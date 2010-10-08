@@ -62,6 +62,19 @@ var VitaleVision = {
     cleanWhitespace(VitaleVision.xmlDocument);
   },
   
+  getDate: function(str) {
+    var jour  = str.substring(0, 2);
+    var mois  = str.substring(2, 4);
+    var annee = str.substring(4, 8);
+    
+    var date = {locale: null, iso: null}; 
+    if(jour){
+      date.locale = jour + "/" + mois + "/" + annee;
+      date.iso    = annee + "-" + mois + "-" + jour;
+    }
+    return date;
+  },
+  
   // Lancement de la lecture de la carte vitale
   read: function() {
     VitaleVision.getContent(VitaleVision.parseContent);
@@ -75,10 +88,25 @@ var VitaleVision = {
         beneficiaireSelect.update();
         
         for (i = 0; i < listBeneficiaires.length; i++) {
-          var ident = listBeneficiaires[i].getElementsByTagName("ident")[0], nom = getNodeValue("nomUsuel", ident), prenom = getNodeValue("prenomUsuel", ident);
+          var ident = listBeneficiaires[i].getElementsByTagName("ident")[0], 
+              nom = getNodeValue("nomUsuel", ident), 
+              prenom = getNodeValue("prenomUsuel", ident),
+              option = DOM.option({value: i}, nom+' '+prenom);
+              
+          var amo = listBeneficiaires[i].getElementsByTagName("amo")[0], 
+              finPeriodeDroits = VitaleVision.getDate(getNodeValue("listePeriodesDroits element fin", amo));
+              
+          if(finPeriodeDroits.iso) {
+            var date = Date.fromDATE(finPeriodeDroits.iso);
+            if (date < new Date()) {
+              option.setStyle({color: "red", fontWeight: "bold"});
+              option.innerHTML += " (période de droits terminée)";
+            }
+          }
           
-          beneficiaireSelect.insert('<option value="'+i+'">'+nom+' '+prenom+'</option>');
+          beneficiaireSelect.insert(option);
         }
+        
         if (listBeneficiaires.length == 1) {
           $('msg-multiple-benef').hide();
           beneficiaireSelect.hide();
@@ -216,22 +244,16 @@ var VitaleVision = {
     $V(form.code_gestion, getNodeValue("codeGestion", amo));
     $V(form.centre_carte, getNodeValue("centreCarte", amo));
     
-    var periodeDroits = getNodeValue("listePeriodesDroits element debut", amo);
-    jour  = periodeDroits.substring(0, 2);
-    mois  = periodeDroits.substring(2, 4);
-    annee = periodeDroits.substring(4, 8);
-    if(jour != ""){
-      $V(form.deb_amo_da, jour + "/" + mois + "/" + annee);
-      $V(form.deb_amo, annee + "-" + mois + "-" + jour);
+    var periodeDroits = VitaleVision.getDate(getNodeValue("listePeriodesDroits element debut", amo));
+    if(periodeDroits.iso) {
+      $V(form.deb_amo_da, periodeDroits.locale);
+      $V(form.deb_amo, periodeDroits.iso);
     }
   
-    periodeDroits = getNodeValue("listePeriodesDroits element fin", amo);
-    jour  = periodeDroits.substring(0, 2);
-    mois  = periodeDroits.substring(2, 4);
-    annee = periodeDroits.substring(4, 8);
-    if(jour != ""){
-      $V(form.fin_amo_da, jour + "/" + mois + "/" + annee);
-      $V(form.fin_amo, annee + "-" + mois + "-" + jour);
+    periodeDroits = VitaleVision.getDate(getNodeValue("listePeriodesDroits element fin", amo));
+    if(periodeDroits.iso) {
+      $V(form.fin_amo_da, periodeDroits.locale);
+      $V(form.fin_amo, periodeDroits.iso);
     }
     
     var libelleExo = getNodeValue("libelleExo", amo).replace(/\\r\\n/g, "\n");

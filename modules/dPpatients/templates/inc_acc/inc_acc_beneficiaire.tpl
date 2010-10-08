@@ -2,7 +2,30 @@
   <tr>
     <td style="width: 50%">
 
+<script type="text/javascript">
+checkFinAmo = function(){
+  var form = getForm("editFrm");
+  var fin_amo = $V(form.fin_amo);
+  var warning = $("fin_amo_warning");
+  var tab = $$("#tab-patient a[href='#beneficiaire']")[0];
+  
+  if (fin_amo && fin_amo < (new Date()).toDATE()) {
+    warning.show();
+    tab.addClassName("wrong");
+  }
+  else {
+    warning.hide();
+    tab.removeClassName("wrong");
+  }
+}
+
+Main.add(checkFinAmo);
+
+</script>
+
 <table class="form">
+  <col style="width: 50%;" />
+  
   <tr>
     <th>{{mb_label object=$patient field="code_regime"}}</th>
     <td>{{mb_field object=$patient field="code_regime"}}</td>
@@ -33,7 +56,12 @@
   </tr>
   <tr>
     <th>{{mb_label object=$patient field="fin_amo"}}</th>
-    <td>{{mb_field object=$patient field="fin_amo" form="editFrm" register=true}}</td>
+    <td>
+      {{mb_field object=$patient field="fin_amo" form="editFrm" register=true onchange="checkFinAmo()"}} {{* event observer doesn't work :( *}}
+      <div class="small-warning" id="fin_amo_warning" style="display: none;">
+        Période de droits terminée
+      </div>
+    </td>
   </tr>
   <tr>
     <th>{{mb_label object=$patient field="code_exo"}}</th>
