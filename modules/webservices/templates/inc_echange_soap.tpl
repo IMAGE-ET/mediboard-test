@@ -27,7 +27,7 @@
   <td>
     <span>
       <label title='{{mb_value object=$object field="date_echange"}}'>
-        {{mb_value object=$object field="date_echange"}}
+        {{$object->date_echange}}
       </label>
     </span>
   </td>
