@@ -750,26 +750,80 @@ class CConsultation extends CCodable {
       }
       $this->sejour_id = $sejour->_id;
     }
-    
+
+    $this->loadRefSejour();
     $this->_adjust_sejour = false;
+    
     if ($this->sejour_id) {
       $forfait_se = $this->_forfait_se;
       $this->loadRefSejour();
       $this->loadRefPlageConsult();
       $datetime = $this->_datetime;
-      /* Code douteux à dégager à terme
-      if ($datetime < $this->_ref_sejour->entree) {
-        $this->_ref_sejour->_hour_entree_prevue = null;
+
+      // Si le séjour est de type consult
+      if ($this->_ref_sejour->type == 'consult') {
+      	$this->_ref_sejour->loadRefsConsultations();
+      	$nb_consults_dans_sejour = count($this->_ref_sejour->_ref_consultations);
+      	$this->_ref_sejour->_hour_entree_prevue = null;
         $this->_ref_sejour->_min_entree_prevue  = null;
         $this->_ref_sejour->_hour_sortie_prevue = null;
         $this->_ref_sejour->_min_sortie_prevue  = null;
-        $this->chrono == self::PLANIFIE ?
-            $this->_ref_sejour->entree_prevue = $datetime:
-            $this->_ref_sejour->entree_reelle = $datetime;
+        
+        // S'il y a d'autres consultations dans le séjour, on étire son entree et sa sortie
+        // en parcourant la liste des consultations
+      	if ($nb_consults_dans_sejour > 1) {
+      		$this->_ref_sejour->entree = $this->_ref_sejour->sortie = $datetime;
+      		foreach ($this->_ref_sejour->_ref_consultations as $_consultation) {
+      			if ($_consultation->_id != $this->_id)
+      			  $_consultation->loadRefPlageConsult();
+      			else {
+      				$_consultation = $this;
+      			}
+      			if ($_consultation->_datetime < $this->_ref_sejour->entree)
+      			  $this->_ref_sejour->entree = $_consultation->_datetime;
+      			if ($_consultation->_datetime > $this->_ref_sejour->sortie)
+              $this->_ref_sejour->sortie = mbDate($_consultation->_datetime) . " 23:59:59";
+      		}
+      		// Si on ne passe jamais dans le cas de la sortie dans le foreach précédent,
+      		// il faut forcer la sortie à 23h59
+      		$this->_ref_sejour->sortie = mbDate($this->_ref_sejour->sortie) . " 23:59:59";
+	        $this->chrono == self::PLANIFIE ?
+	            $this->_ref_sejour->entree_prevue = $this->_ref_sejour->entree:
+	            $this->_ref_sejour->entree_reelle = $this->_ref_sejour->entree;
+	        $this->chrono == self::PLANIFIE ?
+	            $this->_ref_sejour->sortie_prevue = $this->_ref_sejour->sortie:
+	            $this->_ref_sejour->sortie_reelle = $this->_ref_sejour->sortie;
+      	}
+      	// Sinon, on change son entree et sa sortie.  
+        else {
+        	// S'il y a une consultation dans le séjour et qui n'est pas la consultation à enregistrer,
+        	// alors on modifie la date d'entrée du séjour, si cette seule consultation a une date inférieure à celle
+        	// que l'on veut enregistrer.
+          if ($nb_consults_dans_sejour == 1) {
+          	$first_consult = array_shift($this->_ref_sejour->_ref_consultations);
+          	if ($first_consult->_id != $this->_id) {
+          	  $first_consult->loadRefPlageConsult();
+          	  if ($first_consult->_datetime < $datetime) {
+          	     $datetime = $first_consult->_datetime;
+               }
+          	}
+          }
+      	  $this->chrono == self::PLANIFIE ?
+                $this->_ref_sejour->entree_prevue = $datetime:
+                $this->_ref_sejour->entree_reelle = $datetime;
+          $this->_ref_sejour->entree = $datetime;
+
+          $this->chrono == self::PLANIFIE ?
+                $this->_ref_sejour->sortie_prevue = mbDate($datetime) . " 23:59:59":
+                $this->_ref_sejour->sortie_reelle = mbDate($datetime) . " 23:59:59";
+          
+          $this->_ref_sejour->sortie = mbDate($datetime) . " 23:59:59";
+      	}
+        $this->_ref_sejour->updateFormFields();
+        $this->_ref_sejour->_check_bounds = 0;
         $this->_ref_sejour->store();
       }
-      */
-      
+
       // Changement de journée pour la consult 
       if ($this->fieldModified("plageconsult_id")) {
         $this->_adjust_sejour = true;
