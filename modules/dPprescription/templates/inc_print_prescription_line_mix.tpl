@@ -29,6 +29,9 @@
 	  {{/if}}
 	{{/if}}
 	</strong>
+	{{if $perf->commentaire}}
+    ({{$perf->commentaire}})
+  {{/if}}
 	<ul>
 	  {{foreach from=$perf->_ref_lines item=_line}}
 	  <li>
