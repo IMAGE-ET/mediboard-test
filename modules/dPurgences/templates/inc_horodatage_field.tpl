@@ -11,7 +11,7 @@
 {{if $object->$field}}
 	<strong>{{mb_label object=$object field=$field}}</strong>
   <input type="hidden" name="ajax" value="1" />
-  <input type="hidden" name="{{$field}}" value="" />
+  <input type="hidden" name="{{$field}}" value="{{$object->$field}}" />
   <input type="text" name="_{{$field}}_da" value="{{$object->$field|date_format:$dPconfig.time}}" class="time" readonly="readonly"/>
   <input type="hidden" name="_{{$field}}" autocomplete="off" id="Horodatage-{{$rpu->_guid}}_{{$field}}" value="{{$object->$field|date_format:'%H:%M:%S'}}" class="time"
       onchange="$V(this.form.{{$field}}, '{{$object->$field|date_format:'%Y-%m-%d'}} ' + $V(this.form._{{$field}})); onSubmitFormAjax(this.form, {onComplete: function(){Horodatage.reload();}})"></input> 
