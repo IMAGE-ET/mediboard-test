@@ -80,7 +80,7 @@ foreach ($echangesSoap as &$_echange_soap) {
 
 if (!$echange_soap->_id) {
   $ds = CSQLDataSource::get("std");
-  $services = $ds->loadList("SELECT type FROM echange_soap GROUP BY type");
+  $services = $ds->loadColumn("SELECT type FROM echange_soap GROUP BY type");
 }
 
 // Création du template
@@ -94,7 +94,7 @@ $smarty->assign("page"               , $page);
 $smarty->assign("service"            , $service);
 $smarty->assign("web_service"        , $web_service);
 $smarty->assign("fonction"           , $fonction);
-$smarty->assign("services"           , $services[0]);
+$smarty->assign("services"           , $services);
 
 $smarty->display("vw_idx_echange_soap.tpl");
 ?>
