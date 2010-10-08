@@ -1,4 +1,4 @@
-<?php /* $Id $ */
+ <?php /* $Id $ */
 
 /**
  * @package Mediboard
@@ -63,7 +63,7 @@ if ($web_service) {
 
 $total_echange_soap = 0;
 $echangesSoap = array();
-if($service && $web_service) {
+if (($service && $web_service) || ($service && $_date_min && $_date_max)) {
   $total_echange_soap = $itemEchangeSoap->countList($where);
   $order = "date_echange DESC";
   $forceindex[] = "date_echange";
@@ -71,22 +71,16 @@ if($service && $web_service) {
 }
   
   
-foreach($echangesSoap as &$_echange_soap) {
-  $_echange_soap->loadRefs();
-  
+foreach ($echangesSoap as &$_echange_soap) {  
   $url = parse_url($_echange_soap->destinataire);
   $_echange_soap->destinataire = $url['host'];
 }
 
-$services = array();
+//$services = array();
 
 if (!$echange_soap->_id) {
-  $echange_soap = new CEchangeSOAP;
   $ds = CSQLDataSource::get("std");
-  $res = $ds->query("SELECT type FROM echange_soap GROUP BY type");
-  while ($l = $ds->fetchAssoc($res)) {
-  	$services[] = $l['type'];
-  }
+  $services = $ds->loadList("SELECT type FROM echange_soap GROUP BY type");
 }
 
 // Création du template
@@ -100,7 +94,7 @@ $smarty->assign("page"               , $page);
 $smarty->assign("service"            , $service);
 $smarty->assign("web_service"        , $web_service);
 $smarty->assign("fonction"           , $fonction);
-$smarty->assign("services"           , $services);
+$smarty->assign("services"           , $services[0]);
 
 $smarty->display("vw_idx_echange_soap.tpl");
 ?>

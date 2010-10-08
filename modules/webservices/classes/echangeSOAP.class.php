@@ -64,7 +64,7 @@ class CEchangeSOAP extends CMbObject {
   function updateFormFields() {
     parent::updateFormFields();
     
-    $this->_self_emetteur = $this->emetteur == CAppUI::conf('mb_id');
+    $this->_self_emetteur     = $this->emetteur == CAppUI::conf('mb_id');
     $this->_self_destinataire = $this->destinataire == CAppUI::conf('mb_id');
   }
 }
