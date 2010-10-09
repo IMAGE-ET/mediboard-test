@@ -465,14 +465,19 @@ class CCompteRendu extends CDocumentItem {
   function delete() {
     $this->completeField("content_id");
     $this->loadContent(false);
-    $file = new CFile();
-    $files = $file->loadFilesForObject($this);
-    
-    foreach($files as $_file) {
+		$this->loadRefsFiles();
+
+    // Remove PDF preview
+    foreach($this->_ref_files as $_file) {
       $_file->delete();
     }
-    if ($msg = parent::delete()) { return $msg; }
-    return $this->_ref_content->delete();
+    
+		if ($msg = parent::delete()) { 
+		  return $msg; 
+		}
+    
+		// Remove content
+		return $this->_ref_content->delete();
   }
 	
   function handleSend() {

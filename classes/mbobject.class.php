@@ -244,16 +244,22 @@ class CMbObject {
   }
 
   /**
-   * Load files for object
+   * Load files for object with PERM_READ
    * @return int file count
    */
   function loadRefsFiles() {
-  	if (!$this->_id) return;
-    $file = new CFile();
-    if ($file->_ref_module) {
-      $this->_ref_files = CFile::loadFilesForObject($this);
-      return count($this->_ref_files);
+    if (null == $this->_ref_files = $this->loadBackRefs("files", "file_name")) {
+    	return;
     }
+    
+		// Read permission
+    foreach ($this->_ref_files as $_file) {
+      if (!$_file->canRead()){
+        unset($this->_ref_files[$_file->_id]);
+      }
+    }
+		
+    return count($this->_ref_files);
   }
 
   /**

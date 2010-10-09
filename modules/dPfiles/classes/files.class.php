@@ -205,11 +205,12 @@ class CFile extends CDocumentItem {
   }
   
   function delete() {
-    $file = new CFile;
-    $files = $file->loadFilesForObject($this);
-    foreach($files as $_file) {
+  	// Remove previews
+		$this->loadRefsFiles();
+    foreach($this->_ref_files as $_file) {
       $_file->delete();
     }
+		
     if ($msg = parent::delete()) {
       return $msg;
     }
@@ -253,50 +254,6 @@ class CFile extends CDocumentItem {
 			return rename($file, $this->_file_path);
   }
     
-  static function loadFilesForObject(CMbObject $object){
-    $file = new CFile();
-    $file->setObject($object);
-    $files = $file->loadMatchingList("file_name");
-    
-    foreach($files as $_file) {
-      if (!$_file->canRead()){
-        unset($files[$_file->_id]);
-      }
-    }
-    return $files;
-  }
-  
-  static function loadNbFilesByCategory(CMbObject $object){
-    // Liste des Category pour les fichiers de cet objet
-    $listCategory = CFilesCategory::listCatClass($object->_class_name);
-    
-    // Création du tableau de catégorie initialisé à 0
-    $affichageNbFile = array(
-      array(
-        "name" => CAppUI::tr("CFilesCategory.none"),
-        "nb"   => 0
-      )
-    );
-    
-    foreach($listCategory as $keyCat => $currCat){
-      $affichageNbFile[$keyCat] = array(
-        "name" => $currCat->nom,
-        "nb"   => 0
-      );
-    }
-   
-    // S'il objet valide
-    if($object->_id){
-      foreach($object->_ref_files as $keyFile => $curr_file){
-        if($curr_file->file_category_id)
-          $affichageNbFile[$curr_file->file_category_id]["nb"]++;
-        else
-          $affichageNbFile[0]["nb"]++;
-      }
-    }
-    return $affichageNbFile;
-  }
-  
   function oldImageMagick() {
     exec("convert --version", $ret);
     preg_match("/ImageMagick ([0-9\.-]+)/", $ret[0], $matches);
