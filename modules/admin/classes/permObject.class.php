@@ -24,9 +24,10 @@ class CPermObject extends CMbObject {
   const READ = 1;
   const EDIT = 2;
 	
-	// Permissions for connected user
-	static $users_perms = null;
-	static $users_queries = null;
+  // Stored permissions
+  static $users_perms = null;    // OLD query system
+//  static $users_perms = array(); // NEW query system
+  static $users_cache = array();
 	
   // DB Table key
   var $perm_object_id = null;
@@ -118,7 +119,7 @@ class CPermObject extends CMbObject {
 			}
 		}
 		
-    self::$users_queries = array();
+		mbTrace(self::$users_perms, "User perm objects");
 	}
 	
   // Those functions are statics
@@ -178,34 +179,63 @@ class CPermObject extends CMbObject {
       }
     }
 		
-//		foreach($userPermsObjects as $class => $userPermByClass) {
-//      foreach($userPermByClass as $userPerm) {
-//	   		mbTrace($userPerm->getDBFields(), "[$userPerm->object_class][$userPerm->object_id]");
-//      }
-//    }
   }
   
-  static function getPermObject(CMbObject $object, $permType, $defaultObject = null) {
+  static function getPermObject(CMbObject $object, $permType, $defaultObject = null, $user_id = null) {
+    $user = CUser::get($user_id);
+		
+		// Shorteners
+    $class = $object->_class_name;
+    $id    = $object->_id;
+  
+    // Use permission query cache when available
+    if (isset(self::$users_cache[$user->_id][$class][$id])) {
+      return self::$users_cache[$user->_id][$class][$id] >= $permType;
+    }
+
     if (CPermModule::$system_down) {
       return true;
     }
 
-/* Don't know what this code was for
+    // New cached permissions system : DO NOT REMOVE
     if (is_array(self::$users_perms)) {
-    	$perms = self::$users_perms[CAppUI::$user->_id];
-    	$class = $object->_class_name;
-	    $id    = $object->_id;
+      self::buildUser($user->_id);
+      $perms = self::$users_perms[$user->_id];
+
+      // Object specific, or Class specific, or Module generic
+      $perm =  
+        (isset($perms[$class][$id  ]) ? $perms[$class][$id  ] :
+        (isset($perms[$class]["all"]) ? $perms[$class]["all"] : "module"));
 			
-    	if (!isset(self::$users_queries[$class][$id])) {
-    		// query object permission and cache it
-      $perm = 
-        isset($perms[$class][id]    ? $perms[$class][id] :
-        isset($perms[$class]["all"] ? $perms[$class]["all"] :
-        CModule
-    	}
-			// return queried object permission
+			// In case of module check, first build module cache, then get value from cache
+			if ($perm == "module") {
+				$mod_id = $object->_ref_module->_id;
+				CPermModule::getPermModule($mod_id, $permType, $user->_id); 
+				$perm = CPermModule::$users_cache[$user->_id][$mod_id]["permission"];
+			}
+			
+			self::$users_cache[$user->_id][$class][$id] = $perm;
+      return $perm >= $permType;
     }
-*/
+
+    mbTrace($object->_guid, "Querying Object Perm");
+//    // New cached permissions system : DO NOT REMOVE
+//    if (is_array(self::$users_perms)) {
+//    	$perms = self::$users_perms[CAppUI::$user->_id];
+//    	$class = $object->_class_name;
+//	    $id    = $object->_id;
+//			
+//    	if (!isset(self::$users_cache[$class][$id])) {
+//    		// query object permission and cache it
+//      $perm = 
+//        isset($perms[$class][id]    ? $perms[$class][id] :
+//        isset($perms[$class]["all"] ? $perms[$class]["all"] :
+//        CModule
+//    	}
+//			// return queried object permission
+//    }
+
+
     global $userPermsObjects;
 
     $result       = PERM_DENY;
@@ -251,7 +281,8 @@ class CPermObject extends CMbObject {
   }
 }
 
-CPermObject::loadUserPerms();
-//CPermObject::buildUser();
+if (is_null(CPermModule::$users_perms)) {
+  CPermObject::loadUserPerms();
+}
 
 ?>

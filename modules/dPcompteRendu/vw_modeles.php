@@ -10,7 +10,7 @@
 CCanDo::checkRead();
 
 // Liste des praticiens et cabinets accessibles
-$user = CMediusers::getCurrent();
+$user = CMediusers::get();
 $praticiens = $user->loadUsers(PERM_EDIT);
 
 // Filtres

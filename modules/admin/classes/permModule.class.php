@@ -19,9 +19,15 @@ class CPermModule extends CMbObject {
   const READ = 1;
   const EDIT = 2;
   
-  // Permissions for connected user
-  static $users_perms = null;
-  static $users_queries = null;
+  // Stored permissions
+//  static $users_perms = null;    // OLD query system
+  static $users_perms = array(); // NEW query system
+  static $users_cache = array();
+
+	static $pair_deny = array (
+    "permission" => CPermModule::DENY, 
+    "view"       => CPermModule::DENY,
+  );
 	
   // DB Table key
   var $perm_module_id = null;
@@ -115,9 +121,6 @@ class CPermModule extends CMbObject {
 				);
       }
     }
-    
-    self::$users_queries = array();
-    mbTrace(self::$users_perms);
   }	
   
   static function loadUserPerms($user_id = null) {
@@ -196,19 +199,42 @@ class CPermModule extends CMbObject {
     }
   }
   
-  static function getPermModule($mod_id, $permType, $user_id = null) {
+  static function getPermModule($mod_id, $permType = null, $user_id = null) {
     return CPermModule::getInfoModule("permission", $mod_id, $permType, $user_id);
   }
   
-  static function getViewModule($mod_id, $permType, $user_id = null) {
+  static function getViewModule($mod_id, $permType = null, $user_id = null) {
     return CPermModule::getInfoModule("view", $mod_id, $permType, $user_id);
   }
   
-  static function getInfoModule($field, $mod_id, $permType, $user_id = null) {
+  static function getInfoModule($field, $mod_id, $permType = null, $user_id = null) {
+    $user = CUser::get($user_id);
+  
+    // Use permission query cache when available
+		if (isset(self::$users_cache[$user->_id][$mod_id])) {
+			return self::$users_cache[$user->_id][$mod_id][$field] >= $permType;
+		}
+  	
     if (CPermModule::$system_down) {
       return true;
     }
-    
+		
+    // New cached permissions system : DO NOT REMOVE
+    if (is_array(self::$users_perms)) {
+			self::buildUser($user->_id);
+			$perms = self::$users_perms[$user->_id];
+			
+			// Module specific, or All modules, or DENY
+			$perm =  
+			  (isset($perms[$mod_id]) ? $perms[$mod_id] :
+				(isset($perms["all"  ]) ? $perms["all"  ] : self::$pair_deny));
+
+      // Register cache
+      self::$users_cache[$user->_id][$mod_id] = $perm;
+      return $permType === null ? $perm[$field] : $perm[$field] >= $permType;
+		}
+
+    // Old permission system    
     global $userPermsModules;
 		
     $result = PERM_DENY;
@@ -227,6 +253,7 @@ class CPermModule extends CMbObject {
         $result = $perms[$mod_id]->$field;
       }
     }
+
     return $result >= $permType;
   }
 
@@ -261,8 +288,7 @@ class CPermModule extends CMbObject {
 
 // Check if permission system is down
 CPermModule::$system_down = !CSQLDataSource::get("std")->loadTable("perm_module");
-CPermModule::loadUserPerms();
-//CPermModule::buildUser();
-//CPermModule::buildUser(10);
-
+if (is_null(CPermModule::$users_perms)) {
+	CPermModule::loadUserPerms();
+}
 ?>

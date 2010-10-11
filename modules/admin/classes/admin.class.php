@@ -149,7 +149,7 @@ class CUser extends CMbObject {
   }
 
   /**
-   * Lazy access to a gven user, defaultly connected user
+   * Lazy access to a given user, defaultly connected user
    * @param $user_id ref|CUser The user id, connected user if null;
    * @return CUser
    */
