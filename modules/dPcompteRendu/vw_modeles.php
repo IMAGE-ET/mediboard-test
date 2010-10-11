@@ -20,7 +20,7 @@ $filtre->object_class = CValue::getOrSession("object_class");
 $filtre->type         = CValue::getOrSession("type");
 
 // Praticien
-$user = new CMediUsers;
+$user = new CMediusers;
 $user->load($filtre->chir_id);
 if ($user->isPraticien()) {
   CValue::setSession("prat_id", $user->_id);

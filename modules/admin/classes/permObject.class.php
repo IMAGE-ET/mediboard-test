@@ -182,6 +182,8 @@ class CPermObject extends CMbObject {
   }
   
   static function getPermObject(CMbObject $object, $permType, $defaultObject = null, $user_id = null) {
+//    mbTrace($object->_guid, "Querying Object Perm");
+
     $user = CUser::get($user_id);
 		
 		// Shorteners
@@ -217,24 +219,6 @@ class CPermObject extends CMbObject {
 			self::$users_cache[$user->_id][$class][$id] = $perm;
       return $perm >= $permType;
     }
-
-    mbTrace($object->_guid, "Querying Object Perm");
-//    // New cached permissions system : DO NOT REMOVE
-//    if (is_array(self::$users_perms)) {
-//    	$perms = self::$users_perms[CAppUI::$user->_id];
-//    	$class = $object->_class_name;
-//	    $id    = $object->_id;
-//			
-//    	if (!isset(self::$users_cache[$class][$id])) {
-//    		// query object permission and cache it
-//      $perm = 
-//        isset($perms[$class][id]    ? $perms[$class][id] :
-//        isset($perms[$class]["all"] ? $perms[$class]["all"] :
-//        CModule
-//    	}
-//			// return queried object permission
-//    }
-
 
     global $userPermsObjects;
 

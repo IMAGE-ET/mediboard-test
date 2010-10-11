@@ -162,7 +162,7 @@ class CDocumentItem extends CMbMetaObject {
     if (!$this->_ref_author->_id) {
     	return parent::canRead();
 		}
-
+		
     global $can;
     return $this->_canRead = ($this->_ref_author->function_id == CAppUI::$user->function_id || $can->admin) && $this->getPerm(PERM_READ);
   }
