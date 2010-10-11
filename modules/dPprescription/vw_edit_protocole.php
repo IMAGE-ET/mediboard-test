@@ -24,16 +24,6 @@ $listFavoris = array();
 $praticien = new CMediusers();
 $praticiens = $praticien->loadPraticiens(PERM_EDIT);
 
-// Si aucun praticien_id de specifié, on verifie si le user courant est un praticien
-if(!$praticien_id){
-  $mediuser = new CMediusers();
-  $mediuser->load($AppUI->user_id);
-  $mediuser->isPraticien();
-  if($mediuser->_is_praticien){
-    $praticien_id = $mediuser->_id;
-  }
-} 
-
 // Chargement du praticien selectionné
 if($praticien_id){
   $praticien->load($praticien_id);
@@ -53,12 +43,6 @@ if($protocole_id){
 	$protocole->loadRefsLinesElementByCat();
 }
 
-// Chargement des favoris
-/*
-if($praticien_id){
-  $listFavoris = CPrescription::getFavorisPraticien($praticien_id);
-}
-*/
 $contexteType = array();
 $contexteType["CConsultation"][] = "externe";
 $contexteType["CSejour"][] = "pre_admission";
