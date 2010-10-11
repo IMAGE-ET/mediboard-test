@@ -29,6 +29,7 @@ class CProductDelivery extends CMbObject {
    * @var CProductStockGroup 
    */
   var $_ref_stock     = null;
+  var $_ref_stock_service = null;
   /**
    * @var CService
    */
@@ -109,6 +110,22 @@ class CProductDelivery extends CMbObject {
   function loadRefStock(){
     $this->_ref_stock = $this->loadFwdRef("stock_id", true);
   }
+
+  function loadRefStockService(){
+    $this->loadRefStock();
+    
+    $stock_service = new CProductStockService();
+    
+    $this->completeField("service_id");
+    
+    if ($this->service_id) {
+      $stock_service->product_id = $this->_ref_stock->product_id;
+      $stock_service->service_id = $this->service_id;
+      $stock_service->loadMatchingObject();
+    }
+    
+    $this->_ref_stock_service = $stock_service;
+  }
   
   function loadRefService(){
   	$this->_ref_service = $this->loadFwdRef("service_id", true);  
@@ -138,8 +155,9 @@ class CProductDelivery extends CMbObject {
       $delivery_trace->delivery_id = $this->_id;
       $delivery_trace->quantity = $this->quantity;
       $delivery_trace->date_delivery = $this->date_delivery ? $this->date_delivery : mbDateTime();
+      $delivery_trace->date_reception = $delivery_trace->date_delivery;
       if ($msg = $delivery_trace->store()) {
-        CAppUI::setMsg("La commande a été validée, mais elle n'a pas pu etre dispensée automatiquement pour la raison suivante: <br />$msg", UI_MSG_WARNING);
+        CAppUI::setMsg("La commande a été validée, mais elle n'a pas pu etre délivrée automatiquement pour la raison suivante: <br />$msg", UI_MSG_WARNING);
       }
       else {
         CAppUI::setMsg("CProductDeliveryTrace-msg-create");

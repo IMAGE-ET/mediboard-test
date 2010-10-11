@@ -69,10 +69,10 @@
             <button type="button" style="margin: -1px;" class="cancel notext" onclick="removeOutflow('{{$_delivery->_id}}', '{{$_delivery->_ref_stock}}')">{{tr}}Supprimer{{/tr}}</button>
           </td>
           <td style="width: 0.1%;">
-            {{$_delivery->_ref_stock->quantity}}
+            {{$_delivery->_ref_stock_service->quantity}}
           </td>
           <td>
-            {{include file="../../dPstock/templates/inc_bargraph.tpl" stock=$_delivery->_ref_stock}}
+            {{include file="../../dPstock/templates/inc_bargraph.tpl" stock=$_delivery->_ref_stock_service}}
           </td>
         </tr>
       </tbody>

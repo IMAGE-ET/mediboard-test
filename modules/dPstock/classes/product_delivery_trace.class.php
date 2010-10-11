@@ -107,12 +107,8 @@ class CProductDeliveryTrace extends CMbObject {
     
     // If we want to receive, just provide a reception date
     if ($this->date_reception) {
-      $stock_service = new CProductStockService();
-      $stock_service->product_id = $stock->product_id;
-      $stock_service->service_id = $this->_ref_delivery->service_id;
-      
       // If a stock already exist, its quantity is updated
-      if ($stock_service->loadMatchingObject()) {
+      if ($stock_service->_id) {
         $stock_service->quantity += $this->quantity;
       } 
       // if not, the stock is created
@@ -122,7 +118,9 @@ class CProductDeliveryTrace extends CMbObject {
         $stock_service->quantity = $this->quantity;
       }
 
-      if ($msg = $stock_service->store()) return $msg;
+      if ($stock_service->service_id) {
+        if ($msg = $stock_service->store()) return $msg;
+      }
     }
     
     // Un-receive
@@ -145,6 +143,34 @@ class CProductDeliveryTrace extends CMbObject {
     }
 
     return parent::store();
+  }
+  
+  function delete(){
+    $this->completeField('delivery_id', 'quantity');
+    
+    $this->loadRefsFwd();
+    $stock = $this->getStock();
+    $stock->loadRefsFwd();
+    
+    $infinite_group_stock = CAppUI::conf('dPstock CProductStockGroup infinite_quantity') == '1';
+    $negative_allowed = CAppUI::conf('dPstock CProductStockGroup negative_allowed') == '1';
+    
+    $stock_service = new CProductStockService();
+    $stock_service->product_id = $stock->product_id;
+    $stock_service->service_id = $this->_ref_delivery->service_id;
+    $stock_service->loadMatchingObject();
+    
+    if (!$infinite_group_stock) {
+      $stock->quantity += $this->quantity;
+      if ($msg = $stock->store()) return $msg;
+    }
+    
+    if ($stock_service->_id/* && CAppUI::conf('dPstock CProductStockService infinite_quantity') == 0*/) {
+      $stock_service->quantity -= $this->quantity;
+      if ($msg = $stock_service->store()) return $msg;
+    }
+    
+    return parent::delete();
   }
   
   function getStock() {
