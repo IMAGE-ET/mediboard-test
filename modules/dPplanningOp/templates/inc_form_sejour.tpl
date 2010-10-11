@@ -332,11 +332,16 @@ Main.add( function(){
     {{mb_label object=$sejour field="group_id"}}
   </th>
   <td colspan="3">
+    {{if !$sejour->_id || $can->admin}}
     <select class="{{$sejour->_props.group_id}}" name="group_id" onchange="removePlageOp(true);">
     {{foreach from=$etablissements item=curr_etab}}
-      <option value="{{$curr_etab->group_id}}" {{if ($sejour->sejour_id && $sejour->group_id==$curr_etab->group_id) || (!$sejour->sejour_id && $g==$curr_etab->group_id)}} selected="selected"{{/if}}>{{$curr_etab->text}}</option>
+      <option value="{{$curr_etab->group_id}}" {{if ($sejour->sejour_id && $sejour->group_id==$curr_etab->group_id) || (!$sejour->sejour_id && $g==$curr_etab->group_id)}} selected="selected"{{/if}}>{{$curr_etab->_view}}</option>
     {{/foreach}}
     </select>
+    {{else}}
+      {{$sejour->_ref_group->_view}}
+      {{mb_field object=$sejour field=group_id hidden=hidden}}
+    {{/if}}
   </td>
 </tr>
 
