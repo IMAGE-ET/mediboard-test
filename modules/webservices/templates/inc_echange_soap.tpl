@@ -60,5 +60,5 @@
       class="{{if $object->response_time > 10000}}error
       {{elseif $object->response_time > 1000}}warning
       {{elseif $object->response_time < 100}}ok{{/if}}"> 
-    {{mb_value object=$object field="response_time" decimals="0"}} ms</td>
+    {{$object->response_time|round:0}} ms</td>
 </tr>
