@@ -8,6 +8,8 @@
   * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
   *}}
 
+{{mb_include_script module="dPpatients" script="pat_selector"}}
+
 <script type="text/javascript">
 function changePage(page){
   $V(getForm("tracabiliteFilter").elements.start, page);
@@ -15,23 +17,6 @@ function changePage(page){
 
 Main.add(function(){
   var form = getForm("tracabiliteFilter");
-  
-  var url = new Url("system", "ajax_seek_autocomplete");
-  url.addParam("object_class", "CPatient");
-  url.addParam("field", "_patient_id");
-  url.addParam("input_field", "_patient_view");
-  url.autoComplete(form.elements._patient_view, null, {
-    minChars: 3,
-    method: "get",
-    select: "view",
-    dropdown: true,
-    afterUpdateElement: function(field,selected){
-      $V(field.form._patient_id, selected.getAttribute("id").split("-")[2]);
-      if ($V(field.form.elements._patient_view) == "") {
-        $V(field.form.elements._patient_view, selected.down('.view').innerHTML);
-      }
-    }
-  });
   
   var url = new Url("system", "ajax_seek_autocomplete");
   url.addParam("object_class", "CProduct");
@@ -63,8 +48,19 @@ Main.add(function(){
       <th>{{mb_label object=$filter field=_patient_id}}</th>
       <td>
         {{mb_field object=$filter field=_patient_id hidden=true}}
-        <input name="_patient_view" value="{{$filter->_ref_patient}}" size="35" />
-        <button type="button" class="cancel notext" onclick="$V(this.form._patient_id,'');$V(this.form._patient_view,'');">{{tr}}Reset{{/tr}}</button>
+        <input type="text" name="_patient_view" size="30" value="{{$filter->_ref_patient}}" readonly="readonly"
+          ondblclick="PatSelector.init()"
+        />
+        <button type="button" class="search" onclick="PatSelector.init()">Choisir un patient</button>
+        
+        <script type="text/javascript">
+          PatSelector.init = function(){
+            this.sForm = "tracabiliteFilter";
+            this.sId   = "_patient_id";
+            this.sView = "_patient_view";
+            this.pop();
+          }
+        </script>
       </td>
       
       <th>{{mb_label object=$filter field=product_id}}</th>
