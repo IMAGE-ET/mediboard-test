@@ -9,24 +9,15 @@
  */
 
 $compte_rendu_id = CValue::post("compte_rendu_id");
-$content     = stripslashes(urldecode(CValue::post("content")));
 $stream      = CValue::post("stream");
 $compte_rendu = new CCompteRendu;
 $compte_rendu->load($compte_rendu_id);
-$margins     = CValue::post("margins", array($compte_rendu->margin_top,
-                                             $compte_rendu->margin_right,
-                                             $compte_rendu->margin_bottom,
-                                             $compte_rendu->margin_left));
-if ($textes_libres = CValue::post("texte_libre") && CAppUI::conf("dPcompteRendu CCompteRendu pdf_thumbnails") == 1) {
-	CMbArray::removeValue('', $_POST["texte_libre"]);
-
-  // Remplacement des \n par des <br>
-  foreach($_POST["texte_libre"] as $key=>$_texte_libre) {
-    $_POST["texte_libre"][$key] = nl2br($_texte_libre);
-  }
-  
-	$content = $compte_rendu->replaceFreeTextFields($content, $_POST["texte_libre"]);
-}
+$compte_rendu->loadContent(1);
+$content = $compte_rendu->_source;
+$margins = array($compte_rendu->margin_top,
+                 $compte_rendu->margin_right,
+                 $compte_rendu->margin_bottom,
+                 $compte_rendu->margin_left);
 
 $content = $compte_rendu->loadHTMLcontent($content, "doc",'','','','','',$margins);
 

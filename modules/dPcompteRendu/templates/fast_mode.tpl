@@ -76,11 +76,6 @@ Main.add(function() {
        <input class="freetext" type="hidden" name="texte_libre[{{$_nom}}]"/>
     {{/foreach}}
   {{/if}}
-  
-  <!-- the div is needed (textarea-container) -->
-  <div style="display: none;">
-	  <textarea name="content">{{$_source}}</textarea>
-  </div>
 </form>
 
 <form name="fastModeForm" action="?m={{$m}}" method="post"
