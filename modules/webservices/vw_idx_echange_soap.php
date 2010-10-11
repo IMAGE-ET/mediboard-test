@@ -76,7 +76,7 @@ foreach ($echangesSoap as &$_echange_soap) {
   $_echange_soap->destinataire = $url['host'];
 }
 
-//$services = array();
+$services = array();
 
 if (!$echange_soap->_id) {
   $ds = CSQLDataSource::get("std");

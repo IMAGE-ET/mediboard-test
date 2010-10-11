@@ -113,7 +113,7 @@
     <td class="halfPane" rowspan="3">
       <table class="tbl">
         <tr>
-          <th class="title" colspan="14">{{tr}}CEchangeSOAP{{/tr}}</th>
+          <th class="title" colspan="15">{{tr}}CEchangeSOAP{{/tr}}</th>
         </tr>
         <tr>
           <th></th>
@@ -127,6 +127,7 @@
           <th>{{mb_title object=$echange_soap field="function_name"}}</th>
           <th>{{mb_title object=$echange_soap field="input"}}</th>
           <th>{{mb_title object=$echange_soap field="output"}}</th>
+          <th>{{mb_title object=$echange_soap field="response_time"}}</th>
         </tr>
         {{foreach from=$echangesSoap item=curr_echange_soap}}
           <tbody id="echange_{{$curr_echange_soap->_id}}">
@@ -134,7 +135,7 @@
           </tbody>
         {{foreachelse}}
           <tr>
-            <td colspan="14">
+            <td colspan="15">
               {{tr}}CEchangeSOAP.none{{/tr}}
             </td>
           </tr>
@@ -158,12 +159,8 @@
           <th class="category">{{mb_title object=$echange_soap field="output"}}</th>
         </tr>
         <tr>
-          <td style="width: 50%">
-            {{mb_value object=$echange_soap field="input" export=true}}
-          </td>
-          <td>
-            {{mb_value object=$echange_soap field="output" export=true}}
-          </td>
+          <td style="width: 50%"> {{mb_value object=$echange_soap field="input" export=true}} </td>
+          <td> {{mb_value object=$echange_soap field="output" export=true}} </td>
         </tr>
         <tr>
           <td colspan="2" style="text-align: center;">

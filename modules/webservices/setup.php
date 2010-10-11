@@ -47,7 +47,13 @@ class CSetupwebservices extends CSetup {
               CHANGE `input` `input` TEXT;";
      $this->addQuery($sql);
      
-     $this->mod_version = "0.14";
+     $this->makeRevision("0.14");
+     $sql = "ALTER TABLE `echange_soap` 
+               ADD `response_time` FLOAT,
+               ADD INDEX (`type`);";
+     $this->addQuery($sql);
+     
+     $this->mod_version = "0.15";
   }
 }
 ?>

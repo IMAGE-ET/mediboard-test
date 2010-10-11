@@ -49,32 +49,46 @@ class CMbSOAPClient extends SoapClient {
   }
     
   public function __soapCall($function_name, $arguments, $options = null, $input_headers = null, &$output_headers = null) {
+    global $phpChrono;
+    
     $output = null;
+    
+    foreach ($arguments as &$_argument) {
+      if ($_argument && is_string($_argument))
+        $_argument = CMbString::truncate($_argument, 1024);
+    }
     
   	$echange_soap = new CEchangeSOAP();
   	$echange_soap->date_echange = mbDateTime();
-  	$echange_soap->emetteur = CAppUI::conf("mb_id");
+  	$echange_soap->emetteur     = CAppUI::conf("mb_id");
   	$echange_soap->destinataire = $this->wsdl;
-  	$echange_soap->type = $this->type_echange_soap;
+  	$echange_soap->type         = $this->type_echange_soap;
 
-		$url = parse_url($this->wsdl);
+		$url  = parse_url($this->wsdl);
 		$path = explode("/",$url['path']);
   	$echange_soap->web_service_name = end($path);
   	
   	$echange_soap->function_name = $function_name;
-  	$echange_soap->input = serialize($arguments);
+  	$echange_soap->input         = serialize($arguments);
+  	
+  	$phpChrono->stop();
   	try {
+  	  $chrono = new Chronometer();
+  	  $chrono->start();
   	  $output = parent::__soapCall($function_name, $arguments, $options, $input_headers, $output_headers);
+  	  $chrono->stop();
   	} catch(SoapFault $fault) {
-  	  $echange_soap->output = $fault->faultstring;
+  	  $echange_soap->output    = $fault->faultstring;
   		$echange_soap->soapfault = 1;
-      trigger_error("SOAP Fault: (faultcode: {$fault->faultcode}, faultstring: {$fault->faultstring})", E_USER_ERROR);
     }
+    $phpChrono->start();
     
+    // response time
+    $echange_soap->response_time = $chrono->total;
+
     if ($echange_soap->soapfault != 1) {
     	$echange_soap->output = serialize($output);
     }
-
     $echange_soap->store();
   	
   	return $output;
