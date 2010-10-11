@@ -723,9 +723,10 @@ class CConsultation extends CCodable {
       $datetime = $this->_datetime;
       $minutes_before_consult_sejour = CAppUI::conf("dPcabinet CConsultation minutes_before_consult_sejour");
       $where = array();
-      $where['annule'] = " = '0'";
-      $where['patient_id']   = " = '$this->patient_id'";
-      $datetime_before = mbDateTime("+$minutes_before_consult_sejour minute", "$this->_date $this->heure");
+      $where['annule']     = " = '0'";
+      $where['patient_id'] = " = '$this->patient_id'";
+      $where['group_id']   = " = '".CGroups::loadCurrent()->_id."'";
+      $datetime_before     = mbDateTime("+$minutes_before_consult_sejour minute", "$this->_date $this->heure");
       $where[] = "`sejour`.`entree` <= '$datetime_before' AND `sejour`.`sortie` >= '$datetime'";
 
       $sejour = new CSejour();
