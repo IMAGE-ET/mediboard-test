@@ -9,7 +9,20 @@
 *}}
 
 <tr>
-  <td colspan="5">
+  <td rowspan="2">
+    {{if !$reception->locked}}
+      <form name="delete-reception_item-{{$curr_item->_id}}" method="post" action="?">
+        <input type="hidden" name="m" value="dPstock" />
+        <input type="hidden" name="dosql" value="do_order_item_reception_aed" />
+        <input type="hidden" name="del" value="0" />
+        {{mb_key object=$curr_item}}
+        <button type="button" class="trash notext" onclick="confirmDeletion(this.form,{typeName:'cette réception',objName:'', ajax: 1 }, {onComplete: refreshReception.curry({{$reception->_id}})})">
+          {{tr}}Delete{{/tr}}
+        </button>
+      </form>
+    {{/if}}
+  </td>
+  <td colspan="6">
     <strong onmouseover="ObjectTooltip.createEx(this, '{{$curr_item->_guid}}')">
       {{$curr_item->_ref_order_item->_view|truncate:80}}
     </strong>

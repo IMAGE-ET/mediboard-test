@@ -27,7 +27,7 @@ if (($type == "received") && !$invoiced) {
 
 // @todo faire de la pagination
 $order = new CProductOrder;
-$orders = $order->search($type, $keywords, 500, $where);
+$orders = $order->search($type, $keywords, ($invoiced ? 500 : 200), $where);
 
 foreach($orders as $_order) {
   $_order->updateCounts();

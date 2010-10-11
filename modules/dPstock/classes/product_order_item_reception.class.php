@@ -95,6 +95,8 @@ class CProductOrderItemReception extends CMbObject {
   }
   
   function delete(){
+    $this->completeField("order_item_id");
+    
     $this->loadRefOrderItem();
     $item = $this->_ref_order_item;
     
@@ -106,9 +108,32 @@ class CProductOrderItemReception extends CMbObject {
     
     if ($product->loadRefStock()) {
       $product->_ref_stock_group->quantity -= $this->getUnitQuantity();
-      $product->_ref_stock_group->store();
     }
-    return parent::delete();
+    
+    // If the order is already flagged as received, 
+    // we check if it will still be after deletion
+    $item->loadOrder();
+    $order = $item->_ref_order;
+    
+    if ($order->_id && $order->received) {
+      $count_renewed = $order->countRenewedItems();
+      $count_received = $order->countReceivedItems() - (count($order->_ref_order_items) - $count_renewed);
+      
+      if ($count_received < $count_renewed) {
+        $order->received = 0;
+      }
+    }
+    
+    if ($msg = parent::delete()){
+      return $msg;
+    }
+    
+    // we store other objects only if deletion was ok !
+    if ($product->_ref_stock_group && $product->_ref_stock_group->_id)
+      $product->_ref_stock_group->store();
+    
+    if ($order && $order->_id)
+      $order->store();
   }
   
   function getUnitQuantity(){
@@ -201,12 +226,14 @@ class CProductOrderItemReception extends CMbObject {
     // If the order is received, we set the flag
     if ($is_new) {
       $order = $this->_ref_order_item->_ref_order;
-      $count_renewed = $order->countRenewedItems();
-      $count_received = $order->countReceivedItems() - (count($order->_ref_order_items) - $count_renewed);
-      
-      if ($count_renewed && !$order->received && ($count_received >= $count_renewed)) {
-        $order->received = 1;
-        $order->store();
+      if (!$order->received) {
+        $count_renewed = $order->countRenewedItems();
+        $count_received = $order->countReceivedItems() - (count($order->_ref_order_items) - $count_renewed);
+        
+        if ($count_renewed && ($count_received >= $count_renewed)) {
+          $order->received = 1;
+          $order->store();
+        }
       }
     }
   }

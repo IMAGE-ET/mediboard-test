@@ -25,9 +25,10 @@
   
   <table class="tbl">
     <tr>
-      <th colspan="5" class="title">{{$reception->reference}}</th>
+      <th colspan="6" class="title">{{$reception->reference}}</th>
     </tr>
     <tr>
+      <th style="width: 0.1%;"></th>
       <th>{{mb_title class=CProductOrderItemReception field=date}}</th>
       <th>{{mb_title class=CProductOrderItemReception field=quantity}}</th>
       {{if $dPconfig.dPstock.CProductStockGroup.unit_order}}
