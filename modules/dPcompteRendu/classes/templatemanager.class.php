@@ -327,7 +327,12 @@ class CTemplateManager {
         }
         else {
           $fields[] = $property["fieldHTML"];
-          $values[] =  htmlspecialchars(nl2br($property["valueHTML"]),  ENT_QUOTES);
+          if ( preg_match("@<[a-z]+(.*)\/?>@i", $property["valueHTML"])) {
+            $values[] =  nl2br($property["valueHTML"]);
+          }
+          else {
+            $values[] =  nl2br(htmlspecialchars($property["valueHTML"], ENT_QUOTES));
+          }
         }
       }
     }
