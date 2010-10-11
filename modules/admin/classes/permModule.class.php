@@ -20,8 +20,8 @@ class CPermModule extends CMbObject {
   const EDIT = 2;
   
   // Stored permissions
-//  static $users_perms = null;    // OLD query system
-  static $users_perms = array(); // NEW query system
+  static $users_perms = null;    // OLD query system
+//  static $users_perms = array(); // NEW query system
   static $users_cache = array();
 
 	static $pair_deny = array (
