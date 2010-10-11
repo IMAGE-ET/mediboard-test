@@ -327,7 +327,7 @@ class CTemplateManager {
         }
         else {
           $fields[] = $property["fieldHTML"];
-          $values[] = nl2br($property["valueHTML"]);
+          $values[] =  htmlspecialchars(nl2br($property["valueHTML"]),  ENT_QUOTES);
         }
       }
     }
