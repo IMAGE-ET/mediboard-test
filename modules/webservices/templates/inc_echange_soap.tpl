@@ -56,8 +56,9 @@
   <td>{{mb_value object=$object field="function_name"}}</td>
   <td>{{if $object->input}}Oui{{else}}Non{{/if}}</td>
   <td {{if $object->soapfault}}class="error"{{/if}}>{{if $object->output}}Oui{{else}}Non{{/if}}</td>
-  <td class="{{if $object->response_time > 10000}}error
+  <td style="text-align: right;" 
+      class="{{if $object->response_time > 10000}}error
       {{elseif $object->response_time > 1000}}warning
       {{elseif $object->response_time < 100}}ok{{/if}}"> 
-    {{mb_value object=$object field="response_time" decimals="3"}} ms</td>
+    {{mb_value object=$object field="response_time" decimals="0"}} ms</td>
 </tr>
