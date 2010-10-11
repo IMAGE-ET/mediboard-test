@@ -16,6 +16,8 @@ $hors_specialite     = CValue::post("hors_specialite", "0");
 $search_by_cis       = CValue::post("search_by_cis", "1");
 $fast_access         = CValue::post("fast_access", "0");
 $praticien_id        = CValue::post("praticien_id");
+$function_id         = CValue::post("function_id");
+$group_id            = CValue::post("group_id");
 
 $mbProduit = new CBcbProduit();
 
@@ -50,6 +52,7 @@ if(!$hors_specialite){
 
 $protocoles = array();
 // Recherche des protocoles qui possedent le code CIP du produit trouvé par l'autocomplete
+ 
 if($fast_access){
 	// Chargement du praticien
 	$praticien = new CMediusers();
@@ -61,9 +64,19 @@ if($fast_access){
 	$where = array();
 	$where["fast_access"] = " = '1'";
   $where["object_id"] = " IS NULL";
-	$where[] = "praticien_id = '$praticien_id' OR function_id = '$praticien->function_id' OR group_id = '{$praticien->_ref_function->group_id}'";
-	$protocoles_id = $prot_fast_access->loadIds($where);
 	
+	if($praticien_id){
+	  $where[] = "praticien_id = '$praticien_id' OR function_id = '$praticien->function_id' OR group_id = '{$praticien->_ref_function->group_id}'";
+  }
+	if($function_id){
+	  $where["function_id"] = " = '$function_id'";
+  }
+	if($group_id){
+    $where["group_id"] = " = '$group_id'";
+  }
+ 
+	$protocoles_id = $prot_fast_access->loadIds($where);
+  
   foreach($produits as $_produit){
 		$prescription = new CPrescription();
 		$ljoin = array();

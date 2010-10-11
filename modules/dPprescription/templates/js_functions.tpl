@@ -394,10 +394,15 @@ updateFieldsMedicament = function(selected) {
   var dn = selected.childNodes;
 	
 	if(dn[0].className == 'protocole'){
+	  {{if $prescription->object_id}}
 	  // Application d'un protocole par acces rapide
-		oFormProtocole = getForm("applyProtocole");
+		
 		$V(oFormProtocole.pack_protocole_id, "prot-"+dn[0].firstChild.textContent);
+		alert(dn[0].firstChild.textContent);
 		submitProtocole();
+		{{else}}
+		  Protocole.duplicate(dn[0].firstChild.textContent, "{{$prescription->_id}}");
+		{{/if}}
 	} else {
 		if(dn[0].className != 'informal'){
 	    Prescription.addLine(dn[0].firstChild.nodeValue);

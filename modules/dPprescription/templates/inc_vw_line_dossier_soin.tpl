@@ -27,7 +27,8 @@
 	      {{assign var=libelle_ATC value=$line->_ref_produit->_ref_ATC_2_libelle}}
 	      <!-- Cas d'une ligne de medicament -->
 	      <th class="text {{if @$transmissions.ATC.$libelle_ATC|@count}}transmission{{else}}transmission_possible{{/if}}" rowspan="{{$prescription->_nb_produit_by_cat.$type.$_key_cat_ATC}}" 
-	          onclick="addCibleTransmission('','','{{$libelle_ATC}}','{{$libelle_ATC}}');">
+	          onclick="addCibleTransmission('','','{{$libelle_ATC}}','{{$libelle_ATC}}');"
+						style="font-weight: normal; font-size: 0.9em;">
 		      <span onmouseover="ObjectTooltip.createDOM(this, 'tooltip-content-{{$libelle_ATC}}')">
 	          {{$libelle_ATC|smarty:nodefaults}}
 	        </span>
@@ -104,23 +105,13 @@
 
 		<div onclick='addCibleTransmission("{{$line_class}}","{{$line->_id}}","{{$line->_view}}");' 
 	       class="{{if @$transmissions.$line_class.$line_id|@count}}transmission{{else}}transmission_possible{{/if}}"
-				 onmouseover="ObjectTooltip.createEx(this, '{{$line->_guid}}')">
+				 onmouseover="ObjectTooltip.createEx(this, '{{$line->_guid}}')"
+				 style="font-weight: bold">
 	   
 	      {{if $line_class == "CPrescriptionLineMedicament"}}
 					{{$line->_ucd_view}}
 					<br />
-					<span style="opacity: 0.7;">
-						<small>
-							{{$line->_forme_galenique}}
-							{{if $line->_ref_produit_prescription->unite_prise}}
-				        ({{$line->_ref_produit_prescription->unite_prise}})
-				      {{else}}
-				        {{if $line->_unite_administration && ($line->_unite_administration != $line->_forme_galenique)}}
-				          ({{$line->_unite_administration}})<br />
-				        {{/if}}
-				      {{/if}}
-					  </small>
-				  </span>
+					
 					{{if $line->traitement_personnel}} (Traitement perso){{/if}}
 	      {{else}}
 				  <div class="mediuser" style="border-color: #{{$line->_ref_element_prescription->_color}}">
@@ -132,11 +123,7 @@
 					</div>
 				{{/if}} 
 	  </div>
-		
-	  {{if $line instanceof CPrescriptionLineMedicament}}
-      <small>{{$line->voie}}</small>
-    {{/if}}
-    
+		  
     {{if $line->conditionnel}}
       <form action="?" method="post" name="activeCondition-{{$line_id}}-{{$line_class}}">
         <input type="hidden" name="m" value="dPprescription" />
@@ -195,7 +182,7 @@
   	{{if !$line->signee && $line instanceof CPrescriptionLineMedicament && $dPconfig.dPprescription.CPrescription.show_unsigned_med_msg}}
 		
 		{{else}}
-	    <small>
+	    <small style="font-weight: bold;">
 	    {{if @$line->_prises_for_plan.$unite_prise}}
 	      {{if is_numeric($unite_prise)}}
 	        <!-- Cas des posologies de type "tous_les", "fois par" ($unite_prise == $prise->_id) -->
@@ -214,6 +201,26 @@
 	    {{/if}}
 	    </small>
 		{{/if}}
+
+    {{if $line instanceof CPrescriptionLineMedicament}}
+	    <!-- Affichage de la forme galenique -->
+			<div style="opacity: 0.7;">
+			<hr style="width: 70%; border-color: #AAA; margin: 1px auto;" />
+	      <small>
+	        {{$line->_forme_galenique}}
+	        {{if $line->_ref_produit_prescription->unite_prise}}
+	          ({{$line->_ref_produit_prescription->unite_prise}})
+	        {{else}}
+	          {{if $line->_unite_administration && ($line->_unite_administration != $line->_forme_galenique)}}
+	            ({{$line->_unite_administration}})
+	          {{/if}}
+	        {{/if}}
+					{{if $line->voie}}
+					  ({{$line->voie}})
+					{{/if}}
+	      </small>
+	    </div>
+	  {{/if}}
   </td>
   
   {{if $smarty.foreach.$global_foreach.first && $smarty.foreach.$first_foreach.first && $smarty.foreach.$last_foreach.first}}

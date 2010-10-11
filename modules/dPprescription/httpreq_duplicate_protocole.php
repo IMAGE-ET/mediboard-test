@@ -11,7 +11,8 @@
 
 global $AppUI;
 
-$protocole_id = CValue::get("protocole_id");
+$protocole_id      = CValue::get("protocole_id");
+$protocole_dest_id = CValue::get("protocole_dest_id");
 
 // Chargement du protocole
 $protocole = new CPrescription();
@@ -21,17 +22,20 @@ $protocole->loadRefsLinesElement();
 $protocole->loadRefsLinesAllComments();
 $protocole->loadRefsPrescriptionLineMixes();
 
-// Creation du nouveau protocole
-$protocole->_id = "";
-$protocole->libelle = "Copie de $protocole->libelle";
-$msg = $protocole->store();
-CAppUI::displayMsg($msg, "CPrescription-msg-create");
+if(!$protocole_dest_id){
+	// Creation du nouveau protocole
+	$protocole->_id = "";
+	$protocole->libelle = "Copie de $protocole->libelle";
+	$msg = $protocole->store();
+  CAppUI::displayMsg($msg, "CPrescription-msg-create");
+  $protocole_dest_id = $protocole->_id;
+}
 
 // Parcours des medicaments
 foreach($protocole->_ref_prescription_lines as $line){
 	$line->loadRefsPrises();
 	$line->loadRefsSubstitutionLines();
-	$line->prescription_id = $protocole->_id;
+	$line->prescription_id = $protocole_dest_id;
 	$line->_id = "";
 	$msg = $line->store();
 	CAppUI::displayMsg($msg, "CPrescriptionLineMedicament-msg-create");
@@ -48,7 +52,7 @@ foreach($protocole->_ref_prescription_lines as $line){
   foreach($line->_ref_substitution_lines as $_lines_subst_by_type){
     foreach($_lines_subst_by_type as $_line_subst){
       $_line_subst->substitute_for_id = $line->_id;
-      $_line_subst->prescription_id = $protocole->_id;	    
+      $_line_subst->prescription_id = $protocole_dest_id;	    
 	    
       // Medicaments
       if($_line_subst->_class_name == "CPrescriptionLineMedicament"){
@@ -89,7 +93,7 @@ foreach($protocole->_ref_prescription_line_mixes as $_prescription_line_mix){
   $_prescription_line_mix->loadRefsLines();
 	$_prescription_line_mix->loadVoies();
   $_prescription_line_mix->loadRefsSubstitutionLines();
-  $_prescription_line_mix->prescription_id = $protocole->_id;
+  $_prescription_line_mix->prescription_id = $protocole_dest_id;
   $_prescription_line_mix->_id = "";
   $msg = $_prescription_line_mix->store();
   CAppUI::displayMsg($msg, "CPrescriptionLineMix-msg-create");
@@ -98,7 +102,7 @@ foreach($protocole->_ref_prescription_line_mixes as $_prescription_line_mix){
   foreach($_prescription_line_mix->_ref_substitution_lines as $_lines_subst_by_type){
     foreach($_lines_subst_by_type as $_line_subst){
       $_line_subst->substitute_for_id = $_prescription_line_mix->_id;
-      $_line_subst->prescription_id = $protocole->_id;	    
+      $_line_subst->prescription_id = $protocole_dest_id;	    
 	    
       // Medicaments
       if($_line_subst->_class_name == "CPrescriptionLineMedicament"){
@@ -145,7 +149,7 @@ foreach($protocole->_ref_prescription_line_mixes as $_prescription_line_mix){
 // Parcours des elements
 foreach($protocole->_ref_prescription_lines_element as $line_element){
 	$line_element->loadRefsPrises();
-	$line_element->prescription_id = $protocole->_id;
+	$line_element->prescription_id = $protocole_dest_id;
 	$line_element->_id = "";
 	$line_element->store();
 	CAppUI::displayMsg($msg, "CPrescriptionLineElement-msg-create");
@@ -161,7 +165,7 @@ foreach($protocole->_ref_prescription_lines_element as $line_element){
 
 // Parcours des commentaires
 foreach($protocole->_ref_prescription_lines_all_comments as $line_comment){
-	$line_comment->prescription_id = $protocole->_id;
+	$line_comment->prescription_id = $protocole_dest_id;
 	$line_comment->_id = "";
 	$line_comment->store();
 	CAppUI::displayMsg($msg, "CPrescriptionLineComment-msg-create");
@@ -169,7 +173,7 @@ foreach($protocole->_ref_prescription_lines_all_comments as $line_comment){
 
 
 // Lancement du refresh des lignes de la prescription
-echo "<script type='text/javascript'>Protocole.edit($protocole->_id); Protocole.refreshList($protocole->_id);</script>";
+echo "<script type='text/javascript'>Protocole.edit($protocole_dest_id); Protocole.refreshList($protocole_dest_id);</script>";
 echo CAppUI::getMsg();
 CApp::rip();
 ?>

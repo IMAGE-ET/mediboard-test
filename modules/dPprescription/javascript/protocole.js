@@ -46,9 +46,10 @@ var Protocole = {
     Prescription.reload(protocole_id,"","","1");
     //Protocole.refreshList(protocole_id);
   },
-  duplicate: function(protocole_id){
+  duplicate: function(protocole_id, protocole_dest_id){
     var url = new Url("dPprescription", "httpreq_duplicate_protocole");
     url.addParam("protocole_id", protocole_id);
+		url.addParam("protocole_dest_id", protocole_dest_id);
     url.requestUpdate("systemMsg");
   },  
   // Gestion des packs de protocoles

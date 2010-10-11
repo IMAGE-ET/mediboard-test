@@ -29,9 +29,22 @@ Main.add( function(){
       updateElement: updateFieldsMedicament,
       callback: 
         function(input, queryString){
-          var praticien_id = document.selPraticienLine ? $V(document.selPraticienLine.praticien_id) : '{{$prescription->_ref_current_praticien->_id}}';
-          return (queryString + "&inLivret="+($V(oFormProduit._recherche_livret)?'1':'0'+"&praticien_id="+praticien_id
-					{{if $prescription->object_id && !$mode_pharma}}+"&fast_access='1'"{{/if}}));
+				  var oFormSelPrat = getForm("selPrat");
+					var praticien_id = "";
+					var function_id = "";
+          var group_id = "";
+
+          // Protocole
+					if(oFormSelPrat){
+					  praticien_id = $V(oFormSelPrat.praticien_id);
+						function_id = $V(oFormSelPrat.function_id);
+            group_id = $V(oFormSelPrat.group_id);
+          } 
+					// Prescription
+					else {
+					  praticien_id = document.selPraticienLine ? $V(document.selPraticienLine.praticien_id) : '{{$prescription->_ref_current_praticien->_id}}';
+          }
+          return (queryString + "&inLivret="+($V(oFormProduit._recherche_livret)?'1':'0')+"&praticien_id="+praticien_id+"&function_id="+function_id+"&group_id="+group_id{{if !$mode_pharma}}+"&fast_access='1'"{{/if}});
         }
     } );
   }

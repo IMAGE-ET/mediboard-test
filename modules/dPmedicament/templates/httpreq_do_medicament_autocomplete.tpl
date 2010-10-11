@@ -8,6 +8,7 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
 *}}
 
+
 <ul>
   {{foreach from=$produits item=produit}}
 	  {{assign var=code_cip value=$produit->CodeCIP}}
