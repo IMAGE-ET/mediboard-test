@@ -91,9 +91,16 @@ class CMediusers extends CMbObject {
   var $_ref_urgences               = null;
   var $_ref_deplacees              = null;
   
-	static function getCurrent() {
-		return CAppUI::$instance->_ref_user;
-	}
+  /**
+   * Lazy access to a given user, defaultly connected user
+   * @param $user_id ref|CMediuser The user id, connected user if null;
+   * @return CMediuser
+   */
+  static function get($user_id = null) {
+    $user = CAppUI::$user;
+    return $user_id ? $user->getCached($user_id) : $user;
+  }
+
 	
   function getSpec() {
     $spec = parent::getSpec();
@@ -355,14 +362,12 @@ class CMediusers extends CMbObject {
   }
 
   function getPerm($permType) {
-    global $AppUI;
-    $this->loadRefFunction();
-    if($this->user_id == $AppUI->user_id) {
+    if ($this->user_id == CAppUI::$user->_id) {
       return true;
     }
-    else {
-    	return CPermObject::getPermObject($this, $permType, $this->_ref_function);
-    }
+
+    $this->loadRefFunction();
+    return CPermObject::getPermObject($this, $permType, $this->_ref_function);
   }
 
   function loadProtocoles() {

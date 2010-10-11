@@ -17,7 +17,7 @@ if (!$filter_user_id) {
 }
 
 // Utilisateurs disponibles
-$user = CMediusers::getCurrent();
+$user = CMediusers::get();
 $users = $user->loadUsers(PERM_EDIT);
 
 // Functions disponibles
