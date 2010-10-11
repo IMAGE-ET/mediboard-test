@@ -14,7 +14,7 @@ if( isset($_POST["_do_empty_pdf"])) {
   $compte_rendu = new CCompteRendu();
   $compte_rendu->load($compte_rendu_id);
 
-	$compte_rendu->loadRefsFiles()
+	$compte_rendu->loadRefsFiles();
   foreach($compte_rendu->_ref_files as $_file) {
     $_file->file_empty();
   }

@@ -19,6 +19,12 @@ $margins     = CValue::post("margins", array($compte_rendu->margin_top,
                                              $compte_rendu->margin_left));
 if ($textes_libres = CValue::post("texte_libre") && CAppUI::conf("dPcompteRendu CCompteRendu pdf_thumbnails") == 1) {
 	CMbArray::removeValue('', $_POST["texte_libre"]);
+
+  // Remplacement des \n par des <br>
+  foreach($_POST["texte_libre"] as $key=>$_texte_libre) {
+    $_POST["texte_libre"][$key] = nl2br($_texte_libre);
+  }
+  
 	$content = $compte_rendu->replaceFreeTextFields($content, $_POST["texte_libre"]);
 }
 
