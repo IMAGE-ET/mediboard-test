@@ -68,7 +68,7 @@ newExam = function(sAction, consultation_id) {
 <table class="tbl">
 	{{mb_include module=dPcabinet template=inc_list_actes_ccam subject=$object vue=complete}}
 </table>
-
+{{if $object->_canEdit}}
 <table class="form">
   <tr>
     <th class="category" colspan="2">
@@ -120,3 +120,4 @@ newExam = function(sAction, consultation_id) {
     </td>
   </tr>
 </table>
+{{/if}}
