@@ -79,6 +79,7 @@
         </table>
       </div>
       <div id="list-secondary-users" style="display: none;">
+        {{if $can->edit}}
         <form name="addSecUser" action="?m={{$m}}" method="post" onsubmit="return checkForm(this)">
         <input type="hidden" name="dosql" value="do_secondary_function_aed" />
         <input type="hidden" name="secondary_function_id" value="" />
@@ -115,7 +116,7 @@
           </tr>
         </table>
         </form>
-        
+        {{/if}}
         <table class="tbl">
           <tr>
             <th>{{mb_title class=CUser field=user_username}}</th>
@@ -146,6 +147,7 @@
               {{/if}}
             </td>
             <td class="button">
+              {{if $can->edit}}
               <form name="addSecUser" action="?m={{$m}}" method="post" onsubmit="return checkForm(this)">
               <input type="hidden" name="dosql" value="do_secondary_function_aed" />
               <input type="hidden" name="secondary_function_id" value="{{$curr_function->secondary_function_id}}" />
@@ -154,6 +156,7 @@
                 {{tr}}Delete{{/tr}}
               </button>
               </form>
+              {{/if}}
             </td>
           </tr>
           {{foreachelse}}

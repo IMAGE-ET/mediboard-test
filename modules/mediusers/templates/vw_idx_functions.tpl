@@ -17,6 +17,7 @@ function changePage(page) {
 </script>
 
 <table class="main">
+  {{if $can->edit}}
   <tr>
     <td style="width: 60%">
       <a href="?m={{$m}}&amp;tab={{$tab}}&amp;function_id=0" class="button new">
@@ -24,6 +25,7 @@ function changePage(page) {
       </a>
     </td>
   </tr>
+  {{/if}}
   <tr>
     <td>
       <form name="listFilter" action="?m={{$m}}" method="get">
@@ -62,8 +64,6 @@ function changePage(page) {
       </form>
       {{include file="vw_list_functions.tpl"}}
     </td>
-    
-    
     <td style="width: 40%" id="vw_function">
       {{include file="inc_edit_function.tpl"}}
     </td>

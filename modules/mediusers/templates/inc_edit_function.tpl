@@ -7,6 +7,9 @@
 </script>
 
 <form name="editFrm" action="?m={{$m}}" method="post" onSubmit="return checkForm(this)">
+  {{if !$can->edit}}
+  <input name="_locked" value="1" hidden="hidden" />
+  {{/if}}
   <input type="hidden" name="m" value="mediusers" />
   <input type="hidden" name="dosql" value="do_functions_aed" />
   <input type="hidden" name="del" value="0" />

@@ -1,9 +1,11 @@
 <table class="main">
   <tr>
     <td class="halfPane">
+    {{if $can->edit}}
       <a class="button new" href="?m=mediusers&amp;tab=vw_idx_disciplines&amp;discipline_id=0">
         Ajouter une nouvelle spécialité médicale
       </a>
+      {{/if}}
       <table class="tbl">
         <tr>
           <th>Spécialité Médicale</th>
