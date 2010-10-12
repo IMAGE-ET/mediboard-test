@@ -52,7 +52,8 @@ Main.add(function(){
           ondblclick="PatSelector.init()"
         />
         <button type="button" class="search" onclick="PatSelector.init()">Choisir un patient</button>
-        
+        <button type="button" class="cancel notext" onclick="$V(this.form._patient_id,'');$V(this.form._patient_view,'');">{{tr}}Reset{{/tr}}</button>
+
         <script type="text/javascript">
           PatSelector.init = function(){
             this.sForm = "tracabiliteFilter";
