@@ -92,6 +92,7 @@ initializeGraph = function (src, data) {
     src.series.unshift({
       data: [[0, src.standard], [1000, src.standard]], 
       points: {show: false},
+      markers: {show: false},
       mouse: {track: false},
       lines: {lineWidth: 1},
       color: "silver"

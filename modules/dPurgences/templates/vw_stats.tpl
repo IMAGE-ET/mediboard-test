@@ -72,7 +72,7 @@ function drawGraphs(data) {
 function updateGraphs(form){
   WaitingMessage.cover($("graphs"));
   
-  var url = new Url("bloodSalvage", "ajax_json_stats");
+  var url = new Url("dPurgences", "ajax_json_stats");
   url.addFormData(form);
   url.requestJSON(drawGraphs);
   return false;
@@ -90,6 +90,11 @@ Main.add(function () {
   <input type="hidden" name="m" value="dPurgences" />
   
   <table class="main form">
+    <tr>
+      <th class="category">Affichage</th>
+      <th class="category">Stats</th>
+      <th class="category">Stats complémentaires</th>
+    </tr>
     <tr>
       <td>
         <table class="main form">
@@ -123,7 +128,14 @@ Main.add(function () {
       </td>
       <td style="white-space: normal;">
         {{foreach from=$axes key=_axis item=_label}}
-          <label style="width: 18em; display: inline-block;">
+          <label style="width: 16em; display: inline-block;">
+            <input type="radio" name="axe" value="{{$_axis}}" {{if $_axis == $axe}}checked="checked"{{/if}} onchange="this.form.onsubmit()" /> {{$_label}}
+          </label>
+        {{/foreach}}
+      </td>
+      <td style="white-space: normal;">
+        {{foreach from=$axes_other key=_axis item=_label}}
+          <label style="width: 16em; display: inline-block;">
             <input type="radio" name="axe" value="{{$_axis}}" {{if $_axis == $axe}}checked="checked"{{/if}} onchange="this.form.onsubmit()" /> {{$_label}}
           </label>
         {{/foreach}}
@@ -131,7 +143,7 @@ Main.add(function () {
     </tr>
     
     <tr>
-      <td colspan="2" class="button">
+      <td colspan="3" class="button">
         <button type="submit" class="search">{{tr}}Filter{{/tr}}</button>
       </td>
     </tr>

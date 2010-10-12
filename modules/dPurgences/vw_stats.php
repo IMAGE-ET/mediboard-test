@@ -28,9 +28,14 @@ $axes = array(
   "orientation" => CAppUI::tr("CRPU-orientation"),
   "transport" => CAppUI::tr("CRPU-transport"),
   "without_rpu" => "Séjours d'urgence sans RPU",
-  "specialist_count" => "Nombre d'attentes spécialiste",
-  "specialist_time" => "Temps d'attente spécialiste (moy.)",
   "transfers_count" => "Nombre de transferts",
+  "mutations_count" => "Nombre de mutations",
+);
+
+$axes_other = array(
+  "radio" => "Attente radio",
+  "bio"   => "Attente biologie",
+  "spe"   => "Attente spécialiste",
 );
 
 $smarty = new CSmartyDP();
@@ -38,6 +43,7 @@ $smarty = new CSmartyDP();
 $smarty->assign('filter', $filter);
 $smarty->assign('axe', $axe);
 $smarty->assign('axes', $axes);
+$smarty->assign('axes_other', $axes_other);
 $smarty->assign('count', $count);
 
 $smarty->display('vw_stats.tpl');

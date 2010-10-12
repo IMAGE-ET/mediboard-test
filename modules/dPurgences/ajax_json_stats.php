@@ -10,10 +10,94 @@
 
 CCanDo::checkAdmin();
 
+CMbObject::$useObjectCache = false;
+
 $axe    = CValue::getOrSession('axe');
 $entree = CValue::getOrSession('entree', mbDate());
 $period = CValue::getOrSession('period', "MONTH");
 $count = CValue::getOrSession('count', 30);
+
+function computeAttente($areas, &$series, $where, $ljoin, $dates, $period, $sejour, &$total, $start_field, $end_field) {
+  foreach($areas as $key => $value) {
+    $where["rpu.$start_field"] = $value["rpu.$start_field"];
+    $where["rpu.$end_field"] = $value["rpu.$end_field"];
+    $series[$key] = array('data' => array(), "label" => $value[0]);
+    
+    foreach ($dates as $i => $_date) {
+      $_date_next = mbDate("+1 $period", $_date);
+      $where['sejour.entree'] = "BETWEEN '$_date' AND '$_date_next'";
+      $count = $sejour->countList($where, null, null, null, $ljoin);
+      $total += $count;
+      $series[$key]['data'][$i] = array($i, intval($count));
+    }
+  }
+  
+  // Time
+  $areas = array_merge(array(null));
+  foreach($areas as $key => $value) {
+    $key = count($series);
+    $where["rpu.$start_field"] = "IS NOT NULL";
+    $where["rpu.$end_field"] = "IS NOT NULL";
+    $series[$key] = array(
+      'data' => array(), 
+      'yaxis' => 2, 
+      'lines' => array("show" => true),
+      'points' => array("show" => true),
+      'mouse' => array("track" => true),
+      'label' => "Temps",
+      "shadowSize" => 0
+    );
+    
+    foreach ($dates as $i => $_date) {
+      $_date_next = mbDate("+1 $period", $_date);
+      $where['sejour.entree'] = "BETWEEN '$_date' AND '$_date_next'";
+      $_sejours = $sejour->loadList($where, null, null, null, $ljoin);
+      // FIXME
+      
+      $times = array();
+      foreach($_sejours as $_sejour) {
+        $_sejour->loadRefRPU();
+        $_rpu = $_sejour->_ref_rpu;
+        $times[] = mbMinutesRelative($_rpu->$start_field, $_rpu->$end_field);
+      }
+      $count = array_sum($times);
+      $mean = count($times) ? $count / count($times) : 0;
+      
+      $variance = 0;
+      foreach($times as $time) {
+        $variance += pow($time - $mean, 2);
+      }
+      $variance /= count($times);
+      $std_dev = sqrt($variance);
+      
+      $series[$key]['data'][$i] = array($i, intval($count));
+      
+      // mean - std_dev
+      if (!isset($series[$key+1])) {
+        $series[$key+1] = $series[$key];
+        $series[$key+1]["color"] = "#666";
+        $series[$key+1]["lines"]["lineWidth"] = 1;
+        $series[$key+1]["points"]["show"] = false;
+        $series[$key+1]["label"] = null;
+      }
+      $series[$key+1]['data'][$i] = array($i, intval($count)-$std_dev);
+      
+      // mean + std_dev
+      if (!isset($series[$key+2])) {
+        $series[$key+2] = $series[$key];
+        $series[$key+2]["color"] = "#666";
+        $series[$key+2]["lines"]["lineWidth"] = 1;
+        $series[$key+2]["points"]["show"] = false;
+        $series[$key+2]["label"] = null;
+      }
+      $series[$key+2]['data'][$i] = array($i, intval($count)+$std_dev);
+    }
+  }
+  
+  // Echange du dernier et tu premier des lignes pour avoir celle du milieu en avant plan
+  $c = count($series);
+  list($series[$c-3], $series[$c-1]) = array($series[$c-1], $series[$c-3]);
+}
 
 switch ($period) {
   default: $period = "DAY";
@@ -217,64 +301,6 @@ switch ($axe) {
     }
     break;
     
-  // Séjours avec attente spécialiste
-  case "specialist_count":
-    $data[$axe] = array(
-      "options" => array(
-        "title" => utf8_encode("Nombre d'attentes spécialiste")
-      ),
-      "series" => array()
-    );
-    
-    $series = &$data[$axe]['series'];
-    $areas = array_merge(array(null));
-    foreach($areas as $key => $value) {
-      $where["rpu.specia_att"] = "IS NOT NULL";
-      $series[$key] = array('data' => array());
-      
-      foreach ($dates as $i => $_date) {
-        $_date_next = mbDate("+1 $period", $_date);
-        $where['sejour.entree'] = "BETWEEN '$_date' AND '$_date_next'";
-        $count = $sejour->countList($where, null, null, null, $ljoin);
-        $total += $count;
-        $series[$key]['data'][$i] = array($i, intval($count));
-      }
-    }
-    break;
-    
-  // Temps d'attente spécialiste
-  case "specialist_time":
-    $data[$axe] = array(
-      "options" => array(
-        "title" => utf8_encode("Temps d'attente spécialiste (moy.)")
-      ),
-      "series" => array()
-    );
-    
-    $series = &$data[$axe]['series'];
-    $areas = array_merge(array(null));
-    foreach($areas as $key => $value) {
-      $where["rpu.specia_att"] = "IS NOT NULL";
-      $where["rpu.specia_arr"] = "IS NOT NULL";
-      $series[$key] = array('data' => array());
-      
-      foreach ($dates as $i => $_date) {
-        $_date_next = mbDate("+1 $period", $_date);
-        $where['sejour.entree'] = "BETWEEN '$_date' AND '$_date_next'";
-        $_sejours = $sejour->loadList($where, null, null, null, $ljoin);
-        // FIXME
-        
-        $count = 0;
-        foreach($_sejours as $_sejour) {
-          $_sejour->loadRefRPU();
-          $_rpu = $_sejour->_ref_rpu;
-          $count += mbMinutesRelative($_rpu->specia_att, $_rpu->specia_arr);
-        }
-        $total += count($_sejours) ? $count / count($_sejours) : 0;
-        $series[$key]['data'][$i] = array($i, intval($count));
-      }
-    }
-    break;
     
   // Nombre de transferts
   case "transfers_count":
@@ -317,6 +343,144 @@ switch ($axe) {
     }
     $series = array_values($series);
     break;
+    
+  // Nombre de mutations
+  case "mutations_count":
+    $data[$axe] = array(
+      "options" => array(
+        "title" => utf8_encode("Nombre de mutations")
+      ),
+      "series" => array()
+    );
+    
+    $series = &$data[$axe]['series'];
+    
+    $service = new CService;
+    $service->group_id = CGroups::loadCurrent()->_id;
+    $services = $service->loadMatchingList("nom");
+    
+    $key = 0;
+    foreach($services as $_id => $_service) {
+      $where["sejour.service_mutation_id"] = "IS NOT NULL";
+      $series[$key] = array('data' => array(), 'label' => utf8_encode($_service->_view));
+      
+      $sub_total = 0;
+      foreach ($dates as $i => $_date) {
+        $_date_next = mbDate("+1 $period", $_date);
+        $where['sejour.entree'] = "BETWEEN '$_date' AND '$_date_next'";
+        $where['sejour.service_mutation_id'] = "= '$_id'";
+        $count = $sejour->countList($where, null, null, null, $ljoin);
+        $total += $count;
+        $sub_total += $count;
+        $series[$key]['data'][$i] = array($i, intval($count));
+      }
+      $series[$key]['subtotal'] = $sub_total;
+      $key++;
+    }
+    
+    // suppression des series vides
+    foreach($series as $_key => $_serie) {
+      if ($_serie['subtotal'] == 0) {
+        unset($series[$_key]);
+      }
+    }
+    $series = array_values($series);
+    break;
+    
+  // Radio
+  case "radio":
+    $data[$axe] = array(
+      "options" => array(
+        "title" => utf8_encode("Attente radio"),
+        "yaxis" => array("title" => "Nombre"),
+        "y2axis" => array("title" => "Temps"),
+      ),
+      "series" => array()
+    );
+    
+    $series = &$data[$axe]['series'];
+    $areas = array(
+      array(
+        "Sans radio",
+        "rpu.radio_debut" => "IS NULL",
+        "rpu.radio_fin"   => "IS NULL",
+      ),
+      array(
+        "Attente radio sans retour",
+        "rpu.radio_debut" => "IS NOT NULL",
+        "rpu.radio_fin"   => "IS NULL", // FIXME: prendre en charge les attentes de moins d'une minute
+      ),
+      array(
+        "Attente radio avec retour",
+        "rpu.radio_debut" => "IS NOT NULL",
+        "rpu.radio_fin"   => "IS NOT NULL",
+      ),
+    );
+    computeAttente($areas, $series, $where, $ljoin, $dates, $period, $sejour, $total, "radio_debut", "radio_fin");
+    break;
+    
+  // Biolo
+  case "bio":
+    $data[$axe] = array(
+      "options" => array(
+        "title" => utf8_encode("Attente biologie")
+      ),
+      "series" => array()
+    );
+    
+    $series = &$data[$axe]['series'];
+    $areas = array(
+      array(
+        "Sans biologie",
+        "rpu.bio_depart" => "IS NULL",
+        "rpu.bio_retour" => "IS NULL",
+      ),
+      array(
+        "Attente biologie sans retour",
+        "rpu.bio_depart" => "IS NOT NULL",
+        "rpu.bio_retour" => "IS NULL", // FIXME: prendre en charge les attentes de moins d'une minute
+      ),
+      array(
+        "Attente biologie avec retour",
+        "rpu.bio_depart" => "IS NOT NULL",
+        "rpu.bio_retour" => "IS NOT NULL",
+      ),
+    );
+    
+    computeAttente($areas, $series, $where, $ljoin, $dates, $period, $sejour, $total, "bio_depart", "bio_retour");
+    break;
+    
+  // Spé
+  case "spe":
+    $data[$axe] = array(
+      "options" => array(
+        "title" => utf8_encode("Attente spécialiste")
+      ),
+      "series" => array()
+    );
+    
+    $series = &$data[$axe]['series'];
+    $areas = array(
+      array(
+        "Sans spécialiste",
+        "rpu.specia_att" => "IS NULL",
+        "rpu.specia_arr" => "IS NULL",
+      ),
+      array(
+        "Attente spécialiste sans retour",
+        "rpu.specia_att" => "IS NOT NULL",
+        "rpu.specia_arr" => "IS NULL", // FIXME: prendre en charge les attentes de moins d'une minute
+      ),
+      array(
+        "Attente spécialiste avec retour",
+        "rpu.specia_att" => "IS NOT NULL",
+        "rpu.specia_arr" => "IS NOT NULL",
+      ),
+    );
+    
+    computeAttente($areas, $series, $where, $ljoin, $dates, $period, $sejour, $total, "specia_att", "specia_arr");
+    break;
+   
 }
 
 // Ticks
@@ -342,9 +506,14 @@ foreach($data as &$_data) {
   $_data["options"]["subtitle"] = "$group_view - Total: $total";
   
   $totals = array();
-  foreach($_data["series"] as $_series) {
+  foreach($_data["series"] as &$_series) {
+    if (isset($_series["lines"]["show"]) && $_series["lines"]["show"]) {
+      $_series["bars"]["show"] = false;
+      continue;
+    }
+    
     foreach($_series["data"] as $key => $value) {
-      if (!isset($totals[$key][0]))  {
+      if (!isset($totals[$key][0])) {
         $totals[$key][0] = $key;
         $totals[$key][1] = 0;
       }
@@ -354,6 +523,7 @@ foreach($data as &$_data) {
   
   $_data["series"][] = array(
     "data" => $totals,
+    "label" => "Total",
     "bars" => array("show" => false),
     "lines" => array("show" => false),
     "markers" => array("show" => true),
