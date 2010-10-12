@@ -127,7 +127,7 @@ Main.add( function(){
 			<td class="text">{{$_planif->_ref_object->_view}}</td>
 			<td style="text-align: center;">
 			  {{if $_planif->_ref_object instanceof CPrescriptionLineMixItem}}
-				  {{assign var=quantite value=$_planif->_ref_object->quantite}}
+				  {{assign var=quantite value=$_planif->_ref_object->_quantite_administration}}
 				{{else}}
 				  {{assign var=quantite value=$_planif->_ref_prise->_quantite_administrable}} 
 				{{/if}}
@@ -135,11 +135,8 @@ Main.add( function(){
 			</td>
 			<td>
 				{{assign var=unite value=""}}
-			  {{if $_planif->_ref_object instanceof CPrescriptionLineMedicament}}
-				  {{assign var=unite value=$_planif->_ref_object->_unite_administration}}
-        {{/if}}
-				{{if $_planif->_ref_object instanceof CPrescriptionLineMixItem}}
-          {{assign var=unite value=$_planif->_ref_object->unite}}
+			  {{if $_planif->_ref_object instanceof CPrescriptionLineMedicament || $_planif->_ref_object instanceof CPrescriptionLineMixItem}}
+				  {{assign var=unite value=$_planif->_ref_object->_ref_produit->libelle_unite_presentation}}
         {{/if}}
 				{{$unite}}
 			</td>	

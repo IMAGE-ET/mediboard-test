@@ -16,11 +16,14 @@ $operation->load($operation_id);
 
 // Chargement des gestes operatoires
 $operation->loadRefsAnesthPerops();
+$operation->loadRefsFwd();
 
 // Chargement des administrations per-op
 $operation->loadRefSejour();
 $sejour =& $operation->_ref_sejour;
 $sejour->loadRefPrescriptionSejour();
+
+$sejour->loadRefPatient();
 
 $prescription_id = $sejour->_ref_prescription_sejour->_id;
 
@@ -45,6 +48,7 @@ $administrations = $administration->loadList($where, null, null, null, $ljoin);
 // Tri des gestes et administrations perop par ordre chronologique
 $perops = array();
 foreach($administrations as $_administration){
+	$_administration->loadRefsFwd();
 	$perops["$_administration->dateTime-$_administration->_guid"] = $_administration;
 }
 foreach($operation->_ref_anesth_perops as $_perop){

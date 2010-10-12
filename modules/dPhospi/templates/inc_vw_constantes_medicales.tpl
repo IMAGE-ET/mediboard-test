@@ -200,7 +200,7 @@ Main.add(function () {
   {{if $print}}
     {{foreach from=$data item=curr_data key=key}}
       $('constantes-medicales-{{$key}}').setVisible(
-        data.{{$key}}.series.last().data.length > 1
+        data.{{$key}}.series.last().data.length > 0
       );
     {{/foreach}}
   {{else}}

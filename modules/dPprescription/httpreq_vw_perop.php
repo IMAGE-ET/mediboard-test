@@ -69,6 +69,7 @@ if($prescription_id){
 	foreach($mixes as $_mix){
 		$_mix->loadRefsLines();
 		foreach($_mix->_ref_lines as $_mix_item){
+			$_mix_item->updateQuantiteAdministration();
 			$_mix_item->loadbackRefs("planifications");
 			foreach($_mix_item->_back["planifications"] as $_planif){
 				$_planif->_quantite_adm = 0;

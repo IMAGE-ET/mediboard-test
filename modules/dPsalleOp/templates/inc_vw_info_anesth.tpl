@@ -86,9 +86,7 @@ Main.add(function(){
 <ul id="anesth_tab_group" class="control_tabs">
 	<li><a href="#tab_preanesth">Pré-anesthésie</a></li>
 	<li onmousedown="refreshAnesthPerops('{{$selOp->_id}}');"><a href="#tab_perop">Per-opératoire</a></li>
-	<!--
 	<li style="float: right"><button type="button" class="print" onclick="printIntervAnesth();">Fiche d'intervention anesthésie</button></li>
-	-->
 </ul>
 <hr class="control_tabs" />
 
