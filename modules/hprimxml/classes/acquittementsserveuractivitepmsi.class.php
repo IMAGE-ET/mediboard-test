@@ -11,6 +11,13 @@
 CAppUI::requireModuleClass("hprimxml", "hprimxmldocument");
 
 class CHPrimXMLAcquittementsServeurActivitePmsi extends CHPrimXMLDocument {
+  static $evenements = array(
+    'evenementPMSI'                => "CHPrimXMLAcquittementsPmsi",
+    'evenementServeurActe'         => "CHPrimXMLAcquittementsServeurActes",
+    'evenementServeurEtatsPatient' => "CHPrimXMLAcquittementsServeurEtatsPatient",
+    'evenementFraisDivers'         => "CHPrimXMLAcquittementsFraisDivers"
+  );
+  
   var $acquittement = null;
   
   var $_identifiant_acquitte = null;
