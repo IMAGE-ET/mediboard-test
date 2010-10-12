@@ -10,7 +10,7 @@
 
 global $AppUI, $can, $m;
 
-$can->needsRead();
+CCanDo::checkEdit();
 
 $user_id = CValue::getOrSession("user_id", $AppUI->user_id);
 

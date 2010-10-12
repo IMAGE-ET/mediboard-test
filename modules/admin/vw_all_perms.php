@@ -8,9 +8,9 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
  */
 
-global $can, $m;
+global $m;
 
-$can->needsAdmin();
+CCanDo::checkRead();
 
 // Liste des modules
 $listModules = CModule::getActive();
@@ -30,7 +30,7 @@ $perms = array(
 
 $views = array(
   PERM_DENY => "caché",
-  PERM_READ => "vue",
+  PERM_READ => "menu",
   PERM_EDIT => "administration"
 );
               
