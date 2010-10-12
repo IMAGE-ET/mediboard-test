@@ -9,6 +9,10 @@
  */
 
 class CHL7V2 {  
+  const LIB_HL7 = "lib/hl7";
+  const PREFIX_SEGMENT_NAME = "segment";
+  const PREFIX_COMPOSITE_NAME = "composite";
+  
   static $versions = array(
     "1",
     "2",
@@ -18,30 +22,61 @@ class CHL7V2 {
     "5"
   );
   
-  var $version = null;
+  static $specs = array();
+
+  var $spec_hl7_dir  = null;
+  var $spec_filename = null;
+  var $minOccurs     = null;
+  var $maxOccurs     = null;
   
-  function isDate($value) {
+  static function isDate($value) {
     return preg_match("/^\d{8}$/", $value);
   }
   
-  function isTime($value) {
+  static function getDate($value) {
+    
+  }
+  
+  static function isTime($value) {
     return preg_match("/^\d{6}$/", $value);
   }
   
-  function isDateTime($value) {
+  static function isDateTime($value) {
     return preg_match("/^\d{14}$/", $value);
   }
   
-  function isDouble($value) {
+  static function isDouble($value) {
     return is_numeric($value) && is_double(floatval($value));
   }
   
-  function isInteger($value) {
+  static function isInteger($value) {
     return preg_match("/^\d+$/", $value);
   }
   
-  function isString($value) {
+  static function isString($value) {
     return is_string($value);
+  }
+  
+  function getSpecs() {}
+  
+  function getFields() {
+    return CHL7v2XPath::queryMultipleNodes($this->getSpecs(), "elements");
+  }
+  
+  function getFieldsCount() {
+    return CHL7v2XPath::queryCountNode($this->getSpecs(), "elements/field");
+  }
+  
+  function getDescription() {
+    return CHL7v2XPath::queryTextNode($this->getSpecs(), "description");
+  }
+  
+  function getFieldDatatype(SimpleXMLElement $spec_field) {    
+    return CHL7v2XPath::queryTextNode($spec_field, "datatype");;
+  }
+  
+  function getMinOccurs(SimpleXMLElement $spec_field) {
+    $this->minOccurs = CHL7v2XPath::queryAttributNode($spec_field, "elements/field", "minOccurs");
   }
 }
 

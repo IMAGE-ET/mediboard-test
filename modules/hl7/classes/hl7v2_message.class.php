@@ -24,48 +24,40 @@ class CHL7v2Message {
   var $repetitionSeparator   = self::DEFAULT_REPETITION_SEPARATOR;
   var $escapeCharacter       = self::DEFAULT_ESCAPE_CHARACTER;
   var $subcomponentSeparator = self::DEFAULT_SUBCOMPONENT_TERMINATOR;
-        
+
+  var $version     = "5";
   var $name        = null;
   var $description = null;
-  var $segments    = null;
+  var $segments    = array();
   var $data        = null;
   
-  function parse($message) {
+  function parseMessage($message) {
     // first tokenize the segments
     if (($message == null) || (strlen($message) < 4)) {
-      throw new CHL7v2MessageException($message, CHL7v2MessageException::EMPTY_MESSAGE);
+      throw new CHL7v2Exception($message, CHL7v2Exception::EMPTY_MESSAGE);
     }
     
-    $firstSegment = substr($message, 0, 3);
-    // invalid entered header
-    if (!in_array($firstSegment, self::$enteredHeaders)) {
-      throw new CHL7v2MessageException($message, CHL7v2MessageException::INVALID_ENTERED_HEADER);
-    }
+    $this->data = $message;
     
-    $lines = explode(self::DEFAULT_SEGMENT_TERMINATOR, $message);
-
     $this->fieldSeparator = $message[3];
     // valid separator
     if (!preg_match("/[^a-z0-9]/i", $this->fieldSeparator) ) {
-      throw new CHL7v2MessageException($message, CHL7v2MessageException::INVALID_SEPARATOR);
+      throw new CHL7v2Exception($message, CHL7v2Exception::INVALID_SEPARATOR);
     }
-    
+
     $nextDelimiter = strpos($message, $this->fieldSeparator, 4);
     if ($nextDelimiter > 4) {
       // usualy ^
       $this->componentSeparator = $message[4];
     }
-    
     if ($nextDelimiter > 5) {
       // usualy ~
       $this->repetitionSeparator = $message[5];
     }
-    
     if ($nextDelimiter > 6) {
       // usualy \
       $this->escapeCharacter = $message[6];
     }
-    
     if ($nextDelimiter > 7) {
       // usualy &
       $this->subcomponentSeparator = $message[7];
@@ -79,9 +71,40 @@ class CHL7v2Message {
       $this->componentSeparator    = "^";
     }
     
+    $this->handleSegments();
+  }
+  
+  function handleSegments() {
+    $lines = explode($this->segmentTerminator, $this->data);
+    foreach ($lines as $_line) {
+      try {
+        $segment = new CHL7v2Segment($this);
+        $segment->parseSegment($_line);
+      } catch (Exception $e) {
+        exceptionHandler($e);
+        return;
+      }
+    }
     
-    
+    $this->validate();
     mbTrace($this);
+  }
+  
+  function validate() {
+    // get version
+    $this->segments[0]->getVersion();
+    
+    // validate all segments
+    foreach ($this->segments as $_segment) {
+      try {
+        $_segment->validateSegment();
+      } catch (Exception $e) {
+        exceptionHandler($e);
+        return;
+      }
+    }
+    
+    // validate message
   }
 }
 

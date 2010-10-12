@@ -32,7 +32,7 @@ foreach($list as $filepath) {
     
     unlink($hl7File);
   } else {
-    $ftp->delFile($filepath);
+   // $ftp->delFile($filepath);
   }
 }
 
