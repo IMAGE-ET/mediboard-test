@@ -190,7 +190,7 @@ Intermax.Triggers['Formater FSE'].aActes = {{$consult->_fse_intermax|@json}};
       {{if !$praticien->_id_cps}}
         <div class="small-info">
           Praticien non associé à une CPS. <br/>
-          Merci d'effectuer une lecture de la CPS pour permettre le formatage d'une FSE. 
+          Merci d'effectuer une lecture de la CPS. 
         </div>
       {{else}}
         <div class="small-success">
@@ -212,7 +212,7 @@ Intermax.Triggers['Formater FSE'].aActes = {{$consult->_fse_intermax|@json}};
       {{if !$patient->_id_vitale}}
         <div class="small-info">
           Patient non associé à un bénéficiaire Vitale. <br/>
-          Merci d'effectuer une lecture de la carte pour permettre le formatage d'une FSE. 
+          Merci d'effectuer une lecture de la carte Vitale. 
         </div>
       {{else}}
         <div class="small-success">
