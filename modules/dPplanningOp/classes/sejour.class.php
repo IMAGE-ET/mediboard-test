@@ -1321,10 +1321,20 @@ class CSejour extends CCodable {
     $template->addProperty("Sejour - Numéro de dossier"       , $this->_num_dossier );
     $template->addBarcode ("Sejour - Code barre ID"           , "SID$this->_id"     );
     $template->addBarcode ("Sejour - Code barre NDOS"         , "NDOS$this->_num_dossier");
+    
     $template->addDateProperty("Sejour - Date entrée"         , $this->entree);
     $template->addTimeProperty("Sejour - Heure entrée"        , $this->entree);
     $template->addDateProperty("Sejour - Date sortie"         , $this->sortie);
     $template->addTimeProperty("Sejour - Heure sortie"        , $this->sortie);
+    
+    $template->addDateProperty("Sejour - Date entrée réelle"  , $this->entree_reelle);
+    $template->addTimeProperty("Sejour - Heure entrée réelle" , $this->entree_reelle);
+    $template->addDateProperty("Sejour - Date sortie réelle"  , $this->sortie_reelle);
+    $template->addTimeProperty("Sejour - Heure sortie réelle" , $this->sortie_reelle);
+    
+    $template->addProperty("Sejour - Mode de sortie"          , $this->getFormattedValue("mode_sortie"));
+    $template->addProperty("Sejour - Service de sortie"       , $this->getFormattedValue("service_mutation_id"));
+    $template->addProperty("Sejour - Etablissement de sortie" , $this->getFormattedValue("etablissement_transfert_id"));
     
     $this->loadRefPraticien();
     $template->addProperty("Hospitalisation - Praticien"    , "Dr ".$this->_ref_praticien->_view);
