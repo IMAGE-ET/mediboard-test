@@ -33,7 +33,7 @@ if (!window.File.applet) {
         } catch(e) {
           File.applet.debug(e);
         }
-      }, 3);
+      }, 5);
     },
     uploadFiles: function() {
       var files_to_upload = $$(".upload-file:checked");
