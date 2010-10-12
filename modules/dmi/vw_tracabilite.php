@@ -31,6 +31,10 @@ if ($filter->_patient_id) {
   $where["sejour.patient_id"] = $ds->prepare("=%", $filter->_patient_id);
 }
 
+if ($filter->product_id) {
+  $where["prescription_line_dmi.product_id"] = $ds->prepare("=%", $filter->product_id);
+}
+
 if ($lot) {
   $where["product_order_item_reception.code"] = $ds->prepareLike("$lot%");
 }
