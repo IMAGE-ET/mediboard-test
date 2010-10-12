@@ -34,6 +34,12 @@ refreshAnesthPerops = function(operation_id){
 	url.requestUpdate("list_perops_"+operation_id);
 }
 
+printIntervAnesth = function(){
+  var url = new Url("dPsalleOp", "print_intervention_anesth");
+	url.addParam("operation_id", "{{$selOp->_id}}");
+	url.popup(800, 600, "Intervention anesthésiste");
+}
+
 {{if $dialog}}
 reloadAnesth = function() {
   window.opener.location.reload(true);
@@ -80,6 +86,9 @@ Main.add(function(){
 <ul id="anesth_tab_group" class="control_tabs">
 	<li><a href="#tab_preanesth">Pré-anesthésie</a></li>
 	<li onmousedown="refreshAnesthPerops('{{$selOp->_id}}');"><a href="#tab_perop">Per-opératoire</a></li>
+	<!--
+	<li style="float: right"><button type="button" class="print" onclick="printIntervAnesth();">Fiche d'intervention anesthésie</button></li>
+	-->
 </ul>
 <hr class="control_tabs" />
 
