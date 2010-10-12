@@ -8,7 +8,7 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
  */
 
-global $can;
+CCanDo::checkAdmin();
 
 $date     = CValue::getOrSession("date"    , mbDate());
 $groupres = CValue::getOrSession("groupres", 1);

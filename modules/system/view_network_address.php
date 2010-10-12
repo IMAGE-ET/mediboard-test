@@ -8,7 +8,9 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
  */
 
-global $can, $m, $AppUI;
+global $m, $AppUI;
+
+CCanDo::checkEdit();
 
 $start  = CValue::get("start", 0);
 

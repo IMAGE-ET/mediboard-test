@@ -70,9 +70,10 @@ Main.add(function(){
       Alexis Granger<br />
       Fabien Ménager<br />
       Yohann Poiron<br />
+      Flavien Crochard<br />
       <h2>Sociétés actives</h2>
-      OpenXtrem<br />
-      Kheops Technologies<br />
+      <a href="http://www.openxtrem.com" target="_blank">OpenXtrem</a><br />
+      <a href="http://www.kheops.ch/" target="_blank">Kheops Technologies</a><br />
     </div>
     <div class="nav">
       <a href="#1" onclick="return Slideshow.previous()">&lt;&lt; Présentation</a>

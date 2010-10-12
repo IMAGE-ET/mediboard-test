@@ -26,7 +26,9 @@ Main.add(function () {
 	<ul id="tabs-modules" class="control_tabs">
 	  <li><a {{if $upgradable}}class="wrong"{{/if}} {{if !$mbmodules.installed|@count}}class="empty"{{/if}} href="#installed">{{tr}}CModule-modules-installed{{/tr}} ({{$mbmodules.installed|@count}})</a></li>
 	  <li><a {{if !$mbmodules.notInstalled|@count}}class="empty"{{/if}} href="#notInstalled">{{tr}}CModule-modules-notInstalled{{/tr}} ({{$mbmodules.notInstalled|@count}})</a></li>
+    {{if $can->edit}}
     <li><a href="#cache">{{tr}}module-system-cache{{/tr}}</a></li>
+    {{/if}}
     <li><a {{if $obsoleteLibs|@count}}class="wrong"{{/if}} href="#libs">{{tr}}module-system-libs{{/tr}} {{if $obsoleteLibs|@count}}({{$obsoleteLibs|@count}}){{/if}}</a></li>
     <li><a  href="#assistant">{{tr}}module-system-assistant{{/tr}}</a></li>
 	</ul>
@@ -41,6 +43,7 @@ Main.add(function () {
 	  {{include file="inc_module.tpl" object=$mbmodules.notInstalled installed=false}}
 	</div>
   
+  {{if $can->edit}}
   <div id="cache" style="display: none;">
     <script type="text/javascript">
       function updateControlTabs() {
@@ -103,6 +106,7 @@ Main.add(function () {
         </tr>
       </table>
   </div>
+  {{/if}}
   
   <div id="libs" style="display: none;">
     <table class="tbl" style="table-layout: fixed;">

@@ -35,7 +35,7 @@
       <td>{{mb_value object=$mbmodule field=mod_type}}</td>
   
       <td>
-        {{if $can->edit}}
+        {{if $can->admin}}
         <a class="button new action" href="{{$cmd}}=install">
           {{tr}}Install{{/tr}} &gt;
           {{mb_value object=$mbmodule field=_latest}}
@@ -81,15 +81,18 @@
   
       <!-- Actions -->
       <td>
-        {{if $mbmodule->_upgradable}}
+        {{if $mbmodule->_upgradable && $can->admin}}
         <a class="button change action" href="{{$cmd}}=upgrade" onclick="return confirm('{{tr}}CModule-confirm-upgrade{{/tr}}')">
           {{tr}}Upgrade{{/tr}} &gt; {{$mbmodule->_latest}}
         </a>
-  
-        {{elseif $mbmodule->mod_type != "core" && $can->edit}}
+        {{elseif $mbmodule->_upgradable}}
+        {{tr}}Out of date{{/tr}} : {{$mbmodule->_latest}}
+        {{elseif $mbmodule->mod_type != "core" && $can->admin}}
         <a class="button cancel action"  href="{{$cmd}}=remove" onclick="return confirm('{{tr}}CModule-confirm-deletion{{/tr}}');">
           {{tr}}Remove{{/tr}}
         </a>
+        {{else}}
+        {{tr}}Up to date{{/tr}}
         {{/if}}
       </td>
       {{if $installed}}
@@ -120,21 +123,30 @@
     
         <td style="text-align: center; width: 1%;">
           <!-- Actif -->
+          {{if $can->edit}}
           <input type="checkbox" {{if $can->edit && $mbmodule->mod_type != "core"}}onclick="location.href='{{$cmd}}=toggle'"{{/if}}
           {{if $mbmodule->mod_active}}checked="checked"{{/if}} 
           {{if $mbmodule->mod_type=="core"}}disabled="disabled"{{/if}} />
+          {{else}}
+          {{mb_value object=$mbmodule field=mod_active}}
+          {{/if}}
         </td>
     
         <td style="text-align: center; width: 1%;">
+          <!-- Visible -->
+          {{if $can->edit}}
           <input type="checkbox" {{if $can->edit && $mbmodule->mod_active}}onclick="location.href='{{$cmd}}=toggleMenu'"{{/if}} 
           {{if $mbmodule->mod_ui_active}}checked="checked"{{/if}}
           {{if !$mbmodule->mod_active}}disabled="disabled"{{/if}}  />
+          {{else}}
+          {{mb_value object=$mbmodule field=mod_ui_active}}
+          {{/if}}
         </td>
         
         <td style="text-align: right; width: 1%;">
           {{$mbmodule->mod_ui_order}}
-          <img src="./images/icons/updown.gif" usemap="#map-{{$mbmodule->_id}}" />
           {{if $can->edit}}
+          <img src="./images/icons/updown.gif" usemap="#map-{{$mbmodule->_id}}" />
           <map name="map-{{$mbmodule->_id}}">
             <area coords="0,0,10,7"  href="{{$cmd}}=moveup" />
             <area coords="0,8,10,14" href="{{$cmd}}=movedn" />

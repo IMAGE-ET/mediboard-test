@@ -8,9 +8,7 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
  */
 
-global $can;
-
-$can->needsRead();
+CCanDo::checkRead();
 
 $message_id = CValue::getOrSession("message_id");
 $_status = CValue::getOrSession("_status");

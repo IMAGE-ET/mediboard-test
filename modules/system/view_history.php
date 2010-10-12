@@ -13,7 +13,7 @@ global $can, $m, $AppUI;
 $dialog = CValue::get("dialog");
 $start  = CValue::get("start", 0);
 
-if (!$can->read && !$dialog) {
+if (!$can->edit && !$dialog) {
   $can->redirect();
 }
 
