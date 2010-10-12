@@ -283,7 +283,7 @@ Main.add( function(){
 			      <tr>
 			        <!-- Affichage d'une ligne de commentaire -->
 			        {{if $_line->_class_name == "CPrescriptionLineComment"}}
-			          <td colspan="4">{{$_line->commentaire}}</td>
+			          <td colspan="4" class="text">{{$_line->commentaire}}</td>
 			        {{else}}
 			          {{assign var=chapitre value=$_line->_ref_element_prescription->_ref_category_prescription->chapitre}}
 			          <!-- Affichage d'une ligne d'element -->

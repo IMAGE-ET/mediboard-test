@@ -455,7 +455,7 @@ addAerosol = function(){
         </td>
       {{else}}
       <!-- Affichage d'une ligne de commentaire -->
-        <td colspan="3">
+        <td colspan="3" class="text">
            {{$_hist_line->commentaire}}
          </td>
          <td>
