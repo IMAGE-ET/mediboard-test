@@ -49,8 +49,8 @@ class CEchangeSOAP extends CMbObject {
     $specs["date_echange"]          = "dateTime notNull";
     $specs["web_service_name"]      = "str";
     $specs["function_name"]         = "str notNull";
-    $specs["input"]                 = "php";
-    $specs["output"]                = "php";
+    $specs["input"]                 = "php show|0";
+    $specs["output"]                = "php show|0";
     $specs["soapfault"]             = "bool";
     $specs["purge"]                 = "bool";
     $specs["response_time"]         = "float";

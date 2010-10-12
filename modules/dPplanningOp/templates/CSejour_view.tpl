@@ -3,6 +3,12 @@
 {{assign var=sejour value=$object}}
 
 <table class="tbl tooltip">
+  <tr>
+    <th class="category {{if $sejour->sortie_reelle}}arretee{{/if}}" colspan="4">
+      {{tr}}CSejour-_etat.{{$sejour->_etat}}{{/tr}}
+    </th>
+  </tr>
+  
   {{if $sejour->annule == 1}}
   <tr>
     <th class="category cancelled" colspan="4">
