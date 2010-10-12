@@ -74,6 +74,7 @@ else {
   
   $consult->loadRefs();
   $consult->_ref_plageconsult->loadRefs();  
+  $consult->loadRefsNotes();
   
   if ($consult->sejour_id) {
     $consult->loadRefSejour();
