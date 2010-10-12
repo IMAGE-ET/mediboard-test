@@ -82,7 +82,12 @@ class CCanDo {
       $this->redirect("object_not_found", $params);
     }
   }
-	
+
+  static function checkObject(CMbObject $object, $setValues = null){
+    global $can;
+    $can->needsObject($object, $setValues);
+  }
+
   /** 
    * Check if the connected user has READ rights on the current page
    * @return void

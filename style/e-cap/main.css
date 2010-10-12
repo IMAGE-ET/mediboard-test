@@ -22,7 +22,7 @@ table.form {
 }
 
 table.form th {
-  background-color: #ffd;
+  background-color: #ffe;
   vertical-align: top;
   border-right: 1px solid #ddd;
 }
@@ -74,7 +74,7 @@ table.form th a.button.save:link {
 }
 
 table.form td {
-  background-color: #ffd;
+  background-color: #ffe;
   border: none;
 }
 
@@ -87,7 +87,7 @@ table.form td.light {
 }
 
 table.form td.compte_rendu {
-  background: #ffd;
+  background: #ffe;
 }
 
 .wizard {
@@ -360,7 +360,7 @@ div.selected,
 table.tbl tr.selected td,
 table.form tr.selected td,
 table.tbl tbody.selected td {
-  background-color: #edb;
+  background-color: #dca;
 }
 
 table.tbl td.button {
