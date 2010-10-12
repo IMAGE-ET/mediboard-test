@@ -1316,7 +1316,11 @@ class CSetupdPcabinet extends CSetup {
     $sql = "ALTER TABLE `consultation` ADD `si_desistement` ENUM ('0','1') NOT NULL DEFAULT '0'";
     $this->addQuery($sql);
     
-    $this->mod_version = "1.25";
+    $this->makeRevision("1.25");
+    $sql = "ALTER TABLE `plageconsult` ADD `locked` ENUM ('0','1') DEFAULT '0';";
+    $this->addQuery($sql);
+    
+    $this->mod_version = "1.26";
   }
 }
 ?>

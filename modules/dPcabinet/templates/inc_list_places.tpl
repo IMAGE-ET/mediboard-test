@@ -31,7 +31,7 @@ PlageConsult.addPlaceAfter = function(plage_id) {
 {{/if}}
 
 </script>
-{{if $online}}
+{{if $online && !$plage->locked}}
 <form action="?m=dPcabinet" method="post" name="editPlage" onsubmit="return checkForm(this);">
   <input type="hidden" name="m" value="dPcabinet" />
   <input type="hidden" name="dosql" value="do_plageconsult_aed" />
@@ -54,7 +54,7 @@ PlageConsult.addPlaceAfter = function(plage_id) {
       Plage du {{$plage->date|date_format:$dPconfig.longdate}} de {{$plage->debut|date_format:$dPconfig.time}} à {{$plage->fin|date_format:$dPconfig.time}}
     </th>
   </tr>
-  {{if $online}}
+  {{if $online && !$plage->locked}}
   <tr>
     <td class="button" colspan="3">
       <button type="button" class="add singleclick" onclick="PlageConsult.addPlaceBefore()">
@@ -128,7 +128,7 @@ PlageConsult.addPlaceAfter = function(plage_id) {
   <tr>
     <td>
       <div style="float:left">
-        {{if $online}}
+        {{if $online && !$plage->locked}}
           <button type="button" class="tick" onclick="PlageConsult.setClose('{{$_place.time}}')">{{$_place.time|date_format:$dPconfig.time}}</button>
         {{else}}
           {{$_place.time|date_format:$dPconfig.time}}

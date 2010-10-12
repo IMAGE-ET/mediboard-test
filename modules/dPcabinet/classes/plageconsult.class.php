@@ -26,6 +26,7 @@ class CPlageconsult extends CMbObject {
   var $debut   = null;
   var $fin     = null;
   var $libelle = null;
+  var $locked  = null;
 
   // Form fields
   var $_hour_deb             = null;
@@ -75,6 +76,7 @@ class CPlageconsult extends CMbObject {
       "debut"   => "time notNull",
       "fin"     => "time notNull",
       "libelle" => "str seekable",
+      "locked"  => "bool default|0",
 
       // Form fields
       "_hour_deb"  => "",

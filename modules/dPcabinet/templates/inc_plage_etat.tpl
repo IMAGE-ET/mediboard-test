@@ -16,6 +16,9 @@
 <div class="progressBar">
   <div class="bar {{$backgroundClass}}" style="width: {{$pct}}%;"></div>
   <div class="text">
+    {{if $_plage->locked}}
+    <img style="float: right; height: 12px;" src="style/mediboard/images/buttons/lock.png" />
+    {{/if}}
     <a href="#1" onclick="PlageConsult.changePlage({{$_plage->_id}}); return false;">
       {{$_plage->date|date_format:"%A %d"}}
     </a>

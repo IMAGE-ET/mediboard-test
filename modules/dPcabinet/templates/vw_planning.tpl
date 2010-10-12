@@ -160,7 +160,12 @@ Main.add(function () {
                   <a href="?m={{$m}}&amp;tab=edit_planning&amp;consultation_id=0&amp;plageconsult_id={{$plage->plageconsult_id}}" title="Planifier une consultation dans cette plage"> 
                     <div class="progressBar">
                       <div class="bar {{$backgroundClass}}" style="width: {{$pct}}%;"></div>
-                      <div class="text">{{$plage->_affected}} {{if $plage->_nb_patients != $plage->_affected}}({{$plage->_nb_patients}}){{/if}} / {{$plage->_total|string_format:"%.0f"}}</div>
+                      <div class="text">
+                        {{if $plage->locked}}
+                        <img style="float: right; height: 12px;" src="style/mediboard/images/buttons/lock.png" />
+                        {{/if}}
+                        {{$plage->_affected}} {{if $plage->_nb_patients != $plage->_affected}}({{$plage->_nb_patients}}){{/if}} / {{$plage->_total|string_format:"%.0f"}}
+                      </div>
                     </div>
                   </a>
                 </td>
@@ -296,6 +301,11 @@ Main.add(function () {
                   <option value="9">Une semaine sur 9</option>
                 </select>
               </td>
+            </tr>
+            <tr>
+              <td colspan="2"></td>
+              <th>{{mb_label object=$plageSel field="locked"}}</th>
+              <td>{{mb_field object=$plageSel field="locked" typeEnum="checkbox"}}</td>
             </tr>
             <tr>
               {{if !$plageSel->_id}}
