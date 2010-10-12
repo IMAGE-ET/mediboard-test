@@ -90,7 +90,7 @@ initializeGraph = function (src, data) {
   // Ajout de la ligne de niveau standard
   if (src.standard) {
     src.series.unshift({
-      data: [[0, src.standard], [1000, src.standard]], 
+      data: [[-1000, src.standard], [1000, src.standard]], 
       points: {show: false},
       markers: {show: false},
       mouse: {track: false},
@@ -145,6 +145,8 @@ options = {
   options.spreadsheet.show = false;
   options.mouse.track = false;
   options.markers = {show: true};
+  options.grid.outlineWidth = 1;
+  options.xaxis.min = -0.2;
 {{/if}}
 
 // We initalize the graphs with the default options
@@ -195,12 +197,18 @@ Main.add(function () {
   
   drawGraph();
   
-  {{if !$print}}
-  {{foreach from=$data item=curr_data key=key}}
-    checkbox = oForm["checkbox-constantes-medicales-{{$key}}"];
-    checkbox.checked = (data.{{$key}}.series.last().data.length > 1);
-    $('constantes-medicales-{{$key}}').setVisible(checkbox.checked);
-  {{/foreach}}
+  {{if $print}}
+    {{foreach from=$data item=curr_data key=key}}
+      $('constantes-medicales-{{$key}}').setVisible(
+        data.{{$key}}.series.last().data.length > 1
+      );
+    {{/foreach}}
+  {{else}}
+    {{foreach from=$data item=curr_data key=key}}
+      checkbox = oForm["checkbox-constantes-medicales-{{$key}}"];
+      checkbox.checked = (data.{{$key}}.series.last().data.length > 1);
+      $('constantes-medicales-{{$key}}').setVisible(checkbox.checked);
+    {{/foreach}}
   {{/if}}
 });
 
