@@ -264,7 +264,9 @@ emptyProtocole = function() {
 		            </optgroup>
 			        </select>
 				      </td>
-				    {{/if}}
+				    {{else}}
+				      <input type="hidden" id="choix_prat" value="{{$app->user_id}}" />
+            {{/if}}
               {{if $operations|@count > 1}}
 	              <td>
 		              <select name="operation_id" onchange="$V(getForm('applyProtocoleFirst').operation_id, this.value);">
