@@ -28,10 +28,7 @@ class CTemplateManager {
   private static $barcodeCache = array();
   
   function CTemplateManager($parameters = array()) {
-    global $AppUI;
-    $user = new CMediusers();
-    $user->load($AppUI->user_id);
-		
+    $user = CMediusers::get();
   	$this->parameters = $parameters;
 		
     $this->addProperty("Courrier - nom destinataire"     , "[Courrier - nom destinataire]");
@@ -63,7 +60,7 @@ class CTemplateManager {
     return "<span class=\"{$spanClass}\">{$text}</span>";
   }
   
-  function addProperty($field, $value = null, $options = array()) {
+  function addProperty($field, $value = null, $options = array(), $htmlescape = true) {
   	$sec = explode(' - ', $field, 2);
   	if (count($sec) > 1) {
   		$section = $sec[0];
@@ -125,14 +122,27 @@ class CTemplateManager {
   }
 	
   function addListProperty($field, $list = null) {
-    if (!is_array($list)) $list = array($list);
-		$str = "<ul>";
-		if (count($list)) {
-			$str .= "<li>" . implode("</li><li>", $list) . "</li>";
-		}
-		$str .= "</ul>";
-    $this->addProperty($field, $str);
+    $this->addProperty($field, $this->makeList($list), false);
   }
+	
+	function makeList($list) {
+		if (!$list) {
+			return;
+		}
+
+    // Make a list out of a string
+    if (!is_array($list)) {
+      $list = array($list);
+    }
+    
+    $str = "<ul>";
+		foreach ($list as $item) {
+			$item = htmlentities($item);
+      $str .= "<li>$item</li>";
+		}
+    $str.= "</ul>";
+		return $str;
+	}
 	
   function addGraph($field, $data, $options = array()) {
     $this->graphs[utf8_encode($field)] = array(
@@ -141,7 +151,7 @@ class CTemplateManager {
       "name" => utf8_encode($field)
     );
 		
-		$this->addProperty($field, $field);
+		$this->addProperty($field, $field, false);
   }
   
   function addBarcode($field, $data, $options = array()) {
@@ -152,7 +162,7 @@ class CTemplateManager {
         "class"  => "barcode"
       )
     );
-    $this->addProperty($field, $data, $options);
+    $this->addProperty($field, $data, $options, false);
   }
 
   function addList($name, $choice = null) {

@@ -33,7 +33,10 @@ class CDossierMedical extends CMbMetaObject {
   var $_ext_codes_cim    = null;
 
   // Back references
+  var $_all_antecedents = null;
+	// @todo: renommer en $_ref_antecetents_by_type
   var $_ref_antecedents = null;
+  var $_ref_antecedents_by_appareil = null;
   var $_ref_traitements = null;
   var $_ref_etats_dents = null;
   var $_ref_prescription = null;
@@ -55,12 +58,12 @@ class CDossierMedical extends CMbMetaObject {
     $specs["object_class"] = "enum list|CPatient|CSejour";
     $specs["codes_cim"] = "text";
 		
-	  $specs["risque_thrombo_patient"] = "enum list|NR|faible|modere|eleve|majeur default|NR";
-    $specs["risque_thrombo_chirurgie"] = "enum list|NR|faible|modere|eleve default|NR";
-		$specs["risque_MCJ_patient"] = "enum list|NR|sans|avec|suspect|atteint default|NR";
-    $specs["risque_MCJ_chirurgie"] = "enum list|NR|sans|avec default|NR";
+	  $specs["risque_thrombo_patient"   ] = "enum list|NR|faible|modere|eleve|majeur default|NR";
+    $specs["risque_thrombo_chirurgie" ] = "enum list|NR|faible|modere|eleve default|NR";
+		$specs["risque_MCJ_patient"       ] = "enum list|NR|sans|avec|suspect|atteint default|NR";
+    $specs["risque_MCJ_chirurgie"     ] = "enum list|NR|sans|avec default|NR";
     $specs["risque_antibioprophylaxie"] = "enum list|NR|non|oui default|NR";
-	  $specs["risque_prophylaxie"] = "enum list|NR|non|oui default|NR";
+	  $specs["risque_prophylaxie"       ] = "enum list|NR|non|oui default|NR";
     return $specs;
   }  
 
@@ -90,9 +93,10 @@ class CDossierMedical extends CMbMetaObject {
   
   function loadRefPrescription(){
     $this->_ref_prescription = $this->loadUniqueBackRef("prescription");  
-    if($this->_ref_prescription && $this->_ref_prescription->_id){
+    if ($this->_ref_prescription && $this->_ref_prescription->_id){
       $this->_ref_prescription->loadRefsLinesMed();
     }
+		return $this->_ref_prescription;
   }
   
   function loadRefObject(){  
@@ -136,52 +140,37 @@ class CDossierMedical extends CMbMetaObject {
     
   function loadRefsAntecedents($cancelled = false) {
     // Initialisation du classement
-    $ant = new CAntecedent();
-    $list_types = explode("|", $ant->_specs["type"]->list);
-    foreach ($list_types as $type) {
-      $this->_ref_antecedents[$type] = array();
-    }
-    ksort($this->_ref_antecedents);
-    
-    $order = "type";
-    if (null == $antecedents = $this->loadBackRefs("antecedents", $order)) {
+    $order = "type, appareil";
+    if (null == $this->_all_antecedents = $this->loadBackRefs("antecedents", $order)) {
       return;
     }
 
-    // Classements des antécédents
-    foreach ($antecedents as $_antecedent) {
-    	if ($_antecedent->annule == 0 || $cancelled)
-        $this->_ref_antecedents[$_antecedent->type][$_antecedent->_id] = $_antecedent;
+    // Filtrage sur les annulés
+    foreach ($this->_all_antecedents as $_atcd) {
+      if ($_atcd->annule && !$cancelled) {
+			   unset($this->_all_antecedents[$_atcd->_id]);
+      }
+		}
+
+    $atcd = new CAntecedent();
+
+    // Classement par type
+    $this->_ref_antecedents = array_fill_keys($atcd->_specs["type"]->_list, array());
+    ksort($this->_ref_antecedents);
+    foreach ($this->_all_antecedents as $_atcd) {
+      $this->_ref_antecedents[$_atcd->type][$_atcd->_id] = $_atcd;
     }
-  }
-  
-  function loadRefsAntecedentsByAppareil($cancelled = false){
-    // Initialisation du classement
-    $ant = new CAntecedent();
-    $list_appareils = explode("|", $ant->_specs["appareil"]->list);
-    foreach ($list_appareils as $appareil) {
-      $this->_ref_antecedents_by_appareil[$appareil] = array();
-    }
-    ksort($this->_ref_antecedents_by_appareil);
-    
-    $order = "type";
-    if (null == $antecedents = $this->loadBackRefs("antecedents", $order)) {
-      return;
-    }
-    
-    // Classements des antécédents
-    foreach ($antecedents as $_antecedent) {
-    	if ($_antecedent->annule == 0 || $cancelled)
-        $this->_ref_antecedents_by_appareil[$_antecedent->appareil][$_antecedent->_id] = $_antecedent;
+
+    // Classement par type
+    $this->_ref_antecedents_by_appareil = array_fill_keys($atcd->_specs["appareil"]->_list, array());
+    ksort($this->_ref_antecedents);
+    foreach ($this->_all_antecedents as $_atcd) {
+      $this->_ref_antecedents_by_appareil[$_atcd->appareil][$_atcd->_id] = $_atcd;
     }
   }
   
   function loadRefsEtatsDents() {
-    $etat_dent = new CEtatDent();
-    if ($this->_id) {
-      $etat_dent->dossier_medical_id = $this->_id;
-      $this->_ref_etats_dents = $etat_dent->loadMatchingList();
-    }
+    return $this->_ref_etats_dents = $this->loadBackRefs("etats_dent");
   }
 
   /**
@@ -192,7 +181,6 @@ class CDossierMedical extends CMbMetaObject {
   	$antedecent = new CAntecedent();
   	$where = array();
     $where["dossier_medical_id"] = " = '$this->_id'";
-  	// [tom] ??    $where["type"] = " != 'alle'";
 
 	  $where["annule"] = " != '1'";
   	$this->_count_antecedents = $antedecent->countList($where);
@@ -215,7 +203,7 @@ class CDossierMedical extends CMbMetaObject {
   function loadRefsTraitements() {
     $order = "fin DESC, debut DESC";
     if (CAppUI::conf("dPpatients CTraitement enabled")) {
-      $this->_ref_traitements = $this->loadBackRefs("traitements", $order);
+      return $this->_ref_traitements = $this->loadBackRefs("traitements", $order);
     }
   }
   
@@ -263,131 +251,112 @@ class CDossierMedical extends CMbMetaObject {
   function fillTemplate(&$template, $champ = "Patient") {
     // Antécédents
     $this->loadRefsAntecedents();
-    if (is_array($this->_ref_antecedents)){
-      $sAntecedents = "";
+    $atcd = new CAntecedent();
 
-      foreach ($this->_ref_antecedents as $keyAnt => $currTypeAnt) {
-        $aAntecedentsParType = array();
-        $sType =  CAppUI::tr("CAntecedent.type.".$keyAnt);
-        foreach ($currTypeAnt as $currAnt) {
-          $sAntecedent = "&bull; ";
-          if ($currAnt->date) { 
-            $sAntecedent .= $currAnt->getFormattedValue('date') . " : ";
-          }
-          $sAntecedent .= $currAnt->rques;
-          $aAntecedentsParType[] = $sAntecedent;
-        }
-        $sAntecedentsParType = join("<br />", $aAntecedentsParType);
-
-        $template->addProperty("$champ - Antécédents - $sType", $sAntecedentsParType);
-        
-        if (count($currTypeAnt)) {
-	        $sAntecedents .="<br />{$sType}<br />{$sAntecedentsParType}";
-        }
+		// Construction des listes de valeurs
+    $lists_par_type     = array();
+    $lists_par_appareil = array();
+    foreach ($this->_all_antecedents as $_antecedent) {
+      $type     = $_antecedent->type     ? $_antecedent->getFormattedValue("type"    ).": " : "";
+      $appareil = $_antecedent->appareil ? $_antecedent->getFormattedValue("appareil").": " : "";
+			$date = $_antecedent->date ? "[".$_antecedent->getFormattedValue("date")."] " : "";
+      $lists_par_type    [$_antecedent->type    ][] = $appareil . $date . $_antecedent->rques;
+      $lists_par_appareil[$_antecedent->appareil][] = $type     . $date . $_antecedent->rques;
+		}
+		
+		// Création des listes par type
+		$parts = array();
+		$types = $atcd->_specs["type"]->_list;
+		$types[] = "";
+		foreach ($types as $type) {
+			$sType =  CAppUI::tr("CAntecedent.type.$type");
+      $list = @$lists_par_type[$type];
+			$template->addListProperty("$champ - Antécédents - $sType", $list);
+      if ($list) {
+        $parts[] = "<strong>$sType</strong>" . $template->makeList($list);
       }
-      $template->addProperty("$champ - Antécédents -- tous", $sAntecedents !== "" ? $sAntecedents : null);
+		}
+		$template->addProperty("$champ - Antécédents -- tous", implode("", $parts));
+				
+    // Création des listes par appareil
+    $parts = array();
+    $appareils = $atcd->_specs["appareil"]->_list;
+    $appareils[] = "";
+    foreach ($appareils as $appareil) {
+		  $sAppareil =  CAppUI::tr("CAntecedent.appareil.$appareil");
+			$list = @$lists_par_appareil[$appareil];
+      $template->addListProperty("$champ - Antécédents - $sAppareil", $list);
+			if ($list) {
+        $parts[] = "<strong>$sAppareil</strong>" . $template->makeList($list);
+			}
     }
-    
-    $this->loadRefsAntecedentsByAppareil();
-      if (is_array($this->_ref_antecedents_by_appareil)){
-      $sAntecedentsApp = "";
-  
-      foreach ($this->_ref_antecedents_by_appareil as $keyAppAnt => $currAppAnt) {
-        $aAntecedentsParApp = array();
-        $sApp =  CAppUI::tr("CAntecedent.appareil.".$keyAppAnt);
-        foreach ($currAppAnt as $currAppAnt) {
-          $sAntecedentApp = "&bull; ";
-          if ($currAppAnt->date) { 
-            $sAntecedentApp .= $currAppAnt->getFormattedValue('date') . " : ";
-          }
-          $sAntecedentApp .= $currAppAnt->rques;
-          $aAntecedentsParApp[] = $sAntecedentApp;
-        }
-        $sAntecedentsParApp = join("<br />", $aAntecedentsParApp);
-
-        $template->addProperty("$champ - Antécédents - $sApp", $sAntecedentsParApp);
-        
-        if (count($currAppAnt)) {
-	        $sAntecedentsApp .="<br />{$sType}{$sAntecedentsParApp}";
-        }
-      }
-      //$template->addProperty("$champ - Antécédents -- tous", $sAntecedents !== "" ? $sAntecedents : null);
-    }
+    $template->addProperty("$champ - Antécédents -- tous par appareil", implode("", $parts));
+		
     
     // Traitements
     $this->loadRefsTraitements();
     if (is_array($this->_ref_traitements)) {
-      $sTraitements = "";
-      foreach($this->_ref_traitements as $curr_trmt){
-        $sTraitements.="<br /> &bull; ";
-        if ($curr_trmt->fin){
-          $sTraitements .= "Depuis ".$curr_trmt->getFormattedValue('debut').
-                           " jusqu'à ".$curr_trmt->getFormattedValue('fin')." : ";
-        }
-        elseif($curr_trmt->debut){
-          $sTraitements .= "Depuis ".$curr_trmt->getFormattedValue('debut')." : ";
-        }
-        $sTraitements .= $curr_trmt->traitement;
+    	$list = array();
+      foreach ($this->_ref_traitements as $_traitement) {
+        $debut     = $_traitement->debut ? " depuis "   . $_traitement->getFormattedValue("debut") : "";
+        $fin       = $_traitement->debut ? " jusqu'au " . $_traitement->getFormattedValue("fin"  ) : "";
+				$colon  = $debut || $fin ? ": " : "";
+				$list[] = $debut . $fin . $colon . $_traitement->traitement;
       }
 
       // Ajout des traitements notés a l'aide de la BCB
-      if(CModule::getActive('dPprescription')){
-	      $this->loadRefPrescription();
-	      if($this->_ref_prescription->_id){
-	        $this->_ref_prescription->loadRefsLinesMed();
-	        foreach($this->_ref_prescription->_ref_prescription_lines as $_line_med){
-	           $sTraitements .= "<br /> &bull; ".$_line_med->_ucd_view;
-	           $_line_med->loadRefsPrises();
-	           if(count($_line_med->_ref_prises)){
-	             $_posologie = "";
-	             foreach($_line_med->_ref_prises as $_prise){
-	               $_posologie .= "$_prise->_view ";
-	             }
-	             $sTraitements .= " ($_posologie)";
-	           }
-	        }
-	      }
+      $prescription = $this->loadRefPrescription();
+      if ($prescription && $prescription->_id) {
+        $prescription->loadRefsLinesMed();
+        foreach ($prescription->_ref_prescription_lines as $_line) {
+          $view = $_line->_ucd_view;
+          $prises = $_line->loadRefsPrises();
+					$posologie = implode(" - ", CMbArray::pluck($prises, "_view"));
+					$posologie = $posologie ? " ($posologie)" : "";
+          $list[] = $view . $posologie;
+        }
       }
-      $template->addProperty("$champ - Traitements", $sTraitements !== "" ? $sTraitements : null);
+      $template->addListProperty("$champ - Traitements", $list);
     }
     
     // Etat dentaire
-    $this->loadRefsEtatsDents();
     $etats = array();
-    if (is_array($this->_ref_etats_dents)) {
-      foreach($this->_ref_etats_dents as $etat) {
-        if ($etat->etat != null) {
-          switch ($etat->dent) {
-            case 10: 
-            case 30: $position = 'Central haut'; break;
-            case 50: 
-            case 70: $position = 'Central bas'; break;
-            default: $position = $etat->dent;
-          }
-          if (!isset ($etats[$etat->etat])) {
-            $etats[$etat->etat] = array();
-          }
-          $etats[$etat->etat][] = $position;
+    foreach ($this->loadRefsEtatsDents() as $etat) {
+      if ($etat->etat) {
+        switch ($etat->dent) {
+          case 10: 
+          case 30: $position = 'Central haut'; break;
+          case 50: 
+          case 70: $position = 'Central bas'; break;
+          default: $position = $etat->dent;
         }
-      }
+        if (!isset ($etats[$etat->etat])) {
+          $etats[$etat->etat] = array();
+        }
+        $etats[$etat->etat][] = $position;
+			}
+		}
+		
+		// Production des listes par état
+		$list = array();
+    foreach ($etats as $etat => $positions) {
+      sort($positions);
+			$positions = implode(', ', $positions);
+			$etat = CAppUI::tr("CEtatDent.etat.$etat");
+			$list[] = "$etat: $positions";
     }
-    $sEtatsDents = '';
-    foreach ($etats as $key => $list) {
-      sort($list);
-      $sEtatsDents .= '&bull; '.ucfirst($key).' : '.implode(', ', $list).'<br />';
-    }
-    $template->addProperty("$champ - Etat dentaire", $sEtatsDents);
-    
+
+    $template->addListProperty("$champ - Etat dentaire", $list);
     
     // Codes CIM10
-    $aCim10 = array();
+    $list = array();
     if ($this->_ext_codes_cim){
-      foreach ($this->_ext_codes_cim as $curr_code){
-        $aCim10[] = "<br />&bull; $curr_code->code : $curr_code->libelle";
+      foreach ($this->_ext_codes_cim as $_code) {
+      	$list[] = "$_code->code: $_code->libelle";
       }
     }
     
-    $template->addProperty("$champ - Diagnostics", join("", $aCim10));
+    $template->addListProperty("$champ - Diagnostics", $list);
   }
 }
 

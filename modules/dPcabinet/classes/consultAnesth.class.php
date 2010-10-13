@@ -363,18 +363,20 @@ class CConsultAnesth extends CMbObject {
     
     $template->addProperty("Anesthésie - ASA"                    , $this->ASA);
     $template->addProperty("Anesthésie - Préparation pré-opératoire", $this->prepa_preop);
-    $template->addProperty("Anesthésie - Prémédication", $this->getFormattedValue('premedication'));
-    $template->addProperty("Anesthésie - Position", $this->getFormattedValue('position'));
+    $template->addProperty("Anesthésie - Prémédication", $this->premedication);
+    $template->addProperty("Anesthésie - Position"     , $this->getFormattedValue('position'));
 
     $list = CMbArray::pluck($this->loadRefsTechniques(), 'technique');
     $template->addListProperty("Anesthésie - Techniques complémentaires", $list);
     
-    $template->addProperty("Anesthésie - Examen cardiovasculaire", $this->examenCardio);
-    $template->addProperty("Anesthésie - Examen pulmonaire"      , $this->examenPulmo);
+    $template->addProperty("Anesthésie - Résultats ECG"             , $this->result_ecg);
+    $template->addProperty("Anesthésie - Résultats Radio pulmonaier", $this->result_rp);
+    $template->addProperty("Anesthésie - Examen cardiovasculaire"   , $this->examenCardio);
+    $template->addProperty("Anesthésie - Examen pulmonaire"         , $this->examenPulmo);
     
-    $template->addProperty("Anesthésie - Ouverture de la bouche",     $this->getFormattedValue('bouche'));
+    $template->addProperty("Anesthésie - Ouverture de la bouche"    , $this->getFormattedValue('bouche'));
     $template->addProperty("Anesthésie - Distance thyro-mentonnière", $this->getFormattedValue('distThyro'));
-    $template->addProperty("Anesthésie - Etat bucco-dentaire" ,       $this->etatBucco);
+    $template->addProperty("Anesthésie - Etat bucco-dentaire"       , $this->etatBucco);
     $img = '';
     if ($this->mallampati) {
       $img = $this->mallampati.'<br /><img src="../../../images/pictures/'.$this->mallampati.'.png" alt="'.$this->mallampati.'" />';

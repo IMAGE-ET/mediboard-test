@@ -255,6 +255,8 @@ class CPrescriptionLine extends CMbObject {
       $prise->loadRefMoment();
       $prise->loadRefsFwd();
     }
+		
+		return $this->_ref_prises;
   }
  
   /*

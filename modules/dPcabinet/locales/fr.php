@@ -1254,6 +1254,7 @@ $locales['mod-dPcabinet-tab-exam_igs'] = 'Examen IGS';
 $locales['mod-dPcabinet-tab-exam_nyha'] = 'Examen NYHA';
 $locales['mod-dPcabinet-tab-exam_possum'] = 'Examen Possum';
 $locales['mod-dPcabinet-tab-form_print_plages'] = 'Impression plannings';
+$locales['mod-dPcabinet-tab-httpreq_vw_finish_banner'] = 'Bannière de fin de consultation';
 $locales['mod-dPcabinet-tab-httpreq_vw_list_consult'] = 'Planning de consultation';
 $locales['mod-dPcabinet-tab-httpreq_vw_reglement'] = 'Widget de réglément de consultation';
 $locales['mod-dPcabinet-tab-httpreq_widget_files'] = 'Widget de fichiers';

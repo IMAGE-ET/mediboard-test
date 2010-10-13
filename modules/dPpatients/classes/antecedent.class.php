@@ -61,7 +61,12 @@ class CAntecedent extends CMbObject {
     return $specs;
   }
   
-  function loadRefDossierMedical(){ 
+	function updateFormFields() {
+		parent::updateFormFields();
+		$this->_view = $this->rques;
+	}
+	
+  function loadRefDossierMedical() { 
     $this->_ref_dossier_medical = new CDossierMedical();
     $this->_ref_dossier_medical->load($this->dossier_medical_id);
   }
