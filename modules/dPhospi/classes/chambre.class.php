@@ -147,7 +147,7 @@ class CChambre extends CMbObject {
           continue;
         }
         
-        if (!$affectation1->colide($affectation2)) {
+        if (!$affectation1->collide($affectation2)) {
           continue;
         }
         

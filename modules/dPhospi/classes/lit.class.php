@@ -107,7 +107,7 @@ class CLit extends CMbObject {
     foreach ($this->_ref_affectations as $aff1) {
       foreach ($listAff as $aff2) {
         if ($aff1->affectation_id != $aff2->affectation_id) {
-          if ($aff1->colide($aff2)) {
+          if ($aff1->collide($aff2)) {
             $this->_overbooking++;
           }
         }
