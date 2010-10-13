@@ -26,7 +26,7 @@ var Document = {
         url.addArrayParam(s, v);
       });*/
     }
-    url.popup(800, 700, "Document");
+    url.popup(950, 700, "Document");
   },
   
   createFromFast: function(modele_id, object_id, target_id, target_class, switch_mode) {
