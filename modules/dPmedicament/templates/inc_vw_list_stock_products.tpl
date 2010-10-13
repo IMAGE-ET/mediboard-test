@@ -3,6 +3,7 @@
 <table class="main tbl">
   <tr>
     <th style="width: 0.1%;"></th>
+    <th style="width: 16px;"></th>
     <th style="width: 0.1%;">{{mb_title class=CProduct field=code}}</th>
     <th>{{mb_title class=CProduct field=name}}</th>
   </tr>
@@ -31,6 +32,11 @@
             <img src="./images/icons/warning.png" title="Ce produit n'a pas un code CIP valide ({{$_product->code}})"/>
           {{/if}}
         </form>
+      </td>
+      <td>
+        {{if $_product->cancelled}}
+          <img src="./images/icons/archive.png" title="Ce produit est archivé"/>
+        {{/if}}
       </td>
       <td>{{mb_value object=$_product field=code}}</td>
       <td>{{mb_value object=$_product field=name}}</td>

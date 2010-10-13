@@ -10,7 +10,7 @@
 
 <script type="text/javascript">
 function checkOutflow(form) {
-  if (!($V(form.comments) || $V(form.service_id))) return false;
+  if (!($V(form.comments) || $V(form.service_id) || $V(form.type))) return false;
   return onSubmitFormAjax(form, {onComplete: function(){
     getForm("filter").onsubmit();
   }});

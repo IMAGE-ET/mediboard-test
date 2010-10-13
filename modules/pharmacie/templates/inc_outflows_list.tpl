@@ -34,7 +34,23 @@
           </select>
         </td>
         <td style="text-align: center;">{{mb_field object=$delivrance field=date_delivery form="newOutflow" register=1}}</td>
-        <td>{{mb_field object=$delivrance field=comments rows=2}}</td>
+        <td>
+          <script type="text/javascript">
+            showComments = function(element, force){
+              var selected = force || (element.options[element.selectedIndex].value == 'other');
+              var container = $(element.form.comments).up('div.comm');
+              container.setVisible(selected);
+              if (force) {
+                container.down("textarea").tryFocus();
+              }
+            }
+          </script>
+          {{mb_field object=$delivrance field=type emptyLabel="Type" onchange="showComments(this)" onkeyup="showComments(this)"}}
+          <button class="down notext" type="button" onclick="showComments(this,true)" tabIndex="200">Ajouter un commentaire</button>
+          <div class="comm" style="display: none;">
+            {{mb_field object=$delivrance field=comments rows=2}}
+          </div>
+        </td>
         <td><button class="tick notext" style="margin: -1px;" type="submit">Délivrer</button></td>
         <td colspan="2"></td>
       </tr>
@@ -64,7 +80,15 @@
             {{/if}}
           </td>
           <td style="text-align: center;">{{mb_value object=$_delivery field=date_delivery}}</td>
-          <td>{{mb_value object=$_delivery field=comments}}</td>
+          <td>
+            {{if $_delivery->type}}
+              <strong>{{mb_value object=$_delivery field=type}}</strong> 
+              {{if $_delivery->comments}}
+                &ndash;
+              {{/if}}
+            {{/if}}
+            {{$_delivery->comments}}
+          </td>
           <td>
             <button type="button" style="margin: -1px;" class="cancel notext" onclick="removeOutflow('{{$_delivery->_id}}', '{{$_delivery->_ref_stock}}')">{{tr}}Supprimer{{/tr}}</button>
           </td>

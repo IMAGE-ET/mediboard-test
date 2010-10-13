@@ -18,16 +18,16 @@ $filter = new CSejour;
 $filter->entree = $entree;
 
 $axes = array(
-  "age" => "Tranche d'âge",
-  "sexe" => CAppUI::tr("CPatient-sexe"),
-  "ccmu" => CAppUI::tr("CRPU-ccmu"),
-  "mode_entree" => CAppUI::tr("CRPU-mode_entree"),
-  "mode_sortie" => CAppUI::tr("CSejour-mode_sortie"),
-  "provenance" => CAppUI::tr("CRPU-provenance"),
-  "destination" => CAppUI::tr("CRPU-destination"),
-  "orientation" => CAppUI::tr("CRPU-orientation"),
-  "transport" => CAppUI::tr("CRPU-transport"),
-  "without_rpu" => "Séjours d'urgence sans RPU",
+  "age"             => "Tranche d'âge",
+  "sexe"            => CAppUI::tr("CPatient-sexe"),
+  "ccmu"            => CAppUI::tr("CRPU-ccmu"),
+  "mode_entree"     => CAppUI::tr("CRPU-mode_entree"),
+  "mode_sortie"     => CAppUI::tr("CSejour-mode_sortie"),
+  "provenance"      => CAppUI::tr("CRPU-provenance"),
+  "destination"     => CAppUI::tr("CRPU-destination"),
+  "orientation"     => CAppUI::tr("CRPU-orientation"),
+  "transport"       => CAppUI::tr("CRPU-transport"),
+  "without_rpu"     => "Séjours d'urgence sans RPU",
   "transfers_count" => "Nombre de transferts",
   "mutations_count" => "Nombre de mutations",
 );
@@ -36,6 +36,9 @@ $axes_other = array(
   "radio" => "Attente radio",
   "bio"   => "Attente biologie",
   "spe"   => "Attente spécialiste",
+  "duree_sejour"  => "Durée de séjour",
+  /*"duree_pec"     => "Durée de prise en charge",
+  "duree_attente" => "Durée d'attente",*/
 );
 
 $smarty = new CSmartyDP();

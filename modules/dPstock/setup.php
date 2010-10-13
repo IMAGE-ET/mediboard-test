@@ -689,6 +689,13 @@ class CSetupdPstock extends CSetup {
               ADD `cancelled` ENUM ('0','1') NOT NULL DEFAULT '0';";
     $this->addQuery($sql);
 
-    $this->mod_version = "1.39";
+    $this->makeRevision("1.39");
+    $sql = "ALTER TABLE `product_delivery` 
+              ADD `type` ENUM ('other','expired','breakage','loss','gift','discrepancy','notused','toomany');";
+    $this->addQuery($sql);
+    $sql = "ALTER TABLE `product_delivery` ADD INDEX (`type`)";
+    $this->addQuery($sql);
+    
+    $this->mod_version = "1.40";
   }
 }

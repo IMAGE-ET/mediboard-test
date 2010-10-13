@@ -22,6 +22,7 @@ class CProductDelivery extends CMbObject {
   var $order          = null;
   var $manual         = null;
   var $comments       = null;
+  var $type           = null;
 
   // Object References
   //    Single
@@ -62,6 +63,7 @@ class CProductDelivery extends CMbObject {
     $specs['order']             = 'bool default|0';
     $specs['manual']            = 'bool default|0';
     $specs['comments']          = 'text';
+    $specs['type']              = 'enum list|other|expired|breakage|loss|gift|discrepancy|notused|toomany';
     $specs['_date_min']         = 'date notNull';
     $specs['_date_max']         = 'date notNull moreEquals|_date_min';
     return $specs;

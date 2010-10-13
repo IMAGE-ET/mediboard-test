@@ -18,17 +18,21 @@ $period = CValue::getOrSession('period', "MONTH");
 $count = CValue::getOrSession('count', 30);
 
 function computeAttente($areas, &$series, $where, $ljoin, $dates, $period, $sejour, &$total, $start_field, $end_field) {
-  foreach($areas as $key => $value) {
-    $where["rpu.$start_field"] = $value["rpu.$start_field"];
-    $where["rpu.$end_field"] = $value["rpu.$end_field"];
-    $series[$key] = array('data' => array(), "label" => $value[0]);
-    
-    foreach ($dates as $i => $_date) {
-      $_date_next = mbDate("+1 $period", $_date);
-      $where['sejour.entree'] = "BETWEEN '$_date' AND '$_date_next'";
-      $count = $sejour->countList($where, null, null, null, $ljoin);
-      $total += $count;
-      $series[$key]['data'][$i] = array($i, intval($count));
+  $only_duration = empty($areas);
+  
+  if (!$only_duration) {
+    foreach($areas as $key => $value) {
+      $where[$start_field] = $value[$start_field];
+      $where[$end_field] = $value[$end_field];
+      $series[$key] = array('data' => array(), "label" => $value[0]);
+      
+      foreach ($dates as $i => $_date) {
+        $_date_next = mbDate("+1 $period", $_date);
+        $where['sejour.entree'] = "BETWEEN '$_date' AND '$_date_next'";
+        $count = $sejour->countList($where, null, null, null, $ljoin);
+        $total += $count;
+        $series[$key]['data'][$i] = array($i, intval($count));
+      }
     }
   }
   
@@ -36,15 +40,15 @@ function computeAttente($areas, &$series, $where, $ljoin, $dates, $period, $sejo
   $areas = array_merge(array(null));
   foreach($areas as $key => $value) {
     $key = count($series);
-    $where["rpu.$start_field"] = "IS NOT NULL";
-    $where["rpu.$end_field"] = "IS NOT NULL";
+    $where[$start_field] = "IS NOT NULL";
+    $where[$end_field] = "IS NOT NULL";
     $series[$key] = array(
       'data' => array(), 
-      'yaxis' => 2, 
+      'yaxis' => ($only_duration ? 1 : 2), 
       'lines' => array("show" => true),
       'points' => array("show" => true),
       'mouse' => array("track" => true),
-      'label' => "Temps",
+      'label' => ($only_duration ? "" : "Temps"),
       "shadowSize" => 0
     );
     
@@ -56,9 +60,25 @@ function computeAttente($areas, &$series, $where, $ljoin, $dates, $period, $sejo
       
       $times = array();
       foreach($_sejours as $_sejour) {
-        $_sejour->loadRefRPU();
-        $_rpu = $_sejour->_ref_rpu;
-        $times[] = mbMinutesRelative($_rpu->$start_field, $_rpu->$end_field);
+        if (strpos($start_field, "rpu") === 0 ||
+            strpos($end_field, "rpu") === 0) {
+          $_sejour->loadRefRPU();
+          $_rpu = $_sejour->_ref_rpu;
+        }
+        
+        $_start_field = substr($start_field, strpos($start_field, '.')+1);
+        if (strpos($start_field, "rpu") === 0)
+          $start = $_rpu->$_start_field;
+        else 
+          $start = $_sejour->$_start_field;
+          
+        $_end_field = substr($end_field, strpos($start_field, '.')+1);
+        if (strpos($end_field, "rpu") === 0)
+          $end = $_rpu->$_end_field;
+        else 
+          $end = $_sejour->$_end_field;
+        
+        $times[] = mbMinutesRelative($start, $end);
       }
       $count = array_sum($times);
       $mean = count($times) ? $count / count($times) : 0;
@@ -67,7 +87,7 @@ function computeAttente($areas, &$series, $where, $ljoin, $dates, $period, $sejo
       foreach($times as $time) {
         $variance += pow($time - $mean, 2);
       }
-      $variance /= count($times);
+      if (count($times)) $variance /= count($times);
       $std_dev = sqrt($variance);
       
       $series[$key]['data'][$i] = array($i, intval($count));
@@ -416,7 +436,7 @@ switch ($axe) {
         "rpu.radio_fin"   => "IS NOT NULL",
       ),
     );
-    computeAttente($areas, $series, $where, $ljoin, $dates, $period, $sejour, $total, "radio_debut", "radio_fin");
+    computeAttente($areas, $series, $where, $ljoin, $dates, $period, $sejour, $total, "rpu.radio_debut", "rpu.radio_fin");
     break;
     
   // Biolo
@@ -447,7 +467,7 @@ switch ($axe) {
       ),
     );
     
-    computeAttente($areas, $series, $where, $ljoin, $dates, $period, $sejour, $total, "bio_depart", "bio_retour");
+    computeAttente($areas, $series, $where, $ljoin, $dates, $period, $sejour, $total, "rpu.bio_depart", "rpu.bio_retour");
     break;
     
   // Spé
@@ -478,9 +498,32 @@ switch ($axe) {
       ),
     );
     
-    computeAttente($areas, $series, $where, $ljoin, $dates, $period, $sejour, $total, "specia_att", "specia_arr");
+    computeAttente($areas, $series, $where, $ljoin, $dates, $period, $sejour, $total, "rpu.specia_att", "rpu.specia_arr");
     break;
-   
+    
+  case "duree_sejour":
+    $data[$axe] = array(
+      "options" => array(
+        "title" => utf8_encode("Durée de séjour")
+      ),
+      "series" => array()
+    );
+    
+    $series = &$data[$axe]['series'];
+    computeAttente(null, $series, $where, $ljoin, $dates, $period, $sejour, $total, "sejour.entree", "sejour.sortie");
+    break;
+    
+  /*case "duree_pec":
+    $data[$axe] = array(
+      "options" => array(
+        "title" => utf8_encode("Durée de prise en charge")
+      ),
+      "series" => array()
+    );
+    
+    $series = &$data[$axe]['series'];
+    computeAttente(null, $series, $where, $ljoin, $dates, $period, $sejour, $total, "sejour.entree", "sejour.sortie");
+    break;*/
 }
 
 // Ticks
