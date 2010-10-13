@@ -75,7 +75,7 @@ function changePage (start) {
           </tr>
           
           <tr>
-            <th>{{mb_label object=$patient field=medecin_traitant}}</th>
+            <th>Médecin correspondant</th>
             <td>
               <script type="text/javascript">
                 Main.add(function () {
@@ -93,6 +93,8 @@ function changePage (start) {
               <input type="text" name="_view" value="{{$patient->_ref_medecin_traitant}}" size="25" />
               {{mb_field object=$patient field=medecin_traitant hidden=true}}
               <button type="button" class="cancel notext" onclick="this.form.medecin_traitant.value='';this.form._view.value='';"></button>
+              <br />
+              <label><input type="checkbox" name="only_medecin_traitant" /> Seulement en tant que médecin traitant</label>
             </td>
           </tr>
           

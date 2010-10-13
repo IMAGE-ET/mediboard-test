@@ -24,7 +24,7 @@ $fields = array(
     "sexe" => "=", 
     "_age_min" => null, 
     "_age_max" => null, 
-    "medecin_traitant" => "=",
+    "medecin_traitant" => null,
   ),
   "CAntecedent" => array(
     "rques" => "LIKE", 
@@ -105,6 +105,18 @@ if (!empty($data["CPatient"]["_age_max"])) {
   $where[] = "DATEDIFF(sejour.entree_reelle, patients.naissance)/365 <= {$data['CPatient']['_age_max']}";
   //$where[] = "patients.naissance > '".mbDate("-".$data["CPatient"]["_age_max"]. "YEARS")."'";
 }
+if (!empty($data["CPatient"]["medecin_traitant"])) {
+  $one_field = true;
+  $medecin_traitant_id = $data["CPatient"]["medecin_traitant"];
+  if (CValue::get("only_medecin_traitant")) {
+    $where[] = "patients.medecin_traitant = '$medecin_traitant_id'";
+  }
+  else {
+    $where[] = "patients.medecin_traitant = '$medecin_traitant_id' OR 
+                correspondant.medecin_id = '$medecin_traitant_id'";
+    $ljoin["correspondant"] = "patients.patient_id = correspondant.patient_id";
+  }
+}
 
 // CAntecedent ---------------------------
 $dm_data = $data["CAntecedent"];
@@ -147,10 +159,8 @@ if (!empty($interv_data["_rques_interv"])) {
 if (!empty($interv_data["_libelle_interv"])) {
   $where["operations.libelle"] = $ds->prepareLike("%{$interv_data['_libelle_interv']}%");
 }
-$where["operations.chir_id"] = "= '$user_id'";
-$where["operations.annulee"] = "= '0'";
-
-//mbTrace($where);
+$where[] = "operations.chir_id = '$user_id' OR operations.chir_id IS NULL";
+$where[] = "operations.annulee = '0' OR operations.annulee IS NULL";
 
 $ljoin["consultation"] = "consultation.patient_id = patients.patient_id";
 $ljoin["sejour"] = "sejour.patient_id = patients.patient_id";
