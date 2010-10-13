@@ -16,11 +16,14 @@ $yesterday = mbDateTime("-1 DAY");
 $sejour = new CSejour();
 $where['type']   = "= 'consult'";
 $where['entree'] = "BETWEEN '$yesterday' AND '$now'";
+$limit = "0, 10";
 
 // Cloture des sejours passés
 $where['entree_reelle'] = "IS NOT NULL";
 $where['sortie_reelle'] = "IS NULL";
-$sejours = $sejour->loadList($where);
+$order = "entree_reelle";
+
+$sejours = $sejour->loadList($where, $order, $limit);
 
 CAppUI::stepAjax(count($sejours)." séjours à clôturer", UI_MSG_OK);
 
@@ -33,7 +36,8 @@ foreach ($sejours as $_sejour) {
 // Annulation des séjours sans entrée reelle ni sortie reelle
 $where['entree_reelle'] = "IS NULL";
 $where['sortie_reelle'] = "IS NULL";
-$sejours = $sejour->loadList($where);
+$order = "entree_prevue";
+$sejours = $sejour->loadList($where, $order, $limit);
 
 CAppUI::stepAjax(count($sejours)." séjours à annuler", UI_MSG_OK);
 
