@@ -352,7 +352,7 @@ function showEtabEntreeTransfert(mode) {
       {{if !$rpu->mutation_sejour_id}}
 				{{if $dPconfig.dPurgences.gerer_reconvoc == "1"}}
 			    <!-- Reconvocation => formulaire de creation de consultation avec champs pre-remplis -->
-			    <button class="new" type="button" onclick="newConsultation({{$consult->_ref_plageconsult->chir_id}},{{$consult->patient_id}},{{$consult->_id}})">
+			    <button class="new" {{if ($dPconfig.dPurgences.hide_reconvoc_sans_sortie == "1") && !$sejour->sortie_reelle}}disabled="disabled"{{/if}} type="button" onclick="newConsultation({{$consult->_ref_plageconsult->chir_id}},{{$consult->patient_id}},{{$consult->_id}})">
 		        Reconvoquer
 		      </button>
 	      {{/if}}

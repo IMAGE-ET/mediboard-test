@@ -72,15 +72,15 @@ class CMbSOAPClient extends SoapClient {
   	$echange_soap->input         = serialize($arguments);
   	
   	$phpChrono->stop();
+  	$chrono = new Chronometer();
+    $chrono->start();
   	try {
-  	  $chrono = new Chronometer();
-  	  $chrono->start();
   	  $output = parent::__soapCall($function_name, $arguments, $options, $input_headers, $output_headers);
-  	  $chrono->stop();
   	} catch(SoapFault $fault) {
   	  $echange_soap->output    = $fault->faultstring;
   		$echange_soap->soapfault = 1;
     }
+    $chrono->stop();
     $phpChrono->start();
     
     // response time

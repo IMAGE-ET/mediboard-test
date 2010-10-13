@@ -20,6 +20,7 @@
 	  {{mb_include module=system template=inc_config_bool var=responsable_rpu_view}}
 	  {{mb_include module=system template=inc_config_bool var=diag_prat_view}}
 	  {{mb_include module=system template=inc_config_bool var=check_cotation}}
+	  {{mb_include module=system template=inc_config_bool var=hide_reconvoc_sans_sortie}}
 	  
 	  <tr>
 	    <td class="button" colspan="2">
