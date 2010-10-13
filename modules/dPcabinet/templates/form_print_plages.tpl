@@ -18,6 +18,7 @@ function popPlages() {
   url.addElement(form.chir);
   url.addParam("_coordonnees",$V(form._coordonnees));
   url.addParam("_plages_vides",$V(form._plages_vides));
+  url.addParam("_non_pourvues",$V(form._non_pourvues));
   url.popup(700, 550, "Planning");
 }
 
