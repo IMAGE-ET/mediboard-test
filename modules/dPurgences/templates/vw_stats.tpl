@@ -12,7 +12,8 @@
 var filterForm,
     options = {
       legend: {container: "graph-legend"},
-      yaxis: {tickFormatter: yTickFormatter}
+      yaxis: {tickFormatter: yTickFormatter},
+      y2axis: {min: null}
     },
     data;
     
@@ -40,12 +41,15 @@ function yTickFormatter(y) {
 	return parseInt(y).toString();
 }
 
+function timeLabelFormatter(obj) {
+  return obj.y+ "min";
+}
+
 function drawGraphs(data) {
   window.data = data || window.data;
   
   var mode = $V(getForm("stats-filter").mode);
   var container = $("graphs").update("");
-  
   
   $H(data).each(function(pair) {
     var d = pair.value;
@@ -58,6 +62,11 @@ function drawGraphs(data) {
     d.options = Object.merge(profiles[mode], d.options);
     
     var series = d.series;
+    
+    series.each(function(s){
+      if (s.mouse && Object.isString(s.mouse.trackFormatter))
+        s.mouse.trackFormatter = window[s.mouse.trackFormatter];
+    });
     
     if (mode != "bars") {
       series = d.series.clone();

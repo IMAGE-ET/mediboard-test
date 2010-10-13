@@ -15,15 +15,20 @@ CMbObject::$useObjectCache = false;
 $axe    = CValue::getOrSession('axe');
 $entree = CValue::getOrSession('entree', mbDate());
 $period = CValue::getOrSession('period', "MONTH");
-$count = CValue::getOrSession('count', 30);
+$count  = CValue::getOrSession('count', 30);
 
 function computeAttente($areas, &$series, $where, $ljoin, $dates, $period, $sejour, &$total, $start_field, $end_field) {
   $only_duration = empty($areas);
   
+  // never when ljoin on consult (form field)
+  if (strpos($start_field, "._") === false)
+    $where[$start_field] = "IS NOT NULL";
+    
+  if (strpos($end_field, "._") === false)
+    $where[$end_field] = "IS NOT NULL";
+      
   if (!$only_duration) {
     foreach($areas as $key => $value) {
-      $where[$start_field] = $value[$start_field];
-      $where[$end_field] = $value[$end_field];
       $series[$key] = array('data' => array(), "label" => $value[0]);
       
       foreach ($dates as $i => $_date) {
@@ -40,16 +45,16 @@ function computeAttente($areas, &$series, $where, $ljoin, $dates, $period, $sejo
   $areas = array_merge(array(null));
   foreach($areas as $key => $value) {
     $key = count($series);
-    $where[$start_field] = "IS NOT NULL";
-    $where[$end_field] = "IS NOT NULL";
+    
     $series[$key] = array(
       'data' => array(), 
       'yaxis' => ($only_duration ? 1 : 2), 
       'lines' => array("show" => true),
       'points' => array("show" => true),
-      'mouse' => array("track" => true),
+      'mouse' => array("track" => true, "trackFormatter" => "timeLabelFormatter"),
       'label' => ($only_duration ? "" : "Temps"),
-      "shadowSize" => 0
+      'color' => "red",
+      "shadowSize" => 0,
     );
     
     foreach ($dates as $i => $_date) {
@@ -60,23 +65,37 @@ function computeAttente($areas, &$series, $where, $ljoin, $dates, $period, $sejo
       
       $times = array();
       foreach($_sejours as $_sejour) {
-        if (strpos($start_field, "rpu") === 0 ||
-            strpos($end_field, "rpu") === 0) {
+        list($_start_class, $_start_field) = explode(".", $start_field);
+        list($_end_class,   $_end_field)   = explode(".", $end_field);
+        
+        // load RPU
+        if ($_start_class == "rpu" || $_end_class == "rpu") {
           $_sejour->loadRefRPU();
           $_rpu = $_sejour->_ref_rpu;
         }
         
-        $_start_field = substr($start_field, strpos($start_field, '.')+1);
-        if (strpos($start_field, "rpu") === 0)
-          $start = $_rpu->$_start_field;
-        else 
-          $start = $_sejour->$_start_field;
-          
-        $_end_field = substr($end_field, strpos($start_field, '.')+1);
-        if (strpos($end_field, "rpu") === 0)
-          $end = $_rpu->$_end_field;
-        else 
-          $end = $_sejour->$_end_field;
+        // load consult
+        if ($_start_class == "consultation" || $_end_class == "consultation") {
+          $_sejour->loadRefsConsultations();
+          $_consult = $_sejour->_ref_consult_atu;
+          if (!$_consult) continue;
+          $_consult->loadRefPlageConsult();
+        }
+        
+        switch($_start_class) {
+          case "sejour":       $_start_object = $_sejour; break;
+          case "rpu":          $_start_object = $_rpu; break;
+          case "consultation": $_start_object = $_consult; break;
+        }
+        
+        switch($_end_class) {
+          case "sejour":       $_end_object = $_sejour; break;
+          case "rpu":          $_end_object = $_rpu; break;
+          case "consultation": $_end_object = $_consult; break;
+        }
+        
+        $start = $_start_object->$_start_field;
+        $end   = $_end_object->$_end_field;
         
         $times[] = mbMinutesRelative($start, $end);
       }
@@ -90,7 +109,7 @@ function computeAttente($areas, &$series, $where, $ljoin, $dates, $period, $sejo
       if (count($times)) $variance /= count($times);
       $std_dev = sqrt($variance);
       
-      $series[$key]['data'][$i] = array($i, intval($count));
+      $series[$key]['data'][$i] = array($i, $mean);
       
       // mean - std_dev
       if (!isset($series[$key+1])) {
@@ -100,7 +119,7 @@ function computeAttente($areas, &$series, $where, $ljoin, $dates, $period, $sejo
         $series[$key+1]["points"]["show"] = false;
         $series[$key+1]["label"] = null;
       }
-      $series[$key+1]['data'][$i] = array($i, intval($count)-$std_dev);
+      $series[$key+1]['data'][$i] = array($i, $mean-$std_dev);
       
       // mean + std_dev
       if (!isset($series[$key+2])) {
@@ -110,7 +129,7 @@ function computeAttente($areas, &$series, $where, $ljoin, $dates, $period, $sejo
         $series[$key+2]["points"]["show"] = false;
         $series[$key+2]["label"] = null;
       }
-      $series[$key+2]['data'][$i] = array($i, intval($count)+$std_dev);
+      $series[$key+2]['data'][$i] = array($i, $mean+$std_dev);
     }
   }
   
@@ -510,10 +529,10 @@ switch ($axe) {
     );
     
     $series = &$data[$axe]['series'];
-    computeAttente(null, $series, $where, $ljoin, $dates, $period, $sejour, $total, "sejour.entree", "sejour.sortie");
+    computeAttente(array(array("Nombre de séjours")), $series, $where, $ljoin, $dates, $period, $sejour, $total, "sejour.entree", "sejour.sortie");
     break;
     
-  /*case "duree_pec":
+  case "duree_pec":
     $data[$axe] = array(
       "options" => array(
         "title" => utf8_encode("Durée de prise en charge")
@@ -522,8 +541,20 @@ switch ($axe) {
     );
     
     $series = &$data[$axe]['series'];
-    computeAttente(null, $series, $where, $ljoin, $dates, $period, $sejour, $total, "sejour.entree", "sejour.sortie");
-    break;*/
+    computeAttente(array(array("Nombre de séjours")), $series, $where, $ljoin, $dates, $period, $sejour, $total, "consultation._datetime", "sejour.sortie");
+    break;
+    
+  case "duree_attente":
+    $data[$axe] = array(
+      "options" => array(
+        "title" => utf8_encode("Durée d'attente")
+      ),
+      "series" => array()
+    );
+    
+    $series = &$data[$axe]['series'];
+    computeAttente(array(array("Nombre de séjours")), $series, $where, $ljoin, $dates, $period, $sejour, $total, "sejour.entree", "consultation._datetime");
+    break;
 }
 
 // Ticks

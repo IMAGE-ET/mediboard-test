@@ -37,8 +37,8 @@ $axes_other = array(
   "bio"   => "Attente biologie",
   "spe"   => "Attente spécialiste",
   "duree_sejour"  => "Durée de séjour",
-  /*"duree_pec"     => "Durée de prise en charge",
-  "duree_attente" => "Durée d'attente",*/
+  "duree_pec"     => "Durée de prise en charge",
+  "duree_attente" => "Durée d'attente",
 );
 
 $smarty = new CSmartyDP();
