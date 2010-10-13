@@ -11,6 +11,14 @@ textarea#htmlarea {
   height: 100%;
 }
 
+ul {
+	margin: 0;
+	padding-left: 2em;
+}
+
+li {
+	
+}
 span.hilite {
   background: #f5f;
 }

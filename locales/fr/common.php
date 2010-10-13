@@ -78,6 +78,7 @@ $locales['Merge'] = 'Fusionner';
 $locales['Modify'] = 'Modifier';
 $locales['Module'] = 'Module';
 $locales['Move'] = 'Déplacer';
+$locales['Multiple options'] = 'Options Multiples';
 $locales['Name'] = 'Nom';
 $locales['New'] = 'Nouveau';
 $locales['Next'] = 'Suivant';
