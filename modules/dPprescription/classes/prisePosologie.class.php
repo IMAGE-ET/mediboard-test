@@ -389,8 +389,11 @@ class CPrisePosologie extends CMbMetaObject {
     }
     
 		// Seulement Tous les avec comme unite les heures
-    if(!$this->moment_unitaire_id && $this->nb_tous_les && ($this->unite_tous_les == "heure" || $this->unite_tous_les == "minute")){
-    	$date_time_temp = $this->_ref_object->_debut_reel;
+    if(!$this->moment_unitaire_id && ($this->unite_tous_les == "heure" || $this->unite_tous_les == "minute")){
+    	if(!$this->nb_tous_les){
+        $this->nb_tous_les = 1;
+      }
+			$date_time_temp = $this->_ref_object->_debut_reel;
       while($date_time_temp < $this->_ref_object->_fin_reelle){
       	if(($sejour->_entree <= $date_time_temp) && ($sejour->_sortie >= $date_time_temp)){
           $planifs[] = array("unite_prise" => "", "prise_id" => $this->_id, "dateTime" => $date_time_temp);
@@ -398,6 +401,28 @@ class CPrisePosologie extends CMbMetaObject {
 				$type_increment = $this->unite_tous_les == "heure" ? "hours" : "minutes";
 			  $date_time_temp = mbDateTime("+ $this->nb_tous_les $type_increment", $date_time_temp);
       }
+    }
+
+    // Tous les avec comme unite les jours
+     if($this->unite_tous_les == "jour"){
+     	if(!$this->nb_tous_les){
+     		$this->nb_tous_les = 1;
+     	}
+      if($this->_heures){
+        $heure = reset($this->_heures);
+				
+			  $date_time_temp = mbDate($this->_ref_object->_debut_reel)." $heure";
+        if($this->decalage_prise){
+        	$date_time_temp = mbDateTime("+ $this->decalage_prise DAYS", $date_time_temp);
+        }
+          
+				while($date_time_temp < $this->_ref_object->_fin_reelle){
+	        if(($sejour->_entree <= $date_time_temp) && ($sejour->_sortie >= $date_time_temp)){
+	          $planifs[] = array("unite_prise" => "", "prise_id" => $this->_id, "dateTime" => $date_time_temp);
+	        }
+	        $date_time_temp = mbDateTime("+ $this->nb_tous_les DAYS", $date_time_temp);
+	      }
+			}
     }
 
 		// Sauvegarde des planifications systemes
@@ -427,11 +452,16 @@ class CPrisePosologie extends CMbMetaObject {
       }
     }
     
-    if($this->unite_tous_les && (!$this->unite_fois || $this->unite_fois == "jour")){
-      if($configs["Tous les jours"]){
-        $this->_heures[] = $configs["Tous les jours"].":00:00";
+    if( $this->unite_tous_les && (!$this->unite_fois || $this->unite_fois == "jour")){
+      if($this->moment_unitaire_id){
+        $this->loadRefMoment();
+	      $this->_heures[] = $this->_ref_moment->heure;	
+      } else {
+	      if($configs["Tous les jours"]){
+	        $this->_heures[] = $configs["Tous les jours"].":00:00";
+	      }
       }
-    }   
+    }
        
     if(!$this->urgence_datetime && $this->quantite && !$this->moment_unitaire_id && !$this->nb_fois && !$this->unite_fois && !$this->unite_tous_les && !$this->nb_tous_les){
       if($configs["1 fois par jour"]){
@@ -453,7 +483,7 @@ class CPrisePosologie extends CMbMetaObject {
     }
 		
     // Moment unitaire
-    if($this->moment_unitaire_id && !array_key_exists($this->unite_tous_les, $jours)){
+    if($this->moment_unitaire_id && !array_key_exists($this->unite_tous_les, $jours) && $this->unite_tous_les != "jour"){
       foreach($dates as $_date){
       	$this->loadRefMoment($service_id);
         $dateTimePrise = mbAddDateTime(mbTime($this->_ref_moment->heure), $_date);
@@ -465,22 +495,7 @@ class CPrisePosologie extends CMbMetaObject {
       }
     }
     
-    // Tous les sans moment unitaire
-    if(!$this->moment_unitaire_id && $this->unite_tous_les == "jour"){
-      if($this->_heures){
-        $heure = reset($this->_heures);
-        foreach($dates as $_date){          
-          $dateTimePrise = mbAddDateTime(mbTime($heure), $_date);
-					if(($bornes["min"] <= $dateTimePrise) && ($bornes["max"] >= $dateTimePrise)){
-	          if((($this->_ref_object->_debut_reel <= $dateTimePrise) && ($this->_ref_object->_fin_reelle >= $dateTimePrise))){
-	            $_planifs[] = array("unite_prise" => "", "prise_id" => $this->_id, "dateTime" => $dateTimePrise);
-	          }
-					}
-        }
-      }
-    }
-    
-    // Fois par avec comme unite jour
+		// Fois par avec comme unite jour
     if(($this->nb_fois && $this->unite_fois === 'jour' && !$this->unite_tous_les) || ($this->_quantite_administrable && !$this->moment_unitaire_id && 
         !$this->nb_fois && !$this->unite_fois && !$this->unite_tous_les && !$this->nb_tous_les && !$this->heure_prise)){
 			if($this->_heures){
