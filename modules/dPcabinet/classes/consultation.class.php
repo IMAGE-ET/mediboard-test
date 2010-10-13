@@ -751,13 +751,13 @@ class CConsultation extends CCodable {
       }
       $this->sejour_id = $sejour->_id;
     }
-
+    
+    $forfait_se = $this->_forfait_se; // must be BEFORE loadRefSejour()
+    
     $this->loadRefSejour();
     $this->_adjust_sejour = false;
     
     if ($this->sejour_id) {
-      $forfait_se = $this->_forfait_se;
-      $this->loadRefSejour();
       $this->loadRefPlageConsult();
 
       // Si le séjour est de type consult
