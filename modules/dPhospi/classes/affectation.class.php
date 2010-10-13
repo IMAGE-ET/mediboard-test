@@ -115,14 +115,18 @@ class CAffectation extends CMbObject {
   function checkCollisions(){
     $this->completeField("sejour_id");
     if (!$this->sejour_id) return;
+    mbTrace( $this->_id, "on check les colisions", true);
     
     $affectation = new CAffectation;
     $affectation->sejour_id = $this->sejour_id;
-    $affectations = $this->loadMatchingList();
+    mbTrace( $this->sejour_id, "le séjour", true);
+    $affectations = $affectation->loadMatchingList();
     unset($affectations[$this->_id]);
     
     //TODO: corriger l'orthographe de colide > collide
+    mbTrace(count($affectations), "nombre d'affectations existantes", true);
     foreach($affectations as $_aff) {
+      mbTrace($_aff->_id, "on test les colisions", true);
       if($this->colide($_aff)) {
         return "Placement déjà effectué";
       }
