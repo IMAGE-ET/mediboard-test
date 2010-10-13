@@ -944,7 +944,7 @@ class CConsultation extends CCodable {
   
   function loadRefPraticien(){
   	$this->loadRefPlageConsult(1);
-    $this->_ref_praticien =& $this->_ref_chir;
+    return $this->_ref_praticien =& $this->_ref_chir;
   }
   
   function getType() {
@@ -1204,6 +1204,7 @@ class CConsultation extends CCodable {
     if(!in_array("traitement", $this->_exam_fields)) {
       $template->addProperty("Consultation - traitement", $this->traitement);
     }
+		
     $medecin = new CMedecin();
     $medecin->load($this->adresse_par_prat_id);
     $nom = "{$medecin->nom} {$medecin->prenom}";
