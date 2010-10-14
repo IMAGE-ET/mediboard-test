@@ -20,15 +20,9 @@ $fonctions    = array();
 $ds = CSQLDataSource::get("std");
 
 if ($type == "web_service") {
-	$res = $ds->query("SELECT web_service_name FROM echange_soap WHERE type = '$service_demande' GROUP BY web_service_name");
-	while ($l = $ds->fetchAssoc($res)) {
-		$web_services[] = $l['web_service_name'];
-	}
+  $web_services = $ds->loadColumn("SELECT web_service_name FROM echange_soap WHERE type = '$service_demande' GROUP BY web_service_name");
 } else {
-	$res = $ds->query("SELECT function_name FROM echange_soap WHERE type = '$service_demande' AND web_service_name = '$web_service_demande' GROUP BY function_name");
-	while ($l = $ds->fetchAssoc($res)) {
-		$fonctions[] = $l['function_name'];
-	}
+  $fonctions = $ds->loadColumn("SELECT function_name FROM echange_soap WHERE type = '$service_demande' AND web_service_name = '$web_service_demande' GROUP BY function_name");
 }
 
 // Création du template
