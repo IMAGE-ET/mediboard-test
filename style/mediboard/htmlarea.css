@@ -1,7 +1,10 @@
-body {
+body, table {
   font-family: Georgia, serif;
   font-size: 12px;
   background: #fff;
+}
+
+body {
   padding: 2px;
   padding-right: 6px;
 }
@@ -25,14 +28,18 @@ span.hilite {
 
 table.tbl {
   border-spacing: 0;
+	border-collapse: collapse;
 }
 
 table.tbl th {
 	background: #eee;
+  border: 0.1px solid #aaa;
+  padding: 0.5em;
 }
 
 table.tbl td {
-	border: 1px solid #000;
+	border: 1px solid #aaa;
+  padding: 0.5em;
 }
 
 @media screen {
@@ -75,7 +82,7 @@ table.tbl td {
     text-align: left;
     white-space: normal;
     line-height: normal;
-    font-size: 16px;
+    font-size: 12px;
     font-weight: 400;
     font-style: normal;
     font-variant: normal;
