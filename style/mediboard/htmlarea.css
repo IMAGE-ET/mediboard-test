@@ -34,12 +34,12 @@ table.tbl {
 table.tbl th {
 	background: #eee;
   border: 0.1px solid #aaa;
-  padding: 0.5em;
+  padding: 0.1em 0.5em;
 }
 
 table.tbl td {
 	border: 1px solid #aaa;
-  padding: 0.5em;
+  padding: 0.1em 0.5em;
 }
 
 @media screen {
