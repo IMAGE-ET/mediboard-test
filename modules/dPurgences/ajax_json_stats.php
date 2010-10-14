@@ -29,6 +29,14 @@ function computeAttente($areas, &$series, $where, $ljoin, $dates, $period, $sejo
       
   if (!$only_duration) {
     foreach($areas as $key => $value) {
+      
+      // never when ljoin on consult (form field)
+      if (strpos($start_field, "._") === false)
+        $where[$start_field] = $value[$start_field];
+        
+      if (strpos($end_field, "._") === false)
+        $where[$end_field] = $value[$end_field];
+      
       $series[$key] = array('data' => array(), "label" => $value[0]);
       
       foreach ($dates as $i => $_date) {
@@ -431,8 +439,8 @@ switch ($axe) {
     $data[$axe] = array(
       "options" => array(
         "title" => utf8_encode("Attente radio"),
-        "yaxis" => array("title" => "Nombre"),
-        "y2axis" => array("title" => "Temps"),
+        "yaxis" => array("title" => "Nombre de passages"),
+        "y2axis" => array("title" => "Temps (min.)"),
       ),
       "series" => array()
     );
@@ -462,7 +470,9 @@ switch ($axe) {
   case "bio":
     $data[$axe] = array(
       "options" => array(
-        "title" => utf8_encode("Attente biologie")
+        "title" => utf8_encode("Attente biologie"),
+        "yaxis" => array("title" => "Nombre de passages"),
+        "y2axis" => array("title" => "Temps (min.)"),
       ),
       "series" => array()
     );
@@ -493,7 +503,9 @@ switch ($axe) {
   case "spe":
     $data[$axe] = array(
       "options" => array(
-        "title" => utf8_encode("Attente spécialiste")
+        "title" => utf8_encode("Attente spécialiste"),
+        "yaxis" => array("title" => "Nombre de passages"),
+        "y2axis" => array("title" => "Temps (min.)"),
       ),
       "series" => array()
     );
@@ -523,7 +535,9 @@ switch ($axe) {
   case "duree_sejour":
     $data[$axe] = array(
       "options" => array(
-        "title" => utf8_encode("Durée de séjour")
+        "title" => utf8_encode("Durée de séjour"),
+        "yaxis" => array("title" => "Nombre de passages"),
+        "y2axis" => array("title" => "Temps (min.)"),
       ),
       "series" => array()
     );
@@ -535,7 +549,9 @@ switch ($axe) {
   case "duree_pec":
     $data[$axe] = array(
       "options" => array(
-        "title" => utf8_encode("Durée de prise en charge")
+        "title" => utf8_encode("Durée de prise en charge"),
+        "yaxis" => array("title" => "Nombre de passages"),
+        "y2axis" => array("title" => "Temps (min.)"),
       ),
       "series" => array()
     );
@@ -547,7 +563,9 @@ switch ($axe) {
   case "duree_attente":
     $data[$axe] = array(
       "options" => array(
-        "title" => utf8_encode("Durée d'attente")
+        "title" => utf8_encode("Durée d'attente"),
+        "yaxis" => array("title" => "Nombre de passages"),
+        "y2axis" => array("title" => "Temps (min.)"),
       ),
       "series" => array()
     );
