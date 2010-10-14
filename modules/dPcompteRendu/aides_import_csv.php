@@ -39,6 +39,7 @@ if ($file && $owner && $owner->_id && ($fp = fopen($file['tmp_name'], 'r'))) {
     $aide->function_id = $function_id;
     $aide->group_id    = $group_id;
     
+    $aide->escapeValues();
     $alreadyExists = $aide->loadMatchingObject();
     
     if ($msg = $aide->store()) {
@@ -48,7 +49,7 @@ if ($file && $owner && $owner->_id && ($fp = fopen($file['tmp_name'], 'r'))) {
       if ($alreadyExists)
         CAppUI::setMsg("Aide à la saisie déjà présente");
       else
-        CAppUI::setMsg(CAppUI::tr("CAideSaisie-msg-create"));
+        CAppUI::setMsg("CAideSaisie-msg-create");
     }
   }
   fclose($fp);
