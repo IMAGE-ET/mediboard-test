@@ -69,7 +69,7 @@ Main.add(function () {
           </td>
 	
           <!-- Historique & identifiants externes-->
-          <td class="text" style="vertical-align: middle; width: 1%">
+          <td class="text narrow" style="vertical-align: middle;">
             {{mb_include module=system template=inc_object_idsante400 object=$_doc_item}}
             {{mb_include module=system template=inc_object_history object=$_doc_item}}
           </td>

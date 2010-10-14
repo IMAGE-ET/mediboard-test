@@ -14,13 +14,13 @@
 
 <table class="tbl">
   <tr>
-    <th style="width: 0.1%;"></th>
-    <th style="width: 0.1%;">Date</th>
-    <th style="width: 0.1%;">Heure</th>
+    <th class="narrow"></th>
+    <th class="narrow">Date</th>
+    <th class="narrow">Heure</th>
     <th>Nom</th>
     <th>Motif</th>
     <th>Remarques</th>
-    <th style="width: 0.1%;">RDV</th>
+    <th class="narrow">RDV</th>
     <th>Etat</th>
   </tr>
   

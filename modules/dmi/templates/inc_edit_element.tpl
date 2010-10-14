@@ -312,12 +312,12 @@ Main.add(function () {
     <th colspan="10" class="title">Lots</th>
   </tr>
   <tr>
-    <th style="width: 0.1%;"></th>
+    <th class="narrow"></th>
     <th>{{mb_title class=CProductOrderItemReception field=quantity}}</th>
     <th>{{mb_title class=CProductOrderItemReception field=date}}</th>
     <th>{{mb_title class=CProductOrderItemReception field=code}}</th>
     <th>{{mb_title class=CProductOrderItemReception field=lapsing_date}}</th>
-    <th style="width: 0.1%;"></th>
+    <th class="narrow"></th>
   </tr>
   
   <tr>

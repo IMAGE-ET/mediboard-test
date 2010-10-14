@@ -57,7 +57,7 @@
     {{if $_consultation->annule}}
     <td colspan="2" class="cancelled">[Consultation annulée]</td>
     {{else}}    
-    <td style="width: 1%;">
+    <td class="narrow">
       Dr {{$_consultation->_ref_chir->_view}} 
     </td> 
     <td>

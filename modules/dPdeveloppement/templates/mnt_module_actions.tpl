@@ -33,7 +33,7 @@ Documentation = {
   <tr>
     <th class="category" colspan="2">mod-{{$module->mod_name}}</th>
 	  <td class="page" id="mod-{{$module->mod_name}}" />
-	  <td style="width: 1%">
+	  <td class="narrow">
 	  	<a class="button search notext" href="http://www.mediboard.org/public/mod-{{$module->mod_name}}">
 	  		{{tr}}Link{{/tr}}
 	  	</a>
@@ -48,7 +48,7 @@ Documentation = {
 		    {{$_tabs_info.locale|default:$_tabs_info.name}}
 		  </td>
 		  <td class="page" id="{{$_tabs_info.name}}" />
-		  <td style="width: 1%">
+		  <td class="narrow">
 		  	<a class="button search notext" href="http://www.mediboard.org/public/{{$_tabs_info.name}}">
 		  		{{tr}}Link{{/tr}}
 		  	</a>

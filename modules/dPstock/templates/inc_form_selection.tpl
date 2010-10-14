@@ -54,7 +54,7 @@
   </tr>
   {{foreach from=$selection->_back.selection_items item=_item}}
     <tr>
-      <td style="width: 0.1%;">
+      <td class="narrow">
         <button class="remove notext" onclick="deleteSelectionItem({{$_item->_id}})"></button>
       </td>
       <td>

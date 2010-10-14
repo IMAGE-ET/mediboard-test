@@ -17,7 +17,7 @@ Main.add(function () {
 
 <table class="main">
   <tr>
-    <td style="width:1%; white-space:nowrap;">
+    <td style="white-space:nowrap;" class="narrow">
       <ul id="tabs-prat" class="control_tabs_vertical">
         {{foreach from=$sejour_no_prat key=_responsable_id item=_sejours}}
           {{assign var=_sejour value=$_sejours.0 }}

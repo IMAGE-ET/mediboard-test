@@ -27,16 +27,16 @@ Main.add(function() {
     <th style="width: 16em;">
     	{{mb_colonne class=CRPU field="_patient_id" order_col=$order_col order_way=$order_way url="?m=$m&amp;tab=vw_idx_rpu"}}
 		</th>
-		<th style="width: 1%;">
+		<th class="narrow">
       <input type="text" size="6" onkeyup="MainCourante.filter(this)" id="filter-patient-name" />
 		</th>
     <th style="width: 12em;">
 		  {{mb_colonne class=CRPU field="_entree"     order_col=$order_col order_way=$order_way url="?m=$m&amp;tab=vw_idx_rpu"}}
 		</th>
     {{if $dPconfig.dPurgences.responsable_rpu_view}}
-    <th style="width: 1%;">{{mb_title class=CRPU field="_responsable_id"}}</th>
+    <th class="narrow">{{mb_title class=CRPU field="_responsable_id"}}</th>
     {{/if}}
-    <th style="width: 1%;">{{mb_title class=CRPU field=_attente}} / {{mb_title class=CRPU field=_presence}}</th>
+    <th class="narrow">{{mb_title class=CRPU field=_attente}} / {{mb_title class=CRPU field=_presence}}</th>
     {{if $medicalView}}
 			<th style="width: 16em;">
 			{{if $dPconfig.dPurgences.diag_prat_view}}

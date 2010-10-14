@@ -41,12 +41,12 @@
   
   {{if $curr_data is div by 20}}
   <tr>
-    <th class="category" style="width: 0.1%;">Chaîne</th>
+    <th class="category narrow">Chaîne</th>
     {{foreach from=$locales item=curr_lang}}
       <th class="category">{{tr}}language.{{$curr_lang}}{{/tr}}</th>
-      <th class="category" style="width: 0.1%;"></th>
+      <th class="category narrow"></th>
     {{/foreach}}
-    <th class="category" style="width: 0.1%;">
+    <th class="category narrow">
       <button type="submit" class="modify notext">{{tr}}Save{{/tr}}</button>
     </th>
   </tr>

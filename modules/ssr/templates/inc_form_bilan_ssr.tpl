@@ -282,7 +282,7 @@ refreshFormBilanSSR = function(){
 		      {{assign var=category_id value=$_category->_id}}
 		      <tr>
 		        {{if $can_edit_prescription}}
-	            <th style="width: 1%;">
+	            <th class="narrow">
 			        	<span onmouseover="ObjectTooltip.createEx(this, '{{$_category->_guid}}')">{{$_category->_view}}</span>
 						  </th>
 			        <td>

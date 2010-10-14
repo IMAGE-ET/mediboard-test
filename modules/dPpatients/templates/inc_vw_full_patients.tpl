@@ -74,7 +74,7 @@ function popEtatSejour(sejour_id) {
 {{foreach from=$patient->_ref_sejours item=_sejour}}
   {{if $_sejour->group_id == $g || $dPconfig.dPpatients.CPatient.multi_group == "full"}}
     <tr id="CSejour-{{$_sejour->_id}}">
-      <td style="width: 0.1%;">
+      <td class="narrow">
         <button class="lookup notext" onclick="popEtatSejour({{$_sejour->_id}});">{{tr}}Lookup{{/tr}}</button>
       </td>
 			<td>   

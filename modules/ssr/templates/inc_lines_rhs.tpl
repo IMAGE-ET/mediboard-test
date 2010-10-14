@@ -20,12 +20,12 @@
   
 <table class="tbl">
   <tr>
-    <th style="width: 1%"></th>
+    <th class="narrow"></th>
     <th>{{mb_title object=$rhs_line field=code_activite_cdarr}}</th>
     <th>{{mb_title object=$rhs_line field=executant_id}}</th>
     
     {{foreach from=$days key=day item=litteral_day}}
-    <th class="category" style="width: 1%">{{mb_title object=$rhs_line field=qty_$litteral_day}}</th>
+    <th class="category narrow">{{mb_title object=$rhs_line field=qty_$litteral_day}}</th>
     {{/foreach}}
   </tr>
   {{foreach from=$rhs->_back.lines item=_line name=backlines}}

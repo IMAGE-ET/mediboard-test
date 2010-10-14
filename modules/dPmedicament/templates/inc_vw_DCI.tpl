@@ -75,7 +75,7 @@ loadDCI = function(DC_search, DCI_code, dialog, forme, dosage){
   {{foreach from=$tabViewProduit item=_produit}}
   <tr>
     {{if $dialog}}
-    <td style="width: 1%;">
+    <td class="narrow">
       <button type="button" class="add notext" onclick="setClose('{{$_produit->Libelle}}', '{{$_produit->CIP}}')"></button>
     </td>
     {{/if}}

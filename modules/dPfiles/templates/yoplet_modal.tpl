@@ -33,7 +33,7 @@
 				</th>
       </tr>
 			<tr>
-        <th style="width: 1%"></th>
+        <th class="narrow"></th>
         <th>{{mb_title class=CFile field=file_name}}</th>
         <th style="width: 2em;">
 				  <img src="style/mediboard/images/buttons/change.png" title="{{tr}}Send{{/tr}}"/>

@@ -270,7 +270,7 @@ function submitCompteRendu(){
       </textarea>
     </td>
     {{if $pdf_thumbnails == 1}}
-      <td id="thumbs_button" style="width: 0.1%;">
+      <td id="thumbs_button" class="narrow">
         <div id="thumbs" style="overflow: auto; overflow-x: hidden; width: 160px; text-align: center; white-space: normal;">
         </div>
       </td>

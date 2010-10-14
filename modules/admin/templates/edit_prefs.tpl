@@ -16,7 +16,7 @@
 
 <table class="main">
   <tr>
-    <td style="width: 0.1%">
+    <td class="narrow">
     
 <ul id="tab-modules" class="control_tabs_vertical" style="width: 20em;">
   {{foreach from=$prefsUser key=module item=prefs}}

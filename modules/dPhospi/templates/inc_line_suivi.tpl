@@ -62,12 +62,12 @@
     <td>{{$_suivi->_ref_sejour->_ref_patient}}</td>
     <td class="text">{{$_suivi->_ref_sejour->_ref_last_affectation->_ref_lit->_view}}</td>
   {{/if}}
-  <td style="width: 1%;">{{tr}}{{$_suivi->_class_name}}{{/tr}}</td>
-  <td style="width: 1%;">{{$_suivi->_ref_user}}</td>
-  <td style="width: 1%; text-align: center;">
+  <td class="narrow">{{tr}}{{$_suivi->_class_name}}{{/tr}}</td>
+  <td class="narrow">{{$_suivi->_ref_user}}</td>
+  <td style="text-align: center;" class="narrow">
     {{mb_ditto name=date value=$_suivi->date|date_format:$dPconfig.date}}
   </td>
-  <td style="width: 1%;">{{$_suivi->date|date_format:$dPconfig.time}}</td>
+  <td class="narrow">{{$_suivi->date|date_format:$dPconfig.time}}</td>
   <td class="text" style="height: 22px;">
 	  {{if $_suivi->object_id && $_suivi->object_class}}
 	    <a href="#1" onclick="if($('cibleTrans')){ $('cibleTrans').update('{{$_suivi->_ref_object}}'); $V(document.forms.editTrans.object_id, '{{$_suivi->object_id}}'); 
@@ -120,7 +120,7 @@
 		{{/if}}
   </td>
   
-  <td class="button" style="width: 1%; white-space: nowrap;">
+  <td class="button narrow" style="white-space: nowrap;">
     {{if !$without_del_form && $_suivi->_canEdit}}
        <form name="Del-{{$_suivi->_guid}}" action="?m={{$m}}" method="post" onsubmit="return checkForm(this)">
          <input type="hidden" name="dosql" value="do_transmission_aed" />

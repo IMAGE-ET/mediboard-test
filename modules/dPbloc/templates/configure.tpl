@@ -155,7 +155,7 @@ function doReaffectation(mode_real) {
     <th colspan="2" class="title">Réaffectation des plages opératoires</th>
   </tr>
   <tr>
-    <td class="button" style="width: 1%;">
+    <td class="button narrow">
       <button class="modify" onclick="doReaffectation(1)">Réatribuer</button>
       <br />
       <button class="modify" onclick="doReaffectation(0)">Tester</button>

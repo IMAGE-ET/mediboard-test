@@ -91,9 +91,9 @@ Main.add(function () {
 </table>
 <table class="tbl">
   <tr>
-    <th rowspan="2" style="width: 1%;" class="title">Patient</th>
-    <th rowspan="2" style="width: 1%;" class="title">Lit</th>
-    <th rowspan="2" style="width: 1%;" class="title">Praticien</th>
+    <th rowspan="2" class="title narrow">>Patient</th>
+    <th rowspan="2" class="title narrow">>Lit</th>
+    <th rowspan="2" class="title narrow">>Praticien</th>
       {{foreach from=$tabHours key=_date item=_hours_by_moment}}
         {{foreach from=$_hours_by_moment key=moment_journee item=_dates}}
           <th class="{{$_date}}-{{$moment_journee}} title"
@@ -141,7 +141,7 @@ Main.add(function () {
           {{foreach from=$_dates key=_date_reelle item=_hours}}
             {{foreach from=$_hours key=_heure_reelle item=_hour}}
               {{assign var=_date_hour value="$_date_reelle $_heure_reelle"}}						    				
-              <td style="text-align: center; width: 1%;">
+              <td style="text-align: center;" class="narrow">
           		  {{if @$pancarte.$_prescription_id.$_date_hour}}
           		    <div style="border: 1px solid #BBB; height: 16px;"
           		         onmouseover='ObjectTooltip.createDOM(this, "tooltip-content-prises-{{$_prescription_id}}-{{$_date_reelle}}-{{$_heure_reelle}}");'>

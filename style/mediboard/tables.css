@@ -35,6 +35,22 @@ table.form th.category.cancelled {
 	text-align: center;
 }
 
+table.form td.narrow,
+table.main td.narrow,
+table.tbl td.narrow {
+  width: 1%;
+}
+table.form th.narrow,
+table.main th.narrow,
+table.tbl th.narrow {
+  width: 1%;
+}
+table.form col.narrow,
+table.main col.narrow,
+table.tbl col.narrow {
+  width: 1%;
+}
+
 /* Title block */
 table.titleblock td {
   white-space: nowrap;

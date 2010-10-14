@@ -249,4 +249,10 @@ $locales['week'] = 'semaine';
 $locales['weeks'] = 'semaines';
 $locales['year'] = 'année';
 $locales['years'] = 'années';
+$locales['date-deb'] = 'Date de début';
+$locales['date-fin'] = 'Date de fin';
+$locales['dateTime-deb'] = 'Date et heure de début';
+$locales['dateTime-fin'] = 'Date et heure de fin';
+$locales['early'] = 'Début';
+$locales['end'] = 'Fin';
 ?>

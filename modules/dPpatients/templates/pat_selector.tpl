@@ -276,7 +276,7 @@ Intermax.ResultHandler["Lire Vitale"] = function() {
 		</th>
     {{/if}}
     <th>{{mb_label class=CPatient field=adresse}}</th>
-    <th style="white-space: nowrap; width: 0.1%;">{{tr}}Actions{{/tr}}</th>
+    <th style="white-space: nowrap;" class="narrow">{{tr}}Actions{{/tr}}</th>
   </tr>
   
   <!-- Recherche exacte -->

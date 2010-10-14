@@ -574,7 +574,7 @@ Main.add(function () {
   {{assign var=count_urgence value=$prescription->_count_urgence}}
   <table class="main">
 	  <tr>
-	    <td style="width: 1%; white-space: nowrap;">
+	    <td style="white-space: nowrap;" class="narrow">
 		 	  <!-- Affichage des onglets du dossier de soins -->
 		 	  {{mb_include module="dPprescription" template="inc_vw_tab_dossier_soins"}}
 			</td>

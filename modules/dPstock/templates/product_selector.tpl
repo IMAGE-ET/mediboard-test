@@ -62,8 +62,8 @@ function refreshProductInfo(product_id) {
 <form name="form_product_selector" action="" method="get" onsubmit="return false">
 <table class="main">
   <tr>
-    <th class="title" style="width: 1%;">{{tr}}CProductCategory{{/tr}}</th>
-    <th class="title" style="width: 1%;">{{tr}}CProduct{{/tr}}</th>
+    <th class="title narrow">{{tr}}CProductCategory{{/tr}}</th>
+    <th class="title narrow">{{tr}}CProduct{{/tr}}</th>
     <th class="title">{{tr}}Information{{/tr}}</th>
   </tr>
   <tr>

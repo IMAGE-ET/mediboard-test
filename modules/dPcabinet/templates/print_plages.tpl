@@ -39,9 +39,9 @@
     <th style="width: 15%;">Nom / Prénom</th>
     {{if $coordonnees}}
     <th style="width: 15%;">Adresse</th>
-    <th style="width: 01%;">Tel</th>
+    <th class="narrow">Tel</th>
     {{/if}}
-    <th style="width: 01%;">Age</th>
+    <th class="narrow">Age</th>
     <th style="width: 25%;">Motif</th>
     <th style="width: 25%;">Remarques</th>
     <th>Durée</th>

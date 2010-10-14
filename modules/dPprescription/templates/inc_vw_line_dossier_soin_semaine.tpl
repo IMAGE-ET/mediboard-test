@@ -63,7 +63,7 @@
   {{/if}}
 	
    <!-- Affichage du libelle de la ligne -->
-   <td style="width: 1%;" class="text">
+   <td class="text narrow">
     
        <div onclick='addCibleTransmission("{{$line_class}}","{{$line->_id}}","{{$line->_view}}");' 
 	       class="{{if @$transmissions.$line_class.$line_id|@count}}transmission{{else}}transmission_possible{{/if}}">

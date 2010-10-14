@@ -127,16 +127,16 @@
           <th rowspan="2" style="width: 30%;">{{mb_label class=CConsultation field=_prat_id}}</th>
           <th rowspan="2" style="width: 30%;">{{mb_label class=CConsultation field=patient_id}}</th>
           <th rowspan="2" style="width: 30%;">{{mb_label class=CConsultation field=tarif}}</th>
-          <th rowspan="2" style="width:  1%;">{{mb_title class=CConsultation field=secteur1}}</th>
-          <th rowspan="2" style="width:  1%;">{{mb_title class=CConsultation field=secteur2}}</th>
-          <th rowspan="2" style="width:  1%;">{{mb_title class=CConsultation field=_somme}}</th>
-          <th rowspan="2" style="width:  1%;">{{mb_label class=CReglement field=mode}}</th>
-          <th colspan="2" style="width:  1%;">{{mb_title class=CReglement field=emetteur}}</th>
+          <th rowspan="2" class="narrow">{{mb_title class=CConsultation field=secteur1}}</th>
+          <th rowspan="2" class="narrow">{{mb_title class=CConsultation field=secteur2}}</th>
+          <th rowspan="2" class="narrow">{{mb_title class=CConsultation field=_somme}}</th>
+          <th rowspan="2" class="narrow">{{mb_label class=CReglement field=mode}}</th>
+          <th colspan="2" class="narrow">{{mb_title class=CReglement field=emetteur}}</th>
 				</tr>
 				
 				<tr>
-          <th style="width:  1%;">{{tr}}CReglement.emetteur.patient{{/tr}}</th>
-          <th style="width:  1%;">{{tr}}CReglement.emetteur.tiers{{/tr}}</th>
+          <th class="narrow">{{tr}}CReglement.emetteur.patient{{/tr}}</th>
+          <th class="narrow">{{tr}}CReglement.emetteur.tiers{{/tr}}</th>
         </tr>
         
 				{{foreach from=$_date.reglements item=_reglement}}

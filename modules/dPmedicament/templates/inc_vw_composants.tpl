@@ -60,7 +60,7 @@ loadComposants = function(composant, code, libelle, dialog){
   {{foreach from=$composition->_ref_produits item="_produit"}}
     <tr>
       {{if $dialog}}
-      <td style="width: 1%;">
+      <td class="narrow">
         <button type="button" class="add notext" onclick="setClose('{{$_produit->Libelle}}', '{{$_produit->CodeCIP}}')"></button>
       </td>
       {{/if}}

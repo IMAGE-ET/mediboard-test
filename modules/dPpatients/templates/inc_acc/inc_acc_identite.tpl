@@ -104,7 +104,7 @@ Main.add(function() {
       	    {{/if}}
           </td>
           {{if $patient->_id}}
-          <td rowspan="14" style="width: 0.1%; text-align: center;" id="{{$patient->_guid}}-identity">
+          <td rowspan="14"  class="narrow" style="text-align: center;" id="{{$patient->_guid}}-identity">
             {{mb_include template=inc_vw_photo_identite mode="edit"}}
           </td>
           {{/if}}

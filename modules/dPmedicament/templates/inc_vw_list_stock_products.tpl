@@ -2,9 +2,9 @@
 
 <table class="main tbl">
   <tr>
-    <th style="width: 0.1%;"></th>
+    <th class="narrow"></th>
     <th style="width: 16px;"></th>
-    <th style="width: 0.1%;">{{mb_title class=CProduct field=code}}</th>
+    <th class="narrow">{{mb_title class=CProduct field=code}}</th>
     <th>{{mb_title class=CProduct field=name}}</th>
   </tr>
   {{foreach from=$list_products item=_product}}

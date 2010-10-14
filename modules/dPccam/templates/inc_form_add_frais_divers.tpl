@@ -73,7 +73,7 @@ removeFraisDivers = function(id, form) {
       <th class="category">{{mb_label class=CFraisDivers field=facturable}}</th>
       <th class="category">{{mb_label class=CFraisDivers field=montant_base}}</th>
       <th class="category">{{mb_label class=CFraisDivers field=executant_id}}</th>
-      <th class="category" style="width: 0.1%;"></th>
+      <th class="category narrow"></th>
     </tr>
     
     <tr>

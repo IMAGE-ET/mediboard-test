@@ -38,7 +38,7 @@ Main.add( function(){
       <tr>
         <th>{{mb_label class=CCategoryPrescription field=nom}}</th>
         <th>{{mb_label class=CCategoryPrescription field=group_id}}</th>
-				<th style="width: 1%;">Eléments</th>
+				<th class="narrow">Eléments</th>
         <th></th>
       </tr>
       {{foreach from=$_categories item=_cat}}

@@ -117,11 +117,11 @@ Main.add(function () {
   </form>
   <table class="tbl">
     <tr>
-      <th style="width: 0.1%;"></th>
+      <th class="narrow"></th>
       {{if !$search_by_cis}}
-      <th style="width: 0.1%;">CIP</th>
+      <th class="narrow">CIP</th>
       {{/if}}
-      <th style="width: 0.1%;"></th>
+      <th class="narrow"></th>
       <th>UCD</th>
       <th>CIS</th>
       <th>Produit</th>

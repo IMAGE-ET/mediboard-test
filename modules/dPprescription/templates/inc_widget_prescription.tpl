@@ -64,7 +64,7 @@ openPrescription = function(prescription_id){
     			  </td>
   			  {{/if}}
 			  {{/foreach}}
-			  <td style="width: 1%;">
+			  <td class="narrow">
 			  {{if $_prescription->type == "externe"}}
 			    <form name="addPrescriptionSejour{{$suffixe}}" action="?">
 				    <input type="hidden" name="m" value="dPprescription" />

@@ -70,7 +70,7 @@ Main.add(function () {
 {{if $prescription->_id}}
 	<table class="main">
 	  <tr>
-	    <td style="width: 1%">
+	    <td class="narrow">
 			  <ul id="tab_categories_plan" class="control_tabs_vertical">
 					{{if $prescription->_ref_prescription_line_mixes_for_plan_by_type|@count}}
 				    {{foreach from=$prescription->_ref_prescription_line_mixes_for_plan_by_type key=type_line_mix item=_lines_mix}}
@@ -106,7 +106,7 @@ Main.add(function () {
 				    <th class="title">Libelle</th>
 				    <th class="title">Posologie</th>
 				    {{foreach from=$dates item=date}}
-				    <th style="width: 1%" class="category">
+				    <th class="category narrow">
 				      {{$date|date_format:$dPconfig.date}}
 				    </th>
 				    {{/foreach}}

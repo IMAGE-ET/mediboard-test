@@ -16,15 +16,15 @@
 
 <table class="tbl">
   <tr>
-    <th style="width: 0.1%;">{{mb_title class=CProductReference field=code}}</th>
+    <th class="narrow">{{mb_title class=CProductReference field=code}}</th>
     <th>{{mb_title class=CProductReference field=societe_id}}</th>
-    <th style="width: 0.1%">{{mb_title class=CProductReference field=price}}</th>
+    <th class="narrow">{{mb_title class=CProductReference field=price}}</th>
      
 		{{if $dPconfig.dPstock.CProductReference.show_cond_price}}
-    <th colspan="2" style="width: 0.1%">{{mb_title class=CProductReference field=_cond_price}}</th>
+    <th colspan="2" class="narrow">{{mb_title class=CProductReference field=_cond_price}}</th>
     {{/if}}
 		
-    <th colspan="2" style="width: 0.1%">{{mb_title class=CProductReference field=_unit_price}}</th>
+    <th colspan="2" class="narrow">{{mb_title class=CProductReference field=_unit_price}}</th>
   </tr>
   
 	{{foreach from=$product->_ref_references item=_reference}}

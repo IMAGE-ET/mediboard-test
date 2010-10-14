@@ -27,7 +27,7 @@ Main.add(function(){
 
 <table class="main layout">
   <tr>
-    <td style="white-space: nowrap; width: 0.1%;">
+    <td style="white-space: nowrap;" class="narrow">
       <ul class="control_tabs_vertical" id="tab_orders">
       {{foreach from=$list_services item=_service}}
         <li>
@@ -50,7 +50,7 @@ Main.add(function(){
           <tbody id="tab-{{$_service->_guid}}" style="display: none;">
             <!-- Affichage des delivrances globales -->
             <tr>
-              <th style="width: 0.1%;">{{tr}}CProductDelivery-patient_id{{/tr}}</th>
+              <th class="narrow">{{tr}}CProductDelivery-patient_id{{/tr}}</th>
               <th colspan="2">{{tr}}CProductDelivery-date_dispensation{{/tr}}</th>
               <th>
                 <label style="float: left;">
@@ -69,7 +69,7 @@ Main.add(function(){
               {{/if}}
               *}}
               
-              <th style="width: 0.1%;">
+              <th class="narrow">
                 <button type="button" onclick="dispenseAll('tab-{{$_service->_guid}}', refreshOrders)" class="tick">
                   Disp. les <span id="count-orders-{{$_service->_guid}}"></span> visibles
                 </button>

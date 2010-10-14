@@ -37,7 +37,7 @@ td.inactive .societe-type {
     <th>{{mb_title class=CSociete field=name}}</th>
     <th>{{mb_title class=CSociete field=contact_name}}</th>
     <th>{{mb_title class=CSociete field=phone}}</th>
-    <th style="width: 0.1%;"></th>
+    <th class="narrow"></th>
   </tr>
   
   {{foreach from=$list item=curr}}

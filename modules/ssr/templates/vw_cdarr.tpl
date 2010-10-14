@@ -55,7 +55,7 @@ function changePage(page){
           <th>{{mb_title object=$activite field=type}}</th>
           <th>{{mb_title object=$activite field=code}}</th>
           <th>{{mb_title object=$activite field=libelle}}</th>
-					<th style="width: 1%">Nb. éléments</th>
+					<th class="narrow">Nb. éléments</th>
         </tr>
         {{foreach from=$listActivites item=_activite}}
         <tr>

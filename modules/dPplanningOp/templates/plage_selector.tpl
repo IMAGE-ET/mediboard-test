@@ -191,7 +191,7 @@ Main.add(function () {
               </table>
             </div>
          	 </td>
-          <td style="width: 1%; text-align: center;">
+          <td style="text-align: center;" class="narrow">
             {{if $resp_bloc ||
               (
                (!$over || !$dPconfig.dPbloc.CPlageOp.locked)

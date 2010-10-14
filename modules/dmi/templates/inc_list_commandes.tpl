@@ -13,7 +13,7 @@
     <th>{{mb_title class=CPrescriptionLineDMI field=quantity}}</th>
     <th>{{tr}}CPatient{{/tr}}</th>
     <th>{{mb_title class=CPrescriptionLineDMI field=praticien_id}}</th>
-    <th style="width: 1%">{{mb_title class=CPrescriptionLineDMI field=date}}</th>
+    <th class="narrow">{{mb_title class=CPrescriptionLineDMI field=date}}</th>
     <th>{{mb_title class=CPrescriptionLineDMI field=type}}</th>
     <th>{{mb_title class=CPrescriptionLineDMI field=septic}}</th>
   </tr>
@@ -21,7 +21,7 @@
     <th colspan="2">{{mb_title class=CPrescriptionLineDMI field=product_id}}</th>
     <th>{{mb_title class=CProduct field=code}}</th>
     <th>Stock</th>
-    <th style="width: 1%">Commander</th>
+    <th class="narrow">Commander</th>
     <th>Déjà comm.</th>
   </tr>
   {{foreach from=$lines_by_context key=_context_guid item=_lines}}

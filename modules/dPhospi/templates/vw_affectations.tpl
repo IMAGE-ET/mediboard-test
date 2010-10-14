@@ -70,7 +70,7 @@ Main.add(function () {
         <tr>
         {{foreach from=$services item=curr_service}}
 				  {{if $curr_service->_ref_chambres|@count}}
-          <td style="width: 1%" class="fullService" id="service{{$curr_service->service_id}}">
+          <td class="fullService narrow" id="service{{$curr_service->service_id}}">
           {{include file="inc_affectations_services.tpl"}}
           </td>
           {{/if}}

@@ -59,7 +59,7 @@ Voir les séjour :
     <tr>
 
     {{if $smarty.foreach.sejour.first}} 
-	    <td rowspan="{{$count_sejour}}" style="width: 1%;">
+	    <td rowspan="{{$count_sejour}}" class="narrow">
 	      <input name="{{$_patient->_class_name}}-first" type="checkbox" value="{{$_patient->_id}}" onclick="IdentitoVigilance.highlite(this);" />
 	      <input name="{{$_patient->_class_name}}-second" type="radio" value="{{$_patient->_id}}" style="visibility: hidden;" onclick="IdentitoVigilance.merge(this);"/>
 	    </td>
@@ -84,7 +84,7 @@ Voir les séjour :
 	    </td>
     {{/if}}
        
-    <td style="width: 1%;">
+    <td class="narrow">
       {{if $count_sejour > 1}}
       <input name="{{$_sejour->_class_name}}-first" type="checkbox" value="{{$_sejour->_id}}" onclick="IdentitoVigilance.highlite(this);" />
       <input name="{{$_sejour->_class_name}}-second" type="radio" value="{{$_sejour->_id}}" style="visibility: hidden;" onclick="IdentitoVigilance.merge(this);"/>

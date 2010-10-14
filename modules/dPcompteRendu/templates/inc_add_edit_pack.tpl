@@ -140,7 +140,7 @@ Main.add(function() {
       <tr><th class="category" colspan="2">Modèles du pack</th></tr>
       {{foreach from=$pack->_back.modele_links item=modele_link}}
       <tr>
-        <td style="width: 0.1%;">
+        <td class="narrow">
           <form name="delFrm{{$modele_link->_id}}" action="?" method="post"
                 onsubmit="return onSubmitFormAjax(this, 
                                 {onComplete: function() {

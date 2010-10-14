@@ -40,11 +40,11 @@
 
   {{foreach from=$hl7v2_versions item=_hl7v2_version}}  
   <tr>
-    <td style="width:1%">
+    <td class="narrow">
       {{tr}}HL7-v.2.{{$_hl7v2_version}}{{/tr}}
     </td>
     
-    <td onclick="extractSpecsFiles('{{$_hl7v2_version}}');" style="width:1%">
+    <td onclick="extractSpecsFiles('{{$_hl7v2_version}}');" class="narrow">
       <button class="tick">{{tr}}Install{{/tr}}</button>
       <div class="text" id="install_{{$_hl7v2_version}}"></div>
     </td>

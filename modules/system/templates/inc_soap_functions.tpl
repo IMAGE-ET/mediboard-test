@@ -26,7 +26,7 @@
   </tr>
   {{foreach from=$functions item=_function}}
   <tr>
-  	<td style="width:0.1%">
+  	<td class="narrow">
   		<button class="tick notext" onclick="getEvenementName($(this), '{{$_function}}')"></button>
 	  </td>
     <td class="text">

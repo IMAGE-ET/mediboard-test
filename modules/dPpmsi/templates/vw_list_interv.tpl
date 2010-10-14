@@ -45,7 +45,7 @@ Main.add(function () {
   </tr>
   <tr>
     <th>{{mb_title class=$operation field=facture}}</th>
-    <th style="width: 1%">{{mb_title class=CSejour field=_num_dossier}}</th>
+    <th class="narrow">{{mb_title class=CSejour field=_num_dossier}}</th>
     <th>{{mb_label object=$operation field=chir_id}}</th>
     <th>{{mb_label class=CSejour field=patient_id}}</th>
     <th>{{mb_label class=$operation field=time_operation}}</th>

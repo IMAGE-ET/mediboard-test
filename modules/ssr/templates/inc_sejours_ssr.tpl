@@ -34,7 +34,7 @@
 	<tr>
 		{{assign var=url value="?m=$m&$actionType=$action&dialog=$dialog"}}
     <th style="width: 20em;">{{mb_colonne class="CSejour" field="patient_id" order_col=$order_col order_way=$order_way url=$url}}</th>
-    <th style="width: 1%;">
+    <th class="narrow">
       <input type="text" size="6" onkeyup="SejoursSSR.filter(this)" id="filter-patient-name" />
     </th>
     <th style="width:  5em;">{{mb_colonne class="CSejour" field="entree"     order_col=$order_col order_way=$order_way url=$url}}</th>
@@ -83,7 +83,7 @@
 
 		</th>
     
-    <th style="width:   1%;" colspan="2"><label title="Evénements planifiés pour ce patient (ce jour - pendant tout le séjour)">Evt.</label></th>
+    <th colspan="2" class="narrow"><label title="Evénements planifiés pour ce patient (ce jour - pendant tout le séjour)">Evt.</label></th>
 	</tr>
 	
 	{{foreach from=$sejours key=sejour_id item=_sejour}}
@@ -178,13 +178,13 @@
 	        <img src="images/icons/calendar-broken.png" title="Aucune prescription, planification impossible" />
 	      </td>
 	    {{else}}
-	      <td style="text-align: right; width: 1%;">
+	      <td style="text-align: right;" class="narrow">
 	        {{if $_sejour->_count_evenements_ssr}} 
 	        {{$_sejour->_count_evenements_ssr}}
 	        {{/if}}
 	      </td>
 	  
-	      <td style="text-align: right; width: 1%;">
+	      <td style="text-align: right;" class="narrow">
 	        {{if $_sejour->_count.evenements_ssr}} 
 	        {{$_sejour->_count.evenements_ssr}}
 	        {{/if}}

@@ -29,7 +29,7 @@
 {{else}}
   <table class="main">
     <tr>
-      <td style="width: 0.1%">
+      <td class="narrow">
         <ul id="tabs-rhss_no_charge" class="control_tabs_vertical" style="width: 14em;">
           {{foreach from=$rhs_counts item=_rhs_count}}
           <li onmousedown="refreshSejour('{{$_rhs_count.mondate}}')">

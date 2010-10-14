@@ -362,7 +362,7 @@ Main.add(function () {
         </tr>
 
         <tr>
-          <th style="width: 0.1%;">{{mb_title class=CConsultation field=heure}}</th>
+          <th class="narrow">{{mb_title class=CConsultation field=heure}}</th>
           <th>{{mb_title class=CConsultation field=patient_id}}</th>
           <th>{{mb_title class=CConsultation field=motif}}</th>
           <th>{{mb_title class=CConsultation field=rques}}</th>

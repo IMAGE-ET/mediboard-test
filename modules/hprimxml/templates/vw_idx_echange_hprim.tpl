@@ -75,8 +75,8 @@ function refreshEchanges(form) {
           </tr>
           <tr>
             <th style="width:50%">{{mb_label object=$echange_hprim field="_date_min"}}</th>
-            <td style="width:0.1%">{{mb_field object=$echange_hprim field="_date_min" form="filterEchange" register=true onchange="\$V(this.form.page, 0)"}} </td>
-            <th style="width:0.1%">{{mb_label object=$echange_hprim field="_date_max"}}</th>
+            <td class="narrow">{{mb_field object=$echange_hprim field="_date_min" form="filterEchange" register=true onchange="\$V(this.form.page, 0)"}} </td>
+            <th class="narrow">{{mb_label object=$echange_hprim field="_date_max"}}</th>
             <td style="width:50%">{{mb_field object=$echange_hprim field="_date_max" form="filterEchange" register=true onchange="\$V(this.form.page, 0)"}} </td>
           </tr>
           <tr>

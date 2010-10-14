@@ -508,7 +508,7 @@ Main.add( function(){
 	              <input type="hidden" name="del" value="0" />
 	              <table class="form">
 		              <tr>
-		                <td style="border:none; width:1%;">
+		                <td style="border:none" class="narrow">
 		                  {{if $_prescription_line_mix->_can_delete_prescription_line_mix_item && $_prescription_line_mix->type_line != "oxygene"}}
 			                  <button class="trash notext" type="button" onclick="$V(this.form.del,'1'); submitFormAjax(this.form, 'systemMsg', { 
 			                    onComplete: function(){

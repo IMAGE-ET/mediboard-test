@@ -121,7 +121,7 @@ function setClose(selClass,keywords,key,val){
       <td>
       	<label onmouseover="ObjectTooltip.createEx(this, '{{$_object->_guid}}');">{{$_object}}</label>
       </td>     
-      <td class="button" style="width: 1%">
+      <td class="button narrow">
       	<button type="button" class="tick" onclick="setClose('{{$selClass}}', '{{$keywords|stripslashes|smarty:nodefaults|JSAttribute}}', {{$_object->_id}}, '{{$_object->_view|smarty:nodefaults|JSAttribute}}')">
       	  {{tr}}Select{{/tr}}
       	</button>

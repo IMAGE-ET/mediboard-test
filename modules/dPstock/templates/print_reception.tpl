@@ -90,11 +90,11 @@ table.grid th {
 <br />
 
 <table class="grid print {{if $reception->_ref_reception_items|@count <= $nb_par_page}}bodyWithoutPageBreak{{else}}body{{/if}}">
-  <col style="width: 0.1%;" />
-  <col style="width: 0.1%;" />
+  <col class="narrow" />
+  <col class="narrow" />
   <col />
-  <col style="width: 0.1%;" />
-  <col style="width: 0.1%;" />
+  <col class="narrow" />
+  <col class="narrow" />
   
   <tr>
     <th class="category">{{mb_title class=CProduct field=classe_comptable}}</th>
@@ -146,9 +146,9 @@ table.grid th {
     {{else}}
       <td style="text-align: center; white-space: nowrap;">{{mb_value object=$curr_item field=quantity}}</td>
     {{/if}}
-    <td style="text-align: center; width: 1%">{{mb_value object=$curr_item field=code}}</td>
-    <td style="width: 1%">{{mb_value object=$curr_item field=lapsing_date}}</td>
-    <td style="width: 1%">{{mb_value object=$curr_item field=_price}}</td>
+    <td style="text-align: center;" class="narrow">{{mb_value object=$curr_item field=code}}</td>
+    <td class="narrow">{{mb_value object=$curr_item field=lapsing_date}}</td>
+    <td class="narrow">{{mb_value object=$curr_item field=_price}}</td>
   </tr>
   
   {{if $smarty.foreach.foreach_products.last}}

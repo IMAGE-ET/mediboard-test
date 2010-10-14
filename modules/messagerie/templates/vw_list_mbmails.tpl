@@ -15,7 +15,7 @@ Main.add(function () {
     </td>
   </tr>
   <tr>
-    <td style="width: 0.1%; vertical-align: top;">
+    <td style="vertical-align: top;" class="narrow">
       <ul id="tab-mbmails" class="control_tabs_vertical">
         <li>
           {{assign var=count value=$listInbox|@count}}

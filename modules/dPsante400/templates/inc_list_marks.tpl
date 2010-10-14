@@ -14,7 +14,7 @@ function retry(sClass, iRec) {
     <th>{{mb_title class=CTriggerMark field=trigger_number}}</th>
     <th>{{mb_title class=CTriggerMark field=trigger_class}}</th>
     <th>{{mb_title class=CTriggerMark field=mark}}</th>  
-    <th colspan="2" style="width: 1%">{{mb_title class=CTriggerMark field=done}}</th>  
+    <th colspan="2" class="narrow">{{mb_title class=CTriggerMark field=done}}</th>  
   </tr>
   
   {{assign var=href value="?m=dPsante400&$actionType=$action&dialog=$dialog"}}

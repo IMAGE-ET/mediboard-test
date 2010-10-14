@@ -58,8 +58,8 @@
         </th>
         <th>{{mb_label class=CProductOrderItemReception field=code}}</th>
         <th>{{mb_label class=CProductOrderItemReception field=lapsing_date}}</th>
-        <th style="width: 0.1%;"></th>
-        <th style="width: 0.1%;"><img src="style/mediboard/images/buttons/barcode.png" /></th>
+        <th class="narrow"></th>
+        <th class="narrow"><img src="style/mediboard/images/buttons/barcode.png" /></th>
       </tr>
       {{foreach from=$curr_item->_ref_receptions item=curr_reception}}
         <tr>
@@ -101,7 +101,7 @@
   </td>
   
   <!-- Receive item -->
-  <td style="text-align: right; width: 0.1%;">
+  <td style="text-align: right;" class="narrow">
 	  {{if $curr_item->_quantity_received < $curr_item->quantity}}
     <form name="form-item-receive-{{$curr_item->_id}}" action="?" method="post" onsubmit="return makeReception(this, '{{$order->_id}}')">
       <input type="hidden" name="m" value="{{$m}}" />

@@ -38,9 +38,9 @@
 <tr>
   <th>{{mb_title class=CMessage field=titre}}</th>
   <th>{{mb_title class=CMessage field=module_id}}</th>
-  <th style="width: 1%">{{mb_title class=CMessage field=deb}}</th>
-  <th style="width: 1%">{{mb_title class=CMessage field=fin}}</th>
-  <th style="width: 1%">{{mb_title class=CMessage field=group_id}}</th>
+  <th class="narrow">{{mb_title class=CMessage field=deb}}</th>
+  <th class="narrow">{{mb_title class=CMessage field=fin}}</th>
+  <th class="narrow">{{mb_title class=CMessage field=group_id}}</th>
 </tr>
 
 {{foreach from=$messages item=_message}}

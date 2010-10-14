@@ -17,7 +17,7 @@
   <th>{{mb_title class=CAideSaisie field=depend_value_2}}</th>
   <th>{{mb_title class=CAideSaisie field=name}}</th>
   <th>{{mb_title class=CAideSaisie field=text}}</th>
-  <th style="width: 0.1%;"></th>
+  <th class="narrow"></th>
 </tr>
 
 {{foreach from=$aides item=_aide}}

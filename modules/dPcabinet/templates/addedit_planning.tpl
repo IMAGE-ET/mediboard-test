@@ -187,7 +187,7 @@ Main.add(function () {
         	<th class="category" colspan="3">Informations sur la consultation</th>
 			  </tr>
         <tr>
-          <th style="width: 0.1%;">
+          <th class="narrow">
             <label for="chir_id" title="Praticien pour la consultation">Praticien</label>
           </th>
           <td>

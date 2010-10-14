@@ -158,23 +158,23 @@ modeExpertDisplay = function() {
     </tr>
     <tr id="chooseDiag">
       <th>Diagnostic</th>
-      <td style="width: 1%;"><input name="valueDiag" type="radio" value="" /></td>
+      <td class="narrow"><input name="valueDiag" type="radio" value="" /></td>
       <td id="chooseNewDiag"></td>
-      <td style="width: 1%;"><input name="valueDiag" type="radio" checked="checked" value="" /></td>
+      <td class="narrow"><input name="valueDiag" type="radio" checked="checked" value="" /></td>
       <td id="chooseOldDiag"></td>
     </tr>
     <tr id="chooseAdm">
       <th>Admission</th>
-      <td style="width: 1%;"><input name="valueAdm" type="radio" value="" /></td>
+      <td class="narrow"><input name="valueAdm" type="radio" value="" /></td>
       <td id="chooseNewAdm"></td>
-      <td style="width: 1%;"><input name="valueAdm" type="radio" checked="checked" value="" /></td>
+      <td class="narrow"><input name="valueAdm" type="radio" checked="checked" value="" /></td>
       <td id="chooseOldAdm"></td>
     </tr>
     <tr id="chooseSortie">
       <th>Sortie prévue</th>
-      <td style="width: 1%;"><input name="valueSortie" type="radio" value="" /></td>
+      <td class="narrow"><input name="valueSortie" type="radio" value="" /></td>
       <td id="chooseNewSortie"></td>
-      <td style="width: 1%;"><input name="valueSortie" type="radio" checked="checked" value="" /></td>
+      <td class="narrow"><input name="valueSortie" type="radio" checked="checked" value="" /></td>
       <td id="chooseOldSortie"></td>
     </tr>
     <tr>

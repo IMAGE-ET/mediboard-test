@@ -286,7 +286,7 @@ loadConstantesMedicales  = function(context_guid) {
       </td>
     </tr>
     <tr>
-      <td style="width: 0.1%;">
+      <td class="narrow">
         <div id="constantes-medicales-form">
   			  {{include file="inc_form_edit_constantes_medicales.tpl" context_guid=$context_guid}}
   			</div>

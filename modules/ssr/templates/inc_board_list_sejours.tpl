@@ -23,9 +23,9 @@ Main.add(function() {
       {{mb_title class=CPatient field=_age}}
 		</th>
     <th>{{mb_title class=CSejour field=libelle}}</th>
-    <th style="width: 1%;">{{mb_title class=CSejour field=entree}}</th>
-    <th style="width: 1%;">{{mb_title class=CSejour field=sortie}}</th>
-    <th style="width: 1%;" colspan="2"><label title="Evenements planifiés par le rééducateur (cette semaine - pendant tout le séjour)">Evt.</label></th>
+    <th class="narrow">{{mb_title class=CSejour field=entree}}</th>
+    <th class="narrow">{{mb_title class=CSejour field=sortie}}</th>
+    <th class="narrow" colspan="2"><label title="Evenements planifiés par le rééducateur (cette semaine - pendant tout le séjour)">Evt.</label></th>
   </tr>
 	
 {{foreach from=$sejours item=_sejour}}
@@ -41,7 +41,7 @@ Main.add(function() {
         </span>
     	</a>
 		</td>
-		<td  style="width: 1%;">
+		<td class="narrow">
 			{{mb_value object=$patient field=_age}}    
     </td>
     <td class="text">{{mb_value object=$_sejour field=libelle}}</td>

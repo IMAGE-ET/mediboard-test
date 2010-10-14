@@ -106,7 +106,7 @@ Main.add( function(){
 		          <td>
 		            {{$hour}}h
 		          </td>
-		          <td style="width: 1%">
+		          <td class="narrow">
 		          	{{assign var=key_bon value="$line_id-$hour"}}
 		            <input type="checkbox" name="list_bons[]" {{if @in_array($key_bon, $list_bons) || !is_array($list_bons) || !$print}}checked="checked"{{/if}} value="{{$key_bon}}" />
 		          </td>

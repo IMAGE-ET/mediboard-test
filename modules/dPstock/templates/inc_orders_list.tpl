@@ -12,11 +12,11 @@
 <!-- Orders not validated yet -->
 <table class="tbl">
   <tr>
-    <th style="width: 0.1%;">{{mb_title class=CProductOrder field=order_number}}</th>
+    <th class="narrow">{{mb_title class=CProductOrder field=order_number}}</th>
     <th>{{tr}}CProductOrder-societe_id{{/tr}}</th>
     <th>{{tr}}CProductOrder-items_count{{/tr}}</th>
     <th>{{tr}}CProductOrder-_total{{/tr}}</th>
-    <th style="width: 1%;"></th>
+    <th class="narrow"></th>
   </tr>
   <tbody>
 	{{foreach from=$orders item=curr_order}}
@@ -81,12 +81,12 @@
 <!-- Orders locked -->
 <table class="tbl">
   <tr>
-    <th style="width: 0.1%;">{{mb_title class=CProductOrder field=order_number}}</th>
+    <th class="narrow">{{mb_title class=CProductOrder field=order_number}}</th>
     <th>{{tr}}CProductOrder-societe_id{{/tr}}</th>
     <th>{{tr}}CProductOrder-object_id{{/tr}}</th>
     <th>{{tr}}CProductOrder-items_count{{/tr}}</th>
     <th>{{tr}}CProductOrder-_total{{/tr}}</th>
-    <th style="width: 1%;"></th>
+    <th class="narrow"></th>
   </tr>
   <tbody>
   {{foreach from=$orders item=curr_order}}
@@ -162,13 +162,13 @@
 <!-- Orders not received yet -->
 <table class="tbl">
   <tr>
-    <th style="width: 0.1%;">{{mb_title class=CProductOrder field=order_number}}</th>
+    <th class="narrow">{{mb_title class=CProductOrder field=order_number}}</th>
     <th>{{tr}}CProductOrder-societe_id{{/tr}}</th>
     <th>{{tr}}CProductOrder-object_id{{/tr}}</th>
     <th>{{tr}}CProductOrder-items_count{{/tr}} /<br /> {{tr}}CProductOrder-_count_received{{/tr}}</th>
     <th>{{tr}}CProductOrder-date_ordered{{/tr}}</th>
     <th>{{tr}}CProductOrder-_total{{/tr}}</th>
-    <th style="width: 1%;"></th>
+    <th class="narrow"></th>
   </tr>
   <tbody>
   {{foreach from=$orders item=curr_order}}
@@ -248,15 +248,15 @@
 <!-- Received orders -->
 <table class="tbl">
   <tr>
-    <th style="width: 0.1%;">{{mb_title class=CProductOrder field=order_number}}</th>
+    <th class="narrow">{{mb_title class=CProductOrder field=order_number}}</th>
     <th>{{tr}}CProductOrder-societe_id{{/tr}}</th>
     <th>{{tr}}CProductOrder-object_id{{/tr}}</th>
     <th>{{tr}}CProductOrder-items_count{{/tr}}</th>
     <th>{{tr}}CProductOrder-date_ordered{{/tr}}</th>
     <th>{{tr}}CProductOrder-_date_received{{/tr}}</th>
     <th>{{tr}}CProductOrder-_total{{/tr}}</th>
-    <th style="width: 1%;">{{tr}}CProductOrder-bill_number{{/tr}}</th>
-    <th style="width: 1%;"></th>
+    <th class="narrow">{{tr}}CProductOrder-bill_number{{/tr}}</th>
+    <th class="narrow"></th>
   </tr>
   <tbody>
   {{foreach from=$orders item=curr_order}}
@@ -332,14 +332,14 @@
 <!-- Cancelled orders -->
 <table class="tbl">
   <tr>
-    <th style="width: 0.1%;">{{mb_title class=CProductOrder field=order_number}}</th>
+    <th class="narrow">{{mb_title class=CProductOrder field=order_number}}</th>
     <th>{{tr}}CProductOrder-societe_id{{/tr}}</th>
     <th>{{tr}}CProductOrder-object_id{{/tr}}</th>
     <th>{{tr}}CProductOrder-items_count{{/tr}}</th>
     <th>{{tr}}CProductOrder-date_ordered{{/tr}}</th>
     <th>{{tr}}CProductOrder-_date_received{{/tr}}</th>
     <th>{{tr}}CProductOrder-_total{{/tr}}</th>
-    <th style="width: 1%;"></th>
+    <th class="narrow"></th>
   </tr>
   <tbody>
   {{foreach from=$orders item=curr_order}}

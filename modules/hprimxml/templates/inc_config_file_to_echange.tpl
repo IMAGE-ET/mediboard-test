@@ -46,14 +46,14 @@
           {{assign var=class value=CFile}}
           {{assign var="var" value="upload_directory"}}
           <tr>
-            <th style="text-align:left; width:0.1%"> {{tr}}config-{{$m}}-{{$class}}-{{$var}}{{/tr}} </th>
+            <th style="text-align:left;" class="narrow"> {{tr}}config-{{$m}}-{{$class}}-{{$var}}{{/tr}} </th>
             <td>
               {{$dPconfig.$m.$class.$var}}/<input type="text" name="path" size="80" value="" />
             </td>
           </tr>
           
           <tr>
-            <th style="text-align:left; width:0.1%"> {{tr}}CEchangeHprim-type-desc{{/tr}} </th>
+            <th style="text-align:left;" class="narrow"> {{tr}}CEchangeHprim-type-desc{{/tr}} </th>
             <td>
               <label><input type="radio" name="type" value="pmsi"/>PMSI</label>
               <label><input type="radio" name="type" value="actes"/>Serveur d'actes</label>
@@ -61,7 +61,7 @@
           </tr>
           
           <tr>
-            <th style="text-align:left; width:0.1%"> {{tr}}CEchangeHprim-file-limit-desc{{/tr}} </th>
+            <th style="text-align:left;" class="narrow"> {{tr}}CEchangeHprim-file-limit-desc{{/tr}} </th>
             <td>
               <input type="text" name="limit" value="0" />
             </td>

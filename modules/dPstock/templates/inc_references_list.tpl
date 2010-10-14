@@ -14,19 +14,19 @@
 <table class="tbl">
   <tr>
     <th style="width: 16px;"></th>
-    <th style="width: 1%;">{{mb_title class=CProductReference field=code}}</th>
+    <th class="narrow">{{mb_title class=CProductReference field=code}}</th>
     <th>{{mb_label class=CProductReference field=societe_id}}</th>
-    <th style="width: 1%;">{{mb_title class=CProductReference field=price}}</th>
+    <th class="narrow">{{mb_title class=CProductReference field=price}}</th>
     
     {{if $dPconfig.dPstock.CProductReference.show_cond_price}}
-      <th style="width: 1%;">{{mb_title class=CProductReference field=_cond_price}}</th>
+      <th class="narrow">{{mb_title class=CProductReference field=_cond_price}}</th>
     {{/if}}
     
-    <th style="width: 1%;">{{mb_title class=CProductReference field=_unit_price}}</th>
+    <th class="narrow">{{mb_title class=CProductReference field=_unit_price}}</th>
     
     {{if $mode}}
-      {{if $mode == "order"}}<th style="width: 1%;">Stock</th>{{/if}}
-      <th style="width: 1%;"></th>
+      {{if $mode == "order"}}<th class="narrow">Stock</th>{{/if}}
+      <th class="narrow"></th>
     {{/if}}
   </tr>
   

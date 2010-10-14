@@ -27,18 +27,18 @@
     <td>
       <table class="tbl">
         <tr>
-          <th style="width:   1%;">{{mb_title class=CRPU field=_entree}}</th>
+          <th class="narrow">{{mb_title class=CRPU field=_entree}}</th>
 				  <th style="width: 16em;">{{mb_label class=CRPU field=_patient_id}}</th>
 				  <th style="width:  8em;">{{mb_label class=CRPU field=ccmu}}</th>
 					<th style="width: 16em;">{{mb_label class=CRPU field=diag_infirmier}}</th>
-					<th style="width:   1%;">Heure PeC</th>
+					<th class="narrow">Heure PeC</th>
 				  <th style="width:  8em;">{{mb_label class=CRPU field=_responsable_id}}</th>  
-					<th style="width:   1%;">
+					<th class="narrow">
 						{{mb_label class=CSejour field=mode_sortie}} 
 						<br/> &amp; 
 						{{mb_label class=CRPU field=orientation}}
 					</th>
-				  <th style="width:   1%;">{{mb_title class=CRPU field=_sortie}}</th>
+				  <th class="narrow">{{mb_title class=CRPU field=_sortie}}</th>
 				</tr>
 			  {{foreach from=$sejours item=sejour}}
 			  {{assign var=rpu value=$sejour->_ref_rpu}}

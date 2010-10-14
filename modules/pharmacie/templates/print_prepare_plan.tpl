@@ -20,7 +20,7 @@ Main.add(window.print);
 <h2>Délivrances {{if $mode == "nominatif"}}nominatives{{else}}globales{{/if}}</h2>
 <table class="main tbl">
   <colgroup>
-    <col span="5" style="width: 0.1%;" />
+    <col span="5"  class="narrow" />
   </colgroup>
   
   <tr>

@@ -164,7 +164,7 @@ function submitSejour(){
 <table class="tbl" id="list-sorties">
   <tr>
     <th>{{mb_title class=CRPU field="_patient_id"}}</th>
-    <th style="width: 0.1%;"><input type="text" onkeyup="filterPatient(this)" id="filter-patient-name" size="6" /></th>
+    <th class="narrow"><input type="text" onkeyup="filterPatient(this)" id="filter-patient-name" size="6" /></th>
     {{if $dPconfig.dPurgences.responsable_rpu_view}}
       <th>{{mb_title class=CRPU field="_responsable_id"}}</th>
     {{/if}}

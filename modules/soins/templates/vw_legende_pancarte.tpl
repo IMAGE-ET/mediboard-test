@@ -18,17 +18,17 @@
   {{foreach from=$specs_chapitre->_list item=_chapitre}}
 	{{if array_key_exists($_chapitre, $images)}}
   <tr>
-    <td style="width: 1%;"><img src="{{$images.$_chapitre}}" /></td>
+    <td class="narrow"><img src="{{$images.$_chapitre}}" /></td>
     <td>{{tr}}CPrescription._chapitres.{{$_chapitre}}{{/tr}}</td>
   </tr>
 	{{/if}}
   {{/foreach}}
   <tr>
-    <td style="width: 1%;"><img src="images/icons/ampoule.png" /></td>
+    <td class="narrow"><img src="images/icons/ampoule.png" /></td>
     <td>Ligne modifiée récemment</td>
   </tr>
   <tr>
-    <td style="width: 1%;"><img src="images/icons/ampoule_urgence.png" /></td>
+    <td class="narrow"><img src="images/icons/ampoule_urgence.png" /></td>
     <td>Ligne urgente</td>
   </tr>
   <tr>

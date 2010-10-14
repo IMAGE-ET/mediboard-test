@@ -83,7 +83,7 @@ Main.add(function () {
   {{math equation="100/(count+1)" count=$objects|@count assign=width}}
   <table class="form merger">
     <tr>
-      <th class="category" style="width: 1%;">
+      <th class="category narrow">
       </th>
       <th class="category" style="width: {{$width}}%;">Résultat</th>
 

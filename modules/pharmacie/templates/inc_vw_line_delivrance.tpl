@@ -68,7 +68,7 @@
   <table class="layout" {{if $remaining < 1}}style="display: none"{{/if}}>
   {{foreach from=$curr_delivery->_ref_delivery_traces item=trace}}
     <tr>
-      <td class="button" style="width: 0.1%;">
+      <td class="button narrow">
         {{if !$trace->date_reception}}
           <form name="delivery-trace-{{$trace->_id}}-cancel" action="?" method="post" onsubmit="return deliverLine(this)">
             <input type="hidden" name="m" value="dPstock" /> 
@@ -83,7 +83,7 @@
           <img src="images/icons/tick.png" title="Délivré" />
         {{/if}}
       </td>
-      <td style="width: 0.1%;">
+      <td class="narrow">
         {{$trace->quantity}} éléments
       </td>
       <td>

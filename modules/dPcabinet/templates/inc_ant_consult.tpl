@@ -168,7 +168,7 @@ Main.add(function () {
 
       <table class="form">
         <col style="width: 70px;" />
-        <col style="width: 0.1%;" />
+        <col  class="narrow" />
         
         <tr>
           {{if $app->user_prefs.showDatesAntecedents}}
@@ -275,7 +275,7 @@ Main.add(function () {
         
         <table class="form">
           <col style="width: 70px;" />
-          <col style="width: 0.1%;" />
+          <col class="narrow" />
         
           <tr>
             <th>Recherche</th>
@@ -363,7 +363,7 @@ Main.add(function () {
       
       <table class="form">
         <col style="width: 70px;" />
-        <col style="width: 0.1%;" />
+        <col  class="narrow" />
          
         <tr>
           {{if $app->user_prefs.showDatesAntecedents}}

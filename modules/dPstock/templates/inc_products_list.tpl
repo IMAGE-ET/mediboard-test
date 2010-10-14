@@ -23,7 +23,7 @@ Main.add(function(){
     <th colspan="10">{{mb_title class=CProduct field=name}}</th>
   </tr>
   <tr>
-    <th style="width: 1%;">{{mb_title class=CProduct field=code}}</th>
+    <th class="narrow">{{mb_title class=CProduct field=code}}</th>
     <th>{{mb_title class=CProduct field=societe_id}}</th>
     <th>{{mb_title class=CProduct field=quantity}}</th>
     <th>{{mb_label class=CProduct field=item_title}}</th>

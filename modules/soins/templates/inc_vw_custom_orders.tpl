@@ -10,10 +10,10 @@
 
 <table class="tbl">
   <tr>
-    <th style="width: 0.1%;">{{mb_title class=CProductDelivery field=quantity}}</th>
+    <th class="narrow">{{mb_title class=CProductDelivery field=quantity}}</th>
     <th>{{mb_title class=CProductDelivery field=date_dispensation}}</th>
     <th>{{mb_title class=CProductDelivery field=comments}}</th>
-    <th style="width: 0.1%;"></th>
+    <th class="narrow"></th>
   </tr>
 {{foreach from=$deliveries item=_delivery}}
   <tr>

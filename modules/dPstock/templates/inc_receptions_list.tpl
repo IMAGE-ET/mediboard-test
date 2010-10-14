@@ -12,7 +12,7 @@
 
 <table class="main tbl">
   <tr>
-    <th style="width: 1%">{{mb_title class=CProductReception field="reference"}}</th>
+    <th class="narrow">{{mb_title class=CProductReception field="reference"}}</th>
     <th>{{mb_title class=CProductReception field="societe_id"}}</th>
     <th>{{mb_title class=CProductReception field="date"}}</th>
     <th>Nombre d'elements</th>
@@ -28,7 +28,7 @@
     <td>{{mb_value object=$_reception field="societe_id"}}</td>
     <td>{{mb_value object=$_reception field="date"}}</td>
     <td>{{$_reception->_count_reception_items}}</td>
-    <td style="width: 1%">
+    <td class="narrow">
       <button type="button" class="edit notext" {{if $_reception->locked}}disabled="disabled"{{/if}} onclick="editReception({{$_reception->_id}})">{{tr}}Edit{{/tr}}</button>
       
       <form name="reception-{{if $_reception->locked}}un{{/if}}lock-{{$_reception->_id}}" action="?" method="post" onsubmit="return onSubmitFormAjax(this, {onComplete: refreshReceptionsList})">

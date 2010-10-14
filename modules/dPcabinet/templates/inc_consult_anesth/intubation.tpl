@@ -32,7 +32,7 @@ Main.add(function () {
   </tr>
   
   <tr>
-    <td style="width: 1%;">
+    <td class="narrow">
       <div id="dents-schema" style="position: relative;">
         <img id="dents-schema-image" src="images/pictures/dents.png?build={{$version.build}}" border="0" usemap="#dents-schema-map" /> 
         <map id="dents-schema-map" name="dents-schema-map">
@@ -122,7 +122,7 @@ Main.add(function () {
         </tr>
   
         <tr>
-          <th style="width: 1%;">{{mb_label object=$consult_anesth field="bouche" defaultFor="bouche_m20"}}</th>
+          <th class="narrow">{{mb_label object=$consult_anesth field="bouche" defaultFor="bouche_m20"}}</th>
           <td>
             {{mb_field object=$consult_anesth field="bouche" typeEnum="radio" separator="<br />" onclick="verifIntubDifficileAndSave(this.form);"}}
             <input type="radio" style="display: none;" name="bouche" value="" {{if !$consult_anesth->bouche}}checked="checked"{{/if}} onclick="verifIntubDifficileAndSave(this.form);" />

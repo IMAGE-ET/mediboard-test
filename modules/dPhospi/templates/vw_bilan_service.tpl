@@ -325,7 +325,7 @@ selectPeriode = function(element) {
 			
 			{{foreach from=$prises_by_dates key=date item=prises_by_hour name="foreach_date"}}
 		  <tr>
-		    <td style="border:none; width: 1%;"><strong>{{$date|date_format:"%d/%m/%Y"}}</strong></td>
+		    <td style="border:none;" class="narrow"><strong>{{$date|date_format:"%d/%m/%Y"}}</strong></td>
 				<th style="width: 250px; border:none;">Libellé</th> 
 				<th style="width: 50px; border:none;">Prévues</th>
 				<th style="width: 50px; border:none;">Effectuées</th>

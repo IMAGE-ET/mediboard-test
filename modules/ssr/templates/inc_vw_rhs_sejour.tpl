@@ -43,7 +43,7 @@
 
   <table class="tbl">
     <tr>
-      <th  style="width:  1%">
+      <th class="narrow">
       	<button type="button" class="add notext" onclick="Charged.addSome('{{$rhs_date_monday}}')">
       	 	{{tr}}Add{{/tr}}
 				</button>

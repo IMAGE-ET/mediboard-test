@@ -17,7 +17,7 @@
 
 <table class="main tbl">
   <tr>
-    <th rowspan="2" style="width: 0.1%;">{{tr}}CProduct{{/tr}}</th>
+    <th rowspan="2" class="narrow">{{tr}}CProduct{{/tr}}</th>
     <th colspan="2" style="width: 25%;">{{tr}}CProductOrderItemReception{{/tr}}</th>
     <th colspan="3" style="width: 25%;">Délivrance</th>
     <th colspan="2" style="width: 25%;">Réception service</th>
@@ -49,7 +49,7 @@
             </span>
           </th>
         {{/if}}
-        <!-- <td style="width: 1%;">{{$date|date_format:"%m/%d/%Y %H:%M:%S"}}</td>-->
+        <!-- <td class="narrow">{{$date|date_format:"%m/%d/%Y %H:%M:%S"}}</td>-->
         {{if $curr_evt.reception}}
           {{assign var=obj value=$curr_evt.reception}}
           <td style="text-align: center;">

@@ -160,7 +160,7 @@ Main.add(function () {
 
 <table class="main">
   <tr>
-    <td style="width: 0.1%;">
+    <td class="narrow">
       <input type="hidden" name="m" value="{{$m}}" />
       <input type="hidden" name="del" value="0" />
       <input type="hidden" name="dosql" value="do_modele_aed" />
@@ -455,7 +455,7 @@ Main.add(function () {
       {{/if}}
     </td>
     {{if $pdf_thumbnails == 1 && $compte_rendu->_id}}
-      <td style="width: 0.1%;">
+      <td class="narrow">
         <div id="thumbs" style="overflow: auto; overflow-x: hidden; width: 160px; height: 580px; text-align: center;">
         </div>
       </td>

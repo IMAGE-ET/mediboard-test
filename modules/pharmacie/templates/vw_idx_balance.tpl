@@ -48,7 +48,7 @@ Main.add(function(){
   
   {{foreach from=$_flows.0.out item=_flow key=_date}}
     <tr {{if $_date == "total"}}style="font-weight: bold"{{/if}}>
-      <th style="width: 0.1%;">
+      <th class="narrow">
         {{if $_date == "total"}}
           Total
         {{else}}
@@ -57,7 +57,7 @@ Main.add(function(){
       </th>
       
       {{foreach from=$_flow item=_value key=_service_id}}
-        <td style="text-align: center; {{if $_date == "total" && $_service_id == "total"}}font-size: 1.4em;{{/if}} {{if $_service_id == "total"}}font-weight: bold; width: 0.1%;{{/if}}">
+        <td style="text-align: center; {{if $_date == "total" && $_service_id == "total"}}font-size: 1.4em;{{/if}} {{if $_service_id == "total"}}font-weight: bold;{{/if}}" class="narrow">
           {{$_value}}
         </td>
       {{/foreach}}
@@ -77,7 +77,7 @@ Main.add(function(){
   
   {{foreach from=$balance.in key=_date item=_balance}}
     <tr>
-      <th style="width: 0.1%;">
+      <th class="narrow">
         {{$_date|date_format:"%b"}}
       </th>
       

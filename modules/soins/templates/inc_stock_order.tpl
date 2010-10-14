@@ -185,13 +185,13 @@
 
 <table class="tbl">
   <tr>
-    <th style="width: 0.1%;">Code</th>
+    <th class="narrow">Code</th>
     <th></th>
     <th>Unité de dispensation</th>
     <th style="width: 30%">Commande</th>
     <th>Déjà effectuées</th>
     {{if !$infinite_service}}
-    <th colspan="3" style="width: 0.1%;">
+    <th colspan="3" class="narrow">
       Stock du service
     </th>
     {{/if}}

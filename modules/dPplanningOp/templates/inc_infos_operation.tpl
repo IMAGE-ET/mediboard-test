@@ -47,7 +47,7 @@ printFicheBloc = function(operation_id) {
 	    <td class="text">
 	    	{{mb_include module=dPplanningOp template=inc_vw_operation}}
 	    </td>
-	    <td style="width: 1%;">
+	    <td class="narrow">
 	      <button {{if $_operation->_ref_consult_anesth->_ref_consultation->_id}}class="print"{{else}}class="warning"{{/if}} style="width:11em;" type="button" onclick="printFicheAnesth('{{$_operation->_ref_consult_anesth->_ref_consultation->_id}}', '{{$_operation->_id}}');">
           Fiche d'anesthésie
         </button>

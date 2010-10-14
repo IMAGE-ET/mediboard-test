@@ -16,7 +16,7 @@
      <img src="images/icons/next.png" alt="&gt;" />
    {{/if}}
   </td>
-  <td style="width:0.1%">
+  <td class="narrow">
     <form name="delEchange" action = "" method="post">
       <input type="hidden" name="m" value="hprimxml" />
       <input type="hidden" name="dosql" value="do_echangehprim_aed" />
@@ -30,13 +30,13 @@
       </button>
     </form>
   </td>
-  <td style="width:0.1%">
+  <td class="narrow">
     <a href="?m=hprimxml&amp;tab=vw_idx_echange_hprim&amp;echange_hprim_id={{$object->_id}}" class="button search">
      {{$object->echange_hprim_id|str_pad:6:'0':$smarty.const.STR_PAD_LEFT}}
     </a>
   </td>
   {{if $dPconfig.sip.server}}
-  <td style="width:0.1%">
+  <td class="narrow">
     {{if $object->initiateur_id}}
       <a href="?m=hprimxml&amp;tab=vw_idx_echange_hprim&amp;echange_hprim_id={{$object->initiateur_id}}" class="button search">
         {{$object->initiateur_id|str_pad:6:'0':$smarty.const.STR_PAD_LEFT}}
@@ -44,30 +44,30 @@
     {{/if}}
   </td>
   {{/if}}
-  <td style="width:0.1%">
+  <td class="narrow">
     {{$object->object_class}}
   </td>
-  <td style="width:0.1%">
+  <td class="narrow">
     {{if $object->object_id}}
       <span onmouseover="ObjectTooltip.createEx(this, '{{$object->object_class}}-{{$object->object_id}}');">
         {{$object->object_id|str_pad:6:'0':$smarty.const.STR_PAD_LEFT}}
       </span>
     {{/if}}
   </td>
-  <td style="width:0.1%">
+  <td class="narrow">
     {{if $object->id_permanent}}
       <span onmouseover="ObjectTooltip.createEx(this, '{{$object->object_class}}-{{$object->object_id}}', 'identifiers');">
         {{$object->id_permanent|str_pad:6:'0':$smarty.const.STR_PAD_LEFT}}
       </span>
     {{/if}}
   </td>
-  <td style="width:0.1%">
+  <td class="narrow">
     <label title='{{mb_value object=$object field="date_production"}}'>
       {{mb_value object=$object field="date_production" format=relative}}
     </label>
   </td>
   {{assign var=emetteur value=$object->_ref_emetteur}}
-  <td {{if $object->emetteur_id == "0"}}class="error"{{/if}} style="width:0.1%">
+  <td class="{{if $object->emetteur_id == '0'}}error{{/if}} narrow">
      {{if $object->_self_emetteur}}
      <label title='[SELF]' style="font-weight:bold">
        [SELF]
@@ -80,7 +80,7 @@
      {{/if}}
   </td>
   {{assign var=destinataire value=$object->_ref_destinataire}}
-  <td style="width:0.1%">
+  <td class="narrow">
     {{if $object->_self_destinataire}}
      <label title='[SELF]' style="font-weight:bold">
        [SELF]
@@ -89,8 +89,8 @@
        {{mb_value object=$destinataire field="nom"}}
      {{/if}}
   </td>
-  <td {{if $object->sous_type == "inconnu"}}class="error"{{/if}} style="width:0.1%">{{mb_value object=$object field="sous_type"}}</td>
-  <td class="{{if $object->date_echange}}ok{{else}}warning{{/if}}" style="width:0.1%">
+  <td class="{{if $object->sous_type == 'inconnu'}}error{{/if}} narrow">{{mb_value object=$object field="sous_type"}}</td>
+  <td class="{{if $object->date_echange}}ok{{else}}warning{{/if}} narrow">
     {{if $dPconfig.sip.server == "1"}}
       {{if $object->_self_emetteur}}
         <button class="change" onclick="sendMessage('{{$object->_id}}', '{{$object->_class_name}}')" type="button" style="float:right">{{tr}}Send{{/tr}}</button>
@@ -106,7 +106,7 @@
       </label>
     </span>
   </td>
-  <td style="width:0.1%">
+  <td class="narrow">
     <button class="change" onclick="reprocessing('{{$object->_id}}', '{{$object->_class_name}}')" type="button">{{tr}}Reprocess{{/tr}}</button>
   </td>
   <td class="{{if !$object->statut_acquittement || 
@@ -114,7 +114,7 @@
                   ($object->statut_acquittement == 'err')}}error
              {{elseif ($object->statut_acquittement == 'avertissement') || 
                       ($object->statut_acquittement == 'avt')
-             }}warning{{/if}}" style="width:0.1%">
+             }}warning{{/if}} narrow">
     {{mb_value object=$object field="statut_acquittement"}}
   </td>
   <td>

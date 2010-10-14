@@ -162,7 +162,7 @@ function saveFiche() {
               {{$_fiche}}
             </a>
           </td>
-          <td class="button" style="width: 1%">
+          <td class="button narrow">
             <button class="print" type="button" onclick="printFiche({{$_fiche->_id}})">
               {{tr}}Print{{/tr}}
             </button>

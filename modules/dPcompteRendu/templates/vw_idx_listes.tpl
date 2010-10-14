@@ -188,7 +188,7 @@ Main.add(function () {
       {{foreach from=$liste->_valeurs item=_valeur name=choix}}
       <tr>
         <td class="text">{{$_valeur|nl2br}}</td>
-        <td style="width: 1%">
+        <td class="narrow">
           <form name="DelChoix-{{$smarty.foreach.choix.iteration}}" action="?m={{$m}}" method="post" onsubmit="return checkForm(this)">
           <input type="hidden" name="dosql" value="do_liste_aed" />
           <input type="hidden" name="del" value="0" />

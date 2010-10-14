@@ -54,7 +54,7 @@ changeReceptionPage = function(start) {
     <th>
       <button type="button" onclick="receiveAll('list-reception')" class="tick">Tout recevoir</button>
     </th>
-    <th style="width: 0.1%;">
+    <th class="narrow">
       <button type="button" onclick="terminateAll('list-reception')" class="cancel notext">Tout marquer comme terminé (ne met pas à jour le stock du service)</button>
     </th>
   </tr>

@@ -18,7 +18,7 @@
 
 <table class="main">
   <tr>
-    <td style="width: 0.1%">
+    <td class="narrow">
     
 <script type="text/javascript">
 Main.add(Control.Tabs.create.curry('tabs-rhss', true));

@@ -29,7 +29,7 @@
     <th>
       {{mb_colonne class="CSejour" field="patient_id" order_col=$order_col order_way=$order_way url="?m=$m&tab=vw_idx_sortie&date=$date&vue=$vue"}}
     </th>
-    <th style="width: 1%;">
+    <th class="narrow">
       <input type="text" size="3" onkeyup="Admissions.filter(this, 'sortie-{{$mode}}')" id="filter-patient-name" />
     </th>
     <th>

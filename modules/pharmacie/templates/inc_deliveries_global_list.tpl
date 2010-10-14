@@ -22,7 +22,7 @@ Main.add(function(){
 
 <table class="main layout">
   <tr>
-    <td style="white-space: nowrap; width: 0.1%;">
+    <td style="white-space: nowrap; width:" class="narrow">
       <form name="print-plan-cueillette-global" action="" method="get" onsubmit="return printPreparePlan(this)">
         <input type="hidden" name="m" value="pharmacie" />
         <input type="hidden" name="a" value="print_prepare_plan" />
@@ -71,9 +71,9 @@ Main.add(function(){
           {{if !$dPconfig.dPstock.CProductStockService.infinite_quantity}}
             <th>Stock serv.</th>
           {{/if}}
-          <th style="width: 0.1%;"><button type="button" onclick="deliverAll(deliveriesTabs.activeContainer.id)" class="tick">Tout délivrer</button></th>
+          <th class="narrow"><button type="button" onclick="deliverAll(deliveriesTabs.activeContainer.id)" class="tick">Tout délivrer</button></th>
           <th>{{mb_title class=CProduct field=_unit_title}}</th>
-          <th style="width: 0.1%;"></th>
+          <th class="narrow"></th>
         </tr>
         {{foreach from=$deliveries_by_service item=_deliveries key=service_id}}
           <tbody id="global-service-{{$service_id}}" style="display: none;">

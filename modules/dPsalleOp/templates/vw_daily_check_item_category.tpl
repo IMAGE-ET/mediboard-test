@@ -40,7 +40,7 @@
 	          {{/if}}
 	        </tr>
 	        <tr>
-	          <th style="width: 1%;">{{mb_label object=$item_category field="title"}}</th>
+	          <th class="narrow">{{mb_label object=$item_category field="title"}}</th>
 	          <td>{{mb_field object=$item_category field="title"}}</td>
 	        </tr>
           <tr>

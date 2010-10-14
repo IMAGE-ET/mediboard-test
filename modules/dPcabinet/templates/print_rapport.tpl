@@ -198,9 +198,9 @@ PlageConsult = {
         <tr>
           <th style="width: 20%;">{{mb_label class=CConsultation field=patient_id}}</th>
           <th style="width: 10%;">{{mb_label class=CConsultation field=tarif}}</th>
-          <th style="width: 01%;">{{mb_title class=CConsultation field=secteur1}}</th>
-          <th style="width: 01%;">{{mb_title class=CConsultation field=secteur2}}</th>
-          <th style="width: 01%;">{{mb_title class=CConsultation field=_somme}}</th>
+          <th class="narrow">{{mb_title class=CConsultation field=secteur1}}</th>
+          <th class="narrow">{{mb_title class=CConsultation field=secteur2}}</th>
+          <th class="narrow">{{mb_title class=CConsultation field=_somme}}</th>
           <th style="width: 20%;">{{mb_title class=CConsultation field=du_patient}}</th>
           <th style="width: 20%;">{{mb_title class=CConsultation field=du_tiers}}</th>
         </tr>

@@ -138,7 +138,7 @@ Main.add(function () {
             <input type="hidden" name="_last_{{$_constante}}" value="{{$const->$_constante}}" />
           </td>
         {{/if}}
-        <td style="width: 0.1%;">
+        <td class="narrow">
 				  {{if $_constante.0 != "_"}}
             <input type="checkbox" name="checkbox-constantes-medicales-{{$_constante}}" onchange="$('constantes-medicales-{{$_constante}}').setVisible(this.checked)" tabIndex="100" />
           {{/if}}

@@ -64,7 +64,7 @@ Main.add(function(){
 
 <table class="tbl">
   <tr>
-    {{if !$order->date_ordered}}<th style="width: 1%;"></th>{{/if}}
+    {{if !$order->date_ordered}}<th class="narrow"></th>{{/if}}
     <th>{{mb_title class=CProductOrderItem field=reference_id}}</th>
     <th>
       {{if $dPconfig.dPstock.CProductStockGroup.unit_order}}

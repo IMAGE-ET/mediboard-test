@@ -116,9 +116,9 @@ function setToNow(element) {
           <tbody class="acteEffect" id="acte{{$key}}" {{if !$confCCAM.openline}}style="display: none;"{{/if}}>
             <!-- Ligne cosmétique -->
             <tr class="{{$key}}">
-              <td style="width: 1%;" />
-              <td style="width: 1%;" />
-              <td style="width: 1%;" />
+              <td class="narrow">
+              <td class="narrow">
+              <td class="narrow">
               <td style="width: 100%;" />
             </tr>
     

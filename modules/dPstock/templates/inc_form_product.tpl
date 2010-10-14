@@ -94,7 +94,7 @@ duplicateObject = function (form) {
   {{/if}}
 	   
   <tr>
-    <th style="width: 1%;">{{mb_label object=$product field="name"}}</th>
+    <th class="narrow">{{mb_label object=$product field="name"}}</th>
     <td>{{mb_field object=$product field="name" size=40}}</td>
   </tr>
   

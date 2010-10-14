@@ -85,8 +85,8 @@ Main.add(function(){
     <th>{{mb_title class=CPrescriptionLineDMI field=date}}</th>
     <th>Code produit</th>
     <th>Code lot</th>
-    <th style="width: 1%">Praticien</th>
-    <th style="width: 1%">Sign.</th>
+    <th class="narrow">Praticien</th>
+    <th class="narrow">Sign.</th>
   </tr>
   {{foreach from=$prescription->_ref_lines_dmi item=_line_dmi}}
     <tr>

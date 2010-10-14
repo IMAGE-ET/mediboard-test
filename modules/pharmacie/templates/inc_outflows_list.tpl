@@ -9,12 +9,12 @@
   <table class="table tbl">
     <tr>
       <th style="width: 16px;"></th>
-      <th style="width: 0.1%;">{{mb_title class=CProductStockGroup field=product_id}}</th>
-      <th style="width: 0.1%;">{{mb_title class=CProductDelivery field=quantity}}</th>
-      <th style="width: 0.1%;">{{mb_title class=CProductDelivery field=service_id}}</th>
-      <th style="width: 0.1%;">{{mb_title class=CProductDelivery field=date_delivery}}</th>
+      <th class="narrow">{{mb_title class=CProductStockGroup field=product_id}}</th>
+      <th class="narrow">{{mb_title class=CProductDelivery field=quantity}}</th>
+      <th class="narrow">{{mb_title class=CProductDelivery field=service_id}}</th>
+      <th class="narrow">{{mb_title class=CProductDelivery field=date_delivery}}</th>
       <th>{{mb_title class=CProductDelivery field=comments}}</th>
-      <th style="width: 0.1%;"></th>
+      <th class="narrow"></th>
       <th colspan="2" style="width: 6em; white-space: normal;">{{tr}}CProductStockService{{/tr}}</th>
     </tr>
     
@@ -92,7 +92,7 @@
           <td>
             <button type="button" style="margin: -1px;" class="cancel notext" onclick="removeOutflow('{{$_delivery->_id}}', '{{$_delivery->_ref_stock}}')">{{tr}}Supprimer{{/tr}}</button>
           </td>
-          <td style="width: 0.1%;">
+          <td class="narrow">
             {{$_delivery->_ref_stock_service->quantity}}
           </td>
           <td>

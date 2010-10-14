@@ -28,7 +28,7 @@
       <th colspan="6" class="title">{{$reception->reference}}</th>
     </tr>
     <tr>
-      <th style="width: 0.1%;"></th>
+      <th class="narrow"></th>
       <th>{{mb_title class=CProductOrderItemReception field=date}}</th>
       <th>{{mb_title class=CProductOrderItemReception field=quantity}}</th>
       {{if $dPconfig.dPstock.CProductStockGroup.unit_order}}

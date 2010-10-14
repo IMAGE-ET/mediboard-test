@@ -51,16 +51,16 @@ Main.add(function(){
 	{{foreach from=$perops item=_perop}}
 	<tr>
 		{{if $_perop instanceof CAnesthPerop}}
-		  <td style="width: 1%; text-align: center;">{{mb_ditto name=date value=$_perop->datetime|date_format:$dPconfig.date}}</td>
-			<td style="width: 1%; text-align: center;">{{mb_ditto name=time value=$_perop->datetime|date_format:$dPconfig.time}}</td>
+		  <td style="text-align: center;" class="narrow">{{mb_ditto name=date value=$_perop->datetime|date_format:$dPconfig.date}}</td>
+			<td style="text-align: center;" class="narrow">{{mb_ditto name=time value=$_perop->datetime|date_format:$dPconfig.time}}</td>
 			<td style="font-weight: bold;" colspan="2">{{$_perop->libelle}}</td>
 		{{else}}
 		  {{assign var=unite value=""}}
       {{if $_perop->_ref_object instanceof CPrescriptionLineMedicament || $_perop->_ref_object instanceof CPrescriptionLineMixItem}}
         {{assign var=unite value=$_perop->_ref_object->_ref_produit->libelle_unite_presentation}}
       {{/if}}
-		  <td style="width: 1%; text-align: center;">{{mb_ditto name=date value=$_perop->dateTime|date_format:$dPconfig.date}}</td>
-      <td style="width: 1%; text-align: center;">{{mb_ditto name=time value=$_perop->dateTime|date_format:$dPconfig.time}}</td>
+		  <td style="text-align: center;" class="narrow">{{mb_ditto name=date value=$_perop->dateTime|date_format:$dPconfig.date}}</td>
+      <td style="text-align: center;" class="narrow">{{mb_ditto name=time value=$_perop->dateTime|date_format:$dPconfig.time}}</td>
       <td colspan="2">
 				{{if $_perop->_ref_object instanceof CPrescriptionLineElement}}
 				  {{$_perop->_ref_object->_view}}

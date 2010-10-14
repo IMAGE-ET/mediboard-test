@@ -72,7 +72,7 @@ Main.add(function () {
     </td>	
   </tr>
   <tr>
-    <td style="width: 0.1%; vertical-align: top;">
+    <td style="vertical-align: top;" class="narrow">
       <ul id="tab-antecedents" class="control_tabs_vertical">
       {{foreach from=$antecedent->_count_rques_aides item=count key=type}}
         <li>

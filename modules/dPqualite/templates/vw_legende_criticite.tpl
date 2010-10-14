@@ -25,7 +25,7 @@
   {{foreach from=$fiche->_specs.gravite->_list item=gravite name=gravite}}
     <tr>
       {{if $smarty.foreach.gravite.first}}
-      <th rowspan="{{$fiche->_specs.gravite->_list|@count}}" style="width: 0.1%; vertical-align: middle;">
+      <th rowspan="{{$fiche->_specs.gravite->_list|@count}}" style="vertical-align: middle;" class="narrow">
       	{{mb_label object=$fiche field=gravite}}
       </th>	
       {{/if}}

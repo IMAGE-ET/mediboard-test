@@ -49,7 +49,7 @@ Main.add(function(){
 
 <table class="main">
   <tr>
-    <td style="width: 0.1%;">
+    <td class="narrow">
 
 <ul class="control_tabs_vertical">
   <li><a href="#tab1">normal</a></li>
@@ -61,7 +61,7 @@ Main.add(function(){
 </ul>
 
     </td>
-    <td style="width: 0.1%;">
+    <td class="narrow">
       
 <table style="width: 0.1%;" id="buttons">
   <tr>

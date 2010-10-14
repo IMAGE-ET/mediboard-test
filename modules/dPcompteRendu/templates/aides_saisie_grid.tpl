@@ -13,7 +13,7 @@ Main.add(function(){
 
 <table class="main">
   <tr>
-    <td style="white-space: nowrap; width: 0.1%;">
+    <td style="white-space: nowrap;" class="narrow">
       <ul class="control_tabs_vertical" id="tabs-aides-depend">
       {{foreach from=$aidesByDepend1 key=depend1 item=aidesByDepend2}}
         <li class="{{$aidesByDepend2|@count|ternary:"":"empty"}}">

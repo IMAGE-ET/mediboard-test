@@ -194,7 +194,7 @@ Main.add(function () {
 
 <table class="main">
   <tr>
-    <td style="width:1%">
+    <td class="narrow">
       <form name="patFrm" action="?" method="get">
         <table class="form">
           <tr>

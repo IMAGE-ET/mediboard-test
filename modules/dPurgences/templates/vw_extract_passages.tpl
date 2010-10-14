@@ -63,51 +63,51 @@
   </tr>
   {{foreach from=$listPassages item=_passage}}
   <tr>
-    <td style="width:0.1%">
+    <td class="narrow">
       <a href="#1" onclick="return popupEchangeViewer('{{$_passage->_id}}')" class="button search">
        {{$_passage->_id|str_pad:6:'0':$smarty.const.STR_PAD_LEFT}}
       </a>
     </td>
-    <td style="width:0.1%">
+    <td class="narrow">
       {{mb_value object=$_passage field="type"}}
     </td>
-    <td style="width:0.1%">
+    <td class="narrow">
       <label title='{{mb_value object=$_passage field="date_extract"}}'>
         {{mb_value object=$_passage field="date_extract" format=relative}}
       </label>
     </td>
-    <td style="width:0.1%">
+    <td class="narrow">
       {{mb_value object=$_passage field="debut_selection"}}
     </td>
-    <td style="width:0.1%">
+    <td class="narrow">
       {{mb_value object=$_passage field="fin_selection"}}
     </td>
-    <td style="width:0.1%" {{if $_passage->type != "rpu"}}class="arretee"{{/if}}>
+    <td class="narrow {{if $_passage->type != "rpu"}}arretee{{/if}}">
       {{if $_passage->type == "rpu"}}
        {{mb_value object=$_passage field="_nb_rpus"}}
       {{/if}}
     </td>
-    <td style="width:0.1%">
+    <td class="narrow">
       <label title='{{mb_value object=$_passage field="date_echange"}}'>
         {{mb_value object=$_passage field="date_echange" format=relative}}
       </label>
     </td>
-    <td style="width:0.1%" class="{{if $_passage->nb_tentatives > 5}}warning{{/if}}">
+    <td class="narrow {{if $_passage->nb_tentatives > 5}}warning{{/if}}">
       {{mb_value object=$_passage field="nb_tentatives"}}
     </td>
-    <td style="width:0.1%" class="{{if !$_passage->message_valide}}error{{/if}}">
+    <td class="narrow {{if !$_passage->message_valide}}error{{/if}}">
       {{mb_value object=$_passage field="message_valide"}}
     </td>
-    <td style="width:0.1%" id="file_passage_{{$_passage->_id}}">
+    <td id="file_passage_{{$_passage->_id}}" class="narrow">
       {{mb_include template=inc_extract_file}}       
     </td>
-    <td style="width: 0.1%">
+    <td class="narrow">
       <a target="blank" href="?m=dPurgences&a=download_echange&extract_passages_id={{$_passage->_id}}&dialog=1&suppressHeaders=1" class="button modify notext"></a>
     </td>
-    <td style="width: 0.1%">
+    <td class="narrow">
       <button class="tick" type="button" id="encrypt_rpu" onclick="encrypt({{$_passage->_id}})">Chiffrer</button>
     </td>
-    <td style="width:0.1%">
+    <td class="narrow">
       {{if $can->admin}} 
         <form name="Purge-{{$_passage->_guid}}" action="?m={{$m}}&amp;tab=vw_extract_passages" method="post" onsubmit="return confirmCreation(this)">
         <input type="hidden" name="dosql" value="do_extract_passages_aed" />

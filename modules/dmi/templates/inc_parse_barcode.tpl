@@ -84,7 +84,7 @@ Main.add(function(){
     <table class="tbl">
     {{foreach from=$parsed.comp key=key item=value}}
       <tr>
-        <th style="width: 0.1%;">{{$key}}</th>
+        <th class="narrow">{{$key}}</th>
         <td>{{$value}}</td>
       </tr>
     {{/foreach}}
@@ -156,7 +156,7 @@ Main.add(function(){
               <th><label for="_reference_id">Référence / Fournisseur</label></th>
               <th><label for="code">{{tr}}CProductOrderItemReception-code{{/tr}}</label></th>
               <th><label for="lapsing_date">{{tr}}CProductOrderItemReception-lapsing_date{{/tr}}</label></th>
-              <th style="width: 0.1%;"></th>
+              <th class="narrow"></th>
             </tr>
             <tr>
               <td style="text-align: center;">

@@ -19,7 +19,7 @@
     {{assign var=_stock value=$_service->_ref_stock}}
     
     <tr>
-      <td style="width: 0.1%;">
+      <td class="narrow">
         {{$_service}}
       </td>
       

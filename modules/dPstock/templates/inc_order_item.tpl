@@ -80,12 +80,12 @@
   </td>
   
   {{if $order->date_ordered}}
-  <td style="width: 1%; white-space: nowrap;">
+  <td style="white-space: nowrap;" class="narrow">
     {{$curr_item->_quantity_received}}
   </td>
   
   <!-- Receive item -->
-  <td style="width: 1%; white-space: nowrap; padding: 0;">
+  <td style="white-space: nowrap; padding: 0;" class="narrow">
     <form name="form-item-receive-{{$curr_item->_id}}" action="?" method="post" onsubmit="return makeReception(this, '{{$order->_id}}')">
       <input type="hidden" name="m" value="{{$m}}" />
       <input type="hidden" name="dosql" value="do_order_item_reception_aed" />

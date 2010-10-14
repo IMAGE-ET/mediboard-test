@@ -84,7 +84,7 @@ Main.add(function () {
 <div id="holder_main_courante">
 	<table style="width: 100%;">
 	  <tr>
-	    <td style="white-space: nowrap; width: 1%;">
+	    <td style="white-space: nowrap;" class="narrow">
 	      <a class="button new" href="?m=dPurgences&amp;tab=vw_aed_rpu&amp;rpu_id=0">
 	        {{tr}}CRPU-title-create{{/tr}}
 	      </a>

@@ -3,10 +3,10 @@
       <th>{{mb_title class=CModule field=mod_name}}</th>
       <th>{{mb_title class=CModule field=_view}}</th>
       <th>{{mb_title class=CModule field=mod_type}}</th>
-      <th style="width: 0.1%;">{{tr}}Action{{/tr}}</th>
+      <th class="narrow">{{tr}}Action{{/tr}}</th>
       {{if $installed}}
       <th>{{mb_title class=CModule field=_dsns}}</th>
-      <th style="width: 0.1%;">{{mb_title class=CModule field=_configable}}</th>
+      <th class="narrow">{{mb_title class=CModule field=_configable}}</th>
       <th>{{mb_title class=CModule field=mod_version}}</th>
       <th>{{mb_title class=CModule field=mod_active}}</th>
       <th>{{mb_title class=CModule field=mod_ui_active}}</th>
@@ -121,7 +121,7 @@
           {{mb_value object=$mbmodule field=mod_version}}
         </td>
     
-        <td style="text-align: center; width: 1%;">
+        <td style="text-align: center;" class="narrow">
           <!-- Actif -->
           {{if $can->edit}}
           <input type="checkbox" {{if $can->edit && $mbmodule->mod_type != "core"}}onclick="location.href='{{$cmd}}=toggle'"{{/if}}
@@ -132,7 +132,7 @@
           {{/if}}
         </td>
     
-        <td style="text-align: center; width: 1%;">
+        <td style="text-align: center;" class="narrow">
           <!-- Visible -->
           {{if $can->edit}}
           <input type="checkbox" {{if $can->edit && $mbmodule->mod_active}}onclick="location.href='{{$cmd}}=toggleMenu'"{{/if}} 
@@ -143,7 +143,7 @@
           {{/if}}
         </td>
         
-        <td style="text-align: right; width: 1%;">
+        <td style="text-align: right;" class="narrow">
           {{$mbmodule->mod_ui_order}}
           {{if $can->edit}}
           <img src="./images/icons/updown.gif" usemap="#map-{{$mbmodule->_id}}" />

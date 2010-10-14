@@ -20,9 +20,9 @@
 <table class="main tbl">
   <tr>
     <th></th>
-    <th style="width: 1%;">{{mb_title class=CPatient field=naissance}}</th>
+    <th class="narrow">{{mb_title class=CPatient field=naissance}}</th>
     <th>{{mb_title class=CPatient field=adresse}}</th>
-    <th style="width: 1%;"></th>
+    <th class="narrow"></th>
   </tr>
     
   {{foreach from=$list_patient item=_patient}}

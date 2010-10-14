@@ -4,9 +4,9 @@
     <th>{{mb_title class=CDMI field=type}}</th>
     <th>{{mb_title class=CProductOrderItemReception field=code}}</th>
     <th>{{mb_title class=CProductOrderItemReception field=lapsing_date}}</th>
-    <th style="width: 0.1%">Qté<br /> totale</th>
-    <th style="width: 0.1%">Qté<br /> utilisée</th>
-    <th style="width: 0.1%">Qté<br /> restante</th>
+    <th class="narrow">Qté<br /> totale</th>
+    <th class="narrow">Qté<br /> utilisée</th>
+    <th class="narrow">Qté<br /> restante</th>
     <th>Recommande</th>
     <th>Commandes<br /> existantes</th>
     <th>Suppr.</th>
@@ -33,7 +33,7 @@
       <td style="text-align: center;">{{$_lot->_total_quantity}}</td>
       <td style="text-align: center;">{{$_lot->_used_quantity}}</td>
       <td style="text-align: center;">{{$_lot->_remaining_quantity}}</td>
-      <td style="width: 1%;">
+      <td class="narrow">
         {{assign var=lot_id value=$_lot->_id}}
         
         {{if $_lot->_ref_dmi->type != "purchase"}}
@@ -83,7 +83,7 @@
           <br />
         {{/foreach}}
       </td>
-      <td style="width: 1%;">
+      <td class="narrow">
         <form name="lot-cancel-{{$_lot->_id}}" action="?m=dmi&amp;tab=vw_destockage" method="post"
               onsubmit="return confirm('Etes-vous sûr de vouloir annuler ce lot ?')">
           <input type="hidden" name="m" value="dPstock" />

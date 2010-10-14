@@ -22,7 +22,7 @@
   </tr>
 
   <tr>
-    <td rowspan="4" style="width: 0.1%; vertical-align: middle; text-align: center;">
+    <td rowspan="4" class="narrow" style="vertical-align: middle; text-align: center;">
       {{mb_include module=dPpatients template=inc_vw_photo_identite mode="read" size="64"}}
     </td>
     <th>{{mb_label object=$patient field="nom"}}</th>

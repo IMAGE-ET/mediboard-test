@@ -76,7 +76,7 @@
           	 {{$_operation->_ref_patient->_view}}
           </td>
           {{if $_operation->_ref_affectation && $_operation->_ref_affectation->_ref_lit->_id}}
-            <td style="text-align: center; font-size: 0.8em; width: 1%; white-space: nowrap;">
+            <td style="text-align: center; font-size: 0.8em; white-space: nowrap;" class="narrow">
               {{$_operation->_ref_affectation->_ref_lit->_ref_chambre->_ref_service->_view}}<br />
               {{$_operation->_ref_affectation->_ref_lit->_view}}
             </td>
