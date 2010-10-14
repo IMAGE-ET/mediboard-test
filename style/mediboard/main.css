@@ -1130,6 +1130,10 @@ table.tbl th.traitement, table.tbl td.traitement, table.tbl tr:hover td.traiteme
   background-color: #bdb;
 }
 
+table.tbl th.perop, table.tbl td.perop, table.tbl tr:hover td.perop {
+  background-color: #fcc;
+}
+
 /* Select tree */
 ul.select-tree {
   padding: 0;

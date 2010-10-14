@@ -19,7 +19,7 @@
 <tbody  class="hoverable">
   <tr>
     <th colspan="5" id="th_line_CPrescriptionLineMedicament_{{$line->_id}}" 
-        class="text element {{if $line->traitement_personnel}}traitement{{/if}}
+        class="text element {{if $line->traitement_personnel}}traitement{{/if}} {{if $line->perop}}perop{{/if}}
                {{if $line->_fin_reelle && $line->_fin_reelle < $now && !$line->_protocole}}arretee{{/if}}">
       
       {{if !$line->_protocole}}

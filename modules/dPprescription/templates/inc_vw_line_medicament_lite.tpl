@@ -43,6 +43,7 @@
     </td>
     <td style="width: 25%" id="th_line_CPrescriptionLineMedicament_{{$line->_id}}" 
         class="text {{if $line->traitement_personnel}}traitement{{/if}}
+				            {{if $line->perop}}perop{{/if}}
                {{if $line->_fin_reelle && $line->_fin_reelle < $now && !$line->_protocole}}arretee{{/if}}">
       <script type="text/javascript">
         {{if !$line->_protocole && !$mode_induction_perop}}

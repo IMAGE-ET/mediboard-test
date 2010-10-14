@@ -13,7 +13,7 @@
 <table class="tbl elt {{if $line->_fin_reelle && $line->_fin_reelle < $now && !$line->_protocole}}line_stopped{{/if}}" id="line_element_{{$line->_id}}"> 
 <tr class="hoverable">    
   <td style="width:22%;" id="th_line_CPrescriptionLineElement_{{$line->_id}}"
-      class="text {{if $line->_fin_reelle && $line->_fin_reelle < $now && !$line->_protocole}} arretee{{/if}}">
+      class="text {{if $line->perop}}perop{{/if}} {{if $line->_fin_reelle && $line->_fin_reelle < $now && !$line->_protocole}} arretee{{/if}}">
 			{{if $line->_can_delete_line}}
       <button type="button" class="trash notext" onclick="Prescription.delLineElement('{{$line->_id}}','{{$element}}')">
         {{tr}}Delete{{/tr}}

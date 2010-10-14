@@ -22,7 +22,7 @@
   <!-- Header de la ligne d'element -->
   <tr>    
     <th id="th_line_CPrescriptionLineElement_{{$line->_id}}" colspan="8"
-        class="element {{if $line->_fin_reelle && $line->_fin_reelle < $now && !$line->_protocole}} arretee{{/if}}">
+        class="element {{if $line->perop}}perop{{/if}} {{if $line->_fin_reelle && $line->_fin_reelle < $now && !$line->_protocole}} arretee{{/if}}">
       <script type="text/javascript">
          Main.add( function(){
            moveTbodyElt($('line_element_{{$line->_id}}'),'{{$category->_id}}');

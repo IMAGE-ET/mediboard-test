@@ -11,7 +11,7 @@
 <table class="tbl">
 {{assign var=prescription_line_mix_id value=$_prescription_line_mix->_id}}
 <tr>
-  <td style="width: 8%;" class="text {{if $_prescription_line_mix->_fin < $now && !$_prescription_line_mix->_protocole}}arretee{{/if}}">
+  <td style="width: 8%;" class="text {{if $_prescription_line_mix->perop}}perop{{/if}} {{if $_prescription_line_mix->_fin < $now && !$_prescription_line_mix->_protocole}}arretee{{/if}}">
 			     
     {{if $_prescription_line_mix->_can_delete_prescription_line_mix}}
      <form name="editPerf-{{$_prescription_line_mix->_id}}" action="" method="post">
