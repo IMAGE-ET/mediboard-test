@@ -8,9 +8,7 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
  */
 
-global $can;
-
-$can->needsRead();
+CCanDo::checkRead();
 
 $echange_soap_id = CValue::get("echange_soap_id");
 $page            = CValue::get('page', 0);

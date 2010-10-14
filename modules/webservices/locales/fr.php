@@ -46,6 +46,7 @@ $locales['CEchangeSOAP-purge-search'] = 'Chercher les échanges SOAP à purger';
 $locales['CEchangeSOAP-response_time'] = 'Temps de réponse';
 $locales['CEchangeSOAP-response_time-court'] = 'Tps rép.';
 $locales['CEchangeSOAP-response_time-desc'] = 'Temps de réponse';
+$locales['CEchangeSOAP-services'] = 'Services';
 $locales['CEchangeSOAP-soapfault'] = 'Erreur SOAP';
 $locales['CEchangeSOAP-soapfault-court'] = 'Erreur SOAP';
 $locales['CEchangeSOAP-soapfault-desc'] = 'Erreur SOAP';
@@ -71,7 +72,9 @@ $locales['config-webservices-webservice-desc'] = 'Nom du webservice';
 $locales['mod-webservices-tab-configure'] = 'Configuration';
 $locales['mod-webservices-tab-download_echange'] = 'Téléchargement de l\'échange';
 $locales['mod-webservices-tab-vw_idx_echange_soap'] = 'Echange SOAP';
+$locales['mod-webservices-tab-vw_stats'] = 'Statistiques';
 $locales['module-webservices-court'] = 'Service Web';
 $locales['module-webservices-long'] = 'Service Web';
+$locales['stats-echanges-soap'] = 'Statistiques des échanges SOAP';
 $locales['webservices'] = 'Services Web';
 ?>

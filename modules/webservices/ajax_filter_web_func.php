@@ -8,6 +8,8 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
  */
 
+CCanDo::checkRead();
+
 $service             = CValue::getOrSession("service");
 $web_service         = CValue::getOrSession("web_service"); 
 $fonction            = CValue::getOrSession("fonction");
