@@ -36,15 +36,17 @@ class CTemplateManager {
     $this->addProperty("Courrier - cp ville destinataire", "[Courrier - cp ville destinataire]");
     $this->addProperty("Courrier - copie à"              , "[Courrier - copie à]");
 
-    $this->addProperty("Général - date du jour"  , mbTransformTime(null, null, CAppUI::conf("date")));
-    $this->addProperty("Général - heure courante", mbTransformTime(null, null, CAppUI::conf("time")));
+    $now = mbDateTime();
+    $this->addDateProperty("Général - date du jour", $now);
+    $this->addTimeProperty("Général - heure courante", $now);
     
-    $connected_user = $user->_user_first_name . " " . $user->_user_last_name;
+    // Connected user
+		$user_complete = $user->_view;
     if ($user->isPraticien()) {
       $connected_user .= $user->titres;
     }
     $this->addProperty("Général - rédacteur"        , $user->_shortview);
-    $this->addProperty("Général - rédacteur complet", $connected_user);
+    $this->addProperty("Général - rédacteur complet", $user_complete);
   }
 	
   function getParameter($name, $default = null) {

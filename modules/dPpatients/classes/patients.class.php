@@ -1426,8 +1426,9 @@ class CPatient extends CMbObject {
     }
     
     if ($this->medecin_traitant) {
-      $template->addProperty("Patient - médecin traitant"          , "{$this->_ref_medecin_traitant->nom} {$this->_ref_medecin_traitant->prenom}");
-      $template->addProperty("Patient - médecin traitant - adresse", "{$this->_ref_medecin_traitant->adresse}\n{$this->_ref_medecin_traitant->cp} {$this->_ref_medecin_traitant->ville}");
+    	$medecin = $this->_ref_medecin_traitant;
+      $template->addProperty("Patient - médecin traitant"          , "$medecin->nom $medecin->prenom");
+      $template->addProperty("Patient - médecin traitant - adresse", "$medecin->adresse \n $medecin->cp $medecin->ville");
     } else {
       $template->addProperty("Patient - médecin traitant");
       $template->addProperty("Patient - médecin traitant - adresse");
@@ -1484,16 +1485,14 @@ class CPatient extends CMbObject {
 
     //Liste des séjours du patient
     $this->loadRefsSejours();
-    $sejours = "<table class='main>'";
-    
-    $smarty = new CSmartyDP("modules/dPpatients");
     
     if (is_array($this->_ref_sejours)){
     	foreach($this->_ref_sejours as $_sejour) {
     		$_sejour->loadRefPraticien();
     	}
+      $smarty = new CSmartyDP("modules/dPpatients");
 	    $smarty->assign("sejours", $this->_ref_sejours);
-	    $sejours = $smarty->fetch("print_sejours.tpl",'','',0);
+	    $sejours = $smarty->fetch("print_closed_sejours.tpl",'','',0);
 	    $sejours = preg_replace('`([\\n\\r])`', '', $sejours); 
 	   } else {
     	$sejours = CAppUI::tr("CSejour.none");
@@ -1525,6 +1524,7 @@ class CPatient extends CMbObject {
       }
     }
 
+    $smarty = new CSmartyDP("modules/dPpatients");
     $smarty->assign("csteByTime", $csteByTime);    
     $constantes_complet_horiz = $smarty->fetch("print_constantes.tpl",'','',0);
     $constantes_complet_horiz = preg_replace('`([\\n\\r])`', '', $constantes_complet_horiz); 

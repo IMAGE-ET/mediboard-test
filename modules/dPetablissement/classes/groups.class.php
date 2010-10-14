@@ -194,10 +194,10 @@ class CGroups extends CMbObject {
   
   function fillLimitedTemplate(&$template) {
     $template->addProperty("Etablissement - Nom"       , $this->text);
-    $template->addProperty("Etablissement - Adresse"   , "$this->adresse $this->cp $this->ville");
+    $template->addProperty("Etablissement - Adresse"   , "$this->adresse \n $this->cp $this->ville");
     $template->addProperty("Etablissement - Ville"     , $this->ville);
-    $template->addProperty("Etablissement - Téléphone" , $this->tel);
-    $template->addProperty("Etablissement - Fax"       , $this->fax);
+    $template->addProperty("Etablissement - Téléphone" , $this->getFormattedValue("tel"));
+    $template->addProperty("Etablissement - Fax"       , $this->getFormattedValue("fax"));
     $template->addProperty("Etablissement - Domiciliation", $this->domiciliation);
     $template->addProperty("Etablissement - Siret"     , $this->siret);
     $template->addProperty("Etablissement - Finess"     , $this->finess);

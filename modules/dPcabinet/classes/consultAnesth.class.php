@@ -377,11 +377,11 @@ class CConsultAnesth extends CMbObject {
     $template->addProperty("Anesthésie - Ouverture de la bouche"    , $this->getFormattedValue('bouche'));
     $template->addProperty("Anesthésie - Distance thyro-mentonnière", $this->getFormattedValue('distThyro'));
     $template->addProperty("Anesthésie - Etat bucco-dentaire"       , $this->etatBucco);
-    $img = '';
+    $img = "";
     if ($this->mallampati) {
       $img = $this->mallampati.'<br /><img src="../../../images/pictures/'.$this->mallampati.'.png" alt="'.$this->mallampati.'" />';
     }
-    $template->addProperty("Anesthésie - Mallampati", $img);
+    $template->addProperty("Anesthésie - Mallampati", $img, false);
     $template->addProperty("Anesthésie - Remarques",  $this->conclusion);
   }
 
