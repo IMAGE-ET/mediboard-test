@@ -9,7 +9,7 @@
 *}}
 
 <!-- Affichage des allergies -->
-{{if array_key_exists('alle', $antecedents)}}
+{{if isset($antecedents.alle|smarty:nodefaults)}}
   {{assign var=allergies value=$antecedents.alle}}
   {{if $allergies|@count}}
    <img src="images/icons/warning.png" title="Allergies" onmouseover="ObjectTooltip.createDOM(this, 'allergies{{$sejour_id}}')" />
@@ -56,4 +56,3 @@
    </ul>   
    </div>  
  {{/if}}
- 
