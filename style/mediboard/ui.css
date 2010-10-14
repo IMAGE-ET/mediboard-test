@@ -949,10 +949,13 @@ table.active {
 
 img.thumbnail {
   border: 1px solid #000;
-  margin-top: 0.5em ;
+	padding: 1px;
+  -moz-box-shadow: 4px 4px 6px rgba(0, 0, 0, 0.4);  
+	margin-top: 0.5em ;
   margin-bottom: 0.5em;
   cursor: pointer;
 }
 img.thumbnail:hover {
-  outline: 1px solid #000;
+  border: 2px solid #000;
+  padding: 0px;
 }
