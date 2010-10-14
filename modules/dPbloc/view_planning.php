@@ -169,8 +169,9 @@ foreach($plagesop as &$plage) {
       $affectation->_ref_lit->loadCompleteView();
     }
   }
-  if ((sizeof($listOp) == 0) && !$filter->_plage) {
+  if ((count($listOp) == 0) && !$filter->_plage) {
     unset($plagesop[$plage->_id]);
+    continue;
   }
   $plage->_ref_operations = $listOp;
   $numOp += count($listOp);

@@ -19,8 +19,11 @@
           {{/foreach}}
         </tr>
         {{foreach from=$listSalles item=curr_salle key=keySalle}}
+        {{assign var="keyHorsPlage" value="$curr_day-s$keySalle-HorsPlage"}}
         <tr>
-          <td class="salle">{{$curr_salle->nom}}</td>
+          <td class="salle" {{if $affichages.$keyHorsPlage|@count}}rowspan="2"{{/if}}>
+            {{$curr_salle->nom}}
+          </td>
           {{foreach from=$listHours|smarty:nodefaults item=curr_hour}}
           {{foreach from=$listMins|smarty:nodefaults item=curr_min key=keymin}}
             {{assign var="keyAff" value="$curr_day-s$keySalle-$curr_hour:$curr_min:00"}}
@@ -101,9 +104,18 @@
                 {{/if}}
               </td>
             {{/if}}
-           {{/foreach}}
+          {{/foreach}}
           {{/foreach}}
         </tr>
+        {{if $affichages.$keyHorsPlage|@count}}
+        <tr>
+          <td colspan="100" class="empty">
+            <a href="?m=dPbloc&tab=vw_urgences&date={{$curr_day}}">
+              + {{$affichages.$keyHorsPlage|@count}} intervention(s) hors plage
+            </a>
+          </td>
+        </tr>
+        {{/if}}
         {{foreachelse}}
         <tr>
           <td colspan="100">{{tr}}CSalle.none{{/tr}}</td>

@@ -26,16 +26,26 @@ Main.add(function () {
   </tr>
   {{foreach from=$urgences item=curr_op}}
   <tr>
-    <td>{{$curr_op->_ref_sejour->_ref_patient->_view}}</td>
-    <td>Dr {{$curr_op->_ref_chir->_view}}</td>
+    <td>
+      <span class="{{if !$curr_op->_ref_sejour->entree_reelle}}patient-not-arrived{{/if}} {{if $curr_op->_ref_sejour->septique}}septique{{/if}}"
+            onmouseover="ObjectTooltip.createEx(this, '{{$curr_op->_ref_sejour->_ref_patient->_guid}}');">
+        {{$curr_op->_ref_sejour->_ref_patient->_view}}
+      </span>
+    </td>
+    <td>{{mb_include module=mediusers template=inc_vw_mediuser mediuser=$curr_op->_ref_chir}}</td>
     <td class="text">
-      <a href="?m=dPplanningOp&amp;tab=vw_edit_urgence&amp;operation_id={{$curr_op->_id}}">
-      {{$curr_op->_datetime|date_format:$dPconfig.time}}
-      </a>
+      <form name="editTimeFrm{{$curr_op->_id}}" action="?m={{$m}}" method="post">
+        <input type="hidden" name="m" value="dPplanningOp" />
+        <input type="hidden" name="del" value="0" />
+        <input type="hidden" name="dosql" value="do_planning_aed" />
+        <input type="hidden" name="operation_id" value="{{$curr_op->_id}}" />
+        {{assign var=curr_op_id value=$curr_op->_id}}
+        {{mb_field object=$curr_op field=time_operation form="editTimeFrm$curr_op_id" register=true onchange="onSubmitFormAjax(this.form)"}}
+      </form>
     </td>
     <td>
     {{if !$curr_op->salle_id || array_key_exists($curr_op->salle_id, $listSalles)}}
-      <form name="editOpFrm{{$curr_op->_id}}" action="?m={{$m}}" method="post">
+      <form name="editSalleFrm{{$curr_op->_id}}" action="?m={{$m}}" method="post">
         <input type="hidden" name="m" value="dPplanningOp" />
         <input type="hidden" name="del" value="0" />
         <input type="hidden" name="dosql" value="do_planning_aed" />
@@ -60,12 +70,16 @@ Main.add(function () {
       {{/if}}
     </td>
     <td class="text">
+      <a href="?m=dPplanningOp&amp;tab=vw_edit_urgence&amp;operation_id={{$curr_op->_id}}">
+      <span onmouseover="ObjectTooltip.createEx(this, '{{$curr_op->_guid}}');">
       {{if $curr_op->libelle}}
         <em>[{{$curr_op->libelle}}]</em><br />
       {{/if}}
       {{foreach from=$curr_op->_ext_codes_ccam item=curr_code}}
         <strong>{{$curr_code->code}}</strong> : {{$curr_code->libelleLong}}<br />
       {{/foreach}}
+      </span>
+      </a>
     </td>
     <td>{{tr}}COperation.cote.{{$curr_op->cote}}{{/tr}}</td>
     <td class="text">

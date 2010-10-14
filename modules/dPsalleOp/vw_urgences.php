@@ -14,7 +14,7 @@ $can->needsRead();
 $date  = CValue::getOrSession("date", mbDate());
 
 // Listes des interventions hors plage
-$operation = new COperation;
+$operation = new COperation();
 $where = array (
   "date" => "= '$date'",
 );
@@ -22,6 +22,7 @@ $urgences = $operation->loadGroupList($where, "salle_id, chir_id");
 foreach ($urgences as &$urgence) {
   $urgence->loadRefsFwd();
   $urgence->_ref_sejour->loadRefPatient();
+  $urgence->_ref_chir->loadRefsFwd();
 }
 
 // Toutes les salles des salles

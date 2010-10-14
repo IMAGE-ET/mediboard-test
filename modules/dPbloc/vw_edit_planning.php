@@ -67,7 +67,7 @@ $listPlages[$date] = $listPlage->loadList($where,$order);
 $min = CPlageOp::$hours_start.":".reset(CPlageOp::$minutes).":00";
 $max = CPlageOp::$hours_stop.":".end(CPlageOp::$minutes).":00";
 
-// Nombre d'interventions hors plage pour la journée
+// Liste des interventions hors plage pour la journée
 $operation = new COperation();
 $ljoin = array();
 $ljoin["sejour"] = "sejour.sejour_id = operations.sejour_id";
@@ -75,7 +75,8 @@ $where = array();
 $where["operations.date"] = "= '$date'";
 $where[]                  = "operations.salle_id IS NULL OR operations.salle_id ". CSQLDataSource::prepareIn(array_keys($listSalles));
 $where["sejour.group_id"] = "= '".CGroups::loadCurrent()->_id."'";
-$nbIntervHorsPlage = $operation->countList($where, null, null, null, $ljoin);
+$horsPlages = $operation->loadList($where, null, null, null, $ljoin);
+$nbIntervHorsPlage = count($horsPlages);
 
 $nbIntervNonPlacees = 0;
 // Détermination des bornes de chaque plage
@@ -105,6 +106,7 @@ foreach($listSalles as $keySalle=>$valSalle){
     foreach(CPlageOp::$minutes as $keyMins=>$valMins){
       // Initialisation du tableau
       $affichages["$date-s$keySalle-$valHours:$valMins:00"] = "empty";
+      $affichages["$date-s$keySalle-HorsPlage"] = array();
     }
   }
 }
@@ -118,6 +120,12 @@ foreach($listPlages[$date] as &$plage){
     $affichages["$date-s$plage->salle_id-$time"] = "full";
   } 
   $affichages["$date-s$plage->salle_id-$plage->debut"] = $plage->_id;
+}
+// Ajout des interventions hors plage
+foreach($horsPlages as $_op) {
+	if($_op->salle_id) {
+    $affichages["$date-s".$_op->salle_id."-HorsPlage"][$_op->_id] = $_op;
+	}
 }
 
 //Création du template

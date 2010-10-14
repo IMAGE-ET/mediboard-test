@@ -44,6 +44,7 @@ foreach($listDays as $keyDate=>$valDate){
       foreach(CPlageOp::$minutes as $keyMins=>$valMins){
         // Initialisation du tableau
         $affichages["$keyDate-s$keySalle-$valHours:$valMins:00"] = "empty";
+        $affichages["$keyDate-s$keySalle-HorsPlage"] = array();
       }
     }
   }
@@ -64,17 +65,21 @@ $where[]                  = "salle_id IS NULL OR salle_id ". CSQLDataSource::pre
 $where["sejour.group_id"] = "= '".CGroups::loadCurrent()->_id."'";
 $nbIntervHorsPlage = $operation->countList($where, null, null, null, $ljoin);
 
-// Extraction des plagesOp par date
-$where = array();
-$where["date"]     = "BETWEEN '$date' AND '$fin'";
-$where["salle_id"] = CSQLDataSource::prepareIn(array_keys($listSalles));
-$order             = "debut";
-
 foreach($listDays as $keyDate => $valDate){
   
   // Récupération des plages par jour
-  $where["date"] = "= '$keyDate'";
+  $where = array();
+  $where["date"]     = "= '$keyDate'";
+  $where["salle_id"] = CSQLDataSource::prepareIn(array_keys($listSalles));
+  $order             = "debut";
   $listPlages[$keyDate] = $listPlage->loadList($where,$order);
+  
+  // Récupération des interventions hors plages du jour
+  $where = array();
+  $where["date"]     = "= '$keyDate'";
+  $where["salle_id"]        = CSQLDataSource::prepareIn(array_keys($listSalles));
+  $order = "time_operation";
+  $horsPlages = $operation->loadList($where,$order);
   
   // Détermination des bornes du semainier
   $min = CPlageOp::$hours_start.":".reset(CPlageOp::$minutes).":00";
@@ -98,7 +103,7 @@ foreach($listDays as $keyDate => $valDate){
     }
   }
   
-  
+  // Remplissage du tableau de visualisation
   foreach($listPlages[$keyDate] as $plage){
     $plage->debut = mbTimeGetNearestMinsWithInterval($plage->debut, CPlageOp::$minutes_interval);
     $plage->fin   = mbTimeGetNearestMinsWithInterval($plage->fin  , CPlageOp::$minutes_interval);
@@ -107,6 +112,12 @@ foreach($listDays as $keyDate => $valDate){
       $affichages["$keyDate-s$plage->salle_id-$time"] = "full";
     } 
     $affichages["$keyDate-s$plage->salle_id-$plage->debut"] = $plage->_id;
+  }
+  // Ajout des interventions hors plage
+  foreach($horsPlages as $_op) {
+    if($_op->salle_id) {
+      $affichages["$keyDate-s".$_op->salle_id."-HorsPlage"][$_op->_id] = $_op;
+    }
   }
 }
 
