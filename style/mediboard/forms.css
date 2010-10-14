@@ -120,22 +120,22 @@ form hr {
 fieldset, 
 fieldset legend {
   border: 1px solid #999;
-  -moz-border-radius: 5px;
-  -webkit-border-radius: 5px;
-  border-radius: 5px;
+  -moz-border-radius: 3px;
+  -webkit-border-radius: 3px;
+  border-radius: 3px;
 }
 
 fieldset {
-  background: #fff;
+  background: rgba(255,255,255,0.5);
   margin-top: 0.5em;
+  padding: 0.4em;
 }
 
 fieldset legend {
-	font-size: 1.2em;
 	font-weight: bold;
   border: none;
   background: #ddd;
-	padding: 0.5em 2em;
+	padding: 0.2em 0.8em;
 }
 
 label:hover,

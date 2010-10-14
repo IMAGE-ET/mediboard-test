@@ -99,6 +99,11 @@ if (Prototype.Browser.IE) {
   } catch(e) {}
 }
 
+// Exclude HTTrack errors
+if (/httrack/i.test(navigator.userAgent)) {
+  errorHandler = function(){};
+}
+
 /**
  * Main page initialization scripts
  */

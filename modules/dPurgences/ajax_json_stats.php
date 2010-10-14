@@ -31,10 +31,10 @@ function computeAttente($areas, &$series, $where, $ljoin, $dates, $period, $sejo
     foreach($areas as $key => $value) {
       
       // never when ljoin on consult (form field)
-      if (strpos($start_field, "._") === false)
+      if (isset($value[$start_field]) && strpos($start_field, "._") === false)
         $where[$start_field] = $value[$start_field];
         
-      if (strpos($end_field, "._") === false)
+      if (isset($value[$end_field]) && strpos($end_field, "._") === false)
         $where[$end_field] = $value[$end_field];
       
       $series[$key] = array('data' => array(), "label" => $value[0]);

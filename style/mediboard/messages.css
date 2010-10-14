@@ -72,8 +72,8 @@ div.loading {
   z-index: 800;
 }
 
-div.small-success ,
-div.small-info ,
+div.small-success,
+div.small-info,
 div.small-warning,
 div.small-error,
 div.small-mail {
@@ -160,4 +160,18 @@ div.big-error {
   background-image: url(images/icons/error.png);
  	background-color: #fee;
   border-color: #a55;
+}
+
+div.big-success,
+div.big-info,
+div.big-warning,
+div.big-error,
+div.small-success,
+div.small-info,
+div.small-warning,
+div.small-error,
+div.small-mail {
+  -moz-box-shadow: 2px 2px 3px rgba(0,0,0,0.2);
+  -webkit-box-shadow: 2px 2px 3px rgba(0,0,0,0.2);
+  box-shadow: 2px 2px 3px rgba(0,0,0,0.2);
 }

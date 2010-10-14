@@ -261,12 +261,13 @@ var Url = Class.create({
           setLeft: true
         });
         
-				// Default width behaviour
-        var style= {
+		// Default width behaviour
+        var style = {
           width: "auto",
           whiteSpace: "nowrap",
           minWidth: element.getWidth()+"px",
-          maxWidth: "400px"
+          maxWidth: "400px",
+          opacity: 1
         };
 
         // Fixed width behaviour
@@ -279,16 +280,18 @@ var Url = Class.create({
         update.style.top = null;
         update.style.marginTop = null;
         
-        var scrollOffset = update.cumulativeScrollOffset();
+        var scroll = document.viewport.getScrollOffsets(); // Viewport offset
+        var viewport = document.viewport.getDimensions(); // Viewport size
+        var scrollOffset = update.cumulativeOffset();
         var updateHeight = update.getHeight();
         
-        if (scrollOffset.top + updateHeight > document.viewport.getHeight()) {
-          style.top = scrollOffset.top-updateHeight-parseInt(input.getHeight()) + "px";
+        if (scrollOffset.top + updateHeight > viewport.height+scroll.top) {
+          style.top = (-updateHeight+2) + "px";
           style.marginTop = 0;
         }
         
-        update.setStyle(style);
-        update.setOpacity(1).unoverflow();
+        update.setStyle(style)
+              .unoverflow();
         
         if (oOptions.onAfterShow) {
           oOptions.onAfterShow(element, update);
