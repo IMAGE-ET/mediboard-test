@@ -8,7 +8,7 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
 *}}
 
-<div id="prescription_sejour">
+{{* <div id="prescription_sejour"> *}}
 
 {{mb_include_script module="dPmedicament" script="medicament_selector"}}
 {{mb_include_script module="dPmedicament" script="equivalent_selector"}}
@@ -34,7 +34,6 @@ if (oFormProtocole) {
 var url = new Url("dPprescription", "httpreq_vw_select_protocole");
 var autocompleter = url.autoComplete(oFormProtocole.libelle_protocole, "protocole_auto_complete", {
     dropdown: true,
-    adaptDropdown: true,
     minChars: 1,
     valueElement: oFormProtocole.elements.pack_protocole_id,
     updateElement: function(selectedElement) {
@@ -336,4 +335,4 @@ emptyProtocole = function() {
   {{/if}}
 </table>
 
-</div>
+{{* </div> *}}

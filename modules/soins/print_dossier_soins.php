@@ -21,7 +21,23 @@ $sejour = new CSejour();
 $sejour->load($sejour_id);
 $sejour->loadComplete();
 $sejour->loadListConstantesMedicales();
+$sejour->loadRefsOperations();
 $sejour->canRead();
+
+foreach($sejour->_ref_operations as $_interv) {
+  $_interv->loadRefPraticien();
+  $_interv->_ref_praticien->loadRefFunction();
+  $_interv->loadRefsConsultAnesth();
+  $_interv->_ref_consult_anesth->loadRefConsultation();
+  $check_lists = $_interv->loadBackRefs("check_lists", "date");
+  foreach($check_lists as $_check_list) {
+    $_check_list->loadItemTypes();
+    $_check_list->loadBackRefs('items');
+    foreach($_check_list->_back['items'] as $_item) {
+      $_item->loadRefsFwd();
+    }
+  }
+}
 
 // Chargement du patient
 $sejour->loadRefPatient();

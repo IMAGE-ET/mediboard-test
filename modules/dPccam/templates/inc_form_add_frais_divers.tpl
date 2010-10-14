@@ -24,7 +24,6 @@ Main.add(function(){
     minChars: 1,
     method: "get",
     select: "view",
-    adaptDropdown: true,
     dropdown: true,
     afterUpdateElement: function(field,selected){
       var form = field.form;

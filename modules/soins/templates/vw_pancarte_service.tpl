@@ -91,9 +91,9 @@ Main.add(function () {
 </table>
 <table class="tbl">
   <tr>
-    <th rowspan="2" class="title narrow">>Patient</th>
-    <th rowspan="2" class="title narrow">>Lit</th>
-    <th rowspan="2" class="title narrow">>Praticien</th>
+    <th rowspan="2" class="title narrow">Patient</th>
+    <th rowspan="2" class="title narrow">Lit</th>
+    <th rowspan="2" class="title narrow">Praticien</th>
       {{foreach from=$tabHours key=_date item=_hours_by_moment}}
         {{foreach from=$_hours_by_moment key=moment_journee item=_dates}}
           <th class="{{$_date}}-{{$moment_journee}} title"

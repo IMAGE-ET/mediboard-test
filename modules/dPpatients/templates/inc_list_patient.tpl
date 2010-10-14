@@ -185,7 +185,7 @@ reloadPatient = function(patient_id, link){
     <th>{{tr}}CPatient{{/tr}}</th>
     <th class="narrow">{{tr}}CPatient-naissance-court{{/tr}}</th>
     <th>{{tr}}CPatient-adresse{{/tr}}</th>
-    <th class="narrow">></th>
+    <th class="narrow"></th>
   </tr>
 
   {{mb_ternary var="tabPatient" test=$board 

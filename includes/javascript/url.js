@@ -247,7 +247,6 @@ var Url = Class.create({
       frequency: 0.5,
       width: null,
       dropdown: false,
-      adaptDropdown: false,
       valueElement: null,
 	    
       // Allows bigger width than input
@@ -359,17 +358,7 @@ var Url = Class.create({
       
       // The trigger button
       var trigger = new Element("div").addClassName("dropdown-trigger");
-      
       trigger.insert(new Element("div"));
-      
-      if(oOptions.adaptDropdown) {
-        var height = input.getHeight();
-        if (height && height > 10) {
-          trigger.setStyle({
-            height: (height-2)+"px"
-          });
-        }
-      }
       
       // Hide the list
       var hideAutocomplete = function(e){

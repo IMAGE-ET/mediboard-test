@@ -573,12 +573,12 @@ div.dropdown {
 }
 
 div.dropdown-trigger {
-  height: 16px;
   width: 16px;
   padding:0;
   position:absolute;
   right:0;
   top:0;
+  bottom:0;
   margin: 1px;
   cursor:pointer;
   background-repeat: repeat-x;
@@ -589,7 +589,7 @@ div.dropdown-trigger {
 
 div.dropdown-trigger:hover {
   background-image: url(images/buttons/button-over.png);
-  border: 1px solid #333;
+  border-color: #333;
 }
 
 div.dropdown-trigger div {

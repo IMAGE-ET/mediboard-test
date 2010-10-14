@@ -317,6 +317,7 @@ function prepareForm(oForm) {
         !oElement.className.match(/autocomplete/) &&
         !oElement.getAttribute("disabled") && !oElement.getAttribute("readonly") && 
         oElement.clientWidth > 0) {
+        // oElement.clientWidth MUST be at the end. This "call" slows down IE a LOT
 
       oElement.writeAttribute("autofocus", "autofocus");
       

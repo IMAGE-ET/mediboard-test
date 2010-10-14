@@ -8,83 +8,93 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
 *}}
 
-<script type="text/javascript">
-Main.add(function(){
-  Control.Tabs.create("balance-tabs");
-});
-
-</script>
-
-<form name="filter-product" method="get" action="">
-  <input type="hidden" name="m" value="pharmacie" />
-  <input type="hidden" name="tab" value="vw_idx_balance" />
-  
-  {{mb_field object=$stock field=product_id form="filter-product" autocomplete="true,1,50,false,true" style="width:300px; font-size: 1.4em;"}}
-  
-  <button type="submit" class="search notext">{{tr}}Search{{/tr}}</button>
-</form>
+{{main}}
+  Control.Tabs.create("balance-tabs", true);
+  Control.Tabs.create("balance-tabs-byproduct", true);
+{{/main}}
 
 <ul class="control_tabs" id="balance-tabs">
-  <li><a href="#year">Bilan annuel</a></li>
-  <li><a href="#month">Bilan mensuel</a></li>
-  <li><a href="#rotation">Rotation des stocks</a></li>
+  <li><a href="#byproduct">Par produit</a></li>
+  <li><a href="#byselection">Par sélection de produits</a></li>
 </ul>
 <hr class="control_tabs" />
 
-{{math equation="1/(x-1)" x=$services|@count assign=width}}
-
-{{foreach from=$flows item=_flows key=key}}
-
-<table class="main tbl" id="{{$key}}" style="display: none;">
-  <tr>
-    <th></th>
+<div id="byproduct" style="display: none">
+  <form name="filter-product" method="get" action="?" onsubmit="return Url.update(this, 'balance-product-results')">
+    <input type="hidden" name="m" value="pharmacie" />
+    <input type="hidden" name="a" value="ajax_vw_balance_product" />
     
-    {{foreach from=$services item=_service}}
-      <th style="width: {{$width}}%">{{$_service}}</th>
-    {{/foreach}}
+    {{mb_field object=$stock field=product_id form="filter-product" autocomplete="true,1,50,false,true" style="width:300px; font-size: 1.4em;"}}
     
-    <th>Total</th>
-  </tr>
+    <button type="submit" class="search">{{tr}}Search{{/tr}}</button>
+  </form>
   
-  {{foreach from=$_flows.0.out item=_flow key=_date}}
-    <tr {{if $_date == "total"}}style="font-weight: bold"{{/if}}>
-      <th class="narrow">
-        {{if $_date == "total"}}
-          Total
-        {{else}}
-          {{$_date|date_format:$_flows.1}}
-        {{/if}}
-      </th>
-      
-      {{foreach from=$_flow item=_value key=_service_id}}
-        <td style="text-align: center; {{if $_date == "total" && $_service_id == "total"}}font-size: 1.4em;{{/if}} {{if $_service_id == "total"}}font-weight: bold;{{/if}}" class="narrow">
-          {{$_value}}
+  <div id="balance-product-results">
+    <div class="small-info">
+      Choisissez un produit cliquez sur {{tr}}Search{{/tr}}
+    </div>
+  </div>
+</div>
+
+<div id="byselection" style="display: none">
+  <form name="filter-products" method="get" action="?" onsubmit="return Url.update(this, 'balance-selection-results')">
+    <input type="hidden" name="m" value="pharmacie" />
+    <input type="hidden" name="a" value="ajax_vw_balance_selection" />
+    
+    <table class="main form">
+      <tr>
+        <td class="narrow">
+          <fieldset>
+            <legend>{{tr}}CProductSelection{{/tr}}</legend>
+            <select name="product_selection_id" onchange="$('advanced-filters').setOpacity($V(this)?0.4:1)">
+              <option value=""> &ndash; Aucune </option>
+              {{foreach from=$list_selections item=_selection}}
+                <option value="{{$_selection->_id}}">{{$_selection}}</option>
+              {{/foreach}}
+            </select>
+          </fieldset>
         </td>
-      {{/foreach}}
-    </tr>
-  {{/foreach}}
-</table>
-{{/foreach}}
+        <td>
+          <fieldset id="advanced-filters">
+            <legend>Filtres avancés</legend>
+            
+            <table class="layout">
+              <tr>
+                <th>{{mb_label object=$product field=category_id}}</th>
+                <td>
+                  <select name="category_id">
+                    {{foreach from=$list_categories item=_category}}
+                      <option value="{{$_category->_id}}">{{$_category}}</option>
+                    {{/foreach}}
+                  </select>
+                </td>
+              </tr>
+              
+              <tr>
+                <th>{{mb_label object=$product field=classe_comptable}}</th>
+                <td>{{mb_field object=$product field=classe_comptable form="filter-products" autocomplete="true,1,50,false,true"}}</td>
+              </tr>
+              
+              <tr>
+                <th>{{mb_label object=$product field=_classe_atc}}</th>
+                <td>{{mb_field object=$product field=_classe_atc}}</td>
+              </tr>
+              
+            </table>
+          </fieldset>
+        </td>
+      </tr>
+      <tr>
+        <td colspan="2" class="button">
+          <button class="search">{{tr}}Filter{{/tr}}</button>
+        </td>
+      </tr>
+    </table>
+  </form>
 
-<table class="main tbl" id="rotation" style="display: none;">
-  <tr>
-    <th></th>
-    
-    <th style="width: 33%">Entrée</th>
-    <th style="width: 33%">Sortie</th>
-    <th style="width: 33%">Balance</th>
-  </tr>
-  
-  {{foreach from=$balance.in key=_date item=_balance}}
-    <tr>
-      <th class="narrow">
-        {{$_date|date_format:"%b"}}
-      </th>
-      
-      <td style="text-align: center;">{{$balance.in.$_date}}</td>
-      <td style="text-align: center;">{{$balance.out.$_date}}</td>
-      <td style="text-align: center;">{{$balance.diff.$_date}}</td>
-    </tr>
-  {{/foreach}}
-</table>
-
+  <div id="balance-selection-results">
+    <div class="small-info">
+      Configurez le filtre dans le formulaire et cliquez sur Filtrer
+    </div>
+  </div>
+</div>

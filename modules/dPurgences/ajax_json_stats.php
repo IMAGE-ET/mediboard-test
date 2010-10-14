@@ -105,7 +105,8 @@ function computeAttente($areas, &$series, $where, $ljoin, $dates, $period, $sejo
         $start = $_start_object->$_start_field;
         $end   = $_end_object->$_end_field;
         
-        $times[] = mbMinutesRelative($start, $end);
+        if ($start && $end)
+          $times[] = mbMinutesRelative($start, $end);
       }
       $count = array_sum($times);
       $mean = count($times) ? $count / count($times) : 0;
