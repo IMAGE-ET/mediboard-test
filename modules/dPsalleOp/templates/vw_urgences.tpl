@@ -43,14 +43,13 @@ Main.add(function () {
         {{mb_field object=$curr_op field=time_operation form="editTimeFrm$curr_op_id" register=true onchange="onSubmitFormAjax(this.form)"}}
       </form>
     </td>
-    <td>
-    {{if !$curr_op->salle_id || array_key_exists($curr_op->salle_id, $listSalles)}}
+    <td class="text">
       <form name="editSalleFrm{{$curr_op->_id}}" action="?m={{$m}}" method="post">
         <input type="hidden" name="m" value="dPplanningOp" />
         <input type="hidden" name="del" value="0" />
         <input type="hidden" name="dosql" value="do_planning_aed" />
         <input type="hidden" name="operation_id" value="{{$curr_op->_id}}" />
-        <select name="salle_id" onchange="onSubmitFormAjax(this.form)">
+        <select  style="width: 15em;" name="salle_id" onchange="onSubmitFormAjax(this.form)">
           <option value="">&mdash; {{tr}}CSalle.select{{/tr}}</option>
           {{foreach from=$listBlocs item=curr_bloc}}
           <optgroup label="{{$curr_bloc->nom}}">
@@ -65,8 +64,23 @@ Main.add(function () {
           {{/foreach}}
         </select>
       </form>
-      {{else}}
-        {{$curr_op->_ref_salle->_view}}
+      {{if $curr_op->_alternate_plages|@count}}
+      <form name="editPlageFrm{{$curr_op->_id}}" action="?m={{$m}}" method="post">
+        <input type="hidden" name="m" value="dPplanningOp" />
+        <input type="hidden" name="del" value="0" />
+        <input type="hidden" name="dosql" value="do_planning_aed" />
+        <input type="hidden" name="operation_id" value="{{$curr_op->_id}}" />
+        <input type="hidden" name="date" value="" />
+        <input type="hidden" name="time_op" value="" />
+        <input type="hidden" name="salle_id" value="" />
+        <input type="hidden" name="horaire_voulu" value="{{$curr_op->time_operation}}" />
+        <select name="plageop_id" style="width: 15em;" onchange="this.form.submit()">
+          <option value="">&mdash; Replacer cette intervention</option>
+          {{foreach from=$curr_op->_alternate_plages item=_plage}}
+          <option value="{{$_plage->_id}}">{{$_plage->_ref_salle}} - {{mb_value object=$_plage field=debut}} à {{mb_value object=$_plage field=fin}} - {{$_plage}}</option>
+          {{/foreach}}
+        </select>
+      </form>
       {{/if}}
     </td>
     <td class="text">

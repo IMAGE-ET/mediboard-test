@@ -192,7 +192,7 @@ class COperation extends CCodable {
     $specs["anapath"]            = "enum list|1|0|? default|? show|0";
     $specs["labo"]               = "enum list|1|0|? default|? show|0";
     $specs["prothese"]           = "enum list|1|0|? default|? show|0";
-    $specs["horaire_voulu"]      = "time";
+    $specs["horaire_voulu"]      = "time show|0";
     
     $specs["cote_admission"]     = "enum list|droit|gauche show|0";
     $specs["cote_consult_anesth"]= "enum list|droit|gauche show|0";
