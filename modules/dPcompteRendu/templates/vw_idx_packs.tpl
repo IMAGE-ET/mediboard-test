@@ -3,14 +3,13 @@
 <script type="text/javascript">
 
 Main.add(function () {
-	reloadList('{{$pack_id}}', '{{$user_id}}', '{{$filter_class}}');
-	updateAddEditPack.defer('{{$pack_id}}', '{{$filter_class}}');
+	reloadList('{{$pack_id}}');
+	updateAddEditPack.defer('{{$pack_id}}');
 });
 
-function updateAddEditPack(pack_id, filter_class) {
+function updateAddEditPack(pack_id) {
 	var url = new Url("dPcompteRendu", "ajax_add_edit_pack");
 	url.addParam("pack_id", pack_id);
-	url.addParam("filter_class", filter_class);
   url.requestUpdate("add_edit_pack");
   if (pack_id != '') {
 	  var lists = new Array("owner-user", "owner-func", "owner-etab");
@@ -31,10 +30,12 @@ function updateAddEditPack(pack_id, filter_class) {
 	} 
 }
 
-function reloadList(pack_id, filter_user_id, filter_class) {
+function reloadList(pack_id, filter_class, user_id) {
 	var url = new Url("dPcompteRendu", "ajax_list_pack");
 	url.addParam("pack_id", pack_id);
-	url.addParam("filter_user_id", filter_user_id);
+	if (user_id != undefined && user_id != '') {
+		url.addParam("filter_user_id", user_id);
+	}
   if (filter_class != undefined) {
 	  url.addParam("filter_class", filter_class);
   }

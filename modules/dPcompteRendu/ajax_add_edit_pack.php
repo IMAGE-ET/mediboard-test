@@ -11,7 +11,6 @@
 CCanDo::checkEdit();
 $user_id    = CValue::getOrSession("filter_user_id", CAppUI::$user->_id);
 $pack_id    = CValue::get("pack_id");
-$filter_class = CValue::get("filter_class", '');
 
 // Pour la création d'un pack, on affecte comme utilisateur celui de la session par défaut.
 $userSel = new CMediusers;
@@ -37,9 +36,6 @@ $where = array();
 $orderby = "object_class, nom";
 
 $pack = new CPack;
-
-if ($filter_class)
-  $pack->object_class = $filter_class;
 
 $pack->chir_id = $userSel->_id;
 $packsUser = $pack->loadMatchingList($orderby);
@@ -67,43 +63,29 @@ $whereCommon = array();
 $whereCommon["object_id"] = "IS NULL";
 $order = "nom";
 
-$modele = new CCompteRendu;
-
-// Modèles de l'utilisateur
-$modelesUser = array();
-if ($userSel->user_id) {
-  $where = $whereCommon;
-  $where["chir_id"] = $modele->_spec->ds->prepare("= %", $userSel->user_id);
-  $modelesUser = $modele->loadlist($where, $order);
-}
-
-// Modèles de la fonction
-$modelesFunc = array();
-if ($userSel->user_id) {
-  $where = $whereCommon;
-  $where["function_id"] = $modele->_spec->ds->prepare("= %", $userSel->function_id);
-  $modelesFunc = $modele->loadlist($where, $order);
-}
-
-// Modèles de l'etablissement
-$modelesEtab = array();
-if ($userSel->user_id) {
-  $where = $whereCommon;
-  $where["function_id"] = $modele->_spec->ds->prepare("= %", $userSel->_ref_function->group_id);
-  $modelesEtab = $modele->loadlist($where, $order);
-}
-
 // Chargement du pack
 $pack->load($pack_id);
 
+$object_guid = '';
+
 if($pack->_id) {
-	
   $pack->loadRefsFwd();
   $pack->loadBackRefs("modele_links");
+  if ($pack->chir_id) {
+    $user = new CMediUsers;
+    $user->load($pack->chir_id);
+    $object_guid = $user->_guid;
+  } else if ($pack->function_id) {
+  	$function = new CFunctions;
+  	$function->load($pack->function_id);
+  	$object_guid = $function->_guid;
+  } else {
+  	$group = new CGroups;
+  	$group->load($pack->group_id);
+  	$object_guid = $group->_guid;
+  }
 } else {
   $pack->chir_id = $userSel->_id;
-  if ($filter_class)
-    $pack->object_class = $filter_class;
   
 }
 
@@ -111,16 +93,11 @@ if($pack->_id) {
 $smarty = new CSmartyDP();
 
 $smarty->assign("pack", $pack);
-$smarty->assign("user_id", $user_id);
-$smarty->assign("filter_class", $filter_class);
-
-$smarty->assign("modelesUser"   , $modelesUser);
-$smarty->assign("modelesFunc"   , $modelesFunc);
-$smarty->assign("modelesEtab"   , $modelesEtab);
-
-$smarty->assign("listUser"      , $listUser);
-$smarty->assign("listFunc"      , $listFunc);
-$smarty->assign("listEtab"      , $listEtab);
+$smarty->assign("user_id"     , $userSel->_id);
+$smarty->assign("object_guid" , $object_guid);
+$smarty->assign("listUser"    , $listUser);
+$smarty->assign("listFunc"    , $listFunc);
+$smarty->assign("listEtab"    , $listEtab);
 
 $smarty->display("inc_add_edit_pack.tpl"); 
 ?>

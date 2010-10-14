@@ -1,20 +1,33 @@
 <script type="text/javascript">
-reloadListModele = function(filter_class){
+reloadListModele = function(filter_class, object_guid){
+	if (filter_class.indexOf("-none") == -1)
 	  var url = new Url("dPcompteRendu","httpreq_vw_list_modeles");
 	  url.addParam("filter_class", filter_class);
-	  url.addParam("user_id", "{{$user_id}}");
+	  url.addParam("object_guid", object_guid);
 	  url.addParam("pack_id", "{{$pack->_id}}");
 	  url.requestUpdate("listModeles");
 	}
 
 addEditPackCallback = function(id) {
-	updateAddEditPack(id, '{{$filter_class}}');
-	reloadList(id, '{{$user_id}}');
+	updateAddEditPack(id);
+	reloadList(id);
+}
+
+changeClass = function(class_name){
+	var oForm = getForm("editFrm");
+	var object_guid = '';
+	if ($V(oForm.chir_id) != '')
+		object_guid = 'CMediUsers-' + $V(oForm.chir_id);
+	else if ($V(oForm.function_id) != '')
+		object_guid = 'CFunctions-' + $V(oForm.function_id);
+	else
+		object_guid = 'CGroups-' + $V(oForm.group_id);
+	reloadListModele(class_name, object_guid);
 }
 
 Main.add(function() {
 	{{if $pack->_id}}
-	  reloadListModele('{{$filter_class}}');
+	  reloadListModele('{{$pack->object_class}}','{{$object_guid}}');
 	{{/if}}
 });
 
@@ -42,7 +55,7 @@ Main.add(function() {
     <tr>
       <th>{{mb_label object=$pack field="chir_id"}}</th>
       <td>
-        <select name="chir_id" class="{{$pack->_props.chir_id}}" style="width: 12em;">
+        <select name="chir_id" class="{{$pack->_props.chir_id}}" style="width: 12em;" {{if $pack->_id}}onchange="reloadListModele(this.form.object_class.value,'CMediUsers-'+this.value);"{{/if}}>
           <option value="">&mdash; Associer &mdash;</option>
           {{foreach from=$listUser item=_user}}
             <option class="mediuser" style="border-color: #{{$_user->_ref_function->color}};" value="{{$_user->_id}}" {{if $_user->_id == $pack->chir_id}}selected="selected"{{/if}}>
@@ -56,7 +69,7 @@ Main.add(function() {
     <tr>
       <th>{{mb_label object=$pack field="function_id"}}</th>
       <td>
-        <select name="function_id" class="{{$pack->_props.function_id}}" style="width: 12em;">
+        <select name="function_id" class="{{$pack->_props.function_id}}" style="width: 12em;" {{if $pack->_id}}onchange="reloadListModele(this.form.object_class.value,'CFunctions-'+this.value);"{{/if}}>
           <option value="">&mdash; Associer &mdash;</option>
           {{foreach from=$listFunc item=_func}}
             <option class="mediuser" style="border-color: #{{$_func->color}};" value="{{$_func->_id}}" {{if $_func->_id == $pack->function_id}}selected="selected"{{/if}}>
@@ -70,7 +83,7 @@ Main.add(function() {
     <tr>
       <th>{{mb_label object=$pack field="group_id"}}</th>
       <td>
-        <select name="group_id" class="{{$pack->_props.group_id}}" style="width: 12em;">
+        <select name="group_id" class="{{$pack->_props.group_id}}" style="width: 12em;" {{if $pack->_id}}onchange="reloadListModele(this.form.object_class.value,'CGroups-'+this.value);"{{/if}}>
           <option value="">&mdash; Associer &mdash;</option>
           {{foreach from=$listEtab item=_etab}}
             <option value="{{$_etab->_id}}" {{if $_etab->_id == $pack->group_id}} selected="selected" {{/if}}>
@@ -89,7 +102,7 @@ Main.add(function() {
     <tr>
       <th>{{mb_label object=$pack field="object_class"}}</th>
       <td>
-        <select name="object_class" {{if $pack->_id}}onchange="reloadListModele(this.value);"{{/if}} style="width: 12em;">
+        <select name="object_class" style="width: 12em;" {{if $pack->_id}}onchange="changeClass(this.value);"{{/if}}>
           <option value="">&mdash; Choix d'une classe</option>
           {{foreach from=$pack->_specs.object_class->_list item=object_class}}
             <option value="{{$object_class}}" {{if $object_class == $pack->object_class}}selected = "selected"{{/if}}>
@@ -132,7 +145,7 @@ Main.add(function() {
                 onsubmit="return onSubmitFormAjax(this, 
                                 {onComplete: function() {
                                    updateAddEditPack({{$pack->_id}});
-                                   reloadList({{$pack->_id}}, '{{$user_id}}');
+                                   reloadList({{$pack->_id}});
                                 }});">
             <input type="hidden" name="m" value="dPcompteRendu" />
             <input type="hidden" name="dosql" value="do_modele_to_pack_aed" />

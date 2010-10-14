@@ -2,7 +2,7 @@
       onsubmit="return onSubmitFormAjax(this,
           {onComplete: function() {
               updateAddEditPack({{$pack->_id}}, '{{$filter_class}}');
-              reloadList({{$pack->_id}}, '{{$user_id}}');}})">
+              reloadList({{$pack->_id}});}})">
   {{mb_key object=$pack}}
   
   <input type="hidden" name="m" value="dPcompteRendu" />

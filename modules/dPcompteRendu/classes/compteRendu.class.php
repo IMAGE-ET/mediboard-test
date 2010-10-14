@@ -56,6 +56,9 @@ class CCompteRendu extends CDocumentItem {
   var $_ref_file         = null;
 	var $_ref_content      = null;
 
+	// Other fields
+	var $_is_pack          = false;
+	
   static $_page_formats = array(
     'a3'      => array(29.7 , 42),
     'a4'      => array(21   , 29.7),
@@ -631,9 +634,10 @@ class CCompteRendu extends CDocumentItem {
     	$source = $other_source;
     }
 
-    if ($this->header_id || $this->footer_id) {
-      $this->loadComponents();
-      
+    if ($this->header_id || $this->footer_id || $this->_is_pack) {
+      if (!$this->_is_pack) {
+    	  $this->loadComponents();
+      }
       $header = $this->_ref_header;
       $footer = $this->_ref_footer;
     }

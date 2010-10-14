@@ -9,10 +9,10 @@
   <tr>
     <th><label for="filter_user_id">Utilisateur</label></th>
     <td>
-      <select name="filter_user_id" onchange="reloadList('{{$pack_id}}', this.value, '{{$filter_class}}')">
+      <select name="filter_user_id" onchange="reloadList('{{$pack_id}}', '{{$filter_class}}', this.value)">
         <option value="">&mdash; Choisir un utilisateur</option>
         {{foreach from=$listUser item=_user}}
-          <option class="mediuser" style="border-color: #{{$_user->_ref_function->color}};" value="{{$_user->user_id}}" {{if $_user->user_id == $user_id}} selected="selected" {{/if}}>
+          <option class="mediuser" style="border-color: #{{$_user->_ref_function->color}};" value="{{$_user->_id}}" {{if $_user->_id == $user_id}} selected="selected" {{/if}}>
             {{$_user->_view}}
           </option>
         {{/foreach}}
@@ -20,7 +20,7 @@
     </td>
     <th><label for="filter_class">Type d'objet</label></th>
     <td>
-      <select name="filter_class" onchange="reloadList('{{$pack_id}}', '{{$user_id}}', this.value)">
+      <select name="filter_class" onchange="reloadList('{{$pack_id}}', this.value, '{{$user_id}}')">
         <option value="">&mdash; Tous les types d'objets</option>
         {{foreach from=$classes|smarty:nodefaults key=_class item=_class_tr}}
           <option value="{{$_class}}" {{if $_class == $filter_class}} selected="selected" {{/if}}>

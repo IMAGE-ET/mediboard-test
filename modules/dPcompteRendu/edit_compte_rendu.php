@@ -67,6 +67,7 @@ else {
     
     $pack->loadContent();
     $compte_rendu->nom = $pack->nom;
+    $compte_rendu->_is_pack = true;
     $compte_rendu->object_class = $pack->object_class;
     $compte_rendu->_source = $pack->_source;
     
@@ -82,6 +83,8 @@ else {
 
     // Marges et format
     $first_modele = reset($pack->_back['modele_links']);
+    $compte_rendu->_ref_header   = $header;
+    $compte_rendu->_ref_footer   = $footer;
     $compte_rendu->margin_top    = $first_modele->_ref_modele->margin_top;
     $compte_rendu->margin_left   = $first_modele->_ref_modele->margin_left;
     $compte_rendu->margin_right  = $first_modele->_ref_modele->margin_right;

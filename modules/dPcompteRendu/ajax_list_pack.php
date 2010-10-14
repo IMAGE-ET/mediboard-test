@@ -12,11 +12,10 @@ CCanDo::checkRead();
 
 $user_id = CValue::getOrSession("filter_user_id", CAppUI::$user->_id);
 $pack_id = CValue::get("pack_id");
-$filter_class = CValue::getOrSession("filter_class");
-
+$filter_class = CValue::getOrSession("filter_class", '');
 
 $userSel = new CMediusers;
-$userSel->load($user_id ? $user_id : CAppUI::$user->_id);
+$userSel->load($user_id);
 $userSel->loadRefs();
 $userSel->_ref_function->loadRefsFwd();
 
@@ -57,37 +56,6 @@ foreach($packsEtab as $_pack) {
 $user = new CMediusers();
 $listUser = $user->loadUsers(PERM_EDIT);
 
-// Récupération des modèles
-$whereCommon = array();
-$whereCommon["object_id"] = "IS NULL";
-$order = "nom";
-
-$modele = new CCompteRendu;
-
-// Modèles de l'utilisateur
-$modelesUser = array();
-if ($userSel->user_id) {
-  $where = $whereCommon;
-  $where["chir_id"] = $modele->_spec->ds->prepare("= %", $userSel->user_id);
-  $modelesUser = $modele->loadlist($where, $order);
-}
-
-// Modèles de la fonction
-$modelesFunc = array();
-if ($userSel->user_id) {
-  $where = $whereCommon;
-  $where["function_id"] = $modele->_spec->ds->prepare("= %", $userSel->function_id);
-  $modelesFunc = $modele->loadlist($where, $order);
-}
-
-// Modèles de l'etablissement
-$modelesEtab = array();
-if ($userSel->user_id) {
-  $where = $whereCommon;
-  $where["function_id"] = $modele->_spec->ds->prepare("= %", $userSel->_ref_function->group_id);
-  $modelesEtab = $modele->loadlist($where, $order);
-}
-
 // Création du template
 $smarty = new CSmartyDP();
 
@@ -98,10 +66,6 @@ $smarty->assign("filter_class"  , $filter_class);
 $smarty->assign("classes"       , CCompteRendu::getTemplatedClasses());
 
 $smarty->assign("listUser"      , $listUser);
-
-$smarty->assign("modelesUser"   , $modelesUser);
-$smarty->assign("modelesFunc"   , $modelesFunc);
-$smarty->assign("modelesEtab"   , $modelesEtab);
 
 $smarty->assign("packsUser"     , $packsUser);
 $smarty->assign("packsFunc"     , $packsFunc);
