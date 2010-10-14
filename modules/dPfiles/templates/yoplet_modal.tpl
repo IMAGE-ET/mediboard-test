@@ -7,7 +7,7 @@
           width: "100px"
         });
 {{/main}}
-<div id="modal-yoplet" style="display: none;">
+<div id="modal-yoplet" style="display: none; width: 400px;">
   <form name="addFastFile" method="post" action="?"
     onsubmit="return onSubmitFormAjax(this);">
     <input type="hidden" name="m" value="dPfiles" />
@@ -72,7 +72,7 @@
       </tr>
       <tr>
         <td colspan="2">
-				  <input type="checkbox" name="delete_auto" checked="true" />
+				  <input type="checkbox" name="delete_auto" />
 					<label for="delete_auto">{{tr}}Delete after send{{/tr}}</label>
 				</td>
       </tr>

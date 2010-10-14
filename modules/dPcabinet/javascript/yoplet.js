@@ -10,6 +10,7 @@ if (!window.File.applet) {
     current_list_status: [],
     extensions: null,
     modaleWindow: null,
+    timer: null,
 /*    appletCode: DOM.applet({id: 'uploader', name: 'yopletuploader', width: 0, height: 0,
                             code: 'org.yoplet.Yoplet.class', archive: 'includes/applets/yoplet2.jar'},
       DOM.param({name: 'action', value: ''}),
@@ -22,18 +23,12 @@ if (!window.File.applet) {
       this.debugConsole.insert(text+"<br />")
     },
     watchDirectory: function() {
-      this.debugConsole = $("yoplet-debug-console");
-      
-      this.debug("File extensions: "+File.applet.extensions);
-      
       // Lister les nouveaux fichiers
-      this.executer = new PeriodicalExecuter(function(){
-        try {
-          File.applet.uploader.listFiles(File.applet.directory, "false");
-        } catch(e) {
-          File.applet.debug(e);
-        }
-      }, 5);
+      try {
+        File.applet.uploader.listFiles(File.applet.directory, "false");
+      } catch(e) {
+        File.applet.debug(e);
+      }
     },
     uploadFiles: function() {
       var files_to_upload = $$(".upload-file:checked");
@@ -112,7 +107,6 @@ if (!window.File.applet) {
       });
       
        if (nb_files > 0) {
-         //console.log($$(".yopletbutton"));
          // On active tous les boutons upload disponibles
          $$(".yopletbutton").each(function(button) {
             button.disabled = "";
@@ -123,6 +117,16 @@ if (!window.File.applet) {
               button.style.border = "1px solid #888";
           });
        }
+       File.applet.timer = setTimeout("File.applet.watchDirectory()", 3000);
+    },
+    handleListFilesKO: function(result) {
+      $$(".yopletbutton").each(function(button) {
+        button.disabled = '';
+        button.className = 'cancel';
+        button.setStyle({border: "2px #f00 solid"});
+        button.onclick = function() { alert('Le répertoire saisi dans vos préférences présente un problème.');};
+      });
+      File.applet.timer = setTimeout("File.applet.watchDirectory()", 3000);
     },
     handleDeletionOK: function(result) {
       var elem = $$("input:checked").detect(function(n) { return n.value == result.path });
@@ -151,14 +155,14 @@ if (!window.File.applet) {
       // Ferme la modale en cliquant sur annuler,
       Control.Modal.close();
       this.emptyForm();
-      this.executer.resume();
+      File.applet.watchDirectory();
     },
     modalOpen: function(object_guid) {
+      clearTimeout(File.applet.timer);
       this.modaleWindow = modal($("modal-yoplet"));
       $$(".uploadinmodal")[0].disabled = '';
       this.object_guid = object_guid;
       this.modaleWindow.position();
-      this.executer.stop();
     },
     closeModal: function() {
       Control.Modal.close();
@@ -174,7 +178,7 @@ if (!window.File.applet) {
           elem.style.border = '1px solid #888';
       });
       File.refresh(this.object_guid.split("-")[1], this.object_guid.split("-")[0]);
-      this.executer.resume();
+      File.applet.watchDirectory();
     },
     addfile_callback: function(id, args) {
       var file_name = args["_old_file_path"].replace(/\\("|'|\\)/g, "$1");
@@ -223,6 +227,8 @@ if (!window.File.applet) {
       if (!active)
         setTimeout(watching, 50);
       else {
+        File.applet.debugConsole = $("yoplet-debug-console");
+        File.applet.debug("File extensions: "+File.applet.extensions);
         File.applet.uploader.setFileFilters(File.applet.extensions); // case sensitive !
         File.applet.watchDirectory();
       }
@@ -246,6 +252,9 @@ if (!window.File.applet) {
                 break;
         case 'listfiles':
                 File.applet.handleListFiles(operation.result);
+                break;
+        case 'listfilesKO':
+                File.applet.handleListFilesKO(operation.result);
                 break;
         case 'uploadok':
                 File.applet.handleUploadOk(operation.result);
