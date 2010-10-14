@@ -55,7 +55,7 @@ printFicheBloc = function(operation_id) {
 	    {{/if}}
 	  </tr>
     
-    {{if array_key_exists("check_lists", $_operation->_back)}}
+    {{if $_operation->_back && array_key_exists("check_lists", $_operation->_back)}}
     <tr>
       <td colspan="10">
         
