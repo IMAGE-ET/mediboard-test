@@ -1034,12 +1034,10 @@ class CPatient extends CMbObject {
     }
   }
   
-  function loadRefDossierMedical(){
-    $this->_ref_dossier_medical = new CDossierMedical();
-    $where["object_id"] = "= '$this->_id'";
-    $where["object_class"] = "= 'CPatient'";
-    $this->_ref_dossier_medical->loadObject($where);
+  function loadRefDossierMedical() {
+    $this->_ref_dossier_medical = $this->loadUniqueBackRef("dossier_medical");
     $this->_ref_dossier_medical->loadRefsBack();
+		return $this->_ref_dossier_medical;
   }
   
   function loadRefsAffectations() {
