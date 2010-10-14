@@ -86,8 +86,9 @@ function computeAttente($areas, &$series, $where, $ljoin, $dates, $period, $sejo
         if ($_start_class == "consultation" || $_end_class == "consultation") {
           $_sejour->loadRefsConsultations();
           $_consult = $_sejour->_ref_consult_atu;
-          if (!$_consult) continue;
+          if (!$_consult || !$_consult->heure) continue;
           $_consult->loadRefPlageConsult();
+          if (!$_consult->_date) continue;
         }
         
         switch($_start_class) {
