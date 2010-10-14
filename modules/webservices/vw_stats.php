@@ -55,19 +55,24 @@ if ($service) {
     $datas[$day] = $results[0];
   }
   
-  $series[0]["label"]  = utf8_encode("Hits");
+  $series[0]["label"]  = "Hits";
   
   $series[0]["color"]  = "#00A8F0";
   $series[0]["bars"]   = array("show" => true);
   
-  $series[1]["label"]  =  utf8_encode("Temps de réponse");
+  $series[1]["label"]  = utf8_encode("Temps de réponse");
   $series[1]["color"]  = "#C0D800";
   $series[1]["yaxis"]  = 2;
+  $series[1]["mouse"]  = array("track" => true);
   
   $options = array(
-    'xaxis' => array('ticks' => $ticks, 'labelsAngle' => 45),
-    'yaxis' => array('autoscaleMargin' => 1),
-    'y2axis' => array('autoscaleMargin' => 1),
+    'xaxis'  => array('ticks' => $ticks, 'labelsAngle' => 45),
+    'yaxis'  => array('autoscaleMargin' => 1,
+                      'title' => "Hits", 'titleAngle' => 90),
+    'y2axis' => array('autoscaleMargin' => 1,
+                      'title' => "Temps (ms)", 'titleAngle' => 90),
+    'HtmlText' => false
+    
   );
   
 
