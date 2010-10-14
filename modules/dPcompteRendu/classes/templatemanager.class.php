@@ -43,7 +43,7 @@ class CTemplateManager {
     // Connected user
 		$user_complete = $user->_view;
     if ($user->isPraticien()) {
-      $connected_user .= $user->titres;
+      $user_complete .= $user->titres;
     }
     $this->addProperty("Général - rédacteur"        , $user->_shortview);
     $this->addProperty("Général - rédacteur complet", $user_complete);
