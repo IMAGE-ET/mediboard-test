@@ -11,6 +11,7 @@ if (!window.File.applet) {
     extensions: null,
     modaleWindow: null,
     timer: null,
+    isOpen: false,
 /*    appletCode: DOM.applet({id: 'uploader', name: 'yopletuploader', width: 0, height: 0,
                             code: 'org.yoplet.Yoplet.class', archive: 'includes/applets/yoplet2.jar'},
       DOM.param({name: 'action', value: ''}),
@@ -24,6 +25,7 @@ if (!window.File.applet) {
     },
     watchDirectory: function() {
       // Lister les nouveaux fichiers
+      if (File.applet.isOpen) return;
       try {
         File.applet.uploader.listFiles(File.applet.directory, "false");
       } catch(e) {
@@ -117,7 +119,7 @@ if (!window.File.applet) {
               button.style.border = "1px solid #888";
           });
        }
-       File.applet.timer = setTimeout("File.applet.watchDirectory()", 3000);
+       File.applet.timer = setTimeout(File.applet.watchDirectory, 3000);
     },
     handleListFilesKO: function(result) {
       $$(".yopletbutton").each(function(button) {
@@ -126,7 +128,7 @@ if (!window.File.applet) {
         button.setStyle({border: "2px #f00 solid"});
         button.onclick = function() { alert('Le répertoire saisi dans vos préférences présente un problème.');};
       });
-      File.applet.timer = setTimeout("File.applet.watchDirectory()", 3000);
+      File.applet.timer = setTimeout(File.applet.watchDirectory, 3000);
     },
     handleDeletionOK: function(result) {
       var elem = $$("input:checked").detect(function(n) { return n.value == result.path });
@@ -147,18 +149,20 @@ if (!window.File.applet) {
     emptyForm: function(){
       var oForm = getForm("addFastFile");
       $V(oForm.file_rename, '');
-      oForm.delete_auto.checked = false;
+      oForm.delete_auto.checked = true;
       $V(oForm.keywords_category, String.fromCharCode(8212) + " Catégorie");
       $V(oForm.file_category_id, '');
 	  },
     cancelModal: function() {
       // Ferme la modale en cliquant sur annuler,
+      File.applet.isOpen = false;
       Control.Modal.close();
       this.emptyForm();
       File.applet.watchDirectory();
     },
     modalOpen: function(object_guid) {
       clearTimeout(File.applet.timer);
+      File.applet.isOpen = true;
       this.modaleWindow = modal($("modal-yoplet"));
       $$(".uploadinmodal")[0].disabled = '';
       this.object_guid = object_guid;
@@ -166,6 +170,7 @@ if (!window.File.applet) {
     },
     closeModal: function() {
       Control.Modal.close();
+      File.applet.isOpen = false;
       this.emptyForm();
       // Clique sur Ok dans la modale,
       // alors on vide la liste des fichiers dans la modale

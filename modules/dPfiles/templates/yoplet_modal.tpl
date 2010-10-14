@@ -72,7 +72,7 @@
       </tr>
       <tr>
         <td colspan="2">
-				  <input type="checkbox" name="delete_auto" />
+				  <input type="checkbox" name="delete_auto" checked="checked"/>
 					<label for="delete_auto">{{tr}}Delete after send{{/tr}}</label>
 				</td>
       </tr>
