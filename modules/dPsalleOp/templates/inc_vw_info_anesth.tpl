@@ -83,6 +83,34 @@ Main.add(function(){
   {{assign var=onSubmit value="return checkForm(this)"}}
 {{/if}}
 
+{{if $consult_anesth->_id}}
+  <table class="form">
+    <tr>
+      <th colspan="2" class="title">Fichiers / Documents</th>
+    </tr>
+    <tr>
+      <td>
+        {{mb_include_script module="dPcabinet" script="file"}}
+        <div id="files-anesth">
+        <script type="text/javascript">
+          File.register('{{$consult_anesth->_id}}','{{$consult_anesth->_class_name}}', 'files-anesth');
+        </script>
+        </div>
+      </td>
+      <td>
+        <div id="documents-anesth">
+          {{mb_include_script module="dPcompteRendu" script="document"}}
+          <script type="text/javascript">
+            Document.register('{{$consult_anesth->_id}}','{{$consult_anesth->_class_name}}','{{$modeles_prat_id}}','documents-anesth');
+          </script>
+        </div>
+      </td>
+    </tr>
+  </table>
+	
+{{/if}}
+	
+	
 <ul id="anesth_tab_group" class="control_tabs">
 	<li><a href="#tab_preanesth">Pré-anesthésie</a></li>
 	<li onmousedown="refreshAnesthPerops('{{$selOp->_id}}');"><a href="#tab_perop">Per-opératoire</a></li>
@@ -98,7 +126,7 @@ Main.add(function(){
 		    <th colspan="2" class="title">Techniques complémentaires</th>
 		  </tr>
 		  <tr>
-		    <td colspan="2">
+		    <td colspan="2" class="text">
 					<ul>
 		      {{foreach from=$selOp->_ref_consult_anesth->_ref_techniques item=_technique}}
 					  <li>{{$_technique->technique}}</li>
@@ -244,35 +272,8 @@ Main.add(function(){
 	    </td>
 	  </tr>
 	  {{/if}}
-	</table>
-	
+	</table>	
 	</form>
-	
-	{{if $consult_anesth->_id}}
-	<table class="form">
-	  <tr>
-	    <th colspan="2" class="title">Fichiers / Documents</th>
-	  </tr>
-	  <tr>
-	    <td>
-	      {{mb_include_script module="dPcabinet" script="file"}}
-	      <div id="files-anesth">
-	      <script type="text/javascript">
-	        File.register('{{$consult_anesth->_id}}','{{$consult_anesth->_class_name}}', 'files-anesth');
-	      </script>
-	      </div>
-	    </td>
-	    <td>
-	      <div id="documents-anesth">
-	        {{mb_include_script module="dPcompteRendu" script="document"}}
-	        <script type="text/javascript">
-	          Document.register('{{$consult_anesth->_id}}','{{$consult_anesth->_class_name}}','{{$modeles_prat_id}}','documents-anesth');
-	        </script>
-				</div>
-	    </td>
-	  </tr>
-	</table>
-	{{/if}}
 </div>
 
 <div id="tab_perop" style="display: none;">
