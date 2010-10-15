@@ -53,10 +53,10 @@ class CMbSOAPClient extends SoapClient {
     
     $output = null;
     
-    foreach ($arguments as &$_argument) {
+    /*foreach ($arguments as &$_argument) {
       if ($_argument && is_string($_argument))
         $_argument = CMbString::truncate($_argument, 1024);
-    }
+    }*/
     
   	$echange_soap = new CEchangeSOAP();
   	$echange_soap->date_echange = mbDateTime();
