@@ -11,10 +11,13 @@
 $dPconfig["ssr"] = array ( 
   "occupation_surveillance" => array(
     "faible" => "200",
-    "eleve"  => "1000"
+    "eleve"  => "1000",
   ),
   "occupation_technicien" => array(
-     "faible" => "60",
-     "eleve"  => "300"
-  )
+    "faible" => "60",
+    "eleve"  => "300",
+  ),
+	"repartition" => array(
+    "show_tabs" => "1",
+	) 
 );

@@ -1190,7 +1190,7 @@ class CConsultation extends CCodable {
     $template->addDateProperty("Consultation - date"  , $this->_ref_plageconsult->date);
     $template->addLongDateProperty("Consultation - date longue", $this->_ref_plageconsult->date);
     $template->addTimeProperty("Consultation - heure" , $this->heure);
-    $tradExamFields = array(
+    $locExamFields = array(
       "motif"            => "motif",
       "rques"            => "remarques",
       "examen"           => "examen",
@@ -1199,7 +1199,8 @@ class CConsultation extends CCodable {
       "conclusion"       => "conclusion"
     );
     foreach($this->_exam_fields as $field) {
-      $template->addProperty("Consultation - ".$tradExamFields[$field], $this->$field);
+    	$loc_field = $locExamFields[$field];
+      $template->addProperty("Consultation - $loc_field", $this->$field);
     }
     if(!in_array("traitement", $this->_exam_fields)) {
       $template->addProperty("Consultation - traitement", $this->traitement);

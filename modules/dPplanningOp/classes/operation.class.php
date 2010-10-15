@@ -790,16 +790,16 @@ class COperation extends CCodable {
     $this->loadAffectationsPersonnel();
     foreach ($this->_ref_affectations_personnel as $emplacement => $affectations) {
       $locale = CAppUI::tr("CPersonnel.emplacement.$emplacement");
-      $template->addProperty("Opération - personnel réel - $locale", implode(" - ", CMbArray::pluck(CMbArray::pluck(CMbArray::pluck($affectations, "_ref_personnel"), "_ref_user"), "_view")));
-//      $template->addProperty("Opération - personnel - $emplacement", implode(" - ", CMbArray::pluck($affectations, "_ref_personnel", "_ref_user", "_view")));
+			$property = implode(" - ", CMbArray::pluck($affectations, "_ref_personnel", "_ref_user", "_view"));
+      $template->addProperty("Opération - personnel réel - $locale", $property);
     }
     
     $plageop = $this->_ref_plageop;
     $plageop->loadAffectationsPersonnel();
     foreach ($plageop->_ref_affectations_personnel as $emplacement => $affectations) {
       $locale = CAppUI::tr("CPersonnel.emplacement.$emplacement");
-      $template->addProperty("Opération - personnel prévu - $locale", implode(" - ", CMbArray::pluck(CMbArray::pluck(CMbArray::pluck($affectations, "_ref_personnel"), "_ref_user"), "_view")));
-//      $template->addProperty("Opération - personnel - $emplacement", implode(" - ", CMbArray::pluck($affectations, "_ref_personnel", "_ref_user", "_view")));
+      $property = implode(" - ", CMbArray::pluck($affectations, "_ref_personnel", "_ref_user", "_view"));
+      $template->addProperty("Opération - personnel prévu - $locale", $property);
     }
   }
 }
