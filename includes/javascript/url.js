@@ -251,22 +251,24 @@ var Url = Class.create({
 	    
       // Allows bigger width than input
       onShow: function(element, update) {
-        update.style.position = 'absolute';
+        update.style.position = "absolute";
+        
+        var elementDimensions = element.getDimensions();
         
         update.show().clonePosition(element, {
           setWidth: true,
           setHeight: false, 
-          setTop: false,
-          setLeft: true
+          setTop: true,
+          setLeft: true,
+          offsetTop: elementDimensions.height+1
         });
-        
-		// Default width behaviour
+
+        // Default width behaviour
         var style = {
           width: "auto",
           whiteSpace: "nowrap",
-          minWidth: element.getWidth()+"px",
-          maxWidth: "400px",
-          opacity: 1
+          minWidth: elementDimensions.width+"px",
+          maxWidth: "400px"
         };
 
         // Fixed width behaviour
@@ -276,20 +278,17 @@ var Url = Class.create({
           };
         }
         
-        update.style.top = null;
-        update.style.marginTop = null;
-        
         var scroll = document.viewport.getScrollOffsets(); // Viewport offset
         var viewport = document.viewport.getDimensions(); // Viewport size
         var scrollOffset = update.cumulativeOffset();
         var updateHeight = update.getHeight();
         
         if (scrollOffset.top + updateHeight > viewport.height+scroll.top) {
-          style.top = (-updateHeight+2) + "px";
-          style.marginTop = 0;
+          style.top = (parseInt(update.style.top)-elementDimensions.height-updateHeight+2) + "px";
         }
         
         update.setStyle(style)
+              .setOpacity(1)
               .unoverflow();
         
         if (oOptions.onAfterShow) {

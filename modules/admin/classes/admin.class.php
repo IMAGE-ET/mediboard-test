@@ -155,7 +155,7 @@ class CUser extends CMbObject {
    */
   static function get($user_id = null) {
 		$user = new CUser;
-		return $user->getCached(CValue::first($user_id, CAppUI::$user->_id));
+		return $user->getCached(CValue::first($user_id, CAppUI::$instance->user_id));
   }
 	
   function loadRefMediuser() {

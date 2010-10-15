@@ -40,6 +40,10 @@ div.tooltip {
   filter: progid:DXImageTransform.Microsoft.Shadow(color='#969696', Direction=135, Strength=6);
   -ms-filter: "progid:DXImageTransform.Microsoft.Shadow(color='#969696', Direction=135, Strength=6)";
 }
+
+#waitingMsgText {
+  display: none;
+}
 </style>
 <![endif]-->
 

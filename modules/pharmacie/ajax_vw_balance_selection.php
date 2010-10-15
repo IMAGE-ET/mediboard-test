@@ -10,14 +10,49 @@
 
 CCanDo::checkRead();
 
-$product_seletion_id = CValue::get("product_selection_id");
+$product_selection_id = CValue::get("product_selection_id");
+$category_id          = CValue::get("category_id");
+$classe_comptable     = CValue::get("classe_comptable");
+$classe_atc           = CValue::get("_classe_atc");
+$hors_t2a             = CValue::get("hors_t2a");
+
+$list_products = array();
 
 $product_selection = new CProductSelection;
-$product_selection->load($product_seletion_id);
+if($product_selection->load($product_selection_id)) {
+  $list_items = $product_selection->loadRefsItems();
+  $list_products = CMbArray::pluck($list_items, "_ref_product");
+}
 
-$list_items = $product_selection->loadRefsItems();
+else {
+  $product = new CProduct;
+  $ds = $product->_spec->ds;
+  
+  $where = array();
+  
+  if ($category_id) 
+    $where["category_id"] = $ds->prepare("=%", $category_id);
+    
+  if ($classe_comptable) 
+    $where["classe_comptable"] = $ds->prepare("=%", $classe_comptable);
+    
+  if (CModule::getActive("bcb")) {
+    if ($classe_atc) {
+      $classe_atc_obj = new CBcbClasseATC;
+      $list = CMbArray::pluck($classe_atc_obj->loadRefProduitsLivret($classe_atc), "code_cip");
+      $where[] = "code ".$ds->prepareIn($list);
+    }
+    
+    if ($hors_t2a) {
+      $bcb_produit = new CBcbProduit;
+      $list = CMbArray::pluck($bcb_produit->getHorsT2ALivret(), "code_cip");
+      $where[] = "code ".$ds->prepareIn($list);
+    }
+  }
+  
+  $list_products = $product->loadList($where, "name");
+}
 
-$list_products = CMbArray::pluck($list_items, "_ref_product");
 
 // Création du template
 $smarty = new CSmartyDP();

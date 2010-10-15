@@ -63,6 +63,7 @@
                 <th>{{mb_label object=$product field=category_id}}</th>
                 <td>
                   <select name="category_id">
+                    <option value=""> &ndash; Toutes </option>
                     {{foreach from=$list_categories item=_category}}
                       <option value="{{$_category->_id}}">{{$_category}}</option>
                     {{/foreach}}
@@ -78,6 +79,11 @@
               <tr>
                 <th>{{mb_label object=$product field=_classe_atc}}</th>
                 <td>{{mb_field object=$product field=_classe_atc}}</td>
+              </tr>
+              
+              <tr>
+                <th><label for="hors_t2a">Hors T2A</label></th>
+                <td><input type="checkbox" name="hors_t2a" /></td>
               </tr>
               
             </table>

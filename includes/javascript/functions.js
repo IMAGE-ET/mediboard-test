@@ -97,7 +97,7 @@ var WaitingMessage = {
       opacity: 0.4,
       position: 'absolute',
       left: -parseInt(receiver.getStyle("padding-left"))+"px"
-    }).clonePosition(element, {setLeft: false, setTop: false});
+    }).show().clonePosition(element, {setLeft: false, setTop: false});
     
     if (isTopAligned) {
       cover.style.top = -parseInt(receiver.getStyle("padding-top"))+"px";

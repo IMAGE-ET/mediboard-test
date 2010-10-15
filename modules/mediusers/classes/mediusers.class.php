@@ -97,7 +97,7 @@ class CMediusers extends CMbObject {
    * @return CMediuser
    */
   static function get($user_id = null) {
-    $user = CAppUI::$user;
+    $user = CAppUI::$instance->_ref_user; // CAppUI::$user is available *after* CAppUI::$instance->_ref_user
     return $user_id ? $user->getCached($user_id) : $user;
   }
 
