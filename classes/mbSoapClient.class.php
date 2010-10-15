@@ -53,11 +53,6 @@ class CMbSOAPClient extends SoapClient {
     
     $output = null;
     
-    /*foreach ($arguments as &$_argument) {
-      if ($_argument && is_string($_argument))
-        $_argument = CMbString::truncate($_argument, 1024);
-    }*/
-    
   	$echange_soap = new CEchangeSOAP();
   	$echange_soap->date_echange = mbDateTime();
   	$echange_soap->emetteur     = CAppUI::conf("mb_id");
@@ -69,9 +64,8 @@ class CMbSOAPClient extends SoapClient {
   	$echange_soap->web_service_name = end($path);
   	
   	$echange_soap->function_name = $function_name;
-  	$echange_soap->input         = serialize($arguments);
   	
-  	$phpChrono->stop();
+   	$phpChrono->stop();
   	$chrono = new Chronometer();
     $chrono->start();
   	try {
@@ -85,7 +79,12 @@ class CMbSOAPClient extends SoapClient {
     
     // response time
     $echange_soap->response_time = $chrono->total;
-
+    
+    foreach ($arguments as &$_argument) {
+      if ($_argument && is_string($_argument))
+        $_argument = CMbString::truncate($_argument, 1024);
+    }
+    $echange_soap->input = serialize($arguments);
     if ($echange_soap->soapfault != 1) {
     	$echange_soap->output = serialize($output);
     }

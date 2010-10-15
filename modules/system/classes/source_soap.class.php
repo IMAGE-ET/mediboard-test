@@ -49,7 +49,7 @@ class CSourceSOAP extends CExchangeSource {
         $this->_client->$evenement_name($this->_data);
 
     if (null == $this->_acquittement) {
-    	//CAppUI::stepAjax("Acquittement non reçu.", UI_MSG_ERROR);
+    	CAppUI::stepAjax("Acquittement non reçu.", UI_MSG_ERROR);
     }
 		
 		return true;
