@@ -57,6 +57,7 @@ class CProduct extends CMbObject {
   var $_unique_usage       = null;
   
   var $_in_order           = null;
+  var $_classe_atc         = null;
   
   // This group's stock id
   var $_ref_stock_group    = null;
@@ -106,6 +107,8 @@ class CProduct extends CMbObject {
     $specs['_unit_quantity']= 'float min|0';
     $specs['_quantity']     = 'str show|1';
     $specs['_consumption']  = 'num show|1';
+    
+    $specs['_classe_atc']  = 'str';
     return $specs;
   }
 
@@ -198,7 +201,7 @@ class CProduct extends CMbObject {
    * @param Date $date_max [optional]
    * @return Number
    */
-  function getConsumption($since = "-1 MONTH", $date_max = null, $service_id = null){
+  function getConsumption($since = "-1 MONTH", $date_max = null, $service_id = null, $include_loss = true){
     $this->loadRefStock();
     
     $where = array(
@@ -212,6 +215,9 @@ class CProduct extends CMbObject {
     
     if ($service_id) {
       $where["product_delivery.service_id"] = "= '$service_id'";
+    }
+    else if ($include_loss) {
+      $where["product_delivery.service_id"] = "IS NOT NULL";
     }
     
     $ljoin = array(
