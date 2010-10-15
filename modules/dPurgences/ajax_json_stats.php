@@ -37,7 +37,7 @@ function computeAttente($areas, &$series, $where, $ljoin, $dates, $period, $sejo
       if (isset($value[$end_field]) && strpos($end_field, "._") === false)
         $where[$end_field] = $value[$end_field];
       
-      $series[$key] = array('data' => array(), "label" => $value[0]);
+      $series[$key] = array('data' => array(), "label" => utf8_encode($value[0]));
       
       foreach ($dates as $i => $_date) {
         $_date_next = mbDate("+1 $period", $_date);
@@ -545,7 +545,7 @@ switch ($axe) {
     );
     
     $series = &$data[$axe]['series'];
-    computeAttente(array(array("Nombre de séjours")), $series, $where, $ljoin, $dates, $period, $sejour, $total, "sejour.entree", "sejour.sortie");
+    computeAttente(array(array("Nombre de passages")), $series, $where, $ljoin, $dates, $period, $sejour, $total, "sejour.entree", "sejour.sortie");
     break;
     
   case "duree_pec":
@@ -559,7 +559,7 @@ switch ($axe) {
     );
     
     $series = &$data[$axe]['series'];
-    computeAttente(array(array("Nombre de séjours")), $series, $where, $ljoin, $dates, $period, $sejour, $total, "consultation._datetime", "sejour.sortie");
+    computeAttente(array(array("Nombre de passages")), $series, $where, $ljoin, $dates, $period, $sejour, $total, "consultation._datetime", "sejour.sortie");
     break;
     
   case "duree_attente":
@@ -573,7 +573,7 @@ switch ($axe) {
     );
     
     $series = &$data[$axe]['series'];
-    computeAttente(array(array("Nombre de séjours")), $series, $where, $ljoin, $dates, $period, $sejour, $total, "sejour.entree", "consultation._datetime");
+    computeAttente(array(array("Nombre de passages")), $series, $where, $ljoin, $dates, $period, $sejour, $total, "sejour.entree", "consultation._datetime");
     break;
 }
 
