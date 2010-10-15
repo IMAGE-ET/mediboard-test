@@ -1,52 +1,26 @@
+{{unique_id var=uniq_ditto}}
 <table class="tbl" style="width: 100%; font-size: small">
-  <tr><th colspan="11" class="title">Constantes</th></tr>
   <tr>
-    <th style="width: 9%;">{{tr}}CConstantesMedicales-datetime-court{{/tr}}</th>
-    {{assign var="i" value=1}}
-    {{foreach name="constante" from="CConstantesMedicales"|static:"list_constantes" key=_constante item=_params}}
-      {{if $i == 11}}
-        {{assign var=save_constante value=$smarty.foreach.constante.index}}
-        {{php}}break{{/php}}
-      {{/if}}
-      <th style="width: 9%;">{{tr}}CConstantesMedicales-{{$_constante}}-court{{/tr}}</th>
-      {{assign var="i" value=$i+1}}
-    {{/foreach}}
+    <th colspan="11" class="title">Constantes</th>
   </tr>
-
-  {{foreach name="constante_b" from=$csteByTime key=_time item=_cste_time}}
+  {{foreach from=$csteByTime item=_cstes_dates}}
     <tr>
-      <td style="text-align: center;">{{mb_ditto name="datetime" value=$_time|date_format:$dPconfig.datetime}}</td>
-      {{assign var="i" value=1}}
-      {{foreach name="constante_time" from=$_cste_time item=_constante_medicale}}
-        {{if $i == 11}}
-          {{assign var="save_cste_time" value=$smarty.foreach.constante_time.index}}
-          {{php}}break{{/php}}
-        {{/if}}
-        <td style="text-align: right">{{$_constante_medicale}}</td>
-        {{assign var="i" value=$i+1}}
+      <th style="width: 9%;">{{tr}}CConstantesMedicales-datetime-court{{/tr}}</th>
+        {{foreach from=$_cstes_dates item=_cstes}}
+          {{foreach from=$_cstes item=_cste key=_cste_name}}
+            <th style="width: 9%;">{{tr}}CConstantesMedicales-{{$_cste_name}}-court{{/tr}}</th>
+          {{/foreach}}
+        {{/foreach}}
+    </tr>
+    <tr>
+      {{foreach from=$_cstes_dates item=_cstes key=_date_time_cste}}
+        <td>{{mb_ditto name="datetime$uniq_ditto" value=$_date_time_cste|date_format:$dPconfig.datetime}}</td>
+        {{foreach from=$_cstes item=_cste}}
+          <td style="text-align: right">{{$_cste}}</td>
+        {{/foreach}}
       {{/foreach}}
     </tr>
+  {{foreachelse}}
+  <th>{{tr}}CConstantesMedicales.none{{/tr}}</th>
   {{/foreach}}
-  
-  <tr>
-    <th>{{tr}}CConstantesMedicales-datetime-court{{/tr}}</th>
-    {{foreach name="constante2" from="CConstantesMedicales"|static:"list_constantes" key=_constante item=_params}}
-      {{if $smarty.foreach.constante2.index > $save_constante }}
-        <th>{{tr}}CConstantesMedicales-{{$_constante}}-court{{/tr}}</th>
-      {{/if}}
-    {{/foreach}}
-  </tr>
-  
-  {{assign var=reset_mb_ditto value=true}}
-  {{foreach name="constante_b2" from=$csteByTime key=_time item=_cste_time}}
-      <td style="text-align: center;">{{mb_ditto name="datetime" value=$_time|date_format:$dPconfig.datetime reset=$reset_mb_ditto}}</td>
-      {{foreach name="constante_time" from=$_cste_time item=_constante_medicale}}
-        {{if $smarty.foreach.constante_time.index > $save_cste_time}}
-          <td style="text-align: right">{{$_constante_medicale}}</td>
-        {{/if}}
-      {{/foreach}}
-    </tr>
-  {{assign var=reset_mb_ditto value=false}}
-  {{/foreach}}
-  
 </table>
