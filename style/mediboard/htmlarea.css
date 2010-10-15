@@ -38,7 +38,7 @@ table.tbl th {
 }
 
 table.tbl td {
-	border: 1px solid #aaa;
+	border: 0.1px solid #aaa;
   padding: 0.1em 0.5em;
 }
 
