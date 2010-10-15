@@ -333,7 +333,7 @@ function reloadPrescription(prescription_id){
   <div id="anesth">
     {{include file="inc_vw_anesth.tpl"}}
   </div>  
-  <div id="info_anesth">
+  <div id="info_anesth"> 
   {{include file="inc_vw_info_anesth.tpl"}}
   </div>
 </div>
