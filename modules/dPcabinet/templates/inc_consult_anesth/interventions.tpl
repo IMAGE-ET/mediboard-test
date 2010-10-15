@@ -116,20 +116,35 @@
 {{/if}}
 
 {{if $operation->_id}}
+<hr />
+  
 <form name="editOpFrm" action="?m=dPcabinet" method="post" onsubmit="return onSubmitFormAjax(this);">
   <input type="hidden" name="m" value="dPplanningOp" />
   <input type="hidden" name="del" value="0" />
   <input type="hidden" name="dosql" value="do_planning_aed" />
   {{mb_key object=$operation}}
-	
-  {{if $dPconfig.dPplanningOp.COperation.verif_cote && ($operation->cote == "droit" || $operation->cote == "gauche")}}
-  {{mb_label object=$operation field="cote_consult_anesth"}} :
-  {{mb_field emptyLabel="Choose" object=$operation field="cote_consult_anesth" onchange="this.form.onsubmit();"}}
-  <br />
-  {{/if}}
-  {{mb_label object=$operation field="depassement_anesth"}}
-  {{mb_field object=$operation field="depassement_anesth" onchange="this.form.onsubmit();"}}
-  <button type="button" class="notext submit">{{tr}}Save{{/tr}}</button>
+  
+  <table class="layout">
+    {{if $dPconfig.dPplanningOp.COperation.verif_cote && ($operation->cote == "droit" || $operation->cote == "gauche")}}
+      <tr>
+        <th>{{mb_label object=$operation field="cote_consult_anesth"}} :</th>
+        <td>{{mb_field emptyLabel="Choose" object=$operation field="cote_consult_anesth" onchange="this.form.onsubmit();"}}</td>
+      </tr>
+    {{/if}}
+    
+    <tr>
+      <th>{{mb_label object=$operation field="depassement_anesth"}} :</th>
+      <td>
+        {{mb_field object=$operation field="depassement_anesth" onchange="this.form.onsubmit();"}}
+        <button type="button" class="notext submit">{{tr}}Save{{/tr}}</button>
+      </td>
+    </tr>
+    
+    <tr>
+      <th>{{mb_label object=$operation field="depassement"}} :</th>
+      <td>{{mb_value object=$operation field="depassement"}}</td>
+    </tr>
+  </table>
 </form>
 {{else}}
 
