@@ -42,11 +42,14 @@ $dossier_medical->loadRefPrescription();
 $dossier_medical->loadRefsTraitements();
 
 $csteByTime = array();
+$i = 0;
 foreach ($sejour->_list_constantes_medicales as $_constante_medicale) {
-  $csteByTime[$_constante_medicale->datetime] = array();
+  $csteByTime[$i][$_constante_medicale->datetime] = array();  
   foreach (CConstantesMedicales::$list_constantes as $_constante => $_params) {
-    $csteByTime[$_constante_medicale->datetime][$_constante] = $_constante_medicale->$_constante;
+    if (count($csteByTime[$i][$_constante_medicale->datetime]) > 9) $i ++;
+    $csteByTime[$i][$_constante_medicale->datetime][$_constante] = $_constante_medicale->$_constante;
   }
+  $i++;
 }
 
 // Création du template

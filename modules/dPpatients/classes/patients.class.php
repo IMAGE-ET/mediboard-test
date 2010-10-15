@@ -1502,47 +1502,46 @@ class CPatient extends CMbObject {
     $const_med = $this->_ref_constantes_medicales;
     
     // Version complète du tableau de constantes
-    $csteByTime = array();
-    $constante_med = new CConstantesMedicales();
-    $csteByTime[$const_med->datetime] = array();
+    $csteByTime[0][$const_med->datetime] = array();
+    $i = 0;
+        
     foreach (CConstantesMedicales::$list_constantes as $_constante => $_params) {
-      $csteByTime[$const_med->datetime][$_constante] = $const_med->$_constante;
+      if (count($csteByTime[$i][$const_med->datetime]) > 9) $i ++; 
+      $csteByTime[$i][$const_med->datetime][$_constante] = $const_med->$_constante;
     }
-
+    
     // Version minimale du tableau de constantes
     $conf_constantes = explode("|", CAppUI::conf("dPpatients CConstantesMedicales important_constantes"));
     $selection = array_flip($conf_constantes);
 
     $csteByTimeMin = array();
-    $constante_med = new CConstantesMedicales();
-    $csteByTimeMin[$const_med->datetime] = array();
+    $csteByTimeMin[0][$const_med->datetime] = array();
     $constantes_min = array();
+    $i = 0;
+    
     foreach (CConstantesMedicales::$list_constantes as $_constante => $_params) {
+      if (count($csteByTimeMin[$i][$const_med->datetime]) > 9) $i ++; 
       if (array_key_exists($_constante, $selection) || $const_med->$_constante != '') {
-      	$constantes_min[] = $_constante;
-        $csteByTimeMin[$const_med->datetime][$_constante] = $const_med->$_constante;
+        $csteByTimeMin[$i][$const_med->datetime][$_constante] = $const_med->$_constante;
       }
     }
 
     $smarty = new CSmartyDP("modules/dPpatients");
-    $smarty->assign("csteByTime", $csteByTime);    
+
+    $smarty->assign("csteByTime", $csteByTime);
     $constantes_complet_horiz = $smarty->fetch("print_constantes.tpl",'','',0);
     $constantes_complet_horiz = preg_replace('`([\\n\\r])`', '', $constantes_complet_horiz); 
-
-    $smarty->assign("csteByTimeMin" , $csteByTimeMin);
-    $smarty->assign("constantes_min", $constantes_min);
-    $constantes_minimal_horiz = $smarty->fetch("print_constantes_min_horiz.tpl",'','',0);
+    
+    $smarty->assign("csteByTime" , $csteByTimeMin);
+    $constantes_minimal_horiz = $smarty->fetch("print_constantes.tpl",'','',0);
     $constantes_minimal_horiz = preg_replace('`([\\n\\r])`', '', $constantes_minimal_horiz);
     
     $smarty->assign("csteByTime", $csteByTime);
-    $smarty->assign("datetime", $const_med->datetime);
-    $constantes_complet_vert  = $smarty->fetch("print_constantes_comp_vert.tpl",'','',0);
+    $constantes_complet_vert  = $smarty->fetch("print_constantes_vert.tpl",'','',0);
     $constantes_complet_vert  = preg_replace('`([\\n\\r])`', '', $constantes_complet_vert);
 
-    $smarty->assign("csteByTimeMin" , $csteByTimeMin);
-    $smarty->assign("constantes_min", $constantes_min);
-    $smarty->assign("datetime", $const_med->datetime);
-    $constantes_minimal_vert  = $smarty->fetch("print_constantes_min_vert.tpl",'','',0);
+    $smarty->assign("csteByTime" , $csteByTimeMin);
+    $constantes_minimal_vert  = $smarty->fetch("print_constantes_vert.tpl",'','',0);
     $constantes_minimal_vert  = preg_replace('`([\\n\\r])`', '', $constantes_minimal_vert);
     
     $template->addProperty("Patient - Constantes mode complet horizontal", $constantes_complet_horiz);

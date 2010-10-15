@@ -55,8 +55,8 @@
 	              </div>
 	              {{assign var=sejour_id value=$sejour->_id}}
 	              {{assign var=dossier_medical value=$patient->_ref_dossier_medical}}
-	              {{if array_key_exists($sejour_id, $csteByTime)}}
-	              {{assign var=csteByTime value=$csteByTime.$sejour_id}}
+	              {{if array_key_exists($sejour_id, $csteByTimeAll)}}
+	              {{assign var=csteByTime value=$csteByTimeAll.$sejour_id}}
 	              {{/if}}
 	              {{mb_include module=dPurgences template=print_dossier}}
 	            </div>

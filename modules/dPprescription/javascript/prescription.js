@@ -323,7 +323,7 @@ Prescription = {
       alert('Pas de prescription en cours');
     }
   },
-  printPrescription: function(prescription_id, print) {
+  printPrescription: function(prescription_id, print, object_id) {
     // Select de choix du praticien
     var praticien_sortie_id = "";
     
@@ -334,6 +334,8 @@ Prescription = {
     if(prescription_id){
       var url = new Url("dPprescription", "print_prescription");
       url.addParam("prescription_id", prescription_id);
+      if (!object_id)
+        url.addParam("suppressHeaders", 1);
       url.addParam("praticien_sortie_id", praticien_sortie_id);
       url.addParam("print", print);
       url.popup(800, 600, "print_prescription");

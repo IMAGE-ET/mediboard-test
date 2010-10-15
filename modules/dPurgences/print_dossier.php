@@ -44,11 +44,14 @@ foreach ($consult->_ref_actes_ccam as $_ccam) {
 }
 
 $csteByTime = array();
+$i = 0;
 foreach ($sejour->_list_constantes_medicales as $_constante_medicale) {
-	$csteByTime[$_constante_medicale->datetime] = array();
-	foreach (CConstantesMedicales::$list_constantes as $_constante => $_params) {
-		$csteByTime[$_constante_medicale->datetime][$_constante] = $_constante_medicale->$_constante;
-	}
+  $csteByTime[$i][$_constante_medicale->datetime] = array();  
+  foreach (CConstantesMedicales::$list_constantes as $_constante => $_params) {
+    if (count($csteByTime[$i][$_constante_medicale->datetime]) > 9) $i ++;
+    $csteByTime[$i][$_constante_medicale->datetime][$_constante] = $_constante_medicale->$_constante;
+  }
+  $i++;
 }
 
 // Création du template
