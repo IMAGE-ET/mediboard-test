@@ -45,6 +45,7 @@ $whereGeneral = array("mod_id" => "IS NULL");
 $matrice = array();
 foreach($listFunctions as $curr_func) {
   foreach($curr_func->_ref_users as $curr_user) {
+  	$curr_user->loadRefProfile();
     $permModule = new CPermModule();
     
     $whereGeneral["user_id"] = "= '$curr_user->user_id'";
@@ -65,21 +66,24 @@ foreach($listFunctions as $curr_func) {
     }
     foreach($listModules as $curr_mod) {
       $matrice[$curr_user->_id][$curr_mod->_id] = array(
-        "text"     => $perms[$permGeneralPermission]."/".$views[$permGeneralView]." (général)",
+        "text"     => $perms[$permGeneralPermission]."/".$views[$permGeneralView],
+        "type"     => "général",
         "permIcon" => $icons[$permGeneralPermission],
         "viewIcon" => $icons[$permGeneralView],
       );
     }
     foreach($listPermsModulesProfil as $curr_perm) {
       $matrice[$curr_user->_id][$curr_perm->mod_id] = array(
-        "text"     => $perms[$curr_perm->permission]."/".$views[$curr_perm->view]." (profil)",
+        "text"     => $perms[$curr_perm->permission]."/".$views[$curr_perm->view],
+        "type"     => "profil",
         "permIcon" => $icons[$curr_perm->permission],
         "viewIcon" => $icons[$curr_perm->view],
       );
     }
     foreach($listPermsModules as $curr_perm) {
       $matrice[$curr_user->_id][$curr_perm->mod_id] = array(
-        "text"     => $perms[$curr_perm->permission]."/".$views[$curr_perm->view]." (spécifique)",
+        "text"     => $perms[$curr_perm->permission]."/".$views[$curr_perm->view],
+        "type"     => "spécifique",
         "permIcon" => $icons[$curr_perm->permission],
         "viewIcon" => $icons[$curr_perm->view],
       );
