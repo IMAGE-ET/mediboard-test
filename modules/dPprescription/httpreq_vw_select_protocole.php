@@ -26,7 +26,7 @@ $prescription->load($prescription_id);
 
 // Valeur de recherche par defaut
 if(!$prescription->_id){
-	$prescription->type = CValue::post("type");
+	$prescription->type = CValue::post("type", "sejour");
 	$prescription->object_class = "CSejour";
 }
 

@@ -30,12 +30,11 @@ function submitSejourWithSortieReelle(callback){
 }
 
 function reloadSortieReelle() {
-	  var url = new Url;
-	  url.setModuleAction("dPurgences", "ajax_sortie_reelle");
-	  url.addParam("sejour_id", getForm('editSortieReelle').elements.sejour_id.value);
-	  url.addParam("consult_id", getForm('ValidCotation').elements.consultation_id.value);
-	  url.requestUpdate('div_sortie_reelle');
-	}
+  var url = new Url("dPurgences", "ajax_sortie_reelle");
+  url.addParam("sejour_id", getForm('editSortieReelle').elements.sejour_id.value);
+  url.addParam("consult_id", getForm('ValidCotation').elements.consultation_id.value);
+  url.requestUpdate('div_sortie_reelle');
+}
 
 function submitConsultWithChrono(chrono, callback) {
   var oForm = document.editFrmFinish;

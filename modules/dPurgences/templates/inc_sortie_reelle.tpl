@@ -8,23 +8,39 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
 *}}
 
+<script type="text/javascript">
+autoriserSortie = function(value){
+  var form = getForm('editSortieAutorise');
+  form.elements.sortie_autorisee.value = value; 
+  if (!value) {
+    var sejourForm = getForm("editSejour");
+    $V(sejourForm.elements.mode_sortie, "normal");
+  }
+  submitRPU();
+}
+</script>
+
 <form name="editSortieReelle" method="post" action="?m={{$m}}">
   <input type="hidden" name="dosql" value="do_sejour_aed" />
   <input type="hidden" name="m" value="dPplanningOp" />
   <input type="hidden" name="del" value="0" />
   <input type="hidden" name="sejour_id" value="{{$sejour->_id}}" />
   {{if $sejour->sortie_reelle && $rpu->sortie_autorisee}}
-  	{{tr}}CRPU-sortie_assuree.1{{/tr}} à {{mb_field object=$sejour field="sortie_reelle" register=true form="editSortieReelle" onchange="submitFormAjax(this.form, 'systemMsg')"}}	
-		<button class="cancel" type="button" onclick="getForm('editSortieAutorise').elements.sortie_autorisee.value=0; submitRPU();">
+  	{{tr}}CRPU-sortie_assuree.1{{/tr}} à 
+    {{mb_field object=$sejour field="sortie_reelle" register=true form="editSortieReelle" onchange="submitFormAjax(this.form, 'systemMsg')"}}	
+		<button class="cancel" type="button" onclick="autoriserSortie(0)">
 		  Annuler l'autorisation de sortie
 		</button>
   {{else}}    
 	  {{if $rpu->sortie_autorisee}}
-	    <button class="cancel" type="button" onclick="getForm('editSortieAutorise').elements.sortie_autorisee.value=0;
-          submitRPU();">Annuler l'autorisation de sortie</button>
+	    <button class="cancel" type="button" onclick="autoriserSortie(0)">
+	      Annuler l'autorisation de sortie
+      </button>
 		{{else}} 		  
-      <button class="tick" type="button" onclick="getForm('editSortieAutorise').elements.sortie_autorisee.value=1;
-          submitRPU();">{{mb_label object=$rpu field="sortie_autorisee"}}</button>
+      <button class="tick" type="button" onclick="autoriserSortie(1)">
+        {{mb_label object=$rpu field="sortie_autorisee"}}
+      </button>
+      
       {{if !$sejour->sortie_reelle}}
         <input type="hidden" name="sortie_reelle" value="{{$now}}" />
         <button class="tick" type="button" onclick="getForm('editSortieAutorise').elements.sortie_autorisee.value=1;
@@ -33,7 +49,7 @@
       {{else}}
         Sortie à 
           {{mb_field object=$sejour field="sortie_reelle" register=true form="editSortieReelle" 
-            onchange="submitFormAjax(this.form, 'systemMsg')"}}
+            onchange="submitFormAjax(this.form, 'systemMsg'); reloadSortieReelle();"}}
       {{/if}}
 		{{/if}}
   {{/if}}

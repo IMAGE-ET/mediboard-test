@@ -121,7 +121,7 @@
           {{mb_field object=$sejour field=entree_reelle hidden=true}}
           
           {{mb_field object=$sejour field=sortie_reelle
-             onchange="onSubmitFormAjax(this.form,{onComplete:refreshSortie.curry(this,'$rpu_id')})"}}
+             onchange="if(!\$V(this)){\$V(this.form.elements.mode_sortie,'normal')} onSubmitFormAjax(this.form,{onComplete:refreshSortie.curry(this,'$rpu_id')})"}}
           <button class="edit notext" type="button" onclick="Calendar.regField(this.form.sortie_reelle); $(this).remove()">
             Modifier la sortie réelle
           </button>
