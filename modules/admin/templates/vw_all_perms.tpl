@@ -35,6 +35,7 @@ div.bullet.empty {
   <tr>
     <th class="text" style="background-color: #{{$curr_func->color}}; color: #000;">{{$curr_func}}</th>
     <th style="background-color: #{{$curr_func->color}}; color: #000;">Profil</th>
+    <th class="text" style="background-color: #{{$curr_func->color}}; color: #000;">Accès distant</th>
     
     {{foreach from=$listModules item=curr_mod}}
     <th class="text">{{tr}}module-{{$curr_mod->mod_name}}-court{{/tr}}</th>
@@ -45,6 +46,7 @@ div.bullet.empty {
   <tr>
     <td>{{$curr_user->_view}}</td>
     <td>{{$curr_user->_ref_profile->_view}}</td>
+    <td>{{if $curr_user->remote}}Non{{else}}Oui{{/if}}</td>
     {{if $curr_user->actif}}
     {{foreach from=$listModules item=curr_mod}}
     {{assign var=mod_id value=$curr_mod->_id}}
