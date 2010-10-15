@@ -52,7 +52,7 @@ Main.add( function(){
       },
       callback: 
         function(input, queryString){
-          return (queryString + "&prescription_id={{$prescription_id}}&praticien_id={{$app->user_id}}&perop=true"); 
+          return (queryString + "&prescription_id={{$prescription_id}}&praticien_id={{$app->user_id}}&perop=true&type=sejour"); 
         }
     } );  
   }
