@@ -14,6 +14,10 @@ class CContentHTML extends CMbObject {
   // DB Fields
   var $content = null;
 
+  // Form fields
+  var $_list_classes = null;
+  
+  
   function getSpec() {
     $spec = parent::getSpec();
     $spec->table = 'content_html';
@@ -23,6 +27,7 @@ class CContentHTML extends CMbObject {
   
   function getProps() { 
     $specs = parent::getProps();
+    $specs["_list_classes"]    = "enum list|CBloodSalvage|CConsultAnesth|CConsultation|CDossierMedical|CFunctions|CGroups|CMediusers|COperation|CPatient|CPrescription|CSejour";
     $specs["content"] = "html helped|_list_classes";
     return $specs;
   }

@@ -115,7 +115,7 @@ class CCompteRendu extends CDocumentItem {
     $specs["_owner"]           = "enum list|prat|func|etab";
     $specs["_orientation"]     = "enum list|portrait|landscape";
     $specs["_page_format"]     = "enum list|".implode("|", array_keys(self::$_page_formats));
-    $specs["_source"]          = "html";
+    $specs["_source"]          = "html helped|_list_classes";
     return $specs;
   }
   
