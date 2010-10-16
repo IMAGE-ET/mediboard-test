@@ -157,7 +157,7 @@ class CHtmlToPDF {
 
          // On force le display: block pour les éléments en display:inline et qui imbriquent des élements
          // en display: block.
-         $node->setAttribute("style", "display: block");
+         $node->setAttribute("style", "display: block;");
 
      /* if($node->nodeName == "span") {
         foreach ( $node->attributes as $attr => $attr_node ) {
