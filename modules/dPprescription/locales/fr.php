@@ -1507,6 +1507,7 @@ $locales['config-dPprescription-CPrisePosologie-show_poso_bcb-desc'] = 'Affichag
 $locales['config-object_handlers-CPrescriptionLineHandler'] = 'Modification automatique des lignes';
 $locales['mod-dPprescription-tab-configure'] = 'Configurer';
 $locales['mod-dPprescription-tab-httpreq_vw_dossier_medical_patient'] = 'Dossier médical du patient';
+$locales['mod-dPprescription-tab-httpreq_vw_prescription'] = 'Création de prescription';
 $locales['mod-dPprescription-tab-vw_edit_associations_moments'] = 'Moments';
 $locales['mod-dPprescription-tab-vw_edit_catalogue'] = 'Catalogues';
 $locales['mod-dPprescription-tab-vw_edit_categories_group'] = 'Groupes de catégories';

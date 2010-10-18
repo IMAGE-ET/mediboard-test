@@ -170,7 +170,7 @@ class CPrescription extends CMbObject {
   function updateChapterView(){
     // Initialisation du tableau par chapitre
     foreach($this->_specs["_chapitres"]->_list as $_chapitre){
-      $this->_chapter_view[$_chapitre] = "";
+      $this->_chapter_view[$_chapitre] = array();
     }
     unset($this->_chapter_view["inj"]);
     
@@ -179,11 +179,12 @@ class CPrescription extends CMbObject {
     if($this->_ref_lines_med_comments){
       foreach($this->_ref_lines_med_comments as $lines){
         foreach($lines as $_line){
-          if($_line instanceOf CPrescriptionLineMedicament){
+          if ($_line instanceOf CPrescriptionLineMedicament){
             $_line->updateLongView();
-            $this->_chapter_view["med"] .= "$_line->_long_view<br />";
-          } else {
-            $this->_chapter_view["med"] .= "$_line->_view<br />";
+            $this->_chapter_view["med"][] = $_line->_long_view;
+          } 
+					else {
+            $this->_chapter_view["med"][] = $_line->_view;
           }
         }
       }
@@ -194,12 +195,12 @@ class CPrescription extends CMbObject {
     if($this->_ref_lines_elements_comments){
       foreach($this->_ref_lines_elements_comments as $chapitre => $_lines_by_cat){
         foreach($_lines_by_cat as $_lines){
-          foreach($_lines["element"] as $_line_element){
+          foreach ($_lines["element"] as $_line_element){
             $_line_element->updateLongView();
-            $this->_chapter_view[$chapitre] .= "$_line_element->_long_view<br />";
+            $this->_chapter_view[$chapitre][] = $_line_element->_long_view;
           }
           foreach($_lines["comment"] as $_line_comment){
-            $this->_chapter_view[$chapitre] .= "$_line_comment->_view<br />";
+            $this->_chapter_view[$chapitre][] = $_line_comment->_view;
           }
         }
       }
@@ -207,17 +208,13 @@ class CPrescription extends CMbObject {
     
     // Chargement des prescription_line_mixes
     $this->loadRefsPrescriptionLineMixes();
-    if(count($this->_ref_prescription_line_mixes)){
-      foreach($this->_ref_prescription_line_mixes as $_perf){
-        $this->_chapter_view["perf"] = "$_perf->_view: ";
-        $_perf->loadRefsLines();
-        foreach($_perf->_ref_lines as $_perf_line){
-          $this->_chapter_view["perf"] .= "$_perf_line->_view, ";
-        }
-        $this->_chapter_view["perf"] .= "<br />";
-      }
+    foreach($this->_ref_prescription_line_mixes as $_mix) {
+    	$perf_view = "$_mix->_view : ";
+      $_mix->loadRefsLines();
+			$perf_view.= implode(", ", CMbArray::pluck($_mix->_ref_lines, "_view"));
+      $this->_chapter_view[$_mix->type_line][] = $perf_view;
     }
-  }
+	}
   
   function check() {    
     if ($msg = parent::check()) {
@@ -1781,8 +1778,10 @@ class CPrescription extends CMbObject {
   // fillTemplate utilisé pour la consultation et le sejour (affichage des chapitres de la prescription)
   function fillLimitedTemplate(&$template) {
     $this->updateChapterView();
-    foreach($this->_chapter_view as $_chapitre => $view_chapitre){
-      $template->addProperty("Prescription ".CAppUI::tr("CPrescription.type.$this->type")." - ".CAppUI::tr("CPrescription._chapitres.$_chapitre"), $view_chapitre);
+    foreach($this->_chapter_view as $_chapitre => $list_chapitre){
+    	$loc_type = CAppUI::tr("CPrescription.type.$this->type");
+			$loc_chapitre = CAppUI::tr("CPrescription._chapitres.$_chapitre");
+      $template->addListProperty("Prescription $loc_type - $loc_chapitre", $list_chapitre);
     }
   }
   

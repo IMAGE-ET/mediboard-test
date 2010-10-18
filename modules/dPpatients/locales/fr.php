@@ -349,6 +349,7 @@ $locales['CMedecin-tel-court'] = 'Téléphone';
 $locales['CMedecin-tel-desc'] = 'Téléphone du correspondant';
 $locales['CMedecin-type'] = 'Type';
 $locales['CMedecin-type-court'] = 'Type';
+$locales['CMedecin-type-desc'] = 'Type de correspondant médical';
 $locales['CMedecin-ville'] = 'Ville';
 $locales['CMedecin-ville-court'] = 'Ville';
 $locales['CMedecin-ville-desc'] = 'Ville du cabinet du correspondant';
