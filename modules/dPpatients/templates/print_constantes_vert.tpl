@@ -1,7 +1,7 @@
 {{unique_id var=uniq_ditto}}
 {{assign var="one_date" value="1"}}
 
-<table class="tbl" style="width: 40%; font-size: small;">
+<table class="tbl" style="width: 40%;">
   <tbody>
     {{foreach from=$csteByTime item=_cstes_dates}}
       <tr>
