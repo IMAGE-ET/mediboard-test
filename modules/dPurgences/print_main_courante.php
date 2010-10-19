@@ -52,6 +52,7 @@ $stats = array (
 );
 
 $csteByTime = array();
+$csteByTimeAll = array();
 
 // Détail du chargement
 foreach ($sejours as &$_sejour) {
