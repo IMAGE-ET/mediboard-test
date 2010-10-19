@@ -16,7 +16,7 @@ else {
 }
 
 // L'utilisateur est-il chirurgien ?
-$mediuser = CAppUI::$instance->_ref_user;
+$mediuser     = CAppUI::$instance->_ref_user;
 $chir_id      = CValue::getOrSession("chir_id", $mediuser->isPraticien() ? $mediuser->user_id : null);
 
 $protocole_id = CValue::getOrSession("protocole_id");
@@ -28,11 +28,10 @@ $page         = CValue::get("page", array(
 ));
 
 // Praticiens, protocoles disponibles
-$listPrat   = $mediuser->loadPraticiens(PERM_READ);
+$listPrat   = $mediuser->loadPraticiens(PERM_EDIT);
 $listCodes  = array();
 foreach($listPrat as $_prat) {
   $_prat->loadProtocoles();
-
   foreach ($_prat->_ref_protocoles as $_protocole) {
     if (!$chir_id || ($_prat->user_id == $chir_id))
     foreach ($_protocole->_codes_ccam as $code) {

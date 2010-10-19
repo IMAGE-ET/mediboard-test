@@ -27,12 +27,12 @@ $code_ccam    = CValue::getOrSession("code_ccam");
 $type         = CValue::getOrSession("type", "interv"); 
 $page         = CValue::get("page");
 
+$listPrat   = $mediuser->loadPraticiens(PERM_EDIT);
+
 $protocole = new CProtocole;
 $where = array();
 
-if ($chir_id) {
-	$where["chir_id"] = "= '$chir_id'";
-}
+$where["chir_id"] = CSQLDataSource::prepareIn(array_keys($listPrat), $chir_id);
 
 if ($code_ccam) {
 	$where["codes_ccam"] = " LIKE '%$code_ccam%'";
