@@ -83,11 +83,11 @@ if (!window.File.applet) {
       var nb_files = 0;
 
       result.files.each(function(res, index) {
-          var truncate = Preferences.directory_to_watch.length + 1;
+          var truncate = File.applet.directory.length + 1;
 
-          // Si le répertoire à surveiller n'a que 2 caractères, il faut prendre en compte le slash
+          // Si le répertoire à surveiller n'a que 3 caractères, il faut prendre en compte le slash
           // exemple : C:\
-          if (Preferences.directory_to_watch.length == 3)
+          if (File.applet.directory.length == 3)
             truncate --; 
 
           var base_name = res.path.slice(truncate);
@@ -241,6 +241,14 @@ if (!window.File.applet) {
     else {
       File.applet.uploader = document.applets.yopletuploader;
       File.applet.directory = File.appletDirectory;
+      if ((File.applet.directory.length == 2) && (File.applet.directory.charAt(0) != '/')) {
+        File.applet.directory += '\\';
+      }
+      else if ((File.applet.directory.length > 3) &&
+			         ((File.applet.directory.charAt(File.applet.directory.length - 1) == '\\') ||
+               (File.applet.directory.charAt(File.applet.directory.length - 1) == '/'))) {
+        File.applet.directory = File.applet.directory.substr(0, File.applet.directory.length - 1);
+      }
       watching();
     }
   } 
