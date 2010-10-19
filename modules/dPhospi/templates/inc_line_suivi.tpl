@@ -149,7 +149,7 @@
      {{mb_ditto name=date value=$_suivi->datetime|date_format:$dPconfig.date}}
   </td>
   <td>{{$_suivi->datetime|date_format:$dPconfig.time}}</td>
-  <td colspan="2">
+  <td colspan="2" class="text">
     {{foreach from=$params key=_key item=_field name="const"}}
       {{if $_suivi->$_key != null && $_key|substr:0:1 != "_"}}
         {{$_key}}: {{$_suivi->$_key}} ({{$_field.unit}}), &nbsp;

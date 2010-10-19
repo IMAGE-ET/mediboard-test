@@ -24,7 +24,8 @@ $rpu->loadComplete();
 $sejour = $rpu->_ref_sejour;
 $sejour->loadRefsConsultations();
 $sejour->loadListConstantesMedicales();
-
+$sejour->loadSuiviMedical();
+$sejour->loadRefConstantes();
 $patient = $rpu->_ref_sejour->_ref_patient;
 $patient->loadIPP();
 $patient->loadRefDossierMedical();
@@ -64,7 +65,7 @@ $smarty->assign("dossier_medical", $dossier_medical);
 $smarty->assign("consult", $consult);
 $smarty->assign("csteByTime", $csteByTime);
 $smarty->assign("today", $today  );
-
+$smarty->assign("params"              , CConstantesMedicales::$list_constantes);
 $smarty->display("print_dossier.tpl");
 
 ?>
