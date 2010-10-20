@@ -13,7 +13,7 @@ function viewCompleteItem(object_guid) {
   } );
 }
 
-function viewDossierSejour(sejour_id){
+function loadSejour(sejour_id){
   var url = new Url("dPpatients","httpreq_vw_dossier_sejour");
   url.addParam("sejour_id",sejour_id);
   url.requestUpdate("listView", {
@@ -73,8 +73,7 @@ Main.add(function () {
   {{/if}}
   
   {{if $sejour_id}}
-  //viewCompleteItem('CSejour-{{$sejour_id}}');
-  viewDossierSejour('{{$sejour_id}}');
+  loadSejour('{{$sejour_id}}');
   {{/if}}
   
   initNotes();

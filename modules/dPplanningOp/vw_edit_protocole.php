@@ -12,17 +12,12 @@ global $AppUI, $can, $m, $tab;
 $can->needsEdit();
 
 $protocole_id = CValue::getOrSession("protocole_id", 0);
-$chir_id      = CValue::getOrSession("chir_id"     , 0);
-
-// L'utilisateur est-il un praticien
-$mediuser = new CMediusers;
-$mediuser->load($AppUI->user_id);
-if ($mediuser->isPraticien() and !$chir_id) {
-  $chir_id = $mediuser->user_id;
-}
+$mediuser     = CAppUI::$instance->_ref_user;
+$is_praticien = $mediuser->isPraticien();
+$chir_id      = CValue::getOrSession("chir_id", $is_praticien ? $mediuser->user_id : null);
 
 // Chargement du praticien
-$chir = new CMediusers;
+$chir = new CMediusers();
 if ($chir_id) {
   $chir->load($chir_id);
 }
@@ -64,9 +59,10 @@ $listServices = $service->loadListWithPerms(PERM_READ,$where, $order);
 // Création du template
 $smarty = new CSmartyDP();
 
-$smarty->assign("mediuser", $mediuser);
-$smarty->assign("protocole", $protocole);
-$smarty->assign("chir"     , $chir);
+$smarty->assign("mediuser"    , $mediuser);
+$smarty->assign("is_praticien", $is_praticien);
+$smarty->assign("protocole"   , $protocole);
+$smarty->assign("chir"        , $chir);
 
 $smarty->assign("listPraticiens", $listPraticiens);
 $smarty->assign("listServices"  , $listServices);

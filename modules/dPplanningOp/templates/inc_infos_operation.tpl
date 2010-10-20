@@ -8,6 +8,10 @@ printFicheAnesth = function(consultation_id, operation_id) {
   url.popup(700, 500, "printFicheAnesth");
 }
 
+chooseAnesthCallback = function() {
+  loadSejour({{$sejour->_id}}); 
+}
+
 printFicheBloc = function(operation_id) {
   var url = new Url("dPsalleOp", "print_feuille_bloc"); 
   url.addParam("operation_id", operation_id);
@@ -20,7 +24,9 @@ printFicheBloc = function(operation_id) {
 	  <tr>
 	    <th class="title" colspan="4">
 	      {{if $sejour->_ref_consult_anesth->_id && !$sejour->_ref_consult_anesth->operation_id}}
-	        <button style="float: right" class="print" type="button" onclick="printFicheAnesth('{{$sejour->_ref_consult_anesth->_ref_consultation->_id}}');">Fiche d'anesthésie</button>
+	        <button style="float: right" class="print" type="button" onclick="printFicheAnesth('{{$sejour->_ref_consult_anesth->_ref_consultation->_id}}');">
+            Fiche d'anesthésie
+          </button>
 	      {{/if}}
 	      {{tr}}CSejour-back-operations{{/tr}}
 	    </th>

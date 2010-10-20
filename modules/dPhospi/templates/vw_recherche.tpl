@@ -76,19 +76,14 @@ Main.add(function () {
       {{if $selPrat}}
         Dr {{$listPrat.$selPrat->_view}} -
       {{/if}}
-      {{$date_recherche|date_format:$dPconfig.datetime}} : {{$listAff|@count}} patient(s)
+      {{$date_recherche|date_format:$dPconfig.datetime}} : {{$listAff.Aff|@count}} patient(s) placé(s)
+      {{if $listAff.NotAff|@count}}- {{$listAff.NotAff|@count}} patient(s) non placé(s){{/if}}
     </th>
   </tr>
   <tr>
     <th>{{mb_label class=CSejour field=patient_id}}</th>
     <th>{{mb_label class=CSejour field=praticien_id}}</th>
     <th>{{mb_title class=CAffectation field=lit_id}}</th>
-		<!--
-    <th colspan="2">
-  	 {{tr}}CSejour{{/tr}} /
-     {{mb_title class=CSejour field=_duree_prevue}}
-		</th>
-		-->
     <th colspan="2">
      {{tr}}CAffectation{{/tr}} /
      {{mb_title class=CAffectation field=_duree}}
@@ -96,63 +91,69 @@ Main.add(function () {
 		<th>Motif</th>
     <th>Bornes<br/>GHM</th>
   </tr>
-  {{foreach from=$listAff item=curr_aff}}
-  {{assign var=sejour value=$curr_aff->_ref_sejour}}
-  {{assign var=patient value=$sejour->_ref_patient}}
-  {{assign var=praticien value=$sejour->_ref_praticien}}
-  {{assign var=GHM value=$sejour->_ref_GHM}}
+  {{foreach from=$listAff key=_type_aff item=_liste_aff}}
+  {{foreach from=$_liste_aff item=_affectation}}
+  {{if $_type_aff == "Aff"}}
+  {{assign var=_sejour value=$_affectation->_ref_sejour}}
+  {{else}}
+  {{assign var=_sejour value=$_affectation}}
+  {{/if}}
+  {{assign var=_patient   value=$_sejour->_ref_patient}}
+  {{assign var=_praticien value=$_sejour->_ref_praticien}}
+  {{assign var=_GHM       value=$_sejour->_ref_GHM}}
   <tr>
     <td class="text">
       {{if $canPlanningOp->read && !$dialog}}
-      <a class="action" style="float: right"  title="Modifier le dossier administratif" href="?m=dPpatients&amp;tab=vw_edit_patients&amp;patient_id={{$patient->_id}}">
+      <a class="action" style="float: right"  title="Modifier le dossier administratif" href="?m=dPpatients&amp;tab=vw_edit_patients&amp;patient_id={{$_patient->_id}}">
         <img src="images/icons/edit.png" alt="modifier" />
       </a>
-      <a class="action" style="float: right"  title="Modifier le séjour" href="?m=dPplanningOp&amp;tab=vw_edit_sejour&amp;sejour_id={{$sejour->_id}}">
+      <a class="action" style="float: right"  title="Modifier le séjour" href="?m=dPplanningOp&amp;tab=vw_edit_sejour&amp;sejour_id={{$_sejour->_id}}">
         <img src="images/icons/planning.png" alt="modifier" />
       </a>
       {{/if}}
-			<span onmouseover="ObjectTooltip.createEx(this, '{{$patient->_guid}}')">
-        {{$patient}}
+			<span onmouseover="ObjectTooltip.createEx(this, '{{$_patient->_guid}}')">
+        {{$_patient}}
 			</span>
     </td>
     <td class="text">
-    	{{mb_include module=mediusers template=inc_vw_mediuser mediuser=$praticien}}
+    	{{mb_include module=mediusers template=inc_vw_mediuser mediuser=$_praticien}}
     </td>
-    <td class="text">{{$curr_aff->_view}}</td>
-		<!--
+    {{if $_type_aff == "Aff"}}
+    <td class="text">{{$_affectation->_view}}</td>
     <td class="text">
-    	<span onmouseover="ObjectTooltip.createEx(this, '{{$sejour->_guid}}')">
-        {{mb_include module=system template=inc_interval_datetime from=$sejour->entree_prevue to=$sejour->sortie_prevue}}
+      <span onmouseover="ObjectTooltip.createEx(this, '{{$_affectation->_guid}}')">
+        {{mb_include module=system template=inc_interval_datetime from=$_affectation->entree to=$_affectation->sortie}}
       </span>
     </td>
-    <td>{{$sejour->_duree_prevue}}</td>
-		-->
+    {{else}}
+    <td class="text">Non placé</td>
     <td class="text">
-      <span onmouseover="ObjectTooltip.createEx(this, '{{$curr_aff->_guid}}')">
-        {{mb_include module=system template=inc_interval_datetime from=$curr_aff->entree to=$curr_aff->sortie}}
+      <span onmouseover="ObjectTooltip.createEx(this, '{{$_sejour->_guid}}')">
+        {{mb_include module=system template=inc_interval_datetime from=$_sejour->entree to=$_sejour->sortie}}
       </span>
     </td>
-    <td>{{$curr_aff->_duree}}</td>
+    {{/if}}
+    <td>{{$_affectation->_duree}}</td>
 		
 		<td class="text">
-      {{if $sejour->libelle}}
-        {{$sejour->libelle}}
+      {{if $_sejour->libelle}}
+        {{$_sejour->libelle}}
       {{else}}
-        {{foreach from=$sejour->_ref_operations item=_operation}}
+        {{foreach from=$_sejour->_ref_operations item=_operation}}
           {{mb_include module=dPplanningOp template=inc_vw_operation operation=$_operation}}
         {{/foreach}}
       {{/if}}
     </td>
 		
     <td style="text-align: center;">
-      {{if $GHM->_DP}}
-        De {{$GHM->_borne_basse}}
-        à {{$GHM->_borne_haute}} nuits
+      {{if $_GHM->_DP}}
+        De {{$_GHM->_borne_basse}}
+        à {{$_GHM->_borne_haute}} nuits
         <br />
-        {{if $GHM->_borne_basse > $GHM->_duree}}
+        {{if $_GHM->_borne_basse > $_GHM->_duree}}
         <div class="warning">Séjour trop court</div>
         <img src="images/icons/cross.png" alt="alerte" />
-        {{elseif $GHM->_borne_haute < $GHM->_duree}}
+        {{elseif $_GHM->_borne_haute < $_GHM->_duree}}
         <div class="warning">Séjour trop long</div>
         {{else}}
         <div class="message">Dans les bornes</div>
@@ -162,6 +163,7 @@ Main.add(function () {
       {{/if}}
     </td>
   </tr>
+  {{/foreach}}
   {{/foreach}}
   {{/if}}
 </table>

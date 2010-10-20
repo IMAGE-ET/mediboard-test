@@ -52,7 +52,7 @@ if(!$consultation_id) {
     }
   }
   
-  $onSubmit = "return onSubmitFormAjax(this, { onComplete : function() {window.opener.loadSejour.defer(".$selOp->_ref_sejour->_id."); window.close();} })";
+  $onSubmit = "return onSubmitFormAjax(this, { onComplete : function() {window.opener.chooseAnesthCallback.defer(); window.close();} })";
 
   $smarty = new CSmartyDP("modules/dPcabinet");
   

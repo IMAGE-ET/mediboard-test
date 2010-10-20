@@ -17,7 +17,8 @@ else {
 
 // L'utilisateur est-il chirurgien ?
 $mediuser     = CAppUI::$instance->_ref_user;
-$chir_id      = CValue::getOrSession("chir_id", $mediuser->isPraticien() ? $mediuser->user_id : null);
+$is_praticien = $mediuser->isPraticien();
+$chir_id      = CValue::getOrSession("chir_id", $is_praticien ? $mediuser->user_id : null);
 
 $protocole_id = CValue::getOrSession("protocole_id");
 $code_ccam    = CValue::getOrSession("code_ccam");
@@ -49,13 +50,14 @@ if ($protocole->load($protocole_id)) {
 // Création du template
 $smarty = new CSmartyDP();
 
-$smarty->assign("page"      , $page);
-$smarty->assign("listCodes" , $listCodes );
-$smarty->assign("listPrat"  , $listPrat  );
-$smarty->assign("protocole" , $protocole );
-$smarty->assign("chir_id"   , $chir_id   );
-$smarty->assign("code_ccam" , $code_ccam );
-$smarty->assign("mediuser"  , $mediuser  );
+$smarty->assign("page"        , $page);
+$smarty->assign("listCodes"   , $listCodes );
+$smarty->assign("listPrat"    , $listPrat  );
+$smarty->assign("protocole"   , $protocole );
+$smarty->assign("chir_id"     , $chir_id   );
+$smarty->assign("code_ccam"   , $code_ccam );
+$smarty->assign("mediuser"    , $mediuser  );
+$smarty->assign("is_praticien", $is_praticien);
 
 $smarty->display("vw_protocoles.tpl");
 

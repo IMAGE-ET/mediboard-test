@@ -1,21 +1,14 @@
 <!-- $Id$ -->
 
 <script type="text/javascript">
-function checkCopieProtocole(chir_id){
-  // Formulaire de selection du chir
-  var oFormChir = document.selectFrm;
-  oFormChir.chir_id.value = chir_id;
-
-  // Non présent dans le select !
-  if (oFormChir.chir_id.value != chir_id) {
-    alert($T('CProtocole-msg-failed-noprat'));
-    return;
-  } 
+function checkCopieProtocole(){
 
   // Champs à modifier avant duplication
   var oForm = document.copieProtocole;
   oForm.protocole_id.value = "";
-  oForm.chir_id.value = chir_id;
+  {{if $is_praticien}}
+  oForm.chir_id.value = '{{$mediuser->_id}}';
+  {{/if}}
   oForm.libelle.value = "Copie de "+(oForm.libelle.value ? oForm.libelle.value : oForm.codes_ccam.value);
   oForm.submit();
 }
@@ -135,7 +128,7 @@ function checkCopieProtocole(chir_id){
  <tr>
    <td class="button" colspan="2">
    <!-- Formulaire permettant de dupliquer le protocole -->
-   <form name="copieProtocole" action="?m={{$m}}" method="post" onsubmit="return checkCopieProtocole('{{$mediuser->_id}}')">
+   <form name="copieProtocole" action="?m={{$m}}" method="post" onsubmit="return checkCopieProtocole()">
      <input type="hidden" name="dosql" value="do_protocole_aed" />
      <input type="hidden" name="del" value="0" />
 		 {{foreach from=$protocole->_props key=propName item=_prop}}

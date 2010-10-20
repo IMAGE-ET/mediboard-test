@@ -8,6 +8,22 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
 *}}
 
+<script type="text/javascript">
+
+  printFicheAnesth = function(consultation_id, operation_id) {
+    var url = new Url("dPcabinet", "print_fiche"); 
+    url.addParam("consultation_id", consultation_id);
+    url.addParam("operation_id", operation_id);
+    url.popup(700, 500, "printFicheAnesth");
+  }
+
+
+  chooseAnesthCallback = function() {
+	  location.reload(); 
+  }
+
+</script>
+
 <table class="main">
   <tr>
     <th colspan="2">
@@ -305,11 +321,14 @@
             {{/if}}
             Côté : {{tr}}COperation.cote.{{$curr_op->cote}}{{/tr}}
             <br />
+            <button style="float: right;" class="{{if $curr_op->_ref_consult_anesth->_ref_consultation->_id}}print{{else}}warning{{/if}}" style="width:11em;" type="button" onclick="printFicheAnesth('{{$curr_op->_ref_consult_anesth->_ref_consultation->_id}}', '{{$curr_op->_id}}');">
+              Fiche d'anesthésie
+            </button>
             <form name="editFrmAnesth{{$curr_op->operation_id}}" action="?m={{$m}}" method="post">
               <input type="hidden" name="m" value="dPplanningOp" />
               <input type="hidden" name="dosql" value="do_planning_aed" />
               <input type="hidden" name="operation_id" value="{{$curr_op->operation_id}}" />
-              <select name="type_anesth" onchange="this.form.submit()">
+              <select name="type_anesth" onchange="this.form.submit()" style="width: 10em; float: left;">
                 <option value="">&mdash; Anesthésie &mdash;</option>
                 {{foreach from=$anesth item=curr_anesth}}
                 <option value="{{$curr_anesth->type_anesth_id}}" {{if $curr_op->type_anesth == $curr_anesth->type_anesth_id}} selected="selected" {{/if}} >
@@ -403,13 +422,16 @@
             {{if $curr_op->rques}}
               Remarques: {{$curr_op->rques|nl2br}}<br />
             {{/if}}
-            Côté : {{tr}}COperation.cote.{{$curr_op->cote}}{{/tr}}<br />
-
+            Côté : {{tr}}COperation.cote.{{$curr_op->cote}}{{/tr}}
+            <br />
+            <button style="float: right;" class="{{if $curr_op->_ref_consult_anesth->_ref_consultation->_id}}print{{else}}warning{{/if}}" style="width:11em;" type="button" onclick="printFicheAnesth('{{$curr_op->_ref_consult_anesth->_ref_consultation->_id}}', '{{$curr_op->_id}}');">
+              Fiche d'anesthésie
+            </button>
             <form name="editFrmAnesth{{$curr_op->operation_id}}" action="?m={{$m}}" method="post">
               <input type="hidden" name="m" value="dPplanningOp" />
               <input type="hidden" name="dosql" value="do_planning_aed" />
               <input type="hidden" name="operation_id" value="{{$curr_op->operation_id}}" />
-              <select name="type_anesth" onchange="this.form.submit()">
+              <select name="type_anesth" onchange="this.form.submit();" style="width: 10em; float: left;">
                 <option value="">&mdash; Anesthésie &mdash;</option>
                 {{foreach from=$anesth item=curr_anesth}}
                 <option value="{{$curr_anesth->type_anesth_id}}" {{if $curr_op->type_anesth == $curr_anesth->type_anesth_id}} selected="selected" {{/if}} >

@@ -30,12 +30,6 @@ $where["group_id"] = "= '$g'";
 $order = "nom";
 $services = $services->loadListWithPerms(PERM_READ,$where, $order);
 
-// Where permettant de trier suivant les services
-$whereService = "AND service.service_id  " .CSQLDataSource::prepareIn(array_keys($services));
-if($selService){
-  $whereService = "AND service.service_id  = '$selService'";
-}
-
 $listAff = null;
 $libre = null;
 
@@ -68,7 +62,7 @@ if($typeVue == 0) {
 					WHERE lit.lit_id NOT IN($notIn)
 					AND chambre.annule = '0'
 			    AND service.group_id = '$g'
-			    $whereService
+			    AND service.service_id ".CSQLDataSource::prepareIn(array_keys($services), $selService)."
 					GROUP BY lit.lit_id
 					ORDER BY service.nom, chambre.nom, lit.nom, limite DESC";
 	$libre = $ds->loadlist($sql);
@@ -79,39 +73,55 @@ if($typeVue == 0) {
 //
 else if ($typeVue == 1) {
   // Recherche des patients du praticien
-  $date_recherche;
-  
-  if($selPrat) {
-    $wherePrat = "AND sejour.praticien_id = '$selPrat'";
-  } else {
-    $wherePrat = "AND sejour.praticien_id  " .CSQLDataSource::prepareIn(array_keys($listPrat));
+  // Qui ont une affectation
+  $listAff = array(
+   "Aff"    => array(),
+   "NotAff" => array()
+  );
+  $affectation = new CAffectation;
+  $ljoin = array(
+    "lit"     => "affectation.lit_id = lit.lit_id",
+    "chambre" => "chambre.chambre_id = lit.chambre_id",
+    "service" => "service.service_id = chambre.service_id",
+    "sejour"  => "sejour.sejour_id   = affectation.sejour_id"
+  );
+  $where = array(
+    "affectation.entree"  => "< '$date_recherche'",
+    "affectation.sortie"  => "> '$date_recherche'",
+    "service.service_id"  => CSQLDataSource::prepareIn(array_keys($services), $selService),
+    "sejour.praticien_id" => CSQLDataSource::prepareIn(array_keys($listPrat), $selPrat),
+    "sejour.group_id"     => "= '$g'"
+  );
+  $order = "service.nom, chambre.nom, lit.nom";
+  $listAff["Aff"] = $affectation->loadList($where, $order, null, null, $ljoin);
+  foreach($listAff["Aff"] as &$_aff) {
+    $_aff->loadRefSejour();
+    $_aff->_ref_sejour->loadRefPatient();
+    $_aff->_ref_sejour->_ref_praticien =& $listPrat[$_aff->_ref_sejour->praticien_id];
+    $_aff->_ref_sejour->loadRefGHM();
+
+    $_aff->loadRefLit();
+    $_aff->_ref_lit->loadCompleteView();
+    foreach($_aff->_ref_sejour->_ref_operations as $_operation){
+      $_operation->loadExtCodesCCAM();
+    }
   }
-
-  $sql = "SELECT affectation.*
-					FROM affectation
-					LEFT JOIN lit ON affectation.lit_id = lit.lit_id
-					LEFT JOIN chambre ON chambre.chambre_id = lit.chambre_id
-					LEFT JOIN service ON service.service_id = chambre.service_id
-					LEFT JOIN sejour ON sejour.sejour_id = affectation.sejour_id
-					WHERE affectation.entree < '$date_recherche'
-					AND affectation.sortie > '$date_recherche'
-					$whereService
-			    $wherePrat
-			    AND sejour.group_id = '$g'
-					ORDER BY service.nom, chambre.nom, lit.nom";
-  $listAff = new CAffectation;
-  $listAff = $listAff->loadQueryList($sql);
-  foreach($listAff as &$aff) {
-    $aff->loadRefSejour();
-    $aff->_ref_sejour->loadRefPatient();
-    $aff->_ref_sejour->_ref_praticien =& $listPrat[$aff->_ref_sejour->praticien_id];
-    $aff->_ref_sejour->loadRefGHM();
-
-    $aff->loadRefLit();
-    $aff->_ref_lit->loadCompleteView();
-		foreach($aff->_ref_sejour->_ref_operations as $_operation){
-			$_operation->loadExtCodesCCAM();
-		}
+  // Qui n'ont pas d'affectation
+  if(!$selService) {
+    $sejour = new CSejour();
+    $where = array(
+      "sejour.entree"  => "< '$date_recherche'",
+      "sejour.sortie"  => "> '$date_recherche'",
+      "sejour.praticien_id" => CSQLDataSource::prepareIn(array_keys($listPrat), $selPrat),
+      "sejour.group_id"     => "= '$g'"
+    );
+    $order = "sejour.entree, sejour.sortie, sejour.praticien_id";
+    $listAff["NotAff"] = $sejour->loadList($where, $order);
+    foreach($listAff["NotAff"] as &$_sejour) {
+    	$_sejour->loadRefPatient();
+      $_sejour->_ref_praticien =& $listPrat[$_sejour->praticien_id];
+      $_sejour->loadRefGHM();
+    }
   }
 }
 

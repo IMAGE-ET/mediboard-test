@@ -7,13 +7,10 @@ var oCcamField = null;
 
 function copier(){
   var oForm = document.editFrm;
-  
-  oForm.chir_id.value = "{{$mediuser->user_id}}";
-  if(oForm.chir_id.value != "{{$mediuser->user_id}}") {
-    alert("Vous n\'êtes pas un praticien, vous ne pouvez pas dupliquer ce protocole");
-    return;
-  }
   oForm.protocole_id.value = "";
+  {{if $is_praticien}}
+  oForm.chir_id.value = '{{$mediuser->_id}}';
+  {{/if}}
   if(oForm.libelle.value){
     oForm.libelle.value = "Copie de "+oForm.libelle.value;
   } else {
