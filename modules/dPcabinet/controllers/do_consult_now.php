@@ -14,18 +14,29 @@ global $m;
 //$canModule = $module->canDo();
 //$canModule->needsEdit();
 
-$prat_id = CValue::post("prat_id");
-$patient_id = CValue::post("patient_id");
+$prat_id       = CValue::post("prat_id");
+$patient_id    = CValue::post("patient_id");
 $_operation_id = CValue::post("_operation_id");
+$_datetime     = CValue::post("_datetime");
+
+if (!$_datetime || $_datetime == "now") {
+  $_datetime == mbDateTime();
+}
 
 $sejour = new CSejour();
 $sejour->load(CValue::post("sejour_id"));
-	
+
 // Cas des urgences
-if ($sejour->type == "urg") {
+if ($sejour->type === "urg") {
+  if ($_datetime < $sejour->entree || $_datetime > $sejour->sortie) {
+    CAppUI::setMsg("La prise en charge doit être dans les bornes du séjour", UI_MSG_ERROR);
+    CAppUI::redirect("m=dPurgences");
+  }
+  
 	$sejour->loadRefsConsultations();
 	if ($sejour->_ref_consult_atu->_id) {
     CAppUI::setMsg("Patient déjà pris en charge par un praticien", UI_MSG_ERROR);
+    CAppUI::redirect("m=dPurgences");
   }
   
   // Changement de praticien pour le sejour
@@ -33,6 +44,7 @@ if ($sejour->type == "urg") {
     $sejour->praticien_id = $prat_id;
     if($msg = $sejour->store()) {
       CAppUI::setMsg($msg, UI_MSG_ERROR);
+      CAppUI::redirect("m=dPurgences");
     }
   }
 }
@@ -44,9 +56,13 @@ if(!$chir->_id) {
   CAppUI::setMsg("Vous devez choisir un praticien pour la consultation", UI_MSG_ERROR);
 }
 
-$day_now = strftime("%Y-%m-%d");
+/*$day_now = strftime("%Y-%m-%d");
 $time_now = strftime("%H:%M:00");
-$hour_now = strftime("%H:00:00");
+$hour_now = strftime("%H:00:00");*/
+
+$day_now  = mbTransformTime(null, $_datetime, "%Y-%m-%d");
+$time_now = mbTransformTime(null, $_datetime, "%H:%M:00");
+$hour_now = mbTransformTime(null, $_datetime, "%H:00:00");
 $hour_next = mbTime("+1 HOUR", $hour_now);
 
 $plage = new CPlageconsult();
@@ -105,7 +121,7 @@ $consult->plageconsult_id = $plage->plageconsult_id;
 $consult->sejour_id = $sejour->_id;
 $consult->patient_id = $patient_id;
 $consult->heure = $time_now;
-$consult->arrivee = $day_now." ".$time_now;
+$consult->arrivee = "$day_now $time_now";
 $consult->duree = 1;
 $consult->chrono = CConsultation::PATIENT_ARRIVE;
 $consult->accident_travail = CValue::post("accident_travail");
@@ -130,7 +146,7 @@ if($msg = $consult->store()) {
   CAppUI::setMsg($msg, UI_MSG_ERROR);
 }
 
-CAppUI::setMsg(CAppUI::tr("CConsultation-msg-create"), UI_MSG_OK);
+CAppUI::setMsg("CConsultation-msg-create", UI_MSG_OK);
 
 if ($ref_chir->isFromType(array("Anesthésiste"))) {
   // Un Anesthesiste a été choisi 

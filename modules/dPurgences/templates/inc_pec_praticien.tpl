@@ -44,14 +44,35 @@ checkPraticien = function(oForm){
 	{{if !$consult->_id}}
 		{{if !$sejour->sortie_reelle}}
 			{{if $can->edit}}
+      
+      {{main}}
+        var form = getForm("createConsult-{{$rpu->_id}}");
+        var field = form._datetime;
+        var dates = {
+          limit: {
+            start: '{{$sejour->entree|date_format:"%Y-%m-%d"}}',
+            stop: '{{$sejour->sortie|date_format:"%Y-%m-%d"}}'
+          }
+        };
+        
+        var datepicker = Calendar.regField(field, dates);
+        var view = datepicker.element;
+        view.style.width = "16px";
+        
+        datepicker.icon.observe("click", function(){
+          view.style.width = null;
+        });
+        
+      {{/main}}
+      
 			<form name="createConsult-{{$rpu->_id}}" method="post" action="?" onsubmit="return checkForm(this);" class="prepared">
 			  <input type="hidden" name="dosql" value="do_consult_now" />
 			  <input type="hidden" name="m" value="dPcabinet" />
 			  <input type="hidden" name="del" value="0" />
 			  <input type="hidden" name="sejour_id" value="{{$sejour->_id}}" />
 			  <input type="hidden" name="patient_id" value="{{$sejour->patient_id}}" />   
-			  <input type="hidden" name="accident_travail" value="{{$rpu->accident_travail}}" />
-			  <select name="prat_id" class="ref notNull" style="width: 8em;">
+        <input type="hidden" name="accident_travail" value="{{$rpu->accident_travail}}" />
+			  <select name="prat_id" class="ref notNull" style="width: 12em;">
 			    <option value="">&mdash; {{tr}}Choose{{/tr}}</option>
 			    {{foreach from=$listPrats item=_prat}}
 			    <option class="mediuser" style="border-color: #{{$_prat->_ref_function->color}};" value="{{$_prat->_id}}"
@@ -60,6 +81,7 @@ checkPraticien = function(oForm){
 			    </option>
 			    {{/foreach}}
 			  </select>
+        <input type="hidden" name="_datetime" value="" class="dateTime" />
 			  
 			  <br />
 			  <button type="submit" class="new" onclick="return checkPraticien(this.form)">Prendre en charge</button>

@@ -647,6 +647,8 @@ var Calendar = {
     
     datepicker.element.observe('change', function(){elementView.fire("ui:change")});
     element.addClassName('datepicker');
+    
+    return datepicker;
   },
   mobileHide: function (picker){
     document.observeOnce('click', function(e){
