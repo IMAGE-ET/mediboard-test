@@ -69,7 +69,7 @@ class CHtmlToPDF {
   }
 
   function generatePDF($content, $stream, $format, $orientation, $file) {
-    $this->content = $this->fixBlockElements($content);
+  	$this->content = $this->fixBlockElements($content);
     $this->dompdf->set_paper($format, $orientation);
     $this->dompdf->set_protocol(isset($_SERVER["HTTPS"]) ? $protocol = "https://" : $protocol = "http://");
     $this->dompdf->set_host($_SERVER["SERVER_NAME"]);
@@ -152,8 +152,9 @@ class CHtmlToPDF {
       return;
     }
     foreach($node->childNodes as $child) {
-      if(in_array($child->nodeName, $this->display_elem["block"]) &&
-         in_array($node->nodeName, $this->display_elem["inline"])) {
+      if ((in_array($child->nodeName, $this->display_elem["block"]) &&
+         in_array($node->nodeName, $this->display_elem["inline"])) ||
+         ($node->nodeName == "span" && $child->nodeName == "hr")) {
 
          // On force le display: block pour les éléments en display:inline et qui imbriquent des élements
          // en display: block.
