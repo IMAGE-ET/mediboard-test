@@ -16,6 +16,9 @@
       <td>
         {{$_product}}
       </td>
+      <td>
+        {{$_product->code}}
+      </td>
     </tr>
   {{/foreach}}
 </table>

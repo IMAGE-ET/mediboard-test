@@ -24,10 +24,9 @@ foreach ($element->_ref_product->_ref_references as $_ref) {
 }
 $element->_ref_product->loadRefsLots();
 
-/*foreach($element->_ref_product->_ref_lots as $_lot) {
-  $element->getUsedQuantity($_lot);
-  break;
-}*/
+foreach($element->_ref_product->_ref_lots as $_lot) {
+  $_lot->_consumed = ($_lot->getUsedQuantity() >= $_lot->quantity);
+}
 
 $generate_code = CValue::get("generate_code", false);
 if($generate_code){

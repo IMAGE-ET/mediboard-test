@@ -309,7 +309,13 @@ Main.add(function () {
   
 <table class="main tbl">
   <tr>
-    <th colspan="10" class="title">Lots</th>
+    <th colspan="10" class="title">
+      <button class="change" type="button" style="float: right;"
+              onclick="$(this).up('table').select('.consumed').invoke('toggle')">
+        Afficher les consommés
+      </button>
+      Lots
+    </th>
   </tr>
   <tr>
     <th class="narrow"></th>
@@ -349,13 +355,17 @@ Main.add(function () {
   </tr>
   
   {{foreach from=$element->_ref_product->_ref_lots item=_lot}}
-    <tr>
+    <tr {{if $_lot->_consumed}} style="display: none;" class="consumed" {{/if}}>
       <td {{if $_lot->cancelled}}class="error"{{/if}}>
-        <button type="button" class="trash notext" onclick="deleteLot({{$_lot->_id}})">{{tr}}Delete{{/tr}}</button>
-        {{if $_lot->cancelled}}
-          <button type="button" class="change notext" onclick="cancelLot({{$_lot->_id}}, 0)">{{tr}}Reset{{/tr}}</button>
+        {{if !$_lot->_consumed}}
+          <button type="button" class="trash notext" onclick="deleteLot({{$_lot->_id}})">{{tr}}Delete{{/tr}}</button>
+          {{if $_lot->cancelled}}
+            <button type="button" class="change notext" onclick="cancelLot({{$_lot->_id}}, 0)">{{tr}}Reset{{/tr}}</button>
+          {{else}}
+            <button type="button" class="cancel notext" onclick="cancelLot({{$_lot->_id}}, 1)">{{tr}}Cancel{{/tr}}</button>
+          {{/if}}
         {{else}}
-          <button type="button" class="cancel notext" onclick="cancelLot({{$_lot->_id}}, 1)">{{tr}}Cancel{{/tr}}</button>
+          Consommé
         {{/if}}
       </td>
       <td>{{mb_value object=$_lot field=quantity}}</td>
