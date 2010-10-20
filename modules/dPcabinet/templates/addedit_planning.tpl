@@ -191,7 +191,7 @@ Main.add(function () {
             <label for="chir_id" title="Praticien pour la consultation">Praticien</label>
           </th>
           <td>
-            <select name="chir_id" style="max-width: 150px" class="notNull" onChange="ClearRDV(); refreshListCategorie(this.value); $V(this.form._function_id, '');">
+            <select name="chir_id" style="max-width: 150px" class="notNull" onChange="ClearRDV(); refreshListCategorie(this.value); if (this.value != '') $V(this.form._function_id, '');">
               <option value="">&mdash; Choisir un praticien</option>
               {{foreach from=$listPraticiens item=curr_praticien}}
               <option class="mediuser" style="border-color: #{{$curr_praticien->_ref_function->color}};" value="{{$curr_praticien->user_id}}" {{if $chir->user_id == $curr_praticien->user_id}} selected="selected" {{/if}}>
@@ -321,7 +321,7 @@ Main.add(function () {
         <tr>
           <th>{{mb_label object=$consult field="plageconsult_id"}}</th>
           <td>
-            <input type="text" name="_date" value="{{$consult->_date|date_format:"%A %d/%m/%Y"}}" ondblclick="PlageConsultSelector.init()" readonly="readonly" />
+            <input type="text" name="_date" value="{{$consult->_date|date_format:"%A %d/%m/%Y"}}" ondblclick="PlageConsultSelector.init()" readonly="readonly" onchange="if (this.value != '') $V(this.form._function_id, '')"/>
             {{mb_field object=$consult field="plageconsult_id" hidden=1 ondblclick="PlageConsultSelector.init()"}}
             <script type="text/javascript">
             PlageConsultSelector.init = function(){
@@ -373,7 +373,7 @@ Main.add(function () {
         <tr>
           <th>Choix par cabinet</th>
           <td>
-            <select name="_function_id" style="max-width: 130px;">
+            <select name="_function_id" style="max-width: 130px;" onchange = "if (this.value != '') { $V(this.form.chir_id, ''); $V(this.form._date, '');}">
               <option value="">&mdash; choisir un cabinet</option>
               {{foreach from=$listFunctions item=_function}}
               <option value="{{$_function->_id}}" class="mediuser" style="border-color: #{{$_function->color}};">
