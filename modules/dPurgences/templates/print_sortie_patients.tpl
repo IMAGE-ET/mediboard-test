@@ -85,22 +85,15 @@
       {{if !$rpu->urtrau         }}<div class="warning" style="display: block;">Champ manquant {{mb_label object=$rpu field=urtrau         }}</div>{{/if}}
       {{if !$rpu->urmuta         }}<div class="warning" style="display: block;">Champ manquant {{mb_label object=$rpu field=urmuta         }}</div>{{/if}}
       {{/if}}
-            
-      {{if $sejour->sortie_reelle}}
-         {{if $rpu->destination}}
-           <strong>{{tr}}CRPU-destination{{/tr}}:</strong>
-           {{mb_value object=$rpu field="destination"}} <br />
-         {{/if}}
-         {{if $rpu->orientation}}
-           <strong>{{tr}}CRPU-orientation{{/tr}}:</strong>
-           {{mb_value object=$rpu field="orientation"}}      
-         {{/if}}
-      {{else}}
-        <strong>{{tr}}CRPU-orientation{{/tr}}:</strong>
-        {{mb_value object=$rpu field="destination"}} <br />
-        <strong>{{tr}}CRPU-destination{{/tr}}:</strong>
-        {{mb_value object=$rpu field="orientation"}}
+
+      {{if $rpu->destination}}
+         <strong>{{tr}}CRPU-destination{{/tr}}:</strong>
+         {{mb_value object=$rpu field="destination"}} <br />
       {{/if}}
+      {{if $rpu->orientation}}
+         <strong>{{tr}}CRPU-orientation{{/tr}}:</strong>
+         {{mb_value object=$rpu field="orientation"}}      
+       {{/if}}
     </td>
     
     <td>
