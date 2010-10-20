@@ -53,7 +53,13 @@ class CSetupwebservices extends CSetup {
                ADD INDEX (`type`);";
      $this->addQuery($sql);
      
-     $this->mod_version = "0.15";
+     $this->makeRevision("0.15");
+     $sql = "ALTER TABLE `echange_soap` 
+               ADD INDEX (`web_service_name`),
+               ADD INDEX (`function_name`);";
+     $this->addQuery($sql);
+     
+     $this->mod_version = "0.16";
   }
 }
 ?>
