@@ -10,6 +10,7 @@
 
 $service_id = CValue::getOrSession("service_id");
 $date = CValue::getOrSession("debut", mbDate());
+$prescription_id = CValue::get("prescription_id");
 
 $filter_line = new CPrescriptionLineMedicament();
 $filter_line->debut = $date;
@@ -30,22 +31,28 @@ $pancarte = array();
 $lits = array();
 $list_lines = array();
 
-// Chargement des prescriptions qui sont dans le service selectionné
-$prescription = new CPrescription();
 $prescriptions = array();
-$ljoin = array();
-$ljoin["sejour"]      = "prescription.object_id = sejour.sejour_id";
-$ljoin["affectation"] = "sejour.sejour_id = affectation.sejour_id";
-$ljoin["lit"]         = "lit.lit_id = affectation.lit_id";
-$ljoin["chambre"]     = "chambre.chambre_id = lit.chambre_id";
-$ljoin["service"]     = "service.service_id = chambre.service_id";
-$where = array();
-$where["prescription.object_class"] = " = 'CSejour'";
-$where["prescription.type"]         = " = 'sejour'";
-$where["service.service_id"]        = " = '$service_id'";
-$where["affectation.entree"]      = " < '$date 23:59:59'";
-$where["affectation.sortie"]      = " > '$date 00:00:00'";	
-$prescriptions = $prescription->loadList($where, null, null, null, $ljoin);
+$prescription = new CPrescription();
+
+if($prescription_id){
+	$prescription->load($prescription_id);
+	$prescriptions[$prescription->_id] = $prescription;
+} else {
+  // Chargement des prescriptions qui sont dans le service selectionné
+	$ljoin = array();
+	$ljoin["sejour"]      = "prescription.object_id = sejour.sejour_id";
+	$ljoin["affectation"] = "sejour.sejour_id = affectation.sejour_id";
+	$ljoin["lit"]         = "lit.lit_id = affectation.lit_id";
+	$ljoin["chambre"]     = "chambre.chambre_id = lit.chambre_id";
+	$ljoin["service"]     = "service.service_id = chambre.service_id";
+	$where = array();
+	$where["prescription.object_class"] = " = 'CSejour'";
+	$where["prescription.type"]         = " = 'sejour'";
+	$where["service.service_id"]        = " = '$service_id'";
+	$where["affectation.entree"]      = " < '$date 23:59:59'";
+	$where["affectation.sortie"]      = " > '$date 00:00:00'";	
+	$prescriptions = $prescription->loadList($where, null, null, null, $ljoin);
+}
 
 // Chargement des configs de services
 if(!$service_id){
@@ -300,8 +307,8 @@ foreach($prescriptions as $_prescription){
 // Classement par lit
 ksort($lits);
 $_prescriptions = array();
-foreach($lits as $prescription_id){
-  $_prescriptions[$prescription_id] = $prescriptions[$prescription_id];
+foreach($lits as $_prescription_id){
+  $_prescriptions[$_prescription_id] = $prescriptions[$_prescription_id];
 }
 
 // Smarty template
@@ -323,6 +330,15 @@ $smarty->assign("alertes", $alertes);
 $smarty->assign("new", $new);
 $smarty->assign("urgences", $urgences);
 $smarty->assign("filter_line", $filter_line);
-$smarty->display('vw_pancarte_service.tpl');
+
+if($prescription_id){
+	$smarty->assign("_prescription_id", $prescription->_id);
+  $smarty->assign("_prescription", $prescription);
+	$smarty->assign("nodebug", true);
+	$smarty->assign("images", CPrescription::$images);
+  $smarty->display('inc_vw_line_pancarte_service.tpl');
+} else {
+  $smarty->display('vw_pancarte_service.tpl');
+}
 
 ?>

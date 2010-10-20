@@ -426,7 +426,9 @@ showDebit = function(div, color){
 }
 
 Main.add(function () {
-	loadSuivi('{{$sejour->_id}}');
+  if(window.loadSuivi){
+	  loadSuivi('{{$sejour->_id}}');
+	}
 	
 	// Deplacement du dossier de soin
 	if($('plan_soin')){
@@ -444,6 +446,10 @@ Main.add(function () {
 		  $$(".tooltip").invoke("hide");
   	}
   });
+	
+	if(window.modalWindow){
+	  $('modal_button').show();
+	}
 });
 
 </script>
@@ -476,6 +482,7 @@ Main.add(function () {
   <tr>
     <th colspan="10" class="title">
     	 <span style="float: right">
+				 <button type="button" class="cancel" style="float: right; display: none;" onclick="modalWindow.close(); refreshLinePancarte('{{$prescription_id}}');" id="modal_button">{{tr}}Close{{/tr}}</button>
  	 	     <button type="button" class="print" style="float: right" onclick="viewDossier('{{$sejour->_id}}');">Dossier</button>
     	 </span>
        <a style="float: left" href="?m=dPpatients&amp;tab=vw_full_patients&amp;patient_id={{$patient->_id}}"'>
@@ -535,11 +542,13 @@ Main.add(function () {
 		 Attention, le dossier de soin que vous êtes en train de visualiser n'est pas celui de la journée courante
 		 </div>
 	 {{/if}}
-	 
+	
+	
 	<table style="width: 100%">
-	  <tr>
+	   <tr>
 	    <td>
-	      <button type="button" class="print" onclick="printDossierSoin('{{$prescription_id}}');" title="{{tr}}Print{{/tr}}">
+	    	
+				<button type="button" class="print" onclick="printDossierSoin('{{$prescription_id}}');" title="{{tr}}Print{{/tr}}">
 		      Feuille de soins immédiate
 	      </button>
 	      <button type="button" class="print" onclick="printBons('{{$prescription_id}}');" title="{{tr}}Print{{/tr}}">
@@ -564,7 +573,7 @@ Main.add(function () {
        </form>
 	    </td>
 	    <td style="text-align: right">
-	      <button type="button" class="search" onclick="viewLegend()">Légende</button>
+	      <button type="button" class="search" onclick="viewLegend();">Légende</button>
 	    </td>
 	  </tr>
 	</table>

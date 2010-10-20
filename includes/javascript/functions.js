@@ -810,6 +810,17 @@ window.modal = function(container, options) {
   return Control.Modal.open(container, options);
 };
 
+Class.extend(Control.Modal, {
+	restore: function() {
+		this.container.removeClassName("modal");
+		this.container.setStyle({ position: null});
+		Control.Overlay.container.hide(); 
+		this.iFrameShim.hide();
+    this.isOpen = false;
+    this.notify('afterClose');
+	}
+});
+
 var Session = {
   window: null,
   lock: function(){
