@@ -87,6 +87,7 @@ class CGroups extends CMbObject {
     $backProps["product_stocks"]          = "CProductStockGroup group_id";
     $backProps["protocoles_prescription"] = "CPrescription group_id";
     $backProps["reception_bills"]         = "CProductReceptionBill group_id";
+    $backProps['object_configs']          = "CGroupsConfig object_id";
     return $backProps;
   }
   

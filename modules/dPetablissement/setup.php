@@ -111,7 +111,20 @@ class CSetupdPetablissement extends CSetup {
               ADD `chambre_particuliere` ENUM ('0','1') NOT NULL DEFAULT '0'";
     $this->addQuery($sql);
     
-    $this->mod_version = "0.23";
+    $this->makeRevision("0.23");
+    $sql = "CREATE TABLE `groups_config` (
+              `groups_config_id` INT (11) UNSIGNED NOT NULL auto_increment PRIMARY KEY,
+              `object_id` INT (11) UNSIGNED,
+              `max_comp` INT (11) UNSIGNED,
+              `max_ambu` INT (11) UNSIGNED
+            ) TYPE=MYISAM;";
+    $this->addQuery($sql);
+    
+    $sql = "ALTER TABLE `groups_config` 
+              ADD INDEX (`object_id`);";
+    $this->addQuery($sql);
+    
+    $this->mod_version = "0.24";
   } 
 }
 
