@@ -29,6 +29,13 @@ MainCourante = {
 	  url.popup(900, 700, "Impression main courante");
   },
   
+  printSortie: function(date, aff_sortie) {
+    var url = new Url("dPurgences", "print_sortie_patients");
+    url.addParam("date", date);
+    url.addParam("aff_sortie", aff_sortie);
+    url.popup(900, 700, "Impression sortie patients");
+  },
+	
 	legend: function() {
 	  var url = new Url("dPurgences", "vw_legende");
 	  url.popup(300, 320, "Legende");

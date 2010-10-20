@@ -8,6 +8,8 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
 *}}
 
+{{mb_include_script module=dPurgences script=main_courante}}
+
 <script type="text/javascript">
 var refreshExecuter;
 
@@ -157,6 +159,7 @@ function submitSejour(){
           <option value="sortie" {{if $aff_sortie == "sortie"}} selected = "selected" {{/if}}>Sortie à effectuer</option>
         </select>
       </form>
+      <button class="print" onclick="MainCourante.printSortie('{{$date}}','{{$aff_sortie}}')">Sortie des patients</button>
     </td>
   </tr>
 </table>

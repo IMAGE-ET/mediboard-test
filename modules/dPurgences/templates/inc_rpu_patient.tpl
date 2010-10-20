@@ -8,11 +8,18 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
 *}}
 
-<a href="{{$rpu_link}}">
+{{if !isset($print|smarty:nodefaults)}}
+  <a href="{{$rpu_link}}">
+{{else}}
+  <div>
+{{/if}}
   <strong onmouseover="ObjectTooltip.createEx(this, '{{$patient->_guid}};')">
     <big class="CPatient-view">{{$patient}}</big> 
   </strong>
-</a>
-      
+{{if !isset($print|smarty:nodefaults)}}
+  </a>
+{{else}}
+  </div>
+{{/if}}
 {{mb_include module=dPpatients template=inc_vw_ipp ipp=$patient->_IPP}}
 {{if $dPconfig.dPurgences.age_patient_rpu_view}}{{$patient->_age}} ans{{/if}}
