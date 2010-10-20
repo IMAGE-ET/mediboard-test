@@ -15,6 +15,10 @@
     <td class="text">Patient pris en charge</td>
   </tr>
   <tr>
+    <td style="border-right: 5px solid black"></td>
+    <td class="text">Patient sorti</td>
+  </tr>
+  <tr>
     <th colspan="2">Degrés d'urgences</th>
   </tr>
   <tr>
