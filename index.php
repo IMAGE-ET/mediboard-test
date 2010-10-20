@@ -198,6 +198,11 @@ else {
 
 require("./includes/access_log.php");
 
-ob_end_flush();
+if (CValue::get("_aio")) {
+  echo CHTMLResourceLoader::allInOne(ob_get_clean());
+}
+else {
+  ob_end_flush();
+}
 
 CApp::rip();

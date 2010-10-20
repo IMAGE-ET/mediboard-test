@@ -10,6 +10,7 @@
 
 abstract class CHTMLResourceLoader {
   static $build;
+  private static $_stylesheet_path = null;
   
   /** 
    * IE Conditional comments
@@ -66,6 +67,64 @@ abstract class CHTMLResourceLoader {
     }
     
     return $tag;
+  }
+  
+  private static function getFileContents($filename) {
+    if (file_exists($filename)) 
+      return file_get_contents($filename);
+  }
+  
+  private static function replaceScriptSrc($matches) {
+    $src = $matches[1];
+    $src = preg_replace('/(\?.*)$/', '', $src);
+    $script = self::getFileContents($src);
+    return '<script type="text/javascript">'.$script.'</script>';
+  }
+  
+  private static function replaceImgSrc($matches) {
+    $src = $matches[2];
+    $src = preg_replace('/(\?.*)$/', '', $src);
+    $ext = CMbPath::getExtension($src);
+    $img = self::getFileContents($src);
+    $img = " src=\"data:image/$ext;base64,".base64_encode($img)."\" ";
+    return '<img '.$matches[1].$img.$matches[3].'/>';
+  }
+  
+  private static function replaceStylesheetImport($matches) {
+    return self::getFileContents(self::$_stylesheet_path."/".$matches[1]);
+  }
+  
+  private static function replaceStylesheetUrl($matches) {
+    $src = $matches[1];
+    $src = preg_replace('/(\?.*)$/', '', $src);
+    $ext = CMbPath::getExtension($src);
+    $url = self::getFileContents(self::$_stylesheet_path."/".$src);
+    return "url(data:image/$ext;base64,".base64_encode($url).")";
+  }
+  
+  private static function replaceStylesheet($matches) {
+    $src = $matches[1];
+    $src = preg_replace('/(\?.*)$/', '', $src);
+    $stylesheet = self::getFileContents($src);
+    
+    self::$_stylesheet_path = dirname($src);
+    
+    // @import
+    $re = "/\@import\s+(?:url\()?[\"']?([^\"\'\)]+)[\"']?\)?;/i";
+    $stylesheet = preg_replace_callback($re, array('self', 'replaceStylesheetImport'), $stylesheet);
+    
+    // url(foo)
+    $re = "/url\([\"']?([^\"\'\)]+)[\"']?\)?/i";
+    $stylesheet = preg_replace_callback($re, array('self', 'replaceStylesheetUrl'), $stylesheet);
+    
+    return '<style type="text/css">'.$stylesheet.'</style>';
+  }
+  
+  static function allInOne($html) {
+    $html = preg_replace_callback("/<img([^>]*)src\s*=\s*[\"']([^\"']+)[\"']([^>]*)>/i", array('self', 'replaceImgSrc'), $html);
+    $html = preg_replace_callback("/<link[^>]*rel=\"stylesheet\"[^>]*href\s*=\s*[\"']([^\"']+)[\"'][^>]*>/i", array('self', 'replaceStylesheet'), $html);
+    $html = preg_replace_callback("/<script[^>]*src\s*=\s*[\"']([^\"']+)[\"'][^>]*>\s*<\/script>/i", array('self', 'replaceScriptSrc'), $html);
+    return $html;
   }
 }
 
