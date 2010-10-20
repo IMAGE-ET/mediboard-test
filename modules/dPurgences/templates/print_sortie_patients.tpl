@@ -95,6 +95,11 @@
            <strong>{{tr}}CRPU-orientation{{/tr}}:</strong>
            {{mb_value object=$rpu field="orientation"}}      
          {{/if}}
+      {{else}}
+        <strong>{{tr}}CRPU-orientation{{/tr}}:</strong>
+        {{mb_value object=$rpu field="destination"}} <br />
+        <strong>{{tr}}CRPU-destination{{/tr}}:</strong>
+        {{mb_value object=$rpu field="orientation"}}
       {{/if}}
     </td>
     
