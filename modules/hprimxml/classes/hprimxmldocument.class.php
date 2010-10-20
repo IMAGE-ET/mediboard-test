@@ -119,7 +119,8 @@ class CHPrimXMLDocument extends CMbXMLDocument {
     $group = CGroups::loadCurrent();
     $group->loadLastId400();
     $this->addAgent($agents, "acteur", "user$AppUI->user_id", "$AppUI->user_first_name $AppUI->user_last_name");
-    $this->addAgent($agents, "système", CAppUI::conf('mb_id'), $group->text);
+    $code_systeme = (CAppUI::conf('hprimxml code_transmitter_sender') == "finess") ? $group->finess : CAppUI::conf('mb_id');
+    $this->addAgent($agents, "système", $code_systeme, $group->text);
     
     $destinataire = $this->addElement($enteteMessage, "destinataire");
     $agents = $this->addElement($destinataire, "agents");

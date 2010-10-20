@@ -23,6 +23,8 @@
     {{mb_include module=system template=inc_config_bool var=notifier_sortie_reelle}}
     
     {{mb_include module=system template=inc_config_bool var=trash_numdos_sejour_cancel}}
+    
+    {{mb_include module=system template=inc_config_enum var=code_transmitter_sender values=mb_id|finess}}
    
     <tr>
       <td class="button" colspan="10">
