@@ -616,7 +616,7 @@ input.barcode {
 .textarea-helped .toolbar {
   position: absolute;
   bottom: 0px;
-  right: 0px;
+  right: 16px;
   margin: 2px;
   padding: 2px;
   vertical-align: middle;
