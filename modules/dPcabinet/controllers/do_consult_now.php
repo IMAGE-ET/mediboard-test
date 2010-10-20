@@ -20,7 +20,7 @@ $_operation_id = CValue::post("_operation_id");
 $_datetime     = CValue::post("_datetime");
 
 if (!$_datetime || $_datetime == "now") {
-  $_datetime == mbDateTime();
+  $_datetime = mbDateTime();
 }
 
 $sejour = new CSejour();
