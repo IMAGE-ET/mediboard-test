@@ -237,7 +237,7 @@ class CHPrimXMLEvenementsPatients extends CHPrimXMLEvenements {
       $mbVenue->annule = 1;
       
       return $mbVenue;
-    } 
+    }
     
     $mbVenue = $this->getNatureVenue($node, $mbVenue);
     $mbVenue = self::getEntree($node, $mbVenue);
@@ -408,6 +408,7 @@ class CHPrimXMLEvenementsPatients extends CHPrimXMLEvenements {
     $id400 = new CIdSante400();
     $id400->object_class = "CMediusers";
     $id400->tag = $this->getTagMediuser();
+
     $id400->id400 = $code;
     if ($id400->loadMatchingObject()) {
       $mediuser->_id = $id400->object_id;

@@ -39,11 +39,11 @@ class CHPrimXMLDocument extends CMbXMLDocument {
     $this->now = time();
   }
   
-  function schemaValidate($filename = null, $returnErrors = false) {
+  function schemaValidate($filename = null, $returnErrors = false, $display_errors = true) {
     if (!CAppUI::conf("hprimxml ".$this->evenement." validation")) {
       return true;
     }
-    return parent::schemaValidate($filename, $returnErrors);
+    return parent::schemaValidate($filename, $returnErrors, $display_errors);
   }
   
   function checkSchema() {
@@ -195,7 +195,7 @@ class CHPrimXMLDocument extends CMbXMLDocument {
   function getTagMediuser() {
     $this->_ref_echange_hprim->loadRefsDestinataireHprim();
     
-    return $this->_ref_echange_hprim->_ref_destinataire->_tag_mediuser;
+    return $this->_ref_echange_hprim->_ref_emetteur->_tag_mediuser;
   }
   
   function addTexte($elParent, $elName, $elValue, $elMaxSize = 35) {

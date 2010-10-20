@@ -58,7 +58,7 @@ if ($echange_hprim->_message !== null) {
     
   $domGetEvenement->loadXML(utf8_decode($echange_hprim->_message));
   $domGetEvenement->formatOutput = true;
-  $doc_errors_msg = @$domGetEvenement->schemaValidate(null, true, false);
+  $doc_errors_msg = $domGetEvenement->schemaValidate(null, true, false);
  
   $echange_hprim->_message = utf8_encode($domGetEvenement->saveXML());
 }  
@@ -73,7 +73,7 @@ if ($echange_hprim->_acquittement !== null) {
     $observations = $domGetAcquittement->getAcquittementObservationPatients() : array();
   $doc_errors_ack[] = @$domGetAcquittement->schemaValidate(null, true, false);
   
-  $echange_hprim->_acquittement = utf8_decode($domGetAcquittement->saveXML());
+  $echange_hprim->_acquittement = utf8_encode($domGetAcquittement->saveXML());
 }
 
 $evenements = array();
