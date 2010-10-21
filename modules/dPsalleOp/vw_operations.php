@@ -237,7 +237,7 @@ $smarty->assign("modif_operation"        , $modif_operation);
 $smarty->assign("listValidateurs"        , $listValidateurs);
 $smarty->assign("isPrescriptionInstalled", CModule::getActive("dPprescription"));
 $smarty->assign("isbloodSalvageInstalled", CModule::getActive("bloodSalvage"));
-$smarty->assign("isImedsInstalled"       , CModule::getActive("dPImeds"));
+$smarty->assign("isImedsInstalled"       , (CModule::getActive("dPImeds") && CImeds::getTagCIDC(CGroups::loadCurrent())));
 $smarty->assign("prescription"           , $prescription);
 $smarty->assign("protocoles"             , $protocoles);
 $smarty->assign("anesth_id"              , $anesth_id);

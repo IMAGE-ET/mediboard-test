@@ -92,6 +92,6 @@ $smarty->assign("listResponsables"    , $listResponsables);
 $smarty->assign("listPrats"           , $listPrats);
 $smarty->assign("praticien"           , $praticien);
 $smarty->assign("isPrescriptionInstalled", CModule::getActive("dPprescription"));
-$smarty->assign("isImedsInstalled"    , CModule::getActive("dPImeds"));
+$smarty->assign("isImedsInstalled"    , (CModule::getActive("dPImeds") && CImeds::getTagCIDC(CGroups::loadCurrent())));
 $smarty->display("vw_aed_rpu.tpl");
 ?>

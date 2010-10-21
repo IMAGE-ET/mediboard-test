@@ -66,7 +66,7 @@ $smarty->assign("operation_id"            , $operation_id);
 $smarty->assign("patient"                 , $patient);
 $smarty->assign("listPrat"                , $listPrat);
 $smarty->assign("object"                  , $patient);
-$smarty->assign("isImedsInstalled"        , CModule::getActive("dPImeds"));
+$smarty->assign("isImedsInstalled"        , (CModule::getActive("dPImeds") && CImeds::getTagCIDC(CGroups::loadCurrent())));
 
 $smarty->display("vw_full_patients.tpl");
 

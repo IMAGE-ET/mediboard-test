@@ -54,7 +54,7 @@ $smarty->assign("canCabinet", CModule::getCanDo("dPcabinet"));
 $smarty->assign("listPrat"                , $listPrat);
 $smarty->assign("patient"                 , $patient);
 $smarty->assign("can_view_dossier_medical", $can_view_dossier_medical);
-$smarty->assign("isImedsInstalled"        , CModule::getActive("dPImeds"));
+$smarty->assign("isImedsInstalled"        , (CModule::getActive("dPImeds") && CImeds::getTagCIDC(CGroups::loadCurrent())));
 
 $smarty->display("inc_vw_full_patients.tpl");
 ?>

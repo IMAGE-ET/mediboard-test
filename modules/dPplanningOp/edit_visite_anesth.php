@@ -36,7 +36,7 @@ $smarty->assign("currUser"               , $currUser);
 $smarty->assign("user_id"                , $AppUI->user_id);
 $smarty->assign("listAnesths"            , $listAnesths);
 $smarty->assign("isPrescriptionInstalled", CModule::getActive("dPprescription"));
-$smarty->assign("isImedsInstalled"       , CModule::getActive("dPImeds"));
+$smarty->assign("isImedsInstalled"       , (CModule::getActive("dPImeds") && CImeds::getTagCIDC(CGroups::loadCurrent())));
 $smarty->assign("operation"              , $operation);
 $smarty->assign("anesth_perop"           , new CAnesthPerop());
 $smarty->display("edit_visite_anesth.tpl");

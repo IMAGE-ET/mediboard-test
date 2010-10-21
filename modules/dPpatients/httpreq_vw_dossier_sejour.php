@@ -19,7 +19,8 @@ $sejour->canRead();
 
 // Smarty template
 $smarty = new CSmartyDP();
-$smarty->assign("object", $sejour);
+$smarty->assign("object"          , $sejour);
+$smarty->assign("isImedsInstalled", (CModule::getActive("dPImeds") && CImeds::getTagCIDC(CGroups::loadCurrent())));
 $smarty->display('inc_vw_dossier_sejour.tpl'); 
 
 ?>

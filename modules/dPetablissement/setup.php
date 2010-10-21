@@ -124,7 +124,12 @@ class CSetupdPetablissement extends CSetup {
               ADD INDEX (`object_id`);";
     $this->addQuery($sql);
     
-    $this->mod_version = "0.24";
+    $this->makeRevision("0.24");
+    $sql = "ALTER TABLE `groups_config` 
+              ADD `imeds_cidc` VARCHAR  (255);";
+    $this->addQuery($sql);
+    
+    $this->mod_version = "0.25";
   } 
 }
 

@@ -25,10 +25,10 @@ $today = mbDate();
 
 // Création du template
 $smarty = new CSmartyDP();
-$smarty->assign("group"       , CGroups::loadCurrent());
-$smarty->assign("selAffichage", $selAffichage);
-$smarty->assign("date"        , $date);
-$smarty->assign("isImedsInstalled"  , CModule::getActive("dPImeds"));
+$smarty->assign("group"           , CGroups::loadCurrent());
+$smarty->assign("selAffichage"    , $selAffichage);
+$smarty->assign("date"            , $date);
+$smarty->assign("isImedsInstalled", (CModule::getActive("dPImeds") && CImeds::getTagCIDC(CGroups::loadCurrent())));
 
 $smarty->display("vw_idx_rpu.tpl");
 ?>

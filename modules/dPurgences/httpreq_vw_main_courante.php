@@ -124,7 +124,7 @@ $smarty->assign("medicalView" , $medicalView);
 $smarty->assign("date"        , $date);
 $smarty->assign("date_before" , $date_before);
 $smarty->assign("today"       , mbDate());
-$smarty->assign("isImedsInstalled"  , CModule::getActive("dPImeds"));
+$smarty->assign("isImedsInstalled", (CModule::getActive("dPImeds") && CImeds::getTagCIDC(CGroups::loadCurrent())));
 
 $smarty->display("inc_main_courante.tpl");
 ?>

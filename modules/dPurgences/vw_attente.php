@@ -41,10 +41,10 @@ foreach($listSejours as &$_sejour) {
 // Création du template
 $smarty = new CSmartyDP();
 
-$smarty->assign("listSejours", $listSejours);
-$smarty->assign("date", $date);
-$smarty->assign("today", $today);
-$smarty->assign("isImedsInstalled"  , CModule::getActive("dPImeds"));
+$smarty->assign("listSejours"     , $listSejours);
+$smarty->assign("date"            , $date);
+$smarty->assign("today"           , $today);
+$smarty->assign("isImedsInstalled", (CModule::getActive("dPImeds") && CImeds::getTagCIDC(CGroups::loadCurrent())));
 
 $smarty->display("vw_attente.tpl");
 ?>

@@ -398,6 +398,7 @@ $locales['mod-dPurgences-tab-extract_viewer'] = 'Visualiseur d\'extraction de RP
 $locales['mod-dPurgences-tab-print_dossier'] = 'Impression dossier';
 $locales['mod-dPurgences-tab-print_etiquettes'] = 'Impression des étiquettes';
 $locales['mod-dPurgences-tab-print_main_courante'] = 'Impression de la main courante';
+$locales['mod-dPurgences-tab-print_sortie_patients'] = 'Impression de la sortie des patients ';
 $locales['mod-dPurgences-tab-redirect_barcode'] = 'Redirection par code à bard';
 $locales['mod-dPurgences-tab-vw_aed_rpu'] = 'Dossier infirmier';
 $locales['mod-dPurgences-tab-vw_attente'] = 'Attente';

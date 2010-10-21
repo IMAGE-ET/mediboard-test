@@ -29,7 +29,9 @@ loadResultLabo = function(sejour_id) {
 Main.add( function(){
   dossier_sejour_tabs = Control.Tabs.create('dossier_sejour_tab_group', false);
   refreshConstantesHack('{{$object->_id}}');
-  loadResultLabo('{{$object->_id}}');
+  {{if $isImedsInstalled}}
+    loadResultLabo('{{$object->_id}}');
+    {{/if}}
 } );
 
 </script>
@@ -37,7 +39,9 @@ Main.add( function(){
 <ul id="dossier_sejour_tab_group" class="control_tabs">
   <li><a href="#div_sejour">Séjour</a></li>
   <li onmousedown="refreshConstantesHack('{{$object->_id}}')"><a href="#constantes">Constantes</a></li>
+  {{if $isImedsInstalled}}
   <li><a href="#result_labo">Labo</a></li>
+  {{/if}}
 </ul>
 
 <hr class="control_tabs" />
@@ -49,7 +53,8 @@ Main.add( function(){
 <div id="constantes" style="display:none;">
 
 </div>
-
+{{if $isImedsInstalled}}
 <div id="result_labo" style="display:none;">
 
 </div>
+{{/if}}
