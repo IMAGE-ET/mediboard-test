@@ -36,7 +36,9 @@
       <td class="text">
       {{/if}}
       {{if $curr_affectation->sejour_id}}
+        {{if $can->edit}}
         <script type="text/javascript">new Draggable('affectation_{{$curr_affectation->_id}}', {revert:true})</script>
+        {{/if}}
         {{if $sejour->_couvert_cmu}}
         <div style="float: right;"><strong>CMU</strong></div>
         {{/if}}
@@ -209,6 +211,15 @@
     <tr class="dates">
       <td colspan="2"><strong>Age</strong>: {{$patient->_age}} ans ({{mb_value object=$patient field=naissance}})</td>
     </tr>
+
+    {{if $sejour->prestation_id}}
+    <tr class="dates">
+      <td colspan="2">
+        <strong>Prestation:</strong> {{$sejour->_ref_prestation->_view}}
+      </td>
+    </tr>
+    {{/if}}
+    
     <tr class="dates">
       <td class="text" colspan="2">
 	      <strong>
@@ -217,10 +228,10 @@
       </td>
     </tr>
 
-    {{if $sejour->prestation_id}}
+    {{if $sejour->libelle}}
     <tr class="dates">
-      <td colspan="2">
-        <strong>Prestation:</strong> {{$sejour->_ref_prestation->_view}}
+      <td class="text" colspan="2">
+        {{$sejour->libelle}}
       </td>
     </tr>
     {{/if}}
