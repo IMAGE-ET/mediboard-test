@@ -184,7 +184,7 @@ Main.add(function() {
       	</tr>
         <tr>
           <th>{{mb_label object=$patient field="qual_beneficiaire"}}</th>
-          <td>{{mb_field object=$patient field="qual_beneficiaire" onchange=showCopieIdentite()}}</td>
+          <td>{{mb_field object=$patient field="qual_beneficiaire" onchange=showCopieIdentite() style="width:20em;"}}</td>
       	</tr>
         <tr>
           <th>{{mb_label object=$patient field="vip"}}</th>

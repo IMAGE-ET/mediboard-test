@@ -901,6 +901,26 @@ table.active {
   text-align: center;
 }
 
+.modal.popup > .title,
+.modal.popup > button.cancel {
+  position: absolute; 
+  top: -20px;
+}
+
+.modal.popup > .title {
+  left: 20px;
+  background: #eee;
+  padding: 4px 2em;
+  font-weight: bold;
+  border-radius: 5px; 
+  -moz-border-radius: 5px; 
+  -webkit-border-radius: 5px;
+}
+
+.modal.popup > button.cancel {
+  right: -20px;
+}
+
 .pagination {
   text-align: center; 
   font-weight: bold; 

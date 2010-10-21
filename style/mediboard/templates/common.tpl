@@ -6,10 +6,14 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge" /> <!-- IE8+ mode -->
   
   <title>
-    {{$dPconfig.page_title}} 
-    &mdash; {{tr}}module-{{$m}}-court{{/tr}}
-    {{if $a || $tab}}
-      &mdash; {{tr}}mod-{{$m}}-tab-{{if $tab}}{{$tab}}{{else}}{{$a}}{{/if}}{{/tr}}
+    {{if !$dialog}}
+      {{$dPconfig.page_title}} 
+      &mdash; {{tr}}module-{{$m}}-court{{/tr}}
+      {{if $a || $tab}}
+        &mdash; {{tr}}mod-{{$m}}-tab-{{if $tab}}{{$tab}}{{else}}{{$a}}{{/if}}{{/tr}}
+      {{/if}}
+    {{else}}
+      {{tr}}mod-{{$m}}-tab-{{if $tab}}{{$tab}}{{else}}{{$a}}{{/if}}{{/tr}}
     {{/if}}
   </title>
   

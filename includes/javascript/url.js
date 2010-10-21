@@ -191,22 +191,44 @@ var Url = Class.create({
   modale: function(options) {
     this.addParam("dialog", 1);
     
-    var closeButton = DOM.button({type: "button", className: "cancel notext", style: "position: absolute; right: -20px; top: -20px;"});
+    var closeButton = DOM.button({type: "button", className: "cancel notext"});
 
     options = Object.extend({
       className: 'modal popup',
-      width: 800,
+      width: 900,
       height: 600,
       iframe: true,
-      closeOnClick: closeButton
+      title: "",
+      closeOnClick: closeButton,
+      closeOnEscape: true
     }, options);
+    
+    var viewport = document.viewport.getDimensions();
+    options.height = Math.min(viewport.height-50, options.height);
+    options.width = Math.min(viewport.width-50, options.width);
   
     // Hack
     this.modaleObject = Control.Modal.open(new Element("a", {href: this.make()}), options);
     
-    this.modaleObject.container.insert({
-      top: closeButton
-    });
+    var titleElement = DOM.div({className: "title"}, options.title || "&nbsp;");
+    
+    this.modaleObject.container.insert({top: titleElement});   
+    
+    if (options.closeOnClick) {
+      this.modaleObject.container.insert({top: closeButton})
+    }
+    
+    this.modaleObject.observe("onRemoteContentLoaded", function(){
+      var iframeWindow = this.container.down("iframe").contentWindow;
+      
+      if (!options.title) {
+        titleElement.update(iframeWindow.document.title);
+      }
+      
+      if (!options.closeOnEscape) {
+        iframeWindow.document.stopObserving('keydown', iframeWindow.closeWindowByEscape);
+      }
+    }.bind(this.modaleObject));
   
     return this;
   },

@@ -8,7 +8,7 @@ var PatSelector = {
   sId_easy  : null,
   sView_easy: null,
   options : {
-    width : 800,
+    width : 900,
     height: 600,
     useVitale: 0
   },
