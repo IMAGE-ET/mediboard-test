@@ -410,7 +410,7 @@ Main.add( function(){
 
 <tr>
   <th>{{mb_label object=$sejour field="libelle"}}</th>
-  <td colspan="3">{{mb_field object=$sejour field="libelle"}}</td>
+  <td colspan="3">{{mb_field object=$sejour field="libelle" form="editSejour" autocomplete="true,1,50,true,true"}}</td>
 </tr>
 
 {{if $sejour->annule}}
