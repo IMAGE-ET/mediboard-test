@@ -26,7 +26,7 @@ class CModeleEtiquette extends CMbMetaObject {
   var $font          = null;
   
   static $fields = array("CPatient" =>
-      array("[DATE NAISS]", "[IPP]", 
+      array("[DATE NAISS]", "[IPP]", "[LIEU NAISSANCE]",
             "[NOM]", "[NOM JF]",  "[NUM SECU]",
             "[PRENOM]", "[SEXE]"),
       "CSejour" => array("[NDOS]", "[DATE ENT]", "[PRAT RESPONSABLE]"));
