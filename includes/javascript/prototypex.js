@@ -242,6 +242,19 @@ Class.extend(Autocompleter.Base, {
   }
 });
 
+// Fix to get better window size ( document.documentElement instead of document.body )
+// Needs to be done after everything
+(function(){
+  Object.extend(Control.Overlay, {
+    positionOverlay: function(){
+      Control.Overlay.container.setStyle({
+        width: document.documentElement.clientWidth + 'px',
+        height: document.documentElement.clientHeight + 'px'
+      });
+    }
+  });
+}).defer();
+
 Element.addMethods({
   // To fix a bug in Prototype 1.6.0.3 (no need to patch the lib)
   getOffsetParent: function(element) {

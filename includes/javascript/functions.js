@@ -799,6 +799,25 @@ window.open = function(element, title, options) {
   return false;
 }*/
 
+// We replace the window.close method for iframes (modal windows)
+if (window.parent && window.parent != window) {
+  window.launcher = window.parent;
+  window.oldClose = window.close;
+  
+  window.close = function(){
+    try {
+      var modale = window.parent.Control.Modal.current;
+      modale.close();
+      modale.destroy();
+    } catch (e) {
+      window.oldClose();
+    }
+  }
+}
+else {
+  window.launcher = window.opener;
+}
+
 
 window.modal = function(container, options) {
   options = Object.extend({

@@ -188,6 +188,29 @@ var Url = Class.create({
     return this;
   },
   
+  modale: function(options) {
+    this.addParam("dialog", 1);
+    
+    var closeButton = DOM.button({type: "button", className: "cancel notext", style: "position: absolute; right: -20px; top: -20px;"});
+
+    options = Object.extend({
+      className: 'modal popup',
+      width: 800,
+      height: 600,
+      iframe: true,
+      closeOnClick: closeButton
+    }, options);
+  
+    // Hack
+    this.modaleObject = Control.Modal.open(new Element("a", {href: this.make()}), options);
+    
+    this.modaleObject.container.insert({
+      top: closeButton
+    });
+  
+    return this;
+  },
+  
   popDirect: function(iWidth, iHeight, sWindowName, sBaseUrl) {
     iWidth = iWidth || 800;
     iHeight = iHeight || 600;

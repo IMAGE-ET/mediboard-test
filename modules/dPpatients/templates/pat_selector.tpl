@@ -44,7 +44,7 @@ var Patient = {
   },
   
   select: function(patient_id, patient_view) {
-		window.opener.PatSelector.set(patient_id, patient_view);
+		window.launcher.PatSelector.set(patient_id, patient_view);
     window.close();
   }
 }
