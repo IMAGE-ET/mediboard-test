@@ -23,7 +23,7 @@
       <input type="hidden" name="del" value="1" />
       {{mb_key object=$object}}
 
-      <button class="cancel notext" onclick="confirmDeletion(this.form, {
+      <button class="cancel notext" type="button" onclick="confirmDeletion(this.form, {
           typeName:'l\'échange',
           objName:'{{$object|smarty:nodefaults|JSAttribute}}'
         })">
