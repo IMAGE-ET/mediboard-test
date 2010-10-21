@@ -159,7 +159,7 @@
           <th class="category">{{mb_title object=$echange_soap field="output"}}</th>
         </tr>
         <tr>
-          <td style="width: 50%"> {{mb_value object=$echange_soap field="input" export=true}} </td>
+          <td> {{mb_value object=$echange_soap field="input" export=true}} </td>
           <td> {{mb_value object=$echange_soap field="output" export=true}} </td>
         </tr>
         <tr>
