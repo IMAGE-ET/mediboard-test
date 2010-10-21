@@ -53,7 +53,6 @@ function viewTransmissions(service_id, user_id, degre, observations, transmissio
 showPlanSoins = function(sejour_id, date){
   $('dossier_traitement').update("");
   Prescription.loadTraitement(sejour_id, date);
-	
 	modalWindow = modal($('dossier_traitement'));
 }
 
@@ -156,4 +155,4 @@ Main.add(function () {
 	</div>
 </div>
 
-<div id="dossier_traitement" style="width: 80%; min-height: 50%;"></div>	
+<div id="dossier_traitement" style="width: 80%; height: 600px; overflow: auto;"></div>	
