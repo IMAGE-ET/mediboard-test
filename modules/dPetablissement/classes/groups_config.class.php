@@ -16,7 +16,6 @@ class CGroupsConfig extends CMbObject {
   // Object configs
   var $max_comp   = null;
   var $max_ambu   = null; 
-  var $imeds_cidc = null;
 
   function getSpec() {
     $spec = parent::getSpec();
@@ -32,7 +31,6 @@ class CGroupsConfig extends CMbObject {
     
     $specs["max_comp"]   = "num min|0";
     $specs["max_ambu"]   = "num min|0";
-    $specs["imeds_cidc"] = "str";
 
     return $specs;
   }
