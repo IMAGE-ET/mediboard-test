@@ -65,7 +65,6 @@ function submitFormOperation(iSejour_id) {
     var oForm = document.editOp;
     var oFormSejour = document.editSejour;
     oForm.sejour_id.value = iSejour_id;
-    $V(oForm._protocole_prescription_anesth_id, $V(oFormSejour._protocole_prescription_anesth_id));
     $V(oForm._protocole_prescription_chir_id, $V(oFormSejour._protocole_prescription_chir_id));
     if (oForm.onsubmit()) {
       oForm.submit();

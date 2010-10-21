@@ -230,9 +230,6 @@ Main.add( function(){
 //  };
   
   Calendar.regField(form._date_sortie_prevue, dates);
-
-  var sValue = document.editSejour.praticien_id.value;
-  refreshListProtocolesPrescription(sValue, document.editSejour._protocole_prescription_chir_id);
   
   removePlageOp(false);
   
@@ -405,6 +402,20 @@ Main.add( function(){
   <th>{{mb_label object=$sejour field="DP"}}</th>
   <td>{{mb_field object=$sejour field="DP" size="10"}}</td>
   <td colspan="2" class="button"><button type="button" class="search" onclick="CIM10Selector.init()">{{tr}}button-CCodeCIM10-choix{{/tr}}</button>
+  {{*
+  <td colspan="3">
+    {{main}}
+        var url = new Url("dPurgences", "ajax_code_cim10_autocomplete");
+        url.addParam("type", "edit_sejour");
+        url.autoComplete("editSejour_keywords_code", '', {
+          minChars: 1,
+          dropdown: true,
+          width: "250px"
+        });
+      {{/main}}
+    <input type="text" name="keywords_code" id="editSejour_keywords_code" class="autocomplete str" value="" class="code cim10" size="10"/>
+    <input type="hidden" name="DP" />
+    *}}
   </td>
 </tr>
 
@@ -687,15 +698,30 @@ Main.add( function(){
 
 {{if !$sejour->_id && array_key_exists("dPprescription", $modules)}}
 <tr>
-  <td>{{tr}}CProtocole-protocole_prescription_anesth_id{{/tr}}</td>
-  <td colspan="3">{{tr}}CProtocole-protocole_prescription_chir_id{{/tr}}</td>
-</tr>
-<tr>
-  <td>
-    <div id="prot_anesth_view"></div>
-    <input type="hidden" name="_protocole_prescription_anesth_id" value="" />
-  </td>
-  <td colspan="3"><select name="_protocole_prescription_chir_id"></select></td>
+  <th>{{tr}}CProtocole-protocole_prescription_chir_id{{/tr}}</th>
+  <td colspan="3">
+  {{main}}
+    var form = getForm("editSejour");
+    var url = new Url("dPprescription", "httpreq_vw_select_protocole");
+    var autocompleter = url.autoComplete(form.libelle_protocole, 'protocole_auto_complete', {
+      minChars: 1,
+      dropdown: true,
+      width: "250px",
+      updateElement: function(selectedElement) {
+        var node = $(selectedElement).down('.view');
+        $V($("editSejour_libelle_protocole"), (node.innerHTML).replace("&lt;", "<").replace("&gt;",">"));
+        if (autocompleter.options.afterUpdateElement)
+          autocompleter.options.afterUpdateElement(autocompleter.element, selectedElement);
+      },
+      callback: function(input, queryString){
+        return (queryString + "&praticien_id=" + $V(form.praticien_id));
+      },
+      valueElement: form.elements._protocole_prescription_chir_id
+    });
+  {{/main}}
+    <input type="text" name="libelle_protocole" id="editSejour_libelle_protocole" class="autocomplete str" value=""/>
+    <div style="display:none; width: 150px;" class="autocomplete" id="protocole_auto_complete"></div>
+    <input type="hidden" name="_protocole_prescription_chir_id" /></td>
 </tr>
 {{/if}}
 </tbody>

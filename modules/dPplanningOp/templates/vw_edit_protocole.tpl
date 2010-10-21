@@ -180,7 +180,9 @@ Main.add(function () {
   <tr>
     <td colspan="2" style="padding: 2px; text-align: center;">
       {{mb_label object=$protocole field="chir_id"}}
-      <select name="chir_id" class="{{$protocole->_props.chir_id}}" onchange="refreshListProtocolesPrescription($V(this));">
+      <select name="chir_id" class="{{$protocole->_props.chir_id}}"
+              onchange="$('editFrm_libelle_protocole').value = '';
+                        this.form.protocole_prescription_chir_id.value = '';">
         <option value="">&mdash; Choisir un praticien</option>
         {{foreach from=$listPraticiens item=curr_praticien}}
         <option class="mediuser" style="border-color: #{{$curr_praticien->_ref_function->color}};" value="{{$curr_praticien->user_id}}" {{if $chir->user_id == $curr_praticien->user_id}} selected="selected" {{/if}}>
@@ -309,7 +311,7 @@ Main.add(function () {
             {{mb_label object=$protocole field="DP"}}
           </th>
           <td>
-            {{mb_field object=$protocole field="DP" size="10"}}
+          {{mb_field object=$protocole field="DP" size="10"}}
             <button type="button" class="search" onclick="CIM10Selector.init()">Choisir un code</button>
             <script type="text/javascript">
               CIM10Selector.init = function(){
@@ -319,6 +321,19 @@ Main.add(function () {
                 this.pop();
               }
             </script>
+          {{*
+	          {{main}}
+	            var url = new Url("dPurgences", "ajax_code_cim10_autocomplete");
+				      url.addParam("type", "edit_protocole");
+				      url.autoComplete("editFrm_keywords_code", '', {
+				        minChars: 1,
+				        dropdown: true,
+				        width: "250px"
+				      });
+				    {{/main}}
+				    <input type="text" name="keywords_code" id="editFrm_keywords_code" class="autocomplete str" value="{{$protocole->DP}}" class="code cim10" size="8"/>
+	          <input type="hidden" name="DP" />
+	          *}}
           </td>
         </tr>
         
@@ -353,8 +368,29 @@ Main.add(function () {
         {{if array_key_exists("dPprescription", $modules)}}
         <tr>
           <td colspan="2">
+            {{main}}
+              var form = getForm("editFrm");
+              var url = new Url("dPprescription", "httpreq_vw_select_protocole");
+              var autocompleter = url.autoComplete(form.libelle_protocole, 'protocole_auto_complete', {
+                minChars: 1,
+                dropdown: true,
+                width: "250px",
+                updateElement: function(selectedElement) {
+                  var node = $(selectedElement).down('.view');
+                  $V($("editFrm_libelle_protocole"), (node.innerHTML).replace("&lt;", "<").replace("&gt;",">"));
+                  if (autocompleter.options.afterUpdateElement)
+                    autocompleter.options.afterUpdateElement(autocompleter.element, selectedElement);
+                },
+                callback: function(input, queryString){
+                  return (queryString + "&praticien_id=" + $V(form.chir_id));
+                },
+                valueElement: form.elements.protocole_prescription_chir_id
+              });
+            {{/main}}
             {{mb_label object=$protocole field="protocole_prescription_chir_id"}}
-            <select name="protocole_prescription_chir_id"></select>
+            <input type="text" name="libelle_protocole" id="editFrm_libelle_protocole" class="autocomplete str" value="" />
+            <div style="display:none; width: 150px;" class="autocomplete" id="protocole_auto_complete"></div>
+            <input type="hidden" name="protocole_prescription_chir_id" />
           </td>
         </tr>
         {{/if}}

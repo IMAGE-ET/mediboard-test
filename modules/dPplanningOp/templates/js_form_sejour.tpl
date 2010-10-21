@@ -10,9 +10,9 @@ function modifPrat(){
   
   oForm.pathologie.value= sValue ? 
     listCategoriePrat[sValue] || "" : "";
-    
-  //refreshListProtocolesPrescription(sValue, oForm._protocole_prescription_anesth_id);
-  refreshListProtocolesPrescription(sValue, oForm._protocole_prescription_chir_id);
+
+  oForm._protocole_prescription_chir_id.value = "";
+  $("editSejour_libelle_protocole").value = "";
 }
 
 function refreshListProtocolesPrescription(praticien_id, list, selected_id) {
