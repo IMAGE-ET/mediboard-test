@@ -14,32 +14,23 @@
 
   <table class="form">
     <tr>
-      <th class="title" colspan="2">Configuration générale
+      <th class="title" colspan="2">Configuration des onglets
     </tr>
-		<!--
-    {{assign var=class value=CPlateauTechnique}}
-  	<tr>
-  		<th class="category">{{tr}}{{$class}}{{/tr}}
-  	</tr>
-		-->
-    {{* mb_include module=system template=inc_config_bool var=infinite_quantity *}}
-    
-		<tr>
-			<th colspan="2" class="category">
-				Occupation surveillance
-			</th>
-		</tr>
-		{{mb_include module=system template=inc_config_str  class="occupation_surveillance" var="faible"}}
-    {{mb_include module=system template=inc_config_str  class="occupation_surveillance" var="eleve"}}
 
-    <tr>
-      <th colspan="2" class="category">
-        Occupation technicien
-      </th>
-    </tr>  
-	 {{mb_include module=system template=inc_config_str  class="occupation_technicien" var="faible"}}
-   {{mb_include module=system template=inc_config_str  class="occupation_technicien" var="eleve"}}
+		{{assign var=class value=occupation_surveillance}}
+    {{mb_include module=system template=inc_config_category}}
+		{{mb_include module=system template=inc_config_str var=faible}}
+    {{mb_include module=system template=inc_config_str var=eleve}}
+
+    {{assign var=class value=occupation_technicien}}
+    {{mb_include module=system template=inc_config_category}}
+ 	  {{mb_include module=system template=inc_config_str var=faible}}
+    {{mb_include module=system template=inc_config_str var=eleve}}
     
+    {{assign var=class value=repartition}}
+    {{mb_include module=system template=inc_config_category}}
+    {{mb_include module=system template=inc_config_bool var=show_tabs}}
+
     <tr>
       <td class="button" colspan="100">
         <button class="modify" type="submit">{{tr}}Save{{/tr}}</button>

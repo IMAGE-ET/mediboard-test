@@ -54,21 +54,24 @@ Main.add(function () {
 	
   <tr>
     <td>
-			<script type="text/javascript">
-			Main.add(Control.Tabs.create.curry('tabs-plateaux', true));
-			</script>
+    	{{if $dPconfig.ssr.repartition.show_tabs}} 
+    	   
+      <script type="text/javascript">
+      Main.add(Control.Tabs.create.curry('tabs-plateaux', true));
+      </script>
     
-			<ul id="tabs-plateaux" class="control_tabs">
-			  {{foreach from=$plateaux item=_plateau}}
-			  <li>
-			    <a href="#{{$_plateau->_guid}}">
-			      {{$_plateau}}
-			    </a>
-			  </li>
-			  {{/foreach}}
-			</ul>
-			
-			<hr class="control_tabs" />
+      <ul id="tabs-plateaux" class="control_tabs">
+        {{foreach from=$plateaux item=_plateau}}
+        <li>
+          <a href="#{{$_plateau->_guid}}">
+            {{$_plateau}}
+          </a>
+        </li>
+        {{/foreach}}
+      </ul>
+      
+      <hr class="control_tabs" />
+    	{{/if}}
 
 
       {{foreach from=$plateaux item=_plateau}}
