@@ -7,9 +7,7 @@
 * @author Romain OLLIVIER
 */
 
-global $AppUI, $can, $m;
-
-$can->needsEdit();
+CCanDo::checkEdit();
 
 $compte_rendu_id = CValue::get("compte_rendu_id"   , 0);
 $modele_id       = CValue::get("modele_id"         , 0);
@@ -45,7 +43,7 @@ else {
   $compte_rendu->function_id = null;
   $compte_rendu->object_id = $object_id;
   $compte_rendu->_ref_object = null;
-  
+
   // Utilisation des headers/footers
   if ($compte_rendu->header_id || $compte_rendu->footer_id) {
     $compte_rendu->loadComponents();
@@ -102,15 +100,23 @@ $compte_rendu->_ref_object->loadRefsFwd();
 $object =& $compte_rendu->_ref_object;
 
 // Calcul du user concerné
-$user = new CMediusers;
-$user->_id = $AppUI->user_id;
+$user = CAppUI::$user;
 
-if ($object instanceof CConsultAnesth) {
-  $user->_id = $object->_ref_consultation->_praticien_id;
-}
+// Chargement dans l'ordre suivant pour les listes de choix si null :
+// - user courant
+// - anesthésiste
+// - praticien de la consultation
 
-if ($object instanceof CCodable) {
-  $user->_id = $object->_praticien_id;
+if (!$user->isPraticien()) {
+  if ($object instanceof CConsultAnesth) {
+    $object->loadRefOperation();
+    $user->_id = $object->_ref_operation->_ref_anesth->user_id;
+    if ($user->_id == null)
+      $user->_id = $object->_ref_consultation->_praticien_id;
+  }
+  if ($object instanceof CCodable) {
+    $user->_id = $object->_praticien_id;
+  }
 }
 
 $user->load();
@@ -121,7 +127,7 @@ $listCategory = CFilesCategory::listCatClass($compte_rendu->object_class);
 
 // Gestion du template
 $templateManager = new CTemplateManager($_GET);
-
+//$templateManager->isModele = false;
 $object->fillTemplate($templateManager);
 $templateManager->document = $compte_rendu->_source;
 $templateManager->loadHelpers($user->_id, $compte_rendu->object_class);
@@ -173,6 +179,7 @@ $smarty->assign("noms_textes_libres", $noms_textes_libres);
 if ($compte_rendu->fast_edit && !$compte_rendu_id && !$switch_mode && CAppUI::conf("dPcompteRendu CCompteRendu pdf_thumbnails") == 1) {
   $smarty->assign("_source", $templateManager->document);
 	$smarty->assign("object_guid", CValue::get("object_guid"));
+//$smarty->assign("unique_id"       , CValue::get("unique_id"));
   $smarty->display("fast_mode.tpl");
 }
 else {
