@@ -490,7 +490,7 @@ toggleSearchOptions = function(formName, chap){
 		  </script>
 			{{/if}}
 			
-			{{if !($mode_protocole && $_chapitre == "dmi")}}
+			{{if !(($mode_protocole || $prescription->type != "sejour") && $_chapitre == "dmi")}}
 			  <li>
 			  	<a href="#div_{{$_chapitre}}" {{if !$mode_pack}}onmouseup="refreshElementPrescription('{{$_chapitre}}', null, null, true);"{{/if}}>
 			  		{{tr}}CCategoryPrescription.chapitre.{{$_chapitre}}{{/tr}} <span></span>
@@ -517,7 +517,7 @@ toggleSearchOptions = function(formName, chap){
 
 {{if !$mode_pharma}}
   {{foreach from=$specs_chapitre->_list item=_chapitre}}
-    {{if !($mode_protocole && $_chapitre == "dmi")}}
+    {{if !(($mode_protocole || $prescription->type != "sejour") && $_chapitre == "dmi")}}
 		  <script type="text/javascript">
 		    window['{{$_chapitre}}Loaded'] = false;
 		    Main.add( function(){
@@ -643,7 +643,6 @@ toggleSearchOptions = function(formName, chap){
   <input type="hidden" name="commentaire" value="" />
 </form>
 
-
 <form name="addComment-CPrescriptionLineElement" method="post" action="">
   <input type="hidden" name="m" value="dPprescription" />
   <input type="hidden" name="dosql" value="" />
@@ -676,7 +675,6 @@ toggleSearchOptions = function(formName, chap){
   <input type="hidden" name="voie" value="" />
 </form>
 
-
 <form name="perf_signature_prat" method="post" action="">
   <input type="hidden" name="m" value="dPprescription" />
   <input type="hidden" name="dosql" value="do_prescription_line_mix_aed" />
@@ -692,7 +690,6 @@ toggleSearchOptions = function(formName, chap){
   <input type="hidden" name="prescription_line_mix_id" value="" />
   <input type="hidden" name="signature_pharma" value="" />
 </form>
-
 
 <form name="perf_validation_infir" method="post" action="">
   <input type="hidden" name="m" value="dPprescription" />
