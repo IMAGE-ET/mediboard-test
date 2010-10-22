@@ -24,6 +24,7 @@ foreach($plateaux as $_plateau) {
 $plateau->load(CValue::getOrSession("plateau_id"));
 $plateau->loadRefsEquipements();
 $plateau->loadRefsTechniciens();
+$plateau->loadRefsNotes();
 
 // Equipement
 $equipement = new CEquipement;

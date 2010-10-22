@@ -22,6 +22,7 @@ $rhs->load(CValue::get("rhs_id"));
 if (!$rhs->_id) {
 	CAppUI::stepAjax("RHS inexistant", UI_MSG_ERROR);
 }
+$rhs->loadRefsNotes();
 
 // Liste des catégories d'activité
 $type_activite = new CTypeActiviteCdARR();

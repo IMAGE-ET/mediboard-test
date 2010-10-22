@@ -15,10 +15,11 @@ $plateau = new CPlateauTechnique;
 $plateau->load(CValue::get("plateau_id"));
 $plateau->loadRefsTechniciens();
 
-// Equipement à editer
+// Technicien à editer
 $technicien = new CTechnicien;
 $technicien->load(CValue::get("technicien_id"));
 $technicien->plateau_id = $plateau->_id;
+$technicien->loadRefsNotes();
 
 // Kinés
 $user = new CMediusers;

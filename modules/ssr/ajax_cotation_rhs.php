@@ -47,6 +47,7 @@ foreach($rhss as $_rhs) {
     }
     $_rhs->loadRefSejour();
     $_rhs->loadRefDependances();
+    $_rhs->loadRefsNotes();
     if(!$_rhs->_ref_dependances->_id) {
       $_rhs->_ref_dependances->store();
     }

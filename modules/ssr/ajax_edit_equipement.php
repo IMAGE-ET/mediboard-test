@@ -19,6 +19,7 @@ $plateau->loadRefsEquipements();
 $equipement = new CEquipement;
 $equipement->load(CValue::get("equipement_id"));
 $equipement->plateau_id = $plateau->_id;
+$equipement->loadRefsNotes();
 
 // Création du template
 $smarty = new CSmartyDP();
