@@ -10,6 +10,15 @@
  
 CCanDo::checkAdmin();
 
+if (!CAppUI::conf("sip export_dest")) {
+  CAppUI::stepAjax("Aucun destinataire de défini pour l'export.", UI_MSG_ERROR);
+}
+
+// Si pas de tag patient
+if (!CAppUI::conf("dPpatients CPatient tag_ipp")) {
+  CAppUI::stepAjax("Aucun tag patient de défini.", UI_MSG_ERROR);
+}
+
 // Filtre sur les enregistrements
 $patient = new CPatient();
 $action = CValue::get("action", "start");
@@ -52,12 +61,6 @@ set_time_limit($seconds);
 // Export réel
 $errors = 0;
 $patients = $patient->loadList($where, $patient->_spec->key, "0, $max");
-
-// Si pas de tag patient et séjour
-if (!CAppUI::conf("dPplanningOp CSejour tag_dossier") || !CAppUI::conf("dPpatients CPatient tag_ipp")) {
-  CAppUI::stepAjax("Aucun tag (patient/séjour) de défini pour la synchronisation.", UI_MSG_ERROR);
-  return;
-}
 
 $echange = 0;
 foreach ($patients as $patient) {

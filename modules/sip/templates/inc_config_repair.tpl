@@ -32,15 +32,6 @@
   </table>
 </form>
 
-<script type="text/javascript">
-var Action = {  
-  repair: function (sAction) {
-    var url = new Url("sip", "ajax_repair_sejour");
-    url.addParam("action", sAction);
-    url.requestUpdate("repair");
-  }
-}
-</script>
 <table class="tbl">
 	<tr>
 	  <th class="title" colspan="100">{{tr}}sip-repair-classes{{/tr}}</th>

@@ -158,6 +158,36 @@ class CDestinataireHprim extends CMbObject {
 
     }
   }
+  
+  
+  function sendEvenementPatient($domEvenement, $mbObject, $referent = null, $initiateur = null) {
+    $msgEvtVenuePatient = $domEvenement->generateTypeEvenement($mbObject, $referent, $initiateur);
+    
+    if ($this->actif) {
+      $source = CExchangeSource::get("$this->_guid-evenementPatient");
+      if ($source->_id) {
+        $source->setData($msgEvtVenuePatient);
+        $source->send();
+        $acquittement = $source->receive();
+        
+        if ($acquittement) {
+          $echange_hprim = $domEvenement->_ref_echange_hprim;
+          $echange_hprim->date_echange = mbDateTime();
+          
+          $domGetAcquittement = new CHPrimXMLAcquittementsPatients();
+          $domGetAcquittement->loadXML(utf8_decode($acquittement));
+          $domGetAcquittement->_ref_echange_hprim = $echange_hprim;
+          $doc_valid = $domGetAcquittement->schemaValidate();
+          
+          $echange_hprim->statut_acquittement = $domGetAcquittement->getStatutAcquittementPatient();
+          $echange_hprim->acquittement_valide = $doc_valid ? 1 : 0;
+          $echange_hprim->_acquittement = $acquittement;
+      
+          $echange_hprim->store();
+        } 
+      }      
+    }
+  }
 }
 
 // Add

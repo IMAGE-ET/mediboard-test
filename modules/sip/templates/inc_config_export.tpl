@@ -33,6 +33,29 @@
     {{mb_include module=system template=inc_config_bool var=sej_no_numdos}}
     
     {{mb_include module=system template=inc_config_bool var=send_sej_pa}}
+    
+    {{assign var=var    value="export_dest"}}
+    {{assign var=field  value="$m[$var]"}}
+    {{assign var=value  value=$dPconfig.$m.$var}}
+    {{assign var=locale value=config-$m-$var}}
+    <tr>
+      <th>
+        <label for="{{$field}}" title="{{tr}}{{$locale}}-desc{{/tr}}">
+          {{tr}}{{$locale}}{{/tr}}
+        </label>  
+      </th>
+    
+      <td>
+        <select class="str" name="{{$field}}">
+          {{foreach from=$destinataires item=_dest}}
+            <option value="{{$_dest->_id}}" {{if $value == $_dest->_id}} selected="selected"{{/if}}>
+              {{$_dest->_view}}
+           </option>
+          {{/foreach}}
+        </select> 
+      </td>
+    </tr>
+    
   	  		    
     <tr>
       <td class="button" colspan="10">
@@ -42,40 +65,24 @@
   </table>
 </form>
 
-<!-- Import des tables -->
-<script type="text/javascript">
-
-var Action = {
-  module: "sip",
-  
-  import: function (sAction, type) {
-    var url = new Url;
-    url.setModuleAction(this.module, "ajax_export_"+type);
-    url.addParam("action", sAction);
-    url.requestUpdate("export-"+type);
-  },
-}
-
-</script>
-
+{{mb_include_script module="sip" script="action"}}
 <table class="tbl">
-
 <tr>
   <th class="title" colspan="100">{{tr}}sip-export-classes{{/tr}}</th>
 </tr>
 
 <tr>
-  <td>
+  <td class="narrow">
     {{tr}}sip-export-class{{/tr}} '{{tr}}CPatient{{/tr}}'
   </td>
-  <td>
-    <button type="button" class="new" onclick="Action.import('start', 'patient')">
+  <td class="narrow">
+    <button type="button" class="new" onclick="Action.doExport('start', 'patient')">
       {{tr}}Start{{/tr}}      
     </button>
-    <button type="button" class="change" onclick="Action.import('retry', 'patient')">
+    <button type="button" class="change" onclick="Action.doExport('retry', 'patient')">
       {{tr}}Retry{{/tr}}      
     </button>
-    <button type="button" class="tick" onclick="Action.import('continue', 'patient')">
+    <button type="button" class="tick" onclick="Action.doExport('continue', 'patient')">
       {{tr}}Continue{{/tr}}      
     </button>
   </td>
@@ -87,17 +94,16 @@ var Action = {
     {{tr}}sip-export-class{{/tr}} '{{tr}}CSejour{{/tr}}'
   </td>
   <td>
-    <button type="button" class="new" onclick="Action.import('start', 'sejour')">
+    <button type="button" class="new" onclick="Action.doExport('start', 'sejour')">
       {{tr}}Start{{/tr}}      
     </button>
-    <button type="button" class="change" onclick="Action.import('retry', 'sejour')">
+    <button type="button" class="change" onclick="Action.doExport('retry', 'sejour')">
       {{tr}}Retry{{/tr}}      
     </button>
-    <button type="button" class="tick" onclick="Action.import('continue', 'sejour')">
+    <button type="button" class="tick" onclick="Action.doExport('continue', 'sejour')">
       {{tr}}Continue{{/tr}}      
     </button>
   </td>
   <td id="export-sejour"></td>
 </tr>
-
 </table>

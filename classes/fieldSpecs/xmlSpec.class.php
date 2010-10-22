@@ -32,7 +32,7 @@ class CXmlSpec extends CMbFieldSpec {
     $value = $object->{$this->fieldName};
     $geshi = new Geshi($value, "xml");
     $geshi->enable_line_numbers(GESHI_NORMAL_LINE_NUMBERS);
-    $geshi->set_overall_style("max-height: 100%; white-space:normal;");
+    $geshi->set_overall_style("max-height: 100%;");
     $geshi->enable_classes();
 
     return utf8_decode($geshi->parse_code());

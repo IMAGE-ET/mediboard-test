@@ -104,7 +104,7 @@ class CSipObjectHandler extends CMbObjectHandler {
           
           $domEvenementEnregistrementPatient = new CHPrimXMLEnregistrementPatient();
           $domEvenementEnregistrementPatient->_ref_destinataire = $_destinataire;
-          $this->sendEvenement($domEvenementEnregistrementPatient, $mbObject);
+          $_destinataire->sendEvenementPatient($domEvenementEnregistrementPatient, $mbObject);
           
           $mbObject->_IPP = null;
         }
@@ -183,12 +183,12 @@ class CSipObjectHandler extends CMbObjectHandler {
           
           $domEvenementVenuePatient = new CHPrimXMLVenuePatient();
           $domEvenementVenuePatient->_ref_destinataire = $_destinataire;
-          $this->sendEvenement($domEvenementVenuePatient, $mbObject);
+          $_destinataire->sendEvenementPatient($domEvenementVenuePatient, $mbObject);
           
           if ($mbObject->_ref_patient->code_regime) {
             $domEvenementDebiteursVenue = new CHPrimXMLDebiteursVenue();
             $domEvenementDebiteursVenue->_ref_destinataire = $_destinataire;
-            $this->sendEvenement($domEvenementDebiteursVenue, $mbObject);
+            $_destinataire->sendEvenementPatient($domEvenementDebiteursVenue, $mbObject);
           }
           
           $mbObject->_num_dossier = null;
@@ -287,7 +287,7 @@ class CSipObjectHandler extends CMbObjectHandler {
             if ($patient2_ipp)
               $patient->_IPP = $patient2_ipp;
               
-            $this->sendEvenement($domEvenementEnregistrementPatient, $patient);
+            $dest_hprim->sendEvenementPatient($domEvenementEnregistrementPatient, $patient);
             continue;
           }
           
@@ -297,7 +297,7 @@ class CSipObjectHandler extends CMbObjectHandler {
             $domEvenementFusionPatient->_ref_destinataire = $dest_hprim;
                           
             $patient->_patient_elimine = $patient_eliminee;
-            $this->sendEvenement($domEvenementFusionPatient, $patient);
+            $dest_hprim->sendEvenementPatient($domEvenementFusionPatient, $patient);
             continue;
           }
         }        
@@ -306,35 +306,5 @@ class CSipObjectHandler extends CMbObjectHandler {
   }
   
   function onAfterDelete(CMbObject &$mbObject) {}
-  
-  function sendEvenement($domEvenement, $mbObject, $referent = null, $initiateur = null) {
-    $msgEvtVenuePatient = $domEvenement->generateTypeEvenement($mbObject, $referent, $initiateur);
-    
-    $dest_hprim = $domEvenement->_ref_destinataire;
-    if ($dest_hprim->actif) {
-      $source = CExchangeSource::get("$dest_hprim->_guid-evenementPatient");
-      if ($source->_id) {
-        $source->setData($msgEvtVenuePatient);
-        $source->send();
-        $acquittement = $source->receive();
-        
-        if ($acquittement) {
-          $echange_hprim = $domEvenement->_ref_echange_hprim;
-          $echange_hprim->date_echange = mbDateTime();
-          
-          $domGetAcquittement = new CHPrimXMLAcquittementsPatients();
-          $domGetAcquittement->loadXML(utf8_decode($acquittement));
-          $domGetAcquittement->_ref_echange_hprim = $echange_hprim;
-          $doc_valid = $domGetAcquittement->schemaValidate();
-          
-          $echange_hprim->statut_acquittement = $domGetAcquittement->getStatutAcquittementPatient();
-          $echange_hprim->acquittement_valide = $doc_valid ? 1 : 0;
-          $echange_hprim->_acquittement = $acquittement;
-      
-          $echange_hprim->store();
-        } 
-      }      
-    }
-  }
 }
 ?>

@@ -21,14 +21,13 @@ $result = $acquittement = $errors = null;
 if (!CAppUI::conf('sip server')) {  
   if ($operation && $entier1 && $entier2) {
   	$dest_hprim = new CDestinataireHprim();
-	  $dest_hprim->type = "sip";
-    $dest_hprim->group_id = CGroups::loadCurrent()->_id;
-	  $dest_hprim->loadMatchingObject();
-	  
-    $source = CExchangeSource::get($dest_hprim->_guid);
-    $source->setData(array($operation, $entier1, $entier2), true);
-    $source->send("calculatorAuth");
+	  $dest_hprim->load(5);
+    $source = CExchangeSource::get("$dest_hprim->_guid-evenementPatient");
+    $source->setData(array(utf8_encode("add"), utf8_encode(3), utf8_encode(4)), true);
+    $source->send();
+    
     $result = $source->receive();
+    mbTrace($result);
   }
   
   if (is_array($file)) {

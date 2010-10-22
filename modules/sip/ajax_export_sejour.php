@@ -10,6 +10,15 @@
  
 CCanDo::checkAdmin();
 
+// Si pas de tag patient et séjour
+if (!CAppUI::conf("dPplanningOp CSejour tag_dossier") || !CAppUI::conf("dPpatients CPatient tag_ipp")) {
+  CAppUI::stepAjax("Aucun tag (patient/séjour) de défini.", UI_MSG_ERROR);
+}
+
+if (!CAppUI::conf("sip export_dest")) {
+  CAppUI::stepAjax("Aucun destinataire de défini pour l'export.", UI_MSG_ERROR);
+}
+
 // Filtre sur les enregistrements
 $sejour = new CSejour();
 $action = CValue::get("action", "start");
@@ -62,12 +71,6 @@ set_time_limit($seconds);
 $errors = 0;
 $sejours = $sejour->loadList($where, $sejour->_spec->key, "0, $max");
 
-// Si pas de tag patient et séjour
-if (!CAppUI::conf("dPplanningOp CSejour tag_dossier") || !CAppUI::conf("dPpatients CPatient tag_ipp")) {
-  CAppUI::stepAjax("Aucun tag (patient/séjour) de défini pour la synchronisation.", UI_MSG_ERROR);
-  return;
-}
-
 $echange = 0;
 foreach ($sejours as $sejour) {
   $sejour->loadRefPraticien();
@@ -89,11 +92,11 @@ foreach ($sejours as $sejour) {
   $sejour->loadRefsConsultAnesth();
       
   $sejour->_ref_last_log->type = "create";
+  
   $dest_hprim = new CDestinataireHprim();
-  $dest_hprim->message = "patients";
-  $dest_hprim->type = "sip";
-  $dest_hprim->loadMatchingObject();
-
+  $dest_hprim->load(CAppUI::conf("sip export_dest"));
+  $dest_hprim->loadConfigValues();
+  
   if (!$sejour->_num_dossier) {
     $num_dossier = new CIdSante400();
     //Paramétrage de l'id 400
@@ -109,47 +112,46 @@ foreach ($sejours as $sejour) {
     continue;
   }
 
-  if (CAppUI::conf("sip sej_no_numdos") && $sejour->_num_dossier && ($sejour->_num_dossier != "-")) {
+  if (!CAppUI::conf("sip sej_no_numdos") && $sejour->_num_dossier && ($sejour->_num_dossier != "-")) {
     continue;
   }
   
-  $domEvenement = new CHPrimXMLVenuePatient();
-  $domEvenement->emetteur     = CAppUI::conf('mb_id');
-  $domEvenement->destinataire = $dest_hprim->nom;
-  $domEvenement->group_id     = $dest_hprim->group_id;
+  $domEvenementVenuePatient = new CHPrimXMLVenuePatient();
+  $domEvenementVenuePatient->_ref_destinataire = $dest_hprim;
   
-  $messageEvtPatient = $domEvenement->generateTypeEvenement($sejour);
-  $doc_valid = $domEvenement->schemaValidate();
+  $dest_hprim->sendEvenementPatient($domEvenementVenuePatient, $sejour);
   
-  if (!$doc_valid) {
+  if (!$domEvenementVenuePatient->_ref_echange_hprim->message_valide) {
     $errors++;
     trigger_error("Création de l'événement séjour impossible.", E_USER_WARNING);
     CAppUI::stepAjax("Import de '$sejour->_view' échoué", UI_MSG_WARNING);
+    continue;
   }
   
   if ($sejour->_ref_patient->code_regime) {
-    $domEvenement = new CHPrimXMLDebiteursVenue();
-    $domEvenement->emetteur     = CAppUI::conf('mb_id');
-    $domEvenement->destinataire = $dest_hprim->nom;
-    $domEvenement->group_id     = $dest_hprim->group_id;
+    $domEvenementDebiteursVenue = new CHPrimXMLDebiteursVenue();
+    $domEvenementDebiteursVenue->_ref_destinataire = $dest_hprim;
     
-    $messageEvtPatient = $domEvenement->generateTypeEvenement($sejour);
-    $doc_valid = $domEvenement->schemaValidate();
+    $dest_hprim->sendEvenementPatient($domEvenementDebiteursVenue, $sejour);
     
-    if (!$doc_valid) {
+    if (!$domEvenementDebiteursVenue->_ref_echange_hprim->message_valide) {
       $errors++;
       trigger_error("Création de l'événement debiteurs impossible.", E_USER_WARNING);
       CAppUI::stepAjax("Import de '$sejour->_view' échoué", UI_MSG_WARNING);
     }
   }
-  $echange++;
+  if (!$errors) {
+    $echange++;
+  }
 }
 
 // Enregistrement du dernier identifiant dans la session
 if (@$sejour->_id) {
   CValue::setSession("idContinue", $sejour->_id);
   CAppUI::stepAjax("Dernier ID traité : '$sejour->_id'", UI_MSG_OK);
-  CAppUI::stepAjax("$echange de créés", UI_MSG_OK);
+  if (!$errors) {
+    CAppUI::stepAjax("$echange de créés", UI_MSG_OK);
+  }
 }
 
 CAppUI::stepAjax("Import terminé avec  '$errors' erreurs", $errors ? UI_MSG_WARNING : UI_MSG_OK);
