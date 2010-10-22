@@ -119,7 +119,7 @@ emptyProtocole = function() {
 	              <input type="hidden" name="object_class" value="CSejour" />
 	              <input type="hidden" name="type" value="pre_admission" />
 	              <input type="hidden" name="callback" value="reloadPrescription" />
-	              <button type="button" class="add" onclick="submitFormAjax(this.form, 'systemMsg');">
+	              <button type="button" class="add singleclick" onclick="submitFormAjax(this.form, 'systemMsg');">
 	                Pré-admission
 	              </button> 
 	            </form>
@@ -158,7 +158,7 @@ emptyProtocole = function() {
                 <input type="hidden" name="type" value="sejour" />
                 <input type="hidden" name="praticien_id" value="{{$app->user_id}}" />
                 <input type="hidden" name="callback" value="reloadPrescription" />
-                <button type="button" class="add" onclick="submitFormAjax(this.form, 'systemMsg');">
+                <button type="button" class="add singleclick" onclick="submitFormAjax(this.form, 'systemMsg');">
                   Séjour
                 </button> 
               </form>
@@ -195,7 +195,7 @@ emptyProtocole = function() {
 	            <input type="hidden" name="type" value="sortie" />
 	            <input type="hidden" name="callback" value="reloadPrescription" />
 	            <input type="hidden" name="praticien_id" value="{{$app->user_id}}" />
-	            <button type="button" class="add" onclick="submitFormAjax(this.form, 'systemMsg');">             
+	            <button type="button" class="add singleclick" onclick="submitFormAjax(this.form, 'systemMsg');">             
 	              Sortie
 	            </button>
 	          </form>
@@ -310,7 +310,7 @@ emptyProtocole = function() {
 				          <input type="hidden" name="object_class" value="CSejour" />
 				          <input type="hidden" name="type" value="sejour"/>
 				          <input type="hidden" name="callback" value="addProtocole" />
-	                <button type="button" class="submit" onclick="submitFormAjax(this.form, 'systemMsg');">Créer</button>         
+	                <button type="button" class="submit singleclick" onclick="submitFormAjax(this.form, 'systemMsg');">Créer</button>         
                 </form>
 				      </td>
 				    </tr>
