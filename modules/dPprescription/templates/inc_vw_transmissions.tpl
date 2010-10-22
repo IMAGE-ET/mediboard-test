@@ -162,7 +162,7 @@ Main.add(function () {
 			{{include file=../../dPhospi/templates/inc_line_suivi.tpl 
 				_suivi=$_object
 				show_patient=true
-				without_del_form=true
+				readonly=true
 				nodebug=true
 			}}
 			</tr>

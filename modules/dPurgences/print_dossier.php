@@ -25,8 +25,8 @@ $sejour = $rpu->_ref_sejour;
 $sejour->loadRefsConsultations();
 $sejour->loadListConstantesMedicales();
 $sejour->loadSuiviMedical();
-$sejour->loadRefConstantes();
-$patient = $rpu->_ref_sejour->_ref_patient;
+$patient = $sejour->_ref_patient;
+$patient->loadRefConstantesMedicales();
 $patient->loadIPP();
 $patient->loadRefDossierMedical();
 

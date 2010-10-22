@@ -121,7 +121,7 @@
   </tr>
   {{foreach from=$sejour->_ref_suivi_medical item=_suivi}}
 	  <tr id="{{$_suivi->_guid}}" {{if $_suivi instanceof CTransmissionMedicale}}class="{{$_suivi->_cible}}"{{/if}}>
- 	    {{mb_include module=dPhospi template=inc_line_suivi show_patient=false nodebug=true without_del_form=true}}
+ 	    {{mb_include module=dPhospi template=inc_line_suivi show_patient=false nodebug=true readonly=true}}
 		</tr>
   {{foreachelse}}
 	  <tr>

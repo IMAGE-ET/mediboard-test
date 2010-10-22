@@ -326,5 +326,5 @@ printDossier = function(rpu_id) {
   </tr>
 </table>
 
-{{include file="../../dPhospi/templates/inc_list_transmissions.tpl" without_del_form=true list_transmissions=$sejour->_ref_suivi_medical}}
+{{include file="../../dPhospi/templates/inc_list_transmissions.tpl" readonly=true list_transmissions=$sejour->_ref_suivi_medical}}
 

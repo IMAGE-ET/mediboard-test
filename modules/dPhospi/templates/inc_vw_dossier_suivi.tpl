@@ -419,7 +419,7 @@ Main.add(function () {
 	       {{assign var=end value=$count_trans-$start}}
 	    {{/if}}
 	    {{assign var=mini_list value=$sejour->_ref_suivi_medical|@array_slice:$start:$end}}
-	    {{include file="../../dPhospi/templates/inc_list_transmissions.tpl" without_del_form=false list_transmissions=$mini_list}}
+	    {{include file="../../dPhospi/templates/inc_list_transmissions.tpl" readonly=false list_transmissions=$mini_list}}
     </div>
   {{/if}}
 {{/foreach}}

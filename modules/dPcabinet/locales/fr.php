@@ -1267,6 +1267,7 @@ $locales['mod-dPcabinet-tab-print_bilan_fse'] = 'Impression du bilan FSE';
 $locales['mod-dPcabinet-tab-print_bilan_lot'] = 'Impression du bilan lot';
 $locales['mod-dPcabinet-tab-print_bordereau'] = 'Impression bordereau';
 $locales['mod-dPcabinet-tab-print_compta'] = 'Impression de la comptabilité';
+$locales['mod-dPcabinet-tab-print_consult'] = 'Impression de la consultation d\'urgences';
 $locales['mod-dPcabinet-tab-print_docs'] = 'Impression des documents';
 $locales['mod-dPcabinet-tab-print_pack'] = 'Impression du pack';
 $locales['mod-dPcabinet-tab-print_plages'] = 'Impression des plages';

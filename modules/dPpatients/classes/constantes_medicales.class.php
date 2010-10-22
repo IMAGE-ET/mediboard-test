@@ -74,14 +74,14 @@ class CConstantesMedicales extends CMbObject {
       "colors" => array("black")
     ), 
     "ta"                => array(
-      "unit" => "cm Hg", 
+      "unit" => "cmHg", 
       "formfields" => array("_ta_systole", "_ta_diastole"), 
       "min" => 0, "max" => 20,
       "standard" => 12,
       "colors" => array("#00A8F0", "#C0D800")
     ),
     "ta_droit"          => array(
-      "unit" => "cm Hg", 
+      "unit" => "cmHg", 
       "formfields" => array("_ta_droit_systole", "_ta_droit_diastole"), 
       "min" => 0, "max" => 20,
       "standard" => 12,

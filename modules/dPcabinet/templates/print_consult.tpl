@@ -12,9 +12,13 @@
 
 <table class="{{$tbl_class}}">
   <tr>
-    <th class="title" colspan="10" style="font-size: 16px">
-      Dossier de consultation de <span style="font-size: 20px">{{$patient->_view}}</span> {{mb_include module=dPpatients template=inc_vw_ipp ipp=$patient->_IPP}} <br />
-      né(e) le {{mb_value object=$patient field=naissance}} de sexe {{if $patient->sexe == "m"}} masculin {{else}} féminin {{/if}} <br /> <hr />
+    <th class="title" colspan="10" style="font-size: 16px;">
+      Dossier de consultation de 
+			<span style="font-size: 20px;">{{$patient->_view}}</span> 
+			{{mb_include module=dPpatients template=inc_vw_ipp ipp=$patient->_IPP}} 
+			<br />
+      né(e) le {{mb_value object=$patient field=naissance}} 
+			de sexe {{if $patient->sexe == "m"}} masculin {{else}} féminin {{/if}} <br /> <hr />
       <span style="font-size: 14px">par le Dr {{$consult->_ref_praticien}} le {{mb_value object=$consult field=_date}} - Dossier {{mb_include module=dPplanningOp template=inc_vw_numdos num_dossier=$sejour->_num_dossier}}</span>
     </th>
   </tr>
@@ -38,7 +42,7 @@
   </tr>
 </table>
 
-{{mb_include module=dPhospi template=inc_list_transmissions without_del_form=true list_transmissions=$sejour->_ref_suivi_medical}}
+{{mb_include module=dPhospi template=inc_list_transmissions readonly=true list_transmissions=$sejour->_ref_suivi_medical}}
 
 <table class="{{$tbl_class}}">
   <tr>
@@ -61,7 +65,7 @@
   <tr><th class="category" colspan="10">Actes</th></tr>
 </table>
 
-{{mb_include module=dPcabinet template=print_actes without_del_form=true}}
+{{mb_include module=dPcabinet template=print_actes readonly=true}}
 
 {{if !@$offline}}
 <table>

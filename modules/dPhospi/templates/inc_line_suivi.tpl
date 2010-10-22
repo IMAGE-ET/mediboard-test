@@ -21,8 +21,8 @@
   </td>
   <td>{{$_suivi->date|date_format:$dPconfig.time}}</td>
   <td class="text" colspan="2"
-    {{if $_suivi->degre == "high"}}style="background-color: #faa"{{/if}} 
-    {{if $_suivi->degre == "info"}}style="background-color: #aaf"{{/if}}>
+    {{if $_suivi->degre == "high"}} style="background-color: #faa" {{/if}} 
+    {{if $_suivi->degre == "info"}} style="background-color: #aaf" {{/if}}>
     <div>
       {{if $line_guid == $_suivi->_guid && $action == "show" && $_suivi->_canEdit}}
        <form name="editObsSuiviSoins" action="?" method="post">
@@ -37,24 +37,24 @@
     </div>
   </td>
   
+  {{if !$readonly && $_suivi->_canEdit}}
   <td class="button">
-	  {{if !$without_del_form && $_suivi->_canEdit}}
-      <form name="Del-{{$_suivi->_guid}}" action="?m={{$m}}" method="post" onsubmit="return checkForm(this)">
-        <input type="hidden" name="dosql" value="do_observation_aed" />
-        <input type="hidden" name="del" value="1" />
-        <input type="hidden" name="m" value="dPhospi" />
-        <input type="hidden" name="observation_medicale_id" value="{{$_suivi->_id}}" />
-        <input type="hidden" name="sejour_id" value="{{$_suivi->sejour_id}}" />
-        <button type="button" class="trash notext" onclick="submitSuivi(this.form)">{{tr}}Delete{{/tr}}</button>
-      </form>
-     
-		  {{if $line_guid == $_suivi->_guid && $action == "show"}}
-	      <button type="button" class="lock notext" onclick="refreshLineSuivi('{{$_suivi->_guid}}','hide');"></button>
-	    {{else}}
-				<button type="button" class="edit notext" onclick="refreshLineSuivi('{{$_suivi->_guid}}','show');"></button>
-			{{/if}}
+    <form name="Del-{{$_suivi->_guid}}" action="?m={{$m}}" method="post" onsubmit="return checkForm(this)">
+      <input type="hidden" name="dosql" value="do_observation_aed" />
+      <input type="hidden" name="del" value="1" />
+      <input type="hidden" name="m" value="dPhospi" />
+      <input type="hidden" name="observation_medicale_id" value="{{$_suivi->_id}}" />
+      <input type="hidden" name="sejour_id" value="{{$_suivi->sejour_id}}" />
+      <button type="button" class="trash notext" onclick="submitSuivi(this.form)">{{tr}}Delete{{/tr}}</button>
+    </form>
+   
+	  {{if $line_guid == $_suivi->_guid && $action == "show"}}
+      <button type="button" class="lock notext" onclick="refreshLineSuivi('{{$_suivi->_guid}}','hide');"></button>
+    {{else}}
+			<button type="button" class="edit notext" onclick="refreshLineSuivi('{{$_suivi->_guid}}','show');"></button>
 		{{/if}}
   </td>
+  {{/if}}
 {{/if}}
 
 {{if $_suivi instanceof CTransmissionMedicale}}
@@ -106,7 +106,7 @@
 	    <a href="#1" onclick="if($('cibleTrans')){ $('cibleTrans').update('{{$_suivi->libelle_ATC}}'); $V(document.forms.editTrans.libelle_ATC, '{{$_suivi->libelle_ATC}}'); }">{{$_suivi->libelle_ATC}}</a>
 	  {{/if}}
   </td>
-  <td class="text {{if $_suivi->type}}trans-{{$_suivi->type}}{{/if}} libelle_trans" {{if $_suivi->degre == "high"}}style="background-color: #faa"{{/if}}>
+  <td class="text {{if $_suivi->type}}trans-{{$_suivi->type}}{{/if}} libelle_trans" {{if $_suivi->degre == "high"}} style="background-color: #faa" {{/if}}>
     
 		{{if $line_guid == $_suivi->_guid && $action == "show" && $_suivi->_canEdit}}
 		   <form name="editTransSuiviSoins" action="?" method="post">
@@ -120,24 +120,24 @@
 		{{/if}}
   </td>
   
+  {{if !$readonly && $_suivi->_canEdit}}
   <td class="button narrow" style="white-space: nowrap;">
-    {{if !$without_del_form && $_suivi->_canEdit}}
-       <form name="Del-{{$_suivi->_guid}}" action="?m={{$m}}" method="post" onsubmit="return checkForm(this)">
-         <input type="hidden" name="dosql" value="do_transmission_aed" />
-         <input type="hidden" name="del" value="1" />
-         <input type="hidden" name="m" value="dPhospi" />
-         <input type="hidden" name="transmission_medicale_id" value="{{$_suivi->_id}}" />
-         <input type="hidden" name="sejour_id" value="{{$_suivi->sejour_id}}" />
-         <button type="button" class="trash notext" onclick="submitSuivi(this.form)">{{tr}}Delete{{/tr}}</button>
-       </form>
+		<form name="Del-{{$_suivi->_guid}}" action="?m={{$m}}" method="post" onsubmit="return checkForm(this)">
+			<input type="hidden" name="dosql" value="do_transmission_aed" />
+			<input type="hidden" name="del" value="1" />
+			<input type="hidden" name="m" value="dPhospi" />
+			<input type="hidden" name="transmission_medicale_id" value="{{$_suivi->_id}}" />
+			<input type="hidden" name="sejour_id" value="{{$_suivi->sejour_id}}" />
+			<button type="button" class="trash notext" onclick="submitSuivi(this.form)">{{tr}}Delete{{/tr}}</button>
+		</form>
 
-		  {{if $line_guid == $_suivi->_guid && $action == "show"}}
-        <button type="button" class="lock notext" onclick="refreshLineSuivi('{{$_suivi->_guid}}','hide');"></button>
-      {{else}}
-				<button type="button" class="edit notext" onclick="refreshLineSuivi('{{$_suivi->_guid}}','show');"></button>
-			{{/if}}	
-		{{/if}}
+	  {{if $line_guid == $_suivi->_guid && $action == "show"}}
+      <button type="button" class="lock notext" onclick="refreshLineSuivi('{{$_suivi->_guid}}','hide');"></button>
+    {{else}}
+			<button type="button" class="edit notext" onclick="refreshLineSuivi('{{$_suivi->_guid}}','show');"></button>
+		{{/if}}	
   </td>
+  {{/if}}
 {{/if}}
 
 {{if $_suivi instanceof CConstantesMedicales}}
@@ -152,7 +152,8 @@
   <td colspan="2" class="text">
     {{foreach from=$params key=_key item=_field name="const"}}
       {{if $_suivi->$_key != null && $_key|substr:0:1 != "_"}}
-        {{$_key}}: {{$_suivi->$_key}} ({{$_field.unit}}), &nbsp;
+        {{mb_title object=$_suivi field=$_key}} :
+        {{mb_value object=$_suivi field=$_key}}{{$_field.unit}}, 
       {{/if}}
     {{/foreach}}
   </td>
@@ -196,8 +197,8 @@
       {{mb_value object=$_suivi field="commentaire"}}
 		{{/if}}
 	</td>
+  {{if !$readonly && $_suivi->_canEdit}}
   <td>
-    {{if !$without_del_form && $_suivi->_canEdit}}
 			{{if $_suivi instanceof CPrescriptionLineElement}}
 	      <form name="removeLine" action="?" method="post">
 	        <input type="hidden" name="m" value="dPprescription" />
@@ -223,7 +224,7 @@
 			{{else}}
 	  	  <button type="button" class="edit notext" onclick="refreshLineSuivi('{{$_suivi->_guid}}','show');">{{tr}}Edit{{/tr}}</button>
 			{{/if}}
-		{{/if}}
     
   </td>
+  {{/if}}
 {{/if}}

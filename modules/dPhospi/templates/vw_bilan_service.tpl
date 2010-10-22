@@ -234,7 +234,7 @@ selectPeriode = function(element) {
 	  {{foreach from=$_trans_and_obs_by_patient item=_trans_and_obs_by_date}}
 		  {{foreach from=$_trans_and_obs_by_date item=_trans_and_obs}}
 			  <tr id="{{$_trans_and_obs->_guid}}" {{if $_trans_and_obs instanceof CTransmissionMedicale}}class="{{$_trans_and_obs->_cible}}"{{/if}}>
-        {{include file=../../dPhospi/templates/inc_line_suivi.tpl _suivi=$_trans_and_obs show_patient=false without_del_form=true nodebug=true}}
+        {{include file=../../dPhospi/templates/inc_line_suivi.tpl _suivi=$_trans_and_obs show_patient=false readonly=true nodebug=true}}
         </tr>
 		  {{/foreach}}
 	  {{/foreach}}

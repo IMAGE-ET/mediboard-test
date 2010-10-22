@@ -15,7 +15,7 @@ toggleTrans = function(trans_class){
 <table class="tbl">
   <tr>
     <th colspan="7" class="title">
-			{{if !$without_del_form}}
+			{{if !$readonly}}
 				<div style="float: right">
 			    <select style="width:150px" name="selCible" onchange="loadSuivi('{{$sejour->_id}}','',this.value)" >
 			      <option value="">&mdash; Toutes les cibles</option>
@@ -45,12 +45,15 @@ toggleTrans = function(trans_class){
     <th>{{tr}}Date{{/tr}}</th>
     <th>{{tr}}Hour{{/tr}}</th>
     <th>{{mb_title class=CTransmissionMedicale field=object_class}}</th>
+		{{if !$readonly}}
     <th>{{mb_title class=CTransmissionMedicale field=text}}</th>
+		{{/if}}
     <th />
   </tr>  
-  <tbody {{if !$without_del_form}} id="transmissions"{{/if}}>
+  <tbody {{if !$readonly}} id="transmissions" {{/if}}>
   {{foreach from=$list_transmissions item=_suivi}}
-	<tr {{if !$without_del_form}}id="{{$_suivi->_guid}}"{{/if}} {{if $_suivi instanceof CTransmissionMedicale}}class="{{$_suivi->_cible}} {{if $_suivi->object_id}}{{$_suivi->_ref_object->_guid}}{{/if}}"{{/if}}
+	<tr {{if !$readonly}}id="{{$_suivi->_guid}}"{{/if}} 
+	    {{if $_suivi instanceof CTransmissionMedicale}} class="{{$_suivi->_cible}} {{if $_suivi->object_id}}{{$_suivi->_ref_object->_guid}}{{/if}}"{{/if}}
 	    {{if $_suivi instanceof CPrescriptionLineElement || $_suivi instanceof CPrescriptionLineComment}}
 			  onmouseover="highlightTransmissions('{{$_suivi->_guid}}');" onmouseout="removeHighlightTransmissions();"
 			{{/if}}>

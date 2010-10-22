@@ -10,7 +10,7 @@
 
 $line_guid = CValue::get("line_guid");
 $action    = CValue::get("action");
-$without_del_form = CValue::getOrSession("without_del_form");
+$readonly = CValue::getOrSession("readonly");
 
 $user = new CMediusers();
 $user->load(CAppUI::$instance->user_id);
@@ -40,7 +40,7 @@ $smarty->assign("isPraticien" , $user->isPraticien());
 $smarty->assign("line_guid"   , $line_guid);
 $smarty->assign("action"      , $action);
 $smarty->assign("nodebug"     , true);
-$smarty->assign("without_del_form", $without_del_form);
+$smarty->assign("readonly", $readonly);
 $smarty->display("inc_line_suivi.tpl");
 
 ?>
