@@ -14,8 +14,9 @@ class CGroupsConfig extends CMbObject {
   var $object_id = null; // CGroups
   
   // Object configs
-  var $max_comp   = null;
-  var $max_ambu   = null; 
+  var $max_comp    = null;
+  var $max_ambu    = null;
+  var $codage_prat = null;
 
   function getSpec() {
     $spec = parent::getSpec();
@@ -29,8 +30,9 @@ class CGroupsConfig extends CMbObject {
     $specs = parent::getProps();
     $specs["object_id"]          = "ref class|CGroups";
     
-    $specs["max_comp"]   = "num min|0";
-    $specs["max_ambu"]   = "num min|0";
+    $specs["max_comp"]    = "num min|0";
+    $specs["max_ambu"]    = "num min|0";
+    $specs["codage_prat"] = "bool default|0";
 
     return $specs;
   }

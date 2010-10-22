@@ -208,9 +208,9 @@ function reloadPrescription(prescription_id){
   {{/if}}
 
 	{{if !$dPconfig.dPsalleOp.mode_anesth}}
-	  {{if (!$currUser->_is_praticien || $currUser->_is_praticien && $can->edit)}}
-    <li><a href="#diag_tab">Diags.</a></li>
+	  {{if (!$currUser->_is_praticien || ($currUser->_is_praticien && $can->edit) || ($currUser->_is_praticien && $codage_prat))}}
     <li><a href="#codage_tab">Actes</a></li>
+    <li><a href="#diag_tab">Diags.</a></li>
 		{{/if}}
 		
 		{{if !$currUser->_is_praticien || ($currUser->_is_praticien && $can->edit) || ($currUser->_is_praticien && $currUser->_is_anesth)}}
@@ -259,14 +259,7 @@ function reloadPrescription(prescription_id){
 
 {{if !$dPconfig.dPsalleOp.mode_anesth}}
 
-{{if (!$currUser->_is_praticien || $currUser->_is_praticien && $can->edit)}}
-<!-- Troisieme onglet bis: codage diagnostics CIM -->
-<div id="diag_tab" style="display:none">
-  <div id="cim">
-    {{include file="inc_diagnostic_principal.tpl" modeDAS=true}}
-  </div>
-</div>
-
+{{if (!$currUser->_is_praticien || $currUser->_is_praticien && $can->edit || $currUser->_is_praticien && $codage_prat)}}
 
 <!-- codage des acte ccam et ngap -->
 <div id="codage_tab" style="display:none">
@@ -322,6 +315,13 @@ function reloadPrescription(prescription_id){
       {{assign var="object" value=$selOp}}
       {{mb_include module=dPcabinet template=inc_codage_ngap}}
     </div>
+  </div>
+</div>
+
+<!-- codage diagnostics CIM -->
+<div id="diag_tab" style="display:none">
+  <div id="cim">
+    {{include file="inc_diagnostic_principal.tpl" modeDAS=true}}
   </div>
 </div>
 {{/if}}

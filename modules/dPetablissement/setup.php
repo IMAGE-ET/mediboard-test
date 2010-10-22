@@ -124,7 +124,15 @@ class CSetupdPetablissement extends CSetup {
               ADD INDEX (`object_id`);";
     $this->addQuery($sql);
     
-    $this->mod_version = "0.24";
+    $this->makeRevision("0.24");
+    $sql = "ALTER TABLE `groups_config` 
+              ADD `codage_prat` ENUM ('0','1');";
+    $this->addQuery($sql);
+    $sql = "UPDATE SET TABLE `groups_config` 
+              ADD `codage_prat` ENUM ('0','1') DEFAULT 0;";
+    $this->addQuery($sql);
+    
+    $this->mod_version = "0.25";
   } 
 }
 

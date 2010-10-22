@@ -218,9 +218,12 @@ if ($selOp->_id){
   $smarty->assign("listChamps", $listChamps);
 }
 
+$group = CGroups::loadCurrent();
+$group->loadConfigValues();
+
 $listValidateurs = CPersonnel::loadListPers(array("op", "op_panseuse"), true, true);
 
-$smarty->assign("anesth_perop", $anesth_perop);
+$smarty->assign("anesth_perop"           , $anesth_perop);
 $smarty->assign("unites"                 , $unites);
 $smarty->assign("acte_ngap"              , $acte_ngap);
 $smarty->assign("op"                     , $op);
@@ -238,6 +241,7 @@ $smarty->assign("listValidateurs"        , $listValidateurs);
 $smarty->assign("isPrescriptionInstalled", CModule::getActive("dPprescription"));
 $smarty->assign("isbloodSalvageInstalled", CModule::getActive("bloodSalvage"));
 $smarty->assign("isImedsInstalled"       , (CModule::getActive("dPImeds") && CImeds::getTagCIDC(CGroups::loadCurrent())));
+$smarty->assign("codage_prat"            , $group->_configs["codage_prat"]);
 $smarty->assign("prescription"           , $prescription);
 $smarty->assign("protocoles"             , $protocoles);
 $smarty->assign("anesth_id"              , $anesth_id);
