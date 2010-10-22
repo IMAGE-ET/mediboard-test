@@ -161,11 +161,11 @@ foreach($prescriptions as $_prescription){
 			$qte_adm = $_planif->_ref_prise->_quantite_administrable ? $_planif->_ref_prise->_quantite_administrable : 1; 
 			
 		  $time = mbTransformTime($_planif->dateTime,null,"%H").":00:00";
-      $date = mbDate($_planif->dateTime);
-		  if(!isset($pancarte[$_prescription->_id]["$date $time"][$type][$_planif->object_id]["prevue"])){
-			  $pancarte[$_prescription->_id]["$date $time"][$type][$_planif->object_id]["prevue"] = 0;
+      $_date = mbDate($_planif->dateTime);
+		  if(!isset($pancarte[$_prescription->_id]["$_date $time"][$type][$_planif->object_id]["prevue"])){
+			  $pancarte[$_prescription->_id]["$_date $time"][$type][$_planif->object_id]["prevue"] = 0;
 			}
-			$pancarte[$_prescription->_id]["$date $time"][$type][$_planif->object_id]["prevue"] += $qte_adm;			
+			$pancarte[$_prescription->_id]["$_date $time"][$type][$_planif->object_id]["prevue"] += $qte_adm;			
 		}
 		
 		if($_planif->_ref_object instanceof CPrescriptionLineMixItem){
@@ -179,11 +179,11 @@ foreach($prescriptions as $_prescription){
 			$list_lines[$type_line][$_planif->_ref_object->_ref_prescription_line_mix->_id] = $_planif->_ref_object->_ref_prescription_line_mix;
       $list_lines["perf_line"][$_planif->_ref_object->_id] = $_planif->_ref_object; 
 			$time = mbTransformTime($_planif->dateTime,null,"%H").":00:00";
-			$date = mbDate($_planif->dateTime);
-			if(!isset($pancarte[$_prescription->_id]["$date $time"][$type_line][$_planif->_ref_object->prescription_line_mix_id][$_planif->object_id]["prevue"])){
-				$pancarte[$_prescription->_id]["$date $time"][$type_line][$_planif->_ref_object->prescription_line_mix_id][$_planif->object_id]["prevue"] = 0;
+			$_date = mbDate($_planif->dateTime);
+			if(!isset($pancarte[$_prescription->_id]["$_date $time"][$type_line][$_planif->_ref_object->prescription_line_mix_id][$_planif->object_id]["prevue"])){
+				$pancarte[$_prescription->_id]["$_date $time"][$type_line][$_planif->_ref_object->prescription_line_mix_id][$_planif->object_id]["prevue"] = 0;
 			}
-      $pancarte[$_prescription->_id]["$date $time"][$type_line][$_planif->_ref_object->prescription_line_mix_id][$_planif->object_id]["prevue"] += $_planif->_ref_object->_quantite_administration;
+      $pancarte[$_prescription->_id]["$_date $time"][$type_line][$_planif->_ref_object->prescription_line_mix_id][$_planif->object_id]["prevue"] += $_planif->_ref_object->_quantite_administration;
   	}
 	}
 	
@@ -210,7 +210,7 @@ foreach($prescriptions as $_prescription){
 	
 	foreach($administrations as $_administration){
 		$time = mbTransformTime($_administration->dateTime,null,"%H").":00:00";
-    $date = mbDate($_administration->dateTime);
+    $_date = mbDate($_administration->dateTime);
 			
 		$type_adm = $_administration->planification ? "prevue" : "adm";
 			
@@ -225,10 +225,10 @@ foreach($prescriptions as $_prescription){
 	    $_administration->_ref_object->_unite_administration = $_administration->unite_prise;
 	    $list_lines[$type][$_administration->_ref_object->_id] = $_administration->_ref_object;
 	    
-	    if(!isset($pancarte[$_prescription->_id]["$date $time"][$type][$_administration->object_id][$type_adm])){
-	      $pancarte[$_prescription->_id]["$date $time"][$type][$_administration->object_id][$type_adm] = 0;
+	    if(!isset($pancarte[$_prescription->_id]["$_date $time"][$type][$_administration->object_id][$type_adm])){
+	      $pancarte[$_prescription->_id]["$_date $time"][$type][$_administration->object_id][$type_adm] = 0;
 	    }
-	    $pancarte[$_prescription->_id]["$date $time"][$type][$_administration->object_id][$type_adm] += $_administration->quantite;
+	    $pancarte[$_prescription->_id]["$_date $time"][$type][$_administration->object_id][$type_adm] += $_administration->quantite;
 			
 			// Suppression d'une planification systeme replanifiée
 	    if($type_adm == "prevue"){
@@ -256,15 +256,15 @@ foreach($prescriptions as $_prescription){
 			
 			$prescription_line_mix_item = $_administration->_ref_object;
       $time = mbTransformTime($_administration->dateTime,null,"%H").":00:00";
-      $date = mbDate($_administration->dateTime);			
+      $_date = mbDate($_administration->dateTime);			
 			
 			$list_lines[$type_line][$_administration->_ref_object->_ref_prescription_line_mix->_id] = $_administration->_ref_object->_ref_prescription_line_mix;
       $list_lines["perf_line"][$_administration->_ref_object->_id] = $_administration->_ref_object; 
 			
-			if(!isset($pancarte[$_prescription->_id]["$date $time"][$type_line][$prescription_line_mix_item->prescription_line_mix_id][$_administration->object_id][$type_adm])){
-        $pancarte[$_prescription->_id]["$date $time"][$type_line][$prescription_line_mix_item->prescription_line_mix_id][$_administration->object_id][$type_adm] = 0;
+			if(!isset($pancarte[$_prescription->_id]["$_date $time"][$type_line][$prescription_line_mix_item->prescription_line_mix_id][$_administration->object_id][$type_adm])){
+        $pancarte[$_prescription->_id]["$_date $time"][$type_line][$prescription_line_mix_item->prescription_line_mix_id][$_administration->object_id][$type_adm] = 0;
       }
-		  $pancarte[$_prescription->_id]["$date $time"][$type_line][$prescription_line_mix_item->prescription_line_mix_id][$_administration->object_id][$type_adm] += $_administration->quantite;
+		  $pancarte[$_prescription->_id]["$_date $time"][$type_line][$prescription_line_mix_item->prescription_line_mix_id][$_administration->object_id][$type_adm] += $_administration->quantite;
 		}
 	}																																		 											 
 
