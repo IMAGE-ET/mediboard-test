@@ -34,12 +34,20 @@
 		  
 		  <!-- Commentaire -->
 		  {{if $med->commentaire}}
-		  <em>, {{$med->commentaire}}</em>
+		  <em>, {{if $print}}
+              {{$med->commentaire|escape:"html"}}
+            {{else}}
+              {{$med->commentaire}}
+            {{/if}}</em>
 		  {{/if}}
 		  
 		  <!-- Remarque sur la prise -->
 		  {{if $med->_specif_prise && $med->_ref_prises|@count}}
-		    <br />({{$med->_specif_prise}})
+		    <br />( {{if $print}}
+                  {{$med->_specif_prise|escape:"html"}}
+                {{else}}
+                  {{$med->_specif_prise}})
+                {{/if}}
 		  {{/if}}
     </li>
     {{/if}}
@@ -119,13 +127,19 @@
 		 Aucune date
 		 {{/if}}
      {{if $med->commentaire}}
-       , {{mb_value object=$med field="commentaire"}}
+       ,
+       {{if $print}}
+        {{$med->commentaire|escape:"html"}}
+       {{else}}
+         {{$med->commentaire}}
+       {{/if}}
      {{/if}}
       
 		  
 		 <!-- Remarque sur la prise -->
 		 {{if $med->_specif_prise && $med->_ref_prises|@count}}
-		   <br />({{$med->_specif_prise}})
+		   <br />{{if $print}}({{$med->_specif_prise|escape:"html"}})
+		         {{else}}({{$med->_specif_prise}}{{/if}}
 		 {{/if}}
     </li>
   </ul>

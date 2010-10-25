@@ -275,7 +275,7 @@ Main.add( function(){
         {{/if}}
 			 
       <div style="float: right; text-align: right;">
-      	<button type="button" class="print" onclick="Prescription.printPrescription('{{$prescription->_id}}');" />Ordonnance</button>
+      	<button type="button" class="print" onclick="Prescription.printPrescription('{{$prescription->_id}}', 0, '{{$prescription->object_id}}');" />Ordonnance</button>
         <br />
        	{{if !$is_praticien && !$mode_protocole && ($operation_id || $can->admin || $mode_pharma || $current_user->isInfirmiere())}}
 				<form name="selPraticienLine" action="?" method="get">
@@ -541,7 +541,7 @@ Main.add( function(){
 			{{if !$mode_protocole && $prescription->type == "sejour"}}
         <button type="button" class="search" onclick="popupTransmission('{{$prescription->object_id}}');">Transmissions</button>
 			{{/if}}			
-			<button type="button" class="print" onclick="Prescription.printPrescription('{{$prescription->_id}}');" />Ordonnance</button>
+			<button type="button" class="print" onclick="Prescription.printPrescription('{{$prescription->_id}}', 0, '{{$prescription->object_id}}');" />Ordonnance</button>
       {{if $prescription->object_id && $prescription->object_class == "CSejour"}}
 			<button type="button" class="print" onclick="printBons('{{$prescription->_id}}');" title="{{tr}}Print{{/tr}}">Bons</button>
       {{/if}}

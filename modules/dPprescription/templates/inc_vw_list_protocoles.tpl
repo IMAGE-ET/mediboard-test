@@ -61,6 +61,7 @@ Main.add(function(){
 	        <input type="hidden" name="del" value="1" />
 	        <input type="hidden" name="prescription_id" value="{{$protocole->_id}}" />
 	        <input type="hidden" name="callback" value="Prescription.reloadDelProt" />
+	        <button class="print notext" type="button" onclick="Prescription.printPrescription('{{$protocole->_id}}', 1)">{{tr}}Print{{/tr}}</button>
 	        <button class="trash notext" type="button" onclick="if (confirm('{{tr}}CProtocole-confirm-deletion{{/tr}}{{$protocole->libelle}}?'))Protocole.remove(this.form)">Supprimer</button>
 	      </form>
       </div>

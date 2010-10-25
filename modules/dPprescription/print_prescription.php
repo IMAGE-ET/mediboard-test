@@ -110,6 +110,9 @@ if(count($prescription->_ref_lines_elements_comments)){
           if(!CAppUI::conf("dPprescription CPrescription show_unsigned_lines") && !$element->signee && $prescription->object_id){
             continue;
           }
+          if($praticien->_id && $element->praticien_id != $praticien->_id){
+          	continue;
+          }
           if($element instanceof CPrescriptionLineElement){
             $element->loadCompleteView();
           }
@@ -178,10 +181,11 @@ foreach($prescription->_ref_lines_med_comments as $key => $lines_medicament_type
 
 // Tri des medicaments par ordre alphabetique pour l'impression des protocoles
 if (!$prescription->object_id){
-	function compareMed($line1, $line2){
-    return strcmp($line1->_ucd_view, $line2->_ucd_view);
-  }
-
+	if (!function_exists("compareMed")) {
+		function compareMed($line1, $line2){
+	    return strcmp($line1->_ucd_view, $line2->_ucd_view);
+	  }
+	}
 	foreach($lines["medicaments"] as &$meds_by_key){
 		foreach($meds_by_key as &$meds_by_ald){
 			usort($meds_by_ald, "compareMed");
@@ -260,8 +264,10 @@ if(count($prescription->_ref_lines_elements_comments)){
 
 // Tri des elements par ordre alphabetique pour l'impression des protocoles
 if (!$prescription->object_id){
-	function compareElt($line1, $line2){
-	  return strcmp($line1->_view, $line2->_view);
+	if (!function_exists("compareElt")) {
+		function compareElt($line1, $line2){
+		  return strcmp($line1->_view, $line2->_view);
+		}
 	}
 	foreach($linesElt as &$lines_by_chap){
 		foreach($lines_by_chap as &$lines_by_exec){
@@ -282,7 +288,7 @@ if(count($prescription->_ref_lines_dmi)){
 }
 
 // Tableau de traductions
-$traduction = array("E" => "l'entrée", "I" => "I", "S" => "la sortie");
+$traduction = array("E" => "l'entrée", "I" => "I", "S" => "la sortie", "N" => "M");
 
 // Affectation du praticien selectionné
 $prescription->_ref_selected_prat = $praticien;
@@ -334,6 +340,16 @@ $smarty->assign("executants"     , $executants);
 $smarty->assign("poids"          , $poids);
 $smarty->assign("generated_header", @$header->_id ? $template_header->document : "");
 $smarty->assign("generated_footer", @$footer->_id ? $template_footer->document : "");
-$smarty->display("print_prescription.tpl");
+
+if (!$prescription->object_id) {
+	$smarty->assign("no_header", isset($no_header));
+  $content = $smarty->fetch("print_prescription.tpl");
+	$htmltopdf = new CHtmlToPDF;
+	$file = new CFile;
+	$file->file_name = "{$prescription->libelle}.pdf";
+	$htmltopdf->generatePDF($content, 1, "A4", "portrait", $file);
+} else
+  $smarty->display("print_prescription.tpl");
+
 
 ?>

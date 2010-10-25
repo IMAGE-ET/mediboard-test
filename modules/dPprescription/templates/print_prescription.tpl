@@ -8,19 +8,24 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
 *}}
 
-{{if $print}}
-<script type="text/javascript">
-Main.add(window.print);
-</script> 
+{{if $prescription->object_id}}
+	{{if $print}}
+	<script type="text/javascript">
+	Main.add(window.print);
+	</script> 
+	{{/if}}
+	
+	<!-- Fermeture des tableaux -->
+	    </td>
+	  </tr>
+	</table>
+{{else}}
+<html>
+  <body>
 {{/if}}
 
-<!-- Fermeture des tableaux -->
-    </td>
-  </tr>
-</table>
-
 <style type="text/css">
-{{include file=../../dPcompteRendu/css/print.css}}
+{{include file=../../dPcompteRendu/css/print.css nodebug="true"}}
 
 div.body, table.body, div.bodyWithoutPageBreak, table.bodyWithoutPageBreak {
   padding-top: {{$header}}px;
@@ -266,9 +271,11 @@ div.footer {
     <!-- Affichage des no_ald -->
     <ul>
     {{foreach from=$lines.medicaments.med.no_ald item=line_medicament_element_no_ald name="foreach_med"}}
-		  {{if !$smarty.foreach.foreach_med.first && $smarty.foreach.foreach_med.index%15 == 0}}
+		  {{if !$smarty.foreach.foreach_med.first && $smarty.foreach.foreach_med.index%15 == 0 && $prescription->object_id}}
+		   </ul>
 			 </div>
 			 <div class="body">
+			 <ul>
 			{{/if}}
 		
       {{if $line_medicament_element_no_ald->_class_name == "CPrescriptionLineMedicament"}}
@@ -456,7 +463,12 @@ div.footer {
 	 </div>
 {{/if}}
 
-<!-- Re-ouverture des tableaux -->
-<table>
-  <tr>
-    <td>
+{{if $prescription->object_id}}
+	<!-- Re-ouverture des tableaux -->
+	<table>
+	  <tr>
+	    <td>
+{{else}}
+  </body>
+</html>
+{{/if}}
