@@ -61,4 +61,5 @@
       {{elseif $object->response_time > 1000}}warning
       {{elseif $object->response_time < 100}}ok{{/if}}"> 
     {{$object->response_time|round:0}} ms</td>
+  <td {{if $object->trace}}class="warning"{{/if}}>{{mb_value object=$object field="trace"}}</td>
 </tr>

@@ -10,28 +10,33 @@
 
 class CEchangeSOAP extends CMbObject {
   // DB Table key
-  var $echange_soap_id  = null;
+  var $echange_soap_id       = null;
   
   // DB Fields
-  var $emetteur         = null;
-  var $destinataire     = null;
-  var $type             = null;
-  var $date_echange     = null;
-  var $web_service_name = null;
-  var $function_name    = null;
-  var $input            = null;
-  var $output           = null;
-  var $soapfault        = null;
-  var $purge            = null;
-  var $response_time    = null;
+  var $emetteur              = null;
+  var $destinataire          = null;
+  var $type                  = null;
+  var $date_echange          = null;
+  var $web_service_name      = null;
+  var $function_name         = null;
+  var $input                 = null;
+  var $output                = null;
+  var $soapfault             = null;
+  var $purge                 = null;
+  var $response_time         = null;
+  var $trace                 = null;
+  var $last_request_headers  = null;
+  var $last_response_headers = null;
+  var $last_request          = null;
+  var $last_response         = null;
     
   // Form fields
-  var $_self_emetteur       = null;
-  var $_self_destinataire   = null;
+  var $_self_emetteur        = null;
+  var $_self_destinataire    = null;
   
   // Filter fields
-  var $_date_min            = null;
-  var $_date_max            = null;
+  var $_date_min             = null;
+  var $_date_max             = null;
   
   function getSpec() {
     $spec = parent::getSpec();
@@ -54,6 +59,11 @@ class CEchangeSOAP extends CMbObject {
     $specs["soapfault"]             = "bool";
     $specs["purge"]                 = "bool";
     $specs["response_time"]         = "float";
+    $specs["trace"]                 = "bool";
+    $specs["last_request_headers"]  = "text";
+    $specs["last_response_headers"] = "text";
+    $specs["last_request"]          = "xml";
+    $specs["last_response"]         = "xml";
     
     $specs["_self_emetteur"]        = "bool";
     $specs["_self_destinataire"]    = "bool";

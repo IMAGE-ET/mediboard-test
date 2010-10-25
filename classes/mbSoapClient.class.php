@@ -40,6 +40,8 @@ class CMbSOAPClient extends SoapClient {
     }
     
     $options = array_merge($options, array("connexion_timeout" => CAppUI::conf("webservices connection_timeout")));
+    if (CAppUI::conf("webservices trace"))
+      $options = array_merge($options, array("trace" => true));
     
     parent::__construct($this->wsdl, $options);
   }
@@ -76,6 +78,15 @@ class CMbSOAPClient extends SoapClient {
     }
     $chrono->stop();
     $phpChrono->start();
+    
+    // trace
+    if (CAppUI::conf("webservices trace")) {
+      $echange_soap->trace                 = true;
+      $echange_soap->last_request_headers  = $this->__getLastRequestHeaders();
+      $echange_soap->last_request          = $this->__getLastRequest();
+      $echange_soap->last_response_headers = $this->__getLastResponseHeaders();
+      $echange_soap->last_response         = $this->__getLastResponse();
+    }
     
     // response time
     $echange_soap->response_time = $chrono->total;

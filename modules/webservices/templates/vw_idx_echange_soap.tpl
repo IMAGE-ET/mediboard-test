@@ -113,7 +113,7 @@
     <td class="halfPane" rowspan="3">
       <table class="tbl">
         <tr>
-          <th class="title" colspan="15">{{tr}}CEchangeSOAP{{/tr}}</th>
+          <th class="title" colspan="16">{{tr}}CEchangeSOAP{{/tr}}</th>
         </tr>
         <tr>
           <th></th>
@@ -128,14 +128,15 @@
           <th>{{mb_title object=$echange_soap field="input"}}</th>
           <th>{{mb_title object=$echange_soap field="output"}}</th>
           <th>{{mb_title object=$echange_soap field="response_time"}}</th>
+          <th>{{mb_title object=$echange_soap field="trace"}}</th>
         </tr>
         {{foreach from=$echangesSoap item=curr_echange_soap}}
           <tbody id="echange_{{$curr_echange_soap->_id}}">
-            {{include file="inc_echange_soap.tpl" object=$curr_echange_soap}}
+            {{mb_include template="inc_echange_soap" object=$curr_echange_soap}}
           </tbody>
         {{foreachelse}}
           <tr>
-            <td colspan="15">
+            <td colspan="16">
               {{tr}}CEchangeSOAP.none{{/tr}}
             </td>
           </tr>
@@ -144,31 +145,10 @@
     </td>
   </tr>
   {{else}}
-  <tr>
-    <td class="halfPane" rowspan="3">
-      <table class="form">
-        <tr>
-          <th class="title" colspan="2">
-            {{tr}}CEchangeSOAP{{/tr}} - {{$echange_soap->_id|str_pad:6:'0':$smarty.const.STR_PAD_LEFT}}
-            <br />
-            {{mb_value object=$echange_soap field="function_name"}}
-          </th>
-        </tr>
-        <tr>
-          <th class="category">{{mb_title object=$echange_soap field="input"}}</th>
-          <th class="category">{{mb_title object=$echange_soap field="output"}}</th>
-        </tr>
-        <tr>
-          <td> {{mb_value object=$echange_soap field="input" export=true}} </td>
-          <td> {{mb_value object=$echange_soap field="output" export=true}} </td>
-        </tr>
-        <tr>
-          <td colspan="2" style="text-align: center;">
-            <a target="blank" href="?m=webservices&a=download_echange&echange_soap_id={{$echange_soap->_id}}&dialog=1&suppressHeaders=1&message=1&acq=1" class="button modify">Télécharger</a>
-          </td>
-        </tr>
-      </table>
-    </td>
-  </tr>
+    <tr>
+      <td>
+        {{mb_include template="inc_echange_soap_details"}}
+      </td>
+    </tr>
   {{/if}}
 </table>

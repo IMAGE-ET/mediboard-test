@@ -59,7 +59,16 @@ class CSetupwebservices extends CSetup {
                ADD INDEX (`function_name`);";
      $this->addQuery($sql);
      
-     $this->mod_version = "0.16";
+     $this->makeRevision("0.16");
+     $sql = "ALTER TABLE `echange_soap` 
+              ADD `trace` ENUM ('0','1') DEFAULT '0',
+              ADD `last_request_headers` TEXT,
+              ADD `last_response_headers` TEXT,
+              ADD `last_request` MEDIUMTEXT,
+              ADD `last_response` MEDIUMTEXT;";
+     $this->addQuery($sql);
+     
+     $this->mod_version = "0.17";
   }
 }
 ?>
