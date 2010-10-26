@@ -124,7 +124,7 @@ class CHPrimXMLDocument extends CMbXMLDocument {
     
     $destinataire = $this->addElement($enteteMessage, "destinataire");
     $agents = $this->addElement($destinataire, "agents");
-    $this->addAgent($agents, "application", $dest->nom, $dest->libelle);
+    $this->addAgent($agents, "application", (CAppUI::conf('hprimxml code_receiver_sender') == "finess") ? $group->finess : $dest->nom, $dest->libelle);
     /* @todo Doit-on gérer le système du destinataire ? */
     //$this->addAgent($agents, "système", $group->_id, $group->text);
   }

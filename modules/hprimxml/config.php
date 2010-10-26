@@ -39,7 +39,8 @@ $dPconfig["hprimxml"] = array (
   "notifier_sortie_reelle"     => "1",
   "trash_numdos_sejour_cancel" => "0",
   "send_diagnostic"            => "evt_pmsi",
-  "code_transmitter_sender"    => "mb_id"
+  "code_transmitter_sender"    => "mb_id",
+  "code_receiver_sender"       => "dest"
 );
 
 
