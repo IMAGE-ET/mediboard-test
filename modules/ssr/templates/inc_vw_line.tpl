@@ -4,21 +4,27 @@
 
 {{if !@$offline}}
 <button class="edit notext" type="button" onclick="updateListLines('{{$category_id}}', '{{$_line->prescription_id}}', '{{$_line->_id}}');">Edit</button>
+	{{if @!$only_comment && $can_edit_prescription}}
+	  <button class="add notext" onclick="duplicateSSRLine('{{$_line->element_prescription_id}}','{{$category_id}}')">{{tr}}Add{{/tr}}</button>
+	{{/if}}
 {{/if}}
 
 {{assign var=element value=$_line->_ref_element_prescription}}
 {{assign var=category value=$element->_ref_category_prescription}}
-<strong onmouseover="ObjectTooltip.createDOM(this, 'details-{{$element->_guid}}')">
-	<span class="mediuser" style="border-left-color: #{{$element->_color}};">
-	{{$element}}
-  </span>
-</strong>
+
+{{if !@$only_comment}}
+	<strong onmouseover="ObjectTooltip.createDOM(this, 'details-{{$element->_guid}}')">
+		<span class="mediuser" style="border-left-color: #{{$element->_color}};">
+		{{$element}}
+	  </span>
+	</strong>
+{{/if}}
+
 <div id="details-{{$element->_guid}}" style="display: none;">
 	<strong>{{mb_label object=$element field=description}}</strong>: 
 	{{$element->description|default:'Aucune'|nl2br}}
 </div>
 
-
 {{if $_line->commentaire}}
-<div style="margin-left: 2em;" class="text warning">{{$_line->commentaire}}</div>
+<div style="{{if @$only_comment}}display: inline;{{else}}margin-left: 25px;{{/if}}" class="text message">{{$_line->commentaire}}</div>
 {{/if}}

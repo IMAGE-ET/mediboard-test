@@ -17,7 +17,8 @@ updateFieldsElementSSR = function(selected, oFormElement, category_id) {
 		// Si la prescription existe, creation de la ligne
 		if($V(oForm.prescription_id)){
 		  $V(oForm.element_prescription_id, dn[0].firstChild.nodeValue);
-			updateModal();
+			return onSubmitFormAjax(oForm, { onComplete: updateListLines });
+			//updateModal();
 		}
 	  // Sinon, creation de la prescription
 	  else {
@@ -149,6 +150,21 @@ refreshFormBilanSSR = function(){
 }
 
 
+refreshAfterDuplicate = function(line_id){
+  updateListLines(null, "{{$prescription_SSR->_id}}", line_id);
+	$V(getForm("addLineSSR").callback, "");
+
+}
+
+duplicateSSRLine = function(element_prescription_id, category_id){
+  var oForm = getForm("addLineSSR");
+	$V(oForm._category_id, category_id);
+	$V(oForm.element_prescription_id, element_prescription_id);
+	$V(oForm.callback, "refreshAfterDuplicate");
+	return onSubmitFormAjax(oForm);
+}
+
+
 </script>
 
 <div id="modal_SSR" style="display: none;"></div>
@@ -175,7 +191,8 @@ refreshFormBilanSSR = function(){
   <input type="hidden" name="praticien_id" value="{{$app->user_id}}" />
   <input type="hidden" name="creator_id" value="{{$app->user_id}}" />
   <input type="hidden" name="element_prescription_id" value="" />
-	<input type="hidden" name="debut" value="" />
+	<input type="hidden" name="debut" value="current" />
+	<input type="hidden" name="callback" value="" />
 	<input type="hidden" name="_category_id" value=""/>
 </form>
 

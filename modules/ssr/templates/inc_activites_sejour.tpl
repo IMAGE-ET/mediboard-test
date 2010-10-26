@@ -17,35 +17,35 @@ selectActivite = function(activite) {
 
   $$("button.activite").invoke("removeClassName", "selected");
   $("trigger-"+activite).addClassName("selected");
-	
+  
   $$("div.activite").invoke("hide");
   $("activite-"+activite).show();
 
   // On masque les techncien et on enleve le technicien selectionné
   $$("div.techniciens").invoke("hide").invoke("removeClassName", "selected");
   $$("button.ressource").invoke("removeClassName", "selected");
-	$V(oFormEvenementSSR.therapeute_id, '');  
-	
-	// Suppression des valeurs su select de technicien
-	$$("select._technicien_id").each(function(select_tech){
-	  $V(select_tech, '');
-	});
+  $V(oFormEvenementSSR.therapeute_id, '');  
   
-	// Affichage des techniciens correspondants à l'activité selectionnée
-	$("techniciens-"+activite).show();
+  // Suppression des valeurs su select de technicien
+  $$("select._technicien_id").each(function(select_tech){
+    $V(select_tech, '');
+  });
+  
+  // Affichage des techniciens correspondants à l'activité selectionnée
+  $("techniciens-"+activite).show();
 
   // On masque les codes Cdarrs
   $$("div.cdarrs").invoke("hide");
-	$$("div.type-cdarrs").invoke("hide");
+  $$("div.type-cdarrs").invoke("hide");
   
   $('div_other_cdarr').hide(); 
-	$('other_cdarr').hide();
+  $('other_cdarr').hide();
   $V(oFormEvenementSSR.code, '');
-	oFormEvenementSSR._cdarr.checked = false;
+  oFormEvenementSSR._cdarr.checked = false;
   
   // Mise en evidence des elements dans les plannings
   addBorderEvent();
-	refreshSelectSeances();
+  refreshSelectSeances();
 }
 
 selectElement = function(line_id){
@@ -56,11 +56,11 @@ selectElement = function(line_id){
   $("line-"+line_id).addClassName("selected");
   
   $$("div.cdarrs").invoke("hide");
-	$$("div.type-cdarrs").invoke("hide");
-	
+  $$("div.type-cdarrs").invoke("hide");
+  
   $V(getForm("editEvenementSSR").cdarr, '');
   $("cdarrs-"+line_id).show();
-	$("type-cdarrs-"+line_id).show();
+  $("type-cdarrs-"+line_id).show();
   
   $('div_other_cdarr').show();
 
@@ -69,213 +69,213 @@ selectElement = function(line_id){
 
   // Mise en evidence des elements dans les plannings
   addBorderEvent();
-	refreshSelectSeances();
+  refreshSelectSeances();
 }
 
 selectTypeCdarr = function(type_cdarr, line_id, buttonSelected){
   $$('.cdarrs').invoke('hide'); 
-	$('cdarrs-'+line_id+'-'+type_cdarr).show();
-	
-	$$(".button-type-cdarrs").invoke("removeClassName","selected");
-	buttonSelected.addClassName("selected");
+  $('cdarrs-'+line_id+'-'+type_cdarr).show();
+  
+  $$(".button-type-cdarrs").invoke("removeClassName","selected");
+  buttonSelected.addClassName("selected");
 }
 
 selectTechnicien = function(kine_id, buttonSelected) {
-  $V(oFormEvenementSSR.therapeute_id, kine_id);	
-	
+  $V(oFormEvenementSSR.therapeute_id, kine_id); 
+  
   $$("button.ressource").invoke("removeClassName", "selected");
   if(buttonSelected){
-	  buttonSelected.addClassName("selected");
+    buttonSelected.addClassName("selected");
   }
-  	  
+      
   PlanningTechnicien.show(kine_id, null, '{{$bilan->sejour_id}}');
-	if($V(oFormEvenementSSR.equipement_id)){
-	  PlanningEquipement.show($V(oFormEvenementSSR.equipement_id), '{{$bilan->sejour_id}}');
-	}
-	refreshSelectSeances();
+  if($V(oFormEvenementSSR.equipement_id)){
+    PlanningEquipement.show($V(oFormEvenementSSR.equipement_id), '{{$bilan->sejour_id}}');
+  }
+  refreshSelectSeances();
 }
 
 selectEquipement = function(equipement_id) {
   $V(oFormEvenementSSR.equipement_id, equipement_id);
-	$$("button.equipement").invoke("removeClassName", "selected");
-	if($("equipement-"+equipement_id)){
+  $$("button.equipement").invoke("removeClassName", "selected");
+  if($("equipement-"+equipement_id)){
     $("equipement-"+equipement_id).addClassName("selected");
-	}
-	if(equipement_id){
-  	PlanningEquipement.show(equipement_id,'{{$bilan->sejour_id}}');
-	} else {
-	  PlanningEquipement.hide();
   }
-	refreshSelectSeances();
+  if(equipement_id){
+    PlanningEquipement.show(equipement_id,'{{$bilan->sejour_id}}');
+  } else {
+    PlanningEquipement.hide();
+  }
+  refreshSelectSeances();
 }
 
 refreshSelectSeances = function(){  
   if($V(oFormEvenementSSR.equipement_id) && 
-	   $V(oFormEvenementSSR.therapeute_id) &&
-		 $V(oFormEvenementSSR.line_id)){
-	
-		var url = new Url("ssr", "ajax_vw_select_seances");
-		url.addParam("therapeute_id", $V(oFormEvenementSSR.therapeute_id));
-		url.addParam("equipement_id", $V(oFormEvenementSSR.equipement_id));
+     $V(oFormEvenementSSR.therapeute_id) &&
+     $V(oFormEvenementSSR.line_id)){
+  
+    var url = new Url("ssr", "ajax_vw_select_seances");
+    url.addParam("therapeute_id", $V(oFormEvenementSSR.therapeute_id));
+    url.addParam("equipement_id", $V(oFormEvenementSSR.equipement_id));
     url.addParam("prescription_line_element_id", $V(oFormEvenementSSR.line_id));
     url.requestUpdate("select-seances", { 
-		  onComplete: function(){ 
-			  $('seances').show();
-				if($V(oFormEvenementSSR.seance_collective)){
-				  oFormEvenementSSR.seance_collective_id.show();
-				}
-			}
-		});
-	} else {
-	  $('seances').hide();
-		$V(oFormEvenementSSR.seance_collective, false);
-		$V(oFormEvenementSSR.seance_collective_id, '');
-	}
+      onComplete: function(){ 
+        $('seances').show();
+        if($V(oFormEvenementSSR.seance_collective)){
+          oFormEvenementSSR.seance_collective_id.show();
+        }
+      }
+    });
+  } else {
+    $('seances').hide();
+    $V(oFormEvenementSSR.seance_collective, false);
+    $V(oFormEvenementSSR.seance_collective_id, '');
+  }
 }
 
 removeCdarrs = function(){
   oFormEvenementSSR.select('input[name^="cdarrs"]').each(function(e){
     e.checked = false;
   });
-	$$('.counts_cdarr').invoke('update','')
+  $$('.counts_cdarr').invoke('update','')
 }
 
 submitSSR = function(){
-	// Test de la presence d'au moins un code SSR
-	if((oFormEvenementSSR.select('input.checkbox-cdarrs:checked').length == 0) && !$V(oFormEvenementSSR.code) && oFormEvenementSSR.select('input.checkbox-other-cdarrs').length == 0){
+  // Test de la presence d'au moins un code SSR
+  if((oFormEvenementSSR.select('input.checkbox-cdarrs:checked').length == 0) && !$V(oFormEvenementSSR.code) && oFormEvenementSSR.select('input.checkbox-other-cdarrs').length == 0){
     alert("Veuillez selectionner un code SSR");
     return false;
   }
 
-	if(!$V(oFormEvenementSSR.seance_collective) || ($V(oFormEvenementSSR.seance_collective) && !$V(oFormEvenementSSR.seance_collective_id))){
-	  if((oFormEvenementSSR.select('input.days:checked').length == 0)){
+  if(!$V(oFormEvenementSSR.seance_collective) || ($V(oFormEvenementSSR.seance_collective) && !$V(oFormEvenementSSR.seance_collective_id))){
+    if((oFormEvenementSSR.select('input.days:checked').length == 0)){
       alert("Veuillez selectionner au minimum un jour");
       return false;
     }
-		if(!$V(oFormEvenementSSR._heure_deb)){
-	    alert("Veuillez selectionner une heure");
-	    return false;
-	  }
+    if(!$V(oFormEvenementSSR._heure_deb)){
+      alert("Veuillez selectionner une heure");
+      return false;
+    }
     if(!$V(oFormEvenementSSR.duree)){
       alert("Veuillez selectionner une durée");
       return false;
     }
-	}
-	
-	if (oFormEvenementSSR.equipement_id) {
-	  if(!oFormEvenementSSR.select("button.equipement.selected").length && !$V(oFormEvenementSSR.equipement_id)){
-	    alert("Veuillez selectionner un equipement");
-	    return false;
-	  }
-	}
+  }
+  
+  if (oFormEvenementSSR.equipement_id) {
+    if(!oFormEvenementSSR.select("button.equipement.selected").length && !$V(oFormEvenementSSR.equipement_id)){
+      alert("Veuillez selectionner un equipement");
+      return false;
+    }
+  }
   
   return onSubmitFormAjax(oFormEvenementSSR, { onComplete: function(){
-		refreshPlanningsSSR();
-	  $$(".days").each(function(e){
-		  $V(e, '');
-		});
+    refreshPlanningsSSR();
+    $$(".days").each(function(e){
+      $V(e, '');
+    });
 
     // Suppression des actes cdarrs selectionnés
     $V(oFormEvenementSSR._heure_deb, '');
-		$V(oFormEvenementSSR._heure_deb_da, '');
+    $V(oFormEvenementSSR._heure_deb_da, '');
     $V(oFormEvenementSSR._heure_fin, '');
     $V(oFormEvenementSSR._heure_fin_da, '');
     $V(oFormEvenementSSR.duree, $V(oFormEvenementSSR._default_duree));
-		$V(oFormEvenementSSR.seance_collective, '');
-		$V(oFormEvenementSSR.seance_collective_id, '');
-		if(oFormEvenementSSR.seance_collective_id){
-		  oFormEvenementSSR.seance_collective_id.hide();
-		}
+    $V(oFormEvenementSSR.seance_collective, '');
+    $V(oFormEvenementSSR.seance_collective_id, '');
+    if(oFormEvenementSSR.seance_collective_id){
+      oFormEvenementSSR.seance_collective_id.hide();
+    }
 
     // Deselection des codes cdarrs
     $V(oFormEvenementSSR._cdarr, false);
     $$('#other_cdarr span').invoke('remove'); 
     $('other_cdarr').hide();
-		
-		selectElement($V(oFormEvenementSSR.line_id));
-	}} );
+    
+    selectElement($V(oFormEvenementSSR.line_id));
+  }} );
 }
 
 refreshPlanningsSSR = function(){
   Planification.refreshSejour('{{$bilan->sejour_id}}', true);
-	PlanningTechnicien.show($V(oFormEvenementSSR.therapeute_id), null, '{{$bilan->sejour_id}}');
-	if($V(oFormEvenementSSR.equipement_id)){
-	  PlanningEquipement.show($V(oFormEvenementSSR.equipement_id),'{{$bilan->sejour_id}}');
-	}
+  PlanningTechnicien.show($V(oFormEvenementSSR.therapeute_id), null, '{{$bilan->sejour_id}}');
+  if($V(oFormEvenementSSR.equipement_id)){
+    PlanningEquipement.show($V(oFormEvenementSSR.equipement_id),'{{$bilan->sejour_id}}');
+  }
 }
 
 addBorderEvent = function(){
   // Classe des evenements à selectionner
   var category_id = $V(oFormEvenementSSR._category_id);
-	var element_id  = $V(oFormEvenementSSR._element_id);
-	var eventClass = (element_id) ? ".CElementPrescription-"+element_id : ".CCategoryPrescription-"+category_id;
-	var planning = $('planning-sejour');
-	
-	// On ne passe pas en selected les evenements qui possedent la classe tag_cat
-	if(element_id){ 
-	  var elements_tag = planning.select(".event.elt_selected"+eventClass+":not(.tag_cat)");
-		if(planning.select(".event.elt_selected"+eventClass+".selected:not(.tag_cat)").length){
-		  elements_tag.invoke("removeClassName", 'selected');
+  var element_id  = $V(oFormEvenementSSR._element_id);
+  var eventClass = (element_id) ? ".CElementPrescription-"+element_id : ".CCategoryPrescription-"+category_id;
+  var planning = $('planning-sejour');
+  
+  // On ne passe pas en selected les evenements qui possedent la classe tag_cat
+  if(element_id){ 
+    var elements_tag = planning.select(".event.elt_selected"+eventClass+":not(.tag_cat)");
+    if(planning.select(".event.elt_selected"+eventClass+".selected:not(.tag_cat)").length){
+      elements_tag.invoke("removeClassName", 'selected');
     } else {
-	    elements_tag.invoke("addClassName", 'selected');
-  	}
+      elements_tag.invoke("addClassName", 'selected');
+    }
   } else {
-	  var elements = $('planning-sejour').select(".event.elt_selected"+eventClass);
-		if($('planning-sejour').select(".event.elt_selected"+eventClass+".selected").length){
-		  elements.invoke("removeClassName", 'selected');
-		} else {
-		  elements.invoke("addClassName", 'selected');
-		}
-	}
-	
-	planning.select(".event.elt_selected:not("+eventClass+")").invoke("removeClassName", 'selected');
+    var elements = $('planning-sejour').select(".event.elt_selected"+eventClass);
+    if($('planning-sejour').select(".event.elt_selected"+eventClass+".selected").length){
+      elements.invoke("removeClassName", 'selected');
+    } else {
+      elements.invoke("addClassName", 'selected');
+    }
+  }
+  
+  planning.select(".event.elt_selected:not("+eventClass+")").invoke("removeClassName", 'selected');
 
-	// Selection de tous les elements qui ont la classe spécifiée
-	planning.select(".event"+eventClass).invoke("addClassName", 'elt_selected');
-	
-	// Deselection de tous les elements deja selectionnés qui n'ont pas la bonne classe
-	planning.select(".event:not("+eventClass+")").invoke("removeClassName", 'elt_selected');
+  // Selection de tous les elements qui ont la classe spécifiée
+  planning.select(".event"+eventClass).invoke("addClassName", 'elt_selected');
   
-	// Suppression de la classe tag_cat de tous les evenements selectionnés
-	planning.select(".event"+eventClass).invoke("removeClassName", 'tag_cat');
+  // Deselection de tous les elements deja selectionnés qui n'ont pas la bonne classe
+  planning.select(".event:not("+eventClass+")").invoke("removeClassName", 'elt_selected');
   
-	// Si la selection a eu lieu suite au choix d'une categorie, ajout d'une classe aux evenements
-	if(!element_id){
+  // Suppression de la classe tag_cat de tous les evenements selectionnés
+  planning.select(".event"+eventClass).invoke("removeClassName", 'tag_cat');
+  
+  // Si la selection a eu lieu suite au choix d'une categorie, ajout d'une classe aux evenements
+  if(!element_id){
     planning.select(".event.elt_selected"+eventClass).invoke("addClassName", 'tag_cat');
   }
-	
-	// Mise à jour du compteur
-	window["planning-"+$('planning-sejour').down('div.planning').id].updateNbSelectEvents();
+  
+  // Mise à jour du compteur
+  window["planning-"+$('planning-sejour').down('div.planning').id].updateNbSelectEvents();
 }
 
 updateCdarrCount = function(line_id, type_cdarr){
   var countCdarr = ($('cdarrs-'+line_id+'-'+type_cdarr).select('input:checked')).length;  
   if(countCdarr){
     $('count-'+line_id+'-'+type_cdarr).update('('+countCdarr+')');
-	} else {
+  } else {
     $('count-'+line_id+'-'+type_cdarr).update('');
-	}
+  }
 }
 
 updateModalCdarr = function(){
   var oFormEvents = getForm("form_list_cdarr");
-	var url = new Url("ssr", "ajax_update_modal_evts_modif");
-	url.addParam("token_evts", $V(oFormEvents.token_evts));
-	url.requestUpdate("modal-cdarr", { onComplete: function(){
+  var url = new Url("ssr", "ajax_update_modal_evts_modif");
+  url.addParam("token_evts", $V(oFormEvents.token_evts));
+  url.requestUpdate("modal-cdarr", { onComplete: function(){
     if(!$("modal-cdarr").visible()){
-	    modalWindow = modal($('modal-cdarr'), {
-	      className: 'modal'
-	    });
-		}
-	} })
+      modalWindow = modal($('modal-cdarr'), {
+        className: 'modal'
+      });
+    }
+  } })
 }
 
 onchangeSeance = function(seance_id){
   if(seance_id){
-	  $('date-evenements').hide();
-	} else {
-	  $('date-evenements').show();	
-	}
+    $('date-evenements').hide();
+  } else {
+    $('date-evenements').show();  
+  }
 }
 
 toggleAllDays = function(){
@@ -291,8 +291,8 @@ toggleAllDays = function(){
 var oFormEvenementSSR;
 Main.add(function(){
   oFormEvenementSSR = getForm("editEvenementSSR");
-	window.toCheck = false;
-	if($('code_auto_complete')){
+  window.toCheck = false;
+  if($('code_auto_complete')){
     var url = new Url("ssr", "httpreq_do_activite_autocomplete");
     url.autoComplete("editEvenementSSR_code", "code_auto_complete", {
       dropdown: true,
@@ -301,16 +301,16 @@ Main.add(function(){
       updateElement: updateFieldCode
     } );
   }
-	
-	// Initialisation du timePicker
-	Control.Tabs.create('tabs-activites', true);
-	
-	{{if $selected_cat}}
-	  selectActivite('{{$selected_cat->_guid}}');
+  
+  // Initialisation du timePicker
+  Control.Tabs.create('tabs-activites', true);
+  
+  {{if $selected_cat}}
+    selectActivite('{{$selected_cat->_guid}}');
     $("technicien-{{$selected_cat->_id}}-{{$current_user_id}}").onclick();
-	{{/if}}
+  {{/if}}
 });
-									
+                  
 </script>
 {{/if}}
 
@@ -319,16 +319,16 @@ Main.add(function(){
 <div class="small-warning">
   Le patient n'a pas de 
   {{mb_label object=$bilan field=technicien_id}}
-	<a class="button search" href="?&m={{$m}}&amp;tab=vw_idx_repartition">
-	  Me rendre à la répartition des patients
-	</a>
+  <a class="button search" href="?&m={{$m}}&amp;tab=vw_idx_repartition">
+    Me rendre à la répartition des patients
+  </a>
 </div>
 {{else}}
 
 
 <ul id="tabs-activites" class="control_tabs small">
   <li>
-  	<a href="#add_ssr">Boîte à activités</a>
+    <a href="#add_ssr">Boîte à activités</a>
   </li>
   <li>
     <a href="#outils">Outils</a>
@@ -339,7 +339,7 @@ Main.add(function(){
 <div id="add_ssr" style="display: none;">
   <!-- Modification du bilan SSR, brancardage -->
   <form name="editBilanSSR" method="post" action="?" onsubmit="return onSubmitFormAjax(this);">
-  	<input type="hidden" name="m" value="ssr" />
+    <input type="hidden" name="m" value="ssr" />
     <input type="hidden" name="dosql" value="do_bilan_ssr_aed" />
     <input type="hidden" name="del" value="0" />
     <input type="hidden" name="bilan_id" value="{{$bilan->_id}}">
@@ -347,109 +347,114 @@ Main.add(function(){
       <tr>
         <th style="width: 94px">{{mb_label object=$bilan field=entree}}</th>
         <td>
-        	<div style="float: right;">
-	          {{mb_field object=$bilan field=brancardage onchange="this.form.onsubmit();" typeEnum=checkbox}}
-	          {{mb_label object=$bilan field=brancardage}} 
-        	</div>
-        	{{mb_value object=$bilan field=entree}}
-				</td>
+          <div style="float: right;">
+            {{mb_field object=$bilan field=brancardage onchange="this.form.onsubmit();" typeEnum=checkbox}}
+            {{mb_label object=$bilan field=brancardage}} 
+          </div>
+          {{mb_value object=$bilan field=entree}}
+        </td>
       </tr>
       <tr>
         <th>{{mb_label object=$bilan field=technicien_id}}</th>
         <td><strong>{{mb_value object=$bilan field=technicien_id}}</strong></td>
       </tr>
     </table>
-	</form>
-	
-	<form name="editEvenementSSR" method="post" action="?" onsubmit="return submitSSR();">
-	  <input type="hidden" name="m" value="ssr" />
-	  <input type="hidden" name="dosql" value="do_evenement_ssr_multi_aed" />
-	  <input type="hidden" name="del" value="0" />
-	  <input type="hidden" name="sejour_id" value="{{$bilan->sejour_id}}">
-	  
-	  {{mb_field hidden=true object=$evenement field=therapeute_id prop="ref notNull"}}
-	  <input type="hidden" name="line_id" value="" />
-	  <input type="hidden" name="_element_id" value="" />
-	  <input type="hidden" name="_category_id" value="" />
+  </form>
+  
+  <form name="editEvenementSSR" method="post" action="?" onsubmit="return submitSSR();">
+    <input type="hidden" name="m" value="ssr" />
+    <input type="hidden" name="dosql" value="do_evenement_ssr_multi_aed" />
+    <input type="hidden" name="del" value="0" />
+    <input type="hidden" name="sejour_id" value="{{$bilan->sejour_id}}">
     
-	  <table class="form">
-	    <tr>
-	      <th style="width: 94px">Catégories</th>
-	      <td class="text">
-	        {{foreach from=$prescription->_ref_prescription_lines_element_by_cat item=_lines_by_chap}}
-	          {{foreach from=$_lines_by_chap item=_lines_by_cat}}
-	            {{foreach from=$_lines_by_cat.element item=_line name=category}}
-	              {{if $smarty.foreach.category.first}}
-	                {{assign var=category value=$_line->_ref_element_prescription->_ref_category_prescription}}
-	                <button id="trigger-{{$category->_guid}}" class="none activite" type="button" 
-									        onclick="$V(this.form._category_id, '{{$category->_id}}'); selectActivite('{{$category->_guid}}')">
-	                  {{$category}}
-	                </button>
-	              {{/if}}
-	            {{/foreach}}
-	          {{/foreach}}
-	        {{/foreach}}
-	      </td>
-	    </tr>
-	    <tr>
-	      <th>Eléments</th>
-	      <td class="text">
-	        {{foreach from=$prescription->_ref_prescription_lines_element_by_cat item=_lines_by_chap}}
-	          {{foreach from=$_lines_by_chap item=_lines_by_cat}}
-	            {{foreach from=$_lines_by_cat.element item=_line name=category}}
-	              {{assign var=element value=$_line->_ref_element_prescription}}
-	              {{if $smarty.foreach.category.first}}
-	                {{assign var=category value=$element->_ref_category_prescription}}
-	                <div class="activite" id="activite-{{$category->_guid}}" style="display: none;">
-	              {{/if}}
-	              
-	              <span style="float: right">
-                  {{mb_include module=system template=inc_opened_interval_date from=$_line->debut to=$_line->date_arret}}
-	              </span>
-                
-	              <label>
-  	              <input type="radio" name="prescription_line_element_id" id="line-{{$_line->_id}}" class="search line" 
-                         onclick="$V(this.form._element_id, '{{$_line->element_prescription_id}}'); selectElement('{{$_line->_id}}'); $V(this.form._cdarr, false); $$('#other_cdarr span').invoke('remove'); $('other_cdarr').hide();" />
-  	              <span class="mediuser" style="border-left-color: #{{$element->_color}};" 
-                        onmouseover="ObjectTooltip.createEx(this, '{{$element->_guid}}')">
-                    {{$_line}}
-                  </span>
-                </label>
-								{{if $_line->commentaire}} 
-                <div class="warning text">
-                  {{$_line->commentaire}}
-                </div>
-								{{else}}
-                <br />
-								{{/if}}
+    {{mb_field hidden=true object=$evenement field=therapeute_id prop="ref notNull"}}
+    <input type="hidden" name="line_id" value="" />
+    <input type="hidden" name="_element_id" value="" />
+    <input type="hidden" name="_category_id" value="" />
+    
+    <table class="form">
+      <tr>
+        <th style="width: 94px">Catégories</th>
+        <td class="text">
+          {{foreach from=$prescription->_ref_prescription_lines_element_by_cat item=_lines_by_chap}}
+            {{foreach from=$_lines_by_chap item=_lines_by_cat}}
+              {{foreach from=$_lines_by_cat.element item=_line name=category}}
+                {{if $smarty.foreach.category.first}}
+                  {{assign var=category value=$_line->_ref_element_prescription->_ref_category_prescription}}
+                  <button id="trigger-{{$category->_guid}}" class="none activite" type="button" 
+                          onclick="$V(this.form._category_id, '{{$category->_id}}'); selectActivite('{{$category->_guid}}')">
+                    {{$category}}
+                  </button>
+                {{/if}}
+              {{/foreach}}
+            {{/foreach}}
+          {{/foreach}}
+        </td>
+      </tr>
+      <tr>
+        <th>Eléments</th>
+        <td class="text">
 
-	              {{if $smarty.foreach.category.last}}
-	                </div>
-	              {{/if}}
-	            {{/foreach}}
-	          {{/foreach}}
-	        {{/foreach}}
-	      </td>
-	    </tr>
-	    <tr id='tr-cdarrs'>
-	      <th>Codes CdARR</th>
-	      <td class="text">
-	      	<button type="button" class="add" onclick="$('remarque_ssr').toggle(); this.form.remarque.focus();" style="float: right">Remarque</button>
-	        {{foreach from=$prescription->_ref_prescription_lines_element_by_cat item=_lines_by_chap}}
-	          {{foreach from=$_lines_by_chap item=_lines_by_cat}}
-	            {{foreach from=$_lines_by_cat.element item=_line}}
-	              <div class="type-cdarrs" id="type-cdarrs-{{$_line->_id}}" style="display : none;">
-	                {{foreach from=$_line->_ref_element_prescription->_ref_cdarrs_by_type key=type_cdarr item=_cdarrs}}
-										<!-- Boutons de type de code cdarr-->
-										<button class="button-type-cdarrs none" type="button" onclick="selectTypeCdarr('{{$type_cdarr}}','{{$_line->_id}}',this);">
-											{{$type_cdarr}} <span class="counts_cdarr" id="count-{{$_line->_id}}-{{$type_cdarr}}"></span>
-										</button>
-	                {{/foreach}}
-	              </div>
-	            {{/foreach}}
-	          {{/foreach}}
-	        {{/foreach}}  
-					{{foreach from=$prescription->_ref_prescription_lines_element_by_cat item=_lines_by_chap}}
+          {{foreach from=$lines_by_element item=_lines_by_chap}}
+            {{foreach from=$_lines_by_chap item=_lines_by_cat}}
+              {{foreach from=$_lines_by_cat item=_lines_by_elt name=category}}
+                {{foreach from=$_lines_by_elt item=_line name=elts}}
+                  {{assign var=element value=$_line->_ref_element_prescription}}
+                  {{if $smarty.foreach.category.first &&  $smarty.foreach.elts.first}}
+                    {{assign var=category value=$element->_ref_category_prescription}}
+                    <div class="activite" id="activite-{{$category->_guid}}" style="display: none;">
+                  {{/if}}
+                  
+                  {{if $smarty.foreach.elts.first}}
+                   <span class="mediuser" style="font-weight: bold; border-left-color: #{{$element->_color}};" 
+                          onmouseover="ObjectTooltip.createEx(this, '{{$element->_guid}}')">
+                    {{$element->_view}}
+                   </span>
+                   <br />
+                   
+                  {{/if}}
+                  <span style="float: right">
+                    {{mb_include module=system template=inc_opened_interval_date from=$_line->debut to=$_line->date_arret}}
+                  </span>
+                  
+                  <label>
+                    <input type="radio" name="prescription_line_element_id" id="line-{{$_line->_id}}" class="search line" 
+                           onclick="$V(this.form._element_id, '{{$_line->element_prescription_id}}'); selectElement('{{$_line->_id}}'); $V(this.form._cdarr, false); $$('#other_cdarr span').invoke('remove'); $('other_cdarr').hide();" />
+                   
+                    {{if $_line->commentaire}} 
+                      {{$_line->commentaire}}
+                    {{/if}}
+                  </label>
+                  <br />
+                  {{if $smarty.foreach.category.last &&  $smarty.foreach.elts.last}}
+                    </div>
+                  {{/if}}
+                {{/foreach}}
+              {{/foreach}}
+            {{/foreach}}
+          {{/foreach}}
+          
+        </td>
+      </tr>
+      <tr id='tr-cdarrs'>
+        <th>Codes CdARR</th>
+        <td class="text">
+          <button type="button" class="add" onclick="$('remarque_ssr').toggle(); this.form.remarque.focus();" style="float: right">Remarque</button>
+          {{foreach from=$prescription->_ref_prescription_lines_element_by_cat item=_lines_by_chap}}
+            {{foreach from=$_lines_by_chap item=_lines_by_cat}}
+              {{foreach from=$_lines_by_cat.element item=_line}}
+                <div class="type-cdarrs" id="type-cdarrs-{{$_line->_id}}" style="display : none;">
+                  {{foreach from=$_line->_ref_element_prescription->_ref_cdarrs_by_type key=type_cdarr item=_cdarrs}}
+                    <!-- Boutons de type de code cdarr-->
+                    <button class="button-type-cdarrs none" type="button" onclick="selectTypeCdarr('{{$type_cdarr}}','{{$_line->_id}}',this);">
+                      {{$type_cdarr}} <span class="counts_cdarr" id="count-{{$_line->_id}}-{{$type_cdarr}}"></span>
+                    </button>
+                  {{/foreach}}
+                </div>
+              {{/foreach}}
+            {{/foreach}}
+          {{/foreach}}  
+          {{foreach from=$prescription->_ref_prescription_lines_element_by_cat item=_lines_by_chap}}
             {{foreach from=$_lines_by_chap item=_lines_by_cat}}
               {{foreach from=$_lines_by_cat.element item=_line}}
 
@@ -474,77 +479,77 @@ Main.add(function(){
               {{/foreach}}
             {{/foreach}}
           {{/foreach}}  
-	         
-	        <div id="div_other_cdarr" style="display: none;">
+           
+          <div id="div_other_cdarr" style="display: none;">
             <label>
-	            <input type="checkbox" name="_cdarr" value="other" onclick="toggleOther(this);" /> Autre:
+              <input type="checkbox" name="_cdarr" value="other" onclick="toggleOther(this);" /> Autre:
             </label>
             
-	          <span id="other_cdarr" style="display: none;">
-						   <input type="text" name="code" class="autocomplete" canNull=true size="2" />
-	             <div style="display:none;" class="autocomplete" id="code_auto_complete"></div>
-	          </span>
-	        </div>
-	      </td>
-	    </tr> 
-			<tr id="remarque_ssr" style="display: none;">
+            <span id="other_cdarr" style="display: none;">
+               <input type="text" name="code" class="autocomplete" canNull=true size="2" />
+               <div style="display:none;" class="autocomplete" id="code_auto_complete"></div>
+            </span>
+          </div>
+        </td>
+      </tr> 
+      <tr id="remarque_ssr" style="display: none;">
         <th>{{mb_label object=$evenement field=remarque}}</th>
         <td>{{mb_field object=$evenement field=remarque}}</td>
       </tr>
-	    <tr>
-	      <th>{{mb_label object=$evenement field=therapeute_id}}</th>
-	      <td class="text">
-	      	{{foreach from=$prescription->_ref_prescription_lines_element_by_cat item=_lines_by_chap}}
-	          {{foreach from=$_lines_by_chap item=_lines_by_cat}}
-	            {{foreach from=$_lines_by_cat.element item=_line name=foreach_category}}
-	              {{assign var=element value=$_line->_ref_element_prescription}}
-	              
-								{{if $smarty.foreach.foreach_category.first}}
-								  {{assign var=category value=$element->_ref_category_prescription}}
+      <tr>
+        <th>{{mb_label object=$evenement field=therapeute_id}}</th>
+        <td class="text">
+          {{foreach from=$prescription->_ref_prescription_lines_element_by_cat item=_lines_by_chap}}
+            {{foreach from=$_lines_by_chap item=_lines_by_cat}}
+              {{foreach from=$_lines_by_cat.element item=_line name=foreach_category}}
+                {{assign var=element value=$_line->_ref_element_prescription}}
+                
+                {{if $smarty.foreach.foreach_category.first}}
+                  {{assign var=category value=$element->_ref_category_prescription}}
                   {{assign var=category_id value=$category->_id}}
-								  
-								   <div class="techniciens" id="techniciens-{{$category->_guid}}" style="display: none;">
-									   {{if array_key_exists($category_id, $executants)}}
-										   {{assign var=list_executants value=$executants.$category_id}}
-	                     {{if array_key_exists($current_user_id, $list_executants)}}
-											 
-											 {{assign var=current_user value=$list_executants.$current_user_id}}
-											 <button title="{{$current_user->_view}}" id="technicien-{{$category_id}}-{{$current_user_id}}" class="none ressource" type="button" onclick="selectTechnicien('{{$current_user->_id}}', this)">
-	                       {{$current_user->_user_last_name}}
-	                     </button>		 
-										 {{/if}}
-											 
+                  
+                   <div class="techniciens" id="techniciens-{{$category->_guid}}" style="display: none;">
+                     {{if array_key_exists($category_id, $executants)}}
+                       {{assign var=list_executants value=$executants.$category_id}}
+                       {{if array_key_exists($current_user_id, $list_executants)}}
+                       
+                       {{assign var=current_user value=$list_executants.$current_user_id}}
+                       <button title="{{$current_user->_view}}" id="technicien-{{$category_id}}-{{$current_user_id}}" class="none ressource" type="button" onclick="selectTechnicien('{{$current_user->_id}}', this)">
+                         {{$current_user->_user_last_name}}
+                       </button>     
+                     {{/if}}
+                       
                      {{if $can->admin}}
-	                     <select class="_technicien_id" onchange="selectTechnicien(this.value)">
-	                       <option value="">&mdash; {{tr}}Choose{{/tr}}</option>
-	                       {{foreach from=$executants.$category_id item=_user_executant}}
-	                         <option value="{{$_user_executant->_id}}">
-	                           {{$_user_executant->_user_last_name}}
-	                         </option>
-	                       {{/foreach}}
-	                     </select>
-										 {{/if}}
-	
-										{{else}}
-											<div class="small-warning">
-		                    Aucun exécutant n'est disponible pour cette catégorie
-		                  </div>
-		                {{/if}}
-									</div>
-								{{/if}}
-								
-							{{/foreach}}
-						{{/foreach}}
-          {{/foreach}}		
-	      </td>
-	    </tr>
-			
-			{{if $app->user_prefs.ssr_planification_show_equipement}} 
+                       <select class="_technicien_id" onchange="selectTechnicien(this.value)">
+                         <option value="">&mdash; {{tr}}Choose{{/tr}}</option>
+                         {{foreach from=$executants.$category_id item=_user_executant}}
+                           <option value="{{$_user_executant->_id}}">
+                             {{$_user_executant->_user_last_name}}
+                           </option>
+                         {{/foreach}}
+                       </select>
+                     {{/if}}
+  
+                    {{else}}
+                      <div class="small-warning">
+                        Aucun exécutant n'est disponible pour cette catégorie
+                      </div>
+                    {{/if}}
+                  </div>
+                {{/if}}
+                
+              {{/foreach}}
+            {{/foreach}}
+          {{/foreach}}    
+        </td>
+      </tr>
+      
+      {{if $app->user_prefs.ssr_planification_show_equipement}} 
       <tr>
         <th>
-        	{{mb_label object=$evenement field=equipement_id}}
+          {{mb_label object=$evenement field=equipement_id}}
           {{mb_field object=$evenement field=equipement_id hidden=true}}
-				</th>
+        </th>
         <td class="text">
           {{foreach from=$plateau->_ref_equipements item=_equipement}}
           <button id="equipement-{{$_equipement->_id}}" class="none equipement" type="button" onclick="$V(getForm('editEvenementSSR')._equipement_id, ''); selectEquipement('{{$_equipement->_id}}');">
@@ -567,61 +572,61 @@ Main.add(function(){
           </select>
         </td>
       </tr>
-			{{/if}}
+      {{/if}}
 
-			<tr id="seances" style="display: none;">
+      <tr id="seances" style="display: none;">
         <th>{{mb_label object=$evenement field="seance_collective_id"}}</th>
         <td>
-				  <table class="layout">
-					  <tr>
-						  <td>
-							  <input type="checkbox" name="seance_collective" value="true" onclick="getForm(editEvenementSSR).seance_collective_id.toggle(); "/>
-       	      </td>
-					   	<td id="select-seances"></td>
-					  </tr>
-					</table>
+          <table class="layout">
+            <tr>
+              <td>
+                <input type="checkbox" name="seance_collective" value="true" onclick="getForm(editEvenementSSR).seance_collective_id.toggle(); "/>
+              </td>
+              <td id="select-seances"></td>
+            </tr>
+          </table>
         </td>
       </tr>
-			<tbody id="date-evenements">
-		    <tr>
-		      <th style="vertical-align: middle;">Jour</th>
-		      <td style="text-align: center;">
-		        <table>
-		          <tr>
-		            {{foreach from=$list_days key=_date item=_day}}
-		              <td>
-		                <label>{{$_day}}<br /><input class="days nocheck" type="checkbox" name="_days[{{$_date}}]" value="{{$_date}}" />
-		                </label>
-		              </td>
-		            {{/foreach}}
+      <tbody id="date-evenements">
+        <tr>
+          <th style="vertical-align: middle;">Jour</th>
+          <td style="text-align: center;">
+            <table>
+              <tr>
+                {{foreach from=$list_days key=_date item=_day}}
+                  <td>
+                    <label>{{$_day}}<br /><input class="days nocheck" type="checkbox" name="_days[{{$_date}}]" value="{{$_date}}" />
+                    </label>
+                  </td>
+                {{/foreach}}
                 <td style="padding-left: 3em; text-align: center;">
                   <label style="float: right;">
                     <button type="button" onclick="toggleAllDays();">{{tr}}Week{{/tr}}</button>
                   </label>
                 </td>
-		          </tr>
-		        </table>
-		      </td>
-		    </tr>	
-		    <tr>
-		      <th>
+              </tr>
+            </table>
+          </td>
+        </tr> 
+        <tr>
+          <th>
             {{mb_label object=$evenement field=_heure_deb}} / 
             {{mb_label object=$evenement field=duree}} /
             {{mb_label object=$evenement field=_heure_fin}}
-					</th>
-		      <td>
-		      	<script type="text/javascript">
-							updateDuree = function(form) {
+          </th>
+          <td>
+            <script type="text/javascript">
+              updateDuree = function(form) {
                 if ($V(form._heure_deb) && $V(form._heure_fin)) {
-	                var timeDeb = Date.fromDATETIME("2001-01-01 " + $V(form._heure_deb));
-	                var timeFin = Date.fromDATETIME("2001-01-01 " + $V(form._heure_fin));
+                  var timeDeb = Date.fromDATETIME("2001-01-01 " + $V(form._heure_deb));
+                  var timeFin = Date.fromDATETIME("2001-01-01 " + $V(form._heure_fin));
                   $V(form.duree, (timeFin-timeDeb) / Date.minute, false);
-								}
-								
-								if (!$V(form._heure_fin)) {
-								  updateHeureFin(form);
-								}
-							}
+                }
+                
+                if (!$V(form._heure_fin)) {
+                  updateHeureFin(form);
+                }
+              }
 
               updateHeureFin = function(form) {
                 if ($V(form._heure_deb) && $V(form.duree)) {
@@ -631,48 +636,48 @@ Main.add(function(){
                   $V(form._heure_fin_da, time.toLocaleTime(), false);
                 }
               }
-		      	</script>
+            </script>
             <input name="_default_duree" type="hidden" value="{{$evenement->duree}}"/>
-						{{mb_field object=$evenement form=editEvenementSSR field=_heure_deb onchange="updateDuree(this.form)"}}
+            {{mb_field object=$evenement form=editEvenementSSR field=_heure_deb onchange="updateDuree(this.form)"}}
             {{mb_field object=$evenement form=editEvenementSSR field=duree increment=1 size=2 step=10 onchange="updateHeureFin(this.form)"}}
             {{mb_field object=$evenement form=editEvenementSSR field=_heure_fin onchange="updateDuree(this.form)"}}
-					</td>
-		    </tr>
-			</tbody>
-	    <tr>
-	      <td colspan="2" class="button">
-	        <button type="submit" class="submit singleclick">{{tr}}Save{{/tr}}</button>
-	      </td>
-	    </tr>
-	  </table>
-	</form>
+          </td>
+        </tr>
+      </tbody>
+      <tr>
+        <td colspan="2" class="button">
+          <button type="submit" class="submit singleclick">{{tr}}Save{{/tr}}</button>
+        </td>
+      </tr>
+    </table>
+  </form>
 </div>
 
 <div id="outils" style="display: none;">
   
-	<script type="text/javascript">
-		
-		updateSelectedEvents = function(input_elements){
-		  $V(input_elements, '');
-		  var tab_selected = new TokenField(input_elements); 
-		  $$(".event.selected").each(function(e){
-		    if(e.className.match(/CEvenementSSR-([0-9]+)/)){
-		     var evt_id = e.className.match(/CEvenementSSR-([0-9]+)/)[1];
-		     tab_selected.add(evt_id);
-		    }
-		  });
-		}
-		
-		resetFormSSR = function(){
-		  var oForm = getForm('editSelectedEvent');
-		  $V(oForm.del, '0');
+  <script type="text/javascript">
+    
+    updateSelectedEvents = function(input_elements){
+      $V(input_elements, '');
+      var tab_selected = new TokenField(input_elements); 
+      $$(".event.selected").each(function(e){
+        if(e.className.match(/CEvenementSSR-([0-9]+)/)){
+         var evt_id = e.className.match(/CEvenementSSR-([0-9]+)/)[1];
+         tab_selected.add(evt_id);
+        }
+      });
+    }
+    
+    resetFormSSR = function(){
+      var oForm = getForm('editSelectedEvent');
+      $V(oForm.del, '0');
       $V(oForm._nb_decalage_min_debut, '');
       $V(oForm._nb_decalage_heure_debut, '');
       $V(oForm._nb_decalage_jour_debut, '');
       $V(oForm._nb_decalage_duree, ''); 
-			$V(oForm.kine_id, ''); 
-			$V(oForm.equipement_id, ''); 
-		}
+      $V(oForm.kine_id, ''); 
+      $V(oForm.equipement_id, ''); 
+    }
     
     toggleOther = function(elem, dontFocus) {
       var toggle = $V(elem);
@@ -692,7 +697,7 @@ Main.add(function(){
             id: 'editEvenementSSR__cdarrs['+code_selected.innerHTML+']', 
             name:'_cdarrs['+code_selected.innerHTML+']',
             value: code_selected.innerHTML,
-						className: 'checkbox-other-cdarrs'
+            className: 'checkbox-other-cdarrs'
           }),
           DOM.button({
             className: "cancel notext", 
@@ -712,56 +717,56 @@ Main.add(function(){
       $(elem).up().remove();
     }
     
-		onSubmitSelectedEvents = function(form) {
+    onSubmitSelectedEvents = function(form) {
       updateSelectedEvents(form.event_ids);
-			var values = new TokenField(form.event_ids).getValues();
-			
-			// Sélection vide
-			if (!values.length) {
-			  alert($T('CEvenementSSR-alert-selection_empty'));
-				return;
-			}
-			
-			// Suppression multiple
-			if ($V(form.del) == '1' && values.length > 1) {
-			  if (!confirm($T('CEvenementSSR-msg-confirm-multidelete', values.length) + $T('confirm-ask-continue'))) {
-				  return;
-				}
-			}
-			
-			// Envoi du formulaire
-			return onSubmitFormAjax(form, { onComplete: function() {
+      var values = new TokenField(form.event_ids).getValues();
+      
+      // Sélection vide
+      if (!values.length) {
+        alert($T('CEvenementSSR-alert-selection_empty'));
+        return;
+      }
+      
+      // Suppression multiple
+      if ($V(form.del) == '1' && values.length > 1) {
+        if (!confirm($T('CEvenementSSR-msg-confirm-multidelete', values.length) + $T('confirm-ask-continue'))) {
+          return;
+        }
+      }
+      
+      // Envoi du formulaire
+      return onSubmitFormAjax(form, { onComplete: function() {
         refreshPlanningsSSR(); 
-				resetFormSSR(); 
-			} } );
-		}
-	</script>	
+        resetFormSSR(); 
+      } } );
+    }
+  </script> 
 
-	<form name="editSelectedEvent" method="post" action="?" onsubmit="return onSubmitSelectedEvents(this)">
-		<input type="hidden" name="m" value="ssr" />
-		<input type="hidden" name="dosql" value="do_modify_evenements_aed" />
-		<input type="hidden" name="event_ids" value="" />
-    <input type="hidden" name="del" value="0" />		
-		<input type="hidden" name="sejour_id" value="{{$bilan->sejour_id}}">
+  <form name="editSelectedEvent" method="post" action="?" onsubmit="return onSubmitSelectedEvents(this)">
+    <input type="hidden" name="m" value="ssr" />
+    <input type="hidden" name="dosql" value="do_modify_evenements_aed" />
+    <input type="hidden" name="event_ids" value="" />
+    <input type="hidden" name="del" value="0" />    
+    <input type="hidden" name="sejour_id" value="{{$bilan->sejour_id}}">
     <table class="form">
-		 <tr>
+     <tr>
         <th class="category" colspan="2">
           Modification 
         </th>
       </tr>
-			<tr>
-				<td>
-			    Déplacer de {{mb_field object=$evenement field="_nb_decalage_min_debut" form="editSelectedEvent" increment=1 size=2 step=10}} minutes
-      	</td>
-				<td>
+      <tr>
+        <td>
+          Déplacer de {{mb_field object=$evenement field="_nb_decalage_min_debut" form="editSelectedEvent" increment=1 size=2 step=10}} minutes
+        </td>
+        <td>
           Modifier la durée de {{mb_field object=$evenement field="_nb_decalage_duree" form="editSelectedEvent" increment=1 size=2 step=10}} minutes
-				</td>
-			</tr>
+        </td>
+      </tr>
       <tr>
         <td>
           Déplacer de {{mb_field object=$evenement field="_nb_decalage_heure_debut" form="editSelectedEvent" increment=1 size=2}} heures
         </td>
-				<td>
+        <td>
           Transférer vers 
           <select name="kine_id" style="width: 12em;">
             <option value="">&mdash; Rééducateur</option>
@@ -773,13 +778,13 @@ Main.add(function(){
               </optgroup>
             {{/foreach}}
           </select>
-				</td>
-      </tr>	    		
+        </td>
+      </tr>         
       <tr>
         <td>
           Déplacer de {{mb_field object=$evenement field="_nb_decalage_jour_debut" form="editSelectedEvent" increment=1 size=2}} jours
         </td>
-				<td>
+        <td>
           Transférer vers 
           <select name="equipement_id" style="width: 12em;">
             <option value="">&mdash; Equipement</option>
@@ -792,14 +797,14 @@ Main.add(function(){
               </optgroup>
             {{/foreach}}
           </select>
-				</td>
+        </td>
       </tr>
-			<tr>
-				<td class="button" colspan="2">
-					<button type="button" onclick="$V(this.form.del, '0'); this.form.onsubmit();" class="submit">{{tr}}Modify{{/tr}}</button>
-				</td>
-			</tr>	
-			<tr>
+      <tr>
+        <td class="button" colspan="2">
+          <button type="button" onclick="$V(this.form.del, '0'); this.form.onsubmit();" class="submit">{{tr}}Modify{{/tr}}</button>
+        </td>
+      </tr> 
+      <tr>
         <th class="category" colspan="2">
           Suppression 
         </th>
@@ -812,15 +817,15 @@ Main.add(function(){
         </td>
       </tr>
     </table>
-	</form>
-	
-	<form name="duplicateSelectedEvent" method="post" action="?" onsubmit="return onSubmitSelectedEvents(this)">
-		
+  </form>
+  
+  <form name="duplicateSelectedEvent" method="post" action="?" onsubmit="return onSubmitSelectedEvents(this)">
+    
     <input type="hidden" name="m" value="ssr" />
     <input type="hidden" name="dosql" value="do_duplicate_evenements_aed" />
     <input type="hidden" name="event_ids" value="" /> 
     <table class="form">
-    	<tr>
+      <tr>
         <th class="category">
           Duplication
         </th>
@@ -833,31 +838,31 @@ Main.add(function(){
             <option value="-1 DAY" >{{tr}}Day-before{{/tr}}</option>
           </select>
           <button type="button" class="new singleclick" onclick="this.form.onsubmit();">
-          	{{tr}}Duplicate{{/tr}}
-					</button>
+            {{tr}}Duplicate{{/tr}}
+          </button>
         </td>
       </tr> 
-	  </table>
-	</form>
-	
-	<!-- TODO: utiliser le meme formulaire pour stocker le token d'evenements pour les differentes actions  -->
-	<form name="form_list_cdarr">
-		<input type="hidden" name="token_evts" />
-	</form>	
-	
-	<!-- Modal de modification des actes cdarrs -->
-	<div id="modal-cdarr" style="display: none;"></div>
-	
-	<table class="form">
-		<tr>
-			<th class="category">Codes CdARR</td>
-		</tr>
-		<tr>
-			<td class="button">
-			  <button type="button" class="submit" onclick="updateSelectedEvents(getForm('form_list_cdarr').token_evts); updateModalCdarr();">Modifier les codes CdARR</button>
+    </table>
+  </form>
+  
+  <!-- TODO: utiliser le meme formulaire pour stocker le token d'evenements pour les differentes actions  -->
+  <form name="form_list_cdarr">
+    <input type="hidden" name="token_evts" />
+  </form> 
+  
+  <!-- Modal de modification des actes cdarrs -->
+  <div id="modal-cdarr" style="display: none;"></div>
+  
+  <table class="form">
+    <tr>
+      <th class="category">Codes CdARR</td>
+    </tr>
+    <tr>
+      <td class="button">
+        <button type="button" class="submit" onclick="updateSelectedEvents(getForm('form_list_cdarr').token_evts); updateModalCdarr();">Modifier les codes CdARR</button>
       </td>
-		</tr>
-	</table>
+    </tr>
+  </table>
 
 </div>
 {{/if}}

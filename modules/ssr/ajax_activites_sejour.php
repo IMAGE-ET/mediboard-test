@@ -54,6 +54,16 @@ foreach ($prescription->_ref_prescription_lines_element_by_cat as $_lines_by_cha
 	}
 }
 
+// Creation d'un nouveau tableau pour stocker les lignes par elements de prescription
+foreach ($prescription->_ref_prescription_lines_element_by_cat as $chap => $_lines_by_chap){
+  foreach ($_lines_by_chap as $cat => $_lines_by_cat){
+    foreach ($_lines_by_cat['element'] as $line_id => $_line){
+    	$lines_by_element[$chap][$cat][$_line->element_prescription_id][$_line->_id] = $_line;
+		}
+	}
+}
+
+
 // Bilan
 $sejour->loadRefBilanSSR();
 $bilan =& $sejour->_ref_bilan_ssr;
@@ -119,6 +129,7 @@ $smarty->assign("plateaux", $plateaux);
 $smarty->assign("executants", $executants);
 $smarty->assign("selected_cat", $selected_cat);
 $smarty->assign("current_user_id", $current_user_id);
+$smarty->assign("lines_by_element", $lines_by_element);
 $smarty->display("inc_activites_sejour.tpl");
 
 ?>
