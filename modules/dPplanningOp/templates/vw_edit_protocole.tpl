@@ -19,21 +19,6 @@ function copier(){
   oForm.submit();
 }
 
-function refreshListProtocolesPrescription(praticien_id, selected_id) {
-  var url = new Url("dPplanningOp", "httpreq_vw_list_protocoles_prescription");
-  url.addParam("praticien_id", praticien_id);
-  url.addParam("without_pack", true);
-  //url.addParam("selected_id", selected_id || "{{$protocole->protocole_prescription_anesth_id}}");
-  //url.requestUpdate(document.editFrm.protocole_prescription_anesth_id);
-
-  url.addParam("selected_id", selected_id || "{{$protocole->protocole_prescription_chir_id}}");
-  
-  var select = document.editFrm.protocole_prescription_chir_id;
-  if (select && /select/i.test(select.tagName)) { // can be an input type="hidden" !
-    url.requestUpdate(document.editFrm.protocole_prescription_chir_id);
-  }
-}
-
 function refreshListCCAM() {
   var oCcamNode = $("listCodesCcam");
 
@@ -142,8 +127,6 @@ function setOperationActive(active) {
 Main.add(function () {
   refreshListCCAM();
 
-  refreshListProtocolesPrescription($V(document.editFrm.chir_id));
-  
   setOperationActive($V(getForm('editFrm').for_sejour) == 0);
   
   oCcamField = new TokenField(document.editFrm.codes_ccam, { 
