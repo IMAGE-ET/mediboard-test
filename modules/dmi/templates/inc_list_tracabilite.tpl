@@ -37,7 +37,7 @@
         </span>
       </td>
       <td style="width: 17%;">
-        <span onmouseover="ObjectTooltip.createEx(this, '{{$_line->_ref_operation->_guid}}')">
+        <span onmouseover="ObjectTooltip.createEx(this, '{{$_line->_guid}}')">
           {{mb_value object=$_line->_ref_operation field=_datetime}} &ndash;
           {{mb_value object=$_line->_ref_operation field=chir_id}}
         </span>

@@ -34,11 +34,12 @@ function saveSortie(oFormSortie, oFormAffectation){
             <table class="tbl">
               <tr>
                 <th class="title" colspan="6">
+                  <button class="print notext not-printable" onclick="$(this).up('table').print()"></button>
                   Effectuer des déplacements ({{$deplacements|@count}})
                 </th>
               </tr>
               <tr>
-                <th>Effectuer</th>
+                <th class="not-printable">Effectuer</th>
                 <th>{{mb_colonne class="CAffectation" field="_patient" order_col=$order_col order_way=$order_way url="?m=$m&amp;tab=$tab"}}</th>
                 <th>{{mb_colonne class="CAffectation" field="_praticien" order_col=$order_col order_way=$order_way url="?m=$m&amp;tab=$tab"}}</th>
                 <th>{{mb_colonne class="CAffectation" field="_chambre" order_col=$order_col order_way=$order_way url="?m=$m&amp;tab=$tab"}}</th>
@@ -47,7 +48,7 @@ function saveSortie(oFormSortie, oFormAffectation){
                 </tr>
               {{foreach from=$deplacements item=curr_sortie}}
               <tr>
-                <td>
+                <td class="not-printable">
                 <form name="editFrm{{$curr_sortie->affectation_id}}" action="?m={{$m}}" method="post" onsubmit="saveSortie(document.editSortie{{$curr_sortie->affectation_id}}, this);">
                 <input type="hidden" name="m" value="{{$m}}" />
                 <input type="hidden" name="del" value="0" />
