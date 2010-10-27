@@ -275,6 +275,10 @@ class CHPrimXMLEvenementsPatients extends CHPrimXMLEvenements {
   function getNatureVenue($node, CSejour $mbVenue) {
     $xpath = new CHPrimXPath($node->ownerDocument);
     
+    if (self::getEtatVenue($node) == "clôturée") {
+      $mbVenue->facture = 1;
+    }
+        
     $emetteur = $this->_ref_echange_hprim->_ref_emetteur;
     $emetteur->loadConfigValues();
 
