@@ -275,7 +275,7 @@ class CHPrimXMLEvenementsPatients extends CHPrimXMLEvenements {
   function getNatureVenue($node, CSejour $mbVenue) {
     $xpath = new CHPrimXPath($node->ownerDocument);
     
-    if (self::getEtatVenue($node) == "clôturée") {
+    if ((CAppUI::conf("dPpmsi passage_facture") == "reception") && self::getEtatVenue($node) == "clôturée") {
       $mbVenue->facture = 1;
     }
         
