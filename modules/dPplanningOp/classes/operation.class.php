@@ -336,7 +336,8 @@ class COperation extends CCodable {
     } else {
       $this->_link_editor = "index.php?m=dPplanningOp&tab=vw_edit_urgence&operation_id=".$this->_id;
     }
-    $this->_acte_depassement = $this->depassement;   
+    $this->_acte_depassement        = $this->depassement;
+    $this->_acte_depassement_anesth = $this->depassement_anesth;   
  }
   
   function updateDBFields() {

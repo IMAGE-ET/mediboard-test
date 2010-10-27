@@ -214,12 +214,13 @@ function setToNow(element) {
                 
                 {{mb_field object=$acte field=rembourse disabled=$disabled default=$default}}
               </td>
-              
-              {{if $confCCAM.tarif || $subject->_class_name == "CConsultation"}}
+            </tr>
+            {{if $confCCAM.tarif || $subject->_class_name == "CConsultation"}}
+            <tr class="{{$view}}">
               <th>{{mb_label object=$acte field=montant_depassement}}</th>
               <td>{{mb_field object=$acte field=montant_depassement}}</td>
-              {{/if}}
             </tr>
+            {{/if}}
             {{/if}}
 		
         		<!-- Commentaire -->
