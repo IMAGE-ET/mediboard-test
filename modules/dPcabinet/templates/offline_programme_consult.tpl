@@ -15,10 +15,11 @@ var PlageConsult = {
 
 Main.add(function () {
   // Initialisation des onglets
-  Control.Tabs.create('month_tabs');
+  window.tabs = Control.Tabs.create('month_tabs');
 });
 
 </script>
+
 
 <h3>Dernière mise à jour : {{$smarty.now|date_format:$dPconfig.datetime}}</h3>
 
@@ -31,6 +32,9 @@ Main.add(function () {
     </a>
   </li>
   {{/foreach}}
+  <li>
+    <button onclick="window.tabs.print()" class="print">{{tr}}Print{{/tr}}</button>
+  </li>
 </ul>
 
 <hr class="control_tabs" />

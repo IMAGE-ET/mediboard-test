@@ -680,6 +680,24 @@ Class.extend (Control.Tabs, {
         oForm.focusFirstElement();
       }
     }
+  },
+  print: function() {
+    var container = DOM.div({});
+    
+    this.links.each(function(link){
+      // header
+      var h = DOM.h2({});
+      h.update(link.innerHTML);
+      h.select('button').invoke('remove');
+      container.insert(h);
+      
+      // content
+      var content = $(link.getAttribute("href").substr(1)).clone(true);
+      content.show();
+      container.insert(content);
+    }, this);
+      
+    container.print();
   }
 });
 
@@ -991,16 +1009,17 @@ Element.addMethods({
   print: function(element){
     var iframe = $("printFrame");
     
-    if (!iframe) {
-      $(document.documentElement).insert(DOM.iframe({
-        id:    "printFrame",
-        name:  "printFrame", 
-        src:   "about:blank",
-        style: "position:absolute;width:0px;height:0px;",
-        frameborder: 0
-      }));
-      iframe = $("printFrame");
-    }
+    if (iframe) iframe.remove();
+
+    $(document.documentElement).insert(DOM.iframe({
+      id:    "printFrame",
+      name:  "printFrame", 
+      src:   "about:blank",
+      style: "position:absolute;width:0px;height:0px;",
+      frameborder: 0
+    }));
+    
+    iframe = $("printFrame");
     
     var win = iframe.contentWindow;
     var doc = win.document;
@@ -1009,27 +1028,33 @@ Element.addMethods({
     
     var head = doc.head || doc.getElementsByTagName('head')[0];
     var body = doc.body || doc.getElementsByTagName('body')[0];
+    var elements;
     
-    if (Object.isElement(element)) {
-      body.innerHTML = element.innerHTML;
-    }
-    else if (Object.isArray(element)) {
-      body.innerHTML = element.pluck("innerHTML").join("");
-    }
+    if (Object.isElement(element))
+      elements = [element];
+    else 
+      elements = element;
+    
+    elements.each(function(e){
+      body.appendChild($(e).clone(true));
+    });
+    
+    var parentHead = document.head || document.getElementsByTagName('head')[0];
     
     if (Prototype.Browser.IE) { // argh
-      $(document.head || document.getElementsByTagName('head')[0]).childElements().each(function(e){
+      $(parentHead).childElements().each(function(e){
         if (e.styleSheet) {
-          doc.write("<style>"+e.styleSheet.cssText +"</style>");
+          doc.write("<"+"style>"+e.styleSheet.cssText+"<"+"/style>");
         }
         else if (e.tagName === "SCRIPT") {
-          doc.write("<script>"+e.text+"<"+"/script>");
+          doc.write("<"+"script>"+e.text+"<"+"/script>");
         }
       });
       doc.execCommand('print', false, null);
     }
     else {
-      head.innerHTML = (document.head || document.getElementsByTagName('head')[0]).innerHTML;
+      head.innerHTML = parentHead.innerHTML;
+      win.focus();
       win.print();
     }
   }
