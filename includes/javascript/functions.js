@@ -83,14 +83,14 @@ var WaitingMessage = {
     /** If the element is a TR, we add the div to the firstChild to avoid a bad page render (a div in a <table> or a <tr>)*/
     var receiver = element;
     
-    if (/^tr|tbody$/i.test(element.tagName)) {
-      var cell = element.down("td, th");
-      if (cell)
-        receiver = cell;
+    if (/^tbody$/i.test(receiver.tagName)) {
+      receiver = receiver.down();
     }
-    
-    var isTopAligned = receiver.getStyle("vertical-align") === "top";
-    
+		
+    if (/^tr$/i.test(receiver.tagName)) {
+      receiver = receiver.down();
+    }
+
     receiver.insert({top: coverContainer});
     
     cover.setStyle({
@@ -99,17 +99,30 @@ var WaitingMessage = {
       left: -parseInt(receiver.getStyle("padding-left"))+"px"
     }).show().clonePosition(element, {setLeft: false, setTop: false});
     
+    var isTopAligned = receiver.getStyle("vertical-align") === "top";
     if (isTopAligned) {
       cover.style.top = -parseInt(receiver.getStyle("padding-top"))+"px";
     }
     
-    coverContainer.show();
-    
-    if (!isTopAligned) {
-      var offsetCover = coverContainer.cumulativeOffset();
-      var offsetContainer = receiver.cumulativeOffset();
-      coverContainer.style.top = (offsetContainer.top - offsetCover.top)+"px";
+    var isLeftAligned = receiver.getStyle("text-align").match(/left|start/i);
+    if (isLeftAligned) {
+      cover.style.left = -parseInt(receiver.getStyle("padding-left"))+"px";
     }
+
+    coverContainer.show();
+
+    if (!isTopAligned || !isLeftAligned) {
+	    var offsetCover = coverContainer.cumulativeOffset();
+	    var offsetContainer = receiver.cumulativeOffset();
+	    
+	    if (!isTopAligned) {
+	      coverContainer.style.top = (offsetContainer.top - offsetCover.top)+"px";
+	    }
+	
+	    if (!isLeftAligned) {
+	      coverContainer.style.left = (offsetContainer.left - offsetCover.left)+"px";
+	    }
+		}
   }
 };
 
