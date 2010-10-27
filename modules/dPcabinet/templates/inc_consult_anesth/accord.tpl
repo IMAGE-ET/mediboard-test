@@ -48,9 +48,6 @@ Main.add(function () {
   <li onmousedown="refreshConstantesMedicales();"><a href="#Constantes">Constantes</a></li>
   <li><a href="#Exams">Exam. Clinique</a></li>
   <li><a href="#Intub">Intubation</a></li>
-  {{if $app->user_prefs.ccam_consultation == 1}}
-  <li><a href="#Actes">Actes</a></li>
-  {{/if}}
   <li><a href="#ExamsComp">Exam. Comp.</a></li>
   <li><a href="#InfoAnesth">Infos. Anesth.</a></li>
 	{{if $isPrescriptionInstalled && $dPconfig.dPcabinet.CPrescription.view_prescription}}
@@ -60,6 +57,9 @@ Main.add(function () {
   {{/if}}
 	{{if $dPconfig.dPcabinet.CConsultAnesth.show_facteurs_risque}}
     <li onmousedown="refreshFacteursRisque();"><a href="#facteursRisque">Facteurs de risque</a></li>
+  {{/if}}
+  {{if $app->user_prefs.ccam_consultation == 1}}
+  <li><a href="#Actes">Cotation</a></li>
   {{/if}}
   <li><a href="#fdrConsult">Docs. et Réglements</a></li>
 </ul>
@@ -79,6 +79,17 @@ Main.add(function () {
 
 <div id="Exams" style="display: none;">{{include file="../../dPcabinet/templates/inc_consult_anesth/acc_examens_clinique.tpl"}}</div>
 <div id="Intub" style="display: none;">{{include file="../../dPcabinet/templates/inc_consult_anesth/intubation.tpl"}}</div>
+
+<div id="ExamsComp" style="display: none;">{{include file="../../dPcabinet/templates/inc_consult_anesth/acc_examens_complementaire.tpl"}}</div>
+<div id="InfoAnesth" style="display: none;">{{include file="../../dPcabinet/templates/inc_consult_anesth/acc_infos_anesth.tpl"}}</div>
+
+{{if $isPrescriptionInstalled && $dPconfig.dPcabinet.CPrescription.view_prescription}}
+<div id="prescription_sejour" style="display: none"></div>
+{{/if}}
+
+{{if $dPconfig.dPcabinet.CConsultAnesth.show_facteurs_risque}}
+<div id="facteursRisque" style="display: none;"></div>
+{{/if}}
 
 {{if $app->user_prefs.ccam_consultation == 1}}
 <div id="Actes" style="display: none;">
@@ -100,7 +111,7 @@ Main.add(function () {
   <div id="ngap" style="display: none;">
     <div id="listActesNGAP">
       {{assign var="_object_class" value="CConsultation"}}
-	    {{mb_include module=dPcabinet template=inc_codage_ngap}}
+      {{mb_include module=dPcabinet template=inc_codage_ngap}}
     </div>
   </div>
   
@@ -112,17 +123,6 @@ Main.add(function () {
 
   {{/if}}
 </div>
-{{/if}}
-
-<div id="ExamsComp" style="display: none;">{{include file="../../dPcabinet/templates/inc_consult_anesth/acc_examens_complementaire.tpl"}}</div>
-<div id="InfoAnesth" style="display: none;">{{include file="../../dPcabinet/templates/inc_consult_anesth/acc_infos_anesth.tpl"}}</div>
-
-{{if $isPrescriptionInstalled && $dPconfig.dPcabinet.CPrescription.view_prescription}}
-<div id="prescription_sejour" style="display: none"></div>
-{{/if}}
-
-{{if $dPconfig.dPcabinet.CConsultAnesth.show_facteurs_risque}}
-<div id="facteursRisque" style="display: none;"></div>
 {{/if}}
 	
 <div id="fdrConsult" style="display: none;">{{include file="../../dPcabinet/templates/inc_fdr_consult.tpl"}}</div>

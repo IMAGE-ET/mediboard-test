@@ -233,7 +233,7 @@ class COperation extends CCodable {
   function getExecutantId($code_activite) {
     $this->loadRefChir();
     $this->loadRefPlageOp();
-    return ($code_activite == 4 ? $this->_ref_anesth->user_id: $this->chir_id);
+    return ($code_activite == 4 ? $this->_ref_anesth->user_id : $this->chir_id);
   }
   
 	function getBackProps() {

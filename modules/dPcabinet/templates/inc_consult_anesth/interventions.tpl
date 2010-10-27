@@ -111,6 +111,9 @@
     <em>[{{$operation->libelle}}]</em>
     {{/if}}
 	</span>
+  <br />
+  <strong>{{mb_label object=$operation field="depassement"}} :</strong>
+  {{mb_value object=$operation field="depassement"}}
   {{/if}}
 </form>
 {{/if}}
@@ -138,11 +141,6 @@
         {{mb_field object=$operation field="depassement_anesth" onchange="this.form.onsubmit();"}}
         <button type="button" class="notext submit">{{tr}}Save{{/tr}}</button>
       </td>
-    </tr>
-    
-    <tr>
-      <th>{{mb_label object=$operation field="depassement"}} :</th>
-      <td>{{mb_value object=$operation field="depassement"}}</td>
     </tr>
   </table>
 </form>

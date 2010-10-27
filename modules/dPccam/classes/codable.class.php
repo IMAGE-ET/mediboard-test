@@ -15,12 +15,13 @@ class CCodable extends CMbObject {
   var $facture             = null; // Séjour facturé ou non
   
   // Form fields
-  var $_acte_execution     = null;
-  var $_acte_depassement   = null;
-  var $_ref_anesth         = null;
-  var $_anesth             = null;
-  var $_associationCodesActes = null;
-  var $_count_actes        = null;
+  var $_acte_execution          = null;
+  var $_acte_depassement        = null;
+  var $_acte_depassement_anesth = null;
+  var $_ref_anesth              = null;
+  var $_anesth                  = null;
+  var $_associationCodesActes   = null;
+  var $_count_actes             = null;
   
   // Abstract fields
   var $_praticien_id       = null;
@@ -377,7 +378,8 @@ class CCodable extends CMbObject {
    */
   function loadPossibleActes () {
     $this->preparePossibleActes();
-    $depassement_affecte = false;
+    $depassement_affecte        = false;
+    $depassement_anesth_affecte = false;
     // existing acts may only be affected once to possible acts
     $used_actes = array();
     
@@ -399,6 +401,12 @@ class CCodable extends CMbObject {
           if (!$depassement_affecte and $possible_acte->code_activite == 1) {
             $depassement_affecte = true;     	
             $possible_acte->montant_depassement = $this->_acte_depassement;
+          }
+          
+          // Affectation du dépassement au premier acte d'anesthésie
+          if (!$depassement_anesth_affecte and $possible_acte->code_activite == 4) {
+            $depassement_anesth_affecte = true;      
+            $possible_acte->montant_depassement = $this->_acte_depassement_anesth;
           }
           
           $possible_acte->executant_id = $this->getExecutantId($possible_acte->code_activite);
