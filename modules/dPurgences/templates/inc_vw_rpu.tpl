@@ -26,7 +26,26 @@ function redirect() {
 }
 
 function submitSejourWithSortieReelle(callback){
-  submitFormAjax(getForm('editSortieReelle'), 'systemMsg', { onComplete : callback });
+  submitFormAjax(getForm('editSortieReelle'), 'systemMsg', { onComplete : 
+	  callback 
+	});
+}
+
+function submitRPU(callback) {
+  var oForm = document.editSortieAutorise;
+  submitFormAjax(oForm, 'systemMsg', { onComplete : function(){ 
+    reloadSortieReelle(); 
+    if (callback) callback(); 
+  }});
+}
+
+function submitConsultWithChrono(chrono, callback) {
+  var oForm = document.editFrmFinish;
+  oForm.chrono.value = chrono;
+  submitFormAjax(oForm, 'systemMsg', { onComplete : function(){ 
+	  reloadFinishBanner(); 
+	  if (callback) callback(); 
+	}});
 }
 
 function reloadSortieReelle() {
@@ -34,17 +53,6 @@ function reloadSortieReelle() {
   url.addParam("sejour_id", getForm('editSortieReelle').elements.sejour_id.value);
   url.addParam("consult_id", getForm('ValidCotation').elements.consultation_id.value);
   url.requestUpdate('div_sortie_reelle');
-}
-
-function submitConsultWithChrono(chrono, callback) {
-  var oForm = document.editFrmFinish;
-  oForm.chrono.value = chrono;
-  submitFormAjax(oForm, 'systemMsg', { onComplete : function(){ reloadFinishBanner(); if (callback) callback(); }});
-}
-
-function submitRPU(callback) {
-	var oForm = document.editSortieAutorise;
-	submitFormAjax(oForm, 'systemMsg', { onComplete : function(){ reloadSortieReelle(); if (callback) callback(); }});
 }
 
 function submitSejRpuConsult() {
@@ -351,7 +359,7 @@ function showEtabEntreeTransfert(mode) {
       {{if !$rpu->mutation_sejour_id}}
 				{{if $dPconfig.dPurgences.gerer_reconvoc == "1"}}
 			    <!-- Reconvocation => formulaire de creation de consultation avec champs pre-remplis -->
-			    <button class="new" {{if ($dPconfig.dPurgences.hide_reconvoc_sans_sortie == "1") && !$sejour->sortie_reelle}}disabled="disabled"{{/if}} type="button" onclick="newConsultation({{$consult->_ref_plageconsult->chir_id}},{{$consult->patient_id}},{{$consult->_id}})">
+			    <button id="button_reconvoc" class="new" {{if ($dPconfig.dPurgences.hide_reconvoc_sans_sortie == "1") && !$sejour->sortie_reelle}}disabled="disabled"{{/if}} type="button" onclick="newConsultation({{$consult->_ref_plageconsult->chir_id}},{{$consult->patient_id}},{{$consult->_id}})">
 		        Reconvoquer
 		      </button>
 	      {{/if}}

@@ -18,6 +18,14 @@ autoriserSortie = function(value){
   }
   submitRPU();
 }
+
+autoriserEffectuerSortie = function() {
+	getForm('editSortieAutorise').elements.sortie_autorisee.value=1;
+	return onSubmitFormAjax(getForm('ValidCotation'), { onComplete : function(){ 
+		submitSejRpuConsult(); 
+		$('button_reconvoc').disabled=null; 
+	}});
+}
 </script>
 
 <form name="editSortieReelle" method="post" action="?m={{$m}}">
@@ -43,9 +51,7 @@ autoriserSortie = function(value){
       
       {{if !$sejour->sortie_reelle}}
         <input type="hidden" name="sortie_reelle" value="{{$now}}" />
-        <button class="tick" type="button" onclick="getForm('editSortieAutorise').elements.sortie_autorisee.value=1;
-          getForm('ValidCotation').onsubmit(); 
-          submitSejRpuConsult();">Autoriser et effectuer la sortie</button>
+        <button class="tick" type="button" onclick="autoriserEffectuerSortie()">Autoriser et effectuer la sortie</button>
       {{else}}
         Sortie à 
           {{mb_field object=$sejour field="sortie_reelle" register=true form="editSortieReelle" 
