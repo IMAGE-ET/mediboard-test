@@ -491,8 +491,13 @@ class CSetupdPcompteRendu extends CSetup {
       AND user_log.object_id = compte_rendu.compte_rendu_id
       AND user_log.fields = 'source'";
     $this->addQuery($query);
+		
+    $this->makeRevision("0.58");
+    $this->addPrefQuery("listDefault", "ulli");
+    $this->addPrefQuery("listBrPrefix", "&bull;");
+    $this->addPrefQuery("listInlineSeparator", ";");
     
-		$this->mod_version = "0.58";
+		$this->mod_version = "0.59";
   }
 }
 ?>

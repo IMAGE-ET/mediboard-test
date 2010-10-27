@@ -1528,6 +1528,7 @@ $locales['module-dPprescription-long'] = 'Prescriptions informatisées';
 $locales['pref-easy_mode'] = 'Affichage simplifié de la prescription';
 $locales['pref-easy_mode-0'] = 'Non';
 $locales['pref-easy_mode-1'] = 'Oui';
+$locales['pref-easy_mode-desc'] = 'Affichage simplifié de la prescription';
 $locales['pref-mode_readonly'] = 'Type d\'affichage par defaut du mode Lecture seule';
 $locales['pref-mode_readonly-0'] = 'Mode simple';
 $locales['pref-mode_readonly-1'] = 'Mode complet';

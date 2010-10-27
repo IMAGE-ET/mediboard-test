@@ -263,7 +263,17 @@ class CDossierMedical extends CMbMetaObject {
       $lists_par_type    [$_antecedent->type    ][] = $appareil . $date . $_antecedent->rques;
       $lists_par_appareil[$_antecedent->appareil][] = $type     . $date . $_antecedent->rques;
 		}
-		
+
+    // Séparateur pour les groupes de valeurs
+    $default = CAppUI::pref("listDefault");
+    $separator = CAppUI::pref("listInlineSeparator");
+		$separators = array(
+		  "ulli"   => "",
+			"br"     => "<br />",
+			"inline" => " $separator ",
+		);
+    $separator = $separators[$default];
+
 		// Création des listes par type
 		$parts = array();
 		$types = $atcd->_specs["type"]->_list;
@@ -273,10 +283,10 @@ class CDossierMedical extends CMbMetaObject {
       $list = @$lists_par_type[$type];
 			$template->addListProperty("$champ - Antécédents - $sType", $list);
       if ($list) {
-        $parts[] = "<strong>$sType</strong>" . $template->makeList($list);
+        $parts[] = "<strong>$sType</strong>: " . $template->makeList($list);
       }
 		}
-		$template->addProperty("$champ - Antécédents -- tous", implode("", $parts));
+		$template->addProperty("$champ - Antécédents -- tous", implode($separator, $parts));
 				
     // Création des listes par appareil
     $parts = array();
@@ -287,10 +297,10 @@ class CDossierMedical extends CMbMetaObject {
 			$list = @$lists_par_appareil[$appareil];
       $template->addListProperty("$champ - Antécédents - $sAppareil", $list);
 			if ($list) {
-        $parts[] = "<strong>$sAppareil</strong>" . $template->makeList($list);
+        $parts[] = "<strong>$sAppareil</strong>: " . $template->makeList($list);
 			}
     }
-    $template->addProperty("$champ - Antécédents -- tous par appareil", implode("", $parts));
+    $template->addProperty("$champ - Antécédents -- tous par appareil", implode($separator, $parts));
 		
     
     // Traitements

@@ -123,27 +123,52 @@ class CTemplateManager {
     $this->addProperty($field, $value);
   }
 	
-  function addListProperty($field, $list = null) {
-    $this->addProperty($field, $this->makeList($list), false);
+  function addListProperty($field, $items = null) {
+    $this->addProperty($field, $this->makeList($items), false);
   }
 	
-	function makeList($list) {
-		if (!$list) {
+	function makeList($items) {
+		if (!$items) {
 			return;
 		}
 
     // Make a list out of a string
-    if (!is_array($list)) {
-      $list = array($list);
+    if (!is_array($items)) {
+      $items = array($items);
     }
     
-    $str = "<ul>";
-		foreach ($list as $item) {
-			$item = htmlentities($item);
-      $str .= "<li>$item</li>";
-		}
-    $str.= "</ul>";
-		return $str;
+		// Escape content
+    $items = array_map("htmlentities", $items);
+    
+		// HTML production
+		switch (CAppUI::pref("listDefault")) {
+			case "ulli":
+		    $html = "<ul>";
+		    foreach ($items as $item) {
+		      $html .= "<li>$item</li>";
+		    }
+		    $html.= "</ul>";
+				break;
+			
+      case "br":
+        $html = "";
+				$prefix = CAppUI::pref("listBrPrefix");
+        foreach ($items as $item) {
+          $html .= "<br />$prefix $item</li>";
+        }
+        break;
+				
+      case "inline":
+				// Hack: obligé de décoder car dans ce mode le template manager 
+				// le fera une seconde fois s'il ne détecte pas d'entités HTML
+        $items = array_map("html_entity_decode", $items);
+        $html = "";
+        $separator = CAppUI::pref("listInlineSeparator");
+				$html = implode(" $separator ", $items);
+          break;
+		}	
+	
+		return $html;
 	}
 	
   function addGraph($field, $data, $options = array()) {

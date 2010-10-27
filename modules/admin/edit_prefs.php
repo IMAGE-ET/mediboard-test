@@ -88,7 +88,10 @@ $array_list_module_pref = array (
   ),
   "dPcompteRendu" => array(
     "saveOnPrint",
-    "choicepratcab"
+    "choicepratcab",
+    "listDefault",
+    "listBrPrefix",
+    "listInlineSeparator",
   ),
   "dPfiles" => array(
     "directory_to_watch",

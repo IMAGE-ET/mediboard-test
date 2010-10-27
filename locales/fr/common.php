@@ -149,6 +149,7 @@ $locales['Update'] = 'Mettre à jour';
 $locales['Upgrade'] = 'Mettre à jour';
 $locales['Upload'] = 'Envoyer';
 $locales['Uptodate'] = 'A jour';
+$locales['Up to date'] = 'A jour';
 $locales['User'] = 'Utilisateur';
 $locales['User preferences'] = 'Préferences utilisateur';
 $locales['User switch'] = 'Changement d\'utilisateur';

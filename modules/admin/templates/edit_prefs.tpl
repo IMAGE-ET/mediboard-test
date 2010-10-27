@@ -128,7 +128,6 @@ Main.add(Control.Tabs.create.curry('tab-modules', true));
   {{mb_include template=inc_pref_bool var=showDatesAntecedents}}
   {{mb_include template=inc_pref_bool var=pratOnlyForConsult}}
 
-
 	</tbody>
   {{/if}}
     
@@ -139,6 +138,9 @@ Main.add(Control.Tabs.create.curry('tab-modules', true));
 
   {{mb_include template=inc_pref_enum var=saveOnPrint values="0|1|2"}}
   {{mb_include template=inc_pref_enum var=choicepratcab values="prat|cab|group"}}
+  {{mb_include template=inc_pref_enum var=listDefault values="ulli|br|inline"}}
+  {{mb_include template=inc_pref_str var=listBrPrefix}}
+  {{mb_include template=inc_pref_str var=listInlineSeparator}}
   
   </tbody>
   {{/if}}
