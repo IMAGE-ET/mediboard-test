@@ -720,7 +720,7 @@ var DOM = {
   
   tags: [
     'a', 'applet', 'br', 'button', 'canvas', 'div', 'fieldset', 'form',
-    'h1', 'h2', 'h3', 'h4', 'h5', 'hr', 'img', 'input', 'label', 
+    'h1', 'h2', 'h3', 'h4', 'h5', 'hr', 'iframe', 'img', 'input', 'label', 
     'legend', 'li', 'ol', 'optgroup', 'option', 'p', 'param', 'pre', 
     'select', 'span', 'strong', 'table', 'tbody', 'td', 'textarea',
     'tfoot', 'th', 'thead', 'tr', 'tt', 'ul'
@@ -986,6 +986,51 @@ Element.addMethods({
             (range = document.body.createTextRange())) {
         range.moveToElementText(element);
         range.select();
+    }
+  },
+  print: function(element){
+    var iframe = $("printFrame");
+    
+    if (!iframe) {
+      $(document.documentElement).insert(DOM.iframe({
+        id:    "printFrame",
+        name:  "printFrame", 
+        src:   "about:blank",
+        style: "position:absolute;width:0px;height:0px;",
+        frameborder: 0
+      }));
+      iframe = $("printFrame");
+    }
+    
+    var win = iframe.contentWindow;
+    var doc = win.document;
+    
+    doc.write("<html><head></head><body></body></html>");
+    
+    var head = doc.head || doc.getElementsByTagName('head')[0];
+    var body = doc.body || doc.getElementsByTagName('body')[0];
+    
+    if (Object.isElement(element)) {
+      body.innerHTML = element.innerHTML;
+    }
+    else if (Object.isArray(element)) {
+      body.innerHTML = element.pluck("innerHTML").join("");
+    }
+    
+    if (Prototype.Browser.IE) { // argh
+      $(document.head || document.getElementsByTagName('head')[0]).childElements().each(function(e){
+        if (e.styleSheet) {
+          doc.write("<style>"+e.styleSheet.cssText +"</style>");
+        }
+        else if (e.tagName === "SCRIPT") {
+          doc.write("<script>"+e.text+"<"+"/script>");
+        }
+      });
+      doc.execCommand('print', false, null);
+    }
+    else {
+      head.innerHTML = (document.head || document.getElementsByTagName('head')[0]).innerHTML;
+      win.print();
     }
   }
 });

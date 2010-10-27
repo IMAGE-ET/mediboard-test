@@ -24,12 +24,17 @@ Main.add(function () {
 
 <ul id="month_tabs" class="control_tabs">
   {{foreach from=$listPlages key=month_name item=listPlage}}
-  <li><a href="#{{$month_name}}_tab">{{$month_name}}</a></li>
+  <li>
+    <a href="#{{$month_name}}_tab">
+      {{$month_name}}
+      <button onclick="$('{{$month_name}}_tab').print()" class="print notext">{{tr}}Print{{/tr}}</button>
+    </a>
+  </li>
   {{/foreach}}
 </ul>
 
 <hr class="control_tabs" />
-    
+
 {{foreach from=$listPlages key=month_name item=listPlage}}
   <div id="{{$month_name}}_tab" style="display:none">
     <table class="main">
@@ -38,7 +43,7 @@ Main.add(function () {
         <td class="halfPane">
           {{foreach from=$listPlage item=plage}}
           {{assign var="listPlace" value=$plage->_listPlace}}
-          <div id="places-{{$plage->_id}}" style="display:none">
+          <div id="places-{{$plage->_id}}" style="display:none; position: fixed; width: 49%;">
             {{include file="inc_list_places.tpl" listBefore=null listAfter=null}}
           </div>
           {{/foreach}}

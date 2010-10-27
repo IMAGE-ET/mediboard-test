@@ -27,8 +27,8 @@ function processIE7Button(button) {
   setTimeout(function(){
     var className = $w(button.className).without("button", "notext", "rtl")[0];
     
-    if (className)
-      button.insertAdjacentHTML("afterBegin", '<img src="./style/mediboard/images/buttons/'+className+'.png" width="16" />');
+    if (className)                              // hack needed for the all-in-one option
+      button.insertAdjacentHTML("afterBegin", '<'+'img src="./style/mediboard/images/buttons/'+className+'.png" width="16" />');
   }, 0.1);
 }
 </script>
