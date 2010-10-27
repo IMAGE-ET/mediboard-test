@@ -2,13 +2,6 @@
 {{mb_include module=system template=inc_opened_interval_date from=$_line->debut to=$_line->date_arret}}
 </span>
 
-{{if !@$offline}}
-<button class="edit notext" type="button" onclick="updateListLines('{{$category_id}}', '{{$_line->prescription_id}}', '{{$_line->_id}}');">Edit</button>
-	{{if @!$only_comment && $can_edit_prescription}}
-	  <button class="add notext" onclick="duplicateSSRLine('{{$_line->element_prescription_id}}','{{$category_id}}')">{{tr}}Add{{/tr}}</button>
-	{{/if}}
-{{/if}}
-
 {{assign var=element value=$_line->_ref_element_prescription}}
 {{assign var=category value=$element->_ref_category_prescription}}
 

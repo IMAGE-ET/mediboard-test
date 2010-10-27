@@ -405,14 +405,14 @@ Main.add(function(){
                     <div class="activite" id="activite-{{$category->_guid}}" style="display: none;">
                   {{/if}}
                   
-                  {{if $smarty.foreach.elts.first}}
+                  {{if $smarty.foreach.elts.first && $_lines_by_elt|@count > 1}}
                    <span class="mediuser" style="font-weight: bold; border-left-color: #{{$element->_color}};" 
                           onmouseover="ObjectTooltip.createEx(this, '{{$element->_guid}}')">
-                    {{$element->_view}}
+                    {{$element}}
                    </span>
                    <br />
-                   
                   {{/if}}
+
                   <span style="float: right">
                     {{mb_include module=system template=inc_opened_interval_date from=$_line->debut to=$_line->date_arret}}
                   </span>
@@ -421,6 +421,13 @@ Main.add(function(){
                     <input type="radio" name="prescription_line_element_id" id="line-{{$_line->_id}}" class="search line" 
                            onclick="$V(this.form._element_id, '{{$_line->element_prescription_id}}'); selectElement('{{$_line->_id}}'); $V(this.form._cdarr, false); $$('#other_cdarr span').invoke('remove'); $('other_cdarr').hide();" />
                    
+                    {{if $_lines_by_elt|@count == 1}}
+                     <span class="mediuser" style="font-weight: bold; border-left-color: #{{$element->_color}};" 
+                            onmouseover="ObjectTooltip.createEx(this, '{{$element->_guid}}')">
+                      {{$element}}
+                     </span>
+                    {{/if}}
+
                     {{if $_line->commentaire}} 
                       {{$_line->commentaire}}
                     {{/if}}
