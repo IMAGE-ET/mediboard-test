@@ -17,6 +17,8 @@
 		{{mb_include module=system template=inc_config_bool var=server}}
 		
 		{{mb_include module=system template=inc_config_enum var=transmission_actes values=pmsi|signature}}
+    
+    {{mb_include module=system template=inc_config_enum var=passage_facture values=envoi|reception}}
 		
     <tr>
       <td class="button" colspan="2">

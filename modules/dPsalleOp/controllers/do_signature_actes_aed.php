@@ -100,10 +100,12 @@ if (CAppUI::conf("dPpmsi transmission_actes") == "signature" && $object_class ==
 
     $echange_hprim = $evenementActivitePMSI->_ref_echange_hprim;
     if ($doc_valid = $echange_hprim->message_valide) {
-      $mbObject->facture = true;
-      $msg = $mbObject->store();
-      if ($msg) {
-        CAppUI::setMsg($msg, UI_MSG_ERROR );
+      if(CAppUI::conf("dPpmsi passage_facture") == "envoi") {
+        $mbObject->facture = true;
+        $msg = $mbObject->store();
+        if ($msg) {
+          CAppUI::setMsg($msg, UI_MSG_ERROR );
+        }
       }
       
       // Flag les actes CCAM en envoyés

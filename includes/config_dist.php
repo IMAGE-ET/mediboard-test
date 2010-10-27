@@ -471,6 +471,7 @@ $dPconfig["dPpmsi"] = array(
   "systeme_facturation" => "",
 	"server"              => "0",
   "transmission_actes"  => "pmsi",
+  "passage_facture"     => "envoi",
 ); 
 
 $dPconfig["bloodSalvage"] = array (
