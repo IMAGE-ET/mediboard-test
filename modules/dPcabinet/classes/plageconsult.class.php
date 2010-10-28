@@ -325,17 +325,9 @@ class CPlageconsult extends CMbObject {
 
 $pcConfig = CAppUI::conf("dPcabinet CPlageconsult");
 
-/*
-CPlageconsult::$hours_start = $pcConfig["hours_start"];
-CPlageconsult::$hours_stop  = $pcConfig["hours_stop"];
-CPlageconsult::$hours = range($pcConfig["hours_start"], $pcConfig["hours_stop" ]);
-CPlageconsult::$minutes = range(0, 59, $pcConfig["minutes_interval"]);
-*/
-
-CPlageconsult::$hours_start = str_pad(CValue::first($pcConfig["hours_start"], "08"),2,"0",STR_PAD_LEFT);
-CPlageconsult::$hours_stop  = str_pad(CValue::first($pcConfig["hours_stop"], "20"),2,"0",STR_PAD_LEFT);
+CPlageconsult::$hours_start = str_pad($pcConfig["hours_start"],2,"0",STR_PAD_LEFT);
+CPlageconsult::$hours_stop  = str_pad($pcConfig["hours_stop" ],2,"0",STR_PAD_LEFT);
 CPlageconsult::$minutes_interval = CValue::first($pcConfig["minutes_interval"],"15");
-
 
 $hours = range($pcConfig["hours_start"], $pcConfig["hours_stop" ]);
 $mins  = range(0, 59, CPlageconsult::$minutes_interval);
