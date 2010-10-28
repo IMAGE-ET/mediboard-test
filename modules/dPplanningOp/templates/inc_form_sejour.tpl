@@ -232,6 +232,8 @@ Main.add( function(){
   Calendar.regField(form._date_sortie_prevue, dates);
   
   removePlageOp(false);
+
+  updateOccupation();
   
 });
 </script>
@@ -438,7 +440,7 @@ Main.add( function(){
 <tr>
   <th>{{mb_label object=$sejour field="_date_entree_prevue"}}</th>
   <td>
-    {{mb_field object=$sejour form=editSejour field=_date_entree_prevue canNull=false onchange="modifSejour(); updateSortiePrevue();"}}
+    {{mb_field object=$sejour form=editSejour field=_date_entree_prevue canNull=false onchange="updateOccupation(); modifSejour(); updateSortiePrevue();"}}
   </td>
   <td colspan="2">
     à
@@ -468,7 +470,7 @@ Main.add( function(){
 <tr {{if $mode_operation && !$can->admin}} style="display: none" {{/if}}>
   <th>{{mb_label object=$sejour field="_date_sortie_prevue"}}</th>
   <td>
-    {{mb_field object=$sejour form=editSejour field=_date_sortie_prevue canNull=false onchange="updateDureePrevue(); modifSejour()"}}
+    {{mb_field object=$sejour form=editSejour field=_date_sortie_prevue canNull=false onchange="updateDureePrevue(); modifSejour();"}}
   </td>
   <td colspan="2">
     à 
@@ -491,7 +493,7 @@ Main.add( function(){
     {{if !$sejour->type}}
     {{$sejour->type}}
     {{/if}}
-    <select name="type" onchange="changeTypeHospi()">
+    <select name="type" onchange="changeTypeHospi(); updateOccupation();">
     {{assign var=specType value=$sejour->_specs.type}}
     {{foreach from=$specType->_locales item="curr_type" key="key"}}
       <option value="{{$key}}"
@@ -518,6 +520,12 @@ Main.add( function(){
       
       changeTypeHospi();
     </script>
+  </td>
+</tr>
+
+<tr>
+  <th>Taux d'occupation</th>
+  <td colspan="3" id="occupation">
   </td>
 </tr>
 

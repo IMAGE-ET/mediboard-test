@@ -145,6 +145,12 @@
     </td>
   </tr>
   {{/if}}
+  
+  <tr>
+    <th>Taux d'occupation</th>
+    <td colspan="2" id="occupationeasy">
+    </td>
+  </tr>
 
   <!-- Selection du patient -->
   <tr>

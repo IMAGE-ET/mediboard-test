@@ -326,6 +326,16 @@ function changePat() {
   bChangePat = 1;
 }
 
+function updateOccupation() {
+  var oForm = document.editSejour;
+  var occupationUrl = new Url;
+  occupationUrl.setModuleAction("dPplanningOp", "httpreq_show_occupation_lits");
+  occupationUrl.addElement(oForm.type, "type");
+  occupationUrl.addElement(oForm._date_entree_prevue, "entree");
+  occupationUrl.requestUpdate('occupation');
+  occupationUrl.requestUpdate('occupationeasy');
+}
+
 function popRegimes() {
   var oForm = document.editSejour;
   var url = new Url("dPplanningOp", "vw_regimes_alimentaires");
