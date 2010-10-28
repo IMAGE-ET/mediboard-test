@@ -333,7 +333,9 @@ function updateOccupation() {
   occupationUrl.addElement(oForm.type, "type");
   occupationUrl.addElement(oForm._date_entree_prevue, "entree");
   occupationUrl.requestUpdate('occupation');
-  occupationUrl.requestUpdate('occupationeasy');
+  if(document.editOp) {
+    occupationUrl.requestUpdate('occupationeasy');
+  }
 }
 
 function popRegimes() {
