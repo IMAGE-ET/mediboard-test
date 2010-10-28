@@ -18,17 +18,48 @@ catch (e) {}
 
 function submitCompteRendu(){
 	{{if $pdf_thumbnails == 1}}
-	  if (Thumb.modele_id > 0) {
+	  if (Thumb.modele_id > 0 && FormObserver.changes && Thumb.first_time == 0) {
+		  
 		  FormObserver.changes = 0;
 	    FormObserver.onChanged();
 	  }
 	{{/if}}
   (function(){
+	  var html = FCKeditorAPI.Instances._source.GetHTML();
+	  html = html.replace(/&/g, "&amp;" );
+	  html = html.replace(/</g, "&lt;" );
+	  html = html.replace(/>/g, "&gt;" ); 
+	  $("htmlarea").innerHTML = html;
     var form = getForm("editFrm");
     if(checkForm(form) && User.id) {
-      form.submit();
+     form.onsubmit=function(){ return true; };
+      submitFormAjax(form, $("systemMsg"));
     }
   }).defer();
+}
+
+function refreshZones(id, obj) {
+	FCKeditorAPI.Instances._source.EditingArea.Document.activeElement.innerHTML = obj._source;
+	var url = new Url("dPcompteRendu", "edit_compte_rendu");
+	url.addParam("compte_rendu_id", id);
+	url.addParam("reloadzones", 1);
+	url.requestUpdate("reloadzones",
+			{onComplete: function(){
+		     var form = getForm("editFrm");
+		     form.onsubmit = function() { Url.ping({onComplete: submitCompteRendu}); return false;};
+		     $V(form.compte_rendu_id, id);
+		     {{if $pdf_thumbnails == 1}}
+		       Thumb.compte_rendu_id = id;
+		       Thumb.modele_id = 0;
+		       Thumb.refreshThumbs(0, Thumb.compte_rendu_id, null, Thumb.user_id, Thumb.mode);
+		       
+		     {{else}}
+		    	  try {
+		    	    window.opener.Document.refreshList(obj.object_class, obj.object_id);
+		    	  }
+		    	  catch (e) {}
+		     {{/if}}
+	    }});
 }
 </script>
 
@@ -116,6 +147,41 @@ function submitCompteRendu(){
     {{/if}}
   });
 
+function replaceAll() {
+	var oForm = getForm("editFrm");
+  var source = '';
+	oForm.getElements().each(function(item, iterator) {
+		source = FCKeditorAPI.Instances._source.EditingArea.Document.activeElement.innerHTML;
+		switch(item.tagName) {
+		  case "SELECT":
+        if (item.name == "file_category_id" ||
+					  item.name == "_page_format") break;
+			  var list = $V(item);
+			  if (list instanceof Array) {
+				  if (list.length == 0) break;
+				  list = list.join(", ");
+			  }
+        if (list.indexOf("undef") != -1) break;
+        var temp_source = source.replace("\[Liste - " + item.className + "\]", list);
+        FCKeditorAPI.Instances._source.EditingArea.Document.activeElement.innerHTML = temp_source;
+        // Ne pas utiliser item.remove()
+        Element.remove(item);
+			  break;
+		  case "TEXTAREA":
+			  if (item.name == "_source") break;
+			  var content = item.value;
+			  var nom_texte_libre = item.className.split(" ")[1];
+			  var temp_source = source.replace("\[\[Texte libre - " + nom_texte_libre + "\]\]", content);
+			  FCKeditorAPI.Instances._source.EditingArea.Document.activeElement.innerHTML = temp_source;
+			  // Ne pas utiliser item.remove()
+			  // up().up() car il faut supprimer aussi la div qui contient le textarea
+			  Element.remove(item.up().up());
+			default:
+			  break;
+	  }
+	});
+}
+
 </script>
 
 <form style="display: none;" name="download-pdf-form" target="_blank" method="post" action="?m=dPcompteRendu&amp;a=ajax_pdf_and_thumbs"
@@ -140,8 +206,10 @@ function submitCompteRendu(){
   <input type="hidden" name="chir_id" value="" />
   <input type="hidden" name="group_id" value="" />
   <input type="hidden" name="fast_edit" value="0"/>
+  <input type="hidden" name="fast_edit_pdf" value="0"/>
   <input type="hidden" name="switch_mode" value='{{$switch_mode}}'/>
-
+  <input type="hidden" name="callback" value="refreshZones" />
+  
   {{mb_key object=$compte_rendu}}
   {{mb_field object=$compte_rendu field="object_id" hidden=1}}
   {{mb_field object=$compte_rendu field="object_class" hidden=1}}
@@ -210,59 +278,39 @@ function submitCompteRendu(){
     {{/if}}
   </tr>
 
-  {{if $lists|@count}}
-    <tr>
-      <td id="liste" colspan="2">
-        <!-- The div is required because of a Webkit float issue -->
-        <div class="listeChoixCR">
-          {{foreach from=$lists item=curr_list}}
-            <select name="_{{$curr_list->_class_name}}[{{$curr_list->_id}}][]">
-              <option value="undef">&mdash; {{$curr_list->nom}}</option>
-              {{foreach from=$curr_list->_valeurs item=curr_valeur}}
-                <option value="{{$curr_valeur}}" title="{{$curr_valeur}}">{{$curr_valeur|truncate}}</option>
-              {{/foreach}}
-            </select>
-          {{/foreach}}
-        </div>
-      </td>
-    </tr>
-  {{/if}}
-  
-  {{if $noms_textes_libres|@count}}
-    <tr>
-      <td colspan="2">
-      {{foreach from=$noms_textes_libres item=_nom}}
-        <div style="width: 25%; max-width: 200px; height: 50px; display: inline-block;">    
-          {{$_nom}}
-          <textarea class="freetext" name="texte_libre[{{$_nom}}]"></textarea>
-          </div>
-        {{/foreach}}
-      </td>
-    </tr>
-  {{/if}}
-  
-  {{if $noms_textes_libres || $lists|@count}}
-    <tr>
-      <td class="button text" colspan="2">
-        <div id="multiple-info" class="small-info" style="display: none;">
-          {{tr}}CCompteRendu-use-multiple-choices{{/tr}}
-        </div>
-        <script type="text/javascript">
-          function toggleOptions() {
-            $$("#liste select").each(function(select) {
-              select.size = select.size != 4 ? 4 : 1;
-              select.multiple = !select.multiple;
-              select.options[0].selected = false;
-            } );
-            $("multiple-info").toggle();
-          }
-        </script>
-        <button class="hslip" type="button" onclick="toggleOptions();">{{tr}}Multiple options{{/tr}}</button>
-        <button class="tick" type="submit">{{tr}}Save{{/tr}}</button>
-      </td>
-    </tr>
-  {{/if}}
+  <tr>
+    <td colspan="2">
+      <div id="reloadzones">
+        {{mb_include template=inc_zones_fields}}
+      </div>
+    </td>
+  </tr>
 
+  {{if $compte_rendu->_id && $dPconfig.dPfiles.system_sender}}
+  <tr>
+    <th style="width: 50%">
+      <script type="text/javascript">
+        refreshSendButton = function() {
+          var url = new Url("dPfiles", "ajax_send_button");
+          url.addParam("item_guid", "{{$compte_rendu->_guid}}");
+          url.addParam("onComplete", "refreshSendButton()");
+          url.requestUpdate("sendbutton");
+          refreshList();
+        }
+      </script>
+      <label title="{{tr}}config-dPfiles-system_sender{{/tr}}">
+        {{tr}}config-dPfiles-system_sender{{/tr}}
+        <em>({{tr}}{{$dPconfig.dPfiles.system_sender}}{{/tr}})</em>
+      </label>
+    </th>
+    <td id="sendbutton">
+      {{mb_include module=dPfiles template=inc_file_send_button 
+                   _doc_item=$compte_rendu
+                   onComplete="refreshSendButton()"
+                   notext=""}}
+    </td>
+  </tr>
+  {{/if}}
   <tr>
     <td class = "greedyPane" style="height: 600px; width: 1200px;" {{if $pdf_thumbnails==0}} colspan="2" {{else}} colspan="1" {{/if}} id="editeur">
       <textarea id="htmlarea" name="_source">
@@ -277,33 +325,5 @@ function submitCompteRendu(){
     {{/if}}
   </tr>  
 </table>
-
-{{if $compte_rendu->_id && $dPconfig.dPfiles.system_sender}}
-  <table class="form">
-    <tr>
-      <th style="width: 50%">
-        <script type="text/javascript">
-          refreshSendButton = function() {
-            var url = new Url("dPfiles", "ajax_send_button");
-            url.addParam("item_guid", "{{$compte_rendu->_guid}}");
-            url.addParam("onComplete", "refreshSendButton()");
-            url.requestUpdate("sendbutton");
-            refreshList();
-          }
-        </script>
-        <label title="{{tr}}config-dPfiles-system_sender{{/tr}}">
-          {{tr}}config-dPfiles-system_sender{{/tr}}
-          <em>({{tr}}{{$dPconfig.dPfiles.system_sender}}{{/tr}})</em>
-        </label>
-      </th>
-      <td id="sendbutton">
-        {{mb_include module=dPfiles template=inc_file_send_button 
-                     _doc_item=$compte_rendu
-                     onComplete="refreshSendButton()"
-                     notext=""}}
-      </td>
-    </tr>
-  </table>
-{{/if}}
 
 </form>

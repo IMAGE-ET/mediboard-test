@@ -308,6 +308,10 @@ button.print:before, a.button.print:before {
   content: url(images/buttons/print.png);
 }
 
+button.printPDF:before, a.button.printPDF:before {
+  content: url(images/buttons/pdf.png);
+}
+
 button.pagelayout:before, a.button.pagelayout:before {
   content: url(images/buttons/pagelayout.png);
 }
@@ -508,6 +512,7 @@ div.autocomplete {
   margin-bottom: 18px;
   padding:0px;
   z-index: 400;
+  white-space: normal
 }
 
 div.autocomplete ul {

@@ -41,12 +41,17 @@ if ($compte_rendu->_id) {
   $file = $compte_rendu->_ref_file;
 }
 
-if ((!$file || !$file->_id) && $mode != "modele" && $first_time == 1 && !$compte_rendu->object_id) {
+// S'il n'y a pas de pdf ou qu'il est vide, on considère qu'il n'est pas généré
+// pour le mode document
+if ($mode != "modele" &&
+     (((!$file || !$file->_id) && $first_time == 1 && !$compte_rendu->object_id) ||
+     ($file && $file->_id && $first_time == 1 && file_get_contents($file->_file_path) == ""))) {
   CAppUI::stepAjax(CAppUI::tr("CCompteRendu-no-pdf-generated"));
   return;
 }
-else if ( $file && $file->_id && $first_time == 1 && is_file($file->_file_path) && file_get_contents($file->_file_path) != '') {
-  // rien
+else if ($file && $file->_id && $first_time == 1 && is_file($file->_file_path) &&
+         !$compte_rendu->object_id && $mode == "doc" && file_get_contents($file->_file_path) != '') {
+  // Rien
 }
 else {
   if($mode == "modele") {
@@ -121,23 +126,7 @@ else {
     $c1 = preg_replace("!\s!",'',$save_content);
     $c2 = preg_replace("!\s!",'',$compte_rendu->_source);
     if ((md5($c1) == md5($c2)) && $stream == 1 && !CValue::post("texte_libre")) {
-    	header("Pragma: ");
-	    header("Cache-Control: ");
-	    header("Expires: Mon, 26 Jul 1997 05:00:00 GMT");
-	    header("Last-Modified: " . gmdate("D, d M Y H:i:s") . " GMT");
-	    header("Cache-Control: no-store, no-cache, must-revalidate");  //HTTP/1.1
-	    header("Cache-Control: post-check=0, pre-check=0", false);
-	    // END extra headers to resolve IE caching bug
-	    header("MIME-Version: 1.0");
-	    header("Content-length: {$file->file_size}");
-    	header("Content-type: $file->file_type");
-    	if ($_SESSION['browser']['name'] == 'firefox') {
-    	  
-    	  header("Content-disposition: attachment; filename=\"".$file->file_name."\"");  
-    	} else {
-    	  header("Content-disposition: inline; filename=\"".$file->file_name."\"");
-    	}
-    	echo file_get_contents($file->_file_path);
+    	$file->streamFile();
     	CApp::rip();
     }
   }

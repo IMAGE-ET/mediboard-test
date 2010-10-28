@@ -3,6 +3,8 @@ var Thumb = {
   file_id: 0,
   thumb_up2date: true,
   thumb_refreshing: false,
+	nb_thumbs: 0,
+	first_time: 1,
   choixAffiche: function(isNotModele) {
     $("thumbs").toggle();
     if (isNotModele == 1) {
@@ -23,9 +25,10 @@ var Thumb = {
       for (var i = 0; i < Thumb.nb_thumbs; i++) {
         $("thumb_" + i).stopObserving("click");
       }
+			if ($('mess'))
       $('mess').stopObserving("click");
     }
-
+    
     $("thumbs").setOpacity(1);
     var form = getForm("editFrm");
     var url = new Url("dPcompteRendu", "ajax_pdf_and_thumbs");
@@ -82,9 +85,9 @@ var Thumb = {
         this.thumb_up2date = false;
         return;
       }
-
       var on_click = function(){
         FCKeditorAPI.GetInstance('_source').Events.AttachEvent('OnSelectionChange', loadOld);
+				Thumb.first_time = 0;
         Thumb.refreshThumbs(0, Thumb.compte_rendu_id, Thumb.modele_id, Thumb.user_id, Thumb.mode);
       }
       $$(".thumb").each(function(t, i){
@@ -203,18 +206,7 @@ function emptyPDFonChanged(){
     url.addParam("_do_empty_pdf", 1);
     url.addParam("compte_rendu_id", f.compte_rendu_id.value);
     url.requestJSON(function(){}, {
-      method: "post", 
-      onComplete: function() {
-        try {
-          if (Thumb.compte_rendu_id) {
-            window.opener.Document.refreshList(
-              '{{$compte_rendu->object_class}}',
-              '{{$compte_rendu->object_id}}'  
-            );
-          }
-        } catch (e) {}
-      }
-    });
+      method: "post"});
   }
 }
 

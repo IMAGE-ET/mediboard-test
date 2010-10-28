@@ -127,7 +127,7 @@ $listCategory = CFilesCategory::listCatClass($compte_rendu->object_class);
 
 // Gestion du template
 $templateManager = new CTemplateManager($_GET);
-//$templateManager->isModele = false;
+$templateManager->isModele = false;
 $object->fillTemplate($templateManager);
 $templateManager->document = $compte_rendu->_source;
 $templateManager->loadHelpers($user->_id, $compte_rendu->object_class);
@@ -176,10 +176,13 @@ if (isset($compte_rendu->_ref_file->_id)) {
 
 $smarty->assign("noms_textes_libres", $noms_textes_libres);
 
-if ($compte_rendu->fast_edit && !$compte_rendu_id && !$switch_mode && CAppUI::conf("dPcompteRendu CCompteRendu pdf_thumbnails") == 1) {
+if (CValue::get("reloadzones") == 1) {
+  $smarty->display("inc_zones_fields.tpl");
+}
+else if ($compte_rendu->fast_edit && !$compte_rendu_id && !$switch_mode) {
   $smarty->assign("_source", $templateManager->document);
 	$smarty->assign("object_guid", CValue::get("object_guid"));
-//$smarty->assign("unique_id"       , CValue::get("unique_id"));
+  $smarty->assign("unique_id"       , CValue::get("unique_id"));
   $smarty->display("fast_mode.tpl");
 }
 else {

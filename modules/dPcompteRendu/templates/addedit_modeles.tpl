@@ -251,6 +251,12 @@ Main.add(function () {
             {{mb_field object=$compte_rendu field="fast_edit"}}
           </td>
         </tr>
+        <tr>
+          <th>{{mb_label object=$compte_rendu field="fast_edit_pdf"}}</th>
+          <td>
+            {{mb_field object=$compte_rendu field="fast_edit_pdf"}}
+          </td>
+        </tr>
         
         <tr>
           <th>{{mb_label object=$compte_rendu field=type}}</th>

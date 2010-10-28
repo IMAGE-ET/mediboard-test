@@ -38,6 +38,20 @@ class CFile extends CDocumentItem {
   // References
   var $_ref_file_owner = null;
 
+  // Other fields
+  static $rotable_extensions = array("bmp", "gif", "jpg", "jpeg", "png", "pdf");
+
+  // Files extensions so the pdf conversion is possible
+  static $file_types = array(
+    "cgm", "csv", "dbf", "dif", "doc", "docm", "docx", "dot", "dotm", "dotx",
+    "dxf", "emf", "eps", "fodg", "fodp", "fods", "fodt", "htm", "html", "hwp",
+    "lwp", "met", "mml", "odp", "odg", "ods", "otg", "odf", "odm", "odt", "oth",
+    "otp", "ots", "ott", "pct", "pict", "pot", "potm", "potx", "pps", "ppt", "pptm",
+    "pptx", "rtf", "sgf", "sgv", "slk", "stc", "std", "sti", "stw", "svg", "svm", "sxc",
+    "sxd", "sxg", "sxi", "sxm", "sxw", "txt", "uof", "uop", "uos", "uot", "wb2", "wk1", "wks",
+    "wmf", "wpd", "wpg", "wps", "xlc", "xlm", "xls", "xlsb", "xlsm", "xlsx", "xlt", "xltm",
+    "xltx", "xlw", "xml");
+  
   function getSpec() {
     $spec = parent::getSpec();
     $spec->table = 'files_mediboard';
@@ -385,7 +399,7 @@ class CFile extends CDocumentItem {
     exec("sh shell/ooo_state.sh",$res);
     
     if ($res[0] == 0 ){
-//      exec(CAppUI::conf("dPfiles CFile openoffice_path") . "/soffice -accept=\"socket,host=localhost,port=8100;urp;StarOffice.ServiceManager\" -no-logo -headless -nofirststartwizard -no-restore >> /dev/null", $ret);
+      //exec(CAppUI::conf("dPfiles CFile openoffice_path") . "/soffice -accept=\"socket,host=localhost,port=8100;urp;StarOffice.ServiceManager\" -no-logo -headless -nofirststartwizard -no-restore >> /dev/null", $ret);
       usleep(600000);
     }
 
@@ -395,6 +409,25 @@ class CFile extends CDocumentItem {
     return $res;
   }
   
+  function streamFile() {
+    header("Pragma: ");
+    header("Cache-Control: ");
+    header("Expires: Mon, 26 Jul 1997 05:00:00 GMT");
+    header("Last-Modified: " . gmdate("D, d M Y H:i:s") . " GMT");
+    header("Cache-Control: no-store, no-cache, must-revalidate");  //HTTP/1.1
+    header("Cache-Control: post-check=0, pre-check=0", false);
+    // END extra headers to resolve IE caching bug
+    header("MIME-Version: 1.0");
+    header("Content-length: {$this->file_size}");
+    header("Content-type: $this->file_type");
+    if ($_SESSION['browser']['name'] == 'firefox') {
+      
+      header("Content-disposition: attachment; filename=\"".$this->file_name."\"");  
+    } else {
+      header("Content-disposition: inline; filename=\"".$this->file_name."\"");
+    }
+    echo file_get_contents($this->_file_path);
+  }
 }
 
 // We have to replace the backslashes with slashes because of PHPthumb on Windows

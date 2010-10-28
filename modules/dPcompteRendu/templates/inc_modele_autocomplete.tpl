@@ -14,11 +14,11 @@
       <img style="float: right; clear: both; margin: -1px;" 
         src="images/icons/{{$owner_icon}}.png" />
       
-      {{if $_modele->fast_edit && $pdf_thumbnails == 1}}
-        <img style="float: right;" src="images/buttons/pdf.png"/>
+      {{if $_modele->fast_edit}}
+        <img style="float: right;" src="images/icons/lightning.png"/>
       {{/if}}
 
-      <div {{if $_modele->fast_edit && $pdf_thumbnails == 1}}class="fast_edit"{{/if}}>
+      <div {{if $_modele->fast_edit}}class="fast_edit"{{/if}}>
         {{$_modele->nom|emphasize:$keywords}}
       </div>
       

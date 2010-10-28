@@ -286,7 +286,7 @@ class CDossierMedical extends CMbMetaObject {
         $parts[] = "<strong>$sType</strong>: " . $template->makeList($list);
       }
 		}
-		$template->addProperty("$champ - Antécédents -- tous", implode($separator, $parts));
+		$template->addProperty("$champ - Antécédents - tous", implode($separator, $parts), null, false);
 				
     // Création des listes par appareil
     $parts = array();
@@ -300,8 +300,7 @@ class CDossierMedical extends CMbMetaObject {
         $parts[] = "<strong>$sAppareil</strong>: " . $template->makeList($list);
 			}
     }
-    $template->addProperty("$champ - Antécédents -- tous par appareil", implode($separator, $parts));
-		
+    $template->addProperty("$champ - Antécédents - tous par appareil", implode($separator, $parts), null, false);
     
     // Traitements
     $this->loadRefsTraitements();

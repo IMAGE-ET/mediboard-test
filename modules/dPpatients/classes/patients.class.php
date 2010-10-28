@@ -1497,7 +1497,7 @@ class CPatient extends CMbObject {
 	   } else {
     	$sejours = CAppUI::tr("CSejour.none");
     }
-    $template->addProperty("Patient - liste des séjours", $sejours);
+    $template->addProperty("Patient - liste des séjours", $sejours, '', false);
     
     $const_med = $this->_ref_constantes_medicales;
     
@@ -1544,10 +1544,10 @@ class CPatient extends CMbObject {
     $constantes_minimal_vert  = $smarty->fetch("print_constantes_vert.tpl",'','',0);
     $constantes_minimal_vert  = preg_replace('`([\\n\\r])`', '', $constantes_minimal_vert);
     
-    $template->addProperty("Patient - Constantes mode complet horizontal", $constantes_complet_horiz);
-    $template->addProperty("Patient - Constantes mode minimal horizontal", $constantes_minimal_horiz);
-    $template->addProperty("Patient - Constantes mode complet vertical"  , $constantes_complet_vert);
-    $template->addProperty("Patient - Constantes mode minimal vertical"  , $constantes_minimal_vert);
+    $template->addProperty("Patient - Constantes - mode complet horizontal", $constantes_complet_horiz, '', false);
+    $template->addProperty("Patient - Constantes - mode minimal horizontal", $constantes_minimal_horiz, '', false);
+    $template->addProperty("Patient - Constantes - mode complet vertical"  , $constantes_complet_vert, '', false);
+    $template->addProperty("Patient - Constantes - mode minimal vertical"  , $constantes_minimal_vert, '', false);
     $template->addProperty("Patient - poids",  "$const_med->poids kg");
     $template->addProperty("Patient - taille", "$const_med->taille cm");
     $template->addProperty("Patient - Pouls",  $const_med->pouls);

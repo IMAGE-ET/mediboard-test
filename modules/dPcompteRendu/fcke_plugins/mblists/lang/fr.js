@@ -1,11 +1,11 @@
-/* $Id: fr.js 1571 2007-02-12 13:08:34Z maskas $
+/* $Id: fr.js $
  *
  * @package Mediboard
  * @subpackage dPcompteRendu
- * @version $Revision: 1571 $
+ * @version $Revision: $
  * @author Thomas Despoix
  *
  * Mediboard additional custom combo plugin for FCKeditor
  */
 
-FCKLang['mbHelp']  = 'Aide sur les raccourcis clavier' ;
+FCKLang['mblists']  = 'Insertion de listes' ;

@@ -131,6 +131,12 @@ if (intval(CValue::post("del"))) {
   $do->doDelete();
 } else {
   $do->doStore();
+  // Pour le fast mode en impression navigateur, on envoie la source du document complet.
+  $margins = array($do->_obj->margin_top,
+                 $do->_obj->margin_right,
+                 $do->_obj->margin_bottom,
+                 $do->_obj->margin_left);
+  $do->_obj->_entire_doc = CCompteRendu::loadHTMLcontent($do->_obj->_source, "doc",'','','','','',$margins);
 }
 
 

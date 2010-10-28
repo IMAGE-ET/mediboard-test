@@ -1,0 +1,134 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+	<script type="text/javascript" src="../../../../lib/scriptaculous/lib/prototype.js"></script>
+  <script type="text/javascript">
+    var dialog = window.parent ;
+		dialog.document.getElementById("btnCancel").value = "Fermer";
+    var oEditor = dialog.InnerDialogLoaded() ;
+    var FCK = oEditor.FCK;
+    var FCKTools  = oEditor.FCKTools ;
+    var FCKConfig = oEditor.FCKConfig ;
+    var FCKBrowserInfo = oEditor.FCKBrowserInfo ;
+    var fields = window.parent.parent.fields[0].options;
+
+		// Au chargement, on initialise la liste déroulante avec les sections
+    window.onload = function () {
+      dialog.SetAutoSize( true ) ;
+			var section = $("section");
+			$H(fields).each(function(item, iterator){
+				if (item[0] != "AddItem" && item[0] != "IndexOf")
+          section.insert("<option value='" + iterator + "'>"+ item[0] + "</option>");
+			});
+    }
+    
+		function reloadItem(section) {
+			oItem = $("item");
+			oItem.update();
+			// Rien à faire si la section est vide
+			if (section == '') return; 
+
+      // On vide la section des sous-items également
+			reloadSubItem('', '');
+			$H(fields).each(function(item, iterator){
+				if (iterator == section) {
+					$H(item[1]).each(function(itemb, iteratorb) {
+						var onclick = "";
+						var several_items = "";
+						// Un seul item
+						if (itemb[0] != "AddItem" && itemb[0] != "IndexOf") {
+							if (itemb[1].length == undefined) {
+								oItem.insert("<option value='" + itemb[1].shortview + "' ondblclick='" + "insertField(" + iterator + "," + iteratorb + ")''>" + itemb[1].view + several_items + "</option>");
+							}
+							// Un item qui contient des sous-items
+							else {
+								several_items = " &gt;";
+								oItem.insert("<option value='" + itemb[0] + "' onclick='" + "reloadSubItem(" + iterator + "," + iteratorb + ")'>" + itemb[0] + several_items + "</option>");
+							}
+						}
+				  });
+				}
+			});
+		}
+		
+		function reloadSubItem(section, item) {
+			oSubItem = $("subitem");
+			oSubItem.update();
+			// Rien à faire si l'item est vide
+			if (item == '') return;
+			$H(fields).each(function(itema, iteratora) {
+				if (iteratora == section) {
+					$H(itema[1]).each(function(itemb, iteratorb) {
+						if (iteratorb == item) {
+							$H(itemb[1]).each(function(itemc, iteratorc) {
+								if (itemc[0] != "AddItem" && itemc[0] != "IndexOf") {
+									oSubItem.insert("<option value='" + itemc[1].shortview + "' ondblclick='" + "insertField(" + iteratora + "," + iteratorb + "," + iteratorc + ")'>" + itemc[1].view + "</option>");
+								}
+						  });
+					  }
+					});
+				}
+			});
+	  }
+
+    function insertHTML(string) {
+      // Before doing anything, save undo snapshot.
+      oEditor.FCKUndo.SaveUndoStep() ;
+
+      var sHtml ;
+      sHtml = "<span class='field'>" + string + "</span>&nbsp;";
+      sHtml = FCKTools.ProcessLineBreaks( oEditor, FCKConfig, sHtml ) ;
+      oEditor.FCK.InsertHtml( sHtml ) ;
+
+      return true ;
+    }
+
+    function insertField(section, item, subItem) {
+			$H(fields).each(function(itema, iteratora) {
+				if (iteratora == section) {
+					$H(itema[1]).each(function(itemb, iteratorb) {
+						if (iteratorb == item) {
+							if (subItem == null) {
+								insertHTML(itemb[1].item);
+							}
+							else {
+								$H(itemb[1]).each(function(itemc, iteratorc) {
+								  if (itemc[0] == subItem) {
+								    insertHTML(itemc[1].item);
+									}
+								});
+							}
+							dialog.document.getElementById("btnCancel").onclick();
+						}
+						});
+				}
+			});		
+		}
+  </script>
+
+</head>
+<body>
+
+<table>
+	<tr>
+		<td>
+			<select id="section" onchange = "reloadItem(this.value)" size="10" style="width: 150px; height: 180px;">
+			</select>
+		</td>
+		<td>
+			<select id="item" onchange = "reloadSubItem(this.value)" size="10" style="width: 205px; height: 180px;">
+				<option value="">&mdash; Choisissez un item</option>
+      </select>
+		</td>
+		<td>
+			<select id="subitem" size="10" style="width: 170px; height: 180px;">
+				<option value="">&mdash; Choisissez un sous-item</option>
+      </select>
+		</td>	
+	</tr>
+	
+</table>
+</body>
+</html>

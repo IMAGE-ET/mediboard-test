@@ -57,15 +57,16 @@ var Document = {
     var fast = $('fast-'+unique_id);
     
     if (fast) {
+			if (fast.select(".freetext").length || fast.innerHTML.indexOf("[Liste")) {
+        var modaleWindow = modal(fast);
+        modaleWindow.position();
+      }
       var url = new Url("dPcompteRendu", "edit_compte_rendu");
       url.addParam("modele_id"   , modele_id);
       url.addParam("object_id"   , object_id);
       url.addParam('object_class', object_class);
+			url.addParam('unique_id'   , unique_id);
       url.requestUpdate(fast, {onComplete: function(){
-        if (fast.select(".freetext").length || fast.innerHTML.indexOf("[Liste")) {
-          var modaleWindow = modal(fast);
-          modaleWindow.position();
-        }
       }});
     }
   },

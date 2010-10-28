@@ -21,6 +21,7 @@ class CTemplateManager {
   var $isCourrier = null;
   
   var $valueMode = true; // @todo : changer en applyMode
+  var $isModele  = true;
   var $printMode = false;
   var $simplifyMode = false;
   var $parameters = array();
@@ -63,27 +64,55 @@ class CTemplateManager {
   }
   
   function addProperty($field, $value = null, $options = array(), $htmlescape = true) {
-  	$sec = explode(' - ', $field, 2);
-  	if (count($sec) > 1) {
-  		$section = $sec[0];
-  		$item = $sec[1];
-  	} else {
-  		$section = ' ';
-  		$item = $sec;
+  	if ($htmlescape)
+  	  $value = htmlspecialchars($value);
+    
+    $sec = explode(' - ', $field, 3);
+  	switch(count($sec)) {
+  	  case 3:
+  	    $section  = $sec[0];
+  	    $item     = $sec[1];
+  	    $sub_item = $sec[2];
+  	    break;
+  	  case 2:
+  	    $section  = $sec[0];
+  	    $item     = $sec[1];
+  	    $sub_item = '';
+  	    break;
+  	  default:
+  	    trigger_error("Error while exploding the string", E_USER_ERROR);
+  	    return;
   	}
   	
   	if (!array_key_exists($section, $this->sections)) {
   		$this->sections[$section] = array();
   	}
-  	$this->sections[$section][$field] = array (
-  	  "view"      => htmlentities($item),
-      "field"     => $field,
-      "value"     => $value,
-      "fieldHTML" => htmlentities("[{$field}]"),
-      "valueHTML" => $value,
-  	  "shortview" => $section . " - " . $item,
-      "options"   => $options
-    );
+  	if ($sub_item != '' && !array_key_exists($item, $this->sections[$section])) {
+  	  $this->sections[$section][$item] = array();
+  	}
+  	
+  	if ($sub_item == '') {
+    	$this->sections[$section][$field] = array (
+    	  "view"      => htmlentities($item),
+        "field"     => $field,
+        "value"     => $value,
+        "fieldHTML" => htmlentities("[{$field}]"),
+        "valueHTML" => $value,
+    	  "shortview" => $section . " - " . $item,
+        "options"   => $options
+      );
+  	}
+    else {
+      $this->sections[$section][$item][$sub_item] = array (
+        "view"      => htmlentities($sub_item),
+        "field"     => $field,
+        "value"     => $value,
+        "fieldHTML" => htmlentities("[{$field}]"),
+        "valueHTML" => $value,
+        "shortview" => $section . " - " . $item . " - " . $sub_item,
+        "options"   => $options
+      );
+    }
     
     if (isset($options["barcode"])) {
       $_field = &$this->sections[$section][$field];
@@ -124,7 +153,7 @@ class CTemplateManager {
   }
 	
   function addListProperty($field, $items = null) {
-    $this->addProperty($field, $this->makeList($items), false);
+    $this->addProperty($field, $this->makeList($items), null, false);
   }
 	
 	function makeList($items) {
@@ -178,7 +207,7 @@ class CTemplateManager {
       "name" => utf8_encode($field)
     );
 		
-		$this->addProperty($field, $field, false);
+		$this->addProperty($field, $field, null, false);
   }
   
   function addBarcode($field, $data, $options = array()) {
@@ -298,21 +327,34 @@ class CTemplateManager {
     $whereFunc["function_id"] = $ds->prepare("= %", $currUser->function_id);
     $whereFunc["class"]       = $ds->prepare("= %", $compte_rendu->_class_name);
     
+    // Where group_id
+    $whereGroup = array();
+    $group = CGroups::loadCurrent();
+    $whereGroup["group_id"] = $ds->prepare("= %", $group->_id);
+    $whereGroup["class"]       = $ds->prepare("= %", $compte_rendu->_class_name);
+    
     // Chargement des aides
     $aide = new CAideSaisie();
-    $aidesUser = $aide->loadList($whereUser,$order);
-    $aidesFunc = $aide->loadList($whereFunc,$order);
-    
-    $this->helpers["Aide de l'utilisateur"] = "";
+    $aidesUser   = $aide->loadList($whereUser,$order);
+    $aidesFunc   = $aide->loadList($whereFunc,$order);
+    $aidesGroup  = $aide->loadList($whereGroup,$order);
+
+    $this->helpers["Aide de l'utilisateur"] = array();
     foreach($aidesUser as $aideUser){
       if($aideUser->depend_value_1 == $modeleType || $aideUser->depend_value_1 == ""){
-        $this->helpers[$aideUser->name] = $aideUser->text;
+        $this->helpers["Aide de l'utilisateur"][htmlentities($aideUser->name)] = htmlentities($aideUser->text);
       }
     }
-    $this->helpers["Aide de la fonction"] = "";
+    $this->helpers["Aide de la fonction"] = array();
     foreach($aidesFunc as $aideFunc){
       if($aideFunc->depend_value_1 == $modeleType || $aideFunc->depend_value_1 == ""){
-        $this->helpers[$aideFunc->name] = $aideFunc->text;
+        $this->helpers["Aide de la fonction"][htmlentities($aideFunc->name)] = htmlentities($aideFunc->text);
+      } 
+    }
+    $this->helpers["Aide de l'&eacute;tablissement"] = array();
+    foreach($aidesGroup as $aideGroup){
+      if($aideGroup->depend_value_1 == $modeleType || $aideGroup->depend_value_1 == ""){
+        $this->helpers["Aide de l'&eacute;tablissement"][htmlentities($aideGroup->name)] = htmlentities($aideGroup->text);
       } 
     }
   }
@@ -351,10 +393,15 @@ class CTemplateManager {
   function renderDocument($_source) {
     $fields = array();
     $values = array();
-    
     foreach($this->sections as $properties) {
-      foreach($properties as $property) {
-        if ($property["valueHTML"] && isset($property["options"]["barcode"])) {
+      foreach($properties as $key=>$property) {
+        if (strpos($key, ' - ') === false) {
+          foreach($property as $_property) {
+            $fields[] = $_property["fieldHTML"];
+            $values[] = nl2br($_property["valueHTML"]);
+          }
+        }
+        else if ($property["valueHTML"] && isset($property["options"]["barcode"])) {
           $options = $property["options"]["barcode"];
           
           $image = $this->getBarcodeDataUri($property["valueHTML"], $options);
@@ -364,12 +411,7 @@ class CTemplateManager {
         }
         else {
           $fields[] = $property["fieldHTML"];
-          if ( preg_match("@<[a-z]+(.*)\/?>@i", $property["valueHTML"])) {
-            $values[] =  nl2br($property["valueHTML"]);
-          }
-          else {
-            $values[] =  nl2br(htmlspecialchars($property["valueHTML"], ENT_QUOTES));
-          }
+          $values[] =  nl2br($property["valueHTML"]);
         }
       }
     }

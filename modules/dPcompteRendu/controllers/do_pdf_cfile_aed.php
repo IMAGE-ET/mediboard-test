@@ -8,6 +8,14 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
  */
 
+// Si on a un file_id, on stream le pdf
+if ($file_id = CValue::post("file_id")) {
+  $file = new CFile;
+  $file->load($file_id);
+  $file->streamFile();
+  CApp::rip();
+}
+
 $compte_rendu_id = CValue::post("compte_rendu_id");
 $stream      = CValue::post("stream");
 $compte_rendu = new CCompteRendu;
@@ -38,11 +46,13 @@ $htmltopdf->generatePDF($content, 0, $compte_rendu->_page_format, $compte_rendu-
 $file->file_size = filesize($file->_file_path);
 $msg = $file->store();
 
-if ($stream) {
-	$htmltopdf->dompdf->stream($file->file_name, array("Attachment" => 0));
-}
-
 CAppUI::displayMsg($msg, "CCompteRendu-msg-create");
 echo CAppUI::getMsg();
+
+// Un callback pour le stream du pdf
+if ($stream) {
+  echo "\n<script type=\"text/javascript\">streamPDF($file->_id)</script>";
+}
+
 CApp::rip();
 ?>

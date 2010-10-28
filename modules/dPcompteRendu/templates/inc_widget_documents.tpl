@@ -21,7 +21,6 @@
       <input type="text" value="&mdash; Pack" name="keywords_pack" class="autocomplete str" autocomplete="off" onclick="this.value = ''; this.onclick=null;" style="width: 4em;"/>
       
       <script tyle="text/javascript">
-      window.pdf_thumbnails = {{$dPconfig.dPcompteRendu.CCompteRendu.pdf_thumbnails}};
       
       Main.add(function() {
         var url = new Url("dPcompteRendu", "ajax_modele_autocomplete");
@@ -51,7 +50,7 @@
         function createDoc(input, selected) {
           var id = selected.down(".id").innerHTML;
            
-          if (selected.select(".fast_edit").length && window.pdf_thumbnails) {
+          if (selected.select(".fast_edit").length) {
             Document.fastMode('{{$object->_class_name}}', id, '{{$object_id}}', null, null, '{{$unique_id}}');
           } else {
             Document.create(id, '{{$object_id}}');
@@ -92,7 +91,7 @@
 
 </form>
 
-<div id="fast-{{$unique_id}}" style="display: none; width: 50%;"></div>
+<div id="fast-{{$unique_id}}" style="display: none; width: auto; height: auto;"></div>
 
 {{assign var=doc_count value=$object->_ref_documents|@count}}
 {{if $mode != "hide"}}

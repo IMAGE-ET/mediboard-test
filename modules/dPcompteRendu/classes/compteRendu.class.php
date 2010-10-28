@@ -34,6 +34,7 @@ class CCompteRendu extends CDocumentItem {
   var $page_width        = null;
   var $private           = null;
   var $fast_edit         = null;
+  var $fast_edit_pdf     = null;
 
   /// Form fields
   var $_is_document      = false;
@@ -58,7 +59,7 @@ class CCompteRendu extends CDocumentItem {
 
 	// Other fields
 	var $_is_pack          = false;
-	
+	var $_entire_doc       = null;
   static $_page_formats = array(
     'a3'      => array(29.7 , 42),
     'a4'      => array(21   , 29.7),
@@ -112,10 +113,12 @@ class CCompteRendu extends CDocumentItem {
     $specs["valide"]           = "bool";
     $specs["private"]          = "bool notNull default|0";
     $specs["fast_edit"]        = "bool notNull default|0";
+    $specs["fast_edit_pdf"]    = "bool notNull default|0";
     $specs["_owner"]           = "enum list|prat|func|etab";
     $specs["_orientation"]     = "enum list|portrait|landscape";
     $specs["_page_format"]     = "enum list|".implode("|", array_keys(self::$_page_formats));
     $specs["_source"]          = "html helped|_list_classes";
+    $specs["_entire_doc"]      = "html";
     return $specs;
   }
   
@@ -456,8 +459,9 @@ class CCompteRendu extends CDocumentItem {
         return "Impossible de sauvegarder, le document n'est pas du même type que son pied de page";
       }
     }
-
-    $this->_ref_content->store();
+    
+    if ($msg = $this->_ref_content->store())
+      CAppUI::setMsg($msg, "UI_MSG_ERROR");
 
     if (!$this->content_id )
       $this->content_id = $this->_ref_content->_id;

@@ -1,16 +1,3 @@
-/*function clickListener(e) {
-  if ( e.target.tagName == 'SPAN') {
-    for (var i = 0; i < aMbCombos.length; i++) {
-      if (e.target.className == aMbCombos[i].spanClass) {
-      FCKSelection.SelectNode( e.target );
-      }
-    }
-  }  
-}
-
-if (!FCKBrowserInfo.IsIE && bAutoSelectSpans) {
-  FCK.EditorDocument.addEventListener('click', clickListener, true ) ;
-}*/
 
 for (var i = 0; i < aMbCombos.length; i++) {
 
