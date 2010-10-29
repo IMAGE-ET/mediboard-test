@@ -28,7 +28,7 @@ $search_by_name = $mbProduit->searchProduitAutocomplete($tokens, "50", $inLivret
 $dci = new CBcbDCI();
 
 if($inLivret){
-	$dci->distObj->LivretTherapeutique = CGroups::loadCurrent()->_id;
+	$dci->distObj->LivretTherapeutique = CProductStockGroup::getHostGroup();
 }
 
 if(!$hors_specialite){
