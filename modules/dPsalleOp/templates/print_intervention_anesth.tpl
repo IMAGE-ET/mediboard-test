@@ -9,7 +9,7 @@
 *}}
 
 <script type="text/javascript">
-	
+
 Main.add(function(){
 	var url = new Url("dPhospi", "httpreq_vw_constantes_medicales");
 	url.addParam("patient_id", {{$operation->_ref_sejour->patient_id}});
@@ -20,7 +20,7 @@ Main.add(function(){
 	url.addParam("print", 1);
 	url.requestUpdate("constantes");
 });
-	
+
 </script>
 
 {{assign var=sejour value=$operation->_ref_sejour}}
@@ -44,33 +44,44 @@ Main.add(function(){
 		<td><strong>{{mb_label object=$operation field=type_anesth}}</strong> {{mb_value object=$operation field=type_anesth}}</td>
   </tr>
 </table>
+
 <table class="tbl">	
 	<tr>
 	  <th colspan="4">Evenements per-opératoire</th>
 	</tr>		
-	{{foreach from=$perops item=_perop}}
-	<tr>
-		{{if $_perop instanceof CAnesthPerop}}
-		  <td style="text-align: center;" class="narrow">{{mb_ditto name=date value=$_perop->datetime|date_format:$dPconfig.date}}</td>
-			<td style="text-align: center;" class="narrow">{{mb_ditto name=time value=$_perop->datetime|date_format:$dPconfig.time}}</td>
-			<td style="font-weight: bold;" colspan="2">{{$_perop->libelle}}</td>
-		{{else}}
-		  {{assign var=unite value=""}}
-      {{if $_perop->_ref_object instanceof CPrescriptionLineMedicament || $_perop->_ref_object instanceof CPrescriptionLineMixItem}}
-        {{assign var=unite value=$_perop->_ref_object->_ref_produit->libelle_unite_presentation}}
-      {{/if}}
-		  <td style="text-align: center;" class="narrow">{{mb_ditto name=date value=$_perop->dateTime|date_format:$dPconfig.date}}</td>
-      <td style="text-align: center;" class="narrow">{{mb_ditto name=time value=$_perop->dateTime|date_format:$dPconfig.time}}</td>
-      <td colspan="2">
-				{{if $_perop->_ref_object instanceof CPrescriptionLineElement}}
-				  {{$_perop->_ref_object->_view}}
+	{{foreach from=$perops key=datetime item=_perops_by_datetime}}
+	  {{foreach from=$_perops_by_datetime item=_perop}}
+			<tr>
+          <td style="text-align: center;" class="narrow">{{mb_ditto name=date value=$datetime|date_format:$dPconfig.date}}</td>
+          <td style="text-align: center;" class="narrow">{{mb_ditto name=time value=$datetime|date_format:$dPconfig.time}}</td>
+				{{if $_perop instanceof CAnesthPerop}}
+
+					<td style="font-weight: bold;" colspan="2">{{$_perop->libelle}}</td>
+				{{elseif $_perop instanceof CAdministration}}
+				  {{assign var=unite value=""}}
+		      {{if $_perop->_ref_object instanceof CPrescriptionLineMedicament || $_perop->_ref_object instanceof CPrescriptionLineMixItem}}
+		        {{assign var=unite value=$_perop->_ref_object->_ref_produit->libelle_unite_presentation}}
+		      {{/if}}
+
+		      <td colspan="2">
+						{{if $_perop->_ref_object instanceof CPrescriptionLineElement}}
+						  {{$_perop->_ref_object->_view}}
+						{{else}}
+						  {{$_perop->_ref_object->_ucd_view}}
+						{{/if}}
+					  <strong>{{$_perop->quantite}} {{$unite}} </strong>
+		      </td>
 				{{else}}
-				  {{$_perop->_ref_object->_ucd_view}}
+				  <td>
+			  	{{foreach from=$_perop key=toto item=_constante}}
+					  {{if $_constante}}
+					  <strong>{{tr}}CConstantesMedicales-{{$toto}}{{/tr}}:</strong> {{$_constante}}<br />
+						{{/if}}
+				  {{/foreach}}
+					</td>
 				{{/if}}
-			  <strong>{{$_perop->quantite}} {{$unite}} </strong>
-      </td>
-		{{/if}}
-	</tr>
+			</tr>
+	  {{/foreach}}
 	{{/foreach}}
 </table>
 

@@ -300,6 +300,7 @@ $locales['config-dPsalleOp-mode_anesth'] = 'Mode anesthésie';
 $locales['config-dPsalleOp-mode_anesth-desc'] = 'N\'affiche que les informations modifiables dans un contexte d\'anesthésue';
 $locales['mod-dPsalleOp-tab-configure'] = 'Configuration';
 $locales['mod-dPsalleOp-tab-print_feuille_bloc'] = 'Impression feuille de bloc';
+$locales['mod-dPsalleOp-tab-print_intervention_anesth'] = 'Fiche d\'intervention d\'anesthésie';
 $locales['mod-dPsalleOp-tab-vw_anesthesie'] = 'Anesthésie';
 $locales['mod-dPsalleOp-tab-vw_brancardage'] = 'Brancardage';
 $locales['mod-dPsalleOp-tab-vw_daily_check_item_category'] = 'Checklist de la catégorie';

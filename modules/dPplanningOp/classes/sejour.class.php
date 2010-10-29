@@ -1085,11 +1085,10 @@ class CSejour extends CCodable {
 		return $replacement->countMatchingList();
 	}
   
-  function loadListConstantesMedicales() {
+  function loadListConstantesMedicales($where = array()) {
     if ($this->_list_constantes_medicales) return;
     
     $this->_list_constantes_medicales = new CConstantesMedicales();
-    $where = array();
     $where['context_class'] = " = '$this->_class_name'";
     $where['context_id']    = " = $this->_id";
     $where['patient_id']    = " = $this->patient_id";

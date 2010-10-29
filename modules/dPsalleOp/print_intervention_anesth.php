@@ -45,15 +45,29 @@ $where[] = "prescription_line_medicament.perop = '1' OR
 		
 $administrations = $administration->loadList($where, null, null, null, $ljoin);
 
+// Chargement des constantes saisies durant l'intervention
+$whereConst = array();
+$whereConst["datetime"] = "BETWEEN '$operation->_datetime_reel' AND '$operation->_datetime_reel_fin'";
+
+$sejour->loadListConstantesMedicales($whereConst);  
+	
 // Tri des gestes et administrations perop par ordre chronologique
 $perops = array();
 foreach($administrations as $_administration){
 	$_administration->loadRefsFwd();
-	$perops["$_administration->dateTime-$_administration->_guid"] = $_administration;
+	$perops[$_administration->dateTime][$_administration->_guid] = $_administration;
 }
 foreach($operation->_ref_anesth_perops as $_perop){
-  $perops["$_perop->datetime-$_perop->_guid"] = $_perop;
+  $perops[$_perop->datetime][$_perop->_guid] = $_perop;
 }
+
+$constantes = array("pouls", "ta", "frequence_respiratoire", "score_sedation", "spo2", "diurese");
+foreach ($sejour->_list_constantes_medicales as $_constante_medicale) {
+  foreach ($constantes as $_constante) {
+  	$perops[$_constante_medicale->datetime][$_constante_medicale->_guid][$_constante] = $_constante_medicale->$_constante;
+  }
+}
+
 ksort($perops);
 
 $smarty = new CSmartyDP();
