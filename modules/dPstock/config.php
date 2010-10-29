@@ -9,7 +9,7 @@
  */
 
 $dPconfig["dPstock"] = array (
-  "group_independent" => '0',
+  "host_group_id" => '',
   "CProductOrder" => array (
     "order_number_format" => "%y%m%d%H%M%id",
     "order_number_contextual" => "0",

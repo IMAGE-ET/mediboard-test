@@ -10,8 +10,12 @@
 
 CCanDo::checkAdmin();
 
+$group = new CGroups;
+$groups_list = $group->loadList(null, "text");
+
 // Création du template
 $smarty = new CSmartyDP();
+$smarty->assign("groups_list", $groups_list);
 $smarty->display('configure.tpl');
 
 ?>

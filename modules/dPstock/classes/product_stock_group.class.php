@@ -32,11 +32,20 @@ class CProductStockGroup extends CProductStock {
   var $_ordered_last            = null;
   var $_orders                  = array();
   
+  private static $_host_group   = null;
+  
   function getSpec() {
     $spec = parent::getSpec();
     $spec->table = 'product_stock_group';
     $spec->key   = 'stock_id';
-    $spec->uniques["product"] = array("product_id", "group_id");
+    
+    if (!CAppUI::conf("dPstock host_group_id")) 
+      $uniques = array("product_id", "group_id");
+    else
+      $uniques = array("product_id");
+    
+    $spec->uniques["product"] = $uniques;
+    
     return $spec;
   }
   
@@ -111,6 +120,37 @@ class CProductStockGroup extends CProductStock {
     $stock->loadObject($where, null, null, $ljoin);
     return $stock;
   }
+  
+  static function getHostGroup($get_id = true){
+    if (isset(self::$_host_group)) {
+      return self::$_host_group;
+    }
+    
+    $host_group_id = CAppUI::conf("dPstock host_group_id");
+    
+    if (!$host_group_id) {
+      $host_group_id = CGroups::loadCurrent()->_id;
+    }
+    
+    $group = new CGroups;
+    $group->load($host_group_id);
+    
+    self::$_host_group = $group;
+    
+    if ($get_id) return $group->_id;
+    return $group;
+  }
+  
+  static function getServicesList(){
+    $service = new CService;
+
+    $where = array();
+    
+    if (CAppUI::conf("dPstock host_group_id")) 
+      $where["group_id"] = "IS NOT NULL";
+    
+    return $service->loadListWithPerms(PERM_READ, $where, "nom");
+  }
 
   function loadRefsFwd(){
     parent::loadRefsFwd();
@@ -132,7 +172,7 @@ class CProductStockGroup extends CProductStock {
     
     $this->completeField("group_id");
     if (!$this->group_id) {
-      $this->group_id = CGroups::loadCurrent()->_id;
+      $this->group_id = CProductStockGroup::getHostGroup();
     }
   }
 }

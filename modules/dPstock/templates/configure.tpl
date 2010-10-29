@@ -13,6 +13,22 @@
   <input type="hidden" name="m" value="system" />
 
   <table class="form" style="table-layout: fixed;">
+    
+    {{assign var="var" value="host_group_id"}}
+    <tr>
+      <th>{{tr}}config-{{$m}}-{{$var}}{{/tr}}</th>
+      <td>
+        {{assign var=name value="$m[$var]"}}
+        
+        <select name="{{$name}}">
+          <option value=""> &ndash; {{tr}}None{{/tr}}</option>
+          {{foreach from=$groups_list item=_group}}
+            <option value="{{$_group->_id}}" {{if $dPconfig.$m.$var == $_group->_id}}selected="selected"{{/if}}>{{$_group}}</option>
+          {{/foreach}}
+        </select>
+      </td>
+    </tr>
+    
     {{assign var="class" value="CProductOrder"}}
     <tr><th class="category" colspan="2">{{tr}}{{$class}}{{/tr}}</th></tr>
     {{mb_include module=system template=inc_config_str var=order_number_format cssClass="code product_order"}}
