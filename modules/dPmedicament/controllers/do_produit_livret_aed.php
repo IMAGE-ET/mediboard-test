@@ -8,11 +8,8 @@
  *  @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
  */
 
-global $g;
-
 $livret = new CBcbProduitLivretTherapeutique();
 
-$group_id          = CValue::post("group_id");
 $code_cip          = CValue::post("code_cip");
 $prix_hopital      = CValue::post("prix_hopital");
 $date_prix_hopital = CValue::post("date_prix_hopital");
@@ -21,11 +18,13 @@ $date_prix_ville   = CValue::post("date_prix_ville");
 $code_interne      = CValue::post("code_interne");
 $commentaire       = CValue::post("commentaire");
 
+$group_id = CProductStockGroup::getHostGroup();
+
 $del = CValue::post("del");
 
 if($del == 1){ 
   // Suppression du produit
-  if($livret->distObj->Delete($g, $code_cip) < 0){
+  if($livret->distObj->Delete($group_id, $code_cip) < 0){
     // Affichage de l'erreur
     CAppUI::setMsg("Produit supprimé du livret thérapeutique".$livret->distObj->GetLastError(), UI_MSG_ERROR );
   } else {
@@ -35,7 +34,8 @@ if($del == 1){
   $produitLivret = new CBcbProduitLivretTherapeutique();
   if($produitLivret->load($code_cip)){
     // Si le produit existe, on lance l'update
-    $livret->distObj->Code = $g;
+    
+    $livret->distObj->Code = $group_id;
 	  $livret->distObj->CIP = $code_cip;
 	  $livret->distObj->PrixHopital = $prix_hopital;
 	  $livret->distObj->PrixVille = $prix_ville;
@@ -54,7 +54,7 @@ if($del == 1){
     }    
   } else {
     // on crée le produit
-		$livret->distObj->Code = $g;
+		$livret->distObj->Code = $group_id;
 		$livret->distObj->CIP = $code_cip;
     if($livret->distObj->Insert() < 0){
       // Affichage de l'erreur
