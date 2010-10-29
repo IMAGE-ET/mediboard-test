@@ -19,20 +19,10 @@ var Document = {
     
     if(switch_mode){
       url.addParam("switch_mode", switch_mode);
-      /*form.select('.liste').each(function(select) {
-        var v=   $V(select);
-        if (!v || !v.length) return;
-        var s = select.name.substring(0, select.name.length-2);
-        url.addArrayParam(s, v);
-      });*/
     }
     url.popup(950, 700, "Document");
   },
-  
-  createFromFast: function(modele_id, object_id, target_id, target_class, switch_mode) {
-    
-  },
-  
+
   createPack: function(pack_id, object_id, target_id, target_class) {
     if (!pack_id) return;
     
@@ -66,7 +56,7 @@ var Document = {
       url.addParam("object_id"   , object_id);
       url.addParam('object_class', object_class);
 			url.addParam('unique_id'   , unique_id);
-      url.requestUpdate(fast, {onComplete: function(){
+      url.requestUpdate(fast, {onComplete: function(){ modaleWindow.position();
       }});
     }
   },
