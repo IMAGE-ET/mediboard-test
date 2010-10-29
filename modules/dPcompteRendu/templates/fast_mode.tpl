@@ -54,11 +54,11 @@ printDoc = function(id, args) {
 	  iframe.open();
 	  iframe.write(args._entire_doc);
 	  iframe.close();
+	  window.frames['iframe_source{{$uid_fast_mode}}'].focus();
 	}
 	else {
-	  iframe.documentElement.innerHTML = args._entire_content;
+	  iframe.documentElement.innerHTML = args._entire_doc;
 	}
-	window.frames['iframe_source{{$uid_fast_mode}}'].focus();
 	window.frames['iframe_source{{$uid_fast_mode}}'].print();
 	Control.Modal.close();
 	Document.refreshList('{{$object_class}}', '{{$object_id}}');
