@@ -104,7 +104,7 @@ var WaitingMessage = {
       cover.style.top = -parseInt(receiver.getStyle("padding-top"))+"px";
     }
     
-    var isLeftAligned = receiver.getStyle("text-align").match(/left|start/i);
+    var isLeftAligned = (receiver.getStyle("text-align") || "left").match(/left|start/i);
     if (isLeftAligned) {
       cover.style.left = -parseInt(receiver.getStyle("padding-left"))+"px";
     }
