@@ -249,7 +249,8 @@ Main.add(function() {
         <div id="thumbs" style="overflow-x: hidden; width: 160px; text-align: center; white-space: normal; height: 200px;">
           {{if isset($file|smarty:nodefaults) && $file->_id}}
             <img class="thumbnail" src="?m=dPfiles&a=fileviewer&suppressHeaders=1&file_id={{$file->_id}}&phpThumb=1&wl=160&hp=160"
-                 onclick="(new Url).ViewFilePopup('CCompteRendu', '{{$modele_id}}', 'CFile', '{{$file->_id}}');"/>
+                 onclick="(new Url).ViewFilePopup('CCompteRendu', '{{$modele_id}}', 'CFile', '{{$file->_id}}');"
+                 style="width: 113px; height: 160px;"/>
           {{else}}
             {{tr}}CCompteRendu.nothumbs{{/tr}}
           {{/if}}

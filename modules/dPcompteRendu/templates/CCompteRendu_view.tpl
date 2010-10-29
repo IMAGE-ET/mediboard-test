@@ -1,17 +1,5 @@
 {{assign var=pdf_thumbnails value=$dPconfig.dPcompteRendu.CCompteRendu.pdf_thumbnails}}
 {{assign var="document" value=$object}}
-{{if $document->object_id}}
-<script type="text/javascript">
-/*  displaythumb = function() {
-  var url = new Url("dPcompteRendu", "ajax_display_first_thumb");
-  url.addParam("compte_rendu_id", '{{$document->_id}}');
-  url.addParam("nomdoc",'{{$document->nom}}');
-  url.addParam("user_id",'{{$document->_ref_chir->_id}}');
-  url.requestUpdate("thumbnail-{{$document->_id}}");
-}
-Main.add(function(){ displaythumb();})*/
-</script>
-{{/if}}
 
 {{if !$document->object_id}}
 <table class="tbl">
@@ -21,26 +9,13 @@ Main.add(function(){ displaythumb();})*/
 </table>
 {{/if}}
 
-<!--
-<table class="tbl">
-  <tr>
-    <th class="title">{{tr}}CCompteRendu-thumbnail{{/tr}}</th>
-  </tr>
-  <tr>
-    
-  </tr>
-</table>
--->
-
 <table class="tbl">
   <tr>
   {{if $document->object_id && $pdf_thumbnails == 1 && isset($document->_ref_file|smarty:nodefaults) && $document->_ref_file->_id}}
     <td id="thumbnail-{{$document->_id}}" style="text-align: center; background: #fff url(style/mediboard/images/icons/loading.gif) center center no-repeat;">
-      <!-- <img src="?m=dPcompteRendu&amp;a=ajax_display_first_thumb&amp;suppressHeaders=1&amp;compte_rendu_id={{$document->_id}}&amp;nomdoc={{$document->nom}}&amp;user_id={{$document->_ref_chir->_id}}"
-           style="border: 1px solid #666;"/>-->
-           <img style="border: 1px solid #000; margin: auto;"
+      <img style="border: 1px solid #000; margin: auto; width: 64px; height: 91px;"
            src="?m=dPfiles&amp;a=fileviewer&amp;suppressHeaders=1&amp;file_id={{$document->_ref_file->_id}}&amp;phpThumb=1&amp;w=64" />
-    </td>
+  </td>
   {{else}}
     <td>
       <img src="images/pictures/medifile.png"/>
@@ -77,16 +52,6 @@ Main.add(function(){ displaythumb();})*/
               {{$document->_source|count_words}} {{tr}}CCompteRendu-words{{/tr}}
 	        </td>
         </tr>
-
-      <!--
-        <tr>
-          <td>
-            <strong>Validé :</strong>
-            {{mb_value object=$document field="valide"}}
-          </td>
-        </tr>
-      -->
-
       </table>
     </td>
   </tr>
