@@ -402,12 +402,9 @@ Main.add( function(){
 
 <tr>
   <th>{{mb_label object=$sejour field="DP"}}</th>
-  <td>{{mb_field object=$sejour field="DP" size="10"}}</td>
-  <td colspan="2" class="button"><button type="button" class="search" onclick="CIM10Selector.init()">{{tr}}button-CCodeCIM10-choix{{/tr}}</button>
-  {{*
   <td colspan="3">
     {{main}}
-        var url = new Url("dPurgences", "ajax_code_cim10_autocomplete");
+        var url = new Url("dPcim10", "ajax_code_cim10_autocomplete");
         url.addParam("type", "edit_sejour");
         url.autoComplete("editSejour_keywords_code", '', {
           minChars: 1,
@@ -415,9 +412,8 @@ Main.add( function(){
           width: "250px"
         });
       {{/main}}
-    <input type="text" name="keywords_code" id="editSejour_keywords_code" class="autocomplete str" value="" class="code cim10" size="10"/>
+    <input type="text" name="keywords_code" id="editSejour_keywords_code" class="autocomplete str code cim10" value="" size="10"/>
     <input type="hidden" name="DP" />
-    *}}
   </td>
 </tr>
 

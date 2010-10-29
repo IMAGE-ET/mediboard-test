@@ -1,5 +1,5 @@
 <!--  Diagnostic Principal -->
-<form name="editDP-{{$sejour->_id}}" action="?m={{$m}}" method="post" 
+<form name="editDP" action="?m={{$m}}" method="post" 
       onsubmit="return onSubmitFormAjax(this, { onComplete: reloadDiagnostic.curry({{$sejour->_id}}, 1) })">
   <input type="hidden" name="m" value="dPplanningOp" />
   <input type="hidden" name="dosql" value="do_sejour_aed" />
@@ -9,13 +9,18 @@
   
   <div style="text-align: right;">
     {{mb_label object=$sejour field=DP}}
-    {{mb_field object=$sejour field=DP size=5}}
-    <button class="modify notext" type="submit">
-      {{tr}}Validate{{/tr}}
-    </button>
-    <button class="search notext" type="button" onclick="CIM10Selector.initDP({{$sejour->_id}})">
-      {{tr}}Search{{/tr}}
-    </button>
+    {{main}}
+        var url = new Url("dPcim10", "ajax_code_cim10_autocomplete");
+        url.addParam("type", "editDP");
+        url.autoComplete("editDP_keywords_code", '', {
+          minChars: 1,
+          dropdown: true,
+          width: "250px"
+        });
+        
+    {{/main}}
+    <input type="text" name="keywords_code" id="editDP_keywords_code" class="autocomplete str code cim10" value="{{$sejour->DP}}" size="10"/>
+    <input type="hidden" name="DP" onchange="this.form.onsubmit();"/>
   </div>
 </form>
 
@@ -25,7 +30,7 @@
 <hr />
 
 <!--  Diagnostic Relié -->
-<form name="editDR-{{$sejour->_id}}" action="?m={{$m}}" method="post"
+<form name="editDR" action="?m={{$m}}" method="post"
       onsubmit="return onSubmitFormAjax(this, { onComplete: reloadDiagnostic.curry({{$sejour->_id}}, 1) })">
   <input type="hidden" name="m" value="dPplanningOp" />
   <input type="hidden" name="dosql" value="do_sejour_aed" />
@@ -35,13 +40,17 @@
   
   <div style="text-align: right;">
     {{mb_label object=$sejour field=DR}}
-    {{mb_field object=$sejour field=DR size=5}}
-    <button class="modify notext" type="submit">
-      {{tr}}Validate{{/tr}}
-    </button>
-    <button class="search notext" type="button" onclick="CIM10Selector.initDR({{$sejour->_id}})">
-      {{tr}}Search{{/tr}}
-    </button>
+    {{main}}
+        var url = new Url("dPcim10", "ajax_code_cim10_autocomplete");
+        url.addParam("type", "editDR");
+        url.autoComplete("editDR_keywords_code", '', {
+          minChars: 1,
+          dropdown: true,
+          width: "250px"
+        });
+    {{/main}}
+    <input type="text" name="keywords_code" id="editDR_keywords_code" class="autocomplete str code cim10" value="{{$sejour->DR}}" size="10"/>
+    <input type="hidden" name="DR" onchange="this.form.onsubmit();"/>
   </div>
 </form>
 
@@ -50,7 +59,7 @@
 {{/if}}
 <hr />
 
-<form name="editDossierMedical-{{$sejour->_id}}" action="?m={{$m}}" method="post"
+<form name="editDA" action="?m={{$m}}" method="post"
       onsubmit="return onSubmitFormAjax(this, { onComplete: reloadDiagnostic.curry({{$sejour->_id}}, 1) })">
   <input type="hidden" name="m" value="dPpatients" />
   <input type="hidden" name="dosql" value="do_dossierMedical_aed" />
@@ -61,13 +70,17 @@
   
   <div style="text-align: right;">
     <label for="_added_code_cim" title="Diagnostics associés significatifs">DAS</label>
-    <input type="text" name="_added_code_cim" size="5" />
-    <button class="add notext" type="submit">
-      {{tr}}Validate{{/tr}}
-    </button>
-    <button class="search notext" type="button" onclick="CIM10Selector.initDAS({{$sejour->_id}})">
-      {{tr}}Search{{/tr}}
-    </button>
+    {{main}}
+        var url = new Url("dPcim10", "ajax_code_cim10_autocomplete");
+        url.addParam("type", "editDA");
+        url.autoComplete("editDA_keywords_code", '', {
+          minChars: 1,
+          dropdown: true,
+          width: "250px"
+        });
+    {{/main}}
+    <input type="text" name="keywords_code" id="editDA_keywords_code" class="autocomplete str code cim10" value="" size="10"/>
+    <input type="hidden" name="_added_code_cim" onchange="this.form.onsubmit();"/>
   </div>
 </form>
 

@@ -15,7 +15,7 @@ reloadCim10 = function(sCode){
     oCimAnesthField.add(sCode);
   }
   {{/if}}
-  updateTokenCim10();
+
   oForm.code_diag.value="";
 }
 
@@ -442,21 +442,20 @@ Main.add(function () {
   </tr>
   <tr>
     <td class="text">
+      {{main}}
+	      var url = new Url("dPcim10", "ajax_code_cim10_autocomplete");
+	      url.addParam("type", "cab");
+	      url.autoComplete("addDiagFrm_keywords_code", '', {
+	        minChars: 1,
+	        dropdown: true,
+	        width: "250px"
+	      });
+      {{/main}}
       <form name="addDiagFrm" action="?m=dPcabinet" method="post">
         <strong>Ajouter un diagnostic</strong>
         <input type="hidden" name="chir" value="{{$userSel->_id}}" />
-        <button class="search" type="button" onclick="CIM10Selector.init()">{{tr}}Search{{/tr}}</button>
-        <input type="text" name="code_diag" size="5"/>
-        <button class="tick notext" type="button" onclick="reloadCim10(code_diag.value)">{{tr}}Validate{{/tr}}</button>
-        <script type="text/javascript">   
-          CIM10Selector.init = function(){
-            this.sForm = "addDiagFrm";
-            this.sView = "code_diag";
-            this.sChir = "chir";
-            this.options.mode = "favoris";
-            this.pop();
-          }
-        </script> 
+        <input type="text" name="keywords_code" id="addDiagFrm_keywords_code" class="autocomplete str code cim10" value="" size="10"/>
+        <input type="hidden" name="code_diag" />
       </form>
       
       <table style="width: 100%">

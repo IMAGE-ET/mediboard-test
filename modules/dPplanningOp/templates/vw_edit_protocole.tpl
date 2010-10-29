@@ -296,19 +296,8 @@ Main.add(function () {
             {{mb_label object=$protocole field="DP"}}
           </th>
           <td>
-          {{mb_field object=$protocole field="DP" size="10"}}
-            <button type="button" class="search" onclick="CIM10Selector.init()">Choisir un code</button>
-            <script type="text/javascript">
-              CIM10Selector.init = function(){
-                this.sForm = "editFrm";
-                this.sView = "DP";
-                this.sChir = "chir_id";
-                this.pop();
-              }
-            </script>
-          {{*
 	          {{main}}
-	            var url = new Url("dPurgences", "ajax_code_cim10_autocomplete");
+	            var url = new Url("dPcim10", "ajax_code_cim10_autocomplete");
 				      url.addParam("type", "edit_protocole");
 				      url.autoComplete("editFrm_keywords_code", '', {
 				        minChars: 1,
@@ -316,9 +305,8 @@ Main.add(function () {
 				        width: "250px"
 				      });
 				    {{/main}}
-				    <input type="text" name="keywords_code" id="editFrm_keywords_code" class="autocomplete str" value="{{$protocole->DP}}" class="code cim10" size="8"/>
+				    <input type="text" name="keywords_code" id="editFrm_keywords_code" class="autocomplete str code cim10" value="{{$protocole->DP}}" size="8"/>
 	          <input type="hidden" name="DP" />
-	          *}}
           </td>
         </tr>
         

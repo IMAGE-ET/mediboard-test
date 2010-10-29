@@ -9,6 +9,33 @@ onSubmitDiag = function(oForm) {
 		} 
 	} );
 }
+
+Main.add(function() {
+
+    var url = new Url("dPcim10", "ajax_code_cim10_autocomplete");
+    url.addParam("type", "editDP");
+    url.autoComplete("editDP_keywords_code", '', {
+      minChars: 1,
+      dropdown: true,
+      width: "250px",
+    });
+
+    var urlb = new Url("dPcim10", "ajax_code_cim10_autocomplete");
+    urlb.addParam("type", "editDR");
+    urlb.autoComplete("editDR_keywords_code", '', {
+      minChars: 1,
+      dropdown: true,
+      width: "250px",
+    });
+
+    var urlc = new Url("dPcim10", "ajax_code_cim10_autocomplete");
+    urlc.addParam("type", "editDA");
+    urlc.autoComplete("editDA_keywords_code", '', {
+      minChars: 1,
+      dropdown: true,
+      width: "250px",
+    });
+});
 </script>
 
 <table class="form">
@@ -20,52 +47,28 @@ onSubmitDiag = function(oForm) {
 		<!-- Diagnostic Principal -->
     <td class="button">
 
-      <form name="editSejourDP" action="?m={{$m}}" method="post" onsubmit="return onSubmitDiag(this);">
-
-      <input type="hidden" name="m" value="dPplanningOp" />
-      <input type="hidden" name="dosql" value="do_sejour_aed" />
-      <input type="hidden" name="del" value="0" />
-      <input type="hidden" name="sejour_id" value="{{$sejour->_id}}" />
-      <input type="hidden" name="praticien_id" value="{{$sejour->praticien_id}}" />
-      <button type="button" class="search notext" onclick="CIM10Selector.initDP()">
-        {{tr}}button-CCodeCIM10-choix{{/tr}}
-      </button>
-      <script type="text/javascript">
-        CIM10Selector.initDP = function() {
-          this.sForm     = "editSejourDP";
-          this.sView     = "DP";
-          this.sChir     = "praticien_id";
-          this.pop();
-        }
-      </script>
-      <input type="text" name="DP" value="{{$sejour->DP}}" class="code cim10" size="10" onchange="this.form.onsubmit()" />
-      <button class="tick notext" type="button">{{tr}}Validate{{/tr}}</button>
+      <form name="editDP" action="?m={{$m}}" method="post" onsubmit="return onSubmitDiag(this);">
+	      <input type="hidden" name="m" value="dPplanningOp" />
+	      <input type="hidden" name="dosql" value="do_sejour_aed" />
+	      <input type="hidden" name="del" value="0" />
+	      <input type="hidden" name="sejour_id" value="{{$sejour->_id}}" />
+	      <input type="hidden" name="praticien_id" value="{{$sejour->praticien_id}}" />
+	      <input type="hidden" name="DP" value='' onchange="this.form.onsubmit();"/>
+	      <input type="text"   name="keywords_code" id="editDP_keywords_code" value="{{$sejour->DP}}" class="autocomplete str code cim10" size="10" />
       </form>
     </td>
     
 		<!-- Diagnostic Relié -->
     <td class="button">
 
-      <form name="editSejourDR" action="?m={{$m}}" method="post" onsubmit="return onSubmitDiag(this);">
-
-      <input type="hidden" name="m" value="dPplanningOp" />
-      <input type="hidden" name="dosql" value="do_sejour_aed" />
-      <input type="hidden" name="del" value="0" />
-      <input type="hidden" name="sejour_id" value="{{$sejour->_id}}" />
-      <input type="hidden" name="praticien_id" value="{{$sejour->praticien_id}}" />
-      <button type="button" class="search notext" onclick="CIM10Selector.initDR()">
-        {{tr}}button-CCodeCIM10-choix{{/tr}}
-      </button>
-      <script type="text/javascript">
-        CIM10Selector.initDR = function() {
-          this.sForm     = "editSejourDR";
-          this.sView     = "DR";
-          this.sChir     = "praticien_id";
-          this.pop();
-        }
-      </script>
-      <input type="text" name="DR" value="{{$sejour->DR}}" class="code cim10" size="10" onchange="this.form.onsubmit()" />
-      <button class="tick notext" type="button">{{tr}}Validate{{/tr}}</button>
+      <form name="editDR" action="?m={{$m}}" method="post" onsubmit="return onSubmitDiag(this);">
+	      <input type="hidden" name="m" value="dPplanningOp" />
+	      <input type="hidden" name="dosql" value="do_sejour_aed" />
+	      <input type="hidden" name="del" value="0" />
+	      <input type="hidden" name="sejour_id" value="{{$sejour->_id}}" />
+	      <input type="hidden" name="praticien_id" value="{{$sejour->praticien_id}}" />
+	      <input type="hidden" name="DR" value='' onchange="this.form.onsubmit();"/>
+	      <input type="text"   name="keywords_code" id="editDR_keywords_code"value="{{$sejour->DR}}" class="autocomplete str code cim10" size="10" />
       </form>
     </td>
   </tr>
@@ -91,28 +94,15 @@ onSubmitDiag = function(oForm) {
   </tr>
   <tr>
     <td class="button" colspan="2">
-      <form name="editDossierMedical" action="?m={{$m}}" method="post" onsubmit="return onSubmitDiag(this);">
+      <form name="editDA" action="?m={{$m}}" method="post" onsubmit="return onSubmitDiag(this);">
         <input type="hidden" name="m" value="dPpatients" />
         <input type="hidden" name="dosql" value="do_dossierMedical_aed" />
         <input type="hidden" name="del" value="0" />
         <input type="hidden" name="object_class" value="CSejour" />
         <input type="hidden" name="object_id" value="{{$sejour->_id}}" />
         <input type="hidden" name="_praticien_id" value="{{$sejour->praticien_id}}" />
-        <button class="search notext" type="button" onclick="CIM10Selector.initAsso()">
-          Chercher un diagnostic
-        </button>
-        <input type="text" name="_added_code_cim" size="5" onchange="this.form.onsubmit()" />
-        <button class="tick notext" type="button">
-          Valider
-        </button>
-        <script type="text/javascript">   
-          CIM10Selector.initAsso = function(){
-            this.sForm = "editDossierMedical";
-            this.sView = "_added_code_cim";
-            this.sChir = "_praticien_id";
-            this.pop();
-          }
-        </script> 
+        <input type="hidden" name="_added_code_cim" onchange="this.form.onsubmit();"/>
+        <input type="text"   name="keywords_code" id="editDA_keywords_code" size="5" class="autocomplete str code cim10" />
       </form>
     </td>
   </tr>

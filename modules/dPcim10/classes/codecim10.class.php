@@ -315,7 +315,7 @@ class CCodeCIM10 {
   }
   
   // Recherche de codes
-  function findCodes($code, $keys, $lang = self::LANG_FR) {
+  function findCodes($code, $keys, $lang = self::LANG_FR, $max_length = null) {
     $ds =& $this->_spec->ds;
     $this->_lang = $lang;
   
@@ -338,6 +338,9 @@ class CCodeCIM10 {
     }
     if(!$hasWhere) {
       $query .= " AND 0";
+    }
+    if ($max_length) {
+      $query .= " AND LENGTH(abbrev) < $max_length ";
     }
     $query .= " ORDER BY master.SID LIMIT 0 , 100";
     $result = $ds->exec($query);
