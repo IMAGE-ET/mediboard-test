@@ -19,4 +19,5 @@ $stock_location->loadRefsStocks();
 // Smarty template
 $smarty = new CSmartyDP();
 $smarty->assign('stock_location', $stock_location);
+$smarty->assign("host_group_id", CProductStockGroup::getHostGroup());
 $smarty->display('inc_form_stock_location.tpl');

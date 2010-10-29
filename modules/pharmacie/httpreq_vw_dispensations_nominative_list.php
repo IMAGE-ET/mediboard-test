@@ -227,10 +227,8 @@ foreach($dispensations as $code => $quantites){
 	  
 	  if ($product->loadMatchingObject()) {
 	    // Chargement du stock
-	    $stock = new CProductStockGroup();
-	    $stock->group_id = CGroups::loadCurrent()->_id;
-	    $stock->product_id = $product->_id;
-	    $stock->loadMatchingObject();
+      $product->loadRefStock();
+      $stock = $product->_ref_stock_group;
 
 	    // Chargement des ref de la dispensation à effectuer
 	    $delivery = new CProductDelivery();

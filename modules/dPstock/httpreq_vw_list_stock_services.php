@@ -16,11 +16,7 @@ $product_id = CValue::get('product_id');
 $product = new CProduct;
 $product->load($product_id);
 
-$service = new CService;
-$where = array(
-  "group_id" => "= '$g'"
-);
-$list_services = $service->loadListWithPerms(PERM_READ, $where, "nom");
+$list_services = CProductStockGroup::getServicesList();
 
 foreach($list_services as $_service) {
   $stock_service = new CProductStockService;

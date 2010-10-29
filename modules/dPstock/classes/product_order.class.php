@@ -323,9 +323,8 @@ class CProductOrder extends CMbMetaObject {
         break;
     }
     
-    if ($g)
-      $where['product_order.group_id'] = " = $g";
-      
+    $where['product_order.group_id'] = " = '".CProductStockGroup::getHostGroup()."'";
+    
     if ($type === 'pending') {
       $limit = 200;
     }

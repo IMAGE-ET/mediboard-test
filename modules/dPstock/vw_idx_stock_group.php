@@ -8,7 +8,6 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
  */
 
-global $g;
 CCanDo::checkEdit();
 
 $stock_id    = CValue::getOrSession('stock_id');
@@ -44,11 +43,7 @@ $stock->updateFormFields();
 $category = new CProductCategory();
 $list_categories = $category->loadList(null, 'name');
 
-$service = new CService;
-$where = array(
-  "group_id" => "= '$g'"
-);
-$list_services = $service->loadListWithPerms(PERM_READ, $where, "nom");
+$list_services = CProductStockGroup::getServicesList();
 
 foreach($list_services as $_service) {
   $stock_service = new CProductStockService;

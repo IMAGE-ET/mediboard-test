@@ -17,9 +17,8 @@ $without_supplier = CValue::get("without_supplier");
 // Chargement des receptions de l'etablissement
 $reception = new CProductReception();
 
-$where = array(
-  "group_id" => "='".CGroups::loadCurrent()->_id."'",
-);
+$where = array();
+$where["group_id"] = "= '".CProductStockGroup::getHostGroup()."'";
 
 if (!$without_supplier) {
   $where["societe_id"] = "IS NOT NULL";

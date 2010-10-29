@@ -23,9 +23,7 @@ if ($keywords) {
               product.name LIKE '%$keywords%' OR 
               product.description LIKE '%$keywords%'";
 }
-if ($g && CAppUI::conf("dPstock group_independent") == 0) {
-  $where['product_stock_group.group_id'] = " = $g";
-}
+$where['product_stock_group.group_id'] = " = '".CProductStockGroup::getHostGroup()."'";
 
 $leftjoin = array();
 $leftjoin['product'] = 'product.product_id = product_stock_group.product_id';

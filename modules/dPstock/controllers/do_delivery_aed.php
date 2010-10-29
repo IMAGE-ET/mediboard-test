@@ -23,6 +23,16 @@ if (isset ($_POST['product_id'])) {
     $_POST["stock_id"] = $product->_ref_stock_group->_id;
     unset($_POST['product_id']);
   }
+  else if (isset($_POST['manual'])) {
+    $stock_group = new CProductStockGroup();
+    $stock_group->product_id = $product->_id;
+    $stock_group->group_id = CProductStockGroup::getHostGroup();
+    $stock_group->quantity = $_POST["quantity"];
+    $stock_group->order_threshold_min = $_POST["quantity"];
+    CAppUI::displayMsg($stock_group->store(), "CProductStockGroup-msg-create");
+    $_POST["stock_id"] = $stock_group->_id;
+    unset($_POST['product_id']);
+  }
 }
 
 $do = new CDoObjectAddEdit('CProductDelivery');

@@ -20,7 +20,7 @@ function errorHandler(errorMsg, url, lineNumber, exception) {
       method: 'post',
       parameters: 'm=system&a=js_error_handler&' +
       $H({
-        errorMsg: errorMsg,
+        errorMsg: errorMsg + _IEAdditionalInfo,
         url: url,
         lineNumber: lineNumber,
         stack: exception.stack || exception.stacktrace || printStackTrace(),
@@ -87,11 +87,15 @@ function IEVersion(){
   };
 }
 
+var _IEAdditionalInfo = "";
+
 // TODO needs testing (doesn't throw console.error every time)
 if (Prototype.Browser.IE) {
   try {
     (function(){
       var ieVersion = IEVersion();
+      _IEAdditionalInfo = " (Version:"+ieVersion.Version+" BrowserMode:"+ieVersion.BrowserMode+" DocMode:"+ieVersion.DocMode+")";
+      
       // If DocMode is the same as the browser version (IE8 not in Compat mode)
       if (ieVersion.Version == ieVersion.DocMode)
         window.onerror = errorHandler;

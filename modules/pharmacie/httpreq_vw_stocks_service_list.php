@@ -40,10 +40,8 @@ foreach ($list_stocks_service as $stock) {
 	$stock->loadRefsFwd();
 	
   // We load the unique negative delivery for this [service - group stock]
-  $stock_group = new CProductStockGroup();
-  $stock_group->group_id = $g;
-  $stock_group->product_id = $stock->product_id;
-  $stock_group->loadMatchingObject();
+  $stock->_ref_product->loadRefStock();
+  $stock_group = $stock->_ref_product->_ref_stock_group;
   
 	$ref = ($stock->order_threshold_optimum ? $stock->order_threshold_optimum : $stock->order_threshold_min);
 	$dispensation = new CProductDelivery();

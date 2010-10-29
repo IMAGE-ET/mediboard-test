@@ -17,7 +17,7 @@ $category_id = CValue::getOrSession('category_id');
 $category = new CProductCategory();
 $list_categories = $category->loadList(null, 'name');
 
-$where = array('group_id' => "= $g");
+$where = array('group_id' => "= '".CProductStockGroup::getHostGroup()."'");
 $list_services = new CService();
 $list_services = $list_services->loadList($where, 'nom');
 

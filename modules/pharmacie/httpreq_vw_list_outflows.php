@@ -33,8 +33,7 @@ foreach($list_outflows as $_outflow) {
     $_outflow->_ref_stock->_ref_product->getPendingOrderItems(false);
 }
 
-$service = new CService;
-$list_services = $service->loadListWithPerms(PERM_READ);
+$list_services = CProductStockGroup::getServicesList();
 
 // Création du template
 $smarty = new CSmartyDP();

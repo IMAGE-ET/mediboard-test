@@ -7,8 +7,7 @@
  * @author SARL OpenXtrem
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
  */
- 
-global $g;
+
 CCanDo::checkEdit();
 
 $category_id         = CValue::get('category_id');
@@ -21,12 +20,12 @@ $only_ordered_stocks = CValue::get('only_ordered_stocks');
 CValue::setSession('category_id', $category_id);
 
 $where = array();
-if ($g) {
-  $where['product_stock_group.group_id'] = " = $g";
-}
+$where["product_stock_group.group_id"] = "= '".CProductStockGroup::getHostGroup()."'";
+
 if ($category_id) {
   $where['product.category_id'] = " = $category_id";
 }
+
 if ($keywords) {
   $where[] = "product.code LIKE '%$keywords%' OR 
               product.name LIKE '%$keywords%' OR 

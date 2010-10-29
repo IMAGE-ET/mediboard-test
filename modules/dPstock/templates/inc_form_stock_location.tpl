@@ -6,7 +6,7 @@
 <form name="edit_stock_location" action="?m={{$m}}" method="post" onsubmit="return checkForm(this)">
   <input type="hidden" name="dosql" value="do_stock_location_aed" />
   <input type="hidden" name="stock_location_id" value="{{$stock_location->_id}}" />
-  <input type="hidden" name="group_id" value="{{$g}}" />
+  <input type="hidden" name="group_id" value="{{$host_group_id}}" />
   <input type="hidden" name="del" value="0" />
   <table class="form">
     <tr>

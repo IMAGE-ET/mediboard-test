@@ -37,9 +37,7 @@ if(CValue::post("_create_order")) {
     }
   }
   
-  if (CAppUI::conf("dPstock group_independent") == 0) {
-    $where["product_order.group_id"] = "= '".CGroups::loadCurrent()->_id."'";
-  }
+  $where["product_order.group_id"] = "= '".CProductStockGroup::getHostGroup()."'";
 	
   $order = new CProductOrder;
   $orders = $order->search("waiting", null, 1, $where);
@@ -57,7 +55,7 @@ if(CValue::post("_create_order")) {
     }
     
     $order->societe_id = $reference->societe_id;
-    $order->group_id = CGroups::loadCurrent()->_id;
+    $order->group_id = CProductStockGroup::getHostGroup();
     
     $product = $reference->loadRefProduct();
     $count_dmi = $product->countBackRefs("dmis");

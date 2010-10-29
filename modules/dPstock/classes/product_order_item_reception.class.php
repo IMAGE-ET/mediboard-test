@@ -174,7 +174,7 @@ class CProductOrderItemReception extends CMbObject {
       $reception = new CProductReception;
       $reception->date = mbDateTime();
       $reception->societe_id = $order->societe_id;
-      $reception->group_id = CGroups::loadCurrent()->_id;
+      $reception->group_id = CProductStockGroup::getHostGroup();
       
       // Recherche de receptions ayant un numero de reception similaire pour gerer l'increment
       if ($order->order_number) {
@@ -203,11 +203,10 @@ class CProductOrderItemReception extends CMbObject {
         $stock->quantity += $this->getUnitQuantity();
       }
       else {
-        global $g;
         $qty = $this->quantity * $product->_unit_quantity;
         $stock = new CProductStockGroup();
         $stock->product_id = $product->_id;
-        $stock->group_id = $g;
+        $stock->group_id = CProductStockGroup::getHostGroup();
         $stock->quantity = $qty;
         $stock->order_threshold_min = $qty;
         
