@@ -123,7 +123,7 @@ class CProductStockGroup extends CProductStock {
   
   static function getHostGroup($get_id = true){
     if (isset(self::$_host_group)) {
-      return self::$_host_group;
+      return $get_id ? self::$_host_group->_id : self::$_host_group;
     }
     
     $host_group_id = CAppUI::conf("dPstock host_group_id");
