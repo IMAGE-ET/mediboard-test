@@ -62,42 +62,40 @@ Traitement = {
 
 <ul id="antecedents-{{$dossier_medical->_guid}}">
 	{{if $dossier_medical->_count_antecedents || $dossier_medical->_count_cancelled_antecedents}}
-	  {{foreach from=$dossier_medical->_ref_antecedents key=curr_type item=list_antecedent}}
-	  {{foreach from=$list_antecedent item=curr_antecedent}}
-	  <li {{if $curr_antecedent->annule}}class="cancelled" style="display: none;"{{/if}}>
-	    <form name="delAntFrm-{{$curr_antecedent->_id}}" action="?m=dPcabinet" method="post">
+	  {{foreach from=$dossier_medical->_all_antecedents item=_antecedent}}
+	  <li {{if $_antecedent->annule}}class="cancelled" style="display: none;"{{/if}}>
+	    <form name="delAntFrm-{{$_antecedent->_id}}" action="?m=dPcabinet" method="post">
 	      <input type="hidden" name="m" value="dPpatients" />
 	      <input type="hidden" name="del" value="0" />
 	      <input type="hidden" name="dosql" value="do_antecedent_aed" />
-	      <input type="hidden" name="antecedent_id" value="{{$curr_antecedent->_id}}" />
+	      <input type="hidden" name="antecedent_id" value="{{$_antecedent->_id}}" />
 	      <input type="hidden" name="annule" value="" />
 	             
 	      <!-- Seulement si l'utilisateur est le créateur -->
-	      {{if $curr_antecedent->_ref_first_log && $curr_antecedent->_ref_first_log->user_id == $app->user_id}}
+	      {{if $_antecedent->_ref_first_log && $_antecedent->_ref_first_log->user_id == $app->user_id}}
 	      <button title="{{tr}}Delete{{/tr}}" class="trash notext" type="button" onclick="Antecedent.remove(this.form, DossierMedical.reloadDossierPatient)">
 	        {{tr}}Delete{{/tr}}
 	      </button>
 	      {{/if}}
 	      
 	      {{if $_is_anesth && $sejour->_id}}
-	      <button title="{{tr}}Add{{/tr}}" class="add notext" type="button" onclick="copyAntecedent({{$curr_antecedent->_id}})">
+	      <button title="{{tr}}Add{{/tr}}" class="add notext" type="button" onclick="copyAntecedent({{$_antecedent->_id}})">
 	        {{tr}}Add{{/tr}}
 	      </button>
 	      {{/if}}         
 		  </form>
 	
-	    <span onmouseover="ObjectTooltip.createEx(this, '{{$curr_antecedent->_guid}}')">
+	    <span onmouseover="ObjectTooltip.createEx(this, '{{$_antecedent->_guid}}')">
 		    <strong>
-		    	{{if $curr_antecedent->type    }} {{mb_value object=$curr_antecedent field=type    }} {{/if}}
-		    	{{if $curr_antecedent->appareil}} {{mb_value object=$curr_antecedent field=appareil}} {{/if}}
+		    	{{if $_antecedent->type    }} {{mb_value object=$_antecedent field=type    }} {{/if}}
+		    	{{if $_antecedent->appareil}} {{mb_value object=$_antecedent field=appareil}} {{/if}}
 		    </strong>
-	      {{if $curr_antecedent->date}}
-	        [{{mb_value object=$curr_antecedent field=date}}] : 
+	      {{if $_antecedent->date}}
+	        [{{mb_value object=$_antecedent field=date}}] : 
 	      {{/if}}
-	      {{$curr_antecedent->rques}}
+	      {{$_antecedent->rques}}
 	    </span>
 	  </li>
-	  {{/foreach}}
 	  {{/foreach}}
 	{{else}}
 		<li><em>{{tr}}CAntecedent.unknown{{/tr}}</em></li>
@@ -115,7 +113,7 @@ Traitement = {
 	      <input type="hidden" name="dosql" value="do_prescription_line_medicament_aed" />
 	      <input type="hidden" name="prescription_line_medicament_id" value="{{$_line->_id}}" />
 	      <button class="trash notext" type="button" onclick="Traitement.remove(this.form, DossierMedical.reloadDossierPatient)">
-	        {{tr}}delete{{/tr}}
+	        {{tr}}Delete{{/tr}}
 	      </button>
 	      
 	      {{if $_line->fin}}
@@ -144,30 +142,31 @@ Traitement = {
 <strong>Traitements du patient</strong>
 {{/if}}
 <ul>
-  {{foreach from=$dossier_medical->_ref_traitements item=curr_trmt}}
+  {{foreach from=$dossier_medical->_ref_traitements item=_traitement}}
   <li>
-    <form name="delTrmtFrm-{{$curr_trmt->_id}}" action="?m=dPcabinet" method="post">
+    <form name="delTrmtFrm-{{$_traitement->_id}}" action="?m=dPcabinet" method="post">
     <input type="hidden" name="m" value="dPpatients" />
     <input type="hidden" name="del" value="0" />
     <input type="hidden" name="dosql" value="do_traitement_aed" />
-    <input type="hidden" name="traitement_id" value="{{$curr_trmt->traitement_id}}" />
+    {{mb_key object=$_traitement}}
+		
     <button class="trash notext" type="button" onclick="Traitement.remove(this.form, DossierMedical.reloadDossierPatient)">
       {{tr}}delete{{/tr}}
     </button>
     {{if $_is_anesth && $sejour->_id}}
-    <button class="add notext" type="button" onclick="copyTraitement({{$curr_trmt->traitement_id}})">
-      {{tr}}add{{/tr}}
+    <button class="add notext" type="button" onclick="copyTraitement({{$_traitement->_id}})">
+      {{tr}}Add{{/tr}}
     </button>
     {{/if}}
     
-    {{if $curr_trmt->fin}}
-      Depuis {{mb_value object=$curr_trmt field=debut}} 
-      jusqu'à {{mb_value object=$curr_trmt field=fin}} :
-    {{elseif $curr_trmt->debut}}
-      Depuis {{mb_value object=$curr_trmt field=debut}} :
+    {{if $_traitement->fin}}
+      Depuis {{mb_value object=$_traitement field=debut}} 
+      jusqu'à {{mb_value object=$_traitement field=fin}} :
+    {{elseif $_traitement->debut}}
+      Depuis {{mb_value object=$_traitement field=debut}} :
     {{/if}}
-    <span onmouseover="ObjectTooltip.createEx(this, '{{$curr_trmt->_guid}}', 'objectViewHistory')">
-     {{$curr_trmt->traitement}}
+    <span onmouseover="ObjectTooltip.createEx(this, '{{$_traitement->_guid}}', 'objectViewHistory')">
+      {{$_traitement->traitement}}
     </span>
 
     </form>
@@ -182,17 +181,17 @@ Traitement = {
 
 <strong>Diagnostics du patient</strong>
 <ul>
-  {{foreach from=$dossier_medical->_ext_codes_cim item=curr_code}}
+  {{foreach from=$dossier_medical->_ext_codes_cim item=_code}}
   <li>
-    <button class="trash notext" type="button" onclick="oCimField.remove('{{$curr_code->code}}')">
-      {{tr}}delete{{/tr}}
+    <button class="trash notext" type="button" onclick="oCimField.remove('{{$_code->code}}')">
+      {{tr}}Delete{{/tr}}
     </button>
     {{if $_is_anesth && $sejour->_id}}
-    <button class="add notext" type="button" onclick="oCimAnesthField.add('{{$curr_code->code}}')">
-      {{tr}}add{{/tr}}
+    <button class="add notext" type="button" onclick="oCimAnesthField.add('{{$_code->code}}')">
+      {{tr}}Add{{/tr}}
     </button>
     {{/if}}
-    {{$curr_code->code}}: {{$curr_code->libelle}}
+    {{$_code->code}}: {{$_code->libelle}}
   </li>
   {{foreachelse}}
   <li><em>{{tr}}CDossierMedical-codes_cim.unknown{{/tr}}</em></li>

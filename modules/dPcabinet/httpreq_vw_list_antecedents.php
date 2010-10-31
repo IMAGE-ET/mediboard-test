@@ -7,8 +7,6 @@
 * @author Romain Ollivier
 */
 
-global $can, $AppUI;
-
 $canPatient = CModule::getCanDo("dPpatients");
 $canPatient->needsEdit();
 
@@ -28,20 +26,17 @@ $dossier_medical =& $patient->_ref_dossier_medical;
 
 // Chargements des antecedents et traitements du dossier_medical
 if ($dossier_medical->_id) {
-	$dossier_medical->loadRefsAntecedents(true);  
+//	$dossier_medical->loadRefsAntecedents(true);  
 	$dossier_medical->loadRefsTraitements();
 	$dossier_medical->countAntecedents();
 	
-  foreach ($dossier_medical->_ref_antecedents as $type) {
-    foreach ($type as &$ant) {
-      $ant->loadLogs();
-    }
+  foreach ($dossier_medical->_all_antecedents as $_antecedent) {
+    $_antecedent->loadLogs();
   }
   $dossier_medical->loadRefPrescription();
 }
 
-$user = new CMediusers();
-$user->load($AppUI->user_id);
+$user = CAppUI::$user;
 $user->isPraticien();
 
 // Création du template
