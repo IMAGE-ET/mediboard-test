@@ -8,4 +8,4 @@
  * Add fields in the editor
  */
 
-FCKLang['mbfields']  = 'Insertion de champs' ;
+FCKLang['mbfields']  = 'Champs' ;

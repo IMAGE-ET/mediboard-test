@@ -9,4 +9,4 @@
  */
 
 // @TODO Problème d'affichage d'accent
-FCKLang['mbhelpers']  = 'Insertion d\'aide a la saisie' ;
+FCKLang['mbhelpers']  = 'Aides a la saisie' ;

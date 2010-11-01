@@ -33,15 +33,17 @@ FCKConfig.ToolbarSets["Default"] = [
   {{/if}}
 
   FCKConfig.ToolbarSets["Default"] = [
-    ['Save','Preview'], [{{if $pdf_thumbnails == 1}}'mbPrintPDF',{{/if}} textForPrint, 'Cut', 'Copy','Paste', 'PasteText', 
+    ['Save','Preview'], [{{if $pdf_thumbnails == 1}}'mbPrintPDF',{{/if}} textForPrint, 'SelectAll', 'Cut', 'Copy','Paste', 'PasteText', 
      'PasteWord', 'Undo','Redo', 'Find'],
+    [{{if !$templateManager->isModele}}'mbHeader','mbFooter',{{/if}}'mbPageBreak'],
+    ['Table','Rule','Image','SpecialChar'],
     ['FitWindow', 'Source', 'About'], '/',
     ['FontFormat', 'FontName', 'FontSize'],
-    ['Bold','Italic','Underline', 'StrikeThrough', '-','Subscript','Superscript',
-     'JustifyLeft','JustifyCenter','JustifyRight','JustifyFull', 'OrderedList','UnorderedList','-','Outdent','Indent',
-     'TextColor','BGColor'],
-     ['SelectAll','RemoveFormat','Table','Rule','Image','SpecialChar'], '/',
-    {{if !$templateManager->isModele}}['mbHeader','mbFooter'],{{/if}} ['mbPageBreak', 'mbFreeText', 'mbfields', 'mblists', 'mbhelpers']];
+    ['RemoveFormat', 'Bold','Italic','Underline', 'StrikeThrough'],
+    ['Subscript','Superscript','JustifyLeft','JustifyCenter','JustifyRight','JustifyFull','OrderedList','UnorderedList'],
+    ['Outdent','Indent','TextColor','BGColor'],
+    '/',
+    ['mbfields', {{if $templateManager->isModele}}'mblists', 'mbFreeText', {{/if}}'mbhelpers']];
 
 window.parent.fields = [];
 window.parent.listeChoix = [];

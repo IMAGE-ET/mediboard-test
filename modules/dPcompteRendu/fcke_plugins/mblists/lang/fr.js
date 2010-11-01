@@ -8,4 +8,4 @@
  * Mediboard additional custom combo plugin for FCKeditor
  */
 
-FCKLang['mblists']  = 'Insertion de listes' ;
+FCKLang['mblists']  = 'Listes de choix' ;
