@@ -39,7 +39,7 @@ var FCKToolbarMbFreeText = function() {
 }
 
 // Inherit from FCKToolbarButton.
-FCKToolbarMbFreeText.prototype = new FCKToolbarButton("mbFreeText", FCKLang.mbPageBreak) ;
+FCKToolbarMbFreeText.prototype = new FCKToolbarButton("mbFreeText", FCKLang.mbPageBreak, null, FCK_TOOLBARITEM_ICONTEXT) ;
 
 FCKToolbarMbFreeText.prototype.GetLabel = function() {
   return "mbFreeText" ;

@@ -36,7 +36,7 @@ var FCKToolbarMbFields = function() {
 }
 
 // Inherit from FCKToolbarButton.
-FCKToolbarMbFields.prototype = new FCKToolbarButton("mbfields", FCKLang.mbfields) ;
+FCKToolbarMbFields.prototype = new FCKToolbarButton("mbfields", FCKLang.mbfields, null, FCK_TOOLBARITEM_ICONTEXT) ;
 
 FCKToolbarMbFields.prototype.GetLabel = function() {
   return "mbfields" ;
