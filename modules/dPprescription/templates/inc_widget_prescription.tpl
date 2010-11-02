@@ -75,7 +75,7 @@ openPrescription = function(prescription_id){
 				    <button type="button" class="trash notext" onclick="submitFormAjax(this.form, 'systemMsg', { onComplete: function(){ PrescriptionEditor.refresh('{{$_prescription->object_id}}','{{$_prescription->object_class}}'); } } );">
 				    Suppression de la prescription
 				    </button>
-				    <button type="button" class="print notext" onclick="Prescription.printPrescription('{{$_prescription->_id}}', 0, '{{$prescription->object_id}}');">Imprimer</button>
+				    <button type="button" class="print notext" onclick="Prescription.printPrescription('{{$_prescription->_id}}', 0, '{{$_prescription->object_id}}');">Imprimer</button>
 				  </form>
 			  {{/if}}
 			  </td>
