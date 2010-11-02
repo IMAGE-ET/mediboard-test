@@ -86,6 +86,21 @@ function checkTransmission(quantite_prevue, quantite_saisie){
   return true;
 }
 
+updateQuantite = function(ratio_UI, oField){
+  if(!ratio_UI){
+	  return;
+	}
+	var oForm = getForm("addAdministration");
+  
+	if(oField.name == "quantite"){
+	  var quantite_UI = ($V(oField) / ratio_UI).toFixed(3);
+		$V(oForm._quantite_UI, quantite_UI, false);
+	}
+	if(oField.name == "_quantite_UI"){
+    var quantite = ($V(oField) * ratio_UI).toFixed(3);
+    $V(oForm.quantite, quantite, false);
+  }
+}
 
 </script>
 
@@ -170,8 +185,11 @@ function checkTransmission(quantite_prevue, quantite_saisie){
             {{/if}}
           </div>
         {{/if}}
-	      {{mb_label object=$prise field=quantite}}
-	      {{mb_field object=$prise field=quantite min=0 increment=1 form=addAdministration}}
+				
+				{{assign var=ratio_UI value=$line->_ref_produit->_ratio_UI}}
+				
+				{{mb_label object=$prise field=quantite}}
+	      {{mb_field object=$prise field=quantite min=0 increment=1 form=addAdministration onchange="updateQuantite('$ratio_UI', this)"}}
 	      
 	      {{if $line instanceof CPrescriptionLineMedicament}}
 				  {{if $line->_ref_produit_prescription->_id}}
@@ -192,6 +210,12 @@ function checkTransmission(quantite_prevue, quantite_saisie){
 	        {{/foreach}}
 	      </select>
 	      {{/if}}
+				
+				{{if $line->_ref_produit->_ratio_UI}}
+					soit 
+				  {{mb_field object=$prise field=_quantite_UI min=0 increment=1 form=addAdministration onchange="updateQuantite('$ratio_UI', this)"}} UI
+        {{/if}}
+				
 	    </td>
 	  </tr>
 	</table>

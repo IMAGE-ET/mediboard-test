@@ -91,6 +91,10 @@ if($prise_id){
 $prise = new CPrisePosologie();
 $prise->quantite = $quantite;
 
+if($line->_ref_produit->_ratio_UI){
+  $prise->_quantite_UI = $prise->quantite / $line->_ref_produit->_ratio_UI;
+}
+	
 // Chargement du sejour
 $line->_ref_prescription->loadRefObject();
 $sejour = $line->_ref_prescription->_ref_object;

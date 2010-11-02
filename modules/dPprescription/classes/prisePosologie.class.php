@@ -46,7 +46,8 @@ class CPrisePosologie extends CMbMetaObject {
   var $_equivalence_unite_prise = null;
   var $_view_unite_prise = null;
 	var $_ref_planifications_systemes = null;
-	
+	var $_quantite_UI = null; // Quantite exprimée en Unité Internationale (UI)
+  
 	static $cache_produits = array();
 	
   function getSpec() {
@@ -73,6 +74,7 @@ class CPrisePosologie extends CMbMetaObject {
     $specs["urgence_datetime"]   = "dateTime";          
 		$specs["unite_decalage_intervention"] = "enum list|minute|heure default|heure";  
     $specs["_urgent"] = "bool";
+	  $specs["_quantite_UI"]          = "float";
     return $specs;
   }
   
