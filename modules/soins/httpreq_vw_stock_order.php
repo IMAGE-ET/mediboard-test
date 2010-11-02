@@ -49,7 +49,7 @@ $delivrance = new CProductDelivery();
 $delivrance->_date_min = $date_min;
 $delivrance->_date_max = $date_max;
 
-$group_id = CGroups::loadCurrent()->_id;
+$group_id = CProductStockGroup::getHostGroup();
 $single_line = false;
 $limit = "$start,20";
 
