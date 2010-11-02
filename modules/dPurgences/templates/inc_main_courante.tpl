@@ -72,7 +72,7 @@ Main.add(function() {
     </td>
 	  {{else}}
 
-    <td class="ccmu-{{$rpu->ccmu}} text" {{if $_sejour->sortie_reelle}}style="border-right: 5px solid black"{{/if}}>
+    <td class="ccmu-{{$rpu->ccmu}} text" {{if $_sejour->sortie_reelle || $rpu->mutation_sejour_id}}style="border-right: 5px solid black"{{/if}}>
       <a href="{{$rpu_link}}">
         {{if $rpu->ccmu}}
 				  {{mb_value object=$rpu field=ccmu}}

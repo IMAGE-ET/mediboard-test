@@ -38,6 +38,7 @@ $where["rpu.rpu_id"] = "IS NOT NULL";
 
 if ($aff_sortie == "sortie"){
   $where["sortie_reelle"] = "IS NULL";
+  $where["rpu.mutation_sejour_id"] = "IS NULL";
 }
 
 $order_col = "_pec_transport";
