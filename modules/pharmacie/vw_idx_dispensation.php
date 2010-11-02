@@ -14,8 +14,7 @@ $service_id = CValue::getOrSession('service_id');
 $patient_id = CValue::getOrSession('patient_id');
 
 // Services list
-$service = new CService();
-$list_services = $service->loadListWithPerms(PERM_READ);
+$list_services = CProductStockGroup::getServicesList();
 
 $num_days_date_min = CAppUI::conf("pharmacie num_days_date_min");
 $day_min = mbDate("-$num_days_date_min DAY");

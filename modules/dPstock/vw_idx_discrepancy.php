@@ -8,16 +8,13 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
  */
 
-global $g;
 CCanDo::checkEdit();
 
 $service_id  = CValue::getOrSession('service_id');
 $category_id = CValue::getOrSession('category_id');
 
 // Services list
-$service = new CService();
-$service->group_id = $g;
-$list_services = $service->loadMatchingList('nom');
+$list_services = CProductStockGroup::getServicesList();
 
 // Loads the required Category and the complete list
 $category = new CProductCategory();

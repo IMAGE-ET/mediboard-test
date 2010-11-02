@@ -21,8 +21,7 @@ if ($stock_id) {
 	}
 }
 
-$service = new CService();
-$list_services = $service->loadList();
+$list_services = CProductStockGroup::getServicesList();
 
 // Création du template
 $smarty = new CSmartyDP();

@@ -12,8 +12,7 @@ CCanDo::checkRead();
 
 $start = CValue::get('start', 0);
 
-$service = new CService();
-$list_services = $service->loadListWithPerms(PERM_READ);
+$list_services = CProductStockGroup::getServicesList();
 
 $order_by = 'date_dispensation ASC';
 $where = array (

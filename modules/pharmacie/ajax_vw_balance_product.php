@@ -22,8 +22,7 @@ $product->load($product_id);
 $stock = new CProductStockGroup;
 $stock->product_id = $product_id;
 
-$service = new CService;
-$services = $service->loadListWithPerms(PERM_READ);
+$services = CProductStockGroup::getServicesList();
 
 function fillFlow(&$array, $product, $n, $start, $unit, $services) {
   foreach($services as $_service) {

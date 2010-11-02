@@ -36,8 +36,7 @@ if (!in_array($mode, array("global", "nominatif"))) {
   $mode = "global";
 }
 
-$service = new CService;
-$services = $service->loadGroupList();
+$services = CProductStockGroup::getServicesList();
 $services["none"] = new CService;
 $services["none"]->_view = "";
 $service_keys = array_keys($services);

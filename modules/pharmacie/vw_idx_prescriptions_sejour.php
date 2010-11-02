@@ -15,8 +15,7 @@ $mediuser = new CMediusers();
 $praticiens = $mediuser->loadPraticiens();
 
 // Chargement de la liste des services
-$service = new CService();
-$services = $service->loadGroupList();
+$services = CProductStockGroup::getServicesList();
 
 // Recuperation des valeurs
 $praticien_id  = CValue::get("praticien_id");

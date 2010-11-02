@@ -48,8 +48,7 @@ $ljoin = array(
   'product' => 'product.product_id = product_stock_group.product_id',
 );
 
-$list_services = new CService();
-$list_services = $list_services->loadGroupList();
+$list_services = CProductStockGroup::getServicesList();
 
 if (count($service_selection) > 0) {
   foreach($list_services as $_key => $_service) {
