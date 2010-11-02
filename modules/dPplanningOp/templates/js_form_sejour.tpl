@@ -32,24 +32,33 @@ function refreshViewProtocoleAnesth(prescription_id) {
   }
 }
 
-function checkDureeHospi() {
-  var form = document.editSejour;
-  field1 = form.type;
-  field2 = form._duree_prevue;
-  if (field1 && field2) {
-    if (field1.value=="comp" && (field2.value == 0 || field2.value == '')) {
-      field2.value = prompt("Veuillez saisir une durée prévue d'hospitalisation d'au moins 1 jour", "1");
-      field2.onchange();
-      field2.focus();
+function checkDureeHospi(sType) {
+  var oForm = document.editSejour;
+  oTypeField  = oForm.type;
+  oDureeField = oForm._duree_prevue;
+  if(sType == "syncType") {
+    if($V(oDureeField) == 0 && $V(oTypeField) == "comp") {
+      $V(oTypeField, "ambu");
+    } else if($V(oDureeField) > 0 && $V(oTypeField) == "ambu") {
+        $V(oTypeField, "comp");
+    }
+  } else if(sType == "syncDuree") {
+    if($V(oDureeField) > 0 && $V(oTypeField) == "ambu") {
+    	$V(oDureeField, "0");
+    }
+  } else {
+    if($V(oTypeField) == "comp" && ($V(oDureeField) == 0 || $V(oDureeField) == '')) {
+    	$V(oDureeField, prompt("Veuillez saisir une durée prévue d'hospitalisation d'au moins 1 jour", "1"));
+    	oDureeField.focus();
       return false;
     }
-    if (field1.value=="ambu" && field2.value != 0 && field2.value != '') {
+    if ($V(oTypeField) == "ambu" && $V(oDureeField) != 0 && $V(oDureeField) != '') {
       alert('Pour une admission de type Ambulatoire, la durée du séjour doit être de 0 jour.');
-      field2.focus();
+      oDureeField.focus();
       return false;
     }
+    return true;
   }
-  return true;
 }
 
 function reinitDureeSejour(){
@@ -180,7 +189,7 @@ function updateDureePrevue() {
     var dSortiePrevue = Date.fromDATE(oForm._date_sortie_prevue.value);
     var iSecondsDelta = dSortiePrevue - dEntreePrevue;
     var iDaysDelta = iSecondsDelta / (24 * 60 * 60 * 1000);
-    oForm._duree_prevue.value = Math.floor(iDaysDelta);
+    $V(oForm._duree_prevue, Math.floor(iDaysDelta));
   }
 }
 

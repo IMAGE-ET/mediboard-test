@@ -456,7 +456,7 @@ Main.add( function(){
 <tr>
   <th>{{mb_label object=$sejour field="_duree_prevue"}}</th>
   <td>
-    {{mb_field object=$sejour field="_duree_prevue" increment=true form=editSejour prop="num min|0" size=2 onchange="updateSortiePrevue()" value=$sejour->sejour_id|ternary:$sejour->_duree_prevue:0}}
+    {{mb_field object=$sejour field="_duree_prevue" increment=true form=editSejour prop="num min|0" size=2 onchange="updateSortiePrevue(); checkDureeHospi('syncType');" value=$sejour->sejour_id|ternary:$sejour->_duree_prevue:0}}
     nuits
   </td>
   <td id="dureeEst" colspan="2">
@@ -486,10 +486,7 @@ Main.add( function(){
 <tr>
   <th>{{mb_label object=$sejour field="type"}}</th>
   <td>
-    {{if !$sejour->type}}
-    {{$sejour->type}}
-    {{/if}}
-    <select name="type" onchange="changeTypeHospi(); updateOccupation();">
+    <select name="type" onchange="changeTypeHospi(); updateOccupation(); checkDureeHospi('syncDuree');">
     {{assign var=specType value=$sejour->_specs.type}}
     {{foreach from=$specType->_locales item="curr_type" key="key"}}
       <option value="{{$key}}"
