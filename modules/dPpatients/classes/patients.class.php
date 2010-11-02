@@ -1506,7 +1506,7 @@ class CPatient extends CMbObject {
     $i = 0;
         
     foreach (CConstantesMedicales::$list_constantes as $_constante => $_params) {
-      if (count($csteByTime[$i][$const_med->datetime]) > 9) $i ++; 
+      if (count($csteByTime[$i][$const_med->datetime]) > 9) { $i++; $csteByTime[$i][$const_med->datetime] = array(); } 
       $csteByTime[$i][$const_med->datetime][$_constante] = $const_med->$_constante;
     }
     
@@ -1520,7 +1520,7 @@ class CPatient extends CMbObject {
     $i = 0;
     
     foreach (CConstantesMedicales::$list_constantes as $_constante => $_params) {
-      if (count($csteByTimeMin[$i][$const_med->datetime]) > 9) $i ++; 
+      if (count($csteByTimeMin[$i][$const_med->datetime]) > 9) { $i++; $csteByTime[$i][$const_med->datetime] = array(); } 
       if (array_key_exists($_constante, $selection) || $const_med->$_constante != '') {
         $csteByTimeMin[$i][$const_med->datetime][$_constante] = $const_med->$_constante;
       }
