@@ -530,7 +530,7 @@ class CPrescriptionLineMix extends CMbObject {
 		$volume_restant = 0;
 		
 		$dates_planif = array();
-    if($this->date_debut && $this->time_debut && $this->duree){
+    if((($this->date_debut && $this->time_debut) || $this->date_pose)  && $this->duree){
       $date_time_temp = $this->_debut;
       $dates_planif[] = $date_time_temp;
       
