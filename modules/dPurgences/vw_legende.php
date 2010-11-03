@@ -53,4 +53,43 @@
     <td style="background-color:#F00"></td>
     <td class="text">Décès</td>
   </tr>
+  <tr>
+    <th colspan="2">Temps d'attente</th>
+  </tr>
+  <tr>
+    <th>Image</th>
+    <th>Description</th>
+  </tr>
+  <tr>
+    <td>
+      <img src="images/icons/attente_first_part.png"></img>
+    </td>
+    <td>
+      Attente depuis moins de <?php echo mbTransformTime(CAppUI::conf("dPurgences attente_first_part"), null, '%Hh%M')?>
+    </td>
+  </tr>
+  <tr>
+    <td>
+      <img src="images/icons/attente_second_part.png"></img>
+    </td>
+    <td>
+      Attente entre <?php echo mbTransformTime(CAppUI::conf("dPurgences attente_first_part"), null, '%Hh%M')?> et <?php echo mbTransformTime(CAppUI::conf("dPurgences attente_second_part"), null, '%Hh%M') ?>
+    </td>
+  </tr>
+  <tr>
+    <td>
+      <img src="images/icons/attente_third_part.png"></img>
+    </td>
+    <td>
+      Attente entre <?php echo mbTransformTime(CAppUI::conf("dPurgences attente_second_part"), null, '%Hh%M')?> et <?php echo mbTransformTime(CAppUI::conf("dPurgences attente_third_part"), null, '%Hh%M')?>
+    </td>
+  </tr>
+  <tr>
+    <td>
+      <img src="images/icons/attente_fourth_part.png"></img>
+    </td>
+    <td>
+      Attente de plus de <?php echo mbTransformTime(CAppUI::conf("dPurgences attente_third_part"), null, '%Hh%M')?>
+    </td>
+  </tr>
 </table>

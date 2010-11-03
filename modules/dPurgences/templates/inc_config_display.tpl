@@ -21,7 +21,9 @@
 	  {{mb_include module=system template=inc_config_bool var=diag_prat_view}}
 	  {{mb_include module=system template=inc_config_bool var=check_cotation}}
 	  {{mb_include module=system template=inc_config_bool var=hide_reconvoc_sans_sortie}}
-	  
+	  {{mb_include module=system template=inc_config_str var=attente_first_part}}
+	  {{mb_include module=system template=inc_config_str var=attente_second_part}}
+	  {{mb_include module=system template=inc_config_str var=attente_third_part}}
 	  <tr>
 	    <td class="button" colspan="2">
 	      <button class="modify" type="submit">{{tr}}Save{{/tr}}</button>

@@ -8,6 +8,8 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
 *}}
 
+{{assign var="show_statut" value=$dPconfig.dPurgences.show_statut}}
+
 <script type="text/javascript">
 Main.add(function() {
   Veille.refresh();
@@ -30,23 +32,23 @@ Main.add(function() {
 		<th class="narrow">
       <input type="text" size="6" onkeyup="MainCourante.filter(this)" id="filter-patient-name" />
 		</th>
-    <th style="width: 12em;">
+    <th style="width: 10em;">
 		  {{mb_colonne class=CRPU field="_entree"     order_col=$order_col order_way=$order_way url="?m=$m&amp;tab=vw_idx_rpu"}}
 		</th>
     {{if $dPconfig.dPurgences.responsable_rpu_view}}
     <th class="narrow">{{mb_title class=CRPU field="_responsable_id"}}</th>
     {{/if}}
-    <th class="narrow">{{mb_title class=CRPU field=_attente}} / {{mb_title class=CRPU field=_presence}}</th>
+    <th style="width: 10em;">{{mb_title class=CRPU field=_attente}} / {{mb_title class=CRPU field=_presence}}</th>
     {{if $medicalView}}
 			<th style="width: 16em;">
 			{{if $dPconfig.dPurgences.diag_prat_view}}
-	      {{tr}}CRPU-diag_infirmier{{/tr}} / médical
+	      {{tr}}CRPU-diag_infirmier{{/tr}} / {{tr}}Medical{{/tr}}
 			{{else}}
 			  {{tr}}CRPU-diag_infirmier{{/tr}}
 			{{/if}}
 		  </th>
     {{/if}}
-    <th style="width: 0em;">Prise en charge</th>
+    <th style="width: 0em;">{{tr}}CRPU.pec{{/tr}}</th>
   </tr>
 
   {{foreach from=$listSejours item=_sejour key=sejour_id}}
@@ -104,7 +106,7 @@ Main.add(function() {
 
 	  {{else}}
 
-    <td class="text" style="background-color: {{$background}};">
+    <td class="text" style="background-color: {{$background}}; text-align: center;">
 			{{mb_include module=system template=inc_get_notes_image object=$_sejour mode=view float=right}}
       
 			{{if $isImedsInstalled}}
@@ -118,22 +120,52 @@ Main.add(function() {
         </span>
       </a>
 								
-      {{if ($rpu->radio_debut || $rpu->bio_depart || $rpu->specia_att)}}
+      {{if $show_statut == 1}}
         <div style="clear: both; font-weight: bold;">
+           
+ 
         {{if $rpu->radio_debut}}
-        	<div {{if $rpu->radio_fin}}style="opacity: 0.6"{{/if}}>
-        		{{tr}}CRPU-{{mb_ternary test=$rpu->radio_fin value=radio_fin other=radio_debut}}{{/tr}}
-					</div>
+          <img src="modules/soins/images/radio.png"
+            {{if !$rpu->radio_fin}}
+              class="opacity-60"
+              title="{{tr}}CRPU-radio_debut{{/tr}} à {{$rpu->radio_debut|date_format:$dPconfig.time}}"
+            {{else}}
+              title="{{tr}}CRPU-radio_fin{{/tr}} à {{$rpu->radio_fin|date_format:$dPconfig.time}}"
+            {{/if}}/>
+        {{elseif !$rpu->radio_fin}}
+          <img src="images/icons/placeholder.png"/>
         {{/if}}
         {{if $rpu->bio_depart}}
-        	<div {{if $rpu->bio_retour}}style="opacity: 0.6"{{/if}}>
-        		{{tr}}CRPU-{{mb_ternary test=$rpu->bio_retour value=bio_retour other=bio_depart}}{{/tr}}
-					</div>
+          <img src="images/icons/labo.png"
+            {{if !$rpu->bio_retour}}
+              class="opacity-60"
+              title="{{tr}}CRPU-bio_depart{{/tr}} à {{$rpu->bio_depart|date_format:$dPconfig.time}}"
+            {{else}}
+              title="{{tr}}CRPU-bio_retour{{/tr}} à {{$rpu->bio_retour|date_format:$dPconfig.time}}"
+            {{/if}}/>
+        {{elseif !$rpu->bio_retour}}
+          <img src="images/icons/placeholder.png"/>
         {{/if}}
         {{if $rpu->specia_att}}
-          <div {{if $rpu->specia_arr}}style="opacity: 0.6"{{/if}}>
-          	{{tr}}CRPU-{{mb_ternary test=$rpu->specia_arr value=specia_arr other=specia_att}}{{/tr}}
-					</div>
+          <img src="modules/soins/images/stethoscope.png"
+            {{if !$rpu->specia_arr}}
+              class="opacity-60"
+              title="{{tr}}CRPU-specia_att{{/tr}} à {{$rpu->specia_att|date_format:$dPconfig.time}}"
+            {{else}}
+              title="{{tr}}CRPU-specia_arr{{/tr}} à {{$rpu->specia_arr|date_format:$dPconfig.time}}"
+            {{/if}}/>
+        {{elseif !$rpu->specia_arr}}
+          <img src="images/icons/placeholder.png"/>
+        {{/if}}
+        {{if $_sejour->_nb_files_docs > 0}}
+          <img src="images/icons/docitem.png" title="{{$_sejour->_nb_files_docs}} {{tr}}CFile{{/tr}}/{{tr}}CMbObject-back-documents{{/tr}}"/>
+        {{else}}
+          <img src="images/icons/placeholder.png"/>
+        {{/if}}
+        {{if $_sejour->_ref_prescription_sejour->_id && $_sejour->_ref_prescription_sejour->_count_recent_modif_presc == true}}
+          <img src="images/icons/ampoule.png" onmouseover="ObjectTooltip.createEx(this, '{{$_sejour->_ref_prescription_sejour->_guid}}')"/>
+        {{else}}
+          <img src="images/icons/ampoule_grey.png" title="{{tr}}CPrescription.no_recent{{/tr}}"/>
         {{/if}}
       	</div>
       {{/if}}
@@ -153,18 +185,36 @@ Main.add(function() {
       {{else}} 
   		  <td style="background-color: {{$background}}; text-align: center">
   		    {{if $consult && $consult->_id}}
+    		    {{if !$_sejour->sortie_reelle && $show_statut == 1}}
+              <span style="float: right;">
+                {{if $rpu->_attente < $dPconfig.dPurgences.attente_first_part}}
+                  <img src="images/icons/attente_first_part.png"
+                       title = "({{mb_value object=$rpu field=_attente}} / {{mb_value object=$rpu field=_presence}})" />
+                {{elseif $rpu->_attente >= $dPconfig.dPurgences.attente_first_part &&
+                         $rpu->_attente < $dPconfig.dPurgences.attente_second_part}}
+                  <img src="images/icons/attente_second_part.png"
+                       title = "({{mb_value object=$rpu field=_attente}} / {{mb_value object=$rpu field=_presence}})"/>
+                {{elseif $rpu->_attente >= $dPconfig.dPurgences.attente_second_part &&
+                         $rpu->_attente < $dPconfig.dPurgences.attente_third_part}}
+                  <img src="images/icons/attente_third_part.png"
+                       title = "({{mb_value object=$rpu field=_attente}} / {{mb_value object=$rpu field=_presence}})" />
+                {{else}}
+                  <img src="images/icons/attente_fourth_part.png"
+                       title = "({{mb_value object=$rpu field=_attente}} / {{mb_value object=$rpu field=_presence}})"/>
+                {{/if}}
+              </span>
+            {{/if}}
   			    <a href="?m=dPurgences&amp;tab=edit_consultation&amp;selConsult={{$consult->_id}}">
-  			      Consultation à {{$consult->heure|date_format:$dPconfig.time}}
+  			      Consult. {{$consult->heure|date_format:$dPconfig.time}}
   			      {{if $date != $consult->_ref_plageconsult->date}}
   			      <br/>le {{$consult->_ref_plageconsult->date|date_format:$dPconfig.date}}
   			      {{/if}}
   			    </a>
-  			    {{if !$_sejour->sortie_reelle}}
+  			    {{if !$show_statut && !$_sejour->sortie_reelle}}
   			      ({{mb_value object=$rpu field=_attente}} / {{mb_value object=$rpu field=_presence}})
-  			    {{else}}
+  			    {{elseif $_sejour->sortie_reelle}}
   			      (sortie à {{$_sejour->sortie_reelle|date_format:$dPconfig.time}})
   			    {{/if}}
-  		
   		    {{else}}
   		      {{include file="inc_attente.tpl" sejour=$_sejour}}
   	      {{/if}}
@@ -193,9 +243,9 @@ Main.add(function() {
 			<!-- Pas de RPU pour ce séjour d'urgence -->
 			<td colspan="{{$medicalView|ternary:3:2}}">
 			  <div class="small-warning">
-			  	Ce séjour d'urgence n'est pas associé à un RPU.
+			  	{{tr}}CRPU.no_assoc{{/tr}}
 			  	<br />
-			  	Merci de <strong>cliquer sur le lien suivant</strong> :
+			  	{{tr}}CRPU.no_assoc_clic{{/tr}}
 			  	<a class="button action new" href="{{$rpu_link}}">{{tr}}CRPU-title-create{{/tr}}</a>
 			  </div>
 			</td>
@@ -204,6 +254,6 @@ Main.add(function() {
   </tr>
   
   {{foreachelse}}
-  <tr><td colspan="10"><em>Aucun séjour dans la main courante</em></td></tr>
+  <tr><td colspan="10"><em>{{tr}}CSejour.none_main_courante{{/tr}}</em></td></tr>
   {{/foreach}}
 </table>

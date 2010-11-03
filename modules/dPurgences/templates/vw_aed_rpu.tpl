@@ -442,7 +442,7 @@
 	
 		<ul id="tab-dossier" class="control_tabs">
 		  <li><a href="#antecedents">Antécédents &amp; Traitements</a></li>
-		  <li><a href="#suivisoins">Suivi soins</a></li>
+		  <li onclick="loadSuivi({{$rpu->sejour_id}});"><a href="#suivisoins">Suivi soins</a></li>
 		  <li onmousedown="refreshConstantesHack('{{$rpu->sejour_id}}')"><a href="#constantes">Constantes</a></li>
 		  <li><a href="#examens">Consultation médicale</a></li>
 		  {{if $app->user_prefs.ccam_sejour == 1 }}

@@ -81,7 +81,11 @@ foreach ($listSejours as &$sejour) {
   $sejour->_ref_rpu->loadRefSejourMutation();
   $sejour->loadRefsConsultations();
   $sejour->loadRefsNotes();
-    
+  $sejour->countDocItems();
+  $sejour->loadRefPrescriptionSejour();
+  $sejour->_ref_prescription_sejour->loadRefsLinesElementByCat();
+  $sejour->_ref_prescription_sejour->countRecentModif();
+
   // Chargement de l'IPP
   $sejour->_ref_patient->loadIPP();
 

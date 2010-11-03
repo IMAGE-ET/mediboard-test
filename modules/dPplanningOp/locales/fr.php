@@ -719,6 +719,7 @@ $locales['CSejour.modif_SHS.1'] = '1';
 $locales['CSejour.modify'] = 'Modifier le séjour';
 $locales['CSejour.more'] = 'les séjours';
 $locales['CSejour.none'] = 'Aucun séjour';
+$locales['CSejour.none_main_courante'] = 'Aucun séjour dans la main courante';
 $locales['CSejour.one'] = 'le séjour';
 $locales['CSejour.saisi_SHS.'] = ' ';
 $locales['CSejour.saisi_SHS.0'] = 'Non';
