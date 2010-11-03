@@ -258,5 +258,5 @@ $locales['week'] = 'semaine';
 $locales['weeks'] = 'semaines';
 $locales['year'] = 'année';
 $locales['years'] = 'années';
-$locales['no_tag_defined'] = 'Aucun tag (patient/séjour) de défini pour la synchronisation';'
+$locales['no_tag_defined'] = 'Aucun tag (patient/séjour) de défini pour la synchronisation;'
 ?>
