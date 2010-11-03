@@ -8,10 +8,6 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
  */
 
-global $can;
-
-$can->needsAdmin();
-
 // Check params
 if (null == $exchange_source_name = CValue::get("exchange_source_name")) {
   CAppUI::stepAjax("Aucun nom de source d'échange spécifié", UI_MSG_ERROR);
@@ -22,6 +18,9 @@ if (null == $type_action = CValue::get("type_action")) {
 
 $exchange_source = CExchangeSource::get($exchange_source_name);
 
+if (!$exchange_source->_id) {
+  CAppUI::stepAjax("Veuillez tout d'abord enregistrer vos paramètres de connexion", UI_MSG_ERROR);
+}
 $exchange_source->init();
 
 if($type_action == "connexion") {
