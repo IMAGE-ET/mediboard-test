@@ -246,9 +246,21 @@ class CSetuphprimxml extends CSetup {
               CHANGE `send_all_patients` `send_all_patients` ENUM ('0','1') DEFAULT '0';";
     $this->addQuery($sql);
     
+    $this->makeRevision("0.23");
+    
+    $sql = "ALTER TABLE `destinataire_hprim_config`
+              ADD `send_debiteurs_venue` ENUM ('0','1') DEFAULT '1',
+              ADD `send_mvt_patients` ENUM ('0','1') DEFAULT '0';"; 
+    $this->addQuery($sql);
+    
+    $this->makeRevision("0.24");
+    
+    $sql = "ALTER TABLE `echange_hprim`
+              CHANGE `object_class` `object_class` ENUM ('CPatient','CSejour','COperation','CAffectation');";
+    
     // Prochain upgrade supprimer les champs : destinataire et emetteur
     
-    $this->mod_version = "0.23";
+    $this->mod_version = "0.25";
   }
 }
 

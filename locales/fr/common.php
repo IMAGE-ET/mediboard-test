@@ -93,6 +93,7 @@ $locales['Ok'] = 'Ok';
 $locales['Optimize'] = 'Optimiser';
 $locales['Other'] = 'Autre';
 $locales['Owner'] = 'Propriétaire';
+$locales['Parameters'] = 'Paramètres';
 $locales['Password'] = 'Mot de passe';
 $locales['Period.day'] = 'Quotidien';
 $locales['Period.month'] = 'Mensuel';
@@ -257,4 +258,5 @@ $locales['week'] = 'semaine';
 $locales['weeks'] = 'semaines';
 $locales['year'] = 'année';
 $locales['years'] = 'années';
+$locales['no_tag_defined'] = 'Aucun tag (patient/séjour) de défini pour la synchronisation';'
 ?>

@@ -265,32 +265,32 @@ class CSetupsystem extends CSetup {
 		
     $this->makeRevision("1.0.26");
     $query = "DELETE FROM `modules` 
-		  WHERE `mod_name` = 'dPinterop'";
+		            WHERE `mod_name` = 'dPinterop'";
     $this->addQuery($query, true);
     
 		$this->makeRevision("1.0.27");
     $query = "DELETE FROM `modules` 
-		  WHERE `mod_name` = 'dPmateriel'";
+		            WHERE `mod_name` = 'dPmateriel'";
     $this->addQuery($query, true);
 		
     $this->makeRevision("1.0.28");
     $query = "CREATE TABLE IF NOT EXISTS `content_html` (
-		  `content_id` BIGINT NOT NULL auto_increment PRIMARY KEY,
-		  `content` TEXT,
-		  `cr_id` INT
-		) TYPE=MYISAM;";
+          		  `content_id` BIGINT NOT NULL auto_increment PRIMARY KEY,
+          		  `content` TEXT,
+          		  `cr_id` INT
+          		) TYPE=MYISAM;";
     $this->addQuery($query);
     
     $query = "CREATE TABLE `content_xml` (
-		  `content_id` BIGINT NOT NULL auto_increment PRIMARY KEY,
-		  `content` TEXT,
-		  `import_id` INT
-		) TYPE=MYISAM;";
+          		  `content_id` BIGINT NOT NULL auto_increment PRIMARY KEY,
+          		  `content` TEXT,
+          		  `import_id` INT
+          		) TYPE=MYISAM;";
     $this->addQuery($query);
     
     $this->makeRevision("1.0.29");
     $query = "ALTER TABLE `content_html`
-      CHANGE `content` `content` mediumtext NULL";
+                CHANGE `content` `content` mediumtext NULL";
     $this->addQuery($query);
     
     $this->makeRevision("1.0.30");
@@ -301,10 +301,15 @@ class CSetupsystem extends CSetup {
     
     $this->makeRevision("1.0.32");
     $query = "ALTER TABLE `access_log` 
-		  ADD INDEX ( `period` )";
+		            ADD INDEX ( `period` )";
     $this->addQuery($query);
-
-    $this->mod_version = "1.0.33";
+    
+    $this->makeRevision("1.0.33");
+    $query = "ALTER TABLE `source_soap` 
+                ADD `single_parameter` VARCHAR (255);";
+    $this->addQuery($query);
+    
+    $this->mod_version = "1.0.34";
     
   }
 }

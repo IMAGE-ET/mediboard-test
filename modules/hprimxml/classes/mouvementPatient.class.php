@@ -23,12 +23,30 @@ class CHPrimXMLMouvementPatient extends CHPrimXMLEvenementsPatients {
     parent::__construct();
   }
   
-  function generateFromOperation($newVenue, $referent) {  
+  function generateFromOperation(CAffectation $newMouvement, $referent) {  
     $evenementsPatients = $this->documentElement;
     $evenementPatient = $this->addElement($evenementsPatients, "evenementPatient");
     
     $mouvementPatient = $this->addElement($evenementPatient, "mouvementPatient");
-        
+    $actionConversion = array (
+      "create" => "création",
+      "store"  => "modification",
+      "delete" => "suppression"
+    );
+    $this->addAttribute($mouvementPatient, "action", $actionConversion[$newMouvement->_ref_last_log->type]);
+    
+    $patient = $this->addElement($mouvementPatient, "patient");
+    // Ajout du patient   
+    $this->addPatient($patient, $newMouvement->_ref_sejour->_ref_patient, $referent);
+    
+    $venue = $this->addElement($mouvementPatient, "venue"); 
+    // Ajout de la venue   
+    $this->addVenue($venue, $newMouvement->_ref_sejour, $referent);
+    
+    // Ajout du mouvement (1 seul dans notre cas pas l'historique)
+    $mouvements = $this->addElement($mouvementPatient, "mouvements"); 
+    $this->addMouvement($mouvements, $newMouvement, $referent);
+
     // Traitement final
     $this->purgeEmptyElements();
   }

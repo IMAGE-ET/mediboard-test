@@ -579,6 +579,20 @@ class CHPrimXMLDocument extends CMbXMLDocument {
     $this->addPersonne($personne, $praticien);
   }
   
+  function addMedecinResponsable($elParent, $praticien) {
+    $medecinResponsable = $this->addElement($elParent, "medecinResponsable");
+    $this->addElement($medecinResponsable, "numeroAdeli", $praticien->adeli);
+    $identification = $this->addElement($medecinResponsable, "identification");
+    $id400 = new CIdSante400();
+    $id400->object_class = "CMediusers";
+    $id400->object_id    = $praticien->_id;
+    $id400->tag          = $this->getTagMediuser();
+    $this->addElement($identification, "code", $id400->loadMatchingObject() ? $id400->id400 : $praticien->_id);
+    $this->addElement($identification, "libelle", $praticien->_view);
+    $personne = $this->addElement($medecinResponsable, "personne");
+    $this->addPersonne($personne, $praticien);
+  }
+  
   function addVenue($elParent, CSejour $mbVenue, $referent = false, $light = false) {
     $identifiant = $this->addElement($elParent, "identifiant");
     
@@ -1044,6 +1058,35 @@ class CHPrimXMLDocument extends CMbXMLDocument {
   function addTypeMontant($elParent, CFraisDivers $mbFraisDivers) {
     $this->addElement($elParent, "total", $mbFraisDivers->montant_base);
   }
+  
+  function addMouvement($elParent, CAffectation  $mbAffectation, $referent = null) {
+    $mouvement = $this->addElement($elParent, "mouvement");
+    
+    // Correspond à l'identification de l'affectation
+    $identifiant = $this->addElement($mouvement, "identifiant");
+    $emetteur = $this->addElement($identifiant, "emetteur", "$mbAffectation->_id");
+    
+    // Traitement du médecin responsable du séjour
+    $this->addMedecinResponsable($mouvement, $mbAffectation->_ref_sejour->_ref_praticien);
+    
+    // Debut de l'affectation
+    $debut = $this->addElement($mouvement, "debut");
+    $this->addDateHeure($debut, $mbAffectation->entree);
+    
+    // Fin de l'affectation
+    $fin = $this->addElement($mouvement, "fin");
+    $this->addDateHeure($fin, $mbAffectation->entree);
+
+    $unitesFonctionnellesResponsables = $this->addElement($mouvement, "unitesFonctionnellesResponsables");
+    $uniteFonctionnelleResponsable = $this->addElement($unitesFonctionnellesResponsables, "uniteFonctionnelleResponsable");
+    $this->addAttribute($uniteFonctionnelleResponsable, "responsabilite", "m");
+    $service = $mbAffectation->_ref_lit->_ref_chambre->_ref_service;
+    $id400Patient = new CIdSante400();
+    $id400Patient->loadLatestFor($service, $this->_ref_echange_hprim->_ref_destinataire->_tag_sejour);
+    $this->addTexte($uniteFonctionnelleResponsable, "code", $id400Patient->id400 ? $id400Patient->id400 : $service->_id, 10);
+    $this->addTexte($uniteFonctionnelleResponsable, "libelle", $service->_view, 35);
+  }
+  
 }
 
 ?>

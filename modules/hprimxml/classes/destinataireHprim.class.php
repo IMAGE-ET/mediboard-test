@@ -145,7 +145,6 @@ class CDestinataireHprim extends CMbObject {
     $this->_tag_patient  = $this->getTagIPP($this->group_id);		
     $this->_tag_sejour   = $this->getTagNumDossier($this->group_id);
 		
-		
 		$this->_tag_mediuser = str_replace('$g', $this->group_id, CAppUI::conf("mediusers tag_mediuser"));
   }  
   
@@ -169,7 +168,7 @@ class CDestinataireHprim extends CMbObject {
         $source->setData($msgEvtVenuePatient);
         $source->send();
         $acquittement = $source->receive();
-        
+
         if ($acquittement) {
           $echange_hprim = $domEvenement->_ref_echange_hprim;
           $echange_hprim->date_echange = mbDateTime();

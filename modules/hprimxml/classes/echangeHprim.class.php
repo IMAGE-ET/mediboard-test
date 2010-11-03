@@ -84,7 +84,7 @@ class CEchangeHprim extends CMbMetaObject {
     $specs["acquittement_valide"]     = "bool show|0";
     $specs["id_permanent"]            = "str";
     $specs["object_id"]               = "ref class|CMbObject meta|object_class unlink";
-    $specs["object_class"]            = "enum list|CPatient|CSejour|COperation show|0";
+    $specs["object_class"]            = "enum list|CPatient|CSejour|COperation|CAffectation show|0";
     
     $specs["_self_emetteur"]          = "bool";
     $specs["_self_destinataire"]      = "bool notNull";
@@ -203,6 +203,9 @@ class CEchangeHprim extends CMbMetaObject {
     }
     if ($mbObject instanceof COperation) {
       $this->object_class = "COperation";
+    }
+    if ($mbObject instanceof CAffectation) {
+      $this->object_class = "CAffectation";
     }
   }
   

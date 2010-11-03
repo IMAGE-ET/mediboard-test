@@ -76,7 +76,7 @@ class CExchangeSource extends CMbObject {
             $incompatible_source = new $exchange_source->_class_name;
             $incompatible_source->name = $exchange_source->name;
             $incompatible_source->_incompatible = true;
-            CAppUI::displayAjaxMsg(CAppUI::tr("CExchangeSource-_incompatible"), UI_MSG_ERROR);
+            CAppUI::displayAjaxMsg("CExchangeSource-_incompatible", UI_MSG_ERROR);
             return $incompatible_source;
           }
           $exchange_source->_incompatible = true;

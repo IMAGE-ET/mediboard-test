@@ -17,6 +17,7 @@ $smarty = new CSmartyDP();
 
 $smarty->assign("exchange_source", $exchange_source);
 $smarty->assign("functions", $client->__getFunctions());
+$smarty->assign("types"    , $client->__getTypes());
 
 $smarty->display("inc_soap_functions.tpl");
 

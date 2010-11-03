@@ -53,6 +53,10 @@
             <td>{{mb_field object=$source field="evenement_name"}}</td>
           </tr>
           <tr>
+            <th>{{mb_label object=$source field="single_parameter"}}</th>
+            <td>{{mb_field object=$source field="single_parameter"}}</td>
+          </tr>
+          <tr>
             <th>{{mb_label object=$source field="wsdl_mode"}}</th>
             <td>{{mb_field object=$source field="wsdl_mode"}}</td>
           </tr>

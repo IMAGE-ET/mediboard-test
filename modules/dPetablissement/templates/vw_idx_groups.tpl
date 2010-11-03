@@ -16,7 +16,7 @@
       </a>
       <table class="tbl">
         <tr>
-          <th>liste des établissements</th>
+          <th>Liste des établissements</th>
           <th>Fonctions associées</th>
         </tr>
         {{foreach from=$listGroups item=curr_group}}

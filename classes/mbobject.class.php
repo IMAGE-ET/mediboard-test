@@ -1159,7 +1159,12 @@ class CMbObject {
     // Event Handlers
     self::makeHandlers();
     foreach (self::$handlers as $handler) {
-      $handler->onBeforeStore($this);
+      try {
+        $handler->onBeforeStore($this);
+      } 
+      catch(Exception $e) {
+        CAppUI::setMsg($e, UI_MSG_ERROR);
+      }
     }
   }
   
@@ -1171,7 +1176,12 @@ class CMbObject {
     // Event Handlers
     self::makeHandlers();
     foreach (self::$handlers as $handler) {
-      $handler->onAfterStore($this);
+      try {
+        $handler->onAfterStore($this);
+      } 
+      catch(CMbException $e) {
+        CAppUI::setMsg($e->getMessage(), UI_MSG_ERROR);
+      }
     }
   }
   
@@ -1292,7 +1302,12 @@ class CMbObject {
     // Event Handlers
     self::makeHandlers();
     foreach (self::$handlers as $handler) {
-      $handler->onBeforeMerge($this);
+      try {
+        $handler->onBeforeMerge($this);
+      } 
+      catch(CMbException $e) {
+        CAppUI::setMsg($e->getMessage(), UI_MSG_ERROR);
+      }
     }
   }
   
@@ -1304,7 +1319,12 @@ class CMbObject {
     // Event Handlers
     self::makeHandlers();
     foreach (self::$handlers as $handler) {
-      $handler->onAfterMerge($this);
+      try {
+        $handler->onAfterMerge($this);
+      } 
+      catch(CMbException $e) {
+        CAppUI::setMsg($e->getMessage(), UI_MSG_ERROR);
+      }
     }
   }
   
@@ -1744,7 +1764,12 @@ class CMbObject {
     // Event Handlers
     self::makeHandlers();
     foreach (self::$handlers as $handler) {
-      $handler->onBeforeDelete($this);
+      try {
+        $handler->onBeforeDelete($this);
+      } 
+      catch(CMbException $e) {
+        CAppUI::setMsg($e->getMessage(), UI_MSG_ERROR);
+      }
     }
   }
   
@@ -1756,7 +1781,12 @@ class CMbObject {
     // Event Handlers
     self::makeHandlers();
     foreach (self::$handlers as $handler) {
-      $handler->onAfterDelete($this);
+      try {
+        $handler->onAfterDelete($this);
+      } 
+      catch(CMbException $e) {
+        CAppUI::setMsg($e->getMessage(), UI_MSG_ERROR);
+      }
     }
   }
   

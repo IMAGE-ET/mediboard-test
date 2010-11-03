@@ -9,7 +9,7 @@
  */
 
 class CSipObjectHandler extends CMbObjectHandler {
-  static $handled = array ("CPatient", "CSejour");
+  static $handled = array ("CPatient", "CSejour", "CAffectation");
 
   static function isHandled(CMbObject &$mbObject) {
     return in_array($mbObject->_class_name, self::$handled);
@@ -25,8 +25,7 @@ class CSipObjectHandler extends CMbObjectHandler {
     }
     // Si pas de tag patient et séjour
     if (!CAppUI::conf("dPplanningOp CSejour tag_dossier") || !CAppUI::conf("dPpatients CPatient tag_ipp")) {
-      CAppUI::setMsg("Aucun tag (patient/séjour) de défini pour la synchronisation.", UI_MSG_ERROR);
-      return;
+      throw new CMbException("no_tag_defined");
     }
 
     // Si serveur et pas d'IPP sur le patient ou de numéro de dossier sur le séjour
@@ -56,6 +55,8 @@ class CSipObjectHandler extends CMbObjectHandler {
         $dest_hprim->message = "patients";
         $destinataires = $dest_hprim->loadMatchingList();
         foreach ($destinataires as $_destinataire) {
+          $_destinataire->loadConfigValues();
+          
           $echange_hprim = new CEchangeHprim();
           if (isset($mbObject->_hprim_initiator_id)) {
             $echange_hprim->load($mbObject->_hprim_initiator_id);
@@ -86,6 +87,7 @@ class CSipObjectHandler extends CMbObjectHandler {
         
         foreach ($destinataires as $_destinataire) {
           $_destinataire->loadConfigValues();
+          
           if ($mbObject->_hprim_initiateur_group_id) {
             return;
           }
@@ -113,22 +115,12 @@ class CSipObjectHandler extends CMbObjectHandler {
     // Traitement Sejour
     elseif ($mbObject instanceof CSejour) {
       $mbObject->loadRefPraticien();
+      $mbObject->loadNumDossier();
+      $mbObject->loadLastLog();
+      
       $mbObject->loadRefPatient();
       $mbObject->_ref_patient->loadIPP();
-      if ($mbObject->_ref_prescripteurs) {
-        $mbObject->loadRefsPrescripteurs();
-      }
       $mbObject->loadRefAdresseParPraticien();
-      $mbObject->_ref_patient->loadRefsFwd();
-      $mbObject->loadRefsActes();
-      foreach ($mbObject->_ref_actes_ccam as $actes_ccam) {
-        $actes_ccam->loadRefPraticien();
-      }
-      $mbObject->loadRefsAffectations();
-      $mbObject->loadNumDossier();
-      $mbObject->loadLogs();
-      $mbObject->loadRefsConsultations();
-      $mbObject->loadRefsConsultAnesth();
 
       // Si Serveur
       if (CAppUI::conf('sip server')) {
@@ -136,7 +128,9 @@ class CSipObjectHandler extends CMbObjectHandler {
         $dest_hprim->message = "patients";
         $destinataires = $dest_hprim->loadMatchingList();
         foreach ($destinataires as $_destinataire) {
-        $echange_hprim = new CEchangeHprim();
+          $_destinataire->loadConfigValues();
+          
+          $echange_hprim = new CEchangeHprim();
           if (isset($mbObject->_hprim_initiator_id)) {
             $echange_hprim->load($mbObject->_hprim_initiator_id);
           }
@@ -169,6 +163,8 @@ class CSipObjectHandler extends CMbObjectHandler {
         $destinataires = $dest_hprim->loadMatchingList();
         
         foreach ($destinataires as $_destinataire) {
+          $_destinataire->loadConfigValues();
+          
           if (CGroups::loadCurrent()->_id != $_destinataire->group_id) {
             continue;
           }
@@ -185,11 +181,53 @@ class CSipObjectHandler extends CMbObjectHandler {
           $domEvenementVenuePatient->_ref_destinataire = $_destinataire;
           $_destinataire->sendEvenementPatient($domEvenementVenuePatient, $mbObject);
           
-          if ($mbObject->_ref_patient->code_regime) {
+          if ($_destinataire->_configs["send_debiteurs_venue"] && $mbObject->_ref_patient->code_regime) {
             $domEvenementDebiteursVenue = new CHPrimXMLDebiteursVenue();
             $domEvenementDebiteursVenue->_ref_destinataire = $_destinataire;
             $_destinataire->sendEvenementPatient($domEvenementDebiteursVenue, $mbObject);
           }
+          
+          $mbObject->_num_dossier = null;
+        }
+      }
+    }
+    // Traitement Affectation
+    elseif ($mbObject instanceof CAffectation) {
+      $mbObject->_ref_lit->loadRefChambre();
+      $mbObject->_ref_lit->_ref_chambre->loadRefService();
+      $mbObject->loadLastLog();
+      $mbObject->loadRefSejour();
+      $mbObject->_ref_sejour->loadNumDossier();
+      $mbObject->_ref_sejour->loadRefPatient();
+      $mbObject->_ref_sejour->loadRefPraticien();
+      
+      // Si Serveur
+      if (CAppUI::conf('sip server')) { }
+      // Si Client
+      else {
+        $dest_hprim = new CDestinataireHprim();
+        $dest_hprim->type = "sip";
+        $dest_hprim->message = "patients";
+        $destinataires = $dest_hprim->loadMatchingList();
+        
+        foreach ($destinataires as $_destinataire) {
+          $_destinataire->loadConfigValues();
+          
+          if (!$_destinataire->_configs["send_mvt_patients"]) {
+            continue;
+          }
+          
+          if (!$mbObject->_ref_sejour->_num_dossier) {
+            $num_dossier = new CIdSante400();
+            //Paramétrage de l'id 400
+            $num_dossier->loadLatestFor($mbObject->_ref_sejour, $_destinataire->_tag_sejour);
+    
+            $mbObject->_ref_sejour->_num_dossier = $num_dossier->id400;
+          }
+          
+          $domEvenementVenuePatient = new CHPrimXMLMouvementPatient();
+          $domEvenementVenuePatient->_ref_destinataire = $_destinataire;
+          $_destinataire->sendEvenementPatient($domEvenementVenuePatient, $mbObject);
           
           $mbObject->_num_dossier = null;
         }

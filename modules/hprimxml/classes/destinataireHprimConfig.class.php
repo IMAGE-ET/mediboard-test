@@ -11,17 +11,19 @@
 class CDestinataireHprimConfig extends CMbObject {
   var $dest_hprim_config_id = null;
   
-  var $object_id          = null; // CDestinataireHprim
+  var $object_id            = null; // CDestinataireHprim
   // Object configs
-  var $send_sortie_prevue = null; 
-  var $type_sej_hospi     = null;
-  var $type_sej_ambu      = null;
-  var $type_sej_urg       = null;
-  var $type_sej_scanner   = null;
-  var $type_sej_chimio    = null;
-  var $type_sej_dialyse   = null;
-  var $receive_ack        = null;
-  var $send_all_patients  = null;
+  var $send_sortie_prevue   = null; 
+  var $type_sej_hospi       = null;
+  var $type_sej_ambu        = null;
+  var $type_sej_urg         = null;
+  var $type_sej_scanner     = null;
+  var $type_sej_chimio      = null;
+  var $type_sej_dialyse     = null;
+  var $receive_ack          = null;
+  var $send_all_patients    = null;
+  var $send_debiteurs_venue = null;
+  var $send_mvt_patients    = null;
 
   function getSpec() {
     $spec = parent::getSpec();
@@ -33,17 +35,19 @@ class CDestinataireHprimConfig extends CMbObject {
 
   function getProps() {
     $specs = parent::getProps();
-    $specs["object_id"]          = "ref class|CDestinataireHprim";
+    $specs["object_id"]            = "ref class|CDestinataireHprim";
     
-    $specs["send_sortie_prevue"] = "bool default|1";
-    $specs["type_sej_hospi"]     = "str";
-    $specs["type_sej_ambu"]      = "str";
-    $specs["type_sej_urg"]       = "str";
-    $specs["type_sej_scanner"]   = "str";
-    $specs["type_sej_chimio"]    = "str";
-    $specs["type_sej_dialyse"]   = "str";
-    $specs["receive_ack"]        = "bool default|1";
-    $specs["send_all_patients"]  = "bool default|0";
+    $specs["send_sortie_prevue"]   = "bool default|1";
+    $specs["type_sej_hospi"]       = "str";
+    $specs["type_sej_ambu"]        = "str";
+    $specs["type_sej_urg"]         = "str";
+    $specs["type_sej_scanner"]     = "str";
+    $specs["type_sej_chimio"]      = "str";
+    $specs["type_sej_dialyse"]     = "str";
+    $specs["receive_ack"]          = "bool default|1";
+    $specs["send_all_patients"]    = "bool default|0";
+    $specs["send_debiteurs_venue"] = "bool default|1";
+    $specs["send_mvt_patients"]    = "bool default|0";
     
     return $specs;
   }

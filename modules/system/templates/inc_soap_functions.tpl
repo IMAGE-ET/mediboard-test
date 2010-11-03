@@ -34,4 +34,11 @@
     </td>
   </tr>
   {{/foreach}}
+  {{foreach from=$types item=_type}}
+  <tr>
+    <td class="text" colspan="2">
+      {{$_type}}
+    </td>
+  </tr>
+  {{/foreach}}
 </table>

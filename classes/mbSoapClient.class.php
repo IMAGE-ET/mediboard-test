@@ -52,6 +52,12 @@ class CMbSOAPClient extends SoapClient {
     
   public function __soapCall($function_name, $arguments, $options = null, $input_headers = null, &$output_headers = null) {
     global $phpChrono;
+
+    /* @todo Lors d'un appel d'une méthode RPC le tableau $arguments contient un élement vide array( [0] => )
+     * posant problème lors de l'appel d'une méthode du WSDL sans argument */
+    if (isset($arguments[0]) && empty($arguments[0])) {
+      $arguments = array();
+    }
     
     $output = null;
     
@@ -70,7 +76,8 @@ class CMbSOAPClient extends SoapClient {
    	$phpChrono->stop();
   	$chrono = new Chronometer();
     $chrono->start();
-  	try {
+
+    try {
   	  $output = parent::__soapCall($function_name, $arguments, $options, $input_headers, $output_headers);
   	} catch(SoapFault $fault) {
   	  $echange_soap->output    = $fault->faultstring;

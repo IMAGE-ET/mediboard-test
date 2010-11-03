@@ -293,8 +293,8 @@ class CHprimSoapHandler extends CSoapHandler {
   function calculatorAuth($operation, $entier1, $entier2) {
     $result = 0;
 
-    if (($operation != "add") && ($operation != "subtract")) {
-      return "Veuillez utiliser une methode d'operation valable (add/subtract).";
+    if (($operation != "add") && ($operation != "substract")) {
+      return "Veuillez utiliser une methode d'operation valable (add/substract).";
     } 
     if (!$entier1 || !$entier2) {
       return "Veuillez indiquer 2 entiers.";
@@ -302,7 +302,7 @@ class CHprimSoapHandler extends CSoapHandler {
     if ($operation == "add") {
       $result = $entier1 + $entier2;
     }
-    if ($operation == "subtract") {
+    if ($operation == "substract") {
       $result = $entier1 -$entier2;
     }
     
