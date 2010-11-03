@@ -221,20 +221,37 @@ abstract class CSQLDataSource {
    * @return resource The result resource on SELECT, true on others, false if failed 
    **/
   function exec($query) {
+  	// Query colouring
     if (CSQLDataSource::$trace) {
-      mbTrace($query, "Exécution SQL sur DataSource '$this->dsn'");
+      CAppUI::requireLibraryFile("geshi/geshi");
+	    $geshi = new Geshi($query, "sql");
+	    $geshi->set_overall_style("white-space: pre-wrap;");
+      $trace = utf8_decode($geshi->parse_code());
+      echo $trace;
     }
     
+		// Chrono
     $this->chrono->start();
     $result = $this->query($query);
     $this->chrono->stop();
-
+		
+		// Error handling
     if (!$result) {
       trigger_error("Exécution SQL : $query", E_USER_NOTICE);
       trigger_error("Erreur SQL : ".$this->error(), E_USER_WARNING);
       return false;
     }
   
+	  // Chrono messaging
+    if (CSQLDataSource::$trace) {
+      $step = $this->chrono->step * 1000;
+      $pace = floor(2*log10($step));
+      $pace = max(0, min(6, $pace));
+      $message = "query-pace-$pace";
+      $type = floor(($pace+3)/2);
+      CAppUI::stepMessage($type, $message, $this->dsn, number_format($step, 2));
+    }
+
 	  return $result;
   }
   
