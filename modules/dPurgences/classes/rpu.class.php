@@ -238,7 +238,7 @@ class CRPU extends CMbObject {
     $this->_attente  = $this->_presence;
     if ($this->_ref_consult->_id) {
       $entree = mbTime($this->_ref_sejour->_entree);
-      $this->_attente  = mbSubTime($entree, mbTime($this->_ref_consult->heure));
+      $this->_attente  = mbSubTime(mbTransformTime($entree, null,"%H:%M:00"), mbTransformTime(mbTime($this->_ref_consult->heure), null, "%H:%M:00"));
     }
 
     $this->_can_leave_level = $sejour->sortie_reelle ? "" : "ok";

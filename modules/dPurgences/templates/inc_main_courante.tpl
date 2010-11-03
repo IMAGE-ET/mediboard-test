@@ -121,7 +121,7 @@ Main.add(function() {
       </a>
 								
       {{if $show_statut == 1}}
-        <div style="clear: both; font-weight: bold;">
+        <div style="clear: both; font-weight: bold; padding-top: 3px;">
            
  
         {{if $rpu->radio_debut}}
@@ -187,15 +187,15 @@ Main.add(function() {
   		    {{if $consult && $consult->_id}}
     		    {{if !$_sejour->sortie_reelle && $show_statut == 1}}
               <span style="float: right;">
-                {{if $rpu->_attente < $dPconfig.dPurgences.attente_first_part}}
+                {{if $rpu->_presence < $dPconfig.dPurgences.attente_first_part}}
                   <img src="images/icons/attente_first_part.png"
                        title = "({{mb_value object=$rpu field=_attente}} / {{mb_value object=$rpu field=_presence}})" />
-                {{elseif $rpu->_attente >= $dPconfig.dPurgences.attente_first_part &&
-                         $rpu->_attente < $dPconfig.dPurgences.attente_second_part}}
+                {{elseif $rpu->_presence >= $dPconfig.dPurgences.attente_first_part &&
+                         $rpu->_presence < $dPconfig.dPurgences.attente_second_part}}
                   <img src="images/icons/attente_second_part.png"
                        title = "({{mb_value object=$rpu field=_attente}} / {{mb_value object=$rpu field=_presence}})"/>
-                {{elseif $rpu->_attente >= $dPconfig.dPurgences.attente_second_part &&
-                         $rpu->_attente < $dPconfig.dPurgences.attente_third_part}}
+                {{elseif $rpu->_presence >= $dPconfig.dPurgences.attente_second_part &&
+                         $rpu->_presence < $dPconfig.dPurgences.attente_third_part}}
                   <img src="images/icons/attente_third_part.png"
                        title = "({{mb_value object=$rpu field=_attente}} / {{mb_value object=$rpu field=_presence}})" />
                 {{else}}
