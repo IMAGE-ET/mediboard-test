@@ -170,7 +170,7 @@ class CTemplateManager {
     $items = array_map("htmlentities", $items);
     
 		// HTML production
-		switch (CAppUI::pref("listDefault")) {
+		switch ($default = CAppUI::pref("listDefault")) {
 			case "ulli":
 		    $html = "<ul>";
 		    foreach ($items as $item) {
@@ -194,7 +194,12 @@ class CTemplateManager {
         $html = "";
         $separator = CAppUI::pref("listInlineSeparator");
 				$html = implode(" $separator ", $items);
-          break;
+        break;
+					
+			default: 
+        $html = "";
+        trigger_error("Default style for list is unknown '$default'", E_USER_WARNING);
+				break;
 		}	
 	
 		return $html;
