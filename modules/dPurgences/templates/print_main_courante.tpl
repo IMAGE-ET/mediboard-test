@@ -7,19 +7,41 @@
  * @author SARL OpenXtrem
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
 *}}
+
 <script type="text/javascript">
+{{if !$offline}}
   Main.add(window.print);
+{{/if}}
+
+function printPage(element){
+  {{if !$offline}}window.print(); return;{{/if}}
+  
+  var container = element.up('table');
+  var newContainer = container.clone(true);
+  
+  newContainer.select('tr.modal-row').each(function(e){
+    e.show();
+    e.select('.modal').each(function(modal){
+      modal.show();
+      modal.style.cssText = null;
+      modal.removeClassName("modal");
+    });
+  });
+  
+  newContainer.print();
+}
 </script>
 
 <table class="main" style="font-size: 1.1em;">
   <tr>
     <th>
     	{{if $offline}}
-	      <span style="float: right">
+        <button style="float: left;" onclick="printPage(this)" class="print not-printable">{{tr}}Print{{/tr}}</button>
+	      <span style="float: right;">
 	        {{$dateTime|date_format:$dPconfig.datetime}}
 	      </span>
 	    {{/if}}
-       <a href="#print" onclick="window.print()">
+       <a href="#print" onclick="printPage(this)">
         Résumé des Passages aux Urgences du 
 				{{$date|date_format:$dPconfig.longdate}}
 				<br /> Total: {{$sejours|@count}} RPU
@@ -30,10 +52,10 @@
     <td>
       <table class="tbl">
         <tr>
-          <th class="narrow">{{mb_title class=CRPU field=_entree}}</th>
-				  <th style="width: 16em;">{{mb_label class=CRPU field=_patient_id}}</th>
+          <th class="narrow text">{{mb_title class=CRPU field=_entree}}</th>
+				  <th>{{mb_label class=CRPU field=_patient_id}}</th>
 				  <th style="width:  8em;">{{mb_label class=CRPU field=ccmu}}</th>
-					<th style="width: 16em;">{{mb_label class=CRPU field=diag_infirmier}}</th>
+					<th>{{mb_label class=CRPU field=diag_infirmier}}</th>
 					<th class="narrow">Heure PeC</th>
 				  <th style="width:  8em;">{{mb_label class=CRPU field=_responsable_id}}</th>  
 					<th class="narrow">
@@ -51,18 +73,9 @@
           <td style="text-align: right;">{{mb_value object=$sejour field=_entree}}</td>
 			    <td class="text">
 						{{if $offline && $rpu->_id}}
-	            <button class="search notext" onclick="modalwindow = modal($('modal-{{$sejour->_id}}'));"></button>
-	            <div id="modal-{{$sejour->_id}}" style="display: none; height: 600px; overflow: auto;">
-	              <div style="float: right"> 
-	              <button class="cancel" onclick="modalwindow.close();">Fermer</button>
-	              </div>
-	              {{assign var=sejour_id value=$sejour->_id}}
-	              {{assign var=dossier_medical value=$patient->_ref_dossier_medical}}
-	              {{if array_key_exists($sejour_id, $csteByTimeAll)}}
-	              {{assign var=csteByTime value=$csteByTimeAll.$sejour_id}}
-	              {{/if}}
-	              {{mb_include module=dPurgences template=print_dossier}}
-	            </div>
+	            <button class="search notext not-printable" onclick="$('modal-{{$sejour->_id}}').up('tr').show(); modalwindow = modal($('modal-{{$sejour->_id}}'));">
+	              {{tr}}Show{{/tr}}
+	            </button>
 	          {{/if}}
 						<big>{{$patient}}</big>
 						{{if $dPconfig.dPurgences.age_patient_rpu_view}}
@@ -126,6 +139,26 @@
 					</td>
 				{{/if}}
 				</tr>
+        
+        <!-- Modal window -->
+        <tr style="display: none;" class="modal-row">
+          <td colspan="8">
+            {{if $offline && $rpu->_id}}
+              <div id="modal-{{$sejour->_id}}" style="height: 90%; min-width: 700px; overflow: auto;">
+                <button style="float: right" class="cancel not-printable" onclick="modalwindow.close(); $('modal-{{$sejour->_id}}').up('tr').hide()">{{tr}}Close{{/tr}}</button>
+                
+                {{assign var=sejour_id value=$sejour->_id}}
+                {{assign var=dossier_medical value=$patient->_ref_dossier_medical}}
+                
+                {{if array_key_exists($sejour_id, $csteByTimeAll)}}
+                  {{assign var=csteByTime value=$csteByTimeAll.$sejour_id}}
+                {{/if}}
+                
+                {{mb_include module=dPurgences template=print_dossier}}
+              </div>
+            {{/if}}
+          </td>
+        </tr>
 			  {{/foreach}}
 			</table>
 	  </td>

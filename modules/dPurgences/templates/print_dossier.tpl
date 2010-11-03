@@ -1,4 +1,5 @@
 {{assign var=tbl_class value="main tbl"}}
+
 {{if !@$offline}}
 	<script type="text/javascript">
 	  Main.add(window.print);
@@ -10,11 +11,15 @@
   </table>
 
   {{assign var=tbl_class value="print"}}
+{{else}}
+  <button class="print not-printable" onclick="$('modal-{{$sejour->_id}}').down('.modal-content').print()">{{tr}}Print{{/tr}}</button>
 {{/if}}
+
+<div class="modal-content" style="text-align: left;">
 
 <table class="{{$tbl_class}}">
   <tr>
-    <th class="title" colspan="10" style="font-size: 16px">
+    <th class="title" colspan="4" style="font-size: 16px">
       Dossier d'urgence de <span style="font-size: 20px">{{$patient->_view}}</span> {{mb_include module=dPpatients template=inc_vw_ipp ipp=$patient->_IPP}} <br />
       né(e) le {{mb_value object=$patient field=naissance}} de sexe {{if $patient->sexe == "m"}} masculin {{else}} féminin {{/if}} <br /> <hr />
       <span style="font-size: 14px">par le Dr {{$consult->_ref_praticien}} le {{mb_value object=$consult field=_date}} - Dossier {{mb_include module=dPplanningOp template=inc_vw_numdos num_dossier=$sejour->_num_dossier}}</span>
@@ -22,28 +27,20 @@
   </tr>
 
   {{mb_include module=dPcabinet template=print_inc_dossier_medical}}
-
 </table>
 
-<hr />
-
+<br />
 <table class="{{$tbl_class}}">
-  <tr>
-  	<th width="50%">{{mb_label object=$consult field="motif"}}</th>
-    <td>{{mb_value object=$consult field="motif"}}</td>
-	</tr>
-	
-	<tr>
-		<th>Paramètres à l'arrivée</th>
-		<td></td>
-	</tr>
+  <tr><th class="title">Constantes médicales</th></tr>
 </table>
-
 {{mb_include module=dPpatients template=print_constantes}}
 
+<br />
 <table class="{{$tbl_class}}">
+  <tr><th class="title" colspan="2">Antécédents</th></tr>
+  
   <tr>
-    <th>{{mb_label object=$rpu field="motif"}}</th>
+    <th style="width: 50%;">{{mb_label object=$rpu field="motif"}}</th>
     <td>{{mb_value object=$rpu field="motif"}}</td>
   </tr>
   
@@ -51,70 +48,29 @@
 </table>
 
 {{if !@$offline}}
-<br style="page-break-after: always;" />
+  <br style="page-break-after: always;" />
+{{else}}
+  <br />
 {{/if}}
 
 <table class="{{$tbl_class}}">
-  <tr><th class="category" colspan="10">Transmissions paramedicales de passage aux urgences</th></tr>
-	
-	<tr>
-    <th>IPP</th>
-    <td>{{$patient->_IPP}}</td>
-    
-    <th></th>
-    <td></td>
-  </tr>
+  <tr><th class="title" colspan="4">Transmissions paramédicales de passage aux urgences</th></tr>
     
   <tr>
-    <th>{{mb_label object=$patient field="nom"}}</th>
-    <td>{{mb_value object=$patient field="nom"}}</td>
+    <th style="width: 25%;">{{mb_label object=$sejour field="entree_reelle"}} </th>
+    <td style="width: 25%;">{{mb_value object=$sejour field="entree_reelle"}} </td>
     
-    <th>{{mb_label object=$sejour field="entree_reelle"}} </th>
-    <td>{{mb_value object=$sejour field="entree_reelle"}} </td>
-  </tr>
-  
-	<tr>
-    <th>{{mb_label object=$patient field="prenom"}}</th>
-    <td>{{mb_value object=$patient field="prenom"}}</td>
-    
-    <th>{{mb_label object=$sejour field="sortie_reelle"}} </th>
-    <td>{{mb_value object=$sejour field="sortie_reelle"}} </td>
-  </tr>
-	
-	<tr>
-    <th>Né(e) le </th>
-    <td>{{mb_value object=$patient field=naissance}} </td>
-    
-    <th></th>
-    <td></td>
-  </tr>
-	
-  <tr>
-    <th>{{mb_label object=$patient field="adresse"}}</th>
-    <td>{{mb_value object=$patient field="adresse"}}</td>
-		
-		<th></th>
-    <td></td>
-  </tr>
-  
-  <tr>
-    <th></th>
-    <td>{{mb_value object=$patient field="cp"}} {{mb_value object=$patient field="ville"}}</td>
-		
-		<th>Personne à prévenir</th>
-    <td>{{mb_value object=$patient field="prevenir_nom"}} {{mb_value object=$patient field="prevenir_prenom"}} <br /> 
-		    {{mb_value object=$patient field="tel"}} 
-		</td>
+    <th style="width: 25%;">{{mb_label object=$sejour field="sortie_reelle"}} </th>
+    <td style="width: 25%;">{{mb_value object=$sejour field="sortie_reelle"}} </td>
   </tr>
   
   <tr>
     <th>{{mb_label object=$rpu field="ccmu"}}</th>
     <td>{{mb_value object=$rpu field="ccmu"}}</td>
-		
-		<th></th>
-    <td></td>
+    
+    <th>{{mb_label object=$rpu field="box_id"}}</th>
+    <td>{{mb_value object=$rpu field="box_id"}}</td>
   </tr>
-  
   
   <tr> 
     <th>{{mb_label object=$rpu field="mode_entree"}}</th>
@@ -131,30 +87,14 @@
     <th>{{mb_label object=$rpu field="pec_transport"}}</th>
     <td>{{mb_value object=$rpu field="pec_transport"}}</td>
   </tr>
-  
-  <tr>
-    <th>{{mb_label object=$rpu field="box_id"}}</th>
-    <td>{{mb_value object=$rpu field="box_id"}}</td>
-		
-		<th></th>
-    <td></td>
-  </tr>
 </table>
 
-<hr />
-
-<table class="{{$tbl_class}}">
-  <tr>
-    <th width="50%">{{mb_label object=$consult field="motif"}}</th>
-    <td>{{mb_value object=$consult field="motif"}}</td>
-  </tr>
-</table>
-
+<br />
 {{mb_include module=dPhospi template=inc_list_transmissions list_transmissions=$sejour->_ref_suivi_medical readonly=true}}
 
 <table class="{{$tbl_class}}">
   <tr>
-    <th>Documents</th>
+    <th style="width: 50%;">Documents</th>
     <td>
         {{foreach from=$consult->_ref_documents item=_document}}
           {{$_document->_view}} <br />
@@ -171,11 +111,13 @@
     <th>{{mb_label object=$rpu field="gemsa"}}</th>
     <td>{{mb_value object=$rpu field="gemsa"}}</td>
   </tr>
-  
-  <tr><th colspan="2" style="text-align: center; border: 0"><br />Précisions sur la sortie</th></tr>
-  
+</table>
+
+<br />
+<table class="{{$tbl_class}}">
+  <tr><th colspan="2" class="title">Précisions sur la sortie</th></tr>
   <tr>
-    <th>{{mb_label object=$rpu field="orientation"}}</th>
+    <th style="width: 50%;">{{mb_label object=$rpu field="orientation"}}</th>
     <td>{{mb_value object=$rpu field="orientation"}}</td>
   </tr>
   
@@ -183,14 +125,13 @@
     <th>{{mb_label object=$rpu field="destination"}}</th>
     <td>{{mb_value object=$rpu field="destination"}}</td>
   </tr>
-  
 </table>
 
-<table class="{{$tbl_class}}">
-  <tr><th class="category" colspan="10">Actes</th></tr>
-</table>
-
+<br />
 {{mb_include module=dPcabinet template=print_actes readonly=true}}
+
+<br style="page-break-after: always;" />
+</div>
 
 {{if !@$offline}}
 <table>

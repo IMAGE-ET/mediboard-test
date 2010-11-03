@@ -19,7 +19,9 @@
         {{/foreach}}
       </tr>
     {{foreachelse}}
-    <th>{{tr}}CConstantesMedicales.none{{/tr}}</th>
+      <tr>
+        <td>{{tr}}CConstantesMedicales.none{{/tr}}</td>
+      </tr>
     {{/foreach}}
   </tbody>
 </table>

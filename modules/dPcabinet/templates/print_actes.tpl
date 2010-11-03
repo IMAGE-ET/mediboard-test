@@ -1,8 +1,9 @@
-<table>
-  <tr>
-    <td><h1>Consultation de {{$consult->_ref_patient}} par le Dr {{$consult->_ref_praticien}} le {{mb_value object=$consult field=_date}}</h1></td>
-  </tr>
-</table>
+{{if !@$offline}}
+<h2>
+  Consultation de {{$consult->_ref_patient}} par le Dr {{$consult->_ref_praticien}} le 
+  {{mb_value object=$consult field=_date}}
+</h2>
+{{/if}}
 
 <table class="main tbl">
 {{mb_include module=dPcabinet template=inc_list_actes_ccam subject=$consult vue=complete extra=tarif}}
@@ -11,7 +12,7 @@
 {{assign var=object value=$consult}}
 <table class="main tbl">
   <tr>
-    <th class="title" colspan="10">Codages des actes NGAP</th>
+    <th class="title" colspan="8">Codages des actes NGAP</th>
   </tr>
 
   <tr>
@@ -47,6 +48,10 @@
        {{$executant}}
       </div>
     </td>
+  </tr>
+  {{foreachelse}}
+  <tr>
+    <td colspan="8">{{tr}}CActeNGAP.none{{/tr}}</td>
   </tr>
   {{/foreach}}
 </table>
