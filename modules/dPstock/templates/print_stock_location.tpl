@@ -16,15 +16,24 @@ Main.add(print);
 
 <table class="main tbl">
   <tr>
+    <th>{{tr}}CProduct-code{{/tr}}</th>
     <th>{{tr}}CProductStockGroup{{/tr}}</th>
     <th>{{mb_title class=CProductStockGroup field=quantity}}</th>
     <th>{{mb_title class=CProductStockGroup field=order_threshold_optimum}}</th>
   </tr>
   {{foreach from=$stock_location->_back.group_stocks item=_stock}}
     <tr>
+      <td>{{$_stock->_ref_product->code}}</td>
       <td>{{$_stock}}</td>
-      <td>{{mb_value object=$_stock field=quantity}}</td>
-      <td>{{mb_value object=$_stock field=order_threshold_optimum}}</td>
+      
+      {{if $empty}}
+        <td></td>
+        <td></td>
+      {{else}}
+        <td>{{mb_value object=$_stock field=quantity}}</td>
+        <td>{{mb_value object=$_stock field=order_threshold_optimum}}</td>
+      {{/if}}
+      
     </tr>
   {{foreachelse}}
     <tr>

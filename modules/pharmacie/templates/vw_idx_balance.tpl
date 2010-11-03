@@ -16,6 +16,7 @@
 <ul class="control_tabs" id="balance-tabs">
   <li><a href="#byproduct">Par produit</a></li>
   <li><a href="#byselection">Par sélection de produits</a></li>
+  <li><a href="#stock-locations">{{tr}}CProductStockLocation{{/tr}}</a></li>
 </ul>
 <hr class="control_tabs" />
 
@@ -26,12 +27,12 @@
     
     {{mb_field object=$stock field=product_id form="filter-product" autocomplete="true,1,50,false,true" style="width:300px; font-size: 1.4em;"}}
     
-    <button type="submit" class="search">{{tr}}Search{{/tr}}</button>
+    <button type="submit" class="search">{{tr}}Show{{/tr}}</button>
   </form>
   
   <div id="balance-product-results">
     <div class="small-info">
-      Choisissez un produit cliquez sur {{tr}}Search{{/tr}}
+      Choisissez un produit cliquez sur {{tr}}Show{{/tr}}
     </div>
   </div>
 </div>
@@ -104,3 +105,18 @@
     </div>
   </div>
 </div>
+
+<table id="stock-locations" style="display: none;" class="main tbl">
+
+{{foreach from=$list_locations item=_location}}
+  <tr>
+    <td>
+      <button class="print notext" onclick="new Url('dPstock','print_stock_location').addParam('stock_location_id','{{$_location->_id}}').addParam('empty',1).popup()">
+        {{tr}}Print{{/tr}}
+      </button>
+      {{$_location}}
+    </td>
+  </tr>
+{{/foreach}}
+
+</table>

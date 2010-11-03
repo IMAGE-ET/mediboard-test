@@ -26,13 +26,17 @@ $list_selections = $selection->loadList(null, "name");
 $category = new CProductCategory;
 $list_categories = $category->loadList(null, "name");
 
+$stock_location = new CProductStockLocation;
+$list_locations = $stock_location->loadList(null, "position, name");
+
 // Création du template
 $smarty = new CSmartyDP();
 
 $smarty->assign('stock',    $stock);
 $smarty->assign('product',    $product);
-$smarty->assign('list_selections',  $list_selections);
-$smarty->assign('list_categories',  $list_categories);
+$smarty->assign('list_selections', $list_selections);
+$smarty->assign('list_categories', $list_categories);
+$smarty->assign('list_locations',  $list_locations);
 
 $smarty->display('vw_idx_balance.tpl');
 
