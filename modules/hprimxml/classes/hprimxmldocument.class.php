@@ -248,7 +248,9 @@ class CHPrimXMLDocument extends CMbXMLDocument {
     $id400->object_class = "CMediusers";
     $id400->object_id    = $mbMediuser->_id;
     $id400->tag          = $this->getTagMediuser();
-    $id400->loadMatchingObject();
+    if ($id400->tag) {
+      $id400->loadMatchingObject();
+    }
     $this->addElement($identification, "code", $id400->_id ? $id400->id400 : "prat$mbMediuser->user_id");
     $this->addElement($identification, "libelle", $mbMediuser->_view);
     $personne = $this->addElement($elParent, "personne");
