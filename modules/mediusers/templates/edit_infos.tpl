@@ -41,7 +41,7 @@ Main.add(function () {
       <input type="hidden" name="del" value="0" />
       <table class="form">
         <tr>
-          <th class="category" colspan="2">
+          <th class="title" colspan="2">
             {{$user->_view}}
           </th>
         </tr>
@@ -75,6 +75,18 @@ Main.add(function () {
         </tr>
       </table>
       </form>
+      
+
+ <table class="form">  
+  <tr>
+    <th class="title">
+      {{tr}}config-exchange-source{{/tr}}
+    </th>
+  </tr>
+  <tr>
+    <td> {{mb_include module=system template=inc_config_exchange_source source=$smtp_source}} </td>
+  </tr>
+</table>
     </td>
     
     <td class="halfPane">
@@ -90,7 +102,7 @@ Main.add(function () {
       <input type="hidden" name="del" value="0" />
       <table class="form">
         <tr>
-          <th class="category" colspan="2">
+          <th class="title" colspan="2">
             {{$fonction->_view}}
           </th>
         </tr>

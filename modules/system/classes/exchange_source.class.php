@@ -11,7 +11,8 @@
 class CExchangeSource extends CMbObject {
   static $typeToClass = array (
     "ftp"  => "CSourceFTP",
-    "soap" => "CSourceSOAP"
+    "soap" => "CSourceSOAP",
+    "smtp" => "CSourceSMTP"
   );
   
   // DB Fields

@@ -27,7 +27,10 @@ $banques = $banque->loadList(null, $order);
 $spec_cpam = new CSpecCPAM();
 $spec_cpam = $spec_cpam->loadList();
 
-$affiche_nom = CValue::get("affiche_nom",0); 
+$affiche_nom = CValue::get("affiche_nom",0);
+
+// Source SMTP
+$smtp_source = CExchangeSource::get("mediuser-".$mediuser->_id, "smtp", true);
 
 // Création du template
 $smarty = new CSmartyDP();
@@ -38,5 +41,7 @@ $smarty->assign("spec_cpam"   , $spec_cpam              );
 $smarty->assign("user"        , $mediuser               );
 $smarty->assign("fonction"    , $mediuser->_ref_function);
 $smarty->assign("affiche_nom" , $affiche_nom            );
+$smarty->assign("smtp_source" , $smtp_source            );
 $smarty->display("edit_infos.tpl");
+
 ?>

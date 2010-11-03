@@ -180,12 +180,12 @@ CLibrary::$all[$library->name] = $library;
 $library = new CLibrary;
 $library->name = "PHPMailer";
 $library->url = "http://phpmailer.sourceforge.net/";
-$library->fileName = "phpmailer-1.73.tar.gz";
+$library->fileName = "PHPMailer_v5.1.tar.gz";
 $library->description = "Composant PHP d'envoi d'email";
-$library->sourceDir = "phpmailer";
+$library->sourceDir = "PHPMailer_v5.1";
 $library->targetDir = "phpmailer";
-$library->versionFile = "ChangeLog.txt";
-$library->versionString = "Version 1.73";
+$library->versionFile = "changelog.txt";
+$library->versionString = "Version 5.1";
 
 CLibrary::$all[$library->name] = $library;
 

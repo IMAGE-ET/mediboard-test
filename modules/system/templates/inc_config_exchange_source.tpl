@@ -108,5 +108,36 @@
       </table>
       {{/if}}
     </div>
+    
+    <div id="CSourceSMTP-{{$sourcename}}" style="display:{{if !$source->_allowed_instances && ($source instanceof CSourceSMTP)}}block{{else}}none{{/if}};">
+      {{if $source->_id && !($source instanceof CSourceSMTP)}}
+        <div class="small-info">
+          {{tr}}CExchangeSource-already-exist{{/tr}}
+        </div>
+      {{else}}
+      <table class="main">
+        {{assign var="_source_smtp" value=$source}}
+        {{if $source->_class_name == "CExchangeSource"}}
+          {{assign var="_source_smtp" value=$source->_allowed_instances.CSourceSMTP}}
+        {{/if}}
+        {{if !$source->_id}}
+        <tr>
+          <td class="halfPane">
+            <a class="button new" onclick="$('config-source-smtp-{{$sourcename}}').show()">
+              Créer une source SMTP
+            </a>
+         </td>
+        </tr>
+        {{/if}}
+        <tr>
+          <td id="config-source-smtp-{{$sourcename}}" {{if !$source->_id}}style="display:none"{{/if}}>
+            {{if $_source_smtp instanceof CSourceSMTP}}
+              {{mb_include module=system template=inc_config_source_smtp source=$_source_smtp}}  
+            {{/if}}     
+          </td>
+        </tr>
+      </table> 
+      {{/if}}
+    </div>
   </div>
 {{/if}}

@@ -265,32 +265,32 @@ class CSetupsystem extends CSetup {
 		
     $this->makeRevision("1.0.26");
     $query = "DELETE FROM `modules` 
-		            WHERE `mod_name` = 'dPinterop'";
+		  WHERE `mod_name` = 'dPinterop'";
     $this->addQuery($query, true);
     
 		$this->makeRevision("1.0.27");
     $query = "DELETE FROM `modules` 
-		            WHERE `mod_name` = 'dPmateriel'";
+		  WHERE `mod_name` = 'dPmateriel'";
     $this->addQuery($query, true);
 		
     $this->makeRevision("1.0.28");
     $query = "CREATE TABLE IF NOT EXISTS `content_html` (
-          		  `content_id` BIGINT NOT NULL auto_increment PRIMARY KEY,
-          		  `content` TEXT,
-          		  `cr_id` INT
-          		) TYPE=MYISAM;";
+		  `content_id` BIGINT NOT NULL auto_increment PRIMARY KEY,
+		  `content` TEXT,
+		  `cr_id` INT
+		) TYPE=MYISAM;";
     $this->addQuery($query);
     
     $query = "CREATE TABLE `content_xml` (
-          		  `content_id` BIGINT NOT NULL auto_increment PRIMARY KEY,
-          		  `content` TEXT,
-          		  `import_id` INT
-          		) TYPE=MYISAM;";
+		  `content_id` BIGINT NOT NULL auto_increment PRIMARY KEY,
+		  `content` TEXT,
+		  `import_id` INT
+		) TYPE=MYISAM;";
     $this->addQuery($query);
     
     $this->makeRevision("1.0.29");
     $query = "ALTER TABLE `content_html`
-                CHANGE `content` `content` mediumtext NULL";
+      CHANGE `content` `content` mediumtext NULL";
     $this->addQuery($query);
     
     $this->makeRevision("1.0.30");
@@ -301,15 +301,30 @@ class CSetupsystem extends CSetup {
     
     $this->makeRevision("1.0.32");
     $query = "ALTER TABLE `access_log` 
-		            ADD INDEX ( `period` )";
+		  ADD INDEX ( `period` )";
     $this->addQuery($query);
     
     $this->makeRevision("1.0.33");
     $query = "ALTER TABLE `source_soap` 
                 ADD `single_parameter` VARCHAR (255);";
     $this->addQuery($query);
-    
-    $this->mod_version = "1.0.34";
+
+    $this->makeRevision("1.0.34");
+    $query = "CREATE TABLE `source_smtp` (
+              `source_smtp_id` INT (11) UNSIGNED NOT NULL auto_increment PRIMARY KEY,
+              `port` INT (11) DEFAULT '25',
+              `email` VARCHAR (50),
+              `ssl` ENUM ('0','1') DEFAULT '0',
+              `name` VARCHAR  (255) NOT NULL,
+              `role` ENUM ('prod','qualif') NOT NULL DEFAULT 'qualif',
+              `host` TEXT NOT NULL,
+              `user` VARCHAR  (255),
+              `password` VARCHAR (50),
+              `type_echange` VARCHAR  (255)
+              ) TYPE=MYISAM;";
+    $this->addQuery($query);
+
+    $this->mod_version = "1.0.35";
     
   }
 }
