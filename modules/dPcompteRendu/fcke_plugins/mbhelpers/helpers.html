@@ -47,6 +47,7 @@
 			arrayHelperIndex.each(function(item, iterator) {
 			  list.insert("<option value='" + iterator + "' ondblclick='insertHTML(this.value)'>" + item + "</option>");
 			});
+      list.selectedIndex = -1;
     }
 
     function insertHTML(index) {

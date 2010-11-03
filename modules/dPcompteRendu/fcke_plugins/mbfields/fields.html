@@ -22,6 +22,7 @@
 				if (item[0] != "AddItem" && item[0] != "IndexOf")
           section.insert("<option value='" + iterator + "'>"+ item[0] + "</option>");
 			});
+			section.selectedIndex = -1;
     }
     
 		function reloadItem(section) {
@@ -29,7 +30,6 @@
 			oItem.update();
 			// Rien à faire si la section est vide
 			if (section == '') return; 
-
       // On vide la section des sous-items également
 			reloadSubItem('', '');
 			$H(fields).each(function(item, iterator){
@@ -51,6 +51,7 @@
 				  });
 				}
 			});
+      oItem.selectedIndex = -1;
 		}
 		
 		function reloadSubItem(section, item) {
@@ -71,6 +72,7 @@
 					});
 				}
 			});
+      oSubItem.selectedIndex = -1;
 	  }
 
     function insertHTML(string) {

@@ -29,6 +29,7 @@
 			else {
 				list.insert("<option value=''>Aucune liste</option>");
 			}
+      list.selectedIndex = -1;
     }
     
 
@@ -37,7 +38,7 @@
       oEditor.FCKUndo.SaveUndoStep() ;
 
       var sHtml ;
-      sHtml = "<span class='field'>" + string + "</span>&nbsp;";
+      sHtml = "<span class='name'>" + string + "</span>&nbsp;";
       sHtml = FCKTools.ProcessLineBreaks( oEditor, FCKConfig, sHtml ) ;
       oEditor.FCK.InsertHtml( sHtml ) ;
       dialog.document.getElementById("btnCancel").onclick();
