@@ -26,10 +26,8 @@ function submitCompteRendu(){
 	{{/if}}
   (function(){
 	  var html = FCKeditorAPI.Instances._source.GetHTML();
-	  html = html.replace(/&/g, "&amp;" );
-	  html = html.replace(/</g, "&lt;" );
-	  html = html.replace(/>/g, "&gt;" ); 
-	  $("htmlarea").innerHTML = html;
+	  $V($("htmlarea"), html, false);
+	  
     var form = getForm("editFrm");
     if(checkForm(form) && User.id) {
      form.onsubmit=function(){ return true; };
