@@ -37,7 +37,10 @@ table.dialog #systemMsg,
   right: 0;
 }
 
-div.warning, div.error, div.message, div.loading {
+div.warning, 
+div.error, 
+div.info, 
+div.loading {
   min-height: 16px;
   line-height: 16px;
   background: no-repeat center left;
@@ -55,7 +58,7 @@ div.error {
   background-image: url(../../images/icons/error.png);
 }
 
-div.message {
+div.info {
   color: #008;
   background-image: url(../../images/icons/info.png);
 }

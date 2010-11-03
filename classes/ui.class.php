@@ -304,7 +304,7 @@ class CAppUI {
       case UI_MSG_WARNING : return "warning";
       default:
       case UI_MSG_OK      : 
-      case UI_MSG_ALERT   : return "message";
+      case UI_MSG_ALERT   : return "info";
     }
   }
   
