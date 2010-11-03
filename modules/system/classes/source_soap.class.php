@@ -60,7 +60,9 @@ class CSourceSOAP extends CExchangeSource {
     
     if (is_object($this->_acquittement)) {
       $acquittement = (array) $this->_acquittement;
-      $this->_acquittement = reset($acquittement);
+      if (count($acquittement) == 1) {
+        $this->_acquittement = reset($acquittement);
+      } 
     }
     
 		return true;
