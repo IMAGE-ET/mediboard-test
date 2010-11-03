@@ -308,7 +308,7 @@ $library->description = "Generic Syntax Highlighter";
 $library->sourceDir = "geshi";
 $library->targetDir = "geshi";
 $library->versionFile = "geshi.php";
-$library->versionString = "define('GESHI_VERSION', '1.0.8.3')";
+$library->versionString = "define('GESHI_VERSION', '1.0.8.3.1')";
 
 CLibrary::$all[$library->name] = $library;
 
