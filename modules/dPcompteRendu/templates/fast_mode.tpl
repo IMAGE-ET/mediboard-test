@@ -236,8 +236,8 @@ Main.add(function() {
           <tr>
             <td colspan="2" style="text-align: center;">
               <button class="tick">{{tr}}Save{{/tr}}</button>
-              <button class="printPDF singleclick" onclick="$V(getForm('create-pdf-form-{{$uid_fast_mode}}').stream, 1);">{{tr}}Save{{/tr}} {{tr}}and{{/tr}} {{tr}}Print{{/tr}}</button>
-              <button class="print singleclick" onclick="$V(getForm('fastModeForm-{{$uid_fast_mode}}').callback, 'printDoc');">{{tr}}Save{{/tr}} {{tr}}and{{/tr}} {{tr}}Print{{/tr}}</button>
+              <button class="printPDF singleclick" onclick="$V(getForm('create-pdf-form-{{$uid_fast_mode}}').stream, 1); this.form.onsubmit();" type="button">{{tr}}Save{{/tr}} {{tr}}and{{/tr}} {{tr}}Print{{/tr}}</button>
+              <button class="print singleclick" onclick="$V(getForm('fastModeForm-{{$uid_fast_mode}}').callback, 'printDoc'); this.form.onsubmit();" type="button">{{tr}}Save{{/tr}} {{tr}}and{{/tr}} {{tr}}Print{{/tr}}</button>
               <button class="cancel singleclick" onclick="Control.Modal.close();$('fast-{{$unique_id}}').update();" type="button">{{tr}}Close{{/tr}}</button>
               
               <div id="state" style="width: 100%; height: 100%"></div>
@@ -245,17 +245,19 @@ Main.add(function() {
           </tr>
         </table>
       </td>
-      <td style="width: 100px; height: 200px;">
-        <div id="thumbs" style="overflow-x: hidden; width: 160px; text-align: center; white-space: normal; height: 200px;">
-          {{if isset($file|smarty:nodefaults) && $file->_id}}
-            <img class="thumbnail" src="?m=dPfiles&a=fileviewer&suppressHeaders=1&file_id={{$file->_id}}&phpThumb=1&wl=160&hp=160"
-                 onclick="(new Url).ViewFilePopup('CCompteRendu', '{{$modele_id}}', 'CFile', '{{$file->_id}}');"
-                 style="width: 113px; height: 160px;"/>
-          {{else}}
-            {{tr}}CCompteRendu.nothumbs{{/tr}}
-          {{/if}}
-        </div>
-      </td>
+      {{if $pdf_thumbnails == 1}}
+        <td style="width: 100px; height: 200px;">
+          <div id="thumbs" style="overflow-x: hidden; width: 160px; text-align: center; white-space: normal; height: 200px;">
+            {{if isset($file|smarty:nodefaults) && $file->_id}}
+              <img class="thumbnail" src="?m=dPfiles&a=fileviewer&suppressHeaders=1&file_id={{$file->_id}}&phpThumb=1&wl=160&hp=160"
+                   onclick="(new Url).ViewFilePopup('CCompteRendu', '{{$modele_id}}', 'CFile', '{{$file->_id}}');"
+                   style="width: 113px; height: 160px;"/>
+            {{else}}
+              {{tr}}CCompteRendu.nothumbs{{/tr}}
+            {{/if}}
+          </div>
+        </td>
+      {{/if}}
     </tr>
   </table>
 </form>
