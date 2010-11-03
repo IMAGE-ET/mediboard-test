@@ -137,14 +137,7 @@ foreach($all_bons as $_chap => &$_all_bons){
 }
 
 // Creation d'un tableau des affectations pour la date courante
-$affectations = array();
 $prescription->_ref_object->loadRefsAffectations();
-foreach($prescription->_ref_object->_ref_affectations as $_affectation){
-	if(mbDate($_affectation->entree) == $debut || mbDate($_affectation->sortie) == $debut){
-	  $affectations[$_affectation->entree] = $_affectation;
-	}
-}
-ksort($affectations);
 
 // Chargement de toutes les categories
 $categories = CCategoryPrescription::loadCategoriesByChap();
@@ -153,7 +146,6 @@ $filter_line = new CPrescriptionLineElement();
 $filter_line->debut = $debut;
 
 $smarty = new CSmartyDP;
-$smarty->assign("affectations", $affectations);
 $smarty->assign("all_bons", $all_bons);
 $smarty->assign("bons", $bons);
 $smarty->assign("lines", $lines);

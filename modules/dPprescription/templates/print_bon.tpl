@@ -127,18 +127,15 @@ Main.add( function(){
 {{if $print}}
 <div class="header">
   <span style="float: right">
-    {{foreach from=$affectations item=_affectation}}
-		  Chambre {{$_affectation->_ref_lit->_ref_chambre->_view}} 
-			{{if $_affectation->entree|date_format:$dPconfig.date == $debut|date_format:$dPconfig.date}}
-			à partir de {{$_affectation->entree|date_format:$dPconfig.time}} 
-			{{/if}} 
-		  {{if $_affectation->sortie|date_format:$dPconfig.date == $debut|date_format:$dPconfig.date}}
-		    {{if $_affectation->sortie}}jusqu'à {{$_affectation->sortie|date_format:$dPconfig.time}}{{/if}}
-		  {{/if}} 
+    {{foreach from=$prescription->_ref_object->_ref_affectations item=_affectation}}
+		   {{if $prescription->_ref_object->_ref_affectations|@count > 1}}
+		   du {{$_affectation->entree|date_format:$dPconfig.date}} au {{$_affectation->sortie|date_format:$dPconfig.date}}
+			 {{/if}}
+			 <strong>{{$_affectation->_view}}</strong>
 			<br />
-			  DE: {{$sejour->_entree|date_format:"%d/%m/%Y"}}<br />
-		    DS: {{$sejour->_sortie|date_format:"%d/%m/%Y"}}
 		{{/foreach}}
+		DE: {{$sejour->_entree|date_format:"%d/%m/%Y"}}<br />
+    DS: {{$sejour->_sortie|date_format:"%d/%m/%Y"}}
   </span>
 	
   <div>
