@@ -134,7 +134,7 @@ class CHPrimXMLEvenementsPatients extends CHPrimXMLEvenements {
     if ($mbPersonne instanceof CPatient) {
       if ($civilite) {
         $mbPersonne->civilite = $civiliteHprimConversion[$civilite]; 
-      } else {
+      } else if ($mbPersonne->civilite == null) {
         $mbPersonne->civilite = "guess";
       }
       $mbPersonne->nom = $nom;
@@ -150,8 +150,8 @@ class CHPrimXMLEvenementsPatients extends CHPrimXMLEvenements {
       $pays->loadMatchingObject();
       $mbPersonne->pays = $pays->nom_fr;
       $mbPersonne->cp = $cp;
-      $mbPersonne->tel = isset($telephones[0]) ? $telephones[0] : null;
-      $mbPersonne->tel2 = isset($telephones[1]) ? $telephones[1] : null;
+      $mbPersonne->tel  = isset($telephones[0]) && ($telephones[0] != $mbPersonne->tel2) ? $telephones[0] : null;
+      $mbPersonne->tel2 = isset($telephones[1]) && ($telephones[1] != $mbPersonne->tel) ? $telephones[1] : null;
       $mbPersonne->email = $email;
     } elseif ($mbPersonne instanceof CMediusers) {
       $mbPersonne->_user_last_name  = $nom;
