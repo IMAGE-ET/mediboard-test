@@ -84,10 +84,12 @@
                           {{/if}}  
                           <tr> 
                             <td colspan="2">
-                              {{assign var=perf_line value=$list_lines.perf_line.$perf_line_id}}
+                              {{if array_key_exists('new', $_quantites)}}<img src="images/icons/ampoule.png" alt="" title="" />{{/if}}
+		                    
+															{{assign var=perf_line value=$list_lines.perf_line.$perf_line_id}}
                               {{$perf_line->_ucd_view}} ({{$perf_line->_posologie}})   
                               {{if $quantite_prevue == $quantite_adm}}<img src="images/icons/tick.png" alt="" title="" />{{/if}}
-                            </td>
+                        		</td>
                             <td>{{$quantite_prevue}}</td>
                             <td>{{$quantite_adm}}</td>
                             <td>{{$perf_line->_unite_administration}}</td>
