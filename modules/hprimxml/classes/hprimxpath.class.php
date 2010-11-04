@@ -15,7 +15,7 @@ class CHPrimXPath extends CMbXPath {
     $this->registerNamespace( "hprim", "http://www.hprim.org/hprimXML" );
   }
   
-  function queryTextNode($query, DOMNode $contextNode, $purgeChars = "", $addslashes = false) {
+  function queryTextNode($query, DOMNode $contextNode = null, $purgeChars = "", $addslashes = false) {
     $text = "";
     if ($node = $this->queryUniqueNode($query, $contextNode)) {
       $text = utf8_decode($node->textContent);
@@ -28,7 +28,7 @@ class CHPrimXPath extends CMbXPath {
     return $text;
   }
   
-  function getMultipleTextNodes($query, DOMNode $contextNode, $implode = false) {
+  function getMultipleTextNodes($query, DOMNode $contextNode = null, $implode = false) {
     $array = array();
     $query = utf8_encode($query);
     $nodeList = $contextNode ? parent::query($query, $contextNode) : parent::query($query);
@@ -39,7 +39,7 @@ class CHPrimXPath extends CMbXPath {
     return $implode ? implode(" ", $array) : $array;
   }
   
-  function getFirstNode($query, DOMNode $contextNode) {
+  function getFirstNode($query, DOMNode $contextNode = null) {
     $textNodes = $this->getMultipleTextNodes($query, $contextNode);
     //mbTrace($textNodes, "nodes", true);
     
