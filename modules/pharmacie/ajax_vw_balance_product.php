@@ -13,6 +13,7 @@ CCanDo::checkRead();
 $product_id = CValue::get("product_id");
 $year       = CValue::get("year", mbTransformTime(null, null, "%Y"));
 $month      = CValue::get("month", mbTransformTime(null, null, "%m"));
+$include_void_service = CValue::get("include_void_service");
 
 CValue::setSession("product_id", $product_id);
 
@@ -24,9 +25,14 @@ $stock->product_id = $product_id;
 
 $services = CProductStockGroup::getServicesList();
 
+if ($include_void_service) {
+  $services["none"] = new CService;
+  $services["none"]->_view = CAppUI::tr("None");
+}
+
 function fillFlow(&$array, $product, $n, $start, $unit, $services) {
-  foreach($services as $_service) {
-    $array["out"]["total"][$_service->_id] = 0;
+  foreach($services as $_key => $_service) {
+    $array["out"]["total"][$_key] = 0;
   }
   
   $d = &$array["out"];
@@ -45,18 +51,18 @@ function fillFlow(&$array, $product, $n, $start, $unit, $services) {
     $to = mbDate("+1 $unit", $from);
     
     // X init
-    foreach($services as $_service) {
-      $d[$from][$_service->_id] = 0;
+    foreach($services as $_key => $_service) {
+      $d[$from][$_key] = 0;
     }
     $d[$from]["total"] = 0;
     
-    foreach($services as $_service) {
-      $count = $product->getConsumption($from, $to, $_service->_id);
+    foreach($services as $_key => $_service) {
+      $count = $product->getConsumption($from, $to, ($_key != "none") ? $_key : null);
       
-      $d[$from][$_service->_id] = $count;
+      $d[$from][$_key] = $count;
       
       $d[$from]["total"] += $count;
-      @$d["total"][$_service->_id] += $count;
+      @$d["total"][$_key] += $count;
       @$d["total"]["total"] += $count;
     }
   }

@@ -16,22 +16,22 @@
 function printPage(element){
   {{if !$offline}}window.print(); return;{{/if}}
   
-  var container = element.up('table');
-  var newContainer = container.clone(true);
+  var mainCourante = $("main-courante-container").clone(true);
+  var container = DOM.div({}, mainCourante);
+  var dossiers = mainCourante.select('div.dossier');
   
-  newContainer.select('tr.modal-row').each(function(e){
-    e.show();
-    e.select('.modal').each(function(modal){
-      modal.show();
-      modal.style.cssText = null;
-      modal.removeClassName("modal");
-    });
+  dossiers.each(function(e){
+    e.style.cssText = null; // e.show()
+    e.removeClassName("modal");
+    container.insert(e);
   });
   
-  newContainer.print();
+  container.print();
 }
 </script>
 
+<div id="main-courante-container">
+  
 <table class="main" style="font-size: 1.1em;">
   <tr>
     <th>
@@ -144,7 +144,7 @@ function printPage(element){
         <tr style="display: none;" class="modal-row">
           <td colspan="8">
             {{if $offline && $rpu->_id}}
-              <div id="modal-{{$sejour->_id}}" style="height: 90%; min-width: 700px; overflow: auto;">
+              <div id="modal-{{$sejour->_id}}" style="height: 90%; min-width: 700px; overflow: auto;" class="dossier">
                 <button style="float: right" class="cancel not-printable" onclick="modalwindow.close(); $('modal-{{$sejour->_id}}').up('tr').hide()">{{tr}}Close{{/tr}}</button>
                 
                 {{assign var=sejour_id value=$sejour->_id}}
@@ -234,3 +234,5 @@ function printPage(element){
     </td>
 	</tr>
 </table>
+<br style="page-break-after: always;"/>
+</div>

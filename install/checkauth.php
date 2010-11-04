@@ -29,7 +29,7 @@ function showLogin() {
   </tr>
   <tr>
     <th><label for="username">Nom d'utilisateur :</label></th>
-    <td><input type="text" name="username" /></td>
+    <td><input type="text" name="username" autofocus="autofocus" /></td>
   </tr>
   <tr>
     <th><label for="password">Mot de passe :</label></th>

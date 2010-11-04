@@ -28,6 +28,11 @@
     {{mb_field object=$stock field=product_id form="filter-product" autocomplete="true,1,50,false,true" style="width:300px; font-size: 1.4em;"}}
     
     <button type="submit" class="search">{{tr}}Show{{/tr}}</button>
+    
+    <label>
+      <input type="checkbox" name="include_void_service" />
+      Inclure les mouvements sans service de destination
+    </label>
   </form>
   
   <div id="balance-product-results">
@@ -110,12 +115,18 @@
 
 {{foreach from=$list_locations item=_location}}
   <tr>
-    <td>
+    <td class="narrow">
       <button class="print notext" onclick="new Url('dPstock','print_stock_location').addParam('stock_location_id','{{$_location->_id}}').addParam('empty',1).popup()">
         {{tr}}Print{{/tr}}
       </button>
+    </td>
+    <td>
       {{$_location}}
     </td>
+  </tr>
+{{foreachelse}}
+  <tr>
+    <td colspan="2">{{tr}}CProductStockLocation.none{{/tr}}</td>
   </tr>
 {{/foreach}}
 

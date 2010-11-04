@@ -13,7 +13,7 @@
 <table class="tbl">
   <tr>
     <td>
-      <a class="button search" href="?m={{$m}}&amp;a=print_main_courante&amp;offline=1&amp;dialog=1">
+      <a class="button search" href="?m={{$m}}&amp;a=print_main_courante&amp;offline=1&amp;dialog=1&amp;_aio=1">
         Main courante
       </a>
     </td>
