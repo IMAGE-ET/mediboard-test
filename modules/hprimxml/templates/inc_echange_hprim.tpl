@@ -25,7 +25,7 @@
 
       <button class="cancel notext" type="button" onclick="confirmDeletion(this.form, {
           typeName:'l\'échange',
-          objName:'{{$object|smarty:nodefaults|JSAttribute}}'
+          objName:'{{$object->_view|smarty:nodefaults|JSAttribute}}'
         })">
       </button>
     </form>
