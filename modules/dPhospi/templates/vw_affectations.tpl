@@ -23,7 +23,7 @@ Main.add(function () {
         </a>
       </div>
       {{else}}
-      <div class="message">
+      <div class="info">
         Tous les patients sont placés pour la semaine à venir
       </div>
       {{/if}}

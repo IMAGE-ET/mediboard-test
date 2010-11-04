@@ -58,7 +58,7 @@
     <td class="titlecell">
       {{tr}}module-{{$m}}-long{{/tr}}
     </td>
-    <td class="message">
+    <td class="info">
       {{if !$dialog}}
       <!-- System messages -->
       <div id="systemMsg">

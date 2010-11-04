@@ -129,7 +129,7 @@ Main.add(function () {
             {{/foreach}}
           </div>
          {{else}} 
-           <div class='message'>Bibliothèques externes à jour</div>
+           <div class="info">Bibliothèques externes à jour</div>
          {{/if}}
         </td>
       </tr>

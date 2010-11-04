@@ -249,7 +249,7 @@ Main.add(function(){
 
 <div class="error">error</div>
 <div class="warning">warning</div>
-<div class="message">message</div>
+<div class="info">message</div>
 <div class="loading">loading</div>
 
     </td>

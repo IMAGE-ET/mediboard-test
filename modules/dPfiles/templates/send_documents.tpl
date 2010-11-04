@@ -67,7 +67,7 @@
       </div>
 			{{else}}
 				{{if $do}}
-	      <div class="message">
+	      <div class="info">
 		      {{tr}}Sent{{/tr}} !
 	      </div>
 				{{/if}}

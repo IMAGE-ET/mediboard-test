@@ -96,10 +96,10 @@ function setToNow(element) {
                 {{else}}
                 
                 {{if $acte->signe && !$can->admin}}
-                  <div class="message">Acte signé</div>
+                  <div class="info">Acte signé</div>
                 {{else}}
                 {{if $acte->signe}}
-                  <div class="message">Acte signé</div>
+                  <div class="info">Acte signé</div>
                 {{/if}}
                 <button class="remove" type="button" onclick="Event.stop(event); confirmDeletion(this.form,{typeName:'l\'acte',objName:'{{$acte->_view|smarty:nodefaults|JSAttribute}}',ajax:'1'}, { onComplete: ActesCCAM.notifyChange.curry({{$subject->_id}},{{$subject->_praticien_id}}) } )">
                   {{tr}}Delete{{/tr}} cet acte

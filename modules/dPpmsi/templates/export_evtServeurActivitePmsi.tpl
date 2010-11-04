@@ -43,7 +43,7 @@ function choosePreselection(oSelect) {
       <ul>
         <li>
           {{if $mbSejour->_ref_patient->_IPP}}
-          <div class="message">
+          <div class="info">
           {{else}}
           <div class="error">
           {{/if}}
@@ -53,7 +53,7 @@ function choosePreselection(oSelect) {
         </li>
         <li>
           {{if $mbSejour->_num_dossier}}
-          <div class="message">
+          <div class="info">
           {{else}}
           <div class="error">
           {{/if}}
@@ -63,7 +63,7 @@ function choosePreselection(oSelect) {
         </li>
         <li>
           {{if $mbSejour->_ref_praticien->adeli}}
-          <div class="message">
+          <div class="info">
           {{else}}
           <div class="error">
           {{/if}}
@@ -75,7 +75,7 @@ function choosePreselection(oSelect) {
         {{if $typeObject =="op"}}
         <li>
           {{if $mbObject->_ref_chir->_view}}
-          <div class="message">
+          <div class="info">
           {{else}}
           <div class="error">
           {{/if}}
@@ -86,7 +86,7 @@ function choosePreselection(oSelect) {
         </li>
         <li>
           {{if $mbObject->code_uf}}
-          <div class="message">
+          <div class="info">
           {{else}}
           <div class="error">
           {{/if}}
@@ -96,7 +96,7 @@ function choosePreselection(oSelect) {
         </li>
         <li>
           {{if $mbObject->libelle_uf}}
-          <div class="message">
+          <div class="info">
           {{else}}
           <div class="error">
           {{/if}}

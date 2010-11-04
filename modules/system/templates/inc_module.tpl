@@ -101,7 +101,7 @@
           {{foreach from=$mbmodule->_dsns item=dsns_by_status key=status}}
           {{foreach from=$dsns_by_status item=dsn}}
           <div class="
-            {{if $status == 'uptodate'}}message{{/if}}
+            {{if $status == 'uptodate'}}info{{/if}}
             {{if $status == 'obsolete'}}warning{{/if}}
             {{if $status == 'unavailable'}}error{{/if}}">{{$dsn}}</div>
           {{/foreach}}

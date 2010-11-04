@@ -156,7 +156,7 @@ Main.add(function () {
         {{elseif $_GHM->_borne_haute < $_GHM->_duree}}
         <div class="warning">Séjour trop long</div>
         {{else}}
-        <div class="message">Dans les bornes</div>
+        <div class="info">Dans les bornes</div>
         {{/if}}
       {{else}}
       &mdash;

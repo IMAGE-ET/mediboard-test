@@ -116,9 +116,9 @@ Merci de vérifier les paramètres de la configuration ODBC pour la source 'sante4
     {{if $status === null}}
     <div class="warning">Failed</div>
     {{elseif $status === "*"}}
-    <div class="message">Skipped</div>
+    <div class="info">Skipped</div>
     {{else}}
-    <div class="message">
+    <div class="info">
       synch:&nbsp;{{$status}}
       {{if $cache}}
       <br />Cache:&nbsp;{{$cache}}
