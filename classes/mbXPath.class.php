@@ -44,7 +44,7 @@ class CMbXPath extends DOMXPath {
     return $nodeList->item(0);
   } 
   
-  function queryNumcharNode($query, DOMNode $contextNode, $length) {
+  function queryNumcharNode($query, DOMNode $contextNode = null, $length) {
     if (null == $text = $this->queryTextNode($query, $contextNode, " /-.")) {
       return;
     }
@@ -55,7 +55,7 @@ class CMbXPath extends DOMXPath {
     return $text;
   }
   
-  function queryTextNode($query, DOMNode $contextNode, $purgeChars = "", $addslashes = false) {
+  function queryTextNode($query, DOMNode $contextNode = null, $purgeChars = "", $addslashes = false) {
     $text = "";
     if ($node = $this->queryUniqueNode($query, $contextNode)) {
       $text = utf8_decode($node->textContent);
@@ -68,7 +68,7 @@ class CMbXPath extends DOMXPath {
     return $text;
   } 
 
-  function queryMultilineTextNode($query, DOMNode $contextNode, $prefix = "") {
+  function queryMultilineTextNode($query, DOMNode $contextNode = null, $prefix = "") {
     $text = "";
     if ($node = $this->queryUniqueNode($query, $contextNode)) {
       $text = utf8_decode($node->textContent);
@@ -80,7 +80,7 @@ class CMbXPath extends DOMXPath {
     return $text;
   }
   
-  function queryAttributNode($query, DOMNode $contextNode, $attName, $purgeChars = "", $optional = true) {
+  function queryAttributNode($query, DOMNode $contextNode = null, $attName, $purgeChars = "", $optional = true) {
     $text = "";
     if ($node = $this->queryUniqueNode($query, $contextNode, $optional)) {
       $text = utf8_decode($node->getAttribute($attName));
@@ -92,7 +92,7 @@ class CMbXPath extends DOMXPath {
     return $text;
   }
   
-  function getMultipleTextNodes($query, DOMNode $contextNode) {
+  function getMultipleTextNodes($query, DOMNode $contextNode = null) {
     $array = array();
     $query = utf8_encode($query);
     $nodeList = $contextNode ? parent::query($query, $contextNode) : parent::query($query);

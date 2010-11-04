@@ -29,14 +29,12 @@ class CMbSOAPClient extends SoapClient {
   	
     if (!$html = file_get_contents($this->wsdl)) {
     	$this->soap_client_error = true;
-    	trigger_error("Impossible d'analyser l'url : ".$this->wsdl, E_USER_ERROR);
-    	return;
+    	throw new CMbException("CSourceSOAP-unable-to-parse-url", $this->wsdl);
     }
 
     if (strpos($html, "<?xml") === false) {
     	$this->soap_client_error = true;
-      trigger_error("Erreur de connexion sur le service web. WSDL non accessible ou au mauvais format.", E_USER_ERROR);
-      return;
+      throw new CMbException("CSourceSOAP-wsdl-invalid");
     }
     
     $options = array_merge($options, array("connexion_timeout" => CAppUI::conf("webservices connection_timeout")));
@@ -113,8 +111,7 @@ class CMbSOAPClient extends SoapClient {
   
   static public function make($rooturl, $login = null, $password = null, $type = null, $options = array()) {
   	if (!url_exists($rooturl)) {
-  		trigger_error("Impossible d'établir la connexion avec le serveur : ".$rooturl, E_USER_ERROR);
-  		return;
+  		throw new CMbException("CSourceSOAP-unreachable-source", $rooturl);
   	}
 
   	if (($login && $password) || (array_key_exists('login', $options) && array_key_exists('password', $options))) {
@@ -127,8 +124,9 @@ class CMbSOAPClient extends SoapClient {
   	}
 
     if (!$client = new CMbSOAPClient($rooturl, $type, $options)) {
-      trigger_error("Instanciation du SoapClient impossible.");
+      throw new CMbException("CSourceSOAP-soapclient-impossible");
     }
+    
     return $client;
   }
 }
