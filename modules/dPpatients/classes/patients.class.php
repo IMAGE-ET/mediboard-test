@@ -1014,7 +1014,7 @@ class CPatient extends CMbObject {
   }
   
   function loadRefsConsultations($where = null) {
-    $this->_ref_consultations = new CConsultation();
+    $consultation = new CConsultation();
     $curr_user = CAppUI::$user;
     if ($this->patient_id){
       if ($where === null) {
@@ -1030,7 +1030,7 @@ class CPatient extends CMbObject {
       $leftjoin["plageconsult"]        = "consultation.plageconsult_id = plageconsult.plageconsult_id";
       $leftjoin["users_mediboard"]     = "plageconsult.chir_id = users_mediboard.user_id";
       $leftjoin["functions_mediboard"] = "users_mediboard.function_id = functions_mediboard.function_id";
-      $this->_ref_consultations = $this->_ref_consultations->loadList($where, $order, null, null, $leftjoin);
+      $this->_ref_consultations = $consultation->loadList($where, $order, null, null, $leftjoin);
     }
   }
   

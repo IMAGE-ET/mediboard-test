@@ -7,6 +7,22 @@
  * @author SARL OpenXtrem
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
 *}}
+
+<script type="text/javascript">
+guessDataFormEmail = function(element){
+  var email = $V(element).match(/^([^@]+)@(.*)$/);
+  if (!email) return;
+  
+  var form = element.form;
+  
+  if (!$V(form.elements.host))
+    $V(form.elements.host, "smtp."+email[2]);
+  
+  if (!$V(form.elements.user))
+    $V(form.elements.user, email[1]);
+}
+</script>
+
 <table class="main"> 
   <tr>
     <td>
@@ -19,14 +35,18 @@
            
         <table class="form">        
           <tr>
-            <th class="category" colspan="100">
+            <th class="category" colspan="2">
               {{tr}}config-source-smtp{{/tr}}
             </th>
           </tr>
           
           <tr>
             <th>{{mb_label object=$source field="name"}}</th>
-            <td><input type="text" readonly="readonly" name="name" value="{{$source->name}}" /></td>
+            <td>{{mb_field object=$source field="name" readonly="readonly"}}</td>
+          </tr>
+          <tr>
+            <th>{{mb_label object=$source field="email"}}</th>
+            <td>{{mb_field object=$source field="email" onchange="guessDataFormEmail(this)"}}</td>
           </tr>
           <tr>
             <th>{{mb_label object=$source field="host"}}</th>
@@ -43,10 +63,6 @@
           <tr>
             <th>{{mb_label object=$source field="port"}}</th>
             <td>{{mb_field object=$source field="port"}}</td>
-          </tr>
-          <tr>
-            <th>{{mb_label object=$source field="email"}}</th>
-            <td>{{mb_field object=$source field="email"}}</td>
           </tr>
           <tr>
             <th>{{mb_label object=$source field="ssl"}}</th>

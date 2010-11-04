@@ -40,8 +40,8 @@ Main.add( function () {
       <th><label for="vue2" title="Type de vue du planning">Type de vue</label></th>
       <td colspan="5">
         <select name="vue2" onchange="this.form.submit()">
-          <option value="0"{{if $vue == "0"}}selected="selected"{{/if}}>Tout afficher</option>
-          <option value="1"{{if $vue == "1"}}selected="selected"{{/if}}>Cacher les Terminées</option>
+          <option value="0" {{if $vue == "0"}}selected="selected"{{/if}}>Tout afficher</option>
+          <option value="1" {{if $vue == "1"}}selected="selected"{{/if}}>Cacher les terminées</option>
         </select>
       </td>
       {{/if}}
@@ -50,7 +50,7 @@ Main.add( function () {
 </form>
 {{/if}}
 
-<table class="tbl" style="font-size: 9px; {{if @$fixed_width|default:0}}width: 250px{{/if}}">
+<table class="tbl" style="{{if !@$offline}}font-size: 9px;{{/if}} {{if @$fixed_width|default:0}}width: 250px{{/if}}">
   <tr>
     <th class="title" colspan="3">Consultations</th>
   </tr>
@@ -96,19 +96,17 @@ Main.add( function () {
   <tr {{if $_consult->_id == $consult->_id}}class="selected"{{/if}}>
     {{assign var=categorie value=$_consult->_ref_categorie}}
     <td {{if $_consult->annule}}class="cancelled"{{/if}} style="{{if $_consult->_id != $consult->_id}}{{$style}}{{/if}}" {{if $destinations || $_consult->motif}}rowspan="2"{{/if}} class="text">
-      {{if $canCabinet->view}}
+      {{if $canCabinet->view && !@$offline}}
         <a href="?m={{$m}}&amp;tab=edit_planning&amp;consultation_id={{$_consult->_id}}" title="Modifier le RDV" style="float: right;">
-          <img src="images/icons/planning.png" alt="modifier" />
+          <img src="images/icons/planning.png" title="{{tr}}Edit{{/tr}}" />
         </a>
-      {{else}}
-        <a href="#nowhere" title="Impossible de modifier le RDV"></a>
       {{/if}}
       
       {{if $patient->_id}}
-      {{if $canCabinet->view}}
+      {{if $canCabinet->view && !@$offline}}
         <a href="?m={{$current_m}}&amp;tab=edit_consultation&amp;selConsult={{$_consult->_id}}" style="margin-bottom: 4px;">
       {{else}}
-        <a href="#nowhere" title="Impossible de modifier le RDV">
+        <a href="#1" title="Impossible de modifier le RDV">
       {{/if}}
           <span onmouseover="ObjectTooltip.createEx(this, '{{$_consult->_guid}}')">
            {{$_consult->heure|truncate:5:"":true}}
@@ -118,7 +116,7 @@ Main.add( function () {
         {{$_consult->heure|truncate:5:"":true}}
       {{/if}}
       {{if $patient->_id}}
-        {{if ($_consult->chrono == $_consult|const:'PLANIFIE')}}
+        {{if ($_consult->chrono == $_consult|const:'PLANIFIE') && !@$offline}}
 		      <form name="etatFrm{{$_consult->_id}}" action="?m={{$current_m}}" method="post">
 			      <input type="hidden" name="m" value="dPcabinet" />
 			      <input type="hidden" name="dosql" value="do_consultation_aed" />
@@ -127,8 +125,8 @@ Main.add( function () {
 			      <input type="hidden" name="arrivee" value="" />
 		      </form>
 
-          <a style="white-space: nowrap;" href="#" onclick="putArrivee(document.etatFrm{{$_consult->_id}})">
-            <img src="images/icons/check.png" title="Notifier l'arrivée du patient" alt="arrivee" />
+          <a style="white-space: nowrap;" href="#1" onclick="putArrivee(document.etatFrm{{$_consult->_id}})">
+            <img src="images/icons/check.png" title="Notifier l'arrivée du patient" />
             {{$_consult->_etat}}
           </a>
         {{else}}
@@ -139,17 +137,27 @@ Main.add( function () {
 		
     <td class="text" style="{{$style}}" {{if !$categorie->_id}}colspan="2"{{/if}}>
       {{if $patient->_id}}
-	      {{if $canCabinet->view}}
-	      <a href="?m={{$current_m}}&amp;tab=edit_consultation&amp;selConsult={{$_consult->_id}}">
+        {{if @$offline}}
+          <div id="{{$patient->_guid}}-dossier" style="display: none; min-width: 600px;">
+            <button class="print" onclick="$('{{$patient->_guid}}-dossier').print()" style="float: left;">{{tr}}Print{{/tr}}</button>
+            <button class="cancel" onclick="modalWindow.close();" style="float: right;">{{tr}}Close{{/tr}}</button>
+            {{assign var=patient_id value=$patient->_id}}
+            {{$patients_fetch.$patient_id|smarty:nodefaults}}
+          </div>
+          
+          <a href="#1" onclick="modalWindow = modal($('{{$patient->_guid}}-dossier'))">
+	      {{elseif $canCabinet->view}}
+	        <a href="?m={{$current_m}}&amp;tab=edit_consultation&amp;selConsult={{$_consult->_id}}">
 	      {{else}}
-	      <a href=#nowhere title="Impossible de modifier le RDV">
+	        <a href=#1 title="Impossible de modifier le RDV">
 	      {{/if}}
-				  <span onmouseover="ObjectTooltip.createEx(this, '{{$patient->_guid}}')">
+        
+				  <strong onmouseover="ObjectTooltip.createEx(this, '{{$patient->_guid}}')">
 		        {{$patient->_view|truncate:30:"...":true}}
 		        {{if $patient->_age != "??"}}
 		          ({{$patient->_age}}&nbsp;ans)
 	          {{/if}}
-				  </span>
+				  </strong>
 	      </a>
       {{else}}
         [PAUSE]
@@ -157,7 +165,7 @@ Main.add( function () {
     </td>
 
     {{if $categorie->nom_icone}}
-    <td {{if $destinations || $_consult->motif}}rowspan="2"{{/if}} style="{{$style}}">
+    <td {{if $destinations || $_consult->motif}}rowspan="2"{{/if}} style="{{$style}}" class="narrow">
       <img src="./modules/dPcabinet/images/categories/{{$categorie->nom_icone}}" title="{{$categorie->nom_categorie}}" />
     </td>
     {{/if}}
@@ -168,7 +176,7 @@ Main.add( function () {
     <td class="text" style="{{$style}}" {{if !$categorie->_id}}colspan="2"{{/if}}>
       {{assign var=prat_id value=$_plage->chir_id}}
       
-      {{if $destinations}}
+      {{if $destinations && !@$offline}}
       <form name="ChangePlage-{{$_consult->_guid}}" action="?m={{$current_m}}" method="post" style="float: right;">
       
       <input type="hidden" name="dosql" value="do_consultation_aed" />
@@ -195,10 +203,10 @@ Main.add( function () {
       {{/if}}
 
       {{if $patient->_id}}
-      {{if $canCabinet->view}}
+      {{if $canCabinet->view && !@$offline}}
         <a href="?m={{$current_m}}&amp;tab=edit_consultation&amp;selConsult={{$_consult->_id}}">
       {{else}}
-        <a href="#nowhere" title="Impossible de modifier le RDV">
+        <a href="#1" title="Impossible de modifier le RDV">
       {{/if}}
           {{$_consult->motif|truncate:40:"...":true}}
         </a>

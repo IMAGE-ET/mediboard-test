@@ -8,8 +8,8 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
  */
 
-require_once('lib/phpmailer/class.phpmailer.php');
-require_once('lib/phpmailer/class.smtp.php');
+CAppUI::requireLibraryFile("phpmailer/class.phpmailer");
+CAppUI::requireLibraryFile("phpmailer/class.smtp");
 
 class CSourceSMTP extends CExchangeSource {
   // DB Table key
@@ -42,6 +42,11 @@ class CSourceSMTP extends CExchangeSource {
   function updateDBFields() {
   	parent::updateDBFields();
   	$this->role = "prod";
+  }
+  
+  function updateFormFields() {
+    parent::updateFormFields();
+    $this->_view = $this->email;
   }
   
   function init() {

@@ -17,6 +17,7 @@ $cabinet_id   = CValue::getOrSession("cabinet_id", $mediuser->function_id);
 $date         = CValue::getOrSession("date", mbDate());
 $closed       = CValue::getOrSession("closed", true);
 $mode_urgence = CValue::get("mode_urgence", false);
+$offline      = CValue::get("offline", false);
 
 $hour         = mbTime(null);
 $board        = CValue::get("board", 1);
@@ -32,10 +33,14 @@ if ($mode_urgence) {
 
 // Récupération de la liste des praticiens
 $praticiens = array();
+$cabinet = new CFunctions;
+
 if ($cabinet_id) {
   $praticiens = CAppUI::pref("pratOnlyForConsult", 1) ? 
 	  $mediuser->loadPraticiens(PERM_READ, $cabinet_id) :
     $mediuser->loadProfessionnelDeSante(PERM_READ, $cabinet_id);
+    
+  $cabinet->load($cabinet_id);
 }
 
 if ($consult->_id) {
@@ -64,6 +69,8 @@ foreach($praticiens as $prat) {
 
 $nb_attente = 0;
 $nb_a_venir = 0;
+$patients_fetch = array();
+
 foreach ($listPlages as &$infos_by_prat) {
   foreach ($infos_by_prat["plages"] as $plage) {
     $plage->_ref_chir =& $infos_by_prat["prat"];
@@ -88,6 +95,14 @@ foreach ($listPlages as &$infos_by_prat) {
       $consultation->loadRefPatient();
       $consultation->loadRefCategorie();
       $consultation->countDocItems();
+      
+      if ($offline && $consultation->patient_id && !isset($patients_fetch[$consultation->patient_id])) {
+        $args = array(
+          "object_guid" => $consultation->_ref_patient->_guid,
+          "ajax" => 1,
+        );
+        $patients_fetch[$consultation->patient_id] = CApp::fetch("system", "httpreq_vw_complete_object", $args);
+      }
     }
   }
 }
@@ -105,7 +120,10 @@ foreach ($listPlages as &$infos_by_prat) {
 
 // Création du template
 $smarty = new CSmartyDP();
+$smarty->assign("offline"       , $offline);
 $smarty->assign("cabinet_id"    , $cabinet_id);
+$smarty->assign("cabinet"       , $cabinet);
+$smarty->assign("patients_fetch", $patients_fetch);
 $smarty->assign("consult"       , $consult);
 $smarty->assign("listPlages"    , $listPlages);
 $smarty->assign("closed"        , $closed);
