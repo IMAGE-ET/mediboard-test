@@ -868,7 +868,13 @@ Class.extend(Control.Modal, {
 		this.iFrameShim.hide();
     this.isOpen = false;
     this.notify('afterClose');
-	}
+	},
+  print: function() {
+    var e = this.container.clone(true);
+    e.style.cssText = null;
+    e.removeClassName("modal");
+    e.print();
+  }
 });
 
 var Session = {

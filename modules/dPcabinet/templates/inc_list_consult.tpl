@@ -139,8 +139,9 @@ Main.add( function () {
       {{if $patient->_id}}
         {{if @$offline}}
           <div id="{{$patient->_guid}}-dossier" style="display: none; min-width: 600px;">
-            <button class="print" onclick="$('{{$patient->_guid}}-dossier').print()" style="float: left;">{{tr}}Print{{/tr}}</button>
-            <button class="cancel" onclick="modalWindow.close();" style="float: right;">{{tr}}Close{{/tr}}</button>
+            <button class="print not-printable" onclick="modalWindow.print()">{{tr}}Print{{/tr}}</button>
+            <button class="cancel not-printable" onclick="modalWindow.close();" style="float: right;">{{tr}}Close{{/tr}}</button>
+            
             {{assign var=patient_id value=$patient->_id}}
             {{$patients_fetch.$patient_id|smarty:nodefaults}}
           </div>
