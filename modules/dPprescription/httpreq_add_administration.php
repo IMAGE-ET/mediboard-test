@@ -91,7 +91,7 @@ if($prise_id){
 $prise = new CPrisePosologie();
 $prise->quantite = $quantite;
 
-if($line->_ref_produit->_ratio_UI){
+if($line instanceof CPrescriptionLineMedicament  && $line->_ref_produit->_ratio_UI){
   $prise->_quantite_UI = $prise->quantite / $line->_ref_produit->_ratio_UI;
 }
 	
