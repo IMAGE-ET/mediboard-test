@@ -83,7 +83,12 @@ foreach ($listSejours as &$sejour) {
   $sejour->loadRefsNotes();
   $sejour->countDocItems();
   $sejour->loadRefPrescriptionSejour();
-  $sejour->_ref_prescription_sejour->loadRefsLinesElementByCat();
+
+  $prescription = $sejour->_ref_prescription_sejour;
+  $prescription->loadRefsPrescriptionLineMixes();
+  $prescription->loadRefsLinesMedByCat();
+  $prescription->loadRefsLinesElementByCat();
+      
   $sejour->_ref_prescription_sejour->countRecentModif();
 
   // Chargement de l'IPP
