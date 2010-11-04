@@ -186,7 +186,10 @@ updateQuantite = function(ratio_UI, oField){
           </div>
         {{/if}}
 				
+				{{assign var=ratio_UI value=""}}
+				{{if $line instanceof CPrescriptionLineMedicament}}
 				{{assign var=ratio_UI value=$line->_ref_produit->_ratio_UI}}
+				{{/if}}
 				
 				{{mb_label object=$prise field=quantite}}
 	      {{mb_field object=$prise field=quantite min=0 increment=1 form=addAdministration onchange="updateQuantite('$ratio_UI', this)"}}
@@ -211,7 +214,7 @@ updateQuantite = function(ratio_UI, oField){
 	      </select>
 	      {{/if}}
 				
-				{{if $line->_ref_produit->_ratio_UI}}
+				{{if $line instanceof CPrescriptionLineMedicament && $line->_ref_produit->_ratio_UI}}
 					soit 
 				  {{mb_field object=$prise field=_quantite_UI min=0 increment=1 form=addAdministration onchange="updateQuantite('$ratio_UI', this)"}} UI
         {{/if}}
