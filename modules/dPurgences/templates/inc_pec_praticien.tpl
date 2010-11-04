@@ -72,18 +72,20 @@ checkPraticien = function(oForm){
 			  <input type="hidden" name="sejour_id" value="{{$sejour->_id}}" />
 			  <input type="hidden" name="patient_id" value="{{$sejour->patient_id}}" />   
         <input type="hidden" name="accident_travail" value="{{$rpu->accident_travail}}" />
-			  <select name="prat_id" class="ref notNull" style="width: 12em;">
-			    <option value="">&mdash; {{tr}}Choose{{/tr}}</option>
-			    {{foreach from=$listPrats item=_prat}}
-			    <option class="mediuser" style="border-color: #{{$_prat->_ref_function->color}};" value="{{$_prat->_id}}"
-			      {{if $app->user_id == $_prat->_id || $_prat->_id == $sejour->praticien_id}} selected="selected" {{/if}}>
-			      {{$_prat->_view}}
-			    </option>
-			    {{/foreach}}
-			  </select>
-        <input type="hidden" name="_datetime" value="" class="dateTime" />
 			  
-			  <br />
+				<div style="white-space: nowrap;">
+	        <select name="prat_id" class="ref notNull" style="width: 10em;">
+	          <option value="">&mdash; {{tr}}Choose{{/tr}}</option>
+	          {{foreach from=$listPrats item=_prat}}
+	          <option class="mediuser" style="border-color: #{{$_prat->_ref_function->color}};" value="{{$_prat->_id}}"
+	            {{if $app->user_id == $_prat->_id || $_prat->_id == $sejour->praticien_id}} selected="selected" {{/if}}>
+	            {{$_prat->_view}}
+	          </option>
+	          {{/foreach}}
+	        </select>
+	        <input type="hidden" name="_datetime" value="" class="dateTime" />
+				</div>
+			  
 			  <button type="submit" class="new" onclick="return checkPraticien(this.form)">Prendre en charge</button>
 			</form>
 			

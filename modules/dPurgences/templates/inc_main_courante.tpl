@@ -158,15 +158,20 @@ Main.add(function() {
           <img src="images/icons/placeholder.png"/>
         {{/if}}
         {{if $_sejour->_nb_files_docs > 0}}
-          <img src="images/icons/docitem.png" title="{{$_sejour->_nb_files_docs}} {{tr}}CFile{{/tr}}/{{tr}}CMbObject-back-documents{{/tr}}"/>
+          <img src="images/icons/docitem.png" title="{{$_sejour->_nb_files|default:0}} {{tr}}CMbObject-back-files{{/tr}} / {{$_sejour->_nb_docs|default:0}} {{tr}}CMbObject-back-documents{{/tr}}"/>
         {{else}}
           <img src="images/icons/placeholder.png"/>
         {{/if}}
-        {{if $_sejour->_ref_prescription_sejour->_id && $_sejour->_ref_prescription_sejour->_count_recent_modif_presc == true}}
-          <img src="images/icons/ampoule.png" onmouseover="ObjectTooltip.createEx(this, '{{$_sejour->_ref_prescription_sejour->_guid}}')"/>
-        {{else}}
-          <img src="images/icons/ampoule_grey.png" title="{{tr}}CPrescription.no_recent{{/tr}}"/>
-        {{/if}}
+				{{assign var=prescription value=$_sejour->_ref_prescription_sejour}}
+        {{if $prescription->_id}}
+				  {{if $prescription->_count_recent_modif_presc}}
+            <img src="images/icons/ampoule.png" onmouseover="ObjectTooltip.createEx(this, '{{$prescription->_guid}}')"/>
+	        {{else}}
+	          <img src="images/icons/ampoule_grey.png" onmouseover="ObjectTooltip.createEx(this, '{{$prescription->_guid}}')"/>
+	        {{/if}}
+				{{else}}
+          <img src="images/icons/placeholder.png"/>
+			  {{/if}}
       	</div>
       {{/if}}
     </td>
@@ -185,24 +190,8 @@ Main.add(function() {
       {{else}} 
   		  <td style="background-color: {{$background}}; text-align: center">
   		    {{if $consult && $consult->_id}}
-    		    {{if !$_sejour->sortie_reelle && $show_statut == 1}}
-              <span style="float: right;">
-                {{if $rpu->_presence < $dPconfig.dPurgences.attente_first_part}}
-                  <img src="images/icons/attente_first_part.png"
-                       title = "({{mb_value object=$rpu field=_attente}} / {{mb_value object=$rpu field=_presence}})" />
-                {{elseif $rpu->_presence >= $dPconfig.dPurgences.attente_first_part &&
-                         $rpu->_presence < $dPconfig.dPurgences.attente_second_part}}
-                  <img src="images/icons/attente_second_part.png"
-                       title = "({{mb_value object=$rpu field=_attente}} / {{mb_value object=$rpu field=_presence}})"/>
-                {{elseif $rpu->_presence >= $dPconfig.dPurgences.attente_second_part &&
-                         $rpu->_presence < $dPconfig.dPurgences.attente_third_part}}
-                  <img src="images/icons/attente_third_part.png"
-                       title = "({{mb_value object=$rpu field=_attente}} / {{mb_value object=$rpu field=_presence}})" />
-                {{else}}
-                  <img src="images/icons/attente_fourth_part.png"
-                       title = "({{mb_value object=$rpu field=_attente}} / {{mb_value object=$rpu field=_presence}})"/>
-                {{/if}}
-              </span>
+    		    {{if !$_sejour->sortie_reelle && $show_statut}}
+              {{mb_include template=inc_icone_attente}}
             {{/if}}
   			    <a href="?m=dPurgences&amp;tab=edit_consultation&amp;selConsult={{$consult->_id}}">
   			      Consult. {{$consult->heure|date_format:$dPconfig.time}}
@@ -210,7 +199,7 @@ Main.add(function() {
   			      <br/>le {{$consult->_ref_plageconsult->date|date_format:$dPconfig.date}}
   			      {{/if}}
   			    </a>
-  			    {{if !$show_statut && !$_sejour->sortie_reelle}}
+  			    {{if !$_sejour->sortie_reelle}}
   			      ({{mb_value object=$rpu field=_attente}} / {{mb_value object=$rpu field=_presence}})
   			    {{elseif $_sejour->sortie_reelle}}
   			      (sortie à {{$_sejour->sortie_reelle|date_format:$dPconfig.time}})

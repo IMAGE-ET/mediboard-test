@@ -9,27 +9,14 @@
 *}}
 
 {{if !$sejour->_veille}}
-  <span style="float: right;">
   {{assign var=rpu value=$sejour->_ref_rpu}}
-    {{if $rpu->_presence < $dPconfig.dPurgences.attente_first_part}}
-      <img src="images/icons/attente_first_part.png"
-           title = "({{mb_value object=$rpu field=_attente}} / {{mb_value object=$rpu field=_presence}})" />
-    {{elseif $rpu->_presence >= $dPconfig.dPurgences.attente_first_part &&
-             $rpu->_presence < $dPconfig.dPurgences.attente_second_part}}
-      <img src="images/icons/attente_second_part.png"
-           title = "({{mb_value object=$rpu field=_attente}} / {{mb_value object=$rpu field=_presence}})"/>
-    {{elseif $rpu->_presence >= $dPconfig.dPurgences.attente_second_part &&
-             $rpu->_presence < $dPconfig.dPurgences.attente_third_part}}
-      <img src="images/icons/attente_third_part.png"
-           title = "({{mb_value object=$rpu field=_attente}} / {{mb_value object=$rpu field=_presence}})" />
-    {{else}}
-      <img src="images/icons/attente_fourth_part.png"
-           title = "({{mb_value object=$rpu field=_attente}} / {{mb_value object=$rpu field=_presence}})"/>
-    {{/if}}
-  </span>
+  {{mb_include template=inc_icone_attente}}
   {{if $sejour->sortie_reelle}}
     <br />(sortie à {{$sejour->sortie_reelle|date_format:$dPconfig.time}})
-  {{/if}}
+  {{else}}
+	{{mb_value object=$rpu field=_attente}}
+	{{/if}}
+	
 {{else}}
   Admis la veille
 {{/if}}

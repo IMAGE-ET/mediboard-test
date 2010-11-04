@@ -83,6 +83,8 @@ class CMbObject {
   var $_aides         = array(); // Aides à la saisie
   var $_aides_new     = array(); // Nouveau tableau des aides (sans hierarchie)
   var $_nb_files_docs = null;
+  var $_nb_files      = null;
+  var $_nb_docs       = null;
   
   /**
    * References
@@ -289,17 +291,17 @@ class CMbObject {
    * @return int document + files count
    */
   function loadRefsDocItems() {
-  	$nb_files = $this->loadRefsFiles();
-    $nb_docs  = $this->loadRefsDocs();
-    $this->_nb_files_docs = $nb_docs + $nb_files;
+  	$this->nb_files = $this->loadRefsFiles();
+    $this->nb_docs  = $this->loadRefsDocs();
+    $this->_nb_files_docs = $this->_nb_files + $this->_nb_docs;
   }
   
   function countDocs() {
-    return $this->countBackRefs("documents");
+    return $this->_nb_docs = $this->countBackRefs("documents");
   }
   
   function countFiles(){
-    return $this->countBackRefs("files");
+    return $this->_nb_files = $this->countBackRefs("files");
   }
   
   function countDocItems($permType = null) {
@@ -313,14 +315,16 @@ class CMbObject {
     $this->loadRefsFiles();
     if ($this->_ref_files) {
       self::filterByPerm($this->_ref_files, $permType);
+			$this->_nb_files = count($this->_ref_files);
     }
     
     $this->loadRefsDocs();
     if ($this->_ref_documents) {
       self::filterByPerm($this->_ref_documents, $permType);
+      $this->_nb_docs = count($this->_ref_documents);
     }
     
-    return count($this->_ref_files) + count($this->_ref_documents);
+    return $this->_nb_files + $this->_nb_docs;
   }
   
   /**
