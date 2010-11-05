@@ -415,19 +415,41 @@ Element.addMethods(['input', 'textarea'], {
       element.empty() : 
       !notWhiteSpace.test(element.value);
   },
-  switchMultiline: function (element) {
+  switchMultiline: function (element, button) {
     var newElement;
     
     if (/^textarea$/i.test(element.tagName)) {
-      newElement = new Element("input", {type: "text", value: $V(element), style: "width: 100%"});
+      newElement = new Element("input", {type: "text", value: $V(element)});
+      if (button) $(button).removeClassName("singleline").addClassName("multiline");
     }
     else {
-      newElement = new Element("textarea", {style: "width: 100%"}).update($V(element));
+      newElement = new Element("textarea", {style: "width: auto;"}).update($V(element));
+      
+      if (element.maxLength) {
+        newElement.observe("keypress", function(e){
+          var txtarea = Event.element(e),
+              value = $V(txtarea);
+          if (value.length >= element.maxLength) {
+            $V(txtarea, value.substr(0, element.maxLength-1));
+          }
+        });
+      }
+      
+      if (button) $(button).removeClassName("multiline").addClassName("singleline");
     }
     
-    newElement.className = element.className;
-    newElement.name = element.name;
-    newElement.id = element.id;
+    var exclude = ["type", "value"];
+    var map = {
+      readonly: "readOnly", 
+      maxlength: "maxLength", 
+      size: "cols", 
+      cols: "size"
+    };
+    
+    $A(element.attributes).each(function(a){
+      if (exclude.indexOf(a.name) != -1) return;
+      newElement.setAttribute(map[a.name] || a.name, a.value);
+    });
     
     element.insert({after: newElement});
     element.remove();

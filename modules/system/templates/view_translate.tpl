@@ -62,7 +62,7 @@
         <input style="width: 100%" type="text" name="trans[0][{{$curr_lang}}]" value="" />
       </td>
       <td>
-        <button type="button" class="down notext" tabindex="10000" onclick="$(this).up().previous().down('input,textarea').switchMultiline()"></button>
+        <button type="button" class="down notext" tabindex="10000" onclick="$(this).up().previous().down('input,textarea').switchMultiline(this)"></button>
       </td>
     {{/foreach}}
     <td class="button"></td>
@@ -83,7 +83,7 @@
         {{/if}}
       </td>
       <td>
-        <button type="button" class="down notext" tabindex="10000" onclick="$(this).up().previous().down('input,textarea').switchMultiline()"></button>
+        <button type="button" class="down notext" tabindex="10000" onclick="$(this).up().previous().down('input,textarea').switchMultiline(this)"></button>
       </td>
     {{/foreach}}
     <td></td>

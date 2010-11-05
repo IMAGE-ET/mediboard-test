@@ -504,6 +504,7 @@ class CMbFieldSpec {
     
     $autocomplete = CMbArray::extract($params, "autocomplete", "true,2,30,false,false");
     $form         = CMbArray::extract($params, "form");
+    $multiline    = CMbArray::extract($params, "multiline");
     $extra        = CMbArray::makeXmlAttributes($params);
     $spec         = $object->_specs[$field];
     $ref = false;
@@ -512,10 +513,10 @@ class CMbFieldSpec {
     @list($activated, $minChars, $limit, $wholeString, $dropdown) = explode(',', $autocomplete);
     
     if ($this->autocomplete && $form && $activated === 'true') {
-    	if ($minChars === null || $minChars === "")       $minChars = 2;
-    	if ($limit === null || $limit === "")             $limit = 30;
+    	if ($minChars    === null || $minChars    === "")    $minChars = 2;
+    	if ($limit       === null || $limit       === "")       $limit = 30;
     	if ($wholeString === null || $wholeString === "") $wholeString = false;
-      if ($dropdown === null || $dropdown === "" || $dropdown === "false") $dropdown = false;
+      if ($dropdown    === null || $dropdown    === "" || $dropdown === "false") $dropdown = false;
     	
       $options = explode('|', $this->autocomplete);
       $view_field = reset($options);
@@ -576,10 +577,14 @@ class CMbFieldSpec {
     else {
     	$sHtml = "<input type=\"text\" name=\"$field\" value=\"".htmlspecialchars($value)."\"
                 class=\"".htmlspecialchars(trim("$className $this->prop"))."\" $extra/>";
+      
+      if ($multiline) {
+        $sHtml .= '<button type="button" class="multiline notext" onclick="$(this).previous(\'input,textarea\').switchMultiline(this)"></button>';
+      }
     }
     
     if ($protected) {
-      $sHtml .= '<button type="button" onclick="var p=$(this).previous(\'input\');p.readOnly=!p.readOnly;" class="notext lock" title="'.CAppUI::tr("Unlock").'"></button>';
+      $sHtml .= '<button type="button" onclick="var p=$(this).previous(\'input,textarea\');p.readOnly=!p.readOnly;" class="notext lock" title="'.CAppUI::tr("Unlock").'"></button>';
     }
     
     return $sHtml;
