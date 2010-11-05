@@ -614,7 +614,7 @@ Main.add( function(){
 		        {{html_options options=$aides_prescription.$_line_praticien_id.CPrescriptionLineMix}}
 		      </select>
 		      <input type="hidden" name="_hidden_commentaire" value="" />
-		      <button class="new notext" title="Ajouter une aide à la saisie" type="button" onclick="addHelp('CPrescriptionLineMix', this.form._hidden_commentaire, 'commentaire', null, null, null, {{$user_id}});">
+		      <button class="new notext" title="Ajouter une aide à la saisie" type="button" onclick="addHelp('CPrescriptionLineMix', this.form._hidden_commentaire, 'commentaire', null, null, null, {{$_line_praticien_id}});">
 		        Nouveau
 		      </button>
 		      {{else}}
