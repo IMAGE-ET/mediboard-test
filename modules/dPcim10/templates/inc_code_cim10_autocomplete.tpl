@@ -7,7 +7,7 @@
       {{if $type == 'urg'}}
         $V(getForm('editSejour').DP, '{{$_code.code}}'); submitSejour(); reloadDiagnostic('{{$sejour_id}}', 1);
       {{elseif $type == 'cab'}}
-        $V(getForm('addDiagFrm').code_diag, '{{$_code.code}}'); reloadCim10('{{$_code.code}}');
+        $V(getForm('addDiagFrm').code_diag, '{{$_code.code}}');
       {{elseif $type == "edit_sejour"}}
         $V(getForm('editSejour').DP, '{{$_code.code}}');
       {{elseif $type == "edit_protocole"}}

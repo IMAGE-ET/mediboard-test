@@ -412,8 +412,9 @@ Main.add( function(){
           width: "250px"
         });
       {{/main}}
-    <input type="text" name="keywords_code" id="editSejour_keywords_code" class="autocomplete str code cim10" value="" size="10"/>
-    <input type="hidden" name="DP" />
+    <input type="text" name="keywords_code" id="editSejour_keywords_code" class="autocomplete str" value="{{$sejour->DP}}" size="10"/>
+    <button type="button" class="search" onclick="CIM10Selector.init()">{{tr}}button-CCodeCIM10-choix{{/tr}}</button>
+    <input type="hidden" name="DP" onchange="$V(this.form.keywords_code, this.value);"/>
   </td>
 </tr>
 

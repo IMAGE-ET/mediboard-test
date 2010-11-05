@@ -19,8 +19,11 @@
         });
         
     {{/main}}
-    <input type="text" name="keywords_code" id="editDP_keywords_code" class="autocomplete str code cim10" value="{{$sejour->DP}}" size="10"/>
+    <input type="text" name="keywords_code" id="editDP_keywords_code" class="autocomplete str" value="{{$sejour->DP}}" size="10"/>
     <input type="hidden" name="DP" onchange="this.form.onsubmit();"/>
+    <button class="search notext" type="button" onclick="CIM10Selector.initDP({{$sejour->_id}})">
+      {{tr}}Search{{/tr}}
+    </button>
   </div>
 </form>
 
@@ -49,8 +52,11 @@
           width: "250px"
         });
     {{/main}}
-    <input type="text" name="keywords_code" id="editDR_keywords_code" class="autocomplete str code cim10" value="{{$sejour->DR}}" size="10"/>
+    <input type="text" name="keywords_code" id="editDR_keywords_code" class="autocomplete str" value="{{$sejour->DR}}" size="10"/>
     <input type="hidden" name="DR" onchange="this.form.onsubmit();"/>
+    <button class="search notext" type="button" onclick="CIM10Selector.initDR({{$sejour->_id}})">
+      {{tr}}Search{{/tr}}
+    </button>
   </div>
 </form>
 
@@ -79,8 +85,11 @@
           width: "250px"
         });
     {{/main}}
-    <input type="text" name="keywords_code" id="editDA_keywords_code" class="autocomplete str code cim10" value="" size="10"/>
+    <input type="text" name="keywords_code" id="editDA_keywords_code" class="autocomplete str" value="" size="10"/>
     <input type="hidden" name="_added_code_cim" onchange="this.form.onsubmit();"/>
+    <button class="search notext" type="button" onclick="CIM10Selector.initDAS({{$sejour->_id}})">
+      {{tr}}Search{{/tr}}
+    </button>
   </div>
 </form>
 

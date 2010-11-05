@@ -54,7 +54,18 @@ Main.add(function() {
 	      <input type="hidden" name="sejour_id" value="{{$sejour->_id}}" />
 	      <input type="hidden" name="praticien_id" value="{{$sejour->praticien_id}}" />
 	      <input type="hidden" name="DP" value='' onchange="this.form.onsubmit();"/>
-	      <input type="text"   name="keywords_code" id="editDP_keywords_code" value="{{$sejour->DP}}" class="autocomplete str code cim10" size="10" />
+	      <input type="text"   name="keywords_code" id="editDP_keywords_code" value="{{$sejour->DP}}" class="autocomplete str" size="10" />
+	      <button type="button" class="search notext" onclick="CIM10Selector.initDP()">
+          {{tr}}button-CCodeCIM10-choix{{/tr}}
+        </button>
+        <script type="text/javascript">
+          CIM10Selector.initDP = function() {
+            this.sForm     = "editDP";
+            this.sView     = "DP";
+            this.sChir     = "praticien_id";
+            this.pop();
+          }
+        </script>
       </form>
     </td>
     
@@ -68,7 +79,18 @@ Main.add(function() {
 	      <input type="hidden" name="sejour_id" value="{{$sejour->_id}}" />
 	      <input type="hidden" name="praticien_id" value="{{$sejour->praticien_id}}" />
 	      <input type="hidden" name="DR" value='' onchange="this.form.onsubmit();"/>
-	      <input type="text"   name="keywords_code" id="editDR_keywords_code"value="{{$sejour->DR}}" class="autocomplete str code cim10" size="10" />
+	      <input type="text"   name="keywords_code" id="editDR_keywords_code"value="{{$sejour->DR}}" class="autocomplete str" size="10" />
+	      <button type="button" class="search notext" onclick="CIM10Selector.initDR()">
+        {{tr}}button-CCodeCIM10-choix{{/tr}}
+      </button>
+      <script type="text/javascript">
+        CIM10Selector.initDR = function() {
+            this.sForm     = "editDR";
+            this.sView     = "DR";
+            this.sChir     = "praticien_id";
+            this.pop();
+        }
+      </script>
       </form>
     </td>
   </tr>
@@ -102,7 +124,18 @@ Main.add(function() {
         <input type="hidden" name="object_id" value="{{$sejour->_id}}" />
         <input type="hidden" name="_praticien_id" value="{{$sejour->praticien_id}}" />
         <input type="hidden" name="_added_code_cim" onchange="this.form.onsubmit();"/>
-        <input type="text"   name="keywords_code" id="editDA_keywords_code" size="5" class="autocomplete str code cim10" />
+        <input type="text"   name="keywords_code" id="editDA_keywords_code" size="5" class="autocomplete str" />
+        <button class="search notext" type="button" onclick="CIM10Selector.initAsso()">
+          Chercher un diagnostic
+        </button>
+        <script type="text/javascript">
+          CIM10Selector.initAsso = function(){
+            this.sForm = "editDA";
+            this.sView = "_added_code_cim";
+            this.sChir = "_praticien_id";
+            this.pop();
+          }
+        </script>
       </form>
     </td>
   </tr>

@@ -16,6 +16,26 @@
 {{mb_include_script module="dPplanningOp" script="cim10_selector"}}
 
 <script type="text/javascript">
+  CIM10Selector.initDP = function(sejour_id){
+    this.sForm = "editDP";
+    this.sView = "DP";
+    this.sChir = "_praticien_id";
+    this.pop();
+  }
+  
+  CIM10Selector.initDR = function(sejour_id){
+    this.sForm = "editDR";
+    this.sView = "DR";
+    this.sChir = "_praticien_id";
+    this.pop();
+  }
+  
+  CIM10Selector.initDAS = function(sejour_id){
+    this.sForm = "editDA";
+    this.sView = "_added_code_cim";
+    this.sChir = "_praticien_id";
+    this.pop();
+  }
   function choosePreselection(oSelect) {
   if (!oSelect.value) { 
     return;

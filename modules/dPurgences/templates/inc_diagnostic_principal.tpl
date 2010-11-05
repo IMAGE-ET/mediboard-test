@@ -37,8 +37,18 @@
  
   <input type="hidden" name="praticien_id" value="{{$sejour->praticien_id}}" />
 
-  <input type="text" name="keywords_code" id="editSejour_keywords_code" class="autocomplete str code cim10" value="{{$sejour->DP}}" size="10"/>
-  <input type="hidden" name="DP" />
-
+  <input type="text" name="keywords_code" id="editSejour_keywords_code" class="autocomplete str" value="{{$sejour->DP}}" size="10"/>
+  <input type="hidden" name="DP"/>
+  <script type="text/javascript">
+    CIM10Selector.initDP = function() {
+      this.sForm     = "editSejour";
+      this.sView     = "DP";
+      this.sChir     = "praticien_id";
+      this.pop();
+    }
+  </script>
+  <button type="button" class="search notext" onclick="CIM10Selector.initDP()">
+    {{tr}}button-CCodeCIM10-choix{{/tr}}
+  </button>
 </td>
 

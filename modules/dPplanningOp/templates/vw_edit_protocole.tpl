@@ -305,8 +305,17 @@ Main.add(function () {
 				        width: "250px"
 				      });
 				    {{/main}}
-				    <input type="text" name="keywords_code" id="editFrm_keywords_code" class="autocomplete str code cim10" value="{{$protocole->DP}}" size="8"/>
-	          <input type="hidden" name="DP" />
+				    <input type="text" name="keywords_code" id="editFrm_keywords_code" class="autocomplete str" value="{{$protocole->DP}}" size="8"/>
+	          <input type="hidden" name="DP" onchange="$V(this.form.keywords_code, this.value)"/>
+	          <button type="button" class="search" onclick="CIM10Selector.init()">Choisir un code</button>
+              <script type="text/javascript">
+                CIM10Selector.init = function(){
+                  this.sForm = "editFrm";
+                  this.sView = "DP";
+                  this.sChir = "chir_id";
+                  this.pop();
+                }
+              </script>
           </td>
         </tr>
         
