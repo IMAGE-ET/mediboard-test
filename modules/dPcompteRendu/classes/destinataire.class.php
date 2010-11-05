@@ -88,7 +88,7 @@ class CDestinataire {
       $dest->nom     = $medecin->_view;
 	  	$dest->adresse = $medecin->adresse;
 	  	$dest->cpville = "$medecin->cp $medecin->ville";
-	  	$dest->email   = "";
+	  	$dest->email   = $medecin->email;
       self::$destByClass[$mbObject->_class_name][] = $dest;
 	  }
 	  
