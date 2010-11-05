@@ -22,10 +22,6 @@ class CNumSpec extends CMbFieldSpec {
     return "num";
   }
   
-  function getValue($object, $smarty = null, $params = array()) {
-    return number_format($object->{$this->fieldName}, 0, ',', ' ');
-  }
-  
   function getDBSpec(){
     $type_sql = "INT(11)";
     
