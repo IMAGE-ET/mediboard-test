@@ -455,7 +455,18 @@ Main.add(function () {
         <strong>Ajouter un diagnostic</strong>
         <input type="hidden" name="chir" value="{{$userSel->_id}}" />
         <input type="text" name="keywords_code" id="addDiagFrm_keywords_code" class="autocomplete str code cim10" value="" size="10"/>
-        <input type="hidden" name="code_diag" />
+        <input type="hidden" name="code_diag" onchange="$V(this.form.keywords_code, this.value)"/>
+        <button class="search" type="button" onclick="CIM10Selector.init()">{{tr}}Search{{/tr}}</button>
+        <button class="tick notext" type="button" onclick="reloadCim10(code_diag.value)">{{tr}}Validate{{/tr}}</button>
+        <script type="text/javascript">   
+          CIM10Selector.init = function(){
+            this.sForm = "addDiagFrm";
+            this.sView = "code_diag";
+            this.sChir = "chir";
+            this.options.mode = "favoris";
+            this.pop();
+          }
+        </script> 
       </form>
       
       <table style="width: 100%">
