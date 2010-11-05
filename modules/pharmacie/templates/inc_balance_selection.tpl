@@ -13,12 +13,9 @@
 <table class="main tbl">
   {{foreach from=$list_products item=_product}}
     <tr>
-      <td>
-        {{$_product}}
-      </td>
-      <td>
-        {{$_product->code}}
-      </td>
+      <td>{{$_product}}</td>
+      <td>{{$_product->code}}</td>
+      <td>{{mb_value object=$_product->_ref_stock_group field=quantity}}</td>
     </tr>
   {{/foreach}}
 </table>

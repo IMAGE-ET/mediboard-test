@@ -57,6 +57,10 @@ else {
   $list_products = $product->loadList($where, "name");
 }
 
+foreach($list_products as $_product) {
+  $_product->loadRefStock();
+}
+
 
 // Création du template
 $smarty = new CSmartyDP();
