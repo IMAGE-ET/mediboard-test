@@ -100,7 +100,7 @@ showHeader();
   <td class="text"><?php echo nl2br($pathAccess->description); ?></td>
   <td>
     <?php if ($pathAccess->check()) { ?>
-    <div class="message">Ok</div>
+    <div class="info">Ok</div>
     <?php } else { ?>
     <div class="error">Erreur</div>
     <?php } ?>

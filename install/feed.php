@@ -66,7 +66,7 @@ if (@$_POST["do"]) {
   <td>Construction des tables pour les 'core' modules</td>
   <td>
     <?php if (!count($dbConnection->_errors)) { ?>
-    <div class="message">Construction réussie</div>
+    <div class="info">Construction réussie</div>
     <?php } else { ?>
     <div class="error">
       Erreurs lors de la construction

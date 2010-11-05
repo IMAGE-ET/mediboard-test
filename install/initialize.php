@@ -94,7 +94,7 @@ if (@$_POST["adminhost"]) {
   <td>Créations des bases et des utilisateurs</td>
   <td>
     <?php if (!count($dbConnection->_errors)) { ?>
-    <div class="message">Créations réussies</div>
+    <div class="info">Créations réussies</div>
     <?php } else { ?>
     <div class="error">
       Erreurs lors des créations
@@ -167,7 +167,7 @@ if (@$_POST["adminhost"]) {
     <td>
     
     <?php if (!count($dbConnection->_errors)) { ?>
-      <div class="message">Connexion réussie</div>
+      <div class="info">Connexion réussie</div>
     <?php } else { ?>
       <div class="error">
         Echec de connexion

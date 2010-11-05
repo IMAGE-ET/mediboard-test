@@ -67,7 +67,7 @@ showHeader();
 		    <td style="width: 100%; text-align: right;">Extraction des fichiers :</td>
 		    <td>
 			    <?php if ($nbFiles = $library->install()) { ?>
-			    <div class="message">Ok, <?php echo $nbFiles ?> fichiers extraits</div>
+			    <div class="info">Ok, <?php echo $nbFiles ?> fichiers extraits</div>
 			    <?php } else { ?>
 			    <div class="<?php echo $prereq->mandatory ? "error" : "warning"; ?>">Erreur, <?php echo $library->nbFiles; ?> fichiers trouvés</div>
 			    <?php } ?>
@@ -79,7 +79,7 @@ showHeader();
 		    <td style="width: 100%; text-align: right;">Renommage de la bibliothèque <strong>'<?php echo $library->sourceDir; ?>'</strong> en <strong>'<?php echo $library->targetDir; ?>'</strong> : </td>
 		    <td>
 		      <?php if ($library->apply()) { ?>
-			    <div class='message'>Ok</div>
+			    <div class='info'>Ok</div>
 			    <?php } else { ?>
 			    <div class="<?php echo $prereq->mandatory ? "error" : "warning"; ?>">Erreur</div>
 			    <?php } ?>
@@ -92,7 +92,7 @@ showHeader();
 			  <td style="width: 100%; text-align: right;">Patch <strong>'<?php echo $patch->sourceName; ?>'</strong> dans <strong>'<?php echo $patch->targetDir; ?>'</strong> :</td>
         <td>
 			    <?php if ($patch->apply()) { ?>
-			    <div class="message">Patch appliqué</div>
+			    <div class="info">Patch appliqué</div>
 			    <?php } else { ?>
 			    <div class="<?php echo $prereq->mandatory ? "error" : "warning"; ?>">Erreur</div>
 			    <?php } ?>
@@ -116,11 +116,11 @@ showHeader();
       <?php if (!$library->isInstalled()) { ?>
       <div class="error">Non installée</div>
       <?php } else if ($library->getUpdateState() === null) { ?>
-      <div class="message">Inconnu</div>
+      <div class="info">Inconnu</div>
       <?php } else if ($library->getUpdateState())  { ?>
-      <div class="message">A jour</div>
+      <div class="info">A jour</div>
       <?php } else { ?>
-      <div class="warning">Obsolète</div>
+      <div class="info">Obsolète</div>
       <?php } ?>
     </td>
     <td>

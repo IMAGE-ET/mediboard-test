@@ -252,7 +252,7 @@ showHeader();
   </td>
   <td>
     <?php if ($prereq->check()) { ?>
-    <div class="message">Oui, Version <?php echo phpVersion(); ?></div>
+    <div class="info">Oui, Version <?php echo phpVersion(); ?></div>
     <?php } else { ?>
     <div class="<?php echo $prereq->mandatory ? "error" : "warning"; ?>">Non, Version <?php echo phpVersion(); ?></div>
     <?php } ?>
@@ -310,7 +310,7 @@ showHeader();
   </td>
   <td>
     <?php if ($prereq->check()) { ?>
-    <div class="message">Extension chargée</div>
+    <div class="info">Extension chargée</div>
     <?php } else { ?>
     <div class="<?php echo $prereq->mandatory ? "error" : "warning"; ?>">Extension absente</div>
     <?php } ?>
@@ -366,7 +366,7 @@ showHeader();
   <td><?php echo $prereq->status; ?></td>
   <td>
     <?php if ($prereq->check()) { ?>
-    <div class="message">Package installé</div>
+    <div class="info">Package installé</div>
     <?php } else { ?>
     <div class="<?php echo $prereq->mandatory ? "error" : "warning"; ?>">Package manquant</div>
     <?php } ?>

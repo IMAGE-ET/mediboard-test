@@ -99,7 +99,7 @@ if (@$_POST["changePassword"]) {
   <td>Modification du mot de passe 'admin'</td>
   <td>
     <?php if (!Pear::isError($res)) { ?>
-    <div class="message">Mot de passe modifié</div>
+    <div class="info">Mot de passe modifié</div>
     <?php } else { ?>
     <div class="error">
       Erreur lors du changement de mot de passe
