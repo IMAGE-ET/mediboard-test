@@ -125,9 +125,8 @@ Main.add(function() {
            
  
         {{if $rpu->radio_debut}}
-          <img src="modules/soins/images/radio.png"
+          <img src="modules/soins/images/radio{{if !$rpu->radio_fin}}_grey{{/if}}.png"
             {{if !$rpu->radio_fin}}
-              class="opacity-60"
               title="{{tr}}CRPU-radio_debut{{/tr}} à {{$rpu->radio_debut|date_format:$dPconfig.time}}"
             {{else}}
               title="{{tr}}CRPU-radio_fin{{/tr}} à {{$rpu->radio_fin|date_format:$dPconfig.time}}"
@@ -136,9 +135,8 @@ Main.add(function() {
           <img src="images/icons/placeholder.png"/>
         {{/if}}
         {{if $rpu->bio_depart}}
-          <img src="images/icons/labo.png"
+          <img src="images/icons/labo{{if !$rpu->bio_retour}}_grey{{/if}}.png"
             {{if !$rpu->bio_retour}}
-              class="opacity-60"
               title="{{tr}}CRPU-bio_depart{{/tr}} à {{$rpu->bio_depart|date_format:$dPconfig.time}}"
             {{else}}
               title="{{tr}}CRPU-bio_retour{{/tr}} à {{$rpu->bio_retour|date_format:$dPconfig.time}}"
@@ -147,9 +145,8 @@ Main.add(function() {
           <img src="images/icons/placeholder.png"/>
         {{/if}}
         {{if $rpu->specia_att}}
-          <img src="modules/soins/images/stethoscope.png"
+          <img src="modules/soins/images/stethoscope{{if !$rpu->specia_arr}}_grey{{/if}}.png"
             {{if !$rpu->specia_arr}}
-              class="opacity-60"
               title="{{tr}}CRPU-specia_att{{/tr}} à {{$rpu->specia_att|date_format:$dPconfig.time}}"
             {{else}}
               title="{{tr}}CRPU-specia_arr{{/tr}} à {{$rpu->specia_arr|date_format:$dPconfig.time}}"
