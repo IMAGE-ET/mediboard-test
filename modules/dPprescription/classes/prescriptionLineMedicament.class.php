@@ -469,7 +469,6 @@ class CPrescriptionLineMedicament extends CPrescriptionLine {
 							GROUP BY prescription_line_medicament_id";
 	  $ds->exec($sql);
    
-	  
 	  // GROUP_CONCAT(prescription_line_medicament_id SEPARATOR '|')
 	  $sql = "SELECT signature, prescription_line_medicament_id, count(*) as count_signature 
 					  FROM signatures
@@ -499,7 +498,7 @@ class CPrescriptionLineMedicament extends CPrescriptionLine {
 		
 		// Pre-remplissage des prises les plus utilisées
     foreach($line_medicament->_ref_prises as $_prise){
-      if(!$_prise->urgence_datetime){
+      if(!$_prise->urgence_datetime && !$_prise->decalage_intervention){
 	      $_prise->_id = '';
 	      $_prise->object_id = $this->_id;
 	      $_prise->object_class = $this->_class_name;
