@@ -227,7 +227,7 @@ addAerosol = function(){
   {{/if}}
   
 	<tr>
-  	<td>
+  	<td class="text">
   	 <!-- Ne pas donner la possibilite de signer les lignes d'un protocole -->
     {{if $prescription->object_id && ($is_praticien || ($mode_pharma && $prescription->_score_prescription != "2"))}}
     <button class="tick" type="button" onclick="submitValideAllLines('{{$prescription->_id}}', 'medicament', '{{$mode_pharma}}');" style="float: right">
