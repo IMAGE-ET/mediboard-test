@@ -440,6 +440,10 @@ button.barcode:before, a.button.barcode:before {
   content: url(images/buttons/barcode.png);
 }
 
+button.erase:before, a.button.erase:before {
+  content: url(images/buttons/eraser.png);
+}
+
 button.selected {
   border: 2px solid #000;
 }
