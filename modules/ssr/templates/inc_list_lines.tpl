@@ -55,7 +55,7 @@
 						<br />
 						{{mb_label object=$_line field="commentaire"}}
 						{{if $can_edit_prescription}}
-						  {{mb_field object=$_line field="commentaire" style="width: 20em;" onchange="onSubmitFormAjax(this.form);"}}
+						  {{mb_field object=$_line field="commentaire" style="width: 20em;" onchange="onSubmitFormAjax(this.form);" multiline=true}}
 	          {{else}}
 						  {{mb_value object=$_line field="commentaire"}}
 	          {{/if}}
