@@ -15,12 +15,15 @@ ModalValidation = {
 	form: function() {
 		return getForm("editSelectedEvent");
 	},
+
+  formModal: function() {
+    return getForm("TreatEvents");
+  },
 	
-	toggleSejour: function(sejour_id) {
-		$('list-evenements-modal').select('input.CSejour-'+sejour_id).each(function(checkbox) {
-			if (!checkbox.disabled) {
-        checkbox.checked = !checkbox.checked;
-			}
+	toggleSejour: function(sejour_id, type) {
+		$('list-evenements-modal').select('input.CSejour-'+sejour_id+'.'+type).each(function(checkbox) {
+      checkbox.checked = true;
+			checkbox.onchange();
     });
 	},
   
@@ -39,32 +42,41 @@ ModalValidation = {
 	},
 	
 	selectCheckboxes: function() {
-    var event_ids = [];
+    var realise_ids = [];
+    var annule_ids = [];
+
     $('list-evenements-modal').select('input[type="checkbox"]').each(function(checkbox) {
 			if (checkbox.checked) {
-        event_ids.push(checkbox.value);
+        if (checkbox.hasClassName('realise')) realise_ids.push(checkbox.value);
+        if (checkbox.hasClassName('annule' )) annule_ids .push(checkbox.value);
 			}
     });
-    var form = this.form();
-    $V(form.event_ids, event_ids.join('|'));
-    return $V(form.event_ids);
+
+    var form = this.formModal();
+    $V(form.realise_ids, realise_ids.join('|'));
+    $V(form.annule_ids , annule_ids .join('|'));
 	},
 	
 	set: function(values) {
     Form.fromObject(this.form(), values);
 	},
 	
+  // Erase mode
 	submit: function() {
-    if(!this[$('modal_evenements').empty() ? "select" : "selectCheckboxes"]()) {
-      return;
-    }
-
-	  return onSubmitFormAjax(this.form(), { onComplete: function() { 
+		this.select();
+    return onSubmitFormAjax(this.form(), { onComplete: function() { 
       PlanningTechnicien.show(this.kine_id, null, null, 650, true);
-      ModalValidation.close();
-	  } });
+    } });
 	},
 	
+	submitModal: function() {
+    this.selectCheckboxes();
+    return onSubmitFormAjax(this.formModal(), { onComplete: function() { 
+      PlanningTechnicien.show(this.kine_id, null, null, 650, true);
+      ModalValidation.close();
+    } });
+	},
+		
   update: function() {
 		this.select();
     this.open();

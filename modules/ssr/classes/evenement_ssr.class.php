@@ -20,6 +20,7 @@ class CEvenementSSR extends CMbObject {
 	var $therapeute_id           = null;
 	var $equipement_id           = null;
   var $realise                 = null;
+  var $annule                  = null;
 	var $remarque                = null;
 
 	// Seances collectives
@@ -28,8 +29,8 @@ class CEvenementSSR extends CMbObject {
   //var $element_prescription_id = null; // Une seance est liée à un element de prescription et non pas une ligne d'element
 	var $_ref_seance_collective = null;
 	
-	
 	// Form Fields
+  var $_traite                  = null;
   var $_heure_fin               = null; // Time
 	var $_heure_deb               = null; // Time
 	var $_nb_decalage_min_debut   = null;
@@ -42,6 +43,9 @@ class CEvenementSSR extends CMbObject {
 	var $_ref_therapeute        = null;
 	var $_ref_actes_cdarr       = null;
 	var $_ref_evenements_seance = null;
+	
+	// Behaviour field
+	var $_traitement = null;
 	
   function getSpec() {
     $spec = parent::getSpec();
@@ -63,10 +67,12 @@ class CEvenementSSR extends CMbObject {
 
 		$props["therapeute_id"] = "ref class|CMediusers";
 		$props["equipement_id"] = "ref class|CEquipement";
-		$props["realise"]       = "bool default|0";
-		$props["remarque"]      = "str";
+	  $props["realise"]       = "bool default|0";
+    $props["annule"]        = "bool default|0";
+  	$props["remarque"]      = "str";
 		$props["seance_collective_id"] = "ref class|CEvenementSSR";
 		
+    $props["_traite"]       = "bool";
     $props["_nb_decalage_min_debut"]   = "num";
 		$props["_nb_decalage_heure_debut"] = "num";
     $props["_nb_decalage_jour_debut"]  = "num";
@@ -83,15 +89,18 @@ class CEvenementSSR extends CMbObject {
 	
 	function updateFormFields() {
 		parent::updateFormFields();
+		$this->_traite = $this->realise || $this->annule;
     $this->_heure_deb = mbTime($this->debut);
     $this->_heure_fin = mbTime("+ $this->duree MINUTES", $this->debut);
 	}
 	
 	function check(){
-		// Vérouillage d'un événement réalisé
+		// Vérouillage d'un événement traité
     $this->completeField("realise");
-		if ($this->realise && !$this->fieldModified("realise")) {
-			return "Evénément déjà réalisé";
+    $this->completeField("annule");
+    $this->_traite = $this->realise || $this->annule;
+		if ($this->_traite && !$this->_traitement) {
+			return "Evénément déjà traité (réalisé ou annulé)";
 		}
 
     // Evénement dans les bornes du séjour
@@ -126,7 +135,7 @@ class CEvenementSSR extends CMbObject {
 		  $therapeute = $evt_seance->_ref_therapeute;
     }
 		
-	  if ($this->fieldModified("realise")) {
+	  if ($this->fieldModified("realise", "1")) {
 		  // Si le thérapeute n'a pas d'identifiant CdARR
 		  if (!$therapeute->code_intervenant_cdarr) {
 		    return CAppUI::tr("CMediusers-code_intervenant_cdarr-none");
@@ -178,8 +187,10 @@ class CEvenementSSR extends CMbObject {
   	
 		// Impossible de supprmier un événement réalisé	
     $this->completeField("realise");
+    $this->completeField("annule");
+    $this->_traite = $this->realise || $this->annule;
 		if ($this->realise) {
-			return "CEvenementSSR-msg-delete-failed-realise";
+			return "CEvenementSSR-msg-delete-failed-traite";
 		}
 		
 	}

@@ -592,8 +592,13 @@ table#weeklyPlanning th.today {
 .planning .seance {
 	 background: #aaa url(../../images/icons/user-function.png) no-repeat bottom right;
 }
+
 .planning .realise {
-  background-image: url(images/icons/ray.gif);
+  background-image: url(../../images/icons/ray.gif);
+}
+
+.planning .annule {
+  background-image: url(../../images/icons/ray_cancelled.gif);
 }
 
 .planning .hours td {

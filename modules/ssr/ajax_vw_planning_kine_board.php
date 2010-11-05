@@ -22,6 +22,7 @@ $where = array();
 $where["therapeute_id"] = " = '$kine_id'";
 $where["debut"] = " BETWEEN '$monday 00:00:00' AND '$sunday 23:59:59'";
 $where["realise"] = " = '0'";
+$where["annule" ] = " = '0'";
 $count_evts = $evenement->countList($where);
 
 // Création du template

@@ -90,6 +90,11 @@ foreach($evenements as $_evenement){
     $class = "realise";
   }
 	
+  if ($_evenement->annule && !$print){
+    $class = "annule";
+  }
+
+
   $css_classes = array(
     $class,
     $element_prescription->_guid, 

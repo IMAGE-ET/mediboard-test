@@ -370,7 +370,12 @@ class CSetupssr extends CSetup {
                ADD `facture` ENUM ('0','1') DEFAULT '0';";
     $this->addQuery($sql);
     
-		$this->mod_version = "0.30";
+    $this->makeRevision("0.30");
+    $sql = "ALTER TABLE `evenement_ssr` 
+      ADD `annule` ENUM ('0','1') DEFAULT '0';";
+    $this->addQuery($sql);
+
+		$this->mod_version = "0.31";
     
     // Data source query
     $query = "SHOW COLUMNS FROM type_activite LIKE 'libelle_court'";

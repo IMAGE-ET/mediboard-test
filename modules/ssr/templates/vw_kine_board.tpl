@@ -78,7 +78,7 @@ Main.add(function(){
           {{foreach from=$kines item=_kine}}
             <option value="{{$_kine->_id}}" class="mediuser"
                     style="border-color: #{{$_kine->_ref_function->color}}"
-                    {{if $kine_id == $_kine->_id}}selected="selected"{{/if}}>{{$_kine->_view}}</option>
+                    {{if $kine_id == $_kine->_id}} selected="selected" {{/if}}>{{$_kine->_view}}</option>
           {{/foreach}}
         </select>
       </form>
@@ -93,6 +93,8 @@ Main.add(function(){
         <input type="hidden" name="event_ids" value="" />
         <input type="hidden" name="del" value="0" />    
         <input type="hidden" name="realise" value="0" />
+        <input type="hidden" name="annule" value="0" />
+        <input type="hidden" name="_traitement" value="1" />
       </form>
       <div id="planning-kine"></div>
 		</td>

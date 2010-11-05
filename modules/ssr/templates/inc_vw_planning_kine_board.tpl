@@ -17,7 +17,7 @@ Main.add(function(){
 <div style="position: relative">
   <div style="position: absolute; top: 0px; left: 3em;">
     <button type="button" class="tick singleclick"          onclick="ModalValidation.set({realise: '1'}); ModalValidation.update();">{{tr}}Validate{{/tr}}</button>
-    <button type="button" class="cancel notext singleclick" onclick="ModalValidation.set({realise: '0'}); ModalValidation.submit();">{{tr}}Cancel{{/tr}}</button>
+    <button type="button" class="erase notext singleclick" onclick="ModalValidation.set({realise: '0', annule: '0'}); ModalValidation.submit();">{{tr}}Erase{{/tr}}</button>
   </div>
   <div style="position: absolute; top: 0px; right: 0px;">
     <button type="button" class="print notext" onclick="PlanningTechnicien.print();">{{tr}}Print{{/tr}}</button>
