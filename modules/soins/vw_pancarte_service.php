@@ -9,6 +9,10 @@
  */
 
 $service_id = CValue::getOrSession("service_id");
+
+if($service_id == "NP"){
+	$service_id = "";
+}
 $date = CValue::getOrSession("debut", mbDate());
 $prescription_id = CValue::get("prescription_id");
 

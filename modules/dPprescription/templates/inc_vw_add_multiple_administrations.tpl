@@ -64,7 +64,9 @@ function closeApplyAdministrations(dontClose) {
       {{foreach from=$tabs_refresh key=chapitre item=_tab_refresh}}
         window.opener.Prescription.loadTraitement('{{$sejour->_id}}','{{$date_sel}}', oFormClick.nb_decalage.value,'{{$mode_dossier}}', null, null, null, '{{$chapitre}}');
       {{/foreach}}
-      window.opener.loadSuivi('{{$sejour->_id}}');
+			if(window.opener.loadSuivi){
+        window.opener.loadSuivi('{{$sejour->_id}}');
+			}
     }
   {{/if}}
   if (!dontClose) {
