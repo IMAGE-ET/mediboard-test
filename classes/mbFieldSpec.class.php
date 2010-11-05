@@ -528,14 +528,14 @@ class CMbFieldSpec {
 	      $view = $ref_object->$view_field;
 	      
 	      $sHtml  = "<input type=\"hidden\" name=\"$field\" value=\"".htmlspecialchars($value)."\" 
-	                  class=\"".htmlspecialchars(trim("$className $this->prop"))."\" $extra />";
+	                  class=\"".htmlspecialchars("$className $this->prop")."\" $extra />";
 	      $sHtml .= "<input type=\"text\" name=\"{$field}_autocomplete_view\" value=\"".htmlspecialchars($view)."\" 
 	                  class=\"autocomplete\" onchange='if(!this.value){this.form[\"".$field."\"].value=\"\"}' $extra />";
 	      $ref = true;
 	    }
 	    else {
 	      $sHtml  = "<input type=\"text\" name=\"$field\" value=\"".htmlspecialchars($value)."\"
-	                  class=\"".htmlspecialchars(trim("$className $this->prop"))."\" $extra />";
+	                  class=\"".htmlspecialchars("$className $this->prop")."\" $extra />";
 	    }
     	
     	$id = $form.'_'.$field.($ref ? '_autocomplete_view' : '');
@@ -575,11 +575,28 @@ class CMbFieldSpec {
       $sHtml .= '<div style="display:none; width:0;" class="autocomplete" id="'.$id.'_autocomplete"></div>';
     }
     else {
-    	$sHtml = "<input type=\"text\" name=\"$field\" value=\"".htmlspecialchars($value)."\"
-                class=\"".htmlspecialchars(trim("$className $this->prop"))."\" $extra/>";
-      
       if ($multiline) {
-        $sHtml .= '<button type="button" class="multiline notext" onclick="$(this).previous(\'input,textarea\').switchMultiline(this)"></button>';
+        $has_CR = strpos($value, "\n") !== false;
+        
+        if ($has_CR) {
+          if (!isset($params["style"])) $params["style"] = "";
+          $params["style"] .= "width: auto;";
+          $extra = CMbArray::makeXmlAttributes($params);
+          
+          $sHtml = "<textarea name=\"$field\" class=\"".htmlspecialchars("$className $this->prop")." noresize\" $extra>".
+                      htmlspecialchars($value).
+                   "</textarea>";
+        }
+        else{
+          $sHtml = "<input type=\"text\" name=\"$field\" value=\"".htmlspecialchars($value)."\"
+                    class=\"".htmlspecialchars("$className $this->prop")."\" $extra/>";
+        }
+        $sHtml .= '<button type="button" class="'.($has_CR ? "singleline" : "multiline").' notext" tabIndex="10000"
+                           onclick="$(this).previous(\'input,textarea\').switchMultiline(this)"></button>';
+      }
+      else {
+        $sHtml = "<input type=\"text\" name=\"$field\" value=\"".htmlspecialchars($value)."\"
+                  class=\"".htmlspecialchars("$className $this->prop")."\" $extra/>";
       }
     }
     
