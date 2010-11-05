@@ -14,7 +14,7 @@
           </button>
           {{/if}}
 				</th>
-				<td style="vertical-align: middle;">
+				<td class="text" style="vertical-align: middle;">
 					<span class="mediuser" style="border-left-color: #{{$_line->_ref_element_prescription->_color}};">
 		        <strong onmouseover="ObjectTooltip.createEx(this, '{{$_line->_guid}}');">
 		        	{{$_line}}
@@ -27,7 +27,7 @@
 		 {{if $_line->_id == $full_line_id}}
 			<tr>
 				<td></td>
-				<td style="border: 1px solid #aaa;">
+				<td  class="text" style="border: 1px solid #aaa;">
 				  <form name="editLine-{{$_line->_id}}" action="?" method="post">
 				  	<input type="hidden" name="m" value="dPprescription" />
 						<input type="hidden" name="dosql" value="do_prescription_line_element_aed" />
@@ -36,18 +36,21 @@
 						
 						{{if $can_edit_prescription}}
 	          <button style="float: right" type="button" class="trash notext" 
-	                  onclick="$V(this.form.del, '1'); return onSubmitFormAjax(this.form, { 
-	                             onComplete: function(){ updateListLines('{{$category_id}}', '{{$_line->prescription_id}}', ''); }
-	                           } )"></button>
+              onclick="$V(this.form.del, '1'); return onSubmitFormAjax(this.form, { 
+                onComplete: updateListLines.curry('{{$category_id}}', '{{$_line->prescription_id}}', '')
+              } )">
+            </button>
 						{{/if}}
 														 
 						<button type="button" class="lock notext" onclick="updateListLines('{{$category_id}}', '{{$_line->prescription_id}}', '');">
 							{{tr}}Lock{{/tr}}
 						</button>
 	
-		        <span class="mediuser" style="border-left-color: #{{$_line->_ref_element_prescription->_color}};">
-						  <strong onmouseover="ObjectTooltip.createEx(this, '{{$_line->_guid}}');"> {{$_line->_view}}</strong>
-						</span>
+            {{if $_lines|@count == 1}} 
+            <span class="mediuser" style="border-left-color: #{{$_line->_ref_element_prescription->_color}};">
+              <strong onmouseover="ObjectTooltip.createEx(this, '{{$_line->_guid}}');"> {{$_line}}</strong>
+            </span>
+            {{/if}}
 
 						<br />
 						{{mb_label object=$_line field="commentaire"}}
@@ -74,16 +77,23 @@
 			{{else}}
 			<tr>
 				<th>
+          {{if $_line->_recent_modification}} 
+          <img style="float: left" src="images/icons/ampoule.png" title="Prescription recemment modifiée"/>
+          {{/if}}
+          
 					{{if !@$offline}}
 					<button class="edit notext" type="button" onclick="updateListLines('{{$category_id}}', '{{$_line->prescription_id}}', '{{$_line->_id}}');">
 					  {{tr}}Edit{{/tr}}
 					</button>
 					  {{if @!$only_comment && $can_edit_prescription}}
-					    <button class="add notext" onclick="duplicateSSRLine('{{$_line->element_prescription_id}}','{{$category_id}}')">{{tr}}Add{{/tr}}</button>
+				    <button class="add notext" onclick="duplicateSSRLine('{{$_line->element_prescription_id}}','{{$category_id}}')">
+				    	{{tr}}Add{{/tr}}
+						</button>
 					  {{/if}}
 					{{/if}}
 				</th>
-        <td style="vertical-align: middle;">
+
+        <td class="text" style="vertical-align: middle;">
 	        {{mb_include template=inc_vw_line}}
         </td>
 	    </tr>

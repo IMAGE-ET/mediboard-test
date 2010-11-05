@@ -58,7 +58,7 @@ if ($sejour->_id) {
 		$line = new CPrescriptionLineElement();
 		$line->prescription_id = $prescription_SSR->_id;
 		$_lines = $line->loadMatchingList("debut ASC");
-		foreach($_lines as $_line){
+		foreach($_lines as $_line) {
 			$lines[$_line->_ref_element_prescription->category_prescription_id][$_line->element_prescription_id][] = $_line;
 		}
 	}
