@@ -85,8 +85,12 @@ foreach ($sejours as $_sejour) {
   $bilan->loadRefKineJournee($date);
   $kine_journee = $bilan->_ref_kine_journee;
   $kines[$kine_journee->_id] = $kine_journee;
+	
   $kine_referent = $bilan->_ref_kine_referent;
-  $kines[$kine_referent->_id] = $kine_referent;
+	if (!$kine_journee->_id) {
+	  $kines[$kine_referent->_id] = $kine_referent;
+	}
+
   if ($filter->referent_id && $kine_referent->_id != $filter->referent_id && $kine_journee->_id != $filter->referent_id) {
     unset($sejours[$_sejour->_id]);
     continue;
@@ -103,16 +107,18 @@ foreach ($sejours as $_sejour) {
   $_sejour->loadNumDossier();
   $_sejour->loadRefsNotes();
 	$_sejour->countBackRefs("evenements_ssr");
-	$_sejour->countEvenementsSSR($date);
 	
   // Patient
   $_sejour->loadRefPatient();
 	$patient =& $_sejour->_ref_patient;
 	$patient->loadIPP();
-
+	
   // Modification des prescription
 	$_sejour->_ref_prescription_sejour->loadRefsLinesElementByCat();
 	$_sejour->_ref_prescription_sejour->countRecentModif();
+
+  // Praticien demandeur
+	$bilan->loadRefPraticienDemandeur();
 }
 
 // Ajustements services

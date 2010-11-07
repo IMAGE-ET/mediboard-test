@@ -18,8 +18,8 @@ class CSejour extends CCodable {
   var $sejour_id = null;
   
   // DB Réference
-  var $patient_id         = null; // remplace $op->pat_id
-  var $praticien_id       = null; // clone $op->chir_id
+  var $patient_id         = null;
+  var $praticien_id       = null; 
   var $group_id           = null;
   
   var $etablissement_transfert_id        = null;
@@ -870,11 +870,14 @@ class CSejour extends CCodable {
     if (substr($this->_view, 0, 9) == "Séjour du") {
       $this->_view = $this->_ref_patient->_view . " - " . $this->_view;
     }
+		
+		return $this->_ref_patient;
   }
   
   function loadRefPraticien($cache = 0) {
     $this->_ref_praticien = $this->loadFwdRef("praticien_id", $cache);
     $this->_ref_praticien->loadRefFunction();
+		return $this->_ref_praticien;
   }
   
   function loadExtDiagnostics() {

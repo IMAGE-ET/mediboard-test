@@ -30,7 +30,11 @@
     {{assign var=class value=repartition}}
     {{mb_include module=system template=inc_config_category}}
     {{mb_include module=system template=inc_config_bool var=show_tabs}}
-
+		
+    {{assign var=class value=CBilanSSR}}
+    {{mb_include module=system template=inc_config_category}}
+    {{mb_include module=system template=inc_config_str var=tolerance_sejour_demandeur}}
+ 
     <tr>
       <td class="button" colspan="100">
         <button class="modify" type="submit">{{tr}}Save{{/tr}}</button>
@@ -41,15 +45,6 @@
 
 {{mb_include module=system template=configure_dsn dsn=cdarr}}
 
-<script type="text/javascript">
-
-function startCdARR() {
-  var CCAMUrl = new Url;
-  CCAMUrl.setModuleAction("ssr", "httpreq_do_add_cdarr");
-  CCAMUrl.requestUpdate("cdarr");
-}
-
-</script>
 
 <h2>Import de la base de données CdARR</h2>
 
@@ -60,7 +55,10 @@ function startCdARR() {
   </tr>
   
   <tr>
-    <td><button class="tick" onclick="startCdARR()" >Importer la base de données CdARR</button></td>
+    <td>
+    	<button class="tick" onclick="new Url('ssr', 'httpreq_do_add_cdarr').requestUpdate('cdarr');" >
+    		Importer la base de données CdARR</button>
+			</td>
     <td id="cdarr"></td>
   </tr>
 </table>

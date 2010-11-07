@@ -9,15 +9,18 @@
  */
 
 $dPconfig["ssr"] = array ( 
-  "occupation_surveillance" => array(
+  "occupation_surveillance" => array (
     "faible" => "200",
     "eleve"  => "1000",
   ),
-  "occupation_technicien" => array(
+  "occupation_technicien" => array (
     "faible" => "60",
     "eleve"  => "300",
   ),
-	"repartition" => array(
+	"repartition" => array (
     "show_tabs" => "1",
-	) 
+	),
+	"CBilanSSR" => array (
+    "tolerance_sejour_demandeur" => "2",
+	),
 );

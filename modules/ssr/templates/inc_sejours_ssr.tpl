@@ -59,7 +59,8 @@
     <th style="width: 20em;">{{mb_title class="CSejour" field="libelle"}}</th>
 
     <th style="width: 12em;">
-      {{mb_title class="CSejour" field="praticien_id"}}
+      {{mb_title class=CSejour field=praticien_id}} /
+      {{mb_title class=CBilanSSR field=_prat_demandeur_id}}
       {{if !$dialog}}
 			<br />
 			<select name="praticien_id" onchange="$V(getForm('Filter').praticien_id, $V(this), true);">
@@ -70,8 +71,8 @@
     </th>
 
     <th style="width: 16em;">
-		  {{mb_title class="CBilanSSR" field="_kine_referent_id"}} /
-      {{mb_title class="CBilanSSR" field="_kine_journee_id"}}
+		  {{mb_title class=CBilanSSR field=_kine_referent_id}} /
+      {{mb_title class=CBilanSSR field=_kine_journee_id}}
 
       {{if !$dialog}}
       <br />
@@ -100,10 +101,6 @@
         <button class="search notext" onclick="modalwindow = modal($('modal-view-{{$_sejour->_id}}'));" style="float: left;"></button>
       {{/if}}
 			
-		  {{if $_sejour->_ref_prescription_sejour->_count_recent_modif_presc}}
-			<img style="float: right" src="images/icons/ampoule.png" title="Prescription recemment modifiée"/>
-			{{/if}}
-		
 			{{mb_include template=inc_view_patient patient=$_sejour->_ref_patient
 			  link="?m=$m&tab=vw_aed_sejour_ssr&sejour_id=$sejour_id"
 			}}
@@ -156,12 +153,16 @@
 		</td>
 
 		{{else}}
+      {{assign var=bilan value=$_sejour->_ref_bilan_ssr}}
       <td class="text">
         {{mb_include module=mediusers template=inc_vw_mediuser mediuser=$_sejour->_ref_praticien}}
+				{{assign var=prat_demandeur value=$bilan->_ref_prat_demandeur}}
+				{{if $prat_demandeur->_id}} 
+				<br />{{mb_include module=mediusers template=inc_vw_mediuser mediuser=$prat_demandeur}}
+				{{/if}}
       </td>
 					
 	    <td class="text">
-	      {{assign var=bilan value=$_sejour->_ref_bilan_ssr}}
 	      {{assign var=kine_referent value=$bilan->_ref_kine_referent}}
 	      {{if $kine_referent->_id}}
 	        {{mb_include module=mediusers template=inc_vw_mediuser mediuser=$kine_referent}}
@@ -172,25 +173,17 @@
 	      {{/if}}
 	    </td>
 	    
-	    {{assign var=prescription value=$_sejour->_ref_prescription_sejour}}
-	    {{if !$prescription->_id}} 
-	      <td colspan="2" style="text-align: center;">
-	        <img src="images/icons/calendar-broken.png" title="Aucune prescription, planification impossible" />
-	      </td>
-	    {{else}}
-	      <td style="text-align: right;" class="narrow">
-	        {{if $_sejour->_count_evenements_ssr}} 
-	        {{$_sejour->_count_evenements_ssr}}
-	        {{/if}}
-	      </td>
-	  
-	      <td style="text-align: right;" class="narrow">
-	        {{if $_sejour->_count.evenements_ssr}} 
-	        {{$_sejour->_count.evenements_ssr}}
-	        {{/if}}
-	      </td>
-	    {{/if}}
-		{{/if}}
+      <td colspan="2" style="text-align: center;">
+        {{assign var=prescription value=$_sejour->_ref_prescription_sejour}}
+        {{if $prescription->_id}}
+          {{if $prescription->_count_recent_modif_presc}}
+            <img src="images/icons/ampoule.png" onmouseover="ObjectTooltip.createEx(this, '{{$prescription->_guid}}')"/>
+          {{else}}
+            <img src="images/icons/ampoule_grey.png" onmouseover="ObjectTooltip.createEx(this, '{{$prescription->_guid}}')"/>
+          {{/if}}
+        {{/if}}
+      </td>
+   		{{/if}}
 
 	</tr>
 	{{foreachelse}}

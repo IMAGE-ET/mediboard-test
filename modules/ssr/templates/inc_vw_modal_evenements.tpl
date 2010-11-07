@@ -79,10 +79,6 @@
 					{{if $equipement->_id}} 
 					  {{$equipement}}
 					{{/if}}
-					
-					{{if $_evenement->_traite}} 
-					  {{mb_label object=$_evenement field=_traite}}
-					{{/if}}
         </td>
         <td>
           <input class="{{$sejour->_guid}} {{$_evenement->_guid}} realise" type="checkbox" value="{{$_evenement->_id}}" 

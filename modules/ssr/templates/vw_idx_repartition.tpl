@@ -16,11 +16,6 @@ showLegende = function(){
 	url.popup(300, 200, "Legende");
 }
 
-
-Main.add(function () {
-  Calendar.regField(getForm("selDate").date, null, {noView: true});
-});
-
 </script>
 
 {{mb_include_script module=ssr script=repartition}}
@@ -42,12 +37,18 @@ Main.add(function () {
 		<th colspan="2">
 			<big>Planning du {{$date|date_format:$dPconfig.date}}</big>
 			<form name="selDate" action="?" method="get">
-				<input type="hidden" name="m" value="{{$m}}" />
-			  <input type="hidden" name="date" class="date" value="{{$date}}" onchange="this.form.submit()" />
+        <input type="hidden" name="m" value="{{$m}}" />
+        <input type="hidden" name="{{$actionType}}" value="vw_idx_repartition" />
 				<input type="hidden" name="dialog" value="{{$dialog}}" />
-				<input type="hidden" name="a" value="{{$a}}" />
 				<input type="hidden" name="readonly" value="{{$readonly}}" />
+
+        <input type="hidden" name="date" class="date" value="{{$date}}" onchange="this.form.submit()" />
+        <script type="text/javascript">
+				Main.add(Calendar.regField.curry(getForm("selDate").date, null, {noView: true}));
+        </script>
+
 			</form>
+
 			<button type="button" class="search" style="float: right" onclick="showLegende();">Legende</button>
 		</th>
 	</tr>
