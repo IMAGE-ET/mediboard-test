@@ -1387,11 +1387,14 @@ td.ssr-repartition div.libelle {
 }
 
 .ssr div.motif-color {
-	float: left;
-	width: 70%;
 	height: 5px;
   margin-top: 4px;
   margin-left: 2px;
+}
+
+td.ssr-repartition  div.motif-color {
+  float: left;
+  width: 70%;
 }
 
 table.tbl td.trans-data {
