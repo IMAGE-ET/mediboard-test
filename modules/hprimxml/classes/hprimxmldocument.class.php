@@ -43,6 +43,12 @@ class CHPrimXMLDocument extends CMbXMLDocument {
     $this->now = time();
   }
   
+  function loadXML($source) {
+    $source = CMbString::isUTF8($source) ? utf8_decode($source) : $source;
+    
+    return parent::loadXML($source);
+  }
+  
   function schemaValidate($filename = null, $returnErrors = false, $display_errors = true) {
     if (!CAppUI::conf("hprimxml ".$this->evenement." validation")) {
       return true;

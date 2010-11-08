@@ -10,7 +10,7 @@
 
 <script type="text/javascript">
 Main.add(Control.Tabs.create.curry('tabs-configure', true));
-</script>'
+</script>
 
 <ul id="tabs-configure" class="control_tabs">
   <li><a href="#SIP">{{tr}}SIP{{/tr}}</a></li>

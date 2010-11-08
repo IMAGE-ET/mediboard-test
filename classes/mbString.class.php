@@ -190,5 +190,10 @@ abstract class CMbString {
 		CMbArray::removeValue($token, $tokens);
 		return implode($glue, $tokens);
 	}
+
+	static function isUTF8($string) {
+	  return (mb_detect_encoding($string) == "UTF8");
+	}
+	 
 }
 ?>
