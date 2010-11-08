@@ -1,4 +1,5 @@
 <!--  Diagnostic Principal -->
+
 <form name="editDP" action="?m={{$m}}" method="post" 
       onsubmit="return onSubmitFormAjax(this, { onComplete: reloadDiagnostic.curry({{$sejour->_id}}, 1) })">
   <input type="hidden" name="m" value="dPplanningOp" />
@@ -11,19 +12,28 @@
     {{mb_label object=$sejour field=DP}}
     {{main}}
         var url = new Url("dPcim10", "ajax_code_cim10_autocomplete");
-        url.addParam("type", "editDP");
         url.autoComplete("editDP_keywords_code", '', {
           minChars: 1,
           dropdown: true,
-          width: "250px"
+          width: "250px",
+          select: "code",
+          afterUpdateElement: function(oHidden) {
+            $V(getForm("editDP").DP, oHidden.value);
+          } 
         });
-        
+        deleteDP = function() {
+          var oForm = getForm("editDP");
+          $V(oForm.keywords_code, "");
+          $V(oForm.DP, "");
+          oForm.onsubmit();
+        }
     {{/main}}
-    <input type="text" name="keywords_code" id="editDP_keywords_code" class="autocomplete str" value="{{$sejour->DP}}" size="10"/>
+    <input type="text" name="keywords_code" class="autocomplete str  code cim10" value="{{$sejour->DP}}" size="10"/>
     <input type="hidden" name="DP" onchange="this.form.onsubmit();"/>
     <button class="search notext" type="button" onclick="CIM10Selector.initDP({{$sejour->_id}})">
       {{tr}}Search{{/tr}}
     </button>
+    <button type="button" class="cancel notext" onclick="deleteDP();">
   </div>
 </form>
 
@@ -45,18 +55,28 @@
     {{mb_label object=$sejour field=DR}}
     {{main}}
         var url = new Url("dPcim10", "ajax_code_cim10_autocomplete");
-        url.addParam("type", "editDR");
         url.autoComplete("editDR_keywords_code", '', {
           minChars: 1,
           dropdown: true,
-          width: "250px"
+          width: "250px",
+          select: "code",
+          afterUpdateElement: function(oHidden) {
+            $V(getForm("editDR").DR, oHidden.value);
+          }
         });
+        deleteDR = function() {
+          var oForm = getForm("editDR");
+          $V(oForm.keywords_code, "");
+          $V(oForm.DR, "");
+          oForm.onsubmit();
+        }
     {{/main}}
-    <input type="text" name="keywords_code" id="editDR_keywords_code" class="autocomplete str" value="{{$sejour->DR}}" size="10"/>
+    <input type="text" name="keywords_code" class="autocomplete str code cim10" value="{{$sejour->DR}}" size="10"/>
     <input type="hidden" name="DR" onchange="this.form.onsubmit();"/>
     <button class="search notext" type="button" onclick="CIM10Selector.initDR({{$sejour->_id}})">
       {{tr}}Search{{/tr}}
     </button>
+    <button type="button" class="cancel notext" onclick="deleteDR();">
   </div>
 </form>
 
@@ -78,14 +98,17 @@
     <label for="_added_code_cim" title="Diagnostics associés significatifs">DAS</label>
     {{main}}
         var url = new Url("dPcim10", "ajax_code_cim10_autocomplete");
-        url.addParam("type", "editDA");
         url.autoComplete("editDA_keywords_code", '', {
           minChars: 1,
           dropdown: true,
-          width: "250px"
+          width: "250px",
+          select: "code",
+          afterUpdateElement: function(oHidden) {
+            $V(getForm("editDA")._added_code_cim, oHidden.value);
+          }
         });
     {{/main}}
-    <input type="text" name="keywords_code" id="editDA_keywords_code" class="autocomplete str" value="" size="10"/>
+    <input type="text" name="keywords_code" class="autocomplete str" value="" size="10"/>
     <input type="hidden" name="_added_code_cim" onchange="this.form.onsubmit();"/>
     <button class="search notext" type="button" onclick="CIM10Selector.initDAS({{$sejour->_id}})">
       {{tr}}Search{{/tr}}

@@ -23,19 +23,29 @@
 	  url.addParam("modeDAS", modeDAS);
 	  url.requestUpdate("cim");
   }
+  function deleteCodeCim10() {
+	  var oForm = getForm("editSejour");
+	  $V(oForm.keywords_code, '');
+	  $V(oForm.DP, '');
+	  submitSejour('{{$sejour->_id}}');
+  }
   Main.add(function() {
       var url = new Url("dPcim10", "ajax_code_cim10_autocomplete");
       url.addParam("sejour_id", '{{$sejour->_id}}');
-      url.addParam("type", "urg");
-      url.autoComplete("editSejour_keywords_code", '', {
+      url.autoComplete(getForm("editSejour").keywords_code, '', {
         minChars: 1,
         dropdown: true,
-        width: "250px"
+        select: "code",
+        width: "250px",
+        afterUpdateElement: function(oHidden) {
+    	    $V(getForm('editSejour').DP, oHidden.value);
+    	    submitSejour('{{$sejour->_id}}');
+        }
       });
   });
 </script>
  
-  <input type="hidden" name="praticien_id" value="{{$sejour->praticien_id}}" />
+  <input type="hidden" name="praticien_id" value="{{$sejour->praticien_id}}"/>
 
   <input type="text" name="keywords_code" id="editSejour_keywords_code" class="autocomplete str" value="{{$sejour->DP}}" size="10"/>
   <input type="hidden" name="DP"/>
@@ -50,5 +60,6 @@
   <button type="button" class="search notext" onclick="CIM10Selector.initDP()">
     {{tr}}button-CCodeCIM10-choix{{/tr}}
   </button>
+  <button type="button" class="cancel notext" onclick="deleteCodeCim10();">
 </td>
 

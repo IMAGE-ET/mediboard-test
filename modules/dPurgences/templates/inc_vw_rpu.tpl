@@ -16,9 +16,15 @@ ContraintesRPU.contraintesProvenance  = {{$contrainteProvenance|@json}};
 ContraintesRPU.contraintesDestination = {{$contrainteDestination|@json}};
 ContraintesRPU.contraintesOrientation = {{$contrainteOrientation|@json}};
 
-function submitSejour(){
+function submitSejour(sejour_id){
   var oForm = document.editSejour;
-  submitFormAjax(oForm, 'systemMsg');
+  submitFormAjax(oForm, 'systemMsg',
+    { onComplete: function() {
+	      if (sejour_id != null) {
+		      reloadDiagnostic(sejour_id, 1);
+	      }
+	  }
+  });
 }
 
 function redirect() {

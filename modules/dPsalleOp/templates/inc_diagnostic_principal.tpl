@@ -13,27 +13,50 @@ onSubmitDiag = function(oForm) {
 Main.add(function() {
 
     var url = new Url("dPcim10", "ajax_code_cim10_autocomplete");
-    url.addParam("type", "editDP");
     url.autoComplete("editDP_keywords_code", '', {
       minChars: 1,
       dropdown: true,
+      select: "code",
       width: "250px",
+      afterUpdateElement: function(oHidden) {
+        $V(getForm("editDP").DP, oHidden.value);
+      }
     });
 
+    deleteDP = function() {
+      var oForm = getForm("editDP");
+      $V(oForm.keywords_code, "");
+      $V(oForm.DP, "");
+      oForm.onsubmit();
+    }
+
     var urlb = new Url("dPcim10", "ajax_code_cim10_autocomplete");
-    urlb.addParam("type", "editDR");
     urlb.autoComplete("editDR_keywords_code", '', {
       minChars: 1,
       dropdown: true,
+      select: "code",
       width: "250px",
+      afterUpdateElement: function(oHidden) {
+        $V(getForm("editDR").DR, oHidden.value);
+      }
     });
 
+    deleteDR = function() {
+      var oForm = getForm("editDR");
+      $V(oForm.keywords_code, "");
+      $V(oForm.DR, "");
+      oForm.onsubmit();
+    }
+    
     var urlc = new Url("dPcim10", "ajax_code_cim10_autocomplete");
-    urlc.addParam("type", "editDA");
     urlc.autoComplete("editDA_keywords_code", '', {
       minChars: 1,
       dropdown: true,
+      select: "code",
       width: "250px",
+      afterUpdateElement: function(oHidden) {
+        $V(getForm("editDA")._added_code_cim, oHidden.value);
+      }
     });
 });
 </script>
@@ -54,10 +77,11 @@ Main.add(function() {
 	      <input type="hidden" name="sejour_id" value="{{$sejour->_id}}" />
 	      <input type="hidden" name="praticien_id" value="{{$sejour->praticien_id}}" />
 	      <input type="hidden" name="DP" value='' onchange="this.form.onsubmit();"/>
-	      <input type="text"   name="keywords_code" id="editDP_keywords_code" value="{{$sejour->DP}}" class="autocomplete str" size="10" />
+	      <input type="text"   name="keywords_code" value="{{$sejour->DP}}" class="autocomplete str code cim10" size="10" />
 	      <button type="button" class="search notext" onclick="CIM10Selector.initDP()">
           {{tr}}button-CCodeCIM10-choix{{/tr}}
         </button>
+        <button type="button" class="cancel notext" onclick="deleteDP()" />
         <script type="text/javascript">
           CIM10Selector.initDP = function() {
             this.sForm     = "editDP";
@@ -79,10 +103,11 @@ Main.add(function() {
 	      <input type="hidden" name="sejour_id" value="{{$sejour->_id}}" />
 	      <input type="hidden" name="praticien_id" value="{{$sejour->praticien_id}}" />
 	      <input type="hidden" name="DR" value='' onchange="this.form.onsubmit();"/>
-	      <input type="text"   name="keywords_code" id="editDR_keywords_code"value="{{$sejour->DR}}" class="autocomplete str" size="10" />
+	      <input type="text"   name="keywords_code" value="{{$sejour->DR}}" class="autocomplete str code cim10" size="10" />
 	      <button type="button" class="search notext" onclick="CIM10Selector.initDR()">
         {{tr}}button-CCodeCIM10-choix{{/tr}}
       </button>
+      <button type="button" class="cancel notext" onclick="deleteDR()" />
       <script type="text/javascript">
         CIM10Selector.initDR = function() {
             this.sForm     = "editDR";
@@ -124,7 +149,7 @@ Main.add(function() {
         <input type="hidden" name="object_id" value="{{$sejour->_id}}" />
         <input type="hidden" name="_praticien_id" value="{{$sejour->praticien_id}}" />
         <input type="hidden" name="_added_code_cim" onchange="this.form.onsubmit();"/>
-        <input type="text"   name="keywords_code" id="editDA_keywords_code" size="5" class="autocomplete str" />
+        <input type="text"   name="keywords_code" size="5" class="autocomplete str code cim10" />
         <button class="search notext" type="button" onclick="CIM10Selector.initAsso()">
           Chercher un diagnostic
         </button>

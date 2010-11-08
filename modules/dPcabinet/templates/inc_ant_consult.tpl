@@ -15,8 +15,8 @@ reloadCim10 = function(sCode){
     oCimAnesthField.add(sCode);
   }
   {{/if}}
-
-  oForm.code_diag.value="";
+  $V(oForm.code_diag, '');
+  $V(oForm.keywords_code, '');
 }
 
 updateTokenCim10 = function() {
@@ -444,20 +444,24 @@ Main.add(function () {
     <td class="text">
       {{main}}
 	      var url = new Url("dPcim10", "ajax_code_cim10_autocomplete");
-	      url.addParam("type", "cab");
 	      url.autoComplete("addDiagFrm_keywords_code", '', {
 	        minChars: 1,
 	        dropdown: true,
-	        width: "250px"
+	        width: "250px",
+          afterUpdateElement: function(oHidden) {
+            oForm = getForm("addDiagFrm");
+            $V(oForm.code_diag, oHidden.value);
+            reloadCim10($V(oForm.code_diag));
+          }
 	      });
       {{/main}}
-      <form name="addDiagFrm" action="?m=dPcabinet" method="post">
+      <form name="addDiagFrm" action="?m=dPcabinet" method="post" onsubmit="return false;">
         <strong>Ajouter un diagnostic</strong>
         <input type="hidden" name="chir" value="{{$userSel->_id}}" />
-        <input type="text" name="keywords_code" id="addDiagFrm_keywords_code" class="autocomplete str code cim10" value="" size="10"/>
+        <input type="text" name="keywords_code" class="autocomplete str code cim10" value="" size="10"/>
         <input type="hidden" name="code_diag" onchange="$V(this.form.keywords_code, this.value)"/>
         <button class="search" type="button" onclick="CIM10Selector.init()">{{tr}}Search{{/tr}}</button>
-        <button class="tick notext" type="button" onclick="reloadCim10(code_diag.value)">{{tr}}Validate{{/tr}}</button>
+        <button class="tick notext" type="button" onclick="reloadCim10(this.form.code_diag.value)">{{tr}}Validate{{/tr}}</button>
         <script type="text/javascript">   
           CIM10Selector.init = function(){
             this.sForm = "addDiagFrm";

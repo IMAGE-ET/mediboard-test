@@ -298,14 +298,17 @@ Main.add(function () {
           <td>
 	          {{main}}
 	            var url = new Url("dPcim10", "ajax_code_cim10_autocomplete");
-				      url.addParam("type", "edit_protocole");
 				      url.autoComplete("editFrm_keywords_code", '', {
 				        minChars: 1,
 				        dropdown: true,
-				        width: "250px"
+				        width: "250px",
+                select: "code",
+                afterUpdateElement: function(oHidden) {
+                  $V(getForm("editFrm").DP, oHidden.value);
+                }
 				      });
 				    {{/main}}
-				    <input type="text" name="keywords_code" id="editFrm_keywords_code" class="autocomplete str" value="{{$protocole->DP}}" size="8"/>
+				    <input type="text" name="keywords_code" id="editFrm_keywords_code" class="autocomplete str code cim10" value="{{$protocole->DP}}" size="8"/>
 	          <input type="hidden" name="DP" onchange="$V(this.form.keywords_code, this.value)"/>
 	          <button type="button" class="search" onclick="CIM10Selector.init()">Choisir un code</button>
               <script type="text/javascript">
