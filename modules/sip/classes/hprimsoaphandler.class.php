@@ -162,11 +162,15 @@ class CHprimSoapHandler extends CSoapHandler {
       return $messageAcquittement;
       
     } catch (Exception $e) {
+      $echange_hprim->date_production = mbDateTime();
+      $echange_hprim->group_id        = $dest_hprim->group_id ? $dest_hprim->group_id : CGroups::loadCurrent()->_id;
+      $echange_hprim->_message        = $messagePatient;
+      
       $domAcquittement = new CHPrimXMLAcquittementsPatients();
       // Type par défaut
-      $domAcquittement->_sous_type_evt = "enregistrementPatient";
-      $domAcquittement->_identifiant_acquitte = $data['identifiantMessage'];
-      $domAcquittement->_ref_echange_hprim = $echange_hprim;
+      $domAcquittement->_sous_type_evt        = "enregistrementPatient";
+      $domAcquittement->_identifiant_acquitte = $data['identifiantMessage'] ? $data['identifiantMessage'] : "000000000";
+      $domAcquittement->_ref_echange_hprim    = $echange_hprim;
       
       $messageAcquittement = $domAcquittement->generateAcquittementsPatients("erreur", "E009", $e->getMessage());
       $doc_valid = $domAcquittement->schemaValidate();
