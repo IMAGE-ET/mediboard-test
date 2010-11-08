@@ -765,7 +765,7 @@ Main.add(function(){
     <table class="form">
      <tr>
         <th class="category" colspan="2">
-          Modification 
+          Modification / Suppression
         </th>
       </tr>
       <tr>
@@ -815,21 +815,14 @@ Main.add(function(){
       </tr>
       <tr>
         <td class="button" colspan="2">
-          <button type="button" onclick="$V(this.form.del, '0'); this.form.onsubmit();" class="submit">{{tr}}Modify{{/tr}}</button>
-        </td>
-      </tr> 
-      <tr>
-        <th class="category" colspan="2">
-          Suppression 
-        </th>
-      </tr>
-      <tr>
-        <td class="button" colspan="2">
+          <button type="button" onclick="$V(this.form.del, '0'); this.form.onsubmit();" class="submit">
+          	{{tr}}Modify{{/tr}}
+					</button>
           <button type="button" name="delete" class="trash" onclick="$V(this.form.del, '1'); this.form.onsubmit();">
             {{tr}}Delete{{/tr}}
           </button>
         </td>
-      </tr>
+      </tr> 
     </table>
   </form>
   
@@ -838,24 +831,54 @@ Main.add(function(){
     <input type="hidden" name="m" value="ssr" />
     <input type="hidden" name="dosql" value="do_duplicate_evenements_aed" />
     <input type="hidden" name="event_ids" value="" /> 
+    <input type="hidden" name="propagate" value="" /> 
+          
     <table class="form">
       <tr>
-        <th class="category">
-          Duplication
+        <th colspan="2" class="category">
+          Duplication / Propagation
         </th>
       </tr>
       <tr>
-        <td class="button">
+      	
+      	<th>
           <select name="period">
             <option value="+1 WEEK">{{tr}}Week-after{{/tr}}</option>
             <option value="+1 DAY" >{{tr}}Day-after{{/tr}} </option>
             <option value="-1 DAY" >{{tr}}Day-before{{/tr}}</option>
           </select>
-          <button type="button" class="new singleclick" onclick="this.form.onsubmit();">
+      	</th>
+				
+        <td class="button">
+          <button type="button" class="new singleclick" onclick="$V(this.form.propagate, '0'); this.form.onsubmit();">
             {{tr}}Duplicate{{/tr}}
           </button>
         </td>
       </tr> 
+
+      <tr>
+      	<th>
+          <table style="float: right;">
+            <tr>
+              {{foreach from=$list_days key=_date item=_day}}
+                <td>
+                  <label>
+                  	{{$_day}}<br />
+										<input class="days nocheck" type="checkbox" name="_days[{{$_date}}]" value="{{$_date}}" />
+                  </label>
+                </td>
+              {{/foreach}}
+            </tr>
+          </table>
+      	</th>
+				
+        <td class="button">
+          <button type="button" class="new singleclick" onclick="$V(this.form.propagate, '1'); this.form.onsubmit();">
+            {{tr}}Propagate{{/tr}}
+          </button>
+        </td>
+      </tr> 
+
     </table>
   </form>
   

@@ -10,83 +10,86 @@
 
 $event_ids = CValue::post("event_ids");
 $period    = CValue::post("period");
-
+$days      = CValue::post("propagate") ? CValue::post("_days") : array("");
 
 $elts_id = explode("|", $event_ids);
-foreach($elts_id as $_elt_id){
-  $evenement = new CEvenementSSR();
-  $evenement->load($_elt_id);
-  $evenement->loadRefsActesCdARR();
 
-  // Duplication de l'événement  
-	$evenement->_id = "";
-	$evenement->realise = 0;
-	$evenement->debut = mbDateTime($period, $evenement->debut);
-
-  // Cas des séances collectives
-	if ($evenement->seance_collective_id){
-    CAppUI::displayMsg("Impossible de dupliquer des événements qui sont dans des seances collectives", "CEvenementSSR-msg-create");
-		continue;
-	} 
-
-  // Autres rééducateurs
-	global $can;
-	$user = CAppUI::$instance->_ref_user;
-	$therapeute = $evenement->loadRefTherapeute();
-	if ($therapeute->function_id !=  $user->function_id && !$can->admin) {
-    CAppUI::displayMsg("Impossible de dupliquer les événements d'un rééducateur d'une autre spécialié", "CEvenementSSR-msg-create");
-    continue;
-	}
-
-  // Chargements préparatoire au transferts automatiques de rééducateurs	
-	$sejour = new CSejour;
-  $sejour->load($evenement->sejour_id);
-  $sejour->loadRefBilanSSR();
+foreach($days as $day) {
+	foreach($elts_id as $_elt_id){
+	  $evenement = new CEvenementSSR();
+	  $evenement->load($_elt_id);
+	  $evenement->loadRefsActesCdARR();
 	
-  $bilan =& $sejour->_ref_bilan_ssr;
-  $bilan->loadRefKineReferent();
-  
-	$referant =& $bilan->_ref_kine_referent;
-	$_day = mbDate($evenement->debut);
-	$therapeute_id = $evenement->therapeute_id;
+	  // Duplication de l'événement  
+	  $evenement->_id = "";
+	  $evenement->realise = 0;
+	  $evenement->debut = $day ? "$day ".mbTime($evenement->debut) :  mbDateTime($period, $evenement->debut);
 	
-  // Transfert kiné référent => kiné remplaçant si disponible
-  if ($therapeute_id == $referant->_id) {
-    $conge = new CPlageConge();
-    $conge->loadFor($therapeute_id, $_day);
-    // Référent en congés
-    if ($conge->_id){
-      $replacement = new CReplacement();
-      $replacement->conge_id = $conge->_id;
-      $replacement->sejour_id = $sejour->_id;
-      $replacement->loadMatchingObject();
-      if ($replacement->_id) {
-        $evenement->therapeute_id = $replacement->replacer_id;
-      }
-    }
-  }
-
-  // Transfert kiné remplacant => kiné référant si présent
-  if ($sejour->isReplacer($therapeute_id)) {
-    $conge = new CPlageConge();
-    $conge->loadFor($referant->_id, $_day);
-    // Référent présent
-    if (!$conge->_id){
-      $evenement->therapeute_id = $referant->_id;
-    }
-  }
+	  // Cas des séances collectives
+	  if ($evenement->seance_collective_id){
+	    CAppUI::displayMsg("Impossible de dupliquer des événements qui sont dans des seances collectives", "CEvenementSSR-msg-create");
+	    continue;
+	  } 
 	
-  $msg = $evenement->store();
-  CAppUI::displayMsg($msg, "CEvenementSSR-msg-create");
-
-  // Duplication des codes CdARR
-	if ($evenement->_id) {
-		foreach ($evenement->_ref_actes_cdarr as $_acte_cdarr) {
-		  $_acte_cdarr->_id = "";
-		  $_acte_cdarr->evenement_ssr_id = $evenement->_id;
-	    $msg = $_acte_cdarr->store();
-	    CAppUI::displayMsg($msg, "CActeCdARR-msg-create");
-		}
+	  // Autres rééducateurs
+	  global $can;
+	  $user = CAppUI::$user;
+	  $therapeute = $evenement->loadRefTherapeute();
+	  if ($therapeute->function_id !=  $user->function_id && !$can->admin) {
+	    CAppUI::displayMsg("Impossible de dupliquer les événements d'un rééducateur d'une autre spécialié", "CEvenementSSR-msg-create");
+	    continue;
+	  }
+	
+	  // Chargements préparatoire au transferts automatiques de rééducateurs  
+	  $sejour = new CSejour;
+	  $sejour->load($evenement->sejour_id);
+	  $sejour->loadRefBilanSSR();
+	  
+	  $bilan =& $sejour->_ref_bilan_ssr;
+	  $bilan->loadRefKineReferent();
+	  
+	  $referant =& $bilan->_ref_kine_referent;
+	  $_day = mbDate($evenement->debut);
+	  $therapeute_id = $evenement->therapeute_id;
+	  
+	  // Transfert kiné référent => kiné remplaçant si disponible
+	  if ($therapeute_id == $referant->_id) {
+	    $conge = new CPlageConge();
+	    $conge->loadFor($therapeute_id, $_day);
+	    // Référent en congés
+	    if ($conge->_id){
+	      $replacement = new CReplacement();
+	      $replacement->conge_id = $conge->_id;
+	      $replacement->sejour_id = $sejour->_id;
+	      $replacement->loadMatchingObject();
+	      if ($replacement->_id) {
+	        $evenement->therapeute_id = $replacement->replacer_id;
+	      }
+	    }
+	  }
+	
+	  // Transfert kiné remplacant => kiné référant si présent
+	  if ($sejour->isReplacer($therapeute_id)) {
+	    $conge = new CPlageConge();
+	    $conge->loadFor($referant->_id, $_day);
+	    // Référent présent
+	    if (!$conge->_id){
+	      $evenement->therapeute_id = $referant->_id;
+	    }
+	  }
+	  
+	  $msg = $evenement->store();
+	  CAppUI::displayMsg($msg, "CEvenementSSR-msg-create");
+	
+	  // Duplication des codes CdARR
+	  if ($evenement->_id) {
+	    foreach ($evenement->_ref_actes_cdarr as $_acte_cdarr) {
+	      $_acte_cdarr->_id = "";
+	      $_acte_cdarr->evenement_ssr_id = $evenement->_id;
+	      $msg = $_acte_cdarr->store();
+	      CAppUI::displayMsg($msg, "CActeCdARR-msg-create");
+	    }
+	  }
 	}
 }
 
