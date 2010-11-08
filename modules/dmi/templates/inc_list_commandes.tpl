@@ -99,7 +99,11 @@
                   </select>
                 </td>
                 <td>
-                  <button class="tick notext" type="submit">Commander</button>
+                  {{if $_line_dmi->_order_items|@count}}
+                    <button class="tick notext singleclick" type="submit" onclick="return confirm('Etes-vous sûr de vouloir recommander de DMI ?')">Commander</button>
+                  {{else}}
+                    <button class="tick notext singleclick" type="submit">Commander</button>
+                  {{/if}}
                 </td>
               </tr>
               <tr>

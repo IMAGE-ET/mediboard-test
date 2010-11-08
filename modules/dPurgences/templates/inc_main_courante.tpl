@@ -21,6 +21,13 @@ Main.add(function() {
 });
 </script>
 
+<div class="small-info" style="display: none;" id="filter-indicator">
+  <strong>Résultats filtrés</strong>.
+  <br />
+  Les résultats sont filtrés et le rafraîchissement est désactivé. 
+  <button class="change" onclick="MainCourante.start()">Relancer</button>
+</div>
+
 <table class="tbl">
   <tr>
     <th style="width: 8em;">
@@ -30,7 +37,7 @@ Main.add(function() {
     	{{mb_colonne class=CRPU field="_patient_id" order_col=$order_col order_way=$order_way url="?m=$m&amp;tab=vw_idx_rpu"}}
 		</th>
 		<th class="narrow">
-      <input type="text" size="6" onkeyup="MainCourante.filter(this)" id="filter-patient-name" />
+      <input type="text" size="6" onkeyup="MainCourante.filter(this, 'filter-indicator')" id="filter-patient-name" />
 		</th>
     <th style="width: 10em;">
 		  {{mb_colonne class=CRPU field="_entree"     order_col=$order_col order_way=$order_way url="?m=$m&amp;tab=vw_idx_rpu"}}

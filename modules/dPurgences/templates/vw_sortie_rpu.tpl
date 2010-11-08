@@ -112,11 +112,17 @@ function cancelSortie(button, rpu_id) {
   });
 }
 
-function filterPatient(input) {
+function filterPatient(input, indicator) {
   $$("#list-sorties tr").invoke("show");
+  indicator = $(indicator);
   
   var term = $V(input);
   if (!term) return;
+  
+  if (indicator) {
+    indicator.show();
+    this.stop();
+  }
   
   $$("#list-sorties .CPatient-view").each(function(p) {
     if (!p.innerHTML.like(term)) {
@@ -164,10 +170,17 @@ function submitSejour(){
   </tr>
 </table>
 
+<div class="small-info" style="display: none;" id="filter-indicator">
+  <strong>Résultats filtrés</strong>.
+  <br />
+  Les résultats sont filtrés et le rafraîchissement est désactivé. 
+  <button class="change" onclick="getForm('changeDate').submit()">Relancer</button>
+</div>
+
 <table class="tbl" id="list-sorties">
   <tr>
     <th>{{mb_title class=CRPU field="_patient_id"}}</th>
-    <th class="narrow"><input type="text" onkeyup="filterPatient(this)" id="filter-patient-name" size="6" /></th>
+    <th class="narrow"><input type="text" onkeyup="filterPatient(this, 'filter-indicator')" id="filter-patient-name" size="6" /></th>
     {{if $dPconfig.dPurgences.responsable_rpu_view}}
       <th>{{mb_title class=CRPU field="_responsable_id"}}</th>
     {{/if}}
