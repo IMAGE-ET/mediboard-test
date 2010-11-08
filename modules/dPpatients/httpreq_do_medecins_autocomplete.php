@@ -16,12 +16,12 @@ if($can->read && $keywords) {
   $g = CValue::getOrSessionAbs("g", CAppUI::$instance->user_group);
   $indexGroup = new CGroups;
   $indexGroup->load($g);
-  
+  $order = 'nom';
   
   $where = array();
   if($indexGroup->_cp_court) $where['cp'] = "LIKE '".$indexGroup->_cp_court."___'";
-  $where[] = "nom LIKE '$keywords%' OR prenom LIKE '$keywords%'";
-  $matches = $medecin->loadList($where, 'nom', 20);
+  
+  $matches = $medecin->seek($keywords, $where, null, null, null, $order);
   
   // Création du template
   $smarty = new CSmartyDP();
