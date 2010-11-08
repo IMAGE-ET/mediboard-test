@@ -14,7 +14,7 @@
   <table class="form">
     <tr>
       <th class="category" colspan="2">Global</th>
-    </tr
+    </tr>
     {{mb_include module=system template=inc_config_bool var=concatenate_xsd}}
     <tr>
       <th class="category" colspan="2">Patients</th>
