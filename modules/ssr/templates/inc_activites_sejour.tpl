@@ -244,8 +244,11 @@ addBorderEvent = function(){
     planning.select(".event.elt_selected"+eventClass).invoke("addClassName", 'tag_cat');
   }
   
-  // Mise à jour du compteur
-  window["planning-"+$('planning-sejour').down('div.planning').id].updateNbSelectEvents();
+  // Parfois le planning n'est pas prêt
+	
+	if (planning.down('div.planning')) {
+    window["planning-"+planning.down('div.planning').id].updateNbSelectEvents();
+	}
 }
 
 updateCdarrCount = function(line_id, type_cdarr){

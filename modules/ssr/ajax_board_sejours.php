@@ -49,10 +49,11 @@ if ($mode == "count" || $mode == "referenced") {
 
 // Sejours pour lesquels le kine est remplaçant
 if ($mode == "count" || $mode == "replaced") {
+  $order = "nom, prenom";
 	$join = array();
-	$join["patients"]  = "patients.patient_id = sejour.patient_id";
-	$order = "nom, prenom";
-	$join["replacement"]  = "replacement.sejour_id = sejour.sejour_id";
+	$join["patients"   ]  = "patients.patient_id = sejour.patient_id";
+  $join["replacement"]  = "replacement.sejour_id = sejour.sejour_id";
+  $join["plageconge"]   = "plageconge.plage_id = replacement.conge_id";
 	$where = array();
 	$where["sejour.type"  ] = "= 'ssr'";
 	$where["sejour.entree"] = "<= '$planning->date_max'";
@@ -60,6 +61,8 @@ if ($mode == "count" || $mode == "replaced") {
 	$where["sejour.annule"] = "= '0'";
 	$where["replacement.replacement_id"] = "IS NOT NULL";
 	$where["replacement.replacer_id"] = " = '$kine_id'";
+  $where["plageconge.date_debut"] = "<= '$planning->date_max'";
+  $where["plageconge.date_fin"  ] = ">= '$planning->date_min'";
 	
 	if ($mode == "count") {
 	  $counts["replaced"] = $sejour->countList($where, $order, null, null, $join);
@@ -71,9 +74,9 @@ if ($mode == "count" || $mode == "replaced") {
 
 // Sejours pour lesquels le rééducateur a des événements
 if ($mode == "count" || $mode == "planned") {
+  $order = "nom, prenom";
 	$join = array();
-	$join["patients"]  = "patients.patient_id = sejour.patient_id";
-	$order = "nom, prenom";
+	$join["patients"     ]  = "patients.patient_id = sejour.patient_id";
 	$join["evenement_ssr"]  = "evenement_ssr.sejour_id = sejour.sejour_id";
 	$where = array();
 	$where["sejour.type"  ] = "= 'ssr'";
