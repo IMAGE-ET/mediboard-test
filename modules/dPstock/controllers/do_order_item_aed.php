@@ -35,6 +35,9 @@ if(CValue::post("_create_order")) {
       unset($_POST["context_guid"]);
       $where["product_order_item.septic"] = "= '$septic'";
     }
+    else {
+      $where["product_order_item.septic"] = "= '0'";
+    }
   }
   
   $where["product_order.group_id"] = "= '".CProductStockGroup::getHostGroup()."'";
