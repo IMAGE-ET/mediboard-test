@@ -27,13 +27,16 @@ class CDestinataireHprim extends CMbObject {
   var $dest_hprim_id  = null;
   
   // DB Fields
-  var $nom       = null;
-  var $libelle   = null;
-  var $group_id  = null;
-  var $type      = null;
-	var $message   = null;
-  var $actif     = null;
-  var $register  = null;
+  var $nom         = null;
+  var $libelle     = null;
+  var $group_id    = null;
+  var $type        = null;
+	var $message     = null;
+  var $actif       = null;
+  var $register    = null;
+  var $code_appli  = null;
+  var $code_acteur = null;
+  var $code_syst   = null;
 	
   // Forward references
   var $_ref_group             = null;
@@ -55,18 +58,21 @@ class CDestinataireHprim extends CMbObject {
   
   function getProps() {
     $specs = parent::getProps();
-    $specs["nom"]       = "str notNull";
-    $specs["libelle"]   = "str";
-    $specs["group_id"]  = "ref notNull class|CGroups";
-    $specs["type"]      = "enum notNull list|cip|sip default|cip";
-		$specs["message"]   = "enum list|pmsi|patients|stock default|patient";
-    $specs["actif"]     = "bool notNull";
-    $specs["register"]  = "bool notNull default|1";
+    $specs["nom"]         = "str notNull";
+    $specs["libelle"]     = "str";
+    $specs["group_id"]    = "ref notNull class|CGroups";
+    $specs["type"]        = "enum notNull list|cip|sip default|cip";
+		$specs["message"]     = "enum list|pmsi|patients|stock default|patient";
+    $specs["actif"]       = "bool notNull";
+    $specs["register"]    = "bool notNull default|1";
+    $specs["code_appli"]  = "str";
+    $specs["code_acteur"] = "str";
+    $specs["code_syst"]   = "str";
     
-    $specs["_tag_patient"]   = "str";
-    $specs["_tag_sejour"]    = "str";
-		$specs["_tag_mediuser"]  = "str";
-		$specs["_tag_service"]   = "str";
+    $specs["_tag_patient"]  = "str";
+    $specs["_tag_sejour"]   = "str";
+		$specs["_tag_mediuser"] = "str";
+		$specs["_tag_service"]  = "str";
     return $specs;
   }
   
@@ -149,6 +155,8 @@ class CDestinataireHprim extends CMbObject {
 		
 		$this->_tag_mediuser = str_replace('$g', $this->group_id, CAppUI::conf("mediusers tag_mediuser"));
 		$this->_tag_service  = str_replace('$g', $this->group_id, CAppUI::conf("dPhospi tag_service"));
+		
+		$this->code_syst = $this->code_syst ? $this->code_syst : $this->nom;
   }  
   
   function register($idClient) {
@@ -157,7 +165,7 @@ class CDestinataireHprim extends CMbObject {
     
     // Enregistrement automatique d'un destinataire
     if (!$this->_id) {
-
+      
     }
   }
   

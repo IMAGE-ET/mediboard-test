@@ -134,9 +134,11 @@ class CHPrimXMLDocument extends CMbXMLDocument {
     
     $destinataire = $this->addElement($enteteMessage, "destinataire");
     $agents = $this->addElement($destinataire, "agents");
-    $this->addAgent($agents, "application", (CAppUI::conf('hprimxml code_receiver_sender') == "finess") ? $group->finess : $dest->nom, $dest->libelle);
-    /* @todo Doit-on gérer le système du destinataire ? */
-    //$this->addAgent($agents, "système", $group->_id, $group->text);
+    if ($dest->code_appli)
+      $this->addAgent($agents, "application", $dest->code_appli);
+    if ($dest->code_acteur)
+      $this->addAgent($agents, "acteur", $dest->code_acteur);
+    $this->addAgent($agents, "système", $dest->code_syst, $dest->libelle);
   }
   
   function generateTypeEvenement($mbObject, $referent = null, $initiateur = null) {

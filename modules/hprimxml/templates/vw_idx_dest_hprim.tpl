@@ -112,6 +112,18 @@
           <td>{{mb_field object=$dest_hprim field="register"}}</td>
         </tr>
         <tr>
+          <th>{{mb_label object=$dest_hprim field="code_appli"}}</th>
+          <td>{{mb_field object=$dest_hprim field="code_appli"}}</td>
+        </tr>
+        <tr>
+          <th>{{mb_label object=$dest_hprim field="code_acteur"}}</th>
+          <td>{{mb_field object=$dest_hprim field="code_acteur"}}</td>
+        </tr>
+        <tr>
+          <th>{{mb_label object=$dest_hprim field="code_syst"}}</th>
+          <td>{{mb_field object=$dest_hprim field="code_syst"}}</td>
+        </tr>
+        <tr>
           <td class="button" colspan="2">
           	{{if $dest_hprim->_id}}
               <button class="modify" type="submit">{{tr}}Save{{/tr}}</button>

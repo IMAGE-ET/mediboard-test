@@ -264,9 +264,17 @@ class CSetuphprimxml extends CSetup {
               ADD `send_default_serv_with_type_sej` ENUM ('0','1') DEFAULT '0';"; 
     $this->addQuery($sql);
     
+    $this->makeRevision("0.26");
+    
+    $sql = "ALTER TABLE `destinataire_hprim`
+             ADD `code_appli` VARCHAR (255),
+             ADD `code_acteur` VARCHAR (255),
+             ADD `code_syst` VARCHAR (255);";
+    $this->addQuery($sql);
+    
     // Prochain upgrade supprimer les champs : destinataire et emetteur
     
-    $this->mod_version = "0.26";
+    $this->mod_version = "0.27";
   }
 }
 
