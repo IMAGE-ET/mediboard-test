@@ -32,7 +32,11 @@ class CHPrimXMLDocument extends CMbXMLDocument {
     
     $this->patharchiveschema = "modules/hprimxml/xsd";
     $this->schemapath = "$this->patharchiveschema/$dirschemaname";
-    $this->schemafilename = ($schemafilename) ? "$this->schemapath/$schemafilename.xsd" : "$this->schemapath/schema.xml";
+    $this->schemafilename = ($schemafilename) ? 
+                              ((!CAppUI::conf("hprimxml concatenate_xsd")) ? 
+                                "$this->schemapath/$schemafilename.xsd" : 
+                                "$this->schemapath/$schemafilename.xml") :
+                              "$this->schemapath/schema.xml";
     $this->documentfilename = "$this->schemapath/document.xml";
     $this->finalpath = CFile::$directory . "/hprim/$dirschemaname";
     

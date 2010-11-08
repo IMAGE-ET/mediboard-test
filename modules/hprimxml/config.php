@@ -40,7 +40,8 @@ $dPconfig["hprimxml"] = array (
   "trash_numdos_sejour_cancel" => "0",
   "send_diagnostic"            => "evt_pmsi",
   "code_transmitter_sender"    => "mb_id",
-  "code_receiver_sender"       => "dest"
+  "code_receiver_sender"       => "dest",
+  "concatenate_xsd"            => "0"
 );
 
 
