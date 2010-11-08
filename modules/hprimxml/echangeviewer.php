@@ -16,7 +16,7 @@ $echange_hprim = new CEchangeHprim();
 $echange_hprim->load($echange_hprim_id);
 
 $domGetEvenement = new CHPrimXMLEvenementsPatients();
-$domGetEvenement->loadXML(utf8_decode($echange_hprim->_message));
+$domGetEvenement->loadXML($echange_hprim->_message);
 $domGetEvenement->formatOutput = true;
 $doc_errors_msg = @$domGetEvenement->schemaValidate(null, true, false);
 

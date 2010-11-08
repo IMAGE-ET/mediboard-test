@@ -43,7 +43,7 @@ class CHprimSoapHandler extends CSoapHandler {
     
     try {
       // Récupération des informations du message XML
-      $domGetEvenement->loadXML(utf8_decode($messagePatient));
+      $domGetEvenement->loadXML($messagePatient);
       $doc_errors = $domGetEvenement->schemaValidate(null, true);
     
       $data = $domGetEvenement->getEnteteEvenementXML("evenementsPatients");
@@ -199,7 +199,7 @@ class CHprimSoapHandler extends CSoapHandler {
     
     try {
       // Récupération des informations du message XML
-      $domGetEvenement->loadXML(utf8_decode($messageServeurActes));
+      $domGetEvenement->loadXML($messageServeurActes);
       $doc_errors = $domGetEvenement->schemaValidate(null, true);
     
       $data = $domGetEvenement->getEnteteEvenementXML("evenementsServeurActes");

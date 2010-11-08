@@ -56,7 +56,7 @@ if ($echange_hprim->_message !== null) {
   $echange_hprim->type == "pmsi" ?
     $domGetEvenement = new CHPrimXMLEvenementsServeurActivitePmsi::$evenements[$echange_hprim->sous_type] : null;
     
-  $domGetEvenement->loadXML(utf8_decode($echange_hprim->_message));
+  $domGetEvenement->loadXML($echange_hprim->_message);
   $domGetEvenement->formatOutput = true;
   $doc_errors_msg = $domGetEvenement->schemaValidate(null, true, false);
  
@@ -67,7 +67,7 @@ if ($echange_hprim->_acquittement !== null) {
     $domGetAcquittement = new CHPrimXMLAcquittementsPatients() : null;
   $echange_hprim->type == "pmsi" ?
     $domGetAcquittement = new CHPrimXMLAcquittementsServeurActivitePmsi::$evenements[$echange_hprim->sous_type] : null;
-  $domGetAcquittement->loadXML(utf8_decode($echange_hprim->_acquittement));
+  $domGetAcquittement->loadXML($echange_hprim->_acquittement);
   $domGetAcquittement->formatOutput = true;
   $echange_hprim->type == "patients" ?
     $observations = $domGetAcquittement->getAcquittementObservationPatients() : array();

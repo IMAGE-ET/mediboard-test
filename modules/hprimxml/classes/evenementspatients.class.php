@@ -27,7 +27,7 @@ class CHPrimXMLEvenementsPatients extends CHPrimXMLEvenements {
   static function getHPrimXMLEvenementsPatients($messagePatient) {
     $hprimxmldoc = new CHPrimXMLDocument("patient", self::getVersionEvenementsPatients());
     // Récupération des informations du message XML
-    $hprimxmldoc->loadXML(utf8_decode($messagePatient));
+    $hprimxmldoc->loadXML($messagePatient);
     
     $type = $hprimxmldoc->getTypeEvenementPatient();
 

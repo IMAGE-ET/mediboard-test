@@ -44,7 +44,7 @@ if (!$echange_hprim_id) {
       
       if ($acquittement) {
         $domGetAcquittement = new CHPrimXMLAcquittementsPatients();
-        $domGetAcquittement->loadXML(utf8_decode($acquittement));
+        $domGetAcquittement->loadXML($acquittement);
         $doc_valid = $domGetAcquittement->schemaValidate();
         if ($doc_valid) {
           $notification->statut_acquittement = $domGetAcquittement->getStatutAcquittementPatient();
@@ -72,7 +72,7 @@ if (!$echange_hprim_id) {
   
   if ($acquittement) {
     $domGetAcquittement = new CHPrimXMLAcquittementsPatients();
-    $domGetAcquittement->loadXML(utf8_decode($acquittement));
+    $domGetAcquittement->loadXML($acquittement);
     $doc_valid = $domGetAcquittement->schemaValidate();
     if ($doc_valid) {
       $echange_hprim->statut_acquittement = $domGetAcquittement->getStatutAcquittementPatient();
