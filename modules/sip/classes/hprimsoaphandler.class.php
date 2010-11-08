@@ -36,6 +36,7 @@ class CHprimSoapHandler extends CSoapHandler {
   function evenementPatient($messagePatient) {
     // Création de l'échange
     $echange_hprim = new CEchangeHprim();
+    $dest_hprim    = new CDestinataireHprim();
     $messageAcquittement = null;
     $data = array();
         
@@ -48,7 +49,6 @@ class CHprimSoapHandler extends CSoapHandler {
     
       $data = $domGetEvenement->getEnteteEvenementXML("evenementsPatients");
       
-      $dest_hprim = new CDestinataireHprim();
       $dest_hprim->register($data['idClient']);
       
       // Gestion de l'acquittement
@@ -169,7 +169,7 @@ class CHprimSoapHandler extends CSoapHandler {
       $domAcquittement = new CHPrimXMLAcquittementsPatients();
       // Type par défaut
       $domAcquittement->_sous_type_evt        = "enregistrementPatient";
-      $domAcquittement->_identifiant_acquitte = $data['identifiantMessage'] ? $data['identifiantMessage'] : "000000000";
+      $domAcquittement->_identifiant_acquitte = isset($data['identifiantMessage']) ? $data['identifiantMessage'] : "000000000";
       $domAcquittement->_ref_echange_hprim    = $echange_hprim;
       
       $messageAcquittement = $domAcquittement->generateAcquittementsPatients("erreur", "E009", $e->getMessage());
