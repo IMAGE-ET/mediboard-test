@@ -25,7 +25,7 @@ Planification.onCompleteShowWeek = function() {
   Planification.refreshSejour();
   PlanningTechnicien.show();
   PlanningEquipement.show();
-  Planification.refreshActivites();
+//  Planification.refreshActivites();
 }
 
 onKeyDelete = function(e) {
