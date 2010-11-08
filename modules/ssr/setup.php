@@ -178,7 +178,7 @@ class CSetupssr extends CSetup {
     $this->addQuery($query);
     
     $this->makeRevision("0.11");
-    $sql = "ALTER TABLE `ligne_activites_rhs` 
+    $query = "ALTER TABLE `ligne_activites_rhs` 
       CHANGE `code_activite_cdarr` `code_activite_cdarr` CHAR (4) NOT NULL,
       CHANGE `qty_mon` `qty_mon` TINYINT (4) UNSIGNED DEFAULT '0',
       CHANGE `qty_tue` `qty_tue` TINYINT (4) UNSIGNED DEFAULT '0',
@@ -187,23 +187,23 @@ class CSetupssr extends CSetup {
       CHANGE `qty_fri` `qty_fri` TINYINT (4) UNSIGNED DEFAULT '0',
       CHANGE `qty_sat` `qty_sat` TINYINT (4) UNSIGNED DEFAULT '0',
       CHANGE `qty_sun` `qty_sun` TINYINT (4) UNSIGNED DEFAULT '0';";
-    $this->addQuery($sql);
+    $this->addQuery($query);
 		
 		$this->makeRevision("0.12");
-		$sql = "CREATE TABLE `element_prescription_to_cdarr` (
+		$query = "CREATE TABLE `element_prescription_to_cdarr` (
       `element_prescription_to_cdarr_id` INT (11) UNSIGNED NOT NULL auto_increment PRIMARY KEY,
       `element_prescription_id` INT (11) UNSIGNED NOT NULL,
       `code` CHAR (4) NOT NULL,
       `commentaire` VARCHAR (255)
 		) TYPE=MYISAM;";
-		$this->addQuery($sql);
+		$this->addQuery($query);
 
-    $sql = "ALTER TABLE `element_prescription_to_cdarr` 
+    $query = "ALTER TABLE `element_prescription_to_cdarr` 
       ADD INDEX (`element_prescription_id`);";
-		$this->addQuery($sql);
+		$this->addQuery($query);
 		
 		$this->makeRevision("0.13");
-		$sql = "CREATE TABLE `evenement_ssr` (
+		$query = "CREATE TABLE `evenement_ssr` (
 	    `evenement_ssr_id` INT (11) UNSIGNED NOT NULL auto_increment PRIMARY KEY,
 	    `element_prescription_id` INT (11) UNSIGNED NOT NULL,
 	    `code` CHAR (4) NOT NULL,
@@ -213,169 +213,179 @@ class CSetupssr extends CSetup {
 	    `therapeute_id` INT (11) UNSIGNED NOT NULL,
 	    `realise` ENUM ('0','1') DEFAULT '0'
 		) TYPE=MYISAM;";
-		$this->addQuery($sql);
+		$this->addQuery($query);
 
-    $sql = "ALTER TABLE `evenement_ssr` 
+    $query = "ALTER TABLE `evenement_ssr` 
       ADD INDEX (`element_prescription_id`),
       ADD INDEX (`sejour_id`),
       ADD INDEX (`debut`),
       ADD INDEX (`therapeute_id`);";
-		$this->addQuery($sql);
+		$this->addQuery($query);
 		
 		$this->makeRevision("0.14");
-		$sql = "ALTER TABLE `evenement_ssr` 
+		$query = "ALTER TABLE `evenement_ssr` 
       ADD `equipement_id` INT (11) UNSIGNED;";
-    $this->addQuery($sql);
+    $this->addQuery($query);
 		
-		$sql = "ALTER TABLE `evenement_ssr` 
+		$query = "ALTER TABLE `evenement_ssr` 
       ADD INDEX (`equipement_id`);";
-    $this->addQuery($sql);
+    $this->addQuery($query);
 		
 		$this->makeRevision("0.15");
-		$sql = "ALTER TABLE `bilan_ssr` 
+		$query = "ALTER TABLE `bilan_ssr` 
 	    ADD `technicien_id` INT (11) UNSIGNED;";
-	  $this->addQuery($sql);
+	  $this->addQuery($query);
 		
-		$sql = "ALTER TABLE `bilan_ssr` 
+		$query = "ALTER TABLE `bilan_ssr` 
       ADD INDEX (`technicien_id`);";
-		$this->addQuery($sql);
+		$this->addQuery($query);
 		
-		$sql = "UPDATE `bilan_ssr`
+		$query = "UPDATE `bilan_ssr`
 	    SET technicien_id = 
 			  (SELECT technicien_id 
 				FROM technicien
 				WHERE kine_id = bilan_ssr.kine_id
 				LIMIT 1);";
-		$this->addQuery($sql);
+		$this->addQuery($query);
 		
-		$sql = "ALTER TABLE `bilan_ssr` 
+		$query = "ALTER TABLE `bilan_ssr` 
       DROP kine_id";
-		$this->addQuery($sql);
+		$this->addQuery($query);
 		
 		$this->makeRevision("0.16");
-		$sql = "CREATE TABLE `acte_cdarr` (
+		$query = "CREATE TABLE `acte_cdarr` (
       `acte_cdarr_id` INT (11) UNSIGNED NOT NULL auto_increment PRIMARY KEY,
       `evenement_ssr_id` INT (11) UNSIGNED NOT NULL,
       `code` CHAR (4) NOT NULL
     ) TYPE=MYISAM;";
-    $this->addQuery($sql);
+    $this->addQuery($query);
 		 
-    $sql = "ALTER TABLE `acte_cdarr` 
+    $query = "ALTER TABLE `acte_cdarr` 
       ADD INDEX (`evenement_ssr_id`);";
-		$this->addQuery($sql);
+		$this->addQuery($query);
 		
-		$sql = "INSERT INTO `acte_cdarr` (`evenement_ssr_id`,`code`)
+		$query = "INSERT INTO `acte_cdarr` (`evenement_ssr_id`,`code`)
       SELECT `evenement_ssr_id`,`code`
 			FROM evenement_ssr";
-		$this->addQuery($sql);
+		$this->addQuery($query);
 		
-		$sql = "ALTER TABLE `evenement_ssr` 
+		$query = "ALTER TABLE `evenement_ssr` 
       DROP `code`;";
-    $this->addQuery($sql);
+    $this->addQuery($query);
     
 		$this->makeRevision("0.17");
-		$sql = "ALTER TABLE `evenement_ssr` 
+		$query = "ALTER TABLE `evenement_ssr` 
       ADD `remarque` VARCHAR (255);";
-		$this->addQuery($sql);
+		$this->addQuery($query);
 		
 		$this->makeRevision("0.18");
-		$sql = "ALTER TABLE `bilan_ssr` 
+		$query = "ALTER TABLE `bilan_ssr` 
       ADD `brancardage` ENUM ('0','1') DEFAULT '0';";
-		$this->addQuery($sql);
+		$this->addQuery($query);
 		
 		$this->makeRevision("0.19");
-		$sql = "CREATE TABLE `replacement` (
+		$query = "CREATE TABLE `replacement` (
       `replacement_id` INT (11) UNSIGNED NOT NULL auto_increment PRIMARY KEY,
       `sejour_id` INT (11) UNSIGNED NOT NULL,
       `conge_id` INT (11) UNSIGNED NOT NULL,
       `replacer_id` INT (11) UNSIGNED NOT NULL
     ) TYPE=MYISAM;";
-		$this->addQuery($sql);
+		$this->addQuery($query);
 
-    $sql = "ALTER TABLE `replacement` 
+    $query = "ALTER TABLE `replacement` 
 	    ADD INDEX (`sejour_id`),
 	    ADD INDEX (`conge_id`),
 	    ADD INDEX (`replacer_id`);";
-    $this->addQuery($sql);
+    $this->addQuery($query);
 		
     $this->makeRevision("0.20");
-    $sql = "ALTER TABLE `fiche_autonomie` 
+    $query = "ALTER TABLE `fiche_autonomie` 
 		  ADD `toilettes` ENUM ('autonome','partielle','totale') NOT NULL";
-    $this->addQuery($sql);
+    $this->addQuery($query);
 
     $this->makeRevision("0.21");
-    $sql = "ALTER TABLE `fiche_autonomie` 
+    $query = "ALTER TABLE `fiche_autonomie` 
       ADD `antecedents` TEXT,
       ADD `traitements` TEXT;";
-    $this->addQuery($sql);
+    $this->addQuery($query);
 		
 		$this->makeRevision("0.22");
-		$sql = "ALTER TABLE `evenement_ssr` 
+		$query = "ALTER TABLE `evenement_ssr` 
               ADD `prescription_line_element_id` INT (11) UNSIGNED NOT NULL";
-		$this->addQuery($sql);
+		$this->addQuery($query);
 		
-		$sql = "UPDATE `evenement_ssr`
-		         SET `prescription_line_element_id` = (SELECT `prescription_line_element_id` 
-							                                     FROM `prescription_line_element`
-																									 LEFT JOIN `prescription` ON `prescription_line_element`.`prescription_id` = `prescription`.`prescription_id`
-	                                                 WHERE `prescription`.`type` = 'sejour'
-																									 AND `prescription`.`object_id` = `evenement_ssr`.`sejour_id`
-																									 AND `prescription_line_element`.`element_prescription_id` = `evenement_ssr`.`element_prescription_id`);";
-		$this->addQuery($sql);
+		$query = "UPDATE `evenement_ssr`
+			SET `prescription_line_element_id` = (
+				SELECT `prescription_line_element_id` 
+				FROM `prescription_line_element`
+				LEFT JOIN `prescription` ON `prescription_line_element`.`prescription_id` = `prescription`.`prescription_id`
+				WHERE `prescription`.`type` = 'sejour'
+				AND `prescription`.`object_id` = `evenement_ssr`.`sejour_id`
+				AND `prescription_line_element`.`element_prescription_id` = `evenement_ssr`.`element_prescription_id`
+			);";
+		$this->addQuery($query);
 		
-    $sql = "ALTER TABLE `evenement_ssr` 
-              DROP `element_prescription_id`";
-		$this->addQuery($sql);
+    $query = "ALTER TABLE `evenement_ssr` 
+      DROP `element_prescription_id`";
+		$this->addQuery($query);
     
     $this->makeRevision("0.23");
-    $sql = "ALTER TABLE `bilan_ssr` 
+    $query = "ALTER TABLE `bilan_ssr` 
       ADD `planification` ENUM ('0','1') DEFAULT '1';";
-    $this->addQuery($sql);
+    $this->addQuery($query);
 
     $this->makeRevision("0.24");
-		$sql = "ALTER TABLE `evenement_ssr` 
-              CHANGE `sejour_id` `sejour_id` INT (11) UNSIGNED,
-              ADD `seance_collective_id` INT (11) UNSIGNED;";
-		$this->addQuery($sql);
+		$query = "ALTER TABLE `evenement_ssr` 
+      CHANGE `sejour_id` `sejour_id` INT (11) UNSIGNED,
+      ADD `seance_collective_id` INT (11) UNSIGNED;";
+		$this->addQuery($query);
 		
-		$sql = "ALTER TABLE `evenement_ssr` 
-              ADD INDEX (`prescription_line_element_id`),
-              ADD INDEX (`seance_collective_id`);";
-		$this->addQuery($sql);
+		$query = "ALTER TABLE `evenement_ssr` 
+      ADD INDEX (`prescription_line_element_id`),
+      ADD INDEX (`seance_collective_id`);";
+		$this->addQuery($query);
 		
 		$this->makeRevision("0.25");
-		$sql = "ALTER TABLE `evenement_ssr` 
-              CHANGE `prescription_line_element_id` `prescription_line_element_id` INT (11) UNSIGNED,
-              CHANGE `debut` `debut` DATETIME,
-              CHANGE `duree` `duree` INT (11) UNSIGNED,
-              CHANGE `therapeute_id` `therapeute_id` INT (11) UNSIGNED,
-              CHANGE `realise` `realise` ENUM ('0','1') DEFAULT '0';";
-		$this->addQuery($sql);
+		$query = "ALTER TABLE `evenement_ssr` 
+      CHANGE `prescription_line_element_id` `prescription_line_element_id` INT (11) UNSIGNED,
+      CHANGE `debut` `debut` DATETIME,
+      CHANGE `duree` `duree` INT (11) UNSIGNED,
+      CHANGE `therapeute_id` `therapeute_id` INT (11) UNSIGNED,
+      CHANGE `realise` `realise` ENUM ('0','1') DEFAULT '0';";
+		$this->addQuery($query);
 		
 		$this->makeRevision("0.26");
 		$this->addPrefQuery("ssr_planning_dragndrop", "0");
     $this->addPrefQuery("ssr_planning_resize", "0");
     
     $this->makeRevision("0.27");
-    $sql = "ALTER TABLE `equipement` 
-              ADD `visualisable` ENUM ('0','1') NOT NULL DEFAULT '1';";
-    $this->addQuery($sql);
+    $query = "ALTER TABLE `equipement` 
+      ADD `visualisable` ENUM ('0','1') NOT NULL DEFAULT '1';";
+    $this->addQuery($query);
 
     $this->makeRevision("0.28");
     $this->addPrefQuery("ssr_planification_show_equipement", "1");
     $this->addPrefQuery("ssr_planification_duree", "30");
     
     $this->makeRevision("0.29");
-    $sql = "ALTER TABLE `rhs` 
-               ADD `facture` ENUM ('0','1') DEFAULT '0';";
-    $this->addQuery($sql);
+    $query = "ALTER TABLE `rhs` 
+      ADD `facture` ENUM ('0','1') DEFAULT '0';";
+    $this->addQuery($query);
     
     $this->makeRevision("0.30");
-    $sql = "ALTER TABLE `evenement_ssr` 
+    $query = "ALTER TABLE `evenement_ssr` 
       ADD `annule` ENUM ('0','1') DEFAULT '0';";
-    $this->addQuery($sql);
+    $this->addQuery($query);
 
-		$this->mod_version = "0.31";
+    $this->makeRevision("0.31");
+    $query = "ALTER TABLE `technicien` 
+      ADD `actif` ENUM ('0','1') DEFAULT '1';";
+    $this->addQuery($query);
+    $query = "ALTER TABLE `equipement` 
+      ADD `actif` ENUM ('0','1') DEFAULT '1';";
+    $this->addQuery($query);
+
+		$this->mod_version = "0.32";
     
     // Data source query
     $query = "SHOW COLUMNS FROM type_activite LIKE 'libelle_court'";

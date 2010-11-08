@@ -13,7 +13,7 @@ CCanDo::checkRead();
 // Plateau du contexte
 $plateau = new CPlateauTechnique;
 $plateau->load(CValue::get("plateau_id"));
-$plateau->loadRefsEquipements();
+$plateau->loadRefsEquipements(false);
 
 // Equipement à editer
 $equipement = new CEquipement;

@@ -39,9 +39,15 @@
     <th>{{mb_label object=$equipement field=nom}}</th>
     <td>{{mb_field object=$equipement field=nom}}</td>
   </tr>
+	
   <tr>
     <th>{{mb_label object=$equipement field=visualisable}}</th>
     <td>{{mb_field object=$equipement field=visualisable}}</td>
+  </tr>
+
+  <tr>
+    <th>{{mb_label object=$equipement field=actif}}</th>
+    <td>{{mb_field object=$equipement field=actif}}</td>
   </tr>
 
   <tr>

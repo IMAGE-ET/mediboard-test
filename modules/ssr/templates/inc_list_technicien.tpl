@@ -11,18 +11,25 @@
 <table class="tbl">
   <tr>
     <th>{{mb_title class=CTechnicien field=kine_id}}</th>
+    <th>{{mb_title class=CTechnicien field=actif}}</th>
   </tr>
+
   {{foreach from=$plateau->_ref_techniciens item=_technicien}}
-  <tr {{if $technicien->_id == $_technicien->_id}}class="selected"{{/if}}>
+  <tr {{if $technicien->_id == $_technicien->_id}} class="selected" {{/if}}>
     <td>
     	<a href="#Edit-{{$_technicien->_guid}}" onclick="Technicien.edit('{{$plateau->_id}}', '{{$_technicien->_id}}')">
         {{mb_include module=mediusers template=inc_vw_mediuser mediuser=$_technicien->_ref_kine}}
 			</a>
 		</td>
-  </tr>   
+
+    <td>
+      {{mb_value object=$_technicien field=actif}}
+    </td>
+
+  </tr>
   {{foreachelse}}
   <tr>
-    <td><em>{{tr}}None{{/tr}}</em></td>
+    <td colspan="2"><em>{{tr}}None{{/tr}}</em></td>
   </tr>   
   {{/foreach}}
 </table>

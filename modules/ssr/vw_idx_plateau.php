@@ -22,8 +22,8 @@ foreach($plateaux as $_plateau) {
 
 // Plateau sélectionné
 $plateau->load(CValue::getOrSession("plateau_id"));
-$plateau->loadRefsEquipements();
-$plateau->loadRefsTechniciens();
+$plateau->loadRefsEquipements(false);
+$plateau->loadRefsTechniciens(false);
 $plateau->loadRefsNotes();
 
 // Equipement

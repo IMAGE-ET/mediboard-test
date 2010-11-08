@@ -17,7 +17,10 @@ class CTechnicien extends CMbObject {
   
   // References
   var $plateau_id = null;
-  var $kine_id = null;
+  var $kine_id    = null;
+	
+	// DB Fields
+	var $actif      = null;
 	
 	// Derived references
 	var $_ref_conge_date = null;
@@ -30,10 +33,11 @@ class CTechnicien extends CMbObject {
   }
 
   function getProps() {
-    $specs = parent::getProps();
-    $specs["plateau_id"] = "ref notNull class|CPlateauTechnique";
-    $specs["kine_id"]    = "ref notNull class|CMediusers";
-    return $specs;
+    $props = parent::getProps();
+    $props["plateau_id"] = "ref notNull class|CPlateauTechnique";
+    $props["kine_id"]    = "ref notNull class|CMediusers";
+    $props["actif"]      = "bool notNull default|1";
+    return $props;
   }
 	
 	function getBackProps() {
@@ -46,11 +50,13 @@ class CTechnicien extends CMbObject {
     $this->_ref_kine = $this->loadFwdRef("kine_id", true);
 		$this->_ref_kine->loadRefFunction();
     $this->_view = $this->_ref_kine->_view;
+		return $this->_ref_kine;
   }
 	
 	function loadRefCongeDate($date) {
 		$this->_ref_conge_date = new CPlageConge;
 		$this->_ref_conge_date->loadFor($this->kine_id, $date);
+		return $this->_ref_conge_date;
 	}
 }
 

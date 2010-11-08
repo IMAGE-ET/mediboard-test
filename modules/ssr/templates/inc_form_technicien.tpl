@@ -25,7 +25,6 @@
       {{mb_include module=system template=inc_object_idsante400 object=$technicien}}
       {{mb_include module=system template=inc_object_history    object=$technicien}}
 
-      
 	    {{tr}}CTechnicien-title-modify{{/tr}} 
 			'{{$technicien}}'
     </th>
@@ -46,6 +45,11 @@
     </td>
   </tr>
 
+  <tr>
+    <th>{{mb_label object=$technicien field=actif}}</th>
+    <td>{{mb_field object=$technicien field=actif}}</td>
+  </tr>
+	
   <tr>
 		<td class="button" colspan="4">
 		  {{if $technicien->_id}}

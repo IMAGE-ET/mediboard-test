@@ -19,8 +19,9 @@ class CEquipement extends CMbObject {
   var $plateau_id = null;
 
   // DB Fields
-  var $nom      = null;
+  var $nom          = null;
   var $visualisable = null;
+  var $actif        = null;
 
   function getSpec() {
     $spec = parent::getSpec();
@@ -30,11 +31,12 @@ class CEquipement extends CMbObject {
   }
 
   function getProps() {
-    $specs = parent::getProps();
-    $specs["plateau_id"]   = "ref notNull class|CPlateauTechnique";
-    $specs["nom"]          = "str notNull";
-    $specs["visualisable"] = "bool notNull default|1";
-    return $specs;
+    $props = parent::getProps();
+    $props["plateau_id"]   = "ref notNull class|CPlateauTechnique";
+    $props["nom"]          = "str notNull";
+    $props["visualisable"] = "bool notNull default|1";
+    $props["actif"]        = "bool notNull default|1";
+    return $props;
   }
 	
 	 function getBackProps() {

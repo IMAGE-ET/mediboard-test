@@ -48,15 +48,27 @@ class CPlateauTechnique extends CMbObject {
 		$this->_view = $this->nom;
 	}
 	
-	function loadRefsEquipements() {
+	function loadRefsEquipements($actif = true) {
 		$this->_ref_equipements = $this->loadBackRefs("equipements");
+    foreach ($this->_ref_equipements as $_equipement) {
+      if ($actif && !$_equipement->actif) {
+        unset($this->_ref_equipements[$_equipement->_id]);
+        continue;
+      }
+    }
+		return $this->_ref_equipements;
 	}
 
-  function loadRefsTechniciens() {
+  function loadRefsTechniciens($actif = true) {
     $this->_ref_techniciens = $this->loadBackRefs("techniciens");
 		foreach ($this->_ref_techniciens as $_technicien) {
+			if ($actif && !$_technicien->actif) {
+				unset($this->_ref_techniciens[$_technicien->_id]);
+				continue;
+			}
 		  $_technicien->loadRefKine();
 		}
+		return $this->_ref_techniciens;
   }
 }
 
