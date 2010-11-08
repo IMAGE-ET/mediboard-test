@@ -106,7 +106,7 @@ DossierMedical = {
 	},
 	reloadDossiersMedicaux: function(){
 	  DossierMedical.reloadDossierPatient();
-    {{if $_is_anesth}}
+    {{if $_is_anesth || $sejour_id}}
     DossierMedical.reloadDossierSejour();
     {{/if}}
 	}
@@ -525,7 +525,7 @@ Main.add(function () {
   <tr>
     <td class="text" id="listAnt"></td>
   </tr> 
-  {{if $_is_anesth}}
+  {{if $_is_anesth || $sejour_id}}
   <tr>
     <th class="category">
       Eléments significatifs pour le séjour

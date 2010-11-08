@@ -3,7 +3,7 @@
 {{assign var="module" value="dPcabinet"}}
 {{assign var="do_subject_aed" value="do_consultation_aed"}}
 {{mb_include module=dPsalleOp template=js_codage_ccam}}
-{{assign var=sejour_id value=""}}
+{{assign var=sejour_id value=$consult->sejour_id}}
 
 {{assign var="rpu" value=""}}
 {{assign var="mutation_id" value=""}}

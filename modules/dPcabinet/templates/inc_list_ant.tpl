@@ -78,7 +78,7 @@ Traitement = {
 	      </button>
 	      {{/if}}
 	      
-	      {{if $_is_anesth && $sejour->_id}}
+	      {{if $_is_anesth || $sejour->_id}}
 	      <button title="{{tr}}Add{{/tr}}" class="add notext" type="button" onclick="copyAntecedent({{$_antecedent->_id}})">
 	        {{tr}}Add{{/tr}}
 	      </button>
@@ -153,7 +153,7 @@ Traitement = {
     <button class="trash notext" type="button" onclick="Traitement.remove(this.form, DossierMedical.reloadDossierPatient)">
       {{tr}}delete{{/tr}}
     </button>
-    {{if $_is_anesth && $sejour->_id}}
+    {{if $_is_anesth || $sejour->_id}}
     <button class="add notext" type="button" onclick="copyTraitement({{$_traitement->_id}})">
       {{tr}}Add{{/tr}}
     </button>
@@ -186,7 +186,7 @@ Traitement = {
     <button class="trash notext" type="button" onclick="oCimField.remove('{{$_code->code}}')">
       {{tr}}Delete{{/tr}}
     </button>
-    {{if $_is_anesth && $sejour->_id}}
+    {{if $_is_anesth || $sejour->_id}}
     <button class="add notext" type="button" onclick="oCimAnesthField.add('{{$_code->code}}')">
       {{tr}}Add{{/tr}}
     </button>
