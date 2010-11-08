@@ -80,7 +80,7 @@ function extractFiles($schemaDir, $schemaFile, $delOldDir = false) {
     $includeFiles = array_diff(glob("$destinationDir/*.xsd"), $rootFiles);
     
     foreach($rootFiles as $rootFile) {
-      $xsd = new CMbXMLSchema();
+      $xsd = new CHPrimXMLSchema();
       $xsd->loadXML(file_get_contents($rootFile));
       $xpath = new DOMXPath($xsd);
       
