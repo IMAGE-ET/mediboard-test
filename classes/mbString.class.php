@@ -192,7 +192,7 @@ abstract class CMbString {
 	}
 
 	static function isUTF8($string) {
-	  return (mb_detect_encoding($string) == "UTF8");
+	  return (mb_detect_encoding($string) == "UTF-8");
 	}
 	 
 }

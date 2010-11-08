@@ -210,7 +210,7 @@ class CHPrimXMLDocument extends CMbXMLDocument {
   }
   
   function addTexte($elParent, $elName, $elValue, $elMaxSize = 35) {
-    $elValue = substr($elValue, 0, ($elMaxSize-1));
+    $elValue = substr($elValue, 0, $elMaxSize);
     return $this->addElement($elParent, $elName, $elValue);
   }
   
