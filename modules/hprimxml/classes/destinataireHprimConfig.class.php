@@ -24,6 +24,7 @@ class CDestinataireHprimConfig extends CMbObject {
   var $send_all_patients    = null;
   var $send_debiteurs_venue = null;
   var $send_mvt_patients    = null;
+  var $send_default_serv_with_type_sej = null;
 
   function getSpec() {
     $spec = parent::getSpec();
@@ -35,19 +36,20 @@ class CDestinataireHprimConfig extends CMbObject {
 
   function getProps() {
     $specs = parent::getProps();
-    $specs["object_id"]            = "ref class|CDestinataireHprim";
+    $specs["object_id"]                       = "ref class|CDestinataireHprim";
     
-    $specs["send_sortie_prevue"]   = "bool default|1";
-    $specs["type_sej_hospi"]       = "str";
-    $specs["type_sej_ambu"]        = "str";
-    $specs["type_sej_urg"]         = "str";
-    $specs["type_sej_scanner"]     = "str";
-    $specs["type_sej_chimio"]      = "str";
-    $specs["type_sej_dialyse"]     = "str";
-    $specs["receive_ack"]          = "bool default|1";
-    $specs["send_all_patients"]    = "bool default|0";
-    $specs["send_debiteurs_venue"] = "bool default|1";
-    $specs["send_mvt_patients"]    = "bool default|0";
+    $specs["send_sortie_prevue"]              = "bool default|1";
+    $specs["type_sej_hospi"]                  = "str";
+    $specs["type_sej_ambu"]                   = "str";
+    $specs["type_sej_urg"]                    = "str";
+    $specs["type_sej_scanner"]                = "str";
+    $specs["type_sej_chimio"]                 = "str";
+    $specs["type_sej_dialyse"]                = "str";
+    $specs["receive_ack"]                     = "bool default|1";
+    $specs["send_all_patients"]               = "bool default|0";
+    $specs["send_debiteurs_venue"]            = "bool default|1";
+    $specs["send_mvt_patients"]               = "bool default|0";
+    $specs["send_default_serv_with_type_sej"] = "bool default|0";
     
     return $specs;
   }

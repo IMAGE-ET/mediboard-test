@@ -60,7 +60,7 @@ if (file_exists($file)) {
 }
 
 if ($status)
-  echo '<div class="message">Fichiers présents</div>';
+  echo '<div class="info">Fichiers présents</div>';
 else
   echo '<div class="error">Fichiers manquants</div>';
 

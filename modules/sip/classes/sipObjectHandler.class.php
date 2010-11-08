@@ -187,6 +187,29 @@ class CSipObjectHandler extends CMbObjectHandler {
             $_destinataire->sendEvenementPatient($domEvenementDebiteursVenue, $mbObject);
           }
           
+          if ($_destinataire->_configs["send_mvt_patients"] && $_destinataire->_configs["send_default_serv_with_type_sej"]) {
+            $service = new CService();
+            $service->load(CAppUI::conf("dPhospi default_service_types_sejour $mbObject->type"));
+            if (!$service->_id) {
+              // envoi par défaut le premier de la liste si pas défini
+              $service->loadObject();  
+            }
+                        
+            $affectation = new CAffectation();
+            $affectation->loadRefLit();
+            $affectation->_ref_lit->loadRefChambre();
+            $affectation->_ref_lit->_ref_chambre->_ref_service = $service;
+            $affectation->sejour_id = $mbObject->_id;
+            $affectation->loadRefSejour();
+            $affectation->_ref_sejour->loadNumDossier();
+            $affectation->_ref_sejour->loadRefPatient();
+            $affectation->_ref_sejour->loadRefPraticien();
+            
+            $domEvenementMouvementPatient = new CHPrimXMLMouvementPatient();
+            $domEvenementMouvementPatient->_ref_destinataire = $_destinataire;
+            $_destinataire->sendEvenementPatient($domEvenementMouvementPatient, $affectation);
+          }
+          
           $mbObject->_num_dossier = null;
         }
       }
@@ -225,9 +248,9 @@ class CSipObjectHandler extends CMbObjectHandler {
             $mbObject->_ref_sejour->_num_dossier = $num_dossier->id400;
           }
           
-          $domEvenementVenuePatient = new CHPrimXMLMouvementPatient();
-          $domEvenementVenuePatient->_ref_destinataire = $_destinataire;
-          $_destinataire->sendEvenementPatient($domEvenementVenuePatient, $mbObject);
+          $domEvenementMouvementPatient = new CHPrimXMLMouvementPatient();
+          $domEvenementMouvementPatient->_ref_destinataire = $_destinataire;
+          $_destinataire->sendEvenementPatient($domEvenementMouvementPatient, $mbObject);
           
           $mbObject->_num_dossier = null;
         }

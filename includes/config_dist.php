@@ -213,8 +213,6 @@ $dPconfig["dPsalleOp"] = array(
     "active_salle_reveil" => "0"
   )
 );
-   
-$dPconfig["dPhospi"]["pathologies"] = 1;
 
 $dPconfig["dPbloc"]["CPlageOp"] = array (
   "hours_start"          => "8",

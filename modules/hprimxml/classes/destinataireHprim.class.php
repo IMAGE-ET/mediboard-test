@@ -43,6 +43,7 @@ class CDestinataireHprim extends CMbObject {
   var $_tag_patient     = null;
   var $_tag_sejour      = null;
 	var $_tag_mediuser    = null;
+	var $_tag_service     = null;
 	var $_type_echange    = "hprimxml";
   
   function getSpec() {
@@ -65,6 +66,7 @@ class CDestinataireHprim extends CMbObject {
     $specs["_tag_patient"]   = "str";
     $specs["_tag_sejour"]    = "str";
 		$specs["_tag_mediuser"]  = "str";
+		$specs["_tag_service"]   = "str";
     return $specs;
   }
   
@@ -146,6 +148,7 @@ class CDestinataireHprim extends CMbObject {
     $this->_tag_sejour   = $this->getTagNumDossier($this->group_id);
 		
 		$this->_tag_mediuser = str_replace('$g', $this->group_id, CAppUI::conf("mediusers tag_mediuser"));
+		$this->_tag_service  = str_replace('$g', $this->group_id, CAppUI::conf("dPhospi tag_service"));
   }  
   
   function register($idClient) {

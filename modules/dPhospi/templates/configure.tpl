@@ -1,63 +1,33 @@
+{{* $Id$ *}}
+
+{{*
+ * @package Mediboard
+ * @subpackage dPhospi
+ * @version $Revision$
+ * @author SARL OpenXtrem
+ * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+*}}
+
 <script type="text/javascript">
-function synchronizeSejours() {
-  var url = new Url();
-  url.setModuleAction("dPhospi", "httpreq_do_synchronize_sejours");
-  url.addElement(document.synchronizeFrm.dateMin);
-  url.requestUpdate("synchronize");
-}
+  Main.add(Control.Tabs.create.curry('tabs-configure', true));
 </script>
 
-<form name="editConfig" action="?m={{$m}}&amp;{{$actionType}}=configure" method="post" onsubmit="return checkForm(this)">
+<ul id="tabs-configure" class="control_tabs">
+  <li><a href="#config-dPhospi">{{tr}}config-dPhospi{{/tr}}</a></li>
+  <li><a href="#CService">{{tr}}CService{{/tr}}</a></li>
+  <li><a href="#config-synchro_sejour_affectation">{{tr}}config-synchro_sejour_affectation{{/tr}}</a></li>
+</ul>
 
-<input type="hidden" name="dosql" value="do_configure" />
-<input type="hidden" name="m" value="system" />
+<hr class="control_tabs" />
 
-<table class="form">
+<div id="config-dPhospi" style="display: none;">
+  {{mb_include template=inc_config_dPhospi}}
+</div>
 
-  <tr>
-    <th class="title" colspan="2">Prise en compte des pathologies</th>
-  </tr>
-  
-  <tr>
-    <th>
-      <label for="{{$m}}[pathologies]" title="{{tr}}config-{{$m}}-pathologies{{/tr}}">
-        {{tr}}config-{{$m}}-pathologies{{/tr}}
-      </label>  
-    </th>
-    <td>
-      <select name="{{$m}}[pathologies]">
-        <option value="1" {{if $dPconfig.$m.pathologies == 1}}selected="selected"{{/if}}>
-          Oui
-        </option>
-        <option value="0" {{if $dPconfig.$m.pathologies == 0}}selected="selected"{{/if}}>
-          Non
-        </option>
-      </select>
-    </td>
-  </tr>
+<div id="CService" style="display: none;">
+  {{mb_include template=CService_config}}
+</div>
 
-  <tr>
-    <td class="button" colspan="100">
-      <button class="modify" type="submit">{{tr}}Save{{/tr}}</button>
-    </td>
-  </tr>
-</table>
-</form>
-
-<form name="synchronizeFrm">
-<table class="form">
-  <tr>
-    <th colspan="2" class="title">
-      Synchronisation des dates de sortie des séjours et des affectations
-    </th>
-  </tr>
-  <tr>
-    <td>
-      Date minimale de sortie : <input type="text" name="dateMin" value="AAAA-MM-JJ" />
-      <br />
-      <button type="button" class="tick" onclick="synchronizeSejours()">Synchroniser</button>
-    </td>
-    <td id="synchronize"></td>
-  </tr>
-</table>
-</form>
+<div id="config-synchro_sejour_affectation" style="display: none;">
+  {{mb_include template=inc_config_synchro_sejour_affectation}}
+</div>

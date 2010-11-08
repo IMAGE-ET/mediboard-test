@@ -1092,7 +1092,7 @@ class CHPrimXMLDocument extends CMbXMLDocument {
     $this->addAttribute($uniteFonctionnelleResponsable, "responsabilite", "m");
     $service = $mbAffectation->_ref_lit->_ref_chambre->_ref_service;
     $id400Patient = new CIdSante400();
-    $id400Patient->loadLatestFor($service, $this->_ref_echange_hprim->_ref_destinataire->_tag_sejour);
+    $id400Patient->loadLatestFor($service, $this->_ref_echange_hprim->_ref_destinataire->_tag_service);
     $this->addTexte($uniteFonctionnelleResponsable, "code", $id400Patient->id400 ? $id400Patient->id400 : $service->_id, 10);
     $this->addTexte($uniteFonctionnelleResponsable, "libelle", $service->_view, 35);
   }
