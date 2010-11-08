@@ -163,6 +163,7 @@ class CHprimSoapHandler extends CSoapHandler {
       
     } catch (Exception $e) {
       $echange_hprim->date_production = mbDateTime();
+      $echange_hprim->type            = "patients";
       $echange_hprim->group_id        = $dest_hprim->group_id ? $dest_hprim->group_id : CGroups::loadCurrent()->_id;
       $echange_hprim->_message        = $messagePatient;
       
