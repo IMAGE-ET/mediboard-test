@@ -365,16 +365,20 @@ switch ($axe) {
     $etab_externe = new CEtabExterne;
     $etabs = $etab_externe->loadList(null, "nom");
     
+    $etabs["none"] = new CEtabExterne;
+    $etabs["none"]->_view = "Non renseigné";
+    
+    $where["sejour.mode_sortie"] = "= 'transfert'";
+    
     $key = 0;
     foreach($etabs as $_id => $_etab) {
-      $where["sejour.etablissement_transfert_id"] = "IS NOT NULL";
       $series[$key] = array('data' => array(), 'label' => utf8_encode($_etab->_view));
       
       $sub_total = 0;
       foreach ($dates as $i => $_date) {
         $_date_next = mbDate("+1 $period", $_date);
         $where['sejour.entree'] = "BETWEEN '$_date' AND '$_date_next'";
-        $where['sejour.etablissement_transfert_id'] = "= '$_id'";
+        $where['sejour.etablissement_transfert_id'] = ($_id === "none" ? "IS NULL" : "= '$_id'");
         $count = $sejour->countList($where, null, null, null, $ljoin);
         $total += $count;
         $sub_total += $count;
@@ -408,16 +412,20 @@ switch ($axe) {
     $service->group_id = CGroups::loadCurrent()->_id;
     $services = $service->loadMatchingList("nom");
     
+    $services["none"] = new CService;
+    $services["none"]->_view = "Non renseigné";
+    
+    $where["sejour.mode_sortie"] = "= 'mutation'";
+      
     $key = 0;
     foreach($services as $_id => $_service) {
-      $where["sejour.service_mutation_id"] = "IS NOT NULL";
       $series[$key] = array('data' => array(), 'label' => utf8_encode($_service->_view));
       
       $sub_total = 0;
       foreach ($dates as $i => $_date) {
         $_date_next = mbDate("+1 $period", $_date);
         $where['sejour.entree'] = "BETWEEN '$_date' AND '$_date_next'";
-        $where['sejour.service_mutation_id'] = "= '$_id'";
+        $where['sejour.service_mutation_id'] = ($_id === "none" ? "IS NULL" : "= '$_id'");
         $count = $sejour->countList($where, null, null, null, $ljoin);
         $total += $count;
         $sub_total += $count;
