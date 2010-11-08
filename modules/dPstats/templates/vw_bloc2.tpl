@@ -67,8 +67,7 @@ Main.add(function () {
 <table class="tbl">
   <tr>
     <th rowspan="2">Date</th>
-    <th rowspan="2">Bloc</th>
-    <th rowspan="2">Salle</th>
+    <th colspan="2">Salle</th>
     <th colspan="2">Vacation</th>
     <th colspan="2">N° d'ordre</th>
     <th rowspan="2">Patient</th>
@@ -83,6 +82,8 @@ Main.add(function () {
     <th colspan="2">Timings reveil</th>
   </tr>
   <tr>
+    <th>Prévu</th>
+    <th>Réel</th>
     <th>Début</th>
     <th>Fin</th>
     <th>Prévu</th>
@@ -109,8 +110,8 @@ Main.add(function () {
   {{foreach from=$curr_plage->_ref_operations item=curr_op}}
   <tr>
     <td class="text">{{$curr_plage->date|date_format:"%d/%m/%Y"}}</td>
-    <td class="text">{{$curr_plage->_ref_salle->_ref_bloc->_view}}</td>
-    <td class="text">{{$curr_plage->_ref_salle->_shortview}}</td>
+    <td class="text">{{$curr_plage->_ref_salle->_view}}</td>
+    <td class="text">{{$curr_op->_ref_salle->_view}}</td>
     <td class="text">{{$curr_plage->debut|date_format:$dPconfig.time}}</td>
     <td class="text">{{$curr_plage->fin|date_format:$dPconfig.time}}</td>
     <td class="text">

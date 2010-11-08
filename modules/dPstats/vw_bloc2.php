@@ -47,12 +47,12 @@ $plage = new CPlageOp;
 $listPlages = $plage->loadList($where, $order);
 
 // Récupération des interventions
-foreach($listPlages as &$curr_plage) {
+foreach($listPlages as $curr_plage) {
   $curr_plage->loadRefsFwd(1);
   $curr_plage->loadRefsBack(0, "entree_salle");
   
   $i = 1;
-  foreach($curr_plage->_ref_operations as &$curr_op) {
+  foreach($curr_plage->_ref_operations as $curr_op) {
     $curr_op->_rank_reel = $curr_op->entree_salle ? $i : "";
     $i++;
     $next = next($curr_plage->_ref_operations);
@@ -69,7 +69,7 @@ if($mode == "csv") {
     $csvName = "stats_bloc_".$deblist."_".$finlist."_".$bloc_id.".csv";
     $csvPath = "tmp/$csvName";
     $csvFile = fopen($csvPath, "w") or die("can't open file");
-    $title  = '"Date";"Bloc";"Salle";"Début vacation";"Fin vacation";"N° d\'ordre prévu";"N° d\'ordre réel";';
+    $title  = '"Date";"Salle prévue";"Salle réelle";"Début vacation";"Fin vacation";"N° d\'ordre prévu";"N° d\'ordre réel";';
     $title .= '"Patient";"Prise en charge";"Chirurgien";"Anesthésiste";"Libellé";"DP";"CCAM";"Type d\'anesthésie";"Code ASA";"Placement programme";';
     $title .= '"Entrée salle";"Début d\'induction";"Fin d\'induction";"Début d\'intervention";"Fin d\'intervention";"Sortie salle";"Patient suivant";';
     $title .= '"Entrée reveil";"Sortie reveil"
@@ -78,8 +78,8 @@ if($mode == "csv") {
     foreach($listPlages as $curr_plage) {
       foreach($curr_plage->_ref_operations as $curr_op) {
         $line  = '"'.$curr_plage->date.'";';
-        $line .= '"'.$curr_plage->_ref_salle->_ref_bloc->_view.'";';
         $line .= '"'.$curr_plage->_ref_salle->_view.'";';
+        $line .= '"'.$curr_op->_ref_salle->_view.'";';
         $line .= '"'.$curr_plage->debut.'";';
         $line .= '"'.$curr_plage->fin.'";';
         $line .= '"'.$curr_op->rank.'";';
