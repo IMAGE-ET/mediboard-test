@@ -93,7 +93,7 @@
   </tr>
 
   {{assign var="var" value="patient_id"}}
-  {{mb_include module=system template=inc_config_bool var=$var }}
+  {{mb_include module=system template=inc_config_enum var=$var values=$patientId_piped}}
   {{assign var="var" value="modif_SHS"}}
   {{mb_include module=system template=inc_config_bool var=$var }}
 

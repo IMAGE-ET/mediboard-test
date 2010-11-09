@@ -238,6 +238,10 @@ Main.add( function(){
 });
 </script>
 
+<!-- div de confirmation de changement de patient lorsqu'on a un sejour_id -->
+{{mb_include template=inc_modal_change_patient}}
+
+
 <form name="editSejour" action="?m={{$m}}" method="post" onsubmit="return checkSejour()">
 
 <input type="hidden" name="m" value="dPplanningOp" />
@@ -372,15 +376,20 @@ Main.add( function(){
   </th>
   <td>
     <input type="text" name="_patient_view" size="20" value="{{$patient->_view}}" readonly="readonly"
-      {{if $dPconfig.dPplanningOp.CSejour.patient_id || !$sejour->_id || $app->user_type == 1}}
-        ondblclick="PatSelector.init()"
-      {{/if}}
-    />
+           ondblclick="
+    {{if !$sejour->_id}}
+      PatSelector.init();
+    {{else}}
+      confirmChangePatient()
+    {{/if}}"/>
   </td>
   <td colspan="2" class="button">
-    {{if $dPconfig.dPplanningOp.CSejour.patient_id || !$sejour->_id || $app->user_type == 1}}
-    <button type="button" class="search" onclick="PatSelector.init()">Choisir un patient</button>
-    {{/if}}
+  <button type="button" class="search" onclick="
+	  {{if !$sejour->_id}}
+      PatSelector.init();
+    {{else}}
+      confirmChangePatient();
+    {{/if}}">Choisir un patient</button>
   </td>
 </tr>
 
