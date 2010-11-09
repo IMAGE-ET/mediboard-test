@@ -1,6 +1,7 @@
 <?php
 $locales['CBlocOperatoire'] = 'Bloc opératoire';
 $locales['CBlocOperatoire-back-salles'] = 'Salles du bloc';
+$locales['CBlocOperatoire-back-salles.empty'] = 'Aucune salle';
 $locales['CBlocOperatoire-bloc_operatoire_id'] = 'Identifiant';
 $locales['CBlocOperatoire-bloc_operatoire_id-court'] = 'Id';
 $locales['CBlocOperatoire-bloc_operatoire_id-desc'] = 'Identifiant interne';
@@ -96,6 +97,9 @@ $locales['CSalle-back-plages_op'] = 'Plages opératoires';
 $locales['CSalle-bloc_id'] = 'Bloc opératoire';
 $locales['CSalle-bloc_id-court'] = 'Bloc opératoire';
 $locales['CSalle-bloc_id-desc'] = 'Bloc opératoire auquel appartient la ligne';
+$locales['CSalle-dh'] = 'DH en salle';
+$locales['CSalle-dh-court'] = 'DH';
+$locales['CSalle-dh-desc'] = 'Dépassement d\'honoraire en salle';
 $locales['CSalle-group_id'] = 'Etablissement';
 $locales['CSalle-group_id-desc'] = 'Etablissement de la salle. Obligatoire';
 $locales['CSalle-msg-create'] = 'Salle créée';

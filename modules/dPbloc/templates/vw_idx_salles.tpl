@@ -69,6 +69,11 @@
         </tr>
         
         <tr>
+          <th>{{mb_label object=$salle field="dh"}}</th>
+          <td>{{mb_field object=$salle field="dh"}}</td>
+        </tr>
+        
+        <tr>
           <td class="button" colspan="2">
             {{if $salle->salle_id}}
             <button class="submit" type="submit">{{tr}}Save{{/tr}}</button>

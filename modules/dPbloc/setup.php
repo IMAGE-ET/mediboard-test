@@ -218,8 +218,13 @@ class CSetupdPbloc extends CSetup {
     $this->makeRevision("0.25");
     $sql = "ALTER TABLE `plagesop` ADD `unique_chir` ENUM ('0','1') DEFAULT '1';";
     $this->addQuery($sql);
+    
+    $this->makeRevision("0.26");
+    $sql = "ALTER TABLE `sallesbloc`
+              ADD `dh` ENUM ('0','1') NOT NULL DEFAULT '0';";
+    $this->addQuery($sql);
    
-    $this->mod_version = "0.26";
+    $this->mod_version = "0.27";
   }  
 }
 ?>

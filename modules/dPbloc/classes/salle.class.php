@@ -16,8 +16,9 @@ class CSalle extends CMbObject {
   var $bloc_id = null;
 	
   // DB Fields
-  var $nom   = null;
-  var $stats = null;
+  var $nom         = null;
+  var $stats       = null;
+  var $dh          = null;
   
   var $_ref_bloc = null;
   
@@ -47,6 +48,7 @@ class CSalle extends CMbObject {
     $specs["bloc_id"] = "ref notNull class|CBlocOperatoire";
     $specs["nom"]     = "str notNull seekable";
     $specs["stats"]   = "bool notNull";
+    $specs["dh"]      = "bool notNull default|0";
     return $specs;
   }
   

@@ -64,7 +64,7 @@ function setToNow(element) {
         <input type="hidden" name="code_activite" class="{{$acte->_props.code_activite}}" value="{{$acte->code_activite}}" />
         <input type="hidden" name="code_phase" class="{{$acte->_props.code_phase}}" value="{{$acte->code_phase}}" />
         <input type="hidden" name="code_association" class="{{$acte->_props.code_association}}" value="{{$acte->code_association}}" />
-        {{if !$confCCAM.tarif && $subject->_class_name != "CConsultation"}}
+        {{if !$confCCAM.tarif && $subject->_class_name != "CConsultation" && !($subject->_class_name == "COperation" && $subject->_ref_salle->dh == 1)}}
           <input type="hidden" name="montant_depassement" class="{{$acte->_props.montant_depassement}}" value="{{$acte->montant_depassement}}" />
         {{/if}}
         
@@ -179,8 +179,7 @@ function setToNow(element) {
                 
                 {{mb_field object=$acte field=rembourse disabled=$disabled default=$default}}
               </td>
-              
-              {{if $confCCAM.tarif || $subject->_class_name == "CConsultation"}}
+              {{if $confCCAM.tarif || $subject->_class_name == "CConsultation" || ($subject->_class_name == "COperation" && $subject->_ref_salle->dh == 1)}}
               <th>{{mb_label object=$acte field=montant_depassement}}</th>
               <td>{{mb_field object=$acte field=montant_depassement}}</td>
               {{/if}}
@@ -215,7 +214,7 @@ function setToNow(element) {
                 {{mb_field object=$acte field=rembourse disabled=$disabled default=$default}}
               </td>
             </tr>
-            {{if $confCCAM.tarif || $subject->_class_name == "CConsultation"}}
+            {{if $confCCAM.tarif || $subject->_class_name == "CConsultation" || ($subject->_class_name == "COperation" && $subject->_ref_salle->dh == 1)}}
             <tr class="{{$view}}">
               <th>{{mb_label object=$acte field=montant_depassement}}</th>
               <td>{{mb_field object=$acte field=montant_depassement}}</td>
@@ -293,7 +292,7 @@ function setToNow(element) {
               </div>
               {{/if}}
               
-              {{if $confCCAM.tarif || $subject->_class_name == "CConsultation"}}
+              {{if $confCCAM.tarif || $subject->_class_name == "CConsultation"  || ($subject->_class_name == "COperation" && $subject->_ref_salle->dh == 1)}}
               &mdash;  {{mb_label object=$acte field=montant_depassement}} : {{mb_value object=$acte field=montant_depassement}}
               {{/if}}
               {{/if}}
