@@ -136,7 +136,9 @@ class CAffectation extends CMbObject {
     $this->completeField("sejour_id");
     if($this->sejour_id){
       $this->loadRefSejour();
-      return $this->_ref_sejour->delAffectations();
+      if($this->_ref_sejour->type != "seances") {
+        return $this->_ref_sejour->delAffectations();
+      }
     }
     return $this->deleteOne();
   }
@@ -167,7 +169,7 @@ class CAffectation extends CMbObject {
     $changePrev   = 0;
     $changeNext   = 0;
 
-    if($this->_no_synchro) {
+    if($this->_no_synchro || $this->_ref_sejour->type == "seances") {
       return $msg;
     }
     if(!$this->_ref_prev->_id && $this->sejour_id) {

@@ -75,7 +75,9 @@ if($_type_admission == "ambucomp") {
 } else {
   $where["sejour.type"] = "!= 'urg'";
 }
-$where[]                  = "affectation.affectation_id IS NULL";
+if($_type_admission != "seances") {
+  $where[] = "affectation.affectation_id IS NULL";
+}
 $where[]                  = $where_service;
 $leftjoin["affectation"]  = "sejour.sejour_id = affectation.sejour_id";
 

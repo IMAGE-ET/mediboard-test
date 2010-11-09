@@ -157,7 +157,7 @@ function loadSejourNonAffectes($where, $order = null, $praticien_id = null) {
 
   $where["sejour.group_id"] = "= '$g'";
   
-  $where[] = "affectation.affectation_id IS NULL";
+  $where[] = "(sejour.type != 'seances' && affectation.affectation_id IS NULL) || sejour.type = 'seances'";
   
   if($order == null){
     $order = "users_mediboard.function_id, sejour.entree_prevue, patients.nom, patients.prenom";

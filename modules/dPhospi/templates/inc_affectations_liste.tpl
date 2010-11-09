@@ -11,8 +11,13 @@
   <input type="hidden" name="dosql" value="do_affectation_aed" />
   <input type="hidden" name="lit_id" value="" />
   <input type="hidden" name="sejour_id" value="{{$_sejour->_id}}" />
+  {{if $_sejour->type == "seances"}}
+  <input type="hidden" name="entree" value="{{$date}} 09:00:00" />
+  <input type="hidden" name="sortie" value="{{$date}} 18:00:00" />
+  {{else}}
   <input type="hidden" name="entree" value="{{$_sejour->_entree}}" />
   <input type="hidden" name="sortie" value="{{$_sejour->_sortie}}" />
+  {{/if}}
 </form>
 
 <table class="sejourcollapse" id="sejour_{{$_sejour->_id}}">

@@ -532,7 +532,7 @@ class CSejour extends CCodable {
     }
 
     // Synchronisation des affectations
-    if(!$this->_no_synchro) {
+    if(!$this->_no_synchro && !$this->type == "seances") {
       $this->loadRefsAffectations();
       $firstAff =& $this->_ref_first_affectation;
       $lastAff =& $this->_ref_last_affectation;
