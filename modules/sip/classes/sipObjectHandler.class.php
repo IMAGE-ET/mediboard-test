@@ -197,6 +197,8 @@ class CSipObjectHandler extends CMbObjectHandler {
             }
                         
             $affectation = new CAffectation();
+            $affectation->entree = $mbObject->entree;
+            $affectation->sortie = $mbObject->sortie;
             $affectation->loadRefLit();
             $affectation->_ref_lit->loadRefChambre();
             $affectation->_ref_lit->_ref_chambre->_ref_service = $service;
