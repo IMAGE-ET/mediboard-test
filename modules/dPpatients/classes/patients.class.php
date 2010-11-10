@@ -1386,6 +1386,19 @@ class CPatient extends CMbObject {
   }
   
   function fillLimitedTemplate(&$template) {
+    $cdestinataire = new CDestinataire;
+    $cdestinataire->makeAllFor($this);
+    
+    $destinataires = CDestinataire::$destByClass;
+
+    foreach($destinataires as $_destinataires_by_class)
+      foreach($_destinataires_by_class as $_destinataire) {
+        if (!isset($_destinataire->nom) || strlen($_destinataire->nom) == 0 || $_destinataire->nom === " ") continue;
+        $template->destinataires[] =
+          array("nom"   => $_destinataire->nom,
+                "email" => $_destinataire->email,
+                "tag"   => $_destinataire->tag);
+      }
     $this->loadRefsFwd();
     $this->loadRefConstantesMedicales();
     $this->loadIPP();
@@ -1479,6 +1492,7 @@ class CPatient extends CMbObject {
       $noms[] = $nom;
       $template->addProperty("Patient - médecin correspondant $i", $nom);
       $template->addProperty("Patient - médecin correspondant $i - adresse", "{$medecin->adresse}\n{$medecin->cp} {$medecin->ville}");
+      $template->addProperty("Patient - médecin correspondant $i - spécialté", htmlentities($medecin->disciplines));
     }
     
     $template->addProperty("Patient - médecin correspondants", implode(" - ", $noms));

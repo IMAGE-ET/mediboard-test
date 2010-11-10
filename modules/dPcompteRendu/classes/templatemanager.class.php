@@ -26,6 +26,8 @@ class CTemplateManager {
   var $simplifyMode = false;
   var $parameters = array();
   
+  var $destinataires = array();
+  
   private static $barcodeCache = array();
   
   function CTemplateManager($parameters = array()) {

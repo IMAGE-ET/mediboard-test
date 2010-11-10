@@ -55,7 +55,7 @@ class CMedecin extends CMbObject {
     $phone_number_format = str_replace(' ', 'S', CAppUI::conf("system phone_number_format"));
     
     $specs["nom"]             = "str notNull confidential seekable|begin";
-    $specs["prenom"]          = "str notNull confidential seekable|begin";
+    $specs["prenom"]          = "str notNull seekable|begin";
     $specs["jeunefille"]      = "str confidential";
     $specs["adresse"]         = "text".(CAppUI::conf("dPpatients CMedecin medecin_strict") == 1 ? ' notNull' : '')." confidential";
     $specs["ville"]           = "str".(CAppUI::conf("dPpatients CMedecin medecin_strict") == 1 ? ' notNull' : '')." confidential seekable";
@@ -64,9 +64,9 @@ class CMedecin extends CMbObject {
     $specs["fax"]             = "numchar length|10 confidential mask|$phone_number_format";
     $specs["portable"]        = "numchar length|10 confidential mask|$phone_number_format";
     $specs["email"]           = "str confidential";
-    $specs["disciplines"]     = "text confidential seekable";
-    $specs["orientations"]    = "text confidential";
-    $specs["complementaires"] = "text confidential";
+    $specs["disciplines"]     = "text seekable";
+    $specs["orientations"]    = "text";
+    $specs["complementaires"] = "text";
     $specs["type"]            = "enum list|medecin|kine|sagefemme|infirmier|dentiste|podologue|autre default|medecin";
     $specs["adeli"]           = "numchar length|9 confidential mask|99S9S99999S9";
     return $specs;
