@@ -47,22 +47,7 @@ class CHPrimXMLVenuePatient extends CHPrimXMLEvenementsPatients {
     $venue = $this->addElement($venuePatient, "venue"); 
     // Ajout de la venue   
     $this->addVenue($venue, $mbVenue, $referent);
-    
-    // Ajout des attributs du séjour
-    $this->addAttribute($venue, "confidentiel", "non");
-    
-    // Etat d'une venue : encours, clôturée ou préadmission
-    $etatConversion = array (
-      "preadmission" => "préadmission",
-      "encours"  => "encours",
-      "cloture" => "clôturée"
-    );
-
-    $this->addAttribute($venue, "etat", $etatConversion[$mbVenue->_etat]);
-    
-    $this->addAttribute($venue, "facturable", ($mbVenue->facturable)  ? "oui" : "non");
-    $this->addAttribute($venue, "declarationMedecinTraitant", ($mbVenue->_adresse_par_prat)  ? "oui" : "non");
-    
+        
     // Cas d'une annulation dans Mediboard on passe en trash le num dossier
     if (CAppUI::conf("hprimxml trash_numdos_sejour_cancel") && $mbVenue->annule && $mbVenue->_num_dossier) {
       $num_dossier = new CIdSante400();
