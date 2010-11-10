@@ -187,7 +187,8 @@ class CSipObjectHandler extends CMbObjectHandler {
             $_destinataire->sendEvenementPatient($domEvenementDebiteursVenue, $mbObject);
           }
           
-          if ($_destinataire->_configs["send_mvt_patients"] && $_destinataire->_configs["send_default_serv_with_type_sej"]) {
+          if ($_destinataire->_configs["send_mvt_patients"] && $_destinataire->_configs["send_default_serv_with_type_sej"] 
+                && ($mbObject->_ref_last_log->type == "create")) {
             $service = new CService();
             $service->load(CAppUI::conf("dPhospi default_service_types_sejour $mbObject->type"));
             if (!$service->_id) {
