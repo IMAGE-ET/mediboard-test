@@ -92,10 +92,14 @@ foreach ($sejours as $_sejour) {
 	}
 
   if ($filter->referent_id && $kine_referent->_id != $filter->referent_id && $kine_journee->_id != $filter->referent_id) {
+    unset($kines[$kine_journee->_id]);
+    if (!$kine_journee->_id) {
+      unset($kines[$kine_referent->_id]);
+    }
     unset($sejours[$_sejour->_id]);
     continue;
   }
-
+  
   // Regroupement par kine
   $sejours_by_kine[$kine_referent->_id][] = $_sejour;
   if ($kine_journee->_id && $kine_journee->_id != $kine_referent->_id) {
@@ -147,6 +151,7 @@ $smarty->assign("date", $date);
 $smarty->assign("filter", $filter);
 $smarty->assign("colors", $colors);
 $smarty->assign("sejours", $sejours);
+
 $smarty->assign("sejours_by_kine", $sejours_by_kine);
 $smarty->assign("kines", $kines);
 $smarty->assign("praticiens", $praticiens);

@@ -55,14 +55,16 @@
 		</h1>
     {{mb_include template=inc_sejours_ssr sejours=$sejours_by_kine.$kine_id}}
   {{/foreach}}   
-
-  {{assign var=kine_id value=""}}
-  <h1>
-  	<em>
-  		&mdash; {{tr}}None{{/tr}} {{tr}}CBilanSSR-kine_id{{/tr}}
-		</em>
-	</h1>
-  {{mb_include template=inc_sejours_ssr sejours=$sejours_by_kine.$kine_id}}
+  
+  {{if !$filter->referent_id}}
+    {{assign var=kine_id value=""}}
+    <h1>
+    	<em>
+    		&mdash; {{tr}}None{{/tr}} {{tr}}CBilanSSR-kine_id{{/tr}}
+  		</em>
+  	</h1>
+    {{mb_include template=inc_sejours_ssr sejours=$sejours_by_kine.$kine_id}}
+  {{/if}}
 {{else}}
 {{mb_include template=inc_sejours_ssr sejours=$sejours}}
 {{/if}}
