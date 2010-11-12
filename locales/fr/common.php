@@ -263,6 +263,7 @@ $locales['style.medilab'] = 'Medilab (rouge, beige)';
 $locales['style.phenx'] = 'Phenix (blanc, gris, module tabulé)';
 $locales['style.silver'] = 'Silver (gris, vert)';
 $locales['thirty-first-results'] = '30 premiers résultats';
+$locales['fifty-first-results'] = '50 premiers résultats';
 $locales['total'] = 'Total';
 $locales['week'] = 'semaine';
 $locales['weeks'] = 'semaines';

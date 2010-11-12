@@ -120,7 +120,14 @@ function onSubmitCorrespondant(form) {
           <th>{{tr}}Select{{/tr}}</th>
           {{/if}}
         </tr>
-
+        <tr>
+          <th colspan="8">
+            <em>
+              {{$count_medecins}} {{tr}}mod-dPlabo-tab-vw_resultats{{/tr}}
+              {{if $count_medecins >= 50}}({{tr}}fifty-first-results{{/tr}}){{/if}}
+            </em>
+          </th>
+        </tr>
         {{foreach from=$medecins item=_medecin}}
         {{assign var=medecin_id value=$_medecin->_id}}
         <tr {{if $medecin->_id == $_medecin->_id}}class="selected"{{/if}}>
@@ -129,7 +136,7 @@ function onSubmitCorrespondant(form) {
           {{if !$dialog}}
           <td><input type="checkbox" name="objects_id[]" value="{{$_medecin->_id}}" /></td>
           {{/if}}
-
+          
           <td class="text">
             <a {{if !$dialog}} href="{{$href}}"{{/if}}>
               {{$_medecin}}

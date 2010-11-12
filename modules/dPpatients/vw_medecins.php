@@ -60,6 +60,8 @@ if ($order_col == "cp") {
 }
 
 $medecins = new CMedecin();
+
+$count_medecins = $medecins->countlist($where, $order);
 $medecins = $medecins->loadList($where, $order, "0, 50");
 
 $list_types = $medecin->_specs['type']->_locales;
@@ -74,7 +76,7 @@ $smarty->assign("type"       , $medecin_type);
 $smarty->assign("medecins"   , $medecins);
 $smarty->assign("medecin"    , $medecin);
 $smarty->assign("list_types" , $list_types);
-
+$smarty->assign("count_medecins", $count_medecins);
 $smarty->assign("order_col"   , $order_col);
 $smarty->assign("order_way"   , $order_way);
 
