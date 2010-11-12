@@ -67,7 +67,7 @@ class CMedecin extends CMbObject {
     $specs["disciplines"]     = "text seekable";
     $specs["orientations"]    = "text";
     $specs["complementaires"] = "text";
-    $specs["type"]            = "enum list|medecin|kine|sagefemme|infirmier|dentiste|podologue|autre default|medecin";
+    $specs["type"]            = "enum list|medecin|kine|sagefemme|infirmier|dentiste|podologue|pharmacie|maison_medicale|autre default|medecin";
     $specs["adeli"]           = "numchar length|9 confidential mask|99S9S99999S9";
     return $specs;
   }
