@@ -44,6 +44,40 @@ function script_main($params, $content, &$smarty, &$repeat){
     </script>";
 }
 
+function mb_form($params, $content, &$smarty, &$repeat){
+  $attributes = array(
+    "name"   => CMbArray::extract($params, "name", null, true),
+    "method" => CMbArray::extract($params, "method", "get"),
+    "action" => CMbArray::extract($params, "action", "?"),
+  );
+  
+  if ($onsubmit = CMbArray::extract($params, "onsubmit")) {
+    $attributes["onsubmit"] = $onsubmit;
+  }
+  
+  $fields = array(
+    "m"     => CMbArray::extract($params, "m", null, true),
+    "dosql" => CMbArray::extract($params, "dosql"),
+    "tab"   => CMbArray::extract($params, "tab"),
+    "a"     => CMbArray::extract($params, "a"),
+  );
+  
+  $fields = array_filter($fields);
+  
+  $_content = "";
+  foreach($fields as $name => $value) {
+    $_content .= "\n".CHTMLResourceLoader::getTag("input", array(
+      "type"  => "hidden",
+      "name"  => $name,
+      "value" => $value,
+    ));
+  }
+  
+  $_content .= $content;
+  
+  return CHTMLResourceLoader::getTag("form", $attributes, $_content);
+}
+
 /**
  * Render an image using phpThumb
  */
@@ -549,6 +583,7 @@ class CSmartyDP extends Smarty {
     // Register mediboard functions
     $this->register_block   ("tr"                , "do_translation"); 
     $this->register_block   ("main"              , "script_main"); 
+    $this->register_block   ("mb_form"           , "mb_form"); 
     $this->register_function("thumb"             , "thumb");
     $this->register_function("unique_id"         , "smarty_function_unique_id");
     $this->register_function("mb_default"        , "smarty_function_mb_default");

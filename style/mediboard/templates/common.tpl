@@ -43,7 +43,6 @@
     {{$mediboardCommonStyle|smarty:nodefaults}}
   {{/if}}
   {{$mediboardStyle|smarty:nodefaults}}
-  {{$mediboardScript|smarty:nodefaults}}
   
   <!--[if lte IE 8]>
   <link rel="stylesheet" type="text/css" href="style/mediboard/ie.css?build={{$version.build}}" media="all" />
@@ -64,7 +63,11 @@
           action: "{{$action}}",
           actionType: "{{$actionType}}"
         };
-    
+  </script>
+  
+  {{$mediboardScript|smarty:nodefaults}}
+  
+  <script type="text/javascript">
     {{if $dialog}}
     Event.observe(document, 'keydown', closeWindowByEscape);
     {{/if}}
