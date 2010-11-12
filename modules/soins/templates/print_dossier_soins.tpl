@@ -63,7 +63,7 @@
 	{{foreach from=$prescription->_ref_lines_med_comments.med item=line_med}}
 	  <tr>
 	  	<td>
-	  	  {{mb_include module="dPprescription" template="inc_print_medicament" med=$line_med nodebug=true}}
+	  	  {{mb_include module="dPprescription" template="inc_print_medicament" med=$line_med nodebug=true print=false}}
     	</td>
 	  </tr>
 	{{/foreach}}
