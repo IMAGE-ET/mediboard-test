@@ -9,6 +9,11 @@
 *}}
 
 {{assign var=id value=$curr_delivery->_id}}
+{{assign var=product value=$curr_delivery->_ref_stock->_ref_product}}
+
+<td {{if $product->_in_order}}class="ok"{{/if}}>
+  {{mb_include module=dPstock template=inc_product_in_order product=$product}}
+</td>
 
 {{if $curr_delivery->patient_id}}
   <td>{{$curr_delivery->_ref_patient->_view}}</td>

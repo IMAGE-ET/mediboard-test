@@ -73,7 +73,7 @@ html {
   <tr>
     <th>{{if $order->object_id}}{{mb_label object=$order field=object_id}}{{/if}}</th>
     <td>
-      {{if !$septic}}
+      {{if !$order->_septic}}
         {{$order->_ref_object}}
       {{/if}}
     </td>

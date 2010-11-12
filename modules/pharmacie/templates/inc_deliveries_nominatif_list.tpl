@@ -55,6 +55,7 @@ Main.add(function(){
     <td>
       <table class="tbl">
         <tr>
+          <th style="width: 16px;"></th>
           <th>{{tr}}CProductDelivery-patient_id{{/tr}}</th>
           <th>
             {{mb_colonne class=CProductStockGroup field=product_id order_col=$order_col order_way=$order_way function=changeSort}}

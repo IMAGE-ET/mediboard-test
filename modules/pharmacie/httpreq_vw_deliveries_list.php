@@ -100,7 +100,10 @@ foreach($services as $_service_id => $_service) {
   }
   
   foreach($deliveries as $_id => $_delivery) {
-    $stocks_service[$_delivery->_id] = CProductStockService::getFromCode($_delivery->_ref_stock->_ref_product->code, $_delivery->service_id);
+    $_product = $_delivery->_ref_stock->_ref_product;
+    $_product->getPendingOrderItems(false);
+    
+    $stocks_service[$_delivery->_id] = CProductStockService::getFromCode($_product->code, $_delivery->service_id);
 
     /*if ($order_by_product) {
       $key = str_pad($_delivery->_ref_stock->_ref_product->name, 50, " ", STR_PAD_RIGHT).$_delivery->date_dispensation;

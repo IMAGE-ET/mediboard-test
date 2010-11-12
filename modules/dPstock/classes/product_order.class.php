@@ -52,6 +52,7 @@ class CProductOrder extends CMbMetaObject {
   var $_customer_code   = null;
   var $_context_bl      = null;
   var $_septic          = null;
+  var $_has_lot_numbers = false;
   
   // actions
   var $_order           = null;
@@ -580,8 +581,12 @@ class CProductOrder extends CMbMetaObject {
   
   function loadView(){
     parent::loadView();
+    
     foreach($this->_ref_order_items as $_item) {
-      $_item->loadRefLot();
+      if ($_item->lot_id) {
+        $_item->loadRefLot();
+        $this->_has_lot_numbers = true;
+      }
     }
   }
 

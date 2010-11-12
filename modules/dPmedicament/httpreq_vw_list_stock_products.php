@@ -13,6 +13,7 @@ CCanDo::checkRead();
 $keywords     = CValue::getOrSession("keywords");
 $letter       = CValue::getOrSession("letter", "");
 $start = intval(CValue::getOrSession("start", 0));
+$category_id  = CValue::getOrSession("category_id", CAppUI::conf('bcb CBcbProduitLivretTherapeutique product_category_id'));
 
 if (!$keywords) {
   $keywords = "%";
@@ -23,7 +24,6 @@ $where = array(
   "name" => ($letter === "#" ? "RLIKE '^[^A-Z]'" : "LIKE '$letter%'"),
 );
 
-$category_id = CAppUI::conf('bcb CBcbProduitLivretTherapeutique product_category_id');
 if ($category_id) {
   $where["category_id"] = "= '$category_id'";
 }

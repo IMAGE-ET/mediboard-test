@@ -8,11 +8,9 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
 *}}
 
-<script type="text/javascript">
-Main.add(function(){
+{{main}}
   selectProduct(getForm("edit_product").product_id.value);
-});
-</script>
+{{/main}}
 
 {{mb_include module=system template=inc_pagination change_page="changePage" 
     total=$total current=$start step=$dPconfig.dPstock.CProduct.pagination_size}}
@@ -37,7 +35,9 @@ Main.add(function(){
       </td>
       <td colspan="10" style="font-weight: bold;">
         <a href="#1" onclick="return editProduct({{$_product->_id}})">
-          {{$_product->name|truncate:80}}
+          <span onmouseover="ObjectTooltip.createEx(this, '{{$_product->_guid}}')">
+            {{$_product->name|truncate:80}}
+          </span>
         </a>
       </td>
     </tr>

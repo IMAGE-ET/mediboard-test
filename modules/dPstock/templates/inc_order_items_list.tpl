@@ -12,7 +12,7 @@
   <thead>
     <tr>
       <th class="category">Code</th>
-      {{if $order->object_id}}
+      {{if $order->object_id || $order->_has_lot_numbers}}
         <th class="category">Lot</th>
         <th class="category">Date pér.</th>
       {{/if}}
@@ -42,7 +42,7 @@
       {{/if}}
     </td>
     
-    {{if $order->object_id}}
+    {{if $order->object_id || $order->_has_lot_numbers}}
       {{if $curr_item->_ref_lot}}
         <td>{{mb_value object=$curr_item->_ref_lot field=code}}</td>
         <td>{{mb_value object=$curr_item->_ref_lot field=lapsing_date}}</td>

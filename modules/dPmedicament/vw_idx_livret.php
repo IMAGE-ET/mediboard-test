@@ -15,6 +15,8 @@ if(!CModule::getActive('bcb')){
 }
 
 $lettre = CValue::get("lettre");
+$category_id  = CValue::getOrSession("category_id", CAppUI::conf('bcb CBcbProduitLivretTherapeutique product_category_id'));
+
 
 $listProduits = array();
 
@@ -31,6 +33,13 @@ $codeATC     = CValue::get("codeATC");
 $classeATC   = new CBcbClasseATC();
 $chapitreATC = $codeATC ? $classeATC->getLibelle($codeATC) : ''; // Nom du chapitre selectionné
 $arbreATC    = $classeATC->loadArbre($codeATC); // Chargements des sous chapitres
+
+$categories = array();
+
+if(CModule::getActive("dPstock")) {
+  $category = new CProductCategory;
+  $categories = $category->loadList(null, "name");
+}
  
 // Création du template
 $smarty = new CSmartyDP();
@@ -42,6 +51,8 @@ $smarty->assign("chapitreATC", $chapitreATC);
 $smarty->assign("lettre", $lettre);
 $smarty->assign("produits_livret", $etablissement->_ref_produits_livret);
 $smarty->assign("tabLettre", $tabLettre);
+$smarty->assign("category_id", $category_id);
+$smarty->assign("categories", $categories);
 
 $smarty->display("vw_idx_livret.tpl");
 

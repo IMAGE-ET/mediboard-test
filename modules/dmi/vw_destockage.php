@@ -10,6 +10,8 @@
 
 CCanDo::checkRead();
 
+$societe_id = CValue::getOrSession("societe_id");
+
 $ljoin = array(
   "product_order_item" => "product_order_item.order_item_id = product_order_item_reception.order_item_id",
   "product_reference"  => "product_reference.reference_id = product_order_item.reference_id",
@@ -17,9 +19,20 @@ $ljoin = array(
 );
 
 $where = array(
-  "product_order_item_reception.lapsing_date" => "IS NOT NULL",
   "product_order_item_reception.cancelled" => "='0'",
 );
+
+$societe = new CSociete;
+if (!$societe->load($societe_id)) {
+  $where["product_order_item_reception.lapsing_date"] = "IS NOT NULL";
+}
+else {
+  $where["product_reference.societe_id"] = "= '$societe_id'";
+}
+
+$product = new CProduct;
+$product->societe_id = $societe_id;
+$product->loadRefsFwd();
 
 $reception = new CProductOrderItemReception;
 $receptions = $reception->loadList($where, "lapsing_date", 30, null, $ljoin);
@@ -55,4 +68,5 @@ foreach($receptions as $_id => $_reception) {
 // Création du template
 $smarty = new CSmartyDP();
 $smarty->assign("receptions", $receptions);
+$smarty->assign("product", $product);
 $smarty->display("vw_destockage.tpl");

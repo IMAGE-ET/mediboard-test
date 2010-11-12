@@ -15,7 +15,7 @@
       <th class="narrow">{{mb_title class=CProductDelivery field=date_delivery}}</th>
       <th>{{mb_title class=CProductDelivery field=comments}}</th>
       <th class="narrow"></th>
-      <th colspan="2" style="width: 6em; white-space: normal;">{{tr}}CProductStockService{{/tr}}</th>
+      <th colspan="2" style="width: 6em; white-space: normal;">{{tr}}CProductStockGroup{{/tr}}</th>
     </tr>
     
     <tbody class="hoverable">
@@ -93,10 +93,10 @@
             <button type="button" style="margin: -1px;" class="cancel notext" onclick="removeOutflow('{{$_delivery->_id}}', '{{$_delivery->_ref_stock}}')">{{tr}}Supprimer{{/tr}}</button>
           </td>
           <td class="narrow">
-            {{$_delivery->_ref_stock_service->quantity}}
+            {{$_delivery->_ref_stock->quantity}}
           </td>
           <td>
-            {{include file="../../dPstock/templates/inc_bargraph.tpl" stock=$_delivery->_ref_stock_service}}
+            {{include file="../../dPstock/templates/inc_bargraph.tpl" stock=$_delivery->_ref_stock}}
           </td>
         </tr>
       </tbody>

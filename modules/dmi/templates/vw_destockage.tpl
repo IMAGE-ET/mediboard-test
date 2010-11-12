@@ -1,3 +1,17 @@
+
+{{mb_form name="filterSocietes" m="dmi" tab=$tab}}
+  {{mb_field object=$product field=societe_id form="filterSocietes" autocomplete="true,1,50,true,true"}}
+  
+  <button type="submit" class="search">{{tr}}Search{{/tr}}</button>
+{{/mb_form}}
+
+<div class="small-info">
+  Choisissez un laboratoire pour voir les lots disponibles, puis cliquez 
+  sur le bouton <button class="tick notext" type="button">Commander</button> 
+  pour l'ajouter à un bon de commande. Un clic sur un autre article du même 
+  labo l'ajoutera à cette commande.
+</div>
+
 <table class="main tbl">
   <tr>
     <th>{{mb_title class=CProductReference field=product_id}}</th>
@@ -27,7 +41,7 @@
         {{/if}}
       </td>
       <td>{{mb_value object=$_lot field=code}}</td>
-      <td {{if $_lot->lapsing_date|strtotime < $smarty.now}}class="error"{{/if}} style="text-align: center;">
+      <td {{if $_lot->lapsing_date && $_lot->lapsing_date|strtotime < $smarty.now}}class="error"{{/if}} style="text-align: center;">
         {{mb_value object=$_lot field=lapsing_date}}
       </td>
       <td style="text-align: center;">{{$_lot->_total_quantity}}</td>
@@ -93,6 +107,10 @@
           <button class="cancel notext" type="submit">Annuler le lot</button>
         </form>
       </td>
+    </tr>
+  {{foreachelse}}
+    <tr>
+      <td colspan="10">{{tr}}CProductOrderItemReception.none{{/tr}}</td>
     </tr>
   {{/foreach}}
 </table>
