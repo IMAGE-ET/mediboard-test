@@ -623,6 +623,10 @@ Class.extend(String, {
   }
 });
 
+RegExp.escape = function(text) {
+  return text.replace(/[-[\]{}()*+?.,\\^$|#\s]/g, "\\$&");
+};
+
 Ajax.PeriodicalUpdater.addMethods({
   resume: function() {
     this.updateComplete();

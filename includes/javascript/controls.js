@@ -400,7 +400,7 @@ Element.addMethods({
     var htmlFor = "", match;
     
     if (!strict && /radio|checkbox/i.test(element.type)){
-      match = new RegExp("(\.*)_"+element.value+"$", "i").exec(element.id);
+      match = new RegExp("(\.*)_"+RegExp.escape(element.value)+"$", "i").exec(element.id);
       if (match) {
         htmlFor = "label[for='"+match[1]+"'], ";
       }
