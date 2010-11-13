@@ -63,9 +63,9 @@
         // Sinon insertion des sous-items
         subItems = fields[replaceEntites(section)][replaceEntites(item)];
 
-        for(subItem in subItems) {
+        for(var subItem in subItems) {
           if (typeof subItems[subItem] == "function") continue;
-          oSubItem.insert("<option value='" + subItems[subItem].item + "'>" + subItems[subItem].view + "</option>");
+          oSubItem.insert("<option value='" + subItem + "'>" + subItems[subItem].view + "</option>");
         }
         oSubItem.selectedIndex = -1;
       }
@@ -76,6 +76,11 @@
           insertHTML(fields[replaceEntites(section)][replaceEntites(item)].item);
       }
       
+      function insertSubItem(section, item, subitem){
+        if (fields[replaceEntites(section)][replaceEntites(item)][replaceEntites(subitem)].item != null)
+          insertHTML(fields[replaceEntites(section)][replaceEntites(item)][replaceEntites(subitem)].item);
+	    }
+
       function insertHTML(string) {
         // Before doing anything, save undo snapshot.
         oEditor.FCKUndo.SaveUndoStep() ;
@@ -113,7 +118,7 @@
           </select>
         </td>
         <td>
-          <select id="subitem" size="10" style="width: 170px; height: 180px;" ondblclick="insertHTML(this.value);">
+          <select id="subitem" size="10" style="width: 170px; height: 180px;" ondblclick="insertSubItem($('section').value, $('item').value, this.value);">
             <option value="">&mdash; Choisissez un sous-item</option>
           </select>
         </td>  

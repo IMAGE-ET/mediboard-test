@@ -118,7 +118,7 @@ window.parent.fields.push({
   {{foreach from=$templateManager->lists item=list}}
     aOptionsList.push( {
       view: "{{$list.name|smarty:nodefaults|escape:"htmlall"|escape:"javascript"}}" ,
-      item: "[Liste - {{$list.name|smarty:nodefaults|escape:"htmlall"|escape:"javascript"}}]",
+      item: "[Liste - {{$list.name|smarty:nodefaults|escape:"htmlall"|escape:"javascript"}}]"
       });
   {{/foreach}}
 {{/if}}

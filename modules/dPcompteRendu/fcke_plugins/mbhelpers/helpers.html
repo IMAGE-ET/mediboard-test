@@ -28,7 +28,7 @@
       var i = 0;
       $H(helpers).each(function(category, iterator){
         if (category.key != "AddItem" && category.key != "IndexOf") {
-          for(helper in category.value) {
+          for(var helper in category.value) {
             if (helper != "AddItem" && helper != "IndexOf") {
               var style="";
               if (category[0].indexOf("utilisateur") != -1)
