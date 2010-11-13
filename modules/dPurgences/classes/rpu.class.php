@@ -378,8 +378,8 @@ class CRPU extends CMbObject {
 	  $this->_ref_consult->loadRefPraticien();
 	  
 	  // Duplication des champs de la consultation
-	  $template->addProperty("RPU - Consultation - Praticien nom "   , $this->_ref_consult->_ref_praticien->_user_first_name);
-	  $template->addProperty("RPU - Consultation - Praticien prénom ", $this->_ref_consult->_ref_praticien->_user_last_name);
+	  $template->addProperty("RPU - Consultation - Praticien nom"    , $this->_ref_consult->_ref_praticien->_user_first_name);
+	  $template->addProperty("RPU - Consultation - Praticien prénom" , $this->_ref_consult->_ref_praticien->_user_last_name);
 	  $template->addProperty("RPU - Consultation - Motif"            , $this->_ref_consult->motif);
 	  $template->addProperty("RPU - Consultation - Remarques"        , $this->_ref_consult->rques);
 	  $template->addProperty("RPU - Consultation - Examen"           , $this->_ref_consult->examen);

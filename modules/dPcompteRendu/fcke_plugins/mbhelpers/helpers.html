@@ -1,58 +1,60 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<!DOCTYPE html 
+     PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+     "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-	<script type="text/javascript" src="../../../../lib/scriptaculous/lib/prototype.js"></script>
+	<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-15" />
+  <script type="text/javascript" src="../../../../lib/scriptaculous/lib/prototype.js"></script>
   <script type="text/javascript">
     var dialog = window.parent ;
-		dialog.document.getElementById("btnCancel").value = "Fermer";
+    dialog.document.getElementById("btnCancel").value = "Fermer";
     var oEditor = dialog.InnerDialogLoaded() ;
     var FCK = oEditor.FCK;
     var FCKTools  = oEditor.FCKTools ;
     var FCKConfig = oEditor.FCKConfig ;
     var FCKBrowserInfo = oEditor.FCKBrowserInfo ;
-		var helpers = [];
-		var arrayHelperIndex = [];
+    var helpers = [];
+    var arrayHelperIndex = [];
     var arrayHelperContent = [];
     var arrayHelperStyle = [];
-		if (window.parent.parent.helpers[0] != null)
+    if (window.parent.parent.helpers[0] != null)
       helpers = window.parent.parent.helpers[0].options;
 
-		// Au chargement, on initialise la liste déroulante avec les aide à la saisie
+    // Au chargement, on initialise la liste déroulante avec les aide à la saisie
     window.onload = function () {
       dialog.SetAutoSize( true ) ;
-			var list = $("helper");
-			var i = 0;
-			$H(helpers).each(function(category, iterator){
-				if (category[0] != "AddItem" && category[0] != "IndexOf") {
-					for(helper in category[1]) {
-						if (helper != "AddItem" && helper != "IndexOf") {
-							var style="";
-							if (category[0].indexOf("utilisateur") != -1)
-							  style = "url(../../../../images/icons/user.png) no-repeat";
-							else if (category[0].indexOf("fonction") != -1)
-							  style = "url(../../../../images/icons/user-function.png) no-repeat";
-						  else
-							  style = "url(../../../../images/icons/group.png) no-repeat";
-							arrayHelperIndex[i] = helper;
-							arrayHelperStyle[i] = style;
-							arrayHelperContent[i] = category[1][helper]; 
-							i++;
-						}
-					}
-				}
-			});
-			arrayHelperIndex.each(function(item, iterator) {
-			  list.insert("<option value='" + iterator + "' ondblclick='insertHTML(this.value)'>" + item + "</option>");
-			});
+      var list = $("helper");
+      var i = 0;
+      $H(helpers).each(function(category, iterator){
+        if (category.key != "AddItem" && category.key != "IndexOf") {
+          for(helper in category.value) {
+            if (helper != "AddItem" && helper != "IndexOf") {
+              var style="";
+              if (category[0].indexOf("utilisateur") != -1)
+                style = "url(../../../../images/icons/user.png) no-repeat";
+              else if (category[0].indexOf("fonction") != -1)
+                style = "url(../../../../images/icons/user-function.png) no-repeat";
+              else
+                style = "url(../../../../images/icons/group.png) no-repeat";
+              arrayHelperIndex[i] = helper;
+              arrayHelperStyle[i] = style;
+              arrayHelperContent[i] = category[1][helper]; 
+              i++;
+            }
+          }
+        }
+      });
+      arrayHelperIndex.each(function(item, iterator) {
+        list.insert("<option value='" + iterator + "'>" + item + "</option>");
+      });
       list.selectedIndex = -1;
     }
 
     function insertHTML(index) {
-			var string = arrayHelperContent[index];
-			if (string == '') return;
-			
+      var string = arrayHelperContent[index];
+      if (string == '') return;
+      
       // Before doing anything, save undo snapshot.
       oEditor.FCKUndo.SaveUndoStep() ;
 
@@ -60,31 +62,29 @@
       sHtml = "<span class='field'>" + string + "</span>&nbsp;";
       sHtml = FCKTools.ProcessLineBreaks( oEditor, FCKConfig, sHtml ) ;
       oEditor.FCK.InsertHtml( sHtml ) ;
-			dialog.document.getElementById("btnCancel").onclick();
+      dialog.document.getElementById("btnCancel").onclick();
       return true ;
     }
-		
-		function previewHelper(helper) {
-			$("preview").innerHTML = (arrayHelperContent[helper]).replace("\n", "<br/>");
-			$("category_helper").setStyle({background: arrayHelperStyle[helper]});
-		}
+    
+    function previewHelper(helper) {
+      $("preview").innerHTML = (arrayHelperContent[helper]).replace("\n", "<br/>");
+      $("category_helper").setStyle({background: arrayHelperStyle[helper]});
+    }
   </script>
 
 </head>
 <body>
-
-<table>
-	<tr>
-		<td>
-			<select id="helper" size="10" style="width: 200px; height: 180px;" onchange="previewHelper(this.value)">
-			</select>
-		</td>
-		<td style="vertical-align: top;">
-		  <div id="category_helper" style="width: 16px; height: 16px;"></div>
-      <div id="preview" style="overflow: auto; max-height: 180px;"></div>
-		</td>
-	</tr>
-	
-</table>
+  <table>
+    <tr>
+      <td>
+        <select id="helper" size="10" style="width: 200px; height: 180px;" onchange="previewHelper(this.value)" ondblclick="insertHTML(this.value)">
+        </select>
+      </td>
+      <td style="vertical-align: top;">
+        <div id="category_helper" style="width: 16px; height: 16px;"></div>
+        <div id="preview" style="overflow: auto; max-height: 180px;"></div>
+      </td>
+    </tr>
+  </table>
 </body>
 </html>
