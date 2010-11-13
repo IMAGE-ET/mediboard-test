@@ -34,9 +34,9 @@
         if (section == '') return; 
         // On vide la section des sous-items
         reloadSubItem('');
-        //console.log(replaceEntites(section));
+
         var items = fields[replaceEntites(section)];
-        for (item in items) {
+        for (var item in items) {
           if (item == "AddItem" || item == "IndexOf") continue;
           var several_items = "";
           var tag = item;
