@@ -535,9 +535,9 @@ Main.add( function(){
 	        </optgroup>
         {{/if}}
       </select>
-      {{if !$mode_pharma && ($is_praticien || $mode_protocole || @$operation_id || $can->admin)}}
-        <button class="new" type="button" onclick="viewEasyMode('{{$mode_protocole}}','{{$mode_pharma}}', menuTabs.activeContainer.id);">Mode grille</button>
-      {{/if}}
+			
+      <button class="new" type="button" onclick="viewEasyMode('{{$mode_protocole}}','{{$mode_pharma}}', menuTabs.activeContainer.id);">Mode grille</button>
+      
 			{{if !$mode_protocole && $prescription->type == "sejour"}}
         <button type="button" class="search" onclick="popupTransmission('{{$prescription->object_id}}');">Transmissions</button>
 			{{/if}}			
