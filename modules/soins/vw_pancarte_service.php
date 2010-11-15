@@ -174,12 +174,6 @@ foreach($prescriptions as $_prescription){
 			if($_planif->_ref_object->_recent_modification){
         $new[$_prescription->_id]["$_date $time"] = 1;
         $pancarte[$_prescription->_id]["$_date $time"][$type][$_planif->object_id]["new"] = 1;
-      }
-      // Creation du tableau d'urgences
-      if(is_array($_planif->_ref_object->_dates_urgences) && array_key_exists($date_reelle, $_planif->_ref_object->_dates_urgences) 
-         && in_array($dateTime, $_planif->_ref_object->_dates_urgences[$date_reelle])){
-        $urgences[$_prescription->_id]["$_date $time"] = 1;
-        $pancarte[$_prescription->_id]["$_date $time"][$type][$_planif->object_id]["urgence"] = 1;
       }				
 		}
 		
@@ -253,12 +247,6 @@ foreach($prescriptions as $_prescription){
       if($_administration->_ref_object->_recent_modification){
         $new[$_prescription->_id]["$_date $time"] = 1;
         $pancarte[$_prescription->_id]["$_date $time"][$type][$_administration->object_id]["new"] = 1;
-      }
-      // Creation du tableau d'urgences
-      if(is_array($_administration->_ref_object->_dates_urgences) && array_key_exists($date_reelle, $_administration->_ref_object->_dates_urgences) 
-         && in_array($dateTime, $_administration->_ref_object->_dates_urgences[$date_reelle])){
-        $urgences[$_prescription->_id]["$_date $time"] = 1;
-        $pancarte[$_prescription->_id]["$_date $time"][$type][$_administration->object_id]["urgence"] = 1;
       }
 
 			// Suppression d'une planification systeme replanifiée
