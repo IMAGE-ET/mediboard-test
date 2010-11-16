@@ -337,10 +337,13 @@ Main.add( function(){
     </th>
   </tr>
 	<tr>
-	 	<table class="tbl">
+		<td>
+	 	<table class="form">
 	 		{{assign var=patient value=$prescription->_ref_patient}}
 	 		{{mb_include module=dPprescription template=inc_infos_patients_soins}}
 	 	</table>
+		<hr />
+		</td>
   </tr>
   {{/if}}
   
