@@ -35,7 +35,7 @@
 	<ul>
 	  {{foreach from=$perf->_ref_lines item=_line}}
 	  <li>
-	    {{$_line->_view}}
+	    <strong>{{$_line->_ucd_view}}</strong>: {{$_line->_posologie}}
 	  </li>  
 	  {{/foreach}}
 	</ul>
