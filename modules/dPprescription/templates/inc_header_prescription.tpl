@@ -279,7 +279,7 @@ Main.add( function(){
         <br />
        	{{if !$is_praticien && !$mode_protocole && ($operation_id || $can->admin || $mode_pharma || $current_user->isInfirmiere())}}
 				<form name="selPraticienLine" action="?" method="get">
-				  <select name="praticien_id" onchange="changePraticienMed(this.value); {{if !$mode_pharma}}changePraticienElt(this.value);{{/if}} if($('protocole_prat_name')) { $('protocole_prat_name').update('Dr '+this.options[this.selectedIndex].text); }">
+				  <select style="font-size: 0.8em; width: 15em;" name="praticien_id" onchange="changePraticienMed(this.value); {{if !$mode_pharma}}changePraticienElt(this.value);{{/if}} if($('protocole_prat_name')) { $('protocole_prat_name').update('Dr '+this.options[this.selectedIndex].text); }">
 						<optgroup label="Responsables">
 				      <option class="mediuser" style="border-color: #{{$prescription->_ref_current_praticien->_ref_function->color}};" 
 						          value="{{$prescription->_ref_current_praticien->_id}}"
@@ -302,16 +302,8 @@ Main.add( function(){
 				  </select>
 				</form>
 				{{/if}}
-				
-			  <br />
-			  <div id="antecedent_allergie" style="float: right">
-          {{assign var=antecedents value=$prescription->_ref_object->_ref_patient->_ref_dossier_medical->_ref_antecedents}}
-          {{assign var=sejour_id value=$prescription->_ref_object->_id}}
-          {{include file="../../dPprescription/templates/inc_vw_antecedent_allergie.tpl"}}    
-        </div>   
       </div>
 			
-				
       {{if !$mode_protocole && $prescription->object_class == "CSejour"}}
         <div style="float:left; padding-right: 5px;" class="noteDiv {{$prescription->_ref_object->_guid}}">
           <img title="Ecrire une note" src="images/icons/note_grey.png" />
@@ -335,6 +327,11 @@ Main.add( function(){
         {{else}}
            	{{$prescription->_ref_object->_view}}
         {{/if}}
+				 <span id="antecedent_allergie">
+          {{assign var=antecedents value=$prescription->_ref_object->_ref_patient->_ref_dossier_medical->_ref_antecedents}}
+          {{assign var=sejour_id value=$prescription->_ref_object->_id}}
+          {{include file="../../dPprescription/templates/inc_vw_antecedent_allergie.tpl" nodebug=true}}    
+        </span> 
 				</h2>
 	    {{/if}}
     </th>
