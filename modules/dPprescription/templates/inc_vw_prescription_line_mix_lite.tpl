@@ -59,11 +59,11 @@
         {{$_perf_line->_ucd_view}}
         
 				{{if $_perf_line->_posologie}}
-				({{$_perf_line->_posologie}})
+				: {{$_perf_line->_posologie}}
 				{{/if}}
 				 
 		    <span style="font-size: 0.8em; opacity: 0.7">
-         ({{$_perf_line->_forme_galenique}})
+         - {{$_perf_line->_forme_galenique}}
         </span>
       </a>
       {{if !$smarty.foreach.lines.last}}<br />{{/if}}

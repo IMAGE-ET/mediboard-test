@@ -329,18 +329,21 @@ Main.add( function(){
        {{/if}}
       {{/if}}
       {{if !$mode_protocole}}
+			  <h2 style="color: #fff; font-weight: bold;">
         {{if $prescription->type == "externe"}}
           {{$prescription->_ref_patient->_view}}   
         {{else}}
-           <a href="#" onmouseover="ObjectTooltip.createEx(this, '{{$prescription->_ref_object->_guid}}')">
            	{{$prescription->_ref_object->_view}}
-					</a>
         {{/if}}
-        {{if $prescription->_ref_patient->_age}}
-           <br />({{$prescription->_ref_patient->_age}} ans - {{$prescription->_ref_patient->naissance|date_format:"%d/%m/%Y"}}{{if $poids}} - {{$poids}} kg{{/if}})
-        {{/if}}
+				</h2>
 	    {{/if}}
     </th>
+  </tr>
+	<tr>
+	 	<table class="tbl">
+	 		{{assign var=patient value=$prescription->_ref_patient}}
+	 		{{mb_include module=dPprescription template=inc_infos_patients_soins}}
+	 	</table>
   </tr>
   {{/if}}
   
