@@ -58,10 +58,10 @@ class CProductStockLocation extends CMbMetaObject {
 
 	function updateFormFields() {
     parent::updateFormFields();
-    $this->loadTargetObject();
+    $this->loadTargetObject(false);
     
     $this->_shortview = ($this->position ? "[".str_pad($this->position, 3, "0", STR_PAD_LEFT)."] " : "") . $this->name;
-    $this->_view = "{$this->_ref_object->_view} - $this->_shortview";
+    $this->_view = ($this->object_id ? "{$this->_ref_object->_view} - " : "") . $this->_shortview;
   }
 	
 	function updateDBfields() {
