@@ -606,17 +606,19 @@ class CHPrimXMLDocument extends CMbXMLDocument {
   }
   
   function addVenue($elParent, CSejour $mbVenue, $referent = false, $light = false) {
-    // Ajout des attributs du séjour
-    $this->addAttribute($elParent, "confidentiel", "non");
-    // Etat d'une venue : encours, clôturée ou préadmission
-    $etatConversion = array (
-      "preadmission" => "préadmission",
-      "encours"  => "encours",
-      "cloture" => "clôturée"
-    );
-    $this->addAttribute($elParent, "etat", $etatConversion[$mbVenue->_etat]);
-    $this->addAttribute($elParent, "facturable", ($mbVenue->facturable)  ? "oui" : "non");
-    $this->addAttribute($elParent, "declarationMedecinTraitant", ($mbVenue->_adresse_par_prat)  ? "oui" : "non");
+    if (!$light) {
+      // Ajout des attributs du séjour
+      $this->addAttribute($elParent, "confidentiel", "non");
+      // Etat d'une venue : encours, clôturée ou préadmission
+      $etatConversion = array (
+        "preadmission" => "préadmission",
+        "encours"  => "encours",
+        "cloture" => "clôturée"
+      );
+      $this->addAttribute($elParent, "etat", $etatConversion[$mbVenue->_etat]);
+      $this->addAttribute($elParent, "facturable", ($mbVenue->facturable)  ? "oui" : "non");
+      $this->addAttribute($elParent, "declarationMedecinTraitant", ($mbVenue->_adresse_par_prat)  ? "oui" : "non");
+    }
     
     $identifiant = $this->addElement($elParent, "identifiant");
     
