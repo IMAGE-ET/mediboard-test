@@ -5,7 +5,7 @@
   <tr>
     <th class="title" colspan="2">
       <span style="float:left;font-size:12px;">
-        {{$sejour->_id}}
+        [{{$sejour->_num_dossier}}]
       </span>
       <span style="float:right;font-size:12px;">
         {{$sejour->_ref_group->text}}

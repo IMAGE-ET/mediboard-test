@@ -16,6 +16,7 @@ $sejour    = new CSejour;
 
 if ($sejour_id = CValue::get("sejour_id")) {
   $sejour->load($sejour_id);
+  $sejour->loadNumDossier();
   $sejour->loadRefsFwd();
   $patient =& $sejour->_ref_patient;
   $patient->loadRefs();
@@ -25,6 +26,7 @@ if ($operation_id = CValue::get("operation_id")) {
 	$operation->load($operation_id);
 	$operation->loadRefsFwd();
 	$operation->_ref_sejour->loadRefsFwd();
+	$operation->_ref_sejour->loadNumDossier();
 	$patient =& $operation->_ref_sejour->_ref_patient;
   $patient->loadRefs();
 }
