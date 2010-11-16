@@ -14,7 +14,7 @@
  */
 class CService extends CMbObject {
   // DB Table key
-	var $service_id = null;	
+  var $service_id = null;	
   
   // DB references
   var $group_id       = null;
@@ -42,21 +42,22 @@ class CService extends CMbObject {
     return $spec;
   }
 
-	function getBackProps() {
-	  $backProps = parent::getBackProps();
+  function getBackProps() {
+    $backProps = parent::getBackProps();
     $backProps["chambres"]               = "CChambre service_id";
     $backProps["sejours"]                = "CSejour service_id";
     $backProps["protocoles"]             = "CProtocole service_id";
     $backProps["product_deliveries"]     = "CProductDelivery service_id";
-	  $backProps["product_stock_services"] = "CProductStockService service_id";
-	  $backProps["valid_repas"]            = "CValidationRepas service_id";
-	  $backProps["config_moment"]          = "CConfigMomentUnitaire service_id";
-	  $backProps["config_service"]         = "CConfigService service_id";
+    $backProps["product_stock_services"] = "CProductStockService service_id";
+    $backProps["valid_repas"]            = "CValidationRepas service_id";
+    $backProps["config_moment"]          = "CConfigMomentUnitaire service_id";
+    $backProps["config_service"]         = "CConfigService service_id";
     $backProps["endowments"]             = "CProductEndowment service_id";
-		$backProps["services_entree"]        = "CSejour service_entree_mutation_id";
-		$backProps["services_sortie"]        = "CSejour service_mutation_id";
-	  return $backProps;
-	}
+    $backProps["services_entree"]        = "CSejour service_entree_mutation_id";
+    $backProps["services_sortie"]        = "CSejour service_mutation_id";
+    $backProps["stock_locations"]        = "CProductStockLocation object_id";
+    return $backProps;
+  }
 
   function getProps() {
   	$props = parent::getProps();
@@ -86,8 +87,8 @@ class CService extends CMbObject {
    */
   function loadGroupList($where = array(), $order = 'nom', $limit = null, $groupby = null, $ljoin = array()) {
     // Filtre sur l'établissement
-		$group = CGroups::loadCurrent();
-		$where["group_id"] = "= '$group->_id'";
+    $group = CGroups::loadCurrent();
+    $where["group_id"] = "= '$group->_id'";
     
     return $this->loadList($where, $order, $limit, $groupby, $ljoin);
   }

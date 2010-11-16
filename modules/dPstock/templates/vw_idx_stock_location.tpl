@@ -26,6 +26,7 @@ Main.add(editStockLocation);
         <tr>
           <th>{{mb_title class=CProductStockLocation field=name}}</th>
           <th>{{mb_title class=CProductStockLocation field=desc}}</th>
+          <th>{{mb_title class=CProductStockLocation field=object_id}}</th>
           <th>{{mb_title class=CProductStockLocation field=position}}</th>
         </tr>
         {{foreach from=$list_locations item=curr_location}}
@@ -37,6 +38,7 @@ Main.add(editStockLocation);
             </a>
           </td>
 					<td>{{mb_value object=$curr_location field=desc}}</td>
+          <td>{{mb_value object=$curr_location field=object_class}} - {{mb_value object=$curr_location field=object_id}}</td>
           <td>{{mb_value object=$curr_location field=position}}</td>
         </tr>
 				{{foreachelse}}

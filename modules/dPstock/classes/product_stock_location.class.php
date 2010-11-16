@@ -8,7 +8,7 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
  */
 
-class CProductStockLocation extends CMbObject {
+class CProductStockLocation extends CMbMetaObject {
   // DB Table key
   var $stock_location_id = null;
 
@@ -16,22 +16,24 @@ class CProductStockLocation extends CMbObject {
   var $name              = null;
   var $desc              = null;
 	var $position          = null;
-	var $group_id          = null;
+  var $group_id          = null;
 
   // Object References
   var $_ref_group_stocks = null;
+  
   /**
    * @var CGroups
    */
 	var $_ref_group        = null;
 	
 	var $_before           = null;
+  var $_type             = null;
 
   function getSpec() {
     $spec = parent::getSpec();
     $spec->table = 'product_stock_location';
     $spec->key   = 'stock_location_id';
-    $spec->uniques["name"] = array("name");
+    $spec->uniques["name"] = array("name", "object_class", "object_id");
     return $spec;
   }
 	
@@ -40,39 +42,53 @@ class CProductStockLocation extends CMbObject {
     $specs['name'] = 'str notNull seekable';
     $specs['desc'] = 'text seekable';
 		$specs['position'] = 'num min|1';
-		$specs['group_id'] = 'ref notNull class|CGroups';
+    $specs['group_id'] = 'ref notNull class|CGroups';
+    $specs['object_class'] = 'enum notNull list|CGroups|CService'; //|CBlocOperatoire
 		$specs['_before']  = 'ref class|CProductStockLocation autocomplete|name|true';
+    $specs['_type']  = 'str';
     return $specs;
   }
 
 	function getBackProps() {
 	  $backProps = parent::getBackProps();
-	  $backProps["group_stocks"] = "CProductStockGroup location_id";
+    $backProps["group_stocks"] = "CProductStockGroup location_id";
+    $backProps["service_stocks"] = "CProductStockService location_id";
 	  return $backProps;
 	}
 
 	function updateFormFields() {
     parent::updateFormFields();
+    $this->loadTargetObject();
     
-    $this->_view = ($this->position ? "[$this->position] " : "") . $this->name;
+    $this->_shortview = ($this->position ? "[".str_pad($this->position, 3, "0", STR_PAD_LEFT)."] " : "") . $this->name;
+    $this->_view = "{$this->_ref_object->_view} - $this->_shortview";
   }
 	
 	function updateDBfields() {
 		parent::updateDBfields();
 		
+    if ($this->_type) {
+      list($this->object_class, $this->object_id) = explode("-", $this->_type);
+      $this->_type = null;
+    }
+    
 		if ($this->_before && $this->_before != $this->_id) {
 			$next_object = new self;
 			$next_object->load($this->_before);
 			
 			if ($next_object->_id) {
 				$query = '';
+        $table = $this->_spec->table;
+        
 				if ($this->position)
-					$query = "AND `position` BETWEEN $next_object->position AND $this->position";
+					$query = "AND `$table`.`position` BETWEEN $next_object->position AND $this->position";
 				else if ($next_object->position)
-					$query = "AND `position` >= $next_object->position";
+					$query = "AND `$table`.`position` >= $next_object->position";
 				
 				$where = array(
-			    "`position` IS NOT NULL $query"
+			    "`$table`.`position` IS NOT NULL $query",
+          "`$table`.`object_class` = '$this->object_class'",
+          "`$table`.`object_id` = '$this->object_id'"
 				);
 				
 				$this->position = $next_object->position;
@@ -100,11 +116,29 @@ class CProductStockLocation extends CMbObject {
     }
 	}
   
+  function getStockType(){
+    if (!$this->_id) return;
+    
+    $this->completeField("object_class");
+    
+    switch ($this->object_class) {
+      case "CGroups": 
+        return "CProductStockGroup";
+      default: 
+        return "CProductStockService";
+    }
+  }
+  
   function loadRefsStocks(){
     $ljoin = array(
       "product" => "product_stock_group.product_id = product.product_id",
     );
-    return $this->loadBackRefs("group_stocks", "product.name", null, null, $ljoin);
+    $this->loadBackRefs("group_stocks", "product.name", null, null, $ljoin);
+    
+    $ljoin = array(
+      "product" => "product_stock_service.product_id = product.product_id",
+    );
+    $this->loadBackRefs("service_stocks", "product.name", null, null, $ljoin);
   }
 
   function loadRefsFwd(){

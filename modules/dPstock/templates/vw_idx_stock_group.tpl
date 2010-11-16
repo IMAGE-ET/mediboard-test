@@ -107,7 +107,35 @@ function refreshListStocksService(product_id) {
           </tr>
           <tr>
             <th>{{mb_label object=$stock field="location_id"}}</th>
-            <td>{{mb_field object=$stock field="location_id" form="edit_stock"}}</td>
+            <td>
+              {{mb_field object=$stock field="location_id" hidden=true}}
+              <input type="text" name="_location_id_autocomplete_view" value="{{$stock->_ref_location->_shortview}}" />
+              
+              <script type="text/javascript">
+                Main.add(function(){
+                  var form = getForm("edit_stock");
+                  var input = form._location_id_autocomplete_view;
+                  
+                  var url = new Url("dPstock", "httpreq_vw_related_locations");
+                  url.addParam("owner_guid", "CGroups-{{$g}}");
+                  url.autoComplete(input, null, {
+                    minChars: 1,
+                    method: "get",
+                    select: "view",
+                    dropdown: true,
+                    afterUpdateElement: function(field,selected){
+                      $V(field.form["location_id"], selected.className.match(/[a-z]-(\d+)/i)[1]);
+                    }});
+                });
+              </script>
+              
+              <!--<select name="location_id" class="{{$stock->_props.location_id}}">
+                <option value=""> &ndash; Non défini </option>
+                {{foreach from=$stock->_ref_related_locations item=_location}}
+                  <option value="{{$_location->_id}}" {{if $_location->_id == $stock->location_id}} selected="selected" {{/if}}>{{$_location}}</option>
+                {{/foreach}}
+              </select>-->
+            </td>
           </tr>
           <tr>
             <th>{{mb_label object=$stock field="order_threshold_critical"}}</th>

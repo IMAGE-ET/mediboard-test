@@ -11,7 +11,7 @@
 CCanDo::checkEdit();
 
 $stock_location = new CProductStockLocation;
-$list_locations = $stock_location->loadList(null, 'position,name');
+$list_locations = $stock_location->loadList(null, 'object_class, object_id, position,name');
 
 // Création du template
 $smarty = new CSmartyDP();

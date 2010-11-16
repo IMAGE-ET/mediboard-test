@@ -11,7 +11,6 @@
 class CProductStockGroup extends CProductStock {
   // DB Fields
   var $group_id                 = null;
-	var $location_id              = null;
 
   // Object References
   //    Single
@@ -19,10 +18,6 @@ class CProductStockGroup extends CProductStock {
    * @var CGroups
    */
   var $_ref_group               = null;
-  /**
-   * @var CProductStockLocation
-   */
-	var $_ref_location            = null;
 
   //    Multiple
   var $_ref_deliveries          = null;
@@ -40,9 +35,9 @@ class CProductStockGroup extends CProductStock {
     $spec->key   = 'stock_id';
     
     if (!CAppUI::conf("dPstock host_group_id")) 
-      $uniques = array("product_id", "group_id");
+      $uniques = array("product_id"/*, "location_id"*/, "group_id");
     else
-      $uniques = array("product_id");
+      $uniques = array("product_id"/*, "location_id"*/);
     
     $spec->uniques["product"] = $uniques;
     
@@ -58,7 +53,6 @@ class CProductStockGroup extends CProductStock {
   function getProps() {
     $specs = parent::getProps();
     $specs['group_id']       = 'ref notNull class|CGroups';
-		$specs['location_id']    = 'ref class|CProductStockLocation autocomplete|name|true';
     $specs['_ordered_count'] = 'num notNull pos';
     $specs['_ordered_last']  = 'dateTime';
     $specs['_zone_future']   = 'num';
@@ -155,11 +149,20 @@ class CProductStockGroup extends CProductStock {
   function loadRefsFwd(){
     parent::loadRefsFwd();
     $this->_ref_group = $this->loadFwdRef("group_id", true);
-		$this->_ref_location = $this->loadFwdRef("location_id", true);
   }
 
   function loadRefsBack(){
     $this->_ref_deliveries = $this->loadBackRefs('deliveries');
+  }
+  
+  function loadRelatedLocations(){
+    $where = array(
+      "object_class" => "= 'CGroups'",
+      "object_id" => "= '$this->group_id'",
+    );
+    
+    $location = new CProductStockLocation;
+    return $this->_ref_related_locations = $location->loadList($where, "name");
   }
   
   function getPerm($permType) {

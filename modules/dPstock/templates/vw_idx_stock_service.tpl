@@ -69,7 +69,6 @@ ProductSelector.init = function(){
       <form name="edit_stock" action="?m={{$m}}" method="post" onsubmit="return checkForm(this)">
         <input type="hidden" name="dosql" value="do_stock_service_aed" />
         <input type="hidden" name="stock_id" value="{{$stock->_id}}" />
-        <input type="hidden" name="service_id" value="{{$stock->service_id}}" />
         <input type="hidden" name="del" value="0" />
         <table class="form">
           <tr>
@@ -96,19 +95,50 @@ ProductSelector.init = function(){
             </td>
           </tr>
           <tr>
-            <th>{{mb_label object=$stock field="common"}}</th>
-            <td>{{mb_field object=$stock field="common"}}</td>
-          </tr>
-          <tr>
             <th>{{mb_label object=$stock field="service_id"}}</th>
             <td>
-              <select name="service_id">
-                <option value="0">&mdash; {{tr}}CService.select{{/tr}} &mdash;</option>
+              <select name="service_id" class="{{$stock->_props.service_id}}" onchange="$V(this.form.location_id, ''); $V(this.form._location_id_autocomplete_view, '');">
+                <option value="">&mdash; {{tr}}CService.select{{/tr}} &mdash;</option>
                 {{foreach from=$list_services item=curr_service}}
                 <option value="{{$curr_service->_id}}" {{if $stock->service_id==$curr_service->_id}}selected="selected"{{/if}}>{{$curr_service->nom}}</option>
                 {{/foreach}}
               </select>
             </td>
+          </tr>
+          
+          {{* 
+          <tr>
+            <th>{{mb_label object=$stock field="location_id"}}</th>
+            <td>
+              {{mb_field object=$stock field="location_id" hidden=true}}
+              <input type="text" name="_location_id_autocomplete_view" value="{{$stock->_ref_location->_shortview}}" />
+              
+              <script type="text/javascript">
+                Main.add(function(){
+                  var form = getForm("edit_stock");
+                  var input = form._location_id_autocomplete_view;
+                  
+                  var url = new Url("dPstock", "httpreq_vw_related_locations");
+                  url.addParam("owner_guid", "CService-{{$stock->service_id}}");
+                  url.autoComplete(input, null, {
+                    minChars: 1,
+                    method: "get",
+                    select: "view",
+                    dropdown: true,
+                    callback: function(input, queryString){
+                      return queryString + "&owner_guid=CService-"+$V(input.form.service_id);
+                    },
+                    afterUpdateElement: function(field,selected){
+                      $V(field.form["location_id"], selected.className.match(/[a-z]-(\d+)/i)[1]);
+                    }});
+                });
+              </script>
+            </td>
+          </tr>
+           *}}
+          <tr>
+            <th>{{mb_label object=$stock field="common"}}</th>
+            <td>{{mb_field object=$stock field="common"}}</td>
           </tr>
           <tr>
             <th>{{mb_label object=$stock field="order_threshold_critical"}}</th>

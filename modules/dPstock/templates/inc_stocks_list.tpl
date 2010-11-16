@@ -21,8 +21,8 @@
     <th>{{mb_title object=$stock field=product_id}}</th>
     {{if $class_name == 'CProductStockService'}}
       <th>{{mb_title object=$stock field=service_id}}</th>
-      <th>{{mb_title object=$stock field=common}}</th>
     {{/if}}
+    <th>{{mb_title object=$stock field=location_id}}</th>
     <th>{{mb_title object=$stock field=quantity}}</th>
     <th colspan="3">{{mb_title object=$stock field=_package_quantity}}</th>
     <th>{{tr}}CProductStockGroup-bargraph{{/tr}}</th>
@@ -51,8 +51,8 @@
     </td>
     {{if $class_name == 'CProductStockService'}}
       <td>{{$_stock->_ref_service}}</td>
-      <td>{{tr}}{{$_stock->common|ternary:'Yes':''}}{{/tr}}</td>
     {{/if}}
+    <td>{{$_stock->_ref_location->_shortview}}</td>
     <td style="text-align: right;">
 		  <strong>{{$_stock->quantity}}</strong>
 		</td>

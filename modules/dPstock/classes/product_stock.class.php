@@ -19,6 +19,7 @@ class CProductStock extends CMbObject {
   var $order_threshold_min      = null;
   var $order_threshold_optimum  = null;
   var $order_threshold_max      = null;
+  var $location_id              = null;
   
   // Stock percentages 
   var $_quantity                = null;
@@ -38,6 +39,12 @@ class CProductStock extends CMbObject {
    * @var CProduct
    */
   var $_ref_product             = null;
+  /**
+   * @var CProductStockLocation
+   */
+  var $_ref_location            = null;
+  
+  var $_ref_related_locations   = null;
 
   function getProps() {
     $specs = parent::getProps();
@@ -47,6 +54,7 @@ class CProductStock extends CMbObject {
     $specs['order_threshold_min']      = 'num min|0 notNull moreEquals|order_threshold_critical';
     $specs['order_threshold_optimum']  = 'num min|0 moreEquals|order_threshold_min';
     $specs['order_threshold_max']      = 'num min|0 moreEquals|order_threshold_optimum';
+    $specs['location_id']              = 'ref class|CProductStockLocation autocomplete|name|true';
     $specs['_quantity']                = 'pct';
     $specs['_critical']                = 'pct';
     $specs['_min']                     = 'pct';
@@ -120,14 +128,22 @@ class CProductStock extends CMbObject {
 	    }
   	}
   }
+  
+  function loadRefLocation(){
+    return $this->_ref_location = $this->loadFwdRef("location_id", true);
+  }
+  
+  function loadRefProduct(){
+    return $this->_ref_product = $this->loadFwdRef("product_id", true);
+  }
 
   function loadRefsFwd(){
-    $this->_ref_product = $this->loadFwdRef("product_id", true);
+    $this->loadRefLocation();
+    $this->loadRefProduct();
   }
   
   function getPerm($permType) {
-    $this->loadRefsFwd();
-    return $this->_ref_product->getPerm($permType);
+    return $this->loadRefProduct()->getPerm($permType);
   }
 }
 ?>

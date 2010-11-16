@@ -24,6 +24,7 @@ class CProductStockService extends CProductStock {
     $spec = parent::getSpec();
     $spec->table = 'product_stock_service';
     $spec->key   = 'stock_id';
+    $spec->uniques["product"] = array("product_id"/*, "location_id"*/);
     return $spec;
   }
 
@@ -53,10 +54,39 @@ class CProductStockService extends CProductStock {
     parent::updateFormFields();
     $this->_view = "$this->_ref_product ($this->_ref_service)";
   }
+  
+  function loadRefService(){
+    return $this->_ref_service = $this->loadFwdRef("service_id", true);
+  }
 
   function loadRefsFwd(){
     parent::loadRefsFwd();
-    $this->_ref_service = $this->loadFwdRef("service_id", true);
+    $this->loadRefService();
+  }  
+  
+  function loadRelatedLocations(){
+    $where = array(
+      "object_class" => "= 'CService'",
+      "object_id"    => "= '$this->service_id'",
+    );
+    
+    $location = new CProductStockLocation;
+    return $this->_ref_related_locations = $location->loadList($where, "name");
+  }
+  
+  function check(){
+    if ($msg = parent::check()) {
+      return $msg;
+    }
+    
+    if ($this->location_id) {
+      $this->completeField("service_id");
+      $location = $this->loadRefLocation();
+      
+      if ($location->object_class !== "CService" || $location->object_id != $this->service_id) {
+        return "Le stock doit être associé à un emplacement du service '".$this->loadRefService()."'";
+      }
+    }
   }
   
   function getPerm($permType) {

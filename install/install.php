@@ -120,7 +120,7 @@ showHeader();
       <?php } else if ($library->getUpdateState())  { ?>
       <div class="info">A jour</div>
       <?php } else { ?>
-      <div class="info">Obsolète</div>
+      <div class="warning">Obsolète</div>
       <?php } ?>
     </td>
     <td>

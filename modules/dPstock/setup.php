@@ -696,6 +696,28 @@ class CSetupdPstock extends CSetup {
     $sql = "ALTER TABLE `product_delivery` ADD INDEX (`type`)";
     $this->addQuery($sql);
     
-    $this->mod_version = "1.40";
+    $this->makeRevision("1.40");
+    $sql = "ALTER TABLE `product_stock_location` 
+              ADD `object_class` VARCHAR (255) NOT NULL,
+              ADD `object_id` INT (11) UNSIGNED NOT NULL;";
+    $this->addQuery($sql);
+    $sql = "ALTER TABLE `product_stock_location` 
+              ADD INDEX (`object_class`),
+              ADD INDEX (`object_id`);";
+    $this->addQuery($sql);
+    $sql = "UPDATE `product_stock_location` SET
+              `object_class` = 'CGroups'";
+    $sql = "UPDATE `product_stock_location` SET
+              `object_id` = `product_stock_location`.`group_id`";
+    $this->addQuery($sql);
+    
+    $sql = "ALTER TABLE `product_stock_service` 
+              ADD `location_id` INT (11) UNSIGNED;";
+    $this->addQuery($sql);
+    $sql = "ALTER TABLE `product_stock_service` 
+              ADD INDEX (`location_id`);";
+    $this->addQuery($sql);
+    
+    $this->mod_version = "1.41";
   }
 }

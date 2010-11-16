@@ -34,6 +34,7 @@ class CBlocOperatoire extends CMbObject {
     $backProps = parent::getBackProps();
     $backProps["salles"] = "CSalle bloc_id";
     $backProps["check_lists"] = "CDailyCheckList object_id";
+    //$backProps["stock_locations"] = "CProductStockLocation object_id";
     return $backProps;
   }
   
