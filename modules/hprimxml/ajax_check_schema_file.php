@@ -16,43 +16,44 @@ $version = CAppUI::conf("hprimxml $evenement version");
 $status = 0;
 $file   = null;
 $racine = "modules/hprimxml/xsd/";
+$ext    = (CAppUI::conf("hprimxml concatenate_xsd")) ? "xml" : "xsd";
 
 if ($evenement == "evt_serveuractes") {
   if ($version == "1.01") {
-    $file = $racine."serveurActes/msgEvenementsServeurActes101.xsd";
+    $file = $racine."serveurActes/msgEvenementsServeurActes101.$ext";
   } else if ($version == "1.05") {
-    $file = $racine."serveurActivitePmsi/msgEvenementsServeurActes105.xsd";
+    $file = $racine."serveurActivitePmsi/msgEvenementsServeurActes105.$ext";
   }
 }
 
 if ($evenement == "evt_pmsi") {
   if ($version == "1.01") {
-    $file = $racine."evenementPmsi/msgEvenementsPmsi101.xsd";
+    $file = $racine."evenementPmsi/msgEvenementsPmsi101.$ext";
   } else if ($version == "1.05") {
-    $file = $racine."serveurActivitePmsi/msgEvenementsPmsi105.xsd";
+    $file = $racine."serveurActivitePmsi/msgEvenementsPmsi105.$ext";
   }
 }
 
 if ($evenement == "evt_serveuretatspatient") {
   if ($version == "1.05") {
-    $file = $racine."serveurActivitePmsi/msgEvenementsServeurEtatsPatient105.xsd";
+    $file = $racine."serveurActivitePmsi/msgEvenementsServeurEtatsPatient105.$ext";
   }
 }
 
 if ($evenement == "evt_frais_divers") {
   if ($version == "1.05") {
-    $file = $racine."serveurActivitePmsi/msgEvenementsFraisDivers105.xsd";
+    $file = $racine."serveurActivitePmsi/msgEvenementsFraisDivers105.$ext";
   }
 }
 
 if ($evenement == "evt_patients") {
   $version = str_replace(".", "", $version);
-  $file = $racine."patients/msgEvenementsPatients$version.xsd";
+  $file = $racine."patients/msgEvenementsPatients$version.$ext";
 }
 
 if ($evenement == "evt_mvtStock") {
   $version = str_replace(".", "", $version);
-  $file = $racine."mvtStock/msgEvenementsMvtStocks$version.xsd";
+  $file = $racine."mvtStock/msgEvenementsMvtStocks$version.$ext";
 }
 
 if (file_exists($file)) {

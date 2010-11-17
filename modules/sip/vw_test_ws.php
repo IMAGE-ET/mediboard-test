@@ -20,14 +20,14 @@ $result = $acquittement = $errors = null;
 // Si Client
 if (!CAppUI::conf('sip server')) {  
   if ($operation && $entier1 && $entier2) {
-  	/*$dest_hprim = new CDestinataireHprim();
-	  $dest_hprim->load(4);
+  	$dest_hprim = new CDestinataireHprim();
+	  $dest_hprim->load(2);
     $source = CExchangeSource::get("$dest_hprim->_guid-evenementPatient");
     $source->setData(array('operation' => 'add', 'numerique1' => 2, 'numerique2' => 3), false);
     $source->send();
     
     $result = $source->receive();
-    mbTrace($result);*/
+    mbTrace($result);
   }
   
   if (is_array($file)) {

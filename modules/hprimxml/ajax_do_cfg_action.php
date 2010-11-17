@@ -75,7 +75,7 @@ function extractFiles($schemaDir, $schemaFile, $delOldDir = false) {
     return;
   }
   
-  if(CAppUI::conf("hprimxml concatenate_xsd")) {
+  if (CAppUI::conf("hprimxml concatenate_xsd")) {
     $rootFiles = glob("$destinationDir/msg*.xsd");
     $includeFiles = array_diff(glob("$destinationDir/*.xsd"), $rootFiles);
     
@@ -110,49 +110,12 @@ function extractFiles($schemaDir, $schemaFile, $delOldDir = false) {
           
           if ($isImport) {
             $xsd->documentElement->setAttribute("xmlns:insee", "http://www.hprim.org/inseeXML");
-            
-            /*if (!$impNode instanceof DOMText && !$impNode instanceof DOMComment) {
-              $nodeName = "insee:".substr($impNode->nodeName, strlen("xsd:"));
-              $newNode = $xsd->createElement($nodeName);
-              
-              foreach($impNode->attributes as $attr){
-                $newNode->setAttribute($attr->name, $attr->value);
-              }
-              
-              foreach($impNode->childNodes as $_childNode){
-                //$_childNode = $_childNode->parentNode->removeChild($_childNode);
-                $newNode->appendChild($_childNode);
-              }
-              
-              $impNode = $newNode;
-            }*/
           }
           
           if (!$existing)
             $xsd->documentElement->appendChild($impNode);
         }
-  
       }
-      
-      /*$includeNodes = $xpath->query("//xsd:include");
-      foreach($includeNodes as $node) {
-        $node->parentNode->removeChild($node);
-      }
-      
-      $includeNodes = $xpath->query("//xsd:import[@schemaLocation]");
-      foreach($includeNodes as $node) {
-        $schemaLocation = $node->getAttribute("schemaLocation");
-        $alreadyImported = isset($importFiles[$schemaLocation]);
-        
-        $importFiles[$schemaLocation] = true;
-        $node = $node->parentNode->removeChild($node);
-        
-        if (!$alreadyImported) {
-          $xsd->documentElement->setAttribute("xmlns:insee", "http://www.hprim.org/inseeXML");
-          $node->removeAttribute("schemaLocation");
-          $xsd->documentElement->insertBefore($node, $xsd->documentElement->firstChild);
-        }
-      }*/
       
       $xsd->purgeImportedNamespaces();
       $xsd->purgeIncludes();
