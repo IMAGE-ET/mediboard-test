@@ -53,7 +53,8 @@ else if($selAffichage == "presents"){
   $where["rpu.mutation_sejour_id"] = "IS NULL";
 } 
 else if ($selAffichage == "annule_hospitalise") {
-	$where["sejour.annule"] = " = '1'";
+	$where["sejour.sortie_reelle"] = "IS NOT NULL";
+	$where["sejour.mode_sortie"] = " = 'mutation'";
 }
 
 if ($order_col != "_entree" && $order_col != "ccmu" && $order_col != "_patient_id") {
