@@ -1529,7 +1529,7 @@ td.loading {
 }
 
 @media print {
-	#systemMsg {
+	#systemMsg, #performance, .smarty-include {
 		display: none;
 	}
 }
