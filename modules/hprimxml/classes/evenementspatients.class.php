@@ -520,7 +520,7 @@ class CHPrimXMLEvenementsPatients extends CHPrimXMLEvenements {
       else if ($modeSortieHprim == "02") {
         $mbVenue->mode_sortie = "transfert";
         
-        $destination = $xpath->queryUniqueNode("hprim:destination", $modeSortieHprim);
+        $destination = $xpath->queryUniqueNode("hprim:destination", $sortie);
         if ($destination) {
           $mbVenue = $this->getEtablissementTransfert($destination, $mbVenue);
         }
