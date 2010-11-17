@@ -112,7 +112,7 @@ foreach ($sejours as $sejour) {
     continue;
   }
 
-  if (!CAppUI::conf("sip sej_no_numdos") && $sejour->_num_dossier && ($sejour->_num_dossier != "-")) {
+  if (CAppUI::conf("sip sej_no_numdos") && $sejour->_num_dossier && ($sejour->_num_dossier != "-")) {
     continue;
   }
   
