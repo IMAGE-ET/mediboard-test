@@ -59,49 +59,56 @@ window.parent.fields.push({
   options: aOptionsFields
 });
 
+{{assign var=i value=0}}
 {{foreach from=$templateManager->sections key=title item=section}}
-  aOptionsFields["{{$title|smarty:nodefaults|escape:"htmlall"|escape:"javascript"}}"] = [];
-{{foreach from=$section item=property key=_index}}
-  {{if strpos($_index, ' - ') === false}}
-    aOptionsFields["{{$title|smarty:nodefaults|escape:"htmlall"|escape:"javascript"}}"]["{{$_index|smarty:nodefaults|escape:"htmlall"|escape:"javascript"}}"] = [
-    {{foreach from=$property item=_property name=subproperty}}
-      {
-      view: "{{$_property.view|smarty:nodefaults|escape:"javascript"}}" ,
-      item: 
-        {{if $templateManager->valueMode}}
-          "{{$_property.value|utf8_encode|smarty:nodefaults|nl2br|escape:"javascript"}}",
-        {{else}} 
-          "[{{$_property.field|smarty:nodefaults|escape:"htmlall"|escape:"javascript"}}]", 
-        {{/if}}
-       shortview: "{{$_property.shortview|utf8_encode|smarty:nodefaults|escape:"javascript"}}"
-      }
-    {{if $smarty.foreach.subproperty.index != $smarty.foreach.subproperty.last}}
-      ,
+
+  aOptionsFields[{{$i}}] = [];
+  {{assign var=j value=0}}
+  {{foreach from=$section item=property key=_index}}
+    {{if strpos($_index, ' - ') === false}}
+      aOptionsFields[{{$i}}][{{$j}}] = [
+      {{foreach from=$property item=_property name=subproperty}}
+        {
+        section: "{{$title|smarty:nodefaults|escape:"htmlall"|escape:"javascript"}}",
+        itemname: "{{$_index|smarty:nodefaults|escape:"htmlall"|escape:"javascript"}}",
+        view: "{{$_property.view|smarty:nodefaults|escape:"javascript"}}" ,
+        item: 
+          {{if $templateManager->valueMode}}
+            "{{$_property.value|utf8_encode|smarty:nodefaults|nl2br|escape:"javascript"}}",
+          {{else}} 
+            "[{{$_property.field|smarty:nodefaults|escape:"htmlall"|escape:"javascript"}}]", 
+          {{/if}}
+         shortview: "{{$_property.shortview|utf8_encode|smarty:nodefaults|escape:"javascript"}}"
+        }
+      {{if $smarty.foreach.subproperty.index != $smarty.foreach.subproperty.last}}
+        ,
+      {{/if}}
+      {{/foreach}}
+      ];
+    {{else}}
+    aOptionsFields[{{$i}}][{{$j}}] =
+    {   section: "{{$title|smarty:nodefaults|escape:"htmlall"|escape:"javascript"}}",
+        view: '{{$property.view|smarty:nodefaults|escape:"javascript"}}' ,
+        item: 
+          {{if $templateManager->valueMode}}
+            {{if @$property.options.barcode}}
+              "{{$property.field|smarty:nodefaults|escape:"javascript"}}" ,
+            {{else}}
+              "{{$property.value|utf8_encode|smarty:nodefaults|nl2br|escape:"javascript"}}",
+            {{/if}}
+          {{else}} 
+            {{if @$property.options.barcode}}
+              "{{$property.field|smarty:nodefaults|escape:"javascript"}}",
+            {{else}}
+              "[{{$property.field|smarty:nodefaults|escape:"htmlall"|escape:"javascript"}}]", 
+            {{/if}}
+          {{/if}}
+         shortview: "{{$property.shortview|utf8_encode|smarty:nodefaults|escape:"javascript"}}"
+      };
     {{/if}}
-    {{/foreach}}
-    ];
-  {{else}}
-  aOptionsFields["{{$title|smarty:nodefaults|escape:"htmlall"|escape:"javascript"}}"]["{{$_index|smarty:nodefaults|escape:"htmlall"|escape:"javascript"}}"] =
-  {
-      view: '{{$property.view|smarty:nodefaults|escape:"javascript"}}' ,
-      item: 
-        {{if $templateManager->valueMode}}
-          {{if @$property.options.barcode}}
-            "{{$property.field|smarty:nodefaults|escape:"javascript"}}" ,
-          {{else}}
-            "{{$property.value|utf8_encode|smarty:nodefaults|nl2br|escape:"javascript"}}",
-          {{/if}}
-        {{else}} 
-          {{if @$property.options.barcode}}
-            "{{$property.field|smarty:nodefaults|escape:"javascript"}}",
-          {{else}}
-            "[{{$property.field|smarty:nodefaults|escape:"htmlall"|escape:"javascript"}}]", 
-          {{/if}}
-        {{/if}}
-       shortview: "{{$property.shortview|utf8_encode|smarty:nodefaults|escape:"javascript"}}"
-    };
-  {{/if}}
-{{/foreach}}
+    {{math equation="$j+1" assign=j}}
+  {{/foreach}}
+    {{math equation="$i+1" assign=i}}
 {{/foreach}}
 
 // Liste de choix

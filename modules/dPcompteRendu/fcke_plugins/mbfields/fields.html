@@ -20,9 +20,9 @@
       window.onload = function () {
         dialog.SetAutoSize( true ) ;
         var section = $("section");
-        $H(fields).each(function(item, iterator){
-          if (item.key != "AddItem" && item.key != "IndexOf")
-          section.insert("<option value='" + item.key + "'>"+ item.key + "</option>");
+        $A(fields).each(function(item, i){
+          if (item.key != "AddItem" && item != "IndexOf")
+          section.insert("<option value='" + i + "'>"+ item[0].section + "</option>");
         });
         section.selectedIndex = -1;
       }
@@ -39,9 +39,10 @@
         for (var item in items) {
           if (item == "AddItem" || item == "IndexOf") continue;
           var several_items = "";
-          var tag = item;
+          var tag = '';
           if (items[item].length != undefined) {
             several_items = " &gt;";
+            tag = items[item][0].itemname;
           } else {
             tag = items[item].view;
           }
@@ -56,13 +57,12 @@
   
         // Rien à faire si l'item est vide
         if (item == null) return;
-        
-        // Ne rien faire si l'item contient un tiret (ce sera sur un double clic qu'il sera inséré)
-        if (item.indexOf("-") != -1) return;
+          subItems = fields[replaceEntites(section)][replaceEntites(item)];
+
+        // Ne rien faire si l'attribut length est undefined (ce n'est pas un tableau, donc pas de sous-items)
+        if (subItems.length == undefined) return;
 
         // Sinon insertion des sous-items
-        subItems = fields[replaceEntites(section)][replaceEntites(item)];
-
         for(var subItem in subItems) {
           if (typeof subItems[subItem] == "function") continue;
           oSubItem.insert("<option value='" + subItem + "'>" + subItems[subItem].view + "</option>");
