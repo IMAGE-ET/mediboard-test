@@ -22,7 +22,7 @@ class CTriggerMark extends CMbObject {
     $spec = parent::getSpec();
     $spec->table = "trigger_mark";
     $spec->key   = "mark_id";
-    $spec->loggable = true;
+    $spec->loggable = false;
     return $spec;
   }
 
@@ -32,7 +32,6 @@ class CTriggerMark extends CMbObject {
   	$props["trigger_number"] = "numchar notNull maxLength|10";
     $props["done"]           = "bool notNull";
     $props["mark"]           = "str notNull";
-    
     return $props;
   }
   
