@@ -732,14 +732,15 @@ class CHPrimXMLDocument extends CMbXMLDocument {
       // autre transfert dans un autre CH
       else if ($mbVenue->mode_sortie == "transfert") {
         $modeSortieEtablissementHprim = "02";
-        if ($mbVenue->etablissement_transfert_id) {
-          $destination = $this->addElement($modeSortieHprim, "destination");
-          $this->addElement($destination, "libelle", $mbVenue->etablissement_transfert_id);
-        }
       }
       $this->addElement($modeSortieHprim, "code", $modeSortieEtablissementHprim);
       $this->addElement($modeSortieHprim, "libelle", $mbVenue->mode_sortie);
       
+      if ($mbVenue->etablissement_transfert_id) {
+        $destination = $this->addElement($modeSortieHprim, "destination");
+        $this->addElement($destination, "libelle", $mbVenue->etablissement_transfert_id);
+      }
+        
       $this->addAttribute($modeSortieHprim, "valeur", $modeSortieEtablissementHprim);
     }      
     
