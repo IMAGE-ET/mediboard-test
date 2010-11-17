@@ -119,6 +119,7 @@ class CHPrimXMLEvenementsPatients extends CHPrimXMLEvenements {
       "mr"    => "m",
       "dr"    => "dr",
       "pr"    => "pr",
+      "bb"    => "enf",
       "enf"   => "enf",
     );
     $nom = $xpath->queryTextNode("hprim:nomUsuel", $node);
