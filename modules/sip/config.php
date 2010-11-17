@@ -20,6 +20,7 @@ $dPconfig["sip"] = array (
   "tag_ipp"           => "",
   "tag_dossier"       => "",
   "notify_all_destinataires" => "1",
+  "send_mvt"          => "0"
 );
 
 ?>

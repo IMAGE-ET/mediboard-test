@@ -123,7 +123,7 @@ foreach ($sejours as $sejour) {
   
   if (!$domEvenementVenuePatient->_ref_echange_hprim->message_valide) {
     $errors++;
-    trigger_error("Création de l'événement séjour impossible.", E_USER_WARNING);
+    trigger_error("Création de l'événement venue impossible.", E_USER_WARNING);
     CAppUI::stepAjax("Import de '$sejour->_view' échoué", UI_MSG_WARNING);
     continue;
   }
@@ -140,6 +140,30 @@ foreach ($sejours as $sejour) {
       CAppUI::stepAjax("Import de '$sejour->_view' échoué", UI_MSG_WARNING);
     }
   }
+  
+  if (CAppUI::conf("sip send_mvt")) {
+    foreach ($sejour->_ref_affectations as $_affectation) {
+      $_affectation->_ref_lit->loadRefChambre();
+      $_affectation->_ref_lit->_ref_chambre->loadRefService();
+      $_affectation->loadLastLog();
+      $_affectation->loadRefSejour();
+      $_affectation->_ref_sejour->loadNumDossier();
+      $_affectation->_ref_sejour->loadRefPatient();
+      $_affectation->_ref_sejour->loadRefPraticien();
+      
+      $domEvenemenMouvementPatient = new CHPrimXMLMouvementPatient();
+      $domEvenemenMouvementPatient->_ref_destinataire = $dest_hprim;
+      
+      $dest_hprim->sendEvenementPatient($domEvenemenMouvementPatient, $_affectation);
+      
+      if (!$domEvenemenMouvementPatient->_ref_echange_hprim->message_valide) {
+        $errors++;
+        trigger_error("Création de l'événement mouvement impossible.", E_USER_WARNING);
+        CAppUI::stepAjax("Import de '$sejour->_view' échoué", UI_MSG_WARNING);
+      }
+    }
+  }
+  
   if (!$errors) {
     $echange++;
   }

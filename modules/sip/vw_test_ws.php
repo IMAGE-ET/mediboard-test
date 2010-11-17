@@ -20,14 +20,14 @@ $result = $acquittement = $errors = null;
 // Si Client
 if (!CAppUI::conf('sip server')) {  
   if ($operation && $entier1 && $entier2) {
-  	$dest_hprim = new CDestinataireHprim();
-	  $dest_hprim->load(5);
+  	/*$dest_hprim = new CDestinataireHprim();
+	  $dest_hprim->load(4);
     $source = CExchangeSource::get("$dest_hprim->_guid-evenementPatient");
-    $source->setData(array(utf8_encode("add"), utf8_encode(3), utf8_encode(4)), true);
+    $source->setData(array('operation' => 'add', 'numerique1' => 2, 'numerique2' => 3), false);
     $source->send();
     
     $result = $source->receive();
-    mbTrace($result);
+    mbTrace($result);*/
   }
   
   if (is_array($file)) {
@@ -46,7 +46,7 @@ if (!CAppUI::conf('sip server')) {
     $acquittement = $source->receive();
   
     $domGetAcquittement = new CHPrimXMLAcquittementsPatients();
-    $domGetAcquittement->loadXML(utf8_decode($acquittement));  
+    $domGetAcquittement->loadXML($acquittement);  
     $errors = $domGetAcquittement->schemaValidate(null, true);
   }
 }

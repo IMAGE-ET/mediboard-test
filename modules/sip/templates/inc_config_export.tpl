@@ -34,6 +34,8 @@
     
     {{mb_include module=system template=inc_config_bool var=send_sej_pa}}
     
+    {{mb_include module=system template=inc_config_bool var=send_mvt}}
+    
     {{assign var=var    value="export_dest"}}
     {{assign var=field  value="$m[$var]"}}
     {{assign var=value  value=$dPconfig.$m.$var}}
