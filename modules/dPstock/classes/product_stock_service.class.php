@@ -24,7 +24,7 @@ class CProductStockService extends CProductStock {
     $spec = parent::getSpec();
     $spec->table = 'product_stock_service';
     $spec->key   = 'stock_id';
-    $spec->uniques["product"] = array("product_id"/*, "location_id"*/);
+    $spec->uniques["product"] = array("service_id", "product_id"/*, "location_id"*/);
     return $spec;
   }
 
