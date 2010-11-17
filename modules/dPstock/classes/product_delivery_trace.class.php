@@ -87,40 +87,17 @@ class CProductDeliveryTrace extends CMbObject {
       $unit = $stock->_ref_product->_unit_title ? $stock->_ref_product->_unit_title : $stock->_ref_product->_view;
       return "Impossible de délivrer ce nombre de $unit";
     }
-    
+
+    // Un-deliver
+    if ($this->_undeliver) {
+	    $this->_undeliver = null;
+      return $this->delete();
+    }
+     
     // If we want to deliver, just provide a delivery date
     if ($this->date_delivery && !$infinite_group_stock) {
       $stock->quantity -= $this->quantity;
       if ($msg = $stock->store()) return $msg;
-    }
-    
-    // Un-deliver
-    else if ($this->_undeliver) {
-    	if (!$infinite_group_stock) {
-	      $stock->quantity += $this->quantity;
-	      $this->_undeliver = null;
-	      
-	      if ($msg = $stock->store()) return $msg;
-      }
-      return $this->delete();
-    }
-    
-    // If we want to receive, just provide a reception date
-    if ($this->date_reception) {
-      // If a stock already exist, its quantity is updated
-      if ($stock_service->_id) {
-        $stock_service->quantity += $this->quantity;
-      } 
-      // if not, the stock is created
-      else {
-	      $stock_service->order_threshold_min = abs($this->quantity) + 1;
-	      $stock_service->order_threshold_max = $stock_service->order_threshold_min * 2;
-        $stock_service->quantity = $this->quantity;
-      }
-
-      if ($stock_service->service_id) {
-        if ($msg = $stock_service->store()) return $msg;
-      }
     }
     
     // Un-receive
@@ -131,6 +108,24 @@ class CProductDeliveryTrace extends CMbObject {
       
       $this->_unreceive = null;
       $this->date_reception = '';
+    }
+    
+    // If we want to receive, just provide a reception date
+    elseif ($this->date_reception) {
+      // If a stock already exist, its quantity is updated
+      if ($stock_service->_id) {
+        $stock_service->quantity += $this->quantity;
+      }
+      // if not, the stock is created
+      else {
+	      $stock_service->order_threshold_min = abs($this->quantity) + 1;
+	      $stock_service->order_threshold_max = $stock_service->order_threshold_min * 2;
+        $stock_service->quantity = $this->quantity;
+      }
+
+      if ($stock_service->service_id) {
+        if ($msg = $stock_service->store()) return $msg;
+      }
     }
     
     if (!$stock_service->_id) {
@@ -146,7 +141,7 @@ class CProductDeliveryTrace extends CMbObject {
   }
   
   function delete(){
-    $this->completeField('delivery_id', 'quantity');
+    $this->completeField('delivery_id', 'quantity', 'date_delivery', 'date_reception');
     
     $this->loadRefsFwd();
     $stock = $this->getStock();
@@ -160,12 +155,12 @@ class CProductDeliveryTrace extends CMbObject {
     $stock_service->service_id = $this->_ref_delivery->service_id;
     $stock_service->loadMatchingObject();
     
-    if (!$infinite_group_stock) {
+    if (!$infinite_group_stock && $this->date_delivery) {
       $stock->quantity += $this->quantity;
       if ($msg = $stock->store()) return $msg;
     }
     
-    if ($stock_service->_id/* && CAppUI::conf('dPstock CProductStockService infinite_quantity') == 0*/) {
+    if ($stock_service->_id && $this->date_reception /* && CAppUI::conf('dPstock CProductStockService infinite_quantity') == 0*/) {
       $stock_service->quantity -= $this->quantity;
       if ($msg = $stock_service->store()) return $msg;
     }
@@ -174,8 +169,7 @@ class CProductDeliveryTrace extends CMbObject {
   }
   
   function getStock() {
-    $this->_ref_delivery->loadRefStock();
-    return $this->_ref_delivery->_ref_stock;
+    return $this->_ref_delivery->loadRefStock();
   }
   
   function loadRefsFwd() {

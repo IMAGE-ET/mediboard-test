@@ -49,6 +49,10 @@
 </td>
 {{/if}}
 
+<td>
+  {{mb_value object=$curr_delivery->_ref_stock->_ref_location field=name}}
+</td>
+
 {{if !$dPconfig.dPstock.CProductStockService.infinite_quantity}}
 <td style="text-align: center;">
   {{assign var=stock value=$stocks_service.$id}}
@@ -57,10 +61,6 @@
   </a>
 </td>
 {{/if}}
-
-<td>
-  {{mb_value object=$curr_delivery->_ref_stock->_ref_location field=name}}
-</td>
 
 <td>
   {{assign var=remaining value=$curr_delivery->quantity-$curr_delivery->countDelivered()}}

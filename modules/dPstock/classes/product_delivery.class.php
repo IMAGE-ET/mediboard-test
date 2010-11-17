@@ -106,11 +106,11 @@ class CProductDelivery extends CMbObject {
   }
   
   function loadRefsBack(){
-    $this->_ref_delivery_traces = $this->loadBackRefs('delivery_traces');
+    return $this->_ref_delivery_traces = $this->loadBackRefs('delivery_traces');
   }
 
   function loadRefStock(){
-    $this->_ref_stock = $this->loadFwdRef("stock_id", true);
+    return $this->_ref_stock = $this->loadFwdRef("stock_id", true);
   }
 
   function loadRefStockService(){
