@@ -99,17 +99,6 @@ emptyProtocole = function() {
 	            <a href="#1" onclick="Prescription.reloadPrescSejour('{{$prescription_pre_admission->_id}}','{{$prescription->object_id}}');">
 	              Pré-adm.
 	            </a>
-          	 {{if $prescription->type == "pre_admission"}}
-	            <form name="selPratForPresc" method="get" action="">
-			          <select name="selPraticien" 
-			                  onchange="Prescription.reloadPrescSejour('{{$prescription_pre_admission->_id}}','{{$prescription->object_id}}',this.value);">
-			              <option value="">Tous</option>
-				            {{foreach from=$prescription->_praticiens item=_praticien}}
-				              <option value="{{$_praticien}}" {{if $_praticien == $praticien_sortie_id}}selected="selected"{{/if}}>{{$_praticien}}</option>
-				            {{/foreach}}
-			          </select>
-		         </form>
-              {{/if}}
             {{else}}
 	            <form name="addPrescriptionSejour" method="post" action="?">
 	              <input type="hidden" name="m" value="dPprescription" />
@@ -133,17 +122,6 @@ emptyProtocole = function() {
 		          <a href="#1" onclick="Prescription.reloadPrescSejour('{{$prescription_sejour->_id}}','{{$prescription->object_id}}');">
 		            {{tr}}CPrescription.type.sejour{{/tr}}
 		          </a>
-				      {{if $prescription->type == "sejour"}}
-				            <form name="selPratForPresc" method="get" action="">
-						          <select name="selPraticien" 
-						                  onchange="Prescription.reloadPrescSejour('{{$prescription_sejour->_id}}','{{$prescription->object_id}}',this.value);">
-						              <option value="">Tous</option>
-							            {{foreach from=$prescription->_praticiens item=_praticien}}
-							              <option value="{{$_praticien}}" {{if $_praticien == $praticien_sortie_id}}selected="selected"{{/if}}>{{$_praticien}}</option>
-							            {{/foreach}}
-						          </select>
-					         </form>
-			        {{/if}}
 	          {{else}}
               <form name="addPrescriptionSejour" method="post" action="?">
                 <input type="hidden" name="m" value="dPprescription" />
@@ -170,17 +148,6 @@ emptyProtocole = function() {
               <a href="#1" onclick="Prescription.reloadPrescSejour('{{$prescription_sortie->_id}}','{{$prescription->object_id}}');">
 		            {{tr}}CPrescription.type.sortie{{/tr}}
 		          </a>
-		          {{if $prescription->type == "sortie"}}
-		            <form name="selPratForPresc" method="get" action="">
-				          <select name="selPraticien" 
-				                  onchange="Prescription.reloadPrescSejour('{{$prescription_sortie->_id}}','{{$prescription->object_id}}',this.value);">
-				              <option value="">Tous</option>
-					            {{foreach from=$prescription->_praticiens item=_praticien}}
-					              <option value="{{$_praticien}}" {{if $_praticien == $praticien_sortie_id}}selected="selected"{{/if}}>{{$_praticien}}</option>
-					            {{/foreach}}
-				          </select>
-			         </form>
-              {{/if}}
 	        {{else}}
 	          <form name="addPrescriptionSejour" method="post" action="">
 	            <input type="hidden" name="m" value="dPprescription" />

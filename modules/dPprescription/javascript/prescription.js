@@ -198,10 +198,6 @@ Prescription = {
     url.requestUpdate("systemMsg");
   },
   reload: function(prescription_id, element_id, chapitre, mode_protocole, mode_pharma, line_id, full_line_guid) {
-      // Select de choix du praticien
-      if(document.selPratForPresc){
-        var praticien_sortie_id = document.selPratForPresc.selPraticien.value;
-      }
       var oForm = document.addLine;    
       if(window.opener && window.opener.PrescriptionEditor){
         window.opener.PrescriptionEditor.refresh(oForm.object_id.value, oForm.object_class.value);
@@ -212,7 +208,6 @@ Prescription = {
       urlPrescription.addParam("chapitre", chapitre);
       urlPrescription.addParam("mode_protocole", mode_protocole);
       urlPrescription.addParam("mode_pharma", mode_pharma);
-      urlPrescription.addParam("praticien_sortie_id", praticien_sortie_id);
       
       if(!Object.isUndefined(full_line_guid)){
         urlPrescription.addParam("full_line_guid", full_line_guid);
@@ -255,13 +250,6 @@ Prescription = {
     if(!$('prescription_sejour')){
 			return;
 		}
-		// pre-selection du praticien
-    if(document.selPratForPresc){
-      if(document.selPratForPresc.selPraticien.value){
-        pratSel_id = document.selPratForPresc.selPraticien.value;
-        praticien_sortie_id = document.selPratForPresc.selPraticien.value;
-      }
-    }
     
     if(!mode_sejour){
       if(document.mode_affichage){

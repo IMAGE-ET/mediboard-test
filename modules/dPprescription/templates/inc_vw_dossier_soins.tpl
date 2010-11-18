@@ -480,7 +480,7 @@ Main.add(function () {
 
 <table class="tbl">
   <tr>
-    <th colspan="10" class="title">
+    <th colspan="10" class="title text">
     	 <span style="float: right">
 				 <button type="button" class="cancel" style="float: right; display: none;" onclick="modalWindow.close(); refreshLinePancarte('{{$prescription_id}}');" id="modal_button">{{tr}}Close{{/tr}}</button>
  	 	     <button type="button" class="print" style="float: right" onclick="viewDossier('{{$sejour->_id}}');">Dossier</button>
@@ -490,8 +490,10 @@ Main.add(function () {
        </a>
 			 
 			 <h2 style="color: #fff; font-weight: bold;">
-	    {{$sejour->_view}}
-			</h2>
+	      {{$sejour->_ref_patient->_view}}
+				<span style="font-size: 0.7em;"> - {{$sejour->_shortview|replace:"Du":"Séjour du"}}</span>
+			 </h2>
+			
 		</th>
   </tr>
   {{mb_include module=dPprescription template=inc_infos_patients_soins}}

@@ -36,21 +36,6 @@ Main.add( function(){
   {{/if}}
 } );
 
-{{if $prescription->_praticiens|@count}}
-  if(document.selPratForPresc){
-		 var praticiens = {{$prescription->_praticiens|smarty:nodefaults|escape:"htmlall"|@json}};
-		 var chps = document.selPratForPresc.selPraticien;
-		 chps.innerHTML = "";
-		 chps.insert('<option value="">Tous</option>');
-		 for(var prat in praticiens){
-		   chps.insert('<option value='+prat+'>'+praticiens[prat]+'</option>');
-		 }
-		 var praticien_sortie_id = {{$praticien_sortie_id|json}};
-		 $A(chps).each( function(option) {
-		  option.selected = option.value==praticien_sortie_id;
-		 });
-	 }
-{{/if}}
 </script>
 
 <table class="form">

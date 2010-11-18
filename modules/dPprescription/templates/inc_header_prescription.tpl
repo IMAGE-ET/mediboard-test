@@ -322,17 +322,19 @@ Main.add( function(){
       {{/if}}
       {{if !$mode_protocole}}
 			  <h2 style="color: #fff; font-weight: bold;">
-        {{if $prescription->type == "externe"}}
-          {{$prescription->_ref_patient->_view}}   
-        {{else}}
-           	{{$prescription->_ref_object->_view}}
-        {{/if}}
-				 <span id="antecedent_allergie">
-          {{assign var=antecedents value=$prescription->_ref_object->_ref_patient->_ref_dossier_medical->_ref_antecedents}}
-          {{assign var=sejour_id value=$prescription->_ref_object->_id}}
-          {{include file="../../dPprescription/templates/inc_vw_antecedent_allergie.tpl" nodebug=true}}    
-        </span> 
+          {{$prescription->_ref_patient->_view}}  
+					
+					{{if $prescription->type != "externe"}}
+	          <span style="font-size: 0.7em;"> - {{$prescription->_ref_object->_shortview|replace:"Du":"Séjour du"}}</span>
+          {{/if}}
+				 
+          <span id="antecedent_allergie">
+	          {{assign var=antecedents value=$prescription->_ref_object->_ref_patient->_ref_dossier_medical->_ref_antecedents}}
+	          {{assign var=sejour_id value=$prescription->_ref_object->_id}}
+	          {{include file="../../dPprescription/templates/inc_vw_antecedent_allergie.tpl" nodebug=true}}    
+	        </span> 
 				</h2>
+				
 	    {{/if}}
     </th>
   </tr>
@@ -561,10 +563,5 @@ Main.add( function(){
 			{{/if}}
 		</td>
   </tr>  
-  {{if $praticien_sortie_id && $prescription->_praticiens|@count > 1}}
-  <tr>
-    <th class="category" style="background-color: #B00; color: #fff" colspan="3">Prescription affichée partiellement :<br />certaines lignes ont été prescrites par d'autres praticiens</th>
-  </tr>
-  {{/if}}
 </table>
 <hr class="control_tabs" />
