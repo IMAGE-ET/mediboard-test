@@ -1,7 +1,6 @@
 <script type="text/javascript">
 DMI_prescription_id = '{{$prescription->_id}}';
-DMI_operation_id = '{{$operation_id}}';
-  
+
 function parseBarcode(barcode) {
   var url = new Url("dmi", "httpreq_parse_barcode");
   url.addParam("barcode", barcode);

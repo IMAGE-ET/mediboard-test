@@ -102,8 +102,11 @@ Main.add(function () {
   // Effet sur le programme
 	if ($('listplages') && $('listplages-trigger')){
     new PairEffect("listplages", { sEffect : "appear", bStartVisible : true });
-	}
+	}		
   {{/if}}
+	
+	// Sauvegarde de l'operation_id selectionné (utile pour l'ajout de DMI dans la prescription)
+	window.DMI_operation_id = "{{$selOp->_id}}";
 });
 
 </script>
