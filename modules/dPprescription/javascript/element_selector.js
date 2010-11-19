@@ -23,7 +23,8 @@ ElementSelector = {
   pop: function() {
     var oForm = getForm(this.sForm);
     this.oUrl = new Url("dPprescription", "element_selector");
-    this.oUrl.addParam("libelle", oForm[this.sLibelle].value);
+    if (oForm[this.sLibelle].value.indexOf(String.fromCharCode("8212")) == -1)
+      this.oUrl.addParam("libelle", oForm[this.sLibelle].value);
     this.oUrl.addParam("type"  , this.sType);
     this.oUrl.popup(this.options.width, this.options.height, "Element Prescription Selector");
   },

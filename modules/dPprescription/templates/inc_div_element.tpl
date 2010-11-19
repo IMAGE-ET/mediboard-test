@@ -85,7 +85,8 @@ Main.add( function(){
 				  <br />
 			  </span>
 			  <!-- Selecteur d'elements -->
-			  <input type="text" name="libelle" value="" class="autocomplete" onclick="headerPrescriptionTabs.setActiveTab('div_ajout_lignes');" style="font-weight: bold; font-size: 1.3em; width: 300px;"/>
+			  <input type="text" name="libelle" value="&mdash; {{tr}}CPrescription.select_produit{{/tr}}" class="autocomplete"
+               onclick="this.value = ''; headerPrescriptionTabs.setActiveTab('div_ajout_lignes');" style="font-weight: bold; font-size: 1.3em; width: 300px;"/>
 			  <input type="hidden" name="element_id" onchange="Prescription.addLineElement(this.value,'{{$element}}');" />
 			  <div style="display:none;" class="autocomplete" id="{{$element}}_auto_complete"></div>
 			  <button id="searchButton-{{$element}}" class="search" type="button" onclick="ElementSelector.init{{$element}}('{{$element}}')">Rechercher</button>

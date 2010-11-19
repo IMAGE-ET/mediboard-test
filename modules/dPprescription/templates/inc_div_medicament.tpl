@@ -243,19 +243,19 @@ addAerosol = function(){
 			    <button  class="new" onclick="addAerosol();" type="button">Aérosol</button>
           <br />
 					</span>
-			    <input type="text" name="produit" value="" size="20" style="font-weight: bold; font-size: 1.3em; width: 300px;" class="autocomplete" 
-					       onclick="headerPrescriptionTabs.setActiveTab('div_ajout_lignes');" />
+			    <input type="text" name="produit" value="&mdash; {{tr}}CPrescription.select_produit{{/tr}}" size="20" style="font-weight: bold; font-size: 1.3em; width: 300px;" class="autocomplete" 
+					       onclick="this.value = ''; headerPrescriptionTabs.setActiveTab('div_ajout_lignes');" />
 			    <label title="Recherche dans le livret thérapeutique">
 			      <input type="checkbox" value="1" name="_recherche_livret" {{if $prescription->type=="sejour" && $dPconfig.dPprescription.CPrescription.preselect_livret}}checked="checked"{{/if}} onchange="if($V(this.form.produit)) { ac.activate.bind(ac)() };" />
 			      Livret Thérap.
 			    </label>
 			    
 			    <div style="display:none; width: 350px;" class="autocomplete" id="produit_auto_complete"></div>
-			    <button id="searchButton-med" type="button" class="search" onclick="MedSelector.init('produit'); headerPrescriptionTabs.setActiveTab('div_ajout_lignes');">Rechercher</button>
+			    <button id="searchButton-med" type="button" class="search" onclick="MedSelector.initsearch('produit'); headerPrescriptionTabs.setActiveTab('div_ajout_lignes');">Rechercher</button>
 			    <input type="hidden" name="code_cip" onchange="Prescription.addLine(this.value);"/>
 			
 			    <script type="text/javascript">
-			      MedSelector.init = function(onglet){
+			      MedSelector.initsearch = function(onglet){
 			        this.sForm = "searchProd";
 			        this.sView = "produit";
 			        this.sCode = "code_cip";

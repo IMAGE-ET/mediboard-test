@@ -32,7 +32,7 @@ var MedSelector = {
 
   pop: function() {
     this.oUrl = new Url();
-    if(this.sSearch) {
+    if(this.sSearch && this.sSearch.indexOf(String.fromCharCode("8212")) == -1) {
       this.oUrl.addParam(this.sOnglet, this.sSearch);
     }
     this.oUrl.addParam("onglet_recherche", this.sOnglet);
