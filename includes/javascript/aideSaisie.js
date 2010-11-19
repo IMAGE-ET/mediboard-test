@@ -21,6 +21,7 @@ var AideSaisie = {
         resetDependFields: true,
         defaultUserId: null,
         defaultUserView: null,
+        property: '',
         timestamp: "-- %n %p - dd/MM/y HH:mm"
       }, options);
       this.init();
@@ -33,7 +34,7 @@ var AideSaisie = {
       this.list = this.createListContainer();
       
       var url = new Url("dPcompteRendu", "httpreq_do_aide_autocomplete");
-      url.addParam("property", this.element.name);
+      url.addParam("property", this.options.property || this.element.name);
       url.addParam("object_class", this.options.objectClass);
       url.addParam("user_id", this.options.defaultUserId);
       
@@ -253,7 +254,7 @@ var AideSaisie = {
         AideSaisie.create(
           this.options.objectClass, 
           this.element, 
-          null, 
+          this.options.property, 
           $V(this.options.dependField1), 
           $V(this.options.dependField2), 
           this.text,

@@ -21,10 +21,23 @@
     <tr>
       <td colspan="2">
       {{foreach from=$noms_textes_libres item=_nom}}
-        <div style="width: 25%; max-width: 200px; height: 50px; display: inline-block;">    
+        <div style="max-width: 200px; display: inline-block;">    
           {{$_nom}}
-          <textarea class="freetext {{$_nom}}" name="texte_libre[{{$_nom}}]"></textarea>
+          <textarea class="freetext {{$_nom}}" name="texte_libre[{{$_nom}}]" id="editFrm_texte_libre[{{$_nom}}]"></textarea>
           </div>
+          {{main}}
+	          new AideSaisie.AutoComplete('editFrm_texte_libre[{{$_nom}}]',
+	          {
+	            objectClass: '{{$compte_rendu->_class_name}}',
+	            contextUserId: User.id,
+	            contextUserView: "{{$user_view}}",
+	            timestamp: "{{$dPconfig.dPcompteRendu.CCompteRendu.timestamp}}",
+	            resetSearchField: false,
+	            resetDependFields: false,
+	            validateOnBlur: false,
+	            property: "_source"
+	          });                      
+	        {{/main}}
         {{/foreach}}
       </td>
     </tr>

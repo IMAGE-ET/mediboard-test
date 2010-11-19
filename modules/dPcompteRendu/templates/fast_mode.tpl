@@ -228,6 +228,19 @@ Main.add(function() {
               <td>
                 {{$_nom}}
                 <textarea class="freetext" name="texte_libre[{{$_nom}}]"></textarea>
+	              {{main}}
+	                new AideSaisie.AutoComplete('fastModeForm-{{$uid_fast_mode}}_texte_libre[{{$_nom}}]',
+                   {
+                      objectClass: '{{$compte_rendu->_class_name}}',
+                      contextUserId: User.id,
+                      contextUserView: "{{$user_view}}",
+		                  timestamp: "{{$dPconfig.dPcompteRendu.CCompteRendu.timestamp}}",
+		                  resetSearchField: false,
+		                  resetDependFields: false,
+		                  validateOnBlur: false,
+                      property: "_source"
+		                });                      
+						    {{/main}}
               </td>
             </tr>
             {{/foreach}}
