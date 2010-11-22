@@ -79,7 +79,12 @@ duplicateObject = function (form) {
 <table class="form">
   <tr>
     {{if $product->_id}}
-    <th class="title modify text" colspan="2">{{$product->name}}</th>
+    <th class="title modify text" colspan="2">
+      {{mb_include module=system template=inc_object_idsante400 object=$product}}
+      {{mb_include module=system template=inc_object_history object=$product}}
+            
+      {{$product->name}}
+    </th>
     {{else}}
     <th class="title text" colspan="2">{{tr}}CProduct-title-create{{/tr}}</th>
     {{/if}}

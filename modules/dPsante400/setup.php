@@ -94,7 +94,12 @@ class CSetupdPsante400 extends CSetup {
               CHANGE `trigger_number` `trigger_number` BIGINT (10) UNSIGNED ZEROFILL NOT NULL;";
 		$this->addQuery($sql);
 		
-    $this->mod_version = "0.19";
+		$this->makeRevision("0.19");
+		$sql = "ALTER TABLE `id_sante400` 
+              CHANGE `id400` `id400` VARCHAR  (25) NOT NULL;";
+    $this->addQuery($sql);
+		
+    $this->mod_version = "0.20";
   } 
 }
 ?>
