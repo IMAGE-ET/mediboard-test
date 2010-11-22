@@ -3,7 +3,6 @@
 {{mb_include_script module="dPprescription" script="element_selector"}}
 {{mb_include_script module="dPprescription" script="prescription"}}
 {{mb_include_script module="bloodSalvage" script="bloodSalvage"}}
-{{mb_include_script module=dPprescription script=prescription_med}}
 
 {{assign var="sejour" value=$selOp->_ref_sejour}}
 {{assign var="patient" value=$sejour->_ref_patient}}

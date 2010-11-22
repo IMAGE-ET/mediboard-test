@@ -2,7 +2,6 @@
 {{mb_include_script module="dPmedicament" script="equivalent_selector"}}
 {{mb_include_script module="dPprescription" script="element_selector"}}
 {{mb_include_script module="dPprescription" script="prescription"}}
-{{mb_include_script module="dPprescription" script="prescription_med"}}
 {{mb_include_script module="dPplanningOp" script="cim10_selector"}}
 {{mb_include_script module="dPcompteRendu" script="modele_selector"}}
 
