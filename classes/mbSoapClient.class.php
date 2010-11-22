@@ -56,10 +56,7 @@ class CMbSOAPClient extends SoapClient {
     if (isset($arguments[0]) && empty($arguments[0])) {
       $arguments = array();
     }
-    if (isset($arguments[0]) && (count($arguments[0]) > 1)) {
-      $arguments = $arguments[0];
-    }
-
+    
     $output = null;
     
   	$echange_soap = new CEchangeSOAP();
