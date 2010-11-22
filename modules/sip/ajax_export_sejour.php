@@ -125,7 +125,7 @@ foreach ($sejours as $sejour) {
     continue;
   }
   
-  if (!CAppUI::conf("sip pat_no_ipp") && !$sejour->_ref_patient->_IPP  && ($sejour->_ref_patient->_IPP != "-")) {
+  if (!CAppUI::conf("sip pat_no_ipp") && (!$sejour->_ref_patient->_IPP || ($sejour->_ref_patient->_IPP == "-"))) {
     continue;
   }
   
