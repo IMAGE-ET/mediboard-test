@@ -49,11 +49,11 @@ if ($export_id_max = $sip_config["export_id_max"]) {
 }
 
 if (preg_match("/(\d{4})-(\d{2})-(\d{2})/", $sip_config["export_date_min"])) {
-	$where['entree_prevue'] = " >= '".$sip_config["export_date_min"]."'";
+  $where['entree_prevue'] = " >= '".$sip_config["export_date_min"]."'";
 }
 
 if (preg_match("/(\d{4})-(\d{2})-(\d{2})/", $sip_config["export_date_max"])) {
-	$where['sortie_prevue'] = " <= '".$sip_config["export_date_max"]."'";
+  $where['sortie_prevue'] = " <= '".$sip_config["export_date_max"]."'";
 }
 
 // Comptage
@@ -110,7 +110,7 @@ foreach ($sejours as $sejour) {
   if (!$sejour->_ref_patient->_IPP) {
     $IPP               = new CIdSante400();
     $IPP->object_class = "CPatient";
-    $IPP->object_id    = $IPP->_id;
+    $IPP->object_id    = $sejour->_ref_patient->_id;
     $IPP->tag          = $dest_hprim->_tag_patient;
     $IPP->loadMatchingObject();
 
@@ -124,7 +124,7 @@ foreach ($sejours as $sejour) {
   if (CAppUI::conf("sip sej_no_numdos") && $sejour->_num_dossier && ($sejour->_num_dossier != "-")) {
     continue;
   }
-  
+
   if (!CAppUI::conf("sip pat_no_ipp") && (!$sejour->_ref_patient->_IPP || ($sejour->_ref_patient->_IPP == "-"))) {
     continue;
   }
