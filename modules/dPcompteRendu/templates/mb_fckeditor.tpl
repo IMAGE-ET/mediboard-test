@@ -153,7 +153,6 @@ for (var i = 0; i < aMbCombos.length; i++) {
 
 FCKConfig.Plugins.Add( 'mbpagebreak', 'en,fr', sMbPluginsPath );
 //FCKConfig.Plugins.Add( 'mbcombo', 'en,fr', sMbPluginsPath );
-FCKConfig.Plugins.Add( 'mbhelp', 'en,fr', sMbPluginsPath );
 FCKConfig.Plugins.Add( 'mbprint', 'en,fr', sMbPluginsPath );
  FCKConfig.Plugins.Add( 'mbfreetext', 'en,fr', sMbPluginsPath );
  
