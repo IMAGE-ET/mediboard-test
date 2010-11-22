@@ -75,7 +75,6 @@ $echange = 0;
 foreach ($sejours as $sejour) {
   $sejour->loadRefPraticien();
   $sejour->loadRefPatient();
-  $sejour->_ref_patient->loadIPP();
   if ($sejour->_ref_prescripteurs) {
     $sejour->loadRefsPrescripteurs();
   }
@@ -107,12 +106,27 @@ foreach ($sejours as $sejour) {
 
     $sejour->_num_dossier = $num_dossier->id400;
   }
+  
+  if (!$sejour->_ref_patient->_IPP) {
+    $IPP               = new CIdSante400();
+    $IPP->object_class = "CPatient";
+    $IPP->object_id    = $IPP->_id;
+    $IPP->tag          = $dest_hprim->_tag_patient;
+    $IPP->loadMatchingObject();
+
+    $sejour->_ref_patient->_IPP = $IPP->id400;
+  }
 
   if (CAppUI::conf("sip send_sej_pa") && ($sejour->_etat != "preadmission")) {
     continue;
   }
 
   if (CAppUI::conf("sip sej_no_numdos") && $sejour->_num_dossier && ($sejour->_num_dossier != "-")) {
+    continue;
+  }
+  
+  if ((!CAppUI::conf("sip pat_no_ipp") && !$patient->_IPP  && ($patient->_IPP != "-")) || 
+      (!$dest_hprim->_configs["send_all_patients"] && empty($patient->_ref_sejours))) {
     continue;
   }
   
