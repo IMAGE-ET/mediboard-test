@@ -9,7 +9,7 @@
 *}}
 
 {{main}}
-  Control.Tabs.create.curry('tabs-configure', true);
+  Control.Tabs.create('tabs-configure', true);
 {{/main}}
 
 <ul id="tabs-configure" class="control_tabs">
