@@ -11,13 +11,14 @@
 <script type="text/javascript">
 
 Main.add(function () {
-  var tabs = Control.Tabs.create('tab_dispositifs', false);
+  //var tabs = Control.Tabs.create('tab_dispositifs', false);
   
   viewListElement('CDMI');
   viewElement('CDMI', '0');
   
+  /*
   viewListElement('CDM');
-  viewElement('CDM','0');
+  viewElement('CDM','0');*/
 });
 
 viewListElement = function(object_class, element_id){
@@ -45,16 +46,16 @@ changePageCDM = function(start){
 
 </script>
 
-<ul id="tab_dispositifs" class="control_tabs">
+<!--<ul id="tab_dispositifs" class="control_tabs">
   <li><a href="#dmi">DMI</a></li>
   <li><a href="#dm">DM</a></li>
 </ul>
-<hr class="control_tabs" />
+<hr class="control_tabs" />-->
 
 <table class="main">
   <col style="width: 50%" />
   
-  <tr id="dmi" style="display: none;">
+  <tr id="dmi">
     <td>
       <form name="filter-CDMI" action="" method="get" onsubmit="return Url.update(this, 'elements_CDMI')">
         <input type="hidden" name="m" value="dmi" />

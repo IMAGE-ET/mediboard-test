@@ -40,11 +40,7 @@ html {
 }
 </style>
 
-{{if $order->object_id}}
-  {{assign var=label value="Bon de commande / Facturation"}}
-{{else}}
-  {{assign var=label value="Bon de commande"}}
-{{/if}}
+{{assign var=label value=$order->getLabel()}}
 
 <table class="main">
   <tr>
@@ -59,7 +55,7 @@ html {
   <tr>
     <th>Date</th>
     <td>{{$smarty.now|date_format:$dPconfig.datetime}}</td>
-    <th>Numéro de commande</th>
+    <th>Numéro</th>
     <td>{{$order->order_number}}</td>
   </tr>
   
@@ -162,9 +158,9 @@ html {
           {{/if}}
         </span>
         
-        {{$label}} n°<strong>{{$order->order_number}}</strong>
+        {{$label}} n° <strong>{{$order->order_number}}</strong>
         <br />
-        Responsable de la commande : <strong>{{$app->_ref_user}}</strong>
+        Responsable : <strong>{{$app->_ref_user}}</strong>
       </td>
     </tr>
   </tfoot>

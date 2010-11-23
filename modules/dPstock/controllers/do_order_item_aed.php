@@ -39,6 +39,9 @@ if(CValue::post("_create_order")) {
       $where["product_order_item.septic"] = "= '0'";
     }
   }
+  elseif($comments = CValue::read($_POST, "_comments")) {
+    $where["product_order.comments"] = "LIKE '$comments%'";
+  }
   
   $where["product_order.group_id"] = "= '".CProductStockGroup::getHostGroup()."'";
 	
@@ -59,6 +62,7 @@ if(CValue::post("_create_order")) {
     
     $order->societe_id = $reference->societe_id;
     $order->group_id = CProductStockGroup::getHostGroup();
+    $order->comments = CValue::read($_POST, "_comments");
     
     $product = $reference->loadRefProduct();
     $count_dmi = $product->countBackRefs("dmis");

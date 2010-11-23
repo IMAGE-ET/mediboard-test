@@ -8,6 +8,17 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
 *}}
 
+{{mb_include module=system template=inc_pagination change_page="changePage.$type" 
+    total=$count current=$page step=25}}
+
+<script type="text/javascript">
+changePage = window.changePage || {};
+
+changePage.{{$type}} = function(page) {
+  $V(getForm("orders-list-filter")["start[{{$type}}]"], page);
+}
+</script>
+
 {{if $type=="waiting"}}
 <!-- Orders not validated yet -->
 <table class="tbl">
@@ -240,8 +251,8 @@
 
 <div style="text-align: right;">
   <label>
-    <input type="checkbox" {{if $invoiced}} checked="checked" {{/if}}
-           onclick="refreshListOrders('received', getForm('orders-list-filter'), this.checked)" /> Afficher les facturées
+    <input type="checkbox" {{if $invoiced}} checked="checked" {{/if}} id="received-invoiced"
+           onclick="resetPages(getForm('orders-list-filter')); refreshListOrders('received', getForm('orders-list-filter'), this.checked)" /> Afficher les facturées
   </label>
 </div>
 
@@ -408,7 +419,7 @@
 <script type="text/javascript">
   tab = $$('a[href="#list-orders-{{$type}}"]')[0];
   counter = tab.down("small");
-  count = {{$orders|@count}};
+  count = {{$count}};
   
   if (count > 0)
     tab.removeClassName("empty");

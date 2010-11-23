@@ -16,10 +16,12 @@ $ljoin = array(
   "product_order_item" => "product_order_item.order_item_id = product_order_item_reception.order_item_id",
   "product_reference"  => "product_reference.reference_id = product_order_item.reference_id",
   "product"            => "product.product_id = product_reference.product_id",
+  "dmi"                => "dmi.product_id = product.product_id",
 );
 
 $where = array(
   "product_order_item_reception.cancelled" => "='0'",
+  "dmi.type" => " != 'purchase'",
 );
 
 $societe = new CSociete;
@@ -35,7 +37,7 @@ $product->societe_id = $societe_id;
 $product->loadRefsFwd();
 
 $reception = new CProductOrderItemReception;
-$receptions = $reception->loadList($where, "lapsing_date", 30, null, $ljoin);
+$receptions = $reception->loadList($where, ($societe->_id ? "product.name" : "lapsing_date"), ($societe->_id ? 500 : 100), null, $ljoin);
 
 foreach($receptions as $_id => $_reception) {
   $qty = $_reception->getUnitQuantity();
@@ -51,9 +53,18 @@ foreach($receptions as $_id => $_reception) {
     $_reference->loadRefSociete();
   }
   
-  $order_items = $_reception->loadBackRefs("order_items");
-  foreach($order_items as $_order_item) {
+  $_reception->loadBackRefs("order_items");
+  $order_items = &$_reception->_back["order_items"];
+  
+  foreach($order_items as $_order_item_id => $_order_item) {
     $_order_item->loadOrder();
+    if ($_order_item->_ref_order->object_id || 
+        $_order_item->_ref_order->date_ordered || 
+        $_order_item->_ref_order->received || 
+        $_order_item->_ref_order->cancelled || 
+        $_order_item->_ref_order->deleted || 
+        strpos(CProductOrder::$_return_form_label, $_order_item->_ref_order->comments) !== 0) 
+      unset($order_items[$_order_item_id]);
   }
   
   if ($_reception->_remaining_quantity < 1) {

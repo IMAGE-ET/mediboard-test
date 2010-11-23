@@ -26,7 +26,7 @@
   {{assign var=order_id value=$curr_item->order_id}}
   {{assign var=id value=$curr_item->_id}}
   <td>
-    <p onmouseover="ObjectTooltip.createEx(this, '{{$curr_item->_ref_reference->_guid}}')">
+    <p onmouseover="ObjectTooltip.createEx(this, '{{$curr_item->_guid}}')">
       {{$curr_item->_view|truncate:80}}
     </p>
   </td>

@@ -11,7 +11,7 @@
 <script type="text/javascript">
 
 Main.add(function () {
-  var tabs = Control.Tabs.create('tab_dispositifs', false);
+  //var tabs = Control.Tabs.create('tab_dispositifs', false);
   viewListCat('CDMICategory');
   viewCat('CDMICategory', '0');
 });
@@ -31,25 +31,27 @@ viewCat = function(category_class, category_id){
 
 </script>
 
-<ul id="tab_dispositifs" class="control_tabs">
+<!--<ul id="tab_dispositifs" class="control_tabs">
   <li onmousedown="viewListCat('CDMICategory'); viewCat('CDMICategory','0');"><a href="#dmi">DMI</a></li>
   <li onmousedown="viewListCat('CCategoryDM'); viewCat('CCategoryDM','0');"><a href="#dm">DM</a></li>
 </ul>
-<hr class="control_tabs" />
+<hr class="control_tabs" />-->
 
 <div id="div_categories">
   
-<table class="main" id="dmi" style="display: none;">
+<table class="main" id="dmi">
  <tr>
    <td id="list_cat_CDMICategory"></td>
    <td id="cat_CDMICategory"></td>
  </tr>
 </table>
 
+<!--
 <table class="main" id="dm" style="display: none;">
   <tr>
     <td id="list_cat_CCategoryDM"></td>
     <td id="cat_CCategoryDM"></td>
   </tr>
 </table>
+-->
 </div>

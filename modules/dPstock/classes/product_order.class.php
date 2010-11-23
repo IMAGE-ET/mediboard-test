@@ -61,6 +61,8 @@ class CProductOrder extends CMbMetaObject {
   var $_redo            = null;
   var $_reset           = null;
   
+  static $_return_form_label = "Bon de retour";
+  
   function getSpec() {
     $spec = parent::getSpec();
     $spec->table = 'product_order';
@@ -330,7 +332,8 @@ class CProductOrder extends CMbMetaObject {
       $limit = 200;
     }
     
-    $orders_list = $this->loadList($where, $orderby, $limit, null, $leftjoin);
+    $groupby = "product_order.order_id";
+    $orders_list  = $this->loadList($where, $orderby, $limit, $groupby, $leftjoin);
     
     // bons de facturation seulement
     if ($type === 'pending') {
@@ -339,6 +342,10 @@ class CProductOrder extends CMbMetaObject {
           unset($orders_list[$_id]);
         }
       }
+      $this->_search_count = count($orders_list);
+    }
+    else {
+      $this->_search_count = count($this->countMultipleList($where, null, null, $groupby, $leftjoin));
     }
     
     /*if ($type === 'pending') {
@@ -540,8 +547,8 @@ class CProductOrder extends CMbMetaObject {
     }
     
     // gestion des bons de commandes n'ayant pas de lignes renouvelables
-    $this->completeField("object_id", "object_class");
-    if ($this->_order && $this->object_id && ($this->countRenewedItems() == 0)) {
+    $this->completeField("object_id", "object_class", "comments");
+    if ($this->_order && ($this->object_id || strpos(self::$_return_form_label, $this->comments) === 0) && ($this->countRenewedItems() == 0)) {
       $this->received = 1;
     }
     
@@ -588,6 +595,16 @@ class CProductOrder extends CMbMetaObject {
         $this->_has_lot_numbers = true;
       }
     }
+  }
+  
+  function getLabel(){
+    if ($this->object_id)
+      return "Bon de commande / Facturation";
+    
+    if (strpos($this->comments, self::$_return_form_label) === 0)
+      return "Bon de retour";
+    
+    return "Bon de commande";
   }
 
   function getPerm($permType) {

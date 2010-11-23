@@ -210,12 +210,12 @@ class CProductOrderItem extends CMbObject {
       }
     }
     
-    if (!$this->_id && ($stock = $this->getStock())) {
+    /*if (!$this->_id && ($stock = $this->getStock())) {
       $stock->loadRefOrders();
       if ($stock->_zone_future > 2) {
         CAppUI::setMsg("Attention : le stock optimum risque d'être dépassé", UI_MSG_WARNING);
       }
-    }
+    }*/
     
     return parent::store();
   }

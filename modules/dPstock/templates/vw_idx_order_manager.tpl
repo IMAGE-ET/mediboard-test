@@ -45,6 +45,12 @@ confirmPurge = function(element, view, type) {
     });
   }
 }
+
+resetPages = function(form) {
+  orderTypes.each(function(t){
+    $V(form["start["+t+"]"], 0, false);
+  });
+}
 </script>
 
 <div class="main">
@@ -56,16 +62,22 @@ confirmPurge = function(element, view, type) {
 
   <!-- Filter -->
   <form name="orders-list-filter" action="?" method="get" onsubmit="return refreshAll(this)">
-    <select name="category_id" onchange="this.form.onsubmit()">
+    <input type="hidden" name="start[waiting]"   value="0" onchange="refreshListOrders('waiting', this.form)" />
+    <input type="hidden" name="start[locked]"    value="0" onchange="refreshListOrders('locked', this.form)" />
+    <input type="hidden" name="start[pending]"   value="0" onchange="refreshListOrders('pending', this.form)" />
+    <input type="hidden" name="start[received]"  value="0" onchange="refreshListOrders('received', this.form, $('received-invoiced').checked)" />
+    <input type="hidden" name="start[cancelled]" value="0" onchange="refreshListOrders('cancelled', this.form)" />
+    
+    <select name="category_id" onchange="resetPages(this.form); this.form.onsubmit()">
       <option value="" >&ndash; {{tr}}CProductCategory.all{{/tr}}</option>
     {{foreach from=$list_categories item=_category}}
       <option value="{{$_category->category_id}}" {{if $category_id==$_category->_id}}selected="selected"{{/if}}>{{$_category->name}}</option>
     {{/foreach}}
     </select>
-    <input type="text" name="keywords" />
+    <input type="text" name="keywords" onchange="resetPages(this.form)" />
     
     <button type="submit" class="search">{{tr}}Filter{{/tr}}</button>
-    <button type="button" class="cancel notext" onclick="$(this.form).clear(false); this.form.onsubmit();">{{tr}}Empty{{/tr}}</button>
+    <button type="button" class="cancel notext" onclick="resetPages(this.form); $(this.form).clear(false); this.form.onsubmit();">{{tr}}Empty{{/tr}}</button>
   </form>
 
   <!-- Tabs titles -->

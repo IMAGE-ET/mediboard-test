@@ -23,7 +23,7 @@
       {{else}}
         <th class="category">{{mb_title class=CProductOrderItem field=quantity}}</th>
       {{/if}}
-      {{if $order->object_id}}
+      {{if $order->object_id || $order->comments|strpos:"Bon de retour" === 0}}
         <th class="category">{{mb_title class=CProductOrderItem field=renewal}}</th>
       {{/if}}
       <th class="category">{{mb_title class=CProductOrderItem field=unit_price}}</th>
@@ -68,7 +68,7 @@
       <td style="text-align: center; white-space: nowrap;">{{mb_value object=$curr_item field=quantity}}</td>
     {{/if}}
     
-    {{if $order->object_id}}
+    {{if $order->object_id || $order->comments|strpos:"Bon de retour" === 0}}
       <td>{{mb_value object=$curr_item field=renewal}}</td>
     {{/if}}
     

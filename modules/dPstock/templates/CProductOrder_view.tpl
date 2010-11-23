@@ -20,27 +20,37 @@ popupOrderForm = function(order_id, width, height) {
 </script>
 
 {{assign var=order value=$object}}
-
-<table class="layout">
+ 
+<table class="main form">
   <tr>
-    <td>
-      <button type="button" class="print notext" onclick="popupOrderForm({{$object->_id}})">{{tr}}Print{{/tr}}</button>
-      {{mb_value object=$object field=order_number}}
-    </td>
-    <td>{{mb_value object=$object->_ref_societe field=name}}</td>
+    <th class="title" colspan="5">
+      <button type="button" class="print notext" style="float: left;" onclick="popupOrderForm({{$object->_id}})">{{tr}}Print{{/tr}}</button>
+      {{$order->getLabel()}}
+    </th>
   </tr>
-  {{if $object->object_id}}
   <tr>
-    <td colspan="2">
-      {{$object->_ref_object->loadRefsFwd()}}
-      {{$object->_ref_object}}
-    </td>
+    <th>{{mb_label object=$object field=date_ordered}}</th>
+    <td>{{mb_value object=$object field=date_ordered}}</td>
+    
+    <th>{{mb_label object=$object field=order_number}}</th>
+    <td>{{mb_value object=$object field=order_number}}</td>
   </tr>
-  {{/if}}
   
   <tr>
-    <td colspan="2">
-      {{mb_include module=dPstock template=inc_order_items_list screen=true}}
-    </td>
+    <th>{{mb_label object=$object field=societe_id}}</th>
+    <td>{{mb_value object=$object field=societe_id}}</td>
+    
+    <th>{{mb_label object=$object field=comments}}</th>
+    <td>{{mb_value object=$object field=comments}}</td>
   </tr>
+  
+  {{if $object->object_id}}
+    {{$object->_ref_object->loadRefsFwd()}}
+    <tr>
+      <th>{{mb_label object=$object field=object_id}}</th>
+      <td>{{mb_value object=$object field=object_id}}</td>
+    </tr>
+  {{/if}}
 </table>
+
+{{mb_include module=dPstock template=inc_order_items_list screen=true}}
