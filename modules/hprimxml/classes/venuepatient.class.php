@@ -721,6 +721,7 @@ class CHPrimXMLVenuePatient extends CHPrimXMLEvenementsPatients {
               $commentaire = "L'identifiant source fait référence au séjour : $num_dossier->object_id et l'identifiant cible au séjour : $tmpVenue->_id.";
               $messageAcquittement = $domAcquittement->generateAcquittementsPatients("erreur", "E104", $commentaire);
               $doc_valid = $domAcquittement->schemaValidate();
+              $echange_hprim->setObjectIdClass("CSejour", $newVenue->_id);
               
               $echange_hprim->setAckError($doc_valid, $messageAcquittement, "erreur");
               return $messageAcquittement;
