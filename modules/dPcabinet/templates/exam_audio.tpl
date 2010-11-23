@@ -18,9 +18,9 @@ window.opener.ExamDialog.reload('{{$exam_audio->consultation_id}}');
 <table class="main" id="weber">
 
 <tr>
-  <th class="title" colspan="2">
+  <th class="title modify" colspan="2">
   	{{assign var=consultation value=$exam_audio->_ref_consult}}
-    Consultation de <span style="color:#fd4;">{{$consultation->_ref_patient}}</span>
+    Consultation de {{$consultation->_ref_patient}}
     le {{$consultation->_date|date_format:$dPconfig.longdate}}
     par le Dr {{$consultation->_ref_chir}}
   </th>
