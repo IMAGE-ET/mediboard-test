@@ -19,6 +19,7 @@ class CMbSOAPClient extends SoapClient {
 	var $wsdl              = null;
 	var $type_echange_soap = null;
 	var $soap_client_error = false;
+	var $flatten           = null;
 	
   function __construct($rooturl, $type = null, $options = array()) {
   	$this->wsdl = $rooturl;
@@ -55,6 +56,10 @@ class CMbSOAPClient extends SoapClient {
      * posant problème lors de l'appel d'une méthode du WSDL sans argument */
     if (isset($arguments[0]) && empty($arguments[0])) {
       $arguments = array();
+    }
+    
+    if ($this->flatten) {
+      $arguments = $arguments[0];
     }
     
     $output = null;

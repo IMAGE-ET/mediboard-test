@@ -32,7 +32,7 @@ class CSourceSOAP extends CExchangeSource {
     return $specs;
   }
   
-  function send($evenement_name = null) {
+  function send($evenement_name = null, $flatten = false) {
   	if (!$evenement_name) {
   		$evenement_name = $this->evenement_name;
   	}
@@ -45,6 +45,8 @@ class CSourceSOAP extends CExchangeSource {
     if ($this->_client->soap_client_error) {
       throw new CMbException("CSourceSOAP-unreachable-source", $this->name);
     }
+    // Applatissement du tableau $arguments qui contient un élement vide array([0] => ...) ?
+    $this->_client->flatten = $flatten;
     
     if ($this->single_parameter) {
       $this->_data = array("$this->single_parameter" => $this->_data);
