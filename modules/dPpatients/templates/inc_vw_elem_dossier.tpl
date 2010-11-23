@@ -3,7 +3,9 @@
 {{if $object instanceof CSejour}}
 
 {{if $object->group_id == $g || $dPconfig.dPpatients.CPatient.multi_group == "full"}}
-<tr>
+<tr {{if isset($collision_sejour|smarty:nodefaults) && $object->_id == $collision_sejour}}
+      style="border: 2px solid red;"
+    {{/if}}>
   <td class="text">
     {{if $object->_canEdit}}
     <a class="actionPat" title="Modifier le séjour" href="?m=dPplanningOp&amp;tab=vw_edit_sejour&amp;sejour_id={{$object->_id}}">

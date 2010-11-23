@@ -30,6 +30,29 @@ function toggleMode() {
   hiddenElement.setVisible(expert);
 }
 
+window.refreshingSejours = false;
+
+function reloadSejours(id, checkCollision) {
+  // Changer l'entrée prévue d'un séjour change également la sortie prévue,
+  // il faut donc éviter de lancer deux fois cette fonction.
+  if (window.refreshingSejours) return;
+  window.refreshingSejours = true;
+  
+  var oForm = getForm("editSejour");
+  var url = new Url("dPplanningOp", "ajax_list_sejours");
+  url.addParam("id", id);
+  url.addParam("check_collision", checkCollision);
+
+  // Dans le cas où on va checker la collision
+  // On envoie également l'entrée prévue et la sortie prévue
+  if (checkCollision) {
+    url.addParam("date_entree_prevue", $V(oForm._date_entree_prevue));
+    url.addParam("date_sortie_prevue", $V(oForm._date_sortie_prevue));
+    url.addParam("sejour_id"         , $V(oForm.sejour_id));
+  }
+  url.requestUpdate("list_sejours", {onComplete: function() { window.refreshingSejours = false; }});
+}
+
 {{if $app->user_prefs.mode_dhe == 0}}
   Main.add(toggleMode);
 {{/if}}
@@ -91,6 +114,16 @@ function toggleMode() {
     <td>
       {{include file="inc_infos_operation.tpl"}}
       {{include file="inc_infos_hospitalisation.tpl"}}
+      <table class="form" style="width: 100%;">
+        <tr>
+          <th class="title">{{tr}}CSejour-existants{{/tr}}</th>
+        </tr>
+        <tr>
+          <td id="list_sejours">
+              {{include file="inc_list_sejours.tpl"}}
+          </td>
+        </tr>
+      </table>
     </td>
   </tr>
 

@@ -371,7 +371,7 @@ Main.add( function(){
 
 <tr>
   <th>
-    <input type="hidden" name="patient_id" class="{{$sejour->_props.patient_id}}" value="{{$patient->_id}}" onchange="changePat(); checkSejoursToReload(); checkCorrespondantMedical(this.form); " />
+    <input type="hidden" name="patient_id" class="{{$sejour->_props.patient_id}}" value="{{$patient->_id}}" onchange="changePat(); checkSejoursToReload(); checkCorrespondantMedical(this.form); if (window.reloadSejours != null) reloadSejours(this.value);" />
     {{mb_label object=$sejour field="patient_id"}}
   </th>
   <td>
@@ -449,7 +449,7 @@ Main.add( function(){
 <tr>
   <th>{{mb_label object=$sejour field="_date_entree_prevue"}}</th>
   <td>
-    {{mb_field object=$sejour form=editSejour field=_date_entree_prevue canNull=false onchange="updateOccupation(); modifSejour(); updateSortiePrevue();"}}
+    {{mb_field object=$sejour form=editSejour field=_date_entree_prevue canNull=false onchange="updateOccupation(); modifSejour(); updateSortiePrevue(); if (window.reloadSejours != null) reloadSejours(this.form.patient_id.value, true);"}}
   </td>
   <td colspan="2">
     à
@@ -479,7 +479,7 @@ Main.add( function(){
 <tr {{if $mode_operation && !$can->admin}} style="display: none" {{/if}}>
   <th>{{mb_label object=$sejour field="_date_sortie_prevue"}}</th>
   <td>
-    {{mb_field object=$sejour form=editSejour field=_date_sortie_prevue canNull=false onchange="updateDureePrevue(); modifSejour();"}}
+    {{mb_field object=$sejour form=editSejour field=_date_sortie_prevue canNull=false onchange="updateDureePrevue(); modifSejour(); if (window.reloadSejours != null) reloadSejours(this.form.patient_id.value, true);"}}
   </td>
   <td colspan="2">
     à 

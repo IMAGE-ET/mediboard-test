@@ -554,6 +554,7 @@ $locales['CSejour-etablissement_entree_transfert_id-desc'] = 'Etablissement de t
 $locales['CSejour-etablissement_transfert_id'] = 'Etablissement de transfert de sortie';
 $locales['CSejour-etablissement_transfert_id-court'] = 'Transfert de sortie';
 $locales['CSejour-etablissement_transfert_id-desc'] = 'Etablissement de transfert du patient après sa sortie';
+$locales['CSejour-existants'] = 'Séjours existants';
 $locales['CSejour-facturable'] = 'Facturable';
 $locales['CSejour-facturable-court'] = 'Fact.';
 $locales['CSejour-facturable-desc'] = 'Indique sur le dossier de ce séjour est facturable';
