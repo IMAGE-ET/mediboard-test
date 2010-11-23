@@ -775,6 +775,7 @@ $locales['CPatient.confiance_parente.enfant'] = 'Enfant';
 $locales['CPatient.incapable_majeur.'] = ' ';
 $locales['CPatient.incapable_majeur.0'] = 'Non';
 $locales['CPatient.incapable_majeur.1'] = 'Oui';
+$locales['CPatient.name_recopy'] = 'Recopier le nom';
 $locales['CPatient.none'] = 'Aucun patient';
 $locales['CPatient.one'] = 'patient';
 $locales['CPatient.prevenir_parente.'] = 'Indéterminé';

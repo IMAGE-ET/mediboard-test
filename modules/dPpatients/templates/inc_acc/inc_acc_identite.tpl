@@ -5,6 +5,40 @@ togglePrenomsList = function(element) {
 	Element.classNames(element).flip('up', 'down');
 }
 
+toggleNomNaissance = function(element) {
+{{if $nom_jeune_fille_mandatory}}
+  var nom_jeune_fille = element.form.nom_jeune_fille;
+  var nom_jeune_fille_label = nom_jeune_fille.up().previous().down();
+  // Si on choisit Féminin 
+  if (element.value == 'f') {
+    
+      // Rajout de la classe notnull sur Le label et l'input
+      nom_jeune_fille.addClassName('notNull');
+      nom_jeune_fille_label.addClassName('notNull');
+  
+      // Ajout des observeurs sur l'input
+      nom_jeune_fille.observe("change", notNullOK)
+      .observe("keyup",  notNullOK)
+      .observe("ui:change", notNullOK);
+  
+      // Si l'input contient déjà du texte, le déclenchement de l'événement ui:change
+      // permet de le passer en classe notNullOK
+      nom_jeune_fille.fire("ui:change");
+  } else {
+      // On retire les classes
+      nom_jeune_fille.removeClassName('notNull');
+      nom_jeune_fille_label.removeClassName('notNull');
+      nom_jeune_fille_label.removeClassName('notNullOK');
+      nom_jeune_fille_label.removeClassName('error');
+  
+      // On n'observe plus l'input 
+      nom_jeune_fille.stopObserving("change", notNullOK)
+      .stopObserving("keyup",  notNullOK)
+      .stopObserving("ui:change", notNullOK);
+  }
+{{/if}}
+}
+
 selectFirstEnabled = function(select){
   var found = false;
   $A(select.options).each(function (o,i) {
@@ -134,11 +168,20 @@ Main.add(function() {
         
         <tr>
           <th>{{mb_label object=$patient field="nom_jeune_fille"}}</th>
-          <td>{{mb_field object=$patient field="nom_jeune_fille" onchange="copyIdentiteAssureValues(this)"}}</td>
+          <td>
+            {{mb_field object=$patient field="nom_jeune_fille" onchange="copyIdentiteAssureValues(this)"}}
+            <button type="button" class="carriage_return notext" title="{{tr}}CPatient.name_recopy{{/tr}}"
+              onclick="$V(getForm('editFrm').nom_jeune_fille, $V(getForm('editFrm').nom));" tabIndex="1000"></button>
+            {{if $patient->_id && $patient->sexe == "f" && $nom_jeune_fille_mandatory}}
+            <script type="text/javascript">
+              document.editFrm.nom_jeune_fille.addClassName("notNull");
+            </script>
+            {{/if}}
+          </td>
       	</tr>
         <tr>
           <th>{{mb_label object=$patient field="sexe"}}</th>
-          <td>{{mb_field object=$patient field="sexe" onchange="copyIdentiteAssureValues(this);changeCiviliteForSexe(this);"}}</td>
+          <td>{{mb_field object=$patient field="sexe" onchange="toggleNomNaissance(this); copyIdentiteAssureValues(this);changeCiviliteForSexe(this);"}}</td>
       	</tr>
         <tr>
           <th>{{mb_label object=$patient field="naissance"}}</th>

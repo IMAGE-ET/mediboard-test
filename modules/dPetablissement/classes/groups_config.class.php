@@ -17,6 +17,7 @@ class CGroupsConfig extends CMbObject {
   var $max_comp    = null;
   var $max_ambu    = null;
   var $codage_prat = null;
+  var $dPpatients_CPatient_nom_jeune_fille_mandatory = null;
 
   function getSpec() {
     $spec = parent::getSpec();
@@ -33,7 +34,7 @@ class CGroupsConfig extends CMbObject {
     $specs["max_comp"]    = "num min|0";
     $specs["max_ambu"]    = "num min|0";
     $specs["codage_prat"] = "bool default|0";
-
+    $specs["dPpatients_CPatient_nom_jeune_fille_mandatory"] = "bool default|0";
     return $specs;
   }
 }

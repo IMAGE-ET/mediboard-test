@@ -53,8 +53,13 @@ if ($useVitale && CAppUI::pref('GestionFSE') && !CAppUI::pref('VitaleVision')) {
 if($patient_id)
   $patient->updateNomPaysInsee();
 
+$group = CGroups::loadCurrent();
+$group->loadConfigValues();
+$nom_jeune_fille_mandatory = $group->_configs['dPpatients_CPatient_nom_jeune_fille_mandatory'];
+
 // Création du template
 $smarty = new CSmartyDP();
 $smarty->assign("patient", $patient);
 $smarty->assign("useVitale", $useVitale);
+$smarty->assign('nom_jeune_fille_mandatory', $nom_jeune_fille_mandatory);
 $smarty->display("vw_edit_patients.tpl");

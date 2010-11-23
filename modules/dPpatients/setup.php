@@ -1206,11 +1206,16 @@ class CSetupdPpatients extends CSetup {
     $this->addQuery($sql);
     
     $this->makeRevision("1.08");
-    $query = "ALTER TABLE `medecin` 
+    $sql = "ALTER TABLE `medecin` 
       CHANGE `type` `type` ENUM ('medecin','kine','sagefemme','infirmier','dentiste','podologue', 'pharmacie', 'maison_medicale', 'autre');";
-    $this->addQuery($query);
+    $this->addQuery($sql);
     
-    $this->mod_version = "1.09";
+    $this->makeRevision("1.09");
+    $sql = "ALTER TABLE `groups_config`
+      ADD `dPpatients_CPatient_nom_jeune_fille_mandatory` ENUM ('0', '1') NOT NULL DEFAULT '0'";
+    $this->addQuery($sql);
+    $this->mod_version = "1.10";
+    
   }
 }
 
