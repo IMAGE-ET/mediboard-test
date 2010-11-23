@@ -1,3 +1,5 @@
+Options -Indexes
+
 <IfModule mod_deflate.c>
   # DEFLATE by type - html, text, css, xml
   AddOutputFilterByType DEFLATE text/html text/plain text/css text/xml
@@ -9,7 +11,9 @@
   AddOutputFilter DEFLATE js css htm html xml
 </IfModule>
 
-Options -Indexes
+<FilesMatch "\.(flv|gif|jpg|jpeg|png|ico|swf|pdf)$">
+Header set Cache-Control "max-age=2592000"
+</FilesMatch>
 
 <FilesMatch "\.(tpl|tpl.php|class.php)$">
  order allow,deny
