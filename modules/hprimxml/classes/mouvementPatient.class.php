@@ -33,7 +33,7 @@ class CHPrimXMLMouvementPatient extends CHPrimXMLEvenementsPatients {
       "store"  => "modification",
       "delete" => "suppression"
     );
-    $action = $newMouvement->_ref_last_log ? $newMouvement->_ref_last_log->type : "create";
+    $action = $newMouvement->_ref_last_log->type ? $newMouvement->_ref_last_log->type : "create";
     $this->addAttribute($mouvementPatient, "action", $actionConversion[$action]);
     
     $patient = $this->addElement($mouvementPatient, "patient");
