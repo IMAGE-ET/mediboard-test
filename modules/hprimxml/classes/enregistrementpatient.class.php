@@ -514,7 +514,7 @@ class CHPrimXMLEnregistrementPatient extends CHPrimXMLEvenementsPatients {
               $commentaire = "L'identifiant source fait référence au patient : $IPP->object_id et l'identifiant cible au patient : $tmpPatient->_id.";
               $messageAcquittement = $domAcquittement->generateAcquittementsPatients("erreur", "E004", $commentaire);
               $doc_valid = $domAcquittement->schemaValidate();
-              
+              $echange_hprim->setObjectIdClass("CPatient", $newPatient->_id);
               $echange_hprim->setAckError($doc_valid, $messageAcquittement, "erreur");
               return $messageAcquittement;
             }
