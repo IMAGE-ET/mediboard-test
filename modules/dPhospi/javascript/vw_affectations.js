@@ -101,7 +101,7 @@ Calendar.setupAffectation = function(affectation_id, options) {
   var form;
   
   if (form = getForm("entreeAffectation" + affectation_id)) {
-    Calendar.regField(form.entree, dates, {noView: true, icon: 'images/icons/planning.png'});
+    Calendar.regField(form.entree, dates, {noView: true, icon: 'images/icons/calendar.gif'});
   }
 	
   // Sortie affectation
@@ -111,7 +111,7 @@ Calendar.setupAffectation = function(affectation_id, options) {
   };
 
   if (form = getForm("sortieAffectation" + affectation_id)) {
-    Calendar.regField(form.sortie, dates, {noView: true, icon: 'images/icons/planning.png'});
+    Calendar.regField(form.sortie, dates, {noView: true, icon: 'images/icons/calendar.gif'});
   }
   
   // Déplacement affectation

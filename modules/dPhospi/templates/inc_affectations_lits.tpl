@@ -84,23 +84,28 @@
         <strong><em>[LIT BLOQUE]</em></strong>
       {{/if}}
       </td>
+      {{if $curr_affectation->sejour_id}}
       <td class="action" style="background:#{{$sejour->_ref_praticien->_ref_function->color}}" 
   	    onmouseover="ObjectTooltip.createTimeHospi(this, '{{$sejour->praticien_id}}', '{{$sejour->_codes_ccam_operations}}' );">
         {{$sejour->_ref_praticien->_shortview}}
+        <br />
+        <a href="?m=dPplanningOp&amp;tab=vw_edit_sejour&amp;sejour_id={{$sejour->_id}}">
+          <img style="float: right;" src="images/icons/planning.png">
+        </a>
       </td>
+      {{else}}
+      <td></td>
+      {{/if}}
     </tr>
     {{if !$curr_affectation->sejour_id}}
     <tr class="dates">   
       <td class="text">
         {{if $can->edit}}
-        <form name="rmvAffectation{{$curr_affectation->_id}}" action="?m={{$m}}" method="post">
+        <form name="entreeAffectation{{$curr_affectation->_id}}" action="?m={{$m}}" method="post" style="float: right;">
           <input type="hidden" name="dosql" value="do_affectation_aed" />
-          <input type="hidden" name="del" value="1" />
           <input type="hidden" name="affectation_id" value="{{$curr_affectation->_id}}" />
+          <input type="hidden" name="entree" class="dateTime notNull" value="{{$curr_affectation->entree}}" onchange="this.form.submit()" />
         </form>
-        <a style="float: right;" href="#" onclick="confirmDeletion(document.rmvAffectation{{$curr_affectation->_id}},{typeName:'l\'affectation',objName:'{{$patient->_view|smarty:nodefaults|JSAttribute}}'})">
-          <img src="images/icons/trash.png" alt="trash" title="Supprimer l'affectation" />
-        </a>
         {{/if}}
         <strong>Du</strong>:
         {{$curr_affectation->entree|date_format:"%a %d %b %Hh%M"}}
@@ -108,28 +113,31 @@
       </td>
       <td class="action">
         {{if $can->edit}}
-        <form name="entreeAffectation{{$curr_affectation->_id}}" action="?m={{$m}}" method="post">
+        <form name="rmvAffectation{{$curr_affectation->_id}}" action="?m={{$m}}" method="post">
           <input type="hidden" name="dosql" value="do_affectation_aed" />
+          <input type="hidden" name="del" value="1" />
           <input type="hidden" name="affectation_id" value="{{$curr_affectation->_id}}" />
-          <input type="hidden" name="entree" class="dateTime notNull" value="{{$curr_affectation->entree}}" onchange="this.form.submit()" />
         </form>
+        <a href="#" onclick="confirmDeletion(document.rmvAffectation{{$curr_affectation->_id}},{typeName:'l\'affectation',objName:'{{$patient->_view|smarty:nodefaults|JSAttribute}}'})">
+          <img src="images/icons/trash.png" alt="trash" title="Supprimer l'affectation" />
+        </a>
         {{/if}}
       </td>
     </tr>
     <tr class="dates">
       <td class="text">
-        <strong>Au</strong>:
-        {{$curr_affectation->sortie|date_format:"%a %d %b %Hh%M"}}
-        ({{$curr_affectation->_sortie_relative}}j)
-      </td>
-      <td class="action">
         {{if $can->edit && (!$sejour->sortie_reelle || $aff_next->_id)}}
-        <form name="sortieAffectation{{$curr_affectation->_id}}" action="?m={{$m}}" method="post">
+        <form name="sortieAffectation{{$curr_affectation->_id}}" action="?m={{$m}}" method="post" style="float: right;">
           <input type="hidden" name="dosql" value="do_affectation_aed" />
           <input type="hidden" name="affectation_id" value="{{$curr_affectation->_id}}" />
           <input type="hidden" name="sortie" class="dateTime notNull" value="{{$curr_affectation->sortie}}" onchange="this.form.submit()" />
         </form>
         {{/if}}
+        <strong>Au</strong>:
+        {{$curr_affectation->sortie|date_format:"%a %d %b %Hh%M"}}
+        ({{$curr_affectation->_sortie_relative}}j)
+      </td>
+      <td class="action">
       </td>
     </tr>
 
@@ -144,16 +152,14 @@
 
     <tr class="dates">
       <td class="text">
-        {{if $can->edit}}
-        <form name="rmvAffectation{{$curr_affectation->_id}}" action="?m={{$m}}" method="post">
+        {{if $can->edit && (!$sejour->entree_reelle || $aff_prev->_id)}}
+        <form name="entreeAffectation{{$curr_affectation->_id}}" action="?m={{$m}}" method="post" style="float: right;">
           <input type="hidden" name="dosql" value="do_affectation_aed" />
-          <input type="hidden" name="del" value="1" />
           <input type="hidden" name="affectation_id" value="{{$curr_affectation->_id}}" />
+          <input type="hidden" name="entree" class="dateTime notNull" value="{{$curr_affectation->entree}}" onchange="this.form.submit()" />
         </form>
-        <a style="float: right;" href="#" onclick="confirmDeletion(document.rmvAffectation{{$curr_affectation->_id}},{typeName:'l\'affectation',objName:'{{$patient->_view|smarty:nodefaults|JSAttribute}}'})">
-          <img src="images/icons/trash.png" alt="trash" title="Supprimer l'affectation" />
-        </a>
         {{/if}}
+        
         {{if $aff_prev->_id}}
           <strong>Déplacé</strong> (chambre: {{$aff_prev->_ref_lit->_ref_chambre->nom}}):
         {{else}}
@@ -163,21 +169,39 @@
         ({{$curr_affectation->_entree_relative}}j)
       </td>
       <td class="action">
-        {{if $can->edit && (!$sejour->entree_reelle || $aff_prev->_id)}}
-        <form name="entreeAffectation{{$curr_affectation->_id}}" action="?m={{$m}}" method="post">
+        {{if $can->edit}}
+        <form name="rmvAffectation{{$curr_affectation->_id}}" action="?m={{$m}}" method="post">
           <input type="hidden" name="dosql" value="do_affectation_aed" />
+          <input type="hidden" name="del" value="1" />
           <input type="hidden" name="affectation_id" value="{{$curr_affectation->_id}}" />
-          <input type="hidden" name="entree" class="dateTime notNull" value="{{$curr_affectation->entree}}" onchange="this.form.submit()" />
         </form>
+        <a href="#" onclick="confirmDeletion(document.rmvAffectation{{$curr_affectation->_id}},{typeName:'l\'affectation',objName:'{{$patient->_view|smarty:nodefaults|JSAttribute}}'})">
+          <img src="images/icons/trash.png" alt="trash" title="Supprimer l'affectation" />
+        </a>
         {{/if}}
       </td>
     </tr>
     <tr class="dates">
       <td class="text">
+        {{if $can->edit && (!$sejour->sortie_reelle || $aff_next->_id)}}
+        <form name="sortieAffectation{{$curr_affectation->_id}}" action="?m={{$m}}" method="post" style="float: right;">
+          <input type="hidden" name="dosql" value="do_affectation_aed" />
+          <input type="hidden" name="affectation_id" value="{{$curr_affectation->_id}}" />
+          <input type="hidden" name="sortie" class="dateTime notNull" value="{{$curr_affectation->sortie}}" onchange="this.form.submit()" />
+        </form>
+        {{/if}}
+        
         {{if $aff_next->_id}}
         <strong>Déplacé</strong> (chambre: {{$aff_next->_ref_lit->_ref_chambre->nom}}):
         {{else}}
-          {{if $can->edit}}
+        <strong>Sortie</strong>:
+        {{/if}}
+
+        {{$curr_affectation->sortie|date_format:"%a %d %b %Hh%M"}}
+        ({{$curr_affectation->_sortie_relative}}j)
+      </td>
+      <td class="action">
+        {{if $can->edit && !$aff_next->_id}}
         <form name="splitAffectation{{$curr_affectation->_id}}" action="?m={{$m}}" method="post">
           <input type="hidden" name="dosql" value="do_affectation_split" />
           <input type="hidden" name="affectation_id" value="{{$curr_affectation->_id}}" />
@@ -189,20 +213,6 @@
           <span style="float: right;">
             <input type="hidden" name="_date_split" class="dateTime notNull" value="{{$curr_affectation->sortie}}" onchange="submitAffectationSplit(this.form)" />
           </span>
-        </form>
-          {{/if}}
-        <strong>Sortie</strong>:
-        {{/if}}
-
-        {{$curr_affectation->sortie|date_format:"%A %d %b %Hh%M"}}
-        ({{$curr_affectation->_sortie_relative}}j)
-      </td>
-      <td class="action">
-        {{if $can->edit && (!$sejour->sortie_reelle || $aff_next->_id)}}
-        <form name="sortieAffectation{{$curr_affectation->_id}}" action="?m={{$m}}" method="post">
-          <input type="hidden" name="dosql" value="do_affectation_aed" />
-          <input type="hidden" name="affectation_id" value="{{$curr_affectation->_id}}" />
-          <input type="hidden" name="sortie" class="dateTime notNull" value="{{$curr_affectation->sortie}}" onchange="this.form.submit()" />
         </form>
         {{/if}}
       </td>
