@@ -11,9 +11,11 @@ Options -Indexes
   AddOutputFilter DEFLATE js css htm html xml
 </IfModule>
 
-<FilesMatch "\.(flv|gif|jpg|jpeg|png|ico|swf|pdf)$">
-Header set Cache-Control "max-age=2592000"
-</FilesMatch>
+<IfModule mod_headers.c>
+  <FilesMatch "\.(flv|gif|jpg|jpeg|png|ico|swf|pdf)$">
+  Header set Cache-Control "max-age=2592000"
+  </FilesMatch>
+</IfModule>
 
 <FilesMatch "\.(tpl|tpl.php|class.php)$">
  order allow,deny
