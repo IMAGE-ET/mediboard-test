@@ -88,8 +88,8 @@ foreach ($destinataires as $_destinataire) {
   }
 		
 	$logs = array();
+	$source = CExchangeSource::get("$_destinataire->_guid-$evenementActivitePMSI->sous_type");
 	if ($_destinataire->actif) {
-    $source = CExchangeSource::get("$_destinataire->_guid-$evenementActivitePMSI->sous_type");
     if ($source->_id) {
       $sent_files = CValue::get("sent_files");
       if (isset($_POST["hostname"]) or ($doc_valid and !$sent_files)) {
