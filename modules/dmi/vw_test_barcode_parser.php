@@ -320,6 +320,7 @@ foreach($tests as $barcode => $good) {
 
 // Création du template
 $smarty = new CSmartyDP();
-$smarty->assign("tests", $tests);
-$smarty->assign("results", $results);
+$smarty->assign("tests"           , $tests);
+$smarty->assign("results"         , $results);
+$smarty->assign("isPhastInstalled", (CModule::getActive("phast")));
 $smarty->display("vw_test_barcode_parser.tpl");
