@@ -26,6 +26,7 @@ class CChambre extends CMbObject {
 
   // Form Fields
   var $_nb_lits_dispo        = null;
+  var $_nb_affectations      = null;
   var $_overbooking          = null;
   var $_ecart_age            = null;
   var $_genres_melanges      = null;
@@ -99,14 +100,14 @@ class CChambre extends CMbObject {
     
     $listAff = array();
     
-    $this->_chambre_seule = 0;
-    $this->_chambre_double = 0;
+    $this->_chambre_seule        = 0;
+    $this->_chambre_double       = 0;
     $this->_conflits_pathologies = 0;
-    $this->_ecart_age = 0;
-    $this->_genres_melanges = false;
+    $this->_ecart_age            = 0;
+    $this->_genres_melanges      = false;
     $this->_conflits_chirurgiens = 0;
 
-    foreach ($this->_ref_lits as $key => $lit) {
+    foreach ($this->_ref_lits as $lit) {
       assert($lit->_ref_affectations !== null);
 
       // overbooking
@@ -119,17 +120,18 @@ class CChambre extends CMbObject {
       }
       
       // Liste des affectations
-      foreach($lit->_ref_affectations as $key2 => $aff)
-        $listAff[] =& $this->_ref_lits[$key]->_ref_affectations[$key2];
+      foreach($lit->_ref_affectations as $aff)
+        $listAff[] = $aff;
     }
+    $this->_nb_affectations = count($listAff);
 
     foreach ($listAff as $affectation1) {
       if(!$affectation1->sejour_id){
         continue;
       }
-      $sejour1 =& $affectation1->_ref_sejour;
-      $patient1 =& $sejour1->_ref_patient;
-      $chirurgien1 =& $sejour1->_ref_praticien;
+      $sejour1     = $affectation1->_ref_sejour;
+      $patient1    = $sejour1->_ref_patient;
+      $chirurgien1 = $sejour1->_ref_praticien;
       if ((count($this->_ref_lits) == 1) && $sejour1->chambre_seule == 0)
         $this->_chambre_double++;
       if ((count($this->_ref_lits) > 1) && $sejour1->chambre_seule == 1)
@@ -139,7 +141,7 @@ class CChambre extends CMbObject {
         if(!$affectation2->sejour_id){
           continue;
         }
-        if ($affectation1->affectation_id == $affectation2->affectation_id) {
+        if ($affectation1->_id == $affectation2->_id) {
           continue;
         }
         
@@ -151,9 +153,9 @@ class CChambre extends CMbObject {
           continue;
         }
         
-        $sejour2 =& $affectation2->_ref_sejour;
-        $patient2 =& $sejour2->_ref_patient;
-        $chirurgien2 =& $sejour2->_ref_praticien;
+        $sejour2     = $affectation2->_ref_sejour;
+        $patient2    = $sejour2->_ref_patient;
+        $chirurgien2 = $sejour2->_ref_praticien;
 
         // Conflits de pathologies
         if (!$pathos->isCompat($sejour1->pathologie, $sejour2->pathologie, $sejour1->septique, $sejour2->septique))

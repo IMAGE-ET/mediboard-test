@@ -36,6 +36,9 @@
       <td class="text">
       {{/if}}
       {{if $curr_affectation->sejour_id}}
+        <a href="?m=dPplanningOp&amp;tab=vw_edit_sejour&amp;sejour_id={{$sejour->_id}}">
+          <img style="float: right;" src="images/icons/planning.png">
+        </a>
         {{if $can->edit}}
         <script type="text/javascript">new Draggable('affectation_{{$curr_affectation->_id}}', {revert:true})</script>
         {{/if}}
@@ -88,10 +91,6 @@
       <td class="action" style="background:#{{$sejour->_ref_praticien->_ref_function->color}}" 
   	    onmouseover="ObjectTooltip.createTimeHospi(this, '{{$sejour->praticien_id}}', '{{$sejour->_codes_ccam_operations}}' );">
         {{$sejour->_ref_praticien->_shortview}}
-        <br />
-        <a href="?m=dPplanningOp&amp;tab=vw_edit_sejour&amp;sejour_id={{$sejour->_id}}">
-          <img style="float: right;" src="images/icons/planning.png">
-        </a>
       </td>
       {{else}}
       <td></td>

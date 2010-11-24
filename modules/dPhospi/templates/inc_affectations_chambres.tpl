@@ -1,4 +1,4 @@
-<table class="tbl chambrecollapse" id="chambre-{{$curr_chambre->_id}}">
+<table class="tbl chambrecollapse {{if !$curr_chambre->_nb_affectations}}opacity-70{{/if}}" id="chambre-{{$curr_chambre->_id}}">
   <tr>
     <th class="chambre" colspan="2" onclick="
         flipChambre({{$curr_chambre->_id}});
