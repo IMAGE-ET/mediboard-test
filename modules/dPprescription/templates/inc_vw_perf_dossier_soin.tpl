@@ -232,8 +232,7 @@
 									  <table class="tbl">
 									    <tr>
 									    	<th colspan="2">
-									    	  <button style="float: right" class="search" type="button" onclick='addAdministrationPerf("{{$_prescription_line_mix->_id}}","{{$_date}}","{{$_hour}}","{{$_prise}}",document.mode_dossier_soin.mode_dossier.value, "{{$sejour->_id}}");'>Administrations de {{$_prise|date_format:$dPconfig.time}}</button>
-                        	
+									    	  <button class="search" type="button" onclick='addAdministrationPerf("{{$_prescription_line_mix->_id}}","{{$_date}}","{{$_hour}}","{{$_prise}}",document.mode_dossier_soin.mode_dossier.value, "{{$sejour->_id}}");'>Administrations de {{$_prise|date_format:$dPconfig.time}}</button>
 												</th>
 									    </tr>
 											{{foreach from=$_prescription_line_mix->_ref_lines item=_perf_line}}

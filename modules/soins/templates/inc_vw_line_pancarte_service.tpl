@@ -24,9 +24,9 @@
     {{foreach from=$_dates key=_date_reelle item=_hours}}
       {{foreach from=$_hours key=_heure_reelle item=_hour}}
         {{assign var=_date_hour value="$_date_reelle $_heure_reelle"}}                        
-        <td style="text-align: center;" class="narrow">
+        <td style="text-align: center; {{if $smarty.now|date_format:"%Y-%m-%d %H:00:00" == $_date_hour}}background-color: #ccc;{{/if}}" class="narrow">
           {{if @$pancarte.$_prescription_id.$_date_hour}}
-            <div style="border: 1px solid #BBB; height: 16px;"
+            <span style="height: 16px;"
                  onmouseover='ObjectTooltip.createDOM(this, "tooltip-content-prises-{{$_prescription_id}}-{{$_date_reelle}}-{{$_heure_reelle}}");'>
              
              {{if @$new.$_prescription_id.$_date_hour}}
@@ -38,13 +38,16 @@
             
              {{foreach from=$pancarte.$_prescription_id.$_date_hour key="chapitre" item=quantites}}
                <img src="{{$images.$chapitre}}" 
+							 {{if $_date_hour <= $smarty.now|date_format:"%Y-%m-%d %H:%M:%S"}}
                {{if @$alertes.$_prescription_id.$_date_hour.$chapitre == '1'}}
-                 style="background-color: #FB4; height: 100%;"
+                 style="border-bottom: 3px solid #FB4; height: 100%;"
                {{else}}
-                 style="background-color: #B2FF9B; height: 100%;"
-               {{/if}}/>
+                 style="border-bottom: 3px solid #0F0; height: 100%;"
+               {{/if}}
+							 {{/if}}
+							 />
               {{/foreach}}
-            </div>
+            </span>
             
             <div id="tooltip-content-prises-{{$_prescription_id}}-{{$_date_reelle}}-{{$_heure_reelle}}" style="display:none;">
               <table class="tbl">

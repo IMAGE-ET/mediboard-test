@@ -1715,8 +1715,13 @@ class CSetupdPprescription extends CSetup {
 
     $sql = "ALTER TABLE `planification_systeme` DROP `administration_id`;";
 		$this->addQuery($sql);				
+		
+		$this->makeRevision("1.18");
+		$sql = "ALTER TABLE `prescription_line_mix_item` 
+              CHANGE `quantite` `quantite` FLOAT;";
+		$this->addQuery($sql);
 										
-    $this->mod_version = "1.18";
+    $this->mod_version = "1.19";
   }
 }
 

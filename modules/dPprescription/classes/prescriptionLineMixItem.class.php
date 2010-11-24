@@ -61,7 +61,7 @@ class CPrescriptionLineMixItem extends CMbObject {
     $specs["code_cip"]     = "numchar notNull length|7";
     $specs["code_ucd"]     = "numchar length|7";
     $specs["code_cis"]     = "numchar length|8";
-    $specs["quantite"]     = "num";
+    $specs["quantite"]     = "float";
     $specs["unite"]        = "str";
 		$specs["solvant"]      = "bool default|0";
 		$specs["stupefiant"]   = "bool default|0";

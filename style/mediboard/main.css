@@ -16,7 +16,8 @@ z-index ordering (foreground to background) :
   899 #waitingMsgMask
   850 #systemMsg
   800 .ajax-loading
-  500 div.tooltip
+  600 div.tooltip
+  500 div.modal
   400 div.autocomplete
   200 .datepickerControl div.dropdown
   200 .select-tree

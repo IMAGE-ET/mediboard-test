@@ -103,7 +103,7 @@
       <img style="float: right" src="images/icons/ampoule_urgence.png" title="Urgence"/>
     {{/if}}
 
-		<div onclick='addCibleTransmission("{{$line_class}}","{{$line->_id}}","{{$line->_view}}");' 
+		<span onclick='addCibleTransmission("{{$line_class}}","{{$line->_id}}","{{$line->_view}}");' 
 	       class="{{if @$transmissions.$line_class.$line_id|@count}}transmission{{else}}transmission_possible{{/if}}"
 				 onmouseover="ObjectTooltip.createEx(this, '{{$line->_guid}}')"
 				 style="font-weight: bold">
@@ -122,7 +122,7 @@
 						{{/if}}
 					</div>
 				{{/if}} 
-	  </div>
+	  </span>
 		  
     {{if $line->conditionnel}}
       <form action="?" method="post" name="activeCondition-{{$line_id}}-{{$line_class}}">
