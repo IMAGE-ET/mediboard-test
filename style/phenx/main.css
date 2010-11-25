@@ -432,7 +432,8 @@ table.form th.category {
   float: none;
 }
 
-#nav a {
+#nav a, 
+#nav a:active {
   font-variant: normal;
   display: block;
 	position: relative;
@@ -585,6 +586,10 @@ table.form th.category {
 #main div.content {
   background: #FCFCFE;
   border-top: 1px solid #919B9C;
+}
+
+#main.dialog {
+  border: none;
 }
 
 #mainPane {

@@ -365,6 +365,7 @@ class CBarcodeParser {
       // +H703630701210 1/1827361332390I09C
       if (empty($comp) && preg_match('/^[a-z](\d{3})(\d+.)(\d)\/(\d{5})([A-Z0-9]+)(.{4})$/ms', $barcode, $parts)) {
         $comp["ref"] = $parts[2];
+        $comp["per"] = $parts[4];
         $comp["lot"] = $parts[5];
       }
       
@@ -479,6 +480,20 @@ class CBarcodeParser {
     if (empty($comp) && preg_match('/^[a-z]\d{3}INVENT-ZO(\d{2}\.\d)\d{3}$/i', $barcode, $parts)) {
       $type = "karl_zeiss";
       $comp["ref"] = "invent zo +$parts[1]";
+    }
+    
+    //  ___LOT__
+    // S12345678
+    if (empty($comp) && preg_match('/^(S\d{8})$/', $barcode, $parts)) {
+      $type = "medicalens";
+      $comp["lot"] = $parts[1];
+    }
+    
+    //   ___SN__
+    // SN0123456
+    if (empty($comp) && preg_match('/^SN(\d{7})$/', $barcode, $parts)) {
+      $type = "sn";
+      $comp["sn"] = $parts[1];
     }
     
     // Mediboard
