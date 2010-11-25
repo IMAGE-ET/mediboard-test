@@ -21,5 +21,11 @@ var Action = {
     var url = new Url(this.module, "ajax_repair_sejour");
     url.addParam("action", sAction);
     url.requestUpdate("repair");
-  }
+  },
+  
+  doDelete: function (sAction) {
+    var url = new Url(this.module, "ajax_delete_mvt");
+    url.addParam("action", sAction);
+    url.requestUpdate("delete-mvt");
+  },
 }

@@ -108,4 +108,22 @@
   </td>
   <td id="export-sejour"></td>
 </tr>
+
+<tr>
+  <td>
+    Suppression des mouvements
+  </td>
+  <td>
+    <button type="button" class="new" onclick="Action.doDelete('start')">
+      {{tr}}Start{{/tr}}      
+    </button>
+    <button type="button" class="change" onclick="Action.doDelete('retry')">
+      {{tr}}Retry{{/tr}}      
+    </button>
+    <button type="button" class="tick" onclick="Action.doDelete('continue')">
+      {{tr}}Continue{{/tr}}      
+    </button>
+  </td>
+  <td id="delete-mvt"></td>
+</tr>
 </table>
