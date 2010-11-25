@@ -165,7 +165,7 @@ $smarty->assign("modele_id"      , $modele_id);
 $smarty->assign("lists"          , $lists);
 $smarty->assign("destinataires"  , $destinataires);
 $smarty->assign("user_id"        , $user->_id);
-
+$smarty->assign("user_view"      , $user->_view);
 $smarty->assign("object_id"    , $object_id);
 $smarty->assign('object_class' , CValue::get("object_class"));
 
