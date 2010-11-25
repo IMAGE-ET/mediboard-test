@@ -16,6 +16,12 @@ var FCKMbPrintCommand = function() {
 }
 
 FCKMbPrintCommand.prototype.Execute = function() {
+  var printDoc = function() {   
+    FCKeditorAPI.__Instances._source.ToolbarSet.Items[0].Disable();
+    FCK.EditorWindow.focus();
+    FCK.EditorWindow.print();
+    setTimeout(function(){FCKeditorAPI.__Instances._source.ToolbarSet.Items[0].Enable() }, 5000);
+  };
   if (window.parent.same_print == 1) {
     var content = FCKeditorAPI.Instances._source.GetHTML();
     var form = window.parent.document.forms["download-pdf-form"];
@@ -23,10 +29,11 @@ FCKMbPrintCommand.prototype.Execute = function() {
     form.onsubmit();
   }
   else {
-    FCK.EditorWindow.focus();
-    FCK.EditorWindow.print();
     if (window.parent.Preferences.saveOnPrint == 2 || confirm("Souhaitez-vous enregistrer ce document ?")) {
-      window.parent.submitCompteRendu();
+      window.parent.submitCompteRendu(printDoc);
+    }
+    else {
+      printDoc();
     }
   }
 }

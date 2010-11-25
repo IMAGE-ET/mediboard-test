@@ -16,7 +16,10 @@ window.opener.Document.refreshList(
 catch (e) {}
 {{/if}}
 
-function submitCompteRendu(){
+function submitCompteRendu(callback){
+  if (callback)
+    FCKeditorAPI.__Instances._source.ToolbarSet.Items[0].Disable();
+  FCKeditorAPI.Instances._source.EditingArea.Document.activeElement.style.background = "#ddd";
 	{{if $pdf_thumbnails == 1}}
 	  if (Thumb.modele_id > 0 && FormObserver.changes && Thumb.first_time == 0) {
 		  FormObserver.changes = 0;
@@ -30,13 +33,17 @@ function submitCompteRendu(){
     var form = getForm("editFrm");
     if(checkForm(form) && User.id) {
      form.onsubmit=function(){ return true; };
-      submitFormAjax(form, $("systemMsg"));
+      submitFormAjax(form, $("systemMsg"), { onComplete: function() {
+        if (callback) {
+          callback();
+        } }});
     }
   }).defer();
 }
 
 function refreshZones(id, obj) {
 	FCKeditorAPI.Instances._source.EditingArea.Document.activeElement.innerHTML = obj._source;
+	FCKeditorAPI.Instances._source.EditingArea.Document.activeElement.style.background = null;
 	var url = new Url("dPcompteRendu", "edit_compte_rendu");
 	url.addParam("compte_rendu_id", id);
 	url.addParam("reloadzones", 1);

@@ -15,7 +15,7 @@
       </td>
   </tr>
   {{/if}}
-{{if $lists|@count}}
+  {{if $lists|@count}}
     <tr>
       <td id="liste" colspan="2">
         <!-- The div is required because of a Webkit float issue -->
