@@ -448,6 +448,7 @@ Main.add(function () {
 	        minChars: 1,
 	        dropdown: true,
 	        width: "250px",
+          select: "code",
           afterUpdateElement: function(oHidden) {
             oForm = getForm("addDiagFrm");
             $V(oForm.code_diag, oHidden.value);
