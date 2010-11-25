@@ -43,7 +43,7 @@ function submitCompteRendu(callback){
 
 function refreshZones(id, obj) {
 	FCKeditorAPI.Instances._source.EditingArea.Document.activeElement.innerHTML = obj._source;
-	FCKeditorAPI.Instances._source.EditingArea.Document.activeElement.style.background = null;
+	FCKeditorAPI.Instances._source.EditingArea.Document.activeElement.style.background = '';
 	var url = new Url("dPcompteRendu", "edit_compte_rendu");
 	url.addParam("compte_rendu_id", id);
 	url.addParam("reloadzones", 1);
