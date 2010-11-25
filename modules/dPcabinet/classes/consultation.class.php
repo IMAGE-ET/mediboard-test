@@ -769,10 +769,10 @@ class CConsultation extends CCodable {
         $this->_ref_sejour->_hour_sortie_prevue = null;
         $this->_ref_sejour->_min_sortie_prevue  = null;
         
-        // Par défaut, l'entrée et la sortie du futur séjour sont calculées
-        // à partir des valeurs existantes ou de la date de la consultation
-        $entree = min($this->_ref_sejour->entree, $this->_datetime);
-      	$sortie = max($this->_ref_sejour->entree, mbDate($this->_datetime) . " 23:59:59");
+        // Par défaut, l'entrée et la sortie du futur séjour sont mises
+        // à la date de la nouvelle consultation
+        $entree = $this->_datetime;
+      	$sortie = $this->_datetime . " 23:59:59";
 
         // S'il y a d'autres consultations dans le séjour, on étire son entree et sa sortie
         // en parcourant la liste des consultations
