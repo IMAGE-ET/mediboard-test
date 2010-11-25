@@ -115,7 +115,7 @@ input[type=password]:hover,
 input[type=file]:hover, 
 select:hover, 
 textarea:hover,
-.textarea-container:hover {
+.textarea-container.input-hover {
   border-color: #333333;
 }
 
@@ -124,8 +124,18 @@ input[type=password]:focus,
 input[type=file]:focus, 
 select:focus, 
 textarea:focus,
-.textarea-container:focus {
+.textarea-container.input-focus {
   border-color: #FF6600;
+}
+
+input[type=text]:focus, 
+input[type=password]:focus, 
+input[type=file]:focus, 
+select:focus,
+.textarea-container.input-focus {
+  -moz-box-shadow: 0 0 2px rgba(255,127,0,0.8);
+  -webkit-box-shadow: 0 0 2px rgba(255,127,0,0.8);
+  box-shadow: 0 0 2px rgba(255,127,0,0.8);
 }
 
 select, button {

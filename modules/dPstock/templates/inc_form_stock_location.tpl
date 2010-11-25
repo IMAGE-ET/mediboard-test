@@ -9,17 +9,13 @@
   <input type="hidden" name="group_id" value="{{$host_group_id}}" />
   <input type="hidden" name="del" value="0" />
   <table class="form">
-    <tr>
-      {{if $stock_location->_id}}
-      <th class="title modify" colspan="2">{{tr}}CProductStockLocation-title-modify{{/tr}} {{$stock_location->name}}</th>
-      {{else}}
-      <th class="title" colspan="2">{{tr}}CProductStockLocation-title-create{{/tr}}</th>
-      {{/if}}
-    </tr> 
+    {{mb_include module=system template=inc_form_table_header object=$stock_location}}
+    
     <tr>
       <th>{{mb_label object=$stock_location field="name"}}</th>
       <td>{{mb_field object=$stock_location field="name"}}</td>
     </tr>
+    
     <tr>
       <th>{{mb_label object=$stock_location field="object_id"}}</th>
       <td>

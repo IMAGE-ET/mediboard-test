@@ -84,7 +84,12 @@ function refreshListStocksService(product_id) {
         <table class="form">
           <tr>
             {{if $stock->_id}}
-            <th class="title modify" colspan="2">{{$stock->_view|truncate:60}}</th>
+            <th class="title modify" colspan="2">
+              {{mb_include module=system template=inc_object_idsante400 object=$stock}}
+              {{mb_include module=system template=inc_object_history object=$stock}}
+              
+              {{$stock->_view|truncate:60}}
+            </th>
             {{else}}
             <th class="title" colspan="2">{{tr}}CProductStockGroup-title-create{{/tr}}</th>
             {{/if}}

@@ -49,7 +49,8 @@ input[type=text],
 input[type=password], 
 input[type=file], 
 select, 
-textarea {
+textarea,
+.textarea-container {
   border: 1px #666 solid;
   background-color: #efe;
 }
@@ -58,7 +59,8 @@ input[type=text]:focus,
 input[type=password]:focus, 
 input[type=file]:focus, 
 select:focus, 
-textarea:focus {
+textarea:focus,
+.textarea-container.input-focus {
   background-color: #fff;
 }
 

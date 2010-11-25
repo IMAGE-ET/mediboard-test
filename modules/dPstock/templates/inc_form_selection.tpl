@@ -18,13 +18,7 @@
   {{mb_key object=$selection}}
   
   <table class="form">
-    <tr>
-      {{if $selection->_id}}
-      <th class="title modify text" colspan="2">{{$selection->name}}</th>
-      {{else}}
-      <th class="title text" colspan="2">{{tr}}CProductSelection-title-create{{/tr}}</th>
-      {{/if}}
-    </tr>
+    {{mb_include module=system template=inc_form_table_header object=$selection}}
     
     <tr>
       <th>{{mb_label object=$selection field="name"}}</th>

@@ -50,9 +50,9 @@ if (!isset($_SESSION['browser'])) {
   
   $minimal_versions = array(
     'firefox' => '2.0',
-    'msie'    => '7.0',
+    'msie'    => '8.0',
     'opera'   => '9.6',
-    'chrome'  => '3.0',
+    'chrome'  => '5.0',
     'safari'  => '525.26', // 3.2
   );
   
@@ -74,9 +74,6 @@ if (!isset($_SESSION['browser'])) {
   $browser['deprecated'] = isset($minimal_versions[$browser['name']]) && 
                              $browser['version'] < $minimal_versions[$browser['name']] && 
                              !$browser['mobile'];
-  
-  //trigger_error("Old browser: ".$browser['useragent'], E_USER_NOTICE);
-  //echo file_get_contents("style/mediboard/templates/old_browser.tpl");
   
   $_SESSION['browser'] =& $browser; 
 }

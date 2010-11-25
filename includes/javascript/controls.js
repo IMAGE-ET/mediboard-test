@@ -421,6 +421,7 @@ Element.addMethods({
         grippie = new Element('div', {title: "Glissez cette barre vers la bas pour agrandir la zone de texte"}); // the draggable element
     
     $(element).insert({before: container});
+    
     // We remove the margin between the textarea and the grippie
     $(container).insert(element);
     
@@ -433,6 +434,13 @@ Element.addMethods({
     // When the mouse is pressed on the grippie, we begin the drag
     grippie.observe('mousedown', startDrag);
     element.insert({after: grippie});
+    
+    // All this doesn't work with curry()
+    element
+      .observe("focus",     function(){ container.addClassName("input-focus"); })
+      .observe("blur",      function(){ container.removeClassName("input-focus"); })
+      .observe("mouseover", function(){ container.addClassName("input-hover"); })
+      .observe("mouseout",  function(){ container.removeClassName("input-hover"); });
     
     // Loads the height maybe saved in a cookie
     function loadHeight() {

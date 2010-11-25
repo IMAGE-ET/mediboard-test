@@ -18,13 +18,7 @@
   {{mb_key object=$endowment}}
   
   <table class="form">
-    <tr>
-      {{if $endowment->_id}}
-      <th class="title modify text" colspan="2">{{$endowment->name}}</th>
-      {{else}}
-      <th class="title text" colspan="2">{{tr}}CProductEndowment-title-create{{/tr}}</th>
-      {{/if}}
-    </tr>
+    {{mb_include module=system template=inc_form_table_header object=$endowment}}
     
     <tr>
       <th>{{mb_label object=$endowment field="name"}}</th>

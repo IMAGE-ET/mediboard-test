@@ -40,14 +40,9 @@ function updatePrice(type, form) {
 <input type="hidden" name="del" value="0" />
 <input type="hidden" name="_unit_quantity" value="{{$reference->_ref_product->_unit_quantity}}" onchange="updateUnitQuantity(this.form.quantity, 'equivalent_quantity')" />
 <input type="hidden" name="_unit_title" value="{{$reference->_ref_product->_unit_title}}" />
+
 <table class="form">
-  <tr>
-    {{if $reference->_id}}
-    <th class="title modify text" colspan="2">{{$reference->_view}}</th>
-    {{else}}
-    <th class="title" colspan="2">{{tr}}CProductReference-title-create{{/tr}}</th>
-    {{/if}}
-  </tr>
+  {{mb_include module=system template=inc_form_table_header object=$reference}}
 	
   {{if $reference->cancelled == 1}}
   <tr>

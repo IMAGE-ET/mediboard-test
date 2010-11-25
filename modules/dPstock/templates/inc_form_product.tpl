@@ -76,19 +76,9 @@ duplicateObject = function (form) {
 <input type="hidden" name="product_id" value="{{$product->_id}}" />
 <input type="hidden" name="del" value="0" />
 <input type="hidden" name="_duplicate" value="0" />
+
 <table class="form">
-  <tr>
-    {{if $product->_id}}
-    <th class="title modify text" colspan="2">
-      {{mb_include module=system template=inc_object_idsante400 object=$product}}
-      {{mb_include module=system template=inc_object_history object=$product}}
-            
-      {{$product->name}}
-    </th>
-    {{else}}
-    <th class="title text" colspan="2">{{tr}}CProduct-title-create{{/tr}}</th>
-    {{/if}}
-  </tr>
+  {{mb_include module=system template=inc_form_table_header object=$product}}
 	
   {{if $product->cancelled == 1}}
   <tr>
