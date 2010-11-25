@@ -12,7 +12,18 @@ Options -Indexes
 </IfModule>
 
 <IfModule mod_headers.c>
+  # 1 day cache for CSS and JS
+  <FilesMatch "\.(js|css)$">
+  Header set Cache-Control "max-age=86400"
+  </FilesMatch>
+  
+  # 1 week cache for not versionned resources
   <FilesMatch "\.(flv|gif|jpg|jpeg|png|ico|swf|pdf)$">
+  Header set Cache-Control "max-age=604800"
+  </FilesMatch>
+  
+  # 1 month cache for versionned resources
+  <FilesMatch "\.(js|css|flv|gif|jpg|jpeg|png|ico|swf|pdf)(\?[^&]+)$">
   Header set Cache-Control "max-age=2592000"
   </FilesMatch>
 </IfModule>
