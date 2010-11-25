@@ -333,7 +333,7 @@ class CCodeCIM10 {
       $hasWhere = true;
     }
     if($code) {
-      $query .= " AND master.abbrev LIKE '$code%'";
+      $query .= " AND master.abbrev LIKE '".addslashes($code)."%'";
       $hasWhere = true;
     }
     if(!$hasWhere) {
