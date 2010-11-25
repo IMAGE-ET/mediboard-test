@@ -21,8 +21,11 @@ if (!$echange_hprim_id) {
   $echange_hprim = new CEchangeHprim();
   $where['statut_acquittement'] = "IS NULL";
   $where['emetteur_id']         = "IS NULL";
+  $where['destinataire_id']         = "IS NOT NULL";
   $where['message_valide']      = " = '1'";
   $where['acquittement_valide'] = "IS NULL"; 
+  $where['acquittement_content_id'] = "IS NULL"; 
+  $where['date_echange'] = "IS NULL"; 
   
   $notifications = $echange_hprim->loadList($where, null, $limit);
   // Effectue le traitement d'enregistrement des notifications sur lequel le cron vient de passer
