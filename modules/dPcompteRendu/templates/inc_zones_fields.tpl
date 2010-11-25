@@ -1,4 +1,20 @@
 <table>
+  {{if $destinataires|@count}}
+    <tr>
+      <td class="destinataireCR text" id="destinataire" colspan="2">
+        {{foreach from=$destinataires key=curr_class_name item=curr_class}}
+          &bull; <strong>{{tr}}{{$curr_class_name}}{{/tr}}</strong> :
+          {{foreach from=$curr_class key=curr_index item=curr_dest}}
+            <input type="checkbox" name="_dest_{{$curr_class_name}}_{{$curr_index}}" />
+              <label for="_dest_{{$curr_class_name}}_{{$curr_index}}">
+                {{$curr_dest->nom}} ({{tr}}CDestinataire.tag.{{$curr_dest->tag}}{{/tr}});
+              </label>
+          {{/foreach}}
+          <br />
+        {{/foreach}}
+      </td>
+  </tr>
+  {{/if}}
 {{if $lists|@count}}
     <tr>
       <td id="liste" colspan="2">
