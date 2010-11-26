@@ -1102,7 +1102,7 @@ class CHPrimXMLDocument extends CMbXMLDocument {
     
     // Fin de l'affectation
     $fin = $this->addElement($mouvement, "fin");
-    $this->addDateHeure($fin, $mbAffectation->entree);
+    $this->addDateHeure($fin, $mbAffectation->fin);
 
     $unitesFonctionnellesResponsables = $this->addElement($mouvement, "unitesFonctionnellesResponsables");
     $uniteFonctionnelleResponsable = $this->addElement($unitesFonctionnellesResponsables, "uniteFonctionnelleResponsable");
