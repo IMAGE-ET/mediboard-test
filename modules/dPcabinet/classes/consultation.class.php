@@ -785,7 +785,7 @@ class CConsultation extends CCodable {
                $sortie = mbDate($_consultation->_datetime) . " 23:59:59";
           }
       	}
-	      $this->chrono > self::PLANIFIE ?
+	      (($this->chrono > self::PLANIFIE) && (!$this->annule) && ($this->chrono != self::TERMINE)) ?
 	          $this->_ref_sejour->entree_reelle = $entree:
 	          $this->_ref_sejour->entree_prevue = $entree;
 	      $this->_ref_sejour->sortie_prevue = $sortie;
