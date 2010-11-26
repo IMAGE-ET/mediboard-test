@@ -374,11 +374,11 @@ class CHPrimXMLEvenementsPatients extends CHPrimXMLEvenements {
     
     $emetteur = $this->_ref_echange_hprim->_ref_emetteur;
     $medecins = $xpath->queryUniqueNode("hprim:medecins", $node);
-    if (is_array($medecins)) {
+    if ($medecins instanceof DOMElement) {
       $medecin = $medecins->childNodes;
+      
       foreach ($medecin as $_med) {
         $mediuser_id = $this->getMedecin($_med);
-                
         $lien = $xpath->getValueAttributNode($_med, "lien");
         if ($lien == "rsp") {
           $mbVenue->praticien_id = $mediuser_id;
@@ -401,7 +401,7 @@ class CHPrimXMLEvenementsPatients extends CHPrimXMLEvenements {
       }
       $mbVenue->praticien_id = $mediuser->_id;
     }
-    
+
     return $mbVenue;
   }
   
@@ -413,7 +413,6 @@ class CHPrimXMLEvenementsPatients extends CHPrimXMLEvenements {
     $id400 = new CIdSante400();
     $id400->object_class = "CMediusers";
     $id400->tag = $this->getTagMediuser();
-
     $id400->id400 = $code;
     if ($id400->loadMatchingObject()) {
       $mediuser->_id = $id400->object_id;
