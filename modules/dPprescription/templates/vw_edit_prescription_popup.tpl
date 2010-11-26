@@ -8,7 +8,9 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
 *}}
 
-{{* <div id="prescription_sejour"> *}}
+{{if $dialog}}
+  <div id="prescription_sejour">
+{{/if}}
 
 {{mb_include_script module="dPmedicament" script="medicament_selector"}}
 {{mb_include_script module="dPmedicament" script="equivalent_selector"}}
@@ -302,4 +304,6 @@ emptyProtocole = function() {
   {{/if}}
 </table>
 
-{{* </div> *}}
+{{if $dialog}}
+  </div>
+{{/if}}
