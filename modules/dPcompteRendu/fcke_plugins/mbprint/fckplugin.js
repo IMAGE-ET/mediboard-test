@@ -17,10 +17,8 @@ var FCKMbPrintCommand = function() {
 
 FCKMbPrintCommand.prototype.Execute = function() {
   var printDoc = function() {   
-    FCKeditorAPI.__Instances._source.ToolbarSet.Items[0].Disable();
     FCK.EditorWindow.focus();
     FCK.EditorWindow.print();
-    setTimeout(function(){FCKeditorAPI.__Instances._source.ToolbarSet.Items[0].Enable() }, 5000);
   };
   if (window.parent.same_print == 1) {
     var content = FCKeditorAPI.Instances._source.GetHTML();

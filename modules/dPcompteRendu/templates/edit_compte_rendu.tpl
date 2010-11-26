@@ -17,8 +17,6 @@ catch (e) {}
 {{/if}}
 
 function submitCompteRendu(callback){
-  if (callback)
-    FCKeditorAPI.__Instances._source.ToolbarSet.Items[0].Disable();
   FCKeditorAPI.Instances._source.EditingArea.Document.activeElement.style.background = "#ddd";
 	{{if $pdf_thumbnails == 1}}
 	  if (Thumb.modele_id > 0 && FormObserver.changes && Thumb.first_time == 0) {
