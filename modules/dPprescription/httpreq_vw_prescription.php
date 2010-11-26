@@ -144,6 +144,7 @@ if($prescription->_id){
 	$prescription->loadRefPatient();
   $patient =& $prescription->_ref_patient;
   $patient->loadRefPhotoIdentite();
+	$patient->loadRefConstantesMedicales();
 
   // Chargement des praticiens prescripteurs
   $prescription->getPraticiens();
