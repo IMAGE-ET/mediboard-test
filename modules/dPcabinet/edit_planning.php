@@ -127,16 +127,17 @@ if(!$consult->_id && $consult_urgence_id){
 // Création du template
 $smarty = new CSmartyDP();
 
-$smarty->assign("listCat"           , $listCat           );
-$smarty->assign("categories"        , $categories        );
-$smarty->assign("plageConsult"     	, $plageConsult      );
-$smarty->assign("consult"           , $consult           );
-$smarty->assign("chir"              , $chir              );
-$smarty->assign("pat"               , $pat               );
-$smarty->assign("listPraticiens"    , $listPraticiens    );
-$smarty->assign("listFunctions"     , $listFunctions     );
+$smarty->assign("listCat"               , $listCat);
+$smarty->assign("categories"            , $categories);
+$smarty->assign("plageConsult"     	    , $plageConsult);
+$smarty->assign("consult"               , $consult);
+$smarty->assign("chir"                  , $chir);
+$smarty->assign("pat"                   , $pat);
+$smarty->assign("listPraticiens"        , $listPraticiens);
+$smarty->assign("listFunctions"         , $listFunctions);
 $smarty->assign("correspondantsMedicaux", $correspondantsMedicaux);
 $smarty->assign("medecin_adresse_par"   , $medecin_adresse_par);
+$smarty->assign("today"   , mbDate());
 $smarty->display("addedit_planning.tpl");
 
 ?>

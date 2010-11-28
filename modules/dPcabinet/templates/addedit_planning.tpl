@@ -180,6 +180,14 @@ Main.add(function () {
     <th class="category cancelled" colspan="3">{{tr}}CConsultation-annule{{/tr}}</th>
   </tr>
   {{/if}}
+  {{if $consult->_id && ($app->user_type == 1) && $consult->_datetime < $today}}
+  <tr>
+    <td colspan="3">
+      <div class="small-info">Vous ne pouvez pas modifier une consultation passée, veuillez contacter un administrateur</div>
+      <input type="hidden" name="_locked" value="1" />
+    </td>
+  </tr>
+  {{/if}}
   <tr>
     <td style="width: 50%;">
       <table class="form">
