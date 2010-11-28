@@ -30,7 +30,7 @@
   </form>
   <table class="tbl" id="affectation_{{$curr_affectation->_id}}">
     <tr class="patient">
-      <td class="text">
+      <td class="text" style="width: 1%;">
       {{if $curr_affectation->sejour_id}}
         <a href="?m=dPplanningOp&amp;tab=vw_edit_sejour&amp;sejour_id={{$sejour->_id}}">
           <img src="images/icons/planning.png" title="Modifier le séjour">
