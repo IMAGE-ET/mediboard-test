@@ -148,7 +148,7 @@ $dPconfig["dPplanningOp"]["COperation"] = array (
   "locked"             => "0",
   "horaire_voulu"      => "0",
   "verif_cote"         => "0",
-	"delete_only_admin"  => "0"
+	"delete_only_admin"  => "1"
 );
   
 $dPconfig["dPplanningOp"]["CSejour"] = array (
@@ -180,7 +180,7 @@ $dPconfig["dPplanningOp"]["CSejour"] = array (
     "urg"     => "24",
     "consult" => "04",
   ),
-	"delete_only_admin"   => "0",
+	"delete_only_admin"   => "1",
   "max_cancel_time"     => "0"
 );
 
