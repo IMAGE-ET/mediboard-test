@@ -180,7 +180,7 @@ Main.add(function () {
     <th class="category cancelled" colspan="3">{{tr}}CConsultation-annule{{/tr}}</th>
   </tr>
   {{/if}}
-  {{if $consult->_id && ($app->user_type == 1) && $consult->_datetime < $today}}
+  {{if $consult->_id && !($app->user_type == 1) && $consult->_datetime < $today}}
   <tr>
     <td colspan="3">
       <div class="small-info">Vous ne pouvez pas modifier une consultation passée, veuillez contacter un administrateur</div>
@@ -425,10 +425,14 @@ Main.add(function () {
 	            	{{tr}}Cancel{{/tr}}
 	            </button>
             {{/if}}
+            {{if $app->user_type == 1}}
             <button class="trash" type="button" onclick="confirmDeletion(this.form,{typeName:'la consultation de',objName:'{{$consult->_ref_patient->_view|smarty:nodefaults|JSAttribute}}'})">
-              Supprimer
+              {{tr}}Delete{{/tr}}
             </button>
-            <button class="print" type="button" {{if !$consult->patient_id}}disabled="disabled"{{/if}}onclick="printForm();">{{tr}}Print{{/tr}}</button>
+            {{/if}}
+            <button class="print" type="button" {{if !$consult->patient_id}}disabled="disabled"{{/if}}onclick="printForm();">
+              {{tr}}Print{{/tr}}
+            </button>
           {{else}}
             <button class="submit" type="submit">{{tr}}Create{{/tr}}</button>
           {{/if}}
