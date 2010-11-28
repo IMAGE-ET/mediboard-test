@@ -103,7 +103,9 @@ foreach ($today as $sejour_id => $_sejour) {
 
   // Chargement des interventions
 	$_sejour->loadRefsOperations($whereOperations);
-  foreach ($_sejour->_ref_operations as $operation_id => $operation) {
+	$operation = new COperation();
+  foreach ($_sejour->_ref_operations as $operation) {
+  	$operation->loadRefsActes();
     $operation->loadRefsConsultAnesth();
 		$consult_anesth =& $operation->_ref_consult_anesth; 
     $consult_anesth->loadRefConsultation();
