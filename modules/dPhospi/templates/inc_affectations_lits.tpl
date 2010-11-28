@@ -98,7 +98,7 @@
     </tr>
     {{if !$curr_affectation->sejour_id}}
     <tr class="dates">   
-      <td class="text">
+      <td class="text" colspan="2">
         {{if $can->edit}}
         <form name="entreeAffectation{{$curr_affectation->_id}}" action="?m={{$m}}" method="post" style="float: right;">
           <input type="hidden" name="dosql" value="do_affectation_aed" />
@@ -124,7 +124,7 @@
       </td>
     </tr>
     <tr class="dates">
-      <td class="text">
+      <td class="text" colspan="2">
         {{if $can->edit && (!$sejour->sortie_reelle || $aff_next->_id)}}
         <form name="sortieAffectation{{$curr_affectation->_id}}" action="?m={{$m}}" method="post" style="float: right;">
           <input type="hidden" name="dosql" value="do_affectation_aed" />
@@ -142,7 +142,7 @@
 
     {{if $curr_affectation->rques}}
     <tr class="dates">
-      <td class="text highlight" colspan="2">
+      <td class="text highlight" colspan="3">
         <stong>Remarques:</stong> {{$curr_affectation->rques|nl2br}}
       </td>
     </tr>
@@ -150,7 +150,7 @@
     {{else}}
 
     <tr class="dates">
-      <td class="text">
+      <td class="text" colspan="2">
         {{if $can->edit && (!$sejour->entree_reelle || $aff_prev->_id)}}
         <form name="entreeAffectation{{$curr_affectation->_id}}" action="?m={{$m}}" method="post" style="float: right;">
           <input type="hidden" name="dosql" value="do_affectation_aed" />
@@ -181,7 +181,7 @@
       </td>
     </tr>
     <tr class="dates">
-      <td class="text">
+      <td class="text" colspan="2">
         {{if $can->edit && (!$sejour->sortie_reelle || $aff_next->_id)}}
         <form name="sortieAffectation{{$curr_affectation->_id}}" action="?m={{$m}}" method="post" style="float: right;">
           <input type="hidden" name="dosql" value="do_affectation_aed" />
@@ -218,19 +218,19 @@
     </tr>
 
     <tr class="dates">
-      <td colspan="2"><strong>Age</strong>: {{$patient->_age}} ans ({{mb_value object=$patient field=naissance}})</td>
+      <td colspan="3"><strong>Age</strong>: {{$patient->_age}} ans ({{mb_value object=$patient field=naissance}})</td>
     </tr>
 
     {{if $sejour->prestation_id}}
     <tr class="dates">
-      <td colspan="2">
+      <td colspan="3">
         <strong>Prestation:</strong> {{$sejour->_ref_prestation->_view}}
       </td>
     </tr>
     {{/if}}
     
     <tr class="dates">
-      <td class="text" colspan="2">
+      <td class="text" colspan="3">
 	      <strong>
 	        {{mb_include module=mediusers template=inc_vw_mediuser mediuser=$sejour->_ref_praticien}}
 	      </strong>
@@ -239,21 +239,21 @@
 
     {{if $sejour->libelle}}
     <tr class="dates">
-      <td class="text" colspan="2">
+      <td class="text" colspan="3">
         {{$sejour->libelle}}
       </td>
     </tr>
     {{/if}}
 
     <tr class="dates">
-      <td class="text" colspan="2">
+      <td class="text" colspan="3">
         {{foreach from=$sejour->_ref_operations item=_operation}}
           {{mb_include module=dPplanningOp template=inc_vw_operation operation=$_operation}}
         {{/foreach}}
       </td>
     </tr>
     <tr class="dates">
-      <td class="text" colspan="2">
+      <td class="text" colspan="3">
         <form name="SeptieSejour{{$sejour->_id}}" action="?m=dPhospi" method="post">
           <input type="hidden" name="m" value="dPplanningOp" />
           <input type="hidden" name="otherm" value="dPhospi" />
@@ -279,7 +279,7 @@
     </tr>
     {{if $sejour->rques != ""}}
     <tr class="dates">
-      <td class="text highlight" colspan="2">
+      <td class="text highlight" colspan="3">
         <strong>Séjour</strong>: {{$sejour->rques|nl2br}}
       </td>
     </tr>
@@ -287,7 +287,7 @@
     {{foreach from=$sejour->_ref_operations item=curr_operation}}
     {{if $curr_operation->rques != ""}}
     <tr class="dates">
-      <td class="text highlight" colspan="2">
+      <td class="text highlight" colspan="3">
         <strong>Intervention</strong>: {{$curr_operation->rques|nl2br}}
       </td>
     </tr>
@@ -295,13 +295,13 @@
     {{/foreach}}
     {{if $patient->rques != ""}}
     <tr class="dates">
-      <td class="text highlight" colspan="2">
+      <td class="text highlight" colspan="3">
         <strong>Patient</strong>: {{$patient->rques|nl2br}}
       </td>
     </tr>
     {{/if}}
     <tr class="dates">
-      <td class="text" colspan="2">
+      <td class="text" colspan="3">
         {{if $can->edit}}
         <form name="editChFrm{{$sejour->_id}}" action="?m=dPhospi" method="post">
           <input type="hidden" name="m" value="dPplanningOp" />
