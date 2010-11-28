@@ -30,31 +30,17 @@
   </form>
   <table class="tbl" id="affectation_{{$curr_affectation->_id}}">
     <tr class="patient">
-      {{if $curr_affectation->confirme}}
-      <td class="text" style="background-image:url(images/icons/ray.gif); background-repeat:repeat;">
-      {{else}}
       <td class="text">
-      {{/if}}
       {{if $curr_affectation->sejour_id}}
         <a href="?m=dPplanningOp&amp;tab=vw_edit_sejour&amp;sejour_id={{$sejour->_id}}">
-          <img style="float: right;" src="images/icons/planning.png">
+          <img src="images/icons/planning.png" title="Modifier le séjour">
         </a>
         {{if $can->edit}}
         <script type="text/javascript">new Draggable('affectation_{{$curr_affectation->_id}}', {revert:true})</script>
         {{/if}}
         {{if $sejour->_couvert_cmu}}
-        <div style="float: right;"><strong>CMU</strong></div>
+        <div><strong>CMU</strong></div>
         {{/if}}
-          
-        {{if !$sejour->entree_reelle || ($aff_prev->_id && $aff_prev->effectue == 0)}}
-        <font class="patient-not-arrived">
-        {{else}}
-          {{if $sejour->septique}}
-        <font class="septique">
-          {{else}}
-        <font>
-          {{/if}}
-        {{/if}} 
         {{if $sejour->type == "ambu"}}
         <img src="images/icons/X.png" alt="X" title="Sortant ce soir" />
         {{elseif $curr_affectation->sortie|date_format:"%Y-%m-%d" == $demain}}
@@ -70,7 +56,21 @@
         <img src="images/icons/Oo.png" alt="Oo" title="Sortant aujourd'hui" />
           {{/if}}
         {{/if}}
-
+      </td>  
+      {{if $curr_affectation->confirme}}
+      <td class="text" style="background-image:url(images/icons/ray.gif); background-repeat:repeat;">
+      {{else}}
+      <td class="text">
+      {{/if}}
+        {{if !$sejour->entree_reelle || ($aff_prev->_id && $aff_prev->effectue == 0)}}
+        <font class="patient-not-arrived">
+        {{else}}
+          {{if $sejour->septique}}
+        <font class="septique">
+          {{else}}
+        <font>
+          {{/if}}
+        {{/if}} 
         <span onmouseover="ObjectTooltip.createEx(this, '{{$patient->_guid}}')">
           {{if $sejour->type == "ambu"}}
 					<strong><em>{{$patient}}</em></strong>
