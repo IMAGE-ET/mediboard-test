@@ -425,7 +425,7 @@ Main.add(function () {
 	            	{{tr}}Cancel{{/tr}}
 	            </button>
             {{/if}}
-            {{if $can->admin}}
+            {{if $can->admin || !$consult->patient_id}}
             <button class="trash" type="button" onclick="confirmDeletion(this.form,{typeName:'la consultation de',objName:'{{$consult->_ref_patient->_view|smarty:nodefaults|JSAttribute}}'})">
               {{tr}}Delete{{/tr}}
             </button>
