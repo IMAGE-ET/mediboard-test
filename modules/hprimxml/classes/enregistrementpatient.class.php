@@ -437,14 +437,14 @@ class CHPrimXMLEnregistrementPatient extends CHPrimXMLEvenementsPatients {
           if ($newPatient->load($data['idCiblePatient'])) {
             
             // Le patient trouvé est-il différent ?
-            if (!$this->checkSimilarPatient($newPatient, $data['patient'])) {
+            /*if (!$this->checkSimilarPatient($newPatient, $data['patient'])) {
               $commentaire = "Le nom et/ou le prénom sont très différents."; 
               $messageAcquittement = $domAcquittement->generateAcquittementsPatients("erreur", "E016", $commentaire);
               $doc_valid = $domAcquittement->schemaValidate();
               $echange_hprim->setObjectIdClass("CPatient", $newPatient->_id);
               $echange_hprim->setAckError($doc_valid, $messageAcquittement, "erreur");
               return $messageAcquittement;
-            }
+            }*/
         
             // Mapping du patient
             $newPatient = $this->mappingPatient($data['patient'], $newPatient);
@@ -514,14 +514,14 @@ class CHPrimXMLEnregistrementPatient extends CHPrimXMLEvenementsPatients {
       // idSource connu
       else {
         $newPatient->load($IPP->object_id);
-        if (!$this->checkSimilarPatient($newPatient, $data['patient'])) {
+        /*if (!$this->checkSimilarPatient($newPatient, $data['patient'])) {
           $commentaire = "Le nom et/ou le prénom sont très différents."; 
           $messageAcquittement = $domAcquittement->generateAcquittementsPatients("erreur", "E016", $commentaire);
           $doc_valid = $domAcquittement->schemaValidate();
           $echange_hprim->setObjectIdClass("CPatient", $newPatient->_id);
           $echange_hprim->setAckError($doc_valid, $messageAcquittement, "erreur");
           return $messageAcquittement;
-        }
+        }*/
             
         // Mapping du patient
         $newPatient = $this->mappingPatient($data['patient'], $newPatient);
