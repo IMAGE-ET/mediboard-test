@@ -631,7 +631,7 @@ class CHPrimXMLEvenementsPatients extends CHPrimXMLEvenements {
     return $mbPatient;
   }
   
-  function doNotCancelVenue($venue, $domAcquittement, &$echange_hprim) {
+  function doNotCancelVenue(CSejour $venue, $domAcquittement, &$echange_hprim) {
     // Impossible d'annuler un séjour en cours 
     if ($venue->entree_reelle) {
       $commentaire = "La venue $venue->_id que vous souhaitez annuler est impossible.";
@@ -654,6 +654,29 @@ class CHPrimXMLEvenementsPatients extends CHPrimXMLEvenements {
       $echange_hprim->setAckError($doc_valid, $messageAcquittement, "erreur");
       return $messageAcquittement;    
     }  
+  }
+  
+  function trashNumDossier(CSejour $venue, CDestinataireHprim $dest_hprim) {
+    if (isset($dest_hprim->_configs["type_sej_pa"])) {
+      if ($venue->_num_dossier && preg_match($dest_hprim->_configs["type_sej_pa"], $venue->_num_dossier)) {
+        // Passage en pa_ de l'id externe
+        $num_pa = new CIdSante400();
+        $num_pa->object_class = "CSejour";
+        $num_pa->tag = $dest_hprim->_tag_sejour;
+        $num_pa->id400 = $venue->_num_dossier;
+        if ($num_pa->loadMatchingObject()) {
+          $num_pa->tag = CAppUI::conf('dPplanningOp CSejour tag_dossier_pa').$dest_hprim->_tag_sejour;
+          $num_pa->last_update = mbDateTime();
+          $num_pa->store();
+        }
+        return false;
+      }
+      return true;
+    }
+    if ($venue->_num_dossier) {
+      return true;
+    }
+    return false;
   }
 }
 ?>

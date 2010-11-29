@@ -555,7 +555,7 @@ class CHPrimXMLVenuePatient extends CHPrimXMLEvenementsPatients {
             // Recherche d'un num dossier déjà existant pour cette venue 
             // Mise en trash du numéro de dossier reçu
             $newVenue->loadNumDossier();
-            if ($newVenue->_num_dossier) {
+            if ($this->trashNumDossier($newVenue, $dest_hprim)) {
                 $num_dossier->_trash = true;
             } else {
                // Mapping du séjour si pas de numéro de dossier
@@ -589,7 +589,7 @@ class CHPrimXMLVenuePatient extends CHPrimXMLEvenementsPatients {
                     
           // Séjour retrouvé
           if (CAppUI::conf("hprimxml strictSejourMatch")) {
-            if ($newVenue->loadMatchingSejour(null, true)) {
+            if ($newVenue->loadMatchingSejour(null, true, $dest_hprim->_configs["use_sortie_matching"])) {
               // Dans le cas d'une annulation de la venue
               if ($cancel) {
                 if ($messageAcquittement = $this->doNotCancelVenue($newVenue, $domAcquittement, $echange_hprim)) {
@@ -600,7 +600,7 @@ class CHPrimXMLVenuePatient extends CHPrimXMLEvenementsPatients {
               // Recherche d'un num dossier déjà existant pour cette venue 
               // Mise en trash du numéro de dossier reçu
               $newVenue->loadNumDossier();
-              if ($newVenue->_num_dossier) {
+              if ($this->trashNumDossier($newVenue, $dest_hprim)) {
                 $num_dossier->_trash = true;
               } else {
                 // Notifier les autres destinataires
@@ -624,6 +624,7 @@ class CHPrimXMLVenuePatient extends CHPrimXMLEvenementsPatients {
             }
           } else {
             $collision = $newVenue->getCollisions();
+
             if (count($collision) == 1) {
               $newVenue = reset($collision);
               // Dans le cas d'une annulation de la venue
@@ -636,13 +637,13 @@ class CHPrimXMLVenuePatient extends CHPrimXMLEvenementsPatients {
               // Recherche d'un num dossier déjà existant pour cette venue 
               // Mise en trash du numéro de dossier reçu
               $newVenue->loadNumDossier();
-              if ($newVenue->_num_dossier) {
+              if ($this->trashNumDossier($newVenue, $dest_hprim)) {
                 $num_dossier->_trash = true;
               } else {
                 // Mapping du séjour
                 $newVenue = $this->mappingVenue($data['venue'], $newVenue, $cancel);
                 $msgVenue = $newVenue->store();
-  
+
                 $newVenue->loadLogs();
                 $modified_fields = "";
                 if (is_array($newVenue->_ref_last_log->_fields)) {
