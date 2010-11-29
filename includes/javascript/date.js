@@ -643,7 +643,9 @@ var Calendar = {
           Calendar.mobileHide(datepicker);
         }
         else {
-          $(element).unoverflow();
+          $(element).
+					  setStyle({zIndex: null}). // FIXME do not set it in datepicker.js
+					  unoverflow();
         }
       }.bindAsEventListener(datepicker));
     }
