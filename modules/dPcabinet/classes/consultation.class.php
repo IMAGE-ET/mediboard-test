@@ -769,25 +769,37 @@ class CConsultation extends CCodable {
         $this->_ref_sejour->_hour_sortie_prevue = null;
         $this->_ref_sejour->_min_sortie_prevue  = null;
         
-        // Par défaut, l'entrée et la sortie du futur séjour sont mises
-        // à la date de la nouvelle consultation
-        $entree = min($this->_ref_sejour->entree, $this->_datetime);
-      	$sortie = max($this->_ref_sejour->entree, mbDate($this->_datetime) . " 23:59:59");
+        $date_consult = mbDate($this->_datetime);
+        
+        // On déplace l'entrée et la sortie du séjour
+        $entree = $this->_datetime;
+        $sortie = $date_consult . " 23:59:59";
 
-        // S'il y a d'autres consultations dans le séjour, on étire son entree et sa sortie
+        // Si on a une entrée réelle et que la date de la consultation est avant l'entrée réelle, on sort du store
+        if($this->_ref_sejour->entree_reelle && $date_consult < mbDate($this->_ref_sejour->entree_reelle)) {
+          return CAppUI::tr("CConsultation-denyDayChange");
+        }
+        
+        // Si on a une sortie réelle et que la date de la consultation est après la sortie réelle, on sort du store
+        if($this->_ref_sejour->sortie_reelle && $date_consult > mbDate($this->_ref_sejour->sortie_reelle)) {
+      	  return CAppUI::tr("CConsultation-denyDayChange-exit");
+        }
+
+        // S'il y a d'autres consultations dans le séjour, on étire l'entrée et la sortie
         // en parcourant la liste des consultations
         foreach ($this->_ref_sejour->_ref_consultations as $_consultation) {
       		if ($_consultation->_id != $this->_id) {
       		  $_consultation->loadRefPlageConsult();
+      		  
         		if ($_consultation->_datetime < $entree)
         		  $entree = $_consultation->_datetime;
+        		  
         		if ($_consultation->_datetime > $sortie)
                $sortie = mbDate($_consultation->_datetime) . " 23:59:59";
           }
       	}
-	      (($this->chrono > self::PLANIFIE) && (!$this->annule) && ($this->chrono != self::TERMINE)) ?
-	          $this->_ref_sejour->entree_reelle = $entree:
-	          $this->_ref_sejour->entree_prevue = $entree;
+
+        $this->_ref_sejour->entree_prevue = $entree;
 	      $this->_ref_sejour->sortie_prevue = $sortie;
         $this->_ref_sejour->updateFormFields();
         $this->_ref_sejour->_check_bounds = 0;
