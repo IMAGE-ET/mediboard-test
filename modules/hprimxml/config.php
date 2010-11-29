@@ -37,6 +37,7 @@ $dPconfig["hprimxml"] = array (
   "mvtComplet"                 => "0",
   "strictSejourMatch"          => "1",
   "notifier_sortie_reelle"     => "1",
+  "notifier_entree_reelle"     => "1",
   "trash_numdos_sejour_cancel" => "0",
   "send_diagnostic"            => "evt_pmsi",
   "code_transmitter_sender"    => "mb_id",

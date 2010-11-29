@@ -214,8 +214,6 @@ class CHPrimXMLEvenementsPatients extends CHPrimXMLEvenements {
   function checkSimilarSejour(CPatient $mbPatient, CSejour $mbVenue, $xmlVenue) {
     $xpath = new CHPrimXPath($this);
     
-    
-    
     return $mbVenue->checkSimilar();
   }
   
@@ -340,10 +338,10 @@ class CHPrimXMLEvenementsPatients extends CHPrimXMLEvenements {
     
     $dateHeure = "$date $heure";
 
-    if($mbVenue->entree_reelle) {
+    if ($mbVenue->entree_reelle && CAppUI::conf("hprimxml notifier_entree_reelle")) {
       $mbVenue->entree_reelle = $dateHeure;
     } else {
-      $mbVenue->entree_prevue = $dateHeure;
+      $mbVenue->entree_reelle = $dateHeure;
     }
        
     return $mbVenue;
