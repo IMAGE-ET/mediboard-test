@@ -32,6 +32,7 @@ function submitCompteRendu(callback){
     if(checkForm(form) && User.id) {
      form.onsubmit=function(){ return true; };
       submitFormAjax(form, $("systemMsg"), { onComplete: function() {
+        FCKeditorAPI.Instances._source.EditingArea.Document.activeElement.style.background = '';
         if (callback) {
           callback();
         } }});
