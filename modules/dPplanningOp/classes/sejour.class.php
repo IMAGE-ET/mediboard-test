@@ -372,16 +372,17 @@ class CSejour extends CCodable {
     }
     
     $where["annule"] = " = '0'";
-    $where["type"] = " != 'urg'";
     $where["group_id"] = " = '".$this->group_id."'";
-    $patient->loadRefsSejours($where);
+    foreach ($this->_not_collides as $_type_not_collides) {
+      $where[] = "type != '$_type_not_collides'";
+    }
 
+    $patient->loadRefsSejours($where);
     // suppression de la liste des sejours le sejour courant
     $sejours = $patient->_ref_sejours;
 
     foreach ($sejours as $sejour) {
       if ($sejour->_id != $this->_id && $this->collides($sejour, $collides_update_sejour)) {
-        
         $collisions[$sejour->_id] = $sejour;
       }
     }
@@ -1152,16 +1153,18 @@ class CSejour extends CCodable {
    * - Date de d'entree et de sortie équivalentes
    * @return Nombre d'occurences trouvées 
    */
-  function loadMatchingSejour($strict = null, $notCancel = false) {
+  function loadMatchingSejour($strict = null, $notCancel = false, $useSortie = true) {
     if ($strict && $this->_id) {
       $where["sejour_id"] = " != '$this->_id'";
     } 
     $where["patient_id"] = " = '$this->patient_id'";
     
     $this->_entree = CValue::first($this->entree_reelle, $this->entree_prevue);
-    $this->_sortie = CValue::first($this->sortie_reelle, $this->sortie_prevue);
+    if ($useSortie) {
+      $this->_sortie = CValue::first($this->sortie_reelle, $this->sortie_prevue);
+    }
     
-    if (!$this->_entree && !$this->_sortie) {
+    if (!$this->_entree) {
       return;
     }
     
@@ -1169,9 +1172,11 @@ class CSejour extends CCodable {
       $date_entree = mbDate($this->_entree); 
       $where[] = "DATE(entree_prevue) = '$date_entree' OR DATE(entree_reelle) = '$date_entree'";
     }
-    if ($this->_sortie){
-      $date_sortie = mbDate($this->_sortie); 
-      $where[] = "DATE(sortie_prevue) = '$date_sortie' OR DATE(sortie_reelle) = '$date_sortie'";
+    if ($useSortie) {
+      if ($this->_sortie){
+        $date_sortie = mbDate($this->_sortie); 
+        $where[] = "DATE(sortie_prevue) = '$date_sortie' OR DATE(sortie_reelle) = '$date_sortie'";
+      }
     }
 		
 		if ($notCancel) {
