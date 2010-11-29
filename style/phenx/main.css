@@ -644,9 +644,8 @@ ul.control_tabs_vertical li {
 ul.control_tabs li a, 
 ul.control_tabs_vertical li a {
   border-color: #AAA;
-  background-color: #FFF;
   font-size: 1em;
-  color: #999;
+  color: #666;
 }
 
 ul.control_tabs li a:hover, 
@@ -698,13 +697,20 @@ ul.control_tabs_vertical li a.wrong.active {
   border-bottom-color: #FFAA5B;
 }
 
+ul.control_tabs li a {
+  border-bottom-color: #F60;
+  background: -moz-linear-gradient(top, transparent, rgba(0,0,0,0.1));
+  background: -webkit-gradient(linear, left top, left bottom, from(transparent), to(rgba(0,0,0,0.1)));
+}
+
+ul.control_tabs li a.active {
+  background: -moz-linear-gradient(bottom, transparent, rgba(0,0,0,0.1));
+  background: -webkit-gradient(linear, left top, left bottom, to(rgba(0,0,0,0.1)), from(transparent));
+}
+
 ul.control_tabs_vertical {
   border-right-color: #F60;
   margin-right: -1px;
-}
-
-ul.control_tabs li a {
-  border-bottom-color: #F60;
 }
 
 ul.control_tabs_vertical li {
@@ -716,11 +722,15 @@ ul.control_tabs_vertical li a {
   margin-bottom: 0.2em;
   border-bottom-color: #AAA;
   border-right-color: #F60;
+  background: -moz-linear-gradient(right, transparent, rgba(0,0,0,0.1));
+  background: -webkit-gradient(linear, left top, right top, from(transparent), to(rgba(0,0,0,0.1)));
 }
 
 ul.control_tabs_vertical li a.active {
   border-right-color: #FFF;
   border-bottom-color: #F60;
+  background: -moz-linear-gradient(left, transparent, rgba(0,0,0,0.1));
+  background: -webkit-gradient(linear, left top, right top, to(rgba(0,0,0,0.1)), from(transparent));
 }
 
 #waitingMsgText {
@@ -728,13 +738,4 @@ ul.control_tabs_vertical li a.active {
   -moz-border-radius: 6px;
   -webkit-border-radius: 6px;
   border-radius: 6px;
-}
-
-div.dropdown {
-  padding-right: 16px;
-}
-
-div.dropdown-trigger {
-  height: 15px;
-  width: 15px;
 }

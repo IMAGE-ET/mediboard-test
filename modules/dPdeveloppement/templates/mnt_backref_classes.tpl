@@ -26,8 +26,8 @@
 
 			<td>
 			  <select name="show" onchange="submit();">
+          <option value="errors" {{if $show == "errors"}}selected="selected"{{/if}}>Les erreurs</option>
 			    <option value="all"    {{if $show == "all"   }}selected="selected"{{/if}}>Tout</option>
-			    <option value="errors" {{if $show == "errors"}}selected="selected"{{/if}}>Les erreurs</option>
 			  </select>
 			</td>
 

@@ -48,7 +48,7 @@ popupOrderForm = function(order_id, width, height) {
     {{$object->_ref_object->loadRefsFwd()}}
     <tr>
       <th>{{mb_label object=$object field=object_id}}</th>
-      <td>{{mb_value object=$object field=object_id}}</td>
+      <td colspan="3">{{mb_value object=$object field=object_id}}</td>
     </tr>
   {{/if}}
 </table>

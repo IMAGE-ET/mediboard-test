@@ -128,7 +128,7 @@ fieldset legend {
 }
 
 fieldset {
-  background: rgba(255,255,255,0.5);
+  background: rgba(220,220,220,0.3);
   margin-top: 0.5em;
   padding: 0.4em;
 }
@@ -582,7 +582,7 @@ input.autocomplete:focus {
 }
 
 input.autocomplete.throbbing {
-  background-position: 100% -18px;
+  background-position: 100% -19px;
 }
 
 div.dropdown {
@@ -608,6 +608,9 @@ div.dropdown-trigger {
   background-position: center center;
   background-image: url(images/buttons/button.png);
   border: 1px solid #999;
+  -moz-border-radius: 0 3px 3px 0;
+  -webkit-border-radius: 0 3px 3px 0;
+  border-radius: 0 3px 3px 0;
 }
 
 div.dropdown-trigger:hover {
@@ -623,6 +626,9 @@ div.dropdown-trigger div {
   bottom:0;
   background: url(../../images/buttons/down.gif) center center no-repeat;
   border: 1px solid #eee;
+  -moz-border-radius: 0 3px 3px 0;
+  -webkit-border-radius: 0 3px 3px 0;
+  border-radius: 0 3px 3px 0;
 }
 
 input.barcode {

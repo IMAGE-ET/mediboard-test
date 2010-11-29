@@ -584,7 +584,10 @@ var Calendar = {
       this.show.bind(datepicker)(e);
       if(!this.datepicker.element) return;
       
-      $(this.datepicker.element).unoverflow();
+      $(this.datepicker.element).
+         setStyle({zIndex: null}). // FIXME do not set it in datepicker.js
+         unoverflow();
+         
     }.bindAsEventListener(datepicker);
     
     if (options.noView) {

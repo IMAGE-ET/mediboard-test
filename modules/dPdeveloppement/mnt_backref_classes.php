@@ -7,9 +7,11 @@
  * @author openXtrem
  */
 
-global $can;
+CCanDo::checkRead();
 
-$can->needsRead();
+// Checking out the result
+$class_name = CValue::get("class_name");
+$show       = CValue::get("show", "errors");
 
 $classes = CApp::getMbClasses();
 $classes[] = "CMbObject";
@@ -60,10 +62,6 @@ foreach ($classes as $class) {
 
 ksort($wanted);
 //mbTrace($wanted, "Wanted");
-
-// Checking out the result
-$class_name = CValue::get("class_name");
-$show       = CValue::get("show", "all");
 
 $reports = array();
 $error_count = 0;

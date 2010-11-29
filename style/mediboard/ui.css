@@ -571,6 +571,7 @@ td.show {
 	padding:			5px;
   margin-top: -1px;
 	cursor: default;
+  z-index: 500;
 }
 
 .datepickerControl.inline {
@@ -704,7 +705,6 @@ td.show {
   margin: 0;
   font-size: 0.8em;
   text-align: left;
-  z-index: 200;
 }
 
 .datepickerControl div.dropdown a {
