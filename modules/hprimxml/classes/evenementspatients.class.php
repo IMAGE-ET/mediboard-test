@@ -671,7 +671,6 @@ class CHPrimXMLEvenementsPatients extends CHPrimXMLEvenements {
         }
         return false;
       }
-      return true;
     }
     if ($venue->_num_dossier) {
       return true;
