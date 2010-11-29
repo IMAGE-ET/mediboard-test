@@ -32,12 +32,14 @@
     <tr class="patient">
       <td class="text" style="width: 1%;">
       {{if $curr_affectation->sejour_id}}
-        <a href="?m=dPplanningOp&amp;tab=vw_edit_sejour&amp;sejour_id={{$sejour->_id}}">
-          <img src="images/icons/planning.png" title="Modifier le séjour">
-        </a>
         {{if $can->edit}}
         <script type="text/javascript">new Draggable('affectation_{{$curr_affectation->_id}}', {revert:true})</script>
         {{/if}}
+        <!--
+        <a href="?m=dPplanningOp&amp;tab=vw_edit_sejour&amp;sejour_id={{$sejour->_id}}">
+          <img src="images/icons/planning.png" title="Modifier le séjour">
+        </a>
+        -->
         {{if $sejour->_couvert_cmu}}
         <div><strong>CMU</strong></div>
         {{/if}}
