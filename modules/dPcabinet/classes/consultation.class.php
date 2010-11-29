@@ -708,6 +708,62 @@ class CConsultation extends CCodable {
     
   }
   
+  /**
+   * @todo: refactoring complet de la fonction store de la consultation
+
+ANALYSE DU CODE
+1. gestion du désistement
+2. premier if : creation d'une consultation à laquelle on doit attacher un séjour (conf active) : comportement DEPART / ARRIVEE
+3. mise en cache du forfait FSE : uniquement dans le cas d'un séjour
+4. on load le séjour de la consultation
+5. on initialise le _adjust_sejour à false
+6. dans le cas ou on a un séjour
+  6.1. s'il est de type consultation, on ajuste le séjour en fonction du comportement DEPART / ARRIVEE
+  6.2. si la plage de consultation a été modifiée, adjust_sejour passe à true et on ajuste le séjour en fonction du comportement DEPART / ARRIVEE (en passant par l'adjustSejour() )
+  6.3. si on a un id (à virer) et que le chrono est modifié en PATIENT_ARRIVE, si on gère les admissions auto (conf) on met une entrée réelle au séjour
+7. Si le patient est modifié, qu'on est pas en train de merger et qu'on a un séjour, on empeche le store
+8. On appelle le parent::store()
+9. On passe le forfait SE au séjour
+10. On propage la modification du patient de la consultation au séjour
+11. si on a ajusté le séjour et qu'on est dans un séjour de type conclut et que le séjour n'a plus de consultations, on essaie de le supprimer, sinon on l'annule
+12. Gestion du tarif et précodage des actes (bindTarif)
+13. Bind FSE
+
+ACTIONS : 
+- Faire une fonction comportement_DEPART_ARRIVEE()
+- Merger le 2, le 6.1 et le 6.2 (et le passer en 2 si possible)
+- Faire une fonction pour le 6.3, le 7, le 10, le 11
+- Améliorer les fonctions 12 et 13 en incluant le test du behaviour fields
+
+COMPORTEMENT DEPART ARRIVEE
+modif de la date d'une consultation ayant un séjour sur le modèle DEPART / ARRIVEE:
+1. Pour le DEPART :
+-> on décroche la consultation de son ancien séjour
+-> on ne touche pas à l'ancien séjour si :
+- il est de type autre que consultation
+- il a une entrée réelle
+- il a d'autres consultations
+-> sinon on l'annule
+
+2. Pour l'ARRIVEE
+-> si on a un séjour qui englobe : on la colle dedans
+-> sinon on crée un séjour de consultation
+
+TESTS A EFFECTUER
+0. Création d'un pause
+0.1. Déplacement d'une pause
+1. Création d'une consultation simple C1 (Séjour S1)
+2. Création d'une deuxième consultation le même jour / même patient C2 (Séjour S1)
+3. Création d'une troisième consultation le même jour / même patient C3 (Séjour S1)
+4. Déplacement de la consultation C1 un autre jour (Séjour S2)
+5. Changement du nom du patient C2 (pas de modification car une autre consultation)
+6. Déplacement de C3 au même jour (Toujours séjour S1)
+7. Annulation de C1 (Suppression ou annulation de S1)
+8. Déplacement de C2 et C3 à un autre jour (séjour S3 créé, séjour S1 supprimé ou annulé)
+9. Arrivée du patient pour C2 (S3 a une entrée réelle)
+10. Déplacement de C3 dans un autre jour (S4)
+11. Déplacement de C2 dans un autre jour (S5 et S3 reste tel quel)
+   */
   function store() {
     $this->completeField('sejour_id', 'heure', 'plageconsult_id', 'si_desistement');
     
