@@ -110,7 +110,7 @@ $user = CAppUI::$user;
 if (!$user->isPraticien()) {
   if ($object instanceof CConsultAnesth) {
     $object->loadRefOperation();
-    if ($object->_ref_operation->_ref_anesth->_id) {
+    if ($object->_ref_operation->_id && $object->_ref_operation->_ref_anesth->_id) {
       $user->_id = $object->_ref_operation->_ref_anesth->user_id;
     } else $user->_id = null;
     if ($user->_id == null)
