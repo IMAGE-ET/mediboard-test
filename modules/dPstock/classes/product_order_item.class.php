@@ -33,6 +33,7 @@ class CProductOrderItem extends CMbObject {
    */
   var $_ref_reference     = null;
   var $_ref_lot           = null;
+  var $_ref_stock_group   = null;
   
   //    Multiple
   var $_ref_receptions    = null;
@@ -91,6 +92,10 @@ class CProductOrderItem extends CMbObject {
   }
   
   function getStock() {
+    if ($this->_ref_stock_group) {
+      return $this->_ref_stock_group;
+    }
+    
     $this->loadReference();
     $this->loadOrder();
     
@@ -98,7 +103,8 @@ class CProductOrderItem extends CMbObject {
     $stock->group_id = $this->_ref_order->group_id;
     $stock->product_id = $this->_ref_reference->product_id;
     $stock->loadMatchingObject();
-    return $stock;
+    
+    return $this->_ref_stock_group = $stock;
   }
   
   function updateReceived() {

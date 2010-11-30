@@ -25,10 +25,6 @@ class CProductDeliveryTrace extends CMbObject {
    * @var CProductDelivery
    */
   var $_ref_delivery  = null;
-  /**
-   * @var CService
-   */
-  var $_ref_service   = null;
   
   var $_date_min      = null;
   var $_date_max      = null;
@@ -177,15 +173,7 @@ class CProductDeliveryTrace extends CMbObject {
   }
 
   function getPerm($permType) {
-    $stock = $this->getStock();
-    if(!$this->_ref_service) {
-      $this->loadRefsFwd();
-    }
-    if ($this->_ref_service) {
-      return ($stock->getPerm($permType) && $this->_ref_service->getPerm($permType));
-    } else {
-      return ($stock->getPerm($permType));
-    }
+    return $this->getStock()->getPerm($permType);
   }
 }
 ?>

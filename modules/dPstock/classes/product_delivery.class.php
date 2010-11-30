@@ -71,8 +71,14 @@ class CProductDelivery extends CMbObject {
 
   function updateFormFields() {
     parent::updateFormFields();
-    $this->loadRefsFwd();
-    $this->_view = $this->quantity.'x '.$this->_ref_stock->_view.($this->service_id?" pour le service '{$this->_ref_service->_view}'":'');
+    
+    $this->loadRefStock();
+    $this->_view = $this->quantity.'x '.$this->_ref_stock->_view;
+    
+    if ($this->service_id) {
+      $this->loadRefService();
+      $this->_view .= ($this->service_id?" pour le service '{$this->_ref_service->_view}'":'');
+    }
   }
   
   function getBackProps() {
@@ -109,10 +115,6 @@ class CProductDelivery extends CMbObject {
     return $this->_ref_delivery_traces = $this->loadBackRefs('delivery_traces');
   }
 
-  function loadRefStock(){
-    return $this->_ref_stock = $this->loadFwdRef("stock_id", true);
-  }
-
   function loadRefStockService(){
     $this->loadRefStock();
     
@@ -135,6 +137,10 @@ class CProductDelivery extends CMbObject {
   
   function loadRefPatient(){
     $this->_ref_patient = $this->loadFwdRef("patient_id", true);	
+  }
+
+  function loadRefStock(){
+    return $this->_ref_stock = $this->loadFwdRef("stock_id", true);
   }
   
   function loadRefsFwd() {

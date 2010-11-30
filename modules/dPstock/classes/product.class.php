@@ -67,6 +67,7 @@ class CProduct extends CMbObject {
     $spec->table = 'product';
     $spec->key   = 'product_id';
     $spec->uniques["code"] = array("code");
+    $spec->uniques["name"] = array("name");
     return $spec;
   }
 
@@ -141,10 +142,14 @@ class CProduct extends CMbObject {
     
     $this->_unique_usage = ($this->unit_quantity < 2 && !$this->renewable);
   }
+  
+  function loadRefsReferences() {
+    return $this->_ref_references = $this->loadBackRefs('references');
+  }
 
   function loadRefsBack() {
-  	$this->_ref_references     = $this->loadBackRefs('references');
-    $this->_ref_stocks_group   = $this->loadBackRefs('stocks_group');
+  	$this->loadRefsReferences();
+    $this->_ref_stocks_group = $this->loadBackRefs('stocks_group');
     
     $ljoin = array(
       'service' => "service.service_id = product_stock_service.service_id"
@@ -160,11 +165,16 @@ class CProduct extends CMbObject {
   }
   
   // Loads the stock associated to the current group
-  function loadRefStock() {
+  function loadRefStock($cache = true) {
+    if ($this->_ref_stock_group && $cache) {
+      return $this->_ref_stock_group;
+    }
+    
   	$this->completeField("product_id");
     $this->_ref_stock_group = new CProductStockGroup();
     $this->_ref_stock_group->group_id = CProductStockGroup::getHostGroup();
     $this->_ref_stock_group->product_id = $this->product_id;
+    
     return $this->_ref_stock_group->loadMatchingObject();
   }
 
@@ -200,8 +210,54 @@ class CProduct extends CMbObject {
    * @param Date $date_max [optional]
    * @return Number
    */
+  function getConsumptionMultiple($since = "-1 MONTH", $date_max = null, $services = array(), $include_loss = true){
+    $this->loadRefStock(true);
+    
+    $where = array(
+      "product_delivery.stock_id" => "= '{$this->_ref_stock_group->_id}'",
+      "product_delivery_trace.date_delivery > '".mbDate($since)."'",
+    );
+    
+    if ($date_max) {
+      $where[] = "product_delivery_trace.date_delivery <= '".mbDate($date_max)."'";
+    }
+    
+    if (!empty($services)) {
+      $where["product_delivery.service_id"] = $this->_spec->ds->prepareIn(array_keys($services));
+    }
+    
+    $ljoin = array(
+      "product_delivery" => "product_delivery.delivery_id = product_delivery_trace.delivery_id"
+    );
+    
+    $sql = new CRequest();
+    $sql->addTable("product_delivery_trace");
+    $sql->addSelect("service_id, SUM(product_delivery_trace.quantity) AS total");
+    $sql->addLJoin($ljoin);
+    $sql->addGroup("service_id");
+    $sql->addWhere($where);
+    $totals = $this->_spec->ds->loadHashList($sql->getRequest());
+    
+    if ($include_loss) {
+      $where["service_id"] = "IS NULL";
+      $sql = new CRequest();
+      $sql->addTable("product_delivery_trace");
+      $sql->addSelect("SUM(product_delivery_trace.quantity) AS total");
+      $sql->addLJoin($ljoin);
+      $sql->addWhere($where);
+      $totals["none"] = $this->_spec->ds->loadResult($sql->getRequest());
+    }
+    
+    return $totals;
+  }
+  
+  /** Computes this product's consumption between two dates
+   * @param Date $since [optional]
+   * @param Date $date_max [optional]
+   * @return Number
+   */
   function getConsumption($since = "-1 MONTH", $date_max = null, $service_id = null, $include_loss = true){
-    $this->loadRefStock();
+    $this->loadRefStock(true);
     
     $where = array(
       "product_delivery.stock_id" => "= '{$this->_ref_stock_group->_id}'",
@@ -223,13 +279,12 @@ class CProduct extends CMbObject {
       "product_delivery" => "product_delivery.delivery_id = product_delivery_trace.delivery_id"
     );
     
-    $trace = new CProductDeliveryTrace;
-    $traces = $trace->loadList($where, null, null, null, $ljoin);
-
-    $total = 0;
-    foreach($traces as $_trace) {
-      $total += $_trace->quantity;
-    }
+    $sql = new CRequest();
+    $sql->addTable("product_delivery_trace");
+    $sql->addSelect("SUM(product_delivery_trace.quantity)");
+    $sql->addLJoin($ljoin);
+    $sql->addWhere($where);
+    $total = $this->_spec->ds->loadResult($sql->getRequest());
     
     return $this->_consumption = $total;
   }
@@ -255,15 +310,16 @@ class CProduct extends CMbObject {
       "product" => "product.product_id = product_reference.product_id",
     );
     
-    $lot = new CProductOrderItemReception;
-    $lots = $lot->loadList($where, null, null, null, $ljoin);
+    $sql = new CRequest();
+    $sql->addTable("product_order_item_reception");
+    $sql->addSelect("SUM(
+      product_order_item_reception.quantity * 
+      product_reference.quantity * 
+      product.quantity)");
+    $sql->addLJoin($ljoin);
+    $sql->addWhere($where);
     
-    $total = 0;
-    foreach($lots as $_lot) {
-      $total += $_lot->getUnitQuantity();
-    }
-    
-    return $this->_supply = $total;
+    return $this->_supply = $this->_spec->ds->loadResult($sql->getRequest());
   }
   
   function store() {
@@ -277,7 +333,7 @@ class CProduct extends CMbObject {
     }
     
     if ($this->fieldModified("cancelled", 1)) {
-      $references = $this->loadBackRefs("references");
+      $references = $this->loadRefsReferences();
       foreach($references as $_ref) {
         $_ref->cancelled = 1;
         $_ref->store();
@@ -302,20 +358,6 @@ class CProduct extends CMbObject {
       "product_order_item.renewal" => "= '1'", // renewal line
     );
     
-    /*$where[] = 'product_order_item.order_item_id NOT IN (
-      SELECT product_order_item.order_item_id 
-      FROM product_order_item
-      LEFT JOIN product_order_item_reception ON product_order_item_reception.order_item_id = product_order_item.order_item_id
-      LEFT JOIN product_order ON product_order.order_id = product_order_item.order_id
-      WHERE 
-        product_order.deleted = 0 AND
-        product_order.cancelled = 0 AND
-        product_order.date_ordered IS NOT NULL AND
-        product_order_item.renewal = \'1\'
-        
-        HAVING SUM(product_order_item_reception.quantity) < product_order_item.quantity
-    )';*/
-    
     $item = new CProductOrderItem;
     if ($count)
       $list = $item->countList($where, null, null, null, $leftjoin);
@@ -337,6 +379,133 @@ class CProduct extends CMbObject {
     }
     
     return $this->_in_order;
+  }
+  
+  private static function fillFlow(&$array, $products, $n, $start, $unit, $services) {
+    foreach($services as $_key => $_service) {
+      $array["out"]["total"][$_key] = 0;
+    }
+    
+    $d = &$array["out"];
+    
+    // Y init
+    for($i = 0; $i < 12; $i++) {
+      $from = mbDate("+$i $unit", $start);
+      $to = mbDate("+1 $unit", $from);
+      
+      $d[$from] = array();
+    }
+    $d["total"] = array(
+      "total" => 0
+    );
+    
+    for($i = 0; $i < $n; $i++) {
+      $from = mbDate("+$i $unit", $start);
+      $to = mbDate("+1 $unit", $from);
+      
+      // X init
+      foreach($services as $_key => $_service) {
+        $d[$from][$_key] = 0;
+        $d["total"][$_key] = 0;
+      }
+      $d[$from]["total"] = 0;
+      
+      foreach($products as $_product) {
+        $counts = $_product->getConsumptionMultiple($from, $to, $services);
+        
+        foreach($services as $_key => $_service) {
+          if (isset($counts[$_key])) 
+            $_count = $counts[$_key];
+          else 
+            $_count = 0;
+          
+          $d[$from][$_key] += $_count;
+          
+          $d[$from]["total"] += $_count;
+          @$d["total"][$_key] += $_count;
+          @$d["total"]["total"] += $_count;
+        }
+      }
+      
+      /*foreach($services as $_key => $_service) {
+        $count = 0;
+        foreach($products as $_product)
+          $count += $_product->getConsumption($from, $to, ($_key != "none") ? $_key : null);
+        
+        $d[$from][$_key] = $count;
+        
+        $d[$from]["total"] += $count;
+        @$d["total"][$_key] += $count;
+        @$d["total"]["total"] += $count;
+      }*/
+    }
+  
+    // Put the total at the end
+    $total = $d["total"];
+    unset($d["total"]);
+    $d["total"] = $total;
+    
+    $total = $d["total"]["total"];
+    unset($d["total"]["total"]);
+    $d["total"]["total"] = $total;
+  }
+  
+  static function computeBalance(array $products, array $services, $year, $month = null){
+    $flows = array();
+    
+    // YEAR //////////
+    $year_flows = array(
+      "in"  => array(),
+      "out" => array(),
+    );
+    $start = mbDate(null, "$year-01-01");
+    self::fillFlow($year_flows, $products, 12, $start, "MONTH", $services);
+    $flows["year"] = array($year_flows, "%b", "Bilan annuel"); 
+    
+    // MONTH //////////
+    if ($month){
+      $month_flows = array(
+        "in"  => array(),
+        "out" => array(),
+      );
+      $start = mbDate(null, "$year-$month-01");
+      self::fillFlow($month_flows, $products, mbTransformTime("+1 MONTH -1 DAY", $start, "%d"), $start, "DAY", $services);
+      $flows["month"] = array($month_flows, "%d", "Bilan mensuel");
+    }
+    
+    // Balance des stocks ////////////////
+    $balance = array(
+      "in" => $flows["year"][0]["in"],
+      "out" => array(),
+      "diff" => array(),
+    );
+    
+    $start = mbDate(null, "$year-01-01");
+    for($i = 0; $i < 12; $i++) {
+      $from = mbDate("+$i MONTH", $start);
+      $to = mbDate("+1 MONTH", $from);
+      
+      $balance["in"][$from] = 0;
+      $balance["out"][$from] = 0;
+      
+      foreach($products as $_product) {
+        $balance["in"][$from]  += $_product->getSupply($from, $to);
+        $balance["out"][$from] += $_product->getConsumption($from, $to, null, false);
+      }
+    }
+    
+    $cumul = 0;
+    foreach($balance["in"] as $_date => $_balance) {
+      $diff = $balance["in"][$_date] - $balance["out"][$_date];
+      $balance["diff"][$_date] = $diff+$cumul;
+      $cumul += $diff;
+    }
+  
+    return array(
+      $flows, $balance, // required to use list()
+      "flows" => $flows,
+      "balance" => $balance,
+    );
   }
 }
 ?>

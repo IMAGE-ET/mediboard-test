@@ -10,8 +10,6 @@
 
 CCanDo::checkRead();
 
-global $g;
-
 $service_id = CValue::getOrSession('service_id');
 $patient_id = CValue::get('patient_id');
 

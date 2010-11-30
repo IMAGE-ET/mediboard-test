@@ -133,8 +133,8 @@ class CProductStock extends CMbObject {
     return $this->_ref_location = $this->loadFwdRef("location_id", true);
   }
   
-  function loadRefProduct(){
-    return $this->_ref_product = $this->loadFwdRef("product_id", true);
+  function loadRefProduct($cache = true){
+    return $this->_ref_product = $this->loadFwdRef("product_id", $cache);
   }
 
   function loadRefsFwd(){

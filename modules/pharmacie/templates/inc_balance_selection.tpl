@@ -11,6 +11,12 @@
 <div class="small-info">En cours de développement</div>
 
 <table class="main tbl">
+  <tr>
+    <th>{{tr}}CProduct{{/tr}}</th>
+    <th>{{tr}}CProduct-code{{/tr}}</th>
+    <th>{{tr}}CProductStockGroup-quantity{{/tr}}</th>
+  </tr>
+    
   {{foreach from=$list_products item=_product}}
     <tr>
       <td>{{$_product}}</td>

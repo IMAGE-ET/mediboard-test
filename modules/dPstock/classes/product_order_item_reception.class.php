@@ -139,13 +139,26 @@ class CProductOrderItemReception extends CMbObject {
   function getUnitQuantity(){
     $this->completeField("quantity");
     
-    $this->loadRefOrderItem();
-    $item = $this->_ref_order_item;
+    $where = array(
+      $this->_spec->key => "='$this->_id'",
+    );
     
-    $item->loadReference();
-    $reference = $item->_ref_reference;
+    $ljoin = array(
+      "product_order_item" => "product_order_item.order_item_id = product_order_item_reception.order_item_id",
+      "product_reference" => "product_reference.reference_id = product_order_item.reference_id",
+      "product" => "product.product_id = product_reference.product_id",
+    );
     
-    return $this->_unit_quantity = $this->quantity * $reference->_unit_quantity;
+    $sql = new CRequest();
+    $sql->addTable($this->_spec->table);
+    $sql->addSelect("
+      $this->quantity * 
+      product_reference.quantity * 
+      product.quantity");
+    $sql->addLJoin($ljoin);
+    $sql->addWhere($where);
+    
+    return $this->_unit_quantity = $this->_spec->ds->loadResult($sql->getRequest());
   }
  
   function getUsedQuantity(){

@@ -55,6 +55,7 @@ $locales['CProduct-equivalence_id'] = 'Equivalence';
 $locales['CProduct-equivalence_id-court'] = 'Equiv.';
 $locales['CProduct-equivalence_id-desc'] = 'Equivalence';
 $locales['CProduct-failed-code'] = 'Un produit avec ce code existe déjà';
+$locales['CProduct-failed-name'] = 'Un produit avec ce nom existe déjà';
 $locales['CProduct-item_title'] = 'Unité de délivrance';
 $locales['CProduct-item_title-court'] = 'Unité déliv.';
 $locales['CProduct-item_title-desc'] = 'Unité de délivrance';

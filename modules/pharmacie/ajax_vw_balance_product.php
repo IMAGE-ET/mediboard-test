@@ -17,11 +17,15 @@ $include_void_service = CValue::get("include_void_service");
 
 CValue::setSession("product_id", $product_id);
 
-$product = new CProduct;
-$product->load($product_id);
+$products = array();
 
+$product = new CProduct;
 $stock = new CProductStockGroup;
-$stock->product_id = $product_id;
+
+if ($product->load($product_id)) {
+  $products = array($product->_id => $product);
+  $stock->product_id = $product->_id;
+}
 
 $services = CProductStockGroup::getServicesList();
 
@@ -30,104 +34,18 @@ if ($include_void_service) {
   $services["none"]->_view = CAppUI::tr("None");
 }
 
-function fillFlow(&$array, $product, $n, $start, $unit, $services) {
-  foreach($services as $_key => $_service) {
-    $array["out"]["total"][$_key] = 0;
-  }
-  
-  $d = &$array["out"];
-  
-  // Y init
-  for($i = 0; $i < 12; $i++) {
-    $from = mbDate("+$i $unit", $start);
-    $to = mbDate("+1 $unit", $from);
-    
-    $d[$from] = array();
-  }
-  $d["total"] = array();
-  
-  for($i = 0; $i < $n; $i++) {
-    $from = mbDate("+$i $unit", $start);
-    $to = mbDate("+1 $unit", $from);
-    
-    // X init
-    foreach($services as $_key => $_service) {
-      $d[$from][$_key] = 0;
-    }
-    $d[$from]["total"] = 0;
-    
-    foreach($services as $_key => $_service) {
-      $count = $product->getConsumption($from, $to, ($_key != "none") ? $_key : null);
-      
-      $d[$from][$_key] = $count;
-      
-      $d[$from]["total"] += $count;
-      @$d["total"][$_key] += $count;
-      @$d["total"]["total"] += $count;
-    }
-  }
+list($flows, $balance) = CProduct::computeBalance($products, $services, $year, $month);
 
-  // Put the total at the end
-  $total = $d["total"];
-  unset($d["total"]);
-  $d["total"] = $total;
-  
-  $total = $d["total"]["total"];
-  unset($d["total"]["total"]);
-  $d["total"]["total"] = $total;
-}
-
-// YEAR //////////
-$year_flows = array(
-  "in"  => array(),
-  "out" => array(),
-);
-$start = mbDate(null, "$year-01-01");
-fillFlow($year_flows, $product, 12, $start, "MONTH", $services);
-
-// MONTH //////////
-$month_flows = array(
-  "in"  => array(),
-  "out" => array(),
-);
-$start = mbDate(null, "$year-$month-01");
-fillFlow($month_flows, $product, mbTransformTime("+1 MONTH -1 DAY", $start, "%d"), $start, "DAY", $services);
-
-$flows = array(
-  "year"  => array($year_flows, "%b"), 
-  "month" => array($month_flows, "%d"),
-);
-
-// Balance des stocks ////////////////
-$balance = array(
-  "in" => $flows["year"][0]["in"],
-  "out" => array(),
-  "diff" => array(),
-);
-
-$start = mbDate(null, "$year-01-01");
-for($i = 0; $i < 12; $i++) {
-  $from = mbDate("+$i MONTH", $start);
-  $to = mbDate("+1 MONTH", $from);
-  
-  $balance["out"][$from] = $product->getConsumption($from, $to, null, false);
-  $balance["in"][$from] = $product->getSupply($from, $to);
-}
-
-$cumul = 0;
-foreach($balance["in"] as $_date => $_balance) {
-  $diff = $balance["in"][$_date] - $balance["out"][$_date];
-  $balance["diff"][$_date] = $diff+$cumul;
-  $cumul += $diff;
-}
 // Création du template
 $smarty = new CSmartyDP();
 
-$smarty->assign('product',  $product);
+$smarty->assign('products', $products);
+$smarty->assign('total',    count($products));
 $smarty->assign('services', $services);
 $smarty->assign('stock',    $stock);
 $smarty->assign('flows',    $flows);
 $smarty->assign('balance',  $balance);
+$smarty->assign('type',     "product");
 
 $smarty->display('inc_balance_product.tpl');
 

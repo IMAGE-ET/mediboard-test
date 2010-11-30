@@ -12,20 +12,12 @@ Main.add(function(){
     buttonsContainers[4].insert('<a href="#1" class="button '+c+'" title="a.button '+c+'">'+c+'</a><br />');
     buttonsContainers[5].insert('<a href="#1" class="button '+c+' rtl" title="a.button '+c+' rtl">'+c+'</a><br />');
   });
-  
-  var tooltip = $("tooltipTpl").clone(true).show();
-  tooltip.addClassName("tooltip").select(".content")[0].update("tooltip");
-  
-  var postit = $("tooltipTpl").clone(true).show();
-  postit.addClassName("postit").setStyle({marginLeft: '100px'}).select(".content")[0].update("postit");
-  
+
   var form = getForm("test");
   Calendar.regField(form.dateTime);
   Calendar.regField(form.time);
   Calendar.regField(form.date);
   Calendar.regField(form.dateInline, null, {inline: true, container: $(form.dateInline).up(), noView: true});
-  
-  $("tooltip-container").insert(tooltip).insert(postit);
 });
 </script>
 

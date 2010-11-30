@@ -10,8 +10,6 @@
 
 CCanDo::checkRead();
 
-global $g;
-
 $service_id = CValue::getOrSession('service_id');
 $_selected_cis   = CValue::get("_selected_cis");
 

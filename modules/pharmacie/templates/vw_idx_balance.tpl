@@ -17,6 +17,7 @@
   <li><a href="#byproduct">Par produit</a></li>
   <li><a href="#byselection">Par sélection de produits</a></li>
   <li><a href="#stock-locations">{{tr}}CProductStockLocation{{/tr}}</a></li>
+  <li><a href="#stock-global-value">Valorisation globale</a></li>
 </ul>
 <hr class="control_tabs" />
 
@@ -47,21 +48,24 @@
     <input type="hidden" name="m" value="pharmacie" />
     <input type="hidden" name="a" value="ajax_vw_balance_selection" />
     
-    <table class="main form">
+    <table class="main">
       <tr>
         <td class="narrow">
           <fieldset>
             <legend>{{tr}}CProductSelection{{/tr}}</legend>
-            <select name="product_selection_id" onchange="$('advanced-filters').setOpacity($V(this)?0.4:1)">
+            <select name="product_selection_id" onchange="$('advanced-filters').setOpacity($V(this)?0.4:0.99)"> <!-- 0.99 needed -->
               <option value=""> &ndash; Aucune </option>
               {{foreach from=$list_selections item=_selection}}
-                <option value="{{$_selection->_id}}">{{$_selection}}</option>
+                <option value="{{$_selection->_id}}" 
+                        {{if $product_selection_id == $_selection->_id}}selected="selected"{{/if}}>
+                  {{$_selection}}
+                </option>
               {{/foreach}}
             </select>
           </fieldset>
         </td>
         <td>
-          <fieldset id="advanced-filters">
+          <fieldset id="advanced-filters" class="{{$product_selection_id|ternary:'opacity-40':''}}">
             <legend>Filtres avancés</legend>
             
             <table class="layout">
@@ -71,7 +75,39 @@
                   <select name="category_id">
                     <option value=""> &ndash; Toutes </option>
                     {{foreach from=$list_categories item=_category}}
-                      <option value="{{$_category->_id}}">{{$_category}}</option>
+                      <option value="{{$_category->_id}}"
+                              {{if $category_id == $_category->_id}}selected="selected"{{/if}}>
+                        {{$_category}}
+                      </option>
+                    {{/foreach}}
+                  </select>
+                </td>
+              </tr>
+              
+              {{* 
+              <tr>
+                <th>{{mb_label object=$product field=societe_id}}</th>
+                <td>
+                  <select name="manuf_id">
+                    <option value=""> &ndash; Tous </option>
+                    {{foreach from=$list_societes item=_societe}}
+                      <option value="{{$_societe->_id}}">{{$_societe}}</option>
+                    {{/foreach}}
+                  </select>
+                </td>
+              </tr>
+              *}}
+              
+              <tr>
+                <th>Distributeur / Labo</th>
+                <td>
+                  <select name="supplier_id">
+                    <option value=""> &ndash; Tous </option>
+                    {{foreach from=$list_societes item=_societe}}
+                      <option value="{{$_societe->_id}}"
+                              {{if $supplier_id == $_societe->_id}}selected="selected"{{/if}}>
+                        {{$_societe}}
+                      </option>
                     {{/foreach}}
                   </select>
                 </td>
@@ -89,7 +125,7 @@
               
               <tr>
                 <th><label for="hors_t2a">Hors T2A</label></th>
-                <td><input type="checkbox" name="hors_t2a" /></td>
+                <td><input type="checkbox" name="hors_t2a" {{if $hors_t2a}} checked="checked" {{/if}} /></td>
               </tr>
               
             </table>
@@ -98,7 +134,7 @@
       </tr>
       <tr>
         <td colspan="2" class="button">
-          <button class="search">{{tr}}Filter{{/tr}}</button>
+          <button class="search">{{tr}}Display{{/tr}}</button>
         </td>
       </tr>
     </table>
@@ -131,3 +167,10 @@
 {{/foreach}}
 
 </table>
+
+<div id="stock-global-value">
+  <button class="change" onclick="(new Url('pharmacie', 'ajax_vw_total_price')).requestUpdate($(this).next('div'))">
+    Valeur totale
+  </button>
+  <div style="font-size: 2.0em; text-align: center;"></div>
+</div>

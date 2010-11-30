@@ -196,8 +196,8 @@ table.titleblock td.titlecell {
 }
 
 #tabmenu td {
-  height: 21px;
-  padding: 6px;
+  height: 24px;
+  padding: 8px;
 	padding-top: 3px;
   padding-bottom: 0px;
   background: url(images/pictures/tab_background.png) repeat-x top;
@@ -449,7 +449,6 @@ table.form th.category {
 	position: relative;
   font-weight: bold;
   font-size: 1em;
-  background: #FFF;
   padding: 2px;
   border: 1px solid #DDD;
   border-right: none;
@@ -469,10 +468,17 @@ table.form th.category {
 #nav a:hover {
   text-decoration: none;
   border: 1px #FFBA8C solid;
-	background: #FFF;
   border-right: 0;
 	z-index: 41;
 	padding: 2px;
+}
+
+#nav a, 
+#nav a:active, 
+#nav a:hover {
+  background: #FFF;
+  background: #FFF -moz-linear-gradient(left, transparent 90%, rgba(0,0,0,0.1));
+  background: #FFF -webkit-gradient(linear, left top, right top, color-stop(0.9, transparent), color-stop(1, rgba(0,0,0,0.1)));
 }
 
 #nav a img {
@@ -646,6 +652,7 @@ ul.control_tabs_vertical li a {
   border-color: #AAA;
   font-size: 1em;
   color: #666;
+  background-color: #fff;
 }
 
 ul.control_tabs li a:hover, 
@@ -699,13 +706,13 @@ ul.control_tabs_vertical li a.wrong.active {
 
 ul.control_tabs li a {
   border-bottom-color: #F60;
-  background: -moz-linear-gradient(top, transparent, rgba(0,0,0,0.1));
-  background: -webkit-gradient(linear, left top, left bottom, from(transparent), to(rgba(0,0,0,0.1)));
+  background: -moz-linear-gradient(top, transparent 60%, rgba(0,0,0,0.2));
+  background: -webkit-gradient(linear, left top, left bottom, color-stop(0.6, transparent), color-stop(1, rgba(0,0,0,0.2)));
 }
 
 ul.control_tabs li a.active {
   background: -moz-linear-gradient(bottom, transparent, rgba(0,0,0,0.1));
-  background: -webkit-gradient(linear, left top, left bottom, to(rgba(0,0,0,0.1)), from(transparent));
+  background: -webkit-gradient(linear, left top, left bottom, from(rgba(0,0,0,0.1)), to(transparent));
 }
 
 ul.control_tabs_vertical {
@@ -722,15 +729,15 @@ ul.control_tabs_vertical li a {
   margin-bottom: 0.2em;
   border-bottom-color: #AAA;
   border-right-color: #F60;
-  background: -moz-linear-gradient(right, transparent, rgba(0,0,0,0.1));
-  background: -webkit-gradient(linear, left top, right top, from(transparent), to(rgba(0,0,0,0.1)));
+  background: -moz-linear-gradient(left, transparent 80%, rgba(0,0,0,0.2));
+  background: -webkit-gradient(linear, left top, right top, color-stop(0.8, transparent), color-stop(1, rgba(0,0,0,0.2)));
 }
 
 ul.control_tabs_vertical li a.active {
   border-right-color: #FFF;
   border-bottom-color: #F60;
-  background: -moz-linear-gradient(left, transparent, rgba(0,0,0,0.1));
-  background: -webkit-gradient(linear, left top, right top, to(rgba(0,0,0,0.1)), from(transparent));
+  background: -moz-linear-gradient(right, transparent, rgba(0,0,0,0.1));
+  background: -webkit-gradient(linear, left top, right top, from(rgba(0,0,0,0.1)), to(transparent));
 }
 
 #waitingMsgText {

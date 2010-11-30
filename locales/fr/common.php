@@ -40,6 +40,7 @@ $locales['Delete'] = 'Supprimer';
 $locales['Delete-all'] = 'Tout supprimer';
 $locales['Deleted'] = 'Supprimé';
 $locales['Disabled'] = 'Désactivé';
+$locales['Display'] = 'Afficher';
 $locales['Done'] = 'Fait';
 $locales['Draft'] = 'Brouillon';
 $locales['Duplicate'] = 'Dupliquer';

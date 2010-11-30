@@ -707,6 +707,7 @@ class CSetupdPstock extends CSetup {
     $this->addQuery($sql);
     $sql = "UPDATE `product_stock_location` SET
               `object_class` = 'CGroups'";
+    $this->addQuery($sql);
     $sql = "UPDATE `product_stock_location` SET
               `object_id` = `product_stock_location`.`group_id`";
     $this->addQuery($sql);
@@ -718,6 +719,20 @@ class CSetupdPstock extends CSetup {
               ADD INDEX (`location_id`);";
     $this->addQuery($sql);
     
-    $this->mod_version = "1.41";
+    $this->makeRevision("1.41");
+    $sql = "UPDATE `product_stock_location` SET
+              `object_class` = 'CGroups' WHERE `object_class` = ''";
+    $this->addQuery($sql);
+    $sql = "ALTER TABLE `product_delivery` 
+              CHANGE `service_id` `service_id` INT( 11 ) UNSIGNED NULL DEFAULT NULL;";
+    $this->addQuery($sql);
+    $sql = "UPDATE `product_delivery` 
+              SET `product_delivery`.`service_id` = NULL WHERE `product_delivery`.`service_id` = 0;";
+    $this->addQuery($sql);
+    $sql = "UPDATE `product` 
+              SET `product`.`quantity` = 1 WHERE `product`.`quantity` = 0;";
+    $this->addQuery($sql);
+    
+    $this->mod_version = "1.42";
   }
 }

@@ -9,13 +9,23 @@
 *}}
 
 {{main}}
-  Control.Tabs.create("balance-tabs-byproduct", true);
+  Control.Tabs.create("balance-tabs-{{$type}}", true);
 {{/main}}
 
-<ul class="control_tabs small" id="balance-tabs-byproduct">
-  <li><a href="#year">Bilan annuel</a></li>
-  <li><a href="#month">Bilan mensuel</a></li>
-  <li><a href="#rotation">Rotation des stocks</a></li>
+{{if $total > $products|@count}}
+  <div class="small-warning">
+    Seulement les {{$products|@count}} premiers produits sont pris en compte (sur {{$total}}).
+  </div>
+{{/if}}
+
+<ul class="control_tabs small" id="balance-tabs-{{$type}}">
+  {{foreach from=$flows item=_flows key=key}}
+    <li><a href="#{{$type}}-{{$key}}">{{$_flows.2}}</a></li>
+  {{/foreach}}
+  <li><a href="#{{$type}}-rotation">Rotation des stocks</a></li>
+  {{if $products != null}}
+    <li><a href="#{{$type}}-products">Produits ({{$products|@count}}{{if $total > $products|@count}}/{{$total}}{{/if}})</a></li>
+  {{/if}}
 </ul>
 <hr class="control_tabs" />
 
@@ -23,7 +33,7 @@
 
 {{foreach from=$flows item=_flows key=key}}
 
-<table class="main tbl" id="{{$key}}" style="display: none;">
+<table class="main tbl" id="{{$type}}-{{$key}}" style="display: none;">
   <tr>
     <th></th>
     
@@ -54,7 +64,7 @@
 </table>
 {{/foreach}}
 
-<table class="main tbl" id="rotation" style="display: none;">
+<table class="main tbl" id="{{$type}}-rotation" style="display: none;">
   <tr>
     <th></th>
     
@@ -75,3 +85,21 @@
     </tr>
   {{/foreach}}
 </table>
+
+{{if $products != null}}
+<table class="main tbl" id="{{$type}}-products" style="display: none;">
+  <tr>
+    <th>{{tr}}CProduct{{/tr}}</th>
+    <th>{{tr}}CProduct-code{{/tr}}</th>
+    <th>{{tr}}CProductStockGroup-quantity{{/tr}}</th>
+  </tr>
+    
+  {{foreach from=$products item=_product}}
+    <tr>
+      <td>{{$_product}}</td>
+      <td>{{$_product->code}}</td>
+      <td>{{mb_value object=$_product->_ref_stock_group field=quantity}}</td>
+    </tr>
+  {{/foreach}}
+</table>
+{{/if}}

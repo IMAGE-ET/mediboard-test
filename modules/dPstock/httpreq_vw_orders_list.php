@@ -36,6 +36,7 @@ $count = $order->_search_count;
 
 foreach($orders as $_order) {
   //$_order->updateCounts();
+  $_order->countRenewedItems();
   if ($_order->object_id) {
     $_order->loadTargetObject();
     $_order->_ref_object->loadRefsFwd();
