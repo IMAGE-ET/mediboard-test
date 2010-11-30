@@ -310,7 +310,8 @@ div.draggable {
 
 tbody.hoverable:hover tr td,
 table.tbl tr:hover td,
-div.tree-header:hover {
+div.tree-header:hover,
+table.tbl tr td.hover {
   background-color: #FFF2DD;
 }
 
@@ -449,7 +450,6 @@ table.form th.category {
 	position: relative;
   font-weight: bold;
   font-size: 1em;
-  padding: 2px;
   border: 1px solid #DDD;
   border-right: none;
   -moz-border-radius: 4px 0 0 4px;
@@ -470,12 +470,13 @@ table.form th.category {
   border: 1px #FFBA8C solid;
   border-right: 0;
 	z-index: 41;
-	padding: 2px;
 }
 
 #nav a, 
 #nav a:active, 
 #nav a:hover {
+  padding: 2px;
+  padding-right: 4px;
   background: #FFF;
   background: #FFF -moz-linear-gradient(left, transparent 90%, rgba(0,0,0,0.1));
   background: #FFF -webkit-gradient(linear, left top, right top, color-stop(0.9, transparent), color-stop(1, rgba(0,0,0,0.1)));

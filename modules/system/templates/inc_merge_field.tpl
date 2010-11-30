@@ -32,7 +32,7 @@
 
   <!-- All options -->
   {{foreach from=$objects item=object name=object}}
-  <td class="{{$prop}}">
+  <td class="{{$prop}} {{$object->_guid}}">
   	{{assign var=iteration value=$smarty.foreach.object.iteration}}
     <label for="_choix_{{$iteration}}_{{$field}}">
       <input type="radio" name="_choix_{{$field}}" id="form-merge__choix_{{$iteration}}_{{$field}}"

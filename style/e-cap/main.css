@@ -352,7 +352,8 @@ table.tbl th.title {
 
 tbody.hoverable:hover tr td,
 table.tbl tr:hover td,
-div.tree-header:hover {
+div.tree-header:hover,
+table.tbl tr td.hover {
   background-color: #fdd;
 }
 

@@ -33,6 +33,10 @@
 
 {{math equation="1/x*100" x=$_flows.0.out|@reset|@count assign=width}}
 
+{{main}}
+  $("{{$type}}-{{$key}}").gridHighlight();
+{{/main}}
+
 <table class="main tbl" id="{{$type}}-{{$key}}" style="display: none;">
   <tr>
     <th></th>
@@ -50,7 +54,7 @@
   </tr>
   
   {{foreach from=$_flows.0.out item=_flow key=_service_id}}
-    <tr style="{{if $_service_id == "total"}}font-weight: bold;{{/if}} text-align: center;">
+    <tr style="{{if $_service_id == "total"}}font-weight: bold;{{/if}} text-align: right;">
       <th style="width: 0.1%;">
         {{if $_service_id == "total"}}
           Total
@@ -62,7 +66,11 @@
       {{foreach from=$_flow item=_value key=_date}}
         <td style="{{if $_date == "total" && $_service_id == "total"}}font-size: 1.4em;{{/if}} 
                    {{if $_date == "total"}}font-weight: bold;{{/if}}">
-          <span {{if $_value == 0 && $_date != "total" && $_service_id != "total"}}class="opacity-40"{{/if}}>{{$_value}}</span>
+          <span {{if $_value.0 == 0 && $_date != "total" && $_service_id != "total"}}class="opacity-40"{{/if}}>
+            <span class="quantity" style="display: none;">{{$_value.0}}</span> 
+            <span class="sep" style="display: none;">/</span> 
+            <span class="price">{{$_value.1}} {{$dPconfig.currency_symbol}}</span>
+          </span>
         </td>
       {{/foreach}}
     </tr>
@@ -70,7 +78,7 @@
 </table>
 {{/foreach}}
 
-<table class="main tbl" id="{{$type}}-rotation" style="display: none;">
+<table class="main tbl" id="{{$type}}-rotation" style="display: none; text-align: right;">
   <tr>
     <th></th>
     
@@ -85,9 +93,23 @@
         {{$_date|date_format:"%b"}}
       </th>
       
-      <td style="text-align: center;">{{$balance.in.$_date}}</td>
-      <td style="text-align: center;">{{$balance.out.$_date}}</td>
-      <td style="text-align: center;">{{$balance.diff.$_date}}</td>
+      <td>
+        <span class="quantity" style="display: none;">{{$balance.in.$_date.0}}</span> 
+        <span class="sep" style="display: none;">/</span> 
+        <span class="price">{{$balance.in.$_date.1}} {{$dPconfig.currency_symbol}}</span>
+      </td>
+      
+      <td>
+        <span class="quantity" style="display: none;">{{$balance.out.$_date.0}}</span> 
+        <span class="sep" style="display: none;">/</span> 
+        <span class="price">{{$balance.out.$_date.1}} {{$dPconfig.currency_symbol}}</span>
+      </td>
+      
+      <td>
+        <span class="quantity" style="display: none;">{{$balance.diff.$_date.0}}</span> 
+        <span class="sep" style="display: none;">/</span> 
+        <span class="price">{{$balance.diff.$_date.1}} {{$dPconfig.currency_symbol}}</span>
+      </td>
     </tr>
   {{/foreach}}
 </table>
@@ -102,7 +124,11 @@
     
   {{foreach from=$products item=_product}}
     <tr>
-      <td>{{$_product}}</td>
+      <td>
+        <strong onmouseover="ObjectTooltip.createEx(this, '{{$_product->_guid}}')">
+          {{$_product}}
+        </strong>
+      </td>
       <td>{{$_product->code}}</td>
       <td>{{mb_value object=$_product->_ref_stock_group field=quantity}}</td>
     </tr>

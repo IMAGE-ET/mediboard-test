@@ -14,6 +14,14 @@ Main.add(function () {
     window.opener.onMergeComplete();
   }
 } );
+
+function toggleColumn(className) {
+  var inputs = getForm("form-merge").select("."+className+" input[type=radio]");
+  inputs.each(function(input){
+    input.checked = true;
+    input.onclick();
+  });
+}
 </script>
 
 {{if !$dialog}}
@@ -101,7 +109,9 @@ Main.add(function () {
         {{if $alternative_mode}}
 				<br />
         <label style="font-weight: normal;">
-          <input type="radio" name="_base_object_id" value="{{$object->_id}}" {{if $smarty.foreach.object.first}}checked="checked"{{/if}} />
+          <input type="radio" name="_base_object_id" value="{{$object->_id}}" {{if $smarty.foreach.object.first}}checked="checked"{{/if}} 
+                 onclick="toggleColumn('{{$object->_guid}}')"
+          />
           Utiliser comme base [#{{$object->_id}}]
         </label>
         {{/if}} 

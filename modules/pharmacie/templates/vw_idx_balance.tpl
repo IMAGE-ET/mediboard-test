@@ -13,6 +13,22 @@
   Control.Tabs.create("balance-tabs-byproduct", true);
 {{/main}}
 
+<script type="text/javascript">
+function toggleDisplay(value) {
+  var container = $("balance-product-results");
+  
+  switch (value) {
+    case "quantity": 
+    case "price": 
+      container.select(".quantity,.price,.sep").invoke("hide");
+      container.select("."+value).invoke("show");
+      break;
+    case "both":
+      container.select(".quantity,.price,.sep").invoke("show");
+  }
+}
+</script>
+
 <ul class="control_tabs" id="balance-tabs">
   <li><a href="#byproduct">Par produit</a></li>
   <li><a href="#byselection">Par sélection de produits</a></li>
@@ -33,6 +49,16 @@
     <label>
       <input type="checkbox" name="include_void_service" />
       Inclure les mouvements sans service de destination
+    </label>
+
+    <label>
+      <input type="radio" name="display" value="quantity" onclick="toggleDisplay(this.value)" /> Quantité
+    </label>
+    <label>
+      <input type="radio" name="display" value="price" checked="checked" onclick="toggleDisplay(this.value)" /> Prix
+    </label>
+    <label>
+      <input type="radio" name="display" value="both" onclick="toggleDisplay(this.value)" /> Les deux
     </label>
   </form>
   

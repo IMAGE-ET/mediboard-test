@@ -572,6 +572,9 @@ td.show {
   margin-top: -1px;
 	cursor: default;
   z-index: 500;
+  -moz-box-shadow: 4px 4px 8px rgba(0,0,0,0.4);
+  -webkit-box-shadow: 4px 4px 8px rgba(0,0,0,0.4);
+  box-shadow: 4px 4px 8px rgba(0,0,0,0.4);
 }
 
 .datepickerControl.inline {
@@ -579,6 +582,9 @@ td.show {
   padding: 0;
 	background-color:	transparent;
   width: auto;
+  -moz-box-shadow: none;
+  -webkit-box-shadow: none;
+  box-shadow: none;
 }
 
 .datepickerControl td {

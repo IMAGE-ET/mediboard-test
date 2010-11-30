@@ -1066,6 +1066,25 @@ Element.addMethods({
   }
 });
 
+Element.addMethods("table", {
+  gridHighlight: function(table, className) {
+    className = className || "hover";
+    
+    var rows = $(table).select("tr");
+    
+    rows.each(function(row){
+      row.select('th,td').each(function(cell, i){
+        cell.observe("mouseover", function(e){
+          $(table).select("th."+className+",td."+className).invoke("removeClassName", className);
+          rows.each(function(_row){
+            _row.childElements()[i].addClassName(className);
+          });
+        });
+      });
+    });
+  }
+});
+
 BarcodeParser = {
   inputWatcher: Class.create({
     initialize: function(input, options) {

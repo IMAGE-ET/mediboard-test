@@ -8,11 +8,9 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
  */
 
-global $m;
-
-$objects_class = CValue::get('objects_class');
+$objects_class  = CValue::get('objects_class');
 $readonly_class = CValue::get('readonly_class');
-$objects_id    = CValue::get('objects_id');
+$objects_id     = CValue::get('objects_id');
 if (!is_array($objects_id)) {
 	$objects_id = explode("-", $objects_id);
 }

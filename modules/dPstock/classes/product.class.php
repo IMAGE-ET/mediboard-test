@@ -381,9 +381,9 @@ class CProduct extends CMbObject {
     return $this->_in_order;
   }
   
-  private static function fillFlow(&$array, $products, $n, $start, $unit, $services) {
+  private static function fillFlow(&$array, $products, $n, $start, $unit, $services, $financial) {
     foreach($services as $_key => $_service) {
-      $array["out"]["total"][$_key] = 0;
+      $array["out"]["total"][$_key] = array(0, 0);
     }
     
     $d = &$array["out"];
@@ -396,7 +396,7 @@ class CProduct extends CMbObject {
       $d[$from] = array();
     }
     $d["total"] = array(
-      "total" => 0
+      "total" => array(0, 0)
     );
     
     for($i = 0; $i < $n; $i++) {
@@ -405,15 +405,21 @@ class CProduct extends CMbObject {
       
       // X init
       foreach($services as $_key => $_service) {
-        $d[$from][$_key] = 0;
+        $d[$from][$_key] = array(0, 0);
         if (!isset($d["total"][$_key])) {
-          $d["total"][$_key] = 0;
+          $d["total"][$_key] = array(0, 0);
         }
       }
-      $d[$from]["total"] = 0;
+      $d[$from]["total"] = array(0, 0);
       
       foreach($products as $_product) {
         $counts = $_product->getConsumptionMultiple($from, $to, $services);
+        
+        $coeff = 1;
+        $ref = reset($_product->loadRefsReferences());
+        if ($ref) {
+          $coeff = $ref->_unit_price;
+        }
         
         foreach($services as $_key => $_service) {
           if (isset($counts[$_key])) 
@@ -421,11 +427,19 @@ class CProduct extends CMbObject {
           else 
             $_count = 0;
           
-          $d[$from][$_key] += $_count;
+          $_price = $_count * $coeff;
           
-          $d[$from]["total"] += $_count;
-          @$d["total"][$_key] += $_count;
-          @$d["total"]["total"] += $_count;
+          $d[$from][$_key][0] += $_count;
+          $d[$from][$_key][1] += $_price;
+          
+          $d[$from]["total"][0] += $_count;
+          $d[$from]["total"][1] += $_price;
+          
+          @$d["total"][$_key][0] += $_count;
+          @$d["total"][$_key][1] += $_price;
+          
+          @$d["total"]["total"][0] += $_count;
+          @$d["total"]["total"][1] += $_price;
         }
       }
     }
@@ -442,7 +456,7 @@ class CProduct extends CMbObject {
     $d = CMbArray::transpose($d);
   }
   
-  static function computeBalance(array $products, array $services, $year, $month = null){
+  static function computeBalance(array $products, array $services, $year, $month = null, $financial = false){
     $flows = array();
     
     // YEAR //////////
@@ -451,7 +465,7 @@ class CProduct extends CMbObject {
       "out" => array(),
     );
     $start = mbDate(null, "$year-01-01");
-    self::fillFlow($year_flows, $products, 12, $start, "MONTH", $services);
+    self::fillFlow($year_flows, $products, 12, $start, "MONTH", $services, $financial);
     $flows["year"] = array($year_flows, "%b", "Bilan annuel"); 
     
     // MONTH //////////
@@ -461,7 +475,7 @@ class CProduct extends CMbObject {
         "out" => array(),
       );
       $start = mbDate(null, "$year-$month-01");
-      self::fillFlow($month_flows, $products, mbTransformTime("+1 MONTH -1 DAY", $start, "%d"), $start, "DAY", $services);
+      self::fillFlow($month_flows, $products, mbTransformTime("+1 MONTH -1 DAY", $start, "%d"), $start, "DAY", $services, $financial);
       $flows["month"] = array($month_flows, "%d", "Bilan mensuel");
     }
     
@@ -477,20 +491,38 @@ class CProduct extends CMbObject {
       $from = mbDate("+$i MONTH", $start);
       $to = mbDate("+1 MONTH", $from);
       
-      $balance["in"][$from] = 0;
-      $balance["out"][$from] = 0;
+      $balance["in"][$from] = array(0, 0);
+      $balance["out"][$from] = array(0, 0);
       
       foreach($products as $_product) {
-        $balance["in"][$from]  += $_product->getSupply($from, $to);
-        $balance["out"][$from] += $_product->getConsumption($from, $to, null, false);
+        $supply = $_product->getSupply($from, $to);
+        $consum = $_product->getConsumption($from, $to, null, false);
+        
+        $coeff = 1;
+        $ref = reset($_product->loadRefsReferences());
+        if ($ref) {
+          $coeff = $ref->_unit_price;
+        }
+        
+        $balance["in"][$from][0]  += $supply;
+        $balance["in"][$from][1]  += $supply * $coeff;
+        
+        $balance["out"][$from][0] += $consum;
+        $balance["out"][$from][1] += $consum * $coeff;
       }
     }
     
     $cumul = 0;
+    $cumul_price = 0;
     foreach($balance["in"] as $_date => $_balance) {
-      $diff = $balance["in"][$_date] - $balance["out"][$_date];
-      $balance["diff"][$_date] = $diff+$cumul;
+      $diff =       $balance["in"][$_date][0] - $balance["out"][$_date][0];
+      $diff_price = $balance["in"][$_date][1] - $balance["out"][$_date][1];
+      
+      $balance["diff"][$_date][0] = $diff+$cumul;
+      $balance["diff"][$_date][1] = $diff_price+$cumul_price;
+      
       $cumul += $diff;
+      $cumul_price += $diff_price;
     }
   
     return array(
