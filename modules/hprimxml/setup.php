@@ -282,7 +282,13 @@ class CSetuphprimxml extends CSetup {
               ADD `use_sortie_matching` ENUM ('0','1') DEFAULT '1';"; 
     $this->addQuery($sql);
     
-    $this->mod_version = "0.28";
+    $this->makeRevision("0.28");
+    
+    $sql = "ALTER TABLE `destinataire_hprim_config`
+              ADD `fully_qualified` ENUM ('0','1') DEFAULT '1';"; 
+    $this->addQuery($sql);
+    
+    $this->mod_version = "0.29";
   }
 }
 

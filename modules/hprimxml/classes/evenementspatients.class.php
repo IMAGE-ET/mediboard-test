@@ -79,6 +79,13 @@ class CHPrimXMLEvenementsPatients extends CHPrimXMLEvenements {
     $mbPatient = $this->getActiviteSocioProfessionnelle($node, $mbPatient);
     //$mbPatient = $this->getPersonnesPrevenir($node, $mbPatient);
     
+    $emetteur = $this->_ref_echange_hprim->_ref_emetteur;
+    $emetteur->loadConfigValues();
+    
+    if (!$emetteur->_configs["fully_qualified"]) {
+      $mbPatient->nullifyAlteredFields();
+    }
+    
     return $mbPatient;
   }
   
@@ -405,9 +412,7 @@ class CHPrimXMLEvenementsPatients extends CHPrimXMLEvenements {
   
   function getMedecin($node) {
     $xpath = new CHPrimXPath($node->ownerDocument);
-    
-    $this->_ref_echange_hprim->loadRefsDestinataireHprim();
-    
+        
     $code = $xpath->queryTextNode("hprim:identification/hprim:code", $node);
     $mediuser = new CMediusers();
     $id400 = new CIdSante400();

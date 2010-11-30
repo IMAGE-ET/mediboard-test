@@ -27,6 +27,7 @@ class CDestinataireHprimConfig extends CMbObject {
   var $send_mvt_patients    = null;
   var $send_default_serv_with_type_sej = null;
   var $use_sortie_matching  = null;
+  var $fully_qualified      = null;
 
   function getSpec() {
     $spec = parent::getSpec();
@@ -54,6 +55,7 @@ class CDestinataireHprimConfig extends CMbObject {
     $specs["send_mvt_patients"]               = "bool default|0";
     $specs["send_default_serv_with_type_sej"] = "bool default|0";
     $specs["use_sortie_matching"]             = "bool default|1";
+    $specs["fully_qualified"]                 = "bool default|1";
     
     return $specs;
   }
