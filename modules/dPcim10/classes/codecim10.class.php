@@ -273,8 +273,10 @@ class CCodeCIM10 {
     $this->_levelsInf = array();
     $query = "SELECT *
               FROM master
-              WHERE id$this->level = '$this->sid'
-              AND id".($this->level+1)." != '0'";
+              WHERE id$this->level = '$this->sid'";
+    if ($this->level < 7) {
+      $query .= "\nAND id".($this->level+1)." != '0'";
+    }
     if ($this->level < 6) {
       $query .= "\nAND id".($this->level+2)." = '0'";
     }
