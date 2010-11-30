@@ -338,6 +338,30 @@ class CMbObject {
   }
   
   /**
+   * Nullify modified
+   * @return int number of fields modified
+   */
+  function nullifyAlteredFields() {
+    $count = 0;
+  	foreach($this->getDBFields() as $_field => $_value) {
+  		if($this->fieldAltered($_field)) {
+  			$this->$_field = null;
+  			$count++;
+  		}
+  	}
+  	return $count;
+  }
+  
+  /**
+   * Check wether a field has been modified from a non empty value
+   * @param field string Field name
+   * @return boolean
+   */
+  function fieldAltered($field) {
+  	return $this->fieldModified($field) && $this->_old->$field;
+  }
+  
+  /**
    * Check wether a field has been modified or not
    * @param field string Field name
    * @param value mixed Check if modified to given value.
