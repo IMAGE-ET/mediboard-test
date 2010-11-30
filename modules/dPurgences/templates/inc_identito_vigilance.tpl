@@ -14,9 +14,7 @@ Main.add(function() {
   getForm("Merger");
   var tab = $$("a[href=#identito_vigilance]")[0];
 	tab.down("small").update("({{$mergeables_count}})");
-	{{if $mergeables_count}}
-	tab.addClassName("wrong");
-	{{/if}}
+	tab.setClassName("wrong", "{{$mergeables_count}}" != 0);
 })
 </script>
 
@@ -32,7 +30,9 @@ Voir les séjour :
   <tr>
     <th colspan="6" class="title">{{tr}}CPatient{{/tr}}</th>
     <th colspan="3" class="title">{{tr}}CSejour{{/tr}}</th>
+    {{if ($module == "dPurgences")}}
     <th rowspan="2" class="title">RPU</th>
+    {{/if}}
   </tr>
 
   <tr>
@@ -104,7 +104,8 @@ Voir les séjour :
       <strong>{{mb_include module=dPplanningOp template=inc_vw_numdos num_dossier=$_sejour->_num_dossier}}</strong>
     	{{/if}}
 		</td>
-
+    
+    {{if ($module == "dPurgences")}}
     <td>
 	    {{foreach from=$_sejour->_back.rpu key=rpu_id item=_rpu}}
 	    <div>
@@ -122,6 +123,7 @@ Voir les séjour :
       </div>
 	    {{/foreach}}
     </td>
+    {{/if}}
        
     {{/foreach}}
   </tbody>

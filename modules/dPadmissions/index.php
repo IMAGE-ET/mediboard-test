@@ -10,9 +10,10 @@
 
 $module = CModule::getInstalled(basename(dirname(__FILE__)));
 
-$module->registerTab("vw_idx_admission"   , TAB_READ);
-$module->registerTab("vw_idx_sortie"      , TAB_READ);
-$module->registerTab("vw_idx_preadmission", TAB_READ);
-//$module->registerTab("vw_idx_consult"     , TAB_READ);
+$module->registerTab("vw_idx_admission"         , TAB_READ);
+$module->registerTab("vw_idx_sortie"            , TAB_READ);
+$module->registerTab("vw_idx_preadmission"      , TAB_READ);
+//$module->registerTab("vw_idx_consult"         , TAB_READ);
+$module->registerTab("vw_idx_identito_vigilance", TAB_ADMIN);
 
 ?>

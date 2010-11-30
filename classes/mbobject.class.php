@@ -1205,8 +1205,9 @@ class CMbObject {
     else {
       if (count($objects) < 2) return "mergeTooFewObjects";
     }
-        
-    if ($msg = $this->checkMerge($objects)) return $msg;
+
+    // checkMerge is now informative
+    //if ($msg = $this->checkMerge($objects)) return $msg;
     
     // Trigger before event
     $this->onBeforeMerge();
@@ -1270,9 +1271,10 @@ class CMbObject {
    * @return $this or an error
    */
   function mergeDBFields ($objects = array()/*<CMbObject>*/, $getFirstValue = false) {
-		if ($msg = $this->checkMerge($objects)) {
+		/* checkMerge is now informative
+		  if ($msg = $this->checkMerge($objects)) {
 			return $msg;
-		}
+		}*/
 		
     $db_fields = $this->getDBFields();
     $diffs = $db_fields;

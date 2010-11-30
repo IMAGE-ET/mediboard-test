@@ -38,6 +38,7 @@ Main.add(function () {
 	{{if $dPconfig.dPurgences.gerer_reconvoc == "1"}}
   updateConsultations.delay(1, 80);
 	{{/if}}
+  IdentitoVigilance.date = "{{$date}}";	
   IdentitoVigilance.start(2,100);
 
   var tabs = Control.Tabs.create('tab_main_courante', false);

@@ -25,6 +25,7 @@ $locales['mod-dPadmissions-tab-print_entrees'] = 'Impression des entrées';
 $locales['mod-dPadmissions-tab-print_sorties'] = 'Impression des sorties';
 $locales['mod-dPadmissions-tab-vw_idx_admission'] = 'Admissions';
 $locales['mod-dPadmissions-tab-vw_idx_consult'] = 'Consultation des anesthésistes';
+$locales['mod-dPadmissions-tab-vw_idx_identito_vigilance'] = 'Identito-vigilance';
 $locales['mod-dPadmissions-tab-vw_idx_preadmission'] = 'Pré-admissions';
 $locales['mod-dPadmissions-tab-vw_idx_sortie'] = 'Sorties';
 $locales['mod-dPadmissions-tab-vw_legende'] = 'Légende';

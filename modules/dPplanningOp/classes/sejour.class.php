@@ -342,10 +342,12 @@ class CSejour extends CCodable {
 	        $msg .= "Impossible d'annuler un dossier ayant une entree réelle depuis plus de $max_cancel_time heures.<br />";
 	      }
 			}
-  
-      foreach ($this->getCollisions() as $collision) {
-        $msg .= "Collision avec le séjour du $collision->entree_prevue au $collision->sortie_prevue.<br />"; 
-      }
+      
+			if (!$this->_forwardRefMerging) {
+        foreach ($this->getCollisions() as $collision) {
+          $msg .= "Collision avec le séjour du $collision->entree_prevue au $collision->sortie_prevue.<br />"; 
+        }
+			}
     }
     
     return $msg . parent::check();

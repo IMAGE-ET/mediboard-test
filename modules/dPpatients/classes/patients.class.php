@@ -991,7 +991,7 @@ class CPatient extends CMbObject {
     $where[] = implode(" OR ", $whereNom);
     $where["prenom_soundex2"] = "LIKE '$this->prenom_soundex2%'";
     $where["patients.patient_id"] = "!= '$this->_id'";
-		
+
 		$join = null;
 		if ($date) {
 			$join["sejour"] = "sejour.patient_id = patients.patient_id";

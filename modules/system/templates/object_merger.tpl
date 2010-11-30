@@ -30,10 +30,12 @@ Main.add(function () {
 {{if $checkMerge}}
 <div class="big-warning">
   <p>
-  	La fusion de ces deux objets <strong>n'est pas possible</strong> à cause des problèmes suivants :<br />
-    {{$checkMerge}}
+  	La fusion de ces deux objets <strong>n'est pas conseillé</strong> à cause des problèmes suivants :
+  	<ul>
+  	  <li> {{$checkMerge}}</li>
+  	</ul>
 	</p>
-  Veuillez corriger ces problèmes avant toute fusion.
+  Il serait préférable de corriger ces problèmes avant la fusion.
 </div>
 {{/if}}
 

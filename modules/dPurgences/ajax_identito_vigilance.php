@@ -13,27 +13,31 @@ CCanDo::checkEdit();
 // Filtres
 $see_mergeable = CValue::get("see_mergeable", "1");
 $see_yesterday = CValue::get("see_yesterday", "1");
+$module        = CValue::get("module", "dPadmissions");
 
 // Selection de la date
-$date = CValue::getOrSession("date", mbDate());
+$date = CValue::get("date", mbDate());
 $date_min = $see_yesterday ? mbDate("-1 day", $date) : $date;
 $date_max = mbDate("+1 day", $date);
 
 // Chargement des séjours concernés
 $sejour = new CSejour;
 $where = array();
-$where["sejour.entree_reelle"] = "BETWEEN '$date_min' AND '$date_max'";
-$where["sejour.type"] = "= 'urg'";
+$where["sejour.entree"] = "BETWEEN '$date_min' AND '$date_max'";
+if ($module == "dPurgences") {
+  $where["sejour.type"] = "= 'urg'";
+}
 $where["sejour.group_id"] = "= '".CGroups::loadCurrent()->_id."'";
-$order = "entree_reelle";
+$order = "entree";
 $sejours = $sejour->loadList($where, $order);
-
 $guesses = array();
 $patients = array();
 foreach ($sejours as &$_sejour) {
-	// Look for multiple RPU
-  $_sejour->loadBackRefs("rpu");
-
+  if ($module == "dPurgences") {
+  	// Look for multiple RPU
+    $_sejour->loadBackRefs("rpu");
+  }
+  
   // Chargement du numero de dossier
   $_sejour->loadNumDossier();
 
@@ -68,7 +72,7 @@ foreach ($patients as $patient_id => $patient) {
   }
 
   // Phoning patients
-  $phonings = $patient->getPhoning($_sejour->_entree);
+  $phonings = $patient->getPhoning($_sejour->entree);
   foreach ($guess["phonings"] = array_keys($phonings) as $phoning_id) {
     if (array_key_exists($phoning_id, $patients)) {
       $guesses[$phoning_id]["mergeable"] = true;
@@ -81,13 +85,14 @@ foreach ($patients as $patient_id => $patient) {
     $guess["mergeable"] = true;
 	}
 	
-	// Multiple RPU 
-	foreach ($patient->_ref_sejours as $_sejour) {
-		if (count($_sejour->_back["rpu"]) > 1) {
-      $guess["mergeable"] = true;
-		}
+	if ($module == "dPurgences") {
+  	// Multiple RPU 
+  	foreach ($patient->_ref_sejours as $_sejour) {
+  		if (count($_sejour->_back["rpu"]) > 1) {
+        $guess["mergeable"] = true;
+  		}
+  	}
 	}
-	
 	
 	if ($guess["mergeable"]) {
 		$mergeables_count++;
@@ -103,11 +108,12 @@ array_multisort(CMbArray::pluck($patients, "nom"), SORT_ASC, $patients);
 $smarty = new CSmartyDP();
 
 $smarty->assign("mergeables_count", $mergeables_count);
-$smarty->assign("see_mergeable", $see_mergeable);
-$smarty->assign("see_yesterday", $see_yesterday);
-$smarty->assign("date", $date);
-$smarty->assign("patients", $patients );
-$smarty->assign("guesses", $guesses );
+$smarty->assign("see_mergeable"   , $see_mergeable);
+$smarty->assign("see_yesterday"   , $see_yesterday);
+$smarty->assign("date"            , $date);
+$smarty->assign("patients"        , $patients );
+$smarty->assign("guesses"         , $guesses );
+$smarty->assign("module"          , $module );
 
 $smarty->display("inc_identito_vigilance.tpl");
 ?>
