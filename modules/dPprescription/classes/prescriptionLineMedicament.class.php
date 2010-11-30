@@ -609,10 +609,6 @@ class CPrescriptionLineMedicament extends CPrescriptionLine {
       }
     }
     
-		// On met en session le dernier guid créé
-    if($mode_creation){
-      $_SESSION["dPprescription"]["full_line_guid"] = $this->_guid;
-    }
   	if($this->_delete_prises){
   		if($msg = $this->deletePrises()){
   			return $msg;

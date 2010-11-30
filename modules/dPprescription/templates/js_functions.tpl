@@ -288,7 +288,7 @@ addLineContigue = function(oForm){
   if(document.selPraticienLine){
     oForm.praticien_id.value = document.selPraticienLine.praticien_id.value;
   }
-  submitFormAjax(oForm, 'systemMsg'); 
+  onSubmitFormAjax(oForm);
 }
 
 // Fonction lancée lors de la modfication de la posologie

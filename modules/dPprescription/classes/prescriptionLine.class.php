@@ -331,8 +331,6 @@ class CPrescriptionLine extends CMbObject {
    * Duplication d'une ligne
    */
   function duplicateLine($praticien_id, $prescription_id, $debut="", $time_debut="") {
-    global $AppUI;
-    
     if(!$debut){
       $debut = mbDate();
     }
@@ -354,8 +352,7 @@ class CPrescriptionLine extends CMbObject {
 		if($new_line->time_arret){
       $time_debut = $new_line->time_arret;
     }
-		
-		
+
     $new_line->loadRefsPrises();
     $new_line->loadRefPrescription(); 
     $new_line->_id = "";
@@ -373,7 +370,7 @@ class CPrescriptionLine extends CMbObject {
     $new_line->signee = 0;
     $new_line->valide_pharma = 0;
     $new_line->valide_infirmiere = 0;
-    $new_line->creator_id = $AppUI->user_id;
+    $new_line->creator_id = CAppUI::$user->_id;
     $msg = $new_line->store();
     CAppUI::displayMsg($msg, "CPrescriptionLineMedicament-msg-create");
     
@@ -394,6 +391,7 @@ class CPrescriptionLine extends CMbObject {
       $old_line->time_arret = mbTime();
     }
     $old_line->store();
+		return $new_line->_guid;
   }
   
   /*

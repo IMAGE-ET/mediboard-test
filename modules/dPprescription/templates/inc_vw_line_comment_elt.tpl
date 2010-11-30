@@ -8,18 +8,18 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
 *}}
 
-{{assign var=line value=$_line_comment}}
 {{assign var=dosql value="do_prescription_line_comment_aed"}}
 			
 {{if $line->category_prescription_id}}
 	<!-- Commentaire d'elements -->
 	{{assign var=category value=$line->_ref_category_prescription}}
-	{{assign var=div_refresh value=$element}}
+	{{assign var=div_refresh value=$line->_chapitre}}
 {{else}}
   <!-- Commentaires de medicaments -->
   {{assign var=div_refresh value="medicament"}}  
 {{/if}}	        
 
+<table>
 <tbody class="hoverable">
    <tr>
      <td style="width: 25px">
@@ -29,7 +29,7 @@
 	         <input type="hidden" name="dosql" value="do_prescription_line_comment_aed" />
 	         <input type="hidden" name="del" value="1" />
 	         <input type="hidden" name="prescription_line_comment_id" value="{{$line->_id}}" />
-	         <button type="button" class="trash notext" onclick="submitFormAjax(this.form, 'systemMsg', { onComplete: function() { Prescription.reload('{{$prescription->_id}}',null,'{{$div_refresh}}') } } );">
+	         <button type="button" class="trash notext" onclick="modalPrescription.close(); return onSubmitFormAjax(this.form, { onComplete: function() { Prescription.reload('{{$prescription->_id}}',null,'{{$div_refresh}}','{{$mode_protocole}}','{{$mode_pharma}}') } } );">
 	           {{tr}}Delete{{/tr}}
 	         </button>
 	       </form>
@@ -58,7 +58,7 @@
        {{/if}}
      </td>
      <td>
-        {{if $prescription_reelle->type != "sejour"}}
+        {{if $prescription->type != "sejour"}}
          {{include file="../../dPprescription/templates/line/inc_vw_form_ald.tpl"}}
        {{/if}}
      </td>  
@@ -74,10 +74,9 @@
 	       {{if $line->_can_view_form_signature_praticien}} 
 		       {{include file="../../dPprescription/templates/line/inc_vw_form_signature_praticien.tpl"}}
 		     {{/if}}
-		     {{if $line->_guid == $full_line_guid}} 
-	         <button class="lock notext" onclick="Prescription.reload('{{$prescription_reelle->_id}}', '', '{{$div_refresh}}', '', '{{$mode_pharma}}', null, '');"></button>
-	       {{/if}}
+	       <button class="lock notext" onclick="modalPrescription.close(); Prescription.reload('{{$prescription->_id}}', '', '{{$div_refresh}}', '', '{{$mode_pharma}}', null, '');"></button>
        </div>
 	   </td>
   </tr>
 </tbody>
+</table>

@@ -25,9 +25,9 @@ $mode_pharma = CValue::post("mode_pharma");
 
 $prescriptionLine = new CPrescriptionLineMedicament();
 $prescriptionLine->load($prescription_line_id);
-$prescriptionLine->duplicateLine($praticien_id, $prescription_id);
+$new_line_guid = $prescriptionLine->duplicateLine($praticien_id, $prescription_id);
 
-echo "<script type='text/javascript'>Prescription.reload($prescription_id,'','medicament','','$mode_pharma')</script>";
+echo "<script type='text/javascript'>Prescription.reloadLine('$new_line_guid','','$mode_pharma')</script>";
 echo CAppUI::getMsg();
 CApp::rip();
 ?>

@@ -31,6 +31,8 @@ class CPrescriptionLineComment extends CPrescriptionLine {
   var $_can_view_form_signature_infirmiere = null;
   var $_can_view_form_ald = null;
   
+	var $_chapitre = null;
+	
   function getSpec() {
     $spec = parent::getSpec();
     $spec->table = 'prescription_line_comment';
@@ -59,6 +61,8 @@ class CPrescriptionLineComment extends CPrescriptionLine {
     $this->_fin_reelle = "";
     $this->_view = $this->commentaire;
     $this->loadRefsFwd();
+		
+		$this->_chapitre = $this->_ref_category_prescription->chapitre;
   }
   
   function canEdit(){

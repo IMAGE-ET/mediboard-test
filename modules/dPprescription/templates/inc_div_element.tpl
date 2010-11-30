@@ -225,11 +225,7 @@ Main.add( function(){
     
     {{foreach from=$lines_cat.element item=line_element}}
 	    {{if !$praticien_sortie_id || ($praticien_sortie_id == $line_element->praticien_id)}}
-        {{if $full_line_guid == $line_element->_guid}}
-          {{include file="inc_vw_line_element_elt.tpl" _line_element=$line_element prescription_reelle=$prescription nodebug=true}}
-        {{else}}
-	        {{include file="inc_vw_line_element_lite.tpl" _line_element=$line_element prescription_reelle=$prescription nodebug=true}}
-        {{/if}}
+        {{include file="inc_vw_line_element_lite.tpl" _line_element=$line_element nodebug=true}}
       {{/if}}
 	  {{/foreach}}
 	  
@@ -237,11 +233,7 @@ Main.add( function(){
 	  <table class="tbl">
   	  {{foreach from=$lines_cat.comment item=line_comment}}
   	    {{if !$praticien_sortie_id || ($praticien_sortie_id == $line_comment->praticien_id)}}
-          {{if $full_line_guid == $line_comment->_guid}}
-            {{include file="inc_vw_line_comment_elt.tpl" _line_comment=$line_comment prescription_reelle=$prescription nodebug=true}}            
-          {{else}}
-              {{include file="inc_vw_line_comment_readonly.tpl" _line_comment=$line_comment prescription_reelle=$prescription nodebug=true}}
-          {{/if}}
+          {{include file="inc_vw_line_comment_readonly.tpl" _line_comment=$line_comment nodebug=true}}
         {{/if}}
   	  {{/foreach}}
 	  </table>

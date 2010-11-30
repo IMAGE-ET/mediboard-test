@@ -571,7 +571,7 @@ td.show {
 	padding:			5px;
   margin-top: -1px;
 	cursor: default;
-  z-index: 500;
+  z-index: 550;
   -moz-box-shadow: 4px 4px 8px rgba(0,0,0,0.4);
   -webkit-box-shadow: 4px 4px 8px rgba(0,0,0,0.4);
   box-shadow: 4px 4px 8px rgba(0,0,0,0.4);

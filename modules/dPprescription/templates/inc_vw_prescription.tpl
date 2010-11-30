@@ -31,6 +31,9 @@ Main.add(function () {
 
 </script>
 
+<!-- Modale permettant d'afficher les lignes de prescription en mode modification -->
+<div id="modalPrescriptionLine" style="width: 80%; display: none;"></div>
+
 <!-- Formulaire de creation du protocole -->
 {{if !$prescription->_id && $mode_protocole && !$mode_pharma}}
   {{if $function_id || $praticien_id || $group_id}}

@@ -208,7 +208,7 @@ class CPrescriptionLineMix extends CMbObject {
       $this->_frequence = "à $this->vitesse ml/h";
     }
     if($this->nb_tous_les){
-      $this->_frequence = "toutes les $this->nb_tous_les h";
+      $this->_frequence = "toutes les $this->nb_tous_les"."h";
     }
     
     if($this->type == "PCA"){
@@ -665,11 +665,6 @@ class CPrescriptionLineMix extends CMbObject {
 			
 			}
 		}
-		
-  	// On met en session le dernier guid créé
-    if($creation){
-  	  $_SESSION["dPprescription"]["full_line_guid"] = $this->_guid;
-    }
   }
   
   function delete(){

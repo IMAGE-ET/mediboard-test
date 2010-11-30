@@ -116,4 +116,8 @@ Main.add(function () {
 			{{/if}}
 	  </form>
   </div>
+{{foreachelse}}
+	<div class="small-info">
+		Aucune posologie sélectionnée
+	</div>
 {{/foreach}}

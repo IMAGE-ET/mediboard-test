@@ -105,6 +105,7 @@ if($prescription_line_mix_item->_id){
   CAppUI::displayMsg($msg, "CPrescriptionLineMedicament-msg-delete");
 }
 
+echo "<script type='text/javascript'>Prescription.reloadLine('$prescription_line_mix->_guid')</script>";
 echo CAppUI::getMsg();
 CApp::rip();
 

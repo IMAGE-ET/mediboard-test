@@ -101,6 +101,7 @@ $smarty->assign("now"                  , mbDateTime());
 $smarty->assign("refresh_pharma"       , 0);
 $smarty->assign("contexteType"         , "");
 $smarty->assign("categories"           , $categories);
+$smarty->assign("operation_id", "");
 $smarty->display("inc_vw_pack_protocole.tpl");
 
 ?>

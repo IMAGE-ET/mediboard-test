@@ -12,7 +12,7 @@ global $AppUI;
 
 // Dans le cas de la validation de la totalite des prescriptions
 $prescription_id = CValue::post("prescription_id");
-$prescription_reelle_id = CValue::post("prescription_reelle_id");
+
 $mode_pharma = CValue::post("mode_pharma");
 $chapitre = CValue::post("chapitre", "medicament");
 $annulation = CValue::request("annulation", "0");
@@ -268,7 +268,6 @@ foreach($lines as $_type_line => $_lines){
 }
 
 // Refresh de la prescription
-$prescription_id = ($prescription_reelle_id) ? $prescription_reelle_id : $prescription->_id;
 if($chapitre == "all"){
   if($mediuser->_is_praticien){
      // Dans le cas de la signature directement dans la prescription 
@@ -281,7 +280,7 @@ if($chapitre == "all"){
   }
 } else {
   // Dans le cas de la validation d'un chapitre ou d'une ligne de la prescription
-  echo "<script type='text/javascript'>Prescription.reload($prescription_id,'', '$chapitre','','$mode_pharma');</script>";
+  echo "<script type='text/javascript'>Prescription.reload($prescription->_id,'', '$chapitre','','$mode_pharma');</script>";
   echo CAppUI::getMsg();
   CApp::rip();
 }

@@ -284,6 +284,9 @@ modifFormDate = function(nb_prises, form_name, protocole,line_id){
   {{assign var=dosql value="do_prescription_line_mix_aed"}}
 {{/if}}
 
+<!-- Modale permettant d'afficher les lignes de prescription en mode modification -->
+<div id="modalPrescriptionLine" style="width: 80%; display: none;"></div>
+
 {{if !$mode_pack}}
 <table class="tbl">
   <tr>
@@ -340,9 +343,9 @@ modifFormDate = function(nb_prises, form_name, protocole,line_id){
 	      {{/if}}
 	    {{else}}
 	      {{if $curr_line->_class_name == "CPrescriptionLineMedicament"}}
-	        {{include file="../../dPprescription/templates/inc_vw_line_medicament.tpl" mode_pharma=0 mode_substitution=1}}
+	        {{include file="../../dPprescription/templates/inc_vw_line_medicament_lite.tpl" mode_pharma=0 mode_substitution=1}}
 	      {{else}}
-	        {{include file="../../dPprescription/templates/inc_vw_prescription_line_mix.tpl" mode_pharma=0 _prescription_line_mix=$curr_line mode_substitution=1}}
+	        {{include file="../../dPprescription/templates/inc_vw_prescription_line_mix_lite.tpl" mode_pharma=0 _prescription_line_mix=$curr_line mode_substitution=1}}
 	      {{/if}}
 	    {{/if}}
 	  {{/foreach}}

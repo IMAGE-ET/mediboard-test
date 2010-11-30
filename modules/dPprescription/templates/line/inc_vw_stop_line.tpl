@@ -24,11 +24,11 @@ calculDateArret = function(oForm, object_id, object_class, traitement, cat_id){
     oForm.time_arret.value = "00:00";
   }
   if(!oForm.date_arret.value){
-    oForm.date_arret.value = "{{$today}}";
-    oForm.time_arret.value = "{{$now_time}}";
+    oForm.date_arret.value = "{{$now|@date_format:'%Y-%m-%d'}}";
+    oForm.time_arret.value = "{{$now|@date_format:'%H:%M:%S'}}";
   }
 	return onSubmitFormAjax(oForm, { onComplete: function(){
-	  Prescription.reload('{{$prescription->_id}}','','medicament','','{{$mode_pharma}}');
+	  Prescription.reloadLine("{{$line->_guid}}","{{$mode_protocole}}","{{$mode_pharma}}");
 	}});
 }
 
@@ -44,6 +44,7 @@ calculDateArret = function(oForm, object_id, object_class, traitement, cat_id){
   {{assign var=_traitement_personnel value=0}}
 {{/if}}
 
+
 <form name="form-stop-{{$object_class}}-{{$line->_id}}" method="post" action="">
   <input type="hidden" name="m" value="dPprescription" />
   <input type="hidden" name="dosql" value="{{$dosql}}" />
@@ -55,8 +56,8 @@ calculDateArret = function(oForm, object_id, object_class, traitement, cat_id){
 		<input type="hidden" name="time_arret" value="" />
 		<button type="button" class="cancel" 
 	          onclick="return onSubmitFormAjax(this.form, { onComplete: function(){
-                       Prescription.reload('{{$prescription->_id}}','','medicament','','{{$mode_pharma}}');
-                     }});">Annuler l'arrêt</button>
+                       Prescription.reloadLine('{{$line->_guid}}','{{$mode_protocole}}','{{$mode_pharma}}');
+                     } });">Annuler l'arrêt</button>
 	  {{mb_value object=$line field=date_arret}}
 	  {{if $line->time_arret}}
 	    à {{mb_value object=$line field=time_arret}}  

@@ -10,8 +10,7 @@
 
 {{assign var=line value=$curr_line}}
 <table class="tbl {{if $line->traitement_personnel}}traitement{{else}}med{{/if}}
-                  {{if $line->_fin_reelle && $line->_fin_reelle < $now && !$line->_protocole}} line_stopped{{/if}}" 
-      {{if !$mode_induction_perop}}id="line_medicament_{{$line->_id}}"{{/if}}>
+                  {{if $line->_fin_reelle && $line->_fin_reelle < $now && !$line->_protocole}} line_stopped{{/if}}" id="line_medicament_{{$line->_id}}">
   <!-- Header de la ligne -->
   <tr  class="hoverable">
     <td style="text-align: center; width: 5%;" class="text">
@@ -21,32 +20,14 @@
           {{tr}}Delete{{/tr}}
         </button>
       {{/if}}
-		  {{if $line->_can_vw_livret_therapeutique}}
-      <img src="images/icons/livret_therapeutique_barre.gif" title="Produit non présent dans le livret Thérapeutique" />
-      {{/if}}  
-		  {{if $line->stupefiant}}
-        <img src="images/icons/stup.png" title="Produit stupéfiant" />
-      {{/if}}
-      {{if !$line->_ref_produit->inT2A}}
-        <img src="images/icons/T2A_barre.gif" title="Produit hors T2A" />
-      {{/if}}
-      {{if $line->_can_vw_hospi}}
-      <img src="images/icons/hopital.gif" title="Produit Hospitalier" />
-      {{/if}}
-      {{if $line->_can_vw_generique}}
-      <img src="images/icons/generiques.gif" title="Produit générique" />
-      {{/if}}
-      {{if $line->_ref_produit->_supprime}}
-      <img src="images/icons/medicament_barre.gif" title="Produit supprimé" />
-      {{/if}}
-      {{include file="../../dPprescription/templates/line/inc_vw_alertes.tpl"}}
+		  
     </td>
     <td style="width: 25%" id="th_line_CPrescriptionLineMedicament_{{$line->_id}}" 
         class="text {{if $line->traitement_personnel}}traitement{{/if}}
 				            {{if $line->perop}}perop{{/if}}
                {{if $line->_fin_reelle && $line->_fin_reelle < $now && !$line->_protocole}}arretee{{/if}}">
       <script type="text/javascript">
-        {{if !$line->_protocole && !$mode_induction_perop}}
+        {{if !$line->_protocole}}
          Main.add( function(){
              moveTbody($('line_medicament_{{$line->_id}}'));
          });
@@ -57,17 +38,44 @@
         <img style="float: right" src="images/icons/history.gif" title="Ligne possédant un historique" 
              onmouseover="ObjectTooltip.createEx(this, '{{$parent_line->_guid}}')"/>
       {{/if}}
-      <a href="#produit{{$line->_id}}" onclick="Prescription.viewProduit(null,'{{$line->code_ucd}}','{{$line->code_cis}}');" style="font-weight: bold;">
+			
+		
+       <span>
+       	{{include file="../../dPprescription/templates/line/inc_vw_alertes.tpl"}}
+        {{if $line->_can_vw_livret_therapeutique}}
+        <img src="images/icons/livret_therapeutique_barre.gif" title="Produit non présent dans le livret Thérapeutique" />
+        {{/if}}  
+        {{if $line->stupefiant}}
+          <img src="images/icons/stup.png" title="Produit stupéfiant" />
+        {{/if}}
+        {{if !$line->_ref_produit->inT2A}}
+          <img src="images/icons/T2A_barre.gif" title="Produit hors T2A" />
+        {{/if}}
+        {{if $line->_can_vw_hospi}}
+        <img src="images/icons/hopital.gif" title="Produit Hospitalier" />
+        {{/if}}
+        {{if $line->_can_vw_generique}}
+        <img src="images/icons/generiques.gif" title="Produit générique" />
+        {{/if}}
+        {{if $line->_ref_produit->_supprime}}
+        <img src="images/icons/medicament_barre.gif" title="Produit supprimé" />
+        {{/if}}
+        
+      </span>
+      
+      <a href="#produit{{$line->_id}}" onclick="Prescription.viewProduit(null,'{{$line->code_ucd}}','{{$line->code_cis}}');" style="font-weight: bold; display: inline;">
         {{$line->_ucd_view}}
-        <br /> 
-        <span style="font-size: 0.8em; opacity: 0.7">
-         {{$line->_forme_galenique}}
-        </span>
       </a>
+	    <br />
+	 
+		  
+      <span style="font-size: 0.8em; opacity: 0.7">
+       {{$line->_forme_galenique}}
+      </span>
+			
       {{if $line->conditionnel}}{{mb_label object=$line field="conditionnel"}}&nbsp;{{/if}}
 			{{if $line->perop}}{{mb_label object=$line field="perop"}}&nbsp;{{/if}}
       {{if $line->ald}}{{mb_label object=$line field="ald"}}&nbsp;{{/if}}
-      {{if $line->traitement_personnel}}Traitement personnel&nbsp;{{/if}}
     </td>
     <td style="width: 37%;" class="text">
 	    {{if $line->_ref_prises|@count}}
@@ -92,7 +100,7 @@
 					{{else}}
 					  <img src="images/icons/cross.png" title="Ligne non signée par le praticien" />
 					{{/if}}
-          {{if $prescription_reelle->type == "sejour"}}
+          {{if $prescription->type == "sejour"}}
 	          {{if $line->valide_pharma}}
 					    <img src="images/icons/signature_pharma.png" title="Signée par le pharmacien" />
 					  {{else}}
@@ -108,11 +116,8 @@
 		{{if !$line->_protocole}}
 	    {{if $line->fin}}
 			  <td colspan="2" style="width: 25%" class="text">
-			     {{if !$mode_induction_perop}}   
-            <button style="float: right;" class="edit notext" onclick="Prescription.reload('{{$prescription_reelle->_id}}', '', 'medicament', '', '{{$mode_pharma}}', null, '{{$line->_guid}}');"></button>
-          {{/if}}
-					  A partir de la fin du séjour jusqu'au {{mb_value object=$line field=fin}}
-           
+			    <button style="float: right;" class="edit notext" onclick="Prescription.reloadLine('{{$line->_guid}}','{{$line->_protocole}}','{{$mode_pharma}}','{{$operation_id}}');"></button>
+          A partir de la fin du séjour jusqu'au {{mb_value object=$line field=fin}}
 				</td>
 			{{else}}
 				<td style="width: 15%" class="text">
@@ -125,9 +130,7 @@
 	        {{/if}}
 	      </td>
 	      <td style="width: 10%" class="text">
-	        {{if !$mode_induction_perop}}   
-	          <button style="float: right;" class="edit notext" onclick="Prescription.reload('{{$prescription_reelle->_id}}', '', 'medicament', '', '{{$mode_pharma}}', null, '{{$line->_guid}}');"></button>
-	        {{/if}}
+	        <button style="float: right;" class="edit notext" onclick="Prescription.reloadLine('{{$line->_guid}}','{{$line->_protocole}}','{{$mode_pharma}}','{{$operation_id}}');"></button>
 	        <!-- Duree de la ligne -->
 	        {{if $line->duree && $line->unite_duree}}
 	          {{mb_value object=$line field=duree}}  
@@ -137,13 +140,11 @@
 			{{/if}}
 		{{else}}
 		 <td style="width: 25%" class="text">
-		 	 {{if !$mode_induction_perop}}   
-          <button style="float: right;" class="edit notext" onclick="Prescription.reload('{{$prescription_reelle->_id}}', '', 'medicament', '', '{{$mode_pharma}}', null, '{{$line->_guid}}');"></button>
-       {{/if}}
-		 
+		 	 <button style="float: right;" class="edit notext" onclick="Prescription.reloadLine('{{$line->_guid}}','{{$line->_protocole}}','{{$mode_pharma}}','{{$operation_id}}','{{$mode_substitution}}');"></button>
+     
 			 <!-- Duree de la prise --> 
 	     {{if $line->duree && $line->duree != "1"}}
-	      Durée de {{mb_value object=$line field=duree}} jour(s) 
+	       Durée de {{mb_value object=$line field=duree}} jour(s) 
 	     {{/if}}
 	    
 	     <!-- Date de debut de la ligne -->

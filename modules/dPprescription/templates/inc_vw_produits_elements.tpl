@@ -209,14 +209,7 @@ submitValidationInfirmiere = function(object_class, object_id, prescription_id, 
   });
 }
 
-submitValidationPharmacien = function(prescription_id, object_id, valide_pharma, mode_pharma) {
-  var oForm = getForm("validation_pharma");
-  oForm.valide_pharma.value = valide_pharma;
-  oForm.prescription_line_medicament_id.value = object_id;
-  onSubmitFormAjax(oForm, { onComplete: function() {
-    Prescription.reload(prescription_id, '', 'medicament', '', mode_pharma); }
-  });
-}
+
 
 submitValideAllLines = function (prescription_id, chapitre, mode_pharma) {
   var oForm = getForm("valideAllLines");
@@ -260,13 +253,39 @@ submitSignaturePraticien = function(prescription_line_mix_id, prescription_id, s
   } } );
 }
 
+
+
 submitSignaturePharmacien = function(prescription_line_mix_id, prescription_id, signature_pharmacien){
   var oForm = getForm("perf_signature_pharma");
   oForm.prescription_line_mix_id.value = prescription_line_mix_id;
   oForm.signature_pharma.value = signature_pharmacien;
   return onSubmitFormAjax(oForm, { onComplete: function(){
-    Prescription.reload(prescription_id, '', 'medicament','', '1');
+	  if(signature_pharmacien == 1){
+	    modalPrescription.close();	
+			Prescription.reload(prescription_id, '', 'medicament','', '1');
+		}
+		else {
+		  Prescription.reloadLine("CPrescriptionLineMix-"+prescription_line_mix_id, '', 1);
+		}
   } } );
+}
+
+submitValidationPharmacien = function(prescription_id, object_id, valide_pharma) {
+  var oForm = getForm("validation_pharma");
+  oForm.valide_pharma.value = valide_pharma;
+  oForm.prescription_line_medicament_id.value = object_id;
+  onSubmitFormAjax(oForm, { onComplete: function() {
+      // Validation
+      if(valide_pharma == 1){
+        modalPrescription.close();
+        Prescription.reload(prescription_id, '', 'medicament', '', 1);
+      } 
+      // Annnulation de la validation
+      else {
+        Prescription.reloadLine("CPrescriptionLineMedicament-"+object_id, '', 1);
+      }
+    }
+  });
 }
 
 
@@ -422,6 +441,23 @@ toggleSearchOptions = function(formName, chap){
   $('searchButton-'+chap).toggle();
 }
 
+updateModaleAfterAddLineElement = function(line_id){
+  if(line_id){
+    Prescription.reloadLine("CPrescriptionLineElement-"+line_id, '{{$mode_protocole}}', '{{$mode_pharma}}', '{{$operation_id}}');
+  }
+}
+
+updateModaleAfterAddLineComment = function(line_id){
+  if(line_id){
+    Prescription.reloadLine("CPrescriptionLineComment-"+line_id, '{{$mode_protocole}}', '{{$mode_pharma}}', '{{$operation_id}}');
+	}
+}
+
+// Permet de rafraichir la modale apres avoir fait une evolution de perfusion
+reloadPerfEvolution = function(perf_id, object){
+  Prescription.reloadLine('CPrescriptionLineMix-'+object.next_line_id);  
+}
+           
 </script>
 
 {{include file="../../dPprescription/templates/js_functions.tpl"}}
@@ -456,7 +492,6 @@ toggleSearchOptions = function(formName, chap){
   <input type="hidden" name="time_debut" value="" />
   <input type="hidden" name="duree" value="" />
   <input type="hidden" name="unite_duree" value="" />
-  <input type="hidden" name="callback" value="" />
   <input type="hidden" name="element_prescription_id" value=""/>
   <input type="hidden" name="_chapitre" value="" />
 	
@@ -465,6 +500,8 @@ toggleSearchOptions = function(formName, chap){
   <input type="hidden" name="decalage_line" value="" />
   <input type="hidden" name="unite_decalage" value="" />
   <input type="hidden" name="operation_id" value="" />
+	
+	<input type="hidden" name="callback" value="updateModaleAfterAddLineElement" />
 	
 </form>
 

@@ -55,6 +55,7 @@ foreach($prescription->_ref_prescription_line_mixes as $_prescription_line_mix){
 	$_prescription_line_mix->loadRefsLines();
 	$_prescription_line_mix->loadVoies();
 }
+
 // Chargement de la liste des moments
 $moments = CMomentUnitaire::loadAllMomentsWithPrincipal();
 
@@ -66,21 +67,19 @@ $aides_prescription[$AppUI->user_id]["CPrescriptionLineMedicament"] = $prescript
 $prescription_line_mix->loadAides($AppUI->user_id);
 $aides_prescription[$AppUI->user_id]["CPrescriptionLineMix"] = $prescription_line_mix->_aides["commentaire"]["no_enum"];
 
-
 // Création du template
 $smarty = new CSmartyDP();
 $smarty->assign("aides_prescription", $aides_prescription);
 $smarty->assign("line", $object);
 $smarty->assign("prescription", $prescription);
-$smarty->assign("prescription_reelle", $prescription);
 $smarty->assign("today", mbDate());
 $smarty->assign("mode_pharma", 0);
 $smarty->assign("prise_posologie", new CPrisePosologie());
 $smarty->assign("prescription_line_mix", new CPrescriptionLineMix());
 $smarty->assign("moments", $moments);
 $smarty->assign("mode_pack", $mode_pack);
-$smarty->assign("full_line_guid", "");
 $smarty->assign("now", mbDateTime());
+$smarty->assign("operation_id", "");
 $smarty->display("../../dPprescription/templates/inc_vw_add_substitution_line.tpl");
 
 ?>

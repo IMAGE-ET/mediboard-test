@@ -37,8 +37,7 @@ if(!$operation_id && !$mode_sejour){
   CValue::setSession("operation_id", $operation_id);
 }
 	
-// Gestion du mode d'affichage
-$full_line_guid      = CValue::getOrSession("full_line_guid"); 
+// Gestion du mode d'affichage 
 $praticien_sortie_id = CValue::getOrSession("praticien_sortie_id");
 
 // Initialisations
@@ -167,20 +166,6 @@ if($prescription->_id){
 	  	    $_line_med->loadRefsSubstitutionLines();
 					$_line_med->loadRefParentLine();
 					
-	  	    if($_line_med->_guid == $full_line_guid){
-	  	     $_prat_id = !$prescription->object_id ? $prescription->praticien_id : null;
-					 
-					 $_line_med->loadRefProduitPrescription();
-					 if(!$_line_med->_ref_produit_prescription->_id){
-					   $_line_med->loadMostUsedPoso(null, $_prat_id);
-						 $_line_med->loadRefsFwd();
-						 $_line_med->_ref_produit->loadVoies();
-						 $_line_med->isPerfusable();
-					 } else {
-					 	 $_line_med->_unites_prise[] = $_line_med->_ref_produit_prescription->unite_prise;
-						 $_line_med->_ref_produit->voies[] = $_line_med->_ref_produit_prescription->voie;
-					 }
-	  	    }
 	  	  }
 	  	}
 	  }
@@ -192,15 +177,6 @@ if($prescription->_id){
 	    $_prescription_line_mix->loadRefsLines();
 	    $_prescription_line_mix->loadRefParentLine();
 	    $_prescription_line_mix->getAdvancedPerms($is_praticien, $mode_protocole, $mode_pharma, $operation_id);
-			if($_prescription_line_mix->_guid == $full_line_guid){
-	      $_prescription_line_mix->loadRefsSubstitutionLines();
-	      $_prescription_line_mix->loadVoies();
-	      if($_prescription_line_mix->_ref_lines){
-	        foreach($_prescription_line_mix->_ref_lines as &$line_perf){
-	          $line_perf->loadRefsFwd();
-	        }
-	      }
-	    }
 	  }
 	  
 	  // Pour une prescription non protocole
@@ -364,9 +340,6 @@ if($prescription->_id){
 								$_line->loadRefDM();
               }
 							$_line->getAdvancedPerms($is_praticien, $mode_protocole, $mode_pharma, $operation_id);
-							if($full_line_guid == $_line->_guid){
-		            $_line->loadRefsFwd();
-							}
 	          }
 	        }
 	      }
@@ -484,11 +457,11 @@ if(isset($prescription->_ref_lines_med_comments["med"])){
 // Création du template
 $smarty = new CSmartyDP();
 
+$smarty->assign("mode_substitution", 0);
+
 // Mode permettant de supprimer qq elements de la ligne en salle d'op (Anesthesie)
 $smarty->assign("current_user", $current_user);
-$smarty->assign("mode_induction_perop", false);
 $smarty->assign("aides_prescription", $aides_prescription);
-$smarty->assign("full_line_guid", $full_line_guid);
 $smarty->assign("mode_anesth", $mode_anesth);
 $smarty->assign("historique", $historique);
 $smarty->assign("filter_line", $filter_line);

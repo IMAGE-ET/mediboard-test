@@ -102,7 +102,7 @@ emptyProtocole = function() {
 	              Pré-adm.
 	            </a>
             {{else}}
-	            <form name="addPrescriptionSejour" method="post" action="?">
+	            <form name="addPrescriptionPread" method="post" action="?">
 	              <input type="hidden" name="m" value="dPprescription" />
 	              <input type="hidden" name="dosql" value="do_prescription_aed" />
 	              <input type="hidden" name="praticien_id" value="{{$app->user_id}}" />
@@ -116,7 +116,6 @@ emptyProtocole = function() {
 	            </form>
             {{/if}}
           </td>
-          
           
           <!-- Séjour -->
           <td id="sejour" class="step {{if $prescription->type == 'sejour'}}selected{{/if}}">
@@ -151,7 +150,7 @@ emptyProtocole = function() {
 		            {{tr}}CPrescription.type.sortie{{/tr}}
 		          </a>
 	        {{else}}
-	          <form name="addPrescriptionSejour" method="post" action="">
+	          <form name="addPrescriptionSortie" method="post" action="">
 	            <input type="hidden" name="m" value="dPprescription" />
 	            {{if $prescription_sejour->_id}}
 	              <input type="hidden" name="prescription_id" value="{{$prescription_sejour->_id}}" />

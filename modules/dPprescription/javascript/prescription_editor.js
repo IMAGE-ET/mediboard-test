@@ -11,7 +11,7 @@
 PrescriptionEditor = {
   sForm     : null,
   options : {
-    width : 810,
+    width : 900,
     height: 600
   },
   popup : function(prescription_id, object_id, object_class, type) {

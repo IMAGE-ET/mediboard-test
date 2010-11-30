@@ -9,24 +9,17 @@
 *}}
 
 {{assign var=dosql value="do_prescription_line_medicament_aed"}}
-{{assign var=line value=$curr_line}}
 {{assign var=div_refresh value="medicament"}}
 {{assign var=typeDate value="Med"}}
 
 <table class="tbl {{if $line->traitement_personnel}}traitement{{else}}med{{/if}}
-             {{if $line->_fin_reelle && $line->_fin_reelle < $now && !$line->_protocole}} line_stopped{{/if}}
-             {{if $full_line_guid == $line->_guid}}active{{/if}}" id="line_medicament_{{$line->_id}}">
+             {{if $line->_fin_reelle && $line->_fin_reelle < $now && !$line->_protocole}} line_stopped{{/if}}" id="full_line_medicament_{{$line->_id}}">
 <tbody  class="hoverable">
   <tr>
     <th colspan="5" id="th_line_CPrescriptionLineMedicament_{{$line->_id}}" 
         class="text element {{if $line->traitement_personnel}}traitement{{/if}} {{if $line->perop}}perop{{/if}}
                {{if $line->_fin_reelle && $line->_fin_reelle < $now && !$line->_protocole}}arretee{{/if}}">
       
-      {{if !$line->_protocole}}
-      <script type="text/javascript">
-         Main.add( function(){moveTbody($('line_medicament_{{$line->_id}}'));});
-      </script>
-      {{/if}}
       <div style="float:left;">
         {{if $line->_ref_parent_line->_id}}
           {{assign var=parent_line value=$line->_ref_parent_line}}
@@ -46,7 +39,6 @@
 			    {{if $line->perop}}Oui{{else}}Non{{/if}} 
 			  {{/if}}
 				
-      
 		    {{include file="../../dPprescription/templates/line/inc_vw_form_conditionnel.tpl"}}
         {{if $line->_can_vw_form_traitement}} 
           {{include file="../../dPprescription/templates/line/inc_vw_form_traitement.tpl"}}
@@ -58,7 +50,7 @@
         {{if $line->_can_view_signature_praticien}}
             {{include file="../../dPprescription/templates/line/inc_vw_signature_praticien.tpl"}}
             {{if !$mode_pharma}}
-              {{if $prescription_reelle->type == "sejour"}}
+              {{if $prescription->type == "sejour"}}
 		            {{if $line->valide_pharma}}
 								  <img src="images/icons/signature_pharma.png" title="Signée par le pharmacien" />
 								{{else}}
@@ -75,9 +67,9 @@
 				  <!-- Vue pharmacie -->
           {{include file="../../dPprescription/templates/line/inc_vw_form_accord_praticien.tpl"}}
           {{if $line->valide_pharma}}
-            <button type="button" class="cancel" onclick="submitValidationPharmacien('{{$prescription_reelle->_id}}', '{{$line->_id}}', '0', '{{$mode_pharma}}');">Annuler la validation pharmacien</button>
+            <button type="button" class="cancel" onclick="submitValidationPharmacien('{{$prescription->_id}}', '{{$line->_id}}', '0', '{{$mode_pharma}}');">Annuler la validation pharmacien</button>
           {{else}}
-            <button type="button" class="tick" onclick="submitValidationPharmacien('{{$prescription_reelle->_id}}', '{{$line->_id}}', '1', '{{$mode_pharma}}');">Validation pharmacien</button>
+            <button type="button" class="tick" onclick="submitValidationPharmacien('{{$prescription->_id}}', '{{$line->_id}}', '1', '{{$mode_pharma}}');">Validation pharmacien</button>
           {{/if}}
         {{elseif $line->_can_view_form_signature_praticien}}
 				  {{include file="../../dPprescription/templates/line/inc_vw_form_signature_praticien.tpl"}}
@@ -89,14 +81,19 @@
             ({{$line->_count_substitution_lines}})
             </button>
         {{/if}}
-        {{if $line->_guid == $full_line_guid}} 
-          <button class="lock notext" onclick="Prescription.reload('{{$prescription_reelle->_id}}', '', 'medicament', '', '{{$mode_pharma}}', null, '');"></button>
-        {{/if}}
+        <button class="lock notext" onclick="modalPrescription.close(); 
+				{{if @$mode_substitution}}
+				 Prescription.viewSubstitutionLines('{{$line->substitute_for_id}}','{{$line->substitute_for_class}}');
+				{{else}}
+				 Prescription.reload('{{$prescription->_id}}', '', 'medicament', '', '{{$mode_pharma}}', null, '');
+				{{/if}}">
+				
+				</button>
       </div>
       <a href="#produit{{$line->_id}}" onclick="Prescription.viewProduit(null,'{{$line->code_ucd}}','{{$line->code_cis}}');">
-        <strong style="font-size: 1.5em;">
+        <h2>
           {{$line->_ucd_view}}
-        </strong>
+        </h2>
         {{if $line->_forme_galenique}}({{$line->_forme_galenique}}){{/if}}
       </a>
     </th>
@@ -117,7 +114,7 @@
               <input type="hidden" name="dosql" value="do_prescription_line_medicament_aed" />
 							<input type="hidden" name="prescription_line_medicament_id" value="{{$line->_id}}" />
 							{{mb_label object=$line field="injection_ide"}}
-							{{mb_field object=$line field="injection_ide" onchange="submitFormAjax(this.form, 'systemMsg');"}}
+							{{mb_field object=$line field="injection_ide" onchange="onSubmitFormAjax(this.form);"}}
 					  </form>
 					{{/if}}
 				</div>
@@ -126,7 +123,7 @@
     		<form name="addPerfusionLine-{{$line->_id}}" action="?" method="post">
 	  		  <input type="hidden" name="dosql" value="do_line_to_prescription_line_mix_aed" />
 	  		  <input type="hidden" name="m" value="dPprescription" />
-	  		  <input type="hidden" name="prescription_id" value="{{$prescription_reelle->_id}}" />
+	  		  <input type="hidden" name="prescription_id" value="{{$prescription->_id}}" />
 	  		  <input type="hidden" name="prescription_line_medicament_id" value="{{$line->_id}}" />
 
 	  		  <input type="hidden" name="substitute_for_id" value="{{$line->substitute_for_id}}" />
@@ -171,12 +168,12 @@
 	          {{/foreach}}
           </select>
 					
-		  		<button class="add" type="button" onclick="submitFormAjax(this.form, 'systemMsg', { 
+		  		<button class="add" type="button" onclick="onSubmitFormAjax(this.form, { 
 		  		  onComplete: function() { 
 		  		    {{if @$mode_substitution}}
 		  		      Prescription.viewSubstitutionLines('{{$line->substitute_for_id}}','{{$line->substitute_for_class}}');
 		  		    {{else}}
-		  			    Prescription.reloadPrescPerf('{{$prescription_reelle->_id}}','{{$line->_protocole}}','{{$mode_pharma}}');
+		  			    //Prescription.reloadPrescPerf('{{$prescription->_id}}','{{$line->_protocole}}','{{$mode_pharma}}');
 		  			  {{/if}}
 		  		  } } );">
 		  		  Ajouter à la perfusion
@@ -287,7 +284,7 @@
     <td>
       <!-- Suppression de la ligne -->
       {{if $line->_can_delete_line}}
-        <button type="button" class="trash notext" onclick="Prescription.delLine({{$line->_id}})">
+        <button type="button" class="trash notext" onclick="modalPrescription.close(); Prescription.delLine({{$line->_id}})">
           {{tr}}Delete{{/tr}}
         </button>
       {{/if}}
@@ -303,7 +300,7 @@
     {{/if}}
     
       <!-- Insérer un commentaire dans la ligne --> 
-      <form name="commentaire-{{$line->_guid}}">
+      <form name="commentaire-{{$line->_guid}}" onsubmit="this.commentaire.blur(); return false;">
 	      {{include file="../../dPprescription/templates/line/inc_vw_form_add_comment.tpl"}}
 	      	{{if $line->_protocole}}
 	      	  {{assign var=_line_praticien_id value=$app->user_id}}
@@ -328,9 +325,9 @@
           <input type="hidden" name="m" value="dPprescription" />
           <input type="hidden" name="dosql" value="do_substitution_line_aed" />
           <select name="object_guid" style="width: 150px;" 
-                  onchange="submitFormAjax(this.form, 'systemMsg', { onComplete: function() { 
-                               Prescription.reload('{{$line->_ref_prescription->_id}}', '', 'medicament');  
-                             } } )">
+                  onchange="onSubmitFormAjax(this.form, { onComplete:   
+                               Prescription.reloadLine.curry(this.value)
+                              } )">
             <option value="">Lignes de substitutions</option>
             {{foreach from=$line->_ref_substitution_lines item=lines_subst_by_chap}}
                 {{foreach from=$lines_subst_by_chap item=_line_subst}}

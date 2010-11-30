@@ -175,7 +175,12 @@
 										{{if isset($adm_in_hour.$minute|smarty:nodefaults) && $adm_in_hour.$minute != $_sub_adm.quantite}}
 										  {{$adm_in_hour.$minute}} /
 										{{/if}}
-										{{$_sub_adm.quantite}} {{$line->_unite_administration}}
+										{{$_sub_adm.quantite}} 
+										{{if $line instanceof CPrescriptionLineElement}}
+										  {{$line->_unite_prise}}
+                    {{else}}
+										  {{$line->_unite_administration}}
+										{{/if}}
 						     </div>
 						   {{/if}}
              {{/foreach}}

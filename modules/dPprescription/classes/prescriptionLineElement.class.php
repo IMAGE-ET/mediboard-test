@@ -28,6 +28,9 @@ class CPrescriptionLineElement extends CPrescriptionLine {
   
 	var $_ref_dm = null;
 	
+	
+	var $_chapitre = null;
+	
   // Can fields
   var $_can_select_executant               = null;
   var $_can_delete_line                    = null;
@@ -77,7 +80,8 @@ class CPrescriptionLineElement extends CPrescriptionLine {
     $this->_view = $this->_ref_element_prescription->_view;
     
     $chapitre = $this->_ref_element_prescription->_ref_category_prescription->chapitre;
-    
+    $this->_chapitre = $chapitre;
+		
     // Un element ne peut jamais être un traitement
 		if($chapitre){
 		  $this->_unite_prise = CAppUI::conf("dPprescription CCategoryPrescription $chapitre unite_prise");

@@ -53,7 +53,7 @@ $msg = $old_line->store();
 CAppUI::displayMsg($msg, "CPrescriptionLineMedicament-msg-store");
 
 // Le passage de la ligne au reload permet de realiser le testPharma (pre-cochage de la case "Accord du praticien")
-echo "<script type='text/javascript'>Prescription.reload($line->prescription_id, '', 'medicament', '$mode_protocole', '$mode_pharma','$line->_id')</script>";
+echo "<script type='text/javascript'>Prescription.reloadLine('$line->_guid','$mode_protocole', '$mode_pharma')</script>";
 echo CAppUI::getMsg();
 CApp::rip();
 ?>

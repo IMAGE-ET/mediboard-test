@@ -8,8 +8,8 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
 *}}
 
+{{assign var=element value=$line->_chapitre}}
 <!-- Initialisation des variables -->
-{{assign var=line value=$_line_element}}
 {{assign var=dosql value="do_prescription_line_element_aed"}}
 {{assign var=div_refresh value=$element}}
 {{assign var=typeDate value=$element}}
@@ -17,7 +17,7 @@
 
 {{assign var=line_guid value=$line->_guid}}
 
-<table class="tbl elt {{if $line->_fin_reelle && $line->_fin_reelle < $now && !$line->_protocole}}line_stopped{{/if}} {{if $full_line_guid == $line->_guid}}active{{/if}}" id="line_element_{{$line->_id}}">
+<table class="tbl elt {{if $line->_fin_reelle && $line->_fin_reelle < $now && !$line->_protocole}}line_stopped{{/if}}" id="full_line_element_{{$line->_id}}">
 <tbody class="hoverable">
   <!-- Header de la ligne d'element -->
   <tr>    
@@ -25,7 +25,7 @@
         class="element {{if $line->perop}}perop{{/if}} {{if $line->_fin_reelle && $line->_fin_reelle < $now && !$line->_protocole}} arretee{{/if}}">
       <script type="text/javascript">
          Main.add( function(){
-           moveTbodyElt($('line_element_{{$line->_id}}'),'{{$category->_id}}');
+           //moveTbodyElt($('line_element_{{$line->_id}}'),'{{$category->_id}}');
          });
       </script>
       <div style="position: absolute">
@@ -57,9 +57,7 @@
         {{if $line->_can_view_form_signature_praticien}} 
 	        {{include file="../../dPprescription/templates/line/inc_vw_form_signature_praticien.tpl"}}
 	      {{/if}}
-	      {{if $full_line_guid == $line->_guid}}
-	        <button class="lock notext" onclick="Prescription.reload('{{$prescription_reelle->_id}}', '', '{{$category->chapitre}}', '', '{{$mode_pharma}}', null, '');"></button>
-	      {{/if}}
+        <button class="lock notext" onclick="modalPrescription.close(); Prescription.reload('{{$prescription->_id}}', '', '{{$category->chapitre}}', '', '{{$mode_pharma}}', null, '');"></button>
 	    </div>
 	    <!-- View de l'element -->
 	    <strong style="font-size: 1.5em;">
@@ -72,7 +70,7 @@
   <tr>
     <td style="width: 25px" {{if $category->chapitre != "dmi"}}rowspan="3"{{/if}} >
       {{if $line->_can_delete_line}}
-      <button type="button" class="trash notext" onclick="Prescription.delLineElement('{{$line->_id}}','{{$element}}')">
+      <button type="button" class="trash notext" onclick="modalPrescription.close(); Prescription.delLineElement('{{$line->_id}}','{{$element}}')">
         {{tr}}Delete{{/tr}}
       </button>
       {{/if}}
@@ -134,7 +132,7 @@
     {{if $category->chapitre == "dmi"}}
     <td style="width: 25px">
       {{if $line->_can_delete_line}}
-      <button type="button" class="trash notext" onclick="Prescription.delLineElement('{{$line->_id}}','{{$element}}')">
+      <button type="button" class="trash notext" onclick="modalPrescription.close(); Prescription.delLineElement('{{$line->_id}}','{{$element}}')">
         {{tr}}Delete{{/tr}}
       </button>
       {{/if}}
@@ -153,7 +151,7 @@
 	    {{else}}
 	      {{assign var=_line_praticien_id value=$line->praticien_id}}
 	    {{/if}}
-      <form name="commentaire-{{$line->_guid}}">
+      <form name="commentaire-{{$line->_guid}}" onsubmit="this.commentaire.blur(); return false;">
 	      {{include file="../../dPprescription/templates/line/inc_vw_form_add_comment.tpl"}}
 	        {{if $line->_perm_edit}}
 		      <select name="_helpers_commentaire" size="1" onchange="pasteHelperContent(this); this.form.commentaire.onchange();" style="width: 110px;" class="helper">

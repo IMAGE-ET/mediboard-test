@@ -94,10 +94,24 @@ transfertLineTP = function(line_id, sejour_id){
 
 addAerosol = function(){
   var oFormAerosol = getForm("add_aerosol");
-	return onSubmitFormAjax(oFormAerosol, { onComplete: function(){
-    Prescription.reload('{{$prescription->_id}}',null,'medicament')
-	} });
+	return onSubmitFormAjax(oFormAerosol);
 }
+
+// refresh de l'aerosol en modal lors de sa creation
+callbackAerosol = function(aerosol_id){
+  Prescription.reloadLine("CPrescriptionLineMix-"+aerosol_id, "{{$mode_protocole}}","{{$mode_pharma}}","{{$operation_id}}");
+}
+
+updateModaleAfterAddOxygene = function(line_guid){
+  Prescription.reloadLine(line_guid, '{{$mode_protocole}}', '{{$mode_pharma}}', '{{$operation_id}}');
+}
+
+updateModaleAfterAddLine = function(line_id){
+  if(line_id){
+    Prescription.reloadLine("CPrescriptionLineMedicament-"+line_id, '{{$mode_protocole}}', '{{$mode_pharma}}', '{{$operation_id}}');
+  }
+}
+
 
 </script>
 
@@ -128,6 +142,7 @@ addAerosol = function(){
   <input type="hidden" name="creator_id" value="{{$app->user_id}}" />
 	<input type="hidden" name="unite_duree" value="jour" />
 	<input type="hidden" name="unite_duree_passage" value="minute" />
+	<input type="hidden" name="callback" value="callbackAerosol" />
 </form>
 
 <!-- Cas normal -->
@@ -160,6 +175,9 @@ addAerosol = function(){
   <input type="hidden" name="decalage_line" value="" />
   <input type="hidden" name="unite_decalage" value="" />
 	<input type="hidden" name="operation_id" value="" />
+	
+	<input type="hidden" name="callback" value="updateModaleAfterAddLine" />
+	
 </form>
 
 <table class="form">
@@ -277,7 +295,7 @@ addAerosol = function(){
 	<tr>
 	  <td colspan="2" style="text-align:center;"> 		 
 		  <div>
-	    <form name="addLineCommentMed" method="post" action="" onsubmit="return onSubmitFormAjax(this, { onComplete: function(){ Prescription.reload('{{$prescription->_id}}',null,'medicament')} } )">
+	    <form name="addLineCommentMed" method="post" action="" onsubmit="return onSubmitFormAjax(this, { onComplete: function(){ Prescription.reload('{{$prescription->_id}}',null,'medicament','{{$mode_protocole}}','{{$mode_pharma}}')} } )">
 	      <input type="hidden" name="m" value="dPprescription" />
 	      <input type="hidden" name="dosql" value="do_prescription_line_comment_aed" />
 	      <input type="hidden" name="del" value="0" />
@@ -301,7 +319,7 @@ addAerosol = function(){
     <th colspan="6" class="title">Médicaments</th>
   </tr>
   <tr>
-    <th style="width: 5%;">Alertes</th> 
+    <th style="width: 5%;" class="narrow"></th> 
     <th style="width: 25%">Produit</th>
     <th style="width: 37%;">Posologie</th>
     <th style="width: 8%">Praticien</th>
@@ -325,11 +343,7 @@ addAerosol = function(){
     {{if !$praticien_sortie_id || ($praticien_sortie_id == $curr_line->praticien_id)}}
       <!-- Si la ligne ne possede pas d'enfant -->
 	    {{if !$curr_line->child_id}}
-	      {{if $full_line_guid == $curr_line->_guid}}
-	        {{include file="../../dPprescription/templates/inc_vw_line_medicament.tpl" prescription_reelle=$prescription}} 
-	      {{else}}
-	         {{include file="../../dPprescription/templates/inc_vw_line_medicament_lite.tpl" prescription_reelle=$prescription}}
-	      {{/if}}
+	       {{include file="../../dPprescription/templates/inc_vw_line_medicament_lite.tpl"}}
 	    {{/if}}
     {{/if}}
   {{/foreach}}
@@ -341,14 +355,14 @@ addAerosol = function(){
 			    <th colspan="7" class="title">{{tr}}CPrescription._chapitres.{{$type_line}}{{/tr}}</th>
 			  </tr>
 			  <tr>
-			    <th style="width: 8%;">Type</th>
-			    <th style="width: 44%;">Médicaments</th> 
+			    <th style="width: 5%;" class="narrow"></th>
+			    <th style="width: 47%;">Médicaments</th> 
 			    <th style="width: 8%;">Prat</th>
 					{{if $type_line == "aerosol"}}
             <th style="width: 20%;">Interface</th>
           {{else}}
 	          <th style="width: 5%;">Débit</th>
-	          <th style="width: 15%;">Voie</th>					
+	          <th style="width: 15%;">Type / Voie</th>					
 					{{/if}}
           {{if $prescription->object_id}}
 				    <th style="width: 10%;">Début</th>
@@ -363,11 +377,7 @@ addAerosol = function(){
 		  <!-- Parcours des prescription_line_mixes -->
 		  {{foreach from=$_lines_mix_by_type item=_prescription_line_mix}}
 		    {{if !$praticien_sortie_id || ($praticien_sortie_id == $_prescription_line_mix->praticien_id)}}
-		      {{if $full_line_guid == $_prescription_line_mix->_guid}}
-		        {{include file="../../dPprescription/templates/inc_vw_prescription_line_mix.tpl" prescription_reelle=$prescription}}
-		      {{else}}
-			       {{include file="../../dPprescription/templates/inc_vw_prescription_line_mix_lite.tpl" prescription_reelle=$prescription}} 
-			    {{/if}}
+			     {{include file="../../dPprescription/templates/inc_vw_prescription_line_mix_lite.tpl"}} 
 		    {{/if}}
 		  {{/foreach}}
 		{{/foreach}}
@@ -383,11 +393,7 @@ addAerosol = function(){
   <!-- Parcours des commentaires --> 
   {{foreach from=$prescription->_ref_lines_med_comments.comment item=_line_comment}}
     {{if !$praticien_sortie_id || ($praticien_sortie_id == $_line_comment->praticien_id)}}
-      {{if $full_line_guid == $_line_comment->_guid}}
-        {{include file="../../dPprescription/templates/inc_vw_line_comment_elt.tpl" prescription_reelle=$prescription}}
-      {{else}}
-        {{include file="../../dPprescription/templates/inc_vw_line_comment_readonly.tpl" prescription_reelle=$prescription}}
-      {{/if}}
+      {{include file="../../dPprescription/templates/inc_vw_line_comment_readonly.tpl"}}
     {{/if}}
   {{/foreach}}
  </table> 

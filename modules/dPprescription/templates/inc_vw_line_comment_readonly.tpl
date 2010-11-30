@@ -29,7 +29,7 @@
            <input type="hidden" name="dosql" value="do_prescription_line_comment_aed" />
            <input type="hidden" name="del" value="1" />
            <input type="hidden" name="prescription_line_comment_id" value="{{$line->_id}}" />
-           <button type="button" class="trash notext" onclick="submitFormAjax(this.form, 'systemMsg', { onComplete: function() { Prescription.reload('{{$prescription->_id}}',null,'{{$div_refresh}}') } } );">
+           <button type="button" class="trash notext" onclick="return onSubmitFormAjax(this.form, { onComplete: function() { Prescription.reload('{{$prescription->_id}}',null,'{{$div_refresh}}','{{$mode_protocole}}','{{$mode_pharma}}') } } );">
              {{tr}}Delete{{/tr}}
            </button>
          </form>
@@ -41,11 +41,11 @@
      </td>
      
      <td style="text-align: right;">
-	     {{if $line->category_prescription_id || $prescription_reelle->type != "sejour"}}
+	     {{if $line->category_prescription_id || $prescription->type != "sejour"}}
 		     {{if $line->category_prescription_id}}
 		       <b>Exécutant</b>: {{if $line->executant_prescription_line_id || $line->user_executant_id}}{{$line->_ref_executant->_view}}{{else}}aucun{{/if}}
 		     {{/if}}
-		       {{if $prescription_reelle->type != "sejour"}}
+		       {{if $prescription->type != "sejour"}}
 		         <b>{{mb_label object=$line field="ald"}}</b>: {{if $line->ald}}Oui{{else}}Non{{/if}}
 		       {{/if}}
 	     {{/if}}
@@ -59,7 +59,7 @@
 	       {{elseif !$line->_protocole}}
 	         {{$line->_ref_praticien->_view}}    
 	       {{/if}}
-	       <button class="edit notext" onclick="Prescription.reload('{{$prescription_reelle->_id}}', '', '{{$div_refresh}}', '', '{{$mode_pharma}}', null, '{{$line->_guid}}');"></button>
+	       <button class="edit notext" onclick="Prescription.reloadLine('{{$line->_guid}}','{{$mode_protocole}}','{{$mode_pharma}}','{{$operation_id}}');"></button>
        </div>
      </td>
   </tr>

@@ -8,12 +8,12 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
 *}}
 
-{{assign var=allergie value=$prescription_reelle->_alertes.allergie}}
-{{assign var=IPC value=$prescription_reelle->_alertes.IPC}}
-{{assign var=interaction value=$prescription_reelle->_alertes.interaction}}
-{{assign var=profil value=$prescription_reelle->_alertes.profil}}
-{{if @array_key_exists('posoduree', $prescription_reelle->_alertes)}}{{assign var=posoduree value=$prescription_reelle->_alertes.posoduree}}{{/if}}
-{{if @array_key_exists('posoqte', $prescription_reelle->_alertes)}}{{assign var=posoqte value=$prescription_reelle->_alertes.posoqte}}{{/if}}
+{{assign var=allergie value=$prescription->_alertes.allergie}}
+{{assign var=IPC value=$prescription->_alertes.IPC}}
+{{assign var=interaction value=$prescription->_alertes.interaction}}
+{{assign var=profil value=$prescription->_alertes.profil}}
+{{if @array_key_exists('posoduree', $prescription->_alertes)}}{{assign var=posoduree value=$prescription->_alertes.posoduree}}{{/if}}
+{{if @array_key_exists('posoqte', $prescription->_alertes)}}{{assign var=posoqte value=$prescription->_alertes.posoqte}}{{/if}}
 {{assign var=code_cip value=$line->code_cip}}
 
 {{assign var=image value=""}}
@@ -126,7 +126,7 @@
 			 onmouseover='ObjectTooltip.createDOM(this, "tooltip-content-alertes-line-{{$line->_guid}}")' />
 	
 	<div id="tooltip-content-alertes-line-{{$line->_guid}}" style="display: none; background-color: {{$color}};">
-		{{foreach from=$prescription_reelle->_alertes key=type item=curr_type}}
+		{{foreach from=$prescription->_alertes key=type item=curr_type}}
 		  {{if array_key_exists($code_cip, $curr_type)}}
 		    <ul>
 		    {{foreach from=$curr_type.$code_cip item=_alerte}}

@@ -45,15 +45,9 @@ Prescription = {
 		}
     oForm.code_cip.value = code;
     var mode_pharma = oForm.mode_pharma.value;
-
-    submitFormAjax(oForm, 'systemMsg', { 
-     onComplete : 
-       function(){
-         Prescription.reload(oForm.prescription_id.value, '', 'medicament','',mode_pharma, null);
-       }
-    });
+    return onSubmitFormAjax(oForm);
   },
-  addLineElement: function(element_id, chapitre, debut, duree, unite_duree, callback){
+  addLineElement: function(element_id, chapitre){
     // Formulaire contenant la categorie courante
     var oForm     = document.forms.addLineElement;
     var oFormDate = document.forms.selDateLine;
@@ -78,33 +72,15 @@ Prescription = {
         $V(oForm.operation_id, oFormDate.operation_id.value);
       }
     }
-		
-    if(debut){
-      oForm.debut.value = debut;
-    }
-    if(duree && unite_duree){
-      oForm.duree.value = duree;
-      oForm.unite_duree.value = unite_duree;
-    }
-    if(callback){
-      oForm.callback.value = callback;
-    }
     if(!chapitre || !Object.isString(chapitre)){
       var chapitre = oForm._chapitre.value;
     }
     oForm.element_prescription_id.value = element_id;
     
-    submitFormAjax(oForm, 'systemMsg', { 
-      onComplete: function(){ 
-        if(!callback){
-          Prescription.reload(oForm.prescription_id.value, element_id, chapitre, null, null, null);
-        }
-      }
-    });
+    return onSubmitFormAjax(oForm);
     oForm.debut.value = "";
     oForm.duree.value = "";
     oForm.unite_duree.value = "";
-    oForm.callback.value = "";
   },
   submitPriseElement: function(element_id){
     var oFormElement = document.forms.addLineElement;
@@ -154,7 +130,7 @@ Prescription = {
     oForm.prescription_line_medicament_id.value = line_id;
     oForm.del.value = 1;
     var mode_pharma = oForm.mode_pharma.value;
-    submitFormAjax(oForm, 'systemMsg', { 
+    return onSubmitFormAjax(oForm, { 
       onComplete : function(){ 
         Prescription.reload(oForm.prescription_id.value, '', 'medicament','',mode_pharma);
        } 
@@ -207,11 +183,8 @@ Prescription = {
       urlPrescription.addParam("element_id", element_id);
       urlPrescription.addParam("chapitre", chapitre);
       urlPrescription.addParam("mode_protocole", mode_protocole);
-      urlPrescription.addParam("mode_pharma", mode_pharma);
-      
-      if(!Object.isUndefined(full_line_guid)){
-        urlPrescription.addParam("full_line_guid", full_line_guid);
-      }
+			urlPrescription.addParam("mode_pharma", mode_pharma);
+
       if(mode_pharma == "1"){
           urlPrescription.requestUpdate("div_medicament", { onComplete: function(){ Prescription.testPharma(line_id) } });      
       } else {
@@ -274,7 +247,6 @@ Prescription = {
     url.addParam("praticien_sortie_id", praticien_sortie_id);
     url.addParam("mode_anesth", mode_anesth);
     url.addParam("mode_protocole", "0");
-    url.addParam("full_line_guid", full_line_guid);
     url.addParam("mode_sejour", mode_sejour);
     url.addParam("pratSel_id", pratSel_id);
     url.addParam("praticien_for_prot_id", praticien_for_prot_id);
@@ -284,6 +256,20 @@ Prescription = {
 			}
 		} } );
   },
+	reloadLine: function(line_guid, mode_protocole, mode_pharma, operation_id, mode_substitution){
+		if (window.modalPrescription) {
+			modalPrescription.close();
+	  }
+    $('modalPrescriptionLine').update('');
+		modalPrescription = modal($('modalPrescriptionLine'));
+		var url = new Url("dPprescription", "httpreq_vw_line");
+		url.addParam("line_guid", line_guid);
+		url.addParam("mode_protocole", mode_protocole);
+		url.addParam("mode_pharma", mode_pharma);
+		url.addParam("operation_id", operation_id);
+		url.addParam("mode_substitution", mode_substitution);
+		url.requestUpdate("modalPrescriptionLine", { onComplete: function(){ modalPrescription.position(); } });
+	},
   reloadPrescPharma: function(prescription_id){
     var url = new Url("dPprescription", "httpreq_vw_prescription");
     url.addParam("prescription_id", prescription_id);
@@ -410,7 +396,7 @@ Prescription = {
     url.addParam("object_id", object_id);
     url.addParam("object_class", object_class);
     url.addParam("mode_pack", mode_pack);
-    url.popup(800,400, "Lignes de substitution");
+    url.popup(900,600, "Lignes de substitution");
   },
   valideAllLines: function(prescription_id, annulation, praticien_id){
     var url = new Url("dPprescription", "vw_signature_prescription");
