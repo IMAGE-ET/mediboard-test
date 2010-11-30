@@ -9,7 +9,7 @@
 *}}
 
 {{mb_include_script module=dPurgences script=main_courante}}
-{{mb_include_script module=dPurgences script=identito_vigilance}}
+{{mb_include_script module=dPadmissions script=identito_vigilance}}
 {{if $isImedsInstalled}}
   {{mb_include_script module="dPImeds" script="Imeds_results_watcher"}}
 {{/if}}

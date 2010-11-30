@@ -8,7 +8,7 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
 *}}
 
-{{mb_include_script module=dPurgences script=identito_vigilance}}
+{{mb_include_script module=dPadmissions script=identito_vigilance}}
 
 <script type="text/javascript">
 onMergeComplete = function() {
@@ -17,7 +17,7 @@ onMergeComplete = function() {
 
 Main.add(function () {
 	IdentitoVigilance.date = "{{$date}}";
-  IdentitoVigilance.start(2, 5);
+  IdentitoVigilance.start(2, 60);
 
   var tabs = Control.Tabs.create('tab_admissions_identito_vigilance', false);
 });
