@@ -406,11 +406,13 @@ class CHPrimXMLEvenementsPatients extends CHPrimXMLEvenements {
   function getMedecin($node) {
     $xpath = new CHPrimXPath($node->ownerDocument);
     
+    $this->_ref_echange_hprim->loadRefsDestinataireHprim();
+    
     $code = $xpath->queryTextNode("hprim:identification/hprim:code", $node);
     $mediuser = new CMediusers();
     $id400 = new CIdSante400();
     $id400->object_class = "CMediusers";
-    $id400->tag = $this->getTagMediuser();
+    $id400->tag = $this->_ref_echange_hprim->_ref_emetteur->_tag_mediuser;
     $id400->id400 = $code;
     if ($id400->loadMatchingObject()) {
       $mediuser->_id = $id400->object_id;

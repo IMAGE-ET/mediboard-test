@@ -202,7 +202,7 @@ class CHPrimXMLDocument extends CMbXMLDocument {
   function getTagMediuser() {
     $this->_ref_echange_hprim->loadRefsDestinataireHprim();
     
-    return $this->_ref_echange_hprim->_ref_emetteur->_tag_mediuser;
+    return $this->_ref_echange_hprim->_ref_destinataire->_tag_mediuser;
   }
   
   function addTexte($elParent, $elName, $elValue, $elMaxSize = 35) {
