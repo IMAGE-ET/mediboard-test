@@ -121,7 +121,7 @@ class CHPrimXMLFusionVenue extends CHPrimXMLEvenementsPatients {
       if ($mbVenue->load($data['idCibleVenue'])) {
         // Pas de test dans le cas ou la fusion correspond à un changement de numéro de dossier
         if (($etatVenue == "préadmission") || ($etatVenueEliminee != "préadmission")) {
-          if ($mbVenue->_id != $id400Venue->object_id) {
+          if ($id400Venue->object_id && ($mbVenue->_id != $id400Venue->object_id)) {
             $commentaire = "L'identifiant source fait référence au séjour : $id400Venue->object_id et l'identifiant cible au séjour : $mbVenue->_id.";
             $messageAcquittement = $domAcquittement->generateAcquittementsPatients("erreur", "E104", $commentaire);
             $doc_valid = $domAcquittement->schemaValidate();
@@ -142,7 +142,7 @@ class CHPrimXMLFusionVenue extends CHPrimXMLEvenementsPatients {
       $id400VenueEliminee->id400 = $data['idSourceVenueEliminee'];
       $id400VenueEliminee->loadMatchingObject();
       if ($mbVenueEliminee->load($data['idCibleVenueEliminee'])) {
-        if ($mbVenueEliminee->_id != $id400VenueEliminee->object_id) {
+        if ($id400VenueEliminee->object_id && ($mbVenueEliminee->_id != $id400VenueEliminee->object_id)) {
           $commentaire = "L'identifiant source fait référence au séjour : $id400VenueEliminee->object_id et l'identifiant cible au séjour : $mbVenueEliminee->_id.";
           $messageAcquittement = $domAcquittement->generateAcquittementsPatients("erreur", "E141", $commentaire);
           $doc_valid = $domAcquittement->schemaValidate();
