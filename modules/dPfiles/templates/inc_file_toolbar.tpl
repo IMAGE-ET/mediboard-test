@@ -19,7 +19,7 @@
    <input type="hidden" name="compte_rendu_id" value="{{$_doc_item->_id}}" />
    <input type="hidden" name="del" value="0" />
    {{assign var="confirmDeleteType" value="le document"}}
-   {{assign var="confirmDeleteName" value=$_doc_item->nom}}
+   {{assign var="confirmDeleteName" value=$_doc_item->nom|smarty:nodefaults|JSAttribute}}
  {{/if}}
    
  {{if $_doc_item->_class_name=="CFile"}}
@@ -29,14 +29,14 @@
    <input type="hidden" name="file_id" value="{{$_doc_item->_id}}" />
    <input type="hidden" name="del" value="0" />
    {{assign var="confirmDeleteType" value="le fichier"}}
-   {{assign var="confirmDeleteName" value=$_doc_item->file_name}}
+   {{assign var="confirmDeleteName" value=$_doc_item->file_name|smarty:nodefaults|JSAttribute}}
  {{/if}}
  
 	<!-- Deletion -->
   <button type="button" class="trash  {{$notext}}" onclick="file_deleted={{$elementId}};confirmDeletion(
     this.form, {
       typeName:'{{$confirmDeleteType}}',
-      objName:'{{$confirmDeleteName|smarty:nodefaults|JSAttribute}}',
+      objName:'{{$confirmDeleteName}}',
       ajax:1,
       target:'systemMsg'
     },{
