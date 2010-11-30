@@ -1146,7 +1146,11 @@ class CSejour extends CCodable {
     $this->loadSuiviMedical();
     $this->_ref_patient->loadRefPhotoIdentite();
   }
-
+  
+  function loadView() {
+    parent::loadView();
+    $this->loadNumDossier();
+  }
 
 /**
    * Charge le sejour ayant les traits suivants :
