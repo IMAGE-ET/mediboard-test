@@ -391,7 +391,7 @@ class CProduct extends CMbObject {
     // Y init
     for($i = 0; $i < 12; $i++) {
       $from = mbDate("+$i $unit", $start);
-      $to = mbDate("+1 $unit", $from);
+      $to   = mbDate("+1 $unit", $from);
       
       $d[$from] = array();
     }
@@ -406,7 +406,9 @@ class CProduct extends CMbObject {
       // X init
       foreach($services as $_key => $_service) {
         $d[$from][$_key] = 0;
-        $d["total"][$_key] = 0;
+        if (!isset($d["total"][$_key])) {
+          $d["total"][$_key] = 0;
+        }
       }
       $d[$from]["total"] = 0;
       
@@ -426,18 +428,6 @@ class CProduct extends CMbObject {
           @$d["total"]["total"] += $_count;
         }
       }
-      
-      /*foreach($services as $_key => $_service) {
-        $count = 0;
-        foreach($products as $_product)
-          $count += $_product->getConsumption($from, $to, ($_key != "none") ? $_key : null);
-        
-        $d[$from][$_key] = $count;
-        
-        $d[$from]["total"] += $count;
-        @$d["total"][$_key] += $count;
-        @$d["total"]["total"] += $count;
-      }*/
     }
   
     // Put the total at the end
@@ -448,6 +438,8 @@ class CProduct extends CMbObject {
     $total = $d["total"]["total"];
     unset($d["total"]["total"]);
     $d["total"]["total"] = $total;
+    
+    $d = CMbArray::transpose($d);
   }
   
   static function computeBalance(array $products, array $services, $year, $month = null){

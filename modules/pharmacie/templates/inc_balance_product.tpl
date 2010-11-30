@@ -29,34 +29,40 @@
 </ul>
 <hr class="control_tabs" />
 
-{{math equation="1/(x-1)" x=$services|@count assign=width}}
-
 {{foreach from=$flows item=_flows key=key}}
+
+{{math equation="1/x*100" x=$_flows.0.out|@reset|@count assign=width}}
 
 <table class="main tbl" id="{{$type}}-{{$key}}" style="display: none;">
   <tr>
     <th></th>
     
-    {{foreach from=$services item=_service}}
-      <th style="width: {{$width}}%">{{$_service}}</th>
-    {{/foreach}}
-    
-    <th>Total</th>
-  </tr>
-  
-  {{foreach from=$_flows.0.out item=_flow key=_date}}
-    <tr {{if $_date == "total"}}style="font-weight: bold"{{/if}}>
-      <th style="width: 0.1%;">
+    {{foreach from=$_flows.0.out|@reset item=_flow key=_date}}
+      <th style="width: {{$width}}%">
         {{if $_date == "total"}}
           Total
         {{else}}
           {{$_date|date_format:$_flows.1}}
         {{/if}}
       </th>
+    {{/foreach}}
+    
+  </tr>
+  
+  {{foreach from=$_flows.0.out item=_flow key=_service_id}}
+    <tr style="{{if $_service_id == "total"}}font-weight: bold;{{/if}} text-align: center;">
+      <th style="width: 0.1%;">
+        {{if $_service_id == "total"}}
+          Total
+        {{else}}
+          {{$services.$_service_id}}
+        {{/if}}
+      </th>
       
-      {{foreach from=$_flow item=_value key=_service_id}}
-        <td style="text-align: center; {{if $_date == "total" && $_service_id == "total"}}font-size: 1.4em;{{/if}} {{if $_service_id == "total"}}font-weight: bold; width: 0.1%;{{/if}}">
-          {{$_value}}
+      {{foreach from=$_flow item=_value key=_date}}
+        <td style="{{if $_date == "total" && $_service_id == "total"}}font-size: 1.4em;{{/if}} 
+                   {{if $_date == "total"}}font-weight: bold;{{/if}}">
+          <span {{if $_value == 0 && $_date != "total" && $_service_id != "total"}}class="opacity-40"{{/if}}>{{$_value}}</span>
         </td>
       {{/foreach}}
     </tr>

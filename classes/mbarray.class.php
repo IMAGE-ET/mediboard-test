@@ -315,5 +315,15 @@ abstract class CMbArray {
     }
     return $values;
   }
+  
+  static function transpose($array) {
+    $out = array();
+    foreach ($array as $key => $subarr) {
+      foreach ($subarr as $subkey => $subvalue) {
+        $out[$subkey][$key] = $subvalue;
+      }
+    }
+    return $out;
+  }
 }
 ?>
