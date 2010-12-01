@@ -169,7 +169,12 @@
 	          {{/foreach}}
           </select>
 					
-		  		<button class="add" type="button" onclick="onSubmitFormAjax(this.form, { 
+		  		<button class="add" type="button"
+            onclick="if ($V(this.form.type) == '') {
+               alert('{{tr}}CPrescription-alert-no-type{{/tr}}');
+               return;
+            }
+            onSubmitFormAjax(this.form, { 
 		  		  onComplete: function() { 
 		  		    {{if @$mode_substitution}}
 		  		      Prescription.viewSubstitutionLines('{{$line->substitute_for_id}}','{{$line->substitute_for_class}}');

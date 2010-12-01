@@ -409,6 +409,7 @@ $locales['CPrescription-_type_alerte-desc'] = 'Type d\'alerte';
 $locales['CPrescription-_type_sejour'] = 'Type';
 $locales['CPrescription-_type_sejour-court'] = 'Type';
 $locales['CPrescription-_type_sejour-desc'] = 'Type';
+$locales['CPrescription-alert-no-type'] = 'Veuillez sélectionner le type de la perfusion';
 $locales['CPrescription-back-prescription_line_comment'] = 'Ligne de commentaire';
 $locales['CPrescription-back-prescription_line_comment.empty'] = 'Aucun commentaire';
 $locales['CPrescription-back-prescription_line_dmi'] = 'Ligne de DMI';
