@@ -170,7 +170,7 @@
           </select>
 					
 		  		<button class="add" type="button"
-            onclick="if ($V(this.form.type) == '') {
+            onclick="if ($V(this.form.type) == '' && !$V(this.form.prescription_line_mix_id)) {
                alert('{{tr}}CPrescription-alert-no-type{{/tr}}');
                return;
             }
