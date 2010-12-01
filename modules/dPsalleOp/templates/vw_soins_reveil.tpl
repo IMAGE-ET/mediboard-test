@@ -81,7 +81,10 @@ Main.add(function () {
     url.addParam("sejour_id", '{{$sejour->_id}}');
     url.requestUpdate('Imeds_tab');
   }
-	{{/if}}
+	
+	// Sauvegarde de l'operation_id selectionné (utile pour l'ajout de DMI dans la prescription)
+  window.DMI_operation_id = "{{$operation->_id}}";
+	{{/if}}	 
 });
 
 </script>

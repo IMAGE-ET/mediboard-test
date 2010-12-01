@@ -240,8 +240,12 @@ Prescription = {
     var url = new Url("dPprescription", "httpreq_vw_prescription");
     url.addParam("prescription_id", prescription_id);
     url.addParam("sejour_id", sejour_id);
-    url.addParam("operation_id", operation_id);
-    url.addParam("chir_id", chir_id);
+    
+    if (window.DMI_operation_id) {
+      url.addParam("operation_id", window.DMI_operation_id);
+    }
+		  
+		url.addParam("chir_id", chir_id);
     url.addParam("anesth_id", anesth_id);
     url.addParam("full_mode", "1");
     url.addParam("praticien_sortie_id", praticien_sortie_id);
