@@ -498,7 +498,7 @@ Main.add( function(){
 								<input type="text" name="produit" value="" size="20" style="width: 300px;" class="autocomplete" />
                 <div style="display:none; width: 350px;" class="autocomplete" id="aerosol_auto_complete"></div>
    						  <input type="hidden" name="code_cip" value="" onchange="onSubmitFormAjax(this.form, { onComplete: function(){ 
-								  Prescription.reloadLine('{{$line->_guid}}');
+								  Prescription.reloadLine('{{$line->_guid}}','{{$line->_protocole}}', '{{$mode_pharma}}');
 								} } )" />
 	            </form>
             </td>

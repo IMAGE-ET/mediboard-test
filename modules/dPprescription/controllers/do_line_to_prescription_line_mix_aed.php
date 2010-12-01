@@ -14,6 +14,7 @@ $prescription_id = CValue::post("prescription_id");
 $prescription_line_medicament_id = CValue::post("prescription_line_medicament_id");
 $prescription_line_mix_id = CValue::post("prescription_line_mix_id");
 $type = CValue::post("type");
+$mode_pharma = CValue::post("mode_pharma");
 
 $substitute_for_id = CValue::post("substitute_for_id");
 $substitute_for_class = CValue::post("substitute_for_class");
@@ -73,7 +74,6 @@ if(($prescription_line_mix->voie == "Voie parentérale" || $line_med->voie == "Vo
 	}
 }
 
-
 if($error){
   CAppUI::setMsg("Attention, la voie de la ligne ne correspond pas à la voie de la perfusion", UI_MSG_WARNING);
   echo CAppUI::getMsg();
@@ -105,7 +105,7 @@ if($prescription_line_mix_item->_id){
   CAppUI::displayMsg($msg, "CPrescriptionLineMedicament-msg-delete");
 }
 
-echo "<script type='text/javascript'>Prescription.reloadLine('$prescription_line_mix->_guid')</script>";
+echo "<script type='text/javascript'>Prescription.reloadLine('$prescription_line_mix->_guid', '$line_med->_protocole', '$mode_pharma')</script>";
 echo CAppUI::getMsg();
 CApp::rip();
 

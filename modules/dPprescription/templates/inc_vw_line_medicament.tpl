@@ -128,7 +128,8 @@
 
 	  		  <input type="hidden" name="substitute_for_id" value="{{$line->substitute_for_id}}" />
 	  		  <input type="hidden" name="substitute_for_class" value="{{$line->substitute_for_class}}" />
-
+          <input type="hidden" name="mode_pharma" value="{{$mode_pharma}}" />
+					
 	  		  <select name="prescription_line_mix_id" onchange="toggleTypePerfusion(this.form);" style="width: 150px;">
 	  		    <option value="">Nouvelle perfusion</option>
 	  		  
