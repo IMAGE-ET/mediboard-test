@@ -233,7 +233,7 @@ Main.add( function(){
 	  <table class="tbl">
   	  {{foreach from=$lines_cat.comment item=line_comment}}
   	    {{if !$praticien_sortie_id || ($praticien_sortie_id == $line_comment->praticien_id)}}
-          {{include file="inc_vw_line_comment_readonly.tpl" _line_comment=$line_comment nodebug=true}}
+          {{include file="inc_vw_line_comment_lite.tpl" _line_comment=$line_comment nodebug=true}}
         {{/if}}
   	  {{/foreach}}
 	  </table>

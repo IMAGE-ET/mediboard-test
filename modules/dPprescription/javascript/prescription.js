@@ -266,7 +266,9 @@ Prescription = {
 		url.addParam("line_guid", line_guid);
 		url.addParam("mode_protocole", mode_protocole);
 		url.addParam("mode_pharma", mode_pharma);
-		url.addParam("operation_id", operation_id);
+		if (window.DMI_operation_id) {
+	  	url.addParam("operation_id", window.DMI_operation_id);
+	  }
 		url.addParam("mode_substitution", mode_substitution);
 		url.requestUpdate("modalPrescriptionLine", { onComplete: function(){ modalPrescription.position(); } });
 	},

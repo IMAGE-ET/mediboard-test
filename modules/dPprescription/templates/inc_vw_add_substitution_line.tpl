@@ -345,7 +345,7 @@ modifFormDate = function(nb_prises, form_name, protocole,line_id){
 	      {{if $curr_line->_class_name == "CPrescriptionLineMedicament"}}
 	        {{include file="../../dPprescription/templates/inc_vw_line_medicament_lite.tpl" mode_pharma=0 mode_substitution=1}}
 	      {{else}}
-	        {{include file="../../dPprescription/templates/inc_vw_prescription_line_mix_lite.tpl" mode_pharma=0 _prescription_line_mix=$curr_line mode_substitution=1}}
+	        {{include file="../../dPprescription/templates/inc_vw_line_mix_lite.tpl" mode_pharma=0 _prescription_line_mix=$curr_line mode_substitution=1}}
 	      {{/if}}
 	    {{/if}}
 	  {{/foreach}}

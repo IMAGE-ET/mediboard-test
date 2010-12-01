@@ -377,7 +377,7 @@ updateModaleAfterAddLine = function(line_id){
 		  <!-- Parcours des prescription_line_mixes -->
 		  {{foreach from=$_lines_mix_by_type item=_prescription_line_mix}}
 		    {{if !$praticien_sortie_id || ($praticien_sortie_id == $_prescription_line_mix->praticien_id)}}
-			     {{include file="../../dPprescription/templates/inc_vw_prescription_line_mix_lite.tpl"}} 
+			     {{include file="../../dPprescription/templates/inc_vw_line_mix_lite.tpl"}} 
 		    {{/if}}
 		  {{/foreach}}
 		{{/foreach}}
@@ -393,7 +393,7 @@ updateModaleAfterAddLine = function(line_id){
   <!-- Parcours des commentaires --> 
   {{foreach from=$prescription->_ref_lines_med_comments.comment item=_line_comment}}
     {{if !$praticien_sortie_id || ($praticien_sortie_id == $_line_comment->praticien_id)}}
-      {{include file="../../dPprescription/templates/inc_vw_line_comment_readonly.tpl"}}
+      {{include file="../../dPprescription/templates/inc_vw_line_comment_lite.tpl"}}
     {{/if}}
   {{/foreach}}
  </table> 

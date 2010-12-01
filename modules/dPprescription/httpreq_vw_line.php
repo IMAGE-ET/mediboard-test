@@ -114,13 +114,13 @@ switch ($line->_class_name) {
       $smarty->display("inc_vw_line_medicament.tpl");
 			break;
 	case "CPrescriptionLineElement":
-      $smarty->display("inc_vw_line_element_elt.tpl");
+      $smarty->display("inc_vw_line_element.tpl");
 			break;
 	case "CPrescriptionLineMix":
-      $smarty->display("inc_vw_prescription_line_mix.tpl");
+      $smarty->display("inc_vw_line_mix.tpl");
 			break;
 	case "CPrescriptionLineComment":
-		  $smarty->display("inc_vw_line_comment_elt.tpl");
+		  $smarty->display("inc_vw_line_comment.tpl");
 			break;		
 }
 
