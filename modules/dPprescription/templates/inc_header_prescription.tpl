@@ -433,7 +433,7 @@ Main.add( function(){
   {{if !$mode_protocole && !$mode_pharma && ($is_praticien || @$operation_id || $can->admin || $current_user->isInfirmiere())}}
    <td id="div_protocoles" colspan="3">
       <!-- Formulaire de selection protocole -->
-      <form name="applyProtocole" method="post" action="?" onsubmit="return submitProtocole();">
+      <form name="applyProtocole" method="post" action="?" onsubmit="return false;">
 	      <input type="hidden" name="m" value="dPprescription" />
 	      <input type="hidden" name="dosql" value="do_apply_protocole_aed" />
 	      <input type="hidden" name="del" value="0" />
@@ -473,7 +473,7 @@ Main.add( function(){
 	          } );
 	 				</script>				 				
  				{{/if}}
-        <button type="button" class="submit singleclick" onclick="this.form.onsubmit();">Appliquer</button>
+        <button type="button" class="submit singleclick" onclick="submitProtocole();">Appliquer</button>
 		 </form>
     </td>  
   {{/if}}

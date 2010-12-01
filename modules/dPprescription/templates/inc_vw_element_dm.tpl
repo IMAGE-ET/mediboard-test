@@ -43,9 +43,13 @@ Main.add( function(){
   {{if $line->cip_dm}}
     {{$line->_ref_dm->libelle}}, 
 		{{mb_label object=$line field="quantite_dm"}}
-    {{mb_field object=$line field="quantite_dm" form="editDM-$line_guid" increment=1 onchange="onSubmitFormAjax(this.form);"}}
-		{{mb_field object=$line field="cip_dm" hidden=true}}
-		<button type="button" class="trash notext" onclick="this.form.quantite_dm.value=''; this.form.cip_dm.value=''; onSubmitFormAjax(this.form, { onComplete: refreshDM.curry('{{$line->_id}}') } );" /></button>
+    {{if $line->_perm_edit}}
+      {{mb_field object=$line field="quantite_dm" form="editDM-$line_guid" increment=1 onchange="onSubmitFormAjax(this.form);"}}
+      {{mb_field object=$line field="cip_dm" hidden=true}}
+      <button type="button" class="trash notext" onclick="this.form.quantite_dm.value=''; this.form.cip_dm.value=''; onSubmitFormAjax(this.form, { onComplete: refreshDM.curry('{{$line->_id}}') } );" /></button>
+    {{else}}
+      {{mb_value object=$line field="quantite_dm"}}
+    {{/if}}
   {{else}}
 	  <input type="text" name="produit" value="" size="20" style="width: 300px;" class="autocomplete" />
 	  <div style="display:none; width: 350px;" class="autocomplete" id="dm_auto_complete"></div>

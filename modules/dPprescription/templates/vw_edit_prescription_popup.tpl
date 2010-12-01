@@ -251,7 +251,7 @@ emptyProtocole = function() {
 					      </select>
 				      </td>
 				      <td>
-				        <form name="applyProtocoleFirst" method="post" action="?" onsubmit="return checkForm(this);">
+				        <form name="applyProtocoleFirst" method="post" action="?" onsubmit="return false;">
                   <input type="hidden" name="m" value="dPprescription" />
                   <input type="hidden" name="dosql" value="do_apply_protocole_aed" />
                   <input type="hidden" name="del" value="0" />

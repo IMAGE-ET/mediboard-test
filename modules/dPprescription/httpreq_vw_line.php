@@ -64,6 +64,7 @@ if($line instanceof CPrescriptionLineMedicament){
 
 if($line instanceof CPrescriptionLineElement){
   $line->loadRefsPrises();
+  $line->loadRefDM();
 }
 
 if($line instanceof CPrescriptionLineMix){

@@ -165,7 +165,7 @@
 		      {{/if}}
 	    </form>
 
-      {{if $category->chapitre == "soin"}}
+      {{if $category->chapitre == "soin" && $line->_perm_edit}}
       <button type="button" onclick="$('addDM-{{$line->_guid}}').toggle();" class="down">Ajouter DM</button>
       {{/if}}
     </td>   

@@ -487,7 +487,7 @@ Main.add( function(){
 								} );
             	</script>
             	
-							<form name="addLineAerosol" action="?" method="post">
+							<form name="addLineAerosol" action="?" method="post" onsubmit="return false;">
             		<input type="hidden" name="m" value="dPprescription" />
                 <input type="hidden" name="dosql" value="do_prescription_line_mix_item_aed" />
 								<input type="hidden" name="del" value="0" />
