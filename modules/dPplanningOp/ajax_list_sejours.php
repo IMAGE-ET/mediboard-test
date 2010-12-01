@@ -15,9 +15,10 @@ $collision_sejour = null;
 
 $patient = new CPatient;
 $patient->load($patient_id);
-$patient->loadDossierComplet();
+$patient->loadRefsSejours();
 
-foreach($patient->_ref_sejours as $_sejour) {
+foreach($patient->_ref_sejours as $_sejour) {  
+  $_sejour->loadNumDossier();
   $_sejour->loadRefPraticien();
 }
 

@@ -92,8 +92,10 @@ $sejour->_ref_consult_anesth->loadRefConsultation();
 $patient->loadRefsSejours();
 
 if (count($patient->_ref_sejours))
-  foreach($patient->_ref_sejours as $_sejour)
+  foreach($patient->_ref_sejours as $_sejour) {
+    $_sejour->loadNumDossier();
     $_sejour->loadRefPraticien();
+  }
 
 $patient->loadRefsFwd();
 $patient->loadRefsCorrespondants();
