@@ -604,7 +604,7 @@ Main.add( function(){
   {{if $line->_perm_edit || $line->commentaire}}
   <tr>
     <td colspan="9">
-			<form name="commentaire-{{$line->_guid}}">
+			<form name="commentaire-{{$line->_guid}}" onsubmit="this.commentaire.blur(); return false;">
         {{mb_label object=$line field="commentaire" size=60}}: 
 	      	{{if $line->_protocole}}
 	      	  {{assign var=_line_praticien_id value=$app->user_id}}
