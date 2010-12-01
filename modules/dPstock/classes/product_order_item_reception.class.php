@@ -138,7 +138,9 @@ class CProductOrderItemReception extends CMbObject {
   
   function getUnitQuantity(){
     $this->completeField("quantity");
-    
+
+/*   
+    // Attention, avec cette requete, les order_item ne sont plus chargés !
     $where = array(
       $this->_spec->key => "='$this->_id'",
     );
@@ -159,6 +161,15 @@ class CProductOrderItemReception extends CMbObject {
     $sql->addWhere($where);
     
     return $this->_unit_quantity = $this->_spec->ds->loadResult($sql->getRequest());
+*/
+    
+    $this->loadRefOrderItem();
+    $item = $this->_ref_order_item;
+    
+    $item->loadReference();
+    $reference = $item->_ref_reference;
+    
+    return $this->_unit_quantity = $this->quantity * $reference->_unit_quantity;
   }
  
   function getUsedQuantity(){
