@@ -348,7 +348,7 @@ class CHPrimXMLEvenementsPatients extends CHPrimXMLEvenements {
     if ($mbVenue->entree_reelle && CAppUI::conf("hprimxml notifier_entree_reelle")) {
       $mbVenue->entree_reelle = $dateHeure;
     } else {
-      $mbVenue->entree_reelle = $dateHeure;
+      $mbVenue->entree_prevue = $dateHeure;
     }
        
     return $mbVenue;
