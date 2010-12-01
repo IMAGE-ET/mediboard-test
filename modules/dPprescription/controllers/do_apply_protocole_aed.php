@@ -67,6 +67,9 @@ if($current_user->isInfirmiere() && !CModule::getCanDo("dPprescription")->admin)
 	
 	if(count($errors)){
 		CAppUI::setMsg("Impossible d'appliquer le protocole sélectionné car le compte infirmier ne permet pas de créer des lignes dans les chapitres suivants: ".join(", ", $errors), UI_MSG_ERROR);
+		if ($prescription_id) {
+		  echo "<script type='text/javascript'>Prescription.reloadPrescSejour($prescription_id, null, null, null, null, null, null, null, '$pratSel_id', null, '$praticien_id')</script>";
+		}
     echo CAppUI::getMsg();
     CApp::rip();
 	}

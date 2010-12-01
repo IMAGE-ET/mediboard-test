@@ -61,7 +61,7 @@ addProtocole = function(prescription_id) {
   }
   else {
 	  $V(oFormProtocole.praticien_id, $('choix_prat').value);
-	  submitFormAjax(oFormProtocole, 'msgajax');
+	  onSubmitFormAjax(oFormProtocole);
   }
 }
 
@@ -72,8 +72,6 @@ emptyProtocole = function() {
 }
 
 </script>
-
-<div style="display: none;" id="msgajax"></div>
 
 <table class="main">
   {{if $prescription->_id}}
@@ -269,7 +267,7 @@ emptyProtocole = function() {
 	                <div style="display:none; width: 200px;" class="autocomplete" id="protocole_auto_complete"></div>
                 </form>
                 
-				        <form action="?m=dPprescription" method="post" name="addPrescription" onsubmit="return checkForm(this);">
+				        <form action="?m=dPprescription" method="post" name="addPrescription" >
 				          <input type="hidden" name="m" value="dPprescription" />
 				          <input type="hidden" name="dosql" value="do_prescription_aed" />
 				          <input type="hidden" name="prescription_id" value="" />
@@ -278,7 +276,7 @@ emptyProtocole = function() {
 				          <input type="hidden" name="object_class" value="CSejour" />
 				          <input type="hidden" name="type" value="sejour"/>
 				          <input type="hidden" name="callback" value="addProtocole" />
-	                <button type="button" class="submit singleclick" onclick="submitFormAjax(this.form, 'systemMsg');">Créer</button>         
+	                <button type="button" class="submit singleclick" onclick="WaitingMessage.cover('prescription_sejour'); onSubmitFormAjax(this.form);">Créer</button>         
                 </form>
 				      </td>
 				    </tr>
