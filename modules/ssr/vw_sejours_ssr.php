@@ -62,8 +62,8 @@ foreach ($sejours as $_sejour) {
 	}
 
   // Filtre sur prescription
-  $_sejour->loadRefPrescriptionSejour();
-	if ($show == "nopresc" && $_sejour->_ref_prescription_sejour->_id) {
+  $prescription = $_sejour->loadRefPrescriptionSejour();
+	if ($show == "nopresc" && $prescription->_id) {
 		unset($sejours[$_sejour->_id]);
 		continue;
 	}
@@ -78,8 +78,7 @@ foreach ($sejours as $_sejour) {
   }
 	
   // Bilan SSR
-  $_sejour->loadRefBilanSSR();
-  $bilan =& $_sejour->_ref_bilan_ssr;
+  $bilan = $_sejour->loadRefBilanSSR();
 
   // Kinés référent et journée
   $bilan->loadRefKineJournee($date);
@@ -110,16 +109,14 @@ foreach ($sejours as $_sejour) {
   $_sejour->checkDaysRelative($date);
   $_sejour->loadNumDossier();
   $_sejour->loadRefsNotes();
-	$_sejour->countBackRefs("evenements_ssr");
 	
   // Patient
-  $_sejour->loadRefPatient();
-	$patient =& $_sejour->_ref_patient;
+  $patient = $_sejour->loadRefPatient();
 	$patient->loadIPP();
 	
   // Modification des prescription
-	$_sejour->_ref_prescription_sejour->loadRefsLinesElementByCat();
-	$_sejour->_ref_prescription_sejour->countRecentModif();
+	$prescription->loadRefsLinesElementByCat();
+	$prescription->countRecentModif();
 
   // Praticien demandeur
 	$bilan->loadRefPraticienDemandeur();

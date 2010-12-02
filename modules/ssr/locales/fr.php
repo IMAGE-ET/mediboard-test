@@ -112,6 +112,7 @@ $locales['CBilanSSR-title-modify'] = 'Modifier le bilan SSR';
 $locales['CBilanSSR.all'] = 'Tous les bilans SSR';
 $locales['CBilanSSR.none'] = 'Aucun bilan SSR';
 $locales['CBilanSSR.one'] = 'bilan SSR';
+$locales['CCdARRObject'] = 'Code CdARR';
 $locales['CDependancesRHS'] = 'Dépendances';
 $locales['CDependancesRHS-alimentation'] = 'Alimentation';
 $locales['CDependancesRHS-alimentation-court'] = 'Alim.';

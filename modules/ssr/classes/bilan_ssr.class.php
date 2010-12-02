@@ -156,7 +156,7 @@ class CBilanSSR extends CMbObject {
    */
   function loadRefPraticienDemandeur() {
   	$sejour = $this->loadRefSejourDemandeur();
-		$praticien = $sejour->loadRefPraticien();
+		$praticien = $sejour->loadRefPraticien(1);
 		
 		$this->_prat_demandeur_id = $praticien->_id;
 		return $this->_ref_prat_demandeur = $praticien;

@@ -10,7 +10,7 @@
 
 CCanDo::checkRead();
 
-$date = mbDate();
+$date = CValue::get("date", mbDate());
 
 // Chargement des sejours SSR pour la date courante
 $group_id = CGroups::loadCurrent()->_id;
@@ -26,28 +26,23 @@ foreach ($sejours as $_sejour) {
   $_sejour->loadRefPraticien(1);
   
   // Bilan SSR
-  $_sejour->loadRefBilanSSR();
-  $bilan =& $_sejour->_ref_bilan_ssr;
+  $bilan = $_sejour->loadRefBilanSSR();
   $bilan->loadRefKineJournee($date);
+  $bilan->loadRefPraticienDemandeur();
   
   // Détail du séjour
   $_sejour->checkDaysRelative($date);
   $_sejour->loadNumDossier();
   $_sejour->loadRefsNotes();
-  $_sejour->countBackRefs("evenements_ssr");
-  $_sejour->countEvenementsSSR($date);
   
   // Patient
-  $_sejour->loadRefPatient();
-  $patient =& $_sejour->_ref_patient;
+  $patient = $_sejour->loadRefPatient();
   $patient->loadIPP();
 	
-	$_sejour->loadRefPrescriptionSejour();
-	$_sejour->_ref_prescription_sejour->loadRefsLinesElementByCat();
-  $_sejour->_ref_prescription_sejour->countRecentModif();
-	
-  // Chargement des lignes de la prescription
-	$_sejour->_ref_prescription_sejour->loadRefsLinesElement();
+  // Prescription
+	$prescription = $_sejour->loadRefPrescriptionSejour();
+	$prescription->loadRefsLinesElementByCat();
+  $prescription->countRecentModif();
 
   // Chargement du planning du sejour
   $args_planning = array();
