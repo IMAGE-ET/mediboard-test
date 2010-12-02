@@ -14,6 +14,9 @@ $user_id = CValue::getOrSession("filter_user_id", CAppUI::$user->_id);
 $pack_id = CValue::get("pack_id");
 $filter_class = CValue::getOrSession("filter_class", '');
 
+if (!$user_id)
+  $user_id = CAppUI::$user->_id;
+
 $userSel = new CMediusers;
 $userSel->load($user_id);
 $userSel->loadRefs();

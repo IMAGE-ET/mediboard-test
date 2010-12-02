@@ -22,7 +22,7 @@
         var section = $("section");
         $A(fields).each(function(item, i){
           if (item.key != "AddItem" && item != "IndexOf")
-          section.insert("<option value='" + i + "'>"+ item[0].section + "</option>");
+            section.insert("<option value='" + i + "'>" + item[1].section + "</option>");
         });
         section.selectedIndex = -1;
       }
