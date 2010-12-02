@@ -15,6 +15,13 @@ CAppUI::requireSystemClass("mbObjectSpec");
 /**
  * Class CMbObject 
  * @abstract Adds Mediboard abstraction layer functionality
+ * Too many framework responsability here :
+ * - Classification: modules
+ * - Metamodel: properties, class, validation 
+ * - Observation: handlers
+ * - Persistence: storage, navigation, querying, merging, seeking, cache, userlog 
+ * - Configuration: permissions, object configs 
+ * - Business: notes, documents, aides, views, affectations personnels (!), model templates  
  */
 class CMbObject {
   static $useObjectCache = true;
@@ -2286,14 +2293,14 @@ class CMbObject {
     $last_log = new CUserLog;
     $last_log->setObject($this);
     $last_log->loadMatchingObject("date DESC");
-    $this->_ref_last_log = $last_log;
+    return $this->_ref_last_log = $last_log;
   }
   
   function loadFirstLog() {
     $last_log = new CUserLog;
     $last_log->setObject($this);
     $last_log->loadMatchingObject("date ASC");
-    $this->_ref_first_log = $last_log;
+    return $this->_ref_first_log = $last_log;
   }
   
   function loadAffectationsPersonnel() {
