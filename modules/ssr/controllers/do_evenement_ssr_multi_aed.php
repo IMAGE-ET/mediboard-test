@@ -77,7 +77,7 @@ else {
 		$referant =& $bilan->_ref_kine_referent;
 
 		foreach($_days as $_day){
-	    if (!in_range($_day, $entree, $sortie)) {
+	    if (!CMbRange::in($_day, $entree, $sortie)) {
 	      CAppUI::setMsg("CEvenementSSR-msg-failed-bounds", UI_MSG_WARNING);
 	      continue; 
 	    }

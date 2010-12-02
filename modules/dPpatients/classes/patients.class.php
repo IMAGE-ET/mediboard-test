@@ -635,7 +635,7 @@ class CPatient extends CMbObject {
       if (preg_match("/PERIODE_AMO_(\d)+/i", $category)) {
         $deb_amo = mbDateFromLocale($periode["PER_AMO_DEBUT"]);
         $fin_amo = CValue::first(mbDateFromLocale($periode["PER_AMO_FIN"]), "2015-01-01");
-        if (in_range(mbDate(), $deb_amo, $fin_amo)) {
+        if (CMbRange::in(mbDate(), $deb_amo, $fin_amo)) {
           $this->deb_amo  = $deb_amo;
           $this->fin_amo  = $fin_amo;
           $this->ald      = $periode["PER_AMO_ALD"];

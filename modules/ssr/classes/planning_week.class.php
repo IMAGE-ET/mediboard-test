@@ -145,7 +145,7 @@ class CPlanningWeek  {
    * @return bool
    */
   function isDayActive($day) {
-  	return in_range($day, $this->date_min_active, $this->date_max_active);
+  	return CMbRange::in($day, $this->date_min_active, $this->date_max_active);
   }
 
   /**

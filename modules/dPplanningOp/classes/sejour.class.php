@@ -1059,6 +1059,7 @@ class CSejour extends CCodable {
 		$this->_ref_prescription_sejour->object_id = $this->_id;
     $this->_ref_prescription_sejour->type = "sejour";
 		$this->_ref_prescription_sejour->loadMatchingObject();
+		return $this->_ref_prescription_sejour;
 	}
 	
   function loadRefsPrescripteurs(){

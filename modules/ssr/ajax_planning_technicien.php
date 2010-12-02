@@ -84,7 +84,7 @@ foreach($evenements as $_evenement){
   }
   
 	$_sejour = $_evenement->_ref_sejour;
-	if (!in_range($_evenement->debut, mbDate($_sejour->entree), mbDate("+1 DAY", $_sejour->sortie))) {
+	if (!CMbRange::in($_evenement->debut, mbDate($_sejour->entree), mbDate("+1 DAY", $_sejour->sortie))) {
 		$class = "disabled";
 	}
 	

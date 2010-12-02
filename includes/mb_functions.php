@@ -605,17 +605,6 @@ function mbDateFromLocale($date) {
 }
 
 /**
- * Check if given value is in given range or equals to limit
- * @param $value mixed The value to check
- * @param $min mixed The lesser limit
- * @param $max mixed The upper limit
- * @return bool 
- */
-function in_range($value, $min, $max) {
-  return $value <= $max && $value >= $min;
-}
-
-/**
  * Check if a number is a valid Luhn number
  * see http://en.wikipedia.org/wiki/Luhn
  * @param code string String representing a potential Luhn number

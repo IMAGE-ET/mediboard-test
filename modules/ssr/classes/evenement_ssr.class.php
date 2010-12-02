@@ -115,7 +115,7 @@ class CEvenementSSR extends CMbObject {
       $date_debut = mbDate($this->debut);
       $date_entree = mbDate(mbDate($sejour->entree));
       $date_sortie = mbDate(mbDate($sejour->sortie));
-			if (!in_range($date_debut, $date_entree, $date_sortie)) {
+			if (!CMbRange::in($date_debut, $date_entree, $date_sortie)) {
         return "Evenement SSR en dehors des dates du séjour";
 			}
 		}

@@ -109,7 +109,7 @@ class CBilanSSR extends CMbObject {
 	    if ($_replacement->_id) {
 	      $_replacement->loadRefConge();
 	      $conge = $_replacement->_ref_conge;
-	      if (in_range(CValue::first($date, mbDate()), $conge->date_debut, $conge->date_fin)) {
+	      if (CMbRange::in(CValue::first($date, mbDate()), $conge->date_debut, $conge->date_fin)) {
 	        $_replacement->loadRefReplacer();
 	        $replacer =& $_replacement->_ref_replacer;
 	        $replacer->loadRefFunction();

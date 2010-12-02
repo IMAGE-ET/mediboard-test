@@ -57,13 +57,13 @@ class CDateSpec extends CMbFieldSpec {
     
     // Mois grégorien
     $mois = intval($matches[2]);
-    if (!in_range($mois, $this->progressive ? 0 : 1, 12)) { // Possibilité de mettre des mois vides ()
+    if (!CMbRange::in($mois, $this->progressive ? 0 : 1, 12)) { // Possibilité de mettre des mois vides ()
       return "Mois '$mois' non compris entre 1 et 12 ('$propValue')";
     }
       
     // Jour grégorien
     $jour = intval($matches[3]);
-    if (!in_range($jour, $this->progressive ? 0 : 1, 31)) {
+    if (!CMbRange::in($jour, $this->progressive ? 0 : 1, 31)) {
       return "Jour '$jour' non compris entre 1 et 31 ('$propValue')";
     }
   }
