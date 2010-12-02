@@ -10,10 +10,10 @@
 CAppUI::requireModuleClass("dPccam", "codable");
 
 class CConsultation extends CCodable {
-  const PLANIFIE = 16;
+  const PLANIFIE       = 16;
   const PATIENT_ARRIVE = 32;
-  const EN_COURS = 48;
-  const TERMINE = 64;
+  const EN_COURS       = 48;
+  const TERMINE        = 64;
  
   // DB Table key
   var $consultation_id = null;
