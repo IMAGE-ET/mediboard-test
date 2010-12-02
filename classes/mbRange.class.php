@@ -32,7 +32,9 @@ abstract class CMbRange {
 	 * @return boolean 
 	 */
 	static function in($value, $lower, $upper) {
-	  return ($value <= $upper || $upper === null) && ($value >= $lower || $lower === null);
+	  return 
+		  ($value <= $upper || $upper === null) && 
+			($value >= $lower || $lower === null);
 	}
 	
 	/**
@@ -44,7 +46,9 @@ abstract class CMbRange {
 	 * @return boolean
 	 */
 	static function collides($lower1, $upper1, $lower2, $upper2) {
-		return ($lower1 <= $upper2 || $upper2 === null) && ($upper1 >= $lower2 || $lower1 === null);
+		return 
+		  ($lower1 <= $upper2 || $lower1 === null || $upper2 === null) && 
+			($upper1 >= $lower2 || $upper1 === null || $lower1 === null);
 	}
 
   /**
