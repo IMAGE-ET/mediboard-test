@@ -1721,7 +1721,32 @@ class CSetupdPprescription extends CSetup {
               CHANGE `quantite` `quantite` FLOAT;";
 		$this->addQuery($sql);
 										
-    $this->mod_version = "1.19";
+		$this->makeRevision("1.19");
+		$sql = "ALTER TABLE `category_prescription` 
+              CHANGE `chapitre` `chapitre` ENUM ('anapath','biologie','imagerie','consult','kine','soin','dm','dmi','med_elt','ds') NOT NULL";
+    $this->addQuery($sql);
+    
+    $this->makeRevision("1.20");
+		$sql = "UPDATE `administration`
+		         LEFT JOIN prescription_line_element ON (prescription_line_element.prescription_line_element_id = administration.object_id AND administration.object_class = 'CPrescriptionLineElement')
+             LEFT JOIN element_prescription ON element_prescription.element_prescription_id = prescription_line_element.element_prescription_id
+						 LEFT JOIN category_prescription ON category_prescription.category_prescription_id = element_prescription.category_prescription_id
+						 SET `unite_prise` = category_prescription.chapitre
+             WHERE `unite_prise` IS NOT NULL 
+						 AND object_class = 'CPrescriptionLineElement'
+						 AND unite_prise != 'aucune_prise'";
+    $this->addQuery($sql);
+		
+	 $sql = "UPDATE `planification_systeme`
+             LEFT JOIN prescription_line_element ON (prescription_line_element.prescription_line_element_id = planification_systeme.object_id AND planification_systeme.object_class = 'CPrescriptionLineElement')
+             LEFT JOIN element_prescription ON element_prescription.element_prescription_id = prescription_line_element.element_prescription_id
+             LEFT JOIN category_prescription ON category_prescription.category_prescription_id = element_prescription.category_prescription_id
+             SET `unite_prise` = category_prescription.chapitre
+             WHERE `unite_prise` IS NOT NULL 
+             AND object_class = 'CPrescriptionLineElement'";
+    $this->addQuery($sql);
+		
+		$this->mod_version = "1.21";
   }
 }
 

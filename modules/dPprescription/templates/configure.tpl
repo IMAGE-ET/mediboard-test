@@ -106,6 +106,7 @@ function onchangeMed(radioButton, other_field){
     {{mb_include module=system template=inc_config_bool var=show_chapter_soin}}
     {{mb_include module=system template=inc_config_bool var=show_chapter_dm}}
     {{mb_include module=system template=inc_config_bool var=show_chapter_dmi}}
+		{{mb_include module=system template=inc_config_bool var=show_chapter_ds}}
 		<tr>
       <th class="title" colspan="2">
         Droits infirmiers sur la prescription
@@ -122,6 +123,7 @@ function onchangeMed(radioButton, other_field){
 		{{mb_include module=system template=inc_config_bool var=droits_infirmiers_soin}}
 		{{mb_include module=system template=inc_config_bool var=droits_infirmiers_dm}}
 		{{mb_include module=system template=inc_config_bool var=droits_infirmiers_dmi}}
+		{{mb_include module=system template=inc_config_bool var=droits_infirmiers_ds}}
 	  {{assign var="var" value="time_alerte_modification"}}
 	  <tr>
 	    <th colspan="2" class="title">
@@ -258,6 +260,7 @@ function onchangeMed(radioButton, other_field){
 				  {{include file="inc_configure_chapitre.tpl" var=kine}}
 				  {{include file="inc_configure_chapitre.tpl" var=soin}}
 				  {{include file="inc_configure_chapitre.tpl" var=dm}}
+					{{include file="inc_configure_chapitre.tpl" var=ds}}
 	      </table>
 	    </td>
 	  </tr>

@@ -504,11 +504,7 @@ class CPrescriptionLine extends CMbObject {
 					$administrations["adm_in_hour"][$minute] = 0;
 				}
 				$administrations["adm_in_hour"][$minute] += $_administration->quantite;
-			
-			  
-			
-			
-			
+
 			  if(!isset($administrations['quantite'])){
           $administrations['quantite'] = '';
           $administrations['administrations'][$_administration->_id] = '';
@@ -610,8 +606,12 @@ class CPrescriptionLine extends CMbObject {
       $_prise->updateQuantite();
       
       // Cle permettant de ranger les prises prevues, unite_prise si la prise est de type moment sinon prise->_id
-      $key_tab = ($_prise->moment_unitaire_id || $_prise->heure_prise) ? $_prise->unite_prise : $_prise->_id;
-      
+			if($this instanceof CPrescriptionLineElement){
+        $key_tab = ($_prise->moment_unitaire_id || $_prise->heure_prise) ? $this->_chapitre : $_prise->_id;
+			} else {
+			  $key_tab = ($_prise->moment_unitaire_id || $_prise->heure_prise) ? $_prise->unite_prise : $_prise->_id;
+      }
+
 			// Stockage des lignes qui composent le plan de soin
       if($name_chap && $name_cat){
         $prescription->_ref_lines_elt_for_plan[$name_chap][$name_cat][$this->_id][$key_tab] = $this;
@@ -655,8 +655,12 @@ class CPrescriptionLine extends CMbObject {
 			      
       // Stockage du libelle de l'unite de prise
       if($_prise->moment_unitaire_id || $_prise->heure_prise){
-        $this->_prises_for_plan[$_prise->unite_prise][$_prise->_id] = $_prise;
-      } else {
+        if($this instanceof CPrescriptionLineElement){
+          $this->_prises_for_plan[$this->_chapitre][$_prise->_id] = $_prise;
+        } else {
+          $this->_prises_for_plan[$_prise->unite_prise][$_prise->_id] = $_prise;
+        }
+			} else {
         $this->_prises_for_plan[$_prise->_id] = $_prise;
       }
     }

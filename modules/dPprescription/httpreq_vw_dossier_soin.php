@@ -118,6 +118,7 @@ if($object_id && $object_class){
   // Chargement de la ligne de prescription
   $line = new $object_class;
   $line->load($object_id);
+	
   if($line instanceof CPrescriptionLineMedicament){
   	$line->countSubstitutionsLines();
 	  $line->countBackRefs("administration");

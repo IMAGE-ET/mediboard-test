@@ -175,7 +175,9 @@ class CPrisePosologie extends CMbMetaObject {
       if($this->_ref_object->_unite_dispensation == $produit->libelle_unite_presentation){
         $this->_ref_object->_ratio_administration_dispensation = 1;
       } else {
-        $this->_ref_object->_ratio_administration_dispensation = 1 / $produit->nb_unite_presentation;
+      	if($produit->nb_unite_presentation){
+          $this->_ref_object->_ratio_administration_dispensation = 1 / $produit->nb_unite_presentation;
+				}
       }
       // Calcul de la quantite 
       $this->_quantite_dispensation = $this->_quantite_administrable * $this->_ref_object->_ratio_administration_dispensation;       
@@ -430,7 +432,11 @@ class CPrisePosologie extends CMbMetaObject {
 		// Sauvegarde des planifications systemes
 		foreach($planifs as $_planification){
       $new_planif = new CPlanificationSysteme();
-      $new_planif->unite_prise = $_planification["unite_prise"];
+			if($this->_ref_object instanceof CPrescriptionLineElement){
+			  $new_planif->unite_prise = $this->_ref_object->_chapitre;
+      } else {
+			  $new_planif->unite_prise = $_planification["unite_prise"];
+      }
       $new_planif->prise_id = $_planification["prise_id"];
       $new_planif->dateTime = $_planification["dateTime"];
       $new_planif->object_id = $this->_ref_object->_id;

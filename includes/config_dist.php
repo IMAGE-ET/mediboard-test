@@ -329,6 +329,7 @@ $dPconfig["dPprescription"] = array (
 		"droits_infirmiers_soin"     => "0",
 		"droits_infirmiers_dm"       => "0",
 		"droits_infirmiers_dmi"      => "0",
+		"droits_infirmiers_ds"      => "0",
 		"show_chapter_med"      => "1",
 		"show_chapter_med_elt" => "0",
     "show_chapter_anapath"  => "1",
@@ -339,6 +340,7 @@ $dPconfig["dPprescription"] = array (
     "show_chapter_soin"     => "1",
     "show_chapter_dm"       => "1",
     "show_chapter_dmi"      => "1",
+		"show_chapter_ds"       => "0",
 		"preselect_livret"      => "1",
 		"use_libelle_livret"    => "0"
   ),
@@ -376,6 +378,10 @@ $dPconfig["dPprescription"] = array (
       "phrase"      => "Délivrer",
       "unite_prise" => "dispositif(s)"
     ),
+		"ds" => array(
+		  "phrase"      => "",
+			"unite_prise" => ""
+		),
 		"med_elt" => array(
 		  "phrase"      => "",
       "unite_prise" => ""
