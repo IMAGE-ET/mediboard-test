@@ -19,19 +19,20 @@ Main.add( function(){
 	{{if $line->type_line == "perfusion"}}
 	  toggleContinuiteLineMix(editPerfForm.continuite_perf,'{{$line->_id}}');
   {{/if}}
+
+	//Autocomplete des medicaments dans les aérosols
+	var urlAuto = new Url("dPmedicament", "httpreq_do_medicament_autocomplete");
+	urlAuto.addParam("produit_max", 40);
+	window.acAerosol = urlAuto.autoComplete("addLineAerosol_produit", "aerosol_auto_complete", {
+	  minChars: 3,
+	  updateElement: updateFieldsAerosol,
+	  callback: 
+	    function(input, queryString){
+	      return (queryString + "&inLivret="+($V(getForm("addLineAerosol")._recherche_livret)?'1':'0')+"&hors_specialite=0"); 
+	    }
+	} );
 } );
 
-//Autocomplete des medicaments dans les aérosols
-var urlAuto = new Url("dPmedicament", "httpreq_do_medicament_autocomplete");
-urlAuto.addParam("produit_max", 40);
-window.acAerosol = urlAuto.autoComplete("addLineAerosol_produit", "aerosol_auto_complete", {
-  minChars: 3,
-  updateElement: updateFieldsMedicament,
-  callback: 
-    function(input, queryString){
-      return (queryString + "&inLivret="+($V(getForm("addLineAerosol")._recherche_livret)?'1':'0')+"&hors_specialite=0"); 
-    }
-} );
 
 </script>
 
@@ -485,18 +486,6 @@ window.acAerosol = urlAuto.autoComplete("addLineAerosol_produit", "aerosol_auto_
 								  }
 								}
 								
-								Main.add( function(){
-								    // Autocomplete des DM
-								    var urlAuto = new Url("dPmedicament", "httpreq_do_medicament_autocomplete");
-								    urlAuto.autoComplete("addLineAerosol_produit", "aerosol_auto_complete", {
-								      minChars: 3,
-								      updateElement: updateFieldsAerosol,
-								      callback: 
-								        function(input, queryString){
-								          return (queryString + "&inLivret="+($V(getForm("addLineAerosol")._recherche_livret)?'1':'0')+"&hors_specialite=0"); 
-								        }
-								    } );
-								} );
             	</script>
             	
 							<form name="addLineAerosol" action="?" method="post" onsubmit="return false;">
