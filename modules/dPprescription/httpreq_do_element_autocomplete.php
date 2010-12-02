@@ -8,8 +8,6 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
  */
 
-global $g;
-
 $chapitre = CValue::get("category");  // Chapitre
 $category_id = CValue::get("category_id");
 $libelle = CValue::post("libelle", "aaa");
@@ -20,7 +18,8 @@ if(!$category_id){
 	if($chapitre){
 	  $where["chapitre"] = "= '$chapitre'";
 	}
-	$where[] = "group_id = '$g' OR group_id IS NULL";
+	$group_id = CGroups::loadCurrent()->_id;
+	$where[] = "group_id = '$group_id' OR group_id IS NULL";
 	$categories = $category_prescription->loadList($where);
 }
 
@@ -33,9 +32,9 @@ if($category_id){
   $where["category_prescription_id"] = CSQLDataSource::prepareIn(array_keys($categories));
 }
 
-$where["libelle"] = "LIKE '%$libelle%'";
 $where["cancelled"] = " = '0'";
-$elements = $element_prescription->loadList($where);
+$elements = $element_prescription->seek($libelle, $where);
+
 foreach($elements as &$element){
 	$element->loadRefCategory();
 }
