@@ -35,7 +35,7 @@
         <input type="hidden" name="plageop_id" value="{{$plage->_id}}" />
         <input type="hidden" name="temps_inter_op" value="{{$plage->temps_inter_op}}" />
         <input type="hidden" name="_repeat" value="1" />
-        <input type="hidden" name="_type_repeat" value="1" />
+        <input type="hidden" name="_type_repeat" value="simple" />
         {{if $plage->chir_id}}
         Dr {{$plage->_ref_chir->_view}}
         {{if @$modules.messagerie}}
@@ -101,7 +101,7 @@
             <input type="hidden" name="del" value="0" />
             <input type="hidden" name="plageop_id" value="{{$plage->_id}}" />
             <input type="hidden" name="_repeat" value="1" />
-            <input type="hidden" name="_type_repeat" value="1" />
+            <input type="hidden" name="_type_repeat" value="simple" />
           
             <select name="anesth_id" style="width: 10em;">
             <option value="">&mdash; Anesthésiste</option>

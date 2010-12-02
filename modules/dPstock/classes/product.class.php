@@ -143,7 +143,10 @@ class CProduct extends CMbObject {
     $this->_unique_usage = ($this->unit_quantity < 2 && !$this->renewable);
   }
   
-  function loadRefsReferences() {
+  function loadRefsReferences($cache = false) {
+    if ($cache && !empty($this->_ref_references)) {
+      return $this->_ref_references;
+    }
     return $this->_ref_references = $this->loadBackRefs('references');
   }
 
@@ -381,7 +384,7 @@ class CProduct extends CMbObject {
     return $this->_in_order;
   }
   
-  private static function fillFlow(&$array, $products, $n, $start, $unit, $services, $financial) {
+  private static function fillFlow(&$array, $products, $n, $start, $unit, $services) {
     foreach($services as $_key => $_service) {
       $array["out"]["total"][$_key] = array(0, 0);
     }
@@ -398,6 +401,10 @@ class CProduct extends CMbObject {
     $d["total"] = array(
       "total" => array(0, 0)
     );
+    
+    //CProductReference::$_load_lite = true; // don't use this
+    CProductOrderItem::$_load_lite = true;
+    CProductOrderItemReception::$_load_lite = true;
     
     for($i = 0; $i < $n; $i++) {
       $from = mbDate("+$i $unit", $start);
@@ -416,7 +423,7 @@ class CProduct extends CMbObject {
         $counts = $_product->getConsumptionMultiple($from, $to, $services);
         
         $coeff = 1;
-        $ref = reset($_product->loadRefsReferences());
+        $ref = reset($_product->loadRefsReferences(true));
         if ($ref) {
           $coeff = $ref->_unit_price;
         }
@@ -456,7 +463,7 @@ class CProduct extends CMbObject {
     $d = CMbArray::transpose($d);
   }
   
-  static function computeBalance(array $products, array $services, $year, $month = null, $financial = false){
+  static function computeBalance(array $products, array $services, $year, $month = null){
     $flows = array();
     
     // YEAR //////////
@@ -465,7 +472,7 @@ class CProduct extends CMbObject {
       "out" => array(),
     );
     $start = mbDate(null, "$year-01-01");
-    self::fillFlow($year_flows, $products, 12, $start, "MONTH", $services, $financial);
+    self::fillFlow($year_flows, $products, 12, $start, "MONTH", $services);
     $flows["year"] = array($year_flows, "%b", "Bilan annuel"); 
     
     // MONTH //////////
@@ -475,7 +482,7 @@ class CProduct extends CMbObject {
         "out" => array(),
       );
       $start = mbDate(null, "$year-$month-01");
-      self::fillFlow($month_flows, $products, mbTransformTime("+1 MONTH -1 DAY", $start, "%d"), $start, "DAY", $services, $financial);
+      self::fillFlow($month_flows, $products, mbTransformTime("+1 MONTH -1 DAY", $start, "%d"), $start, "DAY", $services);
       $flows["month"] = array($month_flows, "%d", "Bilan mensuel");
     }
     
@@ -499,7 +506,7 @@ class CProduct extends CMbObject {
         $consum = $_product->getConsumption($from, $to, null, false);
         
         $coeff = 1;
-        $ref = reset($_product->loadRefsReferences());
+        $ref = reset($_product->loadRefsReferences(true));
         if ($ref) {
           $coeff = $ref->_unit_price;
         }

@@ -409,7 +409,35 @@ class CMbDate {
       "count" => intval($diff / $secs)
     );
   }
+  
+  /**
+   * Returns the month number
+   * @param Date $date
+   * @return int The month number
+   */
+  static function monthNumber($date) {
+    return intval(mbTransformTime(null, $date, "%m"));
+  }
+  
+  /**
+   * Computes the week number in the month
+   * @param Date $date
+   * @return int The week number
+   */
+  static function weekNumberInMonth($date) {
+    $month = self::monthNumber($date);
+    $week_number = 0;
+    
+    do {
+      $date = mbDate("-1 WEEK", $date);
+      $_month = self::monthNumber($date);
+      $week_number++;
+    } while ($_month == $month);
+    
+    return $week_number;
+  }
 }
+
 CMbDate::$xmlDateTime = CMbDate::$xmlDate."T".CMbDate::$xmlTime;
 /**
  * Return the std variance of an array

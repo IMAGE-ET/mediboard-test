@@ -237,16 +237,8 @@ Main.add(function(){
         </td>
       </tr>
       <tr>
-        <th>
-          <label for="_type_repeat" title="Espacement des plages">Type de répétition</label>
-        </th>
-        <td>
-          <select name="_type_repeat">
-            <option value="1">Normale</option>
-            <option value="2">Une semaine sur deux</option>
-            <option value="3">Une semaine sur trois</option>
-          </select>
-        </td>
+        <th>{{mb_label object=$plagesel field="_type_repeat"}}</th>
+        <td>{{mb_field object=$plagesel field="_type_repeat" typeEnum=select}}</td>
         <th>{{mb_label object=$plagesel field="delay_repl"}}</th>
         <td>{{mb_field object=$plagesel field="delay_repl" size=1 increment=true form="editFrm" min=0}} jours</td>
       </tr>

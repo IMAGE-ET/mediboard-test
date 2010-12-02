@@ -45,12 +45,15 @@ $list_locations = $stock_location->loadList(null, "position, name");
 $societe = new CSociete;
 $list_societes = $societe->loadList(null, "name");
 
+$delivery = new CProductDelivery;
+
 // Création du template
 $smarty = new CSmartyDP();
 
 $smarty->assign('stock',           $stock);
 $smarty->assign('product',         $product);
 $smarty->assign('reference',       $reference);
+$smarty->assign('delivery',        $delivery);
 
 $smarty->assign('product_selection_id', $product_selection_id);
 $smarty->assign('category_id',          $category_id);

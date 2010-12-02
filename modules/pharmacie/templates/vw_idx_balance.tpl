@@ -27,12 +27,52 @@ function toggleDisplay(value) {
       container.select(".quantity,.price,.sep").invoke("show");
   }
 }
+
+function exportData(table, selector) {
+  var url = new Url("system", "export_csv_array");
+  url.addParam("suppressHeaders", 1);
+  var file = {
+    data: [],
+    filename: "Export"
+  };
+  
+  table.select("tr").each(function(row, i){
+    file.data.push([]);
+    var line = file.data.last();
+    row.childElements().each(function(cell, j) {
+      cell = cell.down(selector || "*") || cell;
+      var v = cell.innerHTML.replace(/\n/g, "").stripTags().strip();
+      line.push(v);
+    });
+  });
+  
+  file.data = file.data.toJSON();
+  
+  window._tempIframe = window._tempIframe || Element.getTempIframe();
+  
+  url.pop(20, 20, 'csv_export', null, null, file, window._tempIframe);
+}
+
+function exportPDF(table) {
+  var url = new Url("system", "export_pdf");
+  url.addParam("suppressHeaders", 1);
+  
+  var file = {
+    data: table.outerHTML || new XMLSerializer().serializeToString(table),
+    filename: "Export"
+  };
+  
+  window._tempIframe = window._tempIframe || Element.getTempIframe();
+  
+  url.pop(20, 20, 'pdf_export', null, null, file, window._tempIframe);
+}
 </script>
 
 <ul class="control_tabs" id="balance-tabs">
   <li><a href="#byproduct">Par produit</a></li>
   <li><a href="#byselection">Par sélection de produits</a></li>
   <li><a href="#stock-locations">{{tr}}CProductStockLocation{{/tr}}</a></li>
+  <li><a href="#stock-loss">Pertes</a></li>
   <li><a href="#stock-global-value">Valorisation globale</a></li>
 </ul>
 <hr class="control_tabs" />
@@ -79,7 +119,7 @@ function toggleDisplay(value) {
         <td class="narrow">
           <fieldset>
             <legend>{{tr}}CProductSelection{{/tr}}</legend>
-            <select name="product_selection_id" onchange="$('advanced-filters').setOpacity($V(this)?0.4:0.99)"> <!-- 0.99 needed -->
+            <select name="product_selection_id" onchange="$('advanced-filters').setClassName('opacity-40', $V(this))">
               <option value=""> &ndash; Aucune </option>
               {{foreach from=$list_selections item=_selection}}
                 <option value="{{$_selection->_id}}" 
@@ -194,7 +234,36 @@ function toggleDisplay(value) {
 
 </table>
 
-<div id="stock-global-value">
+<div id="stock-loss" style="display: none;">
+  <form name="filter-products-loss" method="get" action="?" onsubmit="return Url.update(this, 'stock-loss-results')">
+    <input type="hidden" name="m" value="pharmacie" />
+    <input type="hidden" name="a" value="ajax_vw_loss" />
+    
+    <table class="main form">
+      <tr>
+        <th>{{mb_label object=$delivery field=type typeEnum=select}}</th>
+        <td>{{mb_field object=$delivery field=type typeEnum=select}}</td>
+        
+        <th>{{mb_label object=$delivery field=_date_min}}</th>
+        <td>{{mb_field object=$delivery field=_date_min register=true form="filter-products-loss"}}</td>
+        
+        <th>{{mb_label object=$delivery field=_date_max}}</th>
+        <td>{{mb_field object=$delivery field=_date_max register=true form="filter-products-loss"}}</td>
+      </tr>
+      <tr>
+        <td colspan="6">
+          <button class="search" type="submit">
+            {{tr}}Display{{/tr}}
+          </button>
+        </td>
+      </tr>
+    </table>
+    
+  </form>
+  <div id="stock-loss-results"></div>
+</div>
+
+<div id="stock-global-value" style="display: none;">
   <button class="change" onclick="(new Url('pharmacie', 'ajax_vw_total_price')).requestUpdate($(this).next('div'))">
     Valeur totale
   </button>

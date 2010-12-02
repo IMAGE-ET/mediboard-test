@@ -14,7 +14,6 @@ $obj->bind($_POST);
 
 $del         = CValue::post("del", 0);
 $repeat      = CValue::post("_repeat", 0);
-$type_repeat = CValue::post("_type_repeat", 1);
 
 
 // si l'id de l'objet est nul => creation
@@ -90,9 +89,7 @@ if ($del) {
     
       $body_msg .= "<br />Plage du $obj->_day-$obj->_month-$obj->_year: " . $msg;
     
-      for($i=1;$i<=$type_repeat;$i++){
-        $obj->becomeNext();
-      }
+      $obj->becomeNext();
     }
   
     if ($created) $header [] = "$created plage(s) créée(s)";
@@ -134,9 +131,7 @@ if ($del) {
     
       $body_msg .= "<br />Plage du $obj->_day-$obj->_month-$obj->_year: " . $msg;
     
-      for($i=1;$i<=$type_repeat;$i++){
-        $obj->becomeNext();
-      }
+      $obj->becomeNext();
     }
   
     if ($created) $header [] = "$created plage(s) créée(s)";

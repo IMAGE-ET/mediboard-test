@@ -9,6 +9,7 @@
  */
 
 set_time_limit(180);
+error_reporting(E_ALL & ~E_NOTICE & ~E_DEPRECATED);
 
 $mbpath = "../";
 

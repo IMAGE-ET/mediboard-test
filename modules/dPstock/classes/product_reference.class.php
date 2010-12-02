@@ -32,6 +32,8 @@ class CProductReference extends CMbObject {
    * @var CSociete
    */
   var $_ref_societe  = null;
+  
+  static $_load_lite = false;
 
   // Form fields
   var $_cond_price   = null;
@@ -73,6 +75,9 @@ class CProductReference extends CMbObject {
 
   function updateFormFields() {
     parent::updateFormFields();
+    
+    if (self::$_load_lite) return;
+    
     $this->loadRefProduct(false);
     
     $this->completeField("quantity", "price");

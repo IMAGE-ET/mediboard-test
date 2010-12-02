@@ -46,6 +46,8 @@ class CProductOrderItem extends CMbObject {
   var $_unit_quantity     = null;
   var $_is_unit_quantity  = null;
   var $_id_septic         = null;
+  
+  static $_load_lite = false;
 
   function getSpec() {
     $spec = parent::getSpec();
@@ -119,6 +121,9 @@ class CProductOrderItem extends CMbObject {
   
   function updateFormFields() {
     parent::updateFormFields();
+    
+    if (self::$_load_lite) return;
+    
     $this->updateReceived();
     $this->getUnitQuantity();
     $this->_view = $this->_ref_reference->_view;
@@ -161,6 +166,8 @@ class CProductOrderItem extends CMbObject {
 
   function loadRefsFwd() {
     parent::loadRefsFwd();
+    
+    if (self::$_load_lite) return;
 
     $this->loadReference();
     $this->loadOrder();

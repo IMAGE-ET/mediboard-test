@@ -45,6 +45,7 @@ class CPlageOp extends CMbObject {
   var $_minutefin    = null;
   var $_min_inter_op = null;
   var $_duree_prevue = null;
+  var $_type_repeat  = null;
   
   // Object References
   var $_ref_chir       = null;
@@ -93,6 +94,7 @@ class CPlageOp extends CMbObject {
     $specs["_heurefin"]        = "num min|0 max|23";
     $specs["_minutefin"]       = "num min|0 max|59";
     $specs["_min_inter_op"]    = "num min|0 max|59";
+    $specs["_type_repeat"]     = "enum list|simple|double|triple|sameweek";
     return $specs;
   }
   
@@ -316,7 +318,33 @@ class CPlageOp extends CMbObject {
   }
   
   function becomeNext() {
-    $this->date = mbDate("+7 DAYS", $this->date);
+    switch($this->_type_repeat) {
+      case "triple": 
+        $this->date = mbDate("+7 DAYS", $this->date); // 3
+      case "double": 
+        $this->date = mbDate("+7 DAYS", $this->date); // 2
+      default:
+      case "simple": 
+        $this->date = mbDate("+7 DAYS", $this->date); // 1
+      break;
+      
+      //
+      case "sameweek":
+        $week_number = CMbDate::weekNumberInMonth($this->date);
+        $next_month  = CMbDate::monthNumber(mbDate("+1 MONTH", $this->date));
+        
+        $i=0;
+        do {
+          $this->date = mbDate("+1 WEEK", $this->date);
+          $i++;
+        } while(
+          $i<10 && 
+          (CMbDate::monthNumber($this->date)       <  $next_month) ||
+          (CMbDate::weekNumberInMonth($this->date) != $week_number)
+        );
+      break;
+    }
+    
     $where = array();
     $where["date"] = "= '$this->date'";
     $where[] = "`debut` = '$this->debut' OR `fin` = '$this->fin'";

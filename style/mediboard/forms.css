@@ -138,6 +138,7 @@ fieldset legend {
   border: none;
   background: #ddd;
 	padding: 0.2em 0.8em;
+	white-space: nowrap;
 }
 
 label:hover,

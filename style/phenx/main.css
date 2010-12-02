@@ -478,8 +478,8 @@ table.form th.category {
   padding: 2px;
   padding-right: 4px;
   background: #FFF;
-  background: #FFF -moz-linear-gradient(left, transparent 90%, rgba(0,0,0,0.1));
-  background: #FFF -webkit-gradient(linear, left top, right top, color-stop(0.9, transparent), color-stop(1, rgba(0,0,0,0.1)));
+  background: #FFF -moz-linear-gradient(left, transparent 90%, rgba(100,100,100,0.1));
+  background: #FFF -webkit-gradient(linear, left top, right top, color-stop(0.9, transparent), color-stop(1, rgba(100,100,100,0.1)));
 }
 
 #nav a img {
@@ -712,8 +712,8 @@ ul.control_tabs li a {
 }
 
 ul.control_tabs li a.active {
-  background: -moz-linear-gradient(bottom, transparent, rgba(0,0,0,0.1));
-  background: -webkit-gradient(linear, left top, left bottom, from(rgba(0,0,0,0.1)), to(transparent));
+  background: -moz-linear-gradient(bottom, transparent, rgba(255,127,0,0.1));
+  background: -webkit-gradient(linear, left top, left bottom, from(rgba(255,127,0,0.1)), to(transparent));
 }
 
 ul.control_tabs_vertical {
@@ -737,8 +737,8 @@ ul.control_tabs_vertical li a {
 ul.control_tabs_vertical li a.active {
   border-right-color: #FFF;
   border-bottom-color: #F60;
-  background: -moz-linear-gradient(right, transparent, rgba(0,0,0,0.1));
-  background: -webkit-gradient(linear, left top, right top, from(rgba(0,0,0,0.1)), to(transparent));
+  background: -moz-linear-gradient(right, transparent, rgba(255,127,0,0.1));
+  background: -webkit-gradient(linear, left top, right top, from(rgba(255,127,0,0.1)), to(transparent));
 }
 
 #waitingMsgText {

@@ -89,7 +89,7 @@ else {
 }
 
 foreach($list_products as $_product) {
-  $_product->loadRefStock();
+  $_product->loadRefStock(true);
 }
 
 $services = CProductStockGroup::getServicesList();
@@ -104,15 +104,68 @@ $total = count($list_products);
 if ($total > $limit)
   $list_products = array_slice($list_products, 0, $limit);
 
-list($flows, $balance) = CProduct::computeBalance($list_products, $services, $year/*, $month*/);
+list($flows, $balance) = CProduct::computeBalance($list_products, $services, $year, $month);
+
+// filters
+$product = new CProduct;
+$product->classe_comptable = $classe_comptable;
+$product->_classe_atc = $classe_atc;
+
+$selection = new CProductSelection;
+$selection->load($product_selection_id);
+
+$category = new CProductCategory;
+$category->load($category_id);
+
+$supplier = new CSociete;
+$supplier->load($supplier_id);
+
+// Title
+$title = array();
+if ($product_selection->_id) {
+  $title[] = $product_selection->_view;
+}
+else {
+  if ($category->_id) {
+    $title[] = $category->_view;
+  }
+  
+  if ($supplier->_id) {
+    $title[] = $supplier->_view;
+  }
+  
+  if ($product->classe_comptable) {
+    $title[] = "Classe comptable $product->classe_comptable";
+  }
+  
+  if ($product->_classe_atc) {
+    $title[] = "Class ATC $product->_classe_atc";
+  }
+  
+  if ($hors_t2a) {
+    $title[] = "Hors T2A";
+  }
+}
+
+$title = implode(" - ", $title);
 
 // Création du template
 $smarty = new CSmartyDP();
+
+$smarty->assign('title',   $title);
+
+$smarty->assign('product',   $product);
+$smarty->assign('selection', $selection);
+$smarty->assign('category',  $category);
+$smarty->assign('supplier',  $supplier);
+$smarty->assign('hors_t2a',  $hors_t2a);
 
 $smarty->assign('services', $services);
 $smarty->assign('products', $list_products);
 $smarty->assign('flows',    $flows);
 $smarty->assign('total',    $total);
+$smarty->assign('year',     $year);
+$smarty->assign('month',    $month);
 $smarty->assign('balance',  $balance);
 $smarty->assign('type',     "selection");
 

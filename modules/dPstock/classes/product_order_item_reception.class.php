@@ -36,6 +36,8 @@ class CProductOrderItemReception extends CMbObject {
   var $_cancel            = null;
   var $_price             = null;
   var $_unit_quantity     = null;
+  
+  static $_load_lite = false;
 
   function getSpec() {
     $spec = parent::getSpec();
@@ -90,6 +92,9 @@ class CProductOrderItemReception extends CMbObject {
 
   function loadRefsFwd() {
     parent::loadRefsFwd();
+    
+    if (self::$_load_lite) return;
+    
     $this->loadRefOrderItem();
     $this->loadRefReception();
   }
@@ -139,29 +144,29 @@ class CProductOrderItemReception extends CMbObject {
   function getUnitQuantity(){
     $this->completeField("quantity");
 
-/*   
-    // Attention, avec cette requete, les order_item ne sont plus chargés !
-    $where = array(
-      $this->_spec->key => "='$this->_id'",
-    );
-    
-    $ljoin = array(
-      "product_order_item" => "product_order_item.order_item_id = product_order_item_reception.order_item_id",
-      "product_reference" => "product_reference.reference_id = product_order_item.reference_id",
-      "product" => "product.product_id = product_reference.product_id",
-    );
-    
-    $sql = new CRequest();
-    $sql->addTable($this->_spec->table);
-    $sql->addSelect("
-      $this->quantity * 
-      product_reference.quantity * 
-      product.quantity");
-    $sql->addLJoin($ljoin);
-    $sql->addWhere($where);
-    
-    return $this->_unit_quantity = $this->_spec->ds->loadResult($sql->getRequest());
-*/
+    if (self::$_load_lite) {
+      // Attention, avec cette requete, les order_item ne sont plus chargés !
+      $where = array(
+        $this->_spec->key => "='$this->_id'",
+      );
+      
+      $ljoin = array(
+        "product_order_item" => "product_order_item.order_item_id = product_order_item_reception.order_item_id",
+        "product_reference" => "product_reference.reference_id = product_order_item.reference_id",
+        "product" => "product.product_id = product_reference.product_id",
+      );
+      
+      $sql = new CRequest();
+      $sql->addTable($this->_spec->table);
+      $sql->addSelect("
+        $this->quantity * 
+        product_reference.quantity * 
+        product.quantity");
+      $sql->addLJoin($ljoin);
+      $sql->addWhere($where);
+      
+      return $this->_unit_quantity = $this->_spec->ds->loadResult($sql->getRequest());
+    }
     
     $this->loadRefOrderItem();
     $item = $this->_ref_order_item;

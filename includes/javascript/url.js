@@ -134,7 +134,7 @@ var Url = Class.create({
     }
   },
 	
-  pop: function(iWidth, iHeight, sWindowName, sBaseUrl, sPrefix, oPostParameters) {
+  pop: function(iWidth, iHeight, sWindowName, sBaseUrl, sPrefix, oPostParameters, iFrame) {
     this.addParam("dialog", 1);
   
     var iLeft = 50;
@@ -143,31 +143,34 @@ var Url = Class.create({
     sWindowName = sWindowName || "";
     sBaseUrl = sBaseUrl || "";
     
-    var sFeatures = Url.buildPopupFeatures({left: iLeft, height: iHeight, width: iWidth});
-  
-    // Prefixed window collection
-    if (sPrefix && this.oPrefixed[sPrefix]) {
-      this.oPrefixed[sPrefix] = this.oPrefixed[sPrefix].reject(function(oWindow) {
-        return oWindow.closed;
-      });
-          
-      // Purge closed windows
-      iLeft += (iWidth + 8) * this.oPrefixed[sPrefix].length;
+    // the Iframe argument is used when exporting data (export_csv_array for ex.)
+    if (!iFrame) {
+      var sFeatures = Url.buildPopupFeatures({left: iLeft, height: iHeight, width: iWidth});
+    
+      // Prefixed window collection
+      if (sPrefix && this.oPrefixed[sPrefix]) {
+        this.oPrefixed[sPrefix] = this.oPrefixed[sPrefix].reject(function(oWindow) {
+          return oWindow.closed;
+        });
+            
+        // Purge closed windows
+        iLeft += (iWidth + 8) * this.oPrefixed[sPrefix].length;
+      }
+    
+      // Forbidden characters for IE
+      sWindowName = sWindowName.replace(/[ -]/gi, "_");
+      this.oWindow = window.open(oPostParameters ? "" : (sBaseUrl + this.make()), sWindowName, sFeatures);  
+      window.children[sWindowName] = this.oWindow;
+      
+      if (!this.oWindow)
+        return this.showPopupBlockerAlert(sWindowName);
     }
-  
-    // Forbidden characters for IE
-    sWindowName = sWindowName.replace(/[ -]/gi, "_");
-    this.oWindow = window.open(oPostParameters ? "" : (sBaseUrl + this.make()), sWindowName, sFeatures);  
-    window.children[sWindowName] = this.oWindow;
-		
-    if (!this.oWindow)
-      return this.showPopupBlockerAlert(sWindowName);
     
     if (oPostParameters) {
       var form = DOM.form({
         method: "post", 
         action: sBaseUrl + this.make(), 
-        target: sWindowName
+        target: (iFrame ? iFrame.getAttribute("name") : sWindowName)
       });
       
       $(document.documentElement).insert(form);

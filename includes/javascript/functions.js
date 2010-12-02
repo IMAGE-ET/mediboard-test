@@ -1017,6 +1017,7 @@ Element.addMethods({
     
     if (iframe) iframe.remove();
 
+    // FIXME use Element.getTempIframe
     $(document.documentElement).insert(DOM.iframe({
       id:    "printFrame",
       name:  "printFrame", 
@@ -1084,6 +1085,23 @@ Element.addMethods("table", {
     });
   }
 });
+
+Element.getTempIframe = function(id) {
+  var iframe = DOM.iframe({
+    src:   "about:blank",
+    style: "position:absolute;width:0px;height:0px;",
+    frameborder: 0
+  });
+  
+  if (id)
+    Element.writeAttribute(iframe, 'id', id);
+    
+  Element.writeAttribute(iframe, 'name', iframe.identify());
+  
+  $(document.documentElement).insert(iframe);
+  
+  return iframe;
+};
 
 BarcodeParser = {
   inputWatcher: Class.create({
