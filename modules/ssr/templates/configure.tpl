@@ -10,14 +10,13 @@
 
 
 <script type="text/javascript">
-Main.add(function () {
-  Control.Tabs.create('tabs-configure', true);
-});
+Main.add(Control.Tabs.create.curry('tabs-configure', true));
 </script>
 
 <ul id="tabs-configure" class="control_tabs">
   <li><a href="#CBilanSSR">{{tr}}CBilanSSR{{/tr}}</a></li>
   <li><a href="#CCdARRObject">{{tr}}CCdARRObject{{/tr}}</a></li>
+  <li><a href="#CReplacement">{{tr}}CReplacement{{/tr}}</a></li>
   <li><a href="#gui">{{tr}}GUI{{/tr}}</a></li>
   <li><a href="#offline">{{tr}}Offline{{/tr}}</a></li>
 </ul>
@@ -30,6 +29,10 @@ Main.add(function () {
 
 <div id="CCdARRObject" style="display: none;">
   {{mb_include template=CCdARRObject_configure}}
+</div>
+
+<div id="CReplacement" style="display: none;">
+  {{mb_include template=CReplacement_configure}}
 </div>
 
 <div id="gui" style="display: none;">

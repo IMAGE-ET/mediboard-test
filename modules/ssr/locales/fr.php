@@ -670,6 +670,7 @@ $locales['config-ssr-repartition-show_tabs'] = 'Afficher les volets';
 $locales['config-ssr-repartition-show_tabs-desc'] = 'Afficher les volets ou bien mettre les plateaux techniques les uns en dessous des autres';
 $locales['mod-ssr-tab-ajax_activites_sejour'] = 'Boite à activités SSR';
 $locales['mod-ssr-tab-ajax_board_sejours'] = 'Séjours de la journée rééducateur';
+$locales['mod-ssr-tab-ajax_check_replacements'] = 'Vérifications des remplacements';
 $locales['mod-ssr-tab-ajax_evenements_hors_sejours'] = 'Planification SSR hors séjours';
 $locales['mod-ssr-tab-ajax_sejours_technicien'] = 'Séjours de rééducateur';
 $locales['mod-ssr-tab-ajax_sejours_to_rhs_date_monday'] = 'Facturation des RHS d\'une semaine';
