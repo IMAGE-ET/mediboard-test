@@ -8,79 +8,34 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
 *}}
 
-<form name="Config" action="?m={{$m}}&amp;{{$actionType}}=configure" method="post" onsubmit="return checkForm(this)">
-  <input type="hidden" name="dosql" value="do_configure" />
-  <input type="hidden" name="m" value="system" />
 
-  <table class="form">
-    <tr>
-      <th class="title" colspan="2">Configuration des onglets
-    </tr>
+<script type="text/javascript">
+Main.add(function () {
+  Control.Tabs.create('tabs-configure', true);
+});
+</script>
 
-		{{assign var=class value=occupation_surveillance}}
-    {{mb_include module=system template=inc_config_category}}
-		{{mb_include module=system template=inc_config_str var=faible}}
-    {{mb_include module=system template=inc_config_str var=eleve}}
+<ul id="tabs-configure" class="control_tabs">
+  <li><a href="#CBilanSSR">{{tr}}CBilanSSR{{/tr}}</a></li>
+  <li><a href="#CCdARRObject">{{tr}}CCdARRObject{{/tr}}</a></li>
+  <li><a href="#gui">{{tr}}GUI{{/tr}}</a></li>
+  <li><a href="#offline">{{tr}}Offline{{/tr}}</a></li>
+</ul>
 
-    {{assign var=class value=occupation_technicien}}
-    {{mb_include module=system template=inc_config_category}}
- 	  {{mb_include module=system template=inc_config_str var=faible}}
-    {{mb_include module=system template=inc_config_str var=eleve}}
-    
-    {{assign var=class value=repartition}}
-    {{mb_include module=system template=inc_config_category}}
-    {{mb_include module=system template=inc_config_bool var=show_tabs}}
-		
-    {{assign var=class value=CBilanSSR}}
-    {{mb_include module=system template=inc_config_category}}
-    {{mb_include module=system template=inc_config_str var=tolerance_sejour_demandeur}}
- 
-    <tr>
-      <td class="button" colspan="100">
-        <button class="modify" type="submit">{{tr}}Save{{/tr}}</button>
-      </td>
-    </tr>
-  </table>
-</form>
+<hr class="control_tabs" />
 
-{{mb_include module=system template=configure_dsn dsn=cdarr}}
+<div id="CBilanSSR" style="display: none;">
+  {{mb_include template=CBilanSSR_configure}}
+</div>
 
+<div id="CCdARRObject" style="display: none;">
+  {{mb_include template=CCdARRObject_configure}}
+</div>
 
-<h2>Import de la base de données CdARR</h2>
+<div id="gui" style="display: none;">
+  {{mb_include template=inc_configure_gui}}
+</div>
 
-<table class="tbl">
-  <tr>
-    <th>{{tr}}Action{{/tr}}</th>
-    <th>{{tr}}Status{{/tr}}</th>
-  </tr>
-  
-  <tr>
-    <td>
-    	<button class="tick" onclick="new Url('ssr', 'httpreq_do_add_cdarr').requestUpdate('cdarr');" >
-    		Importer la base de données CdARR</button>
-			</td>
-    <td id="cdarr"></td>
-  </tr>
-</table>
-
-<h2>Mode offline</h2>
-
-<table class="tbl">
-  <tr>
-    <td>
-    	<a class="button search" href="?m={{$m}}&amp;a=offline_plannings_equipements&amp;dialog=1">
-    		Plannings Equipements
-			</a>
-      <a class="button search" href="?m={{$m}}&amp;a=offline_plannings_techniciens&amp;dialog=1">
-        Plannings Rééducateurs
-      </a>
-      <a class="button search" href="?m={{$m}}&amp;a=offline_repartition&amp;dialog=1">
-        Répartition des patients
-      </a>
-      <a class="button search" href="?m={{$m}}&amp;a=offline_sejours&amp;dialog=1">
-        Séjours
-      </a>
-		</td>
-  </tr>
-  
-</table>
+<div id="offline" style="display: none;">
+  {{mb_include template=inc_configure_offline}}
+</div>
