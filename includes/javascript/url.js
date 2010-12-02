@@ -450,7 +450,33 @@ var Url = Class.create({
     if(this.oWindow) this.oWindow.close();
     return this;
   },
-  
+	
+  requestModal: function(iWidth, iHeight, oOptions) {
+    var div = DOM.div(null,
+      DOM.div({
+				className: 'content',
+				style: 'overflow-y: auto; overflow-x: hidden; width:'+iWidth+'px; height:'+iHeight+'px'
+			})
+		);
+    $(document.body).insert(div);
+
+    // Decoration preparing
+    var closeButton = DOM.button({type: "button", className: "cancel"}, $T('Close'));
+    var m = this.oParams['m'];
+    var a = this.oParams['a'];
+    var titleElement = DOM.div({className: "title"}, $T('mod-'+m+'-tab-'+a));
+    
+    this.modaleObject = modal(div, {
+      className: 'modal popup',
+      closeOnClick: closeButton
+    });
+		
+    this.modaleObject.container.insert({top: closeButton});    this.modaleObject.container.insert({top: titleElement});   
+
+		this.requestUpdate(div.down('.content'), oOptions);
+		return this;
+	},
+
   requestUpdate: function(ioTarget, oOptions) {
     this.addParam("suppressHeaders", 1);
     this.addParam("ajax", 1);
