@@ -21,6 +21,18 @@ Main.add( function(){
   {{/if}}
 } );
 
+//Autocomplete des medicaments dans les aérosols
+var urlAuto = new Url("dPmedicament", "httpreq_do_medicament_autocomplete");
+urlAuto.addParam("produit_max", 40);
+window.acAerosol = urlAuto.autoComplete("addLineAerosol_produit", "aerosol_auto_complete", {
+  minChars: 3,
+  updateElement: updateFieldsMedicament,
+  callback: 
+    function(input, queryString){
+      return (queryString + "&inLivret="+($V(getForm("addLineAerosol")._recherche_livret)?'1':'0')+"&hors_specialite=0"); 
+    }
+} );
+
 </script>
 
 <table class="tbl" id="prescription_line_mix-{{$line->_id}}"> 
@@ -481,7 +493,7 @@ Main.add( function(){
 								      updateElement: updateFieldsAerosol,
 								      callback: 
 								        function(input, queryString){
-								          return (queryString + "&hors_specialite=0"); 
+								          return (queryString + "&inLivret="+($V(getForm("addLineAerosol")._recherche_livret)?'1':'0')+"&hors_specialite=0"); 
 								        }
 								    } );
 								} );
@@ -500,6 +512,10 @@ Main.add( function(){
    						  <input type="hidden" name="code_cip" value="" onchange="onSubmitFormAjax(this.form, { onComplete: function(){ 
 								  Prescription.reloadLine('{{$line->_guid}}','{{$line->_protocole}}', '{{$mode_pharma}}');
 								} } )" />
+                <label title="Recherche dans le livret thérapeutique">
+                  <input type="checkbox" value="1" name="_recherche_livret" {{if $prescription->type=="sejour" && $dPconfig.dPprescription.CPrescription.preselect_livret}}checked="checked"{{/if}} onchange="if($V(getForm('addLineAerosol').produit)) { acAerosol.activate.bind(acAerosol)() };" />
+                  Livret Thérap.
+                </label>
 	            </form>
             </td>
 					</tr>
