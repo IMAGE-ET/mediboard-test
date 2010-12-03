@@ -15,15 +15,6 @@ function modifPrat(){
   $("editSejour_libelle_protocole").value = "";
 }
 
-function refreshListProtocolesPrescription(praticien_id, list, selected_id) {
-  if (list) {
-    var url = new Url("dPplanningOp", "httpreq_vw_list_protocoles_prescription");
-    url.addParam("praticien_id", praticien_id);
-    url.addParam("selected_id", selected_id);
-    url.requestUpdate(list);
-  }
-}
-
 function refreshViewProtocoleAnesth(prescription_id) {
   if($("prot_anesth_view")) {
     var url = new Url("dPplanningOp", "httpreq_vw_protocole_anesth");

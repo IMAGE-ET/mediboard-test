@@ -35,18 +35,14 @@
 
 <div id="{{$type}}-{{$key}}" style="display: none;">
   <button class="hslip singleclick not-printable" onclick="exportData($('{{$type}}-{{$key}}-table'), '.price')">CSV</button>
-  <button class="pdf singleclick not-printable" onclick="exportPDF($('{{$type}}-{{$key}}'))">PDF</button>
+  <button class="pdf singleclick not-printable" onclick="exportPDF($('{{$type}}-{{$key}}'), 
+  '{{$_flows.2}} &ndash; {{if $key == "month"}}{{$month}}/{{/if}}{{$year}} &ndash; {{$title|smarty:nodefaults|JSAttribute}}')">PDF</button>
    
   {{main}}
     $("{{$type}}-{{$key}}-table").gridHighlight();
   {{/main}}
   
-  <h2>
-    {{$_flows.2}} &ndash;
-    {{if $key == "month"}}{{$month}} / {{/if}}
-    {{$year}}
-  </h2>
-  
+  <h2>{{$_flows.2}} &ndash; {{if $key == "month"}}{{$month}} / {{/if}}{{$year}}</h2>
   <h3>{{$title}}</h3>
   
   <table class="main tbl" id="{{$type}}-{{$key}}-table">
@@ -93,13 +89,10 @@
 
 <div id="{{$type}}-rotation" style="display: none;">
   <button class="hslip singleclick not-printable" onclick="exportData($('{{$type}}-rotation-table'), '.price')">CSV</button>
-  <button class="pdf singleclick not-printable" onclick="exportPDF($('{{$type}}-rotation'))">PDF</button>
+  <button class="pdf singleclick not-printable" onclick="exportPDF($('{{$type}}-rotation'), 
+  'Rotation des stocks &ndash; {{$year}} &ndash; {{$title|smarty:nodefaults|JSAttribute}}')">PDF</button>
   
-  <h2>
-    Rotation des stocks &ndash;
-    {{$year}}
-  </h2>
-  
+  <h2>Rotation des stocks &ndash; {{$year}}</h2>
   <h3>{{$title}}</h3>
   
   <table class="main tbl" id="{{$type}}-rotation-table" style="text-align: right;">

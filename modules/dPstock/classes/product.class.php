@@ -502,6 +502,11 @@ class CProduct extends CMbObject {
       $balance["out"][$from] = array(0, 0);
       
       foreach($products as $_product) {
+        /** 
+        @var CProduct
+        */
+        $_product = $_product; // for autocompletion
+        
         $supply = $_product->getSupply($from, $to);
         $consum = $_product->getConsumption($from, $to, null, false);
         

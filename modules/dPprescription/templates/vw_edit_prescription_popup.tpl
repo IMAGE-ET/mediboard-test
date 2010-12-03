@@ -19,16 +19,6 @@
 {{mb_include_script module="dPprescription" script="protocole"}}
 
 <script type="text/javascript">
-
-refreshListProtocolesPrescription = function(praticien_id, list, selected_id) {
-  if (list) {
-    var url = new Url;
-    url.setModuleAction("dPplanningOp", "httpreq_vw_list_protocoles_prescription");
-    url.addParam("praticien_id", praticien_id);
-    url.addParam("selected_id", selected_id);
-    url.requestUpdate(list);
-  }
-}
 			          
 var oFormProtocole = getForm("applyProtocoleFirst");
 

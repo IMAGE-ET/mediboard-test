@@ -114,6 +114,5 @@ ProtocoleSelector = {
       }
     }
     refreshViewProtocoleAnesth(protocole.protocole_prescription_anesth_id);
-    refreshListProtocolesPrescription(protocole.chir_id, oSejourForm[this.sProtoPrescChir], protocole.protocole_prescription_chir_id);
   }
 };

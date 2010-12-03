@@ -53,13 +53,13 @@ function exportData(table, selector) {
   url.pop(20, 20, 'csv_export', null, null, file, window._tempIframe);
 }
 
-function exportPDF(table) {
+function exportPDF(table, filename) {
   var url = new Url("system", "export_pdf");
   url.addParam("suppressHeaders", 1);
-  
+  console.log(table.xml);
   var file = {
     data: table.outerHTML || new XMLSerializer().serializeToString(table),
-    filename: "Export"
+    filename: filename || "Export"
   };
   
   window._tempIframe = window._tempIframe || Element.getTempIframe();
@@ -267,5 +267,5 @@ function exportPDF(table) {
   <button class="change" onclick="(new Url('pharmacie', 'ajax_vw_total_price')).requestUpdate($(this).next('div'))">
     Valeur totale
   </button>
-  <div style="font-size: 2.0em; text-align: center;"></div>
+  <div style="font-size: 1.5em; text-align: center;"></div>
 </div>

@@ -35,6 +35,7 @@ if ($include_void_service) {
 }
 
 list($flows, $balance) = CProduct::computeBalance($products, $services, $year, $month);
+$product = reset($products);
 
 // Création du template
 $smarty = new CSmartyDP();
@@ -46,6 +47,10 @@ $smarty->assign('stock',    $stock);
 $smarty->assign('flows',    $flows);
 $smarty->assign('balance',  $balance);
 $smarty->assign('type',     "product");
+
+$smarty->assign('title',    $product->_view);
+$smarty->assign('year',     $year);
+$smarty->assign('month',    $month);
 
 $smarty->display('inc_balance_product.tpl');
 
