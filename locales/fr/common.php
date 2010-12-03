@@ -183,6 +183,7 @@ $locales['cancel'] = 'annuler';
 $locales['common-suggest-no-mediuser'] = 'Il est fortement conseillé d\'installer le module Mediusers pour créer et utiliser un utilisateur relié à l\'organigramme.';
 $locales['common-warning-no-mediuser'] = 'Vous n\'êtes pas relié à l\'organigramme, ce qui nuit au bon fonctionnement et réduit les fonctionnalités (vous êtes peut-être authentifié avec l\'utilisateur "admin")';
 $locales['config-interop-base_url'] = 'URL de la DHE distante';
+$locales['config-browser_compat'] = 'Compatibilité avec les navigateurs';
 $locales['configure'] = 'Configurer';
 $locales['confirm-ask-continue'] = 'nnVoulez-vous continuer ?';
 $locales['date-deb'] = 'Date de début';

@@ -27,6 +27,14 @@ $dPconfig["debug"]             = "1";      // Set to true to help analyse errors
 $dPconfig["readonly"]          = "0";      // Read-only mode : any store will fail
 $dPconfig["shared_memory"]     = "none";   // Shared memory handler [none|eaccelerator|apc]
 
+$dPconfig["browser_compat"]    = array(    // minimal browser versions
+  'firefox' => '2.0',
+  'msie'    => '8.0',
+  'opera'   => '9.6',
+  'chrome'  => '5.0',
+  'safari'  => '525.26', // 3.2
+);
+
 // Object handlers
 $dPconfig["object_handlers"]   = array (
 //  "CMyObjectHandler" => true,

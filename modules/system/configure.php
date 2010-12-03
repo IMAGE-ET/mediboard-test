@@ -48,11 +48,28 @@ foreach($php_config as $key => $value) {
   }
 }
 
+$browser_compat = array(
+  'firefox' => array('2.0', '3.0', '3.5', '3.6'),
+  'msie'    => array('7.0', '8.0', '9.0'),
+  'opera'   => array('9.0', '9.6', '10.0', '10.1', '10.7', '11.0'),
+  'chrome'  => array('5.0', '6.0', '7.0', '8.0', '9.0', '10.0'),
+  'safari'  => array(
+    '525.26' => '3.2',
+    '525.27' => '3.2.1',
+    '525.28' => '3.2.3',
+    '530.17' => '4.0',
+    '533.16' => '4.1 / 5.0',
+    '533.17.8' => '4.1.1 / 5.0.1',
+    '533.19.4' => '5.0.3',
+  ),
+);
+
 // Création du template
 $smarty = new CSmartyDP();
 $smarty->assign("timezones", $timezones);
 $smarty->assign("php_config", $php_config_tree);
 $smarty->assign("php_config_important", $php_config_important);
+$smarty->assign("browser_compat", $browser_compat);
 $smarty->display("configure.tpl");
 
 ?>

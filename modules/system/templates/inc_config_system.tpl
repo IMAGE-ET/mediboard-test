@@ -36,6 +36,34 @@ Main.add(function(){
     
     <tr>
       <th colspan="2" class="title">
+        {{tr}}config-browser_compat{{/tr}}
+      </th>
+    </tr>
+    
+    {{foreach from=$browser_compat key=_browser item=_versions}}
+    <tr>
+      <th>
+        <label for="browser_compat.{{$_browser}}" title="{{tr}}browser.{{$_browser}}{{/tr}}">
+          {{tr}}browser.{{$_browser}}{{/tr}}
+        </label>
+      </th>
+      <td>
+        <select name="browser_compat[{{$_browser}}]">
+          {{foreach from=$_versions key=_value item=_label}}
+            {{assign var=_version value=$_value|is_numeric|ternary:$_label:$_value}}
+            
+            <option value="{{$_version}}"
+                    {{if $dPconfig.browser_compat.$_browser == $_version}}selected="selected"{{/if}}>
+              {{$_label}}
+            </option>
+          {{/foreach}}
+        </select>
+      </td>
+    </tr>
+    {{/foreach}}
+    
+    <tr>
+      <th colspan="2" class="title">
         Mode migration
       </th>
     </tr>

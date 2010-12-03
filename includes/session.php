@@ -48,13 +48,7 @@ if (!isset($_SESSION['browser'])) {
     'gecko', 'navigator', 'mosaic', 'lynx', 'amaya', 'omniweb', 'avant', 'camino', 'flock', 'aol'
   );
   
-  $minimal_versions = array(
-    'firefox' => '2.0',
-    'msie'    => '8.0',
-    'opera'   => '9.6',
-    'chrome'  => '5.0',
-    'safari'  => '525.26', // 3.2
-  );
+  $minimal_versions = CAppUI::conf("browser_compat");
   
   if (isset($_SERVER['HTTP_USER_AGENT'])) {
     $browser['useragent'] = $_SERVER['HTTP_USER_AGENT'];
