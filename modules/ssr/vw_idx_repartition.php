@@ -18,6 +18,7 @@ $readonly = CValue::get("readonly", false);
 // Plateaux disponibles
 $plateau = new CPlateauTechnique;
 $plateau->group_id = $group->_id;
+$plateau->repartition = "1";
 $plateaux = $plateau->loadMatchingList();
 foreach ($plateaux as $_plateau) {
   $_plateau->loadRefsTechniciens();

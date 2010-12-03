@@ -50,6 +50,11 @@
   </tr>
 
   <tr>
+    <th>{{mb_label object=$plateau field=repartition}}</th>
+    <td>{{mb_field object=$plateau field=repartition}}</td>
+  </tr>
+
+  <tr>
 		<td class="button" colspan="4">
 		  {{if $plateau->_id}}
 			  <button class="modify" type="submit">

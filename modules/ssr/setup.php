@@ -395,7 +395,12 @@ class CSetupssr extends CSetup {
       ADD INDEX (`fin`);";
     $this->addQuery($query);
 
-		$this->mod_version = "0.33";
+    $this->makeRevision("0.33");
+    $query = "ALTER TABLE `plateau_technique`
+      ADD `repartition` ENUM ('0','1') DEFAULT '1';";
+    $this->addQuery($query);
+
+		$this->mod_version = "0.34";
     
     // Data source query
     $query = "SHOW COLUMNS FROM type_activite LIKE 'libelle_court'";

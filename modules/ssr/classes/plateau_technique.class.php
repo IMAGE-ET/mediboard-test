@@ -16,7 +16,8 @@ class CPlateauTechnique extends CMbObject {
   var $group_id = null;
 
   // DB Fields
-  var $nom      = null;
+  var $nom         = null;
+  var $repartition = null;
 	
 	// Collections
   var $_ref_equipements = null;
@@ -31,8 +32,9 @@ class CPlateauTechnique extends CMbObject {
 
   function getProps() {
   	$props = parent::getProps();
-    $props["group_id"] = "ref notNull class|CGroups";
-    $props["nom"]      = "str notNull";
+    $props["group_id"]    = "ref notNull class|CGroups";
+    $props["nom"]         = "str notNull";
+    $props["repartition"] = "bool default|1";
     return $props;
   }
 		
