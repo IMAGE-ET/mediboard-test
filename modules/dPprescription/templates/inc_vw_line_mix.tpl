@@ -21,16 +21,18 @@ Main.add( function(){
   {{/if}}
 
 	//Autocomplete des medicaments dans les aérosols
-	var urlAuto = new Url("dPmedicament", "httpreq_do_medicament_autocomplete");
-	urlAuto.addParam("produit_max", 40);
-	window.acAerosol = urlAuto.autoComplete("addLineAerosol_produit", "aerosol_auto_complete", {
-	  minChars: 3,
-	  updateElement: updateFieldsAerosol,
-	  callback: 
-	    function(input, queryString){
-	      return (queryString + "&inLivret="+($V(getForm("addLineAerosol")._recherche_livret)?'1':'0')+"&hors_specialite=0"); 
-	    }
-	} );
+	if(getForm("addLineAerosol")){
+		var urlAuto = new Url("dPmedicament", "httpreq_do_medicament_autocomplete");
+		urlAuto.addParam("produit_max", 40);
+		window.acAerosol = urlAuto.autoComplete("addLineAerosol_produit", "aerosol_auto_complete", {
+		  minChars: 3,
+		  updateElement: updateFieldsAerosol,
+		  callback: 
+		    function(input, queryString){
+		      return (queryString + "&inLivret="+($V(getForm("addLineAerosol")._recherche_livret)?'1':'0')+"&hors_specialite=0"); 
+		    }
+		} );
+	}
 } );
 
 
@@ -252,23 +254,22 @@ Main.add( function(){
               {{if $line->type_line == "perfusion"}}
                 <div style="display: none;" id="continue-{{$line->_id}}">
                   {{assign var=types value="CPrescriptionLineMix"|static:"unite_by_line"}}
-                  Débit
+                  
                   {{if $line->_can_modify_prescription_line_mix}}
-                    {{mb_field object=$line field="vitesse" size="3" increment=1 min=0 form="editPerf-$prescription_line_mix_id" onchange="this.form.nb_tous_les.value = ''; this.form.duree_passage.value = ''; return onSubmitFormAjax(this.form);"}}
-                  {{else}}
-                    {{mb_value object=$line field="vitesse"}}
+                    {{mb_label object=$line field="volume_debit"}}
+									  {{mb_field object=$line field="volume_debit" size="3" increment=1 min=0 form="editPerf-$prescription_line_mix_id" onchange="Prescription.updateDebit('$prescription_line_mix_id'); this.form.nb_tous_les.value = ''; this.form.duree_passage.value = ''; return onSubmitFormAjax(this.form);"}} ml
+                    en {{mb_field object=$line field="duree_debit" size="3" increment=1 min=0 form="editPerf-$prescription_line_mix_id" onchange="Prescription.updateDebit('$prescription_line_mix_id'); this.form.nb_tous_les.value = ''; this.form.duree_passage.value = ''; return onSubmitFormAjax(this.form);"}} h
+                    soit <span id="debitLineMix-{{$line->_id}}" style="font-weight: bold; font-size: 1.2em;">{{mb_value object=$line field="_debit"}}</span> ml/h
+									{{else}}
+                    {{mb_value object=$line field="volume_debit"}} ml en {{mb_value object=$line field="duree_debit"}} h soit <strong>{{mb_value object=$line field="_debit"}} ml/h</strong>
                   {{/if}}
-                  <!-- Affichage de l'unite de prise -->
-                  {{$types.$type_line}}
+                  
                 </div>
-  
                 <div style="display: none;" id="discontinue-{{$line->_id}}">
-                
-                
                   {{if $line->type_line == "perfusion"}}
                     {{if $line->_can_modify_prescription_line_mix}}
                       A passer en
-                     {{mb_field object=$line size=2 field=duree_passage increment=1 min=0 form="editPerf-$prescription_line_mix_id" onchange="this.form.vitesse.value = ''; return onSubmitFormAjax(this.form);"}}
+                     {{mb_field object=$line size=2 field=duree_passage increment=1 min=0 form="editPerf-$prescription_line_mix_id" onchange="this.form.volume_debit.value = ''; this.form.duree_debit.value = '';return onSubmitFormAjax(this.form);"}}
                     {{elseif $line->duree_passage}}
                       A passer en
                       {{mb_value object=$line field=duree_passage}}
@@ -277,22 +278,22 @@ Main.add( function(){
                     {{mb_value object=$line field=unite_duree_passage}}
                   {{/if}}
                   
-                   toutes les 
+                  toutes les 
                   {{if $line->_can_modify_prescription_line_mix}}
-                    {{mb_field object=$line field=nb_tous_les size=2 increment=1 min=0 form="editPerf-$prescription_line_mix_id" onchange="this.form.vitesse.value = ''; return onSubmitFormAjax(this.form);"}} heures
+                    {{mb_field object=$line field=nb_tous_les size=2 increment=1 min=0 form="editPerf-$prescription_line_mix_id" onchange="this.form.volume_debit.value = ''; this.form.duree_debit.value = ''; return onSubmitFormAjax(this.form);"}} heures
                   {{else}}      
                     {{mb_value object=$line field="nb_tous_les"}} heures
                   {{/if}}
                 </div>
               {{/if}}
 							
-							             {{if $line->type_line == "oxygene"}}
+							{{if $line->type_line == "oxygene"}}
                   {{assign var=types value="CPrescriptionLineMix"|static:"unite_by_line"}}
                   Débit
                   {{if $line->_can_modify_prescription_line_mix}}
-                    {{mb_field object=$line field="vitesse" size="3" increment=1 min=0 form="editPerf-$prescription_line_mix_id" onchange="return onSubmitFormAjax(this.form);"}}
+                    {{mb_field object=$line field="volume_debit" size="3" increment=1 min=0 form="editPerf-$prescription_line_mix_id" onchange="return onSubmitFormAjax(this.form);"}}
                   {{else}}
-                    {{mb_value object=$line field="vitesse"}}
+                    {{mb_value object=$line field="_debit"}}
                   {{/if}}
                   
                   <!-- Affichage de l'unite de prise -->
@@ -338,10 +339,6 @@ Main.add( function(){
                   {{mb_value object=$line field="nb_tous_les"}} heures
                 {{/if}}
               {{/if}}
-
-							
-							
-							
 	         </tr>
 					 <tr>					
 			      <td style="border: none;">
@@ -368,9 +365,7 @@ Main.add( function(){
 							{{else}}
 							  {{mb_value object=$line field="type"}}
               {{/if}}
-						
 						</td>
-						
 						
 						<td style="border:none;">
 						  {{if $line->type_line == "perfusion"}}
@@ -425,7 +420,6 @@ Main.add( function(){
 				      {{/if}}
 	          </td>
 				    <td style="border:none;">
-					
 				      {{if !$line->_protocole && $line->signature_prat}}
 					       <button type="button" class="new" onclick="$V(this.form.callback, 'reloadPerfEvolution'); 
 								                                            $V(this.form._add_perf_contigue, '1');
@@ -476,7 +470,6 @@ Main.add( function(){
 					<tr>
             <td>
             	<script type="text/javascript">
-            		
 								updateFieldsAerosol = function(selected){
 								  var oFormProduit = getForm("addLineAerosol");
 								  Element.cleanWhitespace(selected);
@@ -485,7 +478,6 @@ Main.add( function(){
 								    $V(oFormProduit.code_cip, dn[0].firstChild.nodeValue);
 								  }
 								}
-								
             	</script>
             	
 							<form name="addLineAerosol" action="?" method="post" onsubmit="return false;">
@@ -603,8 +595,6 @@ Main.add( function(){
     </td>
   </tr>
 	{{/if}}
-	
-
 	
   {{if $line->_perm_edit || $line->commentaire}}
   <tr>

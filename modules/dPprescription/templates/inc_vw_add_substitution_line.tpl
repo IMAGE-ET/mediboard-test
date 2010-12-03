@@ -33,10 +33,14 @@ changeModeBolus = function(oForm){
   //$("img_"+oForm.name+"_vitesse").show();
 
   // Reactivation de la vitesse
-  oForm.vitesse.writeAttribute("disabled",null);
-  oForm.vitesse.up('table').select('td.arrows').invoke('show');
-  oForm.vitesse.setOpacity(1);
+  oForm.volume_debit.writeAttribute("disabled",null);
+  oForm.volume_debit.up('table').select('td.arrows').invoke('show');
+  oForm.volume_debit.setOpacity(1);
   
+	oForm.duree_debit.writeAttribute("disabled",null);
+  oForm.duree_debit.up('table').select('td.arrows').invoke('show');
+  oForm.duree_debit.setOpacity(1);
+	
   oForm.nb_tous_les.writeAttribute("disabled",null);
   oForm.nb_tous_les.up('table').select('td.arrows').invoke('show');
   oForm.nb_tous_les.setOpacity(1);
@@ -62,11 +66,17 @@ changeModeBolus = function(oForm){
   }
   if(oForm.mode_bolus.value == 'bolus'){
     // Désactivation de la vitesse
-    $V(oForm.vitesse, '');
-    oForm.vitesse.writeAttribute("disabled","disabled");
-    oForm.vitesse.up('table').select('td.arrows').invoke('hide');
-    oForm.vitesse.setOpacity(0.3);
+    $V(oForm.volume_debit, '');
+    oForm.volume_debit.writeAttribute("disabled","disabled");
+    oForm.volume_debit.up('table').select('td.arrows').invoke('hide');
+    oForm.volume_debit.setOpacity(0.3);
 
+    $V(oForm.duree_debit, '');
+    oForm.duree_debit.writeAttribute("disabled","disabled");
+    oForm.duree_debit.up('table').select('td.arrows').invoke('hide');
+    oForm.duree_debit.setOpacity(0.3);
+		
+		
     $V(oForm.nb_tous_les, '');
     oForm.nb_tous_les.writeAttribute("disabled","disabled");
     oForm.nb_tous_les.up('table').select('td.arrows').invoke('hide');

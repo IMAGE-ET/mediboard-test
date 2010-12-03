@@ -1746,7 +1746,13 @@ class CSetupdPprescription extends CSetup {
              AND object_class = 'CPrescriptionLineElement'";
     $this->addQuery($sql);
 		
-		$this->mod_version = "1.21";
+		$this->makeRevision("1.21");
+		$sql = "ALTER TABLE `prescription_line_mix`
+              CHANGE `vitesse` `volume_debit` INT (11) UNSIGNED,
+              ADD `duree_debit`  INT (11) UNSIGNED DEFAULT '1'";
+		$this->addQuery($sql);
+		
+		$this->mod_version = "1.22";
   }
 }
 

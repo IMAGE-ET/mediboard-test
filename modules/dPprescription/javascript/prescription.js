@@ -491,5 +491,20 @@ Prescription = {
         url.requestUpdate("dossier_traitement");
       }
     }
+  },
+	updateDebit: function(line_id) {
+		var oForm = getForm("editPerf-"+line_id);
+    var volume = Math.round($V(oForm.volume_debit));
+    var duree = Math.round($V(oForm.duree_debit));
+
+		if(volume == 0 || duree == 0){
+			return;
+		}
+		
+		var debit = (volume / duree).toFixed(2);
+	  if (isNaN(debit)) {
+      debit = "-";
+    } 
+    $("debitLineMix-"+line_id).update(debit);
   }
 };

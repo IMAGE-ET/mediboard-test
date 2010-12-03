@@ -44,7 +44,7 @@
     {{/if}}
   </div>
 	
-	{{if $_prescription_line_mix->vitesse && $_prescription_line_mix->type_line != "oxygene"}}
+	{{if $_prescription_line_mix->_debit && $_prescription_line_mix->type_line != "oxygene"}}
 		<form style="white-space: nowrap" name="modifDebit-{{$prescription_line_mix_id}}" method="post" action="?" onsubmit="return onSubmitFormAjax(this, { onComplete: function() { 
                             Prescription.loadTraitement('{{$_prescription_line_mix->_ref_prescription->object_id}}','{{$date}}','','administration');} } )">
 		  <input type="hidden" name="m" value="dPprescription" />
@@ -256,7 +256,7 @@
 					    <div style="font-size: 0.8em; height: 1em; padding: 2px;"></div>
 					  {{/if}}
              
-						{{if $_prescription_line_mix->vitesse}}
+						{{if $_prescription_line_mix->_debit}}
 						  {{if array_key_exists($_date_hour, $_prescription_line_mix->_variations)}}
 							   <table class="layout" style="width: 100%; margin: -2px; height: 2em;">
 							   	<tr>

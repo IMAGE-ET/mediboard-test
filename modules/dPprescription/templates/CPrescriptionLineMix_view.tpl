@@ -24,15 +24,11 @@
       {{mb_value object=$perf field=voie}}
     </td>
   </tr>
-	{{if $perf->vitesse}}
+	{{if $perf->_frequence}}
   <tr>
     <td>
-      {{mb_label object=$perf field=vitesse}} :
-      {{if $perf->vitesse}}
-      {{mb_value object=$perf field=vitesse}} ml/h
-      {{else}}
-       - 
-      {{/if}}
+    	Fréquence: 
+    	{{$perf->_frequence}}
     </td>
   </tr>
 	{{/if}}

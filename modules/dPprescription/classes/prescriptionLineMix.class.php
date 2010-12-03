@@ -16,7 +16,7 @@ class CPrescriptionLineMix extends CMbObject {
   var $prescription_id  = null; // Prescription
   var $type             = null; // Type de prescription_line_mix: seringue electrique / PCA
   var $libelle          = null; // Libelle de la prescription_line_mix
-  var $vitesse          = null; // Stockée en ml/h
+  
   var $voie             = null; // Voie d'administration des produits
   var $interface        = null; // Interface d'administration
   var $date_debut       = null; // Date de debut
@@ -45,7 +45,6 @@ class CPrescriptionLineMix extends CMbObject {
   var $time_retrait     = null; // Heure de retrait de la perf
   var $emplacement      = null;
   var $nb_tous_les      = null;
-  
 	
 	var $quantite_totale = null; // valeur en ml
 	var $duree_passage   = null; // minutes
@@ -68,6 +67,9 @@ class CPrescriptionLineMix extends CMbObject {
 	var $jour_decalage = null;
 	var $perop         = null;
 	
+  var $volume_debit     = null; // En ml
+  var $duree_debit      = null; // En heures
+  
 	// Fwd Refs
   var $_ref_prescription = null;
   var $_ref_praticien    = null;
@@ -83,12 +85,12 @@ class CPrescriptionLineMix extends CMbObject {
   var $_count_parent_line = null;
   var $_recent_modification = null;
   var $_count_substitution_lines = null;
-
   var $_pose = null;
   var $_retrait   = null;
   var $_voies = null;
   var $_active = null;
 	var $_nb_gouttes = null;
+	var $_debit = null;
 	
   // Object references
   var $_ref_log_signature_prat = null;
@@ -150,7 +152,8 @@ class CPrescriptionLineMix extends CMbObject {
   	$specs["type_line"]              = "enum notNull list|perfusion|aerosol|oxygene|alimentation default|perfusion";
     $specs["type"]                   = "enum list|classique|seringue|PCA|masque|lunettes|sonde|nebuliseur_ultrasonique|nebuliseur_pneumatique|doseur|inhalateur";
 		$specs["libelle"]                = "str";
-    $specs["vitesse"]                = "num pos";
+    $specs["volume_debit"]           = "num pos";
+		$specs["duree_debit"]            = "num pos";
     $specs["voie"]                   = "str";
 		$specs["interface"]              = "str";
     $specs["date_debut"]             = "date";
@@ -191,21 +194,31 @@ class CPrescriptionLineMix extends CMbObject {
 		$specs["duree_passage"]          = "num";
 		$specs["unite_duree_passage"]    = "enum list|minute|heure default|minute";
 		$specs["perop"]                  = "bool default|0"; 
+		$specs["_debit"]           = "num pos";
 		return $specs;
   }
 
   function updateFormFields(){
     parent::updateFormFields();
     
+		if($this->volume_debit && $this->duree_debit){ 
+		  $this->_debit = round($this->volume_debit / $this->duree_debit, 2);
+		}
+		
     // Calcul de la view
     $this->_view = ($this->libelle) ? "$this->libelle " : "";
     $this->_view .= ($this->type) ? " ".CAppUI::tr("CPrescriptionLineMix.type.$this->type").", " : "";
     $this->_view .= $this->voie;
-    $this->_view .= ($this->vitesse) ? " à $this->vitesse ml/h" : "";
+    $this->_view .= ($this->_debit) ? " à $this->_debit ml/h" : "";
     $this->_view .= ($this->nb_tous_les) ? " toutes les $this->nb_tous_les h" : "";
     
-    if($this->vitesse){
-      $this->_frequence = "à $this->vitesse ml/h";
+    if($this->_debit){
+      $this->_frequence = "à $this->_debit";
+			if($this->type_line == "oxygene"){
+				$this->_frequence .= " l/min";
+			} else {
+				$this->_frequence .= " ml/h";
+			}
     }
     if($this->nb_tous_les){
       $this->_frequence = "toutes les $this->nb_tous_les"."h";
@@ -243,7 +256,7 @@ class CPrescriptionLineMix extends CMbObject {
     }
 		$this->_active = (!$this->conditionnel) ? 1 : $this->condition_active;
 		
-		if($this->vitesse){
+		if($this->volume_debit){
 		  $this->_continuite = "continue";
 		}
 		if(($this->nb_tous_les || $this->duree_passage) && $this->type_line != "oxygene"){
@@ -390,7 +403,7 @@ class CPrescriptionLineMix extends CMbObject {
 		  $this->_last_variation = end($this->_ref_variations);
 		} else {
   		$this->_last_variation = new CPrescriptionLineMixVariation();
-			$this->_last_variation->debit = $this->vitesse;
+			$this->_last_variation->debit = $this->_debit;
 			$this->_last_variation->prescription_line_mix_id = $this->_id;
   	}
 	}
@@ -404,7 +417,7 @@ class CPrescriptionLineMix extends CMbObject {
 	    $this->loadRefsVariations();
 	
 		  $_date = mbTransformTime(null, $this->_debut, "%Y-%m-%d %H:00:00");
-		  $current_debit = $this->vitesse;
+		  $current_debit = $this->_debit;
 		  $max_debit = $current_debit ? $current_debit : 1;
 			
 			$variation_id = "perf";
@@ -413,7 +426,7 @@ class CPrescriptionLineMix extends CMbObject {
 				$_variations[$_date][mbTime($_date)]["debit"] = '';
 				$_variations[$_date][mbTime($_date)]["variation_id"] = "perf";
 				
-				$_variations[$_date][mbTime($this->_debut)]["debit"] = $this->vitesse;
+				$_variations[$_date][mbTime($this->_debut)]["debit"] = $this->_debit;
         $_variations[$_date][mbTime($this->_debut)]["variation_id"] = "perf";
         
         $_date = mbDateTime("+ 1 hour", $_date);
@@ -440,7 +453,7 @@ class CPrescriptionLineMix extends CMbObject {
 				if(count($_variations_by_hour) == 1){
 					$_variations[$key][mbTime($key)]["pourcentage"] = "100";
 					$_variations[$key][mbTime($key)]["height"] = round($_variations[$key][mbTime($key)]["debit"] * $max_height / $max_debit, 1);
-				  $_variations[$key][mbTime($key)]["normale"] = round($this->vitesse * $max_height / $max_debit, 1);
+				  $_variations[$key][mbTime($key)]["normale"] = round($this->_debit * $max_height / $max_debit, 1);
 	    	}
 				else {
 					$prev_hour_variation = 0;
@@ -455,7 +468,7 @@ class CPrescriptionLineMix extends CMbObject {
 						$_variations[$key][$_hour_variation]["pourcentage"] = $pourcentage;
 						$_variations[$key][$_hour_variation]["height"] = round($_debit_variation["debit"] * $max_height / $max_debit, 1);
 						$_variations[$key][$_hour_variation]["variation_id"] = $_debit_variation["variation_id"];
-						$_variations[$key][$_hour_variation]["normale"] = round($this->vitesse * $max_height / $max_debit, 1);
+						$_variations[$key][$_hour_variation]["normale"] = round($this->_debit * $max_height / $max_debit, 1);
 					}
 				}
 				ksort($_variations_by_hour);
@@ -535,14 +548,14 @@ class CPrescriptionLineMix extends CMbObject {
       $dates_planif[] = $date_time_temp;
       
       // Perfusion à la vitesse de x ml/h
-      if($this->vitesse && $this->_quantite_totale){
+      if($this->_debit && $this->_quantite_totale){
       	
 				// Chargement de toutes les variations
 				$this->loadRefsVariations();
 				
 				// Initialisation au valeur de depart
 				$prec_variation = $this->_debut;
-				$prec_debit = $this->vitesse;
+				$prec_debit = $this->_debit;
 				
 				$last_variation = new CPrescriptionLineMixVariation();
 				$last_variation->debit = 0;
@@ -634,7 +647,8 @@ class CPrescriptionLineMix extends CMbObject {
     }
               
     $creation = !$this->_id;
-    $calculPlanif =  ($this->fieldModified("vitesse") || 
+    $calculPlanif =  ($this->fieldModified("volume_debit") ||
+		                  $this->fieldModified("duree_debit") || 
 		                  $this->fieldModified("nb_tous_les") || 
 											$this->fieldModified("date_debut") || 
 											$this->fieldModified("time_debut") ||

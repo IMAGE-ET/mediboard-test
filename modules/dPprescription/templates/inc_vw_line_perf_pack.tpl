@@ -33,9 +33,9 @@
       {{/if}}
     </td>
     <td>
-      <strong>{{mb_label object=$_prescription_line_mix field="vitesse"}}</strong>:
-        {{if $_prescription_line_mix->vitesse}}
-      {{mb_value object=$_prescription_line_mix field="vitesse"}} ml/h
+      <strong>{{mb_label object=$_prescription_line_mix field="_debit"}}</strong>:
+        {{if $_prescription_line_mix->_debit}}
+      {{mb_value object=$_prescription_line_mix field="_debit"}} ml/h
       {{else}}
        -
       {{/if}}
