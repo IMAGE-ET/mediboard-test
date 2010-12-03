@@ -927,6 +927,10 @@ table.active {
   right: -20px;
 }
 
+.modal table.tbl {
+	text-align: left;
+}
+
 .pagination {
   text-align: center; 
   font-weight: bold; 
