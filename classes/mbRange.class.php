@@ -21,7 +21,17 @@ abstract class CMbRange {
    * @return boolean 
    */
   static function void($lower, $upper) {
-    return ($upper < $lower || $lower === null || $upper === null);
+    return ($upper < $lower && $lower !== null && $upper !== null);
+  }
+
+  /**
+   * Tell whether range is finite
+   * @param object $lower The lower bound
+   * @param object $upper The upper bound
+   * @return boolean 
+   */
+  static function finite($lower, $upper) {
+    return ($lower !== null && $upper !== null);
   }
 
 	/**
@@ -66,5 +76,49 @@ abstract class CMbRange {
       ($upper1 !== null && $upper2 !== null ) ? min($upper1, $upper2) : null,
 		);
   }
+	
+  /**
+   * Tell whether range1 is inside range2 (permissive)
+   * @param object $lower1
+   * @param object $upper1
+   * @param object $lower2
+   * @param object $upper2
+   * @return boolean
+   */
+  static function inside($lower1, $upper1, $lower2, $upper2) {
+  	list($lower, $upper) = self::intersection($lower1, $upper1, $lower2, $upper2);
+		return $lower == $lower1 && $upper = $upper1;
+  }
+	
+  /**
+   * Crop a range with another, resulting in 0 to 2 range fragments
+   * Limitation: cropper has to be finite
+   * @param object $lower1 Cropped range
+   * @param object $upper1 Cropped range
+   * @param object $lower2 Cropper range
+   * @param object $upper2 Cropper range
+   * @return array Array of range fragments, false on infinite cropper
+   */
+	static function crop($lower1, $upper1, $lower2, $upper2) {
+    if (!self::finite($lower2, $upper2)) return false;
+
+		$fragments = array();
+
+    // Right fragment
+    if ($lower2 <= $upper1 || $upper1 === null) {
+			if (!self::void($lower1, $lower2)) {
+        $fragments[] = array($lower1, $lower2);
+			}
+    }
+
+    // Left fragment
+    if ($upper2 >= $lower1 || $lower1 === null) {
+      if (!self::void($upper2, $upper1)) {
+        $fragments[] = array($upper2, $upper1);
+      }
+    }
+    
+		return $fragments;
+	}
 }
 ?>
