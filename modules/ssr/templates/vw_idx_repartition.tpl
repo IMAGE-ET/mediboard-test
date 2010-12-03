@@ -16,6 +16,7 @@ showLegende = function(){
 	url.popup(300, 200, "Legende");
 }
 
+
 </script>
 
 {{mb_include_script module=ssr script=repartition}}
@@ -58,6 +59,9 @@ showLegende = function(){
     	<div id="plateaux">
         <script type="text/javascript">
         ViewPort.SetAvlHeight('plateaux', 1);
+			  // Debugage du scroll de la div de la liste des prescriptions
+			  Position.includeScrollOffsets = true;
+			  Event.observe('plateaux', 'scroll', function(event) { Position.prepare(); });
         </script>
 
 	      {{if $dPconfig.ssr.repartition.show_tabs}} 
