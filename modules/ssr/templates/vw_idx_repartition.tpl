@@ -55,37 +55,48 @@ showLegende = function(){
 	
   <tr>
     <td>
-    	{{if $dPconfig.ssr.repartition.show_tabs}} 
-    	   
-      <script type="text/javascript">
-      Main.add(Control.Tabs.create.curry('tabs-plateaux', true));
-      </script>
-    
-      <ul id="tabs-plateaux" class="control_tabs">
-        {{foreach from=$plateaux item=_plateau}}
-        <li>
-          <a href="#{{$_plateau->_guid}}">
-            {{$_plateau}}
-          </a>
-        </li>
-        {{/foreach}}
-      </ul>
-      
-      <hr class="control_tabs" />
-    	{{/if}}
+    	<div id="plateaux">
+        <script type="text/javascript">
+        ViewPort.SetAvlHeight('plateaux', 1);
+        </script>
 
-
-      {{foreach from=$plateaux item=_plateau}}
-    	{{mb_include template=inc_repartition_plateau plateau=$_plateau}}
-		  {{foreachelse}}
-		  <div class="small-warning">
-		  	{{tr}}CGroups-back-plateaux_techniques.empty{{/tr}}
-		  </div>
-		  {{/foreach}}
+	      {{if $dPconfig.ssr.repartition.show_tabs}} 
+	         
+	      <script type="text/javascript">
+	      Main.add(Control.Tabs.create.curry('tabs-plateaux', true));
+	      </script>
+	    
+	      <ul id="tabs-plateaux" class="control_tabs">
+	        {{foreach from=$plateaux item=_plateau}}
+	        <li>
+	          <a href="#{{$_plateau->_guid}}">
+	            {{$_plateau}}
+	          </a>
+	        </li>
+	        {{/foreach}}
+	      </ul>
+	      
+	      <hr class="control_tabs" />
+	      {{/if}}
+	
+	
+	      {{foreach from=$plateaux item=_plateau}}
+	      {{mb_include template=inc_repartition_plateau plateau=$_plateau}}
+	      {{foreachelse}}
+	      <div class="small-warning">
+	        {{tr}}CGroups-back-plateaux_techniques.empty{{/tr}}
+	      </div>
+	      {{/foreach}}
+    	</div>
     </td>
 
-    <td style="width: 150px;">
-      {{mb_include template=inc_sejours_non_affectes}}
+    <td style="width: 160px;">
+		  <div id="non-repartis">
+	      <script type="text/javascript">
+	      ViewPort.SetAvlHeight('non-repartis', 1);
+	      </script>
+	      {{mb_include template=inc_sejours_non_affectes}}
+		  </div>
     </td>
   </tr>
   
