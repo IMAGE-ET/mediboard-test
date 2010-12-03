@@ -25,6 +25,8 @@ Voir les séjour :
 <label for="see_mergeable">Seulement les suspects</label>
 <input name="see_yesterday" type="checkbox" {{if $see_yesterday}}checked="true"{{/if}} onclick="IdentitoVigilance.start(0,100);" />
 <label for="see_yesterday">Egalement ceux de la veille</label>
+<input name="see_cancelled" type="checkbox" {{if $see_cancelled}}checked="true"{{/if}} onclick="IdentitoVigilance.start(0,100);" />
+<label for="see_cancelled">Egalement les annulées</label>
 
 <table class="tbl">
   <tr>
@@ -90,12 +92,12 @@ Voir les séjour :
       <input name="{{$_sejour->_class_name}}-second" type="radio" value="{{$_sejour->_id}}" style="visibility: hidden;" onclick="IdentitoVigilance.merge(this);"/>
       {{/if}}
     </td>
-    <td id="{{$_sejour->_guid}}">
+    <td id="{{$_sejour->_guid}}" >
     	<big onmouseover="ObjectTooltip.createEx(this, '{{$_sejour->_guid}}')">
     		{{mb_value object=$_sejour field=_entree date=$date}}
 			</big>
 		</td>
-    <td>
+    <td {{if ($_sejour->annule == 1)}}class="cancelled"{{/if}}>
     	{{if !$_sejour->_num_dossier}} 
        <div class="warning">
           {{tr}}None{{/tr}}
@@ -106,7 +108,7 @@ Voir les séjour :
 		</td>
     
     {{if ($module == "dPurgences")}}
-    <td>
+    <td {{if ($_sejour->annule == 1)}}class="cancelled"{{/if}}>
 	    {{foreach from=$_sejour->_back.rpu key=rpu_id item=_rpu}}
 	    <div>
 	      {{if count($_sejour->_back.rpu) > 1}}

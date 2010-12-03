@@ -12,8 +12,8 @@
     </a>
   </td>
   {{else}}
-  <td>
-    <div style="float:right;">
+  <td style="padding-right: 16px;">
+    <div style="float:right; margin-right: -16px;"">
       {{mb_include module=system template=inc_object_notes object=$_patient}}
     </div>
     {{if $_patient->_id == $patVitale->_id}}

@@ -275,39 +275,119 @@ class CSipObjectHandler extends CMbObjectHandler {
 
       // Si Client
       if (!CAppUI::conf('sip server')) {
-        $dest_hprim = new CDestinataireHprim();
-        $dest_hprim->type = "sip";
-        $dest_hprim->message = "patients";
-        $destinataires = $dest_hprim->loadMatchingList();
-        
         $mbObject->_fusion = array();
-        foreach ($destinataires as $_destinataire) {
-          if ($mbObject->_hprim_initiateur_group_id == $_destinataire->group_id) {
+        foreach (CGroups::loadGroups() as $_group) {
+          if ($mbObject->_hprim_initiateur_group_id == $_group->_id) {
             continue;
           }
           
           $patient->_IPP = null;
-          $patient->loadIPP($_destinataire->group_id);
+          $patient->loadIPP($_group->_id);
           $patient1_ipp = $patient->_IPP;
           
           $patient_elimine->_IPP = null;
-          $patient_elimine->loadIPP($_destinataire->group_id);
+          $patient_elimine->loadIPP($_group->_id);
           $patient2_ipp = $patient_elimine->_IPP;
           
-          // Passage en trash de l'IPP du patient a éliminer si fusion
-          if ($patient1_ipp && $patient2_ipp) {
-            $id400PatientElimine = new CIdSante400();
-            $id400PatientElimine->loadLatestFor($patient_elimine);
-            $id400PatientElimine->tag = CAppUI::conf('dPpatients CPatient tag_ipp_trash').$_destinataire->_tag_patient;
-            $id400PatientElimine->store();
+          // Passage en trash des IPP des patients
+          $tap_IPP = CPatient::getTagIPP($_group->_id);
+          
+          $id400Patient               = new CIdSante400();
+          $id400Patient->tag          = $tap_IPP;
+          $id400Patient->object_class = "CPatient";
+          $id400Patient->object_id    = $patient->_id;
+          $id400sPatient = $id400Patient->loadMatchingList();
+          
+          $id400PatientElimine               = new CIdSante400();
+          $id400PatientElimine->tag          = $tap_IPP;
+          $id400PatientElimine->object_class = "CPatient";
+          $id400PatientElimine->object_id    = $patient_elimine->_id;
+          $id400sPatientElimine = $id400PatientElimine->loadMatchingList();
+          
+          $id400s = array_merge($id400sPatient, $id400sPatientElimine);
+          if (count($id400s) > 1) {
+            foreach ($id400s as $_id_400) {
+              // On continue pour ne pas mettre en trash l'IPP du patient que l'on garde
+              if ($_id_400->id400 == $patient1_ipp) {
+                continue;
+              }
+              $_id_400->tag = CAppUI::conf('dPpatients CPatient tag_ipp_trash').$tap_IPP;
+              $_id_400->last_update = mbDateTime();
+              $_id_400->store();
+            }
           }
                       
-          $mbObject->_fusion[$_destinataire->_id] = array (
+          $mbObject->_fusion[$_group->_id] = array (
             "patientElimine" => $patient_elimine,
-            "patient1_ipp" => $patient1_ipp,
-            "patient2_ipp" => $patient2_ipp,
+            "patient1_ipp"   => $patient1_ipp,
+            "patient2_ipp"   => $patient2_ipp,
           );
         }        
+      }
+    }
+    // Traitement Séjour
+    else if ($mbObject instanceof CSejour) { 
+      $sejour = $mbObject;
+
+      $sejour_eliminee = new CSejour();
+      $sejour_eliminee->load(reset($mbObject->_merging));
+      $sejour_eliminee->updateFormFields();
+      $sejour_eliminee->updateFormFields();
+      $sejour_eliminee->loadRefPatient();
+      $sejour_eliminee->loadRefPraticien();
+      $sejour_eliminee->loadLastLog();
+      $sejour_eliminee->loadRefAdresseParPraticien();
+      
+      // Si Client
+      if (!CAppUI::conf('sip server')) {
+        $mbObject->_fusion = array();
+        foreach (CGroups::loadGroups() as $_group) {
+          if ($mbObject->_hprim_initiateur_group_id == $_group->_id) {
+            continue;
+          }
+          
+          $sejour->_num_dossier = null;
+          $sejour->loadNumDossier($_group->_id);
+          $sejour1_nda = $sejour->_num_dossier;
+          
+          $sejour_eliminee->_num_dossier = null;
+          $sejour_eliminee->loadNumDossier($_group->_id);
+          $sejour2_nda = $sejour_eliminee->_num_dossier;
+          
+          // Passage en trash des NDA des séjours
+          $tap_NDA = CPatient::getTagIPP($_group->_id);
+          
+          $id400Sejour               = new CIdSante400();
+          $id400Sejour->tag          = $tap_NDA;
+          $id400Sejour->object_class = "CSejour";
+          $id400Sejour->object_id    = $sejour->_id;
+          $id400sSejour = $id400Sejour->loadMatchingList();
+          
+          $id400SejourElimine               = new CIdSante400();
+          $id400SejourElimine->tag          = $tap_NDA;
+          $id400SejourElimine->object_class = "CSejour";
+          $id400SejourElimine->object_id    = $sejour_eliminee->_id;
+          $id400sSejourElimine = $id400SejourElimine->loadMatchingList();
+          
+          $id400s = array_merge($id400sSejour, $id400sSejourElimine);
+          if (count($id400s) > 1) {
+            foreach ($id400s as $_id_400) {
+              // On continue pour ne pas mettre en trash le NDA du séjour que l'on garde
+              if ($_id_400->id400 == $sejour1_nda) {
+                continue;
+              }
+              $_id_400->tag = CAppUI::conf('dPplanningOp CSejour tag_dossier_trash').$tap_NDA;
+              $_id_400->last_update = mbDateTime();
+              $_id_400->store();
+            }
+          }
+                      
+          $mbObject->_fusion[$_group->_id] = array (
+            "sejourEliminee" => $sejour_eliminee,
+            "sejour1_nda"    => $sejour1_nda,
+            "sejour2_nda"    => $sejour2_nda,
+          );
+        }       
       }
     }
   }
@@ -325,44 +405,108 @@ class CSipObjectHandler extends CMbObjectHandler {
       
       // Si Client
       if (!CAppUI::conf('sip server')) {
-        foreach ($mbObject->_fusion as $destinataire_id => $infos_fus) {
+        foreach ($mbObject->_fusion as $group_id => $infos_fus) {
           $dest_hprim = new CDestinataireHprim();
-          $dest_hprim->load($destinataire_id);
+          $dest_hprim->group_id = $group_id;
+          $dest_hprim->type     = "sip";
+          $dest_hprim->message  = "patients";
+          $destinataires = $dest_hprim->loadMatchingList();
           
-          if ($mbObject->_hprim_initiateur_group_id == $dest_hprim->group_id) {
-            continue;
-          }
-          
-          $patient1_ipp = $patient->_IPP = $infos_fus["patient1_ipp"];
-          
-          $patient_eliminee = $infos_fus["patientElimine"];
-          $patient2_ipp = $patient_eliminee->_IPP = $infos_fus["patient2_ipp"];
-
-          // Cas 0 IPP : Aucune notification envoyée
-          if (!$patient1_ipp && !$patient2_ipp) {
-            continue;
-          }
-         
-          // Cas 1 IPP : Pas de message de fusion mais d'une modification du patient
-          if ((!$patient1_ipp && $patient2_ipp) || ($patient1_ipp && !$patient2_ipp)) {
-            $domEvenementEnregistrementPatient = new CHPrimXMLEnregistrementPatient();
-            $domEvenementEnregistrementPatient->_ref_destinataire = $dest_hprim;
+          foreach ($destinataires as $_dest_hprim) {
+            if ($mbObject->_hprim_initiateur_group_id == $_dest_hprim->group_id) {
+              continue;
+            }
             
-            if ($patient2_ipp)
-              $patient->_IPP = $patient2_ipp;
+            $patient1_ipp = $patient->_IPP = $infos_fus["patient1_ipp"];
+            
+            $patient_eliminee = $infos_fus["patientElimine"];
+            $patient2_ipp = $patient_eliminee->_IPP = $infos_fus["patient2_ipp"];
+  
+            // Cas 0 IPP : Aucune notification envoyée
+            if (!$patient1_ipp && !$patient2_ipp) {
+              continue;
+            }
+           
+            // Cas 1 IPP : Pas de message de fusion mais d'une modification du patient
+            if ((!$patient1_ipp && $patient2_ipp) || ($patient1_ipp && !$patient2_ipp)) {
+              $domEvenementEnregistrementPatient = new CHPrimXMLEnregistrementPatient();
+              $domEvenementEnregistrementPatient->_ref_destinataire = $_dest_hprim;
               
-            $dest_hprim->sendEvenementPatient($domEvenementEnregistrementPatient, $patient);
-            continue;
+              if ($patient2_ipp)
+                $patient->_IPP = $patient2_ipp;
+                
+              $_dest_hprim->sendEvenementPatient($domEvenementEnregistrementPatient, $patient);
+              continue;
+            }
+            
+            // Cas 2 IPPs : Message de fusion
+            if ($patient1_ipp && $patient2_ipp) {
+              $domEvenementFusionPatient = new CHPrimXMLFusionPatient();
+              $domEvenementFusionPatient->_ref_destinataire = $_dest_hprim;
+                            
+              $patient->_patient_elimine = $patient_eliminee;
+              $_dest_hprim->sendEvenementPatient($domEvenementFusionPatient, $patient);
+              continue;
+            }
           }
+        }        
+      }
+    }
+    // Traitement Séjour
+    else if ($mbObject instanceof CSejour) {
+      $sejour = $mbObject;
+      $sejour->check();
+      $sejour->updateFormFields();
+      $sejour->loadRefPatient();
+      $sejour->loadRefPraticien();
+      $sejour->loadLastLog();
+      $sejour->loadRefAdresseParPraticien();
+      
+      // Si Client
+      if (!CAppUI::conf('sip server')) {
+        foreach ($mbObject->_fusion as $group_id => $infos_fus) {
+          $dest_hprim = new CDestinataireHprim();
+          $dest_hprim->group_id = $group_id;
+          $dest_hprim->type     = "sip";
+          $dest_hprim->message  = "patients";
+          $destinataires = $dest_hprim->loadMatchingList();
           
-          // Cas 2 IPPs : Message de fusion
-          if ($patient1_ipp && $patient2_ipp) {
-            $domEvenementFusionPatient = new CHPrimXMLFusionPatient();
-            $domEvenementFusionPatient->_ref_destinataire = $dest_hprim;
-                          
-            $patient->_patient_elimine = $patient_eliminee;
-            $dest_hprim->sendEvenementPatient($domEvenementFusionPatient, $patient);
-            continue;
+          foreach ($destinataires as $_dest_hprim) {
+            if ($mbObject->_hprim_initiateur_group_id == $_dest_hprim->group_id) {
+              continue;
+            }
+            
+            $sejour1_nda = $sejour->_num_dossier = $infos_fus["sejour1_nda"];
+            
+            $sejour_eliminee = $infos_fus["sejourEliminee"];
+            $sejour2_nda = $sejour_eliminee->_num_dossier = $infos_fus["sejour2_nda"];
+  
+            // Cas 0 NDA : Aucune notification envoyée
+            if (!$sejour1_nda && !$sejour2_nda) {
+              continue;
+            }
+           
+            // Cas 1 NDA : Pas de message de fusion mais d'une modification de la venue
+            if ((!$sejour1_nda && $sejour2_nda) || ($sejour1_nda && !$sejour2_nda)) {
+              $domEvenementVenuePatient = new CHPrimXMLVenuePatient();
+              $domEvenementVenuePatient->_ref_destinataire = $_dest_hprim;
+              
+              if ($sejour2_nda)
+                $sejour->_num_dossier = $sejour2_nda;
+                
+              $_dest_hprim->sendEvenementPatient($domEvenementVenuePatient, $sejour);
+              continue;
+            }
+            
+            // Cas 2 NDA : Message de fusion
+            if ($sejour1_nda && $sejour2_nda) {
+              $domEvenementFusionVenue = new CHPrimXMLFusionVenue();
+              $domEvenementFusionVenue->_ref_destinataire = $_dest_hprim;
+                            
+              $sejour->_sejour_eliminee = $sejour_eliminee;
+              $_dest_hprim->sendEvenementPatient($domEvenementFusionVenue, $sejour);
+              continue;
+            }
           }
         }        
       }

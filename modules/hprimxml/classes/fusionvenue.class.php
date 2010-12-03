@@ -21,24 +21,24 @@ class CHPrimXMLFusionVenue extends CHPrimXMLEvenementsPatients {
     parent::__construct();
   }
   
-  function generateFromOperation($mbVenue, $referent) {  
+  function generateFromOperation(CSejour $mbVenue, $referent) {  
     $evenementsPatients = $this->documentElement;
     $evenementPatient = $this->addElement($evenementsPatients, "evenementPatient");
     
     $fusionVenue = $this->addElement($evenementPatient, "fusionVenue");
     $this->addAttribute($fusionVenue, "action", "fusion");
-      
-    $venue = $this->addElement($fusionVenue, "venue");
-
+          
+    // Ajout du patient
+    $patient = $this->addElement($fusionVenue, "patient");
+    $this->addPatient($patient, $mbVenue->_ref_patient, $referent);
+    
     // Ajout de la venue   
+    $venue = $this->addElement($fusionVenue, "venue");
     $this->addVenue($venue, $mbVenue, $referent);
-      
-    $venueElimine = $this->addElement($fusionVenue, "venueElimine");
-    $mbVenueElimine = new CVenue();
-    $mbVenueElimine->load($mbVenue->_merging);
 
-    // Ajout du patient a eliminer
-    $this->addPatient($venueElimine, $mbVenueElimine, $referent);
+    $venueEliminee = $this->addElement($fusionVenue, "venueEliminee");
+    // Ajout de la venue a eliminer
+    $this->addVenue($venueEliminee, $mbVenue->_sejour_eliminee, $referent);
         
     // Traitement final
     $this->purgeEmptyElements();

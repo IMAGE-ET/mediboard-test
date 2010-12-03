@@ -13,6 +13,7 @@ CCanDo::checkEdit();
 // Filtres
 $see_mergeable = CValue::get("see_mergeable", "1");
 $see_yesterday = CValue::get("see_yesterday", "1");
+$see_cancelled = CValue::get("see_cancelled", "1");
 $module        = CValue::get("module", "dPadmissions");
 
 // Selection de la date
@@ -26,6 +27,9 @@ $where = array();
 $where["sejour.entree"] = "BETWEEN '$date_min' AND '$date_max'";
 if ($module == "dPurgences") {
   $where["sejour.type"] = "= 'urg'";
+}
+if ($see_cancelled == 0) {
+  $where["sejour.annule"] = "= '0'";
 }
 $where["sejour.group_id"] = "= '".CGroups::loadCurrent()->_id."'";
 $order = "entree";
@@ -110,6 +114,7 @@ $smarty = new CSmartyDP();
 $smarty->assign("mergeables_count", $mergeables_count);
 $smarty->assign("see_mergeable"   , $see_mergeable);
 $smarty->assign("see_yesterday"   , $see_yesterday);
+$smarty->assign("see_cancelled"   , $see_cancelled);
 $smarty->assign("date"            , $date);
 $smarty->assign("patients"        , $patients );
 $smarty->assign("guesses"         , $guesses );

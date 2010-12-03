@@ -642,7 +642,7 @@ class CHPrimXMLEvenementsPatients extends CHPrimXMLEvenements {
       $commentaire = "La venue $venue->_id que vous souhaitez annuler est impossible.";
       $messageAcquittement = $domAcquittement->generateAcquittementsPatients("erreur", "E108", $commentaire);
       $doc_valid = $domAcquittement->schemaValidate();
-      
+      $echange_hprim->setObjectIdClass("CSejour", $venue->_id);
       $echange_hprim->setAckError($doc_valid, $messageAcquittement, "erreur");
       return $messageAcquittement;    
     }
@@ -655,7 +655,7 @@ class CHPrimXMLEvenementsPatients extends CHPrimXMLEvenements {
       $commentaire = "La venue $venue->_id que vous souhaitez annuler est impossible.";
       $messageAcquittement = $domAcquittement->generateAcquittementsPatients("erreur", "E109", $commentaire);
       $doc_valid = $domAcquittement->schemaValidate();
-      
+      $echange_hprim->setObjectIdClass("CSejour", $venue->_id);
       $echange_hprim->setAckError($doc_valid, $messageAcquittement, "erreur");
       return $messageAcquittement;    
     }  

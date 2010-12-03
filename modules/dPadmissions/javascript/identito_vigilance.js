@@ -11,6 +11,7 @@ IdentitoVigilance = {
     if (form) {
       url.addParam("see_mergeable", form.see_mergeable.checked ? 1 : 0);
       url.addParam("see_yesterday", form.see_yesterday.checked ? 1 : 0);
+      url.addParam("see_cancelled", form.see_cancelled.checked ? 1 : 0);
 	}
     if (IdentitoVigilance.date) {
     	url.addParam("date", IdentitoVigilance.date);
