@@ -109,7 +109,9 @@ function toggleColumn(className) {
         {{if $alternative_mode}}
 				<br />
         <label style="font-weight: normal;">
-          <input type="radio" name="_base_object_id" value="{{$object->_id}}" {{if $smarty.foreach.object.first}}checked="checked"{{/if}} 
+          <input type="radio" name="_base_object_id" value="{{$object->_id}}" 
+                 {{if $object->_selected}}checked="checked"{{/if}} 
+                 {{if $object->_disabled}}disabled="disabled"{{/if}} 
                  onclick="toggleColumn('{{$object->_guid}}')"
           />
           Utiliser comme base [#{{$object->_id}}]

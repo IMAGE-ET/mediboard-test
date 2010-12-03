@@ -19,6 +19,7 @@ $objects = array();
 $result = null;
 $checkMerge = null;
 $statuses = array();
+
 if (class_exists($objects_class) && count($objects_id)) {
   foreach ($objects_id as $object_id) {
     $object = new $objects_class;
@@ -28,9 +29,54 @@ if (class_exists($objects_class) && count($objects_id)) {
       CAppUI::setMsg("Chargement impossible de l'objet [$object_id]", UI_MSG_ERROR);
       continue;
     }
-
+    
+    $object->loadView();
     $object->loadAllFwdRefs(true);
+    
+    $object->_selected = false;
+    $object->_disabled = false;
+    
     $objects[] = $object;
+  }
+  
+  // selection of the first CSejour or CPatient with an ext ID
+  if ($objects_class == "CSejour" || $objects_class == "CPatient") {
+    $no_extid = array();
+    $extid = array();
+    
+    foreach($objects as $_object) {
+      if ($_object instanceof CSejour && $_object->_num_dossier ||
+            $_object instanceof CPatient && $_object->_IPP) {
+        $extid[] = $_object;
+      }
+      else {
+        $no_extid[] = $_object;
+      }
+    }
+    
+    if (count($no_extid) < count($objects)) {
+      foreach($no_extid as $_object) {
+        $_object->_disabled = true;
+      }
+      $_selected = reset($extid);
+      $_selected->_selected = true;
+      
+      // we put the selected objects at the beginning of the array
+      foreach($objects as $_key => $_object) {
+        if ($_object->_selected) {
+          unset($objects[$_key]);
+          array_unshift($objects, $_object);
+        }
+      }
+    }
+    else {
+      $_selected = reset($objects);
+      $_selected->_selected = true;
+    }
+  }
+  else {
+    $_selected = reset($objects);
+    $_selected->_selected = true;
   }
   
   // Check merge
@@ -59,7 +105,6 @@ if (class_exists($objects_class) && count($objects_id)) {
     // Multiple values
     $statuses[$field] = count(array_unique($values)) == 1 ? "duplicate" : "multiple";
   }
-
 
   $result->updateFormFields();
   $result->loadAllFwdRefs(true);
