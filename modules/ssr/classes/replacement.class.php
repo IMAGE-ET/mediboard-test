@@ -163,27 +163,23 @@ class CReplacement extends CMbObject {
   }
 
   function makeFragments() {
-		$fragments = array(array($this->deb, $this->fin));
-		
-		if (count($this->_ref_replacer_conges) == 1) {
-			$conge = reset($this->_ref_replacer_conges);
-      $conge_deb = mbDate("-1 DAY", $conge->date_debut);
-      $conge_fin = mbDate("+1 DAY", $conge->date_fin  );
-			$fragments = CMbRange::crop($this->deb, $this->fin, $conge_deb, $conge_fin);
-			foreach($fragments as $key => $_fragment) {
-        if (!CMbRange::collides($this->_min_deb, $this->_max_fin, $_fragment[0], $_fragment[1])) {
-        	unset($fragments[$key]);
-        }				
-			}
+		$fragments = array();
+		$croppers = array();
+		foreach($this->_ref_replacer_conges as $_conge) {
+			$croppers[] = array(mbDate("-1 DAY", $_conge->date_debut), mbDate("+1 DAY", $_conge->date_fin));
 		}
 		
+    if (count($this->_ref_replacer_conges) > 0) {
+  		$fragments = CMbRange::multiCrop($this->deb, $this->fin, $croppers);
+      foreach($fragments as $key => $_fragment) {
+        if (!CMbRange::collides($this->_min_deb, $this->_max_fin, $_fragment[0], $_fragment[1])) {
+          unset($fragments[$key]);
+        }       
+      }
+		}
+				
 		return $this->_ref_replacement_fragments = $fragments;
 		
-//		foreach($this->_ref_replacer_conges as $_conge) {
-//			foreach($fragments as $_fragment) {
-//				
-//			}
-//		}
   }
 
 	function loadListFor($user_id, $date) {

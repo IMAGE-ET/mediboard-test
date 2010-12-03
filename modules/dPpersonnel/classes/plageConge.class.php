@@ -80,7 +80,8 @@ class CPlageConge extends CMbObject {
     $where["user_id"] = "= '$user_id'";
     $where["date_debut"] = "<= '$max'";
     $where["date_fin"  ] = ">= '$min'";
-    return $this->loadList($where);
+		$order = "date_debut";
+    return $this->loadList($where, $order);
   }
 
 	
