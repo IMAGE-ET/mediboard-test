@@ -58,7 +58,7 @@ else{
 
 // Gestion du modèle
 $templateManager = new CTemplateManager($_GET);
-$templateManager->editor = "fckeditor";
+$templateManager->editor = "ckeditor";
 
 // L'utilisateur est il une secretaire ou un administrateur?
 $mediuser = new CMediusers();

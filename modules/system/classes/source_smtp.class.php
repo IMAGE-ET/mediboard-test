@@ -83,6 +83,10 @@ class CSourceSMTP extends CExchangeSource {
     $this->_mail->AddAttachment($file_path);
   }
   
+  function addEmbeddedImage($file_path, $cid) {
+    $this->_mail->AddEmbeddedImage($file_path, $cid);
+  }
+  
   function send() {
   	$this->_mail->send();
   }

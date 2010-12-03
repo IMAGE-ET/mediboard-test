@@ -1,0 +1,47 @@
+<!DOCTYPE html 
+     PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+     "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+	<script type="text/javascript" src="../../../../../lib/scriptaculous/lib/prototype.js"></script>
+  <script type="text/javascript">
+	  var CKEDITOR = window.parent.parent.CKEDITOR;
+
+	  window.onload = function () {
+	    document.getElementById("txtData").focus();
+			CKEDITOR.dialog.getCurrent().on("ok", Ok, null, null, 1);
+	  }
+
+	  var Ok = function(e) {
+	    var content = $('txtData').value;
+			if (content != '') {
+				var sHtml = "<span class='field'>[[Texte libre - " + content + "]]</span>&nbsp;";
+		    CKEDITOR.instances.htmlarea.insertHtml(sHtml);
+				CKEDITOR.instances.htmlarea.fire("key", []);
+      }
+	    return true ;
+	  }
+
+		window.onunload = function() {
+			CKEDITOR.dialog.getCurrent().removeListener("ok", Ok);
+		}
+  </script>
+
+</head>
+<body style="overflow: hidden">
+  <table cellspacing="0" cellpadding="0" width="100%" border="0">
+    <tr>
+      <td>
+          Veuillez donner un nom à la zone de texte libre : <input id="txtData" type="text"/> <br />
+      </td>
+    </tr>
+		<tr id="empty-name" style="display: none;">
+			<td>
+				<div style="font-weight: bold; color: #800;">Le nom doit contenir au moins un caractère</div>
+			</td>
+		</tr>
+  </table>
+</body>
+</html>

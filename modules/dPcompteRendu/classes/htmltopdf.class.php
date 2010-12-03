@@ -70,6 +70,7 @@ class CHtmlToPDF {
 
   function generatePDF($content, $stream, $format, $orientation, $file) {
   	$this->content = $this->fixBlockElements($content);
+  	//mbTrace($content,'',1);
     $this->dompdf->set_paper($format, $orientation);
     $this->dompdf->set_protocol(isset($_SERVER["HTTPS"]) ? "https://" : "http://");
     $this->dompdf->set_host($_SERVER["SERVER_NAME"]);

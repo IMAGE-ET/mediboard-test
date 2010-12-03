@@ -1,0 +1,45 @@
+<?php /* $ */
+
+/**
+ *  @package Mediboard
+ *  @subpackage dPcompteRendu
+ *  @version $Revision: $
+ *  @author SARL OpenXtrem
+ *  @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ */
+
+$nom     = CValue::post("nom");
+$email   = CValue::post("email");
+
+$content = stripslashes(CValue::post("content"));
+
+// L'attribut css height dans l'attribut style d'une image est remplacé par height-min
+// Il faut donc le remplacer par l'attribut height de l'image.l
+$content = preg_replace("/height\s*:\s*([0-9]*)px\s*;/i","\" height=\"$1\" style=\"", $content);
+
+preg_match_all("/<img[^>]*src\s*=\s*[\"']([^\"']+)[\"'][^>]*>/i", $content, $matches);
+
+$exchange_source = CExchangeSource::get("mediuser-" . CAppUI::$user->_id);
+
+$exchange_source->init();
+
+try {
+  $exchange_source->setRecipient($email, $nom);
+  $exchange_source->setSubject("Envoi de compte-rendu");
+  
+  // Inclusion des images contenues dans le compte-rendu
+  foreach ($matches[1] as $key=>$_match) {
+    $content = str_replace($_match, "cid:$key", $content);
+    $exchange_source->addEmbeddedImage($_SERVER['DOCUMENT_ROOT'] . $_match, $key);
+  }
+
+  $exchange_source->setBody($content);
+  $exchange_source->send();
+  CAppUI::displayAjaxMsg("Message envoyé");
+  } catch(phpmailerException $e) {
+    CAppUI::displayAjaxMsg($e->errorMessage(), UI_MSG_WARNING);
+  } catch(Exception $e) {
+    CAppUI::displayAjaxMsg($e->getMessage(), UI_MSG_WARNING);
+  }
+
+?>

@@ -52,7 +52,7 @@ var Modele = {
   },
 
   generate_auto_height: function() {
-    var content = window.FCKeditorAPI ? FCKeditorAPI.Instances._source.GetHTML() : $V(form.source);
+    var content = window.CKEDITOR.instances.htmlarea ? CKEDITOR.instances.htmlarea.getData() : $V(form.source);
     var container = new Element("div", {style: "width: 17cm; padding: 0; margin: 0; position: absolute; left: -1500px; bottom: 200px;"}).insert(content);
     $$('body')[0].insert(container);
     // Calcul approximatif de la hauteur
@@ -97,7 +97,7 @@ function loadCategory(value) {
   });
 }
 
-function submitCompteRendu(){
+function submitCompteRendu(callback){
 	{{if $pdf_thumbnails == 1}}
     if (Thumb.modele_id > 0) {
       FormObserver.changes = 0;
@@ -107,6 +107,8 @@ function submitCompteRendu(){
   (function(){
     var form = getForm("editFrm");
     if(checkForm(form) && User.id) {
+      if (callback)
+        callback();
       form.submit();
     }
   }).defer();
@@ -118,10 +120,6 @@ function submitCompteRendu(){
 
 <script type="text/javascript">
 
-{{if $pdf_thumbnails == 1}}
-  emptyPDFonChanged();
-{{/if}}
-
 Main.add(function () {
   loadObjectClass('{{$compte_rendu->object_class}}');
   loadCategory('{{$compte_rendu->file_category_id}}');
@@ -130,7 +128,6 @@ Main.add(function () {
 		Thumb.user_id = {{$user_id}};
 		Thumb.mode = "modele";
 		PageFormat.init(getForm("editFrm"));
-		resizeEditor();
   {{/if}}
 });
 

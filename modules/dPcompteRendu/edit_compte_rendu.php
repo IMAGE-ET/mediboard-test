@@ -178,6 +178,9 @@ if (isset($compte_rendu->_ref_file->_id)) {
 
 $smarty->assign("noms_textes_libres", $noms_textes_libres);
 
+$exchange_source = CExchangeSource::get("mediuser-".CAppUI::$user->_id);
+$smarty->assign("exchange_source", $exchange_source);
+
 if (CValue::get("reloadzones") == 1) {
   $smarty->display("inc_zones_fields.tpl");
 }

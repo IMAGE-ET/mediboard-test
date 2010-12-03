@@ -8,7 +8,7 @@
 */
 
 class CTemplateManager {
-  var $editor = "fckeditor";
+  var $editor = "ckeditor";
   
   var $sections = array();
   var $helpers = array();
@@ -57,11 +57,11 @@ class CTemplateManager {
   }
 
   function makeSpan($spanClass, $text) {
-    // Escape entities cuz FCKEditor does so
+    // Escape entities cuz CKEditor does so
     $text = htmlentities($text);
     
     // Keep backslashed double quotes instead of quotes 
-    // cuz FCKEditor creates double quoted attributes
+    // cuz CKEditor creates double quoted attributes
     return "<span class=\"{$spanClass}\">{$text}</span>";
   }
   

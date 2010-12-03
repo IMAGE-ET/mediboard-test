@@ -65,7 +65,7 @@ if ($compte_rendu->header_id || $compte_rendu->footer_id) {
   $compte_rendu->_source = $style . $header->_source . $footer->_source . $compte_rendu->_source;
 }
 
-// Initialisation de FCKEditor
+// Initialisation de CKEditor
 $templateManager = new CTemplateManager;
 $templateManager->printMode = true;
 $templateManager->initHTMLArea();

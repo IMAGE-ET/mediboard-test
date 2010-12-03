@@ -239,26 +239,45 @@ $library->patches[] = $patch;
 CLibrary::$all[$library->name] = $library;
 
 $library = new CLibrary;
-$library->name = "FCKEditor";
-$library->url = "http://www.fckeditor.net/";
-$library->fileName = "FCKeditor_2.6.3.tar.gz";
+$library->name = "CKEditor";
+$library->url = "http://ckeditor.com/";
+$library->fileName = "ckeditor_3.4.2.tar.gz";
 $library->description = "Composant Javascript d'édition de texte au format HTML";
-$library->sourceDir = "fckeditor";
-$library->targetDir = "fckeditor";
-$library->versionFile = "fckconfig.js";
-$library->versionString = "// Last changes before 3.6 version";
+$library->sourceDir = "ckeditor";
+$library->targetDir = "ckeditor";
+$library->versionFile = "ckeditor.js";
+$library->versionString = "Copyright (c) 2003-2010";
 
 $patch = new CLibraryPatch;
-$patch->dirName = "fckeditor";
-$patch->subDirName = "browser";
-$patch->sourceName = "config.php";
-$patch->targetDir = "editor/filemanager/connectors/php";
+$patch->dirName = "ckeditor";
+$patch->subDirName = "skins/v2/";
+$patch->sourceName = "editor.css";
+$patch->targetDir = "skins/v2/";
 $library->patches[] = $patch;
 
 $patch = new CLibraryPatch;
-$patch->dirName = "fckeditor";
-$patch->sourceName = "fckeditor.html";
-$patch->targetDir = "editor";
+$patch->dirName = "ckeditor";
+$patch->subDirName = "/";
+$patch->sourceName = "ckeditor.js";
+$patch->targetDir = "/";
+$library->patches[] = $patch;
+
+CLibrary::$all[$library->name] = $library;
+
+$library = new CLibrary;
+$library->name = "kcfinder";
+$library->url = "http://kcfinder.sunhater.com/";
+$library->fileName = "kcfinder-2.2.tar.gz";
+$library->description = "Gestionnaire de fichier en ajax";
+$library->sourceDir = "kcfinder-2.2";
+$library->targetDir = "kcfinder";
+$library->versionFile = "browse.php";
+$library->versionString = "@version 2.2";
+
+$patch = new CLibraryPatch;
+$patch->dirName = "kcfinder";
+$patch->sourceName="config.php";
+$patch->targetDir="";
 $library->patches[] = $patch;
 
 CLibrary::$all[$library->name] = $library;

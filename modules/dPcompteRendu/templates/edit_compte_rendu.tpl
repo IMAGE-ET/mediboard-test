@@ -17,32 +17,33 @@ catch (e) {}
 {{/if}}
 
 function submitCompteRendu(callback){
-  FCKeditorAPI.Instances._source.EditingArea.Document.activeElement.style.background = "#ddd";
-	{{if $pdf_thumbnails == 1}}
-	  if (Thumb.modele_id > 0 && FormObserver.changes && Thumb.first_time == 0) {
-		  FormObserver.changes = 0;
-	    FormObserver.onChanged();
-	  }
-	{{/if}}
+  CKEDITOR.instances.htmlarea.getCommand("save").setState(CKEDITOR.TRISTATE_DISABLED);
+  CKEDITOR.instances.htmlarea.document.getBody().setStyle("background", "#ddd");
+	  
   (function(){
-	  var html = FCKeditorAPI.Instances._source.GetHTML();
+	  var html = CKEDITOR.instances.htmlarea.getData();
 	  $V($("htmlarea"), html, false);
 	  
     var form = getForm("editFrm");
+    
     if(checkForm(form) && User.id) {
      form.onsubmit=function(){ return true; };
       submitFormAjax(form, $("systemMsg"), { onComplete: function() {
-        FCKeditorAPI.Instances._source.EditingArea.Document.activeElement.style.background = '';
-        if (callback) {
-          callback();
-        } }});
+        Thumb.changed = false;
+        if (callback)
+          window.callback = callback;
+        else
+          window.canPrint = null;
+      }});
     }
   }).defer();
 }
 
 function refreshZones(id, obj) {
-	FCKeditorAPI.Instances._source.EditingArea.Document.activeElement.innerHTML = obj._source;
-	FCKeditorAPI.Instances._source.EditingArea.Document.activeElement.style.background = '';
+    
+  // Remise du content sauvegardé, avec l'impression en callback
+  CKEDITOR.instances.htmlarea.setData(obj._source, window.callback);
+  
 	var url = new Url("dPcompteRendu", "edit_compte_rendu");
 	url.addParam("compte_rendu_id", id);
 	url.addParam("reloadzones", 1);
@@ -53,7 +54,7 @@ function refreshZones(id, obj) {
 		     $V(form.compte_rendu_id, id);
 		     {{if $pdf_thumbnails == 1}}
 		       Thumb.compte_rendu_id = id;
-		       Thumb.modele_id = 0;
+		       Thumb.modele_id = null;
 		       Thumb.refreshThumbs(0, Thumb.compte_rendu_id, null, Thumb.user_id, Thumb.mode);
 		       
 		     {{else}}
@@ -64,11 +65,13 @@ function refreshZones(id, obj) {
 		     {{/if}}
 	    }});
 }
-</script>
 
-<script type="text/javascript">
+function openWindowMail() {
+  var url = new Url("dPcompteRendu", "ajax_view_mail");
+  url.popup(700, 320, "Envoi mail");
+}
+
 {{if $pdf_thumbnails == 1}}
-   emptyPDFonChanged();
 
   togglePageLayout = function() {
     $("page_layout").toggle();
@@ -122,7 +125,34 @@ function refreshZones(id, obj) {
   }
 {{/if}} 
   Main.add(function(){
-    resizeEditor();
+    {{if $pdf_thumbnails}}
+      window.onbeforeunload = function() {
+        if (Thumb.changed == false) return;
+
+        Thumb.old();
+
+        // La requête de vidage de pdf doit être faite dans le scope
+        // de la fenêtre principale, car on est en train de fermer la popup
+        var f = getForm("download-pdf-form");
+        if (CKEDITOR.env.ie)
+          var url = new Url();
+        else
+          var url = new window.opener.Url();
+
+        url.addParam("m", "dPcompteRendu");
+        url.addParam("dosql", "do_modele_aed");
+        url.addParam("_do_empty_pdf", 1);
+        url.addParam("compte_rendu_id", f.compte_rendu_id.value);
+        
+        url.requestJSON(function(){}, { method: "post"});
+        return '';
+      };
+      
+    {{/if}}
+    // Si c'est un modèle, on réactive le bouton d'enregistrement
+    if ('{{$modele_id}}' != 0)
+      CKEDITOR.instances.htmlarea.on('instanceReady', function() {
+        CKEDITOR.instances.htmlarea.getCommand("save").setState(CKEDITOR.TRISTATE_ENABLED); });
     {{if $pdf_thumbnails}}
       PageFormat.init(getForm("editFrm")); 
       Thumb.compte_rendu_id = '{{$compte_rendu->_id}}';
@@ -150,41 +180,6 @@ function refreshZones(id, obj) {
     {{/if}}
   });
 
-function replaceAll() {
-	var oForm = getForm("editFrm");
-  var source = '';
-	oForm.getElements().each(function(item, iterator) {
-		source = FCKeditorAPI.Instances._source.EditingArea.Document.activeElement.innerHTML;
-		switch(item.tagName) {
-		  case "SELECT":
-        if (item.name == "file_category_id" ||
-					  item.name == "_page_format") break;
-			  var list = $V(item);
-			  if (list instanceof Array) {
-				  if (list.length == 0) break;
-				  list = list.join(", ");
-			  }
-        if (list.indexOf("undef") != -1) break;
-        var temp_source = source.replace("\[Liste - " + item.className + "\]", list);
-        FCKeditorAPI.Instances._source.EditingArea.Document.activeElement.innerHTML = temp_source;
-        // Ne pas utiliser item.remove()
-        Element.remove(item);
-			  break;
-		  case "TEXTAREA":
-			  if (item.name == "_source") break;
-			  var content = item.value;
-			  var nom_texte_libre = item.className.split(" ")[1];
-			  var temp_source = source.replace("\[\[Texte libre - " + nom_texte_libre + "\]\]", content);
-			  FCKeditorAPI.Instances._source.EditingArea.Document.activeElement.innerHTML = temp_source;
-			  // Ne pas utiliser item.remove()
-			  // up().up() car il faut supprimer aussi la div qui contient le textarea
-			  Element.remove(item.up().up());
-			default:
-			  break;
-	  }
-	});
-}
-
 </script>
 
 <form style="display: none;" name="download-pdf-form" target="_blank" method="post" action="?m=dPcompteRendu&amp;a=ajax_pdf_and_thumbs"
@@ -199,7 +194,7 @@ function replaceAll() {
   <input type="hidden" name="orientation" value=""/>
 </form>
 
-<form name="editFrm" action="?m={{$m}}" method="post" 
+<form name="editFrm" action="?m={{$m}}" method="post"
       onsubmit="Url.ping({onComplete: submitCompteRendu}); return false;" 
       class="{{$compte_rendu->_spec}}">
   <input type="hidden" name="m" value="dPcompteRendu" />

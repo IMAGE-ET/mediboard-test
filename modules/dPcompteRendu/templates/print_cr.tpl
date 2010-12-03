@@ -3,7 +3,7 @@
   à gauche, puis sur <strong>Fichier > Aperçu avant impression</strong> (pour Firefox).
 </div>
 
-<div style="height: 700px">
+<div style="height: 700px" class="greedyPane">
 	<textarea id="htmlarea" name="_source">
 	  {{$_source}}
 	</textarea>

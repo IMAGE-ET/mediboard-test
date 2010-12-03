@@ -33,15 +33,17 @@ foreach($nbDoc as $compte_rendu_id => $nb_print){
   }
 }
 
-$_source = "";
+$_source = '';
 foreach($documents as $doc) {
+  
 	$doc->loadContent();
+
   // Suppression des headers et footers en trop (tous sauf le premier)
   $xml = new DOMDocument;
-  $_source = utf8_encode("<div>$doc->_source->content</div>");
-  $_source = preg_replace("/&\w+;/i", "", $_source);
+  $source = utf8_encode("<div>$doc->_source</div>");
+  $source = preg_replace("/&\w+;/i", "", $source);
   
-  @$xml->loadXML($_source);
+  @$xml->loadXML($source);
   $xpath = new DOMXPath($xml);
   
   $nodeList = $xpath->query("//*[@id='header']");
@@ -65,7 +67,7 @@ foreach($documents as $doc) {
   $_source .= $xml->saveHTML() . '<br style="page-break-after: always;" />';
 }
 
-// Initialisation de FCKEditor
+// Initialisation de CKEditor
 $templateManager = new CTemplateManager;
 $templateManager->printMode = true;
 $templateManager->initHTMLArea();

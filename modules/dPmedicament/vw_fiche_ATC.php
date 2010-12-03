@@ -16,7 +16,7 @@ if($fiche_ATC_id){
   $fiche_ATC->load($fiche_ATC_id);
   $fiche_ATC->getLibelleATC();
 	$templateManager = new CTemplateManager();
-	$templateManager->editor = "fckeditor";
+	$templateManager->editor = "ckeditor";
 	$templateManager->simplifyMode = true;
 	$templateManager->printMode = true;
 	$templateManager->initHTMLArea();

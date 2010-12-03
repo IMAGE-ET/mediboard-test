@@ -331,6 +331,10 @@ button.carriage_return:before, a.button.carriage_return:before {
 	content: url(images/buttons/carriage_return.png);
 } 
 
+button.mail:before, a.button.mail:before {
+  content: url(images/buttons/mail.png);
+}
+
 button.modify:before, a.button.modify:before {
   content: url(images/buttons/save.png);
 }

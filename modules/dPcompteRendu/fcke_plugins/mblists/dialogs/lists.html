@@ -1,0 +1,51 @@
+<!DOCTYPE html 
+     PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+     "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+	<script type="text/javascript" src="../../../../../lib/scriptaculous/lib/prototype.js"></script>
+  <script type="text/javascript">
+    var CKEDITOR = window.parent.parent.CKEDITOR;
+		var lists = [];
+		if (window.parent.parent.listeChoix[0] != null)
+      lists = window.parent.parent.listeChoix[0].options;
+
+		// Au chargement, on initialise la liste déroulante avec les listes
+    window.onload = function () {
+			var list = $("list");
+			if (lists.length > 0) {
+				$H(lists).each(function(item, iterator){
+					if (typeof item.value != "function") 
+						list.insert("<option value='" + item[1].item + "'>" + item[1].view + "</option>");
+				});
+			}
+			else {
+				list.insert("<option value=''>Aucune liste</option>");
+			}
+      list.selectedIndex = -1;
+    }
+
+    function insertHTML(string) {
+      var sHtml = "<span class='name'>" + string + "</span>&nbsp;";
+      CKEDITOR.instances.htmlarea.insertHtml(sHtml);
+      CKEDITOR.dialog.getCurrent().hide();
+      return true;
+    }
+  </script>
+
+</head>
+<body>
+
+<table>
+	<tr>
+		<td>
+			<select id="list" size="10" style="width: 150px; height: 180px;" ondblclick="insertHTML(this.value)">
+			</select>
+		</td>
+	</tr>
+	
+</table>
+</body>
+</html>

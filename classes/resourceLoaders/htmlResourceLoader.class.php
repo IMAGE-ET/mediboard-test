@@ -84,10 +84,12 @@ abstract class CHTMLResourceLoader {
   private static function replaceImgSrc($matches) {
     $src = $matches[2];
     $src = preg_replace('/(\?.*)$/', '', $src);
+    if ($src[0] == "/")
+      $src = $_SERVER['DOCUMENT_ROOT'] . $src;
     $ext = CMbPath::getExtension($src);
     $img = self::getFileContents($src);
     $img = " src=\"data:image/$ext;base64,".base64_encode($img)."\" ";
-    return '<img '.$matches[1].$img.$matches[3].'/>';
+    return '<img '.$matches[1].$img.$matches[3].' />';
   }
   
   private static function replaceStylesheetImport($matches) {

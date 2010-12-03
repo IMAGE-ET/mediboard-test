@@ -5,39 +5,31 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
-    <script type="text/javascript" src="../../../../lib/scriptaculous/lib/prototype.js"></script>
+    <script type="text/javascript" src="../../../../../lib/scriptaculous/lib/prototype.js"></script>
     <script type="text/javascript">
-      var dialog = window.parent ;
-      dialog.document.getElementById("btnCancel").value = "Fermer";
-      var oEditor = dialog.InnerDialogLoaded() ;
-      var FCK = oEditor.FCK;
-      var FCKTools  = oEditor.FCKTools ;
-      var FCKConfig = oEditor.FCKConfig ;
-      var FCKBrowserInfo = oEditor.FCKBrowserInfo ;
       var fields = window.parent.parent.fields[0].options;
-
+      var CKEDITOR = window.parent.parent.CKEDITOR;
+      
       // Au chargement, on initialise la liste déroulante avec les sections
       window.onload = function () {
-        dialog.SetAutoSize( true ) ;
         var section = $("section");
         $A(fields).each(function(item, i){
-          if (item.key != "AddItem" && item != "IndexOf")
-            section.insert("<option value='" + i + "'>" + item[1].section + "</option>");
+          section.insert("<option value='" + i + "'>"+ item[1].section + "</option>");
         });
         section.selectedIndex = -1;
       }
 
       function reloadItem(section) {
-        oItem = $("item");
-        oItem.update();
+        var oItem = $("item").update();
+
         // Rien à faire si la section est vide
         if (section == '') return; 
         // On vide la section des sous-items
         reloadSubItem('');
 
-        var items = fields[replaceEntites(section)];
+        var items = fields[section];
         for (var item in items) {
-          if (item == "AddItem" || item == "IndexOf") continue;
+          if (typeof items[item] == "function") continue;
           var several_items = "";
           var tag = '';
           if (items[item].length != undefined) {
@@ -52,12 +44,11 @@
       }
     
       function reloadSubItem(section, item) {
-        oSubItem = $("subitem");
-        oSubItem.update();
+        var oSubItem = $("subitem").update();
   
         // Rien à faire si l'item est vide
         if (item == null) return;
-          subItems = fields[replaceEntites(section)][replaceEntites(item)];
+          subItems = fields[section][item];
 
         // Ne rien faire si l'attribut length est undefined (ce n'est pas un tableau, donc pas de sous-items)
         if (subItems.length == undefined) return;
@@ -71,37 +62,25 @@
       }
 
       function insertItem(section, item) {
-				// Si le champ existe, alors on l'insère
-        if (fields[replaceEntites(section)][replaceEntites(item)].item != null)
-          insertHTML(fields[replaceEntites(section)][replaceEntites(item)].item);
+        // Si le champ existe, alors on l'insère
+        if (fields[section][item].item != null)
+          insertHTML(fields[section][item].item);
       }
       
       function insertSubItem(section, item, subitem){
-        if (fields[replaceEntites(section)][replaceEntites(item)][replaceEntites(subitem)].item != null)
-          insertHTML(fields[replaceEntites(section)][replaceEntites(item)][replaceEntites(subitem)].item);
-	    }
+        if (fields[section][item][subitem].item != null)
+          insertHTML(fields[section][item][subitem].item);
+      }
 
       function insertHTML(string) {
-        // Before doing anything, save undo snapshot.
-        oEditor.FCKUndo.SaveUndoStep() ;
-  
-        var sHtml ;
-        sHtml = "<span class='field'>" + string + "</span>&nbsp;";
-        sHtml = FCKTools.ProcessLineBreaks( oEditor, FCKConfig, sHtml ) ;
-        oEditor.FCK.InsertHtml( sHtml ) ;
-        dialog.document.getElementById("btnCancel").onclick();
+        //var sHtml = "<span class='field' contenteditable='false'>" + string + "</span>&nbsp;";
+        var sHtml = "<span class='field'>" + string + "</span>&nbsp;";
+        CKEDITOR.instances.htmlarea.insertHtml(sHtml);
+        CKEDITOR.dialog.getCurrent().hide();
+        CKEDITOR.instances.htmlarea.fire("key", []);
         return true ;
       }
-      
-      function replaceEntites(string) {
-        var replaceString = string.replace(/é/g, "&eacute;");
-        replaceString = replaceString.replace(/è/g, "&egrave;");
-        replaceString = replaceString.replace(/à/g, "&agrave;");
-        replaceString = replaceString.replace(/â/g, "&acirc;");
-        replaceString = replaceString.replace(/'/g, "&#039;");
-        replaceString = replaceString.replace(/ô/g, "&ocirc;");
-        return replaceString;
-      }
+
     </script>
 
   </head>
