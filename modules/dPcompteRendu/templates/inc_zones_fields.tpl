@@ -80,11 +80,11 @@
       </td>
     </tr>
     {{/if}}
-    <tr>
-      <td style="button text" colspan="2">
-        {{if $exchange_source->name}}
+    {{if $exchange_source->_id}}
+      <tr>
+        <td style="button text" colspan="2">
           <button type="button" class="mail" onclick="openWindowMail();">{{tr}}CCompteRendu.send_mail{{/tr}}</button>
-        {{/if}}
-      </td>
-    </tr>
+        </td>
+      </tr>
+    {{/if}}
 </table>
