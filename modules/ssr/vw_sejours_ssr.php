@@ -11,6 +11,7 @@
 CCanDo::checkRead();
 
 // Plateaux disponibles
+$show_cancelled_services = CValue::getOrSession("show_cancelled_services");
 $date = CValue::getOrSession("date", mbDate());
 $order_way = CValue::getOrSession("order_way", "ASC");
 $order_col = CValue::getOrSession("order_col", "patient_id");
@@ -24,7 +25,8 @@ $filter->praticien_id = CValue::getOrSession("praticien_id");
 $filter->referent_id  = CValue::getOrSession("referent_id");
 
 // Chargement des sejours SSR pour la date selectionnée
-$group_id = CGroups::loadCurrent()->_id;
+$group = CGroups::loadCurrent();
+$group_id = $group->_id;
 $where["type"] = "= 'ssr'";
 $where["group_id"] = "= '$group_id'";
 $where["annule"] = "= '0'";
@@ -41,6 +43,15 @@ if ($order_col == "sortie") {
 $ljoin["patients"] = "sejour.patient_id = patients.patient_id";
 if ($order_col == "patient_id") {
   $order = "patients.nom $order_way, patients.prenom, sejour.entree";
+}
+
+// Masquer les services inactifs
+if (!$show_cancelled_services) {
+	$service = new CService;
+	$service->group_id = $group->_id;
+	$service->cancelled = "1";
+	$services = $service->loadMatchingList();
+	$where["service_id"] = CSQLDataSource::prepareNotIn(array_keys($services));
 }
 
 $sejours = CSejour::loadListForDate($date, $where, $order, null, null, $ljoin);
@@ -155,6 +166,7 @@ $smarty->assign("praticiens", $praticiens);
 $smarty->assign("services", $services);
 $smarty->assign("show", $show);
 $smarty->assign("group_by", $group_by);
+$smarty->assign("show_cancelled_services", $show_cancelled_services);
 $smarty->assign("order_way", $order_way);
 $smarty->assign("order_col", $order_col);
 $smarty->display("vw_sejours_ssr.tpl");

@@ -11,6 +11,7 @@
 CCanDo::checkRead();
 
 // Plateaux disponibles
+$show_cancelled_services = CValue::getOrSession("show_cancelled_services");
 $technicien_id = CValue::get("technicien_id");
 $service_id = CValue::getOrSession("service_id");
 $date = CValue::getOrSession("date", mbDate());
@@ -20,7 +21,7 @@ $technicien->load($technicien_id);
 $technicien->loadRefKine();
 $kine_id = $technicien->_ref_kine->_id;
 
-$sejours = CBilanSSR::loadSejoursSSRfor($technicien_id, $date);
+$sejours = CBilanSSR::loadSejoursSSRfor($technicien_id, $date, $show_cancelled_services);
 $services = array();
 
 $all_sejours = array();
@@ -87,6 +88,7 @@ $colors = CColorLibelleSejour::loadAllFor(CMbArray::pluck($all_sejours, "libelle
 
 // Création du template
 $smarty = new CSmartyDP();
+$smarty->assign("show_cancelled_services", $show_cancelled_services);
 $smarty->assign("technicien_id", $technicien_id);
 $smarty->assign("service_id", $service_id);
 $smarty->assign("colors", $colors);

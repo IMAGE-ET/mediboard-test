@@ -16,16 +16,21 @@
 <!-- Filtre sur service-->
 <tr>
   <td>
-	  <select name="service_id" onchange="Repartition.updateTechnicien('', $V(this));">
-	    <option value="">&mdash; {{tr}}CService.all{{/tr}}</option>
-	    {{foreach from=$services item=_service}}
-	    <option value="{{$_service->_id}}" {{if $_service->_id == $service_id}}selected="selected"{{/if}}>
-	      {{$_service}}
-	    </option>
-	    {{/foreach}}
-	  </select>
+  	<form onsubmit="return Repartition.updateTechnicien('', this);">
+	    <select name="service_id" onchange="this.form.onsubmit()">
+	      <option value="">&mdash; {{tr}}CService.all{{/tr}}</option>
+	      {{foreach from=$services item=_service}}
+	      <option value="{{$_service->_id}}" {{if $_service->_id == $service_id}}selected="selected"{{/if}}>
+	        {{$_service}}
+	      </option>
+	      {{/foreach}}
+	    </select>
+	    <br/>
+	    {{mb_include template=inc_show_cancelled_services}}
+  	</form>
   </td>
 </tr>
+
 {{/if}}
 
 

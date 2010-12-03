@@ -9,11 +9,16 @@
  */
 
 Repartition = {
-  updateTechnicien: function(technicien_id, service_id) {
-    new Url('ssr', 'ajax_sejours_technicien') .
-      addParam('technicien_id', technicien_id) . 
-      addParam('service_id', service_id) . 
-      requestUpdate('sejours-technicien-'+technicien_id);
+  updateTechnicien: function(technicien_id, form) {
+    url = new Url('ssr', 'ajax_sejours_technicien');
+    url.addParam('technicien_id', technicien_id);
+    
+		if (form) {
+      url.addParam('service_id', $V(form.service_id));
+      url.addParam('show_cancelled_services', $V(form.show_cancelled_services));
+		}
+	
+    url.requestUpdate('sejours-technicien-'+technicien_id);
   },
   
   // Make technicien droppable

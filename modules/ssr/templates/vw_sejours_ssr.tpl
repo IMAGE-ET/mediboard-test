@@ -24,21 +24,25 @@
 	</button>
 {{/if}}
 	
-<form class="not-printable" name="Filter" action="?" method="get" style="float: right;">
+<form class="not-printable" name="Filter" action="?" method="get" style="float: right;" onsubmit="this.submit();">
   <input name="m" value="{{$m}}" type="hidden" />
   <input name="{{$actionType}}" value="{{$action}}" type="hidden" />
   <input name="dialog" value="{{$dialog}}" type="hidden" />
 
-  <input name="service_id"   value="{{$filter->service_id}}"   type="hidden" onchange="this.form.submit()" />
-  <input name="praticien_id" value="{{$filter->praticien_id}}" type="hidden" onchange="this.form.submit()" />
-  <input name="referent_id"  value="{{$filter->referent_id}}"  type="hidden" onchange="this.form.submit()" />
+  <input name="service_id"   value="{{$filter->service_id}}"   type="hidden" onchange="this.form.onsubmit()" />
+  <input name="praticien_id" value="{{$filter->praticien_id}}" type="hidden" onchange="this.form.onsubmit()" />
+  <input name="referent_id"  value="{{$filter->referent_id}}"  type="hidden" onchange="this.form.onsubmit()" />
 
 	{{if $dialog}} 
-	<label for="group_by">
-		Regrouper par kiné
-	</label>
-  <input type="checkbox" name="group_by" value="1" {{if $group_by}} checked="checked" {{/if}} onclick="this.form.submit();">
+  <input type="checkbox" name="group_by" value="1" {{if $group_by}} checked="checked" {{/if}} onclick="this.form.onsubmit();">
+  <label for="group_by">
+    Regrouper par kiné
+  </label>
+  &mdash;
 	{{/if}}
+
+  {{mb_include template=inc_show_cancelled_services}}
+	&mdash;
 
   Prescription
   <select name="show" onchange="this.form.submit();">

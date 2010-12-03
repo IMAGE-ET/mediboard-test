@@ -167,8 +167,18 @@ class CBilanSSR extends CMbObject {
 	 * Load Sejour for technicien at a date
 	 * @return array<CSejour>
 	 **/ 
-	static function loadSejoursSSRfor($technicien_id, $date) {
-	  $group = CGroups::loadCurrent();
+	static function loadSejoursSSRfor($technicien_id, $date, $show_cancelled_services = true) {
+    $group = CGroups::loadCurrent();
+
+		// Masquer les services inactifs
+		if (!$show_cancelled_services) {
+		  $service = new CService;
+		  $service->group_id = $group->_id;
+		  $service->cancelled = "1";
+		  $services = $service->loadMatchingList();
+		  $where["service_id"] = CSQLDataSource::prepareNotIn(array_keys($services));
+		}
+		
 	  $where["type"] = "= 'ssr'";
 	  $where["group_id"] = "= '$group->_id'";
 	  $where["annule"] = "= '0'";

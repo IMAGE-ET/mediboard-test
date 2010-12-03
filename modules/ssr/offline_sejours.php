@@ -19,6 +19,13 @@ $where["group_id"] = "= '$group_id'";
 $where["annule"] = "= '0'";
 $sejours = CSejour::loadListForDate($date, $where);
 
+// Masquer les services inactifs
+$service = new CService;
+$service->group_id = $group->_id;
+$service->cancelled = "1";
+$services = $service->loadMatchingList();
+$where["service_id"] = CSQLDataSource::prepareNotIn(array_keys($services));
+
 $plannings = array();
  
 // Chargement du détail des séjour
