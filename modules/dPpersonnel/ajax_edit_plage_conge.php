@@ -17,6 +17,7 @@ $user->load($user_id);
 $plageconge = new CPlageConge();
 $plageconge->user_id = $user_id;
 $plageconge->load($plage_id);
+$plageconge->loadRefsNotes();
 
 // Remplaçants disponibles
 $replacers = $user->loadUsers();

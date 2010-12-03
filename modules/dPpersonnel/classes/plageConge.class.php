@@ -57,17 +57,13 @@ class CPlageConge extends CMbObject {
 	
 	function check() {
 		$this->completeField("date_debut", "date_fin", "user_id");
-		
 		$plage_conge  = new CPlageConge();
 		$plage_conge->user_id = $this->user_id;
 		$plages_conge = $plage_conge->loadMatchingList();
 		unset($plages_conge[$this->_id]);
 		
-		foreach($plages_conge as $_plage){
-			$plageinbounds = (($this->date_debut < $_plage->date_debut) &&
-			                  ($this->date_fin < $_plage->date_debut))  ||
-											 (($this->date_debut > $_plage->date_fin));
-			if (!$plageinbounds) {
+		foreach($plages_conge as $_plage) {
+ 			if (CMbRange::collides($this->date_debut, $this->date_fin, $_plage->date_debut, $_plage->date_fin)) {
         return CAppUI::tr("CPlageConge-conflit %s", $_plage->_view);
 		  }
 	  }
@@ -79,6 +75,14 @@ class CPlageConge extends CMbObject {
 		$where[] = "'$date' BETWEEN date_debut AND date_fin";
 		$this->loadObject($where);
   }
+
+  function loadListForRange($user_id, $min, $max) {
+    $where["user_id"] = "= '$user_id'";
+    $where["date_debut"] = "<= '$max'";
+    $where["date_fin"  ] = ">= '$min'";
+    return $this->loadList($where);
+  }
+
 	
 	function loadRefsReplacementsFor($user_id, $date) {
     $where["replacer_id"] = "= '$user_id'";

@@ -18,7 +18,7 @@ $user->load($user_id);
 // Plages de congés pour l'utilisateur
 $plage_conge = new CPlageConge();
 $plage_conge->user_id = $user_id;
-$plages_conge = $plage_conge->loadMatchingList();
+$plages_conge = $plage_conge->loadMatchingList("date_debut");
 foreach($plages_conge as $_plage) {
 	$_plage->loadFwdRef("replacer_id");
 	$replacer =& $_plage->_fwd["replacer_id"];
