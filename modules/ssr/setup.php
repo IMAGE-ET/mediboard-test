@@ -385,7 +385,17 @@ class CSetupssr extends CSetup {
       ADD `actif` ENUM ('0','1') DEFAULT '1';";
     $this->addQuery($query);
 
-		$this->mod_version = "0.32";
+    $this->makeRevision("0.32");
+    $query = "ALTER TABLE `replacement` 
+      ADD `deb` DATE,
+      ADD `fin` DATE;";
+    $this->addQuery($query);
+    $query = "ALTER TABLE `replacement` 
+      ADD INDEX (`deb`),
+      ADD INDEX (`fin`);";
+    $this->addQuery($query);
+
+		$this->mod_version = "0.33";
     
     // Data source query
     $query = "SHOW COLUMNS FROM type_activite LIKE 'libelle_court'";

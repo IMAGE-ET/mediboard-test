@@ -12,14 +12,28 @@ class CReplacement extends CMbObject {
   // DB Table key
   var $replacement_id = null;
 
+  // DB Fields
   var $sejour_id   = null;
 	var $conge_id    = null;
 	var $replacer_id = null;
+
+  var $deb = null;  
+  var $fin = null;  
 	
+	
+	// References
 	var $_ref_sejour   = null;
 	var $_ref_conge    = null;
 	var $_ref_replacer = null;
 	
+	// Distant fields
+	var $_min_deb = null;
+	var $_max_fin = null;
+	
+  // Distant collections
+  var $_ref_replacer_conges = null;
+  var $_ref_replacement_fragments = null;
+
   function getSpec() {
     $spec = parent::getSpec();
     $spec->table = 'replacement';
@@ -29,9 +43,19 @@ class CReplacement extends CMbObject {
 
   function getProps() {
     $props = parent::getProps();
+		
+		// DB Fields
     $props["sejour_id"]   = "ref notNull class|CSejour";
     $props["conge_id"]    = "ref notNull class|CPlageConge";
 		$props["replacer_id"] = "ref notNull class|CMediusers";
+
+    $props["deb"] = "date";
+    $props["fin"] = "date";
+		
+		// Distant Fields
+    $props["_min_deb"] = "date";
+    $props["_max_fin"] = "date";
+		
     return $props;
   }
 	
@@ -121,6 +145,47 @@ class CReplacement extends CMbObject {
     return $this->_ref_replacer = $this->loadFwdRef("replacer_id", true);
   }	
 	
+	function loadDates() {
+	  $conge  = $this->loadRefConge();
+		$sejour = $this->loadRefSejour();
+		
+		list($this->_min_deb, $this->_max_fin) = CMbRange::intersection(
+		  mbDate($sejour->entree), mbDate($sejour->sortie),
+			$conge->date_debut, $conge->date_fin
+		);
+	}
+	
+  function checkCongesRemplacer() {
+  	$this->loadDates();
+		
+		$conge = new CPlageConge;
+		return $this->_ref_replacer_conges = $conge->loadListForRange($this->replacer_id, $this->_min_deb, $this->_max_fin);
+  }
+
+  function makeFragments() {
+		$fragments = array(array($this->deb, $this->fin));
+		
+		if (count($this->_ref_replacer_conges) == 1) {
+			$conge = reset($this->_ref_replacer_conges);
+      $conge_deb = mbDate("-1 DAY", $conge->date_debut);
+      $conge_fin = mbDate("+1 DAY", $conge->date_fin  );
+			$fragments = CMbRange::crop($this->deb, $this->fin, $conge_deb, $conge_fin);
+			foreach($fragments as $key => $_fragment) {
+        if (!CMbRange::collides($this->_min_deb, $this->_max_fin, $_fragment[0], $_fragment[1])) {
+        	unset($fragments[$key]);
+        }				
+			}
+		}
+		
+		return $this->_ref_replacement_fragments = $fragments;
+		
+//		foreach($this->_ref_replacer_conges as $_conge) {
+//			foreach($fragments as $_fragment) {
+//				
+//			}
+//		}
+  }
+
 	function loadListFor($user_id, $date) {
 		$join["plageconge"] = "replacement.conge_id = plageconge.plage_id";
 		$where[] = "'$date' BETWEEN plageconge.date_debut AND plageconge.date_fin";
