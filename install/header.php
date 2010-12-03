@@ -16,11 +16,11 @@ if (defined("E_DEPRECATED")) {
 
 $mbpath = "../";
 
-if (!file_exists($mbpath."classes/mbarray.class.php")){
+if (!file_exists($mbpath."classes/mbArray.class.php")){
   $mbpath = "./";
 }
 
-require_once($mbpath."classes/mbarray.class.php");
+require_once($mbpath."classes/mbArray.class.php");
 require_once($mbpath."classes/value.class.php");
 require_once($mbpath."includes/mb_functions.php");
 require_once($mbpath."includes/version.php");
