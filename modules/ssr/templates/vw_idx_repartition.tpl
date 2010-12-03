@@ -50,7 +50,7 @@ showLegende = function(){
 
 			</form>
 
-			<button type="button" class="search" style="float: right" onclick="showLegende();">Legende</button>
+			<button type="button" class="search" style="float: right;" onclick="showLegende();">Legende</button>
 		</th>
 	</tr>
 	

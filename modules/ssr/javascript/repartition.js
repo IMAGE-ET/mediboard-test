@@ -39,7 +39,11 @@ Repartition = {
   
 	// Make sejour draggable
 	draggableSejour: function(sejour_guid) {
-		new Draggable(sejour_guid, {revert: true, scroll: window})
+		new Draggable(sejour_guid, {
+			revert: true, 
+			scroll: window, 
+			ghosting: true
+		})
 	},
 	
 	// Link séjour to kiné
