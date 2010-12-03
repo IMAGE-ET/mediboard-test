@@ -241,7 +241,7 @@ class CMediusers extends CMbObject {
     $backProps["checked_lists"]                   = "CDailyCheckList validator_id";
     $backProps["evenements_ssr"]                  = "CEvenementSSR therapeute_id";
 		$backProps["activites_rhs"]                   = "CLigneActivitesRHS executant_id";
-		$backProps["replacement"]                     = "CReplacement replacer_id";
+		$backProps["replacements"]                    = "CReplacement replacer_id";
     $backProps["frais_divers"]                    = "CFraisDivers executant_id";
     return $backProps;
   }

@@ -46,7 +46,7 @@ class CPlageConge extends CMbObject {
 	
 	function getBackProps() {
     $backProps = parent::getBackProps();
-    $backProps["replacement"]             = "CReplacement conge_id";
+    $backProps["replacement"] = "CReplacement conge_id";
     return $backProps;
   }
 

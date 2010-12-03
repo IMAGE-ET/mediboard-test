@@ -299,7 +299,7 @@ duplicateSSRLine = function(element_prescription_id, category_id){
 		      <tr>
 		        {{if $can_edit_prescription}}
 	            <th class="narrow">
-			        	<span onmouseover="ObjectTooltip.createEx(this, '{{$_category->_guid}}')">{{$_category->_view}}</span>
+			        	<strong onmouseover="ObjectTooltip.createEx(this, '{{$_category->_guid}}')">{{$_category}}</strong>
 						  </th>
 			        <td>
 			        	<form name="search_{{$_category->_guid}}" action="?">
@@ -311,7 +311,7 @@ duplicateSSRLine = function(element_prescription_id, category_id){
 						  <td></td>
 							<th style="text-align: left;">
 							  <strong>
-						    <span onmouseover="ObjectTooltip.createEx(this, '{{$_category->_guid}}')">{{$_category->_view}}</span>
+						    <strong onmouseover="ObjectTooltip.createEx(this, '{{$_category->_guid}}')">{{$_category}}</strong>
 								</strong>
               </th>
 						{{/if}}

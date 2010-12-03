@@ -22,6 +22,6 @@
   </table>
 </form>
 
-<button class="tick" onclick="new Url('ssr', 'ajax_check_replacements').requestModal(600, 400);" >
+<button class="tick" onclick="new Url('ssr', 'ajax_check_replacements').requestModal(850, 500);" >
   {{tr}}mod-ssr-tab-ajax_check_replacements{{/tr}}
 </button>
