@@ -9,7 +9,7 @@
  */
 
 $token_evts  = CValue::post("token_evts");
-$_evenements = explode("|", $token_evts);
+$_evenement_ids = explode("|", $token_evts);
 
 // Recuperation des codes cdarrs a ajouter et a supprimer aux evenements
 $add_cdarrs = CValue::post("add_cdarrs") ? explode("|", CValue::post("add_cdarrs")) : '';
@@ -31,7 +31,17 @@ if(count($other_cdarrs)){
 	}
 }
 
-foreach($_evenements as $_evenement_id){
+foreach($_evenement_ids as $_evenement_id){
+	$evenement = new CEvenementSSR;
+	$evenement->load($_evenement_id);
+	
+  // Autres rééducateurs
+  global $can;
+  if ($evenement->therapeute_id && ($evenement->therapeute_id != CAppUI::$instance->user_id) && !$can->admin) {
+    CAppUI::displayMsg("Impossible de modifier les événements d'un autre rééducateur", "CEvenementSSR-msg-modify");
+    continue;
+  }
+	
 	if(is_array($cdarrs)){
 		foreach($cdarrs as $action => $_cdarrs){
 			foreach($_cdarrs as $_cdarr){
