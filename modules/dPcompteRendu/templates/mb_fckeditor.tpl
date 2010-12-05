@@ -13,7 +13,7 @@ CKEDITOR.plugins.addExternal("mbpagebreak", "../../modules/dPcompteRendu/fcke_pl
 
 
 
-// FCK editor general configuration
+// CK editor general configuration
 CKEDITOR.editorConfig = function(config) {
   config.skin = "v2";
   config.language = 'fr';
@@ -21,7 +21,8 @@ CKEDITOR.editorConfig = function(config) {
   config.contentsLanguage = 'fr';
   config.enterMode = CKEDITOR.ENTER_BR;
   config.pasteFromWordPromptCleanup = true;
-  config.pasteFromWordRemoveFontStyles = true;
+  config.pasteFromWordRemoveFontStyles = true; 
+  config.fontSize_sizes = 'xx-small/xx-small;x-small/x-small;small/small;medium/medium;large/large;x-large/x-large;xx-large/xx-large';
   config.contentsCss = "style/mediboard/htmlarea.css?build={{$version.build}}";
   config.docType = '<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">';
   config.filebrowserImageBrowseUrl = "lib/kcfinder/browse.php?type=image";

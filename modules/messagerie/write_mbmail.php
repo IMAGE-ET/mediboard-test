@@ -42,7 +42,7 @@ if ($mbmail->to) {
 
 // Initialisation de FCKEditor
 $templateManager = new CTemplateManager();
-$templateManager->editor = "fckeditor";
+$templateManager->editor = "ckeditor";
 $templateManager->simplifyMode = true;
 
 if ($mbmail->date_sent) {
