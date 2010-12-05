@@ -24,8 +24,6 @@ if (CValue::post("propagate")) {
 
 $elts_id = explode("|", $event_ids);
 
-mbTrace($days);
-
 foreach($days as $day) {
 	foreach($elts_id as $_elt_id){
 	  $evenement = new CEvenementSSR();
