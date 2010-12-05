@@ -607,9 +607,11 @@ Main.add(function(){
           <td style="text-align: center;">
             <table>
               <tr>
-                {{foreach from=$list_days key=_date item=_day}}
+                {{foreach from=$week_days key=_number item=_day}}
                   <td>
-                    <label>{{$_day}}<br /><input class="days nocheck" type="checkbox" name="_days[{{$_date}}]" value="{{$_date}}" />
+                    <label>
+                    	{{$_day}}<br />
+											<input class="days nocheck" type="checkbox" name="_days[{{$_number}}]" value="{{$_number}}" />
                     </label>
                   </td>
                 {{/foreach}}
@@ -860,11 +862,11 @@ Main.add(function(){
       	<th>
           <table style="float: right;">
             <tr>
-              {{foreach from=$list_days key=_date item=_day}}
+              {{foreach from=$week_days key=_number item=_day}}
                 <td>
                   <label>
                   	{{$_day}}<br />
-										<input class="days nocheck" type="checkbox" name="_days[{{$_date}}]" value="{{$_date}}" />
+										<input class="days nocheck" type="checkbox" name="_days[{{$_number}}]" value="{{$_number}}" />
                   </label>
                 </td>
               {{/foreach}}

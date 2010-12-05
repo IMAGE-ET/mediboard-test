@@ -23,8 +23,7 @@ $monday = mbDate("last monday", mbDate("+1 day", $date));
 $sunday = mbDate("next sunday", $date);
 
 for ($i = 0; $i < 7; $i++) {
-	$_date = mbDate("+$i day", $monday);
-  $list_days[$_date] = mbTransformTime(null, $_date, "%a");
+  $week_days[$i] = mbTransformTime("+$i day", $monday, "%a");
 }
 
 // Prescription
@@ -120,7 +119,7 @@ $evenement->duree = CAppUI::pref("ssr_planification_duree");
 // Création du template
 $smarty = new CSmartyDP();
 $smarty->assign("evenement", $evenement);
-$smarty->assign("list_days", $list_days);
+$smarty->assign("week_days", $week_days);
 $smarty->assign("sejour" , $sejour);
 $smarty->assign("bilan"  , $bilan);
 $smarty->assign("plateau", $plateau);

@@ -10,9 +10,21 @@
 
 $event_ids = CValue::post("event_ids");
 $period    = CValue::post("period");
-$days      = CValue::post("propagate") ? CValue::post("_days") : array("");
+$days      = array("");
+
+// Propagation aux autres jours
+if (CValue::post("propagate")) {
+	$days = array();
+  $date = CValue::getOrSession("date", mbDate());
+  $monday = mbDate("last monday", mbDate("+1 day", $date));
+	foreach(CValue::post("_days") as $_number) {
+    $days[] = mbDate("+$_number DAYS", $monday);
+	}
+}
 
 $elts_id = explode("|", $event_ids);
+
+mbTrace($days);
 
 foreach($days as $day) {
 	foreach($elts_id as $_elt_id){

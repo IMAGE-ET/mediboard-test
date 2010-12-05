@@ -75,8 +75,11 @@ else {
 		$bilan =& $sejour->_ref_bilan_ssr;
 		$bilan->loadRefKineReferent();
 		$referant =& $bilan->_ref_kine_referent;
-
-		foreach($_days as $_day){
+    
+    $date = CValue::getOrSession("date", mbDate());
+		$monday = mbDate("last monday", mbDate("+1 day", $date));
+		foreach($_days as $_number){
+			$_day = mbDate("+$_number DAYS", $monday);
 	    if (!CMbRange::in($_day, $entree, $sortie)) {
 	      CAppUI::setMsg("CEvenementSSR-msg-failed-bounds", UI_MSG_WARNING);
 	      continue; 
