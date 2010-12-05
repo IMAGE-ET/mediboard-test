@@ -97,7 +97,7 @@ if (Prototype.Browser.IE) {
       _IEAdditionalInfo = " (Version:"+ieVersion.Version+" BrowserMode:"+ieVersion.BrowserMode+" DocMode:"+ieVersion.DocMode+")";
       
       // If DocMode is the same as the browser version (IE8 not in Compat mode) and IE8+
-      if (ieVersion.Version >= 8 && (ieVersion.Version == ieVersion.DocMode)) {
+      if (ieVersion.Version >= 8 && (ieVersion.Version == ieVersion.DocMode) && (ieVersion.BrowserMode != "Compat Mode")) {
         window.onerror = errorHandler;
       }
     })();
