@@ -37,32 +37,6 @@ $orderby = "object_class, nom";
 
 $pack = new CPack;
 
-$pack->chir_id = $userSel->_id;
-$packsUser = $pack->loadMatchingList($orderby);
-$pack->chir_id = null;
-
-$pack->function_id = $userSel->function_id;
-$packsFunc = $pack->loadMatchingList($orderby);
-$pack->function_id = null;
-
-$pack->group_id = $userSel->_ref_function->group_id;
-$packsEtab = $pack->loadMatchingList($orderby);
-$pack->group_id = null;
-
-foreach($packsUser as $_pack) {
-  $_pack->loadRefsFwd();
-}
-foreach($packsFunc as $_pack) {
-  $_pack->loadRefsFwd();
-}  
-foreach($packsEtab as $_pack) {
-  $_pack->loadRefsFwd();
-}
-// Récupération des modèles
-$whereCommon = array();
-$whereCommon["object_id"] = "IS NULL";
-$order = "nom";
-
 // Chargement du pack
 $pack->load($pack_id);
 
