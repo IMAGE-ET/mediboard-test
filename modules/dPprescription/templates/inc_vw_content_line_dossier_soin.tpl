@@ -211,7 +211,7 @@
 							     {{else}}
 								     {{tr}}CCategoryPrescription.chapitre.{{$name_chap}}{{/tr}} effectué par {{$_log_administration->_ref_user->_view}} le {{$_log_administration->_ref_object->dateTime|date_format:$dPconfig.datetime}}
 							     {{/if}}
-								 <li>
+								 </li>
 							   <ul>
 							     {{foreach from=$transmissions_in_hour.list.$administration_id item=_transmission}}
 								     <li>{{$_transmission->_view}} le {{$_transmission->date|date_format:$dPconfig.datetime}}:<br /> {{$_transmission->text}}</li>
