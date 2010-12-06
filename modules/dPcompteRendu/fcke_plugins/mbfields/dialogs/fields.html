@@ -14,7 +14,11 @@
       window.onload = function () {
         var section = $("section");
         $A(fields).each(function(item, i){
-          section.insert("<option value='" + i + "'>"+ item[1].section + "</option>");
+          var sItem = item[0]; var iter = 1;
+          while (sItem.length != "undefined" && iter < sItem.length) {
+            sItem = item[iter]; iter++;
+          }
+          section.insert("<option value='" + i + "'>"+ sItem.section + "</option>");
         });
         section.selectedIndex = -1;
       }
