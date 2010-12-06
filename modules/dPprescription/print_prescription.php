@@ -15,7 +15,7 @@ $can->needsRead();
 $praticien_sortie_id = CValue::get("praticien_sortie_id");
 $only_dmi            = CValue::get("only_dmi");
 $print               = CValue::get("print", 0);
-
+$no_pdf              = CValue::get("no_pdf", 0);
 $linesDMI = array();
 
 // Chargement de l'etablissement
@@ -341,7 +341,7 @@ $smarty->assign("poids"          , $poids);
 $smarty->assign("generated_header", @$header->_id ? $template_header->document : "");
 $smarty->assign("generated_footer", @$footer->_id ? $template_footer->document : "");
 
-if (!$prescription->object_id) {
+if (!$prescription->object_id && !$no_pdf) {
 	$smarty->assign("no_header", isset($no_header));
   $content = $smarty->fetch("print_prescription.tpl");
 	$htmltopdf = new CHtmlToPDF;

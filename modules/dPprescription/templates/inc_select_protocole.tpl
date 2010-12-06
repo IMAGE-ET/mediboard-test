@@ -18,7 +18,7 @@
         <strong>{{$_prot->libelle|upper|replace:$token_search:$token_replace}}</strong>
         <br />
         <span style="opacity: 0.5; font-size: 0.8em; padding-left: 1em;">
-				  {{if $type == "prot"}}<a href="#" onclick="Prescription.printPrescription('{{$_prot->_id}}', 0, '{{$_prot->object_id}}');" style="float: right">(Détail)</a>{{/if}}
+				  {{if $type == "prot"}}<a href="#" onclick="Prescription.printPrescription('{{$_prot->_id}}', 0, '{{$_prot->object_id}}', 1);" style="float: right">(Détail)</a>{{/if}}
 					{{foreach from=$_prot->_counts_by_chapitre key=chapitre item=_count_chapitre name=chapitres}}
 	        {{if $_count_chapitre}}
 	          {{$_count_chapitre}} {{tr}}CPrescription._chapitres.{{$chapitre}}{{/tr}}{{if !$smarty.foreach.chapitres.last}}, {{/if}}

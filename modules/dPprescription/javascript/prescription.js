@@ -303,7 +303,7 @@ Prescription = {
       alert('Pas de prescription en cours');
     }
   },
-  printPrescription: function(prescription_id, print, object_id) {
+  printPrescription: function(prescription_id, print, object_id, no_pdf) {
     // Select de choix du praticien
     var praticien_sortie_id = "";
     
@@ -314,10 +314,12 @@ Prescription = {
     if(prescription_id){
       var url = new Url("dPprescription", "print_prescription");
       url.addParam("prescription_id", prescription_id);
-      if (!object_id)
-        url.addParam("suppressHeaders", 1);
+      if(!object_id && !no_pdf) {
+	  	  url.addParam("suppressHeaders", 1);
+	    }
       url.addParam("praticien_sortie_id", praticien_sortie_id);
       url.addParam("print", print);
+			url.addParam("no_pdf", no_pdf);
       url.popup(800, 600, "print_prescription");
     }
   },
