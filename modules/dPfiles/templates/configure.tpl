@@ -20,6 +20,7 @@ Main.add(function() {
   <li><a href="#files">{{tr}}CFile{{/tr}}</a></li>
   <!-- <li><a href="#ooo">Openoffice</a></li>-->
   <li><a href="#cdoc">{{tr}}CDocumentSender{{/tr}}</a></li>
+  <li><a href="#test">{{tr}}Cfile-test_operations{{/tr}}</a></li>
 </ul>
 <hr class="control_tabs" />
 <div id="files">
@@ -157,5 +158,9 @@ Main.add(function() {
     </tr>
   
   </table>
+</div>
+
+<div id="test">
+  {{mb_include template="inc_test_files"}}
 </div>
 </form>
