@@ -20,9 +20,11 @@
 
 <ul class="control_tabs small" id="balance-tabs-{{$type}}">
   {{foreach from=$flows item=_flows key=key}}
-    <li><a href="#{{$type}}-{{$key}}">{{$_flows.2}}</a></li>
+    <li onmousedown="window['{{$type}}-{{$key}}-drawFunction']()">
+      <a href="#{{$type}}-{{$key}}">{{$_flows.2}}</a>
+    </li>
   {{/foreach}}
-  <li><a href="#{{$type}}-rotation">Rotation des stocks</a></li>
+  <li onmousedown="window['{{$type}}-rotation-drawFunction']()"><a href="#{{$type}}-rotation">Rotation des stocks</a></li>
   {{if $products != null}}
     <li><a href="#{{$type}}-products">Produits ({{$products|@count}}{{if $total > $products|@count}}/{{$total}}{{/if}})</a></li>
   {{/if}}
@@ -33,14 +35,30 @@
 
 {{math equation="1/x*100" x=$_flows.0.out|@reset|@count assign=width}}
 
+<script type="text/javascript">
+  window["{{$type}}-{{$key}}-drawFunction"] = function(){
+    (function(){
+      var options = {{$_flows.graph.options|@json}};
+      options.legend.container = $("{{$type}}-{{$key}}-legend");
+      Flotr.draw("{{$type}}-{{$key}}-graph", {{$_flows.graph.data|@json}}, options);
+    }).delay(0.1);
+    
+    window["{{$type}}-{{$key}}-drawFunction"] = function(){};
+  }
+  
+  Main.add(function(){
+    $("{{$type}}-{{$key}}-table").gridHighlight();
+    if ($("{{$type}}-{{$key}}").visible()) {
+      window["{{$type}}-{{$key}}-drawFunction"]();
+    }
+  });
+</script>
+
 <div id="{{$type}}-{{$key}}" style="display: none;">
-  <button class="hslip singleclick not-printable" onclick="exportData($('{{$type}}-{{$key}}-table'), '.price')">CSV</button>
+  <button class="hslip singleclick not-printable" onclick="exportData($('{{$type}}-{{$key}}-table'), '.price', 
+  '{{$_flows.2}} &ndash; {{if $key == "month"}}{{$month}}/{{/if}}{{$year}} &ndash; {{$title|smarty:nodefaults|JSAttribute}}')">CSV</button>
   <button class="pdf singleclick not-printable" onclick="exportPDF($('{{$type}}-{{$key}}'), 
   '{{$_flows.2}} &ndash; {{if $key == "month"}}{{$month}}/{{/if}}{{$year}} &ndash; {{$title|smarty:nodefaults|JSAttribute}}')">PDF</button>
-   
-  {{main}}
-    $("{{$type}}-{{$key}}-table").gridHighlight();
-  {{/main}}
   
   <h2>{{$_flows.2}} &ndash; {{if $key == "month"}}{{$month}} / {{/if}}{{$year}}</h2>
   <h3>{{$title}}</h3>
@@ -84,11 +102,40 @@
       </tr>
     {{/foreach}}
   </table>
+  
+  <table class="main" style="margin: 0.2em auto; width: 1%;">
+    <tr>
+      <td class="narrow">
+        <div id="{{$type}}-{{$key}}-graph" style="width: 700px; height: 400px; margin: 0.5em auto;"></div>
+      </td>
+      <td id="{{$type}}-{{$key}}-legend" style="white-space: nowrap;"></td>
+    </tr>
+  </table>
+  
 </div>
 {{/foreach}}
 
 <div id="{{$type}}-rotation" style="display: none;">
-  <button class="hslip singleclick not-printable" onclick="exportData($('{{$type}}-rotation-table'), '.price')">CSV</button>
+  <script type="text/javascript">
+    window["{{$type}}-rotation-drawFunction"] = function(){
+      (function(){
+        var options = {{$balance.graph.options|@json}};
+        options.legend.container = $("{{$type}}-rotation-legend");
+        Flotr.draw("{{$type}}-rotation-graph", {{$balance.graph.data|@json}}, options);
+      }).delay(0.1);
+      
+      window["{{$type}}-rotation-drawFunction"] = function(){};
+    }
+    
+    Main.add(function(){
+      if ($("{{$type}}-rotation").visible()) {
+        window["{{$type}}-rotation-drawFunction"]();
+      }
+    });
+  </script>
+
+  <button class="hslip singleclick not-printable" onclick="exportData($('{{$type}}-rotation-table'), null,
+  'Rotation des stocks &ndash; {{$year}} &ndash; {{$title|smarty:nodefaults|JSAttribute}}')">CSV</button>
   <button class="pdf singleclick not-printable" onclick="exportPDF($('{{$type}}-rotation'), 
   'Rotation des stocks &ndash; {{$year}} &ndash; {{$title|smarty:nodefaults|JSAttribute}}')">PDF</button>
   
@@ -129,6 +176,15 @@
         </td>
       </tr>
     {{/foreach}}
+  </table>
+  
+  <table class="main" style="margin: 0.2em auto; width: 1%;">
+    <tr>
+      <td class="narrow">
+        <div id="{{$type}}-rotation-graph" style="width: 700px; height: 400px; margin: 0.5em auto;"></div>
+      </td>
+      <td id="{{$type}}-rotation-legend" style="white-space: nowrap;"></td>
+    </tr>
   </table>
 </div>
 

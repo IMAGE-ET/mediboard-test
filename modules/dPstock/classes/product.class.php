@@ -463,6 +463,51 @@ class CProduct extends CMbObject {
     $d = CMbArray::transpose($d);
   }
   
+  static function getFlowGraph($flow, $title, $services) {
+    $options = CFlotrGraph::merge("lines", array(
+      "title" => $title,
+      "legend" => array(
+        "show" => true
+      ),
+      "xaxis" => array(
+        "ticks" => array(),
+      ),
+      "yaxis" => array(
+        "min" => 0,
+        "title" => utf8_encode("Valeur (euro)") // FIXME le symbole ne euro passe pas
+      ),
+    ));
+    
+    $graph = array(
+      "data" => array(),
+      "options" => $options,
+    );
+    
+    foreach($flow["out"] as $_service_id => $_data) {
+      if ($_service_id == "total") continue;
+      
+      $data = array(
+        "data" => array(),
+        "label" => utf8_encode($services[$_service_id]->_view),
+      );
+      
+      if (empty($graph["options"]["xaxis"]["ticks"])) {
+        foreach($_data as $_date => $_values) {
+          if ($_date == "total") continue;
+          $graph["options"]["xaxis"]["ticks"][] = array(count($graph["options"]["xaxis"]["ticks"]), $_date);
+        }
+      }
+      
+      foreach($_data as $_date => $_values) {
+        if ($_date == "total") continue;
+        $data["data"][] = array(count($data["data"]), $_values[1]);
+      }
+      $graph["data"][] = $data;
+    }
+    
+    return $graph;
+  }
+  
   static function computeBalance(array $products, array $services, $year, $month = null){
     $flows = array();
     
@@ -473,7 +518,13 @@ class CProduct extends CMbObject {
     );
     $start = mbDate(null, "$year-01-01");
     self::fillFlow($year_flows, $products, 12, $start, "MONTH", $services);
-    $flows["year"] = array($year_flows, "%b", "Bilan annuel"); 
+    
+    $flows["year"] = array(
+      $year_flows, 
+      "%b", 
+      "Bilan annuel",
+      "graph" => self::getFlowGraph($year_flows, "Bilan annuel", $services),
+    ); 
     
     // MONTH //////////
     if ($month){
@@ -483,7 +534,14 @@ class CProduct extends CMbObject {
       );
       $start = mbDate(null, "$year-$month-01");
       self::fillFlow($month_flows, $products, mbTransformTime("+1 MONTH -1 DAY", $start, "%d"), $start, "DAY", $services);
-      $flows["month"] = array($month_flows, "%d", "Bilan mensuel");
+      
+      
+      $flows["month"] = array(
+        $month_flows, 
+        "%d", 
+        "Bilan mensuel",
+        "graph" => self::getFlowGraph($month_flows, "Bilan mensuel", $services),
+      );
     }
     
     // Balance des stocks ////////////////
@@ -536,6 +594,66 @@ class CProduct extends CMbObject {
       $cumul += $diff;
       $cumul_price += $diff_price;
     }
+    
+    $options = CFlotrGraph::merge("bars", array(
+      "title" => "Rotation des stocks",
+      "legend" => array(
+        "show" => true
+      ),
+      "xaxis" => array(
+        "ticks" => array(),
+      ),
+      "yaxis" => array(
+        "min" => null,
+        "title" => utf8_encode("Valeur (euro)") // FIXME le symbole ne euro passe pas
+      ),
+      "y2axis" => array(
+        "min" => null,
+      )
+    ));
+    
+    $graph = array(
+      "data" => array(),
+      "options" => $options,
+    );
+    
+    $params = array(
+      "in" =>   array("label" => "Entrée", "color" => "#4DA74D"),
+      "out" =>  array("label" => "Sortie", "color" => "#CB4B4B"),
+      "diff" => array("label" => "Cumul",  "color" => "#00A8F0"),
+    );
+    
+    foreach($balance as $_type => $_data) {
+      $data = array(
+        "data" => array(),
+        "label" => utf8_encode($params[$_type]["label"]),
+        "color" => $params[$_type]["color"],
+      );
+      
+      if ($_type == "diff") {
+        $data["lines"]["show"] = true;
+        $data["bars"]["show"] = false;
+        $data["points"]["show"] = true;
+        $data["mouse"]["track"] = true;
+        //$data["yaxis"] = 2;
+      }
+      
+      if (empty($graph["options"]["xaxis"]["ticks"])) {
+        foreach($_data as $_date => $_values) {
+          if ($_date == "total") continue;
+          $graph["options"]["xaxis"]["ticks"][] = array(count($graph["options"]["xaxis"]["ticks"]), $_date);
+        }
+      }
+      
+      foreach($_data as $_date => $_values) {
+        if ($_date == "total") continue;
+        $v = ($_type === "out" ? -$_values[1] : $_values[1]);
+        $data["data"][] = array(count($data["data"]), $v);
+      }
+      $graph["data"][] = $data;
+    }
+    
+    $balance["graph"] = $graph;
   
     return array(
       $flows, $balance, // required to use list()

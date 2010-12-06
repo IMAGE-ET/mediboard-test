@@ -298,12 +298,6 @@ div.selected {
   background-color: #FFE7B6;
 }
 
-div.dragged {
-  background-color: #ffc;
-  border: 1px solid black;
-  padding: 2px 10px;
-}
-
 div.draggable {
   cursor: move;
 }

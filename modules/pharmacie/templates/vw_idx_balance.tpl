@@ -28,12 +28,12 @@ function toggleDisplay(value) {
   }
 }
 
-function exportData(table, selector) {
+function exportData(table, selector, filename) {
   var url = new Url("system", "export_csv_array");
   url.addParam("suppressHeaders", 1);
   var file = {
     data: [],
-    filename: "Export"
+    filename: filename || "Export"
   };
   
   table.select("tr").each(function(row, i){
