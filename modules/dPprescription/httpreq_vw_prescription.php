@@ -381,6 +381,7 @@ foreach($mins as &$min){
 
 $filter_line = new CPrescriptionLineMedicament();
 $filter_line->debut = mbDate();
+$filter_line->time_debut = mbTime();
 
 $prise = new CPrisePosologie();
 $prise->quantite = 1.0;
