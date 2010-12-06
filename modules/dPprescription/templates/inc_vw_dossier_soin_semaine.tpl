@@ -36,7 +36,6 @@ calculDuree = function(date1, date2, oForm, now, prescription_id){
   } });
 }
 
-
 addAdministrationPlan = function(line_id, line_class, unite_prise, dateTime, list_administrations){
   var url = new Url;
   url.setModuleAction("dPprescription", "httpreq_add_administration");
@@ -68,6 +67,23 @@ Main.add(function () {
 </script>
 
 {{if $prescription->_id}}
+
+	<h1 style="text-align: center">
+	  <button type="button" class="left singleclick notext" onclick="calculSoinSemaine('{{$prev_week}}', '{{$prescription->_id}}')">
+	    Semaine précédente
+	  </button>
+	
+	  {{assign var=borne_min value=$dates|@reset}}
+	  {{assign var=borne_max value=$dates|@end}}
+	
+	  Semaine du {{$borne_min|date_format:$dPconfig.date}} au {{$borne_max|date_format:$dPconfig.date}}
+		
+		<button type="button" class="right singleclick notext" onclick="calculSoinSemaine('{{$next_week}}', '{{$prescription->_id}}')">
+		  Semaine précédente
+	  </button>
+	</h1>
+
+
 	<table class="main">
 	  <tr>
 	    <td class="narrow">
@@ -106,7 +122,7 @@ Main.add(function () {
 				    <th class="title">Libelle</th>
 				    <th class="title">Posologie</th>
 				    {{foreach from=$dates item=date}}
-				    <th class="category narrow">
+				    <th class="title narrow" style="font-size:0.9em;">
 				      {{$date|date_format:$dPconfig.date}}
 				    </th>
 				    {{/foreach}}

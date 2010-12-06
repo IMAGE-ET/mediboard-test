@@ -293,7 +293,7 @@ applyAdministrations = function () {
 
 viewLegend = function(){
   var url = new Url("dPhospi", "vw_lengende_dossier_soin");
-  url.popup(300,150, "Légende");
+  url.modale("Légende");
 }
 
 viewDossier = function(sejour_id){
@@ -500,8 +500,8 @@ Main.add(function () {
 </table>
 
 <ul id="tab_dossier_soin" class="control_tabs">
-  <li onmousedown="Prescription.loadTraitement('{{$sejour->_id}}','{{$date}}','','administration','','','','med'); refreshTabState();"><a href="#jour">Administration</a></li>
-  <li onmousedown="calculSoinSemaine('{{$date}}','{{$prescription_id}}');"><a href="#semaine">Plan</a></li>
+  <li onmousedown="Prescription.loadTraitement('{{$sejour->_id}}','{{$date}}','','administration','','','','med'); refreshTabState();"><a href="#jour">Journée</a></li>
+  <li onmousedown="calculSoinSemaine('{{$date}}','{{$prescription_id}}');"><a href="#semaine">Semaine</a></li>
 </ul>
 <hr class="control_tabs" />
 
@@ -526,11 +526,9 @@ Main.add(function () {
 		 </div>
 	 {{/if}}
 	
-	
 	<table style="width: 100%">
 	   <tr>
 	    <td>
-	    	
 				<button type="button" class="print" onclick="printDossierSoin('{{$prescription_id}}');" title="{{tr}}Print{{/tr}}">
 		      Feuille de soins immédiate
 	      </button>

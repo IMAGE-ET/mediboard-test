@@ -324,7 +324,7 @@ Prescription = {
   viewFullAlertes: function(prescription_id) {
     var url = new Url("dPprescription", "vw_full_alertes");
     url.addParam("prescription_id", prescription_id);
-    url.popup(700, 550, "Alertes");
+    url.modale("Alertes");
   },
   onSubmitCommentaire: function(oForm, prescription_id, chapitre){
     return onSubmitFormAjax(oForm, { 
@@ -361,7 +361,7 @@ Prescription = {
     url.addParam("code_cip", code_cip);
     url.addParam("code_ucd", code_ucd);
     url.addParam("code_cis", code_cis);
-		url.setFragment(fragment);
+    url.setFragment(fragment);
     url.popup(900, 640, "Descriptif produit");
   },
   viewHistorique: function(prescription_id, type){

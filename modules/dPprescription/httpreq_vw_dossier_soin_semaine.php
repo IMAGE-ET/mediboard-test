@@ -18,24 +18,34 @@ $prescription_id = CValue::get("prescription_id");
 $sejour = new CSejour();
 $patient = new CPatient();
 
-// Creation du tableau de dates
-$dates = array(mbDate("-2 DAYS", $date), mbDate("-1 DAYS", $date), $date, mbDate("+1 DAYS", $date), mbDate("+2 DAYS", $date));
+// Chargement des dates de debut de semaine et de fin de semaine
+$monday = mbDate("last monday", $date);
+$sunday = mbDate("+ 7 DAYS", $monday);
+
+$next_week = mbDate("+1 week", $date);
+$prev_week = mbDate("-1 week", $date);
+     
+$dates = array();		 
+for ($i = 0; $i < 7; $i++) {
+  $_day = mbDate("+$i day", $monday);
+  $dates[] = $_day;
+}
 
 // Chargement de la prescription
 $prescription = new CPrescription();
 if($prescription_id){
   $prescription->load($prescription_id);
-  $prescription->loadRefsLinesMed("1","1","service");
+  $prescription->loadRefsLinesMed("1","1");
 	foreach($prescription->_ref_prescription_lines as $_line_med){
 		$_line_med->loadRefProduitPrescription();
 		$_line_med->loadRefLogSignee();
 	}
   $prescription->loadRefsLinesElementByCat("1","","service");
   $prescription->loadRefsPrescriptionLineMixes("","1");
-  foreach($prescription->_ref_prescription_line_mixes as &$_prescription_line_mix){
-    $_prescription_line_mix->loadRefsLines();
-    $_prescription_line_mix->loadRefPraticien();
-		$_prescription_line_mix->loadRefLogSignaturePrat();
+  foreach($prescription->_ref_prescription_line_mixes as &$_line_mix){
+    $_line_mix->loadRefsLines();
+    $_line_mix->loadRefPraticien();
+		$_line_mix->loadRefLogSignaturePrat();
   }
 
   // Chargement du poids et de la chambre du patient
@@ -60,13 +70,17 @@ $categories = CCategoryPrescription::loadCategoriesByChap();
 
 // Création du template
 $smarty = new CSmartyDP();
-$smarty->assign("sejour", $sejour);
-$smarty->assign("patient", $patient);
-$smarty->assign("categories", $categories);
-$smarty->assign("dates", $dates);
-$smarty->assign("prescription", $prescription);
-$smarty->assign("now", $date);
-$smarty->assign("categorie", new CCategoryPrescription());
+$smarty->assign("sejour"       , $sejour);
+$smarty->assign("patient"      , $patient);
+$smarty->assign("categories"   , $categories);
+$smarty->assign("dates"        , $dates);
+$smarty->assign("prescription" , $prescription);
+$smarty->assign("now"          , $date);
+$smarty->assign("categorie"    , new CCategoryPrescription());
+$smarty->assign("monday"       , $monday);
+$smarty->assign("sunday"       , $sunday);
+$smarty->assign("prev_week"    , $prev_week);
+$smarty->assign("next_week"    , $next_week);
 $smarty->display("../../dPprescription/templates/inc_vw_dossier_soin_semaine.tpl");
 
 ?>
