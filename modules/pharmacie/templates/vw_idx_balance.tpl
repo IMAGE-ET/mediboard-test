@@ -28,6 +28,12 @@ function toggleDisplay(value) {
   }
 }
 
+function mouseTrackFormatter(obj) {
+  var series = obj.series,
+      i = obj.index;
+  return "["+series.xaxis.ticks[i].label+"] "+series.label+" : "+series.data[i][1];
+}
+
 function exportData(table, selector, filename) {
   var url = new Url("system", "export_csv_array");
   url.addParam("suppressHeaders", 1);

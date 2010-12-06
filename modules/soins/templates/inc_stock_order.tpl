@@ -122,7 +122,7 @@
           </button>
           {{/if}}
           
-          <select name="endowment_id" onchange="$V(this.form.start, 0); refreshOrders()">
+          <select name="endowment_id" onchange="$V(this.form.start, 0); refreshOrders()" style="max-width: 10em;">
             <option value=""> &ndash; {{tr}}No{{/tr}}</option>
             {{foreach from=$service->_back.endowments item=_endowment}}
               <option value="{{$_endowment->_id}}" {{if $endowment_id == $_endowment->_id}}selected="selected"{{/if}}>{{$_endowment->name}}</option>

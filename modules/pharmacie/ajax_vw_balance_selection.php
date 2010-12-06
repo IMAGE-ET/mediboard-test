@@ -33,7 +33,7 @@ CValue::get("include_void_service", $include_void_service);
 
 //CMbObject::$useObjectCache = false;
 set_time_limit(300);
-$limit = 1000;
+$limit = 500;
 
 $list_products = array();
 

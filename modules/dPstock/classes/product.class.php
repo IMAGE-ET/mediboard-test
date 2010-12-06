@@ -450,6 +450,8 @@ class CProduct extends CMbObject {
         }
       }
     }
+    
+    $d = array_map_recursive("round", $d);
   
     // Put the total at the end
     $total = $d["total"];
@@ -476,6 +478,9 @@ class CProduct extends CMbObject {
         "min" => 0,
         "title" => utf8_encode("Valeur (euro)") // FIXME le symbole ne euro passe pas
       ),
+      "markers" => array(
+        "show" => false
+      )
     ));
     
     $graph = array(
@@ -535,7 +540,6 @@ class CProduct extends CMbObject {
       $start = mbDate(null, "$year-$month-01");
       self::fillFlow($month_flows, $products, mbTransformTime("+1 MONTH -1 DAY", $start, "%d"), $start, "DAY", $services);
       
-      
       $flows["month"] = array(
         $month_flows, 
         "%d", 
@@ -594,6 +598,8 @@ class CProduct extends CMbObject {
       $cumul += $diff;
       $cumul_price += $diff_price;
     }
+    
+    $balance = array_map_recursive("round", $balance);
     
     $options = CFlotrGraph::merge("bars", array(
       "title" => "Rotation des stocks",

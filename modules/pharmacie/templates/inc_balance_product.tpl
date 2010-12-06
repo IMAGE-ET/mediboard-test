@@ -14,7 +14,9 @@
 
 {{if $total > $products|@count}}
   <div class="small-warning">
-    Seulement les {{$products|@count}} premiers produits sont pris en compte (sur {{$total}}).
+    Pour des raisons de performances, pour le moment seulement les {{$products|@count}} premiers 
+    produits sont pris en compte (sur {{$total}}). Le nombre de produits pris en compte de sera plus limité
+    dans la version finale.
   </div>
 {{/if}}
 
@@ -40,6 +42,7 @@
     (function(){
       var options = {{$_flows.graph.options|@json}};
       options.legend.container = $("{{$type}}-{{$key}}-legend");
+      options.mouse.trackFormatter = mouseTrackFormatter;
       Flotr.draw("{{$type}}-{{$key}}-graph", {{$_flows.graph.data|@json}}, options);
     }).delay(0.1);
     
@@ -121,6 +124,7 @@
       (function(){
         var options = {{$balance.graph.options|@json}};
         options.legend.container = $("{{$type}}-rotation-legend");
+        options.mouse.trackFormatter = mouseTrackFormatter;
         Flotr.draw("{{$type}}-rotation-graph", {{$balance.graph.data|@json}}, options);
       }).delay(0.1);
       
