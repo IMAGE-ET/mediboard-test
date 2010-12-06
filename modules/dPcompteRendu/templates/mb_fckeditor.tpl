@@ -55,7 +55,7 @@ CKEDITOR.editorConfig = function(config) {
     
     config.extraPlugins = 'mbfields,mbfreetext,mbhelpers,mblists,mbprint,mbprintPDF,mbheader,mbfooter,mbpagebreak';
     config.toolbar_Full = [
-      ['Save','Preview'], [{{if $pdf_thumbnails == 1}}'mbprintPDF',{{/if}} textForPrint, 'SelectAll', 'Cut', 'Copy', 'PasteFromWord', 'Undo','Redo', 'Find'],
+      ['Save','Preview'], [{{if $pdf_thumbnails == 1}}'mbprintPDF',{{/if}} textForPrint, 'SelectAll', 'Cut', 'Copy', 'PasteText', 'PasteFromWord', 'Undo','Redo', 'Find'],
       [{{if !$templateManager->isModele}}'mbheader','mbfooter',{{/if}}'mbpagebreak'],
       ['Table','HorizontalRule','Image','SpecialChar'],
       ['Maximize', 'Source'], '/',
