@@ -145,7 +145,7 @@ Main.add( function(){
 		                
 		                <b>{{$date|date_format:"%d/%m/%Y"}}, {{$hour}}h</b> : 
 		                {{mb_label object=$by_hour.prise field=quantite}}
-		                {{mb_field object=$by_hour.prise field=quantite min=1 increment=1 form="addAdministration_$key"}}
+		                {{mb_field object=$by_hour.prise field=quantite min=0 increment=1 form="addAdministration_$key"}}
 		                {{$unite_prise}}
 		              </form>
 		            {{else}}
