@@ -220,10 +220,11 @@ Main.add( function(){
              {{mb_label object=$line field=duree}}
              {{if $line->_can_modify_prescription_line_mix}}
                {{mb_field object=$line field=duree size=1 increment=1 min=0 form="editPerf-$prescription_line_mix_id" onchange="return onSubmitFormAjax(this.form);"}}
+							 {{mb_field object=$line field=unite_duree onchange="return onSubmitFormAjax(this.form);"}}
              {{else}}
                {{mb_value object=$line field=duree}}
+               {{mb_value object=$line field=unite_duree}}
              {{/if}}
-             {{mb_value object=$line field=unite_duree}}
             </td>
             
 						<!-- Continuite -->

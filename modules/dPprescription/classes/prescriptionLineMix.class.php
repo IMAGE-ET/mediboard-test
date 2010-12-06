@@ -241,7 +241,7 @@ class CPrescriptionLineMix extends CMbObject {
     $this->_debut = ($this->date_pose) ? "$this->date_pose $this->time_pose" : "$this->date_debut $this->time_debut";
 
     // Calcul de la fin de la prescription_line_mix
-		$increment = ($this->type_line == "aerosol") ? "DAYS" : "HOURS";
+		$increment = ($this->unite_duree == "jour") ? "DAYS" : "HOURS";
 		
     $this->_date_fin = $this->duree ? mbDateTime("+ $this->duree $increment", "$this->_debut") : $this->_debut;
     $this->_fin = ($this->date_arret && $this->time_arret) ? "$this->date_arret $this->time_arret" 
@@ -653,7 +653,8 @@ class CPrescriptionLineMix extends CMbObject {
 											$this->fieldModified("date_debut") || 
 											$this->fieldModified("time_debut") ||
 											$this->fieldModified("duree") ||
-											$this->fieldModified("date_pose")||
+											$this->fieldModified("unite_duree") ||
+                      $this->fieldModified("date_pose")||
 											$this->fieldModified("time_pose")||
                       $this->fieldModified("date_retrait")||
                       $this->fieldModified("date_retrait")||
