@@ -12,7 +12,7 @@ CCanDo::checkRead();
 
 $type      = CValue::get("type");
 $_date_max = CValue::get("_date_max");
-$_date_min = CValue::get("_date_min", mbDate("-1 MONTH", $_date_max));
+$_date_min = /*CValue::get("_date_min", */mbDate("-1 YEAR", $_date_max)/*)*/;
 $keywords  = CValue::get("keywords");
 
 CValue::setSession("type", $type);
@@ -31,7 +31,7 @@ $delivery->_date_max = $_date_max;
 
 $select = array(
   "product_delivery.service_id", 
-  "DATE(product_delivery_trace.date_delivery) AS date", 
+  "DATE_FORMAT(product_delivery_trace.date_delivery, '%Y-%m') AS date", 
   "product_delivery.type AS type", 
   "SUM(product_delivery_trace.quantity) AS total",
 );
@@ -55,13 +55,13 @@ if ($keywords) {
 
 $orderby = array(
   "product_delivery.service_id", 
-  "DATE(product_delivery_trace.date_delivery)",
+  "DATE_FORMAT(product_delivery_trace.date_delivery, '%Y-%m')",
   //"product_delivery.stock_id", 
 );
 
 $groupby = array(
   "product_delivery.service_id",
-  "DATE(product_delivery_trace.date_delivery)",
+  "DATE_FORMAT(product_delivery_trace.date_delivery, '%Y-%m')",
   //"product_delivery.stock_id",
   // "type",
 );
@@ -86,12 +86,13 @@ foreach($totals as $_values) {
   $_service_id = $_values["service_id"] ? $_values["service_id"] : "none";
   if (!isset($table[$_service_id]))
     $table[$_service_id] = array();
-    
-  if (!isset($table[$_service_id][$_values["date"]])) {
-    $table[$_service_id][$_values["date"]] = 0;
+  
+  $date = $_values["date"]."-01";
+  if (!isset($table[$_service_id][$date])) {
+    $table[$_service_id][$date] = 0;
   }
   
-  $table[$_service_id][$_values["date"]] += $_values["total"];
+  $table[$_service_id][$date] += $_values["total"];
 }
 
 $services = CProductStockGroup::getServicesList();
@@ -100,8 +101,8 @@ $services["none"]->_view = CAppUI::tr("None");
 
 $dates = array();
 while ($_date_min <= $_date_max) {
-  $dates[] = $_date_min;
-  $_date_min = mbDate("+1 DAY", $_date_min);
+  $dates[] = mbTransformTime(null, $_date_min, "%Y-%m");
+  $_date_min = mbDate("+1 MONTH", $_date_min);
 }
 
 foreach($services as $_key => $_service) {
@@ -110,6 +111,7 @@ foreach($services as $_key => $_service) {
   }
   
   foreach($dates as $_date) {
+    $_date = $_date."-01";
     if (!isset($table[$_key][$_date])) {
       $table[$_key][$_date] = null;
     }

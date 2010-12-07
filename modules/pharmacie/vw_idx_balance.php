@@ -19,7 +19,7 @@ $classe_atc           = CValue::getOrSession("_classe_atc");
 $hors_t2a             = CValue::getOrSession("hors_t2a");
 $include_void_service = CValue::getOrSession("include_void_service");
 
-$_date_min            = CValue::getOrSession("_date_min", mbDate("-1 MONTH"));
+$_date_min            = CValue::getOrSession("_date_min");
 $_date_max            = CValue::getOrSession("_date_max", mbDate());
 $keywords             = CValue::getOrSession("keywords");
 
