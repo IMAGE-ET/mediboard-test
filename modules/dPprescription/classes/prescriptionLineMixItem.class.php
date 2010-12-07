@@ -198,6 +198,9 @@ class CPrescriptionLineMixItem extends CMbObject {
   
 	
 	function updateQuantiteAdministration(){
+		if($this->_quantite_administration){
+			return;
+		}
 		 if($this->unite && $this->quantite){
         $_unite_prise = str_replace('/kg', '', $this->unite);
         
