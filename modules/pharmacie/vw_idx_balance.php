@@ -19,6 +19,10 @@ $classe_atc           = CValue::getOrSession("_classe_atc");
 $hors_t2a             = CValue::getOrSession("hors_t2a");
 $include_void_service = CValue::getOrSession("include_void_service");
 
+$_date_min            = CValue::getOrSession("_date_min", mbDate("-1 MONTH"));
+$_date_max            = CValue::getOrSession("_date_max", mbDate());
+$keywords             = CValue::getOrSession("keywords");
+
 $product_id = CValue::getOrSession("product_id");
 $year       = CValue::getOrSession("year", mbTransformTime(null, null, "%Y"));
 $month      = CValue::getOrSession("month", mbTransformTime(null, null, "%m"));
@@ -46,6 +50,8 @@ $societe = new CSociete;
 $list_societes = $societe->loadList(null, "name");
 
 $delivery = new CProductDelivery;
+$delivery->_date_min = $_date_min;
+$delivery->_date_max = $_date_max;
 
 // Création du template
 $smarty = new CSmartyDP();
@@ -61,6 +67,7 @@ $smarty->assign('supplier_id',          $supplier_id);
 $smarty->assign('manuf_id',             $manuf_id);
 $smarty->assign('hors_t2a',             $hors_t2a);
 $smarty->assign('include_void_service', $include_void_service);
+$smarty->assign('keywords',             $keywords);
 
 $smarty->assign('list_selections', $list_selections);
 $smarty->assign('list_categories', $list_categories);

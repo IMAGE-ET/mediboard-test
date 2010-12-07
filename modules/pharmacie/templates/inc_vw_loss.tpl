@@ -8,11 +8,25 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
 *}}
 
-{{$delivery}}
+{{main}}
+   $("table-loss").gridHighlight();
+{{/main}}
 
-
-{{foreach from=$traces item=_trace}}
-
-{{mb_value object=$_trace field=date_delivery}} - {{$_trace}}<br />
-
+<table class="main tbl" id="table-loss">
+  <tr>
+    <th></th>
+    {{foreach from=$dates item=_date}}
+      <th>{{$_date|date_format:"%d/%m"}}</th>
+    {{/foreach}}
+  </tr>
+  
+{{foreach from=$table item=_values key=_service_id}}
+  <tr>
+    <th>{{$services.$_service_id}}</th>
+    {{foreach from=$_values key=_date item=v}}
+      <td>{{$v}}</td>
+    {{/foreach}}
+  </tr>
 {{/foreach}}
+
+</table>

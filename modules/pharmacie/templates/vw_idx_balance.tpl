@@ -270,11 +270,14 @@ function exportReport(elements, filename) {
     <table class="main form">
       <tr>
         <th>{{mb_label object=$delivery field=type typeEnum=select}}</th>
-        <td>{{mb_field object=$delivery field=type typeEnum=select}}</td>
+        <td>{{mb_field object=$delivery field=type typeEnum=select emptyLabel="Tous"}}</td>
         
+        <th>Mots clés (dans les commentaires)</th>
+        <td><input type="text" name="keywords" value="{{$keywords}}" /></td>
+        <!--
         <th>{{mb_label object=$delivery field=_date_min}}</th>
         <td>{{mb_field object=$delivery field=_date_min register=true form="filter-products-loss"}}</td>
-        
+        -->
         <th>{{mb_label object=$delivery field=_date_max}}</th>
         <td>{{mb_field object=$delivery field=_date_max register=true form="filter-products-loss"}}</td>
       </tr>
