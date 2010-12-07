@@ -70,7 +70,6 @@ class CHtmlToPDF {
 
   function generatePDF($content, $stream, $format, $orientation, $file) {
   	$this->content = $this->fixBlockElements($content);
-  	//mbTrace($content,'',1);
     $this->dompdf->set_paper($format, $orientation);
     $this->dompdf->set_protocol(isset($_SERVER["HTTPS"]) ? "https://" : "http://");
     $this->dompdf->set_host($_SERVER["SERVER_NAME"]);
@@ -132,22 +131,26 @@ class CHtmlToPDF {
       foreach($elements as $_element)
         CHtmlToPDF::removeAlign($_element);
     }
+    
+    // Solution temporaire pour les problèmes de mise en page avec domPDF
+    while($elements = $xpath->query("//span[@class='field']")) {
+      if ($elements->length == 0) break;
+      foreach($elements as $_element) {
+        foreach($_element->childNodes as $child) {
+          $_element->parentNode->insertBefore($child->cloneNode(true), $_element);
+        }
+        $_element->parentNode->removeChild($_element);
+      }
+    }
 
     $this->recursiveRemove($html);
     $this->recursiveRemoveNestedFont($html);
     $this->resizeTable($html);
-    
+
     $str = $xml->saveHTML();
     $str = preg_replace("/<br>/", "<br/>", $str);
     return $str;
   }
-  
-  /*function stripEmptyTextNode {
-    if (!$node->hasChildNodes()) {
-      return;
-    }
-    foreach($node->childNodes)
-  }*/
 
   function recursiveRemove(DomNode &$node) {
     if (!$node->hasChildNodes()) {
