@@ -16,7 +16,7 @@
   <tr>
     <th></th>
     {{foreach from=$dates item=_date}}
-      <th>{{$_date|date_format:"%d/%m"}}</th>
+      <th>{{$_date|date_format:"%m/%Y"}}</th>
     {{/foreach}}
   </tr>
   
