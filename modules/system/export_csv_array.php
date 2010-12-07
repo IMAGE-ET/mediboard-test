@@ -19,5 +19,8 @@ header("Content-Type: application/csv");
 header("Content-Disposition: attachment; filename=\"$filename.csv\"");
 
 foreach($data as $_line) {
-  fputcsv($out, array_map("utf8_decode", $_line), ";");
+  if (CMbString::isUTF8(implode("", $_line))) {
+    $_line = array_map("utf8_decode", $_line);
+  }
+  fputcsv($out, $_line, ";");
 }

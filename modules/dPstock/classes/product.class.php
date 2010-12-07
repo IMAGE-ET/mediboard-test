@@ -451,7 +451,7 @@ class CProduct extends CMbObject {
       }
     }
     
-    $d = array_map_recursive("round", $d);
+    $d = array_map_recursive(array("CProduct", "round2"), $d);
   
     // Put the total at the end
     $total = $d["total"];
@@ -463,6 +463,10 @@ class CProduct extends CMbObject {
     $d["total"]["total"] = $total;
     
     $d = CMbArray::transpose($d);
+  }
+  
+  static function round2($val) {
+    return round($val, 2);
   }
   
   static function getFlowGraph($flow, $title, $services) {
@@ -599,7 +603,7 @@ class CProduct extends CMbObject {
       $cumul_price += $diff_price;
     }
     
-    $balance = array_map_recursive("round", $balance);
+    $balance = array_map_recursive(array("CProduct", "round2"), $balance);
     
     $options = CFlotrGraph::merge("bars", array(
       "title" => "Rotation des stocks",
@@ -611,7 +615,7 @@ class CProduct extends CMbObject {
       ),
       "yaxis" => array(
         "min" => null,
-        "title" => utf8_encode("Valeur (euro)") // FIXME le symbole ne euro passe pas
+        "title" => utf8_encode("Valeur (euro)") // FIXME le symbole euro ne passe pas
       ),
       "y2axis" => array(
         "min" => null,

@@ -39,5 +39,5 @@ $file = new CFile;
 $file->file_name = $filename;
 
 $convert = new CHtmlToPDF();
-$convert->generatePDF($data, 1, "a4", "landscape", $file);
+@$convert->generatePDF($data, 1, "a4", "landscape", $file);
 

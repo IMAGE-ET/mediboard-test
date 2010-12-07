@@ -57,7 +57,7 @@
   });
 </script>
 
-<div id="{{$type}}-{{$key}}" style="display: none;">
+<div id="{{$type}}-{{$key}}" style="display: none; page-break-after: always;">
   <button class="hslip singleclick not-printable" onclick="exportData($('{{$type}}-{{$key}}-table'), '.price', 
   '{{$_flows.2}} &ndash; {{if $key == "month"}}{{$month}}/{{/if}}{{$year}} &ndash; {{$title|smarty:nodefaults|JSAttribute}}')">CSV</button>
   <button class="pdf singleclick not-printable" onclick="exportPDF($('{{$type}}-{{$key}}'), 
@@ -106,7 +106,7 @@
     {{/foreach}}
   </table>
   
-  <table class="main" style="margin: 0.2em auto; width: 1%;">
+  <table class="main graph" style="margin: 0.2em auto; width: 1%;">
     <tr>
       <td class="narrow">
         <div id="{{$type}}-{{$key}}-graph" style="width: 700px; height: 400px; margin: 0.5em auto;"></div>
@@ -182,7 +182,7 @@
     {{/foreach}}
   </table>
   
-  <table class="main" style="margin: 0.2em auto; width: 1%;">
+  <table class="main graph" style="margin: 0.2em auto; width: 1%;">
     <tr>
       <td class="narrow">
         <div id="{{$type}}-rotation-graph" style="width: 700px; height: 400px; margin: 0.5em auto;"></div>
@@ -193,7 +193,10 @@
 </div>
 
 {{if $products != null}}
-<div id="{{$type}}-products" style="display: none;">
+<div id="{{$type}}-products" style="display: none; page-break-after: always;">
+  <button class="pdf singleclick not-printable" 
+  onclick="exportReport([$(this).up() {{foreach from=$flows item=_flows key=key}}, $('{{$type}}-{{$key}}'){{/foreach}}, $('{{$type}}-rotation')], '{{$year}} &ndash; {{$title|smarty:nodefaults|JSAttribute}}')">Rapport PDF</button>
+  
   <h3>{{$title}}</h3>
   
   <table class="main tbl" id="{{$type}}-products-table">

@@ -42,7 +42,7 @@ function array_map_recursive($function, $array) {
   foreach ($array as $key => $value ) {
     $array[$key] = is_array($value) ? 
       array_map_recursive($function, $value) : 
-      $function($value);
+      call_user_func($function, $value);
   }
   return $array;
 }

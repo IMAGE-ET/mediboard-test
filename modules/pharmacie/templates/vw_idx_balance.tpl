@@ -62,9 +62,31 @@ function exportData(table, selector, filename) {
 function exportPDF(table, filename) {
   var url = new Url("system", "export_pdf");
   url.addParam("suppressHeaders", 1);
-  console.log(table.xml);
+  
   var file = {
     data: table.outerHTML || new XMLSerializer().serializeToString(table),
+    filename: filename || "Export"
+  };
+  
+  window._tempIframe = window._tempIframe || Element.getTempIframe();
+  
+  url.pop(20, 20, 'pdf_export', null, null, file, window._tempIframe);
+}
+
+function exportReport(elements, filename) {
+  var url = new Url("system", "export_pdf");
+  url.addParam("suppressHeaders", 1);
+  
+  var clones = [];
+  elements.each(function(e){
+    var clone = e.clone(true);
+    clone.select(".graph").invoke("remove");
+    clones.push(clone);
+  });
+  var html = clones.pluck("innerHTML").join('<hr class="pagebreak" />');
+  
+  var file = {
+    data: html,
     filename: filename || "Export"
   };
   
