@@ -1,12 +1,12 @@
-<?php /* $Id: httpreq_get_op_time.php 7210 2009-11-03 12:18:57Z rhum1 $ */
+<?php /* $Id $ */
 
 /**
-* @package Mediboard
-* @subpackage dPplanningOp
-* @version $Revision: 7210 $
-* @author Romain Ollivier
-*/
-
+ * @package Mediboard
+ * @subpackage dPlanningOp
+ * @version $Revision: 6171 $
+ * @author SARL OpenXtrem
+ * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ */
 
 $type   = CValue::get("type");
 $entree = CValue::get("entree");
@@ -16,24 +16,26 @@ $group->loadConfigValues();
 
 $sejour = new CSejour();
 $nb_sejour = 0;
-if($type && $entree) {
+if ($type && $entree) {
 	$where = array(
 	  "type"     => "= '$type'",
 	  "annule"   => "= '0'",
 	  "group_id" => "= '$group->_id'"
 	);
-	if($type == "ambu") {
-		$where[] = "DATE_FORMAT(entree, '%Y-%m-%d') = '$entree'";
+	$min = $entree;
+  $max = mbDate("+1 DAY", $min);
+	if ($type == "ambu") {
+	  $where[] = "entree BETWEEN '$min' AND '$max'";
 	} elseif($type == "comp") {
-    $where[] = "'$entree 23:59:59' BETWEEN entree AND sortie";
+    $where[] = "'$max' BETWEEN entree AND sortie";
 	}
   $nb_sejour = $sejour->countList($where);
 }
 
 $occupation = 0;
-if($type == "ambu" && $group->_configs["max_ambu"]) {
+if ($type == "ambu" && $group->_configs["max_ambu"]) {
   $occupation = $nb_sejour / $group->_configs["max_ambu"] * 100;
-} else if($type == "comp" && $group->_configs["max_comp"]) {
+} else if ($type == "comp" && $group->_configs["max_comp"]) {
 	$occupation = $nb_sejour / $group->_configs["max_comp"] * 100;
 }
 $pct = min($occupation, 100);
