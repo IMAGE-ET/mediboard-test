@@ -34,6 +34,7 @@ $lines = array();
 $pancarte = array();
 $lits = array();
 $list_lines = array();
+$nb_adm = array();
 
 $prescriptions = array();
 $prescription = new CPrescription();
@@ -293,7 +294,12 @@ foreach($prescriptions as $_prescription){
   		foreach($prescription_by_datetime as $_type => $presc_by_type){
   			if($_type != "perfusion" && $_type != 'aerosol'){
 	  			foreach($presc_by_type as $prescription_by_object){
-	  				if(!isset($prescription_by_object["adm"])){
+	  				
+						if(isset($prescription_by_object["adm"])){
+							@$nb_adm[$_prescription_id][$_dateTime][$_type]++;
+						}
+						
+						if(!isset($prescription_by_object["adm"])){
 	  					$prescription_by_object["adm"] = 0;
 	  				}
 						if(!isset($prescription_by_object["prevue"])){
@@ -306,7 +312,12 @@ foreach($prescriptions as $_prescription){
 				} else {
 					foreach($presc_by_type as $prescription_by_object){
 						foreach($prescription_by_object as $_prescription_by_object){
-						  if(!isset($_prescription_by_object["adm"])){
+						  
+							if(isset($_prescription_by_object["adm"])){
+                @$nb_adm[$_prescription_id][$_dateTime][$_type]++;
+              }
+						
+							if(!isset($_prescription_by_object["adm"])){
                 $_prescription_by_object["adm"] = 0;
 	            }
 	            if(!isset($_prescription_by_object["prevue"])){
@@ -347,6 +358,9 @@ $smarty->assign("date_min", $date_min);
 $smarty->assign("service", $service);
 $smarty->assign("patients", $patients);
 $smarty->assign("alertes", $alertes);
+
+$smarty->assign("nb_adm", $nb_adm);
+
 $smarty->assign("new", $new);
 $smarty->assign("urgences", $urgences);
 $smarty->assign("filter_line", $filter_line);

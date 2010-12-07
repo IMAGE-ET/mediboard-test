@@ -1,6 +1,5 @@
 <td>
   {{include file="../../dPpatients/templates/inc_vw_photo_identite.tpl" patient=$_prescription->_ref_patient size=14 nodebug=true}}
-   <!--<a href="#1" onclick="viewDossierSoin('{{$_prescription->_ref_object->_id}}')" style="display: inline;">-->
      <a href="#1" onclick="showPlanSoins('{{$_prescription->_ref_object->_id}}','{{$date}}')" style="display: inline;">
      {{assign var=sejour value=$_prescription->_ref_object}}
      <span class="{{if !$sejour->entree_reelle}}patient-not-arrived{{/if}} {{if $sejour->septique}}septique{{/if}}"
@@ -39,8 +38,10 @@
              {{foreach from=$pancarte.$_prescription_id.$_date_hour key="chapitre" item=quantites}}
                <img src="{{$images.$chapitre}}" 
 							 {{if $_date_hour <= $smarty.now|date_format:"%Y-%m-%d %H:%M:%S"}}
-               {{if @$alertes.$_prescription_id.$_date_hour.$chapitre == '1'}}
-                 style="border-bottom: 3px solid #FB4; height: 100%;"
+               
+							
+							 {{if @$alertes.$_prescription_id.$_date_hour.$chapitre == '1'}}
+                 style="border-bottom: 3px solid {{if !@$nb_adm.$_prescription_id.$_date_hour.$chapitre}}red{{else}}#FB4{{/if}}; height: 100%;"
                {{else}}
                  style="border-bottom: 3px solid #0F0; height: 100%;"
                {{/if}}

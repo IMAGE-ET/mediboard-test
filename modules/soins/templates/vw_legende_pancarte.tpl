@@ -49,7 +49,15 @@
       
     </td>
     <td>
-      Partiellement ou pas effectué
+      Partiellement effectué
+    </td>
+  </tr>
+  <tr>
+    <td style="background-color: red; height: 100%;">
+      
+    </td>
+    <td>
+      Non effectué
     </td>
   </tr>
 </table>
