@@ -199,8 +199,8 @@ class CPrescriptionLineMixItem extends CMbObject {
 	
 	function updateQuantiteAdministration(){
 		if($this->_quantite_administration){
-			return;
-		}
+      return;
+    }
 		 if($this->unite && $this->quantite){
         $_unite_prise = str_replace('/kg', '', $this->unite);
         
@@ -221,22 +221,32 @@ class CPrescriptionLineMixItem extends CMbObject {
 					}
         }
 
-        // Chargement du tableau de correspondance entre les unites de prises
-        $this->_ref_produit->loadRapportUnitePriseByCIS();
-				$coef = isset($this->_ref_produit->rapport_unite_prise[$_unite_prise]["ml"]) ? $this->_ref_produit->rapport_unite_prise[$_unite_prise]["ml"] : 1;
-				$this->_quantite_administration = $this->quantite * $coef;
-        if(isset($poids)){
-          $this->_quantite_administration *= $poids;
-        }
-				
-        if(isset($this->_ref_produit->rapport_unite_prise[$_unite_prise]["ml"])){
-          $this->_ref_prescription_line_mix->_quantite_totale += $this->_quantite_administration;
-        }
         $produit =& $this->_ref_produit;   
         if(!$produit->libelle_unite_presentation){
           $produit->loadLibellePresentation();
           $produit->loadUnitePresentation();
         }
+				
+        $libelle_unite_presentation = $this->_ref_produit->libelle_unite_presentation;
+
+        // Chargement du tableau de correspondance entre les unites de prises
+        $this->_ref_produit->loadRapportUnitePriseByCIS();
+				$coef = isset($this->_ref_produit->rapport_unite_prise[$_unite_prise][$libelle_unite_presentation]) ? $this->_ref_produit->rapport_unite_prise[$_unite_prise][$libelle_unite_presentation] : 1;
+				$this->_quantite_administration = $this->quantite * $coef;
+				if(isset($poids)){
+          $this->_quantite_administration *= $poids;
+        }
+				
+				// On rajoute la quantite de produit a la quantite totale seulement si celle ci peut etre exprimée en ml
+				if(isset($this->_ref_produit->rapport_unite_prise[$_unite_prise]["ml"])){
+					$quantite_perf_line = $this->quantite * $this->_ref_produit->rapport_unite_prise[$_unite_prise]["ml"];
+					if(isset($poids)){
+						$quantite_perf_line *= $poids;
+					}
+					
+          $this->_ref_prescription_line_mix->_quantite_totale += $quantite_perf_line;
+        }
+        
         $this->_unite_administration = $produit->_unite_administration = $produit->libelle_unite_presentation;
         $this->_unite_dispensation = $produit->_unite_dispensation = $produit->libelle_presentation ? $produit->libelle_presentation : $produit->libelle_unite_presentation;
 
