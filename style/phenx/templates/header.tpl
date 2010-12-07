@@ -23,7 +23,8 @@
           <a href="?logout=-1" title="{{tr}}menu-logout{{/tr}}"><img src="style/{{$uistyle}}/images/icons/logout.png" alt="{{tr}}menu-logout{{/tr}}" /></a>
         </div>
         
-        {{mb_include module=mediboard template=change_group style="max-width: 140px;"}}
+        {{assign var=style value="max-width: 140px;"}}
+        {{mb_include module=mediboard template=change_group}}
       </div>
       
       <ul id="nav">
