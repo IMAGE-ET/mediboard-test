@@ -23,6 +23,10 @@ class CBilanSSR extends CMbObject {
   var $planification = null;
   var $brancardage   = null;
 	
+  var $hospit_de_jour = null;
+  var $demi_journee_1 = null;
+  var $demi_journee_2 = null;
+	
   // References
   var $_ref_technicien = null;
 
@@ -64,6 +68,10 @@ class CBilanSSR extends CMbObject {
     $props["sortie"       ] = "text helped";
     $props["planification"] = "bool default|1";
     $props["brancardage"  ] = "bool default|0";
+		
+    $props["hospit_de_jour"] = "bool default|0";
+    $props["demi_journee_1"] = "bool default|0";
+    $props["demi_journee_2"] = "bool default|0";
 
     // Distant Fields
     $props["_kine_referent_id" ]   = "ref class|CMediusers";

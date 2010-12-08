@@ -331,10 +331,10 @@ Main.add(function(){
 
 <ul id="tabs-activites" class="control_tabs small">
   <li>
-    <a href="#add_ssr">Boîte à activités</a>
+    <a href="#add_ssr">{{tr}}Activities{{/tr}}</a>
   </li>
   <li>
-    <a href="#outils">Outils</a>
+    <a href="#outils">{{tr}}Tools{{/tr}}</a>
   </li>
 </ul>
 <hr class="control_tabs" />
@@ -345,8 +345,29 @@ Main.add(function(){
     <input type="hidden" name="m" value="ssr" />
     <input type="hidden" name="dosql" value="do_bilan_ssr_aed" />
     <input type="hidden" name="del" value="0" />
-    <input type="hidden" name="bilan_id" value="{{$bilan->_id}}">
+    {{mb_key object=$bilan}}
+
     <table class="form">
+      <tr>
+        <th>{{mb_label object=$bilan field=hospit_de_jour}}</th>
+        <td>
+          <div id="demi-journees" style="float: right; {{if !$bilan->hospit_de_jour}}display: none;{{/if}}">
+            {{mb_field object=$bilan field=demi_journee_1 onchange="this.form.onsubmit();" typeEnum=checkbox}}
+            {{mb_label object=$bilan field=demi_journee_1}} 
+            {{mb_field object=$bilan field=demi_journee_2 onchange="this.form.onsubmit();" typeEnum=checkbox}}
+            {{mb_label object=$bilan field=demi_journee_2}} 
+          </div>
+					<script>
+						updateDemiJournees = function (input) {
+              $('demi-journees').setVisible($V(input) == '1');
+              input.form.onsubmit();
+						}
+					</script>
+        	{{mb_field object=$bilan field=hospit_de_jour onchange="updateDemiJournees(this)"}}
+        </td>
+      </tr>
+
+
       <tr>
         <th style="width: 94px">{{mb_label object=$bilan field=entree}}</th>
         <td>

@@ -198,6 +198,8 @@ class CConsultAnesth extends CMbObject {
     else {
       $this->loadRefSejour();
     }
+		
+		return $this->_ref_operation;
   }
 
   function loadRefSejour() {

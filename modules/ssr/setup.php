@@ -400,7 +400,14 @@ class CSetupssr extends CSetup {
       ADD `repartition` ENUM ('0','1') DEFAULT '1';";
     $this->addQuery($query);
 
-		$this->mod_version = "0.34";
+    $this->makeRevision("0.34");
+    $query = "ALTER TABLE `bilan_ssr`
+      ADD `hospit_de_jour` ENUM ('0','1') DEFAULT '0',
+      ADD `demi_journee_1` ENUM ('0','1') DEFAULT '0',
+      ADD `demi_journee_2` ENUM ('0','1') DEFAULT '0';";
+    $this->addQuery($query);
+
+		$this->mod_version = "0.35";
     
     // Data source query
     $query = "SHOW COLUMNS FROM type_activite LIKE 'libelle_court'";
