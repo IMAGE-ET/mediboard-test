@@ -1,10 +1,10 @@
 {{include file="../../mediboard/templates/common.tpl" nodebug=true}}
 
 <div id="login" {{if $dialog}}style="height: 50px; margin: auto; position: relative; top: 0; left: 0;"{{/if}}>
-  <h2>{{$dPconfig.company_name}}</h2>
+  <h2>{{$conf.company_name}}</h2>
   {{if !$dialog}}
-    <a href="{{$dPconfig.system.website_url}}">
-      {{mb_include style="mediboard" template="logo" alt=$dPconfig.company_name title=$dPconfig.company_name width="400"}}
+    <a href="{{$conf.system.website_url}}">
+      {{mb_include style="mediboard" template="logo" alt=$conf.company_name title=$conf.company_name width="400"}}
       <br />
     </a>
   {{/if}}

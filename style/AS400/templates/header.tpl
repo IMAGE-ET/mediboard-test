@@ -22,7 +22,7 @@
             </table>
           </td>
           <td class="welcome">
-            <span title="{{tr}}Last connection{{/tr}} : {{$app->user_last_login|date_format:$dPconfig.datetime}}">
+            <span title="{{tr}}Last connection{{/tr}} : {{$app->user_last_login|date_format:$conf.datetime}}">
             {{$app->user_first_name}} {{$app->user_last_name}}
             </span>
             {{mb_include module=mediboard template=svnstatus}}

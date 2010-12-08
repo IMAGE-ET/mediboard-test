@@ -7,7 +7,7 @@
 
       
       <div id="user">
-        <div class="welcome" title="{{tr}}Last connection{{/tr}} : {{$app->user_last_login|date_format:$dPconfig.datetime}}">
+        <div class="welcome" title="{{tr}}Last connection{{/tr}} : {{$app->user_last_login|date_format:$conf.datetime}}">
           {{$app->user_first_name}} {{$app->user_last_name}}
         </div>
         

@@ -31,7 +31,7 @@ var Menu = {
   
     <!-- Welcome -->
     <div>
-      <label title="{{tr}}Last connection{{/tr}} : {{$app->user_last_login|date_format:$dPconfig.datetime}}">
+      <label title="{{tr}}Last connection{{/tr}} : {{$app->user_last_login|date_format:$conf.datetime}}">
         {{$app->user_first_name}} {{$app->user_last_name}}
       </label>
       <br />
@@ -126,7 +126,7 @@ var Menu = {
               {{mb_include module=mediboard template=change_group}}
               <br />
             {{/if}}
-            <span title="{{tr}}Last connection{{/tr}} : {{$app->user_last_login|date_format:$dPconfig.datetime}}">
+            <span title="{{tr}}Last connection{{/tr}} : {{$app->user_last_login|date_format:$conf.datetime}}">
             {{$app->user_first_name}} {{$app->user_last_name}}
             </span>
 

@@ -7,7 +7,7 @@
   
   <title>
     {{if !$dialog}}
-      {{$dPconfig.page_title}} 
+      {{$conf.page_title}} 
       &mdash; {{tr}}module-{{$m}}-court{{/tr}}
       {{if $a || $tab}}
         &mdash; {{tr}}mod-{{$m}}-tab-{{if $tab}}{{$tab}}{{else}}{{$a}}{{/if}}{{/tr}}
@@ -22,8 +22,8 @@
   
   <!-- IE9 specific JumpLists -->
   {{if $browser.name == "msie"}}
-    <meta name="application-name" content="{{$dPconfig.page_title}}" />
-    <meta name="application-tooltip" content="{{$dPconfig.page_title}}" />
+    <meta name="application-name" content="{{$conf.page_title}}" />
+    <meta name="application-tooltip" content="{{$conf.page_title}}" />
     <meta name="msapplication-starturl" content="./" />
     
     {{foreach from=$modules key=mod_name item=currModule}} 

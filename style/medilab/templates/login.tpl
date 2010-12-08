@@ -9,7 +9,7 @@
     {{if !$dialog}}    
     <tr>
       <td class="logo" colspan="3 ">
-        <a href="{{$dPconfig.system.website_url}}">
+        <a href="{{$conf.system.website_url}}">
           {{mb_include style="mediboard" template="logo" width="140"}}
         </a>
         <p>
@@ -41,7 +41,7 @@
     {{if !$dialog}}
      <tr>
       <th class="category" colspan="3">
-        {{$dPconfig.company_name}}
+        {{$conf.company_name}}
       </th>
     </tr>
     <tr>

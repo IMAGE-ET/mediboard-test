@@ -9,13 +9,13 @@
     {{if !$dialog}}
     <tr>
       <th class="title" colspan="10">
-        {{$dPconfig.company_name}}
+        {{$conf.company_name}}
       </th>
     </tr>
     
     <tr>
       <td class="logo" colspan="10">
-        <a href="{{$dPconfig.system.website_url}}">
+        <a href="{{$conf.system.website_url}}">
           {{mb_include style="mediboard" template="logo" alt="MediBoard logo"}}
         </a>
         <p>
