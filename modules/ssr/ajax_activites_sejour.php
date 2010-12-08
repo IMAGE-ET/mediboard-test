@@ -54,6 +54,7 @@ foreach ($prescription->_ref_prescription_lines_element_by_cat as $_lines_by_cha
 }
 
 // Creation d'un nouveau tableau pour stocker les lignes par elements de prescription
+$lines_by_element = array(); 
 foreach ($prescription->_ref_prescription_lines_element_by_cat as $chap => $_lines_by_chap){
   foreach ($_lines_by_chap as $cat => $_lines_by_cat){
     foreach ($_lines_by_cat['element'] as $line_id => $_line){

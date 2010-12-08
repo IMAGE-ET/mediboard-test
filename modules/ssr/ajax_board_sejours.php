@@ -169,6 +169,7 @@ foreach ($sejours as $_sejour) {
 		continue;
 	}
   $_sejour->loadRefPatient();
+  $_sejour->loadRefBilanSSR();
 	
   // Modification des prescription
   $_sejour->loadRefPrescriptionSejour();

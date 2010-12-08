@@ -132,8 +132,13 @@
       <span onmouseover="ObjectTooltip.createEx(this, '{{$_sejour->_guid}}');">
        {{mb_include module=dPplanningOp template=inc_vw_numdos num_dossier=$_sejour->_num_dossier}}
       </span>
+
+      {{assign var=bilan value=$_sejour->_ref_bilan_ssr}}
 			<div style="opacity: 0.6;">
-       {{mb_value object=$_sejour field=service_id}}
+			  {{if $bilan->hospit_de_jour}} 
+          <img style="float: right;" title="{{mb_value object=$bilan field=_demi_journees}}" src="modules/ssr/images/dj-{{$bilan->_demi_journees}}.png" />
+			  {{/if}}
+        {{mb_value object=$_sejour field=service_id}}
 			</div>
 		</td>
 		
@@ -153,7 +158,6 @@
 		</td>
 
 		{{else}}
-      {{assign var=bilan value=$_sejour->_ref_bilan_ssr}}
       <td class="text">
         {{mb_include module=mediusers template=inc_vw_mediuser mediuser=$_sejour->_ref_praticien}}
 				{{assign var=prat_demandeur value=$bilan->_ref_prat_demandeur}}

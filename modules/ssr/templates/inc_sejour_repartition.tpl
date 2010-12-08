@@ -23,6 +23,11 @@
 	<div style="float: right;">
 	  ({{$patient->_age}})
 	</div>
+
+  {{assign var=bilan value=$sejour->_ref_bilan_ssr}}
+  {{if $bilan->hospit_de_jour}} 
+    <img style="float: right;"title="{{mb_value object=$bilan field=_demi_journees}}" src="modules/ssr/images/dj-{{$bilan->_demi_journees}}.png" />
+  {{/if}}
 	
   {{assign var=libelle value=$sejour->libelle|upper}}
 	{{assign var=color value=$colors.$libelle}}

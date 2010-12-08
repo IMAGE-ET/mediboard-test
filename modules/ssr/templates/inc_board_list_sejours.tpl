@@ -44,7 +44,13 @@ Main.add(function() {
 		<td class="narrow">
 			{{mb_value object=$patient field=_age}}    
     </td>
-    <td class="text">{{mb_value object=$_sejour field=libelle}}</td>
+    <td class="text">
+  {{assign var=bilan value=$_sejour->_ref_bilan_ssr}}
+		  {{if $bilan->hospit_de_jour}} 
+		    <img style="float: right;"title="{{mb_value object=$bilan field=_demi_journees}}" src="modules/ssr/images/dj-{{$bilan->_demi_journees}}.png" />
+		  {{/if}}
+    	{{mb_value object=$_sejour field=libelle}}
+		</td>
     <td>{{mb_value object=$_sejour field=entree format=$dPconfig.date}}</td>
     <td>{{mb_value object=$_sejour field=sortie format=$dPconfig.date}}</td>
 

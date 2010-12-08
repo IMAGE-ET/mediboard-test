@@ -27,6 +27,9 @@ class CBilanSSR extends CMbObject {
   var $demi_journee_1 = null;
   var $demi_journee_2 = null;
 	
+	// Form fields
+  var $_demi_journees = null;
+
   // References
   var $_ref_technicien = null;
 
@@ -73,6 +76,9 @@ class CBilanSSR extends CMbObject {
     $props["demi_journee_1"] = "bool default|0";
     $props["demi_journee_2"] = "bool default|0";
 
+    // Form fields
+    $props["_demi_journees"] = "enum list|none|am|pm|all";
+
     // Distant Fields
     $props["_kine_referent_id" ]   = "ref class|CMediusers";
     $props["_kine_journee_id"  ]   = "ref class|CMediusers";
@@ -80,6 +86,23 @@ class CBilanSSR extends CMbObject {
 		
     return $props;
   }
+	
+	function updateFormFields() {
+		parent::updateFormFields();
+		if ($this->hospit_de_jour) {
+			static $demi_journees = array(
+		    "0" => array(
+          "0" => "none",
+          "1" => "pm",
+				),
+        "1" => array(
+          "0" => "am",
+          "1" => "all",
+        ),
+			);
+			$this->_demi_journees = $demi_journees[$this->demi_journee_1][$this->demi_journee_2];
+		}
+	}
 	
   /**
    * Chargement du technicien 
