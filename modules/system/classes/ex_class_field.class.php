@@ -87,7 +87,7 @@ class CExClassField extends CMbObject {
     $dummy = new CExObject;
     $dummy->setExClass($ex_class);
     
-    return $this->_spec_object = $dummy->_specs[$this->name];
+    return $this->_spec_object = CMbFieldSpecFact::getSpec($dummy, $this->name, $this->prop);
   }
   
   function updateDBFields(){

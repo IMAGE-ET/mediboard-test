@@ -11,36 +11,81 @@
 class CExObject extends CMbMetaObject {
   var $id = null;
   
+  var $_ex_class_id = null;
+  
   /**
    * @var CExClass
    */
-  private $_ref_ex_class = null;
+  public $_ref_ex_class = null;
   private $_host_class = null;
 
-  function setExClass(CExClass $exClass) {
-    if ($this->_ref_ex_class) return;
+  function setExClass(CExClass $ex_class = null) {
+    if ($this->_spec->key) return;
     
-    $this->_ref_ex_class = $exClass;
-    $this->_host_class = $exClass->host_class;
-    $this->_spec->table = $exClass->getTableName();
-    $this->_spec->key = "id";
+    if (!$ex_class) {
+      $ex_class = $this->loadRefExClass();
+      if (!$ex_class->_id) return;
+    }
+    
+    $this->_ex_class_id = $ex_class->_id;
+    $this->_ref_ex_class = $ex_class;
     
     $this->_props = $this->getProps();
     $this->_specs = $this->getSpecs();
     
-    $this->_class_name .= "_{$exClass->host_class}_{$exClass->event}";
+    $this->_class_name .= "_{$ex_class->host_class}_{$ex_class->event}";
+  }
+  
+  function loadRefExClass($cache = true){
+    if ($cache && $this->_ref_ex_class) return $this->_ref_ex_class;
+    
+    $ex_class = new CExClass();
+    $ex_class->load($this->_ex_class_id);
+    
+    return $this->_ref_ex_class = $ex_class; // can't use loadFwdRef here
+  }
+  
+  function bind($hash, $doStripSlashes = true) {
+    $this->setExClass();
+    return parent::bind($hash, $doStripSlashes);
+  }
+  
+  function getDBFields() {
+    $result = array();
+    
+    $this->setExClass();
+    $fields = $this->_ref_ex_class->loadRefsFields();
+    
+    $vars = get_object_vars($this);
+    foreach($fields as $_field) {
+      $vars[$_field->name] = $this->{$_field->name};
+    }
+    
+    foreach($vars as $key => $value) {
+      if ($key[0] !== '_') {
+        $result[$key] = $value;
+      }
+    }
+
+    return $result;
   }
   
   function getProps() {
-    $specs = parent::getProps();
+    $ex_class = $this->loadRefExClass();
     
-    if ($this->_ref_ex_class) {
-      //$this->_ref_ex_class->loadRefsFields(); // do not load the fields or we won't be able to change the SQL spec
-      $fields = $this->_ref_ex_class->_ref_fields;
-      foreach($fields as $_field) {
-        $this->{$_field->name} = null; // declaration of the field
-        $specs[$_field->name] = $_field->prop; // declaration of the field spec
-      }
+    $this->_host_class = $ex_class->host_class;
+    
+    $this->_spec->table = $ex_class->getTableName();
+    $this->_spec->key = "id";
+    
+    $specs = parent::getProps();
+    $specs["_ex_class_id"] = "ref class|CExClass";
+    
+    $fields = $this->_ref_ex_class->loadRefsFields();
+    
+    foreach($fields as $_field) {
+      $this->{$_field->name} = null; // declaration of the field
+      $specs[$_field->name] = $_field->prop; // declaration of the field spec
     }
     
     return $specs;

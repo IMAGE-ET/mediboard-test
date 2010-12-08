@@ -9,17 +9,21 @@
 *}}
 
 {{mb_form name="editExObject" m="system" dosql="do_ex_object_aed" method="post" onsubmit="return checkForm(this)"}}
-  {{mb_key object=$ex_object}}
+  {{*mb_key object=$ex_object*}}
+  {{* mb_key is not usable here *}}
+  <input type="hidden" name="id" value="{{$ex_object->_id}}" />
+  
   {{mb_field object=$ex_object field=object_class}}
   {{mb_field object=$ex_object field=object_id}}
+  {{mb_field object=$ex_object field=_ex_class_id}}
   
   <table class="main form">
     <tr>
       <th class="title" colspan="2">
-        {{$ex_class}} - {{$object}}
+        {{$ex_object->_ref_ex_class}} - {{$object}}
       </th>
     </tr>
-    {{foreach from=$ex_class->_ref_fields item=_field}}
+    {{foreach from=$ex_object->_ref_ex_class->_ref_fields item=_field}}
     <tr>
       <th>
         {{mb_label object=$ex_object field=$_field->name}}

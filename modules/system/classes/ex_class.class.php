@@ -47,6 +47,7 @@ class CExClass extends CMbObject {
   }
   
   function loadRefsFields(){
+    if (!empty($this->_ref_fields)) return $this->_ref_fields;
     return $this->_ref_fields = $this->loadBackRefs("fields");
   }
   

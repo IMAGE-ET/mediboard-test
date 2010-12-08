@@ -17,10 +17,11 @@ $ex_class = new CExClass;
 $ex_class->load($ex_class_id);
 $ex_class->loadRefsFields();
 
+$object = CMbObject::loadFromGuid($object_guid);
+
 $ex_object = new CExObject;
 $ex_object->setExClass($ex_class);
-
-$object = CMbObject::loadFromGuid($object_guid);
+$ex_object->setObject($object);
 
 // Création du template
 $smarty = new CSmartyDP();
