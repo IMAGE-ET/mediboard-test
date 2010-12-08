@@ -41,10 +41,10 @@
 	    </label>
 	  </td>
 	  <td rowspan="{{$field_count}}" style="text-align: center;">
-	    {{mb_ditto name=date value=$_log->date|date_format:$dPconfig.date}}
+	    {{mb_ditto name=date value=$_log->date|date_format:$conf.date}}
 	  </td>
 	  <td rowspan="{{$field_count}}" style="text-align: center;">
-	    {{mb_ditto name=time value=$_log->date|date_format:$dPconfig.time}}
+	    {{mb_ditto name=time value=$_log->date|date_format:$conf.time}}
 	  </td>
 	  <td rowspan="{{$field_count}}" {{if $_log->type != "store" && $object->_id}} colspan="4" {{/if}}>{{mb_value object=$_log field=type}}</td>
 		

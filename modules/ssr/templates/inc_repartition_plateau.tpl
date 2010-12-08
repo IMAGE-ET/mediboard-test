@@ -9,7 +9,7 @@
 *}}
 
 <table id="{{$plateau->_guid}}" class="main" style="border-spacing: 4px; border-collapse: separate; width: auto;">
-  {{if !$dPconfig.ssr.repartition.show_tabs}}
+  {{if !$conf.ssr.repartition.show_tabs}}
 	<tr>
 		<th class="title" colspan="{{$plateau->_ref_techniciens|@count}}">
 			{{$plateau}}

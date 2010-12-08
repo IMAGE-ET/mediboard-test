@@ -24,7 +24,7 @@ newExam = function(sAction, consultation_id) {
   <tr>
     <td>
       <strong>Date :</strong>
-      <i>le {{$object->_ref_plageconsult->date|date_format:"%d %B %Y"}} à {{$object->heure|date_format:$dPconfig.time}}</i>
+      <i>le {{$object->_ref_plageconsult->date|date_format:"%d %B %Y"}} à {{$object->heure|date_format:$conf.time}}</i>
     </td>
     <td>
       <strong>Praticien :</strong>

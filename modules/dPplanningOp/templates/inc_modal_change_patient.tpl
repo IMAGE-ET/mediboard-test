@@ -8,7 +8,7 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
 *}}
 
-{{assign var=patient_id_config value=$dPconfig.dPplanningOp.CSejour.patient_id}}
+{{assign var=patient_id_config value=$conf.dPplanningOp.CSejour.patient_id}}
 
 <script type="text/javascript">
   confirmChangePatient = function() {

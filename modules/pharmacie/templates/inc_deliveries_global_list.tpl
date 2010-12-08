@@ -63,13 +63,13 @@ Main.add(function(){
           <th colspan="2">
             {{mb_colonne class=CProductDelivery field=date_dispensation order_col=$order_col order_way=$order_way function=changeSort}}
           </th>
-          {{if !$dPconfig.dPstock.CProductStockGroup.infinite_quantity}}
+          {{if !$conf.dPstock.CProductStockGroup.infinite_quantity}}
             <th>Stock pharm.</th>
           {{/if}}
           <th>
             {{mb_colonne class=CProductStockGroup field=location_id order_col=$order_col order_way=$order_way function=changeSort}}
           </th>
-          {{if !$dPconfig.dPstock.CProductStockService.infinite_quantity}}
+          {{if !$conf.dPstock.CProductStockService.infinite_quantity}}
             <th>Stock serv.</th>
           {{/if}}
           <th class="narrow"><button type="button" onclick="deliverAll(deliveriesTabs.activeContainer.id)" class="tick">Tout délivrer</button></th>

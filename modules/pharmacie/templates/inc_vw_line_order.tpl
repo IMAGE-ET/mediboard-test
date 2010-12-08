@@ -16,8 +16,8 @@
       {{$curr_delivery->_ref_patient->_view}}
     {{/if}}
   </td>
-  <td style="text-align: center;">{{mb_ditto name=date value=$curr_delivery->date_dispensation|date_format:$dPconfig.date}}</td>
-  <td style="text-align: center;">{{mb_ditto name=time value=$curr_delivery->date_dispensation|date_format:$dPconfig.time}}</td>
+  <td style="text-align: center;">{{mb_ditto name=date value=$curr_delivery->date_dispensation|date_format:$conf.date}}</td>
+  <td style="text-align: center;">{{mb_ditto name=time value=$curr_delivery->date_dispensation|date_format:$conf.time}}</td>
   <td>
     {{if $curr_delivery->_ref_stock->_id}}
       <span onmouseover="ObjectTooltip.createEx(this, '{{$curr_delivery->_guid}}')">
@@ -66,7 +66,7 @@
     {{/if}}
   </td>
   <td class="text">{{$curr_delivery->comments}}</td>
-  {{if !$dPconfig.dPstock.CProductStockGroup.infinite_quantity}}
+  {{if !$conf.dPstock.CProductStockGroup.infinite_quantity}}
   <td>
     <table class="layout">
       <tr>
@@ -82,7 +82,7 @@
   {{/if}}
   
   {{* 
-  {{if !$dPconfig.dPstock.CProductStockService.infinite_quantity}}
+  {{if !$conf.dPstock.CProductStockService.infinite_quantity}}
     <td style="text-align: center;">
       {{assign var=stock value=$curr_delivery->_ref_stock}}
       <a href="?m=dPstock&amp;tab=vw_idx_stock_service&amp;stock_service_id={{$stock->_id}}" title="{{tr}}CProductStockService-title-modify{{/tr}}">

@@ -8,8 +8,8 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
 *}}
 
-{{assign var=infinite value=$dPconfig.dPstock.CProductStockGroup.infinite_quantity}}
-{{assign var=infinite_service value=$dPconfig.dPstock.CProductStockService.infinite_quantity}}
+{{assign var=infinite value=$conf.dPstock.CProductStockGroup.infinite_quantity}}
+{{assign var=infinite_service value=$conf.dPstock.CProductStockService.infinite_quantity}}
 
 <tr>
 <!-- Stock Pharmacie -->
@@ -39,7 +39,7 @@
       <input type="hidden" name="dosql" value="do_delivery_aed" />
       <input type="hidden" name="del" value="0" />
       <input type="hidden" name="date_dispensation" value="now" />
-      {{if $endowment_id && $dPconfig.dPstock.CProductDelivery.auto_dispensation}}
+      {{if $endowment_id && $conf.dPstock.CProductDelivery.auto_dispensation}}
         <input type="hidden" name="_auto_deliver" value="1" />
       {{/if}}
       <input type="hidden" name="stock_id" value="{{$stock->_id}}" />

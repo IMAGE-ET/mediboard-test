@@ -70,7 +70,7 @@
       </td>
     </tr>
 
-    {{if $dPconfig.dPpersonnel.CPlageConge.show_replacer}} 
+    {{if $conf.dPpersonnel.CPlageConge.show_replacer}} 
     <tr>
       <th>
         {{mb_label object=$plageconge field="replacer_id"}}

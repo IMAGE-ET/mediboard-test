@@ -38,7 +38,7 @@ Main.add(function(){
         </option>
         {{/foreach}}
       </select>
-      - Interventions du {{$date|date_format:$dPconfig.longdate}}
+      - Interventions du {{$date|date_format:$conf.longdate}}
       <input type="hidden" name="m" value="{{$m}}" />
       <input type="hidden" name="tab" value="vw_idx_planning" />
       <input type="hidden" name="date" class="date" value="{{$date}}" onchange="this.form.submit()" />
@@ -93,7 +93,7 @@ Main.add(function(){
             {{/if}}
             </span>
           </td>
-          <td class="button">{{$_operation->time_operation|date_format:$dPconfig.time}}</td>
+          <td class="button">{{$_operation->time_operation|date_format:$conf.time}}</td>
           <td class="button">{{$_operation->_ref_affectation->_ref_lit->_view}}</td>
           <td class="text">
             {{if $_operation->_ref_consult_anesth->_id}}
@@ -108,7 +108,7 @@ Main.add(function(){
           </td>
           <td class="text">
             {{if $_operation->date_visite_anesth}}
-              Le {{$_operation->date_visite_anesth|date_format:$dPconfig.datetime}} par le Dr {{$_operation->_ref_anesth_visite->_view}}
+              Le {{$_operation->date_visite_anesth|date_format:$conf.datetime}} par le Dr {{$_operation->_ref_anesth_visite->_view}}
             {{else}}
               Visite non effectuée
             {{/if}}

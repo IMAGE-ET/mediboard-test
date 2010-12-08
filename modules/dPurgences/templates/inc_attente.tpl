@@ -12,7 +12,7 @@
   {{assign var=rpu value=$sejour->_ref_rpu}}
   {{mb_include template=inc_icone_attente}}
   {{if $sejour->sortie_reelle}}
-    <br />(sortie à {{$sejour->sortie_reelle|date_format:$dPconfig.time}})
+    <br />(sortie à {{$sejour->sortie_reelle|date_format:$conf.time}})
   {{else}}
 	{{mb_value object=$rpu field=_attente}}
 	{{/if}}

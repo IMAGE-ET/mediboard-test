@@ -22,7 +22,7 @@
   	<td style="padding-left: 1em;">
       <a href="?m=dPplanningOp&amp;tab=vw_edit_planning&amp;operation_id={{$_op->_id}}"
         onmouseover="ObjectTooltip.createEx(this, '{{$_op->_guid}}')">
-        le {{$_op->_datetime|date_format:$dPconfig.date}}
+        le {{$_op->_datetime|date_format:$conf.date}}
       </a>
 		</td>
 		<td>
@@ -59,7 +59,7 @@
     <td>
       <a href="?m=dPcabinet&amp;tab=edit_consultation&amp;selConsult={{$_consult->_id}}"
         onmouseover="ObjectTooltip.createEx(this, '{{$_consult->_guid}}')">
-        le {{$_consult->_datetime|date_format:$dPconfig.date}}
+        le {{$_consult->_datetime|date_format:$conf.date}}
       </a>
     </td>
     <td>

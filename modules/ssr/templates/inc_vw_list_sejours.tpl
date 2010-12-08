@@ -60,11 +60,11 @@ Main.add(function() {
           {{$patient->_age}} ans
 		    </td>
 		    <td style="text-align: center;">
-		      {{mb_value object=$_sejour field=entree format=$dPconfig.date}}
+		      {{mb_value object=$_sejour field=entree format=$conf.date}}
 		      <div style="text-align: left; opacity: 0.6;">{{$_sejour->_entree_relative}}j</div>
 		    </td>
 		    <td style="text-align: center;">
-		      {{mb_value object=$_sejour field=sortie format=$dPconfig.date}}
+		      {{mb_value object=$_sejour field=sortie format=$conf.date}}
 		      <div style="text-align: right; opacity: 0.6;">{{$_sejour->_sortie_relative}}j</div>
 		    </td>
         {{if $type == "kine"}}

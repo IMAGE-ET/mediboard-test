@@ -57,7 +57,7 @@
   <tr>
     <th colspan="10" class="category">
       {{$curr_operation->_view}} 
-      le {{$curr_operation->_datetime|date_format:$dPconfig.date}}
+      le {{$curr_operation->_datetime|date_format:$conf.date}}
     </th>
   </tr> 
 

@@ -112,28 +112,28 @@ Main.add(function () {
     <td class="text">{{$curr_plage->date|date_format:"%d/%m/%Y"}}</td>
     <td class="text">{{$curr_plage->_ref_salle->_view}}</td>
     <td class="text">{{$curr_op->_ref_salle->_view}}</td>
-    <td class="text">{{$curr_plage->debut|date_format:$dPconfig.time}}</td>
-    <td class="text">{{$curr_plage->fin|date_format:$dPconfig.time}}</td>
+    <td class="text">{{$curr_plage->debut|date_format:$conf.time}}</td>
+    <td class="text">{{$curr_plage->fin|date_format:$conf.time}}</td>
     <td class="text">
       {{if $curr_op->rank}}
-        #{{$curr_op->rank}} à {{$curr_op->time_operation|date_format:$dPconfig.time}}
+        #{{$curr_op->rank}} à {{$curr_op->time_operation|date_format:$conf.time}}
       {{else}}
         Non validé
       {{/if}}
     </td>
     <td class="text">
       {{if $curr_op->_rank_reel}}
-        #{{$curr_op->_rank_reel}} à {{$curr_op->entree_salle|date_format:$dPconfig.time}}
+        #{{$curr_op->_rank_reel}} à {{$curr_op->entree_salle|date_format:$conf.time}}
       {{else}}
         Non renseigné
       {{/if}}
     </td>
     <td class="text">{{$curr_op->_ref_sejour->_ref_patient->_view}} ({{$curr_op->_ref_sejour->_ref_patient->_age}} ans)</td>
     <td class="text">{{tr}}CSejour.type.{{$curr_op->_ref_sejour->type}}{{/tr}}</td>
-    <td class="text">{{$curr_op->_ref_sejour->entree_prevue|date_format:$dPconfig.datetime}}</td>
+    <td class="text">{{$curr_op->_ref_sejour->entree_prevue|date_format:$conf.datetime}}</td>
     <td class="text">
       {{if $curr_op->_ref_sejour->entree_reelle}}
-        {{$curr_op->_ref_sejour->entree_reelle|date_format:$dPconfig.datetime}}
+        {{$curr_op->_ref_sejour->entree_reelle|date_format:$conf.datetime}}
       {{else}}
         Non renseigné
       {{/if}}
@@ -151,22 +151,22 @@ Main.add(function () {
     <td class="text">{{$curr_op->_ref_consult_anesth->ASA}}</td>
     <td class="text">
       {{if $curr_op->_ref_first_log}}
-        {{$curr_op->_ref_first_log->date|date_format:$dPconfig.datetime}}
+        {{$curr_op->_ref_first_log->date|date_format:$conf.datetime}}
       {{else}}
         &mdash;
       {{/if}}
     </td>
-    <td class="text">{{$curr_op->entree_salle|date_format:$dPconfig.time}}</td>
-    <td class="text">{{$curr_op->induction_debut|date_format:$dPconfig.time}}</td>
-    <td class="text">{{$curr_op->induction_fin|date_format:$dPconfig.time}}</td>
-    <td class="text">{{$curr_op->pose_garrot|date_format:$dPconfig.time}}</td>
-    <td class="text">{{$curr_op->debut_op|date_format:$dPconfig.time}}</td>
-    <td class="text">{{$curr_op->fin_op|date_format:$dPconfig.time}}</td>
-    <td class="text">{{$curr_op->retrait_garrot|date_format:$dPconfig.time}}</td>
-    <td class="text">{{$curr_op->sortie_salle|date_format:$dPconfig.time}}</td>
-    <td class="text">{{$curr_op->_pat_next|date_format:$dPconfig.time}}</td>
-    <td class="text">{{$curr_op->entree_reveil|date_format:$dPconfig.time}}</td>
-    <td class="text">{{$curr_op->sortie_reveil|date_format:$dPconfig.time}}</td>
+    <td class="text">{{$curr_op->entree_salle|date_format:$conf.time}}</td>
+    <td class="text">{{$curr_op->induction_debut|date_format:$conf.time}}</td>
+    <td class="text">{{$curr_op->induction_fin|date_format:$conf.time}}</td>
+    <td class="text">{{$curr_op->pose_garrot|date_format:$conf.time}}</td>
+    <td class="text">{{$curr_op->debut_op|date_format:$conf.time}}</td>
+    <td class="text">{{$curr_op->fin_op|date_format:$conf.time}}</td>
+    <td class="text">{{$curr_op->retrait_garrot|date_format:$conf.time}}</td>
+    <td class="text">{{$curr_op->sortie_salle|date_format:$conf.time}}</td>
+    <td class="text">{{$curr_op->_pat_next|date_format:$conf.time}}</td>
+    <td class="text">{{$curr_op->entree_reveil|date_format:$conf.time}}</td>
+    <td class="text">{{$curr_op->sortie_reveil|date_format:$conf.time}}</td>
   </tr>
   {{/foreach}}
   {{/foreach}}

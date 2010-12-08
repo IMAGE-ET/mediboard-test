@@ -39,7 +39,7 @@
     {{assign var=_src value="images/pictures/identity_anonymous.png"}}
   {{/if}}
 {{else}}
-  {{if $patient->_age < $dPconfig.dPpatients.CPatient.adult_age && $patient->naissance && $patient->naissance != "0000-00-00"}}
+  {{if $patient->_age < $conf.dPpatients.CPatient.adult_age && $patient->naissance && $patient->naissance != "0000-00-00"}}
     {{assign var=src value="images/pictures/identity_child.png"}}
   {{elseif $patient->sexe == 'm' && $patient->_age < 60}}
     {{assign var=src value="images/pictures/identity_male.png"}}

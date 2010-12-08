@@ -4,7 +4,7 @@
 {{mb_include_script module="dPcabinet" script="plage_selector"}}
 {{mb_include_script module="dPcompteRendu" script="document"}}
 {{mb_include_script module="dPcompteRendu" script="modele_selector"}}
-{{assign var=attach_consult_sejour value=$dPconfig.dPcabinet.CConsultation.attach_consult_sejour}}
+{{assign var=attach_consult_sejour value=$conf.dPcabinet.CConsultation.attach_consult_sejour}}
 <script type="text/javascript">
 
 Medecin = {
@@ -319,7 +319,7 @@ Main.add(function () {
           <td>{{mb_field object=$consult field="si_desistement" typeEnum="checkbox"}}</td>
         </tr>
         
-        {{if $dPconfig.dPcabinet.CConsultation.attach_consult_sejour}}
+        {{if $conf.dPcabinet.CConsultation.attach_consult_sejour}}
         <tr>
           <th>{{mb_label object=$consult field="_forfait_se"}}</th>
           <td>{{mb_field object=$consult field="_forfait_se" typeEnum="checkbox"}}</td>
@@ -393,7 +393,7 @@ Main.add(function () {
         </tr>
         <tr>
           <td colspan="5">
-            {{if $dPconfig.dPcabinet.CConsultAnesth.format_auto_rques}}
+            {{if $conf.dPcabinet.CConsultAnesth.format_auto_rques}}
               <div class="small-info">
               Si vous laissez les champs <strong>Remarques</strong> ou <strong>Motif</strong> vides, <br />
               ils seront pré-remplis selon <a href="?m=dPcabinet&amp;tab=configure">la configuration du module</a>.

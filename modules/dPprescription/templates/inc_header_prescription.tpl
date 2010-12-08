@@ -453,7 +453,7 @@ Main.add( function(){
 						Intervention
 	 				  <select name="operation_id">
 	 				    {{foreach from=$prescription->_dates_dispo key=operation_id item=_date_operation}}
-	 				      <option value="{{$operation_id}}">{{$_date_operation|date_format:$dPconfig.datetime}}</option>
+	 				      <option value="{{$operation_id}}">{{$_date_operation|date_format:$conf.datetime}}</option>
 	 				    {{/foreach}}
 							</select>
 						{{/if}}
@@ -487,12 +487,12 @@ Main.add( function(){
 				    <option value="other">Autre date</option>
             <optgroup label="Intervention">
             {{foreach from=$prescription->_dates_dispo key=_operation_id item=_date_operation}}
-              <option value="I_{{$_date_operation}}_{{$_operation_id}}">Intervention - {{$_date_operation|date_format:$dPconfig.datetime}}</option>
+              <option value="I_{{$_date_operation}}_{{$_operation_id}}">Intervention - {{$_date_operation|date_format:$conf.datetime}}</option>
             {{/foreach}}
             </optgroup>
 				    <optgroup label="Séjour">
-				      <option value="E_{{$prescription->_ref_object->_entree}}">Entrée - {{$prescription->_ref_object->_entree|date_format:$dPconfig.datetime}}</option>
-				      <option value="S_{{$prescription->_ref_object->_sortie}}">Sortie - {{$prescription->_ref_object->_sortie|date_format:$dPconfig.datetime}}</option>
+				      <option value="E_{{$prescription->_ref_object->_entree}}">Entrée - {{$prescription->_ref_object->_entree|date_format:$conf.datetime}}</option>
+				      <option value="S_{{$prescription->_ref_object->_sortie}}">Sortie - {{$prescription->_ref_object->_sortie|date_format:$conf.datetime}}</option>
 				    </optgroup>
 				  </select>		 				
 					<!-- Selection manuelle de la date -->

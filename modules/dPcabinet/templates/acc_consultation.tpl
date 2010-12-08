@@ -85,7 +85,7 @@ Main.add(function () {
   
   <li><a href="#AntTrait">Antécédents</a></li>
  
-  {{if $consult->sejour_id && $modules.dPprescription->_can->read && !$dPconfig.dPprescription.CPrescription.prescription_suivi_soins}}
+  {{if $consult->sejour_id && $modules.dPprescription->_can->read && !$conf.dPprescription.CPrescription.prescription_suivi_soins}}
   <li {{if !$mutation_id}}onmousedown="Prescription.reloadPrescSejour('', '{{$consult->sejour_id}}','', '', null, null, null,'', null, false);"{{/if}}>
     <a href="#prescription_sejour">
       Prescription Séjour
@@ -168,7 +168,7 @@ Main.add(function () {
 	    {{if $sejour && $sejour->_id}}
 	    <li><a href="#cim">Diagnostics</a></li>	    
 	    {{/if}}
-	    {{if $dPconfig.dPccam.CCodable.use_frais_divers.CConsultation}}
+	    {{if $conf.dPccam.CCodable.use_frais_divers.CConsultation}}
 	    <li><a href="#fraisdivers">Frais divers</a></li>
 	    {{/if}}
     </ul>
@@ -194,7 +194,7 @@ Main.add(function () {
 	  </div>
 	  {{/if}}
 	  
-	  {{if $dPconfig.dPccam.CCodable.use_frais_divers.CConsultation}}     
+	  {{if $conf.dPccam.CCodable.use_frais_divers.CConsultation}}     
     <div id="fraisdivers" style="display: none;">
       {{mb_include module=dPccam template=inc_frais_divers object=$consult}}
     </div>

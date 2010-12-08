@@ -49,7 +49,7 @@ function printSuivi(){
           </option>
         {{/foreach}}
         </select>
-        {{$date_suivi|date_format:$dPconfig.longdate}}
+        {{$date_suivi|date_format:$conf.longdate}}
         <input type="hidden" name="date_suivi" class="date" value="{{$date_suivi}}" onchange="this.form.submit()" />
       </form>
     </th>

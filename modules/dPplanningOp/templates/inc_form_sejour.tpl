@@ -200,9 +200,9 @@ Main.add( function(){
 
   var options = {
     exactMinutes: false, 
-    minInterval: {{$dPconfig.dPplanningOp.CSejour.min_intervalle}},
-    minHours: {{$dPconfig.dPplanningOp.CSejour.heure_deb}},
-    maxHours: {{$dPconfig.dPplanningOp.CSejour.heure_fin}}
+    minInterval: {{$conf.dPplanningOp.CSejour.min_intervalle}},
+    minHours: {{$conf.dPplanningOp.CSejour.heure_deb}},
+    maxHours: {{$conf.dPplanningOp.CSejour.heure_fin}}
   };
   
   // Object.value takes the internal functions too :(
@@ -752,7 +752,7 @@ Main.add( function(){
     <button class="{{$annule_class}}" type="button" onclick="cancelSejour();">
       {{tr}}{{$annule_text}}{{/tr}}
     </button>
-    {{if !$dPconfig.dPplanningOp.CSejour.delete_only_admin || $can->admin}}
+    {{if !$conf.dPplanningOp.CSejour.delete_only_admin || $can->admin}}
       <button class="trash" type="button" onclick="confirmDeletion(this.form,{typeName:'le {{$sejour->_view|smarty:nodefaults|JSAttribute}}'});">
         {{tr}}Delete{{/tr}}
       </button>

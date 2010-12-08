@@ -59,12 +59,12 @@ Main.add(function(){
                 {{tr}}CProduct{{/tr}}
               </th>
               <th>{{tr}}CProductDelivery-comments{{/tr}}</th>
-              {{if !$dPconfig.dPstock.CProductStockGroup.infinite_quantity}}
+              {{if !$conf.dPstock.CProductStockGroup.infinite_quantity}}
                 <th>Stock pharmacie</th>
               {{/if}}
               
               {{* 
-              {{if !$dPconfig.dPstock.CProductStockService.infinite_quantity}}
+              {{if !$conf.dPstock.CProductStockService.infinite_quantity}}
                 <th>Stock service</th>
               {{/if}}
               *}}

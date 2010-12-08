@@ -40,7 +40,7 @@ ElementChecker.check.match = function(){
           {{foreach from=$timezones item=timezone_group key=title_group}}
             <optgroup label="{{$title_group}}">
               {{foreach from=$timezone_group item=title key=timezone}}
-                <option value="{{$timezone}}" {{if $timezone==$dPconfig.$var}}selected="selected"{{/if}}>
+                <option value="{{$timezone}}" {{if $timezone==$conf.$var}}selected="selected"{{/if}}>
                   {{$title}}
                 </option>
               {{/foreach}}

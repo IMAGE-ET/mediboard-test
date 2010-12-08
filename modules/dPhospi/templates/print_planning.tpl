@@ -66,7 +66,7 @@ function printAdmission(id) {
         {{assign var=horodatage value=$filter->_horodatage}}
         {{foreach from=$curr_prat.sejours item=curr_sejour}}
         <tr>
-          <td>{{$curr_sejour->$horodatage|date_format:$dPconfig.time}}</td>
+          <td>{{$curr_sejour->$horodatage|date_format:$conf.time}}</td>
           <td>
             {{if !$curr_sejour->facturable}}
             <strong>NF</strong>
@@ -90,7 +90,7 @@ function printAdmission(id) {
             {{foreach from=$curr_sejour->_ref_operations item=curr_operation}}
               {{$curr_operation->_datetime|date_format:"%d/%m/%Y"}}
               {{if $curr_operation->time_operation != "00:00:00"}}
-                à {{$curr_operation->time_operation|date_format:$dPconfig.time}}
+                à {{$curr_operation->time_operation|date_format:$conf.time}}
               {{/if}}
               <br />
             {{/foreach}}

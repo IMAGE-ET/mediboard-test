@@ -9,7 +9,7 @@ Main.add(function () {
   <tr>
     <th class="title" colspan="2">
       <a href="?m={{$m}}&amp;debut={{$prec}}">&lt;&lt;&lt;</a>
-      Semaine du {{$debut|date_format:$dPconfig.longdate}}
+      Semaine du {{$debut|date_format:$conf.longdate}}
       <form action="?" name="changeDate" method="get">
         <input type="hidden" name="m" value="{{$m}}" />
         <input type="hidden" name="tab" value="{{$tab}}" />

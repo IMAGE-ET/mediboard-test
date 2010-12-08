@@ -21,7 +21,7 @@
       </a>
     </td>
     <td class="text">
-      {{$_interv->_presence_reveil|date_format:$dPconfig.time}}
+      {{$_interv->_presence_reveil|date_format:$conf.time}}
     </td>
   </tr>
   {{/foreach}}

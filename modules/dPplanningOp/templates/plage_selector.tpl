@@ -141,15 +141,15 @@ Main.add(function () {
                   onmouseover="ObjectTooltip.createDOM(this, 'plage-{{$_plage->_id}}')" 
                   {{if $resp_bloc ||
                     (
-                     (!$over || !$dPconfig.dPbloc.CPlageOp.locked)
+                     (!$over || !$conf.dPbloc.CPlageOp.locked)
                      && ($_plage->date >= $date_min)
                      && (($_plage->_nb_operations < $_plage->max_intervention) || ($_plage->max_intervention == 0) || ($_plage->max_intervention == ""))
                     )
                   }}ondblclick="setClose('{{$_plage->date}}', '{{$_plage->salle_id}}')"{{/if}}
                 >
                   {{$_plage->date|date_format:"%a %d"}} -
-                  {{$_plage->debut|date_format:$dPconfig.time}} -
-                  {{$_plage->fin|date_format:$dPconfig.time}}
+                  {{$_plage->debut|date_format:$conf.time}} -
+                  {{$_plage->fin|date_format:$conf.time}}
                   &mdash; {{$_plage->_ref_salle->_view}}
                   {{if $_plage->spec_id}}
                   <br />{{$_plage->_ref_spec->_view|truncate:50}}
@@ -161,16 +161,16 @@ Main.add(function () {
               <table class="tbl">
               	<tr>
               		<th class="category" colspan="2">
-              			Plage de {{$_plage->debut|date_format:$dPconfig.time}}-{{$_plage->fin|date_format:$dPconfig.time}}
+              			Plage de {{$_plage->debut|date_format:$conf.time}}-{{$_plage->fin|date_format:$conf.time}}
               		</th>
               	</tr>
                 {{foreach from=$_plage->_ref_operations item=curr_op}}
                 <tr>
                   <td>
                     {{if $curr_op->time_operation && $curr_op->time_operation != "00:00:00"}}
-                      {{$curr_op->time_operation|date_format:$dPconfig.time}} (validé)
+                      {{$curr_op->time_operation|date_format:$conf.time}} (validé)
                     {{elseif $curr_op->horaire_voulu && $curr_op->horaire_voulu != "00:00:00"}}
-                      {{$curr_op->horaire_voulu|date_format:$dPconfig.time}} (souhaité)
+                      {{$curr_op->horaire_voulu|date_format:$conf.time}} (souhaité)
                     {{else}}
                       Pas d'horaire
                     {{/if}}
@@ -194,7 +194,7 @@ Main.add(function () {
           <td style="text-align: center;" class="narrow">
             {{if $resp_bloc ||
               (
-               (!$over || !$dPconfig.dPbloc.CPlageOp.locked)
+               (!$over || !$conf.dPbloc.CPlageOp.locked)
                && ($_plage->date >= $date_min)
                && (($_plage->_nb_operations < $_plage->max_intervention) || ($_plage->max_intervention == 0) || ($_plage->max_intervention == ""))
               )

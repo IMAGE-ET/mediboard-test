@@ -13,9 +13,9 @@ Main.add(window.print);
 </script>
 
 <h1>Plan de cueillette du 
-  {{$date_min|date_format:$dPconfig.datetime}} au 
-  {{$date_max|date_format:$dPconfig.datetime}} le 
-  {{$smarty.now|date_format:$dPconfig.datetime}}</h1>
+  {{$date_min|date_format:$conf.datetime}} au 
+  {{$date_max|date_format:$conf.datetime}} le 
+  {{$smarty.now|date_format:$conf.datetime}}</h1>
 
 <h2>Délivrances {{if $mode == "nominatif"}}nominatives{{else}}globales{{/if}}</h2>
 <table class="main tbl">

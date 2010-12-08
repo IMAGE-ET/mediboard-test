@@ -102,7 +102,7 @@
 					  								  {{/if}}'
 					  		{{if ($line->_fin_reelle && ($line->_fin_reelle|date_format:"%Y-%m-%d %H:00:00" < $_date_hour)) || $line->_debut_reel|date_format:"%Y-%m-%d %H:00:00" > $_date_hour || !$line->_active}}
 						      style="background-color: #aaa"
-						      {{if $dPconfig.dPprescription.CAdministration.hors_plage}}
+						      {{if $conf.dPprescription.CAdministration.hors_plage}}
 						        onclick='toggleSelectForAdministration(this, {{$line_id}}, "{{$quantite}}", "{{$unite_prise}}", "{{$line_class}}","{{$_date}} {{$_hour}}:00:00");'
 					          ondblclick='addAdministration({{$line_id}}, "{{$quantite}}", "{{$unite_prise}}", "{{$line_class}}","{{$_date}} {{$_hour}}:00:00","{{$list_administrations}}","{{$planification_id}}","{{$multiple_adm}}");'
 						      {{/if}}
@@ -197,7 +197,7 @@
 			    {{* Tooltip d'affichage de la date d'origine, des administrations et des transmissions *}}  
 			    <div id="tooltip-content-{{$line_id}}-{{$unite_prise}}-{{$_date}}-{{$_hour}}" style="display: none; text-align: left">
 				     {{if $origine_date_planif}}
-				       <strong>Date d'origine:</strong> {{$origine_date_planif|date_format:$dPconfig.datetime}}<br />
+				       <strong>Date d'origine:</strong> {{$origine_date_planif|date_format:$conf.datetime}}<br />
 				     {{/if}}
 				     {{if @is_array($administrations_in_hour.administrations)}}
 				       <strong>Administrations:</strong>
@@ -207,14 +207,14 @@
 								 <li>
 								 	 {{$_log_administration->_ref_object->quantite}}
 								   {{if $line_class == "CPrescriptionLineMedicament"}}
-							       {{$_log_administration->_ref_object->_ref_object->_ref_produit->libelle_unite_presentation}} administré par {{$_log_administration->_ref_user->_view}} le {{$_log_administration->_ref_object->dateTime|date_format:$dPconfig.datetime}}
+							       {{$_log_administration->_ref_object->_ref_object->_ref_produit->libelle_unite_presentation}} administré par {{$_log_administration->_ref_user->_view}} le {{$_log_administration->_ref_object->dateTime|date_format:$conf.datetime}}
 							     {{else}}
-								     {{tr}}CCategoryPrescription.chapitre.{{$name_chap}}{{/tr}} effectué par {{$_log_administration->_ref_user->_view}} le {{$_log_administration->_ref_object->dateTime|date_format:$dPconfig.datetime}}
+								     {{tr}}CCategoryPrescription.chapitre.{{$name_chap}}{{/tr}} effectué par {{$_log_administration->_ref_user->_view}} le {{$_log_administration->_ref_object->dateTime|date_format:$conf.datetime}}
 							     {{/if}}
 								 </li>
 							   <ul>
 							     {{foreach from=$transmissions_in_hour.list.$administration_id item=_transmission}}
-								     <li>{{$_transmission->_view}} le {{$_transmission->date|date_format:$dPconfig.datetime}}:<br /> {{$_transmission->text}}</li>
+								     <li>{{$_transmission->_view}} le {{$_transmission->date|date_format:$conf.datetime}}:<br /> {{$_transmission->text}}</li>
 							     {{/foreach}}
 							   </ul>
 						   {{/foreach}}

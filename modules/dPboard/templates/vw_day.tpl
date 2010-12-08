@@ -104,7 +104,7 @@ Main.add(function () {
       <form name="changeDate" action="?m={{$m}}" method="get">
         <input type="hidden" name="m" value="{{$m}}" />
         <input type="hidden" name="tab" value="{{$tab}}" />
-        {{$date|date_format:$dPconfig.longdate}}
+        {{$date|date_format:$conf.longdate}}
         <input type="hidden" name="date" class="date" value="{{$date}}" onchange="this.form.submit()" />
       </form>
       <a href="?m={{$m}}&amp;tab={{$tab}}&amp;date={{$suiv}}">&gt;&gt;&gt;</a>

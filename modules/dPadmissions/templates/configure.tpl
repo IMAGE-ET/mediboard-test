@@ -19,10 +19,10 @@
     </th>
     <td>
       <select name="{{$m}}[{{$var}}]">
-        <option value="a4" {{if $dPconfig.$m.$var == "a4"}}selected="selected"{{/if}}>
+        <option value="a4" {{if $conf.$m.$var == "a4"}}selected="selected"{{/if}}>
           Modèle A4
         </option>
-        <option value="a5" {{if $dPconfig.$m.$var == "a5"}}selected="selected"{{/if}}>
+        <option value="a5" {{if $conf.$m.$var == "a5"}}selected="selected"{{/if}}>
           Modèle A5
         </option>
       </select>

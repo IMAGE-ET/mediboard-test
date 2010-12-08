@@ -38,10 +38,10 @@
    - [{{$curr_delivery->comments}}]
   {{/if}}
 </td>
-<td style="text-align: center;">{{mb_ditto name="date-$service_id" value=$curr_delivery->date_dispensation|date_format:$dPconfig.date}}</td>
-<td style="text-align: center;">{{mb_ditto name="time-$service_id" value=$curr_delivery->date_dispensation|date_format:$dPconfig.time}}</td>
+<td style="text-align: center;">{{mb_ditto name="date-$service_id" value=$curr_delivery->date_dispensation|date_format:$conf.date}}</td>
+<td style="text-align: center;">{{mb_ditto name="time-$service_id" value=$curr_delivery->date_dispensation|date_format:$conf.time}}</td>
 
-{{if !$dPconfig.dPstock.CProductStockGroup.infinite_quantity}}
+{{if !$conf.dPstock.CProductStockGroup.infinite_quantity}}
 <td style="text-align: center;">
   <a href="?m=dPstock&amp;tab=vw_idx_stock_group&amp;stock_id={{$curr_delivery->_ref_stock->_id}}" title="{{tr}}CProductStockGroup-title-modify{{/tr}}">
     {{mb_value object=$curr_delivery->_ref_stock field=quantity}}
@@ -53,7 +53,7 @@
   {{mb_value object=$curr_delivery->_ref_stock->_ref_location field=name}}
 </td>
 
-{{if !$dPconfig.dPstock.CProductStockService.infinite_quantity}}
+{{if !$conf.dPstock.CProductStockService.infinite_quantity}}
 <td style="text-align: center;">
   {{assign var=stock value=$stocks_service.$id}}
   <a href="?m=dPstock&amp;tab=vw_idx_stock_group&amp;stock_service_id={{$stock->_id}}" title="{{tr}}CProductStockService-title-modify{{/tr}}">

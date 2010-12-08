@@ -1,6 +1,6 @@
 {{assign var=unloc_count value=$app|static:unlocalized|@count}}
 
-{{if $dPconfig.locale_warn && $unloc_count}}
+{{if $conf.locale_warn && $unloc_count}}
 
 <!-- Local warns -->
 <script type="text/javascript">

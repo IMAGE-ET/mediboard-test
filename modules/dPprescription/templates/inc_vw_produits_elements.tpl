@@ -517,7 +517,7 @@ reloadPerfEvolution = function(perf_id, object){
 <!-- Tabulations -->
 <ul id="prescription_tab_group" class="control_tabs">
 	
-	{{if $dPconfig.dPprescription.CPrescription.show_chapter_med}}
+	{{if $conf.dPprescription.CPrescription.show_chapter_med}}
   <li><a href="#div_medicament">Médicaments <span></span></a></li>
   {{/if}}
 	
@@ -527,7 +527,7 @@ reloadPerfEvolution = function(perf_id, object){
   {{assign var=specs_chapitre value=$class_category->_specs.chapitre}}
   {{foreach from=$specs_chapitre->_list item=_chapitre name="foreach_chapitres"}}
   
-		  {{if !$dPconfig.dPprescription.CPrescription.show_chapter_med && $smarty.foreach.foreach_chapitres.first}}
+		  {{if !$conf.dPprescription.CPrescription.show_chapter_med && $smarty.foreach.foreach_chapitres.first}}
 		  <script type="text/javascript">
         window['{{$_chapitre}}Loaded'] = false;
 				Main.add( function(){
@@ -550,7 +550,7 @@ reloadPerfEvolution = function(perf_id, object){
 <hr class="control_tabs" />
 
 <!-- Declaration des divs -->
-{{if $dPconfig.dPprescription.CPrescription.show_chapter_med}}
+{{if $conf.dPprescription.CPrescription.show_chapter_med}}
 <div id="div_medicament" style="display:none;">
   {{if $mode_pack}}
     {{include file="../../dPprescription/templates/inc_div_medicament_short.tpl"}}

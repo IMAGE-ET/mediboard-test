@@ -570,7 +570,7 @@
   </tr>
   -->
 
-  {{if $dPconfig.dPcabinet.CConsultAnesth.show_facteurs_risque}}
+  {{if $conf.dPcabinet.CConsultAnesth.show_facteurs_risque}}
   <tr>
     <td colspan="2">
       <table style="width: 100%">
@@ -620,7 +620,7 @@
 	{{/if}}
 	
   <tr>
-    <th class="category" colspan="2">Visite de pré-anesthésie {{if $operation->date_visite_anesth}}- {{$operation->date_visite_anesth|date_format:$dPconfig.datetime}}{{/if}}</th>
+    <th class="category" colspan="2">Visite de pré-anesthésie {{if $operation->date_visite_anesth}}- {{$operation->date_visite_anesth|date_format:$conf.datetime}}{{/if}}</th>
   </tr>
   {{if $operation->date_visite_anesth}}
   <tr>

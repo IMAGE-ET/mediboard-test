@@ -35,7 +35,7 @@
      {{$object->echange_hprim_id|str_pad:6:'0':$smarty.const.STR_PAD_LEFT}}
     </a>
   </td>
-  {{if $dPconfig.sip.server}}
+  {{if $conf.sip.server}}
   <td class="narrow">
     {{if $object->initiateur_id}}
       <a href="?m=hprimxml&amp;tab=vw_idx_echange_hprim&amp;echange_hprim_id={{$object->initiateur_id}}" class="button search">
@@ -91,7 +91,7 @@
   </td>
   <td class="{{if $object->sous_type == 'inconnu'}}error{{/if}} narrow">{{mb_value object=$object field="sous_type"}}</td>
   <td class="{{if $object->date_echange}}ok{{else}}warning{{/if}} narrow">
-    {{if $dPconfig.sip.server == "1"}}
+    {{if $conf.sip.server == "1"}}
       {{if $object->_self_emetteur}}
         <button class="change" onclick="sendMessage('{{$object->_id}}', '{{$object->_class_name}}')" type="button" style="float:right">{{tr}}Send{{/tr}}</button>
       {{/if}}

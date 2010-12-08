@@ -1,6 +1,6 @@
 {{if $templateManager->editor == "ckeditor" }}
 
-{{assign var=pdf_thumbnails value=$dPconfig.dPcompteRendu.CCompteRendu.pdf_thumbnails}}
+{{assign var=pdf_thumbnails value=$conf.dPcompteRendu.CCompteRendu.pdf_thumbnails}}
 {{mb_include_script path="lib/ckeditor/ckeditor.js"}}
 
 <style type="text/css">

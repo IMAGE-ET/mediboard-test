@@ -19,7 +19,7 @@
       </label>    
     </th>
     <td>
-      <input type="text" name="{{$m}}[{{$var}}]" value="{{$dPconfig.$m.$var}}"/> 
+      <input type="text" name="{{$m}}[{{$var}}]" value="{{$conf.$m.$var}}"/> 
     </td>             
   </tr>
   
@@ -31,7 +31,7 @@
       </label>    
     </th>
     <td>
-      <input type="text" name="{{$m}}[{{$var}}]" value="{{$dPconfig.$m.$var}}"/> 
+      <input type="text" name="{{$m}}[{{$var}}]" value="{{$conf.$m.$var}}"/> 
     </td>             
   </tr>
 
@@ -53,10 +53,10 @@
     </th>
     <td>
     	<select class="str" name="{{$m}}[{{$class}}][{{$var}}]">
-        <option value="never" {{if $dPconfig.$m.$class.$var == "never"}}selected="selected"{{/if}}>{{tr}}config-{{$m}}-{{$class}}-{{$var}}-never{{/tr}}</option>
-        <option value="oneday" {{if $dPconfig.$m.$class.$var == "oneday"}}selected="selected"{{/if}}>{{tr}}config-{{$m}}-{{$class}}-{{$var}}-oneday{{/tr}}</option>
-        <option value="button" {{if $dPconfig.$m.$class.$var == "button"}}selected="selected"{{/if}}>{{tr}}config-{{$m}}-{{$class}}-{{$var}}-button{{/tr}}</option>
-				<option value="facturation" {{if $dPconfig.$m.$class.$var == "facturation"}}selected="selected"{{/if}}>{{tr}}config-{{$m}}-{{$class}}-{{$var}}-facturation{{/tr}}</option>
+        <option value="never" {{if $conf.$m.$class.$var == "never"}}selected="selected"{{/if}}>{{tr}}config-{{$m}}-{{$class}}-{{$var}}-never{{/tr}}</option>
+        <option value="oneday" {{if $conf.$m.$class.$var == "oneday"}}selected="selected"{{/if}}>{{tr}}config-{{$m}}-{{$class}}-{{$var}}-oneday{{/tr}}</option>
+        <option value="button" {{if $conf.$m.$class.$var == "button"}}selected="selected"{{/if}}>{{tr}}config-{{$m}}-{{$class}}-{{$var}}-button{{/tr}}</option>
+				<option value="facturation" {{if $conf.$m.$class.$var == "facturation"}}selected="selected"{{/if}}>{{tr}}config-{{$m}}-{{$class}}-{{$var}}-facturation{{/tr}}</option>
       </select>
     </td>             
   </tr>

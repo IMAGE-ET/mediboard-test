@@ -85,7 +85,7 @@ tr.important th {
                   {{if $access}}
 									  <input type="hidden" name="php[{{$key}}]" value=""/>
                     <input type="text" name="php[{{$key}}]" value="{{$value.local_value}}" disabled="disabled" style="opacity: 0.5;" />
-                    <input type="checkbox" onclick="toggleInput($(this).previous(), this.checked); this.checked ? (this.previous()).previous().disabled='disabled' : (this.previous()).previous().removeAttribute('disabled');" {{if array_key_exists($key, $dPconfig.php) && $dPconfig.php.$key !== ""}}checked="checked"{{/if}} />
+                    <input type="checkbox" onclick="toggleInput($(this).previous(), this.checked); this.checked ? (this.previous()).previous().disabled='disabled' : (this.previous()).previous().removeAttribute('disabled');" {{if array_key_exists($key, $conf.php) && $conf.php.$key !== ""}}checked="checked"{{/if}} />
                   {{else}}
                     <input type="text" value="{{$value.local_value}}" readonly="readonly" disabled="disabled" />
                   {{/if}}

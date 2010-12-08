@@ -58,7 +58,7 @@ updateDispensationUrgence = function(formUrgence) {
   </tr>
   <tr>
     <th>{{tr}}CProductStockService-product_id{{/tr}}</th>
-    {{if !$dPconfig.dPstock.CProductStockService.infinite_quantity}}
+    {{if !$conf.dPstock.CProductStockService.infinite_quantity}}
     <th>{{tr}}CProductStockService{{/tr}}</th>
     {{/if}}
     <th>{{tr}}CProduct-_unit_title{{/tr}}</th>
@@ -74,7 +74,7 @@ updateDispensationUrgence = function(formUrgence) {
           </span>
         </a>
       </td>
-      {{if !$dPconfig.dPstock.CProductStockService.infinite_quantity}}
+      {{if !$conf.dPstock.CProductStockService.infinite_quantity}}
       <td>
         <table class="layout">
           <tr>

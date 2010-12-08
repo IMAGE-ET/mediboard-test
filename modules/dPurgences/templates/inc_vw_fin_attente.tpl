@@ -29,7 +29,7 @@
     <input type="hidden" name="dosql" value="do_rpu_aed" />
     <input type="hidden" name="ajax" value="1" />
     <input type="hidden" name="{{$fin}}" value="" />
-    <input type="text" name="_fin_da" value="{{$rpu->$fin|date_format:$dPconfig.time}}" class="time" readonly="readonly"/>
+    <input type="text" name="_fin_da" value="{{$rpu->$fin|date_format:$conf.time}}" class="time" readonly="readonly"/>
     <input type="hidden" name="_fin" autocomplete="off" id="editHeure{{$change_heure}}_fin" value="{{$rpu->$fin|date_format:'%H:%M:%S'}}" class="time"
     onchange="$V(this.form.{{$fin}}, '{{$rpu->$fin|date_format:'%Y-%m-%d'}} ' + $V(this.form._fin)); onSubmitFormAjax(this.form, {onComplete:refreshAttente.curry('{{$debut}}', '{{$fin}}', '{{$rpu->_id}}')})"></input> 
     <button class="edit notext" type="button" onclick="Calendar.regField(this.form._fin); $(this).remove()">

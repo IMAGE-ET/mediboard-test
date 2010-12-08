@@ -89,8 +89,8 @@ changeReceptionPage = function(start) {
           {{mb_value object=$curr_delivery field=comments}}
         {{/if}}
       </td>
-      <td style="text-align: center;">{{mb_ditto name=date value=$curr_delivery->date_dispensation|date_format:$dPconfig.date}}</td>
-      <td style="text-align: center;">{{mb_ditto name=time value=$curr_delivery->date_dispensation|date_format:$dPconfig.time}}</td>
+      <td style="text-align: center;">{{mb_ditto name=date value=$curr_delivery->date_dispensation|date_format:$conf.date}}</td>
+      <td style="text-align: center;">{{mb_ditto name=time value=$curr_delivery->date_dispensation|date_format:$conf.time}}</td>
       <td style="text-align: right">{{mb_value object=$curr_delivery field=quantity}}</td>
       <td>{{mb_value object=$curr_delivery->_ref_stock->_ref_product field=_unit_title}}</td>
       <td>

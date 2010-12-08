@@ -21,7 +21,7 @@ Main.add(function () {
 </script>
 
 
-<h3>Dernière mise à jour : {{$smarty.now|date_format:$dPconfig.datetime}}</h3>
+<h3>Dernière mise à jour : {{$smarty.now|date_format:$conf.datetime}}</h3>
 
 <ul id="month_tabs" class="control_tabs">
   {{foreach from=$listPlages key=month_name item=listPlage}}

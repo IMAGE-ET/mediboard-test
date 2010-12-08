@@ -31,7 +31,7 @@ Main.add(function () {
       Calendar.regField(getForm("changeDate").date, null, { noView: true } );
     } );
     </script>
-    <strong><big>{{$date|date_format:$dPconfig.longdate}}</big></strong>
+    <strong><big>{{$date|date_format:$conf.longdate}}</big></strong>
     
     <form action="?" name="changeDate" method="get">
       <input type="hidden" name="m" value="{{$m}}" />

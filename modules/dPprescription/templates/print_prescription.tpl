@@ -351,7 +351,7 @@ div.footer {
        <div class="body">
      {{/if}}
 
-     <h2>{{$dPconfig.dPprescription.CCategoryPrescription.$name_chap.phrase}}</h2>
+     <h2>{{$conf.dPprescription.CCategoryPrescription.$name_chap.phrase}}</h2>
      {{if array_key_exists("ald", $elements) && $elements.ald|@count}}
 	   <div style="border: 1px dotted #555; padding-right: 10px; text-align: center;">
 	     <strong>Prescriptions relatives au traitement de l'affection de longue durée reconnue (liste ou hors liste)</strong>
@@ -369,8 +369,8 @@ div.footer {
 						   {{if $name_cat != "inj"}}
 			           {{assign var=category value=$categories.$name_chap.$name_cat}}
 				         <strong>{{$category->nom}}</strong>
-				         {{if $dPconfig.dPprescription.CCategoryPrescription.show_header && $category->header}}, {{$category->header}}{{/if}}
-				         {{if $dPconfig.dPprescription.CCategoryPrescription.show_description && $category->description}}, {{$category->description}}{{/if}}
+				         {{if $conf.dPprescription.CCategoryPrescription.show_header && $category->header}}, {{$category->header}}{{/if}}
+				         {{if $conf.dPprescription.CCategoryPrescription.show_description && $category->description}}, {{$category->description}}{{/if}}
 		           {{else}}
 							   <strong>Injections par IDE à domicile (férié et dimanche)</strong>
 							 {{/if}}
@@ -408,8 +408,8 @@ div.footer {
 						   {{if $name_cat != "inj"}}
 							   {{assign var=category value=$categories.$name_chap.$name_cat}}
 			           <strong>{{$category->nom}}</strong>
-			         	 {{if $dPconfig.dPprescription.CCategoryPrescription.show_header && $category->header}}, {{$category->header}}{{/if}}
-				         {{if $dPconfig.dPprescription.CCategoryPrescription.show_description && $category->description}}, {{$category->description}}{{/if}}
+			         	 {{if $conf.dPprescription.CCategoryPrescription.show_header && $category->header}}, {{$category->header}}{{/if}}
+				         {{if $conf.dPprescription.CCategoryPrescription.show_description && $category->description}}, {{$category->description}}{{/if}}
 			         {{else}}
 							   <strong>Injections par IDE à domicile (férié et dimanche)</strong>
 							 {{/if}}

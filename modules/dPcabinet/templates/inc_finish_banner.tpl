@@ -26,7 +26,7 @@ function printConsult() {
 
 {{if $app->user_prefs.directory_to_watch != ''}}
 	<script type="text/javascript">
-	  File.applet.extensions = '{{$dPconfig.dPfiles.extensions_yoplet}}';
+	  File.applet.extensions = '{{$conf.dPfiles.extensions_yoplet}}';
 	  File.appletDirectory = "{{$app->user_prefs.directory_to_watch|addslashes}}";
 	</script>
 	

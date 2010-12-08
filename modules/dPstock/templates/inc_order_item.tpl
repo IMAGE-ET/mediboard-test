@@ -8,7 +8,7 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
 *}}
 
-{{assign var=unit_order value=$dPconfig.dPstock.CProductStockGroup.unit_order}}
+{{assign var=unit_order value=$conf.dPstock.CProductStockGroup.unit_order}}
 
 <tr>
   {{if !$order->date_ordered}}
@@ -46,7 +46,7 @@
       <input type="hidden" name="m" value="{{$m}}" />
       <input type="hidden" name="dosql" value="do_order_item_aed" />
       <input type="hidden" name="order_item_id" value="{{$curr_item->_id}}" />
-      {{if $dPconfig.dPstock.CProductStockGroup.unit_order}}
+      {{if $conf.dPstock.CProductStockGroup.unit_order}}
         {{mb_field object=$curr_item 
           field=_unit_quantity
           onchange="quantitySubmit$id(this)"

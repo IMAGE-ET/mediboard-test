@@ -180,9 +180,9 @@ PlageConsult = {
     <td colspan="2">
       <strong onclick="PlageConsult.refresh('{{$_plage.plage->_id}}')">
         {{$_plage.plage->_ref_chir}}
-        &mdash; {{$_plage.plage->date|date_format:$dPconfig.longdate}}
-        de {{$_plage.plage->debut|date_format:$dPconfig.time}} 
-				à  {{$_plage.plage->fin|date_format:$dPconfig.time}} 
+        &mdash; {{$_plage.plage->date|date_format:$conf.longdate}}
+        de {{$_plage.plage->debut|date_format:$conf.time}} 
+				à  {{$_plage.plage->fin|date_format:$conf.time}} 
 
 				{{if $_plage.plage->libelle}} 
         : {{mb_value object=$_plage.plage field=libelle}}	   

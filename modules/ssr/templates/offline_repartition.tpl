@@ -1,7 +1,7 @@
 <table class="main">
   <tr>
     <th colspan="2">
-      <big>Planning du {{$date|date_format:$dPconfig.date}}</big>
+      <big>Planning du {{$date|date_format:$conf.date}}</big>
     </th>
   </tr>
   <tr>

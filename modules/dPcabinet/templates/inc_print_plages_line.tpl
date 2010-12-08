@@ -63,7 +63,7 @@
       <div style="border-left: 4px solid #aaa; padding-left: 5px;">
       {{assign var=operation value=$consult_anesth->_ref_operation}}
   
-      Intervention le {{$operation->_datetime|date_format:$dPconfig.date}}
+      Intervention le {{$operation->_datetime|date_format:$conf.date}}
       - Dr {{$operation->_ref_praticien->_view}}<br />
       {{if $operation->libelle}}
         <em>[{{$operation->libelle}}]</em>

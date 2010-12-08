@@ -139,7 +139,7 @@ function reloadPrescription(prescription_id){
     </th>
   </tr>
   
-  {{if $dPconfig.dPplanningOp.COperation.verif_cote && $selOp->cote_bloc && ($selOp->cote == "droit" || $selOp->cote == "gauche")}}
+  {{if $conf.dPplanningOp.COperation.verif_cote && $selOp->cote_bloc && ($selOp->cote == "droit" || $selOp->cote == "gauche")}}
   <!-- Vérification du côté -->
   <tr>
     <td>
@@ -198,7 +198,7 @@ function reloadPrescription(prescription_id){
 
 <!-- Tabulations -->
 <ul id="main_tab_group" class="control_tabs">
-	{{if !$dPconfig.dPsalleOp.mode_anesth && (!$currUser->_is_praticien || $currUser->_is_praticien && $can->edit)}}
+	{{if !$conf.dPsalleOp.mode_anesth && (!$currUser->_is_praticien || $currUser->_is_praticien && $can->edit)}}
     <li><a href="#timing_tab">Timings</a></li>
 	{{/if}}
 
@@ -206,7 +206,7 @@ function reloadPrescription(prescription_id){
     <li><a href="#bloodSalvage_tab">Cell Saver</a></li>
   {{/if}}
 
-	{{if !$dPconfig.dPsalleOp.mode_anesth}}
+	{{if !$conf.dPsalleOp.mode_anesth}}
 	  {{if (!$currUser->_is_praticien || ($currUser->_is_praticien && $can->edit) || ($currUser->_is_praticien && $codage_prat))}}
     <li><a href="#codage_tab">Actes</a></li>
     <li><a href="#diag_tab">Diags.</a></li>
@@ -236,7 +236,7 @@ function reloadPrescription(prescription_id){
 <hr class="control_tabs" />
 
 <!-- Timings + Personnel -->
-{{if !$dPconfig.dPsalleOp.mode_anesth && (!$currUser->_is_praticien || $currUser->_is_praticien && $can->edit)}}
+{{if !$conf.dPsalleOp.mode_anesth && (!$currUser->_is_praticien || $currUser->_is_praticien && $can->edit)}}
 <div id="timing_tab" style="display:none">
   <div id="check_lists">
     {{include file="inc_vw_operation_check_lists.tpl"}}
@@ -256,7 +256,7 @@ function reloadPrescription(prescription_id){
 {{/if}}
 
 
-{{if !$dPconfig.dPsalleOp.mode_anesth}}
+{{if !$conf.dPsalleOp.mode_anesth}}
 
 {{if (!$currUser->_is_praticien || $currUser->_is_praticien && $can->edit || $currUser->_is_praticien && $codage_prat)}}
 

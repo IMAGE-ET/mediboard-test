@@ -25,7 +25,7 @@
   {{foreach from=$_operations item=_operation}}
   <tr>
     <td style="text-align: center;">
-      {{mb_ditto name=date value=$_operation->_datetime|date_format:$dPconfig.date}}
+      {{mb_ditto name=date value=$_operation->_datetime|date_format:$conf.date}}
       <br />{{mb_ditto name=weekday value=$_operation->_datetime|date_format:"%A"}}
 			{{if $_operation->annulee}}
 			<div class="cancelled">{{tr}}Cancelled{{/tr}}</div>

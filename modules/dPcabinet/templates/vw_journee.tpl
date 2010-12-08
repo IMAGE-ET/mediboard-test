@@ -28,7 +28,7 @@ Main.add(function () {
         <tr>
           <th class="title" colspan="100">
           	Journée de consultation du
-            {{$date|date_format:$dPconfig.longdate}}
+            {{$date|date_format:$conf.longdate}}
             <input type="hidden" name="date" class="date" value="{{$date}}" onchange="this.form.submit()" />
           </th>
         </tr>

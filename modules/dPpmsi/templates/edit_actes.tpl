@@ -13,7 +13,7 @@ Main.add (function () {
   <tr>
     <th class="title" colspan="2">
       {{$selOp->_ref_sejour->_ref_patient->_view}} 
-      &mdash; {{$selOp->_datetime|date_format:$dPconfig.longdate}}
+      &mdash; {{$selOp->_datetime|date_format:$conf.longdate}}
       <br /> Chirurgien : Dr {{$selOp->_ref_chir->_view}}
       {{if $selOp->_ref_anesth->_id}}
         <br /> Anesthésiste probable : Dr {{$selOp->_ref_anesth->_view}}
@@ -41,7 +41,7 @@ Main.add (function () {
       <br />
       Côté {{tr}}COperation.cote.{{$selOp->cote}}{{/tr}}
       <br />
-      ({{$selOp->temp_operation|date_format:$dPconfig.time}})
+      ({{$selOp->temp_operation|date_format:$conf.time}})
       {{/if}}
     </th>
     <td>

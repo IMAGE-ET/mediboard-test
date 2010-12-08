@@ -49,7 +49,7 @@ selectChap = function(name_chap, oField){
   });
 }
 
-var periodes = {{$dPconfig.dPprescription.CPrisePosologie.heures|@json}};
+var periodes = {{$conf.dPprescription.CPrisePosologie.heures|@json}};
 selectPeriode = function(element) {
   var form = getForm("filter_prescription");
   var start = form.elements._dateTime_min;
@@ -223,7 +223,7 @@ selectPeriode = function(element) {
 <table class="tbl">
 	<tr>
 		<th colspan="6" class="title">Transmissions  - 
-    {{$service->_view}} - du {{$dateTime_min|date_format:$dPconfig.datetime}} au {{$dateTime_max|date_format:$dPconfig.datetime}}
+    {{$service->_view}} - du {{$dateTime_min|date_format:$conf.datetime}} au {{$dateTime_max|date_format:$conf.datetime}}
 		</th>
 	</tr>
   {{foreach from=$trans_and_obs key=patient_id item=_trans_and_obs_by_patient}}
@@ -248,7 +248,7 @@ selectPeriode = function(element) {
   {{if !$by_patient}}
 	<tr>
     <th colspan="6" class="title">{{tr}}CPrescription._chapitres.{{$key1}}{{/tr}} - 
-		{{$service->_view}} - du {{$dateTime_min|date_format:$dPconfig.datetime}} au {{$dateTime_max|date_format:$dPconfig.datetime}}</th>
+		{{$service->_view}} - du {{$dateTime_min|date_format:$conf.datetime}} au {{$dateTime_max|date_format:$conf.datetime}}</th>
   </tr>
   <tr>
     <td colspan="6" class="text">
@@ -342,7 +342,7 @@ selectPeriode = function(element) {
 							 	<td colspan="5"><strong>{{$prescription_line_mix->_view}}</strong></td>
 							</tr>
 							
-							{{if !$prescription_line_mix->signature_prat && $dPconfig.dPprescription.CPrescription.show_unsigned_med_msg}}
+							{{if !$prescription_line_mix->signature_prat && $conf.dPprescription.CPrescription.show_unsigned_med_msg}}
 								<tr>
 								  <td></td>
 		              <td class="text">
@@ -406,7 +406,7 @@ selectPeriode = function(element) {
 	              {{/if}}
 	              </td> 
 								
-								{{if !$line->signee && $line->_class_name == "CPrescriptionLineMedicament" && $dPconfig.dPprescription.CPrescription.show_unsigned_med_msg}}
+								{{if !$line->signee && $line->_class_name == "CPrescriptionLineMedicament" && $conf.dPprescription.CPrescription.show_unsigned_med_msg}}
 								<td colspan="3">
 								  <div class="small-warning">
 								  	Ligne non signée

@@ -89,8 +89,8 @@
     </th>
     <td>
       <select class="str" name="{{$m}}[{{$class}}][{{$var}}]">
-        <option value="print_fiche"  {{if "print_fiche" == $dPconfig.$m.$class.$var}} selected="selected" {{/if}}>{{tr}}config-{{$m}}-{{$class}}-{{$var}}-print_fiche{{/tr}}</option>
-        <option value="print_fiche1" {{if "print_fiche1" == $dPconfig.$m.$class.$var}} selected="selected" {{/if}}>{{tr}}config-{{$m}}-{{$class}}-{{$var}}-print_fiche1{{/tr}}</option>
+        <option value="print_fiche"  {{if "print_fiche" == $conf.$m.$class.$var}} selected="selected" {{/if}}>{{tr}}config-{{$m}}-{{$class}}-{{$var}}-print_fiche{{/tr}}</option>
+        <option value="print_fiche1" {{if "print_fiche1" == $conf.$m.$class.$var}} selected="selected" {{/if}}>{{tr}}config-{{$m}}-{{$class}}-{{$var}}-print_fiche1{{/tr}}</option>
       </select>
     </td>
   </tr>
@@ -102,7 +102,7 @@
       </label>  
     </th>
     <td>
-      <input type="text" name="{{$m}}[{{$class}}][{{$var}}]" value="{{$dPconfig.$m.$class.$var}}" />
+      <input type="text" name="{{$m}}[{{$class}}][{{$var}}]" value="{{$conf.$m.$class.$var}}" />
     </td>
   </tr>
   
@@ -114,7 +114,7 @@
       </label>  
     </th>
     <td>
-      <input type="text" name="{{$m}}[{{$class}}][{{$var}}]" value="{{$dPconfig.$m.$class.$var}}" />
+      <input type="text" name="{{$m}}[{{$class}}][{{$var}}]" value="{{$conf.$m.$class.$var}}" />
     </td>
   </tr>
   
@@ -141,7 +141,7 @@
     <td>
       <select class="num" name="{{$m}}[{{$class}}][{{$var}}]">
       {{foreach from=$hours item=_hour}}
-        <option value="{{$_hour}}" {{if $_hour == $dPconfig.$m.$class.$var}} selected="selected" {{/if}}>
+        <option value="{{$_hour}}" {{if $_hour == $conf.$m.$class.$var}} selected="selected" {{/if}}>
           {{$_hour|string_format:"%02d"}}
         </option>
       {{/foreach}}
@@ -159,7 +159,7 @@
     <td>
       <select class="num" name="{{$m}}[{{$class}}][{{$var}}]">
       {{foreach from=$hours item=_hour}}
-        <option value="{{$_hour}}" {{if $_hour == $dPconfig.$m.$class.$var}} selected="selected" {{/if}}>
+        <option value="{{$_hour}}" {{if $_hour == $conf.$m.$class.$var}} selected="selected" {{/if}}>
           {{$_hour|string_format:"%02d"}}
         </option>
       {{/foreach}}
@@ -177,7 +177,7 @@
     <td>
       <select class="num" name="{{$m}}[{{$class}}][{{$var}}]">
       {{foreach from=$intervals item=_interval}}
-        <option value="{{$_interval}}" {{if $_interval == $dPconfig.$m.$class.$var}} selected="selected" {{/if}}>
+        <option value="{{$_interval}}" {{if $_interval == $conf.$m.$class.$var}} selected="selected" {{/if}}>
           {{$_interval}}
         </option>
       {{/foreach}}

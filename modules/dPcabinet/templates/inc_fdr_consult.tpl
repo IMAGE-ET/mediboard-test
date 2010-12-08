@@ -44,7 +44,7 @@
             </script>
           </td>
       	</tr>
-        {{if $dPconfig.dPcabinet.CPrescription.view_prescription}}
+        {{if $conf.dPcabinet.CPrescription.view_prescription}}
         <tr>
           <th class="category">{{tr}}CPrescription{{/tr}}</th>
         </tr>

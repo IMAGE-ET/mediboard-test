@@ -20,7 +20,7 @@
   <tr class="clear">
     <td colspan="10">
       <h3>
-      	{{$curr_plage->date|date_format:$dPconfig.longdate}}
+      	{{$curr_plage->date|date_format:$conf.longdate}}
       	- 
       	Dr {{$curr_plage->_ref_chir->_view}}
         -
@@ -76,7 +76,7 @@
   <tbody class="hoverable">
   <tr>
     <td colspan="2"style="text-align: center;">
-      {{$_place.time|date_format:$dPconfig.time}}
+      {{$_place.time|date_format:$conf.time}}
     </td>
     <td colspan="7"></td>
   </tr>

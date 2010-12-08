@@ -223,7 +223,7 @@ Main.add(function () {
           <th class="category" colspan="2">Liste des séjours</th>
         </tr>
         {{foreach from=$patient->_ref_sejours item=_sejour}}
-          {{if $_sejour->group_id == $g || $dPconfig.dPpatients.CPatient.multi_group == "full"}}
+          {{if $_sejour->group_id == $g || $conf.dPpatients.CPatient.multi_group == "full"}}
           <tr {{if $_sejour->_id == $isSejourPatient}}class="selected{{/if}}">
             <td class="text">
               {{mb_include module=dPplanningOp template=inc_vw_numdos num_dossier=$_sejour->_num_dossier}}
@@ -244,7 +244,7 @@ Main.add(function () {
           <tr>
             <td class="text" style="text-indent: 1em;">
               <span onmouseover="ObjectTooltip.createEx(this, '{{$curr_op->_guid}}')">
-                Intervention le {{$curr_op->_datetime|date_format:$dPconfig.date}}
+                Intervention le {{$curr_op->_datetime|date_format:$conf.date}}
                 {{if $curr_op->_nb_files_docs}}
                   - ({{$curr_op->_nb_files_docs}} Doc.)
                 {{/if}}
@@ -255,10 +255,10 @@ Main.add(function () {
             </td>
           </tr>
           {{/foreach}}
-          {{elseif $dPconfig.dPpatients.CPatient.multi_group == "limited" && !$_sejour->annule}}
+          {{elseif $conf.dPpatients.CPatient.multi_group == "limited" && !$_sejour->annule}}
           <tr>
             <td>
-              Le {{$_sejour->_datetime|date_format:$dPconfig.datetime}}
+              Le {{$_sejour->_datetime|date_format:$conf.datetime}}
             </td>
             <td style="background-color:#afa">
               {{$_sejour->_ref_chir->_ref_function->_ref_group->text|upper}}

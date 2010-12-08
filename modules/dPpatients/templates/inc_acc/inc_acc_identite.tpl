@@ -68,7 +68,7 @@ changeCiviliteForSexe = function(element, assure) {
 	} 
 }
 
-var adult_age = {{$dPconfig.dPpatients.CPatient.adult_age}};
+var adult_age = {{$conf.dPpatients.CPatient.adult_age}};
 
 changeCiviliteForDate = function(element, assure) {
 	var oForm = document.editFrm.elements;

@@ -40,7 +40,7 @@ function reloadAll(subject_id, praticien_id) {
     		  </select>
         </div>
         
-        {{$date|date_format:$dPconfig.longdate}}
+        {{$date|date_format:$conf.longdate}}
         <input type="hidden" name="date" class="date" value="{{$date}}" onchange="this.form.submit()" />
 		  </form>
     </th>
@@ -68,7 +68,7 @@ function reloadAll(subject_id, praticien_id) {
 								  <th>{{mb_title object=$curr_acte field=code_phase}}</th>
 								  <th>{{mb_title object=$curr_acte field=modificateurs}}</th>
 								  <th>{{mb_title object=$curr_acte field=code_association}}</th>
-								  {{if $dPconfig.dPsalleOp.CActeCCAM.tarif}}
+								  {{if $conf.dPsalleOp.CActeCCAM.tarif}}
 								  <th>{{mb_title object=$curr_acte field=rembourse}}</th>
 								  <th>{{mb_title object=$curr_acte field=montant_base}}</th>
 								  <th>{{mb_title object=$curr_acte field=montant_depassement}}</th>
@@ -83,7 +83,7 @@ function reloadAll(subject_id, praticien_id) {
 								  <td>{{mb_value object=$curr_acte field=code_phase}}</td>
 								  <td>{{mb_value object=$curr_acte field=modificateurs}}</td>
 								  <td>{{mb_value object=$curr_acte field=code_association}}</td>
-								  {{if $dPconfig.dPsalleOp.CActeCCAM.tarif}}
+								  {{if $conf.dPsalleOp.CActeCCAM.tarif}}
 								  <td>{{mb_value object=$curr_acte field=rembourse}}</td>
 								  <td>{{mb_value object=$curr_acte field=montant_base}}</td>
 								  <td>{{mb_value object=$curr_acte field=montant_depassement}}</td>
@@ -101,7 +101,7 @@ function reloadAll(subject_id, praticien_id) {
 				      <!-- Formulaire de signature des actes ccam -->
 				      {{if @$nonSigne.$operation_id.$praticien_id}}
 				      <tr>
-				        <td {{if $dPconfig.dPsalleOp.CActeCCAM.tarif}}colspan="8"{{else}}colspan="4"{{/if}}>
+				        <td {{if $conf.dPsalleOp.CActeCCAM.tarif}}colspan="8"{{else}}colspan="4"{{/if}}>
 				        </td>
 				        <td colspan="2" style="text-align: right">
 				        {{$_praticien->_view}}

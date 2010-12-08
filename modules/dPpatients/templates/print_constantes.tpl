@@ -12,7 +12,7 @@
       </tr>
       <tr>
         {{foreach from=$_cstes_dates item=_cstes key=_date_time_cste}}
-          <th>{{mb_ditto name="datetime$uniq_ditto" value=$_date_time_cste|date_format:$dPconfig.datetime}}</th>
+          <th>{{mb_ditto name="datetime$uniq_ditto" value=$_date_time_cste|date_format:$conf.datetime}}</th>
           {{foreach from=$_cstes item=_cste}}
             <td style="text-align: center;">{{$_cste}}</td>
           {{/foreach}}

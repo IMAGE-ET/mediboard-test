@@ -21,7 +21,7 @@ submitPrepaForm = function(oFormPrepa) {
   <tr>
     <td class="text">
       {{if $_operation->rank}}
-        {{$_operation->_datetime|date_format:$dPconfig.time}}
+        {{$_operation->_datetime|date_format:$conf.time}}
       {{else}}
         NP
       {{/if}}

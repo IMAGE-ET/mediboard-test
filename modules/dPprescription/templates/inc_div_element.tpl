@@ -41,7 +41,7 @@ Main.add( function(){
 <table class="form">
 	{{assign var=variable_droits value="droits_infirmiers_$element"}}
 
-	{{if ($is_praticien || $mode_protocole || @$operation_id || $can->admin || ($current_user->isInfirmiere() && $dPconfig.dPprescription.CPrescription.$variable_droits))}}
+	{{if ($is_praticien || $mode_protocole || @$operation_id || $can->admin || ($current_user->isInfirmiere() && $conf.dPprescription.CPrescription.$variable_droits))}}
 	  {{assign var=perm_add_line value=1}}
 	{{else}}
     {{assign var=perm_add_line value=0}}  
@@ -78,7 +78,7 @@ Main.add( function(){
 				
 			  <!-- Boutons d'ajout d'elements et de commentaires -->
 				<span id="addComment-{{$element}}">
-				  {{if $dPconfig.dPprescription.CPrescription.add_element_category}}
+				  {{if $conf.dPprescription.CPrescription.add_element_category}}
 				  <button class="new" onclick="toggleFieldComment(this, $('add_{{$element}}'), 'élément'); headerPrescriptionTabs.setActiveTab('div_ajout_lignes');">Ajouter élément</button>
 				  {{/if}}
 				  <button class="new" onclick="toggleFieldComment(this, $('add_line_comment_{{$element}}'), 'commentaire');" type="button">Ajouter commentaire</button>
@@ -115,7 +115,7 @@ Main.add( function(){
 		<tr>
 	    <td colspan="2">
 		    <!-- Div d'ajout d'element dans la prescription (et dans la nomenclature) -->
-				{{if $dPconfig.dPprescription.CPrescription.add_element_category}}
+				{{if $conf.dPprescription.CPrescription.add_element_category}}
 					<div>
 					  {{if !$categories.$element|@count}}
 					    <div class="small-info">

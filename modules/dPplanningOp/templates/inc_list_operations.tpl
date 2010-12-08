@@ -6,7 +6,7 @@
 </script>
 
 <form action="?" name="changeDate" method="get" style="font-weight:bold; padding: 2px; text-align:center; display: block;">
-  {{$date|date_format:$dPconfig.longdate}}
+  {{$date|date_format:$conf.longdate}}
   <input type="hidden" name="m" value="{{$m}}" />
   <input type="hidden" name="tab" value="vw_idx_planning" />
   <input type="hidden" name="date" class="date" value="{{$date}}" onchange="this.form.submit()" />
@@ -33,8 +33,8 @@
   <tr>
     <th colspan="6">
     	{{$curr_plage->_ref_salle->_view}} : 
-    	de {{$curr_plage->debut|date_format:$dPconfig.time}} 
-    	à {{$curr_plage->fin|date_format:$dPconfig.time}}
+    	de {{$curr_plage->debut|date_format:$conf.time}} 
+    	à {{$curr_plage->fin|date_format:$conf.time}}
     </th>
   </tr>
   
@@ -62,7 +62,7 @@
         {{if $_operation->time_operation != "00:00:00"}}
           Validé pour 
           {{if !$app->user_prefs.dPplanningOp_listeCompacte}}<br />{{/if}}
-          {{$_operation->time_operation|date_format:$dPconfig.time}}
+          {{$_operation->time_operation|date_format:$conf.time}}
         {{else}}
           Non validé
         {{/if}}
@@ -70,13 +70,13 @@
         {{if $_operation->horaire_voulu}}
         souhaité pour 
         {{if !$app->user_prefs.dPplanningOp_listeCompacte}}<br />{{/if}}
-        {{$_operation->horaire_voulu|date_format:$dPconfig.time}}
+        {{$_operation->horaire_voulu|date_format:$conf.time}}
         {{/if}}
       </a>
     </td>
     <td class="top" style="text-align: center;">
       <a href="?m={{$m}}&amp;tab=vw_edit_planning&amp;operation_id={{$_operation->_id}}">
-        {{$_operation->temp_operation|date_format:$dPconfig.time}}
+        {{$_operation->temp_operation|date_format:$conf.time}}
       </a>
     </td>
     {{/if}}
@@ -129,7 +129,7 @@
     </td>
     <td class="top" style="text-align: center;">
       <a href="?m={{$m}}&amp;tab=vw_edit_urgence&amp;operation_id={{$_operation->_id}}">
-        {{$_operation->temp_operation|date_format:$dPconfig.time}}
+        {{$_operation->temp_operation|date_format:$conf.time}}
       </a>
     </td>
   </tr>

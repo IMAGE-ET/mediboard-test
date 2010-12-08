@@ -44,7 +44,7 @@ refreshAdministrations = function(){
   {{foreach from=$prescription_line_mix->_ref_lines item=_perf_line}}
   
   <tr>
-	  <th class="title text" colspan="2">Administration de {{$_perf_line->_view}} à {{$dateTime|date_format:$dPconfig.datetime}}</th>
+	  <th class="title text" colspan="2">Administration de {{$_perf_line->_view}} à {{$dateTime|date_format:$conf.datetime}}</th>
 	</tr>
   {{assign var=perf_line_id value=$_perf_line->_id}}
   {{if $administrations.$perf_line_id|@count}}

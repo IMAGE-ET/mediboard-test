@@ -1,5 +1,5 @@
 <!-- Send File -->
-{{if $dPconfig.dPfiles.system_sender}}
+{{if $conf.dPfiles.system_sender}}
 
 {{if $_doc_item->_send_problem}}
 <button class="send-problem {{$notext}}" type="button" 

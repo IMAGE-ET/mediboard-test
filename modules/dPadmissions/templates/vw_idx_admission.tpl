@@ -70,7 +70,7 @@ function submitCote(oForm) {
 }
 
 function submitAdmission(oForm, bPassCheck) {
-  {{if @$modules.hprim21 && $dPconfig.hprim21.mandatory_num_dos_ipp_adm}}
+  {{if @$modules.hprim21 && $conf.hprim21.mandatory_num_dos_ipp_adm}}
     var oIPPForm = document.forms["editIPP" + oForm.patient_id.value];
     var oNumDosForm = document.forms["editNumdos" + oForm.sejour_id.value];
     if(!bPassCheck && oIPPForm && oNumDosForm && (!$V(oIPPForm.id400) || !$V(oNumDosForm.id400)) ) {

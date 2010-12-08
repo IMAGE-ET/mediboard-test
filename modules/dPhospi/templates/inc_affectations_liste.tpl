@@ -23,7 +23,7 @@
 <table class="sejourcollapse" id="sejour_{{$_sejour->_id}}">
   <tr>
     <td class="selectsejour" style="background:#{{$_sejour->_ref_praticien->_ref_function->color}}">
-      {{if !$dPconfig.dPhospi.pathologies || $_sejour->pathologie}}  
+      {{if !$conf.dPhospi.pathologies || $_sejour->pathologie}}  
       <input type="radio" id="hospitalisation{{$_sejour->_id}}" onclick="selectHospitalisation({{$_sejour->_id}})" />
       <script type="text/javascript">new Draggable('sejour_{{$_sejour->_id}}', {revert: true, scroll: window})</script>
       {{/if}}

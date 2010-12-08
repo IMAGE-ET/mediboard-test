@@ -5,7 +5,7 @@
   url.requestUpdate("openoffice");
 }*/
 Main.add(function() {
-  {{*if $dPconfig.dPfiles.CFile.openoffice_active*}}
+  {{*if $conf.dPfiles.CFile.openoffice_active*}}
     //launch(-1);
   {{*/if*}}
   Control.Tabs.create('tabs-configure', true);
@@ -36,7 +36,7 @@ Main.add(function() {
         </label>  
       </th>
       <td style="width: 50%">
-        <input name="{{$m}}[{{$class}}][{{$var}}]" value="{{$dPconfig.$m.$class.$var}}" />
+        <input name="{{$m}}[{{$class}}][{{$var}}]" value="{{$conf.$m.$class.$var}}" />
       </td>
     </tr>  
   		
@@ -49,7 +49,7 @@ Main.add(function() {
       </th>
       <td>
         <select class="num" name="{{$m}}[{{$var}}]">
-        {{html_options values=$listNbFiles output=$listNbFiles selected=$dPconfig.$m.$var}}
+        {{html_options values=$listNbFiles output=$listNbFiles selected=$conf.$m.$var}}
         </select>
       </td>
     </tr>  
@@ -61,7 +61,7 @@ Main.add(function() {
           {{tr}}config-{{$m}}-{{$var}}{{/tr}}
         </label>  
       </th>
-      <td><input type="text" class="str maxLength|4" name="{{$m}}[{{$var}}]" value="{{$dPconfig.$m.$var}}"/></td>
+      <td><input type="text" class="str maxLength|4" name="{{$m}}[{{$var}}]" value="{{$conf.$m.$var}}"/></td>
     </tr>
 
     <tr>
@@ -71,7 +71,7 @@ Main.add(function() {
           {{tr}}config-{{$m}}-{{$var}}{{/tr}}
         </label>  
       </th>
-      <td><input type="text" class="str maxLength|100" name="{{$m}}[{{$var}}]" value="{{$dPconfig.$m.$var}}"/></td>
+      <td><input type="text" class="str maxLength|100" name="{{$m}}[{{$var}}]" value="{{$conf.$m.$var}}"/></td>
     </tr>
     <tr>
       <td class="button" colspan="2">
@@ -87,7 +87,7 @@ Main.add(function() {
     {{*mb_include module=system template=inc_config_bool var=openoffice_active*}}
   
     {{*mb_include module=system template=inc_config_str var=openoffice_path*}}
-    {{*if $dPconfig.dPfiles.CFile.openoffice_active*}}
+    {{*if $conf.dPfiles.CFile.openoffice_active*}}
     <tr>
       <td style="text-align: right;">
         <button class="new" type="button" onclick="launch(1)">Lancer Openoffice</button>
@@ -132,9 +132,9 @@ Main.add(function() {
       </th>
       <td>
         <select class="str" name="{{$m}}[{{$var}}]">
-          <option value="" {{if "" == $dPconfig.$m.$var}} selected="selected" {{/if}}>Aucun</option>
-          <option value="CEcDocumentSender" {{if "CEcDocumentSender" == $dPconfig.$m.$var}} selected="selected" {{/if}}>{{tr}}CEcDocumentSender{{/tr}}</option>
-          <option value="CMedinetSender"    {{if "CMedinetSender"    == $dPconfig.$m.$var}} selected="selected" {{/if}}>{{tr}}CMedinetSender{{/tr}}</option>
+          <option value="" {{if "" == $conf.$m.$var}} selected="selected" {{/if}}>Aucun</option>
+          <option value="CEcDocumentSender" {{if "CEcDocumentSender" == $conf.$m.$var}} selected="selected" {{/if}}>{{tr}}CEcDocumentSender{{/tr}}</option>
+          <option value="CMedinetSender"    {{if "CMedinetSender"    == $conf.$m.$var}} selected="selected" {{/if}}>{{tr}}CMedinetSender{{/tr}}</option>
         </select>
       </td>
     </tr>  
@@ -147,7 +147,7 @@ Main.add(function() {
          </label>  
        </th>
        <td>
-         <input class="str" size="30" name="{{$m}}[{{$var}}]" value="{{$dPconfig.$m.$var}}" />
+         <input class="str" size="30" name="{{$m}}[{{$var}}]" value="{{$conf.$m.$var}}" />
        </td>
      </tr>
      

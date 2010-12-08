@@ -12,7 +12,7 @@
         {{else}}
           -
         {{/if}}
-        {{$_plage->debut|date_format:$dPconfig.time}} à {{$_plage->fin|date_format:$dPconfig.time}}
+        {{$_plage->debut|date_format:$conf.time}} à {{$_plage->fin|date_format:$conf.time}}
       </a>
     </th>
   </tr>

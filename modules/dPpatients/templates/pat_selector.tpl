@@ -197,7 +197,7 @@ Intermax.ResultHandler["Lire Vitale"] = function() {
       <th><label for="firstName" title="Prénom du patient à rechercher, au moins les premières lettres">Prénom</label></th>
       <td><input name="firstName" value="{{$firstName|stripslashes}}" size="30" tabindex="2" /></td>
 
-      {{if $dPconfig.dPpatients.CPatient.tag_ipp && $dPsanteInstalled}}
+      {{if $conf.dPpatients.CPatient.tag_ipp && $dPsanteInstalled}}
         <th>IPP</th>
         <td>
           <input tabindex="6" type="text" name="patient_ipp" value="{{$patient_ipp}}"/>
@@ -244,9 +244,9 @@ Intermax.ResultHandler["Lire Vitale"] = function() {
 </form>
 {{/if}}
 
-{{if $dPconfig.dPpatients.CPatient.limit_char_search && ($name != $name_search || $firstName != $firstName_search)}}
+{{if $conf.dPpatients.CPatient.limit_char_search && ($name != $name_search || $firstName != $firstName_search)}}
 <div class="small-info">
-  La recherche est volontairement limitée aux {{$dPconfig.dPpatients.CPatient.limit_char_search}} premiers caractères 
+  La recherche est volontairement limitée aux {{$conf.dPpatients.CPatient.limit_char_search}} premiers caractères 
   <ul>
     {{if $name != $name_search}}
     <li>pour le <strong>nom</strong> : '{{$name_search}}'</li>

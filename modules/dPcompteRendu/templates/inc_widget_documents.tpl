@@ -145,7 +145,7 @@
 	    </form>
  	  </td> 
 
-    {{if $dPconfig.dPfiles.system_sender}}
+    {{if $conf.dPfiles.system_sender}}
  	  <td class="button" style="width: 1px">
  	    <form name="Send-{{$document->_guid}}" action="?m={{$m}}" method="post" onsubmit="return checkForm(this)">
   	    <input type="hidden" name="m" value="dPcompteRendu" />

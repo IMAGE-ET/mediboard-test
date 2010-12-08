@@ -11,7 +11,7 @@
         </tr>
         <tr>
           <th>Date </th>
-          <td style="font-size: 1.3em;">{{$consult->_ref_plageconsult->date|date_format:$dPconfig.longdate}}</td>
+          <td style="font-size: 1.3em;">{{$consult->_ref_plageconsult->date|date_format:$conf.longdate}}</td>
           <th>Anesthésiste </th>
           <td style="font-size: 1.3em;">Dr {{$consult->_ref_chir->_view}}</td>
         </tr>

@@ -72,7 +72,7 @@ function popEtatSejour(sejour_id) {
 </tr>
 <tbody class="patientEffect" style="display: none" id="sejours">
 {{foreach from=$patient->_ref_sejours item=_sejour}}
-  {{if $_sejour->group_id == $g || $dPconfig.dPpatients.CPatient.multi_group == "full"}}
+  {{if $_sejour->group_id == $g || $conf.dPpatients.CPatient.multi_group == "full"}}
     <tr id="CSejour-{{$_sejour->_id}}">
       <td class="narrow">
         <button class="lookup notext" onclick="popEtatSejour({{$_sejour->_id}});">{{tr}}Lookup{{/tr}}</button>
@@ -112,7 +112,7 @@ function popEtatSejour(sejour_id) {
         <a class="iconed-text {{$_consult->_type}}" style="margin-left: 20px" href="#"
           onclick="viewCompleteItem('{{$_consult->_guid}}'); ViewFullPatient.select(this)">
           <span onmouseover="ObjectTooltip.createEx(this, '{{$_consult->_guid}}');">
-            Consult. le {{$_consult->_datetime|date_format:$dPconfig.date}}
+            Consult. le {{$_consult->_datetime|date_format:$conf.date}}
           </span>
         </a>
       </td>
@@ -142,7 +142,7 @@ function popEtatSejour(sejour_id) {
         <a href="#" class="iconed-text interv" style="margin-left: 20px" 
            onclick="viewCompleteItem('{{$_op->_guid}}'); ViewFullPatient.select(this)">
           <span onmouseover="ObjectTooltip.createEx(this, '{{$_op->_guid}}')">
-            Interv. le {{$_op->_datetime|date_format:$dPconfig.date}}
+            Interv. le {{$_op->_datetime|date_format:$conf.date}}
           </span>
         </a>
       </td>
@@ -168,7 +168,7 @@ function popEtatSejour(sejour_id) {
           {{if $consult_anesth->_id}}class="iconed-text anesth"{{/if}} 
           onmouseover="ObjectTooltip.createEx(this, '{{$consult_anesth->_guid}}')"
           onclick="viewCompleteItem('{{$consult_anesth->_guid}}'); ViewFullPatient.select(this)">
-          Consult le {{$_consult->_datetime|date_format:$dPconfig.date}}
+          Consult le {{$_consult->_datetime|date_format:$conf.date}}
         </span>
       </td>
     
@@ -189,7 +189,7 @@ function popEtatSejour(sejour_id) {
     </tr>
   {{/if}}
   {{/foreach}}
-{{elseif $dPconfig.dPpatients.CPatient.multi_group == "limited" && !$_sejour->annule}}
+{{elseif $conf.dPpatients.CPatient.multi_group == "limited" && !$_sejour->annule}}
   <tr>
     <td colspan="2">
       {{$_sejour->_shortview}}
@@ -219,12 +219,12 @@ function popEtatSejour(sejour_id) {
 <tbody class="patientEffect" style="display: none" id="consultations">
 
 {{foreach from=$patient->_ref_consultations item=_consult}}
-  {{if $_consult->_ref_chir->_ref_function->group_id == $g || $dPconfig.dPpatients.CPatient.multi_group == "full"}}
+  {{if $_consult->_ref_chir->_ref_function->group_id == $g || $conf.dPpatients.CPatient.multi_group == "full"}}
   <tr>
     <td colspan="2">
       <a href="#" class="iconed-text {{$_consult->_type}}"  onclick="viewCompleteItem('{{$_consult->_guid}}'); ViewFullPatient.select(this)">
         <span onmouseover="ObjectTooltip.createEx(this, '{{$_consult->_guid}}');">
-          Consult. le {{$_consult->_datetime|date_format:$dPconfig.date}}
+          Consult. le {{$_consult->_datetime|date_format:$conf.date}}
         </span>
       </a>
     </td>
@@ -244,10 +244,10 @@ function popEtatSejour(sejour_id) {
     {{/if}}
     </td>
   </tr>
-  {{elseif $dPconfig.dPpatients.CPatient.multi_group == "limited" && !$_consult->annule}}
+  {{elseif $conf.dPpatients.CPatient.multi_group == "limited" && !$_consult->annule}}
   <tr>
     <td colspan="2">
-      Le {{$_consult->_datetime|date_format:$dPconfig.datetime}}
+      Le {{$_consult->_datetime|date_format:$conf.datetime}}
     </td>
     <td style="background-color:#afa" colspan="2">
       {{$_consult->_ref_chir->_ref_function->_ref_group->text|upper}}

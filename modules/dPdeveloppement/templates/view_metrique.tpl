@@ -39,7 +39,7 @@ Main.add(function () {
 	    <td>{{$curr_result.Rows}}</td>
 	    <td>
 	      {{assign var=relative value=$curr_result.Update_relative}}
-	      <label title="{{$curr_result.Update_time|date_format:$dPconfig.datetime}}">
+	      <label title="{{$curr_result.Update_time|date_format:$conf.datetime}}">
 	      	{{$relative.count}} {{tr}}{{$relative.unit}}{{if $relative.count > 1}}s{{/if}}{{/tr}}
 	      </label>
 	    </td>

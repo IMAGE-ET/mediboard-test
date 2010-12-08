@@ -16,10 +16,10 @@
   </td>
   <td  style="text-align: center">
     <strong>
-      {{mb_ditto name=date value=$_suivi->date|date_format:$dPconfig.date}}
+      {{mb_ditto name=date value=$_suivi->date|date_format:$conf.date}}
     </strong>
   </td>
-  <td>{{$_suivi->date|date_format:$dPconfig.time}}</td>
+  <td>{{$_suivi->date|date_format:$conf.time}}</td>
   <td class="text" colspan="2"
     {{if $_suivi->degre == "high"}} style="background-color: #faa" {{/if}} 
     {{if $_suivi->degre == "info"}} style="background-color: #aaf" {{/if}}>
@@ -65,9 +65,9 @@
   <td class="narrow">{{tr}}{{$_suivi->_class_name}}{{/tr}}</td>
   <td class="narrow">{{$_suivi->_ref_user}}</td>
   <td style="text-align: center;" class="narrow">
-    {{mb_ditto name=date value=$_suivi->date|date_format:$dPconfig.date}}
+    {{mb_ditto name=date value=$_suivi->date|date_format:$conf.date}}
   </td>
-  <td class="narrow">{{$_suivi->date|date_format:$dPconfig.time}}</td>
+  <td class="narrow">{{$_suivi->date|date_format:$conf.time}}</td>
   <td class="text" style="height: 22px;">
 	  {{if $_suivi->object_id && $_suivi->object_class}}
 	    <a href="#1" onclick="if($('cibleTrans')){ $('cibleTrans').update('{{$_suivi->_ref_object}}'); $V(document.forms.editTrans.object_id, '{{$_suivi->object_id}}'); 
@@ -146,9 +146,9 @@
     {{$_suivi->_ref_user}}
   </td>
   <td style="text-align: center">
-     {{mb_ditto name=date value=$_suivi->datetime|date_format:$dPconfig.date}}
+     {{mb_ditto name=date value=$_suivi->datetime|date_format:$conf.date}}
   </td>
-  <td>{{$_suivi->datetime|date_format:$dPconfig.time}}</td>
+  <td>{{$_suivi->datetime|date_format:$conf.time}}</td>
   <td colspan="2" class="text">
     {{foreach from=$params key=_key item=_field name="const"}}
       {{if $_suivi->$_key != null && $_key|substr:0:1 != "_"}}
@@ -164,7 +164,7 @@
   <td>Prescription</td>
 	<td>{{mb_value object=$_suivi field="praticien_id"}}</td>
   <td style="text-align: center">
-  	{{mb_ditto name=date value=$_suivi->debut|date_format:$dPconfig.date}}
+  	{{mb_ditto name=date value=$_suivi->debut|date_format:$conf.date}}
 	</td>
 	<td>{{mb_value object=$_suivi field="time_debut"}}</td>
 	<td></td>

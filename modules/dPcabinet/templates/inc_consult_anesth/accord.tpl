@@ -11,7 +11,7 @@
 
 <script type="text/javascript">
 
-{{if $isPrescriptionInstalled && $dPconfig.dPcabinet.CPrescription.view_prescription}}
+{{if $isPrescriptionInstalled && $conf.dPcabinet.CPrescription.view_prescription}}
 function reloadPrescription(prescription_id){
   Prescription.reloadPrescSejour(prescription_id, '','', '1', null, null, null,'', null, false);
 }
@@ -50,12 +50,12 @@ Main.add(function () {
   <li><a href="#Intub">Intubation</a></li>
   <li><a href="#ExamsComp">Exam. Comp.</a></li>
   <li><a href="#InfoAnesth">Infos. Anesth.</a></li>
-	{{if $isPrescriptionInstalled && $dPconfig.dPcabinet.CPrescription.view_prescription}}
+	{{if $isPrescriptionInstalled && $conf.dPcabinet.CPrescription.view_prescription}}
 	  <li onmousedown="Prescription.reloadPrescSejour('', DossierMedical.sejour_id,'', '1', null, null, null,'', null, false);">
 	    <a href="#prescription_sejour">Trait. et prescription</a>
 	  </li>
   {{/if}}
-	{{if $dPconfig.dPcabinet.CConsultAnesth.show_facteurs_risque}}
+	{{if $conf.dPcabinet.CConsultAnesth.show_facteurs_risque}}
     <li onmousedown="refreshFacteursRisque();"><a href="#facteursRisque">Facteurs de risque</a></li>
   {{/if}}
   {{if $app->user_prefs.ccam_consultation == 1}}
@@ -83,11 +83,11 @@ Main.add(function () {
 <div id="ExamsComp" style="display: none;">{{include file="../../dPcabinet/templates/inc_consult_anesth/acc_examens_complementaire.tpl"}}</div>
 <div id="InfoAnesth" style="display: none;">{{include file="../../dPcabinet/templates/inc_consult_anesth/acc_infos_anesth.tpl"}}</div>
 
-{{if $isPrescriptionInstalled && $dPconfig.dPcabinet.CPrescription.view_prescription}}
+{{if $isPrescriptionInstalled && $conf.dPcabinet.CPrescription.view_prescription}}
 <div id="prescription_sejour" style="display: none"></div>
 {{/if}}
 
-{{if $dPconfig.dPcabinet.CConsultAnesth.show_facteurs_risque}}
+{{if $conf.dPcabinet.CConsultAnesth.show_facteurs_risque}}
 <div id="facteursRisque" style="display: none;"></div>
 {{/if}}
 

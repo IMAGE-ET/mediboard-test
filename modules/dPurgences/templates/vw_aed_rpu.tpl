@@ -12,7 +12,7 @@
 {{mb_include_script module="dPcabinet" script="yoplet"}}
 {{if $app->user_prefs.directory_to_watch != ''}}
   <script type="text/javascript">
-    File.applet.extensions = '{{$dPconfig.dPfiles.extensions_yoplet}}';
+    File.applet.extensions = '{{$conf.dPfiles.extensions_yoplet}}';
     File.appletDirectory = "{{$app->user_prefs.directory_to_watch|addslashes}}";
   </script>
   
@@ -262,12 +262,12 @@
 		  </th>
 		  <td>
 		  	<input type="text" name="_patient_view" size="20" value="{{$patient->_view}}" 
-		  	  {{if $dPconfig.dPurgences.allow_change_patient || !$sejour->_id || $app->user_type == 1}} 
+		  	  {{if $conf.dPurgences.allow_change_patient || !$sejour->_id || $app->user_type == 1}} 
 		  	    ondblclick="PatSelector.init()" 
 		  	  {{/if}}
 		  	readonly="readonly" />
 		    
-		    {{if $dPconfig.dPurgences.allow_change_patient || !$sejour->_id || $app->user_type == 1}} 
+		    {{if $conf.dPurgences.allow_change_patient || !$sejour->_id || $app->user_type == 1}} 
 		      <button type="button" class="search" onclick="PatSelector.init()">{{tr}}Search{{/tr}}</button>
 		    {{/if}}
 		    <script type="text/javascript">
@@ -288,7 +288,7 @@
 		    
 	    </td>
 	    
-	    {{if $dPconfig.dPurgences.old_rpu == "1"}}
+	    {{if $conf.dPurgences.old_rpu == "1"}}
 	    <th>{{mb_label object=$rpu field="urprov"}}</th>
 	    <td>{{mb_field object=$rpu field="urprov" defaultOption="&mdash; Provenance"}}</td>
 	    {{else}}
@@ -361,7 +361,7 @@
                   objectClass: "{{$rpu->_class_name}}",
                   contextUserId: "{{$userSel->_id}}",
                   contextUserView: "{{$userSel->_view}}",
-                  timestamp: "{{$dPconfig.dPcompteRendu.CCompteRendu.timestamp}}",
+                  timestamp: "{{$conf.dPcompteRendu.CCompteRendu.timestamp}}",
                   resetSearchField: false,
                   resetDependFields: false,
                   validateOnBlur: false
@@ -370,7 +370,7 @@
                   objectClass: "{{$rpu->_class_name}}",
                   contextUserId: "{{$userSel->_id}}",
                   contextUserView: "{{$userSel->_view}}",
-                  timestamp: "{{$dPconfig.dPcompteRendu.CCompteRendu.timestamp}}",
+                  timestamp: "{{$conf.dPcompteRendu.CCompteRendu.timestamp}}",
                   resetSearchField: false,
                   resetDependFields: false,
                   validateOnBlur: false
@@ -448,7 +448,7 @@
 		  {{if $app->user_prefs.ccam_sejour == 1 }}
 		  <li><a href="#actes">Cotation infirmière</a></li>
 		  {{/if}}
-			{{if $isPrescriptionInstalled && $modules.dPprescription->_can->read && !$dPconfig.dPprescription.CPrescription.prescription_suivi_soins}}
+			{{if $isPrescriptionInstalled && $modules.dPprescription->_can->read && !$conf.dPprescription.CPrescription.prescription_suivi_soins}}
 		  <li {{if $consult->sejour_id}} onclick="Prescription.reloadPrescSejour('', '{{$consult->sejour_id}}','', '', null, null, null,'');" {{/if}}><a href="#prescription_sejour">Prescription</a></li>
 		  {{/if}}
 		  {{if @$modules.dPImeds->mod_active}}
@@ -477,7 +477,7 @@
 		<div id="actes" style="display: none;">
 		  <ul id="tab-actes" class="control_tabs">
 		    <li><a href="#ngap">Actes NGAP</a></li>
-		    {{if $dPconfig.dPccam.CCodable.use_frais_divers.CSejour}}
+		    {{if $conf.dPccam.CCodable.use_frais_divers.CSejour}}
         <li><a href="#fraisdivers">Frais divers</a></li>
         {{/if}}
 		  </ul>
@@ -490,7 +490,7 @@
 		  </table>
 		  
 		  
-		  {{if $dPconfig.dPccam.CCodable.use_frais_divers.CSejour}}   
+		  {{if $conf.dPccam.CCodable.use_frais_divers.CSejour}}   
 		  <table class="form">
         <tr id="fraisdivers" style="display: none;">
           <td id="listFraisDivers">{{mb_include module=dPccam template=inc_frais_divers object=$sejour}}</td>

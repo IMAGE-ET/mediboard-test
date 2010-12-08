@@ -246,7 +246,7 @@ Main.add( function(){
         	          {{mb_value object=$consult field="secteur2"}} (S2)
                   {{else}}
                     <input type="text" size="6" name="_somme" class="notNull currency" value="{{$consult->secteur1+$consult->secteur2}}" onchange="modifSecteur2()" /> 
-                    {{$dPconfig.currency_symbol}}
+                    {{$conf.currency_symbol}}
 										<br />
                     {{mb_label object=$consult field="secteur1"}}
         	          {{mb_field object=$consult field="secteur1" onchange="modifTotal()"}} +
@@ -379,7 +379,7 @@ Main.add( function(){
                       <td>{{mb_value object=$_reglement field=montant}}</td>
                       <td>
                       	<label title="{{mb_value object=$_reglement field=date}}">
-												{{$_reglement->date|date_format:$dPconfig.date}}
+												{{$_reglement->date|date_format:$conf.date}}
 											</td>
                       <td>
                         <a class="button remove notext" href="" onclick="return Reglement.cancel({{$_reglement->_id}});"></a>

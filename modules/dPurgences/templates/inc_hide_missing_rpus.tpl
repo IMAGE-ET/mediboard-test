@@ -10,7 +10,7 @@
 
 
 <div>
-	<label style="visibility: hidden;" class="veille" title="Cacher les admissions non-sorties des {{$dPconfig.dPurgences.date_tolerance}} derniers jours">
+	<label style="visibility: hidden;" class="veille" title="Cacher les admissions non-sorties des {{$conf.dPurgences.date_tolerance}} derniers jours">
 	  <input type="checkbox" onchange="Veille.toggle(this);" />
 	  {{tr}}Hide{{/tr}}
 	  <span>0</span> admission(s) antérieure(s) 

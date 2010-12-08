@@ -56,6 +56,6 @@
 	</tr>
 </table>
 
-{{if $dPconfig.sip.verify_repair}}
+{{if $conf.sip.verify_repair}}
 <div class="small-info">Vous êtes en mode vérification des réparations à effectuer.</div>
 {{/if}}

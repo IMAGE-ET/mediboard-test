@@ -1,7 +1,7 @@
-{{assign var=pdf_thumbnails value=$dPconfig.dPcompteRendu.CCompteRendu.pdf_thumbnails}}
+{{assign var=pdf_thumbnails value=$conf.dPcompteRendu.CCompteRendu.pdf_thumbnails}}
 
 <script type="text/javascript">
-window.same_print = {{$dPconfig.dPcompteRendu.CCompteRendu.same_print}};
+window.same_print = {{$conf.dPcompteRendu.CCompteRendu.same_print}};
 window.pdf_thumbnails = {{$pdf_thumbnails|@json}};
 function popFile(objectClass, objectId, elementClass, elementId, sfn){
   var url = new Url;

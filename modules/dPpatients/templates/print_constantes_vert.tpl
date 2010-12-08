@@ -8,7 +8,7 @@
         <th></th>
         {{foreach from=$_cstes_dates item=_cstes key=_date_time_cste}}
           {{if $one_date == 1}}
-            <th style="text-align: center;">{{mb_ditto name="datetime$uniq_ditto" value=$_date_time_cste|date_format:$dPconfig.datetime}}</th>
+            <th style="text-align: center;">{{mb_ditto name="datetime$uniq_ditto" value=$_date_time_cste|date_format:$conf.datetime}}</th>
           {{/if}}
           {{assign var="one_date" value="0"}}
           </tr>

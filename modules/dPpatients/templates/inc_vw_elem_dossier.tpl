@@ -2,7 +2,7 @@
 
 {{if $object instanceof CSejour}}
 
-{{if $object->group_id == $g || $dPconfig.dPpatients.CPatient.multi_group == "full"}}
+{{if $object->group_id == $g || $conf.dPpatients.CPatient.multi_group == "full"}}
 <tr {{if isset($collision_sejour|smarty:nodefaults) && $object->_id == $collision_sejour}}
       style="border: 2px solid red;"
     {{/if}}>
@@ -39,7 +39,7 @@
     <a href="#nothing" class="iconed-text {{$_consult->_type}}">
     {{/if}}
       <span onmouseover="ObjectTooltip.createEx(this, '{{$_consult->_guid}}')">
-      Consultation le {{$_consult->_datetime|date_format:$dPconfig.date}}
+      Consultation le {{$_consult->_datetime|date_format:$conf.date}}
       {{if $_consult->_nb_files_docs}}
         - ({{$_consult->_nb_files_docs}} Doc.)
       {{/if}}
@@ -64,7 +64,7 @@
     <a href="#nothing" class="iconed-text interv">
     {{/if}}
       <span onmouseover="ObjectTooltip.createEx(this, '{{$curr_op->_guid}}')">
-      Intervention le {{$curr_op->_datetime|date_format:$dPconfig.date}}
+      Intervention le {{$curr_op->_datetime|date_format:$conf.date}}
       {{if $curr_op->_nb_files_docs}}
         - ({{$curr_op->_nb_files_docs}} Doc.)
       {{/if}}
@@ -76,7 +76,7 @@
   </td>
 </tr>
 {{/foreach}}
-{{elseif $dPconfig.dPpatients.CPatient.multi_group == "limited" && !$object->annule}}
+{{elseif $conf.dPpatients.CPatient.multi_group == "limited" && !$object->annule}}
 <tr>
   <td>
     {{$object->_shortview}}
@@ -89,7 +89,7 @@
 
 {{elseif $object instanceof CConsultation}}
 
-{{if $object->_ref_chir->_ref_function->group_id == $g || $dPconfig.dPpatients.CPatient.multi_group == "full"}}
+{{if $object->_ref_chir->_ref_function->group_id == $g || $conf.dPpatients.CPatient.multi_group == "full"}}
 <tr>
   <td class="text">
     {{if $object->_canRead}}
@@ -104,7 +104,7 @@
     <a href="#nothing" class="iconed-text {{$object->_type}}">
     {{/if}}
     <span onmouseover="ObjectTooltip.createEx(this, '{{$object->_guid}}')">
-      Le {{$object->_datetime|date_format:$dPconfig.datetime}} - {{$object->_etat}}
+      Le {{$object->_datetime|date_format:$conf.datetime}} - {{$object->_etat}}
     </span>
     </a>
   </td>
@@ -112,10 +112,10 @@
     {{mb_include module=mediusers template=inc_vw_mediuser mediuser=$object->_ref_chir}}
   </td>
 </tr>
-{{elseif $dPconfig.dPpatients.CPatient.multi_group == "limited" && !$object->annule}}
+{{elseif $conf.dPpatients.CPatient.multi_group == "limited" && !$object->annule}}
 <tr>
   <td>
-    Le {{$object->_datetime|date_format:$dPconfig.datetime}}
+    Le {{$object->_datetime|date_format:$conf.datetime}}
   </td>
   <td style="background-color:#afa">
     {{$object->_ref_chir->_ref_function->_ref_group->text|upper}}

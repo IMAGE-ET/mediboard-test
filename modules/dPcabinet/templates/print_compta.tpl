@@ -118,7 +118,7 @@
   {{if $filter->_type_affichage}}
   {{foreach from=$listReglements key=key_date item=_date}}
   <tr>
-    <td colspan="2"><strong>Règlements du {{$key_date|date_format:$dPconfig.longdate}}</strong></td>
+    <td colspan="2"><strong>Règlements du {{$key_date|date_format:$conf.longdate}}</strong></td>
   </tr>
   <tr>
     <td colspan="2">

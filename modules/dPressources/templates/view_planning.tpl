@@ -15,7 +15,7 @@ Main.add(function () {
   <tr>
     <th class="title">
       <a href="?m={{$m}}&amp;debut={{$prec}}">&lt;&lt;&lt;</a>
-      semaine du {{$debut|date_format:$dPconfig.longdate}}
+      semaine du {{$debut|date_format:$conf.longdate}}
       <form action="?" name="changeDate" method="get">
         <input type="hidden" name="m" value="{{$m}}" />
         <input type="hidden" name="tab" value="{{$tab}}" />
@@ -104,7 +104,7 @@ Main.add(function () {
           <tr>
             <td colspan="2" class="text">
               <a href="?m={{$m}}&amp;debut={{$curr_plage->date|date_format:"%Y-%m-%d"}}">
-              {{$curr_plage->date|date_format:$dPconfig.longdate}} &mdash;
+              {{$curr_plage->date|date_format:$conf.longdate}} &mdash;
               {{if $curr_plage->libelle}}
                 {{$curr_plage->libelle}} &mdash;
               {{/if}}
@@ -130,7 +130,7 @@ Main.add(function () {
           <tr>
             <td colspan="2" class="text">
               <a href="?m={{$m}}&amp;debut={{$curr_plage->date|date_format:"%Y-%m-%d"}}">
-              {{$curr_plage->date|date_format:$dPconfig.longdate}} &mdash;
+              {{$curr_plage->date|date_format:$conf.longdate}} &mdash;
               {{if $curr_plage->libelle}}
                 {{$curr_plage->libelle}} &mdash;
               {{/if}}
@@ -156,7 +156,7 @@ Main.add(function () {
           <tr>
             <td colspan="2" class="text">
               <a href="?m={{$m}}&amp;debut={{$curr_plage->date|date_format:"%Y-%m-%d"}}">
-              {{$curr_plage->date|date_format:$dPconfig.longdate}} &mdash;
+              {{$curr_plage->date|date_format:$conf.longdate}} &mdash;
               {{if $curr_plage->libelle}}
                 {{$curr_plage->libelle}} &mdash;
               {{/if}}

@@ -1,7 +1,7 @@
 <table class="tbl">
 	{{if $print}}
   <tr>
-    <th class="category" colspan="4">Administrations de stupéfiant du {{$date_min|date_format:$dPconfig.date}} au {{$date_max|date_format:$dPconfig.date}}</th>
+    <th class="category" colspan="4">Administrations de stupéfiant du {{$date_min|date_format:$conf.date}} au {{$date_max|date_format:$conf.date}}</th>
   </tr>
   {{/if}}
   {{foreach from=$administrations item=_administration}}

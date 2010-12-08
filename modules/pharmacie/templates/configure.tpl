@@ -36,7 +36,7 @@ function updateDays() {
   <input type="hidden" name="m" value="system" />
   
   {{assign var="var" value="dispensation_schedule"}}
-  <input type="hidden" name="{{$m}}[{{$var}}]" value="{{$dPconfig.$m.$var}}" />
+  <input type="hidden" name="{{$m}}[{{$var}}]" value="{{$conf.$m.$var}}" />
   
   <table class="form">
     <col style="width: 50%" />

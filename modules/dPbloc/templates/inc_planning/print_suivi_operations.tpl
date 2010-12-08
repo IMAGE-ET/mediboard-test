@@ -25,7 +25,7 @@
 </tr>
 
 {{foreach from=$operations item=_operation}}
-{{if $dPconfig.dPsalleOp.COperation.modif_salle}}
+{{if $conf.dPsalleOp.COperation.modif_salle}}
   {{assign var="rowspan" value=2}}
 {{else}}
   {{assign var="rowspan" value=1}}
@@ -49,7 +49,7 @@
 		  {{$_operation->_ref_chir->_view}}
 		  {{else}}
 	      {{if $_operation->time_operation != "00:00:00"}}
-	        {{$_operation->time_operation|date_format:$dPconfig.time}}
+	        {{$_operation->time_operation|date_format:$conf.time}}
 	      {{else}}
 	        NP
 	      {{/if}}
@@ -67,7 +67,7 @@
   
   {{else}}
   <td class="text">
-    {{if $dPconfig.dPbloc.CPlageOp.chambre_operation == 0}}
+    {{if $conf.dPbloc.CPlageOp.chambre_operation == 0}}
       {{$_operation->_ref_patient->_view}}
     {{else}}
       <table style="border: none; width: 100%;">
@@ -89,7 +89,7 @@
   {{/if}}
 </tr>
 
-{{if $dPconfig.dPsalleOp.COperation.modif_salle && !$_operation->_deplacee && !($tab == "vw_suivi_salles" && $m == "dPsalleOp")}}
+{{if $conf.dPsalleOp.COperation.modif_salle && !$_operation->_deplacee && !($tab == "vw_suivi_salles" && $m == "dPsalleOp")}}
 <tr>
   <td colspan="5">
     <form name="changeSalle{{$_operation->_id}}" action="?m={{$m}}" method="post">

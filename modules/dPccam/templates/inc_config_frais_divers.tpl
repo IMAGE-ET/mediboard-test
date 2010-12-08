@@ -24,9 +24,9 @@
       </th>
       <td>
         <label for="{{$m}}[{{$class}}][{{$var}}][{{$type}}]_1">{{tr}}bool.1{{/tr}}</label>
-        <input type="radio" name="{{$m}}[{{$class}}][{{$var}}][{{$type}}]" value="1" {{if $dPconfig.$m.$class.$var.$type == "1"}}checked="checked"{{/if}}/>
+        <input type="radio" name="{{$m}}[{{$class}}][{{$var}}][{{$type}}]" value="1" {{if $conf.$m.$class.$var.$type == "1"}}checked="checked"{{/if}}/>
         <label for="{{$m}}[{{$class}}][{{$var}}][{{$type}}]_0">{{tr}}bool.0{{/tr}}</label>
-        <input type="radio" name="{{$m}}[{{$class}}][{{$var}}][{{$type}}]" value="0" {{if $dPconfig.$m.$class.$var.$type == "0" || $dPconfig.$m.$class.$var.$type == ""}}checked="checked"{{/if}} />
+        <input type="radio" name="{{$m}}[{{$class}}][{{$var}}][{{$type}}]" value="0" {{if $conf.$m.$class.$var.$type == "0" || $conf.$m.$class.$var.$type == ""}}checked="checked"{{/if}} />
       </td>
     </tr>
     {{/foreach}}

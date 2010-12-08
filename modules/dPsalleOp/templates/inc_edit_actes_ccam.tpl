@@ -16,7 +16,7 @@ function setToNow(element) {
 
 </script>
 
-{{assign var=confCCAM value=$dPconfig.dPsalleOp.CActeCCAM}}
+{{assign var=confCCAM value=$conf.dPsalleOp.CActeCCAM}}
 
 <table class="main">
   {{foreach from=$subject->_ext_codes_ccam item=_code key=_key}}

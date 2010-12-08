@@ -10,7 +10,7 @@
 
 {{assign var=prescription_line_mix_id value=$_prescription_line_mix->_id}}
 <tr>
-	{{if $dPconfig.dPprescription.CPrescription.show_categories_plan_soins}}
+	{{if $conf.dPprescription.CPrescription.show_categories_plan_soins}}
   <td style="text-align: center">
    - 
   </td>
@@ -32,7 +32,7 @@
  	  </ul>
  	</td>
 	
-	{{if !$_prescription_line_mix->signature_prat && $dPconfig.dPprescription.CPrescription.show_unsigned_med_msg}}
+	{{if !$_prescription_line_mix->signature_prat && $conf.dPprescription.CPrescription.show_unsigned_med_msg}}
 	  <td colspan="5">
 	  	<div class="small-warning">Ligne non signée</div>
 	  </td>
@@ -46,7 +46,7 @@
 	 <td style="text-align: center">
 	   <div class="mediuser" style="border-color: #{{$_prescription_line_mix->_ref_praticien->_ref_function->color}}">
 	     {{if $_prescription_line_mix->signature_prat}}
-	     <img src="images/icons/tick.png" title="Signée le {{$_prescription_line_mix->_ref_log_signature_prat->date|date_format:$dPconfig.datetime}} par {{$_prescription_line_mix->_ref_praticien->_view}}" />
+	     <img src="images/icons/tick.png" title="Signée le {{$_prescription_line_mix->_ref_log_signature_prat->date|date_format:$conf.datetime}} par {{$_prescription_line_mix->_ref_praticien->_view}}" />
 	     {{else}}
 	     <img src="images/icons/cross.png" title="Non signée par le praticien" />
 	     {{/if}}

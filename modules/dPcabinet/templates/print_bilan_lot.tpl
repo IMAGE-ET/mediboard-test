@@ -7,9 +7,9 @@
         <tr>
           <th colspan="2" class="category">
             <a href="#Print" onclick="window.print()">
-              Rapport du {{$lot->_date_min|date_format:$dPconfig.date}}
+              Rapport du {{$lot->_date_min|date_format:$conf.date}}
               {{if $lot->_date_min != $lot->_date_max}}
-              au {{$lot->_date_max|date_format:$dPconfig.date}}
+              au {{$lot->_date_max|date_format:$conf.date}}
               {{/if}}
             </a>
           </th>
@@ -51,7 +51,7 @@
 
   {{foreach from=$days key=_day item=_fichiers}}
   <tr>
-    <td colspan="2"><strong>{{$_day|date_format:$dPconfig.longdate}}</strong></td>
+    <td colspan="2"><strong>{{$_day|date_format:$conf.longdate}}</strong></td>
   </tr>
 	
   <tr>

@@ -82,7 +82,7 @@ Main.add(function(){
             <select name="{{$m}}[{{$class}}][{{$var}}]" class="notNull">
               <option value="">{{tr}}CProductCategory.select{{/tr}}</option>
               {{foreach from=$categories_list item=category}}
-                <option value="{{$category->_id}}" {{if $category->_id==$dPconfig.$m.$class.$var}}selected="selected"{{/if}}>{{$category->name}}</option>
+                <option value="{{$category->_id}}" {{if $category->_id==$conf.$m.$class.$var}}selected="selected"{{/if}}>{{$category->name}}</option>
               {{/foreach}}
             </select>
             <button type="button" class="tick" onclick="startSyncProducts($V(this.form['{{$m}}[{{$class}}][{{$var}}]']), '{{$class}}');" >Synchroniser les produits du stock</button>

@@ -8,7 +8,7 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
 *}}
 
-{{if $dPconfig.sip.server}}
+{{if $conf.sip.server}}
 <script type="text/javascript">
 ElementChecker.check.dontMatch = function(){
   this.assertMultipleArgs("dontMatch");
@@ -35,7 +35,7 @@ ElementChecker.check.dontMatch = function(){
         
     {{mb_include module=system template=inc_config_bool var=server}}
     
-    {{if $dPconfig.sip.server}}
+    {{if $conf.sip.server}}
       {{mb_include module=system template=inc_config_str var=tag_ipp cssClass="str dontMatch"}}
       {{mb_include module=system template=inc_config_str var=tag_dossier cssClass="str dontMatch"}}
       

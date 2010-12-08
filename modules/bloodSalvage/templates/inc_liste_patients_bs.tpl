@@ -19,8 +19,8 @@
   <table class="form">
     <tr>
       <th class="category" colspan="2">
-        <div style="float: right;">{{$hour|date_format:$dPconfig.time}}</div>
-        {{$date|date_format:$dPconfig.longdate}}
+        <div style="float: right;">{{$hour|date_format:$conf.time}}</div>
+        {{$date|date_format:$conf.longdate}}
         <input type="hidden" name="date" class="date" value="{{$date}}" onchange="this.form.submit()" />
       </th>
     </tr>
@@ -53,7 +53,7 @@
   		    {{$rspo->_ref_sejour->_ref_patient->_view}}
         </a>
 		  </td>
-		  <td class="text">{{$rspo->entree_reveil|date_format:$dPconfig.time}}</td>
+		  <td class="text">{{$rspo->entree_reveil|date_format:$conf.time}}</td>
 		</tr>
 	{{foreachelse}}
 	<tr>

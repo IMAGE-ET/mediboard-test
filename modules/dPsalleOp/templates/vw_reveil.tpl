@@ -1,6 +1,6 @@
 {{mb_include_script module="bloodSalvage" script="bloodSalvage"}}
 
-{{if $dPconfig.dPsalleOp.CDailyCheckList.active_salle_reveil != '1' || 
+{{if $conf.dPsalleOp.CDailyCheckList.active_salle_reveil != '1' || 
      $date < $smarty.now|date_format:"%Y-%m-%d" || 
      $check_list->_id && $check_list->validator_id}}
 		 
@@ -65,7 +65,7 @@ codageCCAM = function(operation_id){
 
 		 
 	<ul id="reveil_tabs" class="control_tabs">
-	  {{if $dPconfig.dPsalleOp.CReveil.multi_tabs_reveil == 1}}
+	  {{if $conf.dPsalleOp.CReveil.multi_tabs_reveil == 1}}
       <li><a href="#preop">{{tr}}SSPI.Preop{{/tr}}     (<span id="lipreop">0</span>)</a>  </li>
 		  <li><a href="#encours">{{tr}}SSPI.Encours{{/tr}} (<span id="liencours">0</span>)</a></li>
 	  	<li><a href="#ops">{{tr}}SSPI.Attente{{/tr}}     (<span id="liops">0</span>)</a>    </li>
@@ -78,7 +78,7 @@ codageCCAM = function(operation_id){
 		  <form action="?" name="selection" method="get">
 		    <input type="hidden" name="m" value="{{$m}}" />
 	      <input type="hidden" name="tab" value="vw_reveil" />
-		    <span id="heure">{{$hour|date_format:$dPconfig.time}}</span> - {{$date|date_format:$dPconfig.longdate}}
+		    <span id="heure">{{$hour|date_format:$conf.time}}</span> - {{$date|date_format:$conf.longdate}}
 	      <input type="hidden" name="date" class="date" value="{{$date}}" onchange="this.form.submit()" />
 	      <select name="bloc_id" onchange="this.form.submit();">
 	        <option value="" disabled="disabled">&mdash; {{tr}}CBlocOperatoire.select{{/tr}}</option>
@@ -96,7 +96,7 @@ codageCCAM = function(operation_id){
 		
 	<hr class="control_tabs" />
 	
-	{{if $dPconfig.dPsalleOp.CReveil.multi_tabs_reveil == 1}}
+	{{if $conf.dPsalleOp.CReveil.multi_tabs_reveil == 1}}
     <div id="preop" style="display:none"></div>
 		<div id="encours" style="display:none"></div>
 		<div id="ops" style="display:none"></div>
@@ -136,7 +136,7 @@ codageCCAM = function(operation_id){
     <form action="?" name="selection" method="get">
       <input type="hidden" name="m" value="{{$m}}" />
       <input type="hidden" name="tab" value="vw_reveil" />
-      <span id="heure">{{$hour|date_format:$dPconfig.time}}</span> - {{$date|date_format:$dPconfig.longdate}}
+      <span id="heure">{{$hour|date_format:$conf.time}}</span> - {{$date|date_format:$conf.longdate}}
       <input type="hidden" name="date" class="date" value="{{$date}}" onchange="this.form.submit()" />
       <select name="bloc_id" onchange="this.form.submit();">
         <option value="" disabled="disabled">&mdash; {{tr}}CBlocOperatoire.select{{/tr}}</option>

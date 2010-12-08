@@ -63,7 +63,7 @@ var Action = {
       </label>  
     </th>
     <td>
-      <input class="notNull str maxLength|8" name="{{$m}}[{{$class}}][{{$var}}]" value="{{$dPconfig.$m.$class.$var}}" />
+      <input class="notNull str maxLength|8" name="{{$m}}[{{$class}}][{{$var}}]" value="{{$conf.$m.$class.$var}}" />
     </td>
   </tr>  
     
@@ -75,7 +75,7 @@ var Action = {
       </label>  
     </th>
     <td>
-      <input class="notNull url" name="{{$m}}[{{$class}}][{{$var}}]" value="{{$dPconfig.$m.$class.$var}}" />
+      <input class="notNull url" name="{{$m}}[{{$class}}][{{$var}}]" value="{{$conf.$m.$class.$var}}" />
     </td>
   </tr>
 
@@ -124,7 +124,7 @@ var Action = {
       </label>  
     </th>
     <td>
-      <input class="notNull url" name="{{$m}}[{{$class}}][{{$var}}]" value="{{$dPconfig.$m.$class.$var}}" />
+      <input class="notNull url" name="{{$m}}[{{$class}}][{{$var}}]" value="{{$conf.$m.$class.$var}}" />
     </td>
   </tr>  
     

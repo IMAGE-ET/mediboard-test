@@ -35,7 +35,7 @@ onMergeComplete = function() {
 Main.add(function () {
   // Delays prevent potential overload with periodical previous updates
   MainCourante.start(0, 60);
-	{{if $dPconfig.dPurgences.gerer_reconvoc == "1"}}
+	{{if $conf.dPurgences.gerer_reconvoc == "1"}}
   updateConsultations.delay(1, 80);
 	{{/if}}
   IdentitoVigilance.date = "{{$date}}";	
@@ -61,7 +61,7 @@ Main.add(function () {
     </form>
   </li>
   <li><a href="#holder_main_courante">Main courante <small>(&ndash;)</small></a></li>
-	{{if $dPconfig.dPurgences.gerer_reconvoc == "1"}}
+	{{if $conf.dPurgences.gerer_reconvoc == "1"}}
   <li><a href="#consultations" class="empty">Reconvocations <small>(&ndash; / &ndash;)</small></a></li>
 	{{/if}}
   <li><a href="#identito_vigilance" class="empty">Identito-vigilance <small>(&ndash;)</small></a></li>
@@ -71,7 +71,7 @@ Main.add(function () {
       Calendar.regField(getForm("changeDate").date, null, { noView: true } );
     } );
     </script>
-    <strong><big>{{$date|date_format:$dPconfig.longdate}}</big></strong>
+    <strong><big>{{$date|date_format:$conf.longdate}}</big></strong>
     
     <form action="?" name="changeDate" method="get">
       <input type="hidden" name="m" value="{{$m}}" />
@@ -114,7 +114,7 @@ Main.add(function () {
   
 	<div id="main_courante"></div>
 </div>
-{{if $dPconfig.dPurgences.gerer_reconvoc == "1"}}
+{{if $conf.dPurgences.gerer_reconvoc == "1"}}
 <div id="consultations" style="display: none;">
   <div class="small-info">{{tr}}msg-common-loading-soon{{/tr}}</div>
 </div>

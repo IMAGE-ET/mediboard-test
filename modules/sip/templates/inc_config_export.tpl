@@ -38,7 +38,7 @@
     
     {{assign var=var    value="export_dest"}}
     {{assign var=field  value="$m[$var]"}}
-    {{assign var=value  value=$dPconfig.$m.$var}}
+    {{assign var=value  value=$conf.$m.$var}}
     {{assign var=locale value=config-$m-$var}}
     <tr>
       <th>

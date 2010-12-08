@@ -54,7 +54,7 @@
               <table class="tbl">
                 <tr>
                   <th colspan="5" class="title">
-                    {{$_prescription->_ref_patient->_view}} - {{$_date_hour|date_format:$dPconfig.datetime}}
+                    {{$_prescription->_ref_patient->_view}} - {{$_date_hour|date_format:$conf.datetime}}
                   </th>
                 </tr>
                 <tr>

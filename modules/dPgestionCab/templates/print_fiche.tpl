@@ -16,13 +16,13 @@
         <font size="5" color="#ffffff">Bulletin de paie</font>
       </td>
       <td colspan="2" align="left" bgcolor="#bb0044">
-        <font color="#ffffff">Du {{$fichePaie->debut|date_format:$dPconfig.longdate}}</font>
+        <font color="#ffffff">Du {{$fichePaie->debut|date_format:$conf.longdate}}</font>
       </td>
     </tr>
   
     <tr>
       <td colspan="2" align="left" bgcolor="#bb0044">
-        <font color="#ffffff">Au  {{$fichePaie->fin|date_format:$dPconfig.longdate}}</font>
+        <font color="#ffffff">Au  {{$fichePaie->fin|date_format:$conf.longdate}}</font>
       </td>
     </tr>
   </tbody>

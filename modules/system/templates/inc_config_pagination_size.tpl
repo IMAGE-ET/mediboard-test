@@ -9,7 +9,7 @@
 *}}
 
 {{assign var=field  value="$m[$class][pagination_size]"}}
-{{assign var=value  value=$dPconfig.$m.$class.pagination_size}}
+{{assign var=value  value=$conf.$m.$class.pagination_size}}
 {{assign var=values value=","|explode:"10,15,20,25,30,50,100,200"}}
 
 <tr>

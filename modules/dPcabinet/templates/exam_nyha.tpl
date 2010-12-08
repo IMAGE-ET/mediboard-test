@@ -24,13 +24,13 @@ window.opener.ExamDialog.reload('{{$consultation->_id}}');
 			  {{mb_include module=system template=inc_object_notes      object=$exam_nyha}}
 
 	      Consultation de '{{$consultation->_ref_patient}}'<br />
-	      le {{$consultation->_date|date_format:$dPconfig.longdate}}
+	      le {{$consultation->_date|date_format:$conf.longdate}}
 	      par le Dr {{$consultation->_ref_chir}}
 	    </th>
     {{else}}
 	    <th class="title text" colspan="3">
 	      Consultation de '{{$consultation->_ref_patient}}'<br />
-	      le {{$consultation->_date|date_format:$dPconfig.longdate}}
+	      le {{$consultation->_date|date_format:$conf.longdate}}
 	      par le Dr {{$consultation->_ref_chir}}
 	    </th>
     {{/if}}

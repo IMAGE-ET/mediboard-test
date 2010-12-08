@@ -51,8 +51,8 @@ Main.add(function() {
 		  {{/if}}
     	{{mb_value object=$_sejour field=libelle}}
 		</td>
-    <td>{{mb_value object=$_sejour field=entree format=$dPconfig.date}}</td>
-    <td>{{mb_value object=$_sejour field=sortie format=$dPconfig.date}}</td>
+    <td>{{mb_value object=$_sejour field=entree format=$conf.date}}</td>
+    <td>{{mb_value object=$_sejour field=sortie format=$conf.date}}</td>
 
     <td style="text-align: right;">
 		  {{assign var=count_evenements value=$_sejour->_count_evenements_ssr_week}}

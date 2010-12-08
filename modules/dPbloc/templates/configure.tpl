@@ -43,7 +43,7 @@ function doReaffectation(mode_real) {
     <td>
       <select class="num" name="{{$m}}[{{$class}}][{{$var}}]">
       {{foreach from=$hours item=_hour}}
-        <option value="{{$_hour}}" {{if $_hour == $dPconfig.$m.$class.$var}} selected="selected" {{/if}}>
+        <option value="{{$_hour}}" {{if $_hour == $conf.$m.$class.$var}} selected="selected" {{/if}}>
           {{$_hour|string_format:"%02d"}}
         </option>
       {{/foreach}}
@@ -59,7 +59,7 @@ function doReaffectation(mode_real) {
     <td>
       <select class="num" name="{{$m}}[{{$class}}][{{$var}}]">
       {{foreach from=$hours item=_hour}}
-        <option value="{{$_hour}}" {{if $_hour == $dPconfig.$m.$class.$var}} selected="selected" {{/if}}>
+        <option value="{{$_hour}}" {{if $_hour == $conf.$m.$class.$var}} selected="selected" {{/if}}>
           {{$_hour|string_format:"%02d"}}
         </option>
       {{/foreach}}
@@ -78,13 +78,13 @@ function doReaffectation(mode_real) {
     {{assign var="var" value="plage_vide"}}
     <td style="text-align: center">
       <label for="{{$m}}[{{$class}}][{{$var}}]">Oui</label>
-      <input type="radio" name="{{$m}}[{{$class}}][{{$var}}]" value="1" {{if $dPconfig.$m.$class.$var == "1"}}checked="checked"{{/if}}/> 
+      <input type="radio" name="{{$m}}[{{$class}}][{{$var}}]" value="1" {{if $conf.$m.$class.$var == "1"}}checked="checked"{{/if}}/> 
       <label for="{{$m}}[{{$class}}][{{$var}}]">Non</label>
-      <input type="radio" name="{{$m}}[{{$class}}][{{$var}}]" value="0" {{if $dPconfig.$m.$class.$var == "0"}}checked="checked"{{/if}}/> 
+      <input type="radio" name="{{$m}}[{{$class}}][{{$var}}]" value="0" {{if $conf.$m.$class.$var == "0"}}checked="checked"{{/if}}/> 
     </td> 
     {{assign var="var" value="planning"}}
     <td colspan="2" style="text-align: center">
-    {{foreach from=$dPconfig.$m.$class.$var item=value key=col}}
+    {{foreach from=$conf.$m.$class.$var item=value key=col}}
 	  <label for="{{$m}}[{{$class}}][{{$var}}][{{$col}}]" title="{{tr}}config-{{$m}}-{{$class}}-{{$var}}-{{$col}}{{/tr}}">
         {{tr}}config-{{$m}}-{{$class}}-{{$var}}-{{$col}}{{/tr}}
       </label>
@@ -99,9 +99,9 @@ function doReaffectation(mode_real) {
     {{assign var="var" value="libelle_ccam"}}
     <td style="text-align: center">
       <label for="{{$m}}[{{$class}}][{{$var}}]">Oui</label>
-      <input type="radio" name="{{$m}}[{{$class}}][{{$var}}]" value="1" {{if $dPconfig.$m.$class.$var == "1"}}checked="checked"{{/if}}/> 
+      <input type="radio" name="{{$m}}[{{$class}}][{{$var}}]" value="1" {{if $conf.$m.$class.$var == "1"}}checked="checked"{{/if}}/> 
       <label for="{{$m}}[{{$class}}][{{$var}}]">Non</label>
-      <input type="radio" name="{{$m}}[{{$class}}][{{$var}}]" value="0" {{if $dPconfig.$m.$class.$var == "0"}}checked="checked"{{/if}}/> 
+      <input type="radio" name="{{$m}}[{{$class}}][{{$var}}]" value="0" {{if $conf.$m.$class.$var == "0"}}checked="checked"{{/if}}/> 
     </td>      
   </tr>
 
@@ -114,9 +114,9 @@ function doReaffectation(mode_real) {
       <label for="{{$m}}[{{$class}}][{{$var}}]_1">{{tr}}config-{{$m}}-{{$class}}-{{$var}}{{/tr}}</label>
     </th>
     <td colspan="2">
-      <input type="radio" name="{{$m}}[{{$class}}][{{$var}}]" value="1" {{if $dPconfig.$m.$class.$var == "1"}}checked="checked"{{/if}}/>
+      <input type="radio" name="{{$m}}[{{$class}}][{{$var}}]" value="1" {{if $conf.$m.$class.$var == "1"}}checked="checked"{{/if}}/>
       <label for="{{$m}}[{{$class}}][{{$var}}]_1">Oui</label>
-      <input type="radio" name="{{$m}}[{{$class}}][{{$var}}]" value="0" {{if $dPconfig.$m.$class.$var == "0"}}checked="checked"{{/if}}/>
+      <input type="radio" name="{{$m}}[{{$class}}][{{$var}}]" value="0" {{if $conf.$m.$class.$var == "0"}}checked="checked"{{/if}}/>
       <label for="{{$m}}[{{$class}}][{{$var}}]_0">Non</label>
     </td>          
   </tr>
@@ -126,7 +126,7 @@ function doReaffectation(mode_real) {
       <label for="{{$m}}[{{$class}}][{{$var}}]">{{tr}}config-{{$m}}-{{$class}}-{{$var}}{{/tr}}</label>
     </th>
     <td colspan="2">
-      <input type="text" name="{{$m}}[{{$class}}][{{$var}}]" value="{{$dPconfig.$m.$class.$var}}" size="2" /> jours
+      <input type="text" name="{{$m}}[{{$class}}][{{$var}}]" value="{{$conf.$m.$class.$var}}" size="2" /> jours
     </td>          
   </tr>
 
@@ -136,9 +136,9 @@ function doReaffectation(mode_real) {
   </tr>
   <tr>
     <td colspan="4" style="text-align: center">
-      <input type="radio" name="{{$m}}[{{$class}}][{{$var}}]" value="1" {{if $dPconfig.$m.$class.$var == "1"}}checked="checked"{{/if}}/>
+      <input type="radio" name="{{$m}}[{{$class}}][{{$var}}]" value="1" {{if $conf.$m.$class.$var == "1"}}checked="checked"{{/if}}/>
       <label for="{{$m}}[{{$class}}][{{$var}}]_1">Oui</label>
-      <input type="radio" name="{{$m}}[{{$class}}][{{$var}}]" value="0" {{if $dPconfig.$m.$class.$var == "0"}}checked="checked"{{/if}}/>
+      <input type="radio" name="{{$m}}[{{$class}}][{{$var}}]" value="0" {{if $conf.$m.$class.$var == "0"}}checked="checked"{{/if}}/>
       <label for="{{$m}}[{{$class}}][{{$var}}]_0">Non</label>
     </td>          
   </tr>

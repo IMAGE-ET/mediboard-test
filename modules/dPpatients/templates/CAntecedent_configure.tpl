@@ -25,14 +25,14 @@ Main.add(function () {
       <label for="{{$m}}[{{$class}}][{{$var}}]" title="{{tr}}config-{{$m}}-{{$class}}-{{$var}}{{/tr}}">
         {{tr}}config-{{$m}}-{{$class}}-{{$var}}{{/tr}}
       </label>
-      <input type="hidden" name="{{$m}}[{{$class}}][{{$var}}]" value="{{$dPconfig.$m.$class.$var}}" size="100" />
+      <input type="hidden" name="{{$m}}[{{$class}}][{{$var}}]" value="{{$conf.$m.$class.$var}}" size="100" />
     </th>
     {{assign var="var" value="appareils"}}
     <th class="category" colspan="3">
       <label for="{{$m}}[{{$class}}][{{$var}}]" title="{{tr}}config-{{$m}}-{{$class}}-{{$var}}{{/tr}}">
         {{tr}}config-{{$m}}-{{$class}}-{{$var}}{{/tr}}
       </label>
-      <input type="hidden" name="{{$m}}[{{$class}}][{{$var}}]" value="{{$dPconfig.$m.$class.$var}}" size="100" />
+      <input type="hidden" name="{{$m}}[{{$class}}][{{$var}}]" value="{{$conf.$m.$class.$var}}" size="100" />
     </th>
   </tr>
   <tr>

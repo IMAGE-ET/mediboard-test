@@ -227,7 +227,7 @@ Main.add(function () {
   		<th>{{mb_label object=$element field=in_livret}}</th>
   		<td>
   			{{assign var=elt_class value=$element->_class_name}}
-  			{{if $dPconfig.dmi.$elt_class.product_category_id}}
+  			{{if $conf.dmi.$elt_class.product_category_id}}
 				  {{if !$element->_id}}
 		  		  {{mb_field object=$element field=in_livret}}
 		  	  {{else}}

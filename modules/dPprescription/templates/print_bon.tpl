@@ -129,7 +129,7 @@ Main.add( function(){
   <span style="float: right">
     {{foreach from=$prescription->_ref_object->_ref_affectations item=_affectation}}
 		   {{if $prescription->_ref_object->_ref_affectations|@count > 1}}
-		   du {{$_affectation->entree|date_format:$dPconfig.date}} au {{$_affectation->sortie|date_format:$dPconfig.date}}
+		   du {{$_affectation->entree|date_format:$conf.date}} au {{$_affectation->sortie|date_format:$conf.date}}
 			 {{/if}}
 			 <strong>{{$_affectation->_view}}</strong>
 			<br />
@@ -165,15 +165,15 @@ Main.add( function(){
 	    <div class="{{if $smarty.foreach.foreach_chap.last && $smarty.foreach.foreach_hour.last}}bodyWithoutPageBreak{{else}}body{{/if}}">
 		    <table class="tbl">
 				  <tr>
-				    <th colspan="2" class="title">{{tr}}CPrescription._chapitres.{{$chapitre}}{{/tr}} - Examens demandés pour le {{$debut|date_format:$dPconfig.date}} à {{$hour}} h</th>
+				    <th colspan="2" class="title">{{tr}}CPrescription._chapitres.{{$chapitre}}{{/tr}} - Examens demandés pour le {{$debut|date_format:$conf.date}} à {{$hour}} h</th>
 				  </tr>
 				  {{foreach from=$_bons_by_cat item=_bons key=name_cat}}
 				  <tr>
 				    <th colspan="2" class="text">
 				      {{assign var=category value=$categories.$chapitre.$name_cat}}
 			        {{$category->nom}}
-			        {{if $dPconfig.dPprescription.CCategoryPrescription.show_header && $category->header}}, {{$category->header}}{{/if}}
-			        {{if $dPconfig.dPprescription.CCategoryPrescription.show_description && $category->description}}, {{$category->description}}{{/if}}
+			        {{if $conf.dPprescription.CCategoryPrescription.show_header && $category->header}}, {{$category->header}}{{/if}}
+			        {{if $conf.dPprescription.CCategoryPrescription.show_description && $category->description}}, {{$category->description}}{{/if}}
 		        </th>
 				  </tr>
 			    {{foreach from=$_bons key=line_id item=_bon}}

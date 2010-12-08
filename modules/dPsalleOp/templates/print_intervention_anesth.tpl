@@ -52,8 +52,8 @@ Main.add(function(){
 	{{foreach from=$perops key=datetime item=_perops_by_datetime}}
 	  {{foreach from=$_perops_by_datetime item=_perop}}
 			<tr>
-          <td style="text-align: center;" class="narrow">{{mb_ditto name=date value=$datetime|date_format:$dPconfig.date}}</td>
-          <td style="text-align: center;" class="narrow">{{mb_ditto name=time value=$datetime|date_format:$dPconfig.time}}</td>
+          <td style="text-align: center;" class="narrow">{{mb_ditto name=date value=$datetime|date_format:$conf.date}}</td>
+          <td style="text-align: center;" class="narrow">{{mb_ditto name=time value=$datetime|date_format:$conf.time}}</td>
 				{{if $_perop instanceof CAnesthPerop}}
 
 					<td style="font-weight: bold;" colspan="2">{{$_perop->libelle}}</td>

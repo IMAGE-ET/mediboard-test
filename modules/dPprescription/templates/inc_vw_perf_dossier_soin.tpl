@@ -11,7 +11,7 @@
 {{assign var=transmissions value=$prescription->_transmissions}}
 {{assign var=prescription_line_mix_id value=$_prescription_line_mix->_id}}
 	
-<td {{if $dPconfig.dPprescription.CPrescription.show_categories_plan_soins}}colspan="2"{{/if}} class="text">
+<td {{if $conf.dPprescription.CPrescription.show_categories_plan_soins}}colspan="2"{{/if}} class="text">
   {{if $move_dossier_soin}}
 	  <script type="text/javascript">
 	    Main.add(function () {
@@ -58,7 +58,7 @@
 	{{/if}}
 	
   {{if $_prescription_line_mix->_active && $_prescription_line_mix->type_line == "perfusion"}}
-	  {{if $_prescription_line_mix->signature_prat || !$dPconfig.dPprescription.CPrescription.show_unsigned_med_msg}}
+	  {{if $_prescription_line_mix->signature_prat || !$conf.dPprescription.CPrescription.show_unsigned_med_msg}}
       <div style="text-align: center;">
 			<form name="editPerfusion-{{$_prescription_line_mix->_id}}" method="post" action="?" style="text-align: center;">
         <input type="hidden" name="m" value="dPprescription" />
@@ -160,7 +160,7 @@
 	
 <th></th>
 
-{{if !$_prescription_line_mix->signature_prat && $dPconfig.dPprescription.CPrescription.show_unsigned_med_msg}}
+{{if !$_prescription_line_mix->signature_prat && $conf.dPprescription.CPrescription.show_unsigned_med_msg}}
   {{foreach from=$tabHours key=_view_date item=_hours_by_moment}}
     {{foreach from=$_hours_by_moment key=moment_journee item=_dates}}
       <td class="{{$_view_date}}-{{$moment_journee}}" colspan="{{if $moment_journee == 'soir'}}{{$count_soir-2}}{{/if}}
@@ -232,7 +232,7 @@
 									  <table class="tbl">
 									    <tr>
 									    	<th colspan="2">
-									    	  <button class="search" type="button" onclick='addAdministrationPerf("{{$_prescription_line_mix->_id}}","{{$_date}}","{{$_hour}}","{{$_prise}}",document.mode_dossier_soin.mode_dossier.value, "{{$sejour->_id}}");'>Administrations de {{$_prise|date_format:$dPconfig.time}}</button>
+									    	  <button class="search" type="button" onclick='addAdministrationPerf("{{$_prescription_line_mix->_id}}","{{$_date}}","{{$_hour}}","{{$_prise}}",document.mode_dossier_soin.mode_dossier.value, "{{$sejour->_id}}");'>Administrations de {{$_prise|date_format:$conf.time}}</button>
 												</th>
 									    </tr>
 											{{foreach from=$_prescription_line_mix->_ref_lines item=_perf_line}}
@@ -316,7 +316,7 @@
 <td style="text-align: center">
 	 <div class="mediuser" style="border-color: #{{$_prescription_line_mix->_ref_praticien->_ref_function->color}}">
    {{if $_prescription_line_mix->signature_prat}}
-   <img src="images/icons/tick.png" title="Signée le {{$_prescription_line_mix->_ref_log_signature_prat->date|date_format:$dPconfig.datetime}} par {{$_prescription_line_mix->_ref_praticien->_view}}" />
+   <img src="images/icons/tick.png" title="Signée le {{$_prescription_line_mix->_ref_log_signature_prat->date|date_format:$conf.datetime}} par {{$_prescription_line_mix->_ref_praticien->_view}}" />
    {{else}}
    <img src="images/icons/cross.png" title="Non signée par le praticien" />
    {{/if}}

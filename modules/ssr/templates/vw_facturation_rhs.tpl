@@ -38,9 +38,9 @@
 							<small class="count">({{$_rhs_count.count}})</small>
               <br />
               <small>
-                du {{$_rhs_count.mondate|date_format:$dPconfig.date}}
+                du {{$_rhs_count.mondate|date_format:$conf.date}}
 								<br />
-                au {{$_rhs_count.sundate|date_format:$dPconfig.date}}
+                au {{$_rhs_count.sundate|date_format:$conf.date}}
               </small>
             </a>
           </li>

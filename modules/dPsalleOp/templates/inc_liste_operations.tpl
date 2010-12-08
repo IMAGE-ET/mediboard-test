@@ -20,7 +20,7 @@
 </tr>
 
 {{foreach from=$operations item=_operation}}
-{{if $dPconfig.dPsalleOp.COperation.modif_salle}}
+{{if $conf.dPsalleOp.COperation.modif_salle}}
   {{assign var="rowspan" value=2}}
 {{else}}
   {{assign var="rowspan" value=1}}
@@ -46,7 +46,7 @@
 		  {{$_operation->_ref_chir->_view}}
 		  {{else}}
 	      {{if $_operation->time_operation != "00:00:00"}}
-	        {{$_operation->time_operation|date_format:$dPconfig.time}}
+	        {{$_operation->time_operation|date_format:$conf.time}}
 	      {{else}}
 	        NP
 	      {{/if}}
@@ -79,7 +79,7 @@
           onmouseover="ObjectTooltip.createEx(this, '{{$_operation->_ref_sejour->_ref_patient->_guid}}')">
       {{$_operation->_ref_patient->_view}}
     </span>
-    {{if $_operation->_ref_affectation && $_operation->_ref_affectation->_ref_lit->_id && $dPconfig.dPbloc.CPlageOp.chambre_operation == 1}}
+    {{if $_operation->_ref_affectation && $_operation->_ref_affectation->_ref_lit->_id && $conf.dPbloc.CPlageOp.chambre_operation == 1}}
       <div style="text-align: center; font-size: 0.8em; width: 1%; white-space: nowrap; border: none;">
         {{$_operation->_ref_affectation->_ref_lit->_ref_chambre->_ref_service->_view}}<br />
         {{$_operation->_ref_affectation->_ref_lit->_view}}
@@ -104,7 +104,7 @@
     </a>
   </td>
   <td>
-    {{if $dPconfig.dPplanningOp.COperation.verif_cote && ($_operation->cote == "droit" || $_operation->cote == "gauche")}}
+    {{if $conf.dPplanningOp.COperation.verif_cote && ($_operation->cote == "droit" || $_operation->cote == "gauche")}}
       <form name="editCoteOp{{$_operation->_id}}" action="?m={{$m}}" method="post">
         <input type="hidden" name="m" value="dPplanningOp" />
         <input type="hidden" name="dosql" value="do_planning_aed" />
@@ -115,12 +115,12 @@
     {{mb_value object=$_operation field="cote"}}
   {{/if}}
   </td>
-  <td>{{$_operation->temp_operation|date_format:$dPconfig.time}}</td>
+  <td>{{$_operation->temp_operation|date_format:$conf.time}}</td>
   {{/if}}
   {{/if}}
 </tr>
 
-{{if $dPconfig.dPsalleOp.COperation.modif_salle && !($_operation->_deplacee && $_operation->salle_id != $salle->_id) && @$allow_moves|default:1}}
+{{if $conf.dPsalleOp.COperation.modif_salle && !($_operation->_deplacee && $_operation->salle_id != $salle->_id) && @$allow_moves|default:1}}
 <tr {{if $_operation->_id == $operation_id}}class="selected"{{/if}}>
   <td colspan="5">
     <form name="changeSalle{{$_operation->_id}}" action="?m={{$m}}" method="post">

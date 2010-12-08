@@ -85,7 +85,7 @@ function updatePrice(type, form) {
     </td>
   </tr>
   
-  <tr {{if !$dPconfig.dPstock.CProductReference.use_mdq}}style="display: none"{{/if}}>
+  <tr {{if !$conf.dPstock.CProductReference.use_mdq}}style="display: none"{{/if}}>
     <th>{{mb_label object=$reference field="mdq"}}</th>
     <td>{{mb_field object=$reference field="mdq" increment=1 form=edit_reference min=1 size=4 onchange="updateUnitQuantity(this, 'equivalent_quantity_mdq')"}}
       <input type="text" name="packaging_2" readonly="readonly" value="{{$reference->_ref_product->packaging}}" style="border: none; background: transparent; width: 5em; color: inherit;"/>
@@ -104,7 +104,7 @@ function updatePrice(type, form) {
     </td>
   </tr>
   
-  <tr {{if !$dPconfig.dPstock.CProductReference.show_cond_price}}style="display: none"{{/if}}>
+  <tr {{if !$conf.dPstock.CProductReference.show_cond_price}}style="display: none"{{/if}}>
     <th>{{mb_label object=$reference field="_cond_price"}}</th>
     <td>
       {{mb_field object=$reference field="_cond_price" increment=1 form=edit_reference min=0 size=4 

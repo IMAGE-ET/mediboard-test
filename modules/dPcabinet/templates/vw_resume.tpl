@@ -114,12 +114,12 @@ function newExam(sAction, consultation_id) {
 	      <strong>{{mb_label object=$curr_consult field=traitement}}</strong>
 	      <em>{{mb_value object=$curr_consult field=traitement}}</em>
 	    {{/if}}
-			{{if $curr_consult->histoire_maladie && $dPconfig.dPcabinet.CConsultation.show_histoire_maladie}}
+			{{if $curr_consult->histoire_maladie && $conf.dPcabinet.CConsultation.show_histoire_maladie}}
         <br />
         <strong>{{mb_label object=$curr_consult field=histoire_maladie}}</strong>
         <em>{{mb_value object=$curr_consult field=histoire_maladie}}</em>
       {{/if}}
-			{{if $curr_consult->conclusion && $dPconfig.dPcabinet.CConsultation.show_conclusion}}
+			{{if $curr_consult->conclusion && $conf.dPcabinet.CConsultation.show_conclusion}}
         <br />
         <strong>{{mb_label object=$curr_consult field=conclusion}}</strong>
         <em>{{mb_value object=$curr_consult field=conclusion}}</em>

@@ -97,7 +97,7 @@
 <td style="background: {{$background}}; {{if !$curr_adm->facturable}}background-image:url(images/icons/ray_vertical.gif); background-repeat:repeat;{{/if}}">
   <a href="#1" onclick="printAdmission({{$curr_adm->sejour_id}})">
     <span onmouseover="ObjectTooltip.createEx(this, '{{$curr_adm->_guid}}');">
-    {{$curr_adm->entree_prevue|date_format:$dPconfig.time}} 
+    {{$curr_adm->entree_prevue|date_format:$conf.time}} 
     <br />
 		{{$curr_adm->type|upper|truncate:1:"":true}}
     {{$curr_adm->_ref_operations|@count}} Int.
@@ -170,7 +170,7 @@
 {{else}}
 <td style="background: {{$background}}; {{if !$curr_adm->facturable}}background-image:url(images/icons/ray_vertical.gif); background-repeat:repeat;{{/if}}">
   {{if $canAdmissions->edit}}
-  {{if $dPconfig.dPplanningOp.COperation.verif_cote}}
+  {{if $conf.dPplanningOp.COperation.verif_cote}}
   {{foreach from=$curr_adm->_ref_operations item=curr_op}}
     {{if $curr_op->cote == "droit" || $curr_op->cote == "gauche"}}
       <form name="editCoteOp{{$curr_op->_id}}" action="?" method="post">
@@ -204,19 +204,19 @@
 	  <br />
   
  	  {{if ($curr_adm->entree_reelle < $date_min) || ($curr_adm->entree_reelle > $date_max)}}
-	    {{$curr_adm->entree_reelle|date_format:$dPconfig.datetime}}
+	    {{$curr_adm->entree_reelle|date_format:$conf.datetime}}
 	    <br>
 	  {{else}}
-	  {{$curr_adm->entree_reelle|date_format:$dPconfig.time}}
+	  {{$curr_adm->entree_reelle|date_format:$conf.time}}
 	  {{/if}}
   {{/if}}
   </form>
   {{elseif $curr_adm->entree_reelle}}
     {{if ($curr_adm->entree_reelle < $date_min) || ($curr_adm->entree_reelle > $date_max)}}
-	    {{$curr_adm->entree_reelle|date_format:$dPconfig.datetime}}
+	    {{$curr_adm->entree_reelle|date_format:$conf.datetime}}
 	    <br>
 	  {{else}}
-	    {{$curr_adm->entree_reelle|date_format:$dPconfig.time}}
+	    {{$curr_adm->entree_reelle|date_format:$conf.time}}
 	  {{/if}}
   {{else}}
     -
@@ -243,7 +243,7 @@
         </button>
       {{/if}}
       
-      {{if ($curr_adm->modif_SHS == 1) && ($dPconfig.dPplanningOp.CSejour.modif_SHS == 1)}}
+      {{if ($curr_adm->modif_SHS == 1) && ($conf.dPplanningOp.CSejour.modif_SHS == 1)}}
         <img src="images/icons/warning.png" title="Le dossier a été modifié, il faut le préparer" />
       {{/if}}
     </form>
@@ -257,7 +257,7 @@
   {{if $curr_op->_ref_consult_anesth->_id}}
   <div class="{{if $curr_op->_ref_consult_anesth->_ref_consultation->chrono == 64}}small-success{{else}}small-info{{/if}}" style="margin: 0px;">
     <span onmouseover="ObjectTooltip.createEx(this, '{{$curr_op->_ref_consult_anesth->_guid}}');">
-    {{$curr_op->_ref_consult_anesth->_date_consult|date_format:$dPconfig.date}}
+    {{$curr_op->_ref_consult_anesth->_date_consult|date_format:$conf.date}}
     </span>
   </div>
   {{/if}}
@@ -272,7 +272,7 @@
   {{/if}}
 </td>
 
-{{if $dPconfig.dPadmissions.show_dh}}
+{{if $conf.dPadmissions.show_dh}}
   <td style="background: {{$background}}; {{if !$curr_adm->facturable}}background-image:url(images/icons/ray_vertical.gif); background-repeat:repeat;{{/if}}">
     {{foreach from=$curr_adm->_ref_operations item=curr_op}}
     {{if $curr_op->_ref_actes_ccam|@count}}

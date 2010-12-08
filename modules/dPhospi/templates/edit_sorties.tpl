@@ -22,7 +22,7 @@ function saveSortie(oFormSortie, oFormAffectation){
           <option value="0" {{if $vue == 0}} selected="selected"{{/if}}>Tout afficher</option>
           <option value="1" {{if $vue == 1}} selected="selected"{{/if}}>Ne pas afficher les validés</option>
         </select>
-        {{$date|date_format:$dPconfig.longdate}}
+        {{$date|date_format:$conf.longdate}}
         <input type="hidden" name="date" class="date" value="{{$date}}" onchange="this.form.submit()" />
       </form>
     </th>
@@ -87,14 +87,14 @@ function saveSortie(oFormSortie, oFormAffectation){
                 </td>
                 <td>
                 {{if $curr_sortie->effectue}}
-                  {{$curr_sortie->sortie|date_format:$dPconfig.time}}
+                  {{$curr_sortie->sortie|date_format:$conf.time}}
                 {{else}}
                 <form name="editSortie{{$curr_sortie->affectation_id}}" action="">
                   <select name="sortie">
                   {{assign var="curr_id" value=$curr_sortie->_id}}
                   {{foreach from=$timing.$curr_id|smarty:nodefaults item="time"}}
                   <option value="{{$time}}" {{if $time==$curr_sortie->sortie}}selected = "selected"{{/if}}>
-                   {{$time|date_format:$dPconfig.time}}
+                   {{$time|date_format:$conf.time}}
                   </option>
                   {{/foreach}}
                   </select>
@@ -162,7 +162,7 @@ function saveSortie(oFormSortie, oFormAffectation){
                 <td class="text">
                   {{$curr_sortie->_ref_lit->_view}}
                 </td>
-                <td>{{$curr_sortie->sortie|date_format:$dPconfig.time}}</td>
+                <td>{{$curr_sortie->sortie|date_format:$conf.time}}</td>
               </tr>
               {{/foreach}}
               <tr><th colspan="5">Ambulatoires</th></tr>
@@ -208,7 +208,7 @@ function saveSortie(oFormSortie, oFormAffectation){
                 <td class="text">
                   {{$curr_sortie->_ref_lit->_view}}
                 </td>
-                <td>{{$curr_sortie->sortie|date_format:$dPconfig.time}}</td>
+                <td>{{$curr_sortie->sortie|date_format:$conf.time}}</td>
               </tr>
               {{/foreach}}
             </table>

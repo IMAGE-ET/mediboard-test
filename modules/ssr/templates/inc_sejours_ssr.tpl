@@ -14,7 +14,7 @@
 			<span style="text-align: left">
 				({{$sejours|@count}}) 
 			</span>
-			Séjours SSR du {{$date|date_format:$dPconfig.longdate}}
+			Séjours SSR du {{$date|date_format:$conf.longdate}}
 			
       {{if !$dialog}}
 	    <form name="selDate" action="?" method="get">
@@ -113,7 +113,7 @@
 	  {{assign var=distance_class value=ssr-today}}
 	  {{/if}}
     <td class="{{$distance_class}}">
-    	{{mb_value object=$_sejour field=entree format=$dPconfig.date}}
+    	{{mb_value object=$_sejour field=entree format=$conf.date}}
       <div style="text-align: left; opacity: 0.6;">{{$_sejour->_entree_relative}}j</div>
 		</td>
 
@@ -124,7 +124,7 @@
     {{assign var=distance_class value=ssr-today}}
     {{/if}}
     <td class="{{$distance_class}}">
-    	{{mb_value object=$_sejour field=sortie format=$dPconfig.date}}
+    	{{mb_value object=$_sejour field=sortie format=$conf.date}}
       <div style="text-align: right; opacity: 0.6;">{{$_sejour->_sortie_relative}}j</div>
 		</td>
 		

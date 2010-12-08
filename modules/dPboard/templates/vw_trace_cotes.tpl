@@ -25,7 +25,7 @@ Main.add(function () {
       <form name="changeDate" action="?m={{$m}}" method="get">
         <input type="hidden" name="m" value="{{$m}}" />
         <input type="hidden" name="tab" value="{{$tab}}" />
-        {{$date_interv|date_format:$dPconfig.longdate}}
+        {{$date_interv|date_format:$conf.longdate}}
         <input type="hidden" name="date_interv" class="date" value="{{$date_interv}}" onchange="this.form.submit()" />
       </form>
     </th>

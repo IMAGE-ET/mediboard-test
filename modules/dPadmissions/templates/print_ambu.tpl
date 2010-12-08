@@ -25,7 +25,7 @@
 	      </select>
       </form>
       </span>
-      <a href="#" onclick="window.print()">Patients en séjour de type Ambulatoire du {{$date|date_format:$dPconfig.date}}</a>
+      <a href="#" onclick="window.print()">Patients en séjour de type Ambulatoire du {{$date|date_format:$conf.date}}</a>
     </th>
   </tr>
   <tr>
@@ -61,11 +61,11 @@
 	        -
 	      {{/if}}
 		  </td>
-		  <td style="text-align: center;">{{$_sejour->entree_reelle|date_format:$dPconfig.time}}</td>
-		  <td style="text-align: center;">{{$_sejour->_ref_last_operation->entree_salle|date_format:$dPconfig.time}}</td>
-		  <!-- <td style="text-align: center;">{{$_sejour->_ref_last_operation->entree_reveil|date_format:$dPconfig.time}}</td> -->
-		  <td style="text-align: center;">{{$_sejour->_ref_last_operation->sortie_reveil|date_format:$dPconfig.time}}</td>
-		  <td style="text-align: center;">{{$_sejour->sortie_reelle|date_format:$dPconfig.time}}</td>
+		  <td style="text-align: center;">{{$_sejour->entree_reelle|date_format:$conf.time}}</td>
+		  <td style="text-align: center;">{{$_sejour->_ref_last_operation->entree_salle|date_format:$conf.time}}</td>
+		  <!-- <td style="text-align: center;">{{$_sejour->_ref_last_operation->entree_reveil|date_format:$conf.time}}</td> -->
+		  <td style="text-align: center;">{{$_sejour->_ref_last_operation->sortie_reveil|date_format:$conf.time}}</td>
+		  <td style="text-align: center;">{{$_sejour->sortie_reelle|date_format:$conf.time}}</td>
 		</tr>
 	{{/foreach}}
 </table>

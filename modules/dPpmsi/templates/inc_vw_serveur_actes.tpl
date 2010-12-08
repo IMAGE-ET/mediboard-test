@@ -13,7 +13,7 @@
   <tr>
     <th class="category" colspan="4">
       Intervention par le Dr {{$curr_op->_ref_chir->_view}}
-      &mdash; {{$curr_op->_datetime|date_format:$dPconfig.longdate}}
+      &mdash; {{$curr_op->_datetime|date_format:$conf.longdate}}
       &mdash; 
       {{if $curr_op->salle_id}}
         {{$curr_op->_ref_salle->_view}}
@@ -83,7 +83,7 @@
       {{include file="inc_confirm_actes_ccam.tpl"}}
     </td>
   </tr>
-  {{if ($dPconfig.dPpmsi.systeme_facturation == "siemens")}}
+  {{if ($conf.dPpmsi.systeme_facturation == "siemens")}}
   <tr>
     <td colspan="4">
       <form name="editOpFrm{{$curr_op->_id}}" action="?m={{$m}}" method="post" onsubmit="return checkForm(this)">

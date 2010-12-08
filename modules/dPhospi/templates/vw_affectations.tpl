@@ -11,7 +11,7 @@ Main.add(function () {
   <tr>
     <td colspan="2">
       <div style="float:right;">
-        <strong>Planning du {{$date|date_format:$dPconfig.longdate}}</strong>
+        <strong>Planning du {{$date|date_format:$conf.longdate}}</strong>
       </div>
       {{if $alerte}}
       <div class="warning">

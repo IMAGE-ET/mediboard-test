@@ -23,7 +23,7 @@
         <select name="{{$name}}">
           <option value=""> &ndash; {{tr}}None{{/tr}}</option>
           {{foreach from=$groups_list item=_group}}
-            <option value="{{$_group->_id}}" {{if $dPconfig.$m.$var == $_group->_id}}selected="selected"{{/if}}>{{$_group}}</option>
+            <option value="{{$_group->_id}}" {{if $conf.$m.$var == $_group->_id}}selected="selected"{{/if}}>{{$_group}}</option>
           {{/foreach}}
         </select>
       </td>

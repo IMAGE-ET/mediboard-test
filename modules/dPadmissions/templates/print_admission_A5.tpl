@@ -76,7 +76,7 @@
   
   <tr>
     <th>Date d'admission :</th>
-    <td>{{$admission->entree_prevue|date_format:$dPconfig.datetime}}</td>
+    <td>{{$admission->entree_prevue|date_format:$conf.datetime}}</td>
     <th>Intervention :</th>
     <td>
       {{foreach from=$admission->_ref_operations item=curr_op}}

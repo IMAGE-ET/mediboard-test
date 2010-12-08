@@ -54,7 +54,7 @@ html {
   
   <tr>
     <th>Date</th>
-    <td>{{$smarty.now|date_format:$dPconfig.datetime}}</td>
+    <td>{{$smarty.now|date_format:$conf.datetime}}</td>
     <th>Numéro</th>
     <td>{{$order->order_number}}</td>
   </tr>
@@ -147,7 +147,7 @@ html {
     <tr>
       <td>
         <span style="float: right; text-align: right;">
-          {{$smarty.now|date_format:$dPconfig.datetime}}
+          {{$smarty.now|date_format:$conf.datetime}}
           
           {{if $pharmacien->_id}}
             <br />

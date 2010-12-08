@@ -109,7 +109,7 @@ reloadPatient = function(patient_id, link){
     	{{mb_include module=dPpatients template=inc_select_date date=$naissance tabindex=3}}
     </td>
 
-    {{if $dPconfig.dPpatients.CPatient.tag_ipp && $dPsanteInstalled}}
+    {{if $conf.dPpatients.CPatient.tag_ipp && $dPsanteInstalled}}
     <th>IPP</th>
     <td>
       <input tabindex="8" type="text" name="patient_ipp" value="{{$patient_ipp}}"/>
@@ -153,9 +153,9 @@ reloadPatient = function(patient_id, link){
 </table>
 </form>
 
-{{if $dPconfig.dPpatients.CPatient.limit_char_search && ($nom != $nom_search || $prenom != $prenom_search)}}
+{{if $conf.dPpatients.CPatient.limit_char_search && ($nom != $nom_search || $prenom != $prenom_search)}}
 <div class="small-info">
-	La recherche est volontairement limitée aux {{$dPconfig.dPpatients.CPatient.limit_char_search}} premiers caractères 
+	La recherche est volontairement limitée aux {{$conf.dPpatients.CPatient.limit_char_search}} premiers caractères 
   <ul>
 	  {{if $nom != $nom_search}}
 	  <li>pour le <strong>nom</strong> : '{{$nom_search}}'</li>
@@ -175,7 +175,7 @@ reloadPatient = function(patient_id, link){
 
 <table class="tbl" id="list_patients">
   <tr>
-    {{if ((!$dPconfig.dPpatients.CPatient.merge_only_admin || $can->admin)) && $can->edit}}
+    {{if ((!$conf.dPpatients.CPatient.merge_only_admin || $can->admin)) && $can->edit}}
     <th class="narrow">
     	<button type="submit" class="merge notext" title="{{tr}}Merge{{/tr}}" style="margin: -1px;">
     		{{tr}}Merge{{/tr}}

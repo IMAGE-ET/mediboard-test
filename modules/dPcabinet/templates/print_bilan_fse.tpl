@@ -9,9 +9,9 @@
         <tr>
           <th colspan="2" class="category">
             <a href="#" onclick="window.print()">
-              Rapport du {{$filter->_date_min|date_format:$dPconfig.date}}
+              Rapport du {{$filter->_date_min|date_format:$conf.date}}
               {{if $filter->_date_min != $filter->_date_max}}
-              au {{$filter->_date_max|date_format:$dPconfig.date}}
+              au {{$filter->_date_max|date_format:$conf.date}}
               {{/if}}
             </a>
           </th>
@@ -44,7 +44,7 @@
 
   {{foreach from=$days key=_day item=_fses}}
   <tr>
-    <td colspan="2"><strong>{{$_day|date_format:$dPconfig.longdate}}</strong></td>
+    <td colspan="2"><strong>{{$_day|date_format:$conf.longdate}}</strong></td>
   </tr>
 	
   <tr>

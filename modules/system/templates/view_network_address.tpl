@@ -100,8 +100,8 @@ Main.add(function(){
     <td style="text-align: right;">{{$_log.ip_explode.1}}.</td>
     <td style="text-align: right;">{{$_log.ip_explode.2}}.</td>
     <td style="text-align: right;">{{$_log.ip_explode.3}}</td>
-    <td class="button">{{mb_ditto value=$_log.date_max|date_format:$dPconfig.date name=date}}</td>
-    <td class="button">{{$_log.date_max|date_format:$dPconfig.time}}</td>
+    <td class="button">{{mb_ditto value=$_log.date_max|date_format:$conf.date name=date}}</td>
+    <td class="button">{{$_log.date_max|date_format:$conf.time}}</td>
     <td class="text" style="width: 100%;">
       {{foreach from=$_log.users item=_user}}
         {{mb_include module=mediusers template=inc_vw_mediuser mediuser=$_user}}

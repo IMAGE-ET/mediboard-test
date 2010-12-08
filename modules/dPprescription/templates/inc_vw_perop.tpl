@@ -121,8 +121,8 @@ Main.add( function(){
 	</tr>	
 	{{foreach from=$lines item=_planif}}
 	  <tr>
-	  	<td style="text-align: center;">{{mb_ditto name="date" value=$_planif->dateTime|date_format:$dPconfig.date}}</td>
-			<td style="text-align: center;">{{mb_ditto name="time" value=$_planif->dateTime|date_format:$dPconfig.time}}</td>
+	  	<td style="text-align: center;">{{mb_ditto name="date" value=$_planif->dateTime|date_format:$conf.date}}</td>
+			<td style="text-align: center;">{{mb_ditto name="time" value=$_planif->dateTime|date_format:$conf.time}}</td>
 			<td class="text">{{$_planif->_ref_object->_view}}</td>
 			<td style="text-align: center;">
 			  {{if $_planif->_ref_object instanceof CPrescriptionLineMixItem}}

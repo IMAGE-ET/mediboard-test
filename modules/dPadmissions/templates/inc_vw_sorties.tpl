@@ -61,9 +61,9 @@
       </button>
       <br />
       {{if ($curr_sortie->sortie_reelle < $date_min) || ($curr_sortie->sortie_reelle > $date_max)}}
-        {{$curr_sortie->sortie_reelle|date_format:$dPconfig.datetime}}
+        {{$curr_sortie->sortie_reelle|date_format:$conf.datetime}}
       {{else}}
-        {{$curr_sortie->sortie_reelle|date_format:$dPconfig.time}}
+        {{$curr_sortie->sortie_reelle|date_format:$conf.time}}
       {{/if}}
       <br />
       {{tr}}CSejour.mode_sortie.{{$curr_sortie->mode_sortie}}{{/tr}}
@@ -88,9 +88,9 @@
       </form>
       {{elseif $curr_sortie->sortie_reelle}}
       {{if ($curr_sortie->sortie_reelle < $date_min) || ($curr_sortie->sortie_reelle > $date_max)}}
-        {{$curr_sortie->sortie_reelle|date_format:$dPconfig.datetime}}
+        {{$curr_sortie->sortie_reelle|date_format:$conf.datetime}}
       {{else}}
-        {{$curr_sortie->sortie_reelle|date_format:$dPconfig.time}}
+        {{$curr_sortie->sortie_reelle|date_format:$conf.time}}
       {{/if}}
       {{if $curr_sortie->mode_sortie}}
       <br />
@@ -129,9 +129,9 @@
     <td style="{{if !$curr_sortie->facturable}}background-image:url(images/icons/ray_vertical.gif); background-repeat:repeat;{{/if}}">
       <span onmouseover="ObjectTooltip.createEx(this, '{{$curr_sortie->_guid}}');">
         {{if ($curr_sortie->sortie_prevue < $date_min) || ($curr_sortie->sortie_prevue > $date_max)}}
-          {{$curr_sortie->sortie_prevue|date_format:$dPconfig.datetime}}
+          {{$curr_sortie->sortie_prevue|date_format:$conf.datetime}}
         {{else}}
-          {{$curr_sortie->sortie_prevue|date_format:$dPconfig.time}}
+          {{$curr_sortie->sortie_prevue|date_format:$conf.time}}
         {{/if}}
       </span>
       {{if $curr_sortie->_ref_last_affectation->confirme}}

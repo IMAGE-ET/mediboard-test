@@ -80,7 +80,7 @@ function printAdmission(id) {
               {{$curr_sejour->_ref_patient->rques}}
             </a>
           </td>
-          <td>{{$curr_sejour->sortie_prevue|date_format:$dPconfig.time}}</td>
+          <td>{{$curr_sejour->sortie_prevue|date_format:$conf.time}}</td>
           <td>
             {{if !$curr_sejour->facturable}}
             <strong>NF</strong>

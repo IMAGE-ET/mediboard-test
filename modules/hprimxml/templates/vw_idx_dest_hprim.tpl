@@ -96,7 +96,7 @@
         <tr>  
           <th>{{mb_label object=$dest_hprim field="type"}}</th>
           <td>
-          	<input type="text" name="type" size="20" value="{{if $dPconfig.sip.server}}cip{{else}}sip{{/if}}" readonly="readonly" />
+          	<input type="text" name="type" size="20" value="{{if $conf.sip.server}}cip{{else}}sip{{/if}}" readonly="readonly" />
           </td>
         </tr>
 				<tr>

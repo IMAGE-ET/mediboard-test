@@ -107,7 +107,7 @@ Main.add(function () {
               {{*  increment=true form="edit-constantes-medicales" *}}
             </td>
           {{/if}}
-          <td style="text-align: center" title="{{$dates.$_constante|date_format:$dPconfig.datetime}}">
+          <td style="text-align: center" title="{{$dates.$_constante|date_format:$conf.datetime}}">
             {{if $const->$_constante}}
               {{mb_value object=$const field=$_params.formfields.0}} /
               {{mb_value object=$const field=$_params.formfields.1}}
@@ -133,7 +133,7 @@ Main.add(function () {
               {{* increment=$_readonly|ternary:false:true form="edit-constantes-medicales" *}}
             </td>
           {{/if}}
-          <td style="text-align: center" title="{{$dates.$_constante|date_format:$dPconfig.datetime}}">
+          <td style="text-align: center" title="{{$dates.$_constante|date_format:$conf.datetime}}">
             {{mb_value object=$const field=$_constante}}
             <input type="hidden" name="_last_{{$_constante}}" value="{{$const->$_constante}}" />
           </td>

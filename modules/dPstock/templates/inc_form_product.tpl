@@ -148,7 +148,7 @@ duplicateObject = function (form) {
     </td>
   </tr>
 	
-	{{if @$modules.dmi && $dPconfig.dPstock.CProduct.use_renewable}}
+	{{if @$modules.dmi && $conf.dPstock.CProduct.use_renewable}}
   <tr>
     <th>{{mb_label object=$product field="renewable"}}</th>
     <td>{{mb_field object=$product field="renewable"}}</td>

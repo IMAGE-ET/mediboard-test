@@ -53,7 +53,7 @@ Main.add(function(){
             {{assign var=_version value=$_value|is_numeric|ternary:$_label:$_value}}
             
             <option value="{{$_version}}"
-                    {{if $dPconfig.browser_compat.$_browser == $_version}}selected="selected"{{/if}}>
+                    {{if $conf.browser_compat.$_browser == $_version}}selected="selected"{{/if}}>
               {{$_label}}
             </option>
           {{/foreach}}

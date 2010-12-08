@@ -27,7 +27,7 @@
 </td>
 <td class="text">
   <div class="{{if $curr_consult->chrono == 64}}small-success{{else}}small-info{{/if}}" style="margin: 0px;">
-  {{$curr_consult->heure|date_format:$dPconfig.time}}
+  {{$curr_consult->heure|date_format:$conf.time}}
   -
   {{mb_include module=mediusers template=inc_vw_mediuser mediuser=$curr_consult->_ref_plageconsult->_ref_chir}}
   </div>
@@ -49,7 +49,7 @@
 <td class="text" style="background: {{$background}}; {{if !$curr_adm->facturable}}background-image:url(images/icons/ray_vertical.gif); background-repeat:repeat;{{/if}}">
   {{mb_include module=dPplanningOp template=inc_vw_numdos num_dossier=$curr_adm->_num_dossier}}
   <span onmouseover="ObjectTooltip.createEx(this, '{{$curr_adm->_guid}}');">
-  le {{$curr_adm->_entree|date_format:$dPconfig.date}}
+  le {{$curr_adm->_entree|date_format:$conf.date}}
   </span>
 </td>
 {{if !$curr_adm->annule && $curr_consult->_ref_consult_anesth->_ref_sejour->_id}}
@@ -129,7 +129,7 @@
     {{tr}}Cancel{{/tr}}
   </button>
   {{/if}}
-  {{if ($curr_adm->modif_SHS == 1) && ($dPconfig.dPplanningOp.CSejour.modif_SHS == 1)}}
+  {{if ($curr_adm->modif_SHS == 1) && ($conf.dPplanningOp.CSejour.modif_SHS == 1)}}
     <img src="images/icons/warning.png" title="Le dossier a été modifié, il faut le préparer" />
   {{/if}}
   </form>

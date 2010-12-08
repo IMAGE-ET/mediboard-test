@@ -61,7 +61,7 @@
 
 	  </td>
 	  
-    {{if $dPconfig.dPfiles.system_sender}}
+    {{if $conf.dPfiles.system_sender}}
 	  <td class="button" style="width: 1px">
       <form name="Edit-{{$_file->_guid}}" action="?m={{$m}}" method="post" onsubmit="return checkForm(this)">
      

@@ -18,8 +18,8 @@
     </label>  
   </th>
   <td>
-    <input class="str" name="{{$mod}}[{{$class}}][{{$var}}]" value="{{$dPconfig.$mod.$class.$var}}" />
-    {{if $dPconfig.$mod.$class.$var != $pat}}
+    <input class="str" name="{{$mod}}[{{$class}}][{{$var}}]" value="{{$conf.$mod.$class.$var}}" />
+    {{if $conf.$mod.$class.$var != $pat}}
     <div class="small-warning">
       Le tag IPP pour l'utilisation de ce module dans cet établissement devrait être : '{{$pat}}' <br />
       <button type="submit" class="change" onclick="this.form.elements['{{$mod}}[{{$class}}][{{$var}}]'].value = '{{$pat}}'">
@@ -44,8 +44,8 @@
     </label>  
   </th>
   <td>
-    <input class="str" name="{{$mod}}[{{$class}}][{{$var}}]" value="{{$dPconfig.$mod.$class.$var}}" />
-    {{if $dPconfig.$mod.$class.$var != $sej}}
+    <input class="str" name="{{$mod}}[{{$class}}][{{$var}}]" value="{{$conf.$mod.$class.$var}}" />
+    {{if $conf.$mod.$class.$var != $sej}}
     <div class="small-warning">
       Le tag 'Numéro de dossier' pour l'utilisation de ce module dans cet établissement devrait être : '{{$sej}}'
       <br />

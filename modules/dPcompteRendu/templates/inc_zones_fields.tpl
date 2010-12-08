@@ -47,7 +47,7 @@
 	            objectClass: '{{$compte_rendu->_class_name}}',
 	            contextUserId: User.id,
 	            contextUserView: "{{$user_view}}",
-	            timestamp: "{{$dPconfig.dPcompteRendu.CCompteRendu.timestamp}}",
+	            timestamp: "{{$conf.dPcompteRendu.CCompteRendu.timestamp}}",
 	            resetSearchField: false,
 	            resetDependFields: false,
 	            validateOnBlur: false,

@@ -94,7 +94,7 @@ submitSortieForm = function(oFormSortie) {
           <option value="">-</option>
           {{foreach from=$timing.$key.sortie_reveil|smarty:nodefaults item=curr_time}}
           <option value="{{$curr_time}}" {{if $curr_time == $_operation->sortie_reveil}}selected="selected"{{/if}}>
-            {{$curr_time|date_format:$dPconfig.time}}
+            {{$curr_time|date_format:$conf.time}}
           </option>
           {{/foreach}}
         </select>

@@ -26,7 +26,7 @@ signerActes = function(object_id, object_class){
   <tr>
     <td colspan="10" class="text">
       <div class="small-info">
-        Les actes ne peuvent plus être modifiés pour la raison suivante : {{tr}}config-dPsalleOp-COperation-modif_actes-{{$dPconfig.dPsalleOp.COperation.modif_actes}}{{/tr}}
+        Les actes ne peuvent plus être modifiés pour la raison suivante : {{tr}}config-dPsalleOp-COperation-modif_actes-{{$conf.dPsalleOp.COperation.modif_actes}}{{/tr}}
         <br />
         Veuillez contacter le PMSI pour toute modification.
       </div>
@@ -62,7 +62,7 @@ signerActes = function(object_id, object_class){
     </td>
   </tr>
 
-  {{if ($module == "dPsalleOp" || $module == "dPhospi") && $dPconfig.dPsalleOp.CActeCCAM.signature}}
+  {{if ($module == "dPsalleOp" || $module == "dPhospi") && $conf.dPsalleOp.CActeCCAM.signature}}
   <!-- Signature des actes -->
   <tr>
 	  <td class="button">

@@ -18,12 +18,12 @@
           </td>
           <td>
             <a href="?m={{$m}}&amp;tab=vw_edit_plats&amp;typerepas_id={{$curr_type->typerepas_id}}" title="Modifier le type de plat">
-              {{$curr_type->debut|date_format:$dPconfig.time}}
+              {{$curr_type->debut|date_format:$conf.time}}
             </a>
           </td>
           <td>
             <a href="?m={{$m}}&amp;tab=vw_edit_plats&amp;typerepas_id={{$curr_type->typerepas_id}}" title="Modifier le type de plat">
-              {{$curr_type->fin|date_format:$dPconfig.time}}
+              {{$curr_type->fin|date_format:$conf.time}}
             </a>
           </td>
         </tr>

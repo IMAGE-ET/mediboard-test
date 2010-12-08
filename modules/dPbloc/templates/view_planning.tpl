@@ -50,7 +50,7 @@ function printAdmission(id) {
         <strong>{{$curr_plageop->_ref_spec->_view}}</strong> -
       {{/if}}
       <strong>{{$curr_plageop->_ref_salle->_view}}</strong>
-      de {{$curr_plageop->debut|date_format:$dPconfig.time}} à {{$curr_plageop->fin|date_format:$dPconfig.time}}
+      de {{$curr_plageop->debut|date_format:$conf.time}} à {{$curr_plageop->fin|date_format:$conf.time}}
       le {{$curr_plageop->date|date_format:"%d/%m/%Y"}}
     
       {{if $curr_plageop->anesth_id}}
@@ -78,9 +78,9 @@ function printAdmission(id) {
     <td>
       <table class="tbl">
         <tr>
-        {{assign var="col1" value=$dPconfig.dPbloc.CPlageOp.planning.col1}}
-        {{assign var="col2" value=$dPconfig.dPbloc.CPlageOp.planning.col2}}
-        {{assign var="col3" value=$dPconfig.dPbloc.CPlageOp.planning.col3}}
+        {{assign var="col1" value=$conf.dPbloc.CPlageOp.planning.col1}}
+        {{assign var="col2" value=$conf.dPbloc.CPlageOp.planning.col2}}
+        {{assign var="col3" value=$conf.dPbloc.CPlageOp.planning.col3}}
      
         {{assign var=suffixe value="_title.tpl"}}
         {{include file=inc_planning/$col1$suffixe}}

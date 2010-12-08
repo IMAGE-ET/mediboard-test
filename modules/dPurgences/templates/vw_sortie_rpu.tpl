@@ -146,7 +146,7 @@ function submitSejour(){
     </td>
 		
     <th style="text-align: center;">
-      <big>{{$date|date_format:$dPconfig.longdate}}</big>
+      <big>{{$date|date_format:$conf.longdate}}</big>
       <form action="?" name="changeDate" method="get">
         <input type="hidden" name="m" value="{{$m}}" />
         <input type="hidden" name="tab" value="{{$tab}}" />
@@ -181,7 +181,7 @@ function submitSejour(){
   <tr>
     <th>{{mb_title class=CRPU field="_patient_id"}}</th>
     <th class="narrow"><input type="text" onkeyup="filterPatient(this, 'filter-indicator')" id="filter-patient-name" size="6" /></th>
-    {{if $dPconfig.dPurgences.responsable_rpu_view}}
+    {{if $conf.dPurgences.responsable_rpu_view}}
       <th>{{mb_title class=CRPU field="_responsable_id"}}</th>
     {{/if}}
     <th>Prise en charge</th>
@@ -199,6 +199,6 @@ function submitSejour(){
       {{mb_include module=dPurgences template=inc_sortie_rpu}}
     </tr>
   {{foreachelse}}
-	  <tr><td colspan="{{$dPconfig.dPurgences.responsable_rpu_view|ternary:7:6}}"><em>Aucune sortie à effectuer</em></td></tr>
+	  <tr><td colspan="{{$conf.dPurgences.responsable_rpu_view|ternary:7:6}}"><em>Aucune sortie à effectuer</em></td></tr>
   {{/foreach}}
 </table>

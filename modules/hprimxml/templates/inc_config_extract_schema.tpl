@@ -48,7 +48,7 @@
   
         <select name="hprimxml[{{$_evt}}][version]" onchange="this.form.onsubmit();">
         {{foreach from=$_versions item=_version}}
-          <option value="{{$_version}}" {{if ($_version == $dPconfig.hprimxml.$_evt.version)}}selected="selected"{{/if}}>v. {{$_version}}</option>
+          <option value="{{$_version}}" {{if ($_version == $conf.hprimxml.$_evt.version)}}selected="selected"{{/if}}>v. {{$_version}}</option>
         {{/foreach}}
         </select>
       </form>
@@ -66,9 +66,9 @@
         <input type="hidden" name="dosql" value="do_configure" />
         
         <label for="validation_{{$_evt}}_1">{{tr}}bool.1{{/tr}}</label>
-        <input type="radio" name="hprimxml[{{$_evt}}][validation]" value="1" onchange="this.form.onsubmit();" {{if $dPconfig.hprimxml.$_evt.validation == "1"}}checked="checked"{{/if}}/>
+        <input type="radio" name="hprimxml[{{$_evt}}][validation]" value="1" onchange="this.form.onsubmit();" {{if $conf.hprimxml.$_evt.validation == "1"}}checked="checked"{{/if}}/>
         <label for="validation_{{$_evt}}_0">{{tr}}bool.0{{/tr}}</label>
-        <input type="radio" name="hprimxml[{{$_evt}}][validation]" value="0" onchange="this.form.onsubmit();" {{if $dPconfig.hprimxml.$_evt.validation == "0"}}checked="checked"{{/if}}/>
+        <input type="radio" name="hprimxml[{{$_evt}}][validation]" value="0" onchange="this.form.onsubmit();" {{if $conf.hprimxml.$_evt.validation == "0"}}checked="checked"{{/if}}/>
       </form>
     </td>
     <td>
@@ -77,9 +77,9 @@
         <input type="hidden" name="dosql" value="do_configure" />
         
         <label for="send_ack_{{$_evt}}_1">{{tr}}bool.1{{/tr}}</label>
-        <input type="radio" name="hprimxml[{{$_evt}}][send_ack]" value="1" onchange="this.form.onsubmit();" {{if $dPconfig.hprimxml.$_evt.send_ack == "1"}}checked="checked"{{/if}}/>
+        <input type="radio" name="hprimxml[{{$_evt}}][send_ack]" value="1" onchange="this.form.onsubmit();" {{if $conf.hprimxml.$_evt.send_ack == "1"}}checked="checked"{{/if}}/>
         <label for="send_ack_{{$_evt}}_0">{{tr}}bool.0{{/tr}}</label>
-        <input type="radio" name="hprimxml[{{$_evt}}][send_ack]" value="0" onchange="this.form.onsubmit();" {{if $dPconfig.hprimxml.$_evt.send_ack == "0"}}checked="checked"{{/if}}/>
+        <input type="radio" name="hprimxml[{{$_evt}}][send_ack]" value="0" onchange="this.form.onsubmit();" {{if $conf.hprimxml.$_evt.send_ack == "0"}}checked="checked"{{/if}}/>
       </form>
     </td>
   </tr>

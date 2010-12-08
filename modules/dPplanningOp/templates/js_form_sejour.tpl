@@ -132,7 +132,7 @@ function cancelSejour() {
 
 function modifSejour() {
   var oForm = document.editSejour;
-  {{if $dPconfig.dPplanningOp.CSejour.modif_SHS}}
+  {{if $conf.dPplanningOp.CSejour.modif_SHS}}
   if (oForm.saisi_SHS.value == '1') {
     oForm.modif_SHS.value = '1';
     oForm.saisi_SHS.value = '0';

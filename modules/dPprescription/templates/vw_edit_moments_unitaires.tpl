@@ -105,7 +105,7 @@ Main.add(function () {
               {{mb_field object=$moment field="principal" typeEnum="checkbox" onchange="submitFormAjax(this.form, 'systemMsg');"}}
             </form>
           </td>  
-					<td style="text-align: center">{{$all_configs.$moment_id.default|date_format:$dPconfig.time}}</td>
+					<td style="text-align: center">{{$all_configs.$moment_id.default|date_format:$conf.time}}</td>
 					<td style="text-align: center">
 					  <form name="editConfigMoment-group-{{$moment_id}}" action="">
 					    <input type="hidden" name="m" value="{{$m}}" />

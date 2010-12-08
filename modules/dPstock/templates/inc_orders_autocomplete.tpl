@@ -13,7 +13,7 @@
   <li>
     <span style="display: none;" class="value">{{$curr_order->_id}}-{{$curr_order->order_number}}</span>
     
-    <small style="float: right">{{$curr_order->date_ordered|date_format:$dPconfig.date}}</small>
+    <small style="float: right">{{$curr_order->date_ordered|date_format:$conf.date}}</small>
     <strong class="view">{{$curr_order->order_number}}</strong>
     
     {{if $curr_order->societe_id}}

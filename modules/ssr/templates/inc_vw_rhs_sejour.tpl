@@ -67,10 +67,10 @@
 		    </td>
 
 		    <td class="{{$arretee}}">
-		      {{mb_value object=$_sejour field=entree format=$dPconfig.date}}
+		      {{mb_value object=$_sejour field=entree format=$conf.date}}
 		    </td>
         <td class="{{$arretee}}">
-          {{mb_value object=$_sejour field=sortie format=$dPconfig.date}}
+          {{mb_value object=$_sejour field=sortie format=$conf.date}}
         </td>
 		    
 		    <td class="{{$arretee}}" style="text-align: center;">

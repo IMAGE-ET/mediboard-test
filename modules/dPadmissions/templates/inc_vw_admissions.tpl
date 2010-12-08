@@ -16,7 +16,7 @@ Calendar.regField(getForm("changeDateAdmissions").date, null, {noView: true});
   <tr>
     <th class="title" colspan="10">
       <a href="?m=dPadmissions&tab=vw_idx_admission&date={{$hier}}" style="display: inline"><<<</a>
-      {{$date|date_format:$dPconfig.longdate}}
+      {{$date|date_format:$conf.longdate}}
       <form name="changeDateAdmissions" action="?" method="get">
         <input type="hidden" name="m" value="{{$m}}" />
         <input type="hidden" name="tab" value="vw_idx_admission" />
@@ -80,7 +80,7 @@ Calendar.regField(getForm("changeDateAdmissions").date, null, {noView: true});
     </th>
     <th>Anesth</th>
     <th>CMU</th>
-    {{if $dPconfig.dPadmissions.show_dh}}
+    {{if $conf.dPadmissions.show_dh}}
     <th>DH</th>
     {{/if}}
   </tr>

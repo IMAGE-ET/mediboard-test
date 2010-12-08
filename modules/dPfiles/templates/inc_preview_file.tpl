@@ -2,7 +2,7 @@
   <h4>{{$fileSel->_view}}</h4>
   
   {{if $fileSel->_class_name=="CFile"}}
-    {{$fileSel->file_date|date_format:$dPconfig.datetime}}<br />
+    {{$fileSel->file_date|date_format:$conf.datetime}}<br />
   {{/if}}
 
   {{if $fileSel->_class_name == "CFile" && $fileSel->_nb_pages && !$acces_denied}}

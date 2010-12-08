@@ -135,7 +135,7 @@
     <th class="title" colspan="2">{{tr}}config-{{$m}}-{{$class}}-{{$var}}{{/tr}}</th>
   </tr>
     
-  {{foreach from=$dPconfig.$m.$class.$var key=type item=value}}
+  {{foreach from=$conf.$m.$class.$var key=type item=value}}
   <tr>
     <th>
       <label for="{{$m}}[{{$class}}][{{$var}}][{{$type}}]" title="{{tr}}config-{{$m}}-{{$class}}-{{$var}}-{{$type}}{{/tr}}">
@@ -144,10 +144,10 @@
     </th>
     <td>
       <select class="num" name="{{$m}}[{{$class}}][{{$var}}][{{$type}}]">
-        <option value="04" {{if "04" == $dPconfig.$m.$class.$var.$type}}selected="selected"{{/if}}>+ 04h</option>
-        <option value="24" {{if "24" == $dPconfig.$m.$class.$var.$type}}selected="selected"{{/if}}>+ 24h</option>
-        <option value="48" {{if "48" == $dPconfig.$m.$class.$var.$type}}selected="selected"{{/if}}>+ 48h</option>
-        <option value="72" {{if "72" == $dPconfig.$m.$class.$var.$type}}selected="selected"{{/if}}>+ 72h</option>
+        <option value="04" {{if "04" == $conf.$m.$class.$var.$type}}selected="selected"{{/if}}>+ 04h</option>
+        <option value="24" {{if "24" == $conf.$m.$class.$var.$type}}selected="selected"{{/if}}>+ 24h</option>
+        <option value="48" {{if "48" == $conf.$m.$class.$var.$type}}selected="selected"{{/if}}>+ 48h</option>
+        <option value="72" {{if "72" == $conf.$m.$class.$var.$type}}selected="selected"{{/if}}>+ 72h</option>
       </select>
     </td>
   </tr>

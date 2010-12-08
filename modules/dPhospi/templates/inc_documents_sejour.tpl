@@ -18,7 +18,7 @@
 </div>
 
 {{foreach from=$sejour->_ref_operations item=operation}}
-<h2 style="clear: both;">{{tr}}COperation{{/tr}} du {{$operation->_datetime|date_format:$dPconfig.date}}</h2>
+<h2 style="clear: both;">{{tr}}COperation{{/tr}} du {{$operation->_datetime|date_format:$conf.date}}</h2>
 <div id="Documents-{{$operation->_guid}}" style="float: left; width: 50%;">
 	<script type="text/javascript">
 	Document.register('{{$operation->_id}}','{{$operation->_class_name}}','{{$operation->chir_id}}', 'Documents-{{$operation->_guid}}', 'normal');

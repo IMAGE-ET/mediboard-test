@@ -52,13 +52,13 @@ submitOperationForm = function(oFormOperation) {
           <a href="#" title="Voir la procédure RSPO" onclick="viewRSPO({{$_operation->_id}});">         
           <img src="images/icons/search.png" title="Voir la procédure RSPO" alt="vw_rspo">
           {{if $_operation->blood_salvage->totaltime > "00:00:00"}}  
-            Débuté à {{$_operation->blood_salvage->_recuperation_start|date_format:$dPconfig.time}}
+            Débuté à {{$_operation->blood_salvage->_recuperation_start|date_format:$conf.time}}
           {{else}}
             Non débuté
           {{/if}} 
         </a>
         </div>
-        {{if $_operation->blood_salvage->totaltime|date_format:$dPconfig.time > "05:00"}} 
+        {{if $_operation->blood_salvage->totaltime|date_format:$conf.time > "05:00"}} 
         <div style="float:right; display:inline">
         
         <img src="images/icons/warning.png" title="Durée légale bientôt atteinte !" alt="alerte-durée-RSPO">
@@ -153,5 +153,5 @@ submitOperationForm = function(oFormOperation) {
 
 <script type="text/javascript">
   $('liops').innerHTML = {{$listOperations|@count}};
-  $('heure').innerHTML = "{{$hour|date_format:$dPconfig.time}}";
+  $('heure').innerHTML = "{{$hour|date_format:$conf.time}}";
 </script>

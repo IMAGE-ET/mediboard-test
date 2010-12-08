@@ -47,7 +47,7 @@
         {{$plage->_ref_spec->_view}}
         {{/if}}
         <br />
-        {{$plage->date|date_format:$dPconfig.longdate}}<br />
+        {{$plage->date|date_format:$conf.longdate}}<br />
         {{$plage->_ref_salle->nom}} :
         <select name="_heuredeb" class="notNull num">
         {{foreach from=$listHours item=heure}}
@@ -250,7 +250,7 @@
       <table class="tbl">
         <tr>
           <th class="title" colspan="3">
-            {{if $dPconfig.dPplanningOp.COperation.horaire_voulu}}
+            {{if $conf.dPplanningOp.COperation.horaire_voulu}}
             <form name="editOrderVoulu" action="?m={{$m}}" method="post">
               <input type="hidden" name="m" value="dPbloc" />
               <input type="hidden" name="dosql" value="do_order_voulu_op" />
@@ -277,10 +277,10 @@
               Admission le {{mb_value object=$curr_op->_ref_sejour field=_entree}} ({{$curr_op->_ref_sejour->type|truncate:1:""|capitalize}})
             </span>
             <br />
-            Durée : {{$curr_op->temp_operation|date_format:$dPconfig.time}}
+            Durée : {{$curr_op->temp_operation|date_format:$conf.time}}
             {{if $curr_op->horaire_voulu}}
               <br />
-              Horaire souhaité: {{$curr_op->horaire_voulu|date_format:$dPconfig.time}}
+              Horaire souhaité: {{$curr_op->horaire_voulu|date_format:$conf.time}}
             {{/if}}
             {{if $listPlages|@count != '1'}}
             <br />
@@ -294,7 +294,7 @@
               <select name="plageop_id" onchange="this.form.submit()">
                 {{foreach from=$listPlages item="_plage"}}
                 <option value="{{$_plage->_id}}" {{if $plage->_id == $_plage->_id}} selected = "selected"{{/if}}>
-                {{$_plage->_ref_salle->nom}} / {{$_plage->debut|date_format:$dPconfig.time}} à {{$plage->fin|date_format:$dPconfig.time}}
+                {{$_plage->_ref_salle->nom}} / {{$_plage->debut|date_format:$conf.time}} à {{$plage->fin|date_format:$conf.time}}
                 </option>
                 {{/foreach}}
               </select>
@@ -378,10 +378,10 @@
                 Admission le {{mb_value object=$curr_op->_ref_sejour field=_entree}} ({{$curr_op->_ref_sejour->type|truncate:1:""|capitalize}})
               </span>
               <br />
-              Horaire : {{$curr_op->time_operation|date_format:$dPconfig.time}} - Durée : {{$curr_op->temp_operation|date_format:$dPconfig.time}}
+              Horaire : {{$curr_op->time_operation|date_format:$conf.time}} - Durée : {{$curr_op->temp_operation|date_format:$conf.time}}
               {{if $curr_op->horaire_voulu}}
               <br />
-              Horaire souhaité: {{$curr_op->horaire_voulu|date_format:$dPconfig.time}}
+              Horaire souhaité: {{$curr_op->horaire_voulu|date_format:$conf.time}}
               {{/if}}
               <br />
               Pause : 

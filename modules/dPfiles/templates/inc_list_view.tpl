@@ -14,7 +14,7 @@ Main.add(function () {
 {{foreach from=$affichageFile item=_cat key=_cat_id}}
   <li>
     {{assign var=docCount value=$_cat.items|@count}}
-    {{if $docCount || $dPconfig.dPfiles.CFilesCategory.show_empty}}
+    {{if $docCount || $conf.dPfiles.CFilesCategory.show_empty}}
   	<a href="#Category-{{$_cat_id}}" {{if !$docCount}}class="empty"{{/if}}>
   		{{$_cat.name}} 
   		<small>({{$docCount}})</small>
@@ -27,7 +27,7 @@ Main.add(function () {
 
 {{foreach from=$affichageFile item=_cat key=_cat_id}}
 {{assign var=docCount value=$_cat.items|@count}}
-{{if $docCount || $dPconfig.dPfiles.CFilesCategory.show_empty}}
+{{if $docCount || $conf.dPfiles.CFilesCategory.show_empty}}
 <table class="tbl" id="Category-{{$_cat_id}}" style="display: none;">
   {{if $canFile->edit && !$accordDossier}}
   <tr>
@@ -43,7 +43,7 @@ Main.add(function () {
     <td class="{{cycle name=cellicon values="dark, light"}}">
       {{assign var="elementId" value=$_doc_item->_id}}
       {{if $_doc_item->_class_name=="CCompteRendu"}}
-        {{if $dPconfig.dPcompteRendu.CCompteRendu.pdf_thumbnails}}
+        {{if $conf.dPcompteRendu.CCompteRendu.pdf_thumbnails}}
           {{assign var="nomdoc" value=$_doc_item->nom}}
           {{assign var="file_owner" value=$_doc_item->chir_id}}
           {{assign var="file_id" value=$_doc_item->_ref_file->_id}}

@@ -164,7 +164,7 @@ Main.add(function () {
             objectClass: "CTransmissionMedicale", 
             //contextUserId: "{{$sejour->_ref_praticien->_id}}",
             //contextUserView: "{{$sejour->_ref_praticien->_view}}",
-            timestamp: "{{$dPconfig.dPcompteRendu.CCompteRendu.timestamp}}",
+            timestamp: "{{$conf.dPcompteRendu.CCompteRendu.timestamp}}",
 						dependField1: oFormTrans.type,
 						//dependField2: oFormTrans.degre,
       			validateOnBlur:0
@@ -177,7 +177,7 @@ Main.add(function () {
 	            objectClass: "CObservationMedicale", 
 	            //contextUserId: "{{$sejour->_ref_praticien->_id}}",
               //contextUserView: "{{$sejour->_ref_praticien->_view}}",
-              timestamp: "{{$dPconfig.dPcompteRendu.CCompteRendu.timestamp}}",
+              timestamp: "{{$conf.dPcompteRendu.CCompteRendu.timestamp}}",
 	            dependField1: oFormObs.degre,
 	            dependField2: '',
 	            validateOnBlur:0
@@ -235,7 +235,7 @@ Main.add(function () {
   {{if $isPraticien}}
     <li><a href="#form-observations">Observations</a></li>
  
-	  {{if $sejour->type == "urg" && $dPconfig.dPprescription.CPrescription.prescription_suivi_soins}}
+	  {{if $sejour->type == "urg" && $conf.dPprescription.CPrescription.prescription_suivi_soins}}
 	    <li><a href="#form-prescription-suivi-soins">Prescriptions</a></li>
 	  {{/if}}
   {{/if}}
@@ -285,7 +285,7 @@ Main.add(function () {
 	      <button type="button" class="add" onclick="submitSuivi(this.form)">{{tr}}Add{{/tr}}</button>
       </form>
     </td>
-		{{if $sejour->type == "urg" && $dPconfig.dPprescription.CPrescription.prescription_suivi_soins && $isPraticien}}
+		{{if $sejour->type == "urg" && $conf.dPprescription.CPrescription.prescription_suivi_soins && $isPraticien}}
 		<td id="form-prescription-suivi-soins">
 			
 			  <!-- Formulaire d'ajout de prescription -->

@@ -144,7 +144,7 @@ updateQuantite = function(ratio_UI, oField){
 	      {{else}}
 	        {{$line->_unite_prise}}
 	      {{/if}}
-	      administré par {{$log->_ref_user->_view}} le {{$log->_ref_object->dateTime|date_format:$dPconfig.datetime}}
+	      administré par {{$log->_ref_user->_view}} le {{$log->_ref_object->dateTime|date_format:$conf.datetime}}
 	    </td>
 	  </tr>
 	  {{foreachelse}}

@@ -56,11 +56,11 @@
           {{mb_ditto name="element-$sejour_id" value=$_evenement->_ref_prescription_line_element->_ref_element_prescription->_view}}
         </td>
         <td style="text-align: right;">
-          {{assign var=config_date value=$dPconfig.date}}
+          {{assign var=config_date value=$conf.date}}
           {{mb_ditto name="date-$sejour_id" value=$_evenement->debut|@date_format:"%A $config_date"}}
         </td>
         <td>
-           {{$_evenement->debut|@date_format:$dPconfig.time}}
+           {{$_evenement->debut|@date_format:$conf.time}}
         </td>
         <td>
           {{mb_value object=$_evenement field="duree"}} min

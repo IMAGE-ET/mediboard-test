@@ -146,7 +146,7 @@ Main.add(function () {
                 <td class="{{if $plageconsult_id == $plage->plageconsult_id}}selectedPlage{{else}}nonEmpty{{/if}} {{if $curr_mins == '00'}}hour_start{{/if}}" rowspan="{{$plage->_nb_intervals}}">
                   <a href="?m={{$m}}&amp;tab={{$tab}}&amp;plageconsult_id={{$plage->plageconsult_id}}" title="Voir le contenu de la plage">
                     {{if $plage->libelle}}{{$plage->libelle}}<br />{{/if}}
-                    {{$plage->debut|date_format:$dPconfig.time}} - {{$plage->fin|date_format:$dPconfig.time}}
+                    {{$plage->debut|date_format:$conf.time}} - {{$plage->fin|date_format:$conf.time}}
                   </a>
                   {{assign var="pct" value=$plage->_fill_rate}}
                   {{if $pct gt 100}}
@@ -333,7 +333,7 @@ Main.add(function () {
 	        </tr>
 	        <tr>
 	          <td class="button" colspan="2">
-	            <button class="trash" type='button' onclick="confirmDeletion(this.form,{typeName:'la plage de consultations du',objName:'{{$plageSel->date|date_format:$dPconfig.longdate}}'})">
+	            <button class="trash" type='button' onclick="confirmDeletion(this.form,{typeName:'la plage de consultations du',objName:'{{$plageSel->date|date_format:$conf.longdate}}'})">
 	              Supprimer
 	            </button>
 	          </td>
@@ -353,7 +353,7 @@ Main.add(function () {
             {{if $plageSel->_id}}
             <button class="print" onclick="printPlage({{$plageSel->_id}})" style="float:right">{{tr}}Print{{/tr}}</button>
             {{mb_include module=system template=inc_object_notes object=$plageSel}}
-            Consultations du {{$plageSel->date|date_format:$dPconfig.longdate}}
+            Consultations du {{$plageSel->date|date_format:$conf.longdate}}
             {{else}}
             {{tr}}CPlageconsult.none{{/tr}}
             {{/if}}
@@ -389,7 +389,7 @@ Main.add(function () {
           <td {{$style|smarty:nodefaults}}>
             <div style="float: left">
             {{if $patient->_id}}
-              <a href="{{$href_consult}}" title="Voir la consultation">{{$_consult->heure|date_format:$dPconfig.time}}</a>
+              <a href="{{$href_consult}}" title="Voir la consultation">{{$_consult->heure|date_format:$conf.time}}</a>
             {{else}}
               {{mb_value object=$_consult field=heure}}
             {{/if}}

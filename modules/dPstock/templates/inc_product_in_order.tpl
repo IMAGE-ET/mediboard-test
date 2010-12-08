@@ -23,7 +23,7 @@
         <td>{{$_item->_ref_order->order_number}}</td>
         <td>{{mb_value object=$_item->_ref_order field=date_ordered}}</td>
         <td>
-          {{if $dPconfig.dPstock.CProductStockGroup.unit_order}}
+          {{if $conf.dPstock.CProductStockGroup.unit_order}}
             {{$_item->_unit_quantity}}
           {{else}}
             {{$_item->quantity}}

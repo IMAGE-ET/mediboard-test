@@ -137,7 +137,7 @@ Main.add(function () {
     <td class="halfPane" style="text-align: center">
       <strong>
         <a href="?m=dPadmissions&amp;tab=vw_idx_sortie&amp;date={{$hier}}"> <<< </a>
-        {{$date|date_format:$dPconfig.longdate}}
+        {{$date|date_format:$conf.longdate}}
         <form name="changeDate" action="?m={{$m}}" method="get">
           <input type="hidden" name="m" value="{{$m}}" />
           <input type="hidden" name="tab" value="vw_idx_sortie" />

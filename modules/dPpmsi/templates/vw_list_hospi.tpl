@@ -7,7 +7,7 @@ Main.add(function () {
 <table class="tbl">
   <tr>
     <th class="title" colspan="8">
-      Liste des {{$listSejours|@count}} personne(s) hospitalisée(s) au {{$date|date_format:$dPconfig.longdate}}
+      Liste des {{$listSejours|@count}} personne(s) hospitalisée(s) au {{$date|date_format:$conf.longdate}}
       
       <form action="?" name="changeDate" method="get">
         <input type="hidden" name="m" value="{{$m}}" />

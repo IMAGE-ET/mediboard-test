@@ -52,7 +52,7 @@ Main.add(function () {
       <input type="hidden" name="m" value="{{$m}}" />
       <input type="hidden" name="tab" value="{{$tab}}" />
       
-  	  Logs d'accès du {{$date|date_format:$dPconfig.longdate}}
+  	  Logs d'accès du {{$date|date_format:$conf.longdate}}
       <input type="hidden" name="date" class="date" value="{{$date}}" onchange="this.form.submit()" />
       
       <label for="interval" title="Echelle d'affichage">Intervalle</label>

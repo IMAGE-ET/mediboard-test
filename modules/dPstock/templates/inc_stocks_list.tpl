@@ -11,7 +11,7 @@
 {{assign var=class_name value=$stock->_class_name}}
 
 {{mb_include module=system template=inc_pagination change_page="changePage" 
-    total=$list_stocks_count current=$start step=$dPconfig.dPstock.$class_name.pagination_size}}
+    total=$list_stocks_count current=$start step=$conf.dPstock.$class_name.pagination_size}}
 
 <table class="tbl">
   <tr>

@@ -12,7 +12,7 @@
 
 {{if $source->_incompatible}} 
 <div class="small-error">
-  {{tr}}CExchangeSource-_incompatible{{/tr}} <strong>({{tr}}config-instance_role-{{$dPconfig.instance_role}}{{/tr}})</strong>
+  {{tr}}CExchangeSource-_incompatible{{/tr}} <strong>({{tr}}config-instance_role-{{$conf.instance_role}}{{/tr}})</strong>
 </div>
 {{/if}}
 

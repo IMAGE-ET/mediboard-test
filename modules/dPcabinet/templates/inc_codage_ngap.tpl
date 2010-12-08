@@ -71,7 +71,7 @@ ActesNGAP = {
     <tr>
       <td colspan="10" class="text">
         <div class="small-info">
-          Les actes ne peuvent plus être modifiés pour la raison suivante : {{tr}}config-dPsalleOp-COperation-modif_actes-{{$dPconfig.dPsalleOp.COperation.modif_actes}}{{/tr}}
+          Les actes ne peuvent plus être modifiés pour la raison suivante : {{tr}}config-dPsalleOp-COperation-modif_actes-{{$conf.dPsalleOp.COperation.modif_actes}}{{/tr}}
           <br />
           Veuillez contacter le PMSI pour toute modification.
         </div>
@@ -94,7 +94,7 @@ ActesNGAP = {
           <th class="category">{{mb_title object=$acte_ngap field=montant_depassement}}</th>
         {{/if}}
       {{else}}
-        {{if $dPconfig.dPsalleOp.CActeCCAM.tarif || $object->_class_name == "CConsultation"}}
+        {{if $conf.dPsalleOp.CActeCCAM.tarif || $object->_class_name == "CConsultation"}}
           <th class="category">{{mb_title object=$acte_ngap field=montant_base}}</th>
           <th class="category">{{mb_title object=$acte_ngap field=montant_depassement}}</th>
         {{/if}}
@@ -154,7 +154,7 @@ ActesNGAP = {
         <td>{{mb_value object=$_acte_ngap field="montant_depassement"}}</td>
         {{/if}}
       {{else}}
-        {{if $dPconfig.dPsalleOp.CActeCCAM.tarif || $object->_class_name == "CConsultation"}}
+        {{if $conf.dPsalleOp.CActeCCAM.tarif || $object->_class_name == "CConsultation"}}
         <td>{{mb_value object=$_acte_ngap field="montant_base"}}</td>
         <td>{{mb_value object=$_acte_ngap field="montant_depassement"}}</td>
         {{/if}}

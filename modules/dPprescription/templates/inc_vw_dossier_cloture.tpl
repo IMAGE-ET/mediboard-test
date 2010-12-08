@@ -64,7 +64,7 @@
              {{$line->_unite_administration}}
            {{/if}}: 
            {{foreach from=$_administrations_by_quantite item=_administration name="foreach_adm"}}
-           {{$_administration->dateTime|date_format:$dPconfig.time}}
+           {{$_administration->dateTime|date_format:$conf.time}}
 					 par {{$_administration->_ref_administrateur->_view}}
 					 {{if !$smarty.foreach.foreach_adm.last}},{{/if}}
 					 

@@ -1,9 +1,9 @@
-{{assign var=pdf_thumbnails value=$dPconfig.dPcompteRendu.CCompteRendu.pdf_thumbnails}}
+{{assign var=pdf_thumbnails value=$conf.dPcompteRendu.CCompteRendu.pdf_thumbnails}}
 
 {{mb_include_script module=dPcompteRendu script=thumb}}
 
 <script type="text/javascript">
-window.same_print = {{$dPconfig.dPcompteRendu.CCompteRendu.same_print}};
+window.same_print = {{$conf.dPcompteRendu.CCompteRendu.same_print}};
 window.pdf_thumbnails = {{$pdf_thumbnails|@json}};
 
 {{if $compte_rendu->_id && $pdf_thumbnails == 0}}
@@ -266,7 +266,7 @@ function openWindowMail() {
     </td>
   </tr>
 
-  {{if $compte_rendu->_id && $dPconfig.dPfiles.system_sender}}
+  {{if $compte_rendu->_id && $conf.dPfiles.system_sender}}
   <tr>
     <th style="width: 50%">
       <script type="text/javascript">
@@ -280,7 +280,7 @@ function openWindowMail() {
       </script>
       <label title="{{tr}}config-dPfiles-system_sender{{/tr}}">
         {{tr}}config-dPfiles-system_sender{{/tr}}
-        <em>({{tr}}{{$dPconfig.dPfiles.system_sender}}{{/tr}})</em>
+        <em>({{tr}}{{$conf.dPfiles.system_sender}}{{/tr}})</em>
       </label>
     </th>
     <td id="sendbutton">

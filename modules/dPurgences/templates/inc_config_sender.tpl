@@ -21,9 +21,9 @@
      </th>
      <td>
        <select name="{{$m}}[{{$var}}]">
-         <option value="" {{if "" == $dPconfig.$m.$var}} selected="selected" {{/if}}>&mdash; Aucun</option>
-         <option value="COscourSender" {{if "COscourSender" == $dPconfig.$m.$var}} selected="selected" {{/if}}>{{tr}}COscourSender{{/tr}}</option>
-         <option value="COuralSender" {{if "COuralSender" == $dPconfig.$m.$var}} selected="selected" {{/if}}>{{tr}}COuralSender{{/tr}}</option>
+         <option value="" {{if "" == $conf.$m.$var}} selected="selected" {{/if}}>&mdash; Aucun</option>
+         <option value="COscourSender" {{if "COscourSender" == $conf.$m.$var}} selected="selected" {{/if}}>{{tr}}COscourSender{{/tr}}</option>
+         <option value="COuralSender" {{if "COuralSender" == $conf.$m.$var}} selected="selected" {{/if}}>{{tr}}COuralSender{{/tr}}</option>
        </select>
      </td>
     </tr>

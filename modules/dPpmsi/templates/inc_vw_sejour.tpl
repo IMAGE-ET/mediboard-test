@@ -29,13 +29,13 @@
       </th>
     </tr>
     
-    {{if ($dPconfig.dPpmsi.systeme_facturation == "siemens") && $patient->_ref_IPP}}
+    {{if ($conf.dPpmsi.systeme_facturation == "siemens") && $patient->_ref_IPP}}
     <tr>
       <th id="IPP"> {{mb_include module=dPpmsi template=inc_ipp_form}} </th>
     </tr>
     {{/if}}
   
-    {{if ($dPconfig.dPpmsi.systeme_facturation == "siemens")}}
+    {{if ($conf.dPpmsi.systeme_facturation == "siemens")}}
     <tr>
       <td id="Numdos{{$sejour->sejour_id}}" class="text">
         {{mb_include module=dPpmsi template=inc_numdos_form}}

@@ -20,7 +20,7 @@
     <th>{{mb_title class=CProductReference field=societe_id}}</th>
     <th class="narrow">{{mb_title class=CProductReference field=price}}</th>
      
-		{{if $dPconfig.dPstock.CProductReference.show_cond_price}}
+		{{if $conf.dPstock.CProductReference.show_cond_price}}
     <th colspan="2" class="narrow">{{mb_title class=CProductReference field=_cond_price}}</th>
     {{/if}}
 		
@@ -49,7 +49,7 @@
 
     <td style="text-align: right;">{{mb_value object=$_reference field=price}}</td>
 
-    {{if $dPconfig.dPstock.CProductReference.show_cond_price}}
+    {{if $conf.dPstock.CProductReference.show_cond_price}}
     <td style="text-align: right;">
       <label title="{{$_reference->quantity}} {{$_product->packaging}}">
         {{mb_value object=$_reference field=quantity}} 

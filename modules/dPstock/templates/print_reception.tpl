@@ -53,7 +53,7 @@ table.grid th {
 
 <div class="footer">
   <span style="float: right;">
-    {{$smarty.now|date_format:$dPconfig.datetime}}
+    {{$smarty.now|date_format:$conf.datetime}}
   </span>
   
   Bon de réception n°{{$reception->reference}}
@@ -100,7 +100,7 @@ table.grid th {
     <th class="category">{{mb_title class=CProduct field=classe_comptable}}</th>
     <th class="category">{{mb_title class=CProductReference field=code}}</th>
     <th class="category">{{mb_title class=CProductOrderItemReception field=order_item_id}}</th>
-    {{if $dPconfig.dPstock.CProductStockGroup.unit_order}}
+    {{if $conf.dPstock.CProductStockGroup.unit_order}}
       <th class="category">Unités</th>
       <th class="category"></th>
     {{else}}
@@ -122,7 +122,7 @@ table.grid th {
         <th class="category">{{mb_title class=CProduct field=classe_comptable}}</th>
         <th class="category">{{mb_title class=CProductReference field=code}}</th>
         <th class="category">{{mb_title class=CProductOrderItemReception field=order_item_id}}</th>
-        {{if $dPconfig.dPstock.CProductStockGroup.unit_order}}
+        {{if $conf.dPstock.CProductStockGroup.unit_order}}
           <th class="category">Unités</th>
           <th class="category"></th>
         {{else}}
@@ -138,7 +138,7 @@ table.grid th {
     <td>{{mb_value object=$curr_item->_ref_order_item->_ref_reference->_ref_product field=classe_comptable}}</td>
     <td>{{mb_value object=$curr_item->_ref_order_item->_ref_reference field=code}}</td>
   	<td>{{mb_value object=$curr_item field=order_item_id}}</td>
-    {{if $dPconfig.dPstock.CProductStockGroup.unit_order}}
+    {{if $conf.dPstock.CProductStockGroup.unit_order}}
       <td style="text-align: right; white-space: nowrap;">
         {{$curr_item->_unit_quantity}}
       </td>

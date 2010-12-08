@@ -38,12 +38,12 @@ function printPage(element){
     	{{if $offline}}
         <button style="float: left;" onclick="printPage(this)" class="print not-printable">{{tr}}Print{{/tr}}</button>
 	      <span style="float: right;">
-	        {{$dateTime|date_format:$dPconfig.datetime}}
+	        {{$dateTime|date_format:$conf.datetime}}
 	      </span>
 	    {{/if}}
        <a href="#print" onclick="printPage(this)">
         Résumé des Passages aux Urgences du 
-				{{$date|date_format:$dPconfig.longdate}}
+				{{$date|date_format:$conf.longdate}}
 				<br /> Total: {{$sejours|@count}} RPU
       </a>
     </th>
@@ -78,7 +78,7 @@ function printPage(element){
 	            </button>
 	          {{/if}}
 						<big>{{$patient}}</big>
-						{{if $dPconfig.dPurgences.age_patient_rpu_view}}
+						{{if $conf.dPurgences.age_patient_rpu_view}}
 						  <br/>{{$patient->_age}} ans
 						{{/if}}
 					</td>

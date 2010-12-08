@@ -24,7 +24,7 @@ Main.add(function () {
         <tr>
           <th class="title">
             Consultations d'anesthésie - 
-            {{$date|date_format:$dPconfig.longdate}}
+            {{$date|date_format:$conf.longdate}}
             <input type="hidden" name="date" class="date" value="{{$date}}" onchange="this.form.submit()" />
           </th>
         </tr>

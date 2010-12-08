@@ -41,7 +41,7 @@
         <tr>
           <th>Date</th>
           <td class="greedyPane">
-            {{$operation->_ref_plageop->date|date_format:$dPconfig.longdate}}
+            {{$operation->_ref_plageop->date|date_format:$conf.longdate}}
           </td>
         </tr>
         <tr>

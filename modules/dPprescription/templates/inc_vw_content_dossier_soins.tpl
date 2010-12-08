@@ -13,7 +13,7 @@
 	{{if $prescription->_ref_lines_med_for_plan|@count || $prescription->_ref_lines_elt_for_plan|@count || 
 	     $prescription->_ref_prescription_line_mixes_for_plan_by_type|@count || $prescription->_ref_injections_for_plan|@count}}
 	  <tr>
-	  	{{if $dPconfig.dPprescription.CPrescription.show_categories_plan_soins}}
+	  	{{if $conf.dPprescription.CPrescription.show_categories_plan_soins}}
 	    <th rowspan="2" class="title">Catégorie</th>
       {{/if}}
 	    <th rowspan="2" class="title">Libellé</th>

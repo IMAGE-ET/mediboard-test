@@ -51,7 +51,7 @@
   <tr>
     <th>
       {{tr}}CConsultation{{/tr}} 
-      du {{$_consultation->_date|date_format:$dPconfig.date}}
+      du {{$_consultation->_date|date_format:$conf.date}}
     </th>
     
     {{if $_consultation->annule}}

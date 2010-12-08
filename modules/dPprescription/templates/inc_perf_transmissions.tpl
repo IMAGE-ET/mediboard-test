@@ -64,7 +64,7 @@
       {{/if}}    
     </td>
     <td>
-      {{$_transmission->date|date_format:$dPconfig.time}}
+      {{$_transmission->date|date_format:$conf.time}}
     </td>
     <td class="text" colspan="2">
       <div {{if $_transmission->degre == "high"}}style="background-color: #faa"{{/if}}>

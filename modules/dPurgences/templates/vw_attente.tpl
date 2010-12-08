@@ -41,7 +41,7 @@ Main.add(function () {
   <tr>
     <th>
      le
-     <big>{{$date|date_format:$dPconfig.longdate}}</big>
+     <big>{{$date|date_format:$conf.longdate}}</big>
       <form action="?" name="changeDate" method="get">
         <input type="hidden" name="m" value="{{$m}}" />
         <input type="hidden" name="tab" value="{{$tab}}" />

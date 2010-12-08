@@ -36,7 +36,7 @@ showLegende = function(){
 <table class="main">
   <tr>
 		<th colspan="2">
-			<big>Planning du {{$date|date_format:$dPconfig.date}}</big>
+			<big>Planning du {{$date|date_format:$conf.date}}</big>
 			<form name="selDate" action="?" method="get">
         <input type="hidden" name="m" value="{{$m}}" />
         <input type="hidden" name="{{$actionType}}" value="vw_idx_repartition" />
@@ -64,7 +64,7 @@ showLegende = function(){
 			  Event.observe('plateaux', 'scroll', function(event) { Position.prepare(); });
         </script>
 
-	      {{if $dPconfig.ssr.repartition.show_tabs}} 
+	      {{if $conf.ssr.repartition.show_tabs}} 
 	         
 	      <script type="text/javascript">
 	      Main.add(Control.Tabs.create.curry('tabs-plateaux', true));

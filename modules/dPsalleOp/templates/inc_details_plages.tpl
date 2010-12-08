@@ -31,7 +31,7 @@
         {{else}}
           -
         {{/if}}
-        {{$_plage->debut|date_format:$dPconfig.time}} à {{$_plage->fin|date_format:$dPconfig.time}}
+        {{$_plage->debut|date_format:$conf.time}} à {{$_plage->fin|date_format:$conf.time}}
       </a>
     </th>
   </tr>
@@ -60,7 +60,7 @@
       </select>
     </td>
   </tr>
-  {{if $dPconfig.dPsalleOp.COperation.modif_actes == "button" && !$_plage->actes_locked}}
+  {{if $conf.dPsalleOp.COperation.modif_actes == "button" && !$_plage->actes_locked}}
   <tr>
     <td class="button" colspan="2">
       <input type="hidden" name="actes_locked" value="{{$_plage->actes_locked}}" />

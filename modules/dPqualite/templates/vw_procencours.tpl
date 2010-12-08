@@ -42,7 +42,7 @@ function popFile(objectClass, objectId, elementClass, elementId){
         {{foreach from=$procTermine item=currProc}}
         <tr>
           <td class="text">
-            {{$currProc->_lastentry->date|date_format:$dPconfig.datetime}}
+            {{$currProc->_lastentry->date|date_format:$conf.datetime}}
           </td>
           <td class="text">
             {{if $currProc->_lastactif->doc_ged_suivi_id}}
@@ -133,7 +133,7 @@ function popFile(objectClass, objectId, elementClass, elementId){
             </a>
           </td>
           <td class="text">
-            {{$currProc->_lastentry->date|date_format:$dPconfig.datetime}}
+            {{$currProc->_lastentry->date|date_format:$conf.datetime}}
           </td>
           <td class="text">
             {{$currProc->_lastentry->remarques|nl2br}}

@@ -80,7 +80,7 @@ function confirmeCloture() {
 
 Main.add(function () {
   var url = new Url;
-  {{if $dPconfig.dPsalleOp.COperation.mode || ($currUser->_is_praticien && !$currUser->_is_anesth && !$can->edit)}}
+  {{if $conf.dPsalleOp.COperation.mode || ($currUser->_is_praticien && !$currUser->_is_anesth && !$can->edit)}}
   url.setModuleAction("dPsalleOp", "httpreq_liste_op_prat");
   {{else}}
   url.setModuleAction("dPsalleOp", "httpreq_liste_plages");
@@ -116,7 +116,7 @@ Main.add(function () {
     <td style="width: 220px;" id="listplages"></td>
     <td>
     {{if $selOp->_id}}
-		  {{if $dPconfig.dPsalleOp.CDailyCheckList.active != '1' || 
+		  {{if $conf.dPsalleOp.CDailyCheckList.active != '1' || 
            $date < $smarty.now|date_format:"%Y-%m-%d" || 
            $daily_check_list->_id && $daily_check_list->validator_id || 
            $currUser->_is_praticien}}

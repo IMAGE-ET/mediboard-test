@@ -365,7 +365,7 @@
         </tr>
     
           
-        {{if !$dPconfig.dPcabinet.CConsultAnesth.show_mallampati}}
+        {{if !$conf.dPcabinet.CConsultAnesth.show_mallampati}}
 				<tr>
 					<th style="font-weight: normal;">Mallampati</th>
           <td style="font-weight: bold;">
@@ -374,7 +374,7 @@
 				</tr>	
 				{{/if}}
         <tr>
-        	{{if $consult->_ref_consult_anesth->mallampati && $dPconfig.dPcabinet.CConsultAnesth.show_mallampati}}
+        	{{if $consult->_ref_consult_anesth->mallampati && $conf.dPcabinet.CConsultAnesth.show_mallampati}}
           <td rowspan="4" class="button" style="white-space: nowrap;">
             <img src="images/pictures/{{$consult->_ref_consult_anesth->mallampati}}.png" alt="{{tr}}CConsultAnesth.mallampati.{{$consult->_ref_consult_anesth->mallampati}}{{/tr}}" />
             <br />Mallampati<br />de {{tr}}CConsultAnesth.mallampati.{{$consult->_ref_consult_anesth->mallampati}}{{/tr}}
@@ -608,7 +608,7 @@
     </td>
   </tr>
 
-  {{if $dPconfig.dPcabinet.CConsultAnesth.show_facteurs_risque}}
+  {{if $conf.dPcabinet.CConsultAnesth.show_facteurs_risque}}
   <tr>
   	<td>
   		<table style="width: 100%">
@@ -658,7 +658,7 @@
   {{/if}}
 	
 	<tr>
-		<th class="category">Visite de pré-anesthésie {{if $operation->date_visite_anesth}}- {{$operation->date_visite_anesth|date_format:$dPconfig.datetime}}{{/if}}</th>
+		<th class="category">Visite de pré-anesthésie {{if $operation->date_visite_anesth}}- {{$operation->date_visite_anesth|date_format:$conf.datetime}}{{/if}}</th>
 	</tr>
 	{{if $operation->date_visite_anesth}}
 	<tr>

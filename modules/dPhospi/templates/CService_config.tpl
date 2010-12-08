@@ -30,7 +30,7 @@
         <select class="num" name="{{$m}}[{{$var}}][{{$_type_admission}}]">
           <option value="">&mdash; Choix du service </option>
           {{foreach from=$services item=_service}}
-          <option value="{{$_service->_id}}" {{if $_service->_id == $dPconfig.$m.$var.$_type_admission}}selected="selected"{{/if}}>
+          <option value="{{$_service->_id}}" {{if $_service->_id == $conf.$m.$var.$_type_admission}}selected="selected"{{/if}}>
             {{$_service}}
           </option>
           {{/foreach}}

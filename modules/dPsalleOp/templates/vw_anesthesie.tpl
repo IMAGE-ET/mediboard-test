@@ -50,7 +50,7 @@ function printAllDocs() {
           <tr>
             <td>
               Consultation d'anesthésie de <strong>{{$consult->_ref_patient->_view}}</strong>
-              le {{$consult->_date|date_format:$dPconfig.longdate}}
+              le {{$consult->_date|date_format:$conf.longdate}}
               par <strong>{{$consult->_ref_chir->_view}}</strong><br />
               Type de Séjour : {{tr}}CSejour.type.{{$consult_anesth->_ref_operation->_ref_sejour->type}}{{/tr}}
               <br />

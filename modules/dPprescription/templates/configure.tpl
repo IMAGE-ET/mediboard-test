@@ -80,7 +80,7 @@ function onchangeMed(radioButton, other_field){
       <td colspan="2">
         <select class="num" name="{{$m}}[{{$class}}][{{$var}}]">
         {{foreach from=$listHours item=_hour}}
-          <option value="{{$_hour}}" {{if $_hour == $dPconfig.$m.$class.$var}}selected="selected"{{/if}}>
+          <option value="{{$_hour}}" {{if $_hour == $conf.$m.$class.$var}}selected="selected"{{/if}}>
             {{$_hour}}
           </option>
         {{/foreach}}
@@ -136,7 +136,7 @@ function onchangeMed(radioButton, other_field){
 	    <td colspan="2" style="text-align: center">
 	      <select class="num" name="{{$m}}[{{$class}}][{{$var}}]">
 	      {{foreach from=$listHours item=_hour}}
-	        <option value="{{$_hour}}" {{if $_hour == $dPconfig.$m.$class.$var}}selected="selected"{{/if}}>
+	        <option value="{{$_hour}}" {{if $_hour == $conf.$m.$class.$var}}selected="selected"{{/if}}>
 	          {{$_hour}}
 	        </option>
 	      {{/foreach}}
@@ -201,9 +201,9 @@ function onchangeMed(radioButton, other_field){
 	    </th>
 		  <td>
 		    <select name="{{$m}}[{{$class}}][{{$var}}][IPC]">
-	        <option value="0" {{if 0 == $dPconfig.$m.$class.$var.IPC}} selected="selected" {{/if}}>0</option>
-	        <option value="1" {{if 1 == $dPconfig.$m.$class.$var.IPC}} selected="selected" {{/if}}>1</option>
-	        <option value="2" {{if 2 == $dPconfig.$m.$class.$var.IPC}} selected="selected" {{/if}}>2</option>
+	        <option value="0" {{if 0 == $conf.$m.$class.$var.IPC}} selected="selected" {{/if}}>0</option>
+	        <option value="1" {{if 1 == $conf.$m.$class.$var.IPC}} selected="selected" {{/if}}>1</option>
+	        <option value="2" {{if 2 == $conf.$m.$class.$var.IPC}} selected="selected" {{/if}}>2</option>
 	      </select>
 		  </td>
 		</tr>
@@ -215,9 +215,9 @@ function onchangeMed(radioButton, other_field){
 	    </th>
 		  <td>
 		    <select name="{{$m}}[{{$class}}][{{$var}}][allergie]">
-	        <option value="0" {{if 0 == $dPconfig.$m.$class.$var.allergie}} selected="selected" {{/if}}>0</option>
-	        <option value="1" {{if 1 == $dPconfig.$m.$class.$var.allergie}} selected="selected" {{/if}}>1</option>
-	        <option value="2" {{if 2 == $dPconfig.$m.$class.$var.allergie}} selected="selected" {{/if}}>2</option>
+	        <option value="0" {{if 0 == $conf.$m.$class.$var.allergie}} selected="selected" {{/if}}>0</option>
+	        <option value="1" {{if 1 == $conf.$m.$class.$var.allergie}} selected="selected" {{/if}}>1</option>
+	        <option value="2" {{if 2 == $conf.$m.$class.$var.allergie}} selected="selected" {{/if}}>2</option>
 	      </select>
 		  </td>
 		</tr>
@@ -229,9 +229,9 @@ function onchangeMed(radioButton, other_field){
 	    </th>
 		  <td>
 		    <select name="{{$m}}[{{$class}}][{{$var}}][hors_livret]">
-	        <option value="0" {{if 0 == $dPconfig.$m.$class.$var.hors_livret}} selected="selected" {{/if}}>0</option>
-	        <option value="1" {{if 1 == $dPconfig.$m.$class.$var.hors_livret}} selected="selected" {{/if}}>1</option>
-	        <option value="2" {{if 2 == $dPconfig.$m.$class.$var.hors_livret}} selected="selected" {{/if}}>2</option>
+	        <option value="0" {{if 0 == $conf.$m.$class.$var.hors_livret}} selected="selected" {{/if}}>0</option>
+	        <option value="1" {{if 1 == $conf.$m.$class.$var.hors_livret}} selected="selected" {{/if}}>1</option>
+	        <option value="2" {{if 2 == $conf.$m.$class.$var.hors_livret}} selected="selected" {{/if}}>2</option>
 	      </select>
 		  </td>
 		</tr>  
@@ -277,9 +277,9 @@ function onchangeMed(radioButton, other_field){
 	  <tr>  
 	    <td colspan="2" style="text-align: center">
 	      <label for="{{$m}}[{{$class}}][{{$var}}]">Oui</label>
-	      <input type="radio" name="{{$m}}[{{$class}}][{{$var}}]" value="1" {{if $dPconfig.$m.$class.$var == "1"}}checked="checked"{{/if}}/> 
+	      <input type="radio" name="{{$m}}[{{$class}}][{{$var}}]" value="1" {{if $conf.$m.$class.$var == "1"}}checked="checked"{{/if}}/> 
 	      <label for="{{$m}}[{{$class}}][{{$var}}]">Non</label>
-	      <input type="radio" name="{{$m}}[{{$class}}][{{$var}}]" value="0" {{if $dPconfig.$m.$class.$var == "0"}}checked="checked"{{/if}}/> 
+	      <input type="radio" name="{{$m}}[{{$class}}][{{$var}}]" value="0" {{if $conf.$m.$class.$var == "0"}}checked="checked"{{/if}}/> 
 	    </td>             
 	  </tr>
 
@@ -301,9 +301,9 @@ function onchangeMed(radioButton, other_field){
 		  </th>
       <td>
         <label for="{{$m}}[{{$class}}][{{$var}}][{{$var_item}}]">Oui</label>
-        <input type="radio" name="{{$m}}[{{$class}}][{{$var}}][{{$var_item}}]" value="1" {{if $dPconfig.$m.$class.$var.$var_item == "1"}}checked="checked"{{/if}}/> 
+        <input type="radio" name="{{$m}}[{{$class}}][{{$var}}][{{$var_item}}]" value="1" {{if $conf.$m.$class.$var.$var_item == "1"}}checked="checked"{{/if}}/> 
         <label for="{{$m}}[{{$class}}][{{$var}}][{{$var_item}}]">Non</label>
-        <input type="radio" name="{{$m}}[{{$class}}][{{$var}}][{{$var_item}}]" value="0" {{if $dPconfig.$m.$class.$var.$var_item == "0"}}checked="checked"{{/if}}/> 
+        <input type="radio" name="{{$m}}[{{$class}}][{{$var}}][{{$var_item}}]" value="0" {{if $conf.$m.$class.$var.$var_item == "0"}}checked="checked"{{/if}}/> 
       </td>             
     </tr>
 		{{assign var="var_item" value="midi"}}
@@ -315,9 +315,9 @@ function onchangeMed(radioButton, other_field){
       </th>
       <td>
       	<label for="{{$m}}[{{$class}}][{{$var}}][{{$var_item}}]">Oui</label>
-        <input type="radio" name="{{$m}}[{{$class}}][{{$var}}][{{$var_item}}]" value="1" {{if $dPconfig.$m.$class.$var.$var_item == "1"}}checked="checked"{{/if}}/> 
+        <input type="radio" name="{{$m}}[{{$class}}][{{$var}}][{{$var_item}}]" value="1" {{if $conf.$m.$class.$var.$var_item == "1"}}checked="checked"{{/if}}/> 
         <label for="{{$m}}[{{$class}}][{{$var}}][{{$var_item}}]">Non</label>
-        <input type="radio" name="{{$m}}[{{$class}}][{{$var}}][{{$var_item}}]" value="0" {{if $dPconfig.$m.$class.$var.$var_item == "0"}}checked="checked"{{/if}}/> 
+        <input type="radio" name="{{$m}}[{{$class}}][{{$var}}][{{$var_item}}]" value="0" {{if $conf.$m.$class.$var.$var_item == "0"}}checked="checked"{{/if}}/> 
       </td>             
     </tr>
 		{{assign var="var_item" value="apres_midi"}}
@@ -329,9 +329,9 @@ function onchangeMed(radioButton, other_field){
       </th>
       <td>  
 		    <label for="{{$m}}[{{$class}}][{{$var}}][{{$var_item}}]">Oui</label>
-        <input type="radio" name="{{$m}}[{{$class}}][{{$var}}][{{$var_item}}]" value="1" {{if $dPconfig.$m.$class.$var.$var_item == "1"}}checked="checked"{{/if}}/> 
+        <input type="radio" name="{{$m}}[{{$class}}][{{$var}}][{{$var_item}}]" value="1" {{if $conf.$m.$class.$var.$var_item == "1"}}checked="checked"{{/if}}/> 
         <label for="{{$m}}[{{$class}}][{{$var}}][{{$var_item}}]">Non</label>
-        <input type="radio" name="{{$m}}[{{$class}}][{{$var}}][{{$var_item}}]" value="0" {{if $dPconfig.$m.$class.$var.$var_item == "0"}}checked="checked"{{/if}}/> 
+        <input type="radio" name="{{$m}}[{{$class}}][{{$var}}][{{$var_item}}]" value="0" {{if $conf.$m.$class.$var.$var_item == "0"}}checked="checked"{{/if}}/> 
       </td>             
     </tr>
 		{{assign var="var_item" value="soir"}}
@@ -343,9 +343,9 @@ function onchangeMed(radioButton, other_field){
       </th>
       <td>
       	<label for="{{$m}}[{{$class}}][{{$var}}][{{$var_item}}]">Oui</label>
-        <input type="radio" name="{{$m}}[{{$class}}][{{$var}}][{{$var_item}}]" value="1" {{if $dPconfig.$m.$class.$var.$var_item == "1"}}checked="checked"{{/if}}/> 
+        <input type="radio" name="{{$m}}[{{$class}}][{{$var}}][{{$var_item}}]" value="1" {{if $conf.$m.$class.$var.$var_item == "1"}}checked="checked"{{/if}}/> 
         <label for="{{$m}}[{{$class}}][{{$var}}][{{$var_item}}]">Non</label>
-        <input type="radio" name="{{$m}}[{{$class}}][{{$var}}][{{$var_item}}]" value="0" {{if $dPconfig.$m.$class.$var.$var_item == "0"}}checked="checked"{{/if}}/> 
+        <input type="radio" name="{{$m}}[{{$class}}][{{$var}}][{{$var_item}}]" value="0" {{if $conf.$m.$class.$var.$var_item == "0"}}checked="checked"{{/if}}/> 
       </td>             
     </tr>
 		{{assign var="var_item" value="coucher"}}
@@ -357,9 +357,9 @@ function onchangeMed(radioButton, other_field){
       </th>
       <td>
       	<label for="{{$m}}[{{$class}}][{{$var}}][{{$var_item}}]">Oui</label>
-        <input type="radio" name="{{$m}}[{{$class}}][{{$var}}][{{$var_item}}]" value="1" {{if $dPconfig.$m.$class.$var.$var_item == "1"}}checked="checked"{{/if}}/> 
+        <input type="radio" name="{{$m}}[{{$class}}][{{$var}}][{{$var_item}}]" value="1" {{if $conf.$m.$class.$var.$var_item == "1"}}checked="checked"{{/if}}/> 
         <label for="{{$m}}[{{$class}}][{{$var}}][{{$var_item}}]">Non</label>
-        <input type="radio" name="{{$m}}[{{$class}}][{{$var}}][{{$var_item}}]" value="0" {{if $dPconfig.$m.$class.$var.$var_item == "0"}}checked="checked"{{/if}}/> 
+        <input type="radio" name="{{$m}}[{{$class}}][{{$var}}][{{$var_item}}]" value="0" {{if $conf.$m.$class.$var.$var_item == "0"}}checked="checked"{{/if}}/> 
       </td>             
     </tr>
 		
@@ -383,9 +383,9 @@ function onchangeMed(radioButton, other_field){
 	  <tr>  
 	    <td colspan="2" style="text-align: center">
 	      <label for="{{$m}}[{{$class}}][{{$var}}]">Oui</label>
-	      <input type="radio" name="{{$m}}[{{$class}}][{{$var}}]" value="1" {{if $dPconfig.$m.$class.$var == "1"}}checked="checked"{{/if}}/> 
+	      <input type="radio" name="{{$m}}[{{$class}}][{{$var}}]" value="1" {{if $conf.$m.$class.$var == "1"}}checked="checked"{{/if}}/> 
 	      <label for="{{$m}}[{{$class}}][{{$var}}]">Non</label>
-	      <input type="radio" name="{{$m}}[{{$class}}][{{$var}}]" value="0" {{if $dPconfig.$m.$class.$var == "0"}}checked="checked"{{/if}}/> 
+	      <input type="radio" name="{{$m}}[{{$class}}][{{$var}}]" value="0" {{if $conf.$m.$class.$var == "0"}}checked="checked"{{/if}}/> 
 	    </td>             
 	  </tr>  
 	  <tr>

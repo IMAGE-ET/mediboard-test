@@ -66,7 +66,7 @@ receiveOrderItems = function(form, container) {
   <tr>
     <th style="width: 50%;"></th>
     <th style="text-align: center;" class="narrow">
-    {{if $dPconfig.dPstock.CProductStockGroup.unit_order}}
+    {{if $conf.dPstock.CProductStockGroup.unit_order}}
       {{mb_title class=CProductOrderItem field=_unit_quantity}}
     {{else}}
       {{mb_title class=CProductOrderItem field=quantity}}

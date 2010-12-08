@@ -51,7 +51,7 @@ PlageConsult.addPlaceAfter = function(plage_id) {
       {{/if}}
       Dr {{$plage->_ref_chir->_view}}
       <br />
-      Plage du {{$plage->date|date_format:$dPconfig.longdate}} de {{$plage->debut|date_format:$dPconfig.time}} à {{$plage->fin|date_format:$dPconfig.time}}
+      Plage du {{$plage->date|date_format:$conf.longdate}} de {{$plage->debut|date_format:$conf.time}} à {{$plage->fin|date_format:$conf.time}}
     </th>
   </tr>
   {{if $online && !$plage->locked}}
@@ -73,14 +73,14 @@ PlageConsult.addPlaceAfter = function(plage_id) {
   </tr>
   {{else}}
   <tr>
-    <th colspan="3">Pas de plage le {{$date|date_format:$dPconfig.longdate}}</th>
+    <th colspan="3">Pas de plage le {{$date|date_format:$conf.longdate}}</th>
   </tr>
   {{/if}}
   {{foreach from=$listBefore item =_consultation}}
   <tr>
     <td>
       <div style="float:left">
-        {{$_consultation->heure|date_format:$dPconfig.time}}
+        {{$_consultation->heure|date_format:$conf.time}}
       </div>
       <div style="float:right">
         {{if $_consultation->categorie_id}}
@@ -129,9 +129,9 @@ PlageConsult.addPlaceAfter = function(plage_id) {
     <td>
       <div style="float:left">
         {{if $online && !$plage->locked}}
-          <button type="button" class="tick" onclick="PlageConsult.setClose('{{$_place.time}}')">{{$_place.time|date_format:$dPconfig.time}}</button>
+          <button type="button" class="tick" onclick="PlageConsult.setClose('{{$_place.time}}')">{{$_place.time|date_format:$conf.time}}</button>
         {{else}}
-          {{$_place.time|date_format:$dPconfig.time}}
+          {{$_place.time|date_format:$conf.time}}
         {{/if}}
       </div>
       <div style="float:right">
@@ -187,7 +187,7 @@ PlageConsult.addPlaceAfter = function(plage_id) {
   <tr>
     <td>
       <div style="float:left">
-        {{$_consultation->heure|date_format:$dPconfig.time}}
+        {{$_consultation->heure|date_format:$conf.time}}
       </div>
       <div style="float:right">
         {{if $_consultation->categorie_id}}

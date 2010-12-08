@@ -29,12 +29,12 @@
   <!-- Allergie -->
   {{if array_key_exists($code_cip, $allergie)}}
     <!-- Alerte faible -->
-    {{if $dPconfig.dPprescription.CPrescription.scores.allergie == '1'}}
+    {{if $conf.dPprescription.CPrescription.scores.allergie == '1'}}
       {{assign var=puce_orange value=true}}
       
     {{/if}}
     <!-- Alerte importante -->
-    {{if $dPconfig.dPprescription.CPrescription.scores.allergie == '2'}}
+    {{if $conf.dPprescription.CPrescription.scores.allergie == '2'}}
       {{assign var=puce_rouge value=true}}
     {{/if}}
   {{/if}}
@@ -42,11 +42,11 @@
   <!-- IPC -->
   {{if array_key_exists($code_cip, $IPC)}}
     <!-- Alerte faible -->
-    {{if $dPconfig.dPprescription.CPrescription.scores.IPC == '1'}}
+    {{if $conf.dPprescription.CPrescription.scores.IPC == '1'}}
       {{assign var=puce_orange value=true}}
     {{/if}}
     <!-- Alerte importante -->
-    {{if $dPconfig.dPprescription.CPrescription.scores.IPC == '2'}}
+    {{if $conf.dPprescription.CPrescription.scores.IPC == '2'}}
       {{assign var=puce_rouge value=true}}
     {{/if}}
   {{/if}}
@@ -56,10 +56,10 @@
 	  {{foreach from=$interaction.$code_cip item=_interaction}}
 	    {{assign var=_niveau value=$_interaction.niveau}}
 	    {{assign var=niveau value=niv$_niveau}}
-	    {{if $dPconfig.dPprescription.CPrescription.scores.interaction.$niveau == '1'}}
+	    {{if $conf.dPprescription.CPrescription.scores.interaction.$niveau == '1'}}
 	      {{assign var=puce_orange value=true}}
 	    {{/if}}
-	    {{if $dPconfig.dPprescription.CPrescription.scores.interaction.$niveau == '2'}}
+	    {{if $conf.dPprescription.CPrescription.scores.interaction.$niveau == '2'}}
 	      {{assign var=puce_rouge value=true}}
 	    {{/if}}
 	  {{/foreach}}
@@ -71,10 +71,10 @@
 	    {{assign var=_niveau value=$_profil.niveau}}
 	    {{assign var=niveau value=niv$_niveau}}
 	     
-	    {{if $dPconfig.dPprescription.CPrescription.scores.profil.$niveau == '1'}}
+	    {{if $conf.dPprescription.CPrescription.scores.profil.$niveau == '1'}}
 	      {{assign var=puce_orange value=true}}
 	    {{/if}}
-	    {{if $dPconfig.dPprescription.CPrescription.scores.profil.$niveau == '2'}}
+	    {{if $conf.dPprescription.CPrescription.scores.profil.$niveau == '2'}}
 	      {{assign var=puce_rouge value=true}}
 	    {{/if}}
 	  {{/foreach}}
@@ -86,10 +86,10 @@
 	    {{assign var=_niveau value=$_posoduree.niveau}}
 	    {{assign var=niveau value=niv$_niveau}}
 	     
-	    {{if $dPconfig.dPprescription.CPrescription.scores.posoduree.$niveau == '1'}}
+	    {{if $conf.dPprescription.CPrescription.scores.posoduree.$niveau == '1'}}
 	      {{assign var=puce_orange value=true}}
 	    {{/if}}
-	    {{if $dPconfig.dPprescription.CPrescription.scores.posoduree.$niveau == '2'}}
+	    {{if $conf.dPprescription.CPrescription.scores.posoduree.$niveau == '2'}}
 	      {{assign var=puce_rouge value=true}}
 	    {{/if}}
 	  {{/foreach}}
@@ -99,10 +99,10 @@
 	    {{assign var=_niveau value=$_posoqte.niveau}}
 	    {{assign var=niveau value=niv$_niveau}}
 	     
-	    {{if $dPconfig.dPprescription.CPrescription.scores.posoqte.$niveau == '1'}}
+	    {{if $conf.dPprescription.CPrescription.scores.posoqte.$niveau == '1'}}
 	      {{assign var=puce_orange value=true}}
 	    {{/if}}
-	    {{if $dPconfig.dPprescription.CPrescription.scores.posoqte.$niveau == '2'}}
+	    {{if $conf.dPprescription.CPrescription.scores.posoqte.$niveau == '2'}}
 	      {{assign var=puce_rouge value=true}}
 	    {{/if}}
 	  {{/foreach}}

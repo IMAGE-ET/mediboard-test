@@ -216,7 +216,7 @@ updateModaleAfterAddLine = function(line_id){
   </tr>
   {{/if}}
   
-	{{if ($is_praticien || $mode_protocole || @$operation_id || $can->admin || $mode_pharma || ($current_user->isInfirmiere() && $dPconfig.dPprescription.CPrescription.droits_infirmiers_med))}}  
+	{{if ($is_praticien || $mode_protocole || @$operation_id || $can->admin || $mode_pharma || ($current_user->isInfirmiere() && $conf.dPprescription.CPrescription.droits_infirmiers_med))}}  
   <tr>
     <th class="title">
     	{{if $app->user_prefs.easy_mode}}
@@ -240,7 +240,7 @@ updateModaleAfterAddLine = function(line_id){
     </button>
     {{/if}}
 		
-    {{if ($is_praticien || $mode_protocole || @$operation_id || $can->admin || $mode_pharma || ($current_user->isInfirmiere() && $dPconfig.dPprescription.CPrescription.droits_infirmiers_med))}}  
+    {{if ($is_praticien || $mode_protocole || @$operation_id || $can->admin || $mode_pharma || ($current_user->isInfirmiere() && $conf.dPprescription.CPrescription.droits_infirmiers_med))}}  
     
 			<!-- Affichage des div des medicaments et autres produits -->
 			  <form action="?" method="get" name="searchProd" onsubmit="return false;">
@@ -264,7 +264,7 @@ updateModaleAfterAddLine = function(line_id){
 			    <input type="text" name="produit" value="&mdash; {{tr}}CPrescription.select_produit{{/tr}}" size="20" style="font-weight: bold; font-size: 1.3em; width: 300px;" class="autocomplete" 
 					       onclick="this.value = ''; headerPrescriptionTabs.setActiveTab('div_ajout_lignes');" />
 			    <label title="Recherche dans le livret thérapeutique">
-			      <input type="checkbox" value="1" name="_recherche_livret" {{if $prescription->type=="sejour" && $dPconfig.dPprescription.CPrescription.preselect_livret}}checked="checked"{{/if}} onchange="if($V(this.form.produit)) { ac.activate.bind(ac)() };" />
+			      <input type="checkbox" value="1" name="_recherche_livret" {{if $prescription->type=="sejour" && $conf.dPprescription.CPrescription.preselect_livret}}checked="checked"{{/if}} onchange="if($V(this.form.produit)) { ac.activate.bind(ac)() };" />
 			      Livret Thérap.
 			    </label>
 			    

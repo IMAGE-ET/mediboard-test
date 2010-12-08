@@ -13,7 +13,7 @@ showLegend = function() {
 	<table class="form">
 	  <tr>
 	    <th class="title" colspan="2">
-	      {{$date|date_format:$dPconfig.longdate}}
+	      {{$date|date_format:$conf.longdate}}
 	      <input type="hidden" name="date" class="date" value="{{$date}}" onchange="this.form.submit()" />
 	    </th>
 	  </tr>

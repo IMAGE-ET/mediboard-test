@@ -25,7 +25,7 @@
 		        {{tr}}config-{{$m}}-{{$var}}{{/tr}}
 		    </th>
 		    <td>
-		      <input type="text" name="{{$m}}[{{$var}}]" value="{{$dPconfig.$m.$var}}" size="40" /> 
+		      <input type="text" name="{{$m}}[{{$var}}]" value="{{$conf.$m.$var}}" size="40" /> 
 		    </td>           
 		  </tr>
 	  {{/if}}

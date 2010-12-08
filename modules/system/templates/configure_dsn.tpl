@@ -37,8 +37,8 @@ var DSN = {
 {{assign var=section value="db"}}
 {{assign var=dsnConfig value=0}}
 
-{{if $dsn|array_key_exists:$dPconfig.$section}}
-  {{assign var=dsnConfig value=$dPconfig.$section.$dsn}}
+{{if $dsn|array_key_exists:$conf.$section}}
+  {{assign var=dsnConfig value=$conf.$section.$dsn}}
 {{/if}} 
 
 <table class="main"> 

@@ -21,7 +21,7 @@
 {{/if}}
 
 <tr id="line_{{$line_class}}_{{$line_id}}_{{$unite_prise|regex_replace:'/[^a-z0-9_-]/i':'_'}}">
-  {{if $dPconfig.dPprescription.CPrescription.show_categories_plan_soins}}
+  {{if $conf.dPprescription.CPrescription.show_categories_plan_soins}}
 		{{if $smarty.foreach.$first_foreach.first && $smarty.foreach.$last_foreach.first}}
 	    {{if $line_class == "CPrescriptionLineMedicament"}}
 	      {{assign var=libelle_ATC value=$line->_ref_produit->_ref_ATC_2_libelle}}
@@ -36,7 +36,7 @@
 	       		{{if @is_array($transmissions.ATC.$libelle_ATC)}}
 	  		      <ul>
 	  			  {{foreach from=$transmissions.ATC.$libelle_ATC item=_trans}}
-	  			    <li>{{$_trans->_view}} le {{$_trans->date|date_format:$dPconfig.datetime}}:<br /> {{$_trans->text}}</li>
+	  			    <li>{{$_trans->_view}} le {{$_trans->date|date_format:$conf.datetime}}:<br /> {{$_trans->text}}</li>
 	  			  {{/foreach}}
 	  		      </ul>
 	  			  {{else}}
@@ -70,7 +70,7 @@
 	       		{{if @is_array($transmissions.CCategoryPrescription.$name_cat)}}
 	  		      <ul>
 	  			  {{foreach from=$transmissions.CCategoryPrescription.$name_cat item=_trans}}
-	  			    <li>{{$_trans->_view}} le {{$_trans->date|date_format:$dPconfig.datetime}}:<br /> {{$_trans->text}}</li>
+	  			    <li>{{$_trans->_view}} le {{$_trans->date|date_format:$conf.datetime}}:<br /> {{$_trans->text}}</li>
 	  			  {{/foreach}}
 	  		      </ul>
 	  			{{else}}
@@ -179,7 +179,7 @@
   
   <!-- Affichage des posologies de la ligne -->
   <td class="text">
-  	{{if !$line->signee && $line instanceof CPrescriptionLineMedicament && $dPconfig.dPprescription.CPrescription.show_unsigned_med_msg}}
+  	{{if !$line->signee && $line instanceof CPrescriptionLineMedicament && $conf.dPprescription.CPrescription.show_unsigned_med_msg}}
 		
 		{{else}}
 	    <small style="font-weight: bold;">
@@ -232,7 +232,7 @@
 	  <td id="first_{{$line_id}}_{{$line_class}}_{{$unite_prise}}" style="display: none;">
 	  </td>
 	  
-		{{if !$line->signee && $line->_class_name == "CPrescriptionLineMedicament" && $dPconfig.dPprescription.CPrescription.show_unsigned_med_msg}}
+		{{if !$line->signee && $line->_class_name == "CPrescriptionLineMedicament" && $conf.dPprescription.CPrescription.show_unsigned_med_msg}}
     {{foreach from=$tabHours key=_view_date item=_hours_by_moment}}
       {{foreach from=$_hours_by_moment key=moment_journee item=_dates}}
         <td class="{{$_view_date}}-{{$moment_journee}}" colspan="{{if $moment_journee == 'soir'}}{{$count_soir-2}}{{/if}}
@@ -259,7 +259,7 @@
  <td style="text-align: center">
  	 <div class="mediuser" style="border-color: #{{$line->_ref_praticien->_ref_function->color}}">
    {{if $line->signee}}
-   <img src="images/icons/tick.png" title="Signée le {{$line->_ref_log_signee->date|date_format:$dPconfig.datetime}} par {{$line->_ref_praticien->_view}}" />
+   <img src="images/icons/tick.png" title="Signée le {{$line->_ref_log_signee->date|date_format:$conf.datetime}} par {{$line->_ref_praticien->_view}}" />
    {{else}}
    <img src="images/icons/cross.png" title="Non signée par le praticien" />
    {{/if}}

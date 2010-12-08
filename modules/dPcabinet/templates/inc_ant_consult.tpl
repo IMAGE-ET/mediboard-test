@@ -206,7 +206,7 @@ Main.add(function () {
                   // Probleme dans dPurgence si on prend l'utilisateur de la consult
                   //contextUserId: "{{$userSel->_id}}",
                   //contextUserView: "{{$userSel->_view}}",
-                  timestamp: "{{$dPconfig.dPcompteRendu.CCompteRendu.timestamp}}"
+                  timestamp: "{{$conf.dPcompteRendu.CCompteRendu.timestamp}}"
                 });
                 
                 $(elements._search).observe("blur", function(e){
@@ -241,7 +241,7 @@ Main.add(function () {
       </form>
     </td>
   </tr>
-  {{if $isPrescriptionInstalled || $dPconfig.dPpatients.CTraitement.enabled}}
+  {{if $isPrescriptionInstalled || $conf.dPpatients.CTraitement.enabled}}
   <tr>
     <th class="category">
       Traitements
@@ -253,7 +253,7 @@ Main.add(function () {
 				{{if $isPrescriptionInstalled}}
 				  <li><a href="#tp_base_med">Base de données de médicaments</a></li>
 				{{/if}}
-				{{if $dPconfig.dPpatients.CTraitement.enabled}}
+				{{if $conf.dPpatients.CTraitement.enabled}}
 				  <li><a href="#tp_texte_simple">Texte simple</a></li>
 				{{/if}}
 			</ul>
@@ -347,7 +347,7 @@ Main.add(function () {
   {{/if}}
       
   <!-- Traitements -->
-  {{if $dPconfig.dPpatients.CTraitement.enabled}}
+  {{if $conf.dPpatients.CTraitement.enabled}}
   <tr id="tp_texte_simple">
     <td class="text">
       <form name="editTrmtFrm" action="?m=dPcabinet" method="post" onsubmit="return onSubmitTraitement(this);">
@@ -410,7 +410,7 @@ Main.add(function () {
                   // Probleme dans dPurgence si on prend l'utilisateur de la consult
                   //contextUserId: "{{$userSel->_id}}",
                   //contextUserView: "{{$userSel->_view}}",
-                  timestamp: "{{$dPconfig.dPcompteRendu.CCompteRendu.timestamp}}"
+                  timestamp: "{{$conf.dPcompteRendu.CCompteRendu.timestamp}}"
                 });
                 
                 $(elements._search).observe("blur", function(e){

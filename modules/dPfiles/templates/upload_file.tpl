@@ -30,7 +30,7 @@ if (window.opener.File && window.opener.File.refresh) {
   <tr>
     
     <td class="button">
-      {{tr}}CFile-msg-maxsize{{/tr}} : {{$dPconfig.dPfiles.upload_max_filesize}}<br />
+      {{tr}}CFile-msg-maxsize{{/tr}} : {{$conf.dPfiles.upload_max_filesize}}<br />
     </td>
     <td></td>
     <td></td>

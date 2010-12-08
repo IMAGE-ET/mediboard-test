@@ -63,8 +63,8 @@
   </script>
 {{/if}}
 
-{{assign var=infinite value=$dPconfig.dPstock.CProductStockGroup.infinite_quantity}}
-{{assign var=infinite_service value=$dPconfig.dPstock.CProductStockService.infinite_quantity}}
+{{assign var=infinite value=$conf.dPstock.CProductStockGroup.infinite_quantity}}
+{{assign var=infinite_service value=$conf.dPstock.CProductStockService.infinite_quantity}}
 
 {{if $single_line}}
   {{foreach from=$stocks item=stock}}

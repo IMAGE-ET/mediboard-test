@@ -128,7 +128,7 @@
   {{mb_key object=$operation}}
   
   <table class="layout">
-    {{if $dPconfig.dPplanningOp.COperation.verif_cote && ($operation->cote == "droit" || $operation->cote == "gauche")}}
+    {{if $conf.dPplanningOp.COperation.verif_cote && ($operation->cote == "droit" || $operation->cote == "gauche")}}
       <tr>
         <th>{{mb_label object=$operation field="cote_consult_anesth"}} :</th>
         <td>{{mb_field emptyLabel="Choose" object=$operation field="cote_consult_anesth" onchange="this.form.onsubmit();"}}</td>

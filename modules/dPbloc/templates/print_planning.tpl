@@ -257,9 +257,9 @@ function showCheckboxAnesth(element){
           <td>  
             {{assign var="var" value="plage_vide"}}
             <label for="_plage">Oui</label>
-            <input type="radio" name="_plage" value="1" {{if $dPconfig.$m.$class.$var == "1"}}checked="checked"{{/if}}/> 
+            <input type="radio" name="_plage" value="1" {{if $conf.$m.$class.$var == "1"}}checked="checked"{{/if}}/> 
             <label for="_plage">Non</label>
-            <input type="radio" name="_plage" value="0" {{if $dPconfig.$m.$class.$var == "0"}}checked="checked"{{/if}}/> 
+            <input type="radio" name="_plage" value="0" {{if $conf.$m.$class.$var == "0"}}checked="checked"{{/if}}/> 
           </td>
         </tr>
         <tr>
@@ -267,9 +267,9 @@ function showCheckboxAnesth(element){
           <td>  
             {{assign var="var" value="libelle_ccam"}}
             <label for="_ccam_libelle">Oui</label>
-            <input type="radio" name="_ccam_libelle" value="1" {{if $dPconfig.$m.$class.$var == "1"}}checked="checked"{{/if}}/> 
+            <input type="radio" name="_ccam_libelle" value="1" {{if $conf.$m.$class.$var == "1"}}checked="checked"{{/if}}/> 
             <label for="_ccam_libelle">Non</label>
-            <input type="radio" name="_ccam_libelle" value="0" {{if $dPconfig.$m.$class.$var == "0"}}checked="checked"{{/if}}/> 
+            <input type="radio" name="_ccam_libelle" value="0" {{if $conf.$m.$class.$var == "0"}}checked="checked"{{/if}}/> 
           </td>
         </tr>
         <tr>

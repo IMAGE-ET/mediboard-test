@@ -3,9 +3,9 @@
 	    <tr>
 	      <th class="title" colspan="6">
 	      	<span style="float: right">
-	      		{{$dateTime|date_format:$dPconfig.datetime}}
+	      		{{$dateTime|date_format:$conf.datetime}}
 	      	</span>
-					Patients non placés du {{$date|date_format:$dPconfig.date}}
+					Patients non placés du {{$date|date_format:$conf.date}}
 				</th>
 			</tr>
 			<tr>
@@ -23,9 +23,9 @@
 	  <tr>
       <th class="title" colspan="6">
         <span style="float: right">
-          {{$dateTime|date_format:$dPconfig.datetime}}
+          {{$dateTime|date_format:$conf.datetime}}
         </span>
-        {{$service->_view}} le {{$date|date_format:$dPconfig.date}}
+        {{$service->_view}} le {{$date|date_format:$conf.date}}
       </th>
     </tr>
 		<tr>

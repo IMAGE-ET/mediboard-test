@@ -15,7 +15,7 @@
 <table class="tbl" id="list-sorties">
   <tr>
     <th colspan="2">{{mb_title class=CRPU field="_patient_id"}}</th>
-    {{if $dPconfig.dPurgences.responsable_rpu_view}}
+    {{if $conf.dPurgences.responsable_rpu_view}}
       <th>{{mb_title class=CRPU field="_responsable_id"}}</th>
     {{/if}}
     <th>Prise en charge</th>
@@ -56,7 +56,7 @@
     </td>
     
     {{else}}
-    {{if $dPconfig.dPurgences.responsable_rpu_view}}
+    {{if $conf.dPurgences.responsable_rpu_view}}
     <td>
         {{mb_include module=mediusers template=inc_vw_mediuser mediuser=$sejour->_ref_praticien}}
     </td>
@@ -75,12 +75,12 @@
       {{if !$rpu->ccmu           }}<div class="warning" style="display: block;">Champ manquant {{mb_label object=$rpu field=ccmu           }}</div>{{/if}}
       {{if !$rpu->gemsa          }}<div class="warning" style="display: block;">Champ manquant {{mb_label object=$rpu field=gemsa          }}</div>{{/if}}
       
-      {{if $dPconfig.dPurgences.check_cotation}}
+      {{if $conf.dPurgences.check_cotation}}
         {{if !$rpu->_ref_consult->_ref_actes}}<div class="warning" style="display: block;">Codage des actes manquant</div>{{/if}}
         {{if $sejour->sortie_reelle && !$rpu->_ref_consult->valide}}<div class="warning" style="display: block;">La cotation n'est pas validée</div>{{/if}}
       {{/if}}
     
-      {{if $dPconfig.dPurgences.old_rpu == "1"}}
+      {{if $conf.dPurgences.old_rpu == "1"}}
       {{if !$rpu->type_pathologie}}<div class="warning" style="display: block;">Champ manquant {{mb_label object=$rpu field=type_pathologie}}</div>{{/if}}
       {{if !$rpu->urtrau         }}<div class="warning" style="display: block;">Champ manquant {{mb_label object=$rpu field=urtrau         }}</div>{{/if}}
       {{if !$rpu->urmuta         }}<div class="warning" style="display: block;">Champ manquant {{mb_label object=$rpu field=urmuta         }}</div>{{/if}}
@@ -168,6 +168,6 @@
     {{/if}}
       </tr>
   {{foreachelse}}
-    <tr><td colspan="{{$dPconfig.dPurgences.responsable_rpu_view|ternary:7:6}}"><em>Aucune sortie à effectuer</em></td></tr>
+    <tr><td colspan="{{$conf.dPurgences.responsable_rpu_view|ternary:7:6}}"><em>Aucune sortie à effectuer</em></td></tr>
   {{/foreach}}
 </table>

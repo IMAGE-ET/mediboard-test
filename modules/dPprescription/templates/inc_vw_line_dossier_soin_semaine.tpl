@@ -13,7 +13,7 @@
 
 
 <tr>
-	{{if $dPconfig.dPprescription.CPrescription.show_categories_plan_soins}}
+	{{if $conf.dPprescription.CPrescription.show_categories_plan_soins}}
 	  {{if $smarty.foreach.$first_foreach.first && $smarty.foreach.$last_foreach.first}}
 	    {{if $line_class == "CPrescriptionLineMedicament"}}
 	      {{assign var=libelle_ATC value=$line->_ref_produit->_ref_ATC_2_libelle}}
@@ -29,7 +29,7 @@
 	       		{{if @is_array($transmissions.ATC.$libelle_ATC)}}
 	  		      <ul>
 	  			  {{foreach from=$transmissions.ATC.$libelle_ATC item=_trans}}
-	  			    <li>{{$_trans->_view}} le {{$_trans->date|date_format:$dPconfig.datetime}}:<br /> {{$_trans->text}}</li>
+	  			    <li>{{$_trans->_view}} le {{$_trans->date|date_format:$conf.datetime}}:<br /> {{$_trans->text}}</li>
 	  			  {{/foreach}}
 	  		      </ul>
 	  			{{else}}
@@ -50,7 +50,7 @@
 	       		{{if @is_array($transmissions.CCategoryPrescription.$name_cat)}}
 	  		      <ul>
 	  			  {{foreach from=$transmissions.CCategoryPrescription.$name_cat item=_trans}}
-	  			    <li>{{$_trans->_view}} le {{$_trans->date|date_format:$dPconfig.datetime}}:<br /> {{$_trans->text}}</li>
+	  			    <li>{{$_trans->_view}} le {{$_trans->date|date_format:$conf.datetime}}:<br /> {{$_trans->text}}</li>
 	  			  {{/foreach}}
 	  		      </ul>
 	  			{{else}}
@@ -85,7 +85,7 @@
 	 
    </td>
    
-	 {{if !$line->signee && $line->_class_name == "CPrescriptionLineMedicament" && $dPconfig.dPprescription.CPrescription.show_unsigned_med_msg}}
+	 {{if !$line->signee && $line->_class_name == "CPrescriptionLineMedicament" && $conf.dPprescription.CPrescription.show_unsigned_med_msg}}
 	  <td colspan="6">
 	  	<div class="small-warning">
 	  		Ligne non signée
@@ -177,9 +177,9 @@
 						     {{assign var=administration_id value=$_log_administration->_ref_object->_id}}
 						    
 						     {{if $line_class == "CPrescriptionLineMedicament"}}
-							     <li>{{$_log_administration->_ref_object->quantite}} {{$_log_administration->_ref_object->_ref_object->_ref_produit->libelle_unite_presentation}} administré par {{$_log_administration->_ref_user->_view}} le {{$_log_administration->_ref_object->dateTime|date_format:$dPconfig.datetime}}</li>		 
+							     <li>{{$_log_administration->_ref_object->quantite}} {{$_log_administration->_ref_object->_ref_object->_ref_produit->libelle_unite_presentation}} administré par {{$_log_administration->_ref_user->_view}} le {{$_log_administration->_ref_object->dateTime|date_format:$conf.datetime}}</li>		 
 							   {{else}}
-								   <li>{{$_log_administration->_ref_object->quantite}} {{tr}}CCategoryPrescription.chapitre.{{$name_chap}}{{/tr}} effectué par {{$_log_administration->_ref_user->_view}} le {{$_log_administration->_ref_object->dateTime|date_format:$dPconfig.datetime}}</li>		         				        
+								   <li>{{$_log_administration->_ref_object->quantite}} {{tr}}CCategoryPrescription.chapitre.{{$name_chap}}{{/tr}} effectué par {{$_log_administration->_ref_user->_view}} le {{$_log_administration->_ref_object->dateTime|date_format:$conf.datetime}}</li>		         				        
 							   {{/if}}        
 							
 							   {{if @$line->_transmissions.$unite_prise.$date.$hour.list.$administration_id}}
@@ -188,7 +188,7 @@
 						     </script>  
 						     <ul>
 							     {{foreach from=$line->_transmissions.$unite_prise.$date.$hour.list.$administration_id item=_transmission}}
-				             <li>{{$_transmission->_view}} le {{$_transmission->date|date_format:$dPconfig.datetime}}:<br /> {{$_transmission->text}}</li>
+				             <li>{{$_transmission->_view}} le {{$_transmission->date|date_format:$conf.datetime}}:<br /> {{$_transmission->text}}</li>
 							     {{/foreach}}
 							   </ul>
 							   {{/if}}
@@ -249,7 +249,7 @@
 	 <td style="text-align: center">
 	   <div class="mediuser" style="border-color: #{{$line->_ref_praticien->_ref_function->color}}">
 	   {{if $line->signee}}
-	   <img src="images/icons/tick.png" title="Signée le {{$line->_ref_log_signee->date|date_format:$dPconfig.datetime}} par {{$line->_ref_praticien->_view}}" />
+	   <img src="images/icons/tick.png" title="Signée le {{$line->_ref_log_signee->date|date_format:$conf.datetime}} par {{$line->_ref_praticien->_view}}" />
 	   {{else}}
 	   <img src="images/icons/cross.png" title="Non signée par le praticien" />
 	   {{/if}}

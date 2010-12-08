@@ -44,7 +44,7 @@
     {{/if}}
     <td>
       <a href="{{$href}}&amp;id_sante400_id={{$_idSante400->_id}}" >
-        {{$_idSante400->last_update|date_format:$dPconfig.datetime}}
+        {{$_idSante400->last_update|date_format:$conf.datetime}}
       </a>
     </td>
     <td>{{$_idSante400->id400}}</td>

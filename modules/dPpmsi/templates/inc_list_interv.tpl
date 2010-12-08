@@ -30,7 +30,7 @@
 
   <td>
     {{if $_operation->rank}}
-      {{$_operation->time_operation|date_format:$dPconfig.time}}
+      {{$_operation->time_operation|date_format:$conf.time}}
     {{else}}
       NP
     {{/if}}

@@ -20,7 +20,7 @@
     <th></th>
     <th>{{tr}}Purge{{/tr}}</th>
     <th>{{mb_title object=$echange_hprim field="echange_hprim_id"}}</th>
-    {{if $dPconfig.sip.server}}
+    {{if $conf.sip.server}}
     <th>{{mb_title object=$echange_hprim field="initiateur_id"}}</th>
     {{/if}}
     <th>{{mb_title object=$echange_hprim field="object_class"}}</th>

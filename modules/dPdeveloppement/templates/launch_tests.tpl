@@ -2,5 +2,5 @@
 
 <div class="big-info">
 	Pour déclencher la suite de tests, ouvrir l'URL suivant dans le navigateur.
-	<pre>chrome://selenium-ide/content/selenium/TestRunner.html?baseURL={{$dPconfig.base_url}}/&test={{$dPconfig.base_url}}/tests/testSuite.htm</pre>
+	<pre>chrome://selenium-ide/content/selenium/TestRunner.html?baseURL={{$conf.base_url}}/&test={{$conf.base_url}}/tests/testSuite.htm</pre>
 </div>

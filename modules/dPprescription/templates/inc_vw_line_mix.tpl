@@ -495,7 +495,7 @@ Main.add( function(){
 								  Prescription.reloadLine('{{$line->_guid}}','{{$line->_protocole}}', '{{$mode_pharma}}');
 								} } )" />
                 <label title="Recherche dans le livret thérapeutique">
-                  <input type="checkbox" value="1" name="_recherche_livret" {{if $prescription->type=="sejour" && $dPconfig.dPprescription.CPrescription.preselect_livret}}checked="checked"{{/if}} onchange="if($V(getForm('addLineAerosol').produit)) { acAerosol.activate.bind(acAerosol)() };" />
+                  <input type="checkbox" value="1" name="_recherche_livret" {{if $prescription->type=="sejour" && $conf.dPprescription.CPrescription.preselect_livret}}checked="checked"{{/if}} onchange="if($V(getForm('addLineAerosol').produit)) { acAerosol.activate.bind(acAerosol)() };" />
                   Livret Thérap.
                 </label>
 	            </form>

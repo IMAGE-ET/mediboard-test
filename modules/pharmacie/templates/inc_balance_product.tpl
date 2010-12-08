@@ -98,7 +98,7 @@
             <span {{if $_value.0 == 0 && $_date != "total" && $_service_id != "total"}}class="opacity-40"{{/if}}>
               <span class="quantity" style="display: none;">{{$_value.0}}</span> 
               <span class="sep" style="display: none;">/</span> 
-              <span class="price">{{$_value.1}} {{$dPconfig.currency_symbol}}</span>
+              <span class="price">{{$_value.1}} {{$conf.currency_symbol}}</span>
             </span>
           </td>
         {{/foreach}}
@@ -164,19 +164,19 @@
         <td>
           <span class="quantity" style="display: none;">{{$balance.in.$_date.0}}</span> 
           <span class="sep" style="display: none;">/</span> 
-          <span class="price">{{$balance.in.$_date.1}} {{$dPconfig.currency_symbol}}</span>
+          <span class="price">{{$balance.in.$_date.1}} {{$conf.currency_symbol}}</span>
         </td>
         
         <td>
           <span class="quantity" style="display: none;">{{$balance.out.$_date.0}}</span> 
           <span class="sep" style="display: none;">/</span> 
-          <span class="price">{{$balance.out.$_date.1}} {{$dPconfig.currency_symbol}}</span>
+          <span class="price">{{$balance.out.$_date.1}} {{$conf.currency_symbol}}</span>
         </td>
         
         <td>
           <span class="quantity" style="display: none;">{{$balance.diff.$_date.0}}</span> 
           <span class="sep" style="display: none;">/</span> 
-          <span class="price">{{$balance.diff.$_date.1}} {{$dPconfig.currency_symbol}}</span>
+          <span class="price">{{$balance.diff.$_date.1}} {{$conf.currency_symbol}}</span>
         </td>
       </tr>
     {{/foreach}}

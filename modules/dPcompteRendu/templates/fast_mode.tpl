@@ -1,4 +1,4 @@
-{{assign var=pdf_thumbnails value=$dPconfig.dPcompteRendu.CCompteRendu.pdf_thumbnails}}
+{{assign var=pdf_thumbnails value=$conf.dPcompteRendu.CCompteRendu.pdf_thumbnails}}
 {{unique_id var=uid_fast_mode}}
 
 <script type="text/javascript">
@@ -234,7 +234,7 @@ Main.add(function() {
                       objectClass: '{{$compte_rendu->_class_name}}',
                       contextUserId: User.id,
                       contextUserView: "{{$user_view}}",
-		                  timestamp: "{{$dPconfig.dPcompteRendu.CCompteRendu.timestamp}}",
+		                  timestamp: "{{$conf.dPcompteRendu.CCompteRendu.timestamp}}",
 		                  resetSearchField: false,
 		                  resetDependFields: false,
 		                  validateOnBlur: false,

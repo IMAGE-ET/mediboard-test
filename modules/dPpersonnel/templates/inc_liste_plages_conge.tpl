@@ -14,7 +14,7 @@
   <tr>
     <th>{{mb_title class=CPlageConge field=libelle}}</th>
     <th>{{tr}}Dates{{/tr}}</th>
-    {{if $dPconfig.dPpersonnel.CPlageConge.show_replacer}} 
+    {{if $conf.dPpersonnel.CPlageConge.show_replacer}} 
     <th>{{mb_title class=CPlageConge field=replacer_id}}</th>
 		{{/if}}
   </tr>
@@ -31,7 +31,7 @@
       <td>
         {{mb_include module=system template=inc_interval_date from=$_plageconge->date_debut to=$_plageconge->date_fin}}
       </td>
-      {{if $dPconfig.dPpersonnel.CPlageConge.show_replacer}} 
+      {{if $conf.dPpersonnel.CPlageConge.show_replacer}} 
 			<td>
 				{{mb_include module=mediusers template=inc_vw_mediuser mediuser=$_plageconge->_fwd.replacer_id}}
 			</td>

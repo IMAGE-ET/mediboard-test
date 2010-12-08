@@ -28,8 +28,8 @@ Main.add( function () {
   <table class="form">
     <tr>
       <td colspan="6" style="text-align: left; width: 100%; font-weight: bold; height: 20px;">
-        <div style="float: right;">{{$hour|date_format:$dPconfig.time}}</div>
-        {{$date|date_format:$dPconfig.longdate}}
+        <div style="float: right;">{{$hour|date_format:$conf.time}}</div>
+        {{$date|date_format:$conf.longdate}}
         {{if $canCabinet->view}}
         <input type="hidden" name="date" class="date" value="{{$date}}" onchange="this.form.submit()" />
         {{/if}}
@@ -65,8 +65,8 @@ Main.add( function () {
   <tr>
     <th colspan="3">
       {{mb_include module=system template=inc_object_notes object=$_plage}}
-    	{{$_plage->debut|date_format:$dPconfig.time}} 
-    	- {{$_plage->fin|date_format:$dPconfig.time}}
+    	{{$_plage->debut|date_format:$conf.time}} 
+    	- {{$_plage->fin|date_format:$conf.time}}
     	{{if $_plage->libelle}}: {{$_plage->libelle}}{{/if}}
     </th>
   </tr>
@@ -193,8 +193,8 @@ Main.add( function () {
         {{foreach from=$destinations item=destination}}
         <option value={{$destination->_id}}>
           {{$destination->_ref_chir->_view}}
-          : {{$destination->debut|date_format:$dPconfig.time}} 
-          - {{$destination->fin|date_format:$dPconfig.time}}
+          : {{$destination->debut|date_format:$conf.time}} 
+          - {{$destination->fin|date_format:$conf.time}}
           {{if $destination->libelle}} - {{$destination->libelle}}{{/if}}
         </option>
         {{/foreach}}

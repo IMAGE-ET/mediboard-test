@@ -8,7 +8,7 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
 *}}
 
-{{if $dPconfig.dPstock.CProductStockGroup.unit_order}}
+{{if $conf.dPstock.CProductStockGroup.unit_order}}
   {{math equation="received * unit_qty/qty" 
          received=$curr_item->_quantity_received 
          qty=$curr_item->quantity 
@@ -36,7 +36,7 @@
     {{/if}}
   </td>
   <td>
-    {{if $dPconfig.dPstock.CProductStockGroup.unit_order}}
+    {{if $conf.dPstock.CProductStockGroup.unit_order}}
       {{mb_value object=$curr_item field=_unit_quantity}}
     {{else}}
       {{mb_value object=$curr_item field=quantity}}
@@ -50,7 +50,7 @@
       <tr>
         <th>{{mb_label class=CProductOrderItemReception field=date}}</th>
         <th>
-          {{if $dPconfig.dPstock.CProductStockGroup.unit_order}}
+          {{if $conf.dPstock.CProductStockGroup.unit_order}}
             {{mb_title class=CProductOrderItemReception field=_unit_quantity}}
           {{else}}
             {{mb_title class=CProductOrderItemReception field=quantity}}
@@ -65,7 +65,7 @@
         <tr>
           <td>{{mb_value object=$curr_reception field=date}}</td>
           <td>
-          {{if $dPconfig.dPstock.CProductStockGroup.unit_order}}
+          {{if $conf.dPstock.CProductStockGroup.unit_order}}
             {{mb_value object=$curr_reception field=_unit_quantity}}
           {{else}}
             {{mb_value object=$curr_reception field=quantity}}
@@ -111,7 +111,7 @@
       <input type="hidden" name="date" value="now" />
       <input type="hidden" name="callback" value="updateReceptionId" />
 
-      {{if $dPconfig.dPstock.CProductStockGroup.unit_order}}
+      {{if $conf.dPstock.CProductStockGroup.unit_order}}
         {{assign var=coeff value=$curr_item->_ref_reference->_unit_quantity}}
         {{mb_field object=$curr_item field=quantity hidden=true}}
         {{mb_field object=$curr_item 

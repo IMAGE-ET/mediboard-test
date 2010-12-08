@@ -250,7 +250,7 @@ modeExpertDisplay = function() {
       {{else}}
       <button class="cancel" type="button" onclick="cancelObjects();">{{tr}}Cancel{{/tr}}</button>
       {{/if}}
-      {{if !$dPconfig.dPplanningOp.COperation.delete_only_admin || $can->admin}}
+      {{if !$conf.dPplanningOp.COperation.delete_only_admin || $can->admin}}
       <button class="trash" type="button" onclick="deleteObjects();">{{tr}}Delete{{/tr}}</button>
 			{{/if}}
       

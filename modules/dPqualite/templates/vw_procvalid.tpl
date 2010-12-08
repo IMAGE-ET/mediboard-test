@@ -114,7 +114,7 @@ function redactionDoc(oForm){
           </td>
           <td class="text">
             <a href="?m=dPqualite&amp;tab=vw_procvalid&amp;doc_ged_id={{$currProc->doc_ged_id}}">
-              {{$currProc->_lastentry->date|date_format:$dPconfig.datetime}}
+              {{$currProc->_lastentry->date|date_format:$conf.datetime}}
             </a>
           </td>
           {{if $currProc->annule}}

@@ -209,7 +209,7 @@ CCAMSelector.init = function(){
     {{/if}}
   </tr>
   
-  {{if !$modurgence && $dPconfig.dPplanningOp.COperation.horaire_voulu}}
+  {{if !$modurgence && $conf.dPplanningOp.COperation.horaire_voulu}}
   <tr>
     <th>Horaire souhaité</th>
     <td colspan="2">

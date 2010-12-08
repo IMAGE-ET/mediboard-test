@@ -11,7 +11,7 @@
 {{/if}}
 
 <script type="text/javascript">
-Intermax.autoWatch = {{$dPconfig.dPpatients.intermax.auto_watch}};
+Intermax.autoWatch = {{$conf.dPpatients.intermax.auto_watch}};
 </script>
 
 <!-- Yoplet to write Intermax file -->
@@ -56,7 +56,7 @@ Intermax.autoWatch = {{$dPconfig.dPpatients.intermax.auto_watch}};
   <param name="lineSeparator" value="---" />
   <param name="debug" value={{if $debug=="true"}}"true"{{else}}"false"{{/if}} />
   <param name="filePath" value="{{$app->user_prefs.InterMaxDir}}/INTERMAX/INTERMAX.OUT" />
-  {{if $dPconfig.dPpatients.intermax.auto_watch}}
+  {{if $conf.dPpatients.intermax.auto_watch}}
 	<param name="flagPath" value="{{$app->user_prefs.InterMaxDir}}/INTERMAX/RETURN.FLG" />
   {{/if}}
 </applet>

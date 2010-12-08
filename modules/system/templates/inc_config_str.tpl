@@ -11,16 +11,16 @@
 {{if @$m}}
   {{if @$class}}
     {{assign var=field  value="$m[$class][$var]"}}
-    {{assign var=value  value=$dPconfig.$m.$class.$var}}
+    {{assign var=value  value=$conf.$m.$class.$var}}
     {{assign var=locale value=config-$m-$class-$var}}
   {{else}}
     {{assign var=field  value="$m[$var]"}}
-    {{assign var=value  value=$dPconfig.$m.$var}}
+    {{assign var=value  value=$conf.$m.$var}}
     {{assign var=locale value=config-$m-$var}}
   {{/if}}
 {{else}}
   {{assign var=field  value="$var"}}
-  {{assign var=value  value=$dPconfig.$var}}
+  {{assign var=value  value=$conf.$var}}
   {{assign var=locale value=config-$var}}
 {{/if}}
 

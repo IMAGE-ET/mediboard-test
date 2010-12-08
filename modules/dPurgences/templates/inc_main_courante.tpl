@@ -8,7 +8,7 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
 *}}
 
-{{assign var="show_statut" value=$dPconfig.dPurgences.show_statut}}
+{{assign var="show_statut" value=$conf.dPurgences.show_statut}}
 
 <script type="text/javascript">
 Main.add(function() {
@@ -42,13 +42,13 @@ Main.add(function() {
     <th style="width: 10em;">
 		  {{mb_colonne class=CRPU field="_entree"     order_col=$order_col order_way=$order_way url="?m=$m&amp;tab=vw_idx_rpu"}}
 		</th>
-    {{if $dPconfig.dPurgences.responsable_rpu_view}}
+    {{if $conf.dPurgences.responsable_rpu_view}}
     <th class="narrow">{{mb_title class=CRPU field="_responsable_id"}}</th>
     {{/if}}
     <th style="width: 10em;">{{mb_title class=CRPU field=_attente}} / {{mb_title class=CRPU field=_presence}}</th>
     {{if $medicalView}}
 			<th style="width: 16em;">
-			{{if $dPconfig.dPurgences.diag_prat_view}}
+			{{if $conf.dPurgences.diag_prat_view}}
 	      {{tr}}CRPU-diag_infirmier{{/tr}} / {{tr}}Medical{{/tr}}
 			{{else}}
 			  {{tr}}CRPU-diag_infirmier{{/tr}}
@@ -104,7 +104,7 @@ Main.add(function() {
     </td>
 
   	{{if $_sejour->annule}}
-    <td class="cancelled" colspan="{{if $dPconfig.dPurgences.responsable_rpu_view}}4{{else}}3{{/if}}">
+    <td class="cancelled" colspan="{{if $conf.dPurgences.responsable_rpu_view}}4{{else}}3{{/if}}">
       {{tr}}Cancelled{{/tr}}
     </td>
 		<td class="cancelled">
@@ -134,9 +134,9 @@ Main.add(function() {
         {{if $rpu->radio_debut}}
           <img src="modules/soins/images/radio{{if !$rpu->radio_fin}}_grey{{/if}}.png"
             {{if !$rpu->radio_fin}}
-              title="{{tr}}CRPU-radio_debut{{/tr}} à {{$rpu->radio_debut|date_format:$dPconfig.time}}"
+              title="{{tr}}CRPU-radio_debut{{/tr}} à {{$rpu->radio_debut|date_format:$conf.time}}"
             {{else}}
-              title="{{tr}}CRPU-radio_fin{{/tr}} à {{$rpu->radio_fin|date_format:$dPconfig.time}}"
+              title="{{tr}}CRPU-radio_fin{{/tr}} à {{$rpu->radio_fin|date_format:$conf.time}}"
             {{/if}}/>
         {{elseif !$rpu->radio_fin}}
           <img src="images/icons/placeholder.png"/>
@@ -144,9 +144,9 @@ Main.add(function() {
         {{if $rpu->bio_depart}}
           <img src="images/icons/labo{{if !$rpu->bio_retour}}_grey{{/if}}.png"
             {{if !$rpu->bio_retour}}
-              title="{{tr}}CRPU-bio_depart{{/tr}} à {{$rpu->bio_depart|date_format:$dPconfig.time}}"
+              title="{{tr}}CRPU-bio_depart{{/tr}} à {{$rpu->bio_depart|date_format:$conf.time}}"
             {{else}}
-              title="{{tr}}CRPU-bio_retour{{/tr}} à {{$rpu->bio_retour|date_format:$dPconfig.time}}"
+              title="{{tr}}CRPU-bio_retour{{/tr}} à {{$rpu->bio_retour|date_format:$conf.time}}"
             {{/if}}/>
         {{elseif !$rpu->bio_retour}}
           <img src="images/icons/placeholder.png"/>
@@ -154,9 +154,9 @@ Main.add(function() {
         {{if $rpu->specia_att}}
           <img src="modules/soins/images/stethoscope{{if !$rpu->specia_arr}}_grey{{/if}}.png"
             {{if !$rpu->specia_arr}}
-              title="{{tr}}CRPU-specia_att{{/tr}} à {{$rpu->specia_att|date_format:$dPconfig.time}}"
+              title="{{tr}}CRPU-specia_att{{/tr}} à {{$rpu->specia_att|date_format:$conf.time}}"
             {{else}}
-              title="{{tr}}CRPU-specia_arr{{/tr}} à {{$rpu->specia_arr|date_format:$dPconfig.time}}"
+              title="{{tr}}CRPU-specia_arr{{/tr}} à {{$rpu->specia_arr|date_format:$conf.time}}"
             {{/if}}/>
         {{elseif !$rpu->specia_arr}}
           <img src="images/icons/placeholder.png"/>
@@ -182,7 +182,7 @@ Main.add(function() {
       {{/if}}
     </td>
     
-    {{if $dPconfig.dPurgences.responsable_rpu_view}}
+    {{if $conf.dPurgences.responsable_rpu_view}}
     <td class="text" style="background-color: {{$background}};">
       <a href="{{$rpu_link}}">
         {{mb_include module=mediusers template=inc_vw_mediuser mediuser=$_sejour->_ref_praticien}}
@@ -200,15 +200,15 @@ Main.add(function() {
               {{mb_include template=inc_icone_attente}}
             {{/if}}
   			    <a href="?m=dPurgences&amp;tab=edit_consultation&amp;selConsult={{$consult->_id}}">
-  			      Consult. {{$consult->heure|date_format:$dPconfig.time}}
+  			      Consult. {{$consult->heure|date_format:$conf.time}}
   			      {{if $date != $consult->_ref_plageconsult->date}}
-  			      <br/>le {{$consult->_ref_plageconsult->date|date_format:$dPconfig.date}}
+  			      <br/>le {{$consult->_ref_plageconsult->date|date_format:$conf.date}}
   			      {{/if}}
   			    </a>
   			    {{if !$_sejour->sortie_reelle}}
   			      ({{mb_value object=$rpu field=_attente}} / {{mb_value object=$rpu field=_presence}})
   			    {{elseif $_sejour->sortie_reelle}}
-  			      (sortie à {{$_sejour->sortie_reelle|date_format:$dPconfig.time}})
+  			      (sortie à {{$_sejour->sortie_reelle|date_format:$conf.time}})
   			    {{/if}}
   		    {{else}}
   		      {{include file="inc_attente.tpl" sejour=$_sejour}}
@@ -218,7 +218,7 @@ Main.add(function() {
     
 	    {{if $medicalView}}
   	    <td class="text" style="background-color: {{$background}};">
-  				{{if $rpu->motif && $dPconfig.dPurgences.diag_prat_view}}
+  				{{if $rpu->motif && $conf.dPurgences.diag_prat_view}}
   				  <span onmouseover="ObjectTooltip.createEx(this, '{{$rpu->_guid}}');">
   				  	<strong>{{mb_title class=$rpu field=motif}}</strong> : {{$rpu->motif|nl2br}}
   				  </span>

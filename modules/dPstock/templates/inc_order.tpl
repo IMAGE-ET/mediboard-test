@@ -67,7 +67,7 @@ Main.add(function(){
     {{if !$order->date_ordered}}<th class="narrow"></th>{{/if}}
     <th>{{mb_title class=CProductOrderItem field=reference_id}}</th>
     <th>
-      {{if $dPconfig.dPstock.CProductStockGroup.unit_order}}
+      {{if $conf.dPstock.CProductStockGroup.unit_order}}
         {{mb_title class=CProductOrderItem field=_unit_quantity}}
       {{else}}
         {{mb_title class=CProductOrderItem field=quantity}}

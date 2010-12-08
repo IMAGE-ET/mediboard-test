@@ -48,7 +48,7 @@
           <tr>
             <th style="text-align:left;" class="narrow"> {{tr}}config-{{$m}}-{{$class}}-{{$var}}{{/tr}} </th>
             <td>
-              {{$dPconfig.$m.$class.$var}}/<input type="text" name="path" size="80" value="" />
+              {{$conf.$m.$class.$var}}/<input type="text" name="path" size="80" value="" />
             </td>
           </tr>
           

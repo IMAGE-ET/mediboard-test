@@ -34,7 +34,7 @@ Main.add(function () {
     <th colspan="4">
       <a href="?m={{$m}}&tab={{$tab}}&date={{$yesterday}}" style="float: left;"><<<</a>
       <a href="?m={{$m}}&tab={{$tab}}&date={{$tomorow}}" style="float: right;">>>></a>
-      {{$date|date_format:$dPconfig.longdate}}
+      {{$date|date_format:$conf.longdate}}
       <form name="changeDate" action="?m={{$m}}" method="get">
         <input type="hidden" name="m" value="{{$m}}" />
         <input type="hidden" name="tab" value="{{$tab}}" />

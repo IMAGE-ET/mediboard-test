@@ -33,8 +33,8 @@
       </td>
     </tr>
   {{/if}}
-  {{if isset($dPconfig.dPcabinet.CConsultation.aide_autocomplete|smarty:nodefaults)}}
-    {{assign var=aide_autocomplete value=$dPconfig.dPcabinet.CConsultation.aide_autocomplete}}
+  {{if isset($conf.dPcabinet.CConsultation.aide_autocomplete|smarty:nodefaults)}}
+    {{assign var=aide_autocomplete value=$conf.dPcabinet.CConsultation.aide_autocomplete}}
     {{if $aide_autocomplete == 1}}
     <tr>
       <th class="category" colspan="2">

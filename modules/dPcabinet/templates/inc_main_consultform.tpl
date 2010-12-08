@@ -1,4 +1,4 @@
-{{assign var=aide_autocomplete value=$dPconfig.dPcabinet.CConsultation.aide_autocomplete}}
+{{assign var=aide_autocomplete value=$conf.dPcabinet.CConsultation.aide_autocomplete}}
 {{if !@$readonly}}
   {{assign var=readonly value=0}}
 {{/if}}
@@ -52,7 +52,7 @@
                   objectClass: "{{$consult->_class_name}}",
                   contextUserId: "{{$consult->_ref_chir->_id}}",
                   contextUserView: "{{$consult->_ref_chir->_view}}",
-                  timestamp: "{{$dPconfig.dPcompteRendu.CCompteRendu.timestamp}}",
+                  timestamp: "{{$conf.dPcompteRendu.CCompteRendu.timestamp}}",
                   validate: function(){ getForm("editFrmExams").onsubmit(); },
                   resetSearchField: false,
                   resetDependFields: false,

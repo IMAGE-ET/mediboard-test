@@ -146,7 +146,7 @@ function showEtabEntreeTransfert(mode) {
                       objectClass: "{{$rpu->_class_name}}",
                       contextUserId: "{{$userSel->_id}}",
                       contextUserView: "{{$userSel->_view}}",
-                      timestamp: "{{$dPconfig.dPcompteRendu.CCompteRendu.timestamp}}",
+                      timestamp: "{{$conf.dPcompteRendu.CCompteRendu.timestamp}}",
                       validate: function(){ form.onsubmit(); },
                       resetSearchField: false,
                       resetDependFields: false,
@@ -157,7 +157,7 @@ function showEtabEntreeTransfert(mode) {
                       objectClass: "{{$rpu->_class_name}}",
                       contextUserId: "{{$userSel->_id}}",
                       contextUserView: "{{$userSel->_view}}",
-                      timestamp: "{{$dPconfig.dPcompteRendu.CCompteRendu.timestamp}}",
+                      timestamp: "{{$conf.dPcompteRendu.CCompteRendu.timestamp}}",
                       validate: function(){ form.onsubmit(); },
                       resetSearchField: false,
                       resetDependFields: false,
@@ -193,7 +193,7 @@ function showEtabEntreeTransfert(mode) {
             <td>{{mb_field object=$rpu field="_service_entree_mutation_id" form="editRPU" autocomplete="true,1,50,true,true" onchange="this.form.onsubmit();"}}</td> 
           </tr>
 			    
-					{{if $dPconfig.dPurgences.old_rpu == "1"}}
+					{{if $conf.dPurgences.old_rpu == "1"}}
 				  <tr>
 				    <th>{{mb_label object=$rpu field="urprov"}}</th>
 				    <td>{{mb_field object=$rpu field="urprov" defaultOption="&mdash; Provenance" onchange="this.form.onsubmit();"}}</td>
@@ -247,7 +247,7 @@ function showEtabEntreeTransfert(mode) {
                         objectClass: "{{$rpu->_class_name}}",
                         contextUserId: "{{$userSel->_id}}",
                         contextUserView: "{{$userSel->_view}}",
-                        timestamp: "{{$dPconfig.dPcompteRendu.CCompteRendu.timestamp}}",
+                        timestamp: "{{$conf.dPcompteRendu.CCompteRendu.timestamp}}",
                         validate: function(){ getForm("editRPUMotif").onsubmit(); },
                         resetSearchField: false,
                         resetDependFields: false,
@@ -321,7 +321,7 @@ function showEtabEntreeTransfert(mode) {
 				    <td>{{mb_field object=$rpu field="gemsa" canNull=false defaultOption="&mdash; Code GEMSA" onchange="this.form.onsubmit();"}}</td>
 				  </tr>				  
 				  
-		      {{if $dPconfig.dPurgences.old_rpu == "1"}}
+		      {{if $conf.dPurgences.old_rpu == "1"}}
 				  <tr>
 				    <th>{{mb_label object=$rpu field="type_pathologie"}}</th>
 				    <td>{{mb_field object=$rpu field="type_pathologie" canNull=false defaultOption="&mdash; Type de pathologie" onchange="this.form.onsubmit();"}}</td>
@@ -337,7 +337,7 @@ function showEtabEntreeTransfert(mode) {
 				    <th class="category" colspan="2">Précisions sur la sortie</th>
 				  </tr>
 
-			    {{if $dPconfig.dPurgences.old_rpu == "1"}}
+			    {{if $conf.dPurgences.old_rpu == "1"}}
 				  <tr>
 				    <th>{{mb_label object=$rpu field="urmuta"}}</th>
 				    <td>{{mb_field object=$rpu field="urmuta" canNull=false defaultOption="&mdash; Cause" onchange="this.form.onsubmit();"}}</td>
@@ -363,14 +363,14 @@ function showEtabEntreeTransfert(mode) {
   <tr>
 	  <td class="button" colspan="4">
       {{if !$rpu->mutation_sejour_id}}
-				{{if $dPconfig.dPurgences.gerer_reconvoc == "1"}}
+				{{if $conf.dPurgences.gerer_reconvoc == "1"}}
 			    <!-- Reconvocation => formulaire de creation de consultation avec champs pre-remplis -->
-			    <button id="button_reconvoc" class="new" {{if ($dPconfig.dPurgences.hide_reconvoc_sans_sortie == "1") && !$sejour->sortie_reelle}}disabled="disabled"{{/if}} type="button" onclick="newConsultation({{$consult->_ref_plageconsult->chir_id}},{{$consult->patient_id}},{{$consult->_id}})">
+			    <button id="button_reconvoc" class="new" {{if ($conf.dPurgences.hide_reconvoc_sans_sortie == "1") && !$sejour->sortie_reelle}}disabled="disabled"{{/if}} type="button" onclick="newConsultation({{$consult->_ref_plageconsult->chir_id}},{{$consult->patient_id}},{{$consult->_id}})">
 		        Reconvoquer
 		      </button>
 	      {{/if}}
 				
-				{{if $dPconfig.dPurgences.gerer_hospi == "1"}} 
+				{{if $conf.dPurgences.gerer_hospi == "1"}} 
 		      <!-- Hospitalisation immediate, creation d'un sejour et transfert des actes dans le nouveau sejour -->
 		      <form name="transfertHospi" method="post" action="?m={{$m}}" onsubmit="return confirm($T('confirm-RPU-Hospitalisation'));">
 		        <input type="hidden" name="dosql" value="do_transfert_aed" />

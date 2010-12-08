@@ -76,7 +76,7 @@ Main.add(function () {
 	  {{assign var=borne_min value=$dates|@reset}}
 	  {{assign var=borne_max value=$dates|@end}}
 	
-	  Semaine du {{$borne_min|date_format:$dPconfig.date}} au {{$borne_max|date_format:$dPconfig.date}}
+	  Semaine du {{$borne_min|date_format:$conf.date}} au {{$borne_max|date_format:$conf.date}}
 		
 		<button type="button" class="right singleclick notext" onclick="calculSoinSemaine('{{$next_week}}', '{{$prescription->_id}}')">
 		  Semaine précédente
@@ -116,14 +116,14 @@ Main.add(function () {
 	    <td>
 	      <table class="tbl">  
 				  <tr>
-				  	{{if $dPconfig.dPprescription.CPrescription.show_categories_plan_soins}}
+				  	{{if $conf.dPprescription.CPrescription.show_categories_plan_soins}}
 				    <th class="title">Catégorie</th>
 						{{/if}}
 				    <th class="title">Libelle</th>
 				    <th class="title">Posologie</th>
 				    {{foreach from=$dates item=date}}
 				    <th class="title narrow" style="font-size:0.9em;">
-				      {{$date|date_format:$dPconfig.date}}
+				      {{$date|date_format:$conf.date}}
 				    </th>
 				    {{/foreach}}
 						 <th colspan="2" class="title">Sign.</th>

@@ -31,13 +31,13 @@ var scoreOper   = {{$exam_possum->_score_oper}};
         {{mb_include module=system template=inc_object_notes      object=$exam_possum}}
 
         Consultation de '{{$consultation->_ref_patient}}'<br />
-        le {{$consultation->_date|date_format:$dPconfig.longdate}}
+        le {{$consultation->_date|date_format:$conf.longdate}}
         par le Dr {{$consultation->_ref_chir}}
       </th>
     {{else}}
       <th class="title text" colspan="6">
         Consultation de '{{$consultation->_ref_patient}}'<br />
-        le {{$consultation->_date|date_format:$dPconfig.longdate}}
+        le {{$consultation->_date|date_format:$conf.longdate}}
         par le Dr {{$consultation->_ref_chir}}
       </th>
     {{/if}}

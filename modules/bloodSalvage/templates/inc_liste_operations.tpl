@@ -30,7 +30,7 @@
 </tr>
 
 {{foreach from=$operations item=_operation}}
-{{if $dPconfig.dPsalleOp.COperation.modif_salle}}
+{{if $conf.dPsalleOp.COperation.modif_salle}}
   {{assign var="rowspan" value=2}}
 {{else}}
   {{assign var="rowspan" value=1}}
@@ -55,7 +55,7 @@
 		  {{$_operation->_ref_chir->_view}}
 		  {{else}}
 	      {{if $_operation->time_operation != "00:00:00"}}
-	        {{$_operation->time_operation|date_format:$dPconfig.time}}
+	        {{$_operation->time_operation|date_format:$conf.time}}
 	      {{else}}
 	        NP
 	      {{/if}}
@@ -92,12 +92,12 @@
     </a>
   </td>
   <td>{{tr}}COperation.cote.{{$_operation->cote}}{{/tr}}</td>
-  <td>{{$_operation->temp_operation|date_format:$dPconfig.time}}</td>
+  <td>{{$_operation->temp_operation|date_format:$conf.time}}</td>
   {{/if}}
   {{/if}}
 </tr>
 
-{{if $dPconfig.dPsalleOp.COperation.modif_salle && !$_operation->_deplacee}}
+{{if $conf.dPsalleOp.COperation.modif_salle && !$_operation->_deplacee}}
 <tr>
   <td colspan="5">
     <form name="changeSalle{{$_operation->_id}}" action="?m={{$m}}" method="post">

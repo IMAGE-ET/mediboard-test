@@ -15,7 +15,7 @@ Main.add(function () {
 {{foreach from=$affichageFile item=_cat key=_cat_id}}
   <li>
     {{assign var=docCount value=$_cat.items|@count}}
-    {{if $docCount || $dPconfig.dPfiles.CFilesCategory.show_empty}}
+    {{if $docCount || $conf.dPfiles.CFilesCategory.show_empty}}
   	<a href="#Category-{{$_cat_id}}" {{if !$docCount}}class="empty"{{/if}}>
   		{{$_cat.name}}
   		<small>({{$docCount}})</small>
@@ -31,7 +31,7 @@ Main.add(function () {
 
 {{foreach from=$affichageFile item=_cat key=_cat_id}}
 {{assign var=docCount value=$_cat.items|@count}}
-{{if $docCount || $dPconfig.dPfiles.CFilesCategory.show_empty}}
+{{if $docCount || $conf.dPfiles.CFilesCategory.show_empty}}
 <div id="Category-{{$_cat_id}}" style="display: none; clear: both;">  
   {{foreach from=$_cat.items item=_doc_item}}
   <div style="float: left; width: 280px;">
@@ -41,7 +41,7 @@ Main.add(function () {
           <td rowspan="2" style="width: 70px; height: 70px; text-align: center">
             {{assign var="elementId" value=$_doc_item->_id}}
             {{if $_doc_item->_class_name=="CCompteRendu"}}
-              {{if $dPconfig.dPcompteRendu.CCompteRendu.pdf_thumbnails}}
+              {{if $conf.dPcompteRendu.CCompteRendu.pdf_thumbnails}}
                 {{assign var="nomdoc" value=$_doc_item->nom}}
                 {{assign var="file_owner" value=$_doc_item->_ref_chir->_id}}
                 {{assign var="file_id" value=$_doc_item->_ref_file->_id}}

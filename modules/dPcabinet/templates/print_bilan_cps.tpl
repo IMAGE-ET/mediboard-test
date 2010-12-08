@@ -54,8 +54,8 @@
     <td>{{$cps.numero}}</td>
     <td>{{$cps.nom}} {{$cps.prenom}}</td>
     <td>{{$cps.adeli}}</td>
-    <td><label title="{{$cps.date_min|date_format:$dPconfig.date}}">{{$cps.date_min|date_format:'%B %Y'}}</label></td>
-    <td><label title="{{$cps.date_max|date_format:$dPconfig.date}}">{{$cps.date_max|date_format:'%B %Y'}}</label></td>
+    <td><label title="{{$cps.date_min|date_format:$conf.date}}">{{$cps.date_min|date_format:'%B %Y'}}</label></td>
+    <td><label title="{{$cps.date_max|date_format:$conf.date}}">{{$cps.date_max|date_format:'%B %Y'}}</label></td>
     <td style="text-align: center">{{$cps.jours}} {{tr}}days{{/tr}}</td>
     <td style="text-align: center">{{$cps.nb_fse}}</td>
 		

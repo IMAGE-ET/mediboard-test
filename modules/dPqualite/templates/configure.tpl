@@ -29,10 +29,10 @@
       </label>    
     </th>
     <td colspan="3">
-      <input type="radio" name="{{$m}}[{{$class}}][{{$var}}]" value="1" {{if $dPconfig.$m.$class.$var == "1"}}checked="checked"{{/if}}/> 
+      <input type="radio" name="{{$m}}[{{$class}}][{{$var}}]" value="1" {{if $conf.$m.$class.$var == "1"}}checked="checked"{{/if}}/> 
       <label for="{{$m}}[{{$class}}][{{$var}}]_1">Categorie-Chapitres-Numero</label>
       <br />
-      <input type="radio" name="{{$m}}[{{$class}}][{{$var}}]" value="0" {{if $dPconfig.$m.$class.$var == "0"}}checked="checked"{{/if}}/> 
+      <input type="radio" name="{{$m}}[{{$class}}][{{$var}}]" value="0" {{if $conf.$m.$class.$var == "0"}}checked="checked"{{/if}}/> 
       <label for="{{$m}}[{{$class}}][{{$var}}]_0">Chapitres-Categorie-Numero</label>
     </td>             
   </tr>
@@ -51,7 +51,7 @@
       </label>    
     </th>
     <td colspan="3">
-      <input type="text" maxlength="1" name="{{$m}}[{{$class}}][{{$var}}]" value="{{$dPconfig.$m.$class.$var}}" />
+      <input type="text" maxlength="1" name="{{$m}}[{{$class}}][{{$var}}]" value="{{$conf.$m.$class.$var}}" />
     </td>             
   </tr>
   

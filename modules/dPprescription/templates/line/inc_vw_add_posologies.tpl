@@ -57,7 +57,7 @@ Main.add(function(){
   <span id="moment{{$type}}{{$line->_id}}" style="display: none; clear: both;">
     {{if $type != "mode_grille"}}
 		
-		{{foreach from=$dPconfig.dPprescription.CMomentUnitaire.poso_lite key=_moment_unitaire item=_show_moment}}
+		{{foreach from=$conf.dPprescription.CMomentUnitaire.poso_lite key=_moment_unitaire item=_show_moment}}
 		  {{if $_show_moment}}
 			<input type="checkbox" name="{{$_moment_unitaire}}" class="moment_poso_lite" />
 			<label for="{{$_moment_unitaire}}">

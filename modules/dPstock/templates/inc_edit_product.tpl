@@ -24,7 +24,7 @@ drawConsumptionGraph = function() {
   }
 </style>
 
-{{assign var=infinite_stock_service value=$dPconfig.dPstock.CProductStockService.infinite_quantity}}
+{{assign var=infinite_stock_service value=$conf.dPstock.CProductStockService.infinite_quantity}}
 
 <button class="new" onclick="editProduct(0)">{{tr}}CProduct-title-create{{/tr}}</button>
       

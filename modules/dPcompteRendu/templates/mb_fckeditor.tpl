@@ -1,4 +1,4 @@
-{{assign var=pdf_thumbnails value=$dPconfig.dPcompteRendu.CCompteRendu.pdf_thumbnails}}
+{{assign var=pdf_thumbnails value=$conf.dPcompteRendu.CCompteRendu.pdf_thumbnails}}
 
 // Preloading extra plugins
 CKEDITOR.plugins.addExternal("mbheader"   , "../../modules/dPcompteRendu/fcke_plugins/mbheader/plugin.js");

@@ -44,12 +44,12 @@ var viewCCAM = function(codeacte) {
         </tr>
         <tr>
           <td>
-            du {{$_date_min|date_format:$dPconfig.longdate}}
+            du {{$_date_min|date_format:$conf.longdate}}
           </td>
         </tr>
         <tr>
           <td>
-            au {{$_date_max|date_format:$dPconfig.longdate}}
+            au {{$_date_max|date_format:$conf.longdate}}
           </td>
         </tr>
       </table>
@@ -86,7 +86,7 @@ var viewCCAM = function(codeacte) {
       <table>
         <tr> 
           <td>
-            <strong>Sortie réelle le {{$key|date_format:$dPconfig.longdate}}</strong>
+            <strong>Sortie réelle le {{$key|date_format:$conf.longdate}}</strong>
           </td>
         </tr>
       </table>

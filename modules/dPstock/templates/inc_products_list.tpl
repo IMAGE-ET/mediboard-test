@@ -13,7 +13,7 @@
 {{/main}}
 
 {{mb_include module=system template=inc_pagination change_page="changePage" 
-    total=$total current=$start step=$dPconfig.dPstock.CProduct.pagination_size}}
+    total=$total current=$start step=$conf.dPstock.CProduct.pagination_size}}
 
 <table class="tbl">
   <tr>

@@ -14,7 +14,7 @@
   {{assign var=var value=important_constantes}}
   
   {{assign var=field  value="$m[$class][$var]"}}
-  {{assign var=value  value=$dPconfig.$m.$class.$var}}
+  {{assign var=value  value=$conf.$m.$class.$var}}
   {{assign var=locale value=config-$m-$class-$var}}
   <tr>
     <th>

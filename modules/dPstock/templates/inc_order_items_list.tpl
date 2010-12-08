@@ -17,7 +17,7 @@
         <th class="category">Date pér.</th>
       {{/if}}
       <th class="category" style="width: auto;">{{mb_title class=CProduct field=name}}</th>
-      {{if $dPconfig.dPstock.CProductStockGroup.unit_order}}
+      {{if $conf.dPstock.CProductStockGroup.unit_order}}
         <th class="category">Unités</th>
         <th class="category"></th>
       {{else}}
@@ -59,7 +59,7 @@
         (Déstérilisé)
       {{/if}}
     </td>
-    {{if $dPconfig.dPstock.CProductStockGroup.unit_order}}
+    {{if $conf.dPstock.CProductStockGroup.unit_order}}
       <td style="text-align: right; white-space: nowrap;">
         {{$curr_item->_unit_quantity}}
       </td>
@@ -73,7 +73,7 @@
     {{/if}}
     
     <td style="white-space: nowrap; text-align: right;">
-      {{if $dPconfig.dPstock.CProductStockGroup.unit_order}}
+      {{if $conf.dPstock.CProductStockGroup.unit_order}}
         {{mb_value object=$curr_item->_ref_reference field=_unit_price}}
       {{else}}
         {{mb_value object=$curr_item field=unit_price}}

@@ -48,14 +48,14 @@
     {{else}}
     <td style="background-color: #afa;">
     {{/if}}
-      {{$_temps->estimation|date_format:$dPconfig.time}}
+      {{$_temps->estimation|date_format:$conf.time}}
     </td>
-    <td>{{$_temps->occup_moy|date_format:$dPconfig.time}}</td>
-    <td><i>{{if $_temps->occup_ecart != "-"}}{{$_temps->occup_ecart|date_format:$dPconfig.time}}{{else}}-{{/if}}</i></td>
-    <td>{{$_temps->duree_moy|date_format:$dPconfig.time}}</td>
-    <td><i>{{if $_temps->duree_ecart != "-"}}{{$_temps->duree_ecart|date_format:$dPconfig.time}}{{else}}-{{/if}}</i></td>
-    <td>{{$_temps->reveil_moy|date_format:$dPconfig.time}}</td>
-    <td><i>{{if $_temps->reveil_ecart != "-"}}{{$_temps->reveil_ecart|date_format:$dPconfig.time}}{{else}}-{{/if}}</i></td>
+    <td>{{$_temps->occup_moy|date_format:$conf.time}}</td>
+    <td><i>{{if $_temps->occup_ecart != "-"}}{{$_temps->occup_ecart|date_format:$conf.time}}{{else}}-{{/if}}</i></td>
+    <td>{{$_temps->duree_moy|date_format:$conf.time}}</td>
+    <td><i>{{if $_temps->duree_ecart != "-"}}{{$_temps->duree_ecart|date_format:$conf.time}}{{else}}-{{/if}}</i></td>
+    <td>{{$_temps->reveil_moy|date_format:$conf.time}}</td>
+    <td><i>{{if $_temps->reveil_ecart != "-"}}{{$_temps->reveil_ecart|date_format:$conf.time}}{{else}}-{{/if}}</i></td>
   </tr>
   {{/foreach}}
   
@@ -69,13 +69,13 @@
     {{else}}
     <td style="background-color: #afa;">
     {{/if}}
-      {{$total.estim_moy|date_format:$dPconfig.time}}
+      {{$total.estim_moy|date_format:$conf.time}}
     </td>
-    <td>{{$total.occup_moy|date_format:$dPconfig.time}}</td>
+    <td>{{$total.occup_moy|date_format:$conf.time}}</td>
     <td>-</td>
-    <td>{{$total.duree_moy|date_format:$dPconfig.time}}</td>
+    <td>{{$total.duree_moy|date_format:$conf.time}}</td>
     <td>-</td>
-    <td>{{$total.reveil_moy|date_format:$dPconfig.time}}</td>
+    <td>{{$total.reveil_moy|date_format:$conf.time}}</td>
     <td>-</td>
   </tr>
 </table>
