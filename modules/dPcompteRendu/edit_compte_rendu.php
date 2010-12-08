@@ -97,7 +97,7 @@ else {
 
 $compte_rendu->loadRefsFwd();
 $compte_rendu->_ref_object->loadRefsFwd();
-$object =& $compte_rendu->_ref_object;
+$object =& $compte_rendu->_ref_object;  
 
 // Calcul du user concerné
 $user = CAppUI::$user;
@@ -109,10 +109,13 @@ $user = CAppUI::$user;
 
 if (!$user->isPraticien()) {
   if ($object instanceof CConsultAnesth) {
-    $object->loadRefOperation();
-    if ($object->_ref_operation->_id && $object->_ref_operation->_ref_anesth->_id) {
-      $user->_id = $object->_ref_operation->_ref_anesth->user_id;
-    } else $user->_id = null;
+    $operation = $object->loadRefOperation();
+		$anesth = $operation->_ref_anesth;
+    $user->_id = null;
+		if ($operation->_id && $anesth->_id) {
+      $user->_id = $anesth->_id;
+    }
+		
     if ($user->_id == null)
       $user->_id = $object->_ref_consultation->_praticien_id;
   }
