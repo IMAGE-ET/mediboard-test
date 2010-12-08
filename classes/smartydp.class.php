@@ -616,7 +616,6 @@ class CSmartyDP extends Smarty {
     // Standard data assignment
     $this->assign("style", $uistyle);
     $this->assign("app", CAppUI::$instance);
-    $this->assign("dPconfig", CAppUI::conf());
     $this->assign("conf", CAppUI::conf());
     $this->assign("user", CAppUI::$instance->user_id); // shouldn't be necessary
     $this->assign("version", $version); 
