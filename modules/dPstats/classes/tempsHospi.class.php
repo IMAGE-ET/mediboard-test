@@ -54,6 +54,12 @@ class CTempsHospi extends CMbObject {
     $this->_ref_praticien->loadRefFunction();
   }
   
+  /**
+   * Durée moyenne d'hospitlisation en jours
+   * @param object $praticien_id [optional]
+   * @param object $ccam [optional]
+   * @return int Durée en jours, 0 si aucun séjour, false si temps non calculé
+   */
   static function getTime($praticien_id = 0, $ccam = null, $type = null){
     $time = 0;
     $where = array();
@@ -74,16 +80,21 @@ class CTempsHospi extends CMbObject {
     }
     
     $temp = new CTempsHospi;
-    $liste = $temp->loadList($where);
+    if (null == $liste = $temp->loadList($where)) {
+      return;
+    }
+
     foreach($liste as $keyTemps => $temps) {
       $total["nbSejours"]   += $temps->nb_sejour;
       $total["duree_somme"] += $temps->nb_sejour * $temps->duree_moy;
     }
+
     if($total["nbSejours"]) {
       $time = $total["duree_somme"] / $total["nbSejours"];
     } else {
       $time = 0;
     }
+
     return $time;
   }
 }

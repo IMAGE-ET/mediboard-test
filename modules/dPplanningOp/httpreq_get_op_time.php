@@ -7,19 +7,15 @@
 * @author Romain Ollivier
 */
 
-global $AppUI, $can, $m, $tab;
+CCanDo::checkRead();
 
 $chir_id = CValue::get("chir_id" , 0 );
 $codes   = CValue::get("codes"   , "");
 $javascript = CValue::get("javascript" , true);
 
-$arrayCodes = explode("|", $codes);
-$result = CTempsOp::getTime($chir_id, $arrayCodes);
-if($result) {
-  $temps = strftime("%Hh%M", $result);
-} else {
-  $temps = "-";
-}
+$codes = explode("|", $codes);
+$result = CTempsOp::getTime($chir_id, $codes);
+$temps = $result ? strftime("%Hh%M", $result) : $temps = "-";
 
 // Création du template
 $smarty = new CSmartyDP();

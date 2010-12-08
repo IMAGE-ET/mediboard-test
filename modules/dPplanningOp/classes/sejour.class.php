@@ -44,8 +44,8 @@ class CSejour extends CCodable {
   var $entree             = null;
   var $sortie             = null;
   
-  var $saisi_SHS          = null; 
-  var $modif_SHS          = null; 
+  var $saisi_SHS          = null; // @todo Renommer ce champ
+  var $modif_SHS          = null; // @todo Renommer ce champ
 
   var $DP                 = null; 
   var $DR                 = null;

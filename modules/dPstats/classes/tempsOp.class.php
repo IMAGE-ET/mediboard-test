@@ -62,6 +62,12 @@ class CTempsOp extends CMbObject {
     $this->_ref_praticien->loadRefFunction();
   }
   
+	/**
+	 * Durée moyenne d'intervention
+	 * @param object $chir_id [optional]
+	 * @param object $ccam [optional]
+	 * @return int Durée en minutes, 0 si aucune intervention, false si temps non calculé
+	 */
   static function getTime($chir_id = 0, $ccam = null){
     $time = 0;
     $where = array();
@@ -79,16 +85,21 @@ class CTempsOp extends CMbObject {
     }
     
     $temp = new CTempsOp;
-    $liste = $temp->loadList($where);
-    foreach($liste as $keyTemps => $temps) {
+    if (null == $liste = $temp->loadList($where)) {
+    	return;
+    }
+		
+    foreach($liste as $temps) {
       $total["nbInterventions"] += $temps->nb_intervention;
       $total["occup_somme"] += $temps->nb_intervention * strtotime($temps->occup_moy);
     }
+		
     if($total["nbInterventions"]) {
       $time = $total["occup_somme"] / $total["nbInterventions"];
     } else {
       $time = 0;
     }
+		
     return $time;
   }
 }

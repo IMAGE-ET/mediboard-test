@@ -584,28 +584,12 @@ class COperation extends CCodable {
   }
   
   function loadRefPlageOp($cache = 0) {
-    $this->_ref_anesth = new CMediusers;
-    if($cache) {
-      $this->_ref_anesth = $this->_ref_anesth->getCached($this->anesth_id);
-    } else {
-      $this->_ref_anesth->load($this->anesth_id);
-    }
-    $this->_ref_anesth_visite = new CMediusers;
-    if($cache) {
-      $this->_ref_anesth_visite = $this->_ref_anesth_visite->getCached($this->prat_visite_anesth_id);
-    } else {
-      $this->_ref_anesth_visite->load($this->prat_visite_anesth_id);
-    }
+    $this->_ref_anesth        = $this->loadFwdRef("anesth_id"            , $cache);
+    $this->_ref_anesth_visite = $this->loadFwdRef("prat_visite_anesth_id", $cache);
     
-    $this->_ref_plageop = new CPlageOp;
-    
+    $this->_ref_plageop = $this->loadFwdRef("plageop_id", $cache);
     // Avec plage d'opération
-    if ($this->plageop_id) {
-      if($cache) {
-        $this->_ref_plageop = $this->_ref_plageop->getCached($this->plageop_id);
-      } else {
-        $this->_ref_plageop->load($this->plageop_id);
-      }
+		if ($this->_ref_plageop->_id) {
       $this->_ref_plageop->loadRefsFwd($cache);
       
       if (!$this->anesth_id) {
@@ -613,7 +597,7 @@ class COperation extends CCodable {
       }
       
       $date = $this->_ref_plageop->date;
-    } 
+		}
     // Hors plage
     else {
       $date = $this->date;
