@@ -48,6 +48,9 @@ class CPrescriptionLineElement extends CPrescriptionLine {
     $spec = parent::getSpec();
     $spec->table = 'prescription_line_element';
     $spec->key   = 'prescription_line_element_id';
+    $spec->events = array(
+      "autonomie",
+    );
     return $spec;
   }
   

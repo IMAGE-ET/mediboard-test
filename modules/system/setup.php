@@ -323,8 +323,49 @@ class CSetupsystem extends CSetup {
               `type_echange` VARCHAR  (255)
               ) TYPE=MYISAM;";
     $this->addQuery($query);
-
-    $this->mod_version = "1.0.35";
+    
+    $this->makeRevision("1.0.35");
+    $sql = "CREATE TABLE `ex_class` (
+              `host_class` VARCHAR (255) NOT NULL,
+              `event` VARCHAR (255) NOT NULL,
+              `ex_class_id` INT (11) UNSIGNED NOT NULL auto_increment PRIMARY KEY
+            ) TYPE=MYISAM;";
+    $this->addQuery($sql);
+    $sql = "CREATE TABLE `ex_class_field` (
+              `ex_class_field_id` INT (11) UNSIGNED NOT NULL auto_increment PRIMARY KEY,
+              `ex_class_id` INT (11) UNSIGNED NOT NULL,
+              `name` VARCHAR (255) NOT NULL,
+              `prop` VARCHAR (255) NOT NULL
+            ) TYPE=MYISAM;";
+    $this->addQuery($sql);
+    $sql = "ALTER TABLE `ex_class_field` 
+              ADD INDEX (`ex_class_id`);";
+    $this->addQuery($sql);
+    $sql = "CREATE TABLE `ex_class_constraint` (
+              `ex_class_constraint_id` INT (11) UNSIGNED NOT NULL auto_increment PRIMARY KEY,
+              `ex_class_id` INT (11) UNSIGNED NOT NULL,
+              `field` VARCHAR  (255) NOT NULL,
+              `operator` ENUM ('=','!=','>','>=','<','<=','startsWith','endsWith','contains') NOT NULL DEFAULT '=',
+              `value` VARCHAR  (255) NOT NULL
+            ) TYPE=MYISAM;";
+    $this->addQuery($sql);
+    $sql = "ALTER TABLE `ex_class_constraint` 
+              ADD INDEX (`ex_class_id`);";
+    $this->addQuery($sql);
+    $sql = "CREATE TABLE `ex_class_field_translation` (
+              `ex_class_field_translation_id` INT (11) UNSIGNED NOT NULL auto_increment PRIMARY KEY,
+              `ex_class_field_id` INT (11) UNSIGNED NOT NULL,
+              `lang` CHAR  (2),
+              `std` VARCHAR  (255),
+              `desc` VARCHAR  (255),
+              `court` VARCHAR  (255)
+            ) TYPE=MYISAM;";
+    $this->addQuery($sql);
+    $sql = "ALTER TABLE `ex_class_field_translation` 
+              ADD INDEX (`ex_class_field_id`);";
+    $this->addQuery($sql);
+    
+    $this->mod_version = "1.0.36";
     
   }
 }

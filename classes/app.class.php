@@ -152,7 +152,7 @@ class CApp {
    * @param array $properties
    * @return array
    */
-  static function getMbClasses($properties = array()) {
+  static function getMbClasses($properties = array(), &$instances = null) {
     $classes = self::getChildClasses("CMbObject", $properties);
     foreach ($classes as $key => $class) {
       // Escaped instanciation in case of DSN errors
@@ -163,6 +163,8 @@ class CApp {
         unset($classes[$key]);
         continue;
       }
+      
+      $instances[$class] = $object;
     }
     
     return $classes;
