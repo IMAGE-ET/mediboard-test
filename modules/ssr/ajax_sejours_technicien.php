@@ -37,6 +37,7 @@ foreach ($sejours as $_sejour) {
 	$all_sejours[] = $_sejour;
   $_sejour->checkDaysRelative($date);
   $_sejour->loadRefPatient(1);
+  $_sejour->loadRefBilanSSR();
 }
 
 // Blows id keys
