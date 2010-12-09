@@ -36,7 +36,15 @@ var Thumb = {
     var url = new Url("dPcompteRendu", "ajax_pdf_and_thumbs");
     url.addParam("compte_rendu_id", compte_rendu_id || modele_id);
     
-    var content = (window.CKEDITOR && CKEDITOR.instances.htmlarea.getData()) ? CKEDITOR.instances.htmlarea.getData() : $V(form._source);
+    var content = '';
+    
+    if (window.CKEDITOR && CKEDITOR.instances.htmlarea.getData) {
+      restoreStyle();
+      content = CKEDITOR.instances.htmlarea.getData();
+      deleteStyle();
+    } else {
+      content = $V(form._source);
+    }
     
     url.addParam("content", encodeURIComponent(content));
     url.addParam("mode", mode);
@@ -117,7 +125,6 @@ var Thumb = {
 
 
 function loadOld() {
-  
   var instance = CKEDITOR.instances.htmlarea;
   if (!instance.checkDirty()) return;
   var html = instance.getData();
@@ -129,4 +136,18 @@ function loadOld() {
     Thumb.content = html;
     Thumb.old();
   }
+}
+
+function restoreStyle() {
+  var instance = CKEDITOR.instances.htmlarea;
+  
+  if (!window.save_style) return;
+  window.save_style.insertBefore(instance.document.getBody().getFirst());
+}
+
+function deleteStyle() {
+  var instance = CKEDITOR.instances.htmlarea;
+  var styleTag = instance.document.getBody().getFirst();
+  if (styleTag.$.tagName == "STYLE")
+    styleTag.remove();
 }

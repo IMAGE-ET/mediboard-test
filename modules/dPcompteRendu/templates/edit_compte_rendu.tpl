@@ -21,7 +21,9 @@ function submitCompteRendu(callback){
   CKEDITOR.instances.htmlarea.document.getBody().setStyle("background", "#ddd");
 	  
   (function(){
+    restoreStyle();
 	  var html = CKEDITOR.instances.htmlarea.getData();
+	  deleteStyle();
 	  $V($("htmlarea"), html, false);
 	  
     var form = getForm("editFrm");
@@ -49,6 +51,7 @@ function refreshZones(id, obj) {
 	url.addParam("reloadzones", 1);
 	url.requestUpdate("reloadzones",
 			{onComplete: function(){
+	       deleteStyle();
 		     var form = getForm("editFrm");
 		     form.onsubmit = function() { Url.ping({onComplete: submitCompteRendu}); return false;};
 		     $V(form.compte_rendu_id, id);
