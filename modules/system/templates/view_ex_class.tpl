@@ -40,13 +40,14 @@ var ExField = {
 
 var ExFieldSpec = {
   options: {},
-  edit: function(specType, prop, className, field, otherFields){
+  edit: function(specType, prop, className, field, otherFields, ex_field_id){
     var url = new Url("system", "ajax_edit_ex_field_spec");
     url.addParam("spec_type", specType);
     url.addParam("prop", prop);
     url.addParam("class", className);
     url.addParam("field", field);
     url.addParam("other_fields", otherFields, true);
+    url.addParam("ex_field_id", ex_field_id);
     url.requestUpdate("fieldSpecEditor");
   }
 };

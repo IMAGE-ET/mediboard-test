@@ -365,7 +365,22 @@ class CSetupsystem extends CSetup {
               ADD INDEX (`ex_class_field_id`);";
     $this->addQuery($sql);
     
-    $this->mod_version = "1.0.36";
+    $this->makeRevision("1.0.36");
+    $sql = "CREATE TABLE `ex_class_field_enum_translation` (
+              `ex_class_field_enum_translation_id` INT (11) UNSIGNED NOT NULL auto_increment PRIMARY KEY,
+              `ex_class_field_id` INT (11) UNSIGNED NOT NULL,
+              `lang` CHAR  (2),
+              `key` VARCHAR  (40),
+              `value` VARCHAR  (255)
+            ) TYPE=MYISAM;";
+    $this->addQuery($sql);
+    $sql = "ALTER TABLE `ex_class_field_enum_translation` 
+              ADD INDEX (`ex_class_field_id`),
+              ADD INDEX (`lang`),
+              ADD INDEX (`key`);";
+    $this->addQuery($sql);
+    
+    $this->mod_version = "1.0.37";
     
   }
 }

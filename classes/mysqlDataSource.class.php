@@ -91,8 +91,14 @@ class CMySQLDataSource extends CSQLDataSource {
     return mysql_fetch_array($result);
   }
 
-  function fetchObject($result) {
-    return mysql_fetch_object($result);
+  function fetchObject($result, $class_name = null, $params = array()) {
+    if (empty($class_name))
+      return mysql_fetch_object($result);
+      
+    if (empty($params))
+      return mysql_fetch_object($result, $class_name);
+    
+    return mysql_fetch_object($result, $class_name, $params);
   }
 
   function escape($value) {

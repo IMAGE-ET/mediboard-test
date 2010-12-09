@@ -27,29 +27,31 @@ Main.add(function(){
     <tr>
       <th style="width: 12em;">{{mb_label object=$ex_constraint field=field}}</th>
       <td>
-        <select name="field" class="{{$ex_constraint->_props.field}}" style="max-width: 15em;">
+        <select name="field" class="{{$ex_constraint->_props.field}}" style="max-width: 15em;" tabIndex="1">
           {{foreach from=$ex_constraint->_ref_ex_class->getAvailableFields() item=_field}}
-            <option value="{{$_field}}">{{tr}}{{$ex_constraint->_ref_ex_class->host_class}}-{{$_field}}{{/tr}} &ndash; {{$_field}}</option>
+            <option value="{{$_field}}" {{if $ex_constraint->field==$_field}}selected="selected"{{/if}}>
+              {{tr}}{{$ex_constraint->_ref_ex_class->host_class}}-{{$_field}}{{/tr}} &ndash; {{$_field}}
+            </option>
           {{/foreach}}
         </select>
       </td>
       
       <th>{{mb_label object=$ex_constraint field=_locale}}</th>
-      <td>{{mb_field object=$ex_constraint field=_locale}}</td>
+      <td>{{mb_field object=$ex_constraint field=_locale tabIndex="4"}}</td>
     </tr>
     <tr>
       <th>{{mb_label object=$ex_constraint field=operator}}</th>
-      <td>{{mb_field object=$ex_constraint field=operator tabIndex=2}}</td>
+      <td>{{mb_field object=$ex_constraint field=operator tabIndex="2"}}</td>
       
       <th>{{mb_label object=$ex_constraint field=_locale_court}}</th>
-      <td>{{mb_field object=$ex_constraint field=_locale_court}}</td>
+      <td>{{mb_field object=$ex_constraint field=_locale_court tabIndex="5"}}</td>
     </tr>
     <tr>
       <th>{{mb_label object=$ex_constraint field=value}}</th>
-      <td>{{mb_field object=$ex_constraint field=value tabIndex=3}}</td>
+      <td>{{mb_field object=$ex_constraint field=value tabIndex="3"}}</td>
       
       <th>{{mb_label object=$ex_constraint field=_locale_court}}</th>
-      <td>{{mb_field object=$ex_constraint field=_locale_court}}</td>
+      <td>{{mb_field object=$ex_constraint field=_locale_court tabIndex="6"}}</td>
     </tr>
       
     <tr>

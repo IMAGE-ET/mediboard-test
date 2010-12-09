@@ -14,6 +14,7 @@ $spec_type    = CValue::get("spec_type");
 $prop         = CValue::get("prop");
 $class        = CValue::get("class");
 $field        = CValue::get("field", "field");
+$ex_field_id  = CValue::get("ex_field_id");
 $other_fields = CValue::get("other_fields", array());
 
 if (!$field) {
@@ -37,6 +38,23 @@ if ($spec_type) {
 
 $spec = @CMbFieldSpecFact::getSpec($object, $field, $prop);
 $options = $spec->getOptions();
+
+// to get the right locales
+if ($spec instanceof CEnumSpec && $ex_field_id) {
+  $ex_field = new CExClassField;
+  $ex_field->load($ex_field_id);
+  $enum_trans = $ex_field->loadRefEnumTranslations();
+  
+  foreach($enum_trans as $_enum_trans) {
+    $_enum_trans->updateLocales();
+  }
+  
+  $ex_object = new CExObject;
+  $ex_object->_ex_class_id = $ex_field->ex_class_id;
+  $ex_object->setExClass();
+  
+  $spec = $ex_object->_specs[$field];
+}
 
 $classes = $spec instanceof CRefSpec ? CApp::getMbClasses() : array();
 

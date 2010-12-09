@@ -18,12 +18,28 @@ class CExClassField extends CMbObject {
   var $_locale = null;
   var $_locale_desc = null;
   var $_locale_court = null;
+  var $_enum_translation = null;
   
   var $_ref_ex_class = null;
   var $_ref_translation = null;
   var $_spec_object = null;
   
   static $_indexed_types = array("ref", "date", "dateTime", "time");
+  static $_data_type_groups = array(
+    array("ipAddress"),
+    array("bool"), 
+    array("enum"), 
+    array("ref"), 
+    array("num", "numchar"), 
+    array("pct", "float", "currency"),
+    array("time"), 
+    array("date", "birthDate"),
+    array("dateTime"), 
+    array("code"), 
+    array("email"), 
+    array("password", "str"), 
+    array("php", "xml", "html", "text"), 
+  );
 
   function getSpec() {
     $spec = parent::getSpec();
@@ -41,6 +57,7 @@ class CExClassField extends CMbObject {
     $props["_locale"]     = "str";
     $props["_locale_desc"]  = "str";
     $props["_locale_court"] = "str";
+    $props["_enum_translation"] = "str";
     return $props;
   }
   
@@ -63,9 +80,20 @@ class CExClassField extends CMbObject {
     return $this->_ref_translation = $trans;
   }
   
+  function loadRefEnumTranslations() {
+    $trans = new CExClassFieldEnumTranslation;
+    $trans->lang = CAppUI::pref("LOCALE");
+    $trans->ex_class_field_id = $this->_id;
+    return $trans->loadMatchingList();
+  }
+  
   function updateTranslation(){
-    $trans = $this->loadRefTranslation();
+    $enum_trans = $this->loadRefEnumTranslations();
+    foreach($enum_trans as $_enum_trans) {
+      $_enum_trans->updateLocales();
+    }
     
+    $trans = $this->loadRefTranslation();
     $this->_locale       = $trans->std;
     $this->_locale_desc  = $trans->desc;
     $this->_locale_court = $trans->court;
@@ -81,11 +109,12 @@ class CExClassField extends CMbObject {
   
   function getSpecObject(){
     $ex_class = $this->loadRefExClass();
-    $ex_class->_fields_by_name[$this->name] = $this;
-    $ex_class->_ref_fields[$this->_id] = $this;
     
     $dummy = new CExObject;
-    $dummy->setExClass($ex_class);
+    $dummy->_ex_class_id = $ex_class->_id;
+    $dummy->setExClass();
+    $dummy->_ref_ex_class->_ref_fields[$this->_id] = $this;
+    $dummy->_class_name = get_class($dummy);
     
     return $this->_spec_object = CMbFieldSpecFact::getSpec($dummy, $this->name, $this->prop);
   }
@@ -99,8 +128,35 @@ class CExClassField extends CMbObject {
       $trans->desc = $this->_locale_desc;
       $trans->court = $this->_locale_court;
       if ($msg = $trans->store()) {
-        mbTrace($msg, "", true);
+        mbTrace($msg, get_class($this), true);
       }
+    }
+    
+    if ($this->_enum_translation) {
+      $values = json_decode(utf8_encode($this->_enum_translation), true);
+      $spec = $this->getSpecObject();
+      
+      $enum_trans = array_values($this->loadRefEnumTranslations());
+      
+      mbtrace(count($enum_trans), "count", true);
+      mbtrace($values, "values", true);
+      
+      foreach($values as $i => $value) {
+        if (!isset($enum_trans[$i])) {
+          $enum_trans[$i] = new CExClassFieldEnumTranslation;
+        }
+        
+        $enum_trans[$i]->ex_class_field_id = $this->_id;
+        $enum_trans[$i]->key = $spec->_list[$i];
+        $enum_trans[$i]->value = $value;
+        $enum_trans[$i]->lang = CAppUI::pref("LOCALE");
+        
+        if ($msg = $enum_trans[$i]->store()) {
+          mbTrace($msg, get_class($this), true);
+        }
+      }
+      
+      $this->_enum_translation = null;
     }
   }
   
@@ -141,7 +197,6 @@ class CExClassField extends CMbObject {
     else if ($this->fieldModified("name") || $this->fieldModified("prop")) {
       $table_name = $this->getTableName();
       $sql_spec = $this->getSQLSpec();
-      mbTrace($sql_spec, "sql_spec", true);
       $query = "ALTER TABLE `$table_name` CHANGE `{$this->_old->name}` `$this->name` $sql_spec";
 
       if (!$ds->query($query)) {

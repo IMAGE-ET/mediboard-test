@@ -35,9 +35,12 @@
                 <option value=""> &ndash; Choisir </option>
                 {{foreach from=$classes item=_events key=_class}}
                   <optgroup label="{{tr}}{{$_class}}{{/tr}}">
-                    {{foreach from=$_events item=_event}}
-                      <option value="{{$_class}}.{{$_event}}" {{if $_class == $ex_class->host_class && $_event == $ex_class->event}}selected="selected"{{/if}}>
-                        {{tr}}{{$_class}}{{/tr}} - {{$_event}}
+                    {{foreach from=$_events item=_params key=_event_name}}
+                      <option value="{{$_class}}.{{$_event_name}}" {{if $_class == $ex_class->host_class && $_event_name == $ex_class->event}}selected="selected"{{/if}}>
+                        {{tr}}{{$_class}}{{/tr}} - {{$_event_name}}
+                        {{if array_key_exists("multiple", $_params)}}
+                          (multiple)
+                        {{/if}}
                       </option>
                     {{/foreach}}
                   </optgroup>

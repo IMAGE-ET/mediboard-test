@@ -11,7 +11,7 @@
 <script type="text/javascript">
 Main.add(function(){
   var fields = {{$other_fields|@json}};
-  ExFieldSpec.edit("{{$spec_type}}", '{{$ex_field->prop}}', 'CExObject', '{{$ex_field->name}}', fields);
+  ExFieldSpec.edit("{{$spec_type}}", '{{$ex_field->prop}}', 'CExObject', '{{$ex_field->name}}', fields, "{{$ex_field->_id}}");
   getForm("editField").elements.name.select();
 });
 </script>
@@ -20,6 +20,7 @@ Main.add(function(){
   <input type="hidden" name="m" value="system" />
   <input type="hidden" name="dosql" value="do_ex_class_field_aed" />
   <input type="hidden" name="del" value="0" />
+  <input type="hidden" name="_enum_translation" value="" />
   {{mb_key object=$ex_field}}
   {{mb_field object=$ex_field field=ex_class_id hidden=true}}
   
@@ -31,12 +32,12 @@ Main.add(function(){
       <td>{{mb_field object=$ex_field field=name}}</td>
       
       <th>{{mb_label object=$ex_field field=_locale}}</th>
-      <td>{{mb_field object=$ex_field field=_locale}}</td>
+      <td>{{mb_field object=$ex_field field=_locale tabIndex="1"}}</td>
     </tr>
     <tr>
       <th><label for="_type">Type</label></th>
       <td>
-        <select name="_type" onchange="ExFieldSpec.edit($V(this), '{{$ex_field->prop}}', 'CExObject', '{{$ex_field->name}}', [])">
+        <select name="_type" onchange="ExFieldSpec.edit($V(this), '{{$ex_field->prop}}', 'CExObject', '{{$ex_field->name}}', [], '{{$ex_field->_id}}')">
           {{foreach from="CMbFieldSpecFact"|static:classes item=_class key=_key}}
             <option value="{{$_key}}" {{if $_key == $spec_type}}selected="selected"{{/if}}>{{$_key}}</option>
           {{/foreach}}
@@ -44,14 +45,14 @@ Main.add(function(){
       </td>
       
       <th>{{mb_label object=$ex_field field=_locale_desc}}</th>
-      <td>{{mb_field object=$ex_field field=_locale_desc}}</td>
+      <td>{{mb_field object=$ex_field field=_locale_desc tabIndex="2"}}</td>
     </tr>
     <tr>
       <th>{{mb_label object=$ex_field field=prop}}</th>
       <td>{{mb_field object=$ex_field field=prop readonly="readonly" size=35}}</td>
       
       <th>{{mb_label object=$ex_field field=_locale_court}}</th>
-      <td>{{mb_field object=$ex_field field=_locale_court}}</td>
+      <td>{{mb_field object=$ex_field field=_locale_court tabIndex="3"}}</td>
     </tr>
       
     <tr>

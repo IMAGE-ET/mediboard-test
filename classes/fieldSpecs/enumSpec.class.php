@@ -16,6 +16,8 @@ class CEnumSpec extends CMbFieldSpec {
   var $_list = null;
   var $_locales = null;
   
+  var $typeEnum = null;
+  
   function __construct($className, $field, $prop = null, $aProperties = array()) {
     parent::__construct($className, $field, $prop, $aProperties);
     foreach ($this->_list = explode('|', $this->list) as $value) {
@@ -34,6 +36,7 @@ class CEnumSpec extends CMbFieldSpec {
   function getOptions(){
     return parent::getOptions() + array(
       'list' => 'list',
+      'typeEnum' => array('select', 'radio'),
     );
   }
   
@@ -66,7 +69,7 @@ class CEnumSpec extends CMbFieldSpec {
   
   function getFormHtmlElement($object, $params, $value, $className){
     $field         = htmlspecialchars($this->fieldName);
-    $typeEnum      = CMbArray::extract($params, "typeEnum", "select");
+    $typeEnum      = CMbArray::extract($params, "typeEnum", $this->typeEnum ? $this->typeEnum : "select");
     $separator     = CMbArray::extract($params, "separator");
     $cycle         = CMbArray::extract($params, "cycle", 1);
     $defaultOption = CMbArray::extract($params, "defaultOption");

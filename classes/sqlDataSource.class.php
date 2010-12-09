@@ -162,9 +162,11 @@ abstract class CSQLDataSource {
   /**
    * Get a result row as an object
    * @param resource $result Query result
+   * @param string $class_name The class of the returned object
+   * @param array $params Params to be passed to the $class_name constructor 
    * @return object the result
    **/
-  abstract function fetchObject($result);
+  abstract function fetchObject($result, $class_name = null, $params = array());
 
   /**
    * Escape value

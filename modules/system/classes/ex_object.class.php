@@ -17,27 +17,24 @@ class CExObject extends CMbMetaObject {
    * @var CExClass
    */
   public $_ref_ex_class = null;
-  private $_host_class = null;
 
-  function setExClass(CExClass $ex_class = null) {
-    if ($this->_spec->key) return;
+  function setExClass() {
+    //if ($this->_spec->key) return;
     
-    if (!$ex_class) {
-      $ex_class = $this->loadRefExClass();
-      if (!$ex_class->_id) return;
-    }
+    if (!$this->_ex_class_id) return;
     
-    $this->_ex_class_id = $ex_class->_id;
+    $ex_class = $this->loadRefExClass();
+    
     $this->_ref_ex_class = $ex_class;
     
     $this->_props = $this->getProps();
     $this->_specs = $this->getSpecs();
     
-    $this->_class_name .= "_{$ex_class->host_class}_{$ex_class->event}";
+    $this->_class_name = get_class($this)."_{$ex_class->host_class}_{$ex_class->event}";
   }
   
   function loadRefExClass($cache = true){
-    if ($cache && $this->_ref_ex_class) return $this->_ref_ex_class;
+    if ($cache && $this->_ref_ex_class && $this->_ref_ex_class->_id) return $this->_ref_ex_class;
     
     $ex_class = new CExClass();
     $ex_class->load($this->_ex_class_id);
@@ -46,46 +43,77 @@ class CExObject extends CMbMetaObject {
   }
   
   function bind($hash, $doStripSlashes = true) {
+    $this->loadRefExClass();
     $this->setExClass();
+    
     return parent::bind($hash, $doStripSlashes);
   }
   
+  function loadOldObject() {
+    if (!$this->_old) {
+      $this->_old = new self;
+      $this->_old->_ex_class_id = $this->_ex_class_id;
+      $this->_old->setExClass();
+      $this->_old->load($this->_id);
+    }
+  }
+  
   function getDBFields() {
-    $result = array();
-    
+    $this->loadRefExClass();
     $this->setExClass();
-    $fields = $this->_ref_ex_class->loadRefsFields();
     
-    $vars = get_object_vars($this);
-    foreach($fields as $_field) {
-      $vars[$_field->name] = $this->{$_field->name};
-    }
+    return parent::getDBFields();
+  }
+  
+  function getSpec() {
+    $spec = parent::getSpec();
+    $spec->key   = "id";
+    return $spec;
+  }
+  
+  // needed or will throw errors in the field specs
+  function checkProperty($propName) {
+    $class_name = $this->_class_name;
+    $this->_class_name = get_class($this);
     
-    foreach($vars as $key => $value) {
-      if ($key[0] !== '_') {
-        $result[$key] = $value;
-      }
-    }
-
-    return $result;
+    $spec = $this->_specs[$propName];
+    $ret = $spec->checkPropertyValue($this);
+    
+    $this->_class_name = $class_name;
+    return $ret;
   }
   
   function getProps() {
     $ex_class = $this->loadRefExClass();
     
-    $this->_host_class = $ex_class->host_class;
-    
     $this->_spec->table = $ex_class->getTableName();
-    $this->_spec->key = "id";
     
-    $specs = parent::getProps();
-    $specs["_ex_class_id"] = "ref class|CExClass";
+    $props = parent::getProps();
+    $props["_ex_class_id"] = "ref class|CExClass";
     
     $fields = $this->_ref_ex_class->loadRefsFields();
     
     foreach($fields as $_field) {
+      if (isset($this->{$_field->name})) break; // don't redeclare them more than once
       $this->{$_field->name} = null; // declaration of the field
-      $specs[$_field->name] = $_field->prop; // declaration of the field spec
+      $props[$_field->name] = $_field->prop; // declaration of the field spec
+    }
+    
+    return $props;
+  }
+  
+  function getSpecs(){
+    $ex_class = $this->loadRefExClass();
+    $this->_class_name = get_class($this)."_{$ex_class->host_class}_{$ex_class->event}";
+    
+    $specs = parent::getSpecs();
+        
+    foreach($specs as $_field => $_spec) {
+      if ($_spec instanceof CEnumSpec) {
+        foreach ($_spec->_locales as $key => $locale) {
+          $specs[$_field]->_locales[$key] = CAppUI::tr("$this->_class_name.$_field.$key");
+        }
+      }
     }
     
     return $specs;

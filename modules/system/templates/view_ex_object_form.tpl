@@ -9,13 +9,13 @@
 *}}
 
 {{mb_form name="editExObject" m="system" dosql="do_ex_object_aed" method="post" onsubmit="return checkForm(this)"}}
-  {{*mb_key object=$ex_object*}}
-  {{* mb_key is not usable here *}}
-  <input type="hidden" name="id" value="{{$ex_object->_id}}" />
+  {{mb_key object=$ex_object}}
+  {{mb_field object=$ex_object field=_ex_class_id hidden=true}}
   
-  {{mb_field object=$ex_object field=object_class}}
-  {{mb_field object=$ex_object field=object_id}}
-  {{mb_field object=$ex_object field=_ex_class_id}}
+  {{mb_field object=$ex_object field=object_class hidden=true}}
+  {{mb_field object=$ex_object field=object_id hidden=true}}
+  
+  <input type="hidden" name="del" value="0" />
   
   <table class="main form">
     <tr>

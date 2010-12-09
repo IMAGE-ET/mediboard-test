@@ -11,21 +11,33 @@
 //CCanDo::checkAdmin();
 
 $ex_class_id = CValue::get("ex_class_id");
+$ex_object_id = CValue::get("ex_object_id");
 $object_guid = CValue::get("object_guid");
 
-$ex_class = new CExClass;
-$ex_class->load($ex_class_id);
-$ex_class->loadRefsFields();
+if (!$ex_class_id) {
+  $msg = "Impossible d'afficher le formulaire sans connaitre la classe de base";
+  CAppUI::stepAjax($msg, UI_MSG_WARNING);
+  trigger_error($msg, E_USER_ERROR);
+  return;
+}
 
 $object = CMbObject::loadFromGuid($object_guid);
 
 $ex_object = new CExObject;
-$ex_object->setExClass($ex_class);
 $ex_object->setObject($object);
+$ex_object->_ex_class_id = $ex_class_id;
+$ex_object->setExClass();
+
+if ($ex_object_id) {
+  $ex_object->load($ex_object_id);
+}
+
+foreach($ex_object->_ref_ex_class->_ref_fields as $_field) {
+  $_field->updateTranslation();
+}
 
 // Création du template
 $smarty = new CSmartyDP();
-$smarty->assign("ex_class", $ex_class);
 $smarty->assign("ex_object", $ex_object);
 $smarty->assign("object", $object);
 $smarty->display("view_ex_object_form.tpl");

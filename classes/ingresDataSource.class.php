@@ -142,7 +142,7 @@ class CIngresDataSource extends CSQLDataSource {
     return $this->_fetchArray(INGRES_ASSOC);
   }
 
-  function fetchObject($result) {
+  function fetchObject($result, $class_name = null, $params = array()) {
     // Simulates limit
     if ($this->nextLimit-- == 0) {
       return;

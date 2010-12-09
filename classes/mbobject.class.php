@@ -712,7 +712,7 @@ class CMbObject {
    * @param array|string $group Group by SQL statement
    * @param array $leftjoin Left join SQL statement collection
    * @param boolean $forceindex Add the forceindex SQL statement
-   * @return CMbObject[] List of found objects, null if module is not installed
+   * @return self[] List of found objects, null if module is not installed
    */
   function loadList($where = null, $order = null, $limit = null, $group = null, $leftjoin = null, $forceindex = null) {
     if (!$this->_ref_module) {
@@ -824,9 +824,13 @@ class CMbObject {
   	$ds = $this->_spec->ds;
     $cur = $ds->exec($sql);
     $list = array();
+    
+    // while ($newObject = $ds->fetchObject($cur, $this->_class_name)) { // @todo should replace fetchAssoc, instanciation and bind
+   
     while ($row = $ds->fetchAssoc($cur)) {
       $newObject = new $this->_class_name;
       $newObject->bind($row, false);
+      
       $newObject->checkConfidential();
       $newObject->updateFormFields();
       $newObject->registerCache();

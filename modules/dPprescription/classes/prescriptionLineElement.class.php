@@ -49,7 +49,7 @@ class CPrescriptionLineElement extends CPrescriptionLine {
     $spec->table = 'prescription_line_element';
     $spec->key   = 'prescription_line_element_id';
     $spec->events = array(
-      "autonomie",
+      "autonomie" => array("multiple" => true),
     );
     return $spec;
   }

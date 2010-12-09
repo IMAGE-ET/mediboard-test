@@ -9,6 +9,8 @@
  */
 
 class CExClass extends CMbObject {
+  var $ex_class_id = null;
+  
   var $host_class = null;
   var $event      = null;
   
@@ -42,7 +44,6 @@ class CExClass extends CMbObject {
   
   function updateFormFields(){
     parent::updateFormFields();
-    
     $this->_view = CAppUI::tr($this->host_class) . " - $this->event";
   }
   
@@ -57,7 +58,7 @@ class CExClass extends CMbObject {
   
   function getTableName(){
     $this->completeField("host_class", "event");
-    return "ex_{$this->host_class}_{$this->event}";
+    return strtolower("ex_{$this->host_class}_{$this->event}");
   }
   
   function checkConstraints(CMbObject $object){
@@ -80,7 +81,13 @@ class CExClass extends CMbObject {
     
     if (!$this->_id) {
       $table_name = $this->getTableName();
-      $query = "CREATE TABLE `$table_name` (`id` INT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY) TYPE=MYISAM;";
+      $query = "CREATE TABLE `$table_name` (
+        `id` INT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
+        `object_id` INT UNSIGNED NOT NULL,
+        `object_class` VARCHAR(80) NOT NULL,
+        INDEX ( `object_id` ),
+        INDEX ( `object_class` )
+      ) TYPE=MYISAM;";
       
       $ds = $this->_spec->ds;
       if (!$ds->query($query)) {

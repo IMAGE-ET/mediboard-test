@@ -19,6 +19,7 @@ class CMbObjectSpec {
   public $measureable         = false;
   public $uniques             = array();
   public $xor                 = array();
+  public $events              = array();
   
   /**
    * @var CSQLDataSource
