@@ -76,6 +76,15 @@ class CExClass extends CMbObject {
     return $this->_host_class_fields = array_keys($object->getDBFields());
   }
   
+  function loadExObjects(CMbObject $object) {
+    $ex_object = new CExObject;
+    $ex_object->_ex_class_id = $this->_id;
+    $ex_object->loadRefExClass();
+    $ex_object->setExClass();
+    $ex_object->setObject($object);
+    return $ex_object->loadMatchingList();
+  }
+  
   function store(){
     if ($msg = $this->check()) return $msg;
     

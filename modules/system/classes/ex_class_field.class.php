@@ -132,14 +132,12 @@ class CExClassField extends CMbObject {
       }
     }
     
+    // enum translations
     if ($this->_enum_translation) {
       $values = json_decode(utf8_encode($this->_enum_translation), true);
       $spec = $this->getSpecObject();
       
       $enum_trans = array_values($this->loadRefEnumTranslations());
-      
-      mbtrace(count($enum_trans), "count", true);
-      mbtrace($values, "values", true);
       
       foreach($values as $i => $value) {
         if (!isset($enum_trans[$i])) {

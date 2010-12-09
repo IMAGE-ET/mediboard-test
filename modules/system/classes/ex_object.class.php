@@ -19,8 +19,6 @@ class CExObject extends CMbMetaObject {
   public $_ref_ex_class = null;
 
   function setExClass() {
-    //if ($this->_spec->key) return;
-    
     if (!$this->_ex_class_id) return;
     
     $ex_class = $this->loadRefExClass();
@@ -43,9 +41,7 @@ class CExObject extends CMbMetaObject {
   }
   
   function bind($hash, $doStripSlashes = true) {
-    $this->loadRefExClass();
     $this->setExClass();
-    
     return parent::bind($hash, $doStripSlashes);
   }
   
@@ -59,9 +55,7 @@ class CExObject extends CMbMetaObject {
   }
   
   function getDBFields() {
-    $this->loadRefExClass();
     $this->setExClass();
-    
     return parent::getDBFields();
   }
   
@@ -69,6 +63,26 @@ class CExObject extends CMbMetaObject {
     $spec = parent::getSpec();
     $spec->key   = "id";
     return $spec;
+  }
+
+  function loadQueryList($sql) {
+    $ds = $this->_spec->ds;
+    $cur = $ds->exec($sql);
+    $list = array();
+
+    while ($row = $ds->fetchAssoc($cur)) {
+      $newObject = new self;
+      //$newObject->_ex_class_id = $this->_ex_class_id;
+      $newObject->bind($row, false);
+      
+      $newObject->checkConfidential();
+      $newObject->updateFormFields();
+      $newObject->registerCache();
+      $list[$newObject->_id] = $newObject;
+    }
+
+    $ds->freeResult($cur);
+    return $list;
   }
   
   // needed or will throw errors in the field specs

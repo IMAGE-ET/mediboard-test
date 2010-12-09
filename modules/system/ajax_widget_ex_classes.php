@@ -15,25 +15,30 @@ $event       = CValue::get("event");
 
 $object = CMbObject::loadFromGuid($object_guid);
 
-mbTrace($object->_view);
-
 $ex_class = new CExClass;
 $ex_class->host_class = $object->_class_name;
 $ex_class->event = $event;
 $ex_classes = $ex_class->loadMatchingList();
 
-mbTrace(count($ex_classes), "ex_classes_before", true);
+$ex_objects = array();
 
 foreach($ex_classes as $_id => $_ex_class) {
   if (!$_ex_class->checkConstraints($object)) {
     unset($ex_classes[$_id]);
   }
+  
+  $objects = $_ex_class->loadExObjects($object);
+  
+  /*foreach($objects as $_object) {
+    $_object->loadLogs();
+  }*/
+  
+  $ex_objects[$_ex_class->_id] = $objects;
 }
-
-mbTrace(count($ex_classes), "ex_classes_after", true);
 
 // Création du template
 $smarty = new CSmartyDP();
 $smarty->assign("ex_classes", $ex_classes);
+$smarty->assign("ex_objects", $ex_objects);
 $smarty->assign("object", $object);
-$smarty->display("inc_vw_available_ex_classes.tpl");
+$smarty->display("inc_widget_ex_classes.tpl");

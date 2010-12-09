@@ -564,7 +564,7 @@ class CMbObject {
    * Register the object into cache
    * @return void
    */
-  private final function registerCache() {
+  protected final function registerCache() {
     if (!self::$useObjectCache) return;
     
     self::$objectCount++;
