@@ -22,6 +22,8 @@
     url.addParam("ex_class_id", ex_class_id);
     url.addParam("ex_object_id", ex_object_id);
     url.modale({title: title});
+
+    url.modaleObject.observe("afterClose", ExObject.refresh);
   }
 </script>
 

@@ -42,6 +42,31 @@ class CExClass extends CMbObject {
     return $backProps;
   }
   
+  function load($id = null) {
+    if (!($ret = parent::load($id))) {
+      return $ret;
+    }
+    
+    // pas encore obligé d'utiliser l'eval, mais je pense que ca sera le plus simple
+    /*$class_name = "CExObject_{$this->host_class}_{$this->event}";
+    
+    if (!class_exists($class_name)) {
+      $table_name = $this->getTableName();
+      
+      eval("
+      class $class_name extends CExObject {
+        function getSpec(){
+          \$spec = parent::getSpec();
+          \$spec->table = '$table_name';
+          return \$spec;
+        }
+      }
+      ");
+    }*/
+    
+    return $ret;
+  }
+  
   function updateFormFields(){
     parent::updateFormFields();
     $this->_view = CAppUI::tr($this->host_class) . " - $this->event";

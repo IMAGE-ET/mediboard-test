@@ -245,6 +245,7 @@ Class.extend(Autocompleter.Base, {
 // Fix to get better window size ( document.documentElement instead of document.body )
 // Needs to be done after everything
 (function(){
+  try {
   Object.extend(Control.Overlay, {
     positionOverlay: function(){
       Control.Overlay.container.setStyle({
@@ -253,6 +254,7 @@ Class.extend(Autocompleter.Base, {
       });
     }
   });
+  } catch (e) {}
 }).defer();
 
 Element.addMethods({

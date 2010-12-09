@@ -9,7 +9,7 @@
  */
 
 class CExObject extends CMbMetaObject {
-  var $id = null;
+  var $ex_object_id = null;
   
   var $_ex_class_id = null;
   
@@ -61,7 +61,7 @@ class CExObject extends CMbMetaObject {
   
   function getSpec() {
     $spec = parent::getSpec();
-    $spec->key   = "id";
+    $spec->key = "ex_object_id";
     return $spec;
   }
 

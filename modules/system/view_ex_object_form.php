@@ -32,6 +32,15 @@ if ($ex_object_id) {
   $ex_object->load($ex_object_id);
 }
 
+// loadAllFwdRefs ne marche pas bien (a cause de la clé primaire)
+foreach($ex_object->_specs as $_field => $_spec) {
+  if ($_spec instanceof CRefSpec && $_field != $ex_object->_spec->key) {
+    $obj = new $_spec->class;
+    $obj->load($ex_object->$_field);
+    $ex_object->_fwd[$_field] = $obj;
+  }
+}
+
 foreach($ex_object->_ref_ex_class->_ref_fields as $_field) {
   $_field->updateTranslation();
 }
