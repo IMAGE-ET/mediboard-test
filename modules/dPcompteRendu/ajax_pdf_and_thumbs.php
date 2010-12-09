@@ -139,6 +139,15 @@ else {
 // Traitement des vignettes
 if($generate_thumbs){
   $thumbs = new phpthumb();
+  
+  // Il faut inclure manuellement la configuration dans l'objet phpThumbs
+  if (!empty($PHPTHUMB_CONFIG)) {
+    foreach ($PHPTHUMB_CONFIG as $key => $value) {
+      $keyname = 'config_'.$key;
+      $thumbs->setParameter($keyname, $value);
+    }
+  }
+  
   $thumbs->setSourceFilename($file->_file_path);
   $vignettes = array();
 	$file->loadNbPages();
