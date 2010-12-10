@@ -8,90 +8,6 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
  */
 
-// Préférences par Module
-$prefnames_by_modname = array (
-  "common" => array (
-    "LOCALE",
-    "UISTYLE",
-    "MenuPosition",
-    "DEFMODULE",
-    "touchscreen",
-    "tooltipAppearenceTimeout",
-    "showLastUpdate",
-    "directory_to_watch",
-    "debug_yoplet"
-  ),
-  
-  "dPpatients" => array (
-    "DEPARTEMENT",
-    "GestionFSE", 
-    "InterMaxDir",
-    "VitaleVisionDir", 
-    "VitaleVision",
-    "vCardExport",
-  ),
-  
-  "dPcabinet" => array (
-    "AFFCONSULT",
-    "MODCONSULT",
-    "AUTOADDSIGN",
-    "DefaultPeriod",
-    "DossierCabinet",
-    "simpleCabinet",
-    "ccam_consultation",
-    "view_traitement",
-    "autoCloseConsult",
-    "resumeCompta",
-    "showDatesAntecedents",
-    "dPcabinet_show_program",
-    "pratOnlyForConsult"
-  ),
-  
-  "dPplanningOp" => array (
-    "mode_dhe",
-    "dPplanningOp_listeCompacte",
-  ),
-  
-  "dPhospi" => array (
-    "ccam_sejour",
-  ),
-  
-  "dPcompteRendu" => array(
-    "saveOnPrint",
-    "choicepratcab",
-    "listDefault",
-    "listBrPrefix",
-    "listInlineSeparator",
-  ),
-  
-  "dPfiles" => array(
-    "directory_to_watch",
-    "debug_yoplet"
-  ),
-  
-  "system" => array (
-    "INFOSYSTEM",
-    "showTemplateSpans"
-  ),
-  
-  "dPprescription" => array (
-    "easy_mode",
-    "show_transmissions_form"
-  ),
-  
-  "dPurgences" => array (
-    "defaultRPUSort",
-    "showMissingRPU",
-  ),
-  
-  "ssr" => array (
-    "ssr_planning_dragndrop",
-    "ssr_planning_resize",
-    "ssr_planification_duree",
-    "ssr_planification_show_equipement",
-  ),
-);
-
 global $can;
 $user_id = $can->edit ? CValue::getOrSession("user_id", "default") : null;
 $user =  CUser::get($user_id);
@@ -108,7 +24,8 @@ $prefvalues = array(
 );
 
 // Classement par module et par préférences
-foreach ($prefnames_by_modname as $modname => $prefnames){
+CPreferences::loadModules();
+foreach (CPreferences::$modules as $modname => $prefnames){
   $prefs[$modname] = array();	
   $module = CModule::getActive($modname);
 	$canRead = $module ? CPermModule::getPermModule($module->_id, PERM_READ, $user_id) : false;

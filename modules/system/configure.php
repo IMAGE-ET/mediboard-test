@@ -8,8 +8,7 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
  */
 
-global $can;
-$can->needsAdmin();
+CCanDo::checkAdmin();
 
 // Chargement des fuseaux horaires
 $zones = timezone_identifiers_list();

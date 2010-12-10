@@ -9,6 +9,14 @@
  */
 
 class CPreferences extends CMbObject {
+  static $modules = array();
+  
+	static function loadModules() {
+		foreach (glob("./modules/*/preferences.php") as $file) {
+		  require_once($file);
+		}
+	}
+
 	var $pref_id = null;
 	
 	var $user_id = null;
