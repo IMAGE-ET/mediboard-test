@@ -91,6 +91,7 @@ Main.add(function () {
   var form = getForm('stats-filter');
   updateGraphs(form);
   $(form.count).addSpinner({min: 0});
+  $(form._percent).addSpinner({min: 0, step: 0.1});
 });
 </script>
 
@@ -144,9 +145,17 @@ Main.add(function () {
       </td>
       <td style="white-space: normal;">
         {{foreach from=$axes_other key=_axis item=_label}}
+          {{if $_axis == "diag_infirmier"}}
+            <hr/>
+          {{/if}}
           <label style="width: 16em; display: inline-block;">
-            <input type="radio" name="axe" value="{{$_axis}}" {{if $_axis == $axe}}checked="checked"{{/if}} onchange="this.form.onsubmit()" /> {{$_label}}
+            <input type="radio" name="axe" value="{{$_axis}}" {{if $_axis == $axe}}checked="checked"{{/if}} onchange="this.form.onsubmit()"/> {{$_label}}
           </label>
+          {{if $_axis == "diag_infirmier"}}
+            <label id="s_percent" title="{{tr}}CRPU-percent_diag-desc{{/tr}}">
+                {{tr}}CRPU-percent_diag{{/tr}} <input type="text"  name="_percent" value="0.5" size="2"/> %
+            </label>
+          {{/if}}
         {{/foreach}}
       </td>
     </tr>

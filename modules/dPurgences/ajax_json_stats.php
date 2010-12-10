@@ -583,7 +583,91 @@ switch ($axe) {
     $series = &$data[$axe]['series'];
     computeAttente(array(array("Nombre de passages")), $series, $where, $ljoin, $dates, $period, $sejour, $total, "sejour.entree", "consultation._datetime");
     break;
+    
+  case "diag_infirmier":
+
+    $data[$axe] = array(
+      'options' => array(
+        'title' => utf8_encode('Par diagnostique infirmier')
+      ),
+      'series' => array()
+    );
+    $ds = CSQLDataSource::get("std");
+    $rpu = new CRPU;
+    $ljoin = array(
+      'sejour' => 'rpu.sejour_id = sejour.sejour_id',
+    );
+    
+    unset($where["sejour.type"]);
+    
+    $where["diag_infirmier"] = "IS NOT NULL";
+    
+    $group = CGroups::loadCurrent();
+    $group_id = $group->_id;
+    $where['sejour.group_id'] = " = '$group_id'";
+    
+    $where['sejour.entree'] = "BETWEEN '".reset($dates)."' AND '".end($dates)."'";
+    $nb_rpus = $rpu->countList($where, null, null, null, $ljoin);
+
+    $percent = CValue::get("_percent") * $nb_rpus;
+    
+    $percent = $percent / 100 ;
+    
+    $sql = "SELECT UPPER(TRIM(TRAILING '\r\n' from substring_index( `diag_infirmier` , '\\n', 1 ))) AS categorie, COUNT(*) as nb_diag
+    FROM `rpu`
+    LEFT JOIN `sejour` ON `rpu`.sejour_id = `sejour`.sejour_id
+    WHERE `diag_infirmier` IS NOT NULL
+    AND `group_id` = '$group_id'
+    AND `entree` BETWEEN '".reset($dates)."' AND '".end($dates)."'
+    GROUP BY `diag_infirmier`
+    HAVING nb_diag > $percent";
+ 
+    $result = $ds->exec($sql);
+    $areas = array();
+    while ($row = $ds->fetchArray($result)) {
+      $areas[] = $row["categorie"];
+    }
+    
+    $areas[] = "Autre";
+    
+    $data[$axe]["options"]["title"] .= utf8_encode(" (" . count($areas) . " catégories)");
+    
+    $series = &$data[$axe]['series'];
+    
+    $totaux = array();
+    
+    // On compte le nombre total de rpu par date
+    foreach($dates as $i => $_date) {
+      $_date_next = mbDate("+1 $period", $_date);
+      $where['sejour.entree'] = "BETWEEN '$_date' AND '$_date_next'";
+      $totaux[$i] = $rpu->countList($where, null, null, null, $ljoin);
+    }
+    
+    foreach($areas as $key => $value) {
+      $label = utf8_encode($value);
+      $where["rpu.diag_infirmier"] = $ds->prepareLike("$value%");
+      
+      $series[$key] = array('data' => array(), 'label' => $label);
+      
+      foreach ($dates as $i => $_date) {
+        // Si la catégorie est autre, on lui affecte le total soustrait aux valeurs des autres catégories
+        if ($value == "Autre") {
+          $series[$key]['data'][$i] = array($i, $totaux[$i]);
+          $total += $totaux[$i];
+          continue;
+        }
+        $_date_next = mbDate("+1 $period", $_date);
+        $where['sejour.entree'] = "BETWEEN '$_date' AND '$_date_next'";
+        $count = $rpu->countList($where, null, null, null, $ljoin);
+        $totaux[$i] -= $count;
+        
+        $total += $count;
+        $series[$key]['data'][$i] = array($i, intval($count)); 
+      }
+    }
 }
+
+
 
 // Ticks
 $ticks = array();
@@ -622,7 +706,7 @@ foreach($data as &$_data) {
       $totals[$key][1] += $value[1];
     }
   }
-  
+
   $_data["series"][] = array(
     "data" => $totals,
     "label" => "Total",

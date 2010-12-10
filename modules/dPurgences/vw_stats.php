@@ -29,7 +29,7 @@ $axes = array(
   "transport"       => CAppUI::tr("CRPU-transport"),
   "without_rpu"     => "Séjours d'urgence sans RPU",
   "transfers_count" => "Nombre de transferts",
-  "mutations_count" => "Nombre de mutations",
+  "mutations_count" => "Nombre de mutations"
 );
 
 $axes_other = array(
@@ -39,6 +39,7 @@ $axes_other = array(
   "duree_sejour"  => "Durée de séjour",
   "duree_pec"     => "Durée de prise en charge",
   "duree_attente" => "Durée d'attente",
+  "diag_infirmier"  => "Diagnostic infirmier",
 );
 
 $smarty = new CSmartyDP();
