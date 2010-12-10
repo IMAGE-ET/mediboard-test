@@ -183,7 +183,7 @@
   <tr>
   <td></td>
     <td>
-     {{if ($prescription->type == "sejour" || $prescription->type == "pre_admission") && !$line->_protocole && $line->signee && ($is_praticien || @$operation_id || $can->admin)}}
+     {{if ($prescription->type == "sejour" || $prescription->type == "pre_admission") && !$line->_protocole && $line->signee}}
         <div id="stop-CPrescriptionLineElement-{{$line->_id}}"> 
           {{include file="../../dPprescription/templates/line/inc_vw_stop_line.tpl" object_class="CPrescriptionLineElement"}}
         </div>
