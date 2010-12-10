@@ -153,8 +153,7 @@
 					  <table class="form">  
               <tr>
               	<td>
-              		{{assign var=message value="CDestinataireHprim"|static:"messagesHprim"}}
-              		{{foreach from=$message key=_message item=_evenements}}
+              		{{foreach from=$dest_hprim->_spec->messages key=_message item=_evenements}}
 									  {{if $_message == $dest_hprim->message}}
 										  <ul id="tabs-evenements-{{$dest_hprim->_guid}}" class="control_tabs">
 										  	{{foreach from=$_evenements item=_evenement}}

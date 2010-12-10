@@ -8,91 +8,64 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
  */
 
-class CDestinataireHprim extends CMbObject {
-  // L'ajout du PMSI se fait en dehors de la classe car dépends de la config
-	static $messagesHprim = array(
-    "patients" => array ( 
-      "evenementPatient" 
-	  ),
-    "pmsi" => array(
-      "evenementServeurActe",
-	    "evenementFraisDivers"
-	  ),
-    "stock" => array ( 
-      "evenementMvtStocks"
-	  )
-  );
-	
+CAppUI::loadClass("CDestinataireXML");
+
+class CDestinataireHprim extends CDestinataireXML {	
   // DB Table key
   var $dest_hprim_id  = null;
   
   // DB Fields
-  var $nom         = null;
-  var $libelle     = null;
-  var $group_id    = null;
   var $type        = null;
-	var $message     = null;
-  var $actif       = null;
   var $register    = null;
   var $code_appli  = null;
   var $code_acteur = null;
   var $code_syst   = null;
-	
-  // Forward references
-  var $_ref_group             = null;
-  var $_ref_exchanges_sources = null;
-  
-  // Form fields
-  var $_tag_patient     = null;
-  var $_tag_sejour      = null;
-	var $_tag_mediuser    = null;
-	var $_tag_service     = null;
-	var $_type_echange    = "hprimxml";
-  
+	  
   function getSpec() {
     $spec = parent::getSpec();
     $spec->table = 'destinataire_hprim';
     $spec->key   = 'dest_hprim_id';
+    $spec->messages = array(
+      "patients" => array ( 
+        "evenementPatient" 
+      ),
+      "pmsi" => array(
+        (CAppUI::conf("hprimxml send_diagnostic") == "evt_serveuretatspatient") ? 
+          "evenementServeurEtatsPatient" : "evenementPMSI",
+        "evenementServeurActe",
+        "evenementFraisDivers"
+      ),
+      "stock" => array ( 
+        "evenementMvtStocks"
+      )
+    );
     return $spec;
   }
   
   function getProps() {
-    $specs = parent::getProps();
-    $specs["nom"]         = "str notNull";
-    $specs["libelle"]     = "str";
-    $specs["group_id"]    = "ref notNull class|CGroups";
-    $specs["type"]        = "enum notNull list|cip|sip default|cip";
-		$specs["message"]     = "enum list|pmsi|patients|stock default|patient";
-    $specs["actif"]       = "bool notNull";
-    $specs["register"]    = "bool notNull default|1";
-    $specs["code_appli"]  = "str";
-    $specs["code_acteur"] = "str";
-    $specs["code_syst"]   = "str";
-    
-    $specs["_tag_patient"]  = "str";
-    $specs["_tag_sejour"]   = "str";
-		$specs["_tag_mediuser"] = "str";
-		$specs["_tag_service"]  = "str";
-    return $specs;
+    $props = parent::getProps();
+    $props["type"]        = "enum notNull list|cip|sip default|cip";
+		$props["message"]     = "enum list|pmsi|patients|stock default|patient";
+    $props["register"]    = "bool notNull default|1";
+    $props["code_appli"]  = "str";
+    $props["code_acteur"] = "str";
+    $props["code_syst"]   = "str";
+
+    return $props;
   }
   
   function getBackProps() {
     $backProps = parent::getBackProps();
     $backProps['object_configs'] = "CDestinataireHprimConfig object_id";
-    $backProps['emetteurs'] = "CEchangeHprim emetteur_id";
-    $backProps['destinataires'] = "CEchangeHprim destinataire_id";
+    $backProps['emetteurs']      = "CEchangeHprim emetteur_id";
+    $backProps['destinataires']  = "CEchangeHprim destinataire_id";
     
     return $backProps;
   }
     
-  function loadRefsFwd() {
-    $this->_ref_group = new CGroups;
-    $this->_ref_group->load($this->group_id);
-  }
-	
 	function loadRefsExchangesSources() {
 		$this->_ref_exchanges_sources = array();
-		foreach (self::$messagesHprim as $_message => $_evenements) {
+		foreach ($this->_spec->messages as $_message => $_evenements) {
 			if ($_message == $this->message) {
 				foreach ($_evenements as $_evenement) {
           $this->_ref_exchanges_sources[$_evenement] = CExchangeSource::get("$this->_guid-$_evenement", null, true, $this->_type_echange);
@@ -169,14 +142,13 @@ class CDestinataireHprim extends CMbObject {
     }
   }
   
-  
   function sendEvenementPatient($domEvenement, $mbObject, $referent = null, $initiateur = null) {
-    $msgEvtVenuePatient = $domEvenement->generateTypeEvenement($mbObject, $referent, $initiateur);
+    $msgEvtPatient = $domEvenement->generateTypeEvenement($mbObject, $referent, $initiateur);
     
     if ($this->actif) {
       $source = CExchangeSource::get("$this->_guid-evenementPatient");
       if ($source->_id) {
-        $source->setData($msgEvtVenuePatient);
+        $source->setData($msgEvtPatient);
         $source->send();
         $acquittement = $source->receive();
 
@@ -200,7 +172,4 @@ class CDestinataireHprim extends CMbObject {
   }
 }
 
-// Add
-CDestinataireHprim::$messagesHprim['pmsi'][] = (CAppUI::conf("hprimxml send_diagnostic") == "evt_serveuretatspatient") ? 
-                                                "evenementServeurEtatsPatient" : "evenementPMSI"; 
 ?>

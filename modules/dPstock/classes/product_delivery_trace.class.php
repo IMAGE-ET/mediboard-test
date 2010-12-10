@@ -169,7 +169,11 @@ class CProductDeliveryTrace extends CMbObject {
   }
   
   function loadRefsFwd() {
-    $this->_ref_delivery = $this->loadFwdRef("delivery_id", true); 
+    $this->loadRefDelivery();
+  }
+  
+  function loadRefDelivery() {
+    return $this->_ref_delivery = $this->loadFwdRef("delivery_id", true); 
   }
 
   function getPerm($permType) {

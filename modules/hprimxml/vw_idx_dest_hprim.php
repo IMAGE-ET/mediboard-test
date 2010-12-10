@@ -10,15 +10,13 @@
  
 CCanDo::checkRead();
 
-$dest_hprim_id = CValue::get("dest_hprim_id");
-
-$listEtab = CGroups::loadGroups();
+$destinataire_id = CValue::getOrSession("destinataire_id");
 
 // Chargement du destinataire HPRIM demandé
 $dest_hprim = new CDestinataireHprim();
-$dest_hprim->load($dest_hprim_id);
-if($dest_hprim->load($dest_hprim_id)) {
-  $dest_hprim->loadRefsFwd();
+$dest_hprim->load($destinataire_id);
+if ($dest_hprim->_id) {
+  $dest_hprim->loadRefGroup();
 	$dest_hprim->loadRefsExchangesSources();
 }
 
@@ -28,14 +26,13 @@ $where = array();
 $where["group_id"] = "= '".CGroups::loadCurrent()->_id."'";
 $listDestHprim = $itemDestHprim->loadList($where);
 foreach($listDestHprim as &$_dest_hprim) {
-  $_dest_hprim->loadRefsFwd();
+  $_dest_hprim->loadRefGroup();
 }
 
 // Création du template
-$smarty = new CSmartyDP();
+$smarty = new CSmartyDP("modules/webservices");
+$smarty->assign("destinataire"    , $dest_hprim);
+$smarty->assign("listDestinataire", $listDestHprim);
+$smarty->display("vw_idx_dest_xml.tpl");
 
-$smarty->assign("dest_hprim"      , $dest_hprim);
-$smarty->assign("listEtab"        , $listEtab);
-$smarty->assign("listDestHprim"   , $listDestHprim);
-$smarty->display("vw_idx_dest_hprim.tpl");
 ?>
