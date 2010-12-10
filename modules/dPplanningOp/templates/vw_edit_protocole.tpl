@@ -188,6 +188,12 @@ Main.add(function () {
             Informations concernant l'intervention
           </th>
         </tr>
+        
+        <tr>
+          <th>{{mb_label object=$protocole field="libelle"}}</th>
+          <td colspan="2">{{mb_field object=$protocole field="libelle" size="35"}}</td>
+        </tr>
+        
         <tr>
           <th>
             {{mb_label object=$protocole field="_hour_op"}}
@@ -235,11 +241,6 @@ Main.add(function () {
         </tr>
         
         <tr>
-          <th>{{mb_label object=$protocole field="libelle"}}</th>
-          <td colspan="2">{{mb_field object=$protocole field="libelle" size="35"}}</td>
-        </tr>
-        
-        <tr>
           <td colspan="3"><hr /></td>
         </tr>
         
@@ -273,6 +274,11 @@ Main.add(function () {
       <table class="form">
         <tr>
          <th class="category" colspan="2">Informations concernant le séjour</th>
+        </tr>
+        
+        <tr>
+          <th>{{mb_label object=$protocole field="libelle_sejour"}}</th>
+          <td>{{mb_field object=$protocole field="libelle_sejour"}}</td>
         </tr>
         
         <tr>
@@ -320,11 +326,6 @@ Main.add(function () {
                 }
               </script>
           </td>
-        </tr>
-        
-        <tr>
-          <th>{{mb_label object=$protocole field="libelle_sejour"}}</th>
-          <td>{{mb_field object=$protocole field="libelle_sejour"}}</td>
         </tr>
         
         <tr>
