@@ -380,7 +380,7 @@ Main.add( function(){
     {{if !$sejour->_id}}
       PatSelector.init();
     {{else}}
-      confirmChangePatient()
+      confirmChangePatient();
     {{/if}}"/>
   </td>
   <td colspan="2" class="button">
@@ -391,6 +391,11 @@ Main.add( function(){
       confirmChangePatient();
     {{/if}}">Choisir un patient</button>
   </td>
+</tr>
+
+<tr>
+  <th>{{mb_label object=$sejour field="libelle"}}</th>
+  <td colspan="3">{{mb_field object=$sejour field="libelle" form="editSejour" autocomplete="true,1,50,true,true"}}</td>
 </tr>
 
 <tr>
@@ -428,11 +433,6 @@ Main.add( function(){
     <button type="button" class="search" onclick="CIM10Selector.init()">{{tr}}button-CCodeCIM10-choix{{/tr}}</button>
     <input type="hidden" name="DP" onchange="$V(this.form.keywords_code, this.value);"/>
   </td>
-</tr>
-
-<tr>
-  <th>{{mb_label object=$sejour field="libelle"}}</th>
-  <td colspan="3">{{mb_field object=$sejour field="libelle" form="editSejour" autocomplete="true,1,50,true,true"}}</td>
 </tr>
 
 {{if $sejour->annule}}

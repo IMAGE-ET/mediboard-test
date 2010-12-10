@@ -97,6 +97,11 @@ CCAMSelector.init = function(){
   </tr>
   
   <tr>
+    <th>{{mb_label object=$op field="libelle"}}</th>
+    <td colspan="2">{{mb_field object=$op field="libelle" form="editOp" autocomplete="true,1,50,true,true"}}</td>
+  </tr>
+  
+  <tr>
     <th>{{mb_label object=$op field="codes_ccam" defaultFor="_codeCCAM"}}</th>
     <td>
       <input type="text" name="_codeCCAM" ondblclick="CCAMSelector.init()" size="10" value="" onblur="oCcamField.add(this.form._codeCCAM.value,true)" />
@@ -113,11 +118,6 @@ CCAMSelector.init = function(){
     </th>
     <td colspan="2" class="text" id="listCodesCcam">
     </td>
-  </tr>
-  
-  <tr>
-    <th>{{mb_label object=$op field="libelle"}}</th>
-    <td colspan="2">{{mb_field object=$op field="libelle"}}</td>
   </tr>
   
   <tr>
