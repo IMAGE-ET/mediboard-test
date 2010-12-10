@@ -67,10 +67,10 @@ addDroppablesDiv = function(draggable){
 	  if(td.hasClassName("canDrop")){
 	    Droppables.add(td.id, {
 	      onDrop: function(element) {
-			    _td = td.id.split("_");
+			    var _td = td.id.split("_");
 			    line_id = _td[1];
 			    line_class = _td[2];
-			    unite_prise = _td[3];
+			    unite_prise = td.getAttribute("data-uniteprise");
 			    date = _td[4];
 			    hour = _td[5];
 			    
@@ -99,10 +99,10 @@ addDroppablesDiv = function(draggable){
 
 addPlanification = function(date, time, key_tab, object_id, object_class, element_id){
   // Split de l'element_id
-  element = element_id.split("_");
-  original_date = element[3]+" "+element[4]+":00:00";
-  quantite = element[5];
-  planification_id = element[6];
+  var element = element_id.split("_");
+  var original_date = element[3]+" "+element[4]+":00:00";
+  var quantite = element[5];
+  var planification_id = element[6];
 
 	// Hack pour corriger le probleme des planifications sur aucune prise prevue
 	if(element[2] == 'aucune' && element[3] == 'prise'){
@@ -117,14 +117,14 @@ addPlanification = function(date, time, key_tab, object_id, object_class, elemen
   $V(oForm.object_id, object_id);
   $V(oForm.object_class, object_class);
   
-  prise_id = !isNaN(key_tab) ? unite_prise : '';
-  unite_prise = isNaN(key_tab) ? unite_prise : '';
+  var prise_id = !isNaN(key_tab) ? key_tab : '';
+  var unite_prise = isNaN(key_tab) ? key_tab : '';
 
   $V(oForm.unite_prise, unite_prise);
   $V(oForm.prise_id, prise_id);
 	$V(oForm.quantite, quantite);
 
-  dateTime = date+" "+time
+  var dateTime = date+" "+time;
   
   $V(oForm.dateTime, dateTime);
   if(planification_id){

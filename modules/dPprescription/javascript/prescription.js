@@ -425,6 +425,7 @@ Prescription = {
 		url.requestUpdate("perop");
 	},
 	loadTraitement: function(sejour_id, date, nb_decalage, mode_dossier, object_id, object_class, unite_prise, chapitre) {
+
 		var url = new Url;
 	  url.setModuleAction("dPprescription", "httpreq_vw_dossier_soin");
 	  url.addParam("sejour_id", sejour_id);
@@ -448,7 +449,9 @@ Prescription = {
         } } );
       }
       else {
-        first_td = $('first_'+object_id+"_"+object_class+"_"+unite_prise);
+        unite_prise = unite_prise.replace(/[^a-z0-9_-]/gi, '_');
+   
+				first_td = $('first_'+object_id+"_"+object_class+"_"+unite_prise);
         last_td = $('last_'+object_id+"_"+object_class+"_"+unite_prise);
         
         // Suppression des td entre les 2 td bornes
@@ -462,8 +465,6 @@ Prescription = {
           td.next().remove();
           first_td.show();
         }
-        
-        unite_prise = unite_prise.replace(/[^a-z0-9_-]/gi, '_');
                 
         url.requestUpdate(first_td, {
           insertion: Insertion.After,

@@ -65,7 +65,7 @@ Main.add(function () {
 		  {{if $line->_class_name == "CPrescriptionLineMedicament"}}
 				<select name="unite_prise" onchange="submitFormAjax(this.form, 'systemMsg');">
 				   {{foreach from=$line->_unites_prise item=_unite_prise}}
-				   <option value="{{$_unite_prise}}" {{if $prise->unite_prise == $_unite_prise}}selected="selected"{{/if}}>{{$_unite_prise}}</option>
+				   <option value="{{$_unite_prise|smarty:nodefaults|JSAttribute}}" {{if $prise->unite_prise == $_unite_prise}}selected="selected"{{/if}}>{{$_unite_prise}}</option>
 				   {{/foreach}}
 					 {{if $line->_ref_produit_prescription->_id}}
 					   <option value="{{$line->_ref_produit_prescription->unite_prise}}" {{if $prise->unite_prise == $line->_ref_produit_prescription->unite_prise}}selected="selected"{{/if}}>{{$line->_ref_produit_prescription->unite_prise}}</option>

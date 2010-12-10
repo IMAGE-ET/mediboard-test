@@ -413,7 +413,7 @@ class CPrescriptionLine extends CMbObject {
               if(is_numeric($_type)){
                 $planification->prise_id = $_type;
               } else {
-                $planification->unite_prise = $_type;
+                $planification->unite_prise = addslashes($_type);
               }
               $planification->original_dateTime = "$_date $heure_reelle:00:00";
               $planification->object_id = $this->_id;
@@ -480,7 +480,8 @@ class CPrescriptionLine extends CMbObject {
     
     foreach($this->_ref_administrations as $_administration){
       $heure_adm = substr($_administration->_heure, 0, 2);
-      $key_administration = $_administration->prise_id ? $_administration->prise_id : stripslashes($_administration->unite_prise);
+      $key_administration = $_administration->prise_id ? $_administration->prise_id : $_administration->unite_prise;
+			
       $administrations =& $this->_administrations[$key_administration][$date][$heure_adm];
     
       // Planifications
@@ -611,7 +612,6 @@ class CPrescriptionLine extends CMbObject {
 			} else {
 			  $key_tab = ($_prise->moment_unitaire_id || $_prise->heure_prise) ? $_prise->unite_prise : $_prise->_id;
       }
-
 			// Stockage des lignes qui composent le plan de soin
       if($name_chap && $name_cat){
         $prescription->_ref_lines_elt_for_plan[$name_chap][$name_cat][$this->_id][$key_tab] = $this;

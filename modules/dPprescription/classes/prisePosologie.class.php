@@ -257,6 +257,10 @@ class CPrisePosologie extends CMbMetaObject {
 				$this->_view .= " à I $signe_decalage $this->decalage_intervention $this->unite_decalage_intervention(s)";
 			}
 		}
+		
+    $this->_view = stripslashes($this->_view);
+		$this->_short_view = stripslashes($this->_short_view);
+    
   }
   
   /*
@@ -305,7 +309,7 @@ class CPrisePosologie extends CMbMetaObject {
     // Pas d'unite de prise de stockée dans le cas d'un element
     $this->completeField("unite_prise");
     if($this->unite_prise){
-      $where["unite_prise"] = " = '$this->unite_prise'";
+      $where["unite_prise"] = $this->_spec->ds->prepare("= %", $this->unite_prise);
     }
     $where["prise_id"] = "IS NULL";
     $where["planification"] = " = '0'";

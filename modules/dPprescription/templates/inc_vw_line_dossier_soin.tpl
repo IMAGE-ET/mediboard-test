@@ -242,7 +242,7 @@
   </th>
   {{/if}}
  
-	  <td id="first_{{$line_id}}_{{$line_class}}_{{$unite_prise}}" style="display: none;">
+	  <td id="first_{{$line_id}}_{{$line_class}}_{{$unite_prise|regex_replace:'/[^a-z0-9_-]/i':'_'}}" style="display: none;">
 	  </td>
 	  
 		{{if !$line->signee && $line->_class_name == "CPrescriptionLineMedicament" && $conf.dPprescription.CPrescription.show_unsigned_med_msg}}
@@ -259,7 +259,7 @@
      {{include file="../../dPprescription/templates/inc_vw_content_line_dossier_soin.tpl" nodebug=true}}
    {{/if}}
 	 
-	  <td id="last_{{$line_id}}_{{$line_class}}_{{$unite_prise}}" style="display: none;">
+	  <td id="last_{{$line_id}}_{{$line_class}}_{{$unite_prise|regex_replace:'/[^a-z0-9_-]/i':'_'}}" style="display: none;">
 	  </td>
  
  {{if $smarty.foreach.$global_foreach.first &&  $smarty.foreach.$first_foreach.first  && $smarty.foreach.$last_foreach.first}}

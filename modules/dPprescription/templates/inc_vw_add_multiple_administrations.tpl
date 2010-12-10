@@ -112,7 +112,7 @@ Main.add( function(){
 		      {{foreach from=$by_date item=by_hour key=hour}}
 	          {{assign var=_unite value=$by_hour.unite_prise|smarty:nodefaults|JSAttribute}}
 	          {{assign var=_prise value=$by_hour.prise_id|smarty:nodefaults|JSAttribute}}
-	          {{assign var=key value="$line_id-$_unite-$_prise-$date-$hour"|smarty:nodefaults|JSAttribute}}
+	          {{assign var=key value="$line_id-$_unite-$_prise-$date-$hour"|md5}}
 	          {{if $smarty.foreach.adm_by_unite_prise.first}}
 		        <tr>
 		          <th class="title" colspan="2">{{$by_hour.line->_view}}</th>
@@ -138,7 +138,7 @@ Main.add( function(){
 		                <input type="hidden" name="administrateur_id" value="{{$app->user_id}}" />
 		                <input type="hidden" name="object_id" value="{{$by_hour.line->_id}}" />
 		                <input type="hidden" name="object_class" value="{{$by_hour.line->_class_name}}" />
-		                <input type="hidden" name="unite_prise" value="{{$by_hour.unite_prise}}" />
+		                <input type="hidden" name="unite_prise" value="{{$by_hour.unite_prise|smarty:nodefaults|JSAttribute}}" />
 		                <input type="hidden" name="dateTime" value="{{$by_hour.dateTime}}" />
 		                <input type="hidden" name="prise_id" value="{{$by_hour.prise_id}}" />
 		                <input type="hidden" name="quantite_prevue" disabled="disabled" value="{{$by_hour.prise->quantite}}" />

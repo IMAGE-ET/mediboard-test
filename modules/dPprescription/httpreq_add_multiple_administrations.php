@@ -8,8 +8,6 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
  */
 
-global $AppUI;
-
 $adm = CValue::post("adm");
 $list_administrations = array();
 $mode_dossier = CValue::get("mode_dossier");
@@ -100,8 +98,10 @@ if (count($adm) > 0) {
 	}
 }
 
+$user = CAppUI::$user;
+
 $transmission = new CTransmissionMedicale();
-$transmission->loadAides($AppUI->user_id);
+$transmission->loadAides($user->_id);
 
 // Création du template
 $smarty = new CSmartyDP();
@@ -111,7 +111,7 @@ $smarty->assign("sejour", $sejour);
 $smarty->assign("transmission", $transmission);
 $smarty->assign("mode_dossier", $mode_dossier);
 $smarty->assign("tabs_refresh", $tabs_refresh);
-$smarty->assign("user_id", $AppUI->user_id);
+$smarty->assign("user_id", $user->_id);
 $smarty->assign("refresh_popup", $refresh_popup);
 $smarty->display("inc_vw_add_multiple_administrations.tpl");
 

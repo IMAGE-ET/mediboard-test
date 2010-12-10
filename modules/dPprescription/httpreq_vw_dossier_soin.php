@@ -20,6 +20,9 @@ $object_id    = CValue::get("object_id");
 $object_class = CValue::get("object_class");
 $unite_prise  = CValue::get("unite_prise");
 
+// Permet de gerer le cas ou des unites de prises contiennent des '
+$unite_prise = stripslashes(preg_replace('~&#0*([0-9]+);~e', 'chr(\\1)', $unite_prise));
+
 // Initialisations
 $operation = new COperation();
 $operations = array();
@@ -301,6 +304,7 @@ if($object_id && $object_class){
 	  $smarty->assign("transmissions_line", $line->_transmissions);
 	  $smarty->assign("administrations_line", $line->_administrations);
 		$smarty->assign("unite_prise", $unite_prise);
+		
 	  $smarty->display("inc_vw_content_line_dossier_soin.tpl");
   }
 } 

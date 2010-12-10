@@ -92,13 +92,13 @@
 				 
 					 
 					{{* Affichage de la case *}} 
-				  <td id="drop_{{$line_id}}_{{$line_class}}_{{$unite_prise}}_{{$_date}}_{{$_hour}}" 
+				  <td data-uniteprise="{{$unite_prise}}" id="drop_{{$line_id}}_{{$line_class}}_{{$unite_prise|md5}}_{{$_date}}_{{$_hour}}" 
 				   		class="{{$line_id}}_{{$line_class}} {{$_view_date}}-{{$moment_journee}} {{if ($quantite == '0' || $quantite == '-')}}canDrop{{/if}} colorPlanif {{$_hour}}" 
 				   		style='display: none; text-align: center; {{if array_key_exists("$_date $_hour:00:00", $operations)}}border-right: 3px solid black;{{/if}}'>
 				   			   
-					  <div id="drag_{{$line_id}}_{{$unite_prise}}_{{$_date}}_{{$heure_reelle}}_{{$_quantite}}_{{$planification_id}}"
+					  <div id="drag_{{$line_id}}_{{$unite_prise|md5}}_{{$_date}}_{{$heure_reelle}}_{{$_quantite}}_{{$planification_id}}"
 					       onmouseover='{{if $origine_date_planif || @is_array($line->_administrations.$unite_prise.$_date.$_hour.administrations)}}
-					  										ObjectTooltip.createDOM(this, "tooltip-content-{{$line_id}}-{{$unite_prise}}-{{$_date}}-{{$_hour}}");
+					  										ObjectTooltip.createDOM(this, "tooltip-content-{{$line_id}}-{{$unite_prise|md5}}-{{$_date}}-{{$_hour}}");
 					  								  {{/if}}'
 					  		{{if ($line->_fin_reelle && ($line->_fin_reelle|date_format:"%Y-%m-%d %H:00:00" < $_date_hour)) || $line->_debut_reel|date_format:"%Y-%m-%d %H:00:00" > $_date_hour || !$line->_active}}
 						      style="background-color: #aaa"
@@ -190,12 +190,12 @@
 					{{if $quantite && @$line->_quantity_by_date.$unite_prise.$_date.quantites.$_hour|@count < 5}}
 			    <script type="text/javascript">
 			      // Pour empecher de deplacer une case ou il y a plusieurs prises
-		        drag = new Draggable("drag_{{$line_id}}_{{$unite_prise}}_{{$_date}}_{{$heure_reelle}}_{{$_quantite}}_{{$planification_id}}", oDragOptions);
+		        drag = new Draggable("drag_{{$line_id}}_{{$unite_prise|md5}}_{{$_date}}_{{$heure_reelle}}_{{$_quantite}}_{{$planification_id}}", oDragOptions);
           </script>
 				  {{/if}}
 
 			    {{* Tooltip d'affichage de la date d'origine, des administrations et des transmissions *}}  
-			    <div id="tooltip-content-{{$line_id}}-{{$unite_prise}}-{{$_date}}-{{$_hour}}" style="display: none; text-align: left">
+			    <div id="tooltip-content-{{$line_id}}-{{$unite_prise|md5}}-{{$_date}}-{{$_hour}}" style="display: none; text-align: left">
 				     {{if $origine_date_planif}}
 				       <strong>Date d'origine:</strong> {{$origine_date_planif|date_format:$conf.datetime}}<br />
 				     {{/if}}
