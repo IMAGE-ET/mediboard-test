@@ -96,13 +96,26 @@
     {{/if}}
 		
 	  {{if $line->_recent_modification}}
-      <img style="float: right" src="images/icons/ampoule.png" title="Ligne recemment modifiée"/>
+      <img style="float: right" src="images/icons/ampoule.png" title="Ligne récemment modifiée"/>
     {{/if}}
     
     {{if is_array($line->_dates_urgences) && array_key_exists($date, $line->_dates_urgences)}}
       <img style="float: right" src="images/icons/ampoule_urgence.png" title="Urgence"/>
     {{/if}}
-
+    
+    {{* 
+    <script type="text/javascript">
+      // EXCLASS ne pas supprimer ////
+      Main.add(function(){
+        ExObject.register("CExObject-add-{{$line->_guid}}", {
+          object_guid: "{{$line->_guid}}",
+          event: "autonomie"
+        });
+      });
+    </script>
+    <div id="CExObject-add-{{$line->_guid}}"></div>
+    *}}
+    
 		<span onclick='addCibleTransmission("{{$line_class}}","{{$line->_id}}","{{$line->_view}}");' 
 	       class="{{if @$transmissions.$line_class.$line_id|@count}}transmission{{else}}transmission_possible{{/if}}"
 				 onmouseover="ObjectTooltip.createEx(this, '{{$line->_guid}}')"

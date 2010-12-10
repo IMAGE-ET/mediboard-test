@@ -8,6 +8,8 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
 *}}
 
+{{if !@$readonly}}
+
 {{mb_form name="editExObject" m="system" dosql="do_ex_object_aed" method="post" onsubmit="return onSubmitFormAjax(this, {onComplete: window.close})"}}
   {{mb_key object=$ex_object}}
   {{mb_field object=$ex_object field=_ex_class_id hidden=true}}
@@ -70,7 +72,7 @@
         {{if $ex_object->_id}}
           <button class="modify" type="submit">{{tr}}Save{{/tr}}</button>
                 
-          <button type="button" class="trash" onclick="confirmDeletion(this.form,{typeName:'',objName:'{{$ex_object->_view|smarty:nodefaults|JSAttribute}}'})">
+          <button type="button" class="trash" onclick="confirmDeletion(this.form,{ajax: true, typeName:'', objName:'{{$ex_object->_view|smarty:nodefaults|JSAttribute}}'})">
             {{tr}}Delete{{/tr}}
           </button>
         {{else}}
@@ -81,3 +83,21 @@
   </table>
 
 {{/mb_form}}
+
+{{else}}
+
+<table class="main form">
+    <tr>
+      <th class="title" colspan="2">
+        {{$ex_object->_ref_ex_class}} - {{$object}}
+      </th>
+    </tr>
+    {{* {{mb_include module=system template=CMbObject_view object=$ex_object}} *}}
+    {{foreach from=$ex_object->_ref_ex_class->_ref_fields item=_field}}
+    <tr>
+      <th style="width: 50%;"><strong>{{mb_label object=$ex_object field=$_field->name}}</strong></th>
+      <td>{{mb_value object=$ex_object field=$_field->name}}</td>
+    </tr>
+    {{/foreach}}
+  </table>
+{{/if}}

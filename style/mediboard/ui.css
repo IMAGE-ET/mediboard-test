@@ -545,6 +545,13 @@ div.triggerShow {
   background-image: url(../../images/icons/collapse.gif);
 }
 
+.triggerShow:hover, .triggerHide:hover,
+.triggerShow:hover td, .triggerHide:hover td,
+.triggerShow:hover th, .triggerHide:hover th {
+  cursor: pointer;
+  text-decoration: underline;
+}
+
 tr.show {
   display: table-row;
 }
