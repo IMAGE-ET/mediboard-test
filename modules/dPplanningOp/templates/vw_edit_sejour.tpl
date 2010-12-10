@@ -23,11 +23,11 @@ ProtocoleSelector.init = function(){
 
 function toggleMode() {
   var trigger = $("modeExpert-trigger"),
-      hiddenElement = $("modeExpert"),
-      expert = !hiddenElement.visible();
+      hiddenElements = $$(".modeExpert"),
+      expert = !hiddenElements[0].visible();
   
   trigger.update(expert ? '{{tr}}button-COperation-modeExpert{{/tr}}' : '{{tr}}button-COperation-modeEasy{{/tr}}');
-  hiddenElement.setVisible(expert);
+  hiddenElements.invoke("setVisible", expert);
 }
 
 window.refreshingSejours = false;

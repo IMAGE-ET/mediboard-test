@@ -535,7 +535,7 @@ Main.add( function(){
   </td>
 </tr>
 
-<tbody id="modeExpert">
+<tbody class="modeExpert">
 {{if !$mode_operation}}
 
 <tr>
@@ -629,7 +629,7 @@ Main.add( function(){
   <th>{{mb_label object=$sejour field="hormone_croissance"}}</th>
   <td>{{mb_field object=$sejour field="hormone_croissance"}}</td>  
 </tr>
-
+</tbody>
 <tr>
   <th>{{mb_label object=$sejour field="chambre_seule"}}</th>
   <td>
@@ -647,11 +647,11 @@ Main.add( function(){
     <button type="button" class="new" onclick="popRegimes()">Régime alimentaire</button>
   </td>
   {{else}}
-  <th>{{mb_label object=$sejour field="repas_sans_sel"}}</th>
-  <td>{{mb_field object=$sejour field="repas_sans_sel"}}</td>
+  <th class="modeExpert">{{mb_label object=$sejour field="repas_sans_sel"}}</th>
+  <td class="modeExpert">{{mb_field object=$sejour field="repas_sans_sel"}}</td>
   {{/if}}
 </tr>
-
+<tbody class="modeExpert">
 {{if $prestations}}
 <tr>
 <th>{{mb_label object=$sejour field=prestation_id}}</th>
@@ -699,17 +699,16 @@ Main.add( function(){
   <td></td>
 </tr>
 {{/if}}
-
+</tbody>
 <tr>
   <td class="text">{{mb_label object=$sejour field="convalescence"}}</td>
   <td class="text" colspan="3">{{mb_label object=$sejour field="rques"}}</td>
 </tr>
-
 <tr>
   <td>{{mb_field object=$sejour field="convalescence" rows="3"}}</td>
   <td colspan="3">{{mb_field object=$sejour field="rques" rows="3"}}</td>
 </tr>
-
+<tbody class="modeExpert">
 {{if !$sejour->_id && array_key_exists("dPprescription", $modules)}}
 <tr>
   <th>{{tr}}CProtocole-protocole_prescription_chir_id{{/tr}}</th>
