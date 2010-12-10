@@ -8,9 +8,9 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
  */
 
-CAppUI::loadClass("CDestinataireXML");
+CAppUI::loadClass("CDestinataireInterop");
 
-class CDestinataireHprim extends CDestinataireXML {	
+class CDestinataireHprim extends CDestinataireInterop {	
   // DB Table key
   var $dest_hprim_id  = null;
   

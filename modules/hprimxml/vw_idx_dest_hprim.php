@@ -33,6 +33,6 @@ foreach($listDestHprim as &$_dest_hprim) {
 $smarty = new CSmartyDP("modules/webservices");
 $smarty->assign("destinataire"    , $dest_hprim);
 $smarty->assign("listDestinataire", $listDestHprim);
-$smarty->display("vw_idx_dest_xml.tpl");
+$smarty->display("vw_idx_dest_interop.tpl");
 
 ?>

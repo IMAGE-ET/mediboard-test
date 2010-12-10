@@ -288,7 +288,19 @@ class CSetuphprimxml extends CSetup {
               ADD `fully_qualified` ENUM ('0','1') DEFAULT '1';"; 
     $this->addQuery($sql);
     
-    $this->mod_version = "0.29";
+    $this->makeRevision("0.29");
+    
+    $sql = "UPDATE `echange_soap` 
+              SET `type` = 'CDestinataireHprim' 
+              WHERE `type` = 'hprimxml';"; 
+    $this->addQuery($sql);
+    
+    $sql = "UPDATE `source_soap` 
+              SET `type_echange` = 'CDestinataireHprim' 
+              WHERE `type_echange` = 'hprimxml';"; 
+    $this->addQuery($sql);
+    
+    $this->mod_version = "0.30";
   }
 }
 

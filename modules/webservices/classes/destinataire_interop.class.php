@@ -8,13 +8,13 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
  */
 
-class CDestinataireXML extends CMbObject {
+class CDestinataireInterop extends CMbObject {
   // DB Fields
   var $nom         = null;
   var $libelle     = null;
   var $group_id    = null;
-  var $message     = null;
   var $actif       = null;
+  var $message     = null;
   
   // Forward references
   var $_ref_group             = null;
