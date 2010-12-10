@@ -126,6 +126,20 @@ CCAMSelector.init = function(){
       {{mb_field object=$op field="cote" defaultOption="&mdash; Choisir" onchange="Value.synchronize(this);"}}
     </td>
   </tr> 
+  
+  <tr>
+    <th>{{mb_label object=$op field="type_anesth"}}</th>
+    <td colspan="2">
+      <select name="type_anesth" onchange="submitAnesth(this.form);">
+        <option value="">&mdash; Type d'anesthésie</option>
+        {{foreach from=$listAnesthType item=curr_anesth}}
+        <option value="{{$curr_anesth->type_anesth_id}}" {{if $op->type_anesth == $curr_anesth->type_anesth_id}} selected="selected" {{/if}} >
+          {{$curr_anesth->name}}
+        </option>
+       {{/foreach}}
+      </select>
+    </td>
+  </tr> 
 
   <tr>
     <th>{{mb_label object=$op field="_hour_op"}}</th>

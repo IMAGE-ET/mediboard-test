@@ -75,6 +75,11 @@ if($sejour_id && !$operation_id) {
   $patient =& $sejour->_ref_patient;
 }
 
+// Liste des types d'anesthésie
+$listAnesthType = new CTypeAnesth;
+$orderanesth = "name";
+$listAnesthType = $listAnesthType->loadList(null,$orderanesth);
+
 // On récupère l'opération
 $op = new COperation;
 $op->load($operation_id);
@@ -211,6 +216,7 @@ $smarty->assign("prestations", $prestations);
 
 $smarty->assign("correspondantsMedicaux", $correspondantsMedicaux);
 $smarty->assign("listEtab"              , $listEtab);
+$smarty->assign("listAnesthType"        , $listAnesthType);
 $smarty->assign("medecin_adresse_par"   , $medecin_adresse_par);
 
 $smarty->display("vw_edit_planning.tpl");
