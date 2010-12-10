@@ -10,6 +10,19 @@
 
 {{if !@$readonly}}
 
+<script type="text/javascript">
+if (window.opener && window.opener !== window) {
+  window.onunload = function(){
+    window.opener.ExObject.register("{{$_element_id}}", {
+      ex_class_id: "{{$ex_class_id}}", 
+      object_guid: "{{$object_guid}}", 
+      event: "{{$event}}", 
+      _element_id: "{{$_element_id}}"
+    });
+  }
+}
+</script>
+
 {{mb_form name="editExObject" m="system" dosql="do_ex_object_aed" method="post" onsubmit="return onSubmitFormAjax(this, {onComplete: window.close})"}}
   {{mb_key object=$ex_object}}
   {{mb_field object=$ex_object field=_ex_class_id hidden=true}}

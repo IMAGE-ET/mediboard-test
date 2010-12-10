@@ -32,7 +32,12 @@ if ($spec_type) {
     $prop = "$spec_type $prop";
   }
   else {
-    $prop = $spec_type." ".substr($prop, strpos($prop, " ")+1);
+    if (strpos($prop, " ") !== false) {
+      $prop = $spec_type." ".substr($prop, strpos($prop, " ")+1);
+    }
+    else {
+      $prop = $spec_type;
+    }
   }
 }
 
@@ -53,7 +58,9 @@ if ($spec instanceof CEnumSpec && $ex_field_id) {
   $ex_object->_ex_class_id = $ex_field->ex_class_id;
   $ex_object->setExClass();
   
-  $spec = $ex_object->_specs[$field];
+  if ($ex_object->_specs[$field] instanceof CEnumSpec) {
+    $spec = $ex_object->_specs[$field];
+  }
 }
 
 $classes = $spec instanceof CRefSpec ? CApp::getMbClasses() : array();
@@ -64,6 +71,7 @@ $smarty->assign("field", $field);
 $smarty->assign("prop", $prop);
 $smarty->assign("spec", $spec);
 $smarty->assign("options", $options);
+$smarty->assign("ex_field_id", $ex_field_id);
 $smarty->assign("other_fields", $other_fields);
 $smarty->assign("classes", $classes);
 $smarty->display("inc_edit_ex_field_spec.tpl");

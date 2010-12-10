@@ -16,6 +16,8 @@ selectExClass = function(element, object_guid, event, _element_id) {
   element.selectedIndex = 0;
 }
 
+var _popup = !!Control.Overlay.container;
+
 showExClassForm = function(ex_class_id, object_guid, title, ex_object_id, event, _element_id) {
   var url = new Url("system", "view_ex_object_form");
   url.addParam("ex_class_id", ex_class_id);
@@ -23,16 +25,21 @@ showExClassForm = function(ex_class_id, object_guid, title, ex_object_id, event,
   url.addParam("ex_object_id", ex_object_id);
   url.addParam("event", event);
   url.addParam("_element_id", _element_id);
-  url.modale({title: title});
 
-  url.modaleObject.observe("afterClose", function(){
-    ExObject.register(_element_id, {
-      ex_class_id: ex_class_id, 
-      object_guid: object_guid, 
-      event: event, 
-      _element_id: _element_id
+  if (_popup) {
+    url.popup(800, 600, title);
+  }
+  else {
+    url.modale({title: title});
+    url.modaleObject.observe("afterClose", function(){
+      ExObject.register(_element_id, {
+        ex_class_id: ex_class_id, 
+        object_guid: object_guid, 
+        event: event, 
+        _element_id: _element_id
+      });
     });
-  });
+  }
 }
 
 Main.add(function(){

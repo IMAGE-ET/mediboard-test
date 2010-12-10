@@ -12,15 +12,9 @@
 
 ExFieldSpec.options = {{$spec->getOptions()|@json}};
 
-ElementChecker.check.regex = function(){
-  this.assertMultipleArgs("regex");
-  if (!(new RegExp(this.oProperties["regex"])).test(this.sValue))
-    this.addError("regex", "Doit respecter l'expression régulière /"+this.oProperties["regex"]+"/");
-}.bind(ElementChecker);
-
-updateFieldSpec = function(nocheck){
+updateFieldSpec = function(){
   var form = getForm("editFieldSpec");
-  if (nocheck && !checkForm(form)) return;
+  if (!checkForm(form)) return;
   
   var data = form.serialize(true);
   var fields = {};
@@ -68,7 +62,8 @@ updateFieldSpec = function(nocheck){
 
 avoidSpaces = function(event) {
   var key = Event.key(event);
-  if (key == 32) Event.stop(event);
+  // space or pipe
+  if (key == 32 || key == 124) Event.stop(event);
 }
 
 cloneTemplate = function(input) {
@@ -80,8 +75,8 @@ cloneTemplate = function(input) {
 Main.add(function(){
   var form = getForm("editFieldSpec");
   form.select("input.nospace").invoke("observe", "keypress", avoidSpaces);
-  form.select("input, select").invoke("observe", "change", updateFieldSpec.curry(true));
-  updateFieldSpec(true);
+  form.select("input, select").invoke("observe", "change", updateFieldSpec);
+  updateFieldSpec();
 });
 </script>
 
@@ -99,7 +94,7 @@ Main.add(function(){
       <td>
         {{* str *}}
         {{if $_type == "str"}}
-          <input type="text" name="{{$_name}}" value="{{$spec->$_name}}" class="str nospace regex|^\s*[^\s\|]*\s*$" />
+          <input type="text" name="{{$_name}}" value="{{$spec->$_name}}" class="str nospace regex|^\s*[a-zA-Z][a-zA-Z0-9_]*\s*$|gi" />
           
         {{* num *}}
         {{elseif $_type == "num"}}
@@ -136,15 +131,23 @@ Main.add(function(){
           {{foreach from=$spec->_list key=_key item=_value}}
             <div>
               <input type="text" name="{{$_name}}[]" value="{{$_value}}" />
-              Traduction: <input type="text" name="__enum[]" value="{{$spec->_locales.$_value}}" />
               <button type="button" class="cancel notext" onclick="$(this).up().remove(); updateFieldSpec();">{{tr}}Delete{{/tr}}</button>
+              {{if $ex_field_id}}
+                Traduction: <input type="text" name="__enum[]" value="{{if $spec->_locales.$_value|strpos:'CExObject' === false}}{{$spec->_locales.$_value}}{{/if}}" />
+              {{else}}
+                <em>Enregistrez le champ avant de pouvoir le traduire</em>
+              {{/if}}
             </div>
           {{/foreach}}
           
           <div style="display: none;" class="template">
             <input type="text" name="{{$_name}}[]" value="" />
-            Traduction: <input type="text" name="__enum[]" value="" />
             <button type="button" class="cancel notext" onclick="$(this).up().remove(); updateFieldSpec();">{{tr}}Delete{{/tr}}</button>
+            {{if $ex_field_id}}
+              Traduction: <input type="text" name="__enum[]" value="" />
+            {{else}}
+              <em>Enregistrez le champ avant de pouvoir le traduire</em>
+            {{/if}}
           </div>
           
           <button type="button" class="add notext" onclick="cloneTemplate(this)">{{tr}}Add{{/tr}}</button>

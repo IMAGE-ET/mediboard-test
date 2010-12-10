@@ -47,7 +47,7 @@ addAdministrationPlan = function(line_id, line_class, unite_prise, dateTime, lis
   url.addParam("mode_plan", '1');
   url.addParam("administrations", list_administrations);
   url.addParam("prescription_id", "{{$prescription->_id}}");
-  url.popup(600,400,"Administration");
+  url.popup(700,600,"Administration");
 }
 
 submitDossierSoinSemaine = function(oForm){

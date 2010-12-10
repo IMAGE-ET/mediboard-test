@@ -505,6 +505,17 @@ Object.extend(ElementChecker, {
     // password
     password: function() {
       this.str();
+    },
+
+    // regex avec ou sans modificateurs
+    // par exemple : regex|^\s*[a-zA-Z][a-zA-Z0-9_]*\s*$|gi
+    // On peut mettre des pipe dans la regex avec \x7C ou des espaces avec \x20
+    regex: function(){
+      this.assertMultipleArgs("regex");
+      var re = new RegExp(this.oProperties.regex[0], this.oProperties.regex[1]);
+      
+      if (!this.sValue.match(re))
+        this.addError("regex", "Ne respecte pas le format attendu"); // Inutile de mettre la regex dans le message
     }
   }
 });

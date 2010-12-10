@@ -10,9 +10,11 @@
 
 //CCanDo::checkAdmin();
 
-$ex_class_id = CValue::get("ex_class_id");
+$ex_class_id  = CValue::get("ex_class_id");
 $ex_object_id = CValue::get("ex_object_id");
-$object_guid = CValue::get("object_guid");
+$object_guid  = CValue::get("object_guid");
+$_element_id  = CValue::get("_element_id");
+$event        = CValue::get("event");
 
 if (!$ex_class_id) {
   $msg = "Impossible d'afficher le formulaire sans connaitre la classe de base";
@@ -47,6 +49,11 @@ foreach($ex_object->_ref_ex_class->_ref_fields as $_field) {
 
 // Création du template
 $smarty = new CSmartyDP();
-$smarty->assign("ex_object", $ex_object);
-$smarty->assign("object", $object);
+$smarty->assign("ex_object",    $ex_object);
+$smarty->assign("ex_object_id", $ex_object_id);
+$smarty->assign("ex_class_id",  $ex_class_id);
+$smarty->assign("object_guid",  $object_guid);
+$smarty->assign("object",       $object);
+$smarty->assign("_element_id",  $_element_id);
+$smarty->assign("event",        $event);
 $smarty->display("view_ex_object_form.tpl");
