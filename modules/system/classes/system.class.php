@@ -33,8 +33,11 @@ class CPreferences extends CMbObject {
   
   static function get($user_id = 0) {
   	$pref = new self;
-  	$pref->user_id = $user_id;
-  	$list = $pref->loadMatchingList();
+    $where["user_id"] = "= '$user_id'";
+		if ($user_id != 0) {
+      $where["value"] = "IS NOT NULL";
+		}
+  	$list = $pref->loadList($where);
   	
   	$preferences = array();
   	foreach($list as $_pref) {

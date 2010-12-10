@@ -518,7 +518,7 @@ class CAppUI {
     }
 
     // load the user preferences
-    self::loadPrefs(self::$instance->user_id);
+    self::buildPrefs(self::$instance->user_id);
     
     return true;
   }
@@ -613,7 +613,9 @@ class CAppUI {
  */
   static function loadPrefs($user_id = 0) {
     if (CModule::getInstalled("system")->mod_version < "1.0.24"){
-	    $query = "SELECT pref_name, pref_value FROM user_preferences WHERE pref_user = '$user_id'";
+	    $query = "SELECT pref_name, pref_value 
+			  FROM user_preferences
+				WHERE pref_user = '$user_id'";
 	    $user_prefs = CSQLDataSource::get("std")->loadHashList($query);
     }
     else {
@@ -623,9 +625,21 @@ class CAppUI {
     self::$instance->user_prefs = array_merge(self::$instance->user_prefs, $user_prefs);
   }
   
-  static function reloadPrefs() {
+	/**
+	 * Apply default / profile / user preferences
+	 */
+  static function buildPrefs() {
+    // Default
     self::loadPrefs();
-    self::loadPrefs(self::$instance->user_id);
+
+		// Profile
+    $user = CUser::get();
+    if ($user->profile_id) {
+      self::loadPrefs($user->profile_id);
+    }
+		
+		// User
+    self::loadPrefs($user->_id);
   }
   
   /**

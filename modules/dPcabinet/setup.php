@@ -1320,7 +1320,11 @@ class CSetupdPcabinet extends CSetup {
     $sql = "ALTER TABLE `plageconsult` ADD `locked` ENUM ('0','1') DEFAULT '0';";
     $this->addQuery($sql);
     
-    $this->mod_version = "1.26";
+    $this->makeRevision("1.26");
+    $this->addPrefQuery("AFFCONSULT", "0");
+    $this->addPrefQuery("MODCONSULT", "0");
+
+    $this->mod_version = "1.27";
   }
 }
 ?>

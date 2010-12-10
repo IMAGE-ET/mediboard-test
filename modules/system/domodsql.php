@@ -46,7 +46,7 @@ if ($cmd == "upgrade-core") {
   }
 
   // In case the setup has added some user prefs
-  CAppUI::reloadPrefs();
+  CAppUI::buildPrefs();
   
   error_reporting($old_er);
   
@@ -126,7 +126,7 @@ switch ($cmd) {
     }
     
   	// In case the setup has added some user prefs
-    CAppUI::reloadPrefs();
+    CAppUI::buildPrefs();
   break;
 
   case "upgrade":
@@ -146,7 +146,7 @@ switch ($cmd) {
   	}
   
   	// In case the setup has added some user prefs
-    CAppUI::reloadPrefs();
+    CAppUI::buildPrefs();
 	break;
   	
 	case "configure":

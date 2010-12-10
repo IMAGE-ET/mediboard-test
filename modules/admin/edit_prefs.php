@@ -8,54 +8,20 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
  */
 
-global $AppUI, $can;
-
-$ds = CSQLDataSource::get("std");
-
-// Utilisateur demandé
-$user_id = CValue::get("user_id" , 0);
-
-// Vérification des droit
-if ($can->edit){
-  $user_id = CValue::getOrSession("user_id", $AppUI->user_id);
-  $user_id = intval($user_id);
-}
-else{
-  $user_id = $AppUI->user_id;
-}
-
-// Load the preferences
-$user = null;
-if($user_id !== null){
-  $user = new CUser;
-  $user->load($user_id);
-  $prefs = array_merge(CPreferences::get(0), CPreferences::get($user_id));
-}
-
-$prefsUser = array();
-
-// Préférences Globales
-$array_list_pref_common = array (
-  "LOCALE",
-  "UISTYLE",
-  "MenuPosition",
-  "DEFMODULE",
-  "touchscreen",
-  "tooltipAppearenceTimeout",
-  "showLastUpdate",
-  "directory_to_watch",
-  "debug_yoplet"
-);
-
-foreach ($array_list_pref_common as $namePref){
-  if (!array_key_exists($namePref,$prefs)) {
-    $prefs[$namePref] = null;
-  }
-  $prefsUser["common"][$namePref] = $prefs[$namePref];
-}
-
 // Préférences par Module
-$array_list_module_pref = array (
+$prefnames_by_modname = array (
+  "common" => array (
+    "LOCALE",
+    "UISTYLE",
+    "MenuPosition",
+    "DEFMODULE",
+    "touchscreen",
+    "tooltipAppearenceTimeout",
+    "showLastUpdate",
+    "directory_to_watch",
+    "debug_yoplet"
+  ),
+  
   "dPpatients" => array (
     "DEPARTEMENT",
     "GestionFSE", 
@@ -64,6 +30,7 @@ $array_list_module_pref = array (
     "VitaleVision",
     "vCardExport",
   ),
+  
   "dPcabinet" => array (
     "AFFCONSULT",
     "MODCONSULT",
@@ -76,16 +43,19 @@ $array_list_module_pref = array (
     "autoCloseConsult",
     "resumeCompta",
     "showDatesAntecedents",
-		"dPcabinet_show_program",
-		"pratOnlyForConsult"
+    "dPcabinet_show_program",
+    "pratOnlyForConsult"
   ),
+  
   "dPplanningOp" => array (
     "mode_dhe",
     "dPplanningOp_listeCompacte",
   ),
+  
   "dPhospi" => array (
     "ccam_sejour",
   ),
+  
   "dPcompteRendu" => array(
     "saveOnPrint",
     "choicepratcab",
@@ -93,22 +63,27 @@ $array_list_module_pref = array (
     "listBrPrefix",
     "listInlineSeparator",
   ),
+  
   "dPfiles" => array(
     "directory_to_watch",
     "debug_yoplet"
   ),
+  
   "system" => array (
     "INFOSYSTEM",
-		"showTemplateSpans"
+    "showTemplateSpans"
   ),
+  
   "dPprescription" => array (
-		"easy_mode",
+    "easy_mode",
     "show_transmissions_form"
   ),
+  
   "dPurgences" => array (
     "defaultRPUSort",
     "showMissingRPU",
   ),
+  
   "ssr" => array (
     "ssr_planning_dragndrop",
     "ssr_planning_resize",
@@ -117,15 +92,32 @@ $array_list_module_pref = array (
   ),
 );
 
-foreach($array_list_module_pref as $modulename => $listPrefs){
-  $prefsUser[$modulename] = array();	
-  $prefModule = CModule::getInstalled($modulename);
-  if (($user_id !== 0 && $prefModule && CPermModule::getPermModule($prefModule->mod_id, PERM_READ, $user_id)) || $user_id === 0){
-    foreach ($listPrefs as $namePref){
-    	if(!array_key_exists($namePref,$prefs)){
-    	  $prefs[$namePref] = null;
-    	}
-      $prefsUser[$modulename][$namePref] = $prefs[$namePref];
+global $can;
+$user_id = $can->edit ? CValue::getOrSession("user_id", "default") : null;
+$user =  CUser::get($user_id);
+$prof = $user->profile_id ? CUser::get($user->profile_id) : new CUser;
+
+if ($user_id == "default") {
+	$user->_id = "0";
+}
+
+$prefvalues = array(
+  "default"  => CPreferences::get(0),
+  "template" => $user->profile_id ? CPreferences::get($user->profile_id) : array(),
+  "user"     => $user->_id !== "" ? CPreferences::get($user->_id       ) : array(),
+);
+
+// Classement par module et par préférences
+foreach ($prefnames_by_modname as $modname => $prefnames){
+  $prefs[$modname] = array();	
+  $module = CModule::getActive($modname);
+  if ($modname == "common" || $user_id == "default" || CPermModule::getPermModule($module->_id, PERM_READ, $user_id)){
+    foreach ($prefnames as $prefname){
+      $prefs[$modname][$prefname] = array(
+        "default"  => CMbArray::extract($prefvalues["default" ], $prefname),
+        "template" => CMbArray::extract($prefvalues["template"], $prefname),
+        "user"     => CMbArray::extract($prefvalues["user"    ], $prefname),
+			);
     }
   }
 }
@@ -150,12 +142,13 @@ CMbArray::removeValue(".svn", $styles);
 
 // Création du template
 $smarty = new CSmartyDP();
-$smarty->assign("user"     , $user);
-$smarty->assign("user_id"  , $user_id);
-$smarty->assign("locales"  , $locales);
-$smarty->assign("styles"   , $styles);
-$smarty->assign("modules"  , $modules);
-$smarty->assign("prefsUser", $prefsUser);
+$smarty->assign("user"   , $user);
+$smarty->assign("prof"   , $prof);
+$smarty->assign("user_id", $user_id);
+$smarty->assign("locales", $locales);
+$smarty->assign("styles" , $styles);
+$smarty->assign("modules", $modules);
+$smarty->assign("prefs"  , $prefs);
 $smarty->display("edit_prefs.tpl");
 
 ?>

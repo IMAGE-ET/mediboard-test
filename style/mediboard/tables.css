@@ -504,3 +504,13 @@ table.main td.step.selected a {
   font-size: 1.5em;
 }
 
+td.active {
+	font-weight: bold;
+}
+
+td.redefined {
+  text-decoration: line-through; 
+	color: #888;
+}
+
+

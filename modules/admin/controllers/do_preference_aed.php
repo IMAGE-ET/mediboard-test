@@ -31,7 +31,7 @@ foreach ($prefs as $key => $value) {
 
 // Reload user preferences
 if ($pref->user_id) {
-  CAppUI::loadPrefs($AppUI->user_id);
+  CAppUI::buildPrefs($AppUI->user_id);
 }
 
 echo CAppUI::getMsg();
