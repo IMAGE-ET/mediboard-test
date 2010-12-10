@@ -644,9 +644,12 @@ switch ($axe) {
     }
     
     foreach($areas as $key => $value) {
+      unset($where[10]);
       $label = utf8_encode($value);
-      $where["rpu.diag_infirmier"] = $ds->prepareLike("$value%");
-      
+      $where[10] = "rpu.diag_infirmier ". $ds->prepareLike("$value\n").
+                   "OR rpu.diag_infirmier ". $ds->prepareLike("$value%\n").
+                   "OR rpu.diag_infirmier ". $ds->prepareLike($value);
+
       $series[$key] = array('data' => array(), 'label' => $label);
       
       foreach ($dates as $i => $_date) {
