@@ -95,7 +95,7 @@ Main.add(function(){
   
   {{foreach from=$options item=_type key=_name}}
     <tr>
-      <th><label for="{{$_name}}">{{$_name}}</label></th>
+      <th><label for="{{$_name}}" title="{{$_name}}">{{tr}}CMbFieldSpec.{{$_name}}{{/tr}}</label></th>
       <td>
         {{* str *}}
         {{if $_type == "str"}}
@@ -107,14 +107,14 @@ Main.add(function(){
           
         {{* bool *}}
         {{elseif $_type == "bool"}}
-          <label><input type="radio" name="{{$_name}}" value="" {{if $spec->$_name === null || $spec->$_name === ""}}checked="checked"{{/if}} /> Indéfini</label>
-          <label><input type="radio" name="{{$_name}}" value="0" {{if $spec->$_name === 0 || $spec->$_name === "0"}}checked="checked"{{/if}} /> Non</label>
-          <label><input type="radio" name="{{$_name}}" value="1" {{if $spec->$_name == 1}}checked="checked"{{/if}} /> Oui</label>
+          <label><input type="radio" name="{{$_name}}" value="" {{if $spec->$_name === null || $spec->$_name === ""}}checked="checked"{{/if}} /> {{tr}}Undefined{{/tr}}</label>
+          <label><input type="radio" name="{{$_name}}" value="0" {{if $spec->$_name === 0 || $spec->$_name === "0"}}checked="checked"{{/if}} /> {{tr}}No{{/tr}}</label>
+          <label><input type="radio" name="{{$_name}}" value="1" {{if $spec->$_name == 1}}checked="checked"{{/if}} /> {{tr}}Yes{{/tr}}</label>
           
         {{* enum *}}
         {{elseif is_array($_type)}}
           {{foreach from=$_type item=_type}}
-          <label><input type="radio" name="{{$_name}}" value="{{$_type}}" {{if $spec->$_name === $_type}}checked="checked"{{/if}} /> {{$_type}} </label>
+          <label><input type="radio" name="{{$_name}}" value="{{$_type}}" {{if $spec->$_name === $_type}}checked="checked"{{/if}} /> {{tr}}CMbFieldSpec.{{$_name}}.{{$_type}}{{/tr}} </label>
           {{/foreach}}
           
         {{* field *}}

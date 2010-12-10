@@ -13,6 +13,7 @@ class CExClass extends CMbObject {
   
   var $host_class = null;
   var $event      = null;
+  var $name       = null;
   
   var $_ref_fields = null;
   var $_ref_constraints = null;
@@ -24,7 +25,7 @@ class CExClass extends CMbObject {
     $spec = parent::getSpec();
     $spec->table = "ex_class";
     $spec->key   = "ex_class_id";
-    $spec->uniques["ex_class"] = array("host_class", "event");
+    $spec->uniques["ex_class"] = array("host_class", "event", "name");
     return $spec;
   }
 
@@ -32,6 +33,7 @@ class CExClass extends CMbObject {
     $props = parent::getProps();
     $props["host_class"] = "str notNull protected";
     $props["event"]      = "str notNull protected canonical";
+    $props["name"]       = "str notNull";
     return $props;
   }
 
@@ -48,7 +50,7 @@ class CExClass extends CMbObject {
     }
     
     // pas encore obligé d'utiliser l'eval, mais je pense que ca sera le plus simple
-    /*$class_name = "CExObject_{$this->host_class}_{$this->event}";
+    /*$class_name = "CExObject_{$this->host_class}_{$this->event}_{$this->_id}";
     
     if (!class_exists($class_name)) {
       $table_name = $this->getTableName();
@@ -69,7 +71,7 @@ class CExClass extends CMbObject {
   
   function updateFormFields(){
     parent::updateFormFields();
-    $this->_view = CAppUI::tr($this->host_class) . " - $this->event";
+    $this->_view = CAppUI::tr($this->host_class) . " - [$this->event] - $this->name";
   }
   
   function loadRefsFields(){
@@ -83,7 +85,7 @@ class CExClass extends CMbObject {
   
   function getTableName(){
     $this->completeField("host_class", "event");
-    return strtolower("ex_{$this->host_class}_{$this->event}");
+    return strtolower("ex_{$this->host_class}_{$this->event}_{$this->_id}");
   }
   
   function checkConstraints(CMbObject $object){
@@ -114,9 +116,13 @@ class CExClass extends CMbObject {
     if ($msg = $this->check()) return $msg;
     
     if (!$this->_id) {
+      if ($msg = parent::store()) {
+        return $msg;
+      }
+      
       $table_name = $this->getTableName();
       $query = "CREATE TABLE `$table_name` (
-        `id` INT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
+        `ex_object_id` INT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
         `object_id` INT UNSIGNED NOT NULL,
         `object_class` VARCHAR(80) NOT NULL,
         INDEX ( `object_id` ),

@@ -22,6 +22,7 @@
         <input type="hidden" name="dosql" value="do_ex_class_aed" />
         <input type="hidden" name="del" value="0" />
         <input type="hidden" name="callback" value="ExClass.edit" />
+        {{mb_key object=$ex_class}}
         
         {{mb_field object=$ex_class field=host_class hidden=true}}
         {{mb_field object=$ex_class field=event hidden=true}}
@@ -38,7 +39,7 @@
                     {{foreach from=$_events item=_params key=_event_name}}
                       <option value="{{$_class}}.{{$_event_name}}" {{if $_class == $ex_class->host_class && $_event_name == $ex_class->event}}selected="selected"{{/if}}>
                         {{tr}}{{$_class}}{{/tr}} - {{$_event_name}}
-                        {{if array_key_exists("multiple", $_params)}}
+                        {{if array_key_exists("multiple", $_params) && $_params.multiple}}
                           (multiple)
                         {{/if}}
                       </option>
@@ -50,6 +51,9 @@
                 {{tr}}{{$ex_class->host_class}}{{/tr}} - {{$ex_class->event}}
               {{/if}}
             </td>
+            
+            <th>{{mb_label object=$ex_class field=name}}</th>
+            <td>{{mb_field object=$ex_class field=name}}</td>
             
             <td>
               {{if $ex_class->_id}}
@@ -92,12 +96,20 @@ Main.add(function(){
       <table class="main tbl">
         <tr>
           <th>{{mb_title class=CExClassField field=name}}</th>
-          <th>{{mb_title class=CExClassField field=prop}}</th>
+          {{*<th>{{mb_title class=CExClassField field=prop}}</th>*}}
         </tr>
         {{foreach from=$ex_class->_ref_fields item=_field}}
           <tr>
-            <td><a href="#1" onclick="ExField.edit({{$_field->_id}})"><strong>{{$_field->name}}</strong></a></td>
-            <td>{{$_field->prop}}</td>
+            <td title="{{$_field->name}}">
+              <a href="#1" onclick="ExField.edit({{$_field->_id}})"><strong>
+                {{if $_field->_locale}}
+                  {{$_field->_locale}}
+                {{else}}
+                  [{{$_field->name}}]
+                {{/if}}
+              </strong></a>
+            </td>
+            {{*<td>{{$_field->prop}}</td>*}}
           </tr>
         {{foreachelse}}
           <tr>

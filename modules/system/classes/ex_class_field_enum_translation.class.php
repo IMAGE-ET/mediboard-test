@@ -38,7 +38,7 @@ class CExClassFieldEnumTranslation extends CMbObject {
   function getKey(){
     $field = $this->loadRefExClassField();
     $class = $field->loadRefExClass();
-    return "CExObject_{$class->host_class}_{$class->event}.{$field->name}.{$this->key}";
+    return "CExObject_{$class->host_class}_{$class->event}_{$class->_id}.{$field->name}.{$this->key}";
   }
   
   function updateLocales(){

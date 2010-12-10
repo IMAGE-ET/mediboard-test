@@ -77,15 +77,28 @@
     </td>
     <!-- Gestion des dates -->
     <td colspan="2">
+      
+      <script type="text/javascript">
+        // EXCLASS ne pas supprimer ////
+        Main.add(function(){
+          ExObject.register("CExObject-{{$line->_guid}}-prescription", {
+            object_guid: "{{$line->_guid}}",
+            event: "prescription", 
+            title: "{{$line}}"
+          });
+        });
+      </script>
+      <div id="CExObject-{{$line->_guid}}-prescription" style="float: right;"></div>
+     
       {{include file="../../dPprescription/templates/line/inc_vw_dates.tpl"}}
-	      <script type="text/javascript">
-          var oForm;
-  	      if(oForm = getForm("editDates-{{$typeDate}}-{{$line->_id}}", true)){
-  		      Calendar.regField(oForm.debut, dates);
-  		      Calendar.regField(oForm._fin, dates);
-  		      Calendar.regField(oForm.fin, dates);
-  	      }
-	      </script>
+      <script type="text/javascript">
+        var oForm;
+	      if(oForm = getForm("editDates-{{$typeDate}}-{{$line->_id}}", true)){
+		      Calendar.regField(oForm.debut, dates);
+		      Calendar.regField(oForm._fin, dates);
+		      Calendar.regField(oForm.fin, dates);
+	      }
+      </script>
     </td>
   </tr>
   <!-- Affichage des pososlogies -->

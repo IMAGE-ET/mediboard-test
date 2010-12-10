@@ -39,7 +39,7 @@ Main.add(function(){
       <td>
         <select name="_type" onchange="ExFieldSpec.edit($V(this), '{{$ex_field->prop}}', 'CExObject', '{{$ex_field->name}}', [], '{{$ex_field->_id}}')">
           {{foreach from="CMbFieldSpecFact"|static:classes item=_class key=_key}}
-            <option value="{{$_key}}" {{if $_key == $spec_type}}selected="selected"{{/if}}>{{$_key}}</option>
+            <option value="{{$_key}}" {{if $_key == $spec_type}}selected="selected"{{/if}}>{{tr}}CMbFieldSpec.type.{{$_key}}{{/tr}}</option>
           {{/foreach}}
         </select>
       </td>

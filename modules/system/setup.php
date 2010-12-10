@@ -380,7 +380,15 @@ class CSetupsystem extends CSetup {
               ADD INDEX (`key`);";
     $this->addQuery($sql);
     
-    $this->mod_version = "1.0.37";
+    $this->makeRevision("1.0.37");
+    $sql = "ALTER TABLE `ex_class` 
+              ADD `name` VARCHAR  (255) NOT NULL;";
+    $this->addQuery($sql);
+    $sql = "ALTER TABLE `ex_class_field_translation` 
+              ADD INDEX (`lang`)";
+    $this->addQuery($sql);
+    
+    $this->mod_version = "1.0.38";
     
   }
 }

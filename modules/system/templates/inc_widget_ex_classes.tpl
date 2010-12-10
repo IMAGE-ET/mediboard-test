@@ -26,7 +26,12 @@ showExClassForm = function(ex_class_id, object_guid, title, ex_object_id, event,
   url.modale({title: title});
 
   url.modaleObject.observe("afterClose", function(){
-    ExObject.register(_element_id, {ex_class_id: ex_class_id, object_guid: object_guid});
+    ExObject.register(_element_id, {
+      ex_class_id: ex_class_id, 
+      object_guid: object_guid, 
+      event: event, 
+      _element_id: _element_id
+    });
   });
 }
 
@@ -44,7 +49,7 @@ Main.add(function(){
     </option>
     
     {{foreach from=$ex_classes item=_ex_class}}
-      <option value="{{$_ex_class->_id}}">{{$_ex_class}}</option>
+      <option value="{{$_ex_class->_id}}">{{$_ex_class->name}}</option>
     {{/foreach}}
   </select>
   

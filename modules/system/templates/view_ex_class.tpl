@@ -25,17 +25,17 @@ ExClass.edit({{$ex_class->_id}});
         <tr>
           <th>{{mb_title class=CExClass field=host_class}}</th>
           <th>{{mb_title class=CExClass field=event}}</th>
-          <th>{{tr}}CExClass-back-fields{{/tr}}</th>
+          <th>{{mb_title class=CExClass field=name}}</th>
         </tr>
         {{foreach from=$list_ex_class item=_ex_class}}
           <tr>
             <td>
               <a href="#1" onclick="ExClass.edit({{$_ex_class->_id}})">
-                <strong>{{mb_value object=$_ex_class field=host_class}}</strong>
+                <strong>{{tr}}{{$_ex_class->host_class}}{{/tr}}</strong>
               </a>
             </td>
             <td>{{mb_value object=$_ex_class field=event}}</td>
-            <td>{{$_ex_class->countBackRefs("fields")}}</td>
+            <td>{{mb_value object=$_ex_class field=name}}</td>
           </tr>
         {{foreachelse}}
           <tr>

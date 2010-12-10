@@ -28,7 +28,7 @@ class CExObject extends CMbMetaObject {
     $this->_props = $this->getProps();
     $this->_specs = $this->getSpecs();
     
-    $this->_class_name = get_class($this)."_{$ex_class->host_class}_{$ex_class->event}";
+    $this->_class_name = get_class($this)."_{$ex_class->host_class}_{$ex_class->event}_{$ex_class->_id}";
   }
   
   function loadRefExClass($cache = true){
@@ -118,7 +118,7 @@ class CExObject extends CMbMetaObject {
   
   function getSpecs(){
     $ex_class = $this->loadRefExClass();
-    $this->_class_name = get_class($this)."_{$ex_class->host_class}_{$ex_class->event}";
+    $this->_class_name = get_class($this)."_{$ex_class->host_class}_{$ex_class->event}_{$ex_class->_id}";
     
     $specs = parent::getSpecs();
         

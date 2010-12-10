@@ -104,6 +104,18 @@ updateQuantite = function(ratio_UI, oField){
 
 </script>
 
+<script type="text/javascript">
+  // EXCLASS ne pas supprimer ////
+  Main.add(function(){
+    ExObject.register("CExObject-{{$line->_guid}}-administration", {
+      object_guid: "{{$line->_guid}}",
+      event: "administration", 
+      title: "{{$line}}"
+    });
+  });
+</script>
+<div id="CExObject-{{$line->_guid}}-administration" style="float: right;"></div>
+
 <h2>
   Soins de {{$sejour->_ref_patient->_view}} 
   ({{if $sejour->_ref_patient->_ref_curr_affectation->_id}}
@@ -154,7 +166,6 @@ updateQuantite = function(ratio_UI, oField){
 	  {{/foreach}}
 	</table>
 {{/if}}
-
 
 <form name="addAdministration" method="post" action="?" onsubmit="return checkTransmission('{{$prise->quantite}}', this.quantite.value)">
   <input type="hidden" name="dosql" value="do_administration_aed" />
