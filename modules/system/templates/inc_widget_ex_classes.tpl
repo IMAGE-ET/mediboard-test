@@ -52,11 +52,11 @@ Main.add(function(){
 <div style="display: inline-block;">
   <select onchange="selectExClass(this, '{{$object->_guid}}', '{{$event}}', '{{$_element_id}}')">
     <option selected="selected" disabled="disabled">
-      {{$ex_classes|@count}} formulaire(s) disponible(s)
+      {{$count_available}} formulaire(s) disponible(s)
     </option>
     
     {{foreach from=$ex_classes item=_ex_class}}
-      <option value="{{$_ex_class->_id}}">{{$_ex_class->name}}</option>
+      <option value="{{$_ex_class->_id}}" {{if $_ex_class->_disabled}}disabled="disabled"{{/if}}>{{$_ex_class->name}}</option>
     {{/foreach}}
   </select>
   
@@ -74,14 +74,16 @@ Main.add(function(){
 
 <ul id="CExObject.{{$object->_guid}}.{{$event}}" class="CExObject-toggle" style="display: none">
 {{foreach from=$ex_objects item=_ex_objects key=_ex_class_id}}
+  {{assign var=_ex_class value=$ex_classes.$_ex_class_id}}
   <li>
-    <strong>{{$ex_classes.$_ex_class_id}}</strong>
+    <strong>{{$_ex_class->name}}</strong>
     <ul>
     {{foreach from=$_ex_objects item=_ex_object}}
       <li>
         <a href="#{{$_ex_object->_guid}}" 
            onclick="showExClassForm({{$_ex_class_id}}, '{{$object->_guid}}', '{{$_ex_object}}', '{{$_ex_object->_id}}', '{{$event}}', '{{$_element_id}}')">
-          {{mb_value object=$_ex_object->_ref_last_log field=date}} &ndash; {{$_ex_object}}
+          {{mb_value object=$_ex_object->_ref_last_log field=date}} &ndash; 
+          {{mb_value object=$_ex_object->_ref_last_log field=user_id}}
         </a>
       </li>
     {{foreachelse}}
