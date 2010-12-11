@@ -74,10 +74,12 @@
 	    {{/foreach}}
 		{{else}}
       <td class="text">
-      {{foreach from=$_log->_fields item=_field name=field}}
-        {{mb_label class=$_log->object_class field=$_field}}
-        {{if !$smarty.foreach.field.last}} - {{/if}}
-			{{/foreach}}
+      {{if $_log->object_class|strpos:"CExObject_" === false}} {{* Because the object con't be instanciated *}}
+        {{foreach from=$_log->_fields item=_field name=field}}
+          {{mb_label class=$_log->object_class field=$_field}}
+          {{if !$smarty.foreach.field.last}} - {{/if}}
+  			{{/foreach}}
+      {{/if}}
       </td>
 
     {{/if}}

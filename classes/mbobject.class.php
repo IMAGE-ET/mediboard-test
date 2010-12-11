@@ -1051,7 +1051,7 @@ class CMbObject {
   /**
    * Prepare the user log before object persistence (store or delete)
    */
-  private function prepareLog() {
+  protected function prepareLog() {
     // If the object is not loggable
     if (!$this->_spec->loggable || $this->_purge) {
       return;

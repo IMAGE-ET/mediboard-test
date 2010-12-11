@@ -72,13 +72,26 @@ class CRefSpec extends CMbFieldSpec {
       $class = $object->$meta;
     }
     
-    if (!is_subclass_of($class, "CMbObject")) {
-      return "La classe '$class' n'est pas une classe d'objet métier";
+    // Gestion des objets étendus ayant une pseudo-classe
+    if (!class_exists($class)) {
+      $ex_object = CExObject::getValidObject($class);
+      if ($ex_object === false) {
+        return "La classe '$class' n'existe pas";
+      }
+      
+      if (!$this->unlink && !$ex_object->load($propValue)) {
+        return "Objet référencé de type '$class' introuvable";      
+      }
     }
-    
-    $ref = new $class;
-    if (!$this->unlink && !$ref->load($propValue)) {
-      return "Objet référencé de type '$class' introuvable";      
+    else {
+      if (!is_subclass_of($class, "CMbObject")) {
+        return "La classe '$class' n'est pas une classe d'objet métier";
+      }
+      
+      $ref = new $class;
+      if (!$this->unlink && !$ref->load($propValue)) {
+        return "Objet référencé de type '$class' introuvable";      
+      }
     }
   }
   
@@ -88,8 +101,7 @@ class CRefSpec extends CMbFieldSpec {
       $className     = htmlspecialchars(trim("$className $this->prop"));
 	    $extra         = CMbArray::makeXmlAttributes($params);
 
-	    $html = "";
-      $html.= "\n<select name=\"$field\" class=\"$className\" $extra>";
+      $html = "\n<select name=\"$field\" class=\"$className\" $extra>";
       $choose = CAppUI::tr("Choose");
       $html.= "\n<option value=\"\">&mdash; $choose</option>";
 			foreach ($options as $_option) {

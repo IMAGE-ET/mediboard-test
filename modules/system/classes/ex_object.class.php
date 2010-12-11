@@ -12,6 +12,8 @@ class CExObject extends CMbMetaObject {
   var $ex_object_id = null;
   
   var $_ex_class_id = null;
+  var $_own_ex_class_id = null;
+  var $_specs_already_set = false;
   
   /**
    * @var CExClass
@@ -19,30 +21,28 @@ class CExObject extends CMbMetaObject {
   public $_ref_ex_class = null;
 
   function setExClass() {
-    if (!$this->_ex_class_id) return;
+    if ($this->_specs_already_set || !$this->_ex_class_id && !$this->_own_ex_class_id) return;
     
     $ex_class = $this->loadRefExClass();
     
+    $this->_own_ex_class_id = $ex_class->_id;
     $this->_ref_ex_class = $ex_class;
     
     $this->_props = $this->getProps();
     $this->_specs = $this->getSpecs();
     
-    $this->_class_name = get_class($this)."_{$ex_class->host_class}_{$ex_class->event}_{$ex_class->_id}";
+    $this->_class_name = "CExObject_{$ex_class->host_class}_{$ex_class->event}_{$ex_class->_id}";
+    
+    $this->_specs_already_set = true;
   }
   
   function loadRefExClass($cache = true){
     if ($cache && $this->_ref_ex_class && $this->_ref_ex_class->_id) return $this->_ref_ex_class;
     
     $ex_class = new CExClass();
-    $ex_class->load($this->_ex_class_id);
+    $ex_class->load($this->_ex_class_id ? $this->_ex_class_id : $this->_own_ex_class_id);
     
     return $this->_ref_ex_class = $ex_class; // can't use loadFwdRef here
-  }
-  
-  function bind($hash, $doStripSlashes = true) {
-    $this->setExClass();
-    return parent::bind($hash, $doStripSlashes);
   }
   
   function loadOldObject() {
@@ -54,10 +54,32 @@ class CExObject extends CMbMetaObject {
     }
   }
   
+  /// Low level methods ///////////
+  function bind($hash, $doStripSlashes = true) {
+    $this->setExClass();
+    return parent::bind($hash, $doStripSlashes);
+  }
+  
+  function load($id = null) {
+    $this->setExClass();
+    return parent::load($id);
+  }
+  
   function getDBFields() {
     $this->setExClass();
     return parent::getDBFields();
   }
+  
+  function fieldModified($field, $value = null) {
+    $this->setExClass();
+    return parent::fieldModified($field, $value);
+  }
+  
+  function prepareLog(){
+    $this->setExClass();
+    return parent::prepareLog();
+  }
+  /// End low level methods /////////
   
   function getSpec() {
     $spec = parent::getSpec();
@@ -71,7 +93,7 @@ class CExObject extends CMbMetaObject {
     $list = array();
 
     while ($row = $ds->fetchAssoc($cur)) {
-      $newObject = new self;
+      $newObject = new self; // $this->_class_name >>>> "self"
       //$newObject->_ex_class_id = $this->_ex_class_id;
       $newObject->bind($row, false);
       
@@ -131,5 +153,43 @@ class CExObject extends CMbMetaObject {
     }
     
     return $specs;
+  }
+  
+  function loadLogs(){
+    $this->setExClass();
+    
+    $where = array(
+      "object_class" => $this->_spec->ds->prepare("=%", $this->_class_name),
+      "object_id" => $this->_spec->ds->prepare("=%", $this->_id)
+    );
+    
+    $log = new CUserLog();
+    $this->_ref_logs = $log->loadList($where, "date DESC", 100);
+
+    // loadRefsFwd will fail because the ExObject's class doesn't really exist
+    foreach($this->_ref_logs as &$_log) {
+      $_log->loadRefUser();
+    }
+    
+    // the first is at the end because of the date order !
+    $this->_ref_first_log = end($this->_ref_logs);
+    $this->_ref_last_log  = reset($this->_ref_logs);
+  }
+  
+  static function getValidObject($object_class) {
+    if (!preg_match("/^CExObject_([A-Za-z]+)_([A-Za-z0-9_]+)_(\d+)$/", $object_class, $matches)) {
+      return false;
+    }
+    
+    $ex_class = new CExClass();
+    if (!$ex_class->load($matches[3])) {
+      return false;
+    }
+    
+    $ex_object = new CExObject();
+    $ex_object->_ex_class_id = $ex_class->_id;
+    $ex_object->setExClass();
+    
+    return $ex_object;
   }
 }

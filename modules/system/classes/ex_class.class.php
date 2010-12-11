@@ -49,6 +49,9 @@ class CExClass extends CMbObject {
       return $ret;
     }
     
+    global $locales;
+    $locales["CExObject_{$this->host_class}_{$this->event}_{$this->_id}"] = $this->_view;
+    
     // pas encore obligé d'utiliser l'eval, mais je pense que ca sera le plus simple
     /*$class_name = "CExObject_{$this->host_class}_{$this->event}_{$this->_id}";
     
@@ -109,7 +112,13 @@ class CExClass extends CMbObject {
     $ex_object->loadRefExClass();
     $ex_object->setExClass();
     $ex_object->setObject($object);
-    return $ex_object->loadMatchingList();
+    $list = $ex_object->loadMatchingList();
+    
+    foreach($list as $_object) {
+      $_object->_ex_class_id = $this->_id;
+    }
+    
+    return $list;
   }
   
   function store(){

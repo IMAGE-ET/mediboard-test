@@ -32,9 +32,9 @@ foreach($ex_classes as $_id => $_ex_class) {
   $objects = $_ex_class->loadExObjects($object);
   $count += count($objects);
   
-  /*foreach($objects as $_object) {
+  foreach($objects as $_object) {
     $_object->loadLogs();
-  }*/
+  }
   
   $ex_objects[$_ex_class->_id] = $objects;
 }

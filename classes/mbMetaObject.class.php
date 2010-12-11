@@ -40,11 +40,22 @@ class CMbMetaObject extends CMbObject {
     }
     
     if (!class_exists($this->object_class)) {
-      trigger_error("Unable to create instance of '$this->object_class' class", E_USER_ERROR);
-      return;
+      $ex_object = CExObject::getValidObject($this->object_class);
+      
+      if (!$ex_object) {
+        trigger_error("Unable to create instance of '$this->object_class' class", E_USER_ERROR);
+        return;
+      }
+      else {
+        $ex_object->load($this->object_id);
+        $this->_ref_object = $ex_object;
+      }
     }
 
-  	$this->_ref_object = $this->loadFwdRef("object_id", $cache);
+    else {
+  	  $this->_ref_object = $this->loadFwdRef("object_id", $cache);
+    }
+  	
     if (!$this->_ref_object->_id) {
       $this->_ref_object->load(null);
       $this->_ref_object->_view = "Element supprimé";

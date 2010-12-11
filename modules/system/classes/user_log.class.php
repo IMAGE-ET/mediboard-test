@@ -80,10 +80,13 @@ class CUserLog extends CMbMetaObject {
     }
   }
   
+  function loadRefUser($cache = true) {
+    return $this->_ref_user = $this->loadFwdRef("user_id", $cache);
+  }
+  
   function loadRefsFwd() {
   	parent::loadRefsFwd();
-  	$user = new CUser;
-    $this->_ref_user = $user->getCached($this->user_id);
+  	$this->loadRefUser();
   }
   
   function loadMergedIds(){

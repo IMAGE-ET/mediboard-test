@@ -81,7 +81,7 @@ Main.add(function(){
       <li>
         <a href="#{{$_ex_object->_guid}}" 
            onclick="showExClassForm({{$_ex_class_id}}, '{{$object->_guid}}', '{{$_ex_object}}', '{{$_ex_object->_id}}', '{{$event}}', '{{$_element_id}}')">
-          {{* {{mb_value object=$_ex_object->_ref_last_log field=date}} &ndash;  *}}{{$_ex_object}}
+          {{mb_value object=$_ex_object->_ref_last_log field=date}} &ndash; {{$_ex_object}}
         </a>
       </li>
     {{foreachelse}}
