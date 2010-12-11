@@ -14,6 +14,7 @@ $module->registerTab("vw_idx_prescriptions_sejour", TAB_READ);
 $module->registerTab("vw_idx_dispensation"        , TAB_READ);
 $module->registerTab("vw_idx_delivrance"          , TAB_READ);
 $module->registerTab("vw_idx_outflow"             , TAB_READ);
+$module->registerTab("ajax_vw_inventory"          , TAB_READ);
 $module->registerTab("vw_idx_balance"             , TAB_READ);
 $module->registerTab("vw_idx_stupefiant"          , TAB_READ);
 ?>
