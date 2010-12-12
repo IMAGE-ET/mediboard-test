@@ -33,7 +33,10 @@
 
   <td {{if @$tdcolspan}}colspan="{{$tdcolspan}}"{{/if}}>
     <select class="str" name="{{$field}}">
+    	{{if !is_array($values)}} 
       {{assign var=values value='|'|explode:$values}}
+    	{{/if}}
+			
     	{{foreach from=$values item=_value}}
         <option value="{{$_value}}" {{if $value == $_value}} selected="selected"{{/if}}>
           {{if @$skip_locales}}

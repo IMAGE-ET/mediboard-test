@@ -8,8 +8,7 @@
  *  @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
 */
 
-global $can;
-$can->needsAdmin();
+CCanDo::checkAdmin();
 
 $listHours = range(0, 23);
 foreach($listHours as &$_hour){

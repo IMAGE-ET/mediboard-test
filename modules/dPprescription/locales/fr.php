@@ -817,6 +817,7 @@ $locales['CPrescriptionLineElement.unite_duree.quinzaine'] = 'Quinzaine(s)';
 $locales['CPrescriptionLineElement.unite_duree.semaine'] = 'Semaine(s)';
 $locales['CPrescriptionLineElement.unite_duree.semestre'] = 'Semestre(s)';
 $locales['CPrescriptionLineElement.unite_duree.trimestre'] = 'Trimestre(s)';
+$locales['CPrescriptionLineHandler'] = 'Gestionnaire de lignes de prescription';
 $locales['CPrescriptionLineMedicament'] = 'Ligne de médicament';
 $locales['CPrescriptionLineMedicament-_fin'] = 'Fin prévue';
 $locales['CPrescriptionLineMedicament-_fin-desc'] = 'Fin prévue';
