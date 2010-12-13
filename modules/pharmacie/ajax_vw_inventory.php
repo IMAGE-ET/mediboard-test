@@ -87,11 +87,12 @@ switch($categorization) {
     ));
     $res = $req->getRequest();
     $list_classe_comptable = CMbArray::pluck($product->_spec->ds->loadList($res), "classe_comptable");
+    $list_classe_comptable[] = "Sans classe comptable";
     
     foreach($list_classe_comptable as $_classe_comptable) {
       $_product = new CProduct();
       $where = array(
-        "classe_comptable" => "='$_classe_comptable'",
+        "classe_comptable" => ($_classe_comptable == "Sans classe comptable") ? "IS NULL" : "='$_classe_comptable'",
         "cancelled" => "='0'",
       );
       $_list_product = $_product->loadList($where, "name");
@@ -123,6 +124,58 @@ switch($categorization) {
         "list"  => $_list_product,
         "level" => 1,
       );
+    }
+  break;
+  
+  case "supplier":
+    $supplier = new CSociete();
+    $suppliers = $supplier->loadList(null, "name");
+    
+    foreach($suppliers as $_supplier) {
+      $_product = new CProduct();
+      $where = array(
+        "product_reference.societe_id" => "='$_supplier->_id'",
+        "product.cancelled" => "='0'",
+      );
+      $ljoin = array(
+        "product_reference" => "product_reference.product_id = product.product_id",
+      );
+      $_list_product = $_product->loadList($where, "name", null, null, $ljoin);
+      
+      if (count($_list_product)) {
+        $list_by_group[$_supplier->_id] = array(
+          "label" => $_supplier->_view,
+          "list"  => $_list_product,
+          "level" => 1,
+        );
+      }
+    }
+  break;
+  
+  case "location":
+    $location = new CProductStockLocation();
+    $locations = $location->loadList(null, "position, name");
+    $location->_view = "Sans emplacement";
+    $locations[] = $location;
+    
+    foreach($locations as $_location) {
+      $_product = new CProduct();
+      $where = array(
+        "product_stock_group.location_id" => ($_location->_id ? "='$_location->_id'" : "IS NULL"),
+        "product.cancelled" => "='0'",
+      );
+      $ljoin = array(
+        "product_stock_group" => "product_stock_group.product_id = product.product_id",
+      );
+      $_list_product = $_product->loadList($where, "name", null, null, $ljoin);
+      
+      if (count($_list_product)) {
+        $list_by_group[$_location->_id] = array(
+          "label" => $_location->_view,
+          "list"  => $_list_product,
+          "level" => 1,
+        );
+      }
     }
   break;
 }

@@ -10,6 +10,8 @@
       <option value="atc" {{if $categorization == "atc"}}selected="selected"{{/if}}>Par classe ATC</option>
       <option value="classe_comptable" {{if $categorization == "classe_comptable"}}selected="selected"{{/if}}>Par classe comptable</option>
       <option value="product_category" {{if $categorization == "product_category"}}selected="selected"{{/if}}>Par catégorie de produit</option>
+      <option value="supplier" {{if $categorization == "supplier"}}selected="selected"{{/if}}>Par laboratoire</option>
+      <option value="location" {{if $categorization == "location"}}selected="selected"{{/if}}>Par emplacement</option>
     </select>
   </label>
   
