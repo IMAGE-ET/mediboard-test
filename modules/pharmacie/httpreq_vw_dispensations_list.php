@@ -346,6 +346,7 @@ foreach($dispensations as $code_cis => $_quantites){
 	    }
 	    foreach ($list_done_nominatif as $d_nomin) {
 	    	$d_nomin->loadRefsBack();
+				$d_nomin->loadRefPatient();
 	      $done_nominatif[$code_cis][$code_cip][] = $d_nomin;
 	      $done_nominatif[$code_cis]["total"] += $d_nomin->quantity;
 	    }

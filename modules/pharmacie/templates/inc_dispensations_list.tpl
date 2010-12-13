@@ -30,16 +30,27 @@ submitSuivi = function(oForm) {
   } });
 }
 
-toggleDoneDispensations = function(){
-  $$("tbody.done").invoke("toggle");
+toggleLineDispensation = function(formName, done){
+  var tbody = getForm(formName).up("tbody");
+  if(done){
+	  tbody.addClassName("done");
+	  $('showDoneDispensations').checked ? tbody.show() : tbody.hide();
+  } else {
+	  tbody.show().removeClassName("done");
+	}					 
 }
+
+toggleDoneDispensations = function(){
+  $('showDoneDispensations').checked ? $$("tbody.done").invoke("show") : $$("tbody.done").invoke("hide");
+}
+
 </script>
 
 {{assign var=infinite value=$conf.dPstock.CProductStockGroup.infinite_quantity}}
 {{assign var=infinite_service value=$conf.dPstock.CProductStockService.infinite_quantity}}
 
 <label>
-  <input type="checkbox" onclick="toggleDoneDispensations()" /> Afficher les dispensations réalisées
+  <input type="checkbox" onclick="toggleDoneDispensations()" id="showDoneDispensations" /> Afficher les dispensations réalisées
 </label>
 
 <table class="tbl">

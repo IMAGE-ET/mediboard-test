@@ -8,7 +8,6 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
 *}}
 
-
 {{assign var=line_med value=$produits_cis.$code_cis}}
 {{assign var=produit value=$line_med->_ref_produit}}
 
@@ -151,9 +150,12 @@
        {{if $delivrance->quantity == 0}}
          {{assign var=style value="opacity: 0.5;"}}
          <script type="text/javascript">
-           getForm("form-dispensation-{{$code_cis}}-{{$code_cip}}").up("tr").hide().addClassName("done");
+         	 toggleLineDispensation("form-dispensation-{{$code_cis}}-{{$code_cip}}", true);
          </script>
        {{else}}
+			   <script type="text/javascript">
+			   	 toggleLineDispensation("form-dispensation-{{$code_cis}}-{{$code_cip}}", false);
+         </script>
          {{assign var=style value=""}}
        {{/if}}
        
@@ -202,10 +204,13 @@
          {{/if}}
          {{if $delivrance->quantity == 0}}
            {{assign var=style value="opacity: 0.5;"}}
-           <script type="text/javascript">
-             getForm("form-dispensation-{{$code_cis}}-{{$code_cip}}").up("tr").hide().addClassName("done");
+					 <script type="text/javascript">
+             toggleLineDispensation("form-dispensation-{{$code_cis}}-{{$code_cip}}", true);
            </script>
          {{else}}
+				   <script type="text/javascript">
+            toggleLineDispensation("form-dispensation-{{$code_cis}}-{{$code_cip}}", false);
+           </script>
            {{assign var=style value=""}}
          {{/if}}
          
