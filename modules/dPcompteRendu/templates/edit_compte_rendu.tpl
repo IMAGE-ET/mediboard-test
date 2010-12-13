@@ -35,7 +35,7 @@ function submitCompteRendu(callback){
         if (callback)
           window.callback = callback;
         else
-          window.canPrint = null;
+          window.callback = null;
       }});
     }
   }).defer();
@@ -58,7 +58,6 @@ function refreshZones(id, obj) {
 		       Thumb.compte_rendu_id = id;
 		       Thumb.modele_id = null;
 		       Thumb.refreshThumbs(0, Thumb.compte_rendu_id, null, Thumb.user_id, Thumb.mode);
-		       
 		     {{else}}
 		    	  try {
 		    	    window.opener.Document.refreshList(obj.object_class, obj.object_id);
