@@ -17,7 +17,6 @@ catch (e) {}
 {{/if}}
 
 function submitCompteRendu(callback){
-  CKEDITOR.instances.htmlarea.getCommand("save").setState(CKEDITOR.TRISTATE_DISABLED);
   CKEDITOR.instances.htmlarea.document.getBody().setStyle("background", "#ddd");
 	  
   (function(){

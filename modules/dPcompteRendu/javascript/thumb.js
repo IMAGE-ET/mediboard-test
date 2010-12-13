@@ -131,8 +131,6 @@ function loadOld() {
   if (html != Thumb.content) {
     Thumb.changed = true;
     instance.removeListener("keypress", loadOld);
-    if (Thumb.modele_id == 0 || Thumb.modele_id == null)
-      instance.getCommand("save").setState(CKEDITOR.TRISTATE_OFF);
     Thumb.content = html;
     Thumb.old();
   }
