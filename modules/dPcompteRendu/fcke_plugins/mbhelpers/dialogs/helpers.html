@@ -53,7 +53,7 @@
 
     function insertHTML(index) {
       var string = arrayHelperContent[index];
-      var sHtml = "<span class='field'>" + string + "</span>&nbsp;";
+      var sHtml = "<span class='field'>" + string.replace(/\n/g, "<br/>") + "</span>&nbsp;";
       CKEDITOR.instances.htmlarea.insertHtml(sHtml);
       CKEDITOR.dialog.getCurrent().hide();
       CKEDITOR.instances.htmlarea.fire("key", []);
@@ -61,7 +61,7 @@
     }
     
     function previewHelper(helper) {
-      $("preview").innerHTML = (arrayHelperContent[helper]).replace("\n", "<br/>");
+      $("preview").innerHTML = (arrayHelperContent[helper]).replace(/\n/g, "<br/>");
       $("category_helper").setStyle({background: arrayHelperStyle[helper]});
     }
   </script>
