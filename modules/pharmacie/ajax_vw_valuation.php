@@ -15,7 +15,7 @@ $label          = CValue::get("label");
 $list           = CValue::post("list");
 $date           = CValue::post("date", "2010-10-02");
 
-$list = array(500);  //1348
+$list = array(1348);
 
 //CMbObject::$useObjectCache = false;
 set_time_limit(300);
@@ -46,7 +46,9 @@ $ljoin_out = array(
 );
 
 foreach($list_products as $_product) {
-  // OUT
+  $_product->loadRefStock();
+
+  // comptage des sorties
   $req = new CRequest;
   $req->addTable($delivery->_spec->table);
   $req->addSelect(array(
@@ -66,9 +68,8 @@ foreach($list_products as $_product) {
   $res = $req->getRequest();
   $list = $ds->loadHash($res);
   $consumed_qty = $list["consumed_qty"];
-  mbTrace($consumed_qty, "out");
   
-  // IN
+  // comptage des entrées
   $req = new CRequest;
   $req->addTable($reception->_spec->table);
   $req->addSelect(array(
@@ -89,12 +90,55 @@ foreach($list_products as $_product) {
   $list = $ds->loadHash($res);
   $received_qty = $list["received_qty"];
   
+  // stock d'origine
+  // recherche du premier log enregistré sur le stock de ce produit avant toute recepion ou delivrance
+  $log = new CUserLog();
+  $where = array(
+    "user_log.object_class" => "= 'CProductStockGroup'",
+    "user_log.object_id" => "= '{$_product->_ref_stock_group->_id}'",
+    "user_log.date = product_order_item_reception.date OR 
+     user_log.date = product_delivery_trace.date_delivery",
+  );
+  $ljoin = array(
+    "product_stock_group" => "user_log.object_id = product_stock_group.stock_id",
+    "product_reference" => "product_reference.product_id = product_stock_group.product_id",
+    "product_order_item" => "product_reference.reference_id = product_order_item.reference_id",
+    "product_order_item_reception" => "product_order_item.order_item_id = product_order_item_reception.order_item_id",
+  
+    "product_delivery" => "product_stock_group.stock_id = product_delivery.stock_id",
+    "product_delivery_trace" => "product_delivery.delivery_id = product_delivery_trace.delivery_id",
+  );
+  $order = null;// "product_order_item_reception.date ASC, product_delivery_trace.date_delivery ASC"; // takes a LOOONNG time
+  
+  $log->loadObject($where, $order, null, $ljoin);
+  $old_values = $log->getOldValues();
+  $orig_quantity = $old_values["quantity"];
+  
+  // product.quantity au moment du log en question
+  $old_product_quantity = $_product->getValueAtDate($log->date, "quantity");
+  mbTrace($old_product_quantity, '$old_product_quantity');
+  
+  $ref = reset($_product->loadRefsReferences());
+  if ($ref && $ref->_id) {
+    $old_ref_price = $ref->getValueAtDate($log->date, "price");
+    mbTrace($old_ref_price, '$old_ref_price');
+  }
+  
+  ///// PRIX DE BASE //////////////////
+  $base_value = $orig_quantity * $old_ref_price;
+  
+  $received_qty += $orig_quantity;
+  
   // si on a plus de recus que de consommés
   // on parcoure les receptions en partant de la plus 
   // ancienne et in decremente la différence pour arriver à 0
   if ($received_qty > $consumed_qty) {
-    $delta = 60; //$received_qty - $consumed_qty;
-    $copy_delta = $delta;
+    $delta = $received_qty - $consumed_qty;
+    
+    mbTrace($received_qty, '$received_qty');
+    mbTrace($consumed_qty, '$consumed_qty');
+    
+    $unit_order = CAppUI::conf("dPstock CProductStockGroup unit_order");
     
     $query = "SELECT 
     OIR1.order_item_reception_id, 
@@ -104,9 +148,9 @@ foreach($list_products as $_product) {
     OIR1.quantity as oirq, 
     R1.quantity as rq,
     P1.quantity as pq,
-    OIR1.quantity * R1.quantity * P1.quantity AS qty,
+    OIR1.quantity * R1.quantity ".($unit_order ? "" : " * P1.quantity")." AS qty,
     OI1.unit_price / R1.quantity as unit_price,
-    OIR1.quantity * OI1.unit_price * P1.quantity AS price
+    OIR1.quantity * OI1.unit_price AS price
     
     FROM product_order_item_reception OIR1
     
@@ -119,7 +163,7 @@ foreach($list_products as $_product) {
     "P1.`product_id` = '{$_product->_id}' AND
     (
         SELECT 
-        SUM(OIR2.quantity) * R2.quantity * P2.quantity
+        SUM(OIR2.quantity) * R2.quantity ".($unit_order ? "" : " * P2.quantity")."
         FROM product_order_item_reception OIR2
         
         LEFT JOIN `product_order_item` AS OI2 ON OI2.order_item_id = OIR2.order_item_id
@@ -135,12 +179,18 @@ foreach($list_products as $_product) {
     
     ORDER BY OIR1.date ASC";
     
-    //mbTrace($query);
-    
     $list = $ds->loadList($query);
-    mbTrace($list);
+    
+    $remaining_value = 0;
+    foreach($list as $_item) {
+      $remaining_value += $_item["qty"] * $_item["unit_price"];
+      $delta -= $_item["qty"];
+    }
+    
+    mbTrace($base_value, "base_value"); 
+    mbTrace($remaining_value, "remaining_value");
+    mbTrace($delta, "delta");
   }
-  mbTrace($received_qty, "in");
 }
 
 /*

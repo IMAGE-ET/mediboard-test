@@ -2425,5 +2425,50 @@ class CMbObject {
     
     $this->_ref_object_configs = $this->loadUniqueBackRef("object_configs");
   }
+  
+  function getValueAtDate($date, $field) {
+    $where = array(
+      "object_class" => "= '$this->_class_name'",
+      "object_id" => "= '$this->_id'",
+      "extra" => "IS NOT NULL",
+    );
+    
+    if ($date) {
+      $where["date"] = ">= '$date'";
+    }
+    
+    /*if ($user_id) {
+      $where["user_id"] = " = '$user_id'";
+    }*/
+    
+    //$where["type"] = "= 'store'";
+    
+    /*if ($fields){
+      $whereField = array();
+      foreach($fields as $_field) {
+        $whereField[] = "
+          fields LIKE '$_field %' OR 
+          fields LIKE '% $_field %' OR 
+          fields LIKE '% $_field' OR 
+          fields LIKE '$_field'";
+      }
+      $where[] = implode(" OR ", $whereField);
+    }*/
+    
+    $where[] = "
+      fields LIKE '$field %' OR 
+      fields LIKE '% $field %' OR 
+      fields LIKE '% $field' OR 
+      fields LIKE '$field'";
+    
+    $user_log = new CUserLog();
+    $user_log->loadObject($where, "date ASC", null, "object_id");
+    
+    if ($user_log->_id) {
+      $user_log->getOldValues();
+    }
+    
+    return CValue::read($user_log->_old_values, $field, $this->$field);
+  }
 }
 ?>

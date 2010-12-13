@@ -78,6 +78,7 @@ class CUserLog extends CMbMetaObject {
       $this->_old_values = (array) json_decode($this->extra);
       $this->_old_values = array_map("utf8_decode", $this->_old_values);
     }
+    return $this->_old_values;
   }
   
   function loadRefUser($cache = true) {
