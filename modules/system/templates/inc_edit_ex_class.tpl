@@ -141,7 +141,9 @@ Main.add(function(){
           <tr>
             <td>
               <a href="#1" onclick="ExConstraint.edit({{$_constraint->_id}})">
-                <strong>{{mb_value object=$_constraint field=field}}</strong>
+                <strong>
+                  {{tr}}{{$_constraint->_ref_ex_class->host_class}}-{{$_constraint->field}}{{/tr}}
+                </strong>
               </a>
             </td>
             <td>{{mb_value object=$_constraint field=operator}}</td>

@@ -22,6 +22,10 @@ foreach($ex_class->_ref_fields as $_ex_field) {
   $_ex_field->getSpecObject();
 }
 
+foreach($ex_class->_ref_constraints as $_ex_constraint) {
+  $_ex_constraint->loadRefExClass();
+}
+
 $classes = array();
 
 if (!$ex_class->_id) {
