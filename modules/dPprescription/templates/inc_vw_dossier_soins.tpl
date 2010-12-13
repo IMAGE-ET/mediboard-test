@@ -209,7 +209,7 @@ addAdministration = function(line_id, quantite, key_tab, object_class, dateTime,
   url.addParam("date_sel", "{{$date}}");
   url.addParam("mode_dossier", $V(document.mode_dossier_soin.mode_dossier));
 	url.addParam("multiple_adm", multiple_adm);
-  url.popup(700,500,"Administration");
+  url.popup(800,600,"Administration");
 }
 
 addAdministrationPerf = function(prescription_line_mix_id, date, hour, time_prevue, mode_dossier, sejour_id){
@@ -221,7 +221,7 @@ addAdministrationPerf = function(prescription_line_mix_id, date, hour, time_prev
   url.addParam("mode_dossier", mode_dossier);
   url.addParam("sejour_id", sejour_id);
   url.addParam("date_sel", "{{$date}}");
-  url.popup(700,500,"Administration d'une prescription_line_mix");
+  url.popup(800,600,"Administration d'une prescription_line_mix");
 }
 
 editPerf = function(prescription_line_mix_id, date, mode_dossier, sejour_id){
@@ -230,7 +230,7 @@ editPerf = function(prescription_line_mix_id, date, mode_dossier, sejour_id){
   url.addParam("date", date);
   url.addParam("mode_dossier", mode_dossier);
   url.addParam("sejour_id", sejour_id);
-  url.popup(700,500,"Pefusion");
+  url.popup(800,600,"Pefusion");
 }
 
 submitPosePerf = function(oFormPerf){
