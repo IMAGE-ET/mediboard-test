@@ -47,6 +47,12 @@ foreach($ex_classes as $_id => $_ex_class) {
   $ex_objects[$_ex_class->_id] = $objects;
 }
 
+foreach($ex_objects as $_id => $_ex_object) {
+  if (!count($_ex_object)) {
+    unset($ex_objects[$_id]);
+  }
+}
+
 // Création du template
 $smarty = new CSmartyDP();
 $smarty->assign("ex_classes", $ex_classes);

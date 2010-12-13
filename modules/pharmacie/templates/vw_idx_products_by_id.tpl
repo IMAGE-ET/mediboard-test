@@ -13,9 +13,9 @@
 <table class="main tbl">
   <thead>
     <tr>
-      <th>{{tr}}CProduct-code{{/tr}}</th>
+      <th class="narrow">{{tr}}CProduct-code{{/tr}}</th>
       <th>{{tr}}CProduct{{/tr}}</th>
-      <th>{{tr}}CProductStock{{/tr}}</th>
+      <th style="width: 50%">{{tr}}CProductStockGroup-quantity{{/tr}}</th>
     </tr>
   </thead>
   

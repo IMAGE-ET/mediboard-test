@@ -99,7 +99,6 @@ function exportReport(elements, filename) {
 <ul class="control_tabs" id="balance-tabs">
   <li><a href="#byproduct">Par produit</a></li>
   <li><a href="#byselection">Par sélection de produits</a></li>
-  <li><a href="#stock-locations">{{tr}}CProductStockLocation{{/tr}}</a></li>
   <li><a href="#stock-loss">Pertes</a></li>
   <li><a href="#stock-global-value">Valorisation globale</a></li>
 </ul>
@@ -240,27 +239,6 @@ function exportReport(elements, filename) {
     </div>
   </div>
 </div>
-
-<table id="stock-locations" style="display: none;" class="main tbl">
-
-{{foreach from=$list_locations item=_location}}
-  <tr>
-    <td class="narrow">
-      <button class="print notext" onclick="new Url('dPstock','print_stock_location').addParam('stock_location_id','{{$_location->_id}}').addParam('empty',1).popup()">
-        {{tr}}Print{{/tr}}
-      </button>
-    </td>
-    <td>
-      {{$_location}}
-    </td>
-  </tr>
-{{foreachelse}}
-  <tr>
-    <td colspan="2">{{tr}}CProductStockLocation.none{{/tr}}</td>
-  </tr>
-{{/foreach}}
-
-</table>
 
 <div id="stock-loss" style="display: none;">
   <form name="filter-products-loss" method="get" action="?" onsubmit="return Url.update(this, 'stock-loss-results')">

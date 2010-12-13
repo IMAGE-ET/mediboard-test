@@ -37,7 +37,7 @@
       <tr class="level-{{$_group.level}}" {{if array_key_exists($_level, $levels) && !$levels.$_level}} style="display: none;" {{/if}}>
         <th colspan="2" class="title" style="text-align: left;" onclick="$('folder-{{$_code}}').toggle()">
           <span style="float: right;">{{$_group.list|@count}}</span>
-          <button type="button" class="down notext"></button>
+          <button type="button" class="down">{{tr}}Display{{/tr}}</button>
           
           {{assign var=_list_ids value=','|implode:$_group.list_id}}
           

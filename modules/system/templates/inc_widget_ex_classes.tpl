@@ -41,12 +41,6 @@ showExClassForm = function(ex_class_id, object_guid, title, ex_object_id, event,
     });
   }
 }
-
-Main.add(function(){
-  PairEffect.initGroup("CExObject-toggle", {
-    bStoreInCookie: false
-  }); 
-});
 </script>
 
 <div style="display: inline-block;">
@@ -65,14 +59,7 @@ Main.add(function(){
   {{/if}}
 </div>
 
-<span style="display: inline-block; white-space: nowrap;">
-  <div id="CExObject.{{$object->_guid}}.{{$event}}-trigger" class="triggerShow" 
-      style="padding-left: 2em; line-height: 1.4em; {{if $count == 0}}display: none;{{/if}}">
-    {{$count}} formulaire(s) enregistré(s)
-  </div>
-</span>
-
-<ul id="CExObject.{{$object->_guid}}.{{$event}}" class="CExObject-toggle" style="display: none">
+<ul id="CExObject.{{$object->_guid}}.{{$event}}">
 {{foreach from=$ex_objects item=_ex_objects key=_ex_class_id}}
   {{assign var=_ex_class value=$ex_classes.$_ex_class_id}}
   <li>
@@ -91,7 +78,5 @@ Main.add(function(){
     {{/foreach}}
     </ul>
   </li>
-{{foreachelse}}
-  <li><em>{{tr}}CExClass.none{{/tr}}</em></li>
 {{/foreach}}
 </ul>
