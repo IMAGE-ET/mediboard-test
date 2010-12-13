@@ -9,6 +9,7 @@
 *}}
 
 {{mb_include_script module=system script=ex_class_editor}}
+{{mb_include_script module=system script=object_selector}}
 
 {{main}}
 ExClass.edit({{$ex_class->_id}});
