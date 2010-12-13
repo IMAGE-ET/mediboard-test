@@ -18,13 +18,17 @@ CKEDITOR.plugins.add('mbprint',{
 
 function mbprint_onclick(editor) {
   var printDoc = function() {
+    restoreStyle();
     if ( CKEDITOR.env.gecko )
       editor.window.$.print();
     else
       editor.document.$.execCommand("Print");
+    deleteStyle();
   };
   if (window.parent.same_print == 1) {
+    restoreStyle();
     var content = editor.getData();
+    deleteStyle();
     var form = window.parent.document.forms["download-pdf-form"];
     form.elements.content.value = encodeURIComponent(content);
     form.onsubmit();

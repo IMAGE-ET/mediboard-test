@@ -51,7 +51,6 @@ function refreshZones(id, obj) {
 	url.addParam("reloadzones", 1);
 	url.requestUpdate("reloadzones",
 			{onComplete: function(){
-	       deleteStyle();
 		     var form = getForm("editFrm");
 		     form.onsubmit = function() { Url.ping({onComplete: submitCompteRendu}); return false;};
 		     $V(form.compte_rendu_id, id);
