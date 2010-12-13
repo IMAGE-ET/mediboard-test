@@ -94,7 +94,7 @@ Main.add(function(){
       <td>
         {{* str *}}
         {{if $_type == "str"}}
-          <input type="text" name="{{$_name}}" value="{{$spec->$_name}}" class="str nospace regex|^\s*[a-zA-Z][a-zA-Z0-9_]*\s*$|gi" />
+          <input type="text" name="{{$_name}}" value="{{$spec->$_name}}" class="str nospace regex|^\s*[a-zA-Z0-9_]*\s*$|gi" />
           
         {{* num *}}
         {{elseif $_type == "num"}}
