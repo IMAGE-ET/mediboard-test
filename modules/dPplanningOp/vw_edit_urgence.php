@@ -95,6 +95,10 @@ if ($op->_id) {
   $patient =& $sejour->_ref_patient;
 }
 
+// Liste des types d'anesthésie
+$listAnesthType = new CTypeAnesth;
+$orderanesth = "name";
+$listAnesthType = $listAnesthType->loadList(null,$orderanesth);
 
 // Compléments de chargement du séjour
 $sejour->makeDatesOperations();
@@ -175,6 +179,7 @@ $smarty->assign("tomorow"   , $tomorow);
 
 $smarty->assign("categorie_prat", $categorie_prat);
 $smarty->assign("listPraticiens", $listPraticiens);
+$smarty->assign("listAnesthType", $listAnesthType);
 $smarty->assign("listServices"  , $listServices);
 $smarty->assign("etablissements", $etablissements);
 
