@@ -88,31 +88,19 @@ foreach($nuit_matin as &$_hour_nuit_matin){
 $time = mbTransformTime(null,null,"%H");
 
 // Construction de la structure de date à parcourir dans le tpl
-if($date == mbDate()){
-  if(in_array($time, $matin)){
-    $date_min = mbDate("- 1 DAY", $date)." ".reset($soir).":00:00";
-    $dates = array($date => array("matin" => $matin, "soir" => $soir));
-  }
-  if(in_array($time, $soir)){
-    $date_min = mbDate("- 1 DAY", $date)." ".reset($nuit).":00:00";
-    $dates = array($date => array("soir" => $soir, "nuit" => $nuit));
-  }
-  if(in_array($time, $nuit)){
-    $date_min = mbDate("- 1 DAY", $date)." ".reset($matin).":00:00";
-    $dates = array(mbDate("- 1 DAY", $date) => array("nuit" => $nuit), $date => array("matin" => $matin));
-  }
-} else {
-  $date_min = "$date 00:00:00"; 
-  $dates = array($date => array("matin" => $matin, "soir" => $soir, 'nuit' => $nuit));
-}
+$dates = array($date => array("matin" => $matin, "soir" => $soir, 'nuit' => $nuit));
 
 $tabDates = array();
 
+$date_min = "";
 $composition_dossier = array();
 foreach($dates as $curr_date => $_date){
   foreach($_date as $moment_journee => $_hours){
     $composition_dossier[] = "$curr_date-$moment_journee";
     foreach($_hours as $_hour){
+    	if(!$date_min){
+        $date_min = "$curr_date $_hour:00:00";
+      }
       $date_reelle = $curr_date;
       if($moment_journee == "nuit" && $_hour < "12:00:00"){
         $date_reelle = mbDate("+ 1 DAY", $curr_date);
