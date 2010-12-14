@@ -10,6 +10,8 @@
 
 CCanDo::checkRead();
 
+set_min_memory_limit("256M");
+
 $date = CValue::get("date", mbDate());
 
 // Chargement des sejours SSR pour la date courante
@@ -21,7 +23,7 @@ $sejours = CSejour::loadListForDate($date, $where);
 
 // Masquer les services inactifs
 $service = new CService;
-$service->group_id = $group->_id;
+$service->group_id = $group_id;
 $service->cancelled = "1";
 $services = $service->loadMatchingList();
 $where["service_id"] = CSQLDataSource::prepareNotIn(array_keys($services));
