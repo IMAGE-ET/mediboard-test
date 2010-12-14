@@ -58,9 +58,6 @@ function initCKEditor() {
     ck_instance.on("afterCombo"        , toggleContentEditable.curry(false));
     ck_instance.on("beforerenderColors", toggleContentEditable.curry(true));
     ck_instance.on("afterrenderColors" , toggleContentEditable.curry(false));*/
-    
-    // On grise le bouton d'enregistrement pour signaler que le contenu n'a pas été modifié
-    ck_instance.getCommand("save").setState(CKEDITOR.TRISTATE_DISABLED);
 
 	  // Redimensionnement de l'éditeur
 		resizeEditor();
