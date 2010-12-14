@@ -74,15 +74,15 @@ processValuation = function(container, categorization, label, list, date) {
           </button>
         </th>
         <th class="title" style="text-align: left;">
+          <span style="float: right;">{{$_group.list|@count}}</span>
           {{$_group.label}}
         </th>
         <th class="title" style="text-align: right;">
-          {{$_group.list|@count}}
-          
           <button type="button" class="change" 
-                  onclick="Event.stop(event);processValuation(this,'{{$categorization}}', '{{$_code}}', {{$_group.list_id|@json}}, '')">
+                  onclick="Event.stop(event);processValuation($(this).next('span'),'{{$categorization}}', '{{$_code}}', {{$_group.list_id|@json}}, '')">
             Valeur
           </button>
+          <span></span>
         </th>
       </tr>
       <tbody style="display: none;" id="folder-{{$_code}}" class="level-{{$_group.level}}">

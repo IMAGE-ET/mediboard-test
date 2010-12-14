@@ -51,7 +51,7 @@ $ljoin_out = array(
   "product" => "product.product_id = product_stock_group.product_id",
 );
 
-$unit_order = CAppUI::conf("dPstock CProductStockGroup unit_order");
+$unit_order = false && CAppUI::conf("dPstock CProductStockGroup unit_order");
 
 foreach($list_products as $_product) {
   //mbTrace($_product->_view, " PRODUCT ");
@@ -109,8 +109,10 @@ foreach($list_products as $_product) {
       CProductReference::$_load_lite = true;
       $ref = reset($_product->loadRefsReferences());
       $old_ref_price = 0;
+      $old_ref_tva = 0;
       if ($ref && $ref->_id) {
         $old_ref_price = $ref->getValueAtDate($date_first_log, "price");
+        $old_ref_tva = $ref->getValueAtDate($date_first_log, "tva");
       }
     }
     else {
@@ -156,10 +158,6 @@ foreach($list_products as $_product) {
       }
     }
     
-    ///// PRIX DE BASE //////////////////
-    $base_value = $orig_quantity * $old_ref_price;
-    //mbTrace($base_value, '# prix d\'origine');
-    
     $received_qty += $orig_quantity; 
     
     $delta = $received_qty - $consumed_qty;
@@ -175,11 +173,15 @@ foreach($list_products as $_product) {
     $delta = $_product->_ref_stock_group->quantity;
   }
   
+  ///// PRIX DE BASE //////////////////
+  $base_value = $orig_quantity * $old_ref_price;
+  //mbTrace($base_value, '# prix d\'origine');
+  
   //mbTrace($delta, "delta");
   
   // si on a plus de recus que de consommés
   // on parcoure les receptions en partant de la plus 
-  // ancienne et in decremente la différence pour arriver à 0
+  // ancienne et on decremente la différence pour arriver à 0
   if ($delta > 0) {
     
     $query = "SELECT 
@@ -246,6 +248,10 @@ foreach($list_products as $_product) {
     $total += $remaining_value;
     $total_ttc += $remaining_value_ttc;
   }
+  elseif($mode_delta) {
+    $total += $delta * $old_ref_price;
+    $total_ttc += $delta * $old_ref_price * (1 + $old_ref_tva / 100);
+  }
 }
 
 /*mbTrace(array(
@@ -253,4 +259,4 @@ foreach($list_products as $_product) {
   "total_ttc" => floatval($total_ttc),
 ));*/
 
-echo $total;
+echo round($total, 3);
