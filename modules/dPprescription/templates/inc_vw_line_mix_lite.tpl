@@ -124,7 +124,7 @@
 		A partir de I+{{mb_value object=$_prescription_line_mix field=decalage_interv}}h
 		{{/if}}
 		{{if $_prescription_line_mix->duree}}
-		pendant {{$_prescription_line_mix->duree}}h
+		pendant {{$_prescription_line_mix->duree}} {{mb_value object=$_prescription_line_mix field="unite_duree"}}
 		{{/if}}
 	</td>
 	{{/if}} 
