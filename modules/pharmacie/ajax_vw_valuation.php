@@ -15,7 +15,7 @@ $label          = CValue::get("label");
 $list           = CValue::post("list");
 $date           = CValue::post("date");
 
-$date_first_log = "2010-06-12";
+$date_first_log = "2010-06-20";
 
 //CMbObject::$useObjectCache = false;
 set_time_limit(300);
@@ -233,7 +233,7 @@ foreach($list_products as $_product) {
     }
     
     if ($delta) {
-      $last_price = end($_item);
+      $last_price = end($list);
       $last_price = $last_price["unit_price"];
       $tva = $last_price["tva"];
       $remaining_value += $delta * $last_price;
@@ -248,7 +248,9 @@ foreach($list_products as $_product) {
   }
 }
 
-mbTrace(array(
+/*mbTrace(array(
   "total" => floatval($total),
   "total_ttc" => floatval($total_ttc),
-));
+));*/
+
+echo $total;

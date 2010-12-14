@@ -23,6 +23,21 @@ toggleLevel = function(level, predicate) {
   $$('tbody.level-'+level).invoke('hide');
   $$('tr.level-'+level).invoke('setVisible', predicate);
 }
+
+processValuation = function(container, categorization, label, list, date) {
+  var url = new Url();
+  url.addParam("categorization", categorization);
+  url.addParam("label", label);
+  url.addParam("list[]", list, true);
+  url.addParam("date", date);
+  url.requestUpdate(container, {
+    method: "post",
+    getParameters: {
+      m: "pharmacie", 
+      a: "ajax_vw_valuation"
+    }
+  });
+}
 </script>
 
 {{if $levels|@count}}
@@ -45,11 +60,9 @@ toggleLevel = function(level, predicate) {
     {{if $_group.level != false}}
       {{assign var=_level value=$_group.level}}
       <tr class="level-{{$_group.level}}" {{if array_key_exists($_level, $levels) && !$levels.$_level}} style="display: none;" {{/if}}>
-        <th colspan="2" class="title" style="text-align: left;" onclick="$('folder-{{$_code}}').toggle()">
-          <span style="float: right;">{{$_group.list|@count}}</span>
-          <button type="button" class="down">{{tr}}Display{{/tr}}</button>
-          
+        <th class="title" style="text-align: left;" onclick="$('folder-{{$_code}}').toggle()">
           {{assign var=_list_ids value=','|implode:$_group.list_id}}
+          <button type="button" class="down">{{tr}}Display{{/tr}}</button>
           
           <button type="button" class="print" 
                   onclick="Event.stop(event);(new Url('pharmacie','vw_idx_products_by_id')).pop(800, 600, 'liste produits', null, null, {product_ids: '{{$_list_ids}}', show_stock_quantity: true })">
@@ -59,12 +72,27 @@ toggleLevel = function(level, predicate) {
                   onclick="Event.stop(event);(new Url('pharmacie','vw_idx_products_by_id')).pop(800, 600, 'liste produits', null, null, {product_ids: '{{$_list_ids}}' })">
             sans quantité
           </button>
+        </th>
+        <th class="title" style="text-align: left;">
           {{$_group.label}}
+        </th>
+        <th class="title" style="text-align: right;">
+          {{$_group.list|@count}}
+          
+          <button type="button" class="change" 
+                  onclick="Event.stop(event);processValuation(this,'{{$categorization}}', '{{$_code}}', {{$_group.list_id|@json}}, '')">
+            Valeur
+          </button>
         </th>
       </tr>
       <tbody style="display: none;" id="folder-{{$_code}}" class="level-{{$_group.level}}">
         {{foreach from=$_group.list item=_product}}
           <tr>
+            <td>
+              <a class="button edit" href="?m=dPstock&amp;tab=vw_idx_product&amp;product_id={{$_product->_id}}">
+                {{tr}}Edit{{/tr}}
+              </a>
+            </td>
             <td>{{$_product->code}}</td>
             <td>{{$_product}}</td>
           </tr>

@@ -181,7 +181,9 @@ switch($categorization) {
 }
 
 foreach($list_by_group as &$_group) {
-  $_group["list_id"] = CMbarray::pluck($_group["list"], "_id");
+  $_list = array_values(CMbarray::pluck($_group["list"], "_id"));
+  $_list = array_map("intval", $_list);
+  $_group["list_id"] = $_list;
 }
 
 //mbTrace($list_by_group);
