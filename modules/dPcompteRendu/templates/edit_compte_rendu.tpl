@@ -147,13 +147,7 @@ function openWindowMail() {
         url.requestJSON(function(){}, { method: "post"});
         return '';
       };
-      
-    {{/if}}
-    // Si c'est un modèle, on réactive le bouton d'enregistrement
-    if ('{{$modele_id}}' != 0)
-      CKEDITOR.instances.htmlarea.on('instanceReady', function() {
-        CKEDITOR.instances.htmlarea.getCommand("save").setState(CKEDITOR.TRISTATE_ENABLED); });
-    {{if $pdf_thumbnails}}
+
       PageFormat.init(getForm("editFrm")); 
       Thumb.compte_rendu_id = '{{$compte_rendu->_id}}';
       Thumb.modele_id = '{{$modele_id}}';
