@@ -18,10 +18,20 @@
   <button type="submit" class="search">{{tr}}Display{{/tr}}</button>
 </form>
 
+<script type="text/javascript">
+toggleLevel = function(level, predicate) {
+  $$('tbody.level-'+level).invoke('hide');
+  $$('tr.level-'+level).invoke('setVisible', predicate);
+}
+</script>
+
 {{if $levels|@count}}
   Niveaux : 
   {{foreach from=$levels key=_level item=_checked}}
-    <input type="checkbox" name="level" value="{{$_level}}" {{if $_checked}}checked="checked"{{/if}} onclick="$$('.level-{{$_level}}').invoke('setVisible',this.checked)" /> {{$_level}}
+    <label>
+      <input type="checkbox" name="level" value="{{$_level}}" {{if $_checked}}checked="checked"{{/if}} 
+             onclick="toggleLevel({{$_level}},this.checked)" /> {{$_level}}
+    </label>
   {{/foreach}}
 {{/if}}
 

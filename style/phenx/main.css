@@ -343,6 +343,17 @@ table.form th.category {
   background-color: #CCCCCC;
 }
 
+th.title.modify,
+th.category.modify,
+table.form th.title.modify,
+table.tbl th.title.modify,
+table.form th.category.modify,
+table.tbl th.category.modify,
+table.main th.title.modify,
+table.main th.title.modify {
+  color: #C64F00;
+}
+
 /* Message styles */
 #systemMsg {
   max-height: 50%;

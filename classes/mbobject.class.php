@@ -2441,7 +2441,7 @@ class CMbObject {
       $where["user_id"] = " = '$user_id'";
     }*/
     
-    //$where["type"] = "= 'store'";
+    $where["type"] = "IN('store', 'merge')";
     
     /*if ($fields){
       $whereField = array();
