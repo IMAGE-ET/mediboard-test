@@ -50,6 +50,7 @@ function refreshZones(id, obj) {
 	url.addParam("reloadzones", 1);
 	url.requestUpdate("reloadzones",
 			{onComplete: function(){
+         window.resizeEditor();
 		     var form = getForm("editFrm");
 		     form.onsubmit = function() { Url.ping({onComplete: submitCompteRendu}); return false;};
 		     $V(form.compte_rendu_id, id);
@@ -155,22 +156,22 @@ function openWindowMail() {
       Thumb.mode = "doc";
       Thumb.object_class = '{{$compte_rendu->object_class}}';
       Thumb.object_id = '{{$compte_rendu->object_id}}';
-      {{if !$compte_rendu->_id && $switch_mode == 1}}
-        if (window.opener.linkFields) {
-  
-          from = window.opener.linkFields();
-          var to = getForm("editFrm");
-          if (from[0].any(function(elt){ return elt.size > 1; }))        
-            toggleOptions();
-          from.each(function(elt) {
-            elt.each(function(select) {
-              if (select) {
-                $V(to[select.name], $V(select));
-              }
-            })
-          });
-        }
-      {{/if}}
+    {{/if}}
+    {{if !$compte_rendu->_id && $switch_mode == 1}}
+      if (window.opener.linkFields) {
+        
+        from = window.opener.linkFields();
+        var to = getForm("editFrm");
+        if (from[0].any(function(elt){ return elt.size > 1; }))        
+          toggleOptions();
+        from.each(function(elt) {
+          elt.each(function(select) {
+            if (select) {
+              $V(to[select.name], $V(select));
+            }
+          })
+        });
+      }
     {{/if}}
   });
 

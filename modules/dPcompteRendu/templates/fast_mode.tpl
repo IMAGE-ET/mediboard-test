@@ -34,7 +34,7 @@ linkFields = function(ref) {
     tab.select(".liste"),
     tab.select(".freetext"),
     tab.select(".destinataires"),
-    [form.nom, form.file_category_id, form._private]
+    [form.nom, form.file_category_id, form.__private]
   ];
 }
 
@@ -116,11 +116,6 @@ Main.add(function() {
 	<input type="hidden" name="dosql" value="do_pdf_cfile_aed" />
   <input type="hidden" name="stream" value="0" />
   <input type="hidden" name="callback" value="closeModal"/>
-  {{if $noms_textes_libres}}
-    {{foreach from=$noms_textes_libres item=_nom}}
-       <input class="freetext" type="hidden" name="texte_libre[{{$_nom}}]"/>
-    {{/foreach}}
-  {{/if}}
 </form>
 
 <form name="fastModeForm-{{$uid_fast_mode}}" action="?m={{$m}}" method="post"
@@ -226,10 +221,11 @@ Main.add(function() {
             {{foreach from=$noms_textes_libres item=_nom}}
             <tr>
               <td>
-                {{$_nom}}
-                <textarea class="freetext" name="texte_libre[{{$_nom}}]"></textarea>
+                {{$_nom|html_entity_decode}}<br/>
+                <textarea class="freetext" name="_texte_libre[{{$_nom|md5}}]"></textarea>
+                <input type="hidden" name="_texte_libre_md5[{{$_nom|md5}}]" value="{{$_nom}}"/>
 	              {{main}}
-	                new AideSaisie.AutoComplete('fastModeForm-{{$uid_fast_mode}}_texte_libre[{{$_nom}}]',
+	                new AideSaisie.AutoComplete('fastModeForm-{{$uid_fast_mode}}__texte_libre[{{$_nom|md5}}]',
                    {
                       objectClass: '{{$compte_rendu->_class_name}}',
                       contextUserId: User.id,

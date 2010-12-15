@@ -35,17 +35,19 @@ if (isset($_POST["fast_edit"]) && $_POST["fast_edit"] == 1 && isset($_POST["obje
 }
 
 // Remplacement des zones de texte libre
-if (isset($_POST["texte_libre"])) {
+if (isset($_POST["_texte_libre"])) {
   $compte_rendu = new CCompteRendu();
-	CMbArray::removeValue('', $_POST["texte_libre"]);
+	CMbArray::removeValue('', $_POST["_texte_libre"]);
+	
+	$textes_libres = array();
 	
 	// Remplacement des \n par des <br>
-	foreach($_POST["texte_libre"] as $key=>$_texte_libre) {
-		$_POST["texte_libre"][$key] = nl2br($_texte_libre);
+	foreach($_POST["_texte_libre"] as $key=>$_texte_libre) {
+		$textes_libres[$_POST["_texte_libre_md5"][$key]] = nl2br($_POST["_texte_libre"][$key]);
 	}
 	
-  $_POST["_source"] = $compte_rendu->replaceFreeTextFields($_POST["_source"], $_POST["texte_libre"]);
-  $_POST["texte_libre"] = null;
+  $_POST["_source"] = $compte_rendu->replaceFreeTextFields($_POST["_source"], $textes_libres);
+  $_POST["_texte_libre"] = null;
 }
 
 if (isset($_POST["_source"])) {

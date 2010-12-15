@@ -713,7 +713,7 @@ class CCompteRendu extends CDocumentItem {
       $patterns[] = "/\[\[Texte libre - $key\]\]/i";
     }
   
-    return preg_replace($patterns, $textes_libres, $source, 1);
+    return preg_replace($patterns, $textes_libres, $source);
   }
 
 }

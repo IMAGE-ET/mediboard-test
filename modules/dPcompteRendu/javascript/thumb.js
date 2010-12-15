@@ -140,7 +140,9 @@ function restoreStyle() {
   var instance = CKEDITOR.instances.htmlarea;
   
   if (!window.save_style) return;
-  window.save_style.insertBefore(instance.document.getBody().getFirst());
+  var tag = instance.document.getBody().getFirst();
+  if (tag.$.tagName == "STYLE") return;
+  window.save_style.insertBefore(tag);
 }
 
 function deleteStyle() {

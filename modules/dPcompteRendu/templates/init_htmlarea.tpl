@@ -19,7 +19,7 @@ function initCKEditor() {
 	var editor = CKEDITOR.replace("htmlarea", {customConfig: "../../?m=dPcompteRendu&a=mb_fckeditor&suppressHeaders=1"});
 	editor.on("instanceReady", function(e) {
     
-    function resizeEditor() {
+    window.resizeEditor = function () {
       var dims = document.viewport.getDimensions();
       var greedyPane = $$(".greedyPane")[0];
       
@@ -29,7 +29,7 @@ function initCKEditor() {
     }
     
 	  var ck_instance = CKEDITOR.instances.htmlarea;
-
+    
     // Hack pour la balise style qui pose problème dans ckeditor
     var element = ck_instance.document.getBody().getFirst();
 
@@ -60,11 +60,11 @@ function initCKEditor() {
     ck_instance.on("afterrenderColors" , toggleContentEditable.curry(false));*/
 
 	  // Redimensionnement de l'éditeur
-		resizeEditor();
+		window.resizeEditor();
 
     // Redimensionnement automatique de l'éditeur en même temps que celui de la fenêtre.
 		Event.observe(window, "resize", function(e){
-		  resizeEditor();
+		  window.resizeEditor();
     });
 		{{if $templateManager->printMode}}
       CKEDITOR.instances.htmlarea.document.getBody().contentEditable=false;
@@ -93,10 +93,14 @@ function initCKEditor() {
   	        Event.stop(e);
   	      }
   	    {{/if}}
-	  });
+	    });
 		// Surveillance de modification de l'éditeur de texte
 		ck_instance.on("key", loadOld);
+
     {{/if}}
+    // Après l'impression, le focus revient sur l'éditeur
+    // On peut donc enlever le style à ce moment-là.
+    ck_instance.on("focus", function(){ deleteStyle(); });
 	});
 }
 

@@ -35,26 +35,31 @@
   
   {{if $noms_textes_libres|@count}}
     <tr>
-      <td colspan="2">
+      <td colspan="2" class="text">
       {{foreach from=$noms_textes_libres item=_nom}}
         <div style="max-width: 200px; display: inline-block;">    
-          {{$_nom}}
-          <textarea class="freetext {{$_nom}}" name="texte_libre[{{$_nom}}]" id="editFrm_texte_libre[{{$_nom}}]"></textarea>
-          </div>
-          {{main}}
-	          new AideSaisie.AutoComplete('editFrm_texte_libre[{{$_nom}}]',
-	          {
-	            objectClass: '{{$compte_rendu->_class_name}}',
-	            contextUserId: User.id,
-	            contextUserView: "{{$user_view}}",
-	            timestamp: "{{$conf.dPcompteRendu.CCompteRendu.timestamp}}",
-	            resetSearchField: false,
-	            resetDependFields: false,
-	            validateOnBlur: false,
-	            property: "_source"
-	          });                      
-	        {{/main}}
-        {{/foreach}}
+          {{$_nom|html_entity_decode}}
+          <textarea class="freetext" name="_texte_libre[{{$_nom|md5}}]" id="editFrm__texte_libre[{{$_nom|md5}}]"></textarea>
+          <input type="hidden" name="_texte_libre_md5[{{$_nom|md5}}]" value="{{$_nom}}"/>
+        </div>
+        {{main}}
+          new AideSaisie.AutoComplete('editFrm__texte_libre[{{$_nom|md5}}]',
+          {
+            objectClass: '{{$compte_rendu->_class_name}}',
+            contextUserId: User.id,
+            contextUserView: "{{$user_view}}",
+            timestamp: "{{$conf.dPcompteRendu.CCompteRendu.timestamp}}",
+            resetSearchField: false,
+            resetDependFields: false,
+            validateOnBlur: false,
+            property: "_source"
+          });
+          
+          var textarea = $('editFrm__texte_libre[{{$_nom|md5}}]');  
+          if (!textarea.up().hasClassName("textarea-container"))
+            textarea.setResizable({autoSave: true, step: 'font-size'});
+        {{/main}}
+      {{/foreach}}
       </td>
     </tr>
   {{/if}}

@@ -18,12 +18,10 @@ CKEDITOR.plugins.add('mbprint',{
 
 function mbprint_onclick(editor) {
   var printDoc = function() {
-    restoreStyle();
     if ( CKEDITOR.env.gecko )
       editor.window.$.print();
     else
       editor.document.$.execCommand("Print");
-    deleteStyle();
   };
   if (window.parent.same_print == 1) {
     restoreStyle();
@@ -38,6 +36,7 @@ function mbprint_onclick(editor) {
       window.parent.submitCompteRendu(printDoc);
     }
     else {
+      restoreStyle();
       printDoc();
     }
   }

@@ -158,7 +158,6 @@ if($isCourrier) {
   $destinataires = CDestinataire::$destByClass;
 }
 
-$noms_textes_libres = array();
 // Création du template
 $smarty = new CSmartyDP();
 
@@ -172,8 +171,13 @@ $smarty->assign("user_view"      , $user->_view);
 $smarty->assign("object_id"    , $object_id);
 $smarty->assign('object_class' , CValue::get("object_class"));
 
+$noms_textes_libres = array();
+
 preg_match_all("/(:?\[\[Texte libre - ([^\]]*)\]\])/i",$compte_rendu->_source, $matches);
 $noms_textes_libres = $matches[2];
+
+// Suppression des doublons
+$noms_textes_libres = array_unique($noms_textes_libres);
 
 if (isset($compte_rendu->_ref_file->_id)) {
   $smarty->assign("file", $compte_rendu->_ref_file);
