@@ -463,6 +463,10 @@ button.erase:before, a.button.erase:before {
   content: url(images/buttons/eraser.png);
 }
 
+button.loading:before, a.button.loading:before {
+  content: url(images/icons/loading.gif) !important;
+}
+
 button.selected {
   border: 2px solid #000;
 }

@@ -24,13 +24,25 @@ toggleLevel = function(level, predicate) {
   $$('tr.level-'+level).invoke('setVisible', predicate);
 }
 
-processValuation = function(container, categorization, label, list, date) {
+processValuation = function(button, container, categorization, label, list, date) {
+  $(button).addClassName("loading");
+  
   var url = new Url();
   url.addParam("categorization", categorization);
   url.addParam("label", label);
   url.addParam("list[]", list, true);
   url.addParam("date", date);
-  url.requestUpdate(container, {
+  url.requestJSON(function(data){
+    $H(data.totals).each(function(pair){
+      $("folder-"+label).select("td.total-product-"+pair.key+"-ht").invoke("update", pair.value.ht);
+      $("folder-"+label).select("td.total-product-"+pair.key+"-ttc").invoke("update", pair.value.ttc);
+    });
+    
+    $("total-group-"+label+"-ht").update(data.total);
+    $("total-group-"+label+"-ttc").update(data.total_ttc);
+    
+    $(button).removeClassName("loading");
+  }, {
     method: "post",
     getParameters: {
       m: "pharmacie", 
@@ -54,6 +66,10 @@ processValuation = function(container, categorization, label, list, date) {
   <tr>
     <th class="narrow">{{tr}}CProduct-code{{/tr}}</th>
     <th>{{tr}}CProduct{{/tr}}</th>
+    <th></th>
+    
+    <th style="width: 5em;">HT</th>
+    <th style="width: 5em;">TTC</th>
   </tr>
   
   {{foreach from=$list_by_group item=_group key=_code}}
@@ -78,23 +94,29 @@ processValuation = function(container, categorization, label, list, date) {
           {{$_group.label}}
         </th>
         <th class="title" style="text-align: right;">
-          <button type="button" class="change" 
-                  onclick="Event.stop(event);processValuation($(this).next('span'),'{{$categorization}}', '{{$_code}}', {{$_group.list_id|@json}}, '')">
+          <button type="button" class="change singleclick" 
+                  onclick="Event.stop(event);processValuation(this,$(this).next('span'),'{{$categorization}}', '{{$_code}}', {{$_group.list_id|@json}}, '')">
             Valeur
           </button>
           <span></span>
         </th>
+        
+        <th id="total-group-{{$_code}}-ht" style="text-align: right;"></th>
+        <th id="total-group-{{$_code}}-ttc" style="text-align: right;"></th>
       </tr>
       <tbody style="display: none;" id="folder-{{$_code}}" class="level-{{$_group.level}}">
         {{foreach from=$_group.list item=_product}}
           <tr>
             <td>
-              <a class="button edit" href="?m=dPstock&amp;tab=vw_idx_product&amp;product_id={{$_product->_id}}">
+              <a class="button edit" target="edit-product" href="?m=dPstock&amp;tab=vw_idx_product&amp;product_id={{$_product->_id}}">
                 {{tr}}Edit{{/tr}}
               </a>
             </td>
             <td>{{$_product->code}}</td>
             <td>{{$_product}}</td>
+            
+            <td class="total-product-{{$_product->_id}}-ht" style="text-align: right;">0</td>
+            <td class="total-product-{{$_product->_id}}-ttc" style="text-align: right;">0</td>
           </tr>
         {{/foreach}}
       </tbody>
