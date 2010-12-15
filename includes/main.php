@@ -136,9 +136,11 @@ if (null == $module = CModule::getInstalled($m)) {
 // these can be further modified by the included action files
 $can = $module->canDo();
 
-$a     = CAppUI::checkFileName(CValue::get("a"     , "index"));
-$u     = CAppUI::checkFileName(CValue::get("u"     , ""));
-$dosql = CAppUI::checkFileName(CValue::post("dosql", ""));
+$a      = CAppUI::checkFileName(CValue::get("a"     , "index"));
+$u      = CAppUI::checkFileName(CValue::get("u"     , ""));
+$dosql  = CAppUI::checkFileName(CValue::post("dosql", ""));
+$m_post = CAppUI::checkFileName(CValue::post("m", ""));
+$class  = CAppUI::checkFileName(CValue::post("@class", ""));
 
 $tab = $a == "index" ? 
   CValue::getOrSession("tab", $tab) : 
@@ -161,12 +163,16 @@ if ($indexGroup->load($g) && !$indexGroup->canRead()) {
 
 // do some db work if dosql is set
 if ($dosql) {
-  $mDo = CValue::post("m", $m);
-  if(is_file("./modules/$mDo/controllers/$dosql.php")) {
-    require("./modules/$mDo/controllers/$dosql.php");
+  if(is_file("./modules/$m_post/controllers/$dosql.php")) {
+    require("./modules/$m_post/controllers/$dosql.php");
   } else {
-    require("./modules/$mDo/$dosql.php");
+    require("./modules/$m_post/$dosql.php");
   }
+}
+
+if ($class) {
+  $do = new CDoObjectAddEdit($class);
+  $do->doIt();
 }
 
 // Checks if the current module is obsolete

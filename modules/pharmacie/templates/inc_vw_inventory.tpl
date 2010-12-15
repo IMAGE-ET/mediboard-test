@@ -24,6 +24,12 @@ toggleLevel = function(level, predicate) {
   $$('tr.level-'+level).invoke('setVisible', predicate);
 }
 
+addToElement = function(element, value) {
+  var current = parseFloat(element.getAttribute("data-value") || 0);
+  element.update((current + value).toFixed(2));
+  element.writeAttribute("data-value", current + value);
+}
+
 processValuation = function(button, container, categorization, label, list, date) {
   $(button).addClassName("loading");
   
@@ -40,6 +46,9 @@ processValuation = function(button, container, categorization, label, list, date
     
     $("total-group-"+label+"-ht").update(data.total);
     $("total-group-"+label+"-ttc").update(data.total_ttc);
+
+    addToElement($("total-ht"), data.total);
+    addToElement($("total-ttc"), data.total_ttc);
     
     $(button).removeClassName("loading");
   }, {
@@ -50,6 +59,14 @@ processValuation = function(button, container, categorization, label, list, date
     }
   });
 }
+
+provessValuationAll = function(table) {
+  var counts = table.select('span.count').sort(function(a,b){ return parseInt(a.innerHTML) - parseInt(b.innerHTML) });
+  counts.each(function(count) {
+    count.up('tr').down('button.change').onclick();
+  });
+}
+
 </script>
 
 {{if $levels|@count}}
@@ -62,11 +79,13 @@ processValuation = function(button, container, categorization, label, list, date
   {{/foreach}}
 {{/if}}
 
-<table class="main tbl">
+<button style="float: right;" onclick="provessValuationAll($('inventory'))" class="change">Tout calculer</button>
+
+<table class="main tbl" id="inventory">
   <tr>
     <th class="narrow">{{tr}}CProduct-code{{/tr}}</th>
     <th>{{tr}}CProduct{{/tr}}</th>
-    <th></th>
+    <th class="narrow"></th>
     
     <th style="width: 5em;">HT</th>
     <th style="width: 5em;">TTC</th>
@@ -90,7 +109,7 @@ processValuation = function(button, container, categorization, label, list, date
           </button>
         </th>
         <th class="title" style="text-align: left;">
-          <span style="float: right;">{{$_group.list|@count}}</span>
+          <span style="float: right;" class="count">{{$_group.list|@count}}</span>
           {{$_group.label}}
         </th>
         <th class="title" style="text-align: right;">
@@ -122,4 +141,11 @@ processValuation = function(button, container, categorization, label, list, date
       </tbody>
     {{/if}}
   {{/foreach}}
+  <tr style="font-size: 1.5em; text-align: right;">
+    <td></td>
+    <td></td>
+    <td style="font-weight: bold;">Totaux:</td>
+    <td id="total-ht"></td>
+    <td id="total-ttc"></td>
+  </tr>
 </table>
