@@ -1474,13 +1474,12 @@ class CPatient extends CMbObject {
     $template->addProperty("Patient - confiance - parente", $this->confiance_parente);
 	
     // Vider les anciens holders
-    if ($this->_id) {
-	    for ($i = 1; $i < 4; $i++) {
-	      $template->addProperty("Patient - médecin correspondant $i");
-	      $template->addProperty("Patient - médecin correspondant $i - adresse");
-	    }
+    for ($i = 1; $i < 4; $i++) {
+      $template->addProperty("Patient - médecin correspondant $i");
+      $template->addProperty("Patient - médecin correspondant $i - adresse");
+      $template->addProperty("Patient - médecin correspondant $i - spécialité");
     }
-    
+
     $this->loadRefsCorrespondants();
     $i = 0;
     $noms = array();
@@ -1492,10 +1491,10 @@ class CPatient extends CMbObject {
       $noms[] = $nom;
       $template->addProperty("Patient - médecin correspondant $i", $nom);
       $template->addProperty("Patient - médecin correspondant $i - adresse", "{$medecin->adresse}\n{$medecin->cp} {$medecin->ville}");
-      $template->addProperty("Patient - médecin correspondant $i - spécialté", htmlentities($medecin->disciplines));
+      $template->addProperty("Patient - médecin correspondant $i - spécialité", htmlentities($medecin->disciplines));
     }
     
-    $template->addProperty("Patient - médecin correspondants", implode(" - ", $noms));
+    $template->addProperty("Patient - médecins correspondants", implode(" - ", $noms));
 
     //Liste des séjours du patient
     $this->loadRefsSejours();
