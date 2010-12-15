@@ -89,6 +89,12 @@ class CGroups extends CMbObject {
     $backProps["reception_bills"]         = "CProductReceptionBill group_id";
     $backProps['object_configs']          = "CGroupsConfig object_id";
     $backProps["stock_locations"]         = "CProductStockLocation object_id";
+    $backProps["stock_first_config"]      = "CCegiStockFirstConfig object_id";
+    $backProps["destinataires_sigems"]    = "CDestinataireSigems group_id";
+    $backProps["echanges_hprim21"]        = "CEchangeHprim21 group_id";
+    $backProps["extract_passages"]        = "CExtractPassages group_id";
+    $backProps["destinataires_phast"]     = "CPhastDestinataire group_id";
+    $backProps["echanges_phast"]          = "CPhastEchange group_id";
     return $backProps;
   }
   

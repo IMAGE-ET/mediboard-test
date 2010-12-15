@@ -46,6 +46,15 @@ class CEchangeHprim21 extends CMbMetaObject {
     return $spec;
   }
   
+  function getBackProps() {
+    $backProps = parent::getBackProps();
+    $backProps["complementaire_hprim21"] = "CHprim21Complementaire echange_hprim21_id";
+    $backProps["medecins_hprim21"]       = "CHprim21Medecin echange_hprim21_id";
+    $backProps["patients_hprim21"]       = "CHprim21Patient echange_hprim21_id";
+    $backProps["sejours_hprim21"]        = "CHprim21Sejour echange_hprim21_id";
+    return $backProps;
+  }
+  
   function getProps() {
     $specs = parent::getProps();
         

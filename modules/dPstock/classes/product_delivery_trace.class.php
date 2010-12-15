@@ -40,7 +40,13 @@ class CProductDeliveryTrace extends CMbObject {
     $spec->key   = 'delivery_trace_id';
     return $spec;
   }
-
+  
+  function getBackProps() {
+    $backProps = parent::getBackProps();
+    $backProps['echanges_phast']  = 'CPhastEchange object_id';
+    return $backProps;
+  }
+  
   function getProps() {
     $specs = parent::getProps();
     $specs[$this->_spec->key] .= " show|1";

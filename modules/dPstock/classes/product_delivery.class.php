@@ -84,6 +84,7 @@ class CProductDelivery extends CMbObject {
   function getBackProps() {
     $backProps = parent::getBackProps();
     $backProps['delivery_traces'] = 'CProductDeliveryTrace delivery_id';
+    $backProps['echanges_phast']  = 'CPhastEchange object_id';
     return $backProps;
   }
   

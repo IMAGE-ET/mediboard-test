@@ -47,6 +47,7 @@ class CMedecin extends CMbObject {
     $backProps["patients_correspondants"] = "CCorrespondant medecin_id";
     $backProps["sejours_adresses"]        = "CSejour adresse_par_prat_id";
     $backProps["consultations_adresses"]  = "CConsultation adresse_par_prat_id";
+    $backProps["echanges_hprim21"]        = "CEchangeHprim21 object_id";
     return $backProps;
   }
 

@@ -51,7 +51,7 @@ function changePage(page) {
             <td style="width:50%">{{mb_field object=$echg_hprim21 field="_date_max" form="filterEchange" register=true onchange="\$V(this.form.page, 0)"}} </td>
           </tr>
           <tr>
-            <th class="category" colspan="4">Critères de filtres</th>
+            <th class="category" colspan="4">{{tr}}filter-criteria{{/tr}}</th>
           </tr>
           <tr>
             <th colspan="2">Type de message</th>

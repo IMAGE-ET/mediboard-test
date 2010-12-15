@@ -343,4 +343,5 @@ $locales['week'] = 'semaine';
 $locales['weeks'] = 'semaines';
 $locales['year'] = 'année';
 $locales['years'] = 'années';
+$locales['filter-criteria'] = 'Critères de filtres';
 ?>
