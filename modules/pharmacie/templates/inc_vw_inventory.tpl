@@ -16,6 +16,9 @@
   </label>
   
   <button type="submit" class="search">{{tr}}Display{{/tr}}</button>
+  
+  Date des valeurs:
+  {{mb_field object=$order_item_reception field=date form=filterInventory register=true}}
 </form>
 
 <script type="text/javascript">
@@ -33,20 +36,26 @@ toggleLevel = function(radio) {
   });
 }
 
-addToElement = function(element, value) {
-  var current = parseFloat(element.getAttribute("data-value") || 0);
-  element.update((current + value).toFixed(2));
-  element.writeAttribute("data-value", current + value);
+updateTotal = function(table) {
+  var counts;
+  
+  ["ht", "ttc"].each(function(t){
+    counts = table.select('tr.visible th.total-group-'+t);
+    
+    $("total-"+t).update(counts.collect(function(c){return parseFloat(c.innerHTML || 0)})
+      .inject(0, function(acc, n) { return acc + n; }
+    ).toFixed(2));
+  });
 }
 
-processValuation = function(button, container, categorization, label, list, date) {
+processValuation = function(button, container, categorization, label, list) {
   $(button).addClassName("loading");
   
   var url = new Url();
   url.addParam("categorization", categorization);
   url.addParam("label", label);
   url.addParam("list[]", list, true);
-  url.addParam("date", date);
+  url.addParam("date", $V(getForm("filterInventory").date));
   
   url.requestJSON(function(data){
     $H(data.totals).each(function(pair){
@@ -57,8 +66,7 @@ processValuation = function(button, container, categorization, label, list, date
     $("total-group-"+label+"-ht").update(data.total);
     $("total-group-"+label+"-ttc").update(data.total_ttc);
 
-    addToElement($("total-ht"), data.total);
-    addToElement($("total-ttc"), data.total_ttc);
+    updateTotal(button.up('table'));
     
     $(button).removeClassName("loading");
   }, {
@@ -71,14 +79,25 @@ processValuation = function(button, container, categorization, label, list, date
 }
 
 provessValuationAll = function(table) {
-  var counts = table.select('tr.visible span.count').sort(function(a,b){ return parseInt(a.innerHTML) - parseInt(b.innerHTML) });
+  var counts;
   
-  $("total-ht").update(0).writeAttribute("data-value", 0);
-  $("total-ttc").update(0).writeAttribute("data-value", 0);
+  // reset all
+  ["ht", "ttc"].each(function(t){
+    counts = table.select('tr.visible th.total-group-'+t);
+    counts.invoke("update", 0);
+    
+    $("total-"+t).update(counts.collect(function(c){return parseFloat(c.innerHTML || 0)})
+      .inject(0, function(acc, n) { return acc + n; }
+    ).toFixed(2));
+  });
   
-  counts.each(function(count) {
-    var button = count.up('tr').down('button.change');
-    button.onclick();
+  counts = table.select('tr.visible span.count').sort(function(a,b){ return parseInt(a.innerHTML) - parseInt(b.innerHTML) });
+   
+  counts.each(function(count, i) {
+    //(function(count, i){
+      var button = count.up('tr').down('button.change');
+      button.onclick();
+    //}).delay(parseInt(count.innerHTML)/100, count, i);
   });
 }
 
@@ -137,8 +156,8 @@ provessValuationAll = function(table) {
           <span></span>
         </th>
         
-        <th id="total-group-{{$_code}}-ht" style="text-align: right;"></th>
-        <th id="total-group-{{$_code}}-ttc" style="text-align: right;"></th>
+        <th id="total-group-{{$_code}}-ht" class="total-group-ht" style="text-align: right;"></th>
+        <th id="total-group-{{$_code}}-ttc" class="total-group-ttc" style="text-align: right;"></th>
       </tr>
       <tbody style="display: none;" id="folder-{{$_code}}" class="level-{{$_group.level}} folder">
         {{foreach from=$_group.list item=_product}}

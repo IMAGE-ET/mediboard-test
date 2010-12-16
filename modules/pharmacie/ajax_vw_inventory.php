@@ -10,7 +10,10 @@
 
 CCanDo::checkRead();
 
-$categorization = CValue::getOrSession("categorization", "atc");
+$categorization = CValue::getOrSession("categorization", "classe_comptable");
+
+$order_item_reception = new CProductOrderItemReception;
+$order_item_reception->date = CValue::get("date", mbDate());
 
 $list_by_group = array();
 $list_products = array();
@@ -194,4 +197,5 @@ $smarty->assign("list_by_group", $list_by_group);
 $smarty->assign("list_products", $list_products);
 $smarty->assign("categorization", $categorization);
 $smarty->assign("levels", $levels);
+$smarty->assign("order_item_reception", $order_item_reception);
 $smarty->display('inc_vw_inventory.tpl');
