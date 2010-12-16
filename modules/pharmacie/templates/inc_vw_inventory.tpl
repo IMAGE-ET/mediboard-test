@@ -62,8 +62,10 @@ processValuation = function(button, container, categorization, label, list, date
 
 provessValuationAll = function(table) {
   var counts = table.select('span.count').sort(function(a,b){ return parseInt(a.innerHTML) - parseInt(b.innerHTML) });
+  
   counts.each(function(count) {
-    count.up('tr').down('button.change').onclick();
+    var button = count.up('tr').down('button.change');
+    button.onclick.bindAsEventListener(button)();
   });
 }
 
@@ -114,7 +116,7 @@ provessValuationAll = function(table) {
         </th>
         <th class="title" style="text-align: right;">
           <button type="button" class="change singleclick" 
-                  onclick="Event.stop(event);processValuation(this,$(this).next('span'),'{{$categorization}}', '{{$_code}}', {{$_group.list_id|@json}}, '')">
+                  onclick="processValuation(this,$(this).next('span'),'{{$categorization}}', '{{$_code}}', {{$_group.list_id|@json}}, '')">
             Valeur
           </button>
           <span></span>
