@@ -135,7 +135,8 @@ Main.add( function(){
 			<br />
 		{{/foreach}}
 		DE: {{$sejour->_entree|date_format:"%d/%m/%Y"}}<br />
-    DS: {{$sejour->_sortie|date_format:"%d/%m/%Y"}}
+    DS: {{$sejour->_sortie|date_format:"%d/%m/%Y"}}<br />
+    [{{$sejour->_num_dossier}}]
   </span>
 	
   <div>
@@ -144,7 +145,7 @@ Main.add( function(){
     <br />
     {{assign var=operation value=$sejour->_ref_last_operation}}
     Intervention le {{$operation->_ref_plageop->date|date_format:"%d/%m/%Y"}}
-    <strong>(I{{if $operation->_compteur_jour >=0}}+{{/if}}{{$operation->_compteur_jour}})</strong><br /><br />
+    <strong>(I{{if $operation->_compteur_jour >=0}}+{{/if}}{{$operation->_compteur_jour}})</strong> - côté {{$operation->cote}}<br /><br />
 		<strong>{{$operation->libelle}}</strong> 
     <div style="text-align: left">
 		{{if !$operation->libelle}}
@@ -186,7 +187,15 @@ Main.add( function(){
 				        Prescripteur: {{$line->_ref_praticien->_view}} ({{$line->_ref_praticien->adeli}})
 				      </td>
 			      </tr>
+            {{if $line->commentaire}}
+            <tr>
+              <td colspan="2" style="text-indent: 1em">
+                {{$line->commentaire}}
+              </td>
+            </tr>
+            {{/if}}
 			    {{/foreach}}
+          
 			    {{/foreach}}
 		    </table>
 	    </div>
