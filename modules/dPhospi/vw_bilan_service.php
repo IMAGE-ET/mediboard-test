@@ -86,9 +86,13 @@ if($do_trans){
   $ljoin["chambre"] = "lit.chambre_id = chambre.chambre_id";
   $ljoin["service"] = "chambre.service_id = service.service_id";
   
-  $where[] = "date >= '$dateTime_min' AND date <= '$dateTime_max'";
+  $where[] = "(degre = 'high') OR (date >= '$dateTime_min' AND date <= '$dateTime_max')";
   $where["service.service_id"] = " = '$service_id'";
-
+  
+  $where[] = "(sejour.entree BETWEEN '$dateTime_min' AND '$dateTime_max') OR 
+            (sejour.sortie BETWEEN '$dateTime_min' AND '$dateTime_max') OR
+            (sejour.entree <= '$dateTime_min' AND sejour.sortie >= '$dateTime_max')";
+ 
   $transmission = new CTransmissionMedicale();
   $_transmissions = $transmission->loadList($where, null, null, null, $ljoin);
 	
