@@ -2,7 +2,7 @@
 
 {{*
  * @package Mediboard
- * @subpackage sip
+ * @subpackage webservices
  * @version $Revision$
  * @author SARL OpenXtrem
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
@@ -17,30 +17,19 @@
    {{/if}}
   </td>
   <td class="narrow">
-    <form name="delEchange" action = "" method="post">
-      <input type="hidden" name="m" value="hprimxml" />
-      <input type="hidden" name="dosql" value="do_echangehprim_aed" />
-      <input type="hidden" name="del" value="1" />
-      {{mb_key object=$object}}
-
-      <button class="cancel notext" type="button" onclick="confirmDeletion(this.form, {
-          typeName:'l\'échange',
-          objName:'{{$object->_view|smarty:nodefaults|JSAttribute}}'
-        })">
-      </button>
-    </form>
+    {{mb_include module="system" template="inc_form_delete"}}
   </td>
   <td class="narrow">
-    <a href="?m=hprimxml&amp;tab=vw_idx_echange_hprim&amp;echange_hprim_id={{$object->_id}}" class="button search">
-     {{$object->echange_hprim_id|str_pad:6:'0':$smarty.const.STR_PAD_LEFT}}
-    </a>
+    <button type="button" onclick="location.href='?m='+App.m+'&amp;tab='+App.tab+'&amp;echange_xml_id={{$object->_id}}'" class="search">
+     {{$object->_id|str_pad:6:'0':$smarty.const.STR_PAD_LEFT}}
+    </button>
   </td>
   {{if $conf.sip.server}}
   <td class="narrow">
     {{if $object->initiateur_id}}
-      <a href="?m=hprimxml&amp;tab=vw_idx_echange_hprim&amp;echange_hprim_id={{$object->initiateur_id}}" class="button search">
+      <button type="button" onclick="location.href='?m='+App.m+'&amp;tab='+App.tab+'&amp;echange_xml_id={{$object->initiateur_id}}'" class="search">
         {{$object->initiateur_id|str_pad:6:'0':$smarty.const.STR_PAD_LEFT}}
-      </a>
+      </button>
     {{/if}}
   </td>
   {{/if}}
@@ -93,11 +82,13 @@
   <td class="{{if $object->date_echange}}ok{{else}}warning{{/if}} narrow">
     {{if $conf.sip.server == "1"}}
       {{if $object->_self_emetteur}}
-        <button class="change" onclick="sendMessage('{{$object->_id}}', '{{$object->_class_name}}')" type="button" style="float:right">{{tr}}Send{{/tr}}</button>
+        <button class="change" onclick="sendMessage('{{$object->_id}}', '{{$object->_class_name}}')" 
+          type="button" style="float:right">{{tr}}Send{{/tr}}</button>
       {{/if}}
     {{else}}
       {{if !($object->date_echange)}}
-        <button class="change" onclick="sendMessage('{{$object->_id}}', '{{$object->_class_name}}')" type="button" style="float:right">{{tr}}Send{{/tr}}</button>
+        <button class="change" onclick="sendMessage('{{$object->_id}}', '{{$object->_class_name}}')" 
+          type="button" style="float:right">{{tr}}Send{{/tr}}</button>
       {{/if}}
     {{/if}}
     <span>
@@ -128,14 +119,16 @@
    {{mb_value object=$object field="message_valide"}}
   </td>
   <td>
-    <a target="blank" href="?m=hprimxml&a=download_echange&echange_hprim_id={{$object->_id}}&dialog=1&suppressHeaders=1&message=1" class="button modify notext"></a>
+    <a target="blank" href="?m=webservices&a=download_echange_xml&echange_xml_guid={{$object->_guid}}&dialog=1&suppressHeaders=1&message=1" 
+      class="button modify notext"></a>
   </td>
   <td class="{{if !$object->acquittement_valide}}error{{/if}}">
    {{mb_value object=$object field="acquittement_valide"}}
   </td>
   <td>
     {{if $object->_acquittement}}
-      <a target="blank" href="?m=hprimxml&a=download_echange&echange_hprim_id={{$object->_id}}&dialog=1&suppressHeaders=1&ack=1" class="button modify notext"></a>
+      <a target="blank" href="?m=webservices&a=download_echange_xml&echange_xml_guid={{$object->_guid}}&dialog=1&suppressHeaders=1&ack=1" 
+        class="button modify notext"></a>
     {{/if}}
   </td>
 </tr>

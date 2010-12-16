@@ -33,9 +33,10 @@ class CContentXML extends CMbObject {
   
   function getBackProps() {
     $backProps = parent::getBackProps();
-    $backProps['messages']      = "CEchangeHprim message_content_id";
-    $backProps['acquittements'] = "CEchangeHprim acquittement_content_id";
-    
+    $backProps["messages"]            = "CEchangeHprim message_content_id";
+    $backProps["acquittements"]       = "CEchangeHprim acquittement_content_id";
+    $backProps["messages_phast"]      = "CPhastEchange message_content_id";
+    $backProps["acquittements_phast"] = "CPhastEchange acquittement_content_id";
     return $backProps;
   }
 }

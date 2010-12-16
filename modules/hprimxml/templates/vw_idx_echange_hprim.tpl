@@ -80,7 +80,7 @@ function refreshEchanges(form) {
             <td style="width:50%">{{mb_field object=$echange_hprim field="_date_max" form="filterEchange" register=true onchange="\$V(this.form.page, 0)"}} </td>
           </tr>
           <tr>
-            <th class="category" colspan="4">Critères de filtres</th>
+            <th class="category" colspan="4">{{tr}}filter-criteria{{/tr}}</th>
           </tr>
           <tr>
             <th colspan="2">{{mb_label object=$echange_hprim field="echange_hprim_id"}}</th>

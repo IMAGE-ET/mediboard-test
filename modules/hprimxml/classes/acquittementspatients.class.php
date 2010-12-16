@@ -44,7 +44,7 @@ class CHPrimXMLAcquittementsPatients extends CHPrimXMLDocument {
     $group->loadLastId400();
     $this->addAgent($agents, "système", CAppUI::conf('mb_id'), $group->text);
 
-    $echg_hprim->loadRefsDestinataireHprim();
+    $echg_hprim->loadRefsDestinataireInterop();
     // Pour un acquittement l'emetteur du message devient destinataire
     $destinataire = $this->addElement($enteteMessageAcquittement, "destinataire");
     $agents = $this->addElement($destinataire, "agents");

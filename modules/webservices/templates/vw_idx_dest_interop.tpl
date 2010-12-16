@@ -49,17 +49,10 @@
     <td class="halfPane">
       {{if $can->edit}}
       <form name="edit{{$destinataire->_class_name}}" action="?m={{$m}}" method="post" onsubmit="return checkForm(this)">
-        <!-- mb_class object= -->
-        {{if $destinataire->_class_name == "CPhastDestinataire"}}
-          <input type="hidden" name="dosql" value="do_phast_destinataire_aed" />
-        {{elseif $destinataire->_class_name == "CDestinataireHprim"}}
-          <input type="hidden" name="dosql" value="do_destinataire_aed" />
-        {{/if}}
-        
-        <input type="hidden" name="del" value="0" /> 
-        
-        {{mb_key object=$destinataire}}     
-        
+        {{mb_key object=$destinataire}}
+        {{mb_class object=$destinataire}}
+        <input type="hidden" name="del" value="0" />
+                      
         <table class="form">
           <tr>
             {{if $destinataire->_id}}

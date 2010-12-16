@@ -200,7 +200,7 @@ class CHPrimXMLDocument extends CMbXMLDocument {
   }
   
   function getTagMediuser() {
-    $this->_ref_echange_hprim->loadRefsDestinataireHprim();
+    $this->_ref_echange_hprim->loadRefsDestinataireInterop();
     
     return $this->_ref_echange_hprim->_ref_destinataire->_tag_mediuser;
   }

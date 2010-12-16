@@ -11,6 +11,7 @@
 CCanDo::checkRead();
 
 $id_permanent        = CValue::getOrSession("id_permanent");
+$echange_xml_class   = CValue::getOrSession("echange_xml_class");
 $t                   = CValue::getOrSession('types', array());
 $statut_acquittement = CValue::getOrSession("statut_acquittement");
 $msg_evenement       = CValue::getOrSession("msg_evenement", "patients");
@@ -19,11 +20,10 @@ $page                = CValue::get('page', 0);
 $_date_min           = CValue::getOrSession('_date_min', mbDateTime("-7 day"));
 $_date_max           = CValue::getOrSession('_date_max', mbDateTime("+1 day"));
 
-// Chargement de l'échange HPRIM demandé
-$echange_hprim = new CEchangeHprim();
+$echange_xml = new $echange_xml_class;
 
-// Récupération de la liste des echanges HPRIM
-$itemEchangeHprim = new CEchangeHprim;
+// Récupération de la liste des echanges XML
+$itemEchangeXML = new $echange_xml_class;
 
 $where = array();
 if (isset($t["emetteur"])) {
@@ -59,30 +59,30 @@ if ($id_permanent) {
 
 $where["group_id"] = "= '".CGroups::loadCurrent()->_id."'";
 
-$total_echange_hprim = $itemEchangeHprim->countList($where);
+$total_echange_xml = $itemEchangeXML->countList($where);
 $order = "date_production DESC";
 $forceindex[] = "date_production";
 
-$echangesHprim = $itemEchangeHprim->loadList($where, $order, "$page, 20", null, null, $forceindex);
+$echangesXML = $itemEchangeXML->loadList($where, $order, "$page, 20", null, null, $forceindex);
   
-foreach($echangesHprim as $_echange) {
+foreach($echangesXML as $_echange) {
   $_echange->loadRefNotifications();
   $_echange->getObservations();
-  $_echange->loadRefsDestinataireHprim();
+  $_echange->loadRefsDestinataireInterop();
 }
 
 // Création du template
 $smarty = new CSmartyDP();
 
-$smarty->assign("echange_hprim"       , $echange_hprim);
-$smarty->assign("echangesHprim"       , $echangesHprim);
-$smarty->assign("total_echange_hprim" , $total_echange_hprim);
+$smarty->assign("echange_xml"         , $echange_xml);
+$smarty->assign("echangesXML"         , $echangesXML);
+$smarty->assign("total_echange_xml"   , $total_echange_xml);
 $smarty->assign("page"                , $page);
 $smarty->assign("selected_types"      , $t);
 $smarty->assign("statut_acquittement" , $statut_acquittement);
 $smarty->assign("msg_evenement"       , $msg_evenement);
 $smarty->assign("type_evenement"      , $type_evenement);
 
-$smarty->display("inc_echanges_hprim.tpl");
+$smarty->display("inc_echanges_xml.tpl");
 
 ?>

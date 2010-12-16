@@ -10,7 +10,7 @@
 
 CCanDo::checkRead();
 
-$echange_hprim_id    = CValue::get("echange_hprim_id");
+$echange_xml_id      = CValue::get("echange_xml_id");
 $id_permanent        = CValue::getOrSession("id_permanent");
 $t                   = CValue::getOrSession('types', array());
 $statut_acquittement = CValue::getOrSession("statut_acquittement");
@@ -39,15 +39,12 @@ $echange_hprim->id_permanent = $id_permanent;
 $echange_hprim->_date_min = $_date_min;
 $echange_hprim->_date_max = $_date_max;
 
-$echange_hprim->load($echange_hprim_id);
+$echange_hprim->load($echange_xml_id);
 
-// Création du template
-$smarty = new CSmartyDP();
-  
 $observations = $doc_errors_msg = $doc_errors_ack = array();
 
 $echange_hprim->loadRefs(); 
-$echange_hprim->loadRefsDestinataireHprim();
+$echange_hprim->loadRefsDestinataireInterop();
 
 if ($echange_hprim->_message !== null) {
   $domGetEvenement = null;
@@ -84,9 +81,9 @@ foreach (CEchangeHprim::$messages as $_message => $_evt_class) {
 }
 
 // Création du template
-$smarty = new CSmartyDP();
+$smarty = new CSmartyDP("modules/webservices");
 
-$smarty->assign("echange_hprim"       , $echange_hprim);
+$smarty->assign("echange_xml"         , $echange_hprim);
 $smarty->assign("selected_types"      , $t);
 $smarty->assign("page"                , $page);
 $smarty->assign("types"               , $types);
@@ -98,6 +95,6 @@ $smarty->assign("observations"        , $observations);
 $smarty->assign("doc_errors_msg"      , $doc_errors_msg);
 $smarty->assign("doc_errors_ack"      , $doc_errors_ack);
 
-$smarty->display("vw_idx_echange_hprim.tpl");
+$smarty->display("vw_idx_echange_xml.tpl");
 
 ?>
