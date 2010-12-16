@@ -30,6 +30,7 @@
   </tr>
   
   {{assign var="class" value="CSejour"}}
+	
   {{assign var="var"   value="easy_service"}}
   {{mb_include module=system template=inc_config_bool var=$var }}
   {{assign var="var"   value="easy_chambre_simple"}}
@@ -67,16 +68,16 @@
   {{mb_include module=system template=inc_config_bool var=$var }}
   
   {{assign var="var" value="duree_deb"}}
-  {{mb_include module=system template=inc_config_enum var=$var  values=$hours_piped skip_locales=true}}
+  {{mb_include module=system template=inc_config_enum var=$var  values=$hours skip_locales=true}}
   {{assign var="var" value="duree_fin"}}
-  {{mb_include module=system template=inc_config_enum var=$var  values=$hours_piped skip_locales=true}}
+  {{mb_include module=system template=inc_config_enum var=$var  values=$hours skip_locales=true}}
   {{assign var="var" value="hour_urgence_deb"}}
-  {{mb_include module=system template=inc_config_enum var=$var  values=$hours_piped skip_locales=true}}
+  {{mb_include module=system template=inc_config_enum var=$var  values=$hours skip_locales=true}}
   {{assign var="var" value="hour_urgence_fin"}}
-  {{mb_include module=system template=inc_config_enum var=$var  values=$hours_piped skip_locales=true}}
+  {{mb_include module=system template=inc_config_enum var=$var  values=$hours skip_locales=true}}
   
   {{assign var="var" value="min_intervalle"}}
-  {{mb_include module=system template=inc_config_enum var=$var  values=$intervals_piped skip_locales=true}}
+  {{mb_include module=system template=inc_config_enum var=$var  values=$intervals skip_locales=true}}
   <tr>
     <td class="button" colspan="2">
       <button class="modify" type="submit">{{tr}}Save{{/tr}}</button>
@@ -93,17 +94,21 @@
   </tr>
 
   {{assign var="var" value="patient_id"}}
-  {{mb_include module=system template=inc_config_enum var=$var values=$patientId_piped}}
+  {{mb_include module=system template=inc_config_enum var=$var values=$patient_ids}}
+
+  {{assign var="var" value="check_collisions"}}
+  {{mb_include module=system template=inc_config_enum var=$var values="no|date|datetime"}}
+
   {{assign var="var" value="modif_SHS"}}
   {{mb_include module=system template=inc_config_bool var=$var }}
 
   {{assign var="var" value="heure_deb"}}
-  {{mb_include module=system template=inc_config_enum var=$var  values=$hours_piped skip_locales=true}}
+  {{mb_include module=system template=inc_config_enum var=$var  values=$hours skip_locales=true}}
   {{assign var="var" value="heure_fin"}}
-  {{mb_include module=system template=inc_config_enum var=$var  values=$hours_piped skip_locales=true}}
+  {{mb_include module=system template=inc_config_enum var=$var  values=$hours skip_locales=true}}
   
   {{assign var="var" value="min_intervalle"}}
-  {{mb_include module=system template=inc_config_enum var=$var  values=$intervals_piped skip_locales=true}}
+  {{mb_include module=system template=inc_config_enum var=$var  values=$intervals skip_locales=true}}
 
   {{assign var="var" value="service_id_notNull"}}
   {{mb_include module=system template=inc_config_bool var=$var }}
@@ -119,16 +124,16 @@
     <th class="category" colspan="2">Heure d'entree</th>
   </tr>
   {{assign var="var" value="heure_entree_veille"}}
-  {{mb_include module=system template=inc_config_enum var=$var  values=$hours_piped skip_locales=true}}
+  {{mb_include module=system template=inc_config_enum var=$var  values=$hours skip_locales=true}}
   {{assign var="var" value="heure_entree_jour"}}
-  {{mb_include module=system template=inc_config_enum var=$var  values=$hours_piped skip_locales=true}}
+  {{mb_include module=system template=inc_config_enum var=$var  values=$hours skip_locales=true}}
   <tr>
     <th class="category" colspan="2">Heure de sortie</th>
   </tr>
   {{assign var="var" value="heure_sortie_ambu"}}
-  {{mb_include module=system template=inc_config_enum var=$var  values=$hours_piped skip_locales=true}}
+  {{mb_include module=system template=inc_config_enum var=$var  values=$hours skip_locales=true}}
   {{assign var="var" value="heure_sortie_autre"}}
-  {{mb_include module=system template=inc_config_enum var=$var  values=$hours_piped skip_locales=true}}
+  {{mb_include module=system template=inc_config_enum var=$var  values=$hours skip_locales=true}}
   
   {{assign var="var" value="sortie_prevue"}}
   <tr>

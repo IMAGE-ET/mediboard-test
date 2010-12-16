@@ -9,7 +9,7 @@
  */
 
 
-$patient_id      = CValue::get("id");
+$patient_id      = CValue::get("patient_id");
 $check_collision = CValue::get("check_collision");
 $collision_sejour = null;
 
@@ -30,15 +30,21 @@ if ($check_collision) {
     $sejour->patient_id = $patient_id;
     $sejour->group_id = CGroups::$_ref_current->_id;
   }
-  else
+  else {
     $sejour->load($sejour_id);
+  }
   
-  $sejour->_update_for_collides = false;
-  $sejour->_entree = CValue::get("date_entree_prevue");
-  $sejour->_sortie = CValue::get("date_sortie_prevue");
+	// Simulation du formulaire
+  $sejour->_date_entree_prevue = CValue::get("date_entree_prevue");
+  $sejour->_date_sortie_prevue = CValue::get("date_sortie_prevue");
+  $sejour->_hour_entree_prevue = CValue::get("hour_entree_prevue");
+  $sejour->_hour_sortie_prevue = CValue::get("hour_sortie_prevue");
+  $sejour->_min_entree_prevue = CValue::get("min_entree_prevue");
+  $sejour->_min_sortie_prevue = CValue::get("min_sortie_prevue");
+  $sejour->updateDBFields();
 
-  $sejours_collides = $sejour->getCollisions(false);
-
+  // Calcul des collisions potentielles
+  $sejours_collides = $sejour->getCollisions();
   foreach($patient->_ref_sejours as $_sejour)
     if (array_key_exists($_sejour->_id, $sejours_collides)) {
       $collision_sejour = $_sejour->_id;

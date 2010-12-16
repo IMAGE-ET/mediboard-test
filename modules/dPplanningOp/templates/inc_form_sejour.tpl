@@ -371,7 +371,13 @@ Main.add( function(){
 
 <tr>
   <th>
-    <input type="hidden" name="patient_id" class="{{$sejour->_props.patient_id}}" value="{{$patient->_id}}" onchange="changePat(); checkSejoursToReload(); checkCorrespondantMedical(this.form); if (window.reloadSejours != null) reloadSejours(this.value);" />
+  	<script type="text/javascript">
+  		if (window.reloadSejours == null) {
+			  reloadSejours = Prototype.emptyFunction;
+			}
+  	</script>
+    <input type="hidden" name="patient_id" class="{{$sejour->_props.patient_id}}" value="{{$patient->_id}}" 
+		  onchange="changePat(); checkSejoursToReload(); checkCorrespondantMedical(this.form); reloadSejours();" />
     {{mb_label object=$sejour field="patient_id"}}
   </th>
   <td>
@@ -449,16 +455,17 @@ Main.add( function(){
 <tr>
   <th>{{mb_label object=$sejour field="_date_entree_prevue"}}</th>
   <td>
-    {{mb_field object=$sejour form=editSejour field=_date_entree_prevue canNull=false onchange="updateOccupation(); modifSejour(); updateSortiePrevue(); if (window.reloadSejours != null) reloadSejours(this.form.patient_id.value, true);"}}
+    {{mb_field object=$sejour form=editSejour field=_date_entree_prevue canNull=false 
+		  onchange="updateOccupation(); modifSejour(); updateSortiePrevue(); reloadSejours(true);"}}
   </td>
   <td colspan="2">
     à
-    <select name="_hour_entree_prevue" onchange="updateHeureSortie(); checkHeureSortie();">
+    <select name="_hour_entree_prevue" onchange="updateHeureSortie(); checkHeureSortie(); reloadSejours(true);">
     {{foreach from=$hours item=hour}}
       <option value="{{$hour}}" {{if $sejour->_hour_entree_prevue == $hour || (!$sejour->sejour_id && $hour == $heure_entree_jour)}} selected="selected" {{/if}}>{{$hour}}</option>
     {{/foreach}}
     </select> h
-    <select name="_min_entree_prevue" onchange="updateHeureSortie()">
+    <select name="_min_entree_prevue" onchange="updateHeureSortie(); reloadSejours(true);">
     {{foreach from=$mins item=min}}
       <option value="{{$min}}" {{if $sejour->_min_entree_prevue == $min}} selected="selected" {{/if}}>{{$min}}</option>
     {{/foreach}}
@@ -479,16 +486,17 @@ Main.add( function(){
 <tr {{if $mode_operation && !$can->admin}} style="display: none" {{/if}}>
   <th>{{mb_label object=$sejour field="_date_sortie_prevue"}}</th>
   <td>
-    {{mb_field object=$sejour form=editSejour field=_date_sortie_prevue canNull=false onchange="updateDureePrevue(); modifSejour(); if (window.reloadSejours != null) reloadSejours(this.form.patient_id.value, true);"}}
+    {{mb_field object=$sejour form=editSejour field=_date_sortie_prevue canNull=false 
+		  onchange="updateDureePrevue(); modifSejour(); reloadSejours(true);"}}
   </td>
   <td colspan="2">
     à 
-    <select name="_hour_sortie_prevue">
+    <select name="_hour_sortie_prevue" onchange="reloadSejours(true);">
     {{foreach from=$hours item=hour}}
       <option value="{{$hour}}" {{if $sejour->_hour_sortie_prevue == $hour  || (!$sejour->sejour_id && $hour == $heure_sortie_ambu)}} selected="selected" {{/if}}>{{$hour}}</option>
     {{/foreach}}
     </select> h
-    <select name="_min_sortie_prevue">
+    <select name="_min_sortie_prevue"  onchange="reloadSejours(true);">
     {{foreach from=$mins item=min}}
       <option value="{{$min}}" {{if $sejour->_min_sortie_prevue == $min}} selected="selected" {{/if}}>{{$min}}</option>
     {{/foreach}}

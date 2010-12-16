@@ -358,7 +358,7 @@ class CSejour extends CCodable {
    * Cherche les différentes collisions au séjour courant
    * @return array|CSejour
    */
-  function getCollisions($collides_update_sejour = true) {
+  function getCollisions() {
     $collisions = array();
     
     // Ne concerne pas les annulés 
@@ -385,7 +385,7 @@ class CSejour extends CCodable {
     $sejours = $patient->_ref_sejours;
 
     foreach ($sejours as $sejour) {
-      if ($sejour->_id != $this->_id && $this->collides($sejour, $collides_update_sejour)) {
+      if ($sejour->_id != $this->_id && $this->collides($sejour)) {
         $collisions[$sejour->_id] = $sejour;
       }
     }
@@ -456,12 +456,27 @@ class CSejour extends CCodable {
       return false;
     }
 
-    if ($collides_update_sejour)
+    if ($collides_update_sejour) {
       $this->updateFormFields();
+    }
 
-    return (mbDate($sejour->_entree) <= mbDate($this->_sortie) and mbDate($sejour->_sortie) >= mbDate($this->_sortie))
-         or(mbDate($sejour->_entree) <= mbDate($this->_entree) and mbDate($sejour->_sortie) >= mbDate($this->_entree))
-         or(mbDate($sejour->_entree) >= mbDate($this->_entree) and mbDate($sejour->_sortie) <= mbDate($this->_sortie));
+    switch ($this->conf("check_collisions")) {
+    	case "no":
+				return;
+      case "date":
+        $lower1 = mbDate($this->entree);
+        $upper1 = mbDate("+1 day", $this->sortie);
+        $lower2 = mbDate($sejour->entree);
+        $upper2 = mbDate("+1 day", $sejour->sortie);
+        break;
+      case "datetime":
+        $lower1 = $this->entree;
+        $upper1 = $this->sortie;
+        $lower2 = $sejour->entree;
+        $upper2 = $sejour->sortie;
+        break;
+    }
+    return CMbRange::collides($lower1, $upper1, $lower2, $upper2);
   }
   
   function applyProtocolesPrescription($operation_id = null) {
