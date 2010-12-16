@@ -139,7 +139,7 @@ $can = $module->canDo();
 $a      = CAppUI::checkFileName(CValue::get("a"     , "index"));
 $u      = CAppUI::checkFileName(CValue::get("u"     , ""));
 $dosql  = CAppUI::checkFileName(CValue::post("dosql", ""));
-$m_post = CAppUI::checkFileName(CValue::post("m", ""));
+$m_post = CAppUI::checkFileName(CValue::post("m", $m));
 $class  = CAppUI::checkFileName(CValue::post("@class", ""));
 
 $tab = $a == "index" ? 
