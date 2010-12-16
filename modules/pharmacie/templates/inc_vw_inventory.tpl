@@ -96,7 +96,7 @@ provessValuationAll = function(table) {
   counts.each(function(count, i) {
     //(function(count, i){
       var button = count.up('tr').down('button.change');
-      button.onclick();
+      button.onclick.bindAsEventListener(button)();
     //}).delay(parseInt(count.innerHTML)/100, count, i);
   });
 }
