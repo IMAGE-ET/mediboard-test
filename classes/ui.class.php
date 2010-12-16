@@ -641,6 +641,7 @@ class CAppUI {
 		// User
     self::loadPrefs($user->_id);
   }
+	
   
   /**
    * Get a named user preference

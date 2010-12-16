@@ -949,6 +949,16 @@ class CMbObject {
   }
 
   /**
+   * Get the configuration of object class for a given conf path
+   * @param string $path
+   * @return string
+   */
+	function conf($path) {
+		$mod_name = $this->_ref_module->mod_name;
+		return CAppUI::conf("$mod_name $this->_class_name $path");
+	}
+
+  /**
    * Repair all non checking properties when possible
    * @return null|array if the object is ok an array of message for repaired fields
    */
