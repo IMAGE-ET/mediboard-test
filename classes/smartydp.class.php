@@ -296,6 +296,20 @@ function smarty_function_mb_key($params, &$smarty) {
 }
 
 /**
+ * @param array params tableau des parametres
+ * Cette fonction prend les mêmes paramètres que smarty_function_mb_field, mais seul object est requis.
+ */
+function smarty_function_mb_class($params, &$smarty) {
+  if (null == $object = CMbArray::extract($params, "object")) {
+    $class = CMbArray::extract($params, "class" , null, true);
+  } else {
+    $class = $object->_class_name;
+  }
+  
+  return "<input type=\"hidden\" name=\"@class\" value=\"$class\" />";
+}
+
+/**
  * Show a value if different from previous cached one
  * @param array params Smarty parameters
  * - name  : Name of the cached value
@@ -587,6 +601,7 @@ class CSmartyDP extends Smarty {
     $this->register_function("mb_default"        , "smarty_function_mb_default");
     $this->register_function("mb_ditto"          , "smarty_function_mb_ditto");
     $this->register_function("mb_field"          , "smarty_function_mb_field");
+    $this->register_function("mb_class"          , "smarty_function_mb_class");
     $this->register_function("mb_key"            , "smarty_function_mb_key");
     $this->register_function("mb_value"          , "smarty_function_mb_value");
     $this->register_function("mb_label"          , "smarty_function_mb_label");
