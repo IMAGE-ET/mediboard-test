@@ -94,10 +94,11 @@ function initCKEditor() {
   	      }
   	    {{/if}}
 	    });
-		// Surveillance de modification de l'éditeur de texte
-		ck_instance.on("key", loadOld);
-
     {{/if}}
+
+    // Surveillance de modification de l'éditeur de texte
+    ck_instance.on("key", loadOld);
+
     // Après l'impression, le focus revient sur l'éditeur
     // On peut donc enlever le style à ce moment-là.
     ck_instance.on("focus", function(){ deleteStyle(); });

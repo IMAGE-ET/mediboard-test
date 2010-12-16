@@ -126,29 +126,31 @@ function openWindowMail() {
   }
 {{/if}} 
   Main.add(function(){
-    {{if $pdf_thumbnails}}
       window.onbeforeunload = function() {
         if (Thumb.changed == false) return;
 
-        Thumb.old();
-
-        // La requête de vidage de pdf doit être faite dans le scope
-        // de la fenêtre principale, car on est en train de fermer la popup
-        var f = getForm("download-pdf-form");
-        if (CKEDITOR.env.ie)
-          var url = new Url();
-        else
-          var url = new window.opener.Url();
-
-        url.addParam("m", "dPcompteRendu");
-        url.addParam("dosql", "do_modele_aed");
-        url.addParam("_do_empty_pdf", 1);
-        url.addParam("compte_rendu_id", f.compte_rendu_id.value);
+        {{if $pdf_thumbnails}}
+          Thumb.old();
+  
+          // La requête de vidage de pdf doit être faite dans le scope
+          // de la fenêtre principale, car on est en train de fermer la popup
+          var f = getForm("download-pdf-form");
+          if (CKEDITOR.env.ie)
+            var url = new Url();
+          else
+            var url = new window.opener.Url();
+  
+          url.addParam("m", "dPcompteRendu");
+          url.addParam("dosql", "do_modele_aed");
+          url.addParam("_do_empty_pdf", 1);
+          url.addParam("compte_rendu_id", f.compte_rendu_id.value);
+          
+          url.requestJSON(function(){}, { method: "post"});
+        {{/if}}
         
-        url.requestJSON(function(){}, { method: "post"});
         return '';
       };
-
+    {{if $pdf_thumbnails}}
       PageFormat.init(getForm("editFrm")); 
       Thumb.compte_rendu_id = '{{$compte_rendu->_id}}';
       Thumb.modele_id = '{{$modele_id}}';

@@ -31,9 +31,10 @@ class CHtmlSpec extends CMbFieldSpec {
     
     // Entity purge
     $source = preg_replace("/&\w+;/i", "", $source);
-    
+
     // Escape warnings, returns false if really invalid
     if (!@DOMDocument::loadXML($source)) {
+      trigger_error("Error: Html document bad formatted", E_USER_ERROR);
       return "Le document HTML est mal formé, ou la requête n'a pas pu se terminer.";
     }
   }

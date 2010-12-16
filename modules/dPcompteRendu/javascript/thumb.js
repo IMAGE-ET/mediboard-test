@@ -132,7 +132,9 @@ function loadOld() {
     Thumb.changed = true;
     instance.removeListener("keypress", loadOld);
     Thumb.content = html;
-    Thumb.old();
+    if (Thumb.pdf_thumbnails) {
+      Thumb.old();
+    }
   }
 }
 
@@ -147,6 +149,8 @@ function restoreStyle() {
 
 function deleteStyle() {
   var instance = CKEDITOR.instances.htmlarea;
+  
+  if (!instance.document) return;
   var styleTag = instance.document.getBody().getFirst();
   if (styleTag.$.tagName == "STYLE")
     styleTag.remove();
