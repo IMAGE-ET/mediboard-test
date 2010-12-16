@@ -19,9 +19,18 @@
 </form>
 
 <script type="text/javascript">
-toggleLevel = function(level, predicate) {
-  $$('tbody.level-'+level).invoke('hide');
-  $$('tr.level-'+level).invoke('setVisible', predicate);
+toggleLevel = function(radio) {
+  $$('tbody.folder').invoke('hide');
+  
+  var radios = $A(radio.form[radio.name]);
+  
+  radios.each(function(r){
+    var checked = r.checked;
+    $$('tr.level-'+r.value).each(function(tr){
+      tr.setVisible(checked)
+        .setClassName('visible', checked);
+    })
+  });
 }
 
 addToElement = function(element, value) {
@@ -38,6 +47,7 @@ processValuation = function(button, container, categorization, label, list, date
   url.addParam("label", label);
   url.addParam("list[]", list, true);
   url.addParam("date", date);
+  
   url.requestJSON(function(data){
     $H(data.totals).each(function(pair){
       $("folder-"+label).select("td.total-product-"+pair.key+"-ht").invoke("update", pair.value.ht);
@@ -61,24 +71,29 @@ processValuation = function(button, container, categorization, label, list, date
 }
 
 provessValuationAll = function(table) {
-  var counts = table.select('span.count').sort(function(a,b){ return parseInt(a.innerHTML) - parseInt(b.innerHTML) });
+  var counts = table.select('tr.visible span.count').sort(function(a,b){ return parseInt(a.innerHTML) - parseInt(b.innerHTML) });
+  
+  $("total-ht").update(0).writeAttribute("data-value", 0);
+  $("total-ttc").update(0).writeAttribute("data-value", 0);
   
   counts.each(function(count) {
     var button = count.up('tr').down('button.change');
-    button.onclick.bindAsEventListener(button)();
+    button.onclick();
   });
 }
 
 </script>
 
 {{if $levels|@count}}
+<form name="levelSelector" method="get" action="?">
   Niveaux : 
   {{foreach from=$levels key=_level item=_checked}}
     <label>
-      <input type="checkbox" name="level" value="{{$_level}}" {{if $_checked}}checked="checked"{{/if}} 
-             onclick="toggleLevel({{$_level}},this.checked)" /> {{$_level}}
+      <input type="radio" name="level" value="{{$_level}}" {{if $_checked}}checked="checked"{{/if}} 
+             onclick="toggleLevel(this)" /> {{$_level}}
     </label>
   {{/foreach}}
+</form>
 {{/if}}
 
 <button style="float: right;" onclick="provessValuationAll($('inventory'))" class="change">Tout calculer</button>
@@ -96,7 +111,7 @@ provessValuationAll = function(table) {
   {{foreach from=$list_by_group item=_group key=_code}}
     {{if $_group.level != false}}
       {{assign var=_level value=$_group.level}}
-      <tr class="level-{{$_group.level}}" {{if array_key_exists($_level, $levels) && !$levels.$_level}} style="display: none;" {{/if}}>
+      <tr class="level-{{$_group.level}} {{if array_key_exists($_level, $levels) && !$levels.$_level}}" style="display: none;" {{else}} visible" {{/if}}>
         <th class="title" style="text-align: left;" onclick="$('folder-{{$_code}}').toggle()">
           {{assign var=_list_ids value=','|implode:$_group.list_id}}
           <button type="button" class="down">{{tr}}Display{{/tr}}</button>
@@ -125,7 +140,7 @@ provessValuationAll = function(table) {
         <th id="total-group-{{$_code}}-ht" style="text-align: right;"></th>
         <th id="total-group-{{$_code}}-ttc" style="text-align: right;"></th>
       </tr>
-      <tbody style="display: none;" id="folder-{{$_code}}" class="level-{{$_group.level}}">
+      <tbody style="display: none;" id="folder-{{$_code}}" class="level-{{$_group.level}} folder">
         {{foreach from=$_group.list item=_product}}
           <tr>
             <td>
