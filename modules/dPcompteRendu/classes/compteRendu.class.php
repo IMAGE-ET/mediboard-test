@@ -202,9 +202,9 @@ class CCompteRendu extends CDocumentItem {
     }
   }
   
-	function loadContent($store_source = true) {
+	function loadContent($field_source = true) {
 		$this->_ref_content = $this->loadFwdRef("content_id", true);
-		if ($store_source) {
+		if ($field_source) {
 		  $this->_source = $this->_ref_content->content;
 		}
 	}
@@ -403,6 +403,38 @@ class CCompteRendu extends CDocumentItem {
     return $can;
   }
   
+  function check() {
+    $this->completeField("type", "header_id", "footer_id", "object_class");
+    // Si c'est un entête ou pied, et utilisé dans des documents dont le type ne correspond pas au nouveau
+    // alors pas d'enregistrement
+    if (in_array($this->type, array("footer", "header"))) {
+      $doc = new CCompteRendu;
+      $where = 'object_class != "'. $this->object_class.
+          '" and ( header_id ="' . $this->_id .
+          '" or footer_id ="' . $this->_id . '")';;
+      if ($doc->countList($where))
+        return "Des documents sont rattachés à ce pied de page (ou entête) et ils ont un type différent";
+    }
+    // Si c'est un document dont le type de l'en-tête ou du pied de page ne correspond pas à son nouveau type
+    // alors pas d'enregistrement
+    if ($this->header_id) {
+      $header = new CCompteRendu;
+      $header->load($this->header_id);
+      if ($header->object_class != $this->object_class) {
+        return "Le document n'est pas du même type que son entête";
+      }
+    }
+    
+    if ($this->footer_id) {
+      $header = new CCompteRendu;
+      $header->load($this->footer_id);
+      if ($header->object_class != $this->object_class) {
+        return "Le document n'est pas du même type que son pied de page";
+      }
+    }
+    return parent::check();
+  }
+  
   function store() {
     $this->completeField("content_id", "_source");
     $this->loadContent(false);
@@ -431,37 +463,9 @@ class CCompteRendu extends CDocumentItem {
     }
 
     $this->_ref_content->content = $this->_source;
-
-    // Si c'est un entête ou pied, et utilisé dans des documents dont le type ne correspond pas au nouveau
-    // alors pas d'enregistrement
-    if (in_array($this->type, array("footer", "header"))) {
-      $doc = new CCompteRendu;
-      $where = 'object_class != "'. $this->object_class.
-          '" and ( header_id ="' . $this->_id .
-          '" or footer_id ="' . $this->_id . '")';;
-      if ($doc->countList($where))
-        return "Impossible d'enregistrer, car des documents sont rattachés à ce pied de page (ou entête) et ils ont un type différent";
-    }
-    // Si c'est un document dont le type de l'en-tête ou du pied de page ne correspond pas à son nouveau type
-    // alors pas d'enregistrement
-    if ($this->header_id) {
-      $header = new CCompteRendu;
-      $header->load($this->header_id);
-      if ($header->object_class != $this->object_class) {
-        return "Impossible de sauvegarder, le document n'est pas du même type que son entête";
-      }
-    }
-    
-    if ($this->footer_id) {
-      $header = new CCompteRendu;
-      $header->load($this->footer_id);
-      if ($header->object_class != $this->object_class) {
-        return "Impossible de sauvegarder, le document n'est pas du même type que son pied de page";
-      }
-    }
     
     if ($msg = $this->_ref_content->store())
-      CAppUI::setMsg($msg, "UI_MSG_ERROR");
+      CAppUI::setMsg($msg, UI_MSG_ERROR);
 
     if (!$this->content_id )
       $this->content_id = $this->_ref_content->_id;

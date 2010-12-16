@@ -31,4 +31,11 @@ class CContentHTML extends CMbObject {
     $specs["content"] = "html helped|_list_classes";
     return $specs;
   }
+  
+  function check() {
+  	if($this->fieldModified("content", "")) {
+  		return "CContentHTML-failed-emptytext";
+  	}
+  	return parent::check();
+  }
 }

@@ -82,6 +82,7 @@ $locales['CContentHTML-content-desc'] = 'Source HTML';
 $locales['CContentHTML-content_id'] = 'Identifiant';
 $locales['CContentHTML-content_id-court'] = 'Id';
 $locales['CContentHTML-content_id-desc'] = 'Identifiant internet';
+$locales['CContentHTML-failed-emptytext'] = 'Le contenu ne peut pas être complètement vidé';
 $locales['CContentHTML-msg-create'] = 'Contenu HTML créé';
 $locales['CContentHTML-msg-delete'] = 'Contenu HTML supprimé';
 $locales['CContentHTML-msg-modify'] = 'Contenu HTML modifié';
