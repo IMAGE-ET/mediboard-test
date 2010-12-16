@@ -19,6 +19,19 @@ $_selected_cis   = CValue::get("_selected_cis");
 $date_min = CValue::get('_date_min');
 $date_max = CValue::get('_date_max');
 
+$borne_min = CValue::getOrSession('borne_min');
+$borne_max = CValue::getOrSession('borne_max');
+
+if(!$borne_min){
+	$borne_min = "00:00:00";
+}
+if(!$borne_max){
+  $borne_max = "23:00:00";
+}
+
+$_borne_min = "$date_min $borne_min";
+$_borne_max = "$date_max $borne_max";
+
 if (!$date_min) {
   $date_min = CValue::session('_date_delivrance_min');
 }
@@ -123,6 +136,11 @@ if($prescription->_id){
 			  	foreach($quantity_by_date as $date => $quantity_by_hour){
 			  	  if (@$quantity_by_hour['quantites']) { //FIXME: parfois cette valeur est vide
 				  	  foreach($quantity_by_hour['quantites'] as $hour => $quantity){
+								// Filtre en fonction des borne
+							  if ("$date $hour:00:00" < $_borne_min || "$date $hour:00:00" > $_borne_max){
+                  continue;
+                }
+			
 				  	  	@$dispensations[$code]["quantite_administration"] += $quantity["total"];
 								if($_line_med->_ref_produit_prescription->_id && ($_line_med->_ref_produit_prescription->unite_prise != $_line_med->_ref_produit_prescription->unite_dispensation)){
 								  $quantity["total_disp"] = $quantity["total_disp"] / ($_line_med->_ref_produit_prescription->quantite * $_line_med->_ref_produit_prescription->nb_presentation);
@@ -140,6 +158,11 @@ if($prescription->_id){
 			    foreach($administrations_by_unite as $_date => &$administrations_by_date){
 					  foreach($administrations_by_date as $_hour => &$administrations_by_hour){
 						  if(is_numeric($_hour)){
+                // Filtre en fonction des borne
+                if ("$_date $_hour:00:00" < $_borne_min || "$_date $_hour:00:00" > $_borne_max){
+                  continue;
+                }
+							
 	          		$quantite_planifiee = @$administrations_by_hour["quantite_planifiee"];
 		            if($quantite_planifiee){
 							    // Calcul de la quantite 
@@ -172,10 +195,15 @@ if($prescription->_id){
 		          $datetime = "$_date $_hour:00:00";
 							$code = $_perf_line->code_cis ? $_perf_line->code_cis : $_perf_line->code_cip;
 							$_lines[$code] = $_perf_line;
+							
 		          if ($datetime < $date_min || $datetime > $date_max){
 		            continue;
 		          }
-		          
+							
+							if ($datetime < $_borne_min || $datetime > $_borne_max){
+                continue;
+              }
+
 		          if(!isset($produits_cis[$code])){
 		           $produits_cis[$code] = $_perf_line;
 		          }      
@@ -396,6 +424,8 @@ $smarty->assign('mode_nominatif'     , "1");
 $smarty->assign("date_min", $date_min_orig);
 $smarty->assign("date_max", $date_max_orig);
 $smarty->assign("now", mbDate());
+$smarty->assign("borne_min", $borne_min);
+$smarty->assign("borne_max", $borne_max);
 
 if($_selected_cis){
   $smarty->assign("quantites", $dispensations[$_selected_cis]);
