@@ -115,7 +115,7 @@ provessValuationAll = function(table) {
 </form>
 {{/if}}
 
-<button style="float: right;" onclick="provessValuationAll($('inventory'))" class="change">Tout calculer</button>
+<button style="float: right;" onclick="provessValuationAll($('inventory'))" class="change singleclick">Tout calculer</button>
 
 <table class="main tbl" id="inventory">
   <tr>

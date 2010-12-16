@@ -22,14 +22,25 @@ $date_max = mbDate("+1 DAY", mbDate());
 // ancien code
 $dmi_line = new CPrescriptionLineDMI();
 
-$where = array();
-$where["date"] = "BETWEEN '$date_min' AND '$date_max'";
+$where = array(
+  "IF(operations.date, operations.date, plagesop.date) BETWEEN '$date_min' AND '$date_max'"
+);
+
+//$where = array();
+//$where["date"] = "BETWEEN '$date_min' AND '$date_max'";
+
 
 if ($type) {
   $where["type"] = " = '$type'";
 }
 
-$list_lines = $dmi_line->loadList($where, "date");
+$ljoin = array(
+  "operations" => "operations.operation_id = prescription_line_dmi.operation_id",
+  "plagesop" => "plagesop.plageop_id = operations.plageop_id",
+);
+
+$list_lines = $dmi_line->loadList($where, "operations.date, plagesop.date", 100, null, $ljoin);
+//$list_lines = $dmi_line->loadList($where, "date");
 
 $lines_by_context = array();
 $contexts = array();

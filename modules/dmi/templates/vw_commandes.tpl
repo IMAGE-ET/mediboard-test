@@ -29,7 +29,7 @@
   
   <table class="form">
     <tr>
-      <th>Depuis le</th>
+      <th>Interventions effectuées après le</th>
       <td>
         {{mb_field object=$dmi_line field="date" prop="date" register=true form="filterCommandes" onchange="this.form.onsubmit()"}}
       </td>
@@ -38,7 +38,7 @@
         {{mb_field object=$dmi_line field="type" typeEnum="select" onchange="this.form.onsubmit()" emptyLabel="All"}}
       </td>
       <td>
-        <button type="submit" class="search">{{tr}}Filter{{/tr}}</button>
+        <button type="submit" class="search">{{tr}}Filter{{/tr}}</button> (le nombre de lignes de DMI est limité à 100)
       </td>
     </tr>
   </table>
