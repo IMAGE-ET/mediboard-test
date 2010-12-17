@@ -131,7 +131,7 @@ function smarty_modifier_json($object) {
  * @param datetime $datetime The date to format
  */
 function smarty_modifier_iso_date($datetime) {
-  return smarty_modifier_date_format($datetime, "%Y-%m-%d");
+  return strftime("%Y-%m-%d", strtotime($datetime));
 }
 
 /**
@@ -140,7 +140,7 @@ function smarty_modifier_iso_date($datetime) {
  * @param datetime $datetime The date to format
  */
 function smarty_modifier_iso_time($datetime) {
-  return smarty_modifier_date_format($datetime, "%H:%M:%S");
+  return strftime("%H:%M:%S", strtotime($datetime));
 }
 
 /**
