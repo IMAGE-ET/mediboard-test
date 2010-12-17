@@ -12,6 +12,11 @@ CCanDo::checkAdmin();
 $date     = CValue::getOrSession("date"    , mbDate());
 $groupmod = CValue::getOrSession("groupmod", 2);
 
+// Hour range for daily stats
+$hour_min = CValue::getOrSession("hour_min", "6");
+$hour_max = CValue::getOrSession("hour_max", "23");
+$hours = range(0, 23);
+
 $left_mode      = CValue::getOrSession("left_mode", "request_time"); // request_time, errors
 $left_sampling  = CValue::getOrSession("left_sampling", "mean"); // total, mean
 
@@ -26,36 +31,39 @@ if (!is_numeric($groupmod)) {
 
 CAppUI::requireModuleFile('dPstats', 'graph_accesslog');
 
-$next     = mbDate("+1 DAY", $date);
+$to    = mbDate("+1 DAY", $date);
 switch ($interval = CValue::getOrSession("interval", "day")) {
   default:
   case "day":
-    $from = mbDate("-1 DAY", $next);
+    $from = mbDate("-1 DAY", $to);
+		// Hours limitation
+    $from = mbDateTime("+$hour_min HOUR", $from);
+    $to   = mbDateTime("-1 DAY +$hour_max HOUR", $to  );
     break;
   case "month":
-    $from = mbDate("-1 MONTH", $next);
+    $from = mbDate("-1 MONTH", $to);
     break;
   case "hyear":
-    $from = mbDate("-6 MONTH", $next);
+    $from = mbDate("-6 MONTH", $to);
     break;
   case "twoyears":
-    $from = mbDate("-2 YEARS", $next);
+    $from = mbDate("-2 YEARS", $to);
     break;
   case "twentyyears":
-    $from = mbDate("-20 YEARS", $next);
+    $from = mbDate("-20 YEARS", $to);
     break;
 }
 
 CSQLDataSource::$trace = false;
-$logs = CAccessLog::loadAgregation($from, $next, $groupmod, $module);
+$logs = CAccessLog::loadAgregation($from, $to, $groupmod, $module);
 $graphs = array();
 $left = array($left_mode, $left_sampling);
 $right = array($right_mode, $right_sampling);
 foreach($logs as $log) {
 	switch($groupmod) {
-		case 0: $graphs[] = graphAccessLog($log->module, $log->action, $date, $interval, $left, $right); break;
-	  case 1: $graphs[] = graphAccessLog($log->module, null, $date, $interval, $left, $right); break;
-	  case 2: $graphs[] = graphAccessLog(null, null, $date, $interval, $left, $right); break;
+		case 0: $graphs[] = graphAccessLog($log->module, $log->action, $from, $to,$interval, $left, $right); break;
+	  case 1: $graphs[] = graphAccessLog($log->module, null        , $from, $to,$interval, $left, $right); break;
+	  case 2: $graphs[] = graphAccessLog(null        , null        , $from, $to,$interval, $left, $right); break;
 	}
 }
 
@@ -65,8 +73,12 @@ CSQLDataSource::$trace = false;
 $smarty = new CSmartyDP();
 
 $smarty->assign("graphs"     , $graphs);
-$smarty->assign("date"       , $date);
 $smarty->assign("groupmod"   , $groupmod);
+
+$smarty->assign("date"       , $date);
+$smarty->assign("hours"      , $hours);
+$smarty->assign("hour_min"   , $hour_min);
+$smarty->assign("hour_max"   , $hour_max);
 
 $smarty->assign("left_mode"    , $left_mode);
 $smarty->assign("left_sampling", $left_sampling);

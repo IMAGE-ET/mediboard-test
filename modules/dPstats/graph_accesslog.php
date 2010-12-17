@@ -8,45 +8,33 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
  */
 
-function graphAccessLog($module_name, $action_name, $date, $interval = 'day', $left, $right) {
-  if (!$date) $date = mbDate();
-
+function graphAccessLog($module_name, $action_name, $startx, $endx, $interval = 'day', $left, $right) {
 	switch($interval) {
 	  case "day":
-	    $startx = "$date 00:00:00";
-	    $endx   = "$date 23:59:59";
 	    $step = "+1 HOUR";
 	    $period_format = "%Hh";
 	    $max = 24;
       $hours = 1;
 	    break;
 	  case "month":
-	    $startx = mbDateTime("-1 MONTH", "$date 00:00:00");
-	    $endx   = "$date 23:59:59";
 	    $step = "+1 DAY";
 	    $period_format = "%d/%m";
 	    $max = 32;
       $hours = 24;
 	    break;
 	  case "hyear":
-	    $startx = mbDateTime("-6 MONTHS", "$date 00:00:00");
-	    $endx   = "$date 23:59:59";
 	    $step = "+1 WEEK";
 	    $period_format = "%U";
 	    $max = 27;
       $hours = 24 * 7;
 	    break;
 	  case "twoyears":
-      $startx = mbDateTime("-2 YEARS", "$date 00:00:00");
-      $endx   = "$date 23:59:59";
       $step = "+1 MONTH";
       $period_format = "%m/%Y";
       $max = 25;
       $hours = 24 * 30;
       break;
     case "twentyyears":
-      $startx = mbDateTime("-20 YEARS", "$date 00:00:00");
-      $endx   = "$date 23:59:59";
       $step = "+1 YEAR";
       $period_format = "%Y";
       $max = 21;
@@ -109,7 +97,7 @@ function graphAccessLog($module_name, $action_name, $date, $interval = 'day', $l
   if($module_name) $title .= CAppUI::tr("module-$module_name-court");
   if($action_name) $title .= " - $action_name";
   
-  $subtitle = mbTransformTime(null, $date, CAppUI::conf("longdate"));
+  $subtitle = mbTransformTime(null, $endx, CAppUI::conf("longdate"));
 	
 	$options = array(
     'title' => utf8_encode($title),

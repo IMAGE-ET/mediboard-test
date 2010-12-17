@@ -56,14 +56,34 @@ Main.add(function () {
       <input type="hidden" name="date" class="date" value="{{$date}}" onchange="this.form.submit()" />
       
       <label for="interval" title="Echelle d'affichage">Intervalle</label>
-      <select name="interval" onchange="this.form.submit()">
-        <option value="day" {{if $interval == "day"}} selected="selected" {{/if}}>Journée</option>
-        <option value="month" {{if $interval == "month"}} selected="selected" {{/if}}>Mois</option>
-        <option value="hyear" {{if $interval == "hyear"}} selected="selected" {{/if}}>Semestre</option>
-        <option value="twoyears" {{if $interval == "twoyears"}} selected="selected" {{/if}}>2 ans</option>
-        <option value="twentyyears" {{if $interval == "twentyyears"}} selected="selected" {{/if}}>20 ans</option>
+      <select name="interval" onchange="this.form.submit();">
+        <option value="day"          {{if $interval == "day"}}         selected="selected" {{/if}}>Journée </option>
+        <option value="month"        {{if $interval == "month"}}       selected="selected" {{/if}}>Mois    </option>
+        <option value="hyear"        {{if $interval == "hyear"}}       selected="selected" {{/if}}>Semestre</option>
+        <option value="twoyears"     {{if $interval == "twoyears"}}    selected="selected" {{/if}}>2 ans   </option>
+        <option value="twentyyears"  {{if $interval == "twentyyears"}} selected="selected" {{/if}}>20 ans  </option>
       </select>
       
+			{{if $interval == "day"}} 
+	      <label for="hour_min" title="Heure minimale">{{tr}}From{{/tr}}</label>
+	      <select name="hour_min" onchange="this.form.submit()">
+	        {{foreach from=$hours item=_hour}}
+	          <option value="{{$_hour}}" {{if $hour_min == $_hour}} selected="selected" {{/if}}>
+	            {{$_hour|pad:2:0}}h
+	          </option>
+	        {{/foreach}}
+	      </select>
+	
+	      <label for="hour_max" title="Heure maximale">{{tr}}To{{/tr}}</label>
+	      <select name="hour_max"  onchange="this.form.submit()">
+	        {{foreach from=$hours item=_hour}}
+	          <option value="{{$_hour}}" {{if $hour_max == $_hour}} selected="selected" {{/if}}>
+	            {{$_hour|pad:2:0}}h
+	          </option>
+	        {{/foreach}}
+	      </select>
+			{{/if}}
+			
       <label for="bigsize" title="Afficher en plus grande taille">Grande taille</label>
       <input type="checkbox" name="bigsize" onclick="drawGraphs(graphSizes[this.checked ? 1 : 0])" {{if $groupmod == 2}}checked="checked"{{/if}} />
       <br />
