@@ -117,7 +117,7 @@ Main.add(function () {
     <td>
     {{if $selOp->_id}}
 		  {{if $conf.dPsalleOp.CDailyCheckList.active != '1' || 
-           $date < $smarty.now|date_format:"%Y-%m-%d" || 
+           $date < $smarty.now|iso_date || 
            $daily_check_list->_id && $daily_check_list->validator_id || 
            $currUser->_is_praticien}}
         {{include file=inc_operation.tpl}}

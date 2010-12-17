@@ -24,8 +24,8 @@ calculDateArret = function(oForm, object_id, object_class, traitement, cat_id){
     oForm.time_arret.value = "00:00";
   }
   if(!oForm.date_arret.value){
-    oForm.date_arret.value = "{{$now|@date_format:'%Y-%m-%d'}}";
-    oForm.time_arret.value = "{{$now|@date_format:'%H:%M:%S'}}";
+    oForm.date_arret.value = "{{$now|iso_date}}";
+    oForm.time_arret.value = "{{$now|iso_time}}";
   }
 	return onSubmitFormAjax(oForm, { onComplete: function(){
 	  Prescription.reloadLine("{{$line->_guid}}","{{$mode_protocole}}","{{$mode_pharma}}");

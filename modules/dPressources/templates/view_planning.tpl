@@ -103,7 +103,7 @@ Main.add(function () {
           {{foreach from=$compte.impayes.plages item=curr_plage}}
           <tr>
             <td colspan="2" class="text">
-              <a href="?m={{$m}}&amp;debut={{$curr_plage->date|date_format:"%Y-%m-%d"}}">
+              <a href="?m={{$m}}&amp;debut={{$curr_plage->date|iso_date}}">
               {{$curr_plage->date|date_format:$conf.longdate}} &mdash;
               {{if $curr_plage->libelle}}
                 {{$curr_plage->libelle}} &mdash;
@@ -129,7 +129,7 @@ Main.add(function () {
           {{foreach from=$compte.inf15.plages item=curr_plage}}
           <tr>
             <td colspan="2" class="text">
-              <a href="?m={{$m}}&amp;debut={{$curr_plage->date|date_format:"%Y-%m-%d"}}">
+              <a href="?m={{$m}}&amp;debut={{$curr_plage->date|iso_date}}">
               {{$curr_plage->date|date_format:$conf.longdate}} &mdash;
               {{if $curr_plage->libelle}}
                 {{$curr_plage->libelle}} &mdash;
@@ -155,7 +155,7 @@ Main.add(function () {
         {{foreach from=$compte.sup15.plages item=curr_plage}}
           <tr>
             <td colspan="2" class="text">
-              <a href="?m={{$m}}&amp;debut={{$curr_plage->date|date_format:"%Y-%m-%d"}}">
+              <a href="?m={{$m}}&amp;debut={{$curr_plage->date|iso_date}}">
               {{$curr_plage->date|date_format:$conf.longdate}} &mdash;
               {{if $curr_plage->libelle}}
                 {{$curr_plage->libelle}} &mdash;

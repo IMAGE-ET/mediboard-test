@@ -144,6 +144,16 @@ function smarty_modifier_iso_time($datetime) {
 }
 
 /**
+ * @abstract Format to ISO DATETIME
+ * Example:  {$datetime|iso_datetime}
+ * @param datetime $datetime The date to format
+ */
+function smarty_modifier_iso_datetime($datetime) {
+  return strftime("%Y-%m-%d %H:%M:%S", strtotime($datetime));
+}
+
+
+/**
  * @abstract Currency format modifier
  *
  * Example:  {$value|currency}
@@ -632,6 +642,7 @@ class CSmartyDP extends Smarty {
     $this->register_modifier("json"              , "smarty_modifier_json");
     $this->register_modifier("iso_date"          , "smarty_modifier_iso_date");
     $this->register_modifier("iso_time"          , "smarty_modifier_iso_time");
+    $this->register_modifier("iso_datetime"      , "smarty_modifier_iso_datetime");
     $this->register_modifier("const"             , "smarty_modifier_const");
     $this->register_modifier("static"            , "smarty_modifier_static");
     $this->register_modifier("cleanField"        , "smarty_modifier_cleanField");

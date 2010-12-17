@@ -1,7 +1,7 @@
 {{mb_include_script module="bloodSalvage" script="bloodSalvage"}}
 
 {{if $conf.dPsalleOp.CDailyCheckList.active_salle_reveil != '1' || 
-     $date < $smarty.now|date_format:"%Y-%m-%d" || 
+     $date < $smarty.now|iso_date || 
      $check_list->_id && $check_list->validator_id}}
 		 
 <script type="text/javascript">

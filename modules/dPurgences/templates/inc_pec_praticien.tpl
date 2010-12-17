@@ -50,8 +50,8 @@ checkPraticien = function(oForm){
         var field = form._datetime;
         var dates = {
           limit: {
-            start: '{{$sejour->entree|date_format:"%Y-%m-%d"}}',
-            stop: '{{$sejour->sortie|date_format:"%Y-%m-%d"}}'
+            start: '{{$sejour->entree|iso_date}}',
+            stop: '{{$sejour->sortie|iso_date}}'
           }
         };
         

@@ -130,8 +130,8 @@
 		 </td>
 	   
 	   {{foreach from=$dates item=date name="foreach_date"}}
-	     <td style="{{if $date < $line->debut || $line->_fin_reelle && $date > $line->_fin_reelle|date_format:'%Y-%m-%d'}}background-color: #ddd;{{/if}}width: 20%; text-align: center"> 		          
-		    {{if $date < $line->debut || $line->_fin_reelle && $date > $line->_fin_reelle|date_format:'%Y-%m-%d'}}
+	     <td style="{{if $date < $line->debut || $line->_fin_reelle && $date > $line->_fin_reelle|iso_date}}background-color: #ddd;{{/if}}width: 20%; text-align: center"> 		          
+		    {{if $date < $line->debut || $line->_fin_reelle && $date > $line->_fin_reelle|iso_date}}
 		      - 
 		    {{else}}
 		      {{assign var=nb_administre value="0"}}

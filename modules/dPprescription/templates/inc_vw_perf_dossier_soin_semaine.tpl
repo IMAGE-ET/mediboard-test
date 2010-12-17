@@ -38,7 +38,7 @@
 	  </td>
 	{{else}}
 	  {{foreach from=$dates item=date name="foreach_date"}}
-	    <td style="{{if $date < $_prescription_line_mix->_debut|date_format:'%Y-%m-%d' ||  $date > $_prescription_line_mix->_fin|date_format:'%Y-%m-%d'}}background-color: #ddd;{{/if}} text-align: center"> 		          
+	    <td style="{{if $date < $_prescription_line_mix->_debut|iso_date ||  $date > $_prescription_line_mix->_fin|iso_date}}background-color: #ddd;{{/if}} text-align: center"> 		          
 	    </td>
 	  {{/foreach}}
 	{{/if}}

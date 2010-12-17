@@ -63,7 +63,7 @@ transfertLineTP = function(line_id, sejour_id){
   
   if(oFormDate){
 	  {{if $prescription->type == "sejour"}}
-      $V(oForm.debut, '{{$prescription->_ref_object->entree|date_format:'%Y-%m-%d'}}');
+      $V(oForm.debut, '{{$prescription->_ref_object->entree|iso_date}}');
 		{{else}}
 	    if(oFormDate.debut && oFormDate.debut.value){
 	      $V(oForm.debut, oFormDate.debut.value);  

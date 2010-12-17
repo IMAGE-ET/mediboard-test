@@ -31,7 +31,7 @@
   <tr {{if $day == $date}}class="selected"{{/if}}>
     {{assign var=day_number value=$day|date_format:"%w"}}
     <td align="right" {{if $day_number == '0' || $day_number == '6'}}style="background-color: #ccc;"{{/if}}>
-      <a href="?m={{$m}}&amp;tab=vw_idx_admission&amp;date={{$day|date_format:"%Y-%m-%d"}}" title="{{$day|date_format:$conf.longdate}}">
+      <a href="?m={{$m}}&amp;tab=vw_idx_admission&amp;date={{$day|iso_date}}" title="{{$day|date_format:$conf.longdate}}">
         <strong>
 	        {{$day|date_format:"%a"|upper|substr:0:1}}
 	        {{$day|date_format:"%d"}}

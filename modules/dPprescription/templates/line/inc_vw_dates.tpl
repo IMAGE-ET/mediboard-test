@@ -72,8 +72,8 @@ syncDateSubmit = function(oForm, curr_line_id, fieldName, type, object_class, ca
 							 				          				           }">
 							 	 <option value="other">Autre date</option>
 							   <optgroup label="Séjour">
-							     <option value="{{$prescription->_ref_object->_entree|date_format:'%Y-%m-%d'}}">Entrée: {{$prescription->_ref_object->_entree|date_format:"%d/%m/%Y"}}</option>
-							     <option value="{{$prescription->_ref_object->_sortie|date_format:'%Y-%m-%d'}}">Sortie: {{$prescription->_ref_object->_sortie|date_format:"%d/%m/%Y"}}</option>
+							     <option value="{{$prescription->_ref_object->_entree|iso_date}}">Entrée: {{$prescription->_ref_object->_entree|date_format:"%d/%m/%Y"}}</option>
+							     <option value="{{$prescription->_ref_object->_sortie|iso_date}}">Sortie: {{$prescription->_ref_object->_sortie|date_format:"%d/%m/%Y"}}</option>
 							   </optgroup>
 							   <optgroup label="Intervention">
   							   {{foreach from=$prescription->_ref_object->_dates_operations item=_date_operation}}

@@ -304,7 +304,7 @@ Main.add(function() {
             <button class="cancel" type="button" onclick="refusMesures(this.form);">
               {{tr}}button-CFicheEi-refus{{/tr}}
             </button>
-            <button class="tick" type="button" onclick="this.form.qualite_date_controle.value = '{{$today|date_format:"%Y-%m-%d"}}'; this.form.submit()">
+            <button class="tick" type="button" onclick="this.form.qualite_date_controle.value = '{{$today|iso_date}}'; this.form.submit()">
               {{tr}}button-CFicheEi-classer{{/tr}}
             </button>
           </td>
@@ -325,7 +325,7 @@ Main.add(function() {
         <tr>
           <th>{{mb_label object=$fiche field="qualite_date_verification"}}</th>
           <td>
-            <input type="hidden" name="qualite_date_verification" value="{{$today|date_format:"%Y-%m-%d"}}" />
+            <input type="hidden" name="qualite_date_verification" value="{{$today|iso_date}}" />
             <button type="button" class="tick" onclick="this.form.qualite_date_verification.name = 'qualite_date_controle'; this.form.submit();">
               {{tr}}button-CFicheEi-classer{{/tr}}
             </button>
@@ -340,7 +340,7 @@ Main.add(function() {
         <tr>
           <th>{{mb_label object=$fiche field="qualite_date_controle"}}</th>
           <td>
-            <input type="hidden" name="qualite_date_controle" value="{{$today|date_format:"%Y-%m-%d"}}" class="date" />
+            <input type="hidden" name="qualite_date_controle" value="{{$today|iso_date}}" class="date" />
           </td>
         </tr>
         {{/if}}

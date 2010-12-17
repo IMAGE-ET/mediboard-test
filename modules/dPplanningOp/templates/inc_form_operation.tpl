@@ -172,7 +172,7 @@ CCAMSelector.init = function(){
         document.editSejour._curr_op_date.value = this.value;
         modifSejour(); $V(this.form._date, this.value);">
         {{if $op->operation_id}}
-        <option value="{{$op->_datetime|date_format:"%Y-%m-%d"}}" selected="selected">
+        <option value="{{$op->_datetime|iso_date}}" selected="selected">
           {{$op->_datetime|date_format:"%d/%m/%Y"}} (inchangée)
         </option>
         {{/if}}

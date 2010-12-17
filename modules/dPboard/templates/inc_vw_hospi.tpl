@@ -30,14 +30,14 @@ PairEffect.initGroup("functionEffect", {
   </tr>
   {{foreach from=$listSejours item=curr_sejour}}
   <tr>
-    {{if $date == $curr_sejour->entree_prevue|date_format:"%Y-%m-%d"}}
+    {{if $date == $curr_sejour->entree_prevue|iso_date}}
     <td style="background-color: #afa">
     {{else}}
     <td>
     {{/if}}
       {{$curr_sejour->entree_prevue|date_format:"%d/%m %Hh%M"}}
     </td>
-    {{if $date == $curr_sejour->sortie_prevue|date_format:"%Y-%m-%d"}}
+    {{if $date == $curr_sejour->sortie_prevue|iso_date}}
     <td style="background-color: #afa">
     {{else}}
     <td>

@@ -67,7 +67,7 @@ Main.add(function () {
         <tbody class="hoverable">
         <tr>
           <td align="right" rowspan="{{$curr_day|@count}}">
-            <a href="#nothing" onclick="updateListOperations('{{$curr_date|date_format:"%Y-%m-%d"}}')">
+            <a href="#nothing" onclick="updateListOperations('{{$curr_date|iso_date}}')">
               {{$curr_date|date_format:"%a %d"}}
             </a>
           </td>

@@ -45,13 +45,13 @@
         {{/if}}
         {{if $sejour->type == "ambu"}}
         <img src="images/icons/X.png" alt="X" title="Sortant ce soir" />
-        {{elseif $curr_affectation->sortie|date_format:"%Y-%m-%d" == $demain}}
+        {{elseif $curr_affectation->sortie|iso_date == $demain}}
           {{if $aff_next->_id}}
         <img src="images/icons/OC.png" alt="OC" title="Sortant demain" />
           {{else}}
         <img src="images/icons/O.png" alt="O" title="Sortant demain" />
           {{/if}}
-        {{elseif $curr_affectation->sortie|date_format:"%Y-%m-%d" == $date}}
+        {{elseif $curr_affectation->sortie|iso_date == $date}}
           {{if $aff_next->_id}}
         <img src="images/icons/OoC.png" alt="OoC" title="Sortant aujourd'hui" />
           {{else}}

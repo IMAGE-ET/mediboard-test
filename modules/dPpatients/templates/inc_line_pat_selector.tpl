@@ -20,7 +20,7 @@
       <img style="float: right;" src="images/icons/carte_vitale.png" title="Bénéficiaire associé à la carte Vitale" />
     {{/if}}
     
-    {{if $_patient->fin_amo && $_patient->fin_amo < $smarty.now|date_format:"%Y-%m-%d"}}
+    {{if $_patient->fin_amo && $_patient->fin_amo < $smarty.now|iso_date}}
       <img style="float: right;" src="images/icons/warning.png" title="Période de droits terminée ({{mb_value object=$_patient field=fin_amo}})" />
     {{/if}}
     

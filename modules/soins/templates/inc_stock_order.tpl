@@ -138,7 +138,7 @@
   </table>
 </form>
 
-{{if $smarty.now|date_format:"%Y-%m-%d" < $delivrance->_date_min || $smarty.now|date_format:"%Y-%m-%d" > $delivrance->_date_max}}
+{{if $smarty.now|iso_date < $delivrance->_date_min || $smarty.now|iso_date > $delivrance->_date_max}}
   <div class="small-info">
     La date courante n'est pas comprise dans l'intervalle spécifié, les dispensations effectuées ne seront pas affichées.
   </div>
