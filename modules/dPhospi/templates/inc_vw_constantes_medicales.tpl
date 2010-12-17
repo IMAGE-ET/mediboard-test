@@ -4,7 +4,7 @@ data = {{$data|@json}};
 dates = {{$dates|@json}};
 hours = {{$hours|@json}};
 const_ids = {{$const_ids|@json}};
-selection = {{$selection|@array_keys|@json}};
+keys_selection = {{$selection|@array_keys|@json}};
 last_date = null;
 
 submitConstantesMedicales = function(oForm) {
@@ -21,7 +21,7 @@ editConstantes = function (const_id, context_guid){
   url.addParam('const_id', const_id);
   url.addParam('context_guid', context_guid);
   url.addParam('readonly', '{{$readonly}}');
-  url.addParam("selection[]", selection);
+  url.addParam("selection[]", keys_selection);
   url.requestUpdate('constantes-medicales-form');
 }
 
@@ -219,7 +219,7 @@ loadConstantesMedicales  = function(context_guid) {
   url.addParam("context_guid", '{{$context_guid}}');
   url.addParam("patient_id", '{{$patient->_id}}');
   url.addParam("readonly", '{{$readonly}}');
-  url.addParam("selection[]", selection);
+  url.addParam("selection[]", keys_selection);
   url.addParam("selected_context_guid", context_guid);
   url.requestUpdate(container);
 };

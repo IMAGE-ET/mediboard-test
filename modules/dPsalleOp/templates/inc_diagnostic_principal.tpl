@@ -81,7 +81,7 @@ Main.add(function() {
 	      <button type="button" class="search notext" onclick="CIM10Selector.initDP()">
           {{tr}}button-CCodeCIM10-choix{{/tr}}
         </button>
-        <button type="button" class="cancel notext" onclick="deleteDP()" />
+        <button type="button" class="cancel notext" onclick="deleteDP()">{{tr}}Delete{{/tr}}</button>
         <script type="text/javascript">
           CIM10Selector.initDP = function() {
             this.sForm     = "editDP";
@@ -107,7 +107,7 @@ Main.add(function() {
 	      <button type="button" class="search notext" onclick="CIM10Selector.initDR()">
         {{tr}}button-CCodeCIM10-choix{{/tr}}
       </button>
-      <button type="button" class="cancel notext" onclick="deleteDR()" />
+      <button type="button" class="cancel notext" onclick="deleteDR()">{{tr}}Delete{{/tr}}</button>
       <script type="text/javascript">
         CIM10Selector.initDR = function() {
             this.sForm     = "editDR";

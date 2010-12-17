@@ -23,6 +23,11 @@ $prefvalues = array(
   "user"     => $user->_id !== "" ? CPreferences::get($user->_id       ) : array(),
 );
 
+// common sera toujours au debut
+$prefs = array(
+  "common" => array()
+);
+
 // Classement par module et par préférences
 CPreferences::loadModules();
 foreach (CPreferences::$modules as $modname => $prefnames){
