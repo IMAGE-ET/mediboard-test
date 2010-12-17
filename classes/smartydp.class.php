@@ -119,10 +119,28 @@ function smarty_modifier_pad($string, $length, $pad_string = ' ', $pad_type = 'l
  * @abstract JSON encode an object for Javascript use
  *
  * Example:  {$object|json}
- * @param any $object The object to ge encoded
+ * @param any $object The object to be encoded
  */
 function smarty_modifier_json($object) {
   return json_encode($object);
+}
+
+/**
+ * @abstract Format to ISO DATE
+ * Example:  {$datetime|iso_date}
+ * @param datetime $datetime The date to format
+ */
+function smarty_modifier_iso_date($datetime) {
+  return smarty_modifier_date_format($datetime, "%Y-%m-%d");
+}
+
+/**
+ * @abstract Format to ISO TIME
+ * Example:  {$datetime|iso_time}
+ * @param datetime $datetime The date to format
+ */
+function smarty_modifier_iso_time($datetime) {
+  return smarty_modifier_date_format($datetime, "%H:%M:%S");
 }
 
 /**
@@ -612,6 +630,8 @@ class CSmartyDP extends Smarty {
     $this->register_function("mb_include_script" , "smarty_function_mb_include_script");
     $this->register_modifier("pad"               , "smarty_modifier_pad");
     $this->register_modifier("json"              , "smarty_modifier_json");
+    $this->register_modifier("iso_date"          , "smarty_modifier_iso_date");
+    $this->register_modifier("iso_time"          , "smarty_modifier_iso_time");
     $this->register_modifier("const"             , "smarty_modifier_const");
     $this->register_modifier("static"            , "smarty_modifier_static");
     $this->register_modifier("cleanField"        , "smarty_modifier_cleanField");
