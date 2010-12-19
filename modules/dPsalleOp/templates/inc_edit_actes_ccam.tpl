@@ -257,7 +257,7 @@ function setToNow(element) {
                   </button>
                   </div>
               {{/if}}
-              
+              {{if !$conf.dPsalleOp.CActeCCAM.codage_strict || ($acte->code_association != $acte->_guess_association)}}
               <select name="{{$view}}"
                 onchange="setAssociation(this.value, document.forms['formActe-{{$view}}'], {{$subject->_id}}, {{$subject->_praticien_id}})">
                 <option value="" {{if !$acte->code_association}}selected="selected"{{/if}}>Aucun (100%)</option>
@@ -267,6 +267,23 @@ function setToNow(element) {
                 <option value="4" {{if $acte->code_association == 4}}selected="selected"{{/if}}>4 (100%)</option>
                 <option value="5" {{if $acte->code_association == 5}}selected="selected"{{/if}}>5 (100%)</option>
               </select>
+              {{else}}
+                <strong>
+                {{if !$acte->code_association}}
+                  Aucun (100%)
+                {{elseif $acte->code_association == 1}}
+                  1 (100%)
+                {{elseif $acte->code_association == 2}}
+                  2 (50%)
+                {{elseif $acte->code_association == 3}}
+                  3 (75%)
+                {{elseif $acte->code_association == 4}}
+                  4 (100%)
+                {{elseif $acte->code_association == 5}}
+                  5 (100%)
+                {{/if}}
+                </strong>
+              {{/if}}
  
               Association pour le Dr {{$acte->_ref_executant->_view}}
               
@@ -279,12 +296,13 @@ function setToNow(element) {
               {{if $acte->code_association != $acte->_guess_association}}
               <span onmouseover="ObjectTooltip.createDOM(this, 'association-{{$acte->_guid}}')">
                 <strong>
-                  {{if $acte->_guess_association}}
-                    ({{$acte->_guess_association}}
+                  {{if $acte->_guess_association && $acte->_guess_association != "X"}}
+                    ({{$acte->_guess_association}} conseillé)
+                  {{elseif !$acte->_guess_association}}
+                    (Aucun conseillé)
                   {{else}}
-                    (Aucun
+                    (Aucune règle d'association trouvée)
                   {{/if}}
-                  conseillé)
                 </strong>
               </span>
               <div id="association-{{$acte->_guid}}" style="display:none">

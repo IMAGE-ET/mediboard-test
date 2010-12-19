@@ -9,20 +9,32 @@
 
 
 class CDoActeCCAMAddEdit extends CDoObjectAddEdit {
+  
+  var $_ref_object = null;
+  
   function CDoActeCCAMAddEdit() {
     $this->CDoObjectAddEdit("CActeCCAM", "acte_id");
   }
   
   function doBind() {
-  	parent::doBind();
+    parent::doBind();
     $this->_obj->modificateurs = "";
     foreach ($_POST as $propName => $propValue) {
       $matches = null;
       if (preg_match("/modificateur_(.)/", $propName, $matches)) {      
-      	$modificateur = $matches[1];
+        $modificateur = $matches[1];
         $this->_obj->modificateurs .= $modificateur;
       }
     }
+    $this->_obj->loadRefObject();
+    $this->_ref_object = $this->_obj->_ref_object;
+  }
+  
+  function doRedirect() {
+    if(CAppUI::conf("dPsalleOp CActeCCAM codage_strict")) {
+      $this->_ref_object->correctActes();
+    }
+    parent::doRedirect();
   }
 }
 

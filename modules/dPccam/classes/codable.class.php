@@ -213,6 +213,17 @@ class CCodable extends CMbObject {
   function countActes() {
     $this->_count_actes = $this->countBackRefs("actes_ngap") + $this->countBackRefs("actes_ccam");
   }
+
+  function correctActes() {
+    $this->loadRefsActes();
+    foreach($this->_ref_actes_ccam as $_acte) {
+      $_acte->guessAssociation();
+      if($_acte->_guess_association != "X") {
+        $_acte->code_association = $_acte->_guess_association;
+        $_acte->store();
+      }
+    }
+  }
   
   function loadRefsActes(){
   	$this->_ref_actes = array();
