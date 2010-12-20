@@ -33,6 +33,7 @@ foreach ($plateaux as $_plateau) {
     foreach($sejours[$_technicien->_id] as $_sejour){
 		  $_sejour->checkDaysRelative($date);
 		  $_sejour->loadRefPatient(1);
+      $_sejour->loadRefBilanSSR();
       $all_sejours[] = $_sejour;
     }
 		
@@ -51,6 +52,8 @@ foreach ($plateaux as $_plateau) {
 		  $sejour =& $_replacement->_ref_sejour;
 		  $sejour->checkDaysRelative($date);
 		  $sejour->loadRefPatient(1);
+      $sejour->loadRefBilanSSR();
+
       $all_sejours[] = $_sejour;
 		}
   }

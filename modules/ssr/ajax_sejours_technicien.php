@@ -65,6 +65,7 @@ foreach ($replacements as $_replacement) {
   $all_sejours[] = $sejour;
   $sejour->checkDaysRelative($date);
   $sejour->loadRefPatient(1);
+  $sejour->loadRefBilanSSR();
 
   // Détail sur le congé
   $_replacement->loadRefConge();
