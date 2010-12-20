@@ -88,7 +88,7 @@ class CPrescriptionLineMixItem extends CMbObject {
       if(preg_match("/\(([0-9.,]+).*\)/i", $this->unite, $matches)){
         $_quant = end($matches);
         $nb = $this->quantite * $_quant;
-        $this->_view_unite_prise = str_replace($_quant, $nb, $this->unite);
+        $this->_view_unite_prise = str_replace($_quant, "soit $nb", $this->unite);
       }
     }
 		
