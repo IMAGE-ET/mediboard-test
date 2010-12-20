@@ -599,7 +599,7 @@ Main.add( function(){
 	
   {{if $line->_perm_edit || $line->commentaire}}
   <tr>
-    <td colspan="9">
+    <td colspan="9" class="text">
 			<form name="commentaire-{{$line->_guid}}" onsubmit="this.commentaire.blur(); return false;">
         {{mb_label object=$line field="commentaire" size=60}}: 
 	      	{{if $line->_protocole}}

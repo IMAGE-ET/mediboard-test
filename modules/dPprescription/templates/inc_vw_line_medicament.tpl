@@ -295,7 +295,7 @@
         </button>
       {{/if}}
     </td>
-    <td colspan="4">
+    <td colspan="4" class="text">
  	 {{if $prescription->type == "sortie"}}
       <!-- Ajouter une ligne (même dans le cas du traitement)-->
       {{if $line->_can_vw_form_add_line_contigue}}
