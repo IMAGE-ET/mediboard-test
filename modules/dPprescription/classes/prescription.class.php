@@ -24,6 +24,7 @@ class CPrescription extends CMbObject {
   var $type            = null;
 
 	var $fast_access    = null;
+	var $planif_removed = null;
 	
   // Form fields
   var $_owner          = null;
@@ -139,6 +140,7 @@ class CPrescription extends CMbObject {
     $specs["libelle"]       = "str";
     $specs["type"]          = "enum notNull list|traitement|pre_admission|sejour|sortie|externe";
     $specs["fast_access"]   = "bool default|0";
+		$specs["planif_removed"]= "bool default|0";
 		$specs["_type_sejour"]  = "enum notNull list|pre_admission|sejour|sortie";
     $specs["_dateTime_min"] = "dateTime";
     $specs["_dateTime_max"] = "dateTime";
@@ -222,7 +224,7 @@ class CPrescription extends CMbObject {
     }
  
     // Test permettant d'eviter que plusieurs prescriptions identiques soient créées 
-    if($this->object_id !== null && $this->object_class !== null && $this->praticien_id !== null && $this->type !== null){
+    if(!$this->_id && $this->object_id !== null && $this->object_class !== null && $this->praticien_id !== null && $this->type !== null){
       $prescription = new CPrescription();
       $prescription->object_id = $this->object_id;
       $prescription->object_class = $this->object_class;
@@ -1564,6 +1566,13 @@ class CPrescription extends CMbObject {
    * Creation de toutes les planifications systeme pour un sejour si celles-ci ne sont pas deja créées
    */
   function calculAllPlanifSysteme(){
+  	$this->completeField("planif_removed");
+		
+  	// Si les planifications ont ete supprimées de la prescriptions, on force le calcul en les supprimant toutes
+		if($this->planif_removed){
+  		$this->removeAllPlanifSysteme();
+		}
+		
   	$this->completeField("object_id");
 		$planif = new CPlanificationSysteme();
 		$planif->sejour_id = $this->object_id;
@@ -1610,6 +1619,10 @@ class CPrescription extends CMbObject {
 		foreach($this->_ref_prescription_line_mixes as $_prescription_line_mix){
 			$_prescription_line_mix->calculPlanifsPerf();
 		}
+		
+		// On vide planif_removed
+		$this->planif_removed = 0;
+    $this->store();
   }
   
   /*
@@ -1622,7 +1635,11 @@ class CPrescription extends CMbObject {
     foreach($planifs as $_planif){
       $_planif->delete();
     }
-  }
+		
+		// Sauvegarde de planif_removed pour indiquer que les planifs doivent etre re-calculer
+		$this->planif_removed = 1;
+		$this->store();
+	}
 	
   /*
    * Génération du Dossier/Feuille de soin

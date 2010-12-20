@@ -1752,7 +1752,11 @@ class CSetupdPprescription extends CSetup {
               ADD `duree_debit`  INT (11) UNSIGNED DEFAULT '1'";
 		$this->addQuery($sql);
 		
-		$this->mod_version = "1.22";
+		$this->makeRevision("1.22");
+		$sql = "ALTER TABLE `prescription` ADD `planif_removed` ENUM ('0','1') DEFAULT '0';";
+		$this->addQuery($sql);
+		
+		$this->mod_version = "1.23";
   }
 }
 

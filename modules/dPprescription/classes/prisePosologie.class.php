@@ -93,7 +93,10 @@ class CPrisePosologie extends CMbMetaObject {
       if(preg_match("/\(([0-9.,]+).*\)/i", $this->unite_prise, $matches)){
         $_quant = end($matches);
         $nb = $this->quantite * $_quant;
-        $this->_view_unite_prise = str_replace($_quant, $nb, $this->unite_prise);
+				
+				// Suppression des parentheses de l'unite de prise
+				//$unite_prise = preg_replace("/[(|)]/", '', $this->unite_prise);
+        $this->_view_unite_prise = str_replace($_quant, "soit $nb", $this->unite_prise);
       }
     }
   }
