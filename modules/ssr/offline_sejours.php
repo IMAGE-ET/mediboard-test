@@ -19,7 +19,6 @@ $group_id = CGroups::loadCurrent()->_id;
 $where["type"] = "= 'ssr'";
 $where["group_id"] = "= '$group_id'";
 $where["annule"] = "= '0'";
-$sejours = CSejour::loadListForDate($date, $where);
 
 // Masquer les services inactifs
 $service = new CService;
@@ -27,6 +26,8 @@ $service->group_id = $group_id;
 $service->cancelled = "1";
 $services = $service->loadMatchingList();
 $where["service_id"] = CSQLDataSource::prepareNotIn(array_keys($services));
+
+$sejours = CSejour::loadListForDate($date, $where);
 
 $plannings = array();
  
