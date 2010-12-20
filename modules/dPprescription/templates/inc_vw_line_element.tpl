@@ -151,7 +151,7 @@
       {{/if}}
     </td>
     {{/if}}
-    <td {{if $category->chapitre != "dmi"}}colspan="3"{{else}}colspan="6"{{/if}}>
+    <td {{if $category->chapitre != "dmi"}}colspan="3"{{else}}colspan="6"{{/if}} class="text">
       {{if $prescription->type != "sortie" || $line->_protocole}}
 	      <div style="float: right">
 	        <!-- Formulaire de selection d'un executant -->
