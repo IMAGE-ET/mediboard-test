@@ -34,7 +34,7 @@ class CHtmlSpec extends CMbFieldSpec {
 
     // Escape warnings, returns false if really invalid
     if (!@DOMDocument::loadXML($source)) {
-      trigger_error("Error: Html document bad formatted", E_USER_ERROR);
+      trigger_error("Error: Html document bad formatted", E_USER_WARNING);
       return "Le document HTML est mal formé, ou la requête n'a pas pu se terminer.";
     }
   }
