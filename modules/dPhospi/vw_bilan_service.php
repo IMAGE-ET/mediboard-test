@@ -8,19 +8,20 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
  */
 
-function getCurrentChambre($sejour, $_date, $_hour, &$chambres, &$affectations){
+function getCurrentLit($sejour, $_date, $_hour, &$lits, &$affectations){
   if(!isset($affectations[$sejour->_id]["$_date $_hour:00:00"])){
     $sejour->loadRefCurrAffectation("$_date $_hour:00:00");
-    $chambre =& $sejour->_ref_curr_affectation->_ref_lit->_ref_chambre;
-    if($chambre){
-      $chambres[$chambre->_id] = $chambre;
+    $lit =& $sejour->_ref_curr_affectation->_ref_lit;
+    $lit->loadCompleteView();
+    if($lit){
+      $lits[$lit->_id] = $lit;
       $affectations[$sejour->_id]["$_date $_hour:00:00"] = $sejour->_ref_curr_affectation;
     }
   } else {
     $affectation = $affectations[$sejour->_id]["$_date $_hour:00:00"];
-    $chambre = $affectation->_ref_lit->_ref_chambre;
+    $lit = $affectation->_ref_lit;
   }
-  return $chambre;
+  return $lit;
 }			            
 			            
 $date         = CValue::getOrSession("date", mbDate());
@@ -65,7 +66,7 @@ $lines_by_patient = array();
 $sejours = array();
 $list_lines = array();
 
-$chambres = array();
+$lits = array();
 $affectations = array();
 
 $_transmissions = array();
@@ -201,13 +202,13 @@ if (CValue::get("do") && ($do_medicaments || $do_injections || $do_perfusions ||
                   if($dateTimePrise < $dateTime_min || $dateTimePrise > $dateTime_max){
                     continue;
                   }
-			            $chambre = getCurrentChambre($sejour, $_date, $_hour, $chambres, $affectations);
-			            if(!$chambre) continue;
+			            $lit = getCurrentLit($sejour, $_date, $_hour, $lits, $affectations);
+			            if(!$lit) continue;
 									
 									foreach($_prescription_line_mix->_ref_lines as $_perf_line){
 										
-										$key1 = $by_patient ? $chambre->_id : "med";
-										$key2 = $by_patient ? "med" : $chambre->_id;
+										$key1 = $by_patient ? $lit->_id : "med";
+										$key2 = $by_patient ? "med" : $lit->_id;
                     
 			              $list_lines[$_perf_line->_class_name][$_perf_line->_id] = $_perf_line;
 										
@@ -229,11 +230,11 @@ if (CValue::get("do") && ($do_medicaments || $do_injections || $do_perfusions ||
                     if($dateTimePrise < $dateTime_min || $dateTimePrise > $dateTime_max){
                       continue;
                     }
-									  $chambre = getCurrentChambre($sejour, $_date, $_hour, $chambres, $affectations);
-				            if(!$chambre) continue;			              
+									  $lit = getCurrentLit($sejour, $_date, $_hour, $lits, $affectations);
+				            if(!$lit) continue;			              
 				            
-                    $key1 = $by_patient ? $chambre->_id : "med";
-                    $key2 = $by_patient ? "med" : $chambre->_id;
+                    $key1 = $by_patient ? $lit->_id : "med";
+                    $key2 = $by_patient ? "med" : $lit->_id;
                     
 									  $lines_by_patient[$key1][$key2][$sejour->_id][$_date][$_hour]['CPrescriptionLineMix'][$_prescription_line_mix->_id][$_perf_line->_id]["administre"] = $_adm;
 				          }
@@ -271,12 +272,12 @@ if (CValue::get("do") && ($do_medicaments || $do_injections || $do_perfusions ||
 														 if($dateTimePrise < $dateTime_min || $dateTimePrise > $dateTime_max){
 	                             continue;
 	                           }
-								            $chambre = getCurrentChambre($sejour, $_date, $_hour, $chambres, $affectations);
-			                      if(!$chambre) continue;
+								            $lit = getCurrentLit($sejour, $_date, $_hour, $lits, $affectations);
+			                      if(!$lit) continue;
 								            if($prise_prevue["total"]){
 								            	
-                              $key1 = $by_patient ? $chambre->_id : "med";
-                              $key2 = $by_patient ? "med" : $chambre->_id;
+                              $key1 = $by_patient ? $lit->_id : "med";
+                              $key2 = $by_patient ? "med" : $lit->_id;
     
 								              @$lines_by_patient[$key1][$key2][$sejour->_id][$_date][$_hour][$_line_med->_class_name][$_line_med->_id]["prevu"] += $prise_prevue["total"];
 								              $prise_prevue["total"] = 0;
@@ -296,16 +297,16 @@ if (CValue::get("do") && ($do_medicaments || $do_injections || $do_perfusions ||
                             if($dateTimePrise < $dateTime_min || $dateTimePrise > $dateTime_max){
                                continue;
                             }
-								            $chambre = getCurrentChambre($sejour, $_date, $_hour, $chambres, $affectations);
-								            if(!$chambre) continue;			  
+								            $lit = getCurrentLit($sejour, $_date, $_hour, $lits, $affectations);
+								            if(!$lit) continue;			  
 								            $quantite = @$administrations_by_hour["quantite"];
 								            if($quantite){
-								              @$lines_by_patient["med"][$chambre->_id][$sejour->_id][$_date][$_hour][$_line_med->_class_name][$_line_med->_id]["administre"] += $quantite;
+								              @$lines_by_patient["med"][$lit->_id][$sejour->_id][$_date][$_hour][$_line_med->_class_name][$_line_med->_id]["administre"] += $quantite;
 								              $administrations_by_hour["quantite"] = 0;
 								            }
 								            $quantite_planifiee = @$administrations_by_hour["quantite_planifiee"];
 								            if($quantite_planifiee){
-								              @$lines_by_patient["med"][$chambre->_id][$sejour->_id][$_date][$_hour][$_line_med->_class_name][$_line_med->_id]["prevu"] += $quantite_planifiee;
+								              @$lines_by_patient["med"][$lit->_id][$sejour->_id][$_date][$_hour][$_line_med->_class_name][$_line_med->_id]["prevu"] += $quantite_planifiee;
 								              $administrations_by_hour["quantite_planifiee"] = 0;
 								            }
 							            }
@@ -340,12 +341,12 @@ if (CValue::get("do") && ($do_medicaments || $do_injections || $do_perfusions ||
                        if($dateTimePrise < $dateTime_min || $dateTimePrise > $dateTime_max){
                          continue;
                        }
-						            $chambre = getCurrentChambre($sejour, $_date, $_hour, $chambres, $affectations);
-						            if(!$chambre) continue;			  
+						            $lit = getCurrentLit($sejour, $_date, $_hour, $lits, $affectations);
+						            if(!$lit) continue;			  
 						            if($prise_prevue["total"]){
 
-													$key1 = $by_patient ? $chambre->_id : $name_chap;
-													$key2 = $by_patient ? $name_chap : $chambre->_id;
+													$key1 = $by_patient ? $lit->_id : $name_chap;
+													$key2 = $by_patient ? $name_chap : $lit->_id;
                     													
 						              @$lines_by_patient[$key1][$key2][$sejour->_id][$_date][$_hour][$_line_elt->_class_name][$_line_elt->_id]["prevu"] += $prise_prevue["total"];
 						              $prise_prevue = 0;
@@ -366,13 +367,13 @@ if (CValue::get("do") && ($do_medicaments || $do_injections || $do_perfusions ||
                            continue;
                          }
 														 
-						            $chambre = getCurrentChambre($sejour, $_date, $_hour, $chambres, $affectations);
-						            if(!$chambre) continue;			  
+						            $lit = getCurrentLit($sejour, $_date, $_hour, $lits, $affectations);
+						            if(!$lit) continue;			  
 						            $quantite = @$administrations_by_hour["quantite"];
 						            if($quantite){
 						            	
-                          $key1 = $by_patient ? $chambre->_id : $name_chap;
-                          $key2 = $by_patient ? $name_chap : $chambre->_id;
+                          $key1 = $by_patient ? $lit->_id : $name_chap;
+                          $key2 = $by_patient ? $name_chap : $lit->_id;
 													
 						              @$lines_by_patient[$key1][$key2][$sejour->_id][$_date][$_hour][$_line_elt->_class_name][$_line_elt->_id]["administre"] += $quantite;
 						              $administrations_by_hour["quantite"] = 0;
@@ -380,8 +381,8 @@ if (CValue::get("do") && ($do_medicaments || $do_injections || $do_perfusions ||
 						          	$quantite_planifiee = @$administrations_by_hour["quantite_planifiee"];
 							          if($quantite_planifiee){
 							          	
-                          $key1 = $by_patient ? $chambre->_id : $name_chap;
-                          $key2 = $by_patient ? $name_chap : $chambre->_id;
+                          $key1 = $by_patient ? $lit->_id : $name_chap;
+                          $key2 = $by_patient ? $name_chap : $lit->_id;
 													
 							            @$lines_by_patient[$key1][$key2][$sejour->_id][$_date][$_hour][$_line_elt->_class_name][$_line_elt->_id]["prevu"] += $quantite_planifiee;
 							            $administrations_by_hour["quantite_planifiee"] = 0;
@@ -402,7 +403,7 @@ if (CValue::get("do") && ($do_medicaments || $do_injections || $do_perfusions ||
 // Tri des lignes
 foreach($lines_by_patient as $name_chap => &$lines_by_chap){
 	ksort($lines_by_chap);
-	foreach($lines_by_chap as $chambre_view => &$lines_by_sejour){
+	foreach($lines_by_chap as $lit_view => &$lines_by_sejour){
 	  foreach($lines_by_sejour as $sejour_id => &$lines_by_date){
 	    ksort($lines_by_date);
 	    foreach($lines_by_date as $date => &$lines_by_hours){
@@ -451,7 +452,6 @@ foreach($cat_groups as $_cat_group){
   	$all_groups[$_cat_group->_id][] = $_item->category_prescription_id ? $_item->category_prescription_id : $_item->type_produit;
   }
 }
-
 // Chargement du service
 $service = new CService();
 $service->load($service_id);
@@ -470,12 +470,12 @@ $smarty->assign("prescription"    , $prescription);
 $smarty->assign("sejours"         , $sejours);
 $smarty->assign("lines_by_patient", $lines_by_patient);
 $smarty->assign("list_lines"      , $list_lines);
-$smarty->assign("chambres"        , $chambres);
+$smarty->assign("lits"            , $lits);
 $smarty->assign("dateTime_min"    , $dateTime_min);
 $smarty->assign("dateTime_max"    , $dateTime_max);
 $smarty->assign("cat_groups"      , $cat_groups);
 $smarty->assign("all_groups"      , $all_groups);
-$smarty->assign("by_patient"         , $by_patient);
+$smarty->assign("by_patient"      , $by_patient);
 $smarty->display('vw_bilan_service.tpl');
 
 ?>

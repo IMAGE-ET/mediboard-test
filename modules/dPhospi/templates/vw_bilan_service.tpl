@@ -279,9 +279,9 @@ selectPeriode = function(element) {
 	
 	{{foreach from=$_lines_by_chap key=key2 item=_lines_by_patient name="foreach_lines"}}
 		{{if $by_patient}}
-		  {{assign var=chambre value=$chambres.$key1}}
+		  {{assign var=lit value=$lits.$key1}}
 		{{else}}
-		   {{assign var=chambre value=$chambres.$key2}}
+		   {{assign var=lit value=$lits.$key2}}
 	  {{/if}}
 	
 	  {{foreach from=$_lines_by_patient key=sejour_id item=prises_by_dates }}
@@ -294,7 +294,9 @@ selectPeriode = function(element) {
 			<tr>
 	      <th colspan="6" class="text">
 	        <span style="float: left">
-	          <strong>Chambre {{$chambre->_view}}</strong>
+            <strong>{{$lit->_ref_chambre->_view}}</strong>
+            <br />
+	          <strong>{{$lit->_short_view}}</strong>
 	        </span>
 			    <span style="float: right">
 			      DE: {{$sejour->_entree|date_format:"%d/%m/%Y"}}<br />
