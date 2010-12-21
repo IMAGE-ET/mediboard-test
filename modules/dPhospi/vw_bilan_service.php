@@ -12,8 +12,8 @@ function getCurrentLit($sejour, $_date, $_hour, &$lits, &$affectations){
   if(!isset($affectations[$sejour->_id]["$_date $_hour:00:00"])){
     $sejour->loadRefCurrAffectation("$_date $_hour:00:00");
     $lit =& $sejour->_ref_curr_affectation->_ref_lit;
-    $lit->loadCompleteView();
-    if($lit){
+		if($lit){
+      $lit->loadCompleteView();
       $lits[$lit->_id] = $lit;
       $affectations[$sejour->_id]["$_date $_hour:00:00"] = $sejour->_ref_curr_affectation;
     }
@@ -106,9 +106,15 @@ $patients = array();
 $trans_and_obs = array();
 foreach($_transmissions as $_trans){
 	$_trans->loadRefSejour();
+	$sejour =& $_trans->_ref_sejour;
+	$sejour->loadRefsOperations();
+  $sejour->_ref_last_operation->loadRefPlageOp();
+  $sejour->_ref_last_operation->loadExtCodesCCAM();
+		
 	$patient_id = $_trans->_ref_sejour->patient_id;
 	if(!array_key_exists($patient_id, $patients)){
     $_trans->_ref_sejour->loadRefPatient();
+		$_trans->_ref_sejour->_ref_patient->loadRefConstantesMedicales();
 		$patients[$patient_id] = $_trans->_ref_sejour->_ref_patient;
 	}
 	$_trans->loadRefsFwd();
@@ -120,6 +126,11 @@ foreach($_transmissions as $_trans){
 
 foreach($_observations as $_obs){
   $_obs->loadRefSejour();
+	$sejour =& $_obs->_ref_sejour;
+  $sejour->loadRefsOperations();
+  $sejour->_ref_last_operation->loadRefPlageOp();
+  $sejour->_ref_last_operation->loadExtCodesCCAM();
+
   $patient_id = $_obs->_ref_sejour->patient_id;
   if(!array_key_exists($patient_id, $patients)){
     $_obs->_ref_sejour->loadRefPatient();
@@ -457,7 +468,6 @@ $service = new CService();
 $service->load($service_id);
 
 $smarty = new CSmartyDP();
-$smarty->assign("patients"        , $patients);
 $smarty->assign("trans_and_obs"   , $trans_and_obs);
 $smarty->assign("service"         , $service);
 $smarty->assign("periode"         , $periode);

@@ -227,12 +227,39 @@ selectPeriode = function(element) {
 		</th>
 	</tr>
   {{foreach from=$trans_and_obs key=patient_id item=_trans_and_obs_by_patient}}
-	  {{assign var=patient value=$patients.$patient_id}}
-	  <tr>
-	  	<th colspan="6"><strong>{{$patient->_view}}</strong></th>
-	  </tr>
-	  {{foreach from=$_trans_and_obs_by_patient item=_trans_and_obs_by_date}}
-		  {{foreach from=$_trans_and_obs_by_date item=_trans_and_obs}}
+	  {{foreach from=$_trans_and_obs_by_patient item=_trans_and_obs_by_date name=foreach_trans_date}}
+		  {{foreach from=$_trans_and_obs_by_date item=_trans_and_obs name=foreach_trans}}
+			
+			  {{if $smarty.foreach.foreach_trans_date.first && $smarty.foreach.foreach_trans.first}}
+			    {{assign var=sejour value=$_trans_and_obs->_ref_sejour}}
+			  	{{assign var=patient value=$sejour->_ref_patient}}
+          {{assign var=operation value=$sejour->_ref_last_operation}} 
+					<tr>
+			      <th colspan="6" class="text">
+			        <span style="float: right">
+			          DE: {{$sejour->_entree|date_format:"%d/%m/%Y"}}<br />
+			          DS:  {{$sejour->_sortie|date_format:"%d/%m/%Y"}}
+			        </span>
+			        <strong>{{$patient->_view}}</strong>
+			        Né(e) le {{mb_value object=$patient field=naissance}} - ({{$patient->_age}} ans) - ({{$patient->_ref_constantes_medicales->poids}} kg)
+			        <br />
+			        Intervention le {{$operation->_ref_plageop->date|date_format:"%d/%m/%Y"}} - 
+			        <strong>(I{{if $operation->_compteur_jour >=0}}+{{/if}}{{$operation->_compteur_jour}})</strong>
+			      </th>
+			    </tr>
+			    <tr>
+			      <th class="element text" colspan="6" style="text-align: left">
+			        <strong>{{$operation->libelle}}</strong> 
+			        {{if !$operation->libelle}}
+			          {{foreach from=$operation->_ext_codes_ccam item=curr_ext_code}}
+			            <strong>{{$curr_ext_code->code}}</strong> :
+			            {{$curr_ext_code->libelleLong}}<br />
+			          {{/foreach}}
+			        {{/if}}
+			      </th>
+			    </tr>
+			  {{/if}}
+			
 			  <tr id="{{$_trans_and_obs->_guid}}" {{if $_trans_and_obs instanceof CTransmissionMedicale}}class="{{$_trans_and_obs->_cible}}"{{/if}}
           {{if $_trans_and_obs->degre == 'high'}} 
             style="font-weight: bold;"
@@ -252,28 +279,6 @@ selectPeriode = function(element) {
 	<tr>
     <th colspan="6" class="title">{{tr}}CPrescription._chapitres.{{$key1}}{{/tr}} - 
 		{{$service->_view}} - du {{$dateTime_min|date_format:$conf.datetime}} au {{$dateTime_max|date_format:$conf.datetime}}</th>
-  </tr>
-  <tr>
-    <td colspan="6" class="text">
-      Catégorie(s) sélectionnée(s):
-      {{foreach from=$cat_used.$key1 item=_cat_view name=cat}}
-        <strong>{{$_cat_view}}{{if !$smarty.foreach.cat.last}},{{/if}}</strong>
-      {{/foreach}}
-    </td>
-  </tr>
-	{{/if}}
-	
-	{{if $by_patient}}
-	<tr>
-    <td colspan="6" class="text">
-      Catégorie(s) sélectionnée(s):
-      {{foreach from=$cat_used key=_cat item=curr_cat}}
-			  <strong>{{tr}}CPrescription._chapitres.{{$_cat}}{{/tr}}: 
-				{{foreach from=$curr_cat item=_cat_view name=cat}}
-	        {{$_cat_view}}{{if !$smarty.foreach.cat.last}},{{/if}}
-	      {{/foreach}}
-			{{/foreach}}
-    </td>
   </tr>
 	{{/if}}
 	
