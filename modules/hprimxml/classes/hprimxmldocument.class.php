@@ -756,26 +756,35 @@ class CHPrimXMLDocument extends CMbXMLDocument {
   function addIntervention($elParent, $mbOp, $referent = null, $light = false) {
     $identifiant = $this->addElement($elParent, "identifiant");
     $emetteur = $this->addElement($identifiant, "emetteur", $mbOp->operation_id);
+    $mbOp->loadRefSejour();
+    $sejour = $mbOp->_ref_sejour;
     
-    $mbOpDebut = CValue::first(
+    $mbOpDate = CValue::first(
+      $mbOp->_ref_plageop->date,
+      $mbOp->date
+    );
+    
+    $mbOpHeureDebut = CValue::first(
       $mbOp->debut_op, 
       $mbOp->entree_salle, 
       $mbOp->time_operation
     );
+    $mbOpDebut = CMbRange::forceInside($sejour->entree, $sejour->sortie, "$mbOpDate $mbOpHeureDebut");
     
-    $debut = $this->addElement($elParent, "debut");
-    $this->addElement($debut, "date", CValue::first($mbOp->_ref_plageop->date, $mbOp->date));
-    $this->addElement($debut, "heure", $mbOpDebut);
-    
-    $mbOpFin   = CValue::first(
+    $mbOpHeureFin   = CValue::first(
       $mbOp->fin_op, 
       $mbOp->sortie_salle, 
       mbAddTime($mbOp->temp_operation, $mbOp->time_operation)
     );
+    $mbOpFin = CMbRange::forceInside($sejour->entree, $sejour->sortie, "$mbOpDate $mbOpHeureFin");
     
+    $debut = $this->addElement($elParent, "debut");
     $fin = $this->addElement($elParent, "fin");
-    $this->addElement($fin, "date", CValue::first($mbOp->_ref_plageop->date, $mbOp->date));
-    $this->addElement($fin, "heure", $mbOpFin);
+    
+    $this->addElement($debut, "date" , mbDate($mbOpDebut));
+    $this->addElement($debut, "heure", mbTime($mbOpDebut));
+    $this->addElement($fin  , "date" , mbDate($mbOpFin));
+    $this->addElement($fin  , "heure", mbTime($mbOpFin));
     
     $this->addUniteFonctionnelle($elParent, $mbOp);
     
