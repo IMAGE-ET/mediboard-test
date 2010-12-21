@@ -29,9 +29,30 @@
 
     function insertHTML(string) {
       var sHtml = "<span class='name'>" + string + "</span>&nbsp;";
-      CKEDITOR.instances.htmlarea.insertHtml(sHtml);
+      CKEDITOR.instances.htmlarea.focus();
+      if (CKEDITOR.env.gecko) {
+        insertSpecialChar(sHtml);
+      } else {
+        CKEDITOR.instances.htmlarea.insertHtml(sHtml);
+      }
       CKEDITOR.dialog.getCurrent().hide();
       return true;
+    }
+		
+    function insertSpecialChar(specialChar) { 
+      var selection = CKEDITOR.instances.htmlarea.getSelection(), 
+          ranges    = selection.getRanges(), 
+          range, textNode;  
+       
+      for ( var i = 0, len = ranges.length ; i < len ; i++ ) { 
+        range = ranges[ i ]; 
+        range.deleteContents(); 
+        textNode = CKEDITOR.dom.element.createFromHtml( specialChar ); 
+        range.insertNode( textNode ); 
+      } 
+       
+      range.moveToPosition( textNode, CKEDITOR.POSITION_AFTER_END ); 
+      range.select(); 
     }
   </script>
 
