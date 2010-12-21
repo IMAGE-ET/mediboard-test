@@ -194,6 +194,10 @@ class CPrescriptionLineMixItem extends CMbObject {
     if(is_array($this->_unites_prise)){
       $this->_unites_prise = array_unique($this->_unites_prise);
     }
+		
+    if(!in_array("ml", $this->_unites_prise) && (array_key_exists("ml", $this->_ref_produit->rapport_unite_prise) || $libelle_unite_presentation == "ml")){
+      $this->_unites_prise[] = "ml";
+    }
   }
   
 	
