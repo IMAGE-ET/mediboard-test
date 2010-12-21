@@ -151,5 +151,11 @@ abstract class CMbRange {
 
     return $fragments;
   }
+  
+  static function forceInside($lower, $upper, $value) {
+  	$value = max($value, $lower);
+  	$value = min($value, $upper);
+  	return $value;
+  }
 }
 ?>
