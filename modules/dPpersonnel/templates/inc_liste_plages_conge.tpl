@@ -22,7 +22,7 @@
     <tr id="p{{$_plageconge->_id}}" {{if $plage_id == $_plageconge->_id}} class="selected" {{/if}}>
       <td>
         <a href="#Edit-{{$_plageconge->_guid}}"
-           onclick="editPlageConge({{$_plageconge->_id}},{{$user->_id}})">
+           onclick="PlageConge.edit('{{$_plageconge->_id}}','{{$user->_id}}')">
           <span onmouseover="ObjectTooltip.createEx(this, '{{$_plageconge->_guid}}')">
           {{mb_value object=$_plageconge field="libelle"}}
           </span>

@@ -11,7 +11,7 @@
 <form name="editplage" action="" method="post"
       onsubmit="return onSubmitFormAjax(this, 
       { onComplete: function() {
-          loadUser({{$plageconge->user_id}}, '{{$plageconge->plage_id}}') ;
+          PlageConge.loadUser({{$plageconge->user_id}}, '{{$plageconge->plage_id}}') ;
           changedate('');
       }
 });">
@@ -21,11 +21,11 @@
   <input type="hidden" name="plage_id" value="{{$plageconge->plage_id}}" />
   <input type="hidden" name="m" value="{{$m}}" />
   <input type="hidden" name="tab" value="{{$tab}}" />
-  <input type="hidden" name="callback" value="editPlageCongeCallback" />
+  <input type="hidden" name="callback" value="PlageConge.edit" />
   <table class="form">
     <tr>
       <td colspan="2">
-        <button class="new" type="button" onclick="editPlageConge('',{{$plageconge->user_id}})">
+        <button class="new" type="button" onclick="PlageConge.edit('',{{$plageconge->user_id}})">
           {{tr}}CPlageConge-title-create{{/tr}}
         </button>
         </td>

@@ -30,11 +30,14 @@
 
 <script type="text/javascript">
 Main.add(Control.Tabs.create.curry('tab-modules', true));
+Preferences.onSubmit = function(form) {
+  return onSubmitFormAjax(form, {onComplete: Preferences.refresh});
+}
 </script>
 
     </td><td>
 
-<form name="form-edit-preferences" action="?m=admin{{if !$ajax}}&amp;{{$actionType}}={{$action}}{{/if}}" method="post" onsubmit="return onSubmitFormAjax(this)">
+<form name="form-edit-preferences" action="?m=admin{{if !$ajax}}&amp;{{$actionType}}={{$action}}{{/if}}" method="post" onsubmit="return Preferences.onSubmit(this)">
 
 <input type="hidden" name="dosql" value="do_preference_aed" />
 <input type="hidden" name="m" value="admin" />

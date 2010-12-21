@@ -116,7 +116,7 @@ DragDropPlage = function(draggable){
         oldDrag.drag.element.style.left = parseInt(oldDrag.left)+"px";
       } else {
         loadPlanning(getForm("searchplanning"));
-        loadUser("{{$filter->user_id}}", '');
+        PlageConge.loadUser("{{$filter->user_id}}", '');
       }
     }
   });
@@ -140,7 +140,7 @@ toggleYear = function (form) {
   }
 }
 
-function editPlageConge(plage_id, user_id){
+PlageConge.edit = function(plage_id, user_id){
     var url = new Url("dPpersonnel", "vw_idx_plages_conge", "tab");
     url.addParam("plage_id", plage_id);
     url.addParam("user_id", user_id);

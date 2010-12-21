@@ -8,10 +8,12 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
  */
 
-$user_id  = CValue::postOrSession("user_id");
-$plage_id = CValue::post("plage_id");
-$user     = new CMediusers();
-$user->load($user_id);
+CCanDo::checkRead();
+
+$plage_id = CValue::get("plage_id");
+$user_id  = CValue::getOrSession("user_id");
+
+$user = CMediusers::get($user_id);
 
 // Chargement de la plage
 $plageconge = new CPlageConge();

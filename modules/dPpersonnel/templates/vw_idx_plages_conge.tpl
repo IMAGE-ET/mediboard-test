@@ -47,10 +47,9 @@ function raz(form) {
         <tr id="u{{$mediuser->_id}}" {{if $filter->user_id == $mediuser->_id}} class="selected" {{/if}}>
           <td>
             <a href="#{{$mediuser->_guid}}"
-						onclick="loadUser({{$mediuser->_id}}, '');
-										   editPlageConge('',{{$mediuser->_id}});
-										 ">
-            	{{mb_include module=mediusers template=inc_vw_mediuser object=$mediuser}}</a>
+						  onclick="PlageConge.loadUser('{{$mediuser->_id}}', ''); PlageConge.edit('','{{$mediuser->_id}}');">
+            	{{mb_include module=mediusers template=inc_vw_mediuser object=$mediuser}}
+						</a>
           </td>
           <td>
           	{{assign var=_user_id value=$mediuser->_id}}
@@ -72,8 +71,8 @@ function raz(form) {
 {{if $filter->user_id}}
   <script type='text/javascript'>
     Main.add( function() {
-      loadUser({{$filter->user_id}}, '{{$filter->_id}}');
-      editPlageConge('{{$filter->_id}}',{{$filter->user_id}});
+      PlageConge.loadUser({{$filter->user_id}}, '{{$filter->_id}}');
+      PlageConge.edit('{{$filter->_id}}',{{$filter->user_id}});
     });
   </script>
 {{/if}}

@@ -18,7 +18,7 @@
   <tr>
     {{if $user->_id}}
     <th class="title modify" colspan="2">
-    	{{assign var=object value=$user}}
+      {{assign var=object value=$user}}
       {{mb_include module=system template=inc_object_idsante400}}
       {{mb_include module=system template=inc_object_history}}
       {{mb_include module=system template=inc_object_notes}}
@@ -46,7 +46,7 @@
   <tr>
     <th><label for="_user_password" title="Saisir le mot de passe. Obligatoire">Mot de passe</label></th>
     <td><input  type="password" name="_user_password" class="{{$specs._user_password}}{{if !$user->user_id}} notNull{{/if}}" value="" onkeyup="checkFormElement(this)" />
-		<span id="editFrm__user_password_message"></span>
+    <span id="editFrm__user_password_message"></span>
     </td>
   </tr>
   <tr>
@@ -85,8 +85,8 @@
       {{if $user->user_id}}
       <button class="modify" type="submit">{{tr}}Save{{/tr}}</button>
       <button class="trash" type="button" onclick="confirmDeletion(this.form, {
-      	  typeName:'l\'utilisateur',
-      	  objName:'{{$user->user_username|smarty:nodefaults|JSAttribute}}'
+          typeName:'l\'utilisateur',
+          objName:'{{$user->user_username|smarty:nodefaults|JSAttribute}}'
         })">
         {{tr}}Delete{{/tr}}
       </button>
@@ -102,30 +102,30 @@
     <td colspan="2" class="button">
       {{if $user->_ref_mediuser->_id}}
         <div class="small-success">
-	        Cet utilisateur est bien intégré à l'organigramme.
-	        <br />
-	        <a class="button edit" href="?m=mediusers&tab=vw_idx_mediusers&user_id={{$user->_id}}">
-	          Gérer cet utilisateur dans l'organigramme
-	        </a>
+          Cet utilisateur est bien intégré à l'organigramme.
+          <br />
+          <a class="button edit" href="?m=mediusers&tab=vw_idx_mediusers&user_id={{$user->_id}}">
+            Gérer cet utilisateur dans l'organigramme
+          </a>
         </div>
       {{else}}
         {{if $user->template}}
         <div class="small-info">
-	        Cet utilisateur n'est pas dans l'organigramme.
-	        <br />
-	        C'est <strong>normal pour un Profil</strong>.
+          Cet utilisateur n'est pas dans l'organigramme.
+          <br />
+          C'est <strong>normal pour un Profil</strong>.
         </div>
-				{{else}}
+        {{else}}
         <div class="small-warning">
-	        Cet utilisateur n'est pas dans l'organigramme, 
-	        <br />
-	        C'est <strong>anormal pour un utilisateur réel</strong>.
+          Cet utilisateur n'est pas dans l'organigramme, 
+          <br />
+          C'est <strong>anormal pour un utilisateur réel</strong>.
         </div>
-				{{/if}}
+        {{/if}}
       {{/if}}
     </td>
   </tr>
-	{{/if}}
+  {{/if}}
   
 </table>
 
