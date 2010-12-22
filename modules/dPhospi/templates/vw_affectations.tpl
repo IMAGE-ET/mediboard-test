@@ -87,7 +87,7 @@ Main.add(function () {
         <table class="form">
           <tr>
             <td class="button" colspan="2">
-              {{mb_field object=$emptySejour field="_type_admission" defaultOption="&mdash; Toutes les admissions" onchange="this.form.submit()"}}
+              {{mb_field object=$emptySejour field="_type_admission" onchange="this.form.submit()"}}
             </td>
           </tr>
           <tr>
