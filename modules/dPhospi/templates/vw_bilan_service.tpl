@@ -236,6 +236,15 @@ selectPeriode = function(element) {
           {{assign var=operation value=$sejour->_ref_last_operation}} 
 					<tr>
 			      <th colspan="6" class="text">
+              <span style="float: left; text-align: left;">
+                {{foreach from=$sejour->_ref_affectations item=_affectation}}
+                   <strong>{{$_affectation->_view}}</strong>
+                   {{if $sejour->_ref_affectations|@count > 1}}
+                   <small>(du {{$_affectation->entree|date_format:$conf.date}} au {{$_affectation->sortie|date_format:$conf.date}})</small>
+                  {{/if}}
+                  <br />
+                {{/foreach}}
+              </span>
 			        <span style="float: right">
 			          DE: {{$sejour->_entree|date_format:"%d/%m/%Y"}}<br />
 			          DS:  {{$sejour->_sortie|date_format:"%d/%m/%Y"}}

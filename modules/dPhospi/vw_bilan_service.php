@@ -14,7 +14,7 @@ function getCurrentLit($sejour, $_date, $_hour, &$lits, &$affectations){
     $lit =& $sejour->_ref_curr_affectation->_ref_lit;
 		if($lit){
       $lit->loadCompleteView();
-      $lits[$lit->_id] = $lit;
+      $lits[$lit->_ref_chambre->nom] = $lit;
       $affectations[$sejour->_id]["$_date $_hour:00:00"] = $sejour->_ref_curr_affectation;
     }
   } else {
@@ -109,6 +109,8 @@ foreach($_transmissions as $_trans){
 	$sejour =& $_trans->_ref_sejour;
 	$sejour->loadRefsOperations();
   $sejour->_ref_last_operation->loadRefPlageOp();
+  $sejour->loadRefsAffectations();
+  
   $sejour->_ref_last_operation->loadExtCodesCCAM();
 		
 	$patient_id = $_trans->_ref_sejour->patient_id;
@@ -121,7 +123,8 @@ foreach($_transmissions as $_trans){
 	if($_trans->object_id){
 	  $_trans->_ref_object->loadRefsFwd();
 	}
-	$trans_and_obs[$_trans->_ref_sejour->patient_id][$_trans->date][] = $_trans;
+	
+	$trans_and_obs[$patient_id][$_trans->date][] = $_trans;
 }
 
 foreach($_observations as $_obs){
@@ -129,6 +132,7 @@ foreach($_observations as $_obs){
 	$sejour =& $_obs->_ref_sejour;
   $sejour->loadRefsOperations();
   $sejour->_ref_last_operation->loadRefPlageOp();
+  $sejour->_ref_last_operation->loadRefAffectation();
   $sejour->_ref_last_operation->loadExtCodesCCAM();
 
   $patient_id = $_obs->_ref_sejour->patient_id;
@@ -137,7 +141,7 @@ foreach($_observations as $_obs){
     $patients[$patient_id] = $_obs->_ref_sejour->_ref_patient;
   }
   $_obs->loadRefsFwd();
-	$trans_and_obs[$_obs->_ref_sejour->patient_id][$_obs->date][] = $_obs;
+	$trans_and_obs[$patient_id][$_obs->date][] = $_obs;
 }
 
 foreach($trans_and_obs as &$trans_by_patients){
@@ -159,8 +163,9 @@ if (CValue::get("do") && ($do_medicaments || $do_injections || $do_perfusions ||
 	            (sejour.entree_prevue <= '$date_min 00:00:00' AND sejour.sortie_prevue >= '$date_max 23:59:59')";
 	
 	$where["service.service_id"] = " = '$service_id'";
+	$orderby = "chambre.nom";
 	$prescription = new CPrescription();
-	$prescriptions = $prescription->loadList($where, null, null, null, $ljoin);
+	$prescriptions = $prescription->loadList($where, $orderby, null, null, $ljoin);
 	
 	$lines = array();
 	$lines["med"] = array();
@@ -218,8 +223,8 @@ if (CValue::get("do") && ($do_medicaments || $do_injections || $do_perfusions ||
 									
 									foreach($_prescription_line_mix->_ref_lines as $_perf_line){
 										
-										$key1 = $by_patient ? $lit->_id : "med";
-										$key2 = $by_patient ? "med" : $lit->_id;
+										$key1 = $by_patient ? $lit->_ref_chambre->nom : "med";
+										$key2 = $by_patient ? "med" : $lit->_ref_chambre->nom;
                     
 			              $list_lines[$_perf_line->_class_name][$_perf_line->_id] = $_perf_line;
 										
@@ -244,8 +249,8 @@ if (CValue::get("do") && ($do_medicaments || $do_injections || $do_perfusions ||
 									  $lit = getCurrentLit($sejour, $_date, $_hour, $lits, $affectations);
 				            if(!$lit) continue;			              
 				            
-                    $key1 = $by_patient ? $lit->_id : "med";
-                    $key2 = $by_patient ? "med" : $lit->_id;
+                    $key1 = $by_patient ? $lit->_ref_chambre->nom : "med";
+                    $key2 = $by_patient ? "med" : $lit->_ref_chambre->nom;
                     
 									  $lines_by_patient[$key1][$key2][$sejour->_id][$_date][$_hour]['CPrescriptionLineMix'][$_prescription_line_mix->_id][$_perf_line->_id]["administre"] = $_adm;
 				          }
@@ -287,8 +292,8 @@ if (CValue::get("do") && ($do_medicaments || $do_injections || $do_perfusions ||
 			                      if(!$lit) continue;
 								            if($prise_prevue["total"]){
 								            	
-                              $key1 = $by_patient ? $lit->_id : "med";
-                              $key2 = $by_patient ? "med" : $lit->_id;
+                              $key1 = $by_patient ? $lit->_ref_chambre->nom : "med";
+                              $key2 = $by_patient ? "med" : $lit->_ref_chambre->nom;
     
 								              @$lines_by_patient[$key1][$key2][$sejour->_id][$_date][$_hour][$_line_med->_class_name][$_line_med->_id]["prevu"] += $prise_prevue["total"];
 								              $prise_prevue["total"] = 0;
@@ -312,12 +317,12 @@ if (CValue::get("do") && ($do_medicaments || $do_injections || $do_perfusions ||
 								            if(!$lit) continue;			  
 								            $quantite = @$administrations_by_hour["quantite"];
 								            if($quantite){
-								              @$lines_by_patient["med"][$lit->_id][$sejour->_id][$_date][$_hour][$_line_med->_class_name][$_line_med->_id]["administre"] += $quantite;
+								              @$lines_by_patient["med"][$lit->_ref_chambre->nom][$sejour->_id][$_date][$_hour][$_line_med->_class_name][$_line_med->_id]["administre"] += $quantite;
 								              $administrations_by_hour["quantite"] = 0;
 								            }
 								            $quantite_planifiee = @$administrations_by_hour["quantite_planifiee"];
 								            if($quantite_planifiee){
-								              @$lines_by_patient["med"][$lit->_id][$sejour->_id][$_date][$_hour][$_line_med->_class_name][$_line_med->_id]["prevu"] += $quantite_planifiee;
+								              @$lines_by_patient["med"][$lit->_ref_chambre->nom][$sejour->_id][$_date][$_hour][$_line_med->_class_name][$_line_med->_id]["prevu"] += $quantite_planifiee;
 								              $administrations_by_hour["quantite_planifiee"] = 0;
 								            }
 							            }
@@ -356,8 +361,8 @@ if (CValue::get("do") && ($do_medicaments || $do_injections || $do_perfusions ||
 						            if(!$lit) continue;			  
 						            if($prise_prevue["total"]){
 
-													$key1 = $by_patient ? $lit->_id : $name_chap;
-													$key2 = $by_patient ? $name_chap : $lit->_id;
+													$key1 = $by_patient ? $lit->_ref_chambre->nom : $name_chap;
+													$key2 = $by_patient ? $name_chap : $lit->_ref_chambre->nom;
                     													
 						              @$lines_by_patient[$key1][$key2][$sejour->_id][$_date][$_hour][$_line_elt->_class_name][$_line_elt->_id]["prevu"] += $prise_prevue["total"];
 						              $prise_prevue = 0;
@@ -383,8 +388,8 @@ if (CValue::get("do") && ($do_medicaments || $do_injections || $do_perfusions ||
 						            $quantite = @$administrations_by_hour["quantite"];
 						            if($quantite){
 						            	
-                          $key1 = $by_patient ? $lit->_id : $name_chap;
-                          $key2 = $by_patient ? $name_chap : $lit->_id;
+                          $key1 = $by_patient ? $lit->_ref_chambre->nom : $name_chap;
+                          $key2 = $by_patient ? $name_chap : $lit->_ref_chambre->nom;
 													
 						              @$lines_by_patient[$key1][$key2][$sejour->_id][$_date][$_hour][$_line_elt->_class_name][$_line_elt->_id]["administre"] += $quantite;
 						              $administrations_by_hour["quantite"] = 0;
@@ -413,18 +418,17 @@ if (CValue::get("do") && ($do_medicaments || $do_injections || $do_perfusions ||
 
 // Tri des lignes
 foreach($lines_by_patient as $name_chap => &$lines_by_chap){
-	ksort($lines_by_chap);
+	ksort($lines_by_chap, SORT_STRING);
 	foreach($lines_by_chap as $lit_view => &$lines_by_sejour){
 	  foreach($lines_by_sejour as $sejour_id => &$lines_by_date){
 	    ksort($lines_by_date);
 	    foreach($lines_by_date as $date => &$lines_by_hours){
 	      ksort($lines_by_hours);
-			
 	    }
 	  }
 	}
 }
- 
+
 // Chargement de toutes les categories
 $categories = CCategoryPrescription::loadCategoriesByChap(null, "current");
 
