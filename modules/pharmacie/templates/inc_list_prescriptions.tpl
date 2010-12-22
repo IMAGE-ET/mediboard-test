@@ -1,6 +1,6 @@
 <script type="text/javascript">
 	Main.add(function(){
-	  Control.Tabs.create("tab-prescriptions-pharma");
+	  Control.Tabs.create("tab-prescriptions-pharma", true);
 	});
 	
  list_prescriptions = {{$list_prescriptions|@json}};

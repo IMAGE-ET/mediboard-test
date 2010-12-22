@@ -121,8 +121,10 @@ foreach($prescriptions as $_prescription){
   $_prescription->loadRefPatient();
   $patients[$_prescription->_ref_patient->_id] = $_prescription->_ref_patient;
   
-  $_prescription->_ref_object->loadRefsAffectations();
-  $lits[$_prescription->_ref_object->_ref_last_affectation->_ref_lit->_view."-".$_prescription->_id] = $_prescription->_id;
+  // Stockage de l'affectation courante dans _ref_curr_affectation du sejour
+  $_prescription->_ref_object->_ref_curr_affectation = $_prescription->_ref_object->getCurrAffectation($date);
+  
+  $lits[$_prescription->_ref_object->_ref_curr_affectation->_ref_lit->_view."-".$_prescription->_id] = $_prescription->_id;
   $_prescription->loadRefPraticien();
   $_prescription->_ref_praticien->loadRefFunction();
   $_prescription->_ref_patient->loadRefPhotoIdentite();

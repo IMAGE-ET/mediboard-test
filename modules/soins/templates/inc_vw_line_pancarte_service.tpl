@@ -9,7 +9,7 @@
    </a>
 </td>
 <td>
-  {{$_prescription->_ref_object->_ref_last_affectation->_ref_lit->_view}}
+  {{$_prescription->_ref_object->_ref_curr_affectation->_ref_lit->_view}}
 </td>
 <td>
   <div class="mediuser" style="border-color: #{{$_prescription->_ref_praticien->_ref_function->color}};">
