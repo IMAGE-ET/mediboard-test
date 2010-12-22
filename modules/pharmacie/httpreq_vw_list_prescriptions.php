@@ -10,13 +10,6 @@
 
 CCanDo::checkRead();
 
-// Chargement de la liste des praticiens
-$mediuser = new CMediusers();
-$praticiens = $mediuser->loadPraticiens();
-
-// Chargement de la liste des services
-$services = CProductStockGroup::getServicesList();
-
 // Recuperation des valeurs
 $praticien_id  = CValue::get("praticien_id");
 $service_id    = CValue::get("service_id");
@@ -83,15 +76,29 @@ $group_id = CGroups::loadCurrent()->_id;
 $where["sejour.group_id"] = " = '$group_id'";
 
 $prescriptions = new CPrescription();
-$prescriptions = $prescriptions->loadList($where, null, null, "prescription_id", $ljoin);
+$_prescriptions = $prescriptions->loadList($where, null, null, "prescription_id", $ljoin);
 
-foreach($prescriptions as $_prescription){
+$prescriptions = array("0" => array(), "1" => array(), "2" => array(),"none" => array());
+
+$list_prescriptions = array();
+
+foreach($_prescriptions as $_prescription){
 	$_prescription->loadRefPatient();
+  if(isset($_prescription->score)){
+	  $prescriptions[$_prescription->score][$_prescription->_id] = $_prescription;
+		$list_prescriptions[$_prescription->score][] = $_prescription->_id;
+  } else {
+    $prescriptions["none"][$_prescription->_id] = $_prescription;
+		$list_prescriptions["none"][] = $_prescription->_id;
+  }
 }
+
 
 // Smarty template
 $smarty = new CSmartyDP();
+$smarty->assign("count_prescriptions", count($_prescriptions));
 $smarty->assign("prescriptions", $prescriptions);
+$smarty->assign("list_prescriptions", $list_prescriptions);
 $smarty->display('inc_list_prescriptions.tpl');
 
 ?>

@@ -299,9 +299,16 @@ if($prescription->_id){
 		    }
 		  }
 		  $prescription->_score_prescription = $score_prescription;
-	  
+	    
+			// Sauvegarde du score de la prescription dans une nouvel objet (permet d'eviter de perdre le chargement des refs)
+			$new_prescription = new CPrescription();
+			$new_prescription->load($prescription->_id);
+			$new_prescription->score = $score_prescription;
+			$new_prescription->store();
+			
 			// Chargement du poids du patient
 			$patient->loadRefConstantesMedicales();
+			
 		  $constantes_medicales = $patient->_ref_constantes_medicales;
 		  $poids = $constantes_medicales->poids;
 		

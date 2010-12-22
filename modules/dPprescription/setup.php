@@ -1756,7 +1756,11 @@ class CSetupdPprescription extends CSetup {
 		$sql = "ALTER TABLE `prescription` ADD `planif_removed` ENUM ('0','1') DEFAULT '0';";
 		$this->addQuery($sql);
 		
-		$this->mod_version = "1.23";
+		$this->makeRevision("1.23");
+		$sql = "ALTER TABLE `prescription` ADD `score` ENUM ('0','1','2');";
+		$this->addQuery($sql);
+		
+		$this->mod_version = "1.24";
   }
 }
 

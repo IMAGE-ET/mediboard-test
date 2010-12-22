@@ -26,6 +26,8 @@ class CPrescription extends CMbObject {
 	var $fast_access    = null;
 	var $planif_removed = null;
 	
+	var $score = null;
+	
   // Form fields
   var $_owner          = null;
   
@@ -146,6 +148,7 @@ class CPrescription extends CMbObject {
     $specs["_dateTime_max"] = "dateTime";
     $specs["_owner"]        = "enum list|prat|func|group";
     $specs["_score_prescription"] = "enum list|0|1|2";
+		$specs["score"] = "enum list|0|1|2";
     $specs["_date_plan_soin"] = "date";
     $specs["_type_alerte"] = "enum list|hors_livret|interaction|allergie|profil|IPC";
     $specs["_chapitres"] = "enum list|med|inj|perfusion|oxygene|alimentation|aerosol|anapath|biologie|consult|dmi|imagerie|kine|soin|dm";

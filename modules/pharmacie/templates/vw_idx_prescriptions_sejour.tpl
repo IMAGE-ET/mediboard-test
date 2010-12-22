@@ -38,14 +38,42 @@ function updateListPrescrition(){
 	} });
 }
 
+// Validations de toutes les prescriptions qui ont le meme score
+function valideAllPrescriptions(list_prescriptions){
+  var oForm = getForm("valideAllPresc");
+	
+	$H(list_prescriptions).each(function(prescription_id){
+	if (!Object.isFunction(prescription_id.value))
+	  oForm.insert(DOM.input( {
+		      type: 'hidden', 
+          name:'prescriptions_pharma['+prescription_id.value+']',
+          value: prescription_id.value
+      }  )); 
+	});
+	
+	return onSubmitFormAjax(oForm, { onComplete: function(){
+	   updateListPrescrition();
+	 } } );
+}
+
+
 Main.add(function () {
   updatePatientsListHeight();
 	updateListPrescrition();
 	setInterval(updateListPrescrition, 300000);
 });
 
-
 </script>
+
+
+<form name="valideAllPresc" action="?" method="post">
+	<input type="hidden" name="m" value="dPprescription" />
+  <input type="hidden" name="dosql" value="do_valide_all_lines_aed" />
+  <input type="hidden" name="del" value="0" />
+	<input type="hidden" name="mode_pharma" value="1" />
+  <input type="hidden" name="praticien_id" value="{{$app->user_id}}" />
+</form>
+
 
 <table class="main">
   <tr>
@@ -104,9 +132,9 @@ Main.add(function () {
     </td>
   </tr>
 	<tr>
-    <td style="width: 250px;" id="left-column">
+    <td style="width: 270px;" id="left-column">
 		  <div style="{{if $smarty.session.browser.name == "msie" && $smarty.session.browser.majorver < 8}}overflow:visible; overflow-x:hidden; overflow-y:auto; padding-right:15px;{{else}}overflow: auto;{{/if}} height: 500px;" class="scroller">
-      <table class="tbl" id="prescriptions-list" style="width:240px;">  
+      <table class="tbl" id="prescriptions-list" style="width:270px;">  
 			</table>
 			</div>
     </td>
