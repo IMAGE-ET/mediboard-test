@@ -116,17 +116,16 @@ foreach($dates as $curr_date => $_date){
 $date_max = "$date_reelle $_hour:00:00";
 
 foreach($prescriptions as $_prescription){
+	$_prescription->calculAllPlanifSysteme();
+  
   $_prescription->loadRefPatient();
   $patients[$_prescription->_ref_patient->_id] = $_prescription->_ref_patient;
   
-	$_prescription->_ref_object->loadRefsAffectations();
+  $_prescription->_ref_object->loadRefsAffectations();
   $lits[$_prescription->_ref_object->_ref_last_affectation->_ref_lit->_view."-".$_prescription->_id] = $_prescription->_id;
-  
-	$_prescription->loadRefPraticien();
+  $_prescription->loadRefPraticien();
   $_prescription->_ref_praticien->loadRefFunction();
   $_prescription->_ref_patient->loadRefPhotoIdentite();
-	
-	$_prescription->calculAllPlanifSysteme();
   
 	// Chargement des planifications systemes
 	$planif = new CPlanificationSysteme();
@@ -320,6 +319,9 @@ foreach($prescriptions as $_prescription){
   		}
   	}
   }
+  
+  
+  
 }
 
 // Classement par lit
