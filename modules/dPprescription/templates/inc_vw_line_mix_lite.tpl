@@ -10,7 +10,7 @@
 
 <table class="tbl">
 {{assign var=prescription_line_mix_id value=$_prescription_line_mix->_id}}
-<tr {{if $_prescription_line_mix->_fin < $now && !$_prescription_line_mix->_protocole}}class="hatching_red"{{/if}}>
+<tr {{if $_prescription_line_mix->_fin && $_prescription_line_mix->_fin < $now && !$_prescription_line_mix->_protocole}}class="hatching_red"{{/if}}>
   <td style="width: 5%;" class="text {{if $_prescription_line_mix->perop}}perop{{/if}}">
 			     
     {{if $_prescription_line_mix->_can_delete_prescription_line_mix}}
