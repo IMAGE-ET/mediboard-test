@@ -2,7 +2,6 @@
 <ruleset name="Mediboard">
   <description>The Mediboard coding standard.</description>
 
-  <exclude-pattern>fieldSpecs</exclude-pattern>
   <exclude-pattern>dev</exclude-pattern>
   <exclude-pattern>includes/config.php</exclude-pattern>
   <exclude-pattern>files</exclude-pattern>
