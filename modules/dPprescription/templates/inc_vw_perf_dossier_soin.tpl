@@ -171,7 +171,7 @@
     {{/foreach}}
   {{/foreach}}
 {{else}}
-
+  {{assign var=nb_prevue value=""}}
 	{{foreach from=$tabHours key=_view_date item=_hours_by_moment}}
     {{foreach from=$_hours_by_moment key=moment_journee item=_dates}}
       {{foreach from=$_dates key=_date item=_hours}}
