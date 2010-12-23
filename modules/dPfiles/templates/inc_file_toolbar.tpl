@@ -51,11 +51,11 @@
 	{{mb_include template=inc_file_send_button onComplete="Document.refreshList('$doc_class','$doc_id')"}}
   
 	<!-- Move -->
-	<button type="button" class="hslip  {{$notext}}" onclick="this.form.file_category_id.show()">
+	<button type="button" class="hslip  {{$notext}}" onclick="this.form.file_category_id.setVisibility(true)">
 	  {{tr}}Move{{/tr}}
 	</button>
-	
-  <select style="display: none; width: 90px;" name="file_category_id" onchange="submitFileChangt(this.form)">
+	<br />
+  <select style="visibility: hidden; width: 12em;" name="file_category_id" onchange="submitFileChangt(this.form)">
     <option value="" {{if !$_doc_item->file_category_id}}selected="selected"{{/if}}>&mdash; Aucune catégorie</option>
     {{foreach from=$listCategory item=curr_cat}}
     <option value="{{$curr_cat->file_category_id}}" {{if $curr_cat->file_category_id == $_doc_item->file_category_id}}selected="selected"{{/if}} >

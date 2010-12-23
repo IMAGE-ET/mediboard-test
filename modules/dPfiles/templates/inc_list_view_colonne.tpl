@@ -34,27 +34,28 @@ Main.add(function () {
 {{if $docCount || $conf.dPfiles.CFilesCategory.show_empty}}
 <div id="Category-{{$_cat_id}}" style="display: none; clear: both;">  
   {{foreach from=$_cat.items item=_doc_item}}
-  <div style="float: left; width: 280px;">
+  <div style="float: left; width: 220px;">
     <table class="tbl">
       <tbody class="hoverable">
         <tr>
-          <td rowspan="2" style="width: 70px; height: 70px; text-align: center">
+          <td rowspan="2" style="width: 70px; height: 112px; text-align: center">
+					  <div></div>
             {{assign var="elementId" value=$_doc_item->_id}}
             {{if $_doc_item->_class_name=="CCompteRendu"}}
               {{if $conf.dPcompteRendu.CCompteRendu.pdf_thumbnails}}
                 {{assign var="nomdoc" value=$_doc_item->nom}}
                 {{assign var="file_owner" value=$_doc_item->_ref_chir->_id}}
                 {{assign var="file_id" value=$_doc_item->_ref_file->_id}}
-                {{assign var="srcImg" value="?m=dPfiles&a=fileviewer&suppressHeaders=1&file_id=$file_id&phpThumb=1&w=64"}}
+                {{assign var="srcImg" value="?m=dPfiles&a=fileviewer&suppressHeaders=1&file_id=$file_id&phpThumb=1&w=64&h=92"}}
               {{else}}
 			          {{assign var="srcImg" value="images/pictures/medifile.png"}}
               {{/if}}
             {{else}}
-              {{assign var="srcImg" value="?m=dPfiles&a=fileviewer&suppressHeaders=1&file_id=$elementId&phpThumb=1&wl=64&hp=64"}}
+              {{assign var="srcImg" value="?m=dPfiles&a=fileviewer&suppressHeaders=1&file_id=$elementId&phpThumb=1&w=64&h=92"}}
             {{/if}}
 
             <a href="#" onclick="popFile('{{$selClass}}', '{{$selKey}}', '{{$_doc_item->_class_name}}', '{{$elementId}}', '0');">
-              <img src="{{$srcImg}}" width="64" title="Afficher le grand aperçu" />
+              <img class="thumbnail" src="{{$srcImg}}" />
             </a>
           </td>
 			    
@@ -67,18 +68,12 @@ Main.add(function () {
               {{/if}}
             </span>
           </td>
-	
-          <!-- Historique & identifiants externes-->
-          <td class="text narrow" style="vertical-align: middle;">
-            {{mb_include module=system template=inc_object_idsante400 object=$_doc_item}}
-            {{mb_include module=system template=inc_object_history object=$_doc_item}}
-          </td>
 
         </tr>
         <tr>
 
           <!-- Toolbar -->
-          <td colspan="2" class="button">
+          <td class="button" style="height: 1px;">
             {{include file=inc_file_toolbar.tpl notext=notext}}
           </td>
 

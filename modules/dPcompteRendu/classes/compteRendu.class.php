@@ -91,10 +91,10 @@ class CCompteRendu extends CDocumentItem {
   
   function getProps() {
     $specs = parent::getProps();
-    $specs["chir_id"]          = "ref class|CMediusers purgeable";
+    $specs["chir_id"]          = "ref class|CMediusers purgeable show|1";
     $specs["function_id"]      = "ref class|CFunctions purgeable";
     $specs["group_id"]         = "ref class|CGroups purgeable";
-    $specs["object_id"]        = "ref class|CMbObject meta|object_class purgeable";
+    $specs["object_id"]        = "ref class|CMbObject meta|object_class purgeable show|1";
 		$specs["content_id"]       = "ref class|CContenthtml show|0";
     $specs["object_class"]     = "str notNull class show|0";
     $specs["nom"]              = "str notNull show|0 seekable";
@@ -381,6 +381,7 @@ class CCompteRendu extends CDocumentItem {
   
   function loadView() {
   	parent::loadView();
+		$this->loadContent();
     $this->loadFile();
   }
     
