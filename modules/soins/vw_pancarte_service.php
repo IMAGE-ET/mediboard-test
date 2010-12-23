@@ -13,8 +13,30 @@ $service_id = CValue::getOrSession("service_id");
 if($service_id == "NP"){
 	$service_id = "";
 }
-$date = CValue::getOrSession("debut", mbDate());
+$date = CValue::getOrSession("debut");
 $prescription_id = CValue::get("prescription_id");
+
+// Chargement des configs de services
+if(!$service_id){
+  $service_id = "none";
+}
+$config_service = new CConfigService();
+$configs = $config_service->getConfigForService($service_id);
+
+$matin = range($configs["Borne matin min"], $configs["Borne matin max"]);
+$soir = range($configs["Borne soir min"], $configs["Borne soir max"]);
+$nuit_soir = range($configs["Borne nuit min"], 23);
+$nuit_matin = range(00, $configs["Borne nuit max"]);
+
+// Si la date actuelle est inférieure a l'heure affichée sur le plan de soins, on affiche le plan de soins de la veille (cas de la nuit)
+if(!$date){
+	$datetime_limit = mbDateTime($configs["Borne matin min"].":00:00");
+	if(mbDateTime() < $datetime_limit){
+	  $date = mbDate("- 1 DAY");
+	} else {
+		$date = mbDate();
+	}
+}
 
 $filter_line = new CPrescriptionLineMedicament();
 $filter_line->debut = $date;
@@ -58,18 +80,6 @@ if($prescription_id){
 	$where["affectation.sortie"]      = " > '$date 00:00:00'";	
 	$prescriptions = $prescription->loadList($where, null, null, null, $ljoin);
 }
-
-// Chargement des configs de services
-if(!$service_id){
-  $service_id = "none";
-}
-$config_service = new CConfigService();
-$configs = $config_service->getConfigForService($service_id);
-
-$matin = range($configs["Borne matin min"], $configs["Borne matin max"]);
-$soir = range($configs["Borne soir min"], $configs["Borne soir max"]);
-$nuit_soir = range($configs["Borne nuit min"], 23);
-$nuit_matin = range(00, $configs["Borne nuit max"]);
 
 foreach($matin as &$_hour_matin){
   $_hour_matin = str_pad($_hour_matin, 2, "0", STR_PAD_LEFT);
