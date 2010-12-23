@@ -10,8 +10,8 @@
 
 <table class="tbl">
 {{assign var=prescription_line_mix_id value=$_prescription_line_mix->_id}}
-<tr>
-  <td style="width: 5%;" class="text {{if $_prescription_line_mix->perop}}perop{{/if}} {{if $_prescription_line_mix->_fin < $now && !$_prescription_line_mix->_protocole}}arretee{{/if}}">
+<tr {{if $_prescription_line_mix->_fin < $now && !$_prescription_line_mix->_protocole}}class="hatching_red"{{/if}}>
+  <td style="width: 5%;" class="text {{if $_prescription_line_mix->perop}}perop{{/if}}">
 			     
     {{if $_prescription_line_mix->_can_delete_prescription_line_mix}}
      <form name="editPerf-{{$_prescription_line_mix->_id}}" action="" method="post">
@@ -57,7 +57,9 @@
         {{$_perf_line->_ucd_view}}
         
 				{{if $_perf_line->_posologie}}
-				: {{$_perf_line->_posologie}}
+				: <span	{{if $_prescription_line_mix->_fin < $now && !$_prescription_line_mix->_protocole}}style="text-decoration:line-through"{{/if}}>
+				{{$_perf_line->_posologie}}</span>
+				
 				{{/if}}
 				 
       </a>

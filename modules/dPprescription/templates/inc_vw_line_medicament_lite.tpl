@@ -12,7 +12,7 @@
 <table class="tbl {{if $line->traitement_personnel}}traitement{{else}}med{{/if}}
                   {{if $line->_fin_reelle && $line->_fin_reelle < $now && !$line->_protocole}} line_stopped{{/if}}" id="line_medicament_{{$line->_id}}">
   <!-- Header de la ligne -->
-  <tr  class="hoverable">
+  <tr class="hoverable {{if $line->_fin_reelle && $line->_fin_reelle < $now && !$line->_protocole}}hatching_red{{/if}}">
     <td style="text-align: center; width: 5%;" class="text">
       <!-- Suppression de la ligne -->
       {{if $line->_can_delete_line}}
@@ -24,8 +24,7 @@
     </td>
     <td style="width: 25%" id="th_line_CPrescriptionLineMedicament_{{$line->_id}}" 
         class="text {{if $line->traitement_personnel}}traitement{{/if}}
-				            {{if $line->perop}}perop{{/if}}
-               {{if $line->_fin_reelle && $line->_fin_reelle < $now && !$line->_protocole}}arretee{{/if}}">
+				            {{if $line->perop}}perop{{/if}}">
       <script type="text/javascript">
         {{if !$line->_protocole}}
          Main.add( function(){
@@ -78,14 +77,16 @@
       {{if $line->ald}}{{mb_label object=$line field="ald"}}&nbsp;{{/if}}
     </td>
     <td style="width: 37%;" class="text">
-	    {{if $line->_ref_prises|@count}}
-	      {{foreach from=$line->_ref_prises item=_prise name=prises}}
-	        {{$_prise->_view}} 
-					{{if !$smarty.foreach.prises.last}}, {{/if}}
-	      {{/foreach}}
-	    {{else}}
-	      Aucune posologie
-	    {{/if}}
+			<span {{if $line->_fin_reelle && $line->_fin_reelle < $now && !$line->_protocole}}style="text-decoration:line-through"{{/if}}>
+			{{if $line->_ref_prises|@count}}
+        {{foreach from=$line->_ref_prises item=_prise name=prises}}
+          {{$_prise->_view}} 
+          {{if !$smarty.foreach.prises.last}}, {{/if}}
+        {{/foreach}}
+      {{else}}
+        Aucune posologie
+      {{/if}}
+			</span>
     </td>
     <td class="text" style="width: 8%" >
     	{{if !$line->_protocole}}

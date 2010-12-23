@@ -1132,6 +1132,11 @@ table.tbl th.arretee, table.tbl td.arretee{
 	background-image: url(images/icons/ray.gif);
 }
 
+table.tbl tr.hatching_red th, table.tbl tr.hatching_red td{   
+  background-image: url(../../images/icons/ray.gif);
+  opacity: 0.5;
+}
+
 table.tbl th.traitement, table.tbl td.traitement, table.tbl tr:hover td.traitement {
   background-color: #bdb;
 }

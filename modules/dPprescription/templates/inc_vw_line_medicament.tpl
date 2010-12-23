@@ -14,11 +14,10 @@
 
 <table class="tbl {{if $line->traitement_personnel}}traitement{{else}}med{{/if}}
              {{if $line->_fin_reelle && $line->_fin_reelle < $now && !$line->_protocole}} line_stopped{{/if}}" id="full_line_medicament_{{$line->_id}}">
-<tbody  class="hoverable">
-  <tr>
+<tbody class="hoverable">
+  <tr {{if $line->_fin_reelle && $line->_fin_reelle < $now && !$line->_protocole}}class="hatching_red"{{/if}}>
     <th colspan="5" id="th_line_CPrescriptionLineMedicament_{{$line->_id}}" 
-        class="text element {{if $line->traitement_personnel}}traitement{{/if}} {{if $line->perop}}perop{{/if}}
-               {{if $line->_fin_reelle && $line->_fin_reelle < $now && !$line->_protocole}}arretee{{/if}}">
+        class="text element {{if $line->traitement_personnel}}traitement{{/if}} {{if $line->perop}}perop{{/if}}">
       
       <div style="float:left;">
         {{if $line->_ref_parent_line->_id}}

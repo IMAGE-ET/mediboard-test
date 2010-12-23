@@ -20,9 +20,9 @@
 <table class="tbl elt {{if $line->_fin_reelle && $line->_fin_reelle < $now && !$line->_protocole}}line_stopped{{/if}}" id="full_line_element_{{$line->_id}}">
 <tbody class="hoverable">
   <!-- Header de la ligne d'element -->
-  <tr>    
+  <tr {{if $line->_fin_reelle && $line->_fin_reelle < $now && !$line->_protocole}}class="hatching_red"{{/if}}>    
     <th id="th_line_CPrescriptionLineElement_{{$line->_id}}" colspan="8"
-        class="element {{if $line->perop}}perop{{/if}} {{if $line->_fin_reelle && $line->_fin_reelle < $now && !$line->_protocole}} arretee{{/if}}">
+        class="element {{if $line->perop}}perop{{/if}}">
       <script type="text/javascript">
          Main.add( function(){
            //moveTbodyElt($('line_element_{{$line->_id}}'),'{{$category->_id}}');

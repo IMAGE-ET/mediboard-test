@@ -41,8 +41,8 @@ Main.add( function(){
 <table class="tbl" id="prescription_line_mix-{{$line->_id}}"> 
 <tbody class="hoverable {{if $line->_fin < $now && !$line->_protocole}}line_stopped{{/if}}">
 {{assign var=prescription_line_mix_id value=$line->_id}}
-  <tr>
-    <th colspan="9" id="th-perf-{{$line->_id}}" class="text element {{if $line->perop}}perop{{/if}} {{if $line->_fin < $now && !$line->_protocole}}arretee{{/if}}">
+  <tr {{if $line->_fin < $now && !$line->_protocole}}class="hatching_red"{{/if}}>
+    <th colspan="9" id="th-perf-{{$line->_id}}" class="text element {{if $line->perop}}perop{{/if}}">
       <div style="float: left">
       	{{if $line->_can_delete_prescription_line_mix}}
           <button type="button" class="trash notext" onclick="$V(getForm('editPerf-{{$line->_id}}').del,'1'); return onSubmitFormAjax(getForm('editPerf-{{$line->_id}}'), { 

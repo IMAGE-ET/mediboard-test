@@ -262,10 +262,10 @@ syncDate = function(oForm, curr_line_id, fieldName, type, object_class, cat_id) 
     // Ligne finie
     var oDiv = $('th_line_'+object_class+'_'+curr_line_id);
     if(oForm._fin.value != "" && oForm._fin.value < '{{$today}}'){
-      oDiv.addClassName("arretee");
+      oDiv.addClassName("hatching_red");
       oTbody.addClassName("line_stopped");
     } else {
-      oDiv.removeClassName("arretee");
+      oDiv.removeClassName("hatching_red");
       oTbody.removeClassName("line_stopped");
     }
   

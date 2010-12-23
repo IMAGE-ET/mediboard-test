@@ -329,10 +329,10 @@ changeColor = function(object_id, object_class, oForm, traitement, cat_id){
   }
   var classes_before = oTbody.className;
   if(date_fin != "" && date_fin <= '{{$now}}'){
-    oDiv.addClassName("arretee");
+    oDiv.addClassName("hatching_red");
     oTbody.addClassName("line_stopped");
   } else {
-    oDiv.removeClassName("arretee");
+    oDiv.removeClassName("hatching_red");
     oTbody.removeClassName("line_stopped");
   }
   var classes_after = oTbody.className;
@@ -356,10 +356,10 @@ changeColorPerf = function(perf_id, oForm){
   var oTbody = $('prescription_line_mix-'+perf_id);
   var oTh = $('th-perf-'+perf_id);
   if(_fin <= '{{$now}}'){
-    oTh.addClassName("arretee");
+    oTh.addClassName("hatching_red");
     oTbody.addClassName("line_stopped");
   } else {
-    oTh.removeClassName("arretee");
+    oTh.removeClassName("hatching_red");
     oTbody.removeClassName("line_stopped");
   }
 }
