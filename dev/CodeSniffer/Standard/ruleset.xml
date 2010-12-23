@@ -22,7 +22,7 @@
   <rule ref="Generic.Files.LineLength">
   <properties>
     <property name="lineLimit" value="85"/>
-    <property name="absoluteLineLimit" value="115"/>
+    <property name="absoluteLineLimit" value="125"/>
   </properties>
   </rule>
 
