@@ -315,39 +315,28 @@ class CCodable extends CMbObject {
 	  $oldObject->codes_ccam = $this->codes_ccam;
 	  $oldObject->updateFormFields();
 	    
-	  $nb_codes_ccam_minimal = array();
-	  $codes_ccam_minimal = array();
-	  $nb_codes_ccam = array();
-	    
 	  $oldObject->loadRefsActesCCAM();
 	    
-	  // Creation du tableau minimal de codes ccam
-	  foreach($oldObject->_ref_actes_ccam as $key => $acte) {
-	    @$codes_ccam_minimal[$acte->code_acte][$acte->code_activite][$acte->code_phase]++;
-	  }
-	  foreach($codes_ccam_minimal as $key => $acte){
-	    $max = max($acte);
-	    $nb_codes_ccam_minimal[$key] = reset($max);
-	  }
-	  foreach($nb_codes_ccam_minimal as $key => $acte) {
-	    for ($i = 0; $i < $acte; $i++){
-	      $oldObject->_codes_ccam_minimal[] = $key;
-	    }
-	  }
+    // Creation du tableau minimal de codes ccam
+    $codes_ccam_minimal = array();
+    foreach ($oldObject->_ref_actes_ccam as $key => $acte) {
+      $codes_ccam_minimal[$acte->code_acte] = true;
+    }
 
 	  // Transformation du tableau de codes ccam
+	  $codes_ccam = array();
 	  foreach($oldObject->_codes_ccam as $key => $code) {
 	    if (strlen($code) > 7){
 	      // si le code est de la forme code-activite-phase
         $detailCode = explode("-", $code);
         $code = $detailCode[0];
 	    }
-	    @$nb_codes_ccam[$code]++;
+	    $codes_ccam[$code] = true;
 	  }
 	  
 	  // Test entre les deux tableaux
-	  foreach($nb_codes_ccam_minimal as $code => $nb_code_minimal){
-	    if ($nb_code_minimal > @$nb_codes_ccam[$code]){
+	  foreach(array_keys($codes_ccam_minimal) as $_code ){
+	    if (!array_key_exists($_code, $codes_ccam)){
 	      return "Impossible de supprimer le code";
 	    }
 	  }
