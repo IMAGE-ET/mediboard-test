@@ -2,6 +2,7 @@
 <ruleset name="Mediboard">
   <description>The Mediboard coding standard.</description>
 
+  <!-- File exclusions -->
   <exclude-pattern>dev</exclude-pattern>
   <exclude-pattern>includes/config.php</exclude-pattern>
   <exclude-pattern>files</exclude-pattern>
@@ -20,17 +21,17 @@
 
   <!-- Lines can be 85 chars long, but never show errors -->
   <rule ref="Generic.Files.LineLength">
-  <properties>
-    <property name="lineLimit" value="85"/>
-    <property name="absoluteLineLimit" value="125"/>
-  </properties>
+    <properties>
+      <property name="lineLimit" value="85"/>
+      <property name="absoluteLineLimit" value="125"/>
+    </properties>
   </rule>
 
   <!-- Use Unix newlines -->
   <rule ref="Generic.Files.LineEndings">
-  <properties>
-    <property name="eolChar" value="\n"/>
-  </properties>
+    <properties>
+      <property name="eolChar" value="\n"/>
+    </properties>
   </rule>
 
   <!-- Use warnings for inline control structures -->
@@ -40,29 +41,30 @@
   </properties>
   </rule>
 
-  <!-- This messgae is not required as spaces are allowed for alignment -->
+  <!-- This message is not required as spaces are allowed for alignment -->
   <rule ref="Generic.Functions.FunctionCallArgumentSpacing.TooMuchSpaceAfterComma">
     <severity>0</severity>
   </rule>
 
+  <!-- This message is not required as spaces are allowed for alignment -->
   <rule ref="Generic.Functions.FunctionCallArgumentSpacing.SpaceBeforeComma">
-   <severity>0</severity>
+    <severity>0</severity>
   </rule>
 
 
   <!-- Use all PEAR Sniffs -->
   <rule ref="PEAR" />
 
+  <!-- my_function() are allowed -->
   <rule ref="PEAR.NamingConventions.ValidFunctionName.FunctionNoCaptial">
     <severity>0</severity>
   </rule>
 
-
   <!-- Use 2 spaces indent -->
   <rule ref="PEAR.WhiteSpace.ScopeIndent">
-  <properties>
-    <property name="indent" value="2"/>
-  </properties>
+    <properties>
+      <property name="indent" value="2"/>
+    </properties>
   </rule>
 
   </ruleset>
