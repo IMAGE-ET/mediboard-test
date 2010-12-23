@@ -1,33 +1,47 @@
-<?php /* $Id$ */
-
+<?php 
 /**
- * @package Mediboard
- * @subpackage includes
- * @version $Revision$
- * @author SARL OpenXtrem
- * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
- * Expose PHP implementation of missing built-in function
+ * Compat functions emulations
+ *
+ * PHP version 5.1.x+
+ *  
+ * @category   Dispatcher
+ * @package    Mediboard
+ * @subpackage Includes
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ * @version    SVN: $Id$ 
+ * @link       http://www.mediboard.org
  */
 
-/**
- * (PHP 5 >= 5.1.0)
- * array_diff_key Computes the difference of arrays using keys for comparison 
- * 
- * cf. http://php.net/array_diff_key
- */
- 
+
 if (!function_exists('array_diff_key')) {
+  /**
+   * Computes the difference of arrays using keys for comparison 
+   * (PHP 5 >= 5.1.0)
+   * 
+   * @return array The difference array, false on error
+   * @link http://php.net/array_diff_key
+   */
   function array_diff_key() {
     $argCount  = func_num_args();
-    $argValues  = func_get_args();
-    $valuesDiff = array();
-    if ($argCount < 2) return false;
-    foreach ($argValues as $argParam) {
-      if (!is_array($argParam)) return false;
+
+    if ($argCount < 2) {
+      return false;
     }
+    
+    $argValues  = func_get_args();
+    foreach ($argValues as $argParam) {
+      if (!is_array($argParam)) {
+        return false;
+      }
+    }
+    
+    $valuesDiff = array();
     foreach ($argValues[0] as $valueKey => $valueData) {
       for ($i = 1; $i < $argCount; $i++) {
-        if (isset($argValues[$i][$valueKey])) continue 2;
+        if (isset($argValues[$i][$valueKey])) {
+          continue 2;
+        }
       }
       $valuesDiff[$valueKey] = $valueData;
     }
@@ -37,6 +51,11 @@ if (!function_exists('array_diff_key')) {
 
 /**
  * Recursively applies a function to values of an array
+ * 
+ * @param string $function Callback to apply
+ * @param array  $array    Array to apply callback on
+ * 
+ * @return arrray
  */
 function array_map_recursive($function, $array) {
   foreach ($array as $key => $value ) {
@@ -49,26 +68,37 @@ function array_map_recursive($function, $array) {
 
 /**
  * Checks recursively if a value exists in an array
- * @return Returns TRUE if needle is found in the array, FALSE otherwise. 
- * @param mixed $needle The searched value.
+ * 
+ * @param mixed $needle   The searched value.
  * @param array $haystack The array.
- * @param bool $strict If the third parameter strict is set to TRUE then the in_array_recursive() function will also check the types of the needle in the haystack.
+ * @param bool  $strict   If true also check value types
+ * 
+ * @return true if needle is found in the array, false otherwise. 
  */
 function in_array_recursive($needle, $haystack, $strict = false) {
-  if (in_array($needle, $haystack, $strict)) return true;
-  foreach ($haystack as $v) {
-    if (is_array($v) && in_array_recursive($needle, $v, $strict)) return true;
+  if (in_array($needle, $haystack, $strict)) {
+    return true;
   }
+  
+  foreach ($haystack as $v) {
+    if (is_array($v) && in_array_recursive($needle, $v, $strict)) {
+      return true;
+    }
+  }
+  
   return false;
 }
 
-/**
- * (PHP 5 >= 5.3.0)
- * array_replace_recursive Replaces elements from passed arrays into the first array recursively
- * 
- * cf. http://php.net/array_replace_recursive
- */
 if (!function_exists('array_replace_recursive')) {
+  /**
+   * Array recursive replace recurse closure
+   * 
+   * @param object $array  Merge host array
+   * @param object $array1 Merged array
+   * 
+   * @return array
+   * @link  http://php.net/array_replace_recursive
+   */
   function array_replace_recursive__recurse($array, $array1) {
     foreach ($array1 as $key => $value) {
       // create new key in $array, if it is empty or not an array
@@ -85,6 +115,16 @@ if (!function_exists('array_replace_recursive')) {
     return $array;
   }
   
+  /**
+   * Replaces elements from passed arrays into the first array recursively
+   * (PHP 5 >= 5.3.0)
+   * 
+   * @param object $array  Merge host array
+   * @param object $array1 Merged array
+   * 
+   * @return array
+   * @link   http://php.net/array_replace_recursive
+   */
   function array_replace_recursive($array, $array1) {
     // handle the arguments, merge one by one
     $args = func_get_args();
@@ -101,67 +141,68 @@ if (!function_exists('array_replace_recursive')) {
   }
 }
 
-/**
- * (PHP 5 >= 5.2.0)
- * array_fill_keys Fill an array with values, specifying keys
- * 
- * cf. http://php.net/array_fill_keys
- */
 if (!function_exists('array_fill_keys')) {
-  function array_fill_keys($keys, $value) {
+  /**
+   * Fill an array with values, specifying keys
+   * 
+   * @param array $keys  Keys to fill values
+   * @param mixed $value Filling value
+   * 
+   * @return array Filled array
+   * @link   http://php.net/array_fill_keys
+   */
+	function array_fill_keys($keys, $value) {
     return array_combine($keys, array_fill(0, count($keys), $value));
   }
 }
 
-/**
- * (PHP 5 >= 5.1.0)
- * property_exists Computes the difference of arrays using keys for comparison 
- * 
- * cf. http://php.net/property_exists
- */
 if (!function_exists('property_exists')) {
-  function property_exists($class, $property) {
-    $vars = is_object($class) ? 
-              get_object_vars($class) : 
-              get_class_vars($class);
+	/**
+	 * property_exists Computes the difference of arrays using keys for comparison 
+   * (PHP 5 >= 5.1.0)
+	 * 
+	 * @param mixed  $context  Object or class name to inspect
+	 * @param string $property Name of property
+	 * 
+	 * @return boolean
+	 * @link http://php.net/property_exists
+	 */
+  function property_exists($context, $property) {
+    $vars = is_object($context) ? 
+      get_object_vars($context) : 
+      get_class_vars($context);
     return array_key_exists($property, $vars);
   }
 } 
 
-/**
- * (PHP 4 >= 4.3.2, PHP 5)
- * memory_get_usage Returns the amount of memory allocated to PHP, 
- * requires compiling with --enable-memory-limit before 5.2.1
- * 
- * cf. http://php.net/memory_get_usage
- */
-if(!function_exists('memory_get_usage')) {
+if (!function_exists('memory_get_usage')) {
+	/**
+	 * Returns the amount of memory allocated to PHP, 
+	 * (PHP 4 >= 4.3.2, PHP 5)
+	 * requires compiling with --enable-memory-limit before 5.2.1
+	 * 
+	 * @param bool $real_usage Real memory if true, emalloc() if false
+	 * 
+	 * @return int Number of bytes
+	 * @link http://php.net/memory_get_usage
+	 */
   function memory_get_usage($real_usage = false) {
-    /*$os = php_uname('s');
-    $pid = getmypid();
-    if (substr($os, 0, 3) === 'WIN') {
-      exec("tasklist /FI \"PID eq $pid\" /FO LIST", $output);
-      return preg_replace('/[\D]/', '', $output[5]) * 1024;
-    }
-    else {
-      exec("ps -eo%mem,rss,pid | grep $pid", $output);
-      $output = explode(' ', $output[0]);
-      return $output[1] * 1024;
-    } */
-    return '-';
+    return -1;
   }
 }
 
-/**
- * (PHP 5 >= 5.1.0)
- * timezone_identifiers_list - Returns numerically index array with all timezone identifiers
- * @param int $what
- * @param string $country
- * @return array The identifiers
- */
-if(!function_exists('timezone_identifiers_list')) {
+if (!function_exists('timezone_identifiers_list')) {
+	/**
+	 * Returns numerically index array with all timezone identifiers
+	 * (PHP 5 >= 5.1.0)
+	 * 
+	 * @param int    $what    One of DateTimeZone class constants
+	 * @param string $country A two-letter ISO 3166-1 compatible country code. 
+	 * 
+	 * @return array The identifiers
+	 */
   function timezone_identifiers_list($what = null, $country = null) {
-    return include('timezones.php');
+    return include "timezones.php";
   }
 }
 
@@ -189,7 +230,7 @@ else {
 }
 
 if (!defined('PHP_INT_MAX')) {
-	define('PHP_INT_MAX', pow(2, 31)-1);
+  define('PHP_INT_MAX', pow(2, 31)-1);
 }
 
 /**
@@ -218,7 +259,7 @@ if (!function_exists('bcmod')) {
  * @param object $timezone_identifier
  * @return 
  */
-if(!function_exists("date_default_timezone_set")) {
+if (!function_exists("date_default_timezone_set")) {
   function date_default_timezone_set($timezone_identifier) {
     // void
   }
@@ -228,7 +269,7 @@ if(!function_exists("date_default_timezone_set")) {
  * (PHP 5 >= 5.1.0)
  * inet_pton Converts a human readable IP address to its packed in_addr representation
  */
-if(!function_exists("inet_pton")) {
+if (!function_exists("inet_pton")) {
   function inet_pton($address) {
     // void
   }
@@ -238,7 +279,7 @@ if(!function_exists("inet_pton")) {
  * (PHP 5 >= 5.1.0)
  * inet_pton Converts a packed internet address to a human readable representation
  */
-if(!function_exists("inet_ntop")) {
+if (!function_exists("inet_ntop")) {
   function inet_ntop($in_addr) {
     return "";
   }

@@ -78,7 +78,7 @@ class CAppUI {
    */
   static function loadClass($className) {
     if (!class_exists($className)) {
-      return mb_autoload($className);
+      return mbAutoload($className);
     }
     return true;
   }

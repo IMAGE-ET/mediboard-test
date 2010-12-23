@@ -1,11 +1,16 @@
-<?php /* $Id$ */
-
+<?php 
 /**
- * @package Mediboard
- * @subpackage includes
- * @version $Revision$
- * @author SARL OpenXtrem
- * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ * Autoload strategies
+ *
+ * PHP version 5.1.x+
+ *  
+ * @category   Dispatcher
+ * @package    Mediboard
+ * @subpackage Includes
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ * @version    SVN: $Id$ 
+ * @link       http://www.mediboard.org
  */
 
 global $performance;
@@ -16,8 +21,12 @@ if (null == $classPaths = SHM::get("class-paths")) {
   updateClassPathCache();
 }
 
-/** Updates the PHP classes paths cache */
-function updateClassPathCache(){
+/** 
+ * Updates the PHP classes paths cache 
+ * 
+ * @return void
+ */
+function updateClassPathCache() {
   $classNames = CApp::getChildClasses(null);
   foreach ($classNames as $className) {
     $class = new ReflectionClass($className);
@@ -27,12 +36,19 @@ function updateClassPathCache(){
   SHM::put("class-paths", $classPaths);
 }
 
-function mb_autoload($className) {
+/**
+ * Mediboard autoload strategy
+ * 
+ * @param string $className Class to be loaded
+ * 
+ * @return bool  
+ */
+function mbAutoload($className) {
   global $classPaths, $performance;
 
   if (isset($classPaths[$className]) && file_exists($classPaths[$className])) {
     $performance["autoload"]++;
-    return require($classPaths[$className]);
+    return include $classPaths[$className];
   }
   else {
     updateClassPathCache();
@@ -41,10 +57,17 @@ function mb_autoload($className) {
 }
 
 if (function_exists("spl_autoload_register")) {
-  spl_autoload_register("mb_autoload");
+  spl_autoload_register("mbAutoload");
 }
 else {
+  /**
+   * Autoload magic function redefinition
+   * 
+   * @param string $className Class to be loaded
+   * 
+   * @return bool
+   */
   function __autoload($className) {
-    return mb_autoload($className);
+    return mbAutoload($className);
   }
 }

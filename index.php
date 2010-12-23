@@ -1,15 +1,19 @@
-<?php /* $Id$ */
-
+<?php 
 /**
- * @package Mediboard
- * @subpackage mediboard
- * @version $Revision$
- * @author SARL OpenXtrem
- * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ * Main URL Dispatcher 
+ *
+ * PHP version 5.1.x+
+ *  
+ * @category Dispatcher
+ * @package  Mediboard
+ * @author   SARL OpenXtrem <dev@openxtrem.com>
+ * @license  GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ * @version  SVN: $Id$ 
+ * @link     http://www.mediboard.org
  */
 
-require("./includes/compat.php");
-require("./includes/magic_quotes_gpc.php");
+require "./includes/compat.php";
+require "./includes/magic_quotes_gpc.php";
 
 /* 
  * The order of the keys is important (only the first keys 
@@ -37,18 +41,19 @@ if (!is_file("./includes/config.php")) {
   die("Redirection vers l'assistant d'installation");
 }
 
-require("./includes/config_dist.php");
-require("./includes/config.php");
+require "./includes/config_dist.php";
+require "./includes/config.php";
 
 $rootName = basename($dPconfig["root_dir"]);
 
-require("./includes/version.php");
-require("./classes/sharedmemory.class.php");
+require "./includes/version.php";
+require "./classes/sharedmemory.class.php";
 
 // PHP Configuration
-foreach($dPconfig["php"] as $key => $value) {
-  if ($value === "") continue;
-  ini_set($key, $value);
+foreach ($dPconfig["php"] as $key => $value) {
+  if ($value !== "") {
+    ini_set($key, $value);
+  }
 }
 
 if ($dPconfig["offline"]) {
@@ -62,31 +67,32 @@ if ($dPconfig["migration"]["active"]) {
 }
 
 // Check that the user has correctly set the root directory
-is_file ($dPconfig["root_dir"]."/includes/config.php") 
-  or die("ERREUR FATALE: Le répertoire racine est probablement mal configuré");
+if (!is_file($dPconfig["root_dir"]."/includes/config.php")) {
+  die("ERREUR FATALE: Le répertoire racine est probablement mal configuré");
+}
 
-require("./includes/mb_functions.php");
-require("./includes/errors.php");
+require "./includes/mb_functions.php";
+require "./includes/errors.php";
 
 date_default_timezone_set($dPconfig["timezone"]);
 
 // Start chrono
-require("./classes/chrono.class.php");
+require "./classes/chrono.class.php";
 $phpChrono = new Chronometer;
 $phpChrono->start();
 
 // Load AppUI from session
-require("./classes/app.class.php");
-require("./classes/ui.class.php");
-require("./includes/session.php");
+require "./classes/app.class.php";
+require "./classes/ui.class.php";
+require "./includes/session.php";
 
 // Register shutdown
 register_shutdown_function(array("CApp", "checkPeace"));
 
-require("./classes/sqlDataSource.class.php");
-require("./classes/mysqlDataSource.class.php");
+require "./classes/sqlDataSource.class.php";
+require "./classes/mysqlDataSource.class.php";
 
-if(!CSQLDataSource::get("std")) {
+if (!CSQLDataSource::get("std")) {
   header("Location: offline.php?reason=bdd");
   die("La base de données n'est pas connectée");
 }
@@ -98,7 +104,7 @@ header("Cache-Control: no-cache, no-store, must-revalidate");  // HTTP/1.1
 header("Pragma: no-cache");  // HTTP/1.0
 //header("X-UA-Compatible: chrome=1"); // To use the ChromeFrame plugin in IE
 
-require("./includes/autoload.php");
+require "./includes/autoload.php";
 
 // Load default preferences if not logged in
 if (!CAppUI::$instance->user_id) {
@@ -115,20 +121,21 @@ $suppressHeaders = CValue::request("suppressHeaders", $wsdl);
 
 // Output the charset header in case of an ajax request
 $ajax = CValue::request("ajax", false);
-
 // Check if we are in the dialog mode
+
 $dialog = CValue::request("dialog");
 
 // check if the user is trying to log in
 if (isset($_REQUEST["login"])) {
-  require("./locales/core.php");
+  include "./locales/core.php";
   if (null == $ok = CAppUI::login()) {
     CAppUI::setMsg("Auth-failed", UI_MSG_ERROR);
   }
 
-  if (isset($_SESSION['browser']['deprecated']) && 
-      $_SESSION['browser']['deprecated'] && 
-      !CValue::get("password")) { // If we are not connecting directly
+  if (isset($_SESSION['browser']['deprecated']) 
+      && $_SESSION['browser']['deprecated'] 
+      && !CValue::get("password")
+  ) { // If we are not connecting directly
     $tpl = new CSmartyDP("style/mediboard");
     $tpl->display("old_browser.tpl");
     CApp::rip();
@@ -154,14 +161,14 @@ if (isset($_REQUEST["login"])) {
 $m = $a = $u = $g = "";
 
 // load locale settings
-require("./locales/core.php");
+require "./locales/core.php";
 
-if (empty($locale_info["names"])){
+if (empty($locale_info["names"])) {
   $locale_info["names"] = array();
 }
 setlocale(LC_TIME, $locale_info["names"]);
 
-if (empty($locale_info["charset"])){
+if (empty($locale_info["charset"])) {
   $locale_info["charset"] = "UTF-8";
 }
 
@@ -189,18 +196,21 @@ CAppUI::requireSystemClass("smartydp");
 ob_start();
 
 // We check if the mobile feature is available and if the user agent is a mobile
-if (is_file("./mobile/main.php") && isset($_SESSION['browser']['mobile']) && $_SESSION['browser']['mobile']) {
-  require("./mobile/main.php");
+if (is_file("./mobile/main.php") 
+    && isset($_SESSION['browser']['mobile']) 
+    && $_SESSION['browser']['mobile']
+) {
+  include "./mobile/main.php";
 }
 else {
-  require("./includes/main.php");
+  include "./includes/main.php";
 }
 
-require("./includes/access_log.php");
+require "./includes/access_log.php";
 
 if (CValue::get("_aio")) {
   echo CHTMLResourceLoader::allInOne(ob_get_clean());
-}
+} 
 else {
   ob_end_flush();
 }

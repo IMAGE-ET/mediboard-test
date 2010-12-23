@@ -1,17 +1,23 @@
-<?php /* $Id$ */
-
+<?php 
 /**
- * @package Mediboard
- * @subpackage includes
- * @version $Revision$
- * @author SARL OpenXtrem
- * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ * Access logging 
+ *
+ * PHP version 5.1.x+
+ *  
+ * @category   Dispatcher
+ * @package    Mediboard
+ * @subpackage Includes
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ * @version    SVN: $Id$ 
+ * @link       http://www.mediboard.org
  */
 
 global $m, $action;
 
 $ds = CSQLDataSource::get("std");
-if (!$ds->loadTable("access_log") || !$action) { // $sction is not defined when the module is inactive
+// $action is not defined when the module is inactive
+if (!$ds->loadTable("access_log") || !$action) { 
   return;
 }
 
