@@ -8,8 +8,6 @@
 * @author Fabien Menager
 **/
 
-global $AppUI;
-
 // Chargement de l'objet
 $object_id    = CValue::get("object_id");
 $object_class = CValue::get("object_class");
@@ -17,18 +15,9 @@ $object = new $object_class;
 $object->load($object_id);
 
 // Chargement du praticien concerné et des praticiens disponibles
-if ($AppUI->_ref_user->isPraticien()) {
-  $praticien = $AppUI->_ref_user;
-  $praticiens = null;
-}
-else {
-	$praticien = new CMediusers();
-	$praticien->load(CValue::getOrSession("praticien_id"));
-	$praticiens = $praticien->loadPraticiens(PERM_EDIT);
-}
-
+$praticien = CMediusers::get(CValue::getOrSession("praticien_id"));
 $praticien->canDo();
-
+$praticiens =$praticien->loadPraticiens(PERM_EDIT);
 
 // Chargement des objets relatifs a l'objet chargé
 $templateClasses = $object->getTemplateClasses();

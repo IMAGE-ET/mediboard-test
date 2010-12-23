@@ -124,7 +124,8 @@ class CCompteRendu extends CDocumentItem {
   
   function getContent() {
     $this->loadContent();
-    return $this->_source;
+//    return $this->_source;
+
 	  $file = $this->loadFile();
 		return $file->_id ? $file->getContent() : $this->_source;
   }
@@ -148,7 +149,6 @@ class CCompteRendu extends CDocumentItem {
   }
 
   function loadDocuments($where = null, $order = null, $limit = null, $group = null, $leftjoin = null) {
-    global $can;
     if (!isset($where["object_id"])) {
       $where["object_id"] = "IS NOT NULL";
     }
@@ -496,6 +496,8 @@ class CCompteRendu extends CDocumentItem {
       return;
     }
 
+    $this->loadFile();
+		
     $this->completeField("nom", "_source");
     
     return parent::handleSend();

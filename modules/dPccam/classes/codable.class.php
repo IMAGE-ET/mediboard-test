@@ -316,7 +316,7 @@ class CCodable extends CMbObject {
 	  $oldObject->updateFormFields();
 	    
 	  $oldObject->loadRefsActesCCAM();
-	    
+			    
     // Creation du tableau minimal de codes ccam
     $codes_ccam_minimal = array();
     foreach ($oldObject->_ref_actes_ccam as $key => $acte) {
