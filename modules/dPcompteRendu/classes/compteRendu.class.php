@@ -715,11 +715,22 @@ class CCompteRendu extends CDocumentItem {
   
   function replaceFreeTextFields($source, $textes_libres) {
     $patterns = array();
+
+    // Les noms des zones de texte libre peuvent comporter des caractères utilisés
+    // en expression régulière, il faut donc les escaper.
+    $escape_patterns =
+      array('/\//', '/\^/', '/\./', '/\|/',
+            '/\(/', '/\)/', '/\[/', '/\]/', '/\*/', '/\+/',
+            '/\?/', '/\{/', '/\}/', '/\,/');
+    $replace =
+      array('\/', '\^', '\.', '\|', '\(', '\)',
+            '\[', '\]', '\*', '\+', '\?', '\{', '\}', '\,');
     
     foreach ($textes_libres as $key=>$_texte) {
-      $patterns[] = "/\[\[Texte libre - $key\]\]/i";
+      $key_escaped = preg_replace($escape_patterns, $replace, $key);
+      $patterns[] = "/\[\[Texte libre - $key_escaped\]\]/i";
     }
-  
+
     return preg_replace($patterns, $textes_libres, $source);
   }
 
