@@ -46,10 +46,7 @@ var File = {
     var url = new Url("dPcabinet", "httpreq_widget_files");
     url.addParam("object_id", object_id);
     url.addParam("object_class", object_class);
-    url.requestUpdate("files-"+object_id+"-"+object_class, {onComplete: function(){
-		    //File.applet.watchDirectory();
-				
-	  }});
+    url.requestUpdate("files-"+object_id+"-"+object_class);
   },
   
   register: function(object_id, object_class, container) {
@@ -62,5 +59,90 @@ var File = {
     Main.add( function() {
       File.refresh(object_id,object_class)
     } );
+  },
+  
+  editNom: function(guid) {
+    var form = getForm("editName-"+guid);
+    $("readonly_"+guid).toggle();
+    $("buttons_"+guid).toggle();
+    var input = form.file_name;
+
+    if ($(input).getStyle("display") == "inline-block") {
+      $(input).setStyle({display: "none"});
+      $V(input, input.up().previous().innerHTML);
+    }
+    else {
+      $(input).setStyle({display: "inline-block"});
+      // Focus et sélection de la sous-chaîne jusqu'au dernier point
+      input.focus();
+      input.caret(0, $V(input).lastIndexOf("."));
+    }
+  },
+  
+  toggleClass: function(element) {
+    if (element.hasClassName("edit")) {
+      element.removeClassName("edit");
+      element.addClassName("cancel");
+    } else {
+      element.removeClassName("cancel");
+      element.addClassName("edit");
+    }
+  },
+  
+  reloadFile: function(object_id, object_class, id) {
+    var url = new Url("dPcabinet", "ajax_reload_line_file");
+    url.addParam("id", id);
+    url.addParam("dialog", 1);
+    url.addParam("object_id", object_id);
+    url.addParam("object_class", object_class);
+    url.requestUpdate("td_CFile-"+id);
+  },
+  
+  checkFileName: function(file_name) {
+    if (file_name.match(/[\/\\\:\*\?\"<>]/g)) {
+      alert("Le nom du fichier ne doit pas comporter les caractères suivants : / \\ : * ? \" < >");
+      return false;
+    }
+    return true;
+  },
+  
+  switchFile: function(id, form, event) {
+    if (!event) {
+      event = window.event;
+    }
+    if (Event.key(event) != 9) {
+      return true;
+    }
+
+    // On annule le comportement par défaut
+    if (event.stopPropagation) {
+      event.stopPropagation();
+    }
+    
+    if (event.preventDefault) {
+      event.preventDefault();
+    }
+    
+    event.returnValue = false;
+    
+    if (File.checkFileName($V(form.file_name))) {
+      form.onsubmit();
+      var current_tr = $("tr_CFile-"+id);
+  
+      // S'il y a un fichier suivant, alors on simule le onclick sur le bouton de modification
+      if (next_tr = current_tr.next()) {
+        var button = next_tr.down(".edit");
+        // Si le bouton d'édition n'existe pas, alors on focus sur l'input pour le changement de nom
+        if (button == undefined) {
+          var input = next_tr.select("input[type='text']")[0];
+          input.focus();
+          input.caret(0, $V(input).lastIndexOf("."));
+        } else {
+          button.onclick();
+        }
+      }
+    }
+
+    return false;
   }
 };
