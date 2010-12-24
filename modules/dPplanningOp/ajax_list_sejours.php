@@ -15,7 +15,8 @@ $collision_sejour = null;
 
 $patient = new CPatient;
 $patient->load($patient_id);
-$patient->loadRefsSejours();
+$where = array("group_id" => "= '".CGroups::loadCurrent()->_id."'");
+$patient->loadRefsSejours($where);
 
 foreach($patient->_ref_sejours as $_sejour) {  
   $_sejour->loadNumDossier();
