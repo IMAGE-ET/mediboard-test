@@ -45,6 +45,7 @@ class CMbBackSpec {
     $backSpec->_notNull   = $backObjectSpec->notNull;
     $backSpec->_purgeable = $backObjectSpec->purgeable;
     $backSpec->_cascade   = $backObjectSpec->cascade;
+    $backSpec->_unlink    = $backObjectSpec->unlink;
     
     return $backSpec;
   }

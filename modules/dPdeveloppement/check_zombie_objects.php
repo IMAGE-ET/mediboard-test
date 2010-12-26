@@ -20,6 +20,7 @@ if ($object->_spec->table) {
   $object->makeAllBackSpecs();
   foreach ($object->_backSpecs as $name => $back_spec) {
     $back_object = new $back_spec->class;
+    $fwd_spec = $back_object->_specs[$back_spec->field];
 
     // Check the back ref only if the class's module is installed
     if (!in_array($back_spec->class, $installed_classes)) {
@@ -34,7 +35,6 @@ if ($object->_spec->table) {
       WHERE `obj`.`{$object->_spec->key}` IS NULL 
       AND `back_obj`.`{$back_spec->field}` IS NOT NULL";
     
-    $fwd_spec = $back_object->_specs[$back_spec->field];
 		if ($field_meta = $fwd_spec->meta) {
       $query .= "\n AND `back_obj`.`$field_meta` = '$class_name'";
 		}

@@ -1,14 +1,18 @@
 <form name="class-selection" action="" method="get">
 	<input type="hidden" name="m" value="{{$m}}" />
   <input type="hidden" name="tab" value="{{$tab}}" />
-	<label>Classe:
+	
+	<label for="class_name">Classe</label>
 	<select name="class_name" onchange="this.form.submit()">
 		{{foreach from=$classes item=_class}}
-		  <option value="{{$_class}}" {{if $class_name == $_class}}selected="selected"{{/if}}>{{$_class}} - {{tr}}{{$_class}}{{/tr}}</option>
+		  <option value="{{$_class}}" {{if $class_name == $_class}} selected="selected" {{/if}}>
+		  	{{$_class}} - {{tr}}{{$_class}}{{/tr}}
+			</option>
 		{{/foreach}}
 	</select>
-	</label>
-	<label>Nombre d'objets à afficher:<input type="text" name="count" value="{{$objects_count}}" size="4" /></label>
+	
+	<label for="count">Nombre d'objets à afficher</label>
+  <input type="text" name="count" value="{{$objects_count}}" size="4" />
 </form>
 
 <table class="tbl main">
@@ -19,12 +23,14 @@
 	{{foreach from=$zombies key=name item=zombie}}
 	  <tr>
 			<td style="font-weight: bold;">
-			  {{assign var=initiator value=$object->_backSpecs[$name]->_initiator}}
+        {{assign var=backSpec value=$object->_backSpecs[$name]}}
+        {{assign var=initiator value=$backSpec->_initiator}}
 			  {{tr}}{{$initiator}}-back-{{$name}}{{/tr}}
 			</td>
 			
 			<td>
 				<div class="{{$zombie.count|ternary:warning:info}}">
+					{{if $backSpec->_unlink}}<strong>Unlink</strong> :{{/if}}
 					<span onmouseover="ObjectTooltip.createDOM(this, '{{$_class}}-{{$name}}')">
 						{{$zombie.count}}
 					</span>
