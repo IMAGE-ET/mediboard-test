@@ -3,8 +3,8 @@
   <input type="hidden" name="tab" value="{{$tab}}" />
 	<label>Classe:
 	<select name="class_name" onchange="this.form.submit()">
-		{{foreach from=$classes item=curr_class}}
-		  <option value="{{$curr_class}}" {{if $class_name == $curr_class}}selected="selected"{{/if}}>{{$curr_class}} - {{tr}}{{$curr_class}}{{/tr}}</option>
+		{{foreach from=$classes item=_class}}
+		  <option value="{{$_class}}" {{if $class_name == $_class}}selected="selected"{{/if}}>{{$_class}} - {{tr}}{{$_class}}{{/tr}}</option>
 		{{/foreach}}
 	</select>
 	</label>
@@ -13,32 +13,43 @@
 
 <table class="tbl main">
 	<tr>
-		<th>Back name</th>
-		<th>Back title</th>
-		<th>Nombre</th>
+		<th>Collection</th>
+		<th>Violations</th>
 	</tr>
 	{{foreach from=$zombies key=name item=zombie}}
-	  <tr class="category" id="zombie-{{$name}}-toggle-trigger">
-	    <td style="font-weight: bold;">{{$name}}</td>
-			<td style="font-weight: bold;">{{tr}}{{$class_name}}-back-{{$name}}{{/tr}}</td>
+	  <tr>
+			<td style="font-weight: bold;">
+			  {{assign var=initiator value=$object->_backSpecs[$name]->_initiator}}
+			  {{tr}}{{$initiator}}-back-{{$name}}{{/tr}}
+			</td>
+			
 			<td>
-				{{$zombie.count}} 
-        <script type="text/javascript">Main.add(function(){new PairEffect('zombie-{{$name}}-toggle')});</script>
-			</td>
-		</tr>
-		<tr id="zombie-{{$name}}-toggle">
-			<td colspan="3">
-				{{foreach from=$zombie.objects item=curr_object}}
-				  <span onmouseover="ObjectTooltip.createEx(this, '{{$curr_object->_guid}}')">
-				  	{{$curr_object}}
+				<div class="{{$zombie.count|ternary:warning:info}}">
+					<span onmouseover="ObjectTooltip.createDOM(this, '{{$_class}}-{{$name}}')">
+						{{$zombie.count}}
 					</span>
-					<br />
-				{{foreachelse}}
-				  {{tr}}None{{/tr}}
-				{{/foreach}}
+				</div>
+				
+				<table class="tbl" id="{{$_class}}-{{$name}}" style="display: none;">
+				  <tr>
+				  	<th>{{$initiator}}.{{$name}}</th>
+					</tr>
+	        {{foreach from=$zombie.objects item=_object}}
+          <tr>
+            <td>
+		          <span onmouseover="ObjectTooltip.createEx(this, '{{$_object->_guid}}')">
+		            {{$_object}}
+		          </span>
+            </td>
+          </tr>
+          {{foreachelse}}
+					<tr><td><em>{{tr}}None{{/tr}}</em></td></tr>
+	        {{/foreach}}
+        </table>
 			</td>
+
 		</tr>
 	{{foreachelse}}
-	<tr><td colspan="3">La classe n'a pas de table associée</td></tr>
+	<tr><td colspan="3">La classe n'est référencé dans aucune collection</td></tr>
 	{{/foreach}}
 </table>
