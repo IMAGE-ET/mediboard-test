@@ -25,6 +25,7 @@ $locales['CEtabExterne-back-transferts_entree'] = 'Séjours en transfert d\'entré
 $locales['CEtabExterne-back-transferts_entree.empty'] = 'Aucun séjour en transfert d\'entrée';
 $locales['CGroups-back-sejours'] = 'Séjours';
 $locales['CGroups-back-sejours.empty'] = 'Aucun séjour';
+$locales['CMbObject-back-modeles_etiquettes'] = 'Modèles d\'étiquette';
 $locales['CMedecin-back-'] = 'Séjours';
 $locales['CMediusers-back-'] = 'Intervention';
 $locales['CMediusers-back-operations_anesth'] = 'Interventions';

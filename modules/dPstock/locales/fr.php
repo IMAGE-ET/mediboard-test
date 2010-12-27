@@ -390,6 +390,7 @@ $locales['CProductOrder._status.received'] = 'Reçue';
 $locales['CProductOrder.all'] = 'Toutes les commandes';
 $locales['CProductOrder.more'] = 'commandes';
 $locales['CProductOrder.none'] = 'Aucune commande';
+$locales['CProductOrder.object_class.COperation'] = 'Intervention';
 $locales['CProductOrder.one'] = 'commande';
 $locales['CProductOrder.select'] = 'Choisissez une commande';
 $locales['CProductOrderItem'] = 'Article';

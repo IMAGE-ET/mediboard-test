@@ -32,12 +32,12 @@ Localize = {
 <table class="form">
   
   <tr>
-    <th>Language</th>
+    <th>{{tr}}Language{{/tr}}</th>
     <td><input type="text" readonly="readonly" name="language" value="{{$app->user_prefs.LOCALE}}" /></td>
   </tr>
 
   <tr>
-    <th>Module</th>
+    <th>{{tr}}Module{{/tr}}</th>
     <td>
       <select name="module">
           <option value="common">&mdash; common</option>
