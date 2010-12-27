@@ -92,7 +92,9 @@
           {{tr}}Remove{{/tr}}
         </a>
         {{else}}
-        {{tr}}Up to date{{/tr}}
+          <div class="info">
+            {{tr}}Up to date{{/tr}}
+          </div>
         {{/if}}
       </td>
       {{if $installed}}
@@ -103,7 +105,9 @@
           <div class="
             {{if $status == 'uptodate'}}info{{/if}}
             {{if $status == 'obsolete'}}warning{{/if}}
-            {{if $status == 'unavailable'}}error{{/if}}">{{$dsn}}</div>
+            {{if $status == 'unavailable'}}error{{/if}}">
+            {{$dsn}}
+					</div>
           {{/foreach}}
           {{/foreach}}
           {{/if}}
