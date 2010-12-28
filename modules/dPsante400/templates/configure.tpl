@@ -102,6 +102,9 @@
       <button class="search" onclick="Moves.doAction('count')">
         {{tr}}Count{{/tr}}
       </button>
+      <button class="search" onclick="Moves.doAction('obsolete')">
+        {{tr}}Obsolete{{/tr}}
+      </button>
     </td>
     <td class="text" id="purgeMoves" />
   </tr>

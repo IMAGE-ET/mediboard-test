@@ -85,6 +85,7 @@ $locales['config-interop-mode_compat-default'] = 'Aucun';
 $locales['config-interop-mode_compat-medicap'] = 'Medicap';
 $locales['mod-dPsante400-tab-configure'] = 'Configuration';
 $locales['mod-dPsante400-tab-easycom'] = 'Tests EasyCom';
+$locales['mod-dPsante400-tab-httpreq_do_moves'] = 'Action sur les mouvements';
 $locales['mod-dPsante400-tab-stats_identifiants'] = 'Statistiques';
 $locales['mod-dPsante400-tab-synchro_sante400'] = 'Traitement de mouvements';
 $locales['mod-dPsante400-tab-view_identifiants'] = 'Identifiants externes';

@@ -121,7 +121,14 @@ class CMouvement400 extends CRecordSante400 {
     return $clause;
   }
   
-  function count($marked = false) {
+  /**
+   * Count triggers
+   * 
+   * @param boolean $marked [optional] 
+   * @param string  $oldest [optional]
+   * @return interger
+   */
+	function count($marked = false, $newest = null) {
 
     if ($marked) {
 	    $mark = new CTriggerMark();
@@ -130,6 +137,11 @@ class CMouvement400 extends CRecordSante400 {
       $where["trigger_class"] = "= '$mark->trigger_class'";
       $where["done"] = "= '0'";
       $where["mark"] = "!= '========'";
+			
+			if ($newest) {
+				$where["trigger_number"] = "<= '$newest'";
+			}
+			
       $total = $mark->countList($where);
     }
     else {
@@ -137,6 +149,11 @@ class CMouvement400 extends CRecordSante400 {
 	    $query = "SELECT COUNT(*) AS TOTAL FROM $this->base.$this->table";
 	    $query.= $this->getNewMarkedClause($marked);
 	    $query.= $this->getFilterClause();
+
+      if ($newest) {
+        $query.= "AND $this->idField <= '$newest'";
+      }
+
 	    $record->query($query);
 	    $total = $record->consume("TOTAL");
     }
@@ -176,8 +193,8 @@ class CMouvement400 extends CRecordSante400 {
   }
     
   function load($rec) {
-    $query = "SELECT * FROM $this->base.$this->table" .
-        "\n WHERE $this->idField = ?";
+    $query = "SELECT * FROM $this->base.$this->table 
+		  WHERE $this->idField = ?";
 
     $values = array (
       intval($rec),
@@ -187,6 +204,13 @@ class CMouvement400 extends CRecordSante400 {
     $this->initialize();
     $this->checkOut();     
   }
+	
+	function loadOldest() {
+    $query = "SELECT * FROM $this->base.$this->table 
+			ORDER BY $this->idField ASC";
+    $this->loadOne($query);
+    $this->initialize();
+	}
   
 /**
  * Mark the mouvement row

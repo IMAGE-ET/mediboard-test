@@ -9,10 +9,10 @@
  */
 
 
-global $can;
-$can->needsAdmin();
+CCanDo::checkAdmin();
 
 $marked = CValue::get("marked");
+$action = CValue::get("action");
 
 $type = CValue::get("type");
 $types = $type == "all" ? CMouvFactory::getTypes() : array($type);
@@ -21,23 +21,31 @@ $marked = CValue::get("marked");
 $marked = $marked == "all" ? array("0", "1") : array($marked);
 
 foreach ($types as $_type) {
-  foreach ($marked as $_marked) {
-	  $mouv = CMouvFactory::create($_type);
-	   
-		switch (CValue::get("action")) {
-			case "count":
-			$count = $mouv->count($_marked);
-			CAppUI::stepAjax("%s - %s : %s disponibles ", UI_MSG_OK, 
-			  CAppUI::tr("CMouvement400-type-$_type"),
-			  CAppUI::tr("CMouvement400-marked-$_marked"), 
-			  $count);
-			break;
+  $mouv = CMouvFactory::create($_type);
+	if ($action == "count") {
+	  foreach ($marked as $_marked) {
+	    $count = $mouv->count($_marked);
+	    CAppUI::stepAjax("%s - %s : %s disponibles ", UI_MSG_OK, 
+	      CAppUI::tr("CMouvement400-type-$_type"),
+	      CAppUI::tr("CMouvement400-marked-$_marked"), 
+	      $count);
+    }
+	}
+	
+  if ($action == "obsolete") {
+  	CSQLDataSource::$trace = false;
+    $mouv->loadOldest();
+    CAppUI::stepAjax("Oldest available trigger for type '%s' is '%s' dating '%s'", UI_MSG_OK, 
+		  $_type,
+			$mouv->rec, 
+			$mouv->when);
 			
-			default:
-		  CAppUI::stepAjax("Action '$action' non prise en charge", UI_MSG_ERROR);
-			break;
-		}
-  }
+		$count = $mouv->count(true, $mouv->rec);
+    CAppUI::stepAjax("Counting '%s' obsolete marked triggers", $count ? UI_MSG_WARNING : UI_MSG_OK, 
+      $count);
+
+    CSQLDataSource::$trace = false;
+  }	
 }
 
 ?>
