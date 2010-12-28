@@ -19,8 +19,8 @@ class CMbXMLDocument extends DOMDocument {
   var $documentfilename = null;
   var $now              = null;
   
-  function __construct() {
-    parent::__construct("1.0", "iso-8859-1");
+  function __construct($encoding = "iso-8859-1") {
+    parent::__construct("1.0", $encoding);
     
     $this->preserveWhiteSpace = false;
     $this->formatOutput = true;

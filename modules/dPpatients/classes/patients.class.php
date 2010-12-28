@@ -835,11 +835,20 @@ class CPatient extends CMbObject {
     }
   }
   
+  function getCurrSejour($dateTime = null) {
+    if (!$dateTime) {
+      $dateTime = mbDateTime();
+    }
+    
+    $where[] = "'$dateTime' BETWEEN entree AND sortie";
+    $this->loadRefsSejours($where);
+  }
+  
   /*
    * Get the next sejour from today or from a given date
    * @return array(CSejour, COperation);
    */ 
-  function getNextSejourAndOperation($date = null) {
+  function getNextSejourAndOperation($date = null, $withOperation = true) {
     $sejour = new CSejour;
     $op     = new COperation;
     if(!$date) {
@@ -858,17 +867,20 @@ class CPatient extends CMbObject {
             $sejour = $_sejour;
           }
         }
-        if(!$_sejour->_ref_operations) {
-          $_sejour->loadRefsOperations(array("annulee" => "= '0'"));
-        }
-        foreach($_sejour->_ref_operations as $_op) {
-          $_op->loadRefPlageOp();
-          if(!$op->_id) {
-            $op = $_op;
-          } 
-          else {
-            if($_op->_datetime < $op->_datetime) {
+        
+        if ($withOperation) {
+          if(!$_sejour->_ref_operations) {
+            $_sejour->loadRefsOperations(array("annulee" => "= '0'"));
+          }
+          foreach($_sejour->_ref_operations as $_op) {
+            $_op->loadRefPlageOp();
+            if(!$op->_id) {
               $op = $_op;
+            } 
+            else {
+              if($_op->_datetime < $op->_datetime) {
+                $op = $_op;
+              }
             }
           }
         }

@@ -179,6 +179,7 @@ updateQuantite = function(ratio_UI, oField){
   <input type="hidden" name="dateTime" value="{{$dateTime}}" />
   <input type="hidden" name="prise_id" value="{{$prise_id}}" />
   <input type="hidden" name="callback" value="submitTransmission" />
+  <input type="hidden" name="_quantite_prevue" value="{{$prise->quantite}}" />
 	<table class="form">
 	  <tr>
 	    <th class="title" colspan="2">Administration de {{$line->_view}}<br />{{$dateTime|date_format:"%d/%m/%Y à %H:%M"}}</th>

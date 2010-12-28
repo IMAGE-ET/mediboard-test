@@ -26,6 +26,8 @@ class CAdministration extends CMbMetaObject {
   // Form field
   var $_heure = null;
   
+  var $_quantite_prevue = null;
+  
   // Object references
   var $_ref_administrateur = null;
   var $_ref_transmissions  = null;

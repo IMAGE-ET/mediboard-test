@@ -38,20 +38,20 @@ abstract class CMbString {
 	static function removeDiacritics($string, $filter = self::BOTHCASES) {
 	  $from = self::$allographs["withdiacritics"];
 		$to   = self::$allographs["withoutdiacritics"];
-		
+
 		switch ($filter) {
 			case self::LOWERCASE:
 			break;
 			
       case self::UPPERCASE:
-      $from = strtoupper($from);
-      $to   = strtoupper($to);
+      $from = mb_strtoupper($from);
+      $to   = mb_strtoupper($to);
 			break;
 			
       default:
       case self::BOTHCASES:
-      $from .= strtoupper($from);
-      $to   .= strtoupper($to);
+      $from .= mb_strtoupper($from);
+      $to   .= mb_strtoupper($to);
       break;
 		}
 			  
@@ -80,6 +80,10 @@ abstract class CMbString {
 	 * @return string The truncated string
 	 */
 	static function truncate($string, $max = 25, $replacement = '...'){
+	  if (is_object($string)) {
+	    return $string;
+	  }
+	  
 	  if (strlen($string) > $max) {
       return substr($string, 0, $max - strlen($replacement)).$replacement;
 	  }

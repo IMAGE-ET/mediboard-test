@@ -9,7 +9,7 @@
 *}}
 
 <script type="text/javascript">
-function refreshLists(code_cis) {
+function refreshLists(code_cis, page) {
   var form = getForm("filter");
   var transmissionTab = $('li-transmissions');
   var showTransmissions = false;
@@ -48,14 +48,16 @@ function refreshLists(code_cis) {
   } else {
     url.requestUpdate("list-dispensations");
   }
-  refreshStocks.defer();
+  refreshStocks.curry(page).defer();
   return false;
 }
 
-function refreshStocks() {
+function refreshStocks(page) {
   var formFilter = getForm("filter");
   var url = new Url("pharmacie", "httpreq_vw_stocks_service_list");
   url.addParam("service_id", $V(formFilter.service_id));
+  if (page)
+    url.addParam("page", page);
   url.requestUpdate("list-stocks");
 }
 

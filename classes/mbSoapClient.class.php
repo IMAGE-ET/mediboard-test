@@ -57,8 +57,8 @@ class CMbSOAPClient extends SoapClient {
     if (isset($arguments[0]) && empty($arguments[0])) {
       $arguments = array();
     }
-    
-    if ($this->flatten) {
+
+    if ($this->flatten && isset($arguments[0]) && !empty($arguments[0])) {
       $arguments = $arguments[0];
     }
     
@@ -101,10 +101,12 @@ class CMbSOAPClient extends SoapClient {
     // response time
     $echange_soap->response_time = $chrono->total;
     
+    //$arguments = array_map(array("CMbString", "truncate"), $arguments, array("1024"));
     foreach ($arguments as &$_argument) {
       if ($_argument && is_string($_argument))
         $_argument = CMbString::truncate($_argument, 1024);
     }
+    
     $echange_soap->input = serialize($arguments);
     if ($echange_soap->soapfault != 1) {
     	$echange_soap->output = serialize($output);

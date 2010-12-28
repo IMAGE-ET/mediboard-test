@@ -32,6 +32,8 @@ updateDispensationUrgence = function(formUrgence) {
 }
 </script>
 
+{{mb_include module=system template=inc_pagination change_page="refreshStocks" current=$page}}
+
 <table class="tbl">
   <tr>
     <th colspan="6" class="title">Dispensations - Produits présents dans les services</th>
@@ -87,7 +89,7 @@ updateDispensationUrgence = function(formUrgence) {
       <td>{{mb_value object=$stock->_ref_product field=_unit_title}}</td>
       <td>
         {{assign var=id value=$stock->_id}}
-        <form name="dispensation-{{$id}}" action="?" method="post" onsubmit="return (checkForm(this) && onSubmitFormAjax(this, {onComplete: refreshLists}))">
+        <form name="dispensation-{{$id}}" action="?" method="post" onsubmit="return (checkForm(this) && onSubmitFormAjax(this, {onComplete: refreshLists.curry(null, '{{$page}}')}))">
           <input type="hidden" name="m" value="dPstock" />
           <input type="hidden" name="dosql" value="do_delivery_aed" />
           {{mb_field object=$list_dispensations.$id field=service_id hidden=true}}
@@ -102,7 +104,7 @@ updateDispensationUrgence = function(formUrgence) {
       {{if array_key_exists($id, $list_returns)}}
         {{foreach from=$list_returns.$id item=return}}
           {{assign var=id value=$return->_id}}
-          <form name="return-{{$id}}" action="?" method="post" onsubmit="return (checkForm(this) && onSubmitFormAjax(this, {onComplete: refreshLists}))">
+          <form name="return-{{$id}}" action="?" method="post" onsubmit="return (checkForm(this) && onSubmitFormAjax(this, {onComplete: refreshLists.curry(null, '{{$page}}')}))">
             <input type="hidden" name="m" value="dPstock" />
             <input type="hidden" name="dosql" value="do_delivery_trace_aed" />
             <input type="hidden" name="delivery_trace_id" value="{{$id}}" />

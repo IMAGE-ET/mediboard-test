@@ -142,6 +142,7 @@ Main.add( function(){
 		                <input type="hidden" name="dateTime" value="{{$by_hour.dateTime}}" />
 		                <input type="hidden" name="prise_id" value="{{$by_hour.prise_id}}" />
 		                <input type="hidden" name="quantite_prevue" disabled="disabled" value="{{$by_hour.prise->quantite}}" />
+		                <input type="hidden" name="_quantite_prevue" value="{{$by_hour.prise->quantite}}" />
 		                
 		                <b>{{$date|date_format:"%d/%m/%Y"}}, {{$hour}}h</b> : 
 		                {{mb_label object=$by_hour.prise field=quantite}}

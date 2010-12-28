@@ -163,8 +163,12 @@ class CProduct extends CMbObject {
   }
 
   function loadRefsFwd() {
-    $this->_ref_category = $this->loadFwdRef("category_id", true);
+    $this->loadRefCategory();
     $this->_ref_societe  = $this->loadFwdRef("societe_id" , true);
+  }
+  
+  function loadRefCategory() {
+    $this->_ref_category = $this->loadFwdRef("category_id", true);
   }
   
   // Loads the stock associated to the current group

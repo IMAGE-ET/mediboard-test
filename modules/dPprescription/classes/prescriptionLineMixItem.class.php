@@ -24,6 +24,7 @@ class CPrescriptionLineMixItem extends CMbObject {
 		
   // Object references
   var $_ref_prescription_line_mix = null;
+  var $_ref_prescription          = null; // Ref Distante par CPrescriptionLineMix
 
   // Form fields
   var $_debut = null;
@@ -135,6 +136,8 @@ class CPrescriptionLineMixItem extends CMbObject {
   function loadRefPerfusion(){
     $this->_ref_prescription_line_mix = new CPrescriptionLineMix();
     $this->_ref_prescription_line_mix = $this->_ref_prescription_line_mix->getCached($this->prescription_line_mix_id);
+    
+    $this->_ref_prescription = $this->_ref_prescription_line_mix->_ref_prescription;
   }
   
   /*

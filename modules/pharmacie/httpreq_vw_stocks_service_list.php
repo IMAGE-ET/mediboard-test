@@ -12,11 +12,14 @@ CCanDo::checkRead();
 
 $service_id = CValue::getOrSession('service_id');
 $patient_id = CValue::get('patient_id');
+$page = CValue::get("page", 0);
 
 // Services' stocks
 $list_stocks_service = new CProductStockService();
 $list_stocks_service->service_id = $service_id;
-$list_stocks_service = $list_stocks_service->loadMatchingList();
+
+$total = $list_stocks_service->countMatchingList();
+$list_stocks_service = $list_stocks_service->loadMatchingList(null, "$page, 20");
 
 // Dispensations list, calculated
 $list_dispensations = array();
@@ -67,6 +70,8 @@ $smarty->assign('list_stocks_service', $list_stocks_service);
 $smarty->assign('list_returns', $list_returns);
 $smarty->assign('list_dispensations',  $list_dispensations);
 $smarty->assign("delivrance", new CProductDelivery());
+$smarty->assign("total", $total);
+$smarty->assign("page", $page);
 $smarty->display('inc_stocks_service_list.tpl');
 
 ?>

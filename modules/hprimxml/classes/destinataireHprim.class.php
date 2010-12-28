@@ -120,8 +120,6 @@ class CDestinataireHprim extends CDestinataireInterop {
   
   function updateFormFields() {
     parent::updateFormFields();
-
-    $this->_view = $this->libelle ? $this->libelle : $this->nom;
     
     $this->_tag_patient  = $this->getTagIPP($this->group_id);		
     $this->_tag_sejour   = $this->getTagNumDossier($this->group_id);

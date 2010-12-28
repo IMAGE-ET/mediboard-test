@@ -34,7 +34,8 @@ class CProductDelivery extends CMbObject {
   /**
    * @var CService
    */
-  var $_ref_service   = null;
+  var $_ref_service = null;
+  var $_ref_patient = null;
   
   var $_ref_delivery_traces = null;
   
