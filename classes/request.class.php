@@ -239,7 +239,8 @@ class CRequest {
         trigger_error("You have to choose either an object or table(s)");
       }
       $arrayTable[] = $obj->_spec->table;
-    } else {
+    } 
+		else {
       $arrayTable = $this->table;
     }
     
