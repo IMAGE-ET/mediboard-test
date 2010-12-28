@@ -29,7 +29,15 @@ if ($compte_rendu_id) {
   $compte_rendu->loadContent();
   $compte_rendu->loadFile();
 }
-
+// Création à partir d'un modèle vide
+else if ($modele_id == 0) {
+  $compte_rendu->valueDefaults();
+  $compte_rendu->object_id = $object_id;
+  $compte_rendu->object_class = $target_class;
+  $compte_rendu->_ref_object = new $target_class;
+  $compte_rendu->_ref_object->load($object_id);
+  $compte_rendu->updateFormFields();
+}
 // Création à partir d'un modèle
 else {
 	$header = null;

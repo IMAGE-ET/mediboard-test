@@ -49,11 +49,16 @@
         
         function createDoc(input, selected) {
           var id = selected.down(".id").innerHTML;
-           
+          var object_class = null;
+
+          if (id == 0) {
+            object_class = '{{$object->_class_name}}';
+          }
+          
           if (selected.select(".fast_edit").length) {
             Document.fastMode('{{$object->_class_name}}', id, '{{$object_id}}', null, null, '{{$unique_id}}');
           } else {
-            Document.create(id, '{{$object_id}}');
+            Document.create(id, '{{$object_id}}', null, object_class, null);
           }
           
           $V(input, '');

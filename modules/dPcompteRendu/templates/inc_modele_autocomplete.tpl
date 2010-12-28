@@ -6,7 +6,7 @@
       {{assign var=owner_icon value="user"}}
     {{elseif $_modele->_owner == "func"}}
       {{assign var=owner_icon value="user-function"}}
-    {{else}}
+    {{elseif $_modele->_owner == "etab"}}
       {{assign var=owner_icon value="group"}}
     {{/if}}
       
@@ -31,4 +31,10 @@
       <div style="display: none;" class="id">{{$_modele->_id}}</div>
     </li>
   {{/foreach}}
+  <li>
+    <div>
+      {{tr}}CCompteRendu-blank_modele{{/tr}}
+    </div>
+    <div style="display: none;" class="id">0</div>
+  </li>
 </ul>

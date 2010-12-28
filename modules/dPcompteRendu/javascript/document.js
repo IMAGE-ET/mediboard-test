@@ -2,24 +2,25 @@ var Document = {
 	/**
 	 * @param ... A DECRIRE
 	 */
-  create: function(modele_id, object_id, target_id, target_class, switch_mode, form) {
+  create: function(modele_id, object_id, target_id, target_class, switch_mode) {
     if (!modele_id) return;
     
     var url = new Url("dPcompteRendu", "edit_compte_rendu");
     url.addParam("modele_id", modele_id);
     url.addParam("object_id", object_id);
  
-    if (target_id){
+    if (target_id) {
       url.addParam("target_id", target_id);
     }
     
-    if(target_class){
+    if (target_class) {
       url.addParam("target_class", target_class);
     }
     
-    if(switch_mode){
+    if (switch_mode) {
       url.addParam("switch_mode", switch_mode);
     }
+    
     url.popup(950, 700, "Document");
   },
 

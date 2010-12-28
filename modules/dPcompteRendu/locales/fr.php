@@ -75,6 +75,7 @@ $locales['CCompteRendu-already-access'] = 'Vous avez deja accès à ce modèle, sou
 $locales['CCompteRendu-back-listes_choix'] = 'Listes de choix';
 $locales['CCompteRendu-back-modeles_footed'] = 'Modèles';
 $locales['CCompteRendu-back-modeles_headed'] = 'Modèles';
+$locales['CCompteRendu-blank_modele'] = 'Modèle vierge';
 $locales['CCompteRendu-chir_id'] = 'Utilisateur';
 $locales['CCompteRendu-chir_id-court'] = 'Util.';
 $locales['CCompteRendu-chir_id-desc'] = 'Utilisateur auquel le modèle est associé';
