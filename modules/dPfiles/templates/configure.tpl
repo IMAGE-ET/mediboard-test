@@ -39,21 +39,7 @@ Main.add(function() {
         <input name="{{$m}}[{{$class}}][{{$var}}]" value="{{$conf.$m.$class.$var}}" />
       </td>
     </tr>  
-  		
-    <tr>
-      {{assign var=var value=nb_upload_files}}
-      <th>
-        <label for="{{$m}}[{{$var}}]" title="{{tr}}config-{{$m}}-{{$var}}{{/tr}}">
-          {{tr}}config-{{$m}}-{{$var}}{{/tr}}
-        </label>  
-      </th>
-      <td>
-        <select class="num" name="{{$m}}[{{$var}}]">
-        {{html_options values=$listNbFiles output=$listNbFiles selected=$conf.$m.$var}}
-        </select>
-      </td>
-    </tr>  
-      
+     
     <tr>
       {{assign var=var value=upload_max_filesize}}
       <th>

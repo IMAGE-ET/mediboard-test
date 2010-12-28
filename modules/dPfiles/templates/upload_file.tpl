@@ -1,14 +1,36 @@
 {{if $uploadok}}
 <script type="text/javascript">
-if (window.opener.reloadAfterUploadFile) {
-  window.opener.reloadAfterUploadFile();
+if (window.parent.reloadAfterUploadFile) {
+  window.parent.reloadAfterUploadFile();
 }
 
-if (window.opener.File && window.opener.File.refresh) {
-	window.opener.File.refresh("{{$object->_id}}", "{{$object->_class_name}}");
+if (window.parent.File && window.parent.File.refresh) {
+	window.parent.File.refresh("{{$object->_id}}", "{{$object->_class_name}}");
 }
 </script>
 {{/if}}
+
+<script type="text/javascript">
+var count_files = 0;
+
+addFile = function(elt) {
+  count_files ++;
+  
+  // Incrément du rowspan pour le th du label
+  var label = $("labelfile-{{$object->_id}}");
+  label.writeAttribute("rowspan", count_files + 1);
+ 
+  // Ajout d'un input pour le fichier suivant
+  // <input type="file" name="formfile[0]" size="0" onchange="addFile(this); this.onchange=''"/>
+  var tr = elt.up().up().up();
+  tr.insert(
+    DOM.tr( {},
+      DOM.td({colspan: 4},
+        DOM.input({type: "file", name: "formfile["+count_files + "]", size: 0, onchange: "addFile(this); this.onchange=''"})
+  )));
+}
+
+</script>
 
 <form name="uploadFrm" action="?m=dPfiles&amp;a=upload_file&amp;dialog=1" enctype="multipart/form-data" method="post" onsubmit="return checkForm(this)">
 <input type="hidden" name="m" value="dPfiles" />
@@ -18,37 +40,24 @@ if (window.opener.File && window.opener.File.refresh) {
 <input type="hidden" name="del" value="0" />
 <input type="hidden" name="object_class" value="{{$object->_class_name}}" />
 <input type="hidden" name="object_id" value="{{$object->_id}}" />
-<input type="hidden" name="file_category_id" value="{{$file_category_id}}" />
-<input type="hidden" name="file_rename" value="{{$file_rename}}" />
 
 <table class="form">
   <tr>
-    <th class="title" colspan="5">
+    <th class="title" colspan="7">
       Ajouter un fichier pour {{$object->_view}}
     </th>
   </tr>
   <tr>
-    
     <td class="button">
       {{tr}}CFile-msg-maxsize{{/tr}} : {{$conf.dPfiles.upload_max_filesize}}<br />
     </td>
-    <td></td>
-    <td></td>
-    <th><label title="{{tr}}CFile-private-desc{{/tr}}" for="uploadFrm___private">{{tr}}CFile-private{{/tr}}</label></th>
-    <td>
-      {{mb_field object=$file field="private" typeEnum=checkbox}}
-    </td>
-  </tr>
-  
-  {{foreach from=$nb_files_upload item=curr_nb_file}}
-  <tr>
     <th>
-      <label for="_file_category_id[{{$curr_nb_file}}]" title="{{tr}}CFile-file_category_id-desc{{/tr}}">
+      <label title="{{tr}}CFile-file_category_id-desc{{/tr}}">
         {{tr}}CFile-file_category_id{{/tr}}
       </label>
     </th>
     <td>
-      <select name="_file_category_id[{{$curr_nb_file}}]">
+      <select name="_file_category_id">
         <option value="" {{if !$file_category_id}}selected="selected"{{/if}}>&mdash; Aucune</option>
         {{foreach from=$listCategory item=curr_cat}}
         <option value="{{$curr_cat->file_category_id}}" {{if $curr_cat->file_category_id == $file_category_id}}selected="selected"{{/if}} >
@@ -57,13 +66,39 @@ if (window.opener.File && window.opener.File.refresh) {
         {{/foreach}}
       </select>
     </td>
-
-    <th><label for="formfile[{{$curr_nb_file}}]">{{tr}}CFile{{/tr}}</label></th>
-    <td colspan="2">
-      <input type="file" name="formfile[{{$curr_nb_file}}]" size="0" />
+    <th>
+      <label title="{{tr}}CFile-_rename-desc{{/tr}}">{{tr}}CFile-_rename{{/tr}}</label>
+    </th>
+    <td>
+      <input type="text" name="_rename" value="{{$_rename}}"/>
+    </td>
+    <th>
+      <label title="{{tr}}CFile-private-desc{{/tr}}" for="uploadFrm___private">
+        {{tr}}CFile-private{{/tr}}
+      </label>
+    </th>
+    <td>
+      {{mb_field object=$file field="private" typeEnum=checkbox}}
     </td>
   </tr>
-  {{/foreach}}
+  
+  <tr>
+    <td colspan="6">
+      <div style="max-height: 220px; overflow: auto; width: 100%;">
+      <table class="form">
+        <tr>
+          <th id="labelfile-{{$object->_id}}">
+            <label>{{tr}}CFile{{/tr}}</label>
+          </th>
+          <td colspan="4">
+            <input type="file" name="formfile[0]" size="0" onchange="addFile(this); this.onchange=''"/>
+          </td>
+        </tr>
+      </table>
+      </div>
+    </td>
+  </tr>
+
   <tr>
     <td class="button" colspan="6">
       <button class="submit" type="submit">{{tr}}Add{{/tr}}</button>

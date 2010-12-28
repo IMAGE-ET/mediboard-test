@@ -45,10 +45,10 @@ class CFileAddEdit extends CDoObjectAddEdit {
     	$file_name = $array_file_name[1];
     	
     	$extension = strrchr($file_name, '.');
-    	$file_rename = $this->request['file_rename'] ? $this->request['file_rename'] : 'upload';
+    	$_rename = $this->request['_rename'] ? $this->request['_rename'] : 'upload';
     	$file_path = "tmp/". $this->request['_checksum'];
       
-    	$obj->file_name = $file_rename == 'upload' ? $file_name : $file_rename . $extension;
+    	$obj->file_name = $_rename == 'upload' ? $file_name : $_rename . $extension;
       $obj->_old_file_path = $this->request['_file_path'];
     	$obj->file_size = filesize($file_path);
     	$obj->file_owner = CAppUI::$user->_id;
@@ -68,29 +68,22 @@ class CFileAddEdit extends CDoObjectAddEdit {
       $aFiles = array();
       $upload =& $_FILES["formfile"];
       $_file_category_id = CValue::post("_file_category_id");
-      
-      // Plusieurs fichiers
-      if (is_array($upload["name"])) {
-        $multifiles = true;
-        foreach($upload["error"] as $fileNumber => $etatFile){
-          $aFiles[] = array(
-            "name"             => $upload["name"][$fileNumber],
-            "type"             => $upload["type"][$fileNumber],
-            "tmp_name"         => $upload["tmp_name"][$fileNumber],
-            "error"            => $upload["error"][$fileNumber],
-            "size"             => $upload["size"][$fileNumber],
-            "file_category_id" => $_file_category_id[$fileNumber],
-            "object_id"        => CValue::post("object_id"),
-            "object_class"     => CValue::post("object_class"),
-            "file_rename"      => CValue::post("file_rename"),
-          );
-        }
+
+      foreach($upload["error"] as $fileNumber => $etatFile){
+        $rename = CValue::post("_rename");
+        $aFiles[] = array(
+          "name"             => $upload["name"][$fileNumber],
+          "type"             => $upload["type"][$fileNumber],
+          "tmp_name"         => $upload["tmp_name"][$fileNumber],
+          "error"            => $upload["error"][$fileNumber],
+          "size"             => $upload["size"][$fileNumber],
+          "file_category_id" => $_file_category_id,
+          "object_id"        => CValue::post("object_id"),
+          "object_class"     => CValue::post("object_class"),
+          "_rename"          => $rename ? $rename . strrchr($upload["name"][$fileNumber], '.') : ""
+        );
       }
-      else{
-        // 1 seul fichier
-        $aFiles[] = $upload;
-      }
-      
+
       foreach ($aFiles as $file) {
         if ($file["error"] == UPLOAD_ERR_NO_FILE) {
           continue;
@@ -102,13 +95,12 @@ class CFileAddEdit extends CDoObjectAddEdit {
         }
         
         // Reinstanciate
-        if ($multifiles){
-          $this->_obj = new $this->_obj->_class_name;
-        }
+
+        $this->_obj = new $this->_obj->_class_name;
         $obj = $this->_obj;
         
         $obj->bind($file);
-        $obj->file_name = empty($file["file_rename"]) ? $file["name"] : $file["file_rename"];
+        $obj->file_name = empty($file["_rename"]) ? $file["name"] : $file["_rename"];
         $obj->file_type = $file["type"];
         $obj->file_size = $file["size"];
         $obj->fillFields();
@@ -130,7 +122,7 @@ class CFileAddEdit extends CDoObjectAddEdit {
 
         CAppUI::setMsg("Fichier enregistré", UI_MSG_OK);
       }
-      
+
       // Redaction du message et renvoi
       if (@count($AppUI->messages[UI_MSG_OK]) && $this->redirectStore) {
         $this->redirect =& $this->redirectStore;

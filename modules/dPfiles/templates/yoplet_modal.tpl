@@ -58,7 +58,7 @@
           {{mb_label class=CFile field=_rename}}
         </th>
 				<td>
-          <input type="text" name="file_rename" value="" />
+          <input type="text" name="_rename" value="" />
         </td>
       </tr>
       <tr>

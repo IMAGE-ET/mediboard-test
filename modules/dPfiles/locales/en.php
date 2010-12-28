@@ -7,7 +7,6 @@ $locales['CFile-msg-loadimgmini'] = 'Chargement du miniature';
 $locales['CFile-msg-maxsize'] = 'Taille maximale des fichiers';
 $locales['CFile-msg-viewfile'] = 'Voir le Fichier';
 $locales['CFilesCategory'] = 'Catégorie de Fichier';
-$locales['config-dPfiles-nb_upload_files'] = 'Nombre de fichiers à uploader';
 $locales['config-dPfiles-upload_max_filesize'] = 'Upload max file size';
 $locales['module-dPfiles-court'] = 'Files';
 $locales['module-dPfiles-long'] = 'Files management';

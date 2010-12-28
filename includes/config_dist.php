@@ -195,7 +195,6 @@ $dPconfig["dPbloc"]["CPlageOp"] = array (
 
 $dPconfig["dPfiles"] = array (
   "extensions_yoplet" => "gif jpeg jpg pdf png",
-  "nb_upload_files"     => "1",
   "upload_max_filesize" => "2M",
   "system_sender"       => "",
   "rooturl"             => "",

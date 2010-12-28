@@ -44,7 +44,7 @@ if (!window.File.applet) {
       });
       
       var json = Object.toJSON(files);
-      var rename = $V(getForm("addFastFile").file_rename) || "upload";
+      var rename = $V(getForm("addFastFile")._rename) || "upload";
       
       this.uploader.performUpload(rename, json);
     },
@@ -148,7 +148,7 @@ if (!window.File.applet) {
     },
     emptyForm: function(){
       var oForm = getForm("addFastFile");
-      $V(oForm.file_rename, '');
+      $V(oForm._rename, '');
       oForm.delete_auto.checked = true;
       $V(oForm.keywords_category, String.fromCharCode(8212) + " Catégorie");
       $V(oForm.file_category_id, '');
