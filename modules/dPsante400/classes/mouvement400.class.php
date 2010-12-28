@@ -77,6 +77,7 @@ class CMouvement400 extends CRecordSante400 {
   
   /**
    * Load List of mouvements
+   * 
    * @param $marked bool Will load only marked (already processed)
    * @param $max int maximum number of mouvements
    * @return array|CMouvement400
@@ -97,11 +98,48 @@ class CMouvement400 extends CRecordSante400 {
             
     return $mouvs;
   }
+	
+	/**
+	 * Mark obsolete triggers
+	 * 
+	 * @param string $newest
+	 * @param integer $max [optional]
+	 * @return integer Number of marks, store-like message on error
+	 */
+	function markObsoleteTriggers($newest, $max = 100) {
+    $mark = new CTriggerMark();
+    $mark->trigger_class = get_class($this);
+    $where["trigger_class"] = "= '$mark->trigger_class'";
+    $where["done"] = "= '0'";
+    $where["mark"] = "!= '========'";
+    $where["trigger_number"] = "<= '$newest'";
+    
+		$marks = $mark->loadList($where, null, $max);
+		foreach($marks as $_mark) {
+      $_mark->done = "1";    
+      $_mark->mark = "obsolete"; 
+			if ($msg = $_mark->store()) {
+				return $msg;
+			}  
+		}
+		
+		return count($marks);
+  }
   
+	/**
+	 * Get a filter where clause
+	 * 
+	 * @return string SQL where clause
+	 */
   function getFilterClause() {
     return;
   }
   
+  /**
+   * Get a marked where clause
+   * 
+   * @return string SQL where clause
+   */
   function getNewMarkedClause($marked, $max = 100) {
 	  $mark = new CTriggerMark();
 	  $mark->trigger_class = get_class($this);
@@ -133,7 +171,6 @@ class CMouvement400 extends CRecordSante400 {
     if ($marked) {
 	    $mark = new CTriggerMark();
 	    $mark->trigger_class = get_class($this);
-      $where = array();
       $where["trigger_class"] = "= '$mark->trigger_class'";
       $where["done"] = "= '0'";
       $where["mark"] = "!= '========'";
@@ -163,6 +200,7 @@ class CMouvement400 extends CRecordSante400 {
   
   /**
    * Load latest with former marks
+   * 
    * @param int $max Max rows
    * @return array
    */

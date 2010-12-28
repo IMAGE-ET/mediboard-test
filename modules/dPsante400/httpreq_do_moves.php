@@ -43,6 +43,15 @@ foreach ($types as $_type) {
 		$count = $mouv->count(true, $mouv->rec);
     CAppUI::stepAjax("Counting '%s' obsolete marked triggers", $count ? UI_MSG_WARNING : UI_MSG_OK, 
       $count);
+    
+		$max = CAppUI::conf("dPsante400 nb_rows");
+    $count = $mouv->markObsoleteTriggers($mouv->rec, $max);
+		if (is_string($count)) {
+      CAppUI::stepAjax("Error marking obsolete trigger: %s", UI_MSG_WARNING, $count);
+		}
+		else {
+      CAppUI::stepAjax("Marked '%s' obsolete triggers", UI_MSG_OK, $count);
+		}
 
     CSQLDataSource::$trace = false;
   }	
