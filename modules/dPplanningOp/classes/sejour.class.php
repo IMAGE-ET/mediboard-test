@@ -344,9 +344,9 @@ class CSejour extends CCodable {
 	      }
 			}
       
-			if (!$this->_forwardRefMerging) {
+			if (!$this->_merging && !$this->_forwardRefMerging) {
         foreach ($this->getCollisions() as $collision) {
-          $msg .= "Collision avec le séjour du $collision->entree_prevue au $collision->sortie_prevue.<br />"; 
+          $msg .= "Collision avec le séjour du $collision->entree au $collision->sortie"; 
         }
 			}
     }
