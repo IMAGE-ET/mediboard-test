@@ -84,7 +84,7 @@ class CMouvement400 extends CRecordSante400 {
    */
   function loadList($marked = false, $max = 100) {
     $query = "SELECT * FROM $this->base.$this->table";
-    $query.= $this->getNewMarkedClause($marked);
+    $query.= $this->getNewMarkedClause($marked, $max);
     $query.= $this->getFilterClause();
 		$query.= "\n ORDER BY $this->idField";
  

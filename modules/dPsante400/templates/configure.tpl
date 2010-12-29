@@ -99,10 +99,10 @@
 	    </select>
     </td>
     <td>
-      <button class="search" onclick="Moves.doAction('count')">
+      <button class="search singleclick" onclick="Moves.doAction('count')">
         {{tr}}Count{{/tr}}
       </button>
-      <button class="search" onclick="Moves.doAction('obsolete')">
+      <button class="search singleclick" onclick="Moves.doAction('obsolete')">
         {{tr}}Obsolete{{/tr}}
       </button>
     </td>
