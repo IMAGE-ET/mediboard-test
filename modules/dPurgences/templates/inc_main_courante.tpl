@@ -11,14 +11,20 @@
 {{assign var="show_statut" value=$conf.dPurgences.show_statut}}
 
 <script type="text/javascript">
-Main.add(function() {
-  Veille.refresh();
-  Missing.refresh();
-  $$("a[href=#holder_main_courante] small")[0].update("({{$listSejours|@count}})");
-	{{if $isImedsInstalled}}
-    ImedsResultsWatcher.loadResults();
-  {{/if}}
-});
+  Main.add(function() {
+    Veille.refresh();
+    Missing.refresh();
+    $$("a[href=#holder_main_courante] small")[0].update("({{$listSejours|@count}})");
+	  {{if $isImedsInstalled}}
+      ImedsResultsWatcher.loadResults();
+    {{/if}}
+  });
+
+  fillRetour = function(rpu_id, type) {
+    var oForm = getForm("editRPU-"+rpu_id);
+    $V(oForm[type], "current");
+    oForm.onsubmit();
+  }
 </script>
 
 <div class="small-info" style="display: none;" id="filter-indicator">
@@ -129,56 +135,88 @@ Main.add(function() {
 								
       {{if $show_statut == 1}}
         <div style="clear: both; font-weight: bold; padding-top: 3px;">
+          <form name="editRPU-{{$rpu->_id}}"
+            onsubmit="return onSubmitFormAjax(this, {onComplete: function() { MainCourante.start() }});">
+            <input type="hidden" name="m" value="dPurgences" />
+            <input type="hidden" name="dosql" value="do_rpu_aed" />
+            <input type="hidden" name="del" value="0" />
+            <input type="hidden" name="radio_fin" value="{{$rpu->radio_fin}}" />
+            <input type="hidden" name="bio_retour" value="{{$rpu->bio_retour}}" />
+            <input type="hidden" name="specia_arr" value="{{$rpu->specia_arr}}" />
+            {{mb_key object=$rpu}}
+        
+            {{if $rpu->radio_debut}}
+              {{if !$rpu->radio_fin}} 
+                <a onclick="fillRetour('{{$rpu->_id}}', 'radio_fin')" href="#1" style="display: inline;">
+              {{/if}}
+              <img src="modules/soins/images/radio{{if !$rpu->radio_fin}}_grey{{/if}}.png"
+                {{if !$rpu->radio_fin}}
+                  title="{{tr}}CRPU-radio_debut{{/tr}} à {{$rpu->radio_debut|date_format:$conf.time}}"
+                {{else}}
+                  title="{{tr}}CRPU-radio_fin{{/tr}} à {{$rpu->radio_fin|date_format:$conf.time}}"
+                {{/if}}/>
+              {{if !$rpu->radio_fin}}
+                </a>
+              {{/if}}
+            {{elseif !$rpu->radio_fin}}
+             <img src="images/icons/placeholder.png"/>
+            {{/if}}
            
- 
-        {{if $rpu->radio_debut}}
-          <img src="modules/soins/images/radio{{if !$rpu->radio_fin}}_grey{{/if}}.png"
-            {{if !$rpu->radio_fin}}
-              title="{{tr}}CRPU-radio_debut{{/tr}} à {{$rpu->radio_debut|date_format:$conf.time}}"
+            {{if $rpu->bio_depart}}
+              {{if !$rpu->bio_retour}}
+                <a onclick="fillRetour('{{$rpu->_id}}', 'bio_retour')" href="#1" style="display: inline;">
+              {{/if}}
+              <img src="images/icons/labo{{if !$rpu->bio_retour}}_grey{{/if}}.png"
+                {{if !$rpu->bio_retour}}
+                  title="{{tr}}CRPU-bio_depart{{/tr}} à {{$rpu->bio_depart|date_format:$conf.time}}"
+                {{else}}
+                  title="{{tr}}CRPU-bio_retour{{/tr}} à {{$rpu->bio_retour|date_format:$conf.time}}"
+                {{/if}}/>
+              {{if !$rpu->bio_retour}}
+                 </a>
+              {{/if}}
+            {{elseif !$rpu->bio_retour}}
+              <img src="images/icons/placeholder.png"/>
+            {{/if}}
+
+            {{if $rpu->specia_att}}
+              {{if !$rpu->specia_arr}}
+                <a onclick="fillRetour('{{$rpu->_id}}', 'specia_arr')" href="#1" style="display: inline;">
+              {{/if}}
+              <img src="modules/soins/images/stethoscope{{if !$rpu->specia_arr}}_grey{{/if}}.png"
+                {{if !$rpu->specia_arr}}
+                  title="{{tr}}CRPU-specia_att{{/tr}} à {{$rpu->specia_att|date_format:$conf.time}}"
+                {{else}}
+                  title="{{tr}}CRPU-specia_arr{{/tr}} à {{$rpu->specia_arr|date_format:$conf.time}}"
+                {{/if}}/>
+              {{if !$rpu->specia_arr}}
+                </a>
+              {{/if}}
+            {{elseif !$rpu->specia_arr}}
+              <img src="images/icons/placeholder.png"/>
+            {{/if}}
+
+            {{if $_sejour->_nb_files_docs > 0}}
+              <img src="images/icons/docitem.png"
+                title="{{$_sejour->_nb_files|default:0}} {{tr}}CMbObject-back-files{{/tr}} / {{$_sejour->_nb_docs|default:0}} {{tr}}CMbObject-back-documents{{/tr}}"/>
             {{else}}
-              title="{{tr}}CRPU-radio_fin{{/tr}} à {{$rpu->radio_fin|date_format:$conf.time}}"
-            {{/if}}/>
-        {{elseif !$rpu->radio_fin}}
-          <img src="images/icons/placeholder.png"/>
-        {{/if}}
-        {{if $rpu->bio_depart}}
-          <img src="images/icons/labo{{if !$rpu->bio_retour}}_grey{{/if}}.png"
-            {{if !$rpu->bio_retour}}
-              title="{{tr}}CRPU-bio_depart{{/tr}} à {{$rpu->bio_depart|date_format:$conf.time}}"
-            {{else}}
-              title="{{tr}}CRPU-bio_retour{{/tr}} à {{$rpu->bio_retour|date_format:$conf.time}}"
-            {{/if}}/>
-        {{elseif !$rpu->bio_retour}}
-          <img src="images/icons/placeholder.png"/>
-        {{/if}}
-        {{if $rpu->specia_att}}
-          <img src="modules/soins/images/stethoscope{{if !$rpu->specia_arr}}_grey{{/if}}.png"
-            {{if !$rpu->specia_arr}}
-              title="{{tr}}CRPU-specia_att{{/tr}} à {{$rpu->specia_att|date_format:$conf.time}}"
-            {{else}}
-              title="{{tr}}CRPU-specia_arr{{/tr}} à {{$rpu->specia_arr|date_format:$conf.time}}"
-            {{/if}}/>
-        {{elseif !$rpu->specia_arr}}
-          <img src="images/icons/placeholder.png"/>
-        {{/if}}
-        {{if $_sejour->_nb_files_docs > 0}}
-          <img src="images/icons/docitem.png" title="{{$_sejour->_nb_files|default:0}} {{tr}}CMbObject-back-files{{/tr}} / {{$_sejour->_nb_docs|default:0}} {{tr}}CMbObject-back-documents{{/tr}}"/>
-        {{else}}
-          <img src="images/icons/placeholder.png"/>
-        {{/if}}
-				{{assign var=prescription value=$_sejour->_ref_prescription_sejour}}
-        {{if $prescription->_id}}
-          <a href="?m=dPurgences&tab=vw_aed_rpu&rpu_id={{$rpu->_id}}#suivisoins" style="display: inline;">
-  				  {{if $prescription->_count_recent_modif_presc}}
-              <img src="images/icons/ampoule.png" onmouseover="ObjectTooltip.createEx(this, '{{$prescription->_guid}}')"/>
-  	        {{else}}
-  	          <img src="images/icons/ampoule_grey.png" onmouseover="ObjectTooltip.createEx(this, '{{$prescription->_guid}}')"/>
-  	        {{/if}}
-          </a>
-				{{else}}
-          <img src="images/icons/placeholder.png"/>
-			  {{/if}}
-      	</div>
+              <img src="images/icons/placeholder.png"/>
+            {{/if}}
+
+            {{assign var=prescription value=$_sejour->_ref_prescription_sejour}}
+            {{if $prescription->_id}}
+              <a href="?m=dPurgences&tab=vw_aed_rpu&rpu_id={{$rpu->_id}}#suivisoins" style="display: inline;">
+                {{if $prescription->_count_recent_modif_presc}}
+                  <img src="images/icons/ampoule.png" onmouseover="ObjectTooltip.createEx(this, '{{$prescription->_guid}}')"/>
+                {{else}}
+  	              <img src="images/icons/ampoule_grey.png" onmouseover="ObjectTooltip.createEx(this, '{{$prescription->_guid}}')"/>
+  	            {{/if}}
+              </a>
+	    	    {{else}}
+              <img src="images/icons/placeholder.png"/>
+			      {{/if}}
+          </form>
+        </div>
       {{/if}}
     </td>
     
