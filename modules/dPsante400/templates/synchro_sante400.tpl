@@ -1,11 +1,23 @@
 <script type="text/javascript">
-function retry(iRec) {
-  var url = new Url("{{$m}}", "{{$action}}");
-  url.addParam("rec", iRec);
-  url.addParam("verbose", 1);
-  url.popup(900, 700, "Explaination Import Sante400");
+Triggers = {
+	retry: function(iRec) {
+	  var url = new Url("{{$m}}", "{{$action}}");
+	  url.addParam("rec", iRec);
+	  url.addParam("verbose", 1);
+	  url.popup(900, 700, "Explaination Import Sante400");
+	},
+	
+  relaunch: function () {
+	  if (document.typeFilter.relaunch.checked) {
+      document.typeFilter.submit();
+	  } 
+  }
 }
   
+
+Main.add(function() {
+  Triggers.relaunch.delay(5);
+})
 </script>
   
 {{if !$connection}}
@@ -33,6 +45,11 @@ Merci de vérifier les paramètres de la configuration ODBC pour la source 'sante4
       {{/foreach}}
     </select>
 
+    <input name="relaunch" type="checkbox" {{if $relaunch}} checked="checked" {{/if}} onclick="Triggers.relaunch();" />
+    <label for="relaunch" title="{{tr}}CMouvement400-relaunch-desc{{/tr}}">
+      {{tr}}CMouvement400-relaunch{{/tr}}
+    </label>
+
     </form>
   
   </td>
@@ -46,8 +63,8 @@ Merci de vérifier les paramètres de la configuration ODBC pour la source 'sante4
 
     <label for="marked" title="{{tr}}CMouvement400-marked-desc{{/tr}}">{{tr}}CMouvement400-marked{{/tr}}</label>
     <select name="marked" onchange="this.form.submit()">
-      <option value="0" {{if !$marked}}selected="selected"{{/if}}>{{tr}}CMouvement400-marked-0{{/tr}}</option>
-      <option value="1" {{if  $marked}}selected="selected"{{/if}}>{{tr}}CMouvement400-marked-1{{/tr}}</option>
+      <option value="0" {{if !$marked}} selected="selected"{{/if}}>{{tr}}CMouvement400-marked-0{{/tr}}</option>
+      <option value="1" {{if  $marked}} selected="selected"{{/if}}>{{tr}}CMouvement400-marked-1{{/tr}}</option>
     </select>
 
     </form>
@@ -131,7 +148,7 @@ Merci de vérifier les paramètres de la configuration ODBC pour la source 'sante4
 
   {{if !$dialog}}
   <td>
-    <button class="search" onclick="retry({{$curr_mouv->rec}})">
+    <button class="search" onclick="Triggers.retry({{$curr_mouv->rec}})">
       {{tr}}Retry{{/tr}}
     </button>
   </td>

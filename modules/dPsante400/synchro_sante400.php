@@ -54,6 +54,8 @@ $smarty->assign("marked", $marked);
 $smarty->assign("count", $count);
 $smarty->assign("procs", $procs);
 $smarty->assign("mouvs", $mouvs);
+$smarty->assign("relaunch", CValue::get("relaunch"));
+
 $smarty->display("synchro_sante400.tpl");
 
 ?>
