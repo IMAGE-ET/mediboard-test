@@ -927,19 +927,20 @@ class CMbObject {
   
   /**
    * Extends object properties with target object (of the same class) properties
+   * @param bool      $gently   Gently preserve existing non-empty values
    * @param CMbObject $mbObject object to extend with 
    */
-  function extendsWith(CMbObject $mbObject) {
-    $targetClass = $mbObject->_class_name;
-    $thisClass = $this->_class_name;
-    if ($targetClass !== $thisClass) {
-      trigger_error(printf("Target object has not the same class (%s) as this (%s)", $targetClass, $thisClass), E_USER_WARNING);
+  function extendsWith(CMbObject $mbObject, $gently = false) {
+    if ($this->_class_name !== $mbObject->_class_name) {
+      trigger_error(printf("Target object has not the same class (%s) as this (%s)", $mbObject->_class_name, $this->_class_name), E_USER_WARNING);
       return;
     }
     
     foreach ($mbObject->getValues() as $propName => $propValue) {
-      if ($propValue !== null) {
-        $this->$propName = $propValue;
+      if ($propValue !== null && $propValue != "") {
+      	if (!$gently || $this->$propName === null || $this->$propName === "") {
+          $this->$propName = $propValue;
+      	}
       }
     }
   }
@@ -1243,21 +1244,20 @@ class CMbObject {
   function merge($objects = array/*<CMbObject>*/(), $fast = false) {
     $alternative_mode = ($this->_id != null);
     
-    // If alternative mode and too many objects
-    if ($alternative_mode) {
-      if (count($objects) > 1) return "mergeAlternativeTooManyObjects";
+    // Modes and object count check
+    if ($alternative_mode && count($objects) > 1) {
+      return "mergeAlternativeTooManyObjects";
     }
-    else {
-      if (count($objects) < 2) return "mergeTooFewObjects";
+		if (!$alternative_mode && count($objects) < 2) {
+  		return "mergeTooFewObjects";
     }
-
-    // checkMerge is now informative
-    //if ($msg = $this->checkMerge($objects)) return $msg;
     
     // Trigger before event
     $this->onBeforeMerge();
     
-    if (!$this->_id && $msg = $this->store()) return $msg;
+    if (!$this->_id && $msg = $this->store()) {
+    	return $msg;
+		}
     
     foreach ($objects as $object) {
       $this->_merging[$object->_id] = $object;
@@ -2020,16 +2020,20 @@ class CMbObject {
   
   /**
    * Get object properties, i.e. having specs
+   * @param  bool  $nonEmpty   Filter non empty values
    * @return array Associative array
    */
-  function getValues() {
-    $result = array();
+  function getValues($nonEmpty = false) {
+    $values = array();
     
-    foreach ($this->_specs as $key => $value) {
-      $result[$key] = $this->$key;
+    foreach ($this->_specs as $key => $_spec) {
+    	$value = $this->$key;
+    	if (!$nonEmpty || $value !== null || $value !== "") {
+        $values[$key] = $value;
+    	}
     }
 
-    return $result;
+    return $values;
   }
   
   /**
