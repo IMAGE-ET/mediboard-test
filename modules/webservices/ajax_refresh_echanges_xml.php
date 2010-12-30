@@ -12,6 +12,7 @@ CCanDo::checkRead();
 
 $id_permanent        = CValue::getOrSession("id_permanent");
 $echange_xml_class   = CValue::getOrSession("echange_xml_class");
+$object_id           = CValue::getOrSession("object_id");
 $t                   = CValue::getOrSession('types', array());
 $statut_acquittement = CValue::getOrSession("statut_acquittement");
 $msg_evenement       = CValue::getOrSession("msg_evenement", "patients");
@@ -56,7 +57,9 @@ if (isset($t["no_date_echange"])) {
 if ($id_permanent) {
   $where["id_permanent"] = " = '$id_permanent'";
 }
-
+if ($object_id) {
+  $where["object_id"] = " = '$object_id'";
+}
 $where["group_id"] = "= '".CGroups::loadCurrent()->_id."'";
 
 $total_echange_xml = $itemEchangeXML->countList($where);

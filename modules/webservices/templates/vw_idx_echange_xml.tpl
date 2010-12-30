@@ -66,6 +66,15 @@ function changePage(page) {
             <th class="category" colspan="4">{{tr}}filter-criteria{{/tr}}</th>
           </tr>
           
+          <tr>
+            <th colspan="2">
+              {{mb_label object=$echange_xml field="object_id"}}
+            </th>
+            <td colspan="2">
+              {{mb_field object=$echange_xml field="object_id"}}
+            </td>
+          </tr>
+          
           {{mb_include module=$echange_xml->_ref_module->mod_name template="`$echange_xml->_class_name`_filter_inc"}}
           
           <tr>
