@@ -105,13 +105,64 @@
         range.moveToPosition( textNode, CKEDITOR.POSITION_AFTER_END ); 
         range.select(); 
       }
-			
+      
+      var empty = true;
+      function searchWord(elt) {
+        if (elt.value == "" && !empty) {
+            empty = true;
+            $("classic").toggle();
+            $("search").toggle();
+        }
+        else if (elt.value != "") {
+          if (empty) {
+            empty = false;
+            $("classic").toggle();
+            $("search").toggle();
+          }
+          // Recherche
+          var resultsearch = $("resultsearch");
+          resultsearch.update();
+          var sections = fields[section];
+          
+          for (var section in fields) {
+            if (typeof fields[section] == "function") continue;
+            
+            var items = fields[section];            
+            for (var item in items) {
+              if (typeof items[item] == "function") continue;
+              
+              // Si l'item contient des sous-items
+              if (items[item].length != undefined) {
+                var subItems = items[item];
+                for (var subItem in subItems) {
+                  var _subItem = subItems[subItem];
+                  if (typeof _subItem == "function") continue;
+                  if (_subItem.shortview.toLowerCase().indexOf(elt.value.toLowerCase()) != -1) {
+                    resultsearch.insert(new Element('option', {value: _subItem.item}).update(_subItem.shortview));
+                  }
+                }
+              } else {
+                var _item = items[item];
+                if (_item.shortview.toLowerCase().indexOf(elt.value.toLowerCase()) != -1) {
+                  resultsearch.insert(new Element('option', {value: _item.item}).update(_item.shortview));
+                }
+              }
+            }
+          }
+          resultsearch.selectedIndex = -1;
+        }
+      }
     </script>
 
   </head>
   <body>
     <table>
       <tr>
+        <td colspan="3">
+          <span style="font-size: 8pt;">Chercher un champ : <input type="text" value="" onkeyup="searchWord(this)"/></span>
+        </td>
+      </tr>
+      <tr id="classic">
         <td>
           <select id="section" onchange = "reloadItem(this.value)" size="10" style="width: 150px; height: 180px;">
           </select>
@@ -126,6 +177,12 @@
             <option value="">&mdash; Choisissez un sous-item</option>
           </select>
         </td>  
+      </tr>
+      <tr id="search" style="display: none">
+        <td>
+          <select id="resultsearch" size="10" style="height: 180px; width: 533px;" ondblclick="insertHTML(this.value)">
+          </select>
+        </td>
       </tr>
     </table>
   </body>
