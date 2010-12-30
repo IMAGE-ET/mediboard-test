@@ -2028,7 +2028,7 @@ class CMbObject {
     
     foreach ($this->_specs as $key => $_spec) {
     	$value = $this->$key;
-    	if (!$nonEmpty || $value !== null || $value !== "") {
+    	if (!$nonEmpty || ($value !== null && $value !== "")) {
         $values[$key] = $value;
     	}
     }
