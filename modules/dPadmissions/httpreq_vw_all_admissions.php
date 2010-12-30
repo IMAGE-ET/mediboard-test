@@ -23,6 +23,7 @@ $nextmonth = mbDate("+1 month", $date);
 $selAdmis  = CValue::getOrSession("selAdmis", "0");
 $selSaisis = CValue::getOrSession("selSaisis", "0");
 $type      = CValue::getOrSession("type", "0");
+$bank_holidays = mbBankHolidays($date);
 
 $hier = mbDate("- 1 day", $date);
 $demain = mbDate("+ 1 day", $date);
@@ -95,6 +96,7 @@ $smarty->assign("demain", $demain);
 $smarty->assign("selAdmis", $selAdmis);
 $smarty->assign("selSaisis", $selSaisis);
 
+$smarty->assign("bank_holidays", $bank_holidays);
 $smarty->assign('date', $date);
 $smarty->assign('lastmonth', $lastmonth);
 $smarty->assign('nextmonth', $nextmonth);

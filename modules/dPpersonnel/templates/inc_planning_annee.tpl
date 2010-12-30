@@ -112,7 +112,13 @@ changeannee = function (sens) {
 				 {{/if}}
 			 {{/foreach}}
 			 {{if !$open}}
-			   <td>
+			   <td
+           {{assign var=weekend value=$date|date_format:"%A"|upper|substr:0:1}}
+           {{if in_array($date, $bank_holidays)}}
+             style="background: #fc0;"
+           {{elseif $weekend == "S" || $weekend == "D"}}
+             style="background: #ddf;"
+           {{/if}}>
 			 {{/if}}
 				 {{assign var=jour value=$i-$start+1}}
 				   <a href="#Week-{{$date}}" onclick="changemode('semaine','{{$date}}',{{$filter->user_id}})">{{$jour}}</a>

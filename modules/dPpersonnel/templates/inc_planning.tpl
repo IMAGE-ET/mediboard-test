@@ -58,7 +58,12 @@
        <td style="width: 12em;"></td>
        {{foreach from=$tableau_periode item=_periode}}
          {{assign var=day value=$_periode|date_format:"%A"|upper|substr:0:1}}
-         <th {{if $day == "S" || $day == "D"}}style="background: #ddf;"{{/if}}>
+         <th
+           {{if in_array($_periode, $bank_holidays)}}
+           style="background: #fc0;"
+           {{elseif $day == "S" || $day == "D"}}
+             style="background: #ddf;"
+           {{/if}}>
       	   <big>{{$day}}</big>
       	   <br/>{{$_periode|date_format:"%d"}}
          </th>

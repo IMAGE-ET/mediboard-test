@@ -16,6 +16,11 @@ $filter = new CPlageConge();
 $filter->user_id = CValue::get("user_id", CAppUI::$user->_id);
 $filter->date_debut = CValue::get("date_debut",mbDate());
 
+// Tableau des jours fériés sur 2 ans, car
+// en mode semaine : 31 décembre - 1 janvier
+$bank_holidays = array_merge(mbBankHolidays($filter->date_debut),
+                   mbBankHolidays(mbTransformTime("+1 YEAR", $filter->date_debut, "%Y-%m-%d")));
+
 $mediuser  = new CMediusers();
 $mediusers = $mediuser->loadListFromType();
 
@@ -87,13 +92,14 @@ foreach ($plagesconge as $_plage) {
 
 $smarty = new CSmartyDP();
 
-$smarty->assign("debut_periode",   $debut_periode);
-$smarty->assign("filter",          $filter);
-$smarty->assign("plagesconge",       $plagesconge);
-$smarty->assign("choix",           $choix);
-$smarty->assign("mediusers",       $mediusers);
+$smarty->assign("debut_periode"  , $debut_periode);
+$smarty->assign("filter"         , $filter);
+$smarty->assign("plagesconge"    , $plagesconge);
+$smarty->assign("choix"          , $choix);
+$smarty->assign("mediusers"      , $mediusers);
 $smarty->assign("tableau_periode", $tableau_periode);
-$smarty->assign("tab_start",       $tab_start);
+$smarty->assign("tab_start"      , $tab_start);
+$smarty->assign("bank_holidays"  , $bank_holidays);
 
 if (($choix == "semaine" || $choix == "mois")) {
   $smarty->display("inc_planning.tpl");
