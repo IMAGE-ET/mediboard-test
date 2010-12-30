@@ -10,6 +10,7 @@
 
 
 $patient_id      = CValue::get("patient_id");
+$sejour_id       = CValue::get("sejour_id");
 $check_collision = CValue::get("check_collision");
 $collision_sejour = null;
 
@@ -18,13 +19,17 @@ $patient->load($patient_id);
 $where = array("group_id" => "= '".CGroups::loadCurrent()->_id."'");
 $patient->loadRefsSejours($where);
 
-foreach($patient->_ref_sejours as $_sejour) {  
+if (!$patient->_id) {
+  CAppUI::stepMessage(UI_MSG_WARNING, "Patient '%s' inexistant", $patient_id);
+  return;
+}
+
+foreach($patient->_ref_sejours as $_sejour) {
   $_sejour->loadNumDossier();
   $_sejour->loadRefPraticien();
 }
 
 if ($check_collision) {
-  $sejour_id = CValue::get("sejour_id");
   $sejour = new CSejour;
   
   if (!$sejour_id) {
@@ -46,11 +51,13 @@ if ($check_collision) {
 
   // Calcul des collisions potentielles
   $sejours_collides = $sejour->getCollisions();
-  foreach($patient->_ref_sejours as $_sejour)
+  foreach($patient->_ref_sejours as $_sejour) {
+    
     if (array_key_exists($_sejour->_id, $sejours_collides)) {
       $collision_sejour = $_sejour->_id;
       break;
     }
+  }
 }
 
 $smarty = new CSmartyDP;

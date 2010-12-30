@@ -33,15 +33,22 @@ function toggleMode() {
 window.refreshingSejours = false;
 
 function reloadSejours(checkCollision) {
+	var oForm = getForm("editSejour");
+	var patient_id = $V(oForm.patient_id);
+
+	if (!patient_id) {
+    return;
+	}
+		
   // Changer l'entrée prévue d'un séjour change également la sortie prévue,
   // il faut donc éviter de lancer deux fois cette fonction.
-  if (window.refreshingSejours) return;
+  if (window.refreshingSejours) {
+	  return;
+  }
   window.refreshingSejours = true;
-  
-  var oForm = getForm("editSejour");
   var url = new Url("dPplanningOp", "ajax_list_sejours");
   url.addParam("check_collision", checkCollision);
-  url.addParam("patient_id", $V(oForm.patient_id));
+  url.addParam("patient_id", patient_id);
 
   // Dans le cas où on va checker la collision
   // On envoie également l'entrée prévue et la sortie prévue
