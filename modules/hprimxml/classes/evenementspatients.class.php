@@ -483,16 +483,6 @@ class CHPrimXMLEvenementsPatients extends CHPrimXMLEvenements {
   function getSortie($node, CSejour $mbVenue) {
     $xpath = new CHPrimXPath($node->ownerDocument);
     
-    // Cas dans lequel on ne récupère pas de sortie tant que l'on a pas la sortie réelle
-    $emetteur = $this->_ref_echange_hprim->_ref_emetteur;
-    if (!$mbVenue->sortie_reelle && ($emetteur->_configs["send_sortie_prevue"] == 0)) {
-      if (!$mbVenue->sortie_prevue) {
-        $mbVenue->sortie_prevue = mbAddDateTime(CAppUI::conf("dPplanningOp CSejour sortie_prevue ".$mbVenue->type).":00:00", 
-                    $mbVenue->entree_reelle ? $mbVenue->entree_reelle : $mbVenue->entree_prevue);
-      }
-      return $mbVenue;
-    } 
-
     $sortie = $xpath->queryUniqueNode("hprim:sortie", $node);
   
     $date = $xpath->queryTextNode("hprim:dateHeureOptionnelle/hprim:date", $sortie);
@@ -507,7 +497,8 @@ class CHPrimXMLEvenementsPatients extends CHPrimXMLEvenements {
     else {
       $dateHeure = $mbVenue->sortie_reelle ? $mbVenue->sortie_reelle : $mbVenue->sortie_prevue;
     }
-
+    
+    // Cas dans lequel on ne récupère pas de sortie tant que l'on a pas la sortie réelle
     if ($mbVenue->sortie_reelle && CAppUI::conf("hprimxml notifier_sortie_reelle")) {
       $mbVenue->sortie_reelle = $dateHeure;
     } else {
