@@ -119,7 +119,7 @@ class CCodeSpec extends CMbFieldSpec {
       }
       
       $matches = null;
-      if (!preg_match ("/^([1278][0-9]{2}[0-9]{2}[0-9][0-9ab][0-9]{3}[0-9]{3})([0-9]{2})$/i", $propValue, $matches)) {
+      if (!preg_match ("/^([12478][0-9]{2}[0-9]{2}[0-9][0-9ab][0-9]{3}[0-9]{3})([0-9]{2})$/i", $propValue, $matches)) {
         return "Matricule incorrect";
       }
  
