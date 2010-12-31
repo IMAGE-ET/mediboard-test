@@ -30,7 +30,7 @@ if ($compte_rendu_id) {
   $compte_rendu->loadFile();
 }
 // Création à partir d'un modèle vide
-else if ($modele_id == 0) {
+else if ($modele_id == 0 && !$pack_id) {
   $compte_rendu->valueDefaults();
   $compte_rendu->object_id = $object_id;
   $compte_rendu->object_class = $target_class;
