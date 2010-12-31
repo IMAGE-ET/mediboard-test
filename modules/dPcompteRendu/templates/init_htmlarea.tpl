@@ -33,7 +33,7 @@ function initCKEditor() {
     // Hack pour la balise style qui pose problème dans ckeditor
     var element = ck_instance.document.getBody().getFirst();
 
-    if (element.$.tagName == "STYLE") {
+    if (element && element.$.tagName == "STYLE") {
       window.save_style = element;
       element.remove();
     }
@@ -67,7 +67,7 @@ function initCKEditor() {
 		  window.resizeEditor();
     });
 		{{if $templateManager->printMode}}
-      CKEDITOR.instances.htmlarea.document.getBody().contentEditable=false;
+      CKEDITOR.instances.htmlarea.document.getBody().$.contentEditable=false;
     {{else}}
 		  {{if $pdf_thumbnails}}
   		  Thumb.content = ck_instance.getData();
@@ -94,7 +94,6 @@ function initCKEditor() {
   	      }
   	    {{/if}}
 	    });
-    {{/if}}
 
     // Surveillance de modification de l'éditeur de texte
     ck_instance.on("key", loadOld);
@@ -104,6 +103,8 @@ function initCKEditor() {
     // Après l'impression, le focus revient sur l'éditeur
     // On peut donc enlever le style à ce moment-là.
     ck_instance.on("focus", function(){ deleteStyle(); });
+
+    {{/if}}
 	});
 }
 
