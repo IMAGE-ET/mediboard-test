@@ -8,9 +8,8 @@
 * @author Fabien Ménager
 */
 
-global $AppUI, $can, $m;
+CCanDo::checkRead();
 
-$can->needsRead();
 $ds = CSQLDataSource::get('std');
 
 // Nom de la classe à prendre en compte

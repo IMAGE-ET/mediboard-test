@@ -7,6 +7,8 @@
  * @author Fabien Ménager
  */
 
+CCanDo::checkRead();
+
 $class_name = CValue::getOrSession('class_name', 'CPatient');
 $objects_count = CValue::getOrSession('objects_count', 20);
 

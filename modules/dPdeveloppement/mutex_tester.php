@@ -7,8 +7,7 @@
  * @author Thomas Despoix
  */
 
-global $can;
-$can->needsRead();
+CCanDo::checkRead();
 
 $actions = array(
   "stall",

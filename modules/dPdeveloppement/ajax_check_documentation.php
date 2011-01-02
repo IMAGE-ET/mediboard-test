@@ -7,8 +7,7 @@
  * @author openXtrem
  */
 
-global $can;
-$can->needsRead();
+CCanDo::checkRead();
 
 $page = CValue::get("page");
 $url = "http://www.mediboard.org/public/$page";

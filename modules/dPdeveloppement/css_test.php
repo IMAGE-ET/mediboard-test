@@ -7,9 +7,7 @@
 * @author Fabien Ménager
 */
 
-global $can;
-$can->needsRead();
-
+CCanDo::checkRead();
 
 // Création du template
 $smarty = new CSmartyDP();

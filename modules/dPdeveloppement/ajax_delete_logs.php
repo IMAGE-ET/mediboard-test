@@ -7,9 +7,7 @@
 * @author Romain Ollivier
 */
 
-global $can;
-
-$can->needsRead();
+CCanDo::checkEdit();
 
 $hash = CValue::get('hash');
 

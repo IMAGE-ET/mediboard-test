@@ -8,6 +8,7 @@ $locales['dPdeveloppement-button-unlocalized_fix'] = 'Mais je suis courageux et 
 $locales['dPdeveloppement-msg-unlocalized_warning'] = 'Cette page contient des textes non traduits au nombre de';
 $locales['mod-dPdeveloppement-tab-benchmark'] = 'Montée en charge';
 $locales['mod-dPdeveloppement-tab-check_zombie_objects'] = 'Intégrité référentielle';
+$locales['mod-dPdeveloppement-tab-sniff_code'] = 'Analyse syntaxique';
 $locales['mod-dPdeveloppement-tab-css_test'] = 'Testeur de CSS';
 $locales['mod-dPdeveloppement-tab-echantillonnage'] = 'Echantillonnage';
 $locales['mod-dPdeveloppement-tab-form_tester'] = 'Testeur de formulaires';

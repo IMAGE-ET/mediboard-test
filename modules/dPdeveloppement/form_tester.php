@@ -7,8 +7,7 @@
 * @author Fabien Ménager
 */
 
-global $can;
-$can->needsRead();
+CCanDo::checkRead();
 
 class CTestClass extends CMbObject {
   function __construct() {

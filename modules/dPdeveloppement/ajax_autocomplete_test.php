@@ -7,6 +7,8 @@
  * @author openXtrem
  */
 
+CCanDo::checkRead();
+
 sleep(0.1);
 
 ?>

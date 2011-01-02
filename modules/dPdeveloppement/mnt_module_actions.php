@@ -7,8 +7,9 @@
  * @author openXtrem
  */
 
-global $can, $locales;
-$can->needsRead();
+CCanDo::checkRead();
+
+global $locales;
 
 $tabs = array();
 foreach ($modules = CModule::getInstalled() as $module) {
@@ -21,6 +22,8 @@ foreach ($modules = CModule::getInstalled() as $module) {
     }
   }
 }
+
+CAppUI::tr()
 
 // Création du template
 $smarty = new CSmartyDP();

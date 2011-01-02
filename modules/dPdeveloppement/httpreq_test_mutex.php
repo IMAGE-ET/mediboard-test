@@ -7,8 +7,7 @@
  * @author Thomas Despoix
  */
 
-global $can;
-$can->needsRead();
+CCanDo::checkRead();
 
 $action = CValue::get("action");
 CAppUI::stepAjax("test_mutex-try", UI_MSG_OK, $action);

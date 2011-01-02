@@ -7,11 +7,7 @@
  * @author Poiron Yohann
  */
 
-global $AppUI, $can, $m;
-
-// only user_type of Administrator (1) can access this page
-$can->edit |= ($AppUI->user_type != 1);
-$can->needsEdit();
+CCanDo::checkEdit();
 
 $module = CValue::getOrSession("module" , "system");
 $classes = CModule::getClassesFor($module);
@@ -189,7 +185,7 @@ $files = CAppUI::readFiles("modules/$module", '\.php$');
 foreach($files as $_file) {
   $_tab = substr($_file, 0, -4);
   
-  if (in_array($_tab, array("setup", "index", "config")) ||
+  if (in_array($_tab, array("setup", "index", "config", "preferences")) ||
       preg_match("/^httpreq|^ajax/", $_tab)) continue;
   
   addLocale("Module", "Tabs", "mod-$module-tab-$_tab");
