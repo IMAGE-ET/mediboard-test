@@ -30,7 +30,7 @@
      
       <table class="tbl">
         <tr>
-          <th class="category" colspan="7">Réglement Patients</th>
+          <th class="title" colspan="7">Réglement Patients</th>
         </tr>
         <tr>
           <th class="category">Type réglement</th>
@@ -60,7 +60,7 @@
           <td>{{$recapReglement.autre.du_patient|currency}}</td>
         </tr>
         <tr>
-          <th class="category" colspan="7">Réglement Tiers</th>
+          <th class="title" colspan="7">Réglement Tiers</th>
         </tr>
         <tr>
           <th class="category">Type réglement</th>
@@ -90,7 +90,7 @@
           <td>{{$recapReglement.autre.du_tiers|currency}}</td>
         </tr>
         <tr>
-          <th class="category" colspan="7">Récapitulatif des consultations concernées</th>
+          <th class="title" colspan="7">Récapitulatif des consultations concernées</th>
         </tr>
         <tr>
           <th class="category">Nb de consultations</th>
