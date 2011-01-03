@@ -56,7 +56,7 @@ if ($patient_id) {
   $patient->load($patient_id);
 }
 
-$patient->loadRefConstantesMedicales();
+$latest_constantes = $patient->loadRefConstantesMedicales();
 $patient->loadRefPhotoIdentite();
 
 $where = array(
@@ -75,9 +75,9 @@ $list_contexts = array();
 foreach($list_constantes as $const) {
   if ($const->context_class && $const->context_id) {
     $c = new $const->context_class;
-    $c->load($const->context_id);
-    $c->loadComplete();
+    $c = $c->getCached($const->context_id);
     if ($c instanceof CConsultation && $c->sejour_id) continue; // Cas d'un RPU
+    $c->loadRefsFwd();
     $list_contexts[$c->_guid] = $c;
   }
 }
@@ -128,9 +128,6 @@ if ($date_max) {
 
 // Les constantes qui correspondent (dans le contexte cette fois)
 $list_constantes = $constantes->loadList($where, "datetime");
-
-// La liste des derniers mesures
-$latest_constantes = CConstantesMedicales::getLatestFor($patient->_id);
 
 $standard_struct = array(
   "series" => array(

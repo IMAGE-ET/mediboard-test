@@ -56,6 +56,9 @@ class CConstantesMedicales extends CMbObject {
   var $_vst                  = null;
   var $_new_constantes_medicales = null;
   
+  static $_specs_converted = false;
+  static $_latest_values = array();
+  
   static $list_constantes = array (
     "poids"             => array(
       "unit" => "kg", 
@@ -78,14 +81,16 @@ class CConstantesMedicales extends CMbObject {
       "formfields" => array("_ta_systole", "_ta_diastole"), 
       "min" => 0, "max" => 20,
       "standard" => 12,
-      "colors" => array("#00A8F0", "#C0D800")
+      "colors" => array("#00A8F0", "#C0D800"),
+      "conversion" => array("mmHg" => 10),
     ),
     "ta_droit"          => array(
       "unit" => "cmHg", 
       "formfields" => array("_ta_droit_systole", "_ta_droit_diastole"), 
       "min" => 0, "max" => 20,
       "standard" => 12,
-      "colors" => array("#00A8F0", "#C0D800")
+      "colors" => array("#00A8F0", "#C0D800"),
+      "conversion" => array("mmHg" => 10),
     ),
     "_vst"              => array(
       "unit" => "ml",
@@ -163,7 +168,34 @@ class CConstantesMedicales extends CMbObject {
         }
       }
     }
+    
     return parent::__construct();
+    
+    // Conversion des specs
+    if (self::$_specs_converted) return;
+    
+    foreach(self::$list_constantes as $_constant => $_params) {
+      $unit = "mmHg";
+      
+      if (isset($_params["conversion"][$unit])) {
+        $conv = $_params["conversion"][$unit];
+        
+        if (isset($_params["formfields"])) {
+          foreach ($_params["formfields"] as $_formfield) {
+            $spec = $this->_specs[$_formfield];
+            if (isset($spec->min)) $spec->min *= $conv;
+            if (isset($spec->max)) $spec->max *= $conv;
+          }
+        }
+        else {
+          $spec = $this->_specs[$_constant];
+          if (isset($spec->min)) $spec->min *= $conv;
+          if (isset($spec->max)) $spec->max *= $conv;
+        }
+      }
+    }
+    
+    self::$_specs_converted = true;
   }
 
   function getSpec() {
@@ -271,14 +303,12 @@ class CConstantesMedicales extends CMbObject {
     	$this->ta = '';
     }
     
-    
     if (!empty($this->_ta_droit_systole) && !empty($this->_ta_droit_diastole)) {
       $this->ta_droit = "$this->_ta_droit_systole|$this->_ta_droit_diastole";
     }
     if ($this->_ta_droit_systole === '' && $this->_ta_droit_diastole === '') {
       $this->ta_droit = '';
     }
-    
     
     if (!empty($this->_inj) && !empty($this->_inj_essai)) {
       $this->injection = "$this->_inj|$this->_inj_essai";
@@ -360,6 +390,10 @@ class CConstantesMedicales extends CMbObject {
   static function getLatestFor($patient) {
     $patient_id = ($patient instanceof CPatient) ? $patient->_id : $patient;
     
+    if (isset(self::$_latest_values[$patient_id])) {
+      return self::$_latest_values[$patient_id];
+    }
+    
     // Constante que l'on va construire
     $constante = new CConstantesMedicales();
     if(!$patient_id) {
@@ -402,7 +436,8 @@ class CConstantesMedicales extends CMbObject {
     }
     
     $constante->updateFormFields();
-    return array($constante, $list_datetimes);
+    
+    return self::$_latest_values[$patient_id] = array($constante, $list_datetimes);
   }
 }
 ?>
