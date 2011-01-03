@@ -1,7 +1,7 @@
 <table class="main">
   <tr>
     <th colspan="2">
-      <a href="#" onclick="print()">Rapport du {{$date|date_format:"%d/%m/%Y"}}</a>
+      <a href="#" onclick="window.print()">Rapport du {{$date|date_format:"%d/%m/%Y"}}</a>
     </th>
   </tr>
   <tr>

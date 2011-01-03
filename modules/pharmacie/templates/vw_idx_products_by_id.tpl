@@ -8,7 +8,7 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
 *}}
 
-<button class="print not-printable" onclick="print()">{{tr}}Print{{/tr}}</button>
+<button class="print not-printable" onclick="window.print()">{{tr}}Print{{/tr}}</button>
 
 <table class="main tbl">
   <thead>
