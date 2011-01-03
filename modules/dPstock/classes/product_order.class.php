@@ -328,6 +328,8 @@ class CProductOrder extends CMbMetaObject {
     
     $where['product_order.group_id'] = " = '".CProductStockGroup::getHostGroup()."'";
     
+    $old_limit = $limit;
+    
     if ($type === 'pending') {
       $limit = 200;
     }
@@ -343,6 +345,8 @@ class CProductOrder extends CMbMetaObject {
         }
       }
       $this->_search_count = count($orders_list);
+      
+      $orders_list = CRequest::artificialLimit($orders_list, $old_limit);
     }
     else {
       $this->_search_count = count($this->countMultipleList($where, null, null, $groupby, $leftjoin));

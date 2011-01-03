@@ -478,10 +478,7 @@ class CMbObject {
     
     // We simulate the MySQL LIMIT
     if ($limit) {
-      preg_match("/(?:(\d+),)?(\d+)/", $limit, $matches);
-      $offset = intval($matches[1]);
-      $length = intval($matches[2]);
-      $list = array_slice($list, $offset, $length, true);
+      $list = CRequest::artificialLimit($list, $limit);
     }
     
     return $list;

@@ -111,6 +111,13 @@ class CRequest {
     $this->limit = $limit;
   }
   
+  static function artificialLimit($list, $limit) {
+    preg_match("/(?:(\d+),\s*)?(\d+)/", $limit, $matches);
+    $offset = intval($matches[1]);
+    $length = intval($matches[2]);
+    return array_slice($list, $offset, $length, true);
+  }
+  
   /**
    * returns the SQL query fragment containing everuthing after the SELECT *
    * @param $from The table names
