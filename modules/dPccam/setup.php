@@ -71,12 +71,13 @@ class CSetupdPccam extends CSetup {
     $this->addQuery($query);
     
     $this->mod_version = "0.14";    
-
-    // Data source query
+		
+		// Data source query
     $query = "SELECT *
-      FROM `actes`
-      WHERE CODE = 'GLLD021'";
+      FROM `codes_ngap`
+      WHERE CODE = 'C' AND tarif = '23'";
     $this->addDatasource("ccamV2", $query);
+		
   }
 }
 ?>
