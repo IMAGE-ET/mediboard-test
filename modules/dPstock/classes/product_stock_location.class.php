@@ -135,10 +135,22 @@ class CProductStockLocation extends CMbMetaObject {
     );
     $this->loadBackRefs("group_stocks", "product.name", null, null, $ljoin);
     
+    if (!empty($this->_back["group_stocks"])) {
+      foreach($this->_back["group_stocks"] as $_id => $_stock) {
+        if ($_stock->loadRefProduct()->cancelled) unset($this->_back["group_stocks"][$_id]);
+      }
+    }
+    
     $ljoin = array(
       "product" => "product_stock_service.product_id = product.product_id",
     );
     $this->loadBackRefs("service_stocks", "product.name", null, null, $ljoin);
+    
+    if (!empty($this->_back["service_stocks"])) {
+      foreach($this->_back["service_stocks"] as $_id => $_stock) {
+        if ($_stock->loadRefProduct()->cancelled) unset($this->_back["service_stocks"][$_id]);
+      }
+    }
   }
 
   function loadRefsFwd(){
