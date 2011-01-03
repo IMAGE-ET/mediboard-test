@@ -130,7 +130,7 @@ function loadOld() {
   var html = instance.getData();
   if (html != Thumb.content) {
     Thumb.changed = true;
-    instance.removeListener("keypress", loadOld);
+    instance.removeListener("key", loadOld);
     Thumb.content = html;
     if (window.pdf_thumbnails == "1") {
       Thumb.old();
