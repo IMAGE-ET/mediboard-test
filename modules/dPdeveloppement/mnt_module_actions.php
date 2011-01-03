@@ -23,8 +23,6 @@ foreach ($modules = CModule::getInstalled() as $module) {
   }
 }
 
-CAppUI::tr()
-
 // Création du template
 $smarty = new CSmartyDP();
 
