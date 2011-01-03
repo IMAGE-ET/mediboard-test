@@ -16,6 +16,11 @@ Intermax.ResultHandler["Lire Vitale"] = function() {
   PatSelector.pop();
 }
 
+updateNomenclatureConsult = function(){
+  var url = new Url("dPcabinet", "httpreq_update_nomenclature_consult");
+  url.requestUpdate("update_nomenclature_consult");
+}
+
 </script>
 
 <table class="tbl">
@@ -44,8 +49,18 @@ Intermax.ResultHandler["Lire Vitale"] = function() {
   </tr>
   {{/foreach}}
   
+	<tr>
+	  <th>Mise à jour de la base AMMAX</th>
+	</tr>
+	<tr>
+		<td class="button">
+			<button type="button" class="submit" onclick="updateNomenclatureConsult();">
+				Passage de la C de 22 à 23 euros
+			</button>
+			<span id="update_nomenclature_consult" style="display: inline-block;"></span>
+		</td>
+	</tr>
 </table>
-
 
 <hr />
 
