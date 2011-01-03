@@ -117,7 +117,6 @@ class CActeNGAP extends CActe {
     	$this->demi = $details[5];
     }
 
-
     if (count($details) >= 7){
     	$this->complement = $details[6];
     }
@@ -145,21 +144,45 @@ class CActeNGAP extends CActe {
     return parent::canDeleteEx();
   }
   
- function getLibelle() {
+	function updateMontantBase() {
+		$ds = CSQLDataSource::get("ccamV2");
+    $query = "SELECT `tarif` 
+		  FROM `codes_ngap` 
+			WHERE `code` = %";
+		$query = $ds->prepare($query, $this->code);
+		
+		$this->montant_base = $ds->loadResult($query);
+		$this->montant_base *= $this->coefficient;
+	  $this->montant_base *= $this->quantite;
+
+		if ($this->demi) {
+		  $this->montant_base /= 2;
+		}
+		
+	  if ($this->complement == "F") {
+	    $this->montant_base += 19.06;  
+	  }
+		
+	  if ($this->complement == "N") {
+	    $this->montant_base += 25; 
+	  }
+		
+		return $this->montant_base;
+	}
+	
+  function getLibelle() {
     $ds = CSQLDataSource::get("ccamV2");
-    $query = $ds->prepare("SELECT * FROM codes_ngap WHERE CODE = % ", $this->code);
-    $result = $ds->exec($query);
-    if(mysql_num_rows($result) == 0) {
-      $this->code = "-";
-      //On rentre les champs de la table codes_ngap
-      $this->libelle = "Acte inconnu ou supprimé";
-      
-    } else {
-      $row = $ds->fetchArray($result);
-      //On rentre les champs de la table codes_ngap
-      $this->libelle = $row["libelle"];
-     
+    $query = "SELECT `libelle`
+		  FROM codes_ngap 
+			WHERE CODE = % ";
+    $query = $ds->prepare($query, $this->code);
+
+    $this->libelle = "Acte inconnu ou supprimé";
+    if ($libelle = $ds->loadResult($query)) {
+      $this->libelle = $libelle;
     }
+		
+		return $this->libelle;
   }
 } 
 

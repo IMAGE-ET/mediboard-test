@@ -7,47 +7,18 @@
 * @author Alexis Granger
 */
 
-global $AppUI, $can, $m;
-$ds = CSQLDataSource::get("ccamV2");
-
-$quantite = CValue::getOrSession("quantite");
-$coefficient = CValue::getOrSession("coefficient");
-$demi = CValue::getOrSession("demi", 0);
-$complement = CValue::getOrSession("complement");
-
-if($quantite == ""){
-  $quantite = 1;
-}
-
-if($coefficient == ""){
-  $coefficient = 1;
-}
-
-$code = CValue::getOrSession("code");
-
-$sql = "SELECT `tarif` FROM `codes_ngap` WHERE `code` = '$code' ";
-$tarif = $ds->loadList($sql, null);
-$tarif = reset($tarif);
-
-$tarif = $tarif["tarif"] * $quantite * $coefficient; 
-if($demi == 1){
-  $tarif = $tarif / 2;
-}
-
-if($complement && $complement != "U"){
-  if($complement == "F"){
-  	$tarif += 19.06;	
-  }
-  if($complement == "N"){
-  	$tarif += 25;	
-  }
-}
-
+$acte = new CActeNGAP;
+$acte->quantite    = CValue::get("quantite", "1");
+$acte->code        = CValue::get("code");
+$acte->coefficient = CValue::get("coefficient", "1");
+$acte->demi        = CValue::get("demi");
+$acte->complement  = CValue::get("complement");
+$acte->updateMontantBase();
+$acte->getLibelle();
 
 // Création du template
 $smarty = new CSmartyDP();
-$smarty->assign("tarif"      , $tarif);
-$smarty->assign("acte_ngap"  , new CActeNGAP());
+$smarty->assign("acte"  , $acte);
 $smarty->display("inc_vw_tarif_ngap.tpl");
 
 

@@ -3,11 +3,11 @@
 refreshTarif = function(){
   var oForm = document.editNGAP;
   var url = new Url("dPcabinet", "httpreq_vw_tarif_code_ngap");
-  url.addParam("quantite", oForm.quantite.value);
-  url.addParam("coefficient", oForm.coefficient.value);
-  url.addParam("demi", oForm.demi.value);
-  url.addParam("code", oForm.code.value);
-  url.addParam("complement", oForm.complement.value);
+  url.addElement(oForm.quantite);
+  url.addElement(oForm.code);
+  url.addElement(oForm.coefficient);
+  url.addElement(oForm.demi);
+  url.addElement(oForm.complement);
   url.requestUpdate('tarifActe');
 }
   
@@ -119,7 +119,7 @@ ActesNGAP = {
           <td>{{mb_field object=$acte_ngap field="coefficient" size="3" onchange="refreshTarif()" onkeyup="refreshTarif()"}}</td>
           <td>{{mb_field object=$acte_ngap field="demi" onchange="refreshTarif()" onkeyup="refreshTarif()"}}</td>
           <td id="tarifActe">
-            {{include file="../../dPcabinet/templates/inc_vw_tarif_ngap.tpl" tarif=0}}
+          	{{mb_field object=$acte_ngap field="montant_base"}}
           </td>
           <td>{{mb_field object=$acte_ngap field="montant_depassement"}}</td>
           <td>{{mb_field object=$acte_ngap field="complement" onchange="refreshTarif()" onkeyup="refreshTarif()" defaultOption="&mdash; Aucun"}}</td>
