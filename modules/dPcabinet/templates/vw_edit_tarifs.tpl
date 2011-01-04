@@ -194,12 +194,16 @@ Main.add(function () {
 							</button>
               {{/if}}
 
+              {{if count($tarif->_new_actes)}}
               <input type="hidden" name="_update_secteur1" value="0" />
               <button class="change" type="submit" onclick="$V(this.form._update_secteur1, '1');">
                 {{tr}}Recompute{{/tr}}
               </button>
+              {{/if}}
 
-	            <button class="trash" type="button" onclick="confirmDeletion(this.form, { typeName: 'le tarif',objName: this.form.description.value } )">{{tr}}Delete{{/tr}}</button>
+	            <button class="trash" type="button" onclick="confirmDeletion(this.form, { typeName: 'le tarif',objName: this.form.description.value } )">
+	            	{{tr}}Delete{{/tr}}
+							</button>
             {{else}}
             <button class="new" type="submit">{{tr}}Create{{/tr}}</button>
             {{/if}}
@@ -213,16 +217,21 @@ Main.add(function () {
       {{if $tarif->_id}}
 	      {{if $tarif->_precode_ready}}
 	      <div class="small-success">
-	      	Les codages CCAM et NGAP de ce tarif sont suffisamment complets pour permettre une cotation réelle automatique. 
-	      	complète automatiquement
+	      	{{tr}}CTarif-_precode_ready-OK{{/tr}}
 	      </div>
 	      {{else}}
 	      <div class="small-warning">
-	      	Les codages CCAM et NGAP de ce tarif ne sont pas assez complets pour permettre une cotation complète automatiquement.
+          {{tr}}CTarif-_precode_ready-KO{{/tr}}
 	      </div>
 				{{/if}}
-			{{/if}}
-			      
+
+        {{if !$tarif->_secteur1_uptodate}}
+        <div class="small-warning">
+          {{tr}}CTarif-_secteur1_uptodate-KO{{/tr}}
+        </div>
+			  {{/if}}
+
+      {{else}}
       <div class="big-info">
         Pour créer un tarif contenant des codes CCAM et NGAP, effectuer une cotation réelle
         pendant une consultation en trois étapes :
@@ -232,6 +241,7 @@ Main.add(function () {
           <li><em>Cliquer</em> <strong>Nouveau tarif</strong> dans cette même section</li>
         </ul>
       </div>
+			{{/if}}
     </td>
   </tr>
 </table>

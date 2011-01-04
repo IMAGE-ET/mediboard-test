@@ -16,7 +16,7 @@ class CCurrencySpec extends CFloatSpec {
   function getSpecType() {
     return "currency";
   }
-  
+  	
   function getValue($object, $smarty = null, $params = array()) {
     $propValue = $object->{$this->fieldName};
     

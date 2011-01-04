@@ -18,6 +18,7 @@ if (!$tarif->getPerm(PERM_EDIT)) {
   $tarif = new CTarif;
 }
 $tarif->loadRefsNotes();
+$tarif->getSecteur1Uptodate();
 
 // L'utilisateur est-il praticien ?
 $user = CAppUI::$user;
@@ -59,6 +60,7 @@ if ($user->isSecretaire()) {
 if ($listeTarifsChir) {
   foreach ($listeTarifsChir as $_tarif) {
     $_tarif->getPrecodeReady();
+    $_tarif->getSecteur1Uptodate();
   }
 }
 
@@ -70,16 +72,16 @@ $listeTarifsSpe = new CTarif();
 $listeTarifsSpe = $listeTarifsSpe->loadList($where, $order);
 foreach ($listeTarifsSpe as $_tarif) {
   $_tarif->getPrecodeReady();
+  $_tarif->getSecteur1Uptodate();
 }
 
 // Liste des praticiens du cabinet -> on ne doit pas voir les autres...
-if($user->_is_secretaire) {
-  if(CAppUI::pref("pratOnlyForConsult", 1)) {
-    $listPrat = $user->loadPraticiens(PERM_READ);
-  } else {
-    $listPrat = $user->loadProfessionnelDeSante(PERM_READ);
-  }
-} else {
+if ($user->_is_secretaire) {
+  $listPrat = CAppUI::pref("pratOnlyForConsult", 1) ?
+	  $user->loadPraticiens(PERM_READ) :
+    $user->loadProfessionnelDeSante(PERM_READ);
+}
+else {
   $listPrat = array($user->_id => $user);
 }
   

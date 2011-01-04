@@ -390,7 +390,7 @@ class CMbObject {
 
     // Not formally deterministic case for floats
     if ($spec instanceof CFloatSpec) {
-      return round($this->$field, 2) != round($this->_old->$field, 2);
+      return !CFloatSpec::equals($this->$field, $this->_old->$field);
     }
     
     // Check against a specific value

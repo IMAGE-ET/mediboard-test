@@ -1,8 +1,4 @@
 <table class="tbl">
-  <tr>
-    <th colspan="10" class="title">{{tr}}CMediusers-back-tarifs{{/tr}}</th>
-  </tr>
-  
   {{if !$user->_is_praticien && !$user->_is_secretaire}}
   <tr>
     <td class="text">
@@ -32,14 +28,19 @@
     </td>
   </tr>
   {{/if}}
-  
-
-  {{if $user->_is_praticien || $user->_is_secretaire}}
-	{{mb_include template=inc_list_tarifs_by_owner tarifs=$listeTarifsChir}}
-  {{/if}}
 </table>
 
 <table class="tbl">
-  <tr><th colspan="10" class="title">{{tr}}CFunctions-back-tarifs{{/tr}}</th></tr>
+  <tr>
+    <th colspan="10" class="title">{{tr}}CMediusers-back-tarifs{{/tr}}</th>
+  </tr>
+  
+  {{if $user->_is_praticien || $user->_is_secretaire}}
+  {{mb_include template=inc_list_tarifs_by_owner tarifs=$listeTarifsChir}}
+  {{/if}}
+
+  <tr>
+  	<th colspan="10" class="title">{{tr}}CFunctions-back-tarifs{{/tr}}</th>
+	</tr>
   {{mb_include template=inc_list_tarifs_by_owner tarifs=$listeTarifsSpe}}
 </table>

@@ -14,6 +14,10 @@ class CFloatSpec extends CMbFieldSpec {
   var $min    = null;
   var $max    = null;
   var $pos    = null;
+	
+  static function equals($value1, $value2) {
+    return round($value1, 2) == round($value2, 2);
+  }
   
   function getSpecType() {
     return "float";

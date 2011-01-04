@@ -31,6 +31,7 @@ class CTarif extends CMbObject {
   
   // Remote fields
   var $_precode_ready = null;
+  var $_secteur1_uptodate = null;
   var $_has_mto = null;
   
   // Behaviour fields
@@ -134,6 +135,7 @@ class CTarif extends CMbObject {
 		// Actes NGAP
     $this->completeField("codes_ngap");
     $this->_codes_ngap = explode("|", $this->codes_ngap);
+    CMbArray::removeValue("", $this->_codes_ngap);
 		foreach ($this->_codes_ngap as &$_code) {
 	    $acte = new CActeNGAP;
 	    $acte->setFullCode($_code);
@@ -145,12 +147,32 @@ class CTarif extends CMbObject {
     // Actes CCAM
     $this->completeField("codes_ccam");
     $this->_codes_ccam = explode("|", $this->codes_ccam);
+    CMbArray::removeValue("", $this->_codes_ccam);
     foreach ($this->_codes_ccam as &$_code) {
       $acte = new CActeCCAM;
       $acte->setFullCode($_code);
       $this->secteur1 += $acte->updateMontantBase();  
       $_code = $acte->makeFullCode();
     }
+		
+		return $this->secteur1;
+	}
+	
+	function getSecteur1Uptodate() {
+		if (!$this->codes_ngap && !$this->codes_ccam) {
+			return $this->_secteur1_uptodate = "1";
+		}
+		
+		$old_secteur1 = $this->secteur1;
+    
+		// Compute...
+    $this->_update_secteur1 = true;
+		$new_secteur1 = $this->updateSecteur1();
+    
+		// ... and restore
+		$this->secteur1 = $old_secteur1;
+
+    return $this->_secteur1_uptodate = CFloatSpec::equals($old_secteur1, $new_secteur1)  ? "1" : "0";
 	}
   
   function getPrecodeReady() {

@@ -101,6 +101,7 @@ class CActeNGAP extends CActe {
    */
   function setFullCode($code){
     $details = explode("-", $code);
+
     $this->quantite    = $details[0];
     $this->code        = $details[1];
     $this->coefficient = $details[2];
