@@ -163,16 +163,21 @@ class CTarif extends CMbObject {
 			return $this->_secteur1_uptodate = "1";
 		}
 		
-		$old_secteur1 = $this->secteur1;
+		// Backup ...
+		$secteur1   = $this->secteur1;
+    $codes_ccam = $this->_codes_ccam;
+    $codes_ngap = $this->_codes_ngap;
     
 		// Compute...
     $this->_update_secteur1 = true;
 		$new_secteur1 = $this->updateSecteur1();
     
 		// ... and restore
-		$this->secteur1 = $old_secteur1;
+    $this->secteur1 = $secteur1;
+    $this->_codes_ccam = $codes_ccam;
+    $this->_codes_ngap = $codes_ngap;
 
-    return $this->_secteur1_uptodate = CFloatSpec::equals($old_secteur1, $new_secteur1)  ? "1" : "0";
+    return $this->_secteur1_uptodate = CFloatSpec::equals($secteur1, $new_secteur1)  ? "1" : "0";
 	}
   
   function getPrecodeReady() {
@@ -186,7 +191,7 @@ class CTarif extends CMbObject {
     foreach ($this->_codes_ccam as $code) {
       $acte = new CActeCCAM();
       $acte->setFullCode($code);
-      $this->_new_actes["$code"] = $acte;
+      $this->_new_actes[$code] = $acte;
       if (!$acte->getPrecodeReady()) {
         return $this->_precode_ready = '0';
       }
