@@ -56,6 +56,7 @@ if($list_administrations){
 	$administration = new CAdministration();
 	$administration->dateTime = $dateTime;
 	$administration->prise_id = $prise_id;
+	$administration->planification = 0;
 	$administrations = $administration->loadMatchingList();
 	foreach($administrations as $_administration){
 	  $_administration->loadRefsFwd();
