@@ -1052,8 +1052,14 @@ class CSetupdPplanningOp extends CSetup {
               ADD `debut_prepa_preop` TIME,
               ADD `fin_prepa_preop` TIME";
     $this->addQuery($query);
+    
+    $this->makeRevision("1.14");
+    $query = "CREATE TABLE `interv_hors_plages` (
+                `interv_hors_plage_id` INT (11) UNSIGNED NOT NULL auto_increment PRIMARY KEY
+              ) TYPE=MYISAM;";
+    $this->addQuery($query);
 		
-    $this->mod_version = "1.14";
+    $this->mod_version = "1.15";
   }
 }
 ?>

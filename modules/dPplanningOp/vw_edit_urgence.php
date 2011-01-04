@@ -11,6 +11,10 @@ global $AppUI, $can, $m, $tab;
 
 $can->needsRead();
 
+$hors_plage = new CIntervHorsPlage();
+if(!$hors_plage->canRead()) {
+  $can->redirect();
+}
 // Liste des Etablissements selon Permissions
 $etablissements = CMediusers::loadEtablissements(PERM_READ);
 
