@@ -7,8 +7,7 @@
 * @author Thomas Despoix
 */
 
-global $AppUI, $can, $m;
-$can->needsEdit();
+CCanDo::checkEdit();
 
 // Edite t'on un tarif ?
 $tarif_id = CValue::getOrSession("tarif_id");
@@ -18,9 +17,10 @@ if (!$tarif->getPerm(PERM_EDIT)) {
   CAppUI::setMsg("Vous n'avez pas le droit de modifier ce tarif");
   $tarif = new CTarif;
 }
+$tarif->loadRefsNotes();
 
 // L'utilisateur est-il praticien ?
-$user = $AppUI->_ref_user;
+$user = CAppUI::$user;
 $user->loadRefFunction();
 
 $prat = new CMediusers();

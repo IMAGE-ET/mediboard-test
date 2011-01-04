@@ -35,6 +35,7 @@ class CTarif extends CMbObject {
   
   // Behaviour fields
   var $_add_mto = null;
+	var $_update_secteur1 = null;
   
   // Object References
   var $_ref_chir     = null;
@@ -82,14 +83,19 @@ class CTarif extends CMbObject {
   
   function updateDBFields() {
   	if ($this->_type !== null) {
-      if($this->_type == "chir")
-        $this->function_id = "";
-      else
-        $this->chir_id = "";
+  		$other_field = $this->_type == "chir" ? "function_id" : "chir_id";
+      $this->$other_field = "";
   	}
+
+    $this->updateSecteur1();
+    $this->bindConsultation();
   }
   
-  function bindConsultation(){
+  function bindConsultation() {
+    if (!$this->_bind_consult){
+      return;
+    }
+
     $this->_bind_consult = false;
     
     // Chargement de la consultation
@@ -114,15 +120,38 @@ class CTarif extends CMbObject {
       $this->completeField("codes_ngap");
       $this->codes_ngap .= "|1-MTO-1---0-";
     }
-    
-    if ($this->_bind_consult){
-      if ($msg = $this->bindConsultation()){
-        return $msg;
-      }
-    }
-    
+    	    
     return parent::store();
   }
+	
+	function updateSecteur1() {
+		if (!$this->_update_secteur1) {
+			return;
+		}		
+
+    $this->secteur1 = 0.00;
+
+		// Actes NGAP
+    $this->completeField("codes_ngap");
+    $this->_codes_ngap = explode("|", $this->codes_ngap);
+		foreach ($this->_codes_ngap as &$_code) {
+	    $acte = new CActeNGAP;
+	    $acte->setFullCode($_code);
+      $this->secteur1 += $acte->updateMontantBase();	
+			$_code = $acte->makeFullCode();
+    }
+    $this->codes_ngap = implode("|", $this->_codes_ngap);
+
+    // Actes CCAM
+    $this->completeField("codes_ccam");
+    $this->_codes_ccam = explode("|", $this->codes_ccam);
+    foreach ($this->_codes_ccam as &$_code) {
+      $acte = new CActeCCAM;
+      $acte->setFullCode($_code);
+      $this->secteur1 += $acte->updateMontantBase();  
+      $_code = $acte->makeFullCode();
+    }
+	}
   
   function getPrecodeReady() {
     $this->_has_mto = '0';

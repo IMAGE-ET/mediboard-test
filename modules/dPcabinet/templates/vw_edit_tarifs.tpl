@@ -81,7 +81,8 @@ Main.add(function () {
         {{if $tarif->_id}}
         <tr>
         	<th class="title modify text" colspan="2">
-        		{{mb_include  module=system template=inc_object_history object=$tarif}}
+            {{mb_include  module=system template=inc_object_notes      object=$tarif}}
+            {{mb_include  module=system template=inc_object_history    object=$tarif}}
         		{{mb_include  module=system template=inc_object_idsante400 object=$tarif}}
         		{{tr}}CTarif-title-modify{{/tr}} '{{$tarif}}'
         	</th>
@@ -185,13 +186,22 @@ Main.add(function () {
           <td class="button" colspan="2">
             {{if $tarif->_id}}
 	            <button class="modify" type="submit">{{tr}}Save{{/tr}}</button>
+
               {{if count($tarif->_new_actes) && !$tarif->_has_mto}}
               <input type="hidden" name="_add_mto" value="0" />
-	            <button class="add" type="submit" onclick="$V(this.form._add_mto, '1');">{{tr}}Add{{/tr}} MTO</button>
+	            <button class="add" type="submit" onclick="$V(this.form._add_mto, '1');">
+	            	{{tr}}Add{{/tr}} MTO
+							</button>
               {{/if}}
+
+              <input type="hidden" name="_update_secteur1" value="0" />
+              <button class="change" type="submit" onclick="$V(this.form._update_secteur1, '1');">
+                {{tr}}Recompute{{/tr}}
+              </button>
+
 	            <button class="trash" type="button" onclick="confirmDeletion(this.form, { typeName: 'le tarif',objName: this.form.description.value } )">{{tr}}Delete{{/tr}}</button>
             {{else}}
-            <button class="new" type="submit" name="btnFuseAction">{{tr}}Create{{/tr}}</button>
+            <button class="new" type="submit">{{tr}}Create{{/tr}}</button>
             {{/if}}
           </td>
         </tr>

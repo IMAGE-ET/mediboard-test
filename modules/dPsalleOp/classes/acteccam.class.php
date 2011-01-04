@@ -236,11 +236,15 @@ class CActeCCAM extends CActe {
     $this->_rembex = $this->rembourse && $code->remboursement == 3 ? '1' : '0';
   }
   
+	function updateMontantBase() {
+    return $this->montant_base = $this->getTarif();  
+	}
+	
   function store() {
     // Sauvegarde du montant de base
     if ($this->_calcul_montant_base) {
       $this->updateFormFields();
-      $this->montant_base = $this->getTarif();  
+			$this->updateMontantBase();
     }
    
     // En cas d'une modification autre que signe, on met signe à 0
