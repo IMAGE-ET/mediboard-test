@@ -130,7 +130,6 @@
 <br />
 {{mb_include module=dPcabinet template=print_actes readonly=true}}
 
-<br style="page-break-after: always;" />
 </div>
 
 {{if !@$offline}}
