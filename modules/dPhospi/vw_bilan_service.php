@@ -93,9 +93,11 @@ if($do_trans){
   $where[] = "(sejour.entree BETWEEN '$dateTime_min' AND '$dateTime_max') OR 
             (sejour.sortie BETWEEN '$dateTime_min' AND '$dateTime_max') OR
             (sejour.entree <= '$dateTime_min' AND sejour.sortie >= '$dateTime_max')";
- 
+  
+  $group_by = "chambre.nom";
+
   $transmission = new CTransmissionMedicale();
-  $_transmissions = $transmission->loadList($where, null, null, null, $ljoin);
+  $_transmissions = $transmission->loadList($where, null, null, $group_by, $ljoin);
 	
 	$ljoin["sejour"] = "observation_medicale.sejour_id = sejour.sejour_id";
   $observation = new CObservationMedicale();
@@ -104,6 +106,7 @@ if($do_trans){
 
 $patients = array();
 $trans_and_obs = array();
+
 foreach($_transmissions as $_trans){
 	$_trans->loadRefSejour();
 	$sejour =& $_trans->_ref_sejour;
@@ -142,10 +145,6 @@ foreach($_observations as $_obs){
   }
   $_obs->loadRefsFwd();
 	$trans_and_obs[$patient_id][$_obs->date][] = $_obs;
-}
-
-foreach($trans_and_obs as &$trans_by_patients){
-	ksort($trans_by_patients);
 }
 
 if (CValue::get("do") && ($do_medicaments || $do_injections || $do_perfusions || $do_aerosols || $do_elements)) {
