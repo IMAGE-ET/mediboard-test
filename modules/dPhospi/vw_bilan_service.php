@@ -94,7 +94,7 @@ if($do_trans){
             (sejour.sortie BETWEEN '$dateTime_min' AND '$dateTime_max') OR
             (sejour.entree <= '$dateTime_min' AND sejour.sortie >= '$dateTime_max')";
   
-  $order_by = "chambre.nom";
+  $order_by = "chambre.nom, date DESC";
 
   $transmission = new CTransmissionMedicale();
   $_transmissions = $transmission->loadList($where, $order_by, null, null, $ljoin);
