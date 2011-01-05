@@ -12,15 +12,14 @@
 CCanDo::checkRead();
 
 // Liste des RHSs
-$where = array();
-$where['facture'] = " = '0'";
-
 $rhs = new CRHS();
 $req = new CRequest;
 $req->addTable("rhs");
+$req->addLJoinClause("sejour", "sejour.sejour_id = rhs.sejour_id");
 $req->addColumn("date_monday", "mondate");
 $req->addColumn("COUNT(*)", "count");
-$req->addWhereClause("facture", " = '0'");
+$req->addWhereClause("rhs.facture", " = '0'");
+$req->addWhereClause("sejour.annule", " = '0'");
 $req->addGroup("date_monday");
 $ds = $rhs->_spec->ds;
 $rhs_counts = $ds->loadList($req->getRequest());

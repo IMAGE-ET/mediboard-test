@@ -14,16 +14,17 @@ $rhs_date_monday = CValue::get('rhs_date_monday');
 
 $date = mbDate();
 $rhs = new CRHS();
-$where = array();
+$join['sejour'] = "sejour.sejour_id = rhs.sejour_id";
+$where['sejour.annule'] = " = '0'";
 $where['date_monday'] = " = '$rhs_date_monday'";
-$sejours_rhs = $rhs->loadList($where);
+$sejours_rhs = $rhs->loadList($where, null, null, null, $join);
 foreach ($sejours_rhs as $_rhs) {
   $sejour = $_rhs->loadRefSejour();
 	$sejour->_ref_patient->loadIPP();
 }
 
-$where['facture'] = " = '0'";
-$count_sej_rhs_no_charge = $rhs->countList($where);
+$where['rhs.facture'] = " = '0'";
+$count_sej_rhs_no_charge = $rhs->countList($where, null, null, null, $join);
 
 // Création du template
 $smarty = new CSmartyDP();
