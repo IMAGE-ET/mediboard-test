@@ -36,7 +36,7 @@ class CTarif extends CMbObject {
   
   // Behaviour fields
   var $_add_mto = null;
-	var $_update_secteur1 = null;
+	var $_update_montants = null;
   
   // Object References
   var $_ref_chir     = null;
@@ -88,7 +88,7 @@ class CTarif extends CMbObject {
       $this->$other_field = "";
   	}
 
-    $this->updateSecteur1();
+    $this->updateMontants();
     $this->bindConsultation();
   }
   
@@ -125,24 +125,13 @@ class CTarif extends CMbObject {
     return parent::store();
   }
 	
-	function updateSecteur1() {
-		if (!$this->_update_secteur1) {
+	function updateMontants() {
+		if (!$this->_update_montants) {
 			return;
 		}		
 
     $this->secteur1 = 0.00;
-
-		// Actes NGAP
-    $this->completeField("codes_ngap");
-    $this->_codes_ngap = explode("|", $this->codes_ngap);
-    CMbArray::removeValue("", $this->_codes_ngap);
-		foreach ($this->_codes_ngap as &$_code) {
-	    $acte = new CActeNGAP;
-	    $acte->setFullCode($_code);
-      $this->secteur1 += $acte->updateMontantBase();	
-			$_code = $acte->makeFullCode();
-    }
-    $this->codes_ngap = implode("|", $this->_codes_ngap);
+		$secteur2 = $this->secteur2;
 
     // Actes CCAM
     $this->completeField("codes_ccam");
@@ -151,10 +140,32 @@ class CTarif extends CMbObject {
     foreach ($this->_codes_ccam as &$_code) {
       $acte = new CActeCCAM;
       $acte->setFullCode($_code);
-      $this->secteur1 += $acte->updateMontantBase();  
+      $this->secteur1 += $acte->updateMontantBase(); 
+
+      // Affectation du secteur 2 au dépassement du premier acte trouvé
+      $acte->montant_depassement = $secteur2 ? $secteur2 : 0;
+      $secteur2 = 0;
+			
       $_code = $acte->makeFullCode();
     }
-		
+    
+		// Actes NGAP
+    $this->completeField("codes_ngap");
+    $this->_codes_ngap = explode("|", $this->codes_ngap);
+    CMbArray::removeValue("", $this->_codes_ngap);
+		foreach ($this->_codes_ngap as &$_code) {
+	    $acte = new CActeNGAP;
+	    $acte->setFullCode($_code);
+      $this->secteur1 += $acte->updateMontantBase();	
+			
+      // Affectation du secteur 2  au dépassement du premier acte trouvé
+      $acte->montant_depassement = $secteur2 ? $secteur2 : 0;
+      $secteur2 = 0;
+
+			$_code = $acte->makeFullCode();
+    }
+    $this->codes_ngap = implode("|", $this->_codes_ngap);
+
 		return $this->secteur1;
 	}
 	
@@ -169,8 +180,8 @@ class CTarif extends CMbObject {
     $codes_ngap = $this->_codes_ngap;
     
 		// Compute...
-    $this->_update_secteur1 = true;
-		$new_secteur1 = $this->updateSecteur1();
+    $this->_update_montants = true;
+		$new_secteur1 = $this->updateMontants();
     
 		// ... and restore
     $this->secteur1 = $secteur1;

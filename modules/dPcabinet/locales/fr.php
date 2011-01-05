@@ -1155,6 +1155,7 @@ $locales['CTarif-_precode_ready-OK'] = 'Les codages CCAM et NGAP de ce tarif son
 $locales['CTarif-_precode_ready-court'] = 'Prêt';
 $locales['CTarif-_precode_ready-desc'] = 'Le tarif est prêt pour une cotation complète automatique';
 $locales['CTarif-_secteur1_uptodate-KO'] = 'La valeur "secteur 1" de ce tarif ne correspondent pas aux codages CCAM et NGAP de ce tarif. Il est conseillé de les recalculer.';
+$locales['CTarif-_secteur1_uptodate-force'] = 'La modification du secteur 2 nécessite un recalcul du secteur 1 lorsqu\'il y a un codage';
 $locales['CTarif-_somme'] = 'Total';
 $locales['CTarif-_somme-court'] = 'Total';
 $locales['CTarif-_somme-desc'] = 'Total facturé';

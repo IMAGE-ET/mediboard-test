@@ -1,58 +1,13 @@
+{{mb_include_script module=dPcabinet script=tarif}}
+
 <script type="text/javascript">
 
-function refreshTotal() {
-  var oForm = document.editFrm;
-  if (!oForm.secteur1 || !oForm.secteur1) {
-  	return;
-  }
-  
-  
-  var secteur1 = oForm.secteur1.value;
-  var secteur2 = oForm.secteur2.value; 
-  
-  if (secteur1 == ""){
-    secteur1 = 0;
-  }
-  
-  if (secteur2 == ""){
-    secteur2 = 0;
-  }
-  
-  oForm._somme.value = parseFloat(secteur1) + parseFloat(secteur2);
-  oForm._somme.value = Math.round(oForm._somme.value*100)/100;
-}
-
-function modifSecteur2(){
-  var oForm = document.editFrm;
-  var secteur1 = oForm.secteur1.value;
-  var somme = oForm._somme.value;
-  if (somme == "") {
-    somme = 0;
-  }
-  if (secteur1 == "") {
-    secteur = 0;
-  }
-  oForm.secteur2.value = parseFloat(somme) - parseFloat(secteur1); 
-  oForm.secteur2.value = Math.round(oForm.secteur2.value*100)/100;
-}
-
-function changeOwner(type){
-  var oFormTarif = getForm("editFrm");
-  if(type == "chir"){
-	  $V(oFormTarif.chir_id, "{{$prat->user_id}}");
-		$V(oFormTarif.function_id, "");
-	} else {
-    $V(oFormTarif.chir_id, "");
-    $V(oFormTarif.function_id, "{{$prat->function_id}}");
-	}
-}
-
 Main.add(function () {
-  var oFormTarif = getForm("editFrm");
-  refreshTotal();
-	
+  Tarif.updateTotal();
+  Tarif.chir_id     = "{{$prat->user_id}}";
+  Tarif.function_id = "{{$prat->function_id}}";
 	{{if $user->_is_praticien || ($user->_is_secretaire && $tarif->_id)}}
-	  changeOwner($V(oFormTarif._type));
+	  Tarif.updateOwner();
 	{{/if}}
 });
 
@@ -97,7 +52,7 @@ Main.add(function () {
 			      {{mb_field object=$tarif field="function_id" hidden=1}}
 			      <input type="hidden" name="chir_id" value="{{$prat->user_id}}" />
 						
-            <select name="_type" onchange="changeOwner(this.value);">
+            <select name="_type" onchange="Tarif.updateOwner();">
               <option value="chir"     {{if $tarif->chir_id}}     selected="selected" {{/if}}>Tarif personnel</option>
               <option value="function" {{if $tarif->function_id}} selected="selected" {{/if}}>Tarif de cabinet</option>
             </select>
@@ -151,9 +106,10 @@ Main.add(function () {
           <th>{{mb_label object=$tarif field=secteur1}}</th>
           <td>
             {{if count($tarif->_new_actes)}}
-	          	{{mb_value object=$tarif field=secteur1}}
+              {{mb_field object=$tarif field=secteur1 hidden=1}}
+              {{mb_value object=$tarif field=secteur1}}
 						{{else}}
-	          	{{mb_field object=$tarif field=secteur1 size=6 onchange="refreshTotal();"}}
+	          	{{mb_field object=$tarif field=secteur1 onchange="Tarif.updateTotal();"}}
 	          	<input type="hidden" name="_tarif" />
 						{{/if}}
           </td>
@@ -163,9 +119,15 @@ Main.add(function () {
           <th>{{mb_label object=$tarif field=secteur2}}</th>
           <td>
             {{if count($tarif->_new_actes)}}
-	          	{{mb_value object=$tarif field=secteur2}}
+              <div id="force-recompute"  class="info" style="float: right; display: none;" onmouseover="ObjectTooltip.createDOM(this, 'force-recompute-info')">
+							  {{tr}}Info{{/tr}}
+							</div>
+              <div id="force-recompute-info" class="small-info" style="display: none;">
+                {{tr}}CTarif-_secteur1_uptodate-force{{/tr}}
+              </div>
+	          	{{mb_field object=$tarif field=secteur2 onchange="Tarif.updateTotal(); Tarif.forceRecompute();"}}
 						{{else}}
-	          	{{mb_field object=$tarif field=secteur2 size=6 onchange="refreshTotal();"}}
+	          	{{mb_field object=$tarif field=secteur2 onchange="Tarif.updateTotal();"}}
 						{{/if}}
           </td>
         </tr>
@@ -174,9 +136,9 @@ Main.add(function () {
           <th>{{mb_label object=$tarif field=_somme}}</th>
           <td>
             {{if count($tarif->_new_actes)}}
-	          	{{mb_value object=$tarif field=_somme}}
+	          	{{mb_field object=$tarif field=_somme readonly=1}}
 						{{else}}
-	            {{mb_field object=$tarif field=_somme onchange="modifSecteur2()"}}
+	            {{mb_field object=$tarif field=_somme onchange="Tarif.updateSecteur2();"}}
 						{{/if}}
           
           </td>
@@ -185,7 +147,7 @@ Main.add(function () {
         <tr>
           <td class="button" colspan="2">
             {{if $tarif->_id}}
-	            <button class="modify" type="submit">{{tr}}Save{{/tr}}</button>
+	            <button name="save" class="modify" type="submit">{{tr}}Save{{/tr}}</button>
 
               {{if count($tarif->_new_actes) && !$tarif->_has_mto}}
               <input type="hidden" name="_add_mto" value="0" />
@@ -195,13 +157,13 @@ Main.add(function () {
               {{/if}}
 
               {{if count($tarif->_new_actes)}}
-              <input type="hidden" name="_update_secteur1" value="0" />
-              <button class="change" type="submit" onclick="$V(this.form._update_secteur1, '1');">
+              <input type="hidden" name="_update_montants" value="0" />
+              <button class="change" type="submit" onclick="$V(this.form._update_montants, '1');">
                 {{tr}}Recompute{{/tr}}
               </button>
               {{/if}}
 
-	            <button class="trash" type="button" onclick="confirmDeletion(this.form, { typeName: 'le tarif',objName: this.form.description.value } )">
+	            <button class="trash" type="button" onclick="confirmDeletion(this.form, { typeName: 'le tarif', objName: this.form.description.value } )">
 	            	{{tr}}Delete{{/tr}}
 							</button>
             {{else}}

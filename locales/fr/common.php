@@ -130,6 +130,7 @@ $locales['Import'] = 'Importer';
 $locales['Import-CSV'] = 'Importer un fichier CSV';
 $locales['Imports/Exports'] = 'Imports/Exports';
 $locales['Impossible'] = 'Impossible';
+$locales['Info'] = 'Info';
 $locales['Infos'] = 'Infos';
 $locales['Install'] = 'Installer';
 $locales['Instant view'] = 'Vue instantanée';
