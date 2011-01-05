@@ -94,14 +94,14 @@ if($do_trans){
             (sejour.sortie BETWEEN '$dateTime_min' AND '$dateTime_max') OR
             (sejour.entree <= '$dateTime_min' AND sejour.sortie >= '$dateTime_max')";
   
-  $group_by = "chambre.nom";
+  $order_by = "chambre.nom";
 
   $transmission = new CTransmissionMedicale();
-  $_transmissions = $transmission->loadList($where, null, null, $group_by, $ljoin);
+  $_transmissions = $transmission->loadList($where, $order_by, null, null, $ljoin);
 	
 	$ljoin["sejour"] = "observation_medicale.sejour_id = sejour.sejour_id";
   $observation = new CObservationMedicale();
-  $_observations = $observation->loadList($where, null, null, null, $ljoin);
+  $_observations = $observation->loadList($where, $order_by, null, null, $ljoin);
 }
 
 $patients = array();
