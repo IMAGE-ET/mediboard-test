@@ -15,9 +15,11 @@ $rhs_date_monday = CValue::get('rhs_date_monday');
 $date = mbDate();
 $rhs = new CRHS();
 $join['sejour'] = "sejour.sejour_id = rhs.sejour_id";
+$join['patients'] = "patients.patient_id = sejour.patient_id";
 $where['sejour.annule'] = " = '0'";
 $where['date_monday'] = " = '$rhs_date_monday'";
-$sejours_rhs = $rhs->loadList($where, null, null, null, $join);
+$order = "nom, prenom";
+$sejours_rhs = $rhs->loadList($where, $order, null, null, $join);
 foreach ($sejours_rhs as $_rhs) {
   $sejour = $_rhs->loadRefSejour();
 	$sejour->_ref_patient->loadIPP();
