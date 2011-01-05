@@ -34,6 +34,17 @@ launchConvert = function() {
   url.requestUpdate("convert-log", {method: "post"});
 }
 
+function importLPP(get_version) {
+  var url = new Url("dmi", "httpreq_do_import_lpp");
+  if (get_version) {
+    url.addParam("get_version", 1);
+    url.requestUpdate("lpp-version");
+  }
+  else {
+    url.requestUpdate("lpp-import");
+  }
+}
+
 Main.add(function(){
   new Control.Tabs("dmi-tabs");
 });
@@ -42,6 +53,8 @@ Main.add(function(){
 <ul class="control_tabs" id="dmi-tabs">
   <li><a href="#tab-CDMI">{{tr}}CDMI{{/tr}}</a></li>
   <li><a href="#tab-CDM">{{tr}}CDM{{/tr}}</a></li>
+  <li><a href="#tab-product-codes">Codes produits</a></li>
+  <li><a href="#tab-LPP">Base LPP</a></li>
 </ul>
 <hr class="control_tabs" />
 
@@ -56,6 +69,12 @@ Main.add(function(){
     {{foreach from=$classes item=class}}
     	<tbody id="tab-{{$class}}" style="display: none;">
         {{mb_include module=system template=inc_config_bool var=active}}
+    
+        <tr>
+          <td colspan="2" class="button">
+            <button class="modify" type="submit">{{tr}}Save{{/tr}}</button>
+          </td>
+        </tr>
         
         {{if $class == "CDMI"}}
           <tr>
@@ -92,23 +111,42 @@ Main.add(function(){
     	</tbody>
     {{/foreach}}
 
-    <tr>
-      <th colspan="2" class="category">Conversion de codes produits</th>
-    </tr>
-    <tr>
-      <th>
-        <button type="button" class="tick" onclick="launchConvert();">Lancer conversion produits Physiol</button>
-      </th>
-      <td>
-        <div id="convert-log"></div>
-      </td>
-    </tr>
-    
-    <tr>
-      <td colspan="2" class="button">
-        <button class="modify" type="submit">{{tr}}Save{{/tr}}</button>
-      </td>
-    </tr>
+    <tbody id="tab-product-codes">
+      <tr>
+        <th colspan="2" class="category">Conversion de codes produits</th>
+      </tr>
+      <tr>
+        <th>
+          <button type="button" class="tick" onclick="launchConvert();">Lancer conversion produits Physiol</button>
+        </th>
+        <td>
+          <div id="convert-log"></div>
+        </td>
+      </tr>
+    </tbody>
   </table>
   
 </form>
+
+<div id="tab-LPP" style="display: none;">
+  {{mb_include module=system template=configure_dsn dsn=lpp}}
+  
+  <h2>Import de la base de données LPP</h2>
+  
+  <table class="tbl" style="table-layout: fixed;">
+    <tr>
+      <th>{{tr}}Action{{/tr}}</th>
+      <th>{{tr}}Status{{/tr}}</th>
+    </tr>
+    
+    <tr>
+      <td><button class="tick" onclick="importLPP(true)" >Vérifier la dernière version disponible</button></td>
+      <td id="lpp-version"></td>
+    </tr>
+    
+    <tr>
+      <td><button class="tick" onclick="importLPP()" >Importer la base de données LPP</button></td>
+      <td id="lpp-import"></td>
+    </tr>
+  </table>
+</div>

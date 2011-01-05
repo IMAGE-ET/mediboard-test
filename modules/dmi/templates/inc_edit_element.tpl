@@ -107,7 +107,9 @@ Main.add(function () {
 
 </script>
 
-<form name="editElement-{{$element->_class_name}}" action="?m={{$m}}" method="post" onsubmit="return onSubmitFormAjax(this)">
+{{assign var=class_name value=$element->_class_name}}
+
+<form name="editElement-{{$class_name}}" action="?m={{$m}}" method="post" onsubmit="return onSubmitFormAjax(this)">
   <input type="hidden" name="m" value="{{$m}}" />
   <input type="hidden" name="del" value="0" />
   <input type="hidden" name="dosql" value="{{$dosql}}" />
@@ -138,6 +140,16 @@ Main.add(function () {
         </select>
       </td>
     </tr>
+    <tr>
+      <th>{{mb_label object=$element field=_labo_id}}</th>
+      <td>
+        {{if !$element->_id}}
+          {{mb_field object=$element field=_labo_id form="editElement-$class_name" autocomplete="true,1,50,true,true"}}
+        {{else}}
+         <input type="text" readonly="readonly" value="{{$element->_ref_labo}}" />
+        {{/if}}
+      </td>
+    </tr>
     {{* if !$element->_id}}
       <tr>
         <td colspan="2">
@@ -153,6 +165,11 @@ Main.add(function () {
       <td>
         {{mb_field object=$element field=product_id hidden=true}}
         <input type="text" name="product_id_autocomplete_view" value="{{$element->_ref_product}}" class="autocomplete" size="45" />
+        
+        {{if $element->product_id}}
+          <a class="button search" href="?m=dPstock&amp;tab=vw_idx_product&amp;product_id={{$element->product_id}}">Fiche produit</a> 
+        {{/if}}
+        
         <div class="autocomplete" id="product_id_autocomplete" style="display:none;"></div>
       </td>
     </tr>
@@ -260,8 +277,6 @@ Main.add(function () {
 </form>
 
 {{if $element->_ref_product && $element->_ref_product->_id}}
-
-{{assign var=class_name value=$element->_class_name}}
 
 <script type="text/javascript">
   refreshDMI = function(lot_id) {

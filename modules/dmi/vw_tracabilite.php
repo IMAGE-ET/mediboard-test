@@ -25,6 +25,7 @@ $ds = $filter->_spec->ds;
 // Filter query
 $where = array(
   "prescription_line_dmi.product_id" => "IS NOT NULL",
+  "prescription_line_dmi.septic" => "= '0'",
 );
 
 if ($filter->_patient_id) {

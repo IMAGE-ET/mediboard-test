@@ -44,18 +44,19 @@ toggleDoneDispensations = function(){
   $('showDoneDispensations').checked ? $$("tbody.done").invoke("show") : $$("tbody.done").invoke("hide");
 }
 
-Main.add(function(){
+{{if $mode_nominatif}}
+  Main.add(function(){
+   var options = {
+      exactMinutes: false, 
+      minInterval: 60
+    };
+  	
+    var oForm = getForm("editBorneDisp");
+    Calendar.regField(oForm.borne_min, null, options);
+  	Calendar.regField(oForm.borne_max, null, options);
+  });
+{{/if}}
 
- var options = {
-    exactMinutes: false, 
-    minInterval: 60
-  };
-	
-	
-  var oForm = getForm("editBorneDisp");
-  Calendar.regField(oForm.borne_min, null, options);
-	Calendar.regField(oForm.borne_max, null, options);
-});
 </script>
 
 {{assign var=infinite value=$conf.dPstock.CProductStockGroup.infinite_quantity}}

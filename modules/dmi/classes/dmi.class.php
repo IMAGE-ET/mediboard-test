@@ -22,6 +22,9 @@ class CDMI extends CProduitPrescriptible {
   
   var $_scc_code = null;
   var $_product_code = null;
+  var $_labo_id = null;
+  
+  var $_ref_labo = null;
   var $_ref_product = null;
   
   function getSpec() {
@@ -38,6 +41,8 @@ class CDMI extends CProduitPrescriptible {
     $specs["code_lpp"]    = "str protected";
     $specs["code"]        = "str show|0";
     $specs["type"]        = "enum notNull list|purchase|loan|deposit default|deposit"; // achat/pret/depot
+    
+    $specs["_labo_id"]  = "ref class|CSociete autocomplete|name";
     $specs["_scc_code"]   = "str length|10";
     $specs["_product_code"] = "str maxLength|30";
     return $specs;
@@ -75,13 +80,24 @@ class CDMI extends CProduitPrescriptible {
     $this->loadRefProduct();
   }
   
+  function loadRefLabo(){
+    $this->_ref_labo = $this->loadFwdRef("_labo_id");
+  }
+  
   function updateFormFields(){
     parent::updateFormFields();
     
     $this->loadRefProduct();
+    
     if ($this->_ref_product->_id) {
       $this->_product_code = $this->_ref_product->code;
       $this->_scc_code = $this->_ref_product->scc_code;
+      
+      $reference = reset($this->_ref_product->loadRefsReferences());
+      if ($reference && $reference->_id) {
+        $this->_labo_id = $reference->societe_id;
+        $this->loadRefLabo();
+      }
     }
   }
   
@@ -120,10 +136,24 @@ class CDMI extends CProduitPrescriptible {
         $product->name = $this->nom;
         $product->scc_code = $this->_scc_code;
         $product->description = $this->description;
+        $product->societe_id = $this->_labo_id;
         $product->category_id = CAppUI::conf("dmi $this->_class_name product_category_id");
         $product->quantity = 1;
+        
         if ($msg = $product->store()){
           return $msg;
+        }
+      
+        if ($this->_labo_id) {
+          $ref = new CProductReference;
+          $ref->societe_id = $this->_labo_id;
+          $ref->product_id = $product->_id;
+          $ref->quantity = 1;
+          $ref->price = 0;
+        
+          if ($msg = $ref->store()){
+            CAppUI::setMsg($msg, UI_MSG_WARNING);
+          }
         }
       }
       

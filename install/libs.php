@@ -145,6 +145,8 @@ $library->sourceDir = "jpgraph-2.1.4";
 $library->targetDir = "jpgraph";
 $library->versionFile = "VERSION";
 $library->versionString = "Revision: r793";
+//$library->versionFile = "src/mbjpgraph.php";
+//$library->versionString = "2010-12-15";
 
 $patch = new CLibraryPatch;
 $patch->dirName = "jpgraph";
@@ -352,6 +354,18 @@ $library->sourceDir = "requireJS";
 $library->targetDir = "requireJS";
 $library->versionFile = "require.js";
 $library->versionString = '0.11.0';
+
+CLibrary::$all[$library->name] = $library;
+
+$library = new CLibrary;
+$library->name = "DBase reader class";
+$library->url = "http://www.phpclasses.org/package/1302.html";
+$library->fileName = "dbase.tar.gz";
+$library->description = "Lecture de fichiers DBF";
+$library->sourceDir = "dbase";
+$library->targetDir = "dbase";
+$library->versionFile = "dbf_class.php";
+$library->versionString = 'v0.05 by Nicholas Vrtis';
 
 CLibrary::$all[$library->name] = $library;
 

@@ -597,7 +597,8 @@ var Calendar = {
       if (datepicker.icon) {
         datepicker.icon.setStyle({
           position: 'relative',
-          right: 0
+          right: 0,
+          top: null
         });
       }
     }
