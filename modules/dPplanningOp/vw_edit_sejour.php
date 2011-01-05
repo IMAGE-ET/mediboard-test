@@ -8,9 +8,7 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
  */
 
-global $AppUI, $can, $m, $tab;
-
-$can->needsRead();
+CCanDo::checkRead();
 
 $sejour_id    = CValue::getOrSession("sejour_id");
 $patient_id   = CValue::get("patient_id");
@@ -24,8 +22,7 @@ $etablissements = $etablissements->loadEtablissements(PERM_READ);
 $prestations = CPrestation::loadCurrentList();
 
 // L'utilisateur est-il un praticien
-$mediuser = new CMediusers;
-$mediuser->load($AppUI->user_id);
+$mediuser = CMediusers::get();
 if ($mediuser->isPraticien() and !$praticien_id) {
   $praticien_id = $mediuser->user_id;
 }
@@ -58,14 +55,10 @@ if ($sejour_id) {
   
   // On vérifie que l'utilisateur a les droits sur le sejour
   if (!$sejour->canRead()) {
+    global $m, $tab;
     CAppUI::setMsg("Vous n'avez pas accés à ce séjour", UI_MSG_WARNING);
     CAppUI::redirect("m=$m&tab=$tab&sejour_id=0");
   }
-  // Ancienne methode
-  /*if (!array_key_exists($sejour->praticien_id, $listPraticiens)) {
-    CAppUI::setMsg("Vous n'avez pas accés aux séjours du Dr {$sejour->_ref_praticien->_view}", UI_MSG_WARNING);
-    CAppUI::redirect("m=$m&tab=$tab&sejour_id=0");
-  }*/
 
   
   foreach ($sejour->_ref_operations as &$operation) {
@@ -95,6 +88,7 @@ if (count($patient->_ref_sejours))
   foreach($patient->_ref_sejours as $_sejour) {
     $_sejour->loadNumDossier();
     $_sejour->loadRefPraticien();
+    $_sejour->loadRefEtablissement();
   }
 
 $patient->loadRefsFwd();
