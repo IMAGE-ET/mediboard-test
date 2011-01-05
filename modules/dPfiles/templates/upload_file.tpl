@@ -83,14 +83,14 @@ addFile = function(elt) {
   </tr>
   
   <tr>
-    <td colspan="6">
+    <td colspan="7">
       <div style="max-height: 220px; overflow: auto; width: 100%;">
       <table class="form">
         <tr>
           <th id="labelfile-{{$object->_id}}">
             <label>{{tr}}CFile{{/tr}}</label>
           </th>
-          <td colspan="4">
+          <td colspan="6">
             <input type="file" name="formfile[0]" size="0" onchange="addFile(this); this.onchange=''"/>
           </td>
         </tr>
@@ -100,7 +100,7 @@ addFile = function(elt) {
   </tr>
 
   <tr>
-    <td class="button" colspan="6">
+    <td class="button" colspan="7">
       <button class="submit" type="submit">{{tr}}Add{{/tr}}</button>
     </td>
   </tr>
