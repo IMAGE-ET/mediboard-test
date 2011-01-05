@@ -1000,11 +1000,11 @@ class CSejour extends CCodable {
   }
   
   function loadRefEtablissement($cache = true) {
-    $this->_ref_group = $this->loadFwdRef("group_id", $cache);
+    return $this->_ref_group = $this->loadFwdRef("group_id", $cache);
   }
   
   function loadRefRPU() {
-    $this->_ref_rpu = $this->loadUniqueBackRef("rpu");
+    return $this->_ref_rpu = $this->loadUniqueBackRef("rpu");
   }
   
   function loadRefBilanSSR() {
