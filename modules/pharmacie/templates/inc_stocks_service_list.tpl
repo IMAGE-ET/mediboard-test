@@ -92,9 +92,12 @@ updateDispensationUrgence = function(formUrgence) {
         <form name="dispensation-{{$id}}" action="?" method="post" onsubmit="return (checkForm(this) && onSubmitFormAjax(this, {onComplete: refreshLists.curry(null, '{{$page}}')}))">
           <input type="hidden" name="m" value="dPstock" />
           <input type="hidden" name="dosql" value="do_delivery_aed" />
+          
           {{mb_field object=$list_dispensations.$id field=service_id hidden=true}}
           {{mb_field object=$list_dispensations.$id field=patient_id hidden=true}}
           {{mb_field object=$list_dispensations.$id field=stock_id hidden=true}}
+          {{mb_field object=$list_dispensations.$id field=stock_class hidden=true}}
+          
           <input type="hidden" name="date_dispensation" value="now" />
           {{mb_field object=$list_dispensations.$id field=quantity increment=1 form="dispensation-$id" size=3}}
           <button type="submit" class="tick notext">Dispenser</button>

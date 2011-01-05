@@ -37,7 +37,8 @@ if ($product->load($product_id)) {
   $product->loadRefStock();
   $where = array(
     //"date_delivery" => "IS NULL OR date_delivery = ''",
-    "stock_id" => " = '{$product->_ref_stock_group->stock_id}'",
+    "stock_class"   => " = 'CProductStockGroup'",
+    "stock_id"      => " = '{$product->_ref_stock_group->stock_id}'",
   );
   
   $delivery = new CProductDelivery;

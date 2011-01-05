@@ -14,8 +14,9 @@ $service_id = CValue::get('service_id');
 
 $delivery = new CProductDelivery;
 $where = array(
-  "service_id" => "= '$service_id'",
-  "stock_id" => "IS NULL",
+  "service_id"  => "= '$service_id'",
+  "stock_id"    => "IS NULL",
+  "stock_class" => "= 'CProductStockGroup'",
 );
 
 $deliveries = $delivery->loadList($where);

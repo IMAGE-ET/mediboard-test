@@ -60,9 +60,15 @@ if(CValue::post("_create_order")) {
       $order->locked = 1;
     }
     
+    $comments = CValue::read($_POST, "_comments");
+    
     $order->societe_id = $reference->societe_id;
     $order->group_id = CProductStockGroup::getHostGroup();
-    $order->comments = CValue::read($_POST, "_comments");
+    $order->comments = $comments;
+    
+    if (strpos(CProductOrder::$_return_form_label, $comments) === 0) {
+      $order->locked = 1;
+    }
     
     $product = $reference->loadRefProduct();
     $count_dmi = $product->countBackRefs("dmis");

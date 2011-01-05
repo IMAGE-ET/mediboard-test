@@ -17,7 +17,8 @@ $start = intval(CValue::get('start', 0));
 $date_max = mbDate("+1 DAY", $date_max);
 $where = array(
   "date_delivery" => "BETWEEN '$date_min' AND '$date_max'",
-  "manual = '1'",
+  "manual"        => " = '1'",
+  "stock_class"   => " = 'CProductStockGroup'",
 );
 
 $delivrance = new CProductDelivery;
@@ -28,7 +29,7 @@ $list_outflows = $delivrance->loadList($where, "date_delivery DESC, service_id",
 $total_outflows = $delivrance->countList($where);
 
 foreach($list_outflows as $_outflow) {
-  $_outflow->loadRefStockService();
+  $_outflow->loadRefTargetStock();
   if ($_outflow->stock_id)
     $_outflow->_ref_stock->_ref_product->getPendingOrderItems(false);
 }

@@ -35,8 +35,14 @@ class CProductStockService extends CProductStock {
     return $specs;
   }
   
+  /**
+   * 
+   * @param string $code
+   * @param int $service_id [optional]
+   * @return CProductStockService
+   */
   static function getFromCode($code, $service_id = null) {
-    $stock = new CProductStockService();
+    $stock = new self();
     
     $where = array();
     $where['product.code'] = "= '$code'";

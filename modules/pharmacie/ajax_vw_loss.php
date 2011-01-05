@@ -38,6 +38,7 @@ $select = array(
 
 $where = array(
   "product_delivery_trace.date_delivery" => "BETWEEN '$_date_min' AND '$_date_max'",
+  "product_delivery.stock_class"         => "= 'CProductStockGroup'",
 );
 
 if ($type) {

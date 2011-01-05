@@ -10,10 +10,11 @@
 
 CCanDo::checkRead();
 
-$stock_id = CValue::getOrSession('stock_id');
+$stock_id    = CValue::getOrSession('stock_id');
+$stock_class = CValue::get('stock_class', 'CProductStockGroup');
 
 // Loads the stock in function of the stock ID or the product ID
-$stock = new CProductStockGroup();
+$stock = new $stock_class;
 if ($stock_id) {
   $stock->stock_id = $stock_id;
   if ($stock->loadMatchingObject()) {

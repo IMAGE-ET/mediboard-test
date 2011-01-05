@@ -20,17 +20,25 @@ if (isset ($_POST['_return']) && isset ($_POST['_code'])) {
   if ($stock_service && $stock_group) {
   	$delivery = new CProductDelivery();
   	$where = array(
-      'stock_id' => "= $stock_group->_id",
-      'service_id' => "= $stock_service->service_id",
-      'quantity' => "< 0"
+      'stock_id'    => "= $stock_group->_id",
+      'stock_class' => "= 'CProductStockGroup'",
+      'service_id'  => "= $stock_service->service_id",
+      'quantity'    => "< 0"
     );
+    
   	if (!$delivery->loadObject($where)) {
-  		$delivery->stock_id = $stock_group->_id;
-  		$delivery->service_id = $stock_service->service_id;
+  		$delivery->stock_id    = $stock_group->_id;
+      $delivery->stock_class = $stock_group->_class_name;
+  		$delivery->service_id  = $stock_service->service_id;
   	}
+    
   	$delivery->quantity += $_POST['quantity'];
-  	$delivery->date_dispensation = MbDateTime();
-  	if ($msg = $delivery->store()) CAppUI::setMsg($msg, UI_MSG_ERROR);
+  	$delivery->date_dispensation = mbDateTime();
+    
+  	if ($msg = $delivery->store()) {
+  	  CAppUI::setMsg($msg, UI_MSG_ERROR);
+    }
+    
   	$_POST['delivery_id'] = $delivery->_id;
   }
 }

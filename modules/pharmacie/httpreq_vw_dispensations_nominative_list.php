@@ -254,6 +254,7 @@ foreach($dispensations as $code => $quantites){
 
 	    // Chargement des ref de la dispensation à effectuer
 	    $delivery = new CProductDelivery();
+      $delivery->stock_class = $stock->_class_name;
       $delivery->stock_id = $stock->_id;
 	    $delivery->service_id = $service_id;
 	    $delivery->loadRefsFwd();
@@ -300,6 +301,8 @@ foreach($dispensations as $code_cis => $_quantites){
 	  $where['product.category_id'] = '= '.CAppUI::conf('bcb CBcbProduitLivretTherapeutique product_category_id');
 	  $where['product_delivery.patient_id'] = "= '$patient_id'";
 	  $where['product_delivery.quantity'] = " > 0";
+    $where['product_delivery.stock_class'] = "= 'CProductStockGroup'";
+    
 	  // Pour faire le lien entre le produit et la delivrance, on utilise le stock etablissement
 	  $ljoin = array();
 	  $ljoin['product_stock_group'] = 'product_delivery.stock_id = product_stock_group.stock_id';

@@ -43,12 +43,6 @@ class CProductStockGroup extends CProductStock {
     
     return $spec;
   }
-  
-  function getBackProps() {
-    $backProps = parent::getBackProps();
-    $backProps['deliveries'] = 'CProductDelivery stock_id';
-    return $backProps;
-  }
 
   function getProps() {
     $specs = parent::getProps();
@@ -105,8 +99,12 @@ class CProductStockGroup extends CProductStock {
       $this->_zone_future = 3;
   }
   
+  /**
+   * @param string $code
+   * @return CProductStockGroup
+   */
   static function getFromCode($code) {
-    $stock = new CProductStockGroup();
+    $stock = new self();
     
     $where = array('product.code' => "= '$code'");
     $ljoin = array('product' => 'product_stock_group.product_id = product.product_id');

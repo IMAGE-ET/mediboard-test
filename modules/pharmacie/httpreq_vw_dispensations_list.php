@@ -278,6 +278,7 @@ foreach($dispensations as $code => $unites){
 	    // Chargement des ref de la dispensation à effectuer
 	    $delivery = new CProductDelivery();
       $delivery->stock_id = $stock->_id;
+      $delivery->stock_class = $stock->_class_name;
 	    $delivery->service_id = $service_id;
 	    $delivery->loadRefsFwd();
 	    $delivery->_ref_stock->loadRefsFwd();
@@ -314,6 +315,8 @@ foreach($dispensations as $code_cis => $_quantites){
 	  $where['product.category_id'] = "= '$category_id'";
 	  $where['product_delivery.patient_id'] = "IS NULL";
 	  $where['product_delivery.quantity'] = " > 0";
+	  $where['product_delivery.stock_class'] = "= 'CProductStockGroup'";
+    
 	  // Pour faire le lien entre le produit et la delivrance, on utilise le stock etablissement
 	  $ljoin = array();
 	  $ljoin['product_stock_group'] = 'product_delivery.stock_id = product_stock_group.stock_id';

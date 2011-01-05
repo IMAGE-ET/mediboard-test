@@ -221,7 +221,8 @@ class CProduct extends CMbObject {
     $this->loadRefStock(true);
     
     $where = array(
-      "product_delivery.stock_id" => "= '{$this->_ref_stock_group->_id}'",
+      "product_delivery.stock_class" => "= 'CProductStockGroup'",
+      "product_delivery.stock_id"    => "= '{$this->_ref_stock_group->_id}'",
       "product_delivery_trace.date_delivery > '".mbDate($since)."'",
     );
     
@@ -267,6 +268,7 @@ class CProduct extends CMbObject {
     $this->loadRefStock(true);
     
     $where = array(
+      "product_delivery.stock_class" => "= 'CProductStockGroup'",
       "product_delivery.stock_id" => "= '{$this->_ref_stock_group->_id}'",
       "product_delivery_trace.date_delivery > '".mbDate($since)."'",
     );

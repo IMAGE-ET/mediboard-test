@@ -14,6 +14,8 @@ class CProductDelivery extends CMbObject {
 
   // DB Fields
   var $stock_id       = null;
+  var $stock_class    = null;
+  
   var $date_dispensation = null;
   var $date_delivery  = null;
   var $quantity       = null;
@@ -55,7 +57,8 @@ class CProductDelivery extends CMbObject {
 
   function getProps() {
     $specs = parent::getProps();
-    $specs['stock_id']          = 'ref class|CProductStockGroup'; // can be null when the stock doesn't exist in the group
+    $specs['stock_id']          = 'ref class|CProductStock meta|stock_class'; // can be null when the stock doesn't exist in the group
+    $specs['stock_class']       = 'str notNull class show|0';
     $specs['date_dispensation'] = 'dateTime notNull';
     $specs['date_delivery']     = 'dateTime';
     $specs['quantity']          = 'num notNull';
@@ -117,7 +120,7 @@ class CProductDelivery extends CMbObject {
     return $this->_ref_delivery_traces = $this->loadBackRefs('delivery_traces');
   }
 
-  function loadRefStockService(){
+  function loadRefTargetStock(){
     $this->loadRefStock();
     
     $stock_service = new CProductStockService();
@@ -149,6 +152,15 @@ class CProductDelivery extends CMbObject {
     $this->loadRefStock();
     $this->loadRefService();
     $this->loadRefPatient();
+  }
+  
+  function updateDBFields(){
+    parent::updateDBFields();
+    
+    $this->completeField("stock_class");
+    if (!$this->stock_class) {
+      $this->stock_class = "CProductStockGroup";
+    }
   }
   
   function store(){

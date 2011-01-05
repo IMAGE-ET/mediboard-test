@@ -156,5 +156,22 @@ class CProductStockLocation extends CMbMetaObject {
   function loadRefsFwd(){
     $this->_ref_group = $this->loadFwdRef("group_id", true);
   }
+  
+  function loadRefStock($product_id) {
+    $class = $this->getStockType();
+    
+    $stock = new $class;
+    $stock->product_id = $product_id;
+    
+    switch ($this->object_class) {
+      case "CGroups": 
+        $stock->group_id = $this->object_id;
+      default: 
+        $stock->service_id = $this->object_id;
+    }
+    
+    $stock->loadMatchingObject();
+    return $stock;
+  }
 }
 ?>

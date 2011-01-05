@@ -69,6 +69,7 @@ class CProductStock extends CMbObject {
 	function getBackProps() {
 	  $backProps = parent::getBackProps();
 	  $backProps["discrepancies"] = "CProductDiscrepancy object_id";
+    $backProps["deliveries"] = "CProductDelivery stock_id";
 	  return $backProps;
 	}
   

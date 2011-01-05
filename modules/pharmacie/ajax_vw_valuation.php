@@ -73,6 +73,7 @@ function getFirstQuantityLog($product, $date_first_log = null) {
        user_log.date = product_delivery_trace.date_delivery",
       "user_log.extra" => "IS NOT NULL",
       "user_log.type" => "IN('store', 'merge')",
+      "product_delivery.stock_class" => "= 'CProductStockGroup'",
     );
     $ljoin = array(
       "product_stock_group" => "user_log.object_id = product_stock_group.stock_id",
@@ -157,7 +158,9 @@ foreach($list_products as $_product) {
   
   $where = array(
     "product.product_id" => $ds->prepare("=%", $_product->_id),
+    "product_delivery.stock_class" => "= 'CProductStockGroup'",
   );
+  
   if ($date) {
     $where["product_delivery_trace.date_delivery"] = $ds->prepare("> %", $date);
   }
@@ -300,6 +303,7 @@ foreach($list_products as $_product) {
     
     $where = array(
       "product.product_id" => $ds->prepare("=%", $_product->_id),
+      "product_delivery.stock_class" => "= 'CProductStockGroup'",
     );
     if ($date) {
       $where["product_delivery_trace.date_delivery"] = $ds->prepare("<= %", $date);

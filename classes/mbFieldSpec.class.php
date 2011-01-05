@@ -33,6 +33,7 @@ class CMbFieldSpec {
   var $seekable       = null;
   var $show           = null;
   var $reported       = null;
+  var $pattern        = null;
 
   static $chars  = array();
   static $nums   = array();
@@ -94,6 +95,7 @@ class CMbFieldSpec {
       'helped'        => 'bool',
       'seekable'      => 'bool',
       'reported'      => 'bool',
+      'pattern'       => 'str',
     );
   }
 
@@ -190,14 +192,14 @@ class CMbFieldSpec {
     }
 
     // alphaAndNum
-    if($field = $this->alphaAndNum){
+    if($this->alphaAndNum){
       if (!preg_match("/[a-z]/", $propValue) || !preg_match("/\d+/", $propValue)) {
         return 'Doit contenir au moins un chiffre ET une lettre';
       }
     }
     
     // input mask
-    if ($field = $this->mask) {
+    if ($this->mask) {
       $regex = self::maskToRegex($this->mask);
       $formatted = self::maskedToFormatted($propValue, $this->mask, $this->format);
       $masked = self::formattedToMasked($propValue, $this->mask, $this->format);
@@ -208,6 +210,13 @@ class CMbFieldSpec {
       	} // else, that means the value is already the formatted value
       } else {
         $object->{$this->fieldName} = $formatted;
+      }
+    }
+
+    // pattern
+    if($this->pattern){
+      if (!preg_match('/^'.preg_quote($this->pattern).'$/', $propValue)) {
+        return 'Ne correspond pas au format attendu';
       }
     }
 

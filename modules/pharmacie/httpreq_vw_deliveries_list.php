@@ -62,6 +62,7 @@ else
   
 $where[] = "product_delivery.date_dispensation BETWEEN '$date_min 00:00:00' AND '$date_max 23:59:59'";
 $where['product_delivery.quantity'] = " > 0";
+$where['product_delivery.stock_class'] = "= 'CProductStockGroup'";
 $where['product_delivery.stock_id'] = "IS NOT NULL";
 //$where[] = "`order` != '1' OR `order` IS NULL";
 

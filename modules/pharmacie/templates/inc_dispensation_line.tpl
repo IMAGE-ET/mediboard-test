@@ -142,11 +142,15 @@
        <input type="hidden" name="dosql" value="do_delivery_aed" />
        <input type="hidden" name="del" value="0" />
        <input type="hidden" name="date_dispensation" value="now" />
+       
        <input type="hidden" name="stock_id" value="{{$delivrance->stock_id}}" />
+       <input type="hidden" name="stock_class" value="{{$delivrance->stock_class}}" />
+       
        <input type="hidden" name="service_id" value="{{$delivrance->service_id}}" />
        {{if $mode_nominatif}}
-       <input type="hidden" name="patient_id" value="{{$prescription->_ref_object->_ref_patient->_id}}" />
+         <input type="hidden" name="patient_id" value="{{$prescription->_ref_object->_ref_patient->_id}}" />
        {{/if}}
+       
        {{if $delivrance->quantity == 0}}
          {{assign var=style value="opacity: 0.5;"}}
          <script type="text/javascript">
@@ -197,11 +201,15 @@
          <input type="hidden" name="dosql" value="do_delivery_aed" />
          <input type="hidden" name="del" value="0" />
          <input type="hidden" name="date_dispensation" value="now" />
+         
          <input type="hidden" name="stock_id" value="{{$delivrance->stock_id}}" />
+         <input type="hidden" name="stock_class" value="{{$delivrance->stock_class}}" />
+         
          <input type="hidden" name="service_id" value="{{$delivrance->service_id}}" />
          {{if $mode_nominatif}}
-         <input type="hidden" name="patient_id" value="{{$prescription->_ref_object->_ref_patient->_id}}" />
+           <input type="hidden" name="patient_id" value="{{$prescription->_ref_object->_ref_patient->_id}}" />
          {{/if}}
+         
          {{if $delivrance->quantity == 0}}
            {{assign var=style value="opacity: 0.5;"}}
 					 <script type="text/javascript">
