@@ -145,15 +145,17 @@
 		  		    {{/if}}
 		  		  {{/foreach}}
 	  		  {{else}}
-		  		  {{foreach from=$prescription->_ref_prescription_line_mixes_by_type.perfusion item=_prescription_line_mix}}
-		  		    <option value="{{$_prescription_line_mix->_id}}">
-		  		    	{{foreach from=$_prescription_line_mix->_ref_lines item=_perf_line name="foreach_prescription_line_mix"}}
-                {{$_perf_line->_ref_produit->libelle_abrege}}
-								{{if !$smarty.foreach.foreach_prescription_line_mix.last}}, {{/if}}
-              {{/foreach}}
-						  ({{$_prescription_line_mix->voie}} - {{tr}}CPrescriptionLineMix.type.{{$_prescription_line_mix->type}}{{/tr}})
-              </option>
-		  		  {{/foreach}}
+            {{if isset($prescription->_ref_prescription_line_mixes_by_type.perfusion|smarty:nodefaults)}}
+  		  		  {{foreach from=$prescription->_ref_prescription_line_mixes_by_type.perfusion item=_prescription_line_mix}}
+  		  		    <option value="{{$_prescription_line_mix->_id}}">
+  		  		    	{{foreach from=$_prescription_line_mix->_ref_lines item=_perf_line name="foreach_prescription_line_mix"}}
+                  {{$_perf_line->_ref_produit->libelle_abrege}}
+  								{{if !$smarty.foreach.foreach_prescription_line_mix.last}}, {{/if}}
+                {{/foreach}}
+  						  ({{$_prescription_line_mix->voie}} - {{tr}}CPrescriptionLineMix.type.{{$_prescription_line_mix->type}}{{/tr}})
+                </option>
+  		  		  {{/foreach}}
+            {{/if}}
 	  		  {{/if}}
 	  		  
 	  		  </select>
