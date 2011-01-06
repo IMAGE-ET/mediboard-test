@@ -13,13 +13,15 @@ function getCurrentLit($sejour, $_date, $_hour, &$lits, &$affectations){
     $sejour->loadRefCurrAffectation("$_date $_hour:00:00");
     $lit =& $sejour->_ref_curr_affectation->_ref_lit;
 		if($lit){
-      $lit->loadCompleteView();
       $lits[$lit->_ref_chambre->nom] = $lit;
       $affectations[$sejour->_id]["$_date $_hour:00:00"] = $sejour->_ref_curr_affectation;
     }
   } else {
     $affectation = $affectations[$sejour->_id]["$_date $_hour:00:00"];
     $lit = $affectation->_ref_lit;
+  }
+  if ($lit) {
+    $lit->loadCompleteView();
   }
   return $lit;
 }			            
