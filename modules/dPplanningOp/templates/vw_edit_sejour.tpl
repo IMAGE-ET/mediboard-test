@@ -118,7 +118,7 @@ function reloadSejours(checkCollision) {
   </tr>
   
   <tr>
-    <td style="width:60%">
+    <td style="width: 60%">
       {{include file="js_form_sejour.tpl"}}
       {{include file="inc_form_sejour.tpl" mode_operation=false}}
     </td>
@@ -131,9 +131,39 @@ function reloadSejours(checkCollision) {
         </tr>
         <tr>
           <td id="list_sejours">
-              {{include file="inc_list_sejours.tpl"}}
+            {{include file="inc_list_sejours.tpl"}}
           </td>
         </tr>
+
+        <tr>
+          <th class="title">
+          	{{tr}}CMbObject-back-documents{{/tr}}
+					</th>
+        </tr>
+        <tr>
+          <td id="documents">
+            {{mb_include_script module=dPcompteRendu script=document}}
+				    <script type="text/javascript">
+				    Document.register('{{$sejour->_id}}','{{$sejour->_class_name}}','{{$sejour->praticien_id}}', 'documents');
+				    </script>
+          </td>
+        </tr>
+
+        <tr>
+          <th class="title">
+          	{{tr}}CMbObject-back-files{{/tr}}
+					</th>
+        </tr>
+        <tr>
+          <td id="files">
+            {{mb_include_script module=dPcabinet script=file}}
+            <script type="text/javascript">
+            File.register('{{$sejour->_id}}','{{$sejour->_class_name}}', 'files');
+            </script>
+            {{mb_include module=dPfiles template=yoplet_uploader object=$sejour}}
+          </td>
+        </tr>
+
       </table>
     </td>
   </tr>
