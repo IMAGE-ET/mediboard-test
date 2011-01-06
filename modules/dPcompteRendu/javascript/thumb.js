@@ -95,7 +95,7 @@ var Thumb = {
         return;
       }
       var on_click = function(){
-    	  CKEDITOR.instances.htmlarea.on("keypress", loadOld);
+    	  CKEDITOR.instances.htmlarea.on("key", loadOld);
     	  Thumb.changed = true;
         Thumb.first_time = 0;
         Thumb.refreshThumbs(0, Thumb.compte_rendu_id, Thumb.modele_id, Thumb.user_id, Thumb.mode);
