@@ -13,14 +13,20 @@ class CProductDelivery extends CMbObject {
   var $delivery_id  = null;
 
   // DB Fields
+  
+  // Source
   var $stock_id       = null;
   var $stock_class    = null;
   
-  var $date_dispensation = null;
-  var $date_delivery  = null;
-  var $quantity       = null;
+  // Target
   var $service_id     = null;
   var $patient_id     = null;
+  //var $prescription_id = null;
+  
+  var $date_dispensation = null;
+  var $date_delivery  = null;
+  
+  var $quantity       = null;
   var $order          = null;
   var $manual         = null;
   var $comments       = null;
@@ -57,17 +63,25 @@ class CProductDelivery extends CMbObject {
 
   function getProps() {
     $specs = parent::getProps();
+    
+    // Source
     $specs['stock_id']          = 'ref class|CProductStock meta|stock_class'; // can be null when the stock doesn't exist in the group
     $specs['stock_class']       = 'str notNull class show|0';
+    
+    // Target
+    $specs['service_id']        = 'ref class|CService'; // >/dev/null
+    $specs['patient_id']        = 'ref class|CPatient';
+    //$specs['prescription_id']   = 'ref class|CPrescription';
+    
     $specs['date_dispensation'] = 'dateTime notNull';
     $specs['date_delivery']     = 'dateTime';
+    
     $specs['quantity']          = 'num notNull';
-    $specs['service_id']        = 'ref class|CService';
-    $specs['patient_id']        = 'ref class|CPatient';
     $specs['order']             = 'bool default|0';
     $specs['manual']            = 'bool default|0';
     $specs['comments']          = 'text';
     $specs['type']              = 'enum list|other|expired|breakage|loss|gift|discrepancy|notused|toomany';
+    
     $specs['_date_min']         = 'date notNull';
     $specs['_date_max']         = 'date notNull moreEquals|_date_min';
     return $specs;
@@ -133,15 +147,15 @@ class CProductDelivery extends CMbObject {
       $stock_service->loadMatchingObject();
     }
     
-    $this->_ref_stock_service = $stock_service;
+    return $this->_ref_stock_service = $stock_service;
   }
   
   function loadRefService(){
-  	$this->_ref_service = $this->loadFwdRef("service_id", true);  
+  	return $this->_ref_service = $this->loadFwdRef("service_id", true);  
   }
   
   function loadRefPatient(){
-    $this->_ref_patient = $this->loadFwdRef("patient_id", true);	
+    return $this->_ref_patient = $this->loadFwdRef("patient_id", true);	
   }
 
   function loadRefStock(){

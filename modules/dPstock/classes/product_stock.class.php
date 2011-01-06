@@ -144,7 +144,23 @@ class CProductStock extends CMbObject {
   }
   
   function getPerm($permType) {
-    return $this->loadRefProduct()->getPerm($permType);
+    return $this->loadRefProduct()->getPerm($permType) && 
+           $this->loadRefHost()->getPerm($permType);
+  }
+  
+  /** 
+   * Returns the host object 
+   * @return CGroups|CService|CBlocOperatoire
+   */
+  function loadRefHost() {
+    trigger_error(__METHOD__." not implemented");
+  }
+  
+  /** 
+   * Sets the host object 
+   * @return void
+   */
+  function setHost(CMbObject $host) {
+    trigger_error(__METHOD__." not implemented");
   }
 }
-?>

@@ -147,14 +147,19 @@ class CProductStockGroup extends CProductStock {
   function loadRefsFwd(){
     parent::loadRefsFwd();
     $this->loadRefGroup();
+    $this->setHost($this->_ref_group);
   }
   
   function loadRefGroup() {
-    $this->_ref_group = $this->loadFwdRef("group_id", true);
+    return $this->_ref_group = $this->loadFwdRef("group_id", true);
   }
 
   function loadRefsBack(){
-    $this->_ref_deliveries = $this->loadBackRefs('deliveries');
+    $this->loadRefsDeliveries();
+  }
+  
+  function loadRefsDeliveries(){
+    return $this->_ref_deliveries = $this->loadBackRefs('deliveries');
   }
   
   function loadRelatedLocations(){
@@ -167,11 +172,6 @@ class CProductStockGroup extends CProductStock {
     return $this->_ref_related_locations = $location->loadList($where, "name");
   }
   
-  function getPerm($permType) {
-    $this->loadRefsFwd();
-    return parent::getPerm($permType) && $this->_ref_group->getPerm($permType);
-  }
-  
   function updateDBFields(){
     parent::updateDBFields();
     
@@ -180,5 +180,13 @@ class CProductStockGroup extends CProductStock {
       $this->group_id = CProductStockGroup::getHostGroup();
     }
   }
+  
+  function loadRefHost(){
+    return $this->loadRefGroup();
+  }
+  
+  function setHost(CGroups $host){
+    $this->_ref_group = $host;
+    $this->group_id = $host->_id;
+  }
 }
-?>

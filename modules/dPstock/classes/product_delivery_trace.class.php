@@ -18,13 +18,17 @@ class CProductDeliveryTrace extends CMbObject {
   var $date_reception = null;
   var $code           = null;
   var $quantity       = null;
+  var $target_location_id = null;
 
-  // Object References
-  //    Single
   /**
    * @var CProductDelivery
    */
   var $_ref_delivery  = null;
+  
+  /**
+   * @var CProductStockLocation
+   */
+  var $_ref_target_location = null;
   
   var $_date_min      = null;
   var $_date_max      = null;
@@ -55,6 +59,7 @@ class CProductDeliveryTrace extends CMbObject {
     $specs['quantity']       = 'num notNull';
     $specs['date_delivery']  = 'dateTime';
     $specs['date_reception'] = 'dateTime';
+    $specs['target_location_id'] = 'ref class|CProductStockLocation'; // can be null if nominative
     $specs['_date_min']      = 'dateTime notNull';
     $specs['_date_max']      = 'dateTime notNull moreThan|_date_min';
     return $specs;
@@ -80,6 +85,7 @@ class CProductDeliveryTrace extends CMbObject {
     $stock_service = new CProductStockService();
     $stock_service->product_id = $stock->product_id;
     $stock_service->service_id = $this->_ref_delivery->service_id;
+    //$stock_service->location_id = $this->target_location_id;
     $stock_service->loadMatchingObject();
     
     if ($this->date_delivery && 
@@ -113,16 +119,30 @@ class CProductDeliveryTrace extends CMbObject {
     }
     
     // If we want to receive, just provide a reception date
-    elseif ($this->date_reception) {
+    // if not dispensation nominative
+    elseif ($this->date_reception && !$this->_ref_delivery->patient_id) {
+    
+    /*if (!$this->_ref_delivery->patient_id && (
+          !$this->_id && $this->date_reception || $this->fieldModified("date_reception")
+        )) {*/
+          
       // If a stock already exist, its quantity is updated
       if ($stock_service->_id) {
         $stock_service->quantity += $this->quantity;
       }
+      
       // if not, the stock is created
       else {
 	      $stock_service->order_threshold_min = abs($this->quantity) + 1;
 	      $stock_service->order_threshold_max = $stock_service->order_threshold_min * 2;
         $stock_service->quantity = $this->quantity;
+        
+        $default_location = CProductStockLocation::getDefaultLocation(
+          $this->_ref_delivery->loadRefService(), 
+          $stock->_ref_product
+        );
+        
+        $stock_service->location_id = $default_location->_id;
       }
 
       if ($stock_service->service_id) {
@@ -130,13 +150,16 @@ class CProductDeliveryTrace extends CMbObject {
       }
     }
     
-    if (!$stock_service->_id) {
-      $stock_service->quantity = $this->quantity;
-      $stock_service->order_threshold_min = 0;
-    }
-    
-    if ($this->_ref_delivery->service_id) {
-      if ($msg = $stock_service->store()) return $msg;
+    // dispensation nominative
+    if (!$this->_ref_delivery->patient_id) {
+      if (!$stock_service->_id) {
+        $stock_service->quantity = $this->quantity;
+        $stock_service->order_threshold_min = 0;
+      }
+      
+      if ($this->_ref_delivery->service_id) {
+        if ($msg = $stock_service->store()) return $msg;
+      }
     }
 
     return parent::store();
@@ -176,10 +199,15 @@ class CProductDeliveryTrace extends CMbObject {
   
   function loadRefsFwd() {
     $this->loadRefDelivery();
+    $this->loadRefTargetLocation();
   }
   
   function loadRefDelivery() {
     return $this->_ref_delivery = $this->loadFwdRef("delivery_id", true); 
+  }
+  
+  function loadRefTargetLocation() {
+    return $this->_ref_target_location = $this->loadFwdRef("target_location_id", true); 
   }
 
   function getPerm($permType) {

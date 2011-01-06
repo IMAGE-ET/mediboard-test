@@ -744,6 +744,14 @@ class CSetupdPstock extends CSetup {
               SET `stock_class` = 'CProductStockGroup'";
     $this->addQuery($query);
     
-    $this->mod_version = "1.43";
+    $this->makeRevision("1.43");
+    $query = "ALTER TABLE `product_delivery_trace` 
+              ADD `target_location_id` INT (11) UNSIGNED;";
+    $this->addQuery($query);
+    $query = "ALTER TABLE `product_delivery_trace` 
+              ADD INDEX (`target_location_id`)";
+    $this->addQuery($query);
+    
+    $this->mod_version = "1.44";
   }
 }

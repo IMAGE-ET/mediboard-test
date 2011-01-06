@@ -51,8 +51,9 @@ class CProductStockLocation extends CMbMetaObject {
 
 	function getBackProps() {
 	  $backProps = parent::getBackProps();
-    $backProps["group_stocks"] = "CProductStockGroup location_id";
-    $backProps["service_stocks"] = "CProductStockService location_id";
+    $backProps["group_stocks"]    = "CProductStockGroup location_id";
+    $backProps["service_stocks"]  = "CProductStockService location_id";
+    $backProps["delivery_traces"] = "CProductDeliveryTrace target_location_id";
 	  return $backProps;
 	}
 
@@ -116,17 +117,21 @@ class CProductStockLocation extends CMbMetaObject {
     }
 	}
   
+  static function getStockClass($host_class) {
+    switch ($host_class) {
+      case "CGroups": 
+        return "CProductStockGroup";
+      default: 
+      case "CService":
+        return "CProductStockService";
+    }
+  }
+  
   function getStockType(){
     if (!$this->_id) return;
     
     $this->completeField("object_class");
-    
-    switch ($this->object_class) {
-      case "CGroups": 
-        return "CProductStockGroup";
-      default: 
-        return "CProductStockService";
-    }
+    return self::getStockClass($this->object_class);
   }
   
   function loadRefsStocks(){
@@ -157,6 +162,22 @@ class CProductStockLocation extends CMbMetaObject {
     $this->_ref_group = $this->loadFwdRef("group_id", true);
   }
   
+  static function getDefaultLocation(CMbObject $host, CProduct $product) {
+    $stock_class = self::getStockClass($host->_class_name);
+    
+    $stock = new $stock_class;
+    $stock->setHost($host);
+    $stock->product_id = $product->_id;
+    
+    if (!$stock->loadMatchingObject()) {
+      $stock = new $stock_class;
+      $stock->setHost($host);
+      $stock->loadMatchingObject();
+    }
+    
+    return $stock->loadRefLocation();
+  }
+  
   function loadRefStock($product_id) {
     $class = $this->getStockType();
     
@@ -174,4 +195,3 @@ class CProductStockLocation extends CMbMetaObject {
     return $stock;
   }
 }
-?>

@@ -68,7 +68,7 @@ class CProductStockService extends CProductStock {
   function loadRefsFwd(){
     parent::loadRefsFwd();
     $this->loadRefService();
-  }  
+  }
   
   function loadRelatedLocations(){
     $where = array(
@@ -95,11 +95,12 @@ class CProductStockService extends CProductStock {
     }
   }
   
-  function getPerm($permType) {
-    if(!$this->_ref_service) {
-      $this->loadRefsFwd();
-    }
-    return parent::getPerm($permType) && $this->_ref_service->getPerm($permType);
+  function loadRefHost(){
+    return $this->loadRefGroup();
+  }
+  
+  function setHost(CService $host){
+    $this->_ref_service = $host;
+    $this->service_id = $host->_id;
   }
 }
-?>
