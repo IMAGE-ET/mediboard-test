@@ -48,7 +48,7 @@
 	        {{$curr_doc->nom}}
 	      </th>
 	      <td>
-	        <input name="nbDoc[{{$curr_doc->compte_rendu_id}}]" type="text" size="2" value="1" readonly="readonly" />
+	        <input name="nbDoc[{{$curr_doc->compte_rendu_id}}]" type="text" size="2" value="1" />
 	        <script type="text/javascript">
 	          $(getForm("selectDocsFrm").elements['nbDoc[{{$curr_doc->compte_rendu_id}}]']).addSpinner({min:0});
 	        </script>

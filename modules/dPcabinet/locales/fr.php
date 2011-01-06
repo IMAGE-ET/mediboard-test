@@ -1277,6 +1277,7 @@ $locales['mod-dPcabinet-tab-print_docs'] = 'Impression des documents';
 $locales['mod-dPcabinet-tab-print_pack'] = 'Impression du pack';
 $locales['mod-dPcabinet-tab-print_plages'] = 'Impression des plages';
 $locales['mod-dPcabinet-tab-print_rapport'] = 'Impression du rapport';
+$locales['mod-dPcabinet-tab-print_select_docs'] = 'Impression multiple';
 $locales['mod-dPcabinet-tab-transfert_plageconsult'] = 'Transférer des plages';
 $locales['mod-dPcabinet-tab-view_consultation'] = 'Consultation';
 $locales['mod-dPcabinet-tab-vw_banques'] = 'Banques';
