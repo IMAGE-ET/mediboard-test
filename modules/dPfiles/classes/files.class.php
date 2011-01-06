@@ -116,8 +116,9 @@ class CFile extends CDocumentItem {
     if ($this->forceDir() === false) {
       return false;
     }
-    
-    return file_put_contents($this->_file_path, $filedata);
+    $result = file_put_contents($this->_file_path, $filedata);
+    $this->file_size = filesize($this->_file_path);
+    return $result;
   }
   
   function loadRefsFwd() {
