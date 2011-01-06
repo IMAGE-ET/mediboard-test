@@ -13,7 +13,7 @@ onSubmitDiag = function(oForm) {
 Main.add(function() {
 
     var url = new Url("dPcim10", "ajax_code_cim10_autocomplete");
-    url.autoComplete("editDP_keywords_code", '', {
+    url.autoComplete(getForm("editDP").keywords_code, '', {
       minChars: 1,
       dropdown: true,
       select: "code",
@@ -31,7 +31,7 @@ Main.add(function() {
     }
 
     var urlb = new Url("dPcim10", "ajax_code_cim10_autocomplete");
-    urlb.autoComplete("editDR_keywords_code", '', {
+    urlb.autoComplete(getForm("editDR").keywords_code, '', {
       minChars: 1,
       dropdown: true,
       select: "code",
@@ -49,7 +49,7 @@ Main.add(function() {
     }
     
     var urlc = new Url("dPcim10", "ajax_code_cim10_autocomplete");
-    urlc.autoComplete("editDA_keywords_code", '', {
+    urlc.autoComplete(getForm("editDA").keywords_code, '', {
       minChars: 1,
       dropdown: true,
       select: "code",

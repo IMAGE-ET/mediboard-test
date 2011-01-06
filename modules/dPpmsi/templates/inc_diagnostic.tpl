@@ -12,7 +12,7 @@
     {{mb_label object=$sejour field=DP}}
     {{main}}
         var url = new Url("dPcim10", "ajax_code_cim10_autocomplete");
-        url.autoComplete("editDP_keywords_code", '', {
+        url.autoComplete(getForm("editDP").keywords_code, '', {
           minChars: 1,
           dropdown: true,
           width: "250px",
@@ -55,7 +55,7 @@
     {{mb_label object=$sejour field=DR}}
     {{main}}
         var url = new Url("dPcim10", "ajax_code_cim10_autocomplete");
-        url.autoComplete("editDR_keywords_code", '', {
+        url.autoComplete(getForm("editDR").keywords_code, '', {
           minChars: 1,
           dropdown: true,
           width: "250px",
@@ -98,7 +98,7 @@
     <label for="_added_code_cim" title="Diagnostics associés significatifs">DAS</label>
     {{main}}
         var url = new Url("dPcim10", "ajax_code_cim10_autocomplete");
-        url.autoComplete("editDA_keywords_code", '', {
+        url.autoComplete(getForm("editDA").keywords_code, '', {
           minChars: 1,
           dropdown: true,
           width: "250px",

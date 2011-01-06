@@ -304,7 +304,7 @@ Main.add(function () {
           <td>
 	          {{main}}
 	            var url = new Url("dPcim10", "ajax_code_cim10_autocomplete");
-				      url.autoComplete("editFrm_keywords_code", '', {
+				      url.autoComplete(getForm("editFrm").keywords_code, '', {
 				        minChars: 1,
 				        dropdown: true,
 				        width: "250px",

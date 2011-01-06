@@ -425,7 +425,7 @@ Main.add( function(){
   <td colspan="3">
     {{main}}
         var url = new Url("dPcim10", "ajax_code_cim10_autocomplete");
-        url.autoComplete("editSejour_keywords_code", '', {
+        url.autoComplete(getForm("editSejour").keywords_code, '', {
           minChars: 1,
           dropdown: true,
           width: "250px",
