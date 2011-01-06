@@ -66,7 +66,7 @@
           {{mb_label class=CFile field=file_category_id}}
         </th>
         <td>
-          <input type="text" value="&mdash; Catégorie" name="keywords_category" class="autocomplete str" autocomplete="off" onclick="this.value = '';" style="width: 5em;" />
+          <input type="text" value="&mdash; {{tr}}Choose{{/tr}}" name="keywords_category" class="autocomplete str" autocomplete="off" onclick="this.value = '';" style="width: 5em;" />
           <input type="hidden" name="file_category_id" value="" />
         </td>
       </tr>

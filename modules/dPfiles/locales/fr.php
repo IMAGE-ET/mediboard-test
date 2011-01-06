@@ -5,6 +5,7 @@ $locales['CDocumentItem-prev'] = 'Document précédent';
 $locales['CDocumentItem.etat_envoi.non'] = 'Non envoyé';
 $locales['CDocumentItem.etat_envoi.obsolete'] = 'Obsolète';
 $locales['CDocumentItem.etat_envoi.oui'] = 'Envoyé';
+$locales['CDocumentSender'] = 'Envoi de fichier';
 $locales['CDocumentSender-alert_problem'] = 'L\'envoi de ce fichier n\'est pas possible pour le raison suivante : ';
 $locales['CDocumentSender-confirm_auto'] = 'Les fichiers de cette catégories sont envoyés automatiquement sans votre intervention. Si toutefois vous désirez l\'envoyer instamment, merci de le confirmer.';
 $locales['CFile'] = 'Fichiers';
