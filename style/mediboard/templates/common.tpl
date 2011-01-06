@@ -87,7 +87,7 @@
   </script>
 </head>
 
-<body class="{{if @$app->user_prefs.touchscreen == 1}}touchscreen{{/if}}">
+<body class="{{if @$app->user_prefs.touchscreen == 1}} touchscreen {{/if}}">
 
 {{if $browser.name == "msie"}}
   {{include file="../../mediboard/templates/ie.tpl" nodebug=true}}
