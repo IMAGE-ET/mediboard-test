@@ -38,13 +38,13 @@ if ($compte_rendu->header_id || $compte_rendu->footer_id) {
   }";
   
   if ($header->_id) {
-    $header->_source->content = "<div id=\"header\">$header->_source->content</div>";
+    $header->_source = "<div id=\"header\">$header->_source</div>";
     $header->height += 20;
     $compte_rendu->header_id = null;
   }
   
   if ($footer->_id) {
-    $footer->_source->content = "<div id=\"footer\">$footer->_source->content</div>";
+    $footer->_source = "<div id=\"footer\">$footer->_source</div>";
     $footer->height += 20;
     $compte_rendu->footer_id = null;
   }
