@@ -206,20 +206,6 @@ submitConditionnel = function(object_class, object_id, conditionnel){
   return onSubmitFormAjax(oForm);
 }
 
-submitValidationInfirmiere = function(object_class, object_id, prescription_id, div_refresh, mode_pharma) {
-  var oForm = getForm("validation_infirmiere-"+object_class);
-  
-  setPrimaryKeyDosql(oForm, object_class, object_id);
-  
-  return onSubmitFormAjax(oForm, { onComplete: 
-    function() { 
-      Prescription.reload(prescription_id, '', div_refresh, '', mode_pharma); 
-    }
-  });
-}
-
-
-
 submitValideAllLines = function (prescription_id, chapitre, mode_pharma) {
   var oForm = getForm("valideAllLines");
   oForm.prescription_id.value = prescription_id;
@@ -295,73 +281,6 @@ submitValidationPharmacien = function(prescription_id, object_id, valide_pharma)
       }
     }
   });
-}
-
-
-submitValidationInfir = function(prescription_line_mix_id, prescription_id, validation_infir){
-  var oForm = getForm("perf_validation_infir");
-  oForm.prescription_line_mix_id.value = prescription_line_mix_id;
-  oForm.validation_infir.value = validation_infir;
-  return onSubmitFormAjax(oForm, { onComplete: function(){
-  	Prescription.reloadPrescSejour(prescription_id);	
-  } } );
-}
-
-// Permet de changer la couleur de la ligne lorsqu'on stoppe la ligne
-changeColor = function(object_id, object_class, oForm, traitement, cat_id){   
-  if(oForm.date_arret){
-    var date_arret = oForm.date_arret.value;
-    var date_fin = date_arret;
-  }
-  
-  if(oForm._heure_arret && oForm._min_arret){
-    var heure_arret = oForm._heure_arret.value;
-    var min_arret = oForm._min_arret.value;
-    var date_fin = date_fin+" "+heure_arret+":"+min_arret+":00";
-  }
-    
-  // Entete de la ligne
-  var oDiv = $('th_line_'+object_class+'_'+object_id);
-  if(object_class == 'CPrescriptionLineMedicament'){
-    var oTbody = $('line_medicament_'+object_id);
-  } else {
-    var oTbody = $('line_element_'+object_id);
-  }
-  var classes_before = oTbody.className;
-  if(date_fin != "" && date_fin <= '{{$now}}'){
-    oDiv.addClassName("hatching_red");
-    oTbody.addClassName("line_stopped");
-  } else {
-    oDiv.removeClassName("hatching_red");
-    oTbody.removeClassName("line_stopped");
-  }
-  var classes_after = oTbody.className;
-  
-  // Deplacement de la ligne
-  if(classes_before != classes_after){
-    if(object_class == 'CPrescriptionLineMedicament'){
-      moveTbody(oTbody);
-    } else {
-      moveTbodyElt(oTbody, cat_id);
-    }
-  }
-}
-
-changeColorPerf = function(perf_id, oForm){
-  if(oForm.date_arret && oForm.date_arret.value != ''){
-    var _fin = oForm.date_arret.value; 
-  } else {
-    var _fin = oForm.date_debut.value;
-  }
-  var oTbody = $('prescription_line_mix-'+perf_id);
-  var oTh = $('th-perf-'+perf_id);
-  if(_fin <= '{{$now}}'){
-    oTh.addClassName("hatching_red");
-    oTbody.addClassName("line_stopped");
-  } else {
-    oTh.removeClassName("hatching_red");
-    oTbody.removeClassName("line_stopped");
-  }
 }
 
 modifFormDate = function(nb_prises, form_name, protocole,line_id){
@@ -644,20 +563,6 @@ reloadPerfEvolution = function(perf_id, object){
   <input type="hidden" name="conditionnel" value="" />
 </form>
 
-<form name="validation_infirmiere-CPrescriptionLineMedicament" action="?" method="post">
-  <input type="hidden" name="dosql" value="" />
-  <input type="hidden" name="m" value="dPprescription" />
-  <input type="hidden" name="prescription_line_medicament_id" value="" />
-  <input type="hidden" name="valide_infirmiere" value="1" />
-</form>
-
-<form name="validation_infirmiere-CPrescriptionLineElement" action="?" method="post">
-  <input type="hidden" name="dosql" value="" />
-  <input type="hidden" name="m" value="dPprescription" />
-  <input type="hidden" name="prescription_line_element_id" value="" />
-  <input type="hidden" name="valide_infirmiere" value="1" />
-</form>
-
 <form name="validation_pharma" action="" method="post">
   <input type="hidden" name="dosql" value="do_prescription_line_medicament_aed" />
   <input type="hidden" name="m" value="dPprescription" />
@@ -735,12 +640,4 @@ reloadPerfEvolution = function(perf_id, object){
   <input type="hidden" name="del" value="0" />
   <input type="hidden" name="prescription_line_mix_id" value="" />
   <input type="hidden" name="signature_pharma" value="" />
-</form>
-
-<form name="perf_validation_infir" method="post" action="">
-  <input type="hidden" name="m" value="dPprescription" />
-  <input type="hidden" name="dosql" value="do_prescription_line_mix_aed" />
-  <input type="hidden" name="del" value="0" />
-  <input type="hidden" name="prescription_line_mix_id" value="" />
-  <input type="hidden" name="validation_infir" value="" />
 </form>

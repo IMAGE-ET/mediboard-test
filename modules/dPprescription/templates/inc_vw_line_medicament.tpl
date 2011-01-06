@@ -12,10 +12,9 @@
 {{assign var=div_refresh value="medicament"}}
 {{assign var=typeDate value="Med"}}
 
-<table class="tbl {{if $line->traitement_personnel}}traitement{{else}}med{{/if}}
-             {{if $line->_fin_reelle && $line->_fin_reelle < $now && !$line->_protocole}} line_stopped{{/if}}" id="full_line_medicament_{{$line->_id}}">
+<table class="tbl {{if $line->traitement_personnel}}traitement{{else}}med{{/if}}" id="full_line_medicament_{{$line->_id}}">
 <tbody class="hoverable">
-  <tr {{if $line->_fin_reelle && $line->_fin_reelle < $now && !$line->_protocole}}class="hatching_red"{{/if}}>
+  <tr>
     <th colspan="5" id="th_line_CPrescriptionLineMedicament_{{$line->_id}}" 
         class="text element {{if $line->traitement_personnel}}traitement{{/if}} {{if $line->perop}}perop{{/if}}">
       

@@ -248,40 +248,6 @@ syncDate = function(oForm, curr_line_id, fieldName, type, object_class, cat_id) 
       testPharma(curr_line_id);
     }
   }
-  
-  if ($('line_medicament_'+curr_line_id) || $('line_element_'+curr_line_id)) {
-    if(object_class == 'CPrescriptionLineMedicament'){
-      var oTbody = $('line_medicament_'+curr_line_id);
-    } else {
-      var oTbody = $('line_element_'+curr_line_id);
-    }
-    
-    // Classes du tbody avant la modification
-    var classes_before = oTbody.className;
-    
-    // Ligne finie
-    var oDiv = $('th_line_'+object_class+'_'+curr_line_id);
-    if(oForm._fin.value != "" && oForm._fin.value < '{{$today}}'){
-      oDiv.addClassName("hatching_red");
-      oTbody.addClassName("line_stopped");
-    } else {
-      oDiv.removeClassName("hatching_red");
-      oTbody.removeClassName("line_stopped");
-    }
-  
-    
-    // Classes du tbody apres la modification
-    var classes_after = oTbody.className;
-    
-    // Si modif, deplacement du tbody
-    if(classes_after != classes_before){
-      if(object_class == 'CPrescriptionLineMedicament'){
-        moveTbody(oTbody);
-      } else {
-        moveTbodyElt(oTbody, cat_id);
-      }
-    }
-  }
 }
 
 addLineContigue = function(oForm){

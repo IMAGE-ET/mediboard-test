@@ -17,10 +17,10 @@
 
 {{assign var=line_guid value=$line->_guid}}
 
-<table class="tbl elt {{if $line->_fin_reelle && $line->_fin_reelle < $now && !$line->_protocole}}line_stopped{{/if}}" id="full_line_element_{{$line->_id}}">
+<table class="tbl elt" id="full_line_element_{{$line->_id}}">
 <tbody class="hoverable">
   <!-- Header de la ligne d'element -->
-  <tr {{if $line->_fin_reelle && $line->_fin_reelle < $now && !$line->_protocole}}class="hatching_red"{{/if}}>    
+  <tr>    
     <th id="th_line_CPrescriptionLineElement_{{$line->_id}}" colspan="8"
         class="element {{if $line->perop}}perop{{/if}}">
       <script type="text/javascript">

@@ -39,9 +39,9 @@ Main.add( function(){
 </script>
 
 <table class="tbl" id="prescription_line_mix-{{$line->_id}}"> 
-<tbody class="hoverable {{if $line->_fin < $now && !$line->_protocole}}line_stopped{{/if}}">
+<tbody class="hoverable">
 {{assign var=prescription_line_mix_id value=$line->_id}}
-  <tr {{if $line->_fin < $now && !$line->_protocole}}class="hatching_red"{{/if}}>
+  <tr>
     <th colspan="9" id="th-perf-{{$line->_id}}" class="text element {{if $line->perop}}perop{{/if}}">
       <div style="float: left">
       	{{if $line->_can_delete_prescription_line_mix}}
@@ -206,7 +206,7 @@ Main.add( function(){
               <td style="border:none;">
                 {{mb_label object=$line field="date_debut"}}
                 {{if $line->_can_modify_prescription_line_mix}}
-                  {{mb_field object=$line field=date_debut form="editPerf-$prescription_line_mix_id" onchange="changeColorPerf($prescription_line_mix_id,this.form); return onSubmitFormAjax(this.form);" register=true}}
+                  {{mb_field object=$line field=date_debut form="editPerf-$prescription_line_mix_id" onchange="return onSubmitFormAjax(this.form);" register=true}}
                   {{mb_field object=$line field=time_debut form="editPerf-$prescription_line_mix_id" onchange="return onSubmitFormAjax(this.form);" register=true}}
                 {{else}}
                   {{mb_value object=$line field=date_debut}}
@@ -424,8 +424,13 @@ Main.add( function(){
 				      {{if !$line->_protocole && $line->signature_prat}}
 					       <button type="button" class="new" onclick="$V(this.form.callback, 'reloadPerfEvolution'); 
 								                                            $V(this.form._add_perf_contigue, '1');
-					                                                  return onSubmitFormAjax(this.form);">Faire évoluer</button>
+																														if(document.selPraticienLine){
+																													    this.form._praticien_id.value = document.selPraticienLine.praticien_id.value;
+																													  }
+  	                                                        return onSubmitFormAjax(this.form);">Faire évoluer</button>
 					        <input type="hidden" name="_add_perf_contigue" value="" />
+									<input type="hidden" name="_praticien_id" value="" />
+                  
 								  <input type="hidden" name="date_arret" value="{{$line->date_arret}}" />
 								  <input type="hidden" name="time_arret" value="{{$line->time_arret}}" />
 						

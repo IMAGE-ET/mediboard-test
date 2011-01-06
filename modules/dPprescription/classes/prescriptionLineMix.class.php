@@ -91,6 +91,7 @@ class CPrescriptionLineMix extends CMbObject {
   var $_active = null;
 	var $_nb_gouttes = null;
 	var $_debit = null;
+	var $_praticien_id = null;
 	
   // Object references
   var $_ref_log_signature_prat = null;
@@ -370,6 +371,14 @@ class CPrescriptionLineMix extends CMbObject {
     $new_perf->_id = "";
     $new_perf->signature_pharma = 0;
     $new_perf->signature_prat = 0;
+		
+		if($this->_praticien_id){
+		  $new_perf->praticien_id = $this->_praticien_id;
+    } else {
+		  $new_perf->praticien_id = CAppUI::$user->_id;
+    }
+		$new_perf->creator_id = CAppUI::$user->_id;
+    
     if($msg = $new_perf->store()){
       return $msg;
     }

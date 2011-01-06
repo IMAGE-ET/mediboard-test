@@ -209,7 +209,10 @@
 								 {{/if}}
                {{/if}}
 							 
-               <div style="margin: 3px;"
+               <div style="margin: 3px;
+							       {{if ($_prescription_line_mix->_fin && ($_prescription_line_mix->_fin|date_format:"%Y-%m-%d %H:00:00" < $_date_hour)) || $_prescription_line_mix->_debut|date_format:"%Y-%m-%d %H:00:00" > $_date_hour}}
+		                  background-color: #ccc
+											{{/if}}"
 							      {{if isset($_prescription_line_mix->_prises_prevues.$_date.$_hour|smarty:nodefaults)}}
 										onclick="ObjectTooltip.createDOM(this, 'tooltip-content-prises-{{$_prescription_line_mix->_guid}}-{{$_date}}-{{$_hour}}', { duration: 0 } );"
 										{{else}}
@@ -221,6 +224,10 @@
 								 {{if $nb_adm}}{{$nb_adm}}
 								 {{elseif $nb_prevue && $_prescription_line_mix->_active}}0{{/if}}
 								 {{if $nb_prevue && $_prescription_line_mix->_active}}/{{$nb_prevue}}{{/if}}
+								 
+								 {{if (($_prescription_line_mix->_fin && ($_prescription_line_mix->_fin|date_format:"%Y-%m-%d %H:00:00" < $_date_hour)) || $_prescription_line_mix->_debut|date_format:"%Y-%m-%d %H:00:00" > $_date_hour) && $_prescription_line_mix->_active}}
+                 <small>{{if $_prescription_line_mix->_fin > $_date_hour}}&gt;{{else}}&lt;{{/if}} </small>
+                 {{/if}}
 							 </div>
 						{{/foreach}}
 						
@@ -261,22 +268,18 @@
 							   <table class="layout" style="width: 100%; margin: -2px; height: 2em;">
 							   	<tr>
 								 {{foreach from=$_prescription_line_mix->_variations.$_date_hour key=hour_variation item=_variation name="foreach_variation"}}
-									 
 									 {{if !@$variation_id}}
-							       {{assign var=background value="aaa"}} 
+							       {{assign var=background value="BBF"}} 
                      {{assign var=variation_id value=$_variation.variation_id}}
               		 {{/if}}
 							     
 									 {{if $variation_id != $_variation.variation_id}}
-									 
-									   {{if $background == "aaa"}}
-										  {{assign var=background value="ccc"}} 
+									   {{if $background == "BBF"}}
+										  {{assign var=background value="BCF"}} 
 										 {{else}}
-										  {{assign var=background value="aaa"}} 
+										  {{assign var=background value="BBF"}} 
 										 {{/if}} 
-										 
 									   {{assign var=variation_id value=$_variation.variation_id}}
-                   
 									 {{/if}} 
 						
 								   <td style="padding: 0; width: {{$_variation.pourcentage}}%; vertical-align: bottom;">

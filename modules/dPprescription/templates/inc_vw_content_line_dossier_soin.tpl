@@ -101,7 +101,7 @@
 					  										ObjectTooltip.createDOM(this, "tooltip-content-{{$line_id}}-{{$unite_prise|md5}}-{{$_date}}-{{$_hour}}");
 					  								  {{/if}}'
 					  		{{if ($line->_fin_reelle && ($line->_fin_reelle|date_format:"%Y-%m-%d %H:00:00" < $_date_hour)) || $line->_debut_reel|date_format:"%Y-%m-%d %H:00:00" > $_date_hour || !$line->_active}}
-						      style="background-color: #aaa"
+						      style="background-color: #ccc"
 						      {{if $conf.dPprescription.CAdministration.hors_plage}}
 						        onclick='toggleSelectForAdministration(this, {{$line_id}}, "{{$quantite}}", "{{$unite_prise}}", "{{$line_class}}","{{$_date}} {{$_hour}}:00:00");'
 					          ondblclick='addAdministration({{$line_id}}, "{{$quantite}}", "{{$unite_prise}}", "{{$line_class}}","{{$_date}} {{$_hour}}:00:00","{{$list_administrations}}","{{$planification_id}}","{{$multiple_adm}}");'
@@ -146,7 +146,11 @@
 							       {{if $quantite}}0/{{$quantite}}{{/if}}
 							     {{/if}}
 								 {{/if}}
-						   {{/if}}   
+						   {{/if}}
+							 
+							 {{if (($line->_fin_reelle && ($line->_fin_reelle|date_format:"%Y-%m-%d %H:00:00" < $_date_hour)) || $line->_debut_reel|date_format:"%Y-%m-%d %H:00:00" > $_date_hour) && $line->_active}}
+		             <small>{{if $line->_fin_reelle > $_date_hour}}&gt;{{else}}&lt;{{/if}} </small>
+		           {{/if}}
 				 </div>	
  
          {{if isset($line_plan_soin.nb_adm|smarty:nodefaults) && $line_plan_soin.nb_adm > 1}}
