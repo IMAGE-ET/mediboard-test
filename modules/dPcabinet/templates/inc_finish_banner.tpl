@@ -17,7 +17,7 @@ function reloadFinishBanner() {
 function printConsult() {
   var url = new Url("dPcabinet", "print_consult");
   url.addParam("consult_id", "{{$consult->_id}}");
-  url.popup(700, 550, "RPU");
+  url.popup(700, 550, "Consultation");
 }
 </script>
 
