@@ -112,7 +112,7 @@ if (!window.File.applet) {
          // On active tous les boutons upload disponibles
          $$(".yopletbutton").each(function(button) {
             button.disabled = "";
-            button.style.border = "3px solid #080";
+            button.style.border = "2px solid #0a0";
          });
        } else {
           $$(".yopletbutton").each(function(button) {
