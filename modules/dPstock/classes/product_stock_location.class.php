@@ -175,8 +175,9 @@ class CProductStockLocation extends CMbMetaObject {
     $stock = new $stock_class;
     $stock->setHost($host);
     $stock->product_id = $product->_id;
+    $stock->loadMatchingObject();
     
-    if (!$stock->loadMatchingObject()) {
+    if (!$stock->_id || !$stock->location_id) {
       $location = new CProductStockLocation;
       $location->setObject($host);
       $location->loadMatchingObject("position");
