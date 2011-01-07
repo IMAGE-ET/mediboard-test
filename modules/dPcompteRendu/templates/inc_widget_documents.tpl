@@ -18,9 +18,9 @@
   
       
       <!-- Impression de tous les modèles disponibles pour l'objet -->
-      <button type="button" class="print notext" style="float: right;" onclick="alert('toto')">
+      <!-- button type="button" class="print notext" style="float: right;" onclick="alert('toto')">
         {{tr}}Print{{/tr}}
-      </button>
+      </button -->
       
     	{{if $praticien->_can->edit}}
       
