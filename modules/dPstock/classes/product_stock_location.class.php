@@ -162,6 +162,13 @@ class CProductStockLocation extends CMbMetaObject {
     $this->_ref_group = $this->loadFwdRef("group_id", true);
   }
   
+  /**
+   * Returns the existing location for the product in the host,
+   * if it doesn't exist, will return the first location found in the host
+   * @param CGroups|CService|CBlocOperatoire $host 
+   * @param CProduct $product
+   * @return CProductStockLocation
+   */
   static function getDefaultLocation(CMbObject $host, CProduct $product) {
     $stock_class = self::getStockClass($host->_class_name);
     
@@ -170,12 +177,14 @@ class CProductStockLocation extends CMbMetaObject {
     $stock->product_id = $product->_id;
     
     if (!$stock->loadMatchingObject()) {
-      $stock = new $stock_class;
-      $stock->setHost($host);
-      $stock->loadMatchingObject();
+      $location = new CProductStockLocation;
+      $location->setObject($host);
+      $location->loadMatchingObject("position");
+      return $location;
     }
-    
-    return $stock->loadRefLocation();
+    else {
+      return $stock->loadRefLocation();
+    }
   }
   
   function loadRefStock($product_id) {
