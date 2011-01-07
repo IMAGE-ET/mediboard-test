@@ -15,7 +15,7 @@ class CSetupdPcompteRendu extends CSetup {
   }
   static function replaceContentQuery($search, $replace) {
     return 'UPDATE `content_html`
-      SET `content` = REPLACE(`content`, "' . $search.'", "' . $replace . '")
+      SET `content` = REPLACE(`content`, "' . htmlentities($search).'", "' . htmlentities($replace) . '")
       WHERE (SELECT cr.compte_rendu_id 
              FROM compte_rendu cr
              WHERE cr.content_id = content_html.content_id
@@ -520,7 +520,11 @@ class CSetupdPcompteRendu extends CSetup {
     $query = self::replaceContentQuery("[Constantes mode", "[Constantes - mode");
     $this->addQuery($query);
 		
-    $this->mod_version = "0.60";
+    $this->makeRevision("0.60");
+    $query = self::replaceContentQuery("[Patient - médecin correspondants]", "[Patient - médecins correspondants]");
+    $this->addQuery($query);
+    
+    $this->mod_version = "0.61";
 
   }
 }
