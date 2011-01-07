@@ -99,7 +99,7 @@ class CFile extends CDocumentItem {
     CMbPath::forceDir($this->_absolute_dir);
   }
   
-  function getContent() {
+  function getBinaryContent() {
     return file_get_contents($this->_file_path);
   }
   

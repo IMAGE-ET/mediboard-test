@@ -41,7 +41,7 @@ class CMbvCardExport {
   
   function addPicture($picture) {
     $type = str_replace('image/', '', $picture->file_type);
-    $file = base64_encode($picture->getContent());
+    $file = base64_encode($picture->getBinaryContent());
     $this->addElement("PHOTO;ENCODING=BASE64;TYPE=$type:", $file);
   }
   

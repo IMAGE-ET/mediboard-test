@@ -45,7 +45,7 @@ class CDocumentItem extends CMbMetaObject {
    * Retrieve content as binary data
    * @return binary Content
    */
-  function getContent() {
+  function getBinaryContent() {
   }
 
   /**

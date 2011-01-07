@@ -122,18 +122,21 @@ class CCompteRendu extends CDocumentItem {
     return $specs;
   }
   
-  function getContent() {
+  function getBinaryContent() {
+  	// Content from PDF preview
     $this->makePDFpreview();
 	  $file = $this->_ref_file;
-		return $file->_id ? 
-		  $file->getContent() : 
-			$this->_source;
+		if ($file->_id) {
+			return $file->getBinaryContent();
+		}
+		
+		// Or acutal HTML source
+		$this->loadContent();
+	  return $this->_source;
   }
   
   function getExtensioned() {
     $file = $this->loadFile();
-		return $this->_extensioned;
-		
 		if ($file->_id) {
 			$this->_extensioned = $file->_extensioned;
 		}
