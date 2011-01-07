@@ -8,8 +8,7 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
  */
 
-global $can;
-$can->needsEdit();
+CCanDo::checkEdit();
 
 $max_sent = CValue::get("max_sent", 10);
 $max_loaded = CValue::get("max_loaded", 1000);
@@ -29,10 +28,10 @@ $where["etat_envoi"      ] = "!= 'oui'";
 $where["object_id"       ] = "IS NOT NULL";
 
 $file = new CFile();
-$items["CFile"] = $file->loadList($where, "file_id DESC", $max_sent);
+$items["CFile"] = $file->loadList($where, "file_id DESC", $max_loaded);
 
 $document = new CCompteRendu();
-$items["CCompteRendu"] = $document->loadList($where, "compte_rendu_id DESC", $max_sent);
+$items["CCompteRendu"] = $document->loadList($where, "compte_rendu_id DESC", $max_loaded);
 
 // Envoi
 foreach ($items as $_items) {

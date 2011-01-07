@@ -1,13 +1,16 @@
 {{* $id: $ *}}
 
 <!-- Category summary -->
+
+<h1>Statistiques</h1>
+
 <table class="tbl">
 
 <tr>
-  <th rowspan="2">{{mb_title class=CFilesCategory field=nom}}</th>
-  <th rowspan="2">{{mb_title class=CFilesCategory field=class}}</th>
-  <th colspan="2">{{tr}}CFilesCategory-back-categorized_files{{/tr}}</th>
-  <th colspan="2">{{tr}}CFilesCategory-back-categorized_documents{{/tr}}</th>
+  <th class="title" rowspan="2">{{mb_label class=CFilesCategory field=nom}}</th>
+  <th class="title" rowspan="2">{{mb_title class=CFilesCategory field=class}}</th>
+  <th class="title" colspan="2">{{tr}}CFilesCategory-back-categorized_files{{/tr}}</th>
+  <th class="title" colspan="2">{{tr}}CFilesCategory-back-categorized_documents{{/tr}}</th>
 </tr>
 
 <tr>
@@ -19,7 +22,11 @@
 
 {{foreach from=$categories item=_category}}
 <tr>
-	<td>{{mb_value object=$_category field=nom}}</td>
+	<td>
+		<span onmouseover="ObjectTooltip.createEx(this, '{{$_category->_guid}}')">
+		  {{mb_value object=$_category field=nom}}
+	  </span>
+	</td>
 	<td>{{tr}}{{$_category->class}}{{/tr}}</td>
 	<td style="text-align: center">{{$_category->_count_unsent_files}}</td>
 	<td style="text-align: center">{{$_category->_count_files}}</td>
@@ -31,10 +38,13 @@
 </table>
 
 <!-- DocItems detail -->
+
+<h1>Envois</h1>
+
 <table class="tbl">
 {{foreach from=$items item=_items key=class}} 
 	<tr>
-		<th class="category" colspan="10">
+		<th class="title" colspan="10">
 			{{tr}}{{$class}}{{/tr}}
 		</th>
 	</tr>

@@ -123,11 +123,11 @@ class CCompteRendu extends CDocumentItem {
   }
   
   function getContent() {
-    $this->loadContent();
-//    return $this->_source;
-
-	  $file = $this->loadFile();
-		return $file->_id ? $file->getContent() : $this->_source;
+    $this->makePDFpreview();
+	  $file = $this->_ref_file;
+		return $file->_id ? 
+		  $file->getContent() : 
+			$this->_source;
   }
   
   function getExtensioned() {
@@ -215,14 +215,7 @@ class CCompteRendu extends CDocumentItem {
   }
 
   function loadFile() {
-    if (!$this->_id) {
-      return;
-    }
-   
-  	$this->_ref_file = new CFile;
-    $this->_ref_file->setObject($this);
-    $this->_ref_file->loadMatchingObject();
-		return $this->_ref_file;
+		return $this->_ref_file = $this->loadUniqueBackRef("files");
   }
 	
   function loadRefsFwd() {
@@ -438,7 +431,10 @@ class CCompteRendu extends CDocumentItem {
   
   function store() {
     $this->completeField("content_id", "_source");
-    $this->loadContent(false);
+		
+    // Prevent source modified wben sending, comparison is working when editing
+    $this->loadContent($this->_send);
+
 		$source_modified = 
 			$this->_ref_content->content != $this->_source || 
 		  $this->fieldModified("margin_top") || 
@@ -602,41 +598,52 @@ class CCompteRendu extends CDocumentItem {
     return $smarty->fetch("../../dPcompteRendu/templates/htmlheader.tpl");
   }
   
-  function makePDFpreview(){
-    if (!CAppUI::conf("dPcompteRendu CCompteRendu pdf_thumbnails") == 1) return;
+  function makePDFpreview() {
+    if (!CAppUI::conf("dPcompteRendu CCompteRendu pdf_thumbnails")) {
+      return;    	
+    } 
   
     $this->loadRefsFwd();
-    $this->loadFile();
-    $this->loadContent();
-
-    if (!isset($this->_ref_file->_id) || file_get_contents($this->_ref_file->_file_path) == '') {
-      if (!isset($this->_ref_file->_id)){
-        $file = new CFile();
-        $file->setObject($this);
-        $file->private = 0;
-        $file->file_name  = $this->nom . ".pdf";
-        $file->file_type  = "application/pdf";
-        $file->file_owner = CAppUI::$user->_id;
-        $file->fillFields();
-        $file->updateFormFields();
-        $file->forceDir();
-      } else {
-        $file = $this->_ref_file;
-      }
-         
-      if ($this->_page_format == "") {
-        $page_width  = round((72 / 2.54) * $this->page_width, 2);
-        $page_height = round((72 / 2.54) * $this->page_height, 2);
-        $this->_page_format = array(0, 0, $page_width, $page_height);
-      }
-      
-      $content = $this->loadHTMLcontent($this->_source, '','','','','','', array($this->margin_top, $this->margin_right, $this->margin_bottom, $this->margin_left));
-      $htmltopdf = new CHtmlToPDF;
-      $htmltopdf->generatePDF($content, 0, $this->_page_format, $this->_orientation, $file);
-      $file->file_size = filesize($file->_file_path);
-      $file->store();
-      $this->_ref_file = $file;
+    $file = $this->loadFile();
+		
+		// Fichier existe déjà et rempli
+		if ($file->_id && filesize($file->_file_path)) {
+			return;
+		}
+		
+		// Création du CFile si inexistant
+    if (!$file->_id) {
+      $file->setObject($this);
+      $file->private = 0;
+      $file->file_name  = $this->nom . ".pdf";
+      $file->file_type  = "application/pdf";
+      $file->file_owner = CAppUI::$user->_id;
+      $file->fillFields();
+      $file->updateFormFields();
+      $file->forceDir();
+    } 
+       
+		// Formatage de la page	 
+    if (!$this->_page_format) {
+      $page_width  = round((72 / 2.54) * $this->page_width, 2);
+      $page_height = round((72 / 2.54) * $this->page_height, 2);
+      $this->_page_format = array(0, 0, $page_width, $page_height);
     }
+    
+		// Génération du contenu PDF 
+		$margins = array(
+			$this->margin_top, 
+			$this->margin_right, 
+			$this->margin_bottom, 
+			$this->margin_left);
+    $this->loadContent();
+    $content = $this->loadHTMLcontent($this->_source, '','','','','','', $margins);
+    $htmltopdf = new CHtmlToPDF;
+    $htmltopdf->generatePDF($content, 0, $this->_page_format, $this->_orientation, $file);
+    $file->file_size = filesize($file->_file_path);
+    $this->_ref_file = $file;
+
+    return $this->_ref_file->store();
   }
   
   function generateDocFromModel($other_source = null) {

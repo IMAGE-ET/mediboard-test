@@ -203,6 +203,7 @@ $locales['Save'] = 'Enregistrer';
 $locales['Search'] = 'Rechercher';
 $locales['Select'] = 'Sélectionner';
 $locales['Send'] = 'Envoyer';
+$locales['Sent'] = 'Envoyés';
 $locales['Session locked'] = 'Session verrouillée';
 $locales['Short'] = 'Court';
 $locales['Show'] = 'Voir';

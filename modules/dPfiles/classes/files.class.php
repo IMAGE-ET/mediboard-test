@@ -100,9 +100,6 @@ class CFile extends CDocumentItem {
   }
   
   function getContent() {
-    mbExport($this->_file_path, "File Name");
-    mbExport(stat($this->_file_path), "File stat");
-    mbExport(strlen(file_get_contents($this->_file_path)), "File Data length");
     return file_get_contents($this->_file_path);
   }
   
