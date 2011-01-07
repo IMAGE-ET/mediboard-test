@@ -10,8 +10,6 @@
 {{assign var=pdf_thumbnails value=$conf.dPcompteRendu.CCompteRendu.pdf_thumbnails}}
 {{unique_id var=unique_id}}
 
-<iframe style="width: 0px; height: 0px; position: absolute; border: none;" frameborder="no" name="print-{{$unique_id}}-{{$object->_guid}}" id="print-{{$unique_id}}-{{$object->_guid}}"></iframe>
-
 <form name="DocumentAdd-{{$unique_id}}-{{$object->_guid}}" action="?m={{$m}}" method="post">
 
 <table class="form">

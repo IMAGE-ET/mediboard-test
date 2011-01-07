@@ -139,22 +139,24 @@ var Document = {
     url.requestUpdate(container);
   },
   
-  print: function(document_id, sIdentifier) {
-    oIframe = $("print-"+sIdentifier);
+  print: function(document_id) {
+    oIframe = Element.getTempIframe();
     var url = new Url("dPcompteRendu", "ajax_get_document_source");
     url.addParam("dialog"         , 1);
     url.addParam("suppressHeaders", 1);
     url.addParam("compte_rendu_id", document_id);
     sUrl = url.make();
-    oIframe.onload = function() {window.frames["print-"+sIdentifier].print();};
+    oIframe.onload = function() { window.frames[oIframe.id].print();};
     oIframe.src = sUrl;
   },
   
   printPDF: function(document_id) {
     var url = new Url("dPcompteRendu", "ajax_pdf_and_thumbs");
-    url.addParam("compte_rendu_id", document_id);
-    url.addParam("stream", 1);
-    url.redirectOpener();
+    url.addParam("suppressHeaders", 1);
+    url.pop(0, 0, "Download PDF", null, null, {
+       compte_rendu_id: document_id,
+       stream: 1,
+       generate_thumbs: 0}, Element.getTempIframe());
   }
 };
 
