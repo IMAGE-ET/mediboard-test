@@ -101,7 +101,7 @@ Main.add(function() {
 
 </script>
 
-<iframe style='width: 0px; height: 0px; position: absolute; border: none;' frameborder="no" name="iframe_source{{$uid_fast_mode}}" id="iframe_source{{$uid_fast_mode}}"></iframe>
+<iframe style="width: 0px; height: 0px; position: absolute; border: none;" frameborder="no" name="iframe_source{{$uid_fast_mode}}" id="iframe_source{{$uid_fast_mode}}"></iframe>
 
 <form name="stream-pdf-{{$uid_fast_mode}}" method="post" action="?" target="_blank">
   <input type="hidden" name="m" value="dPcompteRendu" />

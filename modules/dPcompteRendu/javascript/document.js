@@ -137,6 +137,24 @@ var Document = {
     url.addParam("praticien_id", oOptions.praticien_id);
     url.addParam("mode"        , oOptions.mode);
     url.requestUpdate(container);
+  },
+  
+  print: function(document_id, sIdentifier) {
+    oIframe = $("print-"+sIdentifier);
+    var url = new Url("dPcompteRendu", "ajax_get_document_source");
+    url.addParam("dialog"         , 1);
+    url.addParam("suppressHeaders", 1);
+    url.addParam("compte_rendu_id", document_id);
+    sUrl = url.make();
+    oIframe.onload = function() {window.frames["print-"+sIdentifier].print();};
+    oIframe.src = sUrl;
+  },
+  
+  printPDF: function(document_id) {
+    var url = new Url("dPcompteRendu", "ajax_pdf_and_thumbs");
+    url.addParam("compte_rendu_id", document_id);
+    url.addParam("stream", 1);
+    url.redirectOpener();
   }
 };
 

@@ -571,7 +571,7 @@ updateTP = function(selected){
 
 // Autocomplete des medicaments
 var urlAuto = new Url("dPmedicament", "httpreq_do_medicament_autocomplete");
-urlAuto.autoComplete("editLineTP_produit", "_produit_auto_complete", {
+urlAuto.autoComplete(getForm('editLineTP').produit, "_produit_auto_complete", {
   minChars: 3,
   updateElement: updateFieldsMedicamentTP, 
   callback: function(input, queryString){

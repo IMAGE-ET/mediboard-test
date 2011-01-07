@@ -7,20 +7,28 @@
   
 {{assign var=object_class value=$object->_class_name}}
 {{assign var=object_id value=$object->_id}}
-
+{{assign var=pdf_thumbnails value=$conf.dPcompteRendu.CCompteRendu.pdf_thumbnails}}
 {{unique_id var=unique_id}}
+
+<iframe style="width: 0px; height: 0px; position: absolute; border: none;" frameborder="no" name="print-{{$unique_id}}-{{$object->_guid}}" id="print-{{$unique_id}}-{{$object->_guid}}"></iframe>
 
 <form name="DocumentAdd-{{$unique_id}}-{{$object->_guid}}" action="?m={{$m}}" method="post">
 
 <table class="form">
   <tr>
     <td class="button">
+      
+      <!-- Impression de tous les modèles disponibles pour l'objet -->
+      <button type="button" class="print notext" style="float: right;" onclick="alert('toto')">
+        {{tr}}Print{{/tr}}
+      </button>
+      
     	{{if $praticien->_can->edit}}
       
       <input type="text" value="&mdash; Modèle" name="keywords_modele" class="autocomplete str" autocomplete="off" onclick="this.value = ''; this.onclick=null;" style="width: 5em;" />
       <input type="text" value="&mdash; Pack" name="keywords_pack" class="autocomplete str" autocomplete="off" onclick="this.value = ''; this.onclick=null;" style="width: 4em;"/>
       
-      <script tyle="text/javascript">
+      <script type="text/javascript">
       
       Main.add(function() {
         var url = new Url("dPcompteRendu", "ajax_modele_autocomplete");
@@ -28,7 +36,7 @@
         url.addParam("function_id", "{{$praticien->function_id}}");
         url.addParam("object_class", '{{$object->_class_name}}');
         url.addParam("object_id", '{{$object->_id}}');
-        url.autoComplete('DocumentAdd-{{$unique_id}}-{{$object->_guid}}_keywords_modele', '', {
+        url.autoComplete(getForm('DocumentAdd-{{$unique_id}}-{{$object->_guid}}').keywords_modele, '', {
           minChars: 1,
           afterUpdateElement: createDoc,
           dropdown: true,
@@ -40,7 +48,7 @@
         url.addParam("function_id", "{{$praticien->function_id}}");
         url.addParam("object_class", '{{$object->_class_name}}');
         url.addParam("object_id", '{{$object->_id}}');
-        url.autoComplete('DocumentAdd-{{$unique_id}}-{{$object->_guid}}_keywords_pack', '', {
+        url.autoComplete(getForm('DocumentAdd-{{$unique_id}}-{{$object->_guid}}').keywords_pack, '', {
           minChars: 1,
           afterUpdateElement: createPack,
           dropdown: true,
@@ -67,7 +75,7 @@
         function createPack(input, selected) {
           Document.createPack(selected.down(".id").innerHTML, '{{$object_id}}');
           $V(input, '');
-        }
+        } 
       });
       </script>
 
@@ -134,7 +142,7 @@
       {{/if}}
 	  </td>
 	  
-	  <td class="button" style="width: 1px">
+	  <td class="button" style="width: 1px; white-space: nowrap;">
 	    <form name="Edit-{{$document->_guid}}" action="?m={{$m}}" method="post">
   	    <input type="hidden" name="m" value="dPcompteRendu" />
   	    <input type="hidden" name="dosql" value="do_modele_aed" />
@@ -143,6 +151,15 @@
         
   	    <input type="hidden" name="object_id" value="{{$object_id}}" />
   	    <input type="hidden" name="object_class" value="{{$object_class}}" />
+        
+        <button type="button" class="print notext"
+          onclick="{{if $pdf_thumbnails}}
+            Document.printPDF({{$document->_id}});
+          {{else}}
+            Document.print({{$document->_id}}, '{{$unique_id}}-{{$object->_guid}}')
+          {{/if}}">
+          {{tr}}Print{{/tr}}
+        </button>
   	    
   	    <button type="button" class="trash notext" onclick="Document.del(this.form, '{{$document->nom|smarty:nodefaults|JSAttribute}}')">
   	    	{{tr}}Delete{{/tr}}

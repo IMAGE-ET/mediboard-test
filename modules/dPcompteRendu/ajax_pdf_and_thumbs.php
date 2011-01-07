@@ -4,7 +4,7 @@
 * @package Mediboard
 * @subpackage dPcompteRendu
 * @version $Revision:$
-* @author
+* @author SARL Openxtrem
 */
 global $can;
 

@@ -230,7 +230,7 @@ function updateFields(selected) {
 var url = new Url("dPcabinet", "httpreq_do_ngap_autocomplete");
 url.addParam("object_id", "{{$object->_id}}");
 url.addParam("object_class", "{{$object->_class_name}}");
-url.autoComplete('editNGAP_code', 'code_auto_complete', {
+url.autoComplete(getForm('editNGAP').code, 'code_auto_complete', {
     minChars: 1,
     updateElement: updateFields
 } );
