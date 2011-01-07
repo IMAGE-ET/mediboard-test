@@ -10,11 +10,12 @@
 {{assign var=pdf_thumbnails value=$conf.dPcompteRendu.CCompteRendu.pdf_thumbnails}}
 {{unique_id var=unique_id}}
 
-<form name="DocumentAdd-{{$unique_id}}-{{$object->_guid}}" action="?m={{$m}}" method="post">
-
-<table class="form">
+<table class="tbl">
   <tr>
-    <td class="button">
+    <td colspan="3" class="button">
+      
+      <form name="DocumentAdd-{{$unique_id}}-{{$object->_guid}}" action="?m={{$m}}" method="post">
+  
       
       <!-- Impression de tous les modèles disponibles pour l'objet -->
       <button type="button" class="print notext" style="float: right;" onclick="alert('toto')">
@@ -95,18 +96,17 @@
       
 	    <input type="hidden" name="_modele_id" value="" />
 	    <input type="hidden" name="_object_id" value="" onchange="Document.create(this.form._modele_id.value, this.value,'{{$object_id}}','{{$object_class}}'); $V(this, ''); $V(this.form._modele_id, ''); "/>
+
+      </form>
+      
+      <div id="fast-{{$unique_id}}" style="display: none; min-width: 630px; width: auto; min-height: 270px; heigth: auto;"></div>
+
     </td>
   </tr>
-  
-</table>
 
-</form>
-
-<div id="fast-{{$unique_id}}" style="display: none; min-width: 630px; width: auto; min-height: 270px; heigth: auto;"></div>
 
 {{assign var=doc_count value=$object->_ref_documents|@count}}
 {{if $mode != "hide"}}
-<table class="tbl">
   
   {{if $doc_count && $mode == "collapse"}}
   <tr id="DocsEffect-{{$object->_guid}}-trigger">
@@ -185,13 +185,11 @@
 	</tr>
   {{foreachelse}}
   <tr>
-    <td>
-      <em>
-      	{{tr}}{{$object->_class_name}}{{/tr}} :
-      	Aucun document
-      </em>
+    <td colspan="3">
+      <em>{{tr}}{{$object->_class_name}}{{/tr}} : Aucun document</em>
     </td>
   </tr>
   {{/foreach}}
-</table>
 {{/if}}
+
+</table>

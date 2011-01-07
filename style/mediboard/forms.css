@@ -51,7 +51,7 @@ input[type=file],
 select, 
 textarea,
 .textarea-container {
-  border: 1px #666 solid;
+  border: 1px #999 solid;
   background-color: #efe;
 }
 
@@ -168,7 +168,7 @@ a.button {
   color: #000;
   background: #eee url(images/buttons/button.png) center center repeat-x;
 	
-  border: 1px solid #888;
+  border: 1px solid #999;
   -moz-border-radius: 3px;
   -webkit-border-radius: 3px;
   border-radius: 3px;
@@ -511,7 +511,7 @@ textarea[readonly],
 textarea[readonly]:focus,
 input[type=text][readonly],
 input[type=text][readonly]:focus {
-  border: 1px dotted #333;
+  border: 1px dotted #666;
   background: none;
 }
 
@@ -759,7 +759,7 @@ textarea#htmlarea {
 
 .textarea-container {
   padding: 1px;
-  border: 1px #666 solid;
+  border: 1px #999 solid;
   background-color: #efe;
 }
 

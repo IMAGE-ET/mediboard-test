@@ -110,6 +110,15 @@ textarea,
   border-color: #909090;
 }
 
+input[type=text], 
+input[type=password], 
+input[type=file], 
+select, 
+.textarea-container {
+  -moz-box-shadow: inset 0px 0px 8px rgba(0,0,0,0.1);
+  -webkit-box-shadow: inset 0px 0px 8px rgba(0,0,0,0.1);
+}
+
 input[type=text]:hover, 
 input[type=password]:hover, 
 input[type=file]:hover, 
@@ -270,7 +279,6 @@ table.tbl th {
   border-right: 1px dotted #DDD;
 }
 
-table.tbl td input,
 table.tbl td button {
   margin: 0;
 }

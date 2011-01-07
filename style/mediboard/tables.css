@@ -36,17 +36,13 @@ table.form th.category.cancelled {
 }
 
 table.form td.narrow,
-table.main td.narrow,
-table.tbl td.narrow {
-  width: 1%;
-}
 table.form th.narrow,
-table.main th.narrow,
-table.tbl th.narrow {
-  width: 1%;
-}
 table.form col.narrow,
+table.main td.narrow,
+table.main th.narrow,
 table.main col.narrow,
+table.tbl td.narrow,
+table.tbl th.narrow,
 table.tbl col.narrow {
   width: 1%;
 }
@@ -151,13 +147,13 @@ th.title {
   font-weight: bold;  
   text-align: center;
   background: #888;
-  border: #aaa 1px solid;
+  border: 1px solid #ccc;
 }
 
 /* Standard table */
 table.tbl {
   width: 100%;
-  border: 1px solid #eee;
+  border: 1px solid #ccc;
   border-spacing: 0;
   border-collapse: collapse;
   background-color: #777;
@@ -179,10 +175,14 @@ a.actionPat {
   margin: 0 1px;
 }
 
+table.tbl td,
+table.tbl th {
+  border: 1px solid #ccc;
+}
+
 table.tbl th {
   background-color: #bbb;
   padding: 2px;
-  border: outset #ccc 1px;
   font-weight: normal;
   text-align: center;
   vertical-align: middle;
@@ -194,7 +194,6 @@ table.tbl th.title {
   font-weight: bold;  
   text-align: center;
   background-color: #888;
-  border: #aaa 1px outset;
 }
 
 table.tbl td,
@@ -203,7 +202,6 @@ div.tree-header {
   padding: 2px;
   white-space: nowrap;
   vertical-align: middle;
-  border: 1px solid #999;
 }
 
 /*table.tbl tr,
@@ -360,6 +358,11 @@ table.form {
   border-spacing: 1px;
 }
 
+table.tbl td,
+table.tbl th {
+  border: 1px solid #ccc;
+}
+
 table.form th {
   color: #000;
   white-space: nowrap;
@@ -377,14 +380,12 @@ table.form th.title {
   font-weight: bold;  
   text-align: center;
   background-color: #888;
-  border: #aaa 1px solid;
 }
 
 table.form th.category {
   font-weight: bold;  
   text-align: center;
   background-color: #bbb;
-  border: #aaa 1px solid;
   vertical-align: middle;
 }
 

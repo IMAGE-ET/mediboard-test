@@ -36,19 +36,7 @@
   <script type="text/javascript">
     // This needs to be at the very beginning of the page
     __loadStart = (new Date).getTime();
-  </script>
-  
-  {{$mediboardShortIcon|smarty:nodefaults}}
-  {{if $uistyle != 'mediboard'}}
-    {{$mediboardCommonStyle|smarty:nodefaults}}
-  {{/if}}
-  {{$mediboardStyle|smarty:nodefaults}}
-  
-  <!--[if lte IE 8]>
-  <link rel="stylesheet" type="text/css" href="style/mediboard/ie.css?build={{$version.build}}" media="all" />
-  <![endif]-->
-  
-  <script type="text/javascript">
+    
     {{if $offline}}
     var config = {{$configOffline|@json}};
     {{/if}}
@@ -61,9 +49,20 @@
           a: "{{$a}}",
           tab: "{{$tab}}",
           action: "{{$action}}",
-          actionType: "{{$actionType}}"
+          actionType: "{{$actionType}}",
+          dialog: "{{$dialog}}"
         };
   </script>
+  
+  {{$mediboardShortIcon|smarty:nodefaults}}
+  {{if $uistyle != 'mediboard'}}
+    {{$mediboardCommonStyle|smarty:nodefaults}}
+  {{/if}}
+  {{$mediboardStyle|smarty:nodefaults}}
+  
+  <!--[if lte IE 8]>
+  <link rel="stylesheet" type="text/css" href="style/mediboard/ie.css?build={{$version.build}}" media="all" />
+  <![endif]-->
   
   {{$mediboardScript|smarty:nodefaults}}
   
