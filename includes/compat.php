@@ -45,6 +45,7 @@ if (!function_exists('array_diff_key')) {
       }
       $valuesDiff[$valueKey] = $valueData;
     }
+		
     return $valuesDiff;
   }
 }
@@ -58,12 +59,18 @@ if (!function_exists('array_diff_key')) {
  * @return arrray
  */
 function array_map_recursive($function, $array) {
+	// Recursion closure
+	if (!is_array($array)) {
+		return call_user_func($function, $array);
+	}
+	
+	// Rercursive call
+	$result = array();
   foreach ($array as $key => $value ) {
-    $array[$key] = is_array($value) ? 
-      array_map_recursive($function, $value) : 
-      call_user_func($function, $value);
+    $result[$key] = array_map_recursive($function, $value);
   }
-  return $array;
+	
+  return $result;
 }
 
 /**

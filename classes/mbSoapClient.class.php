@@ -104,7 +104,7 @@ class CMbSOAPClient extends SoapClient {
 
     // Truncate input and output before storing
     $arguments = array_map_recursive(array("CMbSOAPClient", "truncate"), $arguments);
-    $output = array_map_recursive(array("CMbSOAPClient", "truncate"), $output);
+    $output    = array_map_recursive(array("CMbSOAPClient", "truncate"), $output);
 		
     $echange_soap->input = serialize($arguments);
     if ($echange_soap->soapfault != 1) {
@@ -116,12 +116,20 @@ class CMbSOAPClient extends SoapClient {
   }
   
 	static public function truncate($string) {
+    if (!is_string($string)) {
+      return $string;
+    }
+
+		// Truncate
 		$max = 1024;		
 		$result = CMbString::truncate($string, $max);
+		
+		// Indicate true size
 		$length = strlen($string);
     if ($length > 1024) {
       $result .= " [$length bytes]";
     }
+		
 		return $result;
 	}
 	
