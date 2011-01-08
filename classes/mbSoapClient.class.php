@@ -82,7 +82,8 @@ class CMbSOAPClient extends SoapClient {
 
     try {
   	  $output = parent::__soapCall($function_name, $arguments, $options, $input_headers, $output_headers);
-  	} catch(SoapFault $fault) {
+  	} 
+		catch(SoapFault $fault) {
   	  $echange_soap->output    = $fault->faultstring;
   		$echange_soap->soapfault = 1;
     }
@@ -100,13 +101,11 @@ class CMbSOAPClient extends SoapClient {
     
     // response time
     $echange_soap->response_time = $chrono->total;
-    
-    //$arguments = array_map(array("CMbString", "truncate"), $arguments, array("1024"));
-    foreach ($arguments as &$_argument) {
-      if ($_argument && is_string($_argument))
-        $_argument = CMbString::truncate($_argument, 1024);
-    }
-    
+
+    // Truncate input and output before storing
+    $arguments = array_map_recursive(array("CMbSOAPClient", "truncate"), $arguments);
+    $output = array_map_recursive(array("CMbSOAPClient", "truncate"), $output);
+		
     $echange_soap->input = serialize($arguments);
     if ($echange_soap->soapfault != 1) {
     	$echange_soap->output = serialize($output);
@@ -116,6 +115,16 @@ class CMbSOAPClient extends SoapClient {
   	return $output;
   }
   
+	static public function truncate($string) {
+		$max = 1024;		
+		$result = CMbString::truncate($string, $max);
+		$length = strlen($string);
+    if ($length > 1024) {
+      $result .= " [$length bytes]";
+    }
+		return $result;
+	}
+	
   static public function make($rooturl, $login = null, $password = null, $type = null, $options = array()) {
   	if (!url_exists($rooturl)) {
   		throw new CMbException("CSourceSOAP-unreachable-source", $rooturl);
