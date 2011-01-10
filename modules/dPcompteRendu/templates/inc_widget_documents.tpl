@@ -153,7 +153,7 @@
           onclick="{{if $pdf_thumbnails}}
             Document.printPDF({{$document->_id}});
           {{else}}
-            Document.print({{$document->_id}}, '{{$unique_id}}-{{$object->_guid}}')
+            Document.print({{$document->_id}})
           {{/if}}">
           {{tr}}Print{{/tr}}
         </button>

@@ -13,6 +13,7 @@ $cr = new CCompteRendu();
 $cr->load($cr_id);
 $cr->loadContent();
 
-echo $cr->_source;
+echo "<style type=\"text/css\">".file_get_contents("style/mediboard/htmlarea.css")."</style>".
+  $cr->_source;
 
 ?>

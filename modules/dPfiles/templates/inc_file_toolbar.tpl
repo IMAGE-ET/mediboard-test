@@ -2,6 +2,8 @@
   * Show a file/document edit/delete/move/send toolbar
   *}}
 
+{{assign var=pdf_thumbnails value=$conf.dPcompteRendu.CCompteRendu.pdf_thumbnails}}
+
 {{if $canFile->edit && !$accordDossier}}
 
  {{if $_doc_item->_class_name== "CCompteRendu"}}
@@ -11,6 +13,17 @@
    </button>
  {{/if}}
 
+  <!-- Impression -->
+  <button type="button" class="print notext"
+    onclick="
+    {{if $pdf_thumbnails}}
+      Document.printPDF('{{$_doc_item->_id}}');
+    {{else}}
+      Document.print('{{$_doc_item->_id}}')
+    {{/if}}">
+    {{tr}}Print{{/tr}}
+  </button>
+  
 	<!-- Deletion -->
  {{if $_doc_item->_class_name=="CCompteRendu"}}
    <form name="editDoc{{$_doc_item->_id}}" action="?m={{$m}}" method="post" onsubmit="return checkForm(this)">
