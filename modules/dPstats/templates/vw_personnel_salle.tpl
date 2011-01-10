@@ -56,15 +56,24 @@ Main.add(function () {
 {{if $prat_personnel}}
 	<table class="main tbl">
 	  <tr>
-	    <th>Date</th>
-	    <th>Salle</th>
-	    <th>Nb interv.</th>
-	    <th>Durée prévue</th>
-	    <th>Durée première à la dernière</th>
-	    <th>Durée totale interv. (interv. pris en compte)</th>
-	    <th>Nb aides op.</th>
-	    <th>Nb panseuses</th>
-			<th>Nb IADE</th>
+	    <th rowspan="2">Date</th>
+	    <th rowspan="2">Salle</th>
+	    <th rowspan="2">Nb interv.</th>
+	    <th colspan="3">Durées</th>
+	    <th colspan="2">Aides op.</th>
+	    <th colspan="2">Panseuses</th>
+			<th colspan="2">IADE</th>
+	  </tr>
+	  <tr>
+      <th>prévue</th>
+      <th>première à la dernière</th>
+      <th>totale interv. (interv. pris en compte)</th>
+	    <th>nb prévu</th>
+      <th>durée notée</th>
+      <th>nb prévu</th>
+      <th>durée notée</th>
+      <th>nb prévu</th>
+      <th>durée notée</th>
 	  </tr>
 	  {{foreach from=$listPlages item=curr_plage}}
 	  <tr>
@@ -78,8 +87,11 @@ Main.add(function () {
 	      ({{$curr_plage->_op_for_duree_totale}}/{{$curr_plage->_ref_operations|@count}})
 	    </td>
 	    <td>{{$curr_plage->_ref_affectations_personnel.op|@count}}</td>
+	    <td>{{$curr_plage->_duree_total_personnel.op|date_format:$conf.time}}</td>
 	    <td>{{$curr_plage->_ref_affectations_personnel.op_panseuse|@count}}</td>
+	    <td>{{$curr_plage->_duree_total_personnel.op_panseuse|date_format:$conf.time}}</td>
 			<td>{{$curr_plage->_ref_affectations_personnel.iade|@count}}</td>
+			<td>{{$curr_plage->_duree_total_personnel.iade|date_format:$conf.time}}</td>
 	  </tr>
 	  {{/foreach}}
 	  <tr>
@@ -102,7 +114,27 @@ Main.add(function () {
 	        {{$total.duree_reelle|date_format:$conf.time}}
 	      </strong>
 	    </td>
-	    <td colspan="3"></td>
+	    <td></td>
+      <td>
+        <strong>
+          {{$total.personnel.op.days_duree}}j
+          {{$total.personnel.op.duree|date_format:$conf.time}}
+        </strong>
+      </td>
+      <td></td>
+      <td>
+        <strong>
+          {{$total.personnel.op_panseuse.days_duree}}j
+          {{$total.personnel.op_panseuse.duree|date_format:$conf.time}}
+        </strong>
+      </td>
+      <td></td>
+      <td>
+        <strong>
+          {{$total.personnel.iade.days_duree}}j
+          {{$total.personnel.iade.duree|date_format:$conf.time}}
+        </strong>
+      </td>
 	  </tr>
 	</table>
 {{/if}}
