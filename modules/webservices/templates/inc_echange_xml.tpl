@@ -82,12 +82,12 @@
   <td class="{{if $object->date_echange}}ok{{else}}warning{{/if}} narrow">
     {{if $conf.sip.server == "1"}}
       {{if $object->_self_emetteur}}
-        <button class="change" onclick="sendMessage('{{$object->_id}}', '{{$object->_class_name}}')" 
+        <button class="change" onclick="sendMessage(App.m, '{{$object->_id}}', '{{$object->_class_name}}')" 
           type="button" style="float:right">{{tr}}Send{{/tr}}</button>
       {{/if}}
     {{else}}
       {{if !($object->date_echange)}}
-        <button class="change" onclick="sendMessage('{{$object->_id}}', '{{$object->_class_name}}')" 
+        <button class="change" onclick="sendMessage(App.m, '{{$object->_id}}', '{{$object->_class_name}}')" 
           type="button" style="float:right">{{tr}}Send{{/tr}}</button>
       {{/if}}
     {{/if}}

@@ -45,6 +45,9 @@ class CProductDelivery extends CMbObject {
   var $_ref_service = null;
   var $_ref_patient = null;
   
+  var $_ref_location_source = null;
+  var $_ref_location_target = null;
+  
   var $_ref_delivery_traces = null;
   
   var $_date_min      = null;
@@ -52,6 +55,9 @@ class CProductDelivery extends CMbObject {
   var $_delivered     = null;
   var $_auto_deliver  = null;
   var $_make_delivery_trace = null;
+  
+  var $_products                  = null;
+  var $_pn13_initiateur_group_id  = null; // group initiateur du message PN13
   
   function getSpec() {
     $spec = parent::getSpec();

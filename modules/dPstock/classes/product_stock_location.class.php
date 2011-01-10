@@ -200,8 +200,10 @@ class CProductStockLocation extends CMbMetaObject {
     switch ($this->object_class) {
       case "CGroups": 
         $stock->group_id = $this->object_id;
+        break;
       default: 
         $stock->service_id = $this->object_id;
+        break;
     }
     
     $stock->loadMatchingObject();

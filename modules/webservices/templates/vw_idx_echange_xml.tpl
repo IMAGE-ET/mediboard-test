@@ -10,8 +10,8 @@
 
 <script type="text/javascript">
 
-sendMessage = function(echange_xml_id, echange_xml_classname){
-  var url = new Url('webservices', "ajax_send_message");
+sendMessage = function(module, echange_xml_id, echange_xml_classname){
+  var url = new Url(module, "ajax_send_message");
   url.addParam("echange_xml_id", echange_xml_id);
   url.addParam("echange_xml_classname", echange_xml_classname);
   url.requestUpdate("systemMsg", { onComplete:function() { 
