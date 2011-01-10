@@ -21,13 +21,7 @@
 <tbody class="hoverable">
   <!-- Header de la ligne d'element -->
   <tr>    
-    <th id="th_line_CPrescriptionLineElement_{{$line->_id}}" colspan="8"
-        class="element {{if $line->perop}}perop{{/if}}">
-      <script type="text/javascript">
-         Main.add( function(){
-           //moveTbodyElt($('line_element_{{$line->_id}}'),'{{$category->_id}}');
-         });
-      </script>
+    <th colspan="8" class="element {{if $line->perop}}perop{{/if}}">
       <div style="position: absolute">
         <!-- Formulaire ALD -->
         {{include file="../../dPprescription/templates/line/inc_vw_form_ald.tpl"}} 
@@ -57,7 +51,7 @@
         {{if $line->_can_view_form_signature_praticien}} 
 	        {{include file="../../dPprescription/templates/line/inc_vw_form_signature_praticien.tpl"}}
 	      {{/if}}
-        <button class="lock notext" onclick="modalPrescription.close(); Prescription.reload('{{$prescription->_id}}', '', '{{$category->chapitre}}', '', '{{$mode_pharma}}', null, '');"></button>
+        <button class="lock notext" onclick="modalPrescription.close(); Prescription.reload.defer('{{$prescription->_id}}', '', '{{$category->chapitre}}', '', '{{$mode_pharma}}', null, '');"></button>
 	    </div>
 	    <!-- View de l'element -->
 	    <strong style="font-size: 1.5em;">
@@ -164,19 +158,35 @@
 	    {{else}}
 	      {{assign var=_line_praticien_id value=$line->praticien_id}}
 	    {{/if}}
-      <form name="commentaire-{{$line->_guid}}" onsubmit="this.commentaire.blur(); return false;">
-	      {{include file="../../dPprescription/templates/line/inc_vw_form_add_comment.tpl"}}
-	        {{if $line->_perm_edit}}
-		      <select name="_helpers_commentaire" size="1" onchange="pasteHelperContent(this); this.form.commentaire.onchange();" style="width: 110px;" class="helper">
-		        <option value="">&mdash; Aide</option>
-		        {{html_options options=$aides_prescription.$_line_praticien_id.CPrescriptionLineElement}}
-		      </select>
-		      <input type="hidden" name="_hidden_commentaire" value="" />
-		      <button class="new notext" title="Ajouter une aide à la saisie" type="button" onclick="addHelp('CPrescriptionLineElement', this.form._hidden_commentaire, 'commentaire', null, null, null, {{$_line_praticien_id}});">
-		        Nouveau
-		      </button>
-		      {{/if}}
-	    </form>
+			
+			<script type="text/javascript">
+				Main.add( function(){
+			    var oFormCommentaireElement = getForm("editCommentaire-{{$line->_guid}}");
+			    new AideSaisie.AutoComplete(oFormCommentaireElement.commentaire, {
+			      objectClass: "{{$line->_class_name}}", 
+			      contextUserId: "{{$_line_praticien_id}}",
+            resetSearchField: false,
+            validateOnBlur: false
+			    });
+			  });
+			</script>
+	
+      <form name="editCommentaire-{{$line->_guid}}" method="post" action="?" onsubmit="return onSubmitFormAjax(this);">
+				<input type="hidden" name="m" value="dPprescription" />
+				<input type="hidden" name="dosql" value="do_prescription_line_element_aed" />
+        <input type="hidden" name="del" value="0" />
+        {{mb_key object=$line}}
+				
+				{{if $line->_can_modify_comment}}                 
+				  {{mb_field object=$line field="commentaire" onblur="this.form.onsubmit();"}}
+				{{else}}
+				  {{if $line->commentaire}}
+				    {{mb_label object=$line field="commentaire"}}: {{mb_value object=$line field="commentaire"}}
+				  {{else}}
+				    Aucun commentaire
+				  {{/if}}
+				{{/if}}
+      </form>
 
       {{if $category->chapitre == "soin" && $line->_perm_edit}}
       <button type="button" onclick="$('addDM-{{$line->_guid}}').toggle();" class="down">Ajouter DM</button>

@@ -42,8 +42,6 @@
 	     onclick="preselectExecutant(document.forms['addExecutant-'+{{$line->_id}}]._executant.value,'{{$category_id}}');">
 	  <img src="images/icons/updown.gif" title="Préselectionner" border="0" />
 	  </a>
-  {{else}}
-    Aucun exécutant disponible
   {{/if}}
 {{else}}
   {{if $line->executant_prescription_line_id || $line->user_executant_id}}

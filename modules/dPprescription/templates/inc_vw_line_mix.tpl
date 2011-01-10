@@ -96,9 +96,9 @@ Main.add( function(){
         
          <button class="lock notext" onclick="modalPrescription.close();
 				 {{if @$mode_substitution}}
-         Prescription.viewSubstitutionLines('{{$line->substitute_for_id}}','{{$line->substitute_for_class}}');
+         Prescription.viewSubstitutionLines.defer('{{$line->substitute_for_id}}','{{$line->substitute_for_class}}');
 				 {{else}}
-				 Prescription.reload('{{$prescription->_id}}', '', 'medicament', '', '{{$mode_pharma}}', null, '');
+				 Prescription.reload.defer('{{$prescription->_id}}', '', 'medicament', '', '{{$mode_pharma}}', null, '');
 				 {{/if}}"></button>
 		  </div>
 			 <div style="float: right">
@@ -115,7 +115,7 @@ Main.add( function(){
 				  {{else}}
 				    <!-- signature --> 
 				    <input type="hidden" name="signature_prat" value="1" />
-				    <button type="button" class="tick" id="signature_{{$line->_id}}" onclick="onSubmitFormAjax(this.form, { onComplete: function(){ modalPrescription.close(); Prescription.reload('{{$prescription->_id}}','','medicament'); } });">Signer</button>  
+				    <button type="button" class="tick" id="signature_{{$line->_id}}" onclick="onSubmitFormAjax(this.form, { onComplete: function(){ modalPrescription.close(); Prescription.reload.defer('{{$prescription->_id}}','','medicament'); } });">Signer</button>  
 				  {{/if}}
 				</form>
       {{/if}}
@@ -605,30 +605,41 @@ Main.add( function(){
   {{if $line->_perm_edit || $line->commentaire}}
   <tr>
     <td colspan="9" class="text">
-			<form name="commentaire-{{$line->_guid}}" onsubmit="this.commentaire.blur(); return false;">
-        {{mb_label object=$line field="commentaire" size=60}}: 
-	      	{{if $line->_protocole}}
-	      	  {{assign var=_line_praticien_id value=$app->user_id}}
-		      {{else}}
-		        {{assign var=_line_praticien_id value=$line->praticien_id}}
-		      {{/if}}
-		      {{if $line->_perm_edit}}
-		      
-					<input type="text" name="commentaire" value="{{$line->commentaire}}" size=60 
-					       onchange="{{if $line->substitute_for_id && !$line->substitution_active}}submitEditPerfCommentaireSubst('{{$line->_id}}',this.value);{{else}}submitAddComment('{{$line->_class_name}}', '{{$line->_id}}', this.value);{{/if}}" />
-          
-					<select name="_helpers_commentaire" size="1" onchange="pasteHelperContent(this); this.form.commentaire.onchange();" style="width: 110px;" class="helper">
-		        <option value="">&mdash; Aide</option>
-		        {{html_options options=$aides_prescription.$_line_praticien_id.CPrescriptionLineMix}}
-		      </select>
-		      <input type="hidden" name="_hidden_commentaire" value="" />
-		      <button class="new notext" title="Ajouter une aide à la saisie" type="button" onclick="addHelp('CPrescriptionLineMix', this.form._hidden_commentaire, 'commentaire', null, null, null, {{$_line_praticien_id}});">
-		        Nouveau
-		      </button>
-		      {{else}}
-		          {{mb_value object=$line field="commentaire"}}
-		      {{/if}}
-	    </form>
+			{{if $line->_protocole}}
+        {{assign var=_line_praticien_id value=$app->user_id}}
+      {{else}}
+        {{assign var=_line_praticien_id value=$line->praticien_id}}
+      {{/if}}
+      
+      <script type="text/javascript">
+        Main.add( function(){
+          var oFormCommentaireElement = getForm("editCommentaire-{{$line->_guid}}");
+          new AideSaisie.AutoComplete(oFormCommentaireElement.commentaire, {
+            objectClass: "{{$line->_class_name}}", 
+            contextUserId: "{{$_line_praticien_id}}",
+            resetSearchField: false,
+            validateOnBlur: false
+          });
+        });
+      </script>
+  
+      <form name="editCommentaire-{{$line->_guid}}" method="post" action="?" onsubmit="testPharma({{$line->_id}}); return onSubmitFormAjax(this);">
+        <input type="hidden" name="m" value="dPprescription" />
+        <input type="hidden" name="dosql" value="do_prescription_line_mix_aed" />
+        <input type="hidden" name="del" value="0" />
+        {{mb_key object=$line}}
+        
+        {{if $line->_perm_edit}}                 
+          {{mb_field object=$line field="commentaire" onblur="this.form.onsubmit();"}}
+        {{else}}
+          {{if $line->commentaire}}
+            {{mb_label object=$line field="commentaire"}}: {{mb_value object=$line field="commentaire"}}
+          {{else}}
+            Aucun commentaire
+          {{/if}}
+        {{/if}}
+      </form>
+			
 			{{if !$line->date_pose && $line->_ref_prescription->object_id && 
            (($line->_ref_substitution_lines.CPrescriptionLineMedicament|@count) || ($line->_ref_substitution_lines.CPrescriptionLineMix|@count))}} 
           <form name="changeLine-{{$line->_guid}}" action="?" method="post">

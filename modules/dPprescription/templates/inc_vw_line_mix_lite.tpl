@@ -11,7 +11,7 @@
 <table class="tbl">
 {{assign var=prescription_line_mix_id value=$_prescription_line_mix->_id}}
 <tr {{if $_prescription_line_mix->_fin && $_prescription_line_mix->_fin < $now && !$_prescription_line_mix->_protocole}}class="hatching_red"{{/if}}>
-  <td style="width: 5%;" class="text {{if $_prescription_line_mix->perop}}perop{{/if}}">
+  <td style="width: 5%; text-align: center;" class="text {{if $_prescription_line_mix->perop}}perop{{/if}}">
 			     
     {{if $_prescription_line_mix->_can_delete_prescription_line_mix}}
      <form name="editPerf-{{$_prescription_line_mix->_id}}" action="" method="post">
@@ -32,9 +32,8 @@
         <img src="images/icons/history.gif" title="Ligne possédant un historique" 
              onmouseover="ObjectTooltip.createEx(this, '{{$parent_perf->_guid}}')" />
       {{/if}}
-
   </td>
-  <td style="width: 47%" class="text">
+  <td style="width: 45%" class="text">
     {{foreach from=$_prescription_line_mix->_ref_lines item=_perf_line name=lines}}
       {{include file="../../dPprescription/templates/line/inc_vw_alertes.tpl" line=$_perf_line}}
 	    {{if $_perf_line->_can_vw_livret_therapeutique}}
@@ -55,38 +54,14 @@
 			
       <a href="#produit{{$_perf_line->_id}}" onclick="Prescription.viewProduit(null,'{{$_perf_line->code_ucd}}','{{$_perf_line->code_cis}}');" style="font-weight: bold; display: inline;">
         {{$_perf_line->_ucd_view}}
-        
 				{{if $_perf_line->_posologie}}
 				: <span	{{if $_prescription_line_mix->_fin < $now && !$_prescription_line_mix->_protocole}}style="text-decoration:line-through"{{/if}}>
 				{{$_perf_line->_posologie}}</span>
-				
 				{{/if}}
-				 
       </a>
       {{if !$smarty.foreach.lines.last}}<br />{{/if}}
     {{/foreach}}
   </td> 
-  <td style="width: 8%" class="text">
-     {{if !$_prescription_line_mix->_protocole}}
-     <div class="mediuser" style="border-color: #{{$_prescription_line_mix->_ref_praticien->_ref_function->color}};">
-       <label title="{{$_prescription_line_mix->_ref_praticien->_view}}">{{$_prescription_line_mix->_ref_praticien->_shortview}}</label>
-        {{if $_prescription_line_mix->signature_prat}}
-	  		  <img src="images/icons/tick.png" title="Ligne signée par le praticien" />
-		  	{{else}}
-			    <img src="images/icons/cross.png" title="Ligne non signée par le praticien" />
-			  {{/if}}
-			  {{if $prescription->type != "externe"}}
-				  {{if $_prescription_line_mix->signature_pharma}}
-				    <img src="images/icons/signature_pharma.png" title="Signée par le pharmacien" />
-				  {{else}}
-					  <img src="images/icons/signature_pharma_barre.png" title="Non signée par le pharmacien" />
-			  	{{/if}}	
-		  	{{/if}}
-     </div>
-		 {{else}}
-		   -
-		 {{/if}}
-  </td>
   
 	{{if $_prescription_line_mix->type_line == "aerosol"}}
 	  <td style="width: 20%">
@@ -114,15 +89,13 @@
 	  {{/if}}
   </td>
   <td style="width: 10%;" class="text">
-    <button style="float: right;" class="edit notext" onclick="Prescription.reloadLine('{{$_prescription_line_mix->_guid}}','{{$mode_protocole}}','{{$mode_pharma}}','{{$operation_id}}');"></button>
     {{if $_prescription_line_mix->duree}}
 		  {{mb_value object=$_prescription_line_mix field=duree}} {{mb_value object=$_prescription_line_mix field="unite_duree"}}
 		{{/if}}
   </td>  
 	{{else}}
 	<td style="width: 20%" class="text">
-		<button style="float: right;" class="edit notext" onclick="Prescription.reloadLine('{{$_prescription_line_mix->_guid}}','{{$_prescription_line_mix->_protocole}}','{{$mode_pharma}}','{{$operation_id}}','{{$mode_substitution}}');"></button>
-    {{if $_prescription_line_mix->decalage_interv}}
+		{{if $_prescription_line_mix->decalage_interv}}
 		A partir de I+{{mb_value object=$_prescription_line_mix field=decalage_interv}}h
 		{{/if}}
 		{{if $_prescription_line_mix->duree}}
@@ -130,5 +103,28 @@
 		{{/if}}
 	</td>
 	{{/if}} 
+	
+	<td style="width: 10%" class="text">
+		<button style="float: right;" class="edit notext" onclick="Prescription.reloadLine('{{$_prescription_line_mix->_guid}}','{{$_prescription_line_mix->_protocole}}','{{$mode_pharma}}','{{$operation_id}}','{{$mode_substitution}}');"></button>
+     {{if !$_prescription_line_mix->_protocole}}
+     <div class="mediuser" style="border-color: #{{$_prescription_line_mix->_ref_praticien->_ref_function->color}};">
+        {{if $_prescription_line_mix->signature_prat}}
+          <img src="images/icons/tick.png" title="Ligne signée par le praticien" />
+        {{else}}
+          <img src="images/icons/cross.png" title="Ligne non signée par le praticien" />
+        {{/if}}
+        {{if $prescription->type != "externe"}}
+          {{if $_prescription_line_mix->signature_pharma}}
+            <img src="images/icons/signature_pharma.png" title="Signée par le pharmacien" />
+          {{else}}
+            <img src="images/icons/signature_pharma_barre.png" title="Non signée par le pharmacien" />
+          {{/if}} 
+        {{/if}}
+				<label title="{{$_prescription_line_mix->_ref_praticien->_view}}">{{$_prescription_line_mix->_ref_praticien->_shortview}}</label>
+     </div>
+     {{else}}
+       -
+     {{/if}}
+  </td>
 </tr>
 </table>

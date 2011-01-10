@@ -86,60 +86,35 @@ changeModeBolus = function(oForm){
   }
 }
 
-	submitEditPerfCommentaireSubst = function (object_id, commentaire) {
-	  var oForm = getForm("editCommentairePerf");
-	  oForm.dosql.value = "do_prescription_line_mix_aed";
-	  oForm.prescription_line_mix_id.value = object_id;
-	  oForm.commentaire.value = commentaire;
-	  submitFormAjax(oForm, 'systemMsg');
-	}
+submitVoie = function(object_id, voie){
+  var oForm = getForm("editVoie");
+  oForm.dosql.value = "do_prescription_line_medicament_aed";
+  oForm.prescription_line_medicament_id.value = object_id;
+  oForm.voie.value = voie;
+  submitFormAjax(oForm, 'systemMsg');
+}
 
+submitALD = function(object_class, object_id, ald){
+  var oForm = getForm("editALD");
+  oForm.dosql.value = "do_prescription_line_medicament_aed";
+  oForm.prescription_line_medicament_id.value = object_id;
+  oForm.ald.value = ald ? "1" : "0";
+  submitFormAjax(oForm, 'systemMsg');
+}
 
-	submitEditCommentaireSubst = function (object_id, commentaire) {
-	  var oForm = getForm("editCommentaire");
-	  oForm.dosql.value = "do_prescription_line_medicament_aed";
-	  oForm.prescription_line_medicament_id.value = object_id;
-	  oForm.commentaire.value = commentaire;
-	  submitFormAjax(oForm, 'systemMsg');
-	}
-	
-	submitEditEmplacementSubst = function (object_id, emplacement) {
-	  var oForm = getForm("editEmplacement");
-	  oForm.dosql.value = "do_prescription_line_medicament_aed";
-	  oForm.prescription_line_medicament_id.value = object_id;
-	  oForm.emplacement.value = emplacement;
-	  submitFormAjax(oForm, 'systemMsg');
-	}
-	
-	submitVoie = function(object_id, voie){
-	  var oForm = getForm("editVoie");
-	  oForm.dosql.value = "do_prescription_line_medicament_aed";
-	  oForm.prescription_line_medicament_id.value = object_id;
-	  oForm.voie.value = voie;
-	  submitFormAjax(oForm, 'systemMsg');
-	}
-	
-	submitALD = function(object_class, object_id, ald){
-	  var oForm = getForm("editALD");
-	  oForm.dosql.value = "do_prescription_line_medicament_aed";
-	  oForm.prescription_line_medicament_id.value = object_id;
-	  oForm.ald.value = ald ? "1" : "0";
-	  submitFormAjax(oForm, 'systemMsg');
-  }
+submitIDE = function(object_id, ide_domicile){
+  var oForm = getForm("editIDE");
+  oForm.prescription_line_element_id.value = object_id;
+  oForm.ide_domicile.value = ide_domicile ? "1" : "0";
+  submitFormAjax(oForm, 'systemMsg');
+}
 
-  submitIDE = function(object_id, ide_domicile){
-    var oForm = getForm("editIDE");
-    oForm.prescription_line_element_id.value = object_id;
-    oForm.ide_domicile.value = ide_domicile ? "1" : "0";
-    submitFormAjax(oForm, 'systemMsg');
-  }
-	
-	submitConditionnel = function(object_class, object_id, conditionnel){
-	  var oForm = getForm("editConditionnel");
-    oForm.prescription_line_medicament_id.value = object_id;
-		oForm.conditionnel.value = conditionnel ? "1" : "0";
-	  return onSubmitFormAjax(oForm);
-  }
+submitConditionnel = function(object_class, object_id, conditionnel){
+  var oForm = getForm("editConditionnel");
+  oForm.prescription_line_medicament_id.value = object_id;
+	oForm.conditionnel.value = conditionnel ? "1" : "0";
+  return onSubmitFormAjax(oForm);
+}
 
 
 modifFormDate = function(nb_prises, form_name, protocole,line_id){
@@ -198,31 +173,6 @@ modifFormDate = function(nb_prises, form_name, protocole,line_id){
 {{mb_include_script module="dPmedicament" script="equivalent_selector"}}
 {{mb_include_script module="dPprescription" script="element_selector"}}
 {{mb_include_script module="dPprescription" script="prescription"}}
-
-<form name="editCommentaire" method="post" action="">
-  <input type="hidden" name="m" value="dPprescription" />
-  <input type="hidden" name="dosql" value="" />
-  <input type="hidden" name="del" value="0" />
-  <input type="hidden" name="prescription_line_medicament_id" value="" />
-  <input type="hidden" name="commentaire" value="" />
-</form>
-
-<form name="editCommentairePerf" method="post" action="">
-  <input type="hidden" name="m" value="dPprescription" />
-  <input type="hidden" name="dosql" value="" />
-  <input type="hidden" name="del" value="0" />
-  <input type="hidden" name="prescription_line_mix_id" value="" />
-  <input type="hidden" name="commentaire" value="" />
-</form>
-
-
-<form name="editEmplacement" method="post" action="">
-  <input type="hidden" name="m" value="dPprescription" />
-  <input type="hidden" name="dosql" value="" />
-  <input type="hidden" name="del" value="0" />
-  <input type="hidden" name="prescription_line_medicament_id" value="" />
-  <input type="hidden" name="emplacement" value="" />
-</form>
 
 <form name="editVoie" method="post" action="">
   <input type="hidden" name="m" value="dPprescription" />
@@ -295,7 +245,7 @@ modifFormDate = function(nb_prises, form_name, protocole,line_id){
 {{/if}}
 
 <!-- Modale permettant d'afficher les lignes de prescription en mode modification -->
-<div id="modalPrescriptionLine" style="width: 80%; display: none;"></div>
+<div id="modalPrescriptionLine" style="width: 95%; display: none;"></div>
 
 {{if !$mode_pack}}
 <table class="tbl">

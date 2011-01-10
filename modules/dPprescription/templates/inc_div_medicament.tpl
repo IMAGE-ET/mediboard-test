@@ -316,19 +316,19 @@ updateModaleAfterAddLine = function(line_id){
 {{if $prescription->_ref_lines_med_comments.med || $prescription->_ref_lines_med_comments.comment}}
 <table class="tbl">
   <tr>
-    <th colspan="6" class="title">Médicaments</th>
+    <th colspan="7" class="title">Médicaments</th>
   </tr>
   <tr>
-    <th style="width: 5%;" class="narrow"></th> 
+    <th style="width: 5%;" class="narrow">&nbsp;</th> 
     <th style="width: 25%">Produit</th>
-    <th style="width: 37%;">Posologie</th>
-    <th style="width: 8%">Praticien</th>
+    <th style="width: 40%;">Posologie</th>
 		{{if $prescription->object_id}}
-	    <th style="width: 15%">Début</th>
+	    <th style="width: 10%">Début</th>
 	    <th style="width: 10%">Durée</th>
 		{{else}}
-		  <th style="width: 25%">Dates</th>
+		  <th style="width: 20%">Dates</th>
 		{{/if}}
+		<th style="width: 10%">Praticien</th>
   </tr>
 </table>
 {{/if}}
@@ -348,7 +348,6 @@ updateModaleAfterAddLine = function(line_id){
     {{/if}}
   {{/foreach}}
    
-	 
 	 {{foreach from=$prescription->_ref_prescription_line_mixes_by_type key=type_line item=_lines_mix_by_type}}
 			<table class="tbl">
 			  <tr>
@@ -356,8 +355,8 @@ updateModaleAfterAddLine = function(line_id){
 			  </tr>
 			  <tr>
 			    <th style="width: 5%;" class="narrow"></th>
-			    <th style="width: 47%;">Médicaments</th> 
-			    <th style="width: 8%;">Prat</th>
+			    <th style="width: 45%;">Médicaments</th> 
+			    
 					{{if $type_line == "aerosol"}}
             <th style="width: 20%;">Interface</th>
           {{else}}
@@ -370,10 +369,10 @@ updateModaleAfterAddLine = function(line_id){
 					{{else}}
 					  <th style="20%">Dates</th>
 					{{/if}}
+					<th style="width: 10%;">Prat</th>
 			  </tr>
 			</table>
 			
-		
 		  <!-- Parcours des prescription_line_mixes -->
 		  {{foreach from=$_lines_mix_by_type item=_prescription_line_mix}}
 		    {{if !$praticien_sortie_id || ($praticien_sortie_id == $_prescription_line_mix->praticien_id)}}
@@ -381,87 +380,85 @@ updateModaleAfterAddLine = function(line_id){
 		    {{/if}}
 		  {{/foreach}}
 		{{/foreach}}
- 
-	
 
-<table class="tbl">
-  {{if $prescription->_ref_lines_med_comments.comment|@count}}
-  <tr>
-    <th colspan="6">Commentaires</th>
-  </tr>
-  {{/if}}
-  <!-- Parcours des commentaires --> 
-  {{foreach from=$prescription->_ref_lines_med_comments.comment item=_line_comment}}
-    {{if !$praticien_sortie_id || ($praticien_sortie_id == $_line_comment->praticien_id)}}
-      {{include file="../../dPprescription/templates/inc_vw_line_comment_lite.tpl"}}
-    {{/if}}
-  {{/foreach}}
- </table> 
-{{else}}
-  <div class="small-info"> 
-     Il n'y a aucun médicament dans cette prescription.
-  </div>
-{{/if}}
-
-{{if $prescription->object_id}}
-<!-- Affichage de l'historique des prescriptions precedentes -->
-<table class="tbl">
-{{foreach from=$historique key=type_prescription item=hist_prescription}}
- {{if $hist_prescription->_ref_lines_med_comments.med|@count || $hist_prescription->_ref_lines_med_comments.comment|@count}}
-  <tr>
-    <th colspan="5" class="title">Historique {{tr}}CPrescription.type.{{$type_prescription}}{{/tr}}</th>
-  </tr>
-  {{/if}}
-  {{foreach from=$hist_prescription->_ref_lines_med_comments item=_type_hist_line}}
-    {{foreach from=$_type_hist_line item=_hist_line}}
-    <tr>
-      <!-- Affichage d'une ligne de medicament -->
-      {{if $_hist_line->_class_name == "CPrescriptionLineMedicament"}}
-        <td><a href="#1" onmouseover="ObjectTooltip.createEx(this, '{{$_hist_line->_guid}}')">{{$_hist_line->_view}}</a></td>
-        {{if !$_hist_line->fin}}
-          <td>
-            {{mb_label object=$_hist_line field="debut"}}: {{mb_value object=$_hist_line field="debut"}}
-          </td>
-          <td>
-            {{mb_label object=$_hist_line field="duree"}}: 
-              {{if $_hist_line->duree && $_hist_line->unite_duree}}
-                {{mb_value object=$_hist_line field="duree"}}  
-                {{mb_value object=$_hist_line field="unite_duree"}}
-              {{else}}
-              -
-              {{/if}}
-          </td>
-          <td>
-            {{mb_label object=$_hist_line field="_fin"}}: {{mb_value object=$_hist_line field="_fin"}}
-          </td>
-          {{else}}
-          <td colspan="3">
-            {{mb_label object=$_hist_line field="fin"}}: {{mb_value object=$_hist_line field="fin"}}
-          </td>
-        {{/if}}
-        <td>
-          Praticien: {{$_hist_line->_ref_praticien->_view}}
-        </td>
-      {{else}}
-      <!-- Affichage d'une ligne de commentaire -->
-        <td colspan="3" class="text">
-           {{$_hist_line->commentaire}}
-         </td>
-         <td>
-           {{mb_label object=$_hist_line field="ald"}}:
-          {{if $_hist_line->ald}}
-            Oui
-          {{else}}
-            Non
-          {{/if}}
-         </td>
-         <td>
-            Praticien: {{$_hist_line->_ref_praticien->_view}}
-         </td>
-      {{/if}}
-    </tr>
-    {{/foreach}}
-  {{/foreach}}
-{{/foreach}}
-</table>
+		<table class="tbl">
+		  {{if $prescription->_ref_lines_med_comments.comment|@count}}
+		  <tr>
+		    <th colspan="7" class="title">Commentaires</th>
+		  </tr>
+		  {{/if}}
+		  <!-- Parcours des commentaires --> 
+		  {{foreach from=$prescription->_ref_lines_med_comments.comment item=_line_comment}}
+		    {{if !$praticien_sortie_id || ($praticien_sortie_id == $_line_comment->praticien_id)}}
+		      {{include file="../../dPprescription/templates/inc_vw_line_comment_lite.tpl"}}
+		    {{/if}}
+		  {{/foreach}}
+		 </table> 
+		{{else}}
+		  <div class="small-info"> 
+		     Il n'y a aucun médicament dans cette prescription.
+		  </div>
+		{{/if}}
+		
+		{{if $prescription->object_id}}
+		<!-- Affichage de l'historique des prescriptions precedentes -->
+		<table class="tbl">
+		{{foreach from=$historique key=type_prescription item=hist_prescription}}
+		 {{if $hist_prescription->_ref_lines_med_comments.med|@count || $hist_prescription->_ref_lines_med_comments.comment|@count}}
+		  <tr>
+		    <th colspan="5" class="title">Historique {{tr}}CPrescription.type.{{$type_prescription}}{{/tr}}</th>
+		  </tr>
+		  {{/if}}
+		  {{foreach from=$hist_prescription->_ref_lines_med_comments item=_type_hist_line}}
+		    {{foreach from=$_type_hist_line item=_hist_line}}
+		    <tr>
+		      <!-- Affichage d'une ligne de medicament -->
+		      {{if $_hist_line->_class_name == "CPrescriptionLineMedicament"}}
+		        <td><a href="#1" onmouseover="ObjectTooltip.createEx(this, '{{$_hist_line->_guid}}')">{{$_hist_line->_view}}</a></td>
+		        {{if !$_hist_line->fin}}
+		          <td>
+		            {{mb_label object=$_hist_line field="debut"}}: {{mb_value object=$_hist_line field="debut"}}
+		          </td>
+		          <td>
+		            {{mb_label object=$_hist_line field="duree"}}: 
+		              {{if $_hist_line->duree && $_hist_line->unite_duree}}
+		                {{mb_value object=$_hist_line field="duree"}}  
+		                {{mb_value object=$_hist_line field="unite_duree"}}
+		              {{else}}
+		              -
+		              {{/if}}
+		          </td>
+		          <td>
+		            {{mb_label object=$_hist_line field="_fin"}}: {{mb_value object=$_hist_line field="_fin"}}
+		          </td>
+		          {{else}}
+		          <td colspan="3">
+		            {{mb_label object=$_hist_line field="fin"}}: {{mb_value object=$_hist_line field="fin"}}
+		          </td>
+		        {{/if}}
+		        <td>
+		          Praticien: {{$_hist_line->_ref_praticien->_view}}
+		        </td>
+		      {{else}}
+		      <!-- Affichage d'une ligne de commentaire -->
+		        <td colspan="3" class="text">
+		           {{$_hist_line->commentaire}}
+		         </td>
+		         <td>
+		           {{mb_label object=$_hist_line field="ald"}}:
+		          {{if $_hist_line->ald}}
+		            Oui
+		          {{else}}
+		            Non
+		          {{/if}}
+		         </td>
+		         <td>
+		            Praticien: {{$_hist_line->_ref_praticien->_view}}
+		         </td>
+		      {{/if}}
+		    </tr>
+		    {{/foreach}}
+		  {{/foreach}}
+		{{/foreach}}
+		</table>
 {{/if}}

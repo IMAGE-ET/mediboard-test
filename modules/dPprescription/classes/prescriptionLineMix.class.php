@@ -187,7 +187,7 @@ class CPrescriptionLineMix extends CMbObject {
     $specs["substitution_active"]    = "bool";
     $specs["substitution_plan_soin"] = "bool";
     $specs["nb_tous_les"]            = "num";
-    $specs["commentaire"]            = "str helped";
+    $specs["commentaire"]            = "text helped";
 		$specs["conditionnel"]           = "bool";
     $specs["condition_active"]       = "bool";
     $specs["jour_decalage"]          = "enum list|I|N default|I"; // Permet de noter N comme jour de decalage

@@ -651,6 +651,10 @@ input.barcode {
   position: relative;
 }
 
+table.tbl .textarea-helped a {
+  display: inline;
+}
+
 .textarea-helped .toolbar {
   position: absolute;
   bottom: 0px;

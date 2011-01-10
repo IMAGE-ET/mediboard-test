@@ -192,16 +192,17 @@ Main.add( function(){
 <!-- Formulaire d'ajout de ligne d'elements et de commentaires -->
 {{if is_array($prescription->_ref_lines_elements_comments) && array_key_exists($element, $prescription->_ref_lines_elements_comments)}}
  <table class="tbl">
-   <th style="width:22%;">Libellé</th>
+   <th style="width:25%;">Libellé</th>
    <th style="width:35%;">Prises</th>
-   <th style="width:8%;">Prat.</th>
+   
 	 {{if $prescription->object_id}}
-	   <th style="width:15%;">Début</th>
+	   <th style="width:10%;">Début</th>
 	   <th style="width:10%;">Durée</th>
 	 {{else}}
-	   <th style="width: 25%">Dates</th>
+	   <th style="width: 20%">Dates</th>
 	 {{/if}}
    <th style="width:10%;">Exécutant</th>
+	 <th style="width:10%;">Prat.</th>
  </table>
 {{/if}}
 	  

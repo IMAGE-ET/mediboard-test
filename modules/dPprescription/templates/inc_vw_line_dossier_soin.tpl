@@ -86,13 +86,19 @@
 	
   {{if $smarty.foreach.$last_foreach.first}}
   <td class="text" rowspan="{{$nb_line}}" {{if $line instanceof CPrescriptionLineMedicament && $line->traitement_personnel}}style="background-color: #BDB"{{/if}}>
- 
-	 
 		{{if $line->commentaire}}
       <img src="images/icons/flag.png" title="" style="float: right; margin: 2px;" onmouseover="ObjectTooltip.createDOM(this, 'tooltip-content-comment-{{$line->_guid}}');" />
-      <span id="tooltip-content-comment-{{$line->_guid}}" style="display: none;">
-        {{$line->commentaire}}
-      </span>
+      
+			<table class="tbl" id="tooltip-content-comment-{{$line->_guid}}" style="display: none;">
+			  <tr>
+			  	<th>Commentaire - {{$line->_view}}</th>
+				</tr>	
+			 <tr>
+			 	<td class="text" style="width: 300px;">
+			 		 {{$line->commentaire}}
+			 	</td>
+			 </tr>
+			</table>
     {{/if}}
 		
 	  {{if $line->_recent_modification}}

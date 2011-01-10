@@ -20,6 +20,6 @@
   {{else}}
 	  <!-- signature --> 
     <input type="hidden" name="signee" value="1" />
-    <button type="button" class="tick" id="signature_{{$line->_id}}" onclick="onSubmitFormAjax(this.form, { onComplete: function(){ modalPrescription.close(); Prescription.reload('{{$prescription->_id}}','','{{$div_refresh}}'); } });">Signer</button>  
+    <button type="button" class="tick" id="signature_{{$line->_id}}" onclick="onSubmitFormAjax(this.form, { onComplete: function(){ modalPrescription.close(); Prescription.reload.defer('{{$prescription->_id}}','','{{$div_refresh}}'); } });">Signer</button>  
   {{/if}}
 </form>

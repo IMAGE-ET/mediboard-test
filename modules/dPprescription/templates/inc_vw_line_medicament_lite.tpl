@@ -16,15 +16,13 @@
     <td style="text-align: center; width: 5%;" class="text">
       <!-- Suppression de la ligne -->
       {{if $line->_can_delete_line}}
-        <button type="button" class="trash notext" onclick="Prescription.delLine({{$line->_id}})" style="float: left">
+        <button type="button" class="trash notext" onclick="Prescription.delLine({{$line->_id}})" style="">
           {{tr}}Delete{{/tr}}
         </button>
       {{/if}}
 		  
     </td>
-    <td style="width: 25%" id="th_line_CPrescriptionLineMedicament_{{$line->_id}}" 
-        class="text {{if $line->traitement_personnel}}traitement{{/if}}
-				            {{if $line->perop}}perop{{/if}}">
+    <td style="width: 25%" class="text {{if $line->traitement_personnel}}traitement{{/if}} {{if $line->perop}}perop{{/if}}">
       <script type="text/javascript">
         {{if !$line->_protocole}}
          Main.add( function(){
@@ -38,7 +36,6 @@
              onmouseover="ObjectTooltip.createEx(this, '{{$parent_line->_guid}}')"/>
       {{/if}}
 			
-		
        <span>
        	{{include file="../../dPprescription/templates/line/inc_vw_alertes.tpl"}}
         {{if $line->_can_vw_livret_therapeutique}}
@@ -67,7 +64,6 @@
       </a>
 	    <br />
 	 
-		  
       <span style="font-size: 0.8em; opacity: 0.7">
        {{$line->_forme_galenique}}
       </span>
@@ -76,7 +72,7 @@
 			{{if $line->perop}}{{mb_label object=$line field="perop"}}&nbsp;{{/if}}
       {{if $line->ald}}{{mb_label object=$line field="ald"}}&nbsp;{{/if}}
     </td>
-    <td style="width: 37%;" class="text">
+    <td style="width: 40%;" class="text">
 			<span {{if $line->_fin_reelle && $line->_fin_reelle < $now && !$line->_protocole}}style="text-decoration:line-through"{{/if}}>
 			{{if $line->_ref_prises|@count}}
         {{foreach from=$line->_ref_prises item=_prise name=prises}}
@@ -88,32 +84,6 @@
       {{/if}}
 			</span>
     </td>
-    <td class="text" style="width: 8%" >
-    	{{if !$line->_protocole}}
-        <div class="mediuser" style="border-color: #{{$line->_ref_praticien->_ref_function->color}};">
-					{{if @$modules.messagerie}}
-					<a class="action" href="#nothing" onclick="MbMail.create({{$line->_ref_praticien->_id}}, '{{$line->_view}}')">
-					  <img src="images/icons/mbmail.png" title="Envoyer un message" />
-					</a>
-					{{/if}}
-					{{if $line->signee}}
-					  <img src="images/icons/tick.png" title="Ligne signée par le praticien" />
-					{{else}}
-					  <img src="images/icons/cross.png" title="Ligne non signée par le praticien" />
-					{{/if}}
-          {{if $prescription->type == "sejour"}}
-	          {{if $line->valide_pharma}}
-					    <img src="images/icons/signature_pharma.png" title="Signée par le pharmacien" />
-					  {{else}}
-						  <img src="images/icons/signature_pharma_barre.png" title="Non signée par le pharmacien" />
-				  	{{/if}}
-			  	{{/if}}
-			   <label title="{{$line->_ref_praticien->_view}}">{{$line->_ref_praticien->_shortview}}</label>
-       </div>
-			 {{else}}
-			 -
-			 {{/if}}
-    </td>
 		{{if !$line->_protocole}}
 	    {{if $line->fin}}
 			  <td colspan="2" style="width: 25%" class="text">
@@ -121,7 +91,7 @@
           A partir de la fin du séjour jusqu'au {{mb_value object=$line field=fin}}
 				</td>
 			{{else}}
-				<td style="width: 15%" class="text">
+				<td style="width: 10%" class="text">
 	        <!-- Date de debut -->
 	        {{if $line->debut}}
 	          {{mb_value object=$line field=debut}}
@@ -131,7 +101,6 @@
 	        {{/if}}
 	      </td>
 	      <td style="width: 10%" class="text">
-	        <button style="float: right;" class="edit notext" onclick="Prescription.reloadLine('{{$line->_guid}}','{{$line->_protocole}}','{{$mode_pharma}}','{{$operation_id}}');"></button>
 	        <!-- Duree de la ligne -->
 	        {{if $line->duree && $line->unite_duree}}
 	          {{mb_value object=$line field=duree}}  
@@ -140,9 +109,7 @@
 	      </td>
 			{{/if}}
 		{{else}}
-		 <td style="width: 25%" class="text">
-		 	 <button style="float: right;" class="edit notext" onclick="Prescription.reloadLine('{{$line->_guid}}','{{$line->_protocole}}','{{$mode_pharma}}','{{$operation_id}}','{{$mode_substitution}}');"></button>
-     
+		 <td style="width: 20%" class="text">
 			 <!-- Duree de la prise --> 
 	     {{if $line->duree && $line->duree != "1"}}
 	       Durée de {{mb_value object=$line field=duree}} jour(s) 
@@ -180,5 +147,33 @@
 	     {{/if}}
 		 </td>
 		{{/if}}
+		<td class="text" style="width: 10%" >
+			<button style="float: right;" class="edit notext" onclick="Prescription.reloadLine('{{$line->_guid}}','{{$line->_protocole}}','{{$mode_pharma}}','{{$operation_id}}','{{$mode_substitution}}');"></button>
+
+      {{if !$line->_protocole}}
+        <div class="mediuser" style="border-color: #{{$line->_ref_praticien->_ref_function->color}};">
+          {{if @$modules.messagerie}}
+          <a class="action" href="#nothing" onclick="MbMail.create({{$line->_ref_praticien->_id}}, '{{$line->_view}}')">
+            <img src="images/icons/mbmail.png" title="Envoyer un message" />
+          </a>
+          {{/if}}
+          {{if $line->signee}}
+            <img src="images/icons/tick.png" title="Ligne signée par le praticien" />
+          {{else}}
+            <img src="images/icons/cross.png" title="Ligne non signée par le praticien" />
+          {{/if}}
+          {{if $prescription->type == "sejour"}}
+            {{if $line->valide_pharma}}
+              <img src="images/icons/signature_pharma.png" title="Signée par le pharmacien" />
+            {{else}}
+              <img src="images/icons/signature_pharma_barre.png" title="Non signée par le pharmacien" />
+            {{/if}}
+          {{/if}}
+         <label title="{{$line->_ref_praticien->_view}}">{{$line->_ref_praticien->_shortview}}</label>
+       </div>
+       {{else}}
+       -
+       {{/if}}
+    </td>
   </tr>
 </table>

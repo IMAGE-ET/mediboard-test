@@ -351,7 +351,7 @@ updateFieldsElement = function(selected, formElement, element) {
   Element.cleanWhitespace(selected);
   var dn = selected.childNodes;
   Prescription.addLineElement(dn[0].firstChild.nodeValue, dn[1].firstChild.nodeValue);
-  $(formElement+'_'+element).value = "";
+  //$(formElement+'_'+element).value = "";
 }
 
 // UpdateFields de l'autocomplete de medicaments

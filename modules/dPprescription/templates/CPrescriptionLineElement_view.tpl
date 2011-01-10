@@ -57,7 +57,7 @@
   </tr>
   {{/if}}
   <tr>
-    <td colspan="3">   
+    <td colspan="3" class="text">   
       {{mb_label object=$line field="commentaire"}}:
       {{if $line->commentaire}}
         {{mb_value object=$line field="commentaire"}}

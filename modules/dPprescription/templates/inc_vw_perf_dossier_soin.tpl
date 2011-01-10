@@ -26,11 +26,19 @@
 	
 	{{if $_prescription_line_mix->commentaire}}
     <img style="float: right; margin: 2px;" src="images/icons/flag.png" title="" onmouseover="ObjectTooltip.createDOM(this, 'tooltip-content-comment-{{$_prescription_line_mix->_guid}}');" />
-    <span id="tooltip-content-comment-{{$_prescription_line_mix->_guid}}" style="display: none;">
-      {{$_prescription_line_mix->commentaire}}
-    </span>
+   
+    <table class="tbl" id="tooltip-content-comment-{{$_prescription_line_mix->_guid}}" style="display: none;">
+      <tr>
+        <th>Commentaire - {{$_prescription_line_mix->_view}}</th>
+      </tr> 
+      <tr>
+        <td class="text" style="width: 300px;">
+          {{$_prescription_line_mix->commentaire}}
+        </td>
+      </tr>
+    </table>
   {{/if}}
-	
+
   <div style="cursor: pointer; padding: 2px;" class="{{if @$transmissions.CPrescriptionLineMix.$prescription_line_mix_id|@count}}transmission{{else}}transmission_possible{{/if}}"
      onmouseover="ObjectTooltip.createEx(this, '{{$_prescription_line_mix->_guid}}')" 
 	   onclick='editPerf("{{$_prescription_line_mix->_id}}","{{$date}}",document.mode_dossier_soin.mode_dossier.value, "{{$sejour->_id}}");

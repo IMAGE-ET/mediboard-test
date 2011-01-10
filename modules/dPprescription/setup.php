@@ -1760,7 +1760,18 @@ class CSetupdPprescription extends CSetup {
 		$sql = "ALTER TABLE `prescription` ADD `score` ENUM ('0','1','2');";
 		$this->addQuery($sql);
 		
-		$this->mod_version = "1.24";
+		$this->makeRevision("1.24");
+		
+		$sql = "ALTER TABLE `prescription_line_medicament` CHANGE `commentaire` `commentaire` TEXT;";
+    $this->addQuery($sql);
+    
+		$sql = "ALTER TABLE `prescription_line_element` CHANGE `commentaire` `commentaire` TEXT;";
+    $this->addQuery($sql);
+    
+		$sql = "ALTER TABLE `prescription_line_mix` CHANGE `commentaire` `commentaire` TEXT;";
+		$this->addQuery($sql);
+	
+		$this->mod_version = "1.25";
   }
 }
 

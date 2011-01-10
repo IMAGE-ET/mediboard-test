@@ -9,16 +9,19 @@
 *}}
 
 {{assign var=line value=$_line_element}}
+
 <!-- Header de la ligne d'element -->
 <table class="tbl elt {{if $line->_fin_reelle && $line->_fin_reelle < $now && !$line->_protocole}}line_stopped{{/if}}" id="line_element_{{$line->_id}}"> 
 <tr class="hoverable {{if $line->_fin_reelle && $line->_fin_reelle < $now && !$line->_protocole}} hatching_red{{/if}}">    
-  <td style="width:22%;" id="th_line_CPrescriptionLineElement_{{$line->_id}}"
-      class="text {{if $line->perop}}perop{{/if}}">
-			{{if $line->_can_delete_line}}
+  <td style="width: 5%; text-align: center">
+  	{{if $line->_can_delete_line}}
       <button type="button" class="trash notext" onclick="Prescription.delLineElement('{{$line->_id}}','{{$element}}')">
         {{tr}}Delete{{/tr}}
       </button>
-      {{/if}}
+    {{/if}}
+	</td>	
+	
+	<td style="width:20%;" class="text {{if $line->perop}}perop{{/if}}">
     <script type="text/javascript">
        Main.add( function(){
          moveTbodyElt($('line_element_{{$line->_id}}'),'{{$category->_id}}');
@@ -34,6 +37,7 @@
 		<br /><small style="opacity: 0.7;">({{$line->_ref_dm->libelle}})</small>
 		{{/if}}
   </td>
+	
   <td class="text" style="width:35%;">
 		<span {{if $line->_fin_reelle && $line->_fin_reelle < $now && !$line->_protocole}}style="text-decoration:line-through"{{/if}}>
 		{{if $line->_ref_prises|@count}}
@@ -43,28 +47,9 @@
     {{/if}}
 		</span>
   </td>
-  <td style="width:8%;" class="text">
-	  {{if !$line->_protocole}}
-    <div class="mediuser" style="border-color: #{{$line->_ref_praticien->_ref_function->color}};">
-				{{if @$modules.messagerie}}
-				<a class="action" href="#nothing" onclick="MbMail.create({{$line->_ref_praticien->_id}}, '{{$line->_view}}')">
-				  <img src="images/icons/mbmail.png" title="Envoyer un message" />
-				</a>
-				{{/if}}
-				{{if $line->signee}}
-				  <img src="images/icons/tick.png" title="Ligne signée par le praticien" />
-				{{else}}
-				  <img src="images/icons/cross.png" title="Ligne non signée par le praticien" />
-				{{/if}}
-			  <label title="{{$line->_ref_praticien->_view}}">{{$line->_ref_praticien->_shortview}}</label>
-		</div>
-		{{else}}
-		- 
-		{{/if}}
-  </td>
-	
+  
 	{{if !$line->_protocole}}
-		<td style="width:15%;">
+		<td style="width:10%;" class="text">
 		  <!-- Date de debut -->
 	    {{if $line->debut}}
 	      {{mb_value object=$line field=debut}}
@@ -81,7 +66,7 @@
 	    {{/if}}
 	  </td>
   {{else}}
-	  <td style="width: 25%" class="text">
+	  <td style="width: 20%" class="text">
 	  	<!-- Duree de la prise --> 
      {{if $line->duree}}
        Durée de {{mb_value object=$line field=duree}} jour(s) 
@@ -118,8 +103,29 @@
 	{{/if}}
 	
 	<td style="width:10%;" class="text">
-    <button style="float: right" class="edit notext" onclick="Prescription.reloadLine('{{$line->_guid}}','{{$mode_protocole}}','{{$mode_pharma}}','{{$operation_id}}');"></button>
-   {{if $line->executant_prescription_line_id || $line->user_executant_id}}{{$line->_ref_executant->_view}}{{else}}aucun{{/if}}
+   {{if $line->executant_prescription_line_id || $line->user_executant_id}}{{$line->_ref_executant->_view}}{{else}}{{tr}}None{{/tr}}{{/if}}
   </td>
+
+	<td style="width:10%;" class="text">
+    <button style="float: right" class="edit notext" onclick="Prescription.reloadLine('{{$line->_guid}}','{{$mode_protocole}}','{{$mode_pharma}}','{{$operation_id}}');"></button>
+    {{if !$line->_protocole}}
+    <div class="mediuser" style="border-color: #{{$line->_ref_praticien->_ref_function->color}};">
+        {{if @$modules.messagerie}}
+        <a class="action" href="#nothing" onclick="MbMail.create({{$line->_ref_praticien->_id}}, '{{$line->_view}}')">
+          <img src="images/icons/mbmail.png" title="Envoyer un message" />
+        </a>
+        {{/if}}
+        {{if $line->signee}}
+          <img src="images/icons/tick.png" title="Ligne signée par le praticien" />
+        {{else}}
+          <img src="images/icons/cross.png" title="Ligne non signée par le praticien" />
+        {{/if}}
+        <label title="{{$line->_ref_praticien->_view}}">{{$line->_ref_praticien->_shortview}}</label>
+    </div>
+    {{else}}
+    - 
+    {{/if}}
+  </td>
+	
 </tr>
 </table>

@@ -45,7 +45,6 @@ class CPrescriptionLineComment extends CPrescriptionLine {
     $specs["category_prescription_id"]       = "ref class|CCategoryPrescription";
     $specs["executant_prescription_line_id"] = "ref class|CExecutantPrescriptionLine";
     $specs["user_executant_id"]              = "ref class|CMediusers";
-    $specs["commentaire"]                    = "text helped";
     return $specs;
   }
   

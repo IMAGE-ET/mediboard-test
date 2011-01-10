@@ -102,7 +102,7 @@ class CPrescriptionLine extends CMbObject {
     $specs["condition_active"]  = "bool";
     $specs["unite_decalage"]    = "enum list|jour|heure default|jour";
     $specs["unite_decalage_fin"]= "enum list|jour|heure default|jour";
-    $specs["commentaire"]       = "str helped";
+    $specs["commentaire"]       = "text helped";
     $specs["emplacement"]       = "enum notNull list|service|bloc|service_bloc default|service";
     $specs["operation_id"]      = "ref class|COperation";
     $specs["perop"]             = "bool default|0"; 

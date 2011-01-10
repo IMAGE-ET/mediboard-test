@@ -216,21 +216,6 @@ submitValideAllLines = function (prescription_id, chapitre, mode_pharma) {
   return onSubmitFormAjax(oForm);
 }
 
-submitAddComment = function (object_class, object_id, commentaire) {
-  var oForm = getForm("addComment-"+object_class);
-  setPrimaryKeyDosql(oForm, object_class, object_id);
-  oForm.commentaire.value = commentaire;
-  return onSubmitFormAjax(oForm);
-}
-
-
-submitEmplacement = function(object_class, object_id, emplacement){
-  var oForm = getForm("emplacement-"+object_class);
-  setPrimaryKeyDosql(oForm, object_class, object_id);  
-  oForm.emplacement.value = emplacement;
-  return onSubmitFormAjax(oForm);
-}
-
 submitVoie = function(line_medicament_id, libelle_voie){
   var oForm = getForm("voie");
   oForm.prescription_line_medicament_id.value = line_medicament_id;
@@ -257,10 +242,10 @@ submitSignaturePharmacien = function(prescription_line_mix_id, prescription_id, 
   return onSubmitFormAjax(oForm, { onComplete: function(){
 	  if(signature_pharmacien == 1){
 	    modalPrescription.close();	
-			Prescription.reload(prescription_id, '', 'medicament','', '1');
+			Prescription.reload.defer(prescription_id, '', 'medicament','', '1');
 		}
 		else {
-		  Prescription.reloadLine("CPrescriptionLineMix-"+prescription_line_mix_id, '', 1);
+		  Prescription.reloadLine.defer("CPrescriptionLineMix-"+prescription_line_mix_id, '', 1);
 		}
   } } );
 }
@@ -273,11 +258,11 @@ submitValidationPharmacien = function(prescription_id, object_id, valide_pharma)
       // Validation
       if(valide_pharma == 1){
         modalPrescription.close();
-        Prescription.reload(prescription_id, '', 'medicament', '', 1);
+        Prescription.reload.defer(prescription_id, '', 'medicament', '', 1);
       } 
       // Annnulation de la validation
       else {
-        Prescription.reloadLine("CPrescriptionLineMedicament-"+object_id, '', 1);
+        Prescription.reloadLine.defer("CPrescriptionLineMedicament-"+object_id, '', 1);
       }
     }
   });
@@ -576,46 +561,6 @@ reloadPerfEvolution = function(perf_id, object){
   <input type="hidden" name="prescription_id" value="" />
   <input type="hidden" name="chapitre" value="" />
   <input type="hidden" name="mode_pharma" value="" />
-</form>
-
-<form name="addComment-CPrescriptionLineMedicament" method="post" action="">
-  <input type="hidden" name="m" value="dPprescription" />
-  <input type="hidden" name="dosql" value="" />
-  <input type="hidden" name="del" value="0" />
-  <input type="hidden" name="prescription_line_medicament_id" value="" />
-  <input type="hidden" name="commentaire" value="" />
-</form>
-
-<form name="addComment-CPrescriptionLineMix" method="post" action="">
-  <input type="hidden" name="m" value="dPprescription" />
-  <input type="hidden" name="dosql" value="" />
-  <input type="hidden" name="del" value="0" />
-  <input type="hidden" name="prescription_line_mix_id" value="" />
-  <input type="hidden" name="commentaire" value="" />
-</form>
-
-<form name="addComment-CPrescriptionLineElement" method="post" action="">
-  <input type="hidden" name="m" value="dPprescription" />
-  <input type="hidden" name="dosql" value="" />
-  <input type="hidden" name="del" value="0" />
-  <input type="hidden" name="prescription_line_element_id" value="" />
-  <input type="hidden" name="commentaire" value="" />
-</form>
-
-<form name="emplacement-CPrescriptionLineMedicament" method="post" action="">
-  <input type="hidden" name="m" value="dPprescription" />
-  <input type="hidden" name="dosql" value="" />
-  <input type="hidden" name="del" value="0" />
-  <input type="hidden" name="prescription_line_medicament_id" value="" />
-  <input type="hidden" name="emplacement" value="" />
-</form>
-
-<form name="emplacement-CPrescriptionLineElement" method="post" action="">
-  <input type="hidden" name="m" value="dPprescription" />
-  <input type="hidden" name="dosql" value="" />
-  <input type="hidden" name="del" value="0" />
-  <input type="hidden" name="prescription_line_element_id" value="" />
-  <input type="hidden" name="emplacement" value="" />
 </form>
 
 <form name="voie" method="post" action="">
