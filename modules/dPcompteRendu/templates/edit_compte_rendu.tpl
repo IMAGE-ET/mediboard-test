@@ -6,16 +6,6 @@
 window.same_print = {{$conf.dPcompteRendu.CCompteRendu.same_print}};
 window.pdf_thumbnails = {{$pdf_thumbnails|@json}};
 
-{{if $compte_rendu->_id && $pdf_thumbnails == 0}}
-try {
-window.opener.Document.refreshList(
-  '{{$compte_rendu->object_class}}',
-  '{{$compte_rendu->object_id}}'  
-);
-}
-catch (e) {}
-{{/if}}
-
 function submitCompteRendu(callback){
   CKEDITOR.instances.htmlarea.document.getBody().setStyle("background", "#ddd");
 	  
@@ -28,20 +18,25 @@ function submitCompteRendu(callback){
     var form = getForm("editFrm");
     
     if(checkForm(form) && User.id) {
-     form.onsubmit=function(){ return true; };
+      form.onsubmit=function(){ return true; };
       submitFormAjax(form, $("systemMsg"), { onComplete: function() {
         Thumb.changed = false;
-        if (callback)
-          window.callback = callback;
-        else
-          window.callback = null;
+        window.callback = callback ? callback : null;
       }});
+      if (window.pdf_thumbnails == 0 && window.opener.Document.refreshList) {
+        window.opener.setTimeout(window.opener.Document.refreshList.curry($V(form.object_class), $V(form.object_id), 1000));
+      }
     }
   }).defer();
+  
 }
 
 function refreshZones(id, obj) {
-    
+  if (window.pdf_thumbnails != 0) {
+    Thumb.compte_rendu_id = id;
+    Thumb.modele_id = null;
+    Thumb.refreshThumbs(0, Thumb.compte_rendu_id, null, Thumb.user_id, Thumb.mode);
+  }
   // Remise du content sauvegardé, avec l'impression en callback
   CKEDITOR.instances.htmlarea.setData(obj._source, window.callback);
   
@@ -54,17 +49,7 @@ function refreshZones(id, obj) {
 		     var form = getForm("editFrm");
 		     form.onsubmit = function() { Url.ping({onComplete: submitCompteRendu}); return false;};
 		     $V(form.compte_rendu_id, id);
-		     {{if $pdf_thumbnails == 1}}
-		       Thumb.compte_rendu_id = id;
-		       Thumb.modele_id = null;
-		       Thumb.refreshThumbs(0, Thumb.compte_rendu_id, null, Thumb.user_id, Thumb.mode);
-		     {{else}}
-		    	  try {
-		    	    window.opener.Document.refreshList(obj.object_class, obj.object_id);
-		    	  }
-		    	  catch (e) {}
-		     {{/if}}
-	    }});
+  }});
 }
 
 function openWindowMail() {
@@ -127,7 +112,7 @@ function openWindowMail() {
 {{/if}} 
   Main.add(function(){
       window.onbeforeunload = function() {
-        if (Thumb.changed == false) return;
+        if (Thumb.changed == false && (Thumb.modele_id == '' || Thumb.modele_id == null)) return;
 
         {{if $pdf_thumbnails}}
           Thumb.old();
