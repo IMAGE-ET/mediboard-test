@@ -140,12 +140,12 @@ var Document = {
   },
   
   print: function(document_id) {
-    oIframe = Element.getTempIframe();
+    var oIframe = Element.getTempIframe();
     var url = new Url("dPcompteRendu", "ajax_get_document_source");
     url.addParam("dialog"         , 1);
     url.addParam("suppressHeaders", 1);
     url.addParam("compte_rendu_id", document_id);
-    sUrl = url.make();
+    var sUrl = url.make();
     oIframe.onload = function() { window.frames[oIframe.id].print();};
     oIframe.src = sUrl;
   },
@@ -157,6 +157,13 @@ var Document = {
        compte_rendu_id: document_id,
        stream: 1,
        generate_thumbs: 0}, Element.getTempIframe());
+  },
+  
+  printSelDocs: function(object_id, object_class) {
+    var url = new Url("dPcompteRendu", "print_select_docs");
+    url.addParam("object_id"   , object_id);
+    url.addParam("object_class", object_class);
+    url.popup(700, 500, "printSelDocuments");
   }
 };
 

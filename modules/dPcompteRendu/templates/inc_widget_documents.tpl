@@ -18,10 +18,9 @@
   
       
       <!-- Impression de tous les modèles disponibles pour l'objet -->
-      <!-- button type="button" class="print notext" style="float: right;" onclick="alert('toto')">
+      <button type="button" class="print notext" style="float: right;" onclick="Document.printSelDocs('{{$object->_id}}', '{{$object_class}}');">
         {{tr}}Print{{/tr}}
-      </button -->
-      
+      </button>
     	{{if $praticien->_can->edit}}
       
       <input type="text" value="&mdash; Modèle" name="keywords_modele" class="autocomplete str" autocomplete="off" onclick="this.value = ''; this.onclick=null;" style="width: 5em;" />

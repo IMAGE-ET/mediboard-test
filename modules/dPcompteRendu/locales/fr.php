@@ -333,6 +333,7 @@ $locales['mod-dPcompteRendu-tab-edit_compte_rendu'] = 'Modification de compte re
 $locales['mod-dPcompteRendu-tab-mb_fckeditor'] = 'FCKEditor';
 $locales['mod-dPcompteRendu-tab-modele_selector'] = 'Sélecteur du modèle';
 $locales['mod-dPcompteRendu-tab-print_cr'] = 'Impression compte-rendu';
+$locales['mod-dPcompteRendu-tab-print_select_docs'] = 'Impressions multiples';
 $locales['mod-dPcompteRendu-tab-vw_idx_aides'] = 'Aides à la saisie';
 $locales['mod-dPcompteRendu-tab-vw_idx_listes'] = 'Listes de choix';
 $locales['mod-dPcompteRendu-tab-vw_idx_packs'] = 'Packs de modèles';
