@@ -1504,10 +1504,11 @@ class CMbObject {
       return;
     }
 
-    foreach ($this->_backProps as $backName => $backProp) {
-	    list($backClass, $backField) = explode(" ", $backProp);
-	    $backObject = new $backClass;
-	
+    $this->makeAllBackSpecs();
+    foreach ($this->_backSpecs as $backName => $backSpec) {
+	    $backObject = new $backSpec->class;
+      $backField = $backSpec->field;
+
 	    // Cas du module non installé
 	    if (!$backObject->_ref_module) {
 	      continue;
@@ -1523,8 +1524,8 @@ class CMbObject {
 	      WHERE `$backField` = '$object->_id'";
 	
 	    // Cas des meta objects
-	    $backSpec =& $backObject->_specs[$backField];
-	    $backMeta = $backSpec->meta;
+      $fwdSpec =& $backObject->_specs[$backField];
+      $backMeta = $fwdSpec->meta;      
 	    if ($backMeta) {
 	      $query .= "\nAND `$backMeta` = '$object->_class_name'";
 	    }
@@ -1734,7 +1735,6 @@ class CMbObject {
     }
 
     // Deleting backSpecs
-    //$this->makeAllBackSpecs(); // Already done by canDeleteEx
     foreach ($this->_backSpecs as $backName => $backSpec) {
       $backObject = new $backSpec->class;
       $backField = $backSpec->field;
