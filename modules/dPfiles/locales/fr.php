@@ -102,6 +102,7 @@ $locales['CFile._rotate.'] = 'indéterminée';
 $locales['CFile._rotate.left'] = 'Tourner à gauche';
 $locales['CFile._rotate.right'] = 'Tourner à droite';
 $locales['CFile.all'] = 'Tous les fichiers';
+$locales['CFile.download'] = 'Télécharger le fichier';
 $locales['CFile.etat_envoi.non'] = 'Non';
 $locales['CFile.etat_envoi.obsolete'] = 'Obsolète';
 $locales['CFile.etat_envoi.oui'] = 'Oui';

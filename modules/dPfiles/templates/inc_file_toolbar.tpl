@@ -6,12 +6,20 @@
 
 {{if $canFile->edit && !$accordDossier}}
 
- {{if $_doc_item->_class_name== "CCompteRendu"}}
+ {{if $_doc_item->_class_name=="CCompteRendu"}}
  	<!-- Modification -->
    <button class="edit {{$notext}}" type="button" onclick="Document.edit({{$elementId}})">
      {{tr}}Edit{{/tr}}
    </button>
  {{/if}}
+  
+  <!-- Téléchargement du fichier -->
+  {{if $_doc_item->_class_name=="CFile"}}
+    <a class="button new notext"
+      href="?m=dPfiles&amp;a=fileviewer&amp;suppressHeaders=1&amp;file_id={{$_doc_item->_id}}"
+      target="_blank" title="{{tr}}CFile.download{{/tr}}"></a>
+  {{/if}}
+
 
   <!-- Impression -->
   {{if $_doc_item->_class_name=="CCompteRendu"}}
