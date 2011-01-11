@@ -1006,7 +1006,9 @@ class CMbObject {
       }
     }
     
-    if ($this->_merging) return $msg;
+    if ($this->_merging) {
+    	 return $msg;
+    }
 
     // Class level unique checking
     foreach ($this->_spec->uniques as $unique => $propNames) {
@@ -1014,13 +1016,15 @@ class CMbObject {
       
       foreach ($propNames as $propName) {
   	    $this->completeField($propName);
-  	    $other->$propName = addslashes($this->$propName);
+  	    $other->$propName = $value = addslashes($this->$propName);
+				$values[] = "'$value'";
       }
       
 	    $other->loadMatchingObject();
 	
 	    if ($other->_id && $this->_id != $other->_id) {
-	      return CAppUI::tr("$this->_class_name-failed-$unique");
+	      return CAppUI::tr("$this->_class_name-failed-$unique") .
+				  " : " . implode(", ",$values);
 	    }
     }
     
@@ -1031,11 +1035,14 @@ class CMbObject {
       foreach($propNames as $propName) {
         $this->completeField($propName);
         $fields[] = CAppUI::tr("$this->_class_name-$propName");
-        if ($this->$propName) $n++;
+        if ($this->$propName) {
+        	$n++;
+				}
       }
   
       if ($n != 1) {
-        return CAppUI::tr("$this->_class_name-xorFailed-$xor")." (".implode(", ", $fields).")";
+        return CAppUI::tr("$this->_class_name-xorFailed-$xor").
+				  ": ".implode(", ", $fields).")";
       }
     }
     
