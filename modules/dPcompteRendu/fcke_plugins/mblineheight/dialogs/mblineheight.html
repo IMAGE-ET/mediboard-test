@@ -17,7 +17,7 @@
     
     function insertLineHeight(){
 			var lineHeight = document.getElementById("line_height");
-      var style = {element: 'span', attributes: {'style': 'line-height: '+lineHeight.value +'px'}};
+      var style = {element: 'span', attributes: {'style': 'line-height: '+lineHeight.value}};
       var styleCK = new CKEDITOR.style(style);
       instance.addCommand('subscript', new CKEDITOR.styleCommand(styleCK));
       instance.execCommand("subscript");
