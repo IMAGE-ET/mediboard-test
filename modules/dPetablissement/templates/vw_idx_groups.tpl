@@ -11,9 +11,11 @@
 <table class="main">
   <tr>
     <td class="halfPane">
+      {{if $can->edit}}
       <a href="?m={{$m}}&amp;tab={{$tab}}&amp;group_id=0" class="button new">
         Créer un établissement
       </a>
+      {{/if}}
       <table class="tbl">
         <tr>
           <th>Liste des établissements</th>
@@ -22,19 +24,29 @@
         {{foreach from=$listGroups item=curr_group}}
         <tr {{if $curr_group->_id == $usergroup->_id}}class="selected"{{/if}}>
           <td>
+            {{if $can->edit}}
             <a href="?m={{$m}}&amp;tab={{$tab}}&amp;group_id={{$curr_group->group_id}}">
               {{$curr_group->text}}
             </a>
+            {{else}}
+            {{$curr_group->text}}
+            {{/if}}
           </td>
           <td>
+            {{if $can->edit}}
             <a href="?m={{$m}}&amp;tab={{$tab}}&amp;group_id={{$curr_group->group_id}}">
               {{$curr_group->_ref_functions|@count}}
             </a>
+            {{else}}
+              {{$curr_group->_ref_functions|@count}}
+            </a>
+            {{/if}}
           </td>
         </tr>
         {{/foreach}}
       </table>
     </td>
+    {{if $can->edit}}
     <td class="halfPane">
 
 			{{mb_include_script module="dPpatients" script="autocomplete"}}
@@ -176,5 +188,6 @@
       </table>
       </form>
     </td>
+    {{/if}}
   </tr>
 </table>

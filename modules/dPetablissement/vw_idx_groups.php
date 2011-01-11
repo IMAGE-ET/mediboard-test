@@ -13,8 +13,8 @@ global $AppUI, $can, $m;
 $can->needsRead();
 
 // Récupération des fonctions
-$listGroups = new CGroups;
-$listGroups = $listGroups->loadList();
+$group = new CGroups;
+$listGroups = $group->loadListWithPerms(PERM_READ);
 
 foreach($listGroups as $key => $value) {
   $listGroups[$key]->loadRefs();
