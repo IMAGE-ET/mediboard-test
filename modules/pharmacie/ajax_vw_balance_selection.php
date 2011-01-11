@@ -22,6 +22,9 @@ $include_void_service = CValue::get("include_void_service");
 $year       = CValue::get("year", mbTransformTime(null, null, "%Y"));
 $month      = CValue::get("month", mbTransformTime(null, null, "%m"));
 
+CValue::setSession("year", $year);
+CValue::setSession("month", $month);
+
 CValue::setSession("product_selection_id", $product_selection_id);
 CValue::setSession("category_id", $category_id);
 CValue::setSession("classe_comptable", $classe_comptable);

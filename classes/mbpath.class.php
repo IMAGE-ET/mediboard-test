@@ -112,6 +112,7 @@ abstract class CMbPath {
       case "gif" :
       case "bmp" :
       case "tiff" :
+      case "tif" :
         return "image/$ext";
 
       case "css" :
@@ -122,6 +123,7 @@ abstract class CMbPath {
 
       case "doc" :
       case "docx" :
+      case "dot" :
         return "application/msword";
 
       case "xls" :
@@ -150,6 +152,7 @@ abstract class CMbPath {
         return "text/html";
 
       case "txt" :
+      case "ini" :
         return "text/plain";
 
       case "mpeg" :
@@ -184,6 +187,13 @@ abstract class CMbPath {
 
       case "swf" :
         return "application/x-shockwave-flash";
+        
+      case "nfs" :
+      	return "application/vnd.lotus-notes";
+        
+      case "spl" :
+      case "rlb" :
+        return "application/vnd.sante400";
     }
   }
   

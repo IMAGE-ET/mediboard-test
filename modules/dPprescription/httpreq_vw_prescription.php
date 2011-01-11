@@ -332,6 +332,7 @@ if($prescription->_id){
 	    $prescription->loadRefsLinesDMI();
 	    foreach($prescription->_ref_lines_dmi as $_line_dmi){
 	      $_line_dmi->loadRefsFwd();
+          $_line_dmi->loadRefProductOrderItemReception()->loadRefOrderItem();
 	    }
 	  }
 	  

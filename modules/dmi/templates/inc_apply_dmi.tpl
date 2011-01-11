@@ -45,6 +45,7 @@ Main.add(function(){
         {{if $lot->lapsing_date}}
           &mdash; {{mb_value object=$lot field=lapsing_date}}
         {{/if}}
+        &mdash; {{mb_value object=$lot->_ref_order_item->_ref_reference field=societe_id}}
       </td>
       <td style="width: 10%; text-align:center;">
         <button type="button" class="submit" 

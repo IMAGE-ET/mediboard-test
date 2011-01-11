@@ -66,6 +66,12 @@ $smarty->assign('hors_t2a',             $hors_t2a);
 $smarty->assign('include_void_service', $include_void_service);
 $smarty->assign('keywords',             $keywords);
 
+$year_now = mbTransformTime(null, null, "%Y");
+$smarty->assign('years',           range($year_now, $year_now-20));
+$smarty->assign('months',          range(1, 12));
+$smarty->assign('year', $year);
+$smarty->assign('month', $month);
+
 $smarty->assign('list_selections', $list_selections);
 $smarty->assign('list_categories', $list_categories);
 $smarty->assign('list_societes',   $list_societes);

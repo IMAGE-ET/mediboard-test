@@ -72,11 +72,12 @@ Main.add(function(){
 {{if @$prescription->_ref_lines_dmi|@count}}
 <table class="tbl">
   <tr>
-    <th colspan="10" class="title">Lignes de DMI</th>
+    <th colspan="11" class="title">Lignes de DMI</th>
   </tr>
   <!-- Affichage des lignes de DMI-->
   <tr>
     <th style="width: 16px;"></th>
+    <th>Labo</th>
     <th>{{mb_title class=CPrescriptionLineDMI field=product_id}}</th>
     <th>{{mb_title class=CPrescriptionLineDMI field=quantity}}</th>
     <th>{{mb_title class=CPrescriptionLineDMI field=type}}</th>
@@ -100,6 +101,7 @@ Main.add(function(){
           </form>
         {{/if}}
       </td>
+      <td>{{mb_value object=$_line_dmi->_ref_product_order_item_reception->_ref_order_item->_ref_reference field=societe_id}}</td>
       <td>
         <span onmouseover="ObjectTooltip.createEx(this, '{{$_line_dmi->_ref_product->_guid}}')">
           {{$_line_dmi->_ref_product}}
@@ -112,7 +114,11 @@ Main.add(function(){
       </td>
       <td>{{mb_value object=$_line_dmi field=date}}</td>
       <td>{{mb_value object=$_line_dmi->_ref_product field=code}}</td>
-      <td>{{mb_value object=$_line_dmi->_ref_product_order_item_reception field=code}}</td>
+      <td>
+      	<span onmouseover="ObjectTooltip.createEx(this, '{{$_line_dmi->_ref_product_order_item_reception->_guid}}')">
+      	  {{mb_value object=$_line_dmi->_ref_product_order_item_reception field=code}}
+        </span>
+      </td>
       <td>{{mb_include module=mediusers template=inc_vw_mediuser mediuser=$_line_dmi->_ref_praticien}}</td>
       <td style="text-align: center;">
         {{if $_line_dmi->_can_view_form_signature_praticien}}

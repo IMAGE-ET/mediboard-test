@@ -465,9 +465,9 @@ class CSejour extends CCodable {
 				return;
       case "date":
         $lower1 = mbDate($this->entree);
-        $upper1 = mbDate("+1 day", $this->sortie);
+        $upper1 = mbDate($this->sortie);
         $lower2 = mbDate($sejour->entree);
-        $upper2 = mbDate("+1 day", $sejour->sortie);
+        $upper2 = mbDate($sejour->sortie);
         break;
       case "datetime":
         $lower1 = $this->entree;

@@ -133,7 +133,7 @@ class CPrescriptionLineDMI extends CMbObject {
   }
   
   function loadRefPrescription(){
-    $this->_ref_prescription = $this->loadFwdRef("prescription_id");  
+    return $this->_ref_prescription = $this->loadFwdRef("prescription_id");  
   }
   
   function loadRefPraticien(){
@@ -142,22 +142,22 @@ class CPrescriptionLineDMI extends CMbObject {
   }
   
   function loadRefPatient(){
-    $this->_ref_patient = $this->loadFwdRef("_patient_id");
+    return $this->_ref_patient = $this->loadFwdRef("_patient_id");
   }
   
   function loadRefProduct(){
     // load fwd ref doesn't work, and completeFieldis neede :/
     $this->completeField("product_id");
     $this->_ref_product = new CProduct;
-    $this->_ref_product = $this->_ref_product->load($this->product_id);
+    return $this->_ref_product = $this->_ref_product->load($this->product_id);
   }
   
   function loadRefOperation(){
-    $this->_ref_operation = $this->loadFwdRef("operation_id");
+    return $this->_ref_operation = $this->loadFwdRef("operation_id");
   }
   
   function loadRefProductOrderItemReception(){
-    $this->_ref_product_order_item_reception = $this->loadFwdRef("order_item_reception_id");
+    return $this->_ref_product_order_item_reception = $this->loadFwdRef("order_item_reception_id");
   }
   
   function loadRefsFwd(){

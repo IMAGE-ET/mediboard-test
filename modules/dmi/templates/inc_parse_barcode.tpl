@@ -131,6 +131,7 @@ Main.add(function(){
             {{if $_lot->lapsing_date}}
               &ndash; {{mb_value object=$_lot field=lapsing_date}}
             {{/if}}
+            &ndash; {{mb_value object=$_lot->_ref_order_item->_ref_reference field=societe_id}}
           </label>
         </div>
       {{foreachelse}}

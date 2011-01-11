@@ -335,6 +335,7 @@ Main.add(function () {
   <tr>
     <th class="narrow"></th>
     <th>{{mb_title class=CProductOrderItemReception field=quantity}}</th>
+    <th>{{mb_title class=CProductReference field=societe_id}}</th>
     <th>{{mb_title class=CProductOrderItemReception field=date}}</th>
     <th>{{mb_title class=CProductOrderItemReception field=code}}</th>
     <th>{{mb_title class=CProductOrderItemReception field=lapsing_date}}</th>
@@ -362,7 +363,8 @@ Main.add(function () {
         </optgroup>
       </select>
     </td>
-    <td>{{mb_field object=$lot field=code}}</td>
+    <td></td>
+    <td>{{mb_field object=$lot field=code size=16}}</td>
     <td>{{mb_field object=$lot field=lapsing_date prop="str mask|99/99/9999" size=10}}</td>
     <td>
       <button type="submit" class="tick notext"></button>
@@ -386,6 +388,7 @@ Main.add(function () {
         {{/if}}
       </td>
       <td>{{mb_value object=$_lot field=quantity}}</td>
+      <td>{{mb_value object=$_lot->_ref_order_item->_ref_reference field=societe_id}}</td>
       <td>{{mb_value object=$_lot field=date}}</td>
       <td>{{mb_value object=$_lot field=code}}</td>
       <td>{{mb_value object=$_lot field=lapsing_date}}</td>

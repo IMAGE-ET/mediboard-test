@@ -116,22 +116,32 @@ foreach($lots as $_id => $_lot) {
 
 foreach ($products as $_id_product => $_product) {
   foreach($_product->_lots as $_id => $_lot) {
-    // Si lot consommé
-    if($_lot->getUsedQuantity() >= $_lot->quantity) {
-      $_dmi = new CDMI;
-      $_dmi->product_id = $_product->_id;
-      
-      if ($_dmi->loadMatchingObject() && $_dmi->type !== "deposit") {
-        unset($_product->_lots[$_id]);
-        
-        // Si tous les lots du produit sont consommés
-        /*if (count($_product->_lots) == 0) {
-          unset($products[$_id_product]);
-          continue 2;
-        }*/
-        continue;
-      }
+    // on n'affiche pas les lots consommés
+    $consumed = ($_lot->getUsedQuantity() >= $_lot->quantity);
+
+    if ($consumed) {
+      unset($_product->_lots[$_id]);
+      continue;
     }
+
+    $_lot->loadRefOrderItem()->loadReference();
+
+    // Si lot consommé
+//    if($consumed) {
+//      $_dmi = new CDMI;
+//      $_dmi->product_id = $_product->_id;
+//      
+//      if ($_dmi->loadMatchingObject() && $_dmi->type !== "deposit") {
+//        unset($_product->_lots[$_id]);
+//        
+//        // Si tous les lots du produit sont consommés
+//        /*if (count($_product->_lots) == 0) {
+//          unset($products[$_id_product]);
+//          continue 2;
+//        }*/
+//        continue;
+//      }
+//    }
     $_lot->_selected = isset($comp['lot']) && $comp['lot'] && ($_lot->code === $comp['lot']);
   }
   

@@ -94,7 +94,34 @@ function exportReport(elements, filename) {
   
   url.pop(20, 20, 'pdf_export', null, null, file, window._tempIframe);
 }
+
+function updateYearMonth(select){
+  var forms = [getForm("filter-product"), getForm("filter-products")];
+	forms.each(function(f){
+	  $V(f.elements[select.name], $V(select));
+	});
+}
 </script>
+
+<label>
+  Année
+  <select name="year" onchange="updateYearMonth(this)">
+    {{foreach from=$years item=_year}}
+      <option value="{{$_year}}" {{if $_year == $year}}selected="selected"{{/if}}>{{$_year}}</option>
+    {{/foreach}}
+  </select>
+</label>
+
+<label>
+  Mois
+  <select name="month" onchange="updateYearMonth(this)">
+    {{foreach from=$months item=_month}}
+      <option value="{{$_month}}" {{if $_month == $month}}selected="selected"{{/if}}>{{$_month|pad:2:0}}</option>
+    {{/foreach}}
+  </select>
+</label>
+  
+<hr />
 
 <ul class="control_tabs" id="balance-tabs">
   <li><a href="#byproduct">Par produit</a></li>
@@ -108,16 +135,19 @@ function exportReport(elements, filename) {
   <form name="filter-product" method="get" action="?" onsubmit="return Url.update(this, 'balance-product-results')">
     <input type="hidden" name="m" value="pharmacie" />
     <input type="hidden" name="a" value="ajax_vw_balance_product" />
-    
+    <input type="hidden" name="year" value="{{$year}}" />
+    <input type="hidden" name="month" value="{{$month}}" />
+		
     {{mb_field object=$stock field=product_id form="filter-product" autocomplete="true,1,50,false,true" style="width:300px; font-size: 1.4em;"}}
     
     <button type="submit" class="search">{{tr}}Show{{/tr}}</button>
-    
+		
     <label>
       <input type="checkbox" name="include_void_service" />
-      Inclure les mouvements sans service de destination
+      Inclure les mvts sans service
     </label>
 
+    Afficher: 
     <label>
       <input type="radio" name="display" value="quantity" onclick="toggleDisplay(this.value)" /> Quantité
     </label>
@@ -140,6 +170,8 @@ function exportReport(elements, filename) {
   <form name="filter-products" method="get" action="?" onsubmit="return Url.update(this, 'balance-selection-results')">
     <input type="hidden" name="m" value="pharmacie" />
     <input type="hidden" name="a" value="ajax_vw_balance_selection" />
+    <input type="hidden" name="year" value="{{$year}}" />
+    <input type="hidden" name="month" value="{{$month}}" />
     
     <table class="main">
       <tr>

@@ -13,6 +13,7 @@ $locales['config-db-dbpass'] = 'Password';
 $locales['config-db-dbtype'] = 'Server type';
 $locales['config-db-dbtype-ingres'] = 'Ingres';
 $locales['config-db-dbtype-mysql'] = 'MySQL';
+$locales['config-db-dbtype-oracle'] = 'Oracle';
 $locales['config-db-dbuser'] = 'User';
 $locales['config-dsn-create'] = 'Base and privileged user configuration';
 $locales['config-dsn-test'] = 'Test';

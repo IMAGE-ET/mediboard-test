@@ -19,13 +19,20 @@ $element = new $element_class;
 $element->load($element_id);
 $element->loadRefProduct();
 $element->_ref_product->loadRefsBack();
-foreach ($element->_ref_product->_ref_references as $_ref) {
+
+foreach ($element->_ref_product->_ref_references as $_id => $_ref) {
+  if ($_ref->cancelled) {
+    unset($element->_ref_product->_ref_references[$_id]);
+    continue;
+  }
   $_ref->loadRefSociete();
 }
+
 $element->_ref_product->loadRefsLots();
 
 foreach($element->_ref_product->_ref_lots as $_lot) {
   $_lot->_consumed = ($_lot->getUsedQuantity() >= $_lot->quantity);
+  $_lot->loadRefOrderItem()->loadReference();
 }
 
 $generate_code = CValue::get("generate_code", false);
