@@ -39,7 +39,7 @@ $ljoin = array(
   "plagesop" => "plagesop.plageop_id = operations.plageop_id",
 );
 
-$list_lines = $dmi_line->loadList($where, "prescription_line_dmi.date", 100, null, $ljoin);
+$list_lines = $dmi_line->loadList($where, "prescription_line_dmi.date", 300, null, $ljoin);
 //$list_lines = $dmi_line->loadList($where, "date");
 
 $lines_by_context = array();
