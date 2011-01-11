@@ -104,11 +104,10 @@ class CMbSOAPClient extends SoapClient {
 
     // Truncate input and output before storing
     $arguments = array_map_recursive(array("CMbSOAPClient", "truncate"), $arguments);
-    $output    = array_map_recursive(array("CMbSOAPClient", "truncate"), $output);
 		
     $echange_soap->input = serialize($arguments);
     if ($echange_soap->soapfault != 1) {
-    	$echange_soap->output = serialize($output);
+    	$echange_soap->output = serialize(array_map_recursive(array("CMbSOAPClient", "truncate"), $output));
     }
     $echange_soap->store();
   	
