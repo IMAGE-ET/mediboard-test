@@ -465,7 +465,7 @@ Main.add( function(){
       <option value="{{$hour}}" {{if $sejour->_hour_entree_prevue == $hour || (!$sejour->sejour_id && $hour == $heure_entree_jour)}} selected="selected" {{/if}}>{{$hour}}</option>
     {{/foreach}}
     </select> h
-    <select name="_min_entree_prevue" onchange="updateHeureSortie(); reloadSejours(true);">
+    <select name="_min_entree_prevue" onchange="updateHeureSortie(); checkHeureSortie(); reloadSejours(true);">
     {{foreach from=$mins item=min}}
       <option value="{{$min}}" {{if $sejour->_min_entree_prevue == $min}} selected="selected" {{/if}}>{{$min}}</option>
     {{/foreach}}
