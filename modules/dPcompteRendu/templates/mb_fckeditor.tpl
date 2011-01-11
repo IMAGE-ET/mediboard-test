@@ -7,9 +7,11 @@ CKEDITOR.plugins.addExternal("mbfields"   , "../../modules/dPcompteRendu/fcke_pl
 CKEDITOR.plugins.addExternal("mbfreetext" , "../../modules/dPcompteRendu/fcke_plugins/mbfreetext/plugin.js");
 CKEDITOR.plugins.addExternal("mbhelpers"  , "../../modules/dPcompteRendu/fcke_plugins/mbhelpers/plugin.js");
 CKEDITOR.plugins.addExternal("mblists"    , "../../modules/dPcompteRendu/fcke_plugins/mblists/plugin.js");
+/*CKEDITOR.plugins.addExternal("mbplay"     , "../../modules/dPcompteRendu/fcke_plugins/mbplay/plugin.js");*/
 CKEDITOR.plugins.addExternal("mbprint"    , "../../modules/dPcompteRendu/fcke_plugins/mbprint/plugin.js");
 CKEDITOR.plugins.addExternal("mbprintPDF" , "../../modules/dPcompteRendu/fcke_plugins/mbprintPDF/plugin.js");
 CKEDITOR.plugins.addExternal("mbpagebreak", "../../modules/dPcompteRendu/fcke_plugins/mbpagebreak/plugin.js");
+CKEDITOR.plugins.addExternal("mblineheight", "../../modules/dPcompteRendu/fcke_plugins/mblineheight/plugin.js");
 
 
 
@@ -53,13 +55,13 @@ CKEDITOR.editorConfig = function(config) {
       var textForPrint = 'Print';
     {{/if}}
     
-    config.extraPlugins = 'mbfields,mbfreetext,mbhelpers,mblists,mbprint,mbprintPDF,mbheader,mbfooter,mbpagebreak';
+    config.extraPlugins = 'mbfields,mbfreetext,mbhelpers,mblists,mbprint,mbprintPDF,mbheader,mbfooter,mbpagebreak,mblineheight';
     config.toolbar_Full = [
       ['Save','Preview'], [{{if $pdf_thumbnails == 1}}'mbprintPDF',{{/if}} textForPrint, 'SelectAll', 'Cut', 'Copy', 'PasteText', 'PasteFromWord', 'Undo','Redo', 'Find'],
       [{{if !$templateManager->isModele}}'mbheader','mbfooter',{{/if}}'mbpagebreak'],
       ['Table','HorizontalRule','Image','SpecialChar'],
       ['Maximize', 'Source'], '/',
-      ['Font', 'FontSize'],
+      ['Font', 'FontSize', 'mblineheight'],
       ['RemoveFormat', 'Bold','Italic','Underline', 'Strike'],
       ['Subscript','Superscript','JustifyLeft','JustifyCenter','JustifyRight','JustifyBlock','NumberedList','BulletedList'],
       ['Outdent','Indent','TextColor','BGColor'],'/',

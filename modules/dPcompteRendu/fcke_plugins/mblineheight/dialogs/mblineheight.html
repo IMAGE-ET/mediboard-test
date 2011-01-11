@@ -1,0 +1,39 @@
+<!DOCTYPE html 
+     PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+     "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+	<head>
+	  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+	</head>
+  
+	<body>
+		<h6>Valeur de l'interligne : <input type="text" id="line_height" value=""/></h6>
+	</body>
+
+	<script type="text/javascript">
+    var CKEDITOR = window.parent.parent.CKEDITOR;
+    var instance = CKEDITOR.instances.htmlarea;
+    
+    function insertLineHeight(){
+			var lineHeight = document.getElementById("line_height");
+      var style = {element: 'span', attributes: {'style': 'line-height: '+lineHeight.value +'px'}};
+      var styleCK = new CKEDITOR.style(style);
+      instance.addCommand('subscript', new CKEDITOR.styleCommand(styleCK));
+      instance.execCommand("subscript");
+			CKEDITOR.dialog.getCurrent().removeListener("ok", insertLineHeight);
+			CKEDITOR.dialog.getCurrent().removeListener("cancel", removeOkListener);
+      return true;
+    }
+		
+		function removeOkListener() {
+			CKEDITOR.dialog.getCurrent().removeListener("ok", insertLineHeight);
+			CKEDITOR.dialog.getCurrent().removeListener("cancel", removeOkListener);
+		}
+		
+    window.onload=function(){
+			CKEDITOR.dialog.getCurrent().on('ok', insertLineHeight);
+			CKEDITOR.dialog.getCurrent().on('cancel', removeOkListener);
+		}
+  </script>
+</html>
