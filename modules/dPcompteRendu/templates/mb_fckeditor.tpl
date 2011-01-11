@@ -58,13 +58,13 @@ CKEDITOR.editorConfig = function(config) {
     config.extraPlugins = 'mbfields,mbfreetext,mbhelpers,mblists,mbprint,mbprintPDF,mbheader,mbfooter,mbpagebreak,mblineheight';
     config.toolbar_Full = [
       ['Save','Preview'], [{{if $pdf_thumbnails == 1}}'mbprintPDF',{{/if}} textForPrint, 'SelectAll', 'Cut', 'Copy', 'PasteText', 'PasteFromWord', 'Undo','Redo', 'Find'],
-      [{{if !$templateManager->isModele}}'mbheader','mbfooter',{{/if}}'mbpagebreak'],
+      [{{if !$templateManager->isModele}}'mbheader', 'mbfooter',{{/if}} 'mbpagebreak'],
       ['Table','HorizontalRule','Image','SpecialChar'],
       ['Maximize', 'Source'], '/',
-      ['Font', 'FontSize', 'mblineheight'],
-      ['RemoveFormat', 'Bold','Italic','Underline', 'Strike'],
-      ['Subscript','Superscript','JustifyLeft','JustifyCenter','JustifyRight','JustifyBlock','NumberedList','BulletedList'],
-      ['Outdent','Indent','TextColor','BGColor'],'/',
+      ['Font', 'FontSize'],
+      ['RemoveFormat', 'Bold', 'Italic', 'Underline', 'Strike'],
+      ['Subscript', 'Superscript', 'JustifyLeft', 'JustifyCenter', 'JustifyRight', 'JustifyBlock', 'NumberedList', 'BulletedList'],
+      ['Outdent', 'Indent', 'mblineheight', 'TextColor', 'BGColor'],'/',
       ['mbfields', {{if $templateManager->isModele}}'mblists', 'mbfreetext', {{/if}}'mbhelpers']];
 
     window.parent.fields = [];
