@@ -14,15 +14,17 @@
  {{/if}}
 
   <!-- Impression -->
-  <button type="button" class="print notext"
-    onclick="
-    {{if $pdf_thumbnails}}
-      Document.printPDF('{{$_doc_item->_id}}');
-    {{else}}
-      Document.print('{{$_doc_item->_id}}')
-    {{/if}}">
-    {{tr}}Print{{/tr}}
-  </button>
+  {{if $_doc_item->_class_name=="CCompteRendu"}}
+    <button type="button" class="print notext"
+      onclick="
+      {{if $pdf_thumbnails}}
+        Document.printPDF('{{$_doc_item->_id}}');
+      {{else}}
+        Document.print('{{$_doc_item->_id}}')
+      {{/if}}">
+      {{tr}}Print{{/tr}}
+    </button>
+  {{/if}}
   
 	<!-- Deletion -->
  {{if $_doc_item->_class_name=="CCompteRendu"}}
