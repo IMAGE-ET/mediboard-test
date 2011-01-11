@@ -10,8 +10,8 @@
 
 CCanDo::checkRead();
 
-$echange_hprim_id         = CValue::get("echange_hprim_id");
-$echange_hprim_classname  = CValue::get("echange_hprim_classname");
+$echange_hprim_id         = CValue::get("echange_xml_id");
+$echange_hprim_classname  = CValue::get("echange_xml_classname");
 
 $where = '';
 if (!$echange_hprim_id) {
@@ -57,7 +57,11 @@ if (!$echange_hprim_id) {
         $notification->date_echange = mbDateTime();
         $notification->_acquittement = $acquittement;
         $notification->store();
-      }      
+      } 
+      else {
+        $notification->date_echange = null;
+        $notification->store();
+      }   
     }
   }
 } else {
