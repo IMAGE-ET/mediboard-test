@@ -12,6 +12,7 @@ CCanDo::checkRead();
 
 $date = CValue::get("date");
 $type = CValue::get("type");
+$recent_lines = CValue::get("recent_lines");
 
 CValue::setSession("date", $date);
 CValue::setSession("type", $type);
@@ -22,9 +23,14 @@ $date_max = mbDate("+1 DAY", mbDate());
 // ancien code
 $dmi_line = new CPrescriptionLineDMI();
 
-$where = array(
-  "IF(operations.date, operations.date, plagesop.date) BETWEEN '$date_min' AND '$date_max'"
-);
+$where = array();
+
+if ($recent_lines) {
+  $where["prescription_line_dmi.date"] = "BETWEEN '$date_min' AND '$date_max'";
+}
+else {
+	$where[] = "IF(operations.date, operations.date, plagesop.date) BETWEEN '$date_min' AND '$date_max'";
+}
 
 //$where = array();
 //$where["date"] = "BETWEEN '$date_min' AND '$date_max'";

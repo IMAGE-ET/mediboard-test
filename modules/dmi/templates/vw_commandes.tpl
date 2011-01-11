@@ -33,10 +33,17 @@
       <td>
         {{mb_field object=$dmi_line field="date" prop="date" register=true form="filterCommandes" onchange="this.form.onsubmit()"}}
       </td>
+			
       <th>Type</th>
       <td>
         {{mb_field object=$dmi_line field="type" typeEnum="select" onchange="this.form.onsubmit()" emptyLabel="All"}}
       </td>
+			
+      <th>Afficher les lignes créées récemment</th>
+      <td>
+        <input type="checkbox" name="recent_lines" value="1" />
+      </td>
+			
       <td>
         <button type="submit" class="search">{{tr}}Filter{{/tr}}</button> (le nombre de lignes de DMI est limité à 300)
       </td>
