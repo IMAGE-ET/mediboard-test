@@ -123,6 +123,7 @@
 
     $this->object_class = $object_class;
     $this->object_id = $mbObject->_id;
+		$this->last_update = null; // In case already defined
     $this->loadMatchingObject("`last_update` DESC");
     $this->_ref_object = null; // Prevent optimisation errors
     $this->loadRefs();
