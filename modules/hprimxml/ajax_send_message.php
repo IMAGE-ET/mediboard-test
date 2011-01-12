@@ -59,7 +59,7 @@ if (!$echange_hprim_id) {
         $notification->store();
       } 
       else {
-        $notification->date_echange = null;
+        $notification->date_echange = "";
         $notification->store();
       }   
     }
