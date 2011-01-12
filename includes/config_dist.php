@@ -200,8 +200,8 @@ $dPconfig["dPfiles"] = array (
   "rooturl"             => "",
   "CFile"               => array(
     "upload_directory"  => "files",
-    //"openoffice_active"   => "0",
-    //"openoffice_path"     => ""
+    "ooo_active"   => "0",
+    "ooo_path"     => ""
   ),
   "CFilesCategory"      => array(
     "show_empty" => "1",

@@ -53,19 +53,9 @@ if ($file_id = CValue::get("file_id")) {
     header("Location: images/pictures/accessdenied.png");
     return;
   }
-  // Liste des extensions dont la conversion PDF est possible
-  $file_types = array(
-    "cgm", "csv", "dbf", "dif", "doc", "docm", "docx", "dot", "dotm", "dotx",
-    "dxf", "emf", "eps", "fodg", "fodp", "fods", "fodt", "htm", "html", "hwp",
-    "lwp", "met", "mml", "odp", "odg", "ods", "otg", "odf", "odm", "odt", "oth",
-    "otp", "ots", "ott", "pct", "pict", "pot", "potm", "potx", "pps", "ppt", "pptm",
-    "pptx", "rtf", "sgf", "sgv", "slk", "stc", "std", "sti", "stw", "svg", "svm", "sxc",
-    "sxd", "sxg", "sxi", "sxm", "sxw", "txt", "uof", "uop", "uos", "uot", "wb2", "wk1", "wks",
-    "wmf", "wpd", "wpg", "wps", "xlc", "xlm", "xls", "xlsb", "xlsm", "xlsx", "xlt", "xltm",
-    "xltx", "xlw", "xml");
-  global $dPconfig;
-
+  
   if (CValue::get("phpThumb")) {
+    
     $w  = CValue::get("w" , "");
     $h  = CValue::get("h" , "");
     $zc = CValue::get("zc" , "");
@@ -79,7 +69,6 @@ if ($file_id = CValue::get("file_id")) {
     //creation fin URL
     $finUrl="";
 
-
     if($f){ $finUrl.="&f=$f";}    
     if($q){ $finUrl.="&q=$q";}  
 
@@ -92,6 +81,7 @@ if ($file_id = CValue::get("file_id")) {
       //trigger_error("Source is $file->_file_path$finUrl");
       header("Location: lib/phpThumb/phpThumb.php?src=$file->_file_path".$finUrl);
     } elseif (strpos($file->file_type, "pdf") !== false) {
+      
       if($hp){$finUrl.="&h=$hp";}
       if($wl){$finUrl.="&w=$wl";}
       
@@ -106,55 +96,32 @@ if ($file_id = CValue::get("file_id")) {
       
       if($h){$finUrl.="&h=$h";}
       if($w){$finUrl.="&w=$w";}
-      // Sharp filter to unblur raster
-//      $finUrl .= "&fltr[]=usm|80|5|1";
-//      $finUrl .= "&fltr[]=usm";
+
       header("Location: lib/phpThumb/phpThumb.php?src=$file->_file_path".$finUrl);
-      //header("Location: images/pictures/acroread.png");
-    } /*elseif (in_array(substr(strrchr($file->file_name, '.'),1), $file_types)) {
+
+    } elseif ($file->isPDFconvertible()) {
       if($hp){$finUrl.="&h=$hp";}
       if($wl){$finUrl.="&w=$wl";}
       if($h){$finUrl.="&h=$h";}
       if($w){$finUrl.="&w=$w";}
       if($sfn){$finUrl.="&sfn=$sfn";}
       if($dpi){$finUrl.="&dpi=$dpi";}
-      $fileb = new CFile();
-      $fileb->object_class = "CFile";
-      $fileb->object_id = $file->_id;
+      
+      $fileconvert = $file->loadPDFconverted();
       $success = 1;
-      $fileb->loadMatchingObject();
-      if (!$fileb->_id) {
-        $success = $file->convertToPDF(strrchr($file->file_name, '.'));
+      if (!$fileconvert->_id) {
+        $success = $file->convertToPDF();
       }
       if ($success == 1) {
-        $fileb->loadMatchingObject();
-        header("Location: lib/phpThumb/phpThumb.php?src=$fileb->_file_path".$finUrl);
+        $fileconvert = $file->loadPDFconverted();
+        header("Location: lib/phpThumb/phpThumb.php?src=$fileconvert->_file_path".$finUrl);
       }
       else {
         header("Location: images/pictures/medifile.png");
       }
-    }*//*elseif(strpos($file->file_type, "csv") !== false) {
-      header("Location: images/pictures/spreadsheet.png");
-    } elseif(strpos($file->file_type, "xls") !== false) {
-      header("Location: images/pictures/spreadsheet.png");
-    } elseif(strpos($file->file_type, "ods") !== false) {
-      header("Location: images/pictures/spreadsheet.png");
-    } elseif(strpos($file->file_type, "text") !== false) {
-      header("Location: images/pictures/text.png");
-    } elseif(strpos($file->file_type, "msword") !== false) {
-      header("Location: images/pictures/text.png");
-    } elseif(strpos($file->file_type, "video") !== false) {
-      header("Location: images/pictures/video.png");
-    } */else {
+    } else {
       header("Location: images/pictures/medifile.png");
     }
-    /*
-    $thumb = new phpthumb;
-    $thumb->setSourceData(file_get_contents($file->_file_path));
-    $thumb->setParameter("hp", 64);
-    $thumb->setParameter("wl", 64);
-    $thumb->GenerateThumbnail();
-    $thumb->OutputThumbnail();*/
   } else {
 
     // BEGIN extra headers to resolve IE caching bug (JRP 9 Feb 2003)

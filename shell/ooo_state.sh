@@ -11,7 +11,7 @@ else
   APACHE_USER=`ps -ef|grep apache|head -2|tail -1|cut -d' ' -f1`
 fi
 
-# R?cup?ration du pid de soffice
+# Récupération du pid de soffice
 res=`ps -u $APACHE_USER|grep soffice`
 
 

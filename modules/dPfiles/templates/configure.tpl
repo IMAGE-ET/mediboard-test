@@ -1,13 +1,12 @@
 <script type="text/javascript">
-/*launch = function(state) {
-  var url = new Url("dPfiles", "launch_openoffice");
-  url.addParam("state", state);
+getState = function() {
+  var url = new Url("dPfiles", "state_ooo");
   url.requestUpdate("openoffice");
-}*/
+}
 Main.add(function() {
-  {{*if $conf.dPfiles.CFile.openoffice_active*}}
-    //launch(-1);
-  {{*/if*}}
+  {{if $conf.dPfiles.CFile.openoffice_active}}
+    getState();
+  {{/if}}
   Control.Tabs.create('tabs-configure', true);
 });
 </script>
@@ -18,7 +17,7 @@ Main.add(function() {
 
 <ul id="tabs-configure" class="control_tabs">
   <li><a href="#files">{{tr}}CFile{{/tr}}</a></li>
-  <!-- <li><a href="#ooo">Openoffice</a></li>-->
+  <li><a href="#ooo">Openoffice</a></li>
   <li><a href="#cdoc">{{tr}}CDocumentSender{{/tr}}</a></li>
   <li><a href="#test">{{tr}}Cfile-test_operations{{/tr}}</a></li>
 </ul>
@@ -66,32 +65,39 @@ Main.add(function() {
     </tr>
   </table>
 </div>
-<!--
+
 <div id="ooo">
   <table class="form">
-    {{*assign var=class value=CFile*}}
-    {{*mb_include module=system template=inc_config_bool var=openoffice_active*}}
+    {{assign var=class value=CFile}}
+    {{mb_include module=system template=inc_config_bool var=ooo_active}}
   
-    {{*mb_include module=system template=inc_config_str var=openoffice_path*}}
-    {{*if $conf.dPfiles.CFile.openoffice_active*}}
-    <tr>
-      <td style="text-align: right;">
-        <button class="new" type="button" onclick="launch(1)">Lancer Openoffice</button>
-        <button class="cancel" type="button" onclick="launch(0)">Arreter Openoffice</button>
-      </td>
-      <td>
-        <div id="openoffice"></div>
-      </td>
-    </tr>
-    {{*/if*}}
+    {{mb_include module=system template=inc_config_str var=ooo_path}}
+    
+    {{if $conf.dPfiles.CFile.ooo_active}}
+      <tr>
+        <th>Status :</th>
+        <td id="openoffice"></td>
+      </tr>
+    {{/if}}
     <tr>
       <td class="button" colspan="2">
-        <button class="modify" type="submit">{{*tr*}}Save{{*/tr*}}</button>
+        <button class="modify" type="submit">{{tr}}Save{{/tr}}</button>
       </td>
     </tr>
   </table>
+  <div class="big-info">
+    Pour lancer OpenOffice, exécutez ces commandes dans un terminal en <strong>root</strong>: <br/>
+    <ul>
+      <li>
+        <code>su [nom de l'utilisateur Apache]</code>
+      </li>
+      <li>
+        <code>{{$conf.dPfiles.CFile.ooo_path}}/soffice -accept="socket,host=localhost,port=8100;urp;StarOffice.ServiceManager" -no-logo -headless -nofirststartwizard -no-restore >> /dev/null</code>
+      </li>
+    </ul>
+  </div>
 </div>
--->
+
 <div id="cdoc">
   <table class="form">
     <!-- CFileCategory -->

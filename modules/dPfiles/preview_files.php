@@ -32,6 +32,7 @@ $includeInfosFile = null;
 $catFileSel       = null;
 $acces_denied     = true;      // droit d'affichage du fichier demandé
 $arrNumPages      = array();   // navigation par pages (PDF)
+$isConverted      = false;
 
 $pdf_active = CAppUI::conf("dPcompteRendu CCompteRendu pdf_thumbnails") == 1;
 
@@ -91,13 +92,31 @@ if($objectClass && $objectId && $elementClass && $elementId){
 
 // Gestion des pages pour les Fichiers PDF et fichiers TXT
 if($fileSel && $elementClass == "CFile" && !$acces_denied){
-
+  
   if($fileSel->file_type == "text/plain" && file_exists($fileSel->_file_path)){
     // Fichier texte, on récupére le contenu
     $includeInfosFile = nl2br(htmlspecialchars(utf8_decode(file_get_contents($fileSel->_file_path))));
   }
+
+  if ($fileSel->isPDFconvertible()) {
+    $isConverted = true;
+    $fileconvert = $fileSel->loadPDFconverted();
+    $success = 1;
+    if (!$fileconvert->_id) {
+      $success = $fileSel->convertToPDF();
+      
+    }
+    if ($success == 1) {
+      $fileconvert = $fileSel->loadPDFconverted();
+      $fileconvert->loadNbPages();
+      $fileSel->_nb_pages = $fileconvert->_nb_pages;
+    }
+  }
   
-  $fileSel->loadNbPages();
+  if (!$fileSel->_nb_pages) {
+    $fileSel->loadNbPages();
+  }
+  
   if($fileSel->_nb_pages){
     if($sfn>$fileSel->_nb_pages || $sfn<0){$sfn = 0;}
     if($sfn!=0){
@@ -158,6 +177,7 @@ $smarty->assign("includeInfosFile", $includeInfosFile);
 $smarty->assign("popup"           , $popup);
 $smarty->assign("acces_denied"    , $acces_denied);
 $smarty->assign("file_id"         , $file_id);
+$smarty->assign("isConverted"     , $isConverted);
 
 if($popup==1){
   $listCat  = null;

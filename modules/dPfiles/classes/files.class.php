@@ -31,9 +31,10 @@ class CFile extends CDocumentItem {
   var $_file_path     = null;
   var $_nb_pages      = null;
   var $_old_file_path = null;
+  
   // Behavior fields
   var $_rotate      = null;
-	var $_rename      = null; // @todo A utiliser dans le do_aed
+	var $_rename      = null;
 
   // References
   var $_ref_file_owner = null;
@@ -42,15 +43,15 @@ class CFile extends CDocumentItem {
   static $rotable_extensions = array("bmp", "gif", "jpg", "jpeg", "png", "pdf");
 
   // Files extensions so the pdf conversion is possible
-  static $file_types = array(
-    "cgm", "csv", "dbf", "dif", "doc", "docm", "docx", "dot", "dotm", "dotx",
-    "dxf", "emf", "eps", "fodg", "fodp", "fods", "fodt", "htm", "html", "hwp",
-    "lwp", "met", "mml", "odp", "odg", "ods", "otg", "odf", "odm", "odt", "oth",
-    "otp", "ots", "ott", "pct", "pict", "pot", "potm", "potx", "pps", "ppt", "pptm",
-    "pptx", "rtf", "sgf", "sgv", "slk", "stc", "std", "sti", "stw", "svg", "svm", "sxc",
-    "sxd", "sxg", "sxi", "sxm", "sxw", "txt", "uof", "uop", "uos", "uot", "wb2", "wk1", "wks",
-    "wmf", "wpd", "wpg", "wps", "xlc", "xlm", "xls", "xlsb", "xlsm", "xlsx", "xlt", "xltm",
-    "xltx", "xlw", "xml");
+  static $file_types =
+    "cgm csv dbf dif doc docm docx dot dotm dotx
+    dxf emf eps fodg fodp fods fodt hwp
+    lwp met mml odp odg ods otg odf odm odt oth
+    otp ots ott pct pict pot potm potx pps ppt pptm
+    pptx rtf sgf sgv slk stc std sti stw svg svm sxc
+    sxd sxg sxi sxm sxw txt uof uop uos uot wb2 wk1 wks
+    wmf wpd wpg wps xlc xlm xls xlsb xlsm xlsx xlt xltm
+    xltx xlw";
   
   function getSpec() {
     $spec = parent::getSpec();
@@ -282,8 +283,6 @@ class CFile extends CDocumentItem {
         $this->rotation = 360 - $matches[1];
       }
       
-//      return $this->_nb_pages = preg_match_all("/\/Page\W/", $dataFile, $matches);
-      
       if(strpos($dataFile, "%PDF-1.4") !== false && $nb_count >= 2){
         // Fichier PDF 1.4 avec plusieurs occurence
         $splitFile = preg_split("/obj\r<</", $dataFile);
@@ -312,6 +311,11 @@ class CFile extends CDocumentItem {
         $position_count = strripos($dataFile, $string_recherche) + strlen($string_recherche);
         $nombre_temp = explode (" ", trim(substr($dataFile,$position_count, strlen($dataFile)-$position_count)), 2);
         $this->_nb_pages = intval(trim($nombre_temp[0]));
+      }
+      
+      // Si les deux méthodes précédentes ne donnent pas de résultat
+      if (is_null($this->_nb_pages)) {
+        $this->_nb_pages = preg_match_all("/\/Page\W/", $dataFile, $matches);
       }
     }
   }
@@ -378,7 +382,20 @@ class CFile extends CDocumentItem {
     file_put_contents($this->_file_path, '');
   }
   
-  function convertToPDF($ext) {
+  function isPDFconvertible() {
+    return
+      in_array(substr(strrchr($this->file_name, '.'),1), preg_split("/[\s]+/", CFile::$file_types)) &&
+      (CAppUI::conf("dPfiles CFile ooo_active") == 1);
+  }
+ 
+  function convertToPDF() {
+    // Vérifier si openoffice est lancé
+    exec("sh shell/ooo_state.sh", $res);
+
+    if ($res[0] == 0 ){
+      return 0;
+    }
+    
     $file = new CFile();
     $file->setObject($this);
     $file->private = $this->private;
@@ -389,21 +406,23 @@ class CFile extends CDocumentItem {
     $file->updateFormFields();
     $file->forceDir();
     $save_name = $this->_file_path;
-    rename($save_name, $save_name . $ext);
-    $file->store();
-
-    // Vérifier si openoffice est lancé
-    exec("sh shell/ooo_state.sh",$res);
     
-    if ($res[0] == 0 ){
-      //exec(CAppUI::conf("dPfiles CFile openoffice_path") . "/soffice -accept=\"socket,host=localhost,port=8100;urp;StarOffice.ServiceManager\" -no-logo -headless -nofirststartwizard -no-restore >> /dev/null", $ret);
-      usleep(600000);
+    if ($msg = $file->store()) {
+      CAppUI::setMsg($msg, UI_MSG_ERROR);
+      return 0;
     }
+    
+    $res = exec("python ./modules/dPfiles/script/doctopdf.py {$this->_file_path} {$file->_file_path}");
 
-    $res = exec("python ./modules/dPfiles/script/doctopdf.py {$this->_file_path}" . $ext ." {$file->_file_path}", $ret);
-//    mbTrace($this->_file_path,'',1);
-    rename($save_name . $ext, $save_name);
     return $res;
+  }
+  
+  function loadPDFconverted() {
+    $file = new CFile();
+    $file->object_class = "CFile";
+    $file->object_id = $this->_id;
+    $file->loadMatchingObject();
+    return $file;
   }
   
   function streamFile() {
