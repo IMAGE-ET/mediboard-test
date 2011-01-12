@@ -14,9 +14,12 @@ $can->needsRead();
 
 $praticien_id = CValue::getOrSession("praticien_id" , $AppUI->user_id);
 $signee       = CValue::getOrSession("signee"       , 0);  // par default les non signees
-$date_min     = CValue::getOrSession("_date_min"     , mbDateTime("00:00:00"));  // par default, date du jour
-$date_max     = CValue::getOrSession("_date_max"     , mbDateTime("23:59:59"));
+$date_min     = CValue::getOrSession("_date_entree_prevue"     , mbDate());  // par default, date du jour
+$date_max     = CValue::getOrSession("_date_sortie_prevue"     , mbDate());
 $type         = CValue::getOrSession("type"         , "sejour");  // sejour - externe - sortie_manquante
+
+$date_min = $date_min . " 00:00:00";
+$date_max = $date_max . " 23:59:59";
 
 // Chargement de la liste des praticiens
 $mediuser = new CMediusers();

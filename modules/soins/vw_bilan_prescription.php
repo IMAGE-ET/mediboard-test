@@ -14,8 +14,8 @@ $can->needsRead();
 
 $praticien_id = CValue::getOrSession("praticien_id" , $AppUI->user_id);
 $signee       = CValue::getOrSession("signee"       , 0);  // par default les non signees
-$date_min     = CValue::getOrSession("_date_min"     , mbDateTime("00:00:00"));  // par default, date du jour
-$date_max     = CValue::getOrSession("_date_max"     , mbDateTime("23:59:59"));
+$date_min     = CValue::getOrSession("_date_entree_prevue"     , mbDate());  // par default, date du jour
+$date_max     = CValue::getOrSession("_date_sortie_prevue"     , mbDate());
 $type         = CValue::getOrSession("type"         , "sejour");  // sejour - externe - sortie_manquante
 
 // Chargement de la liste des praticiens
@@ -31,8 +31,8 @@ if(!$praticien_id){
 }
 
 $sejour = new CSejour();
-$sejour->_date_min = $date_min;
-$sejour->_date_max = $date_max;
+$sejour->_date_entree_prevue = $date_min;
+$sejour->_date_sortie_prevue = $date_max;
 
 // Smarty template
 $smarty = new CSmartyDP();

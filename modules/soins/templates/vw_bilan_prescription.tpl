@@ -16,8 +16,8 @@ viewListPrescription = function(){
   url.addParam('type', $V(oFilterForm.type));
 	url.addParam('signee', $V(oFilterForm.signee));
   url.addParam('praticien_id', $V(oFilterForm.praticien_id));
-  url.addParam('_date_min', $V(oFilterForm._date_min));
-  url.addParam('_date_max', $V(oFilterForm._date_max));
+  url.addParam('_date_entree_prevue', $V(oFilterForm._date_entree_prevue));
+  url.addParam('_date_sortie_prevue', $V(oFilterForm._date_sortie_prevue));
   url.requestUpdate("list_prescriptions");
 }
 	
@@ -80,11 +80,11 @@ Main.add(function () {
 	          </td>
 	          <td>
 	            A partir du
-	            {{mb_field object=$sejour field="_date_min" form="bilanPrescriptions" register="true" canNull=false}}
+	            {{mb_field object=$sejour field="_date_entree_prevue" form="bilanPrescriptions" register="true" canNull=false}}
 	          </td>
 	          <td>
 	            jusqu'au
-	            {{mb_field object=$sejour field="_date_max" form="bilanPrescriptions" register="true" canNull=false}}
+	            {{mb_field object=$sejour field="_date_sortie_prevue" form="bilanPrescriptions" register="true" canNull=false}}
 	          </td>
 	          <td>
 	            <button class="button tick" type="button" onclick="viewListPrescription();">Filtrer</button>
