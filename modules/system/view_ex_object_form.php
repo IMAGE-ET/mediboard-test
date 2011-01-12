@@ -14,6 +14,7 @@ $ex_class_id  = CValue::get("ex_class_id");
 $ex_object_id = CValue::get("ex_object_id");
 $object_guid  = CValue::get("object_guid");
 $_element_id  = CValue::get("_element_id");
+$readonly     = CValue::get("readonly");
 $event        = CValue::get("event");
 
 if (!$ex_class_id) {
@@ -29,6 +30,8 @@ $ex_object = new CExObject;
 $ex_object->setObject($object);
 $ex_object->_ex_class_id = $ex_class_id;
 $ex_object->setExClass();
+
+list($grid, $out_of_grid) = $ex_object->_ref_ex_class->getGrid();
 
 if ($ex_object_id) {
   $ex_object->load($ex_object_id);
@@ -56,4 +59,7 @@ $smarty->assign("object_guid",  $object_guid);
 $smarty->assign("object",       $object);
 $smarty->assign("_element_id",  $_element_id);
 $smarty->assign("event",        $event);
+$smarty->assign("grid",         $grid);
+$smarty->assign("out_of_grid",  $out_of_grid);
+$smarty->assign("readonly",     $readonly);
 $smarty->display("view_ex_object_form.tpl");

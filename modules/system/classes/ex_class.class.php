@@ -120,6 +120,66 @@ class CExClass extends CMbObject {
     
     return $list;
   }
+	
+	function getGrid($w = 4, $h = 15, $reduce = true){
+		$grid = array_fill(0, $h, array_fill(0, $w, array(
+		  "field" => null, 
+		  "label" => null,
+		)));
+		
+		$out_of_grid = array(
+		  "field" => array(), 
+		  "label" => array(),
+		);
+		
+		foreach($this->loadRefsFields() as $_ex_field) {
+		  $_ex_field->getSpecObject();
+		  
+		  $field_x = $_ex_field->coord_field_x;
+		  $field_y = $_ex_field->coord_field_y;
+		  
+		  $label_x = $_ex_field->coord_label_x;
+		  $label_y = $_ex_field->coord_label_y;
+		  
+		  // field
+		  if ($field_x === null || $field_y === null) {
+		    $out_of_grid["field"][$_ex_field->name] = $_ex_field;
+		  }
+		  else {
+		    $grid[$field_y][$field_x]["field"] = $_ex_field;
+		  }
+		  
+		  // label
+		  if ($label_x === null || $label_y === null) {
+		    $out_of_grid["label"][$_ex_field->name] = $_ex_field;
+		  }
+		  else {
+		    $grid[$label_y][$label_x]["label"] = $_ex_field;
+		  }
+		}
+		
+		if ($reduce) {
+			$max_filled = 0;
+			
+			foreach($grid as $_y => $_line) {
+        $n_filled = 0;
+				
+				foreach($_line as $_x => $_cell) {
+					if ($_cell !== array("field" => null, "label" => null))
+					  $n_filled++;
+				}
+				
+				$max_filled = max($max_filled, $n_filled);
+				if ($n_filled == 0) unset($grid[$_y]);
+			}
+      
+      foreach($grid as $_y => $_line) {
+      	$grid[$_y] = array_slice($_line, 0, $max_filled);
+      }
+		}
+		
+		return array($grid, $out_of_grid, "grid" => $grid, "out_of_grid" => $out_of_grid);
+	}
   
   function store(){
     if ($msg = $this->check()) return $msg;

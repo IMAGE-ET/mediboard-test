@@ -14,9 +14,23 @@ Main.add(function(){
   ExFieldSpec.edit("{{$spec_type}}", '{{$ex_field->prop}}', 'CExObject', '{{$ex_field->name}}', fields, "{{$ex_field->_id}}");
   getForm("editField").elements.name.select();
 });
+
+checkExField = function(form) {
+  if (!checkForm(form)) return false;
+	
+	var prop = $V(form.elements.prop);
+	
+	if (prop.indexOf("enum") == 0 && prop.indexOf("list|") == -1) {
+	  alert("Un champ de type Liste de choix nécessite une liste d'options");
+		$(getForm("editFieldSpec").elements["list[]"][0]).tryFocus();
+	  return false;
+	}
+	
+	return true;
+}
 </script>
 
-<form name="editField" method="post" action="?" onsubmit="return onSubmitFormAjax(this, {onComplete: ExClass.edit.curry({{$ex_field->ex_class_id}})})">
+<form name="editField" method="post" action="?" onsubmit="return onSubmitFormAjax(this, {check: checkExField, onComplete: ExClass.edit.curry({{$ex_field->ex_class_id}})})">
   <input type="hidden" name="m" value="system" />
   <input type="hidden" name="dosql" value="do_ex_class_field_aed" />
   <input type="hidden" name="del" value="0" />

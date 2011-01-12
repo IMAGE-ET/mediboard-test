@@ -60,23 +60,35 @@ showExClassForm = function(ex_class_id, object_guid, title, ex_object_id, event,
 </div>
 
 <ul id="CExObject.{{$object->_guid}}.{{$event}}">
+{{assign var=_events value=$object->_spec->events}}
+
 {{foreach from=$ex_objects item=_ex_objects key=_ex_class_id}}
   {{assign var=_ex_class value=$ex_classes.$_ex_class_id}}
-  <li>
-    <strong>{{$_ex_class->name}}</strong>
-    <ul>
-    {{foreach from=$_ex_objects item=_ex_object}}
-      <li>
-        <a href="#{{$_ex_object->_guid}}" 
-           onclick="showExClassForm({{$_ex_class_id}}, '{{$object->_guid}}', '{{$_ex_object}}', '{{$_ex_object->_id}}', '{{$event}}', '{{$_element_id}}')">
-          {{mb_value object=$_ex_object->_ref_last_log field=date}} &ndash; 
-          {{mb_value object=$_ex_object->_ref_last_log field=user_id}}
-        </a>
-      </li>
-    {{foreachelse}}
-      <li><em>{{tr}}CExObject.none{{/tr}}</em></li>
-    {{/foreach}}
-    </ul>
-  </li>
+	
+	{{if $_events.$event.multiple}}
+	  <li>
+	    <strong>{{$_ex_class->name}}</strong>
+	    <ul>
+	    {{foreach from=$_ex_objects item=_ex_object}}
+	      <li>
+	        <a href="#{{$_ex_object->_guid}}" 
+	           onclick="showExClassForm({{$_ex_class_id}}, '{{$object->_guid}}', '{{$_ex_object}}', '{{$_ex_object->_id}}', '{{$event}}', '{{$_element_id}}')">
+	          {{mb_value object=$_ex_object->_ref_last_log field=date}} &ndash; 
+	          {{mb_value object=$_ex_object->_ref_last_log field=user_id}}
+	        </a>
+	      </li>
+	    {{foreachelse}}
+	      <li><em>{{tr}}CExObject.none{{/tr}}</em></li>
+	    {{/foreach}}
+	    </ul>
+	  </li>
+	{{else}}
+	  {{foreach from=$_ex_objects item=_ex_object}}
+    <a href="#{{$_ex_object->_guid}}" title="{{mb_value object=$_ex_object->_ref_last_log field=date}} &ndash; {{mb_value object=$_ex_object->_ref_last_log field=user_id}}"
+       onclick="showExClassForm({{$_ex_class_id}}, '{{$object->_guid}}', '{{$_ex_object}}', '{{$_ex_object->_id}}', '{{$event}}', '{{$_element_id}}')">
+      {{$_ex_class->name}}
+    </a>
+		{{/foreach}}
+	{{/if}}
 {{/foreach}}
 </ul>

@@ -14,6 +14,11 @@ class CExClassField extends CMbObject {
   var $ex_class_id = null;
   var $name = null; // != object_class, object_id, ex_ClassName_event_id, 
   var $prop = null; 
+	
+  var $coord_field_x = null; 
+  var $coord_field_y = null; 
+  var $coord_label_x = null; 
+  var $coord_label_y = null; 
   
   var $_locale = null;
   var $_locale_desc = null;
@@ -47,7 +52,7 @@ class CExClassField extends CMbObject {
     $spec = parent::getSpec();
     $spec->table = "ex_class_field";
     $spec->key   = "ex_class_field_id";
-    $spec->uniques["field"] = array("ex_class_id", "name");
+    $spec->uniques["field"] = array("ex_class_id", "name", "coord_field_x", "coord_field_y");
     return $spec;
   }
 
@@ -56,6 +61,12 @@ class CExClassField extends CMbObject {
     $props["ex_class_id"] = "ref notNull class|CExClass cascade";
     $props["name"]        = "str notNull protected canonical";
     $props["prop"]        = "str notNull";
+    
+    $props["coord_field_x"] = "num min|0 max|100";
+    $props["coord_field_y"] = "num min|0 max|100";
+    $props["coord_label_x"] = "num min|0 max|100";
+    $props["coord_label_y"] = "num min|0 max|100";
+		
     $props["_locale"]     = "str";
     $props["_locale_desc"]  = "str";
     $props["_locale_court"] = "str";
@@ -193,6 +204,8 @@ class CExClassField extends CMbObject {
       $enum_trans = array_values($this->loadRefEnumTranslations());
       
       foreach($values as $i => $value) {
+      	$value = utf8_decode($value);
+				
         if (!isset($enum_trans[$i])) {
           $enum_trans[$i] = new CExClassFieldEnumTranslation;
         }

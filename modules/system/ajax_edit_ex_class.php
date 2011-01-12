@@ -18,9 +18,11 @@ $ex_class->loadRefsFields();
 $ex_class->loadRefsConstraints();
 $ex_class->loadRefsNotes();
 
-foreach($ex_class->_ref_fields as $_ex_field) {
-  $_ex_field->getSpecObject();
-}
+list($grid, $out_of_grid) = $ex_class->getGrid(4, 15, false);
+
+$ex_object = new CExObject;
+$ex_object->_ex_class_id = $ex_class->_id;
+$ex_object->setExClass();
 
 foreach($ex_class->_ref_constraints as $_ex_constraint) {
   $_ex_constraint->loadRefExClass();
@@ -46,5 +48,8 @@ if (!$ex_class->_id) {
 // Création du template
 $smarty = new CSmartyDP();
 $smarty->assign("ex_class", $ex_class);
+$smarty->assign("ex_object", $ex_object);
 $smarty->assign("classes", $classes);
+$smarty->assign("grid", $grid);
+$smarty->assign("out_of_grid", $out_of_grid);
 $smarty->display("inc_edit_ex_class.tpl");

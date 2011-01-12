@@ -216,6 +216,7 @@ $locales['CExClassField-ex_class_id'] = 'Classe étendue';
 $locales['CExClassField-ex_class_id-court'] = 'Classe étendue';
 $locales['CExClassField-ex_class_id-desc'] = 'Classe étendue';
 $locales['CExClassField-failed-field'] = 'Ce champ existe déjà';
+$locales['CExClassField-layout'] = 'Disposition du formulaire';
 $locales['CExClassField-msg-create'] = 'Champ de classe étendue créé';
 $locales['CExClassField-msg-delete'] = 'Champ de classe étendue supprimé';
 $locales['CExClassField-msg-modify'] = 'Champ de classe étendue modifié';

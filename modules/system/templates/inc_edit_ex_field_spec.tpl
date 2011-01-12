@@ -131,7 +131,7 @@ Main.add(function(){
           {{foreach from=$spec->_list key=_key item=_value}}
             <div>
               <input type="text" name="{{$_name}}[]" value="{{$_value}}" />
-              <button type="button" class="cancel notext" onclick="$(this).up().remove(); updateFieldSpec();">{{tr}}Delete{{/tr}}</button>
+              <button type="button" class="cancel notext" tabindex="1000" onclick="$(this).up().remove(); updateFieldSpec();">{{tr}}Delete{{/tr}}</button>
               {{if $ex_field_id}}
                 Traduction: <input type="text" name="__enum[]" value="{{if $spec->_locales.$_value|strpos:'CExObject' === false}}{{$spec->_locales.$_value}}{{/if}}" />
               {{else}}
@@ -142,7 +142,7 @@ Main.add(function(){
           
           <div style="display: none;" class="template">
             <input type="text" name="{{$_name}}[]" value="" />
-            <button type="button" class="cancel notext" onclick="$(this).up().remove(); updateFieldSpec();">{{tr}}Delete{{/tr}}</button>
+            <button type="button" class="cancel notext" tabindex="1000" onclick="$(this).up().remove(); updateFieldSpec();">{{tr}}Delete{{/tr}}</button>
             {{if $ex_field_id}}
               Traduction: <input type="text" name="__enum[]" value="" />
             {{else}}

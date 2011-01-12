@@ -60,7 +60,7 @@ function extract_props($type) {
     $props['params'] = array_map('trim', $props['params']);
     $props['type']   = substr($props['type'], 0, $pos);
   }
-  $props['type'] = strtoupper($props['type']);
+  $props['type'] = strtoupper(trim($props['type']));
   return $props;
 }
 

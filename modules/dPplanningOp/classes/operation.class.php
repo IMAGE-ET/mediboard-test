@@ -146,6 +146,9 @@ class COperation extends CCodable {
     $spec->table = 'operations';
     $spec->key   = 'operation_id';
     $spec->measureable = true;
+    $spec->events = array(
+      "checklist" => array("multiple" => false),
+    );
     return $spec;
   }
   

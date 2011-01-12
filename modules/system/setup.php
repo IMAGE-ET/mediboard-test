@@ -325,34 +325,34 @@ class CSetupsystem extends CSetup {
     $this->addQuery($query);
     
     $this->makeRevision("1.0.35");
-    $sql = "CREATE TABLE `ex_class` (
+    $query = "CREATE TABLE `ex_class` (
               `host_class` VARCHAR (255) NOT NULL,
               `event` VARCHAR (255) NOT NULL,
               `ex_class_id` INT (11) UNSIGNED NOT NULL auto_increment PRIMARY KEY
             ) TYPE=MYISAM;";
-    $this->addQuery($sql);
-    $sql = "CREATE TABLE `ex_class_field` (
+    $this->addQuery($query);
+    $query = "CREATE TABLE `ex_class_field` (
               `ex_class_field_id` INT (11) UNSIGNED NOT NULL auto_increment PRIMARY KEY,
               `ex_class_id` INT (11) UNSIGNED NOT NULL,
               `name` VARCHAR (255) NOT NULL,
               `prop` VARCHAR (255) NOT NULL
             ) TYPE=MYISAM;";
-    $this->addQuery($sql);
-    $sql = "ALTER TABLE `ex_class_field` 
+    $this->addQuery($query);
+    $query = "ALTER TABLE `ex_class_field` 
               ADD INDEX (`ex_class_id`);";
-    $this->addQuery($sql);
-    $sql = "CREATE TABLE `ex_class_constraint` (
+    $this->addQuery($query);
+    $query = "CREATE TABLE `ex_class_constraint` (
               `ex_class_constraint_id` INT (11) UNSIGNED NOT NULL auto_increment PRIMARY KEY,
               `ex_class_id` INT (11) UNSIGNED NOT NULL,
               `field` VARCHAR  (255) NOT NULL,
               `operator` ENUM ('=','!=','>','>=','<','<=','startsWith','endsWith','contains') NOT NULL DEFAULT '=',
               `value` VARCHAR  (255) NOT NULL
             ) TYPE=MYISAM;";
-    $this->addQuery($sql);
-    $sql = "ALTER TABLE `ex_class_constraint` 
+    $this->addQuery($query);
+    $query = "ALTER TABLE `ex_class_constraint` 
               ADD INDEX (`ex_class_id`);";
-    $this->addQuery($sql);
-    $sql = "CREATE TABLE `ex_class_field_translation` (
+    $this->addQuery($query);
+    $query = "CREATE TABLE `ex_class_field_translation` (
               `ex_class_field_translation_id` INT (11) UNSIGNED NOT NULL auto_increment PRIMARY KEY,
               `ex_class_field_id` INT (11) UNSIGNED NOT NULL,
               `lang` CHAR  (2),
@@ -360,35 +360,43 @@ class CSetupsystem extends CSetup {
               `desc` VARCHAR  (255),
               `court` VARCHAR  (255)
             ) TYPE=MYISAM;";
-    $this->addQuery($sql);
-    $sql = "ALTER TABLE `ex_class_field_translation` 
+    $this->addQuery($query);
+    $query = "ALTER TABLE `ex_class_field_translation` 
               ADD INDEX (`ex_class_field_id`);";
-    $this->addQuery($sql);
+    $this->addQuery($query);
     
     $this->makeRevision("1.0.36");
-    $sql = "CREATE TABLE `ex_class_field_enum_translation` (
+    $query = "CREATE TABLE `ex_class_field_enum_translation` (
               `ex_class_field_enum_translation_id` INT (11) UNSIGNED NOT NULL auto_increment PRIMARY KEY,
               `ex_class_field_id` INT (11) UNSIGNED NOT NULL,
               `lang` CHAR  (2),
               `key` VARCHAR  (40),
               `value` VARCHAR  (255)
             ) TYPE=MYISAM;";
-    $this->addQuery($sql);
-    $sql = "ALTER TABLE `ex_class_field_enum_translation` 
+    $this->addQuery($query);
+    $query = "ALTER TABLE `ex_class_field_enum_translation` 
               ADD INDEX (`ex_class_field_id`),
               ADD INDEX (`lang`),
               ADD INDEX (`key`);";
-    $this->addQuery($sql);
+    $this->addQuery($query);
     
     $this->makeRevision("1.0.37");
-    $sql = "ALTER TABLE `ex_class` 
+    $query = "ALTER TABLE `ex_class` 
               ADD `name` VARCHAR  (255) NOT NULL;";
-    $this->addQuery($sql);
-    $sql = "ALTER TABLE `ex_class_field_translation` 
+    $this->addQuery($query);
+    $query = "ALTER TABLE `ex_class_field_translation` 
               ADD INDEX (`lang`)";
-    $this->addQuery($sql);
+    $this->addQuery($query);
+		
+    $this->makeRevision("1.0.38");
+    $query = "ALTER TABLE `ex_class_field` 
+              ADD `coord_field_x` TINYINT (4) UNSIGNED,
+              ADD `coord_field_y` TINYINT (4) UNSIGNED,
+              ADD `coord_label_x` TINYINT (4) UNSIGNED,
+              ADD `coord_label_y` TINYINT (4) UNSIGNED;";
+    $this->addQuery($query);
     
-    $this->mod_version = "1.0.38";
+    $this->mod_version = "1.0.39";
     
   }
 }

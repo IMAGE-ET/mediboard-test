@@ -34,7 +34,7 @@ foreach($ex_classes as $_id => $_ex_class) {
   $objects = $_ex_class->loadExObjects($object);
   $count += count($objects);
   
-  $_ex_class->_disabled = (count($objects) > 1) && !$object->_spec->events[$event]["multiple"];
+  $_ex_class->_disabled = count($objects) && !$object->_spec->events[$event]["multiple"];
   
   if ($_ex_class->_disabled) {
     $count_available--;

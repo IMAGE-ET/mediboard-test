@@ -31,57 +31,111 @@ if (window.opener && window.opener !== window) {
   {{mb_field object=$ex_object field=object_id hidden=true}}
   
   <input type="hidden" name="del" value="0" />
-  
+		
   <table class="main form">
     <tr>
-      <th class="title" colspan="2">
+      <th class="title" colspan="4">
         {{$ex_object->_ref_ex_class}} - {{$object}}
       </th>
     </tr>
-    {{foreach from=$ex_object->_ref_ex_class->_ref_fields item=_field}}
+		
+    {{foreach from=$grid key=_y item=_line}}
     <tr>
-      <th style="width: 50%;">
-        {{mb_label object=$ex_object field=$_field->name}}
-      </th>
-      <td>
-        {{assign var=_field_name value=$_field->name}}
-        {{assign var=_spec value=$ex_object->_specs.$_field_name}}
-        
-        {{if $_spec instanceof CRefSpec}}
-          <script type="text/javascript">
-          Main.add(function(){
-            var form = getForm("editExObject");
-            var url = new Url("system", "ajax_seek_autocomplete");
-            
-            url.addParam("object_class", "{{$_spec->class}}");
-            url.addParam("field", "{{$_field_name}}");
-            url.addParam("input_field", "_{{$_field_name}}_view");
-            url.autoComplete(form.elements["_{{$_field_name}}_view"], null, {
-              minChars: 3,
-              method: "get",
-              select: "view",
-              dropdown: true,
-              afterUpdateElement: function(field,selected){
-                $V(field.form["{{$_field_name}}"], selected.getAttribute("id").split("-")[2]);
-                if ($V(field.form.elements["_{{$_field_name}}_view"]) == "") {
-                  $V(field.form.elements["_{{$_field_name}}_view"], selected.down('.view').innerHTML);
-                }
-              }
-            });
-          });
-          </script>
-          <input type="text" class="autocomplete" name="_{{$_field_name}}_view" value="{{$ex_object->_fwd.$_field_name}}" size="30" />
-          {{mb_field object=$ex_object field=$_field->name form=editExObject hidden=true}}
-        {{else}}
-          {{mb_field object=$ex_object field=$_field->name register=true increment=true form=editExObject}}
-        {{/if}}
-      </td>
+      {{foreach from=$_line key=_x item=_group}}
+			  {{if $_group.label}}
+				  {{assign var=_field value=$_group.label}} 
+          <th style="font-weight: bold;">
+            {{mb_label object=$ex_object field=$_field->name}}
+          </th>
+			  {{elseif $_group.field}}
+          {{assign var=_field value=$_group.field}} 
+          <td>
+          	{{assign var=_field_name value=$_field->name}}
+		        {{assign var=_spec value=$ex_object->_specs.$_field_name}}
+		        
+		        {{if $_spec instanceof CRefSpec}}
+		          <script type="text/javascript">
+		          Main.add(function(){
+		            var form = getForm("editExObject");
+		            var url = new Url("system", "ajax_seek_autocomplete");
+		            
+		            url.addParam("object_class", "{{$_spec->class}}");
+		            url.addParam("field", "{{$_field_name}}");
+		            url.addParam("input_field", "_{{$_field_name}}_view");
+		            url.autoComplete(form.elements["_{{$_field_name}}_view"], null, {
+		              minChars: 3,
+		              method: "get",
+		              select: "view",
+		              dropdown: true,
+		              afterUpdateElement: function(field,selected){
+		                $V(field.form["{{$_field_name}}"], selected.getAttribute("id").split("-")[2]);
+		                if ($V(field.form.elements["_{{$_field_name}}_view"]) == "") {
+		                  $V(field.form.elements["_{{$_field_name}}_view"], selected.down('.view').innerHTML);
+		                }
+		              }
+		            });
+		          });
+		          </script>
+		          <input type="text" class="autocomplete" name="_{{$_field_name}}_view" value="{{$ex_object->_fwd.$_field_name}}" size="30" />
+		          {{mb_field object=$ex_object field=$_field->name form=editExObject hidden=true}}
+		        {{else}}
+		          {{mb_field object=$ex_object field=$_field->name register=true increment=true form=editExObject}}
+		        {{/if}}
+          </td>
+				{{else}}
+				  <td></td>
+				{{/if}}
+      {{/foreach}}
     </tr>
+    {{/foreach}}
+		
+		{{* Out of grid *}}
+    {{foreach from=$ex_object->_ref_ex_class->_ref_fields item=_field}}
+      {{assign var=_field_name value=$_field->name}}
+			
+		  {{if isset($out_of_grid.field.$_field_name|smarty:nodefaults)}}
+		    <tr>
+		      <th>
+		        {{mb_label object=$ex_object field=$_field->name}}
+		      </th>
+		      <td colspan="3">
+		        {{assign var=_spec value=$ex_object->_specs.$_field_name}}
+		        
+		        {{if $_spec instanceof CRefSpec}}
+		          <script type="text/javascript">
+		          Main.add(function(){
+		            var form = getForm("editExObject");
+		            var url = new Url("system", "ajax_seek_autocomplete");
+		            
+		            url.addParam("object_class", "{{$_spec->class}}");
+		            url.addParam("field", "{{$_field_name}}");
+		            url.addParam("input_field", "_{{$_field_name}}_view");
+		            url.autoComplete(form.elements["_{{$_field_name}}_view"], null, {
+		              minChars: 3,
+		              method: "get",
+		              select: "view",
+		              dropdown: true,
+		              afterUpdateElement: function(field,selected){
+		                $V(field.form["{{$_field_name}}"], selected.getAttribute("id").split("-")[2]);
+		                if ($V(field.form.elements["_{{$_field_name}}_view"]) == "") {
+		                  $V(field.form.elements["_{{$_field_name}}_view"], selected.down('.view').innerHTML);
+		                }
+		              }
+		            });
+		          });
+		          </script>
+		          <input type="text" class="autocomplete" name="_{{$_field_name}}_view" value="{{$ex_object->_fwd.$_field_name}}" size="30" />
+		          {{mb_field object=$ex_object field=$_field->name form=editExObject hidden=true}}
+		        {{else}}
+		          {{mb_field object=$ex_object field=$_field->name register=true increment=true form=editExObject}}
+		        {{/if}}
+		      </td>
+		    </tr>
+		  {{/if}}
     {{/foreach}}
     
     <tr>
-      <td></td>
-      <td>
+      <td colspan="4" class="button">
         {{if $ex_object->_id}}
           <button class="modify" type="submit">{{tr}}Save{{/tr}}</button>
                 
@@ -93,6 +147,7 @@ if (window.opener && window.opener !== window) {
         {{/if}}
       </td>
     </tr>
+		
   </table>
 
 {{/mb_form}}
@@ -101,15 +156,28 @@ if (window.opener && window.opener !== window) {
 
 <table class="main form">
     <tr>
-      <th class="title" colspan="2">
+      <th class="title" colspan="4">
         {{$ex_object->_ref_ex_class}} - {{$object}}
       </th>
     </tr>
-    {{* {{mb_include module=system template=CMbObject_view object=$ex_object}} *}}
-    {{foreach from=$ex_object->_ref_ex_class->_ref_fields item=_field}}
+    
+    {{foreach from=$grid key=_y item=_line}}
     <tr>
-      <th style="width: 50%;"><strong>{{mb_label object=$ex_object field=$_field->name}}</strong></th>
-      <td>{{mb_value object=$ex_object field=$_field->name}}</td>
+      {{foreach from=$_line key=_x item=_group}}
+        {{if $_group.label}}
+          {{assign var=_field value=$_group.label}} 
+          <th style="font-weight: bold;">
+            {{mb_label object=$ex_object field=$_field->name}}
+          </th>
+        {{elseif $_group.field}}
+          {{assign var=_field value=$_group.field}} 
+          <td>
+            {{mb_value object=$ex_object field=$_field->name}}
+          </td>
+        {{else}}
+          <td></td>
+        {{/if}}
+      {{/foreach}}
     </tr>
     {{/foreach}}
   </table>

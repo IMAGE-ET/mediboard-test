@@ -35,7 +35,7 @@ Main.add(function(){
             
             {{if $_field != $ex_constraint->_ref_object->_spec->key}}
               <option {{if $_spec instanceof CRefSpec}}class="ref class|{{$_spec->class}}"{{/if}} value="{{$_field}}" {{if $ex_constraint->field==$_field}}selected="selected"{{/if}}>
-                {{tr}}{{$ex_constraint->_ref_ex_class->host_class}}-{{$_field}}{{/tr}}
+                {{tr}}{{$ex_constraint->_ref_ex_class->host_class}}-{{$_field}}-desc{{/tr}}
               </option>
             {{/if}}
           {{/foreach}}
