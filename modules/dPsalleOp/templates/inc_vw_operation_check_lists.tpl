@@ -45,14 +45,14 @@ Main.add(function(){
 			<script type="text/javascript">
 			  // EXCLASS ne pas supprimer ////
 			  Main.add(function(){
-			    ExObject.register("CExObject-{{$selOp->_guid}}-administration", {
+			    ExObject.register("CExObject-{{$selOp->_guid}}-checklist", {
 			      object_guid: "{{$selOp->_guid}}",
-			      event: "suivi", 
+			      event: "checklist", 
 			      title: "{{$selOp}}"
 			    });
 			  });
 			</script>
-			<div id="CExObject-{{$selOp->_guid}}-administration" style="float: left; font-size: 0.8em;"></div>
+			<div id="CExObject-{{$selOp->_guid}}-checklist" style="float: left; font-size: 0.8em;"></div>
 
       <button class="down" onclick="$('check-lists').toggle(); $(this).toggleClassName('down').toggleClassName('up')">
         Check list

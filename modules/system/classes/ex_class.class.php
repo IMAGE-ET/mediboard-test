@@ -163,18 +163,22 @@ class CExClass extends CMbObject {
 			
 			foreach($grid as $_y => $_line) {
         $n_filled = 0;
+        $x_filled = 0;
 				
 				foreach($_line as $_x => $_cell) {
-					if ($_cell !== array("field" => null, "label" => null))
+					if ($_cell !== array("field" => null, "label" => null)) {
 					  $n_filled++;
+						$x_filled = max($_x, $x_filled);
+					}
 				}
 				
-				$max_filled = max($max_filled, $n_filled);
 				if ($n_filled == 0) unset($grid[$_y]);
+				
+        $max_filled = max($max_filled, $x_filled);
 			}
       
       foreach($grid as $_y => $_line) {
-      	$grid[$_y] = array_slice($_line, 0, $max_filled);
+      	$grid[$_y] = array_slice($_line, 0, $max_filled+1);
       }
 		}
 		
