@@ -50,7 +50,7 @@ class CRecordSante400 {
     self::$chrono->stop("connection");
   }
 
-  static function multipleLoad($sql, $values = array(), $max = 100, $class = "CRecordSante400") {
+  static function multipleLoad($query, $values = array(), $max = 100, $class = "CRecordSante400") {
     if (!new $class instanceof CRecordSante400) {
       trigger_error("instances of '$class' are not instances of 'CRecordSante400'", E_USER_WARNING);
     }
@@ -61,14 +61,14 @@ class CRecordSante400 {
       
       // Verbose
       if (self::$verbose) {
-        mbTrace($sql, "Querying");
+        mbTrace($query, "Querying");
         if (count($values)) {
           mbTrace($values, "With values");
         }
       }
 
       // Query execution
-      $sth = self::$dbh->prepare($sql);
+      $sth = self::$dbh->prepare($query);
       self::$chrono->start();
       $sth->execute($values);
       self::$chrono->stop("multiple load execute");
@@ -86,7 +86,7 @@ class CRecordSante400 {
 
     } 
 		catch (PDOException $e) {
-      trigger_error("Error querying '$sql' : " . $e->getMessage(), E_USER_ERROR);
+      trigger_error("Error querying '$query' : " . $e->getMessage(), E_USER_ERROR);
     }
     
     return $records;
@@ -96,20 +96,20 @@ class CRecordSante400 {
    * Prepare and execute query
    * @return int the number of affected rows (-1 for SELECTs);
    */
-  function query($sql, $values = array()) {
+  function query($query, $values = array()) {
     try {
       self::connect();
       // Verbose
 
       if (self::$verbose) {
-        mbTrace($sql, "Querying");
+        mbTrace($query, "Querying");
         if (count($values)) {
           mbTrace($values, "With values");
         }
       }
 
       // Query execution and fetching
-      $sth = self::$dbh->prepare($sql);
+      $sth = self::$dbh->prepare($query);
       self::$chrono->start();
       $sth->execute($values);
       $this->data = $sth->fetch(PDO::FETCH_ASSOC);
@@ -122,7 +122,7 @@ class CRecordSante400 {
 	      return $sth->rowCount($values);
       }
   
-      trigger_error("Error querying '$sql' : " . $e->getMessage(), E_USER_ERROR);
+      trigger_error("Error querying '$query' : " . $e->getMessage(), E_USER_ERROR);
     }
   }
   

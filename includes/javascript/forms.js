@@ -403,7 +403,7 @@ function submitFormAjax(oForm, ioTarget, oOptions) {
  * @param oForm Form element
  * @return false to prevent page reloading
  */
-function onSubmitFormAjax(oForm, oOptions) {
+function onSubmitFormAjax(oForm, oOptions, ioTarget) {
   oOptions = Object.extend({
     method: oForm.method,
     check: checkForm,
@@ -412,6 +412,8 @@ function onSubmitFormAjax(oForm, oOptions) {
     useDollarV: false
   }, oOptions);
   
+	ioTarget = ioTarget || SystemMessage.id;
+	
   // Check the form
   if (!oOptions.check(oForm)) {
     return false;
@@ -437,7 +439,7 @@ function onSubmitFormAjax(oForm, oOptions) {
 
   // Launch
   
-  url.requestUpdate(SystemMessage.id, oOptions);
+  url.requestUpdate(ioTarget, oOptions);
   
   // return
   return false;

@@ -62,6 +62,7 @@ class CGroups extends CMbObject {
     $backProps["destinataires_hprim"]     = "CDestinataireHprim group_id";
     $backProps["dmi_categories"]          = "CDMICategory group_id";
     $backProps["documents_ged"]           = "CDocGed group_id";
+    $backProps["etablissements_sherpa"]   = "CSpEtablissement group_id";
     $backProps["echanges_hprim"]          = "CEchangeHprim group_id";
     $backProps["functions"]               = "CFunctions group_id";
     $backProps["listes_choix"]            = "CListeChoix group_id";
