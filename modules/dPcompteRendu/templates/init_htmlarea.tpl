@@ -31,13 +31,14 @@ function initCKEditor() {
 	  var ck_instance = CKEDITOR.instances.htmlarea;
     
     // Hack pour la balise style qui pose problème dans ckeditor
-    var element = ck_instance.document.getBody().getFirst();
-
-    if (element && element.$.tagName == "STYLE") {
-      window.save_style = element;
-      element.remove();
-    }
-    
+    {{if !$templateManager->printMode}}
+      var element = ck_instance.document.getBody().getFirst();
+  
+      if (element && element.$.tagName == "STYLE") {
+        window.save_style = element;
+        element.remove();
+      }
+    {{/if}}
     // Les plugins qui ne doivent pas être pris en compte pour le changement de valeur pour contentEditable
     //var plugins = ["source", "undo", "redo", "pastefromword"];
 
