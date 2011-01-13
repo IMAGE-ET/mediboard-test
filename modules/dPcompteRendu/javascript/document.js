@@ -39,7 +39,7 @@ var Document = {
       url.addParam("target_class", target_class);
     }
     
-    url.popup(700, 700, "Document");
+    url.popup(950, 700, "Document");
   },
   
   fastMode: function(object_class, modele_id, object_id, target_id, target_class, unique_id) {
