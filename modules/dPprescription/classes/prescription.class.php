@@ -1569,6 +1569,10 @@ class CPrescription extends CMbObject {
    * Creation de toutes les planifications systeme pour un sejour si celles-ci ne sont pas deja créées
    */
   function calculAllPlanifSysteme(){
+  	if (!$this->_id) {
+  		return;
+  	}
+		
   	$this->completeField("planif_removed");
 		
   	// Si les planifications ont ete supprimées de la prescriptions, on force le calcul en les supprimant toutes
