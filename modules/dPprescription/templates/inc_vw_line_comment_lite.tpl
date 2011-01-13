@@ -28,7 +28,11 @@
          <input type="hidden" name="dosql" value="do_prescription_line_comment_aed" />
          <input type="hidden" name="del" value="1" />
          <input type="hidden" name="prescription_line_comment_id" value="{{$line->_id}}" />
-         <button type="button" class="trash notext" onclick="return onSubmitFormAjax(this.form, { onComplete: function() { Prescription.reload('{{$prescription->_id}}',null,'{{$div_refresh}}','{{$mode_protocole}}','{{$mode_pharma}}') } } );">
+         <button type="button" class="trash notext" onclick="
+           if (Prescription.confirmDelLine('{{$line->_view|smarty:nodefaults|JSAttribute}}')) {
+             return onSubmitFormAjax(this.form, { onComplete: function() {
+                 Prescription.reload('{{$prescription->_id}}',null,'{{$div_refresh}}','{{$mode_protocole}}','{{$mode_pharma}}'); } });
+           }">
            {{tr}}Delete{{/tr}}
          </button>
         </form>

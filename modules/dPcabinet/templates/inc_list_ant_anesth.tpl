@@ -132,9 +132,11 @@ toggleCancelledAnesth = function(list) {
       <input type="hidden" name="del" value="1" />
       <input type="hidden" name="dosql" value="do_prescription_line_medicament_aed" />
       <input type="hidden" name="prescription_line_medicament_id" value="{{$_line->_id}}" />
-      <button class="trash notext" type="button" onclick="Traitement.remove(this.form, DossierMedical.reloadDossierSejour)">
-        {{tr}}delete{{/tr}}
-      </button>
+      {{if !$_line->signee}}
+        <button class="trash notext" type="button" onclick="Traitement.remove(this.form, DossierMedical.reloadDossierSejour)">
+          {{tr}}delete{{/tr}}
+        </button>
+      {{/if}}
       <span onmouseover="ObjectTooltip.createEx(this, '{{$_line->_guid}}', 'objectView')">
 		    <a href=#1 onclick="Prescription.viewProduit(null,'{{$_line->code_ucd}}','{{$_line->code_cis}}');">
 		      {{$_line->_ucd_view}} ({{$_line->_forme_galenique}})</a>

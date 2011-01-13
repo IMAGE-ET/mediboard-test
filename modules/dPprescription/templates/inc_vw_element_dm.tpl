@@ -46,7 +46,11 @@ Main.add( function(){
     {{if $line->_perm_edit}}
       {{mb_field object=$line field="quantite_dm" form="editDM-$line_guid" increment=1 onchange="onSubmitFormAjax(this.form);"}}
       {{mb_field object=$line field="cip_dm" hidden=true}}
-      <button type="button" class="trash notext" onclick="this.form.quantite_dm.value=''; this.form.cip_dm.value=''; onSubmitFormAjax(this.form, { onComplete: refreshDM.curry('{{$line->_id}}') } );" /></button>
+      <button type="button" class="trash notext"
+      onclick="if (Prescription.confirmDelLine('{{$line->_view|smarty:nodefaults|JSAttribute}}')) {
+        this.form.quantite_dm.value='';
+        this.form.cip_dm.value='';
+        onSubmitFormAjax(this.form, { onComplete: refreshDM.curry('{{$line->_id}}') } ); }" /></button>
     {{else}}
       {{mb_value object=$line field="quantite_dm"}}
     {{/if}}

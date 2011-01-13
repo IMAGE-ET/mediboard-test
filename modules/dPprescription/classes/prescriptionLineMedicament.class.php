@@ -110,6 +110,7 @@ class CPrescriptionLineMedicament extends CPrescriptionLine {
   var $_specif_prise    = null;
   var $_count_substitution_lines = null;
   var $_ucd_view        = null;
+  var $_dci_view        = null;
   var $_is_perfusable   = null;
   var $_is_injectable   = null;
   var $_forme_galenique = null;
@@ -186,6 +187,8 @@ class CPrescriptionLineMedicament extends CPrescriptionLine {
     $specs["traitement_personnel"]   = "bool";
 		$specs["injection_ide"]          = "bool";
 		$specs["stupefiant"]             = "bool default|0";
+		$specs["_ucd_view"]              = "str";
+		$specs["_dci_view"]              = "str";
     return $specs;
   }
   
@@ -219,7 +222,13 @@ class CPrescriptionLineMedicament extends CPrescriptionLine {
 
     $this->_nb_alertes = 0;
 		$this->loadRefProduit();
-    $this->_view = $this->_ref_produit->libelle;
+		$this->_ref_produit->loadDCIFromProduit();
+		$this->_dci_view = "";
+
+		if ($this->_ref_produit->_ref_DCI->code_classe)
+		  $this->_dci_view = "{$this->_ref_produit->_ref_DCI->libelle_classe} {$this->_ref_produit->dosage}";
+
+		$this->_view = $this->_ref_produit->libelle;
     $this->_commercial_view = $this->_ref_produit->nom_commercial;
     
 		if($this->code_ucd){

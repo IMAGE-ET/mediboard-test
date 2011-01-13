@@ -45,15 +45,18 @@ Main.add( function(){
     <th colspan="9" id="th-perf-{{$line->_id}}" class="text element {{if $line->perop}}perop{{/if}}">
       <div style="float: left">
       	{{if $line->_can_delete_prescription_line_mix}}
-          <button type="button" class="trash notext" onclick="$V(getForm('editPerf-{{$line->_id}}').del,'1'); return onSubmitFormAjax(getForm('editPerf-{{$line->_id}}'), { 
-            onComplete: function(){
-              {{if @$mode_substitution}}
-                Prescription.viewSubstitutionLines('{{$line->substitute_for_id}}','{{$line->substitute_for_class}}');
-              {{else}}
-                modalPrescription.close(); Prescription.reloadPrescPerf('{{$line->prescription_id}}','{{$line->_protocole}}','{{$mode_pharma}}');
-              {{/if}}
-            }        
-          } );"></button>
+          <button type="button" class="trash notext"
+            onclick="
+              if (Prescription.confirmDelLine('{{$line->_view}}')) {
+                $V(getForm('editPerf-{{$line->_id}}').del,'1');
+                return onSubmitFormAjax(getForm('editPerf-{{$line->_id}}'), { onComplete: function(){
+                  {{if @$mode_substitution}}
+                    Prescription.viewSubstitutionLines('{{$line->substitute_for_id}}','{{$line->substitute_for_class}}');
+                  {{else}}
+                    modalPrescription.close(); Prescription.reloadPrescPerf('{{$line->prescription_id}}','{{$line->_protocole}}','{{$mode_pharma}}');
+                  {{/if}}
+               }        
+            } ); }"></button>
         {{/if}}
 				
 				{{if $line->_ref_prescription->type != "externe"}}
@@ -520,7 +523,9 @@ Main.add( function(){
 		              <tr>
 		                <td style="border:none" class="narrow">
 		                  {{if $line->_can_delete_prescription_line_mix_item && $line->type_line != "oxygene"}}
-			                  <button class="trash notext" type="button" onclick="$V(this.form.del,'1'); submitFormAjax(this.form, 'systemMsg', { 
+			                  <button class="trash notext" type="button"
+                        onclick="if (Prescription.confirmDelLine('{{$_line_item->_view|smarty:nodefaults|JSAttribute}}')) {
+                          $V(this.form.del,'1'); submitFormAjax(this.form, 'systemMsg', { 
 			                    onComplete: function(){
 			                    	{{if @$mode_substitution}}
 									  		      Prescription.viewSubstitutionLines('{{$line->substitute_for_id}}','{{$line->substitute_for_class}}');
@@ -528,7 +533,7 @@ Main.add( function(){
 									  			    Prescription.reloadLine('{{$line->_guid}}','{{$_line_item->_protocole}}','{{$mode_pharma}}');
 			                      {{/if}}
 									  			}
-			                  } );"></button>
+			                  } ); }"></button>
 		                  {{/if}}
 		                </td>
 					          <td style="width: 20%; border:none; vertical-align:middle;" class="text">

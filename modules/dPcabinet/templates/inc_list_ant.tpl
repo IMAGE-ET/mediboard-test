@@ -35,6 +35,7 @@ Antecedent = {
 };
 
 Traitement = {
+  prescription_sejour_id: {{$sejour->_ref_prescription_sejour->_id|@json}},
   remove: function(oForm, onComplete) {
     var oOptions = {
       typeName: 'ce traitement',
@@ -47,10 +48,54 @@ Traitement = {
     };
     
     confirmDeletion(oForm, oOptions, oOptionsAjax);
+  },
+  copyTraitement: function(traitement_id) {
+    var oFormPrescription = getForm("prescription-sejour-{{$patient->_id}}");
+    var oFormTransfert = getForm("transfert_line_TP-{{$patient->_id}}");
+    
+    $V(oFormTransfert.prescription_line_medicament_id, traitement_id);
+
+    if (!this.prescription_sejour_id) {
+      return onSubmitFormAjax(oFormPrescription);
+    }
+    else {
+      return onSubmitFormAjax(oFormTransfert, {onComplete: DossierMedical.reloadDossierSejour});
+    }
+  },
+  copyLine: function(prescription_id) {
+    this.prescription_sejour_id = prescription_id;
+    var oFormTransfert = getForm("transfert_line_TP-{{$patient->_id}}");
+
+    $V(oFormTransfert.prescription_id, prescription_id);
+    onSubmitFormAjax(oFormTransfert, {onComplete: DossierMedical.reloadDossierSejour});
   }
 };
 
 </script>
+
+<!--  Formulaire de création de prescription si inexistante -->
+<form name="prescription-sejour-{{$patient->_id}}" method="post" onsubmit="return false;">
+  <input type="hidden" name="m" value="dPprescription" />
+  <input type="hidden" name="prescription_id" value="" />
+  <input type="hidden" name="dosql" value="do_prescription_aed" />
+  <input type="hidden" name="type" value="sejour" />
+  <input type="hidden" name="object_class" value="CSejour" />
+  <input type="hidden" name="object_id" value="{{$sejour->_id}}" />
+  <input type="hidden" name="praticien_id" value="{{$sejour->praticien_id}}" />
+  <input type="hidden" name="ajax" value="1" />
+  <input type="hidden" name="del" value="0" />
+  <input type="hidden" name="callback" value="Traitement.copyLine" />
+</form>
+
+<!--  Formulaire de duplication de traitement -->
+<form name="transfert_line_TP-{{$patient->_id}}" action="?" method="post" onsubmit="return false;">
+  <input type="hidden" name="m" value="dPprescription" />
+  <input type="hidden" name="dosql" value="do_transfert_line_tp_aed" />
+  <input type="hidden" name="praticien_id" value="{{$app->user_id}}" />
+  <input type="hidden" name="prescription_line_medicament_id" value="" />
+  <input type="hidden" name="debut" value="{{$sejour->entree|date_format:'%Y-%m-%d'}}" />
+  <input type="hidden" name="prescription_id" value="{{$sejour->_ref_prescription_sejour->_id}}" />
+</form>
 
 {{if $dossier_medical->_count_cancelled_antecedents}}
 <button class="search" style="float: right" onclick="Antecedent.toggleCancelled('antecedents-{{$dossier_medical->_guid}}')">
@@ -78,7 +123,7 @@ Traitement = {
 	      </button>
 	      {{/if}}
 	      
-	      {{if $_is_anesth || $sejour->_id}}
+	      {{if $_is_anesth && $sejour->_id}}
 	      <button title="{{tr}}Add{{/tr}}" class="add notext" type="button" onclick="copyAntecedent({{$_antecedent->_id}})">
 	        {{tr}}Add{{/tr}}
 	      </button>
@@ -112,10 +157,14 @@ Traitement = {
 	      <input type="hidden" name="del" value="1" />
 	      <input type="hidden" name="dosql" value="do_prescription_line_medicament_aed" />
 	      <input type="hidden" name="prescription_line_medicament_id" value="{{$_line->_id}}" />
-	      <button class="trash notext" type="button" onclick="Traitement.remove(this.form, DossierMedical.reloadDossierPatient)">
-	        {{tr}}Delete{{/tr}}
-	      </button>
-	      
+	        <button class="trash notext" type="button" onclick="Traitement.remove(this.form, DossierMedical.reloadDossierPatient)">
+	          {{tr}}Delete{{/tr}}
+	        </button>
+        {{if $sejour->_id && $user->_is_praticien}}
+	        <button class="add notext" type="button" onclick="Traitement.copyTraitement('{{$_line->_id}}')">
+            {{tr}}Add{{/tr}}
+          </button>
+        {{/if}}
 	      {{if $_line->fin}}
 		      Du {{$_line->debut|date_format:"%d/%m/%Y"}} au {{$_line->fin|date_format:"%d/%m/%Y"}} :
 		    {{elseif $_line->debut}}
@@ -153,8 +202,8 @@ Traitement = {
     <button class="trash notext" type="button" onclick="Traitement.remove(this.form, DossierMedical.reloadDossierPatient)">
       {{tr}}delete{{/tr}}
     </button>
-    {{if $_is_anesth || $sejour->_id}}
-    <button class="add notext" type="button" onclick="copyTraitement({{$_traitement->_id}})">
+    {{if $_is_anesth && $sejour->_id}}
+    <button class="add notext" type="button" onclick="copyTraitement('{{$_traitement->_id}}')">
       {{tr}}Add{{/tr}}
     </button>
     {{/if}}

@@ -267,7 +267,12 @@
     <td>
       <!-- Suppression de la ligne -->
       {{if $line->_can_delete_line}}
-        <button type="button" class="trash notext" onclick="modalPrescription.close(); Prescription.delLine({{$line->_id}})">
+        <button type="button" class="trash notext"
+          onclick="
+            if (Prescription.confirmDelLine('{{$line->_view}}')) {
+              modalPrescription.close();
+              Prescription.delLine({{$line->_id}});
+            }">
           {{tr}}Delete{{/tr}}
         </button>
       {{/if}}

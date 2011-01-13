@@ -94,6 +94,8 @@ transfertLineTP = function(line_id, sejour_id){
 
 addAerosol = function(){
   var oFormAerosol = getForm("add_aerosol");
+  var oFormDate = getForm("selDateLine");
+  $V(oFormAerosol.date_debut, $V(oFormDate.debut));
 	return onSubmitFormAjax(oFormAerosol);
 }
 
@@ -142,6 +144,7 @@ updateModaleAfterAddLine = function(line_id){
   <input type="hidden" name="creator_id" value="{{$app->user_id}}" />
 	<input type="hidden" name="unite_duree" value="jour" />
 	<input type="hidden" name="unite_duree_passage" value="minute" />
+  <input type="hidden" name="date_debut" value="" />
 	<input type="hidden" name="callback" value="callbackAerosol" />
 </form>
 

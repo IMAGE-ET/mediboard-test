@@ -16,7 +16,10 @@
     <td style="text-align: center; width: 5%;" class="text">
       <!-- Suppression de la ligne -->
       {{if $line->_can_delete_line}}
-        <button type="button" class="trash notext" onclick="Prescription.delLine({{$line->_id}})" style="">
+        <button type="button" class="trash notext" onclick="
+          if (Prescription.confirmDelLine('{{$line->_view|smarty:nodefaults|JSAttribute}}')) {
+            Prescription.delLine({{$line->_id}})
+           }" style="">
           {{tr}}Delete{{/tr}}
         </button>
       {{/if}}

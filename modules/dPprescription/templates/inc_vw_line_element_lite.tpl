@@ -15,7 +15,11 @@
 <tr class="hoverable {{if $line->_fin_reelle && $line->_fin_reelle < $now && !$line->_protocole}} hatching_red{{/if}}">    
   <td style="width: 5%; text-align: center">
   	{{if $line->_can_delete_line}}
-      <button type="button" class="trash notext" onclick="Prescription.delLineElement('{{$line->_id}}','{{$element}}')">
+      <button type="button" class="trash notext"
+        onclick="
+          if (Prescription.confirmDelLine('{{$line->_view|smarty:nodefaults|JSAttribute}}')) { 
+            Prescription.delLineElement('{{$line->_id}}','{{$element}}');
+          }">
         {{tr}}Delete{{/tr}}
       </button>
     {{/if}}

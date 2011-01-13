@@ -64,7 +64,12 @@
   <tr>
     <td style="width: 25px" {{if $category->chapitre != "dmi"}}rowspan="3"{{/if}} >
       {{if $line->_can_delete_line}}
-      <button type="button" class="trash notext" onclick="modalPrescription.close(); Prescription.delLineElement('{{$line->_id}}','{{$element}}')">
+      <button type="button" class="trash notext"
+        onclick="
+          if (Prescription.confirmDelLine('{{$line->_view|smarty:nodefaults|JSAttribute}}')) {
+            modalPrescription.close();
+            Prescription.delLineElement('{{$line->_id}}','{{$element}}');
+          }">
         {{tr}}Delete{{/tr}}
       </button>
       {{/if}}
@@ -139,7 +144,7 @@
     {{if $category->chapitre == "dmi"}}
     <td style="width: 25px">
       {{if $line->_can_delete_line}}
-      <button type="button" class="trash notext" onclick="modalPrescription.close(); Prescription.delLineElement('{{$line->_id}}','{{$element}}')">
+      <button type="button" class="trash notext" onclick="if (Prescription.confirmDelLine('{{$line->_view|smarty:nodefaults|JSAttribute}}')) { modalPrescription.close(); Prescription.delLineElement('{{$line->_id}}','{{$element}}') }">
         {{tr}}Delete{{/tr}}
       </button>
       {{/if}}

@@ -338,6 +338,7 @@ $smarty->assign("linesDMI"       , $linesDMI);
 $smarty->assign("categories"     , $categories);
 $smarty->assign("executants"     , $executants);
 $smarty->assign("poids"          , $poids);
+$smarty->assign("dci"            , CValue::get("dci"));
 $smarty->assign("generated_header", @$header->_id ? $template_header->document : "");
 $smarty->assign("generated_footer", @$footer->_id ? $template_footer->document : "");
 

@@ -14,16 +14,18 @@
   <td style="width: 5%; text-align: center;" class="text {{if $_prescription_line_mix->perop}}perop{{/if}}">
 			     
     {{if $_prescription_line_mix->_can_delete_prescription_line_mix}}
-     <form name="editPerf-{{$_prescription_line_mix->_id}}" action="" method="post">
+     <form name="editPerfLite-{{$_prescription_line_mix->_id}}" action="" method="post">
           <input type="hidden" name="m" value="dPprescription" />
           <input type="hidden" name="dosql" value="do_prescription_line_mix_aed" />
           <input type="hidden" name="prescription_line_mix_id" value="{{$_prescription_line_mix->_id}}" />
           <input type="hidden" name="del" value="1" />
-          <button type="button" class="trash notext" onclick="return onSubmitFormAjax(this.form, { 
-            onComplete: function(){
-                Prescription.reloadPrescPerf('{{$_prescription_line_mix->prescription_id}}','{{$_prescription_line_mix->_protocole}}','{{$mode_pharma}}');
-            }        
-          } );"></button>
+          <button type="button" class="trash notext"
+            onclick="
+              if (Prescription.confirmDelLine('{{$_prescription_line_mix->_view|smarty:nodefaults|JSAttribute}}')) {
+                return onSubmitFormAjax(this.form, { 
+                  onComplete: function(){
+                    Prescription.reloadPrescPerf('{{$_prescription_line_mix->prescription_id}}','{{$_prescription_line_mix->_protocole}}','{{$mode_pharma}}');
+                }} );}"></button>
         </form>
       {{/if}}
 							

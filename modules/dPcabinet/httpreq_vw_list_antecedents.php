@@ -16,6 +16,7 @@ $sejour_id = CValue::getOrSession("sejour_id");
 
 $sejour = new CSejour();
 $sejour->load($sejour_id);
+$sejour->loadRefPrescriptionSejour();
 
 $patient = new CPatient;
 $patient->load($patient_id);
@@ -41,11 +42,11 @@ $user->isPraticien();
 
 // Création du template
 $smarty = new CSmartyDP();
-
 $smarty->assign("sejour" , $sejour);
 $smarty->assign("patient"    , $patient);
 $smarty->assign("_is_anesth" , $_is_anesth);
 $smarty->assign("user", $user);
+
 
 $smarty->display("inc_list_ant.tpl");
 

@@ -68,6 +68,13 @@ popupTransmission = function(sejour_id){
   url.popup(700, 500, "Transmissions et Observations");
 }
 
+popupTraitements = function(dossier_medical_id) {
+  var url = new Url("dPprescription", "ajax_vw_traitements_personnels");
+  url.addParam("dossier_medical_id", dossier_medical_id);
+  url.addParam("sejour_id", '{{$prescription->object_id}}');
+  url.popup(700, 400, "{{tr}}CConsultAnesth-traitements{{/tr}}");
+}
+
 changeManualDate = function(){
   var oForm = getForm('selDateLine'); 
 	oForm.debut_da.value = new String;
@@ -275,7 +282,9 @@ Main.add( function(){
         {{/if}}
 			 
       <div style="float: right; text-align: right;">
-      	<button type="button" class="print" onclick="Prescription.printPrescription('{{$prescription->_id}}', 0, '{{$prescription->object_id}}');" />Ordonnance</button>
+      <!--  <input type="checkbox" id="dci" name="dci"/>
+        <label for="dci">DCI</label> -->
+      	<button type="button" class="print" onclick="Prescription.printPrescription('{{$prescription->_id}}', 0, '{{$prescription->object_id}}', $('dci').checked ? 1: 0);" />Ordonnance</button>
         <br />
        	{{if !$is_praticien && !$mode_protocole && ($operation_id || $can->admin || $mode_pharma || $current_user->isInfirmiere())}}
 				<form name="selPraticienLine" action="?" method="get">
@@ -542,13 +551,15 @@ Main.add( function(){
       </select>
 			
       <button class="new" type="button" onclick="viewEasyMode('{{$mode_protocole}}','{{$mode_pharma}}', menuTabs.activeContainer.id);">Mode grille</button>
-      
+      {{if $prescription->type == "sejour" && $dossier_medical->_id}}
+        <button type="button" class="new" onclick="popupTraitements('{{$dossier_medical->_id}}')">{{tr}}CConsultAnesth-traitements{{/tr}}</button>
+      {{/if}}
 			{{if !$mode_protocole && $prescription->type == "sejour"}}
         <button type="button" class="search" onclick="popupTransmission('{{$prescription->object_id}}');">Transmissions</button>
 			{{/if}}			
 			<button type="button" class="print" onclick="Prescription.printPrescription('{{$prescription->_id}}', 0, '{{$prescription->object_id}}');" />Ordonnance</button>
       {{if $prescription->object_id && $prescription->object_class == "CSejour"}}
-			<button type="button" class="print" onclick="printBons('{{$prescription->_id}}');" title="{{tr}}Print{{/tr}}">Bons</button>
+			  <button type="button" class="print" onclick="printBons('{{$prescription->_id}}');" title="{{tr}}Print{{/tr}}">Bons</button>
       {{/if}}
 			
 			{{if !$mode_protocole && $can->admin && $prescription->type == "sejour"}}
