@@ -35,7 +35,7 @@ class CPersonnel extends CMbObject {
     $specs = parent::getProps();
     $specs["user_id"]     = "ref notNull class|CMediusers";
     $specs["emplacement"] = "enum notNull list|op|op_panseuse|reveil|service|iade default|op";
-    $specs["actif"]       = "bool notNull";
+    $specs["actif"]       = "bool notNull default|1";
     
     $specs["_user_last_name" ] = "str";
     $specs["_user_first_name"] = "str";
