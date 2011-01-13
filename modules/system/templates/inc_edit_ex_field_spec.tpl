@@ -72,6 +72,13 @@ cloneTemplate = function(input) {
   template.insert({before: clone.show().removeClassName('template')});
 }
 
+confirmDelEnum = function(button) {
+  if (!confirm("Voulez-vous vraiment supprimer cette valeur ? Elles seront supprimées de la base.")) return false;
+  $(button).up().remove(); 
+	updateFieldSpec();
+	return true;
+}
+
 Main.add(function(){
   var form = getForm("editFieldSpec");
   form.select("input.nospace").invoke("observe", "keypress", avoidSpaces);
@@ -130,8 +137,8 @@ Main.add(function(){
         {{elseif $_type == "list"}}
           {{foreach from=$spec->_list key=_key item=_value}}
             <div>
-              <input type="text" name="{{$_name}}[]" value="{{$_value}}" />
-              <button type="button" class="cancel notext" tabindex="1000" onclick="$(this).up().remove(); updateFieldSpec();">{{tr}}Delete{{/tr}}</button>
+              <input type="text" name="{{$_name}}[]" value="{{$_value}}" readonly="readonly" />
+              <button type="button" class="cancel notext" tabindex="1000" onclick="return confirmDelEnum(this)">{{tr}}Delete{{/tr}}</button>
               {{if $ex_field_id}}
                 Traduction: <input type="text" name="__enum[]" value="{{if $spec->_locales.$_value|strpos:'CExObject' === false}}{{$spec->_locales.$_value}}{{/if}}" />
               {{else}}
@@ -142,7 +149,7 @@ Main.add(function(){
           
           <div style="display: none;" class="template">
             <input type="text" name="{{$_name}}[]" value="" />
-            <button type="button" class="cancel notext" tabindex="1000" onclick="$(this).up().remove(); updateFieldSpec();">{{tr}}Delete{{/tr}}</button>
+            <button type="button" class="cancel notext" tabindex="1000" onclick="return confirmDelEnum(this)">{{tr}}Delete{{/tr}}</button>
             {{if $ex_field_id}}
               Traduction: <input type="text" name="__enum[]" value="" />
             {{else}}

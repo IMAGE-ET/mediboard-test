@@ -9,9 +9,11 @@
   *}}
 
 {{mb_default var=colspan value=2}}
+{{mb_default var=css_class value=""}}
+
 <tr>
   {{if $object->_id}}
-  <th class="title modify" colspan="{{$colspan}}">
+  <th class="title modify {{$css_class}}" colspan="{{$colspan}}">
     {{mb_include module=system template=inc_object_notes     }}
     {{mb_include module=system template=inc_object_idsante400}}
     {{mb_include module=system template=inc_object_history   }}

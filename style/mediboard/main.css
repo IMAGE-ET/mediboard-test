@@ -114,6 +114,10 @@ a.DESC:hover{
   outline: 4px solid #f88;
 }
 
+.dropactive {
+  outline: 4px solid #9ECFFF;
+}
+
 /* Should not be used */
 div.dragged {
   background-color: #ffc;

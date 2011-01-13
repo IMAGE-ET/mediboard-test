@@ -493,6 +493,7 @@ class CMbFieldSpec {
 
   function getFormHiddenElement($object, $params, $value, $className) {
     $field = $this->fieldName;
+    $form = CMbArray::extract($params, "form"); // needs to be extracted
     $extra = CMbArray::makeXmlAttributes($params);
     $sHtml = "<input type=\"hidden\" name=\"".htmlspecialchars($field)."\" value=\"".htmlspecialchars($value)."\"";
     if($this->prop){
@@ -617,11 +618,12 @@ class CMbFieldSpec {
   }
 
   function getFormElementTextarea($object, &$params, $value, $className){
-    $field        = htmlspecialchars($this->fieldName);
-    $rows         = CMbArray::extract($params, "rows", "3");
-
-    $extra        = CMbArray::makeXmlAttributes($params);
-    $sHtml        = "<textarea name=\"$field\" rows=\"$rows\" class=\"".htmlspecialchars(trim("$className $this->prop"))."\" $extra>".htmlspecialchars($value)."</textarea>";
+    $field = htmlspecialchars($this->fieldName);
+    $rows  = CMbArray::extract($params, "rows", "3");
+    $form  = CMbArray::extract($params, "form"); // needs to be extracted
+    
+    $extra = CMbArray::makeXmlAttributes($params);
+    $sHtml = "<textarea name=\"$field\" rows=\"$rows\" class=\"".htmlspecialchars(trim("$className $this->prop"))."\" $extra>".htmlspecialchars($value)."</textarea>";
     return $sHtml;
   }
 

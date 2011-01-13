@@ -121,7 +121,7 @@ class CExClass extends CMbObject {
     return $list;
   }
 	
-	function getGrid($w = 4, $h = 15, $reduce = true){
+	function getGrid($w = 4, $h = 20, $reduce = true){
 		$grid = array_fill(0, $h, array_fill(0, $w, array(
 		  "field" => null, 
 		  "label" => null,

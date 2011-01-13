@@ -74,6 +74,7 @@ class CEnumSpec extends CMbFieldSpec {
     $cycle         = CMbArray::extract($params, "cycle", 1);
     $defaultOption = CMbArray::extract($params, "defaultOption");
     $alphabet      = CMbArray::extract($params, "alphabet", false);
+    $form          = CMbArray::extract($params, "form"); // needs to be extracted
     
     if ($emptyLabel = CMbArray::extract($params, "emptyLabel")) {
       $defaultOption = "&mdash; ". CAppUI::tr($emptyLabel);

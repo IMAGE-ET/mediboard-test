@@ -58,6 +58,7 @@ class CBoolSpec extends CMbFieldSpec {
     $disabled      = CMbArray::extract($params, "disabled");
     $default       = CMbArray::extract($params, "default", $this->default);
     $defaultOption = CMbArray::extract($params, "defaultOption");
+    $form          = CMbArray::extract($params, "form"); // needs to be extracted
     $className     = htmlspecialchars(trim("$className $this->prop"));
     $extra         = CMbArray::makeXmlAttributes($params);
     

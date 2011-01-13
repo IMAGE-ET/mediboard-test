@@ -12,11 +12,12 @@
 
 <script type="text/javascript">
 selectExClass = function(element, object_guid, event, _element_id) {
-  showExClassForm($V(element), object_guid, element.options[element.options.selectedIndex].innerHTML, null, event, _element_id);
+  var view = element.option ? element.options[element.options.selectedIndex].innerHTML : element.innerHTML;
+  showExClassForm($V(element) || element.value, object_guid, view, null, event, _element_id);
   element.selectedIndex = 0;
 }
 
-var _popup = !!Control.Overlay.container;
+var _popup = Control.Overlay.container && Control.Overlay.container.visible();
 
 showExClassForm = function(ex_class_id, object_guid, title, ex_object_id, event, _element_id) {
   var url = new Url("system", "view_ex_object_form");
@@ -43,23 +44,35 @@ showExClassForm = function(ex_class_id, object_guid, title, ex_object_id, event,
 }
 </script>
 
-<div style="display: inline-block;">
-  <select onchange="selectExClass(this, '{{$object->_guid}}', '{{$event}}', '{{$_element_id}}')">
-    <option selected="selected" disabled="disabled">
-      {{$count_available}} formulaire(s) disponible(s)
-    </option>
-    
-    {{foreach from=$ex_classes item=_ex_class}}
-      <option value="{{$_ex_class->_id}}" {{if $_ex_class->_disabled}}disabled="disabled"{{/if}}>{{$_ex_class->name}}</option>
-    {{/foreach}}
-  </select>
-  
-  {{else}}
-    <em style="color: #999;">Aucun formulaire disponible</em>
-  {{/if}}
-</div>
+  <div style="display: inline-block;">
+		{{if $count_available == 1}}
+      <!-- Un seul formulaire : bouton -->
+		  {{assign var=_ex_class value=$ex_classes|@reset}}
+		  <button class="edit" value="{{$_ex_class->_id}}" onclick="selectExClass(this, '{{$object->_guid}}', '{{$event}}', '{{$_element_id}}')">
+		  	{{$_ex_class->name}}
+		  </button>
+		{{else}}
+		  <!-- plusieurs formulaire : select -->
+		  <select onchange="selectExClass(this, '{{$object->_guid}}', '{{$event}}', '{{$_element_id}}')">
+		    <option selected="selected" disabled="disabled">
+		      {{$count_available}} formulaire(s) disponible(s)
+		    </option>
+		    
+		    {{foreach from=$ex_classes item=_ex_class}}
+		      <option value="{{$_ex_class->_id}}" {{if $_ex_class->_disabled}}disabled="disabled"{{/if}}>{{$_ex_class->name}}</option>
+		    {{/foreach}}
+		  </select>
+		{{/if}}
+  </div>
+	
+{{else}}
+  <em style="color: #999;">Aucun formulaire disponible</em>
+{{/if}}
 
-<ul id="CExObject.{{$object->_guid}}.{{$event}}">
+{{if $ex_objects|@count}}
+<button class="down notext" onclick="ObjectTooltip.createDOM(this, $(this).next(), {duration: 0});">Fiches enregistrées</button>
+
+<ul id="CExObject.{{$object->_guid}}.{{$event}}" style="display: none;">
 {{assign var=_events value=$object->_spec->events}}
 
 {{foreach from=$ex_objects item=_ex_objects key=_ex_class_id}}
@@ -92,3 +105,4 @@ showExClassForm = function(ex_class_id, object_guid, title, ex_object_id, event,
 	{{/if}}
 {{/foreach}}
 </ul>
+{{/if}}

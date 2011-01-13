@@ -75,6 +75,7 @@ class CPasswordSpec extends CMbFieldSpec {
   }
   
   function getFormHtmlElement($object, $params, $value, $className){
+    $form         = CMbArray::extract($params, "form"); // needs to be extracted
     $field        = htmlspecialchars($this->fieldName);
     $extra        = CMbArray::makeXmlAttributes($params);
     $sHtml        = '<input type="password" name="'.$field.'"';    

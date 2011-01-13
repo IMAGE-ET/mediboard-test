@@ -6,6 +6,6 @@
     {{else}}
       {{mb_label object=$ex_object field=$_field->name}}
     {{/if}}
-    <div style="position:absolute;top:0;left:0;bottom:0;right:0;"></div>
+    <div class="overlay"></div>
   </div>
 </div>

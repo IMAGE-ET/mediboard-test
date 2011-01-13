@@ -13,7 +13,7 @@
 {{/main}}
 
 <table class="main form">
-  {{mb_include module=system template=inc_form_table_header object=$ex_class colspan="2"}}
+  {{mb_include module=system template=inc_form_table_header object=$ex_class colspan="2" css_class="text"}}
 
   <tr>
     <td colspan="2">
@@ -165,54 +165,7 @@ Main.add(function(){
 
 <div id="fields-layout" style="display: none;">
   <script type="text/javascript">
-  	Main.add(function(){
-		  $$('.draggable').each(function(d){
-			  new Draggable(d, {
-		      //revert: true, 
-		      scroll: window, 
-		      ghosting: true
-		    });
-			});
-			
-			$$(".droppable").each(function(d){
-		    Droppables.add(d, { 
-		      hoverclass: 'dropover',
-					onDrop: function(drag, drop) {
-					  drag.style.position = null;
-						
-						// prevent multiple fields in the same cell
-					  if (drop.hasClassName('grid') && drop.select('.draggable').length) return;
-						
-            // prevent fields in label-list and vice versa
-            if (
-						  drop.hasClassName('label-list') && drag.hasClassName('field') ||
-						  drop.hasClassName('field-list') && drag.hasClassName('label')
-						) return;
-						
-					  drop.insert(drag);
-						submitLayout(drag);
-					}
-		    });
-			});
-		});
-		
-		function submitLayout(drag) {
-		  var form = getForm("form-layout-field"),
-			    drop = drag.up(".droppable"),
-          coord_x = drop.getAttribute("data-x"),
-          coord_y = drop.getAttribute("data-y"),
-					type = drag.hasClassName("field") ? "field" : "label";
-		  
-			$(form).select('input.coord').each(function(coord){
-			  $V(coord.disable(), '');
-			});
-			
-			$V(form.ex_class_field_id, drag.getAttribute("data-field_id"));
-      $V(form["coord_"+type+"_x"].enable(), coord_x);
-      $V(form["coord_"+type+"_y"].enable(), coord_y);
-			
-			form.onsubmit();
-		}
+  	Main.add(ExClass.initLayoutEditor);
   </script>
 
 	<div class="small-info">Glissez-déposez les champs et leur libellé dans la grille "Disposition"</div>
@@ -265,11 +218,23 @@ Main.add(function(){
     .field-list .field {
 		  margin-top: 1.2em;
     }
+		
+		.draggable .overlay {
+			position:absolute;
+			top:0;
+			left:0;
+			bottom:0;
+			right:0;
+	  }
+		
+		.draggable.hr {
+		  padding: 6px;
+		}
 	</style>
 	
 	<form name="form-grid-layout" method="post" onsubmit="return false">
 		
-	<div class="out-of-grid">
+	<div class="out-of-grid droppable">
 		<table class="main tbl" style="table-layout: fixed;">
 	    <tr>
 	      <th colspan="2" class="title">Eléments non placés</th>
@@ -277,19 +242,29 @@ Main.add(function(){
 		  <tr>
 			  <th>Libellés</th>
         <th>Champs</th>
+				<!--<th>Divers</th>-->
 			</tr>
 			<tr>
-				<td class="label-list droppable" data-x="" data-y="" style="padding: 4px; vertical-align: top;">
+				<td class="label-list" data-x="" data-y="" style="padding: 4px; height: 2em; vertical-align: top;">
 					{{foreach from=$out_of_grid.label item=_field}}
 					  {{mb_include module=system template=inc_ex_field_draggable _type="label"}}
 					{{/foreach}}
 				</td>
 		
-		    <td class="field-list droppable" data-x="" data-y="" style="padding: 4px; vertical-align: top;">
+		    <td class="field-list" data-x="" data-y="" style="padding: 4px; vertical-align: top;">
 		      {{foreach from=$out_of_grid.field item=_field}}
             {{mb_include module=system template=inc_ex_field_draggable _type="field"}}
 		      {{/foreach}}
 				</td>
+				
+				<!--
+				<td>
+					Séparateur horizontal
+					<div class="draggable hr">
+					  <hr />
+					</div>
+				</td>
+				-->
       </tr>
 		</table>
 	</div>

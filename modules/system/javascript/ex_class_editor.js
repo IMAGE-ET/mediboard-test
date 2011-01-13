@@ -12,6 +12,74 @@ var ExClass = {
     var parts = $V(select).split(".");
     $V(form.host_class, parts[0]);
     $V(form.event, parts[1]);
+  },
+  submitLayout: function(drag, drop) {
+    var form = getForm("form-layout-field"),
+        coord_x = drop.getAttribute("data-x"),
+        coord_y = drop.getAttribute("data-y"),
+        type = drag.hasClassName("field") ? "field" : "label";
+    
+    $(form).select('input.coord').each(function(coord){
+      $V(coord.disable(), '');
+    });
+    
+    $V(form.ex_class_field_id, drag.getAttribute("data-field_id"));
+    $V(form["coord_"+type+"_x"].enable(), coord_x);
+    $V(form["coord_"+type+"_y"].enable(), coord_y);
+    
+    form.onsubmit();
+  },
+	initLayoutEditor: function(){
+    $$(".draggable:not(.hr)").each(function(d){
+      new Draggable(d, {
+        //revert: true, 
+        scroll: window, 
+        ghosting: true,
+        onStart: function(){$$(".out-of-grid")[0].addClassName("dropactive")},
+        onEnd: function(){$$(".out-of-grid")[0].removeClassName("dropactive")}
+      });
+    });
+    /*
+    $$(".draggable.hr").each(function(d){
+      new Draggable(d, {
+        //revert: true, 
+        scroll: window, 
+        ghosting: true
+      });
+    });*/
+    
+    $$(".droppable").each(function(d){
+      Droppables.add(d, {
+        hoverclass: 'dropover',
+        onDrop: function(drag, drop) {
+          drag.style.position = ''; // a null value doesn't work on IE
+          
+          if (drop.hasClassName("out-of-grid")) {
+            if (drag.hasClassName('field')) {
+              drop = drop.down(".field-list");
+            }
+            
+            if (drag.hasClassName('label')) {
+              drop = drop.down(".label-list");
+            }
+          }
+          
+          else {
+            // prevent multiple fields in the same cell
+            if (drop.hasClassName('grid') && drop.select('.draggable').length) return;
+          }
+          
+          drop.insert(drag);
+          ExClass.submitLayout(drag, drop);
+        }
+      });
+    });
+    
+    if (Prototype.Browser.IE) {
+      (function(){
+        getForm("form-grid-layout").select("input, select").invoke("disable");
+      }).defer();
+    }
   }
 };
 
