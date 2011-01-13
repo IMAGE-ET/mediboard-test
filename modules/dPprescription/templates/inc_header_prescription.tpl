@@ -174,6 +174,12 @@ Main.add( function(){
 </script>
 
 {{assign var=praticien value=$prescription->_ref_praticien}}
+{{if !$prescription->praticien_id ||
+  ($prescription->praticien_id && ($prescription->praticien_id==$current_user->_id) || !$is_praticien)}}
+  {{assign var=can_edit_protocole value=1}}
+{{else}}
+  {{assign var=can_edit_protocole value=0}}
+{{/if}}
 
 {{if $mode_protocole}}
 <form name="addLibelle-{{$prescription->_id}}" method="post">
@@ -195,7 +201,11 @@ Main.add( function(){
 	  <tr>
 	    <th style="width:7em">{{mb_title object=$prescription field=libelle}}</th>
 	    <td>
-        <input type="text" name="libelle" value="{{$prescription->libelle}}" onchange="refreshListProtocole(this.form);" />
+        <input type="text" name="libelle" value="{{$prescription->libelle}}"
+          onchange="refreshListProtocole(this.form);"
+          {{if !$can_edit_protocole}}
+            readonly="readonly"
+          {{/if}}/>
         <button class="tick notext" type="button"></button>
 	    </td>
 	  </tr>
@@ -203,7 +213,10 @@ Main.add( function(){
 	    <th style="width:7em">{{mb_title object=$prescription field=_owner}}</th>
 	     <td class="text">
          <!-- Modification du pratcien_id / user_id -->
-         <select name="praticien_id" onchange="this.form.function_id.value=''; this.form.group_id.value=''; refreshListProtocole(this.form)">
+         <select name="praticien_id" onchange="this.form.function_id.value=''; this.form.group_id.value=''; refreshListProtocole(this.form)"
+         {{if !$can_edit_protocole}}
+            disabled="disabled"
+         {{/if}}>
            <option value="">&mdash; Choix d'un praticien</option>
  	        {{foreach from=$praticiens item=praticien}}
  	        <option class="mediuser" 
@@ -213,14 +226,20 @@ Main.add( function(){
  	        </option>
  	        {{/foreach}}
  	      </select>
- 	      <select name="function_id" onchange="this.form.praticien_id.value='';this.form.group_id.value=''; refreshListProtocole(this.form)">
+ 	      <select name="function_id" onchange="this.form.praticien_id.value='';this.form.group_id.value=''; refreshListProtocole(this.form)"
+          {{if !$can_edit_protocole}}
+            disabled="disabled"
+          {{/if}}>
            <option value="">&mdash; Choix du cabinet</option>
            {{foreach from=$functions item=_function}}
            <option class="mediuser" style="border-color: #{{$_function->color}}" value="{{$_function->_id}}" 
            {{if $_function->_id == $prescription->function_id}}selected=selected{{/if}}>{{$_function->_view}}</option>
            {{/foreach}}
          </select>
-         <select name="group_id" onchange="this.form.praticien_id.value='';this.form.function_id.value=''; refreshListProtocole(this.form)">
+         <select name="group_id" onchange="this.form.praticien_id.value='';this.form.function_id.value=''; refreshListProtocole(this.form)"
+         {{if !$can_edit_protocole}}
+            disabled="disabled"
+         {{/if}}>
            <option value="">&mdash; Choix d'un etablissement</option>
            {{foreach from=$groups item=_group}}
            <option value="{{$_group->_id}}" 
@@ -233,7 +252,10 @@ Main.add( function(){
 		 <tr>
 			 <th style="width:7em">{{mb_label object=$protocole field="type"}}</th>
 			 <td>
-		      <select name="type" onchange="refreshListProtocole(this.form);">
+		      <select name="type" onchange="refreshListProtocole(this.form);"
+            {{if !$can_edit_protocole}}
+              disabled="disabled"
+            {{/if}}>
 		        <option value="pre_admission" {{if $prescription->type == "pre_admission"}}selected="selected"{{/if}}>Pré-admission</option>
 		        <option value="sejour" {{if $prescription->type == "sejour"}}selected="selected"{{/if}}>Séjour</option>
 		        <option value="sortie" {{if $prescription->type == "sortie"}}selected="selected"{{/if}}>Sortie</option>
@@ -243,7 +265,13 @@ Main.add( function(){
 	   {{/if}}
 		 <tr>
 		 	 <th>{{mb_label object=$prescription field="fast_access"}}</th>
-			 <td>{{mb_field object=$prescription field="fast_access" onchange="onSubmitFormAjax(this.form);"}}</td>
+			 <td>
+         {{if $can_edit_protocole}}
+           {{mb_field object=$prescription field="fast_access" onchange="onSubmitFormAjax(this.form);"}}
+         {{else}}
+           {{mb_value object=$prescription field="fast_access"}}
+         {{/if}}
+       </td>
 		 </tr>
   </table>
 </form>

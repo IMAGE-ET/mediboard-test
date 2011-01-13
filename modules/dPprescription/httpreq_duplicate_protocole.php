@@ -26,6 +26,11 @@ if(!$protocole_dest_id){
 	// Creation du nouveau protocole
 	$protocole->_id = "";
 	$protocole->libelle = "Copie de $protocole->libelle";
+	
+	if ($protocole->praticien_id) {
+	  $protocole->praticien_id = CAppUI::$user->_id;  
+	}
+	
 	$msg = $protocole->store();
   CAppUI::displayMsg($msg, "CPrescription-msg-create");
   $protocole_dest_id = $protocole->_id;
