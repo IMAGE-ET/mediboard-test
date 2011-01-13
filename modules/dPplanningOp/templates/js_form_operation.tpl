@@ -192,7 +192,7 @@ function updateEntreePrevue() {
   }
 
   if(oOpForm.date.value) {
-    if(!oSejourForm._date_entree_prevue.value) {
+    if(!oSejourForm._date_entree_prevue.value || !(oSejourForm._date_entree_prevue.value <= oOpForm.date.value && oSejourForm._date_sortie_prevue.value >= oOpForm.date.value)) {
       oSejourForm._date_entree_prevue.value = oOpForm.date.value;
       oView = getForm('editSejour')._date_entree_prevue_da;
       oView.value = Date.fromDATE(oOpForm.date.value).toLocaleDate();
