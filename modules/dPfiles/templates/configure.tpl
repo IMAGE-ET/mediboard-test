@@ -4,7 +4,7 @@ getState = function() {
   url.requestUpdate("openoffice");
 }
 Main.add(function() {
-  {{if $conf.dPfiles.CFile.openoffice_active}}
+  {{if $conf.dPfiles.CFile.ooo_active}}
     getState();
   {{/if}}
   Control.Tabs.create('tabs-configure', true);
