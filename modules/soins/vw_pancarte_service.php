@@ -177,7 +177,8 @@ foreach($prescriptions as $_prescription){
       }				
 			
 			// Creation du tableau d'urgences
-      if(is_array($_planif->_ref_object->_dates_urgences) && array_key_exists($_date, $_planif->_ref_object->_dates_urgences)){
+      if(is_array($_planif->_ref_object->_dates_urgences) && array_key_exists($_date, $_planif->_ref_object->_dates_urgences) &&
+			in_array("$_date $time",  $_planif->_ref_object->_dates_urgences[$_date])){
         $urgences[$_prescription->_id]["$_date $time"] = 1;
         $pancarte[$_prescription->_id]["$_date $time"][$type][$_planif->object_id]["urgence"] = 1;
       } 
