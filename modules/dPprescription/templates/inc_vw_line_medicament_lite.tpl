@@ -38,25 +38,7 @@
 			
        <span>
        	{{include file="../../dPprescription/templates/line/inc_vw_alertes.tpl"}}
-        {{if $line->_can_vw_livret_therapeutique}}
-        <img src="images/icons/livret_therapeutique_barre.gif" title="Produit non présent dans le livret Thérapeutique" />
-        {{/if}}  
-        {{if $line->stupefiant}}
-          <img src="images/icons/stup.png" title="Produit stupéfiant" />
-        {{/if}}
-        {{if !$line->_ref_produit->inT2A}}
-          <img src="images/icons/T2A_barre.gif" title="Produit hors T2A" />
-        {{/if}}
-        {{if $line->_can_vw_hospi}}
-        <img src="images/icons/hopital.gif" title="Produit Hospitalier" />
-        {{/if}}
-        {{if $line->_can_vw_generique}}
-        <img src="images/icons/generiques.gif" title="Produit générique" />
-        {{/if}}
-        {{if $line->_ref_produit->_supprime}}
-        <img src="images/icons/medicament_barre.gif" title="Produit supprimé" />
-        {{/if}}
-        
+        {{include file="../../dPprescription/templates/inc_vw_info_line_medicament.tpl"}}
       </span>
       
       <a href="#produit{{$line->_id}}" onclick="Prescription.viewProduit(null,'{{$line->code_ucd}}','{{$line->code_cis}}');" style="font-weight: bold; display: inline;">

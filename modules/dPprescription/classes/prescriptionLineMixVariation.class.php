@@ -71,7 +71,7 @@ class CPrescriptionLineMixVariation extends CMbObject {
     $this->_ref_prescription_line_mix->loadRefPrescription();
     if($this->_ref_prescription_line_mix->_ref_prescription->type == "sejour"){
       $this->_ref_prescription_line_mix->removePlanifSysteme();
-      if($this->_ref_prescription_line_mix->substitution_active && (!$this->_ref_prescription_line_mix->conditionnel || ($this->_ref_prescription_line_mix->conditionnel && $this->_ref_prescription_line_mix->condition_active))){
+      if($this->_ref_prescription_line_mix->substitution_active){
         $this->_ref_prescription_line_mix->calculPlanifsPerf();
       }
     }
@@ -89,7 +89,7 @@ class CPrescriptionLineMixVariation extends CMbObject {
 		
 		if($this->_ref_prescription_line_mix->_ref_prescription->type == "sejour"){
       $this->_ref_prescription_line_mix->removePlanifSysteme();
-      if($this->_ref_prescription_line_mix->substitution_active && (!$this->_ref_prescription_line_mix->conditionnel || ($this->_ref_prescription_line_mix->conditionnel && $this->_ref_prescription_line_mix->condition_active))){
+      if($this->_ref_prescription_line_mix->substitution_active){
         $this->_ref_prescription_line_mix->calculPlanifsPerf();
 			}
     }

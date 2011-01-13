@@ -195,30 +195,8 @@
   
   <!-- Pas traitement ni protocole -->
   <tr>
-    <td style="text-align: center">
-      {{if $line->_can_vw_livret_therapeutique}}
-      <img src="images/icons/livret_therapeutique_barre.gif" title="Produit non présent dans le livret Thérapeutique" />
-      <br />
-      {{/if}}
-			{{if $line->stupefiant}}
-			  <img src="images/icons/stup.png" title="Produit stupéfiant" />
-				<br />
-      {{/if}}
-      {{if !$line->_ref_produit->inT2A}}
-        <img src="images/icons/T2A_barre.gif" title="Produit hors T2A" />
-        <br />
-      {{/if}}  
-      {{if $line->_can_vw_hospi}}
-      <img src="images/icons/hopital.gif" title="Produit Hospitalier" />
-      <br />
-      {{/if}}
-      {{if $line->_can_vw_generique}}
-      <img src="images/icons/generiques.gif" title="Produit générique" />
-      <br />
-      {{/if}}
-      {{if $line->_ref_produit->_supprime}}
-      <img src="images/icons/medicament_barre.gif" title="Produit supprimé" />
-      {{/if}}
+    <td style="text-align: center" class="text">
+      {{include file="../../dPprescription/templates/inc_vw_info_line_medicament.tpl"}}
     </td>
     <td colspan="3">
       {{include file="../../dPprescription/templates/line/inc_vw_dates.tpl"}}  
@@ -231,7 +209,7 @@
 	      }
       </script>
 	  </td>
-  </tr> 
+  </tr>
   
   <tr>  
 	  <td style="text-align: left">

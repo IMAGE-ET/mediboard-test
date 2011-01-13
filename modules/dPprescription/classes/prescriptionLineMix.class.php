@@ -669,8 +669,6 @@ class CPrescriptionLineMix extends CMbObject {
                       $this->fieldModified("date_retrait")||
                       $this->fieldModified("date_arret")||
 											$this->fieldModified("time_arret")||
-											$this->fieldModified("conditionnel")||
-											$this->fieldModified("condition_active")||
 											$this->fieldModified("substitution_active"));
 													
     if($msg = parent::store()){
@@ -683,7 +681,7 @@ class CPrescriptionLineMix extends CMbObject {
 			if($this->_count_locked_planif == 0){
 			
 		  $this->removePlanifSysteme();
-			if($this->substitution_active && (!$this->conditionnel || ($this->conditionnel && $this->condition_active))){
+			if($this->substitution_active){
 				$this->calculPlanifsPerf();
 			}
 			

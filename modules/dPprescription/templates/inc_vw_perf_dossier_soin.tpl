@@ -218,7 +218,7 @@
                {{/if}}
 							 
                <div style="margin: 3px;
-							       {{if ($_prescription_line_mix->_fin && ($_prescription_line_mix->_fin|date_format:"%Y-%m-%d %H:00:00" < $_date_hour)) || $_prescription_line_mix->_debut|date_format:"%Y-%m-%d %H:00:00" > $_date_hour}}
+							       {{if ($_prescription_line_mix->_fin && ($_prescription_line_mix->_fin|date_format:"%Y-%m-%d %H:00:00" < $_date_hour)) || ($_prescription_line_mix->_debut|date_format:"%Y-%m-%d %H:00:00" > $_date_hour) || !$_prescription_line_mix->_active}}
 		                  background-color: #ccc
 											{{/if}}"
 							      {{if isset($_prescription_line_mix->_prises_prevues.$_date.$_hour|smarty:nodefaults)}}
@@ -263,56 +263,58 @@
 						{{/if}}
 						
 						<!-- Affichage de la durée de passage indiquée dans la prescription -->
-            {{if $nb_prevue && $_prescription_line_mix->duree_passage}}
-					    <div style="opacity: 0.7; font-size: 0.8em; height: 1em; text-align: center; background-color: #ccc; padding: 2px;">
-                {{$_prescription_line_mix->duree_passage}} min
-						  </div>
-            {{else}}
-					    <div style="font-size: 0.8em; height: 1em; padding: 2px;"></div>
-					  {{/if}}
-             
-						{{if $_prescription_line_mix->_debit}}
-						  {{if array_key_exists($_date_hour, $_prescription_line_mix->_variations)}}
-							   <table class="layout" style="width: 100%; margin: -2px; height: 2em;">
-							   	<tr>
-								 {{foreach from=$_prescription_line_mix->_variations.$_date_hour key=hour_variation item=_variation name="foreach_variation"}}
-									 {{if !@$variation_id}}
-							       {{assign var=background value="BBF"}} 
-                     {{assign var=variation_id value=$_variation.variation_id}}
-              		 {{/if}}
-							     
-									 {{if $variation_id != $_variation.variation_id}}
-									   {{if $background == "BBF"}}
-										  {{assign var=background value="BCF"}} 
-										 {{else}}
-										  {{assign var=background value="BBF"}} 
+            {{if $_prescription_line_mix->_active}}
+							{{if $nb_prevue && $_prescription_line_mix->duree_passage}}
+						    <div style="opacity: 0.7; font-size: 0.8em; height: 1em; text-align: center; background-color: #ccc; padding: 2px;">
+	                {{$_prescription_line_mix->duree_passage}} min
+							  </div>
+	            {{else}}
+						    <div style="font-size: 0.8em; height: 1em; padding: 2px;"></div>
+						  {{/if}}
+	             
+							{{if $_prescription_line_mix->_debit}}
+							  {{if array_key_exists($_date_hour, $_prescription_line_mix->_variations)}}
+								   <table class="layout" style="width: 100%; margin: -2px; height: 2em;">
+								   	<tr>
+									 {{foreach from=$_prescription_line_mix->_variations.$_date_hour key=hour_variation item=_variation name="foreach_variation"}}
+										 {{if !@$variation_id}}
+								       {{assign var=background value="BBF"}} 
+	                     {{assign var=variation_id value=$_variation.variation_id}}
+	              		 {{/if}}
+								     
+										 {{if $variation_id != $_variation.variation_id}}
+										   {{if $background == "BBF"}}
+											  {{assign var=background value="BCF"}} 
+											 {{else}}
+											  {{assign var=background value="BBF"}} 
+											 {{/if}} 
+										   {{assign var=variation_id value=$_variation.variation_id}}
 										 {{/if}} 
-									   {{assign var=variation_id value=$_variation.variation_id}}
-									 {{/if}} 
-						
-								   <td style="padding: 0; width: {{$_variation.pourcentage}}%; vertical-align: bottom;">
-                     <div onmouseover="showDebit(this, '777'); ObjectTooltip.createDOM(this, 'tooltip-content-debit-{{$_prescription_line_mix->_id}}-{{$_variation.debit}}-{{$_variation.variation_id}}');" 
-										      onmouseout="showDebit(this, '{{$background}}');" style="position: relative; padding: 0px; margin: 0px;">
-										 <div class="{{$_variation.debit}}-{{$_variation.variation_id}}"
-										      style="position: absolute;  bottom:0px; width: 100%; background-color: #{{$background}}; border-right: 0px; border-left: 0px; height: {{$_variation.height}}em; {{if $_variation.debit == '0'}}border-bottom: 1px solid red;{{/if}}"></div>
-										 {{if $_variation.debit != ''}}
-										   <div style="position: absolute; bottom:0px; height: {{$_variation.normale}}em; width: 100%; border-top: 1px solid #000;"></div>
-									   {{/if}}
-									 </div>
-									 <span id="tooltip-content-debit-{{$_prescription_line_mix->_id}}-{{$_variation.debit}}-{{$_variation.variation_id}}" style="display: none">
-									   Débit: {{$_variation.debit}} ml/h
-									 </span>
-									 </td>
-								 {{/foreach}}
-								 </tr>
-								 </table>
-						   {{else}}
-							   <table class="layout" style="width: 100%; margin: -2px; height: 2em;">
-                   <tr>
-                     <td></td>
-                   </tr>
-                 </table>
+							
+									   <td style="padding: 0; width: {{$_variation.pourcentage}}%; vertical-align: bottom;">
+	                     <div onmouseover="showDebit(this, '777'); ObjectTooltip.createDOM(this, 'tooltip-content-debit-{{$_prescription_line_mix->_id}}-{{$_variation.debit}}-{{$_variation.variation_id}}');" 
+											      onmouseout="showDebit(this, '{{$background}}');" style="position: relative; padding: 0px; margin: 0px;">
+											 <div class="{{$_variation.debit}}-{{$_variation.variation_id}}"
+											      style="position: absolute;  bottom:0px; width: 100%; background-color: #{{$background}}; border-right: 0px; border-left: 0px; height: {{$_variation.height}}em; {{if $_variation.debit == '0'}}border-bottom: 1px solid red;{{/if}}"></div>
+											 {{if $_variation.debit != ''}}
+											   <div style="position: absolute; bottom:0px; height: {{$_variation.normale}}em; width: 100%; border-top: 1px solid #000;"></div>
+										   {{/if}}
+										 </div>
+										 <span id="tooltip-content-debit-{{$_prescription_line_mix->_id}}-{{$_variation.debit}}-{{$_variation.variation_id}}" style="display: none">
+										   Débit: {{$_variation.debit}} ml/h
+										 </span>
+										 </td>
+									 {{/foreach}}
+									 </tr>
+									 </table>
+							   {{else}}
+								   <table class="layout" style="width: 100%; margin: -2px; height: 2em;">
+	                   <tr>
+	                     <td></td>
+	                   </tr>
+	                 </table>
 							 {{/if}}
+						 {{/if}}
 						 {{/if}}
 						 </div>
 			    </td>

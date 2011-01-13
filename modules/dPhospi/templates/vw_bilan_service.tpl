@@ -7,7 +7,7 @@ Main.add( function(){
   oCatField = new TokenField(document.filter_prescription.token_cat); 
   
   var cats = {{$cats|@json}};
-  $$('input').each( function(oCheckbox) {
+  $$('input[type=checkbox]').each( function(oCheckbox) {
     if(cats.include(oCheckbox.value)){
       oCheckbox.checked = true;
     }
@@ -21,7 +21,7 @@ var groups = {{$all_groups|@json}};
 
 function preselectCat(cat_group_id){
   // On efface la selection de toutes les checkbox
-  $$('input').each( function(oCheckbox) {
+  $$('input[type=checkbox]').each( function(oCheckbox) {
     oCheckbox.checked = false;
 		oCatField.remove(oCheckbox.value);
   });
@@ -207,6 +207,18 @@ selectPeriode = function(element) {
          </table>
        </td>
     </tr>
+		<tr>
+		  <th colspan="4" class="category">Options</th>
+		</tr>
+		<tr>
+      <th colspan="2" style="">
+        Afficher les lignes inactives
+      </th>
+		  <td colspan="2">
+		  	<input type="radio" name="show_inactive" value="1" {{if $show_inactive=='1'}}checked="checked"{{/if}} /> Oui
+        <input type="radio" name="show_inactive" value="0" {{if $show_inactive=='0'}}checked="checked"{{/if}} /> Non
+		  </td>
+		</tr>
     <tr>
       <td style="text-align: center" colspan="4">
         <button class="tick">Filtrer</button>
@@ -355,98 +367,105 @@ selectPeriode = function(element) {
 	      {{foreach from=$prises_by_type key=line_class item=prises name="foreach_unite"}}
 					{{if $line_class == "CPrescriptionLineMix"}}
 						{{foreach from=$prises key=prescription_line_mix_id item=lines}}
-	          {{assign var=prescription_line_mix value=$list_lines.$line_class.$prescription_line_mix_id}}     
-	            <tr>
-							  <td>{{$hour}}h</td>
-							 	<td colspan="5"><strong>{{$prescription_line_mix->_view}}</strong></td>
-							</tr>
-							
-							{{if !$prescription_line_mix->signature_prat && $conf.dPprescription.CPrescription.show_unsigned_med_msg}}
-								<tr>
-								  <td></td>
-		              <td class="text">
-		              	<ul>
-		              	{{foreach from=$lines key=perf_line_id item=_perf}}
-		                  {{assign var=perf_line value=$list_lines.CPrescriptionLineMixItem.$perf_line_id}}
-		                  <li>{{$perf_line->_ucd_view}}</li>
-		                 {{/foreach}}
-										 </ul>
-		              </td>
-									<td colspan="3">
-										<div class="small-warning">
-											Ligne non signée
-										</div>
-									</td>
-									<td></td>
+	          {{assign var=prescription_line_mix value=$list_lines.$line_class.$prescription_line_mix_id}}   
+							{{if $prescription_line_mix->_active || $show_inactive}}
+		            <tr>
+								  <td>{{$hour}}h</td>
+								 	<td colspan="5"><strong>{{$prescription_line_mix->_view}}</strong> {{if $prescription_line_mix->conditionnel}} - <strong>Conditionnel</strong>{{/if}}
+									{{if $prescription_line_mix->commentaire}}
+	                  <br />{{$prescription_line_mix->commentaire}}
+	                {{/if}}
+									 </td>
 								</tr>
-							{{else}}
-	            {{foreach from=$lines key=perf_line_id item=_perf}}
-	              {{assign var=perf_line value=$list_lines.CPrescriptionLineMixItem.$perf_line_id}}
-						    <tr>
-						    	<td></td>
-						      <td class="text">
-	                  <em>{{$perf_line->_ucd_view}}</em>
-	                  {{if array_key_exists('prevu', $_perf) && array_key_exists('administre', $_perf) && $_perf.prevu == $_perf.administre}}
-	                    <img src="images/icons/tick.png" alt="Administrations effectuées" title="Administrations effectuées" />
-	                  {{/if}}
-	                </td>
-	                <td style="text-align: center;">
-	                  {{if array_key_exists('prevu', $_perf)}}
-	                    {{$_perf.prevu}}
-	                  {{/if}}
-	                </td>
-	                <td style="text-align: center;">
-	                  {{if array_key_exists('administre', $_perf)}}
-	                  {{$_perf.administre}}
-	                  {{/if}}
-	                </td>
-	                <td style="text-align: center;">
-	                  {{if $perf_line->_ref_produit_prescription->_id}}
-	                    {{$perf_line->_ref_produit_prescription->unite_prise}}
-	                  {{else}}
-	                    {{$perf_line->_unite_administration}}
-	                  {{/if}}
-	                </td>
-	              </tr>
-	           {{/foreach}}
+								{{if !$prescription_line_mix->signature_prat && $conf.dPprescription.CPrescription.show_unsigned_med_msg}}
+									<tr>
+									  <td></td>
+			              <td class="text">
+			              	<ul>
+			              	{{foreach from=$lines key=perf_line_id item=_perf}}
+			                  {{assign var=perf_line value=$list_lines.CPrescriptionLineMixItem.$perf_line_id}}
+			                  <li>{{$perf_line->_ucd_view}}</li>
+			                 {{/foreach}}
+											 </ul>
+			              </td>
+										<td colspan="3">
+											<div class="small-warning">
+												Ligne non signée
+											</div>
+										</td>
+										<td></td>
+									</tr>
+								{{else}}
+		            {{foreach from=$lines key=perf_line_id item=_perf}}
+		              {{assign var=perf_line value=$list_lines.CPrescriptionLineMixItem.$perf_line_id}}
+							    <tr>
+							    	<td></td>
+							      <td class="text">
+		                  <em>{{$perf_line->_ucd_view}}</em>
+		                  {{if array_key_exists('prevu', $_perf) && array_key_exists('administre', $_perf) && $_perf.prevu == $_perf.administre}}
+		                    <img src="images/icons/tick.png" alt="Administrations effectuées" title="Administrations effectuées" />
+		                  {{/if}}
+		                </td>
+		                <td style="text-align: center;">
+		                  {{if array_key_exists('prevu', $_perf)}}
+		                    {{$_perf.prevu}}
+		                  {{/if}}
+		                </td>
+		                <td style="text-align: center;">
+		                  {{if array_key_exists('administre', $_perf)}}
+		                  {{$_perf.administre}}
+		                  {{/if}}
+		                </td>
+		                <td style="text-align: center;">
+		                  {{if $perf_line->_ref_produit_prescription->_id}}
+		                    {{$perf_line->_ref_produit_prescription->unite_prise}}
+		                  {{else}}
+		                    {{$perf_line->_unite_administration}}
+		                  {{/if}}
+		                </td>
+		              </tr>
+		           {{/foreach}}
+						 {{/if}}
 						 {{/if}}
 				   {{/foreach}}
 		      {{else}}
 					  {{foreach from=$prises key=line_id item=quantite}}
-	           {{assign var=line value=$list_lines.$line_class.$line_id}}        
-	            <tr>
-	            	<td>{{$hour}}h</td>
-	              <td style="width: 250px;" class="text">{{$line->_view}}
-								{{if $line->commentaire}}
-								  <br />{{$line->commentaire}}
+	           {{assign var=line value=$list_lines.$line_class.$line_id}} 
+						 {{if $line->_active || $show_inactive}}       
+		            <tr>
+		            	<td>{{$hour}}h</td>
+		              <td style="width: 250px;" class="text">{{$line->_view}} {{if $line->conditionnel}} - <strong>Conditionnel</strong>{{/if}}
+									{{if $line->commentaire}}
+									  <br />{{$line->commentaire}}
+									{{/if}}
+		              {{if array_key_exists('prevu', $quantite) && array_key_exists('administre', $quantite) && $quantite.prevu == $quantite.administre}}
+		                <img src="images/icons/tick.png" alt="Administrations effectuées" title="Administrations effectuées" />
+		              {{/if}}
+		              </td> 
+									
+									{{if !$line->signee && $line->_class_name == "CPrescriptionLineMedicament" && $conf.dPprescription.CPrescription.show_unsigned_med_msg}}
+									<td colspan="3">
+									  <div class="small-warning">
+									  	Ligne non signée
+									  </div>
+										</td>
+									{{else}}
+		              <td style="width: 50px; text-align: center;">{{if array_key_exists('prevu', $quantite)}}{{$quantite.prevu}}{{else}} -{{/if}}</td>
+		              <td style="width: 50px; text-align: center;">{{if array_key_exists('administre', $quantite)}}{{$quantite.administre}}{{else}}-{{/if}}</td>
+		              <td style="width: 150px; text-align: center;" class="text">
+		                {{if $line_class=="CPrescriptionLineMedicament"}}
+		                  {{if $line->_ref_produit_prescription->_id}}
+		                    {{$line->_ref_produit_prescription->unite_prise}}
+		                  {{else}}
+		                    {{$line->_ref_produit->libelle_unite_presentation}}
+		                  {{/if}}
+		                {{else}}
+		                  {{$line->_unite_prise}}
+		                {{/if}}
+		            </td>
 								{{/if}}
-	              {{if array_key_exists('prevu', $quantite) && array_key_exists('administre', $quantite) && $quantite.prevu == $quantite.administre}}
-	                <img src="images/icons/tick.png" alt="Administrations effectuées" title="Administrations effectuées" />
-	              {{/if}}
-	              </td> 
-								
-								{{if !$line->signee && $line->_class_name == "CPrescriptionLineMedicament" && $conf.dPprescription.CPrescription.show_unsigned_med_msg}}
-								<td colspan="3">
-								  <div class="small-warning">
-								  	Ligne non signée
-								  </div>
-									</td>
-								{{else}}
-	              <td style="width: 50px; text-align: center;">{{if array_key_exists('prevu', $quantite)}}{{$quantite.prevu}}{{else}} -{{/if}}</td>
-	              <td style="width: 50px; text-align: center;">{{if array_key_exists('administre', $quantite)}}{{$quantite.administre}}{{else}}-{{/if}}</td>
-	              <td style="width: 150px; text-align: center;" class="text">
-	                {{if $line_class=="CPrescriptionLineMedicament"}}
-	                  {{if $line->_ref_produit_prescription->_id}}
-	                    {{$line->_ref_produit_prescription->unite_prise}}
-	                  {{else}}
-	                    {{$line->_ref_produit->libelle_unite_presentation}}
-	                  {{/if}}
-	                {{else}}
-	                  {{$line->_unite_prise}}
-	                {{/if}}
-	            </td>
-							{{/if}}
-	          </tr>
+		          </tr>
+						{{/if}}
 	          {{/foreach}}
 					{{/if}}
 	      {{/foreach}}  
@@ -455,7 +474,6 @@ selectPeriode = function(element) {
 	  {{/foreach}}
 	{{/foreach}}
 	</table>
-
 {{/foreach}}
 
 <table>

@@ -350,11 +350,6 @@ class CPrescriptionLineMedicament extends CPrescriptionLine {
     if(!$this->_protocole && $is_praticien && ($this->praticien_id == $AppUI->user_id)){
     	$this->_can_view_form_signature_praticien = 1;
     }
-    // Affichage du formulaire de signature infirmiere
-		/*
-    if(!$this->_protocole && !$is_praticien && !$this->signee && $this->creator_id == $AppUI->user_id && !$this->valide_pharma && $this->_ref_prescription->type !== "externe"){
-    	$this->_can_view_form_signature_infirmiere = 1;
-    }*/
     // Affichage de l'icone Livret Therapeutique
     if(!$this->_ref_produit->inLivret && ($this->_ref_prescription->type === "sejour" || $this->_protocole)){
       $this->_can_vw_livret_therapeutique = 1;
@@ -566,8 +561,6 @@ class CPrescriptionLineMedicament extends CPrescriptionLine {
 											$this->fieldModified("duree") || 
 											$this->fieldModified("unite_duree") || 
 											$this->fieldModified("time_fin") ||
-											$this->fieldModified("conditionnel") ||
-											$this->fieldModified("condition_active") ||
 											$this->fieldModified("substitution_active") ||
 											$this->fieldModified("date_arret") || 
 											$this->fieldModified("substitution_line_id") ||
@@ -595,7 +588,7 @@ class CPrescriptionLineMedicament extends CPrescriptionLine {
 			// Si aucune planification n'est associée à une administration, on peut les supprimer
 			if($this->_count_locked_planif == 0){
 				$this->removePlanifSysteme();
-				if(!$this->substitution_line_id && $this->substitution_active && (!$this->conditionnel || ($this->conditionnel && $this->condition_active))){
+				if(!$this->substitution_line_id && $this->substitution_active){
 					$this->calculPlanifSysteme();
 				}
 			}

@@ -82,8 +82,6 @@
 	  {{/if}}
   {{/if}}
 	
-	
-	
   {{if $smarty.foreach.$last_foreach.first}}
   <td class="text" rowspan="{{$nb_line}}" {{if $line instanceof CPrescriptionLineMedicament && $line->traitement_personnel}}style="background-color: #BDB"{{/if}}>
 		{{if $line->commentaire}}
@@ -108,7 +106,7 @@
     {{if is_array($line->_dates_urgences) && array_key_exists($date, $line->_dates_urgences)}}
       <img style="float: right" src="images/icons/ampoule_urgence.png" title="Urgence"/>
     {{/if}}
-    
+		
 		<span onclick='addCibleTransmission("{{$line_class}}","{{$line->_id}}","{{$line->_view}}");' 
 	       class="{{if @$transmissions.$line_class.$line_id|@count}}transmission{{else}}transmission_possible{{/if}}"
 				 onmouseover="ObjectTooltip.createEx(this, '{{$line->_guid}}')"
@@ -117,7 +115,7 @@
 	      {{if $line_class == "CPrescriptionLineMedicament"}}
 					{{$line->_ucd_view}}
 					<br />
-					
+          {{include file="../../dPprescription/templates/inc_vw_info_line_medicament.tpl"}}
 					{{if $line->traitement_personnel}} (Traitement perso){{/if}}
 	      {{else}}
 				  <div class="mediuser" style="border-color: #{{$line->_ref_element_prescription->_color}}">

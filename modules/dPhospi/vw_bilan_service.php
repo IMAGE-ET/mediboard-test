@@ -32,6 +32,7 @@ $dateTime_max = CValue::getOrSession("_dateTime_max", "$date 23:59:59");
 $periode      = CValue::get("periode");
 $service_id   = CValue::getOrSession("service_id");
 $by_patient   = CValue::get("by_patient", false);
+$show_inactive = CValue::get("show_inactive", "0");
 
 $date_min = mbDate($dateTime_min);
 $date_max = mbDate($dateTime_max);
@@ -491,6 +492,7 @@ $smarty->assign("dateTime_max"    , $dateTime_max);
 $smarty->assign("cat_groups"      , $cat_groups);
 $smarty->assign("all_groups"      , $all_groups);
 $smarty->assign("by_patient"      , $by_patient);
+$smarty->assign("show_inactive"   , $show_inactive);
 $smarty->display('vw_bilan_service.tpl');
 
 ?>

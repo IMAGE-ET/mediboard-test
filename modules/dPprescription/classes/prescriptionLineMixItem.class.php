@@ -45,7 +45,8 @@ class CPrescriptionLineMixItem extends CMbObject {
   // Can fields
   var $_can_vw_livret_therapeutique = null;
   var $_can_vw_generique = null;
-  
+  var $_can_vw_hospi = null;
+	
   var $_ref_administrations = null;
   var $_view_unite_prise = null;
 	
@@ -110,11 +111,21 @@ class CPrescriptionLineMixItem extends CMbObject {
     if(!$this->_ref_produit->inLivret){
       $this->_can_vw_livret_therapeutique = 1;
     }
+    
+	  $this->_protocole = $this->_ref_prescription_line_mix->_protocole;
+		
+    // Affichage de l'icone Livret Therapeutique
+    if(!$this->_ref_produit->inLivret && ($this->_ref_prescription_line_mix->_ref_prescription->type === "sejour" || $this->_protocole)){
+      $this->_can_vw_livret_therapeutique = 1;
+    }
+    // Affichage de l'icone Produit Hospitalier
+    if(!$this->_ref_produit->hospitalier && ($this->_ref_prescription_line_mix->_ref_prescription->type === "sortie" || $this->_protocole)){
+      $this->_can_vw_hospi = 1;
+    }
     // Affichage de l'icone generique
     if($this->_ref_produit->_generique){
       $this->_can_vw_generique = 1;
     }
-    $this->_protocole = $this->_ref_prescription_line_mix->_protocole;
   }
   
 	
@@ -292,7 +303,7 @@ class CPrescriptionLineMixItem extends CMbObject {
 				return;
 			}
     	$this->_ref_prescription_line_mix->removePlanifSysteme();
-			 if($this->_ref_prescription_line_mix->substitution_active && (!$this->_ref_prescription_line_mix->conditionnel || ($this->_ref_prescription_line_mix->conditionnel && $this->_ref_prescription_line_mix->condition_active))){
+			 if($this->_ref_prescription_line_mix->substitution_active){
          $this->_ref_prescription_line_mix->calculPlanifsPerf();
 			 }
     }
