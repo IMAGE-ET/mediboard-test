@@ -122,7 +122,7 @@ function initCKEditor() {
         alltags=alltags.uniq();
       }
 
-      if (alltags == null || (alltags.length == 1 && alltags.indexOf("br"))) {
+      if (alltags == null || (alltags.length == 1 && alltags.indexOf("br") != -1)) {
         paste = paste.replace(/<br(\s)*(\\)*>/g, '\n');
         paste = paste.replace(/&nbsp/g, ' ');
         CKEDITOR.instances.htmlarea.fire("paste", {'text': paste.replace(/<br(\s)*(\\)*>/, '\n')});
