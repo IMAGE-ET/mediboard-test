@@ -137,7 +137,7 @@ Main.add(function(){
         {{elseif $_type == "list"}}
           {{foreach from=$spec->_list key=_key item=_value}}
             <div>
-              <input type="text" name="{{$_name}}[]" value="{{$_value}}" readonly="readonly" />
+              <input type="text" name="{{$_name}}[]" value="{{$_value}}" {{if $_value}}readonly="readonly"{{/if}} />
               <button type="button" class="cancel notext" tabindex="1000" onclick="return confirmDelEnum(this)">{{tr}}Delete{{/tr}}</button>
               {{if $ex_field_id}}
                 Traduction: <input type="text" name="__enum[]" value="{{if $spec->_locales.$_value|strpos:'CExObject' === false}}{{$spec->_locales.$_value}}{{/if}}" />

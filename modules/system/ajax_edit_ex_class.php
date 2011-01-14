@@ -24,6 +24,11 @@ $ex_object = new CExObject;
 $ex_object->_ex_class_id = $ex_class->_id;
 $ex_object->setExClass();
 
+$host_object = null;
+
+if ($ex_class->_id)
+  $host_object = new $ex_class->host_class;
+
 foreach($ex_class->_ref_constraints as $_ex_constraint) {
   $_ex_constraint->loadRefExClass();
 }
@@ -49,6 +54,7 @@ if (!$ex_class->_id) {
 $smarty = new CSmartyDP();
 $smarty->assign("ex_class", $ex_class);
 $smarty->assign("ex_object", $ex_object);
+$smarty->assign("host_object", $host_object);
 $smarty->assign("classes", $classes);
 $smarty->assign("grid", $grid);
 $smarty->assign("out_of_grid", $out_of_grid);

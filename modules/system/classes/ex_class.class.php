@@ -16,6 +16,7 @@ class CExClass extends CMbObject {
   var $name       = null;
   
   var $_ref_fields = null;
+	var $_ref_host_fields = null;
   var $_ref_constraints = null;
   
   var $_fields_by_name = null;
@@ -40,6 +41,7 @@ class CExClass extends CMbObject {
   function getBackProps() {
     $backProps = parent::getBackProps();
     $backProps["fields"]      = "CExClassField ex_class_id";
+    $backProps["host_fields"] = "CExClassHostField ex_class_id";
     $backProps["constraints"] = "CExClassConstraint ex_class_id";
     return $backProps;
   }
@@ -80,6 +82,11 @@ class CExClass extends CMbObject {
   function loadRefsFields(){
     if (!empty($this->_ref_fields)) return $this->_ref_fields;
     return $this->_ref_fields = $this->loadBackRefs("fields");
+  }
+  
+  function loadRefsHostFields(){
+    if (!empty($this->_ref_host_fields)) return $this->_ref_host_fields;
+    return $this->_ref_host_fields = $this->loadBackRefs("host_fields");
   }
   
   function loadRefsConstraints(){
@@ -123,8 +130,8 @@ class CExClass extends CMbObject {
 	
 	function getGrid($w = 4, $h = 20, $reduce = true){
 		$grid = array_fill(0, $h, array_fill(0, $w, array(
-		  "field" => null, 
-		  "label" => null,
+		  "type" => null, 
+		  "object" => null,
 		)));
 		
 		$out_of_grid = array(
@@ -134,29 +141,47 @@ class CExClass extends CMbObject {
 		
 		foreach($this->loadRefsFields() as $_ex_field) {
 		  $_ex_field->getSpecObject();
+			
+      $label_x = $_ex_field->coord_label_x;
+      $label_y = $_ex_field->coord_label_y;
 		  
 		  $field_x = $_ex_field->coord_field_x;
 		  $field_y = $_ex_field->coord_field_y;
-		  
-		  $label_x = $_ex_field->coord_label_x;
-		  $label_y = $_ex_field->coord_label_y;
+      
+      // label
+      if ($label_x === null || $label_y === null) {
+        $out_of_grid["label"][$_ex_field->name] = $_ex_field;
+      }
+      else {
+        $grid[$label_y][$label_x] = array("type" => "label", "object" => $_ex_field);
+      }
 		  
 		  // field
 		  if ($field_x === null || $field_y === null) {
 		    $out_of_grid["field"][$_ex_field->name] = $_ex_field;
 		  }
 		  else {
-		    $grid[$field_y][$field_x]["field"] = $_ex_field;
-		  }
-		  
-		  // label
-		  if ($label_x === null || $label_y === null) {
-		    $out_of_grid["label"][$_ex_field->name] = $_ex_field;
-		  }
-		  else {
-		    $grid[$label_y][$label_x]["label"] = $_ex_field;
+		    $grid[$field_y][$field_x] = array("type" => "field", "object" => $_ex_field);
 		  }
 		}
+    
+    foreach($this->loadRefsHostFields() as $_host_field) {
+      $label_x = $_host_field->coord_label_x;
+      $label_y = $_host_field->coord_label_y;
+			
+      $value_x = $_host_field->coord_value_x;
+      $value_y = $_host_field->coord_value_y;
+      
+      // label
+      if ($label_x !== null && $label_y !== null) {
+        $grid[$label_y][$label_x] = array("type" => "label", "object" => $_host_field);
+      }
+      
+      // value
+      if ($value_x !== null && $value_y !== null) {
+        $grid[$value_y][$value_x] = array("type" => "value", "object" => $_host_field);
+      }
+    }
 		
 		if ($reduce) {
 			$max_filled = 0;
@@ -166,7 +191,7 @@ class CExClass extends CMbObject {
         $x_filled = 0;
 				
 				foreach($_line as $_x => $_cell) {
-					if ($_cell !== array("field" => null, "label" => null)) {
+					if ($_cell !== array("type" => null, "object" => null)) {
 					  $n_filled++;
 						$x_filled = max($_x, $x_filled);
 					}

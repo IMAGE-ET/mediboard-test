@@ -395,8 +395,23 @@ class CSetupsystem extends CSetup {
               ADD `coord_label_x` TINYINT (4) UNSIGNED,
               ADD `coord_label_y` TINYINT (4) UNSIGNED;";
     $this->addQuery($query);
+		
+		$this->makeRevision("1.0.39");
+		$query = "CREATE TABLE `ex_class_host_field` (
+              `ex_class_host_field_id` INT (11) UNSIGNED NOT NULL auto_increment PRIMARY KEY,
+              `ex_class_id` INT (11) UNSIGNED NOT NULL,
+              `field` VARCHAR (80) NOT NULL,
+              `coord_label_x` TINYINT (4) UNSIGNED,
+              `coord_label_y` TINYINT (4) UNSIGNED,
+              `coord_value_x` TINYINT (4) UNSIGNED,
+              `coord_value_y` TINYINT (4) UNSIGNED
+              ) TYPE=MYISAM;";
+    $this->addQuery($query);
+    $query = "ALTER TABLE `ex_class_host_field` 
+              ADD INDEX (`ex_class_id`);";
+    $this->addQuery($query);
     
-    $this->mod_version = "1.0.39";
+    $this->mod_version = "1.0.40";
     
   }
 }

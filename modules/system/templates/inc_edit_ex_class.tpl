@@ -180,6 +180,20 @@ Main.add(function(){
     <input type="hidden" name="coord_field_x" class="coord" value="" />
     <input type="hidden" name="coord_field_y" class="coord" value="" />
 	</form>
+  
+  <form name="form-layout-hostfield" method="post" action="" onsubmit="return false">
+    <input type="hidden" name="m" value="system" />
+    <input type="hidden" name="dosql" value="do_ex_class_host_field_aed" />
+    <input type="hidden" name="del" value="0" />
+    <input type="hidden" name="ex_class_host_field_id" value="" />
+    <input type="hidden" name="ex_class_id" value="{{$ex_class->_id}}" />
+    <input type="hidden" name="field" value="" />
+    
+    <input type="hidden" name="coord_label_x" class="coord" value="" />
+    <input type="hidden" name="coord_label_y" class="coord" value="" />
+    <input type="hidden" name="coord_value_x" class="coord" value="" />
+    <input type="hidden" name="coord_value_y" class="coord" value="" />
+  </form>
 	
 	<style type="text/css">
 		.out-of-grid div {
@@ -192,12 +206,20 @@ Main.add(function(){
 			margin: 2px;
 			padding: 2px;
 		}
+    
+    .droppable.grid .draggable {
+      display: block;
+    }
 		
 		.droppable.grid .draggable.label {
 		  text-align: right;
 			font-weight: bold;
 			white-space: nowrap;
 		}
+    
+    .field-list .field {
+      white-space: normal;
+    }
 		
 		.field:hover .field-info,
 		.field-list .field .field-info {
@@ -227,6 +249,15 @@ Main.add(function(){
 			right:0;
 	  }
 		
+		.grid .hostfield .field-name, 
+		.hostfield.dragging .field-name {
+		  display: inline !important;
+		}
+		
+		.hostfield {
+		  background-color: rgba(205,252,204,0.4);
+		}
+		
 		.draggable.hr {
 		  padding: 6px;
 		}
@@ -237,14 +268,27 @@ Main.add(function(){
 	<div class="out-of-grid droppable">
 		<table class="main tbl" style="table-layout: fixed;">
 	    <tr>
-	      <th colspan="2" class="title">Eléments non placés</th>
+	      <th colspan="3" class="title">Eléments non placés</th>
 	    </tr>
 		  <tr>
+        <th>Champs de <strong>{{tr}}{{$ex_class->host_class}}{{/tr}}</strong></th>
 			  <th>Libellés</th>
         <th>Champs</th>
 				<!--<th>Divers</th>-->
 			</tr>
 			<tr>
+        <td class="hostfield-list" data-x="" data-y="" style="padding: 4px; height: 2em; vertical-align: top;">
+				  <ul style="display: block; height: 10em; overflow-y: scroll;">
+          {{foreach from=$host_object->_specs item=_spec key=_field}}
+					  {{if $_spec->show == 1 || $_field == "_view" || $_field == "_shortview" || ($_spec->show == "" && $_field.0 !== "_")}}
+              <li>
+                {{mb_include module=system template=inc_ex_host_field_draggable}}
+							</li>
+						{{/if}}
+          {{/foreach}}
+					</ul>
+        </td>
+				
 				<td class="label-list" data-x="" data-y="" style="padding: 4px; height: 2em; vertical-align: top;">
 					{{foreach from=$out_of_grid.label item=_field}}
 					  {{mb_include module=system template=inc_ex_field_draggable _type="label"}}
@@ -287,11 +331,13 @@ Main.add(function(){
 	  	<th style="padding: 4px; width: 2em; text-align: right;">{{$_y}}</th>
 	  	{{foreach from=$_line key=_x item=_group}}
 			  <td style="border: 1px dotted #ddd; min-width: 2em;" class="droppable grid" data-x="{{$_x}}" data-y="{{$_y}}">
-				  {{foreach from=$_group item=_field key=_type}}
-					  {{if $_field}}
-						  {{mb_include module=system template=inc_ex_field_draggable}}
-					  {{/if}}
-					{{/foreach}}
+				  {{if $_group.object}}
+					  {{if $_group.object instanceof CExClassField}}
+						  {{mb_include module=system template=inc_ex_field_draggable _field=$_group.object _type=$_group.type}}
+						{{else}}
+              {{mb_include module=system template=inc_ex_host_field_draggable _host_field=$_group.object _field=$_group.object->field _type=$_group.type}}
+						{{/if}}
+					{{/if}}
 			  </td>
 			{{/foreach}}
 	  </tr>

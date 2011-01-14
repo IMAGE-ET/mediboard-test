@@ -15,10 +15,10 @@ class CExClassField extends CMbObject {
   var $name = null; // != object_class, object_id, ex_ClassName_event_id, 
   var $prop = null; 
 	
-  var $coord_field_x = null; 
-  var $coord_field_y = null; 
   var $coord_label_x = null; 
   var $coord_label_y = null; 
+  var $coord_field_x = null; 
+  var $coord_field_y = null; 
   
   var $_locale = null;
   var $_locale_desc = null;
@@ -52,7 +52,11 @@ class CExClassField extends CMbObject {
     $spec = parent::getSpec();
     $spec->table = "ex_class_field";
     $spec->key   = "ex_class_field_id";
-    $spec->uniques["field"] = array("ex_class_id", "name", "coord_field_x", "coord_field_y");
+    $spec->uniques["name"] = array("ex_class_id", "name");
+    
+    // should ignore empty values
+    //$spec->uniques["coord_label"] = array("ex_class_id", "coord_label_x", "coord_label_y");
+    //$spec->uniques["coord_field"] = array("ex_class_id", "coord_field_x", "coord_field_y");
     return $spec;
   }
 
@@ -90,6 +94,7 @@ class CExClassField extends CMbObject {
     $trans->lang = CAppUI::pref("LOCALE");
     $trans->ex_class_field_id = $this->_id;
     $trans->loadMatchingObject();
+    $trans->fillIfEmpty($this->name);
     return $this->_ref_translation = $trans;
   }
   

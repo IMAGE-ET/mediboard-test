@@ -49,6 +49,14 @@ class CExClassFieldEnumTranslation extends CMbObject {
     $this->_view = $this->value;
   }
   
+  function fillIfEmpty() {
+    if (!$this->_id) {
+      $this->value = $this->key;
+      $this->updateLocales();
+      $this->value = "";
+    }
+  }
+  
   function loadRefExClassField($cache = true){
     return $this->_ref_ex_class_field = $this->loadFwdRef("ex_class_field_id", $cache);
   }

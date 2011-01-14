@@ -14,11 +14,11 @@ var ExClass = {
     $V(form.event, parts[1]);
   },
   submitLayout: function(drag, drop) {
-    var form = getForm("form-layout-field"),
-        coord_x = drop.getAttribute("data-x"),
+    var coord_x = drop.getAttribute("data-x"),
         coord_y = drop.getAttribute("data-y"),
-        type = drag.hasClassName("field") ? "field" : "label";
-    
+        type    = drag.getAttribute("data-type"),
+				form = getForm("form-layout-field");
+		
     $(form).select('input.coord').each(function(coord){
       $V(coord.disable(), '');
     });
@@ -28,17 +28,81 @@ var ExClass = {
     $V(form["coord_"+type+"_y"].enable(), coord_y);
     
     form.onsubmit();
+    drop.insert(drag);
   },
+  submitLayoutHostField: function(drag, drop) {
+    var coord_x = drop.getAttribute("data-x"),
+        coord_y = drop.getAttribute("data-y"),
+        type    = drag.getAttribute("data-type"),
+        form = getForm("form-layout-hostfield");
+				
+		if (!drop.hasClassName("droppable")) return;
+    
+    $(form).select('input.coord').each(function(coord){
+      $V(coord.disable(), '');
+    });
+    
+    $V(form.ex_class_host_field_id, drag.getAttribute("data-field_id") || "");
+    $V(form.elements.field, drag.getAttribute("data-field") || "");
+    $V(form["coord_"+type+"_x"].enable(), coord_x);
+    $V(form["coord_"+type+"_y"].enable(), coord_y);
+		
+		// dest = LIST
+		if (drop.hasClassName("out-of-grid")) {
+	    var del = drag.getAttribute("data-field_id");
+	    
+			if (del) {
+				drag.remove();
+        $V(form.del, 1);
+			}
+			else {
+				return;
+			}
+		}
+		
+		// dest = GRID
+		else {
+			if (!drag.up(".grid")) {
+				drag = drag.clone(true);
+				ExClass.initDraggableHostField(drag);
+				drag.setStyle({
+					position: "static",
+					opacity: 1
+				});
+			}
+      drop.update(drag);
+		}
+		
+    onSubmitFormAjax(form);
+  },
+	initDraggableHostField: function(d){
+    new Draggable(d, {
+      revert: 'failure', 
+      scroll: window, 
+      ghosting: true,
+      onStart: function(drag){
+        drag.element.addClassName("dragging");
+        $$(".out-of-grid")[0].addClassName("dropactive");
+      },
+      onEnd: function(drag){
+        drag.element.removeClassName("dragging");
+        $$(".out-of-grid")[0].removeClassName("dropactive");
+      }
+    });
+	},
 	initLayoutEditor: function(){
-    $$(".draggable:not(.hr)").each(function(d){
+    $$(".draggable:not(.hostfield)").each(function(d){
       new Draggable(d, {
-        //revert: true, 
+        revert: 'failure', 
         scroll: window, 
         ghosting: true,
         onStart: function(){$$(".out-of-grid")[0].addClassName("dropactive")},
         onEnd: function(){$$(".out-of-grid")[0].removeClassName("dropactive")}
       });
     });
+		
+    $$(".draggable.hostfield").each(ExClass.initDraggableHostField);
+		
     /*
     $$(".draggable.hr").each(function(d){
       new Draggable(d, {
@@ -68,9 +132,13 @@ var ExClass = {
             // prevent multiple fields in the same cell
             if (drop.hasClassName('grid') && drop.select('.draggable').length) return;
           }
-          
-          drop.insert(drag);
-          ExClass.submitLayout(drag, drop);
+					
+					if (drag.hasClassName('hostfield')) {
+						ExClass.submitLayoutHostField(drag, drop);
+					}
+					else {
+            ExClass.submitLayout(drag, drop);
+					}
         }
       });
     });
