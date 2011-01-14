@@ -15,10 +15,10 @@
           changedate('');
       }
 });">
+  {{mb_key object=$plageconge}}
   <input type="hidden" name="dosql" value="do_plageconge_aed" />
   <input type="hidden" name="del" value="0" />
   <input type="hidden" name="user_id" value="{{$plageconge->user_id}}" />
-  <input type="hidden" name="plage_id" value="{{$plageconge->plage_id}}" />
   <input type="hidden" name="m" value="{{$m}}" />
   <input type="hidden" name="tab" value="{{$tab}}" />
   <input type="hidden" name="callback" value="PlageConge.edit" />
