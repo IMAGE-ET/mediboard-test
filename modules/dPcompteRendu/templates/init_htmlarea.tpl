@@ -15,6 +15,7 @@
 <script type="text/javascript">
 
 function initCKEditor() {
+  CKEDITOR.ispasting = false;
   window.old_source = $("htmlarea").value;
 	var editor = CKEDITOR.replace("htmlarea", {customConfig: "../../?m=dPcompteRendu&a=mb_fckeditor&suppressHeaders=1"});
 	editor.on("instanceReady", function(e) {
@@ -105,6 +106,33 @@ function initCKEditor() {
     // On peut donc enlever le style à ce moment-là.
     ck_instance.on("focus", function(){ deleteStyle(); });
 
+    // Redéfinition du copier-coller dans CKEditor, car le comportement par défaut ne convient pas
+    ck_instance.on("paste", function(evt) {
+      if (CKEDITOR.ispasting) {
+        return;
+      }
+      CKEDITOR.ispasting = true;
+      
+      evt.cancel();
+
+      var paste = evt.data.html;
+      var alltags = paste.match(/<[a-z]+/g);
+           
+      if (alltags) {
+        alltags=alltags.uniq();
+      }
+
+      if (alltags == null || (alltags.length == 1 && alltags.indexOf("br"))) {
+        paste = paste.replace(/<br(\s)*(\\)*>/g, '\n');
+        paste = paste.replace(/&nbsp/g, ' ');
+        CKEDITOR.instances.htmlarea.fire("paste", {'text': paste.replace(/<br(\s)*(\\)*>/, '\n')});
+      }
+      else {
+        CKEDITOR.instances.htmlarea.fire("paste", {'html': paste});
+      }
+      CKEDITOR.ispasting = false;
+    });
+    
     {{/if}}
 	});
 }
