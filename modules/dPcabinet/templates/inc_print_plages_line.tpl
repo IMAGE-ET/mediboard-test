@@ -69,12 +69,14 @@
         <em>[{{$operation->libelle}}]</em>
         <br />
       {{/if}}
+      <!--
       {{foreach from=$operation->_ext_codes_ccam item=curr_code}}
         {{if !$curr_code->_code7}}<strong>{{/if}}
         <small>{{$curr_code->code}} : {{$curr_code->libelleLong}}</small>
         {{if !$curr_code->_code7}}</strong>{{/if}}
         <br/>
       {{/foreach}}
+      -->
       </div>
       {{/if}}
     </td>
