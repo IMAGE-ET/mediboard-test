@@ -19,9 +19,7 @@ PlageConge = {
 
   // Select plage and open form
 	edit: function(plage_id, user_id) {
-    Console.debug(plage_id, "Editing plage");
-    Console.debug(user_id, "Editing user");
-		return;
+
 	  var url = new Url("dPpersonnel", "ajax_edit_plage_conge");
 	  url.addParam("plage_id", plage_id);
 	  url.addParam("user_id", user_id);
