@@ -7,7 +7,11 @@
 * @author SARL OpenXtrem
 */
 
-require "PHP/CodeSniffer.php";
+include "PHP/CodeSniffer.php";
+
+if (!class_exists("PHP_CodeSniffer")) {
+	return;
+}
 
 class CMbCodeSniffer extends PHP_CodeSniffer {
 	
