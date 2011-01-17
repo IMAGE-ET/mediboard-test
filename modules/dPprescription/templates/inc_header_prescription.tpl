@@ -312,7 +312,7 @@ Main.add( function(){
       <div style="float: right; text-align: right;">
       <!--  <input type="checkbox" id="dci" name="dci"/>
         <label for="dci">DCI</label> -->
-      	<button type="button" class="print" onclick="Prescription.printPrescription('{{$prescription->_id}}', 0, '{{$prescription->object_id}}', $('dci').checked ? 1: 0);" />Ordonnance</button>
+      	<button type="button" class="print" onclick="Prescription.printPrescription('{{$prescription->_id}}', 0, '{{$prescription->object_id}}'/*, $('dci').checked ? 1: 0*/);" />Ordonnance</button>
         <br />
        	{{if !$is_praticien && !$mode_protocole && ($operation_id || $can->admin || $mode_pharma || $current_user->isInfirmiere())}}
 				<form name="selPraticienLine" action="?" method="get">
