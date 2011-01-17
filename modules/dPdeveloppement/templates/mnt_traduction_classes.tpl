@@ -128,7 +128,7 @@ Main.add(function () {
             {{/if}}
           </td>
         	<td>
-            <button type="button" class="down notext" onclick="$(this).up().previous().down('input,textarea').switchMultiline()"></button>
+            <button type="button" class="down notext" tabIndex="1000" onclick="$(this).up().previous().down('input,textarea').switchMultiline()"></button>
           </td>
         </tr>
         {{/foreach}}

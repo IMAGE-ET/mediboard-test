@@ -18,13 +18,14 @@ $readonly     = CValue::get("readonly");
 $event        = CValue::get("event");
 
 if (!$ex_class_id) {
-  $msg = "Impossible d'afficher le formulaire sans connaitre la classe de base";
+  $msg = "Impossible d'afficher le formulaire sans connaître la classe de base";
   CAppUI::stepAjax($msg, UI_MSG_WARNING);
   trigger_error($msg, E_USER_ERROR);
   return;
 }
 
 $object = CMbObject::loadFromGuid($object_guid);
+$object->loadComplete();
 
 $ex_object = new CExObject;
 $ex_object->setObject($object);

@@ -1,4 +1,4 @@
-<div class="draggable {{$_type}}" data-type="{{$_type}}" data-field_id="{{$_field->_id}}">
+<div class="draggable {{$_type}}" data-type="{{$_type}}" data-field_id="{{$_field->_id}}" ondblclick="ExField.edit({{$_field->_id}})">
   <div style="position: relative;">
     {{if $_type == "field"}}
       <div class="field-info" style="display: none;">{{if $_field->_locale}}{{tr}}{{$_field->_locale}}{{/tr}}{{else}}{{$_field->name}}{{/if}}</div>

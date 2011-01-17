@@ -1,3 +1,4 @@
+var exClassTabs = null;
 
 var ExClass = {
   id: null,
@@ -118,7 +119,11 @@ var ExClass = {
         onDrop: function(drag, drop) {
           drag.style.position = ''; // a null value doesn't work on IE
           
-          if (drop.hasClassName("out-of-grid")) {
+          // prevent multiple fields in the same cell
+          if (drop.hasClassName('grid') && drop.select('.draggable').length) return;
+						
+					// grid to trash for ExFields
+          if (drop.hasClassName("out-of-grid") && !drag.hasClassName('hostfield')) {
             if (drag.hasClassName('field')) {
               drop = drop.down(".field-list");
             }
@@ -126,11 +131,6 @@ var ExClass = {
             if (drag.hasClassName('label')) {
               drop = drop.down(".label-list");
             }
-          }
-          
-          else {
-            // prevent multiple fields in the same cell
-            if (drop.hasClassName('grid') && drop.select('.draggable').length) return;
           }
 					
 					if (drag.hasClassName('hostfield')) {
@@ -153,6 +153,9 @@ var ExClass = {
 
 var ExField = {
   edit: function(id, ex_class_id) {
+    if (window.exClassTabs) {
+      exClassTabs.setActiveTab("fields-specs");
+    }
     var url = new Url("system", "ajax_edit_ex_field");
     url.addParam("ex_field_id", id);
     url.addParam("ex_class_id", ex_class_id);

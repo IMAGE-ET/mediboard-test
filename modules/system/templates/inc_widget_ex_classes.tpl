@@ -48,10 +48,10 @@ showExClassForm = function(ex_class_id, object_guid, title, ex_object_id, event,
 		{{if $count_available == 1}}
       <!-- Un seul formulaire : bouton -->
 		  {{assign var=_ex_class value=$ex_classes|@reset}}
-		  <button class="edit" value="{{$_ex_class->_id}}" onclick="selectExClass(this, '{{$object->_guid}}', '{{$event}}', '{{$_element_id}}')">
+		  <button class="new" value="{{$_ex_class->_id}}" onclick="selectExClass(this, '{{$object->_guid}}', '{{$event}}', '{{$_element_id}}')">
 		  	{{$_ex_class->name}}
 		  </button>
-		{{else}}
+		{{elseif $count_available > 1}}
 		  <!-- plusieurs formulaire : select -->
 		  <select onchange="selectExClass(this, '{{$object->_guid}}', '{{$event}}', '{{$_element_id}}')">
 		    <option selected="selected" disabled="disabled">
@@ -69,7 +69,7 @@ showExClassForm = function(ex_class_id, object_guid, title, ex_object_id, event,
   <em style="color: #999;">Aucun formulaire disponible</em>
 {{/if}}
 
-{{if $ex_objects|@count}}
+{{if $ex_objects|@count > 1}}
 <button class="down notext" onclick="ObjectTooltip.createDOM(this, $(this).next(), {duration: 0});">Fiches enregistrées</button>
 
 <ul id="CExObject.{{$object->_guid}}.{{$event}}" style="display: none;">
@@ -105,4 +105,13 @@ showExClassForm = function(ex_class_id, object_guid, title, ex_object_id, event,
 	{{/if}}
 {{/foreach}}
 </ul>
+{{else if $ex_objects|@count == 1}}
+	{{foreach from=$ex_objects item=_ex_objects key=_ex_class_id}}
+    {{assign var=_ex_class value=$ex_classes.$_ex_class_id}}
+	  {{foreach from=$_ex_objects item=_ex_object}}
+		  <button class="edit" onclick="showExClassForm({{$_ex_class_id}}, '{{$object->_guid}}', '{{$_ex_object}}', '{{$_ex_object->_id}}', '{{$event}}', '{{$_element_id}}')">
+		    {{$_ex_class->name}}
+		  </button>
+	  {{/foreach}}
+	{{/foreach}}
 {{/if}}

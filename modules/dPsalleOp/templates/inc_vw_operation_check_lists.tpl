@@ -52,7 +52,7 @@ Main.add(function(){
 			    });
 			  });
 			</script>
-			<div id="CExObject-{{$selOp->_guid}}-checklist" style="float: left; font-size: 0.8em;"></div>
+			<div id="CExObject-{{$selOp->_guid}}-checklist" style="float: right; font-size: 0.8em;"></div>
 
       <button class="down" onclick="$('check-lists').toggle(); $(this).toggleClassName('down').toggleClassName('up')">
         Check list

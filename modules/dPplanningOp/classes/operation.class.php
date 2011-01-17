@@ -97,6 +97,7 @@ class COperation extends CCodable {
   var $_protocole_prescription_chir_id   = null;
   var $_move           = null;
   var $_password_visite_anesth = null;
+  var $_patient_id     = null;
   
   // Distant fields
   var $_datetime          = null;
@@ -219,6 +220,7 @@ class COperation extends CCodable {
     $specs["_plage"]                  = "bool";
     $specs["_intervention"]           = "text";
     $specs["_prat_id"]                = "text";
+    $specs["_patient_id"]             = "ref class|CPatient show|1";
     $specs["_bloc_id"]                = "ref class|CBlocOperatoire";
     $specs["_specialite"]             = "text";
     $specs["_ccam_libelle"]           = "bool default|1";
@@ -535,6 +537,7 @@ class COperation extends CCodable {
   
   function loadComplete() {
     parent::loadComplete();
+		$this->loadRefPatient();
     foreach ($this->_ref_actes_ccam as &$acte_ccam) {
       $acte_ccam->loadRefsFwd();
     }
@@ -649,7 +652,7 @@ class COperation extends CCodable {
     $this->_ref_consult_anesth->loadMatchingObject($order);
   }
   
-  function loadRefSejour($cache = 0) {
+  function loadRefSejour($cache = false) {
     $this->_ref_sejour = $this->loadFwdRef("sejour_id", $cache);
   }
   
@@ -661,13 +664,16 @@ class COperation extends CCodable {
   }
   
 	
-  function loadRefPatient($cache = 0) {
+  function loadRefPatient($cache = false) {
     $this->loadRefSejour($cache);
     $this->_ref_sejour->loadRefPatient($cache);
     $this->_ref_patient =& $this->_ref_sejour->_ref_patient;
+		$this->_patient_id = $this->_ref_patient->_id;
+		$this->loadFwdRef("_patient_id", $cache);
+		return $this->_ref_patient;
   }
   
-  function loadRefsFwd($cache = 0) {
+  function loadRefsFwd($cache = false) {
     $this->loadRefsConsultAnesth();
     $this->_ref_consult_anesth->loadRefConsultation();
     $this->_ref_consult_anesth->_ref_consultation->countDocItems();

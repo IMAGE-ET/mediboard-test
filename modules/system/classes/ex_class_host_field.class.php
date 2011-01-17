@@ -25,9 +25,7 @@ class CExClassHostField extends CMbObject {
     $spec = parent::getSpec();
     $spec->table = "ex_class_host_field";
     $spec->key   = "ex_class_host_field_id";
-    //$spec->uniques["field"] = array("ex_class_id", "field");
-    $spec->uniques["coord_value"] = array("ex_class_id", "coord_value_x", "coord_value_y");
-    $spec->uniques["coord_label"] = array("ex_class_id", "coord_label_x", "coord_label_y");
+    $spec->uniques["coord_value"] = array("ex_class_id", "coord_value_x", "coord_value_y", "coord_label_x", "coord_label_y");
     return $spec;
   }
 

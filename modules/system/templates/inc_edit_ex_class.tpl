@@ -76,18 +76,18 @@
 
 <script type="text/javascript">
 Main.add(function(){
-  Control.Tabs.create("ExClass-back", true);
+  exClassTabs = Control.Tabs.create("ExClass-back", true);
 });
 </script>
 
 <ul class="control_tabs" id="ExClass-back">
-  <li><a href="#fields">{{tr}}CExClass-back-fields{{/tr}}</a></li>
-  <li><a href="#constraints">{{tr}}CExClass-back-constraints{{/tr}}</a></li>
+  <li><a href="#fields-specs">{{tr}}CExClass-back-fields{{/tr}}</a></li>
+  <li><a href="#fields-constraints">{{tr}}CExClass-back-constraints{{/tr}}</a></li>
   <li><a href="#fields-layout">{{tr}}CExClassField-layout{{/tr}}</a></li>
 </ul>
 <hr class="control_tabs" />
 
-<table class="main layout" id="fields" style="display: none;">
+<table class="main layout" id="fields-specs" style="display: none;">
   <tr>
     <td style="width: 20em; padding-right: 5px;">
       <button type="button" class="new" style="float: right;" onclick="ExField.create({{$ex_class->_id}})">
@@ -125,7 +125,7 @@ Main.add(function(){
   </tr>
 </table>
 
-<table class="main layout" id="constraints" style="display: none;">
+<table class="main layout" id="fields-constraints" style="display: none;">
   <tr>
     <td style="width: 20em; padding-right: 5px;">
       <button type="button" class="new" style="float: right;" onclick="ExConstraint.create({{$ex_class->_id}})">
@@ -278,15 +278,17 @@ Main.add(function(){
 			</tr>
 			<tr>
         <td class="hostfield-list" data-x="" data-y="" style="padding: 4px; height: 2em; vertical-align: top;">
-				  <ul style="display: block; height: 10em; overflow-y: scroll;">
-          {{foreach from=$host_object->_specs item=_spec key=_field}}
-					  {{if $_spec->show == 1 || $_field == "_view" || $_field == "_shortview" || ($_spec->show == "" && $_field.0 !== "_")}}
-              <li>
-                {{mb_include module=system template=inc_ex_host_field_draggable}}
-							</li>
-						{{/if}}
-          {{/foreach}}
-					</ul>
+					<div style="height: 100%; overflow-y: scroll; min-height: 100px;">
+					  <ul>
+	          {{foreach from=$host_object->_specs item=_spec key=_field}}
+						  {{if $_spec->show == 1 || $_field == "_view" || $_field == "_shortview" || ($_spec->show == "" && $_field.0 !== "_")}}
+	              <li>
+	                {{mb_include module=system template=inc_ex_host_field_draggable}}
+								</li>
+							{{/if}}
+	          {{/foreach}}
+						</ul>
+					</div>
         </td>
 				
 				<td class="label-list" data-x="" data-y="" style="padding: 4px; height: 2em; vertical-align: top;">
@@ -312,8 +314,6 @@ Main.add(function(){
       </tr>
 		</table>
 	</div>
-	
-	<br />
 	
 	<table class="main tbl" style="border-collapse: collapse;">
 	  <tr>
