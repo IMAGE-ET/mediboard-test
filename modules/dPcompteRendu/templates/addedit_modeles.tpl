@@ -47,8 +47,10 @@ var Modele = {
 
   preview_layout: function() {
     var header_size = parseInt($("editFrm_height").value);
-    $("header_footer_content").style["height"] = ((header_size / 728.5)*80).round() + "px";
-    $("body_content").style["height"] = (((728.5 - header_size) / 728.5)*80).round() + "px";
+    if (!isNaN(header_size)) {
+      $("header_footer_content").style["height"] = ((header_size / 728.5)*80).round() + "px";
+      $("body_content").style["height"] = (((728.5 - header_size) / 728.5)*80).round() + "px";
+    }
   },
 
   generate_auto_height: function() {
