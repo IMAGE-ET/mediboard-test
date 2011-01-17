@@ -470,6 +470,8 @@ var Url = Class.create({
       className: 'modal popup',
       closeOnClick: closeButton
     });
+    
+    this.modaleObject.observe("afterClose", function(){div.remove()});
 		
     this.modaleObject.container.insert({top: closeButton});    this.modaleObject.container.insert({top: titleElement});   
 
