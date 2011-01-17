@@ -308,7 +308,7 @@ abstract class CMbPath {
       return;
 		}
 		
-		// Ignored patternes
+		// Ignored patterns
 		foreach ($ignored as $_ignored) {
       $replacements = array(
 			  "*" => ".*",
@@ -316,11 +316,12 @@ abstract class CMbPath {
 			);
 			
       $_ignored = strtr($_ignored, $replacements);
+      
       if (preg_match("|{$_ignored}|i", $dir) === 1) {
         return;
       }
     }
-		
+        		
 		// File case
 		if (!is_dir($dir)) {
 			return true;

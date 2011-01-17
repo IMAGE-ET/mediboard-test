@@ -3,16 +3,16 @@
   <description>The Mediboard coding standard.</description>
 
   <!-- File exclusions -->
-  <exclude-pattern>/dev</exclude-pattern>
+  <exclude-pattern>/dev/</exclude-pattern>
   <exclude-pattern>/config.php</exclude-pattern>
-  <exclude-pattern>/files</exclude-pattern>
-  <exclude-pattern>/images</exclude-pattern>
-  <exclude-pattern>/lib</exclude-pattern>
-  <exclude-pattern>/libpkg</exclude-pattern>
-  <exclude-pattern>/locales</exclude-pattern>
-  <exclude-pattern>/modules</exclude-pattern>
-  <exclude-pattern>/templates</exclude-pattern>
-  <exclude-pattern>/tmp</exclude-pattern>
+  <exclude-pattern>/files/</exclude-pattern>
+  <exclude-pattern>/images/</exclude-pattern>
+  <exclude-pattern>/lib/</exclude-pattern>
+  <exclude-pattern>/libpkg/</exclude-pattern>
+  <exclude-pattern>/locales/</exclude-pattern>
+  <exclude-pattern>/modules/</exclude-pattern>
+  <exclude-pattern>/templates/</exclude-pattern>
+  <exclude-pattern>/tmp/</exclude-pattern>
 
   <!-- Include some additional sniffs from the Generic standard -->
   <rule ref="Generic.Functions.FunctionCallArgumentSpacing"/>

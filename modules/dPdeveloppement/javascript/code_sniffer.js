@@ -15,6 +15,6 @@ CodeSniffer = {
 		file = file.split('/').slice(1).join('/');
 		new Url('dPdeveloppement', 'sniff_file') .
 		  addParam("file", file) .
-			requestModal(800, 600);
+			requestModal(800, 500);
   },
 }

@@ -18,6 +18,10 @@ class CMbCodeSniffer extends PHP_CodeSniffer {
 	function __construct() {
 		$verbosity = 1;
 		$tabwidth = 2;
+		// Use for Apache MacOSX
+		if (!isset($_SERVER["argc"])) {
+		  $_SERVER["argc"] = 0;
+		}
 		parent::__construct($verbosity, $tabwidth);
 	}
 	
