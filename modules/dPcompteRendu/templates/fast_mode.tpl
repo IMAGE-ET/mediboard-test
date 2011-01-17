@@ -244,11 +244,24 @@ Main.add(function() {
           
           <tr>
             <td colspan="2" style="text-align: center;">
-              <button class="tick">{{tr}}Save{{/tr}}</button>
-              <button class="printPDF singleclick" onclick="$V(getForm('create-pdf-form-{{$uid_fast_mode}}').stream, 1); this.form.onsubmit();" type="button">{{tr}}Save{{/tr}} {{tr}}and{{/tr}} {{tr}}Print{{/tr}}</button>
-              <button class="print singleclick" onclick="$V(getForm('fastModeForm-{{$uid_fast_mode}}').callback, 'printDoc'); this.form.onsubmit();" type="button">{{tr}}Save{{/tr}} {{tr}}and{{/tr}} {{tr}}Print{{/tr}}</button>
-              <button class="cancel singleclick" onclick="Control.Modal.close();$('fast-{{$unique_id}}').update();" type="button">{{tr}}Close{{/tr}}</button>
-              
+              <button class="tick"
+                {{if $lists|@count == 0 && $noms_textes_libres|@count == 0}}disabled="disabled"{{/if}}>
+                {{tr}}Save{{/tr}}
+              </button>
+              <button class="printPDF singleclick"
+                onclick="$V(getForm('create-pdf-form-{{$uid_fast_mode}}').stream, 1); this.form.onsubmit();" type="button"
+                {{if $lists|@count == 0 && $noms_textes_libres|@count == 0}}disabled="disabled"{{/if}}>
+                  {{tr}}Save{{/tr}} {{tr}}and{{/tr}} {{tr}}Print{{/tr}}
+              </button>
+              <button class="print singleclick"
+                onclick="$V(getForm('fastModeForm-{{$uid_fast_mode}}').callback, 'printDoc'); this.form.onsubmit();" type="button"
+                {{if $lists|@count == 0 && $noms_textes_libres|@count == 0}}disabled="disabled"{{/if}}>
+                  {{tr}}Save{{/tr}} {{tr}}and{{/tr}} {{tr}}Print{{/tr}}
+              </button>
+              <button class="cancel singleclick" onclick="Control.Modal.close();$('fast-{{$unique_id}}').update();" type="button"
+              {{if $lists|@count == 0 && $noms_textes_libres|@count == 0}}disabled="disabled"{{/if}}>
+                {{tr}}Close{{/tr}}
+              </button>
               <div id="state" style="width: 100%; height: 100%"></div>
             </td>
           </tr>
