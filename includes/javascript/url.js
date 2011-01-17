@@ -461,7 +461,9 @@ var Url = Class.create({
     $(document.body).insert(div);
 
     // Decoration preparing
-    var closeButton = DOM.button({type: "button", className: "cancel"}, $T('Close'));
+    var closeButton  = DOM.button({type: "button", className: "cancel"}, $T('Close'));
+    var reloadButton = DOM.button({type: "button", className: "change"}, $T('Reload'));
+		
     var m = this.oParams['m'];
     var a = this.oParams['a'];
     var titleElement = DOM.div({className: "title"}, $T('mod-'+m+'-tab-'+a));
@@ -473,9 +475,15 @@ var Url = Class.create({
     
     this.modaleObject.observe("afterClose", function(){div.remove()});
 		
-    this.modaleObject.container.insert({top: closeButton});    this.modaleObject.container.insert({top: titleElement});   
+    this.modaleObject.container.insert({top: reloadButton});
+    this.modaleObject.container.insert({top: closeButton});
+    this.modaleObject.container.insert({top: titleElement});   
 
 		this.requestUpdate(div.down('.content'), oOptions);
+		reloadButton.onclick = function() {
+      this.requestUpdate(div.down('.content'), oOptions);
+		}.bind(this);
+		
 		return this;
 	},
 

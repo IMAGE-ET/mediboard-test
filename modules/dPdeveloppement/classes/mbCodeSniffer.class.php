@@ -50,7 +50,7 @@ class CMbCodeSniffer extends PHP_CodeSniffer {
 	function report($file, $reportType) {
 		// Create the file
     $root_dir = CAppUI::conf("root_dir");
-		$reportFile = "$root_dir/tmp/CodeSniffer/$file.xml";
+		$reportFile = "$root_dir/tmp/CodeSniffer/$file.$reportType.xml";
 		CMbPath::forceDir(dirname($reportFile));
 		touch($reportFile);
 

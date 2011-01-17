@@ -17,11 +17,6 @@ if (!class_exists("CMbCodeSniffer")) {
 $file = "classes/mbobject.class.php";
 
 $sniffer = new CMbCodeSniffer;
-//$sniffer->process($file);
-//echo "<pre>";
-//$sniffer->report($file, "full");
-//echo "</pre>";
-
 $files = $sniffer->getFilesTree();
 
 
