@@ -86,10 +86,16 @@ if (window.opener && window.opener !== window) {
 		          </td>
 						{{/if}}
 					{{else}}
-					  {{assign var=_host_field value=$_group.object}} 
-					  <td>
-					  	Champ de l'hote ({{$_group.type}}-{{$_host_field->field}})
-						</td>
+            {{assign var=_host_field value=$_group.object}} 
+					  	{{if $_group.type == "label"}}
+							  <th style="font-weight: bold;">
+					    	  {{mb_label object=$ex_object->_ref_object field=$_host_field->field}}
+								</th>
+							{{else}}
+                <td>
+                  {{mb_value object=$ex_object->_ref_object field=$_host_field->field}}
+                </td>
+							{{/if}}
 					{{/if}}
         {{else}}
           <td></td>

@@ -219,7 +219,7 @@ Main.add(function(){
   </tr>
   <tr>
     <td class="button" colspan="4">
-      <button class="submit" type="submit">{{tr}}Save{{/tr}}</button>
+      <button class="submit oneclick" type="submit">{{tr}}Save{{/tr}}</button>
       <button class="trash" type="button">{{tr}}Remove{{/tr}}</button>
     </td>
   </tr>
