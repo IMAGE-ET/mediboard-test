@@ -694,6 +694,7 @@ div.tree-trigger {
   overflow: hidden;
   width: 0px;
   float: left;
+	padding-left: 20px;
 }
 
 div.tree-header {

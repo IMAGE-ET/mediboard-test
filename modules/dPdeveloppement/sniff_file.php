@@ -9,24 +9,22 @@
 
 CCanDo::checkRead();
 
-$file = "classes/mbobject.class.php";
-
+$file = CValue::get("file");
 $sniffer = new CMbCodeSniffer;
-//$sniffer->process($file);
-//echo "<pre>";
-//$sniffer->report($file, "full");
-//echo "</pre>";
-
-$files = $sniffer->getFilesTree();
-
+echo "<pre>";
+$sniffer->process($file);
+$sniffer->report($file, "full");
+echo "</pre>";
 
 // Cuz sniffer changes work dir but restores it at destruction
 // Be aware that unset() won't call __destruct() anyhow
 $sniffer->__destruct();
 
+return;
+
 // Création du template
 $smarty = new CSmartyDP();
 $smarty->assign("files", $files);
-$smarty->display("sniff_code.tpl");
+$smarty->display("sniff_file.tpl");
 
 ?>

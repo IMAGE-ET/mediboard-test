@@ -27,6 +27,7 @@ pre {
   margin: 2px 10px;
   max-height: 250px;
   overflow: auto;
+	text-align: left;
 }
 
 table {

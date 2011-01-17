@@ -295,7 +295,49 @@ abstract class CMbPath {
     return count(glob("$path/*")) - count(glob("$path/*", GLOB_ONLYDIR));
   }
 
-	
+	/**
+	 * Get the path tree under a given directory
+	 * @param string $dir
+   * @param array  $ignored    Ignored patterns
+   * @param array  $extensions Restricted extensions, if not null
+	 * @return array recursive   Recursive array of basenames
+	 */
+	static function getPathTreeUnder($dir, $ignored = array(), $extensions = null) {
+    // Restricted extensions
+		if (!is_dir($dir) && is_array($extensions) && !in_array(self::getExtension($dir), $extensions)) {
+      return;
+		}
+		
+		// Ignored patternes
+		foreach ($ignored as $_ignored) {
+      $replacements = array(
+			  "*" => ".*",
+				"." => "[.]",
+			);
+			
+      $_ignored = strtr($_ignored, $replacements);
+      if (preg_match("|{$_ignored}|i", $dir) === 1) {
+        return;
+      }
+    }
+		
+		// File case
+		if (!is_dir($dir)) {
+			return true;
+		}
+
+    // Directory case
+		$tree = array();
+		foreach (glob("$dir/*") as $file) {
+			$branch = self::getPathTreeUnder($file, $ignored, $extensions);
+			if ($branch == null || (is_array($branch) && !count($branch))) {
+				continue;
+			}
+      $tree[basename($file)] = $branch;
+		}
+		
+		return $tree;
+	}
 }
 
 ?>
