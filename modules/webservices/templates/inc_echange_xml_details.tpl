@@ -26,8 +26,8 @@
     <hr class="control_tabs" />
     
     <div id="message" style="display: none;">
+    <a target="blank" href="?m=webservices&a=download_echange_xml&echange_xml_guid={{$echange_xml->_guid}}&dialog=1&suppressHeaders=1&message=1" class="button modify">{{tr}}Save{{/tr}}</a>
       {{mb_value object=$echange_xml field="_message"}}
-      <a target="blank" href="?m=webservices&a=download_echange_xml&echange_xml_guid={{$echange_xml->_guid}}&dialog=1&suppressHeaders=1&message=1" class="button modify">{{tr}}Save{{/tr}}</a>
       {{if $echange_xml->message_valide != 1 && count($doc_errors_msg) > 0}}
       <div class="big-error">
         <strong>Erreur validation schéma du message</strong> <br />

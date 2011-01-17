@@ -32,7 +32,13 @@ refreshEchange = function(echange_xml_id, echange_xml_classname){
   url.addParam("echange_xml_classname", echange_xml_classname);
   url.requestUpdate("echange_"+echange_xml_id);
 }
-  
+
+viewEchange = function(echange_xml_id) {
+  var url = new Url(App.m, App.tab);
+  url.addParam("echange_xml_id", echange_xml_id);
+  url.modale();
+}
+
 function changePage(page) {
   $V(getForm('filterEchange').page,page);
 }

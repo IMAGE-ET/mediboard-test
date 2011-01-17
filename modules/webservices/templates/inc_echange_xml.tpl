@@ -20,7 +20,7 @@
     {{mb_include module="system" template="inc_form_delete"}}
   </td>
   <td class="narrow">
-    <button type="button" onclick="location.href='?m='+App.m+'&amp;tab='+App.tab+'&amp;echange_xml_id={{$object->_id}}'" class="search">
+    <button type="button" onclick="viewEchange('{{$object->_id}}')" class="search">
      {{$object->_id|str_pad:6:'0':$smarty.const.STR_PAD_LEFT}}
     </button>
   </td>
