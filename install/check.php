@@ -79,6 +79,14 @@ $package->mandatory = true;
 $package->reasons[] = "Assistant d'installation de Mediboard";
 $packages[] = $package;
 
+$package = new CPearPackage;
+$package->name = "PHP/CodeSniffer";
+$package->description = "Analyseur syntaxique de code source";
+$package->status = "beta";
+$package->mandatory = false;
+$package->reasons[] = "Outil de génie logiciel pour vérifier la qualité du code source de Mediboard";
+$packages[] = $package;
+
 /*
 $package = new CPearPackage;
 $package->name = "phpUnit";
@@ -225,6 +233,11 @@ showHeader();
 <table class="tbl">
 
 <tr>
+  <th class="title" colspan="5">Version de PHP</th>
+</tr>
+
+
+<tr>
   <th>Numéro de version</th>
   <th>Description</th>
   <th>Obligatoire ?</th>
@@ -283,6 +296,10 @@ showHeader();
 <table class="tbl" >
 
 <tr>
+  <th class="title" colspan="5">Extensions PECL</th>
+</tr>
+
+<tr>
   <th>Nom</th>
   <th>Description</th>
   <th>Obligatoire ?</th>
@@ -333,7 +350,7 @@ showHeader();
 <table class="tbl" >
 
 <tr>
-  <th class="category" colspan="6">Packages PEAR</th>
+  <th class="title" colspan="6">Packages PEAR</th>
 </tr>
 
 <tr>

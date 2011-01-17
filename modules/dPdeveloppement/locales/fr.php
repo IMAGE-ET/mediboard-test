@@ -1,4 +1,5 @@
 <?php
+$locales['CMbCodeSniffer-error-PEAR_needed'] = 'Cette fonctionnalité nécessite l\'extension PEAR::PHP_CodeSniffer dans sa version 1.3.0';
 $locales['CPermModule._owner.template'] = 'Profil';
 $locales['CPermModule._owner.user'] = 'Utilisateur';
 $locales['CPrescriptionLine.emplacement.bloc'] = 'Bloc';
@@ -8,7 +9,6 @@ $locales['dPdeveloppement-button-unlocalized_fix'] = 'Mais je suis courageux et 
 $locales['dPdeveloppement-msg-unlocalized_warning'] = 'Cette page contient des textes non traduits au nombre de';
 $locales['mod-dPdeveloppement-tab-benchmark'] = 'Montée en charge';
 $locales['mod-dPdeveloppement-tab-check_zombie_objects'] = 'Intégrité référentielle';
-$locales['mod-dPdeveloppement-tab-sniff_code'] = 'Analyse syntaxique';
 $locales['mod-dPdeveloppement-tab-css_test'] = 'Testeur de CSS';
 $locales['mod-dPdeveloppement-tab-echantillonnage'] = 'Echantillonnage';
 $locales['mod-dPdeveloppement-tab-form_tester'] = 'Testeur de formulaires';
@@ -18,6 +18,8 @@ $locales['mod-dPdeveloppement-tab-mnt_module_actions'] = 'Documentation';
 $locales['mod-dPdeveloppement-tab-mnt_table_classes'] = 'Tables';
 $locales['mod-dPdeveloppement-tab-mnt_traduction_classes'] = 'Traduction';
 $locales['mod-dPdeveloppement-tab-mutex_tester'] = 'Testeur de mutex';
+$locales['mod-dPdeveloppement-tab-sniff_code'] = 'Analyse syntaxique';
+$locales['mod-dPdeveloppement-tab-sniff_file'] = 'Analyse syntaxique d\'un fichier';
 $locales['mod-dPdeveloppement-tab-view_logs'] = 'Logs système';
 $locales['mod-dPdeveloppement-tab-view_metrique'] = 'Métrique';
 $locales['module-dPdeveloppement-court'] = 'Outils';

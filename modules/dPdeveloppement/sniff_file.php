@@ -9,6 +9,11 @@
 
 CCanDo::checkRead();
 
+if (!class_exists("CMbCodeSniffer")) {
+  CAppUI::stepMessage(UI_MSG_WARNING, "CMbCodeSniffer-error-PEAR_needed");
+  return;
+}
+
 $file = CValue::get("file");
 $sniffer = new CMbCodeSniffer;
 echo "<pre>";
