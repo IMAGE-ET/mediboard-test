@@ -38,9 +38,9 @@
 
   <!-- Use warnings for inline control structures -->
   <rule ref="Generic.ControlStructures.InlineControlStructure">
-  <properties>
-    <property name="error" value="false"/>
-  </properties>
+	  <properties>
+	    <property name="error" value="false"/>
+	  </properties>
   </rule>
 
   <!-- This message is not required as spaces are allowed for alignment -->
@@ -53,13 +53,11 @@
     <severity>0</severity>
   </rule>
 
-
   <!-- Use all PEAR Sniffs -->
-  <rule ref="PEAR" />
-
-  <!-- my_function() are allowed -->
-  <rule ref="PEAR.NamingConventions.ValidFunctionName.FunctionNoCaptial">
-    <severity>0</severity>
+  <rule ref="PEAR">
+	  <!-- my_function() are allowed -->
+    <exclude name="PEAR.NamingConventions.ValidFunctionName.FunctionNoCaptial" />
+    <exclude name="PEAR.ControlStructures.ControlSignature" />
   </rule>
 
   <!-- Use 2 spaces indent -->
@@ -69,4 +67,4 @@
     </properties>
   </rule>
 
-  </ruleset>
+</ruleset>

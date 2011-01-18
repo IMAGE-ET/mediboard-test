@@ -29,6 +29,7 @@ class CMbCodeSniffer extends PHP_CodeSniffer {
     $root_dir = CAppUI::conf("root_dir");
 		$file     = "$root_dir/$file";
 		$standard = "$root_dir/dev/CodeSniffer/Standard";
+		$standard = strtr($standard, "/", DIRECTORY_SEPARATOR);
 		return parent::process($file, $standard);
 	}
 	

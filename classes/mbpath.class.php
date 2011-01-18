@@ -339,6 +339,21 @@ abstract class CMbPath {
 		
 		return $tree;
 	}
+	
+	/**
+	 * Add a directory to include path
+	 * @param string $dir Directory to add
+	 * @return string The former include path
+	 */
+	static function addInclude($dir) {
+		if (!is_dir($dir)) {
+			trigger_error("'$dir' is not an actual directory", E_USER_WARNING);
+		}
+		
+		$paths = explode(PATH_SEPARATOR, get_include_path());
+		$paths[] = $dir;
+		return set_include_path(implode(PATH_SEPARATOR, array_unique($paths)));
+	}
 }
 
 ?>
