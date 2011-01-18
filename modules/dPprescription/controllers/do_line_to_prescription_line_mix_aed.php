@@ -94,7 +94,7 @@ $prescription_line_mix_item->code_cip = $line_med->code_cip;
 $prescription_line_mix_item->code_ucd = $line_med->code_ucd;
 $prescription_line_mix_item->code_cis = $line_med->code_cis;
 if($line_med->unite_duree == "heure"){
-  $prescription_line_mix_item->duree = $line_med->duree;
+  // $prescription_line_mix_item->duree = $line_med->duree; FIXME: CPrescriptionLineMixItem n'a pas de durée
 }
 $msg = $prescription_line_mix_item->store();
 CAppUI::displayMsg($msg, "CPrescriptionLineMixItem-msg-create");
