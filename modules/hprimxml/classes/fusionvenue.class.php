@@ -102,11 +102,7 @@ class CHPrimXMLFusionVenue extends CHPrimXMLEvenementsPatients {
       
       // Acquittement d'erreur : identifiants source et cible non fournis pour le venue / venueEliminee
       if (!$data['idSourceVenue'] && !$data['idCibleVenue'] && !$data['idSourceVenueEliminee'] && !$data['idCibleVenueEliminee']) {
-        $messageAcquittement = $domAcquittement->generateAcquittementsPatients("erreur", "E100");
-        $doc_valid = $domAcquittement->schemaValidate();
-				
-        $echange_hprim->setAckError($doc_valid, $messageAcquittement, "erreur");
-        return $messageAcquittement;
+        return $domAcquittement->generateAcquittementsError("E100", $commentaire, $newVenue);
       }
       
       $etatVenue         = CHPrimXMLEvenementsPatients::getEtatVenue($data['venue']);
@@ -123,11 +119,7 @@ class CHPrimXMLFusionVenue extends CHPrimXMLEvenementsPatients {
         if (($etatVenue == "préadmission") || ($etatVenueEliminee != "préadmission")) {
           if ($id400Venue->object_id && ($mbVenue->_id != $id400Venue->object_id)) {
             $commentaire = "L'identifiant source fait référence au séjour : $id400Venue->object_id et l'identifiant cible au séjour : $mbVenue->_id.";
-            $messageAcquittement = $domAcquittement->generateAcquittementsPatients("erreur", "E104", $commentaire);
-            $doc_valid = $domAcquittement->schemaValidate();
-            
-						$echange_hprim->setAckError($doc_valid, $messageAcquittement, "erreur");
-            return $messageAcquittement;
+            return $domAcquittement->generateAcquittementsError("E104", $commentaire, $newVenue);
           }
         }
       } 
@@ -144,11 +136,7 @@ class CHPrimXMLFusionVenue extends CHPrimXMLEvenementsPatients {
       if ($mbVenueEliminee->load($data['idCibleVenueEliminee'])) {
         if ($id400VenueEliminee->object_id && ($mbVenueEliminee->_id != $id400VenueEliminee->object_id)) {
           $commentaire = "L'identifiant source fait référence au séjour : $id400VenueEliminee->object_id et l'identifiant cible au séjour : $mbVenueEliminee->_id.";
-          $messageAcquittement = $domAcquittement->generateAcquittementsPatients("erreur", "E141", $commentaire);
-          $doc_valid = $domAcquittement->schemaValidate();
-					
-          $echange_hprim->setAckError($doc_valid, $messageAcquittement, "erreur");
-          return $messageAcquittement;
+          return $domAcquittement->generateAcquittementsError("E141", $commentaire, $newVenue);
         }
       }
       if (!$mbVenueEliminee->_id) {

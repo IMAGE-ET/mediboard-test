@@ -99,11 +99,7 @@ class CHPrimXMLFusionPatient extends CHPrimXMLEvenementsPatients {
       if ($mbPatient->load($data['idCiblePatient'])) {
         if ($mbPatient->_id != $id400Patient->object_id) {
           $commentaire = "L'identifiant source fait référence au patient : $id400Patient->object_id et l'identifiant cible au patient : $mbPatient->_id.";
-          $messageAcquittement = $domAcquittement->generateAcquittementsPatients("erreur", "E004", $commentaire, $newPatient);
-          $doc_valid = $domAcquittement->schemaValidate();
-					
-          $echange_hprim->setAckError($doc_valid, $messageAcquittement, "erreur");
-          return $messageAcquittement;
+          return $domAcquittement->generateAcquittementsError("E004", $commentaire, $newPatient);
         }
       } 
       if (!$mbPatient->_id) {
@@ -119,11 +115,7 @@ class CHPrimXMLFusionPatient extends CHPrimXMLEvenementsPatients {
       if ($mbPatientElimine->load($data['idCiblePatientElimine'])) {
         if ($mbPatientElimine->_id != $id400PatientElimine->object_id) {
           $commentaire = "L'identifiant source fait référence au patient : $id400PatientElimine->object_id et l'identifiant cible au patient : $mbPatientElimine->_id.";
-          $messageAcquittement = $domAcquittement->generateAcquittementsPatients("erreur", "E041", $commentaire, $newPatient);
-          $doc_valid = $domAcquittement->schemaValidate();
-					
-          $echange_hprim->setAckError($doc_valid, $messageAcquittement, "erreur");
-          return $messageAcquittement;
+          return $domAcquittement->generateAcquittementsError("E041", $commentaire, $newPatient);
         }
       }
       if (!$mbPatientElimine->_id) {
@@ -132,11 +124,7 @@ class CHPrimXMLFusionPatient extends CHPrimXMLEvenementsPatients {
       
       if (!$mbPatient->_id || !$mbPatientElimine->_id) {
         $commentaire = !$mbPatient->_id ? "Le patient $mbPatient->_id est inconnu dans Mediboard." : "Le patient $mbPatientElimine->_id est inconnu dans Mediboard.";
-        $messageAcquittement = $domAcquittement->generateAcquittementsPatients("erreur", "E012", $commentaire, $newPatient);
-        $doc_valid = $domAcquittement->schemaValidate();
-				
-        $echange_hprim->setAckError($doc_valid, $messageAcquittement, "erreur");
-        return $messageAcquittement;
+        return $domAcquittement->generateAcquittementsError("E012", $commentaire, $newPatient);
       }
       
       // Passage en trash de l'IPP du patient a éliminer
@@ -153,20 +141,12 @@ class CHPrimXMLFusionPatient extends CHPrimXMLEvenementsPatients {
       // Erreur sur le check du merge
       if ($checkMerge) {
         $commentaire = "La fusion de ces deux patients n'est pas possible à cause des problèmes suivants : $checkMerge";
-        $messageAcquittement = $domAcquittement->generateAcquittementsPatients("erreur", "E010", $commentaire, $newPatient);
-        $doc_valid = $domAcquittement->schemaValidate();
-				
-        $echange_hprim->setAckError($doc_valid, $messageAcquittement, "erreur");
-        return $messageAcquittement;
+        return $domAcquittement->generateAcquittementsError("E010", $commentaire, $newPatient);
       }
       
       if ($msg = $mbPatient->mergeDBFields($patientsElimine_array)) {
         $commentaire = "La fusion des données des patients a échoué : $msg";
-        $messageAcquittement = $domAcquittement->generateAcquittementsPatients("erreur", "E011", $commentaire, $newPatient);
-        $doc_valid = $domAcquittement->schemaValidate();
-				
-        $echange_hprim->setAckError($doc_valid, $messageAcquittement, "erreur");
-        return $messageAcquittement;
+        return $domAcquittement->generateAcquittementsError("E011", $commentaire, $newPatient);
       }
       
       $mbPatientElimine_id = $mbPatientElimine->_id;

@@ -319,17 +319,7 @@ class CHPrimXMLVenuePatient extends CHPrimXMLEvenementsPatients {
             // Acquittement d'erreur idSource et idCible incohérent
             if ($idVenueSMP != $num_dossier->object_id) {
               $commentaire = "L'identifiant source fait référence à la venue : $idVenueSMP et l'identifiant cible à la venue : $num_dossier->object_id.";
-              $messageAcquittement = $domAcquittement->generateAcquittementsPatients("erreur", "E104", $commentaire);
-              $doc_valid = $domAcquittement->schemaValidate();
-              $echange_hprim->acquittement_valide = $doc_valid ? 1 : 0;
-        
-              $echange_hprim->_acquittement = $messageAcquittement;
-              $echange_hprim->statut_acquittement = "erreur";
-              $echange_hprim->date_echange = mbDateTime();
-              $echange_hprim->setObjectIdClass("CSejour", $newVenue->_id);
-              $echange_hprim->store();
-              
-              return $messageAcquittement;
+              return $domAcquittement->generateAcquittementsError("E104", $commentaire, $newVenue);
             } else {
               $newVenue->load($num_dossier->object_id);
               
@@ -367,17 +357,7 @@ class CHPrimXMLVenuePatient extends CHPrimXMLEvenementsPatients {
           // Cas 3.2.2 : idCible non connu
           else {
             $commentaire = "L'identifiant source fait référence à la venue : $idVenueSMP et l'identifiant cible n'est pas connu.";
-            $messageAcquittement = $domAcquittement->generateAcquittementsPatients("erreur", "E103", $commentaire);
-            $doc_valid = $domAcquittement->schemaValidate();
-            $echange_hprim->acquittement_valide = $doc_valid ? 1 : 0;
-        
-            $echange_hprim->statut_acquittement = "erreur";
-            $echange_hprim->_acquittement = $messageAcquittement;
-            $echange_hprim->date_echange = mbDateTime();
-            $echange_hprim->setObjectIdClass("CSejour", $newVenue->_id);
-            $echange_hprim->store();
-    
-            return $messageAcquittement;
+            return $domAcquittement->generateAcquittementsError("E103", $commentaire, $newVenue);
           }
         }
       }    
@@ -527,11 +507,7 @@ class CHPrimXMLVenuePatient extends CHPrimXMLEvenementsPatients {
     else {      
       // Acquittement d'erreur : identifiants source et cible non fournis pour le patient / venue
       if (!$data['idSourceVenue'] && !$data['idCibleVenue']) {
-        $messageAcquittement = $domAcquittement->generateAcquittementsPatients("erreur", "E100");
-        $doc_valid = $domAcquittement->schemaValidate();
-        
-        $echange_hprim->setAckError($doc_valid, $messageAcquittement, "erreur");
-        return $messageAcquittement;
+        return $domAcquittement->generateAcquittementsError("E100", $commentaire, $newVenue);
       }
       
       $num_dossier = new CIdSante400();
@@ -720,12 +696,7 @@ class CHPrimXMLVenuePatient extends CHPrimXMLEvenementsPatients {
           if ($tmpVenue->load($data['idCibleVenue'])) {
             if ($tmpVenue->_id != $num_dossier->object_id) {
               $commentaire = "L'identifiant source fait référence au séjour : $num_dossier->object_id et l'identifiant cible au séjour : $tmpVenue->_id.";
-              $messageAcquittement = $domAcquittement->generateAcquittementsPatients("erreur", "E104", $commentaire);
-              $doc_valid = $domAcquittement->schemaValidate();
-              $echange_hprim->setObjectIdClass("CSejour", $newVenue->_id);
-              
-              $echange_hprim->setAckError($doc_valid, $messageAcquittement, "erreur");
-              return $messageAcquittement;
+              return $domAcquittement->generateAcquittementsError("E104", $commentaire, $newVenue);
             }
             $_code_NumDos = "I124"; 
           }

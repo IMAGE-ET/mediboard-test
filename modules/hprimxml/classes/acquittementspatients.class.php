@@ -95,7 +95,16 @@ class CHPrimXMLAcquittementsPatients extends CHPrimXMLDocument {
 
     return $messageAcquittementPatient;
   }
-   
+
+  function generateAcquittementsError($code, $commentaire, CMbObject $mbObject = null) {
+    $messageAcquittement = $this->generateAcquittementsPatients("erreur", $code, $commentaire);
+    $doc_valid = $this->schemaValidate();
+    $this->_ref_echange_hprim->setObjectIdClass($mbObject->_class_name, $mbObject->_id);
+    $this->_ref_echange_hprim->setAckError($doc_valid, $messageAcquittement, "erreur");
+
+    return $messageAcquittement;
+  }
+  
   function getStatutAcquittementPatient() {
     $xpath = new CHPrimXPath($this);
         

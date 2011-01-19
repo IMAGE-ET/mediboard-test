@@ -36,7 +36,7 @@ refreshEchange = function(echange_xml_id, echange_xml_classname){
 viewEchange = function(echange_xml_id) {
   var url = new Url(App.m, App.tab);
   url.addParam("echange_xml_id", echange_xml_id);
-  url.requestModal(800, 550);
+  url.requestModal(800, 500);
 }
 
 function changePage(page) {

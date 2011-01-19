@@ -631,11 +631,7 @@ class CHPrimXMLEvenementsPatients extends CHPrimXMLEvenements {
     // Impossible d'annuler un séjour en cours 
     if ($venue->entree_reelle) {
       $commentaire = "La venue $venue->_id que vous souhaitez annuler est impossible.";
-      $messageAcquittement = $domAcquittement->generateAcquittementsPatients("erreur", "E108", $commentaire);
-      $doc_valid = $domAcquittement->schemaValidate();
-      $echange_hprim->setObjectIdClass("CSejour", $venue->_id);
-      $echange_hprim->setAckError($doc_valid, $messageAcquittement, "erreur");
-      return $messageAcquittement;    
+      return $domAcquittement->generateAcquittementsError("E108", $commentaire, $venue); 
     }
     
     // Impossible d'annuler un dossier ayant une intervention
@@ -644,11 +640,7 @@ class CHPrimXMLEvenementsPatients extends CHPrimXMLEvenements {
     $venue->loadRefsOperations($where);
     if (count($venue->_ref_operations) > 0) {
       $commentaire = "La venue $venue->_id que vous souhaitez annuler est impossible.";
-      $messageAcquittement = $domAcquittement->generateAcquittementsPatients("erreur", "E109", $commentaire);
-      $doc_valid = $domAcquittement->schemaValidate();
-      $echange_hprim->setObjectIdClass("CSejour", $venue->_id);
-      $echange_hprim->setAckError($doc_valid, $messageAcquittement, "erreur");
-      return $messageAcquittement;    
+      return $domAcquittement->generateAcquittementsError("E109", $commentaire, $venue);
     }  
   }
   

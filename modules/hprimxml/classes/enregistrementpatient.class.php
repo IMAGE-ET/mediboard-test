@@ -107,11 +107,7 @@ class CHPrimXMLEnregistrementPatient extends CHPrimXMLEvenementsPatients {
           
           if (!$this->checkSimilarPatient($newPatient, $data['patient'])) {
             $commentaire = "Le nom et/ou le prénom sont très différents."; 
-            $messageAcquittement = $domAcquittement->generateAcquittementsPatients("erreur", "E016", $commentaire);
-            $doc_valid = $domAcquittement->schemaValidate();
-            $echange_hprim->setObjectIdClass("CPatient", $newPatient->_id);
-            $echange_hprim->setAckError($doc_valid, $messageAcquittement, "erreur");
-            return $messageAcquittement;
+            return $domAcquittement->generateAcquittementsError("E016", $commentaire, $newPatient);
           }
           
           // Mapping du patient
@@ -249,17 +245,7 @@ class CHPrimXMLEnregistrementPatient extends CHPrimXMLEvenementsPatients {
             // Acquittement d'erreur idSource et idCible incohérent
             if ($idPatientSIP != $IPP->object_id) {
               $commentaire = "L'identifiant source fait référence au patient : $idPatientSIP et l'identifiant cible au patient : $IPP->object_id.";
-              $messageAcquittement = $domAcquittement->generateAcquittementsPatients("erreur", "E004", $commentaire);
-              $doc_valid = $domAcquittement->schemaValidate();
-              $echange_hprim->acquittement_valide = $doc_valid ? 1 : 0;
-        
-              $echange_hprim->_acquittement = $messageAcquittement;
-              $echange_hprim->statut_acquittement = "erreur";
-              $echange_hprim->date_echange = mbDateTime();
-              $echange_hprim->setObjectIdClass("CPatient", $newPatient->_id);
-              $echange_hprim->store();
-              
-              return $messageAcquittement;
+              return $domAcquittement->generateAcquittementsError("E004", $commentaire, $newPatient);
             } else {
               $newPatient->load($IPP->object_id);
 
@@ -289,17 +275,7 @@ class CHPrimXMLEnregistrementPatient extends CHPrimXMLEvenementsPatients {
           // Cas 2.2.2 : idCible non connu
           else {
             $commentaire = "L'identifiant source fait référence au patient : $idPatientSIP et l'identifiant cible n'est pas connu.";
-            $messageAcquittement = $domAcquittement->generateAcquittementsPatients("erreur", "E003", $commentaire);
-            $doc_valid = $domAcquittement->schemaValidate();
-            $echange_hprim->acquittement_valide = $doc_valid ? 1 : 0;
-        
-            $echange_hprim->statut_acquittement = "erreur";
-            $echange_hprim->_acquittement = $messageAcquittement;
-            $echange_hprim->date_echange = mbDateTime();
-            $echange_hprim->setObjectIdClass("CPatient", $newPatient->_id);
-            $echange_hprim->store();
-    
-            return $messageAcquittement; 
+            return $domAcquittement->generateAcquittementsError("E003", $commentaire, $newPatient); 
           }
         }
       }
@@ -535,11 +511,7 @@ class CHPrimXMLEnregistrementPatient extends CHPrimXMLEvenementsPatients {
           if ($tmpPatient->load($data['idCiblePatient'])) {
             if ($tmpPatient->_id != $IPP->object_id) {
               $commentaire = "L'identifiant source fait référence au patient : $IPP->object_id et l'identifiant cible au patient : $tmpPatient->_id.";
-              $messageAcquittement = $domAcquittement->generateAcquittementsPatients("erreur", "E004", $commentaire);
-              $doc_valid = $domAcquittement->schemaValidate();
-              $echange_hprim->setObjectIdClass("CPatient", $newPatient->_id);
-              $echange_hprim->setAckError($doc_valid, $messageAcquittement, "erreur");
-              return $messageAcquittement;
+              return $domAcquittement->generateAcquittementsError("E004", $commentaire, $newPatient);
             }
             $_code_IPP = "I024"; 
           }
