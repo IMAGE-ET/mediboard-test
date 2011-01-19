@@ -107,13 +107,10 @@ class CHPrimXMLFusionVenue extends CHPrimXMLEvenementsPatients {
       
       $etatVenue         = CHPrimXMLEvenementsPatients::getEtatVenue($data['venue']);
       $etatVenueEliminee = CHPrimXMLEvenementsPatients::getEtatVenue($data['venueEliminee']);
-      
-      $id400Venue = new CIdSante400();
-      //Paramétrage de l'id 400
-      $id400Venue->object_class = "CSejour";
-      $id400Venue->tag = ($etatVenue == "préadmission") ? CAppUI::conf('dPplanningOp CSejour tag_dossier_pa').$dest_hprim->_tag_sejour : $dest_hprim->_tag_sejour;
-      $id400Venue->id400 = $data['idSourceVenue'];
-      $id400Venue->loadMatchingObject();
+     
+      $id400Venue = CIdSante400::getMatch("CSejour", 
+        ($etatVenue == "préadmission") ? CAppUI::conf('dPplanningOp CSejour tag_dossier_pa').$dest_hprim->_tag_sejour : 
+                                         $dest_hprim->_tag_sejour, $data['idSourceVenue']);
       if ($mbVenue->load($data['idCibleVenue'])) {
         // Pas de test dans le cas ou la fusion correspond à un changement de numéro de dossier
         if (($etatVenue == "préadmission") || ($etatVenueEliminee != "préadmission")) {
@@ -127,12 +124,9 @@ class CHPrimXMLFusionVenue extends CHPrimXMLEvenementsPatients {
         $mbVenue->_id = $id400Venue->object_id;
       }
       
-      $id400VenueEliminee = new CIdSante400();
-      //Paramétrage de l'id 400
-      $id400VenueEliminee->object_class = "CSejour";
-      $id400VenueEliminee->tag = ($etatVenue == "préadmission") ? CAppUI::conf('dPplanningOp CSejour tag_dossier_pa').$dest_hprim->_tag_sejour : $dest_hprim->_tag_sejour;
-      $id400VenueEliminee->id400 = $data['idSourceVenueEliminee'];
-      $id400VenueEliminee->loadMatchingObject();
+      $id400VenueEliminee = CIdSante400::getMatch("CSejour", 
+        ($etatVenue == "préadmission") ? CAppUI::conf('dPplanningOp CSejour tag_dossier_pa').$dest_hprim->_tag_sejour : 
+                                         $dest_hprim->_tag_sejour, $data['idSourceVenueEliminee']);
       if ($mbVenueEliminee->load($data['idCibleVenueEliminee'])) {
         if ($id400VenueEliminee->object_id && ($mbVenueEliminee->_id != $id400VenueEliminee->object_id)) {
           $commentaire = "L'identifiant source fait référence au séjour : $id400VenueEliminee->object_id et l'identifiant cible au séjour : $mbVenueEliminee->_id.";

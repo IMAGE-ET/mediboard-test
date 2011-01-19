@@ -151,6 +151,16 @@
       throw new Exception($msg);
     }
   }
+  
+  static function getMatch($object_class, $tag, $id400) {
+    $id_ext               = new self;
+    $id_ext->object_class = $object_class;
+    $id_ext->tag          = $tag;
+    $id_ext->id400        = $id400;
+    $id_ext->loadMatchingObject();
+    
+    return $id_ext;
+  }
 }
 
 ?>

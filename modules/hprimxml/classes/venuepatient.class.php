@@ -50,15 +50,10 @@ class CHPrimXMLVenuePatient extends CHPrimXMLEvenementsPatients {
         
     // Cas d'une annulation dans Mediboard on passe en trash le num dossier
     if (CAppUI::conf("hprimxml trash_numdos_sejour_cancel") && $mbVenue->annule && $mbVenue->_num_dossier) {
-      $num_dossier = new CIdSante400();
-      //Paramétrage de l'id 400
-      $num_dossier->object_class = "CSejour";
-      $num_dossier->tag = $this->_ref_echange_hprim->_ref_destinataire->_tag_sejour;
-      $num_dossier->id400 = $mbVenue->_num_dossier;
-      
-      if ($num_dossier->loadMatchingObject()) {
-        $num_dossier->tag = CAppUI::conf('dPplanningOp CSejour tag_dossier_trash').$this->_ref_echange_hprim->_ref_destinataire->_tag_sejour;
-        $num_dossier->store();
+      $NDA = CIdSante400::getMatch("CSejour", $this->_ref_echange_hprim->_ref_destinataire->_tag_sejour, $mbVenue->_num_dossier);
+      if ($NDA->_id) {
+        $NDA->tag = CAppUI::conf('dPplanningOp CSejour tag_dossier_trash').$this->_ref_echange_hprim->_ref_destinataire->_tag_sejour;
+        $NDA->store();
       }
     }
             
@@ -139,14 +134,9 @@ class CHPrimXMLVenuePatient extends CHPrimXMLEvenementsPatients {
     if (CAppUI::conf('sip server')) {
       // Cas 2 : idSource non fourni, idCible fourni
       if (!$data['idSourceVenue'] && $data['idCibleVenue']) {
-        $num_dossier = new CIdSante400();
-        //Paramétrage de l'id 400
-        $num_dossier->object_class = "CSejour";
-        $num_dossier->tag = CAppUI::conf("sip tag_dossier");
-        $num_dossier->id400 = str_pad($data['idCibleVenue'], 6, '0', STR_PAD_LEFT);
-        
+        $num_dossier = CIdSante400::getMatch("CSejour", CAppUI::conf("sip tag_dossier"), str_pad($data['idCibleVenue'], 6, '0', STR_PAD_LEFT));
         // Cas 2.1 : idCible connu
-        if ($num_dossier->loadMatchingObject()) {
+        if ($num_dossier->_id) {
           $newVenue->load($num_dossier->object_id);
           $newVenue->loadRefPatient();
           
@@ -237,18 +227,13 @@ class CHPrimXMLVenuePatient extends CHPrimXMLEvenementsPatients {
         return $messageAcquittement;
       }
       
-      $id400 = new CIdSante400();
-      //Paramétrage de l'id 400
-      $id400->object_class = "CSejour";
-      $id400->tag          = $dest_hprim->_tag_sejour;
-      $id400->id400        = $data['idSourceVenue'];
-      
+      $id400 = CIdSante400::getMatch("CSejour", $dest_hprim->_tag_sejour, $data['idSourceVenue']);
       // Cas 3 : idSource fourni et retrouvé : la venue existe sur le SMP
-      if($id400->loadMatchingObject()) {
+      if ($id400->_id) {
         // Identifiant de la venue sur le SMP
         $idVenueSMP = $id400->object_id;
         // Cas 3.1 : idCible non fourni
-        if(!$data['idCibleVenue']) {
+        if (!$data['idCibleVenue']) {
           if ($newVenue->load($idVenueSMP)) {
             // Dans le cas d'une annulation de la venue
             if ($cancel) {
@@ -308,14 +293,9 @@ class CHPrimXMLVenuePatient extends CHPrimXMLEvenementsPatients {
         }
         // Cas 3.2 : idCible fourni
         else {
-          $num_dossier = new CIdSante400();
-          //Paramétrage de l'id 400
-          $num_dossier->object_class = "CSejour";
-          $num_dossier->tag = CAppUI::conf("sip tag_dossier");
-
-          $num_dossier->id400 = $data['idCibleVenue'];
+          $num_dossier = CIdSante400::getMatch("CSejour", CAppUI::conf("sip tag_dossier"), $data['idCibleVenue']);
           // Cas 3.2.1 : idCible connu
-          if ($num_dossier->loadMatchingObject()) {
+          if ($num_dossier->_id) {
             // Acquittement d'erreur idSource et idCible incohérent
             if ($idVenueSMP != $num_dossier->object_id) {
               $commentaire = "L'identifiant source fait référence à la venue : $idVenueSMP et l'identifiant cible à la venue : $num_dossier->object_id.";
@@ -510,14 +490,9 @@ class CHPrimXMLVenuePatient extends CHPrimXMLEvenementsPatients {
         return $domAcquittement->generateAcquittementsError("E100", $commentaire, $newVenue);
       }
       
-      $num_dossier = new CIdSante400();
-      //Paramétrage de l'id 400
-      $num_dossier->object_class = "CSejour";
-      $num_dossier->tag = $dest_hprim->_tag_sejour;
-      $num_dossier->id400 = $data['idSourceVenue'];
-      
+      $num_dossier = CIdSante400::getMatch("CSejour", $dest_hprim->_tag_sejour, $data['idSourceVenue']);
       // idSource non connu
-      if(!$num_dossier->loadMatchingObject()) {
+      if (!$num_dossier->_id) {
         // idCible fourni
         if ($data['idCibleVenue']) {
           if ($newVenue->load($data['idCibleVenue'])) {

@@ -94,15 +94,9 @@ class CHPrimXMLEnregistrementPatient extends CHPrimXMLEvenementsPatients {
     if (CAppUI::conf('sip server')) {      
       // Cas 1 : Identifiant source (IC) non fourni et identifiant cible fourni (IPP)
       if (!$data['idSourcePatient'] && $data['idCiblePatient']) {
-        $IPP = new CIdSante400();
-        //Paramétrage de l'id 400
-        $IPP->object_class = "CPatient";
-        $IPP->tag = CAppUI::conf("sip tag_ipp");
-
-        $IPP->id400 = str_pad($data['idCiblePatient'], 6, '0', STR_PAD_LEFT);
-
+        $IPP = CIdSante400::getMatch("CPatient", CAppUI::conf("sip tag_ipp"), str_pad($data['idCiblePatient'], 6, '0', STR_PAD_LEFT));
         // Cas 1.1 : idCible connu
-        if ($IPP->loadMatchingObject()) {
+        if ($IPP->_id) {
           $newPatient->load($IPP->object_id);
           
           if (!$this->checkSimilarPatient($newPatient, $data['patient'])) {
@@ -168,15 +162,10 @@ class CHPrimXMLEnregistrementPatient extends CHPrimXMLEvenementsPatients {
         
         return $messageAcquittement;
       }
-        
-      $id400 = new CIdSante400();
-      //Paramétrage de l'id 400
-      $id400->object_class = "CPatient";
-      $id400->tag = $dest_hprim->_tag_patient;
-      $id400->id400 = $data['idSourcePatient'];
-   
+      
+      $id400 = CIdSante400::getMatch("CPatient", $dest_hprim->_tag_patient, $data['idSourcePatient']);
       // Cas 2 : Patient existe sur le SIP
-      if($id400->loadMatchingObject()) {
+      if($id400->_id) {
         // Identifiant du patient sur le SIP
         $idPatientSIP = $id400->object_id;
         // Cas 2.1 : Pas d'idCible
@@ -233,15 +222,9 @@ class CHPrimXMLEnregistrementPatient extends CHPrimXMLEvenementsPatients {
         }
         // Cas 2.2 : idCible envoyé
         else {
-          $IPP = new CIdSante400();
-          //Paramétrage de l'id 400
-          $IPP->object_class = "CPatient";
-          $IPP->tag = CAppUI::conf("sip tag_ipp");
-
-          $IPP->id400 = $data['idCiblePatient'];
-          
+          $IPP = CIdSante400::getMatch("CPatient", CAppUI::conf("sip tag_ipp"), $data['idCiblePatient']);
           // Cas 2.2.1 : idCible connu
-          if ($IPP->loadMatchingObject()) {
+          if ($IPP->_id) {
             // Acquittement d'erreur idSource et idCible incohérent
             if ($idPatientSIP != $IPP->object_id) {
               $commentaire = "L'identifiant source fait référence au patient : $idPatientSIP et l'identifiant cible au patient : $IPP->object_id.";
@@ -400,14 +383,9 @@ class CHPrimXMLEnregistrementPatient extends CHPrimXMLEvenementsPatients {
     } 
     // Si CIP
     else {      
-      $IPP = new CIdSante400();
-      //Paramétrage de l'id 400
-      $IPP->object_class = "CPatient";
-      $IPP->tag = $dest_hprim->_tag_patient;
-      $IPP->id400 = $data['idSourcePatient'];
-      
+      $IPP = CIdSante400::getMatch("CPatient", $dest_hprim->_tag_patient, $data['idSourcePatient']);
       // idSource non connu
-      if (!$IPP->loadMatchingObject()) {
+      if (!$IPP->_id) {
         // idCible fourni
         if ($data['idCiblePatient']) {
           if ($newPatient->load($data['idCiblePatient'])) {

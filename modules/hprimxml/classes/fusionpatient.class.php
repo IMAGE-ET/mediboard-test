@@ -90,12 +90,7 @@ class CHPrimXMLFusionPatient extends CHPrimXMLEvenementsPatients {
         return $messageAcquittement;
       }
       
-      $id400Patient = new CIdSante400();
-      //Paramétrage de l'id 400
-      $id400Patient->object_class = "CPatient";
-      $id400Patient->tag = $dest_hprim->_tag_patient;
-      $id400Patient->id400 = $data['idSourcePatient'];
-      $id400Patient->loadMatchingObject();
+      $id400Patient = CIdSante400::getMatch("CPatient", $dest_hprim->_tag_patient, $data['idSourcePatient']);
       if ($mbPatient->load($data['idCiblePatient'])) {
         if ($mbPatient->_id != $id400Patient->object_id) {
           $commentaire = "L'identifiant source fait référence au patient : $id400Patient->object_id et l'identifiant cible au patient : $mbPatient->_id.";
@@ -106,12 +101,7 @@ class CHPrimXMLFusionPatient extends CHPrimXMLEvenementsPatients {
         $mbPatient->load($id400Patient->object_id);
       }
       
-      $id400PatientElimine = new CIdSante400();
-      //Paramétrage de l'id 400
-      $id400PatientElimine->object_class = "CPatient";
-      $id400PatientElimine->tag = $dest_hprim->_tag_patient;
-      $id400PatientElimine->id400 = $data['idSourcePatientElimine'];
-      $id400PatientElimine->loadMatchingObject();
+      $id400PatientElimine = CIdSante400::getMatch("CPatient", $dest_hprim->_tag_patient, $data['idSourcePatientElimine']);
       if ($mbPatientElimine->load($data['idCiblePatientElimine'])) {
         if ($mbPatientElimine->_id != $id400PatientElimine->object_id) {
           $commentaire = "L'identifiant source fait référence au patient : $id400PatientElimine->object_id et l'identifiant cible au patient : $mbPatientElimine->_id.";
