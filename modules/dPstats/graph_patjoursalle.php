@@ -38,7 +38,6 @@ function graphPatJourSalle($debut = null, $fin = null, $prat_id = 0, $salle_id =
   $series = array();
   $serie = array('data' => array());
 
-  // @TODO : Ajouter les intervs hors plage
   $query = "SELECT COUNT(operations.operation_id) AS total,
     COUNT(DISTINCT(plagesop.date)) AS nb_days,
     COUNT(DISTINCT(sallesbloc.salle_id)) AS nb_salles,
@@ -52,28 +51,64 @@ function graphPatJourSalle($debut = null, $fin = null, $prat_id = 0, $salle_id =
       sallesbloc.stats = '1' AND 
       plagesop.date BETWEEN '$debut' AND '$fin' AND 
       operations.annulee = '0'";
-    
-  if($prat_id)       $query .= "\nAND operations.chir_id = '$prat_id'";
-  if($discipline_id) $query .= "\nAND users_mediboard.discipline_id = '$discipline_id'";
-  if($codeCCAM)      $query .= "\nAND operations.codes_ccam LIKE '%$codeCCAM%'";
+
+  $query_hors_plage = "SELECT COUNT(operations.operation_id) AS total,
+    COUNT(DISTINCT(operations.date)) AS nb_days,
+    COUNT(DISTINCT(sallesbloc.salle_id)) AS nb_salles,
+    DATE_FORMAT(operations.date, '%m/%Y') AS mois,
+    DATE_FORMAT(operations.date, '%Y-%m-01') AS orderitem
+    FROM operations
+    INNER JOIN sallesbloc ON operations.salle_id = sallesbloc.salle_id
+    LEFT JOIN users_mediboard ON operations.chir_id = users_mediboard.user_id
+    WHERE 
+      sallesbloc.stats = '1' AND
+      operations.date IS NOT NULL AND
+      operations.plageop_id IS NULL AND
+      operations.date BETWEEN '$debut' AND '$fin' AND 
+      operations.annulee = '0'";
+  
+  if($prat_id) {
+    $query .= "\nAND operations.chir_id = '$prat_id'";
+    $query_hors_plage .= "\nAND operations.chir_id = '$prat_id'"; 
+  }
+  
+  if($discipline_id) {
+    $query .= "\nAND users_mediboard.discipline_id = '$discipline_id'"; 
+    $query_hors_plage .= "\nAND users_mediboard.discipline_id = '$discipline_id'";
+  }
+  
+  if($codeCCAM) {
+    $query .= "\nAND operations.codes_ccam LIKE '%$codeCCAM%'";
+    $query_hors_plage .= "\nAND operations.codes_ccam LIKE '%$codeCCAM%'";
+  }
 
   if($salle_id) {
     $query .= "\nAND sallesbloc.salle_id = '$salle_id'";
+    $query_hors_plage .= "\nAND sallesbloc.salle_id = '$salle_id'";
   } elseif($bloc_id) {
     $query .= "\nAND sallesbloc.bloc_id = '$bloc_id'";
+    $query_hors_plage .= "\nAND sallesbloc.bloc_id = '$bloc_id'";
   }
   
   $query .= "\nGROUP BY mois ORDER BY orderitem";
+  $query_hors_plage .= "\nGROUP BY mois ORDER BY orderitem";
 
   $result = $prat->_spec->ds->loadlist($query);
+  $result_hors_plage = $prat->_spec->ds->loadlist($query_hors_plage);
+  
   foreach($ticks as $i => $tick) {
     $f = true;
     foreach($result as $r) {
       if($tick[1] == $r["mois"]) {
-        //$nbjours = mbWorkDaysInMonth($r["orderitem"]);
-        //$serie['data'][] = array($i, $r["total"]/($nbjours*count($salles)));
-        $serie['data'][] = array($i, $r["total"]/($r["nb_days"]*$r["nb_salles"]));
-        //$serie['data'][] = array($i, $r["total"]/($r["nb_days"]*count($salles)));
+        $calcul_hors_plage = 0;
+        foreach($result_hors_plage as $key => $rb) {
+          if ($tick[1] == $rb["mois"]) {
+            $calcul_hors_plage = $rb["total"]/($rb["nb_days"]*$rb["nb_salles"]);
+            unset($result_hors_plage[$key]);
+            break;
+          }
+        }
+        $serie['data'][] = array($i, $r["total"]/($r["nb_days"]*$r["nb_salles"]) + $calcul_hors_plage);
         $f = false;
       }
     }

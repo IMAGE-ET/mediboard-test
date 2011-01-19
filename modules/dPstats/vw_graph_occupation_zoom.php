@@ -18,14 +18,14 @@ $bloc_id       = CValue::getOrSession("bloc_id");
 $discipline_id = CValue::getOrSession("discipline_id", 0);
 $codes_ccam    = strtoupper(CValue::getOrSession("codes_ccam", ""));
 
-CAppUI::requireModuleFile("dPstats", "graph_occupation_salle_zoom");
+CAppUI::requireModuleFile("dPstats", "graph_occupation_salle");
 
 $debut = substr($date,3,7)."-".substr($date,0,2)."-01";
 $fin   = mbDate("+1 MONTH", $debut);
 $fin   = mbDate("-1 DAY", $fin);
 
 $graphs = array(
-  graphOccupationSalle($debut, $fin, $prat_id, $salle_id, $bloc_id, $discipline_id, $codes_ccam),
+  graphOccupationSalle($debut, $fin, $prat_id, $salle_id, $bloc_id, $discipline_id, $codes_ccam, null, 'DAY'),
 );
 
 // Création du template

@@ -70,25 +70,55 @@ function graphActiviteZoom($date, $prat_id = 0, $salle_id = 0, $bloc_id = 0, $di
         plagesop.date BETWEEN '$debut' AND '$fin' AND 
         operations.annulee = '0' AND 
         sallesbloc.salle_id = '$salle->_id'";
-        
+
+    $query_hors_plage = "SELECT COUNT(operations.operation_id) AS total,
+      DATE_FORMAT(operations.date, '%d') AS jour,
+      sallesbloc.nom AS nom
+      FROM operations
+      INNER JOIN sallesbloc ON operations.salle_id = sallesbloc.salle_id
+      INNER JOIN users_mediboard ON operations.chir_id = users_mediboard.user_id
+      WHERE
+        operations.date IS NOT NULL AND
+        operations.plageop_id IS NULL AND
+        operations.date BETWEEN '$debut' AND '$fin' AND 
+        operations.annulee = '0' AND
+        sallesbloc.salle_id = '$salle->_id'";
+    
     if($prat_id && !$prat->isFromType(array("Anesthésiste"))) {
       $query .= "\nAND operations.chir_id = '$prat_id'";
+      $query_hors_plage .= "\nAND operations.chir_id = '$prat_id'";
     }
     if($prat_id && $prat->isFromType(array("Anesthésiste"))) {
       $query .= "\nAND (operations.anesth_id = '$prat_id' OR 
                        (plagesop.anesth_id = '$prat_id' AND (operations.anesth_id = '0' OR operations.anesth_id IS NULL)))";
+      $query_hors_plage .= "\nAND (operations.anesth_id = '$prat_id'";
     }
-    if($discipline_id) $query .= "\nAND users_mediboard.discipline_id = '$discipline_id'";
-    if($codes_ccam)    $query .= "\nAND operations.codes_ccam LIKE '%$codes_ccam%'";
+    if($discipline_id) {
+      $query .= "\nAND users_mediboard.discipline_id = '$discipline_id'";
+      $query_hors_plage .= "\nAND users_mediboard.discipline_id = '$discipline_id'";
+    }
+    if($codes_ccam) { 
+      $query .= "\nAND operations.codes_ccam LIKE '%$codes_ccam%'";
+      $query_hors_plage .= "\nAND operations.codes_ccam LIKE '%$codes_ccam%'";
+    }
     
     $query .= "\nGROUP BY jour ORDER BY jour";
+    $query_hors_plage .= "\nGROUP BY jour ORDER BY jour";
     
     $result = $salle->_spec->ds->loadlist($query);
+    $result_hors_plage = $salle->_spec->ds->loadlist($query_hors_plage);
     
     foreach($ticks2 as $i => $tick) {
       $f = true;
       foreach($result as $r) {
         if($tick[1] == $r["jour"]) {
+          foreach($result_hors_plage as $key => $rb) {
+            if ($tick[1] == $rb["jour"]) {
+              $r["total"] += $rb["total"];
+              unset($result_hors_plage[$key]);
+              break;
+            }
+          }
           $serie["data"][] = array($i, $r["total"]);
           $serie_total["data"][$i][1] += $r["total"];
           $total += $r["total"];
