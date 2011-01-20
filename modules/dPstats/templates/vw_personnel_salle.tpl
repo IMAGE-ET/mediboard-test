@@ -16,13 +16,16 @@ Main.add(function () {
   Calendar.regField(form.fin_personnel);
 });
 
+toggleEntreeSortieSalle = function(elt) {
+  elt.next().value = elt.checked == true ? 1 : 0;
+}
 </script>
 
 <form name="personnelSalle" action="?" method="get" onsubmit="return checkForm(this)">
 <input type="hidden" name="m" value="dPstats" />
 <table class="main form">
   <tr>
-    <th colspan="6" class="category">
+    <th colspan="8" class="category">
     	Bilan pour le personnel :
 			{{tr}}CPersonnel.emplacement.op{{/tr}}
 			</th>
@@ -39,6 +42,14 @@ Main.add(function () {
         </option>
         {{/foreach}}
       </select>
+    </td>
+    <th>
+      <label for="_entree_sortie_salle_checkbox" title="Durées avec entrée / sortie de salle">Durées avec entrée / sortie de salle</label>
+    </th>
+    <td>
+      <input type="checkbox" name="_entree_sortie_salle_checkbox" {{if $_entree_sortie_salle == "1"}}checked='checked'{{/if}}
+        onchange="toggleEntreeSortieSalle(this)"/>
+      <input type="hidden" name="_entree_sortie_salle" value="{{$_entree_sortie_salle}}"/>
     </td>
     <th><label for="deb_personnel" title="Date de début">Début</label></th>
     <td><input type="hidden" name="deb_personnel" class="notNull date" value="{{$deb_personnel}}" /></td>

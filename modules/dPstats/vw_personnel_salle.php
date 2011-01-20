@@ -12,9 +12,10 @@ global $AppUI, $can, $m;
 
 $can->needsRead();
 
-$deb_personnel  = CValue::getOrSession("deb_personnel" , mbDate("-1 WEEK"));
-$fin_personnel  = CValue::getOrSession("fin_personnel" , mbDate(""));
-$prat_personnel = CValue::getOrSession("prat_personnel", null);
+$deb_personnel        = CValue::getOrSession("deb_personnel" , mbDate("-1 WEEK"));
+$fin_personnel        = CValue::getOrSession("fin_personnel" , mbDate(""));
+$prat_personnel       = CValue::getOrSession("prat_personnel", null);
+$_entree_sortie_salle = CValue::getOrSession("_entree_sortie_salle", "0");
 
 $user = new CMediusers();
 $user->load($AppUI->user_id);
@@ -59,12 +60,23 @@ if($prat_personnel) {
     $curr_plage->loadAffectationsPersonnel();
     foreach($curr_plage->_ref_operations as $curr_op) {
       // Durées
-      if($curr_op->debut_op && $curr_op->fin_op && ($curr_op->debut_op < $curr_op->fin_op)) {
-        $curr_plage->_first_op       = min($curr_plage->_first_op, $curr_op->debut_op);
-        $curr_plage->_last_op        = max($curr_plage->_last_op, $curr_op->fin_op);
-        $duree_op = mbTimeRelative($curr_op->debut_op, $curr_op->fin_op);
-        $curr_plage->_duree_total_op = mbAddTime($duree_op, $curr_plage->_duree_total_op);
-        $curr_plage->_op_for_duree_totale++;
+      if ($_entree_sortie_salle == "0") {
+        if($curr_op->debut_op && $curr_op->fin_op && ($curr_op->debut_op < $curr_op->fin_op)) {
+          $curr_plage->_first_op       = min($curr_plage->_first_op, $curr_op->debut_op);
+          $curr_plage->_last_op        = max($curr_plage->_last_op, $curr_op->fin_op);
+          $duree_op = mbTimeRelative($curr_op->debut_op, $curr_op->fin_op);
+          $curr_plage->_duree_total_op = mbAddTime($duree_op, $curr_plage->_duree_total_op);
+          $curr_plage->_op_for_duree_totale++;
+        }
+      }
+      else {
+        if($curr_op->entree_salle && $curr_op->sortie_salle && ($curr_op->entree_salle < $curr_op->sortie_salle)) {
+          $curr_plage->_first_op       = min($curr_plage->_first_op, $curr_op->entree_salle);
+          $curr_plage->_last_op        = max($curr_plage->_last_op, $curr_op->sortie_salle);
+          $duree_op = mbTimeRelative($curr_op->entree_salle, $curr_op->sortie_salle);
+          $curr_plage->_duree_total_op = mbAddTime($duree_op, $curr_plage->_duree_total_op);
+          $curr_plage->_op_for_duree_totale++;
+        }
       }
       // Personnel réel
       $curr_op->loadAffectationsPersonnel();
@@ -127,6 +139,7 @@ $smarty->assign("fin_personnel" , $fin_personnel);
 $smarty->assign("prat_personnel", $prat_personnel);
 $smarty->assign("listPlages"    , $listPlages);
 $smarty->assign("total"         , $total);
+$smarty->assign("_entree_sortie_salle", $_entree_sortie_salle);
 
 $smarty->display("vw_personnel_salle.tpl");
 
