@@ -8,7 +8,7 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
  */
 
-CCando::checkRead();
+CCando::checkEdit();
 
 $date    = CValue::get("date", mbDate());
 $kine_id = CValue::getOrSession("kine_id", CAppUI::$instance->user_id);

@@ -9,7 +9,7 @@
  */
 
 
-CCanDo::checkRead();
+CCanDo::checkEdit();
 
 // Liste des RHSs
 $rhs = new CRHS();

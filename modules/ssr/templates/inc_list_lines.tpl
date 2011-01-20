@@ -81,7 +81,7 @@
           <img style="float: left" src="images/icons/ampoule.png" title="Prescription recemment modifiée"/>
           {{/if}}
           
-					{{if !@$offline}}
+					{{if !@$offline && $can_edit_prescription}}
 					<button class="edit notext" type="button" onclick="updateListLines('{{$category_id}}', '{{$_line->prescription_id}}', '{{$_line->_id}}');">
 					  {{tr}}Edit{{/tr}}
 					</button>

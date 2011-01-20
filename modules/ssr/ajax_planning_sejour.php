@@ -8,7 +8,7 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
  */
 
-CCanDo::checkEdit();
+CCanDo::checkRead();
 
 $sejour = new CSejour;
 $sejour->load(CValue::get("sejour_id"));

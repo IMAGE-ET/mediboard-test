@@ -26,8 +26,11 @@
       {{mb_include template=inc_sejour_repartition}}
     </div>
     {{else}}
-	    <div class="draggable" id="{{$sejour->_guid}}">
-	      <script type="text/javascript">Repartition.draggableSejour('{{$sejour->_guid}}')</script>
+	    <div class="{{if $can->edit}} draggable {{/if}}" id="{{$sejour->_guid}}">
+	      {{if $can->edit}}
+        <script type="text/javascript">Repartition.draggableSejour('{{$sejour->_guid}}')</script>
+	      {{/if}}
+
 	      {{mb_include template=inc_sejour_repartition}}       
 	    </div>
     {{/if}}

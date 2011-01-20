@@ -13,9 +13,12 @@
   {{assign var=conge value=$_technicien->_ref_conge_date}}
   <tr {{if $conge->_id}} class="ssr-kine-conges" {{/if}}>
     <th class="text" id="technicien-{{$technicien_id}}">
+    	{{if !$can->edit}}
+			  {{assign var=readonly value=1}}
+      {{/if}}
       <script type="text/javascript">
         Repartition.registerTechnicien('{{$technicien_id}}','{{$readonly}}')
-			</script>
+      </script>
       {{mb_include module=mediusers template=inc_vw_mediuser mediuser=$_technicien->_fwd.kine_id}}
       <small class="count">(-)</small>
  		</th>
