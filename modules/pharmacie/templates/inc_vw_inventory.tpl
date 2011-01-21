@@ -149,8 +149,13 @@ provessValuationAll = function(table) {
           {{$_group.label}}
         </th>
         <th class="title" style="text-align: right;">
+				  {{if $_group.list_id|@count}}
+					  {{assign var=_list_json value=$_group.list_id|@json}}
+					{{else}}
+            {{assign var=_list_json value="'none'"}}
+					{{/if}}
           <button type="button" class="change singleclick" 
-                  onclick="processValuation(this,$(this).next('span'),'{{$categorization}}', '{{$_code}}', {{$_group.list_id|@json}}, '')">
+                  onclick="processValuation(this,$(this).next('span'),'{{$categorization}}', '{{$_code}}', {{$_list_json}}, '')">
             Valeur
           </button>
           <span></span>

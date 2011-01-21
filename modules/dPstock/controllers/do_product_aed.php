@@ -13,8 +13,10 @@ $do = new CDoObjectAddEdit('CProduct');
 if (CValue::post("_duplicate")) {
   $do->doBind();
   $product = $do->_objBefore;
-  $product->code = "";
+  $product->code .= "-copie";
+  $product->name .= " (Copie)";
   $product->_id = null;
+	
   if ($msg = $product->store()) {
     CAppUI::setMsg($msg);
   }
