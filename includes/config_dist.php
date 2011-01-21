@@ -114,15 +114,6 @@ $dPconfig["db"]["Transit"] = array(
   "dbpass" => "AdminTransit",
 );
   
-// you can add as much databases as you want by using
-//$dPconfig["db"]["dsn"] = array(
-//  "dbtype" => "dbtype",
-//  "dbhost" => "dbhost",
-//  "dbname" => "dbname",
-//  "dbuser" => "dbuser",
-//  "dbpass" => "dbpass",
-//);
-
 // Compatibility mode
 $dPconfig["interop"]["mode_compat"] = "default";
 
@@ -191,21 +182,6 @@ $dPconfig["dPbloc"]["CPlageOp"] = array (
   "chambre_operation"    => "0",
   "impression_suivi"     => "0",
   "id_salles_impression" => "",
-);
-
-$dPconfig["dPfiles"] = array (
-  "extensions_yoplet" => "gif jpeg jpg pdf png",
-  "upload_max_filesize" => "2M",
-  "system_sender"       => "",
-  "rooturl"             => "",
-  "CFile"               => array(
-    "upload_directory"  => "files",
-    "ooo_active"   => "0",
-    "ooo_path"     => ""
-  ),
-  "CFilesCategory"      => array(
-    "show_empty" => "1",
-  ),
 );
 
 $dPconfig["dPsante400"] = array (

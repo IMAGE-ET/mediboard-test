@@ -107,7 +107,6 @@ if (!CAppUI::$instance->user_id) {
 }
 
 $tab = 1;
-
 // Set the module and action from the url
 if (null == $m = CAppUI::checkFileName(CValue::get("m", 0))) {
   $m = CPermModule::getFirstVisibleModule();
@@ -141,6 +140,9 @@ $u      = CAppUI::checkFileName(CValue::get("u"     , ""));
 $dosql  = CAppUI::checkFileName(CValue::post("dosql", ""));
 $m_post = CAppUI::checkFileName(CValue::post("m", $m));
 $class  = CAppUI::checkFileName(CValue::post("@class", ""));
+
+// Make $m available in do_aed
+$m = $m_post;
 
 $tab = $a == "index" ? 
   CValue::getOrSession("tab", $tab) : 

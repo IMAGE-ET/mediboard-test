@@ -10,8 +10,6 @@
 
 CCanDo::checkEdit();
 
-$max_sent = CValue::get("max_sent", 10);
-$max_loaded = CValue::get("max_loaded", 1000);
 $do = CValue::get("do", "0");
 
 // Auto send categories
@@ -23,25 +21,36 @@ foreach ($categories = $category->loadMatchingList() as $_category) {
 }
 
 // Unsent docItems
+$max_load = CAppUI::conf("dPfiles CDocumentSender auto_max_load");
 $where["file_category_id"] = CSQLDataSource::prepareIn(array_keys($categories));
 $where["etat_envoi"      ] = "!= 'oui'";
 $where["object_id"       ] = "IS NOT NULL";
 
 $file = new CFile();
-$items["CFile"] = $file->loadList($where, "file_id DESC", $max_loaded);
+$items["CFile"] = $file->loadList($where, "file_id DESC", $max_load);
+$count["CFile"] = $file->countList($where);
 
 $document = new CCompteRendu();
-$items["CCompteRendu"] = $document->loadList($where, "compte_rendu_id DESC", $max_loaded);
+$items["CCompteRendu"] = $document->loadList($where, "compte_rendu_id DESC", $max_load);
+$count["CCompteRendu"] = $document->countList($where);
 
-// Envoi
+// Sending
+$max_send = CAppUI::conf("dPfiles CDocumentSender auto_max_send");
+$sent = 0;
 foreach ($items as $_items) {
   foreach ($_items as $_item) {
 	  $_item->loadTargetObject();
 	  if ($do && !$_item->_send_problem) {
 	    $_item->_send = "1";
 	    $_item->_send_problem = $_item->store();
-	    // To track wether sending has been tried
+	    
+			// To track whether sending has been tried
 	    $_item->_send = "1";
+			
+			// Max sent
+			if ($sent++ > $max_send) {
+				break;
+			}
 	  }
   }
 }
@@ -52,6 +61,7 @@ $smarty = new CSmartyDP();
 $smarty->assign("do", $do);
 $smarty->assign("categories", $categories);
 $smarty->assign("items", $items);
+$smarty->assign("counts", $items);
 
 $smarty->display("send_documents.tpl");
 ?>

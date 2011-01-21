@@ -69,7 +69,7 @@ class CMedinetSender extends CDocumentSender {
       return;
     }
     try {
-      $this->clientSOAP = new SoapClient(CAppUI::conf('dPfiles rooturl'));
+      $this->clientSOAP = new SoapClient(CAppUI::conf('dPfiles CMedinetSender rooturl'));
     } catch (Exception $e) {
       trigger_error("Instanciation du SoapClient impossible : ".$e);
     }
