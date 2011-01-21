@@ -33,7 +33,7 @@ $where["group_id"] = "= '".CGroups::loadCurrent()->_id."'";
 $total_functions = $function->countList($where);
 
 
-$order = "";
+$order = null;
 if ($order_col == "text") {
   $order = "text $order_way";
 } elseif ($order_col == "type") {

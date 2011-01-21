@@ -56,7 +56,7 @@ if (!$filter) {
   $where["users_mediboard.actif"] = $inactif ? "!= '1'" : "= '1'";
 }
 
-$order = "";
+$order = null;
 if ($order_col == "function_id") {
   $order = "functions_mediboard.text $order_way, users.user_last_name ASC, users.user_first_name ASC";
 } elseif ($order_col == "user_username") {
