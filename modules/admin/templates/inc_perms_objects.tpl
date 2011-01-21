@@ -81,13 +81,13 @@ Main.add(function(){
 </form>
 <table class="tbl">
   <tr>
-    <th class="title" colspan="4">Droits existants</th>
+    <th class="title" colspan="5">Droits existants</th>
   </tr>
   <tr>
     <th>{{mb_label object=$permObject field=object_class}}</th>
     <th>{{mb_label object=$permObject field=object_id}}</th>
     <th>{{mb_label object=$permObject field=_owner}}</th>
-    <th>{{mb_label object=$permObject field=permission}}</th>
+    <th colspan="2">{{mb_label object=$permObject field=permission}} </th>
   </tr>
   
   
@@ -140,6 +140,7 @@ Main.add(function(){
 
         </form>
 		  </td>
+		  <td class="narrow">{{mb_include module=system template=inc_object_history object=$_perm}}</td>
 		</tr>
     {{/foreach}}
     {{/foreach}}

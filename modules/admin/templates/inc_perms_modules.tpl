@@ -50,12 +50,12 @@
 <table class="tbl">
   
   <tr>
-    <th class="title" colspan="4">Droits existants</th>
+    <th class="title" colspan="5">Droits existants</th>
   </tr>
   <tr>
     <th>{{mb_label object=$permModule field=mod_id}}</th>
     <th>{{mb_label object=$permModule field=_owner}}</th>
-    <th>
+    <th colspan="2">
       {{mb_label object=$permModule field=permission}} - 
       {{mb_label object=$permModule field=view}} 
 		</th>
@@ -117,6 +117,7 @@
  
        </form>
       </td>
+      <td class="narrow">{{mb_include module=system template=inc_object_history object=$_perm}}</td>
      </tr>
     {{/foreach}}
     </tbody>
