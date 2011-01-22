@@ -61,7 +61,9 @@ $smarty = new CSmartyDP();
 $smarty->assign("do", $do);
 $smarty->assign("categories", $categories);
 $smarty->assign("items", $items);
-$smarty->assign("counts", $items);
+$smarty->assign("count", $count);
+$smarty->assign("max_load", $max_load);
+$smarty->assign("max_send", $max_send);
 
 $smarty->display("send_documents.tpl");
 ?>

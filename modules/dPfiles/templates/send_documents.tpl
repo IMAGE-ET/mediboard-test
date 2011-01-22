@@ -41,11 +41,25 @@
 
 <h1>Envois</h1>
 
+{{if $conf.dPfiles.system_sender}} 
+<a class="button send" href="?m={{$m}}&amp;{{$actionType}}={{$action}}&amp;do=1">
+  {{tr}}Send-upto{{/tr}} {{$max_send}} {{tr}}CDocumentItem{{/tr}}
+</a>
+{{else}}
+<div class="small-warning">
+  {{tr}}dPfiles-system_sender-undefined{{/tr}}
+</div>
+{{/if}}
+
+
 <table class="tbl">
 {{foreach from=$items item=_items key=class}} 
 	<tr>
 		<th class="title" colspan="10">
 			{{tr}}{{$class}}{{/tr}}
+			<small>
+				({{$_items|@count}} chargés / {{$count.$class}} disponibles)
+			</small>
 		</th>
 	</tr>
   
