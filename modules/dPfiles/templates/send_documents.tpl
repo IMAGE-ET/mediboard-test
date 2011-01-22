@@ -86,11 +86,11 @@
     <td>{{mb_value object=$_item field=etat_envoi}}</td>
     <td>
       {{if $_item->_send_problem}}
-      <div class="{{mb_ternary test=$_item->_send value=error other=warning}}">
+      <div class="{{$_item->_send|ternary:error:warning}}">
     	{{mb_value object=$_item field=_send_problem}}
       </div>
 			{{else}}
-				{{if $do}}
+				{{if $_item->_send}}
 	      <div class="info">
 		      {{tr}}Sent{{/tr}} !
 	      </div>
