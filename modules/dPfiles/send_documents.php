@@ -41,16 +41,17 @@ foreach ($items as $_items) {
   foreach ($_items as $_item) {
 	  $_item->loadTargetObject();
 	  if ($do && !$_item->_send_problem) {
+      // Max sent
+      if (++$sent > $max_send) {
+        break;
+      }
+
 	    $_item->_send = "1";
 	    $_item->_send_problem = $_item->store();
 	    
 			// To track whether sending has been tried
 	    $_item->_send = "1";
 			
-			// Max sent
-			if ($sent++ > $max_send) {
-				break;
-			}
 	  }
   }
 }
