@@ -99,7 +99,11 @@
     	
     </td>
   </tr>
-	{{/foreach}}
+  {{foreachelse}}
+	<tr>
+		<td><em>{{tr}}{{$class}}.none{{/tr}}</em></td>
+	</tr>
+  {{/foreach}}
 {{/foreach}}
 </table>
 
