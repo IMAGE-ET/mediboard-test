@@ -20,6 +20,9 @@ foreach (CInteropReceiver::getChildReceivers() as $_interop_receiver) {
   $itemReceiver = new $_interop_receiver;
   $where = array();
   $receivers[$_interop_receiver] = $itemReceiver->loadList($where);
+  if (!is_array($receivers[$_interop_receiver])) {
+    continue;
+  }
   foreach ($receivers[$_interop_receiver] as $_receiver) {
     $_receiver->loadRefGroup();
     $_receiver->loadRefsExchangesSources();
