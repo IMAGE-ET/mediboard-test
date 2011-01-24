@@ -96,7 +96,7 @@ class CProductStockService extends CProductStock {
   }
   
   function loadRefHost(){
-    return $this->loadRefGroup();
+    return $this->loadRefService();
   }
   
   function setHost(CService $host){

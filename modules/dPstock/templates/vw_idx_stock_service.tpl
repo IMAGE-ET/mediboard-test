@@ -111,13 +111,13 @@ ProductSelector.init = function(){
             </td>
           </tr>
           
-          {{* 
           <tr>
             <th>{{mb_label object=$stock field="location_id"}}</th>
             <td>
               {{mb_field object=$stock field="location_id" hidden=true}}
-              <input type="text" name="_location_id_autocomplete_view" value="{{$stock->_ref_location->_shortview}}" />
+              <input {{if $stock->_id}}readonly="readonly"{{/if}} type="text" name="_location_id_autocomplete_view" value="{{$stock->_ref_location->_shortview}}" />
               
+              {{if !$stock->_id}}
               <script type="text/javascript">
                 Main.add(function(){
                   var form = getForm("edit_stock");
@@ -138,9 +138,9 @@ ProductSelector.init = function(){
                     }});
                 });
               </script>
+              {{/if}}
             </td>
           </tr>
-           *}}
           <tr>
             <th>{{mb_label object=$stock field="common"}}</th>
             <td>{{mb_field object=$stock field="common"}}</td>

@@ -751,7 +751,57 @@ class CSetupdPstock extends CSetup {
     $query = "ALTER TABLE `product_delivery_trace` 
               ADD INDEX (`target_location_id`)";
     $this->addQuery($query);
+		
+    // creation des emplacements par defaut pour chaque service et etablissement
+			
+    // Emplacements de CGroups
+    $this->makeRevision("1.44");
+    $query = "INSERT INTO product_stock_location (
+       name, position, group_id, object_class, object_id
+    ) SELECT 'Lieu par défaut', 0, groups_mediboard.group_id, 'CGroups', groups_mediboard.group_id 
+      FROM groups_mediboard";
+    $this->addQuery($query);
+		
+		// Emplacements de CService
+    $query = "INSERT INTO product_stock_location (
+       name, position, group_id, object_class, object_id
+    ) SELECT 'Lieu par défaut', 0, service.group_id, 'CService', service.service_id 
+      FROM service";
+    $this->addQuery($query);
     
-    $this->mod_version = "1.44";
+    // Association des emplacements aux stocks sans emplacement
+    $query = "UPDATE `product_stock_group` SET `location_id` = (
+       SELECT `product_stock_location`.`stock_location_id` 
+       FROM `product_stock_location` 
+       WHERE 
+         `product_stock_group`.`group_id` = `product_stock_location`.`object_id` AND
+         `product_stock_location`.`object_class` = 'CGroups' AND
+         `product_stock_location`.`position` = 0 AND
+         `product_stock_location`.`name` = 'Lieu par défaut'
+       LIMIT 1
+    ) WHERE`product_stock_group`.`location_id` IS NULL";
+    $this->addQuery($query);
+    
+    $query = "UPDATE `product_stock_service` SET `location_id` = (
+       SELECT `product_stock_location`.`stock_location_id` 
+       FROM `product_stock_location` 
+       WHERE 
+         `product_stock_service`.`service_id` = `product_stock_location`.`object_id` AND
+         `product_stock_location`.`object_class` = 'CService' AND
+         `product_stock_location`.`position` = 0 AND
+         `product_stock_location`.`name` = 'Lieu par défaut'
+       LIMIT 1
+    ) WHERE `product_stock_service`.`location_id` IS NULL";
+    $this->addQuery($query);
+    
+    $query = "ALTER TABLE `product_stock_group` 
+              CHANGE `location_id` `location_id` INT (11) UNSIGNED NOT NULL;";
+    $this->addQuery($query);
+    
+    $query = "ALTER TABLE `product_stock_service` 
+              CHANGE `location_id` `location_id` INT (11) UNSIGNED NOT NULL;";
+    $this->addQuery($query);
+    
+    $this->mod_version = "1.45";
   }
 }

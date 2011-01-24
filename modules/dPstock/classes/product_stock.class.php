@@ -54,7 +54,7 @@ class CProductStock extends CMbObject {
     $specs['order_threshold_min']      = 'num min|0 notNull moreEquals|order_threshold_critical';
     $specs['order_threshold_optimum']  = 'num min|0 moreEquals|order_threshold_min';
     $specs['order_threshold_max']      = 'num min|0 moreEquals|order_threshold_optimum';
-    $specs['location_id']              = 'ref class|CProductStockLocation autocomplete|name|true';
+    $specs['location_id']              = 'ref notNull class|CProductStockLocation autocomplete|name|true';
     $specs['_quantity']                = 'pct';
     $specs['_critical']                = 'pct';
     $specs['_min']                     = 'pct';
@@ -128,6 +128,17 @@ class CProductStock extends CMbObject {
 	      $this->_zone = 3;
 	    }
   	}
+  }
+	
+  function store(){
+    $this->completeField("location_id");
+
+    if (!$this->location_id) {
+      $location = CProductStockLocation::getDefaultLocation($this->loadRefHost(), $this->loadRefProduct());
+      $this->location_id = $location->_id;
+    }
+
+    return parent::store();
   }
   
   function loadRefLocation(){
