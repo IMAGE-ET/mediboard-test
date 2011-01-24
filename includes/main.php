@@ -26,8 +26,7 @@ CJSLoader::$files = array(
   "lib/scriptaculous/src/scriptaculous.js",
   
   //"lib/nwmatcher/nwmatcher.js",
-  //"lib/nwmatcher/traversal.js",
-  //"lib/nwmatcher/prototypejs.js",
+  //"lib/nwmatcher/adapter.js",
  
   "includes/javascript/console.js",
 
@@ -50,6 +49,9 @@ CJSLoader::$files = array(
   "lib/livepipe/livepipe.js",
   "lib/livepipe/tabs.js",
   "lib/livepipe/window.js",
+  
+  // Growler
+  //"lib/growler/build/Growler-compressed.js",
 
   // Flotr
   "lib/flotr/flotr.js",
@@ -76,6 +78,9 @@ CJSLoader::$files = array(
 if (!CAppUI::$instance->user_id) {
   $redirect = CValue::get("logout") ?  "" : CValue::read($_SERVER, "QUERY_STRING"); 
   $_SESSION["locked"] = null;
+  
+  // HTTP 403 header
+  //header('HTTP/1.0 403 Forbidden');
   
   // Ajax login alert
   if ($ajax) {

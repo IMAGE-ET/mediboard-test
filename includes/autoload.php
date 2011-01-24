@@ -27,6 +27,19 @@ if (null == $classPaths = SHM::get("class-paths")) {
  * @return void
  */
 function updateClassPathCache() {
+  // debut de refactoring pour ne pas vider le cache a chaque fois, mais le completer
+  /*$classPaths = SHM::get("class-paths");
+
+  // unset obsolete paths
+  if ($classPaths) {
+    foreach ($classPaths as $className => $path) {
+      if (!file_exists($path)) {
+        unset($classPaths[$className]);
+      }
+    }
+  }*/
+	
+  // update paths
   $classNames = CApp::getChildClasses(null);
   foreach ($classNames as $className) {
     $class = new ReflectionClass($className);
@@ -53,6 +66,7 @@ function mbAutoload($className) {
   else {
     updateClassPathCache();
   }
+	
   return true;
 }
 
