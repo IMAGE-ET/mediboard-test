@@ -90,7 +90,7 @@ Main.add( function(){
 	      {{/if}}
       </div>
       <div style="float: right">
-        {{if $line->_protocole && !$line->substitute_for_id && !$mode_pack}}
+        {{if $line->_protocole && $line->_perm_edit && !$line->substitute_for_id && !$mode_pack}}
           <button type="button" class="add" onclick="Prescription.viewSubstitutionLines('{{$line->_id}}','{{$line->_class_name}}')">
              Lignes de substitution
             ({{$line->_count_substitution_lines}})
@@ -202,9 +202,13 @@ Main.add( function(){
                 
               </script>
               {{mb_label object=$line field="date_debut"}}
-                à {{mb_field object=$line field="jour_decalage" onchange="togglePerfDecalage(this.form); return onSubmitFormAjax(this.form);"}} 
-                <span id="decalage_interv-{{$line->_id}}">{{mb_field object=$line field=decalage_interv showPlus="1" increment=1 size="2" form="editPerf-$prescription_line_mix_id" onchange="return onSubmitFormAjax(this.form);"}} h</span>
-              </td>
+							  {{if $line->_perm_edit}}
+								  à {{mb_field object=$line field="jour_decalage" onchange="togglePerfDecalage(this.form); return onSubmitFormAjax(this.form);"}} 
+                  <span id="decalage_interv-{{$line->_id}}">{{mb_field object=$line field=decalage_interv showPlus="1" increment=1 size="2" form="editPerf-$prescription_line_mix_id" onchange="return onSubmitFormAjax(this.form);"}} h</span>
+                {{else}}
+							    à {{mb_value object=$line field="jour_decalage"}} {{if $line->decalage_interv >= 0}}+{{/if}}{{mb_value object=$line field=decalage_interv}}h
+                {{/if}}
+							</td>
             {{else}}
               <td style="border:none;">
                 {{mb_label object=$line field="date_debut"}}

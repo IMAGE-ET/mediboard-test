@@ -72,7 +72,7 @@
 				  {{include file="../../dPprescription/templates/line/inc_vw_form_signature_praticien.tpl"}}
         {{/if}}
 			
-        {{if $line->_protocole && !$line->substitute_for_id && !$mode_pack}}
+        {{if $line->_perm_edit && $line->_protocole && !$line->substitute_for_id && !$mode_pack}}
           <button type="button" class="add" onclick="Prescription.viewSubstitutionLines('{{$line->_id}}','{{$line->_class_name}}')">
              Lignes de substitution
             ({{$line->_count_substitution_lines}})

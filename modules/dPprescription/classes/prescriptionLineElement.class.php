@@ -234,7 +234,9 @@ class CPrescriptionLineElement extends CPrescriptionLine {
       $protocole =& $this->_ref_prescription;
       if($protocole->praticien_id){
         $protocole->loadRefPraticien();
-        $perm_edit = $protocole->_ref_praticien->canEdit();    
+        $is_praticien = CAppUI::$user->isPraticien();
+        $perm_edit = (!$is_praticien || ($is_praticien && CAppUI::$user->_id == $protocole->praticien_id)) ? 1 : 0;
+        
       } elseif($protocole->function_id){
         $protocole->loadRefFunction();
         $perm_edit = $protocole->_ref_function->canEdit();
@@ -280,7 +282,7 @@ class CPrescriptionLineElement extends CPrescriptionLine {
     	$this->_can_view_form_signature_infirmiere = 1;
     }
     // Suppression de la ligne
-    if ($perm_edit || $this->_protocole) {
+    if ($perm_edit) {
   	  $this->_can_delete_line = 1;
   	}
   	// Modification de la posologie

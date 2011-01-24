@@ -93,7 +93,7 @@ class CPrescription extends CMbObject {
 	var $_count_recent_modif_presc = null;
 	
 	var $_ref_prescription_lines_by_cat = null;
-	
+	var $_protocole_locked = null;
 	
 	static $cache_service = null;
   static $images = array(
@@ -170,6 +170,12 @@ class CPrescription extends CMbObject {
       }
       $this->loadRefCurrentPraticien();
     }
+		
+		// Si c'est un protocole de praticien, on verifie les droits
+		if(!$this->object_id && $this->praticien_id){
+			$is_praticien = CAppUI::$user->isPraticien();
+			$this->_protocole_locked = ($is_praticien && CAppUI::$user->_id != $protocole->praticien_id) ? 1 : 0;		
+		}
   }
   
   function updateChapterView(){

@@ -102,8 +102,25 @@ class CPrescriptionLineComment extends CPrescriptionLine {
     if(!$chapitre){
     	$chapitre = "med";
     }
-		$perm_edit = $can->admin || (!$this->signee && ($this->praticien_id == $AppUI->user_id || $is_praticien || $operation_id  || ($current_user->isInfirmiere() && CAppUI::conf("dPprescription CPrescription droits_infirmiers_$chapitre"))));             
-    $this->_perm_edit = $perm_edit;
+
+		if($this->_protocole){
+      $protocole =& $this->_ref_prescription;
+      if($protocole->praticien_id){
+        $protocole->loadRefPraticien();
+        $is_praticien = CAppUI::$user->isPraticien();
+        $perm_edit = (!$is_praticien || ($is_praticien && CAppUI::$user->_id == $protocole->praticien_id)) ? 1 : 0;
+        
+      } elseif($protocole->function_id){
+        $protocole->loadRefFunction();
+        $perm_edit = $protocole->_ref_function->canEdit();
+      } elseif($protocole->group_id){
+        $protocole->loadRefGroup();
+        $perm_edit = $protocole->_ref_group->canEdit();
+      }
+    } else {
+		  $perm_edit = $can->admin || (!$this->signee && ($this->praticien_id == $AppUI->user_id || $is_praticien || $operation_id  || ($current_user->isInfirmiere() && CAppUI::conf("dPprescription CPrescription droits_infirmiers_$chapitre"))));             
+		}
+		$this->_perm_edit = $perm_edit;
     
     // Executant
     if($perm_edit){
@@ -116,7 +133,7 @@ class CPrescriptionLineComment extends CPrescriptionLine {
       $this->_can_view_form_ald = 1;
     }
     // Suppression de la ligne
-    if(($perm_edit) || $this->_protocole){
+    if($perm_edit){
   	  $this->_can_delete_line = 1;
   	}
   	// View signature praticien

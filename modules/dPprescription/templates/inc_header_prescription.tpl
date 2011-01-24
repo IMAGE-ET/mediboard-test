@@ -578,7 +578,9 @@ Main.add( function(){
         {{/if}}
       </select>
 			
+			{{if !$prescription->_protocole_locked}}
       <button class="new" type="button" onclick="viewEasyMode('{{$mode_protocole}}','{{$mode_pharma}}', menuTabs.activeContainer.id);">Mode grille</button>
+			{{/if}}
       {{if $prescription->type == "sejour" && $dossier_medical->_id}}
         <button type="button" class="new" onclick="popupTraitements('{{$dossier_medical->_id}}')">{{tr}}CConsultAnesth-traitements{{/tr}}</button>
       {{/if}}

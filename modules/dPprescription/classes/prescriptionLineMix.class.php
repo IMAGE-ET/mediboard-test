@@ -284,7 +284,9 @@ class CPrescriptionLineMix extends CMbObject {
       $protocole =& $this->_ref_prescription;
       if($protocole->praticien_id){
         $protocole->loadRefPraticien();
-        $perm_edit = $protocole->_ref_praticien->canEdit();    
+        $is_praticien = CAppUI::$user->isPraticien();
+        $perm_edit = (!$is_praticien || ($is_praticien && CAppUI::$user->_id == $protocole->praticien_id)) ? 1 : 0;
+        
       } elseif($protocole->function_id){
         $protocole->loadRefFunction();
         $perm_edit = $protocole->_ref_function->canEdit();
@@ -327,14 +329,8 @@ class CPrescriptionLineMix extends CMbObject {
     if(!$this->_protocole){
     	$this->_can_vw_signature_praticien = 1;
     }
-    // Affichage du formulaire de signature infirmiere
-		/*
-    if(!$mode_pharma && !$this->_protocole && !$is_praticien && !$this->signature_prat && $this->creator_id == $AppUI->user_id && !$this->signature_pharma){
-    	$this->_can_vw_form_signature_infirmiere = 1;
-    }*/
-		
     // Suppression de la ligne
-    if ($perm_edit || $this->_protocole){
+    if ($perm_edit){
       $this->_can_delete_prescription_line_mix = 1;
       $this->_can_delete_prescription_line_mix_item = 1;
   	}

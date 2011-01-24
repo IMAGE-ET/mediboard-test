@@ -219,7 +219,7 @@ updateModaleAfterAddLine = function(line_id){
   </tr>
   {{/if}}
   
-	{{if ($is_praticien || $mode_protocole || @$operation_id || $can->admin || $mode_pharma || ($current_user->isInfirmiere() && $conf.dPprescription.CPrescription.droits_infirmiers_med))}}  
+	{{if !$prescription->_protocole_locked && ($is_praticien || $mode_protocole || @$operation_id || $can->admin || $mode_pharma || ($current_user->isInfirmiere() && $conf.dPprescription.CPrescription.droits_infirmiers_med))}}  
   <tr>
     <th class="title">
     	{{if $app->user_prefs.easy_mode}}
@@ -243,7 +243,7 @@ updateModaleAfterAddLine = function(line_id){
     </button>
     {{/if}}
 		
-    {{if ($is_praticien || $mode_protocole || @$operation_id || $can->admin || $mode_pharma || ($current_user->isInfirmiere() && $conf.dPprescription.CPrescription.droits_infirmiers_med))}}  
+    {{if !$prescription->_protocole_locked && ($is_praticien || $mode_protocole || @$operation_id || $can->admin || $mode_pharma || ($current_user->isInfirmiere() && $conf.dPprescription.CPrescription.droits_infirmiers_med))}}  
     
 			<!-- Affichage des div des medicaments et autres produits -->
 			  <form action="?" method="get" name="searchProd" onsubmit="return false;">

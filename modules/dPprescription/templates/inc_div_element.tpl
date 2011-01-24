@@ -47,7 +47,7 @@ Main.add( function(){
     {{assign var=perm_add_line value=0}}  
 	{{/if}}
 
-  {{if $perm_add_line}}
+  {{if !$prescription->_protocole_locked && $perm_add_line}}
   <tr>
     <th class="title">
     	{{if $app->user_prefs.easy_mode}}
@@ -67,7 +67,7 @@ Main.add( function(){
       </button>
       {{/if}}
  
-     {{if $perm_add_line}}
+     {{if !$prescription->_protocole_locked && $perm_add_line}}
       <!-- Formulaire d'elements les plus utilisés -->
 			<form action="?" method="get" name="search{{$element}}" onsubmit="return false;">
 			  <!-- Affichage des produits les plus utilises -->
