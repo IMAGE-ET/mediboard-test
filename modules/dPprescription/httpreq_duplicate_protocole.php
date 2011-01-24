@@ -26,9 +26,12 @@ if(!$protocole_dest_id){
 	// Creation du nouveau protocole
 	$protocole->_id = "";
 	$protocole->libelle = "Copie de $protocole->libelle";
-	
-	if ($protocole->praticien_id) {
-	  $protocole->praticien_id = CAppUI::$user->_id;  
+
+	// Si l'utilisateur est praticien, la duplication se fait à son nom
+	if (CAppUI::$user->isPraticien()) {
+	  $protocole->praticien_id = CAppUI::$user->_id;
+	  $protocole->group_id = null;
+	  $protocole->function_id = null;
 	}
 	
 	$msg = $protocole->store();
