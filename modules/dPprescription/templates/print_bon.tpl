@@ -136,7 +136,12 @@ Main.add( function(){
 		{{/foreach}}
 		DE: {{$sejour->_entree|date_format:"%d/%m/%Y"}}<br />
     DS: {{$sejour->_sortie|date_format:"%d/%m/%Y"}}<br />
-    [{{$sejour->_num_dossier}}]
+    {{if $sejour->_num_dossier}}
+      Séjour [{{$sejour->_num_dossier}}]<br/>
+    {{/if}}
+    {{if $patient->_IPP}}
+      IPP [{{$patient->_IPP}}]
+    {{/if}}
   </span>
 	
   <div>

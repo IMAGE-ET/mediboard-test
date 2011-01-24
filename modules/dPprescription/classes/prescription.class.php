@@ -109,6 +109,7 @@ class CPrescription extends CMbObject {
 		"soin"     => "modules/soins/images/infirmiere.png",
 		"dm"       => "modules/soins/images/pansement.png",
 		"dmi"      => "modules/soins/images/dmi.png",
+    "ds"       => "modules/soins/images/ds.png"
 	);
                           
   function getSpec() {
@@ -151,7 +152,7 @@ class CPrescription extends CMbObject {
 		$specs["score"] = "enum list|0|1|2";
     $specs["_date_plan_soin"] = "date";
     $specs["_type_alerte"] = "enum list|hors_livret|interaction|allergie|profil|IPC";
-    $specs["_chapitres"] = "enum list|med|inj|perfusion|oxygene|alimentation|aerosol|anapath|biologie|consult|dmi|imagerie|kine|soin|dm";
+    $specs["_chapitres"] = "enum list|med|inj|perfusion|oxygene|alimentation|aerosol|anapath|biologie|consult|dmi|imagerie|kine|soin|dm|ds";
     return $specs;
   }
   

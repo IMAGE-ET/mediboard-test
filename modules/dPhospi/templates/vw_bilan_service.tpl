@@ -118,10 +118,19 @@ selectPeriode = function(element) {
 		 	<th>
 		 		Impression par patient 
 			</th>
-			<td>
-				<input type="checkbox" name="by_patient" value="true" {{if $by_patient}}checked="checked"{{/if}} />
+			<td colspan="3">
+				<input type="checkbox" name="by_patient" value="true" {{if $by_patient}}checked="checked"{{/if}}
 		 	</td>
-			<td colspan="2"></td>
+    </tr>
+    <tr>
+      <th>
+        {{tr}}CPatient.present_only{{/tr}}
+      </th>
+      <td colspan="3">
+        <input type="checkbox" name="_present_only_vw" {{if $_present_only}}checked="checked"{{/if}}
+          onchange="this.checked ? $V(this.form._present_only, 1) : $V(this.form._present_only, 0)"/>
+        <input type="hidden" name="_present_only" value="{{$_present_only}}" />
+      </td>
 		 </tr>
 		 <tr>
 		   <th class="category" colspan="4">Pré-sélection des catégories</th>	
@@ -243,9 +252,13 @@ selectPeriode = function(element) {
 		  {{foreach from=$_trans_and_obs_by_date item=_trans_and_obs name=foreach_trans}}
 			
 			  {{if $smarty.foreach.foreach_trans_date.first && $smarty.foreach.foreach_trans.first}}
-			    {{assign var=sejour value=$_trans_and_obs->_ref_sejour}}
-			  	{{assign var=patient value=$sejour->_ref_patient}}
-          {{assign var=operation value=$sejour->_ref_last_operation}} 
+          {{if $_trans_and_obs instanceof CTransmissionMedicale || $_trans_and_obs instanceof CObservationMedicale}} 
+  			    {{assign var=sejour value=$_trans_and_obs->_ref_sejour}}
+          {{else}}
+            {{assign var=sejour value=$_trans_and_obs->_ref_context}}
+          {{/if}}
+  			 {{assign var=patient value=$sejour->_ref_patient}}
+          {{assign var=operation value=$sejour->_ref_last_operation}}
 					<tr>
 			      <th colspan="6" class="text">
               <span style="float: left; text-align: left;">
@@ -264,7 +277,7 @@ selectPeriode = function(element) {
 			        <strong>{{$patient->_view}}</strong>
 			        Né(e) le {{mb_value object=$patient field=naissance}} - ({{$patient->_age}} ans) - ({{$patient->_ref_constantes_medicales->poids}} kg)
 			        <br />
-			        Intervention le {{$operation->_ref_plageop->date|date_format:"%d/%m/%Y"}} - 
+			        {{$operation->_ref_chir->_view}} - Intervention le {{$operation->_ref_plageop->date|date_format:"%d/%m/%Y"}} - 
 			        <strong>(I{{if $operation->_compteur_jour >=0}}+{{/if}}{{$operation->_compteur_jour}}) - {{mb_label object=$operation field="cote"}} {{mb_value object=$operation field="cote"}}</strong>
 			      </th>
 			    </tr>
@@ -280,16 +293,15 @@ selectPeriode = function(element) {
 			      </th>
 			    </tr>
 			  {{/if}}
-			
 			  <tr id="{{$_trans_and_obs->_guid}}" {{if $_trans_and_obs instanceof CTransmissionMedicale}}class="{{$_trans_and_obs->_cible}}"{{/if}}
-          {{if $_trans_and_obs->degre == 'high'}} 
+          {{if $_trans_and_obs instanceof CTransmissionMedicale && $_trans_and_obs->degre == 'high'}}
             style="font-weight: bold;"
           {{/if}}>
           {{include file=../../dPhospi/templates/inc_line_suivi.tpl _suivi=$_trans_and_obs show_patient=false readonly=true nodebug=true}}
         </tr>
 		  {{/foreach}}
 	  {{/foreach}}
-	{{/foreach}}	
+	{{/foreach}}
 </table>
 <br />
 {{/if}}
@@ -331,7 +343,7 @@ selectPeriode = function(element) {
 			    <strong>{{$patient->_view}}</strong>
 			    Né(e) le {{mb_value object=$patient field=naissance}} - ({{$patient->_age}} ans) - ({{$patient->_ref_constantes_medicales->poids}} kg)
 			    <br />
-	        Intervention le {{$operation->_ref_plageop->date|date_format:"%d/%m/%Y"}} - 
+	         Intervention le {{$operation->_ref_plageop->date|date_format:"%d/%m/%Y"}} - 
 			    <strong>(I{{if $operation->_compteur_jour >=0}}+{{/if}}{{$operation->_compteur_jour}}) - {{mb_label object=$operation field="cote"}} {{mb_value object=$operation field="cote"}}</strong>
 	      </th>
 	    </tr>

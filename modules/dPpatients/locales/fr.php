@@ -778,6 +778,7 @@ $locales['CPatient.incapable_majeur.1'] = 'Oui';
 $locales['CPatient.name_recopy'] = 'Recopier le nom';
 $locales['CPatient.none'] = 'Aucun patient';
 $locales['CPatient.one'] = 'patient';
+$locales['CPatient.present_only'] = 'Seulement les présents';
 $locales['CPatient.prevenir_parente.'] = 'Indéterminé';
 $locales['CPatient.prevenir_parente.ascendant'] = 'Ascendant';
 $locales['CPatient.prevenir_parente.colateral'] = 'Colatéral';

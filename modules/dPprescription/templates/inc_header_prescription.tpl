@@ -565,9 +565,6 @@ Main.add( function(){
       		{{if $prescription->object_id}}
       		<option value="viewHistorique">Historique</option>
       		<option value="viewSubstitutions">Substitutions</option>
-					{{if !$mode_protocole && $prescription->type == "sejour"}}
-          <option value="traitement">Traitements du patient</option>
-          {{/if}}
       	  {{/if}}
         </optgroup>
         {{if $prescription->object_id && ($is_praticien || $mode_protocole || @$operation_id || $can->admin) && $prescription->type != "externe"}}

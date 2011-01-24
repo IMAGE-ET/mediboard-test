@@ -337,7 +337,14 @@ class CPrescriptionLineMix extends CMbObject {
 	}
   
 	function getRecentModification(){
-	  $nb_hours = CAppUI::conf("dPprescription CPrescription time_alerte_modification");
+	  $service_id = isset($_SESSION["soins"]["service_id"]) && $_SESSION["soins"]["service_id"] ?
+	    $_SESSION["soins"]["service_id"] : "none";
+
+    $config_service = new CConfigService();
+    $configs = $config_service->getConfigForService($service_id);
+
+    // modification recente si moins de $nb_hours heures
+    $nb_hours = $configs["Affichage alertes de modifications"];
     $this->_recent_modification = $this->hasRecentLog($nb_hours);
 	}
 	

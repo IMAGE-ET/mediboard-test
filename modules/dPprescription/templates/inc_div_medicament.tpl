@@ -95,7 +95,10 @@ transfertLineTP = function(line_id, sejour_id){
 addAerosol = function(){
   var oFormAerosol = getForm("add_aerosol");
   var oFormDate = getForm("selDateLine");
-  $V(oFormAerosol.date_debut, $V(oFormDate.debut));
+
+  if (oFormDate) {
+    $V(oFormAerosol.date_debut, $V(oFormDate.debut));
+  }
 	return onSubmitFormAjax(oFormAerosol);
 }
 

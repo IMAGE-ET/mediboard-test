@@ -375,9 +375,6 @@ Prescription = {
   },
   popup: function(prescription_id, type){
     switch (type) {
-			case 'traitement':
-			  Prescription.popupDossierMedPatient(prescription_id);
-			break;
       case 'printPrescription':
         Prescription.printPrescription(prescription_id);
         break;
@@ -394,11 +391,6 @@ Prescription = {
         Prescription.viewHistorique(prescription_id,'substitutions');
         break;
     }
-  }, 
-	popupDossierMedPatient: function(prescription_id){
-	  var url = new Url("dPprescription", "httpreq_vw_dossier_medical_patient");
-	  url.addParam("prescription_id", prescription_id);
-	  url.popup(700, 500, "Traitements du patient");
   },
   viewSubstitutionLines: function(object_id, object_class, mode_pack){
     var url = new Url("dPprescription", "httpreq_add_substitution_line");

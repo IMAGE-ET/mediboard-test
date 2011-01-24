@@ -14,7 +14,9 @@ Main.add( function(){
   var editPerfForm = getForm('editPerf-{{$line->_id}}');
   {{if $line->type == "PCA"}}
 	  $("bolus-{{$line->_id}}").show();
-		changeModeBolus(editPerfForm);		
+	  {{if $line->_perm_edit}}
+		  changeModeBolus(editPerfForm);
+		{{/if}}		
   {{/if}}
 	{{if $line->type_line == "perfusion"}}
 	  toggleContinuiteLineMix(editPerfForm.continuite_perf,'{{$line->_id}}');
@@ -193,14 +195,15 @@ Main.add( function(){
             <!-- Début -->
 						{{if $line->_protocole}}
               <td style="border:none;">
-              <script type="text/javascript">
-                            
-                Main.add( function(){
-                  var oForm = document.forms["editPerf-{{$line->_id}}"];
-                  togglePerfDecalage(oForm);
-                } );
-                
-              </script>
+              {{if $line->_perm_edit}}
+                <script type="text/javascript">
+                  Main.add( function(){
+                    var oForm = document.forms["editPerf-{{$line->_id}}"];
+                    togglePerfDecalage(oForm);
+                  } );
+                </script>
+              {{/if}}
+              
               {{mb_label object=$line field="date_debut"}}
 							  {{if $line->_perm_edit}}
 								  à {{mb_field object=$line field="jour_decalage" onchange="togglePerfDecalage(this.form); return onSubmitFormAjax(this.form);"}} 
@@ -421,7 +424,7 @@ Main.add( function(){
 							  {{/if}}
 				      {{else}}
 							  {{if $line->type_line == "aerosol"}}
-								  <strong>{{mb_value object=$line field="interface"}}</strong>
+								  <strong>{{tr}}CPrescriptionLineMix.interface.{{mb_value object=$line field="interface"}}{{/tr}}</strong>
               	{{else}}
 							    <strong>{{mb_value object=$line field="voie"}}</strong>
               	{{/if}}
@@ -458,15 +461,27 @@ Main.add( function(){
 				  <tr id="bolus-{{$line->_id}}" style="display: none;">
 				    <td style="border: none;">
 				    	{{mb_label object=$line field="mode_bolus"}}
-							{{mb_field object=$line field="mode_bolus" onchange="changeModeBolus(this.form); return onSubmitFormAjax(this.form);"}}
+              {{if $line->_perm_edit}}
+							  {{mb_field object=$line field="mode_bolus" onchange="changeModeBolus(this.form); return onSubmitFormAjax(this.form);"}}
+              {{else}}
+                {{mb_value object=$line field="mode_bolus"}}
+              {{/if}}
 				    </td>
 				    <td style="border: none;">
 				    	{{mb_label object=$line field="dose_bolus"}}
-							{{mb_field object=$line field="dose_bolus" onchange="return onSubmitFormAjax(this.form);" size="2" increment=1 min=0 form="editPerf-$prescription_line_mix_id"}} mg
+              {{if $line->_perm_edit}}
+							  {{mb_field object=$line field="dose_bolus" onchange="return onSubmitFormAjax(this.form);" size="2" increment=1 min=0 form="editPerf-$prescription_line_mix_id"}} mg
+              {{else}}
+                {{mb_value object=$line field="dose_bolus"}} mg
+              {{/if}}
 				    </td>
 				    <td style="border: none;">
 				    	{{mb_label object=$line field="periode_interdite"}}
-							{{mb_field object=$line field="periode_interdite" onchange="return onSubmitFormAjax(this.form);" size="2" increment=1 min=0 form="editPerf-$prescription_line_mix_id"}} min
+              {{if $line->_perm_edit}}
+							  {{mb_field object=$line field="periode_interdite" onchange="return onSubmitFormAjax(this.form);" size="2" increment=1 min=0 form="editPerf-$prescription_line_mix_id"}} min
+              {{else}}
+                {{mb_value object=$line field="periode_interdite"}} min
+              {{/if}}
 						</td>
 				  </tr>
         </table>
@@ -478,7 +493,7 @@ Main.add( function(){
   <tr>
     <td colspan="9">
       <table class="form group" id=lines-{{$line->_id}}>
-      	{{if $line->type_line == "aerosol"}}
+      	{{if $line->type_line == "aerosol" && $line->_perm_edit}}
           <!-- Formulaire d'ajout de ligne dans l'aerosol -->
 					<tr>
             <td>

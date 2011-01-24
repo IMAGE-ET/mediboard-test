@@ -143,7 +143,7 @@
 {{if $_suivi instanceof CConstantesMedicales}}
   <td>{{tr}}{{$_suivi->_class_name}}{{/tr}}</td>
   <td>
-    {{$_suivi->_ref_user}}
+    {{$_suivi->_ref_user->_view}}
   </td>
   <td style="text-align: center">
      {{mb_ditto name=date value=$_suivi->datetime|date_format:$conf.date}}

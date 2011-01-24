@@ -963,38 +963,24 @@ class CSejour extends CCodable {
   }
   
   function loadRefConstantes($user_id = null) {
-    $constantes = new CConstantesMedicales();
-    $constantes->patient_id = $this->patient_id;
-    $constantes = $constantes->loadMatchingList();
-    foreach($constantes as $_const) {
-       if($_const->context_class != "CSejour" || $_const->context_id != $this->_id ){
-          unset($constantes[$_const->_id]);
-       }
-    }
+    $this->loadListConstantesMedicales();
+    $constantes = $this->_list_constantes_medicales;
     
-    // rechercher le user
-    foreach($constantes as $cst) {
-      $user_ref_view = "";
-      $user_ref_id = "";
-      $cst->loadLogs();
-      $logs = $cst->_ref_logs;
-      $cst->_ref_user    = null;
-      $cst->_ref_user_id = null;
-      
-      foreach($logs as $_log) {
-        if(!$cst->_ref_user_id &&
-           strpos($_log->fields, "patient_id")    === false &&
-           strpos($_log->fields, "context_class") === false &&
-           strpos($_log->fields, "context_id")    === false) {
-          $_log->loadRefsFwd();
-          $cst->_ref_user    = $_log->_ref_user->_view;
-          $cst->_ref_user_id = $_log->_ref_user->_id;
-          $users[$cst->_ref_user_id] = $_log->_ref_user;
-          if($user_id && $cst->_ref_user_id != $user_id) {
-            unset($constantes[$cst->_id]);
-          }
+    foreach($constantes as $_const) {
+      $_const->loadRefUser();
+      if ($_const->context_class != "CSejour" || $_const->context_id != $this->_id ){
+        unset($constantes[$_const->_id]);
+      }
+      if ($user_id) {
+        $first_log = $_const->loadFirstLog();
+        if ($first_log->_ref_user->_id != $user_id) {
+          unset($constantes[$_const->_id]);  
         }
       }
+    }
+    
+    if (!$this->_ref_suivi_medical) {
+      $this->_ref_suivi_medical = array();
     }
     $this->_ref_suivi_medical = array_merge($constantes,$this->_ref_suivi_medical);
   }

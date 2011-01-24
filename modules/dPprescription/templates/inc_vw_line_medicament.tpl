@@ -293,17 +293,20 @@
       {{assign var=_line_praticien_id value=$line->praticien_id}}
     {{/if}}    
 			
-		 <script type="text/javascript">
-        Main.add( function(){
-          var oFormCommentaireElement = getForm("editCommentaire-{{$line->_guid}}");
-          new AideSaisie.AutoComplete(oFormCommentaireElement.commentaire, {
-            objectClass: "{{$line->_class_name}}", 
-            contextUserId: "{{$_line_praticien_id}}",
-            resetSearchField: false,
-						validateOnBlur: false
+  		 <script type="text/javascript">
+          Main.add( function(){
+            var oFormCommentaireElement = getForm("editCommentaire-{{$line->_guid}}");
+            if (!oFormCommentaireElement.commentaire) {
+              return;
+            }
+            new AideSaisie.AutoComplete(oFormCommentaireElement.commentaire, {
+              objectClass: "{{$line->_class_name}}", 
+              contextUserId: "{{$_line_praticien_id}}",
+              resetSearchField: false,
+  						validateOnBlur: false
+            });
           });
-        });
-      </script>
+        </script>
   
       <form name="editCommentaire-{{$line->_guid}}" method="post" action="?" onsubmit="testPharma({{$line->_id}}); return onSubmitFormAjax(this);">
         <input type="hidden" name="m" value="dPprescription" />

@@ -33,6 +33,7 @@ $periode      = CValue::get("periode");
 $service_id   = CValue::getOrSession("service_id");
 $by_patient   = CValue::get("by_patient", false);
 $show_inactive = CValue::get("show_inactive", "0");
+$_present_only = CValue::get("_present_only", 1);
 
 $date_min = mbDate($dateTime_min);
 $date_max = mbDate($dateTime_max);
@@ -74,7 +75,7 @@ $affectations = array();
 
 $_transmissions = array();
 $_observations = array();
-
+$_constantes = array();
 
 $transmissions = array();
 $observations = array();
@@ -97,6 +98,10 @@ if($do_trans){
             (sejour.sortie BETWEEN '$dateTime_min' AND '$dateTime_max') OR
             (sejour.entree <= '$dateTime_min' AND sejour.sortie >= '$dateTime_max')";
   
+  if ($_present_only == "true") {
+    $where["sejour.sortie_reelle"] = 'IS NULL';
+  }
+  
   $order_by = "chambre.nom, date DESC";
 
   $transmission = new CTransmissionMedicale();
@@ -105,6 +110,16 @@ if($do_trans){
 	$ljoin["sejour"] = "observation_medicale.sejour_id = sejour.sejour_id";
   $observation = new CObservationMedicale();
   $_observations = $observation->loadList($where, $order_by, null, null, $ljoin);
+  
+  // On retire le degré dans le where
+  unset($where[0]);
+  
+  $where[] = "(datetime >= '$dateTime_min ' AND datetime <= '$dateTime_max')";
+  $ljoin["sejour"] = "constantes_medicales.context_id = sejour.sejour_id";
+  $where["context_class"] = " = 'CSejour'";
+  $order_by = "chambre.nom, datetime DESC";
+  $constante = new CConstantesMedicales();
+  $_constantes = $constante->loadlist($where, $order_by, null, null, $ljoin);
 }
 
 $patients = array();
@@ -115,15 +130,16 @@ foreach($_transmissions as $_trans){
 	$sejour =& $_trans->_ref_sejour;
 	$sejour->loadRefsOperations();
   $sejour->_ref_last_operation->loadRefPlageOp();
+  $sejour->_ref_last_operation->loadRefChir();
   $sejour->loadRefsAffectations();
   
   $sejour->_ref_last_operation->loadExtCodesCCAM();
 		
-	$patient_id = $_trans->_ref_sejour->patient_id;
+	$patient_id = $sejour->patient_id;
 	if(!array_key_exists($patient_id, $patients)){
-    $_trans->_ref_sejour->loadRefPatient();
-		$_trans->_ref_sejour->_ref_patient->loadRefConstantesMedicales();
-		$patients[$patient_id] = $_trans->_ref_sejour->_ref_patient;
+    $sejour->loadRefPatient();
+    $sejour->_ref_patient->loadRefConstantesMedicales();
+		$patients[$patient_id] = $sejour->_ref_patient;
 	}
 	$_trans->loadRefsFwd();
 	if($_trans->object_id){
@@ -150,6 +166,30 @@ foreach($_observations as $_obs){
 	$trans_and_obs[$patient_id][$_obs->date][] = $_obs;
 }
 
+foreach($_constantes as $_constante) {
+  $_constante->loadRefsFwd();
+  $_constante->loadRefUser();
+  $sejour = $_constante->_ref_context;
+  $sejour->loadRefsOperations();
+  $sejour->_ref_last_operation->loadRefPlageOp();
+  $sejour->_ref_last_operation->loadRefChir();
+  $sejour->loadRefsAffectations();
+  $sejour->_ref_last_operation->loadExtCodesCCAM();
+
+  $patient_id = $sejour->patient_id;
+  if(!array_key_exists($patient_id, $patients)){
+    $sejour->loadRefPatient();
+    $sejour->_ref_patient->loadRefConstantesMedicales();
+    $patients[$patient_id] = $sejour->_ref_patient;
+  }
+  $trans_and_obs[$_constante->patient_id][$_constante->datetime][] = $_constante;
+}
+
+// Tri des transmission, observations et constantes par date décroissante
+foreach($trans_and_obs as &$_trans) {
+  krsort($_trans, SORT_STRING);
+}
+
 if (CValue::get("do") && ($do_medicaments || $do_injections || $do_perfusions || $do_aerosols || $do_elements)) {
 	// Chargement de toutes les prescriptions
 	$where = array();
@@ -163,6 +203,10 @@ if (CValue::get("do") && ($do_medicaments || $do_injections || $do_perfusions ||
 	$where[] = "(sejour.entree_prevue BETWEEN '$date_min 00:00:00' AND '$date_max 23:59:59') OR 
 	            (sejour.sortie_prevue BETWEEN '$date_min 00:00:00' AND '$date_max 23:59:59') OR
 	            (sejour.entree_prevue <= '$date_min 00:00:00' AND sejour.sortie_prevue >= '$date_max 23:59:59')";
+	
+  if ($_present_only == "true") {
+    $where["sejour.sortie_reelle"] = 'IS NULL';
+  }
 	
 	$where["service.service_id"] = " = '$service_id'";
 	$orderby = "chambre.nom";
@@ -493,6 +537,8 @@ $smarty->assign("cat_groups"      , $cat_groups);
 $smarty->assign("all_groups"      , $all_groups);
 $smarty->assign("by_patient"      , $by_patient);
 $smarty->assign("show_inactive"   , $show_inactive);
+$smarty->assign("_present_only"   , $_present_only);
+$smarty->assign("params"          , CConstantesMedicales::$list_constantes);
 $smarty->display('vw_bilan_service.tpl');
 
 ?>

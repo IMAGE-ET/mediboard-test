@@ -56,6 +56,9 @@ class CConstantesMedicales extends CMbObject {
   var $_vst                  = null;
   var $_new_constantes_medicales = null;
   
+  // Other fields
+  var $_ref_user             = null;
+  
   static $_specs_converted = false;
   static $_latest_values = array();
   
@@ -333,6 +336,11 @@ class CConstantesMedicales extends CMbObject {
   function loadRefsFwd() {
     $this->loadRefContext();
     $this->loadRefPatient();
+  }
+  
+  function loadRefUser() {
+    $first_log = $this->loadFirstLog();
+    $this->_ref_user = $first_log->loadRefUser();
   }
   
   function check() {

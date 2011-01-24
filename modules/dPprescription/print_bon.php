@@ -34,9 +34,10 @@ $prescription->calculPlanSoin(array($debut));
 $prescription->loadRefPatient();
 $patient =& $prescription->_ref_patient;
 $patient->loadRefConstantesMedicales();
-	  
+$patient->loadIPP();
 $sejour =& $prescription->_ref_object;
 $sejour->loadNumDossier();
+
 $sejour->loadRefCurrAffectation($debut);
 $sejour->loadRefsOperations();
 $sejour->_ref_last_operation->loadRefPlageOp();
