@@ -1,6 +1,6 @@
 <?php 
 /**
- * Setup EAI
+ * Status source interop receiver EAI
  *  
  * @category EAI
  * @package  Mediboard
@@ -10,8 +10,17 @@
  * @link     http://www.mediboard.org
  */
 
-$module = CModule::getInstalled(basename(dirname(__FILE__)));
+$source_guid = CValue::get("source_guid");
 
-$module->registerTab("vw_idx_interop_receiver", TAB_READ);
+$status = null;
+
+$object = new CMbObject();
+$source = $object->loadFromGuid($source_guid);
+
+$source->isReachable();
+
+$status = $source->_reachable;
+
+echo json_encode($status);
 
 ?>

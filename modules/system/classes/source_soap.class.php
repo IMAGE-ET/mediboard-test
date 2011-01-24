@@ -73,5 +73,16 @@ class CSourceSOAP extends CExchangeSource {
   function receive() {    
     return $this->_acquittement;
   }
+  
+  function isReachable() {
+    try {
+      CMbSOAPClient::make($this->host, $this->user, $this->password, $this->type_echange);
+    } catch (CMbException $e) {
+      $this->_reachable = false;
+      return;
+    }
+    
+    $this->_reachable = true;
+  }
 }
 ?>

@@ -10,12 +10,12 @@
  * @link     http://www.mediboard.org
  */
 
-class CSetupEAI extends CSetup {
+class CSetupeai extends CSetup {
   
   function __construct() {
     parent::__construct();
     
-    $this->mod_name = "EAI";
+    $this->mod_name = "eai";
     $this->makeRevision("all");
         
     $this->mod_version = "0.01";

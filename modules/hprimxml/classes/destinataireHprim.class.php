@@ -2,15 +2,15 @@
 
 /**
  * @package Mediboard
- * @subpackage sip
+ * @subpackage hprimxml
  * @version $Revision$
  * @author SARL OpenXtrem
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
  */
 
-CAppUI::loadClass("CDestinataireInterop");
+CAppUI::requireModuleClass("eai", "interop_receiver");
 
-class CDestinataireHprim extends CDestinataireInterop {	
+class CDestinataireHprim extends CInteropReceiver {
   // DB Table key
   var $dest_hprim_id  = null;
   

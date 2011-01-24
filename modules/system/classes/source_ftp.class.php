@@ -56,7 +56,7 @@ class CSourceFTP extends CExchangeSource {
       
     $destination_basename = sprintf("%s%0".$this->filenbroll."d", $this->fileprefix, $this->counter % pow(10, $this->filenbroll));
   
-    if($ftp->connect()) {
+    if ($ftp->connect()) {
       $ftp->sendContent($this->_data, "$destination_basename.$this->fileextension");
       if ($this->fileextension_write_end) {
         $ftp->sendContent($this->_data, "$destination_basename.$this->fileextension_write_end");
@@ -70,5 +70,12 @@ class CSourceFTP extends CExchangeSource {
   }
   
   function receive() {}
+  
+  function isReachable() { 
+    $ftp = new CFTP();
+    $ftp->init($this);
+    
+    $this->_reachable = $ftp->connect();
+  }
 }
 ?>

@@ -24,23 +24,25 @@ class CExchangeSource extends CMbObject {
   var $type_echange = null;
 	
   // Behaviour Fields
-  var $_client      = null;
-  var $_data        = null;
-  var $_args_list   = false;
+  var $_client            = null;
+  var $_data              = null;
+  var $_args_list         = false;
   var $_allowed_instances = null;
-  var $_wanted_type  = null;
-  var $_incompatible = false;
+  var $_wanted_type       = null;
+  var $_incompatible      = false;
+  var $_reachable         = null;
   
   function getProps() {
     $specs = parent::getProps();
-    $specs["name"]     = "str notNull";
-    $specs["role"]     = "enum list|prod|qualif default|qualif notNull";
-    $specs["host"]     = "text notNull";
-    $specs["user"]     = "str";
-    $specs["password"] = "password revealable";
+    $specs["name"]         = "str notNull";
+    $specs["role"]         = "enum list|prod|qualif default|qualif notNull";
+    $specs["host"]         = "text notNull";
+    $specs["user"]         = "str";
+    $specs["password"]     = "password revealable";
 		$specs["type_echange"] = "str protected";
     
     $specs["_incompatible"] = "bool";
+    $specs["_reachable"]    = "bool";
     
     return $specs;
   }
@@ -122,5 +124,7 @@ class CExchangeSource extends CMbObject {
   function send($evenement_name = null) {}
   
   function receive() {}
+  
+  function isReachable() {}
 }
 ?>
