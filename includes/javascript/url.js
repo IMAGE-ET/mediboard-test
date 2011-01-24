@@ -158,7 +158,10 @@ var Url = Class.create({
       }
     
       // Forbidden characters for IE
-      sWindowName = sWindowName.replace(/[ -]/gi, "_");
+      if (Prototype.Browser.IE) {
+        sWindowName = sWindowName.replace(/[- '"]/gi, "_");
+      }
+
       this.oWindow = window.open(oPostParameters ? "" : (sBaseUrl + this.make()), sWindowName, sFeatures);  
       window.children[sWindowName] = this.oWindow;
       
@@ -245,7 +248,9 @@ var Url = Class.create({
     var sFeatures = Url.buildPopupFeatures({height: iHeight, width: iWidth});
 		
     // Forbidden characters for IE
-    sWindowName = sWindowName.replace(/[ -]/gi, "_");
+    if (Prototype.Browser.IE) {
+      sWindowName = sWindowName.replace(/[- '"]/gi, "_");
+    }
     this.oWindow = window.open(sBaseUrl + this.make(), sWindowName, sFeatures);
     window.children[sWindowName] = this.oWindow;
     

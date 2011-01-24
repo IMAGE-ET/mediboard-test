@@ -427,8 +427,7 @@ Prescription = {
 	},
 	loadTraitement: function(sejour_id, date, nb_decalage, mode_dossier, object_id, object_class, unite_prise, chapitre) {
 
-		var url = new Url;
-	  url.setModuleAction("dPprescription", "httpreq_vw_dossier_soin");
+		var url = new Url("dPprescription", "httpreq_vw_dossier_soin");
 	  url.addParam("sejour_id", sejour_id);
 	  url.addParam("date", date);
 	  url.addParam("line_type", "bloc");
@@ -441,7 +440,7 @@ Prescription = {
 	  url.addParam("object_id", object_id);
     url.addParam("object_class", object_class);
     url.addParam("unite_prise", unite_prise);
-    
+		
     if(object_id && object_class){
       if(object_class == 'CPrescriptionLineMix'){
         url.requestUpdate("line_"+object_class+"-"+object_id, { onComplete: function() { 
@@ -452,26 +451,28 @@ Prescription = {
       else {
         unite_prise = unite_prise.replace(/[^a-z0-9_-]/gi, '_');
    
-				first_td = $('first_'+object_id+"_"+object_class+"_"+unite_prise);
-        last_td = $('last_'+object_id+"_"+object_class+"_"+unite_prise);
+				var first_td = $('first_'+object_id+"_"+object_class+"_"+unite_prise);
+        var last_td = $('last_'+object_id+"_"+object_class+"_"+unite_prise);
         
         // Suppression des td entre les 2 td bornes
-        td = first_td;
-        first_td.colSpan = 0;
+        var td = first_td;
+        var colSpan = 0;
         
         while(td.next().id != last_td.id){
           if(td.next().visible()){
-            first_td.colSpan = first_td.colSpan + 1;
+            colSpan++;
           }
           td.next().remove();
           first_td.show();
         }
+				
+				first_td.colSpan = colSpan;
                 
         url.requestUpdate(first_td, {
           insertion: Insertion.After,
           onComplete: function(){
             moveDossierSoin($("line_"+object_class+"_"+object_id+"_"+unite_prise));
-            first_td.hide().colSpan = 0;
+					  first_td.hide().colSpan = 1;
           }
         } );
       }

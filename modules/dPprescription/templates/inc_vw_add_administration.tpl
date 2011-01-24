@@ -13,22 +13,23 @@
 var oFormClick = window.opener.document.click;
 
 function submitAdmission(){
-  oFormAdministration = getForm("addAdministration");
+  var oFormAdministration = getForm("addAdministration");
   checkForm(oFormAdministration);
   return onSubmitFormAjax(oFormAdministration);
 }
 
 function submitCancelAdm(){
-  oFormTransmission   = getForm("editTrans");
+  var oFormTransmission   = getForm("editTrans");
   $V(oFormTransmission.text, "Administration annulée");
   
-	oFormAdministration = getForm("addAdministration");
+	var oFormAdministration = getForm("addAdministration");
   $V(oFormAdministration.quantite, '0');
   return onSubmitFormAjax(oFormAdministration);
 }
 
 function submitPlanification(){
-  var oForm = document.addPlanification;
+  var oForm = getForm("addPlanification");
+	
   submitFormAjax(oForm, 'systemMsg', { onComplete: function(){ 
     {{if $mode_plan}}
       window.opener.calculSoinSemaine('{{$date_sel}}',"{{$prescription_id}}"); 
@@ -41,7 +42,7 @@ function submitPlanification(){
 
 // Fonction appelée en callback du formulaire d'administration
 function submitTransmission(administration_id){
-  oFormTransmission   = getForm("editTrans");
+  var oFormTransmission   = getForm("editTrans");
   oFormTransmission.object_class.value = "CAdministration";
   oFormTransmission.object_id.value = administration_id;
   if(oFormTransmission.text.value != ''){
