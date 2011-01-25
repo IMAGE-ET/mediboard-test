@@ -10,6 +10,8 @@
  * @link     http://www.mediboard.org
  */
 
+CCanDo::checkRead();
+
 $source_guid = CValue::get("source_guid");
 
 $status = null;
@@ -19,8 +21,9 @@ $source = $object->loadFromGuid($source_guid);
 
 $source->isReachable();
 
-$status = $source->_reachable;
+$data = array ("reachable" => $source->_reachable,
+               "errors"    => utf8_encode($source->_errors));
 
-echo json_encode($status);
+echo json_encode($data);
 
 ?>

@@ -25,7 +25,7 @@ foreach (CInteropReceiver::getChildReceivers() as $_interop_receiver) {
   }
   foreach ($receivers[$_interop_receiver] as $_receiver) {
     $_receiver->loadRefGroup();
-    $_receiver->loadRefsExchangesSources();
+    $_receiver->isReachable();
   }
 }
 
@@ -33,6 +33,6 @@ foreach (CInteropReceiver::getChildReceivers() as $_interop_receiver) {
 $smarty = new CSmartyDP();
 $smarty->assign("receiver" , $receiver);
 $smarty->assign("receivers", $receivers);
-$smarty->display("vw_idx_interop_receiver.tpl");
+$smarty->display("vw_idx_interop_receivers.tpl");
 
 ?>

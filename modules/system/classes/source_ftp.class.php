@@ -75,7 +75,7 @@ class CSourceFTP extends CExchangeSource {
     $ftp = new CFTP();
     $ftp->init($this);
     
-    $this->_reachable = $ftp->connect();
+    $this->_reachable = $ftp->connect() ? 2 : 0;
   }
 }
 ?>

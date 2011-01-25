@@ -9,16 +9,9 @@
  * @link     http://www.mediboard.org
 *}}
 
-<script type="text/javascript">
-  Main.add(function () {
-    {{if count($receiver->_ref_exchanges_sources) > 0}}
-      Control.Tabs.create('tabs-evenements-{{$receiver->_guid}}', true);
-    {{/if}}
-  });
-</script>
-
 {{if ($receiver->_class_name != "CInteropReceiver") && $can->edit}}
-  <form name="edit{{$receiver->_guid}}" action="?m={{$m}}" method="post" onsubmit="return checkForm(this)">
+  <form name="edit{{$receiver->_guid}}" action="?m={{$m}}" method="post" onsubmit="return onSubmitFormAjax(this, { 
+      onComplete: function() { refreshReceivers(); refreshReceiverExchangesSources('{{$receiver->_guid}}');  }})">
     {{mb_key object=$receiver}}
     {{mb_class object=$receiver}}
     <input type="hidden" name="del" value="0" />
@@ -76,40 +69,8 @@
       </tr>     
     </table>
   </form>
-  {{if count($receiver->_ref_exchanges_sources) > 0}}
-  <table class="form">  
-    <tr>
-      <th class="title" colspan="2">
-        {{tr}}config-exchange-source{{/tr}} '{{mb_value object=$receiver field="message"}}'
-      </th>
-    </tr>
-    <tr>
-      <td colspan="2"> 
-        <table class="form">  
-          <tr>
-            <td>
-              {{foreach from=$receiver->_spec->messages key=_message item=_evenements}}
-                {{if $_message == $receiver->message}}
-                  <ul id="tabs-evenements-{{$receiver->_guid}}" class="control_tabs">
-                    {{foreach from=$_evenements item=_evenement}}
-                      <li><a href="#{{$_evenement}}">{{tr}}{{$_evenement}}{{/tr}}</a></li>
-                    {{/foreach}}
-                  </ul>
-                  
-                  <hr class="control_tabs" />
-                  
-                  {{foreach from=$_evenements item=_evenement}}
-                    <div id="{{$_evenement}}" style="display:none;">
-                     {{mb_include module=system template=inc_config_exchange_source source=$receiver->_ref_exchanges_sources.$_evenement}}
-                    </div>
-                  {{/foreach}}
-                {{/if}}
-              {{/foreach}}
-            </td>
-          </tr>
-        </table>
-      </td>
-    </tr>
+  
+  <table class="form" id="receiver_exchanges_sources">  
+    {{mb_include template=inc_receiver_exchanges_sources}}
   </table>
-  {{/if}}
 {{/if}}

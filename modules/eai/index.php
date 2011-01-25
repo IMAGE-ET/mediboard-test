@@ -12,6 +12,6 @@
 
 $module = CModule::getInstalled(basename(dirname(__FILE__)));
 
-$module->registerTab("vw_idx_interop_receiver", TAB_READ);
+$module->registerTab("vw_idx_interop_receivers", TAB_READ);
 
 ?>
