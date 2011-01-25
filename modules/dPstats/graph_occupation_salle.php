@@ -11,8 +11,18 @@
 function graphOccupationSalle($debut = null, $fin = null, $prat_id = 0, $salle_id = 0, $bloc_id = 0, $discipline_id = null, $codeCCAM = "", $type_hospi = "", $type_duree = "MONTH") {
   
   $ds = CSQLDataSource::get("std");
-  $type_duree_fr = $type_duree == "MONTH" ? "mois" : "jour";
-  $date_format = $type_duree == "MONTH" ? "%m/%Y" : "%d/%m/%Y";
+	
+	if ($type_duree == "MONTH") {
+	  $type_duree_fr = "mois";
+    $date_format = "%m/%Y";
+    $order_key = "%Y%m";
+	}
+	else {
+	  $type_duree_fr = "jour";
+	  $date_format = "%d/%m/%Y";
+		$order_key = "%Y%m%d";
+	}
+	
   if (!$debut) $debut = mbDate("-1 YEAR");
   if (!$fin) $fin = mbDate();
   
@@ -46,7 +56,7 @@ function graphOccupationSalle($debut = null, $fin = null, $prat_id = 0, $salle_i
   // requete de récupération des interventions
   $query = "SELECT COUNT(*) AS total,
     DATE_FORMAT(IF(operations.date, operations.date, plagesop.date), '$date_format') AS $type_duree_fr,
-    DATE_FORMAT(IF(operations.date, operations.date, plagesop.date), '%Y%m') AS orderitem
+    DATE_FORMAT(IF(operations.date, operations.date, plagesop.date), '$order_key') AS orderitem
     FROM operations
     LEFT JOIN sejour ON operations.sejour_id = sejour.sejour_id
     LEFT JOIN plagesop ON operations.plageop_id = plagesop.plageop_id
@@ -57,7 +67,7 @@ function graphOccupationSalle($debut = null, $fin = null, $prat_id = 0, $salle_i
   
   $query_hors_plage = "SELECT COUNT(*) AS total,
     DATE_FORMAT(operations.date, '$date_format') AS $type_duree_fr,
-    DATE_FORMAT(operations.date, '%Y%m') AS orderitem
+    DATE_FORMAT(operations.date, '$order_key') AS orderitem
     FROM operations
     LEFT JOIN sejour ON operations.sejour_id = sejour.sejour_id
     LEFT JOIN users_mediboard ON operations.chir_id = users_mediboard.user_id
@@ -115,7 +125,7 @@ function graphOccupationSalle($debut = null, $fin = null, $prat_id = 0, $salle_i
   $query = "SELECT COUNT(*) AS nbInterv,
     AVG(TIME_TO_SEC(operations.fin_op)-TIME_TO_SEC(operations.debut_op)) AS moyenne,
     DATE_FORMAT(IF(operations.date, operations.date, plagesop.date), '$date_format') AS $type_duree_fr,
-    DATE_FORMAT(IF(operations.date, operations.date, plagesop.date), '%Y%m') AS orderitem
+    DATE_FORMAT(IF(operations.date, operations.date, plagesop.date), '$order_key') AS orderitem
     FROM operations
     LEFT JOIN sejour ON operations.sejour_id = sejour.sejour_id
     LEFT JOIN plagesop ON operations.plageop_id = plagesop.plageop_id
@@ -128,7 +138,7 @@ function graphOccupationSalle($debut = null, $fin = null, $prat_id = 0, $salle_i
     AVG(IF(operations.fin_op > operations.debut_op, TIME_TO_SEC(operations.fin_op)-TIME_TO_SEC(operations.debut_op),
     TIME_TO_SEC(operations.fin_op)-TIME_TO_SEC(operations.debut_op)+86400)) AS moyenne,
     DATE_FORMAT(operations.date, '$date_format') AS $type_duree_fr,
-    DATE_FORMAT(operations.date, '%Y%m') AS orderitem
+    DATE_FORMAT(operations.date, '$order_key') AS orderitem
     FROM operations
     LEFT JOIN sejour ON operations.sejour_id = sejour.sejour_id
     LEFT JOIN users_mediboard ON operations.chir_id = users_mediboard.user_id
@@ -209,7 +219,7 @@ function graphOccupationSalle($debut = null, $fin = null, $prat_id = 0, $salle_i
   $query = "SELECT COUNT(*) AS nbInterv,
     AVG(TIME_TO_SEC(operations.sortie_salle)-TIME_TO_SEC(operations.entree_salle)) AS moyenne,
     DATE_FORMAT(IF(operations.date, operations.date, plagesop.date), '$date_format') AS $type_duree_fr,
-    DATE_FORMAT(IF(operations.date, operations.date, plagesop.date), '%Y%m') AS orderitem
+    DATE_FORMAT(IF(operations.date, operations.date, plagesop.date), '$order_key') AS orderitem
     FROM operations
     LEFT JOIN sejour ON operations.sejour_id = sejour.sejour_id
     LEFT JOIN plagesop ON operations.plageop_id = plagesop.plageop_id
@@ -221,7 +231,7 @@ function graphOccupationSalle($debut = null, $fin = null, $prat_id = 0, $salle_i
   $query_hors_plage = "SELECT COUNT(*) AS nbInterv,
     AVG(TIME_TO_SEC(operations.sortie_salle)-TIME_TO_SEC(operations.entree_salle)) AS moyenne,
     DATE_FORMAT(operations.date, '$date_format') AS $type_duree_fr,
-    DATE_FORMAT(operations.date, '%Y%m') AS orderitem
+    DATE_FORMAT(operations.date, '$order_key') AS orderitem
     FROM operations
     LEFT JOIN sejour ON operations.sejour_id = sejour.sejour_id
     LEFT JOIN users_mediboard ON operations.chir_id = users_mediboard.user_id
@@ -298,7 +308,7 @@ function graphOccupationSalle($debut = null, $fin = null, $prat_id = 0, $salle_i
   $query = "SELECT COUNT(*) AS nbInterv,
     AVG(TIME_TO_SEC(operations.sortie_reveil)-TIME_TO_SEC(operations.entree_reveil)) AS moyenne,
     DATE_FORMAT(IF(operations.date, operations.date, plagesop.date), '$date_format') AS $type_duree_fr,
-    DATE_FORMAT(IF(operations.date, operations.date, plagesop.date), '%Y%m') AS orderitem
+    DATE_FORMAT(IF(operations.date, operations.date, plagesop.date), '$order_key') AS orderitem
     FROM operations
     LEFT JOIN sejour ON operations.sejour_id = sejour.sejour_id
     LEFT JOIN plagesop ON operations.plageop_id = plagesop.plageop_id
@@ -310,7 +320,7 @@ function graphOccupationSalle($debut = null, $fin = null, $prat_id = 0, $salle_i
   $query_hors_plage = "SELECT COUNT(*) AS nbInterv,
     AVG(TIME_TO_SEC(operations.sortie_reveil)-TIME_TO_SEC(operations.entree_reveil)) AS moyenne,
     DATE_FORMAT(operations.date, '$date_format') AS $type_duree_fr,
-    DATE_FORMAT(operations.date, '%Y%m') AS orderitem
+    DATE_FORMAT(operations.date, '$order_key') AS orderitem
     FROM operations
     LEFT JOIN sejour ON operations.sejour_id = sejour.sejour_id
     LEFT JOIN users_mediboard ON operations.chir_id = users_mediboard.user_id
@@ -383,7 +393,7 @@ function graphOccupationSalle($debut = null, $fin = null, $prat_id = 0, $salle_i
   );
   $query = "SELECT SUM(TIME_TO_SEC(plagesop.fin) - TIME_TO_SEC(plagesop.debut)) AS total,
     DATE_FORMAT(plagesop.date, '$date_format') AS $type_duree_fr,
-    DATE_FORMAT(plagesop.date, '%Y%m') AS orderitem
+    DATE_FORMAT(plagesop.date, '$order_key') AS orderitem
     FROM plagesop
     LEFT JOIN users_mediboard ON plagesop.chir_id = users_mediboard.user_id
     WHERE plagesop.salle_id ".CSQLDataSource::prepareIn(array_keys($salles));
