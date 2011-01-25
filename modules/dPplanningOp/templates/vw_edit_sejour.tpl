@@ -135,6 +135,7 @@ function reloadSejours(checkCollision) {
           </td>
         </tr>
 
+        {{if $sejour->_id}} 
         <tr>
           <th class="title">
           	{{tr}}CMbObject-back-documents{{/tr}}
@@ -163,6 +164,7 @@ function reloadSejours(checkCollision) {
             {{mb_include module=dPfiles template=yoplet_uploader object=$sejour}}
           </td>
         </tr>
+        {{/if}}
 
       </table>
     </td>
