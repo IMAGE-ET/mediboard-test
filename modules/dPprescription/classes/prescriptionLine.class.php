@@ -453,6 +453,10 @@ class CPrescriptionLine extends CMbObject {
   function getRecentModification(){
     $service_id = isset($_SESSION["soins"]["service_id"]) && $_SESSION["soins"]["service_id"] ?
       $_SESSION["soins"]["service_id"] : "none";
+      
+    if ($service_id == "NP") {
+      $service_id = "none";
+    }
     
     $config_service = new CConfigService();
     $configs = $config_service->getConfigForService($service_id);
