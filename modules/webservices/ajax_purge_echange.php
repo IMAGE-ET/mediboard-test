@@ -29,29 +29,20 @@ $where["purge"] = "= '0'";
 if (!$do_purge) {
   $count = $echange_soap->countList($where);
   CAppUI::stepAjax($count." échanges SOAP à purger");
-} else {
-  $order = "date_echange ASC";
+} else {  
+  // Suppression du champ input et output
+  $echange_soap->_spec->ds->query("UPDATE `echange_soap` 
+                                   SET `purge` = '1', `input` = '', `output` = ''
+                                   WHERE `date_echange` BETWEEN '".$date_min."' AND '".$date_max."'
+                                   AND `purge` = '0'
+                                   LIMIT 200;");
   
-  // Récupération de la liste des echanges SOAP
-  $echangesSoap = $echange_soap->loadList($where, $order, "0, 100");
-  $count  = 0;
-  foreach($echangesSoap as $_echange_soap) {  
-    // Suppression du champ input et output
-    $_echange_soap->input = "";
-    $_echange_soap->output = "";
-    
-    $_echange_soap->purge = 1;
-    if ($msg = $_echange_soap->store()) {
-      CAppUI::stepAjax("#$_echange_soap->_id : Impossible de sauvegarder l'échange SOAP", UI_MSG_WARNING);
-      CAppUI::stepAjax($msg, UI_MSG_WARNING);
-      continue;
-    }
-    $count++;
-  }
+  $count = $echange_soap->_spec->ds->affectedRows();
+  
   if ($count == 0) {
     echo "<script type='text/javascript'>stop=true;</script>";
   }
-  CAppUI::stepAjax("$count échanges SOAP purgés");
+  CAppUI::stepAjax("$count échanges SOAP purgés - ".mbDateTime());
 }
 
 ?>
