@@ -175,7 +175,7 @@ class CPrescription extends CMbObject {
 		// Si c'est un protocole de praticien, on verifie les droits
 		if(!$this->object_id && $this->praticien_id){
 			$is_praticien = CAppUI::$user->isPraticien();
-			$this->_protocole_locked = ($is_praticien && CAppUI::$user->_id != $protocole->praticien_id) ? 1 : 0;		
+			$this->_protocole_locked = ($is_praticien && CAppUI::$user->_id != $this->praticien_id) ? 1 : 0;		
 		}
   }
   
