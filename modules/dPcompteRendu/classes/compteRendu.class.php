@@ -218,24 +218,7 @@ class CCompteRendu extends CDocumentItem {
   }
 
   function loadFile() {
-    $file = new CFile;
-    $file->setObject($this);
-    
-    // La demande de génération simultanée provoque la création de plusieurs cfile.
-    // On rétablit l'unicité en supprimant les autres cfiles
-    $files = $file->loadMatchingList();
-    
-    if (!count($files)) {
-      return $this->_ref_file = new CFile();
-    }
-    
-    $this->_ref_file = array_shift($files);
-
-    foreach($files as $_file) {
-      $_file->delete();      
-    }
-    
-		return $this->_ref_file;
+		return $this->_ref_file = $this->loadUniqueBackRef("files");
   }
 	
   function loadRefsFwd() {

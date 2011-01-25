@@ -133,6 +133,21 @@ else {
   $htmltopdf = new CHtmlToPDF;
   $htmltopdf->generatePDF($content, $stream, $page_format, $orientation, $file);
   $file->file_size = filesize($file->_file_path);
+  
+  // Il peut y avoir plusieurs cfiles pour un même compte-rendu, à cause 
+  // de n requêtes simultanées pour la génération du pdf.
+  // On supprime donc les autres cfiles.
+  $compte_rendu->loadRefsFiles();
+  $files = $compte_rendu->_ref_files;
+  
+  if ($file->_id) {
+    unset($files[$file->_id]);
+  }
+  
+  foreach($files as $_file) {
+    $_file->delete();
+  }
+  
   $file->store();
 }
 
