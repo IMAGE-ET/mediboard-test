@@ -1608,5 +1608,21 @@ class CSejour extends CCodable {
     return array("[DATE ENT]" => mbDateToLocale($this->entree), "[PRAT RESPONSABLE]" => $this->_ref_praticien->_view,
                  "[NDOS]"     => $this->_num_dossier); 
   }
+	
+	function checkMerge($sejours = array()/*<CSejour>*/) {
+    if ($msg = parent::checkMerge($sejours)) {
+      return $msg;
+    }
+    $count_prescription = 0;
+    foreach ($sejours as $_sejour) {
+      $_sejour->loadRefPrescriptionSejour();
+			if($_sejour->_ref_prescription_sejour->_id){
+				if($count_prescription == 1){
+	        return "Impossible de fusionner des sejours qui comportent chacun des prescriptions de séjour";
+	      }
+				$count_prescription++;
+			}
+    }
+  }
 }
 ?>
