@@ -15,11 +15,11 @@
 class CMbFieldSpecFact {
   
   static $classes = array(
+    "enum"         => "CEnumSpec",
     "str"          => "CStrSpec",
     "text"         => "CTextSpec",
     "num"          => "CNumSpec",
     "float"        => "CFloatSpec",
-    "enum"         => "CEnumSpec",
     "date"         => "CDateSpec",
     "time"         => "CTimeSpec",
     "dateTime"     => "CDateTimeSpec",

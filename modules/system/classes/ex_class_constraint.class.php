@@ -42,6 +42,32 @@ class CExClassConstraint extends CMbObject {
     $props["_locale_court"] = "str";
     return $props;
   }
+	
+	function loadTargetObject(){
+		$this->loadRefExClass();
+		$this->completeField("field", "value");
+		
+		$ref_object = new $this->_ref_ex_class->host_class;
+		
+		if (!$this->_id) {
+			return $this->_ref_target_object = new CMbObject;
+		}
+		
+	  $spec = $ref_object->_specs[$this->field];
+	  
+	  
+	  if ($spec instanceof CRefSpec) {
+	    $object = new $spec->class;
+	    $object->load($this->value);
+	    $this->_ref_target_object = $object;
+	  }
+		else {
+	    // empty object
+	    $this->_ref_target_object = new CMbObject;
+		}
+		
+		return $this->_ref_target_object;
+	}
   
   function checkConstraint(CMbObject $object) {
     $this->completeField("field", "value");

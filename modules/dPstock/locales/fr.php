@@ -777,6 +777,7 @@ $locales['CProductStockService-_package_quantity-desc'] = 'Quantité en fonction 
 $locales['CProductStockService-common'] = 'Stock usuel';
 $locales['CProductStockService-common-court'] = 'Usuel';
 $locales['CProductStockService-common-desc'] = 'Stock couramment utilisé dans le service';
+$locales['CProductStockService-failed-product'] = 'Un stock pour ce produit à cet emplacement existe déjà';
 $locales['CProductStockService-location_id'] = 'Emplacement';
 $locales['CProductStockService-location_id-court'] = 'Empl.';
 $locales['CProductStockService-location_id-desc'] = 'Emplacement';

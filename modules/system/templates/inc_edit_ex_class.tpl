@@ -89,7 +89,7 @@ Main.add(function(){
 
 <table class="main layout" id="fields-specs" style="display: none;">
   <tr>
-    <td style="width: 20em; padding-right: 5px;">
+    <td style="width: 15em; padding-right: 5px;">
       <button type="button" class="new" style="float: right;" onclick="ExField.create({{$ex_class->_id}})">
         {{tr}}CExClassField-title-create{{/tr}}
       </button>
@@ -148,7 +148,13 @@ Main.add(function(){
               </a>
             </td>
             <td>{{mb_value object=$_constraint field=operator}}</td>
-            <td>{{mb_value object=$_constraint field=value}}</td>
+            <td>
+            	{{if $_constraint->_ref_target_object->_id}}
+            	  {{$_constraint->_ref_target_object}}
+						  {{else}}
+            	  {{mb_value object=$_constraint field=value}}
+							{{/if}}
+						</td>
           </tr>
         {{foreachelse}}
           <tr>

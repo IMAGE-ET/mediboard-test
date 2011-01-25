@@ -163,7 +163,20 @@ var ExField = {
   },
   create: function(ex_class_id) {
     this.edit("0", ex_class_id);
-  }
+  },
+	slug: function(str) {
+	  str = (str+"")
+	    .strip()
+	    .removeDiacritics() // Suppression des accents
+	    .toLowerCase() // En minuscule
+      .replace(/@/g, '_at_') // Petit bonus
+	    .replace(/['"\(\)\{\}]/g, '') // Suppression des caractères courants
+	    .replace(/[^a-z0-9_]/g, '_') // Dernier nettoyage
+	    .replace(/^[0-9_]+/g, '') // Suppression des chiffres et underscore au début
+	    .replace(/_+/g, '_'); // Suppression des underscore répétés
+	    
+	  return str;
+	}
 };
 
 var ExFieldSpec = {

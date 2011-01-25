@@ -31,6 +31,7 @@ if ($ex_class->_id)
 
 foreach($ex_class->_ref_constraints as $_ex_constraint) {
   $_ex_constraint->loadRefExClass();
+  $_ex_constraint->loadTargetObject();
 }
 
 $classes = array();

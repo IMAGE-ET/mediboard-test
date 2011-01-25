@@ -91,12 +91,22 @@ Main.add(function(){
   
 <table class="main form">
   <tr>
-    <th class="category" style="width: 12em;">Option</th>
+    <th class="category" style="width: 8em;">Option</th>
     <th class="category">Valeur</th>
   </tr>
   
-  {{foreach from=$options item=_type key=_name}}
-    <tr>
+	{{assign var=advanced_controls_limit value=3}}
+	
+  {{foreach from=$options item=_type key=_name name=specs}}
+	  {{if $smarty.foreach.specs.index == $advanced_controls_limit}}
+		  <tr>
+		  	<th></th>
+		  	<td>
+		  		<button class="down" type="button" onclick="$(this).up('table').select('tr.advanced').invoke('toggle')">Plus d'options</button>
+        </td>
+			</tr>
+		{{/if}}
+    <tr {{if $smarty.foreach.specs.index >= $advanced_controls_limit}}class="advanced" style="display: none;"{{/if}}>
       <th><label for="{{$_name}}" title="{{$_name}}">{{tr}}CMbFieldSpec.{{$_name}}{{/tr}}</label></th>
       <td>
         {{* str *}}

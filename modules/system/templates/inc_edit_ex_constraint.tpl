@@ -12,6 +12,14 @@
 Main.add(function(){
   getForm("editConstraint").elements.field.select();
 });
+
+toggleObjectSelector = function(select) {
+	var selected = select.options[select.selectedIndex];
+	var isRef = selected.hasClassName('ref');
+	$('object_selector').setVisible(isRef);
+  $(select.form.elements.value).up('div').setVisible(!isRef);
+	select.form._object_class.value = selected.className.split('|')[1];
+}
 </script>
 
 <form name="editConstraint" method="post" action="?" onsubmit="return onSubmitFormAjax(this, {onComplete: ExClass.edit.curry({{$ex_constraint->ex_class_id}})})">
@@ -28,14 +36,14 @@ Main.add(function(){
       <th style="width: 12em;">{{mb_label object=$ex_constraint field=field}}</th>
       <td>
         <select name="field" class="{{$ex_constraint->_props.field}}" style="max-width: 15em;" tabIndex="1"
-                onchange="var s=this.options[this.selectedIndex];$('object_selector').setVisible(s.hasClassName('ref')); this.form._object_class.value = s.className.split('|')[1]">
-          {{foreach from=$ex_constraint->_ref_ex_class->getAvailableFields() item=_field name=_constraint}}
+                onchange="toggleObjectSelector(this)">
+          {{foreach from=$ex_constraint->_ref_ex_class->_host_class_fields item=_field name=_constraint}}
             {{assign var=_object value=$ex_constraint->_ref_object}}
             {{assign var=_spec value=$_object->_specs.$_field}}
             
             {{if $_field != $ex_constraint->_ref_object->_spec->key}}
               <option {{if $_spec instanceof CRefSpec}}class="ref class|{{$_spec->class}}"{{/if}} value="{{$_field}}" {{if $ex_constraint->field==$_field}}selected="selected"{{/if}}>
-                {{tr}}{{$ex_constraint->_ref_ex_class->host_class}}-{{$_field}}-desc{{/tr}}
+                {{tr}}{{$ex_constraint->_ref_ex_class->host_class}}-{{$_field}}{{/tr}}
               </option>
             {{/if}}
           {{/foreach}}
@@ -54,12 +62,15 @@ Main.add(function(){
     </tr>
     <tr>
       <th>{{mb_label object=$ex_constraint field=value}}</th>
-      <td>{{mb_field object=$ex_constraint field=value tabIndex="3"}}
-        {{$ex_constraint->_ref_object}}
-        <div id="object_selector" {{if !$ex_constraint->_ref_object}}style="display: none"{{/if}}>
-          <button type="button" class="search" onclick="ObjectSelector.init()">{{tr}}Search{{/tr}}</button>
-          <input type="hidden" name="_object_class" value="" />
-          <input type="text" name="_object_view" readonly="readonly" value="{{$ex_constraint->_ref_object}}" />
+      <td>
+      	<div {{if $ex_constraint->_ref_target_object}}style="display: none"{{/if}}>
+				  {{mb_field object=$ex_constraint field=value tabIndex="3"}}
+				</div>
+				
+        <div id="object_selector" {{if !$ex_constraint->_ref_target_object}}style="display: none"{{/if}}>
+          <input type="hidden" name="_object_class" value="{{$ex_constraint->_ref_target_object->_class_name}}" />
+          <input type="text" name="_object_view" readonly="readonly" value="{{$ex_constraint->_ref_target_object}}" />
+          <button type="button" class="search notext" onclick="ObjectSelector.init()">{{tr}}Search{{/tr}}</button>
           <script type="text/javascript">
             ObjectSelector.init = function(){  
               this.sForm     = "editConstraint";
@@ -69,8 +80,8 @@ Main.add(function(){
               this.onlyclass = "true";
               this.pop();
             } 
-           </script>
-         </div>
+          </script>
+        </div>
       </td>
       
       <th>{{mb_label object=$ex_constraint field=_locale_desc}}</th>

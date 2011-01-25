@@ -146,11 +146,11 @@ var AjaxResponse = {
     }
   },
   
-  onLoaded: function(get, performance) {
+  onLoaded: function(getData, performance) {
     try {
       // If Firebug or Chrome console
-      if (console.firebug || console._inspectorCommandLineAPI) {
-        console.log(get, " ", performance);
+      if (!("_mediboard" in window.console)) {
+        console.log(getData, " ", performance);
       }
     } catch (e) {}
   }

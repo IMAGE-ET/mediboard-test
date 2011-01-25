@@ -12,7 +12,7 @@
 Main.add(function(){
   var fields = {{$other_fields|@json}};
   ExFieldSpec.edit("{{$spec_type}}", '{{$ex_field->prop}}', 'CExObject', '{{$ex_field->name}}', fields, "{{$ex_field->_id}}");
-  getForm("editField").elements.name.select();
+  getForm("editField").elements._locale.select();
 });
 
 checkExField = function(form) {
@@ -28,6 +28,12 @@ checkExField = function(form) {
 	
 	return true;
 }
+
+updateInternalName = function(e){
+  var form = e.form;
+	var str = ExField.slug($V(e));
+	$V(form.elements.name, str);
+}
 </script>
 
 <form name="editField" method="post" action="?" onsubmit="return onSubmitFormAjax(this, {check: checkExField, onComplete: ExClass.edit.curry({{$ex_field->ex_class_id}})})">
@@ -42,11 +48,23 @@ checkExField = function(form) {
     {{mb_include module=system template=inc_form_table_header object=$ex_field colspan="4"}}
     
     <tr>
-      <th style="width: 12em;">{{mb_label object=$ex_field field=name}}</th>
+      <th style="width: 8em;">{{mb_label object=$ex_field field=_locale}}</th>
+      <td>
+      	{{if $ex_field->_id}}
+          {{mb_field object=$ex_field field=_locale}}
+				{{else}}
+      	  {{mb_field object=$ex_field field=_locale onkeyup="updateInternalName(this)"}}
+				{{/if}}
+			</td>
+      <th>{{mb_label object=$ex_field field=name}}</th>
       <td>{{mb_field object=$ex_field field=name}}</td>
+    </tr>
+    <tr>
+      <th>{{mb_label object=$ex_field field=_locale_desc}}</th>
+      <td>{{mb_field object=$ex_field field=_locale_desc tabIndex="2"}}</td>
       
-      <th>{{mb_label object=$ex_field field=_locale}}</th>
-      <td>{{mb_field object=$ex_field field=_locale tabIndex="1"}}</td>
+      <th>{{mb_label object=$ex_field field=prop}}</th>
+      <td>{{mb_field object=$ex_field field=prop readonly="readonly" size=35}}</td>
     </tr>
     <tr>
       <th><label for="_type">Type</label></th>
@@ -57,13 +75,6 @@ checkExField = function(form) {
           {{/foreach}}
         </select>
       </td>
-      
-      <th>{{mb_label object=$ex_field field=_locale_desc}}</th>
-      <td>{{mb_field object=$ex_field field=_locale_desc tabIndex="2"}}</td>
-    </tr>
-    <tr>
-      <th>{{mb_label object=$ex_field field=prop}}</th>
-      <td>{{mb_field object=$ex_field field=prop readonly="readonly" size=35}}</td>
       
       <th>{{mb_label object=$ex_field field=_locale_court}}</th>
       <td>{{mb_field object=$ex_field field=_locale_court tabIndex="3"}}</td>
