@@ -146,9 +146,6 @@ $dosql  = CAppUI::checkFileName(CValue::post("dosql", ""));
 $m_post = CAppUI::checkFileName(CValue::post("m", $m));
 $class  = CAppUI::checkFileName(CValue::post("@class", ""));
 
-// Make $m available in do_aed
-$m = $m_post;
-
 $tab = $a == "index" ? 
   CValue::getOrSession("tab", $tab) : 
   CValue::get("tab");
