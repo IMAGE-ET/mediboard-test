@@ -10,12 +10,12 @@
 
 CCanDo::checkAdmin();
 
-$ex_class_id = CValue::getOrSession("ex_class_id");
+$where = array("ex_class_id" => "IS NULL"); 
 
-$ex_class = new CExClass;
-$ex_class->load($ex_class_id);
+$ex_concept = new CExClassField;
+$list_ex_concept = $ex_concept->loadList($where, "name");
 
 // Création du template
 $smarty = new CSmartyDP();
-$smarty->assign("ex_class", $ex_class);
-$smarty->display("view_ex_class.tpl");
+$smarty->assign("list_ex_concept", $list_ex_concept);
+$smarty->display("inc_list_ex_concept.tpl");

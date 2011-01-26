@@ -36,16 +36,37 @@ updateInternalName = function(e){
 }
 </script>
 
-<form name="editField" method="post" action="?" onsubmit="return onSubmitFormAjax(this, {check: checkExField, onComplete: ExClass.edit.curry({{$ex_field->ex_class_id}})})">
+<form name="editField" method="post" action="?" onsubmit="return onSubmitFormAjax(this, {check: checkExField{{if $ex_field->ex_class_id}},onComplete: ExClass.edit.curry({{$ex_field->ex_class_id}}){{/if}}})">
   <input type="hidden" name="m" value="system" />
   <input type="hidden" name="dosql" value="do_ex_class_field_aed" />
   <input type="hidden" name="del" value="0" />
   <input type="hidden" name="_enum_translation" value="" />
+	
+	{{if !$ex_field->ex_class_id}}
+	  <input type="hidden" name="callback" value="ExConcept.editCallback" />
+	{{/if}}
+	
   {{mb_key object=$ex_field}}
   {{mb_field object=$ex_field field=ex_class_id hidden=true}}
   
   <table class="form">
-    {{mb_include module=system template=inc_form_table_header object=$ex_field colspan="4"}}
+  	
+    {{assign var=object value=$ex_field}}
+		<tr>
+		  {{if $object->_id}}
+		  <th class="title modify" colspan="4">
+		    {{mb_include module=system template=inc_object_notes}}
+		    {{mb_include module=system template=inc_object_idsante400}}
+		    {{mb_include module=system template=inc_object_history}}
+		    {{tr}}{{$object->_class_name}}{{if !$object->ex_class_id}}.concept{{/if}}-title-modify{{/tr}} 
+		    '{{$object}}'
+		  </th>
+		  {{else}}
+		  <th class="title" colspan="4">
+		    {{tr}}{{$object->_class_name}}{{if !$object->ex_class_id}}.concept{{/if}}-title-create{{/tr}} 
+		  </th>
+		  {{/if}}
+		</tr>
     
     <tr>
       <th style="width: 8em;">{{mb_label object=$ex_field field=_locale}}</th>
@@ -69,7 +90,7 @@ updateInternalName = function(e){
     <tr>
       <th><label for="_type">Type</label></th>
       <td>
-        <select name="_type" onchange="ExFieldSpec.edit($V(this), '{{$ex_field->prop}}', 'CExObject', '{{$ex_field->name}}', [], '{{$ex_field->_id}}')">
+        <select {{if $ex_field->_id}}disabled="disabled"{{/if}} name="_type" onchange="ExFieldSpec.edit($V(this), '{{$ex_field->prop}}', 'CExObject', '{{$ex_field->name}}', [], '{{$ex_field->_id}}')">
           {{foreach from="CMbFieldSpecFact"|static:classes item=_class key=_key}}
             <option value="{{$_key}}" {{if $_key == $spec_type}}selected="selected"{{/if}}>{{tr}}CMbFieldSpec.type.{{$_key}}{{/tr}}</option>
           {{/foreach}}

@@ -14,6 +14,7 @@ class CExClassField extends CMbObject {
   var $ex_class_id = null;
   var $name = null; // != object_class, object_id, ex_ClassName_event_id, 
   var $prop = null; 
+  var $concept_id = null;
 	
   var $coord_label_x = null; 
   var $coord_label_y = null; 
@@ -27,6 +28,7 @@ class CExClassField extends CMbObject {
   
   var $_ref_ex_class = null;
   var $_ref_translation = null;
+	var $_ref_concept = null;
   var $_spec_object = null;
   
   var $_dont_drop_column = null;
@@ -62,7 +64,8 @@ class CExClassField extends CMbObject {
 
   function getProps() {
     $props = parent::getProps();
-    $props["ex_class_id"] = "ref notNull class|CExClass cascade";
+    $props["ex_class_id"] = "ref class|CExClass cascade";
+    $props["concept_id"]  = "ref class|CExClassField";
     $props["name"]        = "str notNull protected canonical";
     $props["prop"]        = "str notNull";
     
@@ -87,6 +90,10 @@ class CExClassField extends CMbObject {
   
   function loadRefExClass($cache = true){
     return $this->_ref_ex_class = $this->loadFwdRef("ex_class_id", $cache);
+  }
+  
+  function loadRefConcept($cache = true){
+    return $this->_ref_concept = $this->loadFwdRef("concept_id", $cache);
   }
   
   function loadRefTranslation() {
@@ -126,11 +133,23 @@ class CExClassField extends CMbObject {
   }
   
   function getSpecObject(){
-    $ex_class = $this->loadRefExClass();
-    
     $dummy = new CExObject;
-    $dummy->_ex_class_id = $ex_class->_id;
-    $dummy->setExClass();
+		
+  	if ($this->ex_class_id) {
+      $ex_class = $this->loadRefExClass();
+	    $dummy->_ex_class_id = $ex_class->_id;
+	    $dummy->setExClass();
+		}
+		else {
+			$ex_class = new CExClass;
+			$ex_class->{$this->name} = null;
+			$ex_class->_specs[$this->name] = $this->prop;
+	    $ex_class->_props = $ex_class->getProps();
+	    $ex_class->_specs = $ex_class->getSpecs();
+			
+			$dummy->_ref_ex_class = $ex_class;
+		}
+    
     $dummy->_ref_ex_class->_ref_fields[$this->_id] = $this;
     $dummy->_class_name = get_class($dummy);
     
@@ -150,36 +169,40 @@ class CExClassField extends CMbObject {
     
     $ds = $this->_spec->ds;
     
-    if (!$this->_id) {
-      $table_name = $this->getTableName();
-      $sql_spec = $this->getSQLSpec();
-      $query = "ALTER TABLE `$table_name` ADD `$this->name` $sql_spec";
-      
-      if (!$ds->query($query)) {
-        return "Le champ '$this->name' n'a pas pu être ajouté à la table '$table_name' (".$ds->error().")";
-      }
-      
-      $spec_type = $this->getSpecObject()->getSpecType();
-      
-      // ajout de l'index
-      if (in_array($spec_type, self::$_indexed_types)) {
-        $query = "ALTER TABLE `$table_name` ADD INDEX (`$this->name`)";
-        
-        if (!$ds->query($query)) {
-          //return "L'index sur le champ '$this->name' n'a pas pu être ajouté (".$ds->error().")";
-        }
-      }
-    }
-    
-    else if ($this->fieldModified("name") || $this->fieldModified("prop")) {
-      $table_name = $this->getTableName();
-      $sql_spec = $this->getSQLSpec();
-      $query = "ALTER TABLE `$table_name` CHANGE `{$this->_old->name}` `$this->name` $sql_spec";
-
-      if (!$ds->query($query)) {
-        return "Le champ '$this->name' n'a pas pu être mis à jour (".$ds->error().")";
-      }
-    }
+		$this->completeField("ex_class_id");
+		
+		if ($this->ex_class_id) {
+	    if (!$this->_id) {
+	      $table_name = $this->getTableName();
+	      $sql_spec = $this->getSQLSpec();
+	      $query = "ALTER TABLE `$table_name` ADD `$this->name` $sql_spec";
+	      
+	      if (!$ds->query($query)) {
+	        return "Le champ '$this->name' n'a pas pu être ajouté à la table '$table_name' (".$ds->error().")";
+	      }
+	      
+	      $spec_type = $this->getSpecObject()->getSpecType();
+	      
+	      // ajout de l'index
+	      if (in_array($spec_type, self::$_indexed_types)) {
+	        $query = "ALTER TABLE `$table_name` ADD INDEX (`$this->name`)";
+	        
+	        if (!$ds->query($query)) {
+	          //return "L'index sur le champ '$this->name' n'a pas pu être ajouté (".$ds->error().")";
+	        }
+	      }
+	    }
+	    
+	    else if ($this->fieldModified("name") || $this->fieldModified("prop")) {
+	      $table_name = $this->getTableName();
+	      $sql_spec = $this->getSQLSpec();
+	      $query = "ALTER TABLE `$table_name` CHANGE `{$this->_old->name}` `$this->name` $sql_spec";
+	
+	      if (!$ds->query($query)) {
+	        return "Le champ '$this->name' n'a pas pu être mis à jour (".$ds->error().")";
+	      }
+	    }
+		}
     
     $locale       = $this->_locale;
     $locale_desc  = $this->_locale_desc;
@@ -232,7 +255,9 @@ class CExClassField extends CMbObject {
       return $msg;
     }
     
-    if (!$this->_dont_drop_column) {
+    $this->completeField("ex_class_id");
+    
+    if ($this->ex_class_id && !$this->_dont_drop_column) {
       $this->completeField("name");
       
       $table_name = $this->loadRefExClass()->getTableName();

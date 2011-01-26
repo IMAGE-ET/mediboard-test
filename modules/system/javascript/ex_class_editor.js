@@ -8,6 +8,14 @@ var ExClass = {
     url.addParam("ex_class_id", this.id);
     url.requestUpdate("exClassEditor");
   },
+  editCallback: function(id) {
+    ExClass.edit(id);
+		ExClass.refreshList();
+  },
+	refreshList: function(){
+    var url = new Url("system", "ajax_list_ex_class");
+    url.requestUpdate("exClassList");
+	},
   setEvent: function(select) {
     var form = select.form;
     var parts = $V(select).split(".");
@@ -152,15 +160,18 @@ var ExClass = {
 };
 
 var ExField = {
-  edit: function(id, ex_class_id) {
+  edit: function(id, ex_class_id, target) {
     if (window.exClassTabs) {
       exClassTabs.setActiveTab("fields-specs");
     }
+		
     var url = new Url("system", "ajax_edit_ex_field");
-    url.addParam("ex_field_id", id);
-    url.addParam("ex_class_id", ex_class_id);
-    url.requestUpdate("exFieldEditor");
+		
+		url.addParam("ex_field_id", id);
+		url.addParam("ex_class_id", ex_class_id);
+    url.requestUpdate(target || "exFieldEditor");
   },
+	editCallback: function(id, obj) {},
   create: function(ex_class_id) {
     this.edit("0", ex_class_id);
   },
@@ -177,6 +188,18 @@ var ExField = {
 	    
 	  return str;
 	}
+};
+
+var ExConcept = ExField;
+
+ExConcept.refreshList =  function(){
+  var url = new Url("system", "ajax_list_ex_concept");
+  url.requestUpdate("exConceptList");
+};
+
+ExConcept.editCallback = function(id, obj) {
+	ExConcept.refreshList();
+  ExConcept.edit(id);
 };
 
 var ExFieldSpec = {

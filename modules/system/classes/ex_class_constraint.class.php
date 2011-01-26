@@ -55,7 +55,6 @@ class CExClassConstraint extends CMbObject {
 		
 	  $spec = $ref_object->_specs[$this->field];
 	  
-	  
 	  if ($spec instanceof CRefSpec) {
 	    $object = new $spec->class;
 	    $object->load($this->value);

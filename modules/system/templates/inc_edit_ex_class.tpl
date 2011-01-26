@@ -21,7 +21,7 @@
         <input type="hidden" name="m" value="system" />
         <input type="hidden" name="dosql" value="do_ex_class_aed" />
         <input type="hidden" name="del" value="0" />
-        <input type="hidden" name="callback" value="ExClass.edit" />
+        <input type="hidden" name="callback" value="ExClass.editCallback" />
         {{mb_key object=$ex_class}}
         
         {{mb_field object=$ex_class field=host_class hidden=true}}

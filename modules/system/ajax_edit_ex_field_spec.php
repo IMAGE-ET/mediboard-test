@@ -81,19 +81,22 @@ uksort($options, "order_specs");
 if ($spec instanceof CEnumSpec && $ex_field_id) {
   $ex_field = new CExClassField;
   $ex_field->load($ex_field_id);
+	
   $enum_trans = $ex_field->loadRefEnumTranslations();
   
   foreach($enum_trans as $_enum_trans) {
     $_enum_trans->updateLocales();
   }
-  
-  $ex_object = new CExObject;
-  $ex_object->_ex_class_id = $ex_field->ex_class_id;
-  $ex_object->setExClass();
-  
-  if ($ex_object->_specs[$field] instanceof CEnumSpec) {
-    $spec = $ex_object->_specs[$field];
-  }
+	  
+  if ($ex_field->ex_class_id) {
+	  $ex_object = new CExObject;
+	  $ex_object->_ex_class_id = $ex_field->ex_class_id;
+	  $ex_object->setExClass();
+	  
+	  if ($ex_object->_specs[$field] instanceof CEnumSpec) {
+	    $spec = $ex_object->_specs[$field];
+	  }
+	}
 }
 
 $classes = $spec instanceof CRefSpec ? CApp::getMbClasses() : array();
