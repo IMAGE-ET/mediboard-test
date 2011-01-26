@@ -20,8 +20,7 @@ if ($receiver_class_name) {
   $receiver = new $receiver_class_name;
 } else {
   if ($receiver_guid) {
-    $object = new CMbObject();
-    $receiver = $object->loadFromGuid($receiver_guid);
+    $receiver = CMbObject::loadFromGuid($receiver_guid);
     if ($receiver->_id) {
       $receiver->loadRefGroup();
       $receiver->loadRefsExchangesSources();

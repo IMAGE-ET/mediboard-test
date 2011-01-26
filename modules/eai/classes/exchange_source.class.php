@@ -31,7 +31,7 @@ class CExchangeSource extends CMbObject {
   var $_wanted_type       = null;
   var $_incompatible      = false;
   var $_reachable         = null;
-  var $_errors            = null;
+  var $_message           = null;
   
   function getProps() {
     $specs = parent::getProps();
@@ -126,6 +126,10 @@ class CExchangeSource extends CMbObject {
   
   function receive() {}
   
+  /**
+   * Source is reachable ?
+   * @return boolean reachable
+   */
   function isReachable() {}
 }
 ?>

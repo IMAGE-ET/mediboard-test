@@ -9,12 +9,16 @@
  * @link     http://www.mediboard.org
 *}}
 
+<script type="text/javascript">
+  InteropReceiver.receiver_guid = '{{$receiver->_guid}}';
+</script>
+
 {{if ($receiver->_class_name != "CInteropReceiver") && $can->edit}}
-  <form name="edit{{$receiver->_guid}}" action="?m={{$m}}" method="post" onsubmit="return onSubmitFormAjax(this, { 
-      onComplete: function() { refreshReceivers(); refreshReceiverExchangesSources('{{$receiver->_guid}}');  }})">
+  <form name="edit{{$receiver->_guid}}" action="?m={{$m}}" method="post" onsubmit="return onSubmitFormAjax(this);">
     {{mb_key object=$receiver}}
     {{mb_class object=$receiver}}
     <input type="hidden" name="del" value="0" />
+    <input type="hidden" name="callback" value="InteropReceiver.refreshReceiversAndReceiver" />
                   
     <table class="form">
       <tr>
@@ -59,7 +63,7 @@
         <td class="button" colspan="2">
           {{if $receiver->_id}}
             <button class="modify" type="submit">{{tr}}Save{{/tr}}</button>
-            <button type="button" class="trash" onclick="confirmDeletion(this.form,{typeName:'',objName:'{{$receiver->_view|smarty:nodefaults|JSAttribute}}'},ajax:true)">
+            <button type="button" class="trash" onclick="confirmDeletion(this.form,{typeName:'',objName:'{{$receiver->_view|smarty:nodefaults|JSAttribute}}',ajax:true})">
               {{tr}}Delete{{/tr}}
             </button>
           {{else}}

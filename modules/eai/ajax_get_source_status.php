@@ -21,9 +21,11 @@ $source = $object->loadFromGuid($source_guid);
 
 $source->isReachable();
 
-$data = array ("reachable" => $source->_reachable,
-               "errors"    => utf8_encode($source->_errors));
+$status = array ("reachable" => $source->_reachable,
+                 "message"   => utf8_encode($source->_message),
+                 "name"      => $source->name
+          );
 
-echo json_encode($data);
+echo json_encode($status);
 
 ?>

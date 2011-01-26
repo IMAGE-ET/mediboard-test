@@ -9,25 +9,7 @@
  * @link     http://www.mediboard.org
 *}}
 
-<script type="text/javascript">
-  function refreshReceiver(receiver_guid, receiver_class_name){
-	  var url = new Url("eai", "ajax_refresh_receiver");
-	  url.addParam("receiver_guid", receiver_guid);
-	  url.addParam("receiver_class_name", receiver_class_name);
-	  url.requestUpdate("receiver");
-  }
-
-  function refreshReceivers(){
-    var url = new Url("eai", "ajax_refresh_receivers");
-    url.requestUpdate("receivers");
-  }
-
-  function refreshReceiverExchangesSources(receiver_guid){
-    var url = new Url("eai", "ajax_refresh_receiver_exchanges_sources");
-    url.addParam("receiver_guid", receiver_guid);
-    url.requestUpdate("receiver_exchanges_sources");
-  }
-</script>
+{{mb_include_script module=eai script=interop_receiver}}
 
 <table class="main">
   <tr>

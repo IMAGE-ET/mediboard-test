@@ -14,9 +14,8 @@ CCanDo::checkRead();
 
 $receiver_guid = CValue::getOrSession("receiver_guid");
 
-$object = new CMbObject();
-$receiver = $object->loadFromGuid($receiver_guid);
-$receiver->loadRefsExchangesSources();    
+$receiver = CMbObject::loadFromGuid($receiver_guid);
+$receiver->loadRefsExchangesSources();
 
 // Création du template
 $smarty = new CSmartyDP();

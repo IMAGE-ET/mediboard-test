@@ -11,6 +11,10 @@
  * @link     http://www.mediboard.org
  */
 
+/**
+ * Class CInteropReceiver 
+ * Interoperability Receiver
+ */
 class CInteropReceiver extends CMbObject {
   // DB Fields
   var $nom         = null;
@@ -65,8 +69,14 @@ class CInteropReceiver extends CMbObject {
   function loadRefGroup() {
     return $this->_ref_group = $this->loadFwdRef("group_id", 1);
   }
-
-  function loadRefsExchangesSources() {}
+  
+  /**
+   * Get exchanges sources
+   * 
+   * @return void
+   */
+  function loadRefsExchangesSources() {
+  }
   
   function updateFormFields() {
     parent::updateFormFields();
@@ -75,26 +85,23 @@ class CInteropReceiver extends CMbObject {
     $this->_type_echange = $this->_class_name;
   }
   
+  /**
+   * Get child receivers
+   * 
+   * @return array CInteropReceiver collection 
+   */
   static function getChildReceivers() {    
     return CApp::getChildClasses("CInteropReceiver");
   }
   
+  /**
+   * Receiver is reachable ?
+   * 
+   * @return boolean reachable
+   */
   function isReachable() {
     if (!$this->_ref_exchanges_sources) {
       $this->loadRefsExchangesSources();
-    }
-    
-    foreach ($this->_ref_exchanges_sources as $_exchange_source) {
-      if ($_exchange_source->_id) {
-        $this->_exchanges_sources_save++;
-      }
-      $_exchange_source->isReachable();
-      
-      if (!$_exchange_source->_reachable) {
-        $this->_reachable = false;
-        continue;
-      }
-      $this->_reachable = true;
     }
   }
 }

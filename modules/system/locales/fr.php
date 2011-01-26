@@ -625,6 +625,7 @@ $locales['CSourceSOAP-type_echange-court'] = 'Type échange';
 $locales['CSourceSOAP-type_echange-desc'] = 'Type échange (hprimxml, hprim21, ...)';
 $locales['CSourceSOAP-unable-to-parse-url'] = 'Impossible d\'analyser l\'url : \'%s\'';
 $locales['CSourceSOAP-unreachable-source'] = 'Impossible de joindre la source de donnée : \'%s\'';
+$locales['CSourceSOAP-reachable-source'] = 'Connexion effectuée à la source de donnée : \'%s\'';
 $locales['CSourceSOAP-user'] = 'Utilisateur';
 $locales['CSourceSOAP-user-court'] = 'Utilisateur';
 $locales['CSourceSOAP-user-desc'] = 'Utilisateur source SOAP';
