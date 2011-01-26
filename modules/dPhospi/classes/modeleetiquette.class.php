@@ -97,7 +97,7 @@ class CModeleEtiquette extends CMbMetaObject {
 		
 		// Création de la grille d'étiquettes et écriture du contenu.
 		for ($i = 0; $i < $this->nb_lignes * $this->nb_colonnes; $i++) {
-		  if (round($pdf->GetX()) >= $this->largeur_page ) {
+		  if (round($pdf->GetX()) >= ($this->largeur_page - 2 * $this->marge_horiz)) {
 		    $pdf->SetX(0);
 		    $pdf->SetLeftMargin($this->marge_horiz);
 		    $pdf->SetY($pdf->GetY() + $hauteur_etiq);
@@ -119,7 +119,7 @@ class CModeleEtiquette extends CMbMetaObject {
 		  $pdf->SetY($y);
 		  $pdf->SetX($x);
 		}
-		$pdf->Output($this->nom.'.pdf',"I");
+		$pdf->Output($this->nom.'.pdf', "I");
   }
 }
 ?>
