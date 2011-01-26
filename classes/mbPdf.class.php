@@ -110,6 +110,15 @@ class CMbPdf extends TCPDF {
   		$i++;
   	}
   }
+  
+  function OutPut($name='',$dest='') {
+    if ($dest == "I") {
+      // Needs this header for internet explorer
+      header("Accept-Ranges: bytes");
+    }
+    return parent::Output($name, $dest);
+  }
+  
 }
 
 
