@@ -37,6 +37,8 @@ class CPrescriptionLineMedicament extends CPrescriptionLine {
 	var $stupefiant = null;
   
   var $_most_used_poso = null;
+  var $_debut_reel = null;
+	var $_fin_reelle = null;
   
   static $corresp_voies = array("Voie parentérale" => array("Voie intraveineuse", "Voie intramusculaire"));
                                                             
@@ -189,6 +191,8 @@ class CPrescriptionLineMedicament extends CPrescriptionLine {
 		$specs["stupefiant"]             = "bool default|0";
 		$specs["_ucd_view"]              = "str";
 		$specs["_dci_view"]              = "str";
+		$specs["_fin_reelle"]            = "dateTime";
+    $specs["_debut_reel"]            = "dateTime";
     return $specs;
   }
   

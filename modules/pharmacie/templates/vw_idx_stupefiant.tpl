@@ -6,28 +6,22 @@ Main.add(function(){
 	updateVisibleList();
 });
 
-updateListPrescriptions = function(print){
+updateListPrescriptions = function(order_col, order_way){
 	var url = new Url("pharmacie", "ajax_vw_list_prescriptions_stup");
 	url.addParam("date_min", $V(oFilterForm._date_entree));
 	url.addParam("date_max", $V(oFilterForm._date_sortie));
-	url.addParam("print", print);
-	if(print){
-	  url.popup(600, 600, "Prescriptions de stupéfiants");
-	} else {
-	  url.requestUpdate("prescriptions");
-	}
+  url.addParam("order_col", order_col);
+  url.addParam("order_way", order_way);
+	url.requestUpdate("prescriptions");
 }
 
-updateListAdministrations = function(print){
+updateListAdministrations = function(order_col, order_way){
   var url = new Url("pharmacie", "ajax_vw_list_administrations_stup");
   url.addParam("date_min", $V(oFilterForm._date_entree));
   url.addParam("date_max", $V(oFilterForm._date_sortie));
-  url.addParam("print", print);
-	if(print){
-	  url.popup(600, 600, "Administrations de stupéfiants");
-	} else {
-    url.requestUpdate("administrations");
-	}
+	url.addParam("order_col", order_col);
+	url.addParam("order_way", order_way);
+  url.requestUpdate("administrations");
 }
 
 updateVisibleList = function(){
@@ -75,14 +69,14 @@ function viewDossierSoin(sejour_id, date){
 </form>
 
 <ul id="stupefiants" class="control_tabs">
-	<li onmousedown="updateListPrescriptions();">
+	<li onmousedown="updateListPrescriptions('patient_id', 'ASC');">
 		<a href="#prescriptions">
-			Prescriptions <button type="button" class="print notext" onmousedown="if($('prescriptions').visible()){ Event.stop(event);}  updateListPrescriptions(true);">{{tr}}Print{{/tr}}</button>
+			Prescriptions <button type="button" class="print notext" onmousedown="if($('prescriptions').visible()){ Event.stop(event); $('list-prescriptions-stup').print()};">{{tr}}Print{{/tr}}</button>
 	  </a>
 	</li>
-	<li onmousedown="updateListAdministrations();">
+	<li onmousedown="updateListAdministrations('patient_id', 'ASC');">
 		<a href="#administrations">
-			Administrations <button type="button" class="print notext" onmousedown="if($('administrations').visible()) { Event.stop(event);} updateListAdministrations(true);">{{tr}}Print{{/tr}}</button>
+			Administrations <button type="button" class="print notext" onmousedown="if($('administrations').visible()) { Event.stop(event);} $('list-administrations-stup').print()">{{tr}}Print{{/tr}}</button>
 		</a>
 	</li>
 </ul>
