@@ -83,7 +83,7 @@ function graphOccupationSalle($debut = null, $fin = null, $prat_id = 0, $salle_i
   }
   if($prat_id) {
     $query .= "\nAND operations.chir_id = '$prat_id' AND plagesop.chir_id = '$prat_id'"; 
-    $query_hors_plage .= "\nAND operations.chir_id = '$prat_id' AND plagesop.chir_id = '$prat_id'";
+    $query_hors_plage .= "\nAND operations.chir_id = '$prat_id'";
   }
   if($discipline_id) {
     $query .= "\nAND users_mediboard.discipline_id = '$discipline_id'";
@@ -155,7 +155,7 @@ function graphOccupationSalle($debut = null, $fin = null, $prat_id = 0, $salle_i
   
   if($prat_id) {
     $query .= "\nAND operations.chir_id = '$prat_id' AND plagesop.chir_id = '$prat_id'"; 
-    $query_hors_plage .= "\nAND operations.chir_id = '$prat_id' AND plagesop.chir_id = '$prat_id'";
+    $query_hors_plage .= "\nAND operations.chir_id = '$prat_id'";
   }
   
   if($discipline_id) {
@@ -247,7 +247,7 @@ function graphOccupationSalle($debut = null, $fin = null, $prat_id = 0, $salle_i
   }
   if($prat_id) {
     $query .= "\nAND operations.chir_id = '$prat_id' AND plagesop.chir_id = '$prat_id'";
-    $query_hors_plage .= "\nAND operations.chir_id = '$prat_id' AND plagesop.chir_id = '$prat_id'";
+    $query_hors_plage .= "\nAND operations.chir_id = '$prat_id'";
   }
   if($discipline_id) {
     $query .= "\nAND users_mediboard.discipline_id = '$discipline_id'";
@@ -336,7 +336,7 @@ function graphOccupationSalle($debut = null, $fin = null, $prat_id = 0, $salle_i
   }
   if($prat_id) {
     $query .= "\nAND operations.chir_id = '$prat_id' AND plagesop.chir_id = '$prat_id'";
-    $query_hors_plage .= "\nAND operations.chir_id = '$prat_id' AND plagesop.chir_id = '$prat_id'"; 
+    $query_hors_plage .= "\nAND operations.chir_id = '$prat_id'"; 
   }
   
   if($discipline_id) {
