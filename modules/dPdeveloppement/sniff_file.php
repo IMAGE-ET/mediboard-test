@@ -15,6 +15,7 @@ if (!class_exists("CMbCodeSniffer")) {
 }
 
 $file = CValue::get("file");
+$file = str_replace(":", "/", $file);
 $sniffer = new CMbCodeSniffer;
 echo "<pre>";
 $sniffer->process($file);

@@ -10,7 +10,6 @@
   <exclude-pattern>/lib/</exclude-pattern>
   <exclude-pattern>/libpkg/</exclude-pattern>
   <exclude-pattern>/locales/</exclude-pattern>
-  <exclude-pattern>/modules/</exclude-pattern>
   <exclude-pattern>/templates/</exclude-pattern>
   <exclude-pattern>/tmp/</exclude-pattern>
 
@@ -58,6 +57,7 @@
 	  <!-- my_function() are allowed -->
     <exclude name="PEAR.NamingConventions.ValidFunctionName.FunctionNoCaptial" />
     <exclude name="PEAR.ControlStructures.ControlSignature" />
+    <exclude name="PEAR.Commenting.FileComment.MissingVersion" />
   </rule>
 
   <!-- Use 2 spaces indent -->
