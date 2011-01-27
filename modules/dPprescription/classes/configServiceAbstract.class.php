@@ -19,13 +19,17 @@ class CConfigServiceAbstract extends CMbObject {
     return $specs;
   }
   
-  static function setConfigService($name, $config){
+  static function setSHM($name, $config){
 		SHM::put($name, $config);
   }  
   
-  static function getConfigService($name){
+  static function getSHM($name) {
     return SHM::get($name);
   }
+	
+	static function rembSHM($name) {
+    return SHM::rem($name);
+	}
 }
 
 ?>

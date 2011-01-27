@@ -21,7 +21,7 @@ if(!$service_id){
   $service_id = "none";
 }
 
-$configs = CConfigService::getConfigForService($service_id);
+$configs = CConfigService::getAllFor($service_id);
 
 $matin = range($configs["Borne matin min"], $configs["Borne matin max"]);
 $soir = range($configs["Borne soir min"], $configs["Borne soir max"]);

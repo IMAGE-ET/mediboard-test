@@ -344,7 +344,7 @@ class CPrescriptionLineMix extends CMbObject {
       $service_id = "none";
     }  
 	  
-    $configs = CConfigService::getConfigForService($service_id);
+    $configs = CConfigService::getAllFor($service_id);
 
     // modification recente si moins de $nb_hours heures
     $nb_hours = $configs["Affichage alertes de modifications"];

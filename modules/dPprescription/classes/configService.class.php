@@ -34,10 +34,10 @@ class CConfigService extends CConfigServiceAbstract {
   /*
    * Chargement des configs en fonction du service
    */
-  static function getConfigForService($service_id = "none"){
+  static function getAllFor($service_id = "none"){
     $group_id = CGroups::loadCurrent()->_id;
     if(!isset(self::$configs_SHM)){
-      self::$configs_SHM = $configs = self::getConfigService("conf-service");
+      self::$configs_SHM = $configs = self::getSHM("conf-service");
     } else {
       $configs = self::$configs_SHM;
     }
@@ -54,7 +54,7 @@ class CConfigService extends CConfigServiceAbstract {
    */ 
   static function setConfigInSHM(){
     $configs = self::getAllConfigs();
-    self::setConfigService("conf-service", $configs);
+    self::setSHM("conf-service", $configs);
     return $configs;
   }
   

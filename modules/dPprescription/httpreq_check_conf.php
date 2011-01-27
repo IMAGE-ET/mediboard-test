@@ -21,10 +21,10 @@ switch($name){
 }
 
 if($action == "check"){
-  if(null == $config->getConfigService($name)){
+  if(null == $config->getSHM($name)){
     $etat = "vide";
   } else {
-    if($config->getConfigService($name) == $config->getAllConfigs()){
+    if($config->getSHM($name) == $config->getAllConfigs()){
       $etat = "ok";
     }
   }
@@ -32,7 +32,7 @@ if($action == "check"){
 
 if($action == "create"){
   $config->setConfigInSHM();
-  if($config->getConfigService($name) == $config->getAllConfigs()){
+  if($config->getSHM($name) == $config->getAllConfigs()){
     $etat = "ok";
   }  
 }

@@ -33,15 +33,15 @@ class CConfigMomentUnitaire extends CConfigServiceAbstract {
   /*
    * Chargement des configs en fonction du service
    */
-  function getConfigMomentForService($service_id = "none"){
+  static function getAllFor($service_id = "none"){
     $group_id = CGroups::loadCurrent()->_id;
     if(!isset(self::$configs_SHM)){
-      self::$configs_SHM = $configs = $this->getConfigService("conf-moment");
+      self::$configs_SHM = $configs = self::getSHM("conf-moment");
     } else {
       $configs = self::$configs_SHM;
     }
     if($configs == null){
-      $configs = $this->setConfigInSHM();
+      $configs = self::setConfigInSHM();
       self::$configs_SHM = $configs;
     }
     return $configs[$group_id][$service_id];
@@ -50,15 +50,15 @@ class CConfigMomentUnitaire extends CConfigServiceAbstract {
   /*
    * Sauvegarde des configs dans la SHM
    */ 
-  function setConfigInSHM(){
-    $configs = $this->getAllConfigs();
-    $this->setConfigService("conf-moment", $configs);
+  static function setConfigInSHM(){
+    $configs = self::getAllConfigs();
+    self::setSHM("conf-moment", $configs);
   }
   
   /*
    * Calcul de la totalité des configs pour les stocker dans la SHM
    */
-  function getAllConfigs(){
+  static function getAllConfigs(){
     // Chargement des etablissements
     $group = new CGroups();
     $groups = $group->loadList();
