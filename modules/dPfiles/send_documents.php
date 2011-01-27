@@ -36,8 +36,8 @@ $count["CCompteRendu"] = $document->countList($where);
 
 // Sending
 $max_send = CAppUI::conf("dPfiles CDocumentSender auto_max_send");
-$sent = 0;
 foreach ($items as $_items) {
+  $sent = 0;
   foreach ($_items as $_item) {
 	  $_item->loadTargetObject();
 	  if ($do && !$_item->_send_problem) {
