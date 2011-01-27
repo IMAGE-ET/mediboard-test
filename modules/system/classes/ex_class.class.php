@@ -110,7 +110,15 @@ class CExClass extends CMbObject {
   
   function getAvailableFields(){
     $object = new $this->host_class;
-    return $this->_host_class_fields = array_keys($object->getDBFields());
+    $this->_host_class_fields = $object->_specs;
+		
+		foreach($this->_host_class_fields as $_field => $_spec) {
+			if ($_field[0] === "_") {
+				unset($this->_host_class_fields[$_field]);
+			}
+		}
+		
+		return $this->_host_class_fields;
   }
   
   function loadExObjects(CMbObject $object) {

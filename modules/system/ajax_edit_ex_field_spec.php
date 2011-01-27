@@ -72,7 +72,7 @@ function order_specs($a, $b) {
 	return ($key_a === false ? 1000 : $key_a) - ($key_b === false ? 1000 : $key_b);
 }
 
-$spec = @CMbFieldSpecFact::getSpec($object, $field, $prop);
+$spec = @CMbFieldSpecFact::getSpecWithClassName($class, $field, $prop);
 $options = $spec->getOptions();
 
 uksort($options, "order_specs");
@@ -87,16 +87,21 @@ if ($spec instanceof CEnumSpec && $ex_field_id) {
   foreach($enum_trans as $_enum_trans) {
     $_enum_trans->updateLocales();
   }
-	  
+
   if ($ex_field->ex_class_id) {
-	  $ex_object = new CExObject;
-	  $ex_object->_ex_class_id = $ex_field->ex_class_id;
-	  $ex_object->setExClass();
-	  
-	  if ($ex_object->_specs[$field] instanceof CEnumSpec) {
-	    $spec = $ex_object->_specs[$field];
-	  }
-	}
+    $ex_object = new CExObject;
+    $ex_object->_ex_class_id = $ex_field->ex_class_id;
+    $ex_object->setExClass();
+    
+    if ($ex_object->_specs[$field] instanceof CEnumSpec) {
+      $spec = $ex_object->_specs[$field];
+    }
+  }
+
+  else {
+    // A second timpe to get the enum locales
+    $spec = @CMbFieldSpecFact::getSpecWithClassName($class, $field, $prop);
+  }
 }
 
 $classes = $spec instanceof CRefSpec ? CApp::getMbClasses() : array();

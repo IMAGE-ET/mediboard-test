@@ -13,7 +13,24 @@ CCanDo::checkAdmin();
 $ex_class = new CExClass;
 $list_ex_class = $ex_class->loadList(null, "host_class, event");
 
+$class_tree = array();
+
+foreach($list_ex_class as $_ex_class) {
+	$host_class = $_ex_class->host_class;
+  $event = $_ex_class->event;
+	
+	if (!isset($class_tree[$host_class])) {
+		$class_tree[$host_class] = array();
+	}
+	
+  if (!isset($class_tree[$host_class][$event])) {
+    $class_tree[$host_class][$event] = array();
+  }
+	
+	$class_tree[$host_class][$event][] = $_ex_class;
+}
+
 // Création du template
 $smarty = new CSmartyDP();
-$smarty->assign("list_ex_class", $list_ex_class);
+$smarty->assign("class_tree", $class_tree);
 $smarty->display("inc_list_ex_class.tpl");

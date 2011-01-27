@@ -15,6 +15,8 @@ $where = array("ex_class_id" => "IS NULL");
 $ex_concept = new CExClassField;
 $list_ex_concept = $ex_concept->loadList($where, "name");
 
+CMbArray::invoke($list_ex_concept, "updateTranslation");
+
 // Création du template
 $smarty = new CSmartyDP();
 $smarty->assign("list_ex_concept", $list_ex_concept);

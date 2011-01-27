@@ -12,7 +12,7 @@
 
 <script type="text/javascript">
 selectExClass = function(element, object_guid, event, _element_id) {
-  var view = element.option ? element.options[element.options.selectedIndex].innerHTML : element.innerHTML;
+  var view = element.options ? element.options[element.options.selectedIndex].innerHTML : element.innerHTML;
   showExClassForm($V(element) || element.value, object_guid, view, null, event, _element_id);
   element.selectedIndex = 0;
 }

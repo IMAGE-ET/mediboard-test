@@ -6,14 +6,11 @@
   <tr>
     <th class="title" colspan="1">Concepts</th>
   </tr>
-  <tr>
-    <th>{{mb_title class=CExClassField field=name}}</th>
-  </tr>
   {{foreach from=$list_ex_concept item=_ex_concept}}
     <tr>
       <td>
         <a href="#1" onclick="ExConcept.edit({{$_ex_concept->_id}}, null, 'exClassEditor')">
-          <strong>{{tr}}{{$_ex_concept->name}}{{/tr}}</strong>
+          {{$_ex_concept->_locale}}
         </a>
       </td
     </tr>

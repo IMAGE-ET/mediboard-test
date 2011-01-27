@@ -133,27 +133,7 @@ class CExClassField extends CMbObject {
   }
   
   function getSpecObject(){
-    $dummy = new CExObject;
-		
-  	if ($this->ex_class_id) {
-      $ex_class = $this->loadRefExClass();
-	    $dummy->_ex_class_id = $ex_class->_id;
-	    $dummy->setExClass();
-		}
-		else {
-			$ex_class = new CExClass;
-			$ex_class->{$this->name} = null;
-			$ex_class->_specs[$this->name] = $this->prop;
-	    $ex_class->_props = $ex_class->getProps();
-	    $ex_class->_specs = $ex_class->getSpecs();
-			
-			$dummy->_ref_ex_class = $ex_class;
-		}
-    
-    $dummy->_ref_ex_class->_ref_fields[$this->_id] = $this;
-    $dummy->_class_name = get_class($dummy);
-    
-    return $this->_spec_object = CMbFieldSpecFact::getSpec($dummy, $this->name, $this->prop);
+    return $this->_spec_object = CMbFieldSpecFact::getSpecWithClassName("CExObject", $this->name, $this->prop);
   }
   
   function getSQLSpec(){
@@ -171,6 +151,7 @@ class CExClassField extends CMbObject {
     
 		$this->completeField("ex_class_id");
 		
+		// If this is not a concept
 		if ($this->ex_class_id) {
 	    if (!$this->_id) {
 	      $table_name = $this->getTableName();
@@ -257,6 +238,7 @@ class CExClassField extends CMbObject {
     
     $this->completeField("ex_class_id");
     
+		// If this is not a concept
     if ($this->ex_class_id && !$this->_dont_drop_column) {
       $this->completeField("name");
       

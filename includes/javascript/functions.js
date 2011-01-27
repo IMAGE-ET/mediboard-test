@@ -94,7 +94,7 @@ var WaitingMessage = {
     receiver.insert({top: coverContainer});
     
     cover.setStyle({
-      opacity: 0.4,
+      opacity: 0.3,
       position: 'absolute',
       left: -parseInt(receiver.getStyle("padding-left"))+"px"
     }).show().clonePosition(element, {setLeft: false, setTop: false});

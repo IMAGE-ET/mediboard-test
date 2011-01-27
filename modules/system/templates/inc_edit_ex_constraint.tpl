@@ -18,7 +18,7 @@ toggleObjectSelector = function(select) {
 	var isRef = selected.hasClassName('ref');
 	$('object_selector').setVisible(isRef);
   $(select.form.elements.value).up('div').setVisible(!isRef);
-	select.form._object_class.value = selected.className.split('|')[1];
+	$V(select.form._object_class, selected.className.split('|')[1]);
 }
 </script>
 
@@ -37,13 +37,12 @@ toggleObjectSelector = function(select) {
       <td>
         <select name="field" class="{{$ex_constraint->_props.field}}" style="max-width: 15em;" tabIndex="1"
                 onchange="toggleObjectSelector(this)">
-          {{foreach from=$ex_constraint->_ref_ex_class->_host_class_fields item=_field name=_constraint}}
-            {{assign var=_object value=$ex_constraint->_ref_object}}
-            {{assign var=_spec value=$_object->_specs.$_field}}
+          {{foreach from=$ex_constraint->_ref_ex_class->_host_class_fields key=_field item=_spec name=_constraint}}
+            {{assign var=_object value=$ex_constraint->_ref_target_object}}
             
-            {{if $_field != $ex_constraint->_ref_object->_spec->key}}
+            {{if $_field != $ex_constraint->_ref_target_object->_spec->key}}
               <option {{if $_spec instanceof CRefSpec}}class="ref class|{{$_spec->class}}"{{/if}} value="{{$_field}}" {{if $ex_constraint->field==$_field}}selected="selected"{{/if}}>
-                {{tr}}{{$ex_constraint->_ref_ex_class->host_class}}-{{$_field}}{{/tr}}
+								{{tr}}{{$ex_constraint->_ref_ex_class->host_class}}-{{$_field}}{{/tr}}
               </option>
             {{/if}}
           {{/foreach}}
@@ -63,11 +62,11 @@ toggleObjectSelector = function(select) {
     <tr>
       <th>{{mb_label object=$ex_constraint field=value}}</th>
       <td>
-      	<div {{if $ex_constraint->_ref_target_object}}style="display: none"{{/if}}>
+      	<div {{if $ex_constraint->_ref_target_object->_id}}style="display: none"{{/if}}>
 				  {{mb_field object=$ex_constraint field=value tabIndex="3"}}
 				</div>
 				
-        <div id="object_selector" {{if !$ex_constraint->_ref_target_object}}style="display: none"{{/if}}>
+        <div id="object_selector" {{if !$ex_constraint->_ref_target_object->_id}}style="display: none"{{/if}}>
           <input type="hidden" name="_object_class" value="{{$ex_constraint->_ref_target_object->_class_name}}" />
           <input type="text" name="_object_view" readonly="readonly" value="{{$ex_constraint->_ref_target_object}}" />
           <button type="button" class="search notext" onclick="ObjectSelector.init()">{{tr}}Search{{/tr}}</button>
