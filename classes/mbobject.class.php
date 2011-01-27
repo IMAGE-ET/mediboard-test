@@ -2304,9 +2304,10 @@ class CMbObject {
 	 */ 
 	
   function hasRecentLog($nb_hours = 1) {
+  	$recent = mbDateTime("- $nb_hours HOURS");
     $where["object_id"   ] = "= '$this->_id'";
     $where["object_class"] = "= '$this->_class_name'";
-    $where["date"] = "> DATE_ADD(NOW(), INTERVAL -$nb_hours HOUR)";
+    $where["date"] = "> '$recent'";
     $log = new CUserLog();
     return $log->countList($where);
   }
