@@ -211,6 +211,24 @@ function smarty_modifier_static($object, $name) {
   return $static;
 }
 
+/**
+ * @abstract True if the module is installed
+ * Example:  {"dPfiles"|module_installed}
+ * @param string $module The module name
+ */
+function smarty_modifier_module_installed($module) {
+  return CModule::getInstalled($module);
+}
+
+/**
+ * @abstract True if the module is active
+ * Example:  {"dPfiles"|module_active}
+ * @param string $module The module name
+ */
+function smarty_modifier_module_active($module) {
+  return CModule::getActive($module);
+}
+
 function JSAttribute($string){
 	return str_replace(
 	  array('\\',   "'",   '"',      "\r",  "\n",  '</'), 
@@ -652,6 +670,8 @@ class CSmartyDP extends Smarty {
     $this->register_modifier("currency"          , "smarty_modifier_currency");
     $this->register_modifier("percent"           , "smarty_modifier_percent");
     $this->register_modifier("spancate"          , "smarty_modifier_spancate");
+    $this->register_modifier("module_installed"  , "smarty_modifier_module_installed");
+    $this->register_modifier("module_active"     , "smarty_modifier_module_active");
     $this->register_modifier("JSAttribute"       , "JSAttribute");
     
     $modules = CModule::getActive();
