@@ -19,10 +19,10 @@ function submitCompteRendu(callback){
     
     if(checkForm(form) && User.id) {
       form.onsubmit=function(){ return true; };
-      submitFormAjax(form, $("systemMsg"), { onComplete: function() {
+      onSubmitFormAjax(form,{ useDollarV: true, onComplete: function() {
         Thumb.changed = false;
         window.callback = callback ? callback : null;
-      }});
+      }},  $("systemMsg"));
       if (window.pdf_thumbnails == 0 && window.opener.Document.refreshList) {
         window.opener.setTimeout(window.opener.Document.refreshList.curry($V(form.object_class), $V(form.object_id), 1000));
       }
