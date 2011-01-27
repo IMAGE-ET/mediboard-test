@@ -65,13 +65,18 @@ foreach($classNames as $className) {
 
 if (null == $sharedClassPaths = SHM::get("class-paths")) {
   CAppUI::stepAjax("Table des classes absente en mémoire", UI_MSG_OK);
-  return;
 }
 
 // Only if there are missing classes, but nothing must happen if classes are added
 if (array_intersect($sharedClassPaths, $classPaths) != $classPaths) {
-  CAppUI::stepAjax("Table des classes périmée", UI_MSG_ERROR);
-  return;
+  CAppUI::stepAjax("Table des classes périmée", UI_MSG_WARNING);
+}
+else {
+  CAppUI::stepAjax("Table des classes à jour", UI_MSG_OK);
 }
 
-CAppUI::stepAjax("Table des classes à jour", UI_MSG_OK);
+// Module specific checkings
+foreach (glob("modules/*/check_shared_memory.php") as $script) {
+  require $script;
+}
+

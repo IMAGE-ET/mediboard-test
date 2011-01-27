@@ -37,16 +37,21 @@ foreach (glob("locales/*", GLOB_ONLYDIR) as $localeDir) {
 
 // Remove class paths
 if (!SHM::get("class-paths")) {
-  CAppUI::stepAjax("Table des classes absente en mémoire", UI_MSG_OK);
-  return;
+  CAppUI::stepAjax("Table des classes absente en mémoire", UI_MSG_WARNING);
+}
+else {
+	if (!SHM::rem("class-paths")) {
+	  CAppUI::stepAjax("Impossible de supprimer la table des classes", UI_MSG_ERROR);
+	}
+	
+	CAppUI::stepAjax("Table des classes supprimée", UI_MSG_OK);
 }
   
-if (!SHM::rem("class-paths")) {
-  CAppUI::stepAjax("Impossible de supprimer la table des classes", UI_MSG_ERROR);
-  return;
-}
-
-CAppUI::stepAjax("Table des classes supprimée", UI_MSG_OK);
 
 CJSLoader::writeLocaleFile();
 CAppUI::stepAjax("Fichiers de locales mis à jour", UI_MSG_OK);
+
+// Module specific removals
+foreach (glob("modules/*/empty_shared_memory.php") as $script) {
+	require $script;
+}
