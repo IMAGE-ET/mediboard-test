@@ -34,16 +34,16 @@ class CConfigService extends CConfigServiceAbstract {
   /*
    * Chargement des configs en fonction du service
    */
-  function getConfigForService($service_id = "none"){
+  static function getConfigForService($service_id = "none"){
     $group_id = CGroups::loadCurrent()->_id;
     if(!isset(self::$configs_SHM)){
-      self::$configs_SHM = $configs = $this->getConfigService("conf-service");
+      self::$configs_SHM = $configs = self::getConfigService("conf-service");
     } else {
       $configs = self::$configs_SHM;
     }
     // Si la config n'existe pas en SHM
     if($configs == null){
-      $configs = $this->setConfigInSHM();
+      $configs = self::setConfigInSHM();
       self::$configs_SHM = $configs;
     }
     return $configs[$group_id][$service_id];
@@ -52,16 +52,16 @@ class CConfigService extends CConfigServiceAbstract {
   /*
    * Sauvegarde des configs dans la SHM
    */ 
-  function setConfigInSHM(){
-    $configs = $this->getAllConfigs();
-    $this->setConfigService("conf-service", $configs);
+  static function setConfigInSHM(){
+    $configs = self::getAllConfigs();
+    self::setConfigService("conf-service", $configs);
     return $configs;
   }
   
   /*
    * Calcul de la totalité des configs pour les stocker dans la SHM
    */
-  function getAllConfigs(){
+  static function getAllConfigs(){
     // Chargement des etablissements
     $group = new CGroups();
     $groups = $group->loadList();

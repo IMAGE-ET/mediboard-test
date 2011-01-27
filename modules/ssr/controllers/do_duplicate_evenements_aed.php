@@ -32,7 +32,8 @@ foreach($days as $day) {
 	
 	  // Duplication de l'événement  
 	  $evenement->_id = "";
-	  $evenement->realise = 0;
+    $evenement->realise = 0;
+    $evenement->annule = 0;
 	  $evenement->debut = $day ? "$day ".mbTime($evenement->debut) :  mbDateTime($period, $evenement->debut);
 	
 	  // Cas des séances collectives

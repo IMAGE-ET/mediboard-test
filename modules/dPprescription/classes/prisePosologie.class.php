@@ -454,8 +454,7 @@ class CPrisePosologie extends CMbMetaObject {
   }
   
 	function getPlanifs($dates, $service_id, $bornes){
-		$config_service = new CConfigService();
-    $configs = $config_service->getConfigForService($service_id);
+    $configs = CConfigService::getConfigForService($service_id);
 	 
 	 // Preparation des valeurs
 	  if($this->nb_fois && $this->nb_fois <= 6 && $this->unite_fois == "jour"){  

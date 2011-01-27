@@ -458,8 +458,7 @@ class CPrescriptionLine extends CMbObject {
       $service_id = "none";
     }
     
-    $config_service = new CConfigService();
-    $configs = $config_service->getConfigForService($service_id);
+    $configs = CConfigService::getConfigForService($service_id);
     
 		// modification recente si moins de $nb_hours heures
     $nb_hours = $configs["Affichage alertes de modifications"];

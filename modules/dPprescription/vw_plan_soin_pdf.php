@@ -76,8 +76,7 @@ if($sejour->_ref_curr_affectation->_id){
   $service_id = "none";
 }
 
-$config_service = new CConfigService();
-$configs = $config_service->getConfigForService($service_id);
+$configs = CConfigService::getConfigForService($service_id);
 
 $matin = range($configs["Borne matin min"], $configs["Borne matin max"]);
 $soir = range($configs["Borne soir min"], $configs["Borne soir max"]);
