@@ -101,7 +101,7 @@
         <tr>
           <td id="config-source-soap-{{$sourcename}}" {{if !$source->_id}}style="display:none"{{/if}}>
             {{if $_source_soap instanceof CSourceSOAP}}
-              {{mb_include module=system template=inc_config_source_soap source=$_source_soap}}
+              {{mb_include module=webservices template=inc_config_source_soap source=$_source_soap}}
             {{/if}}            
           </td>
         </tr>

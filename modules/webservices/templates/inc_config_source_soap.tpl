@@ -79,13 +79,13 @@
       <script type="text/javascript">
         SOAP = {
           connexion: function (exchange_source_name) {
-            var url = new Url("system", "ajax_connexion_soap");
+            var url = new Url("webservices", "ajax_connexion_soap");
             url.addParam("exchange_source_name", exchange_source_name);
             url.requestUpdate("utilities-source-soap-connexion-" + exchange_source_name);
           },
           
           getFunctions: function (exchange_source_name) {
-            var url = new Url("system", "ajax_getFunctions_soap");
+            var url = new Url("webservices", "ajax_getFunctions_soap");
             url.addParam("exchange_source_name", exchange_source_name);
             url.requestUpdate("utilities-source-soap-getFunctions-" + exchange_source_name);
           }

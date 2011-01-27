@@ -271,10 +271,7 @@ class CSetuphprimxml extends CSetup {
              ADD `code_acteur` VARCHAR (255),
              ADD `code_syst` VARCHAR (255);";
     $this->addQuery($sql);
-    
-    // Prochain upgrade supprimer les champs : destinataire et emetteur
-    $this->addDependency("webservices", "0.16");
-    
+        
     $this->makeRevision("0.27");
     
     $sql = "ALTER TABLE `destinataire_hprim_config`
@@ -299,6 +296,8 @@ class CSetuphprimxml extends CSetup {
               SET `type_echange` = 'CDestinataireHprim' 
               WHERE `type_echange` = 'hprimxml';"; 
     $this->addQuery($sql);
+    
+    // Prochain upgrade supprimer les champs : destinataire et emetteur
     
     $this->mod_version = "0.30";
   }

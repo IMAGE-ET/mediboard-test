@@ -19,10 +19,10 @@
   <td>
     <a target="blank" href="?m=webservices&a=download_echange&echange_soap_id={{$curr_echange_soap->_id}}&dialog=1&suppressHeaders=1" class="button modify notext"></a>
   </td>
-  <td>
-    <a href="?m=webservices&amp;tab=vw_idx_echange_soap&amp;echange_soap_id={{$object->_id}}" class="button search">
+  <td class="narrow">
+    <button type="button" onclick="viewEchange('{{$object->_id}}')" class="search">
      {{$object->_id|str_pad:6:'0':$smarty.const.STR_PAD_LEFT}}
-    </a>
+    </button>
   </td>
   <td>
     <span>

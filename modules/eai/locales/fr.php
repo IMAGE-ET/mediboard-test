@@ -10,7 +10,7 @@ $locales['CInteropReceiver-group_id-court'] = 'Étab.';
 $locales['CInteropReceiver-group_id-desc'] = 'Établissement';
 $locales['CInteropReceiver-nom-court'] = 'Nom';
 $locales['CInteropReceiver-nom-desc'] = 'Nom';
-$locales['mod-eai-tab-vw_idx_interop_receiver'] = 'Destinataires';
+$locales['mod-eai-tab-vw_idx_interop_receivers'] = 'Destinataires';
 $locales['module-eai-court'] = 'EAI';
 $locales['module-eai-long'] = 'Enterprise Application Integration';
 ?>

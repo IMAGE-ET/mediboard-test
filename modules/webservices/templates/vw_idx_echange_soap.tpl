@@ -26,6 +26,12 @@
     }});
 	}
 
+	viewEchange = function(echange_soap_id) {
+	  var url = new Url("webservices", "vw_idx_echange_soap");
+	  url.addParam("echange_soap_id", echange_soap_id);
+	  url.requestModal(800, 500);
+	}
+
 	function changePage(page) {
 	  $V(getForm('filterEchange').page, page);
 	}

@@ -15,8 +15,6 @@ class CSetuphl7 extends CSetup {
     
     $this->mod_name = "hl7";
     $this->makeRevision("all");
-
-    $this->addDependency("webservices", "0.16");
     
     $this->mod_version = "0.01";
   }
