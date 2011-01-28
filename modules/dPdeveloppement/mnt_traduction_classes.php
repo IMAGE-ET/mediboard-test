@@ -132,7 +132,7 @@ foreach ($classes as $class) {
       }
     }
     
-    if ($spec instanceof CRefSpec) {
+    if ($spec instanceof CRefSpec && $prop[0] != "_") {
       $fwdClass = $spec->class;
       $fwdObject = new $fwdClass;
       
