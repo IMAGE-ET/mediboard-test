@@ -746,13 +746,47 @@ class CSejour extends CCodable {
   }
 
   /**
-   * Load sejours including a specific date
-   * @param $date date Date to check for inclusion
-   * @param $where array Array of additional where clauses
-   * @param $order array Array of order fields
-   * @param $limit string MySQL limit clause
-   * @param $group array Array of group by clauses
+   * Count sejours including a specific date
+   * 
+   * @param $date     date  Date to check for inclusion
+   * @param $where    array Array of additional where clauses
    * @param $leftjoin array Array of left join clauses
+   * 
+   * @return int Count null if module is not installed
+   */
+  static function countForDate($date, $where = null, $leftjoin = null) {
+    $where[] = "sejour.entree <= '$date 23:59:59'";
+    $where[] = "sejour.sortie >= '$date 00:00:00'";
+    $sejour = new CSejour;
+    return $sejour->countList($where, null, null, null, $leftjoin);
+  }
+  
+  /**
+   * Count sejours including a specific date
+   * 
+   * @param $date     date  Date to check for inclusion
+   * @param $where    array Array of additional where clauses
+   * @param $leftjoin array Array of left join clauses
+   * 
+   * @return int Count null if module is not installed
+   */
+  static function countForDateTime($datetime, $where = null, $leftjoin = null) {
+    $where[] = "sejour.entree <= '$datetime'";
+    $where[] = "sejour.sortie >= '$datetime'";
+    $sejour = new CSejour;
+    return $sejour->countList($where, null, null, null, $leftjoin);
+  }
+
+  /**
+   * Load sejours including a specific date
+   * 
+   * @param $date     date   Date to check for inclusion
+   * @param $where    array  Array of additional where clauses
+   * @param $order    array  Array of order fields
+   * @param $limit    string MySQL limit clause
+   * @param $group    array  Array of group by clauses
+   * @param $leftjoin array  Array of left join clauses
+   * 
    * @return array[CMbObject] List of found objects, null if module is not installed
    */
   static function loadListForDate($date, $where = null, $order = null, $limit = null, $group = null, $leftjoin = null) {
@@ -764,12 +798,14 @@ class CSejour extends CCodable {
   
   /**
    * Load sejours including a specific datetime
-   * @param $date datetime Datetime to check for inclusion
-   * @param $where array Array of additional where clauses
-   * @param $order array Array of order fields
-   * @param $limit string MySQL limit clause
-   * @param $group array Array of group by clauses
-   * @param $leftjoin array Array of left join clauses
+   * 
+   * @param $date     datetime Datetime to check for inclusion
+   * @param $where    array    Array of additional where clauses
+   * @param $order    array    Array of order fields
+   * @param $limit    string   MySQL limit clause
+   * @param $group    array    Array of group by clauses
+   * @param $leftjoin array    Array of left join clauses
+   * 
    * @return array[CMbObject] List of found objects, null if module is not installed
    */
   static function loadListForDateTime($datetime, $where = null, $order = null, $limit = null, $group = null, $leftjoin = null) {

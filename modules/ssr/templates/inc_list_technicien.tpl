@@ -12,6 +12,7 @@
   <tr>
     <th>{{mb_title class=CTechnicien field=kine_id}}</th>
     <th>{{mb_title class=CTechnicien field=actif}}</th>
+    <th>{{mb_title class=CTechnicien field=_count_sejours_date}}</th>
   </tr>
 
   {{foreach from=$plateau->_ref_techniciens item=_technicien}}
@@ -24,6 +25,10 @@
 
     <td>
       {{mb_value object=$_technicien field=actif}}
+    </td>
+
+    <td>
+      {{mb_value object=$_technicien field=_count_sejours_date}}
     </td>
 
   </tr>

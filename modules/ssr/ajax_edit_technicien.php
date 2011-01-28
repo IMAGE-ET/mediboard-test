@@ -13,13 +13,27 @@ CCanDo::checkRead();
 // Plateau du contexte
 $plateau = new CPlateauTechnique;
 $plateau->load(CValue::get("plateau_id"));
-$plateau->loadRefsTechniciens(false);
+
+// Détails des techniciens
+$date = mbDate();
+foreach ($plateau->loadRefsTechniciens(false) as $_technicien) {
+	$_technicien->countSejoursDate($date);
+};
 
 // Technicien à editer
 $technicien = new CTechnicien;
 $technicien->load(CValue::get("technicien_id"));
 $technicien->plateau_id = $plateau->_id;
 $technicien->loadRefsNotes();
+$technicien->countSejoursDate($date);
+
+// Alter egos pour les transferts de séjours
+$where["kine_id"] = "= '$technicien->kine_id'";
+$alteregos = $technicien->loadList($where);
+unset($alteregos[$technicien->_id]);
+foreach($alteregos as $_alterego) {
+  $_alterego->loadRefPlateau();	
+}
 
 // Kinés
 $user = new CMediusers;
@@ -28,6 +42,7 @@ $kines = $user->loadKines();
 // Création du template
 $smarty = new CSmartyDP();
 $smarty->assign("technicien", $technicien);
+$smarty->assign("alteregos", $alteregos);
 $smarty->assign("plateau", $plateau);
 $smarty->assign("kines", $kines);
 

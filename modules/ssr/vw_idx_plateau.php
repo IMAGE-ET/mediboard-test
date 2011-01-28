@@ -22,9 +22,13 @@ foreach($plateaux as $_plateau) {
 
 // Plateau sélectionné
 $plateau->load(CValue::getOrSession("plateau_id"));
-$plateau->loadRefsEquipements(false);
-$plateau->loadRefsTechniciens(false);
 $plateau->loadRefsNotes();
+$plateau->loadRefsEquipements(false);
+
+$date = mbDate();
+foreach ($plateau->loadRefsTechniciens(false) as $_technicien) {
+	$_technicien->countSejoursDate($date);
+}
 
 // Equipement
 $equipement = new CEquipement;
