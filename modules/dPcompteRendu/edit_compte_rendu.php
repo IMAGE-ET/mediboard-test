@@ -108,7 +108,7 @@ $compte_rendu->_ref_object->loadRefsFwd();
 $object =& $compte_rendu->_ref_object;  
 
 // Calcul du user concerné
-$user = CAppUI::$user;
+$user = clone CAppUI::$user;
 
 // Chargement dans l'ordre suivant pour les listes de choix si null :
 // - user courant
