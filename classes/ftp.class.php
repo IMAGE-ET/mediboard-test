@@ -20,19 +20,10 @@ class CFTP {
   var $fileprefix    = null;
   var $fileextension = null;
   var $filenbroll    = null;
-  var $logs          = array();
-  
-  function logError($log) {
-    $this->logs[] = "<strong>Erreur : </strong>$log";
-  }
-
-  function logStep($log) {
-    $this->logs[] = "Etape : $log";
-  }
   
   function init($exchange_source) {   
     if (!$exchange_source) {
-      trigger_error("Aucune source d'échange disponible pour ce nom : '$exchange_source->name'");
+      throw new CMbException("CSourceFTP-no-source", $exchange_source->name);
     }
        
     $this->hostname      = $exchange_source->host;
@@ -48,80 +39,77 @@ class CFTP {
   }
   
   function testSocket() {
-    $fp = fsockopen($this->hostname, $this->port, $errno, $errstr, $this->timeout);
+    $fp = @fsockopen($this->hostname, $this->port, $errno, $errstr, $this->timeout);
     if (!$fp) {
-      trigger_error("Socket connection failed : ($errno) $errstr");
-      return false;
+      throw new CMbException("CSourceFTP-socket-connection-failed", $this->hostname, $this->port, $errno, $errstr);
     }
-    return true;
   }
   
   function connect() {
-    if(!function_exists("ftp_connect")) {
-      $this->logError("Fonctions FTP non disponibles");
-      return false;
+    if (!function_exists("ftp_connect")) {
+      throw new CMbException("CSourceFTP-function-not-available", "ftp_connect");
     }
     
     // Set up basic connection
-    $this->connexion = ftp_connect($this->hostname, $this->port, $this->timeout);
+    $this->connexion = @ftp_connect($this->hostname, $this->port, $this->timeout);
     if (!$this->connexion) {
-      return false;
+      throw new CMbException("CSourceFTP-connexion-failed", $this->hostname);
     }
 
     // Login with username and password
-    if (!ftp_login($this->connexion, $this->username, $this->userpass)) {
-      return false;
+    if (!@ftp_login($this->connexion, $this->username, $this->userpass)) {
+      throw new CMbException("CSourceFTP-identification-failed", $this->username);
     } 
     
     // Turn passive mode on
-    if($this->passif_mode && !ftp_pasv($this->connexion, true)) {
-      return false;
+    if ($this->passif_mode && !@ftp_pasv($this->connexion, true)) {
+      throw new CMbException("CSourceFTP-passive-mode-on-failed");
     }
-    
-    return true;
   }
   
   function getListFiles($folder = ".") {
-    if(!$this->connexion) {
-      return false;
+    if (!$this->connexion) {
+      throw new CMbException("CSourceFTP-connexion-failed", $this->hostname);
     }
         
     return ftp_nlist($this->connexion, $folder);
   }
   
   function delFile($file) {
-    if(!$this->connexion) {
-      return false;
+    if (!$this->connexion) {
+      throw new CMbException("CSourceFTP-connexion-failed", $this->hostname);
     }
     
-    return ftp_delete($this->connexion, $file);
+    // Download the file
+    if (!@ftp_delete($this->connexion, $file)) {
+      throw new CMbException("CSourceFTP-delete-file-failed", $file);
+    }    
   }
   
   function getFile($source_file, $destination_file = null) {
-    
     $source_base = basename($source_file);
     
-    if(!$destination_file) {
+    if (!$destination_file) {
       $destination_file = "tmp/$source_base";
     }
     $destination_info = pathinfo($destination_file);
     CMbPath::forceDir($destination_info["dirname"]);
     
-    if(!$this->connexion) {
-      return false;
+    if (!$this->connexion) {
+      throw new CMbException("CSourceFTP-connexion-failed", $this->hostname);
     }
     
     // Download the file
-    if (!ftp_get($this->connexion, $destination_file, $source_file, constant($this->mode))) {
-      return false;
+    if (!@ftp_get($this->connexion, $destination_file, $source_file, constant($this->mode))) {
+      throw new CMbException("CSourceFTP-download-file-failed", $source_file, $destination_file);
     }
     
     return $destination_file;
   }
   
   function sendContent($source_content, $destination_file) {
-    if(!$this->connexion) {
-      return false;
+    if (!$this->connexion) {
+      throw new CMbException("CSourceFTP-connexion-failed", $this->hostname);
     }
     
     $tmpfile = tempnam("","");    
@@ -133,27 +121,33 @@ class CFTP {
   }
 
   function sendFile($source_file, $destination_file) {
-    if(!$this->connexion) {
-      return false;
+    if (!$this->connexion) {
+      throw new CMbException("CSourceFTP-connexion-failed", $this->hostname);
     }
 
     // Upload the file
-    return ftp_put($this->connexion, $destination_file, $source_file, constant($this->mode));
+    if (!@ftp_put($this->connexion, $destination_file, $source_file, constant($this->mode))) {
+      throw new CMbException("CSourceFTP-upload-file-failed", $source_file, $destination_file);
+    }
   }
   
   function renameFile($oldname, $newname) {
-    if(!$this->connexion) {
-      return false;
+    if (!$this->connexion) {
+      throw new CMbException("CSourceFTP-connexion-failed", $this->hostname);
     }
     
     // Rename the file
-    return ftp_rename($this->connexion, $oldname, $newname);
+    if (!@ftp_rename($this->connexion, $oldname, $newname)) {
+      throw new CMbException("CSourceFTP-rename-file-failed", $oldname, $newname);
+    }
   }
   
   function close() {
     // close the FTP stream
-    ftp_close($this->connexion);
-    $this->logStep("Déconnecté du serveur $this->hostname");
+    if (!@ftp_close($this->connexion)) {
+      throw new CMbException("CSourceFTP-close-connexion-failed", $this->hostname);
+    }
+    
     $this->connexion = null;
     return true;
   }

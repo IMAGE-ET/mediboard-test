@@ -676,6 +676,36 @@ function url_exists($url) {
 }
 
 /**
+ * Check responsetime for a webbserver
+ * @param string $url URL to check
+ * @return int response time
+ */
+function url_response_time($url, $port){
+  $parse_url = parse_url($url);
+  if (isset($parse_url["port"])) {
+    $port = $parse_url["port"];
+  }
+  
+  $url = isset($parse_url["host"]) ? $parse_url["host"] : $url;
+
+  $starttime     = microtime(true);
+  $file          = @fsockopen($url, $port, $errno, $errstr, 5);
+  $stoptime      = microtime(true);
+  $response_time = 0;
+  
+  if (!$file) {
+    $response_time = -1;  // Site is down
+  }
+  else{
+    fclose($file);
+    $response_time = ($stoptime - $starttime) * 1000;
+    $response_time = floor($response_time);
+  }
+
+  return $response_time;
+}
+
+/**
  * Build a url string based on components in an array
  * @param array $components Components, as of parse_url (see PHP documentation)
  * @return string

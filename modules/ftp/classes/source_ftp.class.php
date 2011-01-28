@@ -71,11 +71,38 @@ class CSourceFTP extends CExchangeSource {
   
   function receive() {}
   
-  function isReachable() { 
+  function isReachableSource() {
     $ftp = new CFTP();
     $ftp->init($this);
     
-    $this->_reachable = $ftp->connect() ? 2 : 0;
+    try {
+      $ftp->testSocket();
+    } 
+    catch (CMbException $e) {
+      $this->_reachable = 0;
+      $this->_message   = $e->getMessage();
+      return false;
+    }
+    return true;
+  }
+  
+  function isAuthentificate() {
+    $ftp = new CFTP();
+    $ftp->init($this);
+    
+    try {
+      $ftp->connect();
+    } 
+    catch (CMbException $e) {
+      $this->_reachable = 0;
+      $this->_message   = $e->getMessage();
+      return false;
+    }
+    return true;
+  }
+  
+  function getResponseTime() {
+    $this->_response_time = url_response_time($this->host, $this->port);
   }
 }
 ?>

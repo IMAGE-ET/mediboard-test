@@ -205,36 +205,7 @@ class CSetupsystem extends CSetup {
     $query = "UPDATE user_preferences 
 		  SET pref_value = 'mediboard' 
 			WHERE pref_value = 'mediboard_super_lite';";
-    $this->addQuery($query);
-
-    $this->makeRevision("1.0.22");
-    $query = "CREATE TABLE `source_ftp` (
-      `source_ftp_id` INT (11) UNSIGNED NOT NULL auto_increment PRIMARY KEY,
-      `port` INT (11) DEFAULT '21',
-      `timeout` INT (11) DEFAULT '90',
-      `pasv` ENUM ('0','1') DEFAULT '0',
-      `mode` ENUM ('FTP_ASCII','FTP_BINARY') DEFAULT 'FTP_ASCII',
-      `fileprefix` VARCHAR (255),
-      `fileextension` VARCHAR (255),
-      `filenbroll` ENUM ('1','2','3','4'),
-      `fileextension_write_end` VARCHAR (255),
-      `counter` VARCHAR (255),
-      `name` VARCHAR (255) NOT NULL,
-      `host` TEXT NOT NULL,
-      `user` VARCHAR (255),
-      `password` VARCHAR (50)
-    ) TYPE=MYISAM;";
-    $this->addQuery($query);
-    
-    $query = "CREATE TABLE `source_soap` (
-      `source_soap_id` INT (11) UNSIGNED NOT NULL auto_increment PRIMARY KEY,
-      `wsdl_mode` ENUM ('0','1') DEFAULT '1',
-      `name` VARCHAR (255) NOT NULL,
-      `host` TEXT NOT NULL,
-      `user` VARCHAR (255),
-      `password` VARCHAR (50)
-    ) TYPE=MYISAM;";
-    $this->addQuery($query);
+    $this->addQuery($query);    
     
     $this->makeRevision("1.0.23");
     $query = "ALTER TABLE `user_preferences` DROP PRIMARY KEY;";

@@ -16,9 +16,21 @@ $extension = $exchange_source->fileextension;
 
 $ftp = new CFTP();
 $ftp->init($exchange_source);
-$ftp->connect();
 
-if (!$list = $ftp->getListFiles("./")) {
+try {
+  $ftp->connect();
+} catch (CMbException $e) {
+  CAppUI::stepAjax($e->getMessage(), UI_MSG_WARNING); 
+}
+
+$list = array();
+try {
+  $list = $ftp->getListFiles("./");
+} catch (CMbException $e) {
+  CAppUI::stepAjax($e->getMessage(), UI_MSG_WARNING); 
+}
+
+if (empty($list)) {
   CAppUI::stepAjax("Le répertoire ne contient aucun fichier", UI_MSG_ERROR);
 }
 

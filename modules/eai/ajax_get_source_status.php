@@ -20,11 +20,12 @@ $object = new CMbObject();
 $source = $object->loadFromGuid($source_guid);
 
 $source->isReachable();
+$source->getResponseTime();
 
-$status = array ("reachable" => $source->_reachable,
-                 "message"   => utf8_encode($source->_message),
-                 "name"      => $source->name
-          );
+$status = array ("reachable"     => $source->_reachable,
+                 "message"       => utf8_encode($source->_message),
+                 "name"          => $source->name,
+                 "response_time" => $source->_response_time);
 
 echo json_encode($status);
 

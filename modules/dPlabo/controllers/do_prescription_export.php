@@ -195,7 +195,7 @@ $prescriptionlabo_source = CExchangeSource::get("prescriptionlabo");
 $ftp = new CFTP;
 $ftp->init($prescriptionlabo_source);
 
-if(!$ftp->hostname){
+if (!$ftp->hostname){
   CAppUI::setMsg("Le document n'a pas pu être envoyé, configuration FTP manquante", UI_MSG_ERROR );
   redirect();
 }
@@ -203,23 +203,29 @@ if(!$ftp->hostname){
 // Transfert
 $destination_basename = "Prescription-".$mbPrescription->_id;
 $file = "tmp/dPlabo/export_prescription.xml";
-$envoi = $ftp->connect();
-if(!$ftp->connect()) {
-  CAppUI::stepAjax("Impossible de se connecter au serveur $ftp->hostname", UI_MSG_ERROR);
+
+try {
+  $ftp->connect();
+} catch (CMbException $e) {
+  CAppUI::stepAjax($e->getMessage(), UI_MSG_WARNING); 
   redirect();
 }
-if(!$ftp->sendFile($file, "$destination_basename.xml", FTP_ASCII)) {
-  CAppUI::stepAjax("Impossible de copier le fichier source $local_file en fichier cible $remote_file", UI_MSG_ERROR);
-  $ftp->close();
+
+try {
+  $ftp->sendFile($file, "$destination_basename.xml");
+} catch (CMbException $e) {
+  CAppUI::stepAjax($e->getMessage(), UI_MSG_WARNING);
+  $ftp->close(); 
   redirect();
 }
+
 $ftp->close();
+
 CAppUI::setMsg("Document envoyé", UI_MSG_OK );
 
 // Créer le document joint
 if ($msg = $doc->addFile($mbPrescription)) {  
   CAppUI::setMsg("Document non attaché à la prescription: $msg", UI_MSG_ERROR );
-  //redirect();
 }
 redirect();
 

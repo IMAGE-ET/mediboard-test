@@ -1,8 +1,8 @@
 <?php 
 /**
- * Index EAI
+ * Index FTP
  *  
- * @category EAI
+ * @category FTP
  * @package  Mediboard
  * @author   SARL OpenXtrem <dev@openxtrem.com>
  * @license  GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
@@ -11,7 +11,5 @@
  */
 
 $module = CModule::getInstalled(basename(dirname(__FILE__)));
-
-$module->registerTab("vw_idx_interop_receivers", TAB_READ);
 
 ?>

@@ -148,4 +148,13 @@ $locales['CSourceSOAP.none'] = 'Aucune source SOAP';
 $locales['CSourceSOAP.one'] = 'Une source SOAP';
 $locales['CSourceSOAP.role.prod'] = 'Production';
 $locales['CSourceSOAP.role.qualif'] = 'Qualification';
+$locales['utilities-source-ftp'] = 'Utilitaires FTP';
+$locales['utilities-source-ftp-connexion'] = 'Test de la connexion';
+$locales['utilities-source-ftp-getFiles'] = 'Liste des fichiers';
+$locales['utilities-source-smtp'] = 'Outils de test de la connexion';
+$locales['utilities-source-smtp-connexion'] = 'Test de connexion';
+$locales['utilities-source-smtp-envoi'] = 'Test d\'envoi de mail';
+$locales['utilities-source-soap'] = 'Utilitaires SOAP';
+$locales['utilities-source-soap-connexion'] = 'Test de la connexion';
+$locales['utilities-source-soap-getFunctions'] = 'Liste des fonctions';
 ?>

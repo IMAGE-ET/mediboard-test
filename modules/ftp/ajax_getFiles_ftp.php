@@ -22,35 +22,30 @@ $exchange_source = CExchangeSource::get($exchange_source_name);
 $ftp = new CFTP();
 $ftp->init($exchange_source);
 
-if (!$ftp->testSocket()) {
-  CAppUI::stepAjax("Connexion au serveur $ftp->hostname' échouée", UI_MSG_WARNING);
-} else {
-  CAppUI::stepAjax("Connecté au serveur $ftp->hostname sur le port $ftp->port");
-}
-
-if (!$ftp->connect()) {
-  CAppUI::stepAjax("Impossible de se connecter au serveur $ftp->hostname", UI_MSG_ERROR);
-} else {
+try {
+  $ftp->connect();
   CAppUI::stepAjax("Connecté au serveur $ftp->hostname et authentifié en tant que $ftp->username");
+} catch (CMbException $e) {
+  CAppUI::stepAjax($e->getMessage(), UI_MSG_WARNING); 
+  return;
 }
 
-if($ftp->passif_mode) {
+if ($ftp->passif_mode) {
   CAppUI::stepAjax("Activation du mode passif");
 }
 
-/*$list = $ftp->getListFiles();
-if (!is_array($list)) {
-  CAppUI::stepAjax("Impossible de lister les fichiers", UI_MSG_ERROR);
-} else {
-  CAppUI::stepAjax("Liste des fichiers du dossier");
-  mbTrace($list);
-}*/
+try {
+  $files = $ftp->getListFiles();
+} catch (CMbException $e) {
+  CAppUI::stepAjax($e->getMessage(), UI_MSG_WARNING); 
+  return;
+}
 
 // Création du template
 $smarty = new CSmartyDP();
 
 $smarty->assign("exchange_source", $exchange_source);
-$smarty->assign("files", $ftp->getListFiles());
+$smarty->assign("files", $files);
 
 $smarty->display("inc_ftp_files.tpl");
 

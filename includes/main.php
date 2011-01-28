@@ -133,7 +133,7 @@ if (null == $m) {
 }
 
 if (null == $module = CModule::getInstalled($m)) {
-  CAppUI::redirect("m=system&a=module_missing&module=$m");
+  CAppUI::redirect("m=system&a=module_missing&mod=$m");
 }
 
 // Get current module permissions

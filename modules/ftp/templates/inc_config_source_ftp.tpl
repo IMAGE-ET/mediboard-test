@@ -11,7 +11,7 @@
   <tr>
     <td>
       <form name="editSourceFTP" action="?m={{$m}}" method="post" onsubmit="return onSubmitFormAjax(this, { onComplete: refreshExchangeSource.curry('{{$source->name}}', '{{$source->_wanted_type}}') } )">
-        <input type="hidden" name="m" value="system" />
+        <input type="hidden" name="m" value="ftp" />
         <input type="hidden" name="dosql" value="do_source_ftp_aed" />
         <input type="hidden" name="source_ftp_id" value="{{$source->_id}}" />
         <input type="hidden" name="del" value="0" /> 
@@ -100,13 +100,13 @@
       <script type="text/javascript">
         FTP = {
           connexion: function (exchange_source_name) {
-            var url = new Url("system", "ajax_connexion_ftp");
+            var url = new Url("ftp", "ajax_connexion_ftp");
             url.addParam("exchange_source_name", exchange_source_name);
             url.requestUpdate("utilities-source-ftp-connexion-" + exchange_source_name);
           },
           
           getFiles: function (exchange_source_name) {
-            var url = new Url("system", "ajax_getFiles_ftp");
+            var url = new Url("ftp", "ajax_getFiles_ftp");
             url.addParam("exchange_source_name", exchange_source_name);
             url.requestUpdate("utilities-source-ftp-getFiles-" + exchange_source_name);
           }

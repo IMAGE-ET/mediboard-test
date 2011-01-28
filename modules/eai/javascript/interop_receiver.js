@@ -59,7 +59,11 @@ InteropReceiver = {
               DOM.tr(null,
                 DOM.td({className:"text"}, 
                   DOM.strong(null, "Message : "), status.message)
-             )
+             ), 
+             DOM.tr(null,
+	           DOM.td({className:"text"}, 
+	             DOM.strong(null, "Temps de réponse : "), status.response_time, " ms")
+	         )
            )
          ).hide()) 
       };

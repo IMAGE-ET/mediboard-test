@@ -48,64 +48,72 @@
     {{/if}} 
     
     <div id="CSourceFTP-{{$sourcename}}" style="display:{{if !$source->_allowed_instances && ($source instanceof CSourceFTP)}}block{{else}}none{{/if}};">
-      {{if $source->_id && !($source instanceof CSourceFTP)}}
-        <div class="small-info">
-          {{tr}}CExchangeSource-already-exist{{/tr}}
-        </div>
+      {{if !"ftp"|module_active}}
+        {{mb_include module=system template=module_missing mod=ftp}}  
       {{else}}
-      <table class="main">
-        {{assign var="_source_ftp" value=$source}}
-        {{if $source->_class_name == "CExchangeSource"}}
-          {{assign var="_source_ftp" value=$source->_allowed_instances.CSourceFTP}}
+        {{if $source->_id && !($source instanceof CSourceFTP)}}
+          <div class="small-info">
+            {{tr}}CExchangeSource-already-exist{{/tr}}
+          </div>
+        {{else}}
+        <table class="main">
+          {{assign var="_source_ftp" value=$source}}
+          {{if $source->_class_name == "CExchangeSource"}}
+            {{assign var="_source_ftp" value=$source->_allowed_instances.CSourceFTP}}
+          {{/if}}
+          {{if !$source->_id}}
+          <tr>
+            <td class="halfPane">
+              <a class="button new" onclick="$('config-source-ftp-{{$sourcename}}').show()">
+                Créer une source FTP
+              </a>
+           </td>
+          </tr>
+          {{/if}}
+          <tr>
+            <td id="config-source-ftp-{{$sourcename}}" {{if !$source->_id}}style="display:none"{{/if}}>
+              {{if $_source_ftp instanceof CSourceFTP}}
+                {{mb_include module=ftp template=inc_config_source_ftp source=$_source_ftp}}  
+              {{/if}}     
+            </td>
+          </tr>
+        </table> 
         {{/if}}
-        {{if !$source->_id}}
-        <tr>
-          <td class="halfPane">
-            <a class="button new" onclick="$('config-source-ftp-{{$sourcename}}').show()">
-              Créer une source FTP
-            </a>
-         </td>
-        </tr>
-        {{/if}}
-        <tr>
-          <td id="config-source-ftp-{{$sourcename}}" {{if !$source->_id}}style="display:none"{{/if}}>
-            {{if $_source_ftp instanceof CSourceFTP}}
-              {{mb_include module=system template=inc_config_source_ftp source=$_source_ftp}}  
-            {{/if}}     
-          </td>
-        </tr>
-      </table> 
       {{/if}}
     </div>
     
     <div id="CSourceSOAP-{{$sourcename}}" style="display:{{if !$source->_allowed_instances && ($source instanceof CSourceSOAP)}}block{{else}}none{{/if}};">
-      {{if $source->_id && !($source instanceof CSourceSOAP)}}
-        <div class="small-info">
-          {{tr}}CExchangeSource-already-exist{{/tr}}
-        </div>
+      {{if !"webservices"|module_active}}
+        {{mb_include module=system template=module_missing mod=webservices}}  
       {{else}}
-      <table class="main source">
-        {{assign var="_source_soap" value=$source}}
-        {{if $source->_class_name == "CExchangeSource"}}
-          {{assign var="_source_soap" value=$source->_allowed_instances.CSourceSOAP}}
+        {{if $source->_id && !($source instanceof CSourceSOAP)}}
+          <div class="small-info">
+            {{tr}}CExchangeSource-already-exist{{/tr}}
+          </div>
+        {{else}}
+        <table class="main source">
+          {{assign var="_source_soap" value=$source}}
+          {{if $source->_class_name == "CExchangeSource"}}
+            {{assign var="_source_soap" value=$source->_allowed_instances.CSourceSOAP}}
+          {{/if}}
+          {{if !$source->_id}}
+          <tr>
+            <td class="halfPane">
+              <a class="button new" onclick="$('config-source-soap-{{$sourcename}}').show()">
+                Créer une source SOAP
+              </a> 
+           </td>
+          </tr>
+          {{/if}}
+          <tr>
+            <td id="config-source-soap-{{$sourcename}}" {{if !$source->_id}}style="display:none"{{/if}}>
+              {{if $_source_soap instanceof CSourceSOAP}}
+                {{mb_include module=webservices template=inc_config_source_soap source=$_source_soap}}
+              {{/if}}            
+            </td>
+          </tr>
+        </table>
         {{/if}}
-        {{if !$source->_id}}
-        <tr>
-          <td class="halfPane">
-            <a class="button new" onclick="$('config-source-soap-{{$sourcename}}').show()">
-              Créer une source SOAP
-            </a> 
-         </td>
-        </tr>
-        {{/if}}
-        <tr>
-          <td id="config-source-soap-{{$sourcename}}" {{if !$source->_id}}style="display:none"{{/if}}>
-            {{if $_source_soap instanceof CSourceSOAP}}
-              {{mb_include module=webservices template=inc_config_source_soap source=$_source_soap}}
-            {{/if}}            
-          </td>
-        </tr>
-      </table>
       {{/if}}
     </div>
     

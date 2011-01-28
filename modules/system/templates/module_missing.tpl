@@ -9,5 +9,5 @@
 *}}
 
 <div class="small-warning">
-Le module <strong>{{tr}}module-{{$module}}-court{{/tr}}</strong> n'est pas installé.
+Le module <strong>{{tr}}module-{{$mod}}-court{{/tr}}</strong> n'est pas installé.
 </div>

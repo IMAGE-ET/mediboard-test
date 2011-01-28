@@ -74,23 +74,28 @@ class CSourceSOAP extends CExchangeSource {
     return $this->_acquittement;
   }
   
-  function isReachable() {
+  function isReachableSource() {
     if (!url_exists($this->host)) {
       $this->_reachable = 0;
       $this->_message   = CAppUI::tr("CSourceSOAP-unreachable-source", $this->host);
-      return;
+      return false;
     }
-    
+    return true;
+  }
+  
+  function isAuthentificate() {
     try {
       CMbSOAPClient::make($this->host, $this->user, $this->password, $this->type_echange);
     } catch (CMbException $e) {
       $this->_reachable = 1;
       $this->_message   = $e->getMessage();
-      return;
+      return false;
     }
-    
-    $this->_reachable = 2;
-    $this->_message   = CAppUI::tr("CSourceSOAP-reachable-source", $this->host);
+    return true;
+  }
+  
+  function getResponseTime() {
+    $this->_response_time = url_response_time($this->host, 80);
   }
 }
 ?>

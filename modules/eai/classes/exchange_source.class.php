@@ -32,18 +32,20 @@ class CExchangeSource extends CMbObject {
   var $_incompatible      = false;
   var $_reachable         = null;
   var $_message           = null;
+  var $_response_time     = null;
   
   function getProps() {
     $specs = parent::getProps();
-    $specs["name"]         = "str notNull";
-    $specs["role"]         = "enum list|prod|qualif default|qualif notNull";
-    $specs["host"]         = "text notNull";
-    $specs["user"]         = "str";
-    $specs["password"]     = "password revealable";
-		$specs["type_echange"] = "str protected";
+    $specs["name"]           = "str notNull";
+    $specs["role"]           = "enum list|prod|qualif default|qualif notNull";
+    $specs["host"]           = "text notNull";
+    $specs["user"]           = "str";
+    $specs["password"]       = "password revealable";
+		$specs["type_echange"]   = "str protected";
     
-    $specs["_incompatible"] = "bool";
-    $specs["_reachable"]    = "enum list|0|1|2 default|0";
+    $specs["_incompatible"]  = "bool";
+    $specs["_reachable"]     = "enum list|0|1|2 default|0";
+    $specs["_response_time"] = "float";
     
     return $specs;
   }
@@ -130,6 +132,23 @@ class CExchangeSource extends CMbObject {
    * Source is reachable ?
    * @return boolean reachable
    */
-  function isReachable() {}
+  function isReachable() {
+    if (!$this->isReachableSource()) {
+      return;
+    }
+
+    if (!$this->isAuthentificate()) {
+      return;
+    }
+    
+    $this->_reachable = 2;
+    $this->_message   = CAppUI::tr("$this->_class_name-reachable-source", $this->host);
+  }
+  
+  function isReachableSource() {}
+  
+  function isAuthentificate() {}
+  
+  function getResponseTime() {}
 }
 ?>
