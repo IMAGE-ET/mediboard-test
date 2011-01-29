@@ -51,13 +51,15 @@ class CPlateauTechnique extends CMbObject {
 	}
 	
 	function loadRefsEquipements($actif = true) {
-		$this->_ref_equipements = $this->loadBackRefs("equipements");
+		$order = "nom ASC";
+		$this->_ref_equipements = $this->loadBackRefs("equipements", $order);
     foreach ($this->_ref_equipements as $_equipement) {
       if ($actif && !$_equipement->actif) {
         unset($this->_ref_equipements[$_equipement->_id]);
         continue;
       }
     }
+
 		return $this->_ref_equipements;
 	}
 
@@ -70,6 +72,9 @@ class CPlateauTechnique extends CMbObject {
 			}
 		  $_technicien->loadRefKine();
 		}
+		
+		$sorter = CMbArray::pluck($this->_ref_techniciens, "_view");
+		array_multisort($sorter, SORT_ASC, $this->_ref_techniciens);
 		return $this->_ref_techniciens;
   }
 }

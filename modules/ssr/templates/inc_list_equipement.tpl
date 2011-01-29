@@ -21,10 +21,12 @@
         {{mb_value object=$_equipement field=nom}}
 			</a>
 		</td>
-    <td>
+		
+    <td style="text-align: center">
       {{mb_value object=$_equipement field=visualisable}}
     </td>
-    <td>
+
+    <td style="text-align: center" {{if !$_equipement->actif}} class="cancelled" {{/if}}>
       {{mb_value object=$_equipement field=actif}}
     </td>
   </tr>   
