@@ -22,7 +22,8 @@ class CTechnicien extends CMbObject {
 	// DB Fields
 	var $actif      = null;
 	
-  // Derived fields
+  // Form fields
+	var $_transfer_id        = null;
   var $_count_sejours_date = null;
 
   // References
@@ -47,6 +48,7 @@ class CTechnicien extends CMbObject {
     $props["kine_id"]    = "ref notNull class|CMediusers";
     $props["actif"]      = "bool notNull default|1";
 
+    $props["_transfer_id"]        = "ref class|CTechnicien";
     $props["_count_sejours_date"] = "num";
 		
     return $props;
@@ -58,15 +60,45 @@ class CTechnicien extends CMbObject {
     return $backProps;
   }
 	
+	function store() {
+		// Transfert de séjours vers un autre technicien
+		if ($this->_transfer_id) {
+			foreach ($this->loadRefsSejours(mbDate()) as $_sejour) {
+				$bilan = $_sejour->loadRefBilanSSR();
+				$bilan->technicien_id = $this->_transfer_id;
+				if ($msg = $bilan->store()) {
+					return $msg;
+				}
+			} 
+		}
+		
+		return parent::store();
+	}
+	
+	function updateView() {
+		$parts = array();
+    if ($this->_ref_kine && $this->_ref_kine->_id) {
+      $parts[] = $this->_ref_kine->_view;
+    }
+    
+		if ($this->_ref_plateau && $this->_ref_plateau->_id) {
+			$parts[] = $this->_ref_plateau->_view;
+		}
+
+		$this->_view = implode(" &ndash; ",$parts);
+	}
+	
   function loadRefPlateau() {
-  	return $this->_ref_plateau = $this->loadFwdRef("plateau_id", true);
+    $this->_ref_plateau = $this->loadFwdRef("plateau_id", true);
+    $this->updateView();
+  	return $this->_ref_plateau;
   }	
 	
 	
   function loadRefKine() {
     $this->_ref_kine = $this->loadFwdRef("kine_id", true);
 		$this->_ref_kine->loadRefFunction();
-    $this->_view = $this->_ref_kine->_view;
+    $this->updateView();
 		return $this->_ref_kine;
   }
 	

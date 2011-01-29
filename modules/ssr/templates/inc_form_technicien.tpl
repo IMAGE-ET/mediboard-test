@@ -15,12 +15,11 @@
 <input type="hidden" name="del" value="0" />
 
 {{mb_key object=$technicien}}
-{{mb_field object=$technicien field=plateau_id hidden=1}}
 
 <table class="form">
   <tr>
     {{if $technicien->_id}}
-    <th class="title modify" colspan="4">
+    <th class="title modify" colspan="2">
       {{mb_include module=system template=inc_object_notes      object=$technicien}}
       {{mb_include module=system template=inc_object_idsante400 object=$technicien}}
       {{mb_include module=system template=inc_object_history    object=$technicien}}
@@ -29,12 +28,20 @@
 			'{{$technicien}}'
     </th>
     {{else}}
-    <th class="title" colspan="4">
+    <th class="title" colspan="2">
 	    {{tr}}CTechnicien-title-create{{/tr}} 
 	  </th>
     {{/if}}
   </tr>
     
+  <tr>
+    <th>{{mb_label object=$technicien field=plateau_id}}</th>
+    <td>
+      {{mb_field object=$technicien field=plateau_id hidden=1}}
+      {{mb_value object=$technicien field=plateau_id}}
+			</td>
+  </tr>
+  
   <tr>
     <th>{{mb_label object=$technicien field=kine_id}}</th>
     <td>
@@ -51,7 +58,7 @@
   </tr>
 	
   <tr>
-		<td class="button" colspan="4">
+		<td class="button" colspan="2">
 		  {{if $technicien->_id}}
 			  <button class="modify" type="submit">
 			  	{{tr}}Save{{/tr}}
@@ -70,6 +77,19 @@
       {{/if}}
   	</td>
   </tr>
+
+  {{if $alteregos|@count}} 
+  <tr>
+    <td class="button" colspan="2">
+      {{mb_label object=$technicien field=_transfer_id}}
+      {{mb_field object=$technicien field=_transfer_id options=$alteregos}}
+
+      <button class="change" type="submit" onclick="return Technicien.confirmTransfer(this.form, '{{$technicien->_count_sejours_date}}')">
+        {{tr}}Transfer{{/tr}}
+      </button>
+    </td>
+  </tr>
+  {{/if}}
   
 </table>
 

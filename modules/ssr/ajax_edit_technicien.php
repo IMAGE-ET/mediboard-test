@@ -25,6 +25,8 @@ $technicien = new CTechnicien;
 $technicien->load(CValue::get("technicien_id"));
 $technicien->plateau_id = $plateau->_id;
 $technicien->loadRefsNotes();
+$technicien->loadRefPlateau(); 
+$technicien->loadRefKine(); 
 $technicien->countSejoursDate($date);
 
 // Alter egos pour les transferts de séjours
@@ -32,7 +34,8 @@ $where["kine_id"] = "= '$technicien->kine_id'";
 $alteregos = $technicien->loadList($where);
 unset($alteregos[$technicien->_id]);
 foreach($alteregos as $_alterego) {
-  $_alterego->loadRefPlateau();	
+  $_alterego->loadRefPlateau(); 
+  $_alterego->loadRefKine(); 
 }
 
 // Kinés

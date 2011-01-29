@@ -1029,6 +1029,10 @@ class CSejour extends CCodable {
     return $this->_ref_rpu = $this->loadUniqueBackRef("rpu");
   }
   
+	/**
+	 * Load associated BilanSSR
+	 * @return CBilanSSR
+	 */
   function loadRefBilanSSR() {
     return $this->_ref_bilan_ssr = $this->loadUniqueBackRef("bilan_ssr");
   }

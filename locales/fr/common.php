@@ -226,6 +226,7 @@ $locales['Today'] = 'Aujourd\'hui';
 $locales['Toggle'] = 'Basculer';
 $locales['Tools'] = 'Outils';
 $locales['Total'] = 'Total';
+$locales['Transfer'] = 'Transférer';
 $locales['Type'] = 'Type';
 $locales['Unarchive'] = 'Désarchiver';
 $locales['Unavailable information'] = 'Information non disponible';
