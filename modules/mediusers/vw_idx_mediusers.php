@@ -7,9 +7,7 @@
 * @author Romain Ollivier
 */
 
-global $AppUI, $can, $m;
-
-$can->needsRead();
+CCanDo::checkRead();
 
 $page      = intval(CValue::get('page', 0));
 $pro_sante = CValue::get("pro_sante", array());
@@ -52,22 +50,28 @@ if ($pro_sante) {
     $where["users.user_type"] = CSQLDataSource::prepareIn($user_types);
   }
 }
-if (!$filter) {
-  $where["users_mediboard.actif"] = $inactif ? "!= '1'" : "= '1'";
+
+if ($inactif) {
+  $where["users_mediboard.actif"] = "!= '1'";
 }
 
 $order = null;
 if ($order_col == "function_id") {
   $order = "functions_mediboard.text $order_way, users.user_last_name ASC, users.user_first_name ASC";
-} elseif ($order_col == "user_username") {
+} 
+if ($order_col == "user_username") {
   $order = "users.user_username $order_way, users.user_last_name ASC, users.user_first_name ASC";
-} elseif ($order_col == "user_last_name") {
+} 
+if ($order_col == "user_last_name") {
   $order = "users.user_last_name $order_way, users.user_first_name ASC";
-} elseif ($order_col == "user_first_name") {
+} 
+if ($order_col == "user_first_name") {
   $order = "users.user_first_name $order_way, users.user_last_name ASC";
-} elseif ($order_col == "user_type") {
+} 
+if ($order_col == "user_type") {
   $order = "users.user_type $order_way, users.user_last_name ASC, users.user_first_name ASC";
-} elseif ($order_col == "user_last_login") {
+} 
+if ($order_col == "user_last_login") {
   $order = "users.user_last_login ";
   $order .= $order_way == "ASC" ? "DESC" : "ASC";
   $order .= ", users.user_last_name ASC, users.user_first_name ASC";

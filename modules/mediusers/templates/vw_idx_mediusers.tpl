@@ -76,7 +76,7 @@ function changePage(page) {
             </td>
           </tr>
           <tr>
-            <th></th>
+            <th>Afficher seulement</th>
             <td>
               <label>
                 <input onchange="$V(this.form.page, 0)" type="checkbox" name="pro_sante" {{if $pro_sante}}checked="checked"{{/if}} /> Professionnel de santé

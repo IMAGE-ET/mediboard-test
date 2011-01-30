@@ -22,46 +22,53 @@
     </th>
   </tr>
 
-  {{foreach from=$mediusers item=curr_user}}
-  <tr {{if $curr_user->_id == $object->_id}}class="selected"{{/if}}>
+  {{foreach from=$mediusers item=_user}}
+  <tr {{if $_user->_id == $object->_id}}class="selected"{{/if}}>
 
-    {{assign var=user_id value=$curr_user->_id}}
-    {{if $curr_user->_ref_user->_id}}
+    {{assign var=user_id value=$_user->_id}}
+    {{if $_user->_ref_user->_id}}
 
      <td class="text">
-       <a href="#" onclick="showMediuser('{{$user_id}}', this)" class="mediuser" style="border-left-color: #{{$curr_user->_ref_function->color}};">
-         <span onmouseover="ObjectTooltip.createEx(this,'{{$curr_user->_guid}}', 'identifiers')">
-           {{mb_value object=$curr_user field=_user_username}}
+       <a href="#{{$_user->_guid}}" onclick="showMediuser('{{$user_id}}', this)" class="mediuser" style="border-left-color: #{{$_user->_ref_function->color}};">
+         <span onmouseover="ObjectTooltip.createEx(this,'{{$_user->_guid}}', 'identifiers')">
+           {{mb_value object=$_user field=_user_username}}
          </span>
        </a>
      </td>
-     <td class="text">
-       <a href="#" onclick="showMediuser('{{$user_id}}', this)">
-         {{mb_value object=$curr_user field=_user_last_name}}
+     
+		 <td class="text">
+       <a href="#{{$_user->_guid}}" onclick="showMediuser('{{$user_id}}', this)">
+         {{mb_value object=$_user field=_user_last_name}}
        </a>
      </td>
-     <td class="text">
-       <a href="#" onclick="showMediuser('{{$user_id}}', this)">
-         {{mb_value object=$curr_user field=_user_first_name}}
+     
+		 <td class="text">
+       <a href="#{{$_user->_guid}}" onclick="showMediuser('{{$user_id}}', this)">
+         {{mb_value object=$_user field=_user_first_name}}
        </a>
      </td>
+		 
      <td  class="text" style="text-align: center">
-     	{{mb_ditto name=function_name value=$curr_user->_ref_function->_view}}
+     	{{mb_ditto name=function_view value=$_user->_ref_function->_view}}
 		 </td>
 
-     <td class="text">
-       {{assign var=type value=$curr_user->_user_type}}
-       {{if array_key_exists($type, $utypes)}}{{$utypes.$type}}{{/if}}
+     <td  class="text" style="text-align: center">
+       {{assign var=type value=$_user->_user_type}}
+       {{if array_key_exists($type, $utypes)}}
+       {{mb_ditto name=type_name value=$utypes.$type}}
+			 {{/if}}
      </td>
       
-     <td class="text">{{$curr_user->_ref_profile->user_username}}</td>
+     <td  class="text" style="text-align: center">
+       {{mb_ditto name=profile_name value=$_user->_ref_profile->user_username}}
+		 </td>
      
-     <td class="text">{{mb_value object=$curr_user field=remote}}</td>
+     <td class="text">{{mb_value object=$_user field=remote}}</td>
       
-     <td class="{{if !$curr_user->actif}}cancelled{{/if}}">
-       {{if $curr_user->_user_last_login}}
-       <label title="{{mb_value object=$curr_user field=_user_last_login}}">
-         {{mb_value object=$curr_user field=_user_last_login format=relative}}
+     <td {{if !$_user->actif}} class="cancelled" {{/if}}>
+       {{if $_user->_user_last_login}}
+       <label title="{{mb_value object=$_user field=_user_last_login}}">
+         {{mb_value object=$_user field=_user_last_login format=relative}}
        </label>
        {{/if}}
      </td>
