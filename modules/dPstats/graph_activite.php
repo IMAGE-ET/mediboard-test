@@ -92,7 +92,7 @@ function graphActivite($debut = null, $fin = null, $prat_id = 0, $salle_id = 0, 
     if($prat_id && $prat->isFromType(array("Anesthésiste"))) {
       $query .= "\nAND (operations.anesth_id = '$prat_id' OR 
                        (plagesop.anesth_id = '$prat_id' AND (operations.anesth_id = '0' OR operations.anesth_id IS NULL)))";
-      $query_hors_plage .= "\nAND (operations.anesth_id = '$prat_id'";
+      $query_hors_plage .= "\nAND operations.anesth_id = '$prat_id'";
     }
     if($discipline_id) {
       $query .= "\nAND users_mediboard.discipline_id = '$discipline_id'";
