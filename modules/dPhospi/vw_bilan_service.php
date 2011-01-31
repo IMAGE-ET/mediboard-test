@@ -136,6 +136,7 @@ foreach($_transmissions as $_trans){
   $sejour->_ref_last_operation->loadExtCodesCCAM();
 		
 	$patient_id = $sejour->patient_id;
+
 	if(!array_key_exists($patient_id, $patients)){
     $sejour->loadRefPatient();
     $sejour->_ref_patient->loadRefConstantesMedicales();
@@ -153,23 +154,29 @@ foreach($_observations as $_obs){
   $_obs->loadRefSejour();
 	$sejour =& $_obs->_ref_sejour;
   $sejour->loadRefsOperations();
-  $sejour->_ref_last_operation->loadRefPlageOp();
-  $sejour->_ref_last_operation->loadRefAffectation();
-  $sejour->_ref_last_operation->loadExtCodesCCAM();
 
-  $patient_id = $_obs->_ref_sejour->patient_id;
+  $sejour->_ref_last_operation->loadRefPlageOp();
+  $sejour->_ref_last_operation->loadRefChir();
+  $sejour->loadRefsAffectations();
+  $sejour->_ref_last_operation->loadExtCodesCCAM();
+  
+  $patient_id = $sejour->patient_id;
+  
   if(!array_key_exists($patient_id, $patients)){
-    $_obs->_ref_sejour->loadRefPatient();
-    $patients[$patient_id] = $_obs->_ref_sejour->_ref_patient;
+    $sejour->loadRefPatient();
+    $sejour->_ref_patient->loadRefConstantesMedicales();
+    $patients[$patient_id] = $sejour->_ref_patient;
   }
+
   $_obs->loadRefsFwd();
+
 	$trans_and_obs[$patient_id][$_obs->date][] = $_obs;
 }
 
 foreach($_constantes as $_constante) {
   $_constante->loadRefsFwd();
   $_constante->loadRefUser();
-  $sejour = $_constante->_ref_context;
+  $sejour =& $_constante->_ref_context;
   $sejour->loadRefsOperations();
   $sejour->_ref_last_operation->loadRefPlageOp();
   $sejour->_ref_last_operation->loadRefChir();
@@ -182,7 +189,7 @@ foreach($_constantes as $_constante) {
     $sejour->_ref_patient->loadRefConstantesMedicales();
     $patients[$patient_id] = $sejour->_ref_patient;
   }
-  $trans_and_obs[$_constante->patient_id][$_constante->datetime][] = $_constante;
+  $trans_and_obs[$patient_id][$_constante->datetime][] = $_constante;
 }
 
 // Tri des transmission, observations et constantes par date décroissante
@@ -516,6 +523,7 @@ foreach($cat_groups as $_cat_group){
 // Chargement du service
 $service = new CService();
 $service->load($service_id);
+
 
 $smarty = new CSmartyDP();
 $smarty->assign("trans_and_obs"   , $trans_and_obs);

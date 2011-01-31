@@ -257,7 +257,7 @@ selectPeriode = function(element) {
           {{else}}
             {{assign var=sejour value=$_trans_and_obs->_ref_context}}
           {{/if}}
-  			 {{assign var=patient value=$sejour->_ref_patient}}
+  			  {{assign var=patient value=$sejour->_ref_patient}}
           {{assign var=operation value=$sejour->_ref_last_operation}}
 					<tr>
 			      <th colspan="6" class="text">
@@ -277,8 +277,10 @@ selectPeriode = function(element) {
 			        <strong>{{$patient->_view}}</strong>
 			        Né(e) le {{mb_value object=$patient field=naissance}} - ({{$patient->_age}} ans) - ({{$patient->_ref_constantes_medicales->poids}} kg)
 			        <br />
-			        {{$operation->_ref_chir->_view}} - Intervention le {{$operation->_ref_plageop->date|date_format:"%d/%m/%Y"}} - 
-			        <strong>(I{{if $operation->_compteur_jour >=0}}+{{/if}}{{$operation->_compteur_jour}}) - {{mb_label object=$operation field="cote"}} {{mb_value object=$operation field="cote"}}</strong>
+              {{if $operation->_id}}
+  			        {{$operation->_ref_chir->_view}} - Intervention le {{$operation->_ref_plageop->date|date_format:"%d/%m/%Y"}} - 
+		  	        <strong>(I{{if $operation->_compteur_jour >=0}}+{{/if}}{{$operation->_compteur_jour}}) - {{mb_label object=$operation field="cote"}} {{mb_value object=$operation field="cote"}}</strong>
+              {{/if}}
 			      </th>
 			    </tr>
 			    <tr>
