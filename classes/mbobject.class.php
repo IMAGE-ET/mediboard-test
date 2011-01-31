@@ -1165,7 +1165,6 @@ class CMbObject {
     // Properties checking
     $this->updateDBFields();
 
-    // Préparation du log
     $this->loadOldObject();
     
     if ($msg = $this->check()) {
@@ -1190,12 +1189,14 @@ class CMbObject {
     if (!$ret) {
       return "$this->_class_name::store failed <br />" . $spec->ds->error();
     }
-
+    
+    // Préparation du log, doit être fait AVANT $this->load()
+    $this->prepareLog();
+		
     // Load the object to get all properties
     $this->load();
     
     // Enregistrement du log une fois le store terminé
-    $this->prepareLog();
     $this->doLog();
         
     // Trigger event

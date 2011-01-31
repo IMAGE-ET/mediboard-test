@@ -738,7 +738,7 @@ td.show {
 #waitingMsgMask {
   width: 100%;
   position: absolute;
-  background-color:#000;
+  background-color:#333;
   z-index: 899;
 }
 
