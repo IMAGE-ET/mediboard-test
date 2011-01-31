@@ -18,15 +18,12 @@ Main.add(function(){
 
 </script>
 
+<h3>
+	Kiné référent : 
+  {{$sejour->_ref_bilan_ssr->_ref_technicien->_ref_kine}}
+</h3>
+
 <table class="tbl">
-	<tr>
-		<th class="title" colspan="2">Kiné Référent</th>
-	</tr>
-	<tr>
-		<td colspan="2">
-			{{$sejour->_ref_bilan_ssr->_ref_technicien->_ref_kine->_view}}
-		</td>
-	</tr>	
 	<tr>
 		<th class="title" colspan="2">Intervenants</th>
 	</tr>
@@ -45,3 +42,18 @@ Main.add(function(){
 </table>
 
 <div id="planning-sejour"></div>
+
+<div class="planning-signatures">
+	<fieldset style="float: left;">
+	  <legend>Patient</legend>
+		Je, soussigné(e) {{$sejour->_ref_patient}}, 
+		<br />déclare avoir pris connaissance 
+		<br />et accepter les activités de rééducation.
+	</fieldset>
+	
+	<fieldset style="float: right;">
+	  <legend>Praticien</legend>
+		Médecin référent :
+		<br/>{{$sejour->_ref_praticien}}
+	</fieldset>
+</div>

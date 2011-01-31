@@ -21,7 +21,7 @@ Main.add(function() {
     {{$planning->adapt_range|@json}},
 		'{{$planning->selectable}}'
   );
-  
+	
   planning.container.addClassName("drawn");
   planning.container.show();
   planning.setPlanningHeight(planning.container.up().getHeight());

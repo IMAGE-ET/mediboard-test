@@ -16,6 +16,8 @@ $sejour_id = CValue::getOrSession("sejour_id");
 $sejour = new CSejour();
 $sejour->load($sejour_id);
 $sejour->loadRefBilanSSR();
+$sejour->loadRefPatient();
+$sejour->loadRefPraticien();
 $bilan_ssr =& $sejour->_ref_bilan_ssr;
 $bilan_ssr->loadRefTechnicien();
 $technicien =& $bilan_ssr->_ref_technicien;

@@ -74,10 +74,10 @@ PlanningTechnicien = {
 					$('planning-technicien').select(".planning col")[2].style.width = 0;
 					$('planning-technicien').select(".week-container")[0].style.overflowY = "visible";
 					
-					for (var i = 0; i < 7; i++) {
+					for (var i = 0; i < 8; i++) {
 						$$('.hour-0' + i)[0].hide();
 					}
-					for (var i = 19; i < 24; i++) {
+					for (var i = 18; i < 24; i++) {
 						$$('.hour-' + i)[0].hide();
 					}
 			
@@ -140,10 +140,10 @@ Planification = {
 						$('planning-sejour').select(".planning col")[2].style.width = 0;
 						$('planning-sejour').select(".week-container")[0].style.overflowY = "visible";
 						
-						for(var i=0; i<7; i++){
+						for(var i=0; i<8; i++){
 							$$('.hour-0'+i)[0].hide();
             }
-						for(var i=19; i<24; i++){
+						for(var i=18; i<24; i++){
               $$('.hour-'+i)[0].hide();
             }
 					}

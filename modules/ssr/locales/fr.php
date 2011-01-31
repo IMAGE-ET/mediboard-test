@@ -774,6 +774,7 @@ $locales['mod-ssr-tab-ajax_board_sejours'] = 'Séjours de la journée rééducateur'
 $locales['mod-ssr-tab-ajax_check_replacements'] = 'Vérifications des remplacements';
 $locales['mod-ssr-tab-ajax_edit_technicien'] = 'Modifier un technicien';
 $locales['mod-ssr-tab-ajax_evenements_hors_sejours'] = 'Planification SSR hors séjours';
+$locales['mod-ssr-tab-ajax_planning_sejour'] = 'Planning de séjour';
 $locales['mod-ssr-tab-ajax_sejours_technicien'] = 'Séjours de rééducateur';
 $locales['mod-ssr-tab-ajax_sejours_to_rhs_date_monday'] = 'Facturation des RHS d\'une semaine';
 $locales['mod-ssr-tab-ajax_update_modal_evenements'] = 'Dialogue de validation des evénements SSR';

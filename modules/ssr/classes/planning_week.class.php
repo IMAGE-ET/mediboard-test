@@ -85,11 +85,13 @@ class CPlanningWeek  {
 	}
   
   function addEvent(CPlanningEvent $event) {
-    if ($event->day < $this->date_min || $event->day > $this->date_max) 
+    if ($event->day < $this->date_min || $event->day > $this->date_max) {
       return;
+    }
       
-    if ($event->day < $this->date_min_active || $event->day > $this->date_max_active) 
+    if ($event->day < $this->date_min_active || $event->day > $this->date_max_active) {
       $event->disabled = true;
+    }
     
     $this->events[] = $event;
     $this->days[$event->day][] = $event;

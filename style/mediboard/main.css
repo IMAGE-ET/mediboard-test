@@ -555,7 +555,7 @@ table#weeklyPlanning th.today {
 
 .planning .event .time {
   padding: 1px;
-  font-size: 8px;
+  font-size: 80%;
   font-weight: bold;
   border-bottom: 1px dotted rgba(255,255,255,0.3);
   white-space: nowrap;
@@ -627,7 +627,7 @@ table#weeklyPlanning th.today {
 }
 
 .planning .hour {
-  vertical-align: middle;
+  vertical-align: top;
   padding: 1px;
 }
 
@@ -683,6 +683,17 @@ table#weeklyPlanning th.today {
 }
 .planning .load.high {
   background: #FF0000;
+}
+
+@media print {
+  .planning .event  {  	
+    font-size: 110%;
+  }
+}
+
+.planning-signatures fieldset {
+	width: 45%;
+	height: 6em;
 }
 
 div.tree-content {
