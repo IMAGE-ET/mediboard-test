@@ -8,69 +8,67 @@
     </th>
   </tr>
   <tr>
-    <th>Date </th>
-    <td>{{$today|date_format:"%A %d/%m/%Y"}}</td>
-  </tr>
-  <tr>
     <th>Praticien</th>
-    <td>Dr {{$prat_id->_view}}</td>
+    <td>Dr {{$prat->_view}}</td>
   </tr>
-  {{if $prat_id->discipline_id}}
+  {{if $prat->discipline_id}}
   <tr>
     <th>Spécialité</th>
-    <td>{{$prat_id->_ref_discipline->_view}}</td>
+    <td>{{$prat->_ref_discipline->_view}}</td>
   </tr>
   {{/if}}
   <tr>
-  	<th>Adresse </th>
+    <th class="category" colspan="2">Rendez-vous</th>
+  </tr>
+  <tr>
+    <th>Le</th>
     <td>
-      {{$prat_id->_ref_function->adresse}} &mdash;
-      {{$prat_id->_ref_function->cp}} {{$prat_id->_ref_function->ville}}
+      {{$consultation->_ref_plageconsult->date|date_format:$conf.longdate}}
+      à {{$consultation->heure|date_format:$conf.time}}
     </td>
   </tr>
   <tr>
-    <th class="category" colspan="2">Renseignements concernant le patient</th>
+  	<th>Adresse</th>
+    <td>
+      {{mb_value object=$prat->_ref_function field=adresse}} <br />
+      {{mb_value object=$prat->_ref_function field=cp}} {{mb_value object=$prat->_ref_function field=ville}}
+    </td>
   </tr>
   <tr>
-    <th>Nom / Prénom </th>
+    <th>Tel</th>
+    <td>{{mb_value object=$prat->_ref_function field=tel}}</td>
+  </tr>
+  <tr>
+    <th>Fax</th>
+    <td>{{mb_value object=$prat->_ref_function field=fax}}</td>
+  </tr>
+  <tr>
+    <th class="category" colspan="2">Fiche Patient</th>
+  </tr>
+  <tr>
+    <th>Nom / Prénom</th>
     <td>{{$patient->_view}}</td>
   </tr>
-  
   <tr>
-    <th>Date de naissance / Sexe </th>
+    <th>Date de naissance / Sexe</th>
     <td>
       né(e) le {{mb_value object=$patient field="naissance"}}
-      de sexe 
-      {{if $patient->sexe == "m"}}masculin{{else}}féminin{{/if}}
+      de sexe {{mb_value object=$patient field="sexe"}}
     </td>
   </tr>
- 
   <tr>
-    <th>Téléphone </th>
+    <th>Téléphone</th>
     <td>{{mb_value object=$patient field=tel}}</td>
   </tr>
-
   <tr>
-    <th>Medecin traitant </th>
+    <th>Medecin traitant</th>
     <td>{{$patient->_ref_medecin_traitant->_view}}</td>
   </tr>
-  
   <tr>
-    <th>Adresse </th>
+    <th>Adresse</th>
     <td>
-      {{$patient->adresse}} &mdash;
-      {{$patient->cp}} {{$patient->ville}}
-    </td>
-  </tr>
-  
-  <tr>
-    <th class="category" colspan="2">Renseignements relatifs à la consultation</th>
-  </tr>
-  
-  <tr>
-    <th>Consultation </th>
-    <td>      
-      le {{$consultation->_ref_plageconsult->date|date_format:"%A %d/%m/%Y"}} à {{$consultation->heure}}
+      {{mb_value object=$patient field=adresse}} <br />
+      {{mb_value object=$patient field=cp}} {{mb_value object=$patient field=ville}}
     </td>
   </tr>
 </table>
