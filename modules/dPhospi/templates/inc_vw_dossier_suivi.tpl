@@ -178,8 +178,8 @@ Main.add(function () {
 	            //contextUserId: "{{$sejour->_ref_praticien->_id}}",
               //contextUserView: "{{$sejour->_ref_praticien->_view}}",
               timestamp: "{{$conf.dPcompteRendu.CCompteRendu.timestamp}}",
-	            dependField1: oFormObs.degre,
-	            dependField2: '',
+	            //dependField1: oFormObs.degre,
+	            //dependField2: '',
 	            validateOnBlur:0
 	          });
 	}
