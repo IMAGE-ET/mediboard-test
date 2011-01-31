@@ -35,7 +35,7 @@
 	    </form>
 	    {{if $line->_class_name == "CPrescriptionLineMedicament"}}
 	      <button type="button" class="search" onclick="Prescription.viewSubstitutionLines('{{$line->_id}}', '{{$line->_class_name}}','1')">
-	         Substitution
+	         Variantes
 	         ({{$line->_count_substitution_lines}})
 	      </button>
 	    {{/if}}

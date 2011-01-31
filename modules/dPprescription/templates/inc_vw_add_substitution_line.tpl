@@ -250,7 +250,7 @@ modifFormDate = function(nb_prises, form_name, protocole,line_id){
 {{if !$mode_pack}}
 <table class="tbl">
   <tr>
-    <th class="title">Ajout d'une ligne de substitution</th>
+    <th class="title">Ajout d'une variante</th>
   </tr>
   <tr>
     <td>
@@ -288,7 +288,7 @@ modifFormDate = function(nb_prises, form_name, protocole,line_id){
     </td>
   </tr>
   <tr>
-    <th class="title">Affichage des lignes de substitutions</th>
+    <th class="title">Affichage des variantes</th>
   </tr>
 </table>
 {{/if}}

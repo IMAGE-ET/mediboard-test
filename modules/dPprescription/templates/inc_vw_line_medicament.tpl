@@ -74,7 +74,7 @@
 			
         {{if $line->_perm_edit && $line->_protocole && !$line->substitute_for_id && !$mode_pack}}
           <button type="button" class="add" onclick="Prescription.viewSubstitutionLines('{{$line->_id}}','{{$line->_class_name}}')">
-             Lignes de substitution
+             Variantes
             ({{$line->_count_substitution_lines}})
             </button>
         {{/if}}
@@ -334,7 +334,7 @@
                   onchange="onSubmitFormAjax(this.form, { onComplete:   
                                Prescription.reloadLine.curry(this.value)
                               } )">
-            <option value="">Lignes de substitutions</option>
+            <option value="">Variantes</option>
             {{foreach from=$line->_ref_substitution_lines item=lines_subst_by_chap}}
                 {{foreach from=$lines_subst_by_chap item=_line_subst}}
                 <option value="{{$_line_subst->_guid}}">

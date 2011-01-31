@@ -285,7 +285,7 @@ div.footer {
 	          || $line_medicament_element_no_ald->_ref_substitution_lines.CPrescriptionLineMix|@count}}
 	        <br />
 	        <ul style="margin-left: 15px;">
-	        <strong>Substitutions possibles:</strong> 
+	        <strong>Variantes possibles:</strong> 
 	        {{foreach from=$line_medicament_element_no_ald->_ref_substitution_lines item=_subst_line_by_chap}}
 	        {{foreach from=$_subst_line_by_chap item=_subst_line_med}}
 	          {{if $_subst_line_med->_class_name == "CPrescriptionLineMedicament"}}
@@ -305,7 +305,7 @@ div.footer {
 	          || $line_medicament_element_no_ald->_ref_substitution_lines.CPrescriptionLineMix|@count}}
 	        <br />
 	        <ul style="margin-left: 15px;">
-	          <strong>Substitutions possibles:</strong> 
+	          <strong>Variantes possibles:</strong> 
 	        {{foreach from=$line_medicament_element_no_ald->_ref_substitution_lines item=_subst_line_by_chap}}
 	        {{foreach from=$_subst_line_by_chap item=_subst_line_med}}
 	          {{if $_subst_line_med->_class_name == "CPrescriptionLineMedicament"}}

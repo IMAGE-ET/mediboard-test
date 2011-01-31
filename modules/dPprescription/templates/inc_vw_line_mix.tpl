@@ -94,7 +94,7 @@ Main.add( function(){
       <div style="float: right">
         {{if $line->_protocole && $line->_perm_edit && !$line->substitute_for_id && !$mode_pack}}
           <button type="button" class="add" onclick="Prescription.viewSubstitutionLines('{{$line->_id}}','{{$line->_class_name}}')">
-             Lignes de substitution
+             Variantes
             ({{$line->_count_substitution_lines}})
             </button>
         {{/if}}
@@ -671,7 +671,7 @@ Main.add( function(){
             <input type="hidden" name="dosql" value="do_substitution_line_aed" />
             <select name="object_guid" style="width: 150px;" 
                     onchange="onSubmitFormAjax(this.form, { onComplete: Prescription.reloadLine.curry(this.value) } )">
-              <option value="">Lignes de substitutions</option>
+              <option value="">Variantes</option>
               {{foreach from=$line->_ref_substitution_lines item=lines_subst_by_chap}}
                   {{foreach from=$lines_subst_by_chap item=_line_subst}}
                   <option value="{{$_line_subst->_guid}}">
