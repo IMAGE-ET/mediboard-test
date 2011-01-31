@@ -22,7 +22,7 @@ function zoomGraphIntervention(date, type){
   url.addParam("codes_ccam"   , "{{$filter->codes_ccam|smarty:nodefaults|escape:"javascript"}}");
   url.addParam("discipline_id", "{{$filter->_specialite}}");
   url.addParam("size"         , 2);
-  url.popup(760, 400, "ZoomMonth");
+  url.popup(850, 550, "ZoomMonth");
 }
 
 var graphs = {{$graphs|@json}};
