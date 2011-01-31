@@ -227,6 +227,7 @@ foreach($prescriptions as $_prescription){
 														(prescription_line_mix.prescription_id = prescription.prescription_id)";
 	$where = array();
 	$where["prescription.prescription_id"] = " = '$_prescription->_id'";
+	$where["administration.dateTime"] = " BETWEEN '$date_min' AND '$date_max'";
 	$administrations = $administration->loadList($where, null, null, null, $ljoin);
 	
 	foreach($administrations as $_administration){
