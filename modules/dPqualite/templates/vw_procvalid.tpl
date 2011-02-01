@@ -37,9 +37,9 @@ function validDoc(oForm){
 }
 
 function validDocDirect(oForm){
-  if(oForm.elements["formfile"].value == ""){
+  if(oForm.elements["formfile[0]"].value == ""){
     alert("Veuillez selectionner un fichier");
-    oForm.elements["formfile"].focus();
+    oForm.elements["formfile[0]"].focus();
   }else{
     validDoc(oForm);
   }
