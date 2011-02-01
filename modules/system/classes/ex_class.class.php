@@ -14,6 +14,7 @@ class CExClass extends CMbObject {
   var $host_class = null;
   var $event      = null;
   var $name       = null;
+  var $disabled   = null;
   
   var $_ref_fields = null;
 	var $_ref_host_fields = null;
@@ -35,6 +36,7 @@ class CExClass extends CMbObject {
     $props["host_class"] = "str notNull protected";
     $props["event"]      = "str notNull protected canonical";
     $props["name"]       = "str notNull";
+    $props["disabled"]   = "bool notNull default|1";
     return $props;
   }
 

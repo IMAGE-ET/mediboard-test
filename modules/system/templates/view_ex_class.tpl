@@ -19,7 +19,7 @@ ExConcept.refreshList();
 
 <table class="main">
   <tr>
-    <td id="exClassList" style="width: 20%">
+    <td id="exClassList" style="width: 20%;">
     	<!-- exClassList -->
     </td>
     <td id="exClassEditor" rowspan="2">

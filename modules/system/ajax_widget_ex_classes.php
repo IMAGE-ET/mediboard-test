@@ -19,6 +19,7 @@ $object = CMbObject::loadFromGuid($object_guid);
 $ex_class = new CExClass;
 $ex_class->host_class = $object->_class_name;
 $ex_class->event = $event;
+$ex_class->disabled = 0;
 $ex_classes = $ex_class->loadMatchingList();
 
 $ex_objects = array();

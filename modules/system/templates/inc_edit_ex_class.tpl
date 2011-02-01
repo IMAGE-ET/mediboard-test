@@ -55,6 +55,9 @@
             <th>{{mb_label object=$ex_class field=name}}</th>
             <td>{{mb_field object=$ex_class field=name}}</td>
             
+            <th>{{mb_label object=$ex_class field=disabled}}</th>
+            <td>{{mb_field object=$ex_class field=disabled typeEnum=checkbox}}</td>
+            
             <td>
               {{if $ex_class->_id}}
                 <button type="submit" class="modify">{{tr}}Save{{/tr}}</button>
@@ -88,8 +91,10 @@ Main.add(function(){
 <hr class="control_tabs" />
 
 <table class="main layout" id="fields-specs" style="display: none;">
+  <col style="width: 15em; max-width: 300px;" />
+	
   <tr>
-    <td style="width: 15em; padding-right: 5px;">
+    <td style="padding-right: 5px;">
       <button type="button" class="new" style="float: right;" onclick="ExField.create({{$ex_class->_id}})">
         {{tr}}CExClassField-title-create{{/tr}}
       </button>
@@ -120,7 +125,7 @@ Main.add(function(){
       </table>
     </td>
     <td id="exFieldEditor">
-      <!-- exFieldEditor -->
+      <!-- exFieldEditor -->&nbsp;
     </td>
   </tr>
 </table>
@@ -164,7 +169,7 @@ Main.add(function(){
       </table>
     </td>
     <td id="exConstraintEditor">
-      <!-- exConstraintEditor -->
+      <!-- exConstraintEditor -->&nbsp;
     </td>
   </tr>
 </table>

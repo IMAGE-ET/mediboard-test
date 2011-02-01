@@ -17,6 +17,9 @@
       {{foreach from=$_by_event item=_ex_class}}
 		    <tr>
 		      <td style="padding-left: 2em;">
+            {{if $_ex_class->disabled}}
+              <span style="float: right;">(inactif)</span>
+            {{/if}}
 		        <a href="#1" onclick="ExClass.edit({{$_ex_class->_id}})">
 		          {{mb_value object=$_ex_class field=name}}
 		        </a>

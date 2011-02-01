@@ -390,8 +390,13 @@ class CSetupsystem extends CSetup {
     $query = "ALTER TABLE `ex_class_field` 
               ADD INDEX (`concept_id`);";
     $this->addQuery($query);
+		
+		$this->makeRevision("1.0.41");
+		$query = "ALTER TABLE `ex_class` 
+              ADD `disabled` ENUM ('0','1') NOT NULL DEFAULT '1';";
+    $this->addQuery($query);
     
-    $this->mod_version = "1.0.41";
+    $this->mod_version = "1.0.42";
     
   }
 }
