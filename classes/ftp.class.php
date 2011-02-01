@@ -43,6 +43,8 @@ class CFTP {
     if (!$fp) {
       throw new CMbException("CSourceFTP-socket-connection-failed", $this->hostname, $this->port, $errno, $errstr);
     }
+    
+    return true;
   }
   
   function connect() {
@@ -65,6 +67,8 @@ class CFTP {
     if ($this->passif_mode && !@ftp_pasv($this->connexion, true)) {
       throw new CMbException("CSourceFTP-passive-mode-on-failed");
     }
+    
+    return true;
   }
   
   function getListFiles($folder = ".") {
@@ -84,6 +88,8 @@ class CFTP {
     if (!@ftp_delete($this->connexion, $file)) {
       throw new CMbException("CSourceFTP-delete-file-failed", $file);
     }    
+    
+    return true;
   }
   
   function getFile($source_file, $destination_file = null) {
@@ -129,6 +135,8 @@ class CFTP {
     if (!@ftp_put($this->connexion, $destination_file, $source_file, constant($this->mode))) {
       throw new CMbException("CSourceFTP-upload-file-failed", $source_file, $destination_file);
     }
+    
+    return true;
   }
   
   function renameFile($oldname, $newname) {
@@ -140,6 +148,8 @@ class CFTP {
     if (!@ftp_rename($this->connexion, $oldname, $newname)) {
       throw new CMbException("CSourceFTP-rename-file-failed", $oldname, $newname);
     }
+    
+    return true;
   }
   
   function close() {
