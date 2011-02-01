@@ -59,7 +59,8 @@ class CDoDocGedAddEdit extends CDoObjectAddEdit {
         $objFile = new CFileAddEdit;
         $objFile->redirect = null;
         $objFile->doBind();
-        $objFile->_obj->object_id = $doc_ged_id;
+        $_POST["object_id"] = $doc_ged_id;
+        $_POST["private"] = 0;
         $objFile->dostore();
         if(CAppUI::isMsgOK()){
           $file_upload_ok = true;

@@ -134,7 +134,7 @@ function ZoomAjax(objectClass, objectId, elementClass, elementId, sfn){
         {{/if}}
         <tr>
           <th>
-            <label for="formfile">
+            <label for="formfile[0]">
               {{if $docGed->doc_ged_id}}
               {{tr}}CDocGedSuivi-file_id-modify{{/tr}}
               {{else}}
@@ -143,7 +143,7 @@ function ZoomAjax(objectClass, objectId, elementClass, elementId, sfn){
             </label>
           </th>
           <td>
-            <input type="file" name="formfile" size="0" />
+            <input type="file" name="formfile[0]" size="0" />
           </td>
         </tr>
         <tr>
