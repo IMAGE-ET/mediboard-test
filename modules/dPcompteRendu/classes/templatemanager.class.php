@@ -417,6 +417,7 @@ class CTemplateManager {
           $values[] = "src=\"$image\"";
         }
         else {
+          $property["fieldHTML"] = preg_replace("/'/",'&#39;', $property["fieldHTML"]);
           $fields[] = $property["fieldHTML"];
           $values[] =  nl2br($property["valueHTML"]);
         }
