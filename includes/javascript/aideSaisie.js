@@ -19,6 +19,7 @@ var AideSaisie = {
         validateOnBlur: true,
         resetSearchField: true,
         resetDependFields: true,
+        filterWithDependFields: true,
         defaultUserId: null,
         defaultUserView: null,
         property: '',
@@ -151,8 +152,10 @@ var AideSaisie = {
         paramName: "_search",
         caretBounds: true,
         callback: function(input, query){
-          query += options.dependField1 ? ("&depend_value_1="+($V(options.dependField1) || "")) : '';
-          query += options.dependField2 ? ("&depend_value_2="+($V(options.dependField2) || "")) : '';
+					if (options.filterWithDependFields) {
+						query += options.dependField1 ? ("&depend_value_1=" + ($V(options.dependField1) || "")) : '';
+						query += options.dependField2 ? ("&depend_value_2=" + ($V(options.dependField2) || "")) : '';
+					}
           return query+"&hide_empty_list=1&hide_exact_match=1";
         },
         dontSelectFirst: true,
