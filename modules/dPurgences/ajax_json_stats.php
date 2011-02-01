@@ -619,7 +619,7 @@ switch ($axe) {
     WHERE `diag_infirmier` IS NOT NULL
     AND `group_id` = '$group_id'
     AND `entree` BETWEEN '".reset($dates)."' AND '".end($dates)."'
-    GROUP BY `diag_infirmier`
+    GROUP BY categorie
     HAVING nb_diag > $percent";
  
     $result = $ds->exec($sql);
@@ -646,9 +646,10 @@ switch ($axe) {
     foreach($areas as $key => $value) {
       unset($where[10]);
       $label = utf8_encode($value);
-      $where[10] = "rpu.diag_infirmier ". $ds->prepareLike("$value\n").
-                   "OR rpu.diag_infirmier ". $ds->prepareLike("$value%\n").
-                   "OR rpu.diag_infirmier ". $ds->prepareLike($value);
+      $value = addslashes($value);
+      $where[10] = "rpu.diag_infirmier LIKE '$value\n%'
+        OR rpu.diag_infirmier LIKE '$value\n'
+        OR rpu.diag_infirmier LIKE '$value'";
 
       $series[$key] = array('data' => array(), 'label' => $label);
       
