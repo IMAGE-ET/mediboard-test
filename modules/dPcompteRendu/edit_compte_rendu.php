@@ -196,6 +196,14 @@ $smarty->assign("noms_textes_libres", $noms_textes_libres);
 $exchange_source = CExchangeSource::get("mediuser-".CAppUI::$user->_id);
 $smarty->assign("exchange_source", $exchange_source);
 
+// Nettoyage des balises meta et link.
+// Pose problème lors de la présence d'un entête et ou/pied de page
+$source = &$templateManager->document;
+
+$source = preg_replace("/<meta\s*[^>]*\s*[^\/]>/", '', $source);
+$source = preg_replace("/(<\/meta>)+/i", '', $source);
+$source = preg_replace("/<link\s*[^>]*\s*>/", '', $source);
+
 if (CValue::get("reloadzones") == 1) {
   $smarty->display("inc_zones_fields.tpl");
 }
