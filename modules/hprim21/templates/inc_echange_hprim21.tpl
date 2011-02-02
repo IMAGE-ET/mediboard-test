@@ -27,39 +27,53 @@
      {{$object->echange_hprim21_id|str_pad:6:'0':$smarty.const.STR_PAD_LEFT}}
     </a>
   </td>
-  <td class="narrow">
+  <td>
     {{$object->object_class}}
   </td>
-  <td class="narrow">
+  <td>
     {{if $object->object_id}}
       <span onmouseover="ObjectTooltip.createEx(this, '{{$object->object_class}}-{{$object->object_id}}');">
         {{$object->object_id|str_pad:6:'0':$smarty.const.STR_PAD_LEFT}}
       </span>
     {{/if}}
   </td>
-  <td class="narrow">
+  <td>
     {{if $object->id_permanent}}
       <span onmouseover="ObjectTooltip.createEx(this, '{{$object->object_class}}-{{$object->object_id}}', 'identifiers');">
         {{$object->id_permanent|str_pad:6:'0':$smarty.const.STR_PAD_LEFT}}
       </span>
     {{/if}}
   </td>
-  <td class="narrow">
+  <td>
     <label title='{{mb_value object=$object field="date_production"}}'>
       {{mb_value object=$object field="date_production" format=relative}}
     </label>
   </td>
-  <td class="narrow">
+  <td>
     {{$object->version}}
   </td>
-  <td class="narrow">
+  <td>
     {{$object->type_message}}
   </td>
-  <td>
-     {{mb_value object=$object field="emetteur_desc"}} ({{mb_value object=$object field="id_emetteur"}})
+  {{assign var=emetteur value=$object->_ref_emetteur}}
+  <td class="{{if $object->emetteur_id == '0'}}error{{/if}}">
+     {{if $object->_self_emetteur}}
+     <label title='[SELF]' style="font-weight:bold">
+       [SELF]
+     </label>
+     {{else}}
+       {{mb_value object=$emetteur field="nom"}}
+     {{/if}}
   </td>
+  {{assign var=destinataire value=$object->_ref_destinataire}}
   <td>
-    {{mb_value object=$object field="destinataire_desc"}}
+    {{if $object->_self_destinataire}}
+     <label title='[SELF]' style="font-weight:bold">
+       [SELF]
+     </label>
+     {{else}}
+       {{mb_value object=$destinataire field="nom"}}
+     {{/if}}
   </td>
   <td class="{{if $object->date_echange}}ok{{else}}warning{{/if}}">
     <span>

@@ -45,7 +45,7 @@ class CDestinataireHprim extends CInteropReceiver {
   function getProps() {
     $props = parent::getProps();
     $props["type"]        = "enum notNull list|cip|sip default|cip";
-		$props["message"]     = "enum list|pmsi|patients|stock default|patient";
+		$props["message"]     = "enum list|pmsi|patients|stock default|patients";
     $props["register"]    = "bool notNull default|1";
     $props["code_appli"]  = "str";
     $props["code_acteur"] = "str";
@@ -74,71 +74,11 @@ class CDestinataireHprim extends CInteropReceiver {
 		}
 	}
   
-  function getTagIPP($group_id = null) {
-    // Pas de tag IPP => pas d'affichage d'IPP
-    if (null == $tag_ipp = CAppUI::conf("dPpatients CPatient tag_ipp")) {
-      return;
-    }
-
-    // Permettre des IPP en fonction de l'établissement
-    $group = CGroups::loadCurrent();
-    if (!$group_id) {
-      $group_id = $group->_id;
-    }
-    
-    // Préférer un identifiant externe de l'établissement
-    if ($tag_group_idex = CAppUI::conf("dPpatients CPatient tag_ipp_group_idex")) {
-      $idex = new CIdSante400();
-      $idex->loadLatestFor($group, $tag_group_idex);
-      $group_id = $idex->id400;
-    }
-   
-    return str_replace('$g', $group_id, $tag_ipp);
-  }
-  
-  function getTagNumDossier($group_id = null) {
-    // Pas de tag Num dossier
-    if (null == $tag_dossier = CAppUI::conf("dPplanningOp CSejour tag_dossier")) {
-      return;
-    }
-
-    // Permettre des IPP en fonction de l'établissement
-    $group = CGroups::loadCurrent();
-    if (!$group_id) {
-      $group_id = $group->_id;
-    }
-    
-    // Préférer un identifiant externe de l'établissement
-    if ($tag_group_idex = CAppUI::conf("dPplanningOp CSejour tag_dossier_group_idex")) {
-      $idex = new CIdSante400();
-      $idex->loadLatestFor($group, $tag_group_idex);
-      $group_id = $idex->id400;
-    }
-
-    return str_replace('$g', $group_id, $tag_dossier);
-  }
-  
   function updateFormFields() {
     parent::updateFormFields();
-    
-    $this->_tag_patient  = $this->getTagIPP($this->group_id);		
-    $this->_tag_sejour   = $this->getTagNumDossier($this->group_id);
-		
-		$this->_tag_mediuser = str_replace('$g', $this->group_id, CAppUI::conf("mediusers tag_mediuser"));
-		$this->_tag_service  = str_replace('$g', $this->group_id, CAppUI::conf("dPhospi tag_service"));
-		
+
 		$this->code_syst = $this->code_syst ? $this->code_syst : $this->nom;
   }  
-  
-  function register($idClient) {
-    $this->nom = $idClient;
-    $this->loadMatchingObject();
-    
-    // Enregistrement automatique d'un destinataire
-    if (!$this->_id) {
-      
-    }
-  }
   
   function sendEvenementPatient($domEvenement, $mbObject, $referent = null, $initiateur = null) {
     $msgEvtPatient = $domEvenement->generateTypeEvenement($mbObject, $referent, $initiateur);

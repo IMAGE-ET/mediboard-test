@@ -1,6 +1,12 @@
 <?php
 $locales['CContentXML-back-messages'] = 'Contenu du message';
 $locales['CDestinataireHprim'] = 'Destinataire H\'XML';
+$locales['CDestinataireHprim-_exchanges_sources_save'] = 'Sources enregistrées';
+$locales['CDestinataireHprim-_exchanges_sources_save-court'] = 'Sources enregistrées';
+$locales['CDestinataireHprim-_exchanges_sources_save-desc'] = 'Sources enregistrées';
+$locales['CDestinataireHprim-_reachable'] = 'Accessible';
+$locales['CDestinataireHprim-_reachable-court'] = 'Accessible';
+$locales['CDestinataireHprim-_reachable-desc'] = 'Accessible';
 $locales['CDestinataireHprim-_tag'] = 'Tag';
 $locales['CDestinataireHprim-_tag-court'] = 'Tag';
 $locales['CDestinataireHprim-_tag-desc'] = 'Tag associé au destinataire';
@@ -248,10 +254,6 @@ $locales['CEchangeHprim.object_class.CPatient'] = 'Patient';
 $locales['CEchangeHprim.object_class.CSejour'] = 'Séjour';
 $locales['CEchangeHprim.one'] = 'echange H\'XML';
 $locales['CEchangeHprim.select'] = 'Choisissez un echange H\'XML';
-$locales['CEchangeXML.object_class.CAffectation'] = 'Affectation';
-$locales['CEchangeXML.object_class.COperation'] = 'Intervention';
-$locales['CEchangeXML.object_class.CPatient'] = 'Patient';
-$locales['CEchangeXML.object_class.CSejour'] = 'Séjour';
 $locales['CGroups-back-'] = 'Etablissements';
 $locales['CGroups-back-destinataires_hprim'] = 'Destinataires H\'XML';
 $locales['CGroups-back-destinataires_hprim.empty'] = 'Pas de destinataire H\'XML';

@@ -101,8 +101,8 @@ function changePage(page) {
           <th>{{mb_title object=$echg_hprim21 field="date_production"}}</th>
           <th>{{mb_title object=$echg_hprim21 field="version"}}</th>
           <th>{{mb_title object=$echg_hprim21 field="type_message"}}</th>
-          <th>{{mb_title object=$echg_hprim21 field="emetteur_desc"}}</th>
-          <th>{{mb_title object=$echg_hprim21 field="destinataire_desc"}}</th>
+          <th>{{mb_title object=$echg_hprim21 field="emetteur_id"}}</th>
+          <th>{{mb_title object=$echg_hprim21 field="destinataire_id"}}</th>
           <th>{{mb_title object=$echg_hprim21 field="date_echange"}}</th>
           <th>Retraitement</th>
           <th colspan="2">{{mb_title object=$echg_hprim21 field="message_valide"}}</th>

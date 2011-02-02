@@ -55,7 +55,7 @@ class CSourceFTP extends CExchangeSource {
     $this->counter++;
       
     $destination_basename = sprintf("%s%0".$this->filenbroll."d", $this->fileprefix, $this->counter % pow(10, $this->filenbroll));
-  
+    
     if ($ftp->connect()) {
       $ftp->sendContent($this->_data, "$destination_basename.$this->fileextension");
       if ($this->fileextension_write_end) {

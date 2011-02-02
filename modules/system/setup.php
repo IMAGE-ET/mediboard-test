@@ -396,8 +396,16 @@ class CSetupsystem extends CSetup {
               ADD `disabled` ENUM ('0','1') NOT NULL DEFAULT '1';";
     $this->addQuery($query);
     
-    $this->mod_version = "1.0.42";
+    $this->makeRevision("1.0.42");
+    $query = "CREATE TABLE `content_tabular` (
+                `content_id` INT (11) UNSIGNED NOT NULL auto_increment PRIMARY KEY,
+                `content` TEXT,
+                `import_id` INT (11),
+                `separator` CHAR (1)
+              ) TYPE=MYISAM;";
+    $this->addQuery($query);
     
+    $this->mod_version = "1.0.43";
   }
 }
 ?>

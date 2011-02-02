@@ -45,17 +45,16 @@ class CHPrim21Reader {
   function bindEchange($fileName = null) {
     $this->_echange_hprim21->date_production   = mbDateTime($this->date);
     $this->_echange_hprim21->version           = $this->version;
-    $this->_echange_hprim21->type              = $this->type;
     $this->_echange_hprim21->nom_fichier       = $this->nom_fichier;
-    $this->_echange_hprim21->id_emetteur       = $this->id_emetteur;
-    $this->_echange_hprim21->emetteur_desc     = $this->id_emetteur_desc;
-    $this->_echange_hprim21->adresse_emetteur  = $this->adresse_emetteur;
-    $this->_echange_hprim21->id_destinataire   = $this->id_recepteur;
-    $this->_echange_hprim21->destinataire_desc = $this->id_recepteur_desc;
+    $dest_hprim21 = new CDestinataireHprim21();
+    $dest_hprim21->register($this->id_emetteur);
+    $this->_echange_hprim21->emetteur_id       = isset($dest_hprim21->_id) ? $dest_hprim21->_id : 0;
+    // Read => Mediboard
+    $this->_echange_hprim21->destinataire_id   = null;
     $this->_echange_hprim21->type_message      = $this->type_message;
     $this->_echange_hprim21->date_echange      = mbDateTime();
     if ($fileName)
-      $this->_echange_hprim21->message           = file_get_contents($fileName);
+      $this->_echange_hprim21->_message        = file_get_contents($fileName);
     
     return $this->_echange_hprim21;
   }
@@ -215,19 +214,13 @@ class CHPrim21Reader {
     $this->mot_de_passe      = $champs[1];
     $emetteur                = explode($this->separateur_sous_champ, $champs[2]);
     $this->id_emetteur       = $emetteur[0];
-    $this->id_emetteur_desc  = $emetteur[1];
-    $this->adresse_emetteur  = $champs[3];
     $this->type_message      = $champs[4];
-    $this->tel_emetteur      = $champs[5];
     $this->carac_trans       = $champs[6];
     $recepteur               = explode($this->separateur_sous_champ, $champs[7]);
-    $this->id_recepteur      = $recepteur[0];
-    $this->id_recepteur_desc = $recepteur[1];
     $this->commentaire       = $champs[8];
     $this->mode_traitement   = $champs[9];
     $version_type            = explode($this->separateur_sous_champ, $champs[10]);
     $this->version           = $version_type[0];
-    $this->type              = $version_type[1];
     $this->date              = $champs[11];
     $this->has_header        = true;
     

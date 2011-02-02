@@ -104,6 +104,16 @@ class CInteropReceiver extends CMbObject {
       $this->loadRefsExchangesSources();
     }
   }
+  
+  function register($name) {
+    $this->nom = $name;
+    $this->loadMatchingObject();
+    
+    // Enregistrement automatique d'un destinataire
+    if (!$this->_id) {
+      
+    }
+  }
 }
 
 ?>

@@ -259,6 +259,94 @@ class CSetuphprim21 extends CSetup {
               ADD INDEX (`echange_hprim21_id`)";
     $this->addQuery($sql);
     
-    $this->mod_version = "0.14";
+    $this->makeRevision("0.14");
+     
+    $this->setTimeLimit(3600);
+    
+    $sql = "INSERT INTO content_tabular (`content`, `import_id`) 
+              SELECT `message`, `echange_hprim21_id` FROM `echange_hprim21`;";
+    $this->addQuery($sql);
+    
+    $sql = "ALTER TABLE `echange_hprim21` 
+              DROP `message`;";
+    $this->addQuery($sql);
+    
+    $sql = "ALTER TABLE `echange_hprim21` 
+              ADD `message_content_id` INT (11) UNSIGNED;";
+    $this->addQuery($sql);
+    
+    $sql = "ALTER TABLE `echange_hprim21` 
+              ADD INDEX (`message_content_id`);";
+    $this->addQuery($sql);
+    
+    $sql = "UPDATE echange_hprim21 e 
+              JOIN content_tabular cx ON echange_hprim21_id = cx.import_id
+              SET  e.message_content_id = cx.content_id;";
+    $this->addQuery($sql);
+    
+    $sql = "UPDATE `content_tabular`
+             SET `import_id` = NULL,
+                 `separator` = '|';";
+    $this->addQuery($sql); 
+
+    $this->makeRevision("0.15");
+    
+    $sql = "CREATE TABLE `destinataire_hprim21` (
+              `dest_hprim21_id` INT (11) UNSIGNED NOT NULL auto_increment PRIMARY KEY,
+              `nom` VARCHAR (255) NOT NULL,
+              `libelle` VARCHAR (255),
+              `group_id` INT (11) UNSIGNED NOT NULL,
+              `actif` ENUM ('0','1') NOT NULL DEFAULT '0',
+              `message` ENUM ('L','C','R') DEFAULT 'C'
+            ) TYPE=MYISAM;";
+    $this->addQuery($sql); 
+    
+    $sql = "ALTER TABLE `destinataire_hprim21` 
+              ADD INDEX (`group_id`);";
+    $this->addQuery($sql); 
+    
+    $this->setTimeLimit(3600);
+    
+    // Insertion de l'id du CDestinataireHprim21 dans le champ emetteur_id 
+    $sql = "INSERT INTO destinataire_hprim21 (`nom`, `libelle`, `group_id`, `actif`, `message`) 
+              SELECT DISTINCT `id_emetteur`, `emetteur_desc`, `group_id`, '1', `type` FROM `echange_hprim21`;";
+    $this->addQuery($sql);    
+    
+    $sql = "ALTER TABLE `echange_hprim21` 
+              ADD `emetteur_id` INT (11) UNSIGNED;";
+    $this->addQuery($sql);
+    
+    $sql = "ALTER TABLE `echange_hprim21` 
+              ADD INDEX (`emetteur_id`);";
+    $this->addQuery($sql);
+    
+    $sql = "UPDATE echange_hprim21 e 
+              JOIN destinataire_hprim21 dh ON id_emetteur = dh.nom
+              SET  e.emetteur_id = dh.dest_hprim21_id;";
+    $this->addQuery($sql);
+    
+    $sql = "ALTER TABLE `echange_hprim21` 
+              DROP `id_emetteur`,
+              DROP `emetteur_desc`,
+              DROP `adresse_emetteur`,
+              DROP `type`;";
+    $this->addQuery($sql);
+    
+    // Insertion de l'id du CDestinataireHprim21 dans le champ destinataire_id 
+    // Dans notre cas, toujours récepteur donc NULL
+    $sql = "ALTER TABLE `echange_hprim21` 
+              ADD `destinataire_id` INT (11) UNSIGNED;";
+    $this->addQuery($sql);
+    
+    $sql = "ALTER TABLE `echange_hprim21` 
+              ADD INDEX (`destinataire_id`);";
+    $this->addQuery($sql);
+    
+    $sql = "ALTER TABLE `echange_hprim21` 
+              DROP `id_destinataire`,
+              DROP `destinataire_desc`;";
+    $this->addQuery($sql);
+    
+    $this->mod_version = "0.16";
   }
 }
