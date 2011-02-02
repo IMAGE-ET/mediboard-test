@@ -8,6 +8,10 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
  */
   
+// Needed for module config file inclusions 
+// Beginning of this file or installer will fail on config loading.
+global $dPconfig; 
+
 // Global hosting settings
 $dPconfig["root_dir"]          = "/var/www/mediboard";  // No trailing slash, no backslashes for Win users (use slashes instead)
 $dPconfig["company_name"]      = "mediboard.org";
@@ -434,12 +438,10 @@ $dPconfig["mediusers"] = array (
   "tag_mediuser" => ""
 );
 
-// Inclusion des fichiers de config de chaque module
+// Module config file inclusion
 $config_files = glob("./modules/*/config.php");
-
-global $dPconfig; // Needed, or the config won't be well loaded
 foreach ($config_files as $file) {
-  require_once($file);
+  require_once $file;
 }
 
 ?>
