@@ -93,6 +93,9 @@ var AideSaisie = {
       if($V(input).charAt($V(input).length - 1) != '\n') {
         $V(input, $V(input) + ' ');
       }
+			if (Object.isFunction(input.onchange)){
+				input.onchange.bindAsEventListener(input)();
+			}
       input.tryFocus();
       $V(this.options.dependField1, data.depend1);
       $V(this.options.dependField2, data.depend2);
