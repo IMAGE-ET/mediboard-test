@@ -84,7 +84,7 @@ $listSejour = $listSejour->loadGroupList($where, $order, null, null, $ljoin);
 foreach($listSejour as $key => $sejour){
   $sejour->loadRefPatient();
   $sejour->loadRefPraticien();
-  $sejour->loadRefsAffectations("sortie ASC");
+  $sejour->loadRefsAffectations();
   $sejour->loadRefEtabExterne();
   $sejour->loadNumDossier();
   $affectation =& $sejour->_ref_last_affectation;
