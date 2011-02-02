@@ -43,6 +43,7 @@
       <xs:enumeration value="kine"/>
       <xs:enumeration value="soin"/>
       <xs:enumeration value="dm"/>
+      <xs:enumeration value="ds"/>
     </xs:restriction>
   </xs:simpleType>
 
