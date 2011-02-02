@@ -152,7 +152,7 @@ Traitement = {
 	<ul>
 	{{foreach from=$dossier_medical->_ref_prescription->_ref_prescription_lines item=_line}}
 	  <li>
-	    <form name="delTraitementDossierMedPat-{{$_line->_id}}">
+	    <form name="delTraitementDossierMedPat-{{$_line->_id}}"  action="?" method="post">
 	      <input type="hidden" name="m" value="dPprescription" />
 	      <input type="hidden" name="del" value="1" />
 	      <input type="hidden" name="dosql" value="do_prescription_line_medicament_aed" />

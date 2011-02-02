@@ -1,107 +1,80 @@
 {{assign var=patient value=$consult->_ref_patient}}
 {{assign var=praticien value=$consult->_ref_chir}}
 
-<table style="width: 100%">
-  <!-- 1ere ligne -->
-  
-  {{if $consult->sejour_id}} {{* Cas d'un RPU *}}
+<table class="form">
   <tr>
-    <th class="title" colspan="2">{{tr}}CConsultation{{/tr}}</th>
+    <th class="category" colspan="2">Documents</th>
   </tr>
-  {{/if}}
-  
   <tr>
-    <td style="width: 50%">
-      <table class="form">
-        <!-- Fichiers -->
-      	<tr>
-      		<th class="category">{{tr}}CFile{{/tr}}</th>
-      	</tr>
-      	
-      	<tr>
-      		<td>            
-            <div id="files">
-            <script type="text/javascript">
-              File.register('{{$consult->_id}}','{{$consult->_class_name}}', 'files');
-            </script>
-            </div>
-          </td>
-        </tr>
-      </table>
+    <td class="halfPane">
+      <fieldset>
+        <legend>{{tr}}CFile{{/tr}} - {{tr}}CConsultation{{/tr}}</legend>            
+        <div id="files">
+          <script type="text/javascript">
+            File.register('{{$consult->_id}}','{{$consult->_class_name}}', 'files');
+          </script>
+        </div>
+      </fieldset>
   	</td>
-  	<td style="width: 50%">
-      <table class="form">
-        <tr>
-          <th class="category">Documents</th>
-        </tr>
-      	<tr>
-          <td id="documents-fdr"> 
-            {{mb_ternary var=object test=$consult->_is_anesth value=$consult->_ref_consult_anesth other=$consult}}
-            
-            {{mb_include_script module="dPcompteRendu" script="document"}}
-            <script type="text/javascript">
-              Document.register('{{$object->_id}}','{{$object->_class_name}}','{{$consult->_praticien_id}}','documents-fdr');
-            </script>
-          </td>
-      	</tr>
-        {{if $conf.dPcabinet.CPrescription.view_prescription}}
-        <tr>
-          <th class="category">{{tr}}CPrescription{{/tr}}</th>
-        </tr>
-      	<tr>
-      		<td id="prescription_register">
-            <script type="text/javascript">
-             PrescriptionEditor.register('{{$consult->_id}}','{{$consult->_class_name}}','fdr','{{$consult->_praticien_id}}');
-           </script>
-      		</td>
-      	</tr>
-        {{/if}}
-      </table>
+  	<td class="halfPane">
+      <fieldset>
+        <legend>{{tr}}CCompteRendu{{/tr}} - {{tr}}CConsultation{{/tr}}</legend>            
+        <div id="documents-fdr"> 
+          {{mb_ternary var=object test=$consult->_is_anesth value=$consult->_ref_consult_anesth other=$consult}}
+          {{mb_include_script module="dPcompteRendu" script="document"}}
+          <script type="text/javascript">
+            Document.register('{{$object->_id}}','{{$object->_class_name}}','{{$consult->_praticien_id}}','documents-fdr');
+          </script>
+        </div>
+      </fieldset>
+    </td>
+  </tr>
+  <tr>
+    <td colspan="2">
+      {{if $conf.dPcabinet.CPrescription.view_prescription}}
+      <fieldset>
+        <legend>{{tr}}CPrescription{{/tr}}</legend>
+        <div id="prescription_register">
+          <script type="text/javascript">
+            PrescriptionEditor.register('{{$consult->_id}}','{{$consult->_class_name}}','fdr','{{$consult->_praticien_id}}');
+          </script>
+        </div>
+      </fieldset>
+      {{/if}}
 		</td>  
 	</tr>
-  
   {{if $consult->sejour_id}} {{* Cas d'un RPU *}}
-    {{assign var=sejour value=$consult->_ref_sejour}}
-    
-    <tr>
-      <th class="title" colspan="2">{{tr}}CSejour{{/tr}}</th>
-    </tr>
-    
-    <tr>
-      <td>
-        <table class="form">
-          <tr>
-            <th class="category">{{tr}}CFile{{/tr}}</th>
-          </tr>
-          <tr>
-            <td id="files-CSejour">
-              <script type="text/javascript">
-                File.register('{{$sejour->_id}}','{{$sejour->_class_name}}', 'files-CSejour');
-              </script>
-            </td>
-          </tr>
-        </table>
-      </td>
-      <td>
-        <table class="form">
-          <tr>
-            <th class="category">Documents</th>
-          </tr>
-          <tr>
-            <td id="documents-CSejour">
-              <script type="text/javascript">
-                Document.register('{{$sejour->_id}}','{{$sejour->_class_name}}','{{$sejour->_praticien_id}}','documents-CSejour');
-              </script>
-            </td>
-          </tr>
-        </table>
-      </td>
-    </tr>
+  {{assign var=sejour value=$consult->_ref_sejour}}
+  <tr>
+    <td class="halfPane">
+      <fieldset>
+        <legend>{{tr}}CFile{{/tr}} - {{tr}}CSejour{{/tr}}</legend>            
+        <div id="files-CSejour">
+          <script type="text/javascript">
+            File.register('{{$sejour->_id}}','{{$sejour->_class_name}}', 'files-CSejour');
+          </script>
+        </div>
+      </fieldset>
+    </td>
+    <td class="halfPane">
+      <fieldset>
+        <legend>{{tr}}CCompteRendu{{/tr}} - {{tr}}CSejour{{/tr}}</legend>            
+        <div id="documents-CSejour">
+          <script type="text/javascript">
+            Document.register('{{$sejour->_id}}','{{$sejour->_class_name}}','{{$sejour->_praticien_id}}','documents-CSejour');
+          </script>
+        </div>
+      </fieldset>
+    </td>
+  </tr>
   {{/if}}
 
   <!-- 2eme ligne -->
   {{* si on n'est pas dans le module dPsalleOp (pas besoin du reglement) *}}
   {{if $m!="dPsalleOp"}}
+  <tr>
+    <th class="category" colspan="2">Règlements</th>
+  </tr>
   <tr>
     <!-- Reglement -->
     <td colspan="2">

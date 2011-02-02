@@ -13,7 +13,7 @@ global $can;
 // En l'état on ne peut pas vérifier les droits sur dPcabinet
 //$can->needsRead();
 
-$user_id = CValue::getOrSession("user_id");
+$user_id = CValue::get("user_id", CAppUI::$user->_id);
 $patient_id = CValue::get("patient_id");
 $consult_id = CValue::get("consult_id");
 

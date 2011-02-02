@@ -17,122 +17,162 @@ function reloadListTech() {
   UrllistTech.addParam("selConsult", document.editFrmFinish.consultation_id.value);
   UrllistTech.requestUpdate('listTech');
 }
+
+Main.add(function () {
+  var oOpForm = getForm("editOpAnesthFrm");
+  new AideSaisie.AutoComplete(oOpForm.rques, {
+            objectClass: "COperation",
+            timestamp: "{{$conf.dPcompteRendu.CCompteRendu.timestamp}}",
+            validateOnBlur:0
+          });
+  var oAnesthForm = getForm("editInfosAnesthFrm");
+  new AideSaisie.AutoComplete(oAnesthForm.prepa_preop, {
+            objectClass: "CConsultAnesth",
+            timestamp: "{{$conf.dPcompteRendu.CCompteRendu.timestamp}}",
+            validateOnBlur:0
+          });
+  if(oAnesthForm.premedication) {
+    new AideSaisie.AutoComplete(oAnesthForm.premedication, {
+              objectClass: "CConsultAnesth",
+              timestamp: "{{$conf.dPcompteRendu.CCompteRendu.timestamp}}",
+              validateOnBlur:0
+            });
+  }
+  var oTechCompForm = getForm("addEditTechCompFrm");
+  new AideSaisie.AutoComplete(oTechCompForm.technique, {
+            objectClass: "CTechniqueComp",
+            timestamp: "{{$conf.dPcompteRendu.CCompteRendu.timestamp}}",
+            validateOnBlur:0
+          });
+  var oRquesConsultForm = getForm("editRquesConsultFrm");
+  new AideSaisie.AutoComplete(oRquesConsultForm.rques, {
+            objectClass: "CConsultation",
+            timestamp: "{{$conf.dPcompteRendu.CCompteRendu.timestamp}}",
+            validateOnBlur:0
+          });
+  
+});
+
 </script>
+
+{{assign var=operation value=$consult_anesth->_ref_operation}}
 
 <table class="form">
   <tr>
-    <td class="text">
-    	{{assign var=operation value=$consult_anesth->_ref_operation}}
-      {{if $operation->_id}}
-      <form name="editOpFrm" action="?m=dPcabinet" method="post" onsubmit="return onSubmitFormAjax(this);">
-      	
-      <input type="hidden" name="m" value="dPplanningOp" />
-      <input type="hidden" name="del" value="0" />
-      <input type="hidden" name="dosql" value="do_planning_aed" />
-      {{mb_key object=$operation}}
-
-      {{mb_label object=$operation field=type_anesth}}
-      {{mb_field object=$operation field=type_anesth options=$anesth onchange="this.form.onsubmit()"}}
-
-      <br />
-      {{mb_label object=$operation field="rques"}}
-      <select name="_helpers_rques" size="1" onchange="pasteHelperContent(this);this.form.rques.onchange();" class="helper">
-        <option value="">&mdash; Aide</option>
-        {{html_options options=$operation->_aides.rques.no_enum}}
-      </select>
-      <button class="new notext" title="Ajouter une aide à la saisie" type="button" onclick="addHelp('COperation', this.form.rques)">{{tr}}New{{/tr}}</button><br />
-      {{mb_field object=$operation field="rques" onblur="this.form.onsubmit()"}}
+    <td>
+      <fieldset>
+        <legend>Intervention</legend>
+        <table class="layout" style="width: 100%">
+          <tr>
+            <td class="halfPane">
+              {{if $operation->_id}}
+              <form name="editOpAnesthFrm" action="?m=dPcabinet" method="post" onsubmit="return onSubmitFormAjax(this);">
+              <input type="hidden" name="m" value="dPplanningOp" />
+              <input type="hidden" name="del" value="0" />
+              <input type="hidden" name="dosql" value="do_planning_aed" />
+              {{mb_key object=$operation}}
+              {{mb_label object=$operation field="rques"}}
+              {{mb_field object=$operation field="rques" rows="4" onblur="this.form.onsubmit()"}}
+              </form>
+              {{else}}
+              <div class="small-info text">
+                Aucune intervention n'étant selectionné, vous ne pouvez pas accéder
+                à la totalité des champs disponibles pour la consultation
+              </div>
+              {{/if}}
+            </td>
+            <td class="halfPane">
+              {{if $operation->_id}}
+                <form name="editTypeAnesthFrm" action="?m=dPcabinet" method="post" onsubmit="return onSubmitFormAjax(this);">
+                  <input type="hidden" name="m" value="dPplanningOp" />
+                  <input type="hidden" name="del" value="0" />
+                  <input type="hidden" name="dosql" value="do_planning_aed" />
+                  {{mb_key object=$operation}}
+                  {{mb_label object=$operation field=type_anesth}}
+                  {{mb_field object=$operation field=type_anesth options=$anesth style="width: 12em;" onchange="this.form.onsubmit()"}}
+                </form>
+                <br />
+              {{/if}}
+              <form name="editInfosASAFrm" action="?m={{$m}}" method="post" onsubmit="return onSubmitFormAjax(this);">
+                <input type="hidden" name="m" value="dPcabinet" />
+                <input type="hidden" name="del" value="0" />
+                <input type="hidden" name="dosql" value="do_consult_anesth_aed" />
+                {{mb_key object=$consult_anesth}}
+                {{mb_label object=$consult_anesth field="ASA" style="padding-left: 6em;"}}
+                {{mb_field object=$consult_anesth field="ASA" emptyLabel="Choose" style="width: 12em;" onchange="this.form.onsubmit()"}}
+                <br />
+                {{mb_label object=$consult_anesth field="position" style="padding-left: 4.5em;"}}
+                {{mb_field object=$consult_anesth field="position" emptyLabel="Choose" style="width: 12em;" onchange="this.form.onsubmit()"}}
+              </form>
+            </td>
+          </tr>
+        </table>
+      </fieldset>
+      <fieldset>
+        <legend>Pré-opératoire</legend>
+        <form name="editInfosAnesthFrm" action="?m={{$m}}" method="post" onsubmit="return onSubmitFormAjax(this);">
+        <input type="hidden" name="m" value="dPcabinet" />
+        <input type="hidden" name="del" value="0" />
+        <input type="hidden" name="dosql" value="do_consult_anesth_aed" />
+        {{mb_key object=$consult_anesth}}
+        <table class="layout" style="width: 100%">
+          <tr>
+            <td class="halfPane">
+              {{mb_label object=$consult_anesth field="prepa_preop"}}
+              {{mb_field object=$consult_anesth field="prepa_preop" rows="4" onchange="this.form.onsubmit()"}}
+            </td>
+            <td class="halfPane">
+              {{if !$isPrescriptionInstalled || $conf.dPcabinet.CConsultAnesth.view_premedication}}
+                {{mb_label object=$consult_anesth field="premedication"}}
+                {{mb_field object=$consult_anesth field="premedication" rows="4" onchange="this.form.onsubmit()"}}
+              {{else}}
+                {{if $conf.dPcabinet.CPrescription.view_prescription}}
+                  {{mb_label object=$consult_anesth field="premedication"}}
+                  <br />
+                  <button class="tick" type="button" onclick="tabsConsultAnesth.setActiveTab('prescription_sejour')">Accéder à la prescription</button>
+                {{else}}
+                  <div class="small-info">
+                    La saisie de la prémédication n'est actuellement pas active
+                  </div>
+                {{/if}}
+              {{/if}}
+            </td>
+          </tr>
+        </table>
+      </fieldset>
       </form>
-      
-      <br />
-      {{/if}}
-      
-      <form name="editAsaFrm" action="?m={{$m}}" method="post" onsubmit="return onSubmitFormAjax(this);">
-      	
-      <input type="hidden" name="m" value="dPcabinet" />
-      <input type="hidden" name="del" value="0" />
-      <input type="hidden" name="dosql" value="do_consult_anesth_aed" />
-      {{mb_key object=$consult_anesth}}
-      {{mb_label object=$consult_anesth field="ASA"}}
-      {{mb_field object=$consult_anesth field="ASA" emptyLabel="Choose" onchange="this.form.onsubmit()"}}
-		  {{mb_label object=$consult_anesth field="position"}}
-		  {{mb_field object=$consult_anesth field="position" emptyLabel="Choose" onchange="this.form.onsubmit()"}}
-      
-      {{if !$isPrescriptionInstalled || $conf.dPcabinet.CConsultAnesth.view_premedication}}
-      <br />
-      {{mb_label object=$consult_anesth field="premedication"}}
-      <select name="_helpers_premedication" size="1" onchange="pasteHelperContent(this);this.form.premedication.onchange();" class="helper">
-        <option value="">&mdash; Aide</option>
-        {{html_options options=$consult_anesth->_aides.premedication.no_enum}}
-      </select>
-      <button class="new notext" title="Ajouter une aide à la saisie" type="button" onclick="addHelp('CConsultAnesth', this.form.premedication, '', '', '', '', {{$userSel->_id}})">{{tr}}New{{/tr}}</button><br />
-      {{mb_field object=$consult_anesth field="premedication" onchange="this.form.onsubmit()"}}
-      {{else}}
-      <br />
-      <br />
-				{{if $conf.dPcabinet.CPrescription.view_prescription}}
-	        <button class="tick" type="button" onclick="tabsConsultAnesth.setActiveTab('prescription_sejour')">Accéder à la prescription</button>
-	      {{/if}}
-      {{/if}}
-      
-      <br />
-      {{mb_label object=$consult_anesth field="prepa_preop"}}
-      <select name="_helpers_prepa_preop" size="1" onchange="pasteHelperContent(this);this.form.prepa_preop.onchange();" class="helper">
-        <option value="">&mdash; Aide</option>
-        {{html_options options=$consult_anesth->_aides.prepa_preop.no_enum}}
-      </select>
-      <button class="new notext" title="Ajouter une aide à la saisie" type="button" onclick="addHelp('CConsultAnesth', this.form.prepa_preop, '', '', '', '', {{$userSel->_id}})">{{tr}}New{{/tr}}</button><br />
-      {{mb_field object=$consult_anesth field="prepa_preop" onchange="this.form.onsubmit()"}}
-			
-      </form>
-      
-      <br />
-      
-			<form name="edittechniqueFrm" action="?m=dPcabinet" method="post" onsubmit="return checkForm(this)">
-      	
+      <form name="addEditTechCompFrm" action="?m=dPcabinet" method="post" onsubmit="return checkForm(this)">
       <input type="hidden" name="m" value="dPcabinet" />
       <input type="hidden" name="del" value="0" />
       <input type="hidden" name="dosql" value="do_technique_aed" />
-			
       {{mb_field object=$consult_anesth field="consultation_anesth_id" hidden=1}}
-      {{mb_label object=$techniquesComp field="technique"}}
-      
-			<select name="_helpers_technique" size="1" onchange="pasteHelperContent(this)" class="helper">
-        <option value="">&mdash; Aide</option>
-        {{html_options options=$techniquesComp->_aides.technique.no_enum}}
-      </select>
-      <button class="new notext" title="Ajouter une aide à la saisie" type="button" onclick="addHelp('CTechniqueComp', this.form._hidden_technique, 'technique', '', '', '', {{$userSel->_id}})">{{tr}}New{{/tr}}</button><br />
-      
-			<input type="hidden" name="_hidden_technique" value="" />
-      <textarea name="technique" onblur="if(!$(this).emptyValue()){ submitTech(this.form);}"></textarea>
-      <button class="submit" type="button">{{tr}}Add{{/tr}}</button>
-
+      <fieldset>
+        <legend>{{mb_label object=$techniquesComp field="technique"}}</legend>
+        <table class="layout" style="width: 100%">
+          <tr>
+            <td class="halfPane">
+              <input type="hidden" name="_hidden_technique" value="" />
+              {{mb_field object=$techniquesComp field="technique" rows="4" onblur="if(!$(this).emptyValue()){ submitTech(this.form);}"}}
+              <button class="add" type="button">{{tr}}Add{{/tr}}</button>
+            </td>
+            <td class="halfPane" id="listTech">
+              {{mb_include module=dPcabinet template=inc_consult_anesth/techniques_comp}}
+            </td>
+          </tr>
+        </table>
+      </fieldset>
       </form>
-    </td>
-    
-    <td class="text" rowspan="2" id="listTech">
-      {{mb_include module=dPcabinet template=inc_consult_anesth/techniques_comp}}
-    </td>
-  </tr>
-
-  <tr>
-    <td>
-      <form class="watch" name="editFrmRemarques" action="?m={{$m}}" method="post" onsubmit="return onSubmitFormAjax(this);">
+      <form name="editRquesConsultFrm" action="?m={{$m}}" method="post" onsubmit="return onSubmitFormAjax(this);">
   
-	    <input type="hidden" name="m" value="dPcabinet" />
+      <input type="hidden" name="m" value="dPcabinet" />
       <input type="hidden" name="del" value="0" />
       <input type="hidden" name="dosql" value="do_consultation_aed" />
       {{mb_key object=$consult}}
-			
-      {{mb_label object=$consult field="rques"}}
-      <select name="_helpers_rques" size="1" onchange="pasteHelperContent(this);this.form.rques.onchange();" class="helper">
-        <option value="">&mdash; Aide</option>
-        {{html_options options=$consult->_aides.rques.no_enum}}
-      </select>
-      <button class="new notext" title="Ajouter une aide à la saisie" type="button" onclick="addHelp('CConsultation', this.form.rques, '', '', '', '', {{$userSel->_id}})">{{tr}}New{{/tr}}</button><br />
-      {{mb_field object=$consult field="rques" onchange="this.form.onsubmit()"}}
-	
-	    </form>
+      <fieldset>
+        <legend>{{mb_label object=$consult field="rques"}}</legend>
+        {{mb_field object=$consult field="rques" rows="4" onblur="this.form.onsubmit()"}}
+      </fieldset>
+      </form>
     </td>
   </tr>
 </table>

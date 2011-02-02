@@ -89,166 +89,151 @@ Intermax.ResultHandler["Consulter FSE"] = Intermax.ResultHandler["Formater FSE"]
 Intermax.Triggers['Formater FSE'].aActes = {{$consult->_fse_intermax|@json}};
 </script>
 
-<table class="form">
-  <tr>
-    <th class="category" colspan="2">{{tr}}CLmFSE{{/tr}}</th>
-  </tr>
+<table class="layout" style="width: 100%">
+  <!-- Feuille de soins -->
   <tr>
     <td colspan="2">
-    <!-- Feuille de soins -->
-      <table class="form">
-        <tr>
-          <td class="text">
-            {{if !$patient->_id_vitale || !$praticien->_id_cps}}
-              <div class="small-warning">
-                Merci d'associer <strong>la CPS et la carte Vitale</strong> pour formater une FSE. 
-              </div>
-            {{else}}
-              <form name="BindFSE" action="?m={{$m}}" method="post">
-                <input type="hidden" name="m" value="dPcabinet" />
-                <input type="hidden" name="dosql" value="do_consultation_aed" />
-                <input type="hidden" name="_delete_actes" value="1" />
-                <input type="hidden" name="_bind_fse" value="1" />
-                {{mb_field object=$consult field="consultation_id" hidden="1"}}
-              </form>
+      <fieldset>
+        <legend>{{tr}}CLmFSE{{/tr}}</legend>
+          <table class="layout" style="width: 100%">
+            <tr>
+              <td class="text">
+                {{if !$patient->_id_vitale || !$praticien->_id_cps}}
+                  <div class="small-warning">
+                    Merci d'associer <strong>la CPS et la carte Vitale</strong> pour formater une FSE. 
+                  </div>
+                {{else}}
+                  <form name="BindFSE" action="?m={{$m}}" method="post">
+                    <input type="hidden" name="m" value="dPcabinet" />
+                    <input type="hidden" name="dosql" value="do_consultation_aed" />
+                    <input type="hidden" name="_delete_actes" value="1" />
+                    <input type="hidden" name="_bind_fse" value="1" />
+                    {{mb_field object=$consult field="consultation_id" hidden="1"}}
+                  </form>
+                {{/if}}
+              </td>
+            </tr>
+            <!-- Les FSE déjà associées -->
+            {{foreach from=$consult->_ext_fses key=_id_fse item=_ext_fse}}
+            <tr>
+              <td>
+                <span onmouseover="ObjectTooltip.createEx(this, '{{$_ext_fse->_guid}}')">
+                  {{$_ext_fse}}
+                </span>
+              </td>
+              {{if $_ext_fse->_annulee}}
+              <td class="cancelled">
+                {{mb_value object=$_ext_fse field=S_FSE_ETAT}}
+              </td>
+              {{/if}}
+            </tr>
+              {{if !$_ext_fse->_annulee}}
+              <tr>
+                <td class="button" colspan="2">
+                  <button class="search singleclick" type="button" onclick="Intermax.Triggers['Consulter FSE']('{{$_id_fse}}');">
+                    Consulter 
+                  </button>
+                  <button class="print singleclick" type="button" onclick="Intermax.Triggers['Editer FSE']('{{$_id_fse}}');">
+                    Imprimer
+                  </button>
+                  <button class="cancel singleclick" type="button" onclick="Intermax.Triggers['Annuler FSE']('{{$_id_fse}}');">
+                    Annuler
+                  </button>
+                </td>
+              </tr>
+              {{/if}}
+            {{foreachelse}}
+            <tr>
+              <td>
+                <em>Aucune FSE associée</em>
+              </td>
+            </tr>
+            {{/foreach}}
+            {{if $patient->_id_vitale && $praticien->_id_cps}}
+            <tr>
+              <td class="button" colspan="2">
+                {{if !$consult->_current_fse}}
+                <button class="new singleclick" type="button" onclick="Intermax.Triggers['Formater FSE']('{{$praticien->_id_cps}}', '{{$patient->_id_vitale}}');">
+                  Formater FSE
+                </button>
+                {{/if}}
+                <button class="change intermax-result" type="button" onclick="Intermax.result(['Formater FSE', 'Consulter FSE', 'Annuler FSE']);">
+                  Mettre à jour FSE
+                </button>
+              </td>
+            </tr>
             {{/if}}
-          </td>
-        </tr>
-        
-        <!-- Les FSE déjà associées -->
-        {{foreach from=$consult->_ext_fses key=_id_fse item=_ext_fse}}
-        <tr>
-          <td>
-            <span onmouseover="ObjectTooltip.createEx(this, '{{$_ext_fse->_guid}}')">
-              {{$_ext_fse}}
-            </span>
-          </td>
-          {{if $_ext_fse->_annulee}}
-          <td class="cancelled">
-            {{mb_value object=$_ext_fse field=S_FSE_ETAT}}
-          </td>
-          {{/if}}
-        </tr>
-          {{if !$_ext_fse->_annulee}}
-          <tr>
-            <td class="button" colspan="2">
-              <button class="search singleclick" type="button" onclick="Intermax.Triggers['Consulter FSE']('{{$_id_fse}}');">
-                Consulter 
-              </button>
-              <button class="print singleclick" type="button" onclick="Intermax.Triggers['Editer FSE']('{{$_id_fse}}');">
-                Imprimer
-              </button>
-              <button class="cancel singleclick" type="button" onclick="Intermax.Triggers['Annuler FSE']('{{$_id_fse}}');">
-                Annuler
-              </button>
-            </td>
-          </tr>
-          {{/if}}
-        {{foreachelse}}
-        <tr>
-          <td>
-            <em>Aucune FSE associée</em>
-          </td>
-        </tr>
-        {{/foreach}}
-
-        {{if $patient->_id_vitale && $praticien->_id_cps}}
-        <tr>
-          <td class="button" colspan="2">
-            {{if !$consult->_current_fse}}
-            <button class="new singleclick" type="button" onclick="Intermax.Triggers['Formater FSE']('{{$praticien->_id_cps}}', '{{$patient->_id_vitale}}');">
-              Formater FSE
-            </button>
-            {{/if}}
-            <button class="change intermax-result" type="button" onclick="Intermax.result(['Formater FSE', 'Consulter FSE', 'Annuler FSE']);">
-              Mettre à jour FSE
-            </button>
-          </td>
-        </tr>
+          </table>
+      </fieldset>
+    </td>
+  </tr>
+  <tr>
+    <!-- Professionnel de Santé -->
+    <td class="halfPane">
+      <fieldset>
+        <legend>Professionnel de santé</legend>
+        <form name="BindCPS" action="?m={{$m}}" method="post">
+          <input type="hidden" name="m" value="mediusers" />
+          <input type="hidden" name="dosql" value="do_mediusers_aed" />
+          <input type="hidden" name="_bind_cps" value="1" />
+          {{mb_field object=$praticien field="user_id" hidden="1"}}
+        </form>
+      
+        {{if !$praticien->_id_cps}}
+          <div class="small-info text">
+            Praticien non associé à une CPS. <br/>
+            Merci d'effectuer une lecture de la CPS. 
+          </div>
+        {{else}}
+          <div class="small-success text">
+            Praticien correctement associé à une CPS.
+          </div>
         {{/if}}
-        
-      </table>
+        {{if !$praticien->_id_cps}}
+          <button class="search" type="button" onclick="Intermax.trigger('Lire CPS');">
+            Lire CPS
+          </button>
+          <button class="change notext intermax-result" type="button" onclick="Intermax.result('Lire CPS');">
+            Associer CPS
+          </button>
+        {{/if}}
+      </fieldset>
     </td>
-  </tr>
-
-  <!-- Patient Vitale et Professionnel de Santé -->
-  <tr>
-    <th class="category">Professionnel de santé</th>
-    <th class="category">Patient Vitale</th>
-  </tr>
-  
-  <tr>
-    <!-- Professionnel de santé -->
-    <td class="text">
-      <form name="BindCPS" action="?m={{$m}}" method="post">
-        <input type="hidden" name="m" value="mediusers" />
-        <input type="hidden" name="dosql" value="do_mediusers_aed" />
-        <input type="hidden" name="_bind_cps" value="1" />
-        {{mb_field object=$praticien field="user_id" hidden="1"}}
-      </form>
-    
-      {{if !$praticien->_id_cps}}
-        <div class="small-info">
-          Praticien non associé à une CPS. <br/>
-          Merci d'effectuer une lecture de la CPS. 
-        </div>
-      {{else}}
-        <div class="small-success">
-          Praticien correctement associé à une CPS.
-        </div>
-      {{/if}}
-    </td>
-
     <!-- Patient Vitale -->
-    <td class="text">
-      <form name="BindVitale" action="?m={{$m}}" method="post">
-        <input type="hidden" name="m" value="dPpatients" />
-        <input type="hidden" name="dosql" value="do_patients_aed" />
-        {{mb_key object=$patient}}
-        <input type="hidden" name="_bind_vitale" value="1" />
-        <input type="hidden" name="_update_vitale" value="1" />
-      </form>
-            
-      {{if !$patient->_id_vitale}}
-        <div class="small-info">
-          Patient non associé à un bénéficiaire Vitale. <br/>
-          Merci d'effectuer une lecture de la carte Vitale. 
-        </div>
-      {{else}}
-        <div class="small-success">
-          Patient correctement associé à un bénéficiaire Vitale.
-        </div>
-      {{/if}}
-    </td>
-  </tr>
-  
-  <tr>
-    <!-- Professionnel de santé -->
-    <td class="button">
-      {{if !$praticien->_id_cps}}
-        <button class="search" type="button" onclick="Intermax.trigger('Lire CPS');">
-          Lire CPS
-        </button>
-        <button class="change notext intermax-result" type="button" onclick="Intermax.result('Lire CPS');">
-          Associer CPS
-        </button>
-      {{/if}}
-    </td>
-
-    <!-- Patient Vitale -->
-    <td class="button">
-      {{if $patient->_id_vitale}}
-        <button class="search" type="button" onclick="Intermax.Triggers['Consulter Vitale']({{$patient->_id_vitale}});">
-          Consulter Vitale
-        </button>
-      {{else}}
-        <button class="search" type="button" onclick="Intermax.trigger('Lire Vitale');">
-          Lire Vitale
-        </button>
-        <button class="change notext intermax-result" type="button" onclick="Intermax.result();">
-          Associer Vitale
-        </button>
-      {{/if}}
+    <td class="halfPane">
+      <fieldset>
+        <legend>Patient Vitale</legend>
+        <form name="BindVitale" action="?m={{$m}}" method="post">
+          <input type="hidden" name="m" value="dPpatients" />
+          <input type="hidden" name="dosql" value="do_patients_aed" />
+          {{mb_key object=$patient}}
+          <input type="hidden" name="_bind_vitale" value="1" />
+          <input type="hidden" name="_update_vitale" value="1" />
+        </form>
+              
+        {{if !$patient->_id_vitale}}
+          <div class="small-info text">
+            Patient non associé à un bénéficiaire Vitale. <br/>
+            Merci d'effectuer une lecture de la carte Vitale. 
+          </div>
+        {{else}}
+          <div class="small-success text">
+            Patient correctement associé à un bénéficiaire Vitale.
+          </div>
+        {{/if}}
+        {{if $patient->_id_vitale}}
+          <button class="search" type="button" onclick="Intermax.Triggers['Consulter Vitale']({{$patient->_id_vitale}});">
+            Consulter Vitale
+          </button>
+        {{else}}
+          <button class="search" type="button" onclick="Intermax.trigger('Lire Vitale');">
+            Lire Vitale
+          </button>
+          <button class="change notext intermax-result" type="button" onclick="Intermax.result();">
+            Associer Vitale
+          </button>
+        {{/if}}
+      </fieldset>
     </td>
   </tr>
 </table>

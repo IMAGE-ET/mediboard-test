@@ -37,9 +37,32 @@ function calculPSA () {
   }
 }
 
+Main.add(function () {
+  var oExamCompForm = getForm("addExamCompFrm");
+  new AideSaisie.AutoComplete(oExamCompForm.examen, {
+            objectClass: "CExamComp",
+            timestamp: "{{$conf.dPcompteRendu.CCompteRendu.timestamp}}",
+            validateOnBlur:0
+          });
+
+  var oExamECGRPForm = getForm("editExamCompFrm");
+  new AideSaisie.AutoComplete(oExamECGRPForm.result_ecg, {
+            objectClass: "CConsultAnesth",
+            timestamp: "{{$conf.dPcompteRendu.CCompteRendu.timestamp}}",
+            validateOnBlur:0
+          });
+          
+  new AideSaisie.AutoComplete(oExamECGRPForm.result_rp, {
+            objectClass: "CConsultAnesth",
+            timestamp: "{{$conf.dPcompteRendu.CCompteRendu.timestamp}}",
+            validateOnBlur:0
+          });
+  
+});
+
 </script>
 
-<table class="form">
+<table class="form" style="width: 100%">
   <tr>
     <td class="text">
       <form name="addExamCompFrm" action="?m=dPcabinet" method="post" onsubmit="return checkForm(this)">
@@ -47,38 +70,165 @@ function calculPSA () {
       <input type="hidden" name="del" value="0" />
       <input type="hidden" name="dosql" value="do_examcomp_aed" />
       {{mb_field object=$consult field="consultation_id" hidden=1}}
-      <table class="form">
+      <fieldset>
+        <legend>{{tr}}CExamComp{{/tr}}</legend>
+          <table class="layout" style="width: 100%">
+            <tr>
+              <td>
+                {{mb_field object=$examComp field=realisation}}
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <input type="hidden" name="_hidden_examen" value="" />
+                {{mb_field object=$examComp field="examen" rows="4" onblur="if(!$(this).emptyValue()){ExamComp.submit(this.form);}"}}
+              </td>
+            </tr>
+            <tr>
+              <td class="button" colspan="3">
+                <button class="add" type="button">{{tr}}CExamComp-title-create{{/tr}}</button>
+              </td>
+            </tr>
+          </table>     
+      </fieldset> 
+      </form>
+      <form name="editExamCompFrm" action="?m={{$m}}" method="post" onsubmit="return checkForm(this);">
+      <input type="hidden" name="m" value="dPcabinet" />
+      <input type="hidden" name="del" value="0" />
+      <input type="hidden" name="dosql" value="do_consult_anesth_aed" />
+      {{mb_key object=$consult_anesth}}
+      <fieldset>
+        <legend>Résultats d'analyse</legend>
+        <table class="layout" style="width: 100%">
+          <tr>
+            <th>{{mb_label object=$consult_anesth field="date_analyse"}}</th>
+            <td>
+              {{mb_field object=$consult_anesth field="date_analyse" form="editExamCompFrm" register="true" onchange="submitForm(this.form)"}}
+            </td>      
+            <th>{{mb_label object=$consult_anesth field="creatinine"}}</th>
+            <td>
+              {{mb_field object=$consult_anesth field="creatinine" tabindex="108" size="4" onchange="calculClairance();submitForm(this.form);"}}
+              mg/l
+            </td>
+          </tr>
+          <tr>
+            <th>{{mb_label object=$consult_anesth field="groupe"}}</th>
+            <td>
+              {{mb_field object=$consult_anesth field="groupe" tabindex="101" onchange="submitForm(this.form)"}}
+              /
+              {{mb_field object=$consult_anesth field="rhesus" tabindex="102" onchange="submitForm(this.form)"}}
+            </td>
+            <th>{{mb_label object=$consult_anesth field="_clairance"}}</th>
+            <td>
+              {{mb_field object=$consult_anesth field="_clairance"  size="4" readonly="readonly"}}
+              ml/min
+            </td>
+          </tr>
+          <tr>
+            <th>{{mb_label object=$consult_anesth field="groupe_ok"}}</th>
+            <td>
+              {{mb_field object=$consult_anesth field="groupe_ok" typeEnum="checkbox" tabindex="103" onchange="submitForm(this.form)"}}
+            </td>
+            <th>{{mb_label object=$consult_anesth field="fibrinogene"}}</th>
+            <td>
+              {{mb_field object=$consult_anesth field="fibrinogene" tabindex="109" size="4" onchange="submitForm(this.form)"}}
+              g/l
+            </td>
+          </tr>
+          <tr>
+            <th>{{mb_label object=$consult_anesth field="rai"}}</th>
+            <td>
+              {{mb_field object=$consult_anesth field="rai" tabindex="103" onchange="submitForm(this.form)"}}
+            </td>
+            <th>{{mb_label object=$consult_anesth field="na"}}</th>
+            <td>
+              {{mb_field object=$consult_anesth field="na" tabindex="109" size="4" onchange="submitForm(this.form)"}}
+              mmol/l
+            </td>
+          </tr>
+          <tr> 
+            <th>{{mb_label object=$consult_anesth field="hb"}}</th>
+            <td>
+              {{mb_field object=$consult_anesth field="hb" tabindex="104" size="4" onchange="submitForm(this.form)"}}
+              g/dl
+            </td>
+            <th>{{mb_label object=$consult_anesth field="k"}}</th>
+            <td>
+              {{mb_field object=$consult_anesth field="k" tabindex="110" size="4" onchange="submitForm(this.form)"}}
+              mmol/l
+            </td>
+          </tr>
+          <tr>
+            <th>{{mb_label object=$consult_anesth field="ht"}}</th>
+            <td>
+              {{mb_field object=$consult_anesth field="ht" tabindex="105" size="4" onchange="calculPSA();submitForm(this.form);"}}
+              %
+            </td>
+            <th>{{mb_label object=$consult_anesth field="tp"}}</th>
+            <td>
+              {{mb_field object=$consult_anesth field="tp" tabindex="111" size="4" onchange="submitForm(this.form)"}}
+              %
+            </td>
+          </tr>
+          <tr>
+            <th>{{mb_label object=$consult_anesth field="ht_final"}}</th>
+            <td>
+              {{mb_field object=$consult_anesth field="ht_final" tabindex="106" size="4" onchange="calculPSA();submitForm(this.form);"}}
+              %
+            </td>
+            <th>{{mb_label object=$consult_anesth field="tca" defaultFor="tca_temoin"}}</th>
+            <td>
+              {{mb_field object=$consult_anesth field="tca_temoin" tabindex="112" maxlength="2" size="2" onchange="submitForm(this.form)"}}
+              s /
+              {{mb_field object=$consult_anesth field="tca" tabindex="113" maxlength="2" size="2" onchange="submitForm(this.form)"}}
+               s
+            </td>
+          </tr>
+          <tr>
+            <th>{{mb_label object=$consult_anesth field="_psa"}}</th>
+            <td>
+              {{mb_field object=$consult_anesth field="_psa"  size="4" readonly="readonly"}}
+              ml/GR
+            </td>
+            <th>{{mb_label object=$consult_anesth field="tsivy" defaultFor="_min_tsivy"}}</th>
+            <td>
+              {{html_options tabindex="114" name="_min_tsivy" values=$mins output=$mins selected=$consult_anesth->_min_tsivy onchange="submitForm(this.form)"}}
+              min
+              {{html_options tabindex="115" name="_sec_tsivy" values=$secs output=$secs selected=$consult_anesth->_sec_tsivy onchange="submitForm(this.form)"}}
+              s
+            </td>
+          </tr>
+          <tr>
+            <th>{{mb_label object=$consult_anesth field="plaquettes"}}</th>
+            <td>
+              {{mb_field object=$consult_anesth field="plaquettes" tabindex="107" size="6" onchange="submitForm(this.form)"}} (x1000) /mm3
+            </td>
+            <th>{{mb_label object=$consult_anesth field="ecbu"}}</th>
+            <td>
+              {{mb_field object=$consult_anesth field="ecbu" tabindex="116" onchange="submitForm(this.form)"}}
+            </td>
+          </tr>
+        </table>
+      </fieldset>
+      <table class="layout" style="width: 100%">
         <tr>
-          <td>
-            {{mb_label object=$examComp field=realisation}}
-            {{mb_field object=$examComp field=realisation}}
+          <td class="halfPane">
+            <fieldset>
+              <legend>{{mb_label object=$consult_anesth field="result_ecg"}}</legend>
+              {{mb_field object=$consult_anesth field="result_ecg" rows="4" onblur="submitForm(this.form)"}}
+            </fieldset>
+          </td>
+          <td class="halfPane">
+            <fieldset>
+              <legend>{{mb_label object=$consult_anesth field="result_rp"}}</legend>
+              {{mb_field object=$consult_anesth field="result_rp" rows="4" onblur="submitForm(this.form)"}}
+            </fieldset>
           </td>
         </tr>
-        <tr>
-          <td>
-            {{mb_label object=$examComp field="examen"}}
-            <select name="_helpers_examen" size="1" onchange="pasteHelperContent(this)" class="helper">
-              <option value="">&mdash; Aide</option>
-                {{html_options options=$examComp->_aides.examen.no_enum}}
-              </select>
-              <button class="new notext" title="Ajouter une aide à la saisie" type="button" onclick="addHelp('CExamComp', this.form._hidden_examen, 'examen', '', '', '',{{$userSel->_id}})">{{tr}}New{{/tr}}</button>
-          </td>
-        </tr>
-				<tr>
-          <td>
-            <input type="hidden" name="_hidden_examen" value="" />
-            <textarea name="examen" onblur="if(!$(this).emptyValue()){ExamComp.submit(this.form);}"></textarea>
-          </td>
-			  </tr>
-        <tr>
-          <td class="button" colspan="3">
-            <button class="add" type="button">{{tr}}CExamComp-title-create{{/tr}}</button>
-          </td>
-        </tr>
-      </table>      
+      </table> 
       </form>
     </td>
-    <td class="text" rowspan="2">
+    <td class="text">
       <div id="listExamComp">
       {{include file="../../dPcabinet/templates/exam_comp.tpl"}}
       </div>
@@ -100,149 +250,6 @@ function calculPSA () {
 			    </td>
 			  </tr>
       </table>
-    </td>
-  </tr>
-  <tr>
-    <td>
-      <form name="editExamCompFrm" action="?m={{$m}}" method="post" onsubmit="return checkForm(this);">
-      <input type="hidden" name="m" value="dPcabinet" />
-      <input type="hidden" name="del" value="0" />
-      <input type="hidden" name="dosql" value="do_consult_anesth_aed" />
-      {{mb_key object=$consult_anesth}}
-      <table class="form">
-        <tr>
-          <th colspan="4" class="category">Résultats d'analyse</th>
-        </tr>
-        <tr>
-          <th>{{mb_label object=$consult_anesth field="date_analyse"}}</th>
-          <td>
-            {{mb_field object=$consult_anesth field="date_analyse" form="editExamCompFrm" register="true" onchange="submitForm(this.form)"}}
-          </td>      
-          <th>{{mb_label object=$consult_anesth field="creatinine"}}</th>
-          <td>
-            {{mb_field object=$consult_anesth field="creatinine" tabindex="108" size="4" onchange="calculClairance();submitForm(this.form);"}}
-            mg/l
-          </td>
-        </tr>
-        <tr>
-          <th>{{mb_label object=$consult_anesth field="groupe"}}</th>
-          <td>
-            {{mb_field object=$consult_anesth field="groupe" tabindex="101" onchange="submitForm(this.form)"}}
-            /
-            {{mb_field object=$consult_anesth field="rhesus" tabindex="102" onchange="submitForm(this.form)"}}
-          </td>
-          <th>{{mb_label object=$consult_anesth field="_clairance"}}</th>
-          <td>
-            {{mb_field object=$consult_anesth field="_clairance"  size="4" readonly="readonly"}}
-            ml/min
-          </td>
-        </tr>
-        <tr>
-          <th>{{mb_label object=$consult_anesth field="groupe_ok"}}</th>
-          <td>
-            {{mb_field object=$consult_anesth field="groupe_ok" typeEnum="checkbox" tabindex="103" onchange="submitForm(this.form)"}}
-          </td>
-          <th>{{mb_label object=$consult_anesth field="fibrinogene"}}</th>
-          <td>
-            {{mb_field object=$consult_anesth field="fibrinogene" tabindex="109" size="4" onchange="submitForm(this.form)"}}
-            g/l
-          </td>
-        </tr>
-        <tr>
-          <th>{{mb_label object=$consult_anesth field="rai"}}</th>
-          <td>
-            {{mb_field object=$consult_anesth field="rai" tabindex="103" onchange="submitForm(this.form)"}}
-          </td>
-          <th>{{mb_label object=$consult_anesth field="na"}}</th>
-          <td>
-            {{mb_field object=$consult_anesth field="na" tabindex="109" size="4" onchange="submitForm(this.form)"}}
-            mmol/l
-          </td>
-        </tr>
-        <tr> 
-          <th>{{mb_label object=$consult_anesth field="hb"}}</th>
-          <td>
-            {{mb_field object=$consult_anesth field="hb" tabindex="104" size="4" onchange="submitForm(this.form)"}}
-            g/dl
-          </td>
-          <th>{{mb_label object=$consult_anesth field="k"}}</th>
-          <td>
-            {{mb_field object=$consult_anesth field="k" tabindex="110" size="4" onchange="submitForm(this.form)"}}
-            mmol/l
-          </td>
-        </tr>
-        <tr>
-          <th>{{mb_label object=$consult_anesth field="ht"}}</th>
-          <td>
-            {{mb_field object=$consult_anesth field="ht" tabindex="105" size="4" onchange="calculPSA();submitForm(this.form);"}}
-            %
-          </td>
-          <th>{{mb_label object=$consult_anesth field="tp"}}</th>
-          <td>
-            {{mb_field object=$consult_anesth field="tp" tabindex="111" size="4" onchange="submitForm(this.form)"}}
-            %
-          </td>
-        </tr>
-        <tr>
-          <th>{{mb_label object=$consult_anesth field="ht_final"}}</th>
-          <td>
-            {{mb_field object=$consult_anesth field="ht_final" tabindex="106" size="4" onchange="calculPSA();submitForm(this.form);"}}
-            %
-          </td>
-          <th>{{mb_label object=$consult_anesth field="tca" defaultFor="tca_temoin"}}</th>
-          <td>
-            {{mb_field object=$consult_anesth field="tca_temoin" tabindex="112" maxlength="2" size="2" onchange="submitForm(this.form)"}}
-            s /
-            {{mb_field object=$consult_anesth field="tca" tabindex="113" maxlength="2" size="2" onchange="submitForm(this.form)"}}
-             s
-          </td>
-        </tr>
-        <tr>
-          <th>{{mb_label object=$consult_anesth field="_psa"}}</th>
-          <td>
-            {{mb_field object=$consult_anesth field="_psa"  size="4" readonly="readonly"}}
-            ml/GR
-          </td>
-          <th>{{mb_label object=$consult_anesth field="tsivy" defaultFor="_min_tsivy"}}</th>
-          <td>
-            {{html_options tabindex="114" name="_min_tsivy" values=$mins output=$mins selected=$consult_anesth->_min_tsivy onchange="submitForm(this.form)"}}
-            min
-            {{html_options tabindex="115" name="_sec_tsivy" values=$secs output=$secs selected=$consult_anesth->_sec_tsivy onchange="submitForm(this.form)"}}
-            s
-          </td>
-        </tr>
-        <tr>
-          <th>{{mb_label object=$consult_anesth field="plaquettes"}}</th>
-          <td>
-            {{mb_field object=$consult_anesth field="plaquettes" tabindex="107" size="6" onchange="submitForm(this.form)"}} (x1000) /mm3
-          </td>
-          <th>{{mb_label object=$consult_anesth field="ecbu"}}</th>
-          <td>
-            {{mb_field object=$consult_anesth field="ecbu" tabindex="116" onchange="submitForm(this.form)"}}
-          </td>
-        </tr>
-        <tr>
-          <td colspan="2">
-            {{mb_label object=$consult_anesth field="result_ecg"}}
-            <select name="_helpers_result_ecg" size="1" onchange="pasteHelperContent(this)" class="helper">
-              <option value="">&mdash; Aide</option>
-                {{html_options options=$consult_anesth->_aides.result_ecg.no_enum}}
-            </select>
-            <button class="new notext" title="Ajouter une aide à la saisie" type="button" onclick="addHelp('CConsultAnesth', this.form.result_ecg, 'result_ecg', '', '', '', {{$userSel->_id}})">{{tr}}New{{/tr}}</button>
-            <textarea name="result_ecg" onblur="submitForm(this.form)">{{$consult_anesth->result_ecg}}</textarea>
-          </td>
-          <td colspan="2">
-            {{mb_label object=$consult_anesth field="result_rp"}}
-            <select name="_helpers_result_rp" size="1" onchange="pasteHelperContent(this)" class="helper">
-              <option value="">&mdash; Aide</option>
-                {{html_options options=$consult_anesth->_aides.result_rp.no_enum}}
-            </select>
-            <button class="new notext" title="Ajouter une aide à la saisie" type="button" onclick="addHelp('CConsultAnesth', this.form.result_rp, 'result_rp', '', '', '', {{$userSel->_id}})">{{tr}}New{{/tr}}</button>
-            <textarea name="result_rp" onblur="submitForm(this.form)">{{$consult_anesth->result_rp}}</textarea>
-          </td>
-        </tr>
-      </table>    
-      </form>
     </td>
   </tr>
 </table>

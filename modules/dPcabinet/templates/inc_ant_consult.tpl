@@ -38,9 +38,7 @@ onSubmitAnt = function (oForm) {
     onComplete : DossierMedical.reloadDossiersMedicaux 
   } );
   
-  // Nettoyage du formulaire
-  oForm._hidden_rques.value = oForm.rques.value;
-  oForm.rques.value = "";
+  oForm.rques.value     = "";
 
   return false;
 }
@@ -64,7 +62,7 @@ onSubmitTraitement = function (oForm) {
 
 easyMode = function() {
   var url = new Url("dPcabinet", "vw_ant_easymode");
-  url.addParam("user_id", "{{$userSel->_id}}");
+  //url.addParam("user_id", "{{$userSel->_id}}");
   url.addParam("patient_id", "{{$patient->_id}}");
   {{if isset($consult|smarty:nodefaults)}}
     url.addParam("consult_id", "{{$consult->_id}}");
@@ -131,10 +129,33 @@ refreshAddPoso = function(code_cip){
 
 Main.add(function () {
   DossierMedical.reloadDossiersMedicaux();
-  refreshAidesAntecedents();
 	if($('tab_traitements_perso')){
 	  Control.Tabs.create('tab_traitements_perso', false);
 	}
+	
+	var oAtcdForm = getForm("editAntFrm");
+  new AideSaisie.AutoComplete(oAtcdForm.rques, {
+            objectClass: "CAntecedent",
+            dependField1: oAtcdForm.type, 
+            dependField2: oAtcdForm.appareil, 
+            objectClass: "CAntecedent",
+            filterWithDependFields: false,
+            // Probleme dans dPurgence si on prend l'utilisateur de la consult
+            //contextUserId: "{{$userSel->_id}}",
+            //contextUserView: "{{$userSel->_view}}",
+            timestamp: "{{$conf.dPcompteRendu.CCompteRendu.timestamp}}",
+            validateOnBlur:0
+          });
+  
+  var aTttForm = getForm("editTrmtFrm");
+  new AideSaisie.AutoComplete(aTttForm.traitement, {
+            objectClass: "CTraitement", 
+            // Probleme dans dPurgence si on prend l'utilisateur de la consult
+            //contextUserId: "{{$userSel->_id}}",
+            //contextUserView: "{{$userSel->_view}}",
+            timestamp: "{{$conf.dPcompteRendu.CCompteRendu.timestamp}}",
+            validateOnBlur:0
+          });
 });
 
 </script>
@@ -145,373 +166,291 @@ Main.add(function () {
       
 <table class="form">
   <tr>
-    <th class="category">
-      <button style="float: left" class="edit" type="button" onclick="easyMode();">Mode grille</button>
-      Antécédents
-    </th>
-  </tr>
-  <tr>
-    <td class="text">      
-      <!-- Antécédents -->
-      <form name="editAntFrm" action="?m=dPcabinet" method="post" onsubmit="return onSubmitAnt(this);">
-      
-      <input type="hidden" name="m" value="dPpatients" />
-      <input type="hidden" name="del" value="0" />
-      <input type="hidden" name="dosql" value="do_antecedent_aed" />
-      <input type="hidden" name="_patient_id" value="{{$patient->_id}}" />
-      
-      <!-- dossier_medical_id du sejour si c'est une consultation_anesth -->
-      {{if $_is_anesth}}
-      <!-- On passe _sejour_id seulement s'il y a un sejour_id -->
-      <input type="hidden" name="_sejour_id" value="{{$sejour_id}}" />
-      {{/if}}
-
-      <table class="form">
-        <col style="width: 70px;" />
-        <col  class="narrow" />
-        
-        <tr>
-          {{if $app->user_prefs.showDatesAntecedents}}
-            <th>{{mb_label object=$antecedent field=date}}</th>
-            <td>{{mb_field object=$antecedent field=date form=editAntFrm register=true}}</td>
-          {{else}}
-            <td colspan="2" />
-          {{/if}}
-          
-          <th id="listAides_Antecedent_rques">
-            {{mb_label object=$antecedent field="rques"}}
-            	<select name="_helpers_rques" style="width: 7em;" onchange="pasteHelperContent(this)" class="helper">
-							</select>
-						<input type="hidden" name="_hidden_rques" value="" />
-            <button class="new notext" title="Ajouter une aide à la saisie" type="button" onclick="addHelp('CAntecedent', this.form._hidden_rques, 'rques', this.form.type.value, this.form.appareil.value, null, {{$userSel->_id}})">
-              {{tr}}New{{/tr}}
-            </button>
-          </th>
-        </tr>
-
-        <tr>
-          <!-- Auto-completion -->
-          <th>{{mb_label object=$antecedent field=_search}}</th>
-          <td>
-            {{mb_field object=$antecedent field=_search size=10 class="autocomplete"}}
-            <script type="text/javascript">
-              Main.add(function(){
-                var form = getForm("editAntFrm");
-                var elements = form.elements;
-                new AideSaisie.AutoComplete(elements.rques, {
-                  searchField: elements._search, 
-                  dependField1: elements.type, 
-                  dependField2: elements.appareil, 
-                  objectClass: "CAntecedent", 
-                  // Probleme dans dPurgence si on prend l'utilisateur de la consult
-                  //contextUserId: "{{$userSel->_id}}",
-                  //contextUserView: "{{$userSel->_view}}",
-                  timestamp: "{{$conf.dPcompteRendu.CCompteRendu.timestamp}}"
-                });
-                
-                $(elements._search).observe("blur", function(e){
-                  $V(Event.element(e), "");
-                });
-              });
-            </script>
-          </td>
-          <td rowspan="3">
-            <textarea name="rques" rows=4 onblur="this.form.onsubmit();"></textarea>
-          </td>
-        </tr>
-
-        <tr>
-          <th>{{mb_label object=$antecedent field="type"}}</th>
-          <td>{{mb_field object=$antecedent field="type" defaultOption="&mdash; Aucun" alphabet="1" onchange="refreshAidesAntecedents()"}}</td>
-        </tr>
-
-        <tr>
-          <th>{{mb_label object=$antecedent field="appareil"}}</th>
-          <td>{{mb_field object=$antecedent field="appareil" defaultOption="&mdash; Aucun" alphabet="1" onchange="refreshAidesAntecedents()"}}</td>
-        </tr>
-        
-        <tr>
-          <td class="button" colspan="2">
-            <button class="tick" type="button">
-              {{tr}}Add{{/tr}} un antécédent
-            </button>
-          </td>
-        </tr>
-      </table>
-      </form>
+    <td class="button">
+      <button class="edit" type="button" onclick="easyMode();">Mode grille</button>
     </td>
   </tr>
-  {{if $isPrescriptionInstalled || $conf.dPpatients.CTraitement.enabled}}
   <tr>
-    <th class="category">
-      Traitements
-    </th>
-  </tr>
-  <tr>
-    <td class="text">
-			<ul id="tab_traitements_perso" class="control_tabs small">
-				{{if $isPrescriptionInstalled}}
-				  <li><a href="#tp_base_med">Base de données de médicaments</a></li>
-				{{/if}}
-				{{if $conf.dPpatients.CTraitement.enabled}}
-				  <li><a href="#tp_texte_simple">Texte simple</a></li>
-				{{/if}}
-			</ul>
-			<hr class="control_tabs" /> 
-    </td>
-	</tr>
-	{{/if}}
-	
-	{{if $isPrescriptionInstalled}}
-	<tr id="tp_base_med">
-		<td class="text">
-      <!-- Formulaire d'ajout de traitements -->
-      <form name="editLineTP" action="?m=dPcabinet" method="post">
-        <input type="hidden" name="m" value="dPprescription" />
-        <input type="hidden" name="dosql" value="do_add_line_tp_aed" />
-        <input type="hidden" name="code_cip" value="" onchange="refreshAddPoso(this.value);"/>
+    <td>
+      <fieldset>
+        <legend>Antécédents</legend>
+
+        <form name="editAntFrm" action="?m=dPcabinet" method="post" onsubmit="return onSubmitAnt(this);">
+      
+        <input type="hidden" name="m" value="dPpatients" />
+        <input type="hidden" name="del" value="0" />
+        <input type="hidden" name="dosql" value="do_antecedent_aed" />
         <input type="hidden" name="_patient_id" value="{{$patient->_id}}" />
-        <input type="hidden" name="praticien_id" value="{{$userSel->_id}}" />
-        
-        <table class="form">
-          <col style="width: 70px;" />
-          <col class="narrow" />
-        
-          <tr>
-            <th>Recherche</th>
-            <td>
-              <input type="text" name="produit" value="" size="12" class="autocomplete" />
-              <button type="button" class="search notext" onclick="MedSelector.init('produit');"></button>
-              <div style="display:none; width: 350px;" class="autocomplete" id="_produit_auto_complete"></div>
-              <script type="text/javascript">
-                  MedSelector.init = function(onglet){
-                    this.sForm = "editLineTP";
-                    this.sView = "produit";
-                    this.sCode = "code_cip";
-                    this.sSearch = document.editLineTP.produit.value;
-                    this.selfClose = true;
-                    this.sOnglet = onglet;
-                    this.pop();
-                  }
-                  MedSelector.doSet = function(){
-                    var oForm = document[MedSelector.sForm];
-                    $('_libelle').update(MedSelector.prepared.nom);
-                    $V(oForm.code_cip, MedSelector.prepared.code);
-                    $('button_submit_traitement').focus();
-                  }
-              </script>
-            </td>
-            <td>
-              <strong><div id="_libelle"></div></strong>
-            </td>
-          </tr>
-          
-          <tr>
-            {{if $app->user_prefs.showDatesAntecedents}}
-            <th>{{mb_label object=$line field="debut"}}</th>
-            <td>{{mb_field object=$line field="debut" register=true form=editLineTP}}</td>
-            {{else}}
-            <td colspan="2"></td>
-            {{/if}}
-            <td rowspan="3" id="addPosoLine"></td>
-          </tr>
-          
-          {{if $app->user_prefs.showDatesAntecedents}}
-          <tr>
-            <th>{{mb_label object=$line field="fin"}}</th>
-            <td>{{mb_field object=$line field="fin" register=true form=editLineTP}}</td>
-          </tr>
-          {{/if}}
-          
-          <tr>
-            <th>{{mb_label object=$line field="commentaire"}}</th>
-            <td>{{mb_field object=$line field="commentaire" size=20}}</td>
-          </tr>
-          <tr>
-            <td colspan="2" class="button">
-              <button id="button_submit_traitement" class="tick" type="button" onclick="submitFormAjax(this.form, 'systemMsg', { 
-                onComplete: function(){
-                  DossierMedical.reloadDossiersMedicaux();
-                  resetEditLineTP();
-                  resetFormTP();
-                }
-               } ); this.form.produit.focus();">
-                {{tr}}Add{{/tr}} un traitement
-              </button>
-            </td>
-          </tr>
-        </table>
-      </form>
-    </td>
-  </tr>
-  {{/if}}
       
-  <!-- Traitements -->
-  {{if $conf.dPpatients.CTraitement.enabled}}
-  <tr id="tp_texte_simple">
-    <td class="text">
-      <form name="editTrmtFrm" action="?m=dPcabinet" method="post" onsubmit="return onSubmitTraitement(this);">
-      <input type="hidden" name="m" value="dPpatients" />
-      <input type="hidden" name="del" value="0" />
-      <input type="hidden" name="dosql" value="do_traitement_aed" />
-      <input type="hidden" name="_patient_id" value="{{$patient->_id}}" />
-      
-      {{if $_is_anesth}}
-      <!-- On passe _sejour_id seulement s'il y a un sejour_id -->
-      <input type="hidden" name="_sejour_id" value="{{$sejour_id}}" />
-      {{/if}}
-      
-      <table class="form">
-        <col style="width: 70px;" />
-        <col  class="narrow" />
-         
-        <tr>
-          {{if $app->user_prefs.showDatesAntecedents}}
-          <th>{{mb_label object=$traitement field=debut}}</th>
-          <td>{{mb_field object=$traitement field=debut form=editTrmtFrm register=true}}</td>
-          {{else}}
-          <td colspan="2"></td>
-          {{/if}}
-          <th>
-            {{mb_label object=$traitement field="traitement"}}
-            <select name="_helpers_traitement" size="1" style="width: 80px;" onchange="pasteHelperContent(this)" class="helper">
-              <option value="">&mdash; {{tr}}Choose{{/tr}}</option>
-              {{html_options options=$traitement->_aides.traitement.no_enum}}
-            </select>
-            <input type="hidden" name="_hidden_traitement" value="" />
-            <button class="new notext" title="Ajouter une aide à la saisie" type="button" onclick="addHelp('CTraitement', this.form._hidden_traitement, 'traitement', null, null, null, {{$userSel->_id}})">
-              {{tr}}New{{/tr}}
-            </button>
-          </th>
-        </tr>
-        <tr>
-          {{if $app->user_prefs.showDatesAntecedents}}
-          <th>{{mb_label object=$traitement field=fin}}</th>
-          <td>{{mb_field object=$traitement field=fin form=editTrmtFrm register=true}}</td>
-          {{else}}
-          <td colspan="2"></td>
-          {{/if}}
-          <td rowspan="3">
-            <textarea name="traitement" onblur="this.form.onsubmit()"></textarea>
-          </td>
-        </tr>
-        <tr>
-          <!-- Auto-completion -->
-          <th>{{mb_label object=$traitement field=_search}}</th>
-          <td>
-            {{mb_field object=$traitement field=_search size=10 class="autocomplete"}}
-            <script type="text/javascript">
-              Main.add(function(){
-                var form = getForm("editTrmtFrm");
-                var elements = form.elements;
-                new AideSaisie.AutoComplete(elements.traitement, {
-                  searchField: elements._search, 
-                  objectClass: "CTraitement", 
-                  // Probleme dans dPurgence si on prend l'utilisateur de la consult
-                  //contextUserId: "{{$userSel->_id}}",
-                  //contextUserView: "{{$userSel->_view}}",
-                  timestamp: "{{$conf.dPcompteRendu.CCompteRendu.timestamp}}"
-                });
-                
-                $(elements._search).observe("blur", function(e){
-                  $V(Event.element(e), "");
-                });
-              });
-            </script>
-          </td>
-        </tr>
-
-        <tr>
-          <td class="button" colspan="2">
-            <button class="tick" type="button">
-              {{tr}}Add{{/tr}} un traitement
-            </button>
-          </td>
-        </tr>
-      </table>
-      </form>
-    </td>
-  </tr>
-  {{/if}}
+        <!-- dossier_medical_id du sejour si c'est une consultation_anesth -->
+        {{if $_is_anesth}}
+        <!-- On passe _sejour_id seulement s'il y a un sejour_id -->
+        <input type="hidden" name="_sejour_id" value="{{$sejour_id}}" />
+        {{/if}}
   
-  <!-- Diagnostics CIM -->
-  <tr>
-    <th class="category">
-      Base de données CIM
-    </th>
-  </tr>
-  <tr>
-    <td class="text">
-      {{main}}
-	      var url = new Url("dPcim10", "ajax_code_cim10_autocomplete");
-	      url.autoComplete(getForm("addDiagFrm").keywords_code, '', {
-	        minChars: 1,
-	        dropdown: true,
-	        width: "250px",
-          select: "code",
-          afterUpdateElement: function(oHidden) {
-            oForm = getForm("addDiagFrm");
-            $V(oForm.code_diag, oHidden.value);
-            reloadCim10($V(oForm.code_diag));
-          }
-	      });
-      {{/main}}
-      <form name="addDiagFrm" action="?m=dPcabinet" method="post" onsubmit="return false;">
-        <strong>Ajouter un diagnostic</strong>
-        <input type="hidden" name="chir" value="{{$userSel->_id}}" />
-        <input type="text" name="keywords_code" class="autocomplete str code cim10" value="" size="10"/>
-        <input type="hidden" name="code_diag" onchange="$V(this.form.keywords_code, this.value)"/>
-        <button class="search" type="button" onclick="CIM10Selector.init()">{{tr}}Search{{/tr}}</button>
-        <button class="tick notext" type="button" onclick="reloadCim10(this.form.code_diag.value)">{{tr}}Validate{{/tr}}</button>
-        <script type="text/javascript">   
-          CIM10Selector.init = function(){
-            this.sForm = "addDiagFrm";
-            this.sView = "code_diag";
-            this.sChir = "chir";
-            this.options.mode = "favoris";
-            this.pop();
-          }
-        </script> 
-      </form>
+          <table class="layout" style="width: 100%">
+            <tr>
+              {{if $app->user_prefs.showDatesAntecedents}}
+                <th style="height: 1%">{{mb_label object=$antecedent field=date}}</th>
+                <td>{{mb_field object=$antecedent field=date form=editAntFrm register=true}}</td>
+              {{else}}
+                <td colspan="2" />
+              {{/if}}
+              <td rowspan="3" style="width: 100%">
+                {{mb_field object=$antecedent field="rques" rows="4"}}
+              </td>
+            </tr>
+    
+            <tr>
+              <th style="height: 100%">{{mb_label object=$antecedent field="type"}}</th>
+              <td>{{mb_field object=$antecedent field="type" defaultOption="&mdash; Aucun" alphabet="1" style="width: 9em;" onchange=""}}</td>
+            </tr>
+    
+            <tr>
+              <th>{{mb_label object=$antecedent field="appareil"}}</th>
+              <td>{{mb_field object=$antecedent field="appareil" defaultOption="&mdash; Aucun" alphabet="1" style="width: 9em;"}}</td>
+            </tr>
+            
+            <tr>
+              <td class="button" colspan="3">
+                <button class="tick" type="button" onclick="this.form.onsubmit();">
+                  {{tr}}Add{{/tr}} l'antécédent
+                </button>
+              </td>
+            </tr>
+          </table>
+          
+        </form>
       
-      <table style="width: 100%">
-      {{foreach from=$patient->_static_cim10 key=cat item=curr_cat}}
-        <tr id="category{{$cat}}-trigger">
-          <td>{{$cat}}</td>
-        </tr>
-        <tbody id="category{{$cat}}">
-          <tr class="script">
-            <td>
-              <script type="text/javascript">new PairEffect("category{{$cat}}");</script>
-            </td>
-          </tr>
-          {{foreach from=$curr_cat item=curr_code key="key"}}
+      </fieldset>
+      
+      {{if $isPrescriptionInstalled || $conf.dPpatients.CTraitement.enabled}}
+      <fieldset>
+        <legend>Traitements</legend>
+        <table class="layout" style="width: 100%;">
           <tr>
             <td class="text">
-            <form name="code_finder-{{$curr_code->sid}}" action="?">
-              <button class="tick notext" type="button" onclick="oCimField.add('{{$curr_code->code}}'); if(DossierMedical.sejour_id != '') { {{if $_is_anesth}}oCimAnesthField.add('{{$curr_code->code}}');{{/if}} }">
-                Ajouter
-              </button>
-              
-              <input type="hidden" name="codeCim" value="{{$curr_code->code}}" />
-              <button class="down notext" type="button" onclick="CIM10Selector.initfind{{$curr_code->sid}}()">
-                Parcourir
-              </button>
-              <script type="text/javascript">   
-                CIM10Selector.initfind{{$curr_code->sid}} = function(){
-                  this.sForm = "code_finder-{{$curr_code->sid}}";
-                  this.sCode = "codeCim";
-                  this.find();
-                }
-              </script> 
-              {{$curr_code->code}}: {{$curr_code->libelle}}
+              <ul id="tab_traitements_perso" class="control_tabs small">
+                {{if $isPrescriptionInstalled}}
+                  <li><a href="#tp_base_med">Base de données de médicaments</a></li>
+                {{/if}}
+                {{if $conf.dPpatients.CTraitement.enabled}}
+                  <li><a href="#tp_texte_simple">Texte simple</a></li>
+                {{/if}}
+              </ul>
+              <hr class="control_tabs" /> 
+            </td>
+          </tr>
+          {{/if}}
+          
+          {{if $isPrescriptionInstalled}}
+          <tr id="tp_base_med">
+            <td class="text">
+              <!-- Formulaire d'ajout de traitements -->
+              <form name="editLineTP" action="?m=dPcabinet" method="post">
+                <input type="hidden" name="m" value="dPprescription" />
+                <input type="hidden" name="dosql" value="do_add_line_tp_aed" />
+                <input type="hidden" name="code_cip" value="" onchange="refreshAddPoso(this.value);"/>
+                <input type="hidden" name="_patient_id" value="{{$patient->_id}}" />
+                <input type="hidden" name="praticien_id" value="{{$userSel->_id}}" />
+                
+                <table class="layout">
+                  <col style="width: 70px;" />
+                  <col class="narrow" />
+                
+                  <tr>
+                    <th>Recherche</th>
+                    <td>
+                      <input type="text" name="produit" value="" size="12" class="autocomplete" />
+                      <button type="button" class="search notext" onclick="MedSelector.init('produit');"></button>
+                      <div style="display:none; width: 350px;" class="autocomplete" id="_produit_auto_complete"></div>
+                      <script type="text/javascript">
+                          MedSelector.init = function(onglet){
+                            this.sForm = "editLineTP";
+                            this.sView = "produit";
+                            this.sCode = "code_cip";
+                            this.sSearch = document.editLineTP.produit.value;
+                            this.selfClose = true;
+                            this.sOnglet = onglet;
+                            this.pop();
+                          }
+                          MedSelector.doSet = function(){
+                            var oForm = document[MedSelector.sForm];
+                            $('_libelle').update(MedSelector.prepared.nom);
+                            $V(oForm.code_cip, MedSelector.prepared.code);
+                            $('button_submit_traitement').focus();
+                          }
+                      </script>
+                    </td>
+                    <td>
+                      <strong><div id="_libelle"></div></strong>
+                    </td>
+                  </tr>
+                  
+                  <tr>
+                    {{if $app->user_prefs.showDatesAntecedents}}
+                    <th>{{mb_label object=$line field="debut"}}</th>
+                    <td>{{mb_field object=$line field="debut" register=true form=editLineTP}}</td>
+                    {{else}}
+                    <td colspan="2"></td>
+                    {{/if}}
+                    <td rowspan="2" id="addPosoLine"></td>
+                  </tr>
+                  
+                  {{if $app->user_prefs.showDatesAntecedents}}
+                  <tr>
+                    <th>{{mb_label object=$line field="fin"}}</th>
+                    <td>{{mb_field object=$line field="fin" register=true form=editLineTP}}</td>
+                  </tr>
+                  {{/if}}
+                  
+                  <tr>
+                    <th>{{mb_label object=$line field="commentaire"}}</th>
+                    <td>{{mb_field object=$line field="commentaire" size=20}}</td>
+                  </tr>
+                  <tr>
+                    <td colspan="3" class="button">
+                      <button id="button_submit_traitement" class="tick" type="button" onclick="submitFormAjax(this.form, 'systemMsg', { 
+                        onComplete: function(){
+                          DossierMedical.reloadDossiersMedicaux();
+                          resetEditLineTP();
+                          resetFormTP();
+                        }
+                       } ); this.form.produit.focus();">
+                        {{tr}}Add{{/tr}} le traitement
+                      </button>
+                    </td>
+                  </tr>
+                </table>
               </form>
             </td>
           </tr>
-           {{/foreach}}
-        </tbody>
-      {{/foreach}}
-      </table>
+          {{/if}}
+              
+          <!-- Traitements -->
+          {{if $conf.dPpatients.CTraitement.enabled}}
+          <tr id="tp_texte_simple">
+            <td class="text">
+              <form name="editTrmtFrm" action="?m=dPcabinet" method="post" onsubmit="return onSubmitTraitement(this);">
+              <input type="hidden" name="m" value="dPpatients" />
+              <input type="hidden" name="del" value="0" />
+              <input type="hidden" name="dosql" value="do_traitement_aed" />
+              <input type="hidden" name="_patient_id" value="{{$patient->_id}}" />
+              
+              {{if $_is_anesth}}
+              <!-- On passe _sejour_id seulement s'il y a un sejour_id -->
+              <input type="hidden" name="_sejour_id" value="{{$sejour_id}}" />
+              {{/if}}
+              
+              <table class="layout">
+                 
+                <tr>
+                  {{if $app->user_prefs.showDatesAntecedents}}
+                  <th style="height: 100%;">{{mb_label object=$traitement field=debut}}</th>
+                  <td>{{mb_field object=$traitement field=debut form=editTrmtFrm register=true}}</td>
+                  {{else}}
+                  <td colspan="2"></td>
+                  {{/if}}
+                  <td rowspan="2" style="width: 100%">
+                    <textarea name="traitement" rows=4></textarea>
+                  </td>
+                </tr>
+                <tr>
+                  {{if $app->user_prefs.showDatesAntecedents}}
+                  <th>{{mb_label object=$traitement field=fin}}</th>
+                  <td>{{mb_field object=$traitement field=fin form=editTrmtFrm register=true}}</td>
+                  {{else}}
+                  <td colspan="2"></td>
+                  {{/if}}
+                </tr>
+        
+                <tr>
+                  <td class="button" colspan="3">
+                    <button class="tick" type="button" onclick="this.form.onsubmit()">
+                      {{tr}}Add{{/tr}} le traitement
+                    </button>
+                  </td>
+                </tr>
+              </table>
+              </form>
+            </td>
+          </tr>
+          {{/if}}
+        </table>
+      </fieldset>
+      <fieldset>
+        <legend>Base de données CIM</legend>
+        {{main}}
+          var url = new Url("dPcim10", "ajax_code_cim10_autocomplete");
+          url.autoComplete(getForm("addDiagFrm").keywords_code, '', {
+            minChars: 1,
+            dropdown: true,
+            width: "250px",
+            select: "code",
+            afterUpdateElement: function(oHidden) {
+              oForm = getForm("addDiagFrm");
+              $V(oForm.code_diag, oHidden.value);
+              reloadCim10($V(oForm.code_diag));
+            }
+          });
+        {{/main}}
+        <form name="addDiagFrm" action="?m=dPcabinet" method="post" onsubmit="return false;">
+          <strong>Ajouter un diagnostic</strong>
+          <input type="hidden" name="chir" value="{{$userSel->_id}}" />
+          <input type="text" name="keywords_code" class="autocomplete str code cim10" value="" size="10"/>
+          <input type="hidden" name="code_diag" onchange="$V(this.form.keywords_code, this.value)"/>
+          <button class="search" type="button" onclick="CIM10Selector.init()">{{tr}}Search{{/tr}}</button>
+          <button class="tick notext" type="button" onclick="reloadCim10(this.form.code_diag.value)">{{tr}}Validate{{/tr}}</button>
+          <script type="text/javascript">   
+            CIM10Selector.init = function(){
+              this.sForm = "addDiagFrm";
+              this.sView = "code_diag";
+              this.sChir = "chir";
+              this.options.mode = "favoris";
+              this.pop();
+            }
+          </script> 
+        </form>
+        
+        <table class="layout" style="width: 100%">
+        {{foreach from=$patient->_static_cim10 key=cat item=curr_cat}}
+          <tr id="category{{$cat}}-trigger">
+            <td>{{$cat}}</td>
+          </tr>
+          <tbody id="category{{$cat}}">
+            <tr class="script">
+              <td>
+                <script type="text/javascript">new PairEffect("category{{$cat}}");</script>
+              </td>
+            </tr>
+            {{foreach from=$curr_cat item=curr_code key="key"}}
+            <tr>
+              <td class="text">
+              <form name="code_finder-{{$curr_code->sid}}" action="?">
+                <button class="tick notext" type="button" onclick="oCimField.add('{{$curr_code->code}}'); if(DossierMedical.sejour_id != '') { {{if $_is_anesth}}oCimAnesthField.add('{{$curr_code->code}}');{{/if}} }">
+                  Ajouter
+                </button>
+                
+                <input type="hidden" name="codeCim" value="{{$curr_code->code}}" />
+                <button class="down notext" type="button" onclick="CIM10Selector.initfind{{$curr_code->sid}}()">
+                  Parcourir
+                </button>
+                <script type="text/javascript">   
+                  CIM10Selector.initfind{{$curr_code->sid}} = function(){
+                    this.sForm = "code_finder-{{$curr_code->sid}}";
+                    this.sCode = "codeCim";
+                    this.find();
+                  }
+                </script> 
+                {{$curr_code->code}}: {{$curr_code->libelle}}
+                </form>
+              </td>
+            </tr>
+             {{/foreach}}
+          </tbody>
+        {{/foreach}}
+        </table>
+      </fieldset>
     </td>
   </tr>
 </table>

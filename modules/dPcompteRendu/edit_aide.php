@@ -74,7 +74,10 @@ if($aide_id) {
   // Nouvelle Aide à la saisie
   $aide->class        = $class;
   $aide->field        = $field;
-  $aide->text         = stripslashes($text);
+  $text               = stripslashes($text);
+  $name               = implode(" ", array_slice(explode(" ", $text), 0, 3));
+  $aide->name         = $name;
+  $aide->text         = $text;
   $aide->depend_value_1 = $depend_value_1;
   $aide->depend_value_2 = $depend_value_2;
   //switch(CAppUI::pref("choicepratcab")) {
@@ -85,23 +88,23 @@ if($aide_id) {
 }
 
 $fields = array(
-    "user_id" => $user_id,
+    "user_id"     => $user_id,
     "function_id" => $user->function_id,
-    "group_id" => $group->_id);
+    "group_id"    => $group->_id);
 
 // Création du template
 $smarty = new CSmartyDP();
 
-$smarty->assign("aide"     , $aide);
-$smarty->assign("aide_id"  , $aide_id);
-$smarty->assign("dependValues", $dependValues);
-$smarty->assign("listFunc" , $listFunc);
-$smarty->assign("listPrat" , $listPrat);
-$smarty->assign("listEtab" , $listEtab);
-$smarty->assign("aides"    , $aides);
-$smarty->assign("user"    ,  $user);
-$smarty->assign("group"    , $group);
+$smarty->assign("aide"         , $aide);
+$smarty->assign("aide_id"      , $aide_id);
+$smarty->assign("dependValues" , $dependValues);
+$smarty->assign("listFunc"     , $listFunc);
+$smarty->assign("listPrat"     , $listPrat);
+$smarty->assign("listEtab"     , $listEtab);
+$smarty->assign("aides"        , $aides);
+$smarty->assign("user"         , $user);
+$smarty->assign("group"        , $group);
 $smarty->assign("choicepratcab", $choicepratcab);
-$smarty->assign("fields", $fields);
+$smarty->assign("fields"       , $fields);
 $smarty->display("vw_edit_aides.tpl");
 ?>

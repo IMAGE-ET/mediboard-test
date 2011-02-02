@@ -3,106 +3,83 @@
   {{assign var=readonly value=0}}
 {{/if}}
 
-<!-- Fiches d'examens -->
-{{mb_include_script module="dPcabinet" script="exam_dialog"}}
-
-<script type="text/javascript">
-  {{if !$readonly}}
-    ExamDialog.register('{{$consult->_id}}','{{$consult->_class_name}}');
-  {{/if}}
-
-  onExamComplete = function(){
-    FormObserver.changes = 0;
-  }
-</script>
-
-{{if $consult->_id}}
-<form class="watched" name="editFrmExams" action="?m={{$m}}" method="post" onsubmit="return onSubmitFormAjax(this, {onComplete: onExamComplete})">
-<input type="hidden" name="m" value="dPcabinet" />
-<input type="hidden" name="del" value="0" />
-<input type="hidden" name="dosql" value="do_consultation_aed" />
-{{mb_key object=$consult}}
-
-{{assign var=exam_count value=$consult->_exam_fields|@count}}
-{{math assign=text_rows equation="12/round(c/2)" c=$exam_count}}
-
-<table class="main">
-  {{foreach name=exam_fields from=$consult->_exam_fields key=current item=field}}
-  {{assign var=last value=$smarty.foreach.exam_fields.last}}
-  
-  {{if !$last && $current mod 2 == 0}}
+<table class="form">
   <tr>
-    <td class="halfPane">
-  {{elseif $current mod 2 == 1}}
-    <td class="halfPane">
-  {{else}}
-  <tr>
-    <td colspan="2">
-  {{/if}}
-  {{* Beginning *}}
-  
-  <table class="form">
-    <tr>
-      <th class="category">
+    <td>
+      <!-- Fiches d'examens -->
+      {{mb_include_script module="dPcabinet" script="exam_dialog"}}
+      
+      <script type="text/javascript">
         {{if !$readonly}}
-          {{if $aide_autocomplete == 1}}
-            <script type="text/javascript">
-              Main.add(function() {
-                new AideSaisie.AutoComplete(getForm("editFrmExams").elements.{{$field}}, {
-                  objectClass: "{{$consult->_class_name}}",
-                  contextUserId: "{{$consult->_ref_chir->_id}}",
-                  contextUserView: "{{$consult->_ref_chir->_view}}",
-                  timestamp: "{{$conf.dPcompteRendu.CCompteRendu.timestamp}}",
-                  validate: function(){ getForm("editFrmExams").onsubmit(); },
-                  resetSearchField: false,
-                  resetDependFields: false,
-                  validateOnBlur: false
-                });
-              });
-            </script>
-          {{else}}
-            <button class="submit notext" style="float: left;" type="submit" tabindex="1000">
-              {{tr}}Save{{/tr}}
-            </button>
-            <button class="new notext" title="Ajouter une aide à la saisie" style="float: right;" 
-                    type="button" onclick="addHelp('CConsultation', this.form.{{$field}}, null, null, null, null,{{$userSel->_id}})">
-              Nouveau
-            </button>
-            <select name="_helpers_{{$field}}" style="width: 130px; float: right;" 
-                    onchange="pasteHelperContent(this); this.form.onsubmit()" class="helper">
-              <option value="">&mdash; Aide</option>
-              {{html_options options=$consult->_aides.$field.no_enum}}
-            </select>
-          {{/if}}
+          ExamDialog.register('{{$consult->_id}}','{{$consult->_class_name}}');
         {{/if}}
-        {{mb_label object=$consult field=$field}}
-      </th>
-    </tr>
-    <tr>
-      <td>
-        {{if $readonly}}
-          {{mb_value object=$consult field=$field}}
+      
+        onExamComplete = function(){
+          FormObserver.changes = 0;
+        }
+      </script>
+      
+      {{if $consult->_id}}
+      <form class="watched" name="editFrmExams" action="?m={{$m}}" method="post" onsubmit="return onSubmitFormAjax(this, {onComplete: onExamComplete})">
+      <input type="hidden" name="m" value="dPcabinet" />
+      <input type="hidden" name="del" value="0" />
+      <input type="hidden" name="dosql" value="do_consultation_aed" />
+      {{mb_key object=$consult}}
+      
+      {{assign var=exam_count value=$consult->_exam_fields|@count}}
+      {{math assign=text_rows equation="12/round(c/2)" c=$exam_count}}
+      
+      <table class="layout" style="width: 100%;">
+        {{foreach name=exam_fields from=$consult->_exam_fields key=current item=field}}
+        {{assign var=last value=$smarty.foreach.exam_fields.last}}
+        
+        {{if !$last && $current mod 2 == 0}}
+        <tr>
+          <td class="halfPane">
+        {{elseif $current mod 2 == 1}}
+          <td class="halfPane">
         {{else}}
-          {{mb_field object=$consult field=$field rows=$text_rows onchange="this.form.onsubmit()"}}
+        <tr>
+          <td colspan="2">
         {{/if}}
-      </td>
-    </tr>
-  </table>
-
-  {{* End *}}
-  {{if !$last && $current mod 2 == 0}}
-    </td>
-  {{elseif $current mod 2 == 1}}
+          {{* Beginning *}}
+        
+          {{if !$readonly}}
+          <script type="text/javascript">
+            Main.add(function() {
+              new AideSaisie.AutoComplete(getForm("editFrmExams").elements.{{$field}}, {
+                objectClass: "{{$consult->_class_name}}",
+                timestamp: "{{$conf.dPcompteRendu.CCompteRendu.timestamp}}",
+                validateOnBlur: 0
+              });
+            });
+          </script>
+          {{/if}}
+          <fieldset>
+            <legend>{{mb_label object=$consult field=$field}}</legend>
+            {{if $readonly}}
+              {{mb_value object=$consult field=$field}}
+            {{else}}
+              {{mb_field object=$consult field=$field rows=$text_rows onchange="this.form.onsubmit()"}}
+            {{/if}}
+          </fieldset>
+        {{* End *}}
+        {{if !$last && $current mod 2 == 0}}
+          </td>
+        {{elseif $current mod 2 == 1}}
+          </td>
+        </tr>
+        {{else}}
+          </td>
+        </tr>
+        {{/if}}
+      {{/foreach}}
+      </table>
+      </form>
+      
+      {{else}}
+      <div class="small-info">Consultation non réalisée</div>
+      {{/if}}
     </td>
   </tr>
-  {{else}}
-    </td>
-  </tr>
-  {{/if}}
-{{/foreach}}
 </table>
-</form>
-
-{{else}}
-<div class="small-info">Consultation non réalisée</div>
-{{/if}}

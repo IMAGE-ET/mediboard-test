@@ -1,6 +1,6 @@
 <table class="form">
-  <tr>
-    <td class="text">
+  <tr id="tr_{{$_file->_guid}}">
+    <td id="td_{{$_file->_guid}}" class="text">
       <a href="#" class="action" id="readonly_{{$_file->_guid}}"
          onclick="File.popup('{{$object_class}}','{{$object_id}}','{{$_file->_class_name}}','{{$_file->_id}}');"
          onmouseover="ObjectTooltip.createEx(this, '{{$_file->_guid}}', 'objectView')">{{$_file}}</a>
@@ -47,6 +47,24 @@
           </button>
         </span>
       </form>
-    </td>        
+    </td>
+    {{if $conf.dPfiles.system_sender}}
+    <td class="button" style="width: 1px">
+      <form name="Edit-{{$_file->_guid}}" action="?m={{$m}}" method="post" onsubmit="return checkForm(this)">
+     
+      <input type="hidden" name="m" value="dPfiles" />
+      <input type="hidden" name="dosql" value="do_file_aed" />
+      <input type="hidden" name="del" value="0" />
+      {{mb_key object=$_file}}
+     
+      <!-- Send File -->
+      {{mb_include module=dPfiles template=inc_file_send_button 
+         notext=notext
+          _doc_item=$_file
+          onComplete="File.refresh('$object_id','$object_class')"
+      }}
+      </form>
+    </td>
+    {{/if}}        
   </tr>
 </table>

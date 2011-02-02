@@ -1,3 +1,29 @@
+<script type="text/javascript">
+Main.add(function () {
+  
+  var oExamCliniqueForm = getForm("editAnesthExamenClinique");
+  new AideSaisie.AutoComplete(oExamCliniqueForm.examenCardio, {
+            objectClass: "CConsultAnesth",
+            timestamp: "{{$conf.dPcompteRendu.CCompteRendu.timestamp}}",
+            validateOnBlur:0
+          });
+
+  new AideSaisie.AutoComplete(oExamCliniqueForm.examenPulmo, {
+            objectClass: "CConsultAnesth",
+            timestamp: "{{$conf.dPcompteRendu.CCompteRendu.timestamp}}",
+            validateOnBlur:0
+          });
+          
+  var oExamForm = getForm("editFrmExamenConsult");
+  new AideSaisie.AutoComplete(oExamForm.examen, {
+            objectClass: "CConsultation",
+            timestamp: "{{$conf.dPcompteRendu.CCompteRendu.timestamp}}",
+            validateOnBlur:0
+          });
+  
+});
+</script>
+
 <table class="main form">
   <tr>
     <td>
@@ -6,54 +32,40 @@
       <script type="text/javascript">
         ExamDialog.register('{{$consult->_id}}','{{$consult->_class_name}}');
       </script>
-    </td>
-  </tr>
-  <tr>
-    <td>
-      <form name="editAnesthExamenCardio" action="?m={{$m}}" method="post" onsubmit="return onSubmitFormAjax(this);">
+      <form name="editAnesthExamenClinique" action="?" method="post" onsubmit="return onSubmitFormAjax(this);">
         <input type="hidden" name="m" value="dPcabinet" />
         <input type="hidden" name="del" value="0" />
         <input type="hidden" name="dosql" value="do_consult_anesth_aed" />
         {{mb_key object=$consult_anesth}}
-				
-        {{mb_label object=$consult_anesth field="examenCardio"}}
-        <select name="_helpers_examenCardio" onchange="pasteHelperContent(this); this.form.examenCardio.onchange();" class="helper">
-          <option value="">&mdash; Aide</option>
-          {{html_options options=$consult_anesth->_aides.examenCardio.no_enum}}
-        </select>
-        <button class="new notext" title="Ajouter une aide à la saisie" type="button" onclick="addHelp('CConsultAnesth', this.form.examenCardio, '', '', '', '', {{$userSel->_id}})">{{tr}}New{{/tr}}</button>
-        <br />
-        {{mb_field object=$consult_anesth field="examenCardio" onchange="this.form.onsubmit()"}}
-
-        <br />
-
-        {{mb_label object=$consult_anesth field="examenPulmo"}}
-        <select name="_helpers_examenPulmo" onchange="pasteHelperContent(this); this.form.examenPulmo.onchange();" class="helper">
-          <option value="">&mdash; Aide</option>
-          {{html_options options=$consult_anesth->_aides.examenPulmo.no_enum}}
-        </select>
-        <button class="new notext" title="Ajouter une aide à la saisie" type="button" onclick="addHelp('CConsultAnesth', this.form.examenPulmo, '', '', '', '', {{$userSel->_id}})">{{tr}}New{{/tr}}</button>
-        <br />
-        {{mb_field object=$consult_anesth field="examenPulmo" onchange="this.form.onsubmit()"}}
+        <table class="layout" style="width: 100%">
+          <tr>
+            <td class="halfPane">
+              <fieldset>
+                <legend>{{mb_label object=$consult_anesth field="examenCardio"}}</legend>
+                {{mb_field object=$consult_anesth field="examenCardio" rows="4" onchange="this.form.onsubmit()"}}
+              </fieldset>
+              </form>
+            </td>
+            <td class="halfPane">
+              <fieldset>
+                <legend>{{mb_label object=$consult_anesth field="examenPulmo"}}</legend>
+                {{mb_field object=$consult_anesth field="examenPulmo" rows="4" onchange="this.form.onsubmit()"}}
+              </fieldset>
+              </form>
+            </td>
+          </tr>
+        </table>
       </form>
-    </td>
-  </tr>
-  <tr>
-    <td>
-      <form name="editFrmExams" action="?m={{$m}}" method="post" onsubmit="return onSubmitFormAjax(this);"">
+      
+      <form name="editFrmExamenConsult" action="?" method="post" onsubmit="return onSubmitFormAjax(this);">
         <input type="hidden" name="m" value="dPcabinet" />
         <input type="hidden" name="del" value="0" />
         <input type="hidden" name="dosql" value="do_consultation_aed" />
         {{mb_key object=$consult}}
-				
-        {{mb_label object=$consult field="examen"}}
-        <select name="_helpers_examen" onchange="pasteHelperContent(this); this.form.examen.onchange();" class="helper">
-          <option value="">&mdash; Aide</option>
-          {{html_options options=$consult->_aides.examen.no_enum}}
-        </select>
-        <button class="new notext" title="Ajouter une aide à la saisie" type="button" onclick="addHelp('CConsultation', this.form.examen, '', '', '', '', {{$userSel->_id}})">{{tr}}New{{/tr}}</button>
-        <br />
-        {{mb_field object=$consult field="examen" onchange="this.form.onsubmit()"}}
+        <fieldset>
+          <legend>{{mb_label object=$consult field="examen"}}</legend>
+          {{mb_field object=$consult field="examen" rows="4" onchange="this.form.onsubmit()"}}
+        </fieldset>
       </form>
     </td>
   </tr>

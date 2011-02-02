@@ -1,4 +1,3 @@
-<strong>Techniques Complémentaires</strong>
 <ul>
   {{foreach from=$consult_anesth->_ref_techniques item=curr_tech}}
   <li>
