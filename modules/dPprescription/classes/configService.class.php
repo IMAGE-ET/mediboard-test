@@ -74,6 +74,10 @@ class CConfigService extends CConfigServiceAbstract {
     $config_service = new CConfigService();
     $all_configs = $config_service->loadList();
     
+    if ($all_configs == null) {
+      return;
+    }
+    
     // Creation du tableau de valeur par defaut (quelque soit l'etablissement)
     foreach($all_configs as $_config){
       if(!$_config->service_id && !$_config->group_id){

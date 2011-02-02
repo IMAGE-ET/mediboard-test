@@ -71,6 +71,10 @@ class CConfigMomentUnitaire extends CConfigServiceAbstract {
     $config_moment = new CConfigMomentUnitaire();
     $all_configs = $config_moment->loadList();
     
+    if ($all_configs == null) {
+      return;
+    }
+    
     // Creation du tableau de valeur par defaut (quelque soit l'etablissement)
     foreach($all_configs as $_config){
       if(!$_config->service_id && !$_config->group_id){
