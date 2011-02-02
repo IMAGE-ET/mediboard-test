@@ -20,12 +20,12 @@ function submitCompteRendu(callback){
     if(checkForm(form) && User.id) {
       form.onsubmit=function(){ return true; };
       onSubmitFormAjax(form,{ useDollarV: true, onComplete: function() {
+        if (window.pdf_thumbnails == 0 && window.opener.Document.refreshList) {
+          window.opener.Document.refreshList($V(form.object_class), $V(form.object_id));
+        }
         Thumb.changed = false;
         window.callback = callback ? callback : null;
       }},  $("systemMsg"));
-      if (window.pdf_thumbnails == 0 && window.opener.Document.refreshList) {
-        window.opener.setTimeout(window.opener.Document.refreshList.curry($V(form.object_class), $V(form.object_id), 1000));
-      }
     }
   }).defer();
   
