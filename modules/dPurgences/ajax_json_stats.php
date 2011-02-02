@@ -628,7 +628,7 @@ switch ($axe) {
       $areas[] = $row["categorie"];
     }
     
-    $areas[] = "Autres";
+    $areas[] = "AUTRES DIAGNOSTICS";
     
     foreach($areas as &$_area) {
       $_area = rtrim($_area);
@@ -657,13 +657,13 @@ switch ($axe) {
       unset($where[10]);
       $label = utf8_encode($value);
       $value = addslashes($value);
-      $where[10] = "rpu.diag_infirmier RLIKE '^{$value}[[:space:]]*'";
+      $where[10] = "rpu.diag_infirmier RLIKE '^{$value}[[:space:]]*\n'";
 
       $series[$j] = array('data' => array(), 'label' => $label);
       
       foreach ($dates as $i => $_date) {
         // Si la catégorie est autre, on lui affecte le total soustrait aux valeurs des autres catégories
-        if ($value == "AUTRES") {
+        if ($value == "AUTRES DIAGNOSTICS") {
           $series[$j]['data'][$i] = array($i, $totaux[$i]);
           $total += $totaux[$i];
           continue;
