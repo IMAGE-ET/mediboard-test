@@ -613,7 +613,7 @@ switch ($axe) {
     
     $percent = $percent / 100 ;
     
-    $sql = "SELECT UPPER(TRIM(TRAILING '\r\n' from substring_index( `diag_infirmier` , '\\n', 1 ))) AS categorie, COUNT(*) as nb_diag
+    $sql = "SELECT TRIM(TRAILING '\r\n' from substring_index( `diag_infirmier` , '\\n', 1 )) AS categorie, COUNT(*) as nb_diag
     FROM `rpu`
     LEFT JOIN `sejour` ON `rpu`.sejour_id = `sejour`.sejour_id
     WHERE `diag_infirmier` IS NOT NULL
@@ -628,7 +628,15 @@ switch ($axe) {
       $areas[] = $row["categorie"];
     }
     
-    $areas[] = "Autre";
+    $areas[] = "Autres";
+    
+    foreach($areas as &$_area) {
+      $_area = rtrim($_area);
+      $_area = CMbString::removeDiacritics($_area);
+      $_area = strtoupper($_area);
+    }
+    
+    $areas = array_unique($areas);
     
     $data[$axe]["options"]["title"] .= utf8_encode(" (" . count($areas) . " catégories)");
     
@@ -643,20 +651,20 @@ switch ($axe) {
       $totaux[$i] = $rpu->countList($where, null, null, null, $ljoin);
     }
     
-    foreach($areas as $key => $value) {
+    $j = 0;
+    
+    foreach($areas as $value) {
       unset($where[10]);
       $label = utf8_encode($value);
       $value = addslashes($value);
-      $where[10] = "rpu.diag_infirmier LIKE '$value\n%'
-        OR rpu.diag_infirmier LIKE '$value\n'
-        OR rpu.diag_infirmier LIKE '$value'";
+      $where[10] = "rpu.diag_infirmier RLIKE '^{$value}[[:space:]]*'";
 
-      $series[$key] = array('data' => array(), 'label' => $label);
+      $series[$j] = array('data' => array(), 'label' => $label);
       
       foreach ($dates as $i => $_date) {
         // Si la catégorie est autre, on lui affecte le total soustrait aux valeurs des autres catégories
-        if ($value == "Autre") {
-          $series[$key]['data'][$i] = array($i, $totaux[$i]);
+        if ($value == "AUTRES") {
+          $series[$j]['data'][$i] = array($i, $totaux[$i]);
           $total += $totaux[$i];
           continue;
         }
@@ -666,8 +674,9 @@ switch ($axe) {
         $totaux[$i] -= $count;
         
         $total += $count;
-        $series[$key]['data'][$i] = array($i, intval($count)); 
+        $series[$j]['data'][$i] = array($i, intval($count)); 
       }
+      $j++;
     }
 }
 
