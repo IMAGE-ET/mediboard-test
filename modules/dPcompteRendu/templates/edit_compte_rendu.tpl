@@ -8,7 +8,11 @@ window.pdf_thumbnails = {{$pdf_thumbnails|@json}};
 
 function submitCompteRendu(callback){
   CKEDITOR.instances.htmlarea.document.getBody().setStyle("background", "#ddd");
-  $('mess').stopObserving("click");
+
+  var mess = null;
+  if (mess=$('mess')) {
+    mess.stopObserving("click");
+  }
   (function(){
     restoreStyle();
 	  var html = CKEDITOR.instances.htmlarea.getData();
