@@ -220,7 +220,7 @@ class CTemplateManager {
   function addBarcode($field, $data, $options = array()) {
     $options = array(
       "barcode" => array(
-        "width"  => 150,
+        "width"  => 220,
         "height" => 60,
         "class"  => "barcode"
       )
