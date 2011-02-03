@@ -137,46 +137,53 @@ Main.add( function(){
       </strong>
 			
 			<!-- Selection de la voie / interface -->
-			{{if $line->_perm_edit}}
-			  <br />
-	      {{if $line->type_line == "aerosol"}}
-	       {{assign var=interfaces value="CPrescriptionLineMix"|static:"interface_by_line"}}
-	       {{assign var=interfaces_for_line value=$interfaces.aerosol}}
-	        
-	        <select name="interface" onchange="return onSubmitFormAjax(this.form);">           
-	          <option value="">&mdash; Interface</option>               
-	          {{foreach from=$interfaces_for_line item=_interface}}
-	            <option value="{{$_interface}}" {{if $line->interface == $_interface}}selected="selected"{{/if}}>{{tr}}CPrescriptionLineMix.interface.{{$_interface}}{{/tr}}</option> 
-	          {{/foreach}}
-	        </select>
-	      {{else}}
-	        {{if $line->_voies}}
-	          <select name="voie" onchange="{{if !in_array($line->voie, $line->_voies)}}
-	                                          Element.hide($('warning_voie_{{$line->_id}}')); 
-	                                          Element.hide($('last_option_{{$line->_id}}'));
-	                                        {{/if}}
-	                                        submitFormAjax(this.form, 'systemMsg');">
-	            {{foreach from=$line->_voies item=_voie}}
-	              <option value="{{$_voie}}" {{if $line->voie == $_voie}}selected="selected"{{/if}}>{{$_voie}}</option>
-	            {{/foreach}}
-	            {{if !in_array($line->voie, $line->_voies)}}
-	              <option value="{{$line->voie}}" selected="selected" id="last_option_{{$line->_id}}">{{$line->voie}}</option>
-	            {{/if}}
-	          </select>
-	           {{if !in_array($line->voie, $line->_voies)}}
-	           <div class="warning" id="warning_voie_{{$line->_id}}">
-	             Attention, la voie selectionnée n'est plus disponible
-	           </div>
-	           {{/if}}
-	        {{/if}}
-	      {{/if}}
-	    {{else}}
-	      {{if $line->type_line == "aerosol"}}
-	        <strong>{{tr}}CPrescriptionLineMix.interface.{{mb_value object=$line field="interface"}}{{/tr}}</strong>
-	      {{else}}
-	        <strong>{{mb_value object=$line field="voie"}}</strong>
-	      {{/if}}
-	    {{/if}}
+			<form name="editVoieLineMix-{{$line->_id}}" action="" method="post">
+        <input type="hidden" name="m" value="dPprescription" />
+        <input type="hidden" name="dosql" value="do_prescription_line_mix_aed" />
+        <input type="hidden" name="prescription_line_mix_id" value="{{$line->_id}}" />
+        <input type="hidden" name="del" value="0" />
+				
+				{{if $line->_perm_edit}}
+				  <br />
+		      {{if $line->type_line == "aerosol"}}
+		       {{assign var=interfaces value="CPrescriptionLineMix"|static:"interface_by_line"}}
+		       {{assign var=interfaces_for_line value=$interfaces.aerosol}}
+		        
+		        <select name="interface" onchange="return onSubmitFormAjax(this.form);">           
+		          <option value="">&mdash; Interface</option>               
+		          {{foreach from=$interfaces_for_line item=_interface}}
+		            <option value="{{$_interface}}" {{if $line->interface == $_interface}}selected="selected"{{/if}}>{{tr}}CPrescriptionLineMix.interface.{{$_interface}}{{/tr}}</option> 
+		          {{/foreach}}
+		        </select>
+		      {{else}}
+		        {{if $line->_voies}}
+		          <select name="voie" onchange="{{if !in_array($line->voie, $line->_voies)}}
+		                                          Element.hide($('warning_voie_{{$line->_id}}')); 
+		                                          Element.hide($('last_option_{{$line->_id}}'));
+		                                        {{/if}}
+		                                        submitFormAjax(this.form, 'systemMsg');">
+		            {{foreach from=$line->_voies item=_voie}}
+		              <option value="{{$_voie}}" {{if $line->voie == $_voie}}selected="selected"{{/if}}>{{$_voie}}</option>
+		            {{/foreach}}
+		            {{if !in_array($line->voie, $line->_voies)}}
+		              <option value="{{$line->voie}}" selected="selected" id="last_option_{{$line->_id}}">{{$line->voie}}</option>
+		            {{/if}}
+		          </select>
+		           {{if !in_array($line->voie, $line->_voies)}}
+		           <div class="warning" id="warning_voie_{{$line->_id}}">
+		             Attention, la voie selectionnée n'est plus disponible
+		           </div>
+		           {{/if}}
+		        {{/if}}
+		      {{/if}}
+		    {{else}}
+		      {{if $line->type_line == "aerosol"}}
+		        <strong>{{tr}}CPrescriptionLineMix.interface.{{mb_value object=$line field="interface"}}{{/tr}}</strong>
+		      {{else}}
+		        <strong>{{mb_value object=$line field="voie"}}</strong>
+		      {{/if}}
+		    {{/if}}
+			</form>
     </th>
   </tr>
 </table>
@@ -264,7 +271,7 @@ Main.add( function(){
 	              </label>
 	              {{/if}}
 	              
-								<div style="display: inline; float: right;">
+								<div style="display: inline; {{if $line->type_line != 'aerosol'}}float: right;{{/if}}">
 	              {{if $line->type_line == "perfusion"}}
 	                <span style="display: none;" id="continue-{{$line->_id}}">
 	                  {{assign var=types value="CPrescriptionLineMix"|static:"unite_by_line"}}
@@ -338,20 +345,21 @@ Main.add( function(){
 	              {{/if}}
 	              
 	              {{if $line->type_line == "aerosol"}}
-	                {{if $line->_can_modify_prescription_line_mix}}
-	                   pendant {{mb_field object=$line size=2 field=duree_passage increment=1 min=0 form="editPerf-$prescription_line_mix_id" onchange="return onSubmitFormAjax(this.form);"}}
-	                  {{elseif $line->duree_passage}}
-	                   pendant {{mb_value object=$line field=duree_passage}}
-	                  {{/if}}
-	                  <!-- duree de passage en minutes -->
-	                  {{mb_value object=$line field=unite_duree_passage}}
-	                  
-	                 toutes les 
+								  {{if $line->_can_modify_prescription_line_mix}}
+                   pendant {{mb_field object=$line size=2 field=duree_passage increment=1 min=0 form="editPerf-$prescription_line_mix_id" onchange="return onSubmitFormAjax(this.form);"}}
+                  {{elseif $line->duree_passage}}
+                   pendant {{mb_value object=$line field=duree_passage}}
+                  {{/if}}
+                  <!-- duree de passage en minutes -->
+                  {{mb_value object=$line field=unite_duree_passage}}
+                  
+	                toutes les 
 	                {{if $line->_can_modify_prescription_line_mix}}
 	                  {{mb_field object=$line field=nb_tous_les size=2 increment=1 min=0 form="editPerf-$prescription_line_mix_id" onchange="return onSubmitFormAjax(this.form);"}} h
 	                {{else}}      
 	                  {{mb_value object=$line field="nb_tous_les"}} h
 	                {{/if}}
+								
 	              {{/if}}
 								</div>
 							 </fieldset>
