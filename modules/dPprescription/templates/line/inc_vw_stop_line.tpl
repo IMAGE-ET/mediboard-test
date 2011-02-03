@@ -61,22 +61,16 @@ calculDateArret = function(oForm, object_id, object_class, traitement, cat_id){
 	  {{mb_value object=$line field=date_arret}}
 	  {{if $line->time_arret}}
 	    à {{mb_value object=$line field=time_arret}}  
-	  {{/if}}<br />
+	  {{/if}}
   {{else}}
-    <table>
-      <tr>
-        <td style="border: none;">Date d'arrêt</td>
-        <td style="border:none;">
-          {{assign var=line_id value=$line->_id}}
-	        {{mb_field object=$line field=date_arret form=form-stop-$object_class-$line_id canNull=false}}
-	        {{mb_field object=$line field=time_arret form=form-stop-$object_class-$line_id}}
-	        <button type="button" 
-	                class="stop" 
-	                onclick="calculDateArret(this.form, '{{$line->_id}}','{{$line->_class_name}}','{{$_traitement_personnel}}','{{$category_id}}');">  
-	          Arrêter
-	        </button>
-	      </td>
-	    </tr>
-	  </table>
+    Date d'arrêt
+    {{assign var=line_id value=$line->_id}}
+    {{mb_field object=$line field=date_arret form=form-stop-$object_class-$line_id canNull=false}}
+    {{mb_field object=$line field=time_arret form=form-stop-$object_class-$line_id}}
+    <button type="button" 
+            class="stop" 
+            onclick="calculDateArret(this.form, '{{$line->_id}}','{{$line->_class_name}}','{{$_traitement_personnel}}','{{$category_id}}');">  
+      Arrêter
+    </button>
   {{/if}}
 </form>

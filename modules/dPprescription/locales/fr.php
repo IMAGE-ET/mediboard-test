@@ -1558,6 +1558,7 @@ $locales['mod-dPprescription-tab-configure'] = 'Configurer';
 $locales['mod-dPprescription-tab-edit_perf_dossier_soin'] = 'Perfusions';
 $locales['mod-dPprescription-tab-element_selector'] = 'Sélecteur d\'élément';
 $locales['mod-dPprescription-tab-httpreq_add_administration'] = 'Administration d\'un produit';
+$locales['mod-dPprescription-tab-httpreq_add_substitution_line'] = 'Variantes';
 $locales['mod-dPprescription-tab-httpreq_vw_dossier_medical_patient'] = 'Dossier médical du patient';
 $locales['mod-dPprescription-tab-httpreq_vw_prescription'] = 'Création de prescription';
 $locales['mod-dPprescription-tab-import_elements_prescription'] = 'Import des éléments';

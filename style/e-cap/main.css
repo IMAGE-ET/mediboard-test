@@ -440,4 +440,11 @@ tr.catalogue-3 th {
   background-color: transparent;
 }
 
+fieldset, 
+fieldset legend {
+	border: 1px solid #ABE;
+}
 
+fieldset legend {
+  background-color: #ddd;
+}

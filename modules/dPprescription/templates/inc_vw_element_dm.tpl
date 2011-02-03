@@ -39,7 +39,6 @@ Main.add( function(){
   <input type="hidden" name="dosql" value="do_prescription_line_element_aed" />
   <input type="hidden" name="del" value="0" />
   <input type="hidden" name="prescription_line_element_id" value="{{$line->_id}}" />
-	<strong>DM</strong>
   {{if $line->cip_dm}}
     {{$line->_ref_dm->libelle}}, 
 		{{mb_label object=$line field="quantite_dm"}}

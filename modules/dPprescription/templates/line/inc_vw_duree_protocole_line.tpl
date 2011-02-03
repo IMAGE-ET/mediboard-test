@@ -16,7 +16,7 @@
   {{assign var=onchange value=""}}
 {{/if}}
 
-<table class="form">
+<table class="form layout">
 	<tr>
 	  <td style="border: none;">
 	    {{if $line->_perm_edit || $typeDate == "mode_grille"}}

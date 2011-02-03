@@ -51,9 +51,13 @@ selDivPoso = function(type, line_id, type_elt){
     type = "foisPar"+type_elt;
   }
   
+	$("view_quantity_"+line_id).show();
+	$("add_button_"+line_id).show();
+  
   oDivMoment = $('moment'+type_elt+line_id);
   oDivFoisPar = $('foisPar'+type_elt+line_id);
   oDivTousLes = $('tousLes'+type_elt+line_id);
+	oDivStats = $('stats'+type_elt+line_id);
   oDivDecalageIntervention = $('decalage_intervention'+type_elt+line_id);
   
   oFormPrise = document.forms['addPrise'+type_elt+line_id].show();
@@ -79,6 +83,7 @@ selDivPoso = function(type, line_id, type_elt){
       if(oDivDecalageIntervention){
         oDivDecalageIntervention.hide();
       }
+			oDivStats.hide();
       oFormPrise.moment_unitaire_id.setStyle( { float: null } );
       $("tous_les_"+type_elt+"_"+line_id).insert(oFormPrise.moment_unitaire_id);
       oFormPrise.moment_unitaire_id.onchange = null;
@@ -112,6 +117,7 @@ selDivPoso = function(type, line_id, type_elt){
       oDivFoisPar.show();
       oDivTousLes.hide();
       oDivMoment.hide();
+			oDivStats.hide();
       if(oDivDecalageIntervention){
         oDivDecalageIntervention.hide();
       }
@@ -123,14 +129,27 @@ selDivPoso = function(type, line_id, type_elt){
       oDivFoisPar.hide();
       oDivTousLes.hide();
       oDivMoment.hide();
+			oDivStats.hide();
       if(oDivDecalageIntervention){
         oDivDecalageIntervention.show();
+      }
+    break;
+		 case "stats"+type_elt: 
+			$("view_quantity_"+line_id).hide();
+			$("add_button_"+line_id).hide();
+	    oDivStats.show();
+      oDivFoisPar.hide();
+      oDivTousLes.hide();
+      oDivMoment.hide();
+      if(oDivDecalageIntervention){
+        oDivDecalageIntervention.hide();
       }
     break;
   }
   if (type == "moment"+type_elt) {
     oDivFoisPar.hide();
     oDivTousLes.hide();
+		oDivStats.hide();
     if(oDivDecalageIntervention){
       oDivDecalageIntervention.hide();
     }
@@ -328,14 +347,6 @@ testPharma = function(line_id){
   }
 }
 
-// Preselection des executants
-preselectExecutant = function(executant_id, category_id){
- $$('select.executant-'+category_id).each( function(select) {
-   select.value = executant_id;
-   select.onchange();
- })
-}
-
 changePraticienElt = function(praticien_id, element){
   var oFormAddLineElement = document.addLineElement;
   var oFormAddLineCommentElement = document.forms['addLineComment'+element];
@@ -407,7 +418,7 @@ toggleContinuiteLineMix = function(radioButton, prescription_line_mix_id){
 removeSolvant = function(checkbox){
   if (!checkbox.checked) return;
 
-  $(checkbox).up('table.group').select('input[name=__solvant]').each(
+  $(checkbox).up('table.line_mix_items').select('input[name=__solvant]').each(
     function(e){
       if(e != checkbox){
         e.checked=false;
@@ -417,6 +428,7 @@ removeSolvant = function(checkbox){
   );
 }
 
+/*
 updateSolvant = function(prescription_line_mix_id, line_id){
   var checked = $('lines-'+prescription_line_mix_id).select('input[name=__solvant]:checked')[0];
   if(!checked){
@@ -449,6 +461,6 @@ updateSolvant = function(prescription_line_mix_id, line_id){
     }
   });
 }
-
+*/
 
 </script>

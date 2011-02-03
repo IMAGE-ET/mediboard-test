@@ -11,24 +11,40 @@
 <script type="text/javascript">
 Main.add(function(){
   // Affichage du type de posologie Moment par defaut
-  getForm("ChoixPrise-{{$line->_id}}").typePrise[0].onclick();
+	$('ChoixPrise-{{$line->_id}}_typePrise_moment{{$type}}').onclick();
 });
 </script>
 
-
-
+<strong>
 {{assign var=line_id value=$line->_id}}
-<div style="margin-top: 5px; margin-bottom: -14px;">
-  <form name="ChoixPrise-{{$line->_id}}" action="" method="post" onsubmit="return false">
-	  <input name="typePrise" type="radio" value="moment{{$type}}"  onclick="selDivPoso(this.value,'{{$line->_id}}','{{$type}}');" checked="checked" /><label for="typePrise_moment{{$type}}" title="Moment de la journée"> Moment</label>
-	  <input name="typePrise" type="radio" value="foisPar{{$type}}" onclick="selDivPoso(this.value,'{{$line->_id}}','{{$type}}');" /><label for="typePrise_foisPar{{$type}}" title="x fois par y"> Fréquence</label>
-	  <input name="typePrise" type="radio" value="tousLes{{$type}}" onclick="selDivPoso(this.value,'{{$line->_id}}','{{$type}}');" /><label for="typePrise_tousLes{{$type}}" title="Tous les x y"> Répétition</label>
-	  
-    {{if $line->_protocole && $line->_ref_prescription->type!="externe"}}
-	  <input name="typePrise" type="radio" value="decalage_intervention{{$type}}"  onclick="selDivPoso(this.value,'{{$line->_id}}','{{$type}}');" /><label for="typePrise_decalage_intervention{{$type}}"> I + x heures</label>
-	  {{/if}}
-	</form>
-</div>
+<label title="Moment de la journée">
+	<input id="ChoixPrise-{{$line->_id}}_typePrise_moment{{$type}}" name="typePrise" type="radio" value="moment{{$type}}"  onclick="selDivPoso(this.value,'{{$line->_id}}','{{$type}}');" checked="checked" />
+	Moment
+</label>
+<label title="x fois par y"> 
+  <input name="typePrise" type="radio" value="foisPar{{$type}}" onclick="selDivPoso(this.value,'{{$line->_id}}','{{$type}}');" />
+  Fréquence
+</label>
+<label title="Tous les x y">
+  <input name="typePrise" type="radio" value="tousLes{{$type}}" onclick="selDivPoso(this.value,'{{$line->_id}}','{{$type}}');" />
+	Répétition
+</label>
+
+{{if $line->_ref_prescription->object_id && $line->_unites_prise|@count && $line->_most_used_poso|@count}}
+<label title="Stats">
+  <input name="typePrise" type="radio" value="stats{{$type}}" onclick="selDivPoso(this.value,'{{$line->_id}}','{{$type}}');" />
+  Stats
+</label>
+{{/if}}
+  
+{{if $line->_protocole && $line->_ref_prescription->type!="externe"}}
+<label>
+  <input name="typePrise" type="radio" value="decalage_intervention{{$type}}"  onclick="selDivPoso(this.value,'{{$line->_id}}','{{$type}}');" /> 
+  I + x heures
+</label>
+{{/if}}
+
+</strong>
 <br />
 
 <form name="addPrise{{$type}}{{$line->_id}}" action="?" method="post" style="display: none;" onsubmit="testPharma({{$line->_id}}); return onSubmitPrise(this,'{{$typeDate}}');">
@@ -39,6 +55,7 @@ Main.add(function(){
   <input type="hidden" name="object_id" value="{{$line->_id}}" />
   <input type="hidden" name="object_class" value="{{$line->_class_name}}" />
   
+	<span id="view_quantity_{{$line->_id}}">
   {{mb_field object=$prise_posologie field=quantite size=3 increment=1 min=1 form=addPrise$type$line_id}}
   {{if $line->_class_name == "CPrescriptionLineMedicament" && $type != "mode_grille"}}
   <select name="unite_prise" style="width: 75px;">
@@ -50,7 +67,8 @@ Main.add(function(){
   {{if $line->_class_name == "CPrescriptionLineElement"}}
     {{$line->_unite_prise}}
   {{/if}}
-  
+  </span>
+	
   <!-- Emplacement du formulaire de prises pour l'affichage dans le mode Tous Les -->
   <span id="tous_les_{{$type}}_{{$line->_id}}"></span>
   
@@ -88,15 +106,22 @@ Main.add(function(){
   
   {{if $line->_protocole && $line->_ref_prescription->type!="externe"}}
   <span id="decalage_intervention{{$type}}{{$line->_id}}" style="display: none;">
-  à I {{mb_field object=$prise_posologie showPlus="1" field=decalage_intervention size=3 increment=1 form=addPrise$type$line_id}} 
-	{{mb_field object=$prise_posologie field=unite_decalage_intervention}}
-	
+	  à I {{mb_field object=$prise_posologie showPlus="1" field=decalage_intervention size=3 increment=1 form=addPrise$type$line_id}} 
+		{{mb_field object=$prise_posologie field=unite_decalage_intervention}}
   </span>
   {{/if}}
-  
+
   {{if $line->_id}}
-    <button type="button" class="add notext" onclick="this.form.onsubmit(); refreshCheckbox(this.form);">{{tr}}Save{{/tr}}</button>
+    <button id="add_button_{{$line->_id}}" type="button" class="add notext" onclick="this.form.onsubmit(); refreshCheckbox(this.form);">{{tr}}Save{{/tr}}</button>
   {{/if}}
   
   <span id="moment_{{$type}}_{{$line->_id}}"></span>
 </form>
+
+<span id="stats{{$type}}{{$line->_id}}" style="display: none;">
+  <!-- Selection des posologies statistiques -->
+  {{if $line->_ref_prescription->object_id && $line->_unites_prise|@count}}
+    {{include file="../../dPprescription/templates/line/inc_vw_form_select_poso.tpl"}}
+  {{/if}}   
+</span>
+	

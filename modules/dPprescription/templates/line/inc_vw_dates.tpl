@@ -35,7 +35,6 @@ syncDateSubmit = function(oForm, curr_line_id, fieldName, type, object_class, ca
   {{assign var=chapitre value=""}}
 {{/if}}
 
-
 {{if $typeDate != "mode_grille"}}
   {{assign var=onchange value="submitFormAjax(this.form, 'systemMsg');"}}
 {{else}}
@@ -49,134 +48,131 @@ syncDateSubmit = function(oForm, curr_line_id, fieldName, type, object_class, ca
    <input type="hidden" name="del" value="0" />
    <input type="hidden" name="{{$line->_spec->key}}" value="{{$line->_id}}" />
   
-   <table>
-	     {{if !$line->fin}}
-	     <tr>
-	       <td style="border:none">
-           {{if $chapitre == "consult" || $chapitre == "anapath" || $chapitre == "imagerie"}}
-					   Date
-					 {{else}}
-					   {{mb_label object=$line field=debut}}
-           {{/if}}
-    	   </td>    
-	       {{if $line->_can_modify_dates || $typeDate == "mode_grille"}}
-	       <td style="border:none; {{if $typeDate == 'mode_grille'}}width: 190px;{{/if}}">
-	         {{if $prescription->type != "externe" && $typeDate == "mode_grille"}}
-		           <select name="debut_date" onchange="getForm('editDates-{{$typeDate}}-{{$line->_id}}').debut_da.value = new String;
-					 				                                  this.form.debut.value = '';
-		           																		 if(this.value == 'other') {
-							 				          					           $('date_mb_field-{{$typeDate}}-{{$line_id}}').show();
-							 				          					  			 } else { 
-							 				          					  			   this.form.debut.value = this.value;
-							 				          				             $('date_mb_field-{{$typeDate}}-{{$line_id}}').hide();
-							 				          				           }">
-							 	 <option value="other">Autre date</option>
-							   <optgroup label="Séjour">
-							     <option value="{{$prescription->_ref_object->_entree|iso_date}}">Entrée: {{$prescription->_ref_object->_entree|date_format:"%d/%m/%Y"}}</option>
-							     <option value="{{$prescription->_ref_object->_sortie|iso_date}}">Sortie: {{$prescription->_ref_object->_sortie|date_format:"%d/%m/%Y"}}</option>
-							   </optgroup>
-							   <optgroup label="Intervention">
-  							   {{foreach from=$prescription->_ref_object->_dates_operations item=_date_operation}}
-  							   <option value="{{$_date_operation}}">{{$_date_operation|date_format:"%d/%m/%Y"}}</option>
-  							   {{/foreach}}
-								 </optgroup>					   
-							 </select>
-							 <div id="date_mb_field-{{$typeDate}}-{{$line_id}}" style="border:none;">
-							   {{if $typeDate != "mode_grille" && ($chapitre == "consult" || $chapitre == "anapath" || $chapitre == "imagerie")}}
-							     {{mb_field object=$line field=debut canNull=false form=editDates-$typeDate-$line_id onchange="submitFormAjax(this.form, 'systemMsg');"}}
-							   {{else}}
-							     {{mb_field object=$line field=debut canNull=false form=editDates-$typeDate-$line_id onchange="syncDateSubmit(this.form, '$line_id', this.name, '$typeDate','$_object_class','$category_id');"}}
-				         {{/if}}
-				         {{mb_field object=$line field=time_debut form=editDates-$typeDate-$line_id onchange="$onchange"}}
-				       </div>	       
-		       {{else}}
-	           {{if $typeDate != "mode_grille" && ($chapitre == "consult" || $chapitre == "anapath" || $chapitre == "imagerie")}}
-			         {{mb_field object=$line field=debut form=editDates-$typeDate-$line_id onchange="submitFormAjax(this.form, 'systemMsg');"}}  
-	           {{else}}
-	             {{mb_field object=$line field=debut form=editDates-$typeDate-$line_id onchange="syncDateSubmit(this.form, '$line_id', this.name, '$typeDate','$_object_class','$category_id');"}}  
-	           {{/if}}
-	           {{mb_field object=$line field=time_debut form=editDates-$typeDate-$line_id onchange="$onchange"}}    
-				   {{/if}} 
-	       </td>
+   <table class="main layout">
+	   {{if !$line->fin}}
+	   <tr>  
+	     {{if $line->_can_modify_dates || $typeDate == "mode_grille"}}
+	     <td style="{{if $typeDate == 'mode_grille'}}width: 190px;{{/if}}">
+			   <strong>
+				 {{if $chapitre == "consult" || $chapitre == "anapath" || $chapitre == "imagerie"}}
+           Date
+         {{else}}
+           {{mb_label object=$line field=debut}}
+         {{/if}}
+				 </strong>
+	       {{if $prescription->type != "externe" && $typeDate == "mode_grille"}}
+	           <select name="debut_date" onchange="getForm('editDates-{{$typeDate}}-{{$line->_id}}').debut_da.value = new String;
+				 				                                  this.form.debut.value = '';
+	           																		 if(this.value == 'other') {
+						 				          					           $('date_mb_field-{{$typeDate}}-{{$line_id}}').show();
+						 				          					  			 } else { 
+						 				          					  			   this.form.debut.value = this.value;
+						 				          				             $('date_mb_field-{{$typeDate}}-{{$line_id}}').hide();
+						 				          				           }">
+						 	 <option value="other">Autre date</option>
+						   <optgroup label="Séjour">
+						     <option value="{{$prescription->_ref_object->_entree|iso_date}}">Entrée: {{$prescription->_ref_object->_entree|date_format:"%d/%m/%Y"}}</option>
+						     <option value="{{$prescription->_ref_object->_sortie|iso_date}}">Sortie: {{$prescription->_ref_object->_sortie|date_format:"%d/%m/%Y"}}</option>
+						   </optgroup>
+						   <optgroup label="Intervention">
+							   {{foreach from=$prescription->_ref_object->_dates_operations item=_date_operation}}
+							   <option value="{{$_date_operation}}">{{$_date_operation|date_format:"%d/%m/%Y"}}</option>
+							   {{/foreach}}
+							 </optgroup>					   
+						 </select>
+						 <div id="date_mb_field-{{$typeDate}}-{{$line_id}}" style="border:none;">
+						   {{if $typeDate != "mode_grille" && ($chapitre == "consult" || $chapitre == "anapath" || $chapitre == "imagerie")}}
+						     {{mb_field object=$line field=debut canNull=false form=editDates-$typeDate-$line_id onchange="submitFormAjax(this.form, 'systemMsg');"}}
+						   {{else}}
+						     {{mb_field object=$line field=debut canNull=false form=editDates-$typeDate-$line_id onchange="syncDateSubmit(this.form, '$line_id', this.name, '$typeDate','$_object_class','$category_id');"}}
+			         {{/if}}
+			         {{mb_field object=$line field=time_debut form=editDates-$typeDate-$line_id onchange="$onchange"}}
+			       </div>	       
 	       {{else}}
-	       <td style="border:none">
-	         {{if $line->debut}}
-	           {{$line->debut|date_format:"%d/%m/%Y"}}
-	           {{if $prescription->type == "sejour"}}
-	             {{mb_field object=$line field=time_debut form=editDates-$typeDate-$line_id onchange="$onchange"}} 
-	           {{/if}}
+	         {{if $typeDate != "mode_grille" && ($chapitre == "consult" || $chapitre == "anapath" || $chapitre == "imagerie")}}
+		         {{mb_field object=$line field=debut form=editDates-$typeDate-$line_id onchange="submitFormAjax(this.form, 'systemMsg');"}}  
 	         {{else}}
-	          -
-	         {{/if}}				   
-	       </td>
-	       {{/if}}
-
-	       {{if $chapitre != "consult" && $chapitre != "anapath" && $chapitre != "imagerie"}}
-	       <td style="border:none;">
-	         {{mb_label object=$line field=duree}}
-	       </td>
-	       <td style="border:none">
-		       {{if $line->_can_modify_dates || $typeDate == "mode_grille"}}
-				     {{mb_field object=$line field=duree increment=1 min=1 form=editDates-$typeDate-$line_id onchange="syncDateSubmit(this.form, '$line_id', this.name, '$typeDate','$_object_class','$category_id');" size="1" }}
-				     {{mb_field object=$line style="width: 70px;" field=unite_duree onchange="syncDateSubmit(this.form, '$line_id', this.name, '$typeDate','$_object_class','$category_id');"}}
-				   {{else}}
-				     {{if $line->duree}}
-				       {{$line->duree}}
-				     {{else}}
-				       -
-				     {{/if}}
-				     {{if $line->unite_duree}}
-				       {{tr}}CPrescriptionLineMedicament.unite_duree.{{$line->unite_duree}}{{/tr}}	      
-				     {{/if}}
-				   {{/if}}
-
-	       </td>
-	       <td style="border:none">
-	         {{mb_label object=$line field=_fin}} 
-	       </td>
+	           {{mb_field object=$line field=debut form=editDates-$typeDate-$line_id onchange="syncDateSubmit(this.form, '$line_id', this.name, '$typeDate','$_object_class','$category_id');"}}  
+	         {{/if}}
+	         {{mb_field object=$line field=time_debut form=editDates-$typeDate-$line_id onchange="$onchange"}}    
+			   {{/if}} 
+	     </td>
+	     {{else}}
+	     <td>
+	     	 <strong>
+	       {{if $chapitre == "consult" || $chapitre == "anapath" || $chapitre == "imagerie"}}
+           Date
+         {{else}}
+           {{mb_label object=$line field=debut}}
+         {{/if}}
+				 </strong>
+	       {{if $line->debut}}
+	         {{$line->debut|date_format:"%d/%m/%Y"}}
+	         {{if $prescription->type == "sejour"}}
+	           {{mb_field object=$line field=time_debut form=editDates-$typeDate-$line_id onchange="$onchange"}} 
+	         {{/if}}
+	       {{else}}
+	        -
+	       {{/if}}				   
+	     </td>
+	     {{/if}}
+	
+	     {{if $chapitre != "consult" && $chapitre != "anapath" && $chapitre != "imagerie"}}
+	     <td>
+	      	<strong>{{mb_label object=$line field=duree}}</strong>
 	       {{if $line->_can_modify_dates || $typeDate == "mode_grille"}}
-	       <td style="border:none;">
-	         {{mb_field object=$line field=_fin form=editDates-$typeDate-$line_id onchange="syncDateSubmit(this.form, '$line_id', this.name, '$typeDate','$_object_class','$category_id');"}}
-	         {{mb_field object=$line field=time_fin form=editDates-$typeDate-$line_id onchange="syncDateSubmit(this.form, '$line_id', this.name, '$typeDate','$_object_class','$category_id');"}}
-	       </td>
+			     {{mb_field object=$line field=duree increment=1 min=1 form=editDates-$typeDate-$line_id onchange="syncDateSubmit(this.form, '$line_id', this.name, '$typeDate','$_object_class','$category_id');" size="1" }}
+			     {{mb_field object=$line style="width: 70px;" field=unite_duree onchange="syncDateSubmit(this.form, '$line_id', this.name, '$typeDate','$_object_class','$category_id');"}}
+			   {{else}}
+			     {{if $line->duree}}
+			       {{$line->duree}}
+			     {{else}}
+			       -
+			     {{/if}}
+			     {{if $line->unite_duree}}
+			       {{tr}}CPrescriptionLineMedicament.unite_duree.{{$line->unite_duree}}{{/tr}}	      
+			     {{/if}}
+			   {{/if}}
+	     </td>
+
+	     {{if $line->_can_modify_dates || $typeDate == "mode_grille"}}
+	     <td>
+	     	 <strong>{{mb_label object=$line field=_fin}}</strong>
+	       {{mb_field object=$line field=_fin form=editDates-$typeDate-$line_id onchange="syncDateSubmit(this.form, '$line_id', this.name, '$typeDate','$_object_class','$category_id');"}}
+	       {{mb_field object=$line field=time_fin form=editDates-$typeDate-$line_id onchange="syncDateSubmit(this.form, '$line_id', this.name, '$typeDate','$_object_class','$category_id');"}}
+	     </td>
+	     {{else}}
+	     <td>
+	     	 <strong>{{mb_label object=$line field=_fin}}</strong>
+	       {{if $line->_fin}}
+	         {{$line->_fin|date_format:"%d/%m/%Y"}}
 	       {{else}}
-	       <td style="border:none">
-		       {{if $line->_fin}}
-		         {{$line->_fin|date_format:"%d/%m/%Y"}}
-		       {{else}}
-		        -
-		       {{/if}}				   
-	       </td>
-	      </tr>
-	     {{/if}}
-	   
+	        -
+	       {{/if}}				   
+	     </td>
 	    </tr>
-	    {{/if}}
-	    
-	    {{/if}}
-	    
-	    
-	    {{if $line->fin}}
-	    <tr>
-	      <td style="border:none">
-	         Fin
-	      </td>       
-	     {{if $line->_can_modify_dates}}
-	       <td style="border:none;">
-	         {{mb_field object=$line field=fin canNull=false form=editDates-$typeDate-$line_id onchange="submitFormAjax(this.form, 'systemMsg');"}}
-	         {{mb_field object=$line field=time_fin form=editDates-$typeDate-$line_id onchange="submitFormAjax(this.form, 'systemMsg');"}}
-	       </td>
+	   {{/if}}
+	  </tr>
+	  {{/if}}
+	  {{/if}}
+	  {{if $line->fin}}
+	  <tr>  
+	   {{if $line->_can_modify_dates}}
+	     <td>
+	     	 <strong>Fin</strong>
+	       {{mb_field object=$line field=fin canNull=false form=editDates-$typeDate-$line_id onchange="submitFormAjax(this.form, 'systemMsg');"}}
+	       {{mb_field object=$line field=time_fin form=editDates-$typeDate-$line_id onchange="submitFormAjax(this.form, 'systemMsg');"}}
+	     </td>
+	     {{else}}
+	     <td>
+	       {{if $line->fin}}
+	         {{$line->fin|date_format:"%d/%m/%Y"}}
 	       {{else}}
-	       <td style="border:none">
-	         {{if $line->fin}}
-		         {{$line->fin|date_format:"%d/%m/%Y"}}
-		       {{else}}
-		        -
-		       {{/if}}				   
-	       </td>
-	       {{/if}}
+	        -
+	       {{/if}}				   
+	     </td>
 	     {{/if}}
-	     
+	   {{/if}}
   </table>
  </form> 
  <div id="info_date_{{$line->_id}}" class="small-info" style="display: none;">
