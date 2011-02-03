@@ -21,11 +21,18 @@ var groups = {{$all_groups|@json}};
 
 function preselectCat(cat_group_id){
   // On efface la selection de toutes les checkbox
+  // (sauf par patient et seulement les présents)
   $$('input[type=checkbox]').each( function(oCheckbox) {
-    oCheckbox.checked = false;
-		oCatField.remove(oCheckbox.value);
+    if (oCheckbox.name != "_present_only_vw" && oCheckbox.name != "by_patient") {
+      oCheckbox.checked = false;
+      oCatField.remove(oCheckbox.value);
+    }
   });
-	
+  
+  if (!cat_group_id) {
+    return;
+  }
+  
 	// Selection des checkbox en fonction du groupe selectionné
   group = groups[cat_group_id];
   group.each( function(item_id){
@@ -141,7 +148,9 @@ selectPeriode = function(element) {
 				   <select name="cat_group_id" onchange="preselectCat(this.value);">
 				   	 <option value="">&mdash; Groupe de catégories</option>
 	           {{foreach from=$cat_groups item=_cat_group}}
-	             <option value="{{$_cat_group->_id}}">{{$_cat_group->libelle}}</option>
+	             <option value="{{$_cat_group->_id}}" {{if $_cat_group->_id == $cat_group_id}}selected="true"{{/if}}>
+                 {{$_cat_group->libelle}}
+               </option>
 	           {{/foreach}}
 	         </select>
 	       {{else}}

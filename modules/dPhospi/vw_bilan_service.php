@@ -238,9 +238,15 @@ if (CValue::get("do") && ($do_medicaments || $do_injections || $do_perfusions ||
 	  
 	  // Chargement du sejour et du patient
 	  $sejour =& $_prescription->_ref_object;
-	  $sejour->loadRefsOperations();
-	  $sejour->_ref_last_operation->loadRefPlageOp();
-		$sejour->_ref_last_operation->loadExtCodesCCAM();
+	  
+	  // Si les transmissions ont été requêtées,
+	  // alors le loadRefsOperations peut avoir déjà été fait
+	  if (!isset($sejour->_ref_operations)) {
+	    $sejour->loadRefsOperations();
+	    $sejour->_ref_last_operation->loadRefPlageOp();
+	    $sejour->_ref_last_operation->loadExtCodesCCAM();
+	  }
+
 	  // Stockage de la liste des patients
 	  $sejours[$sejour->_id] = $sejour;
 	  $sejour->loadRefPatient();
@@ -369,13 +375,15 @@ if (CValue::get("do") && ($do_medicaments || $do_injections || $do_perfusions ||
 								            $lit = getCurrentLit($sejour, $_date, $_hour, $lits, $affectations);
 								            if(!$lit) continue;			  
 								            $quantite = @$administrations_by_hour["quantite"];
+								            $key1 = $by_patient ? $lit->_ref_chambre->nom : "med";
+                            $key2 = $by_patient ? "med" : $lit->_ref_chambre->nom;
 								            if($quantite){
-								              @$lines_by_patient["med"][$lit->_ref_chambre->nom][$sejour->_id][$_date][$_hour][$_line_med->_class_name][$_line_med->_id]["administre"] += $quantite;
+								              @$lines_by_patient[$key1][$key2][$sejour->_id][$_date][$_hour][$_line_med->_class_name][$_line_med->_id]["administre"] += $quantite;
 								              $administrations_by_hour["quantite"] = 0;
 								            }
 								            $quantite_planifiee = @$administrations_by_hour["quantite_planifiee"];
 								            if($quantite_planifiee){
-								              @$lines_by_patient["med"][$lit->_ref_chambre->nom][$sejour->_id][$_date][$_hour][$_line_med->_class_name][$_line_med->_id]["prevu"] += $quantite_planifiee;
+								              @$lines_by_patient[$key1][$key2][$sejour->_id][$_date][$_hour][$_line_med->_class_name][$_line_med->_id]["prevu"] += $quantite_planifiee;
 								              $administrations_by_hour["quantite_planifiee"] = 0;
 								            }
 							            }
@@ -546,6 +554,7 @@ $smarty->assign("all_groups"      , $all_groups);
 $smarty->assign("by_patient"      , $by_patient);
 $smarty->assign("show_inactive"   , $show_inactive);
 $smarty->assign("_present_only"   , $_present_only);
+$smarty->assign("cat_group_id"    , CValue::get("cat_group_id"));
 $smarty->assign("params"          , CConstantesMedicales::$list_constantes);
 $smarty->display('vw_bilan_service.tpl');
 
