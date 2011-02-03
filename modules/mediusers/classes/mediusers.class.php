@@ -809,6 +809,7 @@ class CMediusers extends CMbObject {
     $template->addProperty("Praticien - titres"    , $this->titres);
     $template->addProperty("Praticien - ADELI"     , $this->adeli);
     $template->addProperty("Praticien - RPPS"      , $this->rpps);
+    $template->addBarcode("Praticien - Code barre RPPS", "RPPS$this->rpps");
   }
   
   /**
