@@ -80,7 +80,7 @@
         //var sHtml = "<span class='field' contenteditable='false'>" + string + "</span>&nbsp;";
         var sHtml = "<span class='field'>" + string + "</span>&nbsp;";
         CKEDITOR.instances.htmlarea.focus();
-        if (CKEDITOR.env.gecko) {
+        if (CKEDITOR.env.gecko && string.match(/Code barre/) == -1) {
           insertSpecialChar(sHtml);
         } else {
           CKEDITOR.instances.htmlarea.insertHtml(sHtml);
