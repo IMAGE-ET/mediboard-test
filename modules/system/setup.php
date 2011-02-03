@@ -216,23 +216,6 @@ class CSetupsystem extends CSetup {
       CHANGE `pref_name` `key` VARCHAR (40) NOT NULL,
       CHANGE `pref_value` `value` VARCHAR (255);";
     $this->addQuery($query);
-    
-    $this->makeRevision("1.0.24");
-    $query = "ALTER TABLE `source_ftp` 
-      ADD `role` ENUM ('prod','qualif') NOT NULL DEFAULT 'qualif';";
-    $this->addQuery($query);
-    $query = "ALTER TABLE `source_soap` 
-      ADD `role` ENUM ('prod','qualif') NOT NULL DEFAULT 'qualif';";
-    $this->addQuery($query);
-		
-		$this->makeRevision("1.0.25");
-    $query = "ALTER TABLE `source_soap` 
-      ADD `evenement_name` VARCHAR (255),
-      ADD `type_echange` VARCHAR (255);";
-    $this->addQuery($query);
-    $query = "ALTER TABLE `source_ftp` 
-      ADD `type_echange` VARCHAR (255);";
-    $this->addQuery($query);
 		
     $this->makeRevision("1.0.26");
     $query = "DELETE FROM `modules` 
