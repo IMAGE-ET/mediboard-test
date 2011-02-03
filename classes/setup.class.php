@@ -122,12 +122,17 @@ class CSetup {
   }
   
   /**
+   * @FIXME: Make it pure SQL, DELETE + INSERT
    * Add a preference query to current revision definition 
    * @param string $name Name of the preference
    * @param string $default Default value of the preference
    */
   function addPrefQuery($name, $default) {
-    if (CModule::getInstalled("system")->mod_version < "1.0.24"){
+    // Former pure SQL system
+		// Cannot check against module version or fresh install will generate errors
+		// Very consuming though...
+    $ds = CSQLDataSource::get("std");
+    if ($ds->loadField("user_preferences", "pref_name")) {
       $sqlTest = "SELECT * FROM `user_preferences` WHERE `pref_user` = '0' && `pref_name` = '$name'";
       $result = $this->ds->exec($sqlTest);
       if(!$this->ds->numRows($result)) {
@@ -136,6 +141,7 @@ class CSetup {
         $this->addQuery($sql);
       }
     }
+    // Latter object oriented system
     else {
       $pref = new CPreferences;
       $pref->user_id = 0;
@@ -147,13 +153,14 @@ class CSetup {
   }
   
   /**
+   * @FIXME: Make it pure SQL
    * Delete a user preference
    * @param string $name Name of the preference
    */
   function delPrefQuery($name) {
     return; 
     // FIXME: les fonctions addPrefQuery et delPrefQuery sont EXECUTEES
-    // a CHAQUE fois quon va sur la page de setup !
+    // a CHAQUE fois quon va sur la page de setup ! cf. pure SQL
   	$pref = new CPreferences;
     $where = array();
     $where['key'] = " = '$name'";

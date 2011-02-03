@@ -730,9 +730,6 @@ class CSetupdPplanningOp extends CSetup {
         
     $this->makeRevision("0.67");
     $query = "UPDATE `user_preferences` 
-		  SET `pref_name` = 'mode_dhe' WHERE `pref_name` = 'mode';";
-    $this->addQuery($query, true);
-    $query = "UPDATE `user_preferences` 
 		  SET `key` = 'mode_dhe' WHERE `key` = 'mode';";
     $this->addQuery($query, true);
     

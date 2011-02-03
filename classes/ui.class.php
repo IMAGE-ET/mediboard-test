@@ -612,12 +612,15 @@ class CAppUI {
  * @param int $uid User id number, 0 for default preferences
  */
   static function loadPrefs($user_id = 0) {
-    if (CModule::getInstalled("system")->mod_version < "1.0.24"){
+		// Former pure SQL system
+    $ds = CSQLDataSource::get("std");
+    if ($ds->loadField("user_preferences", "pref_name")) {
 	    $query = "SELECT pref_name, pref_value 
 			  FROM user_preferences
 				WHERE pref_user = '$user_id'";
-	    $user_prefs = CSQLDataSource::get("std")->loadHashList($query);
+	    $user_prefs = $ds->loadHashList($query);
     }
+		// Latter object oriented system
     else {
     	$user_prefs = CPreferences::get($user_id);
     }

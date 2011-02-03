@@ -28,7 +28,6 @@ if ($cmd == "upgrade-core") {
   foreach($list_modules as $module) {
     $setupClass = "CSetup$module->mod_name";
     $setup = new $setupClass;
-    
     if ($module->mod_version = $setup->upgrade($module->mod_version)) {
       $module->mod_type = $setup->mod_type;
       $module->store();
@@ -44,7 +43,7 @@ if ($cmd == "upgrade-core") {
       CAppUI::setMsg("Module '%s' non mis à jour", UI_MSG_WARNING, $module->mod_name);
     }
   }
-
+  
   // In case the setup has added some user prefs
   CAppUI::buildPrefs();
   

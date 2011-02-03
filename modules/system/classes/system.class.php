@@ -10,7 +10,7 @@
 
 class CPreferences extends CMbObject {
   static $modules = array();
-  
+	
 	static function loadModules() {
 		foreach (glob("./modules/*/preferences.php") as $file) {
 		  require_once($file);
@@ -33,6 +33,7 @@ class CPreferences extends CMbObject {
 
   function getProps() {
     $specs = parent::getProps();
+		// @FIXME: use null for global preferences
     $specs["user_id"] = "num min|0"; //"ref class|CUser"; // Needed for the default preferences
     $specs["key"]     = "str notNull maxLength|40";
     $specs["value"]   = "str";

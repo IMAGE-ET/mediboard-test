@@ -1123,23 +1123,21 @@ class CMbObject {
     	$extra = json_encode($old_values);
     }
     
-    // TODO: supprimer ces lignes
-    $system_version = explode(".", CModule::getInstalled("system")->mod_version);
-    if ($system_version[0] == 1 && $system_version[1] == 0 && $system_version[2] < 4){
-      return;	
-    }
-    
     $address = get_remote_address();
     
     $log = new CUserLog;
     $log->user_id = CAppUI::$instance->user_id;
     $log->object_id = $object_id;
     $log->object_class = $this->_class_name;
-    $log->ip_address = $address["remote"] ? inet_pton($address["remote"]) : null;
     $log->type = $type;
     $log->_fields = $fields;
     $log->date = mbDateTime();
-    $log->extra = $extra;
+
+    // Champs potentiellement absents
+    if (CModule::getInstalled("system")->mod_version > "1.0.19") {
+	    $log->ip_address = $address["remote"] ? inet_pton($address["remote"]) : null;
+	    $log->extra = $extra;
+    }
     
     $this->_ref_last_log = $log;
   }
