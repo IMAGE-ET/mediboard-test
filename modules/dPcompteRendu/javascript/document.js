@@ -151,12 +151,11 @@ var Document = {
   },
   
   printPDF: function(document_id) {
-    var url = new Url("dPcompteRendu", "ajax_pdf_and_thumbs");
+    var url = new Url("dPcompteRendu", "ajax_pdf");
     url.addParam("suppressHeaders", 1);
     url.pop(0, 0, "Download PDF", null, null, {
        compte_rendu_id: document_id,
-       stream: 1,
-       generate_thumbs: 0}, Element.getTempIframe());
+       stream: 1});
   },
   
   printSelDocs: function(object_id, object_class) {

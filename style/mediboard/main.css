@@ -1470,6 +1470,15 @@ img#thumb {
   box-shadow: 6px 6px 10px rgba(0,0,0,0.4);
 }
 
+div.oldThumbs {
+	z-index: 1;
+	position: fixed;
+	width: 160px;
+	height: 100%;
+	cursor: pointer;
+	background: url(images/buttons/change.png) no-repeat 50% 40% #aaa;
+}
+
 td.tick {
   background: url(images/buttons/tick.png) no-repeat 6px;
 }

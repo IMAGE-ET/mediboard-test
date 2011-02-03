@@ -8,7 +8,7 @@ window.pdf_thumbnails = {{$pdf_thumbnails|@json}};
 
 function submitCompteRendu(callback){
   CKEDITOR.instances.htmlarea.document.getBody().setStyle("background", "#ddd");
-	  
+  $('mess').stopObserving("click");
   (function(){
     restoreStyle();
 	  var html = CKEDITOR.instances.htmlarea.getData();
@@ -18,12 +18,17 @@ function submitCompteRendu(callback){
     var form = getForm("editFrm");
     
     if(checkForm(form) && User.id) {
+      CKEDITOR.instances.htmlarea.on("key", loadOld);
       form.onsubmit=function(){ return true; };
+      if (Thumb.modele_id && Thumb.contentChanged) {
+        emptyPDF();
+      }
+      clearTimeout(window.thumbs_timeout);
       onSubmitFormAjax(form,{ useDollarV: true, onComplete: function() {
+        Thumb.contentChanged = false;
         if (window.pdf_thumbnails == 0 && window.opener.Document.refreshList) {
           window.opener.Document.refreshList($V(form.object_class), $V(form.object_id));
         }
-        Thumb.changed = false;
         window.callback = callback ? callback : null;
       }},  $("systemMsg"));
     }
@@ -34,10 +39,20 @@ function submitCompteRendu(callback){
 function refreshZones(id, obj) {
   if (window.pdf_thumbnails != 0) {
     Thumb.compte_rendu_id = id;
-    Thumb.modele_id = null;
-    Thumb.refreshThumbs(0, Thumb.compte_rendu_id, null, Thumb.user_id, Thumb.mode);
+    Thumb.modele_id = 0;
+    var refresh = function() { window.thumbs_timeout = setTimeout(function() {
+      Thumb.refreshThumbs(0);
+    }, 0)};
+    window.callback == null ?
+      window.callback = refresh :
+      window.callback =
+        window.callback.wrap(function(callOriginal) {
+          refresh();
+          return callOriginal();
+        });
   }
-  // Remise du content sauvegardé, avec l'impression en callback
+  
+  //Remise du content sauvegardé, avec l'impression en callback
   CKEDITOR.instances.htmlarea.setData(obj._source, window.callback);
   
 	var url = new Url("dPcompteRendu", "edit_compte_rendu");
@@ -100,57 +115,57 @@ function openWindowMail() {
     $V(PageFormat.form.page_width,    page_layout_save.page_width);
     $V(PageFormat.form._orientation,  page_layout_save.orientation);
 
-    if(!Thumb.thumb_up2date && !Thumb.oldContent) {
-
+    if(Thumb.thumb_up2date && !Thumb.changed) {
       Thumb.thumb_up2date = true;
-      $('mess').toggle();
+      $('mess').hide();
       $('thumbs').setOpacity(1);
-      Thumb.init();
     }
     Control.Modal.close();
   }
-{{/if}} 
+
+  emptyPDF = function() {
+    Thumb.old();
+    
+    // La requête de vidage de pdf doit être faite dans le scope
+    // de la fenêtre principale, car on est en train de fermer la popup
+    var f = getForm("download-pdf-form");
+
+    var url = new window.opener.Url();
+    url.addParam("m", "dPcompteRendu");
+    url.addParam("dosql", "do_modele_aed");
+    url.addParam("_do_empty_pdf", 1);
+    url.addParam("compte_rendu_id", $V(f.compte_rendu_id));
+    url.requestJSON(function(){}, { method: "post"});
+  }
+{{/if}}
+
   Main.add(function(){
       window.onbeforeunload = function() {
-        if (Thumb.changed == false && (Thumb.modele_id == '' || Thumb.modele_id == null)) return;
+        if (Thumb.contentChanged == false) return;
 
         {{if $pdf_thumbnails}}
-          Thumb.old();
-  
-          // La requête de vidage de pdf doit être faite dans le scope
-          // de la fenêtre principale, car on est en train de fermer la popup
-          var f = getForm("download-pdf-form");
-          if (CKEDITOR.env.ie)
-            var url = new Url();
-          else
-            var url = new window.opener.Url();
-  
-          url.addParam("m", "dPcompteRendu");
-          url.addParam("dosql", "do_modele_aed");
-          url.addParam("_do_empty_pdf", 1);
-          url.addParam("compte_rendu_id", f.compte_rendu_id.value);
-          
-          url.requestJSON(function(){}, { method: "post"});
+          emptyPDF();
         {{/if}}
         
         return '';
       };
     {{if $pdf_thumbnails}}
-      PageFormat.init(getForm("editFrm")); 
+      PageFormat.init(getForm("editFrm"));
       Thumb.compte_rendu_id = '{{$compte_rendu->_id}}';
       Thumb.modele_id = '{{$modele_id}}';
       Thumb.user_id = '{{$user_id}}';
       Thumb.mode = "doc";
       Thumb.object_class = '{{$compte_rendu->object_class}}';
       Thumb.object_id = '{{$compte_rendu->object_id}}';
+
     {{/if}}
     {{if !$compte_rendu->_id && $switch_mode == 1}}
       if (window.opener.linkFields) {
-        
         from = window.opener.linkFields();
         var to = getForm("editFrm");
-        if (from[0].any(function(elt){ return elt.size > 1; }))        
+        if (from[0].any(function(elt){ return elt.size > 1; })) {
           toggleOptions();
+        }
         from.each(function(elt) {
           elt.each(function(select) {
             if (select) {
@@ -164,14 +179,13 @@ function openWindowMail() {
 
 </script>
 
-<form style="display: none;" name="download-pdf-form" target="_blank" method="post" action="?m=dPcompteRendu&amp;a=ajax_pdf_and_thumbs"
+<form style="display: none;" name="download-pdf-form" target="_blank" method="post" action="?m=dPcompteRendu&amp;a=ajax_pdf"
       onsubmit="completeLayout(); this.submit();">
   <input type="hidden" name="content" value=""/>
   <input type="hidden" name="compte_rendu_id" value='{{if $compte_rendu->_id != ''}}{{$compte_rendu->_id}}{{else}}{{$modele_id}}{{/if}}' />
   <input type="hidden" name="object_id" value="{{$compte_rendu->object_id}}"/>
   <input type="hidden" name="suppressHeaders" value="1"/>
   <input type="hidden" name="stream" value="1"/>
-  <input type="hidden" name="generate_thumbs" value="0"/>
   <input type="hidden" name="page_format" value=""/>
   <input type="hidden" name="orientation" value=""/>
 </form>
@@ -274,13 +288,15 @@ function openWindowMail() {
   </tr>
   {{/if}}
   <tr>
-    <td class = "greedyPane" style="height: 600px; width: 1200px;" {{if $pdf_thumbnails==0}} colspan="2" {{else}} colspan="1" {{/if}} id="editeur">
+    <td class = "greedyPane" style="width: 1200px;" {{if $pdf_thumbnails==0}} colspan="2" {{else}} colspan="1" {{/if}} id="editeur">
       <textarea id="htmlarea" name="_source">
         {{$templateManager->document}}
       </textarea>
     </td>
     {{if $pdf_thumbnails == 1}}
       <td id="thumbs_button" class="narrow">
+        <div id="mess" class="oldThumbs opacity-60" style="display: none;">
+        </div>
         <div id="thumbs" style="overflow: auto; overflow-x: hidden; width: 160px; text-align: center; white-space: normal;">
         </div>
       </td>

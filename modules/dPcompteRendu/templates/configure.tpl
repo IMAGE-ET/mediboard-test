@@ -26,6 +26,8 @@
     {{mb_include module=system template=inc_config_bool}}
     {{assign var="var" value="same_print"}}
     {{mb_include module=system template=inc_config_bool}}
+    {{assign var="var" value="time_before_thumbs"}}
+    {{mb_include module=system template=inc_config_str numeric=1}}
   {{else}}
     <tr>
       <td colspan="2">

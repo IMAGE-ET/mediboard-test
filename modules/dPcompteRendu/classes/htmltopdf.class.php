@@ -90,9 +90,6 @@ class CHtmlToPDF {
   // Expressions régulières provenant de FCKEditor
   // cf http://docs.cksource.com/FCKeditor_2.x/Developers_Guide/Configuration/Configuration_Options/CleanWordKeepsStructure
   function cleanWord($str) {
-    $str = preg_replace("/<meta\s*[^>]*\s*[^\/]>/", '',$str);
-    $str = preg_replace("/(<\/meta>)+/i", '', $str);
-    $str = str_replace("<o:p></o:p>", '', $str);
     $str = str_replace("<o:p>", "<p>",$str);
     $str = str_replace("</o:p>", "</p>",$str);
     $str = str_replace("<w:", '<', $str);
@@ -164,7 +161,7 @@ class CHtmlToPDF {
 
          // On force le display: block pour les éléments en display:inline et qui imbriquent des élements
          // en display: block.
-         $node->setAttribute("style", "display: block;");
+         $node->setAttribute("style", $node->getAttribute("style") . "; display: block;");
 
      /* if($node->nodeName == "span") {
         foreach ( $node->attributes as $attr => $attr_node ) {

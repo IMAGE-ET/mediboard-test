@@ -14,6 +14,9 @@
 
 <script type="text/javascript">
 
+window.time_before_thumbs = {{$conf.dPcompteRendu.CCompteRendu.time_before_thumbs}};
+window.time_before_thumbs *= 1000;
+
 function initCKEditor() {
   CKEDITOR.ispasting = false;
   window.old_source = $("htmlarea").value;
@@ -73,7 +76,9 @@ function initCKEditor() {
     {{else}}
 		  {{if $pdf_thumbnails}}
   		  Thumb.content = ck_instance.getData();
-  	    Thumb.refreshThumbs(1, Thumb.compte_rendu_id, Thumb.modele_id, Thumb.user_id, Thumb.mode);
+  	    window.thumbs_timeout = setTimeout(function() {
+          Thumb.refreshThumbs(1);
+  	    }, time_before_thumbs);
   		{{/if}}
   		// Don't close the window with escape
   	  document.stopObserving('keydown', closeWindowByEscape);

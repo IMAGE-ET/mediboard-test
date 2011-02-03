@@ -1,11 +1,13 @@
 var Thumb = {
   compte_rendu_id: 0,
+  modele_id: 0,
   file_id: 0,
   thumb_up2date: true,
   thumb_refreshing: false,
 	nb_thumbs: 0,
 	first_time: 1,
 	changed: false,
+	contentChanged: false,
   choixAffiche: function(isNotModele) {
     $("thumbs").toggle();
     if (isNotModele == 1) {
@@ -19,22 +21,19 @@ var Thumb = {
     colspan_editeur == '1' ? editeur.writeAttribute("colspan",'2') : editeur.writeAttribute("colspan",'1');
   },
 
-  refreshThumbs: function(first_time, compte_rendu_id, modele_id, user_id, mode) {
-    this.thumb_refreshing = true;
-
-    // TODO: changer en classes CSS
-    if (first_time != 1) {
-      for (var i = 0; i < Thumb.nb_thumbs; i++) {
-        $("thumb_" + i).stopObserving("click");
-      }
-			if ($('mess'))
-      $('mess').stopObserving("click");
-    }
+  refreshThumbs: function(first_time) {
     
+    $("thumbs").stopObserving("scroll", Thumb.refreshThumb);
+    this.changed = false;
+    var mess = null;
+    if (mess = $('mess')) {
+      mess.stopObserving("click");
+      mess.hide();
+    }
     $("thumbs").setOpacity(1);
     var form = getForm("editFrm");
-    var url = new Url("dPcompteRendu", "ajax_pdf_and_thumbs");
-    url.addParam("compte_rendu_id", compte_rendu_id || modele_id);
+    var url = new Url();
+    url.addParam("compte_rendu_id", this.compte_rendu_id || this.modele_id);
     
     var content = '';
     
@@ -47,9 +46,9 @@ var Thumb = {
     }
     
     url.addParam("content", encodeURIComponent(content));
-    url.addParam("mode", mode);
+    url.addParam("mode", this.mode);
     
-    if (mode == "modele") {
+    if (this.modele_id) {
       url.addParam("type",      $V(form.elements.type));
       url.addParam("header_id", $V(form.elements.header_id));
       url.addParam("footer_id", $V(form.elements.footer_id));
@@ -57,9 +56,9 @@ var Thumb = {
     }
     
     url.addParam("stream", 0);
-    url.addParam("generate_thumbs", 1);
+    url.addParam("write_page", 1);
     url.addParam("first_time", first_time);
-    url.addParam("user_id", user_id);
+    url.addParam("user_id", this.user_id);
     url.addParam("margins[]",[form.elements.margin_top.value,
                               form.elements.margin_right.value,
                               form.elements.margin_bottom.value,
@@ -74,23 +73,65 @@ var Thumb = {
       method: "post",
       getParameters: {
         m: "dPcompteRendu", 
-        a: "ajax_pdf_and_thumbs"
+        a: "ajax_pdf"
       },
       onComplete: function() {
-          Thumb.thumb_refreshing = false;
-          if(!Thumb.thumb_up2date) {
-            Thumb.thumb_up2date = true;
-            Thumb.old();
-          }
-          else {
-          Thumb.init();
-         }
+        
+        Thumb.thumb_refreshing = false;
+        if(!Thumb.thumb_up2date) {
+          
+          Thumb.thumb_up2date = true;
+          Thumb.old();
+        }
+        else {
+          // Requête pour la première vignette
+          (function() { Thumb.refreshThumb()}).defer();
+          $("thumbs").observe("scroll", Thumb.refreshThumb);
+        }
       }
     });
+  },
+  refreshThumb: function() {
+    var document_height = document.viewport.getHeight();
+    var thumbs = $("thumbs");
+    var thumbs_empty = $$(".thumb_empty");
+
+    if (!thumbs_empty || thumbs_empty.length == 0 || Thumb.changed) {
+      $("thumbs").stopObserving("scroll", Thumb.refreshThumb);
+      return;
+    }
+    
+    for(var thumb in thumbs_empty) {
+     
+      thumb = thumbs_empty[thumb];
+      if (typeof thumb == "function") continue;
+      
+      var index = parseInt(thumb.id.substr(6)) -1 ;
+      
+      var thumbs_lower = thumbs.cumulativeOffset()[1];
+      var thumbs_higher = thumbs_lower + thumbs.getHeight();
+      var scroll_lower = thumb.cumulativeOffset()[1] - thumb.cumulativeScrollOffset()[1];
+      var scroll_higher = scroll_lower + thumb.getHeight();
+      
+      if ((scroll_lower >= thumbs_lower && scroll_lower <= thumbs_higher) ||
+          (scroll_higher >= thumbs_lower && scroll_higher <= thumbs_higher)) {
+        var url = new Url("dPcompteRendu", "ajax_thumbs");
+        url.addParam("index", index);
+        url.addParam("file_id", Thumb.file_id);
+        thumb.removeClassName("thumb_empty").addClassName("thumb_full");
+        url.requestJSON(function(thumbnail) {
+          thumb.observe("click", function(){
+            (new Url).ViewFilePopup('CCompteRendu', Thumb.compte_rendu_id || Thumb.modele_id, 'CFile', Thumb.file_id, index)});
+          thumb.src = "data:image/png;base64,"+thumbnail; Thumb.refreshThumb();
+        });
+        break;
+      }
+    }
   },
   old: function() {
     if (window.pdf_thumbnails == 1) {
       if (this.thumb_refreshing) {
+        
         this.thumb_up2date = false;
         return;
       }
@@ -98,29 +139,20 @@ var Thumb = {
     	  CKEDITOR.instances.htmlarea.on("key", loadOld);
     	  Thumb.changed = true;
         Thumb.first_time = 0;
-        Thumb.refreshThumbs(0, Thumb.compte_rendu_id, Thumb.modele_id, Thumb.user_id, Thumb.mode);
+        Thumb.thumb_refreshing = true;
+        window.thumbs_timeout = setTimeout(function() {
+          Thumb.refreshThumbs(0);
+        }, 0);
       }
-      
-      $$(".thumb").each(function(t, i){
-        t.stopObserving("click").observe("click", on_click);
-      });
+
       var mess = $('mess');
       if (this.thumb_up2date && mess) {
-        $("thumbs").setOpacity(0.5);
         mess.show();
         mess.stopObserving("click");
         mess.observe("click", on_click);
       }
     }
   },
-  init: function(){
-    $$(".thumb").each(function(t, i) {
-      t.stopObserving("click").
-        observe("click", function(){
-        (new Url).ViewFilePopup('CCompteRendu', Thumb.compte_rendu_id || Thumb.modele_id, 'CFile', Thumb.file_id, i);
-      });
-    });
-  }
 }
 
 
@@ -129,10 +161,12 @@ function loadOld() {
   if (!instance.checkDirty()) return;
   var html = instance.getData();
   if (html != Thumb.content) {
+    Thumb.contentChanged = true;
     Thumb.changed = true;
     instance.removeListener("key", loadOld);
     Thumb.content = html;
     if (window.pdf_thumbnails == "1") {
+      clearTimeout(window.thumbs_timeout);
       Thumb.old();
     }
   }
@@ -143,7 +177,7 @@ function restoreStyle() {
   
   if (!window.save_style) return;
   var tag = instance.document.getBody().getFirst();
-  if (tag.$.tagName == "STYLE") return;
+  if (tag && tag.$.tagName == "STYLE") return;
   window.save_style.insertBefore(tag);
 }
 
@@ -152,6 +186,6 @@ function deleteStyle() {
   
   if (!instance.document) return;
   var styleTag = instance.document.getBody().getFirst();
-  if (styleTag.$.tagName == "STYLE")
+  if (styleTag && styleTag.$.tagName == "STYLE")
     styleTag.remove();
 }

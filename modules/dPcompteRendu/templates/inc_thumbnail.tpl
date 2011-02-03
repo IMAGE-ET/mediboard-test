@@ -1,5 +1,5 @@
 <script type="text/javascript">
-  Thumb.nb_thumbs = {{$nbpages}};
+  Thumb.nb_thumbs = {{$_nb_pages}};
   Thumb.file_id = {{$file_id}};
 	// @FIXME: Pourquoi rafraichir la widget ici ???
   Main.add(function() {
@@ -12,22 +12,15 @@
   });
 </script>
 
-<div id="mess" style="position: fixed; width: 160px; font-size: 12pt; font-weight: bold; display: none; cursor: pointer;">
-  <br/><br/>Vignettes obsolètes : cliquez sur une vignette pour réactualiser.<br/>
-</div>
-
-<!--<button type="button" class="hsplit" onclick="var url = new Url('dPcompteRendu', 'compare'); url.addParam('dialog', 1); url.addParam('file_id', Thumb.file_id); url.popup(1500,1100);">
-  Comparer
-</button>-->
-
-{{assign var=i value=0}}
-{{foreach from=$vignettes item=_vignette}}
+{{$_nb_pages}} page{{if $_nb_pages > 1}}s{{/if}}
+{{foreach from=1|range:$_nb_pages item=index}}
   <p style="margin-bottom: 10px;">
-	  <a id="thumb_{{$i}}" class="thumb" href="#1" onclick="return false">
-	    <img class="thumbnail" src="data:image/jpg;base64,{{$_vignette}}" style="margin-bottom: 0px;" />
-	  </a>
-		<br/>
-		{{$i+1}} / {{$nbpages}}
-	</p>
-	{{assign var=i value=$i+1}}
+    <!--  Firefox refuse le min-width et min-height pour une image avec un src vide,  -->
+      <img id="thumb_{{$index}}" class="thumb_empty thumbnail"
+        src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP4zwAAAgEBAKEeXHUAAAAASUVORK5CYII="
+        style="margin-bottom: 0px; min-width: 138px; max-width: 138px; min-height: 195px;max-height: 195px; color: blank; cursor: pointer;"
+        onclick="return false;"/>
+  	<br/>
+    {{$index}}
+  </p>
 {{/foreach}}

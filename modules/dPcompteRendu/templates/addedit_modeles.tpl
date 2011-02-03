@@ -14,20 +14,20 @@ var Modele = {
     
     {{if $droit}}
       if(confirm('{{tr}}CCompteRendu-already-access{{/tr}}')){
-        oForm.compte_rendu_id.value = "";
+        $V(oForm.compte_rendu_id, "");
         
         {{if $isPraticien}}
-        oForm.chir_id.value = "{{$user_id}}";
-        oForm.function_id.value = "";
+        $V(oForm.chir_id, "{{$user_id}}");
+        $V(oForm.function_id, "");
         {{/if}}
         
-        oForm.nom.value = "Copie de "+oForm.nom.value;
+        $V(oForm.nom, "Copie de "+ $V(oForm.nom));
         oForm.onsubmit(); 
       }
     {{else}}
-      oForm.compte_rendu_id.value = "";
-      oForm.chir_id.value = "{{$user_id}}";
-      oForm.nom.value = "Copie de "+oForm.nom.value;
+      $V(oForm.compte_rendu_id, "");
+      $V(oForm.chir_id, "{{$user_id}}");
+      $V(oForm.nom, "Copie de "+ $V(oForm.nom));
       oForm.onsubmit();
     {{/if}}
   },
@@ -46,11 +46,11 @@ var Modele = {
   },
 
   preview_layout: function() {
-    var header_size = parseInt($("editFrm_height").value);
+    var header_size = parseInt($V(getForm("editFrm").elements.height));
     if (!isNaN(header_size)) {
       $("header_footer_content").style["height"] = ((header_size / 728.5)*80).round() + "px";
-      $("body_content").style["height"] = (((728.5 - header_size) / 728.5)*80).round() + "px";
     }
+    $("body_content").style["height"] =  "80px";
   },
 
   generate_auto_height: function() {
@@ -58,7 +58,7 @@ var Modele = {
     var container = new Element("div", {style: "width: 17cm; padding: 0; margin: 0; position: absolute; left: -1500px; bottom: 200px;"}).insert(content);
     $$('body')[0].insert(container);
     // Calcul approximatif de la hauteur
-    getForm("editFrm").height.value = (container.getHeight() * 1.4).round();
+    $V(getForm("editFrm").height, (container.getHeight() * 1.4).round());
   }
 };
 
@@ -137,7 +137,7 @@ Main.add(function () {
 
 {{if $pdf_thumbnails == 1}}
   <form style="display: none;" name="download-pdf-form" target="_blank" method="post"
-    action="?m=dPcompteRendu&amp;a=ajax_pdf_and_thumbs"
+    action="?m=dPcompteRendu&amp;a=ajax_pdf"
     onsubmit="PageFormat.completeForm();">
     <input type="hidden" name="content" value="" />
     <input type="hidden" name="compte_rendu_id" value="{{$compte_rendu->_id}}"/>
@@ -148,7 +148,6 @@ Main.add(function () {
     <input type="hidden" name="mode" value="" />
     <input type="hidden" name="type" value="" />
     <input type="hidden" name="height" value="0" />
-    <input type="hidden" name="generate_thumbs" value="0" />
     <input type="hidden" name="stream" value="1" />
   </form>
 {{/if}}
@@ -446,7 +445,7 @@ Main.add(function () {
       </table>
     </td>
     
-    <td class="greedyPane" style="height: 500px">
+    <td class="greedyPane" style="height: 500px; max-width: 600px !important;">
       {{if $compte_rendu->_id}}
         {{if !$droit}}
           <div class="big-info">
@@ -460,8 +459,10 @@ Main.add(function () {
       {{/if}}
     </td>
     {{if $pdf_thumbnails == 1 && $compte_rendu->_id}}
-      <td class="narrow">
-        <div id="thumbs" style="overflow: auto; overflow-x: hidden; width: 160px; height: 580px; text-align: center;">
+      <td id="thumbs_button" class="narrow">
+        <div id="mess" class="oldThumbs opacity-60" style="display: none;">
+        </div>
+        <div id="thumbs" style="overflow: auto; overflow-x: hidden; width: 160px; text-align: center; white-space: normal;">
         </div>
       </td>
     {{/if}}

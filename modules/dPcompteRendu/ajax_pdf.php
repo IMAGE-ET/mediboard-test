@@ -6,11 +6,6 @@
 * @version $Revision:$
 * @author SARL Openxtrem
 */
-global $can;
-
-
-CAppUI::requireLibraryFile("phpThumb/phpThumb.config");
-CAppUI::requireLibraryFile("phpThumb/phpthumb.class");
 
 $compte_rendu_id = CValue::post("compte_rendu_id");
 $compte_rendu = new CCompteRendu();
@@ -24,6 +19,8 @@ $header_id   = CValue::post("header_id", $compte_rendu->header_id);
 $stream      = CValue::post("stream");
 $content     = stripslashes(urldecode(CValue::post("content", $compte_rendu->_source)));
 $save_content = $content;
+
+$write_page  = CValue::post("write_page", 0);
 $page_format = CValue::post("page_format",$compte_rendu->_page_format);
 $orientation = CValue::post("orientation",$compte_rendu->_orientation);
 $first_time  = CValue::post("first_time");
@@ -58,7 +55,7 @@ else {
     switch($type) {
       case "header":
       case "footer":
-      	$height = CValue::post("height",$compte_rendu->height);
+        $height = CValue::post("height",$compte_rendu->height);
         $content = $compte_rendu->loadHTMLcontent($content, $mode, $type, '', $height, '', '', $margins);
         break;
       case "body":
@@ -67,14 +64,14 @@ else {
         $footer = ''; $sizefooter = 0;
         if($header_id) {
           $compte_rendu_h_f->load($header_id);
-					$compte_rendu_h_f->loadContent();
+          $compte_rendu_h_f->loadContent();
           $header = $compte_rendu_h_f->_source;
           $sizeheader = $compte_rendu_h_f->height;
         }
         if($footer_id) {
-        	$compte_rendu_h_f = new CCompteRendu;
+          $compte_rendu_h_f = new CCompteRendu;
           $compte_rendu_h_f->load($footer_id);
-					$compte_rendu_h_f->loadContent();
+          $compte_rendu_h_f->loadContent();
           $footer = $compte_rendu_h_f->_source;
           $sizefooter = $compte_rendu_h_f->height;
         }
@@ -100,39 +97,31 @@ else {
     $page_format = array(0, 0, $page_width, $page_height);
   }
 
+  
   // Création du CFile si inexistant
   if (!$file->_id) {
     $file = new CFile();
     $file->setObject($compte_rendu);
     $file->private = 0;
-    $file->file_name  = $compte_rendu->nom . ".pdf";
     $file->file_type  = "application/pdf";
     $file->file_owner = $user_id;
     $file->fillFields();
     $file->updateFormFields();
     $file->forceDir();
   }
-  else {
-    $file->file_name  = $compte_rendu->nom . ".pdf";
-    
-    // Le fichier en lui-même peut ne pas exister. Dans ce cas, on s'assure de l'arborescence.
-    if  (!is_file($file->_file_path)) {
-      $file->updateFormFields();
-    	$file->forceDir();
-    }
-    
-    // Si la source envoyée et celle présente en base sont identique, on stream le PDF déjà généré
-    // Suppression des espaces, tabulations, retours chariots et sauts de lignes pour effectuer le md5
-    $c1 = preg_replace("!\s!",'',$save_content);
-    $c2 = preg_replace("!\s!",'',$compte_rendu->_source);
-    if ((md5($c1) == md5($c2)) && $stream == 1 && !CValue::post("texte_libre")) {
-    	$file->streamFile();
-    	CApp::rip();
-    }
+  
+  $file->file_name  = $compte_rendu->nom . ".pdf";
+  
+  $c1 = preg_replace("!\s!",'',$save_content);
+  $c2 = preg_replace("!\s!",'',$compte_rendu->_source);
+  
+  // Si la source envoyée et celle présente en base sont différentes, on regénère le PDF
+  // Suppression des espaces, tabulations, retours chariots et sauts de lignes pour effectuer le md5
+  if (md5($c1) != md5($c2) || !$file->_id || file_get_contents($file->_file_path) == "") {
+    $htmltopdf = new CHtmlToPDF;
+    $htmltopdf->generatePDF($content, 0, $page_format, $orientation, $file);
+    $file->file_size = filesize($file->_file_path);
   }
-  $htmltopdf = new CHtmlToPDF;
-  $htmltopdf->generatePDF($content, $stream, $page_format, $orientation, $file);
-  $file->file_size = filesize($file->_file_path);
   
   // Il peut y avoir plusieurs cfiles pour un même compte-rendu, à cause 
   // de n requêtes simultanées pour la génération du pdf.
@@ -151,36 +140,17 @@ else {
   $file->store();
 }
 
-// Traitement des vignettes
-if($generate_thumbs){
-  $thumbs = new phpthumb();
-  
-  // Il faut inclure manuellement la configuration dans l'objet phpThumbs
-  if (!empty($PHPTHUMB_CONFIG)) {
-    foreach ($PHPTHUMB_CONFIG as $key => $value) {
-      $keyname = 'config_'.$key;
-      $thumbs->setParameter($keyname, $value);
-    }
-  }
-  
-  $thumbs->setSourceFilename($file->_file_path);
-  $vignettes = array();
-	$file->loadNbPages();
+if ($stream) {
+  mbTrace("passage",'',1);
+  $file->streamFile();
+  CApp::rip();
+}
 
-  for($i = 0; $i < $file->_nb_pages ; $i++) {
-    $thumbs->sfn=$i ;
-    $thumbs->w = 138;
-    $thumbs->GenerateThumbnail();
-
-    $vignettes[$i] = base64_encode($thumbs->IMresizedData);
-  }
-
-  $smarty = new CSmartyDP();
-  $smarty->assign("vignettes",$vignettes);
-  $smarty->assign("nbpages", $file->_nb_pages);
+if ($write_page) {
+  $file->loadNbPages();
+  $smarty = new CSmartyDP;
   $smarty->assign("file_id", $file->_id);
-  $smarty->assign("compte_rendu_id", $compte_rendu_id);
-  $smarty->assign("can", $can);
+  $smarty->assign("_nb_pages", $file->_nb_pages);
   $smarty->display("inc_thumbnail.tpl");
 }
 

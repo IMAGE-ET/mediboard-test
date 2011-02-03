@@ -8,12 +8,7 @@
   <body>
   <script type="text/javascript">
     var pp = getPrintParams();
-    //app.alert(pp.toSource());
-    pp.reversePages = true;
-    //pp.printerName="PDFCreator";
     pp.interactive = pp.constants.interactionLevel.full;
-    
-    
     print(pp);
     
   </script>
