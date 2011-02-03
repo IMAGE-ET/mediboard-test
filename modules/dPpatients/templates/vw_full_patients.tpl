@@ -2,6 +2,8 @@
 
 {{mb_include_script module="dPcompteRendu" script="document"}}
 {{mb_include_script module="dPfiles" script="files"}}
+{{mb_include_script module=dPcabinet script=file}}
+{{mb_include module=dPfiles template=yoplet_uploader object=$object}}
 
 <script type="text/javascript">
 

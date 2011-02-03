@@ -182,7 +182,13 @@ if (!window.File.applet) {
           elem.disabled='disabled';
           elem.style.border = '1px solid #888';
       });
+      // Pour le refresh dans les consultations
       File.refresh(this.object_guid.split("-")[1], this.object_guid.split("-")[0]);
+      
+      // Pour le refresh dans le dossier patient
+      if (window.parent.reloadAfterUploadFile) {
+        window.parent.reloadAfterUploadFile();
+      }
       File.applet.watchDirectory();
     },
     addfile_callback: function(id, args) {

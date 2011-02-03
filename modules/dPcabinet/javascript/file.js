@@ -42,7 +42,9 @@ var File = {
   
   refresh: function(object_id, object_class) {
   	var div_id = printf("files-%s-%s", object_id, object_class);
-  	
+  	if (!$("div_id")) {
+  	  return;
+  	}
     var url = new Url("dPcabinet", "httpreq_widget_files");
     url.addParam("object_id", object_id);
     url.addParam("object_class", object_class);
