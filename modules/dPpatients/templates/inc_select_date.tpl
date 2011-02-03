@@ -22,6 +22,6 @@
   month_empty="--"
   year_empty="----"
   day_extra="tabindex='$day_index'"
-  month_extra="tabindex='$month_index' style='width: 3.4em;'"
+  month_extra="tabindex='$month_index' style='width: 4em;'"
   year_extra="tabindex='$year_index'"
 }}

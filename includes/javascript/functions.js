@@ -686,7 +686,10 @@ Class.extend (Control.Tabs, {
       }
     }
   },
-  print: function() {
+  print: function(){
+		this.toPrint().print();
+	},
+	toPrint: function(){
     var container = DOM.div({});
     
     this.links.each(function(link){
@@ -701,9 +704,9 @@ Class.extend (Control.Tabs, {
       content.show();
       container.insert(content);
     }, this);
-      
-    container.print();
-  }
+    
+    return container;
+	}
 });
 
 window.getInnerDimensions = function() {
@@ -894,15 +897,15 @@ var Session = {
     var container = $('sessionLock');
     this.window = Modal.open(container);
     
-    container.select('form').first().reset();
-    container.select('input[type=text], input[type=password]').first().focus();
+    container.down('form').reset();
+    container.down('input[type=text], input[type=password]').focus();
     
     $('main').hide();
   },
   request: function(form){
     var url = new Url;
     url.addElement(form.password);
-    url.requestUpdate(form.select('.login-message').first(), {
+    url.requestUpdate(form.down('.login-message'), {
       method: "post",
       getParameters: {m: 'admin', a: 'ajax_unlock_session'}
     });
@@ -935,8 +938,8 @@ var UserSwitch = {
     var container = $('userSwitch');
     this.window = Modal.open(container);
     
-    container.select('form').first().reset();
-    container.select('input[type=text], input[type=password]').first().focus();
+    container.down('form').reset();
+    container.down('input[type=text], input[type=password]').focus();
     document.observe('keydown', function(e){
       if (Event.key(e) == 27) UserSwitch.cancel();
     });
@@ -950,7 +953,7 @@ var UserSwitch = {
     var url = new Url;
     url.addElement(form.username);
     url.addElement(form.password);
-    url.requestUpdate(form.select('.login-message').first(), {
+    url.requestUpdate(form.down('.login-message'), {
       method: "post",
       getParameters: {
         m: 'admin',
@@ -1038,6 +1041,7 @@ Element.addMethods({
     
     doc.write("<html><head></head><body></body></html>");
     
+		// !! Don't use PrototypeJS functions here, this is an iframe
     var head = doc.head || doc.getElementsByTagName('head')[0];
     var body = doc.body || doc.getElementsByTagName('body')[0];
     var elements;
@@ -1048,21 +1052,45 @@ Element.addMethods({
       elements = element;
     
     elements.each(function(e){
-      body.appendChild($(e).clone(true));
+			if (Object.isFunction(e.toPrint)) {
+				e = e.toPrint();
+			}
+			var clone = $(e).clone(true);
+			clone.select('script').invoke('remove');
+			body.appendChild(clone);
     });
     
     var parentHead = document.head || document.getElementsByTagName('head')[0];
     
     if (Prototype.Browser.IE) { // argh
       $(parentHead).childElements().each(function(e){
+				// Si c'est une feuille de style
         if (e.styleSheet) {
-          doc.write("<"+"style>"+e.styleSheet.cssText+"<"+"/style>");
+					var css = e.styleSheet.cssText;
+					
+					// Si elle a un href (feuille de style externe=
+					if (e.href) {
+						var matchHref = e.href.match(/(.*\/)[^\/]+$/);
+						var pattern = /@import\s*(?:url\s*\(\s*)?["']?([^"'\)]+)\)?["']?/g;
+            var i = 50;
+						
+						if (matchHref) {
+							// on regarde tous ses @import pour les importer "à la main"
+		          while(i-- && (match = pattern.exec(css))) {
+                doc.write("<" + "link type=\"text/css\" rel=\"stylesheet\" href=\"" + matchHref[1] + match[1] + "\" />");
+		          }
+						}
+					}
+					
+          doc.write("<"+"style>"+css+"<"+"/style>");
         }
         else if (e.tagName === "SCRIPT") {
-          doc.write("<"+"script>"+e.text+"<"+"/script>");
+          doc.write(e.outerHTML);
         }
       });
-      doc.execCommand('print', false, null);
+			
+			//console.log(doc.body.innerHTML);
+			doc.execCommand('print', false, null);
     }
     else {
       head.innerHTML = parentHead.innerHTML;
@@ -1072,6 +1100,11 @@ Element.addMethods({
   }
 });
 
+/**
+ * Adds column highlighting to a table
+ * @param {Element} table The table
+ * @param {String} className The CSS class to give to the highlighted cells
+ */
 Element.addMethods("table", {
   gridHighlight: function(table, className) {
     className = className || "hover";
@@ -1091,6 +1124,10 @@ Element.addMethods("table", {
   }
 });
 
+/**
+ * Creates a temporary iframe element
+ * @param {String} id The ID to give to the iframe
+ */
 Element.getTempIframe = function(id) {
   var iframe = DOM.iframe({
     src:   "about:blank",
@@ -1098,8 +1135,9 @@ Element.getTempIframe = function(id) {
     frameborder: 0
   });
   
-  if (id)
-    Element.writeAttribute(iframe, 'id', id);
+  if (id) {
+		Element.writeAttribute(iframe, 'id', id);
+	}
     
   Element.writeAttribute(iframe, 'name', iframe.identify());
   

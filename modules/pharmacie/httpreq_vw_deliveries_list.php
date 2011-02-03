@@ -13,8 +13,17 @@ CCanDo::checkRead();
 $mode               = CValue::getOrSession('mode');
 $display_delivered  = CValue::getOrSession('display_delivered', 'false') == 'true';
 
-$order_col = CValue::get('order_col', 'date_dispensation');
-$order_way = CValue::get('order_way', 'DESC');
+$order_col = CValue::get('order_col');
+$order_way = CValue::get('order_way');
+
+if (!$order_col) {
+	$order_col = 'date_dispensation';
+}
+
+if (!$order_way) {
+  $order_way = 'DESC';
+}
+
 CValue::setSession('order_col', $order_col);
 CValue::setSession('order_way', $order_way);
 

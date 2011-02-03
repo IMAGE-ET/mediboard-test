@@ -45,6 +45,15 @@ textarea {
   font-size: 1em;
 }
 
+
+input[type=text], 
+input[type=password], 
+input[type=file],
+textarea {
+  -webkit-border-radius: 0;
+  background-color: white;
+}
+
 input[type=text], 
 input[type=password], 
 input[type=file], 

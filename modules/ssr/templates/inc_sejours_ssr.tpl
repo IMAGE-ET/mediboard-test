@@ -8,15 +8,48 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
 *}}
 
-<table id="sejours-ssr" class="tbl">
+<script type="text/javascript">
+printOffline = function(element) {
+  var elements = [element];
+	
+	$$('.modal-view').each(function(modale){
+	  var id = modale.id;
+		var tab = window["tab-"+id];
+    var sejour_id = id.match(/(\d+)/)[1];
+		var sejour_guid = 'CSejour-'+sejour_id;
+		
+		modale.show();
+		$("planning-"+sejour_id).show();
+		
+		$(sejour_guid).down('.week-container').setStyle({height: '800px' });
+    window['planning-'+sejour_guid].updateEventsDimensions();
+		
+		elements.push(
+		  modale.down(".modale-title"), 
+			tab
+		);
+		
+    modale.hide();
+    $("planning-"+sejour_id).hide();
+	});
+	
+  Element.print(elements);
+}
+</script>
+
+<table id="sejours-ssr" class="tbl" style="page-break-after: always;">
 	<tr>
 		<th class="title" colspan="10">
+			{{if @$offline}}
+        <button class="print not-printable" style="float: right;" onclick="printOffline($(this).up('table'))">{{tr}}Print{{/tr}}</button>
+			{{/if}}
+			
 			<span style="text-align: left">
 				({{$sejours|@count}}) 
 			</span>
 			Séjours SSR du {{$date|date_format:$conf.longdate}}
 			
-      {{if !$dialog}}
+      {{if !$dialog && !@$offline}}
 	    <form name="selDate" action="?" method="get">
 	      <input type="hidden" name="m" value="{{$m}}" />
 				<script type="text/javascript">
@@ -35,7 +68,7 @@
 		{{assign var=url value="?m=$m&$actionType=$action&dialog=$dialog"}}
     <th style="width: 20em;">{{mb_colonne class="CSejour" field="patient_id" order_col=$order_col order_way=$order_way url=$url}}</th>
     <th class="narrow">
-      <input type="text" size="6" onkeyup="SejoursSSR.filter(this)" id="filter-patient-name" />
+      <input type="text" size="6" class="not-printable" onkeyup="SejoursSSR.filter(this)" id="filter-patient-name" />
     </th>
     <th style="width:  5em;">{{mb_colonne class="CSejour" field="entree"     order_col=$order_col order_way=$order_way url=$url}}</th>
     <th style="width:  5em;">{{mb_colonne class="CSejour" field="sortie"     order_col=$order_col order_way=$order_way url=$url}}</th>
@@ -43,7 +76,7 @@
 		<th style="width:  5em;">
 			DHE {{mb_title class=CSejour field=service_id}}
 
-			{{if !$dialog}}
+			{{if !$dialog && !@$offline}}
       <br />
       <select name="service_id" onchange="$V(getForm('Filter').service_id, $V(this), true);">
         <option value="">&mdash; {{tr}}All{{/tr}}</option>
@@ -61,7 +94,7 @@
     <th style="width: 12em;">
       {{mb_title class=CSejour field=praticien_id}} /
       {{mb_title class=CBilanSSR field=_prat_demandeur_id}}
-      {{if !$dialog}}
+      {{if !$dialog && !@$offline}}
 			<br />
 			<select name="praticien_id" onchange="$V(getForm('Filter').praticien_id, $V(this), true);">
 				<option value="">&mdash; {{tr}}All{{/tr}}</option>
@@ -74,7 +107,7 @@
 		  {{mb_title class=CBilanSSR field=_kine_referent_id}} /
       {{mb_title class=CBilanSSR field=_kine_journee_id}}
 
-      {{if !$dialog}}
+      {{if !$dialog && !@$offline}}
       <br />
       <select name="referent_id" onchange="$V(getForm('Filter').referent_id, $V(this), true);">
         <option value="">&mdash; {{tr}}All{{/tr}}</option>
@@ -98,7 +131,7 @@
 	<tr class="{{$ssr_class}}">
 		<td colspan="2" class="text">
 			{{if @$offline}}
-        <button class="search notext" onclick="modalwindow = modal($('modal-view-{{$_sejour->_id}}'));" style="float: left;"></button>
+        <button class="search notext not-printable" onclick="modalwindow = modal($('modal-view-{{$_sejour->_id}}'));" style="float: left;"></button>
       {{/if}}
 			
 			{{mb_include template=inc_view_patient patient=$_sejour->_ref_patient

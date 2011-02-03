@@ -63,7 +63,7 @@ class CPlageconsult extends CMbObject {
   
   function getBackProps() {
       $backProps = parent::getBackProps();
-      $backProps["consulations"] = "CConsultation plageconsult_id";
+      $backProps["consultations"] = "CConsultation plageconsult_id";
      return $backProps;
   }
 

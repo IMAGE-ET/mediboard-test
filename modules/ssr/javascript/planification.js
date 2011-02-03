@@ -71,7 +71,7 @@ PlanningTechnicien = {
 		url.requestUpdate("planning-technicien", {
 		  onComplete: function(){
 				if (print) {
-					$('planning-technicien').select(".planning col")[2].style.width = 0;
+					$('planning-technicien').select(".planning col")[2].style.width = "1px";
 					$('planning-technicien').select(".week-container")[0].style.overflowY = "visible";
 					
 					for (var i = 0; i < 8; i++) {
@@ -137,7 +137,7 @@ Planification = {
       requestUpdate("planning-sejour", { 
 			  onComplete: function(){
 					if(print){
-						$('planning-sejour').select(".planning col")[2].style.width = 0;
+						$('planning-sejour').select(".planning col")[2].style.width = "1px";
 						$('planning-sejour').select(".week-container")[0].style.overflowY = "visible";
 						
 						for(var i=0; i<8; i++){

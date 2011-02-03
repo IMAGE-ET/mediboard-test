@@ -39,7 +39,7 @@ Main.add(function() {
   <table class="tbl" style="table-layout: fixed;">
     <col style="width: 3.0em;" />
     <col span="{{$nb_days}}" />
-    <col style="width: 16px;" />
+    <col style="width: 18px;"/>
     <tr>
     	<th class="title {{if $planning->selectable}}selector{{/if}}" colspan="{{$nb_days+2}}" 
 			  {{if $planning->selectable}} onclick="window['planning-{{$planning->guid}}'].selectAllEvents()" {{/if}}>

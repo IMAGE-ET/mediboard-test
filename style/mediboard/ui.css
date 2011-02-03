@@ -592,6 +592,7 @@ td.show {
   -moz-box-shadow: none;
   -webkit-box-shadow: none;
   box-shadow: none;
+	position: static !important;
 }
 
 .datepickerControl td {
