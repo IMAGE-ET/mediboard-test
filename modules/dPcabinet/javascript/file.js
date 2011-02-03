@@ -9,7 +9,7 @@ var File = {
     url.addParam("object_class", object_class);
     url.addParam("object_id", object_id);
     url.addParam("file_category_id", file_category_id);
-    url.modale({width: 700, height: 300});
+    url.requestModal(700, 300);
   },
   
   remove: function(oButton, object_id, object_class){

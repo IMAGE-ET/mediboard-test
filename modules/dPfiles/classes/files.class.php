@@ -437,7 +437,6 @@ class CFile extends CDocumentItem {
     header("Content-length: {$this->file_size}");
     header("Content-type: $this->file_type");
     if ($_SESSION['browser']['name'] == 'firefox') {
-      
       header("Content-disposition: attachment; filename=\"".$this->file_name."\"");  
     } else {
       header("Content-disposition: inline; filename=\"".$this->file_name."\"");

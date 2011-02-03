@@ -491,13 +491,18 @@ function guid_ids(guid) {
   view_idsante400(parts[0], parts[1]);
 }
 
-function uploadFile(object_class, object_id, file_category_id, _rename){
+function uploadFile(object_class, object_id, file_category_id, _rename, for_identite){
   var url = new Url("dPfiles", "upload_file");
   url.addParam("object_class", object_class);
   url.addParam("object_id", object_id);
+  
+  if (for_identite) {
+    url.addParam("for_identite", for_identite);
+  }
+  
   url.addParam("file_category_id", file_category_id);
   url.addParam("_rename", _rename);
-  url.modale({width: 700, height: 300});
+  url.requestModal(700, 300);
 }
 
 function popChgPwd() {

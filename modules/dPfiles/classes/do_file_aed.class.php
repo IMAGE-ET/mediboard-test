@@ -68,11 +68,13 @@ class CFileAddEdit extends CDoObjectAddEdit {
       $aFiles = array();
       $upload =& $_FILES["formfile"];
       $_file_category_id = CValue::post("_file_category_id");
-
+      $for_identite = CValue::post("for_identite", 0);
+      $rename = CValue::post("_rename");
+      
+      CValue::setSession("_rename", $rename);
+      
       foreach($upload["error"] as $fileNumber => $etatFile){
-        $rename = CValue::post("_rename");
-        
-        if ($rename != "identite.jpg") {
+        if (!$for_identite) {
           $rename = $rename ? $rename . strrchr($upload["name"][$fileNumber], '.') : "";
         }
         

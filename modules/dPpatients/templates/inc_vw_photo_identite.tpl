@@ -63,7 +63,7 @@
 {{if @$mode == "edit"}}
   <br />
   {{if !$patient->_ref_photo_identite->_id}}
-    <button type="button" class="search" onclick="uploadFile('{{$patient->_class_name}}', '{{$patient->_id}}', null, 'identite.jpg')">{{tr}}Browse{{/tr}}</button>
+    <button type="button" class="search" onclick="uploadFile('{{$patient->_class_name}}', '{{$patient->_id}}', null, 'identite.jpg', 1)">{{tr}}Browse{{/tr}}</button>
   {{elseif $patient->_can_see_photo == 1}}
     <button onclick="deletePhoto({{$patient->_ref_photo_identite->_id}})" class="trash" type="button">{{tr}}Delete{{/tr}}</button>
   {{/if}}
