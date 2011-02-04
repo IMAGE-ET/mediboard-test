@@ -103,7 +103,7 @@ Traitement = {
 </button>
 {{/if}}
 
-<strong>Antécédents du patient</strong>
+<strong>Antécédents</strong>
 
 <ul id="antecedents-{{$dossier_medical->_guid}}">
 	{{if $dossier_medical->_count_antecedents || $dossier_medical->_count_cancelled_antecedents}}
@@ -148,7 +148,7 @@ Traitement = {
 </ul>
 
 {{if $dossier_medical->_ref_prescription}}
-	<strong>Traitements du patient</strong>
+	<strong>Traitements personnels</strong>
 	<ul>
 	{{foreach from=$dossier_medical->_ref_prescription->_ref_prescription_lines item=_line}}
 	  <li>
@@ -188,7 +188,7 @@ Traitement = {
 {{if is_array($dossier_medical->_ref_traitements)}}
 <!-- Traitements -->
 {{if !$dossier_medical->_ref_prescription}}
-<strong>Traitements du patient</strong>
+<strong>Traitements personnels</strong>
 {{/if}}
 <ul>
   {{foreach from=$dossier_medical->_ref_traitements item=_traitement}}
@@ -228,7 +228,7 @@ Traitement = {
 </ul>
 {{/if}}
 
-<strong>Diagnostics du patient</strong>
+<strong>Diagnostics CIM</strong>
 <ul>
   {{foreach from=$dossier_medical->_ext_codes_cim item=_code}}
   <li>

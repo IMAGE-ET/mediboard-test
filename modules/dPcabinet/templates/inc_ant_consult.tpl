@@ -226,7 +226,7 @@ Main.add(function () {
       
       {{if $isPrescriptionInstalled || $conf.dPpatients.CTraitement.enabled}}
       <fieldset>
-        <legend>Traitements</legend>
+        <legend>Traitements personnels</legend>
         <table class="layout" style="width: 100%;">
           <tr>
             <td class="text">
