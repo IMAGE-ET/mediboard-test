@@ -540,7 +540,7 @@ Main.add( function(){
 															{{/if}}
 													  </select>
 												{{else}}
-												  {{if $_line->quantite}}
+												  {{if $_line_item->quantite}}
 													  {{mb_value object=$_line_item field=quantite}}
 							              {{mb_value object=$_line_item field=unite}}	
 													{{else}}
