@@ -9,9 +9,9 @@
     <td class="halfPane">
       <fieldset>
         <legend>{{tr}}CFile{{/tr}} - {{tr}}CConsultation{{/tr}}</legend>            
-        <div id="files">
+        <div id="files-fdr">
           <script type="text/javascript">
-            File.register('{{$consult->_id}}','{{$consult->_class_name}}', 'files');
+            File.register('{{$consult->_id}}','{{$consult->_class_name}}', 'files-fdr');
           </script>
         </div>
       </fieldset>

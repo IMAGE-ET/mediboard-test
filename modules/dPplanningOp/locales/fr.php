@@ -889,6 +889,7 @@ $locales['config-dPplanningOp-CSejour-tag_dossier_trash-desc'] = 'Préfixe tag nu
 $locales['mod-dPplanningOp-tab-check_synchro_hours_sejour'] = 'Recherche synchronisation des heures du séjour';
 $locales['mod-dPplanningOp-tab-code_selector'] = 'Sélecteur du code';
 $locales['mod-dPplanningOp-tab-configure'] = 'Configuration';
+$locales['mod-dPplanningOp-tab-dhe_externe'] = 'Demande d\'hospitalisation externe';
 $locales['mod-dPplanningOp-tab-edit_visite_anesth'] = 'Modification de la visite d\'anesthésie';
 $locales['mod-dPplanningOp-tab-plage_selector'] = 'Sélecteur de plage';
 $locales['mod-dPplanningOp-tab-view_planning'] = 'Impression DHE';

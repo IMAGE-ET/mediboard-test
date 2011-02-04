@@ -26,6 +26,13 @@
       <input type="hidden" name="dosql" value="do_consultation_aed" />
       {{mb_key object=$consult}}
       
+      
+      <div class="small-info text" style="cursor:pointer" onclick="(new Url('dPcompteRendu', 'vw_aides_saisie_help')).popup(500, 400, 'Aide à la saisie');">
+        <strong>Amélioration des aides à la saisie</strong><br />
+        Les aides à la saisie ont évoluées pour vous en simplifier l'utilisation.
+        Pour en savoir plus, cliquez ici
+      </div>
+      
       {{assign var=exam_count value=$consult->_exam_fields|@count}}
       {{math assign=text_rows equation="12/round(c/2)" c=$exam_count}}
       

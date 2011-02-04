@@ -166,6 +166,15 @@ Main.add(function () {
       
 <table class="form">
   <tr>
+    <td>
+      <div class="small-info text" style="cursor:pointer" onclick="(new Url('dPcompteRendu', 'vw_aides_saisie_help')).popup(500, 400, 'Aide à la saisie');">
+        <strong>Amélioration des aides à la saisie</strong><br />
+        Les aides à la saisie ont évoluées pour vous en simplifier l'utilisation.
+        Pour en savoir plus, cliquez ici
+      </div>
+    </td>
+  </tr>
+  <tr>
     <td class="button">
       <button class="edit" type="button" onclick="easyMode();">Mode grille</button>
     </td>
