@@ -209,6 +209,7 @@ class CGroups extends CMbObject {
     $template->addProperty("Etablissement - Siret"     , $this->siret);
     $template->addProperty("Etablissement - Finess"     , $this->finess);
     $template->addProperty("Etablissement - Ape"     , $this->ape);
+    $template->addBarCode("Etablissement - Code Barre FINESS", "FINESS$this->finess");
   }
   
   function fillTemplate(&$template) {
