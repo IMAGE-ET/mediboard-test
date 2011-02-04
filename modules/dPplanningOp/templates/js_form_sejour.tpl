@@ -180,7 +180,7 @@ function updateDureePrevue() {
     var dSortiePrevue = Date.fromDATE(oForm._date_sortie_prevue.value);
     var iSecondsDelta = dSortiePrevue - dEntreePrevue;
     var iDaysDelta = iSecondsDelta / (24 * 60 * 60 * 1000);
-    $V(oForm._duree_prevue, Math.floor(iDaysDelta));
+    $V(oForm._duree_prevue, Math.round(iDaysDelta));
   }
 }
 
