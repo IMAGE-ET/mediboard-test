@@ -87,12 +87,4 @@
       Enregistrer le champ en train d'être saisi
     </td>
   </tr>
-  <tr>
-    <th>
-      <img src="style/mediboard/images/icons/help.png" />
-    </th>
-    <td class="text">
-      Cette aide
-    </td>
-  </tr>
 </table>

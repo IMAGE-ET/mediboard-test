@@ -125,8 +125,7 @@ var AideSaisie = {
           buttons.create = DOM.a({href: "#1"}, DOM.img({src: "images/icons/new.png", title: "Nouvelle aide"})),
           buttons.owner  = DOM.a({href: "#1", title: this.options.defaultUserView}, DOM.img({src: "images/icons/user-glow.png"})),
           buttons.timestamp = DOM.a({href: "#1"}, DOM.img({src: "images/icons/timestamp.png", title: "Ajouter un horodatage"})),
-          buttons.valid  = DOM.a({href: "#1"}, DOM.img({src: "style/mediboard/images/buttons/submit.png", title: "Valider"})).setVisible(this.options.validate),
-          buttons.help   = DOM.a({href: "#1"}, DOM.img({src: "style/mediboard/images/icons/help.png", title: $T("Help")}))
+          buttons.valid  = DOM.a({href: "#1"}, DOM.img({src: "style/mediboard/images/buttons/submit.png", title: "Valider"})).setVisible(this.options.validate)
         ).hide(),
         list = $(this.searchField.id + "_auto_complete").setStyle({marginLeft: "-2px"})
       );
@@ -294,10 +293,6 @@ var AideSaisie = {
       
       buttons.newLightning.observe('mouseover', function(e){
         buttons.newLightning.down('.sub-toolbar').show();
-      });
-      
-      buttons.help.observe('click', function(e){
-        (new Url("dPcompteRendu", "vw_aides_saisie_help")).popup(500, 400, "Aide à la saisie");
       });
       
       buttons.create.observe('click', function(e){
