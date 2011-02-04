@@ -30,7 +30,7 @@ Main.add(function(){
 	Répétition
 </label>
 
-{{if $line->_ref_prescription->object_id && $line->_unites_prise|@count && $line->_most_used_poso|@count}}
+{{if $line instanceof CPrescriptionLineMedicament && $line->_ref_prescription->object_id && $line->_unites_prise|@count && $line->_most_used_poso|@count}}
 <label title="Stats">
   <input name="typePrise" type="radio" value="stats{{$type}}" onclick="selDivPoso(this.value,'{{$line->_id}}','{{$type}}');" />
   Stats

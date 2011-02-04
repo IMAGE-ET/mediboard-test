@@ -337,8 +337,6 @@
 			<td>
 				<fieldset>
 					<legend>Variantes</legend>
-				</fieldset>
-		    
 	        <form action="?" method="post" name="changeLine-{{$line->_guid}}">
 	          <input type="hidden" name="m" value="dPprescription" />
 	          <input type="hidden" name="dosql" value="do_substitution_line_aed" />
@@ -360,7 +358,7 @@
 	            {{/foreach}}
 	          </select>
 	        </form>
-	      
+	      </fieldset>
 			</td>	
 		</tr>	
 	{{/if}}

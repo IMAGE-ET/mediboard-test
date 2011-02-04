@@ -387,9 +387,11 @@ class CPrisePosologie extends CMbMetaObject {
 		}
 		
 		// Heure de prises specifié (I+x heures)
-    if($this->heure_prise){
+    if($this->heure_prise ){
       $dateTimePrise = mbAddDateTime($this->heure_prise, mbDate($this->_ref_object->_debut_reel));
+      if(($sejour->_entree <= $dateTimePrise) && ($sejour->_sortie >= $dateTimePrise)){
 			$planifs[] = array("unite_prise" => "", "prise_id" => $this->_id, "dateTime" => $dateTimePrise);
+      }
     }
   
     // Prise en urgence
