@@ -87,7 +87,11 @@ function __construct() {
     $query = "ALTER TABLE `source_soap` 
       ADD `evenement_name` VARCHAR (255),
       ADD `type_echange` VARCHAR (255);";
-    $this->addQuery($query);    
+    $this->addQuery($query); 
+
+    $query = "ALTER TABLE `source_soap` 
+                ADD `single_parameter` VARCHAR (255);";
+    $this->addQuery($query);
      
     $this->mod_version = "0.18";
   }

@@ -248,11 +248,6 @@ class CSetupsystem extends CSetup {
 		  ADD INDEX ( `period` )";
     $this->addQuery($query);
     
-    $this->makeRevision("1.0.33");
-    $query = "ALTER TABLE `source_soap` 
-                ADD `single_parameter` VARCHAR (255);";
-    $this->addQuery($query);
-
     $this->makeRevision("1.0.34");
     $query = "CREATE TABLE `source_smtp` (
 	    `source_smtp_id` INT (11) UNSIGNED NOT NULL auto_increment PRIMARY KEY,
