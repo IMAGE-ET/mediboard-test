@@ -74,61 +74,25 @@ function graphPraticienDiscipline($debut = null, $fin = null, $prat_id = 0, $sal
         operations.annulee = '0' AND 
         users_mediboard.user_id = '$user->_id'";
   
-    $query_hors_plage = "SELECT COUNT(operations.operation_id) AS total,
-      DATE_FORMAT(operations.date, '%m/%Y') AS mois,
-      DATE_FORMAT(operations.date, '%Y%m') AS orderitem,
-      users_mediboard.user_id
-      FROM operations
-      INNER JOIN sallesbloc ON operations.salle_id = sallesbloc.salle_id
-      LEFT JOIN sejour ON operations.sejour_id = sejour.sejour_id
-      INNER JOIN users_mediboard ON operations.chir_id = users_mediboard.user_id
-      LEFT JOIN users ON users_mediboard.user_id = users.user_id
-      WHERE
-        operations.date IS NOT NULL AND
-        operations.plageop_id IS NULL AND
-        sejour.group_id = '".CGroups::loadCurrent()->_id."' AND
-        operations.date BETWEEN '$debut' AND '$fin' AND 
-        operations.annulee = '0' AND 
-        users_mediboard.user_id = '$user->_id'";
-    
     if($type_hospi) {
       $query .= "\nAND sejour.type = '$type_hospi'";
-      $query_hors_plage .= "\nAND sejour.type = '$type_hospi'";
     }
-    if($discipline_id) {
-      $query .= "\nAND users_mediboard.discipline_id = '$discipline_id'";
-      $query_hors_plage .= "\nAND users_mediboard.discipline_id = '$discipline_id'"; 
-    }
-    
-    if($codeCCAM) { 
-      $query .= "\nAND operations.codes_ccam LIKE '%$codeCCAM%'";
-      $query_hors_plage .= "\nAND operations.codes_ccam LIKE '%$codeCCAM%'";
-    }
+    if($discipline_id) $query .= "\nAND users_mediboard.discipline_id = '$discipline_id'";
+    if($codeCCAM)      $query .= "\nAND operations.codes_ccam LIKE '%$codeCCAM%'";
     
     if($salle_id) {
       $query .= "\nAND sallesbloc.salle_id = '$salle_id'";
-      $query_hors_plage .= "\nAND sallesbloc.salle_id = '$salle_id'";
     } elseif($bloc_id) {
       $query .= "\nAND sallesbloc.bloc_id = '$bloc_id'";
-      $query_hors_plage .= "\nAND sallesbloc.bloc_id = '$bloc_id'";
     }
     
     $query .= "\nGROUP BY mois ORDER BY orderitem";
-    $query_hors_plage .= "\nGROUP BY mois ORDER BY orderitem";
-    
+  
     $result = $user->_spec->ds->loadlist($query);
-    $result_hors_plage = $user->_spec->ds->loadlist($query_hors_plage);
     foreach($ticks as $i => $tick) {
       $f = true;
       foreach($result as $r) {
         if($tick[1] == $r["mois"]) {
-          foreach($result_hors_plage as $key => $rb) {
-            if ($tick[1] == $rb["mois"]) {
-              $r["total"] += $rb["total"];
-              unset($result_hors_plage[$key]);
-              break;
-            }
-          }
           $serie['data'][] = array($i, $r["total"]);
           $serie_total["data"][$i][1] += $r["total"];
           $f = false;

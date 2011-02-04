@@ -12,18 +12,18 @@
 
 
 <script type="text/javascript">
-
-function zoomGraphIntervention(date, type){
-  var actionPopup = type == "nbInterv" ? "vw_graph_activite_zoom" : "vw_graph_occupation_zoom";
-  var url = new Url("dPstats", actionPopup);
+{{if $type_view_bloc == "nbInterv"}}
+function zoomGraphIntervention(date){
+  var url = new Url("dPstats", "vw_graph_activite_zoom");
   url.addParam("date"         , date);
   url.addParam("salle_id"     , "{{$filter->salle_id}}");
   url.addParam("prat_id"      , "{{$filter->_prat_id}}");
   url.addParam("codes_ccam"   , "{{$filter->codes_ccam|smarty:nodefaults|escape:"javascript"}}");
   url.addParam("discipline_id", "{{$filter->_specialite}}");
   url.addParam("size"         , 2);
-  url.popup(850, 550, "ZoomMonth");
+  url.popup(760, 400, "ZoomMonth");
 }
+{{/if}}
 
 var graphs = {{$graphs|@json}};
 Main.add(function(){
@@ -31,20 +31,24 @@ Main.add(function(){
 });
 
 function drawGraphs(showLegend){
+  {{if $type_view_bloc == "nbInterv"}}
   var zoomSelect = $("graph-activite-zoom-date");
   $("graph-0").insert({before: zoomSelect});
+  {{/if}}
   
   graphs.each(function(g, i){
     Flotr.draw($('graph-'+i), g.series, Object.extend(g.options, {legend: {show: showLegend}}));
   });
   
+  {{if $type_view_bloc == "nbInterv"}}
   if (zoomSelect.options.length == 1) {
     graphs[0].options.xaxis.ticks.each(function(tick){
       zoomSelect.insert(new Element('option', {value: tick[1]}).update(tick[1]));
     });
   }
   
-  $('graph-0').select('.flotr-tabs-group').first().insert(zoomSelect);
+  $('graph-0').select('.flotr-tabs-group').first().insert(zoomSelect.show());
+  {{/if}}
 }
 </script>
 
@@ -156,9 +160,11 @@ function drawGraphs(showLegend){
 </table>
 </form>
 
-<select id="graph-activite-zoom-date" onchange="zoomGraphIntervention($V(this), '{{$type_view_bloc}}')">
+{{if $type_view_bloc == "nbInterv"}}
+<select id="graph-activite-zoom-date" onchange="zoomGraphIntervention($V(this))" style="display: none;">
   <option selected="selected" disabled="disabled">&ndash; Vue sur un mois &ndash;</option>
 </select>
+{{/if}}
 
 {{foreach from=$graphs item=graph key=key}}
 	<div style="width: 480px; height: 350px; float: left; margin: 1em;" id="graph-{{$key}}"></div>

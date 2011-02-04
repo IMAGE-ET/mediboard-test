@@ -47,57 +47,30 @@ function graphPatParHeureReveil($debut = null, $fin = null, $prat_id = 0, $bloc_
     $query = "DROP TEMPORARY TABLE IF EXISTS pat_par_heure";
     $ds->exec($query);
     $query = "CREATE TEMPORARY TABLE pat_par_heure
-      SELECT COUNT(operations.operation_id) AS total_by_day,
-             '".$tick[1]."' AS heure,
-             plagesop.date AS date
-      FROM operations
-      INNER JOIN sallesbloc ON operations.salle_id = sallesbloc.salle_id
-      LEFT JOIN plagesop ON operations.plageop_id = plagesop.plageop_id
-      LEFT JOIN users_mediboard ON operations.chir_id = users_mediboard.user_id
-      WHERE 
-        sallesbloc.stats = '1' AND 
-        plagesop.date BETWEEN '$debut' AND '$fin' AND 
-        '".$tick[1].":00' BETWEEN operations.entree_reveil AND operations.sortie_reveil AND
-        operations.annulee = '0'";
-    
-    $query_hors_plage = "INSERT INTO pat_par_heure
-      SELECT COUNT(operations.operation_id) AS total_by_day,
-             '".$tick[1]."' AS heure,
-             operations.date AS date
-      FROM operations
-      INNER JOIN sallesbloc ON operations.salle_id = sallesbloc.salle_id
-      LEFT JOIN users_mediboard ON operations.chir_id = users_mediboard.user_id
-      WHERE 
-        sallesbloc.stats = '1' AND
-        operations.date IS NOT NULL AND 
-        operations.plageop_id IS NULL AND
-        operations.date BETWEEN '$debut' AND '$fin' AND 
-        '".$tick[1].":00' BETWEEN operations.entree_reveil AND operations.sortie_reveil AND
-        operations.annulee = '0'";
-    
-    if($prat_id) {
-      $query .= "\nAND operations.chir_id = '$prat_id'"; 
-      $query_hors_plage .= "\nAND operations.chir_id = '$prat_id'";
-    }
-    if($discipline_id) {
-      $query .= "\nAND users_mediboard.discipline_id = '$discipline_id'"; 
-      $query_hors_plage .= "\nAND users_mediboard.discipline_id = '$discipline_id'";
-    }
-    if($codeCCAM) {
-      $query .= "\nAND operations.codes_ccam LIKE '%$codeCCAM%'";
-      $query_hors_plage .= "\nAND operations.codes_ccam LIKE '%$codeCCAM%'"; 
-    }
+                SELECT COUNT(operations.operation_id) AS total_by_day,
+                       '".$tick[1]."' AS heure,
+                       plagesop.date AS date
+                FROM operations
+                INNER JOIN sallesbloc ON operations.salle_id = sallesbloc.salle_id
+                LEFT JOIN plagesop ON operations.plageop_id = plagesop.plageop_id
+                LEFT JOIN users_mediboard ON operations.chir_id = users_mediboard.user_id
+                WHERE 
+                  sallesbloc.stats = '1' AND 
+                  plagesop.date BETWEEN '$debut' AND '$fin' AND 
+                  '".$tick[1].":00' BETWEEN operations.entree_reveil AND operations.sortie_reveil AND
+                  operations.annulee = '0'";
+      
+    if($prat_id)       $query .= "\nAND operations.chir_id = '$prat_id'";
+    if($discipline_id) $query .= "\nAND users_mediboard.discipline_id = '$discipline_id'";
+    if($codeCCAM)      $query .= "\nAND operations.codes_ccam LIKE '%$codeCCAM%'";
   
     if($bloc_id) {
       $query .= "\nAND sallesbloc.bloc_id = '$bloc_id'";
-      $query_hors_plage .= "\nAND sallesbloc.bloc_id = '$bloc_id'";
     }
     
     $query .= "\nGROUP BY plagesop.date";
-    $query_hors_plage .= "\nGROUP BY operations.date";
-    
     $result = $ds->exec($query);
-    $result = $ds->exec($query_hors_plage);
+    
     
     $query = "SELECT SUM(total_by_day) AS total, MAX(total_by_day) AS max,heure
                 FROM pat_par_heure
@@ -125,46 +98,19 @@ function graphPatParHeureReveil($debut = null, $fin = null, $prat_id = 0, $bloc_
       plagesop.date BETWEEN '$debut' AND '$fin' AND 
       (operations.entree_reveil IS NULL OR operations.sortie_reveil IS NULL) AND
       operations.annulee = '0'";
-  
-  $query_hors_plage = "SELECT COUNT(operations.operation_id) AS total,
-    'err' AS heure
-    FROM operations
-    INNER JOIN sallesbloc ON operations.salle_id = sallesbloc.salle_id
-    LEFT JOIN users_mediboard ON operations.chir_id = users_mediboard.user_id
-    WHERE 
-      sallesbloc.stats = '1' AND
-      operations.date IS NOT NULL AND
-      operations.plageop_id IS NULL AND
-      operations.date BETWEEN '$debut' AND '$fin' AND
-      (operations.entree_reveil IS NULL OR operations.sortie_reveil IS NULL) AND
-      operations.annulee = '0'";
     
-  if($prat_id) {
-    $query      .= "\nAND operations.chir_id = '$prat_id'";
-    $query_hors_plage .= "\nAND operations.chir_id = '$prat_id'";
-  } 
-  if($discipline_id) {
-    $query .= "\nAND users_mediboard.discipline_id = '$discipline_id'"; 
-    $query_hors_plage .= "\nAND users_mediboard.discipline_id = '$discipline_id'";
-  }
-  
-  if($codeCCAM) {
-    $query      .= "\nAND operations.codes_ccam LIKE '%$codeCCAM%'";
-    $query_hors_plage  .= "\nAND operations.codes_ccam LIKE '%$codeCCAM%'";
-  }
+  if($prat_id)  $query      .= "\nAND operations.chir_id = '$prat_id'";
+  if($discipline_id) $query .= "\nAND users_mediboard.discipline_id = '$discipline_id'";
+  if($codeCCAM) $query      .= "\nAND operations.codes_ccam LIKE '%$codeCCAM%'";
 
   if($bloc_id) {
     $query .= "\nAND sallesbloc.bloc_id = '$bloc_id'";
-    $query_hors_plage .= "\nAND sallesbloc.bloc_id = '$bloc_id'";
   }
   
   $query .= "\nGROUP BY heure";
-  $query_hors_plage .= "\nGROUP BY heure";
-  
   $result = $ds->loadlist($query);
-  $result_hors_plage = $ds->loadlist($query);
   if(count($result)) {
-    $serie_moyenne["data"][] = array(count($ticks), ($result[0]["total"] + $result_hors_plage[0]["total"]) / $totalWorkDays);
+    $serie_moyenne["data"][] = array(count($ticks), $result[0]["total"] / $totalWorkDays);
   } else {
     $serie_moyenne["data"][] = array(count($ticks), 0);
   }

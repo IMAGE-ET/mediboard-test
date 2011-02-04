@@ -18,5 +18,5 @@ Main.add(function(){
 </script>
 
 {{foreach from=$graphs item=graph key=key}}
-	<div style="width: 800px; height: 500px; float: left; margin: 1em;" id="graph-{{$key}}"></div>
+	<div style="width: 600px; height: 350px; float: left; margin: 1em;" id="graph-{{$key}}"></div>
 {{/foreach}}

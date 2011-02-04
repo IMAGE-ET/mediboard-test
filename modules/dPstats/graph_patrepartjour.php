@@ -52,60 +52,23 @@ function graphPatRepartJour($debut = null, $fin = null, $prat_id = 0, $bloc_id =
       sallesbloc.stats = '1' AND 
       plagesop.date BETWEEN '$debut' AND '$fin' AND
       operations.annulee = '0'";
-  
-  $query_hors_plage = "SELECT COUNT(operations.operation_id) AS total,
-    COUNT(DISTINCT(operations.date)) AS nb_days,
-    DATE_FORMAT(operations.date, '%W') AS jour,
-    DATE_FORMAT(operations.date, '%w') AS orderitem
-    FROM operations
-    INNER JOIN sallesbloc ON operations.salle_id = sallesbloc.salle_id
-    LEFT JOIN users_mediboard ON operations.chir_id = users_mediboard.user_id
-    WHERE 
-      operations.date IS NOT NULL AND
-      operations.plageop_id IS NULL AND
-      sallesbloc.stats = '1' AND 
-      plagesop.date BETWEEN '$debut' AND '$fin' AND
-      operations.annulee = '0'"; 
     
-  if($prat_id) {
-    $query .= "\nAND operations.chir_id = '$prat_id'";
-    $query_hors_plage .= "\nAND operations.chir_id = '$prat_id'";
-  }
-  
-  if($discipline_id) {
-    $query .= "\nAND users_mediboard.discipline_id = '$discipline_id'";
-    $query_hors_plage .= "\nAND users_mediboard.discipline_id = '$discipline_id'";    
-  }
-  
-  if($codeCCAM) {
-    $query .= "\nAND operations.codes_ccam LIKE '%$codeCCAM%'";
-    $query_hors_plage .= "\nAND operations.codes_ccam LIKE '%$codeCCAM%'"; 
-  }
+  if($prat_id)       $query .= "\nAND operations.chir_id = '$prat_id'";
+  if($discipline_id) $query .= "\nAND users_mediboard.discipline_id = '$discipline_id'";
+  if($codeCCAM)      $query .= "\nAND operations.codes_ccam LIKE '%$codeCCAM%'";
 
   if($bloc_id) {
     $query .= "\nAND sallesbloc.bloc_id = '$bloc_id'";
-    $query_hors_plage .= "\nAND sallesbloc.bloc_id = '$bloc_id'";
   }
   
   $query .= "\nGROUP BY jour ORDER BY orderitem";
-  $query_hors_plage .= "\nGROUP BY jour ORDER BY orderitem";
-  
   $result = $prat->_spec->ds->loadlist($query);
-  $result_hors_plage = $prat->_spec->ds->loadlist($query_hors_plage);
   
   foreach($ticks as $i => $tick) {
     $f = true;
     foreach($result as $r) {
       if($i == $r["orderitem"]) {
-        $calcul_hors_plage = 0;
-        foreach($result_hors_plage as $key => $rb) {
-          if ($i == $rb["orderitem"]) {
-            $calcul_hors_plage = $rb["total"]/$rb["nb_days"];
-            unset($result_hors_plage[$key]);
-            break;
-          }
-        }
-        $serie["data"][] = array($tick[0], $r["total"]/$r["nb_days"] + $calcul_hors_plage);
+        $serie["data"][] = array($tick[0], $r["total"]/$r["nb_days"]);
         $f = false;
       }
     }

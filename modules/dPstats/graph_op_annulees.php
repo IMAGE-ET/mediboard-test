@@ -48,75 +48,37 @@ function graphOpAnnulees($debut = null, $fin = null, $prat_id = 0, $salle_id = 0
       'data' => array()
     );
     $query = "SELECT COUNT(DISTINCT(operations.operation_id)) AS total,
-      DATE_FORMAT(plagesop.date, '%m/%Y') AS mois,
-      DATE_FORMAT(plagesop.date, '%Y-%m-01') AS orderitem
-      FROM operations
-      LEFT JOIN sejour ON operations.sejour_id = sejour.sejour_id
-      INNER JOIN sallesbloc ON operations.salle_id = sallesbloc.salle_id
-      LEFT JOIN plagesop ON plagesop.plageop_id = operations.plageop_id
-      LEFT JOIN user_log ON user_log.object_id = operations.operation_id
-      AND user_log.object_class = 'COperation'
-      WHERE
-        sejour.group_id = '".CGroups::loadCurrent()->_id."' AND
-        plagesop.date BETWEEN '$debut' AND '$fin' AND
-        user_log.type = 'store' AND
-        DATE(user_log.date) = plagesop.date AND
-        user_log.fields LIKE '%annulee%' AND
-        operations.annulee = '1'";
-    
-    $query_hors_plage = "SELECT COUNT(DISTINCT(operations.operation_id)) AS total,
-      DATE_FORMAT(operations.date, '%m/%Y') AS mois,
-      DATE_FORMAT(operations.date, '%Y-%m-01') AS orderitem
-      FROM operations
-      LEFT JOIN sejour ON operations.sejour_id = sejour.sejour_id
-      INNER JOIN sallesbloc ON operations.salle_id = sallesbloc.salle_id
-      LEFT JOIN user_log ON user_log.object_id = operations.operation_id
-      AND user_log.object_class = 'COperation'
-      WHERE
-        sejour.group_id = '".CGroups::loadCurrent()->_id."' AND
-        operations.date IS NOT NULL AND
-        operations.plageop_id IS NULL AND
-        operations.date BETWEEN '$debut' AND '$fin' AND
-        user_log.type = 'store' AND
-        DATE(user_log.date) = operations.date AND
-        user_log.fields LIKE '%annulee%' AND
-        operations.annulee = '1'";
-    
+                DATE_FORMAT(plagesop.date, '%m/%Y') AS mois,
+                DATE_FORMAT(plagesop.date, '%Y-%m-01') AS orderitem
+              FROM operations
+              LEFT JOIN sejour ON operations.sejour_id = sejour.sejour_id
+              INNER JOIN sallesbloc ON operations.salle_id = sallesbloc.salle_id
+              LEFT JOIN plagesop ON plagesop.plageop_id = operations.plageop_id
+              LEFT JOIN user_log ON user_log.object_id = operations.operation_id
+                AND user_log.object_class = 'COperation'
+              WHERE sejour.group_id = '".CGroups::loadCurrent()->_id."'
+                AND plagesop.date BETWEEN '$debut' AND '$fin'
+                AND user_log.type = 'store'
+                AND DATE(user_log.date) = plagesop.date
+                AND user_log.fields LIKE '%annulee%'
+                AND operations.annulee = '1'";
+  
     if($type_hospi) {
       $query .= "\nAND sejour.type = '$type_hospi'";
-      $query_hors_plage .= "\nAND sejour.type = '$type_hospi'";
     }
-    if($prat_id)  {
-      $query .= "\nAND operations.chir_id = '$prat_id'";
-      $query_hors_plage .= "\nAND operations.chir_id = '$prat_id'"; 
-    }
-    if($codeCCAM) { 
-      $query .= "\nAND operations.codes_ccam LIKE '%$codeCCAM%'";
-      $query_hors_plage .= "\nAND operations.codes_ccam LIKE '%$codeCCAM%'";
-    }
+    if($prat_id)  $query .= "\nAND operations.chir_id = '$prat_id'";
+    if($codeCCAM) $query .= "\nAND operations.codes_ccam LIKE '%$codeCCAM%'";
 
     $query .= "\nAND sallesbloc.salle_id = '$salle->_id'";
+  
     $query .= "GROUP BY mois
                ORDER BY orderitem";
-    
-    $query_hors_plage .= "\nAND sallesbloc.salle_id = '$salle->_id'";
-    $query_hors_plage .= "GROUP BY mois
-                          ORDER BY orderitem";
-    
+
     $result = $prat->_spec->ds->loadlist($query);
-    $result_hors_plage = $prat->_spec->ds->loadlist($query_hors_plage);
-    
     foreach($ticks as $i => $tick) {
       $f = true;
       foreach($result as $r) {
-        if($tick[1] == $r["mois"]) {
-          foreach($result_hors_plage as $key => $rb) {
-            if ($tick[1] == $rb["mois"]) {
-              $r["total"] += $rb["total"];
-              unset($result_hors_plage[$key]);
-              break;
-            }
-          }
+        if($tick[1] == $r["mois"]) {        
           $serie["data"][] = array($i, $r["total"]);
           $serie_total["data"][$i][1] += $r["total"];
           $total += $r["total"];
