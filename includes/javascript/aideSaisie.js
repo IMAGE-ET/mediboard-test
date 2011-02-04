@@ -93,9 +93,9 @@ var AideSaisie = {
       if($V(input).charAt($V(input).length - 1) != '\n') {
         $V(input, $V(input) + ' ');
       }
-			if (Object.isFunction(input.onchange)){
-				input.onchange.bindAsEventListener(input)();
-			}
+      if (Object.isFunction(input.onchange)){
+        input.onchange.bindAsEventListener(input)();
+      }
       input.tryFocus();
       $V(this.options.dependField1, data.depend1);
       $V(this.options.dependField2, data.depend2);
@@ -113,18 +113,27 @@ var AideSaisie = {
           DOM.div({className: "throbber-background"}), 
           throbber = DOM.div({className: "throbber"}).hide(),
           //buttons.grid   = DOM.a({href: "#1"}, DOM.img({src: "images/icons/grid.png", title: "Mode grille"})),
-          buttons.create = DOM.a({href: "#1"}, DOM.img({src: "images/icons/new.png", title: "Nouvelle aide"})),
           buttons.down   = DOM.a({href: "#1"}, DOM.img({src: "style/mediboard/images/buttons/down.png", title: "Voir tous les choix"})),
+          buttons.newLightning = DOM.a({href: "#1"},
+            DOM.span({style: "position: absolute; bottom: 21px; display: none;", className: "sub-toolbar"},
+              buttons.newGroup    = DOM.img({src: "images/icons/group.png", style: "margin-bottom: 0px;", title: "Nouvelle aide pour "+User["group"].view}), DOM.br({}),
+              buttons.newFunction = DOM.img({src: "images/icons/user-function.png", style: "margin-bottom: 0px;", title: "Nouvelle aide pour "+User["function"].view}), DOM.br({}),
+              buttons.newUser     = DOM.img({src: "images/icons/user.png", style: "margin-bottom: 0px;", title: "Nouvelle aide pour "+User.view})
+            ),
+            DOM.img({src: "style/mediboard/images/buttons/new-lightning.png", title: "Nouvelle aide rapide"})
+          ),
+          buttons.create = DOM.a({href: "#1"}, DOM.img({src: "images/icons/new.png", title: "Nouvelle aide"})),
           buttons.owner  = DOM.a({href: "#1", title: this.options.defaultUserView}, DOM.img({src: "images/icons/user-glow.png"})),
           buttons.timestamp = DOM.a({href: "#1"}, DOM.img({src: "images/icons/timestamp.png", title: "Ajouter un horodatage"})),
-          buttons.valid  = DOM.a({href: "#1"}, DOM.img({src: "style/mediboard/images/buttons/submit.png", title: "Valider"})).setVisible(this.options.validate)
+          buttons.valid  = DOM.a({href: "#1"}, DOM.img({src: "style/mediboard/images/buttons/submit.png", title: "Valider"})).setVisible(this.options.validate),
+          buttons.help   = DOM.a({href: "#1"}, DOM.img({src: "style/mediboard/images/icons/help.png", title: $T("Help")}))
         ).hide(),
         list = $(this.searchField.id + "_auto_complete").setStyle({marginLeft: "-2px"})
       );
       
       this.searchField.up().
         observe('mousemove', function(){toolbar.show()}).
-        observe('mouseout',  function(){toolbar.hide()})/*.
+        observe('mouseout',  function(){toolbar.hide(); toolbar.select(".sub-toolbar").invoke("hide"); })/*.
         observe('click',     function(){toolbar.hide()}).
         observe('keydown',   function(){toolbar.hide()})*/;
       
@@ -155,10 +164,10 @@ var AideSaisie = {
         paramName: "_search",
         caretBounds: true,
         callback: function(input, query){
-					if (options.filterWithDependFields) {
-						query += options.dependField1 ? ("&depend_value_1=" + ($V(options.dependField1) || "")) : '';
-						query += options.dependField2 ? ("&depend_value_2=" + ($V(options.dependField2) || "")) : '';
-					}
+          if (options.filterWithDependFields) {
+            query += options.dependField1 ? ("&depend_value_1=" + ($V(options.dependField1) || "")) : '';
+            query += options.dependField2 ? ("&depend_value_2=" + ($V(options.dependField2) || "")) : '';
+          }
           return query+"&hide_empty_list=1&hide_exact_match=1";
         },
         dontSelectFirst: true,
@@ -219,6 +228,32 @@ var AideSaisie = {
         }.bind(this);
       }.bindAsEventListener(this);
       
+      // quick creation
+      var createQuick = function(owner, id) {
+        var text = this.text || this.element.value;
+        var name = text.split(/\s+/).splice(0, 3).join(" ");
+        
+        var url = new Url()
+          .addParam("m", "dPcompteRendu")
+          .addParam("@class", "CAideSaisie")
+          .addParam("del", 0)
+          .addParam("class", options.objectClass)
+          .addParam("field", options.property || this.element.name)
+          
+          .addParam("name", name)
+          .addParam("text", text)
+          
+          .addParam("depend_value_1", $V(options.dependField1))
+          .addParam("depend_value_2", $V(options.dependField2))
+          .addParam(owner, id);
+          
+        url.requestUpdate("systemMsg", {method: "post"});
+      }.bind(this);
+      
+      buttons.newUser    .observe('click', createQuick.curry("user_id", User.id));
+      buttons.newFunction.observe('click', createQuick.curry("function_id", User["function"].id));
+      buttons.newGroup   .observe('click', createQuick.curry("group_id", User["group"].id));
+      
       // Toolbar buttons actions
       if (!this.isContextOwner) {
         buttons.owner.observe('click', function (e) {
@@ -256,6 +291,15 @@ var AideSaisie = {
       buttons.down.observe('click', activate);
       //buttons.grid.observe('mousedown', gridMode);
       buttons.valid.observe('click', validate);
+      
+      buttons.newLightning.observe('mouseover', function(e){
+        buttons.newLightning.down('.sub-toolbar').show();
+      });
+      
+      buttons.help.observe('click', function(e){
+        (new Url("dPcompteRendu", "vw_aides_saisie_help")).popup(500, 400, "Aide à la saisie");
+      });
+      
       buttons.create.observe('click', function(e){
         AideSaisie.create(
           this.options.objectClass, 
@@ -269,21 +313,20 @@ var AideSaisie = {
       }.bindAsEventListener(this));
 
       buttons.timestamp.observe('click', function(){
-    	var timestamp = DateFormat.format(new Date(), this.options.timestamp);
-    	
-    	var parts = this.options.userView.split(" ");
-
-    	timestamp = timestamp.replace(/%p/g, parts[1]);
-    	timestamp = timestamp.replace(/%n/g, parts[0]);
-    	timestamp = timestamp.replace(/%i/g, parts[1].charAt(0) + ". " + parts[0].charAt(0) + ". ");
-    	
-    	if(this.element.value[this.element.value.length -1] != '\n' && this.element.value.length != 0) {
-    	  timestamp = '\n' + timestamp;
-    	}
-    	
-    	this.element.value += timestamp + '\n';
-    	this.element.scrollTop = this.element.scrollHeight;
-    	this.element.tryFocus();
+        var timestamp = DateFormat.format(new Date(), this.options.timestamp);
+        var parts = this.options.userView.split(" ");
+  
+        timestamp = timestamp.replace(/%p/g, parts[1]);
+        timestamp = timestamp.replace(/%n/g, parts[0]);
+        timestamp = timestamp.replace(/%i/g, parts[1].charAt(0) + ". " + parts[0].charAt(0) + ". ");
+        
+        if(this.element.value[this.element.value.length -1] != '\n' && this.element.value.length != 0) {
+          timestamp = '\n' + timestamp;
+        }
+        
+        this.element.value += timestamp + '\n';
+        this.element.scrollTop = this.element.scrollHeight;
+        this.element.tryFocus();
       }.bindAsEventListener(this));
       
       // We wrap the textarea with the new container
@@ -314,7 +357,7 @@ var AideSaisie = {
     url.addParam("text"        , text || field.value);
     url.addParam("depend_value_1", dependValue1 || null);
     url.addParam("depend_value_2", dependValue2 || null);
-    url.popup(600, 300, "AidesSaisie");
+    url.popup(600, 400, "AidesSaisie");
   }
 };
 

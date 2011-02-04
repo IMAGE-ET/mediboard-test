@@ -472,6 +472,10 @@ button.erase:before, a.button.erase:before {
   content: url(images/buttons/eraser.png);
 }
 
+button.new-lightning:before, a.button.new-lightning:before {
+  content: url(images/buttons/new-lightning.png);
+}
+
 button.loading:before, a.button.loading:before {
   content: url(images/icons/loading.gif) !important;
 }
