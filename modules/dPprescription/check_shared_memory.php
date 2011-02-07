@@ -12,7 +12,11 @@ CCanDo::checkRead();
 
 $class = "CConfigService";
 $name = "conf-service";
-if (CConfigService::getSHM($name) != CConfigService::getAllConfigs()) {
+$configs = CConfigService::getSHM($name);
+if(!$configs) {
+  CAppUI::stepAjax("$class-shm-none", UI_MSG_OK);
+}
+elseif ($configs != CConfigService::getAllConfigs()) {
   CAppUI::stepAjax("$class-shm-ko", UI_MSG_WARNING);
 }
 else {
@@ -21,7 +25,11 @@ else {
 
 $class = "CConfigMomentUnitaire";
 $name = "conf-moment";
-if (CConfigMomentUnitaire::getSHM($name) != CConfigMomentUnitaire::getAllConfigs()) {
+$configs = CConfigService::getSHM($name);
+if(!$configs) {
+  CAppUI::stepAjax("$class-shm-none", UI_MSG_OK);
+}
+elseif (CConfigMomentUnitaire::getSHM($name) != CConfigMomentUnitaire::getAllConfigs()) {
   CAppUI::stepAjax("$class-shm-ko", UI_MSG_WARNING);
 }
 else {
