@@ -35,7 +35,7 @@ foreach ($events as $name => $event) {
 	foreach ($columns as $column => $names) {
 		
 	}
-	$event 
+	$event;
 }
 
 ?>
