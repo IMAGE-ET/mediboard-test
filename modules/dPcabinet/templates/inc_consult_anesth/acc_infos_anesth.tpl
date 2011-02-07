@@ -20,11 +20,13 @@ function reloadListTech() {
 
 Main.add(function () {
   var oOpForm = getForm("editOpAnesthFrm");
+  if(oOpForm){
   new AideSaisie.AutoComplete(oOpForm.rques, {
             objectClass: "COperation",
             timestamp: "{{$conf.dPcompteRendu.CCompteRendu.timestamp}}",
             validateOnBlur:0
           });
+  }
   var oAnesthForm = getForm("editInfosAnesthFrm");
   new AideSaisie.AutoComplete(oAnesthForm.prepa_preop, {
             objectClass: "CConsultAnesth",
