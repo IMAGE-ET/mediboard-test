@@ -1,3 +1,30 @@
+{{mb_include_script module="dPmedicament" script="medicament_selector"}}
+
+<script type="text/javascript">
+
+Main.add(function () {
+  
+   // UpdateFields de l'autocomplete des traitements
+  updateFieldTraitement = function(selected) {
+    var dn = selected.childElements();
+    oForm = getForm('editFrmExams');
+    $V(oForm.traitement, $V(oForm.traitement)+dn[3].innerHTML.stripTags().strip()+'\n');
+    $V(oForm.produit, "");
+  }
+
+  // Autocomplete des medicaments
+  var urlAuto = new Url("dPmedicament", "httpreq_do_medicament_autocomplete");
+  urlAuto.autoComplete(getForm('editFrmExams').produit, "_traitement_auto_complete", {
+    minChars: 3,
+    updateElement: updateFieldTraitement, 
+    callback: function(input, queryString){
+      return (queryString + "&produit_max=40"); 
+    }
+  } );
+});
+
+</script>
+
 {{assign var=aide_autocomplete value=$conf.dPcabinet.CConsultation.aide_autocomplete}}
 {{if !@$readonly}}
   {{assign var=readonly value=0}}
@@ -20,7 +47,7 @@
       </script>
       
       {{if $consult->_id}}
-      <form class="watched" name="editFrmExams" action="?m={{$m}}" method="post" onsubmit="return onSubmitFormAjax(this, {onComplete: onExamComplete})">
+      <form name="editFrmExams" action="?m={{$m}}" method="post" onsubmit="return onSubmitFormAjax(this, {onComplete: onExamComplete})">
       <input type="hidden" name="m" value="dPcabinet" />
       <input type="hidden" name="del" value="0" />
       <input type="hidden" name="dosql" value="do_consultation_aed" />
@@ -63,7 +90,13 @@
           </script>
           {{/if}}
           <fieldset>
-            <legend>{{mb_label object=$consult field=$field}}</legend>
+            <legend>
+              {{mb_label object=$consult field=$field}}
+              {{if $field == "traitement" && $isPrescriptionInstalled}}
+                <input type="text" name="produit" value="" size="12" class="autocomplete" style="margin-top: -3px; margin-bottom: -2px;" />
+                <div style="display:none; width: 350px;" class="autocomplete" id="_traitement_auto_complete"></div>
+              {{/if}}
+            </legend>
             {{if $readonly}}
               {{mb_value object=$consult field=$field}}
             {{else}}
