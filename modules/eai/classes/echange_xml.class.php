@@ -20,11 +20,7 @@ CAppUI::requireModuleClass("eai", "exchange_data_format");
 
 class CEchangeXML extends CExchangeDataFormat {
   var $identifiant_emetteur    = null;
-  var $sous_type               = null;
   var $initiateur_id           = null;  
-  
-  // Form fields
-  var $_observations      = null;
  
   // Forward references
   var $_ref_notifications = null;
@@ -39,11 +35,11 @@ class CEchangeXML extends CExchangeDataFormat {
     $props = parent::getProps();
     
     $props["identifiant_emetteur"]    = "str";
-    $props["sous_type"]               = "str";
     $props["message_content_id"]      = "ref class|CContentXML show|0 cascade";
     $props["acquittement_content_id"] = "ref class|CContentXML show|0 cascade";   
     
-    $props["_observations"]           = "str";
+    $props["_message"]                = "xml";
+    $props["_acquittement"]           = "xml";
     
     return $props;
   }
@@ -57,9 +53,7 @@ class CEchangeXML extends CExchangeDataFormat {
     $content->load($this->acquittement_content_id);
     $this->_acquittement = $content->content;
   }
-  
-  function getObservations() {}
-  
+    
   function updateDBFields() {
     if ($this->_message !== null) {
       $content = new CContentXML();

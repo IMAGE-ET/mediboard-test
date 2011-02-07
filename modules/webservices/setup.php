@@ -71,22 +71,22 @@ function __construct() {
    $this->makeRevision("0.17");
    
    $query = "CREATE TABLE IF NOT EXISTS `source_soap` (
-      `source_soap_id` INT (11) UNSIGNED NOT NULL auto_increment PRIMARY KEY,
-      `wsdl_mode` ENUM ('0','1') DEFAULT '1',
-      `name` VARCHAR (255) NOT NULL,
-      `host` TEXT NOT NULL,
-      `user` VARCHAR (255),
-      `password` VARCHAR (50)
-    ) TYPE=MYISAM;";
+              `source_soap_id` INT (11) UNSIGNED NOT NULL auto_increment PRIMARY KEY,
+              `wsdl_mode` ENUM ('0','1') DEFAULT '1',
+              `name` VARCHAR (255) NOT NULL,
+              `host` TEXT NOT NULL,
+              `user` VARCHAR (255),
+              `password` VARCHAR (50)
+            ) TYPE=MYISAM;";
     $this->addQuery($query);
         
     $query = "ALTER TABLE `source_soap` 
-      ADD `role` ENUM ('prod','qualif') NOT NULL DEFAULT 'qualif';";
+                ADD `role` ENUM ('prod','qualif') NOT NULL DEFAULT 'qualif';";
     $this->addQuery($query);
     
     $query = "ALTER TABLE `source_soap` 
-      ADD `evenement_name` VARCHAR (255),
-      ADD `type_echange` VARCHAR (255);";
+                ADD `evenement_name` VARCHAR (255),
+                ADD `type_echange` VARCHAR (255);";
     $this->addQuery($query); 
 
     $query = "ALTER TABLE `source_soap` 

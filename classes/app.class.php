@@ -127,7 +127,7 @@ class CApp {
    * @param array $properties No property checking if empty
    * @return array
    */
-  static function getChildClasses($parent = "CMbObject", $properties = array()) {
+  static function getChildClasses($parent = "CMbObject", $properties = array(), $active_module = false) {
     self::getAllClasses();
     
     $listClasses = get_declared_classes();
@@ -138,11 +138,19 @@ class CApp {
       }
   
       foreach($properties as $prop) {
-        if(!array_key_exists($prop, get_class_vars($class))) {
+        if (!array_key_exists($prop, get_class_vars($class))) {
+          unset($listClasses[$key]);
+        }
+      }
+      
+      if ($active_module) {
+        $object = new $class; 
+        if (!isset($object->_ref_module)) {
           unset($listClasses[$key]);
         }
       }
     }
+    
     sort($listClasses);
     return $listClasses;
   }

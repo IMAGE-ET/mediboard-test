@@ -10,6 +10,4 @@
 
 $module = CModule::getInstalled(basename(dirname(__FILE__)));
 
-$module->registerTab("vw_idx_echange_hprim", TAB_ADMIN);
-
 ?>

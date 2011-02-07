@@ -47,17 +47,7 @@ $echange_hprim->loadRefs();
 $echange_hprim->loadRefsDestinataireInterop();
 
 if ($echange_hprim->_message !== null) {
-  $domGetEvenement = null;
-  $echange_hprim->type == "patients" ?
-    $domGetEvenement = new CHPrimXMLEvenementsPatients() : null;
-  $echange_hprim->type == "pmsi" ?
-    $domGetEvenement = new CHPrimXMLEvenementsServeurActivitePmsi::$evenements[$echange_hprim->sous_type] : null;
-    
-  $domGetEvenement->loadXML($echange_hprim->_message);
-  $domGetEvenement->formatOutput = true;
-  $doc_errors_msg = $domGetEvenement->schemaValidate(null, true, false);
- 
-  $echange_hprim->_message = utf8_encode($domGetEvenement->saveXML());
+  
 }  
 if ($echange_hprim->_acquittement !== null) {
   $echange_hprim->type == "patients" ?

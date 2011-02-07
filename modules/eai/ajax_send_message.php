@@ -1,6 +1,6 @@
 <?php 
 /**
- * Index EAI
+ * Send message
  *  
  * @category EAI
  * @package  Mediboard
@@ -10,9 +10,10 @@
  * @link     http://www.mediboard.org
  */
 
-$module = CModule::getInstalled(basename(dirname(__FILE__)));
+CCanDo::checkRead();
 
-$module->registerTab("vw_idx_interop_receivers"   , TAB_READ);
-$module->registerTab("vw_idx_exchange_data_format", TAB_READ);
+CAppUI::setMsg("Cette fonctionnalité est désactivée pour le moment...", UI_MSG_ERROR);
+
+echo CAppUI::getMsg();
 
 ?>

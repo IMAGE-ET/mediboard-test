@@ -1,0 +1,29 @@
+<?php 
+/**
+ * Refresh exchange
+ *  
+ * @category EAI
+ * @package  Mediboard
+ * @author   SARL OpenXtrem <dev@openxtrem.com>
+ * @license  GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ * @version  SVN: $Id$ 
+ * @link     http://www.mediboard.org
+ */
+
+CCanDo::checkRead();
+
+$exchange_guid = CValue::get("exchange_guid");
+
+// Chargement de l'échange demandé
+$object = new CMbObject();
+$exchange = $object->loadFromGuid($exchange_guid);
+$exchange->loadRefs(); 
+$exchange->loadRefsDestinataireInterop();
+$exchange->getObservations();
+
+// Création du template
+$smarty = new CSmartyDP();
+$smarty->assign("object", $exchange);
+$smarty->display("inc_exchange.tpl");
+
+?>

@@ -347,6 +347,31 @@ class CSetuphprim21 extends CSetup {
               DROP `destinataire_desc`;";
     $this->addQuery($sql);
     
-    $this->mod_version = "0.16";
+    $this->makeRevision("0.16");
+    
+    $sql = "ALTER TABLE `echange_hprim21` 
+              ADD `type` VARCHAR (255),
+              ADD `acquittement_content_id` INT (11) UNSIGNED,
+              ADD `statut_acquittement` VARCHAR (255),
+              CHANGE `message_valide` `message_valide` ENUM ('0','1'),
+              ADD `acquittement_valide` ENUM ('0','1'),
+              CHANGE `object_class` `object_class` ENUM ('CPatient','CSejour','CMedecin');";
+    $this->addQuery($sql);
+    
+    $sql = "ALTER TABLE `echange_hprim21` 
+              ADD INDEX (`acquittement_content_id`);";
+    $this->addQuery($sql); 
+       
+    $sql = "UPDATE `echange_hprim21`
+             SET `type` = 'C';";
+    $this->addQuery($sql);   
+
+    $this->makeRevision("0.17");
+    
+    $sql = "ALTER TABLE `echange_hprim21` 
+              CHANGE `type_message` `sous_type` VARCHAR( 255 )";
+    $this->addQuery($sql);
+    
+    $this->mod_version = "0.18";
   }
 }

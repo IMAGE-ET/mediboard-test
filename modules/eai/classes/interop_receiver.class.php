@@ -80,7 +80,12 @@ class CInteropReceiver extends CMbObject {
   
   function updateFormFields() {
     parent::updateFormFields();
-
+        
+    $this->_tag_patient  = CPatient::getTagIPP($this->group_id);  
+    $this->_tag_sejour   = CSejour::getTagNumDossier($this->group_id);
+    $this->_tag_mediuser = CMediusers::getTagMediusers($this->group_id);
+    $this->_tag_service  = CService::getTagService($this->group_id);
+    
     $this->_view = $this->libelle ? $this->libelle : $this->nom;
     $this->_type_echange = $this->_class_name;
   }
@@ -91,7 +96,7 @@ class CInteropReceiver extends CMbObject {
    * @return array CInteropReceiver collection 
    */
   static function getChildReceivers() {    
-    return CApp::getChildClasses("CInteropReceiver");
+    return CApp::getChildClasses("CInteropReceiver", array(), true);
   }
   
   /**

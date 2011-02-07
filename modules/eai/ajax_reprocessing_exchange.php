@@ -1,15 +1,20 @@
-<?php /* $Id $ */
-
+<?php 
 /**
- * @package Mediboard
- * @subpackage sip
- * @version $Revision: 7453 $
- * @author SARL OpenXtrem
- * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * Reprocessing exchange
+ *  
+ * @category EAI
+ * @package  Mediboard
+ * @author   SARL OpenXtrem <dev@openxtrem.com>
+ * @license  GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ * @version  SVN: $Id:$ 
+ * @link     http://www.mediboard.org
  */
 
 CCanDo::checkRead();
 
+CAppUI::setMsg("Cette fonctionnalité est désactivée pour le moment...", UI_MSG_ERROR);
+
+/*
 $echange_xml_id         = CValue::get("echange_xml_id");
 $echange_xml_classname  = CValue::get("echange_xml_classname");
 
@@ -36,10 +41,7 @@ else if ($echange_xml instanceof CPhastEchange) {
   
   
   CAppUI::setMsg("Message '$echange_xml->_class_name' retraité", UI_MSG_OK);
-}
-
-
-
+}*/
 
 echo CAppUI::getMsg();
 

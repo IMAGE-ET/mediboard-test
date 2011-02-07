@@ -21,13 +21,10 @@ class CHPrim21Reader {
   var $nom_fichier                = null;
   var $mot_de_passe               = null;
   var $id_emetteur                = null;
-  var $id_emetteur_desc           = null;
-  var $adresse_emetteur           = null;
-  var $type_message               = null;
+  var $sous_type                  = null;
   var $tel_emetteur               = null;
   var $carac_trans                = null;
   var $id_recepteur               = null;
-  var $id_recepteur_desc          = null;
   var $commentaire                = null;
   var $mode_traitement            = null;
   var $version                    = null;
@@ -51,7 +48,7 @@ class CHPrim21Reader {
     $this->_echange_hprim21->emetteur_id       = isset($dest_hprim21->_id) ? $dest_hprim21->_id : 0;
     // Read => Mediboard
     $this->_echange_hprim21->destinataire_id   = null;
-    $this->_echange_hprim21->type_message      = $this->type_message;
+    $this->_echange_hprim21->sous_type         = $this->sous_type;
     $this->_echange_hprim21->date_echange      = mbDateTime();
     if ($fileName)
       $this->_echange_hprim21->_message        = file_get_contents($fileName);

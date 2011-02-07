@@ -14,8 +14,9 @@
   <input type="hidden" name="del" value="1" />
 
   <button class="cancel notext" type="button" onclick="confirmDeletion(this.form, {
-      typeName:'{{tr}}{{$object->_class_name}}.one{{/tr}}',
-      objName:'{{$object->_view|smarty:nodefaults|JSAttribute}}'
+	    ajax:1, 
+      typeName:&quot;{{tr}}{{$object->_class_name}}.one{{/tr}}&quot;,
+      objName:&quot;{{$object->_view|smarty:nodefaults|JSAttribute}}&quot;
     })">
   </button>
 </form>

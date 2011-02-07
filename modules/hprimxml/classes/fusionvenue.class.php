@@ -130,7 +130,7 @@ class CHPrimXMLFusionVenue extends CHPrimXMLEvenementsPatients {
       if ($mbVenueEliminee->load($data['idCibleVenueEliminee'])) {
         if ($id400VenueEliminee->object_id && ($mbVenueEliminee->_id != $id400VenueEliminee->object_id)) {
           $commentaire = "L'identifiant source fait référence au séjour : $id400VenueEliminee->object_id et l'identifiant cible au séjour : $mbVenueEliminee->_id.";
-          return $domAcquittement->generateAcquittementsError("E141", $commentaire, $newVenue);
+          return $domAcquittement->generateAcquittementsError("E141", $commentaire, $mbVenueEliminee);
         }
       }
       if (!$mbVenueEliminee->_id) {

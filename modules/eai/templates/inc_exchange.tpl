@@ -9,7 +9,7 @@
 *}}
 
 <tr>
-  <td>
+  <td class="narrow">
    {{if $object->_self_emetteur}}
      <img src="images/icons/prev.png" alt="&lt;" />
    {{else}}
@@ -17,22 +17,28 @@
    {{/if}}
   </td>
   <td class="narrow">
-    {{mb_include module="system" template="inc_form_delete"}}
+    <form name="del{{$object->_guid}}" action="" method="post">
+      {{mb_class object=$object}}
+      {{mb_key object=$object}}
+      <input type="hidden" name="del" value="1" />
+    
+      <button class="cancel notext" type="button" onclick="confirmDeletion(this.form, {
+          ajax:1, 
+          typeName:&quot;{{tr}}{{$object->_class_name}}.one{{/tr}}&quot;,
+          objName:&quot;{{$object->_view|smarty:nodefaults|JSAttribute}}&quot;},
+          { onComplete: ExchangeDataFormat.refreshExchangesList.curry(getForm('filterExchange'))
+        })">
+      </button>
+    </form>
   </td>
   <td class="narrow">
-    <button type="button" onclick="viewEchange('{{$object->_id}}')" class="search">
+    <button class="change notext" onclick="ExchangeDataFormat.reprocessing('{{$object->_guid}}')" type="button">{{tr}}Reprocess{{/tr}}</button>
+  </td>
+  <td class="narrow">
+    <button type="button" onclick="ExchangeDataFormat.viewExchange('{{$object->_guid}}')" class="search">
      {{$object->_id|str_pad:6:'0':$smarty.const.STR_PAD_LEFT}}
     </button>
   </td>
-  {{if $conf.sip.server}}
-  <td class="narrow">
-    {{if $object->initiateur_id}}
-      <button type="button" onclick="location.href='?m='+App.m+'&amp;tab='+App.tab+'&amp;echange_xml_id={{$object->initiateur_id}}'" class="search">
-        {{$object->initiateur_id|str_pad:6:'0':$smarty.const.STR_PAD_LEFT}}
-      </button>
-    {{/if}}
-  </td>
-  {{/if}}
   <td class="narrow">
     {{$object->object_class}}
   </td>
@@ -64,9 +70,6 @@
      {{else}}
        {{mb_value object=$emetteur field="nom"}}
      {{/if}}
-     {{if $object->identifiant_emetteur}}
-      : {{$object->identifiant_emetteur|str_pad:6:'0':$smarty.const.STR_PAD_LEFT}}
-     {{/if}}
   </td>
   {{assign var=destinataire value=$object->_ref_destinataire}}
   <td class="narrow">
@@ -82,12 +85,12 @@
   <td class="{{if $object->date_echange}}ok{{else}}warning{{/if}} narrow">
     {{if $conf.sip.server == "1"}}
       {{if $object->_self_emetteur}}
-        <button class="change" onclick="sendMessage(App.m, '{{$object->_id}}', '{{$object->_class_name}}')" 
+        <button class="change" onclick="ExchangeDataFormat.sendMessage('{{$object->_id}}', '{{$object->_class_name}}')" 
           type="button" style="float:right">{{tr}}Send{{/tr}}</button>
       {{/if}}
     {{else}}
       {{if !($object->date_echange)}}
-        <button class="change" onclick="sendMessage(App.m, '{{$object->_id}}', '{{$object->_class_name}}')" 
+        <button class="change" onclick="ExchangeDataFormat.sendMessage('{{$object->_id}}', '{{$object->_class_name}}')" 
           type="button" style="float:right">{{tr}}Send{{/tr}}</button>
       {{/if}}
     {{/if}}
@@ -96,9 +99,6 @@
         {{mb_value object=$object field="date_echange" format=relative}}
       </label>
     </span>
-  </td>
-  <td class="narrow">
-    <button class="change" onclick="reprocessing('{{$object->_id}}', '{{$object->_class_name}}')" type="button">{{tr}}Reprocess{{/tr}}</button>
   </td>
   <td class="{{if !$object->statut_acquittement || 
                   ($object->statut_acquittement == 'erreur') || 
@@ -118,16 +118,16 @@
   <td class="{{if !$object->message_valide}}error{{/if}}">
    {{mb_value object=$object field="message_valide"}}
   </td>
-  <td>
-    <a target="blank" href="?m=webservices&a=download_echange_xml&echange_xml_guid={{$object->_guid}}&dialog=1&suppressHeaders=1&message=1" 
+  <td class="narrow {{if !$object->message_valide}}error{{/if}}">
+    <a target="blank" href="?m=eai&a=download_exchange&exchange_guid={{$object->_guid}}&dialog=1&suppressHeaders=1&message=1" 
       class="button modify notext"></a>
   </td>
   <td class="{{if !$object->acquittement_valide}}error{{/if}}">
    {{mb_value object=$object field="acquittement_valide"}}
   </td>
-  <td>
+  <td class="narrow {{if !$object->acquittement_valide}}error{{/if}}">
     {{if $object->_acquittement}}
-      <a target="blank" href="?m=webservices&a=download_echange_xml&echange_xml_guid={{$object->_guid}}&dialog=1&suppressHeaders=1&ack=1" 
+      <a target="blank" href="?m=eai&a=download_exchange&exchange_guid={{$object->_guid}}&dialog=1&suppressHeaders=1&ack=1" 
         class="button modify notext"></a>
     {{/if}}
   </td>

@@ -12,8 +12,8 @@ CAppUI::loadClass('CEchangeXML');
 
 class CEchangeHprim extends CEchangeXML {
 	static $messages = array(
-	   "pmsi"     => "CHPrimXMLEvenementsServeurActivitePmsi", 
-		 "patients" => "CHPrimXMLEvenementsPatients"  
+		 "patients" => "CHPrimXMLEvenementsPatients",
+	   "pmsi"     => "CHPrimXMLEvenementsServeurActivitePmsi" 
 	);
 	
   // DB Table key
@@ -45,17 +45,60 @@ class CEchangeHprim extends CEchangeXML {
     return $backProps;
   }
   
+  function loadRefsBack() {
+    parent::loadRefsBack();
+    
+    $this->loadRefNotifications();
+  }
+  
   function loadRefNotifications(){
     $this->_ref_notifications = $this->loadBackRefs("notifications");
   }
   
+  function getErrors() {
+    if ($this->_message !== null) {
+      $domGetEvenement = null;
+      $this->type == "patients" ?
+        $domGetEvenement = new CHPrimXMLEvenementsPatients() : null;
+      $this->type == "pmsi" ?
+        $domGetEvenement = new CHPrimXMLEvenementsServeurActivitePmsi::$evenements[$this->sous_type] : null;
+        
+      $domGetEvenement->loadXML($this->_message);
+      $domGetEvenement->formatOutput = true;
+
+      $errors = explode("\n", utf8_decode($domGetEvenement->schemaValidate(null, true, false)));
+      $this->_doc_errors_msg = array_filter($errors);
+      
+      $this->_message = utf8_encode($domGetEvenement->saveXML());
+    } 
+    
+    if ($this->_acquittement !== null) {
+      $this->type == "patients" ?
+        $domGetAcquittement = new CHPrimXMLAcquittementsPatients() : null;
+      $this->type == "pmsi" ?
+        $domGetAcquittement = new CHPrimXMLAcquittementsServeurActivitePmsi::$evenements[$this->sous_type] : null;
+      $domGetAcquittement->loadXML($this->_acquittement);
+      $domGetAcquittement->formatOutput = true; 
+      $errors = explode("\n", utf8_decode($domGetAcquittement->schemaValidate(null, true, false)));
+      $this->_doc_errors_ack = array_filter($errors);
+          
+      $this->_acquittement = utf8_encode($domGetAcquittement->saveXML());
+    }
+  }
+  
   function getObservations($display_errors = false) {
     if ($this->_acquittement) {
-      $domGetAcquittement = new CHPrimXMLAcquittementsPatients();
-      $domGetAcquittement->loadXML($this->_acquittement);
-      $doc_valid = $domGetAcquittement->schemaValidate(null, false, false);
-      if ($doc_valid) {    
-        return $this->_observations = $domGetAcquittement->getAcquittementObservationPatients();
+      if ($this->type == "patients") {
+        $domGetAcquittement = new CHPrimXMLAcquittementsPatients();
+        $domGetAcquittement->loadXML($this->_acquittement);
+        $doc_valid = $domGetAcquittement->schemaValidate(null, false, false);
+        if ($doc_valid) {    
+          return $this->_observations = $domGetAcquittement->getAcquittementObservationPatients();
+        }
+      }
+      /* @todo a remplir ... */
+      if ($this->type == "pmsi") {
+        return $this->_observations = array();
       }
     }
   }

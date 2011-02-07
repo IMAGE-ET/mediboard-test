@@ -22,11 +22,6 @@ refreshEchange = function(echange_hprim21_id){
   url.addParam("echange_hprim21_id", echange_hprim21_id);
   url.requestUpdate("echange_"+echange_hprim21_id);
 }
-
-function changePage(page) {
-  $V(getForm('filterEchange').page,page);
-}
-
 </script>
 
 <table class="main">  

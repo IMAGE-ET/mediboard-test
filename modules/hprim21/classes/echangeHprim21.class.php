@@ -11,6 +11,12 @@
 CAppUI::requireModuleClass("eai", "exchange_data_format");
 
 class CEchangeHprim21 extends CExchangeTabular {
+  static $messages = array(
+     "L" => "CHprim21Liaison", 
+     "C" => "CHprim21Liaison",
+     "R" => "CHprim21Liaison"  
+  );
+  
   // DB Table key
   var $echange_hprim21_id = null;
 
