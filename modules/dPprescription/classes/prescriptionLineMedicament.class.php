@@ -226,12 +226,9 @@ class CPrescriptionLineMedicament extends CPrescriptionLine {
 
     $this->_nb_alertes = 0;
 		$this->loadRefProduit();
-		$this->_ref_produit->loadDCIFromProduit();
-		$this->_dci_view = "";
-
-		if ($this->_ref_produit->_ref_DCI->code_classe)
-		  $this->_dci_view = "{$this->_ref_produit->_ref_DCI->libelle_classe} {$this->_ref_produit->dosage}";
-
+		
+		$this->_dci_view = $this->_ref_produit->loadDCIViewFromProduit();
+		
 		$this->_view = $this->_ref_produit->libelle;
     $this->_commercial_view = $this->_ref_produit->nom_commercial;
     

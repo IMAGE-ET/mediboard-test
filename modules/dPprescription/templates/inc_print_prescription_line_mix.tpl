@@ -28,14 +28,20 @@
 	    {{/if}}
 	  {{/if}}
 	{{/if}}
-	</strong>
+	</strong><br/>
 	{{if $perf->commentaire}}
     ({{$perf->commentaire}})
   {{/if}}
 	<ul>
 	  {{foreach from=$perf->_ref_lines item=_line}}
 	  <li>
-	    <strong>{{$_line->_ucd_view}}</strong>: {{$_line->_posologie}}
+	    <strong>
+        {{if $dci}}
+          {{$_line->_dci_view}}
+        {{else}}
+          {{$_line->_view}}
+        {{/if}}
+      </strong>: {{$_line->_posologie}}
 	  </li>  
 	  {{/foreach}}
 	</ul>

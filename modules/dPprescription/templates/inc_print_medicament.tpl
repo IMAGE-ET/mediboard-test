@@ -11,7 +11,12 @@
 {{if !$med->_protocole}}
 <!-- Affichage normal -->
 <li>{{if !$praticien->_id}}({{$med->_ref_praticien->_view}}){{/if}}
-  <strong>{{$med->_ucd_view}} - {{$med->_forme_galenique}} {{if $med->voie}}({{$med->voie}}){{/if}} {{if $med->conditionnel}}(Conditionnel){{/if}}</strong>
+  <strong>
+    {{if $dci}}
+      {{$med->_dci_view}}
+    {{else}}
+      {{$med->_ucd_view}}
+    {{/if}} - {{$med->_forme_galenique}} {{if $med->voie}}({{$med->voie}}){{/if}} {{if $med->conditionnel}}(Conditionnel){{/if}}</strong>
   <ul>
     {{if $med->_ref_prises|@count || $med->_duree_prise || $med->date_arret || $med->_specif_prise}}
     <li>
@@ -32,14 +37,7 @@
 		    (Médicament arrêté le {{$med->date_arret|date_format:"%d/%m/%Y"}}) 
 		  {{/if}}
 		  
-		  <!-- Commentaire -->
-		  {{if $med->commentaire}}
-		  <em>, {{if $print}}
-              {{$med->commentaire|escape:"html"}}
-            {{else}}
-              {{$med->commentaire}}
-            {{/if}}</em>
-		  {{/if}}
+		  
 		  
 		  <!-- Remarque sur la prise -->
 		  {{if $med->_specif_prise && $med->_ref_prises|@count}}
@@ -50,6 +48,14 @@
                 {{/if}}
 		  {{/if}}
     </li>
+    <!-- Commentaire -->
+      {{if $med->commentaire}}
+      <em>{{if $print}}
+              {{$med->commentaire|escape:"html"}}
+            {{else}}
+              {{$med->commentaire}}
+            {{/if}}</em>
+      {{/if}}
     {{/if}}
   </ul>
 </li>

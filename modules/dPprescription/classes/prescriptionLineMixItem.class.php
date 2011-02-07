@@ -35,6 +35,7 @@ class CPrescriptionLineMixItem extends CMbObject {
   var $_ratio_administration_dispensation = null;
   var $_quantite_dispensation = null;
   var $_ucd_view = null;
+  var $_dci_view = null;
   var $_forme_galenique = null;
   var $_posologie = null;
   var $_unite_administration = null;
@@ -95,6 +96,8 @@ class CPrescriptionLineMixItem extends CMbObject {
     }
 		
     $this->loadRefProduit();
+    $this->_dci_view = $this->_ref_produit->loadDCIViewFromProduit();
+    
     $this->_forme_galenique = $this->_ref_produit->forme;
     $this->_ucd_view = "{$this->_ref_produit->libelle_abrege} {$this->_ref_produit->dosage}";
     $this->_view = "$this->_ucd_view $this->_forme_galenique";
