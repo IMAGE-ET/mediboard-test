@@ -2258,8 +2258,10 @@ class CMbObject {
   	$this->_history = array();
   	$this->loadLogs();
   	$clone = $this->getDBFields();
+		
   	foreach($this->_ref_logs as $_log) {
       $this->_history[$_log->_id] = $clone;
+			
       $_log->getOldValues();
       foreach($_log->_old_values as $_old_field => $_old_value) {
       	$clone[$_old_field] = $_old_value;

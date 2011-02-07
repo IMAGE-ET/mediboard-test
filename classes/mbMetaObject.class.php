@@ -36,7 +36,7 @@ class CMbMetaObject extends CMbObject {
    */
   function loadTargetObject($cache = true) {
     if ($this->_ref_object || !$this->object_class) {
-      return;
+      return $this->_ref_object;
     }
     
     if (!class_exists($this->object_class)) {
@@ -60,6 +60,8 @@ class CMbMetaObject extends CMbObject {
       $this->_ref_object->load(null);
       $this->_ref_object->_view = "Element supprimé";
     }
+		
+		return $this->_ref_object;
   }
     
   function loadRefsFwd() {	

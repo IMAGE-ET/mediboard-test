@@ -31,6 +31,8 @@ class CUserLog extends CMbMetaObject {
   var $_fields = null;
   var $_old_values = null;
   var $_ref_user = null;
+  var $_canUndo = null;
+  var $_undo = null;
   
   var $_merged_ids = null; // Tableau d'identifiants des objets fusionnés
 
@@ -73,6 +75,8 @@ class CUserLog extends CMbMetaObject {
   }
   
   function getOldValues() {
+  	$this->completeField("extra");
+		
   	$this->_old_values = array();
     if ($this->extra && ($this->type === "store" || $this->type === "merge")) {
       $this->_old_values = (array) json_decode($this->extra);
@@ -90,6 +94,14 @@ class CUserLog extends CMbMetaObject {
   	$this->loadRefUser();
   }
   
+	function loadView(){
+		parent::loadView();
+		
+		$this->getOldValues();
+		$this->canUndo();
+		$this->loadTargetObject()->loadHistory();
+	}
+	
   function loadMergedIds(){
     if ($this->type === "merge") {
       $date_max = mbDateTime("+3 seconds", $this->date);
@@ -105,5 +117,67 @@ class CUserLog extends CMbMetaObject {
       }
     }
   }
+	
+	function store(){
+		if ($msg = $this->check()) {
+			return $msg;
+		}
+    
+    if ($this->_undo) {
+			$this->_undo = null;
+			return $this->undo();
+    }
+		
+		return parent::store();
+	}
+  
+  function canDeleteEx(){
+    if (!$this->canEdit() || !$this->_ref_module->canAdmin()) {
+      return false;
+    }
+    
+    return parent::canDeleteEx();
+  }
+	
+	function canUndo(){
+		$this->completeField("type", "extra");
+		
+		if (!$this->_id || ($this->type != "store") || ($this->extra == null) || !$this->canEdit() || !$this->_ref_module->canAdmin()) {
+			return $this->_canUndo = false;
+		}
+		
+		$this->completeField("object_id", "object_class");
+		
+		$where = array(
+		  "object_id"           => "= '$this->object_id'",
+			"object_class"        => "= '$this->object_class'",
+			"{$this->_spec->key}" => "> $this->_id",
+		);
+		
+		return $this->_canUndo = ($this->countList($where) == 0);
+	}
+	
+	function undo(){
+		if (!$this->canUndo()) {
+			return "CUserLog-undo-ko";
+		}
+		
+		$object = $this->loadTargetObject();
+		$object->_spec->loggable = false;
+		
+		$this->getOldValues();
+		
+		foreach($this->_old_values as $_field => $_value) {
+			$object->$_field = $_value;
+		}
+		
+		$msg = $object->store();
+    $object->_spec->loggable = true;
+		
+		if ($msg) {
+			return $msg;
+		}
+		
+		return $this->delete();
+	}
 }
-?>

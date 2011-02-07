@@ -46,7 +46,11 @@
 	  <td rowspan="{{$field_count}}" style="text-align: center;">
 	    {{mb_ditto name=time value=$_log->date|date_format:$conf.time}}
 	  </td>
-	  <td rowspan="{{$field_count}}" {{if $_log->type != "store" && $object->_id}} colspan="4" {{/if}}>{{mb_value object=$_log field=type}}</td>
+	  <td rowspan="{{$field_count}}" {{if $_log->type != "store" && $object->_id}} colspan="4" {{/if}}>
+		  <span onmouseover="ObjectTooltip.createEx(this, '{{$_log->_guid}}')">
+			  {{mb_value object=$_log field=type}}
+			</span>
+	  </td>
 		
     <!-- Valeurs de champs-->
     {{if $object->_id}}
@@ -74,9 +78,9 @@
 	    {{/foreach}}
 		{{else}}
       <td class="text">
-      {{if $_log->object_class|strpos:"CExObject_" === false}} {{* Because the object con't be instanciated *}}
+      {{if $_log->object_class|strpos:"CExObject_" === false}} {{* Because the object can't be instanciated *}}
         {{foreach from=$_log->_fields item=_field name=field}}
-          {{mb_label class=$_log->object_class field=$_field}}
+         {{mb_label class=$_log->object_class field=$_field}} 
           {{if !$smarty.foreach.field.last}} - {{/if}}
   			{{/foreach}}
       {{/if}}

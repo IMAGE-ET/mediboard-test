@@ -51,7 +51,7 @@ input[type=password],
 input[type=file],
 textarea {
   -webkit-border-radius: 0;
-  background-color: white;
+  -webkit-appearance: none; /* To remov ethe "shadow" on iPad" */
 }
 
 input[type=text], 
@@ -474,6 +474,10 @@ button.erase:before, a.button.erase:before {
 
 button.new-lightning:before, a.button.new-lightning:before {
   content: url(images/buttons/new-lightning.png);
+}
+
+button.undo:before, a.button.undo:before {
+  content: url(images/buttons/undo.png);
 }
 
 button.loading:before, a.button.loading:before {
