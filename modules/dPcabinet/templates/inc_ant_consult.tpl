@@ -167,10 +167,10 @@ Main.add(function () {
 <table class="form">
   <tr>
     <td>
-      <div class="small-info text" style="cursor:pointer" onclick="(new Url('dPcompteRendu', 'vw_aides_saisie_help')).popup(500, 400, 'Aide à la saisie');">
+      <div class="small-info text">
         <strong>Amélioration des aides à la saisie</strong><br />
-        Les aides à la saisie ont évoluées pour vous en simplifier l'utilisation.
-        Pour en savoir plus, cliquez ici
+        Les aides à la saisie ont évolué pour vous en simplifier l'utilisation.<br />
+        Pour en savoir plus, <a href="#1" onclick="(new Url('dPcompteRendu', 'vw_aides_saisie_help')).popup(500, 400, 'Aide à la saisie');">cliquez ici</a>
       </div>
     </td>
   </tr>
