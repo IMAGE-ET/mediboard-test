@@ -51,9 +51,9 @@ class CUserLog extends CMbMetaObject {
     $specs["user_id"]      = "ref notNull class|CUser";
     $specs["date"]         = "dateTime notNull";
     $specs["type"]         = "enum notNull list|create|store|merge|delete";
-    $specs["fields"]       = "text";
+    $specs["fields"]       = "text show|0";
     $specs["ip_address"]   = "ipAddress";
-    $specs["extra"]        = "text";
+    $specs["extra"]        = "text show|0";
 
     $specs["_date_min"]    = "dateTime";
     $specs["_date_max"]    = "dateTime moreEquals|_date_min";
