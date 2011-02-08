@@ -141,7 +141,6 @@ else {
 }
 
 if ($stream) {
-  mbTrace("passage",'',1);
   $file->streamFile();
   CApp::rip();
 }
