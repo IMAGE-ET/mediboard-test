@@ -87,7 +87,7 @@ Main.add( function(){
 
 {{mb_ternary var=gestionFSE test=$consult->sejour_id value=0 other=$app->user_prefs.GestionFSE}}
 
-<table class="layout" style="width: 100%">
+<table class="layout main">
   <tr>
     {{if $gestionFSE}}
     <td class="halfPane">

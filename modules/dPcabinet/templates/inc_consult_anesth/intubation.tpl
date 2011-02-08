@@ -110,11 +110,11 @@ Main.add(function () {
     <td>
       <fieldset>
         <legend>Conditions d'intubation</legend>
-        <table class="layout" style="width: 100%">
+        <table class="layout main">
           <tr>
             <td colspan="2">
               <button class="cancel" type="button" style="float: right;" onclick="resetIntubation(this.form)">{{tr}}Reset{{/tr}}</button>
-              <table class="layout" style="width: 100%">
+              <table class="layout main">
                 <tr>
                   {{foreach from=$consult_anesth->_specs.mallampati->_locales key=curr_mallampati item=trans_mallampati}}
                   <td class="button">

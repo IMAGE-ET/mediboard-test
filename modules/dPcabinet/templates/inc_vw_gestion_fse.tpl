@@ -89,13 +89,13 @@ Intermax.ResultHandler["Consulter FSE"] = Intermax.ResultHandler["Formater FSE"]
 Intermax.Triggers['Formater FSE'].aActes = {{$consult->_fse_intermax|@json}};
 </script>
 
-<table class="layout" style="width: 100%">
+<table class="layout main">
   <!-- Feuille de soins -->
   <tr>
     <td colspan="2">
       <fieldset>
         <legend>{{tr}}CLmFSE{{/tr}}</legend>
-          <table class="layout" style="width: 100%">
+          <table class="layout main">
             <tr>
               <td class="text">
                 {{if !$patient->_id_vitale || !$praticien->_id_cps}}

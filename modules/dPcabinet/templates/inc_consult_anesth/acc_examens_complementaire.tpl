@@ -72,7 +72,7 @@ Main.add(function () {
       {{mb_field object=$consult field="consultation_id" hidden=1}}
       <fieldset>
         <legend>{{tr}}CExamComp{{/tr}}</legend>
-          <table class="layout" style="width: 100%">
+          <table class="layout main">
             <tr>
               <td>
                 {{mb_field object=$examComp field=realisation}}
@@ -99,7 +99,7 @@ Main.add(function () {
       {{mb_key object=$consult_anesth}}
       <fieldset>
         <legend>Résultats d'analyse</legend>
-        <table class="layout" style="width: 100%">
+        <table class="layout main">
           <tr>
             <th>{{mb_label object=$consult_anesth field="date_analyse"}}</th>
             <td>
@@ -210,7 +210,7 @@ Main.add(function () {
           </tr>
         </table>
       </fieldset>
-      <table class="layout" style="width: 100%">
+      <table class="layout main">
         <tr>
           <td class="halfPane">
             <fieldset>

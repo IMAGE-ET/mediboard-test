@@ -197,7 +197,7 @@ Main.add(function () {
         <input type="hidden" name="_sejour_id" value="{{$sejour_id}}" />
         {{/if}}
   
-          <table class="layout" style="width: 100%">
+          <table class="layout main">
             <tr>
               {{if $app->user_prefs.showDatesAntecedents}}
                 <th style="height: 1%">{{mb_label object=$antecedent field=date}}</th>
@@ -236,7 +236,7 @@ Main.add(function () {
       {{if $isPrescriptionInstalled || $conf.dPpatients.CTraitement.enabled}}
       <fieldset>
         <legend>Traitements personnels</legend>
-        <table class="layout" style="width: 100%;">
+        <table class="layout main">
           <tr>
             <td class="text">
               <ul id="tab_traitements_perso" class="control_tabs small">
@@ -421,7 +421,7 @@ Main.add(function () {
           </script> 
         </form>
         
-        <table class="layout" style="width: 100%">
+        <table class="layout main">
         {{foreach from=$patient->_static_cim10 key=cat item=curr_cat}}
           <tr id="category{{$cat}}-trigger">
             <td>{{$cat}}</td>

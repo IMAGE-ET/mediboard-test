@@ -37,7 +37,7 @@ Main.add(function () {
         <input type="hidden" name="del" value="0" />
         <input type="hidden" name="dosql" value="do_consult_anesth_aed" />
         {{mb_key object=$consult_anesth}}
-        <table class="layout" style="width: 100%">
+        <table class="layout main">
           <tr>
             <td class="halfPane">
               <fieldset>

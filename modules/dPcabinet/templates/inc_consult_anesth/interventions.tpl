@@ -127,7 +127,7 @@
   <input type="hidden" name="dosql" value="do_planning_aed" />
   {{mb_key object=$operation}}
   
-  <table class="layout">
+  <table class="layout main">
     {{if $conf.dPplanningOp.COperation.verif_cote && ($operation->cote == "droit" || $operation->cote == "gauche")}}
       <tr>
         <th>{{mb_label object=$operation field="cote_consult_anesth"}} :</th>

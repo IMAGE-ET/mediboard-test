@@ -64,7 +64,7 @@ Main.add(function () {
     <td>
       <fieldset>
         <legend>Intervention</legend>
-        <table class="layout" style="width: 100%">
+        <table class="layout main">
           <tr>
             <td class="halfPane">
               {{if $operation->_id}}
@@ -117,7 +117,7 @@ Main.add(function () {
         <input type="hidden" name="del" value="0" />
         <input type="hidden" name="dosql" value="do_consult_anesth_aed" />
         {{mb_key object=$consult_anesth}}
-        <table class="layout" style="width: 100%">
+        <table class="layout main">
           <tr>
             <td class="halfPane">
               {{mb_label object=$consult_anesth field="prepa_preop"}}
@@ -150,7 +150,7 @@ Main.add(function () {
       {{mb_field object=$consult_anesth field="consultation_anesth_id" hidden=1}}
       <fieldset>
         <legend>{{mb_label object=$techniquesComp field="technique"}}</legend>
-        <table class="layout" style="width: 100%">
+        <table class="layout main">
           <tr>
             <td class="halfPane">
               <input type="hidden" name="_hidden_technique" value="" />

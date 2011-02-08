@@ -62,7 +62,7 @@ Main.add(function () {
       {{assign var=exam_count value=$consult->_exam_fields|@count}}
       {{math assign=text_rows equation="12/round(c/2)" c=$exam_count}}
       
-      <table class="layout" style="width: 100%;">
+      <table class="layout main">
         {{foreach name=exam_fields from=$consult->_exam_fields key=current item=field}}
         {{assign var=last value=$smarty.foreach.exam_fields.last}}
         
