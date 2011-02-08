@@ -136,6 +136,9 @@ class CDoObjectAddEdit {
     
     $fields = $this->_obj->getValues();
     $fields = array_map_recursive("utf8_encode", $fields);
+    $fields["_guid"] = $this->_obj->_guid;
+    $fields["_class_name"] = $this->_obj->_class_name;
+    
     $json = @json_encode($fields);
     
     $id = $this->_obj->_id ? $this->_obj->_id : 0;
