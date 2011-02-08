@@ -17,12 +17,13 @@ $salle_id      = CValue::getOrSession("salle_id", 0);
 $bloc_id       = CValue::getOrSession("bloc_id");
 $discipline_id = CValue::getOrSession("discipline_id", 0);
 $codes_ccam    = strtoupper(CValue::getOrSession("codes_ccam", ""));
+$hors_plage    = CValue::getOrSession("hors_plage", 1);
 
 // map Graph Interventions
 CAppUI::requireModuleFile("dPstats", "graph_activite_zoom");
 
 $graphs = array(
-  graphActiviteZoom($date, $prat_id, $salle_id, $bloc_id, $discipline_id, $codes_ccam),
+  graphActiviteZoom($date, $prat_id, $salle_id, $bloc_id, $discipline_id, $codes_ccam, $hors_plage),
 );
 
 // Création du template

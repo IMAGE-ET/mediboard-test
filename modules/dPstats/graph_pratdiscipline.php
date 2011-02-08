@@ -8,7 +8,7 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
  */
 
-function graphPraticienDiscipline($debut = null, $fin = null, $prat_id = 0, $salle_id = 0, $bloc_id = 0, $discipline_id = 0, $codeCCAM = "", $type_hospi = "") {
+function graphPraticienDiscipline($debut = null, $fin = null, $prat_id = 0, $salle_id = 0, $bloc_id = 0, $discipline_id = 0, $codeCCAM = "", $type_hospi = "", $hors_plage) {
   if (!$debut) $debut = mbDate("-1 YEAR");
   if (!$fin) $fin = mbDate();
   
@@ -89,10 +89,55 @@ function graphPraticienDiscipline($debut = null, $fin = null, $prat_id = 0, $sal
     $query .= "\nGROUP BY mois ORDER BY orderitem";
   
     $result = $user->_spec->ds->loadlist($query);
+    
+    if ($hors_plage) {
+      $query_hors_plage = "SELECT COUNT(operations.operation_id) AS total,
+      DATE_FORMAT(operations.date, '%m/%Y') AS mois,
+      DATE_FORMAT(operations.date, '%Y%m') AS orderitem,
+      users_mediboard.user_id
+      FROM operations
+      INNER JOIN sallesbloc ON operations.salle_id = sallesbloc.salle_id
+      LEFT JOIN sejour ON operations.sejour_id = sejour.sejour_id
+      INNER JOIN users_mediboard ON operations.chir_id = users_mediboard.user_id
+      LEFT JOIN users ON users_mediboard.user_id = users.user_id
+      WHERE
+        operations.plageop_id IS NULL AND
+        operations.date IS NOT NULL AND
+        sejour.group_id = '".CGroups::loadCurrent()->_id."' AND
+        operations.date BETWEEN '$debut' AND '$fin' AND 
+        operations.annulee = '0' AND 
+        users_mediboard.user_id = '$user->_id'";
+  
+      if($type_hospi) {
+        $query_hors_plage .= "\nAND sejour.type = '$type_hospi'";
+      }
+      if($discipline_id) $query_hors_plage .= "\nAND users_mediboard.discipline_id = '$discipline_id'";
+      if($codeCCAM)      $query_hors_plage .= "\nAND operations.codes_ccam LIKE '%$codeCCAM%'";
+      
+      if($salle_id) {
+        $query_hors_plage .= "\nAND sallesbloc.salle_id = '$salle_id'";
+      } elseif($bloc_id) {
+        $query_hors_plage .= "\nAND sallesbloc.bloc_id = '$bloc_id'";
+      }
+      
+      $query_hors_plage .= "\nGROUP BY mois ORDER BY orderitem";
+    
+      $result_hors_plage = $user->_spec->ds->loadlist($query_hors_plage);
+    }
+    
     foreach($ticks as $i => $tick) {
       $f = true;
       foreach($result as $r) {
-        if($tick[1] == $r["mois"]) {
+        if ($tick[1] == $r["mois"]) {
+          if ($hors_plage) {
+            foreach($result_hors_plage as &$_r_h) {
+              if ($tick[1] == $_r_h["mois"]) {
+                $r["total"] += $_r_h["total"];
+                unset($_r_h);
+                break;
+              }
+            }
+          }
           $serie['data'][] = array($i, $r["total"]);
           $serie_total["data"][$i][1] += $r["total"];
           $f = false;

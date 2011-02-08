@@ -21,6 +21,7 @@ function zoomGraphIntervention(date){
   url.addParam("codes_ccam"   , "{{$filter->codes_ccam|smarty:nodefaults|escape:"javascript"}}");
   url.addParam("discipline_id", "{{$filter->_specialite}}");
   url.addParam("size"         , 2);
+  url.addParam("hors_plage"   , $("bloc_hors_plage").value);
   url.popup(760, 400, "ZoomMonth");
 }
 {{/if}}
@@ -155,6 +156,9 @@ function drawGraphs(showLegend){
     <td colspan="6" class="button">
       <button class="search" type="submit">Afficher</button>
       <label><input type="checkbox" onclick="drawGraphs(this.checked)" checked="checked" /> Légende</label>
+      <label><input type="checkbox" name="hors_plage_view" {{if $hors_plage}}checked="true"{{/if}}
+        onchange="$V(this.form.hors_plage, this.checked ? 1 : 0)"/>Hors plage</label>
+      <input type="hidden" name="hors_plage" value="{{$hors_plage}}" />
     </td>
   </tr>
 </table>

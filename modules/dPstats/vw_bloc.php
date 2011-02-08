@@ -20,6 +20,8 @@ global $discipline_id, $codes_ccam;
 
 $type_view_bloc = CValue::getOrSession("type_view_bloc", "nbInterv");
 
+$hors_plage = CValue::getOrSession("hors_plage", 1);
+
 $debutact      = $filter->_date_min = CValue::getOrSession("_date_min", mbDate("-1 YEAR"));
 $rectif        = mbTransformTime("+0 DAY", $filter->_date_min, "%d")-1;
 $debutact      = $filter->_date_min = mbDate("-$rectif DAYS", $filter->_date_min);
@@ -45,6 +47,7 @@ CAppUI::requireModuleFile("dPstats", "graph_pratdiscipline");
 CAppUI::requireModuleFile("dPstats", "graph_patjoursalle");
 CAppUI::requireModuleFile("dPstats", "graph_op_annulees");
 CAppUI::requireModuleFile("dPstats", "graph_occupation_salle");
+CAppUI::requireModuleFile("dPstats", "graph_temps_salle");
 
 $user = new CMediusers;
 $listPrats = $user->loadPraticiens(PERM_READ);
@@ -74,16 +77,18 @@ $listDisciplines = $listDisciplines->loadUsedDisciplines();
 
 $graphs = array();
 if($type_view_bloc == "nbInterv") {
-  $graphs[] = graphActivite($debutact, $finact, $prat_id, $salle_id, $bloc_id, $discipline_id, $codes_ccam, $type_hospi);
-  $graphs[] = graphOpAnnulees($debutact, $finact, $prat_id, $salle_id, $bloc_id, $codes_ccam, $type_hospi);
+  $graphs[] = graphActivite($debutact, $finact, $prat_id, $salle_id, $bloc_id, $discipline_id, $codes_ccam, $type_hospi, $hors_plage);
+  $graphs[] = graphOpAnnulees($debutact, $finact, $prat_id, $salle_id, $bloc_id, $codes_ccam, $type_hospi, $hors_plage);
   if($discipline_id) {
-    $graphs[] = graphPraticienDiscipline($debutact, $finact, $prat_id, $salle_id, $bloc_id, $discipline_id, $codes_ccam, $type_hospi);
+    $graphs[] = graphPraticienDiscipline($debutact, $finact, $prat_id, $salle_id, $bloc_id, $discipline_id, $codes_ccam, $type_hospi, $hors_plage);
   }
 } else {
-  $listOccupation = graphOccupationSalle($debutact, $finact, $prat_id, $salle_id, $bloc_id, $discipline_id, $codes_ccam, $type_hospi);
+  $listOccupation = graphOccupationSalle($debutact, $finact, $prat_id, $salle_id, $bloc_id, $discipline_id, $codes_ccam, $type_hospi, $hors_plage);
   $graphs[] = $listOccupation["total"];
   $graphs[] = $listOccupation["moyenne"];
-  $graphs[] = graphPatJourSalle($debutact, $finact, $prat_id, $salle_id, $bloc_id, $discipline_id, $codes_ccam, $type_hospi);
+  $graphs[] = graphTempsSalle($debutact, $finact, $prat_id, $salle_id, $bloc_id, $discipline_id, $codes_ccam, $type_hospi, $hors_plage);
+  $graphs[] = graphPatJourSalle($debutact, $finact, $prat_id, $salle_id, $bloc_id, $discipline_id, $codes_ccam, $hors_plage);
+  
 }
 
 // Création du template
@@ -97,6 +102,7 @@ $smarty->assign("listBlocs"               , $listBlocs         );
 $smarty->assign("listBlocsForSalles"      , $listBlocsForSalles);
 $smarty->assign("bloc"                    , $bloc              );
 $smarty->assign("listDisciplines"         , $listDisciplines   );
+$smarty->assign("hors_plage"              , $hors_plage        );
 $smarty->assign("graphs"                  , $graphs            );
 
 $smarty->display("vw_bloc.tpl");

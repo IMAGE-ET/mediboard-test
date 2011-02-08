@@ -8,7 +8,7 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
  */
 
-function graphOpAnnulees($debut = null, $fin = null, $prat_id = 0, $salle_id = 0, $bloc_id = 0, $codeCCAM = "", $type_hospi = "") {
+function graphOpAnnulees($debut = null, $fin = null, $prat_id = 0, $salle_id = 0, $bloc_id = 0, $codeCCAM = "", $type_hospi = "", $hors_plage) {
   if (!$debut) $debut = mbDate("-1 YEAR");
   if (!$fin) $fin = mbDate();
   
@@ -75,10 +75,52 @@ function graphOpAnnulees($debut = null, $fin = null, $prat_id = 0, $salle_id = 0
                ORDER BY orderitem";
 
     $result = $prat->_spec->ds->loadlist($query);
+    
+    if ($hors_plage) {
+      $query_hors_plage = "SELECT COUNT(DISTINCT(operations.operation_id)) AS total,
+                DATE_FORMAT(operations.date, '%m/%Y') AS mois,
+                DATE_FORMAT(operations.date, '%Y-%m-01') AS orderitem
+              FROM operations
+              LEFT JOIN sejour ON operations.sejour_id = sejour.sejour_id
+              INNER JOIN sallesbloc ON operations.salle_id = sallesbloc.salle_id
+              LEFT JOIN user_log ON user_log.object_id = operations.operation_id
+                AND user_log.object_class = 'COperation'
+              WHERE sejour.group_id = '".CGroups::loadCurrent()->_id."'
+                AND operations.plageop_id IS NULL
+                AND operations.date IS NOT NULL
+                AND operations.date BETWEEN '$debut' AND '$fin'
+                AND user_log.type = 'store'
+                AND DATE(user_log.date) = operations.date
+                AND user_log.fields LIKE '%annulee%'
+                AND operations.annulee = '1'";
+  
+      if($type_hospi) {
+        $query_hors_plage .= "\nAND sejour.type = '$type_hospi'";
+      }
+      if($prat_id)  $query_hors_plage .= "\nAND operations.chir_id = '$prat_id'";
+      if($codeCCAM) $query_hors_plage .= "\nAND operations.codes_ccam LIKE '%$codeCCAM%'";
+  
+      $query_hors_plage .= "\nAND sallesbloc.salle_id = '$salle->_id'";
+    
+      $query_hors_plage .= "GROUP BY mois
+                 ORDER BY orderitem";
+  
+      $result_hors_plage = $prat->_spec->ds->loadlist($query_hors_plage);
+    }
+    
     foreach($ticks as $i => $tick) {
       $f = true;
       foreach($result as $r) {
-        if($tick[1] == $r["mois"]) {        
+        if($tick[1] == $r["mois"]) {
+          if ($hors_plage) {
+            foreach($result_hors_plage as &$_r_h) {
+              if ($tick[1] == $_r_h["mois"]) {
+                $r["total"] += $_r_h["total"];
+                unset($_r_h);
+                break;
+              }
+            }
+          }
           $serie["data"][] = array($i, $r["total"]);
           $serie_total["data"][$i][1] += $r["total"];
           $total += $r["total"];

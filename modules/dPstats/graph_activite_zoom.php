@@ -8,7 +8,7 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
  */
 
-function graphActiviteZoom($date, $prat_id = 0, $salle_id = 0, $bloc_id = 0, $discipline_id = 0, $codes_ccam = '') {
+function graphActiviteZoom($date, $prat_id = 0, $salle_id = 0, $bloc_id = 0, $discipline_id = 0, $codes_ccam = '', $hors_plage) {
   if (!$date) $date = mbTransformTime("+0 DAY", mbDate(), "%m/%Y");
 
   $prat = new CMediusers;
@@ -85,10 +85,47 @@ function graphActiviteZoom($date, $prat_id = 0, $salle_id = 0, $bloc_id = 0, $di
     
     $result = $salle->_spec->ds->loadlist($query);
     
+    if ($hors_plage) {
+      $query_hors_plage = "SELECT COUNT(operations.operation_id) AS total,
+      DATE_FORMAT(operations.date, '%d') AS jour,
+      sallesbloc.nom AS nom
+      FROM operations
+      INNER JOIN sallesbloc ON operations.salle_id = sallesbloc.salle_id
+      INNER JOIN users_mediboard ON operations.chir_id = users_mediboard.user_id
+      WHERE
+        operations.plageop_id IS NULL AND
+        operations.date IS NOT NULL AND
+        operations.date BETWEEN '$debut' AND '$fin' AND 
+        operations.annulee = '0' AND 
+        sallesbloc.salle_id = '$salle->_id'";
+        
+      if($prat_id && !$prat->isFromType(array("Anesthésiste"))) {
+        $query_hors_plage .= "\nAND operations.chir_id = '$prat_id'";
+      }
+      if($prat_id && $prat->isFromType(array("Anesthésiste"))) {
+        $query_hors_plage .= "\nAND operations.anesth_id = '$prat_id'"; 
+      }
+      if($discipline_id) $query_hors_plage .= "\nAND users_mediboard.discipline_id = '$discipline_id'";
+      if($codes_ccam)    $query_hors_plage .= "\nAND operations.codes_ccam LIKE '%$codes_ccam%'";
+      
+      $query_hors_plage .= "\nGROUP BY jour ORDER BY jour";
+      
+      $result_hors_plage = $salle->_spec->ds->loadlist($query_hors_plage);
+    }
+    
     foreach($ticks2 as $i => $tick) {
       $f = true;
       foreach($result as $r) {
         if($tick[1] == $r["jour"]) {
+          if ($hors_plage) {
+            foreach($result_hors_plage as &$_r_h) {
+              if ($tick[1] == $_r_h["jour"]) {
+                $r["total"] += $_r_h["total"];
+                unset($_r_h);
+                break;
+              }
+            }
+          }
           $serie["data"][] = array($i, $r["total"]);
           $serie_total["data"][$i][1] += $r["total"];
           $total += $r["total"];
