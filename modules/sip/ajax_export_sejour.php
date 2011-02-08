@@ -48,16 +48,14 @@ if ($export_id_max = $sip_config["export_id_max"]) {
   $where[] = $sejour->_spec->key." <= '$export_id_max'";
 }
 
-if (preg_match("/(\d{4})-(\d{2})-(\d{2})/", $sip_config["export_date_min"])) {
-  $where['entree_prevue'] = " >= '".$sip_config["export_date_min"]."'";
-}
-
-if (preg_match("/(\d{4})-(\d{2})-(\d{2})/", $sip_config["export_date_max"])) {
-  $where['sortie_prevue'] = " <= '".$sip_config["export_date_max"]."'";
+if (preg_match("/(\d{4})-(\d{2})-(\d{2})/", $sip_config["export_date_min"]) && 
+    preg_match("/(\d{4})-(\d{2})-(\d{2})/", $sip_config["export_date_max"])) {
+  $where['entree_prevue'] = " BETWEEN '".$sip_config["export_date_min"]."' AND '".$sip_config["export_date_max"]."'";
 }
 
 // Comptage
 $count = $sejour->countList($where);
+
 $max = $sip_config["export_segment"];
 $max = min($max, $count);
 CAppUI::stepAjax("Export de $max sur $count objets de type 'CSejour' à partir de l'ID '$idMin'", UI_MSG_OK);
