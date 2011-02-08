@@ -297,9 +297,13 @@ class CSetuphprimxml extends CSetup {
               WHERE `type_echange` = 'hprimxml';"; 
     $this->addQuery($sql);
     
-    // Prochain upgrade supprimer les champs : destinataire et emetteur
+    $this->makeRevision("0.30");
     
-    $this->mod_version = "0.30";
+    $sql = "ALTER TABLE `destinataire_hprim_config`
+              ADD `type_sej_exte` VARCHAR (255);"; 
+    $this->addQuery($sql);
+    
+    $this->mod_version = "0.31";
   }
 }
 

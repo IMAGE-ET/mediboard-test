@@ -320,6 +320,7 @@ class CHPrimXMLEvenementsPatients extends CHPrimXMLEvenements {
       "type_sej_hospi"   => "comp",
       "type_sej_ambu"    => "ambu",
       "type_sej_urg"     => "urg",
+      "type_sej_exte"    => "exte",
       "type_sej_scanner" => "seances",
       "type_sej_chimio"  => "seances",
       "type_sej_dialyse" => "seances",

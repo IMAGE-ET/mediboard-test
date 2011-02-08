@@ -17,6 +17,7 @@ class CDestinataireHprimConfig extends CMbObject {
   var $type_sej_hospi       = null;
   var $type_sej_ambu        = null;
   var $type_sej_urg         = null;
+  var $type_sej_exte        = null;
   var $type_sej_scanner     = null;
   var $type_sej_chimio      = null;
   var $type_sej_dialyse     = null;
@@ -45,6 +46,7 @@ class CDestinataireHprimConfig extends CMbObject {
     $specs["type_sej_hospi"]                  = "str";
     $specs["type_sej_ambu"]                   = "str";
     $specs["type_sej_urg"]                    = "str";
+    $specs["type_sej_exte"]                   = "str";
     $specs["type_sej_scanner"]                = "str";
     $specs["type_sej_chimio"]                 = "str";
     $specs["type_sej_dialyse"]                = "str";
