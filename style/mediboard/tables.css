@@ -168,6 +168,10 @@ table.tbl a.action {
   display: inline-block;
 }
 
+table.tbl td.top {
+  vertical-align: top;
+}
+
 a.actionPat {
   display: inline;
   float: right;
