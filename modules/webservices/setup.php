@@ -68,8 +68,6 @@ function __construct() {
             ADD `last_response` MEDIUMTEXT;";
    $this->addQuery($sql);
    
-   $this->makeRevision("0.17");
-   
    $query = "CREATE TABLE IF NOT EXISTS `source_soap` (
               `source_soap_id` INT (11) UNSIGNED NOT NULL auto_increment PRIMARY KEY,
               `wsdl_mode` ENUM ('0','1') DEFAULT '1',
@@ -92,7 +90,9 @@ function __construct() {
     $query = "ALTER TABLE `source_soap` 
                 ADD `single_parameter` VARCHAR (255);";
     $this->addQuery($query);
-     
+   
+   $this->makeRevision("0.17");
+        
     $this->mod_version = "0.18";
   }
 }
