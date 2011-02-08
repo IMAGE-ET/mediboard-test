@@ -46,12 +46,12 @@ ExchangeDataFormat = {
   reprocessing : function(exchange_guid){
     var url = new Url("eai", "ajax_reprocessing_exchange");
     url.addParam("exchange_guid", exchange_guid);
-    url.requestUpdate("systemMsg", { onComplete:function() { 
-    	refreshExchange(exchange_guid) }});
+    url.requestUpdate("systemMsg", { onComplete:
+    	ExchangeDataFormat.refreshExchange.curry(exchange_guid) });
   },
 
-  refreshExchange : function(exchange_guid){
-    var url = new Url("eai", "ajax_refresh_message");
+  refreshExchange : function(exchange_guid){console.debug(exchange_guid);
+    var url = new Url("eai", "ajax_refresh_exchange");
     url.addParam("exchange_guid", exchange_guid);
     url.requestUpdate("exchange_"+exchange_guid);
   },
@@ -59,8 +59,8 @@ ExchangeDataFormat = {
   sendMessage : function(exchange_guid){
     var url = new Url("eai", "ajax_send_message");
     url.addParam("exchange_guid", exchange_guid);
-    url.requestUpdate("systemMsg", { onComplete:function() { 
-    	refreshExchange(exchange_guid) }});
+    url.requestUpdate("systemMsg", { onComplete:
+    	ExchangeDataFormat.refreshExchange.curry(exchange_guid) });
   },
 	
   changePage : function(page) {

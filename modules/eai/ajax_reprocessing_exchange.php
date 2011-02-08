@@ -12,36 +12,27 @@
 
 CCanDo::checkRead();
 
-CAppUI::setMsg("Cette fonctionnalité est désactivée pour le moment...", UI_MSG_ERROR);
+$exchange_guid = CValue::get("exchange_guid");
 
-/*
-$echange_xml_id         = CValue::get("echange_xml_id");
-$echange_xml_classname  = CValue::get("echange_xml_classname");
+// Chargement de l'échange demandé
+$object = new CMbObject();
+$exchange = $object->loadFromGuid($exchange_guid);
 
-// Chargement de l'objet
-$echange_xml = new $echange_xml_classname;
-$echange_xml->load($echange_xml_id);
-
-if ($echange_xml instanceof CEchangeHprim) {
-  $acquittement = CHprimSoapHandler::evenementPatient($echange_xml->_message);
+if ($exchange instanceof CEchangeHprim) {
+  $acquittement = CHprimSoapHandler::evenementPatient($exchange->_message);
 
   $domGetAcquittement = new CHPrimXMLAcquittementsPatients();
   $domGetAcquittement->loadXML($acquittement);
   $doc_valid = $domGetAcquittement->schemaValidate();
   if ($doc_valid) {
-    $echange_xml->statut_acquittement = $domGetAcquittement->getStatutAcquittementPatient();
+    $exchange->statut_acquittement = $domGetAcquittement->getStatutAcquittementPatient();
   }
-  $echange_xml->acquittement_valide = $doc_valid ? 1 : 0;
-  $echange_xml->_acquittement = $acquittement;
-  $echange_xml->store();
+  $exchange->acquittement_valide = $doc_valid ? 1 : 0;
+  $exchange->_acquittement = $acquittement;
+  $exchange->store();
   
-  CAppUI::setMsg("Message '$echange_xml->_class_name' retraité", UI_MSG_OK);
+  CAppUI::setMsg("Message '$exchange->_class_name' retraité", UI_MSG_OK);
 }
-else if ($echange_xml instanceof CPhastEchange) {
-  
-  
-  CAppUI::setMsg("Message '$echange_xml->_class_name' retraité", UI_MSG_OK);
-}*/
 
 echo CAppUI::getMsg();
 

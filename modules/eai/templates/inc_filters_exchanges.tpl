@@ -58,7 +58,7 @@ ExchangeDataFormat.evenements = {{$evenements|@json}};
             <th colspan="2">Type de message</th>
             <td colspan="2">
               <select class="str" name="type" onchange="ExchangeDataFormat.fillSelect(this, this.form.elements.evenement, '{{$mod_name}}')">
-                <option value="">&mdash; Liste des messages &mdash;</option>
+                <option value="">&mdash; Messages &mdash;</option>
                 {{foreach from=$messages key=_message item=_class_message}}
                   <option value="{{$_message}}"> {{tr}}{{$mod_name}}-msg-{{$_message}}{{/tr}}</option>
                 {{/foreach}}
@@ -69,13 +69,8 @@ ExchangeDataFormat.evenements = {{$evenements|@json}};
             <th colspan="2">Types d'événements</th>
             <td colspan="2">
               <select class="str" name="evenement">
-                <option value="">&mdash; Liste des événements &mdash;</option>
+                <option value="">&mdash; Événements &mdash;</option>
                 <option value="inconnu"> {{tr}}{{$mod_name}}-evt-choose{{/tr}} </option>
-                {{foreach from=$evenements.$msg_evenement key=_type_evenement item=_class_evenement}}
-                  <option value="{{$_type_evenement}}" {{if $type_evenement == $_type_evenement}}selected="selected"{{/if}}>
-                    {{tr}}{{$mod_name}}-evt_{{$msg_evenement}}-{{$_type_evenement}}{{/tr}}
-                  </option>
-                {{/foreach}}
               </select>
             </td>
           </tr>
