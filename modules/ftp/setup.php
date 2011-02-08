@@ -38,11 +38,11 @@ class CSetupftp extends CSetup {
   
     $query = "ALTER TABLE `source_ftp` 
                ADD `role` ENUM ('prod','qualif') NOT NULL DEFAULT 'qualif';";
-    $this->addQuery($query);
+    $this->addQuery($query, true);
     
     $query = "ALTER TABLE `source_ftp` 
                ADD `type_echange` VARCHAR (255);";
-    $this->addQuery($query);
+    $this->addQuery($query, true);
     
     $this->mod_version = "0.01";
   }

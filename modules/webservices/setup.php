@@ -77,22 +77,22 @@ function __construct() {
               `password` VARCHAR (50)
             ) TYPE=MYISAM;";
     $this->addQuery($query);
-        
+   
+    $this->makeRevision("0.17");
+
     $query = "ALTER TABLE `source_soap` 
                 ADD `role` ENUM ('prod','qualif') NOT NULL DEFAULT 'qualif';";
-    $this->addQuery($query);
+    $this->addQuery($query, true);
     
     $query = "ALTER TABLE `source_soap` 
                 ADD `evenement_name` VARCHAR (255),
                 ADD `type_echange` VARCHAR (255);";
-    $this->addQuery($query); 
+    $this->addQuery($query, true); 
 
     $query = "ALTER TABLE `source_soap` 
                 ADD `single_parameter` VARCHAR (255);";
-    $this->addQuery($query);
-   
-   $this->makeRevision("0.17");
-        
+    $this->addQuery($query, true);
+    
     $this->mod_version = "0.18";
   }
 }
