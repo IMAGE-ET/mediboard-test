@@ -157,7 +157,7 @@ Main.add(function () {
               {{mb_field object=$techniquesComp field="technique" rows="4"}}
               <button class="add" type="button" onclick="submitTech(this.form);">{{tr}}Add{{/tr}}</button>
             </td>
-            <td class="halfPane" id="listTech">
+            <td class="halfPane text" id="listTech">
               {{mb_include module=dPcabinet template=inc_consult_anesth/techniques_comp}}
             </td>
           </tr>
