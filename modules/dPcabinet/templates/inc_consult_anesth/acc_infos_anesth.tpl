@@ -154,8 +154,8 @@ Main.add(function () {
           <tr>
             <td class="halfPane">
               <input type="hidden" name="_hidden_technique" value="" />
-              {{mb_field object=$techniquesComp field="technique" rows="4" onblur="if(!$(this).emptyValue()){ submitTech(this.form);}"}}
-              <button class="add" type="button">{{tr}}Add{{/tr}}</button>
+              {{mb_field object=$techniquesComp field="technique" rows="4"}}
+              <button class="add" type="button" onclick="submitTech(this.form);">{{tr}}Add{{/tr}}</button>
             </td>
             <td class="halfPane" id="listTech">
               {{mb_include module=dPcabinet template=inc_consult_anesth/techniques_comp}}
