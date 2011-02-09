@@ -150,7 +150,7 @@ fieldset legend {
 	white-space: nowrap;
 }
 
-fieldset td.cancelled {
+table.layout td.cancelled {
 	background-color: #F00;
 }
 
