@@ -702,18 +702,28 @@ Element.findDuplicates = function(attr, tag) {
   return results;
 }
 
+Element._duplicates = [];
+
 Element.warnDuplicates = function(){
-  if (!(console.firebug || console._inspectorCommandLineAPI)) return;
+  if (!(console.firebug || (Preferences.INFOSYSTEM == 1))) return; // if("0") => true
   
   var dups;
   
   dups = Element.findDuplicates("id");
-  if (dups.length) {
+  if (dups.length && !Element._duplicates.intersect(dups).length) {
+    Element._duplicates = Element._duplicates.concat(dups);
     console.warn("Duplicates *[id]: ", dups);
   }
   
   dups = Element.findDuplicates("name", "form");
-  if (dups.length) {
+  if (dups.length && !Element._duplicates.intersect(dups).length) {
+    Element._duplicates = Element._duplicates.concat(dups);
     console.warn("Duplicates form[name]: ", dups);
+  }
+	
+	dups = $$("form form");
+  if (dups.length && !Element._duplicates.intersect(dups).length) {
+    Element._duplicates = Element._duplicates.concat(dups);
+    console.error("Nested form: ", dups);
   }
 }
