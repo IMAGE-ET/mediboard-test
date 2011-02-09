@@ -150,6 +150,10 @@ fieldset legend {
 	white-space: nowrap;
 }
 
+fieldset td.cancelled {
+	background-color: #F00;
+}
+
 label:hover,
 *[onmouseover] {
   border-bottom: 1px dotted #bbb;
