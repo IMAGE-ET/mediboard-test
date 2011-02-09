@@ -15,7 +15,7 @@
   </tr>
   
   <tr>
-    <td class="text">
+    <td class="text top">
       {{foreach from=$object->_ref_antecedents key=curr_type item=list_antecedent}}
       {{if $list_antecedent|@count}}
       <strong>
@@ -36,7 +36,7 @@
     </td>
     
     {{if is_array($object->_ref_traitements)}}
-    <td class="text">
+    <td class="text top">
       {{if $object->_ref_traitements|@count}}<ul>{{/if}}
       {{foreach from=$object->_ref_traitements item=curr_traitement}}
         <li>
@@ -55,7 +55,7 @@
     </td>
     {{/if}}
     
-    <td class="text">
+    <td class="text top">
       {{if $object->_ext_codes_cim|@count}}<ul>{{/if}}
       {{foreach from=$object->_ext_codes_cim item=curr_code}}
         <li>
