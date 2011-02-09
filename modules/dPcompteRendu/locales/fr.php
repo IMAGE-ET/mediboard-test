@@ -361,4 +361,14 @@ $locales['pref-saveOnPrint-0'] = 'Non';
 $locales['pref-saveOnPrint-1'] = 'Oui';
 $locales['pref-saveOnPrint-2'] = 'Oui, sans confirmation';
 $locales['pref-saveOnPrint-desc'] = 'demande de sauvegarde lors de l\'impression';
+$locales['pref-aideAutoComplete'] = 'Utiliser la saisie semi-automatique';
+$locales['pref-aideAutoComplete-desc'] = 'Aides à la saisie - Utiliser la saisie semi-automatique';
+$locales['pref-aideFastMode'] = 'Affichage des créations rapide d\'aides';
+$locales['pref-aideFastMode-desc'] = 'Aides à la saisie - Affichage des créations rapide d\'aides';
+$locales['pref-aideOwner'] = 'Afficher le changement de contexte';
+$locales['pref-aideOwner-desc'] = 'Aides à la saisie - Afficher le changement de contexte';
+$locales['pref-aideShowOver'] = 'Afficher les aides à la saisie au survol';
+$locales['pref-aideShowOver-desc'] = 'Aides à la saisie - Afficher les aides à la saisie au survol';
+$locales['pref-aideTimestamp'] = 'Afficher l\'horodatage';
+$locales['pref-aideTimestamp-desc'] = 'Aides à la saisie - afficher l\'horodatage';
 ?>
