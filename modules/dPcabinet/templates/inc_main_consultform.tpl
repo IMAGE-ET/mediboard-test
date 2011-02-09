@@ -13,14 +13,16 @@ Main.add(function () {
   }
 
   // Autocomplete des medicaments
-  var urlAuto = new Url("dPmedicament", "httpreq_do_medicament_autocomplete");
-  urlAuto.autoComplete(getForm('editFrmExams').produit, "_traitement_auto_complete", {
-    minChars: 3,
-    updateElement: updateFieldTraitement, 
-    callback: function(input, queryString){
-      return (queryString + "&produit_max=40"); 
-    }
-  } );
+  if(getForm('editFrmExams').produit) {
+    var urlAuto = new Url("dPmedicament", "httpreq_do_medicament_autocomplete");
+    urlAuto.autoComplete(getForm('editFrmExams').produit, "_traitement_auto_complete", {
+      minChars: 3,
+      updateElement: updateFieldTraitement, 
+      callback: function(input, queryString){
+        return (queryString + "&produit_max=40"); 
+      }
+    } );
+  }
 });
 
 </script>
