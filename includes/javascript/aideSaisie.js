@@ -105,7 +105,6 @@ var AideSaisie = {
       var throbber, list, toolbar, 
           options = this.options,
           buttons = {};
-      
       var container = 
         DOM.div({className: "textarea-helped"},
         toolbar = DOM.div({className: "toolbar"},
@@ -114,30 +113,33 @@ var AideSaisie = {
           throbber = DOM.div({className: "throbber"}).hide(),
           //buttons.grid   = DOM.a({href: "#1"}, DOM.img({src: "images/icons/grid.png", title: "Mode grille"})),
           buttons.down   = DOM.a({href: "#1"}, DOM.img({src: "style/mediboard/images/buttons/down.png", title: "Voir tous les choix"})),
-          buttons.newLightning = DOM.a({href: "#1"},
-            DOM.span({style: "position: absolute; bottom: 21px; display: none;", className: "sub-toolbar"},
+          buttons.create = DOM.a({href: "#1"},
+            DOM.span({style: "position: absolute; bottom: 21px; display: none; background-color: #fff;", className: "sub-toolbar"},
               buttons.newGroup    = DOM.img({src: "images/icons/group.png", style: "margin-bottom: 0px;", title: "Nouvelle aide pour "+User["group"].view}), DOM.br({}),
               buttons.newFunction = DOM.img({src: "images/icons/user-function.png", style: "margin-bottom: 0px;", title: "Nouvelle aide pour "+User["function"].view}), DOM.br({}),
               buttons.newUser     = DOM.img({src: "images/icons/user.png", style: "margin-bottom: 0px;", title: "Nouvelle aide pour "+User.view})
             ),
-            DOM.img({src: "style/mediboard/images/buttons/new-lightning.png", title: "Nouvelle aide rapide"})
+            DOM.img({src: "images/icons/new.png", title: "Nouvelle aide"})
           ),
-          buttons.create = DOM.a({href: "#1"}, DOM.img({src: "images/icons/new.png", title: "Nouvelle aide"})),
-          buttons.owner  = DOM.a({href: "#1", title: this.options.defaultUserView}, DOM.img({src: "images/icons/user-glow.png"})),
-          buttons.timestamp = DOM.a({href: "#1"}, DOM.img({src: "images/icons/timestamp.png", title: "Ajouter un horodatage"})),
+          buttons.owner  = DOM.a({href: "#1", title: this.options.defaultUserView}, DOM.img({src: "images/icons/user-glow.png"})).setVisible(Preferences.aideOwner == '1'),
+          buttons.timestamp = DOM.a({href: "#1"}, DOM.img({src: "images/icons/timestamp.png", title: "Ajouter un horodatage"})).setVisible(Preferences.aideTimestamp == '1'),
           buttons.valid  = DOM.a({href: "#1"}, DOM.img({src: "style/mediboard/images/buttons/submit.png", title: "Valider"})).setVisible(this.options.validate)
         ).hide(),
         list = $(this.searchField.id + "_auto_complete").setStyle({marginLeft: "-2px"})
       );
       
       this.searchField.up().
-        observe('mousemove', function(){toolbar.show()}).
+        observe(Preferences.aideShowOver == '1' ? 'mousemove' : 'dblclick', function(){toolbar.show()}).
         observe('mouseout',  function(){toolbar.hide(); toolbar.select(".sub-toolbar").invoke("hide"); })/*.
         observe('click',     function(){toolbar.hide()}).
         observe('keydown',   function(){toolbar.hide()})*/;
       
       // to prevent mousemove on the list to trigger toolbar.show
       list.observe("mousemove", Event.stop);
+      
+      if(Preferences.aideShowOver == '0') {
+        toolbar.observe('mousemove', function(){toolbar.show()});
+      }
       
       //buttons.invoke('observe', 'mouseover', Event.stop);
       
@@ -156,7 +158,7 @@ var AideSaisie = {
       
       // Setup the autocompleter
       var autocomplete = url.autoComplete(this.searchField, list, {
-        minChars: 2,
+        minChars: Preferences.aideOwner == '1' ? 2 : 65536,
         tokens: "\n",
         indicator: throbber,
         select: "text", 
@@ -290,10 +292,11 @@ var AideSaisie = {
       buttons.down.observe('click', activate);
       //buttons.grid.observe('mousedown', gridMode);
       buttons.valid.observe('click', validate);
-      
-      buttons.newLightning.observe('mouseover', function(e){
-        buttons.newLightning.down('.sub-toolbar').show();
-      });
+      if(Preferences.aideFastMode == '1') {
+        buttons.create.observe('mouseover', function(e){
+          buttons.create.down('.sub-toolbar').show();
+        });
+      }
       
       buttons.create.observe('click', function(e){
         AideSaisie.create(

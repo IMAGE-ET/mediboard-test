@@ -259,8 +259,8 @@ CCAMSelector.init = function(){
   <tr>
     <td colspan="3">
       <div class="small-info">
-      	L'intervention déjà codée.<br/>
-        Impossible de modifier les champs ci-dessous 
+      	L'intervention a déjà été codée.<br/>
+        Il est impossible de modifier les champs ci-dessous.
       </div>
 		</td>
   </tr>

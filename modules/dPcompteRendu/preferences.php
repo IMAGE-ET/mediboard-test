@@ -14,5 +14,10 @@ CPreferences::$modules["dPcompteRendu"] = array(
   "listDefault",
   "listBrPrefix",
   "listInlineSeparator",
+  "aideTimestamp",
+  "aideOwner",
+  "aideFastMode",
+  "aideAutoComplete",
+  "aideShowOver",
 );
 ?>

@@ -159,6 +159,11 @@ Preferences.onSubmit = function(form) {
   {{mb_include template=inc_pref spec=enum var=listDefault values="ulli|br|inline"}}
   {{mb_include template=inc_pref spec=str  var=listBrPrefix}}
   {{mb_include template=inc_pref spec=str  var=listInlineSeparator}}
+  {{mb_include template=inc_pref spec=bool var=aideTimestamp}}
+  {{mb_include template=inc_pref spec=bool var=aideOwner}}
+  {{mb_include template=inc_pref spec=bool var=aideFastMode}}
+  {{mb_include template=inc_pref spec=bool var=aideAutoComplete}}
+  {{mb_include template=inc_pref spec=bool var=aideShowOver}}
   
   </tbody>
   {{/if}}

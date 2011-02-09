@@ -524,7 +524,14 @@ class CSetupdPcompteRendu extends CSetup {
     $query = self::replaceContentQuery("[Patient - médecin correspondants]", "[Patient - médecins correspondants]");
     $this->addQuery($query);
     
-    $this->mod_version = "0.61";
+    $this->makeRevision("0.61");
+    $this->addPrefQuery("aideTimestamp"   , "1");
+    $this->addPrefQuery("aideOwner"       , "0");
+    $this->addPrefQuery("aideFastMode"    , "1");
+    $this->addPrefQuery("aideAutoComplete", "1");
+    $this->addPrefQuery("aideShowOver"    , "1");
+    
+    $this->mod_version = "0.62";
 
   }
 }
