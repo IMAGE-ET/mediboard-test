@@ -108,36 +108,36 @@ Main.add(function () {
       <fieldset>
         <legend>Pré-opératoire</legend>
         <form name="editInfosAnesthFrm" action="?m={{$m}}" method="post" onsubmit="return onSubmitFormAjax(this);">
-        <input type="hidden" name="m" value="dPcabinet" />
-        <input type="hidden" name="del" value="0" />
-        <input type="hidden" name="dosql" value="do_consult_anesth_aed" />
-        {{mb_key object=$consult_anesth}}
-        <table class="layout main">
-          <tr>
-            <td class="halfPane">
-              {{mb_label object=$consult_anesth field="prepa_preop"}}
-              {{mb_field object=$consult_anesth field="prepa_preop" rows="4" onchange="this.form.onsubmit()"}}
-            </td>
-            <td class="halfPane">
-              {{if !$isPrescriptionInstalled || $conf.dPcabinet.CConsultAnesth.view_premedication}}
-                {{mb_label object=$consult_anesth field="premedication"}}
-                {{mb_field object=$consult_anesth field="premedication" rows="4" onchange="this.form.onsubmit()"}}
-              {{else}}
-                {{if $conf.dPcabinet.CPrescription.view_prescription}}
-                  {{mb_label object=$consult_anesth field="premedication"}}
-                  <br />
-                  <button class="tick" type="button" onclick="tabsConsultAnesth.setActiveTab('prescription_sejour')">Accéder à la prescription</button>
-                {{else}}
-                  <div class="small-info">
-                    La saisie de la prémédication n'est actuellement pas active
-                  </div>
-                {{/if}}
-              {{/if}}
-            </td>
-          </tr>
-        </table>
+	        <input type="hidden" name="m" value="dPcabinet" />
+	        <input type="hidden" name="del" value="0" />
+	        <input type="hidden" name="dosql" value="do_consult_anesth_aed" />
+	        {{mb_key object=$consult_anesth}}
+	        <table class="layout main">
+	          <tr>
+	            <td class="halfPane">
+	              {{mb_label object=$consult_anesth field="prepa_preop"}}
+	              {{mb_field object=$consult_anesth field="prepa_preop" rows="4" onchange="this.form.onsubmit()"}}
+	            </td>
+	            <td class="halfPane">
+	              {{if !$isPrescriptionInstalled || $conf.dPcabinet.CConsultAnesth.view_premedication}}
+	                {{mb_label object=$consult_anesth field="premedication"}}
+	                {{mb_field object=$consult_anesth field="premedication" rows="4" onchange="this.form.onsubmit()"}}
+	              {{else}}
+	                {{if $conf.dPcabinet.CPrescription.view_prescription}}
+	                  {{mb_label object=$consult_anesth field="premedication"}}
+	                  <br />
+	                  <button class="tick" type="button" onclick="tabsConsultAnesth.setActiveTab('prescription_sejour')">Accéder à la prescription</button>
+	                {{else}}
+	                  <div class="small-info">
+	                    La saisie de la prémédication n'est actuellement pas active
+	                  </div>
+	                {{/if}}
+	              {{/if}}
+	            </td>
+	          </tr>
+	        </table>
+        </form>
       </fieldset>
-      </form>
 			
       <fieldset>
         <legend>{{mb_label object=$techniquesComp field="technique"}}</legend>

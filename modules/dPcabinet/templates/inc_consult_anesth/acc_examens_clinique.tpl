@@ -44,14 +44,12 @@ Main.add(function () {
                 <legend>{{mb_label object=$consult_anesth field="examenCardio"}}</legend>
                 {{mb_field object=$consult_anesth field="examenCardio" rows="4" onchange="this.form.onsubmit()"}}
               </fieldset>
-              </form>
             </td>
             <td class="halfPane">
               <fieldset>
                 <legend>{{mb_label object=$consult_anesth field="examenPulmo"}}</legend>
                 {{mb_field object=$consult_anesth field="examenPulmo" rows="4" onchange="this.form.onsubmit()"}}
               </fieldset>
-              </form>
             </td>
           </tr>
         </table>
