@@ -18,6 +18,8 @@ class CDailyCheckItemType extends CMbObject {
   var $attribute   = null;
   var $group_id    = null;
   var $category_id = null;
+  var $default_value = null;
+  var $index       = null;
 	
   var $_checked    = null;
   var $_answer     = null;
@@ -40,6 +42,8 @@ class CDailyCheckItemType extends CMbObject {
     $specs['attribute']   = 'enum list|normal|notrecommended|notapplicable default|normal';
     $specs['group_id']    = 'ref class|CGroups';
     $specs['category_id'] = 'ref notNull class|CDailyCheckItemCategory autocomplete|title';
+    $specs['default_value'] = 'enum notNull list|yes|no|nr|na default|yes';
+    $specs['index']       = 'num notNull min|1';
     return $specs;
   }
 	

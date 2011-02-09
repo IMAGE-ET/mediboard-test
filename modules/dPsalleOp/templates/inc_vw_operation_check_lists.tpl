@@ -18,7 +18,7 @@
 {{/foreach}}
 
 <script type="text/javascript">
-var checkListTypes = ["normal", "endoscopie"];
+var checkListTypes = ["normal", "endoscopie", "endoscopie-bronchique"];
 
 function showCheckListType(element, type) {
   checkListTypes.each(function(t){
@@ -55,59 +55,78 @@ Main.add(function(){
 			<div id="CExObject-{{$selOp->_guid}}-checklist" style="float: right; font-size: 0.8em;"></div>
 
       <button class="down" onclick="$('check-lists').toggle(); $(this).toggleClassName('down').toggleClassName('up')">
-        Check list
+        Check list Sécurité du Patient
       </button>
       
-      <select onchange="showCheckListType($(this).up('table'), $V(this))">
-        <option value="normal" {{if $active_list_type == "normal"}} selected="selected" {{/if}}>Sécurité du patient au bloc opératoire</option>
-        <option value="endoscopie" {{if $active_list_type == "endoscopie"}} selected="selected" {{/if}}>Sécurité du patient en endoscopie digestive</option>
+      <select onchange="showCheckListType($(this).up('table'), $V(this))" style="max-width: 22em;">
+        <option value="normal" {{if $active_list_type == "normal"}} selected="selected" {{/if}}>Au bloc opératoire (v. 2011-01)</option>
+        <option value="endoscopie" {{if $active_list_type == "endoscopie"}} selected="selected" {{/if}}>En endoscopie digestive (v. 2010-01)</option>
+        <option value="endoscopie-bronchique" {{if $active_list_type == "endoscopie-bronchique"}} selected="selected" {{/if}}>En endoscopie bronchique (v. 2011-01)</option>
       </select>
+			
+			<img height="20" src="images/pictures/logo-has-small.png" />
     </th>
   </tr>
   
   <tr class="normal" style="display: none;">
     <td class="button" id="preanesth-title">
-      <h3 style="margin: 4px;">
+      <h3 style="margin: 2px;">
         <img src="images/icons/{{$operation_check_lists.preanesth->_readonly|ternary:"tick":"cross"}}.png" />
         Avant induction anesthésique
       </h3>
-      Temps de pause avant anesthésie
+      <small>Temps de pause avant anesthésie</small>
     </td>
     <td class="button" id="preop-title">
-      <h3 style="margin: 4px;">
+      <h3 style="margin: 2px;">
         <img src="images/icons/{{$operation_check_lists.preop->_readonly|ternary:"tick":"cross"}}.png" />
         Avant intervention chirurgicale
       </h3>
-      Temps de pause avant incision
+      <small>Temps de pause avant incision</small>
     </td>
     <td class="button" id="postop-title">
-      <h3 style="margin: 4px;">
+      <h3 style="margin: 2px;">
         <img src="images/icons/{{$operation_check_lists.postop->_readonly|ternary:"tick":"cross"}}.png" />
         Après intervention
       </h3>
-      Pause avant sortie de salle d'intervention
+      <small>Pause avant sortie de salle d'intervention</small>
     </td>
   </tr>
     
   <tr class="endoscopie" style="display: none;">
     <td class="button" id="preendoscopie-title" colspan="2">
-      <h3 style="margin: 4px;">
+      <h3 style="margin: 2px;">
         <img src="images/icons/{{$operation_check_lists.preendoscopie->_readonly|ternary:"tick":"cross"}}.png" />
-        Avant l'endoscopie
+        Avant l'endoscopie digestive
       </h3>
-      Avec ou sans anesthésie
+      <small>Avec ou sans anesthésie</small>
     </td>
     <td class="button" id="postendoscopie-title">
-      <h3 style="margin: 4px;">
+      <h3 style="margin: 2px;">
         <img src="images/icons/{{$operation_check_lists.postendoscopie->_readonly|ternary:"tick":"cross"}}.png" />
-        Après l'endoscopie
+        Après l'endoscopie digestive
+      </h3>
+    </td>
+  </tr>
+    
+  <tr class="endoscopie-bronchique" style="display: none;">
+    <td class="button" id="preendoscopie_bronchique-title" colspan="2">
+      <h3 style="margin: 2px;">
+        <img src="images/icons/{{$operation_check_lists.preendoscopie_bronchique->_readonly|ternary:"tick":"cross"}}.png" />
+        Avant l'endoscopie bronchique
+      </h3>
+      <small>Avec ou sans anesthésie</small>
+    </td>
+    <td class="button" id="postendoscopie_bronchique-title">
+      <h3 style="margin: 2px;">
+        <img src="images/icons/{{$operation_check_lists.postendoscopie_bronchique->_readonly|ternary:"tick":"cross"}}.png" />
+        Après l'endoscopie bronchique
       </h3>
     </td>
   </tr>
   
   <tbody id="check-lists" style="display: none;">
     <tr class="normal" style="display: none;">
-      <td style="padding:0;">
+      <td style="padding:1px;">
         <div id="preanesth">
         {{assign var=check_list value=$operation_check_lists.preanesth}}
         {{mb_include module=dPsalleOp template=inc_edit_check_list 
@@ -115,7 +134,7 @@ Main.add(function(){
              personnel=$listValidateurs}}
         </div>
       </td>
-      <td style="padding:0;">
+      <td style="padding:1px;">
         <div id="preop">
         {{assign var=check_list value=$operation_check_lists.preop}}
         {{mb_include module=dPsalleOp template=inc_edit_check_list 
@@ -123,7 +142,7 @@ Main.add(function(){
              personnel=$listValidateurs}}
         </div>
       </td>
-      <td style="padding:0;">
+      <td style="padding:1px;">
         <div id="postop">
         {{assign var=check_list value=$operation_check_lists.postop}}
         {{mb_include module=dPsalleOp template=inc_edit_check_list 
@@ -152,14 +171,32 @@ Main.add(function(){
       </td>
     </tr>
     
+    <tr class="endoscopie-bronchique" style="display: none;">
+      <td style="padding:0;" colspan="2">
+        <div id="preendoscopie_bronchique">
+        {{assign var=check_list value=$operation_check_lists.preendoscopie_bronchique}}
+        {{mb_include module=dPsalleOp template=inc_edit_check_list 
+             check_item_categories=$operation_check_item_categories.preendoscopie_bronchique
+             personnel=$listValidateurs}}
+        </div>
+      </td>
+      <td style="padding:0;">
+        <div id="postendoscopie_bronchique">
+        {{assign var=check_list value=$operation_check_lists.postendoscopie_bronchique}}
+        {{mb_include module=dPsalleOp template=inc_edit_check_list 
+             check_item_categories=$operation_check_item_categories.postendoscopie_bronchique
+             personnel=$listValidateurs}}
+        </div>
+      </td>
+    </tr>
+    
     <tr>
       <td colspan="3" class="button">
         <hr />
-        La check-list a pour but de vérifier que les différents points critiques 
-        ont été pris en compte et que les mesures adéquates ont été prises.<br />
-        La réponse "oui" à un item valide sa vérification croisée au sein de l'équipe. 
-        Si cette vérification n'a pu être réalisée, la réponse "non" doit être cochée.<br />
-        Abréviations utilisées : C/L : Check-list - N/A : Non Applicable - N/R : Non Recommandé
+				Le rôle du coordonnateur check-list sous la responsabilité du(es) chirurgien(s) et anesthésiste(s) responsables  <br />
+				de l'intervention est de ne cocher les items de la check list  que (1) si la vérification a bien été effectuée,  <br />
+				(2) si elle a été faite oralement en présence des membres de l'équipe concernée et (3) si les non conformités (marquées d'un *) <br />
+				ont fait l'objet d'une concertation en équipe et d'une décision qui doit le cas échéant être rapportée dans l'encart spécifique.
       </td>
     </tr>
   </tbody>

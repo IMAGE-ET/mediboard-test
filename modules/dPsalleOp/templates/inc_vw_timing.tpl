@@ -5,7 +5,7 @@
 <input type="hidden" name="operation_id" value="{{$selOp->operation_id}}" />
 <input type="hidden" name="del" value="0" />
 
-<table class="form">
+<table class="form" style="table-layout: fixed;">
   <tr>
     <th class="title" colspan="3">Horodatage</th>
   </tr>

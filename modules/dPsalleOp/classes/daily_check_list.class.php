@@ -37,6 +37,8 @@ class CDailyCheckList extends CMbObject { // not a MetaObject, as there can be m
     "postop"    => "normal",
     "preendoscopie"  => "endoscopie", 
     "postendoscopie" => "endoscopie",
+    "preendoscopie_bronchique"  => "endoscopie-bronchique", 
+    "postendoscopie_bronchique" => "endoscopie-bronchique",
   );
   
   function getSpec() {
@@ -51,7 +53,7 @@ class CDailyCheckList extends CMbObject { // not a MetaObject, as there can be m
     $specs['date']         = 'date notNull';
     $specs['object_class'] = 'enum list|CSalle|CBlocOperatoire|COperation notNull default|CSalle';
     $specs['object_id']    = 'ref class|CMbObject meta|object_class notNull autocomplete';
-    $specs['type']         = 'enum list|preanesth|preop|postop|preendoscopie|postendoscopie';
+    $specs['type']         = 'enum list|preanesth|preop|postop|preendoscopie|postendoscopie|preendoscopie_bronchique|postendoscopie_bronchique';
     $specs['validator_id'] = 'ref class|CMediusers';
     $specs['comments']     = 'text';
     $specs['_validator_password'] = 'password notNull';

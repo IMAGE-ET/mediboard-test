@@ -120,37 +120,38 @@ Main.add(function(){
         </tr>
       {{/if}}
       <tr>
-        <td style="padding-left: 1em;" class="text">
-          {{mb_value object=$curr_type field=title}}<br />
-          <small style="text-indent: 1em; color: #666;">{{mb_value object=$curr_type field=desc}}</small>
+        <td class="text">
+          <ul style="padding-left: 0; list-style-position: inside;">
+					  <li>{{mb_value object=$curr_type field=title}}</li>
+					</ul>
+					
+					{{if $curr_type->desc}}
+					  <br />
+            <small style="text-indent: 1em; color: #666;">{{mb_value object=$curr_type field=desc}}</small>
+					{{/if}}
         </td>
-        <td>
+        <td style="text-align: left;">
           {{assign var=attr value=$curr_type->attribute}}
+          {{assign var=default_value value=$curr_type->default_value}}
           
-          <label style="white-space: nowrap;">
-            <input type="radio" name="_items[{{$curr_type->_id}}]" value="yes" {{if $curr_type->_checked == "yes"}}checked="checked"{{/if}} />
-            {{tr}}CDailyCheckItem.checked.yes{{/tr}}
-          </label>
-          
-          <label style="white-space: nowrap;">
-            <input type="radio" name="_items[{{$curr_type->_id}}]" value="no" {{if $curr_type->_checked == "no" || $curr_type->_checked === null}}checked="checked"{{/if}} />
-            {{tr}}CDailyCheckItem.checked.no{{/tr}}
-          </label>
+					{{if $default_value == "yes"}}
+            {{mb_include module=dPsalleOp template=inc_check_list_field_yes}}
+            {{mb_include module=dPsalleOp template=inc_check_list_field_no}}
+					{{else}}
+            {{mb_include module=dPsalleOp template=inc_check_list_field_no}}
+            {{mb_include module=dPsalleOp template=inc_check_list_field_yes}}
+					{{/if}}
           
           {{if $attr == "notrecommended"}}
-            <br />
-            <label style="white-space: nowrap; float: right;">
-              <input type="radio" name="_items[{{$curr_type->_id}}]" value="nr" {{if $curr_type->_checked == "nr"}}checked="checked"{{/if}} />
-              {{tr}}CDailyCheckItem.checked.nr{{/tr}}
-            </label>
+            <div>
+              {{mb_include module=dPsalleOp template=inc_check_list_field_notrecommended}}
+						</div>
           {{/if}}
           
           {{if $attr == "notapplicable"}}
-            <br />
-            <label style="white-space: nowrap; float: right;">
-              <input type="radio" name="_items[{{$curr_type->_id}}]" value="na" {{if $curr_type->_checked == "na"}}checked="checked"{{/if}} />
-              {{tr}}CDailyCheckItem.checked.na{{/tr}}
-            </label>
+            <div>
+              {{mb_include module=dPsalleOp template=inc_check_list_field_notapplicable}}
+						</div>
           {{/if}}
         </td>
       </tr>
@@ -162,11 +163,16 @@ Main.add(function(){
       </tr>
     {{/foreach}}
     
-    {{if $check_list->object_class != "COperation" || $check_list->type == "postop" || $check_list->type == "postendoscopie"}}
+    {{if $check_list->object_class != "COperation" || $check_list->type == "postop" || $check_list->type == "postendoscopie" || $check_list->type == "postendoscopie_bronchique"}}
     <tr>
       <td colspan="10" style="white-space: normal;">
+			  <hr />
         {{mb_label object=$check_list field=comments}}<br />
         {{mb_field object=$check_list field=comments}}
+				<div class="small-info">
+					Pour consulter les informations sur la version 2011 des check-lists, 
+					<a href="http://www.has-sante.fr/portail/jcms/c_1020514/la-check-list-securite-du-patient-au-bloc-operatoire" target="_blank" style="display: inline;">rendez-vous sur le site de la HAS en cliquant ici</a>.
+				</div>
       </td>
     </tr>
     {{/if}}

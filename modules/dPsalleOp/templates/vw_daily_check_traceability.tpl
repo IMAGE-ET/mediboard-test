@@ -117,7 +117,7 @@
                     {{mb_value object=$curr_type field=title}}
                     <small style="text-indent: 1em; color: #666;">{{mb_value object=$curr_type field=desc}}</small>
                   </td>
-                  <td class="text" {{if $_item->checked == "no"}}style="color: red; font-weight: bold;"{{/if}}>
+                  <td class="text" {{if $_item->checked == "no" && $curr_type->default_value == "yes" || $_item->checked == "yes" && $curr_type->default_value == "no"}}style="color: red; font-weight: bold;"{{/if}}>
                     {{$_item->getAnswer()}}
                   </td>
                 </tr>

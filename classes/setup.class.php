@@ -16,8 +16,12 @@ class CSetup {
   // Public vars
   var $mod_name = null;
   var $mod_version = null;
-  var $ds = null;
   var $mod_type = "user";
+  
+  /**
+   * @var CSQLDataSource
+   */
+  var $ds = null;
 
   // Protected vars
   var $revisions    = array();
@@ -267,7 +271,7 @@ class CSetup {
       
       // Callback upgrading
       foreach ($this->functions[$currRevision] as $function) {
-        if (!call_user_func($function)) {
+        if (!call_user_func($function, $this)) {
           CAppUI::setMsg("Error in function '%s' call back for revision '%s': see logs", UI_MSG_ERROR, $function, $currRevision);
           return $currRevision;
         }
