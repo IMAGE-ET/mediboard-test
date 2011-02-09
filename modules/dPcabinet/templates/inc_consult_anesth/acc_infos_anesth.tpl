@@ -1,19 +1,15 @@
 <script type="text/javascript">
 
 function submitTech(oForm) {
-  if(oForm.technique){
-    var technique = oForm.technique.value;
+  onSubmitFormAjax(oForm, { onComplete : reloadListTech });
+  if ($V(oForm.elements.del)) {
+    oForm.reset();
   }
-  submitFormAjax(oForm, 'systemMsg', { onComplete : reloadListTech});
-  oForm.reset();
-  if(oForm.technique){
-    oForm._hidden_technique.value = technique;
-  }
+	return false;
 }
 
 function reloadListTech() {
-  var UrllistTech = new Url;
-  UrllistTech.setModuleAction("dPcabinet", "httpreq_vw_list_techniques_comp");
+  var UrllistTech = new Url("dPcabinet", "httpreq_vw_list_techniques_comp");
   UrllistTech.addParam("selConsult", document.editFrmFinish.consultation_id.value);
   UrllistTech.requestUpdate('listTech');
 }
@@ -52,7 +48,6 @@ Main.add(function () {
             timestamp: "{{$conf.dPcompteRendu.CCompteRendu.timestamp}}",
             validateOnBlur:0
           });
-  
 });
 
 </script>
@@ -143,19 +138,20 @@ Main.add(function () {
         </table>
       </fieldset>
       </form>
-      <form name="addEditTechCompFrm" action="?m=dPcabinet" method="post" onsubmit="return checkForm(this)">
-      <input type="hidden" name="m" value="dPcabinet" />
-      <input type="hidden" name="del" value="0" />
-      <input type="hidden" name="dosql" value="do_technique_aed" />
-      {{mb_field object=$consult_anesth field="consultation_anesth_id" hidden=1}}
+			
       <fieldset>
         <legend>{{mb_label object=$techniquesComp field="technique"}}</legend>
         <table class="layout main">
           <tr>
             <td class="halfPane">
-              <input type="hidden" name="_hidden_technique" value="" />
-              {{mb_field object=$techniquesComp field="technique" rows="4"}}
-              <button class="add" type="button" onclick="submitTech(this.form);">{{tr}}Add{{/tr}}</button>
+				      <form name="addEditTechCompFrm" action="?m=dPcabinet" method="post" onsubmit="return submitTech(this)">
+					      <input type="hidden" name="m" value="dPcabinet" />
+					      <input type="hidden" name="del" value="0" />
+					      <input type="hidden" name="dosql" value="do_technique_aed" />
+					      {{mb_field object=$consult_anesth field="consultation_anesth_id" hidden=1}}
+	              {{mb_field object=$techniquesComp field="technique" rows="4"}}
+	              <button class="add" type="submit">{{tr}}Add{{/tr}}</button>
+							</form>
             </td>
             <td class="halfPane text" id="listTech">
               {{mb_include module=dPcabinet template=inc_consult_anesth/techniques_comp}}
@@ -163,7 +159,7 @@ Main.add(function () {
           </tr>
         </table>
       </fieldset>
-      </form>
+			
       <form name="editRquesConsultFrm" action="?m={{$m}}" method="post" onsubmit="return onSubmitFormAjax(this);">
   
       <input type="hidden" name="m" value="dPcabinet" />
