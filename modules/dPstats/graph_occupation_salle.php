@@ -8,9 +8,20 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
  */
 
-function graphOccupationSalle($debut = null, $fin = null, $prat_id = 0, $salle_id = 0, $bloc_id = 0, $discipline_id = null, $codeCCAM = "", $type_hospi = "", $hors_plage) {
+function graphOccupationSalle($debut = null, $fin = null, $prat_id = 0, $salle_id = 0, $bloc_id = 0, $discipline_id = null, $codeCCAM = "", $type_hospi = "", $hors_plage, $type_duree) {
 
   $ds = CSQLDataSource::get("std");
+  
+  if ($type_duree == "MONTH") {
+	  $type_duree_fr = "mois";
+    $date_format = "%m/%Y";
+    $order_key = "%Y%m";
+	}
+	else {
+	  $type_duree_fr = "jour";
+	  $date_format = "%d/%m/%Y";
+		$order_key = "%Y%m%d";
+	}
   
   if (!$debut) $debut = mbDate("-1 YEAR");
   if (!$fin) $fin = mbDate();
@@ -28,8 +39,8 @@ function graphOccupationSalle($debut = null, $fin = null, $prat_id = 0, $salle_i
   $discipline->load($discipline_id);
   
   $ticks = array();
-  for($i = $debut; $i <= $fin; $i = mbDate("+1 MONTH", $i)) {
-    $ticks[] = array(count($ticks), mbTransformTime("+0 DAY", $i, "%m/%Y"));
+  for($i = $debut; $i <= $fin; $i = mbDate("+1 $type_duree", $i)) {
+    $ticks[] = array(count($ticks), mbTransformTime("+0 DAY", $i, $date_format));
   }
 
   $where = array();
@@ -44,13 +55,17 @@ function graphOccupationSalle($debut = null, $fin = null, $prat_id = 0, $salle_i
   
   // requete de récupération des interventions
   $query = "SELECT COUNT(*) AS total,
-  DATE_FORMAT(IF(operations.date, operations.date, plagesop.date), '%m/%Y') AS mois,
-    DATE_FORMAT(IF(operations.date, operations.date, plagesop.date), '%Y%m') AS orderitem
+    DATE_FORMAT(plagesop.date, '$date_format') AS $type_duree_fr,
+    DATE_FORMAT(plagesop.date, '$order_key') AS orderitem
     FROM operations
     LEFT JOIN sejour ON operations.sejour_id = sejour.sejour_id
     LEFT JOIN plagesop ON operations.plageop_id = plagesop.plageop_id
     LEFT JOIN users_mediboard ON operations.chir_id = users_mediboard.user_id
     WHERE operations.annulee = '0'
+    AND operations.debut_op IS NOT NULL
+    AND operations.fin_op IS NOT NULL
+    AND operations.date IS NULL
+    AND operations.debut_op < operations.fin_op
     AND sejour.group_id = '".CGroups::loadCurrent()->_id."'
     AND operations.salle_id ".CSQLDataSource::prepareIn(array_keys($salles));
   if($type_hospi) {
@@ -60,9 +75,8 @@ function graphOccupationSalle($debut = null, $fin = null, $prat_id = 0, $salle_i
   if($discipline_id) $query .= "\nAND users_mediboard.discipline_id = '$discipline_id'";
   if($codeCCAM)      $query .= "\nAND operations.codes_ccam LIKE '%$codeCCAM%'";
   
-  $query .=  "\nAND (operations.date BETWEEN '$debut' AND '$fin'
-      OR (operations.date IS NULL AND plagesop.date BETWEEN '$debut' AND '$fin'))
-    GROUP BY mois ORDER BY orderitem";
+  $query .=  "\nAND plagesop.date BETWEEN '$debut' AND '$fin'
+    GROUP BY $type_duree_fr ORDER BY orderitem";
   $nbInterventions = $ds->loadList($query);
 
   $seriesMoy = array();
@@ -77,8 +91,8 @@ function graphOccupationSalle($debut = null, $fin = null, $prat_id = 0, $salle_i
   );
   $query = "SELECT COUNT(*) AS nbInterv,
     AVG(TIME_TO_SEC(operations.fin_op)-TIME_TO_SEC(operations.debut_op)) AS moyenne,
-    DATE_FORMAT(IF(operations.date, operations.date, plagesop.date), '%m/%Y') AS mois,
-    DATE_FORMAT(IF(operations.date, operations.date, plagesop.date), '%Y%m') AS orderitem
+    DATE_FORMAT(plagesop.date, '$date_format') AS $type_duree_fr,
+    DATE_FORMAT(plagesop.date, '$order_key') AS orderitem
     FROM operations
     LEFT JOIN sejour ON operations.sejour_id = sejour.sejour_id
     LEFT JOIN plagesop ON operations.plageop_id = plagesop.plageop_id
@@ -92,19 +106,20 @@ function graphOccupationSalle($debut = null, $fin = null, $prat_id = 0, $salle_i
   if($prat_id)       $query .= "\nAND operations.chir_id = '$prat_id' AND plagesop.chir_id = '$prat_id'";
   if($discipline_id) $query .= "\nAND users_mediboard.discipline_id = '$discipline_id'";
   if($codeCCAM)      $query .= "\nAND operations.codes_ccam LIKE '%$codeCCAM%'";
-  $query .=  "\nAND (operations.date BETWEEN '$debut' AND '$fin'
-      OR (operations.date IS NULL AND plagesop.date BETWEEN '$debut' AND '$fin'))
+  $query .=  "\nAND plagesop.date BETWEEN '$debut' AND '$fin'
+    AND operations.date IS NULL
+    AND operations.plageop_id IS NOT NULL
     AND operations.debut_op IS NOT NULL
     AND operations.fin_op IS NOT NULL
     AND operations.debut_op < operations.fin_op
-    GROUP BY mois ORDER BY orderitem";
+    GROUP BY $type_duree_fr ORDER BY orderitem";
   $result = $ds->loadList($query);
 
   if ($hors_plage) {
     $query_hors_plage = "SELECT COUNT(*) AS nbInterv,
     AVG(TIME_TO_SEC(operations.fin_op)-TIME_TO_SEC(operations.debut_op)) AS moyenne,
-    DATE_FORMAT(operations.date, '%m/%Y') AS mois,
-    DATE_FORMAT(operations.date, '%Y%m') AS orderitem
+    DATE_FORMAT(operations.date, '$date_format') AS $type_duree_fr,
+    DATE_FORMAT(operations.date, '$order_key') AS orderitem
     FROM operations
     LEFT JOIN sejour ON operations.sejour_id = sejour.sejour_id
     LEFT JOIN users_mediboard ON operations.chir_id = users_mediboard.user_id
@@ -134,7 +149,7 @@ function graphOccupationSalle($debut = null, $fin = null, $prat_id = 0, $salle_i
       AND operations.debut_op IS NOT NULL
       AND operations.fin_op IS NOT NULL
       AND operations.debut_op < operations.fin_op
-      GROUP BY mois ORDER BY orderitem";
+      GROUP BY $type_duree_fr ORDER BY orderitem";
     
     $result_hors_plage = $ds->loadList($query_hors_plage);
   }
@@ -144,12 +159,12 @@ function graphOccupationSalle($debut = null, $fin = null, $prat_id = 0, $salle_i
     if(!isset($nbInterventions[$i])) {
       $nbInterventions[$i] = array("total" => 0);
     }
-    foreach($result as $r) {
-      $nb_interv = $nbInterventions[$i]["total"];
-      if($tick[1] == $r["mois"]) {
+    foreach($result as $j=>$r) {
+      $nb_interv = $nbInterventions[$j]["total"];
+      if($tick[1] == $r["$type_duree_fr"]) {
         if ($hors_plage) {
           foreach($result_hors_plage as &$r_h) {
-            if ($tick[1] == $r["mois"]) {
+            if ($tick[1] == $r_h["$type_duree_fr"]) {
               $r["moyenne"] = ($r_h["moyenne"] * $r_h["nbInterv"] + $r["moyenne"] * $nb_interv) / ($r_h["nbInterv"] + $nb_interv);
               $nb_interv += $r_h["nbInterv"];
               unset($r_h);
@@ -180,8 +195,8 @@ function graphOccupationSalle($debut = null, $fin = null, $prat_id = 0, $salle_i
   );
   $query = "SELECT COUNT(*) AS nbInterv,
     AVG(TIME_TO_SEC(operations.sortie_salle)-TIME_TO_SEC(operations.entree_salle)) AS moyenne,
-    DATE_FORMAT(IF(operations.date, operations.date, plagesop.date), '%m/%Y') AS mois,
-    DATE_FORMAT(IF(operations.date, operations.date, plagesop.date), '%Y%m') AS orderitem
+    DATE_FORMAT(plagesop.date, '$date_format') AS $type_duree_fr,
+    DATE_FORMAT(plagesop.date, '$order_key') AS orderitem
     FROM operations
     LEFT JOIN sejour ON operations.sejour_id = sejour.sejour_id
     LEFT JOIN plagesop ON operations.plageop_id = plagesop.plageop_id
@@ -195,19 +210,20 @@ function graphOccupationSalle($debut = null, $fin = null, $prat_id = 0, $salle_i
   if($prat_id)       $query .= "\nAND operations.chir_id = '$prat_id' AND plagesop.chir_id = '$prat_id'";
   if($discipline_id) $query .= "\nAND users_mediboard.discipline_id = '$discipline_id'";
   if($codeCCAM)      $query .= "\nAND operations.codes_ccam LIKE '%$codeCCAM%'";
-  $query .=  "\nAND (operations.date BETWEEN '$debut' AND '$fin'
-      OR (operations.date IS NULL AND plagesop.date BETWEEN '$debut' AND '$fin'))
+  $query .=  "\nAND plagesop.date BETWEEN '$debut' AND '$fin'
+    AND operations.date IS NULL
+    AND operations.plageop_id IS NOT NULL
     AND operations.entree_salle IS NOT NULL
     AND operations.sortie_salle IS NOT NULL
     AND operations.entree_salle < operations.sortie_salle
-    GROUP BY mois ORDER BY orderitem";
+    GROUP BY $type_duree_fr ORDER BY orderitem";
   $result = $ds->loadList($query);
 
   if ($hors_plage) {
     $query_hors_plage = "SELECT COUNT(*) AS nbInterv,
     AVG(TIME_TO_SEC(operations.sortie_salle)-TIME_TO_SEC(operations.entree_salle)) AS moyenne,
-    DATE_FORMAT(operations.date, '%m/%Y') AS mois,
-    DATE_FORMAT(operations.date, '%Y%m') AS orderitem
+    DATE_FORMAT(operations.date, '$date_format') AS $type_duree_fr,
+    DATE_FORMAT(operations.date, '$order_key') AS orderitem
     FROM operations
     LEFT JOIN sejour ON operations.sejour_id = sejour.sejour_id
     LEFT JOIN users_mediboard ON operations.chir_id = users_mediboard.user_id
@@ -226,18 +242,18 @@ function graphOccupationSalle($debut = null, $fin = null, $prat_id = 0, $salle_i
     AND operations.entree_salle IS NOT NULL
     AND operations.sortie_salle IS NOT NULL
     AND operations.entree_salle < operations.sortie_salle
-    GROUP BY mois ORDER BY orderitem";
+    GROUP BY $type_duree_fr ORDER BY orderitem";
   $result_hors_plage = $ds->loadList($query_hors_plage);
   }
   
   foreach($ticks as $i => $tick) {
     $f = true;
-    foreach($result as $r) {
-      if($tick[1] == $r["mois"]) {
-        $nb_interv = $nbInterventions[$i]["total"];
+    foreach($result as $j=>$r) {
+      if($tick[1] == $r["$type_duree_fr"]) {
+        $nb_interv = $nbInterventions[$j]["total"];
         if ($hors_plage) {
           foreach($result_hors_plage as &$r_h) {
-            if ($tick[1] == $r["mois"]) {
+            if ($tick[1] == $r["$type_duree_fr"]) {
               $r["moyenne"] = ($r_h["moyenne"] * $r_h["nbInterv"] + $r["moyenne"] * $nb_interv) / ($r_h["nbInterv"] + $nb_interv);
               $nb_interv += $r_h["nbInterv"];
               unset($r_h);
@@ -268,8 +284,8 @@ function graphOccupationSalle($debut = null, $fin = null, $prat_id = 0, $salle_i
   );
   $query = "SELECT COUNT(*) AS nbInterv,
     AVG(TIME_TO_SEC(operations.sortie_reveil)-TIME_TO_SEC(operations.entree_reveil)) AS moyenne,
-    DATE_FORMAT(IF(operations.date, operations.date, plagesop.date), '%m/%Y') AS mois,
-    DATE_FORMAT(IF(operations.date, operations.date, plagesop.date), '%Y%m') AS orderitem
+    DATE_FORMAT(plagesop.date, '$date_format') AS $type_duree_fr,
+    DATE_FORMAT(plagesop.date, '$order_key') AS orderitem
     FROM operations
     LEFT JOIN sejour ON operations.sejour_id = sejour.sejour_id
     LEFT JOIN plagesop ON operations.plageop_id = plagesop.plageop_id
@@ -282,19 +298,20 @@ function graphOccupationSalle($debut = null, $fin = null, $prat_id = 0, $salle_i
   }
   if($prat_id)       $query .= "\nAND operations.chir_id = '$prat_id' AND plagesop.chir_id = '$prat_id'";
   if($discipline_id) $query .= "\nAND users_mediboard.discipline_id = '$discipline_id'";
-  $query .=  "\nAND (operations.date BETWEEN '$debut' AND '$fin'
-      OR (operations.date IS NULL AND plagesop.date BETWEEN '$debut' AND '$fin'))
+  $query .=  "\nAND plagesop.date BETWEEN '$debut' AND '$fin'
+    AND operations.date IS NULL
+    AND operations.plageop_id IS NOT NULL
     AND operations.entree_reveil IS NOT NULL
     AND operations.sortie_reveil IS NOT NULL
     AND operations.entree_reveil < operations.sortie_reveil
-    GROUP BY mois ORDER BY orderitem";
+    GROUP BY $type_duree_fr ORDER BY orderitem";
   $result = $ds->loadList($query);
   
   if ($hors_plage) {
     $query_hors_plage = "SELECT COUNT(*) AS nbInterv,
       AVG(TIME_TO_SEC(operations.sortie_reveil)-TIME_TO_SEC(operations.entree_reveil)) AS moyenne,
-      DATE_FORMAT(operations.date, '%m/%Y') AS mois,
-      DATE_FORMAT(operations.date, '%Y%m') AS orderitem
+      DATE_FORMAT(operations.date, '$date_format') AS $type_duree_fr,
+      DATE_FORMAT(operations.date, '$order_key') AS orderitem
       FROM operations
       LEFT JOIN sejour ON operations.sejour_id = sejour.sejour_id
       LEFT JOIN users_mediboard ON operations.chir_id = users_mediboard.user_id
@@ -312,18 +329,18 @@ function graphOccupationSalle($debut = null, $fin = null, $prat_id = 0, $salle_i
       AND operations.entree_reveil IS NOT NULL
       AND operations.sortie_reveil IS NOT NULL
       AND operations.entree_reveil < operations.sortie_reveil
-      GROUP BY mois ORDER BY orderitem";
+      GROUP BY $type_duree_fr ORDER BY orderitem";
     $result_hors_plage = $ds->loadList($query_hors_plage);
   }
 
   foreach($ticks as $i => $tick) {
     $f = true;
-    foreach($result as $r) {
-      if($tick[1] == $r["mois"]) {
-        $nb_interv = $nbInterventions[$i]["total"];
+    foreach($result as $j=>$r) {
+      if($tick[1] == $r[$type_duree_fr]) {
+        $nb_interv = $nbInterventions[$j]["total"];
         if ($hors_plage) {
           foreach($result_hors_plage as &$r_h) {
-            if ($tick[1] == $r["mois"]) {
+            if ($tick[1] == $r[$type_duree_fr]) {
               $r["moyenne"] = ($r_h["moyenne"] * $r_h["nbInterv"] + $r["moyenne"] * $nb_interv) / ($r_h["nbInterv"] + $nb_interv);
               $nb_interv += $r_h["nbInterv"];
               unset($r_h);
@@ -373,7 +390,12 @@ function graphOccupationSalle($debut = null, $fin = null, $prat_id = 0, $salle_i
   ));
   if ($totalTot == 0) $optionsTot['yaxis']['max'] = 1;
   
-  return array(
-    "moyenne" => array('series' => $seriesMoy, 'options' => $optionsMoy),
-    "total"   => array('series' => $seriesTot, 'options' => $optionsTot));
+  if ($type_duree == "MONTH") {
+    return array(
+      "moyenne" => array('series' => $seriesMoy, 'options' => $optionsMoy),
+      "total"   => array('series' => $seriesTot, 'options' => $optionsTot));
+  }
+  else {
+    return array('series' => $seriesTot, 'options' => $optionsTot);
+  }
 }

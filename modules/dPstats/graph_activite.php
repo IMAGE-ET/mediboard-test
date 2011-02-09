@@ -110,7 +110,7 @@ function graphActivite($debut = null, $fin = null, $prat_id = 0, $salle_id = 0, 
         $query_hors_plage .= "\nAND operations.chir_id = '$prat_id'";
       }
       if($prat_id && $prat->isFromType(array("Anesthésiste"))) {
-        $query_hors_plage .= "\nAND (operations.anesth_id = '$prat_id'";
+        $query_hors_plage .= "\nAND operations.anesth_id = '$prat_id'";
       }
       if($discipline_id) {
         $query_hors_plage .= "\nAND users_mediboard.discipline_id = '$discipline_id'";
