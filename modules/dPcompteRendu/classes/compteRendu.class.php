@@ -43,6 +43,7 @@ class CCompteRendu extends CDocumentItem {
   var $_page_format      = null;
   var $_orientation      = null;
   var $_list_classes     = null;
+/*  var $_is_editable      = true;*/
 
   // Distant field
   var $_source           = null;
@@ -209,6 +210,22 @@ class CCompteRendu extends CDocumentItem {
 		$this->_ref_content = $this->loadFwdRef("content_id", true);
 		if ($field_source) {
 		  $this->_source = $this->_ref_content->content;
+		  $xml = new DOMDocument('1.0', 'iso-8859-1');
+      $str = "<div>".CHtmlToPDF::xmlEntities($this->_source)."</div>";
+      $str = CHtmlToPDF::cleanWord($str);
+		  $xml->loadXML(utf8_encode($str));
+		  
+		  $xpath = new DOMXpath($xml);
+		  $elements = $xpath->query("*/style");
+		  
+		  if ($elements != null) {
+  		  foreach($elements as $_element) {
+  		    if (preg_match("/(header|footer)/",$_element->nodeValue) == 0) {
+  		      $_element->parentNode->removeChild($_element);
+  		    }
+  		  }
+		  }
+		  $this->_source = substr($xml->saveHTML(), 5, -7);
 		}
 	}
 	

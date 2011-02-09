@@ -89,7 +89,7 @@ class CHtmlToPDF {
 
   // Expressions régulières provenant de FCKEditor
   // cf http://docs.cksource.com/FCKeditor_2.x/Developers_Guide/Configuration/Configuration_Options/CleanWordKeepsStructure
-  function cleanWord($str) {
+  static function cleanWord($str) {
     $str = str_replace("<o:p>", "<p>",$str);
     $str = str_replace("</o:p>", "</p>",$str);
     $str = str_replace("<w:", '<', $str);
@@ -107,8 +107,8 @@ class CHtmlToPDF {
 
     $xml = new DOMDocument('1.0', 'iso-8859-1');
 
-    $str = $this->xmlEntities($str);
-    $str = $this->cleanWord($str);
+    $str = CHtmlToPDF::xmlEntities($str);
+    $str = CHtmlToPDF::cleanWord($str);
 
     $xml->loadXML(utf8_encode($str));
         
@@ -256,7 +256,7 @@ class CHtmlToPDF {
   // Table extraite de :
   // - http://www.sourcerally.net/Scripts/39-Convert-HTML-Entities-to-XML-Entities
   // - http://yost.com/computers/htmlchars/html40charsbynumber.html
-  function xmlEntities($str) {
+  static function xmlEntities($str) {
     $xml =  array('&#34;'     , '&#38;'    , '&#60;'     , '&#62;'     , '&#160;'    , '&#161;'    , '&#162;' ,
                   '&#163;'    , '&#164;'   , '&#165;'    , '&#166;'    , '&#167;'    , '&#168;'    , '&#169;' ,
                   '&#170;'    , '&#171;'   , '&#172;'    , '&#173;'    , '&#174;'    , '&#175;'    , '&#176;' ,
