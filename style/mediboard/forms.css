@@ -151,7 +151,7 @@ fieldset legend {
 }
 
 table.layout td.cancelled {
-	background-color: #F00;
+	background-color: #F00 !important;
 }
 
 label:hover,
