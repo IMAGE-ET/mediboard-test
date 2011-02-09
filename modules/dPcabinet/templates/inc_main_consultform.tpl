@@ -55,11 +55,13 @@ Main.add(function () {
       <input type="hidden" name="dosql" value="do_consultation_aed" />
       {{mb_key object=$consult}}
       
+      {{if !$readonly}}
       <div class="small-info text">
         <strong>Amélioration des aides à la saisie</strong><br />
         Les aides à la saisie ont évolué pour vous en simplifier l'utilisation.<br />
         Pour en savoir plus, <a href="#1" onclick="(new Url('dPcompteRendu', 'vw_aides_saisie_help')).requestModal(700, 600);">cliquez ici</a>
       </div>
+      {{/if}}
       
       {{assign var=exam_count value=$consult->_exam_fields|@count}}
       {{math assign=text_rows equation="12/round(c/2)" c=$exam_count}}
@@ -93,7 +95,7 @@ Main.add(function () {
           <fieldset>
             <legend>
               {{mb_label object=$consult field=$field}}
-              {{if $field == "traitement" && $isPrescriptionInstalled}}
+              {{if $field == "traitement" && $isPrescriptionInstalled && !$readonly}}
                 <input type="text" name="produit" value="" size="12" class="autocomplete" style="margin-top: -3px; margin-bottom: -2px;" />
                 <div style="display:none; width: 350px;" class="autocomplete" id="_traitement_auto_complete"></div>
               {{/if}}
