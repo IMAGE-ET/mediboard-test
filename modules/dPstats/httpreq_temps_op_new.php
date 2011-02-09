@@ -46,7 +46,7 @@ function buildPartialTables($tableName, $tableFields, $queryFields, $querySelect
     "\n`ccam` varchar(255) NOT NULL default ''," .
     "\nKEY `chir_id` (`chir_id`)," .
     "\nKEY `ccam` (`ccam`)" .
-    "\n) ENGINE=MyISAM;";
+    "\n) /*! ENGINE=MyISAM */;";
   
 //  mbDump($create);
   $ds->exec($create);

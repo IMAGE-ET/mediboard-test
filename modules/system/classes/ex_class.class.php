@@ -235,7 +235,7 @@ class CExClass extends CMbObject {
         `object_class` VARCHAR(80) NOT NULL,
         INDEX ( `object_id` ),
         INDEX ( `object_class` )
-      ) TYPE=MYISAM;";
+      ) /*! ENGINE=MyISAM */;";
       
       $ds = $this->_spec->ds;
       if (!$ds->query($query)) {

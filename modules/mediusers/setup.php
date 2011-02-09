@@ -19,7 +19,7 @@ class CSetupmediusers extends CSetup {
           "\n`user_id` INT(11) UNSIGNED NOT NULL," .
           "\n`function_id` TINYINT(4) UNSIGNED NOT NULL DEFAULT '0'," .
           "\nPRIMARY KEY (`user_id`)" .
-          "\n) TYPE=MyISAM;";
+          "\n) /*! ENGINE=MyISAM */;";
     $this->addQuery($sql);
     $sql = "CREATE TABLE `functions_mediboard` (" .
           "\n`function_id` TINYINT(4) UNSIGNED NOT NULL AUTO_INCREMENT," .
@@ -27,7 +27,7 @@ class CSetupmediusers extends CSetup {
           "\n`text` VARCHAR(50) NOT NULL," .
           "\n`color` VARCHAR(6) NOT NULL DEFAULT 'ffffff'," .
           "\nPRIMARY KEY (`function_id`)" .
-          "\n) TYPE=MyISAM;";
+          "\n) /*! ENGINE=MyISAM */;";
     $this->addQuery($sql);
     
     $this->makeRevision("0.1");
@@ -47,7 +47,7 @@ class CSetupmediusers extends CSetup {
             "\n`discipline_id` TINYINT(4) UNSIGNED NOT NULL AUTO_INCREMENT," .
             "\n`text` VARCHAR(100) NOT NULL," .
             "\nPRIMARY KEY (`discipline_id`)" .
-            "\n) TYPE=MyISAM;";
+            "\n) /*! ENGINE=MyISAM */;";
     $this->addQuery($sql);
     $sql = "ALTER TABLE `users_mediboard` ADD `discipline_id` TINYINT(4) DEFAULT NULL AFTER `function_id`";
     $this->addQuery($sql);
@@ -256,7 +256,7 @@ class CSetupmediusers extends CSetup {
             "\n`text` VARCHAR(255) NOT NULL," .
             "\n`actes` VARCHAR(255) NOT NULL," .
             "\nPRIMARY KEY (`spec_cpam_id`)" .
-            "\n) TYPE=MyISAM;";
+            "\n) /*! ENGINE=MyISAM */;";
     $this->addQuery($sql);
     $sql = "ALTER TABLE `users_mediboard` ADD `spec_cpam_id` TINYINT(4) DEFAULT NULL AFTER `discipline_id`";
     $this->addQuery($sql);
@@ -413,7 +413,7 @@ class CSetupmediusers extends CSetup {
                `secondary_function_id` INT (11) UNSIGNED NOT NULL auto_increment PRIMARY KEY,
                `function_id` INT (11) UNSIGNED NOT NULL,
                `user_id` INT (11) UNSIGNED NOT NULL
-             ) TYPE=MYISAM;";
+             ) /*! ENGINE=MyISAM */;";
      $this->addQuery($sql);
      $sql = "ALTER TABLE `secondary_function` 
              ADD INDEX (`function_id`),

@@ -27,7 +27,7 @@ CREATE TABLE IF NOT EXISTS `access_log` (
   UNIQUE KEY `triplet` (`module`,`action`,`period`),
   KEY `module` (`module`),
   KEY `action` (`action`)
-) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
+) /*! ENGINE=MyISAM */  DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
 
 -- --------------------------------------------------------
 
@@ -48,7 +48,7 @@ CREATE TABLE IF NOT EXISTS `etab_externe` (
   `siret` char(14) DEFAULT NULL,
   `ape` varchar(6) DEFAULT NULL,
   PRIMARY KEY (`etab_id`)
-) ENGINE=MyISAM DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
+) /*! ENGINE=MyISAM */ DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
 
 -- --------------------------------------------------------
 
@@ -74,7 +74,7 @@ CREATE TABLE IF NOT EXISTS `groups_mediboard` (
   `tel_anesth` bigint(10) unsigned zerofill DEFAULT NULL,
   `service_urgences_id` int(11) unsigned DEFAULT NULL,
   PRIMARY KEY (`group_id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=2 ;
+) /*! ENGINE=MyISAM */  DEFAULT CHARSET=latin1 AUTO_INCREMENT=2 ;
 
 --
 -- Contenu de la table `groups_mediboard`
@@ -98,7 +98,7 @@ CREATE TABLE IF NOT EXISTS `message` (
   `urgence` enum('normal','urgent') NOT NULL DEFAULT 'normal',
   `module_id` int(11) unsigned DEFAULT NULL,
   PRIMARY KEY (`message_id`)
-) ENGINE=MyISAM DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
+) /*! ENGINE=MyISAM */ DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
 
 -- --------------------------------------------------------
 
@@ -120,7 +120,7 @@ CREATE TABLE IF NOT EXISTS `modules` (
   `mod_ui_active` int(1) unsigned NOT NULL DEFAULT '0',
   `mod_description` varchar(255) NOT NULL DEFAULT '',
   PRIMARY KEY (`mod_id`,`mod_directory`)
-) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=4 ;
+) /*! ENGINE=MyISAM */  DEFAULT CHARSET=latin1 AUTO_INCREMENT=4 ;
 
 --
 -- Contenu de la table `modules`
@@ -149,7 +149,7 @@ CREATE TABLE IF NOT EXISTS `note` (
   `text` text,
   PRIMARY KEY (`note_id`),
   KEY `user_id` (`user_id`,`object_id`,`object_class`,`public`,`degre`,`date`)
-) ENGINE=MyISAM DEFAULT CHARSET=latin1 COMMENT='Table des notes sur les objets' AUTO_INCREMENT=1 ;
+) /*! ENGINE=MyISAM */ DEFAULT CHARSET=latin1 COMMENT='Table des notes sur les objets' AUTO_INCREMENT=1 ;
 
 -- --------------------------------------------------------
 
@@ -167,7 +167,7 @@ CREATE TABLE IF NOT EXISTS `permissions` (
   UNIQUE KEY `idx_pgrant_on` (`permission_grant_on`,`permission_item`,`permission_user`),
   KEY `idx_puser` (`permission_user`),
   KEY `idx_pvalue` (`permission_value`)
-) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=80 ;
+) /*! ENGINE=MyISAM */  DEFAULT CHARSET=latin1 AUTO_INCREMENT=80 ;
 
 --
 -- Contenu de la table `permissions`
@@ -268,7 +268,7 @@ CREATE TABLE IF NOT EXISTS `perm_module` (
   `view` tinyint(1) unsigned zerofill NOT NULL DEFAULT '0',
   PRIMARY KEY (`perm_module_id`),
   UNIQUE KEY `user_id` (`user_id`,`mod_id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=latin1 COMMENT='table des permissions sur les modules' AUTO_INCREMENT=4 ;
+) /*! ENGINE=MyISAM */  DEFAULT CHARSET=latin1 COMMENT='table des permissions sur les modules' AUTO_INCREMENT=4 ;
 
 --
 -- Contenu de la table `perm_module`
@@ -293,7 +293,7 @@ CREATE TABLE IF NOT EXISTS `perm_object` (
   `permission` tinyint(1) unsigned zerofill NOT NULL DEFAULT '0',
   PRIMARY KEY (`perm_object_id`),
   UNIQUE KEY `user_id` (`user_id`,`object_id`,`object_class`)
-) ENGINE=MyISAM DEFAULT CHARSET=latin1 COMMENT='Table des permissions sur les objets' AUTO_INCREMENT=1 ;
+) /*! ENGINE=MyISAM */ DEFAULT CHARSET=latin1 COMMENT='Table des permissions sur les objets' AUTO_INCREMENT=1 ;
 
 -- --------------------------------------------------------
 
@@ -325,7 +325,7 @@ CREATE TABLE IF NOT EXISTS `users` (
   PRIMARY KEY (`user_id`),
   KEY `idx_uid` (`user_username`),
   KEY `idx_pwd` (`user_password`)
-) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=14 ;
+) /*! ENGINE=MyISAM */  DEFAULT CHARSET=latin1 AUTO_INCREMENT=14 ;
 
 --
 -- Contenu de la table `users`
@@ -365,7 +365,7 @@ CREATE TABLE IF NOT EXISTS `user_log` (
   KEY `object_id` (`object_id`),
   KEY `object_class` (`object_class`),
   KEY `date` (`date`)
-) ENGINE=MyISAM DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
+) /*! ENGINE=MyISAM */ DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
 
 -- --------------------------------------------------------
 
@@ -379,7 +379,7 @@ CREATE TABLE IF NOT EXISTS `user_preferences` (
   `pref_value` varchar(40) NOT NULL DEFAULT '',
   PRIMARY KEY (`pref_user`,`pref_name`),
   KEY `pref_user` (`pref_user`,`pref_name`)
-) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+) /*! ENGINE=MyISAM */ DEFAULT CHARSET=latin1;
 
 --
 -- Contenu de la table `user_preferences`

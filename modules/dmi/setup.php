@@ -20,7 +20,7 @@ class CSetupdmi extends CSetup {
 			`category_id` INT (11) UNSIGNED NOT NULL auto_increment PRIMARY KEY,
 			`nom` VARCHAR (255) NOT NULL,
 			`description` VARCHAR (255)
-		) TYPE=MYISAM;";
+		) /*! ENGINE=MyISAM */;";
     $this->addQuery($sql);
     
     $this->makeRevision("0.01");
@@ -47,7 +47,7 @@ class CSetupdmi extends CSetup {
 		`lot` VARCHAR (255),
 		`dans_livret` ENUM ('0','1'),
 		`category_id` INT (11) UNSIGNED NOT NULL
-		) TYPE=MYISAM;";
+		) /*! ENGINE=MyISAM */;";
     $this->addQuery($sql);
 
     $sql = "ALTER TABLE `dmi` 
@@ -69,7 +69,7 @@ class CSetupdmi extends CSetup {
 							`description` TEXT,
 							`code` VARCHAR (255) NOT NULL,
 							`in_livret` ENUM ('0','1')
-						) TYPE=MYISAM;";
+						) /*! ENGINE=MyISAM */;";
     $this->addQuery($sql);
     
     $sql = "CREATE TABLE `category_dm` (
@@ -77,7 +77,7 @@ class CSetupdmi extends CSetup {
 							`nom` VARCHAR (255) NOT NULL,
 							`description` TEXT,
 							`group_id` INT (11) UNSIGNED NOT NULL
-						) TYPE=MYISAM;";
+						) /*! ENGINE=MyISAM */;";
     $this->addQuery($sql);
     
     $sql = "ALTER TABLE `dm` 

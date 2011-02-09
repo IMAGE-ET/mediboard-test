@@ -36,7 +36,7 @@ class CSetupdPcompteRendu extends CSetup {
             "\ntype ENUM('consultation', 'operation', 'hospitalisation', 'autre') DEFAULT 'autre' NOT NULL ," .
             "\nPRIMARY KEY (compte_rendu_id) ," .
             "\nINDEX (chir_id)" .
-            "\n) TYPE=MyISAM COMMENT = 'Table des modeles de compte-rendu';";
+            "\n) /*! ENGINE=MyISAM */ COMMENT = 'Table des modeles de compte-rendu';";
     $this->addQuery($query);
     $query = "ALTER TABLE permissions" .
             "\nCHANGE permission_grant_on permission_grant_on VARCHAR(25) NOT NULL";
@@ -51,7 +51,7 @@ class CSetupdPcompteRendu extends CSetup {
             "\n`field` VARCHAR(20) NOT NULL ," .
             "\n`name` VARCHAR(40) NOT NULL ," .
             "\n`text` TEXT NOT NULL ," .
-            "\nPRIMARY KEY (`aide_id`)) TYPE=MyISAM;";
+            "\nPRIMARY KEY (`aide_id`)) /*! ENGINE=MyISAM */;";
     $this->addQuery($query);
     
     $this->makeRevision("0.11");
@@ -62,7 +62,7 @@ class CSetupdPcompteRendu extends CSetup {
                   `valeurs` TEXT,
                   PRIMARY KEY (`liste_choix_id`) ,
                   INDEX (`chir_id`)
-                ) TYPE=MyISAM COMMENT = 'table des listes de choix personnalisées';";
+                ) /*! ENGINE=MyISAM */ COMMENT = 'table des listes de choix personnalisées';";
     $this->addQuery($query);
     
     $this->makeRevision("0.12");
@@ -73,7 +73,7 @@ class CSetupdPcompteRendu extends CSetup {
                   `modeles` TEXT,
                   PRIMARY KEY (`pack_id`) ,
                   INDEX (`chir_id`)
-                ) TYPE=MyISAM COMMENT = 'table des packs post hospitalisation';";
+                ) /*! ENGINE=MyISAM */ COMMENT = 'table des packs post hospitalisation';";
     $this->addQuery($query);
     
     $this->makeRevision("0.13");
@@ -435,7 +435,7 @@ class CSetupdPcompteRendu extends CSetup {
               `modele_to_pack_id` INT (11) UNSIGNED NOT NULL auto_increment PRIMARY KEY,
               `modele_id` INT (11) UNSIGNED,
               `pack_id` INT (11) UNSIGNED
-					 ) TYPE=MYISAM;";
+					 ) /*! ENGINE=MyISAM */;";
 		$this->addQuery($query);
 		
 		$query = "ALTER TABLE `modele_to_pack` 

@@ -26,7 +26,7 @@ class CSetupsystem extends CSetup {
 			`period` DATETIME NOT NULL ,
 			`hits` TINYINT DEFAULT '0' NOT NULL ,
 			`duration` DOUBLE NOT NULL,
-			PRIMARY KEY ( `accesslog_id` )) TYPE=MyISAM";
+			PRIMARY KEY ( `accesslog_id` )) /*! ENGINE=MyISAM */";
     $this->addQuery($query);
     $query = "ALTER TABLE `access_log` 
 		  ADD UNIQUE `triplet` (`module` , `action` , `period`)";
@@ -97,7 +97,7 @@ class CSetupsystem extends CSetup {
       `libelle` VARCHAR( 255 ) NOT NULL ,
       `text` TEXT NULL ,
       INDEX ( `user_id` , `object_id` , `object_class` , `public` , `degre` , `date` )
-    ) ENGINE = MYISAM COMMENT = 'Table des notes sur les objets';";
+    ) /*! ENGINE=MyISAM */ COMMENT = 'Table des notes sur les objets';";
     $this->addQuery($query);
     
     $this->makeRevision("1.0.07");
@@ -181,7 +181,7 @@ class CSetupsystem extends CSetup {
 	    `handled` ENUM ('0','1') NOT NULL DEFAULT '0',
 	    `object_id` INT (11) UNSIGNED NOT NULL,
 	    `object_class` VARCHAR (255) NOT NULL
-	  ) TYPE=MYISAM;";
+	  ) /*! ENGINE=MyISAM */;";
     $this->addQuery($query);
     $query = "ALTER TABLE `alert` 
       ADD INDEX (`object_id`),
@@ -222,14 +222,14 @@ class CSetupsystem extends CSetup {
 		  `content_id` BIGINT NOT NULL auto_increment PRIMARY KEY,
 		  `content` TEXT,
 		  `cr_id` INT
-		) TYPE=MYISAM;";
+		) /*! ENGINE=MyISAM */;";
     $this->addQuery($query);
     
     $query = "CREATE TABLE `content_xml` (
 		  `content_id` BIGINT NOT NULL auto_increment PRIMARY KEY,
 		  `content` TEXT,
 		  `import_id` INT
-		) TYPE=MYISAM;";
+		) /*! ENGINE=MyISAM */;";
     $this->addQuery($query);
     
     $this->makeRevision("1.0.29");
@@ -260,7 +260,7 @@ class CSetupsystem extends CSetup {
 	    `user` VARCHAR  (255),
 	    `password` VARCHAR (50),
 	    `type_echange` VARCHAR  (255)
-    ) TYPE=MYISAM;";
+    ) /*! ENGINE=MyISAM */;";
     $this->addQuery($query);
     
     $this->makeRevision("1.0.35");
@@ -268,14 +268,14 @@ class CSetupsystem extends CSetup {
       `host_class` VARCHAR (255) NOT NULL,
       `event` VARCHAR (255) NOT NULL,
       `ex_class_id` INT (11) UNSIGNED NOT NULL auto_increment PRIMARY KEY
-    ) TYPE=MYISAM;";
+    ) /*! ENGINE=MyISAM */;";
     $this->addQuery($query);
     $query = "CREATE TABLE `ex_class_field` (
       `ex_class_field_id` INT (11) UNSIGNED NOT NULL auto_increment PRIMARY KEY,
       `ex_class_id` INT (11) UNSIGNED NOT NULL,
       `name` VARCHAR (255) NOT NULL,
       `prop` VARCHAR (255) NOT NULL
-    ) TYPE=MYISAM;";
+    ) /*! ENGINE=MyISAM */;";
     $this->addQuery($query);
     $query = "ALTER TABLE `ex_class_field` 
               ADD INDEX (`ex_class_id`);";
@@ -286,7 +286,7 @@ class CSetupsystem extends CSetup {
       `field` VARCHAR  (255) NOT NULL,
       `operator` ENUM ('=','!=','>','>=','<','<=','startsWith','endsWith','contains') NOT NULL DEFAULT '=',
       `value` VARCHAR  (255) NOT NULL
-    ) TYPE=MYISAM;";
+    ) /*! ENGINE=MyISAM */;";
     $this->addQuery($query);
     $query = "ALTER TABLE `ex_class_constraint` 
       ADD INDEX (`ex_class_id`);";
@@ -298,7 +298,7 @@ class CSetupsystem extends CSetup {
       `std` VARCHAR  (255),
       `desc` VARCHAR  (255),
       `court` VARCHAR  (255)
-    ) TYPE=MYISAM;";
+    ) /*! ENGINE=MyISAM */;";
     $this->addQuery($query);
     $query = "ALTER TABLE `ex_class_field_translation` 
       ADD INDEX (`ex_class_field_id`);";
@@ -311,7 +311,7 @@ class CSetupsystem extends CSetup {
       `lang` CHAR  (2),
       `key` VARCHAR  (40),
       `value` VARCHAR  (255)
-    ) TYPE=MYISAM;";
+    ) /*! ENGINE=MyISAM */;";
     $this->addQuery($query);
     $query = "ALTER TABLE `ex_class_field_enum_translation` 
 	    ADD INDEX (`ex_class_field_id`),
@@ -344,7 +344,7 @@ class CSetupsystem extends CSetup {
 	    `coord_label_y` TINYINT (4) UNSIGNED,
 	    `coord_value_x` TINYINT (4) UNSIGNED,
 	    `coord_value_y` TINYINT (4) UNSIGNED
-	    ) TYPE=MYISAM;";
+	    ) /*! ENGINE=MyISAM */;";
     $this->addQuery($query);
     $query = "ALTER TABLE `ex_class_host_field` 
       ADD INDEX (`ex_class_id`);";
@@ -370,7 +370,7 @@ class CSetupsystem extends CSetup {
       `content` TEXT,
       `import_id` INT (11),
       `separator` CHAR (1)
-    ) TYPE=MYISAM;";
+    ) /*! ENGINE=MyISAM */;";
     $this->addQuery($query);
     
     $this->mod_version = "1.0.43";

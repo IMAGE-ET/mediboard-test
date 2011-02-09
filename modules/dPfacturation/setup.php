@@ -20,7 +20,7 @@ class CSetupdPfacturation extends CSetup {
  			`facture_id` INT(11) UNSIGNED NOT NULL AUTO_INCREMENT, 
  			`date` DATE NOT NULL, 
  			`sejour_id` INT(11) UNSIGNED NOT NULL, 
-			PRIMARY KEY (`facture_id`)) TYPE=MYISAM;";
+			PRIMARY KEY (`facture_id`)) /*! ENGINE=MyISAM */;";
      $this->addQuery($sql);
       
      $sql = "CREATE TABLE `factureitem` (
@@ -29,7 +29,7 @@ class CSetupdPfacturation extends CSetup {
  				`libelle` TEXT NOT NULL, 
  				`prix_ht` FLOAT NOT NULL, 
  				`taxe` FLOAT, 
-			PRIMARY KEY (`factureitem_id`)) TYPE=MYISAM;";
+			PRIMARY KEY (`factureitem_id`)) /*! ENGINE=MyISAM */;";
      $this->addQuery($sql);   
      
      $this->makeRevision("0.10");

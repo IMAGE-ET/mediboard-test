@@ -23,7 +23,7 @@ class CSetupdPstock extends CSetup {
 			 `code` VARCHAR(32) NULL,
 			 `category_id` INT(11) UNSIGNED NOT NULL, 
 			 `societe_id` INT(11) UNSIGNED NOT NULL, 
-			PRIMARY KEY (`product_id`)) TYPE=MYISAM;';
+			PRIMARY KEY (`product_id`)) /*! ENGINE=MyISAM */;';
     $this->addQuery($query);
     
     $query = 'ALTER TABLE `product`
@@ -35,7 +35,7 @@ class CSetupdPstock extends CSetup {
     $query = 'CREATE TABLE `product_category` (
 			 `category_id` INT(11) UNSIGNED NOT NULL AUTO_INCREMENT, 
 			 `name` VARCHAR(50) NOT NULL, 
-			PRIMARY KEY (`category_id`)) TYPE=MYISAM;';
+			PRIMARY KEY (`category_id`)) /*! ENGINE=MyISAM */;';
     $this->addQuery($query);
 
     $query = 'CREATE TABLE `product_delivery` (
@@ -46,7 +46,7 @@ class CSetupdPstock extends CSetup {
 		 `target_id` INT(11) UNSIGNED NOT NULL, 
 		 `code` VARCHAR(32) NULL, 
 		 `description` TEXT, 
-		PRIMARY KEY (`delivery_id`)) TYPE=MYISAM;';
+		PRIMARY KEY (`delivery_id`)) /*! ENGINE=MyISAM */;';
     $this->addQuery($query);
     
     $query = 'ALTER TABLE `product_delivery`
@@ -66,7 +66,7 @@ class CSetupdPstock extends CSetup {
 		 `cancelled` BOOL NULL DEFAULT \'0\',
 		 `deleted` BOOL NULL DEFAULT \'0\',
 		 `order_number` VARCHAR(64) NOT NULL, 
-		PRIMARY KEY (`order_id`)) TYPE=MYISAM;';
+		PRIMARY KEY (`order_id`)) /*! ENGINE=MyISAM */;';
     $this->addQuery($query);
     
     $query = 'ALTER TABLE `product_order`
@@ -84,7 +84,7 @@ class CSetupdPstock extends CSetup {
 		 `unit_price` FLOAT, 
 		 `date_received` DATETIME, 
 		 `quantity_received` INT(11) UNSIGNED DEFAULT \'0\',
-		PRIMARY KEY (`order_item_id`)) TYPE=MYISAM;';
+		PRIMARY KEY (`order_item_id`)) /*! ENGINE=MyISAM */;';
     $this->addQuery($query);
     
     $query = 'ALTER TABLE `product_order_item`
@@ -100,7 +100,7 @@ class CSetupdPstock extends CSetup {
 		 `quantity` INT(11) UNSIGNED NOT NULL, 
 		 `code` VARCHAR(32) NULL, 
 		 `price` FLOAT NOT NULL, 
-		PRIMARY KEY (`reference_id`)) TYPE=MYISAM;';
+		PRIMARY KEY (`reference_id`)) /*! ENGINE=MyISAM */;';
     $this->addQuery($query);
     
     $query = 'ALTER TABLE `product_reference`
@@ -118,7 +118,7 @@ class CSetupdPstock extends CSetup {
 		 `order_threshold_min` INT(11) UNSIGNED NOT NULL, 
 		 `order_threshold_optimum` INT(11) UNSIGNED, 
 		 `order_threshold_max` INT(11) UNSIGNED NOT NULL, 
-		PRIMARY KEY (`stock_id`)) TYPE=MYISAM;';
+		PRIMARY KEY (`stock_id`)) /*! ENGINE=MyISAM */;';
     $this->addQuery($query);
     
     $query = 'ALTER TABLE `product_stock`
@@ -138,7 +138,7 @@ class CSetupdPstock extends CSetup {
 		 `siret` VARCHAR(14) NULL,
 		 `contact_name` VARCHAR(50), 
 		 `contact_surname` VARCHAR(50), 
-		PRIMARY KEY (`societe_id`)) TYPE=MYISAM;';
+		PRIMARY KEY (`societe_id`)) /*! ENGINE=MyISAM */;';
     $this->addQuery($query);
     
     $query = 'CREATE TABLE `product_stock_out` (
@@ -148,7 +148,7 @@ class CSetupdPstock extends CSetup {
 		 `quantity` INT(11) NOT NULL, 
 		 `code` VARCHAR(32), 
 		 `function_id` INT(11) UNSIGNED, 
-		PRIMARY KEY (`stock_out_id`)) TYPE=MYISAM;';
+		PRIMARY KEY (`stock_out_id`)) /*! ENGINE=MyISAM */;';
     $this->addQuery($query);
     
     $query = 'ALTER TABLE `product_stock_out` 
@@ -164,7 +164,7 @@ class CSetupdPstock extends CSetup {
       `product_id` INT (11) UNSIGNED NOT NULL,
       `function_id` INT (11) UNSIGNED NOT NULL,
       `quantity` INT (11) NOT NULL
-    ) TYPE=MYISAM;';
+    ) /*! ENGINE=MyISAM */;';
     $this->addQuery($query);
     
     $query = 'ALTER TABLE `product_stock_service` 
@@ -232,7 +232,7 @@ class CSetupdPstock extends CSetup {
       `quantity` INT (11) NOT NULL,
       `code` VARCHAR (255),
       `date` DATETIME NOT NULL
-    ) TYPE=MYISAM;';
+    ) /*! ENGINE=MyISAM */;';
     $this->addQuery($query);
     
     $query = 'ALTER TABLE `product_order_item_reception` 
@@ -248,7 +248,7 @@ class CSetupdPstock extends CSetup {
       `quantity` INT (11) NOT NULL,
       `code` VARCHAR (255),
       `date_delivery` DATETIME NOT NULL,
-      `date_reception` DATETIME) TYPE=MYISAM;';
+      `date_reception` DATETIME) /*! ENGINE=MyISAM */;';
     $this->addQuery($query);
     
     $query = 'ALTER TABLE `product_delivery_trace` 
@@ -290,7 +290,7 @@ class CSetupdPstock extends CSetup {
 		  `date` DATETIME NOT NULL,
 		  `description` TEXT,
 		  `object_id` INT (11) UNSIGNED NOT NULL,
-		  `object_class` ENUM (\'CProductStockGroup\',\'CProductStockService\') NOT NULL) TYPE=MYISAM;';
+		  `object_class` ENUM (\'CProductStockGroup\',\'CProductStockService\') NOT NULL) /*! ENGINE=MyISAM */;';
     $this->addQuery($query);
     
 		$query = 'ALTER TABLE `product_discrepancy` 
@@ -336,7 +336,7 @@ class CSetupdPstock extends CSetup {
 					  `desc` TEXT,
 					  `position` INT (11),
 					  `group_id` INT (11) UNSIGNED NOT NULL
-					) TYPE=MYISAM;";
+					) /*! ENGINE=MyISAM */;";
 		$this->addQuery($query);
     $query = "ALTER TABLE `product_stock_location` ADD INDEX (`group_id`);";
 		$this->addQuery($query);
@@ -376,7 +376,7 @@ class CSetupdPstock extends CSetup {
               `societe_id` INT (11) UNSIGNED NOT NULL,
               `group_id` INT (11) UNSIGNED NOT NULL,
               `reference` VARCHAR (255) NOT NULL
-            ) TYPE=MYISAM;";
+            ) /*! ENGINE=MyISAM */;";
     $this->addQuery($query);
     $query = "ALTER TABLE `product_reception` 
               ADD INDEX (`date`),
@@ -498,7 +498,7 @@ class CSetupdPstock extends CSetup {
     $query = "CREATE TABLE `product_equivalence` (
               `equivalence_id` INT (11) UNSIGNED NOT NULL auto_increment PRIMARY KEY,
               `name` VARCHAR (255) NOT NULL
-            ) TYPE=MYISAM;";
+            ) /*! ENGINE=MyISAM */;";
     $this->addQuery($query);
     $query = "ALTER TABLE `product` 
               ADD `equivalence_id` INT (11) UNSIGNED,
@@ -507,13 +507,13 @@ class CSetupdPstock extends CSetup {
     $query = "CREATE TABLE `product_selection` (
               `selection_id` INT (11) UNSIGNED NOT NULL auto_increment PRIMARY KEY,
               `name` VARCHAR (255) NOT NULL
-            ) TYPE=MYISAM;";
+            ) /*! ENGINE=MyISAM */;";
     $this->addQuery($query);
     $query = "CREATE TABLE `product_selection_item` (
               `selection_item_id` INT (11) UNSIGNED NOT NULL auto_increment PRIMARY KEY,
               `product_id` INT (11) UNSIGNED NOT NULL,
               `selection_id` INT (11) UNSIGNED NOT NULL
-            ) TYPE=MYISAM;";
+            ) /*! ENGINE=MyISAM */;";
     $this->addQuery($query);
     $query = "ALTER TABLE `product_selection_item` 
               ADD INDEX (`product_id`),
@@ -523,7 +523,7 @@ class CSetupdPstock extends CSetup {
               `endowment_id` INT (11) UNSIGNED NOT NULL auto_increment PRIMARY KEY,
               `name` VARCHAR (255) NOT NULL,
               `service_id` INT (11) UNSIGNED NOT NULL
-            ) TYPE=MYISAM;";
+            ) /*! ENGINE=MyISAM */;";
     $this->addQuery($query);
     $query = "ALTER TABLE `product_endowment` ADD INDEX (`service_id`);";
     $this->addQuery($query);
@@ -532,7 +532,7 @@ class CSetupdPstock extends CSetup {
               `quantity` INT (11) UNSIGNED NOT NULL,
               `endowment_id` INT (11) UNSIGNED NOT NULL,
               `product_id` INT (11) UNSIGNED NOT NULL
-            ) TYPE=MYISAM;";
+            ) /*! ENGINE=MyISAM */;";
     $this->addQuery($query);
     $query = "ALTER TABLE `product_endowment_item` 
               ADD INDEX (`endowment_id`),
@@ -546,7 +546,7 @@ class CSetupdPstock extends CSetup {
               `societe_id` INT (11) UNSIGNED NOT NULL,
               `group_id` INT (11) UNSIGNED NOT NULL,
               `reference` VARCHAR (80) NOT NULL
-            ) TYPE=MYISAM;";
+            ) /*! ENGINE=MyISAM */;";
     $this->addQuery($query);
     $query = "ALTER TABLE `product_bill` 
               ADD INDEX (`date`),
@@ -559,7 +559,7 @@ class CSetupdPstock extends CSetup {
               `reception_item_id` INT (11) UNSIGNED,
               `quantity` INT (11) UNSIGNED,
               `unit_price` DECIMAL  (12,5)
-            ) TYPE=MYISAM;";
+            ) /*! ENGINE=MyISAM */;";
     $this->addQuery($query);
     $query = "ALTER TABLE `product_reception_bill_item` 
               ADD INDEX (`bill_id`),

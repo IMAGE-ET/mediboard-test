@@ -21,7 +21,7 @@ class CSetupdPlabo extends CSetup {
           "\n`identifiant` VARCHAR(255) NOT NULL ," .
           "\n`libelle` VARCHAR(255) NOT NULL," .
           "\nPRIMARY KEY (`catalogue_labo_id`) ," .
-          "\nINDEX ( `pere_id` )) TYPE=MyISAM;";
+          "\nINDEX ( `pere_id` )) /*! ENGINE=MyISAM */;";
     $this->addQuery($sql);
     $sql = "CREATE TABLE `examen_labo` (" .
           "\n`examen_labo_id` INT(11) UNSIGNED NOT NULL AUTO_INCREMENT ," .
@@ -33,7 +33,7 @@ class CSetupdPlabo extends CSetup {
           "\n`min` FLOAT DEFAULT NULL," .
           "\n`max` FLOAT DEFAULT NULL," .
           "\nPRIMARY KEY ( `examen_labo_id` ) ," .
-          "\nINDEX ( `catalogue_labo_id` )) TYPE=MyISAM;";
+          "\nINDEX ( `catalogue_labo_id` )) /*! ENGINE=MyISAM */;";
     $this->addQuery($sql);
 
     $this->makeRevision("0.1");
@@ -42,7 +42,7 @@ class CSetupdPlabo extends CSetup {
           "\n`function_id` INT(11) UNSIGNED DEFAULT NULL ," .
           "\n`libelle` VARCHAR(255) NOT NULL," .
           "\nPRIMARY KEY ( `pack_examens_labo_id` ) ," .
-          "\nINDEX ( `function_id` )) TYPE=MyISAM;";
+          "\nINDEX ( `function_id` )) /*! ENGINE=MyISAM */;";
     $this->addQuery($sql);
     $sql = "CREATE TABLE `pack_item_examen_labo` (" .
           "\n`pack_item_examen_labo_id` INT(11) UNSIGNED NOT NULL AUTO_INCREMENT ," .
@@ -52,7 +52,7 @@ class CSetupdPlabo extends CSetup {
           "\nPRIMARY KEY ( `pack_item_examen_labo_id` ) ," .
           "\nINDEX ( `pack_examens_labo_id` ) ," .
           "\nINDEX ( `examen_labo_id` )" .
-          ") TYPE=MyISAM;";
+          ") /*! ENGINE=MyISAM */;";
     $this->addQuery($sql);
     
     $this->makeRevision("0.11");
@@ -62,7 +62,7 @@ class CSetupdPlabo extends CSetup {
           "\n`prescription_labo_id` INT(11) UNSIGNED NOT NULL AUTO_INCREMENT ," .
           "\n`consultation_id` INT(11) UNSIGNED DEFAULT NULL ," .
           "\nPRIMARY KEY ( `prescription_labo_id` ) ," .
-          "\nINDEX ( `consultation_id` )) TYPE=MyISAM;";
+          "\nINDEX ( `consultation_id` )) /*! ENGINE=MyISAM */;";
     $this->addQuery($sql);
     $sql = "CREATE TABLE `prescription_labo_examen` (" .
           "\n`prescription_labo_examen_id` INT(11) UNSIGNED NOT NULL AUTO_INCREMENT ," .
@@ -71,7 +71,7 @@ class CSetupdPlabo extends CSetup {
           "\nPRIMARY KEY ( `prescription_labo_examen_id` ) ," .
           "\nINDEX ( `prescription_labo_id` ) ," .
           "\nINDEX ( `examen_labo_id` )" .
-          ") TYPE=MyISAM;";
+          ") /*! ENGINE=MyISAM */;";
     $this->addQuery($sql);
     
     $this->makeRevision("0.12");

@@ -69,7 +69,7 @@ class CSetupdPetablissement extends CSetup {
 			`tel` BIGINT(10) UNSIGNED ZEROFILL, 
 			`fax` BIGINT(10) UNSIGNED ZEROFILL, 
 			`finess` INT(9) UNSIGNED ZEROFILL, 
-			PRIMARY KEY (`etab_id`)) TYPE=MYISAM;";
+			PRIMARY KEY (`etab_id`)) /*! ENGINE=MyISAM */;";
     $this->addQuery($query);
     
     $this->makeRevision("0.16");
@@ -118,7 +118,7 @@ class CSetupdPetablissement extends CSetup {
       `object_id` INT (11) UNSIGNED,
       `max_comp` INT (11) UNSIGNED,
       `max_ambu` INT (11) UNSIGNED
-    ) TYPE=MYISAM;";
+    ) /*! ENGINE=MyISAM */;";
     $this->addQuery($query);
     
     $query = "ALTER TABLE `groups_config` 

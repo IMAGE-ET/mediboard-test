@@ -29,7 +29,7 @@ class CSetupdPstats extends CSetup {
                `duree_moy` TIME NOT NULL ,
                `duree_ecart` TIME NOT NULL,
                PRIMARY KEY  (temps_op_id)
-               ) TYPE=MyISAM COMMENT='Table temporaire des temps operatoire';";
+               ) /*! ENGINE=MyISAM */ COMMENT='Table temporaire des temps operatoire';";
     $this->addQuery($sql);
     $sql = "CREATE TABLE `temps_prepa` (
                `temps_prepa_id` INT(11) NOT NULL AUTO_INCREMENT ,
@@ -39,7 +39,7 @@ class CSetupdPstats extends CSetup {
                `duree_moy` TIME NOT NULL ,
                `duree_ecart` TIME NOT NULL,
                PRIMARY KEY  (temps_prepa_id)
-               ) TYPE=MyISAM COMMENT='Table temporaire des temps preparatoire';";
+               ) /*! ENGINE=MyISAM */ COMMENT='Table temporaire des temps preparatoire';";
     $this->addQuery($sql);
     
     $this->makeRevision("0.11");
@@ -62,7 +62,7 @@ class CSetupdPstats extends CSetup {
                PRIMARY KEY (`temps_hospi_id`),
                INDEX (`praticien_id`),
                INDEX (`ccam`)
-               ) TYPE=MyISAM COMMENT='Table temporaire des temps d\'hospitalisation';";
+               ) /*! ENGINE=MyISAM */ COMMENT='Table temporaire des temps d\'hospitalisation';";
     $this->addQuery($sql);
     
     $this->makeRevision("0.13");

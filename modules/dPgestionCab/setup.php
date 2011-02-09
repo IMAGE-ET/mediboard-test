@@ -27,7 +27,7 @@ class CSetupdPgestionCab extends CSetup {
                   `rques` TEXT,
                   PRIMARY KEY ( `gestioncab_id` ) ,
                   INDEX ( `function_id` , `rubrique_id` , `mode_paiement_id` )
-                ) TYPE=MyISAM COMMENT = 'Table des lignes de la comptabilité de cabinet';";
+                ) /*! ENGINE=MyISAM */ COMMENT = 'Table des lignes de la comptabilité de cabinet';";
     $this->addQuery($sql);
     $sql = "CREATE TABLE `rubrique_gestioncab` (
                   `rubrique_id` INT NOT NULL AUTO_INCREMENT ,
@@ -35,7 +35,7 @@ class CSetupdPgestionCab extends CSetup {
                   `nom` VARCHAR( 30 ) DEFAULT 'divers' NOT NULL ,
                   PRIMARY KEY ( `rubrique_id` ) ,
                   INDEX ( `function_id` )
-                ) TYPE=MyISAM COMMENT = 'Table des rubriques pour la gestion comptable de cabinet';";
+                ) /*! ENGINE=MyISAM */ COMMENT = 'Table des rubriques pour la gestion comptable de cabinet';";
     $this->addQuery($sql);
     $sql = "INSERT INTO `rubrique_gestioncab` ( `rubrique_id` , `function_id` , `nom` )
                 VALUES ('', '0', 'divers');";
@@ -46,7 +46,7 @@ class CSetupdPgestionCab extends CSetup {
                   `nom` VARCHAR( 30 ) DEFAULT 'inconnu' NOT NULL ,
                   PRIMARY KEY ( `mode_paiement_id` ) ,
                   INDEX ( `function_id` )
-                ) TYPE=MyISAM COMMENT = 'Table des modes de règlement';";
+                ) /*! ENGINE=MyISAM */ COMMENT = 'Table des modes de règlement';";
     $this->addQuery($sql);
     $sql = "INSERT INTO `mode_paiement` ( `mode_paiement_id` , `function_id` , `nom` ) VALUES ('', '0', 'Chèque');";
     $this->addQuery($sql);
@@ -85,7 +85,7 @@ class CSetupdPgestionCab extends CSetup {
                   `ape` VARCHAR(4) NOT NULL ,
                   PRIMARY KEY ( `params_paie_id` ) ,
                   INDEX ( `user_id` )
-                ) TYPE=MyISAM COMMENT = 'Paramètres fiscaux pour les fiches de paie';";
+                ) /*! ENGINE=MyISAM */ COMMENT = 'Paramètres fiscaux pour les fiches de paie';";
     $this->addQuery($sql);
     $sql = "CREATE TABLE `fiche_paie` (
                   `fiche_paie_id` BIGINT NOT NULL AUTO_INCREMENT ,
@@ -100,7 +100,7 @@ class CSetupdPgestionCab extends CSetup {
                   `anciennete` FLOAT NOT NULL ,
                   PRIMARY KEY ( `fiche_paie_id` ) ,
                   INDEX ( `params_paie_id` )
-                ) TYPE=MyISAM COMMENT = 'Table des fiches de paie';";
+                ) /*! ENGINE=MyISAM */ COMMENT = 'Table des fiches de paie';";
     $this->addQuery($sql);
     
     $this->makeRevision("0.1");
@@ -126,7 +126,7 @@ class CSetupdPgestionCab extends CSetup {
             "\n`ville` VARCHAR( 50 )," .
             "PRIMARY KEY ( `employecab_id` ) ," .
             "INDEX ( `function_id` )" .
-            ") TYPE=MyISAM COMMENT = 'Table des employes';";
+            ") /*! ENGINE=MyISAM */ COMMENT = 'Table des employes';";
     $this->addQuery($sql);
     $sql = "ALTER TABLE `params_paie` CHANGE `user_id` `employecab_id` INT NOT NULL DEFAULT '0';";
     $this->addQuery($sql);

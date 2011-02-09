@@ -27,7 +27,7 @@ class CSetupdPcabinet extends CSetup {
                     rques text,
                     PRIMARY KEY  (consultation_id),
                     KEY plageconsult_id (plageconsult_id,patient_id)
-                    ) TYPE=MyISAM COMMENT='Table des consultations';";
+                    ) /*! ENGINE=MyISAM */ COMMENT='Table des consultations';";
     $this->addQuery($sql);
     $sql = "CREATE TABLE plageconsult (
                     plageconsult_id bigint(20) NOT NULL auto_increment,
@@ -37,7 +37,7 @@ class CSetupdPcabinet extends CSetup {
                     fin time NOT NULL default '00:00:00',
                     PRIMARY KEY  (plageconsult_id),
                     KEY chir_id (chir_id)
-                    ) TYPE=MyISAM COMMENT='Table des plages de consultation des médecins';";
+                    ) /*! ENGINE=MyISAM */ COMMENT='Table des plages de consultation des médecins';";
     $this->addQuery($sql);
     
     
@@ -79,7 +79,7 @@ class CSetupdPcabinet extends CSetup {
                 PRIMARY KEY ( `tarif_id` ) ,
                 INDEX ( `chir_id`),
                 INDEX ( `function_id` )
-                ) TYPE=MyISAM COMMENT = 'table des tarifs de consultation';";
+                ) /*! ENGINE=MyISAM */ COMMENT = 'table des tarifs de consultation';";
     $this->addQuery($sql);
     $sql = "ALTER TABLE `consultation` ADD `tarif` TINYINT,
             ADD `type_tarif` ENUM( 'cheque', 'CB', 'especes', 'tiers', 'autre' ) ;";
@@ -148,7 +148,7 @@ class CSetupdPcabinet extends CSetup {
           PRIMARY KEY ( `consultation_anesth_id` ) ,
           INDEX ( `consultation_id`) ,
           INDEX ( `operation_id` )
-          ) TYPE=MyISAM COMMENT = 'Consultations d\'anesthésie';";
+          ) /*! ENGINE=MyISAM */ COMMENT = 'Consultations d\'anesthésie';";
     $this->addQuery($sql);
     
     // CR passage des champs à enregistrements supprimé car regressifs
@@ -163,7 +163,7 @@ class CSetupdPcabinet extends CSetup {
           "\n`droite_aerien` VARCHAR( 64 ) ," .
           "\n`droite_osseux` VARCHAR( 64 ) ," .
           "\nPRIMARY KEY ( `examaudio_id` ) ," .
-          "\nINDEX ( `consultation_id` )) TYPE=MyISAM";
+          "\nINDEX ( `consultation_id` )) /*! ENGINE=MyISAM */";
     $this->addQuery($sql);
     
     $this->makeRevision("0.32");
@@ -250,7 +250,7 @@ class CSetupdPcabinet extends CSetup {
                `technique_id` INT NOT NULL AUTO_INCREMENT ,
                `consultAnesth_id` INT NOT NULL ,
                `technique` TEXT NOT NULL ,
-               PRIMARY KEY ( `technique_id` )) TYPE=MyISAM";
+               PRIMARY KEY ( `technique_id` )) /*! ENGINE=MyISAM */";
     $this->addQuery($sql);
     $sql = "ALTER TABLE `consultation_anesth`
             ADD `rai` float default NULL,
@@ -283,7 +283,7 @@ class CSetupdPcabinet extends CSetup {
                `consult_id` INT NOT NULL ,
                `examen` TEXT NOT NULL ,
                `fait` tinyint(1) NOT NULL default 0,
-               PRIMARY KEY ( `exam_id` )) TYPE=MyISAM";
+               PRIMARY KEY ( `exam_id` )) /*! ENGINE=MyISAM */";
     $this->addQuery($sql);
     
     $this->makeRevision("0.44");
@@ -465,7 +465,7 @@ class CSetupdPcabinet extends CSetup {
                     `circonstances_interv` enum('reglee','urg','prgm','sansdelai') NULL,
                     PRIMARY KEY  (`exampossum_id`),
                     KEY `consultation_id` (`consultation_id`)
-                    ) TYPE=MyISAM COMMENT='Table pour le calcul possum';";
+                    ) /*! ENGINE=MyISAM */ COMMENT='Table pour le calcul possum';";
     $this->addQuery($sql);
     
     $this->makeRevision("0.54");
@@ -480,7 +480,7 @@ class CSetupdPcabinet extends CSetup {
                     `hesitation` enum('0','1') NOT NULL DEFAULT '0',
                     PRIMARY KEY  (`examnyha_id`),
                     KEY `consultation_id` (`consultation_id`)
-                    ) TYPE=MyISAM COMMENT='Table pour la classe NYHA';";
+                    ) /*! ENGINE=MyISAM */ COMMENT='Table pour la classe NYHA';";
     $this->addQuery($sql);
     
     $this->makeRevision("0.55");
@@ -567,7 +567,7 @@ class CSetupdPcabinet extends CSetup {
             `type` enum('tabac', 'oenolisme', 'cannabis') NOT NULL default 'tabac',
             `addiction` text,
             PRIMARY KEY  (`addiction_id`)
-            ) TYPE=MyISAM COMMENT = 'Addictions pour le dossier anesthésie';";
+            ) /*! ENGINE=MyISAM */ COMMENT = 'Addictions pour le dossier anesthésie';";
     $this->addQuery($sql);
     
     $this->makeRevision("0.61");
@@ -633,7 +633,7 @@ class CSetupdPcabinet extends CSetup {
              `banque_id` INT(11) UNSIGNED NOT NULL AUTO_INCREMENT, 
              `nom` VARCHAR(255) NOT NULL, 
              `description` VARCHAR(255), 
-              PRIMARY KEY (`banque_id`)) TYPE=MYISAM;";
+              PRIMARY KEY (`banque_id`)) /*! ENGINE=MyISAM */;";
     $this->addQuery($sql);
     
     $this->makeRevision("0.73");
@@ -706,7 +706,7 @@ class CSetupdPcabinet extends CSetup {
             `function_id` INT(11) UNSIGNED NOT NULL, 
             `nom_categorie` VARCHAR(255) NOT NULL, 
             `nom_icone` VARCHAR(255) NOT NULL, 
-             PRIMARY KEY (`categorie_id`)) TYPE=MYISAM;";
+             PRIMARY KEY (`categorie_id`)) /*! ENGINE=MyISAM */;";
     $this->addQuery($sql);
     
     $this->makeRevision("0.76");
@@ -776,7 +776,7 @@ class CSetupdPcabinet extends CSetup {
             `quantite` INT(11) NOT NULL, 
             `coefficient` FLOAT NOT NULL, 
             `consultation_id` INT(11) UNSIGNED NOT NULL, 
-            PRIMARY KEY (`acte_ngap_id`)) TYPE=MYISAM;";
+            PRIMARY KEY (`acte_ngap_id`)) /*! ENGINE=MyISAM */;";
     $this->addQuery($sql);
     
     $this->makeRevision("0.81");
@@ -928,7 +928,7 @@ class CSetupdPcabinet extends CSetup {
 					 `maladies_chroniques` ENUM('9','10','17'), 
 					 `admission` ENUM('0','6','8'), 
 					 `scoreIGS` INT(11), 
- 					  PRIMARY KEY (`examigs_id`)) TYPE=MYISAM;";
+ 					  PRIMARY KEY (`examigs_id`)) /*! ENGINE=MyISAM */;";
     $this->addQuery($sql);
     
     
@@ -1082,7 +1082,7 @@ class CSetupdPcabinet extends CSetup {
       `emetteur` ENUM( 'patient', 'tiers' ) ,
       `mode` ENUM( 'cheque', 'CB', 'especes', 'virement', 'autre' ) ,
       PRIMARY KEY ( `reglement_id` )
-      ) TYPE = MYISAM ;";
+      ) /*! ENGINE=MyISAM */ ;";
     $this->addQuery($sql);
     
     // On crée les règlements des patients

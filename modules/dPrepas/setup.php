@@ -34,7 +34,7 @@ class CSetupdPrepas extends CSetup {
           "\n`debut` date NOT NULL," .
           "\n`fin` date NOT NULL," .
           "\n`repetition` int(11) unsigned NOT NULL," .
-          "\nPRIMARY KEY ( `menu_id` )) TYPE=MyISAM;";
+          "\nPRIMARY KEY ( `menu_id` )) /*! ENGINE=MyISAM */;";
     $this->addQuery($sql);
     $sql = "CREATE TABLE `plats` (" .
           "\n`plat_id` int(11) unsigned NOT NULL AUTO_INCREMENT ," .
@@ -42,7 +42,7 @@ class CSetupdPrepas extends CSetup {
           "\n`nom` VARCHAR( 255 ) NOT NULL ," .
           "\n`type` enum('plat1','plat2','plat3','plat4','plat5','boisson','pain') NOT NULL DEFAULT 'plat1'," .
           "\n`typerepas` int(11) UNSIGNED NOT NULL," .
-          "\nPRIMARY KEY ( `plat_id` )) TYPE=MyISAM;";
+          "\nPRIMARY KEY ( `plat_id` )) /*! ENGINE=MyISAM */;";
     $this->addQuery($sql);
     $sql = "CREATE TABLE `repas_type` (" .
           "\n`typerepas_id` int(11) unsigned NOT NULL AUTO_INCREMENT ," .
@@ -50,7 +50,7 @@ class CSetupdPrepas extends CSetup {
           "\n`nom` VARCHAR( 255 ) NOT NULL ," .
           "\n`debut` time NOT NULL," .
           "\n`fin` time NOT NULL," .
-          "\nPRIMARY KEY ( `typerepas_id` )) TYPE=MyISAM;";
+          "\nPRIMARY KEY ( `typerepas_id` )) /*! ENGINE=MyISAM */;";
     $this->addQuery($sql);
     $sql = "CREATE TABLE `repas` (" .
           "\n`repas_id` int(11) unsigned NOT NULL AUTO_INCREMENT ," .
@@ -64,7 +64,7 @@ class CSetupdPrepas extends CSetup {
           "\n`boisson` int(11) UNSIGNED NULL," .
           "\n`pain` int(11) UNSIGNED NULL," .
           "\n`date` date NOT NULL," .
-          "\nPRIMARY KEY ( `repas_id` )) TYPE=MyISAM;";
+          "\nPRIMARY KEY ( `repas_id` )) /*! ENGINE=MyISAM */;";
     $this->addQuery($sql);
     
     $this->makeRevision("0.1");
@@ -105,7 +105,7 @@ class CSetupdPrepas extends CSetup {
           "\n`service_id` int(11) UNSIGNED NOT NULL," .
           "\n`date` date NOT NULL," .
           "\n`typerepas_id` int(11) UNSIGNED NOT NULL," .
-          "\nPRIMARY KEY ( `validationrepas_id` )) TYPE=MyISAM;";
+          "\nPRIMARY KEY ( `validationrepas_id` )) /*! ENGINE=MyISAM */;";
     $this->addQuery($sql);
     
     $this->makeRevision("0.12");

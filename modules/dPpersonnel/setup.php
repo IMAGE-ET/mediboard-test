@@ -25,7 +25,7 @@ class CSetupdPpersonnel extends CSetup {
 			`object_id` INT(11) UNSIGNED NOT NULL, 
 			`object_class` VARCHAR(25) NOT NULL, 
 			PRIMARY KEY (`affect_id`)
-			) TYPE=MYISAM COMMENT='Table des affectations du personnel';";
+			) /*! ENGINE=MyISAM */ COMMENT='Table des affectations du personnel';";
     $this->addQuery($query);
 
     $this->makeRevision("0.1");
@@ -38,7 +38,7 @@ class CSetupdPpersonnel extends CSetup {
 	    `personnel_id` INT(11) UNSIGNED NOT NULL AUTO_INCREMENT, 
 	    `user_id` INT(11) UNSIGNED NOT NULL, 
 	    `emplacement` ENUM('op','reveil','service') NOT NULL, 
-	    PRIMARY KEY (`personnel_id`)) TYPE=MYISAM;";
+	    PRIMARY KEY (`personnel_id`)) /*! ENGINE=MyISAM */;";
     $this->addQuery($query);
     
     $query = "ALTER TABLE `affectation_personnel` 
@@ -111,7 +111,7 @@ class CSetupdPpersonnel extends CSetup {
 		  `date_debut` DATE,
 		  `date_fin` DATE,
 		  `libelle` VARCHAR (255)
-		) TYPE=MYISAM;";
+		) /*! ENGINE=MyISAM */;";
     $this->addQuery($query);
 
     $query = "ALTER TABLE `plageVacances` 

@@ -21,7 +21,7 @@ class CSetupdPcim10 extends CSetup {
       `favoris_user` int(11) NOT NULL default '0',
       `favoris_code` varchar(16) NOT NULL default '',
       PRIMARY KEY  (`favoris_id`)
-      ) TYPE=MyISAM COMMENT='table des favoris cim10'";
+      ) /*! ENGINE=MyISAM */ COMMENT='table des favoris cim10'";
     $this->addQuery($sql);
     
     $this->makeRevision("0.1");

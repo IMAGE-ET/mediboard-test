@@ -26,7 +26,7 @@ class CSetupdPqualite extends CSetup {
                `date` DATETIME,
                `actif` TINYINT(1) DEFAULT 0,
                PRIMARY KEY  (doc_ged_suivi_id)
-               ) TYPE=MyISAM COMMENT='Table de suivie des procedures';";
+               ) /*! ENGINE=MyISAM */ COMMENT='Table de suivie des procedures';";
     $this->addQuery($sql);
     $sql = "CREATE TABLE `doc_ged` (
                `doc_ged_id` int( 11 ) NOT NULL AUTO_INCREMENT ,
@@ -41,27 +41,27 @@ class CSetupdPqualite extends CSetup {
                `version` float default NULL,
                `num_ref` MEDIUMINT(9) UNSIGNED NULL,
                PRIMARY KEY ( doc_ged_id )
-               ) TYPE = MYISAM COMMENT = 'Table des procedures';";
+               ) /*! ENGINE=MyISAM */ COMMENT = 'Table des procedures';";
     $this->addQuery($sql);
     $sql = "CREATE TABLE `doc_chapitres` (
                `doc_chapitre_id` int( 11 ) NOT NULL AUTO_INCREMENT ,
                `nom` VARCHAR( 50 ) DEFAULT NULL ,
                `code` VARCHAR( 10 ) DEFAULT NULL ,
                PRIMARY KEY ( doc_chapitre_id )
-               ) TYPE = MYISAM COMMENT = 'Table des chapitres pour les procedures';";
+               ) /*! ENGINE=MyISAM */ COMMENT = 'Table des chapitres pour les procedures';";
     $this->addQuery($sql);
     $sql = "CREATE TABLE `doc_themes` (
                `doc_theme_id` int( 11 ) NOT NULL AUTO_INCREMENT ,
                `nom` VARCHAR( 50 ) DEFAULT NULL ,
                PRIMARY KEY ( doc_theme_id )
-               ) TYPE = MYISAM COMMENT = 'Table des theme pour les procedures';";
+               ) /*! ENGINE=MyISAM */ COMMENT = 'Table des theme pour les procedures';";
     $this->addQuery($sql);
     $sql = "CREATE TABLE `doc_categories` (
                `doc_categorie_id` int( 11 ) NOT NULL AUTO_INCREMENT ,
                `nom` VARCHAR( 50 ) DEFAULT NULL ,
                `code` VARCHAR( 1 ) DEFAULT NULL ,
                PRIMARY KEY ( doc_categorie_id )
-               ) TYPE = MYISAM COMMENT = 'Table des categories pour les procedures';";
+               ) /*! ENGINE=MyISAM */ COMMENT = 'Table des categories pour les procedures';";
     $this->addQuery($sql);
     $sql = "INSERT INTO `doc_categories` VALUES (1, 'Manuel qualité', 'A');"; $this->addQuery($sql);
     $sql = "INSERT INTO `doc_categories` VALUES (2, 'Procédure',      'B');"; $this->addQuery($sql);
@@ -72,14 +72,14 @@ class CSetupdPqualite extends CSetup {
                 `ei_categorie_id` int( 11 ) NOT NULL AUTO_INCREMENT ,
                 `nom` VARCHAR( 50 ) DEFAULT NULL ,
                 PRIMARY KEY ( ei_categorie_id )
-                ) TYPE = MYISAM COMMENT = 'Table des categories des EI'";
+                ) /*! ENGINE=MyISAM */ COMMENT = 'Table des categories des EI'";
     $this->addQuery($sql);
     $sql = "CREATE TABLE `ei_item` (
                 `ei_item_id` int( 11 ) NOT NULL AUTO_INCREMENT ,
                 `ei_categorie_id` int( 11 ) NOT NULL DEFAULT 0 ,
                 `nom` VARCHAR( 50 ) DEFAULT NULL ,
                 PRIMARY KEY ( ei_item_id )
-                ) TYPE = MYISAM COMMENT = 'Table des item des categories des EI'";
+                ) /*! ENGINE=MyISAM */ COMMENT = 'Table des item des categories des EI'";
     $this->addQuery($sql);
     $sql = "CREATE TABLE `fiches_ei` (
                 `fiche_ei_id` int ( 11 ) NOT NULL AUTO_INCREMENT ,
@@ -103,7 +103,7 @@ class CSetupdPqualite extends CSetup {
                 `deja_survenu` int(1) DEFAULT NULL,
                 `degre_urgence` int(1) DEFAULT NULL,
                 PRIMARY KEY ( fiche_ei_id )
-                ) TYPE = MYISAM COMMENT ='Table des fiches incidents'";
+                ) /*! ENGINE=MyISAM */ COMMENT ='Table des fiches incidents'";
     $this->addQuery($sql);
     
     $this->makeRevision("0.1");

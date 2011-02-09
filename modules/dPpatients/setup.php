@@ -34,7 +34,7 @@ class CSetupdPpatients extends CSetup {
               UNIQUE KEY `patient_id` (`patient_id`),
               KEY `matricule` (`matricule`,`SHS`),
               KEY `nom` (`nom`,`prenom`)
-            ) TYPE=MyISAM;";
+            ) /*! ENGINE=MyISAM */;";
     $this->addQuery($sql);
     
     $this->makeRevision("0.1");
@@ -56,7 +56,7 @@ class CSetupdPpatients extends CSetup {
             "\nville VARCHAR(50) DEFAULT NULL," .
             "\ncp VARCHAR(5) DEFAULT NULL," .
             "\nPRIMARY KEY  (`medecin_id`))" .
-            "\nTYPE=MyISAM COMMENT='Table des medecins correspondants';";
+            "\n/*! ENGINE=MyISAM */ COMMENT='Table des medecins correspondants';";
     $this->addQuery($sql);
     
     $this->makeRevision("0.2");
@@ -100,7 +100,7 @@ class CSetupdPpatients extends CSetup {
                 `rques` TEXT,
                 PRIMARY KEY ( `antecedent_id` ) ,
                 INDEX ( `patient_id` )
-                ) TYPE=MyISAM COMMENT = 'antecedents des patients';";
+                ) /*! ENGINE=MyISAM */ COMMENT = 'antecedents des patients';";
     $this->addQuery($sql);
     
     $this->makeRevision("0.27");
@@ -119,7 +119,7 @@ class CSetupdPpatients extends CSetup {
                 `traitement` TEXT,
                 PRIMARY KEY ( `traitement_id` ) ,
                 INDEX ( `patient_id` )
-                ) TYPE=MyISAM COMMENT = 'traitements des patients';";
+                ) /*! ENGINE=MyISAM */ COMMENT = 'traitements des patients';";
     $this->addQuery($sql);
     
     $this->makeRevision("0.28");
@@ -390,7 +390,7 @@ class CSetupdPpatients extends CSetup {
             `listCim10` TEXT, 
             `object_id` INT(11) UNSIGNED NOT NULL, 
             `object_class` VARCHAR(25) NOT NULL, 
-            PRIMARY KEY (`dossier_medical_id`)) TYPE=MYISAM;";
+            PRIMARY KEY (`dossier_medical_id`)) /*! ENGINE=MyISAM */;";
     $this->addQuery($sql);
 
     
@@ -699,7 +699,7 @@ class CSetupdPpatients extends CSetup {
             `dossier_medical_id` INT NOT NULL ,
             `dent` TINYINT UNSIGNED NOT NULL ,
             `etat` ENUM('bridge', 'pivot', 'mobile', 'appareil') NULL
-            ) ENGINE = MYISAM ;";
+            ) /*! ENGINE=MyISAM */ ;";
     $this->addQuery($sql);
     
     $this->makeRevision("0.64");
@@ -728,7 +728,7 @@ class CSetupdPpatients extends CSetup {
       `ta` VARCHAR (10),
       `pouls` INT (11) UNSIGNED,
       `spo2` FLOAT
-    ) TYPE=MYISAM;";
+    ) /*! ENGINE=MyISAM */;";
     $this->addQuery($sql);
     
     $sql = "ALTER TABLE `constantes_medicales` 
@@ -823,7 +823,7 @@ class CSetupdPpatients extends CSetup {
       `patient_id` INT (11) UNSIGNED NOT NULL,
       KEY (`medecin_id`),
       KEY (`patient_id`)
-      ) TYPE=MYISAM;";
+      ) /*! ENGINE=MyISAM */;";
     $this->addQuery($sql);
     
     $this->makeRevision("0.72");

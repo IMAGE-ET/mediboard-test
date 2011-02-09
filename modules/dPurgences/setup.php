@@ -34,7 +34,7 @@ class CSetupdPurgences extends CSetup {
       KEY `sejour_id` (`sejour_id`),
       KEY `ccmu` (`ccmu`),
       KEY `sortie` (`sortie`),
-      PRIMARY KEY (`rpu_id`)) TYPE=MYISAM;";
+      PRIMARY KEY (`rpu_id`)) /*! ENGINE=MyISAM */;";
     $this->addQuery($query);
     
     $this->makeRevision("0.1");
@@ -126,7 +126,7 @@ class CSetupdPurgences extends CSetup {
       `message` MEDIUMTEXT NOT NULL,
       `message_valide` ENUM ('0','1'),
       `nb_tentatives` INT (11)
-    ) TYPE=MYISAM;";
+    ) /*! ENGINE=MyISAM */;";
     $this->addQuery($sql);
     $sql = "ALTER TABLE `extract_passages` 
       ADD INDEX (`date_extract`),
@@ -139,7 +139,7 @@ class CSetupdPurgences extends CSetup {
       `rpu_passage_id` INT (11) UNSIGNED NOT NULL auto_increment PRIMARY KEY,
       `rpu_id` INT (11) UNSIGNED NOT NULL,
       `extract_passages_id` INT (11) UNSIGNED NOT NULL
-    ) TYPE=MYISAM;";
+    ) /*! ENGINE=MyISAM */;";
     $this->addQuery($sql);
     $sql = "ALTER TABLE `rpu_passage` 
       ADD INDEX (`rpu_id`),

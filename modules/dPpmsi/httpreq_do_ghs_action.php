@@ -76,7 +76,7 @@ function addcm() {
     `CM_id` varchar(2) NOT NULL default '0',
     `nom` varchar(100) default NULL,
     PRIMARY KEY  (`CM_id`)
-    ) ENGINE=MyISAM
+    ) /*! ENGINE=MyISAM */
     COMMENT='Table des catégoris majeurs';";
   $ds->exec($sql);
   if($error = $ds->error()) {
@@ -126,7 +126,7 @@ function adddiagcm() {
   `diag` varchar(10) NOT NULL default '0',
   `CM_id` varchar(2) NOT NULL default '01',
   PRIMARY KEY  (`diag`, `CM_id`)
-) ENGINE=MyISAM DEFAULT CHARSET=latin1 COMMENT='Table des diagnostics d\'entree dans les CM';";
+) /*! ENGINE=MyISAM */ DEFAULT CHARSET=latin1 COMMENT='Table des diagnostics d\'entree dans les CM';";
   $ds->exec($sql);
   if($error = $ds->error()) {
     echo "<div class='error'>$error ($sql)</div>";
@@ -183,7 +183,7 @@ function addactes() {
   `liste_id` varchar(6) NOT NULL default '0',
   `nom` varchar(100) default NULL,
   PRIMARY KEY  (`liste_id`)
-) ENGINE=MyISAM DEFAULT CHARSET=latin1 COMMENT='Table des listes';";
+) /*! ENGINE=MyISAM */ DEFAULT CHARSET=latin1 COMMENT='Table des listes';";
   $ds->exec($sql);
   if($error = $ds->error()) {
     echo "<div class='error'>$error ($sql)</div>";
@@ -201,7 +201,7 @@ function addactes() {
   `liste_id` varchar(6) NOT NULL default 'A-001',
   `CM_id` varchar(2) NOT NULL default '01',
   PRIMARY KEY  (`code`, `phase`, `liste_id`, `CM_id`)
-) ENGINE=MyISAM DEFAULT CHARSET=latin1 COMMENT='Table des actes';";
+) /*! ENGINE=MyISAM */ DEFAULT CHARSET=latin1 COMMENT='Table des actes';";
   $ds->exec($sql);
   if($error = $ds->error()) {
     echo "<div class='error'>$error ($sql)</div>";
@@ -218,7 +218,7 @@ function addactes() {
   `liste_id` varchar(6) NOT NULL default 'D-001',
   `CM_id` varchar(2) NOT NULL default '01',
   PRIMARY KEY  (`code`, `liste_id`, `CM_id`)
-) ENGINE=MyISAM DEFAULT CHARSET=latin1 COMMENT='Table des diagnostics';";
+) /*! ENGINE=MyISAM */ DEFAULT CHARSET=latin1 COMMENT='Table des diagnostics';";
   $ds->exec($sql);
   if($error = $ds->error()) {
     echo "<div class='error'>$error ($sql)</div>";
@@ -333,7 +333,7 @@ function addghm() {
   `tarif_2006` float default NULL,
   `EXH` float default NULL,
   PRIMARY KEY  (`GHM_id`)
-) ENGINE=MyISAM DEFAULT CHARSET=latin1 COMMENT='Table des groupements homogènes de malades';";
+) /*! ENGINE=MyISAM */ DEFAULT CHARSET=latin1 COMMENT='Table des groupements homogènes de malades';";
   $ds->exec($sql);
   if($error = $ds->error()) {
     echo "<div class='error'>$error ($sql)</div>";
@@ -448,7 +448,7 @@ function addcma() {
     $sql = "CREATE TABLE `$typeCM` (
     `".$typeCM."_id` varchar(10) NOT NULL default '0',
     PRIMARY KEY  (`".$typeCM."_id`)
-  ) ENGINE=MyISAM DEFAULT CHARSET=latin1 COMMENT='Table des $typeCM';";
+  ) /*! ENGINE=MyISAM */ DEFAULT CHARSET=latin1 COMMENT='Table des $typeCM';";
     $ds->exec($sql);
     if($error = $ds->error()) {
       echo "<div class='error'>$error ($sql)</div>";
@@ -500,7 +500,7 @@ function addincomp() {
   `CIM1` varchar(10) NOT NULL default '0',
   `CIM2` varchar(10) NOT NULL default '0',
   PRIMARY KEY  (`CIM1`, `CIM2`)
-) ENGINE=MyISAM DEFAULT CHARSET=latin1 COMMENT='Table des incompatibilités DP - CMA';";
+) /*! ENGINE=MyISAM */ DEFAULT CHARSET=latin1 COMMENT='Table des incompatibilités DP - CMA';";
   $ds->exec($sql);
   if($error = $ds->error()) {
     echo "<div class='error'>$error ($sql)</div>";
@@ -612,7 +612,7 @@ function addarbre() {
   }
   $sql .= "\nPRIMARY KEY (`arbre_id`)," .
       "\nKEY `CM_id` (`CM_id`)" .
-      ") ENGINE=MyISAM DEFAULT CHARSET=latin1 COMMENT='Table de l\'arbre de décision pour les GHM';";
+      ") /*! ENGINE=MyISAM */ DEFAULT CHARSET=latin1 COMMENT='Table de l\'arbre de décision pour les GHM';";
   $ds->exec($sql);
   if($error = $ds->error()) {
     echo "<div class='error'>$error ($sql)</div>";

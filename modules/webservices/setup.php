@@ -28,7 +28,7 @@ function __construct() {
             `function_name` VARCHAR (255) NOT NULL,
             `input` TEXT NOT NULL,
             `output` TEXT
-          ) TYPE=MYISAM;";
+          ) /*! ENGINE=MyISAM */;";
    $this->addQuery($sql);
    
    $this->makeRevision("0.11");
@@ -75,7 +75,7 @@ function __construct() {
               `host` TEXT NOT NULL,
               `user` VARCHAR (255),
               `password` VARCHAR (50)
-            ) TYPE=MYISAM;";
+            ) /*! ENGINE=MyISAM */;";
     $this->addQuery($query);
    
     $this->makeRevision("0.17");

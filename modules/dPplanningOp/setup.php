@@ -43,7 +43,7 @@ class CSetupdPplanningOp extends CSetup {
 			admis ENUM('n','o') NOT NULL DEFAULT 'n', 
 			PRIMARY KEY  (operation_id), 
 			UNIQUE KEY operation_id (operation_id)
-		) TYPE=MyISAM;";
+		) /*! ENGINE=MyISAM */;";
     $this->addQuery($query);
     
     $this->makeRevision("0.1");
@@ -179,7 +179,7 @@ class CSetupdPplanningOp extends CSetup {
 			`sortie_reelle` DATETIME,
 			`chambre_seule` ENUM('o','n') NOT NULL DEFAULT 'o',
 			PRIMARY KEY ( `sejour_id` )
-		) TYPE=MyISAM";
+		) /*! ENGINE=MyISAM */";
     $this->addQuery($query);
     $query = "ALTER TABLE `sejour` 
 		  ADD INDEX ( `patient_id` )";
@@ -379,7 +379,7 @@ class CSetupdPplanningOp extends CSetup {
 			rques_operation TEXT DEFAULT NULL, 
 			depassement TINYINT DEFAULT NULL, 
 			PRIMARY KEY  (protocole_id)
-		) TYPE=MyISAM;";
+		) /*! ENGINE=MyISAM */;";
     $this->addQuery($query);
     $query = "ALTER TABLE `protocole` 
 		  ADD INDEX (`chir_id`)";
@@ -480,7 +480,7 @@ class CSetupdPplanningOp extends CSetup {
 		  `type_anesth_id` INT UNSIGNED NOT NULL auto_increment,
 			`name` VARCHAR(50) DEFAULT NULL,
 			PRIMARY KEY  (type_anesth_id)
-		) TYPE=MyISAM;";
+		) /*! ENGINE=MyISAM */;";
     $this->addQuery($query);
     $query = "INSERT INTO `type_anesth` 
 		  VALUES ('1', 'Non définie');";
@@ -1041,7 +1041,7 @@ class CSetupdPplanningOp extends CSetup {
       `color_id` INT (11) UNSIGNED NOT NULL auto_increment PRIMARY KEY,
       `libelle` VARCHAR (255) NOT NULL,
       `color` CHAR (6) NOT NULL DEFAULT 'ffffff'
-    ) TYPE=MYISAM;";
+    ) /*! ENGINE=MyISAM */;";
     $this->addQuery($query);
     
     $this->makeRevision("1.13");
@@ -1053,7 +1053,7 @@ class CSetupdPplanningOp extends CSetup {
     $this->makeRevision("1.14");
     $query = "CREATE TABLE `interv_hors_plages` (
                 `interv_hors_plage_id` INT (11) UNSIGNED NOT NULL auto_increment PRIMARY KEY
-              ) TYPE=MYISAM;";
+              ) /*! ENGINE=MyISAM */;";
     $this->addQuery($query);
 		
     $this->mod_version = "1.15";

@@ -319,7 +319,7 @@ function get_query_for_class($class, $errors = array()) {
   // creation / modification de la table
   if (count($change) > 0) {
     if ($add_table) {
-      $ret = "CREATE TABLE `{$class['table']}` (\n              " . implode($glue, $change) . "\n) TYPE=MYISAM;";
+      $ret = "CREATE TABLE `{$class['table']}` (\n              " . implode($glue, $change) . "\n) /*! ENGINE=MyISAM */;";
     }
     else {
       $ret = "ALTER TABLE `{$class['table']}` \n              " . implode($glue, $change) . ";";

@@ -23,7 +23,7 @@ class CSetupssr extends CSetup {
       `plateau_id` INT (11) UNSIGNED NOT NULL auto_increment PRIMARY KEY,
       `group_id` INT (11) UNSIGNED,
       `nom` VARCHAR (255) NOT NULL
-    ) TYPE=MYISAM;";
+    ) /*! ENGINE=MyISAM */;";
     $this->addQuery($query);
 		$query = "ALTER TABLE `plateau_technique` 
       ADD INDEX (`group_id`);";
@@ -35,7 +35,7 @@ class CSetupssr extends CSetup {
 	    `equipement_id` INT (11) UNSIGNED NOT NULL auto_increment PRIMARY KEY,
 	    `plateau_id` INT (11) UNSIGNED NOT NULL,
 	    `nom` VARCHAR (255) NOT NULL
-    ) TYPE=MYISAM;";
+    ) /*! ENGINE=MyISAM */;";
     $this->addQuery($query);
     $query = "ALTER TABLE `equipement` 
       ADD INDEX (`plateau_id`);";
@@ -48,7 +48,7 @@ class CSetupssr extends CSetup {
       `technicien_id` INT (11) UNSIGNED NOT NULL auto_increment PRIMARY KEY,
       `plateau_id` INT (11) UNSIGNED NOT NULL,
       `kine_id` INT (11) UNSIGNED NOT NULL
-    ) TYPE=MYISAM;";
+    ) /*! ENGINE=MyISAM */;";
     $this->addQuery($query);
     $query = "ALTER TABLE `technicien` 
       ADD INDEX (`plateau_id`),
@@ -77,7 +77,7 @@ class CSetupssr extends CSetup {
       `resolution_pb` ENUM ('intacte','alteree'),
       `etat_psychique` TEXT,
       `devenir_envisage` TEXT
-    ) TYPE=MYISAM;";
+    ) /*! ENGINE=MyISAM */;";
     $this->addQuery($query);
 
     $query = "ALTER TABLE `fiche_autonomie` 
@@ -103,7 +103,7 @@ class CSetupssr extends CSetup {
 	    `apa` VARCHAR (255) NOT NULL,
 	    `entree` TEXT,
 	    `sortie` TEXT
-    ) TYPE=MYISAM;";
+    ) /*! ENGINE=MyISAM */;";
     $this->addQuery($query);
     $query = "ALTER TABLE `bilan_ssr` 
       ADD INDEX (`sejour_id`);";
@@ -115,7 +115,7 @@ class CSetupssr extends CSetup {
       `rhs_id` INT (11) UNSIGNED NOT NULL auto_increment PRIMARY KEY,
       `sejour_id` INT (11) UNSIGNED NOT NULL,
       `date_monday` DATE NOT NULL
-    ) TYPE=MYISAM;";
+    ) /*! ENGINE=MyISAM */;";
     $this->addQuery($query);
     $query = "ALTER TABLE `rhs` 
       ADD INDEX (`sejour_id`),
@@ -133,7 +133,7 @@ class CSetupssr extends CSetup {
 	    `continence`   ENUM ('1','2','3','4'),
 	    `comportement` ENUM ('1','2','3','4'),
 	    `relation`     ENUM ('1','2','3','4')
-    ) TYPE=MYISAM;";
+    ) /*! ENGINE=MyISAM */;";
     $this->addQuery($query);
     $query = "ALTER TABLE `dependances_rhs` 
       ADD INDEX (`rhs_id`);";
@@ -154,7 +154,7 @@ class CSetupssr extends CSetup {
 	    `qty_fri` INT (11),
 	    `qty_sat` INT (11),
 	    `qty_sun` INT (11)
-    ) TYPE=MYISAM;";
+    ) /*! ENGINE=MyISAM */;";
     $this->addQuery($query);
     $query = "ALTER TABLE `ligne_activites_rhs` 
       ADD INDEX (`rhs_id`),
@@ -195,7 +195,7 @@ class CSetupssr extends CSetup {
       `element_prescription_id` INT (11) UNSIGNED NOT NULL,
       `code` CHAR (4) NOT NULL,
       `commentaire` VARCHAR (255)
-		) TYPE=MYISAM;";
+		) /*! ENGINE=MyISAM */;";
 		$this->addQuery($query);
 
     $query = "ALTER TABLE `element_prescription_to_cdarr` 
@@ -212,7 +212,7 @@ class CSetupssr extends CSetup {
 	    `duree` INT (11) UNSIGNED NOT NULL,
 	    `therapeute_id` INT (11) UNSIGNED NOT NULL,
 	    `realise` ENUM ('0','1') DEFAULT '0'
-		) TYPE=MYISAM;";
+		) /*! ENGINE=MyISAM */;";
 		$this->addQuery($query);
 
     $query = "ALTER TABLE `evenement_ssr` 
@@ -257,7 +257,7 @@ class CSetupssr extends CSetup {
       `acte_cdarr_id` INT (11) UNSIGNED NOT NULL auto_increment PRIMARY KEY,
       `evenement_ssr_id` INT (11) UNSIGNED NOT NULL,
       `code` CHAR (4) NOT NULL
-    ) TYPE=MYISAM;";
+    ) /*! ENGINE=MyISAM */;";
     $this->addQuery($query);
 		 
     $query = "ALTER TABLE `acte_cdarr` 
@@ -289,7 +289,7 @@ class CSetupssr extends CSetup {
       `sejour_id` INT (11) UNSIGNED NOT NULL,
       `conge_id` INT (11) UNSIGNED NOT NULL,
       `replacer_id` INT (11) UNSIGNED NOT NULL
-    ) TYPE=MYISAM;";
+    ) /*! ENGINE=MyISAM */;";
 		$this->addQuery($query);
 
     $query = "ALTER TABLE `replacement` 

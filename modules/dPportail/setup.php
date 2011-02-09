@@ -19,7 +19,7 @@ class CSetupdPportail extends CSetup {
               `forum_theme_id` INT(11) UNSIGNED NOT NULL AUTO_INCREMENT, 
               `title` TEXT NOT NULL, 
               `desc` TEXT, 
-              PRIMARY KEY (`forum_theme_id`)) TYPE=MYISAM;';
+              PRIMARY KEY (`forum_theme_id`)) /*! ENGINE=MyISAM */;';
     $this->addQuery($sql);
     
     $sql = 'CREATE TABLE `forum_message` (
@@ -28,7 +28,7 @@ class CSetupdPportail extends CSetup {
               `body` TEXT NOT NULL, 
               `date` DATETIME NOT NULL, 
               `user_id` INT(11) UNSIGNED NOT NULL,
-              PRIMARY KEY (`forum_message_id`)) TYPE=MYISAM;';
+              PRIMARY KEY (`forum_message_id`)) /*! ENGINE=MyISAM */;';
     $this->addQuery($sql);
     
     $sql = 'CREATE TABLE `forum_thread` (
@@ -38,7 +38,7 @@ class CSetupdPportail extends CSetup {
               `body` TEXT NOT NULL, 
               `date` DATETIME NOT NULL, 
               `user_id` INT(11) UNSIGNED NOT NULL,
-              PRIMARY KEY (`forum_thread_id`)) TYPE=MYISAM;';
+              PRIMARY KEY (`forum_thread_id`)) /*! ENGINE=MyISAM */;';
     $this->addQuery($sql);
     
     $this->makeRevision("0.10");

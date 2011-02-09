@@ -33,7 +33,7 @@ class CSetupftp extends CSetup {
                 `host` TEXT NOT NULL,
                 `user` VARCHAR (255),
                 `password` VARCHAR (50)
-              ) TYPE=MYISAM;";
+              ) /*! ENGINE=MyISAM */;";
     $this->addQuery($query);
   
     $query = "ALTER TABLE `source_ftp` 

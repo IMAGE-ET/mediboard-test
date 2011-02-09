@@ -25,7 +25,7 @@ class CSetupmessagerie extends CSetup {
               `date_read` DATETIME,
               `date_archived` DATETIME,
               `starred` ENUM ('0','1') NOT NULL DEFAULT '0'
-              ) TYPE=MYISAM;";
+              ) /*! ENGINE=MyISAM */;";
     $this->addQuery($sql);
     
     $sql = "ALTER TABLE `mbmail` 

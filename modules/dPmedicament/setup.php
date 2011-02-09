@@ -29,7 +29,7 @@ class CSetupdPmedicament extends CSetup {
             `date_prix_ville` DATE,  
             `code_interne` INT(11), 
             `commentaire` TEXT, 
-            PRIMARY KEY (`produit_livret_id`)) TYPE=MYISAM;";
+            PRIMARY KEY (`produit_livret_id`)) /*! ENGINE=MyISAM */;";
     $this->addQuery($sql);
     
     $this->makeRevision("0.11");
@@ -50,7 +50,7 @@ class CSetupdPmedicament extends CSetup {
 							`code_ATC` CHAR (3) NOT NULL,
               `libelle` VARCHAR (255),
 							`description` MEDIUMTEXT
-						) TYPE=MYISAM;";
+						) /*! ENGINE=MyISAM */;";
     $this->addQuery($sql);
     
 		$this->makeRevision("0.14");
@@ -64,7 +64,7 @@ class CSetupdPmedicament extends CSetup {
 						  `unite_prise` VARCHAR (255) NOT NULL,
 						  `nb_presentation` INT (11) NOT NULL,
 						  `voie` VARCHAR (255)
-						) TYPE=MYISAM;";
+						) /*! ENGINE=MyISAM */;";
 		$this->addQuery($sql);
 		
 		$this->makeRevision("0.15");

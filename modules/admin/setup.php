@@ -31,7 +31,7 @@ class CSetupadmin extends CSetup {
       `view` TINYINT NOT NULL ,
       PRIMARY KEY ( `perm_module_id` ) ,
       UNIQUE ( `user_id`, `mod_id` )
-    ) TYPE=MyISAM COMMENT = 'table des permissions sur les modules';";
+    ) /*! ENGINE=MyISAM */ COMMENT = 'table des permissions sur les modules';";
     $this->addQuery($query);
     $query = "CREATE TABLE `perm_object` (
       `perm_object_id` MEDIUMINT NOT NULL AUTO_INCREMENT ,
@@ -45,7 +45,7 @@ class CSetupadmin extends CSetup {
         `object_id` ,
         `object_class`
       )
-    ) TYPE=MyISAM COMMENT = 'Table des permissions sur les objets';";
+    ) /*! ENGINE=MyISAM */ COMMENT = 'Table des permissions sur les objets';";
     $this->addQuery($query);
     
     function setup_changePerm(){

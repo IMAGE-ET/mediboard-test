@@ -26,13 +26,13 @@ class CSetupdPbloc extends CSetup {
               debut time NOT NULL default '00:00:00',
               fin time NOT NULL default '00:00:00',
               PRIMARY KEY  (id)
-              ) TYPE=MyISAM COMMENT='Table des plages d\'opération';";
+              ) /*! ENGINE=MyISAM */ COMMENT='Table des plages d\'opération';";
     $this->addQuery($sql);
     $sql = "CREATE TABLE sallesbloc (
                 id tinyint(4) NOT NULL auto_increment,
                 nom varchar(50) NOT NULL default '',
                 PRIMARY KEY  (id)
-                ) TYPE=MyISAM COMMENT='Table des salles d\'opération du bloc';";
+                ) /*! ENGINE=MyISAM */ COMMENT='Table des salles d\'opération du bloc';";
     $this->addQuery($sql);         
               
     $this->makeRevision("0.1");

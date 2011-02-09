@@ -21,7 +21,7 @@ class CSetupdPccam extends CSetup {
       `favoris_user` int(11) NOT NULL default '0',
       `favoris_code` varchar(7) NOT NULL default '',
       PRIMARY KEY  (`favoris_id`)
-      ) TYPE=MyISAM COMMENT='table des favoris'";
+      ) /*! ENGINE=MyISAM */ COMMENT='table des favoris'";
     $this->addQuery($query);
     
     $this->makeRevision("0.1");
@@ -52,7 +52,7 @@ class CSetupdPccam extends CSetup {
                 `executant_id` INT (11) UNSIGNED NOT NULL,
                 `object_id` INT (11) UNSIGNED NOT NULL,
                 `object_class` VARCHAR (255) NOT NULL
-              ) TYPE=MYISAM;";
+              ) /*! ENGINE=MyISAM */;";
     $this->addQuery($query);
 
     $query = "ALTER TABLE `frais_divers` 
@@ -67,7 +67,7 @@ class CSetupdPccam extends CSetup {
                 `libelle` VARCHAR (255) NOT NULL,
                 `tarif` DECIMAL (10,3) NOT NULL,
                 `facturable` ENUM ('0','1') NOT NULL DEFAULT '0'
-              ) TYPE=MYISAM;";
+              ) /*! ENGINE=MyISAM */;";
     $this->addQuery($query);
     
     $this->mod_version = "0.14";    

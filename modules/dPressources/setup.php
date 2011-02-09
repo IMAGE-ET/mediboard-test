@@ -25,7 +25,7 @@ class CSetupdPressources extends CSetup {
                  `paye` TINYINT DEFAULT '0' NOT NULL ,
                  `libelle` VARCHAR( 50 ) ,
                  PRIMARY KEY ( `plageressource_id` )
-               ) TYPE=MyISAM COMMENT = 'Table des plages de ressource';";
+               ) /*! ENGINE=MyISAM */ COMMENT = 'Table des plages de ressource';";
     $this->addQuery($sql);
     
     $this->makeRevision("0.1");

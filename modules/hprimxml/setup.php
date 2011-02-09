@@ -26,7 +26,7 @@ class CSetuphprimxml extends CSetup {
               `password` VARCHAR (50) NOT NULL,
               `actif` ENUM ('0','1') NOT NULL DEFAULT 0,
     					`group_id` INT (11) UNSIGNED NOT NULL
-            ) TYPE=MYISAM;";
+            ) /*! ENGINE=MyISAM */;";
     $this->addQuery($sql);
     
     $sql = "ALTER TABLE `destinataire_hprim` 
@@ -53,7 +53,7 @@ class CSetuphprimxml extends CSetup {
     					`object_id` INT (11) UNSIGNED DEFAULT NULL,
               `object_class` VARCHAR (255) DEFAULT NULL,
               `compressed` ENUM ('0','1') DEFAULT 0
-            ) TYPE=MYISAM;";
+            ) /*! ENGINE=MyISAM */;";
     $this->addQuery($sql);
     
     $sql = "ALTER TABLE `echange_hprim` 
@@ -169,7 +169,7 @@ class CSetuphprimxml extends CSetup {
               `type_sej_scanner` VARCHAR (255),
               `type_sej_chimio` VARCHAR (255),
               `type_sej_dialyse` VARCHAR (255)
-          ) TYPE=MYISAM;";
+          ) /*! ENGINE=MyISAM */;";
     $this->addQuery($sql);
     
     $sql = "ALTER TABLE `destinataire_hprim_config` 

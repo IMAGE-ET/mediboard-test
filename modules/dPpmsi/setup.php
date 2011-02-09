@@ -24,7 +24,7 @@ class CSetupdPpmsi extends CSetup {
           `DADs` TEXT,
           PRIMARY KEY ( `ghm_id` ) ,
           INDEX ( `operation_id` )
-          ) TYPE=MyISAM COMMENT = 'Table des GHM';";
+          ) /*! ENGINE=MyISAM */ COMMENT = 'Table des GHM';";
     $this->addQuery($sql);
     
     $this->makeRevision("0.11");

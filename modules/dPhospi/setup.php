@@ -19,7 +19,7 @@ class CSetupdPhospi extends CSetup {
       `service_id` INT NOT NULL AUTO_INCREMENT ,
 			`nom` VARCHAR( 50 ) NOT NULL ,
 			`description` TEXT,
-			PRIMARY KEY ( `service_id` )) TYPE=MyISAM;";
+			PRIMARY KEY ( `service_id` )) /*! ENGINE=MyISAM */;";
     $this->addQuery($query);
 		
     $query = "CREATE TABLE `chambre` (
@@ -28,7 +28,7 @@ class CSetupdPhospi extends CSetup {
 			`nom` VARCHAR( 50 ) ,
 			`caracteristiques` TEXT ,
       PRIMARY KEY ( `chambre_id` ) ,
-			INDEX ( `service_id` )) TYPE=MyISAM;";
+			INDEX ( `service_id` )) /*! ENGINE=MyISAM */;";
     $this->addQuery($query);
 		
     $query = "CREATE TABLE `lit` (
@@ -36,7 +36,7 @@ class CSetupdPhospi extends CSetup {
 			`chambre_id` INT NOT NULL,
 			`nom` VARCHAR( 50 ) NOT NULL ,
 			PRIMARY KEY ( `lit_id` ) ,
-			INDEX ( `chambre_id` )) TYPE=MyISAM;";
+			INDEX ( `chambre_id` )) /*! ENGINE=MyISAM */;";
     $this->addQuery($query);
     
     $this->makeRevision("0.1");
@@ -47,7 +47,7 @@ class CSetupdPhospi extends CSetup {
 			`entree` DATETIME NOT NULL ,
 			`sortie` DATETIME NOT NULL ,
 			PRIMARY KEY ( `affectation_id` ) ,
-			INDEX ( `lit_id` , `operation_id` )) TYPE=MyISAM;";
+			INDEX ( `lit_id` , `operation_id` )) /*! ENGINE=MyISAM */;";
     $this->addQuery($query);
     
     $this->makeRevision("0.11");
@@ -153,7 +153,7 @@ class CSetupdPhospi extends CSetup {
      `group_id` INT(11) UNSIGNED NOT NULL, 
      `nom` VARCHAR(255) NOT NULL, 
      `description` TEXT, 
-      PRIMARY KEY (`prestation_id`)) TYPE=MYISAM;";
+      PRIMARY KEY (`prestation_id`)) /*! ENGINE=MyISAM */;";
     $this->addQuery($query);
     
     $this->makeRevision("0.21");
@@ -173,7 +173,7 @@ class CSetupdPhospi extends CSetup {
       `date` DATETIME NOT NULL ,
       `text` TEXT NULL ,
       INDEX ( `sejour_id`, `user_id` , `degre` , `date` )
-    ) ENGINE = MYISAM COMMENT = 'Table des observations médicales';";
+    ) /*! ENGINE=MyISAM */ COMMENT = 'Table des observations médicales';";
     $this->addQuery($query);
     
     $query = "CREATE TABLE `transmission_medicale` (
@@ -184,7 +184,7 @@ class CSetupdPhospi extends CSetup {
       `date` DATETIME NOT NULL ,
       `text` TEXT NULL ,
       INDEX ( `sejour_id`, `user_id` , `degre` , `date` )
-    ) ENGINE = MYISAM COMMENT = 'Table des transmissions médicales';";
+    ) /*! ENGINE=MyISAM */ COMMENT = 'Table des transmissions médicales';";
     $this->addQuery($query);
     
     $this->makeRevision("0.24");
@@ -192,7 +192,7 @@ class CSetupdPhospi extends CSetup {
       `categorie_cible_transmission_id` INT (11) UNSIGNED NOT NULL auto_increment PRIMARY KEY,
       `libelle` VARCHAR (255) NOT NULL,
       `description` TEXT
-    ) TYPE=MYISAM COMMENT = 'Table des catégories de cible de transmission médicales';";
+    ) /*! ENGINE=MyISAM */ COMMENT = 'Table des catégories de cible de transmission médicales';";
     $this->addQuery($query);
     
     $query = "CREATE TABLE `cible_transmission` (
@@ -201,7 +201,7 @@ class CSetupdPhospi extends CSetup {
       `libelle` VARCHAR (255) NOT NULL,
       `description` TEXT,
       INDEX(`categorie_cible_transmission_id`)
-    ) TYPE=MYISAM COMMENT = 'Table des cible de transmission médicales';";
+    ) /*! ENGINE=MyISAM */ COMMENT = 'Table des cible de transmission médicales';";
     $this->addQuery($query);
     
     $query = "ALTER TABLE `transmission_medicale` 
@@ -301,7 +301,7 @@ class CSetupdPhospi extends CSetup {
               `object_id` INT (11) DEFAULT NULL,
               `object_class` VARCHAR (255) DEFAULT NULL,
               `font` TEXT DEFAULT NULL
-            ) TYPE=MYISAM;";
+            ) /*! ENGINE=MyISAM */;";
     $this->addQuery($query);
 
     $this->makeRevision("0.37");

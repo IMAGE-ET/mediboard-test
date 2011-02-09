@@ -24,7 +24,7 @@ class CSetupdPsante400 extends CSetup {
             "\n`tag` VARCHAR( 80 ) ," .
             "\n`last_update` DATETIME NOT NULL ," .
             "\nPRIMARY KEY ( `id_sante400_id` ) ," .
-            "\nINDEX ( `object_class` , `object_id` , `tag` )) TYPE=MyISAM;";
+            "\nINDEX ( `object_class` , `object_id` , `tag` )) /*! ENGINE=MyISAM */;";
     $this->addQuery($sql);
     
     $this->makeRevision("0.1");
@@ -76,7 +76,7 @@ class CSetupdPsante400 extends CSetup {
 			`trigger_number` VARCHAR (10) NOT NULL,
 			`mark` VARCHAR (255) NOT NULL,
 			`done` ENUM ('0','1') NOT NULL
-		) TYPE=MYISAM;";
+		) /*! ENGINE=MyISAM */;";
         
     $this->addQuery($sql);
     

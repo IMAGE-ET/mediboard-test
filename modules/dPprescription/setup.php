@@ -22,7 +22,7 @@ class CSetupdPprescription extends CSetup {
           `object_class` ENUM('CSejour','CConsultation') NOT NULL DEFAULT 'CSejour',
           `object_id` INT(11) UNSIGNED,
           PRIMARY KEY (`prescription_id`)
-          ) TYPE=MyISAM COMMENT='Table des prescriptions';";
+          ) /*! ENGINE=MyISAM */ COMMENT='Table des prescriptions';";
     $this->addQuery($query);
     
     $query = "CREATE TABLE `prescription_line` (
@@ -30,7 +30,7 @@ class CSetupdPprescription extends CSetup {
           `prescription_id` INT(11) UNSIGNED NOT NULL,
           `code_cip` VARCHAR(7) NOT NULL,
           PRIMARY KEY (`prescription_line_id`)
-          ) TYPE=MyISAM COMMENT='Table des lignes de médicament des prescriptions';";
+          ) /*! ENGINE=MyISAM */ COMMENT='Table des lignes de médicament des prescriptions';";
     $this->addQuery($query);
     
     $this->makeRevision("0.10");
@@ -51,7 +51,7 @@ class CSetupdPprescription extends CSetup {
            `chapitre` ENUM('dmi','anapath','biologie','imagerie','consult','kine','soin') NOT NULL, 
            `nom` VARCHAR(255) NOT NULL, 
            `description` TEXT,  
-            PRIMARY KEY (`category_prescription_id`)) TYPE=MYISAM;";
+            PRIMARY KEY (`category_prescription_id`)) /*! ENGINE=MyISAM */;";
     $this->addQuery($query);
     
     $query = "CREATE TABLE `element_prescription` (
@@ -59,7 +59,7 @@ class CSetupdPprescription extends CSetup {
            `category_prescription_id` INT(11) UNSIGNED NOT NULL, 
            `libelle` VARCHAR(255) NOT NULL, 
            `description` TEXT, 
-           PRIMARY KEY (`element_prescription_id`)) TYPE=MYISAM;";
+           PRIMARY KEY (`element_prescription_id`)) /*! ENGINE=MyISAM */;";
     $this->addQuery($query);
     
     $query = "CREATE TABLE `prescription_line_element` (
@@ -67,7 +67,7 @@ class CSetupdPprescription extends CSetup {
            `element_prescription_id` INT(11) UNSIGNED NOT NULL, 
            `prescription_id` INT(11) UNSIGNED NOT NULL,
            `commentaire` VARCHAR(255),
-           PRIMARY KEY (`prescription_line_element_id`)) TYPE=MYISAM;";
+           PRIMARY KEY (`prescription_line_element_id`)) /*! ENGINE=MyISAM */;";
     $this->addQuery($query);
     
     $this->makeRevision("0.12");
@@ -86,7 +86,7 @@ class CSetupdPprescription extends CSetup {
            `prescription_id` INT(11) UNSIGNED NOT NULL, 
            `commentaire` TEXT, 
            `chapitre` ENUM('medicament','dmi','anapath','biologie','imagerie','consult','kine','soin') NOT NULL, 
-            PRIMARY KEY (`prescription_line_comment_id`)) TYPE=MYISAM;";
+            PRIMARY KEY (`prescription_line_comment_id`)) /*! ENGINE=MyISAM */;";
     $this->addQuery($query);
     
     $this->makeRevision("0.15");
@@ -109,7 +109,7 @@ class CSetupdPprescription extends CSetup {
            `heure_min` TIME, 
            `heure_max` TIME, 
            `type_moment` ENUM('matin','midi','apres_midi','soir','horaire','autre') NOT NULL,
-            PRIMARY KEY (`moment_unitaire_id`)) TYPE=MYISAM;";
+            PRIMARY KEY (`moment_unitaire_id`)) /*! ENGINE=MyISAM */;";
     $this->addQuery($query);
     
     // Creation d'un tableau de moments => array("libelle","type_moment")
@@ -245,7 +245,7 @@ class CSetupdPprescription extends CSetup {
            `prescription_line_id` INT(11) UNSIGNED NOT NULL, 
            `moment_unitaire_id` INT(11) UNSIGNED NOT NULL, 
            `quantite` INT(11), 
-            PRIMARY KEY (`prise_posologie_id`)) TYPE=MYISAM;";
+            PRIMARY KEY (`prise_posologie_id`)) /*! ENGINE=MyISAM */;";
     $this->addQuery($query);
     
     $this->makeRevision("0.19");
@@ -254,7 +254,7 @@ class CSetupdPprescription extends CSetup {
            `code_moment_id` INT(11) UNSIGNED NOT NULL, 
            `moment_unitaire_id` INT(11) UNSIGNED NOT NULL, 
            `OR` ENUM('0','1') DEFAULT '0', 
-            PRIMARY KEY (`association_moment_id`)) TYPE=MYISAM;";
+            PRIMARY KEY (`association_moment_id`)) /*! ENGINE=MyISAM */;";
     $this->addQuery($query);
     
     $this->makeRevision("0.20");
@@ -298,7 +298,7 @@ class CSetupdPprescription extends CSetup {
             `category_prescription_id` INT(11) UNSIGNED NOT NULL, 
             `nom` VARCHAR(255) NOT NULL, 
             `description` TEXT, 
-            PRIMARY KEY (`executant_prescription_line_id`)) TYPE=MYISAM;";
+            PRIMARY KEY (`executant_prescription_line_id`)) /*! ENGINE=MyISAM */;";
     $this->addQuery($query);
     
     $this->makeRevision("0.25");
@@ -688,7 +688,7 @@ class CSetupdPprescription extends CSetup {
 							`moment_complexe_id` INT (11) UNSIGNED NOT NULL auto_increment PRIMARY KEY,
 							`code_moment_id` INT (11) NOT NULL,
 							`visible` ENUM ('0','1') DEFAULT '0'
-						) TYPE=MYISAM;";
+						) /*! ENGINE=MyISAM */;";
     $this->addQuery($query);
     
     $this->makeRevision("0.48");
@@ -701,7 +701,7 @@ class CSetupdPprescription extends CSetup {
 							`commentaire` TEXT,
 							`object_id` INT (11) UNSIGNED NOT NULL,
 							`object_class` ENUM ('CPrescriptionLineMedicament','CPrescriptionLineElement') NOT NULL
-						) TYPE=MYISAM;";
+						) /*! ENGINE=MyISAM */;";
     $this->addQuery($query);
     
     $query = "ALTER TABLE `administration` 
@@ -772,7 +772,7 @@ class CSetupdPprescription extends CSetup {
 						`praticien_id` INT (11) UNSIGNED,
 						`function_id` INT (11) UNSIGNED,
             `object_class` ENUM ('CSejour','CConsultation') NOT NULL
-					 ) TYPE=MYISAM;";
+					 ) /*! ENGINE=MyISAM */;";
    $this->addQuery($query);
    
    $query = "ALTER TABLE `prescription_protocole_pack` 
@@ -784,7 +784,7 @@ class CSetupdPprescription extends CSetup {
 						`prescription_protocole_pack_item_id` INT (11) UNSIGNED NOT NULL auto_increment PRIMARY KEY,
 						`prescription_protocole_pack_id` INT (11) UNSIGNED NOT NULL,
 						`prescription_id` INT (11) UNSIGNED NOT NULL
-					) TYPE=MYISAM;";
+					) /*! ENGINE=MyISAM */;";
    $this->addQuery($query);
    
    $query = "ALTER TABLE `prescription_protocole_pack_item` 
@@ -816,7 +816,7 @@ class CSetupdPprescription extends CSetup {
 						`function_category_prescription_id` INT (11) UNSIGNED NOT NULL auto_increment PRIMARY KEY,
 						`function_id` INT (11) UNSIGNED NOT NULL,
 						`category_prescription_id` INT (11) UNSIGNED NOT NULL
-					) TYPE=MYISAM;";
+					) /*! ENGINE=MyISAM */;";
    $this->addQuery($query);
     
 	 $query = "ALTER TABLE `function_category_prescription` 
@@ -864,7 +864,7 @@ class CSetupdPprescription extends CSetup {
 							`validation_infir` ENUM ('0','1'),
 							`date_arret` DATE,
 							`time_arret` TIME
-						) TYPE=MYISAM;";
+						) /*! ENGINE=MyISAM */;";
     $this->addQuery($query);
     
     $query = "ALTER TABLE `perfusion` 
@@ -886,7 +886,7 @@ class CSetupdPprescription extends CSetup {
 							`unite` VARCHAR (255),
 							`date_debut` DATE,
 							`time_debut` TIME
-						) TYPE=MYISAM;";
+						) /*! ENGINE=MyISAM */;";
     $this->addQuery($query);
     
     $query = "ALTER TABLE `perfusion_line` 
@@ -1005,7 +1005,7 @@ class CSetupdPprescription extends CSetup {
 							`praticien_id` INT (11) UNSIGNED NOT NULL,
 							`product_id` INT (11) UNSIGNED NOT NULL,
 							`order_item_reception_id` INT (11) UNSIGNED NOT NULL
-						) TYPE=MYISAM;";
+						) /*! ENGINE=MyISAM */;";
     $this->addQuery($query);
     
     $query = "ALTER TABLE `prescription_line_dmi` 
@@ -1143,7 +1143,7 @@ class CSetupdPprescription extends CSetup {
 							`heure` TIME,
 							`service_id` INT (11) UNSIGNED,
 							`group_id` INT (11) UNSIGNED
-						) TYPE=MYISAM;";
+						) /*! ENGINE=MyISAM */;";
     $this->addQuery($query);
     
     $query = "ALTER TABLE `config_moment_unitaire` 
@@ -1159,7 +1159,7 @@ class CSetupdPprescription extends CSetup {
 						`value` VARCHAR (255),
 						`service_id` INT (11) UNSIGNED,
 						`group_id` INT (11) UNSIGNED
-					) TYPE=MYISAM;";
+					) /*! ENGINE=MyISAM */;";
     $this->addQuery($query);
     
     $query = "ALTER TABLE `config_service` 
@@ -1356,7 +1356,7 @@ class CSetupdPprescription extends CSetup {
 						  `prescription_category_group_id` INT (11) UNSIGNED NOT NULL auto_increment PRIMARY KEY,
 						  `libelle` VARCHAR (255) NOT NULL,
 						  `group_id` INT (11) UNSIGNED
-						) TYPE=MYISAM;";
+						) /*! ENGINE=MyISAM */;";
     $this->addQuery($query);
 		
     $query = "ALTER TABLE `prescription_category_group` 
@@ -1368,7 +1368,7 @@ class CSetupdPprescription extends CSetup {
 						  `prescription_category_group_id` INT (11) UNSIGNED NOT NULL,
 						  `category_prescription_id` INT (11) UNSIGNED,
 						  `type_produit` ENUM ('med','perf','inj')
-						) TYPE=MYISAM;";
+						) /*! ENGINE=MyISAM */;";
     $this->addQuery($query);
 		
     $query = "ALTER TABLE `prescription_category_group_item` 
@@ -1428,7 +1428,7 @@ class CSetupdPprescription extends CSetup {
               `sejour_id` INT (11) UNSIGNED NOT NULL,
               `object_id` INT (11) UNSIGNED NOT NULL,
               `object_class` ENUM ('CPrescriptionLineMedicament','CPrescriptionLineElement','CPerfusionLine') NOT NULL
-          ) TYPE=MYISAM;";
+          ) /*! ENGINE=MyISAM */;";
     $this->addQuery($query);
 		
     $query = "ALTER TABLE `planification_systeme` 
@@ -1471,7 +1471,7 @@ class CSetupdPprescription extends CSetup {
               `perfusion_id` INT (11) UNSIGNED NOT NULL,
               `debit` INT (11) UNSIGNED NOT NULL,
               `dateTime` DATETIME NOT NULL
-            ) TYPE=MYISAM;";
+            ) /*! ENGINE=MyISAM */;";
     $this->addQuery($query);
 	 
 	  $query = "ALTER TABLE `perfusion_variation` 

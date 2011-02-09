@@ -18,7 +18,7 @@ class CSetuphprim21 extends CSetup {
     $this->makeRevision("all");
     $sql = "CREATE TABLE `hprim21_patient` (
               `hprim21_patient_id` INT(11) UNSIGNED NOT NULL AUTO_INCREMENT,
-              PRIMARY KEY (`hprim21_patient_id`)) TYPE=MYISAM;";
+              PRIMARY KEY (`hprim21_patient_id`)) /*! ENGINE=MyISAM */;";
     $this->addQuery($sql);
     $sql = "ALTER TABLE `hprim21_patient`
               ADD `patient_id` INT(11) UNSIGNED, 
@@ -87,7 +87,7 @@ class CSetuphprim21 extends CSetup {
     $this->addQuery($sql);
     $sql = "CREATE TABLE `hprim21_complementaire` (
               `hprim21_complementaire_id` INT(11) UNSIGNED NOT NULL AUTO_INCREMENT,
-              PRIMARY KEY (`hprim21_complementaire_id`)) TYPE=MYISAM;";
+              PRIMARY KEY (`hprim21_complementaire_id`)) /*! ENGINE=MyISAM */;";
     $this->addQuery($sql);
     $sql = "ALTER TABLE `hprim21_complementaire`
               ADD `hprim21_patient_id` INT(11) UNSIGNED, 
@@ -101,7 +101,7 @@ class CSetuphprim21 extends CSetup {
     $this->addQuery($sql);
     $sql = "CREATE TABLE `hprim21_sejour` (
               `hprim21_sejour_id` INT(11) UNSIGNED NOT NULL AUTO_INCREMENT,
-              PRIMARY KEY (`hprim21_sejour_id`)) TYPE=MYISAM;";
+              PRIMARY KEY (`hprim21_sejour_id`)) /*! ENGINE=MyISAM */;";
     $this->addQuery($sql);
     $sql = "ALTER TABLE `hprim21_sejour`
               ADD `hprim21_patient_id` INT(11) UNSIGNED NOT NULL, 
@@ -122,7 +122,7 @@ class CSetuphprim21 extends CSetup {
     $this->addQuery($sql);
     $sql = "CREATE TABLE `hprim21_medecin` (
               `hprim21_medecin_id` INT(11) UNSIGNED NOT NULL AUTO_INCREMENT,
-              PRIMARY KEY (`hprim21_medecin_id`)) TYPE=MYISAM;";
+              PRIMARY KEY (`hprim21_medecin_id`)) /*! ENGINE=MyISAM */;";
     $this->addQuery($sql);
     $sql = "ALTER TABLE `hprim21_medecin`
               ADD `user_id` INT(11) UNSIGNED, 
@@ -216,7 +216,7 @@ class CSetuphprim21 extends CSetup {
               `id_permanent` VARCHAR (255),
               `object_id` INT (11) UNSIGNED,
               `object_class` ENUM ('CPatient','CSejour','CMediusers')
-          ) TYPE=MYISAM;";
+          ) /*! ENGINE=MyISAM */;";
     $this->addQuery($sql);
     
     $sql = "ALTER TABLE `echange_hprim21` 
@@ -298,7 +298,7 @@ class CSetuphprim21 extends CSetup {
               `group_id` INT (11) UNSIGNED NOT NULL,
               `actif` ENUM ('0','1') NOT NULL DEFAULT '0',
               `message` ENUM ('L','C','R') DEFAULT 'C'
-            ) TYPE=MYISAM;";
+            ) /*! ENGINE=MyISAM */;";
     $this->addQuery($sql); 
     
     $sql = "ALTER TABLE `destinataire_hprim21` 

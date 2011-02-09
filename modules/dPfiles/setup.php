@@ -35,7 +35,7 @@ class CSetupdPfiles extends CSetup {
                       KEY idx_file_consultation (file_consultation),
                       KEY idx_file_operation (file_operation),
                       KEY idx_file_parent (file_parent)
-                    ) TYPE=MyISAM;";
+                    ) /*! ENGINE=MyISAM */;";
       $this->addQuery($query);
       $query = "CREATE TABLE files_index_mediboard (
                       file_id int(11) NOT NULL default '0',
@@ -44,7 +44,7 @@ class CSetupdPfiles extends CSetup {
                       PRIMARY KEY  (file_id,word),
                       KEY idx_fwrd (word),
                       KEY idx_wcnt (word_placement)
-                      ) TYPE=MyISAM;";
+                      ) /*! ENGINE=MyISAM */;";
       $this->addQuery($query);
       $query = "ALTER TABLE `files_mediboard`" .
             "\nDROP `file_parent`," .
@@ -89,7 +89,7 @@ class CSetupdPfiles extends CSetup {
             "\n`nom` VARCHAR(50) NOT NULL DEFAULT ''," .
             "\n`class` VARCHAR(30) DEFAULT NULL," .
             "\nPRIMARY KEY (file_category_id)" .
-            "\n) TYPE=MyISAM;";
+            "\n) /*! ENGINE=MyISAM */;";
     $this->addQuery($query);
     $query = "INSERT INTO `files_category` VALUES('1', 'Divers', NULL)";
     $this->addQuery($query);

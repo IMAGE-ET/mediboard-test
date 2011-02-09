@@ -30,7 +30,7 @@ class CSetupbloodSalvage extends CSetup {
 			`recuperation_end` DATETIME,
 			`transfusion_start` DATETIME,
 			`transfusion_end` DATETIME
-		) TYPE=MYISAM;';
+		) /*! ENGINE=MyISAM */;';
 		$this->addQuery($sql);
 		
 		$sql='ALTER TABLE `blood_salvage` 
@@ -54,7 +54,7 @@ class CSetupbloodSalvage extends CSetup {
     `cell_saver_id`  INT (11) UNSIGNED NOT NULL auto_increment PRIMARY KEY,
     `marque` VARCHAR(50) NOT NULL,
     `modele` VARCHAR( 30 ) NOT NULL
-     ) TYPE=MYISAM;';
+     ) /*! ENGINE=MyISAM */;';
     
     $this->addQuery($sql);
     
@@ -63,7 +63,7 @@ class CSetupbloodSalvage extends CSetup {
           `concerne` ENUM( 'pat', 'vis', 'pers', 'med', 'mat' ) NOT NULL ,
           `desc` TEXT NULL,
           `name` VARCHAR( 30 ) NOT NULL
-          ) ENGINE = MYISAM ;";
+          ) /*! ENGINE=MyISAM */ ;";
     $this->addQuery($sql);
     
     $sql = " ALTER TABLE `blood_salvage` 

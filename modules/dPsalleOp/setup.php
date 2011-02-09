@@ -27,7 +27,7 @@ class CSetupdPsalleOp extends CSetup {
             "\n`commentaire` TEXT," .
             "\n`operation_id` INT NOT NULL ," .
             "\n`executant_id` INT NOT NULL ," .
-            "\nPRIMARY KEY ( `acte_id` )) TYPE=MyISAM";
+            "\nPRIMARY KEY ( `acte_id` )) /*! ENGINE=MyISAM */";
     $this->addQuery($sql);
     
     $this->makeRevision("0.11");
@@ -124,7 +124,7 @@ class CSetupdPsalleOp extends CSetup {
 						  `list_id` INT (11) UNSIGNED NOT NULL,
 						  `item_type_id` INT (11) UNSIGNED NOT NULL,
 						  `checked` ENUM ('0','1') NOT NULL
-						) TYPE=MYISAM;";
+						) /*! ENGINE=MyISAM */;";
 		$this->addQuery($sql);
 		$sql = "ALTER TABLE `daily_check_item` 
 						  ADD INDEX (`list_id`),
@@ -137,7 +137,7 @@ class CSetupdPsalleOp extends CSetup {
 						  `desc` TEXT,
 						  `active` ENUM ('0','1') NOT NULL,
 						  `group_id` INT (11) UNSIGNED NOT NULL
-						) TYPE=MYISAM;";
+						) /*! ENGINE=MyISAM */;";
 		$this->addQuery($sql);
     $sql = "ALTER TABLE `daily_check_item_type` ADD INDEX (`group_id`)";
 		$this->addQuery($sql);
@@ -147,7 +147,7 @@ class CSetupdPsalleOp extends CSetup {
 						  `date` DATE NOT NULL,
 						  `room_id` INT (11) UNSIGNED NOT NULL,
 						  `validator_id` INT (11) UNSIGNED
-						) TYPE=MYISAM;";
+						) /*! ENGINE=MyISAM */;";
     $this->addQuery($sql);
 		$sql = "ALTER TABLE `daily_check_list` 
 						  ADD INDEX (`date`),
@@ -164,7 +164,7 @@ class CSetupdPsalleOp extends CSetup {
               `daily_check_item_category_id` INT (11) UNSIGNED NOT NULL auto_increment PRIMARY KEY,
               `title` VARCHAR (255) NOT NULL,
               `desc` TEXT
-            ) TYPE=MYISAM;";
+            ) /*! ENGINE=MyISAM */;";
     $this->addQuery($sql);
     
     $this->makeRevision("0.27");
@@ -310,7 +310,7 @@ class CSetupdPsalleOp extends CSetup {
               `operation_id` INT (11) UNSIGNED NOT NULL,
               `libelle` VARCHAR (255) NOT NULL,
               `datetime` DATETIME NOT NULL
-             ) TYPE=MYISAM;";
+             ) /*! ENGINE=MyISAM */;";
 		$this->addQuery($sql);
 		
 		$sql = "ALTER TABLE `anesth_perop` 
