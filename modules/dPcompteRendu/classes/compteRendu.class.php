@@ -210,22 +210,22 @@ class CCompteRendu extends CDocumentItem {
 		$this->_ref_content = $this->loadFwdRef("content_id", true);
 		if ($field_source) {
 		  $this->_source = $this->_ref_content->content;
-		  $xml = new DOMDocument('1.0', 'iso-8859-1');
+		  /*$xml = new DOMDocument('1.0', 'iso-8859-1');
       $str = "<div>".CHtmlToPDF::xmlEntities($this->_source)."</div>";
       $str = CHtmlToPDF::cleanWord($str);
 		  $xml->loadXML(utf8_encode($str));
 		  
-		  $xpath = new DOMXpath($xml);
-		  $elements = $xpath->query("*/style");
+		  $xpath = new DOMXpath($xml);*/
+		 // $elements = $xpath->query("*/style");
 		  
-		  if ($elements != null) {
+		  /*if ($elements != null) {
   		  foreach($elements as $_element) {
   		    if (preg_match("/(header|footer)/",$_element->nodeValue) == 0) {
   		      $_element->parentNode->removeChild($_element);
   		    }
   		  }
 		  }
-		  $this->_source = substr($xml->saveHTML(), 5, -7);
+		  $this->_source = substr($xml->saveHTML(), 5, -7);*/
 		}
 	}
 	
