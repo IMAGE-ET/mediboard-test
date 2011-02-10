@@ -709,3 +709,7 @@ Url.update = function(form, element) {
   new Url().addFormData(form).requestUpdate(element);
   return false;
 };
+
+Url.hashParams = function() {
+	return window.location.hash.substr(1).toQueryParams();
+};
