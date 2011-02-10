@@ -157,19 +157,22 @@ Main.add( function(){
 		        </select>
 		      {{else}}
 		        {{if $line->_voies}}
-		          <select name="voie" onchange="{{if !in_array($line->voie, $line->_voies)}}
+		          <select name="voie" onchange="{{if !in_array($line->voie, $line->_voies) && $line->voie != 'none'}}
 		                                          Element.hide($('warning_voie_{{$line->_id}}')); 
 		                                          Element.hide($('last_option_{{$line->_id}}'));
 		                                        {{/if}}
 		                                        submitFormAjax(this.form, 'systemMsg');">
+                {{if $line->voie == "none"}}
+                  <option value="{{$line->voie}}">Voie non définie</option>
+                {{/if}}
 		            {{foreach from=$line->_voies item=_voie}}
 		              <option value="{{$_voie}}" {{if $line->voie == $_voie}}selected="selected"{{/if}}>{{$_voie}}</option>
 		            {{/foreach}}
-		            {{if !in_array($line->voie, $line->_voies)}}
+		            {{if !in_array($line->voie, $line->_voies) && $line->voie != "none"}}
 		              <option value="{{$line->voie}}" selected="selected" id="last_option_{{$line->_id}}">{{$line->voie}}</option>
 		            {{/if}}
 		          </select>
-		           {{if !in_array($line->voie, $line->_voies)}}
+		           {{if !in_array($line->voie, $line->_voies) && $line->voie != "none"}}
 		           <div class="warning" id="warning_voie_{{$line->_id}}">
 		             Attention, la voie selectionnée n'est plus disponible
 		           </div>

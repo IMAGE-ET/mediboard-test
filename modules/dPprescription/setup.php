@@ -1778,7 +1778,11 @@ class CSetupdPprescription extends CSetup {
 		  CAppUI::conf("dPprescription CPrescription time_alerte_modification")."',NULL,NULL)";
 		$this->addQuery($query);
 		
-		$this->mod_version = "1.26";
+		$this->makeRevision("1.26");
+		$query = "UPDATE `prescription_line_medicament` SET `voie` = 'none' WHERE `voie` IS NULL";
+		$this->addQuery($query);
+		
+		$this->mod_version = "1.27";
   }
 }
 

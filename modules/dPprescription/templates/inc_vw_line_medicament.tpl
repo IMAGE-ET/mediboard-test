@@ -97,17 +97,17 @@
         {{/if}}
       {{else}}
         <select name="voie-{{$line->_id}}" 
-                onchange="{{if $line->voie && !in_array($line->voie, $line->_ref_produit->voies)}}
+                onchange="{{if $line->voie && !in_array($line->voie, $line->_ref_produit->voies) && $line->voie != 'none'}}
                             $('warning-voie-{{$line->_id}}').hide();
                             $('warning-voie-option-{{$line->_id}}').hide();
                           {{/if}}
                           return submitVoie('{{$line->_id}}',this.value);">
-            <option value="">Voie non définie</option>
+            <option value="none">Voie non définie</option>
           {{foreach from=$line->_ref_produit->voies item=libelle_voie}}
             <option value="{{$libelle_voie}}" {{if $libelle_voie == $line->voie}}selected="selected"{{/if}}>{{$libelle_voie}}</option>
           {{/foreach}}
           
-          {{if $line->voie && !in_array($line->voie, $line->_ref_produit->voies)}}
+          {{if $line->voie && !in_array($line->voie, $line->_ref_produit->voies) && $line->voie != "none"}}
             <script type="text/javascript">
               $('warning-voie-{{$line->_id}}').show();
             </script>

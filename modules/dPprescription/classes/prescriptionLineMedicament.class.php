@@ -543,7 +543,7 @@ class CPrescriptionLineMedicament extends CPrescriptionLine {
     $this->_count_locked_planif = $count_planifications = $administration->countList($where, null, null, null, $ljoin);
   }
   
-  function store(){
+  function store(){   
 		// Sauvegarde de la voie lors de la creation de la ligne
     if(!$this->_id && !$this->voie){
     	$this->loadRefProduitPrescription();
@@ -719,7 +719,7 @@ class CPrescriptionLineMedicament extends CPrescriptionLine {
 
   
   function isInjectable(){
-    if($this->voie){
+    if($this->voie && $this->voie !== "none"){
 	    if(self::$voies[$this->voie]["injectable"]){
 	      $this->_is_injectable = true;  
 	    }
