@@ -267,7 +267,10 @@ class CConsultAnesth extends CMbObject {
         $const_med->poids >= 35 && $const_med->poids <= 120 && 
         $this->creatinine >= 6 && $this->creatinine <= 70) {
           $this->_clairance = $const_med->poids * (140-$age) / (7.2 * $this->creatinine);
-      if ($patient->sexe != 'm') {
+      if ($patient->sexe == 'm') {
+        $this->_clairance *= 1.04;
+      }
+      else {
         $this->_clairance *= 0.85;
       }
       $this->_clairance = round($this->_clairance, 2);

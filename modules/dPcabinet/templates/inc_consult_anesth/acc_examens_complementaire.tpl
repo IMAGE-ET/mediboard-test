@@ -11,8 +11,7 @@ function calculClairance () {
   if({{if $patient->_age && $patient->_age!="??" && $patient->_age>=18 && $patient->_age<=110}}1{{else}}0{{/if}} && 
     poids && !isNaN(poids) && poids >= 35 && poids <= 120 && 
     creatinine && !isNaN(creatinine) && creatinine >= 6 && creatinine <= 70) {
-    
-    $V(oFormExam._clairance, Math.round(({{if $patient->sexe!="m"}}0.85 * {{/if}}poids * (140-{{if $patient->_age!="??"}}{{$patient->_age}}{{else}}0{{/if}})/(creatinine*7.2))*100)/100);
+    $V(oFormExam._clairance, Math.round(({{if $patient->sexe=="m"}}1.04{{else}}0.85{{/if}}*poids * (140-{{if $patient->_age!="??"}}{{$patient->_age}}{{else}}0{{/if}})/(creatinine*7.2))*100)/100);
   }
   else {
     $V(oFormExam._clairance, "");
