@@ -72,6 +72,7 @@ $locales['CMbFieldSpec.type.password'] = 'Mot de passe';
 $locales['CMbFieldSpec.type.pct'] = 'Pourcentage';
 $locales['CMbFieldSpec.type.php'] = 'Source PHP';
 $locales['CMbFieldSpec.type.ref'] = 'Objet';
+$locales['CMbFieldSpec.type.set'] = 'Choix multiple';
 $locales['CMbFieldSpec.type.str'] = 'Texte court';
 $locales['CMbFieldSpec.type.text'] = 'Texte long';
 $locales['CMbFieldSpec.type.time'] = 'Heure';

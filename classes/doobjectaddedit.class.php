@@ -23,9 +23,17 @@ class CDoObjectAddEdit {
   var $ajax                = null;
   var $callBack            = null;
   var $suppressHeaders     = null;
-  var $_obj                = null;
-  var $_objBefore          = null;
   var $_logIt              = null;
+	
+  /**
+   * @var CMbObject
+   */
+  var $_obj                = null;
+	
+  /**
+   * @var CMbObject
+   */
+  var $_objBefore          = null;
 
   function CDoObjectAddEdit($className, $objectKey = null) {
     global $m;

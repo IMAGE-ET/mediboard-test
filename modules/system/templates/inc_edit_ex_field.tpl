@@ -11,8 +11,9 @@
 <script type="text/javascript">
 Main.add(function(){
   var fields = {{$other_fields|@json}};
-  ExFieldSpec.edit("{{$spec_type}}", '{{$ex_field->prop}}', 'CExObject', '{{$ex_field->name}}', fields, "{{$ex_field->_id}}");
-  getForm("editField").elements._locale.select();
+	var form = getForm("editField");
+  ExFieldSpec.edit(form.elements._type, '{{$ex_field->prop}}', 'CExObject', '{{$ex_field->name}}', fields, "{{$ex_field->_id}}");
+  form.elements._locale.select();
 });
 
 checkExField = function(form) {
@@ -48,6 +49,7 @@ updateInternalName = function(e){
 	
   {{mb_key object=$ex_field}}
   {{mb_field object=$ex_field field=ex_class_id hidden=true}}
+  {{mb_field object=$ex_field field=concept_id hidden=true}}
   
   <table class="form">
   	
@@ -90,10 +92,23 @@ updateInternalName = function(e){
     <tr>
       <th><label for="_type">Type</label></th>
       <td>
-        <select {{if $ex_field->_id}}disabled="disabled"{{/if}} name="_type" onchange="ExFieldSpec.edit($V(this), '{{$ex_field->prop}}', 'CExObject', '{{$ex_field->name}}', [], '{{$ex_field->_id}}')">
-          {{foreach from="CMbFieldSpecFact"|static:classes item=_class key=_key}}
-            <option value="{{$_key}}" {{if $_key == $spec_type}}selected="selected"{{/if}}>{{tr}}CMbFieldSpec.type.{{$_key}}{{/tr}}</option>
-          {{/foreach}}
+        <select {{if $ex_field->_id}}disabled="disabled"{{/if}} name="_type" onchange="ExFieldSpec.edit(this, '{{$ex_field->prop}}', 'CExObject', '{{$ex_field->name}}', [], '{{$ex_field->_id}}')">
+          {{* Only non-concepts can have a concept *}}
+					{{if $ex_field->ex_class_id}}
+					<optgroup label="Concepts">
+						{{foreach from=$list_concepts item=_concept}}
+	            <option value="{{$_concept->_guid}}" {{if $_concept->_guid == $ex_field->concept_id}}selected="selected"{{/if}}>{{$_concept}}</option>
+	          {{foreachelse}}
+						  <option disabled="disabled">{{tr}}None{{/tr}}</option>
+						{{/foreach}}
+					</optgroup>
+					{{/if}}
+					
+					<optgroup label="Types">
+	          {{foreach from="CMbFieldSpecFact"|static:classes item=_class key=_key}}
+	            <option value="{{$_key}}" {{if $_key == $spec_type && !$ex_field->concept_id}}selected="selected"{{/if}}>{{tr}}CMbFieldSpec.type.{{$_key}}{{/tr}}</option>
+	          {{/foreach}}
+					</optgroup>
         </select>
       </td>
       

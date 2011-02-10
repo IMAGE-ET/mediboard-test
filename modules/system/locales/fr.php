@@ -271,6 +271,7 @@ $locales['CExClassField.concept-title-create'] = 'Nouveau concept';
 $locales['CExClassField.concept-title-modify'] = 'Modifier le concept';
 $locales['CExClassField.none'] = 'Aucun champ de classe étendue';
 $locales['CExClassField.one'] = 'Un champ de classe étendue';
+$locales['CExClassField.concept.none'] = 'Aucun concept';
 $locales['CExClassFieldEnumTranslation'] = 'Traduction d\'énumération étendue';
 $locales['CExClassFieldEnumTranslation.lang.en'] = 'EN (English)';
 $locales['CExClassFieldEnumTranslation.lang.fr'] = 'FR (Français)';

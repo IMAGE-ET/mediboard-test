@@ -141,6 +141,10 @@ class CExClassField extends CMbObject {
   }
   
   function store(){
+    if (!$this->_id && $this->concept_id) {
+      $this->prop = $this->loadRefConcept()->prop;
+    }
+		
     if ($msg = $this->check()) return $msg;
     
     if (!preg_match('/^[a-z0-9_]+$/i', $this->name)) {

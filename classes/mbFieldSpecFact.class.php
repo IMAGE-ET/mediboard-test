@@ -16,6 +16,7 @@ class CMbFieldSpecFact {
   
   static $classes = array(
     "enum"         => "CEnumSpec",
+    "set"          => "CSetSpec",
     "str"          => "CStrSpec",
     "text"         => "CTextSpec",
     "num"          => "CNumSpec",

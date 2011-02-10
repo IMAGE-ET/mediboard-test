@@ -346,9 +346,18 @@ Object.extend(ElementChecker, {
     // list
     list: function() {
       var list = this.assertMultipleArgs("list");
-
-      if (!this.sValue || (this.sValue && list.indexOf(this.sValue) == -1))
-        this.addError("list", "N'est pas une valeur possible");
+			
+			if (this.oElement.hasClassName("set")) {
+				var values = this.sValue.split('|');
+				var intersect = list.intersect(values);
+				if (intersect.length != values.length) {
+	        this.addError("list", "Contient une valeur invalide possible");
+				}
+			}
+			else {
+				if (!this.sValue || (this.sValue && list.indexOf(this.sValue) == -1)) 
+					this.addError("list", "N'est pas une valeur possible");
+			}
     },
     
     ///////// Data types ////////////
@@ -382,6 +391,14 @@ Object.extend(ElementChecker, {
     "enum": function() {
       if (!this.oProperties.list && !this.oProperties['class']) {
         console.error("Spécification 'list' ou 'class' manquante pour le champ " + this.sLabel);
+        return;
+      }
+    },
+    
+    // set
+    "set": function() {
+      if (!this.oProperties.list) {
+        console.error("Spécification 'list' manquante pour le champ " + this.sLabel);
         return;
       }
     },

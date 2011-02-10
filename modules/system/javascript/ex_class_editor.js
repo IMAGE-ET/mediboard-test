@@ -10,12 +10,12 @@ var ExClass = {
   },
   editCallback: function(id) {
     ExClass.edit(id);
-		ExClass.refreshList();
+    ExClass.refreshList();
   },
-	refreshList: function(){
+  refreshList: function(){
     var url = new Url("system", "ajax_list_ex_class");
     url.requestUpdate("exClassList");
-	},
+  },
   setEvent: function(select) {
     var form = select.form;
     var parts = $V(select).split(".");
@@ -26,8 +26,8 @@ var ExClass = {
     var coord_x = drop.getAttribute("data-x"),
         coord_y = drop.getAttribute("data-y"),
         type    = drag.getAttribute("data-type"),
-				form = getForm("form-layout-field");
-		
+        form = getForm("form-layout-field");
+    
     $(form).select('input.coord').each(function(coord){
       $V(coord.disable(), '');
     });
@@ -44,8 +44,8 @@ var ExClass = {
         coord_y = drop.getAttribute("data-y"),
         type    = drag.getAttribute("data-type"),
         form = getForm("form-layout-hostfield");
-				
-		if (!drop.hasClassName("droppable")) return;
+        
+    if (!drop.hasClassName("droppable")) return;
     
     $(form).select('input.coord').each(function(coord){
       $V(coord.disable(), '');
@@ -55,36 +55,36 @@ var ExClass = {
     $V(form.elements.field, drag.getAttribute("data-field") || "");
     $V(form["coord_"+type+"_x"].enable(), coord_x);
     $V(form["coord_"+type+"_y"].enable(), coord_y);
-		
-		// dest = LIST
-		if (drop.hasClassName("out-of-grid")) {
-	    var del = drag.getAttribute("data-field_id");
-	    
-			if (del) {
-				drag.remove();
+    
+    // dest = LIST
+    if (drop.hasClassName("out-of-grid")) {
+      var del = drag.getAttribute("data-field_id");
+      
+      if (del) {
+        drag.remove();
         $V(form.del, 1);
-			}
-			else {
-				return;
-			}
-		}
-		
-		// dest = GRID
-		else {
-			if (!drag.up(".grid")) {
-				drag = drag.clone(true);
-				ExClass.initDraggableHostField(drag);
-				drag.setStyle({
-					position: "static",
-					opacity: 1
-				});
-			}
+      }
+      else {
+        return;
+      }
+    }
+    
+    // dest = GRID
+    else {
+      if (!drag.up(".grid")) {
+        drag = drag.clone(true);
+        ExClass.initDraggableHostField(drag);
+        drag.setStyle({
+          position: "static",
+          opacity: 1
+        });
+      }
       drop.update(drag);
-		}
-		
+    }
+    
     onSubmitFormAjax(form);
   },
-	initDraggableHostField: function(d){
+  initDraggableHostField: function(d){
     new Draggable(d, {
       revert: 'failure', 
       scroll: window, 
@@ -98,8 +98,8 @@ var ExClass = {
         $$(".out-of-grid")[0].removeClassName("dropactive");
       }
     });
-	},
-	initLayoutEditor: function(){
+  },
+  initLayoutEditor: function(){
     $$(".draggable:not(.hostfield)").each(function(d){
       new Draggable(d, {
         revert: 'failure', 
@@ -109,9 +109,9 @@ var ExClass = {
         onEnd: function(){$$(".out-of-grid")[0].removeClassName("dropactive")}
       });
     });
-		
+    
     $$(".draggable.hostfield").each(ExClass.initDraggableHostField);
-		
+    
     /*
     $$(".draggable.hr").each(function(d){
       new Draggable(d, {
@@ -129,8 +129,8 @@ var ExClass = {
           
           // prevent multiple fields in the same cell
           if (drop.hasClassName('grid') && drop.select('.draggable').length) return;
-						
-					// grid to trash for ExFields
+            
+          // grid to trash for ExFields
           if (drop.hasClassName("out-of-grid") && !drag.hasClassName('hostfield')) {
             if (drag.hasClassName('field')) {
               drop = drop.down(".field-list");
@@ -140,13 +140,13 @@ var ExClass = {
               drop = drop.down(".label-list");
             }
           }
-					
-					if (drag.hasClassName('hostfield')) {
-						ExClass.submitLayoutHostField(drag, drop);
-					}
-					else {
+          
+          if (drag.hasClassName('hostfield')) {
+            ExClass.submitLayoutHostField(drag, drop);
+          }
+          else {
             ExClass.submitLayout(drag, drop);
-					}
+          }
         }
       });
     });
@@ -164,30 +164,32 @@ var ExField = {
     if (window.exClassTabs) {
       exClassTabs.setActiveTab("fields-specs");
     }
-		
+    
     var url = new Url("system", "ajax_edit_ex_field");
-		
-		url.addParam("ex_field_id", id);
-		url.addParam("ex_class_id", ex_class_id);
+    
+    url.addParam("ex_field_id", id);
+    url.addParam("ex_class_id", ex_class_id);
     url.requestUpdate(target || "exFieldEditor");
   },
-	editCallback: function(id, obj) {},
+  editCallback: function(id, obj) {
+    // void
+  },
   create: function(ex_class_id) {
     this.edit("0", ex_class_id);
   },
-	slug: function(str) {
-	  str = (str+"")
-	    .strip()
-	    .removeDiacritics() // Suppression des accents
-	    .toLowerCase() // En minuscule
+  slug: function(str) {
+    str = (str+"")
+      .strip()
+      .removeDiacritics() // Suppression des accents
+      .toLowerCase() // En minuscule
       .replace(/@/g, '_at_') // Petit bonus
-	    .replace(/['"\(\)\{\}]/g, '') // Suppression des caractères courants
-	    .replace(/[^a-z0-9_]/g, '_') // Dernier nettoyage
-	    .replace(/^[0-9_]+/g, '') // Suppression des chiffres et underscore au début
-	    .replace(/_+/g, '_'); // Suppression des underscore répétés
-	    
-	  return str;
-	}
+      .replace(/['"\(\)\{\}]/g, '') // Suppression des caractères courants
+      .replace(/[^a-z0-9_]/g, '_') // Dernier nettoyage
+      .replace(/^[0-9_]+/g, '') // Suppression des chiffres et underscore au début
+      .replace(/_+/g, '_'); // Suppression des underscore répétés
+      
+    return str;
+  }
 };
 
 var ExConcept = ExField;
@@ -198,13 +200,23 @@ ExConcept.refreshList =  function(){
 };
 
 ExConcept.editCallback = function(id, obj) {
-	ExConcept.refreshList();
-  ExConcept.edit(id);
+  ExConcept.refreshList();
+  ExConcept.edit(id, null, "exClassEditor");
 };
 
 var ExFieldSpec = {
   options: {},
-  edit: function(specType, prop, className, field, otherFields, ex_field_id){
+  edit: function(formField, prop, className, field, otherFields, ex_field_id){
+    var specType = $V(formField);
+    var match = specType.match(/[a-z]+-(\d+)/);
+    
+    if (match) {
+      $V(formField.form.concept_id, match[1]);
+    }
+    else {
+      $V(formField.form.concept_id, "");
+    }
+    
     var url = new Url("system", "ajax_edit_ex_field_spec");
     url.addParam("spec_type", specType);
     url.addParam("prop", prop);
