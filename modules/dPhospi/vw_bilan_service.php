@@ -412,7 +412,7 @@ if (CValue::get("do") && ($do_medicaments || $do_injections || $do_perfusions ||
 			        if(is_array($_line_elt->_quantity_by_date)){
 					      foreach($_line_elt->_quantity_by_date as $unite_prise => &$prises_prevues_by_unite){
 					        foreach($prises_prevues_by_unite as $_date => &$prises_prevues_by_date){
-					          if(is_array($prises_prevues_by_date['quantites'])){
+					          if(@is_array($prises_prevues_by_date['quantites'])){
 						          foreach($prises_prevues_by_date['quantites'] as $_hour => &$prise_prevue){
 			          	     $dateTimePrise = "$_date $_hour:00:00";
                        if($dateTimePrise < $dateTime_min || $dateTimePrise > $dateTime_max){
