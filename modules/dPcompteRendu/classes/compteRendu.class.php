@@ -225,6 +225,7 @@ class CCompteRendu extends CDocumentItem {
   		  }
 		  }
 		  $this->_source = substr($xml->saveHTML(), 5, -7);
+		  $this->_source = str_replace("<br>", "<br/>",  $this->_source);
 		  
 		  // La fonction loadXml supprime le namespace des balises p vides insérées par Word.
 		  $this->_source = str_replace("<p>", "<o:p>", $this->_source);
