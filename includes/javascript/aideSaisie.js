@@ -284,7 +284,12 @@ var AideSaisie = {
         // We save the default params, change it so that _search 
         // is empty to have all the entries and restore it after
         var oldDefaultParams = this.options.defaultParams;
-        this.options.defaultParams = "_search=";
+				
+        this.options.defaultParams = 
+				  "_search=" + 
+					(options.dependField1 ? ("&depend_value_1=" + ($V(options.dependField1) || "")) : '') + 
+					(options.dependField2 ? ("&depend_value_2=" + ($V(options.dependField2) || "")) : '');
+					
         this.getUpdatedChoices();
         this.options.defaultParams = oldDefaultParams;
       }.bind(autocomplete);
