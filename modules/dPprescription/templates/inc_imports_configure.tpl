@@ -20,9 +20,14 @@ function exportElementsPrescription(){
   url.requestUpdate("export_elements_prescription");
 }
 
-function importElementsPrescription(){
+function importElementsPrescriptionXML(){
   var url = new Url("dPprescription", "import_elements_prescription");
-  url.popup(700, 500, "export_elements_prescription");
+  url.popup(700, 500, "export_elements_prescription_xml");
+}
+
+function importElementsPrescriptionCSV(){
+  var url = new Url("dPprescription", "import_elements_prescription_csv");
+  url.popup(700, 500, "export_elements_prescription_csv");
 }
 
 function updateVoie(){
@@ -70,7 +75,10 @@ function onchangeMed(radioButton, other_field){
     <td id="export_elements_prescription"></td>
   </tr>
   <tr>
-    <td colspan="2"><button class="tick" onclick="importElementsPrescription()" >Importer les elements de prescriptions</button></td>
+    <td colspan="2">
+    	<button class="tick" onclick="importElementsPrescriptionXML()" >Importer les elements de prescriptions XML</button>
+			<button class="tick" onclick="importElementsPrescriptionCSV()" >Importer les elements de prescriptions CSV</button>
+	  </td>
   </tr>
   <tr>
     <td><button class="tick" onclick="updateVoie()">Mettre à jour la voie pour les lignes de medicaments</button></td>
