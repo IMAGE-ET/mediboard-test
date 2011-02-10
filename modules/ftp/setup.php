@@ -44,7 +44,22 @@ class CSetupftp extends CSetup {
                ADD `type_echange` VARCHAR (255);";
     $this->addQuery($query, true);
     
-    $this->mod_version = "0.01";
+    $this->makeRevision("0.01");
+    
+    $query = "CREATE TABLE `sender_ftp` (
+                `sender_ftp_id` INT (11) UNSIGNED NOT NULL auto_increment PRIMARY KEY,
+                `nom` VARCHAR (255) NOT NULL,
+                `libelle` VARCHAR (255),
+                `group_id` INT (11) UNSIGNED NOT NULL,
+                `actif` ENUM ('0','1') NOT NULL DEFAULT '0'
+              ) TYPE=MYISAM;";
+    $this->addQuery($query);
+    
+    $query = "ALTER TABLE `sender_ftp` 
+              ADD INDEX (`group_id`);";
+    $this->addQuery($query);
+              
+    $this->mod_version = "0.02";
   }
 }
 ?>

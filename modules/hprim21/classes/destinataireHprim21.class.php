@@ -61,6 +61,15 @@ class CDestinataireHprim21 extends CInteropReceiver {
       }
     }
   }
+  
+  function lastMessage() {
+    $echg_hprim21 = new CEchangeHprim21();
+    $where = array();
+    $where["emetteur_id"] = " = '$this->_id'";    
+    $key = $echg_hprim21->_spec->key;
+    $echg_hprim21->loadObject($where, "$key DESC");
+    $this->_ref_last_message = $echg_hprim21; 
+  }
 }
 
 ?>

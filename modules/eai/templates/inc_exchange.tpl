@@ -68,7 +68,9 @@
        [SELF]
      </label>
      {{else}}
-       {{mb_value object=$emetteur field="nom"}}
+       <a href="?m=eai&tab=vw_idx_interop_actors#interop_actor_guid={{$emetteur->_guid}}">
+         {{mb_value object=$emetteur field="nom"}}
+       </a>
      {{/if}}
   </td>
   {{assign var=destinataire value=$object->_ref_destinataire}}
@@ -78,7 +80,9 @@
        [SELF]
      </label>
      {{else}}
-       {{mb_value object=$destinataire field="nom"}}
+       <a href="?m=eai&tab=vw_idx_interop_actors#interop_actor_guid={{$destinataire->_guid}}">
+         {{mb_value object=$destinataire field="nom"}}
+       </a>
      {{/if}}
   </td>
   <td class="{{if $object->sous_type == 'inconnu'}}error{{/if}} narrow">{{mb_value object=$object field="sous_type"}}</td>

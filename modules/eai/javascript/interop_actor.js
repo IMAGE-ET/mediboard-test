@@ -1,5 +1,5 @@
 /**
- * JS function Interop Receiver EAI
+ * JS function Interop Actor EAI
  *  
  * @category EAI
  * @package  Mediboard
@@ -9,31 +9,26 @@
  * @link     http://www.mediboard.org
  */
 
-InteropReceiver = {
-  receiver_guid : null,
+InteropActor = {
+  actor_guid : null,
   status_images : ["images/icons/status_red.png", "images/icons/status_orange.png", "images/icons/status_green.png"],
 		
-  refreshReceiver : function(receiver_guid, receiver_class_name){
-    var url = new Url("eai", "ajax_refresh_receiver");
-    url.addParam("receiver_guid", receiver_guid);
-    url.addParam("receiver_class_name", receiver_class_name);
-    url.requestUpdate("receiver");
-  },
-
-  refreshReceivers : function(){
-    var url = new Url("eai", "ajax_refresh_receivers");
-    url.requestUpdate("receivers");
+  refreshActor : function(actor_guid, actor_class_name){
+    var url = new Url("eai", "ajax_refresh_actor");
+    url.addParam("actor_guid", actor_guid);
+    url.addParam("actor_class_name", actor_class_name);
+    url.requestUpdate("actor");
   },
   
-  refreshReceiverExchangesSources : function(receiver_guid){
-    var url = new Url("eai", "ajax_refresh_receiver_exchanges_sources");
-    url.addParam("receiver_guid", receiver_guid);
-    url.requestUpdate("receiver_exchanges_sources");
+  refreshActors : function(parent_class_name) {
+	var url = new Url("eai", "ajax_refresh_actors");
+	url.addParam("actor_class_name", parent_class_name);
+	url.requestUpdate(parent_class_name+"s");
   },
   
-  refreshReceiversAndReceiver : function(receiver_id){
-	InteropReceiver.refreshReceivers();   
-	InteropReceiver.refreshReceiver(InteropReceiver.receiver_guid.split('-')[0]+"-"+receiver_id);  
+  refreshActorsAndActor : function(actor_id){
+	InteropActor.refreshActor(InteropActor.actor_guid.split('-')[0]+"-"+actor_id);  
+	InteropActor.refreshActors($V(getForm("edit"+InteropActor.actor_guid).parent_class_name));
   },
   
   resfreshImageStatus : function(element){
@@ -48,7 +43,7 @@ InteropReceiver = {
     
     url.addParam("source_guid", element.getAttribute('data-guid'));
     url.requestJSON(function(status) {
-      element.src = InteropReceiver.status_images[status.reachable];
+      element.src = InteropActor.status_images[status.reachable];
       element.onmouseover = function() { 
         ObjectTooltip.createDOM(element, 
           DOM.div(null, 

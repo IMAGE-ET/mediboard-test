@@ -46,6 +46,10 @@ ExchangeDataFormat.evenements = {{$evenements|@json}};
             <th class="category" colspan="4">{{tr}}filter-criteria{{/tr}}</th>
           </tr>
           <tr>
+            <th colspan="2">{{mb_label object=$exchange field="group_id"}}</th>
+            <td colspan="2">{{mb_field object=$exchange field="group_id" canNull=true form="filterExchange" autocomplete="true,1,50,true,true"}}</td>
+          </tr>
+          <tr>
             <th colspan="2">{{mb_label object=$exchange field=$exchange->_spec->key}}</th>
             <td colspan="2">{{mb_field object=$exchange field=$exchange->_spec->key}}</td>
           </tr>

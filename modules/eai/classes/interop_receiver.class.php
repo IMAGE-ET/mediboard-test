@@ -15,17 +15,8 @@
  * Class CInteropReceiver 
  * Interoperability Receiver
  */
-class CInteropReceiver extends CMbObject {
-  // DB Fields
-  var $nom         = null;
-  var $libelle     = null;
-  var $group_id    = null;
-  var $actif       = null;
+class CInteropReceiver extends CInteropActor {
   var $message     = null;
-  
-  // Forward references
-  var $_ref_group             = null;
-  var $_ref_exchanges_sources = null;
   
   // Form fields
   var $_tag_patient  = null;
@@ -33,7 +24,6 @@ class CInteropReceiver extends CMbObject {
   var $_tag_mediuser = null;
   var $_tag_service  = null;
   var $_type_echange = null;
-  var $_reachable    = null;
   var $_exchanges_sources_save = 0;
   
   function getSpec() {
@@ -45,37 +35,14 @@ class CInteropReceiver extends CMbObject {
   
   function getProps() {
     $props = parent::getProps();
-    $props["nom"]           = "str notNull";
-    $props["libelle"]       = "str";
-    $props["group_id"]      = "ref notNull class|CGroups autocomplete|text";
-    $props["actif"]         = "bool notNull";
     $props["message"]       = "str";
 
     $props["_tag_patient"]            = "str";
     $props["_tag_sejour"]             = "str";
     $props["_tag_mediuser"]           = "str";
     $props["_tag_service"]            = "str";
-    $props["_reachable"]              = "bool";
     $props["_exchanges_sources_save"] = "num";
     return $props;
-  }
-  
-  function getBackProps() {
-    $backProps = parent::getBackProps();
-    
-    return $backProps;
-  }
-    
-  function loadRefGroup() {
-    return $this->_ref_group = $this->loadFwdRef("group_id", 1);
-  }
-  
-  /**
-   * Get exchanges sources
-   * 
-   * @return void
-   */
-  function loadRefsExchangesSources() {
   }
   
   function updateFormFields() {
@@ -85,9 +52,8 @@ class CInteropReceiver extends CMbObject {
     $this->_tag_sejour   = CSejour::getTagNumDossier($this->group_id);
     $this->_tag_mediuser = CMediusers::getTagMediusers($this->group_id);
     $this->_tag_service  = CService::getTagService($this->group_id);
-    
-    $this->_view = $this->libelle ? $this->libelle : $this->nom;
-    $this->_type_echange = $this->_class_name;
+        
+    $this->_parent_class_name = "CInteropReceiver";
   }
   
   /**
@@ -99,17 +65,6 @@ class CInteropReceiver extends CMbObject {
     return CApp::getChildClasses("CInteropReceiver", array(), true);
   }
   
-  /**
-   * Receiver is reachable ?
-   * 
-   * @return boolean reachable
-   */
-  function isReachable() {
-    if (!$this->_ref_exchanges_sources) {
-      $this->loadRefsExchangesSources();
-    }
-  }
-  
   function register($name) {
     $this->nom = $name;
     $this->loadMatchingObject();
@@ -119,6 +74,31 @@ class CInteropReceiver extends CMbObject {
       
     }
   }
+  
+  /**
+   * Get objects
+   * 
+   * @return array CInteropReceiver collection 
+   */
+  function getObjects() {
+    $objects = array();
+    foreach (self::getChildReceivers() as $_interop_receiver) {
+      $itemReceiver = new $_interop_receiver;
+      
+      // Récupération de la liste des destinataires
+      $objects[$_interop_receiver] = $itemReceiver->loadList();
+      if (!is_array($objects[$_interop_receiver])) {
+        continue;
+      }
+      foreach ($objects[$_interop_receiver] as $_receiver) {
+        $_receiver->loadRefGroup();
+        $_receiver->isReachable();
+        $_receiver->lastMessage();
+      }
+    }
+    
+    return $objects;
+  } 
 }
 
 ?>

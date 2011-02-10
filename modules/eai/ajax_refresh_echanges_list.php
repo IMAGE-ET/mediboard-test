@@ -19,6 +19,7 @@ $t                   = CValue::getOrSession('types', array());
 $statut_acquittement = CValue::getOrSession("statut_acquittement");
 $type                = CValue::getOrSession("type");
 $evenement           = CValue::getOrSession("evenement");
+$group_id            = CValue::getOrSession("group_id");
 $page                = CValue::get('page', 0);
 $_date_min           = CValue::getOrSession('_date_min', mbDateTime("-7 day"));
 $_date_max           = CValue::getOrSession('_date_max', mbDateTime("+1 day"));
@@ -67,7 +68,9 @@ if ($id_permanent) {
 if ($object_id) {
   $where["object_id"] = " = '$object_id'";
 }
-$where["group_id"] = "= '".CGroups::loadCurrent()->_id."'";
+
+$group_id = $group_id ? $group_id : CGroups::loadCurrent()->_id;
+$where["group_id"] = " = '$group_id'";
 
 $total_exchanges = $itemExchange->countList($where);
 $order = "date_production DESC";

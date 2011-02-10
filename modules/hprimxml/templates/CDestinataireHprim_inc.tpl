@@ -9,24 +9,24 @@
 *}}
 
 <tr>  
-  <th>{{mb_label object=$receiver field="type"}}</th>
+  <th>{{mb_label object=$actor field="type"}}</th>
   <td>
     <input type="text" name="type" size="20" value="{{if $conf.sip.server}}cip{{else}}sip{{/if}}" readonly="readonly" />
   </td>
 </tr>
 <tr>
-  <th>{{mb_label object=$receiver field="register"}}</th>
-  <td>{{mb_field object=$receiver field="register"}}</td>
+  <th>{{mb_label object=$actor field="register"}}</th>
+  <td>{{mb_field object=$actor field="register"}}</td>
 </tr>
 <tr>
-  <th>{{mb_label object=$receiver field="code_appli"}}</th>
-  <td>{{mb_field object=$receiver field="code_appli"}}</td>
+  <th>{{mb_label object=$actor field="code_appli"}}</th>
+  <td>{{mb_field object=$actor field="code_appli"}}</td>
 </tr>
 <tr>
-  <th>{{mb_label object=$receiver field="code_acteur"}}</th>
-  <td>{{mb_field object=$receiver field="code_acteur"}}</td>
+  <th>{{mb_label object=$actor field="code_acteur"}}</th>
+  <td>{{mb_field object=$actor field="code_acteur"}}</td>
 </tr>
 <tr>
-  <th>{{mb_label object=$receiver field="code_syst"}}</th>
-  <td>{{mb_field object=$receiver field="code_syst"}}</td>
+  <th>{{mb_label object=$actor field="code_syst"}}</th>
+  <td>{{mb_field object=$actor field="code_syst"}}</td>
 </tr>

@@ -1,6 +1,6 @@
 <?php 
 /**
- * View interop receiver exchanges sources EAI
+ * View interop actors EAI
  *  
  * @category EAI
  * @package  Mediboard
@@ -12,14 +12,21 @@
  
 CCanDo::checkRead();
 
-$receiver_guid = CValue::getOrSession("receiver_guid");
+$receiver = new CInteropReceiver(); 
+$receivers = $receiver->getObjects();
 
-$receiver = CMbObject::loadFromGuid($receiver_guid);
-$receiver->loadRefsExchangesSources();
+$sender = new CInteropSender(); 
+$senders = $sender->getObjects();
 
 // Création du template
 $smarty = new CSmartyDP();
+
 $smarty->assign("receiver" , $receiver);
-$smarty->display("inc_receiver_exchanges_sources.tpl");
+$smarty->assign("receivers", $receivers);
+
+$smarty->assign("sender" , $sender);
+$smarty->assign("senders", $senders);
+
+$smarty->display("vw_idx_interop_actors.tpl");
 
 ?>

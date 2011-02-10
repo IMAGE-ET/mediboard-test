@@ -13,10 +13,19 @@ ExchangeDataFormat = {
   evenements : null,	
   target: "exchange_data_format",
   
-  refreshExchanges : function(exchange_class_name){
+  refreshExchanges : function(exchange_class_name, exchange_type){
     var url = new Url("eai", "ajax_refresh_exchanges");
     url.addParam("exchange_class_name", exchange_class_name);
-    url.requestUpdate("exchanges");
+    url.requestUpdate("exchanges", { onComplete : function() {
+    	if (!exchange_type) {
+    	  return;
+    	}
+    	var form = getForm("filterExchange");
+		if (form) {
+		  $V(form.elements.type, exchange_type, false); 
+		  ExchangeDataFormat.refreshExchangesList(form);
+		}
+	} });
   },
 	
   fillSelect : function(source, dest, mod_name) {

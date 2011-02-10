@@ -60,7 +60,7 @@ class CExchangeDataFormat extends CMbMetaObject {
     $props = parent::getProps();
     
     $props["date_production"]     = "dateTime notNull";
-    $props["group_id"]            = "ref notNull class|CGroups";
+    $props["group_id"]            = "ref notNull class|CGroups autocomplete|text";
     $props["type"]                = "str";
     $props["sous_type"]           = "str";
     $props["date_echange"]        = "dateTime";
