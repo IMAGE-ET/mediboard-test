@@ -158,7 +158,7 @@ var AideSaisie = {
       
       // Setup the autocompleter
       var autocomplete = url.autoComplete(this.searchField, list, {
-        minChars: Preferences.aideOwner == '1' ? 2 : 65536,
+        minChars: 2,
         tokens: "\n",
         indicator: throbber,
         select: "text", 
