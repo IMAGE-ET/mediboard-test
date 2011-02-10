@@ -210,26 +210,24 @@ class CCompteRendu extends CDocumentItem {
 		$this->_ref_content = $this->loadFwdRef("content_id", true);
 		if ($field_source) {
 		  $this->_source = $this->_ref_content->content;
-		  $xml = new DOMDocument('1.0', 'iso-8859-1');
-      $str = "<div>".CHtmlToPDF::xmlEntities($this->_source)."</div>";
-		  @$xml->loadXML(utf8_encode($str));
-		  
-		  $xpath = new DOMXpath($xml);
-		  $elements = $xpath->query("*/style");
-		  
-		  if ($elements != null) {
-  		  foreach($elements as $_element) {
-  		    if (preg_match("/(header|footer)/",$_element->nodeValue) == 0) {
-  		      $_element->parentNode->removeChild($_element);
-  		    }
+		  if (preg_match("/mso-style/", $this->_source)) {
+  		  $xml = new DOMDocument('1.0', 'iso-8859-1');
+        $str = "<div>".CHtmlToPDF::xmlEntities($this->_source)."</div>";
+  		  @$xml->loadXML(utf8_encode($str));
+  		  
+  		  $xpath = new DOMXpath($xml);
+  		  $elements = $xpath->query("*/style");
+  		  
+  		  if ($elements != null) {
+    		  foreach($elements as $_element) {
+    		    if (preg_match("/(header|footer)/",$_element->nodeValue) == 0) {
+    		      $_element->parentNode->removeChild($_element);
+    		    }
+    		  }
   		  }
+  		  $this->_source = substr($xml->saveHTML(), 5, -7);
+  		  $this->_source = str_replace("<br>", "<br/>",  $this->_source);
 		  }
-		  $this->_source = substr($xml->saveHTML(), 5, -7);
-		  $this->_source = str_replace("<br>", "<br/>",  $this->_source);
-		  
-		  // La fonction loadXml supprime le namespace des balises p vides insérées par Word.
-		  $this->_source = str_replace("<p>", "<o:p>", $this->_source);
-      $this->_source = str_replace("</p>", "</o:p>", $this->_source);
 		}
 	}
 	
