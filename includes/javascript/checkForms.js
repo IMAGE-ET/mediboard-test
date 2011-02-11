@@ -347,9 +347,11 @@ Object.extend(ElementChecker, {
     list: function() {
       var list = this.assertMultipleArgs("list");
 			
-			if (this.oElement.hasClassName("set")) {
-				var values = this.sValue.split('|');
-				var intersect = list.intersect(values);
+			// If it is a "set"
+			if (this.oProperties["set"]) {
+				var values = this.sValue.split('|'),
+				    intersect = list.intersect(values);
+						
 				if (intersect.length != values.length) {
 	        this.addError("list", "Contient une valeur invalide possible");
 				}
