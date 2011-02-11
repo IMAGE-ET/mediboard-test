@@ -87,11 +87,11 @@ Main.add(function () {
 	      ({{$curr_plage->_op_for_duree_totale}}/{{$curr_plage->_ref_operations|@count}})
 	    </td>
 	    <td>{{$curr_plage->_ref_affectations_personnel.op|@count}}</td>
-	    <td>{{$curr_plage->_duree_total_personnel.op|date_format:$conf.time}}</td>
+	    <td>{{$curr_plage->_duree_total_personnel.op.days_duree}}j {{$curr_plage->_duree_total_personnel.op.duree|date_format:$conf.time}}</td>
 	    <td>{{$curr_plage->_ref_affectations_personnel.op_panseuse|@count}}</td>
-	    <td>{{$curr_plage->_duree_total_personnel.op_panseuse|date_format:$conf.time}}</td>
+	    <td>{{$curr_plage->_duree_total_personnel.op_panseuse.days_duree}}j {{$curr_plage->_duree_total_personnel.op_panseuse.duree|date_format:$conf.time}}</td>
 			<td>{{$curr_plage->_ref_affectations_personnel.iade|@count}}</td>
-			<td>{{$curr_plage->_duree_total_personnel.iade|date_format:$conf.time}}</td>
+			<td>{{$curr_plage->_duree_total_personnel.iade.days_duree}}j {{$curr_plage->_duree_total_personnel.iade.duree|date_format:$conf.time}}</td>
 	  </tr>
 	  {{/foreach}}
 	  <tr>

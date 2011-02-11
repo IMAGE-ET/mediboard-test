@@ -71,14 +71,22 @@ if($prat_personnel) {
       }
       // Personnel réel
       $curr_op->loadAffectationsPersonnel();
+      
       foreach($curr_op->_ref_affectations_personnel as $_key_cat => $_curr_cat) {
+        
         if(!isset($curr_plage->_duree_total_personnel[$_key_cat])) {
-          $curr_plage->_duree_total_personnel[$_key_cat] = "00:00:00";
+          $curr_plage->_duree_total_personnel[$_key_cat]["duree"] = "00:00:00";
+          $curr_plage->_duree_total_personnel[$_key_cat]["days_duree"] = "0";
         }
+        
         foreach($_curr_cat as $_curr_aff) {
           if($_curr_aff->debut && $_curr_aff->fin) {
             $duree = mbTimeRelative($_curr_aff->debut, $_curr_aff->fin);
-            $curr_plage->_duree_total_personnel[$_key_cat] = mbAddTime($duree, $curr_plage->_duree_total_personnel[$_key_cat]);
+            $new_total = mbAddTime($duree, $curr_plage->_duree_total_personnel[$_key_cat]["duree"]);
+            if ($new_total < $curr_plage->_duree_total_personnel[$_key_cat]["duree"]) {
+              $curr_plage->_duree_total_personnel[$_key_cat]["days_duree"] ++;
+            }
+            $curr_plage->_duree_total_personnel[$_key_cat]["duree"] = $new_total;
           }
         }
       }
@@ -107,12 +115,14 @@ if($prat_personnel) {
     }
     $total["duree_reelle"] = $newTotalReel;
     // Durée du personnel
+
     foreach($curr_plage->_duree_total_personnel as $_key_cat => $_curr_cat) {
       if(!isset($total["personnel"][$_key_cat])) {
           $total["personnel"][$_key_cat]["duree"]      = "00:00:00";
           $total["personnel"][$_key_cat]["days_duree"] = 0;
       }
-      $newTotalPersonnel = mbAddTime($curr_plage->_duree_total_personnel[$_key_cat], $total["personnel"][$_key_cat]["duree"]);
+      $newTotalPersonnel = mbAddTime($curr_plage->_duree_total_personnel[$_key_cat]["duree"], $total["personnel"][$_key_cat]["duree"]);
+      $total["personnel"][$_key_cat]["days_duree"] += $curr_plage->_duree_total_personnel[$_key_cat]["days_duree"];
       if($newTotalPersonnel < $total["personnel"][$_key_cat]["duree"]) {
         $total["personnel"][$_key_cat]["days_duree"]++;
       }
