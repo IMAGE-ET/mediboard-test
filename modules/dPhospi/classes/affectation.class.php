@@ -80,14 +80,12 @@ class CAffectation extends CMbObject {
   }
 
   function loadView() {
-    $this->loadRefLit();
-    $this->_ref_lit->loadCompleteView();
+    $this->loadRefLit()->loadCompleteView();
+    $this->_view = $this->_ref_lit->_view;
   }
 
   function updateFormFields() {
     parent::updateFormFields();
-    $this->loadView();
-    $this->_view = $this->_ref_lit->_view;
     $this->_duree = mbDaysRelative($this->entree, $this->sortie);
   }
 
@@ -218,15 +216,16 @@ class CAffectation extends CMbObject {
   }
 
   function loadRefLit($cache = 1) {
-    $this->_ref_lit = $this->loadFwdRef("lit_id", $cache);
+    return $this->_ref_lit = $this->loadFwdRef("lit_id", $cache);
   }
 
   function loadRefSejour($cache = 1) {
-    $this->_ref_sejour =  $this->loadFwdRef("sejour_id", $cache);
+    return $this->_ref_sejour =  $this->loadFwdRef("sejour_id", $cache);
   }
 
   function loadRefsFwd($cache = 1) {
     $this->loadRefLit($cache);
+    $this->loadView();
     $this->loadRefSejour($cache);
     $this->loadRefsAffectations();
   }
