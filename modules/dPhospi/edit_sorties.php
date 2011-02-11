@@ -164,8 +164,7 @@ $smarty->assign("order_way"    , $order_way);
 $smarty->assign("order_col"    , $order_col);
 $smarty->assign("date"         , $date        );
 $smarty->assign("deplacements" , $deplacements);
-$smarty->assign("sortiesAmbu"  , $sorties["ambu"] );
-$smarty->assign("sortiesComp"  , $sorties["comp"] );
+$smarty->assign("sorties"      , $sorties);
 $smarty->assign("vue"          , $vue         );
 $smarty->assign("canPlanningOp", CModule::getCanDo("dPplanningOp"));
 
