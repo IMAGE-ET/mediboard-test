@@ -44,7 +44,6 @@ $ljoin["service"]  = "service.service_id = chambre.service_id";
 $where["affectation.sortie"]   = "BETWEEN '$limit1' AND '$limit2'";
 $where["type"]     = "!= 'exte'";
 $where["service.group_id"] = "= '$g'";
-//$where["service.service_id"] = CSQLDataSource::prepareIn(array_keys($services));
 
 $whereDeplacement = $where;
 $whereSortie = $where;
@@ -54,13 +53,6 @@ if ($vue) {
   $whereSortie["confirme"] = " = '0'";
 }
 
-
-
-/*
-if($order_col != "_patient_deplacement" && $order_col != "_praticien_deplacement"  && $order_col != "_chambre_deplacement"){
-  $order_col = "_patient";	
-}
-*/
 $orderDep = null;
 
 if($order_col == "_patient"){
@@ -76,32 +68,32 @@ if($order_col == "sortie"){
   $orderDep = "affectation.sortie $order_way, patients.nom, patients.prenom";
 }
 
-
-
-
 // Récupération des déplacements du jour
-$deplacements = new CAffectation;
-$deplacements = $deplacements->loadList($whereDeplacement, $orderDep, null, null, $ljoin);
-foreach($deplacements as $key => $value) {
-  $deplacements[$key]->loadRefsFwd();
-    
-  if(!$deplacements[$key]->_ref_next->affectation_id) {
-    unset($deplacements[$key]);
-  } else {
-    $deplacements[$key]->_ref_sejour->loadRefsFwd(1);
-    $deplacements[$key]->_ref_sejour->_ref_praticien->loadRefsFwd();
-    $deplacements[$key]->_ref_lit->loadCompleteView();
-    $deplacements[$key]->_ref_lit->loadRefChambre();
-    $deplacements[$key]->_ref_next->loadRefsFwd();
-    $deplacements[$key]->_ref_next->_ref_lit->loadCompleteView();
-    $deplacements[$key]->_ref_next->_ref_lit->loadRefChambre();
-    
-    $service_actuel    = $deplacements[$key]->_ref_lit->_ref_chambre->service_id;
-    $service_transfert = $deplacements[$key]->_ref_next->_ref_lit->_ref_chambre->service_id;
-    
-    if(!in_array($service_actuel,array_keys($services)) && !in_array($service_transfert,array_keys($services))){
-      unset($deplacements[$key]);
-    }
+$affectation = new CAffectation;
+$deplacements = $affectation->loadList($whereDeplacement, $orderDep, null, null, $ljoin);
+$sejours    = CMbObject::massLoadFwdRef($deplacements, "sejour_id");
+$patients   = CMbObject::massLoadFwdRef($sejours, "patient_id");
+$praticiens = CMbObject::massLoadFwdRef($sejours, "praticien_id");
+CMbObject::massLoadFwdRef($praticiens, "function_id");
+CMbObject::massLoadFwdRef($deplacements, "lit_id");
+
+foreach($deplacements as $_deplacement) {
+  $_deplacement->loadRefsFwd();
+  
+  if(!$_deplacement->_ref_next->_id) {
+    unset($deplacements[$_deplacement->_id]);
+    continue;
+  }
+  $sejour = $_deplacement->_ref_sejour; 
+  $sejour->loadRefPatient(1);
+  $sejour->loadRefPraticien(1);
+  $_deplacement->_ref_next->loadRefLit()->loadCompleteView();
+  
+  $service_actuel    = $_deplacement->_ref_lit->_ref_chambre->service_id;
+  $service_transfert = $_deplacement->_ref_next->_ref_lit->_ref_chambre->service_id;
+  
+  if (!array_key_exists($service_actuel, $services) && !array_key_exists($service_transfert, $services)){
+    unset($deplacements[$_deplacement->_id]);
   }
 }
 
@@ -135,45 +127,28 @@ if($order_col == "_chambre"){
 
 
 // Récupération des sorties ambu du jour
+$sorties = array();
 $whereSortie["type"] = "= 'ambu'";
-$sortiesAmbu = new CAffectation;
-$sortiesAmbu = $sortiesAmbu->loadList($whereSortie, $order, null, null, $ljoin);
-foreach($sortiesAmbu as $key => $value) {
-  $sortiesAmbu[$key]->loadRefsFwd();
-  if($sortiesAmbu[$key]->_ref_next->affectation_id) {
-    unset($sortiesAmbu[$key]);
-  } else {
-    $sortiesAmbu[$key]->_ref_sejour->loadRefsFwd();
-    $sortiesAmbu[$key]->_ref_sejour->_ref_praticien->loadRefsFwd();
-    $sortiesAmbu[$key]->_ref_lit->loadCompleteView();
-    $sortiesAmbu[$key]->_ref_next->loadRefsFwd();
-    $sortiesAmbu[$key]->_ref_next->_ref_lit->loadCompleteView();
-    
-    $service_actuel    = $sortiesAmbu[$key]->_ref_lit->_ref_chambre->service_id;
-    if(!in_array($service_actuel,array_keys($services))){
-        unset($sortiesAmbu[$key]);
-    }
-  }
-}
+$sorties["ambu"] = $affectation->loadList($whereSortie, $order, null, null, $ljoin);
 
-// Récupération des sorties hospi complete du jour
 $whereSortie["type"] = "= 'comp'";
-$sortiesComp = new CAffectation;
-$sortiesComp = $sortiesComp->loadList($whereSortie, $order, null, null, $ljoin);
-foreach($sortiesComp as $key => $value) {
-  $sortiesComp[$key]->loadRefsFwd();
-  if($sortiesComp[$key]->_ref_next->affectation_id) {
-    unset($sortiesComp[$key]);
-  } else {
-    $sortiesComp[$key]->_ref_sejour->loadRefsFwd();
-    $sortiesComp[$key]->_ref_sejour->_ref_praticien->loadRefsFwd();
-    $sortiesComp[$key]->_ref_lit->loadCompleteView();
-    $sortiesComp[$key]->_ref_next->loadRefsFwd();
-    $sortiesComp[$key]->_ref_next->_ref_lit->loadCompleteView();
+$sorties["comp"] = $affectation->loadList($whereSortie, $order, null, null, $ljoin);
+
+foreach($sorties as &$_sorties) {
+  foreach($_sorties as $_sortie) {
+    $_sortie->loadRefsFwd();
+    if($_sortie->_ref_next->_id) {
+      unset($_sorties[$_sortie->_id]);
+      continue;
+    }
+    $sejour = $_sortie->_ref_sejour;
+    $sejour->loadRefPatient(1);
+    $sejour->loadRefPraticien(1);
+    $_sortie->_ref_next->loadRefLit(1)->loadCompleteView();
     
-    $service_actuel    = $sortiesComp[$key]->_ref_lit->_ref_chambre->service_id;
-    if(!in_array($service_actuel,array_keys($services))){
-        unset($sortiesComp[$key]);
+    $service_id    = $_sortie->_ref_lit->_ref_chambre->service_id;
+    if (!array_key_exists($service_id, $services)) {
+        unset($_sorties[$_sortie->_id]);
     }
   }
 }
@@ -189,8 +164,8 @@ $smarty->assign("order_way"    , $order_way);
 $smarty->assign("order_col"    , $order_col);
 $smarty->assign("date"         , $date        );
 $smarty->assign("deplacements" , $deplacements);
-$smarty->assign("sortiesAmbu"  , $sortiesAmbu );
-$smarty->assign("sortiesComp"  , $sortiesComp );
+$smarty->assign("sortiesAmbu"  , $sorties["ambu"] );
+$smarty->assign("sortiesComp"  , $sorties["comp"] );
 $smarty->assign("vue"          , $vue         );
 $smarty->assign("canPlanningOp", CModule::getCanDo("dPplanningOp"));
 
