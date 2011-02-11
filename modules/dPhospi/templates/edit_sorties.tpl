@@ -40,22 +40,24 @@ function saveSortie(oFormSortie, oFormAffectation){
               </tr>
               <tr>
                 <th class="not-printable">Effectuer <br/> le déplacement</th>
-                <th>{{mb_colonne class="CAffectation" field="_patient" order_col=$order_col order_way=$order_way url="?m=$m&amp;tab=$tab"}}</th>
-                <th>{{mb_colonne class="CAffectation" field="_praticien" order_col=$order_col order_way=$order_way url="?m=$m&amp;tab=$tab"}}</th>
-                <th>{{mb_colonne class="CAffectation" field="_chambre" order_col=$order_col order_way=$order_way url="?m=$m&amp;tab=$tab"}}</th>
+                {{assign var=url value="?m=$m&tab=$tab"}}
+                <th>{{mb_colonne class="CAffectation" field="_patient"   order_col=$order_col order_way=$order_way url=$url}}</th>
+                <th>{{mb_colonne class="CAffectation" field="_praticien" order_col=$order_col order_way=$order_way url=$url}}</th>
+                <th>{{mb_colonne class="CAffectation" field="_chambre"   order_col=$order_col order_way=$order_way url=$url}}</th>
                 <th>Destination</th>
-                <th>{{mb_colonne class="CAffectation" field="sortie" order_col=$order_col order_way=$order_way url="?m=$m&amp;tab=$tab"}}</th>
+                <th>{{mb_colonne class="CAffectation" field="sortie"     order_col=$order_col order_way=$order_way url=$url}}</th>
                 </tr>
-              {{foreach from=$deplacements item=curr_sortie}}
+              {{foreach from=$deplacements item=_sortie}}
               <tr>
                 <td class="not-printable">
-                <form name="editFrm{{$curr_sortie->affectation_id}}" action="?m={{$m}}" method="post" onsubmit="saveSortie(document.editSortie{{$curr_sortie->affectation_id}}, this);">
+                <form name="Edit-{{$_sortie->_guid}}" action="?m={{$m}}" method="post" onsubmit="saveSortie(getForm('Sortie-{{$_sortie->_guid}}'), this);">
                 <input type="hidden" name="m" value="{{$m}}" />
                 <input type="hidden" name="del" value="0" />
                 <input type="hidden" name="dosql" value="do_affectation_aed" />
-                <input type="hidden" name="affectation_id" value="{{$curr_sortie->affectation_id}}" />
-                <input type="hidden" name="sortie" value="{{$curr_sortie->sortie}}" />
-                {{if $curr_sortie->effectue}}
+                {{mb_key object=$_sortie}}
+                {{mb_field object=$_sortie field=sortie hidden=1}}
+
+                {{if $_sortie->effectue}}
                
                 <input type="hidden" name="effectue" value="0" />
                 <button type="submit" class="cancel">
@@ -69,31 +71,33 @@ function saveSortie(oFormSortie, oFormAffectation){
                 {{/if}}
                 </form>
                 </td>
-                {{if $curr_sortie->effectue}}
-                <td class="text" style="background-image:url(images/icons/ray.gif); background-repeat:repeat;">
+                {{if $_sortie->effectue}}
+                <td class="text" class="arretee">
                 {{else}}
                 <td class="text">
                 {{/if}}
-                  <b>{{$curr_sortie->_ref_sejour->_ref_patient->_view}}</b>
-                </td>
-                <td class="text" style="background:#{{$curr_sortie->_ref_sejour->_ref_praticien->_ref_function->color}}">
-                  {{$curr_sortie->_ref_sejour->_ref_praticien->_view}}
-                </td>
-                <td class="text">
-                  {{$curr_sortie->_ref_lit->_view}}
+                {{assign var=sejour value=$_sortie->_ref_sejour}}
+                {{assign var=patient value=$sejour->_ref_patient}}
+                  <strong onmouseover="ObjectTooltip.createEx(this, '{{$patient->_guid}}')">{{$patient}}</strong>
                 </td>
                 <td class="text">
-                  {{$curr_sortie->_ref_next->_ref_lit->_view}}
+                  {{mb_include module=mediusers template=inc_vw_mediuser mediuser=$sejour->_ref_praticien}}
+                </td>
+                <td class="text">
+                  {{$_sortie->_ref_lit}}
+                </td>
+                <td class="text">
+                  {{$_sortie->_ref_next->_ref_lit}}
                 </td>
                 <td>
-                {{if $curr_sortie->effectue}}
-                  {{$curr_sortie->sortie|date_format:$conf.time}}
+                {{if $_sortie->effectue}}
+                  {{$_sortie->sortie|date_format:$conf.time}}
                 {{else}}
-                <form name="editSortie{{$curr_sortie->affectation_id}}" action="">
+                <form name="Sortie-{{$_sortie->_guid}}" action="">
                   <select name="sortie">
-                  {{assign var="curr_id" value=$curr_sortie->_id}}
-                  {{foreach from=$timing.$curr_id|smarty:nodefaults item="time"}}
-                  <option value="{{$time}}" {{if $time==$curr_sortie->sortie}}selected = "selected"{{/if}}>
+                  {{assign var="_id" value=$_sortie->_id}}
+                  {{foreach from=$timing.$_id|smarty:nodefaults item="time"}}
+                  <option value="{{$time}}" {{if $time==$_sortie->sortie}}selected = "selected"{{/if}}>
                    {{$time|date_format:$conf.time}}
                   </option>
                   {{/foreach}}
@@ -114,23 +118,23 @@ function saveSortie(oFormSortie, oFormAffectation){
               </tr>
               <tr>
                 <th>Autoriser <br/> la sortie</th>
-                <th>{{mb_colonne class="CAffectation" field="_patient" order_col=$order_col order_way=$order_way url="?m=$m&amp;tab=$tab"}}</th>
-                <th>{{mb_colonne class="CAffectation" field="_praticien" order_col=$order_col order_way=$order_way url="?m=$m&amp;tab=$tab"}}</th>
-                <th>{{mb_colonne class="CAffectation" field="_chambre" order_col=$order_col order_way=$order_way url="?m=$m&amp;tab=$tab"}}</th>
-                <th>{{mb_colonne class="CAffectation" field="sortie" order_col=$order_col order_way=$order_way url="?m=$m&amp;tab=$tab"}}</th>
+                <th>{{mb_colonne class="CAffectation" field="_patient"   order_col=$order_col order_way=$order_way url=$url}}</th>
+                <th>{{mb_colonne class="CAffectation" field="_praticien" order_col=$order_col order_way=$order_way url=$url}}</th>
+                <th>{{mb_colonne class="CAffectation" field="_chambre"   order_col=$order_col order_way=$order_way url=$url}}</th>
+                <th>{{mb_colonne class="CAffectation" field="sortie"     order_col=$order_col order_way=$order_way url=$url}}</th>
               </tr>
               
               {{foreach from=$sorties item=_sorties key=type}}
                 <tr><th colspan="5">{{tr}}CSejour.type.{{$type}}{{/tr}}</th></tr>
-                {{foreach from=$_sorties item=curr_sortie}}
+                {{foreach from=$_sorties item=_sortie}}
                   <tr>
                     <td>
-                    <form name="editFrm{{$curr_sortie->affectation_id}}" action="?m={{$m}}" method="post">
+                    <form name="Sortie-{{$_sortie->_guid}}" action="?m={{$m}}" method="post">
                     <input type="hidden" name="m" value="{{$m}}" />
                     <input type="hidden" name="del" value="0" />
                     <input type="hidden" name="dosql" value="do_affectation_aed" />
-                    <input type="hidden" name="affectation_id" value="{{$curr_sortie->affectation_id}}" />
-                    {{if $curr_sortie->confirme}}
+                    {{mb_key object=$_sortie}}
+                    {{if $_sortie->confirme}}
                     <input type="hidden" name="confirme" value="0" />
                     <button type="submit" class="cancel">
                     Annuler
@@ -143,28 +147,27 @@ function saveSortie(oFormSortie, oFormAffectation){
                     {{/if}}
                     </form>
                     </td>
-                    {{if $curr_sortie->confirme}}
-                    <td class="text" style="background-image:url(images/icons/ray.gif); background-repeat:repeat;">
+                    {{if $_sortie->confirme}}
+                    <td class="text" class="arretee">
                     {{else}}
                     <td class="text">
                     {{/if}}
                      {{if $canPlanningOp->read}}
-                     <a class="action" style="float: right"  title="Modifier le dossier administratif" href="?m=dPpatients&amp;tab=vw_edit_patients&amp;patient_id={{$curr_sortie->_ref_sejour->patient_id}}">
-                         <img src="images/icons/edit.png" alt="modifier" />
-                     </a>
-                     <a class="action" style="float: right"  title="Modifier le séjour" href="?m=dPplanningOp&amp;tab=vw_edit_sejour&amp;sejour_id={{$curr_sortie->_ref_sejour->_id}}">
+                     {{assign var=sejour value=$_sortie->_ref_sejour}}
+                     <a class="action" style="float: right"  title="Modifier le séjour" href="?m=dPplanningOp&amp;tab=vw_edit_sejour&amp;sejour_id={{$sejour->_id}}">
                        <img src="images/icons/planning.png" alt="modifier" />
                      </a>
                      {{/if}}
-                      <b>{{$curr_sortie->_ref_sejour->_ref_patient->_view}}</b>
-                    </td>
-                    <td class="text" style="background:#{{$curr_sortie->_ref_sejour->_ref_praticien->_ref_function->color}}">
-                      {{$curr_sortie->_ref_sejour->_ref_praticien->_view}}
+                      {{assign var=patient value=$sejour->_ref_patient}}
+                      <strong onmouseover="ObjectTooltip.createEx(this, '{{$patient->_guid}}')">{{$patient}}</strong>
                     </td>
                     <td class="text">
-                      {{$curr_sortie->_ref_lit->_view}}
+                      {{mb_include module=mediusers template=inc_vw_mediuser mediuser=$sejour->_ref_praticien}}
                     </td>
-                    <td>{{$curr_sortie->sortie|date_format:$conf.time}}</td>
+                    <td class="text">
+                      {{$_sortie->_ref_lit}}
+                    </td>
+                    <td>{{$_sortie->sortie|date_format:$conf.time}}</td>
                   </tr>
                 {{/foreach}}
               {{/foreach}}
