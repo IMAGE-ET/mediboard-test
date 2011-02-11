@@ -55,9 +55,12 @@ if (class_exists($objects_class) && count($objects_id)) {
     }
     
     if (count($no_extid) < count($objects)) {
-      foreach($no_extid as $_object) {
-        $_object->_disabled = true;
+      if (CAppUI::conf("merge_prevent_base_without_idex") == 1) {
+        foreach($no_extid as $_object) {
+          $_object->_disabled = true;
+        }
       }
+      
       $_selected = reset($extid);
       $_selected->_selected = true;
       

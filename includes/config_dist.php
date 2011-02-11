@@ -18,18 +18,21 @@ $dPconfig["company_name"]      = "mediboard.org";
 $dPconfig["page_title"]        = "Mediboard SIH";
 $dPconfig["base_url"]          = "http://localhost/mediboard/";
 
-$dPconfig["offline"]           = "0";
+$dPconfig["offline"]           = "0";      // Offline mode (redirect to offline.php)
 $dPconfig["instance_role"]     = "qualif"; // qualif|prod
-$dPconfig["mb_id"]             = "";
-$dPconfig["alternative_mode"]  = "0";
-$dPconfig["minify_javascript"] = "0";
-$dPconfig["currency_symbol"]   = "&euro;"; // Currency symbol (html entities allowed)
-$dPconfig["hide_confidential"] = "0";      // Enable if you want to hide confidentials fields
-$dPconfig["locale_warn"]       = "0";      // Warn when a translation is not found (for developers and tranlators)
-$dPconfig["locale_alert"]      = "^";      // The string appended to untranslated string or unfound keys
-$dPconfig["debug"]             = "1";      // Set to true to help analyse errors
+$dPconfig["mb_id"]             = "";       // Instance unique ID
+$dPconfig["minify_javascript"] = "0";      // 0 => no concatenation, 1 => concatenation, 2 => concatenation+minification
+$dPconfig["currency_symbol"]   = "&euro;"; // Currency symbol (HTML entities allowed)
+$dPconfig["hide_confidential"] = "0";      // Enable if you want to hide confidential fields
+$dPconfig["locale_warn"]       = "0";      // Warn when a translation is not found (for developers and translators)
+$dPconfig["locale_alert"]      = "^";      // The string appended to untranslated string or not found keys
+$dPconfig["debug"]             = "1";      // Set to true to help analyze errors
 $dPconfig["readonly"]          = "0";      // Read-only mode : any store will fail
 $dPconfig["shared_memory"]     = "none";   // Shared memory handler [none|eaccelerator|apc]
+
+// Object merge
+$dPconfig["alternative_mode"]  = "0";      // Alternative fusion mode (keeps one object, max 2 objects to merge)
+$dPconfig["merge_prevent_base_without_idex"]  = "1"; // Prevent choosing a base without an external ID
 
 $dPconfig["browser_compat"]    = array(    // minimal browser versions
   'firefox' => '2.0',
