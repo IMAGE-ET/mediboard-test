@@ -323,7 +323,7 @@ function graphOccupationSalle($debut = null, $fin = null, $prat_id = 0, $salle_i
     if($type_hospi) {
       $query_hors_plage .= "\nAND sejour.type = '$type_hospi'";
     }
-    if($prat_id)       $query_hors_plage .= "\nAND operations.chir_id = '$prat_id' AND plagesop.chir_id = '$prat_id'";
+    if($prat_id)       $query_hors_plage .= "\nAND operations.chir_id = '$prat_id'";
     if($discipline_id) $query_hors_plage .= "\nAND users_mediboard.discipline_id = '$discipline_id'";
     $query_hors_plage .=  "\nAND operations.date BETWEEN '$debut' AND '$fin'
       AND operations.entree_reveil IS NOT NULL
