@@ -162,20 +162,19 @@ $sortiesComp = new CAffectation;
 $sortiesComp = $sortiesComp->loadList($whereSortie, $order, null, null, $ljoin);
 foreach($sortiesComp as $key => $value) {
   $sortiesComp[$key]->loadRefsFwd();
-  $_sortie = & $sortiesComp[$key];
-  while ($_sortie->_ref_next->_id) {
-    $_sortie = $_sortie->_ref_next;
-    $_sortie->loadRefsFwd();
-  }
-  $sortiesComp[$key]->_ref_sejour->loadRefsFwd();
-  $sortiesComp[$key]->_ref_sejour->_ref_praticien->loadRefsFwd();
-  $sortiesComp[$key]->_ref_lit->loadCompleteView();
-  $sortiesComp[$key]->_ref_next->loadRefsFwd();
-  $sortiesComp[$key]->_ref_next->_ref_lit->loadCompleteView();
-  
-  $service_actuel    = $sortiesComp[$key]->_ref_lit->_ref_chambre->service_id;
-  if(!in_array($service_actuel,array_keys($services))){
-      unset($sortiesComp[$key]);
+  if($sortiesComp[$key]->_ref_next->affectation_id) {
+    unset($sortiesComp[$key]);
+  } else {
+    $sortiesComp[$key]->_ref_sejour->loadRefsFwd();
+    $sortiesComp[$key]->_ref_sejour->_ref_praticien->loadRefsFwd();
+    $sortiesComp[$key]->_ref_lit->loadCompleteView();
+    $sortiesComp[$key]->_ref_next->loadRefsFwd();
+    $sortiesComp[$key]->_ref_next->_ref_lit->loadCompleteView();
+    
+    $service_actuel    = $sortiesComp[$key]->_ref_lit->_ref_chambre->service_id;
+    if(!in_array($service_actuel,array_keys($services))){
+        unset($sortiesComp[$key]);
+    }
   }
 }
 
