@@ -113,9 +113,15 @@ class CExClassField extends CMbObject {
   }
   
   function updateTranslation(){
-    $enum_trans = $this->loadRefEnumTranslations();
+  	$base = $this;
+		
+  	if ($this->concept_id) {
+  		$base = $this->loadRefConcept();
+  	}
+		
+    $enum_trans = $base->loadRefEnumTranslations();
     foreach($enum_trans as $_enum_trans) {
-      $_enum_trans->updateLocales();
+      $_enum_trans->updateLocales($this);
     }
     
     $trans = $this->loadRefTranslation();

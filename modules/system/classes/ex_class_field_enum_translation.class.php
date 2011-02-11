@@ -35,9 +35,9 @@ class CExClassFieldEnumTranslation extends CMbObject {
     return $props;
   }
   
-  function getKey(){
-    $field = $this->loadRefExClassField();
-    $class = $field->loadRefExClass();
+  function getKey(CExClassField $base = null){
+    $field = $base ? $base : $this->loadRefExClassField();
+    $class = $base ? $base->loadRefExClass() : $field->loadRefExClass();
 		$key = "CExObject";
 		
 		if ($class->_id) {
@@ -47,8 +47,8 @@ class CExClassFieldEnumTranslation extends CMbObject {
     return "$key.{$field->name}.{$this->key}";
   }
   
-  function updateLocales(){
-    $key = $this->getKey();
+  function updateLocales(CExClassField $base = null){
+    $key = $this->getKey($base);
 		
     global $locales;
     $locales[$key] = $this->value;

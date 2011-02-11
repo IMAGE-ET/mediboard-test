@@ -119,7 +119,7 @@ var AideSaisie = {
               buttons.newFunction = DOM.img({src: "images/icons/user-function.png", style: "margin-bottom: 0px;", title: "Nouvelle aide pour "+User["function"].view}), DOM.br({}),
               buttons.newUser     = DOM.img({src: "images/icons/user.png", style: "margin-bottom: 0px;", title: "Nouvelle aide pour "+User.view})
             ),
-            DOM.img({src: "images/icons/new.png", title: "Nouvelle aide"})
+            buttons.createIcon = DOM.img({src: "images/icons/new.png", title: "Nouvelle aide"})
           ),
           buttons.owner  = DOM.a({href: "#1", title: this.options.defaultUserView}, DOM.img({src: "images/icons/user-glow.png"})).setVisible(Preferences.aideOwner == '1'),
           buttons.timestamp = DOM.a({href: "#1"}, DOM.img({src: "images/icons/timestamp.png", title: "Ajouter un horodatage"})).setVisible(Preferences.aideTimestamp == '1'),
@@ -303,7 +303,7 @@ var AideSaisie = {
         });
       }
       
-      buttons.create.observe('click', function(e){
+      buttons.createIcon.observe('click', function(e){
         AideSaisie.create(
           this.options.objectClass, 
           this.element, 
