@@ -56,10 +56,15 @@ var ExClass = {
     $V(form["coord_"+type+"_x"].enable(), coord_x);
     $V(form["coord_"+type+"_y"].enable(), coord_y);
     
+    $V(form.elements.callback, "");
+    $V(form.del, 0);
+			
     // dest = LIST
     if (drop.hasClassName("out-of-grid")) {
       var del = drag.getAttribute("data-field_id");
-      
+			
+      $V(form.elements.callback, "");
+			
       if (del) {
         drag.remove();
         $V(form.del, 1);
@@ -80,10 +85,19 @@ var ExClass = {
         });
       }
       drop.update(drag);
+			
+			var id = drag.identify();
+			$V(form.elements.callback, "ExClass.setHostFieldId.curry("+id+")");
     }
     
     onSubmitFormAjax(form);
   },
+	setHostFieldId: function(element_id, object_id, obj) {
+		var drag = $(element_id);
+		if (drag) {
+			drag.setAttribute("data-field_id", object_id);
+		}
+	},
   initDraggableHostField: function(d){
     new Draggable(d, {
       revert: 'failure', 

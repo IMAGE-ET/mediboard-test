@@ -199,6 +199,7 @@ Main.add(function(){
     <input type="hidden" name="ex_class_host_field_id" value="" />
     <input type="hidden" name="ex_class_id" value="{{$ex_class->_id}}" />
     <input type="hidden" name="field" value="" />
+    <input type="hidden" name="callback" value="" />
     
     <input type="hidden" name="coord_label_x" class="coord" value="" />
     <input type="hidden" name="coord_label_y" class="coord" value="" />
@@ -266,6 +267,7 @@ Main.add(function(){
 		}
 		
 		.hostfield {
+      background-color: rgb(205,252,204);
 		  background-color: rgba(205,252,204,0.4);
 		}
 		
@@ -292,7 +294,7 @@ Main.add(function(){
 					<div style="height: 100%; overflow-y: scroll; min-height: 100px;">
 					  <ul>
 	          {{foreach from=$host_object->_specs item=_spec key=_field}}
-						  {{if $_spec->show == 1 || $_field == "_view" || $_field == "_shortview" || ($_spec->show == "" && $_field.0 !== "_")}}
+						  {{if $_spec->show == 1 || $_field == "_view" || ($_spec->show == "" && $_field.0 !== "_")}} {{*  || $_field == "_shortview" *}}
 	              <li>
 	                {{mb_include module=system template=inc_ex_host_field_draggable}}
 								</li>

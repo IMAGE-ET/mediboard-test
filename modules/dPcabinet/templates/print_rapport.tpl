@@ -21,8 +21,8 @@ PlageConsult = {
   showObsolete: function() {
 	  var oStyle = {
       opacity: 0.9,
-      position: 'absolute',
-    }
+      position: 'absolute'
+    };
     $("obsolete-totals").setStyle(oStyle).clonePosition("totals").show();
   }
 }
