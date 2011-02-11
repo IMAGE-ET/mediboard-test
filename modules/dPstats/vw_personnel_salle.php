@@ -26,7 +26,10 @@ $total["duree_first_to_last"]      = "00:00:00";
 $total["days_duree_first_to_last"] = 0;
 $total["duree_reelle"]             = "00:00:00";
 $total["days_duree_reelle"]        = 0;
-$total["personnel"] = array();
+$total["personnel"] = array(
+  "iade" => array("days_duree"=> 0, "duree" => "00:00:00"),
+  "op"   => array("days_duree"=> 0, "duree" => "00:00:00"),
+  "op_panseuse" => array("days_duree"=> 0, "duree" => "00:00:00"));
 
 // Récupération des plages
 $plage = new CPlageOp;
