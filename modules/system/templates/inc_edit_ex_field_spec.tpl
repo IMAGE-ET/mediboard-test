@@ -70,6 +70,7 @@ cloneTemplate = function(input) {
   var template = $(input).previous('.template');
   var clone = template.clone(true).observe("change", updateFieldSpec);
   template.insert({before: clone.show().removeClassName('template')});
+  clone.down('input[type=text]').tryFocus();
 }
 
 confirmDelEnum = function(button) {
@@ -77,6 +78,13 @@ confirmDelEnum = function(button) {
   $(button).up().remove(); 
 	updateFieldSpec();
 	return true;
+}
+
+updateInternalNameEnum = function(e) {
+  var target = $(e).next('input');
+  if (target.readOnly) return;
+  
+  $V(target, ExField.slug($V(e)));
 }
 
 Main.add(function(){
@@ -147,24 +155,17 @@ Main.add(function(){
         {{elseif $_type == "list"}}
           {{foreach from=$spec->_list key=_key item=_value}}
             <div>
-              <input type="text" name="{{$_name}}[]" value="{{$_value}}" {{if $_value}}readonly="readonly"{{/if}} />
+              <input type="text" name="__enum[]" onkeyup="updateInternalNameEnum(this)" size="35"
+                     value="{{if $spec->_locales.$_value|strpos:'CExObject' === false}}{{$spec->_locales.$_value}}{{/if}}" />
+              Nom interne: <input type="text" name="{{$_name}}[]" value="{{$_value}}" {{if $_value}}readonly="readonly"{{/if}} />
               <button type="button" class="cancel notext" tabindex="1000" onclick="return confirmDelEnum(this)">{{tr}}Delete{{/tr}}</button>
-              {{if $ex_field_id}}
-                Traduction: <input type="text" name="__enum[]" value="{{if $spec->_locales.$_value|strpos:'CExObject' === false}}{{$spec->_locales.$_value}}{{/if}}" />
-              {{else}}
-                <em>Enregistrez le champ avant de pouvoir le traduire</em>
-              {{/if}}
             </div>
           {{/foreach}}
           
           <div style="display: none;" class="template">
-            <input type="text" name="{{$_name}}[]" value="" />
+            <input type="text" name="__enum[]" value="" onkeyup="updateInternalNameEnum(this)" size="35" />
+            Nom interne: <input type="text" name="{{$_name}}[]" value="" />
             <button type="button" class="cancel notext" tabindex="1000" onclick="return confirmDelEnum(this)">{{tr}}Delete{{/tr}}</button>
-            {{if $ex_field_id}}
-              Traduction: <input type="text" name="__enum[]" value="" />
-            {{else}}
-              <em>Enregistrez le champ avant de pouvoir le traduire</em>
-            {{/if}}
           </div>
           
           <button type="button" class="add notext" onclick="cloneTemplate(this)">{{tr}}Add{{/tr}}</button>

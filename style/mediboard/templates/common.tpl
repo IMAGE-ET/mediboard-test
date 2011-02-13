@@ -21,6 +21,10 @@
   <meta name="Description" content="Mediboard: Plateforme Open Source pour les Etablissements de Santé" />
   <meta name="Version" content="{{$version.string}}" />
   
+  <!-- iOS specific -->
+  {{* Can't use the "apple-mobile-web-app-capable" meta tags because any hyperlink will be opened in Safari *}}
+  <link rel="apple-touch-icon" href="images/icons/apple-touch-icon.png?{{$version.build}}" />
+  
   <!-- IE9 specific JumpLists -->
   {{if $browser.name == "msie"}}
     <meta name="application-name" content="{{$conf.page_title}}" />
@@ -87,7 +91,7 @@
   </script>
 </head>
 
-<body class="{{if @$app->user_prefs.touchscreen == 1}} touchscreen {{/if}}">
+<body class="{{if @$app->user_prefs.touchscreen == 1 || $browser.name == 'ipad'}} touchscreen {{/if}}">
 
 {{if $browser.name == "msie"}}
   {{include file="../../mediboard/templates/ie.tpl" nodebug=true}}

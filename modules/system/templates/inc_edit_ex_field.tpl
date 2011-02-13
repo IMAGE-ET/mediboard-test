@@ -74,9 +74,9 @@ updateInternalName = function(e){
       <th style="width: 8em;">{{mb_label object=$ex_field field=_locale}}</th>
       <td>
       	{{if $ex_field->_id}}
-          {{mb_field object=$ex_field field=_locale}}
+          {{mb_field object=$ex_field field=_locale size=40}}
 				{{else}}
-      	  {{mb_field object=$ex_field field=_locale onkeyup="updateInternalName(this)"}}
+      	  {{mb_field object=$ex_field field=_locale onkeyup="updateInternalName(this)" size=40}}
 				{{/if}}
 			</td>
       <th>{{mb_label object=$ex_field field=name}}</th>
@@ -84,10 +84,10 @@ updateInternalName = function(e){
     </tr>
     <tr>
       <th>{{mb_label object=$ex_field field=_locale_desc}}</th>
-      <td>{{mb_field object=$ex_field field=_locale_desc tabIndex="2"}}</td>
+      <td>{{mb_field object=$ex_field field=_locale_desc tabIndex="2" size=40}}</td>
       
       <th>{{mb_label object=$ex_field field=prop}}</th>
-      <td>{{mb_field object=$ex_field field=prop readonly="readonly" size=35}}</td>
+      <td>{{mb_field object=$ex_field field=prop readonly="readonly" size=30}}</td>
     </tr>
     <tr>
       <th><label for="_type">Type</label></th>
@@ -113,7 +113,7 @@ updateInternalName = function(e){
       </td>
       
       <th>{{mb_label object=$ex_field field=_locale_court}}</th>
-      <td>{{mb_field object=$ex_field field=_locale_court tabIndex="3"}}</td>
+      <td>{{mb_field object=$ex_field field=_locale_court tabIndex="3" size=30}}</td>
     </tr>
       
     <tr>
