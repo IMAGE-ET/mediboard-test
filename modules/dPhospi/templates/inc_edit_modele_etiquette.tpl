@@ -30,7 +30,7 @@ previewEtiq = function() {
 }
 </script>
 
-<form name="edit_etiq" onsubmit="return onSubmitFormAjax(this);">
+<form name="edit_etiq" onsubmit="return onSubmitFormAjax(this);" method="post">
   <input type="hidden" name="m" value="dPhospi" />
   <input type="hidden" name="dosql" value="do_modele_etiquette_aed" />
   <input type="hidden" name="callback" value="after_edit_modele_etiq" />
