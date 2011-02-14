@@ -19,7 +19,7 @@
 		{{$elt->_ref_element_prescription->_view}}: {{if $elt->conditionnel}}(Conditionnel){{/if}}</strong>
 
   {{if $elt->commentaire}}
-  <em>({{$elt->commentaire}})</em>
+  <em>({{$elt->commentaire|nl2br}})</em>
   {{/if}}
   {{if  $chapitre_category != "dmi" && ($elt->_ref_prises|@count || $elt->_duree_prise || $elt->date_arret) }}
 
@@ -45,7 +45,7 @@
   <strong>{{$elt->_ref_element_prescription->_view}} {{if $elt->conditionnel}}(Conditionnel){{/if}}</strong>
 
   {{if $elt->commentaire}}
-  <em>({{$elt->commentaire}})</em>
+  <em>({{$elt->commentaire|nl2br}})</em>
   {{/if}}
   {{if  $chapitre_category != "dmi"}}
 	  <ul>
@@ -109,7 +109,7 @@
 		 {{/if}}
 		
      {{if $elt->commentaire}}
-       , {{mb_value object=$elt field="commentaire"}}
+       , {{$elt->commentaire|nl2br}}
      {{/if}}
      
 			</li>

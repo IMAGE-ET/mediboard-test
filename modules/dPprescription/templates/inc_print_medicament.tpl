@@ -53,7 +53,7 @@
       <em>{{if $print}}
               {{$med->commentaire|escape:"html"}}
             {{else}}
-              {{$med->commentaire}}
+              {{$med->commentaire|nl2br}}
             {{/if}}</em>
       {{/if}}
     {{/if}}
@@ -137,7 +137,7 @@
        {{if $print}}
         {{$med->commentaire|escape:"html"}}
        {{else}}
-         {{$med->commentaire}}
+         {{$med->commentaire|nl2br}}
        {{/if}}
      {{/if}}
       

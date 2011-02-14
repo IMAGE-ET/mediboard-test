@@ -30,7 +30,7 @@
 	{{/if}}
 	</strong><br/>
 	{{if $perf->commentaire}}
-    ({{$perf->commentaire}})
+    ({{$perf->commentaire|nl2br}})
   {{/if}}
 	<ul>
 	  {{foreach from=$perf->_ref_lines item=_line}}
