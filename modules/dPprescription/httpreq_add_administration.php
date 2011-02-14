@@ -102,7 +102,7 @@ $sejour = $line->_ref_prescription->_ref_object;
 $sejour->loadRefPatient();
 $patient =& $sejour->_ref_patient;
 $patient->loadRefsAffectations();
-$patient->_ref_curr_affectation->updateFormFields();
+$patient->_ref_curr_affectation->loadView();
 
 // Heures disponibles pour l'administration
 $hours = range(0,23);
