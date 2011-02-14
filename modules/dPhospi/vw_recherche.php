@@ -95,6 +95,7 @@ else if ($typeVue == 1) {
   $order = "service.nom, chambre.nom, lit.nom";
   $listAff["Aff"] = $affectation->loadList($where, $order, null, null, $ljoin);
   foreach($listAff["Aff"] as &$_aff) {
+    $_aff->loadView();
     $_aff->loadRefSejour();
     $_aff->_ref_sejour->loadRefPatient();
     $_aff->_ref_sejour->_ref_praticien =& $listPrat[$_aff->_ref_sejour->praticien_id];
