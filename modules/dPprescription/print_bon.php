@@ -141,6 +141,10 @@ foreach($all_bons as $_chap => &$_all_bons){
 // Creation d'un tableau des affectations pour la date courante
 $prescription->_ref_object->loadRefsAffectations();
 
+foreach($prescription->_ref_object->_ref_affectations as $_affectation) {
+  $_affectation->loadView();
+}
+
 // Chargement de toutes les categories
 $categories = CCategoryPrescription::loadCategoriesByChap();
 
