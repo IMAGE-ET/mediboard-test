@@ -381,17 +381,16 @@ $library->versionString = 'v1.0';
 
 CLibrary::$all[$library->name] = $library;
 
-/*
 $library = new CLibrary;
-$library->name = "dsHistory";
-$library->url = "http://code.google.com/p/dshistory/";
-$library->fileName = "dshistory.tar.gz";
-$library->description = "A JavaScript-based browser history event manager";
-$library->sourceDir = "dshistory";
-$library->targetDir = "dshistory";
-$library->versionFile = "dshistory.js";
-$library->versionString = "v1-beta5";
+$library->name = "jsExpressionEval";
+$library->url = "https://github.com/silentmatt/js-expression-eval";
+$library->fileName = "jsExpressionEval.tar.gz";
+$library->description = "A JavaScript math expression evaluator";
+$library->sourceDir = "jsExpressionEval";
+$library->targetDir = "jsExpressionEval";
+$library->versionFile = "parser.js";
+$library->versionString = "Based on ndef.parser, by Raphael Graf(r@undefined.ch)";
 
-CLibrary::$all[$library->name] = $library;*/
+CLibrary::$all[$library->name] = $library;
 
 ?>
