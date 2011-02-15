@@ -708,7 +708,7 @@ class CPrescriptionLineMedicament extends CPrescriptionLine {
 		
 		if($this->_ref_produit->voies){
 	    foreach($this->_ref_produit->voies as $_voie){
-	      if(self::$voies[$_voie]["perfusable"]){
+	      if(isset(self::$voies[$_voie]) && self::$voies[$_voie]["perfusable"]){
 	        $this->_is_perfusable = true;
 	        break;  
 	      }
@@ -720,7 +720,7 @@ class CPrescriptionLineMedicament extends CPrescriptionLine {
   
   function isInjectable(){
     if($this->voie && $this->voie !== "none"){
-	    if(self::$voies[$this->voie]["injectable"]){
+	    if(isset(self::$voies[$this->voie]) && self::$voies[$this->voie]["injectable"]){
 	      $this->_is_injectable = true;  
 	    }
     }
