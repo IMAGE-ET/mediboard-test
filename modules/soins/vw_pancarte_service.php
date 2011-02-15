@@ -133,6 +133,7 @@ foreach($prescriptions as $_prescription){
   
   // Stockage de l'affectation courante dans _ref_curr_affectation du sejour
   $_prescription->_ref_object->_ref_curr_affectation = $_prescription->_ref_object->getCurrAffectation($date);
+  $_prescription->_ref_object->_ref_curr_affectation->loadView();
   
   $lits[$_prescription->_ref_object->_ref_curr_affectation->_ref_lit->_view."-".$_prescription->_id] = $_prescription->_id;
   $_prescription->loadRefPraticien();
