@@ -185,7 +185,7 @@ Intermax.ResultHandler["Lire Vitale"] = function() {
     
     <tr>
       <th><label for="name" title="Nom du patient à rechercher, au moins les premières lettres">Nom</label></th>
-      <td><input name="name" value="{{$name|stripslashes}}" size="30" tabindex="1" /></td>
+      <td><input type="text" name="name" value="{{$name|stripslashes}}" size="30" tabindex="1" /></td>
       
       <th><label for="naissance" title="Date de naissance">Date de naissance</label></th>
       <td>
@@ -195,7 +195,7 @@ Intermax.ResultHandler["Lire Vitale"] = function() {
     
     <tr>
       <th><label for="firstName" title="Prénom du patient à rechercher, au moins les premières lettres">Prénom</label></th>
-      <td><input name="firstName" value="{{$firstName|stripslashes}}" size="30" tabindex="2" /></td>
+      <td><input type="text" name="firstName" value="{{$firstName|stripslashes}}" size="30" tabindex="2" /></td>
 
       {{if $conf.dPpatients.CPatient.tag_ipp && $dPsanteInstalled}}
         <th>IPP</th>
