@@ -42,7 +42,7 @@ printFicheBloc = function(operation_id) {
 	    <td>
         {{mb_include module=mediusers template=inc_vw_mediuser mediuser=$_operation->_ref_chir}}
 	    </td>
-	    <td>{{$_operation->_datetime|date_format:"%a %d %b %Y"}}</td>
+	    <td>{{$_operation->_datetime|date_format:$conf.date}}</td>
 	    {{if $_operation->annulee}}
 	    <th class="category cancelled">
 	      <strong>{{tr}}COperation-annulee{{/tr}}</strong>
