@@ -169,6 +169,13 @@
 	
 	<input type="hidden" name="_bind_sejour" value="1" />
 	<table class="form">
+		<colgroup>
+			<col class="narrow" />
+      <col style="width: 50%" />
+      <col class="narrow" />
+      <col style="width: 50%" />
+		</colgroup>
+		
 	  <tr>
 	    {{if $rpu->_id}}
 	    <th class="title modify" colspan="4">
