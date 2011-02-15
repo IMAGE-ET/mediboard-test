@@ -12,7 +12,8 @@
 
 CCanDo::checkEdit();
 
-$source_id = CValue::getOrSession("source_id", 0);
+$source_id  = CValue::getOrSession("source_id", 0);
+$class_name = CValue::getOrSession("class_name", "CSourceLPR");
 
 $sources = array();
 
@@ -26,8 +27,10 @@ $sources = array_merge($sources, $source_smb->loadlist());
 // Création du template
 $smarty = new CSmartyDP();
 
-$smarty->assign("sources"  , $sources);
-$smarty->assign("source_id", $source_id);
+$smarty->assign("sources"   , $sources);
+$smarty->assign("source_id" , $source_id);
+$smarty->assign("class_name", $class_name);
+
 $smarty->display("inc_list_sources.tpl");
 
 ?>

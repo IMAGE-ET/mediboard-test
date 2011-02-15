@@ -10,9 +10,9 @@
 *}}
 
 <script type="text/css">
-  updateSelected = function(id) {
+  updateSelected = function(guid) {
     removeSelected();
-    var source = $("source-" + id);
+    var source = $("source-" + guid);
     source.addClassName("selected");
   }
 
@@ -53,9 +53,9 @@
   </tr>
   
   {{foreach from=$sources item=_source}}
-    <tr id='source-{{$_source->_id}}' class="osource {{if $_source->_id == $source_id}}selected{{/if}}">
+    <tr id='source-{{$_source->_guid}}' class="osource {{if $_source->_id == $source_id && $_source->_class_name == $class_name}}selected{{/if}}">
       <td>
-        <a href="#1" onclick="editSource('{{$_source->_id}}', '{{$_source->_class_name}}'); updateSelected('{{$_source->_id}}')">
+        <a href="#1" onclick="editSource('{{$_source->_id}}', '{{$_source->_class_name}}'); updateSelected('{{$_source->_guid}}')">
          {{$_source->name}} 
         </a>
       </td>

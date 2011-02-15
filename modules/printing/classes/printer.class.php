@@ -25,14 +25,20 @@ class CPrinter extends CMbMetaObject {
     return $spec;
   }
   
+  function loadTargetObject() {
+    parent::loadTargetObject();
+    $this->_view = $this->_ref_object->name;
+  }
+  
   function getProps() {
-    $specs = parent::getProps();
+    $props = parent::getProps();
     
-    $specs["name"]         = "str notNull";
-    $specs["function_id"]  = "ref class|CFunctions notNull";
-    $specs["object_id"]    = "ref notNull class|CMbObject meta|object_class cascade purgeable show|1";
-    $specs["object_class"] = "str notNull class show|0";
-   return $specs;
+    $props["name"]         = "str notNull";
+    $props["function_id"]  = "ref class|CFunctions notNull";
+    $props["object_id"]    = "ref notNull class|CSourcePrinter meta|object_class";
+    $props["object_class"] = "str notNull class show|0";
+    
+    return $props;
   }
 }
 

@@ -310,13 +310,7 @@ class CSetupdPhospi extends CSetup {
     $this->addQuery($query);
     
     $this->makeRevision("0.38");
-    $query = "CREATE TABLE `printer` (
-              `printer_id` INT (11) UNSIGNED NOT NULL auto_increment PRIMARY KEY,
-              `name` VARCHAR (255),
-              `function_id` INT (11) DEFAULT NULL,
-              `object_id` INT (11) DEFAULT NULL,
-              `object_class` VARCHAR (255) DEFAULT NULL
-              ) TYPE=MYISAM";
+    $query = "SELECT 0";
     $this->addQuery($query);
     
     $this->mod_version = "0.39";

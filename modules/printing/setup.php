@@ -45,7 +45,17 @@ class CSetupprinting extends CSetup {
               ) TYPE=MYISAM;";
     $this->addQuery($query);
     
-    $this->mod_version = "0.02";
+    $this->makeRevision("0.02");
+    $query = "CREATE TABLE IF NOT EXISTS `printer` (
+              `printer_id` INT (11) UNSIGNED NOT NULL auto_increment PRIMARY KEY,
+              `name` VARCHAR (255),
+              `function_id` INT (11) DEFAULT NULL,
+              `object_id` INT (11) DEFAULT NULL,
+              `object_class` VARCHAR (255) DEFAULT NULL
+              ) TYPE=MYISAM";
+    $this->addQuery($query);
+    
+    $this->mod_version = "0.03";
     
     
   }

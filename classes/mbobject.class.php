@@ -2068,9 +2068,6 @@ class CMbObject {
       "affectations_personnel" => "CAffectationPersonnel object_id",
       "contextes_constante"    => "CConstantesMedicales context_id",
       "modeles_etiquettes"     => "CModeleEtiquette object_id",
-      "printers"               => "CPrinter object_id",
-      "sources_smb"            => "CSourceSMB object_id",
-      "sources_lpr"            => "CSourceLPR object_id"
     );
   }
   
