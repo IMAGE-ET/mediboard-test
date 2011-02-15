@@ -154,6 +154,7 @@ foreach ($sejours as $sejour) {
   
   if (CAppUI::conf("sip send_mvt")) {
     foreach ($sejour->_ref_affectations as $_affectation) {
+      $_affectation->loadRefLit();
       $_affectation->_ref_lit->loadRefChambre();
       $_affectation->_ref_lit->_ref_chambre->loadRefService();
       $_affectation->loadLastLog();
