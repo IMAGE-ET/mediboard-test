@@ -49,6 +49,7 @@ class CHPrim21Reader {
     // Read => Mediboard
     $this->_echange_hprim21->destinataire_id   = null;
     $this->_echange_hprim21->sous_type         = $this->sous_type;
+    $this->_echange_hprim21->type              = $this->type;
     $this->_echange_hprim21->date_echange      = mbDateTime();
     if ($fileName)
       $this->_echange_hprim21->_message        = file_get_contents($fileName);
@@ -94,7 +95,7 @@ class CHPrim21Reader {
     }    
     
     // Lecture du message
-    switch ($this->type_message) {
+    switch ($this->sous_type) {
       // De demandeur (d'analyses ou d'actes de radiologie) à exécutant
       case "ADM" :
         // Transfert de données d'admission
@@ -211,13 +212,14 @@ class CHPrim21Reader {
     $this->mot_de_passe      = $champs[1];
     $emetteur                = explode($this->separateur_sous_champ, $champs[2]);
     $this->id_emetteur       = $emetteur[0];
-    $this->type_message      = $champs[4];
+    $this->sous_type         = $champs[4];
     $this->carac_trans       = $champs[6];
     $recepteur               = explode($this->separateur_sous_champ, $champs[7]);
     $this->commentaire       = $champs[8];
     $this->mode_traitement   = $champs[9];
     $version_type            = explode($this->separateur_sous_champ, $champs[10]);
     $this->version           = $version_type[0];
+    $this->type              = $version_type[1];
     $this->date              = $champs[11];
     $this->has_header        = true;
     
