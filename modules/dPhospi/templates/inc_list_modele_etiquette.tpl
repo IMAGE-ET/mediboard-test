@@ -1,14 +1,19 @@
 <script type="text/css">
-updateSelected = function(elem) {
-  var etiq = $('modele_etiq-' + elem);
-  etiq.siblings().each(function(cur) {
-    cur.className = '';
-  });
-  etiq.className = 'selected';
+updateSelected = function(id) {
+  removeSelected();
+  var printer = $("modele_etiq-" + id);
+  printer.addClassName("selected");
+}
+
+removeSelected = function() {
+  var modele_etiq = $$(".omodele.selected")[0];
+  if (modele_etiq) {
+    modele_etiq.removeClassName("selected");
+  }
 }
 </script>
 
-<button type="button" onclick="editEtiq('');" class="new">{{tr}}CModeleEtiquette.new{{/tr}}</button>
+<button type="button" onclick="editEtiq(''); removeSelected();" class="new">{{tr}}CModeleEtiquette.new{{/tr}}</button>
 <!--  Filtre -->
 <table class="tbl">
   <tr>
@@ -44,11 +49,11 @@ updateSelected = function(elem) {
   </tr>
       
   {{foreach from=$liste_modele_etiquette item=_modele_etiq}}
-    <tr id='modele_etiq-{{$_modele_etiq->_id}}' {{if $_modele_etiq->_id == $modele_etiquette_id}}class="selected"{{/if}}>
+    <tr id='modele_etiq-{{$_modele_etiq->_id}}' class="omodele {{if $_modele_etiq->_id == $modele_etiquette_id}}selected{{/if}}">
       <td>
-       <a href="#1" onclick="editEtiq('{{$_modele_etiq->_id}}'); updateSelected('{{$_modele_etiq->_id}}');">
-         <span onmouseover="ObjectTooltip.createEx(this, '{{$_modele_etiq->_guid}}')">
-          {{mb_value object=$_modele_etiq field=nom}}
+        <a href="#1" onclick="editEtiq('{{$_modele_etiq->_id}}'); updateSelected('{{$_modele_etiq->_id}}');">
+          <span onmouseover="ObjectTooltip.createEx(this, '{{$_modele_etiq->_guid}}')">
+           {{mb_value object=$_modele_etiq field=nom}}
           </span>
         </a>
       </td>

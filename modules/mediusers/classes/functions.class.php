@@ -70,6 +70,7 @@ class CFunctions extends CMbObject {
 	  $backProps["rubriques"]                      = "CRubrique function_id";
 	  $backProps["tarifs"]                         = "CTarif function_id";
 	  $backProps["sigems_skipped"]                 = "CSigemsSkippedFunction function_id";
+	  $backProps["printer"]                        = "CPrinter function_id";
 	  return $backProps;
 	}
 	
