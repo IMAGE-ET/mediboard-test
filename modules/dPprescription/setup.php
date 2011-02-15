@@ -1778,11 +1778,30 @@ class CSetupdPprescription extends CSetup {
 		  CAppUI::conf("dPprescription CPrescription time_alerte_modification")."',NULL,NULL)";
 		$this->addQuery($query);
 		
-		$this->makeRevision("1.26");
+    $this->makeRevision("1.26");
 		$query = "UPDATE `prescription_line_medicament` SET `voie` = 'none' WHERE `voie` IS NULL";
 		$this->addQuery($query);
+
+    $this->makeRevision("1.27");
+		$query = "ALTER TABLE `prescription_line_medicament` ADD INDEX (`code_cip`);";
+		$this->addQuery($query);
 		
-		$this->mod_version = "1.27";
+		$query = "ALTER TABLE `prescription_line_medicament` ADD INDEX (`code_ucd`);";
+    $this->addQuery($query);
+    
+		$query = "ALTER TABLE `prescription_line_medicament` ADD INDEX (`code_cis`);";
+    $this->addQuery($query);
+    
+		$query = "ALTER TABLE `prescription_line_mix_item` ADD INDEX (`code_cip`);";
+    $this->addQuery($query);
+    
+		$query = "ALTER TABLE `prescription_line_mix_item` ADD INDEX (`code_ucd`);";
+    $this->addQuery($query);
+    
+		$query = "ALTER TABLE `prescription_line_mix_item` ADD INDEX (`code_cis`);";
+    $this->addQuery($query);
+    
+		$this->mod_version = "1.28";
   }
 }
 

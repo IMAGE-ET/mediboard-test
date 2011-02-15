@@ -40,6 +40,11 @@ function updateUCD(){
   url.requestUpdate("update_ucd");
 }
 
+function updateCIS(){
+  var url = new Url("dPprescription", "httpreq_update_cis");
+  url.requestUpdate("update_cis");
+}
+
 /*
 function onchangeMed(radioButton, other_field){
   var oForm = getForm("editConfig");
@@ -85,7 +90,11 @@ function onchangeMed(radioButton, other_field){
     <td id="update_voie"></td>
   </tr>
   <tr>
-    <td><button class="tick" onclick="updateUCD()">Mettre à jour les code UCD et CIS</button></td>
+    <td><button class="tick" onclick="updateUCD()">Mettre à jour les code UCD et CIS (mise à jour initiale)</button></td>
     <td id="update_ucd"></td>
+  </tr>
+  <tr>
+    <td><button class="tick" onclick="updateCIS()">Mettre à jour les codes CIS</button></td>
+    <td id="update_cis"></td>
   </tr>
 </table>
