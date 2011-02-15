@@ -21,7 +21,93 @@ class CFTP {
   var $fileextension = null;
   var $filenbroll    = null;
   
-  function init($exchange_source) {   
+  private static $aliases = array(
+    'sslconnect' => 'ssl_connect',
+    'getoption' => 'get_option',
+    'setoption' => 'set_option',
+    'nbcontinue' => 'nb_continue',
+    'nbfget' => 'nb_fget',
+    'nbfput' => 'nb_fput',
+    'nbget' => 'nb_get',
+    'nbput' => 'nb_put',
+  );
+  
+  /**
+   * Magic method (do not call directly).
+   * @param  string  method name
+   * @param  array   arguments
+   * @return mixed
+   * @throws Exception
+   * @throws CMbException
+   */
+  function __call($name, $args) {
+    global $phpChrono;
+    
+    $name = strtolower($name);
+    $silent = strncmp($name, 'try', 3) === 0;
+    $function_name = $silent ? substr($name, 3) : $name;
+    $function_name = '_' . (isset(self::$aliases[$function_name]) ? self::$aliases[$function_name] : $function_name);
+
+    if (!method_exists($this, $function_name)) {
+      throw new CMbException("CSourceFTP-call-undefined-method", $name);
+    }
+    
+    $echange_ftp = new CExchangeFTP();
+    $echange_ftp->date_echange = mbDateTime();
+    $echange_ftp->emetteur     = CAppUI::conf("mb_id");
+    $echange_ftp->destinataire = $this->hostname;
+    
+    $echange_ftp->function_name = $name;
+    
+    $phpChrono->stop();
+    $chrono = new Chronometer();
+    $chrono->start();
+    
+    $output = null;
+    try {
+      $output = call_user_func_array(array($this, $function_name), $args);
+    } 
+    catch(CMbException $fault) {
+      $echange_ftp->output    = $fault->getMessage();
+      $echange_ftp->ftp_fault = 1;
+    }
+    $chrono->stop();
+    $phpChrono->start();
+    
+     // response time
+    $echange_ftp->response_time = $chrono->total;
+
+    // Truncate input and output before storing
+    $args = array_map_recursive(array("CFTP", "truncate"), $args);
+    
+    $echange_ftp->input = serialize($args);
+    if ($echange_ftp->ftp_fault != 1) {
+      $echange_ftp->output = serialize(array_map_recursive(array("CFTP", "truncate"), $output));
+    }
+    $echange_ftp->store();
+    
+    return $output;
+  }
+  
+  static public function truncate($string) {
+    if (!is_string($string)) {
+      return $string;
+    }
+
+    // Truncate
+    $max = 1024;    
+    $result = CMbString::truncate($string, $max);
+    
+    // Indicate true size
+    $length = strlen($string);
+    if ($length > 1024) {
+      $result .= " [$length bytes]";
+    }
+    
+    return $result;
+  }
+  
+  private function _init($exchange_source) {   
     if (!$exchange_source) {
       throw new CMbException("CSourceFTP-no-source", $exchange_source->name);
     }
@@ -38,7 +124,7 @@ class CFTP {
     $this->filenbroll    = $exchange_source->filenbroll;
   }
   
-  function testSocket() {
+  private function _testSocket() {
     $fp = @fsockopen($this->hostname, $this->port, $errno, $errstr, $this->timeout);
     if (!$fp) {
       throw new CMbException("CSourceFTP-socket-connection-failed", $this->hostname, $this->port, $errno, $errstr);
@@ -47,7 +133,7 @@ class CFTP {
     return true;
   }
   
-  function connect() {
+  private function _connect() {
     if (!function_exists("ftp_connect")) {
       throw new CMbException("CSourceFTP-function-not-available", "ftp_connect");
     }
@@ -71,7 +157,7 @@ class CFTP {
     return true;
   }
   
-  function getListFiles($folder = ".") {
+  private function _getListFiles($folder = ".") {
     if (!$this->connexion) {
       throw new CMbException("CSourceFTP-connexion-failed", $this->hostname);
     }
@@ -79,7 +165,7 @@ class CFTP {
     return ftp_nlist($this->connexion, $folder);
   }
   
-  function delFile($file) {
+  private function _delFile($file) {
     if (!$this->connexion) {
       throw new CMbException("CSourceFTP-connexion-failed", $this->hostname);
     }
@@ -92,7 +178,7 @@ class CFTP {
     return true;
   }
   
-  function getFile($source_file, $destination_file = null) {
+  private function _getFile($source_file, $destination_file = null) {
     $source_base = basename($source_file);
     
     if (!$destination_file) {
@@ -113,7 +199,7 @@ class CFTP {
     return $destination_file;
   }
   
-  function sendContent($source_content, $destination_file) {
+  private function _sendContent($source_content, $destination_file) {
     if (!$this->connexion) {
       throw new CMbException("CSourceFTP-connexion-failed", $this->hostname);
     }
@@ -126,7 +212,7 @@ class CFTP {
     return $result;
   }
 
-  function sendFile($source_file, $destination_file) {
+  private function _sendFile($source_file, $destination_file) {
     if (!$this->connexion) {
       throw new CMbException("CSourceFTP-connexion-failed", $this->hostname);
     }
@@ -139,7 +225,7 @@ class CFTP {
     return true;
   }
   
-  function renameFile($oldname, $newname) {
+  private function _renameFile($oldname, $newname) {
     if (!$this->connexion) {
       throw new CMbException("CSourceFTP-connexion-failed", $this->hostname);
     }
@@ -152,7 +238,7 @@ class CFTP {
     return true;
   }
   
-  function close() {
+  private function _close() {
     // close the FTP stream
     if (!@ftp_close($this->connexion)) {
       throw new CMbException("CSourceFTP-close-connexion-failed", $this->hostname);

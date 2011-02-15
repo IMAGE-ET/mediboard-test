@@ -63,7 +63,7 @@
   </tr>
   <tr>
     <td style="text-align: center;">
-      <a target="blank" href="?m=webservices&a=download_echange&echange_soap_id={{$echange_soap->_id}}&dialog=1&suppressHeaders=1&message=1&acq=1" class="button modify">Télécharger</a>
+      <a target="blank" href="?m=webservices&a=download_echange&echange_soap_id={{$echange_soap->_id}}&dialog=1&suppressHeaders=1&message=1&acq=1" class="button modify">{{tr}}Download{{/tr}}</a>
     </td>
   </tr>
 </table>

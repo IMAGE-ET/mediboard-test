@@ -16,8 +16,9 @@
     <th class="title" colspan="20">{{tr}}{{$exchange->_class_name}}{{/tr}} - {{$type}}</th>
   </tr>
   <tr>
-    <th colspan="3"></th>
-    <th>{{mb_title object=$exchange field="object_class"}}</th>
+    <th></th>
+    <th>{{tr}}Actions{{/tr}}</th>
+    <th>{{mb_title object=$exchange field=$exchange->_spec->key}}</th>
     <th>{{mb_title object=$exchange field="object_class"}}</th>
     <th>{{mb_title object=$exchange field="object_id"}}</th>
     <th>{{mb_title object=$exchange field="id_permanent"}}</th>

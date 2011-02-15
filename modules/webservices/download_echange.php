@@ -21,8 +21,10 @@ else
   $output = print_r(unserialize($echange_soap->output), true);
 
 $function_name = $echange_soap->function_name;
-$content = "Date d'echange:
+$content = "Date d'echange :
 {$echange_soap->date_echange}\n
+Temps de reponse :
+{$echange_soap->response_time} ms \n
 Parametres :\n
 $input
 Resultat :\n

@@ -112,6 +112,7 @@ $locales['Deleted'] = 'Supprimé';
 $locales['Disabled'] = 'Désactivé';
 $locales['Display'] = 'Afficher';
 $locales['Done'] = 'Fait';
+$locales['Download'] = 'Télécharger';
 $locales['Draft'] = 'Brouillon';
 $locales['Duplicate'] = 'Dupliquer';
 $locales['Edit'] = 'Modifier';

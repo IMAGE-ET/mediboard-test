@@ -22,15 +22,27 @@ $fonctions    = array();
 $ds = CSQLDataSource::get("std");
 
 if ($type == "web_service") {
-  $web_services = $ds->loadColumn("SELECT DISTINCT web_service_name FROM echange_soap WHERE type = '$service_demande'");
+  $web_services = CMbArray::pluck($ds->loadList("SELECT web_service_name FROM echange_soap GROUP BY web_service_name"), "web_service_name");
+  foreach ($web_services as $key => $_web_service) {
+    $type_web_service = CMbArray::pluck($ds->loadList("SELECT `type` FROM echange_soap WHERE `web_service_name` = '$_web_service' LIMIT 1 "), "type");    
+    if ($type_web_service[0] != $service_demande) {
+      unset($web_services[$key]);
+    }
+  }
 } else {
-  $fonctions = $ds->loadColumn("SELECT DISTINCT function_name FROM echange_soap WHERE type = '$service_demande' AND web_service_name = '$web_service_demande'");
+  $functions = CMbArray::pluck($ds->loadList("SELECT function_name FROM echange_soap GROUP BY function_name"), "function_name");
+  foreach ($functions as $key => $_function) {
+    $web_service_name = CMbArray::pluck($ds->loadList("SELECT `web_service_name` FROM echange_soap WHERE `function_name` = '$_function' LIMIT 1 "), "web_service_name");    
+    if ($web_service_name[0] != $web_service_demande) {
+      unset($functions[$key]);
+    }
+  }
 }
 
 // Création du template
 $smarty = new CSmartyDP();
 $smarty->assign('web_services', $web_services);
-$smarty->assign('fonctions'   , $fonctions);
+$smarty->assign('fonctions'   , $functions);
 $smarty->assign("service"     , $service);
 $smarty->assign("web_service" , $web_service);
 $smarty->assign("fonction"    , $fonction);

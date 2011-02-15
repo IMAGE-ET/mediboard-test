@@ -31,7 +31,11 @@ class CSenderFTP extends CInteropSender {
     $this->_ref_exchanges_sources[] = CExchangeSource::get("$this->_guid", "ftp", true, $this->_type_echange);
   }
   
-  function read() {}
+  function read() {
+    $this->loadRefsExchangesSources();
+    
+    
+  }
 }
 
 ?>

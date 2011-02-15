@@ -30,8 +30,6 @@
         })">
       </button>
     </form>
-  </td>
-  <td class="narrow">
     <button class="change notext" onclick="ExchangeDataFormat.reprocessing('{{$object->_guid}}')" type="button">{{tr}}Reprocess{{/tr}}</button>
   </td>
   <td class="narrow">
