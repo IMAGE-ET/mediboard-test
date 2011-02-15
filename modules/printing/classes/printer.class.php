@@ -15,7 +15,6 @@ class CPrinter extends CMbMetaObject {
   var $printer_id = null;
   
   // DB Fields
-  var $name = null;
   var $function_id = null;
   
   function getSpec() {
@@ -33,7 +32,6 @@ class CPrinter extends CMbMetaObject {
   function getProps() {
     $props = parent::getProps();
     
-    $props["name"]         = "str notNull";
     $props["function_id"]  = "ref class|CFunctions notNull";
     $props["object_id"]    = "ref notNull class|CSourcePrinter meta|object_class";
     $props["object_class"] = "str notNull class show|0";

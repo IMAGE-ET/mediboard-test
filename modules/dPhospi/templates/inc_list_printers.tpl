@@ -25,7 +25,7 @@ removeSelected = function() {
     <tr id='printer-{{$_printer->_id}}' class="oprinter {{if $_printer->_id == $printer_id}}selected{{/if}}">
       <td>
         <a href="#1" onclick="Printer.editPrinter('{{$_printer->_id}}'); updateSelected('{{$_printer->_id}}');">
-         {{$_printer->name}}
+         {{$_printer->_view}}
         </a>
       </td>
     </tr>

@@ -11,6 +11,10 @@
 $printer = new CPrinter();
 $printers = $printer->loadList();
 
+foreach($printers as $_printer) {
+  $_printer->loadTargetObject();
+}
+
 $printer_id = CValue::getOrSession("printer_id", 0);
 $smarty = new CSmartyDP();
 

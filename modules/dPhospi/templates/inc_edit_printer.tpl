@@ -22,14 +22,6 @@
       </tr>
       <tr>
         <td>
-          {{mb_label object=$printer field=name}}
-        </td>
-        <td>
-          {{mb_field object=$printer field=name}}
-        </td>
-      </tr>
-      <tr>
-        <td>
           {{mb_label object=$printer field=function_id}}
         </td>
         <td>

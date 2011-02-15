@@ -48,7 +48,6 @@ class CSetupprinting extends CSetup {
     $this->makeRevision("0.02");
     $query = "CREATE TABLE IF NOT EXISTS `printer` (
               `printer_id` INT (11) UNSIGNED NOT NULL auto_increment PRIMARY KEY,
-              `name` VARCHAR (255),
               `function_id` INT (11) DEFAULT NULL,
               `object_id` INT (11) DEFAULT NULL,
               `object_class` VARCHAR (255) DEFAULT NULL
