@@ -17,6 +17,9 @@ class CPrinter extends CMbMetaObject {
   // DB Fields
   var $function_id = null;
   
+  // Ref fields
+  var $_ref_function = null;
+  
   function getSpec() {
     $spec = parent::getSpec();
     $spec->table = 'printer';
@@ -37,6 +40,10 @@ class CPrinter extends CMbMetaObject {
     $props["object_class"] = "str notNull class show|0";
     
     return $props;
+  }
+  
+  function loadRefFunction($cached = true){
+    return $this->_ref_function = $this->loadFwdRef("function_id", $cached);
   }
 }
 
