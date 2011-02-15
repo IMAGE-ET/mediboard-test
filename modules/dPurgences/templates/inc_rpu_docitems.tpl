@@ -8,55 +8,57 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
 *}}
 
+
+{{mb_include_script module=dPcompteRendu script=modele_selector}}
+{{mb_include_script module=dPcompteRendu script=document}}
+
 <table class="form">
 
 <tr>
-  <th class="title" colspan="2">{{tr}}CSejour{{/tr}}</th>
-</tr>
-
-<tr>
-  <th class="category" style="width: 50%;">{{tr}}CFile{{/tr}}</th>
-  <th class="category" style="width: 50%;">Documents</th>
-</tr>
-
-<tr>
-  <td id="files-CSejour">
-		
-		<script type="text/javascript">
-		  File.register('{{$sejour->_id}}','{{$sejour->_class_name}}', 'files-CSejour');
-		</script>
+  <td class="halfPane">
+    <fieldset>
+      <legend>{{tr}}CFile{{/tr}} - {{tr}}CSejour{{/tr}}</legend>            
+      <div id="files-CSejour">
+        <script type="text/javascript">
+          File.register('{{$sejour->_id}}','{{$sejour->_class_name}}', 'files-CSejour');
+        </script>
+      </div>
+    </fieldset>
 	</td>
-  <td id="documents-CSejour">
-		{{mb_include_script module=dPcompteRendu script=modele_selector}}
-    {{mb_include_script module=dPcompteRendu script=document}}
-    <script type="text/javascript">
-      Document.register('{{$sejour->_id}}','{{$sejour->_class_name}}','{{$sejour->_praticien_id}}','documents-CSejour');
-    </script>
+  <td class="halfPane">
+    <fieldset>
+      <legend>{{tr}}CCompteRendu{{/tr}} - {{tr}}CSejour{{/tr}}</legend>            
+      <div id="documents-CSejour">
+        <script type="text/javascript">
+          Document.register('{{$sejour->_id}}','{{$sejour->_class_name}}','{{$sejour->_praticien_id}}','documents-CSejour');
+        </script>
+      </div>
+    </fieldset>
 	</td>
-</tr>
-
-<tr>
-  <th class="title" colspan="2">{{tr}}CConsultation{{/tr}}</th>
 </tr>
 
 {{if $consult->_id}} 
-<tr>
-  <th class="category" style="width: 50%;">{{tr}}CFile{{/tr}}</th>
-  <th class="category" style="width: 50%;">Documents</th>
-</tr>
 
 <tr>
-  <td id="files-CConsultation">
-    <script type="text/javascript">
-      File.register('{{$consult->_id}}','{{$consult->_class_name}}', 'files-CConsultation');
-    </script>
+  <td class="halfPane">
+    <fieldset>
+      <legend>{{tr}}CFile{{/tr}} - {{tr}}CConsultation{{/tr}}</legend>            
+      <div id="files-CConsultation">
+        <script type="text/javascript">
+          File.register('{{$consult->_id}}','{{$consult->_class_name}}', 'files-CConsultation');
+        </script>
+      </div>
+    </fieldset>
   </td>
-  <td id="documents-CConsultation">
-    {{mb_include_script module=dPcompteRendu script=modele_selector}}
-    {{mb_include_script module=dPcompteRendu script=document}}
-    <script type="text/javascript">
-      Document.register('{{$consult->_id}}','{{$consult->_class_name}}','{{$sejour->_praticien_id}}','documents-CConsultation');
-    </script>
+  <td class="halfPane">
+    <fieldset>
+      <legend>{{tr}}CCompteRendu{{/tr}} - {{tr}}CConsultation{{/tr}}</legend>            
+      <div id="documents-CConsultation"> 
+        <script type="text/javascript">
+          Document.register('{{$consult->_id}}','{{$consult->_class_name}}','{{$consult->_praticien_id}}','documents-CConsultation');
+        </script>
+      </div>
+    </fieldset>
   </td>
 </tr>
 {{else}}
