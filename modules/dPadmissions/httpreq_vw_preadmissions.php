@@ -56,6 +56,9 @@ foreach($listConsultations as &$curr_consult) {
     $curr_sejour->loadRefPraticien();
     $curr_sejour->loadNumDossier();
     $curr_sejour->loadRefsAffectations();
+    foreach($curr_sejour->_ref_affectations as $_aff) {
+      $_aff->loadView();
+    }
     $curr_sejour->getDroitsCMU();
   } else {
     $curr_consult->_next_sejour_and_operation = $curr_consult->_ref_patient->getNextSejourAndOperation($curr_consult->_ref_plageconsult->date);
@@ -63,6 +66,9 @@ foreach($listConsultations as &$curr_consult) {
     $curr_consult->_next_sejour_and_operation["CSejour"]->loadRefPraticien();
     $curr_consult->_next_sejour_and_operation["CSejour"]->loadNumDossier();
     $curr_consult->_next_sejour_and_operation["CSejour"]->loadRefsAffectations();
+    foreach($curr_consult->_next_sejour_and_operation["CSejour"]->_ref_affectations as $_aff) {
+      $_aff->loadView();
+    }
     $curr_consult->_next_sejour_and_operation["CSejour"]->getDroitsCMU();
     
   }
