@@ -17,8 +17,16 @@ removeSelected = function() {
 
 <table class="tbl printerlist">
   <tr>
-    <th class="title">
+    <th class="title" colspan="2">
       {{tr}}CPrinter.list{{/tr}}
+    </th>
+  </tr>
+  <tr>
+    <th class="category">
+      {{tr}}CPrinter-nom{{/tr}}
+    </th>
+    <th class="category">
+      {{tr}}CPrinter-function_id{{/tr}}
     </th>
   </tr>
   {{foreach from=$printers item=_printer}}
@@ -27,6 +35,9 @@ removeSelected = function() {
         <a href="#1" onclick="Printer.editPrinter('{{$_printer->_id}}'); updateSelected('{{$_printer->_id}}');">
          {{$_printer->_view}}
         </a>
+      </td>
+      <td>
+        {{$_printer->_ref_function->text}}
       </td>
     </tr>
   {{foreachelse}}

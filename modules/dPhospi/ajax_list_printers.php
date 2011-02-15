@@ -9,10 +9,14 @@
  */
 
 $printer = new CPrinter();
-$printers = $printer->loadList();
+$order_by = "object_id, text";
+$ljoin = array();
+$ljoin["functions_mediboard"] = "functions_mediboard.function_id = printer.function_id";
+$printers = $printer->loadList(null, $order_by, null, null, $ljoin);
 
 foreach($printers as $_printer) {
   $_printer->loadTargetObject();
+  $_printer->loadRefFunction();
 }
 
 $printer_id = CValue::getOrSession("printer_id", 0);

@@ -55,7 +55,7 @@
           {{if $printer->_id}}
             <button class="cancel" onclick="confirmDeletion(this.form, {
               typeName: 'l\'imprimante',
-              objName:'{{$printer->name|smarty:nodefaults|JSAttribute}}',
+              objName:'{{$printer->_view|smarty:nodefaults|JSAttribute}}',
               ajax: true})" type="button">{{tr}}Delete{{/tr}}</button>
           {{/if}}
         </td>

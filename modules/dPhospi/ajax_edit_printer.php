@@ -13,6 +13,10 @@ $printer_id = CValue::getOrSession("printer_id", 0);
 $printer = new CPrinter();
 $printer->load($printer_id);
 
+if ($printer->_id) {
+  $printer->loadTargetObject();
+}
+
 $source = new CSourceLPR();
 $sources = $source->loadlist();
 
