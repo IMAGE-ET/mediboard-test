@@ -133,6 +133,10 @@ foreach($_transmissions as $_trans){
   $sejour->_ref_last_operation->loadRefChir();
   $sejour->loadRefsAffectations();
   
+  foreach($sejour->_ref_affectations as $_affectation) {
+    $_affectation->loadView();
+  }
+  
   $sejour->_ref_last_operation->loadExtCodesCCAM();
 		
 	$patient_id = $sejour->patient_id;
@@ -158,6 +162,11 @@ foreach($_observations as $_obs){
   $sejour->_ref_last_operation->loadRefPlageOp();
   $sejour->_ref_last_operation->loadRefChir();
   $sejour->loadRefsAffectations();
+  
+  foreach($sejour->_ref_affectations as $_affectation) {
+    $_affectation->loadView();
+  }
+  
   $sejour->_ref_last_operation->loadExtCodesCCAM();
   
   $patient_id = $sejour->patient_id;
@@ -181,6 +190,11 @@ foreach($_constantes as $_constante) {
   $sejour->_ref_last_operation->loadRefPlageOp();
   $sejour->_ref_last_operation->loadRefChir();
   $sejour->loadRefsAffectations();
+  
+  foreach($sejour->_ref_affectations as $_affectation) {
+    $_affectation->loadView();
+  }
+  
   $sejour->_ref_last_operation->loadExtCodesCCAM();
 
   $patient_id = $sejour->patient_id;
