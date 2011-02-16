@@ -502,6 +502,8 @@ var Url = Class.create({
       console.warn(ioTarget+" doesn't exist");
       return;
     }
+		
+		var customInsertion = oOptions && oOptions.insertion;
     
     oOptions = Object.extend( {
       waitingText: null,
@@ -523,25 +525,28 @@ var Url = Class.create({
       Element.warnDuplicates();
     });
     
-    // Empty holder gets a div for load notifying
-    if (!/\S/.test(element.innerHTML)) {
-      element.update('<div style="height: 2em;" />');
-    }
-
-    // Animate system message
-    if (element.id == SystemMessage.id) {
-      oOptions.waitingText = $T("Loading in progress");
-      SystemMessage.doEffect();
-    }
-    // Cover div
-    else {
-      if (!Prototype.Browser.IE || oOptions.coverIE)
-        WaitingMessage.cover(element);
-    }
-  	
-    if (oOptions.waitingText) {
-      element.update('<div class="loading">' + oOptions.waitingText + '...</div>');
-    }
+		// If we have a custom insertion, we should not touch the origin target
+		if (!customInsertion) {
+			// Empty holder gets a div for load notifying
+			if (!/\S/.test(element.innerHTML)) {
+				element.update('<div style="height: 2em;" />');
+			}
+			
+			// Animate system message
+			if (element.id == SystemMessage.id) {
+				oOptions.waitingText = $T("Loading in progress");
+				SystemMessage.doEffect();
+			}
+			// Cover div
+			else {
+				if (!Prototype.Browser.IE || oOptions.coverIE) 
+					WaitingMessage.cover(element);
+			}
+			
+			if (oOptions.waitingText) {
+				element.update('<div class="loading">' + oOptions.waitingText + '...</div>');
+			}
+		}
 
     var getParams = oOptions.getParameters ? "?" + $H(oOptions.getParameters).toQueryString() : '';
     new Ajax.Updater(element, oOptions.urlBase + "index.php" + getParams, oOptions);

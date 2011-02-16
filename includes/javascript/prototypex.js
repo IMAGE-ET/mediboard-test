@@ -368,6 +368,7 @@ Element.addMethods({
 	setClassName: function(element, className, condition) {
     if (condition ) element.addClassName(className);
     if (!condition) element.removeClassName(className);
+		return element;
 	},
   
   getInnerWidth: function(element){

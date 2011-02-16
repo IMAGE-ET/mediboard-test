@@ -372,8 +372,33 @@ class CSetupsystem extends CSetup {
       `separator` CHAR (1)
     ) /*! ENGINE=MyISAM */;";
     $this->addQuery($query);
+		
+		$this->makeRevision("1.0.43");
+		$query = "CREATE TABLE `tag` (
+              `tag_id` INT (11) UNSIGNED NOT NULL auto_increment PRIMARY KEY,
+              `parent_id` INT (11) UNSIGNED,
+              `object_class` VARCHAR (80),
+              `name` VARCHAR (255) NOT NULL
+              ) /*! ENGINE=MyISAM */;";
+    $this->addQuery($query);
+    $query = "ALTER TABLE `tag` 
+              ADD INDEX (`parent_id`),
+              ADD INDEX (`object_class`);";
+    $this->addQuery($query);
+		$query = "CREATE TABLE `tag_item` (
+              `tag_item_id` INT (11) UNSIGNED NOT NULL auto_increment PRIMARY KEY,
+              `tag_id` INT (11) UNSIGNED NOT NULL,
+              `object_id` INT (11) UNSIGNED NOT NULL,
+              `object_class` VARCHAR (80) NOT NULL
+              ) /*! ENGINE=MyISAM */;";
+    $this->addQuery($query);
+    $query = "ALTER TABLE `tag_item` 
+              ADD INDEX (`tag_id`),
+              ADD INDEX (`object_id`),
+              ADD INDEX (`object_class`);";
+    $this->addQuery($query);
     
-    $this->mod_version = "1.0.43";
+    $this->mod_version = "1.0.44";
   }
 }
 ?>

@@ -110,6 +110,7 @@ class CMbObject {
   var $_ref_files      = array(); // Fichiers
   var $_ref_affectations_personnel  = null;
   var $_ref_object_configs = null; // Object configs
+  var $_ref_tag_items  = array(); // Object tag items
   
   /**
    * @var CMbObject The object in database
@@ -2301,10 +2302,10 @@ class CMbObject {
 	
 	/**
 	 * Check wether object has a log more recent than given hours
+	 * 
 	 * @param $nb_hours Number of hours
-	 * @return bool
-	 */ 
-	
+	 * @return int
+	 */
   function hasRecentLog($nb_hours = 1) {
   	$recent = mbDateTime("- $nb_hours HOURS");
     $where["object_id"   ] = "= '$this->_id'";
@@ -2314,6 +2315,11 @@ class CMbObject {
     return $log->countList($where);
   }
   
+  /**
+   * Returns the object's latest log
+   * 
+   * @return CUserLog
+   */
   function loadLastLog() {
     $last_log = new CUserLog;
     $last_log->setObject($this);
@@ -2321,6 +2327,11 @@ class CMbObject {
     return $this->_ref_last_log = $last_log;
   }
   
+	/**
+	 * Returns the object's first log
+	 * 
+	 * @return CUserLog
+	 */
   function loadFirstLog() {
     $last_log = new CUserLog;
     $last_log->setObject($this);
@@ -2347,6 +2358,27 @@ class CMbObject {
     }
   }
 
+  /**
+   * Loads the object's tag items
+   * @return array
+   */
+  function loadRefsTagItems($cache = true) {
+  	if ($cache && !empty($this->_ref_tag_items)) {
+  		return $this->_ref_tag_items;
+  	}
+		
+    return $this->_ref_tag_items = $this->loadBackRefs("tag_items");
+  }
+
+  /**
+   * Get the object's tags
+   * @return array
+   */
+  function getTags($cache = true) {
+  	$tag_items = $this->loadRefsTagItems($cache = true);
+		return CMbArray::pluck($tag_items, "_ref_tag");
+  }
+	
 	/**
 	 * This function register all templated properties for the object
 	 * Will load as necessary and fill in values
@@ -2482,6 +2514,13 @@ class CMbObject {
     $this->_ref_object_configs = $this->loadUniqueBackRef("object_configs");
   }
   
+	/**
+	 * Returns a field's value at the specified date
+	 * 
+	 * @param string $date
+	 * @param string $field
+	 * @return string
+	 */
   function getValueAtDate($date, $field) {
     $where = array(
       "object_class" => "= '$this->_class_name'",
@@ -2527,4 +2566,3 @@ class CMbObject {
     return CValue::read($user_log->_old_values, $field, $this->$field);
   }
 }
-?>

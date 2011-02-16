@@ -524,4 +524,40 @@ td.redefined {
 	color: #888;
 }
 
+/** Tree grid **/
+.treegrid .tree-spacer,
+.treegrid .tree-folding {
+	display: inline-block;
+}
 
+.treegrid .tree-spacer {
+  float: left;
+  height: 1px;
+  width: 18px;
+}
+
+.treegrid .tree-folding {
+  background-image: url(images/buttons/tree-folding.png);
+  background-repeat: no-repeat;
+  padding-left: 16px;
+}
+
+/*.treegrid .tree-folding:before {
+  content: url(images/icons/tag.png);
+}*/
+
+.treegrid .tree-folding:hover {
+  background-position: 0 0px;
+}
+
+.treegrid .tree-folding {
+  background-position: 0 -16px;
+}
+
+.treegrid tbody.opened .tree-folding:hover {
+  background-position: 0 -32px;
+}
+
+.treegrid tbody.opened .tree-folding {
+  background-position: 0 -48px;
+}
