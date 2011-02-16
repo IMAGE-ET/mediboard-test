@@ -26,6 +26,7 @@ function saveSortie(oFormSortie, oFormAffectation){
         <input type="hidden" name="date" class="date" value="{{$date}}" onchange="this.form.submit()" />
       </form>
     </th>
+	</tr>
   <tr>
     <td colspan="3">
       <table width="100%">
@@ -106,6 +107,8 @@ function saveSortie(oFormSortie, oFormAffectation){
                 {{/if}}                  
                 </td>
               </tr>
+							{{foreachelse}}
+							<tr><td colspan="6"><em>{{tr}}CSejour.none{{/tr}}</em></td></tr>
               {{/foreach}}
             </table>
           </td>
@@ -147,11 +150,8 @@ function saveSortie(oFormSortie, oFormAffectation){
                     {{/if}}
                     </form>
                     </td>
-                    {{if $_sortie->confirme}}
-                    <td class="text" class="arretee">
-                    {{else}}
-                    <td class="text">
-                    {{/if}}
+                    
+                    <td class="text {{if $_sortie->confirme}} arretee {{/if}}">
                      {{if $canPlanningOp->read}}
                      {{assign var=sejour value=$_sortie->_ref_sejour}}
                      <a class="action" style="float: right"  title="Modifier le séjour" href="?m=dPplanningOp&amp;tab=vw_edit_sejour&amp;sejour_id={{$sejour->_id}}">
@@ -169,6 +169,8 @@ function saveSortie(oFormSortie, oFormAffectation){
                     </td>
                     <td>{{$_sortie->sortie|date_format:$conf.time}}</td>
                   </tr>
+	              {{foreachelse}}
+  	              <tr><td colspan="5"><em>{{tr}}CSejour.none{{/tr}}</em></td></tr>
                 {{/foreach}}
               {{/foreach}}
             </table>

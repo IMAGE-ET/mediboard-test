@@ -7,9 +7,7 @@
 * @author Romain OLLIVIER
 */
 
-global $AppUI, $can, $m, $g;
-
-$can->needsRead();
+CCanDo::checkRead();
 
 // Type d'affichage
 $vue       = CValue::getOrSession("vue"      , 0);
@@ -19,11 +17,12 @@ $order_way = CValue::getOrSession("order_way", "ASC");
 $order_col = CValue::getOrSession("order_col", "_patient");
 
 // Liste des services
+$group = CGroups::loadCurrent();
 $services = new CService;
 $whereDeplacement = array();
 $whereSortie = array();
 $where = array();
-$where["group_id"] = "= '$g'";
+$where["group_id"] = "= '$group->_id'";
 $order = "nom";
 $services = $services->loadListWithPerms(PERM_READ,$where, $order);
 
@@ -43,7 +42,7 @@ $ljoin["chambre"]  = "chambre.chambre_id = lit.chambre_id";
 $ljoin["service"]  = "service.service_id = chambre.service_id";
 $where["affectation.sortie"]   = "BETWEEN '$limit1' AND '$limit2'";
 $where["type"]     = "!= 'exte'";
-$where["service.group_id"] = "= '$g'";
+$where["service.group_id"] = "= '$group->_id'";
 
 $whereDeplacement = $where;
 $whereSortie = $where;
@@ -104,12 +103,6 @@ foreach($deplacements as $key => $deplacement){
   }
 } 
 
-
-/*
-if($order_col != "_patient" && $order_col != "_praticien" && $order_col != "sortie" && $order_col != "_chambre"){
-  $order_col = "_patient";	
-}
-*/
 $order = null;
 
 if($order_col == "_patient"){
@@ -125,15 +118,14 @@ if($order_col == "_chambre"){
   $order = "chambre.nom $order_way, patients.nom, patients.prenom";
 }
 
-
-// Récupération des sorties ambu du jour
+// Récupération des sorties ambu et hospidu jour
 $sorties = array();
+$whereSortie["type"] = "= 'comp'";
+$sorties["comp"] = $affectation->loadList($whereSortie, $order, null, null, $ljoin);
 $whereSortie["type"] = "= 'ambu'";
 $sorties["ambu"] = $affectation->loadList($whereSortie, $order, null, null, $ljoin);
 
-$whereSortie["type"] = "= 'comp'";
-$sorties["comp"] = $affectation->loadList($whereSortie, $order, null, null, $ljoin);
-
+// Chargements des détails des séjours
 foreach($sorties as &$_sorties) {
   foreach($_sorties as $_sortie) {
     $_sortie->loadRefsFwd();
@@ -141,12 +133,14 @@ foreach($sorties as &$_sorties) {
       unset($_sorties[$_sortie->_id]);
       continue;
     }
+		
     $sejour = $_sortie->_ref_sejour;
     $sejour->loadRefPatient(1);
     $sejour->loadRefPraticien(1);
     $_sortie->_ref_next->loadRefLit(1)->loadCompleteView();
     
-    $service_id    = $_sortie->_ref_lit->_ref_chambre->service_id;
+		// Filtre sur les service
+    $service_id = $_sortie->_ref_lit->_ref_chambre->service_id;
     if (!array_key_exists($service_id, $services)) {
         unset($_sorties[$_sortie->_id]);
     }
@@ -157,9 +151,10 @@ foreach($sorties as &$_sorties) {
 // Création du template
 $smarty = new CSmartyDP();
 
-if($deplacements){
+if ($deplacements){
   $smarty->assign("timing"       , $timing      );
 }
+
 $smarty->assign("order_way"    , $order_way);
 $smarty->assign("order_col"    , $order_col);
 $smarty->assign("date"         , $date        );
