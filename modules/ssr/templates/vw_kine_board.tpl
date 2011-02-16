@@ -75,11 +75,7 @@ Main.add(function(){
         <input type="hidden" name="m" value="ssr" />
         <input type="hidden" name="tab" value="vw_kine_board" />
         <select name="kine_id" onchange="this.form.submit();">
-          {{foreach from=$kines item=_kine}}
-            <option value="{{$_kine->_id}}" class="mediuser"
-                    style="border-color: #{{$_kine->_ref_function->color}}"
-                    {{if $kine_id == $_kine->_id}} selected="selected" {{/if}}>{{$_kine->_view}}</option>
-          {{/foreach}}
+	      	{{mb_include module=mediusers template=inc_options_mediuser list=$kines selected=$kine_id}}
         </select>
       </form>
   	</td>

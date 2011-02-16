@@ -19,9 +19,7 @@ Main.add(function () {
   <li>
   	<a {{if !$_count}} class="empty" {{/if}} href="#board-sejours-{{$mode}}" onmouseup="BoardSejours.updateTab('{{$mode}}');">
   		{{tr}}ssr-board-sejours-{{$mode}}{{/tr}}
-			{{if $_count}}
 			<small>({{$_count}})</small>
-			{{/if}}
 		</a>
 	</li>
 	{{/foreach}}

@@ -84,15 +84,15 @@ if ($technicien->_id = $bilan->technicien_id) {
 $plateau_tech = new CPlateauTechnique();
 $plateau_tech->group_id = CGroups::loadCurrent()->_id;
 $plateaux = $plateau_tech->loadMatchingList();
-foreach($plateaux as $_plateau_tech){
-	$_plateau_tech->loadRefsEquipements();
-	$_plateau_tech->loadRefsTechniciens();
+foreach($plateaux as $_plateau) {
+	$_plateau->loadRefsEquipements();
 }
 
 $executants = array();
 
 // Chargement des executants en fonction des category de prescription
 $executants = array();
+$reeducateurs = array();
 $selected_cat = "";
 foreach($categories as $_category){
 	// Chargement des associations pour chaque catégorie
@@ -106,10 +106,12 @@ foreach($categories as $_category){
 		$function =& $_assoc->_ref_function;
 		$function->loadRefsUsers();
 		foreach($function->_ref_users as $_user){
-			 if($_user->_id == $current_user_id && !$selected_cat){
-			 	 $selected_cat = $_category;
-			 }
-			 $executants[$_category->_id][$_user->_id] = $_user;
+			$_user->_ref_function = $function;
+	 	  if ($_user->_id == $current_user_id && !$selected_cat){
+        $selected_cat = $_category;
+		  }
+		  $executants[$_category->_id][$_user->_id] = $_user;
+			$reeducateurs[$_user->_id] = $_user;
 		}
 	}
 }
@@ -127,6 +129,7 @@ $smarty->assign("plateau", $plateau);
 $smarty->assign("prescription", $prescription);
 $smarty->assign("plateaux", $plateaux);
 $smarty->assign("executants", $executants);
+$smarty->assign("reeducateurs", $reeducateurs);
 $smarty->assign("selected_cat", $selected_cat);
 $smarty->assign("current_user_id", $current_user_id);
 $smarty->assign("lines_by_element", $lines_by_element);

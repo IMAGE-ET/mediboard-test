@@ -557,11 +557,7 @@ Main.add(function(){
                      {{if $can->admin}}
                        <select class="_technicien_id" onchange="selectTechnicien(this.value)">
                          <option value="">&mdash; {{tr}}Choose{{/tr}}</option>
-                         {{foreach from=$executants.$category_id item=_user_executant}}
-                           <option value="{{$_user_executant->_id}}">
-                             {{$_user_executant->_user_last_name}}
-                           </option>
-                         {{/foreach}}
+                         {{mb_include module=mediusers template=inc_options_mediuser list=$executants.$category_id}}
                        </select>
                      {{/if}}
   
@@ -806,14 +802,8 @@ Main.add(function(){
         <td>
           Transférer vers 
           <select name="kine_id" style="width: 12em;">
-            <option value="">&mdash; Rééducateur</option>
-            {{foreach from=$plateaux item=_plateau}}
-              <optgroup label="{{$_plateau->_view}}">
-              {{foreach from=$_plateau->_ref_techniciens item=_technicien}}
-                <option value="{{$_technicien->_ref_kine->_id}}">{{$_technicien->_ref_kine->_view}}</option>
-              {{/foreach}}
-              </optgroup>
-            {{/foreach}}
+            <option value="">&mdash; {{tr}}Choose{{/tr}}</option>
+           {{mb_include module=mediusers template=inc_options_mediuser list=$reeducateurs}}
           </select>
         </td>
       </tr>         
