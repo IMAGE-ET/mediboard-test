@@ -3,8 +3,9 @@
 <table style="width: 100%;">
   <tr>
     {{if !$offline && !$dialog}}
-    <td style="vertical-align: top; width: 1%; padding-right: 0;">
-
+    <td style="vertical-align: top; width: 1%; padding-right: 0; text-align: center">
+      
+      {{mb_include style="mediboard" template="logo" id="mediboard-logo" alt="MediBoard logo" width="140"}}
       
       <div id="user">
         <div class="welcome" title="{{tr}}Last connection{{/tr}} : {{$app->user_last_login|date_format:$conf.datetime}}">
