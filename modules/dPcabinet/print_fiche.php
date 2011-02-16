@@ -23,6 +23,8 @@ $operation_id          = CValue::get("operation_id");
 $create_dossier_anesth = CValue::get("create_dossier_anesth", 0);
 $offline = CValue::get("offline");
 
+$lines = array();
+
 // Consultation courante
 $consult = new CConsultation();
 
@@ -76,11 +78,46 @@ if ($consultation_id) {
   $consult->loadRefsExamNyha();
   $consult->loadRefsExamPossum();
   $consult->loadRefsExamIgs();
-
+  $consult->loadRefSejour();
+  
   if($consult->_ref_consult_anesth->consultation_anesth_id) {
-    $consult->_ref_consult_anesth->loadRefs();
+    $consult_anesth = $consult->_ref_consult_anesth;
+    $consult_anesth->loadRefs();
+    
+    // Récupération des planifications systèmes antérieures à l'intervention
+    $planif_system = new CPlanificationSysteme();
+    $where  = array();
+    $where["sejour_id"] = " = '{$consult_anesth->_ref_sejour->_id}'";
+    $where["dateTime"] = " < '{$consult_anesth->_ref_operation->_datetime}'";
+    $where["object_class"] = " NOT LIKE 'CPrescriptionLineElement'";
+    
+    $list_planifs_system = $planif_system->loadlist($where);
+    
+    foreach($list_planifs_system as $_planif) {
+      $_planif->loadRefPrise();
+      $_planif->loadTargetObject();
+      $object = $_planif->_ref_object;
+      
+      if ($object instanceof CPrescriptionLineMedicament) {
+        $_planif->_ref_prise->loadRefsFwd();
+        $object->_ref_prises = array();
+        $object->_ref_prises[$_planif->_ref_prise->_id] = $_planif->_ref_prise;
+      }
+      
+      if ($object instanceof CPrescriptionLineMixItem) {
+        $object->loadRefPerfusion();
+        $object->_ref_prescription_line_mix->loadRefPraticien();
+        $object->_ref_prescription_line_mix->_ref_lines = array();
+        
+        // Il faut cloner $object pour casser la référence lors de l'écrasement à la ligne suivante
+        $object->_ref_prescription_line_mix->_ref_lines[$object->_id] = clone $object;
+        $object = $object->_ref_prescription_line_mix;
+      }
+      
+      $lines[$object->_guid] = $object;
+    }
   }
-
+  
   $consult->_ref_consult_anesth->_ref_sejour->loadRefDossierMedical();
 
   $praticien =& $consult->_ref_chir;
@@ -175,6 +212,8 @@ $smarty->assign("listChamps", $listChamps);
 $smarty->assign("consult"   , $consult);
 $smarty->assign("etatDents" , $sEtatsDents);
 $smarty->assign("print"     , $print);
+$smarty->assign("praticien" , new CUser);
+$smarty->assign("lines"     , $lines);
 $smarty->assign("dossier_medical_sejour", $consult->_ref_consult_anesth->_ref_sejour->_ref_dossier_medical);
 $template = CAppUI::conf("dPcabinet CConsultAnesth feuille_anesthesie");
 
