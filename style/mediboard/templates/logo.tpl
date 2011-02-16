@@ -14,7 +14,8 @@
 {{if is_file($logo_custom)}}
   {{assign var=logo value=$logo_custom}}
 {{/if}}
-
+{{assign var=homepage value="-"|explode:$app->user_prefs.DEFMODULE}}
+<a href="?m={{$homepage.0}}{{if $homepage|@count == 2}}&tab={{$homepage.1}}{{/if}}" name="Accueil">
 <img src="{{$logo}}" 
      {{if @$width}}width="{{$width}}"{{/if}} 
      {{if @$height}}height="{{$height}}"{{/if}}
@@ -22,3 +23,4 @@
      {{if @$title}}title="{{$title}}"{{/if}}
      {{if @$class}}class="{{$class}}"{{/if}}
      {{if @$id}}id="{{$id}}"{{/if}} />
+</a>
