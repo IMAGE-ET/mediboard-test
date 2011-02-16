@@ -118,7 +118,8 @@ class CFunctions extends CMbObject {
   function loadRefsUsers($type = null) {
     if(!$type) {
       $where = array(
-        "function_id" => "= '$this->function_id'"
+        "function_id" => "= '$this->function_id'",
+        "actif"       => "= '1'"
       );
       $ljoin = array(
         "users" => "`users`.`user_id` = `users_mediboard`.`user_id`"
@@ -126,7 +127,8 @@ class CFunctions extends CMbObject {
       $order = "`users`.`user_last_name`, `users`.`user_first_name`";
       $this->_ref_users = new CMediusers;
       $this->_ref_users = $this->_ref_users->loadList($where, $order, null, null, $ljoin);
-    } else {
+    } 
+		else {
       $this->_ref_users = new CMediusers;
       $this->_ref_users = $this->_ref_users->loadListFromType($type, PERM_READ, $this->function_id);
     }
