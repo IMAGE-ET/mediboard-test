@@ -7,9 +7,7 @@
 * @author Thomas Despoix 
 */
 
-global $can;
-
-$can->needsEdit();
+CCanDo::checkEdit();
 
 $filter = new CLmFSE();
 $filter->_date_min = CValue::get("_date_min", mbDate());
