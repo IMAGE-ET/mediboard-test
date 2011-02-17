@@ -1,6 +1,6 @@
 <table class="form">
-  <tr id="tr_{{$_file->_guid}}">
-    <td id="td_{{$_file->_guid}}" class="text">
+  <tr>
+    <td class="text">
       <a href="#" class="action" id="readonly_{{$_file->_guid}}"
          onclick="File.popup('{{$object_class}}','{{$object_id}}','{{$_file->_class_name}}','{{$_file->_id}}');"
          onmouseover="ObjectTooltip.createEx(this, '{{$_file->_guid}}', 'objectView')">{{$_file}}</a>

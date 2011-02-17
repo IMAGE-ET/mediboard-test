@@ -28,7 +28,11 @@
   {{foreach from=$object->_ref_files item=_file}}
     {{assign var=object_class value=$object->_class_name}}
     {{assign var=object_id    value=$object->_id        }}
-    {{mb_include template="inc_widget_line_file"}}
+    <tr id="tr_{{$_file->_guid}}">
+      <td id="td_{{$_file->_guid}}">
+        {{mb_include template="inc_widget_line_file"}}
+      </td>
+    </tr>
   {{foreachelse}}
     <tr>
     	<td>
