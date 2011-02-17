@@ -168,9 +168,12 @@ if ($indexGroup->load($g) && !$indexGroup->canRead()) {
 
 // do some db work if dosql is set
 if ($dosql) {
-  if(is_file("./modules/$m_post/controllers/$dosql.php")) {
+	// controller in controllers/ directory
+  if (is_file("./modules/$m_post/controllers/$dosql.php")) {
     require("./modules/$m_post/controllers/$dosql.php");
-  } else {
+  } 
+	// otherwise... @FIXME to be removed
+	else {
     require("./modules/$m_post/$dosql.php");
   }
 }

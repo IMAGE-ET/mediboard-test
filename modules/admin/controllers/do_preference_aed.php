@@ -8,8 +8,6 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
  */
 
-global $AppUI;
-
 $prefs = CValue::post("pref", array());
 $user_id = CValue::post("user_id", 0);
 
@@ -24,14 +22,15 @@ foreach ($prefs as $key => $value) {
 
 	if ($msg = $pref->store()) {
 		CAppUI::setMsg($msg, UI_MSG_ERROR);
-	} else {
+	} 
+	else {
 		CAppUI::setMsg("CPreferences-msg-modify", UI_MSG_OK);
 	}
 }
 
 // Reload user preferences
 if ($pref->user_id) {
-  CAppUI::buildPrefs($AppUI->user_id);
+  CAppUI::buildPrefs(CAppUI::$user->_id);
 }
 
 echo CAppUI::getMsg();

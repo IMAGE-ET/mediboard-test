@@ -31,7 +31,7 @@
 <script type="text/javascript">
 Main.add(Control.Tabs.create.curry('tab-modules', true));
 Preferences.onSubmit = function(form) {
-  return onSubmitFormAjax(form, {onComplete: Preferences.refresh});
+  return onSubmitFormAjax(form, {onComplete: Preferences.refresh || Prototype.emptyFunction});
 }
 </script>
 
