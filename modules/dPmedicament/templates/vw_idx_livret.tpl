@@ -40,6 +40,10 @@ Main.add(function () {
     updateElement: updateFieldsProduitLivret,
     callback: 
       function(input, queryString){
+        {{if isset($livret_cabinet|smarty:nodefaults)}}
+          queryString += "&function_id=" + $("function_guid").value.split("-")[1]+"&livret_cabinet=1";
+          console.log(queryString);
+        {{/if}}
         return (queryString + "&inLivret=1&search_libelle_long=true&search_by_cis=0"); 
       }
     } );
@@ -93,6 +97,9 @@ var Livret = {
     this.urlEditProd.addParam("code_cip", code_cip);
     this.urlEditProd.addParam("lettre", lettre);
     this.urlEditProd.addParam("codeATC", codeATC);
+    {{if isset($livret_cabinet|smarty:nodefaults)}}
+      this.urlEditProd.addParam("function_guid", "{{$function_guid}}");
+    {{/if}}
     this.urlEditProd.popup(385, 230, "Modification d'un élément");
   },
   
@@ -102,6 +109,9 @@ var Livret = {
     var url = new Url("dPmedicament", "httpreq_vw_livret");
     url.addParam("lettre", lettre);
     url.addParam("code_cip", codeCIP);
+    {{if isset($livret_cabinet|smarty:nodefaults)}}
+      url.addParam("function_guid", "{{$function_guid}}");
+    {{/if}}
     url.requestUpdate("livret");
   },
   
@@ -119,7 +129,16 @@ var Livret = {
 function printLivret(orderbyATC){
   var url = new Url("dPmedicament", "print_livret");
   url.addParam("orderby", orderbyATC ? "atc" : "libelle");
+  {{if isset($livret_cabinet|smarty:nodefaults)}}
+  url.addParam("function_guid", "{{$function_guid}}");
+  {{/if}}
   url.popup(850, 650, "Livret Thérapeutique");
+}
+
+function reloadWithFunction(function_guid) {
+  var url = new Url("dPcabinet", "vw_idx_livret", "tab");
+  url.addParam("function_guid", function_guid);
+  url.redirect();
 }
 
 </script>
@@ -140,7 +159,18 @@ function printLivret(orderbyATC){
            <input type="checkbox" id="orderby-atc" /> Trier par classe ATC
          </label>
        </span>
-       Livret Thérapeutique
+       {{if isset($livret_cabinet|smarty:nodefaults)}}
+         <span style="float: left">
+           <select name="function_guid" id="function_guid" onchange="reloadWithFunction(this.value)"
+             {{if $functions|@count == 1}}disabled="disabled"{{/if}}>
+             {{foreach from=$functions item=_function}}
+               <option value="{{$_function->_guid}}"
+                 {{if $_function->_guid == $function_guid}}selected="selected"{{/if}}>{{$_function->text}}</option>
+             {{/foreach}}
+           </select>
+         </span>
+       {{/if}}
+       Livret {{if isset($livret_cabinet|smarty:nodefaults)}}de prescription{{else}}Thérapeutique{{/if}}
      </th>
    </tr>
    <tr>
@@ -192,17 +222,17 @@ function printLivret(orderbyATC){
 
 <!-- Affichage des produits du livret en fonction de la lettre -->
 <div id="livret" style="display: none;">
-  {{include file="inc_vw_livret.tpl"}}
+  {{mb_include module=dPmedicament template=inc_vw_livret}}
 </div>
 
 <!-- Affichage des produits du livret en fonction de la classe ATC -->
 <div id="ATC" style="display: none;">
-  {{include file="inc_vw_livret_arbre_ATC.tpl"}}
+  {{mb_include module=dPmedicament template=inc_vw_livret_arbre_ATC}}
 </div>
 
 {{if @$modules.dPstock}}
   <!-- Affichage des produits des stocks -->
   <div id="stocks" style="display: none;">
-    {{include file="inc_vw_stock_products.tpl"}}
+    {{mb_include module=dPmedicament template=inc_vw_stock_products}}
   </div>
 {{/if}}

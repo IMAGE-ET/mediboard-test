@@ -109,6 +109,7 @@ $locales['CGroups-web'] = 'Site internet';
 $locales['CGroups-web-court'] = 'Web';
 $locales['CGroups-web-desc'] = 'Veuillez saisir l\'adresse d\'un site internet';
 $locales['CGroups.all'] = 'Tous les établissements';
+$locales['CGroups.current'] = 'Etablissement courant';
 $locales['CGroups.none'] = 'Aucun établissement';
 $locales['CGroups.one'] = 'établissement';
 $locales['CGroups.select'] = 'Choisir un établissement';

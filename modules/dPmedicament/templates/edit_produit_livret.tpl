@@ -33,6 +33,9 @@ Main.add(function() {
   <input type="hidden" name="dosql" value="do_produit_livret_aed" />
   <input type="hidden" name="del" value="0" />
   <input type="hidden" name="code_cip" value="{{$produit_livret->code_cip}}" />
+  {{if isset($function_guid|smarty:nodefaults)}}
+    <input type="hidden" name="_function_guid" value="{{$function_guid}}" />
+  {{/if}}
   <table class="tbl">
     <tr>
       <th colspan="2">{{$produit_livret->_ref_produit->libelle}}</th>

@@ -1177,6 +1177,9 @@ class CPrescription extends CMbObject {
    * Chargement des lignes de prescription de médicament
    */
   function loadRefsLinesMed($with_child = 0, $with_subst = 0, $emplacement="", $order="") {
+    if ($this->_ref_prescription_lines) {
+      return;
+    }
 		$line = new CPrescriptionLineMedicament();
     $where = array();
     $where["prescription_id"] = " = '$this->_id'";
@@ -1200,6 +1203,9 @@ class CPrescription extends CMbObject {
    * Chargement des lignes de prescription de médicament par catégorie ATC
    */
   function loadRefsLinesMedByCat($with_child = 0, $with_subst = 0, $emplacement = "") {
+    if ($this->_ref_prescription_lines_by_cat) {
+      return;
+    }
     $this->loadRefsLinesMed($with_child, $with_subst, $emplacement);
     $this->_ref_prescription_lines_by_cat = array();
     foreach($this->_ref_prescription_lines as &$_line){
@@ -1275,6 +1281,10 @@ class CPrescription extends CMbObject {
    * Chargement des lignes d'elements par catégorie
    */
   function loadRefsLinesElementByCat($withRefs = "1", $chapitre = "", $emplacement="", $order=""){
+    if ($this->_ref_prescription_lines_element_by_cat) {
+      return;
+    }
+    
     $this->loadRefsLinesElement($chapitre, $withRefs, $emplacement, $order);
     $this->_ref_prescription_lines_element_by_cat = array();
     

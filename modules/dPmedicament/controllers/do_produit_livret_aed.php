@@ -17,14 +17,22 @@ $prix_ville        = CValue::post("prix_ville");
 $date_prix_ville   = CValue::post("date_prix_ville");
 $code_interne      = CValue::post("code_interne");
 $commentaire       = CValue::post("commentaire");
+$function_guid     = CValue::post("_function_guid", null);
 
-$group_id = CProductStockGroup::getHostGroup();
+if (isset($function_guid)) {
+  $crc = $function_guid;
+}
+else {
+  $crc = CProductStockGroup::getHostGroup(false)->_guid;
+}
+
+$crc = abs(crc32($crc) - pow(2, 31));
 
 $del = CValue::post("del");
 
 if($del == 1){ 
   // Suppression du produit
-  if($livret->distObj->Delete($group_id, $code_cip) < 0){
+  if($livret->distObj->Delete($crc, $code_cip) < 0){
     // Affichage de l'erreur
     CAppUI::setMsg("Produit supprimé du livret thérapeutique".$livret->distObj->GetLastError(), UI_MSG_ERROR );
   } else {
@@ -32,10 +40,11 @@ if($del == 1){
   }  
 } else {
   $produitLivret = new CBcbProduitLivretTherapeutique();
-  if($produitLivret->load($code_cip)){
-    // Si le produit existe, on lance l'update
+
+  if($produitLivret->load($code_cip, $crc) && $produitLivret->group_id == $crc){
     
-    $livret->distObj->Code = $group_id;
+    // Si le produit existe, on lance l'update
+    $livret->distObj->Code = $crc;
 	  $livret->distObj->CIP = $code_cip;
 	  $livret->distObj->PrixHopital = $prix_hopital;
 	  $livret->distObj->PrixVille = $prix_ville;
@@ -43,7 +52,8 @@ if($del == 1){
 	  $livret->distObj->DatePrixVille = $date_prix_ville;
 	  $livret->distObj->Commentaire = $commentaire;
 	  $livret->distObj->CodeInterne = $code_interne;
-
+    
+	  
 	  $livret->updateDBFields();
 
 	  if($livret->distObj->Update() < 0){
@@ -54,16 +64,19 @@ if($del == 1){
     }    
   } else {
     // on crée le produit
-		$livret->distObj->Code = $group_id;
+		$livret->distObj->Code = $crc;
+		
 		$livret->distObj->CIP = $code_cip;
+
     if($livret->distObj->Insert() < 0){
+      
       // Affichage de l'erreur
       CAppUI::setMsg("Produit ajouté au livret thérapeutique".$livret->distObj->GetLastError(), UI_MSG_ERROR );
     } else {
       CAppUI::setMsg("Produit ajouté au livret thérapeutique", UI_MSG_OK );
       
       $produitLivret = new CBcbProduitLivretTherapeutique();
-      $produitLivret->load($code_cip);
+      $produitLivret->load($code_cip, $crc);
       if ($produitLivret->addToStocks()) {
         CAppUI::setMsg("Produit ajouté aux stocks", UI_MSG_OK );
       }

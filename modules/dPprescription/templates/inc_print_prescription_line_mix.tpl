@@ -36,11 +36,7 @@
 	  {{foreach from=$perf->_ref_lines item=_line}}
 	  <li>
 	    <strong>
-        {{if $dci}}
-          {{$_line->_dci_view}}
-        {{else}}
-          {{$_line->_view}}
-        {{/if}}
+        {{$_line->_view}}
       </strong>: {{$_line->_posologie}}
 	  </li>  
 	  {{/foreach}}

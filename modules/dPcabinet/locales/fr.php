@@ -1286,6 +1286,7 @@ $locales['mod-dPcabinet-tab-vw_compta'] = 'Comptabilité';
 $locales['mod-dPcabinet-tab-vw_dossier'] = 'Dossiers';
 $locales['mod-dPcabinet-tab-vw_edit_tarifs'] = 'Tarifs';
 $locales['mod-dPcabinet-tab-vw_history'] = 'Historique';
+$locales['mod-dPcabinet-tab-vw_idx_livret'] = 'Livret de prescription';
 $locales['mod-dPcabinet-tab-vw_intermax'] = 'LogicMax FSE';
 $locales['mod-dPcabinet-tab-vw_journee'] = 'Journée';
 $locales['mod-dPcabinet-tab-vw_planning'] = 'Semainier';

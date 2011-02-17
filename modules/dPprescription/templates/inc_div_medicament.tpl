@@ -44,7 +44,7 @@ Main.add( function(){
 					else {
 					  praticien_id = document.selPraticienLine ? $V(document.selPraticienLine.praticien_id) : '{{$prescription->_ref_current_praticien->_id}}';
           }
-          return (queryString + "&inLivret="+($V(oFormProduit._recherche_livret)?'1':'0')+"&praticien_id="+praticien_id+"&function_id="+function_id+"&group_id="+group_id{{if !$mode_pharma}}+"&fast_access='1'"{{/if}});
+          return (queryString + "&inLivret="+($V(oFormProduit._recherche_livret)?'1':'0')+"&praticien_id="+praticien_id+"&function_id="+function_id+"&group_id="+group_id+"&type="+'{{$prescription->type}}'{{if !$mode_pharma}}+"&fast_access='1'"{{/if}});
         }
     } );
   }
@@ -250,7 +250,6 @@ updateModaleAfterAddLine = function(line_id){
     
 			<!-- Affichage des div des medicaments et autres produits -->
 			  <form action="?" method="get" name="searchProd" onsubmit="return false;">
-			    
 					<!-- Affichage des produits les plus utilises -->
 					<select name="favoris" onchange="Prescription.addLine(this.value); this.value = '';" style="width: 120px;" onclick="updateFavoris('{{$favoris_praticien_id}}','med', this); headerPrescriptionTabs.setActiveTab('div_ajout_lignes');">
 				 	  <option value="">&mdash; les plus utilisés</option>

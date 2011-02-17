@@ -23,7 +23,7 @@ removeSelected = function() {
   </tr>
   <tr>
     <th class="category">
-      {{tr}}CPrinter-nom{{/tr}}
+      {{tr}}CPrinter.name{{/tr}}
     </th>
     <th class="category">
       {{tr}}CPrinter-function_id{{/tr}}

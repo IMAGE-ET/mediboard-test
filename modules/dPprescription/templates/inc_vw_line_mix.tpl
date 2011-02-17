@@ -580,19 +580,21 @@ Main.add( function(){
 	      {{else}}
 	        {{assign var=_line_praticien_id value=$line->praticien_id}}
 	      {{/if}}
-	      
-	      <script type="text/javascript">
-	        Main.add( function(){
-	          var oFormCommentaireElement = getForm("editCommentaire-{{$line->_guid}}");
-	          new AideSaisie.AutoComplete(oFormCommentaireElement.commentaire, {
-	            objectClass: "{{$line->_class_name}}", 
-	            contextUserId: "{{$_line_praticien_id}}",
-	            resetSearchField: false,
-	            validateOnBlur: false
-	          });
-	        });
-	      </script>
-	  
+        
+	      {{if $line->_perm_edit}}
+  	      <script type="text/javascript">
+  	        Main.add( function(){
+  	          var oFormCommentaireElement = getForm("editCommentaire-{{$line->_guid}}");
+  	          new AideSaisie.AutoComplete(oFormCommentaireElement.commentaire, {
+  	            objectClass: "{{$line->_class_name}}", 
+  	            contextUserId: "{{$_line_praticien_id}}",
+  	            resetSearchField: false,
+  	            validateOnBlur: false
+  	          });
+  	        })
+  	      </script>
+	      {{/if}}
+        
 	      <form name="editCommentaire-{{$line->_guid}}" method="post" action="?" onsubmit="testPharma({{$line->_id}}); return onSubmitFormAjax(this);">
 	        <input type="hidden" name="m" value="dPprescription" />
 	        <input type="hidden" name="dosql" value="do_prescription_line_mix_aed" />

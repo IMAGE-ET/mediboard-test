@@ -20,11 +20,8 @@ $category_id  = CValue::getOrSession("category_id", CAppUI::conf('bcb CBcbProdui
 
 $listProduits = array();
 
-// Chargement de l'etablissement courant
-$etablissement = CGroups::loadCurrent();
-
 // Chargement des produits du livret therapeutique
-$etablissement->loadRefLivretTherapeutique();
+$produits_livret = CBcbProduit::loadRefLivretTherapeutique();
 
 $tabLettre = range('A', 'Z');
 
@@ -49,7 +46,7 @@ $smarty->assign("arbreATC", $arbreATC);
 $smarty->assign("codeATC", $codeATC);
 $smarty->assign("chapitreATC", $chapitreATC);
 $smarty->assign("lettre", $lettre);
-$smarty->assign("produits_livret", $etablissement->_ref_produits_livret);
+$smarty->assign("produits_livret", $produits_livret);
 $smarty->assign("tabLettre", $tabLettre);
 $smarty->assign("category_id", $category_id);
 $smarty->assign("categories", $categories);

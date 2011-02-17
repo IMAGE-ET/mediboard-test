@@ -9,9 +9,10 @@
  */
 
 // Cas d'ajout de produit, affichage de la bonne lettre
-$lettre = CValue::get("lettre");
-$code_cip = CValue::getOrSession("code_cip");
-$type = CValue::get("type");
+$lettre         = CValue::get("lettre");
+$code_cip       = CValue::getOrSession("code_cip");
+$type           = CValue::get("type");
+$function_guid  = CValue::get("function_guid", null);
 $produits_livret = array();
 
 // Chargement du produit ajouté
@@ -24,11 +25,8 @@ if($code_cip){
 if($lettre == "hors_T2A"){
   $produits_livret = CBcbProduit::getHorsT2ALivret();
 } else {
-	// Chargement de l'etablissement courant
-	$etablissement = CGroups::loadCurrent();
 	// Chargement des produits du livret therapeutique
-  $etablissement->loadRefLivretTherapeutique($lettre, 200);
-  $produits_livret = $etablissement->_ref_produits_livret;
+	$produits_livret = CBcBProduit::loadRefLivretTherapeutique($function_guid, $lettre, 200);
 }
 
 $tabLettre = range('A', 'Z');
@@ -39,6 +37,7 @@ $smarty = new CSmartyDP();
 $smarty->assign("tabLettre", $tabLettre);
 $smarty->assign("produits_livret", $produits_livret);
 $smarty->assign("lettre", $lettre);
+$smarty->assign("function_guid", $function_guid);
 
 $smarty->display("inc_vw_livret.tpl");
 

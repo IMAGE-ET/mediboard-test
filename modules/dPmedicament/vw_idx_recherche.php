@@ -83,7 +83,7 @@ if($produit){
 	}
 	// Recherche de produits dans le livret Therapeutique
 	if($rechercheLivret){
-	  $produits = $mbProduit->searchProduit($produit, $supprime, $param_recherche, $hors_specialite, 100, CProductStockGroup::getHostGroup(), null, $search_by_cis);
+	  $produits = $mbProduit->searchProduit($produit, $supprime, $param_recherche, $hors_specialite, 100, CProductStockGroup::getHostGroup(false)->_guid, null, $search_by_cis);
 	}
 }
 

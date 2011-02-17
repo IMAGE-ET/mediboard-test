@@ -36,7 +36,10 @@ Main.add(function(){
   <input type="hidden" name="m" value="dPmedicament" />
   <input type="hidden" name="dosql" value="do_produit_livret_aed" />
   <input type="hidden" name="del" value="0" />
-  <input type="hidden" name="group_id" value="{{$g}}"/>
+  {{if isset($function_guid|smarty:nodefaults)}}
+    <input type="hidden" name="_function_guid" value="{{$function_guid}}"/>
+  {{/if}}
+  
   <input type="hidden" name="code_cip" value=""/>
   
 </form>

@@ -18,18 +18,30 @@ $fast_access         = CValue::post("fast_access", "0");
 $praticien_id        = CValue::post("praticien_id");
 $function_id         = CValue::post("function_id");
 $group_id            = CValue::post("group_id");
+$type                = CValue::post("type", " ");
+$livret_cabinet      = CValue::post("livret_cabinet", 0);
 
 $mbProduit = new CBcbProduit();
+$code = '';
 
 // Recherche dans la bcb
-$search_by_name = $mbProduit->searchProduitAutocomplete($tokens, "50", $inLivret, $search_libelle_long, $hors_specialite, $search_by_cis);
+if($inLivret){
+  if ($function_id == "") {
+    $function_id = CAppUI::$user->function_id;
+  }
+  if ($type && $type != "externe" && !$livret_cabinet) {
+    $code = abs(crc32(CProductStockGroup::getHostGroup(false)->_guid) - pow(2, 31));
+  }
+  else {
+    $code = abs(crc32("CFunctions-".$function_id) - pow(2, 31));
+  }
+}
+
+$search_by_name = $mbProduit->searchProduitAutocomplete($tokens, "50", $inLivret, $code, $search_libelle_long, $hors_specialite, $search_by_cis);
 
 // Recherche des produits en se basant sur les DCI
 $dci = new CBcbDCI();
-
-if($inLivret){
-	$dci->distObj->LivretTherapeutique = CProductStockGroup::getHostGroup();
-}
+$dci->distObj->LivretTherapeutique = $code;
 
 if(!$hors_specialite){
   $search_by_dci = $dci->searchProduits($tokens, 100, $search_by_cis);
@@ -74,7 +86,9 @@ if($fast_access){
 	if($group_id){
     $where["group_id"] = " = '$group_id'";
   }
- 
+  if($type){
+    $where["type"] = " = '$type'";
+  }
 	$protocoles_id = $prot_fast_access->loadIds($where);
   
   foreach($produits as $_produit){

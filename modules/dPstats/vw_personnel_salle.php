@@ -58,6 +58,8 @@ if($prat_personnel) {
     $curr_plage->_duree_total_op      = "00:00:00";
     $curr_plage->_duree_first_to_last = "00:00:00";
     $curr_plage->_op_for_duree_totale = 0;
+    $curr_plage->_duree_total_personnel = array();
+    
     // Personnel de la plage
     $curr_plage->loadAffectationsPersonnel();
     foreach($curr_plage->_ref_operations as $curr_op) {

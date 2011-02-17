@@ -35,7 +35,6 @@ class CGroups extends CMbObject {
   // Object References
   var $_ref_functions = null;
   var $_ref_blocs = null;
-  var $_ref_produits_livret = null;
   var $_ref_dmi_categories = null;
   var $_ref_services = null;
   var $_ref_pharmacie = null;
@@ -133,24 +132,7 @@ class CGroups extends CMbObject {
     $this->_cp_court = substr($this->cp,0,2);
   }
   
-  function loadRefLivretTherapeutique($lettre = "%", $limit = 50, $full_mode = true){
-    if ($lettre != '%') {
-	    $produit = new CBcbProduit();
-	    
-	    // Chargement des produits du livret Therapeutique en fonction d'une lettre
-	    $produits = $produit->searchProduit($lettre, 1, "debut", 0, $limit, CProductStockGroup::getHostGroup(), $full_mode, "0") + $produit->searchProduit($lettre, 1, "debut", 1, $limit, CProductStockGroup::getHostGroup(), $full_mode, "0");
-
-	    $this->_ref_produits_livret = array();
-	    foreach($produits as $code_cip => $prod){
-	      $produitLivretTherapeutique = new CBcbProduitLivretTherapeutique();
-	      $produitLivretTherapeutique->load($code_cip);
-	      $produitLivretTherapeutique->_ref_produit = $prod;
-	      $this->_ref_produits_livret[] = $produitLivretTherapeutique;
-	    }
-    } else {
-  	  $this->_ref_produits_livret = CBcbProduitLivretTherapeutique::getProduits('CODECIP', $limit, $full_mode);
-    }
-  }
+  
 
   /**
    * Load functions with given permission

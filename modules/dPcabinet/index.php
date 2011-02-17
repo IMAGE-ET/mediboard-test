@@ -26,4 +26,6 @@ if (CAppUI::pref("GestionFSE")) {
   $module->registerTab("vw_intermax" , TAB_EDIT);
 }
 
+$module->registerTab("vw_idx_livret"             , TAB_EDIT);
+
 ?>

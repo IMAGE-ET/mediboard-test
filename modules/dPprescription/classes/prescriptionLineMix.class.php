@@ -640,10 +640,18 @@ class CPrescriptionLineMix extends CMbObject {
         }
       }
     }
+    
+		$this->loadRefPrescription();
+		$prescription =& $this->_ref_prescription;
+		$sejour =& $this->_ref_prescription->_ref_object;
 		
     // Creation des planifications
 		foreach($this->_ref_lines as $_perf_line){
       foreach($dates_planif as $_datetime){
+        if ($prescription->type == "sejour" &&
+            ($sejour->_entree > $_datetime || $sejour->_sortie < $_datetime)) {
+          continue;
+        }
         $new_planif = new CPlanificationSysteme();
         $new_planif->dateTime = $_datetime;
         $new_planif->object_id = $_perf_line->_id;

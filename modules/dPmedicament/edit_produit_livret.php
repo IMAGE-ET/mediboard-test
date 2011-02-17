@@ -10,13 +10,25 @@
 
 CCanDo::checkEdit();
 
-$lettre = CValue::get("lettre");
-$codeATC = CValue::get("codeATC");
-$code_cip = CValue::get("code_cip");
+$lettre        = CValue::get("lettre");
+$codeATC       = CValue::get("codeATC");
+$code_cip      = CValue::get("code_cip");
+$function_guid = CValue::get("function_guid", null);
+
+$crc = "";
+
+if ($function_guid) {
+  $crc = $function_guid;
+}
+else {
+  $crc = CGroups::loadCurrent()->_guid;
+}
+
+$crc = abs(crc32($crc) - pow(2, 31));
 
 // Chargement du produit
 $produit_livret = new CBcbProduitLivretTherapeutique();
-$produit_livret->load($code_cip);
+$produit_livret->load($code_cip, $crc);
 $produit_livret->loadRefProduit();
 
 $produit_livret->updateFormFields();
@@ -28,6 +40,10 @@ $smarty->assign("code_cip", $code_cip);
 $smarty->assign("codeATC", $codeATC);
 $smarty->assign("lettre", $lettre);
 $smarty->assign("produit_livret", $produit_livret);
+
+if (isset($function_guid)) {
+  $smarty->assign("function_guid", $function_guid);
+}
 
 $smarty->display("edit_produit_livret.tpl");
 
