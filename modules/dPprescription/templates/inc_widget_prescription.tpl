@@ -22,7 +22,7 @@ openPrescription = function(prescription_id){
 {{if is_array($prescriptions)}}
   <!-- Pas de prescription -->
   {{if !$prescriptions|@count}}
-  <form name="addPrescriptionSejour{{$suffixe}}" action="?">
+  <form name="addPrescriptionSejour{{$suffixe}}" action="?" method="post">
     <input type="hidden" name="m" value="dPprescription" />
     <input type="hidden" name="dosql" value="do_prescription_aed" />
     <input type="hidden" name="del" value="0" />
@@ -66,7 +66,7 @@ openPrescription = function(prescription_id){
 			  {{/foreach}}
 			  <td class="narrow">
 			  {{if $_prescription->type == "externe"}}
-			    <form name="addPrescriptionSejour{{$suffixe}}" action="?">
+			    <form name="addPrescriptionSejour{{$suffixe}}" action="?" method="post">
 				    <input type="hidden" name="m" value="dPprescription" />
 				    <input type="hidden" name="dosql" value="do_prescription_aed" />
 				    <input type="hidden" name="del" value="1" />
