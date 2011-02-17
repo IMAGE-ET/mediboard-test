@@ -25,7 +25,7 @@ function submitSejour(sejour_id){
         }
     }
   });
-}
+} 
 
 function redirect() {
   //document.location.href="?m=dPurgences&tab=vw_idx_rpu";
@@ -71,19 +71,13 @@ function submitSejRpuConsult() {
   }
 }
 
-function loadTransfert(mode_sortie){
-  $('etablissement_sortie_transfert').setVisible(mode_sortie == "transfert");
-}
-
-function loadServiceMutation(mode_sortie){
-  $('service_sortie_transfert').setVisible(mode_sortie == "mutation");
-}
 
 function initFields(mode_sortie){
   ContraintesRPU.updateDestination(mode_sortie, true);
   ContraintesRPU.updateOrientation(mode_sortie, true); 
-  loadTransfert(mode_sortie);
-  loadServiceMutation(mode_sortie);
+  $('etablissement_sortie_transfert').setVisible(mode_sortie == "transfert");
+  $('service_sortie_transfert'      ).setVisible(mode_sortie == "mutation");
+  $('commentaires_sortie'           ).setVisible(mode_sortie && mode_sortie != "normal");
 }
 
 function printDossier(id) {
@@ -138,28 +132,19 @@ function showEtabEntreeTransfert(mode) {
                 <script type="text/javascript">
                   Main.add(function() {
                     var form = getForm("editRPU");
+										var options = {
+                      objectClass: "{{$rpu->_class_name}}",
+                      contextUserId: "{{$userSel->_id}}",
+                      contextUserView: "{{$userSel->_view}}",
+                      timestamp: "{{$conf.dPcompteRendu.CCompteRendu.timestamp}}",
+                      validate: function() { form.onsubmit(); },
+                      resetSearchField: false,
+                      resetDependFields: false,
+                      validateOnBlur: false
+                    }
                     
-                    new AideSaisie.AutoComplete(form.elements.diag_infirmier, {
-                        objectClass: "{{$rpu->_class_name}}",
-                        contextUserId: "{{$userSel->_id}}",
-                        contextUserView: "{{$userSel->_view}}",
-                        timestamp: "{{$conf.dPcompteRendu.CCompteRendu.timestamp}}",
-                        validate: function(){ form.onsubmit(); },
-                        resetSearchField: false,
-                        resetDependFields: false,
-                        validateOnBlur: false
-                      });
-                      
-                    new AideSaisie.AutoComplete(form.elements.pec_douleur, {
-                        objectClass: "{{$rpu->_class_name}}",
-                        contextUserId: "{{$userSel->_id}}",
-                        contextUserView: "{{$userSel->_view}}",
-                        timestamp: "{{$conf.dPcompteRendu.CCompteRendu.timestamp}}",
-                        validate: function(){ form.onsubmit(); },
-                        resetSearchField: false,
-                        resetDependFields: false,
-                        validateOnBlur: false
-                      });
+                    new AideSaisie.AutoComplete(form.elements.diag_infirmier, options);
+                    new AideSaisie.AutoComplete(form.elements.pec_douleur   , options);
                     });
                 </script>
               </td>
@@ -240,16 +225,19 @@ function showEtabEntreeTransfert(mode) {
               <tr>
                 <td colspan="2">
                 {{main}}
-                  new AideSaisie.AutoComplete(getForm("editRPUMotif").elements.motif, {
-                          objectClass: "{{$rpu->_class_name}}",
-                          contextUserId: "{{$userSel->_id}}",
-                          contextUserView: "{{$userSel->_view}}",
-                          timestamp: "{{$conf.dPcompteRendu.CCompteRendu.timestamp}}",
-                          validate: function(){ getForm("editRPUMotif").onsubmit(); },
-                          resetSearchField: false,
-                          resetDependFields: false,
-                          validateOnBlur: false
-                        });
+                  var form = getForm("editRPUMotif");
+                  var options = {
+                    objectClass: "{{$rpu->_class_name}}",
+                    contextUserId: "{{$userSel->_id}}",
+                    contextUserView: "{{$userSel->_view}}",
+                    timestamp: "{{$conf.dPcompteRendu.CCompteRendu.timestamp}}",
+                    validate: function() { form.onsubmit(); },
+                    resetSearchField: false,
+                    resetDependFields: false,
+                    validateOnBlur: false
+                  }
+									
+                  new AideSaisie.AutoComplete(form.elements.motif, options);
                 {{/main}}
                 {{mb_field object=$rpu field="motif" onchange="this.form.onsubmit();" class="autocomplete"}}
                 </td>
@@ -279,7 +267,7 @@ function showEtabEntreeTransfert(mode) {
             <tr>
               <th style="width: 120px;">{{mb_label object=$sejour field="mode_sortie"}}</th>
               <td>
-                {{mb_field object=$sejour field="mode_sortie" defaultOption="&mdash; Mode de sortie" onchange="initFields(this.value); submitSejour();"}}
+                {{mb_field object=$sejour field="mode_sortie" emptyLabel="Choose" onchange="initFields(this.value); submitSejour();"}}
                 {{if !$rpu->mutation_sejour_id}}
                   <input type="hidden" name="group_id" value="{{if $sejour->group_id}}{{$sejour->group_id}}{{else}}{{$g}}{{/if}}" />
                 {{else}}
@@ -289,14 +277,22 @@ function showEtabEntreeTransfert(mode) {
                      </a> 
                    </strong>
                 {{/if}}
-                <div id="etablissement_sortie_transfert" {{if !$sejour->etablissement_transfert_id}}style="display:none;"{{/if}}>
-                  {{mb_field object=$sejour field="etablissement_transfert_id" form="editSejour" autocomplete="true,1,50,true,true" onchange="submitSejour();"}}
-                </div>
-                  
-                <div id="service_sortie_transfert" {{if !$sejour->service_mutation_id}}style="display:none;"{{/if}}>
-                  {{mb_field object=$sejour field="service_mutation_id" form="editSejour" autocomplete="true,1,50,true,true" onchange="submitSejour();"}}
-                </div>
               </td>
+						</tr>
+						
+            <tr id="etablissement_sortie_transfert" {{if $sejour->mode_sortie != "transfert"}} style="display:none;" {{/if}}>
+            	<th>{{mb_label object=$sejour field="etablissement_transfert_id"}}</th>
+              <td>{{mb_field object=$sejour field="etablissement_transfert_id" form="editSejour" autocomplete="true,1,50,true,true" onchange="submitSejour();"}}</td>
+            </tr>
+
+            <tr id="service_sortie_transfert" {{if $sejour->mode_sortie != "mutation"}} style="display:none;" {{/if}}>
+            	<th>{{mb_label object=$sejour field="service_mutation_id"}}</th>
+							<td>{{mb_field object=$sejour field="service_mutation_id" form="editSejour" autocomplete="true,1,50,true,true" onchange="submitSejour();"}}</td>
+            </tr>
+						
+            <tr id="commentaires_sortie" {{if $sejour->mode_sortie == "" || $sejour->mode_sortie == "normal"}} style="display:none;" {{/if}}>
+              <th>{{mb_label object=$sejour field="commentaires_sortie"}}</th>
+              <td>{{mb_field object=$sejour field="commentaires_sortie"}}</td>
             </tr>
             
             <!-- Diagnostic Principal -->

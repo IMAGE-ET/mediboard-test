@@ -70,6 +70,7 @@ class CSejour extends CCodable {
   var $adresse_par_etab_id = null;
   var $libelle             = null;  
   var $forfait_se          = null;
+	var $commentaires_sortie = null;   
 	
   // Form Fields
   var $_entree             = null;
@@ -259,6 +260,7 @@ class CSejour extends CCodable {
     $props["libelle"]             = "str seekable autocomplete dependsOn|praticien_id";
     $props["facture"]             = "bool default|0";
     $props["forfait_se"]          = "bool default|0";
+    $props["commentaires_sortie"] = "text";
     
     $props["_time_entree_prevue"] = "time";
     $props["_time_sortie_prevue"] = "time";

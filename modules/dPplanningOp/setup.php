@@ -1046,17 +1046,22 @@ class CSetupdPplanningOp extends CSetup {
     
     $this->makeRevision("1.13");
     $query = "ALTER TABLE `operations` 
-              ADD `debut_prepa_preop` TIME,
-              ADD `fin_prepa_preop` TIME";
+      ADD `debut_prepa_preop` TIME,
+      ADD `fin_prepa_preop` TIME";
     $this->addQuery($query);
     
     $this->makeRevision("1.14");
     $query = "CREATE TABLE `interv_hors_plages` (
-                `interv_hors_plage_id` INT (11) UNSIGNED NOT NULL auto_increment PRIMARY KEY
-              ) /*! ENGINE=MyISAM */;";
+      `interv_hors_plage_id` INT (11) UNSIGNED NOT NULL auto_increment PRIMARY KEY
+    ) /*! ENGINE=MyISAM */;";
     $this->addQuery($query);
-		
-    $this->mod_version = "1.15";
+
+    $this->makeRevision("1.15");
+    $query = "ALTER TABLE sejour 
+      ADD commentaires_sortie TEXT;";
+    $this->addQuery($query);
+
+    $this->mod_version = "1.16";
   }
 }
 ?>
