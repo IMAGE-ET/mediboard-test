@@ -114,10 +114,10 @@ var AideSaisie = {
           //buttons.grid   = DOM.a({href: "#1"}, DOM.img({src: "images/icons/grid.png", title: "Mode grille"})),
           buttons.down   = DOM.a({href: "#1"}, DOM.img({src: "style/mediboard/images/buttons/down.png", title: "Voir tous les choix"})),
           buttons.create = DOM.a({href: "#1"},
-            DOM.span({style: "position: absolute; bottom: 21px; display: none; background-color: #fff;", className: "sub-toolbar"},
-              buttons.newGroup    = DOM.img({src: "images/icons/group.png", style: "margin-bottom: 0px;", title: "Nouvelle aide pour "+User["group"].view}), DOM.br({}),
-              buttons.newFunction = DOM.img({src: "images/icons/user-function.png", style: "margin-bottom: 0px;", title: "Nouvelle aide pour "+User["function"].view}), DOM.br({}),
-              buttons.newUser     = DOM.img({src: "images/icons/user.png", style: "margin-bottom: 0px;", title: "Nouvelle aide pour "+User.view})
+            DOM.span({style: "display: none;", className: "sub-toolbar"},
+              buttons.newGroup    = DOM.img({style: "", src: "images/icons/group.png", title: "Nouvelle aide pour "+User["group"].view}), DOM.br({}),
+              buttons.newFunction = DOM.img({style: "", src: "images/icons/user-function.png", title: "Nouvelle aide pour "+User["function"].view}), DOM.br({}),
+              buttons.newUser     = DOM.img({style: "", src: "images/icons/user.png", title: "Nouvelle aide pour "+User.view})
             ),
             buttons.createIcon = DOM.img({src: "images/icons/new.png", title: "Nouvelle aide"})
           ),

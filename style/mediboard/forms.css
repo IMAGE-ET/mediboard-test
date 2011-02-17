@@ -680,8 +680,8 @@ table.tbl .textarea-helped a {
   position: absolute;
   bottom: 0px;
   right: 16px;
-  margin: 2px;
-  padding: 2px;
+  margin: 2px 1px;
+  padding: 0px;
   vertical-align: middle;
   text-align: right;
   background-color: #fff;
@@ -708,6 +708,33 @@ table.tbl .textarea-helped a {
   margin: 1px;
   padding: 1px;
 }
+
+.textarea-helped .sub-toolbar {
+  position: absolute; 
+	bottom: 20px; 
+	background-color: #fff;
+	margin-bottom: -1px;
+  margin-left: -3px;
+  padding: 2px;
+  border: 1px solid #ccc;
+	border-bottom: none;
+  -moz-border-radius: 3px;
+  -webkit-border-radius: 3px;
+  border-radius: 3px;
+}
+
+.textarea-helped .sub-toolbar img {
+  margin-bottom: 0px;
+}
+
+.textarea-helped .toolbar a:hover .sub-toolbar img {
+  outline: none;
+}
+
+.textarea-helped .toolbar a:hover .sub-toolbar img:hover {
+  outline: 1px dotted #999;
+}
+
 
 .textarea-helped .throbber,
 .textarea-helped .throbber-background {
