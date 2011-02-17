@@ -84,6 +84,10 @@ if ($consultation_id) {
     $consult_anesth = $consult->_ref_consult_anesth;
     $consult_anesth->loadRefs();
     
+		// Chargement de toutes les planifs systemes si celles-ci ne sont pas deja chargées
+    $consult_anesth->_ref_sejour->loadRefPrescriptionSejour();
+		$consult_anesth->_ref_sejour->_ref_prescription_sejour->calculAllPlanifSysteme();
+		
     // Récupération des planifications systèmes antérieures à l'intervention
     $planif_system = new CPlanificationSysteme();
     $where  = array();
