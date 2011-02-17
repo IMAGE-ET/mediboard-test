@@ -20,24 +20,25 @@ $consultation = new CConsultation();
 $consultation->load($consultation_id);
 $consultation->loadRefConsultAnesth();
 
-foreach($patient->_ref_sejours as $key => $sejour) {
-  $patient->_ref_sejours[$key]->loadRefsOperations();
-  $patient->_ref_sejours[$key]->loadRefsConsultations();
-  foreach($patient->_ref_sejours[$key]->_ref_consultations as $keyCslt => $cslt) {
-    $patient->_ref_sejours[$key]->_ref_consultations[$keyCslt]->getType();
+foreach($patient->_ref_sejours as $_sejour) {
+  $_sejour->loadRefsOperations();
+  $_sejour->loadRefsConsultations();
+  foreach($_sejour->_ref_consultations as $_consult) {
+    $_consult->getType();
   }
-  foreach($patient->_ref_sejours[$key]->_ref_operations as $keyOp => $op) {
-    $patient->_ref_sejours[$key]->_ref_operations[$keyOp]->loadRefsFwd();
+  foreach($_sejour->_ref_operations as $_op) {
+    $_op->loadRefsFwd();
   }
 }
-foreach($patient->_ref_consultations as $key => $consult) {
-	if ($patient->_ref_consultations[$key]->annule || $patient->_ref_consultations[$key]->sejour_id) {
-		unset($patient->_ref_consultations[$key]);
+foreach($patient->_ref_consultations as $_key => $_consult) {
+	if ($_consult->annule || $_consult->sejour_id) {
+		unset($patient->_ref_consultations[$_key]);
 		continue;
 	}
-  $patient->_ref_consultations[$key]->loadRefsFwd();
-  $patient->_ref_consultations[$key]->loadRefPraticien();
-  $patient->_ref_consultations[$key]->_ref_plageconsult->loadRefsFwd();
+  $_consult->loadRefsFwd();
+  $_consult->getType();
+  $_consult->loadRefPraticien();
+  $_consult->_ref_plageconsult->loadRefsFwd();
 }
 
 if ($can->read) {

@@ -8,7 +8,7 @@
   <tr>
     <td class="halfPane">
       <fieldset>
-        <legend>{{tr}}CFile{{/tr}} - {{tr}}CConsultation{{/tr}}</legend>            
+        <legend>{{tr}}CFile{{/tr}} - {{tr}}{{$consult->_class_name}}{{/tr}}</legend>            
         <div id="files-fdr">
           <script type="text/javascript">
             File.register('{{$consult->_id}}','{{$consult->_class_name}}', 'files-fdr');
@@ -17,10 +17,10 @@
       </fieldset>
   	</td>
   	<td class="halfPane">
+  	  {{mb_ternary var=object test=$consult->_is_anesth value=$consult->_ref_consult_anesth other=$consult}}
       <fieldset>
-        <legend>{{tr}}CCompteRendu{{/tr}} - {{tr}}CConsultation{{/tr}}</legend>            
-        <div id="documents-fdr"> 
-          {{mb_ternary var=object test=$consult->_is_anesth value=$consult->_ref_consult_anesth other=$consult}}
+        <legend>{{tr}}CCompteRendu{{/tr}} - {{tr}}{{$object->_class_name}}{{/tr}}</legend>            
+        <div id="documents-fdr">
           {{mb_include_script module="dPcompteRendu" script="document"}}
           <script type="text/javascript">
             Document.register('{{$object->_id}}','{{$object->_class_name}}','{{$consult->_praticien_id}}','documents-fdr');

@@ -1,7 +1,7 @@
 {{main}}
   var url = new Url("dPfiles", "ajax_category_autocomplete");
   url.addParam("object_class", "{{$object->_class_name}}");
-  url.autoComplete('addFastFile_keywords_category', '', {
+  url.autoComplete(getForm('addFastFile').keywords_category, '', {
           minChars: 1,
           dropdown: true,
           width: "100px"

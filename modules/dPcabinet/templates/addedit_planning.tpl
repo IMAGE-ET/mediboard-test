@@ -1,9 +1,16 @@
 <!-- $Id$ -->
 
+
+
 {{mb_include_script module="dPpatients" script="pat_selector"}}
 {{mb_include_script module="dPcabinet" script="plage_selector"}}
 {{mb_include_script module="dPcompteRendu" script="document"}}
 {{mb_include_script module="dPcompteRendu" script="modele_selector"}}
+{{mb_include_script module="dPcabinet" script="file"}}
+{{if $consult->_id}}
+  {{mb_ternary var=object_consult test=$consult->_is_anesth value=$consult->_ref_consult_anesth other=$consult}}
+  {{mb_include module="dPFiles" template="yoplet_uploader" object=$object_consult}}
+{{/if}}
 {{assign var=attach_consult_sejour value=$conf.dPcabinet.CConsultation.attach_consult_sejour}}
 <script type="text/javascript">
 
@@ -35,7 +42,6 @@ function changePause(){
     oForm._pat_name.value = "";
     $("viewPatient").hide();
     $("infoPat").update("");
-    $("clickPat").update("Infos patient (indisponibles)");
   }else{
     $("viewPatient").show();
   }
@@ -128,11 +134,15 @@ Main.add(function () {
 
   requestInfoPat();
 
-  {{if $plageConsult->plageconsult_id && !$consult->consultation_id}}
-  oForm.plageconsult_id.value = {{$plageConsult->plageconsult_id}};
+  {{if $plageConsult->_id && !$consult->_id}}
+  oForm.plageconsult_id.value = {{$plageConsult->_id}};
   oForm.chir_id.value = {{$plageConsult->chir_id}};
   refreshListCategorie({{$plageConsult->chir_id}});
   PlageConsultSelector.init();
+  {{/if}}
+  
+  {{if $consult->_id && $consult->patient_id}}
+  $("print_fiche_consult").disabled = "";
   {{/if}}
 });
 
@@ -180,7 +190,7 @@ Main.add(function () {
     <th class="category cancelled" colspan="3">{{tr}}CConsultation-annule{{/tr}}</th>
   </tr>
   {{/if}}
-  {{if $consult->_id && !$can->admin && $consult->_datetime < $today}}
+  {{if $consult->_id && $consult->_datetime < $today}}
   <tr>
     <td colspan="3">
       <div class="small-info">Vous ne pouvez pas modifier une consultation passée, veuillez contacter un administrateur</div>
@@ -433,7 +443,7 @@ Main.add(function () {
               {{tr}}Delete{{/tr}}
             </button>
             {{/if}}
-            <button class="print" type="button" {{if !$consult->patient_id}}disabled="disabled"{{/if}}onclick="printForm();">
+            <button class="print" id="print_fiche_consult" type="button" {{if !$consult->patient_id}}disabled="disabled"{{/if}}onclick="printForm();">
               {{tr}}Print{{/tr}}
             </button>
           {{else}}
@@ -451,23 +461,30 @@ Main.add(function () {
 
 <table class="form">
   <tr>
-    <th id="clickPat" class="category" style="width: 50%">
-      Infos patient
-    </th>
-    <th class="category" style="width: 50%">
-      Documents
-    </th>
-  </tr>
-  
-  <tr>
-    <td id="infoPat" class="text"></td>
-    
-    <td id="documents">
-    	{{if $consult->_id}}
-			{{mb_ternary var=object test=$consult->_is_anesth value=$consult->_ref_consult_anesth other=$consult}}
-      <script type="text/javascript">
-      	Document.register('{{$object->_id}}','{{$object->_class_name}}','{{$consult->_praticien_id}}','documents');
-      </script>
+    <td class="halfPane" style="width: 50%;">
+      <fieldSet>
+        <legend>Infos patient</legend>
+        <div class="text" id="infoPat"></div>
+      </fieldSet>
+    </td>
+    <td class="halfPane">
+      {{if $consult->_id}}
+      <fieldset>
+        <legend>{{tr}}CCompteRendu{{/tr}} - {{tr}}{{$object_consult->_class_name}}{{/tr}}</legend>
+        <div id="documents">
+          <script type="text/javascript">
+            Document.register('{{$object_consult->_id}}','{{$object_consult->_class_name}}','{{$consult->_praticien_id}}','documents');
+          </script>
+        </div>
+      </fieldset>
+      <fieldset>
+        <legend>{{tr}}CFile{{/tr}} - {{tr}}{{$consult->_class_name}}{{/tr}}</legend>            
+        <div id="files">
+          <script type="text/javascript">
+            File.register('{{$consult->_id}}','{{$consult->_class_name}}', 'files');
+          </script>
+        </div>
+      </fieldset>
       {{/if}}
     </td>
   </tr>
