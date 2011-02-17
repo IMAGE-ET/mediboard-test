@@ -11,17 +11,18 @@
 CAppUI::requireSystemClass('mbobject');
 
 class CMbMetaObject extends CMbObject {
-  // DB Fields	
   var $object_id    = null;
   var $object_class = null;
 
-  // Object References
+	/**
+	 * @var CMbObject
+	 */
   var $_ref_object  = null;
   
   function getProps() {
   	$specs = parent::getProps();
     $specs["object_id"]    = "ref notNull class|CMbObject meta|object_class";
-    $specs["object_class"] = "str notNull show|0";
+    $specs["object_class"] = "str notNull class show|0";
     return $specs;
   }
     
@@ -33,6 +34,8 @@ class CMbMetaObject extends CMbObject {
   
   /**
    * Load target of meta object
+   * 
+   * @return CMbObject
    */
   function loadTargetObject($cache = true) {
     if ($this->_ref_object || !$this->object_class) {

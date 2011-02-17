@@ -49,10 +49,16 @@ var Tag = {
       table.select('tbody.tag-'+tagId).invoke("hide");
     }
   },
-	loadElements: function(node, params) {
+	loadElements: function(node) {
     node = $(node);
 		
 		var row = node.up('tbody');
+    var table = row.up('table');
+		var columns = table.getAttribute("data-columns");
+		
+		if (columns) {
+			columns = columns.split(",");
+		}
 		
 		// Don't load if the row is closed
 		if (!row.hasClassName("opened")) return;
@@ -60,7 +66,8 @@ var Tag = {
 		var nextRow = row.next('tbody');
 		var insertAfter = ((nextRow && nextRow.getAttribute("data-tag_id")) || !nextRow);
 		var insertion, target;
-		var offset = node.previousSiblings().length + 2;
+		var offset = parseInt(node.style.marginLeft)+18;
+		var tagId = row.getAttribute("data-tag_id");
 		
 		if (insertAfter) {
 			insertion = "after";
@@ -71,18 +78,24 @@ var Tag = {
       target = nextRow;
 		}
 		
-		var url = new Url('system', 'ajax_ping');
+		var url = new Url('system', 'ajax_list_objects_by_tag');
+		url.addParam("tag_id", tagId);
+		
+		if (columns && columns.length) {
+			url.addParam("col[]", columns, true);
+		}
+		
 		url.requestUpdate(target, {
 			insertion: insertion, 
 			onComplete: function(){
 				var tbody = row.next('tbody');
-				var tagId = row.getAttribute("data-tag_id");
+				
 				tbody.className = row.className;
 				tbody.addClassName('tag-'+tagId);
 				tbody.setAttribute("data-parent_tag_id", tagId);
 				
 				var firstCells = tbody.select("td:first-of-type");
-				firstCells.invoke("setStyle", {paddingLeft: (offset*18)+"px"});
+				firstCells.invoke("setStyle", {paddingLeft: offset+"px"});
 			}
 		});
 	}

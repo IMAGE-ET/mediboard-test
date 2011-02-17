@@ -37,6 +37,7 @@ class CTag extends CMbObject {
   function getBackProps() {
     $backProps = parent::getBackProps();
     $backProps["child_tags"] = "CTag parent_id";
+    $backProps["items"] = "CTagItem tag_id";
     return $backProps;
   }
 
@@ -44,6 +45,20 @@ class CTag extends CMbObject {
     parent::updateFormFields();
 		$this->_view = $this->name;
   }
+	
+	function loadRefItems(){
+		return $this->_ref_items = $this->loadBackRefs("items");
+	}
+  
+  function loadRefParent(){
+    return $this->_ref_parent = $this->loadFwdRef("parent_id");
+  }
+	
+	function getObjects(){
+		$items = $this->loadRefItems();
+		CMbArray::invoke($items, "loadTargetObject");
+		return CMbArray::pluck($items, "_ref_object");
+	}
 	
 	static function getTree(CMbObject $object, CTag $parent = null, &$tree = array()) {
 		$object_class = $object->_class_name;

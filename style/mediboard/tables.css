@@ -183,6 +183,11 @@ table.tbl th {
   border: 1px solid #ccc;
 }
 
+table.tbl td.empty {
+  font-style: italic;
+  color: #999;
+}
+
 table.tbl th {
   background-color: #bbb;
   padding: 2px;
@@ -525,21 +530,11 @@ td.redefined {
 }
 
 /** Tree grid **/
-.treegrid .tree-spacer,
-.treegrid .tree-folding {
-	display: inline-block;
-}
-
-.treegrid .tree-spacer {
-  float: left;
-  height: 1px;
-  width: 18px;
-}
-
 .treegrid .tree-folding {
   background-image: url(images/buttons/tree-folding.png);
   background-repeat: no-repeat;
   padding-left: 16px;
+	font-weight: bold;
 }
 
 /*.treegrid .tree-folding:before {

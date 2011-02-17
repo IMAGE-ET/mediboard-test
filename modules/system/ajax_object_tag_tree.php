@@ -10,8 +10,7 @@
 
 $object_class = CValue::get("object_class");
 $parent_tag_id = CValue::get("parent_tag_id");
-$columns = CValue::get("columns", 2);
-
+$columns = CValue::get("col");
 
 $parent_tag = new CTag();
 $parent_tag->load($parent_tag_id);

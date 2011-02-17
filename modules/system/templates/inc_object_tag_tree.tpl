@@ -1,9 +1,18 @@
+{{math assign=colspan equation="x+1" x=$columns|@count}}
+
 {{if $root}}
-  <script type="text/javascript">
-  </script>
-	<table class="main tbl treegrid">
+
+	{{if $columns|is_array}}
+	  {{assign var=_columns value=","|implode:$columns}}
+	{{else}}
+	  {{assign var=_columns value=""}}
+	{{/if}}
+	
+	<table class="main tbl treegrid" data-columns="{{$_columns}}">
 		<tr>
-			<th colspan="{{$columns}}">{{tr}}{{$object_class}}{{/tr}}</th>
+			<th colspan="{{$colspan}}">
+				{{tr}}{{$object_class}}{{/tr}}
+			</th>
 		</tr>
 {{/if}}
 
@@ -19,12 +28,9 @@
 				 style="{{if !$root}}display: none;{{/if}}"
 				 >
 	  <tr>
-	  	<td colspan="{{$columns}}">
-			  {{section loop=$level name=level}}
-				  <div class="tree-spacer"> </div>
-				{{/section}}
+	  	<td colspan="{{$colspan}}">
 				
-				<a href="#1" class="tree-folding" onclick="$(this).up('tbody').toggleClassName('opened'); Tag.setNodeVisibility(this); Tag.loadElements(this); return false;"> 
+				<a href="#1" style="margin-left: {{$level*18}}px;" class="tree-folding" onclick="$(this).up('tbody').toggleClassName('opened'); Tag.setNodeVisibility(this); Tag.loadElements(this); return false;">
 				  {{$_tag.parent}}
 				</a>
 			</td>
