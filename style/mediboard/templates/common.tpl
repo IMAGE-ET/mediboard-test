@@ -24,6 +24,7 @@
   <!-- iOS specific -->
   {{* Can't use the "apple-mobile-web-app-capable" meta tags because any hyperlink will be opened in Safari *}}
   <link rel="apple-touch-icon" href="images/icons/apple-touch-icon.png?{{$version.build}}" />
+	<meta name="format-detection" content="telephone=no" />
   
   <!-- IE9 specific JumpLists -->
   {{if $browser.name == "msie"}}

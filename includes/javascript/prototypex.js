@@ -727,4 +727,12 @@ Element.warnDuplicates = function(){
     Element._duplicates = Element._duplicates.concat(dups);
     console.error("Nested form: ", dups);
   }
+	
+	if (!Prototype.Browser.IE) {
+		dups = $$("form:not([method]), form[method='']");
+		if (dups.length && !Element._duplicates.intersect(dups).length) {
+			Element._duplicates = Element._duplicates.concat(dups);
+			console.error("Method-less forms: ", dups);
+		}
+	}
 }
