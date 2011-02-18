@@ -40,6 +40,7 @@
     <!-- <th>Sortie<br />de bloc</th>         -->
     <th>Retour<br />de bloc</th>
     <th>Sortie<br />établissement</th>
+    <th>Temps écoulé</th>
   </tr>
 	{{foreach from=$sejours item=_sejour}}
 		<tr>
@@ -66,6 +67,7 @@
 		  <!-- <td style="text-align: center;">{{$_sejour->_ref_last_operation->entree_reveil|date_format:$conf.time}}</td> -->
 		  <td style="text-align: center;">{{$_sejour->_ref_last_operation->sortie_reveil|date_format:$conf.time}}</td>
 		  <td style="text-align: center;">{{$_sejour->sortie_reelle|date_format:$conf.time}}</td>
+      <td style="text-align: center;">{{$_sejour->_duree|date_format:$conf.time}}</td></td>
 		</tr>
 	{{/foreach}}
 </table>
