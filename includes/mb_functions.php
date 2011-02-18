@@ -818,7 +818,7 @@ function mb_crc32($str) {
   $crc = crc32($str);
 
   // if 32bit platform
-  if (PHP_INT_MAX <= pow(2, 31)-1) {
+  if (PHP_INT_MAX <= pow(2, 31)-1 && $crc < 0) {
     $crc += pow(2, 32);
   }
   
