@@ -436,11 +436,9 @@ class CFile extends CDocumentItem {
     header("MIME-Version: 1.0");
     header("Content-length: {$this->file_size}");
     header("Content-type: $this->file_type");
-    if ($_SESSION['browser']['name'] == 'firefox') {
-      header("Content-disposition: attachment; filename=\"".$this->file_name."\"");  
-    } else {
-      header("Content-disposition: inline; filename=\"".$this->file_name."\"");
-    }
+    header("Accept-Ranges: bytes");
+    header("Content-disposition: inline; filename=\"".$this->file_name."\"");
+    
     echo file_get_contents($this->_file_path);
   }
 }
