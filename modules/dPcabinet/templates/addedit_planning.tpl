@@ -9,7 +9,7 @@
 {{mb_include_script module="dPcabinet" script="file"}}
 {{if $consult->_id}}
   {{mb_ternary var=object_consult test=$consult->_is_anesth value=$consult->_ref_consult_anesth other=$consult}}
-  {{mb_include module="dPFiles" template="yoplet_uploader" object=$object_consult}}
+  {{mb_include module="dPfiles" template="yoplet_uploader" object=$object_consult}}
 {{/if}}
 {{assign var=attach_consult_sejour value=$conf.dPcabinet.CConsultation.attach_consult_sejour}}
 <script type="text/javascript">
