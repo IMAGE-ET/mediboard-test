@@ -69,13 +69,17 @@ function submitSejRpuConsult() {
   }
 }
 
-function initFields(mode_sortie){
-  ContraintesRPU.updateDestination(mode_sortie, true);
-  ContraintesRPU.updateOrientation(mode_sortie, true); 
-  $('etablissement_sortie_transfert').setVisible(mode_sortie == "transfert");
-  $('service_sortie_transfert'      ).setVisible(mode_sortie == "mutation");
-  $('commentaires_sortie'           ).setVisible(mode_sortie && mode_sortie != "normal");
+Fields = {
+  init: function(mode_sortie) {
+	  ContraintesRPU.updateDestination(mode_sortie, true);
+	  ContraintesRPU.updateOrientation(mode_sortie, true); 
+	  $('etablissement_sortie_transfert').setVisible(mode_sortie == "transfert");
+	  $('service_sortie_transfert'      ).setVisible(mode_sortie == "mutation");
+	  $('commentaires_sortie'           ).setVisible(mode_sortie && mode_sortie != "normal");
+	}
 }
+
+function 
 
 function printDossier(id) {
   var url = new Url("dPurgences", "print_dossier");
