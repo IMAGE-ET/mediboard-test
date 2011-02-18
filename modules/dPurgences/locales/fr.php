@@ -403,6 +403,7 @@ $locales['extract-rpu'] = 'RPU';
 $locales['extract-rpu-desc'] = 'Extraction des données RPU';
 $locales['extract-urg'] = 'Urgences';
 $locales['extract-urg-desc'] = 'Extraction des données Urgences';
+$locales['mod-dPurgences-tab-ajax_edit_sortie'] = 'Modification de la sortie';
 $locales['mod-dPurgences-tab-configure'] = 'Configuration';
 $locales['mod-dPurgences-tab-download_echange'] = 'Téléchargement d\'échanges';
 $locales['mod-dPurgences-tab-edit_consultation'] = 'Consultation médicale';

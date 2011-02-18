@@ -64,9 +64,6 @@ $traitement->loadAides($user->_id);
 $antecedent = new CAntecedent();
 $antecedent->loadAides($user->_id);
 
-// Chargement du praticien courant
-$userSel = $user;
-
 // Contraintes sur le mode d'entree / provenance
 $contrainteProvenance[6] = array("", 1, 2, 3, 4);
 $contrainteProvenance[7] = array("", 1, 2, 3, 4);
@@ -81,7 +78,7 @@ $smarty->assign("group"               , $group);
 $smarty->assign("line"                , new CPrescriptionLineMedicament());
 $smarty->assign("listServicesUrgence" , $listServicesUrgence);
 $smarty->assign("contrainteProvenance", $contrainteProvenance);
-$smarty->assign("userSel"             , $userSel);
+$smarty->assign("userSel"             , $user);
 $smarty->assign("today"               , mbDate());
 $smarty->assign("traitement"          , $traitement);
 $smarty->assign("antecedent"          , $antecedent);

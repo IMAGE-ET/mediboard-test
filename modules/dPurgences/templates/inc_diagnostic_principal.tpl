@@ -30,18 +30,18 @@
 	  submitSejour('{{$sejour->_id}}');
   }
   Main.add(function() {
-      var url = new Url("dPcim10", "ajax_code_cim10_autocomplete");
-      url.addParam("sejour_id", '{{$sejour->_id}}');
-      url.autoComplete(getForm("editSejour").keywords_code, '', {
-        minChars: 1,
-        dropdown: true,
-        select: "code",
-        width: "250px",
-        afterUpdateElement: function(oHidden) {
-    	    $V(getForm('editSejour').DP, oHidden.value);
-    	    submitSejour('{{$sejour->_id}}');
-        }
-      });
+    var url = new Url("dPcim10", "ajax_code_cim10_autocomplete");
+    url.addParam("sejour_id", '{{$sejour->_id}}');
+    url.autoComplete(getForm("editSejour").keywords_code, '', {
+      minChars: 1,
+      dropdown: true,
+      select: "code",
+      width: "250px",
+      afterUpdateElement: function(oHidden) {
+  	    $V(getForm('editSejour').DP, oHidden.value);
+  	    submitSejour('{{$sejour->_id}}');
+      }
+    });
   });
 </script>
  
@@ -61,5 +61,7 @@
     {{tr}}button-CCodeCIM10-choix{{/tr}}
   </button>
   <button type="button" class="cancel notext" onclick="deleteCodeCim10();">
+  	{{tr}}Delete{{/tr}}
+  </button>
 </td>
 

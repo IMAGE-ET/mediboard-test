@@ -21,95 +21,33 @@ Main.add(function () {
   }, 60);
 });
 
-function modeSortieDest(mode_sortie, rpu_id) {
-  var oFormRPU = document.forms["editRPU-" + rpu_id]; 
-  
-  // Recuperation du tableau de contrainte modeSortie/Destination en JSON
-  var contrainteDestination = {{$contrainteDestination|@json}};
- 
-  if(mode_sortie == ""){
-    $A(oFormRPU.destination).each( function(input) {
-      input.disabled = false;
-    });
-    return;
-  }
-  
-  if(!contrainteDestination[mode_sortie]){
-    $A(oFormRPU.destination).each( function(input) {
-      input.disabled = true;
-    });
-    return;
-  }
-  
-  var _contrainteDestination = contrainteDestination[mode_sortie];
-  $A(oFormRPU.destination).each( function(input) {
-    input.disabled = !_contrainteDestination.include(input.value);
-  });
-}
-
-function modeSortieOrient(mode_sortie, rpu_id){
-  var oFormRPU = document.forms["editRPU-" + rpu_id]; 
-  
-  // Recuperation du tableau de contrainte modeSortie/Orientation en JSON
-  var contrainteOrientation = {{$contrainteOrientation|@json}}
-  
-  if(mode_sortie == ""){
-    $A(oFormRPU.orientation).each( function(input) {
-      input.disabled = false;
-    });
-    return;
-  }
-  
-  if(!contrainteOrientation[mode_sortie]){
-    $A(oFormRPU.orientation).each( function(input) {
-      input.disabled = true;
-    });
-    return;
-  }
-  
-  var _contrainteOrientation = contrainteOrientation[mode_sortie];
-  $A(oFormRPU.orientation).each( function(input) {
-    input.disabled = !_contrainteOrientation.include(input.value);
-  });
-}
-
-function loadTransfert(mode_sortie, sejour_id){
-  $('etablissement_sortie_transfert_'+sejour_id).setVisible(mode_sortie == "transfert");
-}
-
-function loadServiceMutation(mode_sortie, sejour_id){
-  $('service_sortie_transfert_'+sejour_id).setVisible(mode_sortie == "mutation");
-}
-
-function initFields(rpu_id,sejour_id, mode_sortie){
-  var oForm = document.forms['editRPU-'+rpu_id];
-  oForm.destination.value = '';
-  oForm.orientation.value = ''; 
-  modeSortieDest(mode_sortie, rpu_id); 
-  modeSortieOrient(mode_sortie, rpu_id); 
-  loadTransfert(mode_sortie, sejour_id);
-	loadServiceMutation(mode_sortie, sejour_id);
-}
-
 function validCotation(consutation_id) {
   return onSubmitFormAjax(getForm('validCotation-'+consutation_id));
 }
 
-refreshSortie = function(button, rpu_id){
-  var line = button.up('tr').up('tr');
-  var url = new Url("dPurgences", "ajax_refresh_sortie");
-  url.addParam("rpu_id", rpu_id);
-  url.requestUpdate(line, {onComplete: function(){refreshExecuter.resume()}});
-}
-
-function cancelSortie(button, rpu_id) {
-  var form = button.form;
-  form.mode_sortie.value = "";
-  form.etablissement_transfert_id.value = "";
-  form.sortie_reelle.value = "";
-  return onSubmitFormAjax(form, {
-    onComplete: refreshSortie.curry(button, rpu_id)
-  });
+Sortie = {
+  modal: null,
+	refresh: function(rpu_id) {
+	  var url = new Url("dPurgences", "ajax_refresh_sortie");
+	  url.addParam("rpu_id", rpu_id);
+	  url.requestUpdate('CRPU-'+rpu_id, {onComplete: function(){refreshExecuter.resume()}});
+	},
+	
+	edit: function(rpu_id) {
+	  refreshExecuter.stop();
+	  var url = new Url("dPurgences", "ajax_edit_sortie")
+    url.addParam("rpu_id", rpu_id);
+		url.requestModal(500, 200);
+    this.modal = url.modaleObject;
+	},
+	
+	close: function() {
+    refreshExecuter.resume();
+	  if (this.modal) {
+		  this.modal.close();
+			this.modal = null;
+		}
+	}
 }
 
 function filterPatient(input, indicator) {
@@ -129,12 +67,6 @@ function filterPatient(input, indicator) {
       p.up("tr").hide();
     }
   });
-}
-
-// Fonction appelée dans inc_vw_etab_externe qui submit le sejour dans le cas de "inc_vw_rpu.tpl"
-// Dans la sortie, on ne veut pas déclencher de submit
-function submitSejour(){
- // Ne rien faire
 }
 
 </script>
@@ -161,7 +93,7 @@ function submitSejour(){
       Type d'affichage
       <form name="selView" action="?m=dPurgences&amp;tab=vw_sortie_rpu" method="post">
         <select name="aff_sortie" onchange="this.form.submit()">
-          <option value="tous" {{if $aff_sortie == "tous"}}selected = "selected"{{/if}}>Tous</option>
+          <option value="tous"   {{if $aff_sortie == "tous"  }} selected = "selected" {{/if}}>Tous</option>
           <option value="sortie" {{if $aff_sortie == "sortie"}} selected = "selected" {{/if}}>Sortie à effectuer</option>
         </select>
       </form>
@@ -195,7 +127,7 @@ function submitSejour(){
   {{foreach from=$listSejours item=sejour}}
     {{assign var=rpu value=$sejour->_ref_rpu}}
     {{assign var=patient value=$sejour->_ref_patient}}
-    <tr {{if !$sejour->sortie_reelle && $sejour->_veille}}class="veille"{{/if}}>
+    <tr id="{{$rpu->_guid}}" {{if !$sejour->sortie_reelle && $sejour->_veille}} class="veille" {{/if}}>
       {{mb_include module=dPurgences template=inc_sortie_rpu}}
     </tr>
   {{foreachelse}}

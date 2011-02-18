@@ -16,17 +16,6 @@ ContraintesRPU.contraintesProvenance  = {{$contrainteProvenance|@json}};
 ContraintesRPU.contraintesDestination = {{$contrainteDestination|@json}};
 ContraintesRPU.contraintesOrientation = {{$contrainteOrientation|@json}};
 
-function submitSejour(sejour_id){
-  var oForm = document.editSejour;
-  submitFormAjax(oForm, 'systemMsg',
-    { onComplete: function() {
-        if (sejour_id != null) {
-          reloadDiagnostic(sejour_id, 1);
-        }
-    }
-  });
-} 
-
 function redirect() {
   //document.location.href="?m=dPurgences&tab=vw_idx_rpu";
 }
@@ -54,6 +43,15 @@ function submitConsultWithChrono(chrono, callback) {
   }});
 }
 
+function submitSejour(sejour_id) {
+  var oForm = document.editSejour;
+  return onSubmitFormAjax(oForm, { onComplete: function() {
+    if (sejour_id != null) {
+      reloadDiagnostic(sejour_id, 1);
+    }
+  }});
+} 
+
 function reloadSortieReelle() {
   var url = new Url("dPurgences", "ajax_sortie_reelle");
   url.addParam("sejour_id", getForm('editSortieReelle').elements.sejour_id.value);
@@ -70,7 +68,6 @@ function submitSejRpuConsult() {
     ); 
   }
 }
-
 
 function initFields(mode_sortie){
   ContraintesRPU.updateDestination(mode_sortie, true);
@@ -208,9 +205,11 @@ function showEtabEntreeTransfert(mode) {
         </form>
       </fieldset>
     </td>
+		
     <td>
       <fieldset>
         <legend>Prise en charge praticien</legend>
+				
         <form name="editRPUMotif" action="?" method="post" onsubmit="return onSubmitFormAjax(this);">
           <input type="hidden" name="dosql" value="do_rpu_aed" />
           <input type="hidden" name="m" value="dPurgences" />
@@ -239,69 +238,18 @@ function showEtabEntreeTransfert(mode) {
 									
                   new AideSaisie.AutoComplete(form.elements.motif, options);
                 {{/main}}
+								
                 {{mb_field object=$rpu field="motif" onchange="this.form.onsubmit();" class="autocomplete"}}
                 </td>
              </tr>
            </table>
          </form>
      
-         {{assign var=sejour value=$rpu->_ref_sejour}}
-         <form name="editSejour" action="?" method="post">
-           <input type="hidden" name="dosql" value="do_sejour_aed" />
-           <input type="hidden" name="m" value="dPplanningOp" />
-           <input type="hidden" name="del" value="0" />
-           <input type="hidden" name="sejour_id" value="{{$sejour->_id}}" />
-          
-            <table class="layout" style="width: 100%">
-            
-            {{if $can->admin}}
-            <!-- Sortie réelle uniquement pour les administrateurs -->
-            <tr>
-              <th>{{mb_label object=$sejour field=sortie_reelle}}</th>
-              <td>
-                {{mb_field object=$sejour field=sortie_reelle form=editSejour onchange="submitSejour();" register=true}}
-              </td> 
-            </tr>
-            {{/if}}
-  
-            <tr>
-              <th style="width: 120px;">{{mb_label object=$sejour field="mode_sortie"}}</th>
-              <td>
-                {{mb_field object=$sejour field="mode_sortie" emptyLabel="Choose" onchange="initFields(this.value); submitSejour();"}}
-                {{if !$rpu->mutation_sejour_id}}
-                  <input type="hidden" name="group_id" value="{{if $sejour->group_id}}{{$sejour->group_id}}{{else}}{{$g}}{{/if}}" />
-                {{else}}
-                  <strong>
-                    <a href="?m=dPplanningOp&tab=vw_edit_sejour&sejour_id={{$rpu->mutation_sejour_id}}">
-                      Hospitalisation dossier {{mb_include module=dPplanningOp template=inc_vw_numdos num_dossier=$rpu->_ref_sejour_mutation->_num_dossier}}
-                     </a> 
-                   </strong>
-                {{/if}}
-              </td>
-						</tr>
-						
-            <tr id="etablissement_sortie_transfert" {{if $sejour->mode_sortie != "transfert"}} style="display:none;" {{/if}}>
-            	<th>{{mb_label object=$sejour field="etablissement_transfert_id"}}</th>
-              <td>{{mb_field object=$sejour field="etablissement_transfert_id" form="editSejour" autocomplete="true,1,50,true,true" onchange="submitSejour();"}}</td>
-            </tr>
+		    {{assign var=sejour value=$rpu->_ref_sejour}}
+        {{mb_include template=inc_form_sortie}}
 
-            <tr id="service_sortie_transfert" {{if $sejour->mode_sortie != "mutation"}} style="display:none;" {{/if}}>
-            	<th>{{mb_label object=$sejour field="service_mutation_id"}}</th>
-							<td>{{mb_field object=$sejour field="service_mutation_id" form="editSejour" autocomplete="true,1,50,true,true" onchange="submitSejour();"}}</td>
-            </tr>
-						
-            <tr id="commentaires_sortie" {{if $sejour->mode_sortie == "" || $sejour->mode_sortie == "normal"}} style="display:none;" {{/if}}>
-              <th>{{mb_label object=$sejour field="commentaires_sortie"}}</th>
-              <td>{{mb_field object=$sejour field="commentaires_sortie"}}</td>
-            </tr>
-            
-            <!-- Diagnostic Principal -->
-            <tr id="dp_{{$sejour->_id}}">
-               {{mb_include module=dPurgences template=inc_diagnostic_principal}}
-             </tr>         
-          </table>
-        </form>
       </fieldset>
+
       <fieldset>
         <legend>Précisions sur la sortie</legend>
         <form name="editRPUDest" action="?" method="post" onsubmit="return onSubmitFormAjax(this);">
