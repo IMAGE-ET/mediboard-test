@@ -1434,6 +1434,7 @@ class CSejour extends CCodable {
     $template->addProperty("Sejour - Mode de sortie"          , $this->getFormattedValue("mode_sortie"));
     $template->addProperty("Sejour - Service de sortie"       , $this->getFormattedValue("service_mutation_id"));
     $template->addProperty("Sejour - Etablissement de sortie" , $this->getFormattedValue("etablissement_transfert_id"));
+    $template->addProperty("Sejour - Commentaires de sortie"  , $this->getFormattedValue("commentaires_sortie"));
     
     $this->loadRefPraticien();
     $template->addProperty("Hospitalisation - Praticien"    , "Dr ".$this->_ref_praticien->_view);
