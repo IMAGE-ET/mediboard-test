@@ -88,8 +88,9 @@ Main.add(function(){
 	  {{/if}}
   </span>
 
-	<select name="moment_unitaire_id" style="width: 75px;" onclick="completeSelect(this,'{{$line->_id}}','{{$type}}');">
-	  <option value="">&mdash; Moment</option>
+	<select name="moment_unitaire_id" style="width: 75px;" onmousedown="completeSelect(this,'{{$line->_id}}','{{$type}}');">
+	  <!-- Laisser ces &nbsp; a cause de IE qui va elargir la liste quand on clique dessus et elle va passer a la ligne (desolé!) -->
+    <option value="">&mdash; Moment &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; </option>
 	</select>
   
   <span id="foisPar{{$type}}{{$line->_id}}" style="display: none;">

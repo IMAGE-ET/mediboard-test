@@ -285,7 +285,7 @@ Main.add( function(){
 
 <form name="moment_unitaire">
   <select name="moment_unitaire_id" style="width: 150px; display: none;">  
-    <option value="">&mdash; Sélection du moment</option>
+    <option value="">&mdash; Moment</option>
    {{foreach from=$moments key=type_moment item=_moments}}
    <optgroup label="{{$type_moment}}">
    {{foreach from=$_moments item=moment}}

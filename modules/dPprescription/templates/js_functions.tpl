@@ -15,13 +15,14 @@ completeSelect = function(oSelect, line_id, type_elt){
                         window.opener.document.moment_unitaire.moment_unitaire_id :
                         document.moment_unitaire.moment_unitaire_id;
   
-  oFormPrise = document.forms['addPrise'+type_elt+line_id].show();          
-  if(oSelect.length == 1){
-    /*oSelect.down().remove();
-    $A(selectMoments.childNodes).each(function (optgroup) {
-      oSelect.appendChild(optgroup.cloneNode(true));
-    } );*/
-    oSelect.innerHTML = selectMoments.innerHTML;
+  oFormPrise = document.forms['addPrise'+type_elt+line_id].show();
+	
+  if(oSelect.options.length == 1){
+    oSelect.down().remove();
+    $A(selectMoments.childNodes).each(function (child) {
+      oSelect.appendChild(child.cloneNode(true));
+    });
+    //oSelect.innerHTML = selectMoments.innerHTML; // ne fonctionne pas sous IE
   }
 }
 
