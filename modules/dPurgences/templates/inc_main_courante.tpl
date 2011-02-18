@@ -114,7 +114,9 @@
       {{tr}}Cancelled{{/tr}}
     </td>
 		<td class="cancelled">
+		  {{if $rpu->_ref_consult->_id}}
       {{include file="inc_pec_praticien.tpl"}}
+			{{/if}}
     </td>
 
 	  {{else}}
