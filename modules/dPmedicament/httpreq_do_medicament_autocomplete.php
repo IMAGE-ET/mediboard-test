@@ -18,7 +18,7 @@ $fast_access         = CValue::post("fast_access", "0");
 $praticien_id        = CValue::post("praticien_id");
 $function_id         = CValue::post("function_id");
 $group_id            = CValue::post("group_id");
-$type                = CValue::post("type", " ");
+$type                = CValue::post("type", "");
 $livret_cabinet      = CValue::post("livret_cabinet", 0);
 
 $mbProduit = new CBcbProduit();
@@ -29,11 +29,13 @@ if($inLivret){
   if ($function_id == "") {
     $function_id = CAppUI::$user->function_id;
   }
-  if ($type && $type != "externe" && !$livret_cabinet) {
-    $code = abs(crc32(CProductStockGroup::getHostGroup(false)->_guid) - pow(2, 31));
+  // Livret de prescription 
+  if ($type == "externe") {
+    $code = CBcbProduit::getHash("CFunctions-".$function_id);
   }
+  // Livret thérapeutique de l'établissement
   else {
-    $code = abs(crc32("CFunctions-".$function_id) - pow(2, 31));
+    $code = CBcbProduit::getHash(CProductStockGroup::getHostGroup(false)->_guid);
   }
 }
 

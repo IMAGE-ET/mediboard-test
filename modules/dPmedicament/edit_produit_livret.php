@@ -24,7 +24,7 @@ else {
   $crc = CGroups::loadCurrent()->_guid;
 }
 
-$crc = abs(crc32($crc) - pow(2, 31));
+$crc = CBcbProduit::getHash($crc);
 
 // Chargement du produit
 $produit_livret = new CBcbProduitLivretTherapeutique();

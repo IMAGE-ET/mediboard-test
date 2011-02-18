@@ -26,7 +26,7 @@ else {
   $crc = CProductStockGroup::getHostGroup(false)->_guid;
 }
 
-$crc = abs(crc32($crc) - pow(2, 31));
+$crc = CBcbProduit::getHash($crc);
 
 $del = CValue::post("del");
 

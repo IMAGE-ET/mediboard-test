@@ -813,3 +813,14 @@ function get_remote_address(){
   
   return $address;
 }
+
+function mb_crc32($str) {
+  $crc = crc32($str);
+
+  // if 32bit platform
+  if (PHP_INT_MAX <= pow(2, 31)-1) {
+    $crc += pow(2, 32);
+  }
+  
+  return $crc;
+}
