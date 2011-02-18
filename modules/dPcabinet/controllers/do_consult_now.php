@@ -56,9 +56,6 @@ if(!$chir->_id) {
   CAppUI::setMsg("Vous devez choisir un praticien pour la consultation", UI_MSG_ERROR);
 }
 
-/*$day_now = strftime("%Y-%m-%d");
-$time_now = strftime("%H:%M:00");
-$hour_now = strftime("%H:00:00");*/
 
 $day_now  = mbTransformTime(null, $_datetime, "%Y-%m-%d");
 $time_now = mbTransformTime(null, $_datetime, "%H:%M:00");
@@ -126,6 +123,9 @@ $consult->duree = 1;
 $consult->chrono = CConsultation::PATIENT_ARRIVE;
 $consult->accident_travail = CValue::post("accident_travail");
 
+// Cas standard
+$consult->motif = CValue::post("motif", "Consultation immédiate");
+
 // Cas des urgences
 if ($sejour->type == "urg") {
   // Motif de la consultation
@@ -137,12 +137,7 @@ if ($sejour->type == "urg") {
   $consult->motif.= $sejour->_ref_rpu->diag_infirmier;
 } 
 
-// Cas standard
-else {
-  $consult->motif = "Consultation immédiate";
-}
-
-if($msg = $consult->store()) {
+if ($msg = $consult->store()) {
   CAppUI::setMsg($msg, UI_MSG_ERROR);
 }
 

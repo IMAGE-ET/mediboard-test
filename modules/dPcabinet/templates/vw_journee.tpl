@@ -46,7 +46,7 @@ Reconvocation = {
   
   submit: function() {
     var form = getForm('Create-Reconvocation');
-    return onSubmitFormAjax(form, { onComplete: Consultations.start.curry(5) });  
+    return onSubmitFormAjax(form, { onComplete: Consultations.start.curry(80) });  
   } 
 }
 </script>
@@ -70,6 +70,7 @@ Reconvocation = {
 					{{mb_include module=mediusers template=inc_options_mediuser list=$praticiens selected=$app->user_id}}
         </select>
         
+        <input type="hidden" name="motif" value="Reconvocation immédiate" />   
         <button type="submit" class="new">Reconvocation immédiate</button>
       </form>
 			
