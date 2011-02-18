@@ -52,6 +52,10 @@ class CFTP {
       throw new CMbException("CSourceFTP-call-undefined-method", $name);
     }
     
+    if ($function_name == "_init") {
+      return call_user_func_array(array($this, $function_name), $args);
+    }
+    
     $echange_ftp = new CExchangeFTP();
     $echange_ftp->date_echange = mbDateTime();
     $echange_ftp->emetteur     = CAppUI::conf("mb_id");
