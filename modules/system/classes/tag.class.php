@@ -14,6 +14,7 @@ class CTag extends CMbObject {
   var $parent_id    = null;
   var $object_class = null;
   var $name         = null;
+  var $color        = null;
   
   var $_ref_parent  = null;
   var $_ref_items   = null;
@@ -30,13 +31,14 @@ class CTag extends CMbObject {
     $props = parent::getProps();
     $props["parent_id"]    = "ref class|CTag";
     $props["object_class"] = "str class";
-    $props["name"]         = "str notNull";
+    $props["name"]         = "str notNull seekable";
+    $props["color"]        = "str maxLength|20";
     return $props;
   }
 
   function getBackProps() {
     $backProps = parent::getBackProps();
-    $backProps["child_tags"] = "CTag parent_id";
+    $backProps["children"] = "CTag parent_id";
     $backProps["items"] = "CTagItem tag_id";
     return $backProps;
   }
@@ -49,6 +51,14 @@ class CTag extends CMbObject {
 	function loadRefItems(){
 		return $this->_ref_items = $this->loadBackRefs("items");
 	}
+	
+	function loadRefChildren(){
+    return $this->_ref_children = $this->loadBackRefs("children");
+	}
+  
+  function countChildren(){
+    return $this->countBackRefs("children");
+  }
   
   function loadRefParent(){
     return $this->_ref_parent = $this->loadFwdRef("parent_id");

@@ -148,6 +148,8 @@ var AjaxResponse = {
   
   onLoaded: function(getData, performance) {
     try {
+			if (Prototype.Browser.IE) return;
+			
       // If Firebug or Chrome console
       if (!("_mediboard" in window.console)) {
         console.log(getData, " ", performance);

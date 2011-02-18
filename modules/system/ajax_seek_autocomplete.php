@@ -24,6 +24,10 @@ foreach($where as $key => $value) {
   $where[$key] = $ds->prepare("= %", $value);
 }
 
+if ($keywords == "") {
+  $keywords = "%";
+}
+
 $matches = $object->seek($keywords, $where, $limit);
 $template = null;
 

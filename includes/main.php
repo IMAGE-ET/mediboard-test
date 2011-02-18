@@ -71,6 +71,7 @@ CJSLoader::$files = array(
   "includes/javascript/aideSaisie.js",
   "includes/javascript/exObject.js",
   "includes/javascript/tag.js",
+  "includes/javascript/mbObject.js",
 
   "includes/javascript/mbmail.js",
 );

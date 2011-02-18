@@ -72,6 +72,7 @@ var Tag = {
 		if (insertAfter) {
 			insertion = "after";
 			target = row;
+			//target = row.insert({after: "<tbody><tr><td colspan='10'></td></tr></tbody>"}).next('tbody');
 		}
 		else {
 			return; // don't load if already loaded
@@ -98,5 +99,23 @@ var Tag = {
 				firstCells.invoke("setStyle", {paddingLeft: offset+"px"});
 			}
 		});
-	}
+	},
+  removeItem: function(tag_item_id, onComplete) {
+    var url = new Url().mergeParams({
+      "@class": "CTagItem",
+      tag_item_id: tag_item_id,
+      del: 1
+    })
+    .requestUpdate("systemMsg", {method: "post", onComplete: onComplete || function(){} });
+  },
+  bindTag: function(object_guid, tag_id, onComplete) {
+		var parts = object_guid.split("-");
+    var url = new Url().mergeParams({
+      "@class": "CTagItem",
+      tag_id: tag_id,
+      object_class: parts[0],
+      object_id: parts[1]
+    })
+    .requestUpdate("systemMsg", {method: "post", onComplete: onComplete || function(){} });
+  }
 };

@@ -41,5 +41,15 @@
 {{/foreach}}
 
 {{if $root}}
+	  <tbody data-tag_id="none-{{$object_class}}" class="tag-none">
+	    <tr>
+	      <td colspan="{{$colspan}}">
+	        
+	        <a href="#1" class="tree-folding" onclick="$(this).up('tbody').toggleClassName('opened'); Tag.setNodeVisibility(this); Tag.loadElements(this); return false;">
+	          Non classé
+	        </a>
+	      </td>
+	    </tr>
+	  </tbody>
   </table>
 {{/if}}

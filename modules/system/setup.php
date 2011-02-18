@@ -397,8 +397,13 @@ class CSetupsystem extends CSetup {
               ADD INDEX (`object_id`),
               ADD INDEX (`object_class`);";
     $this->addQuery($query);
+		
+		$this->makeRevision("1.0.44");
+		$query = "ALTER TABLE `tag` 
+              ADD `color` VARCHAR (20);";
+    $this->addQuery($query);
     
-    $this->mod_version = "1.0.44";
+    $this->mod_version = "1.0.45";
   }
 }
 ?>

@@ -944,6 +944,7 @@ table.active {
 	text-align: left;
 }
 
+/** Pagination **/
 .pagination {
   text-align: center; 
   font-weight: bold; 
@@ -990,15 +991,58 @@ table.active {
   color: #ccc;
 }
 
+/** Image thumbnails **/
 img.thumbnail {
   border: 1px solid #000;
-	padding: 1px;
-  -moz-box-shadow: 4px 4px 6px rgba(0, 0, 0, 0.4);  
+	padding: 1px;  
 	margin-top: 0.5em ;
   margin-bottom: 0.5em;
   cursor: pointer;
+  -moz-box-shadow: 4px 4px 6px rgba(0, 0, 0, 0.4);  
+  -wekit-box-shadow: 4px 4px 6px rgba(0, 0, 0, 0.4);  
+  box-shadow: 4px 4px 6px rgba(0, 0, 0, 0.4);
 }
+
 img.thumbnail:hover {
   border: 2px solid #000;
   padding: 0px;
+}
+
+/** Object tags **/
+ul.tags {
+  list-style-type: none;
+	margin: 0;
+	padding: 0;
+}
+
+ul.tags > li {
+	border: 1px solid #ccc;
+	background: #fff;
+	padding: 1px 3px 1px 5px; 
+	-webkit-border-radius: 4px;
+	cursor: pointer;
+	display: inline-block;
+	margin-top: 2px;
+}
+
+ul.tags > li:hover {
+  border-color: #999;
+	text-decoration: none;
+}
+
+ul.tags > li button.delete {
+	background: transparent url(images/buttons/delete-tiny.png) no-repeat top center;
+	border: none;
+	width: 11px;
+  height: 11px;
+	padding: 0;
+}
+
+ul.tags > li button.delete:hover {
+  background: transparent url(images/buttons/delete-tiny.png) no-repeat center center;
+}
+
+ul.tags > li.input {
+  border: none;
+	padding: 0;
 }
