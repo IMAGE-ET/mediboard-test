@@ -79,8 +79,9 @@ var ElementChecker = {
   
   castCompareValues: function(sTargetElement) {
     this.oTargetElement = this.oElement.form.elements[sTargetElement];
-    if (!this.oTargetElement)
-      printf("Elément cible invalide ou inexistant (nom = %s)", sTargetElement);
+    if (!this.oTargetElement) {
+      return printf("Elément cible pour comparaison invalide ou inexistant (nom = %s)", sTargetElement);
+		}
     
     var fCaster = this.getCastFunction();
   	this.oCompare = {
@@ -147,7 +148,7 @@ Object.extend(ElementChecker, {
       var sTargetElement = this.assertSingleArg("moreThan");
       this.addError("moreThan", this.castCompareValues(sTargetElement));
       
-      if (this.oCompare.source && this.oCompare.target && (this.oCompare.source <= this.oCompare.target))
+      if (this.oCompare && this.oCompare.source && this.oCompare.target && (this.oCompare.source <= this.oCompare.target))
         this.addError("moreThan", printf("'%s' n'est pas strictement supérieur à '%s'", this.sValue,  this.oTargetElement.value));
     },
     
@@ -156,7 +157,7 @@ Object.extend(ElementChecker, {
       var sTargetElement = this.assertSingleArg("moreEquals");
       this.addError("moreEquals", this.castCompareValues(sTargetElement));
       
-      if (this.oCompare.source && this.oCompare.target && (this.oCompare.source < this.oCompare.target))
+      if (this.oCompare && this.oCompare.source && this.oCompare.target && (this.oCompare.source < this.oCompare.target))
         this.addError("moreEquals", printf("'%s' n'est pas supérieur ou égal à '%s'", this.sValue,  this.oTargetElement.value));
     },
     
@@ -165,7 +166,7 @@ Object.extend(ElementChecker, {
       var sTargetElement = this.assertSingleArg("sameAs");
       this.addError("sameAs", this.castCompareValues(sTargetElement));
       
-      if (this.oCompare.source && this.oCompare.target && (this.oCompare.source != this.oCompare.target)) {
+      if (this.oCompare && this.oCompare.source && this.oCompare.target && (this.oCompare.source != this.oCompare.target)) {
         var oTargetLabel = Element.getLabel(this.oTargetElement);
         var sTargetLabel = oTargetLabel ? oTargetLabel.innerHTML : this.oTargetElement.name;
         this.addError("sameAs", printf("Doit être identique à [%s]", sTargetLabel.strip()));
@@ -177,7 +178,7 @@ Object.extend(ElementChecker, {
       var sTargetElement = this.assertSingleArg("notContaining");
       this.addError("notContaining", this.castCompareValues(sTargetElement));
 
-      if (this.oCompare.source && this.oCompare.target && this.oCompare.source.match(this.oCompare.target)) {
+      if (this.oCompare && this.oCompare.source && this.oCompare.target && this.oCompare.source.match(this.oCompare.target)) {
         var oTargetLabel = Element.getLabel(this.oTargetElement);
         var sTargetLabel = oTargetLabel ? oTargetLabel.innerHTML : '"'+this.oCompare.target+'"';
         this.addError("notContaining", printf("Ne doit pas contenir [%s]", sTargetLabel.strip()));
@@ -189,7 +190,7 @@ Object.extend(ElementChecker, {
       var sTargetElement = this.assertSingleArg("notNear");
       this.addError("notNear", this.castCompareValues(sTargetElement));
       
-      if (this.oCompare.source && this.oCompare.target && levenshtein(this.oCompare.target, this.oCompare.source) < 3) {
+      if (this.oCompare && this.oCompare.source && this.oCompare.target && levenshtein(this.oCompare.target, this.oCompare.source) < 3) {
         var oTargetLabel = Element.getLabel(this.oTargetElement);
         var sTargetLabel = oTargetLabel ? oTargetLabel.innerHTML : '"'+this.oCompare.target+'"';
         this.addError("notNear", printf("Ressemble trop à [%s]", sTargetLabel.strip()));
