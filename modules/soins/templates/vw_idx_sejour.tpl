@@ -260,7 +260,7 @@ printDossierComplet = function(){
 <table class="main">
   <tr>
     <td rowspan="3">
-      <form name="form_prescription" action="">
+      <form name="form_prescription" action="" method="get">
         <input type="hidden" name="sejour_id" value="{{$object->_id}}" />
       </form>
       <table class="form" id="left-column" style="width:240px;">
