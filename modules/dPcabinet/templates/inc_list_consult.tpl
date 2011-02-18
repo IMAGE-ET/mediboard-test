@@ -1,7 +1,7 @@
 <script type="text/javascript">
 // Notification de l'arrivée du patient
-if (!window.updateConsultations) {
-  updateConsultations = function() {
+if (!window.Consultations) {
+  Consultations.start = function() {
   	window.location.reload();
   }
 }
@@ -9,7 +9,7 @@ if (!window.updateConsultations) {
 putArrivee = function(oForm) {
   var today = new Date();
   oForm.arrivee.value = today.toDATETIME(true);
-  submitFormAjax(oForm, 'systemMsg', { onComplete: updateConsultations } );
+  onSubmitFormAjax(oForm, { onComplete: Consultations.start } );
 }
 </script>
 

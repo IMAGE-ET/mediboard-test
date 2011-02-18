@@ -1,6 +1,6 @@
 <script type="text/javascript">
 Main.add(function () {
-  if(document.selCabinet && "{{$offline}}" == 0){
+  if (document.selCabinet && "{{$offline}}" == 0){
     Calendar.regField(getForm("selCabinet").date, null, {noView: true});
   }
   
@@ -15,10 +15,67 @@ Main.add(function () {
 	  {{/if}}
   }
 });
+
+PatSelector.init = function() {
+  this.sForm = 'Create-Reconvocation';
+  this.sId   = 'patient_id';
+  this.sView = '_patient_view';
+  this.pop();
+}
+
+Reconvocation = {
+  checkPraticien: function() {
+    var form = getForm('Create-Reconvocation')
+    if ($V(form.prat_id) == '') {
+      alert('Veuillez sélectionner un praticien');
+      return false;
+    }
+    return true;
+  },
+  
+  choosePatient: function() {
+    Consultations.stop()	
+    if (!Reconvocation.checkPraticien()) {
+      return false;
+    }
+    
+		PatSelector.init();
+    return false;
+    
+  },
+  
+  submit: function() {
+    var form = getForm('Create-Reconvocation');
+    return onSubmitFormAjax(form, { onComplete: Consultations.start.curry(5) });  
+  } 
+}
 </script>
 
 <table class="main">
-  {{if !$mode_urgence}}
+  {{if $mode_urgence}}
+	<tr>
+		<td>
+		  	
+      <form name="Create-Reconvocation" method="post" action="?" onsubmit="return Reconvocation.choosePatient();">
+        <input type="hidden" name="dosql" value="do_consult_now" />
+        <input type="hidden" name="m" value="dPcabinet" />
+        <input type="hidden" name="del" value="0" />
+        <input type="hidden" name="_datetime" value="now" class="dateTime" />
+
+        <input type="hidden" name="patient_id" class="ref notNull" onchange="Reconvocation.submit();"/>   
+        <input type="hidden" name="_patient_view" />   
+				
+        <select name="prat_id" class="ref notNull">
+          <option value="">&mdash; {{tr}}Choose{{/tr}}</option>
+					{{mb_include module=mediusers template=inc_options_mediuser list=$praticiens selected=$app->user_id}}
+        </select>
+        
+        <button type="submit" class="new">Reconvocation immédiate</button>
+      </form>
+			
+		</td>
+	</tr>
+	{{else}}
   <tr>
     <td>
       <form name="selCabinet" action="?" method="get">
@@ -76,9 +133,9 @@ Main.add(function () {
     <td>
       <table class="form">
         <tr>
-        {{foreach from=$praticiens item=curr_prat}}
+        {{foreach from=$praticiens item=_praticien}}
           <th class="title">
-            {{$curr_prat->_view}}
+            {{$_praticien}}
           </th>
         {{/foreach}}
         </tr>
