@@ -41,7 +41,7 @@
     {{mb_ternary var=rpu_link_param test=$rpu->_id value="rpu_id=$rpu_id" other="sejour_id=$sejour_id"}}
     {{assign var=rpu_link value="?m=dPurgences&tab=vw_aed_rpu&$rpu_link_param"}}
     
-    <td class="text {{if $sejour->annule}}cancelled{{/if}}" colspan="2">
+    <td class="text {{if $sejour->annule}} cancelled {{/if}}" colspan="2">
       {{mb_include template=inc_rpu_patient}}
     </td>
     
@@ -62,9 +62,9 @@
     </td>
     {{/if}}
     
-    <td class="{{if $sejour->type != "urg"}}arretee{{/if}}">
+    <td class="{{if $sejour->type != "urg"}} arretee {{/if}}">
       {{if !$rpu->_ref_consult->_id}}
-        {{tr}}PEC non saisie{{/tr}}
+        <em>{{tr}}CRPU-ATU-missing{{/tr}}</em>
       {{else}}
         {{mb_include module=mediusers template=inc_vw_mediuser mediuser=$sejour->_ref_praticien}}
       {{/if}}
@@ -97,45 +97,37 @@
     </td>
     
     <td>
-        <table>
-          {{if $sejour->sortie_reelle}}
-          <tr>
-            <td>
-              <span>
-                {{mb_include module=dPplanningOp template=inc_vw_numdos num_dossier=$sejour->_num_dossier}}
-                {{mb_title object=$sejour field=_entree}}
-                <strong>{{mb_value object=$sejour field=_entree date=$date}}</strong>
-              </span>
-              <br />
-              {{mb_title object=$sejour field=_sortie}} :
-              {{mb_value object=$sejour field=mode_sortie}}
-              {{if $sejour->mode_sortie == "transfert" && $sejour->etablissement_transfert_id}}
-                <br />&gt; <strong>{{mb_value object=$sejour field=etablissement_transfert_id}}</strong>
-              {{/if}}
-              {{if $sejour->mode_sortie == "mutation" && $sejour->service_mutation_id}}
-                {{assign var=service_id value=$sejour->service_mutation_id}}
-                {{assign var=service value=$services.$service_id}}
-                <br />&gt; <strong>{{$service}}</strong>
-              {{/if}}
-              <br />
-             </td>
-           </tr>
-            
-           <!-- Sortie à effectuer -->
-           {{else}}
-           <tr>
-             <td class="text">
-              <span>
-                {{mb_include module=dPplanningOp template=inc_vw_numdos num_dossier=$sejour->_num_dossier}}
-                {{mb_title object=$sejour field=_entree}}
-                <strong>{{mb_value object=$sejour field=_entree date=$date}}</strong>
-              </span>
-             </td>
-           </tr>
-          {{/if}}
-          
-          </table>
-      </td>
+		  <span onmouseover="ObjectTooltip.createEx(this, '{{$sejour->_guid}}')">
+		    {{mb_include module=dPplanningOp template=inc_vw_numdos num_dossier=$sejour->_num_dossier}}
+		    {{if !$sejour->sortie_reelle}} 
+		    {{mb_title object=$sejour field=_entree}}
+		    {{/if}}
+		    <strong>
+		      {{mb_value object=$sejour field=entree date=$date}}
+		      {{if $sejour->sortie_reelle}} 
+		      &gt; {{mb_value object=$sejour field=sortie date=$date}}
+		      {{/if}}
+		    </strong>
+		    
+		  </span>
+		  
+		   <br />
+		  {{if $sejour->sortie_reelle}} 
+		    {{mb_title object=$sejour field=sortie}} :
+		    {{mb_value object=$sejour field=mode_sortie}}
+		  
+		    {{if $sejour->mode_sortie == "transfert" && $sejour->etablissement_transfert_id}}
+		      <br />&gt; <strong>{{mb_value object=$sejour field=etablissement_transfert_id}}</strong>
+		    {{/if}}
+		  
+		    {{if $sejour->mode_sortie == "mutation" && $sejour->service_mutation_id}}
+		      {{assign var=service_id value=$sejour->service_mutation_id}}
+		      {{assign var=service value=$services.$service_id}}
+		      <br />&gt; <strong>{{$service}}</strong>
+		    {{/if}}
+				<em>{{mb_value object=$sejour field=commentaires_sortie}}</em>
+		  {{/if}}
+    </td>
       
       <td id="rpu-{{$rpu->_id}}" style="font-weight: bold" class="text {{if !$rpu->sortie_autorisee}}arretee{{/if}} {{$rpu->_can_leave_level}}">
         {{if $sejour->sortie_reelle}}

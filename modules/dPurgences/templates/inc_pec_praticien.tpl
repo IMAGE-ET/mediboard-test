@@ -93,7 +93,7 @@ checkPraticien = function(oForm){
 			  &mdash;
 			{{/if}}
 		{{else}}
-		  {{tr}}PEC non saisie{{/tr}}
+		  <em>{{tr}}CRPU-ATU-missing{{/tr}}</em>
 		{{/if}}
 	{{else}}
 	  {{mb_include module=mediusers template=inc_vw_mediuser mediuser=$consult->_ref_praticien}}

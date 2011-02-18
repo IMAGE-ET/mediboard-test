@@ -87,8 +87,10 @@
 <td>
   <span onmouseover="ObjectTooltip.createEx(this, '{{$sejour->_guid}}')">
     {{mb_include module=dPplanningOp template=inc_vw_numdos num_dossier=$sejour->_num_dossier}}
+    {{if !$sejour->sortie_reelle}} 
     {{mb_title object=$sejour field=_entree}}
-    <strong>
+    {{/if}}
+		<strong>
     	{{mb_value object=$sejour field=entree date=$date}}
       {{if $sejour->sortie_reelle}} 
 			&gt; {{mb_value object=$sejour field=sortie date=$date}}

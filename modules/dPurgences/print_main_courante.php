@@ -57,6 +57,7 @@ $csteByTimeAll = array();
 // Détail du chargement
 foreach ($sejours as &$_sejour) {
   $_sejour->loadRefsFwd(1);
+	$_sejour->_ref_patient->loadIPP();
   $_sejour->loadRefRPU();
   $_sejour->_ref_rpu->loadRefSejourMutation();
 

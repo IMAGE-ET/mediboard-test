@@ -53,6 +53,7 @@ $locales['CLit-back-affectations_rpu.empty'] = 'Box non utilisé';
 $locales['COscourSender'] = 'Oscour';
 $locales['COuralSender'] = 'Oural';
 $locales['CRPU'] = 'Résumé de passage aux urgences';
+$locales['CRPU-ATU-missing'] = 'Aucune PEC médicale';
 $locales['CRPU-_DP'] = 'Dagnostic Principal';
 $locales['CRPU-_DP-court'] = 'DP';
 $locales['CRPU-_DP-desc'] = 'Diagnostic Principal (Code CIM10)';

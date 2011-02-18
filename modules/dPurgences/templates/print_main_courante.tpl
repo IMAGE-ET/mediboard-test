@@ -32,7 +32,7 @@ function printPage(element){
 
 <div id="main-courante-container">
   
-<table class="main" style="font-size: 1.1em;">
+<table class="main">
   <tr>
     <th>
     	{{if $offline}}
@@ -65,22 +65,21 @@ function printPage(element){
 					</th>
 				  <th class="narrow">{{mb_title class=CRPU field=_sortie}}</th>
 				</tr>
+				
 			  {{foreach from=$sejours item=sejour}}
 			  {{assign var=rpu value=$sejour->_ref_rpu}}
 			  {{assign var=patient value=$sejour->_ref_patient}}
 			  {{assign var=consult value=$rpu->_ref_consult}}
 			  <tr>
-          <td style="text-align: right;">{{mb_value object=$sejour field=_entree}}</td>
+          <td style="text-align: right;">{{mb_value object=$sejour field=entree}}</td>
 			    <td class="text">
 						{{if $offline && $rpu->_id}}
 	            <button class="search notext not-printable" onclick="$('modal-{{$sejour->_id}}').up('tr').show(); modalwindow = modal($('modal-{{$sejour->_id}}'));">
 	              {{tr}}Show{{/tr}}
 	            </button>
-	          {{/if}}
-						<big>{{$patient}}</big>
-						{{if $conf.dPurgences.age_patient_rpu_view}}
-						  <br/>{{$patient->_age}} ans
-						{{/if}}
+ 	          {{/if}}
+            {{assign var=rpu_link value="#`$patient->_guid`"}}
+            {{mb_include template=inc_rpu_patient}}
 					</td>
         {{if $rpu->_id}}
 					<td class="ccmu-{{$rpu->ccmu}} text">
@@ -90,23 +89,24 @@ function printPage(element){
 					</td>
 					<td>{{mb_value object=$rpu field="diag_infirmier"}}</td>    
 					<td>{{mb_value object=$consult field="heure"}}</td>      
-			    <td>{{mb_value object=$sejour field="praticien_id"}}</td>
+			    <td>        {{mb_include module=mediusers template=inc_vw_mediuser mediuser=$sejour->_ref_praticien}}</td>
 					<td>
 						{{if $sejour->sortie_reelle}}
 							{{mb_value object=$sejour field="mode_sortie"}}
 						{{/if}}
 					  {{if $sejour->mode_sortie == "transfert"}}
 						  <br />
-						  &gt; <strong>{{mb_value object=$sejour field="etablissement_transfert_id"}}</strong>
+						  &gt; <strong>{{mb_value object=$sejour field=etablissement_transfert_id}}</strong>
 						{{/if}}
             {{if $sejour->mode_sortie == "mutation"}}
               <br />
-              &gt; <strong>{{mb_value object=$sejour field="service_mutation_id"}}</strong>
+              &gt; <strong>{{mb_value object=$sejour field=service_mutation_id}}</strong>
             {{/if}}
 						{{if $rpu->orientation}}
 							<br />
 						  {{mb_value object=$rpu field="orientation"}}
 						{{/if}}
+						<em>{{mb_value object=$sejour field=commentaires_sortie}}</em>
 					</td>
           
 					
