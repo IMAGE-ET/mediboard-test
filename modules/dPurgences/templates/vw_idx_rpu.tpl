@@ -59,7 +59,7 @@ Main.add(function () {
   <li style="float: right">
     <form action="?" name="FindSejour" method="get">
       <label for="sip_barcode" title="Veuillez doucher le numéro de dossier sur un document ou bien le saisir à la main">
-        Code à barres de dossier
+        Numéro dossier
       </label>
         
       <input type="hidden" name="m" value="{{$m}}" />

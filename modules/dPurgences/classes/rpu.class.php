@@ -209,7 +209,11 @@ class CRPU extends CMbObject {
     parent::loadRefsFwd();
     $this->loadRefSejour();
   }
-  
+	
+  /**
+   * Chargement du séjour
+   * @return CSejour
+   */
   function loadRefSejour() {
     $this->_ref_sejour = new CSejour;
     $this->_ref_sejour->load($this->sejour_id);
@@ -222,6 +226,8 @@ class CRPU extends CMbObject {
 		if ($this->_ref_sejour->sortie_reelle) {
 	    $this->_presence  = mbSubTime($entree, mbTime($this->_ref_sejour->sortie_reelle));
 	  }
+		
+		return $this->_ref_sejour;
   }
 	
 	function loadRefConsult() {
