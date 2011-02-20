@@ -80,6 +80,7 @@ class CMouvement400 extends CRecordSante400 {
    * 
    * @param $marked bool Will load only marked (already processed)
    * @param $max int maximum number of mouvements
+   * 
    * @return array|CMouvement400
    */
   function loadList($marked = false, $max = 100) {
@@ -232,7 +233,7 @@ class CMouvement400 extends CRecordSante400 {
     
   function load($rec) {
     $query = "SELECT * FROM $this->base.$this->table 
-		  WHERE $this->idField = ?";
+      WHERE $this->idField = ?";
 
     $values = array (
       intval($rec),

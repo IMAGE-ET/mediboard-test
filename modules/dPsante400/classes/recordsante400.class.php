@@ -25,6 +25,13 @@ class CRecordSante400 {
   function __construct() {
   }
 
+  /**
+   * Connect to a AS400 DB2 SQL server via ODBC driver
+   * 
+   * @throws Error on misconfigured or anavailable server
+   * 
+   * @return void
+   */
   static function connect() {
     if (self::$dbh) {
       return;
@@ -50,7 +57,46 @@ class CRecordSante400 {
     self::$chrono->stop("connection");
   }
 
-  static function multipleLoad($query, $values = array(), $max = 100, $class = "CRecordSante400") {
+  /**
+   * Trace a query applying syntax coloring
+   * 
+   * @param object $query             Query to execute
+   * @param object $values [optional] Values to prepare
+   * 
+   * @return void
+   */
+  static function traceQuery($query, $values = array()) {
+    // Verbose
+    if (!self::$verbose) {
+      return;
+    }
+    
+		// Inject values into query
+    foreach ($values as $_value) {
+    	$_value = str_replace("'", "\\'", $_value);
+    	$max = 1;
+      $query = str_replace("?", "'$_value'", $query, $max);
+    }
+    
+		// Geshi rendering
+    CAppUI::requireLibraryFile("geshi/geshi");
+    $geshi = new Geshi($query, "sql");
+    $geshi->set_overall_style("white-space: pre-wrap;");
+    $trace = utf8_decode($geshi->parse_code());
+    echo $trace;
+  }
+  
+  /**
+   * Prepare, execute a query and return multiple records
+   * 
+   * @param object $query             Query to execute
+   * @param object $values [optional] Values to prepare
+   * @param object $max    [optional] Maximum records returned
+   * @param object $class  [optional] Records specific class instances
+   * 
+   * @return array
+   */
+	static function multipleLoad($query, $values = array(), $max = 100, $class = "CRecordSante400") {
     if (!new $class instanceof CRecordSante400) {
       trigger_error("instances of '$class' are not instances of 'CRecordSante400'", E_USER_WARNING);
     }
@@ -58,14 +104,7 @@ class CRecordSante400 {
     $records = array();
     try {
       self::connect();
-      
-      // Verbose
-      if (self::$verbose) {
-        mbTrace($query, "Querying");
-        if (count($values)) {
-          mbTrace($values, "With values");
-        }
-      }
+			self::traceQuery($query, $values);
 
       // Query execution
       $sth = self::$dbh->prepare($query);
@@ -91,22 +130,19 @@ class CRecordSante400 {
     
     return $records;
   }
-  
+	
   /**
    * Prepare and execute query
+   * 
+   * @param object $query             Query to execute
+   * @param object $values [optional] Values to prepare against
+   *
    * @return int the number of affected rows (-1 for SELECTs);
    */
   function query($query, $values = array()) {
     try {
       self::connect();
-      // Verbose
-
-      if (self::$verbose) {
-        mbTrace($query, "Querying");
-        if (count($values)) {
-          mbTrace($values, "With values");
-        }
-      }
+      self::traceQuery($query, $values);
 
       // Query execution and fetching
       $sth = self::$dbh->prepare($query);
@@ -126,6 +162,15 @@ class CRecordSante400 {
     }
   }
   
+  /**
+   * Load a unique record from query
+   * @throws Exception if no record fount
+   * 
+   * @param object $query             Query to execute
+   * @param object $values [optional] Values to prepare against
+   *
+   * @return int the number of affected rows (-1 for SELECTs);
+   */
   function loadOne($query, $values = array()) {
     $this->query($query, $values);
     if (!$this->data) {
@@ -135,14 +180,25 @@ class CRecordSante400 {
   }
     
   /**
-   * Transforms a DDMMYYYY AS400 date into a YYYY-MM-DD SQL date 
+   * Consume a AS400 DDMMYYYY date and turn it into a SQL ISO date 
+   * 
+   * @param string $valueName DDMMYYYY date value name
+   * 
+   * @return string ISO date 
    */
   function consumeDateInverse($valueName) {
     $date = $this->consume($valueName);
     return preg_replace("/(\d{1,2})(\d{2})(\d{4})/i", "$3-$2-$1", $date);
   }
   
-  function consume($valueName) {
+ 	/**
+	 * Consume and return any value 
+	 * 
+	 * @param string $valueName Value name
+	 * 
+	 * @return string Trimmed and slashed value
+	 */
+	function consume($valueName) {
     $valueName = "$this->valuePrefix$valueName";
     
     if (!is_array($this->data)) {
@@ -162,6 +218,14 @@ class CRecordSante400 {
     return trim(addslashes($value));    
   }
 
+  /**
+   * Consume and return phone number value
+   * Escaping any non-digit character 
+   * 
+   * @param string $valueName Value name
+   * 
+   * @return string 10-digit phone number
+   */
   function consumeTel($valueName) {
     $value = $this->consume($valueName);
     $value = preg_replace("/(\D)/", "", $value);
@@ -171,6 +235,16 @@ class CRecordSante400 {
     return $value;
   }
 
+
+  /**
+   * Consume and assemble two values with a new line separator
+   * Escaping any non-digit character 
+   * 
+   * @param string $valueName1 Value name 1
+   * @param string $valueName2 Value name 2
+   * 
+   * @return string Multi-line value
+   */
   function consumeMulti($valueName1, $valueName2) {
     $value1 = $this->consume($valueName1);
     $value2 = $this->consume($valueName2);
@@ -178,7 +252,11 @@ class CRecordSante400 {
   }
 
   /**
-   * Transforms a YYYYMMDD AS400 date into a YYYY-MM-DD SQL date 
+   * Consume a AS400 YYYYMMDD date and turn it into a SQL ISO date 
+   * 
+   * @param string $valueName YYYYMMDD date value name
+   * 
+   * @return string ISO date 
    */
   function consumeDate($valueName) {
     $date = $this->consume($valueName);
@@ -191,7 +269,11 @@ class CRecordSante400 {
   }
 
   /**
-   * Transforms a HHhMM or HHMM AS400 time into a HH:MM:00 SQL time 
+   * Consume a AS400 HHhMM or HHMM time and turn it into a SQL HH:MM:00 time 
+   * 
+   * @param string $valueName HHhMM or HHMM time value name
+   * 
+   * @return string HH:MM:00 time
    */
   function consumeTime($valueName) {
     $time = $this->consume($valueName);
@@ -213,7 +295,11 @@ class CRecordSante400 {
   }
 
   /**
-   * Transforms a HHhMM AS400 time into a HH:MM:00 SQL time 
+   * Consume a AS400 HH[MM[SS]] flat time and turn it into a SQL ISO time
+   * 
+   * @param string $valueName HH[MM[SS]] flat time value name
+   * 
+   * @return string ISO time
    */
   function consumeTimeFlat($valueName) {
     $time = $this->consume($valueName);
@@ -227,6 +313,14 @@ class CRecordSante400 {
     return preg_replace($reg, "$1:$2:$3", $time);
   }
 
+  /**
+   * Consume and assemble AS400 date and flat time into an SQL ISO datetime 
+   * 
+   * @param string $dateName YYYYMMDD date time value name
+   * @param string $timeName HHhMM or HHMM time value name
+   * 
+   * @return string ISO datetime
+   */
   function consumeDateTime($dateName, $timeName) {
     if (null == $date = $this->consumeDate($dateName)) {
       return null;
@@ -239,6 +333,14 @@ class CRecordSante400 {
     return "$date $time";
   }
 
+  /**
+   * Consume and assemble AS400 date and flat time into an SQL ISO datetime 
+   * 
+   * @param string $dateName YYYYMMDD date time value name
+   * @param string $timeName HH[MM[SS]] flat time value name
+   * 
+   * @return string ISO datetime
+   */
   function consumeDateTimeFlat($dateName, $timeName) {
     if (null == $date = $this->consumeDate($dateName)) {
       return null;

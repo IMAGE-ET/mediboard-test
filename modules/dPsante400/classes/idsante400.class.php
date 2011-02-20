@@ -95,8 +95,8 @@
   
   /**
    * Tries to get an already bound object if id400
-   * @return CMbObject
-   *    */
+   * @return CMbObject    
+   */
   function getMbObject() {
     // Look for object
     $this->_id = null;
