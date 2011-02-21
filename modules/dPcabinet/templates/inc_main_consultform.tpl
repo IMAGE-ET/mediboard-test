@@ -7,15 +7,16 @@ Main.add(function () {
    // UpdateFields de l'autocomplete des traitements
   updateFieldTraitement = function(selected) {
     var dn = selected.childElements();
-    oForm = getForm('editFrmExams');
+    var oForm = getForm('editFrmExams');
     $V(oForm.traitement, $V(oForm.traitement)+dn[3].innerHTML.stripTags().strip()+'\n');
     $V(oForm.produit, "");
   }
 
   // Autocomplete des medicaments
-  if(getForm('editFrmExams').produit) {
+  var oForm = getForm('editFrmExams');
+  if(oForm && oForm.produit) {
     var urlAuto = new Url("dPmedicament", "httpreq_do_medicament_autocomplete");
-    urlAuto.autoComplete(getForm('editFrmExams').produit, "_traitement_auto_complete", {
+    urlAuto.autoComplete(oForm.produit, "_traitement_auto_complete", {
       minChars: 3,
       updateElement: updateFieldTraitement, 
       callback: function(input, queryString){

@@ -435,7 +435,7 @@ Main.add(function () {
             {{foreach from=$curr_cat item=curr_code key="key"}}
             <tr>
               <td class="text">
-              <form name="code_finder-{{$curr_code->sid}}" action="?">
+              <form name="code_finder-{{$curr_code->sid}}" action="?" method="post">
                 <button class="tick notext" type="button" onclick="oCimField.add('{{$curr_code->code}}'); if(DossierMedical.sejour_id != '') { {{if $_is_anesth}}oCimAnesthField.add('{{$curr_code->code}}');{{/if}} }">
                   Ajouter
                 </button>
