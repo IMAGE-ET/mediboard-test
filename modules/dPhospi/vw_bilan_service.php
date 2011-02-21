@@ -98,7 +98,7 @@ if($do_trans){
             (sejour.sortie BETWEEN '$dateTime_min' AND '$dateTime_max') OR
             (sejour.entree <= '$dateTime_min' AND sejour.sortie >= '$dateTime_max')";
   
-  if ($_present_only == "true") {
+  if ($_present_only) {
     $where["sejour.sortie_reelle"] = 'IS NULL';
   }
   
