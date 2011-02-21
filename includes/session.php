@@ -71,7 +71,7 @@ if (!isset($_SESSION['browser'])) {
   }
   
   $browser['deprecated'] = isset($minimal_versions[$browser['name']]) && 
-                             $browser['version'] < $minimal_versions[$browser['name']] && 
+                             version_compare($browser['version'],  $minimal_versions[$browser['name']], "<") && 
                              !$browser['mobile'];
   
   $_SESSION['browser'] =& $browser; 
