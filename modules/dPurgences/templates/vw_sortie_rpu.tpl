@@ -59,7 +59,6 @@ function filterPatient(input, indicator) {
   
   if (indicator) {
     indicator.show();
-    this.stop();
   }
   
   $$("#list-sorties .CPatient-view").each(function(p) {
