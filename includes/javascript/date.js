@@ -585,7 +585,7 @@ var Calendar = {
       if(!this.datepicker.element) return;
       
       $(this.datepicker.element).
-         setStyle({zIndex: null}). // FIXME do not set it in datepicker.js
+         setStyle({zIndex: ""}). // FIXME do not set it in datepicker.js
          unoverflow();
          
     }.bindAsEventListener(datepicker);
@@ -598,7 +598,7 @@ var Calendar = {
         datepicker.icon.setStyle({
           position: 'relative',
           right: 0,
-          top: null
+          top: ""
         });
       }
     }
@@ -645,7 +645,7 @@ var Calendar = {
         }
         else {
           $(element).
-					  setStyle({zIndex: null}). // FIXME do not set it in datepicker.js
+					  setStyle({zIndex: ""}). // FIXME do not set it in datepicker.js
 					  unoverflow();
         }
       }.bindAsEventListener(datepicker));
