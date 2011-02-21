@@ -20,7 +20,7 @@ selectExClass = function(element, object_guid, event, _element_id) {
 var _popup = Control.Overlay.container && Control.Overlay.container.visible();
 
 showExClassForm = function(ex_class_id, object_guid, title, ex_object_id, event, _element_id) {
-  var url = new Url("system", "view_ex_object_form");
+  var url = new Url("forms", "view_ex_object_form");
   url.addParam("ex_class_id", ex_class_id);
   url.addParam("object_guid", object_guid);
   url.addParam("ex_object_id", ex_object_id);
