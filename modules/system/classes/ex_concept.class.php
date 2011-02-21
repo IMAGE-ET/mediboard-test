@@ -8,47 +8,14 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
  */
 
-class CExClassField extends CMbObject {
-  var $ex_class_field_id = null;
+class CExConcept extends CMbObject {
+  var $ex_concept_id = null;
   
-  var $ex_class_id = null;
+  var $ex_list_id = null;
   var $name = null; // != object_class, object_id, ex_ClassName_event_id, 
   var $prop = null; 
-  var $concept_id = null;
-	
-  var $coord_label_x = null; 
-  var $coord_label_y = null; 
-  var $coord_field_x = null; 
-  var $coord_field_y = null; 
   
-  var $_locale = null;
-  var $_locale_desc = null;
-  var $_locale_court = null;
-  var $_enum_translation = null;
-  
-  var $_ref_ex_class = null;
-  var $_ref_translation = null;
-	var $_ref_concept = null;
-  var $_spec_object = null;
-  
-  var $_dont_drop_column = null;
-  
-  static $_indexed_types = array("ref", "date", "dateTime", "time");
-  static $_data_type_groups = array(
-    array("ipAddress"),
-    array("bool"), 
-    array("enum"), 
-    array("ref"), 
-    array("num", "numchar"), 
-    array("pct", "float", "currency"),
-    array("time"), 
-    array("date", "birthDate"),
-    array("dateTime"), 
-    array("code"), 
-    array("email"), 
-    array("password", "str"), 
-    array("php", "xml", "html", "text"), 
-  );
+  var $_ref_ex_list = null;
 
   function getSpec() {
     $spec = parent::getSpec();
@@ -64,20 +31,9 @@ class CExClassField extends CMbObject {
 
   function getProps() {
     $props = parent::getProps();
-    $props["ex_class_id"] = "ref class|CExClass cascade";
-    $props["concept_id"]  = "ref class|CExClassField";
+    $props["ex_list_id"]  = "ref class|CExList";
     $props["name"]        = "str notNull protected canonical";
     $props["prop"]        = "str notNull";
-    
-    $props["coord_field_x"] = "num min|0 max|100";
-    $props["coord_field_y"] = "num min|0 max|100";
-    $props["coord_label_x"] = "num min|0 max|100";
-    $props["coord_label_y"] = "num min|0 max|100";
-		
-    $props["_locale"]     = "str";
-    $props["_locale_desc"]  = "str";
-    $props["_locale_court"] = "str";
-    $props["_enum_translation"] = "str";
     return $props;
   }
 	

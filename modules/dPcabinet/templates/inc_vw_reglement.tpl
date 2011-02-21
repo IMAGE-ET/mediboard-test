@@ -374,7 +374,8 @@ Main.add( function(){
                   <td>{{mb_value object=$_reglement field=montant}}</td>
                   <td>
                     <label title="{{mb_value object=$_reglement field=date}}">
-                    {{$_reglement->date|date_format:$conf.date}}
+                      {{$_reglement->date|date_format:$conf.date}}
+										</label>
                   </td>
                   <td>
                     <a class="button remove notext" href="" onclick="return Reglement.cancel({{$_reglement->_id}});"></a>

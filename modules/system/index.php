@@ -17,7 +17,6 @@ $module->registerTab("view_history"        , TAB_EDIT);
 $module->registerTab("view_access_logs"    , TAB_ADMIN);
 $module->registerTab("view_ressources_logs", TAB_ADMIN);
 $module->registerTab("view_network_address", TAB_EDIT);
-$module->registerTab("view_ex_class"       , TAB_ADMIN);
 $module->registerTab("about"               , TAB_READ);
 
 ?>

@@ -2,14 +2,14 @@
 
 {{*
  * @package Mediboard
- * @subpackage system
+ * @subpackage forms
  * @version $Revision$
  * @author SARL OpenXtrem
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
 *}}
 
-{{mb_include_script module=system script=ex_class_editor}}
-{{mb_include_script module=system script=object_selector}}
+{{mb_include_script module=forms script=ex_class_editor}}
+{{mb_include_script module=forms script=object_selector}}
 
 {{main}}
 ExClass.edit({{$ex_class->_id}});

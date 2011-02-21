@@ -2,7 +2,7 @@
 
 {{*
  * @package Mediboard
- * @subpackage system
+ * @subpackage forms
  * @version $Revision$
  * @author SARL OpenXtrem
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
@@ -296,7 +296,7 @@ Main.add(function(){
 	          {{foreach from=$host_object->_specs item=_spec key=_field}}
 						  {{if $_spec->show == 1 || $_field == "_view" || ($_spec->show == "" && $_field.0 !== "_")}} {{*  || $_field == "_shortview" *}}
 	              <li>
-	                {{mb_include module=system template=inc_ex_host_field_draggable}}
+	                {{mb_include module=forms template=inc_ex_host_field_draggable}}
 								</li>
 							{{/if}}
 	          {{/foreach}}
@@ -306,13 +306,13 @@ Main.add(function(){
 				
 				<td class="label-list" data-x="" data-y="" style="padding: 4px; height: 2em; vertical-align: top;">
 					{{foreach from=$out_of_grid.label item=_field}}
-					  {{mb_include module=system template=inc_ex_field_draggable _type="label"}}
+					  {{mb_include module=forms template=inc_ex_field_draggable _type="label"}}
 					{{/foreach}}
 				</td>
 		
 		    <td class="field-list" data-x="" data-y="" style="padding: 4px; vertical-align: top;">
 		      {{foreach from=$out_of_grid.field item=_field}}
-            {{mb_include module=system template=inc_ex_field_draggable _type="field"}}
+            {{mb_include module=forms template=inc_ex_field_draggable _type="field"}}
 		      {{/foreach}}
 				</td>
 				
@@ -346,9 +346,9 @@ Main.add(function(){
 			  <td style="border: 1px dotted #ddd; min-width: 2em;" class="droppable grid" data-x="{{$_x}}" data-y="{{$_y}}">
 				  {{if $_group.object}}
 					  {{if $_group.object instanceof CExClassField}}
-						  {{mb_include module=system template=inc_ex_field_draggable _field=$_group.object _type=$_group.type}}
+						  {{mb_include module=forms template=inc_ex_field_draggable _field=$_group.object _type=$_group.type}}
 						{{else}}
-              {{mb_include module=system template=inc_ex_host_field_draggable _host_field=$_group.object _field=$_group.object->field _type=$_group.type}}
+              {{mb_include module=forms template=inc_ex_host_field_draggable _host_field=$_group.object _field=$_group.object->field _type=$_group.type}}
 						{{/if}}
 					{{/if}}
 			  </td>

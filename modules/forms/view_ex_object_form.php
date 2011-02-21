@@ -2,7 +2,7 @@
 
 /**
  * @package Mediboard
- * @subpackage system
+ * @subpackage forms
  * @version $Revision: 7622 $
  * @author SARL OpenXtrem
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 

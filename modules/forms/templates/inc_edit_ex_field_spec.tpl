@@ -67,7 +67,7 @@ avoidSpaces = function(event) {
 }
 
 cloneTemplate = function(input) {
-  var template = $(input).previous('.template');
+  var template = $(input).up('table').down('.template');
   var clone = template.clone(true).observe("change", updateFieldSpec);
   template.insert({before: clone.show().removeClassName('template')});
   clone.down('input[type=text]').tryFocus();
@@ -75,13 +75,13 @@ cloneTemplate = function(input) {
 
 confirmDelEnum = function(button) {
   if (!confirm("Voulez-vous vraiment supprimer cette valeur ? Elles seront supprimées de la base.")) return false;
-  $(button).up().remove(); 
+  $(button).up("tr").remove(); 
 	updateFieldSpec();
 	return true;
 }
 
 updateInternalNameEnum = function(e) {
-  var target = $(e).next('input');
+  var target = $(e).up('tr').down('input.internal');
   if (target.readOnly) return;
   
   $V(target, ExField.slug($V(e)));
@@ -153,22 +153,46 @@ Main.add(function(){
           
         {{* list *}}
         {{elseif $_type == "list"}}
+				  <table class="tbl" style="width: 1%;">
+				  	<tr>
+				  		<th class="narrow">Nom</th>
+              <th class="narrow">Valeur</th>
+              <th class="narrow"></th>
+				  	</tr>
+						
           {{foreach from=$spec->_list key=_key item=_value}}
-            <div>
-              <input type="text" name="__enum[]" onkeyup="updateInternalNameEnum(this)" size="35"
-                     value="{{if $spec->_locales.$_value|strpos:'CExObject' === false}}{{$spec->_locales.$_value}}{{/if}}" />
-              Nom interne: <input type="text" name="{{$_name}}[]" value="{{$_value}}" {{if $_value}}readonly="readonly"{{/if}} />
-              <button type="button" class="cancel notext" tabindex="1000" onclick="return confirmDelEnum(this)">{{tr}}Delete{{/tr}}</button>
-            </div>
+            <tr>
+            	<td>
+	              <input type="text" name="__enum[]" onkeyup="updateInternalNameEnum(this)" size="35"
+	                     value="{{if $spec->_locales.$_value|strpos:'CExObject' === false}}{{$spec->_locales.$_value}}{{/if}}" />
+						  </td>
+              <td>
+              	<input type="text" name="{{$_name}}[]" class="internal" value="{{$_value}}" {{if $_value}}readonly="readonly"{{/if}} />
+							</td>
+              <td>
+              	<button type="button" class="cancel notext" tabindex="1000" onclick="return confirmDelEnum(this)">{{tr}}Delete{{/tr}}</button>
+              </td>
+            </tr>
           {{/foreach}}
           
-          <div style="display: none;" class="template">
-            <input type="text" name="__enum[]" value="" onkeyup="updateInternalNameEnum(this)" size="35" />
-            Nom interne: <input type="text" name="{{$_name}}[]" value="" />
-            <button type="button" class="cancel notext" tabindex="1000" onclick="return confirmDelEnum(this)">{{tr}}Delete{{/tr}}</button>
-          </div>
-          
-          <button type="button" class="add notext" onclick="cloneTemplate(this)">{{tr}}Add{{/tr}}</button>
+	          <tr style="display: none;" class="template">
+						  <td>
+	              <input type="text" name="__enum[]" value="" onkeyup="updateInternalNameEnum(this)" size="35" />
+							</td>
+	            <td>
+	            	<input type="text" name="{{$_name}}[]" class="internal" value="" />
+							</td>
+	            <td>
+	              <button type="button" class="cancel notext" tabindex="1000" onclick="return confirmDelEnum(this)">{{tr}}Delete{{/tr}}</button>
+						  </td>
+	          </tr>
+						
+	          <tr>
+	          	<td colspan="3">
+	          		<button type="button" class="add notext" onclick="cloneTemplate(this)">{{tr}}Add{{/tr}}</button>
+	          	</td>
+	          </tr>
+	        </table>
           
         {{* class *}}
         {{elseif $_type == "class"}}
