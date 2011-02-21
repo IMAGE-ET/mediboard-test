@@ -497,6 +497,7 @@ $locales['CIntervenantCdARR-title-modify'] = 'Modifier le type d\'intervenant';
 $locales['CIntervenantCdARR.all'] = 'les types d\'intervenants';
 $locales['CIntervenantCdARR.none'] = 'Aucun type d\'intervenant';
 $locales['CIntervenantCdARR.one'] = 'le type d\'intervenant';
+$locales['CIntervenantCdARR.exclude_without_code'] = 'Exclure les intervenants sans aucun code';
 $locales['CLigneActivitesRHS'] = 'Ligne d\'activité du RHS';
 $locales['CLigneActivitesRHS-_executant'] = 'Exécutant';
 $locales['CLigneActivitesRHS-_executant-court'] = 'Exécutant';
