@@ -125,7 +125,7 @@ if($service_id){
 }
 						
 if($praticien_id && !$praticien->_is_anesth){
-  $query .= " AND `sejour`.`praticien_id` = '$praticien_id'"; 
+  $query_presc .= " AND `sejour`.`praticien_id` = '$praticien_id'"; 
 }
 					
 $query_presc .= " GROUP BY `period`
