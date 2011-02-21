@@ -283,7 +283,7 @@ Main.add( function(){
 </table>
 {{/if}}
 
-<form name="moment_unitaire">
+<form name="moment_unitaire" action="?" method="get">
   <select name="moment_unitaire_id" style="width: 150px; display: none;">  
     <option value="">&mdash; Moment</option>
    {{foreach from=$moments key=type_moment item=_moments}}

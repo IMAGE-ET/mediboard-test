@@ -224,6 +224,13 @@ addAdministrationPerf = function(prescription_line_mix_id, date, hour, time_prev
   url.popup(800,600,"Administration d'une prescription_line_mix");
 }
 
+addInscription = function(datetime, prescription_id){
+  var url = new Url("dPprescription", "vw_edit_inscription");
+  url.addParam("datetime", datetime);
+	url.addParam("prescription_id", prescription_id);
+  url.popup(800, 600, "Ajout d'une inscription");
+}
+
 editPerf = function(prescription_line_mix_id, date, mode_dossier, sejour_id){
   var url = new Url("dPprescription", "edit_perf_dossier_soin");
   url.addParam("prescription_line_mix_id", prescription_line_mix_id);
@@ -402,6 +409,7 @@ refreshTabState = function(){
 	window['oxygeneSoinLoaded'] = false;
   window['aerosolSoinLoaded'] = false;
   window['alimentationSoinLoaded'] = false;
+  window['inscriptionSoinLoaded'] = false;
   
   window['injSoinLoaded'] = false;
   {{assign var=specs_chapitre value=$categorie->_specs.chapitre}}
@@ -456,11 +464,11 @@ Main.add(function () {
 
 </script>
 
-<form name="adm_multiple">
+<form name="adm_multiple" action="?" method="get">
   <input type="hidden" name="_administrations">
 </form>
 
-<form name="click">
+<form name="click" action="?" method="get">
   <input type="hidden" name="nb_decalage" value="{{$nb_decalage}}" />
 </form>
 
@@ -544,7 +552,7 @@ Main.add(function () {
         </button>
 	    </td>
 	    <td style="text-align: center">
-	      <form name="mode_dossier_soin">
+	      <form name="mode_dossier_soin" action="?" method="get">
 	        <label>
 	          <input type="radio" name="mode_dossier" value="administration" {{if $mode_dossier == "administration" || $mode_dossier == ""}}checked="checked"{{/if}} 
 	          			 onclick="viewDossierSoin($('plan_soin'));"/>Administration

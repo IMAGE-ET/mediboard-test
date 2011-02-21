@@ -207,7 +207,7 @@ modifFormDate = function(nb_prises, form_name, protocole,line_id){
 </form>
 
 <!-- Select de moments unitaire -->
-<form name="moment_unitaire">
+<form name="moment_unitaire" action="?" method="get">
   <select name="moment_unitaire_id" style="width: 150px; display: none;">  
      <option value="">&mdash; Sélection du moment</option>
     {{foreach from=$moments key=type_moment item=_moments}}

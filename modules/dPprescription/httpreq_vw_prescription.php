@@ -155,7 +155,17 @@ if($prescription->_id){
 	$prescription->countLinesMedsElements($praticien_sortie_id);
 
 	// Chargement des medicaments et commentaires de medicament
-	if ($full_mode || $chapitre == "medicament" || $mode_protocole || $mode_pharma) {
+	if ($full_mode || $chapitre == "medicament" || $chapitre == "inscription" || $mode_protocole || $mode_pharma) {
+		
+		// Chargement des inscriptions (med + elt)
+		$prescription->loadRefsLinesInscriptions();
+		foreach($prescription->_ref_lines_inscriptions as $_incriptions_by_type){
+			foreach($_incriptions_by_type as $_inscription){
+				$_inscription->loadRefsPrises();
+				$_inscription->getAdvancedPerms($is_praticien, $mode_protocole, $mode_pharma, $operation_id);
+			}
+		}
+		
 		// Chargement des medicaments
 		$prescription->loadRefsLinesMedComments();
 	  foreach($prescription->_ref_lines_med_comments as $type => $lines_by_type){
@@ -554,9 +564,9 @@ if(!$refresh_pharma && !$mode_protocole){
 	  	$smarty->display("inc_vw_produits_elements.tpl");	
     } else {
       // Refresh Medicament
-      if($chapitre == "medicament"){
-       	$smarty->display("inc_div_medicament.tpl");
-      } 
+      if($chapitre == "medicament" || $chapitre == "inscription"){
+       	$smarty->display("inc_div_$chapitre.tpl");
+      }
       // refresh Element
       else {
         $smarty->assign("element", $chapitre);

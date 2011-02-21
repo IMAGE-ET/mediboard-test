@@ -8,8 +8,7 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
  */
 
-global $can;
-$can->needsAdmin();
+CCanDo::checkAdmin();
 
 function updateFieldMed($table, $mb_field, $bcb_field){
   $ds_std = CSQLDataSource::get("std");
@@ -18,23 +17,23 @@ function updateFieldMed($table, $mb_field, $bcb_field){
   $nb_modif = 0;
   $cips = array();
   
-  $sql = "SELECT DISTINCT code_cip 
+  $query = "SELECT DISTINCT code_cip 
 	        FROM $table
 					WHERE $mb_field = '';";
-  $codes_cip = $ds_std->loadColumn($sql);
+  $codes_cip = $ds_std->loadColumn($query);
 
 	foreach($codes_cip as $code_cip){
-	  $sql = "SELECT $bcb_field FROM `IDENT_PRODUITS`
+	  $query = "SELECT $bcb_field FROM `IDENT_PRODUITS`
 			      WHERE `IDENT_PRODUITS`.`CODE_CIP` = '$code_cip';";
-	  $cips[$code_cip] = $ds_bcb->loadResult($sql);
+	  $cips[$code_cip] = $ds_bcb->loadResult($query);
 	}
 	
 	foreach($cips as $code_cip => $_code){
-	  $sql = "UPDATE `$table`
+	  $query = "UPDATE `$table`
 	          SET `$mb_field` = '$_code'
 			      WHERE `code_cip` = '$code_cip'
 	          AND `$mb_field` = '';";
-	  $ds_std->exec($sql);
+	  $ds_std->exec($query);
 	  $nb_modif += $ds_std->affectedRows();
 	}
 	CAppUI::stepAjax("$nb_modif codes $mb_field mis à jour dans la table $table", UI_MSG_OK);

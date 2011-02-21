@@ -238,6 +238,10 @@ foreach($prescriptions as $_prescription){
 		$type_adm = $_administration->planification ? "prevue" : "adm";
 			
 		$_administration->loadTargetObject();
+		if($_administration->_ref_object instanceof CPrescriptionLineMedicament){
+		  $_administration->_ref_object->_ref_produit->loadUnitePresentation();
+		}
+		
 		if($_administration->_ref_object instanceof CPrescriptionLineMedicament || $_administration->_ref_object instanceof CPrescriptionLineElement){
 			if($_administration->_ref_object instanceof CPrescriptionLineMedicament){
 	      $type = $_administration->_ref_object->_is_injectable ? "inj" : "med";

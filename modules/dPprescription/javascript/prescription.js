@@ -191,7 +191,7 @@ Prescription = {
 	      if(mode_protocole == "1"){
 	        urlPrescription.requestUpdate("vw_protocole");
 	      } else {
-	        if(chapitre){
+		 	    if(chapitre){
 	          if (window[chapitre+'Loaded'] || chapitre == "medicament") {
 	            urlPrescription.requestUpdate("div_"+chapitre, { onComplete: function(){
 							  if(window.viewListPrescription){
@@ -345,15 +345,6 @@ Prescription = {
 		
     link.select('span')[0].innerHTML = lineCount > 0 ? " ("+lineCount+")" : "";
   },
-	/*
-  submitFormStop: function(oForm, object_id, object_class){
-    submitFormAjax(oForm, 'systemMsg', { onComplete: function(){ 
-      var url = new Url("dPprescription", "httpreq_vw_stop_line");
-      url.addParam("object_id", object_id);
-      url.addParam("object_class", object_class)
-      url.requestUpdate("stop-"+object_class+"-"+object_id);
-    } } );
-  },*/
   viewAllergies: function(prescription_id){
     var url = new Url("dPprescription", "httpreq_vw_allergies_sejour");
     url.addParam("prescription_id", prescription_id);
@@ -418,7 +409,6 @@ Prescription = {
 		url.requestUpdate("perop");
 	},
 	loadTraitement: function(sejour_id, date, nb_decalage, mode_dossier, object_id, object_class, unite_prise, chapitre) {
-
 		var url = new Url("dPprescription", "httpreq_vw_dossier_soin");
 	  url.addParam("sejour_id", sejour_id);
 	  url.addParam("date", date);
@@ -475,7 +465,8 @@ Prescription = {
 					 chapitre == "oxygene" || 
 					 chapitre == "alimentation" ||
 					 chapitre == "aerosol" ||
-           chapitre == "inj"){
+           chapitre == "inj" ||
+					 chapitre == "inscription"){
           chapitre = "_"+chapitre;
         } else {
           chapitre = "_cat-"+chapitre;

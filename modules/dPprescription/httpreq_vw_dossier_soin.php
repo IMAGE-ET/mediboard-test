@@ -215,7 +215,19 @@ else {
 		    $_prescription_line_mix->loadRefLogSignaturePrat();
 				$_prescription_line_mix->calculVariations();
       }
-    } elseif (!$chapitre) {
+    } 
+		elseif ($chapitre == "inscription"){
+			// Chargement des inscriptions effectuées
+			$prescription->loadRefsLinesInscriptions();
+			foreach($prescription->_ref_lines_inscriptions as $_inscriptions_by_type){
+				foreach($_inscriptions_by_type as $_inscription){
+		
+        $_inscription->countBackRefs("administration");
+
+				}
+			}
+		}
+		elseif (!$chapitre) {
       // Parcours initial pour afficher les onglets utiles (pas de chapitre de specifié)
       $prescription->loadRefsPrescriptionLineMixes("","1");
       $prescription->loadRefsLinesMedByCat("1","1");

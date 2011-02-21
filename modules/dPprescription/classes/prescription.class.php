@@ -45,9 +45,11 @@ class CPrescription extends CMbObject {
   var $_ref_prescription_lines_element        = null;
   var $_ref_prescription_lines_element_by_cat = null;
   var $_ref_prescription_lines_comment        = null;
-  var $_ref_prescription_line_mixes                        = null;
+  var $_ref_prescription_line_mixes           = null;
   var $_ref_lines_dmi                         = null;
-  
+  var $_ref_lines_inscriptions                = null;
+	var $_count_inscriptions                    = null;
+	
   // Others Fields
   var $_type_sejour = null;
   var $_counts_by_chapitre = null;
@@ -69,6 +71,7 @@ class CPrescription extends CMbObject {
   var $_list_prises_med = null;
   var $_ref_lines_med_for_plan = null;
   var $_ref_lines_elt_for_plan = null;
+	var $_ref_inscriptions_for_plan = null;
   var $_ref_prescription_line_mixes_for_plan = null;
 	var $_ref_prescription_line_mixes_for_plan_by_type = null;
   
@@ -773,6 +776,26 @@ class CPrescription extends CMbObject {
 		  }
 		}
 	}
+	
+	/*
+	 * Chargement des inscriptions
+	 */
+  function loadRefsLinesInscriptions(){
+  	// Chargement des inscriptions de medicament
+		$line_med = new CPrescriptionLineMedicament();
+		$line_med->prescription_id = $this->_id;
+		$line_med->inscription = 1;
+		$this->_ref_lines_inscriptions["med"] = $line_med->loadMatchingList();
+		
+		// Chargement des inscriptions d'element
+		$line_elt = new CPrescriptionLineElement();
+		$line_elt->prescription_id = $this->_id;
+		$line_elt->inscription = 1;
+		$this->_ref_lines_inscriptions["elt"] = $line_elt->loadMatchingList();
+  
+	  $this->_count_inscriptions = count($this->_ref_lines_inscriptions["med"]) + count($this->_ref_lines_inscriptions["elt"]);
+	}
+  
   
   /*
    * Chargement du praticien utilisé pour l'affichage des protocoles/favoris
@@ -940,7 +963,8 @@ class CPrescription extends CMbObject {
     $whereMed["child_id"] = "IS NULL";
     $whereMed["substitution_line_id"] = "IS NULL";
     $whereMed["substitution_active"] = " = '1'";
-    if($praticien_sortie_id){
+    $whereMed["inscription"] = " = '0'";
+		if($praticien_sortie_id){
       $where["praticien_id"] = " = '$praticien_sortie_id'";
       $whereMed["praticien_id"] = " = '$praticien_sortie_id'";
     }
@@ -979,7 +1003,8 @@ class CPrescription extends CMbObject {
     // Parcours des elements
     $where = array();
     $where["prescription_id"] = " = '$this->_id'";
-    if($praticien_sortie_id){
+    $where["inscription"] = " = '0'";
+		if($praticien_sortie_id){
       $where["praticien_id"] = " = '$praticien_sortie_id'";
     }
     
@@ -1002,6 +1027,19 @@ class CPrescription extends CMbObject {
       $nb_comment = $line_comment->countList($where, null, null, null, $ljoin_comment);
       $this->_counts_by_chapitre_non_signee[$chapitre] = $nb_element + $nb_comment;
     }
+		
+		// Compteur d'inscription
+		$line_med = new CPrescriptionLineMedicament();
+    $line_med->prescription_id = $this->_id;
+    $line_med->inscription = 1;
+    $this->_counts_by_chapitre["inscription"] = $line_med->countMatchingList();
+    
+    // Chargement des inscriptions d'element
+    $line_elt = new CPrescriptionLineElement();
+    $line_elt->prescription_id = $this->_id;
+    $line_elt->inscription = 1;
+    $this->_counts_by_chapitre["inscription"] += $line_elt->countMatchingList();
+		$this->_counts_by_chapitre_non_signee["inscription"] = $this->_counts_by_chapitre["inscription"];
   }
   
   /*
@@ -1183,7 +1221,7 @@ class CPrescription extends CMbObject {
 		$line = new CPrescriptionLineMedicament();
     $where = array();
     $where["prescription_id"] = " = '$this->_id'";
-    
+    $where["inscription"] = " = '0'";
     if($with_child != "1"){
       $where["child_id"] = "IS NULL";
     }
@@ -1257,6 +1295,7 @@ class CPrescription extends CMbObject {
       $where["category_prescription.chapitre"] = " = '$chapitre'";
     }
     $where["prescription_id"] = " = '$this->_id'";
+		$where["inscription"] = " = '0'";
     if(!$order){
       $ljoin["element_prescription"] = "prescription_line_element.element_prescription_id = element_prescription.element_prescription_id";
       $ljoin["category_prescription"] = "element_prescription.category_prescription_id = category_prescription.category_prescription_id";
@@ -1608,7 +1647,7 @@ class CPrescription extends CMbObject {
     // Chargement de toutes les lignes
     $this->loadRefsLinesMedByCat("1","1");
     $this->loadRefsLinesElementByCat("1");
-    $this->loadRefsPrescriptionLineMixes();
+    $this->loadRefsPrescriptionLineMixes(); 
 		  
 	  // Paroucrs des lignes de medicaments
     foreach($this->_ref_prescription_lines as &$_line_med){
@@ -1670,6 +1709,30 @@ class CPrescription extends CMbObject {
    */
   function calculPlanSoin($dates, $mode_feuille_soin = 0, $mode_semainier = 0, $mode_dispensation = 0, $code_cip = "", $with_calcul = true, $code_cis = ""){  
 	  $this->calculAllPlanifSysteme();
+		
+		// Chargement des lignes d'inscriptions
+		$this->loadRefsLinesInscriptions();
+		if($this->_count_inscriptions){
+			foreach($this->_ref_lines_inscriptions as $_lines_inscription_by_type){
+				foreach($_lines_inscription_by_type as $_inscription){
+					
+					
+					
+				
+					if($with_calcul){
+            foreach($dates as $date){
+              $_inscription->calculAdministrations($date, $mode_dispensation);
+							
+            }
+         }
+				
+				
+				 
+            $this->_ref_inscriptions_for_plan[$_inscription->_id] = $_inscription;
+          
+				}
+			}
+		}
 
     // Parcours des lignes de smedicaments
     if(count($this->_ref_prescription_lines)){

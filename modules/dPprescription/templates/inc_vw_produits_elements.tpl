@@ -421,10 +421,16 @@ reloadPerfEvolution = function(perf_id, object){
 <!-- Tabulations -->
 <ul id="prescription_tab_group" class="control_tabs">
 	
+  {{if $is_praticien && $prescription->_count_inscriptions}}
+	  <li>
+      <a href="#div_inscription">Inscriptions <span></span></a>
+    </li>
+	{{/if}}
+			
 	{{if $conf.dPprescription.CPrescription.show_chapter_med}}
-  <li><a href="#div_medicament">Médicaments <span></span></a></li>
+    <li><a href="#div_medicament">Médicaments <span></span></a></li>
   {{/if}}
-	
+		
 {{assign var=easy_mode value=$app->user_prefs.easy_mode}}
 
 {{if !$mode_pharma}}
@@ -447,11 +453,19 @@ reloadPerfEvolution = function(perf_id, object){
 					</a>
 				</li>
 		  {{/if}}
+			
   {{/foreach}}
 {{/if}}
 </ul>
 
 <hr class="control_tabs" />
+
+<!-- Affichage des inscriptions des infirmieres -->
+{{if $is_praticien && $prescription->_count_inscriptions}}
+	<div id="div_inscription">
+		{{include file="../../dPprescription/templates/inc_div_inscription.tpl"}}
+	</div>	
+{{/if}}
 
 <!-- Declaration des divs -->
 {{if $conf.dPprescription.CPrescription.show_chapter_med}}

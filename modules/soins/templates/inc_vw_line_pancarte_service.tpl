@@ -164,7 +164,11 @@
                         <td style="text-align: center;">{{$quantite_adm}}</td>
                         <td>
                           {{if $line instanceof CPrescriptionLineMedicament}}
-                            {{$line->_unite_administration}}
+													  {{if $line->_unite_administration == "aucune_prise"}}
+														  {{$line->_ref_produit->libelle_unite_presentation}}
+														{{else}}
+														  {{$line->_unite_administration}}
+														{{/if}}
                           {{/if}}
                           {{if $line instanceof CPrescriptionLineElement}}
                             {{$line->_unite_prise}}

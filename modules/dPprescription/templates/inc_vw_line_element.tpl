@@ -11,7 +11,13 @@
 {{assign var=element value=$line->_chapitre}}
 <!-- Initialisation des variables -->
 {{assign var=dosql value="do_prescription_line_element_aed"}}
-{{assign var=div_refresh value=$element}}
+
+{{if $line->inscription}}
+  {{assign var=div_refresh value="inscription"}}
+{{else}}
+  {{assign var=div_refresh value=$element}}
+{{/if}}
+
 {{assign var=typeDate value=$element}}
 {{assign var=category value=$line->_ref_element_prescription->_ref_category_prescription}}
 
@@ -46,7 +52,7 @@
         {{elseif !$line->_protocole}}
           {{$line->_ref_praticien->_view}}    
         {{/if}}
-        <button class="lock notext" onclick="modalPrescription.close(); Prescription.reload.defer('{{$prescription->_id}}', '', '{{$category->chapitre}}', '', '{{$mode_pharma}}', null, '');"></button>
+        <button class="lock notext" onclick="modalPrescription.close(); Prescription.reload.defer('{{$prescription->_id}}', '', '{{$div_refresh}}', '', '{{$mode_pharma}}', null, '');"></button>
       </div>
       <!-- View de l'element -->
       <strong style="font-size: 1.5em;">
@@ -248,7 +254,7 @@
 		              onclick="
 				          if (Prescription.confirmDelLine('{{$line->_view|smarty:nodefaults|JSAttribute}}')) {
 				            modalPrescription.close();
-				            Prescription.delLineElement('{{$line->_id}}','{{$element}}');
+				            Prescription.delLineElement('{{$line->_id}}','{{$div_refresh}}');
 				          }">
 		        {{tr}}Delete{{/tr}}
 		      </button>

@@ -69,7 +69,7 @@ class CPrescriptionLineMix extends CMbObject {
 	
   var $volume_debit     = null; // En ml
   var $duree_debit      = null; // En heures
-  
+	
 	// Fwd Refs
   var $_ref_prescription = null;
   var $_ref_praticien    = null;

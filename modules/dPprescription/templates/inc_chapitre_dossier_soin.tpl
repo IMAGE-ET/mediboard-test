@@ -48,6 +48,45 @@
 		  {{include file="../../dPprescription/templates/inc_vw_perf_dossier_soin.tpl" nodebug=true}}
 		</tr>
 	{{/foreach}}
+{{elseif $chapitre == "inscription"}}
+
+  {{foreach from=$prescription->_ref_inscriptions_for_plan item=_inscription name="foreach_inscription"}}
+  	{{include file="../../dPprescription/templates/inc_vw_line_dossier_soin.tpl"
+		  line=$_inscription
+      nodebug=true
+      first_foreach=""
+      last_foreach=""
+      global_foreach=""
+			name_chap=""
+      nb_line=1  
+			type="med"
+			unite_prise="aucune_prise"
+      dosql=do_prescription_line_medicament_aed}}
+	{{/foreach}}
+  <tr> 
+    <td class="text" colspan="2"><strong>Nouvelle inscription</strong></td>
+	  <th class="before" style="cursor: pointer" onclick="showBefore();" onmouseout="clearTimeout(timeOutBefore);">
+	   <img src="images/icons/a_left.png" />
+	  </th>
+    <td style="display: none;"></td>
+		{{foreach from=$tabHours key=_view_date item=_hours_by_moment}}
+      {{foreach from=$_hours_by_moment key=moment_journee item=_dates}}
+        {{foreach from=$_dates key=_date item=_hours}}
+          {{foreach from=$_hours key=_heure_reelle item=_hour}} 
+            <td class="{{$_view_date}}-{{$moment_journee}}">
+              <div class="administration" ondblclick="addInscription('{{$_date}} {{$_hour}}:00:00', '{{$prescription->_id}}');"></div>
+						</td>
+					{{/foreach}}
+				{{/foreach}}                           
+      {{/foreach}}
+    {{/foreach}}
+    <td style="display: none;"></td>
+    <th class="after" style="cursor: pointer" onclick="showAfter();" onmouseout="clearTimeout(timeOutAfter);">
+      <img src="images/icons/a_right.png" />
+    </th>
+	  <td style="text-align: center"></td>
+	  <td style="text-align: center"></td>
+  </tr>
 {{else}}
 	{{assign var=elements value=$prescription->_ref_lines_elt_for_plan}}
 	{{assign var=elements_chap value=$elements.$chapitre}}

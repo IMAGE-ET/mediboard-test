@@ -251,6 +251,7 @@ class CPrisePosologie extends CMbMetaObject {
       $this->_short_view .= " à ". mbTransformTime(null, $this->heure_prise, "%Hh%M");
     }
 		
+		$this->_ref_object->loadRefPrescription();
 		if(!$this->_ref_object->_ref_prescription->object_id){
 			if($this->decalage_intervention){
 				$signe_decalage = "";
@@ -592,7 +593,7 @@ class CPrisePosologie extends CMbMetaObject {
 	  	if(!$this->_ref_object){
 	  		$this->loadTargetObject();
 	  	}
-		  if(!($this->_ref_object instanceof CPrescriptionLineMedicament && !$this->_ref_object->substitution_active)){
+		  if(!($this->_ref_object instanceof CPrescriptionLineMedicament && !$this->_ref_object->substitution_active && !$this->inscription)){
 			  $this->calculPlanifs();
 			}
 	  }

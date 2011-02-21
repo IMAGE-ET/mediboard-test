@@ -60,4 +60,11 @@
       </a></li>
     {{/if}}
   {{/foreach}}
+	
+	{{if $conf.dPprescription.CPrescription.show_inscription}}
+	<!-- Volet Inscription --> 
+	<li onmousedown="refreshDossierSoin(null, 'inscription');">
+    <a href="#_inscription">Inscription</a>
+	</li>
+	{{/if}}
 </ul> 

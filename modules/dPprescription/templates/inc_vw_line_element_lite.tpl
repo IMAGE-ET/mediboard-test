@@ -12,7 +12,7 @@
 
 <!-- Header de la ligne d'element -->
 <table class="tbl elt {{if $line->_fin_reelle && $line->_fin_reelle < $now && !$line->_protocole}}line_stopped{{/if}}" id="line_element_{{$line->_id}}"> 
-<tr class="hoverable {{if $line->_fin_reelle && $line->_fin_reelle < $now && !$line->_protocole}} hatching_red{{/if}}">    
+<tr class="hoverable {{if $line->_fin_reelle && $line->_fin_reelle < $now && !$line->_protocole && !$line->inscription}} hatching_red{{/if}}">    
   <td style="width: 5%; text-align: center">
   	{{if $line->_can_delete_line}}
       <button type="button" class="trash notext"
@@ -27,9 +27,11 @@
 	
 	<td style="width:20%;" class="text {{if $line->perop}}perop{{/if}}">
     <script type="text/javascript">
-       Main.add( function(){
-         moveTbodyElt($('line_element_{{$line->_id}}'),'{{$category->_id}}');
-       });
+    	{{if !$line->inscription}}
+        Main.add( function(){
+          moveTbodyElt($('line_element_{{$line->_id}}'),'{{$category->_id}}');
+        });
+			{{/if}}
     </script>
 		<span style="float: right">
 	    {{if $line->conditionnel}}{{mb_label object=$line field="conditionnel"}}&nbsp;{{/if}}
@@ -43,7 +45,7 @@
   </td>
 	
   <td class="text" style="width:35%;">
-		<span {{if $line->_fin_reelle && $line->_fin_reelle < $now && !$line->_protocole}}style="text-decoration:line-through"{{/if}}>
+		<span {{if $line->_fin_reelle && $line->_fin_reelle < $now && !$line->_protocole && !$line->inscription}}style="text-decoration:line-through"{{/if}}>
 		{{if $line->_ref_prises|@count}}
       {{foreach from=$line->_ref_prises item=_prise name=prises}}
         {{$_prise->_view}}{{if !$smarty.foreach.prises.last}}, {{/if}}

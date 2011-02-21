@@ -30,6 +30,7 @@ class CPrescriptionLineElement extends CPrescriptionLine {
 	
 	
 	var $_chapitre = null;
+	var $_unite_prise = null;
 	
   // Can fields
   var $_can_select_executant               = null;
@@ -155,22 +156,65 @@ class CPrescriptionLineElement extends CPrescriptionLine {
   }
 	
   function store(){
-  	$mode_creation = !$this->_id;
+    $mode_creation = !$this->_id;
 		
     $calcul_planif = ($this->fieldModified("debut") || 
                       $this->fieldModified("time_debut") || 
                       $this->fieldModified("duree") || 
                       $this->fieldModified("unite_duree")|| 
                       $this->fieldModified("time_fin") ||
+											$this->fieldModified("inscription") ||
 											$this->_update_planif_systeme) ? true : false;
     
+		// Lors du passage d'une inscription à une prescription, on modifie l'unité de prises des adm deja créées
+    if($this->fieldModified("inscription", "0")){
+			// Chargment du chapitre de l'element
+			$this->completeField("element_prescription_id");
+      $this->loadRefElement();
+      $chapitre = $this->_ref_element_prescription->_ref_category_prescription->chapitre;
+
+			// Chargement de la 1ere prise
+      $this->loadRefsPrises();
+			
+			$unite_prise = "";
+			$prise_id = "";
+			
+			// S'il une prise a été créé, on recupere la premiere
+			if(count($this->_ref_prises)){
+				$first_prise = reset($this->_ref_prises);
+
+        if($first_prise->moment_unitaire_id){
+        	$unite_prise = $chapitre;
+        } else {
+        	$prise_id = $first_prise->prise_posologie_id;
+        }
+      } 
+			// Sinon, stockage du chapitre comme unite de prise
+			else {
+      	//$unite_prise = $chapitre;
+      }
+			
+      $this->loadRefsAdministrations();
+      foreach($this->_ref_administrations as $_administration){
+      	if($unite_prise){
+      	  $_administration->unite_prise = $unite_prise;       
+        }
+				if($prise_id){
+				  $_administration->prise_id = $prise_id;
+        }
+      	if($msg = $_administration->store()){
+          return $msg;
+        }
+      }
+    }
+		
     if($msg = parent::store()){
   		return $msg;
   	}
     
 		if($calcul_planif && $this->_ref_prescription->type == "sejour"){
 		  $this->countLockedPlanif();
-			if($this->_count_locked_planif == 0){
+			if($this->_count_locked_planif == 0 && !$this->inscription){
 		    $this->removePlanifSysteme();
 		    $this->calculPlanifSysteme();	
 			}
@@ -274,7 +318,7 @@ class CPrescriptionLineElement extends CPrescriptionLine {
     	$this->_can_view_signature_praticien = 1;
     }
     // Affichage du formulaire de signature praticien
-    if(!$this->_protocole && $is_praticien && ($this->praticien_id == $AppUI->user_id)){
+    if(!$this->_protocole && $is_praticien && (($this->praticien_id == $AppUI->user_id) || $this->inscription)){
     	$this->_can_view_form_signature_praticien = 1;
     }
     // Affichage du formulaire de signature infirmiere

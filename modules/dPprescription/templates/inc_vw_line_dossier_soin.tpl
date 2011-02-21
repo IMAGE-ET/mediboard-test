@@ -14,14 +14,16 @@
 {{assign var=administrations_line value=$line->_administrations}}
 {{assign var=transmissions value=$prescription->_transmissions}}
 
+
 {{if $line instanceof CPrescriptionLineMedicament}}
   {{assign var=nb_lines_chap value=$prescription->_nb_produit_by_chap.$type}}
 {{else}}
   {{assign var=nb_lines_chap value=$prescription->_nb_produit_by_chap.$name_chap}}
 {{/if}}
 
+
 <tr id="line_{{$line_class}}_{{$line_id}}_{{$unite_prise|regex_replace:'/[^a-z0-9_-]/i':'_'}}">
-  {{if $conf.dPprescription.CPrescription.show_categories_plan_soins}}
+  {{if $conf.dPprescription.CPrescription.show_categories_plan_soins && !$line->inscription}}
 		{{if $smarty.foreach.$first_foreach.first && $smarty.foreach.$last_foreach.first}}
 	    {{if $line_class == "CPrescriptionLineMedicament"}}
 	      {{assign var=libelle_ATC value=$line->_ref_produit->_ref_ATC_2_libelle}}
@@ -80,9 +82,12 @@
 		    </th>
 	    {{/if}}
 	  {{/if}}
+		
+		
+		
   {{/if}}
 	
-  {{if $smarty.foreach.$last_foreach.first}}
+  {{if $line->inscription || $smarty.foreach.$last_foreach.first}}
   <td class="text" rowspan="{{$nb_line}}" {{if $line instanceof CPrescriptionLineMedicament && $line->traitement_personnel}}style="background-color: #BDB"{{/if}}>
 		{{if $line->commentaire}}
       <img src="images/icons/flag.png" title="" style="float: right; margin: 2px;" onmouseover="ObjectTooltip.createDOM(this, 'tooltip-content-comment-{{$line->_guid}}');" />
@@ -202,6 +207,10 @@
 						</div>
 	        {{/foreach}}
 	      {{/if}}
+	    {{else}}
+	      {{if $line->inscription}}
+			Inscription
+		  {{/if}}	
 	    {{/if}}
 	    </small>
 		{{/if}}
@@ -209,8 +218,11 @@
     {{if $line instanceof CPrescriptionLineMedicament}}
 	    <!-- Affichage de la forme galenique -->
 			<div style="opacity: 0.7;">
-			<hr style="width: 70%; border-color: #AAA; margin: 1px auto;" />
-	      <small>
+			{{if !$line->inscription}}
+			  <hr style="width: 70%; border-color: #AAA; margin: 1px auto;" />
+	    {{/if}}
+			
+			  <small>
 	        {{$line->_forme_galenique}}
 	        {{if $line->_ref_produit_prescription->unite_prise}}
 	          ({{$line->_ref_produit_prescription->unite_prise}})
@@ -227,12 +239,16 @@
 	  {{/if}}
   </td>
   
-  {{if $smarty.foreach.$global_foreach.first && $smarty.foreach.$first_foreach.first && $smarty.foreach.$last_foreach.first}}
-  <th class="before" style="cursor: pointer" onclick="showBefore();" rowspan="{{$nb_lines_chap}}" onmouseout="clearTimeout(timeOutBefore);">
-   <img src="images/icons/a_left.png" />
-  </th>
-  {{/if}}
- 
+		{{if !$line->inscription}}
+		  {{if $smarty.foreach.$global_foreach.first && $smarty.foreach.$first_foreach.first && $smarty.foreach.$last_foreach.first}}
+			  <th class="before" style="cursor: pointer" onclick="showBefore();" rowspan="{{$nb_lines_chap}}" onmouseout="clearTimeout(timeOutBefore);">
+			   <img src="images/icons/a_left.png" />
+				</th>
+			{{/if}}
+		{{else}}
+	    <th></th>
+	  {{/if}}
+	 
 	  <td id="first_{{$line_id}}_{{$line_class}}_{{$unite_prise|regex_replace:'/[^a-z0-9_-]/i':'_'}}" style="display: none;">
 	  </td>
 	  
@@ -253,11 +269,15 @@
 	  <td id="last_{{$line_id}}_{{$line_class}}_{{$unite_prise|regex_replace:'/[^a-z0-9_-]/i':'_'}}" style="display: none;">
 	  </td>
  
- {{if $smarty.foreach.$global_foreach.first &&  $smarty.foreach.$first_foreach.first  && $smarty.foreach.$last_foreach.first}}
-   <th class="after" style="cursor: pointer" onclick="showAfter();" rowspan="{{$nb_lines_chap}}" onmouseout="clearTimeout(timeOutAfter);">
-     <img src="images/icons/a_right.png" />
-   </th>
- {{/if}}
+   {{if !$line->inscription}}
+		 {{if $smarty.foreach.$global_foreach.first &&  $smarty.foreach.$first_foreach.first  && $smarty.foreach.$last_foreach.first}}
+		   <th class="after" style="cursor: pointer" onclick="showAfter();" rowspan="{{$nb_lines_chap}}" onmouseout="clearTimeout(timeOutAfter);">
+		       <img src="images/icons/a_right.png" />
+			  </th>
+		 {{/if}}
+	 {{else}}
+	   <th></th>
+	 {{/if}}
  
  <!-- Signature du praticien -->
  <td style="text-align: center">

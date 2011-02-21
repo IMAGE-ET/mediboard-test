@@ -1801,7 +1801,18 @@ class CSetupdPprescription extends CSetup {
 		$query = "ALTER TABLE `prescription_line_mix_item` ADD INDEX (`code_cis`);";
     $this->addQuery($query);
     
-		$this->mod_version = "1.28";
+		$this->makeRevision("1.28");
+		
+    $query = "ALTER TABLE `prescription_line_medicament` ADD `inscription` ENUM ('0','1') DEFAULT '0';";
+    $this->addQuery($query);
+    
+    $query = "ALTER TABLE `prescription_line_element` ADD `inscription` ENUM ('0','1') DEFAULT '0';";
+    $this->addQuery($query);
+
+    $query = "ALTER TABLE `prescription_line_comment` ADD `inscription` ENUM ('0','1') DEFAULT '0';";
+    $this->addQuery($query);
+  
+		$this->mod_version = "1.29";
   }
 }
 

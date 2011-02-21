@@ -359,7 +359,7 @@ class CPrescriptionLineMedicament extends CPrescriptionLine {
     	$this->_can_view_signature_praticien = 1;
     }
     // Affichage du formulaire de signature praticien
-    if(!$this->_protocole && $is_praticien && ($this->praticien_id == $AppUI->user_id)){
+    if(!$this->_protocole && $is_praticien && (($this->praticien_id == $AppUI->user_id) || $this->inscription)){
     	$this->_can_view_form_signature_praticien = 1;
     }
     // Affichage de l'icone Livret Therapeutique
@@ -576,8 +576,28 @@ class CPrescriptionLineMedicament extends CPrescriptionLine {
 											$this->fieldModified("substitution_active") ||
 											$this->fieldModified("date_arret") || 
 											$this->fieldModified("substitution_line_id") ||
-											$this->_update_planif_systeme);
+											$this->_update_planif_systeme ||
+											$this->fieldModified("inscription"));
   
+	  // Lors du passage d'une inscription à une prescription, on modifie l'unité de prises des adm deja créées
+	  if($this->fieldModified("inscription", "0")){
+	  	// Chargement de la 1ere prise
+			$this->loadRefsPrises();
+			$first_prise = reset($this->_ref_prises);
+			
+			$unite_prise = $first_prise->unite_prise;
+			$prise_id = !$first_prise->moment_unitaire_id ? $first_prise->prise_posologie_id : '';
+			
+			$this->loadRefsAdministrations();
+			foreach($this->_ref_administrations as $_administration){
+				$_administration->unite_prise = $unite_prise;
+				$_administration->prise_id = $prise_id;
+        
+				if($msg = $_administration->store()){
+		      return $msg;
+		    }
+			}
+	  }
 	
 	  // Stockage du stupefiant lors de la creation de la ligne
     if(!$this->_id){
@@ -589,7 +609,7 @@ class CPrescriptionLineMedicament extends CPrescriptionLine {
         $this->stupefiant = 1;
       }
     }
-		
+	
   	if($msg = parent::store()){
   		return $msg;
   	}
@@ -598,7 +618,7 @@ class CPrescriptionLineMedicament extends CPrescriptionLine {
   		$this->countLockedPlanif();
 	
 			// Si aucune planification n'est associée à une administration, on peut les supprimer
-			if($this->_count_locked_planif == 0){
+			if($this->_count_locked_planif == 0 && !$this->inscription){
 				$this->removePlanifSysteme();
 				if(!$this->substitution_line_id && $this->substitution_active){
 					$this->calculPlanifSysteme();

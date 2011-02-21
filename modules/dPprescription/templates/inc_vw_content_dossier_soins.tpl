@@ -11,7 +11,7 @@
 <table class="tbl" id="plan_soin">
 	<tbody id="tbody_date">
 	{{if $prescription->_ref_lines_med_for_plan|@count || $prescription->_ref_lines_elt_for_plan|@count || 
-	     $prescription->_ref_prescription_line_mixes_for_plan_by_type|@count || $prescription->_ref_injections_for_plan|@count}}
+	     $prescription->_ref_prescription_line_mixes_for_plan_by_type|@count || $prescription->_ref_injections_for_plan|@count || $conf.dPprescription.CPrescription.show_inscription}}
 	  <tr>
 	  	{{if $conf.dPprescription.CPrescription.show_categories_plan_soins}}
 	    <th rowspan="2" class="title">Catégorie</th>
@@ -85,4 +85,8 @@
 	  <tbody id="_cat-{{$name_chap}}" style="display: none;">
 	{{/foreach}}
 	</tbody>
+	{{if $conf.dPprescription.CPrescription.show_inscription}}
+		<!-- Affichage des inscriptions du personnel soignant -->
+		<tbody id="_inscription" style="display: none;"></tbody>
+	{{/if}}
 </table>

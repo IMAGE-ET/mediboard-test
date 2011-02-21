@@ -76,13 +76,12 @@ emptyProtocole = function() {
   
   <tr>
     <td>
-      <form name="mode_affichage">
+      <form name="mode_affichage" action="?" method="get">
         <!-- Permet de rester en mode lecture (et de ne pas recuperer l'operation_id en session) -->
         <input type="hidden" name="mode_sejour" value="{{$mode_sejour}}" />
       </form>
       <table style="width: 100%;">
         <tr>
-          
           <!-- Pre-admission -->
           <td id="pre_admission" class="step {{if $prescription->type == 'pre_admission'}}selected{{/if}}">
           {{if $prescription_pre_admission->_id}}

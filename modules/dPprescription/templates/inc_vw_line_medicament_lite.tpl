@@ -27,13 +27,13 @@
     </td>
     <td style="width: 25%" class="text {{if $line->traitement_personnel}}traitement{{/if}} {{if $line->perop}}perop{{/if}}">
       <script type="text/javascript">
-        {{if !$line->_protocole}}
-         Main.add( function(){
-             moveTbody($('line_medicament_{{$line->_id}}'));
-         });
+        {{if !$line->_protocole && !$line->inscription}}
+          Main.add( function(){
+            moveTbody($('line_medicament_{{$line->_id}}'));
+          });
          {{/if}}
       </script>
-      {{if $line->_ref_parent_line->_id}}
+      {{if !$line->inscription && $line->_ref_parent_line->_id}}
         {{assign var=parent_line value=$line->_ref_parent_line}}
         <img style="float: right" src="images/icons/history.gif" title="Ligne possédant un historique" 
              onmouseover="ObjectTooltip.createEx(this, '{{$parent_line->_guid}}')"/>

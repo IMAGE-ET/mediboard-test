@@ -9,7 +9,13 @@
 *}}
 
 {{assign var=dosql value="do_prescription_line_medicament_aed"}}
-{{assign var=div_refresh value="medicament"}}
+
+{{if $line->inscription}}
+  {{assign var=div_refresh value="inscription"}}
+{{else}}
+  {{assign var=div_refresh value="medicament"}}
+{{/if}}
+
 {{assign var=typeDate value="Med"}}
 
 <table class="tbl {{if $line->traitement_personnel}}traitement{{else}}med{{/if}}" id="full_line_medicament_{{$line->_id}}">
@@ -76,7 +82,7 @@
 				{{if @$mode_substitution}}
 				 Prescription.viewSubstitutionLines('{{$line->substitute_for_id}}','{{$line->substitute_for_class}}');
 				{{else}}
-				 Prescription.reload('{{$prescription->_id}}', '', 'medicament', '', '{{$mode_pharma}}', null, '');
+				 Prescription.reload('{{$prescription->_id}}', '', '{{$div_refresh}}', '', '{{$mode_pharma}}', null, '');
 				{{/if}}">
 				
 				</button>
@@ -128,7 +134,7 @@
 	
 	<table class="main layout">
 	<!-- Association d'un produit à une perfusion-->
-  {{if $line->_is_perfusable && $line->_perm_edit}}
+  {{if $line->_is_perfusable && $line->_perm_edit && !$line->inscription}}
 	  <tr>
 	    <td>
 	    	<fieldset>

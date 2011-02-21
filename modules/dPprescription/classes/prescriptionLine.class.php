@@ -38,6 +38,7 @@ class CPrescriptionLine extends CMbObject {
   var $emplacement         = null;
   var $commentaire         = null;
   var $perop               = null;
+	var $inscription         = null;
 	
   // Form Fields
   var $_fin                = null;
@@ -81,7 +82,7 @@ class CPrescriptionLine extends CMbObject {
     $specs = parent::getProps();
     $specs["prescription_id"]   = "ref notNull class|CPrescription cascade";
     $specs["ald"]               = "bool";
-    $specs["praticien_id"]      = "ref notNull class|CMediusers";
+    $specs["praticien_id"]      = "ref class|CMediusers";
     $specs["creator_id"]        = "ref notNull class|CMediusers";
     $specs["signee"]            = "bool";
     $specs["debut"]             = "date";
@@ -106,6 +107,7 @@ class CPrescriptionLine extends CMbObject {
     $specs["emplacement"]       = "enum notNull list|service|bloc|service_bloc default|service";
     $specs["operation_id"]      = "ref class|COperation";
     $specs["perop"]             = "bool default|0"; 
+    $specs["inscription"]       = "bool default|0";
     $specs["_fin"]              = "date moreEquals|debut";
     $specs["_fin_reelle"]       = "date";
     return $specs;
