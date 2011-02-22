@@ -9,7 +9,8 @@
     <script type="text/javascript">
       try {
         this.print();
-      } catch(e){ }
+      }
+      catch(e){ }
     </script>
     
     {{$content|smarty:nodefaults}}
