@@ -16,8 +16,13 @@ $line = new CPrescriptionLineMix();
 $line->load($line_id);
 $line->calculQuantiteTotal();
 
+$line_item = new CPrescriptionLineMixItem();
 $line_item = $line->_ref_lines[CValue::get("line_item_id")];
-$quantite_produit = $line_item->_quantite_ml / $line_item->_ref_produit->rapport_unite_prise["mg"]["ml"];
+if($line_item->_quantite_ml) {
+  $quantite_produit = $line_item->_quantite_ml / $line_item->_ref_produit->rapport_unite_prise["mg"]["ml"];
+} else {
+  $quantite_produit = $line_item->quantite / $line_item->_ref_produit->rapport_unite_prise[$line_item->unite]["mg"];
+}
 
 $smarty->assign("line"            , $line);
 $smarty->assign("line_item"       , $line_item);
