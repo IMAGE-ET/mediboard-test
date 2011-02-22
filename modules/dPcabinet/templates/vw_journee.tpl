@@ -67,7 +67,7 @@ Reconvocation = {
 				
         <select name="prat_id" class="ref notNull">
           <option value="">&mdash; {{tr}}Choose{{/tr}}</option>
-					{{mb_include module=mediusers template=inc_options_mediuser list=$praticiens selected=$app->user_id}}
+					{{mb_include module=mediusers template=inc_options_mediuser list=$all_prats selected=$app->user_id}}
         </select>
         
         <input type="hidden" name="motif" value="Reconvocation immédiate" />   

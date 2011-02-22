@@ -43,6 +43,9 @@ if ($cabinet_id) {
   $cabinet->load($cabinet_id);
 }
 
+// Praticiens disponibles
+$all_prats = $praticiens;
+
 if ($consult->_id) {
   $date = $consult->_ref_plageconsult->date;
   CValue::setSession("date", $date);
@@ -66,6 +69,7 @@ foreach($praticiens as $prat) {
     $listPlages[$prat->_id]["destinations"] = array();    
   }
 }
+
 
 $nb_attente = 0;
 $nb_a_venir = 0;
@@ -130,6 +134,7 @@ $smarty->assign("closed"        , $closed);
 $smarty->assign("date"          , $date);
 $smarty->assign("hour"          , $hour);
 $smarty->assign("praticiens"    , $praticiens);
+$smarty->assign("all_prats"     , $all_prats);
 $smarty->assign("cabinets"      , $cabinets);
 $smarty->assign("board"         , $board);
 $smarty->assign("boardItem"     , $boardItem);
