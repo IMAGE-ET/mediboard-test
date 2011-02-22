@@ -478,6 +478,7 @@ class CSejour extends CCodable {
         $upper2 = $sejour->sortie;
         break;
     }
+		
     return CMbRange::collides($lower1, $upper1, $lower2, $upper2);
   }
   

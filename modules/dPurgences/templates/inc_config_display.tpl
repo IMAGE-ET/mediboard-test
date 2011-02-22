@@ -19,7 +19,9 @@
 	  {{mb_include module=system template=inc_config_bool var=age_patient_rpu_view}}
 	  {{mb_include module=system template=inc_config_bool var=responsable_rpu_view}}
 	  {{mb_include module=system template=inc_config_bool var=diag_prat_view}}
-	  {{mb_include module=system template=inc_config_bool var=check_cotation}}
+    {{mb_include module=system template=inc_config_bool var=check_cotation}}
+    {{mb_include module=system template=inc_config_bool var=check_gemsa}}
+    {{mb_include module=system template=inc_config_bool var=check_can_leave}}
 	  {{mb_include module=system template=inc_config_bool var=hide_reconvoc_sans_sortie}}
 	  {{mb_include module=system template=inc_config_str var=attente_first_part}}
 	  {{mb_include module=system template=inc_config_str var=attente_second_part}}

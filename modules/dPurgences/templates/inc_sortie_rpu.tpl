@@ -50,7 +50,10 @@
 <td>
   <!-- Vérification des champs semi obligatoires -->
   {{if !$rpu->ccmu           }}<div class="warning">Champ manquant {{mb_label object=$rpu field=ccmu           }}</div>{{/if}}
-  {{if !$rpu->gemsa          }}<div class="warning">Champ manquant {{mb_label object=$rpu field=gemsa          }}</div>{{/if}}
+	
+  {{if $conf.dPurgences.check_gemsa}}
+    {{if !$rpu->gemsa          }}<div class="warning">Champ manquant {{mb_label object=$rpu field=gemsa          }}</div>{{/if}}
+	{{/if}}
 	
   {{if $conf.dPurgences.check_cotation}}
 	  {{if !$rpu->_ref_consult->_ref_actes}}<div class="warning">Codage des actes manquant</div>{{/if}}
@@ -125,6 +128,7 @@
 	{{/if}}
   </td>
 	
+  {{if $conf.dPurgences.check_can_leave}}
   <td id="rpu-{{$rpu->_id}}" style="font-weight: bold" class="text {{if !$rpu->sortie_autorisee}}arretee{{/if}} {{$rpu->_can_leave_level}}">
     {{if $sejour->sortie_reelle}}
     	{{if !$rpu->sortie_autorisee}}
@@ -153,4 +157,6 @@
       {{tr}}CRPU-sortie_assuree.{{$rpu->sortie_autorisee}}{{/tr}}
     {{/if}}
   </td>
+	{{/if}}
+	
 {{/if}}

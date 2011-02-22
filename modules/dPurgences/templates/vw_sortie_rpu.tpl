@@ -121,7 +121,9 @@ function filterPatient(input, indicator) {
       {{mb_title class=CSejour field=_entree}} /
       {{mb_title class=CSejour field=_sortie}}
 		</th>
+    {{if $conf.dPurgences.check_can_leave}}
     <th>{{mb_title class=CRPU field="_can_leave"}}</th>
+		{{/if}}
   </tr>
   {{foreach from=$listSejours item=sejour}}
     {{assign var=rpu value=$sejour->_ref_rpu}}
