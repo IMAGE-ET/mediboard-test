@@ -33,6 +33,12 @@ class CLPR {
   }
   
   function printFile($file) {
+    // Test de la commande lpr
+    exec("whereis lpr", $ret);
+    if (preg_match("@\/lpr@", $ret[0]) == 0) {
+       CAppUI::stepAjax("La commande lpr n'est pas disponible", UI_MSG_ERROR);
+    }
+    
     if (file_get_contents($file->_file_path) === false) {
       CAppUI::stepAjax("Impossible d'accéder au PDF", UI_MSG_ERROR);
     }
@@ -52,8 +58,8 @@ class CLPR {
       $host .= ":$this->port";
     }
     
-    $command = "lpr -H $host $u $printer '".dirname(__DIR__)."/$file->_file_path'";
-
+    $command = "lpr -H $host $u $printer '$file->_file_path'";
+    
     exec($command, $res, $success);
 
     // La commande lpr retourne 0 si la transmission s'est bien effectuée
@@ -61,7 +67,7 @@ class CLPR {
       CAppUI::stepAjax("Impression réussie", UI_MSG_OK);  
     }
     else {
-      CAppUI::stepAjax("Impression échouée", UI_MSG_ERROR);
+      CAppUI::stepAjax("Impression échouée, vérifiez la configuration", UI_MSG_ERROR);
     }
   }
 }

@@ -18,6 +18,7 @@ if ($file_id = CValue::post("file_id")) {
 
 $compte_rendu_id = CValue::post("compte_rendu_id");
 $stream      = CValue::post("stream");
+$print_to_server = CValue::post("print_to_server");
 $compte_rendu = new CCompteRendu;
 $compte_rendu->load($compte_rendu_id);
 $compte_rendu->loadContent(1);
@@ -52,6 +53,11 @@ echo CAppUI::getMsg();
 // Un callback pour le stream du pdf
 if ($stream) {
   echo "\n<script type=\"text/javascript\">streamPDF($file->_id)</script>";
+}
+
+// Un callback pour l'impression server side
+if ($print_to_server) {
+  echo "\n<script type=\"text/javascript\">printToServer($file->_id)</script>";
 }
 
 CApp::rip();

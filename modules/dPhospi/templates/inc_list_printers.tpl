@@ -42,7 +42,7 @@ removeSelected = function() {
     </tr>
   {{foreachelse}}
     <tr>
-      <td>
+      <td colspan="2">
         {{tr}}CPrinter.none{{/tr}}
       </td>
     </tr>

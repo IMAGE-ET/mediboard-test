@@ -19,6 +19,7 @@ class CPrinter extends CMbMetaObject {
   
   // Ref fields
   var $_ref_function = null;
+  var $_ref_source   = null;
   
   function getSpec() {
     $spec = parent::getSpec();
@@ -44,6 +45,11 @@ class CPrinter extends CMbMetaObject {
   
   function loadRefFunction($cached = true){
     return $this->_ref_function = $this->loadFwdRef("function_id", $cached);
+  }
+  
+  function loadRefSource() {
+    $source_guid = $this->object_class.'-'.$this->object_id;
+    return $this->_ref_source = CMbObject::loadFromGuid($source_guid);
   }
 }
 

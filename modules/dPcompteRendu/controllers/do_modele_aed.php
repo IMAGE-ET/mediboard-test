@@ -141,7 +141,6 @@ if (intval(CValue::post("del"))) {
   $do->_obj->_entire_doc = CCompteRendu::loadHTMLcontent($do->_obj->_source, "doc",'','','','','',$margins);
 }
 
-
 if($do->ajax){
   $do->doCallback();
 }

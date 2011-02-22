@@ -20,7 +20,6 @@ $target_id       = CValue::get("target_id");
 $target_class    = CValue::get("target_class");
 
 // Faire ici le test des différentes variables dont on a besoin
-
 $compte_rendu = new CCompteRendu;
 
 // Modification d'un document
@@ -138,6 +137,15 @@ $user->loadRefFunction();
 // Chargement des catégories
 $listCategory = CFilesCategory::listCatClass($compte_rendu->object_class);
 
+// Décompte des imprimantes disponibles pour l'impression serveur
+$nb_printers = 0;
+if (CModule::getInstalled("printing")) {
+  $printer = new CPrinter;
+  $wherePrinter = array();
+  $wherePrinter["function_id"] = " ='".CAppUI::$user->function_id."'";
+  $nb_printers = $printer->countList($wherePrinter);
+}
+
 // Gestion du template
 $templateManager = new CTemplateManager($_GET);
 $templateManager->isModele = false;
@@ -169,15 +177,16 @@ if($isCourrier) {
 // Création du template
 $smarty = new CSmartyDP();
 
-$smarty->assign("listCategory"   , $listCategory);
-$smarty->assign("compte_rendu"   , $compte_rendu);
-$smarty->assign("modele_id"      , $modele_id);
-$smarty->assign("lists"          , $lists);
-$smarty->assign("destinataires"  , $destinataires);
-$smarty->assign("user_id"        , $user->_id);
-$smarty->assign("user_view"      , $user->_view);
-$smarty->assign("object_id"    , $object_id);
-$smarty->assign('object_class' , CValue::get("object_class"));
+$smarty->assign("listCategory"  , $listCategory);
+$smarty->assign("compte_rendu"  , $compte_rendu);
+$smarty->assign("modele_id"     , $modele_id);
+$smarty->assign("lists"         , $lists);
+$smarty->assign("destinataires" , $destinataires);
+$smarty->assign("user_id"       , $user->_id);
+$smarty->assign("user_view"     , $user->_view);
+$smarty->assign("object_id"     , $object_id);
+$smarty->assign('object_class'  , CValue::get("object_class"));
+$smarty->assign("nb_printers"   , $nb_printers);
 
 $noms_textes_libres = array();
 
@@ -208,15 +217,24 @@ if (CValue::get("reloadzones") == 1) {
   $smarty->display("inc_zones_fields.tpl");
 }
 else if ($compte_rendu->fast_edit && !$compte_rendu_id && !$switch_mode) {
-  $smarty->assign("_source", $templateManager->document);
-	$smarty->assign("object_guid", CValue::get("object_guid"));
-  $smarty->assign("unique_id"       , CValue::get("unique_id"));
+  $printers = $printer->loadList($wherePrinter);
+  
+  foreach($printers as $_printer) {
+    $_printer->loadTargetObject();
+  }
+  
+  $smarty->assign("_source"     , $templateManager->document);
+	$smarty->assign("object_guid" , CValue::get("object_guid"));
+  $smarty->assign("unique_id"   , CValue::get("unique_id"));
+  $smarty->assign("printers"    , $printers);
+  
   $smarty->display("fast_mode.tpl");
 }
 else {
   $templateManager->initHTMLArea();
-  $smarty->assign("switch_mode", CValue::get("switch_mode", 0));
+  $smarty->assign("switch_mode"    , CValue::get("switch_mode", 0));
   $smarty->assign("templateManager", $templateManager);
+  
   $smarty->display("edit_compte_rendu.tpl");
 }
 ?>

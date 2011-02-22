@@ -31,7 +31,6 @@ guessDataFormEmail = function(element){
         <input type="hidden" name="dosql" value="do_source_smtp_aed" />
         <input type="hidden" name="source_smtp_id" value="{{$source->_id}}" />
         <input type="hidden" name="del" value="0" /> 
-        <input type="hidden" name="name" value="{{$source->name}}" /> 
            
         <table class="form">        
           <tr>

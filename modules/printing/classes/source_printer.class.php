@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Source SMB PRINTING
+ * Source Printer PRINTING
  *  
  * @category PRINTING
  * @package  Mediboard
@@ -31,7 +31,6 @@ class CSourcePrinter extends CMbObject{
     $props["host"]         = "text notNull";
     $props["port"]         = "num";
     $props["printer_name"] = "str notNull";
-
     return $props;
   }
   

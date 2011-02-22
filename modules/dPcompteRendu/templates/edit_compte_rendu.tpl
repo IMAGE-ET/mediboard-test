@@ -5,6 +5,7 @@
 <script type="text/javascript">
 window.same_print = {{$conf.dPcompteRendu.CCompteRendu.same_print}};
 window.pdf_thumbnails = {{$pdf_thumbnails|@json}};
+window.nb_printers = {{$nb_printers|@json}};
 
 function submitCompteRendu(callback){
   CKEDITOR.instances.htmlarea.document.getBody().setStyle("background", "#ddd");
@@ -45,7 +46,7 @@ function refreshZones(id, obj) {
     Thumb.compte_rendu_id = id;
     Thumb.modele_id = 0;
     var refresh = function() { window.thumbs_timeout = setTimeout(function() {
-      Thumb.refreshThumbs(0);
+      Thumb.refreshThumbs(0, Thumb.print);
     }, 0)};
     window.callback == null ?
       window.callback = refresh :
@@ -54,6 +55,9 @@ function refreshZones(id, obj) {
           refresh();
           return callOriginal();
         });
+  }
+  else if (Thumb.print) {
+    pdfAndPrintServer(id);
   }
   
   //Remise du content sauvegardé, avec l'impression en callback
@@ -74,6 +78,11 @@ function refreshZones(id, obj) {
 function openWindowMail() {
   var url = new Url("dPcompteRendu", "ajax_view_mail");
   url.popup(700, 320, "Envoi mail");
+}
+
+function openModalPrinters() {
+  window.modalPrinters = new Url("dPcompteRendu", "ajax_choose_printer");
+  modalPrinters.requestModal(700, 400);
 }
 
 {{if $pdf_thumbnails == 1}}
@@ -164,8 +173,8 @@ function openWindowMail() {
 
     {{/if}}
     {{if !$compte_rendu->_id && $switch_mode == 1}}
-      if (window.opener.linkFields) {
-        from = window.opener.linkFields();
+      if (window.opener.saveFields) {
+        from = window.opener.saveFields;
         var to = getForm("editFrm");
         if (from[0].any(function(elt){ return elt.size > 1; })) {
           toggleOptions();
@@ -183,6 +192,19 @@ function openWindowMail() {
 
 </script>
 
+<!-- Formulaire pour l'impression server side -->
+<form name="print-server" method="post" action="?m=dPcompteRendu&amp;ajax_print_server">
+  <input type="hidden" name="content" value=""/>
+  <input type="hidden" name=""/>
+</form>
+
+<!-- Zone cachée pour la génération PDF et l'impression server side,
+  utilisée lorsque la config PDF n'est pas activée-->
+{{if !$pdf_thumbnails}}
+  <div id="pdf_area" style="display: none;"></div>
+{{/if}}
+
+<!-- Formulaire pour streamer le pdf -->
 <form style="display: none;" name="download-pdf-form" target="_blank" method="post" action="?m=dPcompteRendu&amp;a=ajax_pdf"
       onsubmit="completeLayout(); this.submit();">
   <input type="hidden" name="content" value=""/>

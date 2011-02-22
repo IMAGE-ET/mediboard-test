@@ -13,6 +13,7 @@ $compte_rendu->load($compte_rendu_id);
 $compte_rendu->loadContent();
 $generate_thumbs = CValue::post("generate_thumbs");
 $mode        = CValue::post("mode","doc");
+$print       = CValue::post("print", 0);
 $type        = CValue::post("type", $compte_rendu->type);
 $footer_id   = CValue::post("footer_id", $compte_rendu->footer_id);
 $header_id   = CValue::post("header_id", $compte_rendu->header_id);
@@ -24,7 +25,7 @@ $write_page  = CValue::post("write_page", 0);
 $page_format = CValue::post("page_format",$compte_rendu->_page_format);
 $orientation = CValue::post("orientation",$compte_rendu->_orientation);
 $first_time  = CValue::post("first_time");
-$user_id     = CValue::post("user_id");
+$user_id     = CValue::post("user_id", CAppUI::$user->_id);
 $page_width  = CValue::post("page_width", $compte_rendu->page_width);
 $page_height = CValue::post("page_height", $compte_rendu->page_height);
 $margins     = CValue::post("margins", array($compte_rendu->margin_top,
@@ -150,6 +151,7 @@ if ($write_page) {
   $smarty = new CSmartyDP;
   $smarty->assign("file_id", $file->_id);
   $smarty->assign("_nb_pages", $file->_nb_pages);
+  $smarty->assign("print", $print);
   $smarty->display("inc_thumbnail.tpl");
 }
 

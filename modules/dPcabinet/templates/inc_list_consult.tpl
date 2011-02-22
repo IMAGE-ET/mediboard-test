@@ -1,9 +1,11 @@
 <script type="text/javascript">
 // Notification de l'arrivée du patient
 if (!window.Consultations) {
-  Consultations.start = function() {
-  	window.location.reload();
-  }
+  Consultations = {
+    start: function() {
+  	  window.location.reload();
+    }
+  };
 }
 
 putArrivee = function(oForm) {

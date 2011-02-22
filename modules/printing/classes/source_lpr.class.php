@@ -27,15 +27,18 @@ class CSourceLPR extends CSourcePrinter {
 
   function getSpec() {
     $spec = parent::getSpec();
+    
     $spec->table = 'source_lpr';
     $spec->key   = 'source_lpr_id';
     return $spec;
   }
   
   function getProps() {
-    $specs = parent::getProps();
-    $specs["user"]         = "str";
-    return $specs;
+    $props = parent::getProps();
+    
+    $props["user"]         = "str";
+    $props["printer_name"] = "str";
+    return $props;
   }
   
   function sendDocument($file) {

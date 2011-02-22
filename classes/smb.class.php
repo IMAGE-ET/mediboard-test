@@ -35,6 +35,16 @@ class CSMB {
   }
   
   function printFile($file) {
+    // Test de la commande smbclient
+    exec("whereis smbclient", $ret);
+    if (preg_match("@\/smbclient@", $ret[0]) == 0) {
+       CAppUI::stepAjax("La commande smbclient n'est pas disponible", UI_MSG_ERROR);
+    }
+    
+    if (file_get_contents($file->_file_path) === false) {
+      CAppUI::stepAjax("Impossible d'accéder au PDF", UI_MSG_ERROR);
+    }
+    
     // Construction de l'uri
     $uri = "'//$this->hostname/$this->printer_name' "; 
     
@@ -42,7 +52,7 @@ class CSMB {
       $uri .= $this->password;
     }
     
-    $uri .= " -c 'print " . dirname(__DIR__) . "/$file->_file_path' ";
+    $uri .= " -c 'print $file->_file_path' ";
     
     if ($this->username) {
       $uri .= "-U $this->username ";

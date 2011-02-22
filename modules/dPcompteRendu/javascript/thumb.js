@@ -21,7 +21,7 @@ var Thumb = {
     colspan_editeur == '1' ? editeur.writeAttribute("colspan",'2') : editeur.writeAttribute("colspan",'1');
   },
 
-  refreshThumbs: function(first_time) {
+  refreshThumbs: function(first_time, print) {
     
     $("thumbs").stopObserving("scroll", Thumb.refreshThumb);
     this.changed = false;
@@ -47,6 +47,11 @@ var Thumb = {
     
     url.addParam("content", encodeURIComponent(content));
     url.addParam("mode", this.mode);
+    
+    if (print) {
+      url.addParam("print", print);
+      Thumb.print = 0;
+    }
     
     if (this.modele_id) {
       url.addParam("type",      $V(form.elements.type));
@@ -76,10 +81,8 @@ var Thumb = {
         a: "ajax_pdf"
       },
       onComplete: function() {
-        
         Thumb.thumb_refreshing = false;
         if(!Thumb.thumb_up2date) {
-          
           Thumb.thumb_up2date = true;
           Thumb.old();
         }
@@ -188,4 +191,12 @@ function deleteStyle() {
   var styleTag = instance.document.getBody().getFirst();
   if (styleTag && styleTag.$.tagName == "STYLE")
     styleTag.remove();
+}
+
+function pdfAndPrintServer(compte_rendu_id) {
+  var url = new Url();
+  url.addParam("compte_rendu_id", compte_rendu_id);
+  url.addParam("write_page", 1);
+  url.addParam("print", 1);
+  url.requestUpdate("pdf_area", {method: "post", getParameters: {m: "dPcompteRendu", a: "ajax_pdf"}});
 }

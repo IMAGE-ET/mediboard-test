@@ -45,21 +45,13 @@ var Document = {
   fastMode: function(object_class, modele_id, object_id, target_id, target_class, unique_id) {
     if (!modele_id) return;
     
-    var fast = $('fast-'+unique_id);
-    
-    if (fast) {
-			if (fast.select(".freetext").length || fast.innerHTML.indexOf("[Liste")) {
-        var modaleWindow = modal(fast);
-        modaleWindow.position();
-      }
       var url = new Url("dPcompteRendu", "edit_compte_rendu");
       url.addParam("modele_id"   , modele_id);
       url.addParam("object_id"   , object_id);
       url.addParam('object_class', object_class);
 			url.addParam('unique_id'   , unique_id);
-      url.requestUpdate(fast, {onComplete: function(){ modaleWindow.position();
+      url.requestModal(750, 400, {onComplete: function(){ modaleWindow.position();
       }});
-    }
   },
   
   edit: function(compte_rendu_id){

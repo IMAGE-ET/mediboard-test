@@ -12,6 +12,7 @@
 <script type="text/css">
   updateSelected = function(guid) {
     removeSelected();
+    $("type_source").selectedIndex = 0;
     var source = $("source-" + guid);
     source.addClassName("selected");
   }
@@ -24,7 +25,10 @@
   }
 </script>
 
-<select id="type_source">
+<select id="type_source" onchange="removeSelected(); editSource(0, this.value);">
+  <option value="">
+    &mdash; {{tr}}CSourceLPR.choose_type{{/tr}}
+  </option>
   <option value="CSourceLPR">
     {{tr}}CSourceLPR{{/tr}}
   </option>
@@ -32,10 +36,6 @@
     {{tr}}CSourceSMB{{/tr}}
   </option>
 </select>
-
-<button type="button" onclick="removeSelected(); editSource(0, $('type_source').value);" class="new">
-  {{tr}}Create{{/tr}}
-</button>
 
 <table class="tbl">
   <tr>

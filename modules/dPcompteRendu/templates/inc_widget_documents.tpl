@@ -95,8 +95,6 @@ Main.add(function() {
 
 </form>
 
-<div id="fast-{{$unique_id}}" style="display: none; min-width: 630px; width: auto; min-height: 270px; heigth: auto;"></div>
-
 <table class="form">
 {{assign var=doc_count value=$object->_ref_documents|@count}}
 {{if $mode != "hide"}}

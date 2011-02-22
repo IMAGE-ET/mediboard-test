@@ -1,6 +1,6 @@
 <fieldset>
   <legend>Fiches d'examens</legend>
-  <form name="newExamen" action="?m=dPcabinet">
+  <form name="newExamen" action="?m=dPcabinet" method="get">
     <select name="type_examen" onchange="ExamDialog.init(this.value)">
       <option value="">&mdash; Choisir un type d'examen</option>
       {{if $_is_anesth}}

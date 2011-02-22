@@ -26,6 +26,14 @@ printFast = function() {
   });
 }
 
+preparePrintToServer = function(printer_id) {
+  lockAllButtons();
+  window.printer_id = printer_id;
+  var oForm = getForm('create-pdf-form-{{$uid_fast_mode}}');
+  $V(oForm.print_to_server, 1);
+  getForm("fastModeForm-{{$uid_fast_mode}}").onsubmit();
+}
+
 linkFields = function(ref) {
   var tab = $('fast-edit-table-{{$uid_fast_mode}}');
   var form = getForm("fastModeForm-{{$uid_fast_mode}}");
@@ -38,11 +46,17 @@ linkFields = function(ref) {
   ];
 }
 
+lockAllButtons = function() {
+  $$(".printer").each(function(item) {
+    item.disabled = "disabled";
+  });
+}
+
 generatePdf = function(id) {
 	oState = $("state");
 	oState.className = "loading";
 	oState.setStyle({backgroundPosition: "50% 50%", height: '100px', textAlign: "center", marginTop: "1em", fontWeight: "bold"});
-	oState.innerHTML = "Génération PDF en cours";
+	oState.innerHTML = "{{tr}}CCompteRendu.generating_pdf{{/tr}}";
 	var form = getForm('create-pdf-form-{{$uid_fast_mode}}'); 
 	$V(form.compte_rendu_id, id);
 	form.onsubmit();
@@ -62,6 +76,13 @@ printDoc = function(id, args) {
 	window.frames['iframe_source{{$uid_fast_mode}}'].print();
 	Control.Modal.close();
 	Document.refreshList('{{$object_class}}', '{{$object_id}}');
+}
+
+printToServer = function(file_id) {
+  var url = new Url("dPcompteRendu", "ajax_print");
+  url.addParam("printer_id", window.printer_id);
+  url.addParam("file_id", file_id);
+  url.requestUpdate("systemMsg");
 }
 
 streamOrNotStream = function(form) {
@@ -85,16 +106,26 @@ streamPDF = function(id) {
 	Document.refreshList('{{$object_class}}', '{{$object_id}}');
 }
 
+switchToEditor = function() {
+  window.saveFields = linkFields();
+  Control.Modal.close();
+  Document.create('{{$modele_id}}','{{$object_id}}', null, null, 1, getForm('fastModeForm-{{$uid_fast_mode}}'));
+}
 
 Main.add(function() {
-	{{if $lists|@count == 0 && $noms_textes_libres|@count == 0}}
-	  var oForm = getForm('fastModeForm-{{$uid_fast_mode}}');
-	  {{if $compte_rendu->fast_edit_pdf}}
-      $V(getForm('create-pdf-form-{{$uid_fast_mode}}').stream, 1);
-    {{else}}
-      $V(oForm.callback, 'printDoc');
+	{{if $lists|@count == 0 && $noms_textes_libres|@count == 0 && $printers|@count <= 1}}
+	  {{if $printers|@count == 1}}
+      $$(".printerServer")[0].click();
+	  {{else}}
+	  lockAllButtons();
+  	  var oForm = getForm('fastModeForm-{{$uid_fast_mode}}');
+  	  {{if $compte_rendu->fast_edit_pdf}}
+        $V(getForm('create-pdf-form-{{$uid_fast_mode}}').stream, 1);
+      {{else}}
+        $V(oForm.callback, 'printDoc');
+      {{/if}}
+      	oForm.onsubmit();
     {{/if}}
-    	oForm.onsubmit();
 	{{/if}}
 });
 
@@ -115,6 +146,7 @@ Main.add(function() {
 	<input type="hidden" name="m" value="dPcompteRendu" />
 	<input type="hidden" name="dosql" value="do_pdf_cfile_aed" />
   <input type="hidden" name="stream" value="0" />
+  <input type="hidden" name="print_to_server" value="0" />
   <input type="hidden" name="callback" value="closeModal"/>
 </form>
 
@@ -175,17 +207,22 @@ Main.add(function() {
     </tr>
     <tr>
       <td colspan="2">
-        <button class="hslip" onclick="Control.Modal.close(); Document.create('{{$modele_id}}','{{$object_id}}', null, null, 1, getForm('fastModeForm-{{$uid_fast_mode}}'));" type="button">{{tr}}CCompteRendu.switchEditor{{/tr}}</button>
+        <button class="hslip" onclick="switchToEditor();" type="button">
+          {{tr}}CCompteRendu.switchEditor{{/tr}}
+        </button>
       </td>
     </tr>
     <tr>
-      <td style="width: 70%;">
+      <td {{if $pdf_thumbnails == 1}} style="width: 80%;" {{else}} colspan="2" {{/if}}>
         <table style="width: 100%;">
           {{if $lists|@count}}
             <tr>
               <td id="liste" colspan="2">
+              
                 <!-- The div is required because of a Webkit float issue -->
                 <div class="listeChoixCR">
+                  <fieldset>
+                    <legend>{{tr}}CListeChoix{{/tr}}</legend>
                   {{foreach from=$lists item=curr_list}}
                     <select name="_{{$curr_list->_class_name}}[{{$curr_list->_id}}][]" class="liste">
                       <option value="undef">&mdash; {{$curr_list->nom}}</option>
@@ -194,7 +231,9 @@ Main.add(function() {
                       {{/foreach}}
                     </select>
                   {{/foreach}}
+                  </fieldset>
                 </div>
+                
               </td>
             </tr>
             <tr>
@@ -220,10 +259,12 @@ Main.add(function() {
           {{if $noms_textes_libres|@count}}
             {{foreach from=$noms_textes_libres item=_nom}}
             <tr>
-              <td>
-                {{$_nom|html_entity_decode}}<br/>
-                <textarea class="freetext" name="_texte_libre[{{$_nom|md5}}]"></textarea>
-                <input type="hidden" name="_texte_libre_md5[{{$_nom|md5}}]" value="{{$_nom}}"/>
+              <td colspan="2">
+                <fieldset>
+                  <legend>{{$_nom|html_entity_decode}}</legend>
+                  <textarea class="freetext" name="_texte_libre[{{$_nom|md5}}]"></textarea>
+                  <input type="hidden" name="_texte_libre_md5[{{$_nom|md5}}]" value="{{$_nom}}"/>
+                </fieldset>
 	              {{main}}
 	                new AideSaisie.AutoComplete('fastModeForm-{{$uid_fast_mode}}__texte_libre[{{$_nom|md5}}]',
                    {
@@ -243,32 +284,38 @@ Main.add(function() {
           {{/if}}
           
           <tr>
-            <td colspan="2" style="text-align: center;">
-              <button class="tick"
-                {{if $lists|@count == 0 && $noms_textes_libres|@count == 0}}disabled="disabled"{{/if}}>
+            <td>
+              <div id="state" style="width: 100%; height: 100%"></div>
+            </td>
+            <td style="float: right;">
+              <button class="tick oneclick printer" type="button" onclick="lockAllButtons(); this.form.onsubmit();">
                 {{tr}}Save{{/tr}}
               </button>
-              <button class="printPDF singleclick"
-                onclick="$V(getForm('create-pdf-form-{{$uid_fast_mode}}').stream, 1); this.form.onsubmit();" type="button"
-                {{if $lists|@count == 0 && $noms_textes_libres|@count == 0}}disabled="disabled"{{/if}}>
-                  {{tr}}Save{{/tr}} {{tr}}and{{/tr}} {{tr}}Print{{/tr}}
-              </button>
-              <button class="print singleclick"
-                onclick="$V(getForm('fastModeForm-{{$uid_fast_mode}}').callback, 'printDoc'); this.form.onsubmit();" type="button"
-                {{if $lists|@count == 0 && $noms_textes_libres|@count == 0}}disabled="disabled"{{/if}}>
-                  {{tr}}Save{{/tr}} {{tr}}and{{/tr}} {{tr}}Print{{/tr}}
-              </button>
-              <button class="cancel singleclick" onclick="Control.Modal.close();$('fast-{{$unique_id}}').update();" type="button"
-              {{if $lists|@count == 0 && $noms_textes_libres|@count == 0}}disabled="disabled"{{/if}}>
-                {{tr}}Close{{/tr}}
-              </button>
-              <div id="state" style="width: 100%; height: 100%"></div>
+              <fieldset style="display: inline; whitespace: normal;">
+                <legend>{{tr}}Save{{/tr}} {{tr}}and{{/tr}}...</legend>
+                <button class="printPDF printer oneclick" type="button"
+                  onclick="lockAllButtons(); $V(getForm('create-pdf-form-{{$uid_fast_mode}}').stream, 1); this.form.onsubmit();">
+                    {{tr}}Print{{/tr}}
+                </button>
+                {{if !$pdf_thumbnails}}
+                  <button class="print printer oneclick" type="button"
+                    onclick="lockAllButtons(); $V(getForm('fastModeForm-{{$uid_fast_mode}}').callback, 'printDoc'); this.form.onsubmit();">
+                      {{tr}}Print{{/tr}}
+                  </button>
+                {{/if}}
+                {{foreach from=$printers item=_printer}}
+                  <button class="print printer oneclick printerServer" type="button"
+                    onclick="preparePrintToServer('{{$_printer->_id}}');">
+                    {{tr}}Print{{/tr}} ({{$_printer}})
+                  </button>
+                {{/foreach}}
+              </fieldset>
             </td>
           </tr>
         </table>
       </td>
       {{if $pdf_thumbnails == 1}}
-        <td style="width: 100px; height: 200px;">
+        <td style="height: 200px;">
           <div id="thumbs" style="overflow-x: hidden; width: 160px; text-align: center; white-space: normal; height: 200px;">
             {{if isset($file|smarty:nodefaults) && $file->_id}}
               <img class="thumbnail" src="?m=dPfiles&a=fileviewer&suppressHeaders=1&file_id={{$file->_id}}&phpThumb=1&wl=160&hp=160"
