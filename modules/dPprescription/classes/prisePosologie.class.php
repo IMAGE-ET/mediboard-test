@@ -336,6 +336,10 @@ class CPrisePosologie extends CMbMetaObject {
   }
   
 	function calculPlanifs(){
+		if($this->condition){
+			return;
+		}
+		
 		// Chargement de la ligne de prescription
     $this->_ref_object = new $this->object_class;
     $this->_ref_object = $this->_ref_object->getCached($this->object_id);
@@ -502,7 +506,7 @@ class CPrisePosologie extends CMbMetaObject {
       }
     }
        
-    if(!$this->urgence_datetime && $this->quantite && !$this->moment_unitaire_id && !$this->nb_fois && !$this->unite_fois && !$this->unite_tous_les && !$this->nb_tous_les){
+    if(!$this->datetime && !$this->urgence_datetime && $this->quantite && !$this->moment_unitaire_id && !$this->nb_fois && !$this->unite_fois && !$this->unite_tous_les && !$this->nb_tous_les){
       if($configs["1 fois par jour"]){
         $this->_heures = explode("|",$configs["1 fois par jour"]);
         foreach($this->_heures as &$_heure){
@@ -615,7 +619,8 @@ class CPrisePosologie extends CMbMetaObject {
 	  	if(!$this->_ref_object){
 	  		$this->loadTargetObject();
 	  	}
-		  if(!($this->_ref_object instanceof CPrescriptionLineMedicament && !$this->_ref_object->substitution_active) && !$this->condition){
+
+		  if(!($this->_ref_object instanceof CPrescriptionLineMedicament && !$this->_ref_object->substitution_active)){
 			  $this->calculPlanifs();
 			}
 	  }
