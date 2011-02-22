@@ -153,7 +153,7 @@ class CPrescriptionLineMix extends CMbObject {
   	$specs["type_line"]              = "enum notNull list|perfusion|aerosol|oxygene|alimentation default|perfusion";
     $specs["type"]                   = "enum list|classique|seringue|PCA|masque|lunettes|sonde|nebuliseur_ultrasonique|nebuliseur_pneumatique|doseur|inhalateur";
 		$specs["libelle"]                = "str";
-    $specs["volume_debit"]           = "num pos";
+    $specs["volume_debit"]           = "float pos";
 		$specs["duree_debit"]            = "num pos";
     $specs["voie"]                   = "str";
 		$specs["interface"]              = "str";
