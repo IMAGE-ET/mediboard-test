@@ -77,9 +77,7 @@ Fields = {
 	  $('service_sortie_transfert'      ).setVisible(mode_sortie == "mutation");
 	  $('commentaires_sortie'           ).setVisible(mode_sortie && mode_sortie != "normal");
 	}
-}
-
-function 
+};
 
 function printDossier(id) {
   var url = new Url("dPurgences", "print_dossier");

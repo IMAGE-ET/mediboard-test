@@ -224,6 +224,23 @@ var Url = Class.create({
       this.modaleObject.container.insert({top: closeButton})
     }
     
+    // iframe.onload not thrown under IE
+    if (Prototype.Browser.IE) {
+      var that = this.modaleObject;
+      var iframe = that.container.down("iframe");
+
+      iframe.onload = null;
+      iframe.onreadystatechange = function(){
+        if (iframe.readyState !== "complete") return;
+
+        that.notify('onRemoteContentLoaded');
+        if (that.options.indicator) 
+          that.hideIndicator();
+
+        iframe.onreadystatechange = null;
+      }
+    }
+		
     this.modaleObject.observe("onRemoteContentLoaded", function(){
       var iframeWindow = this.container.down("iframe").contentWindow;
       

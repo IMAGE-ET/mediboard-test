@@ -73,6 +73,11 @@ var WaitingMessage = {
   },
   
   cover: function(element) {
+    // don't cover hidden elements in IE
+    if (Prototype.Browser.IE && (element.style && element.style.display === "none")) {
+      return;
+    }
+	
     element = $(element);
     
     var coverContainer = new Element("div", {style: "border:none;background:none;padding:0;margin:0;position:relative;"}).addClassName("cover-container").hide(),

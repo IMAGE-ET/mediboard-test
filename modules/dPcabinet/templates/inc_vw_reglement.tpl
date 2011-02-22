@@ -110,6 +110,18 @@ Main.add( function(){
           {{/if}}
         </div>
         
+          {{if $consult->valide}}
+          <!-- Creation d'un nouveau tarif avec les actes NGAP de la consultation courante -->
+          <form name="creerTarif" action="?m=dPcabinet&amp;tab=vw_compta" method="post">
+            <input type="hidden" name="dosql" value="do_tarif_aed" />
+            <input type="hidden" name="m" value="dPcabinet" />
+            <input type="hidden" name="_tab" value="vw_edit_tarifs" />
+            <input type="hidden" name="del" value="0" />
+            <input type="hidden" name="_bind_consult" value="1" />
+            <input type="hidden" name="_consult_id" value="{{$consult->_id}}" />
+          </form>
+          {{/if}}
+				
           <!-- Formulaire de selection de tarif -->
           <form name="selectionTarif" action="?m={{$m}}" method="post" onsubmit="return onSubmitFormAjax(this, { onComplete : Reglement.reload.curry(true) } );">
             <input type="hidden" name="m" value="dPcabinet" />
@@ -181,16 +193,8 @@ Main.add( function(){
                   <th>{{mb_label object=$consult field=tarif}}</th>
                   <td>
                     {{if $consult->valide}}
-                    <!-- Creation d'un nouveau tarif avec les actes NGAP de la consultation courante -->
-                    <form name="creerTarif" action="?m=dPcabinet&amp;tab=vw_compta" method="post">
-                      <input type="hidden" name="dosql" value="do_tarif_aed" />
-                      <input type="hidden" name="m" value="dPcabinet" />
-                      <input type="hidden" name="_tab" value="vw_edit_tarifs" />
-                      <input type="hidden" name="del" value="0" />
-                      <input type="hidden" name="_bind_consult" value="1" />
-                      <input type="hidden" name="_consult_id" value="{{$consult->_id}}" />
-                      <button class="submit" type="submit" style="float: right;">Nouveau tarif</button>
-                    </form>
+	                    <!-- Creation d'un nouveau tarif avec les actes NGAP de la consultation courante -->
+	                    <button class="submit" type="button" style="float: right;" onclick="getForm('creerTarif').submit()">Nouveau tarif</button>
                     {{/if}}
                     {{mb_value object=$consult field=tarif}}
                   </td>
