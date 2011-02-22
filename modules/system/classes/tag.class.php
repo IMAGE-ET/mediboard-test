@@ -29,7 +29,7 @@ class CTag extends CMbObject {
 
   function getProps() {
     $props = parent::getProps();
-    $props["parent_id"]    = "ref class|CTag autocomplete|name";
+    $props["parent_id"]    = "ref class|CTag autocomplete|name dependsOn|object_class";
     $props["object_class"] = "str class";
     $props["name"]         = "str notNull seekable";
     $props["color"]        = "str maxLength|20";

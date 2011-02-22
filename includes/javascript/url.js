@@ -420,25 +420,38 @@ var Url = Class.create({
       
       // Show the list
       var showAutocomplete = function(e, dontClear){
+        var oldValue;
+				
         if (!dontClear) {
-          $V(input, '');
-          input.fire("ui:change");
+          oldValue = $V(input);
+          $V(input, '', false);
         }
-        input.focus();
+        
         autocompleter.activate.bind(autocompleter)();
         Event.stop(e);
         document.observeOnce("mousedown", hideAutocomplete);
+        
+        if (!dontClear) {
+          $V(input, oldValue, false);
+        }
+
+        input.select();
       };
       
       // Bind the events
       trigger.observe("mousedown", showAutocomplete.bindAsEventListener(this));
       //input.observe("click", showAutocomplete.bindAsEventListener(this, true));
       input.observe("click", function(){
-        if (oOptions.valueElement && oOptions.valueElement.value == "")
+        var valueElement = oOptions.valueElement;
+        
+        if (valueElement && valueElement.value == "") {
           input.value = "";
-        else try {
-          input.select();
-        } catch(e) {}
+        }
+        else if (valueElement && valueElement.hasClassName("ref")) {
+          try {
+            input.select();
+          } catch(e) {}
+        }
           
         input.fire("ui:change");
         autocompleter.activate.bind(autocompleter)();

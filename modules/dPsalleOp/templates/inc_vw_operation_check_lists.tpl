@@ -42,6 +42,7 @@ Main.add(function(){
   <tr>
     <th colspan="10" class="title">
     	
+			{{if "forms"|module_active}}
 			<script type="text/javascript">
 			  // EXCLASS ne pas supprimer ////
 			  Main.add(function(){
@@ -53,6 +54,7 @@ Main.add(function(){
 			  });
 			</script>
 			<div id="CExObject-{{$selOp->_guid}}-checklist" style="float: right; font-size: 0.8em;"></div>
+      {{/if}}
 
       <button class="down" onclick="$('check-lists').toggle(); $(this).toggleClassName('down').toggleClassName('up')">
         Check list Sécurité du Patient

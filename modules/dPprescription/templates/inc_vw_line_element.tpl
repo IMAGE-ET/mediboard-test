@@ -68,6 +68,7 @@
 	    <!-- Dates -->
 	    <td>
 	      {{* 
+				{{if "forms"|module_active}}
 				<script type="text/javascript">
 	        // EXCLASS ne pas supprimer ////
 				  Main.add(function(){
@@ -79,6 +80,7 @@
 	        });
 	      </script>
 	      <div id="CExObject-{{$line->_guid}}-prescription" style="float: right;"></div>
+				{{/if}}
 	      *}}
 				
 				<fieldset>

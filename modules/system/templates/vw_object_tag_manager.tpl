@@ -39,15 +39,15 @@
 				 >
     <tr>
       <td>
-	      <button class="tag-edit notext" style="float: right; margin: -1px;" onclick="MbObject.edit('{{$_tag.parent->_guid}}')">{{tr}}Edit{{/tr}}</button>
+	      <button class="edit notext" style="float: right; margin: -1px;" onclick="MbObject.edit('{{$_tag.parent->_guid}}')">{{tr}}Edit{{/tr}}</button>
         <span style="background: #{{$_tag.parent->color}}; float: right; display: inline-block; width: 6px; height: 16px; margin-right: 3px;"> </span>
 				
 				{{if $_tag.children|@count}}
-	        <a href="#1" style="margin-left: {{$level*18}}px;" class="tree-folding" onclick="$(this).up('tbody').toggleClassName('opened'); Tag.setNodeVisibility(this); return false;">
+	        <a href="#1" style="margin-left: {{$level*18}}px; font-weight: normal;" class="tree-folding" onclick="$(this).up('tbody').toggleClassName('opened'); Tag.setNodeVisibility(this); return false;">
 	          {{$_tag.parent->name}}
 	        </a>
 				{{else}}
-          <span style="margin-left: {{$level*18}}px;">{{$_tag.parent->name}}</span>
+          <span style="margin-left: {{$level*18}}px; padding-left: 16px;">{{$_tag.parent->name}}</span>
 				{{/if}}
       </td>
     </tr>

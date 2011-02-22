@@ -27,7 +27,7 @@ MbObject.editCallback = function(){
 		
 		<tr>
       <th>{{mb_label object=$object field=parent_id}}</th>
-      <td>{{mb_field object=$object field=parent_id form="edit-`$object->_guid`"  autocomplete="true,1,50,false,true"}}</td>
+      <td>{{mb_field object=$object field=parent_id form="edit-`$object->_guid`" autocomplete="true,1,50,false,true"}}</td>
     </tr>
     
     <tr>
@@ -46,7 +46,6 @@ MbObject.editCallback = function(){
         <button type="button" class="search notext" onclick="ColorSelector.init()">
           {{tr}}Choose{{/tr}}
         </button>
-				
 			</td>
     </tr>
     
