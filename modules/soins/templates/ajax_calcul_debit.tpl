@@ -17,11 +17,6 @@
       alert('Certains éléments sont manquant, merci de les remplir')
     }
   }
-  
-  var applyDebit = function() {
-    var oForm = getForm("calcul_debit");
-    var oFormDest = parent.
-  }
 </script>
 
 <form name="calcul_debit" action="?" method="get" onsubmit="getDebit(); return false;">
