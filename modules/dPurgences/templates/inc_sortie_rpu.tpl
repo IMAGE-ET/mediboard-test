@@ -116,6 +116,8 @@
 	    {{assign var=service value=$services.$service_id}}
 	    <br />&gt; <strong>{{$service}}</strong>
 	  {{/if}}
+		
+		<em>{{mb_value object=$sejour field=commentaires_sortie}}</em>
 	{{else}}
     <button class="tick" onclick="Sortie.edit('{{$rpu->_id}}')">
 		  {{tr}}Validate{{/tr}} {{mb_label object=$sejour field=sortie}}
