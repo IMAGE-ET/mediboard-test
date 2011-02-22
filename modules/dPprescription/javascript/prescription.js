@@ -482,8 +482,8 @@ Prescription = {
   },
 	updateDebit: function(line_id) {
 		var oForm = getForm("editPerf-"+line_id);
-    var volume = Math.round($V(oForm.volume_debit));
-    var duree = Math.round($V(oForm.duree_debit));
+    var volume = $V(oForm.volume_debit);
+    var duree = $V(oForm.duree_debit);
 
 		if(volume == 0 || duree == 0){
 			return;
