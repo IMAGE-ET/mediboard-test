@@ -14,10 +14,10 @@
 		{{mb_include module=system template=inc_form_table_header}}
 		
 		{{if $object->_id}}
-		{{mb_include module=system template=inc_tag_binder}}
-		<tr>
-			<td colspan="2"><hr /></td>
-		</tr>
+			{{mb_include module=system template=inc_tag_binder}}
+			<tr>
+				<td colspan="2"><hr /></td>
+			</tr>
     {{/if}}
 		
 		{{foreach from=$object->_specs item=_spec key=_field}}

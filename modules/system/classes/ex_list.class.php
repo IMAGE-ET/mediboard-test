@@ -43,4 +43,9 @@ class CExList extends CMbObject {
 		parent::updateFormFields();
 		$this->_view = $this->name;
 	}
+	
+	function loadView(){
+		parent::loadView();
+		$this->loadBackRefs("items", "value");
+	}
 }

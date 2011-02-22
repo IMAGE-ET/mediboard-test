@@ -408,6 +408,11 @@ Element.addMethods({
   getSurroundingForm: function(element) {
     if (element.form) return $(element.form);
     return $(element).up('form');
+  },
+
+  /** Get the element's "data-" attributes value */
+  "get": function(element, data) {
+    return $(element).getAttribute("data-"+data);
   }
 });
 
