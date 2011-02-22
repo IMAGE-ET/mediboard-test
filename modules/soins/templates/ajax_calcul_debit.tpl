@@ -12,10 +12,15 @@
       fDebitProduit = sUniteDebitProduit      == 'µg' ? fDebitProduit / 1000 : fDebitProduit;
       fDebitProduit = sUniteDebitProduitTemps == 'mn' ? fDebitProduit * 60   : fDebitProduit;
       var fResultat = (fQuantiteProduit * fDebitProduit) / fVolumeTotal;
-      $V(oForm.resultat, fResultat);
+      $V(oForm.resultat, fResultat.toFixed(2));
     } else {
       alert('Certains éléments sont manquant, merci de les remplir')
     }
+  }
+  
+  var applyDebit = function() {
+    var oForm = getForm("calcul_debit");
+    var oFormDest = parent.
   }
 </script>
 
@@ -31,7 +36,7 @@
     </tr>
     <tr>
       <th>Débit</th>
-      <td><input type="text" size="4" name="debit_produit" value="" /></td>
+      <td><input type="text" size="6" name="debit_produit" value="" /></td>
       <td>
         <select name="unite_debit_produit">
           <option value="µg">µg</option>
@@ -47,17 +52,17 @@
     </tr>
     <tr>
       <th>Volume total</th>
-      <td><input type="text" size="4" name="volume_total" value="{{$volume_total}}" /></td>
+      <td><input type="text" readonly="readonly" size="6" name="volume_total" value="{{$volume_total}}" /></td>
       <td>ml</td>
     </tr>
     <tr>
       <th>Quantité de produit</th>
-      <td><input type="text" size="4" name="quantite_produit" value="{{$quantite_produit}}" /></td>
-      <td>mg</td>
+      <td><input type="text" readonly="readonly" size="6" name="quantite_produit" value="{{$quantite_produit}}" /></td>
+      <td class="text">mg de {{$line_item->_view}}</td>
     </tr>
     <tr>
       <th><button type="submit" class="search">Resultat</button></th>
-      <td><input type="text" readonly="readonly" size="4" name="resultat" value="" /></td>
+      <td><input type="text" readonly="readonly" size="6" name="resultat" value="" /></td>
       <td>ml par heure</td>
     </tr>
   </table>

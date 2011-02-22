@@ -401,13 +401,17 @@ togglePerfDecalage = function(oForm){
 }
 
 toggleContinuiteLineMix = function(radioButton, prescription_line_mix_id){
-  if($V(radioButton) == "continue"){
+  var sValueContinuite = $V(radioButton);
+    console.debug($('lines-'+prescription_line_mix_id));
+  if(sValueContinuite == "continue"){
+    $('lines-'+prescription_line_mix_id).select('.calcul_debit').invoke('show');
     $('discontinue-'+prescription_line_mix_id).hide();
   }
-  if($V(radioButton) == "discontinue"){
+  if(sValueContinuite == "discontinue"){
+    $('lines-'+prescription_line_mix_id).select('.calcul_debit').invoke('hide');
     $('continue-'+prescription_line_mix_id).hide();
   }
-  $($V(radioButton)+'-'+prescription_line_mix_id).show();
+  $(sValueContinuite+'-'+prescription_line_mix_id).show();
 }
 
 removeSolvant = function(checkbox){
@@ -421,6 +425,13 @@ removeSolvant = function(checkbox){
       }
     }
   );
+}
+
+calculDebit = function(line_id, line_item_id){
+  var url = new Url("soins", "ajax_calcul_debit");
+  url.addParam("line_id", line_id);
+  url.addParam("line_item_id", line_item_id);
+  url.pop(600, 200, "calculDebit");
 }
 
 /*

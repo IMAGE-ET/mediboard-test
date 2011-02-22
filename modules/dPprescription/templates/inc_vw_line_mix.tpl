@@ -48,7 +48,7 @@ Main.add( function(){
       	
 				{{if $line->_ref_prescription->type != "externe"}}
 				  {{if $line->_perm_edit}}
-					  <form name="editCondPerf-{{$line->_id}}">
+					  <form name="editCondPerf-{{$line->_id}}" action="?" method="post">
 					  	<input type="hidden" name="m" value="dPprescription" />
 							<input type="hidden" name="dosql" value="do_prescription_line_mix_aed" />
 							<input type="hidden" name="prescription_line_mix_id" value="{{$line->_id}}" />
@@ -56,7 +56,7 @@ Main.add( function(){
 				      {{mb_label object=$line field="conditionnel"}}
 						</form>
 						
-						<form name="editPeropPerf-{{$line->_id}}">
+						<form name="editPeropPerf-{{$line->_id}}" action="?" method="post">
               <input type="hidden" name="m" value="dPprescription" />
               <input type="hidden" name="dosql" value="do_prescription_line_mix_aed" />
               <input type="hidden" name="prescription_line_mix_id" value="{{$line->_id}}" />
@@ -430,10 +430,8 @@ Main.add( function(){
   <tr>
     <td>
 			<fieldset>
-				<legend>
-					Produits
-				</legend>			
-	      <table class="main layout line_mix_items" id=lines-{{$line->_id}}>
+				<legend>Produits</legend>			
+	      <table class="main layout line_mix_items" id="lines-{{$line->_id}}">
 	      	{{if $line->type_line == "aerosol" && $line->_perm_edit}}
 	          <!-- Formulaire d'ajout de ligne dans l'aerosol -->
 						<tr>
@@ -520,6 +518,17 @@ Main.add( function(){
 				              <td style="border:none; width: 30%;">
 						             <span style="float: right">
 						             	{{if $line->_can_modify_prescription_line_mix_item && $line->type_line == "perfusion"}}
+						             	{{assign var="is_mg" value=false}}
+						             	{{foreach from=$_line_item->_unites_prise item=_unite}}
+						             	  {{if substr($_unite, 0, 2) == "mg"}}
+						             	    {{assign var="is_mg" value=true}}
+						             	  {{/if}}
+						             	{{/foreach}}
+						             	{{if $is_mg}}
+						             	<button type="button" class="search calcul_debit" onclick="calculDebit('{{$line->_id}}', '{{$_line_item->_id}}')">
+						             	  Debit
+						             	</button>
+						             	{{/if}}
 													<label>
 													  {{mb_field object=$_line_item field="solvant" typeEnum=checkbox 
 														           onchange="removeSolvant(this.form.__solvant); return onSubmitFormAjax(this.form);"}} 

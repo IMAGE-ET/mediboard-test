@@ -50,6 +50,7 @@ class CPrescriptionLineMixItem extends CMbObject {
 	
   var $_ref_administrations = null;
   var $_view_unite_prise = null;
+  var $_quantite_ml = null;
 	
   function getSpec() {
     $spec = parent::getSpec();
@@ -265,7 +266,8 @@ class CPrescriptionLineMixItem extends CMbObject {
 						$quantite_perf_line *= $poids;
 					}
 					
-          $this->_ref_prescription_line_mix->_quantite_totale += $quantite_perf_line;
+          $this->_quantite_ml = $quantite_perf_line;
+          $this->_ref_prescription_line_mix->_quantite_totale += $this->_quantite_ml;
         }
         
         $this->_unite_administration = $produit->_unite_administration = $produit->libelle_unite_presentation;
