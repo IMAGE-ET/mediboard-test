@@ -203,7 +203,16 @@
 	        <!-- Cas des posologies sous forme de moments -->
 	        {{foreach from=$line->_prises_for_plan.$unite_prise item=_prise}}
 	          <div style="white-space: nowrap;">
-	            {{$_prise->_short_view}}
+						  {{if $_prise->condition}}
+								<form name="duplicate-{{$_prise->_id}}" action="?" method="post" onsubmit="return onSubmitFormAjax(this, { onComplete: function(){ refreshDossierSoin('','{{$chapitre}}', true); }  })">
+							  	<input type="hidden" name="m" value="dPprescription" />
+									<input type="hidden" name="del" value="0" />
+	                <input type="hidden" name="dosql" value="do_duplicate_prise_cond_aed" />
+	                <input type="hidden" name="prise_id" value="{{$_prise->_id}}" />
+		              <button type="submit" class="add notext"></button>
+								 </form>
+							 {{/if}}
+						  {{$_prise->_short_view}}
 						</div>
 	        {{/foreach}}
 	      {{/if}}

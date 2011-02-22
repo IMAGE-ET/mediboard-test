@@ -230,7 +230,7 @@ class CConstantesMedicales extends CMbObject {
     $specs['redon']                  = 'float pos min|0 max|1000';
     $specs['redon_2']                = 'float pos min|0 max|1000';
     $specs['redon_3']                = 'float pos min|0 max|1000';
-    $specs['diurese']                = 'float pos min|0';
+    $specs['diurese']                = 'float min|0';
     $specs['injection']              = 'str maxLength|10';
     $specs['_imc']                   = 'float pos';
     $specs['_vst']                   = 'float pos';

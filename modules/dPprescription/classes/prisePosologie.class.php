@@ -32,7 +32,10 @@ class CPrisePosologie extends CMbMetaObject {
   var $decalage_intervention = null;  // decalage en heures par rapport à l'intervention
   var $unite_decalage_intervention = null;
   var $heure_prise           = null;  // heure calculée
-
+  
+  var $condition             = null;
+	var $datetime              = null;
+	
   var $_type                 = null; // Type de prise
   var $_unite                = null; // Unite de la prise
   var $_heures               = null; // Heure de la prise
@@ -73,6 +76,8 @@ class CPrisePosologie extends CMbMetaObject {
     $specs["heure_prise"]           = "time";
     $specs["urgence_datetime"]   = "dateTime";          
 		$specs["unite_decalage_intervention"] = "enum list|minute|heure default|heure";  
+		$specs["condition"] = "str";
+		$specs["datetime"] = "dateTime";
     $specs["_urgent"] = "bool";
 	  $specs["_quantite_UI"]          = "float";
     return $specs;
@@ -262,6 +267,16 @@ class CPrisePosologie extends CMbMetaObject {
 			}
 		}
 		
+		if($this->condition){
+			$this->_view .= " $this->condition";
+			$this->_short_view .= " $this->condition";
+		}
+		
+		if($this->datetime){
+      $this->_view .= " le ".mbTransformTime(null, $this->datetime, "%d/%m/%Y à %Hh%M");
+      $this->_short_view .= " le ".mbTransformTime(null, $this->datetime, "%d/%m/%Y à %Hh%M");
+    }
+		
     $this->_view = stripslashes($this->_view);
 		$this->_short_view = stripslashes($this->_short_view);
     
@@ -402,6 +417,13 @@ class CPrisePosologie extends CMbMetaObject {
 		  }
     }
     
+    // Prise en urgence
+    if($this->datetime){
+      if((($this->_ref_object->_debut_reel <= $this->datetime) && ($this->_ref_object->_fin_reelle >= $this->datetime))){
+        $planifs[] = array("unite_prise" => "", "prise_id" => $this->_id, "dateTime" => $this->datetime);
+      }
+    }
+		
 		// Seulement Tous les avec comme unite les heures
     if(!$this->moment_unitaire_id && ($this->unite_tous_les == "heure" || $this->unite_tous_les == "minute")){
     	if(!$this->nb_tous_les){
@@ -593,7 +615,7 @@ class CPrisePosologie extends CMbMetaObject {
 	  	if(!$this->_ref_object){
 	  		$this->loadTargetObject();
 	  	}
-		  if(!($this->_ref_object instanceof CPrescriptionLineMedicament && !$this->_ref_object->substitution_active && !$this->inscription)){
+		  if(!($this->_ref_object instanceof CPrescriptionLineMedicament && !$this->_ref_object->substitution_active) && !$this->condition){
 			  $this->calculPlanifs();
 			}
 	  }

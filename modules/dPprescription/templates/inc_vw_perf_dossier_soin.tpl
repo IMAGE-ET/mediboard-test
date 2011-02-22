@@ -221,10 +221,12 @@
 							       {{if ($_prescription_line_mix->_fin && ($_prescription_line_mix->_fin|date_format:"%Y-%m-%d %H:00:00" < $_date_hour)) || ($_prescription_line_mix->_debut|date_format:"%Y-%m-%d %H:00:00" > $_date_hour) || !$_prescription_line_mix->_active}}
 		                  background-color: #ccc
 											{{/if}}"
+										{{if $_prescription_line_mix->_active}}
 							      {{if isset($_prescription_line_mix->_prises_prevues.$_date.$_hour|smarty:nodefaults)}}
 										onclick="ObjectTooltip.createDOM(this, 'tooltip-content-prises-{{$_prescription_line_mix->_guid}}-{{$_date}}-{{$_hour}}', { duration: 0 } );"
 										{{else}}
 										ondblclick='addAdministrationPerf("{{$_prescription_line_mix->_id}}","{{$_date}}","{{$_hour}}", null,document.mode_dossier_soin.mode_dossier.value, "{{$sejour->_id}}");'
+										{{/if}}
 										{{/if}}
                     class="administration {{$etat}} perfusion">
 										

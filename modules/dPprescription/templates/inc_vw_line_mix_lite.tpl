@@ -63,6 +63,13 @@
       </a>
       {{if !$smarty.foreach.lines.last}}<br />{{/if}}
     {{/foreach}}
+		
+	  {{if $_prescription_line_mix->commentaire}}
+      <br />
+      <span style="font-size: 0.8em; opacity: 0.7">
+      {{$_prescription_line_mix->commentaire|spancate:50}}
+      </span>
+    {{/if}}
   </td> 
   
 	{{if $_prescription_line_mix->type_line == "aerosol"}}

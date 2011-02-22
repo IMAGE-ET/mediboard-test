@@ -248,7 +248,7 @@ class CPrescriptionLine extends CMbObject {
    * Chargement des prises de la ligne
    */
   function loadRefsPrises(){
-    $this->_ref_prises = $this->loadBackRefs("prise_posologie","moment_unitaire_id");
+    $this->_ref_prises = $this->loadBackRefs("prise_posologie","moment_unitaire_id, prise_posologie_id");
     foreach ($this->_ref_prises as &$prise) {
       if($prise->decalage_intervention != NULL){
         $this->_nb_prises_interv++;
@@ -618,9 +618,9 @@ class CPrescriptionLine extends CMbObject {
       
       // Cle permettant de ranger les prises prevues, unite_prise si la prise est de type moment sinon prise->_id
 			if($this instanceof CPrescriptionLineElement){
-        $key_tab = ($_prise->moment_unitaire_id || $_prise->heure_prise) ? $this->_chapitre : $_prise->_id;
+        $key_tab = ($_prise->moment_unitaire_id || $_prise->heure_prise || $_prise->condition || $_prise->datetime) ? $this->_chapitre : $_prise->_id;
 			} else {
-			  $key_tab = ($_prise->moment_unitaire_id || $_prise->heure_prise) ? $_prise->unite_prise : $_prise->_id;
+			  $key_tab = ($_prise->moment_unitaire_id || $_prise->heure_prise || $_prise->condition || $_prise->datetime) ? $_prise->unite_prise : $_prise->_id;
       }
 			// Stockage des lignes qui composent le plan de soin
       if($name_chap && $name_cat){
@@ -664,7 +664,7 @@ class CPrescriptionLine extends CMbObject {
       }
 			      
       // Stockage du libelle de l'unite de prise
-      if($_prise->moment_unitaire_id || $_prise->heure_prise){
+      if($_prise->moment_unitaire_id || $_prise->heure_prise || $_prise->condition || $_prise->datetime){
         if($this instanceof CPrescriptionLineElement){
           $this->_prises_for_plan[$this->_chapitre][$_prise->_id] = $_prise;
         } else {

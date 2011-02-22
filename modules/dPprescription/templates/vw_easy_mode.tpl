@@ -58,14 +58,18 @@ function resetModeEasy(){
 }
 
 function submitAllElements(){
+  $$('input.valeur').each( function(input) {
+     input.value = '';
+  });
+	
   // Divs
   var oDivFoisPar = $('foisParmode_grille');
   var oDivTousLes = $('tousLesmode_grille');
 
   // Forms
-  var oForm      = document.forms.add_med_element;
-  var oFormPrise = document.forms.addPrisemode_grille;
-  var oFormChoix = document.forms["ChoixPrise-"];
+  var oForm      = getForm("add_med_element");
+  var oFormPrise = getForm("addPrisemode_grille");
+  var oFormChoix = getForm("ChoixPrise-");
   
   $(oFormPrise).show();
   
@@ -101,11 +105,10 @@ function submitAllElements(){
     $V(oForm.quantite          , oFormPrise.quantite.value);
   }
   else if($V(oFormChoix.typePrise) == "foisParmode_grille" && 
-      oFormPrise.nb_fois.value && 
-      oFormPrise.unite_fois.value && 
+      oFormPrise.nb_fois.value &&
       oFormPrise.quantite.value){
     $V(oForm.nb_fois   , oFormPrise.nb_fois.value);
-    $V(oForm.unite_fois, oFormPrise.unite_fois.value);
+    $V(oForm.unite_fois, "jour");
     $V(oForm.quantite  , oFormPrise.quantite.value);
   }
   else if($V(oFormChoix.typePrise) == "tousLesmode_grille" && 
@@ -124,8 +127,7 @@ function submitAllElements(){
   }
   $V(oForm.commentaire, $V(document.addCommentaire.commentaire));
   
-  onSubmitFormAjax(oForm);
-  resetModeEasy();
+  onSubmitFormAjax(oForm, { onComplete: resetModeEasy } );
   return false;
 }
 

@@ -1715,21 +1715,12 @@ class CPrescription extends CMbObject {
 		if($this->_count_inscriptions){
 			foreach($this->_ref_lines_inscriptions as $_lines_inscription_by_type){
 				foreach($_lines_inscription_by_type as $_inscription){
-					
-					
-					
-				
 					if($with_calcul){
             foreach($dates as $date){
               $_inscription->calculAdministrations($date, $mode_dispensation);
-							
             }
-         }
-				
-				
-				 
-            $this->_ref_inscriptions_for_plan[$_inscription->_id] = $_inscription;
-          
+          }
+          $this->_ref_inscriptions_for_plan[$_inscription->_id] = $_inscription;
 				}
 			}
 		}

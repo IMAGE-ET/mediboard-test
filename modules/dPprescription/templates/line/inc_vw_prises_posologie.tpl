@@ -101,6 +101,14 @@ Main.add(function () {
 			  (J+{{mb_value object=$prise field=decalage_prise}})
 			{{/if}}
 			
+			{{if $prise->condition}}
+			  {{mb_value object=$prise field=condition}}   
+			{{/if}}
+			
+			{{if $prise->datetime}}
+        le {{$prise->datetime|date_format:$conf.datetime}} 
+			{{/if}}
+			
 			<!-- Cas du decalage par rapport à l'intervention -->
 			{{if $prise->decalage_intervention != NULL}}
 			  {{if $prise->decalage_intervention >= 0}}

@@ -16,33 +16,44 @@ Main.add(function(){
 </script>
 
 <strong>
-{{assign var=line_id value=$line->_id}}
-<label title="Moment de la journée">
-	<input id="ChoixPrise-{{$line->_id}}_typePrise_moment{{$type}}" name="typePrise" type="radio" value="moment{{$type}}"  onclick="selDivPoso(this.value,'{{$line->_id}}','{{$type}}');" checked="checked" />
-	Moment
-</label>
-<label title="x fois par y"> 
-  <input name="typePrise" type="radio" value="foisPar{{$type}}" onclick="selDivPoso(this.value,'{{$line->_id}}','{{$type}}');" />
-  Fréquence
-</label>
-<label title="Tous les x y">
-  <input name="typePrise" type="radio" value="tousLes{{$type}}" onclick="selDivPoso(this.value,'{{$line->_id}}','{{$type}}');" />
-	Répétition
-</label>
+	
+<form name="ChoixPrise-{{$line->_id}}" action="?" method="get">
+	{{assign var=line_id value=$line->_id}}
+	<label title="Moment de la journée">
+		<input name="typePrise" type="radio" value="moment{{$type}}"  onclick="selDivPoso(this.value,'{{$line->_id}}','{{$type}}');" checked="checked" />
+		Moment
+	</label>
+	<label title="x fois par y"> 
+	  <input name="typePrise" type="radio" value="foisPar{{$type}}" onclick="selDivPoso(this.value,'{{$line->_id}}','{{$type}}');" />
+	  Fréquence
+	</label>
+	<label title="Tous les x y">
+	  <input name="typePrise" type="radio" value="tousLes{{$type}}" onclick="selDivPoso(this.value,'{{$line->_id}}','{{$type}}');" />
+		Répétition
+	</label>
+	
+	{{if $type != "mode_grille"}}
+	<label title="Evenement">
+	  <input name="typePrise" type="radio" value="evenement{{$type}}" onclick="selDivPoso(this.value,'{{$line->_id}}','{{$type}}');" />
+	  Evènement
+	</label>
+	{{/if}}
+	
+	{{if $type != "mode_grille" && $line instanceof CPrescriptionLineMedicament && $line->_ref_prescription->object_id && $line->_unites_prise|@count && $line->_most_used_poso|@count}}
+	<label title="Stats">
+	  <input name="typePrise" type="radio" value="stats{{$type}}" onclick="selDivPoso(this.value,'{{$line->_id}}','{{$type}}');" />
+	  Stats
+	</label>
+	{{/if}}
+	  
+	{{if $type != "mode_grille" && $line->_protocole && $line->_ref_prescription->type!="externe"}}
+	<label>
+	  <input name="typePrise" type="radio" value="decalage_intervention{{$type}}"  onclick="selDivPoso(this.value,'{{$line->_id}}','{{$type}}');" /> 
+	  I + x heures
+	</label>
+	{{/if}}
 
-{{if $line instanceof CPrescriptionLineMedicament && $line->_ref_prescription->object_id && $line->_unites_prise|@count && $line->_most_used_poso|@count}}
-<label title="Stats">
-  <input name="typePrise" type="radio" value="stats{{$type}}" onclick="selDivPoso(this.value,'{{$line->_id}}','{{$type}}');" />
-  Stats
-</label>
-{{/if}}
-  
-{{if $line->_protocole && $line->_ref_prescription->type!="externe"}}
-<label>
-  <input name="typePrise" type="radio" value="decalage_intervention{{$type}}"  onclick="selDivPoso(this.value,'{{$line->_id}}','{{$type}}');" /> 
-  I + x heures
-</label>
-{{/if}}
+</form>
 
 </strong>
 <br />
@@ -105,6 +116,10 @@ Main.add(function(){
     (J+{{mb_field object=$prise_posologie field=decalage_prise size=1 increment=1 min="0" form=addPrise$type$line_id}})
   </span>
   
+	 <span id="evenement{{$type}}{{$line->_id}}" style="display: none;">
+    {{mb_field object=$prise_posologie field=condition}}
+  </span>
+	
   {{if $line->_protocole && $line->_ref_prescription->type!="externe"}}
   <span id="decalage_intervention{{$type}}{{$line->_id}}" style="display: none;">
 	  à I {{mb_field object=$prise_posologie showPlus="1" field=decalage_intervention size=3 increment=1 form=addPrise$type$line_id}} 

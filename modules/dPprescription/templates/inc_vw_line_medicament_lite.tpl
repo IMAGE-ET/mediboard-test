@@ -68,6 +68,12 @@
         Aucune posologie
       {{/if}}
 			</span>
+			{{if $line->commentaire}}
+			  <br />
+			  <span style="font-size: 0.8em; opacity: 0.7">
+			  {{$line->commentaire|spancate:50}}
+				</span>
+			{{/if}}
     </td>
 		{{if !$line->_protocole}}
 	    {{if $line->fin}}

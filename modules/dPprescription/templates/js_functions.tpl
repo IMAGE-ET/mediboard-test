@@ -52,16 +52,21 @@ selDivPoso = function(type, line_id, type_elt){
     type = "foisPar"+type_elt;
   }
   
-	$("view_quantity_"+line_id).show();
-	$("add_button_"+line_id).show();
+	if(line_id){
+	  $("view_quantity_"+line_id).show();
+	  $("add_button_"+line_id).show();
+  }
   
   oDivMoment = $('moment'+type_elt+line_id);
   oDivFoisPar = $('foisPar'+type_elt+line_id);
   oDivTousLes = $('tousLes'+type_elt+line_id);
+	oDivEvenement = $('evenement'+type_elt+line_id);
+  
 	oDivStats = $('stats'+type_elt+line_id);
   oDivDecalageIntervention = $('decalage_intervention'+type_elt+line_id);
   
-  oFormPrise = document.forms['addPrise'+type_elt+line_id].show();
+  var oFormPrise = document.forms['addPrise'+type_elt+line_id].show();
+  var oFormEvenement = document.forms['addPrise'+type_elt+line_id].show();
   
   var selectMoments = (type_elt == "mode_grille") ? 
                         window.opener.document.moment_unitaire.moment_unitaire_id :
@@ -73,19 +78,25 @@ selDivPoso = function(type, line_id, type_elt){
       e.hide().writeAttribute("disabled", "disabled").value = "";
     }
   });
+	
+	// hide de toutes les div
+	oDivMoment.hide();
+  oDivFoisPar.hide();
+  oDivEvenement.hide();
+  oDivStats.hide();
+  oDivTousLes.hide();
+	if(oDivDecalageIntervention){
+    oDivDecalageIntervention.hide();
+  }
+				
   switch (type) {
     case "tousLes"+type_elt: 
+		oDivTousLes.show();
       oFormPrise.nb_tous_les.enable().show();
       oFormPrise.unite_tous_les.enable().show();
       oFormPrise.decalage_prise.enable().show();
-      oDivMoment.hide();
-      oDivFoisPar.hide();
-      oDivTousLes.show();
-      if(oDivDecalageIntervention){
-        oDivDecalageIntervention.hide();
-      }
-			oDivStats.hide();
-      oFormPrise.moment_unitaire_id.setStyle( { float: null } );
+      
+      oFormPrise.moment_unitaire_id.setStyle( { 'float': '' } );
       $("tous_les_"+type_elt+"_"+line_id).insert(oFormPrise.moment_unitaire_id);
       oFormPrise.moment_unitaire_id.onchange = null;
       oFormPrise.moment_unitaire_id.enable().show();
@@ -112,48 +123,31 @@ selDivPoso = function(type, line_id, type_elt){
       oFormPrise.moment_unitaire_id.enable().show();
       oFormPrise.moment_unitaire_id.onchange = oFormPrise.onsubmit.bind(oFormPrise);
     break;
+		
     case "foisPar"+type_elt: 
       oFormPrise.nb_fois.enable().show();
       oFormPrise.unite_fois.enable().show();
       oDivFoisPar.show();
-      oDivTousLes.hide();
-      oDivMoment.hide();
-			oDivStats.hide();
-      if(oDivDecalageIntervention){
-        oDivDecalageIntervention.hide();
-      }
     break;
+		
     case "decalage_intervention"+type_elt: 
       oFormPrise.decalage_intervention.enable().show();
 			oFormPrise.unite_decalage_intervention.enable().show();
-      
-      oDivFoisPar.hide();
-      oDivTousLes.hide();
-      oDivMoment.hide();
-			oDivStats.hide();
       if(oDivDecalageIntervention){
         oDivDecalageIntervention.show();
       }
     break;
-		 case "stats"+type_elt: 
+		
+	  case "stats"+type_elt: 
 			$("view_quantity_"+line_id).hide();
 			$("add_button_"+line_id).hide();
 	    oDivStats.show();
-      oDivFoisPar.hide();
-      oDivTousLes.hide();
-      oDivMoment.hide();
-      if(oDivDecalageIntervention){
-        oDivDecalageIntervention.hide();
-      }
     break;
-  }
-  if (type == "moment"+type_elt) {
-    oDivFoisPar.hide();
-    oDivTousLes.hide();
-		oDivStats.hide();
-    if(oDivDecalageIntervention){
-      oDivDecalageIntervention.hide();
-    }
+		
+		case "evenement"+type_elt: 
+      oDivEvenement.show();
+			oFormEvenement.condition.enable().show();
+    break;
   }
 }
 
