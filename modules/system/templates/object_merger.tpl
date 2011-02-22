@@ -30,7 +30,6 @@ function toggleColumn(className) {
 
 {{if $result}}
 
-{{mb_include_script module=system script=mb_object}}
 {{mb_include_script module=system script=object_merger}}
 
 <h2>Fusion de {{tr}}{{$result->_class_name}}{{/tr}}</h2>

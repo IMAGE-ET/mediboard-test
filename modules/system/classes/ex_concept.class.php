@@ -19,13 +19,8 @@ class CExConcept extends CMbObject {
 
   function getSpec() {
     $spec = parent::getSpec();
-    $spec->table = "ex_class_field";
-    $spec->key   = "ex_class_field_id";
-    $spec->uniques["name"] = array("ex_class_id", "name");
-    
-    // should ignore empty values
-    //$spec->uniques["coord_label"] = array("ex_class_id", "coord_label_x", "coord_label_y");
-    //$spec->uniques["coord_field"] = array("ex_class_id", "coord_field_x", "coord_field_y");
+    $spec->table = "ex_concept";
+    $spec->key   = "ex_concept_id";
     return $spec;
   }
 

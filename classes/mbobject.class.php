@@ -100,7 +100,12 @@ class CMbObject {
   var $_count          = null; // Back references counts
   var $_fwd            = null; // Forward references
   var $_history        = null; // Array representation of the object's evolution
+  
+  /**
+   * @var CModule
+   */
   var $_ref_module     = null; // Parent module
+  
   var $_ref_logs       = null; // history of the object
   var $_ref_first_log  = null;
   var $_ref_last_log   = null;
@@ -2566,4 +2571,25 @@ class CMbObject {
     
     return CValue::read($user_log->_old_values, $field, $this->$field);
   }
+	
+	/**
+	 * Returns the path to the class-specific template
+	 * 
+	 * @param string $type view|autocomplete|edit
+	 * @return string
+	 */
+	function getTypedTemplate($type) {
+		if (!in_array($type, array("view", "autocomplete", "edit"))) {
+			return;
+		}
+		
+		$mod_name = $this->_ref_module->mod_name;
+		$template = "$mod_name/templates/{$this->_class_name}_$type.tpl";
+		
+		if (!is_file("modules/$template")) {
+		  $template = "system/templates/CMbObject_$type.tpl";
+		}
+		
+		return "../../$template";
+	}
 }

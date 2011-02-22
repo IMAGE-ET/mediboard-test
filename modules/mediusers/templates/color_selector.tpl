@@ -22,10 +22,11 @@
         {{foreach from=$hex item=h}}
           {{assign var=rgb value="$h$h$h"}}
           <tr>
-          	<td style="background-color: #{{$rgb}}; width: 12px; height: 24px; cursor: pointer; {{if $color==$rgb}}outline: 1px dotted #000;{{/if}}" 
-              onclick="selectColor('{{$rgb}}', this);"
+          	<td style="background-color: #{{$rgb}}; width: 14px; height: 24px; cursor: pointer; border: none; {{if $color==$rgb}}outline: 1px dotted #000;{{/if}}" 
+              onmouseover="selectColor('{{$rgb}}', this);"
+							onclick="selectColor('{{$rgb}}', this);"
               ondblclick="selectColor('{{$rgb}}', this); setClose();"
-              title="{{$rgb}}"
+              title="#{{$rgb}}"
 						/>
 					</tr>
         {{/foreach}}
@@ -44,10 +45,11 @@
                 {{assign var=g_color value=$hex.$g}}
                 {{assign var=b_color value=$hex.$b}}
                 {{assign var=rgb value="$r_color$g_color$b_color"}}
-                <td style="background-color: #{{$rgb}}; width: 12px; height: 12px; cursor: pointer; {{if $color==$rgb}}outline: 1px dotted #000;{{/if}}" 
+                <td style="background-color: #{{$rgb}}; width: 14px; height: 14px; cursor: pointer; border: none; {{if $color==$rgb}}outline: 1px dotted #000;{{/if}}" 
+                  onmouseover="selectColor('{{$rgb}}', this);"
                   onclick="selectColor('{{$rgb}}', this);" 
                   ondblclick="selectColor('{{$rgb}}', this); setClose();"
-                  title="{{$rgb}}"
+                  title="#{{$rgb}}"
 								/>
               {{/foreach}}
              </tr>
@@ -61,8 +63,9 @@
     <td style="height: 72px; {{if $color}}background-color: #{{$color}};{{/if}}" id="color-view"></td>
   </tr>
   <tr>
-    <td style="vertical-align: bottom;">
+    <td style="vertical-align: bottom; width: 1%;">
       <button type="button" class="tick" onclick="setClose()">{{tr}}Select{{/tr}}</button>
+      <button type="button" class="cancel" onclick="window.close()">{{tr}}Cancel{{/tr}}</button>
     </td>
   </tr>
 </table>

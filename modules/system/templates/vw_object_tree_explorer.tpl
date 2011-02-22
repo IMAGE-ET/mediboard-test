@@ -1,10 +1,6 @@
 <script type="text/javascript">
 Main.add(function(){
-  var url = new Url("system", "ajax_object_tag_tree");
-	url.addParam("object_class", "{{$object_class}}");
-  url.addParam("col[]", {{$columns|@json}});
-	url.requestUpdate("tag-tree");
-	
+  MbObject.list("{{$object_class}}", {{$columns|@json}});
 	MbObject.edit("{{$object_guid}}");
 });
 </script>

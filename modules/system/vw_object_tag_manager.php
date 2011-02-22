@@ -16,11 +16,11 @@ if (!$object_class || !is_subclass_of($object_class, "CMbObject")) {
 	CAppUI::stepAjax("Nom de classe invalide <strong>$object_class</strong>", UI_MSG_ERROR);
 }
 
-$object_guid = CValue::session("object_guid", "$object_class-0");
-$columns = CValue::get("col");
+$object = new $object_class;
+$tree = CTag::getTree($object);
 
 $smarty = new CSmartyDP("modules/system");
 $smarty->assign("object_class", $object_class);
-$smarty->assign("object_guid", $object_guid);
-$smarty->assign("columns", $columns);
-$smarty->display("vw_object_tree_explorer.tpl");
+$smarty->assign("tree", $tree);
+$smarty->assign("root", true);
+$smarty->display("vw_object_tag_manager.tpl");

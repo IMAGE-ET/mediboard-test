@@ -26,6 +26,11 @@ var Tag = {
     
     url.requestUpdate("systemMsg", {method: "post"});
 	},
+	manage: function(object_class) {
+      new Url('system', 'vw_object_tag_manager')
+         .addParam('object_class', object_class)
+         .popup(800, 600, "Tags");
+	},
 	setNodeVisibility: function(node) {
     node = $(node);
     

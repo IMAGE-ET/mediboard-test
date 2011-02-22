@@ -29,7 +29,7 @@ class CTag extends CMbObject {
 
   function getProps() {
     $props = parent::getProps();
-    $props["parent_id"]    = "ref class|CTag";
+    $props["parent_id"]    = "ref class|CTag autocomplete|name";
     $props["object_class"] = "str class";
     $props["name"]         = "str notNull seekable";
     $props["color"]        = "str maxLength|20";
@@ -45,7 +45,8 @@ class CTag extends CMbObject {
 
   function updateFormFields() {
     parent::updateFormFields();
-		$this->_view = $this->name;
+		$parent = $this->loadRefParent();
+		$this->_view = ($parent->_id ? "$parent->_view // " : "").$this->name;
   }
 	
 	function loadRefItems(){

@@ -12,7 +12,8 @@
 	{{foreach from=$objects item=_object}}
 	<tr>
 		<td>
-			<a href="#1" onclick="MbObject.edit(this)" data-object_guid="{{$_object->_guid}}"> 
+			<a href="#1" onclick="MbObject.edit(this)" data-object_guid="{{$_object->_guid}}"
+			   style="{{if $tag->color}}border-right: 6px solid #{{$tag->color}};{{/if}}"> 
         <span onmouseover="ObjectTooltip.createEx(this, '{{$_object->_guid}}');">
 				  {{$_object}}
 				</span>
@@ -30,7 +31,9 @@
 			{{math assign=colspan equation="x+1" x=$columns|@count}}
 			
 			<td class="empty" colspan="{{$colspan}}">
-				{{tr}}{{$tag->object_class}}.none{{/tr}}
+				<div style="{{if $tag->color}}border-right: 6px solid #{{$tag->color}};{{/if}}">
+				  {{tr}}{{$tag->object_class}}.none{{/tr}}
+				</div>
 			</td>
 		</tr>
 		{{/if}}

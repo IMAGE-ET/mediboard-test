@@ -402,8 +402,33 @@ class CSetupsystem extends CSetup {
 		$query = "ALTER TABLE `tag` 
               ADD `color` VARCHAR (20);";
     $this->addQuery($query);
+		
+		$this->makeRevision("1.0.45");
+		$query = "CREATE TABLE `ex_list` (
+              `ex_list_id` INT (11) UNSIGNED NOT NULL auto_increment PRIMARY KEY,
+              `name` VARCHAR (255) NOT NULL
+							) /*! ENGINE=MyISAM */;";
+    $this->addQuery($query);
+		$query = "CREATE TABLE `ex_list_item` (
+              `ex_list_item_id` INT (11) UNSIGNED NOT NULL auto_increment PRIMARY KEY,
+              `list_id` INT (11) UNSIGNED NOT NULL,
+              `name` VARCHAR (255) NOT NULL,
+              `value` INT (11)
+            ) /*! ENGINE=MyISAM */;";
+    $this->addQuery($query);
+    $query = "ALTER TABLE `ex_list_item` 
+              ADD INDEX (`list_id`);";
+    $this->addQuery($query);
+		$query = "CREATE TABLE `ex_concept` (
+              `ex_concept_id` INT (11) UNSIGNED NOT NULL auto_increment PRIMARY KEY,
+              `ex_list_id` INT (11) UNSIGNED,
+              `name` VARCHAR (255) NOT NULL,
+              `prop` VARCHAR (255) NOT NULL
+            ) /*! ENGINE=MyISAM */;";
+    $this->addQuery($query);
+    $query = "ALTER TABLE `ex_concept` ADD INDEX (`ex_list_id`);";
+    $this->addQuery($query);
     
-    $this->mod_version = "1.0.45";
+    $this->mod_version = "1.0.46";
   }
 }
-?>

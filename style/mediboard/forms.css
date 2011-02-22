@@ -484,6 +484,30 @@ button.undo:before, a.button.undo:before {
   content: url(images/buttons/undo.png);
 }
 
+button.tag:before, a.button.tag:before {
+  content: url(images/buttons/tag.png);
+}
+
+button.tag-edit:before, a.button.tag-edit:before {
+  content: url(images/buttons/tag-edit.png);
+}
+
+button.tag-delete:before, a.button.tag-delete:before {
+  content: url(images/buttons/tag-delete.png);
+}
+
+button.tag-add:before, a.button.tag-add:before {
+  content: url(images/buttons/tag-add.png);
+}
+
+button.tag-arrow:before, a.button.tag-arrow:before {
+  content: url(images/buttons/tag-arrow.png);
+}
+
+button.tag-warning:before, a.button.tag-warning:before {
+  content: url(images/buttons/tag-warning.png);
+}
+
 button.loading:before, a.button.loading:before {
   content: url(images/icons/loading.gif) !important;
 }

@@ -51,10 +51,7 @@ if ($spec instanceof CRefSpec) {
     $matches = $target_object->loadList($where, $view_field, $limit, $view_field);
     $total = $target_object->countList($where, null, null, $view_field);
   } 
-  $template_file = "modules/{$target_object->_ref_module->mod_name}/templates/{$target_object->_class_name}_autocomplete.tpl";
-  if (is_file($template_file)) {
-    $template = "../../../$template_file";
-  }
+  $template = $target_object->getTypedTemplate("autocomplete");
 }
 else {
   $where[$field] = $ds->prepareLike($search);

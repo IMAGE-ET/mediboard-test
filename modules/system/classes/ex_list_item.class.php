@@ -33,4 +33,14 @@ class CExListItem extends CMbObject {
     $props["value"]   = "num";
     return $props;
   }
+	
+	function loadRefList($cache = true){
+		return $this->_ref_list = $this->loadFwdRef("list_id", $cache);
+	}
+  
+  function updateFormFields(){
+    parent::updateFormFields();
+		$list = $this->loadRefList();
+    $this->_view = "{$list->_view} / $this->name [$this->value]";
+  }
 }

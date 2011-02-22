@@ -19,9 +19,13 @@
 				Tags
 			</th>
 			<td style="white-space: normal;">
+			  <button style="float: right;" class="tag-edit" type="button" onclick="Tag.manage('{{$object->_class_name}}')">
+				  Gérer les tags
+				</button>
+				
 				<ul class="tags">
 					{{foreach from=$object->_ref_tag_items item=_item name=tag_items}}
-					  <li data-tag_item_id="{{$_item->_id}}" style="background-color: {{$_item->_ref_tag->color}}">
+					  <li data-tag_item_id="{{$_item->_id}}" style="background-color: #{{$_item->_ref_tag->color}}">
 					  	{{$_item}} 
 							<button type="button" class="delete" 
 							        onclick="Tag.removeItem($(this).up('li').getAttribute('data-tag_item_id'), MbObject.edit.curry('{{$object->_guid}}'))">
@@ -38,6 +42,7 @@
                 
                 url.addParam("object_class", "CTag");
                 url.addParam("input_field", element);
+                url.addParam("where[object_class]", "{{$object->_class_name}}");
                 url.autoComplete(element, null, {
                   minChars: 3,
                   method: "get",
@@ -66,7 +71,7 @@
 		  {{if ($_field.0 !== "_") && ($_field != $object->_spec->key) && ($_spec->show != "0") || ($_field.0 === "_" && $_spec->show == 1)}}
 		  <tr>
 	      <th>{{mb_label object=$object field=$_field}}</th>
-	      <td>{{mb_field object=$object field=$_field}}</td>
+	      <td>{{mb_field object=$object field=$_field register=true increment=true form="edit-`$object->_guid`"}}</td>
 		  </tr>
 			{{/if}}
 		{{/foreach}}

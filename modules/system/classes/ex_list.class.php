@@ -12,9 +12,8 @@ class CExList extends CMbObject {
   var $ex_list_id = null;
   
   var $name       = null;
-  var $category_id = null;
   
-  var $_ref_category = null;
+	var $_ref_items = null;
 
   function getSpec() {
     $spec = parent::getSpec();
@@ -32,7 +31,16 @@ class CExList extends CMbObject {
 
   function getBackProps() {
     $backProps = parent::getBackProps();
-    $backProps["concepts"] = "CExList list_id";
+    $backProps["items"] = "CExListItem list_id";
     return $backProps;
   }
+	
+	function loadRefItems() {
+		return $this->_ref_items = $this->loadBackRefs("items");
+	}
+	
+	function updateFormFields(){
+		parent::updateFormFields();
+		$this->_view = $this->name;
+	}
 }
