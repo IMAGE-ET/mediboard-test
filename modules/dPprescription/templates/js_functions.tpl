@@ -402,7 +402,6 @@ togglePerfDecalage = function(oForm){
 
 toggleContinuiteLineMix = function(radioButton, prescription_line_mix_id){
   var sValueContinuite = $V(radioButton);
-    console.debug($('lines-'+prescription_line_mix_id));
   if(sValueContinuite == "continue"){
     $('lines-'+prescription_line_mix_id).select('.calcul_debit').invoke('show');
     $('discontinue-'+prescription_line_mix_id).hide();
