@@ -51,7 +51,7 @@ Main.add(function(){
         <input type="text" name="_patient_view" size="30" value="{{$filter->_ref_patient}}" readonly="readonly"
           ondblclick="PatSelector.init()"
         />
-        <button type="button" class="search" onclick="PatSelector.init()">Choisir un patient</button>
+        <button type="button" class="search" onclick="PatSelector.init()">{{tr}}Choose{{/tr}}</button>
         <button type="button" class="cancel notext" onclick="$V(this.form._patient_id,'');$V(this.form._patient_view,'');">{{tr}}Reset{{/tr}}</button>
 
         <script type="text/javascript">
@@ -70,13 +70,26 @@ Main.add(function(){
         <input name="_product_view" value="{{$filter->_ref_product}}" size="35" />
         <button type="button" class="cancel notext" onclick="$V(this.form.product_id,'');$V(this.form._product_view,'');">{{tr}}Reset{{/tr}}</button>
       </td>
-        
-      <th>{{mb_label object=$filter field=order_item_reception_id}}</th>
-      <td><input type="text" name="lot" value="{{$lot}}" /></td>
       
-      <td>
+      <td rowspan="2">
         <button type="submit" class="search">{{tr}}Search{{/tr}}</button>
       </td>
+    </tr>
+		
+		<tr>
+      <th>{{mb_label object=$product_reference field=societe_id}}</th>
+      <td>
+      	{{mb_field object=$product_reference field=societe_id form=tracabiliteFilter autocomplete="true,1,50,true,true"}}
+        <button type="button" class="cancel notext" onclick="$V(this.form.societe_id,'');$V(this.form.societe_id_autocomplete_view,'');">{{tr}}Reset{{/tr}}</button>
+			</td>
+			
+      <th>{{mb_label object=$filter field=order_item_reception_id}}</th>
+      <td>
+      	<input type="text" name="lot" value="{{$lot}}" />
+				
+				{{mb_label object=$filter field=septic}}
+				{{mb_field object=$filter field=septic typeEnum=checkbox}}
+			</td>
   	</tr>
   </table>
 </form>
