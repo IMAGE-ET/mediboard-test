@@ -25,7 +25,7 @@ class CExList extends CMbObject {
 
   function getProps() {
     $props = parent::getProps();
-    $props["name"] = "str notNull";
+    $props["name"] = "str notNull seekable";
     return $props;
   }
 

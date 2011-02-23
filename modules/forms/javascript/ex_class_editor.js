@@ -23,16 +23,16 @@ var ExClass = {
     $V(form.event, parts[1]);
   },
   submitLayout: function(drag, drop) {
-    var coord_x = drop.getAttribute("data-x"),
-        coord_y = drop.getAttribute("data-y"),
-        type    = drag.getAttribute("data-type"),
+    var coord_x = drop.get("x"),
+        coord_y = drop.get("y"),
+        type    = drag.get("type"),
         form = getForm("form-layout-field");
     
     $(form).select('input.coord').each(function(coord){
       $V(coord.disable(), '');
     });
     
-    $V(form.ex_class_field_id, drag.getAttribute("data-field_id"));
+    $V(form.ex_class_field_id, drag.get("field_id"));
     $V(form["coord_"+type+"_x"].enable(), coord_x);
     $V(form["coord_"+type+"_y"].enable(), coord_y);
     
@@ -40,9 +40,9 @@ var ExClass = {
     drop.insert(drag);
   },
   submitLayoutHostField: function(drag, drop) {
-    var coord_x = drop.getAttribute("data-x"),
-        coord_y = drop.getAttribute("data-y"),
-        type    = drag.getAttribute("data-type"),
+    var coord_x = drop.get("x"),
+        coord_y = drop.get("y"),
+        type    = drag.get("type"),
         form = getForm("form-layout-hostfield");
         
     if (!drop.hasClassName("droppable")) return;
@@ -51,8 +51,8 @@ var ExClass = {
       $V(coord.disable(), '');
     });
     
-    $V(form.ex_class_host_field_id, drag.getAttribute("data-field_id") || "");
-    $V(form.elements.field, drag.getAttribute("data-field") || "");
+    $V(form.ex_class_host_field_id, drag.get("field_id") || "");
+    $V(form.elements.field, drag.get("field") || "");
     $V(form["coord_"+type+"_x"].enable(), coord_x);
     $V(form["coord_"+type+"_y"].enable(), coord_y);
     
@@ -61,7 +61,7 @@ var ExClass = {
 			
     // dest = LIST
     if (drop.hasClassName("out-of-grid")) {
-      var del = drag.getAttribute("data-field_id");
+      var del = drag.get("field_id");
 			
       $V(form.elements.callback, "");
 			

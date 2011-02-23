@@ -18,18 +18,20 @@ if (!$object_guid) {
 
 $object = CMbObject::loadFromGuid($object_guid);
 
-global $can;
-$can->read = $object->canRead();
-$can->edit = $object->canEdit();
-$can->needsRead();
-
-$template = $object->getTypedTemplate("edit");
+if ($object && $object->_id) {
+	global $can;
+	$can->read = $object->canRead();
+	$can->edit = $object->canEdit();
+	$can->needsRead();
+}
 
 if (!$object->_id && !empty($values)) {
 	foreach($values as $_key => $_value) {
 		$object->$_key = $_value;
 	}
 }
+
+$template = $object->getTypedTemplate("edit");
 
 $object->loadView();
 $object->loadRefsTagItems();

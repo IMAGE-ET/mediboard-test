@@ -8,11 +8,29 @@
 	  {{assign var=_columns value=""}}
 	{{/if}}
 	
+	
 	<table class="main tbl treegrid" data-columns="{{$_columns}}">
 		<tr>
-			<th colspan="{{$colspan}}">
-				{{tr}}{{$object_class}}{{/tr}}
-			</th>
+			<td colspan="{{$colspan}}">
+				<form name="filter-{{$object_class}}" method="get" action="?" onsubmit="return false">
+					Filtres &ndash;
+				  <label>
+				     Tag
+				    <input type="text" name="tag" onkeyup="Tag.filter(this)" size="8" />
+				  </label>
+					<button class="cancel notext" type="button" onclick="Tag.cancelFilter(this.form.tag)">
+						{{tr}}Cancel{{/tr}}
+					</button>
+					
+          <label>
+            Nom
+            <input type="text" name="object_name" size="8" />
+          </label>
+          <button class="cancel notext" type="button" onclick="$V(this.form.object_name, '')">
+            {{tr}}Cancel{{/tr}}
+          </button>
+				</form>
+			</td>
 		</tr>
 {{/if}}
 
@@ -26,6 +44,7 @@
          class="{{foreach from=","|explode:$ancestors item=_ancestor}}{{if $_ancestor}}tag-{{$_ancestor}} {{/if}}{{/foreach}}"
          {{if $parent}}data-parent_tag_id="{{$parent->_id}}"{{/if}}
 				 style="{{if !$root}}display: none;{{/if}}"
+				 data-name="{{$_tag.parent->name}}"
 				 >
 	  <tr>
 	  	<td colspan="{{$colspan}}">
@@ -41,7 +60,7 @@
 {{/foreach}}
 
 {{if $root}}
-	  <tbody data-tag_id="none-{{$object_class}}" class="tag-none">
+	  <tbody data-tag_id="none-{{$object_class}}" class="tag-none" data-name="__none__">
 	    <tr>
 	      <td colspan="{{$colspan}}">
 	        <a href="#1" class="tree-folding" onclick="$(this).up('tbody').toggleClassName('opened'); Tag.setNodeVisibility(this); Tag.loadElements(this); return false;">

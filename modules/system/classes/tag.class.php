@@ -65,10 +65,18 @@ class CTag extends CMbObject {
     return $this->_ref_parent = $this->loadFwdRef("parent_id");
   }
 	
-	function getObjects(){
-		$items = $this->loadRefItems();
-		CMbArray::invoke($items, "loadTargetObject");
-		return CMbArray::pluck($items, "_ref_object");
+	function getObjects($keywords = ""){
+		if (!$keywords) {
+			$items = $this->loadRefItems();
+		}
+		else {
+			$item = new CTagItem;
+			$where = array("tag_id" => "= '$this->_id'");
+			$items = $item->seek($keywords, $where, 10000);
+		}
+		
+    CMbArray::invoke($items, "loadTargetObject");
+    return CMbArray::pluck($items, "_ref_object");
 	}
 	
 	static function getTree(CMbObject $object, CTag $parent = null, &$tree = array()) {

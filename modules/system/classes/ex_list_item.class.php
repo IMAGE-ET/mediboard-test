@@ -28,7 +28,7 @@ class CExListItem extends CMbObject {
 
   function getProps() {
     $props = parent::getProps();
-    $props["list_id"] = "ref notNull class|CExList";
+    $props["list_id"] = "ref notNull class|CExList cascade";
     $props["name"]    = "str notNull";
     $props["value"]   = "num";
     return $props;

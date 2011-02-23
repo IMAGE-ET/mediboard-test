@@ -29,6 +29,7 @@ class CTagItem extends CMbMetaObject {
   function getProps() {
     $props = parent::getProps();
     $props["tag_id"] = "ref notNull class|CTag";
+		$props["object_id"] .= " cascade seekable";
     return $props;
   }
 	

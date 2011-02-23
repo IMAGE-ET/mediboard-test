@@ -6,6 +6,7 @@
   {{mb_class object=$object}}
   {{mb_key object=$object}}
 	
+  <input type="hidden" name="del" value="0" />
 	<input type="hidden" name="callback" value="MbObject.editCallback" />
 	
 	<table class="main form">

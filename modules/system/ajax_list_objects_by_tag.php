@@ -10,8 +10,9 @@
 
 CCanDo::checkRead();
 
-$tag_id  = CValue::get("tag_id");
-$columns = CValue::get("col");
+$tag_id   = CValue::get("tag_id");
+$columns  = CValue::get("col");
+$keywords = CValue::get("keywords");
 
 $tag = new CTag;
 
@@ -30,13 +31,17 @@ if (strpos($tag_id, "none") === 0) {
 	  "tag_item" => "tag_item.object_id = {$object->_spec->table}.{$object->_spec->key} AND tag_item.object_class = '$object_class'",
 	);
 	
-	$count_children = $object->countList($where, null, null, null, $ljoin);
-	$objects = $object->loadList($where, null, null, null, $ljoin);
+	if (!$keywords) {
+		$keywords = "%";
+	}
+	
+  $objects = $object->seek($keywords, $where, 10000, true, $ljoin);
+	$count_children = $object->_totalSeek;
 }
 else {
 	$tag->load($tag_id);
 	$count_children = $tag->countChildren();
-	$objects = $tag->getObjects();
+	$objects = $tag->getObjects($keywords);
 }
 
 // Création du template

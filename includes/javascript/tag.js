@@ -60,6 +60,7 @@ var Tag = {
 		var row = node.up('tbody');
     var table = row.up('table');
 		var columns = table.getAttribute("data-columns");
+	  var form = table.down('form');
 		
 		if (columns) {
 			columns = columns.split(",");
@@ -80,7 +81,7 @@ var Tag = {
 			//target = row.insert({after: "<tbody><tr><td colspan='10'></td></tr></tbody>"}).next('tbody');
 		}
 		else {
-			return; // don't load if already loaded
+			//return; // don't load if already loaded
       target = nextRow;
 		}
 		
@@ -91,12 +92,18 @@ var Tag = {
 			url.addParam("col[]", columns, true);
 		}
 		
+		var keywords = $V(form.object_name);
+		if (keywords) {
+      url.addParam("keywords", keywords);
+		}
+		
 		url.requestUpdate(target, {
 			insertion: insertion, 
 			onComplete: function(){
 				var tbody = row.next('tbody');
+				if (!tbody.hasClassName("object-list")) return;
 				
-				tbody.className = row.className;
+				tbody.className += " "+row.className;
 				tbody.addClassName('tag-'+tagId);
 				tbody.setAttribute("data-parent_tag_id", tagId);
 				
@@ -122,5 +129,25 @@ var Tag = {
       object_id: parts[1]
     })
     .requestUpdate("systemMsg", {method: "post", onComplete: onComplete || function(){} });
+  },
+  filter: function(input) {
+    var table = $(input).up('table.treegrid');
+    var tags = table.select("tbody[data-name]");
+    var lists = table.select("tbody.object-list");
+    
+    tags.invoke("show").invoke("addClassName", "opened");
+    lists.invoke("hide").invoke("removeClassName", "opened");
+    
+    var term = $V(input);
+    if (!term) return;
+    
+    tags.each(function(e) {
+      e.setVisible(e.get("name").like(term));
+    });
+  },
+  cancelFilter: function(input) {
+		$V(input, "");
+		Tag.filter(input);
+		$(input).tryFocus();
   }
 };
