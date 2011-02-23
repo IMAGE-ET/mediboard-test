@@ -152,8 +152,8 @@ function saveSortie(oFormSortie, oFormAffectation){
                     </td>
                     
                     <td class="text {{if $_sortie->confirme}} arretee {{/if}}">
-                     {{if $canPlanningOp->read}}
                      {{assign var=sejour value=$_sortie->_ref_sejour}}
+                     {{if $canPlanningOp->read}}
                      <a class="action" style="float: right"  title="Modifier le séjour" href="?m=dPplanningOp&amp;tab=vw_edit_sejour&amp;sejour_id={{$sejour->_id}}">
                        <img src="images/icons/planning.png" alt="modifier" />
                      </a>
