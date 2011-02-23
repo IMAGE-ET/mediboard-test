@@ -91,7 +91,8 @@ class CPrescriptionLineMixItem extends CMbObject {
     if(!$this->_view_unite_prise){
       if(preg_match("/\(([0-9.,]+).*\)/i", $this->unite, $matches)){
         $_quant = end($matches);
-        $nb = $this->quantite * $_quant;
+        $nb = round($this->quantite * $_quant);
+				
         $this->_view_unite_prise = str_replace($_quant, "soit $nb", $this->unite);
       }
     }
@@ -254,7 +255,13 @@ class CPrescriptionLineMixItem extends CMbObject {
         // Chargement du tableau de correspondance entre les unites de prises
         $this->_ref_produit->loadRapportUnitePriseByCIS();
 				$coef = isset($this->_ref_produit->rapport_unite_prise[$_unite_prise][$libelle_unite_presentation]) ? $this->_ref_produit->rapport_unite_prise[$_unite_prise][$libelle_unite_presentation] : 1;
-				$this->_quantite_administration = $this->quantite * $coef;
+
+        $this->_quantite_administration = $this->quantite * $coef;
+				
+				if($coef != 1){
+					$this->_quantite_administration = round($this->_quantite_administration);
+				}
+
 				if(isset($poids)){
           $this->_quantite_administration *= $poids;
         }
