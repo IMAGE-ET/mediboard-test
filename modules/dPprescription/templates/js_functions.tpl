@@ -376,7 +376,7 @@ updateFieldsMedicament = function(selected) {
 		{{/if}}
 	} else {
 		if(dn[0].className != 'informal'){
-	    Prescription.addLine(dn[0].nodeValue);
+	    Prescription.addLine(dn[0].firstChild.nodeValue);
 		}
 	}
   $('searchProd_produit').value = "";
