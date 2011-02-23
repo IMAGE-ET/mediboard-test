@@ -217,16 +217,19 @@ if (CValue::get("reloadzones") == 1) {
   $smarty->display("inc_zones_fields.tpl");
 }
 else if ($compte_rendu->fast_edit && !$compte_rendu_id && !$switch_mode) {
-  $printers = $printer->loadList($wherePrinter);
+  $printers = array();
   
-  foreach($printers as $_printer) {
-    $_printer->loadTargetObject();
+  if (CModule::getInstalled("printing")) {
+    $printers = $printer->loadList($wherePrinter);
+    foreach($printers as $_printer) {
+      $_printer->loadTargetObject();
+    }
   }
   
+  $smarty->assign("printers"    , $printers);
   $smarty->assign("_source"     , $templateManager->document);
 	$smarty->assign("object_guid" , CValue::get("object_guid"));
   $smarty->assign("unique_id"   , CValue::get("unique_id"));
-  $smarty->assign("printers"    , $printers);
   
   $smarty->display("fast_mode.tpl");
 }
