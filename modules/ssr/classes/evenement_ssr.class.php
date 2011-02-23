@@ -95,6 +95,10 @@ class CEvenementSSR extends CMbObject {
 	}
 	
 	function check(){
+		if ($this->_forwardRefMerging) {
+			return;
+		}
+		
 		// Vérouillage d'un événement traité
     $this->completeField("realise");
     $this->completeField("annule");
