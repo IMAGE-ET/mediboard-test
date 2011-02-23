@@ -1,23 +1,36 @@
 {{mb_include_script module="dPprescription" script="prescription"}}
 
-{{if !$documents|@count && !$prescription_preadm->_id && !$prescription_sortie->_id}}
+{{if !$documents|@count && !$prescription_preadm->_id && !$prescription_sejour->_id && !$prescription_sortie->_id}}
   <div class="small-info">
     Il n'y a aucun document pour cette consultation
   </div>
 {{else}}
 	{{if $prescription_preadm->_id}}
-	<table class="form">
-	  <tr>
-	    <th class="title">Prescription de pre-admission</th>
-	  </tr>
-	  <tr>
-	    <td style="text-align: center">
-	      <button class="print" type="button" onclick="Prescription.printPrescription('{{$prescription_preadm->_id}}','0', '{{$prescription_preadm->object_id}}')">Imprimer</button>
-	    </td>
-	  </tr>
-	</table>
+  	<table class="form">
+  	  <tr>
+  	    <th class="title">Prescription de pre-admission</th>
+  	  </tr>
+  	  <tr>
+  	    <td style="text-align: center">
+  	      <button class="print" type="button" onclick="Prescription.printPrescription('{{$prescription_preadm->_id}}','0', '{{$prescription_preadm->object_id}}')">Imprimer</button>
+  	    </td>
+  	  </tr>
+  	</table>
 	{{/if}}
 	
+  {{if $prescription_sejour->_id}}
+    <table class="form">
+      <tr>
+        <th class="title">Prescription de séjour</th>
+      </tr>
+      <tr>
+       <td style="text-align: center">
+           <button class="print" type="button" onclick="Prescription.printPrescription('{{$prescription_sejour->_id}}','0', '{{$prescription_sejour->object_id}}')">Imprimer</button>
+       </td>
+      </tr>
+    </table>
+  {{/if}}
+  
 	{{if $prescription_sortie->_id}}
 	<table class="form">
 	  <tr>
@@ -30,6 +43,7 @@
 	  </tr>
 	</table>
 	{{/if}}
+	
 	{{if $documents|@count}}
   <form name="selectDocsFrm" action="?" method="get">
 	  <input type="hidden" name="consultation_id" value="{{$consult->consultation_id}}" />
