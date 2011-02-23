@@ -398,7 +398,9 @@ class CSejour extends CCodable {
   /**
    * Cherche des séjours les dates d'entrée ou sortie sont proches, 
    * pour le même patient dans le même établissement
+   * 
    * @param $tolerance int Tolérance en heures
+   * 
    * @return array|CSejour
    */
 	function getSiblings($tolerance = 1, $use_type = false) {

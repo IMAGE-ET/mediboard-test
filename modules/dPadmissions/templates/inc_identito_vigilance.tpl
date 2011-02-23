@@ -18,7 +18,7 @@ Main.add(function() {
 })
 </script>
 
-<form name="Merger" action="?">
+<form name="Merger" action="?" method="get">
 
 Voir les séjour :
 <input name="see_mergeable" type="checkbox" {{if $see_mergeable}}checked="true"{{/if}} onclick="IdentitoVigilance.start(0,100);" />
