@@ -56,7 +56,7 @@ submitProtocole = function(){
 	  oForm.praticien_id.value = document.selPraticienLine.praticien_id.value;
 	  oForm.pratSel_id.value = document.selPraticienLine.praticien_id.value
   }	
-  return onSubmitFormAjax(oForm, 'systemMsg');
+  return onSubmitFormAjax(oForm);
 }
 
 popupTransmission = function(sejour_id){

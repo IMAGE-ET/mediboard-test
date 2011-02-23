@@ -364,19 +364,19 @@ updateFieldsElement = function(selected, formElement, element) {
 updateFieldsMedicament = function(selected) {
 	Element.cleanWhitespace(selected);
   var dn = selected.childNodes;
-	
+
 	if(dn[0].className == 'protocole'){
 	  {{if $prescription->object_id}}
 		  // Application d'un protocole par acces rapide
 			oFormProtocole = getForm("applyProtocole");
-			$V(oFormProtocole.pack_protocole_id, "prot-"+dn[0].firstChild.textContent);
+			$V(oFormProtocole.pack_protocole_id, "prot-"+(dn[0].textContent || dn[0].innerText));
 			submitProtocole();
 		{{else}}
-		  Protocole.duplicate(dn[0].firstChild.textContent, "{{$prescription->_id}}");
+		  Protocole.duplicate((dn[0].textContent || dn[0].innerText), "{{$prescription->_id}}");
 		{{/if}}
 	} else {
 		if(dn[0].className != 'informal'){
-	    Prescription.addLine(dn[0].firstChild.nodeValue);
+	    Prescription.addLine(dn[0].nodeValue);
 		}
 	}
   $('searchProd_produit').value = "";

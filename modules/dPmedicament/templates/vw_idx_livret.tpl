@@ -41,7 +41,7 @@ Main.add(function () {
     callback: 
       function(input, queryString){
         {{if isset($livret_cabinet|smarty:nodefaults)}}
-          queryString += "&function_id=" + $("function_guid").value.split("-")[1]+"&livret_cabinet=1";
+          queryString += "&function_guid="+$("function_guid").value+"&livret_cabinet=1";
         {{/if}}
         return (queryString + "&inLivret=1&search_libelle_long=true&search_by_cis=0"); 
       }

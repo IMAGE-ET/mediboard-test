@@ -20,18 +20,21 @@ $function_id         = CValue::post("function_id");
 $group_id            = CValue::post("group_id");
 $type                = CValue::post("type", "");
 $livret_cabinet      = CValue::post("livret_cabinet", 0);
-
+$function_guid       = CValue::post("function_guid");
+  
+	
 $mbProduit = new CBcbProduit();
 $code = '';
 
 // Recherche dans la bcb
 if($inLivret){
-  if ($function_id == "") {
-    $function_id = CAppUI::$user->function_id;
+  if (!$function_guid) {
+    $function_guid = CAppUI::$user->_ref_function->_guid;
   }
+	
   // Livret de prescription 
   if ($type == "externe") {
-    $code = CBcbProduit::getHash("CFunctions-".$function_id);
+    $code = CBcbProduit::getHash($function_guid);
   }
   // Livret thérapeutique de l'établissement
   else {
@@ -78,7 +81,7 @@ if($fast_access){
 	$where = array();
 	$where["fast_access"] = " = '1'";
   $where["object_id"] = " IS NULL";
-	
+
 	if($praticien_id){
 	  $where[] = "praticien_id = '$praticien_id' OR function_id = '$praticien->function_id' OR group_id = '{$praticien->_ref_function->group_id}'";
   }
