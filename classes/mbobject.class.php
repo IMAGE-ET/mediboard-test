@@ -132,7 +132,7 @@ class CMbObject {
   }
   
   function __toString() {
-  	return $this->_view;
+    return $this->_view;
   }
   
   function CMbObject() {
@@ -149,8 +149,8 @@ class CMbObject {
         $module = self::getModuleName($classPaths[$class]);
       }
       else {
-	      $reflection = new ReflectionClass($class);
-	      $module = self::getModuleName($reflection->getFileName());
+        $reflection = new ReflectionClass($class);
+        $module = self::getModuleName($reflection->getFileName());
       }
       self::$module_name[$class] = $module;
     }
@@ -235,7 +235,7 @@ class CMbObject {
    * @return string The field's formatted value
    */
   function getFormattedValue($field, $options = array()) {
-  	return $this->_specs[$field]->getValue($this, new CSmartyDP, $options);
+    return $this->_specs[$field]->getValue($this, new CSmartyDP, $options);
   }
   
   /**
@@ -243,14 +243,14 @@ class CMbObject {
    */
   function loadRefsNotes($perm = PERM_READ) {
     $this->_ref_notes = array();
-	  $this->_high_notes = false;
+    $this->_high_notes = false;
     
     if ($this->_id) {
       $this->_ref_notes = CNote::loadNotesForObject($this, $perm);
       foreach($this->_ref_notes as $_note) {
         if ($_note->degre === "high") {
-	        $this->_high_notes = true;
-	        break;
+          $this->_high_notes = true;
+          break;
         }
       }
     }
@@ -264,16 +264,16 @@ class CMbObject {
    */
   function loadRefsFiles() {
     if (null == $this->_ref_files = $this->loadBackRefs("files", "file_name")) {
-    	return;
+      return;
     }
     
-		// Read permission
+    // Read permission
     foreach ($this->_ref_files as $_file) {
       if (!$_file->canRead()){
         unset($this->_ref_files[$_file->_id]);
       }
     }
-		
+    
     return count($this->_ref_files);
   }
 
@@ -282,7 +282,7 @@ class CMbObject {
    * @return int document count
    */
   function loadRefsDocs() {
-  	if (!$this->_id) return;
+    if (!$this->_id) return;
     $document = new CCompteRendu();
 
     if ($document->_ref_module) {
@@ -305,7 +305,7 @@ class CMbObject {
    * @return int document + files count
    */
   function loadRefsDocItems() {
-  	$this->nb_files = $this->loadRefsFiles();
+    $this->nb_files = $this->loadRefsFiles();
     $this->nb_docs  = $this->loadRefsDocs();
     $this->_nb_files_docs = $this->_nb_files + $this->_nb_docs;
   }
@@ -329,7 +329,7 @@ class CMbObject {
     $this->loadRefsFiles();
     if ($this->_ref_files) {
       self::filterByPerm($this->_ref_files, $permType);
-			$this->_nb_files = count($this->_ref_files);
+      $this->_nb_files = count($this->_ref_files);
     }
     
     $this->loadRefsDocs();
@@ -357,13 +357,13 @@ class CMbObject {
    */
   function nullifyAlteredFields() {
     $count = 0;
-  	foreach($this->getDBFields() as $_field => $_value) {
-  		if($this->fieldAltered($_field)) {
-  			$this->$_field = null;
-  			$count++;
-  		}
-  	}
-  	return $count;
+    foreach($this->getDBFields() as $_field => $_value) {
+      if($this->fieldAltered($_field)) {
+        $this->$_field = null;
+        $count++;
+      }
+    }
+    return $count;
   }
   
   /**
@@ -372,7 +372,7 @@ class CMbObject {
    * @return boolean
    */
   function fieldAltered($field) {
-  	return $this->fieldModified($field) && $this->_old->$field;
+    return $this->fieldModified($field) && $this->_old->$field;
   }
   
   /**
@@ -414,23 +414,23 @@ class CMbObject {
    * @param [...] string Field names or an array of field names
    */
   function completeField() {
-  	if (!$this->_id) return;
-  	
-  	$fields = func_get_args();
-  	
-  	if (isset($fields[0]) && is_array($fields[0])) {
+    if (!$this->_id) return;
+    
+    $fields = func_get_args();
+    
+    if (isset($fields[0]) && is_array($fields[0])) {
       $fields = $fields[0];
-  	}
-  	
-  	foreach ($fields as $field) {
+    }
+    
+    foreach ($fields as $field) {
       // Field is valued
       if ($this->$field !== null) {
         continue;
       }
-	    
+      
       $this->loadOldObject();
       $this->$field = $this->_old->$field;
-  	}
+    }
   }
   
   /**
@@ -517,7 +517,7 @@ class CMbObject {
    * @return CMbObject|boolean The loaded object if found, false otherwise
    */
   function load($id = null) {
-  	if ($id) {
+    if ($id) {
       $this->_id = $id;
     }
 
@@ -550,19 +550,19 @@ class CMbObject {
     $this->checkConfidential();
     $this->registerCache();
     $this->updateFormFields();
-		
+    
     return $this;
   }
-	
-	/**
-	 * Load all objects for given identifiers
-	 * @params array $ids list of identifiers
+  
+  /**
+   * Load all objects for given identifiers
+   * @params array $ids list of identifiers
    * @return array list of objects
-	 */
-	function loadAll($ids) {
-		$where[$this->_spec->key] = CSQLDataSource::prepareIn($ids);
-		return $this->loadList($where);
-	}
+   */
+  function loadAll($ids) {
+    $where[$this->_spec->key] = CSQLDataSource::prepareIn($ids);
+    return $this->loadList($where);
+  }
   
   /**
    * Register the object into cache
@@ -581,8 +581,8 @@ class CMbObject {
       
       self::$cachableCounts[$this->_class_name]++;
     }
-	
-	  self::$objectCache[$this->_class_name][$this->_id] =& $this;
+  
+    self::$objectCache[$this->_class_name][$this->_id] =& $this;
   }
   
   /**
@@ -723,8 +723,8 @@ class CMbObject {
       return null;
     }
     
-  	$request = new CRequest();
-  	$request->addForceIndex($forceindex);
+    $request = new CRequest();
+    $request->addForceIndex($forceindex);
     $request->addLJoin($leftjoin);
     $request->addWhere($where);
     $request->addGroup($group);
@@ -744,11 +744,11 @@ class CMbObject {
    * @return CMbObject[] List of found objects, null if module is not installed
    */
   function loadGroupList($where = array(), $order = null, $limit = null, $groupby = null, $ljoin = array()) {
-  	if(property_exists($this, "group_id")) {
+    if(property_exists($this, "group_id")) {
       // Filtre sur l'établissement
       $g = CGroups::loadCurrent();
       $where["group_id"] = "= '$g->_id'";
-  	}
+    }
     return $this->loadList($where, $order, $limit, $groupby, $ljoin);
   }
 
@@ -785,7 +785,7 @@ class CMbObject {
       return null;
     }
     
-  	$request = new CRequest();
+    $request = new CRequest();
     $request->addLJoin($leftjoin);
     $request->addWhere($where);
     $request->addGroup($group);
@@ -804,7 +804,7 @@ class CMbObject {
       return null;
     }
     
-  	$request = new CRequest();
+    $request = new CRequest();
     $request->addLJoin($leftjoin);
     $request->addWhere($where);
     $request->addGroup($group);
@@ -816,7 +816,7 @@ class CMbObject {
   }
   
   function loadListByReq(CRequest $request) {
-  	return $this->loadQueryList($request->getRequest($this));
+    return $this->loadQueryList($request->getRequest($this));
   }
   
   /**
@@ -825,7 +825,7 @@ class CMbObject {
    * @note to optimize request, only select object oids in $sql
    */
   function loadQueryList($sql) {
-  	$ds = $this->_spec->ds;
+    $ds = $this->_spec->ds;
     $cur = $ds->exec($sql);
     $list = array();
     
@@ -851,12 +851,12 @@ class CMbObject {
 
   function updateFormFields() {
     $this->_guid = "$this->_class_name-$this->_id";
-	  $this->_view = CAppUI::tr($this->_class_name) . " " . $this->_id;
+    $this->_view = CAppUI::tr($this->_class_name) . " " . $this->_id;
     $this->_shortview = "#$this->_id";
     if ($module = $this->_ref_module) {
       $path = "$module->mod_name/templates/$this->_class_name";
-	    $this->_view_template          = "{$path}_view.tpl";
-	    $this->_complete_view_template = "{$path}_complete.tpl";
+      $this->_view_template          = "{$path}_view.tpl";
+      $this->_complete_view_template = "{$path}_complete.tpl";
     }
   }
   
@@ -869,13 +869,13 @@ class CMbObject {
   static function loadFromGuid($guid, $cached = false) {
     list($class, $id) = explode('-', $guid);
     if ($class) {
-	    $object = new $class;
-	    
-			if ($id) {
+      $object = new $class;
+      
+      if ($id && $id !== "none") {
         return $cached ? $object->getCached($id) : $object->load($id);
-			}
-			
-			return $object;
+      }
+      
+      return $object;
     }
   }
   
@@ -883,7 +883,7 @@ class CMbObject {
    * Load object view information 
    */
   function loadView() {
-  	$this->loadRefsNotes();
+    $this->loadRefsNotes();
     $this->loadAllFwdRefs();
   }
   
@@ -942,9 +942,9 @@ class CMbObject {
     
     foreach ($mbObject->getValues() as $propName => $propValue) {
       if ($propValue !== null && $propValue != "") {
-      	if (!$gently || $this->$propName === null || $this->$propName === "") {
+        if (!$gently || $this->$propName === null || $this->$propName === "") {
           $this->$propName = $propValue;
-      	}
+        }
       }
     }
   }
@@ -958,10 +958,10 @@ class CMbObject {
    * @param string $path
    * @return string
    */
-	function conf($path) {
-		$mod_name = $this->_ref_module->mod_name;
-		return CAppUI::conf("$mod_name $this->_class_name $path");
-	}
+  function conf($path) {
+    $mod_name = $this->_ref_module->mod_name;
+    return CAppUI::conf("$mod_name $this->_class_name $path");
+  }
 
   /**
    * Repair all non checking properties when possible
@@ -1014,7 +1014,7 @@ class CMbObject {
     }
     
     if ($this->_merging) {
-    	 return $msg;
+       return $msg;
     }
 
     // Class level unique checking
@@ -1022,17 +1022,17 @@ class CMbObject {
       $other = new $this->_class_name;
       
       foreach ($propNames as $propName) {
-  	    $this->completeField($propName);
-  	    $other->$propName = $value = addslashes($this->$propName);
-				$values[] = "'$value'";
+        $this->completeField($propName);
+        $other->$propName = $value = addslashes($this->$propName);
+        $values[] = "'$value'";
       }
       
-	    $other->loadMatchingObject();
-	
-	    if ($other->_id && $this->_id != $other->_id) {
-	      return CAppUI::tr("$this->_class_name-failed-$unique") .
-				  " : " . implode(", ",$values);
-	    }
+      $other->loadMatchingObject();
+  
+      if ($other->_id && $this->_id != $other->_id) {
+        return CAppUI::tr("$this->_class_name-failed-$unique") .
+          " : " . implode(", ",$values);
+      }
     }
     
     // Class-level xor checking
@@ -1043,13 +1043,13 @@ class CMbObject {
         $this->completeField($propName);
         $fields[] = CAppUI::tr("$this->_class_name-$propName");
         if ($this->$propName) {
-        	$n++;
-				}
+          $n++;
+        }
       }
   
       if ($n != 1) {
         return CAppUI::tr("$this->_class_name-xorFailed-$xor").
-				  ": ".implode(", ", $fields).")";
+          ": ".implode(", ", $fields).")";
       }
     }
     
@@ -1112,22 +1112,22 @@ class CMbObject {
     }
 
     if (!count($fields) && $type === "store") {
-    	return;
+      return;
     }
    
     if ($type === "store" || $type === "merge") {
-    	$old_values = array();
-    	foreach($fields as $_field) {
-    		$_spec = $this->_specs[$_field];
-    		if ($_spec instanceof CTextSpec ||
+      $old_values = array();
+      foreach($fields as $_field) {
+        $_spec = $this->_specs[$_field];
+        if ($_spec instanceof CTextSpec ||
             $_spec instanceof CHtmlSpec ||
             $_spec instanceof CXmlSpec ||
             $_spec instanceof CPhpSpec) {
-    			continue;
-    		}
-    		$old_values[$_field] = utf8_encode($old->$_field);
-    	}
-    	$extra = json_encode($old_values);
+          continue;
+        }
+        $old_values[$_field] = utf8_encode($old->$_field);
+      }
+      $extra = json_encode($old_values);
     }
     
     $address = get_remote_address();
@@ -1142,8 +1142,8 @@ class CMbObject {
 
     // Champs potentiellement absents
     if (CModule::getInstalled("system")->mod_version > "1.0.19") {
-	    $log->ip_address = $address["remote"] ? inet_pton($address["remote"]) : null;
-	    $log->extra = $extra;
+      $log->ip_address = $address["remote"] ? inet_pton($address["remote"]) : null;
+      $log->extra = $extra;
     }
     
     $this->_ref_last_log = $log;
@@ -1182,7 +1182,7 @@ class CMbObject {
     $this->onBeforeStore();
 
     $spec = $this->_spec;
-		
+    
     // DB query
     if ($this->_old->_id) {
       $ret = $spec->ds->updateObject($spec->table, $this, $spec->key, $spec->nullifyEmptyStrings);
@@ -1197,7 +1197,7 @@ class CMbObject {
     
     // Préparation du log, doit être fait AVANT $this->load()
     $this->prepareLog();
-		
+    
     // Load the object to get all properties
     $this->load();
     
@@ -1258,16 +1258,16 @@ class CMbObject {
     if ($alternative_mode && count($objects) > 1) {
       return "mergeAlternativeTooManyObjects";
     }
-		if (!$alternative_mode && count($objects) < 2) {
-  		return "mergeTooFewObjects";
+    if (!$alternative_mode && count($objects) < 2) {
+      return "mergeTooFewObjects";
     }
     
     // Trigger before event
     $this->onBeforeMerge();
     
     if (!$this->_id && $msg = $this->store()) {
-    	return $msg;
-		}
+      return $msg;
+    }
     
     foreach ($objects as $object) {
       $this->_merging[$object->_id] = $object;
@@ -1291,8 +1291,8 @@ class CMbObject {
         $this->fastTransferBackRefsFrom($object) :
         $this->transferBackRefsFrom($object);
         
-    	if ($msg) return $msg;
-    	if ($msg = $object->delete()) return $msg;
+      if ($msg) return $msg;
+      if ($msg = $object->delete()) return $msg;
     }
     
     // Trigger after event
@@ -1326,11 +1326,11 @@ class CMbObject {
    * @return $this or an error
    */
   function mergeDBFields ($objects = array()/*<CMbObject>*/, $getFirstValue = false) {
-		/* checkMerge is now informative
-		  if ($msg = $this->checkMerge($objects)) {
-			return $msg;
-		}*/
-		
+    /* checkMerge is now informative
+      if ($msg = $this->checkMerge($objects)) {
+      return $msg;
+    }*/
+    
     $db_fields = $this->getDBFields();
     $diffs = $db_fields;
     foreach ($diffs as &$diff) $diff = false;
@@ -1397,7 +1397,7 @@ class CMbObject {
    */
   function countBackRefs($backName) {
     if (!$backSpec = $this->makeBackSpec($backName)) {
-    	return null;
+      return null;
     }
     $backObject = new $backSpec->class;
     $backField = $backSpec->field;
@@ -1512,31 +1512,31 @@ class CMbObject {
 
     $this->makeAllBackSpecs();
     foreach ($this->_backSpecs as $backName => $backSpec) {
-	    $backObject = new $backSpec->class;
+      $backObject = new $backSpec->class;
       $backField = $backSpec->field;
 
-	    // Cas du module non installé
-	    if (!$backObject->_ref_module) {
-	      continue;
-	    }
-	
-	    // Unstored object
-	    if (!$backObject->_spec->table || !$backObject->_spec->key) {
-	      continue;
-	    }
-	    
-	    $query = "UPDATE `{$backObject->_spec->table}`
-				SET `$backField` = '$this->_id'
-	      WHERE `$backField` = '$object->_id'";
-	
-	    // Cas des meta objects
+      // Cas du module non installé
+      if (!$backObject->_ref_module) {
+        continue;
+      }
+  
+      // Unstored object
+      if (!$backObject->_spec->table || !$backObject->_spec->key) {
+        continue;
+      }
+      
+      $query = "UPDATE `{$backObject->_spec->table}`
+        SET `$backField` = '$this->_id'
+        WHERE `$backField` = '$object->_id'";
+  
+      // Cas des meta objects
       $fwdSpec =& $backObject->_specs[$backField];
       $backMeta = $fwdSpec->meta;      
-	    if ($backMeta) {
-	      $query .= "\nAND `$backMeta` = '$object->_class_name'";
-	    }
-	    
-	    $this->_spec->ds->exec($query);
+      if ($backMeta) {
+        $query .= "\nAND `$backMeta` = '$object->_class_name'";
+      }
+      
+      $this->_spec->ds->exec($query);
     }    
   }
   
@@ -1558,22 +1558,22 @@ class CMbObject {
       if (count($backObjects)) {
         $backSpec = $this->_backSpecs[$backName];
         $backObject = new $backSpec->class;
-		    $backField = $backSpec->field;
-		    $fwdSpec =& $backObject->_specs[$backField];
-		    $backMeta = $fwdSpec->meta;      
-	      
+        $backField = $backSpec->field;
+        $fwdSpec =& $backObject->_specs[$backField];
+        $backMeta = $fwdSpec->meta;      
+        
         // Change back field and store back objects
-	      foreach ($backObjects as $backObject) {
-	        // Use a dummy tranferer object to prevent checks on all values
-	        $transferer = new $backObject->_class_name;
-	        $transferer->_id = $backObject->_id;
+        foreach ($backObjects as $backObject) {
+          // Use a dummy tranferer object to prevent checks on all values
+          $transferer = new $backObject->_class_name;
+          $transferer->_id = $backObject->_id;
           $transferer->$backField = $this->_id;
           $transferer->_forwardRefMerging = true;
           
           // Cas des meta objects
-			    if ($backMeta) {
-			      $transferer->$backMeta = $this->_class_name;
-			    }
+          if ($backMeta) {
+            $transferer->$backMeta = $this->_class_name;
+          }
           
           if ($msg = $transferer->store()) {
             return $msg;
@@ -1588,14 +1588,14 @@ class CMbObject {
    * @return CMbObject concrete loaded object 
    */
   function loadFwdRef($field, $cached = false) {
-  	if (isset($this->_fwd[$field]) && $this->_fwd[$field]->_id) {
-  		return $this->_fwd[$field];
-  	}
+    if (isset($this->_fwd[$field]) && $this->_fwd[$field]->_id) {
+      return $this->_fwd[$field];
+    }
 
     $spec = $this->_specs[$field];
     if ($spec instanceof CRefSpec) {
       $class = $spec->meta ? $this->{$spec->meta} : $spec->class;
-			
+      
       if (!$class) 
         return $this->_fwd[$field] = null;
       
@@ -1604,7 +1604,7 @@ class CMbObject {
       if ($cached)
         $fwd = $fwd->getCached($this->$field);
       else
-  	    $fwd->load($this->$field);
+        $fwd->load($this->$field);
 
       return $this->_fwd[$field] = $fwd;
     }
@@ -1615,44 +1615,44 @@ class CMbObject {
    * @return CMbObject concrete loaded object 
    */
   static function massLoadFwdRef($objects, $field) {
-  	if (!count($objects)) {
-  		return array();
-  	}
+    if (!count($objects)) {
+      return array();
+    }
 
     $object = reset($objects);
     $spec = $object->_specs[$field];
-		
+    
     if (!$spec instanceof CRefSpec) {
-    	trigger_error("Can't mass load not ref '$field' for object class '$object->_class_name'", E_USER_WARNING);
-			return;
-		}
+      trigger_error("Can't mass load not ref '$field' for object class '$object->_class_name'", E_USER_WARNING);
+      return;
+    }
 
     if ($spec->meta) {
       trigger_error("Can't mass load (yet!) ref '$field' with meta field '$spec->meta' for object class '$object->_class_name'", E_USER_WARNING);
       return;
     }
-		
+    
     // Trim real values
     $fwd_ids = CMbArray::pluck($objects, $field);
     $fwd_ids = array_unique($fwd_ids);
-		CMbArray::removeValue("", $fwd_ids);
+    CMbArray::removeValue("", $fwd_ids);
     if (!count($fwd_ids)) {
       return array();
     }
 
     $fwd = new $spec->class;
-		
-		$where[$fwd->_spec->key] = CSQLDataSource::prepareIn($fwd_ids);
-		return $fwd->loadList($where);
+    
+    $where[$fwd->_spec->key] = CSQLDataSource::prepareIn($fwd_ids);
+    return $fwd->loadList($where);
   }
-	  
+    
   /**
    * Load named forward reference
    * @return void
    */
   function loadAllFwdRefs() {
     foreach ($this->_specs as $field => $spec) {
-    	$this->loadFwdRef($field);
+      $this->loadFwdRef($field);
     }
   }
     
@@ -1671,10 +1671,10 @@ class CMbObject {
     $issues = array();
     $this->makeAllBackSpecs();
     foreach ($this->_backSpecs as $backName => &$backSpec) {
-	    $backObject = new $backSpec->class;
-	    $backField = $backSpec->field;
-	    $fwdSpec =& $backObject->_specs[$backField];
-	    $backMeta = $fwdSpec->meta;
+      $backObject = new $backSpec->class;
+      $backField = $backSpec->field;
+      $fwdSpec =& $backObject->_specs[$backField];
+      $backMeta = $fwdSpec->meta;
 
       // Cas du module non installé
       if (!$backObject->_ref_module) {
@@ -1735,9 +1735,9 @@ class CMbObject {
     
     // Delete checking
     if (!$this->_purge) {
-	    if ($msg = $this->canDeleteEx()) {
-	      return $msg;
-	    }
+      if ($msg = $this->canDeleteEx()) {
+        return $msg;
+      }
     }
 
     // Deleting backSpecs
@@ -1798,15 +1798,15 @@ class CMbObject {
       foreach ($backRefs as $backRef) {
         $backSpec = $this->_backSpecs[$backName];
         if ($backSpec->_notNull || $backSpec->_purgeable || $backSpec->_cascade) {
- 	        if ($msg = $backRef->purge()) {
- 	          return $msg;
- 	        }
+           if ($msg = $backRef->purge()) {
+             return $msg;
+           }
         }
         else {
           $backRef->{$backSpec->field} = "";
- 	        if ($msg = $backRef->store()) {
- 	          return $msg;
- 	        }
+           if ($msg = $backRef->store()) {
+             return $msg;
+           }
         }
         CAppUI::setMsg("$backRef->_class_name-msg-delete", UI_MSG_ALERT);
       }
@@ -1941,12 +1941,12 @@ class CMbObject {
           }
           if ($spec->seekable === true) {
             if ($spec instanceof CRefSpec) {
-            	$object = new $spec->class;
-            	$objects = $object->seek($keywords);
-            	if (count($objects)) {
-            	  $ids = implode(',', array_keys($objects));
+              $object = new $spec->class;
+              $objects = $object->seek($keywords);
+              if (count($objects)) {
+                $ids = implode(',', array_keys($objects));
                 $query .= "\nOR `{$this->_spec->table}`.`$field` IN ($ids)";
-            	}
+              }
             }
             else {
               $query .= "\nOR `{$this->_spec->table}`.`$field` LIKE '%$keyword%'";
@@ -2007,7 +2007,7 @@ class CMbObject {
    * @return void
    */
   function escapeValues() {
-  	$values = $this->getValues();
+    $values = $this->getValues();
     foreach ($values as $propName => $propValue) {
       if ($propValue) {
         $this->$propName = addslashes($propValue);
@@ -2020,7 +2020,7 @@ class CMbObject {
    * @return void
    */
   function unescapeValues() {
-  	$values = $this->getValues();
+    $values = $this->getValues();
     foreach ($values as $propName => $propValue) {
       if ($propValue) {
         $this->$propName = stripslashes($propValue);
@@ -2037,10 +2037,10 @@ class CMbObject {
     $values = array();
     
     foreach ($this->_specs as $key => $_spec) {
-    	$value = $this->$key;
-    	if (!$nonEmpty || ($value !== null && $value !== "")) {
+      $value = $this->$key;
+      if (!$nonEmpty || ($value !== null && $value !== "")) {
         $values[$key] = $value;
-    	}
+      }
     }
 
     return $values;
@@ -2064,7 +2064,7 @@ class CMbObject {
    */
   function getBackProps() {
     return array (
-		  "alerts"                 => "CAlert object_id",
+      "alerts"                 => "CAlert object_id",
       "identifiants"           => "CIdSante400 object_id",
       "notes"                  => "CNote object_id",
       "files"                  => "CFile object_id",
@@ -2083,13 +2083,13 @@ class CMbObject {
    * @return array Associative array of values
    */
   function getCSVFields() {
-		$fields = array();
-		foreach ($this->getDBFields() as $key => $value) {
-		  if (!$this->_specs[$key] instanceof CRefSpec) {
-		    $fields[$key] = $value;
-		  }
-		}
-		return $fields;
+    $fields = array();
+    foreach ($this->getDBFields() as $key => $value) {
+      if (!$this->_specs[$key] instanceof CRefSpec) {
+        $fields[$key] = $value;
+      }
+    }
+    return $fields;
   }
   
   function getTemplateClasses(){
@@ -2117,7 +2117,7 @@ class CMbObject {
    */
   function makeAllBackSpecs() {
     foreach($this->_backProps as $backName => $backProp) {
-    	$this->makeBackSpec($backName);
+      $this->makeBackSpec($backName);
     }
   }
 
@@ -2202,10 +2202,10 @@ class CMbObject {
     if ($depend_value_2){
       $where["depend_value_2"] = " = '$depend_value_2'";
     }
-		
-		if($object_field){
-		  $where["field"] = " = '$object_field'";
-		}
+    
+    if($object_field){
+      $where["field"] = " = '$object_field'";
+    }
     
     // tri par user puis function puis group (ordre inversé pour avoir ce résultat)
     $order = "group_id, function_id, user_id, depend_value_1, depend_value_2, name, text";
@@ -2263,18 +2263,18 @@ class CMbObject {
    *
    */
   function loadHistory() {
-  	$this->_history = array();
-  	$this->loadLogs();
-  	$clone = $this->getDBFields();
-		
-  	foreach($this->_ref_logs as $_log) {
+    $this->_history = array();
+    $this->loadLogs();
+    $clone = $this->getDBFields();
+    
+    foreach($this->_ref_logs as $_log) {
       $this->_history[$_log->_id] = $clone;
-			
+      
       $_log->getOldValues();
       foreach($_log->_old_values as $_old_field => $_old_value) {
-      	$clone[$_old_field] = $_old_value;
+        $clone[$_old_field] = $_old_value;
       }
-  	}
+    }
   }
   
   function loadLogs() {
@@ -2284,36 +2284,36 @@ class CMbObject {
       $_log->loadRefsFwd();
     }
     
-		// the first is at the end because of the date order !
+    // the first is at the end because of the date order !
     $this->_ref_first_log = end($this->_ref_logs);
     $this->_ref_last_log  = reset($this->_ref_logs);
   }
   
-  function loadLastLogForField($fieldName = null){	
+  function loadLastLogForField($fieldName = null){  
     $where["object_id"   ] = " = '$this->_id'";
     $where["object_class"] = " = '$this->_class_name'";
     
-  	if ($fieldName){
-  	  $where["fields"] = " LIKE '%$fieldName%'";
-  	}
-  	
+    if ($fieldName){
+      $where["fields"] = " LIKE '%$fieldName%'";
+    }
+    
     $log = new CUserLog();
     $log->loadObject($where, "date DESC");
-  	
-  	if ($log->_id){
-  	  $log->loadRefsFwd();
-  	}
-  	return $log;
+    
+    if ($log->_id){
+      $log->loadRefsFwd();
+    }
+    return $log;
   }
-	
-	/**
-	 * Check wether object has a log more recent than given hours
-	 * 
-	 * @param $nb_hours Number of hours
-	 * @return int
-	 */
+  
+  /**
+   * Check wether object has a log more recent than given hours
+   * 
+   * @param $nb_hours Number of hours
+   * @return int
+   */
   function hasRecentLog($nb_hours = 1) {
-  	$recent = mbDateTime("- $nb_hours HOURS");
+    $recent = mbDateTime("- $nb_hours HOURS");
     $where["object_id"   ] = "= '$this->_id'";
     $where["object_class"] = "= '$this->_class_name'";
     $where["date"] = "> '$recent'";
@@ -2333,11 +2333,11 @@ class CMbObject {
     return $this->_ref_last_log = $last_log;
   }
   
-	/**
-	 * Returns the object's first log
-	 * 
-	 * @return CUserLog
-	 */
+  /**
+   * Returns the object's first log
+   * 
+   * @return CUserLog
+   */
   function loadFirstLog() {
     $last_log = new CUserLog;
     $last_log->setObject($this);
@@ -2359,7 +2359,7 @@ class CMbObject {
     foreach ($affectations as $key => $affectation) {
       $affectation->loadRefPersonnel();
       $affectation->_ref_personnel->loadRefUser();
-			$affectation->_ref_personnel->_ref_user->loadRefFunction();
+      $affectation->_ref_personnel->_ref_user->loadRefFunction();
       $this->_ref_affectations_personnel[$affectation->_ref_personnel->emplacement][$affectation->_id] = $affectation;
     }
   }
@@ -2369,10 +2369,10 @@ class CMbObject {
    * @return array
    */
   function loadRefsTagItems($cache = true) {
-  	if ($cache && !empty($this->_ref_tag_items)) {
-  		return $this->_ref_tag_items;
-  	}
-		
+    if ($cache && !empty($this->_ref_tag_items)) {
+      return $this->_ref_tag_items;
+    }
+    
     return $this->_ref_tag_items = $this->loadBackRefs("tag_items");
   }
 
@@ -2381,24 +2381,24 @@ class CMbObject {
    * @return array
    */
   function getTags($cache = true) {
-  	$tag_items = $this->loadRefsTagItems($cache = true);
-		return CMbArray::pluck($tag_items, "_ref_tag");
+    $tag_items = $this->loadRefsTagItems($cache = true);
+    return CMbArray::pluck($tag_items, "_ref_tag");
   }
-	
-	/**
-	 * This function register all templated properties for the object
-	 * Will load as necessary and fill in values
-	 * @param $template CTemplateManager
-	 */
+  
+  /**
+   * This function register all templated properties for the object
+   * Will load as necessary and fill in values
+   * @param $template CTemplateManager
+   */
   function fillTemplate(&$template) {
   }
    
-	/**
-	 * This function register most important templated properties for the object
-	 * Won't register distant properties
-	 * Will load as necessary and fill in values
-	 * @param $template CTemplateManager
-	 **/
+  /**
+   * This function register most important templated properties for the object
+   * Won't register distant properties
+   * Will load as necessary and fill in values
+   * @param $template CTemplateManager
+   **/
   function fillLimitedTemplate(&$template) {
   }
    
@@ -2520,13 +2520,13 @@ class CMbObject {
     $this->_ref_object_configs = $this->loadUniqueBackRef("object_configs");
   }
   
-	/**
-	 * Returns a field's value at the specified date
-	 * 
-	 * @param string $date
-	 * @param string $field
-	 * @return string
-	 */
+  /**
+   * Returns a field's value at the specified date
+   * 
+   * @param string $date
+   * @param string $field
+   * @return string
+   */
   function getValueAtDate($date, $field) {
     $where = array(
       "object_class" => "= '$this->_class_name'",
@@ -2571,25 +2571,25 @@ class CMbObject {
     
     return CValue::read($user_log->_old_values, $field, $this->$field);
   }
-	
-	/**
-	 * Returns the path to the class-specific template
-	 * 
-	 * @param string $type view|autocomplete|edit
-	 * @return string
-	 */
-	function getTypedTemplate($type) {
-		if (!in_array($type, array("view", "autocomplete", "edit"))) {
-			return;
-		}
-		
-		$mod_name = $this->_ref_module->mod_name;
-		$template = "$mod_name/templates/{$this->_class_name}_$type.tpl";
-		
-		if (!is_file("modules/$template")) {
-		  $template = "system/templates/CMbObject_$type.tpl";
-		}
-		
-		return "../../$template";
-	}
+  
+  /**
+   * Returns the path to the class-specific template
+   * 
+   * @param string $type view|autocomplete|edit
+   * @return string
+   */
+  function getTypedTemplate($type) {
+    if (!in_array($type, array("view", "autocomplete", "edit"))) {
+      return;
+    }
+    
+    $mod_name = $this->_ref_module->mod_name;
+    $template = "$mod_name/templates/{$this->_class_name}_$type.tpl";
+    
+    if (!is_file("modules/$template")) {
+      $template = "system/templates/CMbObject_$type.tpl";
+    }
+    
+    return "../../$template";
+  }
 }
