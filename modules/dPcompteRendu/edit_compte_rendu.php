@@ -212,7 +212,7 @@ if (CValue::get("reloadzones") == 1) {
   $smarty->display("inc_zones_fields.tpl");
 }
 else if ($compte_rendu->fast_edit && !$compte_rendu_id && !$switch_mode) {
-  $printers = $function->loadBacksRefs("printers");
+  $printers = $function->loadBackRefs("printers");
   
   if (is_array($printers)) {
     foreach($printers as $_printer) {
