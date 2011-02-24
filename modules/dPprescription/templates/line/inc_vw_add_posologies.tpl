@@ -33,7 +33,7 @@ Main.add(function(){
 	</label>
 	
 	{{if $type != "mode_grille"}}
-	<label title="Evenement">
+	<label title="Evenement" style="display : none;">
 	  <input name="typePrise" type="radio" value="evenement{{$type}}" onclick="selDivPoso(this.value,'{{$line->_id}}','{{$type}}');" />
 	  Evènement
 	</label>
