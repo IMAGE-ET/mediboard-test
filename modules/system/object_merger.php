@@ -55,14 +55,15 @@ if (class_exists($objects_class) && count($objects_id)) {
     }
     
     if (count($no_extid) < count($objects)) {
+    	// Selection disabled for idex less objects
       if (CAppUI::conf("merge_prevent_base_without_idex") == 1) {
         foreach($no_extid as $_object) {
           $_object->_disabled = true;
         }
+
+	      $_selected = reset($extid);
+	      $_selected->_selected = true;
       }
-      
-      $_selected = reset($extid);
-      $_selected->_selected = true;
       
       // we put the selected objects at the beginning of the array
       foreach($objects as $_key => $_object) {
