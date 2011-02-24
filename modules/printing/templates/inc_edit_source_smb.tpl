@@ -62,18 +62,24 @@ after_edit_source_smb = function(id) {
     </tr>
     <tr>
       <td>
-        {{mb_label object=$source_smb field=workgroup}}
-      </td>
-      <td>
-        {{mb_field object=$source_smb field=workgroup}}
-      </td>
-      <td>
         {{mb_label object=$source_smb field=user}}
       </td>
       <td>
         {{mb_field object=$source_smb field=user}}
       </td>
+      <td>
+        {{mb_label object=$source_smb field=password}}
+      </td>
+      <td>
+        {{mb_field object=$source_smb field=password}}
+      </td>
     </tr>
+    <td>
+        {{mb_label object=$source_smb field=workgroup}}
+      </td>
+      <td colspan="3">
+        {{mb_field object=$source_smb field=workgroup}}
+      </td>
     {{if $source_smb->_id}}
       <tr>
         <td style="padding-top: 20px;">

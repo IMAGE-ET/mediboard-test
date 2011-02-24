@@ -62,8 +62,10 @@ class CSMB {
       $uri .= "-W '$this->workgroup' ";
     }
     
-    $uri .= "-N 2";
-
+    if (!$this->password) {
+      $uri .= "-N";
+    }
+    
     exec("smbclient $uri", $res);
     
     if (count($res)) {
