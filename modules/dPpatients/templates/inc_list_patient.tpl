@@ -168,8 +168,8 @@ reloadPatient = function(patient_id, link){
 {{/if}}
 
 <form name="fusion" action="?" method="get">
-<input type="hidden" name="m" value="{{$m}}" />
-<input type="hidden" name="a" value="fusion_pat" />
+<input type="hidden" name="m" value="system" />
+<input type="hidden" name="a" value="object_merger" />
 <input type="hidden" name="readonly_class" value="1" />
 <input type="hidden" name="objects_class" value="CPatient" />
 

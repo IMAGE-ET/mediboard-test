@@ -28,8 +28,8 @@
   <tr>
     <td colspan="10">  
       <form name="fusion" action="?" method="get">
-        <input type="hidden" name="m" value="dPpatients" />
-        <input type="hidden" name="a" value="fusion_pat" />
+        <input type="hidden" name="m" value="system" />
+        <input type="hidden" name="a" value="object_merger" />
         <input type="hidden" name="objects_class" value="CPatient" />
         <input type="hidden" name="readonly_class" value="CPatient" />
         <table class="form">
