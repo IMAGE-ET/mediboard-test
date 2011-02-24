@@ -77,7 +77,7 @@ var WaitingMessage = {
     if (Prototype.Browser.IE && (element.style && element.style.display === "none")) {
       return;
     }
-	
+  
     element = $(element);
     
     var coverContainer = new Element("div", {style: "border:none;background:none;padding:0;margin:0;position:relative;"}).addClassName("cover-container").hide(),
@@ -91,7 +91,7 @@ var WaitingMessage = {
     if (/^tbody$/i.test(receiver.tagName)) {
       receiver = receiver.down();
     }
-		
+    
     if (/^tr$/i.test(receiver.tagName)) {
       receiver = receiver.down();
     }
@@ -117,17 +117,17 @@ var WaitingMessage = {
     coverContainer.show();
 
     if (!isTopAligned || !isLeftAligned) {
-	    var offsetCover = coverContainer.cumulativeOffset();
-	    var offsetContainer = receiver.cumulativeOffset();
-	    
-	    if (!isTopAligned) {
-	      coverContainer.style.top = (offsetContainer.top - offsetCover.top)+"px";
-	    }
-	
-	    if (!isLeftAligned) {
-	      coverContainer.style.left = (offsetContainer.left - offsetCover.left)+"px";
-	    }
-		}
+      var offsetCover = coverContainer.cumulativeOffset();
+      var offsetContainer = receiver.cumulativeOffset();
+      
+      if (!isTopAligned) {
+        coverContainer.style.top = (offsetContainer.top - offsetCover.top)+"px";
+      }
+  
+      if (!isLeftAligned) {
+        coverContainer.style.left = (offsetContainer.left - offsetCover.left)+"px";
+      }
+    }
   }
 };
 
@@ -153,8 +153,8 @@ var AjaxResponse = {
   
   onLoaded: function(getData, performance) {
     try {
-			if (Prototype.Browser.IE) return;
-			
+      if (Prototype.Browser.IE) return;
+      
       // If Firebug or Chrome console
       if (!("_mediboard" in window.console)) {
         console.log(getData, " ", performance);
@@ -694,9 +694,9 @@ Class.extend (Control.Tabs, {
     }
   },
   print: function(){
-		this.toPrint().print();
-	},
-	toPrint: function(){
+    this.toPrint().print();
+  },
+  toPrint: function(){
     var container = DOM.div({});
     
     this.links.each(function(link){
@@ -713,7 +713,7 @@ Class.extend (Control.Tabs, {
     }, this);
     
     return container;
-	}
+  }
 });
 
 window.getInnerDimensions = function() {
@@ -818,8 +818,38 @@ var Modal = {
     );
     
     var m = Control.Modal.open(html.innerHTML, options);
-    m.container.down('button.tick'  ).observe('click', (function(){this.close(); options.onValidate(true ); options.onOK(); }).bind(m));
-    m.container.down('button.cancel').observe('click', (function(){this.close(); options.onValidate(false); options.onKO(); }).bind(m));
+    
+    var okButton = m.container.down('button.tick');
+    var koButton = m.container.down('button.cancel');
+    
+    var closeModal = function(){
+      document.stopObserving('keyup', escapeClose);
+      m.close();
+    };
+    
+    var okCallback = function(){ 
+      closeModal(); 
+      options.onValidate(true); 
+      options.onOK();
+    };
+    okButton.observe('click', okCallback);
+    
+    var koCallback = function(){ 
+      closeModal(); 
+      options.onValidate(false); 
+      options.onKO(); 
+    };
+    koButton.observe('click', koCallback);
+    
+    var escapeClose = function(e){
+      if (Event.key(e) == 27) {
+        e.stop();
+        koCallback();
+      }
+    };
+    
+    okButton.tryFocus();
+    document.observe('keyup', escapeClose);
   }, 
   
   open: function(container, options) {
@@ -876,14 +906,14 @@ window.modal = function(container, options) {
 };
 
 Class.extend(Control.Modal, {
-	restore: function() {
-		this.container.removeClassName("modal");
-		this.container.setStyle({ position: null});
-		Control.Overlay.container.hide(); 
-		this.iFrameShim.hide();
+  restore: function() {
+    this.container.removeClassName("modal");
+    this.container.setStyle({ position: null});
+    Control.Overlay.container.hide(); 
+    this.iFrameShim.hide();
     this.isOpen = false;
     this.notify('afterClose');
-	},
+  },
   print: function() {
     var e = this.container.clone(true);
     e.style.cssText = null;
@@ -1048,7 +1078,7 @@ Element.addMethods({
     
     doc.write("<html><head></head><body></body></html>");
     
-		// !! Don't use PrototypeJS functions here, this is an iframe
+    // !! Don't use PrototypeJS functions here, this is an iframe
     var head = doc.head || doc.getElementsByTagName('head')[0];
     var body = doc.body || doc.getElementsByTagName('body')[0];
     var elements;
@@ -1059,45 +1089,45 @@ Element.addMethods({
       elements = element;
     
     elements.each(function(e){
-			if (Object.isFunction(e.toPrint)) {
-				e = e.toPrint();
-			}
-			var clone = $(e).clone(true);
-			clone.select('script').invoke('remove');
-			body.appendChild(clone);
+      if (Object.isFunction(e.toPrint)) {
+        e = e.toPrint();
+      }
+      var clone = $(e).clone(true);
+      clone.select('script').invoke('remove');
+      body.appendChild(clone);
     });
     
     var parentHead = document.head || document.getElementsByTagName('head')[0];
     
     if (Prototype.Browser.IE) { // argh
       $(parentHead).childElements().each(function(e){
-				// Si c'est une feuille de style
+        // Si c'est une feuille de style
         if (e.styleSheet) {
-					var css = e.styleSheet.cssText;
-					
-					// Si elle a un href (feuille de style externe=
-					if (e.href) {
-						var matchHref = e.href.match(/(.*\/)[^\/]+$/);
-						var pattern = /@import\s*(?:url\s*\(\s*)?["']?([^"'\)]+)\)?["']?/g;
+          var css = e.styleSheet.cssText;
+          
+          // Si elle a un href (feuille de style externe=
+          if (e.href) {
+            var matchHref = e.href.match(/(.*\/)[^\/]+$/);
+            var pattern = /@import\s*(?:url\s*\(\s*)?["']?([^"'\)]+)\)?["']?/g;
             var i = 50;
-						
-						if (matchHref) {
-							// on regarde tous ses @import pour les importer "à la main"
-		          while(i-- && (match = pattern.exec(css))) {
+            
+            if (matchHref) {
+              // on regarde tous ses @import pour les importer "à la main"
+              while(i-- && (match = pattern.exec(css))) {
                 doc.write("<" + "link type=\"text/css\" rel=\"stylesheet\" href=\"" + matchHref[1] + match[1] + "\" />");
-		          }
-						}
-					}
-					
+              }
+            }
+          }
+          
           doc.write("<"+"style>"+css+"<"+"/style>");
         }
         else if (e.tagName === "SCRIPT") {
           doc.write(e.outerHTML);
         }
       });
-			
-			//console.log(doc.body.innerHTML);
-			doc.execCommand('print', false, null);
+      
+      //console.log(doc.body.innerHTML);
+      doc.execCommand('print', false, null);
     }
     else {
       head.innerHTML = parentHead.innerHTML;
@@ -1143,8 +1173,8 @@ Element.getTempIframe = function(id) {
   });
   
   if (id) {
-		Element.writeAttribute(iframe, 'id', id);
-	}
+    Element.writeAttribute(iframe, 'id', id);
+  }
     
   Element.writeAttribute(iframe, 'name', iframe.identify());
   
