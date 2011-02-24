@@ -46,7 +46,9 @@
 	  <td rowspan="{{$field_count}}" style="text-align: center;">
 	    {{mb_ditto name=time value=$_log->date|date_format:$conf.time}}
 	  </td>
-	  <td rowspan="{{$field_count}}" {{if $_log->type != "store" && $object->_id}} colspan="4" {{/if}}>
+	  <td rowspan="{{$field_count}}"
+      {{if $_log->type != "store" && $object->_id && $_log->type!="merge" ||
+        ($_log->type=="merge" && $_log->_old_values|@count == 0)}} colspan="4" {{/if}}>
 		  <span onmouseover="ObjectTooltip.createEx(this, '{{$_log->_guid}}')">
 			  {{mb_value object=$_log field=type}}
 			</span>
