@@ -10,7 +10,7 @@
 
 <script type="text/javascript">
 function toggleColumn(className) {
-  var inputs = getForm("form-merge").select("."+className+" input[type=radio]");
+  var inputs = getForm("form-merge").select("tr.multiple ."+className+" input[type=radio]");
   inputs.each(function(input){
     input.checked = true;
     input.onclick();
