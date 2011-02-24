@@ -18,7 +18,7 @@ MbObject.editCallback = function(){
   <table class="main form">
     <col class="narrow" />
     
-    {{mb_include module=system template=inc_form_table_header}}
+    {{mb_include module=system template=inc_form_table_header css_class="text"}}
 		
     <tr>
       <th>{{mb_label object=$object field=name}}</th>

@@ -12,7 +12,7 @@
 	<table class="main form">
 		<col class="narrow" />
 		
-		{{mb_include module=system template=inc_form_table_header}}
+		{{mb_include module=system template=inc_form_table_header css_class="text"}}
 		
 		{{if $object->_id}}
 			{{mb_include module=system template=inc_tag_binder}}

@@ -1,8 +1,10 @@
+{{mb_default var=colspan value=2}}
+
 <tr>
   <th>
     <label for="_bind_tag_view">Tags</label>
   </th>
-  <td style="white-space: normal;">
+  <td style="white-space: normal;" colspan="{{$colspan-1}}">
     <button style="float: right;" class="tag-edit" type="button" onclick="Tag.manage('{{$object->_class_name}}')">
       Gérer les tags
     </button>
