@@ -11,7 +11,7 @@
       fDebitProduit = sUniteDebitProduit      == 'g'  ? fDebitProduit * 1000 : fDebitProduit;
       fDebitProduit = sUniteDebitProduit      == 'µg' ? fDebitProduit / 1000 : fDebitProduit;
       fDebitProduit = sUniteDebitProduitTemps == 'mn' ? fDebitProduit * 60   : fDebitProduit;
-      var fResultat = (fQuantiteProduit * fDebitProduit) / fVolumeTotal;
+      var fResultat = (fVolumeTotal * fDebitProduit) / fQuantiteProduit;
       $V(oForm.resultat, fResultat.toFixed(2));
     } else {
       alert('Certains éléments sont manquant, merci de les remplir')

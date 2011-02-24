@@ -520,7 +520,7 @@ Main.add( function(){
 						             	{{if $line->_can_modify_prescription_line_mix_item && $line->type_line == "perfusion"}}
 						             	{{assign var="is_mg" value=false}}
 						             	{{foreach from=$_line_item->_unites_prise item=_unite}}
-						             	  {{if substr($_unite, 0, 2) == "mg"}}
+						             	  {{if substr($_unite, 0, 2) == "mg" || substr($_unite, 0, 2) == "µg"}}
 						             	    {{assign var="is_mg" value=true}}
 						             	  {{/if}}
 						             	{{/foreach}}
