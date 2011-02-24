@@ -16,7 +16,7 @@
 
 <tr>
   <th style="width: 50%">
-    <label for="{{$col}}[{{$class}}]" title="{{tr}}config-{{$col}}-{{$class}}{{/tr}}">
+    <label for="{{$col}}[{{$class}}]" title="{{tr}}config-{{$col}}-{{$class}}-desc{{/tr}}">
       {{tr}}config-{{$col}}-{{$class}}{{/tr}}
     </label>  
   </th>

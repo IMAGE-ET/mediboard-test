@@ -86,6 +86,7 @@ class CMbSOAPClient extends SoapClient {
 		catch(SoapFault $fault) {
   	  $echange_soap->output    = $fault->faultstring;
   		$echange_soap->soapfault = 1;
+  		throw $fault;
     }
     $chrono->stop();
     $phpChrono->start();

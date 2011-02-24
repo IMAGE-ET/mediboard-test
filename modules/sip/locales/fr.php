@@ -1,5 +1,6 @@
 <?php
 $locales['CSipObjectHandler'] = 'Gestionnaire SIP';
+$locales['config-object_handlers-CSipObjectHandler-desc'] = 'Permet d\'utiliser des gestionnaire d\'objets pour ajouter du comportement événementiel de façon non intrusive.';
 $locales['SIP'] = 'SIP';
 $locales['config-object_handlers-CSipObjectHandler'] = 'Activer le gestionnaire SIP';
 $locales['config-sip'] = 'Configuration mode SIP';

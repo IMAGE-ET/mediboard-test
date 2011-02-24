@@ -8,9 +8,7 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
  */
 
-global $can;
-
-$can->needsAdmin();
+CCanDo::checkAdmin;
 
 // Check params
 if (null == $exchange_source_name = CValue::get("exchange_source_name")) {

@@ -66,7 +66,6 @@ class CFTP {
     //$phpChrono->stop();
     $chrono = new Chronometer();
     $chrono->start();
-    
     $output = null;
     try {
       $output = call_user_func_array(array($this, $function_name), $args);
@@ -74,6 +73,7 @@ class CFTP {
     catch(CMbException $fault) {
       $echange_ftp->output    = $fault->getMessage();
       $echange_ftp->ftp_fault = 1;
+      throw $fault;
     }
     $chrono->stop();
     //$phpChrono->start();
@@ -210,7 +210,7 @@ class CFTP {
     
     $tmpfile = tempnam("","");    
     file_put_contents($tmpfile, $source_content);
-    $result = $this->sendFile($tmpfile, $destination_file);
+    $result = $this->_sendFile($tmpfile, $destination_file);
     unlink($tmpfile);
     
     return $result;
