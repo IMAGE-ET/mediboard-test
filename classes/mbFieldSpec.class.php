@@ -34,6 +34,7 @@ class CMbFieldSpec {
   var $show           = null;
   var $reported       = null;
   var $pattern        = null;
+  var $derived        = null;
 
   static $chars  = array();
   static $nums   = array();

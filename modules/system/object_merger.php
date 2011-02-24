@@ -129,9 +129,6 @@ $smarty->assign("list_classes", CApp::getInstalledClasses());
 $smarty->assign("alternative_mode", CAppUI::conf("alternative_mode"));
 $smarty->assign("readonly_class", $readonly_class);
 
-$merger_template = $result ? "../../{$result->_ref_module->mod_name}/templates/{$result->_class_name}_merger.tpl" : '';
-$merger_template = is_readable($merger_template) ? $merger_template : "../../system/templates/object_merger.tpl";
-
-$smarty->display($merger_template);
+$smarty->display("object_merger.tpl");
 
 ?>

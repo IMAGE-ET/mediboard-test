@@ -115,7 +115,7 @@ function toggleColumn(className) {
     </tr>
     
     {{foreach from=$result->_specs item=spec name=spec}}
-      {{if $spec->fieldName != $result->_spec->key && ($spec->fieldName|substr:0:1 != '_' || $spec->reported)}}
+      {{if $spec->fieldName != $result->_spec->key && ($spec->fieldName|substr:0:1 != '_' || $spec->reported) && !$spec->derived}}
         {{mb_include module=system template=inc_merge_field field=$spec->fieldName}}
       {{/if}}
     {{/foreach}}
