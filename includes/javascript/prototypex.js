@@ -715,11 +715,11 @@ Element.warnDuplicates = function(){
   
   var dups;
   
-  dups = Element.findDuplicates("id");
+  /*dups = Element.findDuplicates("id");
   if (dups.length && !Element._duplicates.intersect(dups).length) {
     Element._duplicates = Element._duplicates.concat(dups);
     console.warn("Duplicates *[id]: ", dups);
-  }
+  }*/
   
   dups = Element.findDuplicates("name", "form");
   if (dups.length && !Element._duplicates.intersect(dups).length) {
