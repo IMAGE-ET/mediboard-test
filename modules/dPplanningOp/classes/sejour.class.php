@@ -125,6 +125,7 @@ class CSejour extends CCodable {
   var $_ref_dossier_medical   = null;
   var $_ref_rpu               = null;
   var $_ref_bilan_ssr         = null;
+	var $_ref_fiche_autonomie   = null;
   var $_ref_consult_anesth    = null;
   var $_ref_consultations     = null;
   var $_ref_consult_atu       = null;
@@ -1040,6 +1041,10 @@ class CSejour extends CCodable {
 	 */
   function loadRefBilanSSR() {
     return $this->_ref_bilan_ssr = $this->loadUniqueBackRef("bilan_ssr");
+  }
+  
+	function loadRefFicheAutonomie() {
+    return $this->_ref_fiche_autonomie = $this->loadUniqueBackRef("fiche_autonomie");
   }
   
   function loadRefAdresseParPraticien() {

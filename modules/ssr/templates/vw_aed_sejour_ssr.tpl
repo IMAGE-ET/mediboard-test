@@ -38,6 +38,12 @@ refreshConstantesMedicales = function (force) {
   }
 };
 
+refreshSejoursSSR = function(sejour_id){
+  var url = new Url("ssr", "ajax_vw_sejours_patient");
+	url.addParam("sejour_id", sejour_id);
+	url.requestUpdate("sejours_ssr");
+}
+
 </script>
 
 <ul id="tab-sejour" class="control_tabs">
@@ -62,7 +68,7 @@ refreshConstantesMedicales = function (force) {
 		</li>  
 
 	  <li>
-	  	<a href="#bilan">
+	  	<a href="#bilan" onmousedown="refreshSejoursSSR('{{$sejour->_id}}');">
 	  		{{tr}}CPrescription{{/tr}} &amp; {{tr}}CBilanSSR{{/tr}}
 			</a>
 		</li>

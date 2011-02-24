@@ -391,6 +391,9 @@ duplicateSSRLine = function(element_prescription_id, category_id){
         </table>
       </form>
       {{/if}}
+			
+			<!-- Affichage des sejours SSR du patient -->
+      <div id="sejours_ssr"></div>
 
     </td>
   </tr>
