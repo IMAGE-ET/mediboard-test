@@ -63,7 +63,7 @@ class CFTP {
     
     $echange_ftp->function_name = $name;
     
-    //$phpChrono->stop();
+    $phpChrono->stop();
     $chrono = new Chronometer();
     $chrono->start();
     $output = null;
@@ -76,7 +76,7 @@ class CFTP {
       throw $fault;
     }
     $chrono->stop();
-    //$phpChrono->start();
+    $phpChrono->start();
     
      // response time
     $echange_ftp->response_time = $chrono->total;
