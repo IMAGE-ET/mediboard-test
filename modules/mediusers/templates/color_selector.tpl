@@ -17,8 +17,8 @@
 </script>
 <table border="0" cellpadding="0" cellspacing="4" id="palette">
   <tr>
-    <td rowspan="2">
-      <table border="0" cellpadding="0" cellspacing="0" style="height: 100%; vertical-aligne: top;">
+    <td rowspan="2" style="width: 1%;">
+      <table cellpadding="0" cellspacing="0" style="border: 1px solid #999; height: 100%; width: 16px; vertical-align: top;">
         {{foreach from=$hex item=h}}
           {{assign var=rgb value="$h$h$h"}}
           <tr>
@@ -33,7 +33,7 @@
       </table>
     </td>
     <td rowspan="2">
-      <table border="0" cellpadding="0" cellspacing="0">
+      <table cellpadding="0" cellspacing="0" style="border: 1px solid #999;">
         {{foreach from=$range item=r}}
         {{if $r==0 || $r==3}}<tr>{{/if}}
         <td>
