@@ -160,9 +160,8 @@ class CRPU extends CMbObject {
 
   function updateFormFields() {
     parent::updateFormFields();
-    $this->loadRefsFwd();
     
-    $sejour =& $this->_ref_sejour;
+    $sejour = $this->loadRefSejour();
 
     $this->_responsable_id = $sejour->praticien_id;
     $this->_entree         = $sejour->_entree;
@@ -215,8 +214,7 @@ class CRPU extends CMbObject {
    * @return CSejour
    */
   function loadRefSejour() {
-    $this->_ref_sejour = new CSejour;
-    $this->_ref_sejour->load($this->sejour_id);
+    $this->_ref_sejour = $this->loadFwdRef("sejour_id", true);
     $this->_ref_sejour->loadRefsFwd();
 
 	  // Calcul des temps d'attente et présence
