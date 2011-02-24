@@ -11,9 +11,9 @@
 CCanDo::checkEdit();
 
 // Filtres
-$see_mergeable = CValue::get("see_mergeable", "1");
-$see_yesterday = CValue::get("see_yesterday", "1");
-$see_cancelled = CValue::get("see_cancelled", "1");
+$see_mergeable = CValue::getOrSession("see_mergeable", "1");
+$see_yesterday = CValue::getOrSession("see_yesterday", "1");
+$see_cancelled = CValue::getOrSession("see_cancelled", "1");
 $module        = CValue::get("module", "dPadmissions");
 
 // Selection de la date
