@@ -39,6 +39,9 @@ if (class_exists($objects_class) && count($objects_id)) {
     $objects[] = $object;
   }
   
+  // Default préselection of first object
+  $_selected = reset($objects);
+	
   // selection of the first CSejour or CPatient with an ext ID
   if ($objects_class == "CSejour" || $objects_class == "CPatient") {
     $no_extid = array();
@@ -62,26 +65,12 @@ if (class_exists($objects_class) && count($objects_id)) {
         }
 
 	      $_selected = reset($extid);
-	      $_selected->_selected = true;
-      }
-      
-      // we put the selected objects at the beginning of the array
-      foreach($objects as $_key => $_object) {
-        if ($_object->_selected) {
-          unset($objects[$_key]);
-          array_unshift($objects, $_object);
-        }
       }
     }
-    else {
-      $_selected = reset($objects);
-      $_selected->_selected = true;
-    }
   }
-  else {
-    $_selected = reset($objects);
-    $_selected->_selected = true;
-  }
+	
+	// Selected object IS selected (!)
+  $_selected->_selected = true;
   
   // Check merge
 	$result = new $objects_class;
