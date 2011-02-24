@@ -132,19 +132,14 @@ if (!$user->isPraticien()) {
 }
 
 $user->load();
-$user->loadRefFunction();
+$function = $user->loadRefFunction();
+
 
 // Chargement des catégories
 $listCategory = CFilesCategory::listCatClass($compte_rendu->object_class);
 
 // Décompte des imprimantes disponibles pour l'impression serveur
-$nb_printers = 0;
-if (CModule::getInstalled("printing")) {
-  $printer = new CPrinter;
-  $wherePrinter = array();
-  $wherePrinter["function_id"] = " ='".CAppUI::$user->function_id."'";
-  $nb_printers = $printer->countList($wherePrinter);
-}
+$nb_printers = $function->countBackRefs("printers");
 
 // Gestion du template
 $templateManager = new CTemplateManager($_GET);
@@ -217,17 +212,16 @@ if (CValue::get("reloadzones") == 1) {
   $smarty->display("inc_zones_fields.tpl");
 }
 else if ($compte_rendu->fast_edit && !$compte_rendu_id && !$switch_mode) {
-  $printers = array();
+  $printers = $function->loadBacksRefs("printers");
   
-  if (CModule::getInstalled("printing")) {
-    $printers = $printer->loadList($wherePrinter);
+  if (is_array($printers)) {
     foreach($printers as $_printer) {
-      $_printer->loadTargetObject();
+        $_printer->loadTargetObject();
     }
   }
   
-  $smarty->assign("printers"    , $printers);
   $smarty->assign("_source"     , $templateManager->document);
+  $smarty->assign("printers"    , $printers);
 	$smarty->assign("object_guid" , CValue::get("object_guid"));
   $smarty->assign("unique_id"   , CValue::get("unique_id"));
   
