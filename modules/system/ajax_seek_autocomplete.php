@@ -28,13 +28,9 @@ if ($keywords == "") {
   $keywords = "%";
 }
 
-$matches = $object->seek($keywords, $where, $limit);
-$template = null;
+$matches = $object->getAutocompleteList($keywords, $where, $limit);
 
-$template_file = "modules/{$object->_ref_module->mod_name}/templates/{$object->_class_name}_autocomplete.tpl";
-if (is_file($template_file)) {
-  $template = "../../../$template_file";
-}
+$template = $object->getTypedTemplate("autocomplete");
 
 // Création du template
 $smarty = new CSmartyDP();

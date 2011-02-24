@@ -1987,6 +1987,18 @@ class CMbObject {
   }
   
   /**
+   * Returns a list of objects for autocompleted fields
+   * 
+   * @param string $keywords
+   * @param array $where [optional]
+   * @param string $limit [optional]
+   * @return array
+   */
+  function getAutocompleteList($keywords, $where = null, $limit = null) {
+    return $this->seek($keywords, $where, $limit);
+  }
+  
+  /**
    * Get DB fields and there values
    * @return array Associative array
    */

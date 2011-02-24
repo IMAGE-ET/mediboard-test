@@ -18,6 +18,8 @@ class CTag extends CMbObject {
   
   var $_ref_parent  = null;
   var $_ref_items   = null;
+	
+	var $_deepness    = null;
 
   function getSpec() {
     $spec = parent::getSpec();
@@ -77,6 +79,24 @@ class CTag extends CMbObject {
 		
     CMbArray::invoke($items, "loadTargetObject");
     return CMbArray::pluck($items, "_ref_object");
+	}
+	
+	function getAutocompleteList($keywords, $where = null, $limit = null) {
+		$list = parent::getAutocompleteList($keywords, $where, $limit);
+		
+		foreach($list as $_tag) {
+			$_tag->getDeepness();
+		}
+		
+		return $list;
+	}
+	
+	function getDeepness($d = 0){
+		if ($this->parent_id) {
+			$d++;
+			$d = $this->loadRefParent()->getDeepness($d);
+		}
+		return $this->_deepness = $d;
 	}
 	
 	static function getTree(CMbObject $object, CTag $parent = null, &$tree = array()) {

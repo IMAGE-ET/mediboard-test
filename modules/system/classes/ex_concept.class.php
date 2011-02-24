@@ -21,13 +21,14 @@ class CExConcept extends CMbObject {
     $spec = parent::getSpec();
     $spec->table = "ex_concept";
     $spec->key   = "ex_concept_id";
+	  $spec->uniques["name"] = array("name", "ex_list_id");
     return $spec;
   }
 
   function getProps() {
     $props = parent::getProps();
     $props["ex_list_id"]  = "ref class|CExList";
-    $props["name"]        = "str notNull protected canonical";
+    $props["name"]        = "str notNull";
     $props["prop"]        = "str notNull";
     return $props;
   }
@@ -40,33 +41,17 @@ class CExConcept extends CMbObject {
   
   function updateFormFields(){
     parent::updateFormFields();
-    $this->_view = "$this->name [$this->prop]";
-    
-    $this->updateTranslation();
+		
+    $this->_view = $this->name;
+		
+		if ($this->ex_list_id) {
+			$list = $this->loadRefExList();
+			$this->_view .= " [$list->_view]";
+		}
   }
   
-  function loadRefExClass($cache = true){
-    return $this->_ref_ex_class = $this->loadFwdRef("ex_class_id", $cache);
-  }
-  
-  function loadRefConcept($cache = true){
-    return $this->_ref_concept = $this->loadFwdRef("concept_id", $cache);
-  }
-  
-  function loadRefTranslation() {
-    $trans = new CExClassFieldTranslation;
-    $trans->lang = CAppUI::pref("LOCALE");
-    $trans->ex_class_field_id = $this->_id;
-    $trans->loadMatchingObject();
-    $trans->fillIfEmpty($this->name);
-    return $this->_ref_translation = $trans;
-  }
-  
-  function loadRefEnumTranslations() {
-    $trans = new CExClassFieldEnumTranslation;
-    $trans->lang = CAppUI::pref("LOCALE");
-    $trans->ex_class_field_id = $this->_id;
-    return $trans->loadMatchingList();
+  function loadRefExList($cache = true){
+    return $this->_ref_ex_list = $this->loadFwdRef("ex_list_id", $cache);
   }
   
   function updateTranslation(){
@@ -89,135 +74,5 @@ class CExConcept extends CMbObject {
     $this->_view = $this->_locale;
     
     return $trans;
-  }
-  
-  function getTableName(){
-    return $this->loadRefExClass()->getTableName();
-  }
-  
-  function getSpecObject(){
-    return $this->_spec_object = CMbFieldSpecFact::getSpecWithClassName("CExObject", $this->name, $this->prop);
-  }
-  
-  function getSQLSpec(){
-    return $this->getSpecObject()->getFullDBSpec();
-  }
-  
-  function store(){
-    if (!$this->_id && $this->concept_id) {
-      $this->prop = $this->loadRefConcept()->prop;
-    }
-		
-    if ($msg = $this->check()) return $msg;
-    
-    if (!preg_match('/^[a-z0-9_]+$/i', $this->name)) {
-      return "Nom de champ invalide ($this->name)";
-    }
-    
-    $ds = $this->_spec->ds;
-    
-		$this->completeField("ex_class_id");
-		
-		// If this is not a concept
-		if ($this->ex_class_id) {
-	    if (!$this->_id) {
-	      $table_name = $this->getTableName();
-	      $sql_spec = $this->getSQLSpec();
-	      $query = "ALTER TABLE `$table_name` ADD `$this->name` $sql_spec";
-	      
-	      if (!$ds->query($query)) {
-	        return "Le champ '$this->name' n'a pas pu être ajouté à la table '$table_name' (".$ds->error().")";
-	      }
-	      
-	      $spec_type = $this->getSpecObject()->getSpecType();
-	      
-	      // ajout de l'index
-	      if (in_array($spec_type, self::$_indexed_types)) {
-	        $query = "ALTER TABLE `$table_name` ADD INDEX (`$this->name`)";
-	        
-	        if (!$ds->query($query)) {
-	          //return "L'index sur le champ '$this->name' n'a pas pu être ajouté (".$ds->error().")";
-	        }
-	      }
-	    }
-	    
-	    else if ($this->fieldModified("name") || $this->fieldModified("prop")) {
-	      $table_name = $this->getTableName();
-	      $sql_spec = $this->getSQLSpec();
-	      $query = "ALTER TABLE `$table_name` CHANGE `{$this->_old->name}` `$this->name` $sql_spec";
-	
-	      if (!$ds->query($query)) {
-	        return "Le champ '$this->name' n'a pas pu être mis à jour (".$ds->error().")";
-	      }
-	    }
-		}
-    
-    $locale       = $this->_locale;
-    $locale_desc  = $this->_locale_desc;
-    $locale_court = $this->_locale_court;
-    $locale_enum  = $this->_enum_translation;
-    
-    if ($msg = parent::store()) {
-      return $msg;
-    }
-    
-    // self translations
-    if ($locale || $locale_desc || $locale_court) {
-      $trans = $this->loadRefTranslation();
-      $trans->std = $locale;
-      $trans->desc = $locale_desc;
-      $trans->court = $locale_court;
-      if ($msg = $trans->store()) {
-        mbTrace($msg, get_class($this), true);
-      }
-    }
-    
-    // enum translations
-    if ($locale_enum) {
-      $values = json_decode(utf8_encode($locale_enum), true);
-      $spec = $this->getSpecObject();
-      
-      $enum_trans = array_values($this->loadRefEnumTranslations());
-      
-      foreach($values as $i => $value) {
-      	$value = utf8_decode($value);
-				
-        if (!isset($enum_trans[$i])) {
-          $enum_trans[$i] = new CExClassFieldEnumTranslation;
-        }
-        
-        $enum_trans[$i]->ex_class_field_id = $this->_id;
-        $enum_trans[$i]->key = $spec->_list[$i];
-        $enum_trans[$i]->value = $value;
-        $enum_trans[$i]->lang = CAppUI::pref("LOCALE");
-        
-        if ($msg = $enum_trans[$i]->store()) {
-          mbTrace($msg, get_class($this), true);
-        }
-      }
-    }
-  }
-  
-  function delete(){
-    if ($msg = $this->canDeleteEx()) {
-      return $msg;
-    }
-    
-    $this->completeField("ex_class_id");
-    
-		// If this is not a concept
-    if ($this->ex_class_id && !$this->_dont_drop_column) {
-      $this->completeField("name");
-      
-      $table_name = $this->loadRefExClass()->getTableName();
-      $query = "ALTER TABLE `$table_name` DROP `$this->name`";
-      $ds = $this->_spec->ds;
-      
-      if (!$ds->query($query)) {
-        return "Le champ '$this->name' n'a pas pu être supprimé (".$ds->error().")";
-      }
-    }
-    
-    return parent::delete();
   }
 }

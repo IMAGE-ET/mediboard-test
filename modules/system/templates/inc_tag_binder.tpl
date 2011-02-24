@@ -9,8 +9,8 @@
     
     <ul class="tags">
       {{foreach from=$object->_ref_tag_items item=_item name=tag_items}}
-        <li data-tag_item_id="{{$_item->_id}}" style="background-color: #{{$_item->_ref_tag->color}}">
-          {{$_item}} 
+        <li data-tag_item_id="{{$_item->_id}}" style="background-color: #{{$_item->_ref_tag->color}}" class="tag">
+          {{$_item}}
           <button type="button" class="delete" 
                   onclick="Tag.removeItem($(this).up('li').getAttribute('data-tag_item_id'), MbObject.edit.curry('{{$object->_guid}}'))">
           </button>
@@ -23,11 +23,11 @@
         <script type="text/javascript">
           Main.add(function(){
             var form = getForm("edit-{{$object->_guid}}");
-            var element = form._bind_tag_view;
+            var element = form.elements._bind_tag_view;
             var url = new Url("system", "ajax_seek_autocomplete");
             
             url.addParam("object_class", "CTag");
-            url.addParam("input_field", element);
+            url.addParam("input_field", element.name);
             url.addParam("where[object_class]", "{{$object->_class_name}}");
             url.autoComplete(element, null, {
               minChars: 3,
