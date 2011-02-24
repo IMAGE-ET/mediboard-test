@@ -9,12 +9,6 @@
 *}}
 
 <script type="text/javascript">
-Main.add(function () {
-  if (window.opener && window.opener.onMergeComplete) {
-    window.opener.onMergeComplete();
-  }
-} );
-
 function toggleColumn(className) {
   var inputs = getForm("form-merge").select("."+className+" input[type=radio]");
   inputs.each(function(input){
@@ -203,6 +197,14 @@ function toggleColumn(className) {
 </form>
 
 {{else}}
+<script type="text/javascript">
+Main.add(function () {
+  if (window.opener && window.opener.onMergeComplete) {
+    window.opener.onMergeComplete();
+  }
+} );
+
+</script>
 <div class="small-info">
   Veuillez choisir des objets existants à fusionner.
 </div>
