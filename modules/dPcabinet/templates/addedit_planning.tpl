@@ -1,7 +1,5 @@
 <!-- $Id$ -->
 
-
-
 {{mb_include_script module="dPpatients" script="pat_selector"}}
 {{mb_include_script module="dPcabinet" script="plage_selector"}}
 {{mb_include_script module="dPcompteRendu" script="document"}}
@@ -190,7 +188,13 @@ Main.add(function () {
     <th class="category cancelled" colspan="3">{{tr}}CConsultation-annule{{/tr}}</th>
   </tr>
   {{/if}}
-  {{if $consult->_id && $consult->_datetime < $today}}
+  {{if $consult->_id && $consult->_datetime < $today && $can->admin}}
+  <tr>
+    <td colspan="3">
+      <div class="small-warning">Attention, vous êtes en train de modifier une consultation passée</div>
+    </td>
+  </tr>
+  {{elseif $consult->_id && $consult->_datetime < $today}}
   <tr>
     <td colspan="3">
       <div class="small-info">Vous ne pouvez pas modifier une consultation passée, veuillez contacter un administrateur</div>
