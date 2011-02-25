@@ -25,88 +25,103 @@ function toggleList(list, button) {
 
 <table class="print">
   <tr>
-  	<th class="title" colspan="2"><a href="#" onclick="window.print()">Fiche Patient</a></th>
+  	<th class="title" colspan="4"><a href="#" onclick="window.print()">Fiche Patient &mdash; le {{$today}}</a></th>
 	</tr>
-  <tr>
-  	<th>Date: </th>
-		<td>{{$today}}</td>
-	</tr>
-  <tr>
-  	<th class="category" colspan="2">Informations sur le patient</th>
+	<tr>
+    <td colspan="2" style="width: 50%;"></td>
+    <td colspan="2" style="width: 50%;"></td>
 	</tr>
   <tr>
   	<th>{{mb_label object=$patient field=nom}} / {{mb_label object=$patient field=prenom}}</th>
-	  <td><strong>{{$patient->_view}}</strong> {{mb_include module=dPpatients template=inc_vw_ipp ipp=$patient->_IPP hide_empty=true}}</td>
-  </tr>
-  <tr>
-  	<th>{{mb_label object=$patient field=naissance}} / {{mb_label object=$patient field=sexe}}</th>
-		<td>né(e) le {{mb_value object=$patient field=naissance}} de sexe {{if $patient->sexe == "m"}} masculin {{else}} féminin {{/if}}
+	  <td colspan="3"><strong>{{$patient->_view}}</strong> {{mb_include module=dPpatients template=inc_vw_ipp ipp=$patient->_IPP hide_empty=true}}</td>
+	</tr>
+	<tr>
+    <th>{{mb_label object=$patient field=naissance}} / {{mb_label object=$patient field=sexe}}</th>
+    <td>
+      né(e) le {{mb_value object=$patient field=naissance}} <br />
+      de sexe {{if $patient->sexe == "m"}} masculin {{else}} féminin {{/if}}
+    </td>
+    <th>{{mb_label object=$patient field=lieu_naissance}}</th>
+    <td>
+      {{mb_value object=$patient field=cp_naissance}}
+      {{mb_value object=$patient field=lieu_naissance}} <br />
+      {{mb_value object=$patient field=_pays_naissance_insee}}
     </td>
   </tr>
   <tr>
-    <th>{{mb_label object=$patient field=incapable_majeur}}</th>
-    <td>{{mb_value object=$patient field=incapable_majeur}}</td>
+    <th>{{mb_label object=$patient field=matricule}}</th>
+    <td>{{mb_value object=$patient field=matricule}}</td>
+    <th>{{mb_label object=$patient field=profession}}</th>
+    <td>{{mb_value object=$patient field=profession}}</td>
   </tr>
   <tr>
   	<th>{{mb_label object=$patient field=tel}}</th>
 		<td>{{mb_value object=$patient field=tel}}</td>
+    <th>{{mb_label object=$patient field=tel2}}</th>
+    <td>{{mb_value object=$patient field=tel2}}</td>
   </tr>
   <tr>
-  	<th>{{mb_label object=$patient field=tel2}}</th>
-		<td>{{mb_value object=$patient field=tel2}}</td>
 	</tr>
   {{if $patient->tel_autre}}
   <tr>
     <th>{{mb_label object=$patient field=tel_autre}}</th>
     <td>{{mb_value object=$patient field=tel_autre}}</td>
   </tr>
+  </tr>
   {{/if}}
   <tr>
   	<th>{{mb_label object=$patient field=adresse}}</th>
-		<td>{{$patient->adresse|nl2br}} - {{$patient->cp}} {{$patient->ville}}</td>
+		<td>
+		  {{$patient->adresse|nl2br}} <br />
+		  {{$patient->cp}} {{$patient->ville}}
+		</td>
+    <th>{{mb_label object=$patient field=incapable_majeur}}</th>
+    <td>{{mb_value object=$patient field=incapable_majeur}}</td>
 	</tr>
   <tr>
   	<th>{{mb_label object=$patient field=rques}}</th>
-		<td>{{$patient->rques|nl2br}}</td>
+		<td colspan="3">{{$patient->rques|nl2br}}</td>
 	</tr>
-  {{if $patient->_ref_medecin_traitant->medecin_id || $patient->_ref_medecins_correspondants|@count}}
-  <tr><th class="category" colspan="2">Correspondants médicaux</th></tr>
-  {{if $patient->_ref_medecin_traitant->medecin_id}}
+  <tr>
+    <th class="category" colspan="4">Correspondants médicaux</th>
+  </tr>
     <tr>
-      <th>Médecin traitant: </th>
-      <td>
-        {{$patient->_ref_medecin_traitant->_view}}<br />
-        {{$patient->_ref_medecin_traitant->adresse|nl2br}}<br />
-        {{$patient->_ref_medecin_traitant->cp}} {{$patient->_ref_medecin_traitant->ville}}
+      <th>Médecin traitant</th>
+      <td colspan="3">
+        {{if $patient->_ref_medecin_traitant->_id}}
+          {{$patient->_ref_medecin_traitant->_view}}<br />
+          {{$patient->_ref_medecin_traitant->adresse|nl2br}}<br />
+          {{$patient->_ref_medecin_traitant->cp}} {{$patient->_ref_medecin_traitant->ville}}
+        {{else}}
+          Non renseigné
+        {{/if}}
       </td>
     </tr>
-  {{/if}}
-  {{if $patient->_ref_medecins_correspondants|@count}}
     <tr>
-      <th>Correspondants médicaux: </th>
-      <td>
+      <th>Correspondants</th>
+      <td colspan="3">
         {{foreach from=$patient->_ref_medecins_correspondants item=curr_corresp}}
         <div style="float: left; margin-right: 1em; margin-bottom: 0.5em; margin-top: 0.4em; width: 15em;">
           {{$curr_corresp->_ref_medecin->_view}}<br />
           {{$curr_corresp->_ref_medecin->adresse|nl2br}}<br />
           {{$curr_corresp->_ref_medecin->cp}} {{$curr_corresp->_ref_medecin->ville}}
         </div>
+        {{foreachelse}}
+          Non renseigné
         {{/foreach}}
       </td>
     </tr>
-  {{/if}}
-  {{/if}}
   {{if $patient->_ref_sejours|@count}}
   <tr>
-    <th class="category" colspan="10">
+    <th class="category" colspan="4">
       <button class="change not-printable" style="float:right;" onclick="toggleList('sejour', this)">Seulement le dernier</button>
       <span>Séjours</span>
     </th>
   </tr>
   {{foreach from=$patient->_ref_sejours item=curr_sejour}}
   <tr class="sejour">
-    <th>Dr {{$curr_sejour->_ref_praticien->_view}}</th>
-    <td>
+    <th class="text">{{$curr_sejour->_ref_praticien->_view}}</th>
+    <td colspan="3">
       {{mb_include module=dPplanningOp template=inc_vw_numdos num_dossier=$curr_sejour->_num_dossier}}
       Du {{$curr_sejour->entree_prevue|date_format:"%d/%m/%Y"}}
       au {{$curr_sejour->sortie_prevue|date_format:"%d/%m/%Y"}}
@@ -115,7 +130,7 @@ function toggleList(list, button) {
       {{foreach from=$curr_sejour->_ref_operations item="curr_op"}}
         <li>
           Intervention le {{$curr_op->_datetime|date_format:"%d/%m/%Y"}}
-          (Dr {{$curr_op->_ref_chir->_view}})
+          ({{$curr_op->_ref_chir->_view}})
         </li>
       {{foreachelse}}
         <li><em>Pas d'interventions</em></li>
@@ -127,15 +142,15 @@ function toggleList(list, button) {
   {{/if}}
   {{if $patient->_ref_consultations|@count}}
   <tr>
-    <th class="category" colspan="10">
+    <th class="category" colspan="4">
       <button class="change not-printable" style="float:right;" onclick="toggleList('consultation', this)">Seulement la dernière</button>
       <span>Consultations</span>
     </th>
   </tr>
   {{foreach from=$patient->_ref_consultations item=curr_consult}}
   <tr class="consultation">
-    <th>Dr {{$curr_consult->_ref_plageconsult->_ref_chir->_view}}</th>
-    <td>le {{$curr_consult->_ref_plageconsult->date|date_format:"%d/%m/%Y"}}</td>
+    <th class="text">{{$curr_consult->_ref_plageconsult->_ref_chir->_view}}</th>
+    <td colspan="3">le {{$curr_consult->_ref_plageconsult->date|date_format:"%d/%m/%Y"}}</td>
   </tr>
   {{/foreach}}
   {{/if}}
