@@ -240,7 +240,7 @@ duplicateSSRLine = function(element_prescription_id, category_id){
 				          </tr>
 				          <tr>
 				            <td>
-				              <input type="text" name="libelle_protocole" value="&mdash; Choisir un protocole" class="autocomplete" style="font-weight: bold; font-size: 1.3em; width: 300px;"/>
+				              <input type="text" name="libelle_protocole" value="&mdash; Choisir un protocole" class="autocomplete" style="font-weight: bold; font-size: 1.3em; width: 200px;"/>
                       <div style="display:none; width: 350px;" class="autocomplete" id="protocole_auto_complete"></div>
 				            </td>
 				            <td>

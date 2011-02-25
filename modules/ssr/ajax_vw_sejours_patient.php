@@ -16,8 +16,7 @@ $sejour_id = CValue::getOrSession("sejour_id");
 $sejour = new CSejour();
 $sejour->load($sejour_id);
 
-$sejour->loadRefPrescriptionSejour();
-$sejour->_ref_prescription_sejour->countBackRefs("prescription_line_element");
+$sejour->loadRefPrescriptionSejour()->countBackRefs("prescription_line_element");
 
 // Recherche des sejours SSR du patient
 $where = array();
@@ -25,18 +24,17 @@ $where["patient_id"] = " = '$sejour->patient_id'";
 $where["type"] = " = 'ssr'";
 $where["annule"] = " = '0'";
 $where["sejour_id"] = " != '$sejour->_id'";
-$where["sortie"] = " <= '".mbDateTime()."'";
+$where["sortie"] = " <= '$sejour->entree'";
 
 $sejours = new CSejour();
 $sejours = $sejours->loadList($where);
 
 foreach($sejours as $_sejour){
-	$_sejour->loadRefBilanSSR();
-	$_sejour->_ref_bilan_ssr->loadRefPraticienDemandeur();
+	$_sejour->loadRefBilanSSR()->loadRefPraticienDemandeur();
 	
-	$_sejour->loadRefPrescriptionSejour();
-	$_sejour->_ref_prescription_sejour->loadRefsLinesElementByCat();
-  $_sejour->_ref_prescription_sejour->countRecentModif();
+	$prescription = $_sejour->loadRefPrescriptionSejour();
+	$prescription->loadRefsLinesElementByCat();
+  $prescription->countRecentModif();
 }
 
 $colors = CColorLibelleSejour::loadAllFor(CMbArray::pluck($sejours, "libelle"));

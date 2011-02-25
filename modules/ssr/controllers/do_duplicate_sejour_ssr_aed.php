@@ -112,6 +112,8 @@ foreach($evenements as $_evenement){
 
 	$_evenement->_id = "";
 	$_evenement->sejour_id = $sejour_id;
+  $_evenement->realise = "0";
+  $_evenement->annule = "0";
 	$_evenement->prescription_line_element_id = $original_to_new_line[$_evenement->prescription_line_element_id];
   $_evenement->debut = mbDateTime("+ $nb_decalage DAYS", $_evenement->debut);
 	$msg = $_evenement->store();
