@@ -53,6 +53,7 @@ $locales['CInteropSender-nom-court'] = 'Nom';
 $locales['CInteropSender-nom-desc'] = 'Nom';
 $locales['config-object-servers'] = 'Serveurs d\'objets';
 $locales['config-object_server-CSipObjectHandler'] = 'Serveur d\'objets SIP';
+$locales['config-soap-server'] = 'SOAP Serveur';
 $locales['exchange-choose-type'] = 'Veuillez choisir un type de message';
 $locales['mod-eai-tab-ajax_vw_exchange_details'] = 'Détails de l\'échange';
 $locales['mod-eai-tab-configure'] = 'Configurer';

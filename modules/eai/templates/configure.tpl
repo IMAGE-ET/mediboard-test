@@ -15,6 +15,7 @@
 
 <ul id="tabs-configure" class="control_tabs">
   <li><a href="#object-servers">{{tr}}config-object-servers{{/tr}}</a></li>
+  <li><a href="#soap-server">{{tr}}config-soap-server{{/tr}}</a></li>
 </ul>
 
 <hr class="control_tabs" />
@@ -22,3 +23,8 @@
 <div id="object-servers" style="display: none;">
   {{mb_include template=inc_config_object_servers}}
 </div>
+
+<div id="soap-server" style="display: none;">
+  {{mb_include template=inc_config_soap_server}}
+</div>
+

@@ -18,7 +18,7 @@ $web_service_demande = CValue::get("web_service_demande");
 $type                = CValue::get("type");
 
 $web_services = array();
-$fonctions    = array();
+$functions    = array();
 $ds = CSQLDataSource::get("std");
 
 if ($type == "web_service") {
