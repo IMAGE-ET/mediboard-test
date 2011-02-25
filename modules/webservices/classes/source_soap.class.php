@@ -33,13 +33,17 @@ class CSourceSOAP extends CExchangeSource {
   }
   
   function send($evenement_name = null, $flatten = false) {
+    if (!$this->_id) {
+      throw new CMbException("CSourceSOAP-no-source", $this->name);
+    }
+    
   	if (!$evenement_name) {
   		$evenement_name = $this->evenement_name;
   	}
 		
 		if (!$evenement_name) {
 		  throw new CMbException("CSourceSOAP-no-evenement", $this->name);
-		}
+		}   
 		
 		$this->_client = CMbSOAPClient::make($this->host, $this->user, $this->password, $this->type_echange);
     if ($this->_client->soap_client_error) {
@@ -86,7 +90,7 @@ class CSourceSOAP extends CExchangeSource {
   function isAuthentificate() {
     try {
       CMbSOAPClient::make($this->host, $this->user, $this->password, $this->type_echange);
-    } catch (CMbException $e) {
+    } catch (Exception $e) {
       $this->_reachable = 1;
       $this->_message   = $e->getMessage();
       return false;
