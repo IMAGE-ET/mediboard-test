@@ -56,25 +56,29 @@
     <!-- Valeurs de champs-->
     {{if $object->_id}}
       {{foreach from=$_log->_fields item=_field name=field}}
-        <td class="text" style="font-weight: normal;">
-          {{mb_label object=$object field=$_field}}
-        </td>
-  
-        {{if array_key_exists($_field,$_log->_old_values)}}
-          <td class="text" style="font-weight: normal;">
-            {{assign var=old_value value=$_log->_old_values.$_field}}
-            {{mb_value object=$object field=$_field value=$old_value tooltip=1}}
-          </td>
-          <td class="text" style="font-weight: normal;">
-            {{assign var=log_id value=$_log->_id}}
-            {{assign var=new_value value=$object->_history.$log_id.$_field}}
-            <strong>
-              {{mb_value object=$object field=$_field value=$new_value tooltip=1}}
-            </strong>
-          </td>
-        {{else}}
-          <td colspan="3" style="font-weight: normal;"><em>{{tr}}Unavailable information{{/tr}}</em></td>
-        {{/if}}
+			  {{if $object->_specs[$_field]->derived}}
+	        <td colspan="3" style="display: none;"></td>
+				{{else}}
+	        <td class="text" style="font-weight: normal;">
+	          {{mb_label object=$object field=$_field}}
+	        </td>
+	  
+	        {{if array_key_exists($_field,$_log->_old_values)}}
+	          <td class="text" style="font-weight: normal;">
+	            {{assign var=old_value value=$_log->_old_values.$_field}}
+	            {{mb_value object=$object field=$_field value=$old_value tooltip=1}}
+	          </td>
+	          <td class="text" style="font-weight: normal;">
+	            {{assign var=log_id value=$_log->_id}}
+	            {{assign var=new_value value=$object->_history.$log_id.$_field}}
+	            <strong>
+	              {{mb_value object=$object field=$_field value=$new_value tooltip=1}}
+	            </strong>
+	          </td>
+	        {{else}}
+	          <td colspan="3" style="font-weight: normal;"><em>{{tr}}Unavailable information{{/tr}}</em></td>
+	        {{/if}}
+				{{/if}}
       {{if !$smarty.foreach.field.last}}</tr><tr>{{/if}}
       {{/foreach}}
     {{else}}
