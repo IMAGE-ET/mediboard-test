@@ -29,7 +29,7 @@ class CExConcept extends CMbObject {
   function getProps() {
     $props = parent::getProps();
     $props["ex_list_id"]  = "ref class|CExList autocomplete|name";
-    $props["name"]        = "str notNull";
+    $props["name"]        = "str notNull seekable";
     $props["prop"]        = "str notNull";
     return $props;
   }

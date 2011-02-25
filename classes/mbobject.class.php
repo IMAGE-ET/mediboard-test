@@ -1941,8 +1941,15 @@ class CMbObject {
           }
           if ($spec->seekable === true) {
             if ($spec instanceof CRefSpec) {
-              $object = new $spec->class;
+              $class = $spec->class;
+              
+              if (isset($spec->meta)) {
+                $class = $this->{$spec->meta};
+              }
+              
+              $object = new $class;
               $objects = $object->seek($keywords);
+              
               if (count($objects)) {
                 $ids = implode(',', array_keys($objects));
                 $query .= "\nOR `{$this->_spec->table}`.`$field` IN ($ids)";

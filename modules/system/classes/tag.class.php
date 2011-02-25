@@ -73,6 +73,7 @@ class CTag extends CMbObject {
 		}
 		else {
 			$item = new CTagItem;
+			$item->object_class = $this->object_class;
 			$where = array("tag_id" => "= '$this->_id'");
 			$items = $item->seek($keywords, $where, 10000);
 		}

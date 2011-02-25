@@ -9,7 +9,7 @@
   {{/if}}
   
   
-  <table class="main tbl treegrid" data-columns="{{$_columns}}">
+  <table class="main tbl treegrid" data-columns="{{$_columns}}" data-object_class="{{$object_class}}">
     <tr>
       <th colspan="{{$colspan}}">
         <form name="filter-{{$object_class}}" method="get" action="?" onsubmit="return false">

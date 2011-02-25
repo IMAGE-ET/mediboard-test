@@ -35,7 +35,7 @@ class CExClass extends CMbObject {
     $props = parent::getProps();
     $props["host_class"] = "str notNull protected";
     $props["event"]      = "str notNull protected canonical";
-    $props["name"]       = "str notNull";
+    $props["name"]       = "str notNull seekable";
     $props["disabled"]   = "bool notNull default|1";
     return $props;
   }

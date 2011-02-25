@@ -59,7 +59,7 @@ var Tag = {
 		
 		var row = node.up('tbody');
     var table = row.up('table');
-		var columns = table.getAttribute("data-columns");
+		var columns = table.get("columns");
 	  var form = table.down('form');
 		
 		if (columns) {
@@ -73,7 +73,7 @@ var Tag = {
 		var insertAfter = ((nextRow && nextRow.getAttribute("data-tag_id")) || !nextRow);
 		var insertion, target;
 		var offset = parseInt(node.style.marginLeft)+18;
-		var tagId = row.getAttribute("data-tag_id");
+		var tagId = row.get("tag_id");
 		
 		if (insertAfter) {
 			insertion = "after";
