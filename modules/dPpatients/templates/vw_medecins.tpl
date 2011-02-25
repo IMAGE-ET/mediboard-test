@@ -108,7 +108,11 @@ function onSubmitCorrespondant(form) {
       <table class="tbl">
         <tr>
           {{if !$dialog}}
-          <th><button type="submit" class="search notext" title="Fusion">{{tr}}Merge{{/tr}}</button></th>
+          <th>
+            <button type="submit" class="merge notext" title="{{tr}}Merge{{/tr}}" style="margin: -1px;">
+              {{tr}}Merge{{/tr}}
+            </button>
+          </th>
           {{/if}}
           <th>{{mb_title class=CMedecin field=nom}}</th>
           <th>{{mb_title class=CMedecin field=adresse}}</th>
