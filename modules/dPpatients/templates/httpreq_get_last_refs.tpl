@@ -15,7 +15,7 @@
     	{{foreach from=$patient->_ref_sejours item=curr_sejour}}
 			  <li>
 	        <span onmouseover="ObjectTooltip.createEx(this, '{{$curr_sejour->_guid}}')">
-	          {{$curr_sejour->_shortview}} 
+	          {{$curr_sejour->_view}} 
 					</span>
 					<ul>
 		      {{foreach from=$curr_sejour->_ref_operations item=curr_op}}
