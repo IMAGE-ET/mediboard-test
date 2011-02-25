@@ -302,7 +302,7 @@ duplicateSSRLine = function(element_prescription_id, category_id){
 			        	<strong onmouseover="ObjectTooltip.createEx(this, '{{$_category->_guid}}')">{{$_category}}</strong>
 						  </th>
 			        <td>
-			        	<form name="search_{{$_category->_guid}}" action="?">
+			        	<form name="search_{{$_category->_guid}}" action="?" method="post">
 			            <input type="text" name="libelle" value="" class="autocomplete" />
 			            <div style="display:none;" class="autocomplete" id="{{$_category->_guid}}_auto_complete"></div>
 			          </form>
