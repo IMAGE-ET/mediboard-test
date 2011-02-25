@@ -219,6 +219,7 @@ class CSipObjectHandler extends CMbObjectHandler {
     }
     // Traitement Affectation
     elseif ($mbObject instanceof CAffectation) {
+      $mbObject->loadRefLit();
       $mbObject->_ref_lit->loadRefChambre();
       $mbObject->_ref_lit->_ref_chambre->loadRefService();
       $mbObject->loadLastLog();
