@@ -50,8 +50,12 @@
 	    <br />
 	 
       <span style="font-size: 0.8em; opacity: 0.7">
-       {{$line->_forme_galenique}}
-      </span>
+        {{$line->_forme_galenique}}
+	      {{if $line->voie != "none"}}
+	        - {{$line->voie}}
+	      {{/if}}
+			</span>
+			
 			
       {{if $line->conditionnel}}{{mb_label object=$line field="conditionnel"}}&nbsp;{{/if}}
 			{{if $line->perop}}{{mb_label object=$line field="perop"}}&nbsp;{{/if}}
