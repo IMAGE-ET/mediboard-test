@@ -18,6 +18,7 @@ $patient_id = CValue::get("patient_id");
 // Création du patient
 $patient = new CPatient();
 $patient->load($patient_id);
+$patient->updateNomPaysInsee();
 
 $patient->loadRefsSejours();
 foreach ($patient->_ref_sejours as $sejour) {
