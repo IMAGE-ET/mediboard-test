@@ -11,6 +11,7 @@ global $AppUI, $can, $m;
 
 $patient_id = CValue::get("patient_id", 0);
 $consultation_id = CValue::get("consultation_id", 0);
+$is_anesth = CValue::get("is_anesth", 1);
 
 $patient = new CPatient;
 $patient->load($patient_id);
@@ -45,6 +46,7 @@ if ($can->read) {
   // Création du template
   $smarty = new CSmartyDP();
   
+  $smarty->assign("is_anesth", $is_anesth);
   $smarty->assign("consultation", $consultation);
   $smarty->assign("patient", $patient);
 

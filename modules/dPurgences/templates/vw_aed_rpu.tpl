@@ -121,6 +121,18 @@
 	  url.requestUpdate('Imeds');
 	}
 
+  function requestInfoPat() {
+    var oForm = getForm("editRPU");
+    var iPatient_id = $V(oForm._patient_id);
+    if(!iPatient_id){
+      return false;
+    }
+    var url = new Url("dPpatients", "httpreq_get_last_refs");
+    url.addParam("patient_id", iPatient_id);
+    url.addParam("is_anesth", 0);
+    url.requestUpdate("infoPat");
+  }
+
 	Main.add(function () {
 	  {{if $rpu->_id && $can->edit}}
 	    DossierMedical.reloadDossierPatient();
@@ -246,7 +258,7 @@
 	
 	  <tr>
 		  <th>
-		    <input type="hidden" name="_patient_id" class="{{$sejour->_props.patient_id}}" ondblclick="PatSelector.init()" value="{{$rpu->_patient_id}}" />
+		    <input type="hidden" name="_patient_id" class="{{$sejour->_props.patient_id}}" ondblclick="PatSelector.init()" value="{{$rpu->_patient_id}}"  onchange="requestInfoPat();" />
 		    {{mb_label object=$rpu field="_patient_id"}}
 		  </th>
 		  <td>
@@ -404,6 +416,16 @@
 	      {{/if}}
 	  	</td>
 	  </tr>
+	  {{if !$rpu->_id}}
+    <tr>
+      <td colspan="4">
+        <fieldSet>
+          <legend>Infos patient</legend>
+          <div class="text" id="infoPat"></div>
+        </fieldSet>
+      </td>
+    </tr>
+	  {{/if}}
 	  
 	</table>
 	

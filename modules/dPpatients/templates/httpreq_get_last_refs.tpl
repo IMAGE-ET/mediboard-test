@@ -19,8 +19,10 @@
 					</span>
 					<ul>
 		      {{foreach from=$curr_sejour->_ref_operations item=curr_op}}
-			      <li style="list-style-type: none;">
+			      <li style="list-style-type: none;" class="iconed-text interv">
+			        {{if $is_anesth}}
   			      <input type="radio" name="_operation_id" value="{{$curr_op->operation_id}}" {{if $curr_op->operation_id == $consultation->_ref_consult_anesth->operation_id}}checked="checked"{{/if}} />
+  			      {{/if}}
   			      <span onmouseover="ObjectTooltip.createEx(this, '{{$curr_op->_guid}}')">
     			      Intervention le {{$curr_op->_datetime|date_format:"%d/%m/%Y"}}
     			      avec le Dr {{$curr_op->_ref_chir->_view}} {{if $curr_op->annulee}}<span style="color: red;">[ANNULE]</span>{{/if}}
