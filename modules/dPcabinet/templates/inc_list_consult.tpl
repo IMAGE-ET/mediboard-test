@@ -17,7 +17,7 @@ putArrivee = function(oForm) {
 
 
 {{if !$board}}
-{{if $canCabinet->view}}
+{{if $canCabinet->read}}
 <script type="text/javascript">
 Main.add( function () {
   Calendar.regField(getForm("changeView").date, null, {noView: true});
@@ -32,13 +32,13 @@ Main.add( function () {
       <td colspan="6" style="text-align: left; width: 100%; font-weight: bold; height: 20px;">
         <div style="float: right;">{{$hour|date_format:$conf.time}}</div>
         {{$date|date_format:$conf.longdate}}
-        {{if $canCabinet->view}}
+        {{if $canCabinet->read}}
         <input type="hidden" name="date" class="date" value="{{$date}}" onchange="this.form.submit()" />
         {{/if}}
       </td>
     </tr>
     <tr>
-      {{if $canCabinet->view}}
+      {{if $canCabinet->read}}
       <th><label for="vue2" title="Type de vue du planning">Type de vue</label></th>
       <td colspan="5">
         <select name="vue2" onchange="this.form.submit()">
@@ -98,14 +98,14 @@ Main.add( function () {
   <tr {{if $_consult->_id == $consult->_id}}class="selected"{{/if}}>
     {{assign var=categorie value=$_consult->_ref_categorie}}
     <td {{if $_consult->annule}}class="cancelled"{{/if}} style="{{if $_consult->_id != $consult->_id}}{{$style}}{{/if}}" {{if $destinations || $_consult->motif}}rowspan="2"{{/if}} class="text">
-      {{if $canCabinet->view && !@$offline}}
+      {{if $canCabinet->read && !@$offline}}
         <a href="?m={{$m}}&amp;tab=edit_planning&amp;consultation_id={{$_consult->_id}}" title="Modifier le RDV" style="float: right;">
           <img src="images/icons/planning.png" title="{{tr}}Edit{{/tr}}" />
         </a>
       {{/if}}
       
       {{if $patient->_id}}
-      {{if $canCabinet->view && !@$offline}}
+      {{if $canCabinet->read && !@$offline}}
         <a href="?m={{$current_m}}&amp;tab=edit_consultation&amp;selConsult={{$_consult->_id}}" style="margin-bottom: 4px;">
       {{else}}
         <a href="#1" title="Impossible de modifier le RDV">
@@ -149,7 +149,7 @@ Main.add( function () {
           </div>
           
           <a href="#1" onclick="modalWindow = modal($('{{$patient->_guid}}-dossier'))">
-	      {{elseif $canCabinet->view}}
+	      {{elseif $canCabinet->read}}
 	        <a href="?m={{$current_m}}&amp;tab=edit_consultation&amp;selConsult={{$_consult->_id}}">
 	      {{else}}
 	        <a href=#1 title="Impossible de modifier le RDV">
@@ -206,7 +206,7 @@ Main.add( function () {
       {{/if}}
 
       {{if $patient->_id}}
-      {{if $canCabinet->view && !@$offline}}
+      {{if $canCabinet->read && !@$offline}}
         <a href="?m={{$current_m}}&amp;tab=edit_consultation&amp;selConsult={{$_consult->_id}}">
       {{else}}
         <a href="#1" title="Impossible de modifier le RDV">
