@@ -226,7 +226,12 @@ class CCompteRendu extends CDocumentItem {
     		  }
   		  }
   		  $this->_source = substr($xml->saveHTML(), 5, -7);
-  		  $this->_source = str_replace("<br>", "<br/>",  $this->_source);
+  		  
+  		  // La fonction saveHTML ne ferme pas les tags br, hr et img
+        $this->_source = str_replace("<br>", "<br/>",  $this->_source);
+        $this->_source = str_replace("<hr>", "<hr/>",  $this->_source);
+        $this->_source = preg_replace("/<hr class=\"pagebreak\">/", "<hr class=\"pagebreak\"/>", $this->_source);
+        $this->_source = preg_replace("/<img([^>]+)>/", "<img$1/>", $this->_source);
 		  }
 		}
 	}
