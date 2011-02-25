@@ -112,7 +112,8 @@ class CPrescription extends CMbObject {
 		"soin"     => "modules/soins/images/infirmiere.png",
 		"dm"       => "modules/soins/images/pansement.png",
 		"dmi"      => "modules/soins/images/dmi.png",
-    "ds"       => "modules/soins/images/ds.png"
+    "ds"       => "modules/soins/images/ds.png",
+    "med_elt"  => "modules/soins/images/medicaments.png"
 	);
                           
   function getSpec() {
