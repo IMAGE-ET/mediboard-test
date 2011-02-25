@@ -15,7 +15,9 @@ $is_anesth = CValue::get("is_anesth", 1);
 
 $patient = new CPatient;
 $patient->load($patient_id);
-$patient->loadRefs();
+$where = array("group_id" => "= '".CGroups::loadCurrent()->_id."'");
+$patient->loadRefsSejours($where);
+$patient->loadRefsConsultations();
 
 $consultation = new CConsultation();
 $consultation->load($consultation_id);
