@@ -107,7 +107,7 @@ Main.add(function () {
           </td>  
 					<td style="text-align: center">{{$all_configs.$moment_id.default|date_format:$conf.time}}</td>
 					<td style="text-align: center">
-					  <form name="editConfigMoment-group-{{$moment_id}}" action="">
+					  <form name="editConfigMoment-group-{{$moment_id}}" action="" method="post">
 					    <input type="hidden" name="m" value="{{$m}}" />
 					    <input type="hidden" name="dosql" value="do_config_moment_unitaire_aed" />
 					    <input type="hidden" name="moment_unitaire_id" value="{{$moment_id}}" />
@@ -124,7 +124,7 @@ Main.add(function () {
 					</td>
 					{{if $service_id}}
 					<td style="text-align: center">
-					  <form name="editconfigMoment-service-{{$moment_id}}" action="">
+					  <form name="editconfigMoment-service-{{$moment_id}}" action="" method="post">
 					    <input type="hidden" name="m" value="{{$m}}" />
 					    <input type="hidden" name="dosql" value="do_config_moment_unitaire_aed" />
 					    <input type="hidden" name="moment_unitaire_id" value="{{$moment_id}}" />
