@@ -76,7 +76,12 @@ else {
 		$bilan->loadRefKineReferent();
 		$referant =& $bilan->_ref_kine_referent;
     
+		// Ugly hack du m_post
+		global $m;
+		$m = $m_post;
+		
     $date = CValue::getOrSession("date", mbDate());
+
 		$monday = mbDate("last monday", mbDate("+1 day", $date));
 		foreach($_days as $_number){
 			$_day = mbDate("+$_number DAYS", $monday);

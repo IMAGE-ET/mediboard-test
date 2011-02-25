@@ -15,6 +15,11 @@ $days      = array("");
 // Propagation aux autres jours
 if (CValue::post("propagate")) {
 	$days = array();
+	
+  // Ugly hack du m_post
+  global $m;
+  $m = $m_post;
+	
   $date = CValue::getOrSession("date", mbDate());
   $monday = mbDate("last monday", mbDate("+1 day", $date));
 	foreach(CValue::post("_days") as $_number) {
