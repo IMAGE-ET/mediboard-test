@@ -248,7 +248,7 @@ function showEtabEntreeTransfert(mode) {
          </form>
      
 		    {{assign var=sejour value=$rpu->_ref_sejour}}
-        {{mb_include template=inc_form_sortie}}
+        {{mb_include module=dPurgences template=inc_form_sortie}}
 
       </fieldset>
 
