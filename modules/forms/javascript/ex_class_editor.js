@@ -1,6 +1,6 @@
-var exClassTabs = null;
+exClassTabs = null;
 
-var ExClass = {
+ExClass = {
   id: null,
   edit: function(id) {
     this.id = id || this.id;
@@ -173,7 +173,7 @@ var ExClass = {
   }
 };
 
-var ExField = {
+ExField = {
   edit: function(id, ex_class_id, target) {
     if (window.exClassTabs) {
       exClassTabs.setActiveTab("fields-specs");
@@ -206,7 +206,7 @@ var ExField = {
   }
 };
 
-var ExConcept = ExField;
+ExConcept = ExField;
 
 ExConcept.refreshList =  function(){
   var url = new Url("forms", "ajax_list_ex_concept");
@@ -218,7 +218,7 @@ ExConcept.editCallback = function(id, obj) {
   ExConcept.edit(id, null, "exClassEditor");
 };
 
-var ExFieldSpec = {
+ExFieldSpec = {
   options: {},
   edit: function(formField, prop, className, field, otherFields, ex_field_id){
     var specType = $V(formField);
@@ -242,7 +242,7 @@ var ExFieldSpec = {
   }
 };
 
-var ExConstraint = {
+ExConstraint = {
   edit: function(id, ex_class_id) {
     var url = new Url("forms", "ajax_edit_ex_constraint");
     url.addParam("ex_constraint_id", id);
@@ -251,5 +251,21 @@ var ExConstraint = {
   },
   create: function(ex_class_id) {
     this.edit("0", ex_class_id);
+  }
+};
+
+ExConceptSpec = {
+  options: {},
+  edit: function(form){
+    var prop = $V(form.prop);
+    var spec_type = $V(form._spec_type);
+    var ex_list_id = $V(form.ex_list_id);
+		
+    var url = new Url("forms", "ajax_edit_ex_field_spec2");
+    url.addParam("spec_type", spec_type);
+    url.addParam("prop", prop);
+    url.addParam("ex_list_id", ex_list_id);
+    url.addParam("form_name", form.getAttribute("name"));
+    url.requestUpdate("ExConcept-spec-editor");
   }
 };

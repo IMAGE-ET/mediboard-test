@@ -30,9 +30,9 @@ th.category.cancelled,
 table.form th.category.cancelled {
   color: #fff;
   background-color: #f00;
-	text-transform: uppercase;
-	font-weight: bold;
-	text-align: center;
+  text-transform: uppercase;
+  font-weight: bold;
+  text-align: center;
 }
 
 table.form td.narrow,
@@ -78,7 +78,7 @@ table.tabmenu {
 }
 
 table.tabmenu td {
-  height: 28px;	
+  height: 28px;  
   line-height: 90%;
   background: url(./images/icons/tabBg.png) repeat-x bottom;
 }
@@ -142,7 +142,7 @@ th.greedyPane {
 }
 
 th.title {
-	color: #fff;
+  color: #fff;
   font-size: 1.2em;
   font-weight: bold;  
   text-align: center;
@@ -366,11 +366,6 @@ table.form {
   border-spacing: 1px;
 }
 
-table.tbl td,
-table.tbl th {
-  border: 1px solid #ccc;
-}
-
 table.form th {
   color: #000;
   white-space: nowrap;
@@ -383,7 +378,7 @@ table.form th {
 }
 
 table.form th.title {
-	color: #fff;
+  color: #fff;
   font-size: 1.2em;
   font-weight: bold;  
   text-align: center;
@@ -503,17 +498,17 @@ table.print td.halfPane {
 }
 
 table.main td.step {
-	background: url(images/pictures/background.png) left bottom;
-	width: 10%; 
-	font-size: 12px; 
-	font-weight: bold; 
-	text-align: center;
-	vertical-align: middle;
-	border: 1px solid #ccc;
+  background: url(images/pictures/background.png) left bottom;
+  width: 10%; 
+  font-size: 12px; 
+  font-weight: bold; 
+  text-align: center;
+  vertical-align: middle;
+  border: 1px solid #ccc;
 }
 
 table.main td.step.selected  {
-	border: 2px solid;
+  border: 2px solid;
 }
 
 table.main td.step.selected a {
@@ -521,12 +516,12 @@ table.main td.step.selected a {
 }
 
 td.active {
-	font-weight: bold;
+  font-weight: bold;
 }
 
 td.redefined {
   text-decoration: line-through; 
-	color: #888;
+  color: #888;
 }
 
 /** Tree grid **/
@@ -534,7 +529,8 @@ td.redefined {
   background-image: url(images/buttons/tree-folding.png);
   background-repeat: no-repeat;
   padding-left: 16px;
-	font-weight: bold;
+  font-weight: bold;
+  border-right: 1em solid transparent; 
 }
 
 /*.treegrid .tree-folding:before {

@@ -143,13 +143,13 @@ Element.addMethods('input', {
       ignore = ((k < 41) && (k != 32) && (k != 16)); // ignore modifiers, home, end, ... except space and shift
       
       //delete selection before proceeding
-      if((pos.begin - pos.end) != 0 && (!ignore || k==8 || k==46)) { // if not ignored or is backspace or delete
+      if((pos.begin - pos.end) != 0 && (!ignore || k==Event.KEY_BACKSPACE || k==Event.KEY_DELETE)) { // if not ignored or is backspace or delete
         clearBuffer(pos.begin, pos.end);
       }
       
       //backspace and delete get special treatment
       switch (k) {
-      case 8: // backspace
+      case Event.KEY_BACKSPACE:
         while(pos.begin-- >= 0) {
           if(!locked[pos.begin]) {
             buffer[pos.begin] = element.options.placeholder;
@@ -168,14 +168,14 @@ Element.addMethods('input', {
         }
       break;
       
-      case 46: // delete
+      case Event.KEY_DELETE:
         clearBuffer(pos.begin, pos.begin+1);
         writeBuffer();
         element.caret(Math.max(firstNonMaskPos, pos.begin));
         return false;
       break;
 
-      case 27: // escape
+      case Event.KEY_ESC:
         clearBuffer(0, mask.length);
         writeBuffer();
         element.caret(firstNonMaskPos);
@@ -744,8 +744,8 @@ Element.addMethods('select', {
             focused = list.select('.focused');
         
         switch (keycode) {
-          case 37:
-          case 38:
+          case Event.KEY_LEFT:
+          case Event.KEY_UP:
             if (focused && (focused = focused[0])) {
               focused.removeClassName('focused');
               if (!(focused = focused.previous())) {
@@ -757,8 +757,8 @@ Element.addMethods('select', {
             }
           
           break;
-          case 39: 
-          case 40:
+          case Event.KEY_RIGHT: 
+          case Event.KEY_DOWN:
             if (focused && (focused = focused[0])) {
               focused.removeClassName('focused');
               if (!(focused = focused.next())) {
@@ -810,16 +810,16 @@ Element.addMethods('select', {
       var keycode = Event.key(e);
 
       if (validKey(keycode)) { // Valid keycode
-        if (keycode == 8 && search.value == '' && !select.visible()) {
+        if (keycode == Event.KEY_BACKSPACE && search.value == '' && !select.visible()) {
           select.display(true);
         } else {
           list.search(search.value);
         }
       }
-      else if (keycode == 27) { // Escape
+      else if (keycode == Event.KEY_ESC) {
         select.display(false);
       } 
-      else if (keycode == 13) { // Enter
+      else if (keycode == Event.KEY_RETURN) {
         var focused = list.select('.focused');
         if (focused && (focused = focused[0])) {
           focused.onclick(Event.stop(e));
@@ -831,7 +831,7 @@ Element.addMethods('select', {
     search.display = function (e) {
       var keycode = Event.key(e);
       
-      if (validKey(keycode) && keycode != 8 && keycode != 27) {
+      if (validKey(keycode) && keycode != Event.KEY_BACKSPACE && keycode != Event.KEY_ESC) {
         select.hide();
         tree.undisplay();
         list.update().show();

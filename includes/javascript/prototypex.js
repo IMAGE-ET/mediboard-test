@@ -358,33 +358,33 @@ Element.addMethods({
   setVisible: function(element, condition) {
     return element[condition ? "show" : "hide"]();
   },
-	
+  
   setVisibility: function(element, condition) {
     return element.setStyle( {
-		  visibility: condition ? "visible" : "hidden"
-	  } );
+      visibility: condition ? "visible" : "hidden"
+    } );
   },
-	
-	setClassName: function(element, className, condition) {
+  
+  setClassName: function(element, className, condition) {
     if (condition ) element.addClassName(className);
     if (!condition) element.removeClassName(className);
-		return element;
-	},
+    return element;
+  },
   
   getInnerWidth: function(element){
     var aBorderLeft = parseInt(element.getStyle("border-left-width")),
         aBorderRight = parseInt(element.getStyle("border-right-width"));
     return element.offsetWidth - aBorderLeft - aBorderRight;
   },
-	
+  
   getInnerHeight: function(element){
     var aBorderTop = parseInt(element.getStyle("border-top-width")),
         aBorderBottom = parseInt(element.getStyle("border-bottom-width"));
     return element.offsetHeight - aBorderTop - aBorderBottom;
   },
-	
-	/** Gets the elements properties (specs) thanks to its className */
-	getProperties: function (element) {
+  
+  /** Gets the elements properties (specs) thanks to its className */
+  getProperties: function (element) {
     var props = {};
 
     $w(element.className).each(function (value) {
@@ -399,7 +399,7 @@ Element.addMethods({
     $(element).siblings().invoke('removeClassName', className);
     return element.addClassName(className);
   },
-	
+  
   clone: function(element, deep) {
     return $($(element).cloneNode(deep)).writeAttribute("id", "");
   },
@@ -408,13 +408,25 @@ Element.addMethods({
   getSurroundingForm: function(element) {
     if (element.form) return $(element.form);
     return $(element).up('form');
-  },
-
-  /** Get the element's "data-" attributes value */
-  "get": function(element, data) {
-    return $(element).getAttribute("data-"+data);
   }
 });
+
+/** Get the element's "data-" attributes value */
+// If HTML5 compliant browser (only Chrome, 02/2011)
+if ("dataset" in document.createElement('div')) {
+  Element.addMethods({
+    "get": function(element, data) {
+      return element.dataset[data];
+    }
+  });
+}
+else {
+  Element.addMethods({
+    "get": function(element, data) {
+      return element.getAttribute("data-"+data);
+    }
+  });
+}
 
 Element.addMethods(['input', 'textarea'], {
   emptyValue: function (element) {
@@ -726,16 +738,16 @@ Element.warnDuplicates = function(){
     Element._duplicates = Element._duplicates.concat(dups);
     console.warn("Duplicates form[name]: ", dups);
   }
-	
-	dups = $$("form form");
+  
+  dups = $$("form form");
   if (dups.length && !Element._duplicates.intersect(dups).length) {
     Element._duplicates = Element._duplicates.concat(dups);
     console.error("Nested form: ", dups);
   }
-	
-	dups = $$("form:not([method]), form[method='']");
-	if (dups.length && !Element._duplicates.intersect(dups).length) {
-		Element._duplicates = Element._duplicates.concat(dups);
-		console.error("Method-less forms: ", dups);
-	}
+  
+  dups = $$("form:not([method]), form[method='']");
+  if (dups.length && !Element._duplicates.intersect(dups).length) {
+    Element._duplicates = Element._duplicates.concat(dups);
+    console.error("Method-less forms: ", dups);
+  }
 }

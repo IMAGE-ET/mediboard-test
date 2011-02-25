@@ -13,7 +13,7 @@ class CExList extends CMbObject {
   
   var $name       = null;
   
-	var $_ref_items = null;
+  var $_ref_items = null;
 
   function getSpec() {
     $spec = parent::getSpec();
@@ -34,18 +34,33 @@ class CExList extends CMbObject {
     $backProps["items"] = "CExListItem list_id";
     return $backProps;
   }
-	
-	function loadRefItems() {
-		return $this->_ref_items = $this->loadBackRefs("items");
-	}
-	
-	function updateFormFields(){
-		parent::updateFormFields();
-		$this->_view = $this->name;
-	}
-	
-	function loadView(){
-		parent::loadView();
-		$this->loadBackRefs("items", "value");
-	}
+  
+  function loadRefItems() {
+    return $this->_ref_items = $this->loadBackRefs("items", "value");
+  }
+  
+  function updateFormFields(){
+    parent::updateFormFields();
+    $this->_view = $this->name;
+  }
+  
+  function loadView(){
+    parent::loadView();
+    $this->loadBackRefs("items", "value");
+  }
+  
+  function updateEnumSpec(CEnumSpec $spec){
+    $items = $this->loadRefItems();
+    $empty = empty($spec->_locales);
+    
+    foreach($items as $_item) {
+      if (!$empty && !isset($spec->_locales[$_item->value])) continue;
+      $spec->_locales[$_item->value] = $_item->name;
+    }
+    
+    unset($spec->_locales[""]);
+    $spec->_list = array_keys($spec->_locales);
+    
+    return $spec;
+  }
 }

@@ -191,7 +191,7 @@ function $T() {
 }
 
 function closeWindowByEscape(e) {
-  if(Event.key(e) == 27){
+  if(Event.key(e) == Event.KEY_ESC){
     e.stop();
     window.close();
   }

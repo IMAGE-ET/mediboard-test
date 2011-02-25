@@ -842,7 +842,7 @@ var Modal = {
     koButton.observe('click', koCallback);
     
     var escapeClose = function(e){
-      if (Event.key(e) == 27) {
+      if (Event.key(e) == Event.KEY_ESC) {
         e.stop();
         koCallback();
       }
@@ -978,7 +978,7 @@ var UserSwitch = {
     container.down('form').reset();
     container.down('input[type=text], input[type=password]').focus();
     document.observe('keydown', function(e){
-      if (Event.key(e) == 27) UserSwitch.cancel();
+      if (Event.key(e) == Event.KEY_ESC) UserSwitch.cancel();
     });
   },
   reload: function(){
@@ -1221,7 +1221,7 @@ BarcodeParser = {
         var charCode = Event.key(e);
         var input = Event.element(e);
         
-        if (charCode == 13) {
+        if (charCode == Event.KEY_RETURN) {
           if (!this.options.size || ($V(input).length != this.options.size)) {
             Event.stop(e);
           }

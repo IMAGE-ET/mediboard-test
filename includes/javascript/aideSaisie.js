@@ -345,7 +345,7 @@ var AideSaisie = {
         
         document.observe("keydown", function(e){
           // if TAB key pressed
-          if (this.searchField.value && Event.key(e) == 9)
+          if (this.searchField.value && Event.key(e) == Event.KEY_TAB)
             validate();
         }.bindAsEventListener(this));
       }
