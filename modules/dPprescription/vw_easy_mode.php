@@ -43,7 +43,7 @@ if($prescription->_ref_object instanceof CSejour){
 // Chargement de la liste des moments
 $moments = CMomentUnitaire::loadAllMomentsWithPrincipal();
 
-$filter_line_element = new CPrescriptionLineMedicament();
+$filter_line_element = new CPrescriptionLineElement();
 $filter_line_element->debut = mbDate();
 
 // Création du template

@@ -136,7 +136,7 @@ Main.add(function(){
 
 <span id="stats{{$type}}{{$line->_id}}" style="display: none;">
   <!-- Selection des posologies statistiques -->
-  {{if $line->_ref_prescription->object_id && !$line instanceof CPrescriptionLineElement && $line->_unites_prise|@count}}
+  {{if !$line instanceof CPrescriptionLineElement && $line->_ref_prescription->object_id && $line->_unites_prise|@count}}
     {{include file="../../dPprescription/templates/line/inc_vw_form_select_poso.tpl"}}
   {{/if}}   
 </span>
