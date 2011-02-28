@@ -12,7 +12,10 @@ toggleListCustom = function(radio) {
   var input = form.ex_list_id_autocomplete_view;
   var select = form._spec_type;
   
-  input.up(".dropdown").down(".dropdown-trigger").setVisibility(enableList);
+  if (input) {
+	  input.up(".dropdown").down(".dropdown-trigger").setVisibility(enableList);
+		input.disabled = input.readOnly = !enableList;
+	}
   
   if (enableList) {
     //$V(select, "none");
@@ -22,7 +25,6 @@ toggleListCustom = function(radio) {
     $V(form.ex_list_id, "");
   }
   
-  input.disabled = input.readOnly = !enableList;
   select.disabled = select.readOnly = enableList;
   
   ExConceptSpec.edit(form);
@@ -59,13 +61,18 @@ Main.add(function(){
       
       <th>
         <label>
-          {{tr}}CExConcept-ex_list_id{{/tr}}
-          <input type="radio" name="_concept_type" value="list" {{if $object->ex_list_id}}checked="checked"{{/if}}
-                 onclick="toggleListCustom(this)" />
+          {{if !$object->_id || $object->ex_list_id}}{{tr}}CExConcept-ex_list_id{{/tr}}{{/if}}
+          <input type="radio" name="_concept_type" value="list" {{if $object->_id}}style="display: none;"{{/if}}
+					       {{if $object->ex_list_id}}checked="checked"{{/if}} onclick="toggleListCustom(this)" />
         </label>
       </th>
       <td>
-        {{mb_field object=$object field=ex_list_id form="edit-`$object->_guid`" autocomplete="true,1,50,false,true" onchange="ExConceptSpec.edit(this.form)"}}
+        {{if !$object->_id}}
+          {{mb_field object=$object field=ex_list_id form="edit-`$object->_guid`" autocomplete="true,1,50,false,true" onchange="ExConceptSpec.edit(this.form)"}}
+				{{else}}
+          {{mb_value object=$object field=ex_list_id}}
+          {{mb_field object=$object field=ex_list_id hidden=true}}
+				{{/if}}
       </td>
     </tr>
     <tr>
@@ -83,22 +90,29 @@ Main.add(function(){
       </td>
       <th>
         <label>
-          Type 
-          <input type="radio" name="_concept_type" value="custom" {{if !$object->ex_list_id}}checked="checked"{{/if}}
-                 onclick="toggleListCustom(this)" />
+          {{if !$object->ex_list_id}}Type {{/if}}
+          <input type="radio" name="_concept_type" value="custom" {{if $object->_id}}style="display: none;"{{/if}}
+					       {{if !$object->ex_list_id}}checked="checked"{{/if}} onclick="toggleListCustom(this)" />
         </label>
       </th>
-      <td>        
-        <select name="_spec_type" onchange="ExConceptSpec.edit(this.form)">
-           <!--<option value="none"> &ndash; Aucun</option>-->
-
-          {{assign var=spec_type value=$object->_concept_spec->getSpecType()}}
-          {{foreach from="CMbFieldSpecFact"|static:classes item=_class key=_key}}
-            <option value="{{$_key}}" {{if $_key == $spec_type && !$object->ex_list_id}}selected="selected"{{/if}}>
-              {{tr}}CMbFieldSpec.type.{{$_key}}{{/tr}}
-            </option>
-          {{/foreach}}
-        </select>
+      <td>
+        {{assign var=spec_type value=$object->_concept_spec->getSpecType()}}
+				
+      	{{if !$object->_id}}
+	        <select name="_spec_type" onchange="ExConceptSpec.edit(this.form)">
+	          {{foreach from="CMbFieldSpecFact"|static:classes item=_class key=_key}}
+	            <option value="{{$_key}}" {{if $_key == $spec_type && !$object->ex_list_id}}selected="selected"{{/if}}>
+	              {{tr}}CMbFieldSpec.type.{{$_key}}{{/tr}}
+	            </option>
+	          {{/foreach}}
+	        </select>
+				{{else}}
+				  <input type="hidden" name="_spec_type" value="{{$spec_type}}" />
+					
+				  {{if !$object->ex_list_id}}
+					  {{tr}}CMbFieldSpec.type.{{$spec_type}}{{/tr}}
+					{{/if}}
+				{{/if}}
       </td>
     </tr>
     <tr {{if $app->user_prefs.INFOSYSTEM == 0}}style="display: none;"{{/if}}>

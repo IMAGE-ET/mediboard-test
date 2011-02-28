@@ -12,7 +12,7 @@
 	<tbody class="object-list">
 		{{foreach from=$objects item=_object}}
 		<tr>
-			<td>
+			<td style="padding-left: 18px;">
 				<a href="#1" onclick="MbObject.edit(this)" data-object_guid="{{$_object->_guid}}"
 				   style="{{if $tag->color}}border-right: 1em solid #{{$tag->color}};{{/if}}"> 
 	        <span onmouseover="ObjectTooltip.createEx(this, '{{$_object->_guid}}');">

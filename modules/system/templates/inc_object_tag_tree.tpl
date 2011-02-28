@@ -13,7 +13,6 @@
     <tr>
       <th colspan="{{$colspan}}">
         <form name="filter-{{$object_class}}" method="get" action="?" onsubmit="return false">
-          Filtres &ndash;
           <label>
              Tag
             <input type="text" name="tag" onkeyup="Tag.filter(this)" size="8" />
@@ -21,7 +20,7 @@
           <button class="cancel notext" type="button" onclick="Tag.cancelFilter(this.form.tag)">
             {{tr}}Cancel{{/tr}}
           </button>
-          
+          &mdash;
           <label>
             Nom
             <input type="text" name="object_name" size="8" />
@@ -45,6 +44,7 @@
          {{if $parent}}data-parent_tag_id="{{$parent->_id}}"{{/if}}
          style="{{if !$root}}display: none;{{/if}}"
          data-name="{{$_tag.parent->name}}"
+				 data-deepness={{$_tag.parent->_deepness}}
          >
     <tr>
       <td colspan="{{$colspan}}">

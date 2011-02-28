@@ -373,7 +373,7 @@ table.form th {
   vertical-align: middle;
   text-align: right;
   font-weight: normal;
-  padding: 2px 4px;
+  padding: 2px 3px;
   border: none;
 }
 
@@ -408,7 +408,7 @@ table.form td {
   vertical-align: top;
   background-color: #eee;
   text-align: left;
-  padding: 1px 4px;
+  padding: 1px 3px;
 }
 
 table.form td.dark {

@@ -115,6 +115,7 @@ class CTag extends CMbObject {
 		$tags = $tag->loadList($where, "name");
 		
 		foreach($tags as $_tag) {
+			$_tag->getDeepness();
 			self::getTree($object, $_tag, $sub_tree);
 			$tree["children"][] = $sub_tree;
 		}

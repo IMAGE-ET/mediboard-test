@@ -136,13 +136,14 @@ var Tag = {
     var lists = table.select("tbody.object-list");
     
     tags.invoke("show").invoke("addClassName", "opened");
-    lists.invoke("hide").invoke("removeClassName", "opened");
+    lists.invoke("hide");
     
     var term = $V(input);
     if (!term) return;
     
     tags.each(function(e) {
-      e.setVisible(e.get("name").like(term));
+			var visible = e.get("name").like(term);
+      e.setVisible(visible);
     });
   },
   cancelFilter: function(input) {

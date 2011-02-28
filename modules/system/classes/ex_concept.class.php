@@ -30,7 +30,7 @@ class CExConcept extends CMbObject {
     $props = parent::getProps();
     $props["ex_list_id"]  = "ref class|CExList autocomplete|name";
     $props["name"]        = "str notNull seekable";
-    $props["prop"]        = "str notNull";
+    $props["prop"]        = "str notNull show|0";
     return $props;
   }
   
@@ -49,6 +49,10 @@ class CExConcept extends CMbObject {
       $list = $this->loadRefExList();
       $this->_view .= " [$list->_view]";
     }
+		else {
+			$spec_type = $this->loadConceptSpec()->getSpecType();
+      $this->_view .= " [".CAppUI::tr("CMbFieldSpec.type.$spec_type")."]";
+		}
   }
   
   function loadRefExList($cache = true){
@@ -57,8 +61,12 @@ class CExConcept extends CMbObject {
   
   function loadView(){
     parent::loadView();
-    $this->_concept_spec = self::getConceptSpec($this->prop);
+		$this->loadConceptSpec();
   }
+	
+	function loadConceptSpec(){
+    return $this->_concept_spec = self::getConceptSpec($this->prop);
+	}
   
   function updateTranslation(){
     $base = $this;

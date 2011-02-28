@@ -99,7 +99,9 @@ Main.add(function(){
 <form name="editFieldSpec" action="?" method="get" onsubmit="return false">
   
 <table class="main form">
-  <tr>
+	<col class="narrow" />
+  
+	<tr>
     <th class="title" colspan="2">Paramètres</th>
   </tr>
   
@@ -154,16 +156,20 @@ Main.add(function(){
         {{* list *}}
         {{elseif $_type == "list"}}
 				  <table class="tbl" style="width: 1%;">
+					  <col class="narrow" />
+						
 				  	<tr>
-              <th class="narrow"></th>
-              <th class="narrow">Valeur</th>
-				  		<th class="narrow">Nom</th>
+              <th></th>
+              <th>Valeur</th>
+				  		<th>Nom</th>
 				  	</tr>
 						
           {{foreach from=$spec->_list key=_key item=_value}}
             <tr>
               <td>
-                <button type="button" class="cancel notext" tabindex="1000" onclick="return confirmDelEnum(this)">{{tr}}Delete{{/tr}}</button>
+                <button type="button" class="cancel notext" tabindex="1000" style="margin: -1px;" onclick="return confirmDelEnum(this)">
+								  {{tr}}Delete{{/tr}}
+								</button>
               </td>
             	<td style="text-align: right;">
 							  {{$_value}}
@@ -171,6 +177,11 @@ Main.add(function(){
 							</td>
               <td>{{$spec->_locales.$_value}}</td>
             </tr>
+					{{foreachelse}}
+					  <tr>
+              <td><button type="button" class="cancel notext" disabled="disabled">{{tr}}Delete{{/tr}}</button></td>
+              <td colspan="2" class="empty">Aucun élement</td>
+					  </tr>
           {{/foreach}}
 	        </table>
           

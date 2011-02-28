@@ -93,7 +93,7 @@ legend {
 }
 
 form hr {
-  border-color: #666;
+  border-color: #999;
 }
 
 .control {
@@ -339,6 +339,7 @@ table.tbl tr.clear th {
 /* Form tables */
 table.form th {
   vertical-align: top;
+	border-right: 1px solid #ddd;
 }
 
 table.form th.title {
@@ -349,6 +350,10 @@ table.form th.title {
 
 table.form th.category {
   background-color: #CCCCCC;
+}
+
+table.form td {
+  padding: 1px 2px;
 }
 
 th.title.modify,

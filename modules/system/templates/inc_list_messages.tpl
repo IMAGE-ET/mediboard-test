@@ -74,7 +74,7 @@
 </tr>
 
 <tr {{if $_message->_id == $message->_id}}class="selected"{{/if}}>
-  <td class="text" style="padding: 0 2em;" colspan="10">
+  <td class="text compact" colspan="5" style="padding-left: 2em;">
   	{{mb_value object=$_message field=corps}}
   </td>
 </tr>

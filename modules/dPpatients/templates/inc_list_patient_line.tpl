@@ -13,11 +13,12 @@
   </td>
   {{else}}
   <td style="padding-right: 16px;">
-    <div style="float:right; margin-right: -16px;"">
+    <div style="float: right; margin-right: -16px;">
       {{mb_include module=system template=inc_object_notes object=$_patient}}
     </div>
+		
     {{if $_patient->_id == $patVitale->_id}}
-    <div style="float:right;">
+    <div style="float: right;">
       <img src="images/icons/carte_vitale.png" alt="lecture vitale" title="Bénéficiaire associé à la carte Vitale" />
     </div>
     {{/if}}
@@ -32,8 +33,8 @@
       {{mb_value object=$_patient field="naissance"}}
   	</span>
   </td>
-  <td class="text" style="font-size: 0.9em; color: #666;">
-    <span style="white-space: nowrap;">{{$_patient->adresse|spancate:30}} - </span>
+  <td class="text compact">
+    <span style="white-space: nowrap;">{{$_patient->adresse|spancate:30}}</span>
     <span style="white-space: nowrap;">{{$_patient->cp}} {{$_patient->ville|spancate:20}}</span>
   </td>
   <td>
