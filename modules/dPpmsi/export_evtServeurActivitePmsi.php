@@ -136,6 +136,6 @@ $smarty->assign("logs"           , $logs);
 $smarty->assign("doc_valid"      , @$doc_valid);
 $smarty->assign("typeObject"     , $typeObject);
 $smarty->assign("mbObject"       , $mbObject);
-$smarty->display("export_evtServeurActivitePmsi.tpl");
+$smarty->display("../../dPpmsi/templates/export_evtServeurActivitePmsi.tpl");
 
 ?>

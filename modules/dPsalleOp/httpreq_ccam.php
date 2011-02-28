@@ -8,7 +8,8 @@ $chir_id         = CValue::getOrSession("chir_id");
 
 $date  = CValue::getOrSession("date", mbDate());
 $date_now = mbDate();
-$modif_operation = $date>=$date_now;
+$modif_operation = (CAppUI::conf("dPsalleOp COperation modif_actes") == "never") ||
+                   ((CAppUI::conf("dPsalleOp COperation modif_actes") == "oneday") && ($date >= $date_now));
 
 
 // Chargement de la liste des praticiens
@@ -27,6 +28,9 @@ $codable->loadRefPraticien();
 $codable->getAssociationCodesActes();
 $codable->loadExtCodesCCAM();
 $codable->loadPossibleActes();
+if($codable->_class_name == "COperation") {
+  $codable->countEchangeHprim();
+}
 
 
 // Création du template

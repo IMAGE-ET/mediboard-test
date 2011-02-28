@@ -16,7 +16,7 @@ signerActes = function(object_id, object_class){
     <td colspan="10">
       <div class="small-info">
        La cotation des actes est terminée.<br />
-       Pour pouvoir coder des actes, veuillez dévalider la consultation.
+       Pour pouvoir coder des actes, veuillez dévalider la cotation.
        </div>
      </td>
   </tr> 
@@ -34,14 +34,14 @@ signerActes = function(object_id, object_class){
   </tr>
   {{/if}}
 
+  <!-- Gestion des codes -->
+  {{if !$subject->_coded}}
   <tr>
     <td class="text">
-      <!-- Gestion des codes -->
-      {{if !$subject->_coded}}
-        {{include file="../../dPsalleOp/templates/inc_manage_codes.tpl"}}
-      {{/if}}
+      {{include file="../../dPsalleOp/templates/inc_manage_codes.tpl"}}
     </td>
   </tr>
+  {{/if}}
 
   <tr>
     <td class="text">
@@ -57,6 +57,32 @@ signerActes = function(object_id, object_class){
       {{/if}}
     </td>
   </tr>
+  {{if $conf.dPsalleOp.CActeCCAM.envoi_actes_salle}}
+  <tr>
+    <td>
+      {{if !$subject->_nb_echange_hprim || $m == "dPpmsi"}}
+      <button class="tick" onclick="ActesCCAM.exportHPRIM({{$subject->_id}}, 'op')">Export des actes au PMSI</button>
+      {{/if}}
+      {{if $subject->_nb_echange_hprim}}
+      <div class="small-success">
+        Export déjà effectué {{$subject->_nb_echange_hprim}} fois
+      </div>
+      {{else}}
+      <div class="small-info">
+        Pas d'export effectué
+      </div>
+      {{/if}}
+    </td>
+  </tr>
+  <tr>
+    <td class="text">
+    </td>
+  </tr>
+  <tr>
+    <td class="text" id="hprim_export_op{{$subject->_id}}">
+    </td>
+  </tr>
+  {{/if}}
 
   {{if ($module == "dPsalleOp" || $module == "dPhospi") && $conf.dPsalleOp.CActeCCAM.signature}}
   <!-- Signature des actes -->

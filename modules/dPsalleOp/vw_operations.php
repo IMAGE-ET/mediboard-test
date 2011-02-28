@@ -52,6 +52,7 @@ if ($op) {
   $selOp->load($op);
   
   $selOp->loadRefs();
+  $selOp->countEchangeHprim();
   $selOp->_ref_consult_anesth->loadRefsTechniques();
   $modif_operation = $modif_operation || (CAppUI::conf("dPsalleOp COperation modif_actes") == "button" && !$selOp->_ref_plageop->actes_locked);
 

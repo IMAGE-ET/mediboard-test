@@ -74,7 +74,8 @@
 	{{mb_include module=system template=inc_config_bool var=openline}}  
 	{{mb_include module=system template=inc_config_bool var=modifs_compacts}}  
 	{{mb_include module=system template=inc_config_bool var=commentaire}}  
-	{{mb_include module=system template=inc_config_bool var=signature}}  
+	{{mb_include module=system template=inc_config_bool var=signature}}   
+  {{mb_include module=system template=inc_config_bool var=envoi_actes_salle}}  
 
   {{assign var="class" value="CDossierMedical"}}
   <tr>
