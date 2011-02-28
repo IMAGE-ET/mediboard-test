@@ -145,6 +145,7 @@ syncDateSubmit = function(oForm, curr_line_id, fieldName, type, object_class, ca
 
 	     {{if $line->_can_modify_dates || $typeDate == "mode_grille"}}
 	     <td>
+	     	 {{if $typeDate != "mode_grille"}}
 	     	 <script type="text/javascript">
 	     	 	 Main.add(function(){
 						 {{if $line->_ref_prescription->type == "sejour" && !$line->_fin}} 
@@ -157,7 +158,8 @@ syncDateSubmit = function(oForm, curr_line_id, fieldName, type, object_class, ca
 		     	   {{/if}}
 					 });
 				 </script>
-
+         {{/if}}
+				 
 	     	 <strong>{{mb_label object=$line field=_fin}}</strong>
 	       {{mb_field object=$line field=_fin form=editDates-$typeDate-$line_id onchange="syncDateSubmit(this.form, '$line_id', this.name, '$typeDate','$_object_class','$category_id');"}}
 	       {{mb_field object=$line field=time_fin form=editDates-$typeDate-$line_id onchange="syncDateSubmit(this.form, '$line_id', this.name, '$typeDate','$_object_class','$category_id');"}}
