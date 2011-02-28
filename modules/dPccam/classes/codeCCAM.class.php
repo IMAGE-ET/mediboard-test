@@ -376,7 +376,7 @@ class CCodeCCAM {
     $resultEffet = $ds->exec($queryEffet);
     $rowEffet = $ds->fetchArray($resultEffet);
     $lastDate = $rowEffet["LASTDATE"];
-    $query = $ds->prepare("SELECT * FROM associabilite WHERE CODEACTE = % AND DATEEFFET = '$lastDate' GROUP BY ACTEASSO LIMIT 0, 15", $this->code);
+    $query = $ds->prepare("SELECT * FROM associabilite WHERE CODEACTE = % AND DATEEFFET = '$lastDate' GROUP BY ACTEASSO", $this->code);
     $result = $ds->exec($query);
     $i = 0;
     while($row = $ds->fetchArray($result)) {
@@ -395,11 +395,11 @@ class CCodeCCAM {
     $resultEffet = $ds->exec($queryEffet);
     $rowEffet = $ds->fetchArray($resultEffet);
     $lastDate = $rowEffet["LASTDATE"];
-    $query = $ds->prepare("SELECT * FROM incompatibilite WHERE CODEACTE = % AND DATEEFFET = '$lastDate' GROUP BY INCOMPATIBLE LIMIT 0, 15", $this->code);
+    $query = $ds->prepare("SELECT * FROM incompatibilite WHERE CODEACTE = % AND DATEEFFET = '$lastDate' GROUP BY INCOMPATIBLE", $this->code);
     $result = $ds->exec($query);
     $i = 0;
     while($row = $ds->fetchArray($result)) {
-      $this->incomps[$i]["code"] = $row["INCOMPATIBLE"];
+      $this->incomps[$i]["code"] = trim($row["INCOMPATIBLE"]);
       $query2 = $ds->prepare("SELECT * FROM actes WHERE CODE = % AND DATEFIN = '00000000'", $row["INCOMPATIBLE"]);
       $result2 = $ds->exec($query2);
       $row2 = $ds->fetchArray($result2);

@@ -141,9 +141,13 @@ class CActeCCAM extends CActe {
   }
 
   function check() {
-    
     // Test si la consultation est validée
     if ($msg = $this->checkCoded()){
+      return $msg;
+    }
+      
+    // Test si on n'a pas d'incompatibilité avec les autres codes
+    if ($msg = $this->checkCompat()) {
       return $msg;
     }
     
@@ -239,6 +243,48 @@ class CActeCCAM extends CActe {
 	function updateMontantBase() {
     return $this->montant_base = $this->getTarif();  
 	}
+  
+  /**
+   * Check if acte is compatible with others already coded
+   * @return bool
+   */
+  function checkCompat() {
+    $this->loadRefCodeCCAM();
+    $this->_ref_code_ccam->getChaps();
+    $this->getLinkedActes(false);
+    
+    // Cas des incompatibilités
+    $_acte = new CActeCCAM();
+    foreach($this->_linked_actes as $_acte) {
+      $_acte->loadRefCodeCCAM();
+      $_acte->_ref_code_ccam->getActesIncomp();
+      $incomps = CMbArray::pluck($_acte->_ref_code_ccam->incomps, "code");
+      if(in_array($this->code_acte, $incomps)) {
+        return "Acte incompatible avec le codage de " . $_acte->_ref_code_ccam->code;
+      }
+    }
+    
+    // Cas des associations d'anesthésie
+    if ($this->_ref_code_ccam->chapitres["1"]["rang"] == "18.01.") {
+      foreach($this->_linked_actes as $_acte) {
+        $_acte->loadRefCodeCCAM();
+        $_acte->_ref_code_ccam->getActivites();
+        $activites = CMbArray::pluck($_acte->_ref_code_ccam->activites, "numero");
+        if (in_array("4", $activites)) {
+          return "Acte incompatible avec le codage de " . $_acte->_ref_code_ccam->code . " qui possède déjà une activité d'anesthésie";
+        }
+      }
+    } else if ($this->code_activite == "4") {
+        foreach($this->_linked_actes as $_acte) {
+          $_acte->loadRefCodeCCAM();
+          $_acte->_ref_code_ccam->getActivites();
+          $activites = CMbArray::pluck($_acte->_ref_code_ccam->chapitres, "rang");
+          if (in_array("18.01.", $activites)) {
+            return "Acte incompatible avec le codage de l'anesthésie complémentaire " . $_acte->_ref_code_ccam->code;
+          }
+      }
+    }
+  }
 	
   function store() {
     // Sauvegarde du montant de base
@@ -320,7 +366,7 @@ class CActeCCAM extends CActe {
     return $this->_ref_object->getPerm($permType);
   }
   
-  function getLinkedActes() {
+  function getLinkedActes($same_executant = true) {
     $acte = new CActeCCAM();
     
     $where = array();
@@ -328,9 +374,12 @@ class CActeCCAM extends CActe {
     $where["object_class"]  = "= '$this->object_class'";
     $where["object_id"]     = "= '$this->object_id'";
     //$where["code_activite"] = "= '$this->code_activite'";
-    $where["executant_id"]  = "= '$this->executant_id'";
+    if($same_executant) {
+      $where["executant_id"]  = "= '$this->executant_id'";
+    }
     
     $this->_linked_actes = $acte->loadList($where);
+    return $this->_linked_actes;
   }
   
   function guessAssociation() {

@@ -93,6 +93,10 @@ class CActe extends CMbMetaObject {
     return $specs;
   }
   
+  /**
+   * Check if linked object is already coded
+   * @return bool
+   */
   function checkCoded() {
     if (!$this->_check_coded){
       return;
@@ -108,7 +112,7 @@ class CActe extends CMbMetaObject {
   }
 
   /**
-   * Tell wether acte is ready for prcoding
+   * Tell wether acte is ready for precoding
    * @return bool
    */
   function getPrecodeReady() {
