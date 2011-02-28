@@ -49,6 +49,7 @@ tr.script {
 /** Must not apply it to every tag, or it will break textareas behavior */
 td.text,
 th.text,
+legend.text,
 div.text {
   white-space: normal !important;
 }
