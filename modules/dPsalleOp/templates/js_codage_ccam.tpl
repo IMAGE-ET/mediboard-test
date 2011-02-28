@@ -66,26 +66,30 @@ ActesCCAM = {
     }
   },
   exportHPRIM: function(object_id, typeObject, oOptions) {
-          var oDefaultOptions = {
-            onlySentFiles : false
-          };
-          
-          Object.extend(oDefaultOptions, oOptions);
-          
-          var url = new Url("dPsalleOp", "export_evtServeurActivitePmsi");
-          url.addParam("object_id", object_id);
-          url.addParam("typeObject", typeObject);
-          url.addParam("sent_files", oDefaultOptions.onlySentFiles ? 1 : 0);
-          
-          var oRequestOptions = {
-            waitingText: oDefaultOptions.onlySentFiles ? 
-              "Chargement des fichers envoyés" : 
-              "Export H'XML",
-            onComplete: ActesCCAM.refreshList.curry(object_id)
-          };
-          
-          url.requestUpdate("hprim_export_" + typeObject + object_id, oRequestOptions); 
-        }
+    if(!confirm("L'envoi des actes cloturera définitivement le codage de cette intervention pour le chirurgien et l'anesthésiste." +
+              "\nConfirmez-vous l'envoi en facturation ?")) {
+      return;
+    }
+    var oDefaultOptions = {
+      onlySentFiles : false
+    };
+    
+    Object.extend(oDefaultOptions, oOptions);
+    
+    var url = new Url("dPsalleOp", "export_evtServeurActivitePmsi");
+    url.addParam("object_id", object_id);
+    url.addParam("typeObject", typeObject);
+    url.addParam("sent_files", oDefaultOptions.onlySentFiles ? 1 : 0);
+    
+    var oRequestOptions = {
+      waitingText: oDefaultOptions.onlySentFiles ? 
+        "Chargement des fichers envoyés" : 
+        "Export H'XML",
+      onComplete: ActesCCAM.refreshList.curry(object_id)
+    };
+    
+    url.requestUpdate("hprim_export_" + typeObject + object_id, oRequestOptions); 
+  }
 }
 
 function setCodeTemp(code){
