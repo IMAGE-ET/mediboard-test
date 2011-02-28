@@ -252,9 +252,24 @@ class CActeCCAM extends CActe {
     $this->loadRefCodeCCAM();
     $this->_ref_code_ccam->getChaps();
     $this->getLinkedActes(false);
+    $_acte = new CActeCCAM();
+    
+    // Cas du nombre d'actes
+    // Cas général : 2 actes au plus
+    /**
+    $distinctCodes = array();
+    foreach($this->_linked_actes as $_acte) {
+      $_acte->loadRefCodeCCAM();
+      if(!in_array($_acte->_ref_code_ccam->code, $distinctCodes)) {
+        $distinctCodes[] = $_acte->_ref_code_ccam->code;
+      }
+    }
+    if(count($distinctCodes) >= 2) {
+      return "Vous ne pouvez pas coder plus de deux actes";
+    }
+     */
     
     // Cas des incompatibilités
-    $_acte = new CActeCCAM();
     foreach($this->_linked_actes as $_acte) {
       $_acte->loadRefCodeCCAM();
       $_acte->_ref_code_ccam->getActesIncomp();
