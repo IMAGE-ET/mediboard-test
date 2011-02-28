@@ -385,7 +385,7 @@
 	        </fieldset>
 	      {{/if}}
 			 
-			  {{if $line->_can_delete_line || $mode_pharma || $line->_can_view_form_signature_praticien}}
+			  {{if $line->_can_delete_line || $mode_pharma || ($line->signee && ($app->user_id == $line->praticien_id || $line->inscription) || !$line->signee)}}
 				  <fieldset style="float: right; width: 48%; vertical-align: top;">
 				  	<legend>Actions</legend>
 					  <!-- Suppression de la ligne -->

@@ -100,7 +100,9 @@
 	        {{if $line->duree && $line->unite_duree}}
 	          {{mb_value object=$line field=duree}}  
 	          {{mb_value object=$line field=unite_duree}}
-	        {{/if}}
+	        {{elseif $line->_ref_prescription->type == "sejour"}}
+					  <span style="opacity: 0.7;">{{mb_value object=$line field=_duree}} Jour(s) <br />(Fin du séjour)</span>
+					{{/if}}
 	      </td>
 			{{/if}}
 		{{else}}

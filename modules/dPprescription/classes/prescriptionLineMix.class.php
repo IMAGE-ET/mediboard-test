@@ -322,7 +322,7 @@ class CPrescriptionLineMix extends CMbObject {
     	$this->_can_vw_form_signature_pharmacien = 1;
     }
     // Affichage du formulaire de signature praticien
-    if(!$this->_protocole && $is_praticien && ($this->praticien_id == $AppUI->user_id)){
+    if(!$this->_protocole && $is_praticien){
     	$this->_can_vw_form_signature_praticien = 1;
     }
     // View signature praticien

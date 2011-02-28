@@ -16,18 +16,26 @@
 	
 	{{if $line->inscription}}
 	  <input type="hidden" name="inscription" value="0" />
-    <input type="hidden" name="praticien_id" value="{{$app->user_id}}" />
 	{{/if}}
 	
-  {{if $line->signee}}
+	
+	<!-- Si la ligne est signée et qu'on est le prescripteur, on peut supprimer la signature de la ligne -->
+  {{if $line->signee && ($app->user_id == $line->praticien_id || $line->inscription)}}
 	  <!-- Annulation de la signature -->
     <input type="hidden" name="signee" value="0" />
     <button type="button" class="cancel" onclick="onSubmitFormAjax(this.form, { onComplete: function() { Prescription.reloadLine('{{$line->_guid}}'); } });">Annuler la signature</button>
-  {{else}}
-	  <!-- signature --> 
+  
+	<!-- Sinon, si elle n'est pas signee -->
+	{{elseif !$line->signee}}
+	  <input type="hidden" name="praticien_id" value="{{$app->user_id}}" />
     <input type="hidden" name="signee" value="1" />
     <button type="button" class="tick" id="signature_{{$line->_id}}" 
-		        onclick="onSubmitFormAjax(this.form, { 
+		        onclick="{{if $line->praticien_id && ($app->user_id != $line->praticien_id)}}
+						         if(!confirm('Attention, vous etes sur le point de signer une ligne créée par un autre praticien, êtes vous sur de vouloir continuer ?')){
+										   return;
+										 }
+										 {{/if}}
+						         onSubmitFormAjax(this.form, { 
 	                      onComplete: function(){ 
 												  modalPrescription.close(); 
 												  {{if $line->inscription}}

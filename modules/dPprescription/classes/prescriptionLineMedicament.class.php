@@ -153,15 +153,14 @@ class CPrescriptionLineMedicament extends CPrescriptionLine {
   var $_can_modify_dates                   = null;
   var $_can_modify_comment                 = null;
   var $_quantites                          = null;
-  
   var $_unite_administration               = null;
   var $_unite_dispensation                 = null;
   var $_ratio_administration_dispensation  = null;
   var $_quantite_administration            = null;
   var $_quantite_dispensation              = null;
   var $_unite_prise                        = null;
-  
   var $_long_view = null;
+  var $_duree                              = null;
   
   function getSpec() {
     $spec = parent::getSpec();
@@ -193,6 +192,7 @@ class CPrescriptionLineMedicament extends CPrescriptionLine {
 		$specs["_dci_view"]              = "str";
 		$specs["_fin_reelle"]            = "dateTime";
     $specs["_debut_reel"]            = "dateTime";
+		$specs["_duree"]                 = "num min|0";
     return $specs;
   }
   
@@ -285,6 +285,10 @@ class CPrescriptionLineMedicament extends CPrescriptionLine {
     }
     $this->isPerfusable();
     $this->isInjectable();
+		
+		if(!$this->duree && $this->_ref_prescription->type == "sejour"){
+			$this->_duree = mbDaysRelative($this->debut, mbDate($this->_ref_prescription->_ref_object->sortie))+1;
+		}
   }
     
   function updateLongView(){
@@ -359,7 +363,7 @@ class CPrescriptionLineMedicament extends CPrescriptionLine {
     	$this->_can_view_signature_praticien = 1;
     }
     // Affichage du formulaire de signature praticien
-    if(!$this->_protocole && $is_praticien && (($this->praticien_id == $AppUI->user_id) || $this->inscription)){
+    if(!$this->_protocole && $is_praticien){
     	$this->_can_view_form_signature_praticien = 1;
     }
     // Affichage de l'icone Livret Therapeutique

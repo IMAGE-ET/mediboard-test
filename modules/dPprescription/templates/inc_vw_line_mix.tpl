@@ -704,7 +704,9 @@ Main.add( function(){
 				{{/if}}
 				
 				<!-- Actions -->
-				{{if $line->_can_delete_prescription_line_mix || $line->_can_vw_form_signature_praticien || $line->_can_vw_form_signature_pharmacien}}
+				{{if $line->_can_delete_prescription_line_mix || 
+				    ($line->signature_prat &&  ($app->user_id == $line->praticien_id) || !$line->signature_prat) || 
+						$line->_can_vw_form_signature_pharmacien}}
 					<fieldset style="float: right; width: 48%;">
 						<legend>
 							Actions
@@ -730,18 +732,26 @@ Main.add( function(){
 			          <input type="hidden" name="dosql" value="do_prescription_line_mix_aed" />
 			          <input type="hidden" name="m" value="dPprescription" />
 			          <input type="hidden" name="{{$line->_spec->key}}" value="{{$line->_id}}" />
-			          {{if $line->signature_prat}}
+			          {{if $line->signature_prat &&  ($app->user_id == $line->praticien_id)}}
 			            <!-- Annulation de la signature -->
 			            <input type="hidden" name="signature_prat" value="0" />
 			            <button type="button" class="cancel" onclick="onSubmitFormAjax(this.form, { onComplete: function() { Prescription.reloadLine('{{$line->_guid}}'); } });">Annuler la signature</button>
-			          {{else}}
+			          {{elseif !$line->signature_prat}}
 			            <!-- signature --> 
+                  <input type="hidden" name="praticien_id" value="{{$app->user_id}}" />
 			            <input type="hidden" name="signature_prat" value="1" />
-			            <button type="button" class="tick" id="signature_{{$line->_id}}" onclick="onSubmitFormAjax(this.form, { onComplete: function(){ modalPrescription.close(); Prescription.reload.defer('{{$prescription->_id}}','','medicament'); } });">Signer</button>  
+			            <button type="button" class="tick" id="signature_{{$line->_id}}" 
+									        onclick="
+													  {{if $app->user_id != $line->praticien_id}}
+				                      if(!confirm('Attention, vous etes sur le point de signer une ligne créée par un autre praticien, êtes vous sur de vouloir continuer ?')){
+				                        return;
+				                      }
+				                    {{/if}}
+													  onSubmitFormAjax(this.form, { onComplete: function(){ modalPrescription.close(); Prescription.reload.defer('{{$prescription->_id}}','','medicament'); } });">Signer</button>  
 			          {{/if}}
 			        </form>
 			      {{/if}}
-		      
+		        
 		        <!-- Signature pharmacien -->
 		        {{if $line->_can_vw_form_signature_pharmacien}}
 		          {{if $line->signature_pharma}}

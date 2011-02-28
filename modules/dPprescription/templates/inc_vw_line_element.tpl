@@ -246,7 +246,7 @@
 		     {{/if}}
 		  {{/if}}
 
-      {{if $line->_can_delete_line || $line->_can_view_form_signature_praticien}}
+      {{if $line->_can_delete_line || ($line->signee && ($app->user_id == $line->praticien_id || $line->inscription) || !$line->signee)}}
 			<fieldset style="float: right; width: 48%;">
 			 	<legend>
 			 		Actions

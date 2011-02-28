@@ -77,15 +77,17 @@
 	    <!-- Duree de la ligne -->
 	    {{if $line->duree}}
 	      {{mb_value object=$line field=duree}} {{mb_value object=$line field=unite_duree}} 
-	    {{/if}}
+	    {{elseif $line->_ref_prescription->type == "sejour"}}
+        1 Jour(s)
+      {{/if}}
 	  </td>
   {{else}}
 	  <td style="width: 20%" class="text">
 	  	<!-- Duree de la prise --> 
-     {{if $line->duree}}
-       Durée de {{mb_value object=$line field=duree}} jour(s) 
+      {{if $line->duree}}
+        Durée de {{mb_value object=$line field=duree}} jour(s) 
       {{/if}}
-    
+		
       <!-- Date de debut de la ligne -->
     {{if $line->jour_decalage && $line->unite_decalage}} 
       {{if $line->duree > 1 || $line->jour_decalage_fin}} à partir de {{else}} à {{/if}}

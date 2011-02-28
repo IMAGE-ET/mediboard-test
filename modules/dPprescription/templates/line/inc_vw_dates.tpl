@@ -127,7 +127,15 @@ syncDateSubmit = function(oForm, curr_line_id, fieldName, type, object_class, ca
 			     {{if $line->duree}}
 			       {{$line->duree}}
 			     {{else}}
-			       -
+			       {{if $line->_ref_prescription->type == "sejour" && !$line->duree}} 
+	              {{if $line instanceof CPrescriptionLineMedicament}}
+	                {{mb_value object=$line field=_duree}}
+                {{else}}
+	                1
+	              {{/if}}
+	           {{else}}
+	             - 
+	           {{/if}}
 			     {{/if}}
 			     {{if $line->unite_duree}}
 			       {{tr}}CPrescriptionLineMedicament.unite_duree.{{$line->unite_duree}}{{/tr}}	      
@@ -137,6 +145,19 @@ syncDateSubmit = function(oForm, curr_line_id, fieldName, type, object_class, ca
 
 	     {{if $line->_can_modify_dates || $typeDate == "mode_grille"}}
 	     <td>
+	     	 <script type="text/javascript">
+	     	 	 Main.add(function(){
+						 {{if $line->_ref_prescription->type == "sejour" && !$line->_fin}} 
+							 var oForm = getForm("editDates-{{$typeDate}}-{{$line->_id}}");
+							 {{if $line instanceof CPrescriptionLineMedicament}}
+							   $V(oForm._fin_da, "Fin du séjour");
+							 {{elseif $line instanceof CPrescriptionLineElement}}
+							   $V(oForm._fin_da, "Date de début");
+		           {{/if}}
+		     	   {{/if}}
+					 });
+				 </script>
+
 	     	 <strong>{{mb_label object=$line field=_fin}}</strong>
 	       {{mb_field object=$line field=_fin form=editDates-$typeDate-$line_id onchange="syncDateSubmit(this.form, '$line_id', this.name, '$typeDate','$_object_class','$category_id');"}}
 	       {{mb_field object=$line field=time_fin form=editDates-$typeDate-$line_id onchange="syncDateSubmit(this.form, '$line_id', this.name, '$typeDate','$_object_class','$category_id');"}}
@@ -147,7 +168,15 @@ syncDateSubmit = function(oForm, curr_line_id, fieldName, type, object_class, ca
 	       {{if $line->_fin}}
 	         {{$line->_fin|date_format:"%d/%m/%Y"}}
 	       {{else}}
-	        -
+				   {{if $line->_ref_prescription->type == "sejour" && !$line->_fin}} 
+					    {{if $line instanceof CPrescriptionLineMedicament}}
+							  Fin du séjour
+							{{else}}
+							  {{mb_value object=$line field=debut}}
+							{{/if}}
+					 {{else}}
+					   - 
+					 {{/if}}
 	       {{/if}}				   
 	     </td>
 	    </tr>
