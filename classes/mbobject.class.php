@@ -212,6 +212,10 @@ class CMbObject {
     }
   }
   
+  static function getHandlers(){
+    return self::$handlers;
+  }
+  
   /**
    * Ignore a specific handler
    * @param string $handler The handler's class name
@@ -1218,7 +1222,7 @@ class CMbObject {
   function onBeforeStore() {
     // Event Handlers
     self::makeHandlers();
-    foreach (self::$handlers as $handler) {
+    foreach (self::getHandlers() as $handler) {
       try {
         $handler->onBeforeStore($this);
       } 
@@ -1235,7 +1239,7 @@ class CMbObject {
   function onAfterStore() {
     // Event Handlers
     self::makeHandlers();
-    foreach (self::$handlers as $handler) {
+    foreach (self::getHandlers() as $handler) {
       try {
         $handler->onAfterStore($this);
       } 
@@ -1362,7 +1366,7 @@ class CMbObject {
   function onBeforeMerge() {
     // Event Handlers
     self::makeHandlers();
-    foreach (self::$handlers as $handler) {
+    foreach (self::getHandlers() as $handler) {
       try {
         $handler->onBeforeMerge($this);
       } 
@@ -1379,7 +1383,7 @@ class CMbObject {
   function onAfterMerge() {
     // Event Handlers
     self::makeHandlers();
-    foreach (self::$handlers as $handler) {
+    foreach (self::getHandlers() as $handler) {
       try {
         $handler->onAfterMerge($this);
       } 
@@ -1824,7 +1828,7 @@ class CMbObject {
   function onBeforeDelete() {
     // Event Handlers
     self::makeHandlers();
-    foreach (self::$handlers as $handler) {
+    foreach (self::getHandlers() as $handler) {
       try {
         $handler->onBeforeDelete($this);
       } 
@@ -1841,7 +1845,7 @@ class CMbObject {
   function onAfterDelete() {
     // Event Handlers
     self::makeHandlers();
-    foreach (self::$handlers as $handler) {
+    foreach (self::getHandlers() as $handler) {
       try {
         $handler->onAfterDelete($this);
       } 
