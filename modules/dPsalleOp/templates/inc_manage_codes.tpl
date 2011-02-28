@@ -13,50 +13,51 @@
   <input type="hidden" name="_class_name" value="{{$subject->_class_name}}" />
   
   {{if $can->edit || $modif_operation}}
-  <table class="form">
+  <table class="main layout">
     <tr>
-      <th class="category">Ajout et suppression de codes</th>
-    </tr>
-    <tr>
-      <td colspan="2" style="vertical-align:middle;">
-        <input name="_actes" type="hidden" value="" />
-        <select name="_selCode">
-          <option value="0">&mdash; Choisir un code à supprimer</option>
-          {{foreach from=$subject->_associationCodesActes item=curr_code}}
-          <option value="{{$curr_code.code}}" onclick="this.form._actes.value = '{{$curr_code.ids}}'">
-            {{$curr_code.code|truncate:7:""|capitalize}}
-          </option>
-          {{/foreach}}
-        </select>
-        <button class="trash" type="button" onclick="ActesCCAM.remove({{$subject->_id}})">
-          Supprimer
-        </button>
+      <td class="halfPane">
+        <fieldset>
+          <legend>Ajouter un code</legend>
+          <button class="search" type="button" onclick="CCAMSelector.init()">
+            {{tr}}Search{{/tr}}
+          </button>
+       
+          <script type="text/javascript">   
+            CCAMSelector.init = function(){
+              this.sForm = "manageCodes";
+              this.sClass = "_class_name";
+              this.sChir = "_chir";
+              {{if ($subject->_class_name=="COperation")}}
+              this.sAnesth = "_anesth";
+              {{/if}}
+              this.sView = "_newCode";
+            this.pop();
+            }
+          </script>
+          
+          <input type="text" size="10" name="_newCode" />
+          
+          <button class="add" name="addCode" type="button" onclick="ActesCCAM.add('{{$subject->_id}}','{{$subject->_praticien_id}}')">
+            {{tr}}Add{{/tr}}
+          </button>
+        </fieldset>
       </td>
-    </tr>
-    <tr>
-      <td colspan="2" style="vertical-align:middle;">
-        <button class="search" type="button" onclick="CCAMSelector.init()">
-          Rechercher un code à ajouter
-        </button>
-     
-        <script type="text/javascript">   
-          CCAMSelector.init = function(){
-            this.sForm = "manageCodes";
-            this.sClass = "_class_name";
-            this.sChir = "_chir";
-            {{if ($subject->_class_name=="COperation")}}
-            this.sAnesth = "_anesth";
-            {{/if}}
-            this.sView = "_newCode";
-          this.pop();
-          }
-        </script>
-        
-        <input type="text" size="10" name="_newCode" />
-        
-        <button class="tick" name="addCode" type="button" onclick="ActesCCAM.add('{{$subject->_id}}','{{$subject->_praticien_id}}')">
-          {{tr}}Add{{/tr}}
-        </button>        
+      <td class="halfPane">
+        <fieldset>
+          <legend>Supprimer de code</legend>
+          <input name="_actes" type="hidden" value="" />
+          <select name="_selCode">
+            <option value="0">&mdash; Choisir un code à supprimer</option>
+            {{foreach from=$subject->_associationCodesActes item=curr_code}}
+            <option value="{{$curr_code.code}}" onclick="this.form._actes.value = '{{$curr_code.ids}}'">
+              {{$curr_code.code|truncate:7:""|capitalize}}
+            </option>
+            {{/foreach}}
+          </select>
+          <button class="trash" type="button" onclick="ActesCCAM.remove({{$subject->_id}})">
+            Supprimer
+          </button>
+        </fieldset>
       </td>
     </tr>
   </table>

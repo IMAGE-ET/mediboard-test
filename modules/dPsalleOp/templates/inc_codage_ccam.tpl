@@ -44,10 +44,6 @@ signerActes = function(object_id, object_class){
   </tr>
 
   <tr>
-    <th class="category">Codage des actes CCAM</th>
-  </tr>
-
-  <tr>
     <td class="text">
       <!-- Codage des actes -->
       {{if $subject->_coded}}
