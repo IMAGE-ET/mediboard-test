@@ -57,7 +57,7 @@ signerActes = function(object_id, object_class){
       {{/if}}
     </td>
   </tr>
-  {{if $conf.dPsalleOp.CActeCCAM.envoi_actes_salle}}
+  {{if $conf.dPsalleOp.CActeCCAM.envoi_actes_salle && ($subject instanceof COperation)}}
   <tr>
     <td>
       {{if !$subject->_nb_echange_hprim || $m == "dPpmsi"}}
