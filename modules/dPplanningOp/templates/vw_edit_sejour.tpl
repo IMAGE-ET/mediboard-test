@@ -144,6 +144,7 @@ function reloadSejours(checkCollision) {
         <tr>
           <td id="documents">
             {{mb_include_script module=dPcompteRendu script=document}}
+            {{mb_include_script module=dPcompteRendu script=modele_selector}}
 				    <script type="text/javascript">
 				    Document.register('{{$sejour->_id}}','{{$sejour->_class_name}}','{{$sejour->praticien_id}}', 'documents');
 				    </script>
