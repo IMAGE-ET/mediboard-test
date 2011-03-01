@@ -210,6 +210,8 @@ class CCompteRendu extends CDocumentItem {
 		$this->_ref_content = $this->loadFwdRef("content_id", true);
 		if ($field_source) {
 		  $this->_source = $this->_ref_content->content;
+		  $this->_source = preg_replace("/<meta[^>]+>/", '', $this->_source);
+		  $this->_source = preg_replace("/<\/meta>/", '', $this->_source);
 		  if (preg_match("/mso-style/", $this->_source)) {
   		  $xml = new DOMDocument('1.0', 'iso-8859-1');
         $str = "<div>".CHtmlToPDF::xmlEntities($this->_source)."</div>";
