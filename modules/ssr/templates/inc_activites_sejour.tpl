@@ -896,7 +896,7 @@ Main.add(function(){
   </form>
   
   <!-- TODO: utiliser le meme formulaire pour stocker le token d'evenements pour les differentes actions  -->
-  <form name="form_list_cdarr">
+  <form name="form_list_cdarr" method="post">
     <input type="hidden" name="token_evts" />
   </form> 
   

@@ -16,11 +16,11 @@
 <!-- Filtre sur service-->
 <tr>
   <td>
-  	<form onsubmit="return Repartition.updateTechnicien('', this);">
+  	<form onsubmit="return Repartition.updateTechnicien('', this);" method="get">
 	    <select name="service_id" onchange="this.form.onsubmit()">
 	      <option value="">&mdash; {{tr}}CService.all{{/tr}}</option>
 	      {{foreach from=$services item=_service}}
-	      <option value="{{$_service->_id}}" {{if $_service->_id == $service_id}}selected="selected"{{/if}}>
+	      <option value="{{$_service->_id}}" {{if $_service->_id == $service_id}} selected="selected" {{/if}}>
 	        {{$_service}}
 	      </option>
 	      {{/foreach}}
