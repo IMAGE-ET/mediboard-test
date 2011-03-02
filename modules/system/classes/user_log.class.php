@@ -167,10 +167,14 @@ class CUserLog extends CMbMetaObject {
 		
 		$this->getOldValues();
 		
+		// Revalue fields
 		foreach($this->_old_values as $_field => $_value) {
 			$object->$_field = $_value;
 		}
 		$object->updateFormFields();
+		
+		// Prevent disturbing checks
+		$object->_merging = true;
 		
 		$msg = $object->store();
     $object->_spec->loggable = true;
