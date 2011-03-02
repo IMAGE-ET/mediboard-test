@@ -7,10 +7,13 @@
   {{/if}}
 {{/if}}
 
+<tbody class="hoverable">
+	
 <tr class="{{$trClass}}">
-  {{assign var="nbConsults" value=$_patient->_ref_consultations|@count}}
-  {{assign var="nbSejours" value=$_patient->_ref_sejours|@count}}
-  {{assign var="rowspan" value=$nbConsults+$nbSejours+1}}
+  {{assign var="rowspan" value=1}}
+	{{if count($_patient->_ref_consultations) || count($_patient->_ref_sejours)}} 
+    {{assign var="rowspan" value=2}}
+	{{/if}}
   <td rowspan="{{$rowspan}}">
     <div style="float: right;">
       {{mb_include module=system template=inc_object_notes object=$_patient}}
@@ -49,11 +52,9 @@
       <br />{{mb_value object=$_patient field=tel2}}
 		{{/if}}
 	</td>
-  <td class="text" style="color: #666;">
-    <small>
-      <span style="white-space: nowrap;">{{$_patient->adresse|spancate:30}} - </span>
+  <td class="text compact">
+      <span style="white-space: nowrap;">{{$_patient->adresse|spancate:30}}</span>
       <span style="white-space: nowrap;">{{$_patient->cp}} {{$_patient->ville|spancate:20}}</span>
-    </small>
 	</td>
   <td class="button" rowspan="{{$rowspan}}" style="white-space: nowrap;">
     {{if $can->edit}}
@@ -69,22 +70,28 @@
   {{/if}}
 </tr>
 
-<!-- Consultations du jour -->
-{{foreach from=$_patient->_ref_consultations item=_consult}}
+{{if $rowspan == 2}} 
 <tr>
   <td colspan="3" class="text">
-    Consult. aujourd'hui à {{mb_value object=$_consult field=heure}}
-    avec le Dr {{$_consult->_ref_plageconsult->_ref_chir->_view}}
+  	<div class="small-info">
+			<!-- Consultations du jour -->
+			{{foreach from=$_patient->_ref_consultations item=_consult}}
+			<div>
+		    Consultation aujourd'hui à {{mb_value object=$_consult field=heure}} avec
+		    {{mb_include module=mediusers template=inc_vw_mediuser mediuser=$_consult->_ref_praticien}}
+			</div>
+			{{/foreach}}
+	
+			<!-- Admissions du jour -->
+			{{foreach from=$_patient->_ref_sejours item=_sejour}}
+	    <div>
+		    Admission aujourd'hui à {{mb_value object=$_sejour field=entree_prevue format="%Hh%M"}} pour 
+		    {{mb_include module=mediusers template=inc_vw_mediuser mediuser=$_sejour->_ref_praticien}}
+	    </div>
+			{{/foreach}}
+    </div>
   </td>
 </tr>
-{{/foreach}}
+{{/if}}
 
-<!-- Admissions du jour -->
-{{foreach from=$_patient->_ref_sejours item=_sejour}}
-<tr>
-  <td colspan="3" class="text">
-    Admission aujourd'hui à {{mb_value object=$_sejour field=entree_prevue format="%Hh%M"}}
-    pour le Dr {{$_sejour->_ref_praticien->_view}}
-  </td>
-</tr>
-{{/foreach}}
+</tbody>

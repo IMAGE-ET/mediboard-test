@@ -110,8 +110,8 @@ else {
     $where["plageconsult.date"] = "= '$today'";
     foreach ($patients as &$patient) {
       $patient->loadRefsConsultations($where);
-      foreach ($patient->_ref_consultations as &$consult) {
-        $consult->loadRefPlageConsult();
+      foreach ($patient->_ref_consultations as $consult) {
+        $consult->loadRefPraticien()->loadRefFunction();
       }
     }
     
@@ -121,11 +121,11 @@ else {
   function loadAdmissionsDuJour(&$patients) {
     $today = mbDate();
     $where = array();
-    $where["entree_prevue"] = "LIKE '$today __:__:__'";
+    $where["entree"] = "LIKE '$today __:__:__'";
     foreach ($patients as &$patient) {
       $patient->loadRefsSejours($where);
-      foreach ($patient->_ref_sejours as &$sejour) {
-        $sejour->loadRefPraticien();
+      foreach ($patient->_ref_sejours as $sejour) {
+        $sejour->loadRefPraticien()->loadRefFunction();
       }
     }
   }
