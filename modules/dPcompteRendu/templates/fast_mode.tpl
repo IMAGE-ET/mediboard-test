@@ -63,18 +63,8 @@ generatePdf = function(id) {
 }
 
 printDoc = function(id, args) {
-	var iframe = $("iframe_source{{$uid_fast_mode}}").contentWindow.document;
-	if (Prototype.Browser.IE) {
-	  iframe.open();
-	  iframe.write(args._entire_doc);
-	  iframe.close();
-	  window.frames['iframe_source{{$uid_fast_mode}}'].focus();
-	}
-	else {
-	  iframe.documentElement.innerHTML = args._entire_doc;
-	}
-	window.frames['iframe_source{{$uid_fast_mode}}'].print();
-	Control.Modal.close();
+  Document.print(id);
+  Control.Modal.close();
 	Document.refreshList('{{$object_class}}', '{{$object_id}}');
 }
 
@@ -131,8 +121,6 @@ Main.add(function() {
 
 
 </script>
-
-<iframe style="width: 0px; height: 0px; position: absolute; border: none;" frameborder="no" name="iframe_source{{$uid_fast_mode}}" id="iframe_source{{$uid_fast_mode}}"></iframe>
 
 <form name="stream-pdf-{{$uid_fast_mode}}" method="post" action="?" target="_blank">
   <input type="hidden" name="m" value="dPcompteRendu" />
@@ -213,7 +201,7 @@ Main.add(function() {
       </td>
     </tr>
     <tr>
-      <td {{if $pdf_thumbnails == 1}} style="width: 80%;" {{else}} colspan="2" {{/if}}>
+      <td {{if $pdf_thumbnails && $app->user_prefs.pdf_and_thumbs}} style="width: 80%;" {{else}} colspan="2" {{/if}}>
         <table style="width: 100%;">
           {{if $lists|@count}}
             <tr>
@@ -297,7 +285,7 @@ Main.add(function() {
                   onclick="lockAllButtons(); $V(getForm('create-pdf-form-{{$uid_fast_mode}}').stream, 1); this.form.onsubmit();">
                     {{tr}}Print{{/tr}}
                 </button>
-                {{if !$pdf_thumbnails}}
+                {{if !$pdf_thumbnails || !$app->user_prefs.pdf_and_thumbs || !$compte_rendu->fast_edit_pdf}}
                   <button class="print printer oneclick" type="button"
                     onclick="lockAllButtons(); $V(getForm('fastModeForm-{{$uid_fast_mode}}').callback, 'printDoc'); this.form.onsubmit();">
                       {{tr}}Print{{/tr}}
@@ -314,7 +302,7 @@ Main.add(function() {
           </tr>
         </table>
       </td>
-      {{if $pdf_thumbnails == 1}}
+      {{if $pdf_thumbnails && $app->user_prefs.pdf_and_thumbs}}
         <td style="height: 200px;">
           <div id="thumbs" style="overflow-x: hidden; width: 160px; text-align: center; white-space: normal; height: 200px;">
             {{if isset($file|smarty:nodefaults) && $file->_id}}

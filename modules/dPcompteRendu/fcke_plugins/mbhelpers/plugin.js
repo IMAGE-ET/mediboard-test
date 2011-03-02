@@ -41,7 +41,7 @@ CKEDITOR.plugins.add('mbhelpers',{
             }
           ]
      }
-   ],
+   ]
    };
    });
    

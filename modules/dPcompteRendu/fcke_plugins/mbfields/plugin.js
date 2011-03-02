@@ -40,7 +40,7 @@ CKEDITOR.plugins.add('mbfields',{
             }
           ]
      }
-   ],
+   ]
    };
    });
    

@@ -80,7 +80,7 @@ else {
       }
     }
   else {
-    if ($textes_libres = CValue::post("texte_libre") && CAppUI::conf("dPcompteRendu CCompteRendu pdf_thumbnails") == 1) {
+    if ($textes_libres = CValue::post("texte_libre") && CAppUI::conf("dPcompteRendu CCompteRendu pdf_thumbnails") && CAppUI::pref("pdf_and_thumbs")) {
       $compte_rendu->_source = $compte_rendu->replaceFreeTextFields($content, $_POST["texte_libre"]);
     }
     $content = $compte_rendu->loadHTMLcontent($content, $mode,'','','','','',$margins);

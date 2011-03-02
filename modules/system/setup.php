@@ -429,6 +429,9 @@ class CSetupsystem extends CSetup {
     $query = "ALTER TABLE `ex_concept` ADD INDEX (`ex_list_id`);";
     $this->addQuery($query);
     
-    $this->mod_version = "1.0.46";
+    $this->makeRevision("1.0.46");
+    $this->addPrefQuery("pdf_and_thumbs", "1");
+    
+    $this->mod_version = "1.0.47";
   }
 }

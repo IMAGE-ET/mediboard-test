@@ -24,9 +24,7 @@ function mbprint_onclick(editor) {
       editor.document.$.execCommand("Print");
   };
   if (window.parent.same_print == 1) {
-    restoreStyle();
     var content = editor.getData();
-    deleteStyle();
     var form = window.parent.document.forms["download-pdf-form"];
     form.elements.content.value = encodeURIComponent(content);
     form.onsubmit();
@@ -36,7 +34,6 @@ function mbprint_onclick(editor) {
       window.parent.submitCompteRendu(printDoc);
     }
     else {
-      restoreStyle();
       printDoc();
     }
   }

@@ -25,7 +25,7 @@
   {{if $_doc_item->_class_name=="CCompteRendu"}}
     <button type="button" class="print notext"
       onclick="
-      {{if $pdf_thumbnails}}
+      {{if $pdf_thumbnails && $app->user_prefs.pdf_and_thumbs}}
         Document.printPDF('{{$_doc_item->_id}}');
       {{else}}
         Document.print('{{$_doc_item->_id}}')

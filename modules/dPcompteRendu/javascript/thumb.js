@@ -38,9 +38,7 @@ var Thumb = {
     var content = '';
     
     if (window.CKEDITOR && CKEDITOR.instances.htmlarea.getData) {
-      restoreStyle();
       content = CKEDITOR.instances.htmlarea.getData();
-      deleteStyle();
     } else {
       content = $V(form._source);
     }
@@ -132,7 +130,7 @@ var Thumb = {
     }
   },
   old: function() {
-    if (window.pdf_thumbnails == 1) {
+    if (window.pdf_thumbnails && window.Preferences.pdf_and_thumbs == 1) {
       if (this.thumb_refreshing) {
         
         this.thumb_up2date = false;
@@ -155,7 +153,7 @@ var Thumb = {
         mess.observe("click", on_click);
       }
     }
-  },
+  }
 }
 
 
@@ -168,32 +166,15 @@ function loadOld() {
     Thumb.changed = true;
     instance.removeListener("key", loadOld);
     Thumb.content = html;
-    if (window.pdf_thumbnails == "1") {
+    if (window.pdf_thumbnails && window.Preferences.pdf_and_thumbs == 1) {
       clearTimeout(window.thumbs_timeout);
       Thumb.old();
     }
   }
 }
 
-function restoreStyle() {
-  var instance = CKEDITOR.instances.htmlarea;
-  
-  if (!window.save_style) return;
-  var tag = instance.document.getBody().getFirst();
-  if (tag && tag.$.tagName == "STYLE") return;
-  window.save_style.insertBefore(tag);
-}
-
-function deleteStyle() {
-  var instance = CKEDITOR.instances.htmlarea;
-  
-  if (!instance.document) return;
-  var styleTag = instance.document.getBody().getFirst();
-  if (styleTag && styleTag.$.tagName == "STYLE")
-    styleTag.remove();
-}
-
 function pdfAndPrintServer(compte_rendu_id) {
+  Thumb.print = 0;
   var url = new Url();
   url.addParam("compte_rendu_id", compte_rendu_id);
   url.addParam("write_page", 1);

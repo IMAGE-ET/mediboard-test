@@ -42,7 +42,7 @@ Main.add(function () {
 					  <div></div>
             {{assign var="elementId" value=$_doc_item->_id}}
             {{if $_doc_item->_class_name=="CCompteRendu"}}
-              {{if $conf.dPcompteRendu.CCompteRendu.pdf_thumbnails}}
+              {{if $conf.dPcompteRendu.CCompteRendu.pdf_thumbnails && $app->user_prefs.pdf_and_thumbs}}
                 {{assign var="nomdoc" value=$_doc_item->nom}}
                 {{assign var="file_owner" value=$_doc_item->_ref_chir->_id}}
                 {{assign var="file_id" value=$_doc_item->_ref_file->_id}}

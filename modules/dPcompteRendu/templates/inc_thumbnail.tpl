@@ -24,7 +24,7 @@
   {{/if}}
 </script>
 
-{{if $pdf_thumbnails}}
+{{if $pdf_thumbnails && $app->user_prefs.pdf_and_thumbs}}
   {{$_nb_pages}} page{{if $_nb_pages > 1}}s{{/if}}
   {{foreach from=1|range:$_nb_pages item=index}}
     <p style="margin-bottom: 10px;">

@@ -142,7 +142,7 @@ Main.add(function() {
   	    <input type="hidden" name="object_class" value="{{$object_class}}" />
         
         <button type="button" class="print notext"
-          onclick="{{if $pdf_thumbnails}}
+          onclick="{{if $pdf_thumbnails && $app->user_prefs.pdf_and_thumbs}}
             Document.printPDF({{$document->_id}});
           {{else}}
             Document.print({{$document->_id}})

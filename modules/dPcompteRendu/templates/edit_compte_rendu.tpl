@@ -4,7 +4,7 @@
 
 <script type="text/javascript">
 window.same_print = {{$conf.dPcompteRendu.CCompteRendu.same_print}};
-window.pdf_thumbnails = {{$pdf_thumbnails|@json}};
+window.pdf_thumbnails = {{$pdf_thumbnails|@json}} == 1;
 window.nb_printers = {{$nb_printers|@json}};
 
 function submitCompteRendu(callback){
@@ -15,9 +15,7 @@ function submitCompteRendu(callback){
     mess.stopObserving("click");
   }
   (function(){
-    restoreStyle();
 	  var html = CKEDITOR.instances.htmlarea.getData();
-	  deleteStyle();
 	  $V($("htmlarea"), html, false);
 	  
     var form = getForm("editFrm");
@@ -31,7 +29,7 @@ function submitCompteRendu(callback){
       clearTimeout(window.thumbs_timeout);
       onSubmitFormAjax(form,{ useDollarV: true, onComplete: function() {
         Thumb.contentChanged = false;
-        if (window.pdf_thumbnails == 0 && window.opener.Document.refreshList) {
+        if (!window.pdf_thumbnails || window.Preferences.pdf_and_thumbs == 0 && window.opener.Document.refreshList) {
           window.opener.Document.refreshList($V(form.object_class), $V(form.object_id));
         }
         window.callback = callback ? callback : null;
@@ -42,7 +40,7 @@ function submitCompteRendu(callback){
 }
 
 function refreshZones(id, obj) {
-  if (window.pdf_thumbnails != 0) {
+  if (window.pdf_thumbnails && window.Preferences.pdf_and_thumbs == 1) {
     Thumb.compte_rendu_id = id;
     Thumb.modele_id = 0;
     var refresh = function() { window.thumbs_timeout = setTimeout(function() {
@@ -85,7 +83,7 @@ function openModalPrinters() {
   modalPrinters.requestModal(700, 400);
 }
 
-{{if $pdf_thumbnails == 1}}
+{{if $pdf_thumbnails && $app->user_prefs.pdf_and_thumbs}}
 
   togglePageLayout = function() {
     $("page_layout").toggle();
@@ -153,16 +151,17 @@ function openModalPrinters() {
 {{/if}}
 
   Main.add(function(){
-      window.onbeforeunload = function() {
-        if (Thumb.contentChanged == false) return;
+    window.onbeforeunload = function() {
+      if (Thumb.contentChanged == false) return;
 
-        {{if $pdf_thumbnails}}
-          emptyPDF();
-        {{/if}}
-        
-        return '';
-      };
-    {{if $pdf_thumbnails}}
+      if (window.pdf_thumbnails && window.Preferences.pdf_and_thumbs == 1) {
+        emptyPDF();
+      }
+      
+      return '';
+    };
+    
+    if (window.pdf_thumbnails && window.Preferences.pdf_and_thumbs == 1) {
       PageFormat.init(getForm("editFrm"));
       Thumb.compte_rendu_id = '{{$compte_rendu->_id}}';
       Thumb.modele_id = '{{$modele_id}}';
@@ -170,8 +169,8 @@ function openModalPrinters() {
       Thumb.mode = "doc";
       Thumb.object_class = '{{$compte_rendu->object_class}}';
       Thumb.object_id = '{{$compte_rendu->object_id}}';
-
-    {{/if}}
+    }
+    
     {{if !$compte_rendu->_id && $switch_mode == 1}}
       if (window.opener.saveFields) {
         from = window.opener.saveFields;
@@ -200,7 +199,7 @@ function openModalPrinters() {
 
 <!-- Zone cachée pour la génération PDF et l'impression server side,
   utilisée lorsque la config PDF n'est pas activée-->
-{{if !$pdf_thumbnails}}
+{{if !$pdf_thumbnails || !$app->user_prefs.pdf_and_thumbs}}
   <div id="pdf_area" style="display: none;"></div>
 {{/if}}
 
@@ -257,7 +256,7 @@ function openModalPrinters() {
         {{tr}}CCompteRendu-private{{/tr}}
         {{mb_field object=$compte_rendu field=private typeEnum="checkbox"}}
       </label>
-      {{if $pdf_thumbnails}}
+      {{if $pdf_thumbnails && $app->user_prefs.pdf_and_thumbs}}
         &mdash;
         <button class="pagelayout" type="button" title="Mise en page"
                 onclick="save_page_layout(); modal($('page_layout'), {
@@ -314,12 +313,17 @@ function openModalPrinters() {
   </tr>
   {{/if}}
   <tr>
-    <td class = "greedyPane" style="width: 1200px;" {{if $pdf_thumbnails==0}} colspan="2" {{else}} colspan="1" {{/if}} id="editeur">
+    <td class = "greedyPane" style="width: 1200px;"
+      {{if $pdf_thumbnails && $app->user_prefs.pdf_and_thumbs}}
+        colspan="1"
+      {{else}}
+        colspan="2"
+      {{/if}} id="editeur">
       <textarea id="htmlarea" name="_source">
         {{$templateManager->document}}
       </textarea>
     </td>
-    {{if $pdf_thumbnails == 1}}
+    {{if $pdf_thumbnails && $app->user_prefs.pdf_and_thumbs}}
       <td id="thumbs_button" class="narrow">
         <div id="mess" class="oldThumbs opacity-60" style="display: none;">
         </div>

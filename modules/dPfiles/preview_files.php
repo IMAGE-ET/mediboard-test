@@ -34,7 +34,8 @@ $acces_denied     = true;      // droit d'affichage du fichier demandé
 $arrNumPages      = array();   // navigation par pages (PDF)
 $isConverted      = false;
 
-$pdf_active = CAppUI::conf("dPcompteRendu CCompteRendu pdf_thumbnails") == 1;
+$pdf_active = (CAppUI::conf("dPcompteRendu CCompteRendu pdf_thumbnails") == 1 ) &&
+  (CAppUI::pref("pdf_and_thumbs") == 1);
 
 // Création du template
 $smarty = new CSmartyDP();

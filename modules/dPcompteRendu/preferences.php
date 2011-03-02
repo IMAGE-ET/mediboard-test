@@ -19,5 +19,6 @@ CPreferences::$modules["dPcompteRendu"] = array(
   "aideFastMode",
   "aideAutoComplete",
   "aideShowOver",
+  "pdf_and_thumbs",
 );
 ?>

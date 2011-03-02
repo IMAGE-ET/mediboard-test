@@ -2,7 +2,8 @@
 
 <script type="text/javascript">
 window.same_print = {{$conf.dPcompteRendu.CCompteRendu.same_print}};
-window.pdf_thumbnails = {{$pdf_thumbnails|@json}};
+window.pdf_thumbnails = {{$pdf_thumbnails|@json}} == 1;
+
 function popFile(objectClass, objectId, elementClass, elementId, sfn){
   var url = new Url;
   url.ViewFilePopup(objectClass, objectId, elementClass, elementId, sfn);
@@ -100,12 +101,12 @@ function loadCategory(value) {
 }
 
 function submitCompteRendu(callback){
-	{{if $pdf_thumbnails == 1}}
+	if (window.pdf_thumbnails && window.Preferences.pdf_and_thumbs == 1) {
     if (Thumb.modele_id > 0) {
       FormObserver.changes = 0;
       FormObserver.onChanged();
     }
-  {{/if}}
+  }
   (function(){
     var form = getForm("editFrm");
     if(checkForm(form) && User.id) {
@@ -125,7 +126,7 @@ function submitCompteRendu(callback){
 Main.add(function () {
   loadObjectClass('{{$compte_rendu->object_class}}');
   loadCategory('{{$compte_rendu->file_category_id}}');
-  {{if $compte_rendu->_id && $droit && $pdf_thumbnails}}
+  {{if $compte_rendu->_id && $droit && $pdf_thumbnails && $app->user_prefs.pdf_and_thumbs}}
     Thumb.compte_rendu_id = {{$compte_rendu->_id}};
 		Thumb.user_id = {{$user_id}};
 		Thumb.mode = "modele";
@@ -135,7 +136,7 @@ Main.add(function () {
 
 </script>
 
-{{if $pdf_thumbnails == 1}}
+{{if $pdf_thumbnails && $app->user_prefs.pdf_and_thumbs}}
   <form style="display: none;" name="download-pdf-form" target="_blank" method="post"
     action="?m=dPcompteRendu&amp;a=ajax_pdf"
     onsubmit="PageFormat.completeForm();">
@@ -155,6 +156,14 @@ Main.add(function () {
 <form name="editFrm" action="?m={{$m}}" method="post" 
  onsubmit="Url.ping({onComplete: submitCompteRendu}); return false;"
  class="{{$compte_rendu->_spec}}">
+
+{{if (!$pdf_thumbnails || !$app->user_prefs.pdf_and_thumbs)}}
+  <input type="hidden" name="fast_edit_pdf" value="0" />
+{{/if}}
+
+{{if $compte_rendu->type != "body"}}
+  <input type="hidden" name="fast_edit" value="0" />
+{{/if}}
 
 <table class="main">
   <tr>
@@ -243,18 +252,23 @@ Main.add(function () {
           </td>
         </tr>
         
-        <tr>
-          <th>{{mb_label object=$compte_rendu field="fast_edit"}}</th>
-          <td>
-            {{mb_field object=$compte_rendu field="fast_edit"}}
-          </td>
-        </tr>
-        <tr>
-          <th>{{mb_label object=$compte_rendu field="fast_edit_pdf"}}</th>
-          <td>
-            {{mb_field object=$compte_rendu field="fast_edit_pdf"}}
-          </td>
-        </tr>
+        {{if $compte_rendu->type == "body"}}
+          <tr>
+            <th>{{mb_label object=$compte_rendu field="fast_edit"}}</th>
+            <td>
+              {{mb_field object=$compte_rendu field="fast_edit"}}
+            </td>
+          </tr>
+        {{/if}}
+        
+        {{if $pdf_thumbnails && $app->user_prefs.pdf_and_thumbs}}
+          <tr>
+            <th>{{mb_label object=$compte_rendu field="fast_edit_pdf"}}</th>
+            <td>
+              {{mb_field object=$compte_rendu field="fast_edit_pdf"}}
+            </td>
+          </tr>
+        {{/if}}
         
         <tr>
           <th>{{mb_label object=$compte_rendu field=type}}</th>
@@ -281,9 +295,9 @@ Main.add(function () {
                 $("preview_page").insert({top: $("body_content").remove()});
               }
               // layout
-							{{if $pdf_thumbnails == 1}}
+							if (window.pdf_thumbnails && window.Preferences.pdf_and_thumbs == 1) {
                 $("page_layout").setVisible(bBody);
-              {{/if}}
+              }
               $("layout_header_footer").setVisible(!bBody);
               
               // Height
@@ -375,7 +389,7 @@ Main.add(function () {
         {{if $compte_rendu->_id}}
         
         
-        {{if $pdf_thumbnails == 1}}
+        {{if $pdf_thumbnails && $app->user_prefs.pdf_and_thumbs}}
         <tr>
           <th class="category" colspan="2">
           	{{tr}}CCompteRendu-Pagelayout{{/tr}}
@@ -393,7 +407,7 @@ Main.add(function () {
           <th>{{mb_label object=$compte_rendu field=height}}</th>
           <td>
           {{if $droit}}
-            <button type="button" class="change" onclick="Thumb.old(); Modele.generate_auto_height(); Modele.preview_layout();">{{tr}}Générer hauteur auto{{/tr}}</button><br/>
+            <button type="button" class="change" onclick="Thumb.old(); Modele.generate_auto_height(); Modele.preview_layout();">{{tr}}CCompteRendu.auto_height{{/tr}}</button><br/>
               {{mb_field object=$compte_rendu field=height increment=true form=editFrm onchange="Thumb.old(); Modele.preview_layout();" step="10" onkeyup="Modele.preview_layout();"}}
           {{else}}
             {{mb_field object=$compte_rendu field=height readonly="readonly"}}
@@ -458,7 +472,7 @@ Main.add(function () {
         {{mb_field object=$compte_rendu field="_source" id="htmlarea" name="_source"}}
       {{/if}}
     </td>
-    {{if $pdf_thumbnails == 1 && $compte_rendu->_id}}
+    {{if $pdf_thumbnails && $compte_rendu->_id && $app->user_prefs.pdf_and_thumbs}}
       <td id="thumbs_button" class="narrow">
         <div id="mess" class="oldThumbs opacity-60" style="display: none;">
         </div>

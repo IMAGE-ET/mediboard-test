@@ -152,7 +152,7 @@ else {
   } 
   // Si c'est un modèle de compte rendu
   else { 
-    $do->redirect = "m=$m&compte_rendu_id=".$do->_obj->_id;
+    $do->redirect = "m=$m&tab=addedit_modeles&compte_rendu_id=".$do->_obj->_id;
   }
   $do->doRedirect();
 }

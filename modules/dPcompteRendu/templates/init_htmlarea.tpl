@@ -27,22 +27,14 @@ function initCKEditor() {
       var dims = document.viewport.getDimensions();
       var greedyPane = $$(".greedyPane")[0];
       
-      CKEDITOR.instances.htmlarea.resize('', (dims["height"] - greedyPane.cumulativeOffset().top - 10)); 
-      if (window.pdf_thumbnails == 1)
+      CKEDITOR.instances.htmlarea.resize('', (dims["height"] - greedyPane.cumulativeOffset().top - 10));
+      if (window.pdf_thumbnails && window.Preferences.pdf_and_thumbs == 1) {
         $("thumbs").style.height = (dims["height"] - greedyPane.cumulativeOffset().top - 10) +"px";
+      }
     }
     
 	  var ck_instance = CKEDITOR.instances.htmlarea;
-    
-    // Hack pour la balise style qui pose problème dans ckeditor
-    {{if !$templateManager->printMode}}
-      var element = ck_instance.document.getBody().getFirst();
-  
-      if (element && element.$.tagName == "STYLE") {
-        window.save_style = element;
-        element.remove();
-      }
-    {{/if}}
+
     // Les plugins qui ne doivent pas être pris en compte pour le changement de valeur pour contentEditable
     //var plugins = ["source", "undo", "redo", "pastefromword"];
 
@@ -74,7 +66,7 @@ function initCKEditor() {
 		{{if $templateManager->printMode}}
       CKEDITOR.instances.htmlarea.document.getBody().$.contentEditable=false;
     {{else}}
-		  {{if $pdf_thumbnails}}
+		  {{if $pdf_thumbnails && $app->user_prefs.pdf_and_thumbs}}
   		  Thumb.content = ck_instance.getData();
   	    window.thumbs_timeout = setTimeout(function() {
           Thumb.refreshThumbs(1);
@@ -94,7 +86,7 @@ function initCKEditor() {
   	      submitCompteRendu();
   	      Event.stop(e);
   	    }
-  	    {{if $pdf_thumbnails}}
+  	    {{if $pdf_thumbnails && $app->user_prefs.pdf_and_thumbs}}
   	      if (keycode == 80 && (e.ctrlKey || e.metaKey)) {
   	        ck_instance.getCommand("mbprintPDF").exec();
   	        Event.stop(e);
@@ -104,12 +96,6 @@ function initCKEditor() {
 
     // Surveillance de modification de l'éditeur de texte
     ck_instance.on("key", loadOld);
-
-    ck_instance.on("beforePreview", function(){ restoreStyle(); });
-    ck_instance.on("afterPreview", function(){ deleteStyle(); });
-    // Après l'impression, le focus revient sur l'éditeur
-    // On peut donc enlever le style à ce moment-là.
-    ck_instance.on("focus", function(){ deleteStyle(); });
 
     // Redéfinition du copier-coller dans CKEditor, car le comportement par défaut ne convient pas
     ck_instance.on("paste", function(evt) {

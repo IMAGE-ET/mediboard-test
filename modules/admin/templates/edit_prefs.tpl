@@ -164,7 +164,7 @@ Preferences.onSubmit = function(form) {
   {{mb_include template=inc_pref spec=bool var=aideFastMode}}
   {{mb_include template=inc_pref spec=bool var=aideAutoComplete}}
   {{mb_include template=inc_pref spec=bool var=aideShowOver}}
-  
+  {{mb_include template=inc_pref spec=bool var=pdf_and_thumbs}}
   </tbody>
   {{/if}}
 

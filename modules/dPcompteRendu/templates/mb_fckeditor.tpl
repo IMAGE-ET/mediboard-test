@@ -58,7 +58,7 @@ CKEDITOR.editorConfig = function(config) {
     
     config.extraPlugins = 'mbfields,mbfreetext,mbhelpers,mblists,mbprint,mbprintPDF,mbheader,mbfooter,mbpagebreak,mblineheight{{if "printing"|module_active && !$templateManager->isModele}},mbprinting{{/if}}';
     config.toolbar_Full = [
-      ['Save','Preview'], [{{if $pdf_thumbnails == 1}}'mbprintPDF',{{/if}} textForPrint, 'mbprinting', 'SelectAll', 'Cut', 'Copy', 'PasteText', 'PasteFromWord', 'Undo','Redo', 'Find'],
+      ['Save','Preview'], [{{if $pdf_thumbnails && $app->user_prefs.pdf_and_thumbs}}'mbprintPDF',{{/if}} textForPrint, 'mbprinting', 'SelectAll', 'Cut', 'Copy', 'PasteText', 'PasteFromWord', 'Undo','Redo', 'Find'],
       [{{if !$templateManager->isModele}}'mbheader', 'mbfooter',{{/if}} 'mbpagebreak'],
       ['Table','HorizontalRule','Image','SpecialChar'],
       ['Maximize', 'Source'], '/',
@@ -182,6 +182,6 @@ CKEDITOR.editorConfig = function(config) {
   config.keystrokes.push( [CKEDITOR.CTRL + 75 /*K*/, "mbpagebreak"] );
   config.keystrokes.push( [CKEDITOR.CTRL + CKEDITOR.ALT + 85 /*U*/, "Source"] );
   config.keystrokes.push( [CKEDITOR.CTRL + 83 /*S*/, "save"] );  
-  if (window.parent.pdf_thumbnails == 1)
+  if (window.parent.pdf_thumbnails && window.parent.Preferences.pdf_and_thumbs == 1)
     config.keystrokes.push( [CKEDITOR.CTRL + 80 /*P*/, "mbprintPDF"] );
 }

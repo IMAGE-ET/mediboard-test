@@ -628,7 +628,7 @@ class CCompteRendu extends CDocumentItem {
   }
   
   function makePDFpreview() {
-    if (!CAppUI::conf("dPcompteRendu CCompteRendu pdf_thumbnails")) {
+    if (!CAppUI::conf("dPcompteRendu CCompteRendu pdf_thumbnails") || !CAppUI::pref("pdf_and_thumbs")) {
       return;    	
     } 
   
@@ -709,7 +709,7 @@ class CCompteRendu extends CDocumentItem {
         $header->loadContent();
         $header->_source = "<div id='header'>$header->_source</div>";
         
-        if(CAppUI::conf("dPcompteRendu CCompteRendu pdf_thumbnails") == 0) {      
+        if (!CAppUI::conf("dPcompteRendu CCompteRendu pdf_thumbnails") || !CAppUI::pref("pdf_and_thumbs")) {      
           $header->height += 20;
         }
       }
@@ -718,7 +718,7 @@ class CCompteRendu extends CDocumentItem {
         $footer->loadContent();
         $footer->_source = "<div id='footer'>$footer->_source</div>";
   
-        if(CAppUI::conf("dPcompteRendu CCompteRendu pdf_thumbnails") == 0) {
+        if (!CAppUI::conf("dPcompteRendu CCompteRendu pdf_thumbnails") || !CAppUI::pref("pdf_and_thumbs")) {
           $footer->height += 20;
         }
       }

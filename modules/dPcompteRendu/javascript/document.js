@@ -138,7 +138,7 @@ var Document = {
     url.addParam("suppressHeaders", 1);
     url.addParam("compte_rendu_id", document_id);
     var sUrl = url.make();
-    oIframe.onload = function() { window.frames[oIframe.id].print();};
+    oIframe.onload = function() { window.frames[oIframe.name].print(); };
     oIframe.src = sUrl;
   },
   
