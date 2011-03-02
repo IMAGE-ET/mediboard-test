@@ -46,6 +46,10 @@ $ds = CSQLDataSource::get("std");
 $query = "SELECT count(`sejour`.`sejour_id`) AS `nb_sejours`,  DATE_FORMAT(`sejour`.`entree`, '%U') AS `period`
           FROM `sejour`";
 
+
+$query .= " LEFT JOIN `operations` ON `operations`.`sejour_id` = `sejour`.`sejour_id` 
+            LEFT JOIN `plagesop` ON `operations`.`plageop_id` = `plagesop`.`plageop_id` ";
+
 if($service_id){
   $query .= " LEFT JOIN `affectation` ON `sejour`.`sejour_id` = `affectation`.`sejour_id`
 	            LEFT JOIN `lit` ON `affectation`.`lit_id` = `lit`.`lit_id`
@@ -60,9 +64,15 @@ $query .= " WHERE DATE(`sejour`.`entree`) BETWEEN '$date_min' AND '$date_max'
 if($type){
 	$query .= " AND `sejour`.`type` = '$type'";
 }
-					
-if($praticien_id && !$praticien->_is_anesth){
-  $query .= " AND `sejour`.`praticien_id` = '$praticien_id'";	
+
+if($praticien_id){
+	if(!$praticien->_is_anesth){
+		$query .= " AND `sejour`.`praticien_id` = '$praticien_id'";  
+	} else {
+		$query .= " AND ((operations.anesth_id = '$praticien_id' OR (plagesop.anesth_id = '$praticien_id' AND (operations.anesth_id = '0' OR operations.anesth_id IS NULL)))
+		            OR `operations`.`sejour_id` IS NULL)";
+		// intrev qui a l'anesth ou IS NULL
+	}
 }
 
 if($service_id){
@@ -90,6 +100,8 @@ foreach($_results_sejours as $_result_sejour){
 
 $query_presc = "SELECT COUNT(DISTINCT `sejour`.`sejour_id`) as `nb_sejours`, DATE_FORMAT(`sejour`.`entree`, '%U') as `period`
                FROM `sejour`
+							 LEFT JOIN `operations` ON `operations`.`sejour_id` = `sejour`.`sejour_id`
+							 LEFT JOIN `plagesop` ON `operations`.`plageop_id` = `plagesop`.`plageop_id`
                LEFT JOIN `prescription` ON (`sejour`.`sejour_id` = `prescription`.`object_id` AND `prescription`.`type` = 'sejour')";
 							
 if($praticien_id){
@@ -124,8 +136,14 @@ if($service_id){
   $query_presc .= " AND `service`.`service_id` = '$service_id'";
 }
 						
-if($praticien_id && !$praticien->_is_anesth){
-  $query_presc .= " AND `sejour`.`praticien_id` = '$praticien_id'"; 
+if($praticien_id){
+  if(!$praticien->_is_anesth){
+    $query_presc .= " AND `sejour`.`praticien_id` = '$praticien_id'";  
+  } else {
+    $query_presc .= " AND ((operations.anesth_id = '$praticien_id' OR (plagesop.anesth_id = '$praticien_id' AND (operations.anesth_id = '0' OR operations.anesth_id IS NULL)))
+                OR `operations`.`sejour_id` IS NULL)";
+    // intrev qui a l'anesth ou IS NULL
+  }
 }
 					
 $query_presc .= " GROUP BY `period`
