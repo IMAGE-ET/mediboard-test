@@ -12,9 +12,12 @@
 function errorHandler(errorMsg, url, lineNumber, exception) {
   try {
     exception = exception || new Error(errorMsg, url, lineNumber);
-    try {
-      console.error(exception);
-    } catch (e) {}
+    
+    if (Prototype.Browser.IE) {
+      try {
+        console.error(exception);
+      } catch (e) {}
+    }
     
     new Ajax.Request("index.php?m=system&a=js_error_handler&suppressHeaders=1&dialog=1", {
       method: 'post',
@@ -23,12 +26,13 @@ function errorHandler(errorMsg, url, lineNumber, exception) {
         errorMsg: errorMsg + _IEAdditionalInfo,
         url: url,
         lineNumber: lineNumber,
-        stack: exception.stack || exception.stacktrace || printStackTrace(),
+        stack: exception.stack || exception.stacktrace,// || printStackTrace(),
         location: location.href
       }).toQueryString()
     });
   } catch (e) {}
-  return true;
+	
+  return Prototype.Browser.WebKit; // Webkit handles this differently
 };
 
 /*
@@ -102,6 +106,9 @@ if (Prototype.Browser.IE) {
       }
     })();
   } catch(e) {}
+}
+else {
+  window.onerror = errorHandler;
 }
 
 // Exclude HTTrack errors
