@@ -48,7 +48,7 @@
          >
     <tr>
       <td colspan="{{$colspan}}">
-        <a href="#1" style="margin-left: {{$level*18}}px; {{if $_tag.parent->color}}border-color: #{{$_tag.parent->color}};{{/if}}" 
+        <a href="#unfold.{{$_tag.parent->_guid}}" style="margin-left: {{$level*18}}px; {{if $_tag.parent->color}}border-color: #{{$_tag.parent->color}};{{/if}}" 
            class="tree-folding" onclick="$(this).up('tbody').toggleClassName('opened'); Tag.setNodeVisibility(this); Tag.loadElements(this); return false;">
           {{$_tag.parent->name}}
         </a>
@@ -63,7 +63,7 @@
     <tbody data-tag_id="none-{{$object_class}}" class="tag-none" data-name="__none__">
       <tr>
         <td colspan="{{$colspan}}">
-          <a href="#1" class="tree-folding" onclick="$(this).up('tbody').toggleClassName('opened'); Tag.setNodeVisibility(this); Tag.loadElements(this); return false;">
+          <a href="#unfold.none" class="tree-folding" onclick="$(this).up('tbody').toggleClassName('opened'); Tag.setNodeVisibility(this); Tag.loadElements(this); return false;">
             Non classé
           </a>
         </td>

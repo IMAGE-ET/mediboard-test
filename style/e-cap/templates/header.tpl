@@ -106,7 +106,7 @@ var Menu = {
   
 {{else}}
 <td id="topMenu">
-<table id="header" cellspacing="0">
+<table id="header">
   <tr>
     <td id="mainHeader">
       <table>

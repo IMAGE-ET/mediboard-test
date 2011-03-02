@@ -3,7 +3,6 @@
 <head>
   <!-- Content-Type meta tags need to be the first in the page (even before title) -->
   <meta http-equiv="Content-Type" content="text/html;charset={{$localeInfo.charset}}" />
-  <meta http-equiv="X-UA-Compatible" content="IE=8" /> <!-- IE8+ mode -->
   <meta name="viewport" content="width=device-width, maximum-scale=1.0, minimum-scale=1.0" />
   
   <title>
@@ -24,7 +23,7 @@
   <!-- iOS specific -->
   {{* Can't use the "apple-mobile-web-app-capable" meta tags because any hyperlink will be opened in Safari *}}
   <link rel="apple-touch-icon" href="images/icons/apple-touch-icon.png?{{$version.build}}" />
-	<meta name="format-detection" content="telephone=no" />
+  <meta name="format-detection" content="telephone=no" />
   
   <!-- IE9 specific JumpLists -->
   {{if $browser.name == "msie"}}
@@ -157,43 +156,43 @@
 <!-- Mails -->
 {{if !$dialog && @count($mails)}}
 <div class="small-mail" onmouseover="ObjectTooltip.createDOM(this, 'mail-details');">
-	<label>
-		{{tr}}CMbMail{{/tr}} :
-		
-		{{if array_key_exists("received", $mails)}}
-			{{$mails.received|@count}} {{tr}}CMbMail._to_state.received{{/tr}}
-		{{/if}}
-		
-		{{if count($mails) == 2}}&ndash;{{/if}}
-		
-		{{if array_key_exists("starred", $mails)}}
-			{{$mails.starred|@count}} {{tr}}CMbMail._to_state.starred{{/tr}}
-		{{/if}}
-	</label>
+  <label>
+    {{tr}}CMbMail{{/tr}} :
+    
+    {{if array_key_exists("received", $mails)}}
+      {{$mails.received|@count}} {{tr}}CMbMail._to_state.received{{/tr}}
+    {{/if}}
+    
+    {{if count($mails) == 2}}&ndash;{{/if}}
+    
+    {{if array_key_exists("starred", $mails)}}
+      {{$mails.starred|@count}} {{tr}}CMbMail._to_state.starred{{/tr}}
+    {{/if}}
+  </label>
 </div>
 
 <div id="mail-details" style="display: none;">
-	<table class="tbl">
-	{{foreach from=$mails key=to_state item=_mails}}
-		<tr>
-		  <th class="category" colspan="10">{{tr}}CMbMail._to_state.{{$to_state}}{{/tr}}</th>
-		</tr>
-		{{foreach from=$_mails item=_mail}}
-			<tr>
-			  <td>
-			  	<div class="mediuser" style="border-color: #{{$_mail->_ref_user_from->_ref_function->color}};">{{$_mail->_ref_user_from}}</div>
-			  </td>
-			  <td>
-			  	<a href="#Read-{{$_mail->_guid}}" onclick="MbMail.edit({{$_mail->_id}})">{{$_mail->subject}}</a>
-			  </td>
-			  <td>
-	        <label title="{{mb_value object=$_mail field=date_sent}}">
-	          {{mb_value object=$_mail field=date_sent format=relative}}
-	        </label>
-			  </td>
-			</tr>
-		{{/foreach}}
-	{{/foreach}}
-	</table>
+  <table class="tbl">
+  {{foreach from=$mails key=to_state item=_mails}}
+    <tr>
+      <th class="category" colspan="10">{{tr}}CMbMail._to_state.{{$to_state}}{{/tr}}</th>
+    </tr>
+    {{foreach from=$_mails item=_mail}}
+      <tr>
+        <td>
+          <div class="mediuser" style="border-color: #{{$_mail->_ref_user_from->_ref_function->color}};">{{$_mail->_ref_user_from}}</div>
+        </td>
+        <td>
+          <a href="#Read-{{$_mail->_guid}}" onclick="MbMail.edit({{$_mail->_id}})">{{$_mail->subject}}</a>
+        </td>
+        <td>
+          <label title="{{mb_value object=$_mail field=date_sent}}">
+            {{mb_value object=$_mail field=date_sent format=relative}}
+          </label>
+        </td>
+      </tr>
+    {{/foreach}}
+  {{/foreach}}
+  </table>
 </div>
 {{/if}}

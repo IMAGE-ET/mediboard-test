@@ -4,7 +4,7 @@
 
 {{include file="../../mediboard/templates/message.tpl"}}
 
-<table id="header" cellspacing="0">
+<table id="header">
   <tr>
     <td id="mainHeader">
       <table>

@@ -36,7 +36,7 @@ Main.add(function(){
 });
 </script>
 
-<form name="edit-{{$object->_guid}}" method="post" action="?" onsubmit="return onSubmitFormAjax(this)">
+<form name="edit-{{$object->_guid}}" data-object_guid="{{$object->_guid}}" method="post" action="?" onsubmit="return onSubmitFormAjax(this)">
   {{mb_class object=$object}}
   {{mb_key object=$object}}
   

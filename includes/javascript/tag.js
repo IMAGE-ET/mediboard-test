@@ -87,6 +87,7 @@ var Tag = {
 		
 		var url = new Url('system', 'ajax_list_objects_by_tag');
 		url.addParam("tag_id", tagId);
+		url.addParam("insertion", insertion);
 		
 		if (columns && columns.length) {
 			url.addParam("col[]", columns, true);

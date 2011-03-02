@@ -12,8 +12,11 @@ class CExListItem extends CMbObject {
   var $ex_list_item_id = null;
   
   var $list_id         = null;
+  var $concept_id      = null;
+  var $field_id        = null;
+	
+  var $code            = null;
   var $name            = null;
-  var $value           = null;
   
   var $_ref_list       = null;
 
@@ -21,26 +24,33 @@ class CExListItem extends CMbObject {
     $spec = parent::getSpec();
     $spec->table = "ex_list_item";
     $spec->key   = "ex_list_item_id";
-    $spec->uniques["value"] = array("list_id", "value");
     $spec->uniques["name"]  = array("list_id", "name");
+    $spec->xor["owner"] = array("list_id", "concept_id", "field_id");
     return $spec;
   }
 
   function getProps() {
     $props = parent::getProps();
-    $props["list_id"] = "ref notNull class|CExList cascade";
-    $props["name"]    = "str notNull";
-    $props["value"]   = "num";
+    $props["list_id"]    = "ref class|CExList cascade";
+    $props["concept_id"] = "ref class|CExConcept cascade";
+    $props["field_id"]   = "ref class|CExClassField cascade";
+    $props["code"]       = "str maxLength|20";
+    $props["name"]       = "str notNull";
     return $props;
   }
 	
-	function loadRefList($cache = true){
+	function loadRefList($cache = true) {
 		return $this->_ref_list = $this->loadFwdRef("list_id", $cache);
 	}
   
   function updateFormFields(){
     parent::updateFormFields();
+		
 		$list = $this->loadRefList();
-    $this->_view = "{$list->_view} / $this->name [$this->value]";
+    $this->_view = "{$list->_view} / $this->name";
+		
+		if ($this->code != null) {
+			$this->_view .= " [$this->code]";
+		}
   }
 }

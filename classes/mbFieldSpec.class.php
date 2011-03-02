@@ -683,6 +683,41 @@ class CMbFieldSpec {
   }
 
   function getDBSpec(){}
+	
+	static function parseDBSpec($db_spec, $reduce_strings = false) {
+	  $props = array(
+	    'type' => null,
+	    'params' => null,
+	    'unsigned' => null,
+	    'zerofill' => null,
+	  );
+		
+	  $props['type']    = $db_spec;
+	  $props['unsigned'] = stristr($db_spec, 'unsigned') != false;
+	  $props['zerofill'] = stristr($db_spec, 'zerofill') != false;
+	  $props['type'] = trim(str_ireplace(array('unsigned', 'zerofill'), '', $props['type']));
+	  $props['params']  = null;
+		
+	  if ($pos = strpos($props['type'], '(')) {
+	    $props['params'] = explode(',', substr($props['type'], $pos+1, strpos($props['type'], ')')-$pos-1));
+	    $props['params'] = array_map('trim', $props['params']);
+			
+			if ($reduce_strings) {
+				foreach($props['params'] as &$v) {
+					if ($v[0] === "'") 
+					  $v = trim($v, "'");
+					else 
+					  $v = (int)$v;
+				}
+			}
+			
+	    $props['type']   = substr($props['type'], 0, $pos);
+	  }
+		
+	  $props['type'] = strtoupper(trim($props['type']));
+		
+	  return $props;
+	}
 
   function getFullDBSpec(){
     $object = new $this->className;

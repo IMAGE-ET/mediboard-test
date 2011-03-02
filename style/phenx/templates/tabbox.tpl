@@ -1,5 +1,5 @@
 {{if !$fintab}}
-<table id="tabmenu" cellspacing="0">
+<table id="tabmenu">
   <tr>
     {{foreach from=$tabs item=currTabBox key=keyTabBox}}
       {{if $tab == $currTabBox}}

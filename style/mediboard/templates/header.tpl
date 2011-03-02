@@ -19,7 +19,7 @@ var Menu = {
 }
 </script>
 
-<table id="header" cellspacing="0"><!-- IE Hack: cellspacing should be useless -->
+<table id="header">
 </table>
 {{/if}}
 

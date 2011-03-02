@@ -8,7 +8,9 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
  */
 
-class CExClassField extends CMbObject {
+CAppUI::requireModuleClass("system", "ex_list_items_owner");
+
+class CExClassField extends CExListItemsOwner {
   var $ex_class_field_id = null;
   
   var $ex_class_id = null;
@@ -65,7 +67,7 @@ class CExClassField extends CMbObject {
   function getProps() {
     $props = parent::getProps();
     $props["ex_class_id"] = "ref class|CExClass cascade";
-    $props["concept_id"]  = "ref class|CExClassField";
+    $props["concept_id"]  = "ref class|CExConcept";
     $props["name"]        = "str notNull protected canonical";
     $props["prop"]        = "str notNull";
     
@@ -83,7 +85,8 @@ class CExClassField extends CMbObject {
 	
   function getBackProps() {
     $backProps = parent::getBackProps();
-    $backProps["class_fields"] = "CExClassField concept_id";
+		$backProps["enum_translations"] = "CExClassFieldEnumTranslation ex_class_field_id";
+		$backProps["field_translations"] = "CExClassFieldTranslation ex_class_field_id";
     return $backProps;
   }
   
@@ -148,8 +151,28 @@ class CExClassField extends CMbObject {
     return $this->_spec_object = CMbFieldSpecFact::getSpecWithClassName("CExObject", $this->name, $this->prop);
   }
   
-  function getSQLSpec(){
-    return $this->getSpecObject()->getFullDBSpec();
+  function getSQLSpec($union = true){
+  	$spec_obj = $this->getSpecObject();
+		$db_spec = $spec_obj->getFullDBSpec();
+		
+		if ($union) {
+			$ds = $this->_spec->ds;
+      $db_parsed = CMbFieldSpec::parseDBSpec($db_spec, true);
+			
+		  if ($db_parsed['type'] === "ENUM") {
+				$prop_parsed = $ds->getDBstruct($this->getTableName(), $this->name, true);
+				
+        mbTrace($prop_parsed, '$prop_parsed');
+        mbTrace($db_parsed, '$db_parsed');
+				
+				$db_parsed['params'] = array_unique(array_merge($db_parsed['params'], $prop_parsed['params']));
+				
+        $spec_obj->list = implode("|", $db_parsed['params']);
+        $db_spec = $spec_obj->getFullDBSpec();
+			}
+		}
+		
+    return $db_spec;
   }
   
   function store(){

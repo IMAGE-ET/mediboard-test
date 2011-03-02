@@ -20,11 +20,11 @@ updateFieldSpec = function(){
   var fields = {};
   var str = "{{$spec->getSpecType()}}";
   
-  var translations = data["__enum[]"];
+  /*var translations = data["__enum[]"];
   if (translations) {
     translations.pop(); // pour supprimer l'element vide
     delete data["__enum[]"];
-  }
+  }*/
   
   Object.keys(data).each(function(k){
     var d = data[k];
@@ -56,8 +56,8 @@ updateFieldSpec = function(){
   var fieldForm = getForm("{{$form_name}}");
   $V(fieldForm.prop, str);
   
-  if (translations)
-    $V(fieldForm._enum_translation, Object.toJSON(translations));
+  /*if (translations)
+    $V(fieldForm._enum_translation, Object.toJSON(translations));*/
 }
 
 avoidSpaces = function(event) {
@@ -155,36 +155,48 @@ Main.add(function(){
           
         {{* list *}}
         {{elseif $_type == "list"}}
-				  <table class="tbl" style="width: 1%;">
-					  <col class="narrow" />
-						
-				  	<tr>
-              <th></th>
-              <th>Valeur</th>
-				  		<th>Nom</th>
-				  	</tr>
-						
-          {{foreach from=$spec->_list key=_key item=_value}}
-            <tr>
-              <td>
-                <button type="button" class="cancel notext" tabindex="1000" style="margin: -1px;" onclick="return confirmDelEnum(this)">
-								  {{tr}}Delete{{/tr}}
-								</button>
-              </td>
-            	<td style="text-align: right;">
-							  {{$_value}}
-								<input type="hidden" name="{{$_name}}[]" class="internal" value="{{$_value}}" />
-							</td>
-              <td>{{$spec->_locales.$_value}}</td>
-            </tr>
-					{{foreachelse}}
-					  <tr>
-              <td><button type="button" class="cancel notext" disabled="disabled">{{tr}}Delete{{/tr}}</button></td>
-              <td colspan="2" class="empty">Aucun élement</td>
-					  </tr>
-          {{/foreach}}
-	        </table>
-          
+				  
+					{{if $ex_list->_id}}
+						<table class="tbl" style="width: 1%;">
+						  <col class="narrow" />
+							
+	            <tr>
+	              <th {{if $app->user_prefs.INFOSYSTEM == 0}}style="display: none;"{{/if}}>Valeur</th>
+	              {{if $ex_list->coded}}
+								  <th>Code</th>
+								{{/if}}
+	              <th>Nom</th>
+	            </tr>
+	            
+	            {{foreach from=$spec->_list key=_key item=_value}}
+	              <tr>
+	                <td style="text-align: right; {{if $app->user_prefs.INFOSYSTEM == 0}}display: none;{{/if}}">
+	                  {{$_value}}
+	                  <input type="hidden" name="{{$_name}}[]" class="internal" value="{{$_value}}" />
+	                </td>
+	                {{if $ex_list->coded}}
+									  <td>
+									  	{{$ex_list->_ref_items.$_value->code}}
+										</td>
+									{{/if}}
+	                <td>{{$spec->_locales.$_value}}</td>
+	              </tr>
+	            {{foreachelse}}
+	              <tr>
+	                <td {{if $app->user_prefs.INFOSYSTEM == 0}}style="display: none;"{{/if}}></td>
+	                <td colspan="{{$ex_list->coded|ternary:3:2}}" class="empty">Aucun élément</td>
+	              </tr>
+	            {{/foreach}}
+		        </table>
+					{{else}}
+					  {{if $owner && $owner->_id}}
+              {{foreach from=$spec->_list key=_key item=_value}}
+                <input type="hidden" name="{{$_name}}[]" class="internal" value="{{$_value}}" />
+              {{/foreach}}
+					    <em>Voir "{{tr}}CExList-back-list_items{{/tr}}"</em>
+						{{/if}}
+          {{/if}}
+					 
         {{* class *}}
         {{elseif $_type == "class"}}
           <select name="{{$_name}}">
@@ -199,3 +211,7 @@ Main.add(function(){
   {{/foreach}}
 </table>
 </form>
+
+{{if $spec instanceof CEnumSpec && !$ex_list->_id && $owner && $owner->_id}}
+  {{mb_include module=system template=inc_ex_list_item_edit object=$owner}}
+{{/if}}

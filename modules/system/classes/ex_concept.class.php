@@ -8,7 +8,9 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
  */
 
-class CExConcept extends CMbObject {
+CAppUI::requireModuleClass("system", "ex_list_items_owner");
+
+class CExConcept extends CExListItemsOwner {
   var $ex_concept_id = null;
   
   var $ex_list_id = null;
@@ -16,6 +18,7 @@ class CExConcept extends CMbObject {
   var $prop = null; 
   
   var $_ref_ex_list = null;
+	var $_ref_class_fields = null;
   var $_concept_spec = null;
 
   function getSpec() {
@@ -44,6 +47,8 @@ class CExConcept extends CMbObject {
     parent::updateFormFields();
     
     $this->_view = $this->name;
+		
+    $this->updatePropFromList();
     
     if ($this->ex_list_id) {
       $list = $this->loadRefExList();
@@ -54,10 +59,41 @@ class CExConcept extends CMbObject {
       $this->_view .= " [".CAppUI::tr("CMbFieldSpec.type.$spec_type")."]";
 		}
   }
+	
+	function updatePropFromList(){
+		$spec = $this->loadConceptSpec();
+		if (!$spec instanceof CEnumSpec) return;
+		
+		if ($this->ex_list_id) {
+	    $list = $this->loadRefExList();
+			$ids = $list->getItemsKeys();
+		}
+		else {
+			$ids = $this->getItemsKeys();
+		}
+		
+		$suffix = " list|".implode("|", $ids);
+		$pattern = "/( list\|[^ ]+)/";
+		
+		if (!preg_match($pattern, $this->prop)) {
+			$this->prop .= $suffix;
+		}
+		else {
+			$this->prop = preg_replace($pattern, $suffix, $this->prop);
+		}
+	}
   
+	/**
+	 * @param bool $cache [optional]
+	 * @return CExList
+	 */
   function loadRefExList($cache = true){
     return $this->_ref_ex_list = $this->loadFwdRef("ex_list_id", $cache);
   }
+	
+	function loadRefClassFields(){
+		return $this->_ref_class_fields = $this->loadBackRefs("class_fields");
+	}
   
   function loadView(){
     parent::loadView();
@@ -120,6 +156,22 @@ class CExConcept extends CMbObject {
     
     return ($key_a === false ? 1000 : $key_a) - ($key_b === false ? 1000 : $key_b);
   }
+	
+	function store(){
+		$prop_changed = $this->fieldModified("prop");
+		
+		if ($msg = parent::store()){
+			return $msg;
+		}
+		
+		if ($prop_changed) {
+			$fields = $this->loadRefClassFields();
+			foreach($fields as $_field) {
+				$_field->prop = $this->prop;
+			}
+		}
+		
+	}
   
   /**
    * @param string $prop

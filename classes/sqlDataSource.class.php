@@ -596,6 +596,45 @@ abstract class CSQLDataSource {
     }
     return strtr($query, $trans);
   }
+	
+	function getDBstruct($table, $field = null, $reduce_strings = false){
+    $list_fields = $this->loadList("SHOW COLUMNS FROM `{$table}`");
+		$fields = array();
+    
+    foreach($list_fields as $curr_field){
+    	if (!$field) continue;
+			
+    	$field_name = $curr_field['Field'];
+      $fields[$field_name] = array();
+			
+      $_field =& $fields[$field_name];
+      
+      $props = CMbFieldSpec::parseDBSpec($curr_field['Type']);
+      
+      $_field['type']     = $props['type'];
+      $_field['unsigned'] = $props['unsigned'];
+      $_field['zerofill'] = $props['zerofill'];
+      $_field['null']     = ($curr_field['Null'] != 'NO');
+      $_field['default']  = $curr_field['Default'];
+      $_field['index']    = null;
+      $_field['extra']    = $curr_field['Extra'];
+			
+			if ($reduce_strings && is_array($props['params'])) {
+        foreach($props['params'] as &$v) {
+          if ($v[0] === "'") 
+            $v = trim($v, "'");
+          else 
+            $v = (int)$v;
+        }
+			}
+			
+      $_field['params']   = $props['params'];
+			
+			if ($field === $field_name) return $_field;
+    }
+		
+		return $fields;
+	}
 
   /**
    * Prepares an IN where clause with a given array of values

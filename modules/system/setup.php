@@ -428,10 +428,30 @@ class CSetupsystem extends CSetup {
     $this->addQuery($query);
     $query = "ALTER TABLE `ex_concept` ADD INDEX (`ex_list_id`);";
     $this->addQuery($query);
-    
+
     $this->makeRevision("1.0.46");
     $this->addPrefQuery("pdf_and_thumbs", "1");
     
-    $this->mod_version = "1.0.47";
+    $this->makeRevision("1.0.47");
+    $query = "ALTER TABLE `ex_list` 
+              ADD `coded` ENUM ('0','1') NOT NULL DEFAULT '0';";
+    $this->addQuery($query);
+    $query = "ALTER TABLE `ex_list_item` 
+              ADD `code` CHAR (20);";
+    $this->addQuery($query);
+    $query = "ALTER TABLE `ex_list_item` 
+              DROP `value`";
+    $this->addQuery($query);
+    $query = "ALTER TABLE `ex_list_item` 
+              CHANGE `list_id` `list_id` INT (11) UNSIGNED,
+              ADD `concept_id` INT (11) UNSIGNED,
+              ADD `field_id` INT (11) UNSIGNED";
+    $this->addQuery($query);
+    $query = "ALTER TABLE `ex_list_item` 
+              ADD INDEX (`concept_id`),
+              ADD INDEX (`field_id`);";
+    $this->addQuery($query);
+    
+    $this->mod_version = "1.0.48";
   }
 }

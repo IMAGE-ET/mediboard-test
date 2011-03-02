@@ -266,6 +266,7 @@ ExConceptSpec = {
     url.addParam("prop", prop);
     url.addParam("ex_list_id", ex_list_id);
     url.addParam("form_name", form.getAttribute("name"));
+    url.addParam("owner_guid", form.get("object_guid"));
     url.requestUpdate("ExConcept-spec-editor");
   }
 };

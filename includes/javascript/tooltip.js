@@ -176,7 +176,7 @@ Object.extend(ObjectTooltip, {
       action: "httpreq_vw_object",
       sClass: "tooltip",
       width: 300,
-      height: 100
+      height: 50
     },
     identifiers: {
       module: "dPsante400",

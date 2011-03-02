@@ -2,7 +2,7 @@
 	{{tr}}{{$object->_class_name}}-title-create{{/tr}}
 </button>
 
-<form name="edit-{{$object->_guid}}" method="post" action="?" onsubmit="return onSubmitFormAjax(this)">
+<form name="edit-{{$object->_guid}}" data-object_guid="{{$object->_guid}}" method="post" action="?" onsubmit="return onSubmitFormAjax(this)">
   {{mb_class object=$object}}
   {{mb_key object=$object}}
 	
@@ -16,9 +16,6 @@
 		
 		{{if $object->_id}}
 			{{mb_include module=system template=inc_tag_binder}}
-			<tr>
-				<td colspan="2"><hr /></td>
-			</tr>
     {{/if}}
 		
 		{{foreach from=$object->_specs item=_spec key=_field}}

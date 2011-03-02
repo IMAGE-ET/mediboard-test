@@ -1,4 +1,4 @@
-<table class="tabmenu" cellspacing="0">
+<table class="tabmenu">
   <tr>
     {{foreach from=$tabs item=currTabBox key=keyTabBox}}
     {{if $tab == $currTabBox}}

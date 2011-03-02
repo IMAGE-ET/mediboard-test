@@ -2098,6 +2098,7 @@ class CMbObject {
       "contextes_constante"    => "CConstantesMedicales context_id",
       "modeles_etiquettes"     => "CModeleEtiquette object_id",
       "tag_items"              => "CTagItem object_id",
+      //"ex_objects"             => "CExObject object_id", // NE PAS DECOMMENTER CETTE LIGNE, backref impossible pour le moment (cf. Fabien)
     );
   }
   

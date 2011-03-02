@@ -19,7 +19,7 @@ var Menu = {
 }
 </script>
 
-<table id="header" cellspacing="0">
+<table id="header">
   <tr>
     <td id="menubar">
       <table>

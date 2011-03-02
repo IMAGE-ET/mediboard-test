@@ -13,6 +13,7 @@ CCanDo::checkRead();
 $tag_id   = CValue::get("tag_id");
 $columns  = CValue::get("col");
 $keywords = CValue::get("keywords");
+$insertion = CValue::get("insertion");
 
 $tag = new CTag;
 
@@ -48,6 +49,7 @@ else {
 $smarty = new CSmartyDP();
 $smarty->assign("objects", $objects);
 $smarty->assign("columns", $columns);
+$smarty->assign("insertion", $insertion);
 $smarty->assign("count_children", $count_children);
 $smarty->assign("tag", $tag);
 $smarty->display("inc_list_objects_by_tag.tpl");

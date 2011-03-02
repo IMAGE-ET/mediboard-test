@@ -20,7 +20,16 @@ var MbObject = {
 		if (object_guid) {
 			url.addParam("object_guid", object_guid);
 		}
-		url.requestUpdate(options.target);
+		url.requestUpdate(options.target, {
+			onComplete: function(){
+				var listContainer = $("tag-tree");
+				var lines = listContainer.select("a[data-object_guid="+object_guid+"]").invoke("up", "tr");
+				if (lines.length == 0) return;
+				
+				listContainer.select("tr.selected").invoke("removeClassName", "selected");
+				lines.invoke("addClassName", "selected");
+			}
+		});
 	},
   editCallback: function(id, obj) {
     MbObject.list(obj._class_name);

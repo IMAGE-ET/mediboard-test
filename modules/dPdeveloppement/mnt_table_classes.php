@@ -42,28 +42,6 @@ foreach ($error_types as $type) {
   $types[$type] = !isset($t) || in_array($type, $t);
 }
 
-// Fonction d'extraction des proprietés d'un type SQL (du genre "UNSIGNED INT(11)")
-function extract_props($type) {
-  $props = array(
-    'type' => null,
-    'params' => null,
-    'unsigned' => null,
-    'zerofill' => null,
-  );
-  $props['type']    = $type;
-  $props['unsigned'] = stristr($type, 'unsigned') != false;
-  $props['zerofill'] = stristr($type, 'zerofill') != false;
-  $props['type'] = trim(str_ireplace(array('unsigned', 'zerofill'), '', $props['type']));
-  $props['params']  = null;
-  if ($pos = strpos($props['type'], '(')) {
-    $props['params'] = explode(',', substr($props['type'], $pos+1, strpos($props['type'], ')')-$pos-1));
-    $props['params'] = array_map('trim', $props['params']);
-    $props['type']   = substr($props['type'], 0, $pos);
-  }
-  $props['type'] = strtoupper(trim($props['type']));
-  return $props;
-}
-
 function array_duplicates($array, $field) {
   $ret = array();
   $count = count($array);
@@ -110,7 +88,7 @@ foreach ($list_selected_classes as $curr_class_name) {
     // db fields
     if ($spec = @$object->_specs[$k]) {
       //mbTrace($spec);
-      $class['fields'][$k]['object']['db_spec'] = extract_props($spec->getDBSpec());
+      $class['fields'][$k]['object']['db_spec'] = CMbFieldSpec::parseDBSpec($spec->getDBSpec());
       
       //$specs_obj = $object->getSpecs();
       $db_spec = &$class['fields'][$k]['object']['db_spec'];
@@ -165,7 +143,7 @@ foreach ($list_selected_classes as $curr_class_name) {
 	    }
 	  	$field =& $class['fields'][$curr_field['Field']]['db'];
 	  	
-	  	$props = extract_props($curr_field['Type']);
+	  	$props = CMbFieldSpec::parseDBSpec($curr_field['Type']);
 	  	
 	    $field['type']     = $props['type'];
 	    $field['params']   = $props['params'];

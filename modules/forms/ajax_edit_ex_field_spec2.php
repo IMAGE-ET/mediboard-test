@@ -14,6 +14,15 @@ $prop         = CValue::get("prop");
 $spec_type    = CValue::get("spec_type");
 $form_name    = CValue::get("form_name");
 $ex_list_id   = CValue::get("ex_list_id");
+$owner_guid   = CValue::get("owner_guid");
+
+$ex_list = new CExList;
+if($ex_list_id) {
+  $ex_list->load($ex_list_id);
+}
+
+$owner = CMbObject::loadFromGuid($owner_guid);
+$owner->loadView();
 
 $prop_type = explode(" ", $prop);
 $prop_type = reset($prop_type);
@@ -42,11 +51,7 @@ if ($spec instanceof CEnumSpec) {
 	}
 	
 	if($ex_list_id) {
-	  $ex_list = new CExList;
-	  $ex_list->load($ex_list_id);
-	  
 	  $ex_list->updateEnumSpec($spec);
-		
 		$prop .= " ".implode("|", $spec->_list);
 	}
 }
@@ -87,4 +92,6 @@ $smarty->assign("spec", $spec);
 $smarty->assign("options", $options);
 $smarty->assign("form_name", $form_name);
 $smarty->assign("classes", $classes);
+$smarty->assign("ex_list", $ex_list);
+$smarty->assign("owner", $owner);
 $smarty->display("inc_edit_ex_field_spec2.tpl");

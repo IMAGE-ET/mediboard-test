@@ -8,12 +8,13 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
  */
 
-class CExList extends CMbObject {
+CAppUI::requireModuleClass("system", "ex_list_items_owner");
+
+class CExList extends CExListItemsOwner {
   var $ex_list_id = null;
   
   var $name       = null;
-  
-  var $_ref_items = null;
+  var $coded      = null;
 
   function getSpec() {
     $spec = parent::getSpec();
@@ -25,18 +26,15 @@ class CExList extends CMbObject {
 
   function getProps() {
     $props = parent::getProps();
-    $props["name"] = "str notNull seekable";
+    $props["name"]  = "str notNull seekable";
+    $props["coded"] = "bool notNull default|0";
     return $props;
   }
 
   function getBackProps() {
     $backProps = parent::getBackProps();
-    $backProps["items"] = "CExListItem list_id";
+		$backProps["concepts"] = "CExConcept ex_list_id";
     return $backProps;
-  }
-  
-  function loadRefItems() {
-    return $this->_ref_items = $this->loadBackRefs("items", "value");
   }
   
   function updateFormFields(){
@@ -44,18 +42,13 @@ class CExList extends CMbObject {
     $this->_view = $this->name;
   }
   
-  function loadView(){
-    parent::loadView();
-    $this->loadBackRefs("items", "value");
-  }
-  
   function updateEnumSpec(CEnumSpec $spec){
     $items = $this->loadRefItems();
     $empty = empty($spec->_locales);
     
     foreach($items as $_item) {
-      if (!$empty && !isset($spec->_locales[$_item->value])) continue;
-      $spec->_locales[$_item->value] = $_item->name;
+      if (!$empty && !isset($spec->_locales[$_item->_id])) continue;
+      $spec->_locales[$_item->_id] = $_item->name;
     }
     
     unset($spec->_locales[""]);

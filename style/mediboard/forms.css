@@ -237,7 +237,7 @@ a.button.notext {
 
 button:before,
 a.button:before {
-  line-height: 6px;
+  line-height: 8px;
   margin-right: 1px;
   vertical-align: text-bottom;
 }
