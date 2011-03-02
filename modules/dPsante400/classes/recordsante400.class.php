@@ -184,11 +184,19 @@ class CRecordSante400 {
    * 
    * @param string $valueName DDMMYYYY date value name
    * 
-   * @return string ISO date 
+   * @return string ISO date, null on wrong format
    */
   function consumeDateInverse($valueName) {
     $date = $this->consume($valueName);
-    return preg_replace("/(\d{1,2})(\d{2})(\d{4})/i", "$3-$2-$1", $date);
+		
+    $reg = "/(\d{1,2})(\d{2})(\d{4})/i";
+    
+    // Check format anyway
+    if (!preg_match($reg, $date)) {
+      return null;
+    }
+
+    return preg_replace($reg, "$3-$2-$1", $date);
   }
   
  	/**
@@ -256,7 +264,7 @@ class CRecordSante400 {
    * 
    * @param string $valueName YYYYMMDD date value name
    * 
-   * @return string ISO date 
+   * @return string ISO date, null on wrong format
    */
   function consumeDate($valueName) {
     $date = $this->consume($valueName);
@@ -265,6 +273,12 @@ class CRecordSante400 {
     }
     
     $reg = "/(\d{4})(\d{2})(\d{2})/i";
+		
+		// Check format anyway
+    if (!preg_match($reg, $date)) {
+      return null;
+    }
+
     return preg_replace($reg, "$1-$2-$3", $date);
   }
 
