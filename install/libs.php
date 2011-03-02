@@ -243,12 +243,12 @@ CLibrary::$all[$library->name] = $library;
 $library = new CLibrary;
 $library->name = "CKEditor";
 $library->url = "http://ckeditor.com/";
-$library->fileName = "ckeditor_3.5.tar.gz";
+$library->fileName = "ckeditor_3.5.2.tar.gz";
 $library->description = "Composant Javascript d'édition de texte au format HTML";
 $library->sourceDir = "ckeditor";
 $library->targetDir = "ckeditor";
 $library->versionFile = "ckeditor.js";
-$library->versionString = "Version 3.5";
+$library->versionString = "version:'3.5.2'";
 
 $patch = new CLibraryPatch;
 $patch->dirName = "ckeditor";
