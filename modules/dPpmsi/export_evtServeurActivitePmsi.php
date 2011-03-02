@@ -109,7 +109,7 @@ foreach ($destinataires as $_destinataire) {
               $domGetAcquittement = new CHPrimXMLAcquittementsPMSI();
               break;
           }
-          $domGetAcquittement->loadXML(utf8_decode($acquittement));
+          $domGetAcquittement->loadXML($acquittement);
           $domGetAcquittement->_ref_echange_hprim = $echange_hprim;       
           $doc_valid = $domGetAcquittement->schemaValidate();
           
