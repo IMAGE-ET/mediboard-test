@@ -1,11 +1,14 @@
 <!-- $Id: $ -->
 
+{{mb_default var=selected_guid value=""}}
+
 {{if $object instanceof CSejour}}
 
 {{if $object->group_id == $g || $conf.dPpatients.CPatient.multi_group == "full"}}
-<tr {{if isset($collision_sejour|smarty:nodefaults) && $object->_id == $collision_sejour}}
-      style="border: 2px solid red;"
-    {{/if}}>
+<tr {{if $object->_guid == $selected_guid}} class="selected" {{/if}}
+  {{if isset($collision_sejour|smarty:nodefaults) && $object->_id == $collision_sejour}}
+    style="border: 2px solid red;"
+  {{/if}}>
   <td class="text">
     {{if $object->_canEdit}}
     <a class="actionPat" title="Modifier le séjour" href="?m=dPplanningOp&amp;tab=vw_edit_sejour&amp;sejour_id={{$object->_id}}">
@@ -27,7 +30,7 @@
 </tr>
 
 {{foreach from=$object->_ref_consultations item=_consult}}
-<tr>
+<tr {{if $object->_guid == $selected_guid}} class="selected" {{/if}}>
   <td class="text" style="text-indent: 1em;">
     {{if $_consult->_canEdit}}
     <a class="actionPat" title="Modifier la consultation" href="?m=dPcabinet&amp;tab=edit_planning&amp;consultation_id={{$_consult->_id}}">
@@ -53,7 +56,7 @@
 {{/foreach}}
 
 {{foreach from=$object->_ref_operations item=curr_op}}
-<tr>
+<tr {{if $object->_guid == $selected_guid}} class="selected" {{/if}}>
   <td class="text" style="text-indent: 1em;">
     {{if $curr_op->_canEdit}}
     <a class="actionPat" title="Modifier l'intervention" href="{{$curr_op->_link_editor}}">
@@ -90,7 +93,7 @@
 {{elseif $object instanceof CConsultation}}
 
 {{if $object->_ref_chir->_ref_function->group_id == $g || $conf.dPpatients.CPatient.multi_group == "full"}}
-<tr>
+<tr {{if $object->_guid == $selected_guid}} class="selected" {{/if}}>
   <td class="text">
     {{if $object->_canRead}}
     <a class="actionPat" title="Modifier la consultation" href="?m=dPcabinet&amp;tab=edit_planning&amp;consultation_id={{$object->_id}}">

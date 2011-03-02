@@ -131,7 +131,7 @@ function reloadSejours(checkCollision) {
         </tr>
         <tr>
           <td id="list_sejours">
-            {{include file="inc_list_sejours.tpl"}}
+            {{mb_include template=inc_list_sejours selected_guid=$sejour->_guid}}
           </td>
         </tr>
 
