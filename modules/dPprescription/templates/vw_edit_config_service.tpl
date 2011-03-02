@@ -68,7 +68,7 @@ Main.add(function () {
 		<td>{{$all_configs.$config_id.name}}</td>
 		<td>{{$all_configs.$config_id.default}}</td>
 		<td>
-		  <form name="editConfigService-group-{{$config_id}}">
+		  <form name="editConfigService-group-{{$config_id}}" action="?" method="post">
 		    <input type="hidden" name="m" value="{{$m}}" />
 		    <input type="hidden" name="dosql" value="do_config_service_aed" />
 		    <input type="hidden" name="name" value="{{$config_group->name}}" />
@@ -76,12 +76,12 @@ Main.add(function () {
 		    <input type="hidden" name="config_service_id" value="{{$config_group->_id}}" />
 		    <input type="hidden" name="callback" value="updateId" />
 		    <input type="text" name="value" value="{{$config_group->value}}" onchange="$V(document.selService.refresh_form, 'editConfigService-group-{{$config_id}}'); submitFormAjax(this.form, 'systemMsg');"/>
-		    <button type="button" class="tick notext" onclick="" />
+		    <button type="button" class="tick notext" onclick=""></button>
 		  </form>
 		</td>
 		{{if $service_id}}
 		<td>
-		  <form name="editconfigService-service-{{$config_id}}">
+		  <form name="editconfigService-service-{{$config_id}}" action="?" method="post">
 		    <input type="hidden" name="m" value="{{$m}}" />
 		    <input type="hidden" name="dosql" value="do_config_service_aed" />
 		    <input type="hidden" name="name" value="{{$config_service->name}}" />
@@ -89,7 +89,7 @@ Main.add(function () {
 		    <input type="hidden" name="config_service_id" value="{{$config_service->_id}}" />
 		    <input type="hidden" name="callback" value="updateId" />
 		    <input type="text" name="value" value="{{$config_service->value}}" onchange="$V(document.selService.refresh_form, 'editconfigService-service-{{$config_id}}'); submitFormAjax(this.form, 'systemMsg');"/>
-		    <button type="button" class="tick notext" onclick="" />
+		    <button type="button" class="tick notext" onclick=""></button>
 		  </form>
   	</td>
   	{{/if}}
