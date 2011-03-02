@@ -42,8 +42,15 @@ if (!$echange_hprim_id) {
     if ($dest_hprim->actif) {
       $source = CExchangeSource::get("$dest_hprim->_guid-evenementPatient");
       $source->setData($notification->_message);
-      $source->send();
-      $acquittement = $source->receive();
+      try {
+        $source->send();
+      } catch(Exception $e) {
+        $notification->date_echange = "";
+        $notification->store();
+        continue;
+      }
+      
+      $acquittement = $source->getACQ();
       
       if ($acquittement) {
         $domGetAcquittement = new CHPrimXMLAcquittementsPatients();
@@ -75,7 +82,7 @@ if (!$echange_hprim_id) {
   $source = CExchangeSource::get("$dest_hprim->_guid-evenementPatient");
   $source->setData($echange_hprim->_message);
   $source->send();
-  $acquittement = $source->receive();
+  $acquittement = $source->getACQ();
   
   if ($acquittement) {
     $domGetAcquittement = new CHPrimXMLAcquittementsPatients();
