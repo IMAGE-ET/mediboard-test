@@ -1,0 +1,226 @@
+<?php /* $Id$ */
+
+/**
+ * @package Mediboard
+ * @subpackage forms
+ * @version $Revision$
+ * @author SARL OpenXtrem
+ * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ */
+
+CCanDo::checkEdit();
+
+$object_class = CValue::post("object_class");
+$file = CValue::read($_FILES, 'import');
+$separator = CValue::post("separator", ',');
+$enclosure = CValue::post("enclosure", '"');
+
+$prop_map = array(
+  "binaire" => "bool",
+  "binaire ssq" => "bool",
+  "binaire / ssq" => "bool",
+	
+  "liste fermée" => "enum",
+  "liste fermée ssq" => "enum",
+  "liste fermée / ssq" => "enum",
+	
+  "texte court" => "str",
+  "texte long" => "text",
+  "date/heure" => "dateTime",
+  "timestamp" => "dateTime",
+	
+  "numérique" => "float",
+);
+
+if (!$object_class) {
+  CAppUI::setMsg("Veuillez choisir un type d'objet", UI_MSG_WARNING);
+}
+else {
+
+	if (!$file) {
+		CAppUI::setMsg("Aucun fichier fourni", UI_MSG_WARNING);
+	}
+	else {
+		CMbObject::$useObjectCache = false;
+		$fp = fopen($file['tmp_name'], 'r');
+		
+		switch ($object_class) {
+			
+			////////////////// LIST ///////////////////////
+			case "CExList":
+				$keys = array("list_name", "list_coded", "item_code", "item_name");
+				$multiline = array("list_name", "list_coded");
+				$line = array_fill_keys($keys, "");
+				
+	      while($current_line = fgetcsv($fp, null, $separator, $enclosure)) {
+					$current_line = array_map("trim", $current_line);
+          $current_line = array_combine($keys, $current_line);
+					
+					foreach($current_line as $_key => $_value) {
+						if (in_array($_key, $multiline) && $_value == "") {
+							$current_line[$_key] = $line[$_key];
+						}
+					}
+					
+					$line = $current_line;
+					
+					// LIST
+          $list = new CExList;
+          $ds = $list->_spec->ds;
+          $where = array(
+            "name" => $ds->prepare("=%", $line["list_name"]),
+          );
+          
+					$list->loadObject($where);
+					
+          if (!$list->_id) {
+            $list->name = $line["list_name"];
+            $list->coded = (($line["item_code"] != "") ? 1 : 0);
+            
+            if ($msg = $list->store()) {
+              CAppUI::setMsg($msg, UI_MSG_WARNING);
+              continue;
+            }
+          }
+					
+					// LIST ITEM
+					$list_item = new CExListItem;
+          $ds = $list_item->_spec->ds;
+          $where = array(
+            "list_id" => $ds->prepare("=%", $list->_id),
+            "name"    => $ds->prepare("=%", $line["item_name"]),
+          );
+          
+					$list_item->loadObject($where);
+					
+          if (!$list_item->_id) {
+            $list_item->list_id = $list->_id;
+            $list_item->name = $line["item_name"];
+            $list_item->code = $line["item_code"];
+            
+            if ($msg = $list_item->store()) {
+              CAppUI::setMsg($msg, UI_MSG_WARNING);
+              continue;
+            }
+          }
+				}
+				
+			break;
+			
+			////////////////// CONCEPT ///////////////////////
+			case "CExConcept":
+        $keys = array("tag_name_1", "tag_name_2", "concept_name", "concept_type", "list_name", "form");
+        $multiline = array("tag_name_1", "tag_name_2");
+        $line = array_fill_keys($keys, "");
+        
+        while($current_line = fgetcsv($fp, null, $separator, $enclosure)) {
+          $current_line = array_slice($current_line, 0, count($keys));
+          $current_line = array_map("trim", $current_line);
+          $current_line = array_combine($keys, $current_line);
+					
+          
+          foreach($current_line as $_key => $_value) {
+            if (in_array($_key, $multiline) && $_value == "") {
+              $current_line[$_key] = $line[$_key];
+            }
+          }
+          
+          $line = $current_line;
+          
+          // TAG LEVEL 1
+          $tag1 = new CTag;
+          $ds = $tag1->_spec->ds;
+          $where = array(
+            "name"         => $ds->prepare("=%", $line["tag_name_1"]),
+            "object_class" => $ds->prepare("=%", $object_class),
+          );
+          
+          $tag1->loadObject($where);
+          
+          if (!$tag1->_id) {
+            $tag1->name = $line["tag_name_1"];
+            $tag1->object_class = $object_class;
+            
+            if ($msg = $tag1->store()) {
+              CAppUI::setMsg($msg, UI_MSG_WARNING);
+              continue;
+            }
+          }
+          
+          // TAG LEVEL 2
+          $tag2 = new CTag;
+          $ds = $tag2->_spec->ds;
+          $where = array(
+            "name"         => $ds->prepare("=%", $line["tag_name_2"]),
+            "object_class" => $ds->prepare("=%", $object_class),
+          );
+          
+          $tag2->loadObject($where);
+          
+          if (!$tag2->_id) {
+            $tag2->name = $line["tag_name_2"];
+            $tag2->object_class = $object_class;
+            $tag2->parent_id = $tag1->_id;
+            
+            if ($msg = $tag2->store()) {
+              CAppUI::setMsg($msg, UI_MSG_WARNING);
+              continue;
+            }
+          }
+          
+          // CONCEPT
+					$concept_prop = CValue::read($prop_map, CMbString::lower($line["concept_type"]));
+					if (!$concept_prop) {
+						CAppUI::setMsg("Type de concept invalide : ".$line["concept_type"], UI_MSG_WARNING);
+						continue;
+					}
+					
+          $concept = new CExConcept;
+          $ds = $concept->_spec->ds;
+          $where = array(
+            "name"         => $ds->prepare("=%", $line["concept_name"]),
+          );
+          
+          $concept->loadObject($where);
+          
+          //if (!$concept->_id) {
+            $concept->name = $line["concept_name"];
+            $concept->prop = $concept_prop;
+						
+						if ($line["list_name"]) {
+							$_list = new CExList;
+					    $_list->name = $line["list_name"];
+							$_list->loadMatchingObject();
+							$concept->ex_list_id = $_list->_id; 
+						}
+            
+            if ($msg = $concept->store()) {
+              CAppUI::setMsg($msg, UI_MSG_WARNING);
+              continue;
+            }
+          //}
+					
+					// TAG BINDING
+          $tag_item = new CTagItem;
+          $tag_item->setObject($concept);
+					$tag_item->tag_id = $tag2->_id;
+					
+					if (!$tag_item->loadMatchingObject()) {
+						if ($msg = $tag_item->store()) {
+              CAppUI::setMsg($msg, UI_MSG_WARNING);
+						}
+					}
+        }
+				
+      break;
+		}
+		
+		fclose($fp);
+  }
+}
+
+
+// Création du template
+$smarty = new CSmartyDP();
+$smarty->assign("message", CAppUI::getMsg());
+$smarty->display("inc_import.tpl");

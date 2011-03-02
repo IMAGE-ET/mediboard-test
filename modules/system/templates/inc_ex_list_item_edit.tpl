@@ -6,7 +6,7 @@ editListItem = function(line) {
   $V(form.elements.code, line.get('code'));
   var button = form.down('button');
   button.removeClassName('add').addClassName('save');
-  form.down('button.cancel').show();
+  form.down('button.cancel').setVisibility(true);
 }
 
 cancelEditListItem = function(form) {
@@ -15,7 +15,7 @@ cancelEditListItem = function(form) {
   $V(form.elements.code, "");
   var button = form.down('button');
   button.removeClassName('save').addClassName('add');
-  form.down('button.cancel').hide();
+  form.down('button.cancel').setVisibility(false);
 }
   
 Main.add(function(){
@@ -53,7 +53,7 @@ Main.add(function(){
   
   <table class="main tbl">
     <tr>
-      <th colspan="3" class="title">{{tr}}CExList-back-list_items{{/tr}}</th>
+      <th colspan="4" class="title">{{tr}}CExList-back-list_items{{/tr}}</th>
     </tr>
 		
     <tr>
@@ -64,6 +64,7 @@ Main.add(function(){
       <th>
         {{mb_title class=CExListItem field=name}}
       </th>
+			<th class="narrow"></th>
     </tr>
     
     <tr>
@@ -72,8 +73,10 @@ Main.add(function(){
       </td>
       <td class="code" {{if !$coded}}style="display: none"{{/if}}>{{mb_field class=CExListItem field=code size=6}}</td>
       <td>
-        {{mb_field class=CExListItem field=name}}
-        <button class="cancel notext" type="button" onclick="cancelEditListItem(this.form)" style="margin: -1px; display: none">
+        {{mb_field class=CExListItem field=name style="width: 99%;"}}
+			</td>
+			<td>
+        <button class="cancel notext" type="button" onclick="cancelEditListItem(this.form)" style="margin: -1px; visibility: hidden;">
           {{tr}}Cancel{{/tr}}
         </button>
       </td>
@@ -88,10 +91,11 @@ Main.add(function(){
         </td>
         <td class="code" {{if !$coded}}style="display: none"{{/if}}>{{mb_value object=$_item field=code}}</td>
         <td>{{mb_value object=$_item field=name}}</td>
+				<td></td>
       </tr>
     {{foreachelse}}
       <tr>
-        <td class="empty" colspan="3">{{tr}}CExListItem.none{{/tr}}</td>
+        <td class="empty" colspan="4">{{tr}}CExListItem.none{{/tr}}</td>
       </tr>
     {{/foreach}}
   </table>

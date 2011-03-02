@@ -175,6 +175,11 @@ var SystemMessage = {
   autohidable: function() {
     return $(this.id).select(".error, .warning, .loading").length == 0;
   },
+	
+	notify: function(text, append) {
+		$(this.id)[append ? "insert" : "update"](text);
+		this.doEffect();
+	},
 
   // show/hide the div
   doEffect : function (delay, forceFade) {

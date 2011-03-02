@@ -12,7 +12,8 @@ MbObject.editCallback = function(){
   {{mb_class object=$object}}
   {{mb_key object=$object}}
 	{{mb_field object=$object field=object_class hidden=true}}
-  
+	
+  <input type="hidden" name="del" value="0" />
   <input type="hidden" name="callback" value="MbObject.editCallback" />
   
   <table class="main form">
