@@ -361,6 +361,7 @@ class CSejour extends CCodable {
 
   /**
    * Cherche les différentes collisions au séjour courant
+   * 
    * @return array|CSejour
    */
   function getCollisions() {
@@ -372,6 +373,11 @@ class CSejour extends CCodable {
       return $collisions;
     }
     
+    // Données incomplètes
+    if (!$this->entree || !$this->sortie) {
+      return $collisions;
+    }
+    
     // Test de colision avec un autre sejour
     $patient = new CPatient;
     $patient->load($this->patient_id);
@@ -379,6 +385,7 @@ class CSejour extends CCodable {
       return $collisions;
     }
     
+    // Chargement des autres séjours
     $where["annule"] = " = '0'";
     $where["group_id"] = " = '".$this->group_id."'";
     foreach ($this->_not_collides as $_type_not_collides) {
@@ -386,9 +393,9 @@ class CSejour extends CCodable {
     }
 
     $patient->loadRefsSejours($where);
-    // suppression de la liste des sejours le sejour courant
     $sejours = $patient->_ref_sejours;
-
+    
+    // Collision sur chacun des autres séjours
     foreach ($sejours as $sejour) {
       if ($sejour->_id != $this->_id && $this->collides($sejour)) {
         $collisions[$sejour->_id] = $sejour;
