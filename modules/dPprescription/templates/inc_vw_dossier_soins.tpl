@@ -429,6 +429,12 @@ refreshTabState = function(){
 	}
 }
 
+updateTasks = function(sejour_id){
+  var url = new Url("soins", "ajax_vw_tasks_sejour");
+	url.addParam("sejour_id", sejour_id);
+	url.requestUpdate("tasks");
+}
+
 showDebit = function(div, color){
 	$("_perfusion").select("."+div.down().className).each(function(elt){
 	  elt.setStyle( { backgroundColor: '#'+color } );
@@ -512,6 +518,7 @@ Main.add(function () {
 <ul id="tab_dossier_soin" class="control_tabs">
   <li onmousedown="Prescription.loadTraitement('{{$sejour->_id}}','{{$date}}','','administration','','','','med'); refreshTabState();"><a href="#jour">Journée</a></li>
   <li onmousedown="calculSoinSemaine('{{$date}}','{{$prescription_id}}');"><a href="#semaine">Semaine</a></li>
+	<li onmousedown="updateTasks('{{$sejour->_id}}');"><a href="#tasks">Activités</a></li>
 </ul>
 <hr class="control_tabs" />
 
@@ -591,5 +598,6 @@ Main.add(function () {
 {{/if}}
 </div>
 <div id="semaine" style="display:none"></div>
+<div id="tasks" style="display:none"></div>
 <hr />
 <div id="dossier_suivi"></div>

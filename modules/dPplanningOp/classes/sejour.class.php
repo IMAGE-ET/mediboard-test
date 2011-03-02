@@ -137,6 +137,7 @@ class CSejour extends CCodable {
   var $_ref_prescription_sejour = null;
   var $_ref_replacements        = null;
   var $_ref_replacement         = null;
+	var $_ref_tasks               = null;
 	
   // External objects
   var $_ext_diagnostic_principal = null;
@@ -210,6 +211,7 @@ class CSejour extends CCodable {
 		$backProps["evenements_ssr"]       = "CEvenementSSR sejour_id";
 		$backProps["replacements"]         = "CReplacement sejour_id";
 		$backProps["echanges_hprim21"]     = "CEchangeHprim21 object_id";
+		$backProps["tasks"]                = "CSejourTask sejour_id";
     return $backProps;
   }
 
@@ -971,6 +973,10 @@ class CSejour extends CCodable {
   
   function loadRefsTransmissions(){
     $this->_ref_transmissions = $this->loadBackRefs("transmissions"); 
+  }
+  
+	function loadRefsTasks(){
+    $this->_ref_tasks = $this->loadBackRefs("tasks"); 
   }
   
   function loadSuiviMedical() {

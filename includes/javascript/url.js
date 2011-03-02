@@ -489,8 +489,12 @@ var Url = Class.create({
   requestModal: function(iWidth, iHeight, oOptions) {
     var div = DOM.div(null,
       DOM.div({
-				className: 'content',
-				style: 'overflow-y: auto; overflow-x: hidden; width:'+iWidth+'px; height:'+iHeight+'px'
+				className: 'content'
+			}).setStyle({
+				overflowY: 'auto',
+				overflowX: 'hidden',
+				height: iHeight ? iHeight+'px' : '',
+				width: iWidth ? iWidth+'px' : ''
 			})
 		);
     $(document.body).insert(div);
@@ -514,7 +518,12 @@ var Url = Class.create({
     this.modaleObject.container.insert({top: closeButton});
     this.modaleObject.container.insert({top: titleElement});   
 
+    // Repositionnement de la modale quand la hauteur n'est pas spécifiée
+    oOptions = Object.extend({
+      onComplete: this.modaleObject.position.bind(this.modaleObject)
+    }, oOptions);
 		this.requestUpdate(div.down('.content'), oOptions);
+	
 		reloadButton.onclick = function() {
       this.requestUpdate(div.down('.content'), oOptions);
 		}.bind(this);
