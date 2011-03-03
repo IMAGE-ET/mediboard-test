@@ -51,7 +51,7 @@ input[type=password],
 input[type=file],
 textarea {
   -webkit-border-radius: 0;
-  -webkit-appearance: none; /* To remov ethe "shadow" on iPad" */
+  -webkit-appearance: none; /* To remove the "shadow" on iPad" */
 }
 
 input[type=text], 
@@ -290,6 +290,17 @@ button[disabled="disabled"]:hover { /* For IE */
 
 button.none {
   text-indent: 2px;
+}
+
+button.big {
+  font-size: 160%;
+  height: 50px;
+  margin: 4px 10px;
+  padding: 4px 8px;
+	text-align: center;
+  -moz-border-radius: 6px;
+  -webkit-border-radius: 6px;
+  border-radius: 6px;
 }
 
 button.edit:before, a.button.edit:before {
