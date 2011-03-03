@@ -62,6 +62,11 @@ rm -Rvf $database
 case $1 in
   hotcopy)
     result=$database/
+    
+    databasebinlog=$database-${DATETIME}.binlog.position
+    mysql --user=$username --password=$password $database < mysql_show_master_status.sql > databasebinlog
+    check_errs $? "Failed to create MySQL Binary Log" "MySQL Binary Log done!"
+    
     mysqlhotcopy -u $username -p $password $database $BASEPATH
     check_errs $? "Failed to create MySQL hot copy" "MySQL hot copy done!"
     ;;
@@ -81,7 +86,7 @@ esac
 find ${BASEPATH} -name "$database*.tar.gz" -ctime +$time -exec /bin/rm '{}' ';'
 check_errs $? "Failed to delete files" "Files deleted"
 
-## Compress archive and remove files
+# Compress archive and remove files
 DATETIME=$(date +%Y-%m-%dT%H-%M-%S)
 
 # Make the tarball
