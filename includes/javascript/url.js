@@ -500,8 +500,8 @@ var Url = Class.create({
     $(document.body).insert(div);
 
     // Decoration preparing
-    var closeButton  = DOM.button({type: "button", className: "cancel"}, $T('Close'));
-    var reloadButton = DOM.button({type: "button", className: "change"}, $T('Reload'));
+    var closeButton  = DOM.button({type: "button", className: "cancel notext"}, $T('Close'));
+    var reloadButton = DOM.button({type: "button", className: "change notext"}, $T('Reload'));
 		
     var m = this.oParams['m'];
     var a = this.oParams['a'];
