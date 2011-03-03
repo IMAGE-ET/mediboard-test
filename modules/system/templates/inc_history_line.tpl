@@ -56,37 +56,45 @@
     <!-- Valeurs de champs-->
     {{if $object->_id}}
       {{foreach from=$_log->_fields item=_field name=field}}
-			  {{if $object->_specs[$_field]->derived}}
-	        <td colspan="3" style="display: none;"></td>
-				{{else}}
-	        <td class="text" style="font-weight: normal;">
-	          {{mb_label object=$object field=$_field}}
-	        </td>
-	  
-	        {{if array_key_exists($_field,$_log->_old_values)}}
-	          <td class="text" style="font-weight: normal;">
-	            {{assign var=old_value value=$_log->_old_values.$_field}}
-	            {{mb_value object=$object field=$_field value=$old_value tooltip=1}}
-	          </td>
-	          <td class="text" style="font-weight: normal;">
-	            {{assign var=log_id value=$_log->_id}}
-	            {{assign var=new_value value=$object->_history.$log_id.$_field}}
-	            <strong>
-	              {{mb_value object=$object field=$_field value=$new_value tooltip=1}}
-	            </strong>
-	          </td>
-	        {{else}}
-	          <td colspan="3" style="font-weight: normal;"><em>{{tr}}Unavailable information{{/tr}}</em></td>
-	        {{/if}}
-				{{/if}}
+        <td class="text" style="font-weight: normal;">
+          {{if array_key_exists($_field, $object->_specs)}}
+            {{if $object->_specs[$_field]->derived}}
+  	          <td colspan="3" style="display: none;"></td>
+    				{{else}}
+              {{mb_label object=$object field=$_field}}
+            {{/if}}
+          {{else}}
+            {{tr}}CMbObject.missing_spec{{/tr}} ({{$_field}})
+          {{/if}}
+        </td>
+  
+        {{if array_key_exists($_field,$_log->_old_values)}}
+          <td class="text" style="font-weight: normal;">
+            {{assign var=old_value value=$_log->_old_values.$_field}}
+            {{mb_value object=$object field=$_field value=$old_value tooltip=1}}
+          </td>
+          <td class="text" style="font-weight: normal;">
+            {{assign var=log_id value=$_log->_id}}
+            {{assign var=new_value value=$object->_history.$log_id.$_field}}
+            <strong>
+              {{mb_value object=$object field=$_field value=$new_value tooltip=1}}
+            </strong>
+          </td>
+        {{else}}
+          <td colspan="3" style="font-weight: normal;"><em>{{tr}}Unavailable information{{/tr}}</em></td>
+        {{/if}}
       {{if !$smarty.foreach.field.last}}</tr><tr>{{/if}}
       {{/foreach}}
     {{else}}
       <td class="text">
       {{if $_log->object_class|strpos:"CExObject_" === false}} {{* Because the object can't be instanciated *}}
         {{foreach from=$_log->_fields item=_field name=field}}
-         {{mb_label class=$_log->object_class field=$_field}} 
-          {{if !$smarty.foreach.field.last}} - {{/if}}
+         {{if array_key_exists($_field, $object->_specs)}}
+           {{mb_label class=$_log->object_class field=$_field}}
+           {{if !$smarty.foreach.field.last}} - {{/if}}
+         {{else}}
+           {{tr}}CMbObject.missing_spec{{/tr}} ({{$_field}})
+         {{/if}}
         {{/foreach}}
       {{/if}}
       </td>

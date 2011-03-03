@@ -395,6 +395,7 @@ $locales['CMbObject-back-logs'] = 'Journal des modifications';
 $locales['CMbObject-back-logs.empty'] = 'Aucun entrée dans le journal';
 $locales['CMbObject-back-notes'] = 'Notes';
 $locales['CMbObject-back-notes.empty'] = 'Aucune note';
+$locales['CMbObject.missing_spec'] = 'Propriété inexistante';
 $locales['CMediusers-back-owned_notes'] = 'Notes rédigées';
 $locales['CMediusers-back-owned_notes.empty'] = 'Aucune note rédigée';
 $locales['CMessage'] = 'Message';
