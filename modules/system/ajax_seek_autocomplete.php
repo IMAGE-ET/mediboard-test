@@ -22,6 +22,7 @@ $ds = $object->_spec->ds;
 
 foreach($where as $key => $value) {
   $where[$key] = $ds->prepare("= %", $value);
+	$object->$key = $value;
 }
 
 if ($keywords == "") {

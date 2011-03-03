@@ -16,8 +16,11 @@
 		{{foreach from=$objects item=_object}}
 		<tr>
 			<td style="padding-left: 18px;">
-				<a href="#edit.{{$_object->_guid}}" onclick="MbObject.edit(this)" data-object_guid="{{$_object->_guid}}"
-				   style="{{if $tag->color}}border-right: 1em solid #{{$tag->color}};{{/if}}"> 
+        {{if $tag->color}}
+          <span style="float: right; border-right: 1em solid #{{$tag->color}};" title="{{$tag}}">&nbsp;</span>
+        {{/if}}
+				
+				<a href="#edit.{{$_object->_guid}}" onclick="MbObject.edit(this)" data-object_guid="{{$_object->_guid}}">
 	        <span onmouseover="ObjectTooltip.createEx(this, '{{$_object->_guid}}');">
 					  {{$_object}}
 					</span>

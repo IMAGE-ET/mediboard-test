@@ -14,7 +14,7 @@ $ex_class_id = CValue::getOrSession("ex_class_id");
 
 $ex_class = new CExClass;
 $ex_class->load($ex_class_id);
-$ex_class->loadRefsFields();
+$ex_class->loadRefsGroups();
 $ex_class->loadRefsConstraints();
 $ex_class->loadRefsNotes();
 
@@ -48,6 +48,7 @@ if (!$ex_class->_id) {
     $instances[$class] = $instance->_spec->events;
   }
   
+  $ex_class->disabled = 1;
   $classes = $instances;
 }
 

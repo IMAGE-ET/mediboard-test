@@ -19,17 +19,34 @@ onUploadComplete = function(message){
   <input type="hidden" name="a" value="do_import" />
   <input type="hidden" name="suppressHeaders" value="1" />
 	
-	<select name="object_class">
-		{{foreach from=$classes item=_class}}
-		  <option value="{{$_class}}">{{tr}}{{$_class}}{{/tr}}</option>
-		{{/foreach}}
-	</select>
-  
-  <input type="hidden" name="MAX_FILE_SIZE" value="4096000" />
-  <input type="file" name="import" />
-  
-  <button type="submit" class="submit">{{tr}}Save{{/tr}}</button>
+	<table class="main form">
+		<tr>
+			<th class="title" colspan="5">
+				Importation
+			</th>
+		<tr>
+			<th>
+				Type d'éléments à importer
+			</th>
+			<td>
+		    <select name="object_class">
+		      {{foreach from=$classes item=_class}}
+		        <option value="{{$_class}}">{{tr}}{{$_class}}{{/tr}}</option>
+		      {{/foreach}}
+		    </select>
+			</td>
+			
+			<th>Fichier</th>
+			<td>
+		    <input type="hidden" name="MAX_FILE_SIZE" value="4096000" />
+		    <input type="file" name="import" style="width: 20em;" />
+			</td>
+			
+			<td>
+				<button type="submit" class="submit">{{tr}}Save{{/tr}}</button>
+			</td>
+		</tr>
+	</table>
 </form>
 
-<br />
-<iframe name="upload_iframe" style="border: 1px solid gray; width: 100%; height: 500px;"></iframe>
+<iframe name="upload_iframe" style="display: none;"></iframe>

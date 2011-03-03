@@ -88,9 +88,11 @@ if ($spec instanceof CEnumSpec && $ex_field_id) {
     $_enum_trans->updateLocales();
   }
 
-  if ($ex_field->ex_class_id) {
+  if ($ex_field->ex_group_id) {
+  	$ex_field->loadRefExClass();
+		
     $ex_object = new CExObject;
-    $ex_object->_ex_class_id = $ex_field->ex_class_id;
+    $ex_object->_ex_class_id = $ex_field->_ref_ex_class->_id;
     $ex_object->setExClass();
     
     if ($ex_object->_specs[$field] instanceof CEnumSpec) {

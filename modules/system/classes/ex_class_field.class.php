@@ -13,7 +13,7 @@ CAppUI::requireModuleClass("system", "ex_list_items_owner");
 class CExClassField extends CExListItemsOwner {
   var $ex_class_field_id = null;
   
-  var $ex_class_id = null;
+  var $ex_group_id = null;
   var $name = null; // != object_class, object_id, ex_ClassName_event_id, 
   var $prop = null; 
   var $concept_id = null;
@@ -28,6 +28,7 @@ class CExClassField extends CExListItemsOwner {
   var $_locale_court = null;
   var $_enum_translation = null;
   
+  var $_ref_ex_group = null;
   var $_ref_ex_class = null;
   var $_ref_translation = null;
 	var $_ref_concept = null;
@@ -56,17 +57,17 @@ class CExClassField extends CExListItemsOwner {
     $spec = parent::getSpec();
     $spec->table = "ex_class_field";
     $spec->key   = "ex_class_field_id";
-    $spec->uniques["name"] = array("ex_class_id", "name");
+    $spec->uniques["name"] = array("ex_group_id", "name");
     
     // should ignore empty values
-    //$spec->uniques["coord_label"] = array("ex_class_id", "coord_label_x", "coord_label_y");
-    //$spec->uniques["coord_field"] = array("ex_class_id", "coord_field_x", "coord_field_y");
+    //$spec->uniques["coord_label"] = array("ex_group_id", "coord_label_x", "coord_label_y");
+    //$spec->uniques["coord_field"] = array("ex_group_id", "coord_field_x", "coord_field_y");
     return $spec;
   }
 
   function getProps() {
     $props = parent::getProps();
-    $props["ex_class_id"] = "ref class|CExClass cascade";
+    $props["ex_group_id"] = "ref class|CExClassFieldGroup cascade";
     $props["concept_id"]  = "ref class|CExConcept";
     $props["name"]        = "str notNull protected canonical";
     $props["prop"]        = "str notNull";
@@ -97,8 +98,12 @@ class CExClassField extends CExListItemsOwner {
     $this->updateTranslation();
   }
   
+  function loadRefExGroup($cache = true){
+    return $this->_ref_ex_group = $this->loadFwdRef("ex_group_id", $cache);
+  }
+  
   function loadRefExClass($cache = true){
-    return $this->_ref_ex_class = $this->loadFwdRef("ex_class_id", $cache);
+  	return $this->_ref_ex_class = $this->loadRefExGroup($cache)->loadRefExClass($cache);
   }
   
   function loadRefConcept($cache = true){
@@ -188,40 +193,35 @@ class CExClassField extends CExListItemsOwner {
     
     $ds = $this->_spec->ds;
     
-		$this->completeField("ex_class_id");
-		
-		// If this is not a concept
-		if ($this->ex_class_id) {
-	    if (!$this->_id) {
-	      $table_name = $this->getTableName();
-	      $sql_spec = $this->getSQLSpec();
-	      $query = "ALTER TABLE `$table_name` ADD `$this->name` $sql_spec";
-	      
-	      if (!$ds->query($query)) {
-	        return "Le champ '$this->name' n'a pas pu être ajouté à la table '$table_name' (".$ds->error().")";
-	      }
-	      
-	      $spec_type = $this->getSpecObject()->getSpecType();
-	      
-	      // ajout de l'index
-	      if (in_array($spec_type, self::$_indexed_types)) {
-	        $query = "ALTER TABLE `$table_name` ADD INDEX (`$this->name`)";
-	        
-	        if (!$ds->query($query)) {
-	          //return "L'index sur le champ '$this->name' n'a pas pu être ajouté (".$ds->error().")";
-	        }
-	      }
-	    }
-	    
-	    else if ($this->fieldModified("name") || $this->fieldModified("prop")) {
-	      $table_name = $this->getTableName();
-	      $sql_spec = $this->getSQLSpec();
-	      $query = "ALTER TABLE `$table_name` CHANGE `{$this->_old->name}` `$this->name` $sql_spec";
-	
-	      if (!$ds->query($query)) {
-	        return "Le champ '$this->name' n'a pas pu être mis à jour (".$ds->error().")";
-	      }
-	    }
+    if (!$this->_id) {
+      $table_name = $this->getTableName();
+      $sql_spec = $this->getSQLSpec();
+      $query = "ALTER TABLE `$table_name` ADD `$this->name` $sql_spec";
+      
+      if (!$ds->query($query)) {
+        return "Le champ '$this->name' n'a pas pu être ajouté à la table '$table_name' (".$ds->error().")";
+      }
+      
+      $spec_type = $this->getSpecObject()->getSpecType();
+      
+      // ajout de l'index
+      if (in_array($spec_type, self::$_indexed_types)) {
+        $query = "ALTER TABLE `$table_name` ADD INDEX (`$this->name`)";
+        
+        if (!$ds->query($query)) {
+          //return "L'index sur le champ '$this->name' n'a pas pu être ajouté (".$ds->error().")";
+        }
+      }
+    }
+    
+    else if ($this->fieldModified("name") || $this->fieldModified("prop")) {
+      $table_name = $this->getTableName();
+      $sql_spec = $this->getSQLSpec();
+      $query = "ALTER TABLE `$table_name` CHANGE `{$this->_old->name}` `$this->name` $sql_spec";
+
+      if (!$ds->query($query)) {
+        return "Le champ '$this->name' n'a pas pu être mis à jour (".$ds->error().")";
+      }
 		}
     
     $locale       = $this->_locale;
@@ -274,11 +274,8 @@ class CExClassField extends CExListItemsOwner {
     if ($msg = $this->canDeleteEx()) {
       return $msg;
     }
-    
-    $this->completeField("ex_class_id");
-    
-		// If this is not a concept
-    if ($this->ex_class_id && !$this->_dont_drop_column) {
+		
+    if (!$this->_dont_drop_column) {
       $this->completeField("name");
       
       $table_name = $this->loadRefExClass()->getTableName();

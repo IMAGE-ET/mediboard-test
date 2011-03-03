@@ -433,7 +433,8 @@ ul.control_tabs_vertical li a.active {
   border-bottom: 1px solid #458;
 }
 
-ul.control_tabs.small li a {
+ul.control_tabs.small li a,
+ul.control_tabs_vertical.small li a {
 	font-size: 1em; 
 	padding: 2px 8px;
 	font-weight: normal;

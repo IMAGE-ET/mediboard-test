@@ -42,9 +42,9 @@ class CExClass extends CMbObject {
 
   function getBackProps() {
     $backProps = parent::getBackProps();
-    $backProps["fields"]      = "CExClassField ex_class_id";
-    $backProps["host_fields"] = "CExClassHostField ex_class_id";
-    $backProps["constraints"] = "CExClassConstraint ex_class_id";
+    $backProps["field_groups"] = "CExClassFieldGroup ex_class_id";
+    $backProps["host_fields"]  = "CExClassHostField ex_class_id";
+    $backProps["constraints"]  = "CExClassConstraint ex_class_id";
     return $backProps;
   }
   
@@ -81,9 +81,18 @@ class CExClass extends CMbObject {
     $this->_view = CAppUI::tr($this->host_class) . " - [$this->event] - $this->name";
   }
   
-  function loadRefsFields(){
-    if (!empty($this->_ref_fields)) return $this->_ref_fields;
-    return $this->_ref_fields = $this->loadBackRefs("fields");
+  function loadRefsGroups(){
+    if (!empty($this->_ref_groups)) return $this->_ref_groups;
+    return $this->_ref_groups = $this->loadBackRefs("field_groups");
+  }
+  
+  function loadRefsAllFields(){
+    $groups = $this->loadRefsGroups();
+		$fields = array();
+		foreach($groups as $_group) {
+			$fields = array_merge($_group->loadRefsFields(), $fields);
+		}
+    return $fields;
   }
   
   function loadRefsHostFields(){
@@ -138,95 +147,140 @@ class CExClass extends CMbObject {
     return $list;
   }
 	
-	function getGrid($w = 4, $h = 20, $reduce = true){
-		$grid = array_fill(0, $h, array_fill(0, $w, array(
-		  "type" => null, 
-		  "object" => null,
-		)));
+	static function getTree(){
+		$ex_class = new self;
+		$list_ex_class = $ex_class->loadList(null, "host_class, event");
 		
-		$out_of_grid = array(
-		  "field" => array(), 
-		  "label" => array(),
-		);
+		$class_tree = array();
 		
-		foreach($this->loadRefsFields() as $_ex_field) {
-		  $_ex_field->getSpecObject();
-			
-      $label_x = $_ex_field->coord_label_x;
-      $label_y = $_ex_field->coord_label_y;
+		foreach($list_ex_class as $_ex_class) {
+		  $host_class = $_ex_class->host_class;
+		  $event = $_ex_class->event;
 		  
-		  $field_x = $_ex_field->coord_field_x;
-		  $field_y = $_ex_field->coord_field_y;
-      
-      // label
-      if ($label_x === null || $label_y === null) {
-        $out_of_grid["label"][$_ex_field->name] = $_ex_field;
-      }
-      else {
-        $grid[$label_y][$label_x] = array("type" => "label", "object" => $_ex_field);
-      }
+		  if (!isset($class_tree[$host_class])) {
+		    $class_tree[$host_class] = array();
+		  }
 		  
-		  // field
-		  if ($field_x === null || $field_y === null) {
-		    $out_of_grid["field"][$_ex_field->name] = $_ex_field;
+		  if (!isset($class_tree[$host_class][$event])) {
+		    $class_tree[$host_class][$event] = array();
 		  }
-		  else {
-		    $grid[$field_y][$field_x] = array("type" => "field", "object" => $_ex_field);
-		  }
+		  
+		  $class_tree[$host_class][$event][] = $_ex_class;
 		}
-    
-    foreach($this->loadRefsHostFields() as $_host_field) {
-      $label_x = $_host_field->coord_label_x;
-      $label_y = $_host_field->coord_label_y;
-			
-      $value_x = $_host_field->coord_value_x;
-      $value_y = $_host_field->coord_value_y;
-      
-      // label
-      if ($label_x !== null && $label_y !== null) {
-        $grid[$label_y][$label_x] = array("type" => "label", "object" => $_host_field);
-      }
-      
-      // value
-      if ($value_x !== null && $value_y !== null) {
-        $grid[$value_y][$value_x] = array("type" => "value", "object" => $_host_field);
-      }
-    }
 		
-		if ($reduce) {
-			$max_filled = 0;
+		return $class_tree;
+	}
+	
+	function getGrid($w = 4, $h = 20, $reduce = true) {
+		$big_grid = array();
+    $big_out_of_grid = array();
+		
+    foreach($this->loadRefsGroups() as $_ex_group) {
+			$grid = array_fill(0, $h, array_fill(0, $w, array(
+			  "type" => null, 
+			  "object" => null,
+			)));
 			
-			foreach($grid as $_y => $_line) {
-        $n_filled = 0;
-        $x_filled = 0;
+			$out_of_grid = array(
+			  "field" => array(), 
+			  "label" => array(),
+			);
+		
+			$_ex_group->loadRefsFields();
+			foreach($_ex_group->_ref_fields as $_ex_field) {
+			  $_ex_field->getSpecObject();
 				
-				foreach($_line as $_x => $_cell) {
-					if ($_cell !== array("type" => null, "object" => null)) {
-					  $n_filled++;
-						$x_filled = max($_x, $x_filled);
+	      $label_x = $_ex_field->coord_label_x;
+	      $label_y = $_ex_field->coord_label_y;
+			  
+			  $field_x = $_ex_field->coord_field_x;
+			  $field_y = $_ex_field->coord_field_y;
+	      
+	      // label
+	      if ($label_x === null || $label_y === null) {
+	        $out_of_grid["label"][$_ex_field->name] = $_ex_field;
+	      }
+	      else {
+	        $grid[$label_y][$label_x] = array("type" => "label", "object" => $_ex_field);
+	      }
+			  
+			  // field
+			  if ($field_x === null || $field_y === null) {
+			    $out_of_grid["field"][$_ex_field->name] = $_ex_field;
+			  }
+			  else {
+			    $grid[$field_y][$field_x] = array("type" => "field", "object" => $_ex_field);
+			  }
+			}
+    
+		 /* $_ex_group->loadRefsHostFields();
+	    foreach($_ex_group->_ref_host_fields as $_host_field) {
+	      $label_x = $_host_field->coord_label_x;
+	      $label_y = $_host_field->coord_label_y;
+				
+	      $value_x = $_host_field->coord_value_x;
+	      $value_y = $_host_field->coord_value_y;
+	      
+	      // label
+	      if ($label_x !== null && $label_y !== null) {
+	        $grid[$label_y][$label_x] = array("type" => "label", "object" => $_host_field);
+	      }
+	      
+	      // value
+	      if ($value_x !== null && $value_y !== null) {
+	        $grid[$value_y][$value_x] = array("type" => "value", "object" => $_host_field);
+	      }
+	    }*/
+			
+			if ($reduce) {
+				$max_filled = 0;
+				
+				foreach($grid as $_y => $_line) {
+	        $n_filled = 0;
+	        $x_filled = 0;
+					
+					foreach($_line as $_x => $_cell) {
+						if ($_cell !== array("type" => null, "object" => null)) {
+						  $n_filled++;
+							$x_filled = max($_x, $x_filled);
+						}
 					}
+					
+					if ($n_filled == 0) unset($grid[$_y]);
+					
+	        $max_filled = max($max_filled, $x_filled);
 				}
-				
-				if ($n_filled == 0) unset($grid[$_y]);
-				
-        $max_filled = max($max_filled, $x_filled);
+	      
+	      foreach($grid as $_y => $_line) {
+	      	$grid[$_y] = array_slice($_line, 0, $max_filled+1);
+	      }
 			}
       
-      foreach($grid as $_y => $_line) {
-      	$grid[$_y] = array_slice($_line, 0, $max_filled+1);
-      }
+      $big_grid       [$_ex_group->_id] = $grid;
+      $big_out_of_grid[$_ex_group->_id] = $out_of_grid;
 		}
 		
-		return array($grid, $out_of_grid, "grid" => $grid, "out_of_grid" => $out_of_grid);
+		return array(
+		  $big_grid, $big_out_of_grid, 
+		  "grid" => $big_grid, "out_of_grid" => $big_out_of_grid,
+		);
 	}
   
   function store(){
     if ($msg = $this->check()) return $msg;
     
-    if (!$this->_id) {
+		$is_new = !$this->_id;
+		
+    if ($is_new) {
       if ($msg = parent::store()) {
         return $msg;
       }
+			
+			// Groupe par défaut
+			$ex_group = new CExClassFieldGroup;
+			$ex_group->name = "Groupe général";
+			$ex_group->ex_class_id = $this->_id;
+			$ex_group->store();
       
       $table_name = $this->getTableName();
       $query = "CREATE TABLE `$table_name` (

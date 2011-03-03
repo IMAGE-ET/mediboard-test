@@ -83,13 +83,33 @@ class CTag extends CMbObject {
 	}
 	
 	function getAutocompleteList($keywords, $where = null, $limit = null) {
-		$list = parent::getAutocompleteList($keywords, $where, $limit);
+		$list = array();
 		
-		foreach($list as $_tag) {
-			$_tag->getDeepness();
+		if ($keywords === "%" || $keywords == "") {
+			$class = $this->object_class;
+			$obj = new $class;
+			$tree = self::getTree($obj);
+			self::appendItemsRecursive($list, $tree);
+			
+      foreach($list as $_tag) {
+        $_tag->_view = $_tag->name;
+      }
+		}
+		else {
+	    $list = parent::getAutocompleteList($keywords, $where, $limit);
 		}
 		
 		return $list;
+	}
+	
+	private static function appendItemsRecursive(&$list, $tree) {
+		if ($tree["parent"]) {
+		  $list[] = $tree["parent"];
+		}
+		
+		foreach($tree["children"] as $_child) {
+			self::appendItemsRecursive($list, $_child);
+		}
 	}
 	
 	function getDeepness($d = 0){

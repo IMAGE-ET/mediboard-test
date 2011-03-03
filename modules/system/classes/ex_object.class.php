@@ -127,7 +127,7 @@ class CExObject extends CMbMetaObject {
     $props = parent::getProps();
     $props["_ex_class_id"] = "ref class|CExClass";
     
-    $fields = $this->_ref_ex_class->loadRefsFields();
+    $fields = $this->_ref_ex_class->loadRefsAllFields();
     
     foreach($fields as $_field) {
       if (isset($this->{$_field->name})) break; // don't redeclare them more than once
@@ -157,10 +157,11 @@ class CExObject extends CMbMetaObject {
   
   function loadLogs(){
     $this->setExClass();
-    
+    $ds = $this->_spec->ds;
+		
     $where = array(
-      "object_class" => $this->_spec->ds->prepare("=%", $this->_class_name),
-      "object_id" => $this->_spec->ds->prepare("=%", $this->_id)
+      "object_class" => $ds->prepare("=%", $this->_class_name),
+      "object_id"    => $ds->prepare("=%", $this->_id)
     );
     
     $log = new CUserLog();
@@ -177,7 +178,7 @@ class CExObject extends CMbMetaObject {
   }
   
   static function getValidObject($object_class) {
-    if (!preg_match("/^CExObject_([A-Za-z]+)_([A-Za-z0-9_]+)_(\d+)$/", $object_class, $matches)) {
+    if (!preg_match('/^CExObject_([A-Za-z]+)_([A-Za-z0-9_]+)_(\d+)$/', $object_class, $matches)) {
       return false;
     }
     

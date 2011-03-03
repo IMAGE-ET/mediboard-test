@@ -94,7 +94,7 @@ class CBoolSpec extends CMbFieldSpec {
 	      return $sHtml;
     
       case "checkbox":
-      	if(($value !== null && $value === "1")){
+      	if(($value !== null && $value == 1)){
           $checked = " checked=\"checked\""; 
         }else{
           $checked = "";

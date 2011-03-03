@@ -105,9 +105,15 @@ class CMySQLDataSource extends CSQLDataSource {
     return mysql_real_escape_string($value, $this->link);
   }
   
-  function prepareLike($value) {
+  function prepareLike($value, $diacritics_insensitive = false) {
     $value = preg_replace('`\\\\`', '\\\\\\', $value);
-    return $this->prepare("LIKE %", $value);
+
+    $query = "LIKE %";
+    if ($diacritics_insensitive) {
+      $query = "LIKE CONVERT(% USING utf8)";
+    }
+
+    return $this->prepare($query, $value);
   }
 
   function version() {

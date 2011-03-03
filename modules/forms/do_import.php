@@ -15,6 +15,14 @@ $file = CValue::read($_FILES, 'import');
 $separator = CValue::post("separator", ',');
 $enclosure = CValue::post("enclosure", '"');
 
+/*
+TRUNCATE `ex_concept`;
+TRUNCATE `ex_list`;
+TRUNCATE `ex_list_item`;
+TRUNCATE `tag`;
+TRUNCATE `tag_item`;
+ */
+
 $prop_map = array(
   "binaire" => "bool",
   "binaire ssq" => "bool",
@@ -31,6 +39,10 @@ $prop_map = array(
 	
   "numérique" => "float",
 );
+
+function reduce_whitespace($str) {
+	return preg_replace("/\s+/", " ", $str);
+}
 
 if (!$object_class) {
   CAppUI::setMsg("Veuillez choisir un type d'objet", UI_MSG_WARNING);
@@ -53,7 +65,8 @@ else {
 				$line = array_fill_keys($keys, "");
 				
 	      while($current_line = fgetcsv($fp, null, $separator, $enclosure)) {
-					$current_line = array_map("trim", $current_line);
+          $current_line = array_map("trim", $current_line);
+          $current_line = array_map("reduce_whitespace", $current_line);
           $current_line = array_combine($keys, $current_line);
 					
 					foreach($current_line as $_key => $_value) {
@@ -68,7 +81,7 @@ else {
           $list = new CExList;
           $ds = $list->_spec->ds;
           $where = array(
-            "name" => $ds->prepare("=%", $line["list_name"]),
+            "name" => $ds->prepareLike($line["list_name"], true),
           );
           
 					$list->loadObject($where);
@@ -81,6 +94,9 @@ else {
               CAppUI::setMsg($msg, UI_MSG_WARNING);
               continue;
             }
+						else {
+							CAppUI::setMsg("$list->_class_name-msg-create", UI_MSG_OK);
+						}
           }
 					
 					// LIST ITEM
@@ -88,7 +104,7 @@ else {
           $ds = $list_item->_spec->ds;
           $where = array(
             "list_id" => $ds->prepare("=%", $list->_id),
-            "name"    => $ds->prepare("=%", $line["item_name"]),
+            "name"    => $ds->prepareLike($line["item_name"], true),
           );
           
 					$list_item->loadObject($where);
@@ -101,6 +117,9 @@ else {
             if ($msg = $list_item->store()) {
               CAppUI::setMsg($msg, UI_MSG_WARNING);
               continue;
+            }
+            else {
+              CAppUI::setMsg("$list_item->_class_name-msg-create", UI_MSG_OK);
             }
           }
 				}
@@ -116,8 +135,8 @@ else {
         while($current_line = fgetcsv($fp, null, $separator, $enclosure)) {
           $current_line = array_slice($current_line, 0, count($keys));
           $current_line = array_map("trim", $current_line);
+          $current_line = array_map("reduce_whitespace", $current_line);
           $current_line = array_combine($keys, $current_line);
-					
           
           foreach($current_line as $_key => $_value) {
             if (in_array($_key, $multiline) && $_value == "") {
@@ -131,7 +150,7 @@ else {
           $tag1 = new CTag;
           $ds = $tag1->_spec->ds;
           $where = array(
-            "name"         => $ds->prepare("=%", $line["tag_name_1"]),
+            "name"         => $ds->prepareLike($line["tag_name_1"], true),
             "object_class" => $ds->prepare("=%", $object_class),
           );
           
@@ -145,13 +164,16 @@ else {
               CAppUI::setMsg($msg, UI_MSG_WARNING);
               continue;
             }
+            else {
+              CAppUI::setMsg("$tag1->_class_name-msg-create", UI_MSG_OK);
+            }
           }
-          
+
           // TAG LEVEL 2
           $tag2 = new CTag;
           $ds = $tag2->_spec->ds;
           $where = array(
-            "name"         => $ds->prepare("=%", $line["tag_name_2"]),
+            "name"         => $ds->prepareLike($line["tag_name_2"], true),
             "object_class" => $ds->prepare("=%", $object_class),
           );
           
@@ -166,49 +188,67 @@ else {
               CAppUI::setMsg($msg, UI_MSG_WARNING);
               continue;
             }
+            else {
+              CAppUI::setMsg("$tag2->_class_name-msg-create", UI_MSG_OK);
+            }
           }
           
           // CONCEPT
 					$concept_prop = CValue::read($prop_map, CMbString::lower($line["concept_type"]));
 					if (!$concept_prop) {
-						CAppUI::setMsg("Type de concept invalide : ".$line["concept_type"], UI_MSG_WARNING);
+						CAppUI::setMsg("Type de concept invalide : <strong>{$line['concept_type']}</strong>", UI_MSG_WARNING);
 						continue;
 					}
+					
+					// If list name provided, it needs to exist
+          if ($line["list_name"]) {
+            $_list = new CExList;
+            $_list->name = $line["list_name"];
+            if (!$_list->loadMatchingObject() ){
+	            CAppUI::setMsg("Nom de liste introuvable : <strong>{$line['list_name']}</strong>", UI_MSG_WARNING);
+	            continue;
+            }
+          }
 					
           $concept = new CExConcept;
           $ds = $concept->_spec->ds;
           $where = array(
-            "name"         => $ds->prepare("=%", $line["concept_name"]),
+            "name"         => $ds->prepareLike($line["concept_name"], true),
           );
           
           $concept->loadObject($where);
           
-          //if (!$concept->_id) {
+          if (!$concept->_id) {
             $concept->name = $line["concept_name"];
             $concept->prop = $concept_prop;
-						
-						if ($line["list_name"]) {
-							$_list = new CExList;
-					    $_list->name = $line["list_name"];
-							$_list->loadMatchingObject();
-							$concept->ex_list_id = $_list->_id; 
-						}
+          
+	          if ($line["list_name"]) {
+	            $concept->ex_list_id = $_list->_id; 
+	          }
             
             if ($msg = $concept->store()) {
               CAppUI::setMsg($msg, UI_MSG_WARNING);
               continue;
             }
-          //}
+            else {
+              CAppUI::setMsg("$concept->_class_name-msg-create", UI_MSG_OK);
+            }
+          }
 					
 					// TAG BINDING
           $tag_item = new CTagItem;
           $tag_item->setObject($concept);
 					$tag_item->tag_id = $tag2->_id;
 					
-					if (!$tag_item->loadMatchingObject()) {
+					$tag_item->loadMatchingObject();
+					
+					if (!$tag_item->_id) {
 						if ($msg = $tag_item->store()) {
               CAppUI::setMsg($msg, UI_MSG_WARNING);
 						}
+            else {
+              CAppUI::setMsg("$tag_item->_class_name-msg-create", UI_MSG_OK);
+            }
 					}
         }
 				
@@ -216,9 +256,10 @@ else {
 		}
 		
 		fclose($fp);
+    
+    CAppUI::setMsg("Import terminé avec succès", UI_MSG_OK);
   }
 }
-
 
 // Création du template
 $smarty = new CSmartyDP();

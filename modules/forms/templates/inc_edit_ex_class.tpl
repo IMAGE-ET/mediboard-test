@@ -80,47 +80,63 @@
 <script type="text/javascript">
 Main.add(function(){
   exClassTabs = Control.Tabs.create("ExClass-back", true);
+  exFieldGroupsTabs = Control.Tabs.create("field_groups", true);
 });
 </script>
 
 <ul class="control_tabs" id="ExClass-back">
   <li><a href="#fields-specs">{{tr}}CExClass-back-fields{{/tr}}</a></li>
-  <li><a href="#fields-constraints">{{tr}}CExClass-back-constraints{{/tr}}</a></li>
-  <li><a href="#fields-layout">{{tr}}CExClassField-layout{{/tr}}</a></li>
+  <!--<li><a href="#fields-constraints">{{tr}}CExClass-back-constraints{{/tr}}</a></li>
+  <li><a href="#fields-layout">{{tr}}CExClassField-layout{{/tr}}</a></li>-->
 </ul>
 <hr class="control_tabs" />
 
 <table class="main layout" id="fields-specs" style="display: none;">
-  <col style="width: 15em; max-width: 300px;" />
+  <col class="narrow" />
+  <col style="width: 12em; max-width: 300px;" />
 	
   <tr>
-    <td style="padding-right: 5px;">
+    <td>
       <button type="button" class="new" style="float: right;" onclick="ExField.create({{$ex_class->_id}})">
         {{tr}}CExClassField-title-create{{/tr}}
       </button>
-
+			
+      <ul class="control_tabs_vertical small" id="field_groups" style="float: right;">
+        {{foreach from=$ex_class->_ref_groups item=_group}}
+          <li>
+            <a href="#group-{{$_group->_guid}}" style="white-space: nowrap;">{{$_group->name}}</a>
+          </li>
+        {{/foreach}}
+      </ul>
+    </td>
+		
+		<td>
       <table class="main tbl">
         <tr>
           <th>{{mb_title class=CExClassField field=name}}</th>
           {{*<th>{{mb_title class=CExClassField field=prop}}</th>*}}
         </tr>
-        {{foreach from=$ex_class->_ref_fields item=_field}}
-          <tr>
-            <td title="{{$_field->name}}">
-              <a href="#1" onclick="ExField.edit({{$_field->_id}})"><strong>
-                {{if $_field->_locale}}
-                  {{$_field->_locale}}
-                {{else}}
-                  [{{$_field->name}}]
-                {{/if}}
-              </strong></a>
-            </td>
-            {{*<td>{{$_field->prop}}</td>*}}
-          </tr>
-        {{foreachelse}}
-          <tr>
-            <td colspan="2">{{tr}}CExClassField.none{{/tr}}</td>
-          </tr>
+				{{foreach from=$ex_class->_ref_groups item=_group}}
+					<tbody id="group-{{$_group->_guid}}">
+		        {{foreach from=$_group->_ref_fields item=_field}}
+		          <tr>
+		            <td title="{{$_field->name}}">
+		              <a href="#1" onclick="ExField.edit({{$_field->_id}})">
+		                {{if $_field->_locale}}
+		                  {{$_field->_locale}}
+		                {{else}}
+		                  [{{$_field->name}}]
+		                {{/if}}
+		              </a>
+		            </td>
+		            {{*<td>{{$_field->prop}}</td>*}}
+		          </tr>
+		        {{foreachelse}}
+		          <tr>
+		            <td colspan="2" class="empty">{{tr}}CExClassField.none{{/tr}}</td>
+		          </tr>
+		        {{/foreach}}
+					</tbody>
         {{/foreach}}
       </table>
     </td>
@@ -175,6 +191,7 @@ Main.add(function(){
 </table>
 
 <div id="fields-layout" style="display: none;">
+{{* 
   <script type="text/javascript">
   	Main.add(ExClass.initLayoutEditor);
   </script>
@@ -294,7 +311,7 @@ Main.add(function(){
 					<div style="height: 100%; overflow-y: scroll; min-height: 100px;">
 					  <ul>
 	          {{foreach from=$host_object->_specs item=_spec key=_field}}
-						  {{if $_spec->show == 1 || $_field == "_view" || ($_spec->show == "" && $_field.0 !== "_")}} {{*  || $_field == "_shortview" *}}
+						  {{if $_spec->show == 1 || $_field == "_view" || ($_spec->show == "" && $_field.0 !== "_")}}
 	              <li>
 	                {{mb_include module=forms template=inc_ex_host_field_draggable}}
 								</li>
@@ -359,5 +376,7 @@ Main.add(function(){
 	
 	</form>
 
+ *}}
 </div>
+
 {{/if}}

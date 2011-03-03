@@ -8,7 +8,6 @@
     {{assign var=_columns value=""}}
   {{/if}}
   
-  
   <table class="main tbl treegrid" data-columns="{{$_columns}}" data-object_class="{{$object_class}}">
     <tr>
       <th colspan="{{$colspan}}">

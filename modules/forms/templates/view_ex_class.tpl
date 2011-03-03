@@ -12,24 +12,17 @@
 {{mb_include_script module=system script=object_selector}}
 
 {{main}}
-ExClass.edit({{$ex_class->_id}});
 ExClass.refreshList();
-ExConcept.refreshList();
+ExClass.edit({{$ex_class->_id}});
 {{/main}}
 
 <table class="main">
   <tr>
-    <td id="exClassList" style="width: 20%;">
+    <td id="exClassList" style="width: 15%;">
     	<!-- exClassList -->
     </td>
-    <td id="exClassEditor" rowspan="2">
+    <td id="exClassEditor">
       <!-- exClassEditor -->
     </td>
   </tr>
-	
-	<tr>
-		<td id="exConceptList">
-      <!-- exConceptList -->
-		</td>
-	</tr>
 </table>

@@ -451,7 +451,53 @@ class CSetupsystem extends CSetup {
               ADD INDEX (`concept_id`),
               ADD INDEX (`field_id`);";
     $this->addQuery($query);
+		
+    $this->makeRevision("1.0.48");
+		$query = "CREATE TABLE `ex_class_field_group` (
+              `ex_class_field_group_id` INT (11) UNSIGNED NOT NULL auto_increment PRIMARY KEY,
+              `ex_class_id` INT (11) UNSIGNED,
+              `name` VARCHAR (255) NOT NULL
+              ) /*! ENGINE=MyISAM */;";
+    $this->addQuery($query);
+    $query = "ALTER TABLE `ex_class_field_group` 
+              ADD INDEX (`ex_class_id`);";
+    $this->addQuery($query);
+		$query = "INSERT INTO `ex_class_field_group` (`name`, `ex_class_id`)
+              SELECT 'Groupe principal', `ex_class`.`ex_class_id` FROM `ex_class`";
+    $this->addQuery($query);
+		
+		// class field
+		$query = "ALTER TABLE `ex_class_field` 
+              ADD `ex_group_id` INT (11) UNSIGNED";
+    $this->addQuery($query);
+    $query = "ALTER TABLE `ex_class_field` 
+              ADD INDEX (`ex_group_id`)";
+    $this->addQuery($query);
+    $query = "UPDATE `ex_class_field` 
+		          SET `ex_group_id` = (
+							  SELECT `ex_class_field_group`.`ex_class_field_group_id` 
+								FROM `ex_class_field_group` 
+								WHERE `ex_class_field_group`.`ex_class_id` = `ex_class_field`.`ex_class_id`
+								LIMIT 1
+							)";
+    $this->addQuery($query);
+							
+		// class host field
+    $query = "ALTER TABLE `ex_class_host_field` 
+              ADD `ex_group_id` INT (11) UNSIGNED";
+    $this->addQuery($query);
+    $query = "ALTER TABLE `ex_class_host_field` 
+              ADD INDEX (`ex_group_id`)";
+    $this->addQuery($query);
+    $query = "UPDATE `ex_class_host_field` 
+              SET `ex_group_id` = (
+                SELECT `ex_class_field_group`.`ex_class_field_group_id` 
+                FROM `ex_class_field_group` 
+                WHERE `ex_class_field_group`.`ex_class_id` = `ex_class_host_field`.`ex_class_id`
+                LIMIT 1
+              )";
+    $this->addQuery($query);
     
-    $this->mod_version = "1.0.48";
+    $this->mod_version = "1.0.49";
   }
 }

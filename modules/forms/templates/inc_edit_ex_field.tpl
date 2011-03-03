@@ -37,18 +37,14 @@ updateInternalName = function(e){
 }
 </script>
 
-<form name="editField" method="post" action="?" onsubmit="return onSubmitFormAjax(this, {check: checkExField{{if $ex_field->ex_class_id}},onComplete: ExClass.edit.curry({{$ex_field->ex_class_id}}){{/if}}})">
+<form name="editField" method="post" action="?" onsubmit="return onSubmitFormAjax(this, {check: checkExField,onComplete: ExClass.edit.curry({{$ex_class->_id}})})">
   <input type="hidden" name="m" value="system" />
   <input type="hidden" name="dosql" value="do_ex_class_field_aed" />
   <input type="hidden" name="del" value="0" />
   <input type="hidden" name="_enum_translation" value="" />
 	
-	{{if !$ex_field->ex_class_id}}
-	  <input type="hidden" name="callback" value="ExConcept.editCallback" />
-	{{/if}}
-	
   {{mb_key object=$ex_field}}
-  {{mb_field object=$ex_field field=ex_class_id hidden=true}}
+  {{mb_field object=$ex_field field=ex_group_id hidden=true}}
   {{mb_field object=$ex_field field=concept_id hidden=true}}
   
   <table class="form">
@@ -60,12 +56,12 @@ updateInternalName = function(e){
 		    {{mb_include module=system template=inc_object_notes}}
 		    {{mb_include module=system template=inc_object_idsante400}}
 		    {{mb_include module=system template=inc_object_history}}
-		    {{tr}}{{$object->_class_name}}{{if !$object->ex_class_id}}.concept{{/if}}-title-modify{{/tr}} 
+		    {{tr}}{{$object->_class_name}}-title-modify{{/tr}} 
 		    '{{$object}}'
 		  </th>
 		  {{else}}
 		  <th class="title" colspan="4">
-		    {{tr}}{{$object->_class_name}}{{if !$object->ex_class_id}}.concept{{/if}}-title-create{{/tr}} 
+		    {{tr}}{{$object->_class_name}}-title-create{{/tr}} 
 		  </th>
 		  {{/if}}
 		</tr>
@@ -93,22 +89,23 @@ updateInternalName = function(e){
       <th><label for="_type">Type</label></th>
       <td>
         <select {{if $ex_field->_id}}disabled="disabled"{{/if}} name="_type" onchange="ExFieldSpec.edit(this, '{{$ex_field->prop}}', 'CExObject', '{{$ex_field->name}}', [], '{{$ex_field->_id}}')">
-          {{* Only non-concepts can have a concept *}}
-					{{if $ex_field->ex_class_id}}
-					<optgroup label="Concepts">
-						{{foreach from=$list_concepts item=_concept}}
-	            <option value="{{$_concept->_guid}}" {{if $_concept->_guid == $ex_field->concept_id}}selected="selected"{{/if}}>{{$_concept}}</option>
-	          {{foreachelse}}
-						  <option disabled="disabled">{{tr}}None{{/tr}}</option>
-						{{/foreach}}
-					</optgroup>
-					{{/if}}
-					
-					<optgroup label="Types">
-	          {{foreach from="CMbFieldSpecFact"|static:classes item=_class key=_key}}
-	            <option value="{{$_key}}" {{if $_key == $spec_type && !$ex_field->concept_id}}selected="selected"{{/if}}>{{tr}}CMbFieldSpec.type.{{$_key}}{{/tr}}</option>
-	          {{/foreach}}
-					</optgroup>
+          {{foreach from="CMbFieldSpecFact"|static:classes item=_class key=_key}}
+            <option value="{{$_key}}" {{if $_key == $spec_type && !$ex_field->concept_id}}selected="selected"{{/if}}>{{tr}}CMbFieldSpec.type.{{$_key}}{{/tr}}</option>
+          {{/foreach}}
+        </select>
+      </td>
+      
+      <th>{{mb_label object=$ex_field field=_locale_court}}</th>
+      <td>{{mb_field object=$ex_field field=_locale_court tabIndex="3" size=30}}</td>
+    </tr>
+		
+    <tr>
+      <th><label for="ex_group_id">Groupe</label></th>
+      <td>
+        <select name="ex_group_id">
+          {{foreach from=$ex_class->_ref_groups item=_group}}
+            <option value="{{$_group->_id}}" {{if $_group->_id == $ex_field->ex_group_id}}selected="selected"{{/if}}>{{$_group}}</option>
+          {{/foreach}}
         </select>
       </td>
       
