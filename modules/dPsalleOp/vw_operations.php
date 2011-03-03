@@ -34,7 +34,7 @@ $listAnesths = new CMediusers;
 $listAnesths = $listAnesths->loadAnesthesistes(PERM_DENY);
 
 $listChirs = new CMediusers;
-$listChirs = $listChirs->loadPraticiens(PERM_READ);
+$listChirs = $listChirs->loadPraticiens(PERM_DENY);
 
 // Sauvegarde en session du bloc (pour preselectionner dans la salle de reveil)
 $salle = new CSalle;

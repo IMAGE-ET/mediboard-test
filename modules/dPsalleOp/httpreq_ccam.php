@@ -14,11 +14,11 @@ $modif_operation = (CAppUI::conf("dPsalleOp COperation modif_actes") == "never")
 
 // Chargement de la liste des praticiens
 $listChirs = new CMediusers;
-$listChirs = $listChirs->loadPraticiens();
+$listChirs = $listChirs->loadPraticiens(PERM_DENY);
 
 // Chargement de la liste des anesthesistes
 $listAnesths = new CMediusers;
-$listAnesths = $listAnesths->loadAnesthesistes();
+$listAnesths = $listAnesths->loadAnesthesistes(PERM_DENY);
 
 $codable = new $object_class;
 $codable->load($object_id);
