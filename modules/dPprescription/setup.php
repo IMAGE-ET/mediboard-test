@@ -1828,7 +1828,11 @@ class CSetupdPprescription extends CSetup {
 		$query = "ALTER TABLE `prise_posologie` ADD INDEX (`datetime`);";
 		$this->addQuery($query);
 		
-		$this->mod_version = "1.32";
+		$this->makeRevision("1.32");
+		$query = "ALTER TABLE `category_prescription` ADD `cible_importante` ENUM ('0','1') DEFAULT '0';";
+		$this->addQuery($query);
+		
+		$this->mod_version = "1.33";
   }
 }
 

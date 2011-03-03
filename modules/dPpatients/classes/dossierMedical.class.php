@@ -40,7 +40,8 @@ class CDossierMedical extends CMbMetaObject {
   var $_ref_traitements = null;
   var $_ref_etats_dents = null;
   var $_ref_prescription = null;
-  
+  var $_ref_allergies = null;
+	
   // Derived back references
   var $_count_antecedents = null;
   var $_count_cancelled_antecedents = null;
@@ -198,6 +199,14 @@ class CDossierMedical extends CMbMetaObject {
     $antecedent->annule = "0";
     $antecedent->dossier_medical_id = $this->_id;
     $this->_count_allergies = $antecedent->countMatchingList();
+  }
+	
+	function loadRefsAllergies(){
+	  $antecedent = new CAntecedent();
+    $antecedent->type = "alle";
+    $antecedent->annule = "0";
+    $antecedent->dossier_medical_id = $this->_id;
+    $this->_ref_allergies = $antecedent->loadMatchingList();
   }
   
   function loadRefsTraitements() {

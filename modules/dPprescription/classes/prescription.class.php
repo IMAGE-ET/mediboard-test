@@ -1179,6 +1179,34 @@ class CPrescription extends CMbObject {
       }
     }
   }
+	
+	function getFastRecentModif(){
+		$service_id = isset($_SESSION["soins"]["service_id"]) && $_SESSION["soins"]["service_id"] ? $_SESSION["soins"]["service_id"] : "none";
+      
+    if ($service_id == "NP") {
+      $service_id = "none";
+    }
+    
+    $configs = CConfigService::getAllFor($service_id);
+    
+    // modification recente si moins de $nb_hours heures
+    $nb_hours = $configs["Affichage alertes de modifications"];
+
+		$this->_count_fast_recent_modif = 0;
+		
+		$recent = mbDateTime("- $nb_hours HOURS");
+    
+		$classes = array();
+		$classes["prescription_line_medicament"] = "CPrescriptionLineMedicament";
+		$classes["prescription_line_element"] = "CPrescriptionLineElement";
+    $classes["prescription_line_comment"] = "CPrescriptionLineComment";
+    $classes["prescription_line_mix"] = "CPrescriptionLineMix";
+    
+		foreach($classes as $_backprop => $_object_class){
+			$ids = $this->loadBackIds($_backprop);
+			$this->_count_fast_recent_modif += CUserLog::countRecentFor($_object_class, $ids, $recent);
+		}
+	}
   
   /*
    * Calcul des chapitres qui possedent des prises urgentes 

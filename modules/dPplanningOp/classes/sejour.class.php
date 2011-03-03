@@ -978,10 +978,24 @@ class CSejour extends CCodable {
     $this->_ref_prestation = $this->loadFwdRef("prestation_id", true);
   }
   
-  function loadRefsTransmissions(){
-    $this->_ref_transmissions = $this->loadBackRefs("transmissions"); 
+  function loadRefsTransmissions($important = false){
+		if($important){
+			// Chargement des transmissions ciblées sur une catégorie importante
+		  $transmission = new CTransmissionMedicale();
+			$ljoin = array();
+			$ljoin["category_prescription"] = "category_prescription.category_prescription_id = transmission_medicale.object_id";
+      
+			$where = array();
+			$where["object_class"] = " = 'CCategoryPrescription'";
+			$where["sejour_id"] = " = '$this->_id'";
+      $where["category_prescription.cible_importante"] = " = '1'";
+			
+			$this->_ref_transmissions = $transmission->loadList($where, null, null, null, $ljoin);
+  	} else {
+  		$this->_ref_transmissions = $this->loadBackRefs("transmissions"); 
+    }
   }
-  
+	
 	function loadRefsTasks(){
     $this->_ref_tasks = $this->loadBackRefs("tasks"); 
   }

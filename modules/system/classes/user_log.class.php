@@ -118,6 +118,16 @@ class CUserLog extends CMbMetaObject {
     }
   }
 	
+	 
+  static function countRecentFor($object_class, $ids, $recent){
+    $log = new CUserLog();
+		$where = array();
+		$where["object_class"] = "= '$object_class'";
+    $where["date"] = "> '$recent'";
+    $where["object_id"] = CSQLDataSource::prepareIn($ids);
+    return $log->countList($where);
+  }
+	
 	function store(){
 		if ($msg = $this->check()) {
 			return $msg;

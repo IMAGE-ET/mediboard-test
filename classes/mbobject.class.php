@@ -344,7 +344,7 @@ class CMbObject {
     
     return $this->_nb_files + $this->_nb_docs;
   }
-  
+  	
   /**
    * Load the object database version
    */
@@ -1468,6 +1468,38 @@ class CMbObject {
     return $this->_back[$backName] = $backObject->loadMatchingList($order, $limit, $group, $ljoin);
   }
   
+	
+  function loadBackIds($backName, $order = null, $limit = null, $group = null, $ljoin = null) {
+    if (!$backSpec = $this->makeBackSpec($backName)) {
+      return null;
+    }
+
+    // Cas du module non installé
+    $backObject = new $backSpec->class;
+    if (!$backObject->_ref_module) {
+      return null;
+    }
+
+    $backField = $backSpec->field;
+    $fwdSpec =& $backObject->_specs[$backField];
+    $backMeta = $fwdSpec->meta;
+    
+		// Cas des meta objects
+    if ($backMeta) {
+      trigger_error("meta case anavailable", E_USER_ERROR);
+    }
+    
+    // Empty object
+    if (!$this->_id) {
+      return array();
+    }
+
+    // Vérification de la possibilité de supprimer chaque backref
+    $where[$backField] = " = '$this->_id'";
+		
+    return $backObject->loadIds($where, $order, $limit, $group, $ljoin);
+  }
+	
   /**
    * Load the unique back reference for given collection name
    * Will check for uniqueness

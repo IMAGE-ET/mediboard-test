@@ -498,7 +498,7 @@ Main.add(function () {
   <tr>
     <th colspan="10" class="title text">
     	 <span style="float: right">
-				 <button type="button" class="cancel" style="float: right; display: none;" onclick="modalWindow.close(); refreshLinePancarte('{{$prescription_id}}');" id="modal_button">{{tr}}Close{{/tr}}</button>
+				 <button type="button" class="cancel" style="float: right; display: none;" onclick="modalWindow.close(); if(window.refreshLinePancarte){ refreshLinePancarte('{{$prescription_id}}'); }" id="modal_button">{{tr}}Close{{/tr}}</button>
  	 	     <button type="button" class="print" style="float: right" onclick="viewDossier('{{$sejour->_id}}');">Dossier</button>
     	 </span>
        <a style="float: left" href="?m=dPpatients&amp;tab=vw_full_patients&amp;patient_id={{$patient->_id}}"'>
