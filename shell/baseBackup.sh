@@ -64,7 +64,7 @@ case $1 in
     result=$database/
     
     databasebinlog=$database-${DATETIME}.binlog.position
-    mysql --user=$username --password=$password $database < mysql_show_master_status.sql > databasebinlog
+    mysql --user=$username --password=$password $database < $BASH_PATH/mysql_show_master_status.sql > $BASH_PATH/databasebinlog
     check_errs $? "Failed to create MySQL Binary Log" "MySQL Binary Log done!"
     
     mysqlhotcopy -u $username -p $password $database $BASEPATH
