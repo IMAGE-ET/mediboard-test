@@ -29,6 +29,13 @@ $codable->getAssociationCodesActes();
 $codable->loadExtCodesCCAM();
 $codable->loadPossibleActes();
 if($codable->_class_name == "COperation") {
+  $codable->loadRefPlageOp();
+  $modif_operation = $modif_operation || (CAppUI::conf("dPsalleOp COperation modif_actes") == "button" && !$codable->_ref_plageop->actes_locked);
+
+  $sejour =& $selOp->_ref_sejour;
+
+  // Codable facturé
+  $modif_operation = $modif_operation || (CAppUI::conf("dPsalleOp COperation modif_actes") == "facturation" && !$codable->facture);
   $codable->countEchangeHprim();
 }
 
