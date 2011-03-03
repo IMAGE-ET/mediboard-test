@@ -22,16 +22,7 @@ signerActes = function(object_id, object_class){
   </tr> 
   {{/if}}
   
-  {{if !($can->edit}}
-  <tr>
-    <td colspan="10" class="text">
-      <div class="small-info">
-          Vous n'avez pas les droits sur la cotation en salle, veuillez contacter un administrateur
-      </div>
-    </td>
-  </tr>
-  {{/if}}
-  {{if $modif_operation)}}
+  {{if !($can->edit || $modif_operation)}}
   <tr>
     <td colspan="10" class="text">
       <div class="small-info">
