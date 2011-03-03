@@ -13,7 +13,7 @@
     <tr>
       <th class="info {{$curr_note->degre}}">
         <span style="float: right;">
-          {{mb_include module=mediusers template=inc_vw_mediuser mediuser=$curr_note->_ref_user initials=true}}
+          {{mb_include module=mediusers template=inc_vw_mediuser mediuser=$curr_note->_ref_user initials=block}}
         </span>
         
         <label title="{{$curr_note->date|date_format:$conf.datetime}}">
