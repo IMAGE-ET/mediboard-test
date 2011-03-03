@@ -68,15 +68,14 @@ case $1 in
   hotcopy)
     result=$database/
     
-    if [ $binary_log -eq 1 ]
-    then
+    mysqlhotcopy -u $username -p $password $database $BASEPATH
+    check_errs $? "Failed to create MySQL hot copy" "MySQL hot copy done!"
+    
+    if [ $binary_log -eq 1 ]; then
       databasebinlog=$database-${DATETIME}.binlog.position
       mysql --user=$username --password=$password $database < $SHELL_PATH/mysql_show_master_status.sql > $SHELL_PATH/databasebinlog
       check_errs $? "Failed to create MySQL Binary Log" "MySQL Binary Log done!"
     fi
-    
-    mysqlhotcopy -u $username -p $password $database $BASEPATH
-    check_errs $? "Failed to create MySQL hot copy" "MySQL hot copy done!"
     ;;
   dump)
     result=$database.sql
