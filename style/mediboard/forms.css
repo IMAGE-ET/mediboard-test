@@ -292,11 +292,13 @@ button.none {
   text-indent: 2px;
 }
 
-button.big {
+button.big,
+a.button.big {
   font-size: 160%;
   height: 50px;
   margin: 4px 10px;
   padding: 4px 8px;
+	border-width: 2px;
 	text-align: center;
   -moz-border-radius: 6px;
   -webkit-border-radius: 6px;

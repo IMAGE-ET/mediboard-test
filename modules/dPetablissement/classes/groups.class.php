@@ -162,7 +162,7 @@ class CGroups extends CMbObject {
   }
 
   function loadRefsService(){
-    $this->_ref_services = $this->loadBackRefs("services");
+    return $this->_ref_services = $this->loadBackRefs("services", "nom");
   }
 
   function loadRefPharmacie(){

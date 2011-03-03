@@ -933,11 +933,11 @@ table.active {
 }
 
 .modal.popup > button.cancel {
-	right: -20px;
+	right: -15px;
 }
 
 .modal.popup > button.change {
-  right: 50px;
+  right: 10px;
 }
 
 .modal table.tbl {
