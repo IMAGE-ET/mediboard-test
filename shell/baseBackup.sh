@@ -12,12 +12,13 @@ announce_script "Database daily backup"
 if [ "$#" -lt 5 ]
 then 
   echo "Usage: $0 <method> <username> <password> <database> <backup_path> \[<time>\]"
-  echo "  <method> is hotcopy or dump method, eg hotcopy"
-  echo "  <username> is username for mysql, eg admindb"
-  echo "  <password> is password for mysql, eg dbadmin"
-  echo "  <database> is database, eg mediboard"
-  echo "  <backup_path> is the backup path, eg /var/backup"
-  echo "  [-t <time>] is time of removal of files (day), default 7"
+  echo " <method> is hotcopy or dump method, eg hotcopy"
+  echo " <username> is username for mysql, eg admindb"
+  echo " <password> is password for mysql, eg dbadmin"
+  echo " <database> is database, eg mediboard"
+  echo " <backup_path> is the backup path, eg /var/backup"
+  echo " [-t <time>] is time of removal of files (day), default 7"
+  echo " [-b <binary_log>] is create mysql binary log"
   exit 1
 fi
 
@@ -33,6 +34,7 @@ set -- $args
 for i; do
   case "$i" in
     -t) time=$2; shift 2;;
+    -b) binary_log=1; shift;;
     --) shift ; break ;;
   esac
 done
@@ -44,6 +46,9 @@ database=$4
 backup_path=$5
 
 ## Make complete path
+
+# Make shell path
+SHELL_PATH=`pwd`/$BASH_PATH
 
 # Make backup path
 BACKUPPATH=$5
@@ -63,9 +68,12 @@ case $1 in
   hotcopy)
     result=$database/
     
-    databasebinlog=$database-${DATETIME}.binlog.position
-    mysql --user=$username --password=$password $database < $BASH_PATH/mysql_show_master_status.sql > $BASH_PATH/databasebinlog
-    check_errs $? "Failed to create MySQL Binary Log" "MySQL Binary Log done!"
+    if [ $binary_log -eq 1 ]
+    then
+      databasebinlog=$database-${DATETIME}.binlog.position
+      mysql --user=$username --password=$password $database < $SHELL_PATH/mysql_show_master_status.sql > $SHELL_PATH/databasebinlog
+      check_errs $? "Failed to create MySQL Binary Log" "MySQL Binary Log done!"
+    fi
     
     mysqlhotcopy -u $username -p $password $database $BASEPATH
     check_errs $? "Failed to create MySQL hot copy" "MySQL hot copy done!"
