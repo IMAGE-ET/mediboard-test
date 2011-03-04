@@ -1052,3 +1052,22 @@ ul.tags > li.input {
   border: none;
   padding: 0;
 }
+
+.hour_adm {
+  width: 100%;
+  display: none;
+  font-size: 0.8em; 
+  background-color: #555 !important;
+  color: #fff;
+  position: absolute;
+  top: -11px;
+  right: 0;  
+}
+
+td.td_hour_adm:hover {
+  background-color: #eee !important;
+}
+
+td.td_hour_adm:hover .hour_adm {
+ display: inline;
+}

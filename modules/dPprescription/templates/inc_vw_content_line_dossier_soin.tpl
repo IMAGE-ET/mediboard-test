@@ -93,9 +93,15 @@
 					 
 					{{* Affichage de la case *}} 
 				  <td data-uniteprise="{{$unite_prise}}" id="drop_{{$line_id}}_{{$line_class}}_{{$unite_prise|md5}}_{{$_date}}_{{$_hour}}" 
-				   		class="{{$line_id}}_{{$line_class}} {{$_view_date}}-{{$moment_journee}} {{if ($quantite == '0' || $quantite == '-')}}canDrop{{/if}} colorPlanif {{$_hour}} {{$_date}}-{{$_hour}}" 
+				   		class="{{$line_id}}_{{$line_class}} {{$_view_date}}-{{$moment_journee}} {{if ($quantite == '0' || $quantite == '-')}}canDrop{{/if}} colorPlanif {{$_hour}} {{$_date}}-{{$_hour}} td_hour_adm" 
 				   		style='display: none; text-align: center; {{if array_key_exists("$_date $_hour:00:00", $operations)}}border-right: 3px solid black;{{/if}}'>
-				   			   
+				  
+					
+					 	<div style="position: relative;">		
+						   <span class="hour_adm">
+                 {{$_hour}}h
+               </span>
+						   
 					  <div id="drag_{{$line_id}}_{{$unite_prise|md5}}_{{$_date}}_{{$heure_reelle}}_{{$_quantite}}_{{$planification_id}}"
 					       onmouseover='{{if $origine_date_planif || @is_array($line->_administrations.$unite_prise.$_date.$_hour.administrations)}}
 					  										ObjectTooltip.createDOM(this, "tooltip-content-{{$line_id}}-{{$unite_prise|md5}}-{{$_date}}-{{$_hour}}");
@@ -151,6 +157,7 @@
 							 {{if (($line->_fin_reelle && ($line->_fin_reelle|date_format:"%Y-%m-%d %H:00:00" < $_date_hour)) || $line->_debut_reel|date_format:"%Y-%m-%d %H:00:00" > $_date_hour) && $line->_active && !$line->inscription}}
 		             <small>{{if $line->_fin_reelle > $_date_hour}}&gt;{{else}}&lt;{{/if}} </small>
 		           {{/if}}
+							
 				 </div>	
  
          {{if isset($line_plan_soin.nb_adm|smarty:nodefaults) && $line_plan_soin.nb_adm > 1}}
@@ -225,6 +232,10 @@
 					   </ul>
 				     {{/if}}
 	         </div>
+					 
+				
+					 
+					 </div>
 			   </td> 
      {{/foreach}}
     {{/foreach}}		   

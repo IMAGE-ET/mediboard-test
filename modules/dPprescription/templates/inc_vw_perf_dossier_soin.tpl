@@ -185,7 +185,14 @@
       {{foreach from=$_dates key=_date item=_hours}}
         {{foreach from=$_hours key=_heure_reelle item=_hour}}
 		      {{assign var=_date_hour value="$_date $_heure_reelle"}}	
-			    <td class="{{$_view_date}}-{{$moment_journee}}" style='text-align: center; padding: 0; width: 100px; cursor: pointer; {{if array_key_exists("$_date $_hour:00:00", $operations)}}border-right: 3px solid black;{{/if}}'>
+			    <td class="{{$_view_date}}-{{$moment_journee}} td_hour_adm" style='text-align: center; padding: 0; width: 100px; cursor: pointer; {{if array_key_exists("$_date $_hour:00:00", $operations)}}border-right: 3px solid black;{{/if}}'>
+						
+						
+						  <div style="position: relative;">   
+               <span class="hour_adm">
+                 {{$_hour}}h
+               </span>
+						
 						{{foreach from=$_prescription_line_mix->_ref_lines item=_perf_line name="foreach_perf_line"}}
 					     {{if isset($_perf_line->_administrations.$_date.$_hour|smarty:nodefaults)}}
 					       {{assign var=nb_adm value=$_perf_line->_administrations.$_date.$_hour}}
@@ -318,6 +325,8 @@
 							 {{/if}}
 						 {{/if}}
 						 {{/if}}
+						 </div>
+						 
 						 </div>
 			    </td>
 		    {{/foreach}}
