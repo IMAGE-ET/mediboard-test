@@ -12,7 +12,7 @@
 
 selColonne = function(hour){
 	$('plan_soin').select('div.non_administre:not(.perfusion), div.a_administrer:not(.perfusion)').each(function(oDiv){
-	  if(oDiv.up(2).visible() && oDiv.up().hasClassName(hour)){
+	  if(oDiv.up("tbody").visible() && oDiv.up("td").hasClassName(hour)){
 	    if(Object.isFunction(oDiv.onclick)){
 			  oDiv.onclick();
 			}
