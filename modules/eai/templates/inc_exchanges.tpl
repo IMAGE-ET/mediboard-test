@@ -23,8 +23,8 @@
     <th>{{mb_title object=$exchange field="object_id"}}</th>
     <th>{{mb_title object=$exchange field="id_permanent"}}</th>
     <th>{{mb_title object=$exchange field="date_production"}}</th>
-    <th>{{mb_title object=$exchange field="destinataire_id"}}</th>
     <th>{{mb_title object=$exchange field="emetteur_id"}}</th>
+    <th>{{mb_title object=$exchange field="destinataire_id"}}</th>
     <th>{{mb_title object=$exchange field="sous_type"}}</th>
     <th>{{mb_title object=$exchange field="date_echange"}}</th>
     <th>{{mb_title object=$exchange field="statut_acquittement"}}</th>
