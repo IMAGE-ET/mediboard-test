@@ -6,7 +6,7 @@ Main.add(function () {
   
   // Mise à jour du compteur de patients arrivés
 	if($('tab_main_courante')){
-		link = $('tab_main_courante').select("a[href=#consultations]")[0];
+		var link = $('tab_main_courante').select("a[href=#consultations]")[0];
 	  link.update('Reconvocations <small>({{$nb_attente}} / {{$nb_a_venir}})</small>');
 	  {{if $nb_attente == '0'}}
 	    link.addClassName('empty');
@@ -16,16 +16,10 @@ Main.add(function () {
   }
 });
 
-PatSelector.init = function() {
-  this.sForm = 'Create-Reconvocation';
-  this.sId   = 'patient_id';
-  this.sView = '_patient_view';
-  this.pop();
-}
-
 Reconvocation = {
   checkPraticien: function() {
-    var form = getForm('Create-Reconvocation')
+    var form = getForm('Create-Reconvocation');
+		
     if ($V(form.prat_id) == '') {
       alert('Veuillez sélectionner un praticien');
       return false;
@@ -34,14 +28,17 @@ Reconvocation = {
   },
   
   choosePatient: function() {
-    Consultations.stop()	
+    Consultations.stop();
+		
     if (!Reconvocation.checkPraticien()) {
       return false;
     }
     
-		PatSelector.init();
+		{{if $mode_urgence}}
+		  PatSelector.init();
+		{{/if}}
+		
     return false;
-    
   },
   
   submit: function() {
@@ -55,7 +52,15 @@ Reconvocation = {
   {{if $mode_urgence}}
 	<tr>
 		<td>
-		  	
+		  <script type="text/javascript">
+				PatSelector.init = function() {
+				  this.sForm = 'Create-Reconvocation';
+				  this.sId   = 'patient_id';
+				  this.sView = '_patient_view';
+				  this.pop();
+				}
+		  </script>
+			
       <form name="Create-Reconvocation" method="post" action="?" onsubmit="return Reconvocation.choosePatient();">
         <input type="hidden" name="dosql" value="do_consult_now" />
         <input type="hidden" name="m" value="dPcabinet" />
