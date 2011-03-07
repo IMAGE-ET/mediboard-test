@@ -10,6 +10,10 @@ signerActes = function(object_id, object_class){
 
 </script>
 
+{{if !isset($modif_operation|smarty:nodefaults)}}
+{{assign var=modif_operation value=1}}
+{{/if}}
+
 <table class="form">
   {{if $subject->_coded}}
   <tr>
