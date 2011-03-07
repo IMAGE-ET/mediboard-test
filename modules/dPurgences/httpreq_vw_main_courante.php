@@ -37,7 +37,7 @@ $where = array();
 $ljoin["rpu"] = "sejour.sejour_id = rpu.sejour_id";
 $ljoin["patients"] = "sejour.patient_id = patients.patient_id";
 $where[] = "sejour.entree_reelle BETWEEN '$date' AND '$date_after' 
-  OR (sejour.sortie_reelle IS NULL AND sejour.entree_reelle BETWEEN '$date_before' AND '$date_after')";
+  OR (sejour.sortie_reelle IS NULL AND sejour.entree_reelle BETWEEN '$date_before' AND '$date_after' AND sejour.annule = '0')";
 $where[] = CAppUI::pref("showMissingRPU") ? 
   "sejour.type = 'urg' OR rpu.rpu_id IS NOT NULL" :
   "rpu.rpu_id IS NOT NULL";
