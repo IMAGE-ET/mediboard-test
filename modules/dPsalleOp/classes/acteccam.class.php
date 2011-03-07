@@ -411,6 +411,7 @@ class CActeCCAM extends CActe {
     
     // Nombre d'actes
     $numActes = count($this->_linked_actes) + 1;
+    mbTrace($this->_linked_actes, $this->code_acte, true);
     
     // Calcul de la position tarifaire de l'acte
     $tarif = $this->_ref_code_ccam->activites[$this->code_activite]->phases[$this->code_phase]->tarif;
@@ -571,12 +572,14 @@ class CActeCCAM extends CActe {
       return $this->_guess_association;
     }
     
-    // 1 actes + 1 acte du chap. 18 ou du chap. 19.02 (règles B) / Non présent pour le mode Siemens
-    if($numActes == 2 && !(CAppUI::conf("dPpmsi systeme_facturation") == "siemens")) {
+    // 1 actes + 1 acte du chap. 18 ou du chap. 19.02 (règles B) (règle supprimée pour l'instant à cause de l'interface factu)
+    /**
+    if($numActes == 2)) {
       // 1 acte + 1 geste complémentaire chap. 18 (règle B)
       if($numChap18 == 1) {
         $this->_guess_association = "";
         $this->_guess_regle_asso  = "B";
+      mbTrace($this->_guess_association." ".$this->_guess_regle_asso, $this->code_acte, true); 
         return $this->_guess_association;
       }
       // 1 acte + 1 supplément des chap. 19.02 (règle B)
@@ -586,7 +589,8 @@ class CActeCCAM extends CActe {
         return $this->_guess_association;
       }
     }
-    
+     */
+     
     // 1 acte + 1 ou pls geste complémentaire chap. 18 + 1 ou pls supplément des chap. 19.02 (règle C)
     if($numActes >= 3 && $numActes - ($numChap18 + $numChap1902) == 1 && $numChap18 && $numChap1902) {
       $this->_guess_association = "1";
