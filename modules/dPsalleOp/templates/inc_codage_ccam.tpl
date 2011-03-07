@@ -45,7 +45,7 @@ signerActes = function(object_id, object_class){
   {{/if}}
 
   <!-- Gestion des codes -->
-  {{if !$subject->_coded}}
+  {{if !$subject->_coded && $modif_operation}}
   <tr>
     <td class="text">
       {{include file="../../dPsalleOp/templates/inc_manage_codes.tpl"}}
@@ -59,7 +59,7 @@ signerActes = function(object_id, object_class){
       {{if $subject->_coded}}
         {{mb_include module=dPsalleOp template=inc_possible_actes_ccam}}
       {{else}}
-        {{if $can->edit || $modif_operation}}
+        {{if $can->admin || $modif_operation}}
           {{mb_include module=dPsalleOp template=inc_edit_actes_ccam}}
         {{else}}
           {{mb_include module=dPsalleOp template=inc_possible_actes_ccam}}
@@ -70,7 +70,7 @@ signerActes = function(object_id, object_class){
   {{if $conf.dPsalleOp.CActeCCAM.envoi_actes_salle && ($subject instanceof COperation)}}
   <tr>
     <td>
-      {{if !$subject->_nb_echange_hprim || $m == "dPpmsi"}}
+      {{if !$subject->_nb_echange_hprim || $m == "dPpmsi" || $can->admin}}
       <button class="tick" onclick="ActesCCAM.exportHPRIM({{$subject->_id}}, 'op')">Export des actes au PMSI</button>
       {{/if}}
       {{if $subject->_nb_echange_hprim}}
@@ -88,8 +88,15 @@ signerActes = function(object_id, object_class){
     <td class="text">
     </td>
   </tr>
+  {{if $can->admin}}
   <tr>
+  {{else}}
+  <tr style="display: none;">
+    {{/if}}
     <td class="text" id="hprim_export_op{{$subject->_id}}">
+      <div class="small-info">
+        Fenêtre de résultat de l'envoi
+      </div>
     </td>
   </tr>
   {{/if}}
