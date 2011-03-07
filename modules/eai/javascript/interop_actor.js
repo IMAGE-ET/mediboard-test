@@ -63,5 +63,11 @@ InteropActor = {
          ).hide()) 
       };
     });
+  },
+  
+  receive : function(actor_guid) {
+    var url = new Url("eai", "ajax_receive_files");
+	url.addParam("actor_guid", actor_guid);
+	url.requestUpdate("utilities-exchange-source-receive");
   }
 };

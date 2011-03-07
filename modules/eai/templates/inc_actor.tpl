@@ -55,7 +55,7 @@
       </tr>
                   
       {{mb_include module=eai template="`$actor->_parent_class_name`_inc"}}
-      
+        
       <tr>
         <td class="button" colspan="2">
           {{if $actor->_id}}
@@ -67,7 +67,21 @@
              <button class="submit" type="submit">{{tr}}Create{{/tr}}</button>
           {{/if}}
         </td>
-      </tr>     
+      </tr> 
+      
+      {{if ($actor instanceof CInteropSender) && count($actor->_ref_exchanges_sources) > 0}}
+      <tr>
+        <th colspan="2" class="category">Utilitaires expéditeur FTP</th>
+      </tr>   
+      <tr>
+        <td>
+          <button  type="button" class="tick" onclick="InteropActor.receive('{{$actor->_guid}}');">
+            {{tr}}utilities-exchange-source-receive{{/tr}}
+          </button> 
+        </td>
+        <td id="utilities-exchange-source-receive"></td>
+      </tr> 
+      {{/if}}   
     </table>
   </form>
   

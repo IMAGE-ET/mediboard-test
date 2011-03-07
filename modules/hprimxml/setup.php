@@ -303,7 +303,16 @@ class CSetuphprimxml extends CSetup {
               ADD `type_sej_exte` VARCHAR (255);"; 
     $this->addQuery($sql);
     
-    $this->mod_version = "0.31";
+    $this->makeRevision("0.31");
+    
+    $sql = "ALTER TABLE `echange_hprim`
+              DROP `emetteur`,
+              DROP `destinataire`,
+              DROP INDEX `message_content_id`,
+              DROP INDEX `acquittement_content_id`;"; 
+    $this->addQuery($sql);
+    
+    $this->mod_version = "0.32";
   }
 }
 

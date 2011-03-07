@@ -72,7 +72,41 @@ class CSourceFTP extends CExchangeSource {
     }
   }
   
-  function receive() {}
+  function getACQ() {}
+  
+  function receive() {
+    $extension = $this->fileextension;
+
+    $ftp = new CFTP();
+    $ftp->init($this);
+
+    try {
+      $ftp->connect();
+    } catch (CMbException $e) {
+      CAppUI::stepAjax($e->getMessage(), UI_MSG_WARNING); 
+    }
+    
+    $files = array();
+    try {
+      $files = $ftp->getListFiles("./".$ftp->fileprefix);
+    } catch (CMbException $e) {
+      CAppUI::stepAjax($e->getMessage(), UI_MSG_WARNING); 
+    }
+    
+    if (empty($files)) {
+      CAppUI::stepAjax("Le répertoire ne contient aucun fichier", UI_MSG_ERROR);
+    }
+    
+    foreach($files as $filepath) {
+      if (substr($filepath, -(strlen($extension))) == $extension) {
+        $filename = basename($filepath);
+        
+        $file = $ftp->getFile($filepath, "tmp/ftp_files/$filename");
+        mbTrace($file);
+      }
+    }
+    
+  }
   
   function isReachableSource() {
     $ftp = new CFTP();

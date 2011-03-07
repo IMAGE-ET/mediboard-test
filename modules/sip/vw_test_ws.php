@@ -26,7 +26,7 @@ if (!CAppUI::conf('sip server')) {
     $source->setData(array('operation' => 'add', 'numerique1' => 2, 'numerique2' => 3), false);
     $source->send();
     
-    $result = $source->receive();
+    $result = $source->getACQ();
     mbTrace($result);
   }
   
@@ -43,7 +43,7 @@ if (!CAppUI::conf('sip server')) {
     $source = CExchangeSource::get($dest_hprim->_guid);
     $source->setData($msgEvt);
     $source->send("evenementPatient");
-    $acquittement = $source->receive();
+    $acquittement = $source->getACQ();
   
     $domGetAcquittement = new CHPrimXMLAcquittementsPatients();
     $domGetAcquittement->loadXML($acquittement);  

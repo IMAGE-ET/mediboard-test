@@ -25,8 +25,8 @@ class CEAISoapHandler extends CSoapHandler {
   );
   
   function event($message) {
-    //CEAI::dispatch($message);
     // Dispatch EAI 
+    CEAIDispatcher::dispatch($message);
   }
 }
 

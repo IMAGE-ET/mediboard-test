@@ -99,7 +99,7 @@ foreach ($destinataires as $_destinataire) {
           $echange_hprim->store();
           $logs[] = "Archivage du fichier envoyé sur le serveur Mediboard";
         }
-        $acquittement = $source->receive();
+        $acquittement = $source->getACQ();
         if ($acquittement) {
           switch ($typeObject) {
             case "op" :

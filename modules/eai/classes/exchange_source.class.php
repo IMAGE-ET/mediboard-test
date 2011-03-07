@@ -133,8 +133,10 @@ class CExchangeSource extends CMbObject {
     
   function send($evenement_name = null) {}
   
-  function receive() {}
+  function getACQ() {}
   
+  function receive() {}
+
   /**
    * Source is reachable ?
    * @return boolean reachable

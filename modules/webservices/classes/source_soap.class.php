@@ -74,7 +74,7 @@ class CSourceSOAP extends CExchangeSource {
 		return true;
   }
   
-  function receive() {    
+  function getACQ() {    
     return $this->_acquittement;
   }
   

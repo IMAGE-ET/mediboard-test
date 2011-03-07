@@ -127,7 +127,7 @@ if (CAppUI::conf("dPpmsi transmission_actes") == "signature" && $object_class ==
             $echange_hprim->date_echange = mbDateTime();
             $echange_hprim->store();
           }
-          $acquittement = $source->receive();
+          $acquittement = $source->getACQ();
           if ($acquittement) {          
             $domGetAcquittement = new CHPrimXMLAcquittementsPMSI();
             $domGetAcquittement->loadXML(utf8_decode($acquittement));

@@ -50,7 +50,7 @@ if (!$echange_hprim_id) {
         continue;
       }
       
-      $acquittement = $source->receive();
+      $acquittement = $source->getACQ();
       
       if ($acquittement) {
         $domGetAcquittement = new CHPrimXMLAcquittementsPatients();
@@ -82,7 +82,7 @@ if (!$echange_hprim_id) {
   $source = CExchangeSource::get("$dest_hprim->_guid-evenementPatient");
   $source->setData($echange_hprim->_message);
   $source->send();
-  $acquittement = $source->receive();
+  $acquittement = $source->getACQ();
   
   if ($acquittement) {
     $domGetAcquittement = new CHPrimXMLAcquittementsPatients();

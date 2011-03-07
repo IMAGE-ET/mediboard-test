@@ -50,6 +50,7 @@ class CExchangeDataFormat extends CMbMetaObject {
   var $_observations       = array();
   var $_doc_errors_msg     = array();
   var $_doc_errors_ack     = array();
+  var $_load_content       = true;
   
   // Forward references
   var $_ref_group          = null;
@@ -108,7 +109,9 @@ class CExchangeDataFormat extends CMbMetaObject {
     $this->_tag_service  = CService::getTagService($this->group_id); 
     
     // Chargement des contents 
-    $this->loadContent();
+    if ($this->_load_content) {
+      $this->loadContent();
+    }   
      
     $this->_self_emetteur     = $this->emetteur_id     === null;
     $this->_self_destinataire = $this->destinataire_id === null;

@@ -88,7 +88,7 @@ class CDestinataireHprim extends CInteropReceiver {
       if ($source->_id) {
         $source->setData($msgEvtPatient);
         $source->send();
-        $acquittement = $source->receive();
+        $acquittement = $source->getACQ();
 
         if ($acquittement) {
           $echange_hprim = $domEvenement->_ref_echange_hprim;
@@ -111,6 +111,7 @@ class CDestinataireHprim extends CInteropReceiver {
   
   function lastMessage() {
     $echg_hprim = new CEchangeHprim();
+    $echg_hprim->_load_content = false;
     $where = array();
     $where["emetteur_id"] = " = '$this->_id'";    
     $key = $echg_hprim->_spec->key;

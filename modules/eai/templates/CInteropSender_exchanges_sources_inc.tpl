@@ -11,7 +11,7 @@
 
 <table class="form">  
   <tr>
-    <th class="category">
+    <th class="title">
       {{tr}}config-exchange-source{{/tr}}
     </th>
   </tr>
