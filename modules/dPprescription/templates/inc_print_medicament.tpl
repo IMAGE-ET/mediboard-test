@@ -36,27 +36,28 @@
 		  {{if $med->date_arret}}
 		    (Médicament arrêté le {{$med->date_arret|date_format:"%d/%m/%Y"}}) 
 		  {{/if}}
-		  
-		  
-		  
+		 
 		  <!-- Remarque sur la prise -->
 		  {{if $med->_specif_prise && $med->_ref_prises|@count}}
-		    <br />( {{if $print}}
-                  {{$med->_specif_prise|escape:"html"}}
-                {{else}}
-                  {{$med->_specif_prise}})
-                {{/if}}
+		    <br />
+				({{if $print}}
+          {{$med->_specif_prise|escape:"html"}}
+        {{else}}
+          {{$med->_specif_prise}}
+        {{/if}})
 		  {{/if}}
     </li>
-    <!-- Commentaire -->
-      {{if $med->commentaire}}
-      <em>{{if $print}}
-              {{$med->commentaire|escape:"html"}}
-            {{else}}
-              {{$med->commentaire|nl2br}}
-            {{/if}}</em>
-      {{/if}}
     {{/if}}
+		<!-- Commentaire -->
+      {{if $med->commentaire}}
+	      <em>
+	      	{{if $print}}
+	          {{$med->commentaire|escape:"html"}}
+	        {{else}}
+	          {{$med->commentaire|nl2br}}
+	        {{/if}}
+				</em>
+      {{/if}}
   </ul>
 </li>
 {{else}}
