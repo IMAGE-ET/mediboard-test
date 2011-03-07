@@ -16,10 +16,6 @@ $object->load($object_id);
 $object->loadRefsActesNGAP();
 $date            = CValue::getOrSession("date", mbDate());
 $date_now        = mbDate();
-$modif_operation = (CAppUI::conf("dPsalleOp COperation modif_actes") == "never") ||
-                   ((CAppUI::conf("dPsalleOp COperation modif_actes") == "oneday") && ($date >= $date_now));
-
-$modif_operation = $modif_operation || (CAppUI::conf("dPsalleOp COperation modif_actes") == "facturation" && !$object->facture);
 
 // Initialisation d'un acte NGAP
 $acte_ngap = new CActeNGAP();
@@ -32,7 +28,6 @@ $smarty = new CSmartyDP();
 
 $smarty->assign("acte_ngap"      , $acte_ngap);
 $smarty->assign("object"         , $object);
-$smarty->assign("modif_operation", $modif_operation);
 
 $smarty->display("inc_codage_ngap.tpl");
 ?>

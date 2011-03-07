@@ -8,8 +8,6 @@ $chir_id         = CValue::getOrSession("chir_id");
 
 $date  = CValue::getOrSession("date", mbDate());
 $date_now = mbDate();
-$modif_operation = (CAppUI::conf("dPsalleOp COperation modif_actes") == "never") ||
-                   ((CAppUI::conf("dPsalleOp COperation modif_actes") == "oneday") && ($date >= $date_now));
 
 
 // Chargement de la liste des praticiens
@@ -22,6 +20,7 @@ $listAnesths = $listAnesths->loadAnesthesistes(PERM_DENY);
 
 $codable = new $object_class;
 $codable->load($object_id);
+$codable->isCoded();
 
 $codable->loadRefPatient();
 $codable->loadRefPraticien();
@@ -29,13 +28,6 @@ $codable->getAssociationCodesActes();
 $codable->loadExtCodesCCAM();
 $codable->loadPossibleActes();
 if($codable->_class_name == "COperation") {
-  $codable->loadRefPlageOp();
-  $modif_operation = $modif_operation || (CAppUI::conf("dPsalleOp COperation modif_actes") == "button" && !$codable->_ref_plageop->actes_locked);
-
-  $sejour =& $selOp->_ref_sejour;
-
-  // Codable facturé
-  $modif_operation = $modif_operation || (CAppUI::conf("dPsalleOp COperation modif_actes") == "facturation" && !$codable->facture);
   $codable->countEchangeHprim();
 }
 
@@ -47,8 +39,7 @@ $smarty->assign("listChirs"        , $listChirs);
 $smarty->assign("subject"          , $codable);
 $smarty->assign("module"           , $module);
 $smarty->assign("do_subject_aed"   , $do_subject_aed);
-$smarty->assign("chir_id"          , $chir_id); 
-$smarty->assign("modif_operation"  , $modif_operation);
+$smarty->assign("chir_id"          , $chir_id);
 $smarty->display("inc_codage_ccam.tpl");
 
 ?>

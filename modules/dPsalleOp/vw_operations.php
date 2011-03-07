@@ -20,8 +20,6 @@ $bloc_id         = CValue::getOrSession("bloc_id");
 $op              = CValue::getOrSession("op");
 $date            = CValue::getOrSession("date", mbDate());
 $date_now        = mbDate();
-$modif_operation = (CAppUI::conf("dPsalleOp COperation modif_actes") == "never") ||
-                   ((CAppUI::conf("dPsalleOp COperation modif_actes") == "oneday") && ($date >= $date_now));
 
 // Récupération de l'utilisateur courant
 $currUser = new CMediusers();
@@ -42,7 +40,7 @@ $salle->load($salle_id);
 CValue::setSession("bloc_id", $salle->bloc_id);
 
 // Opération selectionnée
-$selOp = new COperation;
+$selOp = new COperation();
 $timing = array();
 $prescription = new CPrescription();
 $protocoles = array();
@@ -53,13 +51,10 @@ if ($op) {
   
   $selOp->loadRefs();
   $selOp->countEchangeHprim();
+  $selOp->isCoded();
   $selOp->_ref_consult_anesth->loadRefsTechniques();
-  $modif_operation = $modif_operation || (CAppUI::conf("dPsalleOp COperation modif_actes") == "button" && !$selOp->_ref_plageop->actes_locked);
 
   $sejour =& $selOp->_ref_sejour;
-
-  // Codable facturé
-  $modif_operation = $modif_operation || (CAppUI::conf("dPsalleOp COperation modif_actes") == "facturation" && !$selOp->facture);
  
   $sejour->loadExtDiagnostics();
   $sejour->loadRefDossierMedical();
@@ -237,7 +232,6 @@ $smarty->assign("modeDAS"                , CAppUI::conf("dPsalleOp CDossierMedic
 $smarty->assign("selOp"                  , $selOp);
 $smarty->assign("timing"                 , $timing);
 $smarty->assign("date"                   , $date);
-$smarty->assign("modif_operation"        , $modif_operation);
 $smarty->assign("listValidateurs"        , $listValidateurs);
 $smarty->assign("isPrescriptionInstalled", CModule::getActive("dPprescription"));
 $smarty->assign("isbloodSalvageInstalled", CModule::getActive("bloodSalvage"));

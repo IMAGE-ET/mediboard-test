@@ -262,7 +262,7 @@ function reloadPrescription(prescription_id){
 
 <!-- codage des acte ccam et ngap -->
 <div id="codage_tab" style="display:none">
-  {{if $can->edit || $modif_operation}}
+  {{if $can->admin || ($can->edit && !$selOp->_coded)}}
   <form name="infoFactu" action="?m={{$m}}" method="post">
   <input type="hidden" name="m" value="dPplanningOp" />
   <input type="hidden" name="dosql" value="do_planning_aed" />

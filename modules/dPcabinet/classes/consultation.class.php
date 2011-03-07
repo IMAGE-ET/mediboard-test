@@ -266,7 +266,7 @@ class CConsultation extends CCodable {
     $this->_view = "Consultation ".$this->_etat;
     // pour récuperer le praticien depuis la plage consult
     $this->loadRefPlageConsult(true);
-    // si _coded vaut 1 alors, impossible de modifier la consultation
+    // si _coded vaut 1 alors, impossible de modifier la cotation
     $this->_coded = $this->valide;
     
     $this->_exam_fields = self::getExamFields();

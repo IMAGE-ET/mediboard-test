@@ -12,8 +12,6 @@ global $AppUI, $can, $m, $g;
 $operation_id = CValue::getOrSession("operation_id");
 
 $date  = CValue::getOrSession("date", mbDate());
-$date_now = mbDate();
-$modif_operation = $date>=$date_now;
 
 $operation = new COperation();
 $operation->load($operation_id);
@@ -28,6 +26,7 @@ $listAnesths = new CMediusers;
 $listAnesths = $listAnesths->loadAnesthesistes();
 
 $operation->updateFormFields();
+$operation->isCoded();
 $operation->loadRefsActesCCAM();
 $operation->loadExtCodesCCAM();
 $operation->getAssociationCodesActes();
@@ -36,7 +35,6 @@ $operation->loadRefPraticien();
 
 // Création du template
 $smarty = new CSmartyDP();
-$smarty->assign("modif_operation"  , $modif_operation);
 $smarty->assign("listAnesths"      , $listAnesths );
 $smarty->assign("listChirs"        , $listChirs   );
 $smarty->assign("operation"        , $operation   );

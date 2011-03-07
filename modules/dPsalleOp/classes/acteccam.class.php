@@ -411,7 +411,6 @@ class CActeCCAM extends CActe {
     
     // Nombre d'actes
     $numActes = count($this->_linked_actes) + 1;
-    mbTrace($this->_linked_actes, $this->code_acte, true);
     
     // Calcul de la position tarifaire de l'acte
     $tarif = $this->_ref_code_ccam->activites[$this->code_activite]->phases[$this->code_phase]->tarif;
@@ -579,7 +578,6 @@ class CActeCCAM extends CActe {
       if($numChap18 == 1) {
         $this->_guess_association = "";
         $this->_guess_regle_asso  = "B";
-      mbTrace($this->_guess_association." ".$this->_guess_regle_asso, $this->code_acte, true); 
         return $this->_guess_association;
       }
       // 1 acte + 1 supplément des chap. 19.02 (règle B)

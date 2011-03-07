@@ -12,7 +12,7 @@
   {{/if}}
   <input type="hidden" name="_class_name" value="{{$subject->_class_name}}" />
   
-  {{if $can->edit || $modif_operation}}
+  {{if $can->admin || ($can->edit && !$subject->_coded)}}
   <table class="main layout">
     <tr>
       <td class="halfPane">

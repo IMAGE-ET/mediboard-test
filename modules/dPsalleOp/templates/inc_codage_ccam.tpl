@@ -10,12 +10,9 @@ signerActes = function(object_id, object_class){
 
 </script>
 
-{{if !isset($modif_operation|smarty:nodefaults)}}
-{{assign var=modif_operation value=1}}
-{{/if}}
-
 <table class="form">
   {{if $subject->_coded}}
+  {{if $subject->_class_name == "CConsultation"}}
   <tr>
     <td colspan="10">
       <div class="small-info">
@@ -24,15 +21,7 @@ signerActes = function(object_id, object_class){
        </div>
      </td>
   </tr> 
-  {{/if}}
-  {{if !$can->read}}
-  <tr>
-    <td colspan="10" class="text">
-      <div class="small-info">Vous n'avez pas les droits nescessaires pour coder les actes</div>
-    </td>
-  </tr>
-  {{/if}}
-  {{if !$modif_operation}}
+  {{else}}
   <tr>
     <td colspan="10" class="text">
       <div class="small-info">
@@ -43,9 +32,17 @@ signerActes = function(object_id, object_class){
     </td>
   </tr>
   {{/if}}
+  {{/if}}
+  {{if (!$can->edit && $subject->_class_name == "CConsultation") || !$can->read}}
+  <tr>
+    <td colspan="10" class="text">
+      <div class="small-info">Vous n'avez pas les droits nescessaires pour coder les actes</div>
+    </td>
+  </tr>
+  {{else}}
 
   <!-- Gestion des codes -->
-  {{if !$subject->_coded && $modif_operation}}
+  {{if !$subject->_coded}}
   <tr>
     <td class="text">
       {{include file="../../dPsalleOp/templates/inc_manage_codes.tpl"}}
@@ -56,14 +53,10 @@ signerActes = function(object_id, object_class){
   <tr>
     <td class="text">
       <!-- Codage des actes -->
-      {{if $subject->_coded}}
+      {{if $subject->_coded && !$can->admin}}
         {{mb_include module=dPsalleOp template=inc_possible_actes_ccam}}
       {{else}}
-        {{if $can->admin || $modif_operation}}
-          {{mb_include module=dPsalleOp template=inc_edit_actes_ccam}}
-        {{else}}
-          {{mb_include module=dPsalleOp template=inc_possible_actes_ccam}}
-        {{/if}}
+        {{mb_include module=dPsalleOp template=inc_edit_actes_ccam}}
       {{/if}}
     </td>
   </tr>
@@ -110,6 +103,8 @@ signerActes = function(object_id, object_class){
 	    </button>
 	  </td>
   </tr>
+  {{/if}}
+  
   {{/if}}
   
 </table>

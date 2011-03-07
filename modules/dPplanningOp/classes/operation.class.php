@@ -343,7 +343,7 @@ class COperation extends CCodable {
     }
     $this->_acte_depassement        = $this->depassement;
     $this->_acte_depassement_anesth = $this->depassement_anesth;   
- }
+  }
   
   function updateDBFields() {
     if (count($this->_codes_ccam)) {
@@ -702,6 +702,15 @@ class COperation extends CCodable {
 	function countEchangeHprim() {
     // Récupération de tous les échanges produits
     $this->_nb_echange_hprim = $this->countBackRefs("echanges_hprim");
+  }
+  
+  function isCoded() {
+    $this->loadRefPlageOp();
+    $this->_coded = (CAppUI::conf("dPsalleOp COperation modif_actes") == "never") ||
+                    (CAppUI::conf("dPsalleOp COperation modif_actes") == "oneday" && $this->date > mbDate()) ||
+                    (CAppUI::conf("dPsalleOp COperation modif_actes") == "button" && !$this->_ref_plageop->actes_locked) ||
+                    (CAppUI::conf("dPsalleOp COperation modif_actes") == "facturation" && $this->facture);
+    return $this->_coded;
   }
   
   function getPerm($permType) {

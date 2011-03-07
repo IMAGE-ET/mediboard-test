@@ -114,6 +114,10 @@ class CCodable extends CMbObject {
     $this->_acte_execution = mbDateTime();
   }
   
+  function isCoded() {
+    return $this->_coded;
+  }
+  
   function updateFormFields() {
   	parent::updateFormFields();
     

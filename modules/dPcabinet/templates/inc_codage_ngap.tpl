@@ -57,6 +57,7 @@ ActesNGAP = {
   <table class="form">
   	
   	{{if $object->_coded}}
+  	{{if $object->_class_name == "CConsultation"}}
     <tr>
       <td colspan="10">
         <div class="small-info">
@@ -64,10 +65,8 @@ ActesNGAP = {
         Pour pouvoir coder des actes, veuillez dévalider la consultation.
         </div>
       </td>
-    </tr> 
-    {{/if}}
-    
-    {{if !($can->edit || $modif_operation)}}
+    </tr>
+    {{else}}
     <tr>
       <td colspan="10" class="text">
         <div class="small-info">
@@ -78,6 +77,14 @@ ActesNGAP = {
       </td>
     </tr>
     {{/if}}
+    {{/if}}
+    {{if (!$can->edit && $subject->_class_name == "CConsultation") || !$can->read}}
+    <tr>
+      <td colspan="10" class="text">
+        <div class="small-info">Vous n'avez pas les droits nescessaires pour coder les actes</div>
+      </td>
+    </tr>
+    {{else}}
     
     <tr>
       <th class="title" colspan="10">Codages des actes NGAP</th>
@@ -89,7 +96,7 @@ ActesNGAP = {
       <th class="category">{{mb_title object=$acte_ngap field=coefficient}}</th>
       <th class="category">{{mb_title object=$acte_ngap field=demi}}</th>
       {{if !$object->_coded}}
-        {{if ($can->edit || $modif_operation)}}
+        {{if $can->edit}}
           <th class="category">{{mb_title object=$acte_ngap field=montant_base}}</th>
           <th class="category">{{mb_title object=$acte_ngap field=montant_depassement}}</th>
         {{/if}}
@@ -102,14 +109,14 @@ ActesNGAP = {
       <th class="category">{{mb_title object=$acte_ngap field=complement}}</th>
       <th class="category">{{mb_title object=$acte_ngap field=executant_id}}</th>
       {{if !$object->_coded}}
-        {{if ($can->edit || $modif_operation)}}
+        {{if $can->edit}}
            <th class="category">{{tr}}Action{{/tr}}</th>
         {{/if}}
       {{/if}}
     </tr>
     
     {{if !$object->_coded}}
-      {{if ($can->edit || $modif_operation)}}
+      {{if $can->edit}}
         <tr>
           <td>{{mb_field object=$acte_ngap field="quantite" onchange="refreshTarif()" onkeyup="refreshTarif()"}}</td>
           <td>
@@ -149,7 +156,7 @@ ActesNGAP = {
       <td>{{mb_value object=$_acte_ngap field="coefficient"}}</td>
       <td>{{mb_value object=$_acte_ngap field="demi"}}</td>
       {{if !$object->_coded}}
-        {{if ($can->edit || $modif_operation)}}
+        {{if $can->edit}}
         <td>{{mb_value object=$_acte_ngap field="montant_base"}}</td>
         <td>{{mb_value object=$_acte_ngap field="montant_depassement"}}</td>
         {{/if}}
@@ -170,7 +177,7 @@ ActesNGAP = {
       {{assign var="executant" value=$_acte_ngap->_ref_executant}}
 			<td>
 				{{if !$object->_coded}}
-          {{if ($can->edit || $modif_operation)}}
+          {{if $can->edit}}
     				<select onchange="ActesNGAP.changeExecutant('{{$_acte_ngap->_id}}', $V(this))" name="executant" style="width: 150px;" class="{{$acte_ngap->_props.executant_id}}">
               <option value="">&mdash; {{tr}}Choose{{/tr}}</option>
               {{foreach from=$acte_ngap->_list_executants item=_executant}}
@@ -192,7 +199,7 @@ ActesNGAP = {
       </td>
 
       {{if !$object->_coded}}
-        {{if ($can->edit || $modif_operation)}}
+        {{if $can->edit}}
           <td>
            	<button type="button" class="trash" onclick="ActesNGAP.remove({{$_acte_ngap->_id}})">
               {{tr}}Delete{{/tr}}
@@ -202,6 +209,7 @@ ActesNGAP = {
       {{/if}}
    </tr>
    {{/foreach}}
+   {{/if}}
  </table>
 </form>
 
