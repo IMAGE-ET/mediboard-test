@@ -10,8 +10,8 @@
 
 CCanDo::checkEdit();
 
-$spec_type    = CValue::get("spec_type");
 $prop         = CValue::get("prop");
+$spec_type    = CValue::get("spec_type");
 $class        = CValue::get("class");
 $field        = CValue::get("field", "field");
 $ex_field_id  = CValue::get("ex_field_id");

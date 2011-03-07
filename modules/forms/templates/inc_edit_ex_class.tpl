@@ -97,27 +97,52 @@ Main.add(function(){
 	
   <tr>
     <td>
-      <button type="button" class="new" style="float: right;" onclick="ExField.create({{$ex_class->_id}})">
-        {{tr}}CExClassField-title-create{{/tr}}
-      </button>
-			
       <ul class="control_tabs_vertical small" id="field_groups" style="float: right;">
+			  <li style="margin: 4px;">
+				  <strong>Groupes</strong>
+				</li>
         {{foreach from=$ex_class->_ref_groups item=_group}}
           <li>
             <a href="#group-{{$_group->_guid}}" style="white-space: nowrap;">{{$_group->name}}</a>
           </li>
         {{/foreach}}
+				
+				{{* create a new group *}}
+				<li style="white-space: nowrap;">
+				  <form name="create-field-group" action="?" method="post" onsubmit="return onSubmitFormAjax(this, {onComplete: ExClass.edit.curry({{$ex_class->_id}})})">
+            <input type="hidden" name="m" value="system" />
+            <input type="hidden" name="@class" value="CExClassFieldGroup" />
+            <input type="hidden" name="ex_class_id" value="{{$ex_class->_id}}" />
+						
+            <button class="add notext" type="button" style="margin: 3px; margin-top: 0;" 
+						        onclick="$(this).hide().next('span').show(); $(this.form.elements.name).tryFocus()">
+							{{tr}}CExClassFieldGroup-title-create{{/tr}}
+						</button>
+						
+						<span style="display: none;">
+	            <button class="submit notext" type="submit" style="margin: -1px; margin-right: -3px;"></button>
+							{{mb_field class=CExClassFieldGroup field=name size=10 style="margin-right: 4px;"}}
+						</span>
+					</form>
+				</li>
       </ul>
     </td>
 		
 		<td>
       <table class="main tbl">
-        <tr>
+        {{*<tr>
           <th>{{mb_title class=CExClassField field=name}}</th>
-          {{*<th>{{mb_title class=CExClassField field=prop}}</th>*}}
-        </tr>
+          <th>{{mb_title class=CExClassField field=prop}}</th>
+        </tr>*}}
 				{{foreach from=$ex_class->_ref_groups item=_group}}
 					<tbody id="group-{{$_group->_guid}}">
+						<tr>
+							<td>
+					      <button type="button" class="new" style="float: right;" onclick="ExField.create({{$ex_class->_id}}, '{{$_group->_id}}')">
+					        {{tr}}CExClassField-title-create{{/tr}}
+					      </button>
+							</td>
+						</tr>
 		        {{foreach from=$_group->_ref_fields item=_field}}
 		          <tr>
 		            <td title="{{$_field->name}}">

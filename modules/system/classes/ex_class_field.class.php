@@ -68,7 +68,7 @@ class CExClassField extends CExListItemsOwner {
   function getProps() {
     $props = parent::getProps();
     $props["ex_group_id"] = "ref class|CExClassFieldGroup cascade";
-    $props["concept_id"]  = "ref class|CExConcept";
+    $props["concept_id"]  = "ref class|CExConcept autocomplete|name";
     $props["name"]        = "str notNull protected canonical";
     $props["prop"]        = "str notNull";
     
@@ -127,16 +127,21 @@ class CExClassField extends CExListItemsOwner {
   }
   
   function updateTranslation(){
-  	$base = $this;
-		
   	if ($this->concept_id) {
-  		$base = $this->loadRefConcept();
+  		$concept = $this->loadRefConcept();
   	}
-		
-    $enum_trans = $base->loadRefEnumTranslations();
-    foreach($enum_trans as $_enum_trans) {
-      $_enum_trans->updateLocales($this);
-    }
+		else {
+			$items = $this->loadRefItems();
+			
+			foreach($items as $_item) {
+				
+			}
+			
+	    /*$enum_trans = $this->loadRefEnumTranslations();
+	    foreach($enum_trans as $_enum_trans) {
+	      $_enum_trans->updateLocales($this);
+	    }*/
+		}
     
     $trans = $this->loadRefTranslation();
     $this->_locale       = $trans->std;

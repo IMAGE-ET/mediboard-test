@@ -174,7 +174,7 @@ ExClass = {
 };
 
 ExField = {
-  edit: function(id, ex_class_id, target) {
+  edit: function(id, ex_class_id, target, ex_group_id) {
     if (window.exClassTabs) {
       exClassTabs.setActiveTab("fields-specs");
     }
@@ -183,13 +183,14 @@ ExField = {
     
     url.addParam("ex_field_id", id);
     url.addParam("ex_class_id", ex_class_id);
+    url.addParam("ex_group_id", ex_group_id);
     url.requestUpdate(target || "exFieldEditor");
   },
   editCallback: function(id, obj) {
     // void
   },
-  create: function(ex_class_id) {
-    this.edit("0", ex_class_id);
+  create: function(ex_class_id, ex_group_id) {
+    this.edit("0", ex_class_id, null, ex_group_id);
   },
   slug: function(str) {
     str = (str+"")
@@ -220,24 +221,15 @@ ExConcept.editCallback = function(id, obj) {
 
 ExFieldSpec = {
   options: {},
-  edit: function(formField, prop, className, field, otherFields, ex_field_id){
-    var specType = $V(formField);
-    var match = specType.match(/[a-z]+-(\d+)/);
+  edit: function(form){
+    var specType = $V(form._spec_type);
+    var prop = $V(form.prop);
     
-    if (match) {
-      $V(formField.form.concept_id, match[1]);
-    }
-    else {
-      $V(formField.form.concept_id, "");
-    }
-    
-    var url = new Url("forms", "ajax_edit_ex_field_spec");
-    url.addParam("spec_type", specType);
+    var url = new Url("forms", "ajax_edit_ex_field_spec2");
     url.addParam("prop", prop);
-    url.addParam("class", className);
-    url.addParam("field", field);
-    url.addParam("other_fields", otherFields, true);
-    url.addParam("ex_field_id", ex_field_id);
+    url.addParam("spec_type", specType);
+    url.addParam("form_name", form.getAttribute("name"));
+    url.addParam("owner_guid", form.get("object_guid"));
     url.requestUpdate("fieldSpecEditor");
   }
 };

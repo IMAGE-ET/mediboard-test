@@ -157,6 +157,7 @@ Main.add(function(){
         {{elseif $_type == "list"}}
 				  
 					{{if $ex_list->_id}}
+					  <a class="button edit" href="?m=forms&amp;tab=view_ex_list&amp;object_guid={{$ex_list->_guid}}">{{tr}}CExList-title-modify{{/tr}}</a>
 						<table class="tbl" style="width: 1%;">
 						  <col class="narrow" />
 							
@@ -194,6 +195,8 @@ Main.add(function(){
                 <input type="hidden" name="{{$_name}}[]" class="internal" value="{{$_value}}" />
               {{/foreach}}
 					    <em>Voir "{{tr}}CExList-back-list_items{{/tr}}"</em>
+						{{else}}
+              <em>Enregistrez avant d'ajouter des élements</em>
 						{{/if}}
           {{/if}}
 					 

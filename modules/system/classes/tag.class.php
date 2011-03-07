@@ -67,6 +67,23 @@ class CTag extends CMbObject {
     return $this->_ref_parent = $this->loadFwdRef("parent_id");
   }
 	
+	function check(){
+		if ($msg = parent::check()) {
+			return $msg;
+		}
+		
+		if (!$this->parent_id) return;
+		
+		$tag = $this;
+		while($tag->parent_id) {
+			$parent = $tag->loadRefParent();
+			if ($parent->_id == $this->_id) {
+				return "Récurcivité détectée, un des ancêtres du tag est lui-même";
+			}
+			$tag = $parent;
+		}
+	}
+	
 	function getObjects($keywords = ""){
 		if (!$keywords) {
 			$items = $this->loadRefItems();

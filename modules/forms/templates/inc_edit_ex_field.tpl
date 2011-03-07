@@ -9,10 +9,39 @@
 *}}
 
 <script type="text/javascript">
+toggleListCustom = function(radio) {
+  var enableList = (radio.value == "concept" && radio.checked);
+  var form = radio.form;
+  
+  var input = form.concept_id_autocomplete_view;
+  var select = form._spec_type;
+  
+  if (input) {
+    input.up(".dropdown").down(".dropdown-trigger").setVisibility(enableList);
+    input.disabled = input.readOnly = !enableList;
+  }
+  
+  if (enableList) {
+    //$V(select, "none");
+  }
+  else {
+    $V(input, "");
+    $V(form.concept_id, "");
+  }
+  
+  select.disabled = select.readOnly = !!$V(form.ex_class_field_id) || enableList;
+  
+  ExFieldSpec.edit(form);
+}
+
 Main.add(function(){
+  var radio = getForm("editField")._concept_type[0];
+  toggleListCustom.defer(radio);
+	
   var fields = {{$other_fields|@json}};
 	var form = getForm("editField");
-  ExFieldSpec.edit(form.elements._type, '{{$ex_field->prop}}', 'CExObject', '{{$ex_field->name}}', fields, "{{$ex_field->_id}}");
+	
+  ExFieldSpec.edit(form);
   form.elements._locale.select();
 });
 
@@ -37,7 +66,7 @@ updateInternalName = function(e){
 }
 </script>
 
-<form name="editField" method="post" action="?" onsubmit="return onSubmitFormAjax(this, {check: checkExField,onComplete: ExClass.edit.curry({{$ex_class->_id}})})">
+<form name="editField" method="post" action="?" data-object_guid="{{$ex_field->_guid}}" onsubmit="return onSubmitFormAjax(this, {check: checkExField,onComplete: ExClass.edit.curry({{$ex_class->_id}})})">
   <input type="hidden" name="m" value="system" />
   <input type="hidden" name="dosql" value="do_ex_class_field_aed" />
   <input type="hidden" name="del" value="0" />
@@ -45,7 +74,8 @@ updateInternalName = function(e){
 	
   {{mb_key object=$ex_field}}
   {{mb_field object=$ex_field field=ex_group_id hidden=true}}
-  {{mb_field object=$ex_field field=concept_id hidden=true}}
+	
+	{{mb_field object=$ex_field field=name hidden=true}}
   
   <table class="form">
   	
@@ -75,28 +105,9 @@ updateInternalName = function(e){
       	  {{mb_field object=$ex_field field=_locale onkeyup="updateInternalName(this)" size=40}}
 				{{/if}}
 			</td>
-      <th>{{mb_label object=$ex_field field=name}}</th>
-      <td>{{mb_field object=$ex_field field=name}}</td>
-    </tr>
-    <tr>
+			
       <th>{{mb_label object=$ex_field field=_locale_desc}}</th>
       <td>{{mb_field object=$ex_field field=_locale_desc tabIndex="2" size=40}}</td>
-      
-      <th>{{mb_label object=$ex_field field=prop}}</th>
-      <td>{{mb_field object=$ex_field field=prop readonly="readonly" size=30}}</td>
-    </tr>
-    <tr>
-      <th><label for="_type">Type</label></th>
-      <td>
-        <select {{if $ex_field->_id}}disabled="disabled"{{/if}} name="_type" onchange="ExFieldSpec.edit(this, '{{$ex_field->prop}}', 'CExObject', '{{$ex_field->name}}', [], '{{$ex_field->_id}}')">
-          {{foreach from="CMbFieldSpecFact"|static:classes item=_class key=_key}}
-            <option value="{{$_key}}" {{if $_key == $spec_type && !$ex_field->concept_id}}selected="selected"{{/if}}>{{tr}}CMbFieldSpec.type.{{$_key}}{{/tr}}</option>
-          {{/foreach}}
-        </select>
-      </td>
-      
-      <th>{{mb_label object=$ex_field field=_locale_court}}</th>
-      <td>{{mb_field object=$ex_field field=_locale_court tabIndex="3" size=30}}</td>
     </tr>
 		
     <tr>
@@ -111,10 +122,52 @@ updateInternalName = function(e){
       
       <th>{{mb_label object=$ex_field field=_locale_court}}</th>
       <td>{{mb_field object=$ex_field field=_locale_court tabIndex="3" size=30}}</td>
+		</tr>
+		<tr>
+			
+      <th>
+        <label>
+          {{if !$ex_field->concept_id}}Type {{/if}}
+          <input type="radio" name="_concept_type" value="custom" {{if $ex_field->_id}}style="display: none;"{{/if}}
+                 {{if !$ex_field->concept_id}}checked="checked"{{/if}} onclick="toggleListCustom(this)" />
+        </label>
+			</th>
+      <td>
+      	{{if !$ex_field->_id}}
+	        <select {{if $ex_field->_id}}disabled="disabled"{{/if}} name="_spec_type" onchange="ExFieldSpec.edit(this.form)">
+	          {{foreach from="CMbFieldSpecFact"|static:classes item=_class key=_key}}
+	            <option value="{{$_key}}" {{if $_key == $spec_type && !$ex_field->concept_id}}selected="selected"{{/if}}>{{tr}}CMbFieldSpec.type.{{$_key}}{{/tr}}</option>
+	          {{/foreach}}
+	        </select>
+				{{else}}
+				  <input type="hidden" name="_spec_type" value="{{$spec_type}}" />
+					{{if !$ex_field->concept_id}}
+					  {{tr}}CMbFieldSpec.type.{{$spec_type}}{{/tr}}
+					{{/if}}
+				{{/if}}
+      </td>
+			
+      <th>
+        <label>
+          {{if !$ex_field->_id || $ex_field->concept_id}}{{tr}}CExClassField-concept_id{{/tr}}{{/if}}
+					
+          <input type="radio" name="_concept_type" value="concept" {{if $ex_field->_id}}style="display: none;"{{/if}}
+                 {{if $ex_field->concept_id}}checked="checked"{{/if}} onclick="toggleListCustom(this)" />
+        </label>
+			</th>
+			<td>
+        {{if !$ex_field->_id}}
+          {{mb_field object=$ex_field field=concept_id form="editField" autocomplete="true,1,50,false,true" 
+					           onchange="ExFieldSpec.edit(this.form)"}}
+        {{else}}
+          {{mb_value object=$ex_field field=concept_id}}
+          {{mb_field object=$ex_field field=concept_id hidden=true}}
+        {{/if}}
+      </td>
     </tr>
-      
-    <tr>
-      <th></th>
+		
+		<tr>
+			<th></th>
       <td colspan="3">
         {{if $ex_field->_id}}
           <button type="submit" class="modify">{{tr}}Save{{/tr}}</button>
@@ -126,6 +179,14 @@ updateInternalName = function(e){
         {{/if}}
       </td>
     </tr>
+		
+		<tr {{if $app->user_prefs.INFOSYSTEM == 0}}style="display: none"{{/if}}>
+			<th></th>
+			<td colspan="3">
+				{{mb_field object=$ex_field field=prop readonly="readonly" size=50}}
+			</td>
+    </tr>
+		
   </table>
 </form>
 

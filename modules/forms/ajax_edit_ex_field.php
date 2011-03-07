@@ -12,6 +12,7 @@ CCanDo::checkEdit();
 
 $ex_field_id = CValue::get("ex_field_id");
 $ex_class_id = CValue::get("ex_class_id");
+$ex_group_id = CValue::get("ex_group_id");
 
 $ex_field = new CExClassField;
 
@@ -24,6 +25,7 @@ if ($ex_field->load($ex_field_id)) {
 }
 else {
   $ex_field->ex_class_id = $ex_class_id;
+	$ex_field->ex_group_id = $ex_group_id;
 }
 
 $ex_field->loadRefExClass();

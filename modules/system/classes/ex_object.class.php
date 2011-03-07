@@ -79,13 +79,6 @@ class CExObject extends CMbMetaObject {
     $this->setExClass();
     return parent::prepareLog();
   }
-  /// End low level methods /////////
-  
-  function getSpec() {
-    $spec = parent::getSpec();
-    $spec->key = "ex_object_id";
-    return $spec;
-  }
 
   function loadQueryList($sql) {
     $ds = $this->_spec->ds;
@@ -106,7 +99,7 @@ class CExObject extends CMbMetaObject {
     $ds->freeResult($cur);
     return $list;
   }
-  
+	
   // needed or will throw errors in the field specs
   function checkProperty($propName) {
     $class_name = $this->_class_name;
@@ -117,6 +110,13 @@ class CExObject extends CMbMetaObject {
     
     $this->_class_name = $class_name;
     return $ret;
+  }
+  /// End low level methods /////////
+  
+  function getSpec() {
+    $spec = parent::getSpec();
+    $spec->key = "ex_object_id";
+    return $spec;
   }
   
   function getProps() {

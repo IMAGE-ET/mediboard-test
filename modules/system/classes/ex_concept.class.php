@@ -170,7 +170,6 @@ class CExConcept extends CExListItemsOwner {
 				$_field->prop = $this->prop;
 			}
 		}
-		
 	}
   
   /**

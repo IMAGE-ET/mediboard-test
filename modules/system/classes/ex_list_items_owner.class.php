@@ -23,9 +23,9 @@ class CExListItemsOwner extends CMbObject {
 	
 	private function getBackRefField(){
 		$map = array(
-      "CExList"        => "list_id",
-      "CExConcept"     => "concept_id",
-      "CExClassFields" => "field_id",
+      "CExList"       => "list_id",
+      "CExConcept"    => "concept_id",
+      "CExClassField" => "field_id",
     );
 		return CValue::read($map, $this->_class_name);
 	}
