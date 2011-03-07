@@ -340,10 +340,7 @@ div.footer {
 <!-- Parcours des chapitres -->
 {{foreach from=$linesElt key=name_chap item=elementsChap name="foreachChap"}}
 <!-- Parcours des categories -->
-  {{foreach from=$elementsChap key=exec item=elements name="foreachExec"}}
-    {{if $exec != "aucun"}}
-      {{assign var=exec value=$executants.$exec}}
-    {{/if}}
+  {{foreach from=$elementsChap item=elements name="foreachExec"}}
      
      {{if $smarty.foreach.foreachChap.last && $smarty.foreach.foreachExec.last &&  !$linesDMI|@count}}
        <div class="bodyWithoutPageBreak">

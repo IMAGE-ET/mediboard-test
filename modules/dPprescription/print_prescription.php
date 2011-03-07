@@ -61,19 +61,6 @@ if($praticien->_id){
 // Chargement de toutes les categories
 $categories = CCategoryPrescription::loadCategoriesByChap();
 
-// Chargement de la liste des executants
-$executant = new CExecutantPrescriptionLine();
-$_executants = $executant->loadList();
-foreach($_executants as $_executant){
-  $executants[$_executant->_guid] = $_executant;
-}
-
-$mediuser = new CMediusers();
-$mediusers = $mediuser->loadList();
-foreach($mediusers as $_mediuser){
-  $executants[$_mediuser->_guid] = $_mediuser;
-}
-
 // Chargement des lignes de prescriptions
 $prescription->loadRefsLinesMedComments("1", "debut ASC");
 $prescription->loadRefsLinesElementsComments("1","","debut ASC");
@@ -336,7 +323,6 @@ $smarty->assign("lines"          , $lines);
 $smarty->assign("linesElt"       , $linesElt);
 $smarty->assign("linesDMI"       , $linesDMI);
 $smarty->assign("categories"     , $categories);
-$smarty->assign("executants"     , $executants);
 $smarty->assign("poids"          , $poids);
 $smarty->assign("dci"            , CValue::get("dci"));
 $smarty->assign("generated_header", @$header->_id ? $template_header->document : "");
