@@ -157,7 +157,7 @@ submitReveilForm = function(oFormOperation) {
       </form>
     </td>
     <td class="button">
-      {{if $can->edit || $modif_operation}}
+      {{if $modif_operation}}
       <form name="editSortieReveilFrm{{$_operation->_id}}" action="?m={{$m}}" method="post">
         <input type="hidden" name="m" value="dPplanningOp" />
         <input type="hidden" name="dosql" value="do_planning_aed" />

@@ -137,7 +137,7 @@ submitPersonnel = function(oForm){
 		    {{include file=inc_field_timing.tpl object=$affectation field=_debut}}
 		    {{include file=inc_field_timing.tpl object=$affectation field=_fin}}
 				<td>
-					{{if $can->edit || $modif_operation}}
+					{{if $modif_operation}}
             <button type="button" class="cancel notext" onclick="$V(this.form.del, '1'); submitPersonnel(this.form)">{{tr}}Cancel{{/tr}}</button>
           {{/if}}
 				</td>

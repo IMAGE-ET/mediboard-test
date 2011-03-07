@@ -15,7 +15,7 @@ $can->needsRead();
 $blood_salvage_id = CValue::getOrSession("blood_salvage_id");
 $date  = CValue::getOrSession("date", mbDate());
 $timing  = CValue::getOrSession("timing");
-$modif_operation    = $date>=mbDate();
+$modif_operation    = $can->edit || $date >= mbDate();
 
 
 $blood_salvage = new CBloodSalvage();

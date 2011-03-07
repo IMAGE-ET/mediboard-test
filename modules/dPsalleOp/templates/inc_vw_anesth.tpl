@@ -16,7 +16,7 @@ reloadPrescriptionAnesth = function(prescription_id){
 	  <!-- Choix anesthésiste et type anesthésie -->
 	  <tr>
 	    <td rowspan="2" style="vertical-align: middle;">
-	      {{if $can->edit || $modif_operation}}
+	      {{if $modif_operation}}
 	      <select name="type_anesth" onchange="submitAnesth(this.form);">
 	        <option value="">&mdash; Type d'anesthésie</option>
 	        {{foreach from=$listAnesthType item=curr_anesth}}
@@ -31,7 +31,7 @@ reloadPrescriptionAnesth = function(prescription_id){
 	        {{$typeAnesth->name}}
 	      {{else}}-{{/if}}
 	      <br />par le Dr
-	      {{if $can->edit || $modif_operation}}
+	      {{if $modif_operation}}
 	      <select name="anesth_id" onchange="submitAnesth(this.form);">
 	        <option value="">&mdash; Anesthésiste</option>
 	        {{foreach from=$listAnesths item=curr_anesth}}

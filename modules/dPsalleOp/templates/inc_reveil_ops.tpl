@@ -85,7 +85,7 @@ submitOperationForm = function(oFormOperation) {
       {{/if}}
     </td>
     <td>
-      {{if $can->edit || $modif_operation}}
+      {{if $modif_operation}}
       
       {{if $personnels !== null}}
       <form name="selPersonnel{{$_operation->_id}}" action="?m={{$m}}" method="post">
@@ -132,7 +132,7 @@ submitOperationForm = function(oFormOperation) {
       {{/if}}
     </td>
     <td class="button">
-      {{if $can->edit || $modif_operation}}
+      {{if $modif_operation}}
       <form name="editEntreeReveilFrm{{$_operation->_id}}" action="?m={{$m}}" method="post">
         <input type="hidden" name="m" value="dPplanningOp" />
         <input type="hidden" name="dosql" value="do_planning_aed" />

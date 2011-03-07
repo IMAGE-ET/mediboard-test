@@ -15,7 +15,7 @@ $blood_salvage = new CBloodSalvage();
 
 $date  = CValue::getOrSession("date", mbDate());
 
-$modif_operation = $date>=mbDate();
+$modif_operation = $can->edit || $date >= mbDate();
 
 $list_nurse_sspi= CPersonnel::loadListPers("reveil");
 

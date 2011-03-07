@@ -42,7 +42,7 @@ signerActes = function(object_id, object_class){
   {{else}}
 
   <!-- Gestion des codes -->
-  {{if !$subject->_coded}}
+  {{if $can->admin || (!$subject->_coded && (($can->edit && ($subject->_class_name == "CConsultation")) || $can->read))}}
   <tr>
     <td class="text">
       {{include file="../../dPsalleOp/templates/inc_manage_codes.tpl"}}

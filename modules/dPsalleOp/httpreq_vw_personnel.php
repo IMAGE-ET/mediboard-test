@@ -10,8 +10,7 @@
 global $can, $m;
 
 $date  = CValue::getOrSession("date", mbDate());
-$date_now = mbDate();
-$modif_operation = $date>=$date_now;
+$modif_operation = $can->edit || $date >= mbDate();
 
 // Chargement de l'operation selectionnee
 $operation_id = CValue::getOrSession("operation_id");

@@ -13,8 +13,7 @@ $can->needsRead();
 
 $date = CValue::getOrSession("date", mbDate());
 $hour = mbTime(null);
-$date_now = mbDate();
-$modif_operation = $date>=$date_now;
+$modif_operation = $can->edit || $date >= mbDate();
 
 // Selection des plages opératoires de la journée
 $plages = new CPlageOp;

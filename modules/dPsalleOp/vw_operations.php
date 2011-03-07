@@ -19,7 +19,7 @@ $salle_id        = CValue::getOrSession("salle");
 $bloc_id         = CValue::getOrSession("bloc_id");
 $op              = CValue::getOrSession("op");
 $date            = CValue::getOrSession("date", mbDate());
-$date_now        = mbDate();
+$modif_operation = $can->edit || $date >= mbDate();
 
 // Récupération de l'utilisateur courant
 $currUser = new CMediusers();
@@ -232,6 +232,7 @@ $smarty->assign("modeDAS"                , CAppUI::conf("dPsalleOp CDossierMedic
 $smarty->assign("selOp"                  , $selOp);
 $smarty->assign("timing"                 , $timing);
 $smarty->assign("date"                   , $date);
+$smarty->assign("modif_operation"        , $modif_operation);
 $smarty->assign("listValidateurs"        , $listValidateurs);
 $smarty->assign("isPrescriptionInstalled", CModule::getActive("dPprescription"));
 $smarty->assign("isbloodSalvageInstalled", CModule::getActive("bloodSalvage"));

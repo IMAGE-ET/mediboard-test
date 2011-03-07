@@ -13,7 +13,7 @@ $can->needsRead();
 $date    = CValue::getOrSession("date", mbDate());
 $bloc_id = CValue::getOrSession("bloc_id");
 
-$modif_operation = ($date >= mbDate());
+$modif_operation = $can->edit || $date >= mbDate();
 $hour = mbTime();
 $blocs_list = CGroups::loadCurrent()->loadBlocs();
 

@@ -13,7 +13,7 @@ $can->needsRead();
 
 $operation_id = CValue::getOrSession("operation_id");
 $date  = CValue::getOrSession("date", mbDate());
-$modif_operation = $date >= mbDate();
+$modif_operation = $can->edit || $date >= mbDate();
 
 
 $operation = new COperation();

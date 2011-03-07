@@ -36,7 +36,7 @@
 	 
 	 <td>
 	    {{foreach from=$tabAffected key=affectation_id item=affectation}}
-		    {{if $can->edit || $modif_operation}}
+		    {{if $modif_operation}}
 		    <div style="float: right">
 			    <form name="cancelAffectation-{{$affectation_id}}" action="?m={{$m}}" method="post">
 			      <input type="hidden" name="affect_id" value="{{$affectation->_id}}" />

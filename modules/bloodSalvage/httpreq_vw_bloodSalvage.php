@@ -15,7 +15,7 @@ $salle            = CValue::getOrSession("salle");
 $op               = CValue::getOrSession("op");
 $date             = CValue::getOrSession("date", mbDate());
 
-$modif_operation  = $date >= mbDate();
+$modif_operation  = $can->edit || $date >= mbDate();
 $timing = array();
 
 $inLivretTherapeutique = CAppUI::conf("bloodSalvage inLivretTherapeutique");

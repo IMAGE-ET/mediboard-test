@@ -56,7 +56,7 @@ submitPrepaForm = function(oFormPrepa) {
     </td>
     <td class="text">{{mb_value object=$_operation field="cote"}}</td>
     <td class="button">
-      {{if $can->edit || $modif_operation}}
+      {{if $modif_operation}}
         <form name="editDebutPreopFrm{{$_operation->_id}}" action="?m={{$m}}" method="post">
           <input type="hidden" name="m" value="dPplanningOp" />
           <input type="hidden" name="dosql" value="do_planning_aed" />
@@ -75,7 +75,7 @@ submitPrepaForm = function(oFormPrepa) {
       {{/if}}
     </td>
     <td class="button">
-      {{if $can->edit || $modif_operation}}
+      {{if $modif_operation}}
         <form name="editFinPreopFrm{{$_operation->_id}}" action="?m={{$m}}" method="post">
           <input type="hidden" name="m" value="dPplanningOp" />
           <input type="hidden" name="dosql" value="do_planning_aed" />

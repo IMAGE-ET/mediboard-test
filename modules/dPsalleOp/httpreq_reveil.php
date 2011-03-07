@@ -15,7 +15,7 @@ $date    = CValue::getOrSession("date", mbDate());
 $bloc_id = CValue::getOrSession("bloc_id");
 $type    = CValue::get("type"); // Type d'affichage => encours, ops, reveil, out
 
-$modif_operation = $date >= mbDate();
+$modif_operation = $can->edit || $date >= mbDate();
 
 $timing = array();
 

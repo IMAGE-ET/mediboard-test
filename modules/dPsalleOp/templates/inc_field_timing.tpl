@@ -29,7 +29,7 @@
       {{$object->$field|date_format:$conf.time}}
     {{/if}}
   
-  {{elseif $can->edit || $modif_operation}}
+  {{elseif $modif_operation}}
     <input type="hidden" name="{{$field}}" value="" onchange="{{$submit}}(this.form);" />
     <button type="button" class="submit" onclick="$V(this.form.{{$field}}, 'current', true);">
     {{mb_label object=$object field=$field}}
