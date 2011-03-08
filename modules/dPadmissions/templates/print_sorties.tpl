@@ -23,12 +23,8 @@ function printAdmission(id) {
   <tr>
     <th>
       <a href="#" onclick="window.print()">
-        Sorties
-        {{if $type == "autre"}}
-          hors
-        {{/if}}
-        ambu + hospi complète
-        du {{$date|date_format:"%A %d %b %Y"}} ({{$total}} sorties)
+        Sortie {{tr}}CSejour.type.{{$type}}{{/tr}}
+        du {{$date|date_format:"%A %d %B %Y"}} ({{$total}} sorties)
       </a>
     </th>
   </tr>

@@ -19,7 +19,7 @@ $order_way = CValue::getOrSession("order_way", "ASC");
 $filter_function_id = CValue::getOrSession("filter_function_id");
 
 // Mode => ambu ou comp
-$mode = CValue::getOrSession("mode");
+$type_sejour = CValue::getOrSession("type_sejour", "ambu");
 
 // Type d'affichage
 $vue = CValue::getOrSession("vue", 0);
@@ -46,11 +46,7 @@ $ljoin["patients"] = "sejour.patient_id = patients.patient_id";
 $ljoin["users"] = "sejour.praticien_id = users.user_id";
 $ljoin["users_mediboard"] = "sejour.praticien_id = users_mediboard.user_id";
 $where["sejour.sortie"] = "BETWEEN '$limit1' AND '$limit2'";
-if($mode != "autre") {
-  $where["sejour.type"] = " = '$mode'";
-} else {
-  $where[] = "(type != 'comp' AND type != 'ambu')";
-}
+$where["sejour.type"] = " = '$type_sejour'";
 $where["sejour.annule"] = " = '0'";
 
 // Afficher seulement les sorties non effectuées (sejour sans date de sortie reelle)
@@ -120,7 +116,7 @@ $smarty->assign("now"           , $now );
 $smarty->assign("vue"           , $vue );
 $smarty->assign("listSejour"    , $listSejour );
 $smarty->assign("date_sortie"   , $date_sortie);
-$smarty->assign("mode"          , $mode);
+$smarty->assign("type_sejour"   , $type_sejour);
 
 $smarty->display("inc_vw_sorties.tpl");
 

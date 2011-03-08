@@ -8,29 +8,23 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
 *}}
 
-<table class="tbl" id="sortie-{{$mode}}">
+<table class="tbl" id="sortie-{{$type_sejour}}">
   <tr>
     <th class="title" colspan="7">
-      {{if $mode == "ambu"}}
-      <span style="float: right"><button type="button" class="search" onclick="printAmbu();">Impression Ambu</button></span>
+      <span style="float: left"><button type="button" class="print notext" onclick="printPlanning('{{$type_sejour}}');">{{tr}}Print{{/tr}}</button></span>
+      {{if $type_sejour == "ambu"}}
+      <span style="float: right"><button type="button" class="print" onclick="printAmbu();">Impression Ambu</button></span>
       {{/if}}
-      {{if $mode != "autre"}}
-      Sortie {{tr}}CSejour.type.{{$mode}}{{/tr}}
-      {{else}}
-      Autres sorties
-      {{/if}}
+      Sortie {{tr}}CSejour.type.{{$type_sejour}}{{/tr}}
     </th>
   </tr>
   <tr>
     <th>Effectuer la sortie</th>
-    {{if $mode == "autre"}}
-    <th>Type hospi</th>
-    {{/if}}
     <th>
       {{mb_colonne class="CSejour" field="patient_id" order_col=$order_col order_way=$order_way url="?m=$m&tab=vw_idx_sortie&date=$date&vue=$vue"}}
     </th>
     <th class="narrow">
-      <input type="text" size="3" onkeyup="Admissions.filter(this, 'sortie-{{$mode}}')" id="filter-patient-name" />
+      <input type="text" size="3" onkeyup="Admissions.filter(this, 'sortie-{{$type_sejour}}')" id="filter-patient-name" />
     </th>
     <th>
       {{mb_colonne class="CSejour" field="sortie_prevue" order_col=$order_col order_way=$order_way url="?m=$m&tab=vw_idx_sortie&date=$date&vue=$vue"}}
@@ -56,7 +50,7 @@
       <input type="hidden" name="mode_sortie" value="{{$curr_sortie->mode_sortie}}" />
       <input type="hidden" name="etablissement_transfert_id" value="{{$curr_sortie->etablissement_transfert_id}}" />
       <input type="hidden" name="_modifier_sortie" value="0" />
-      <button class="cancel" type="button" onclick="submitSortie(this.form,'{{$mode}}')">
+      <button class="cancel" type="button" onclick="submitSortie(this.form,'{{$type_sejour}}')">
         Annuler la sortie
       </button>
       <br />
@@ -74,11 +68,11 @@
       {{else}}
       <input type="hidden" name="_modifier_sortie" value="1" />
       <input type="hidden" name="entree_reelle" value="{{$curr_sortie->entree_reelle}}" />
-      <button class="tick" type="button" onclick="confirmation('{{$date_actuelle}}', '{{$date_demain}}', '{{$curr_sortie->sortie_prevue}}', '{{$curr_sortie->entree_reelle}}', this.form, '{{$mode}}');">
+      <button class="tick" type="button" onclick="confirmation('{{$date_actuelle}}', '{{$date_demain}}', '{{$curr_sortie->sortie_prevue}}', '{{$curr_sortie->entree_reelle}}', this.form, '{{$type_sejour}}');">
         Effectuer la sortie
       </button>
       <br />  
-      {{mb_field object=$curr_sortie field="mode_sortie" onchange="this.form._modifier_sortie.value = '0'; submitSortie(this.form, '$mode');"}}
+      {{mb_field object=$curr_sortie field="mode_sortie" onchange="this.form._modifier_sortie.value = '0'; submitSortie(this.form, '$type_sejour');"}}
       <br />
       <div id="listEtabExterne-editFrm{{$curr_sortie->_id}}" style="display: inline;"></div>
       <script type="text/javascript">
@@ -103,12 +97,6 @@
       -
       {{/if}}
     </td>
-    
-    {{if $mode == "autre"}}
-    <td>
-      {{tr}}CSejour.type.{{$curr_sortie->type}}{{/tr}}
-    </td>
-    {{/if}}
     
     <td class="text CPatient-view" colspan="2" style="{{if !$curr_sortie->facturable}}background-image:url(images/icons/ray_vertical.gif); background-repeat:repeat;{{/if}}">
       {{if $canPatients->edit}}

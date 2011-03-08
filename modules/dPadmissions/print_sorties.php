@@ -12,18 +12,14 @@ global $AppUI, $can, $m;
 
 $can->needsRead();
 
-$date = CValue::get("date", mbDate());
-$type = CValue::get("type", "ambu_comp");
+$date        = CValue::get("date", mbDate());
+$type_sejour = CValue::get("type_sejour", "ambu");
 
 $sejour = new CSejour;
 $where = array();
 $where[] = "DATE(sejour.sortie_prevue) = '". $date ."'";
 $where["sejour.annule"] = "= '0'";
-if($type == "ambu_comp") {
-  $where[] = "sejour.type = 'ambu' OR sejour.type = 'comp'";
-} else {
-  $where[] = "sejour.type != 'ambu' AND sejour.type != 'comp'";
-}
+$where["sejour.type"] = "= '$type_sejour'";
 $ljoin = array();
 $ljoin["users"] = "users.user_id = sejour.praticien_id";
 $order = "users.user_last_name, users.user_first_name, sejour.sortie_prevue";
@@ -47,10 +43,10 @@ foreach ($sejours as $key => &$sejour) {
 // Création du template
 $smarty = new CSmartyDP();
 
-$smarty->assign("date"      , $date);
-$smarty->assign("type"      , $type);
-$smarty->assign("listByPrat", $listByPrat);
-$smarty->assign("total"     , count($sejours));
+$smarty->assign("date"       , $date);
+$smarty->assign("type_sejour", $type_sejour);
+$smarty->assign("listByPrat" , $listByPrat);
+$smarty->assign("total"      , count($sejours));
 
 $smarty->display("print_sorties.tpl");
 

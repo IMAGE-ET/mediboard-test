@@ -1,4 +1,4 @@
-{{* $Id$ *}}
+{{* $Id: *}}
 
 {{*
  * @package Mediboard
@@ -12,16 +12,16 @@
 
 <script type="text/javascript">
 
-function printAmbu(date){
+function printAmbu(){
   var url = new Url("dPadmissions", "print_ambu");
   url.addParam("date", "{{$date}}");
   url.popup(800,600,"Ambu");
 }
 
-function printPlanning(type) {
+function printPlanning(type_sejour) {
   var url = new Url("dPadmissions", "print_sorties");
   url.addParam("date", "{{$date}}");
-  url.addParam("type", type);
+  url.addParam("type", type_sejour);
   url.popup(700, 550, "Sorties");
 }
 
@@ -40,38 +40,35 @@ function loadTransfert(oForm){
   }
 }
 
-changeEtablissementId = function(oForm) {
-  oForm._modifier_sortie.value = '0';
-  type = $V(oForm.type);
-  if(type != 'ambu' && type != 'comp') {
-    type = 'autre';
-  }
+var changeEtablissementId = function(oForm) {
+  $V(oForm._modifier_sortie, '0');
+  var type = $V(oForm.type);
   submitSortie(oForm, type);
 }
 
-function reload(mode) {
+function reload(type_sejour) {
   var url = new Url("dPadmissions", "httpreq_vw_sorties");
   url.addParam("date", "{{$date}}");
   url.addParam("vue", "{{$vue}}");
   url.addParam("filter_function_id" , "{{$filter_function_id}}");
-  url.addParam("mode", mode);
-  url.requestUpdate('sorties'+mode);
+  url.addParam("type_sejour", type_sejour);
+  url.requestUpdate("listSorties");
 }
 
-function submitSortie(oForm, mode) {
-  submitFormAjax(oForm, 'systemMsg', { onComplete : function() { reload(mode) } });
+function submitSortie(oForm, type_sejour) {
+  submitFormAjax(oForm, 'systemMsg', { onComplete : function() { reload(type_sejour) } });
 }
 
-function confirmation(oForm, mode){
+function confirmation(oForm, type_sejour){
    if(!checkForm(oForm)){
      return false;
    }
    if(confirm('La date enregistrée de sortie est différente de la date prévue, souhaitez vous confimer la sortie du patient ?')){
-     submitSortie(oForm, mode);
+     submitSortie(oForm, type_sejour);
    }
 }
 
-function confirmation(date_actuelle, date_demain, sortie_prevue, entree_reelle, oForm, mode){
+function confirmation(date_actuelle, date_demain, sortie_prevue, entree_reelle, oForm, type_sejour){
   if(entree_reelle == ""){
     if(!confirm('Attention, ce patient ne possède pas de date d\'entrée réelle, souhaitez vous confirmer la sortie du patient ?')){
      return false;
@@ -82,32 +79,18 @@ function confirmation(date_actuelle, date_demain, sortie_prevue, entree_reelle, 
      return false;
     }
   }
-  submitSortie(oForm, mode);    
+  submitSortie(oForm, type_sejour);    
 }
 
 Main.add(function () {
-  var ambuUpdater = new Url("dPadmissions", "httpreq_vw_sorties");
-  ambuUpdater.addParam("date", "{{$date}}");
-  ambuUpdater.addParam("vue" , "{{$vue}}");
-	ambuUpdater.addParam("filter_function_id" , "{{$filter_function_id}}");
-  ambuUpdater.addParam("mode", "ambu");
-  ambuUpdater.periodicalUpdate('sortiesambu', { frequency: 90 });
+  var totalUpdater = new Url("dPadmissions", "httpreq_vw_all_sorties");
+  totalUpdater.addParam("date", "{{$date}}");
+  totalUpdater.periodicalUpdate('allSorties', { frequency: 120 });
   
-  var compUpdater = new Url("dPadmissions", "httpreq_vw_sorties");
-  compUpdater.addParam("date", "{{$date}}");
-  compUpdater.addParam("vue" , "{{$vue}}");
-  compUpdater.addParam("filter_function_id" , "{{$filter_function_id}}");
-  compUpdater.addParam("mode", "comp");
-  compUpdater.periodicalUpdate('sortiescomp', { frequency: 90 });
-  
-  var compUpdater = new Url("dPadmissions", "httpreq_vw_sorties");
-  compUpdater.addParam("date", "{{$date}}");
-  compUpdater.addParam("vue" , "{{$vue}}");
-  compUpdater.addParam("filter_function_id" , "{{$filter_function_id}}");
-  compUpdater.addParam("mode", "autre");
-  compUpdater.periodicalUpdate('sortiesautre', { frequency: 90 });
-  
-  Control.Tabs.create("main_tab_group", true);
+  var listUpdater = new Url("dPadmissions", "httpreq_vw_sorties");
+  listUpdater.addParam("type_sejour", "{{$type_sejour}}");
+  listUpdater.addParam("date", "{{$date}}");
+  listUpdater.periodicalUpdate('listSorties', { frequency: 120 });
 
   Calendar.regField(getForm("changeDate").date, null, {noView: true});
 });
@@ -125,12 +108,12 @@ Main.add(function () {
           <option value="1" {{if $vue == 1}}selected="selected"{{/if}}>Ne pas afficher les sorties effectuées</option>
         </select>
 
-	      <select name="filter_function_id" style="width: 16em;" onchange="this.form.submit();">
-	        <option value=""> &mdash; Toutes les fonctions</option>
-	        {{foreach from=$functions item=_function}}
-	          <option value="{{$_function->_id}}" {{if $_function->_id == $filter_function_id}}selected="selected"{{/if}} class="mediuser" style="border-color: #{{$_function->color}};">{{$_function}}</option>
-	        {{/foreach}}
-	      </select>
+        <select name="filter_function_id" style="width: 16em;" onchange="this.form.submit();">
+          <option value=""> &mdash; Toutes les fonctions</option>
+          {{foreach from=$functions item=_function}}
+            <option value="{{$_function->_id}}" {{if $_function->_id == $filter_function_id}}selected="selected"{{/if}} class="mediuser" style="border-color: #{{$_function->color}};">{{$_function}}</option>
+          {{/foreach}}
+        </select>
 
       </form>
     </td>
@@ -147,40 +130,13 @@ Main.add(function () {
       </strong>
     </td>
   </tr>
+</table>
+
+<table class="main">
   <tr>
-    <td colspan="2">
-      <!-- Tabulations -->
-        <ul id="main_tab_group" class="control_tabs">
-          <li>
-            <a href="#comp_ambu">
-              Ambu + Hospi complète
-              <button onclick="printPlanning('ambu_comp')" class="notext print">{{tr}}Print{{/tr}}</button>
-            </a>
-          </li>
-          <li>
-            <a href="#autre">
-              Autres
-              <button onclick="printPlanning('autre')" class="notext print">{{tr}}Print{{/tr}}</button>
-            </a>
-          </li>
-        </ul>
-  
-       <hr class="control_tabs" />
-       <div id="comp_ambu" style="display:none">
-         <table class="main">
-           <tr>
-             <td class="halfPane">
-               <div id="sortiesambu"></div>
-             </td>
-             <td class="halfPane">
-               <div id="sortiescomp"></div>
-             </td>
-           </tr>
-         </table>
-       </div>
-       <div id="autre" style="display:none">
-         <div id="sortiesautre"></div>
-       </div>
+    <td id="allSorties" style="width: 250px">
+    </td>
+    <td id="listSorties" style="width: 100%">
     </td>
   </tr>
 </table>
