@@ -1,22 +1,35 @@
+<script type="text/javascript">
+
+function changeCodeToDel(subject_id, code_ccam, actes_ids){
+  var oForm = getForm("manageCodes");
+  $V(oForm._selCode, code_ccam);
+  $V(oForm._actes, actes_ids);
+  ActesCCAM.remove(subject_id);
+}
+
+</script>
+
 <!-- Pas d'affichage de inc_manage_codes si la consultation est deja validée -->
-<form name="manageCodes" action="?m={{$module}}" method="post">
-  <input type="hidden" name="m" value="{{$subject->_ref_module->mod_name}}" />
-  <input type="hidden" name="dosql" value="{{$do_subject_aed}}" />
-  <input type="hidden" name="{{$subject->_spec->key}}" value="{{$subject->_id}}" />
-  <input type="hidden" name="del" value="0" />
-  <input type="hidden" name="codes_ccam" value="{{$subject->codes_ccam}}" />
-  <input type="submit" disabled="disabled" style="display:none;"/>
-  <input type="hidden" name="_chir" value="{{$subject->_praticien_id}}" />
-  {{if ($subject->_class_name=="COperation")}}
-  <input type="hidden" name="_anesth" value="{{$subject->_ref_plageop->anesth_id}}" />
-  {{/if}}
-  <input type="hidden" name="_class_name" value="{{$subject->_class_name}}" />
   
   <table class="main layout">
     <tr>
       <td class="halfPane">
+        <form name="manageCodes" action="?m={{$module}}" method="post">
+        <input type="hidden" name="m" value="{{$subject->_ref_module->mod_name}}" />
+        <input type="hidden" name="dosql" value="{{$do_subject_aed}}" />
+        <input type="hidden" name="{{$subject->_spec->key}}" value="{{$subject->_id}}" />
+        <input type="hidden" name="del" value="0" />
+        <input type="hidden" name="codes_ccam" value="{{$subject->codes_ccam}}" />
+        <input type="submit" disabled="disabled" style="display:none;"/>
+        <input type="hidden" name="_chir" value="{{$subject->_praticien_id}}" />
+        {{if ($subject->_class_name=="COperation")}}
+        <input type="hidden" name="_anesth" value="{{$subject->_ref_plageop->anesth_id}}" />
+        {{/if}}
+        <input type="hidden" name="_class_name" value="{{$subject->_class_name}}" />
         <fieldset>
           <legend>Ajouter un code</legend>
+          <input name="_actes" type="hidden" value="" />
+          <input name="_selCode" type="hidden" value="" />
           <button class="search" type="button" onclick="CCAMSelector.init()">
             {{tr}}Search{{/tr}}
           </button>
@@ -40,27 +53,46 @@
             {{tr}}Add{{/tr}}
           </button>
         </fieldset>
+        </form>
       </td>
       <td class="halfPane">
         <fieldset>
-          <legend>Supprimer de code</legend>
-          <input name="_actes" type="hidden" value="" />
-          <select name="_selCode">
-            <option value="0">&mdash; Choisir un code à supprimer</option>
-            {{foreach from=$subject->_associationCodesActes item=curr_code}}
-            <option value="{{$curr_code.code}}" onclick="this.form._actes.value = '{{$curr_code.ids}}'">
-              {{$curr_code.code|truncate:7:""|capitalize}}
-            </option>
-            {{/foreach}}
-          </select>
-          <button class="trash" type="button" onclick="ActesCCAM.remove({{$subject->_id}})">
-            Supprimer
-          </button>
+          <legend>Validation du codage</legend>
+          {{if ($conf.dPsalleOp.CActeCCAM.envoi_actes_salle || $m == "dPpmsi") && ($subject instanceof COperation)}}
+            <table class="main layout">
+              <tr>
+                <td class="halfPane">
+                  {{if !$subject->_nb_echange_hprim || $m == "dPpmsi" || $can->admin}}
+                  <button type="button" class="tick" onclick="ActesCCAM.exportHPRIM({{$subject->_id}}, 'op')">
+                    Export des actes au PMSI
+                  </button>
+                  {{else}}
+                  <div class="small-warning">Export PMSI impossible</div>
+                  {{/if}}
+                </td>
+                <td class="halfPane">
+                  {{if $subject->_nb_echange_hprim}}
+                  <div class="small-success">
+                    Export déjà effectué {{$subject->_nb_echange_hprim}} fois
+                  </div>
+                  {{else}}
+                  <div class="small-info">
+                    Pas d'export effectué
+                  </div>
+                  {{/if}}
+                </td>
+              </tr>
+            </table>
+          {{/if}}
+          {{if ($module == "dPsalleOp" || $module == "dPhospi") && $conf.dPsalleOp.CActeCCAM.signature}}
+            <button class="tick" onclick="signerActes('{{$subject->_id}}', '{{$subject->_class_name}}')">
+              Signer les actes
+            </button>
+          {{/if}}
         </fieldset>
       </td>
     </tr>
   </table>
-</form>
 
 
 {{if $ajax}}

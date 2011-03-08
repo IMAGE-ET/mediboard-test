@@ -26,7 +26,7 @@ ActesCCAM = {
       onComplete: ActesCCAM.notifyChange.curry(subject_id, chir_id)
     }
     Object.extend(oDefaultOptions, oOptions);
-    var oForm = document.manageCodes;
+    var oForm = getForm("manageCodes");
     var oCcamField = new TokenField(oForm.codes_ccam, {
       sProps : "notNull code ccam"
     } );
@@ -41,14 +41,14 @@ ActesCCAM = {
     }
 		
     Object.extend(oDefaultOptions, oOptions);
-    var oForm = document.manageCodes;
+    var oForm = getForm("manageCodes");
     var aListActes = null;
     var oActeForm = null;
     if(oForm._actes && oForm._actes.value != "") {
       aListActes = oForm._actes.value.split("|").without("");
       if(confirm('Des actes ont été validés pour ce code\nÊtes-vous sur de vouloir le supprimer ?')) {
         aListActes.each(function(elem) {
-          oActeForm = document.forms['formActe-'+elem];
+          oActeForm = getForm('formActe-'+elem);
           oActeForm.del.value = 1;
           submitFormAjax(oActeForm, 'systemMsg');
         });
@@ -65,6 +65,7 @@ ActesCCAM = {
       submitFormAjax(oForm, 'systemMsg', oDefaultOptions);
     }
   },
+  
   exportHPRIM: function(object_id, typeObject, oOptions) {
     if(!confirm("L'envoi des actes cloturera définitivement le codage de cette intervention pour le chirurgien et l'anesthésiste." +
               "\nConfirmez-vous l'envoi en facturation ?")) {
@@ -93,7 +94,7 @@ ActesCCAM = {
 }
 
 function setCodeTemp(code){
-  var oForm = document.manageCodes;
+  var oForm = getForm("manageCodes");
   oForm._newCode.value = code;
   oForm.addCode.onclick();
 }

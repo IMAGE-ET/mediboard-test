@@ -165,29 +165,27 @@ class CCodable extends CMbObject {
     }
     $this->_associationCodesActes = array();
     $listCodes = $this->_codes_ccam;
+    $listCodes = $this->_ext_codes_ccam;
     $listActes = $this->_ref_actes_ccam;
-    $i = 0;
-    foreach($listCodes as $curr_code) {
-      $code_complet = explode("-", $curr_code);
-      $ccam     = $code_complet[0];
-      $phase    = isset($code_complet[1]) ? $code_complet[1] : null;
-      $activite = isset($code_complet[2]) ? $code_complet[2] : null;
-      $this->_associationCodesActes[$i]["code"]    = $curr_code;
-      $this->_associationCodesActes[$i]["nbActes"] = 0;
-      $this->_associationCodesActes[$i]["ids"]     = "";
+    foreach($listCodes as $key_code => $curr_code) {
+      $ccam     = $curr_code->code;
+      $phase    = $curr_code->_phase;
+      $activite = $curr_code->_activite;
+      $this->_associationCodesActes[$key_code]["code"]    = $curr_code->code;
+      $this->_associationCodesActes[$key_code]["nbActes"] = 0;
+      $this->_associationCodesActes[$key_code]["ids"]     = "";
       foreach($listActes as $key_acte => $curr_acte) {
         $test = ($curr_acte->code_acte == $ccam);
         $test = $test && ($phase === null || $curr_acte->code_phase == $phase);
         $test = $test && ($activite === null || $curr_acte->code_activite == $activite);
-        $test = $test && (!isset($this->_associationCodesActes[$i]["actes"][$curr_acte->code_phase][$curr_acte->code_activite]));
+        $test = $test && (!isset($this->_associationCodesActes[$key_code]["actes"][$curr_acte->code_phase][$curr_acte->code_activite]));
         if($test) {
-          $this->_associationCodesActes[$i]["actes"][$curr_acte->code_phase][$curr_acte->code_activite] = $curr_acte;
-          $this->_associationCodesActes[$i]["nbActes"]++;
-          $this->_associationCodesActes[$i]["ids"] .= "$curr_acte->_id|";
+          $this->_associationCodesActes[$key_code]["actes"][$curr_acte->code_phase][$curr_acte->code_activite] = $curr_acte;
+          $this->_associationCodesActes[$key_code]["nbActes"]++;
+          $this->_associationCodesActes[$key_code]["ids"] .= "$curr_acte->_id|";
           unset($listActes[$key_acte]);
         }
       }
-      $i++;
     }
   }
   

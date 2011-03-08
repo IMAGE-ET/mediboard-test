@@ -7,7 +7,6 @@ $do_subject_aed  = CValue::getOrSession("do_subject_aed");
 $chir_id         = CValue::getOrSession("chir_id");
 
 $date  = CValue::getOrSession("date", mbDate());
-$date_now = mbDate();
 
 
 // Chargement de la liste des praticiens
@@ -24,8 +23,8 @@ $codable->isCoded();
 
 $codable->loadRefPatient();
 $codable->loadRefPraticien();
-$codable->getAssociationCodesActes();
 $codable->loadExtCodesCCAM();
+$codable->getAssociationCodesActes();
 $codable->loadPossibleActes();
 if($codable->_class_name == "COperation") {
   $codable->countEchangeHprim();

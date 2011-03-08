@@ -60,51 +60,17 @@ signerActes = function(object_id, object_class){
       {{/if}}
     </td>
   </tr>
-  {{if $conf.dPsalleOp.CActeCCAM.envoi_actes_salle && ($subject instanceof COperation)}}
-  <tr>
-    <td>
-      {{if !$subject->_nb_echange_hprim || $m == "dPpmsi" || $can->admin}}
-      <button class="tick" onclick="ActesCCAM.exportHPRIM({{$subject->_id}}, 'op')">Export des actes au PMSI</button>
-      {{/if}}
-      {{if $subject->_nb_echange_hprim}}
-      <div class="small-success">
-        Export déjà effectué {{$subject->_nb_echange_hprim}} fois
-      </div>
-      {{else}}
-      <div class="small-info">
-        Pas d'export effectué
-      </div>
-      {{/if}}
-    </td>
-  </tr>
-  <tr>
-    <td class="text">
-    </td>
-  </tr>
   {{if $can->admin}}
   <tr>
   {{else}}
   <tr style="display: none;">
-    {{/if}}
+  {{/if}}
     <td class="text" id="hprim_export_op{{$subject->_id}}">
       <div class="small-info">
-        Fenêtre de résultat de l'envoi
+        Fenêtre de résultat de l'envoi HPRIM
       </div>
     </td>
   </tr>
-  {{/if}}
-
-  {{if ($module == "dPsalleOp" || $module == "dPhospi") && $conf.dPsalleOp.CActeCCAM.signature}}
-  <!-- Signature des actes -->
-  <tr>
-	  <td class="button">
-	    <button class="tick" onclick="signerActes('{{$subject->_id}}', '{{$subject->_class_name}}')">
-	      Signer les actes
-	    </button>
-	  </td>
-  </tr>
-  {{/if}}
-  
   {{/if}}
   
 </table>

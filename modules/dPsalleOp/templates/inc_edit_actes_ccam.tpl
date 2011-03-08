@@ -19,8 +19,12 @@ function setToNow(element) {
 {{assign var=confCCAM value=$conf.dPsalleOp.CActeCCAM}}
 
 {{foreach from=$subject->_ext_codes_ccam item=_code key=_key}}
+{{assign var=actes_ids value=$subject->_associationCodesActes.$_key.ids}}
 <fieldset>
   <legend class="text" style="width: 90%">
+    <button type="button" class="notext trash" style="float: right;" onclick="changeCodeToDel('{{$subject->_id}}', '{{$_code->code}}', '{{$actes_ids}}')">
+      {{tr}}Delete{{/tr}}
+    </button>
     <!-- Codes d'associations -->
     {{if count($_code->assos) > 0 && count($_code->assos) < 15}}
     <select style="float:right; width: 160px;" name="asso" onchange="setCodeTemp(this.value)">
