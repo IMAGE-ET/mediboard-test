@@ -41,13 +41,7 @@ Main.add(function(){
   {{mb_class class=CExListItem}}
   <input type="hidden" name="ex_list_item_id" value="" class="ref" />
 	
-	{{assign var=owner value="list_id"}}
-	
-	{{if $object instanceof CExConcept}}
-    {{assign var=owner value="concept_id"}}
-	{{elseif $object instanceof CExClassField}}
-    {{assign var=owner value="field_id"}}
-	{{/if}}
+	{{assign var=owner value=$object->getBackRefField()}}
 	
 	<input type="hidden" name="{{$owner}}" value="{{$object->_id}}" />
   

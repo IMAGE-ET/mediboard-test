@@ -77,7 +77,7 @@ class CExClassField extends CExListItemsOwner {
     $props["coord_label_x"] = "num min|0 max|100";
     $props["coord_label_y"] = "num min|0 max|100";
 		
-    $props["_locale"]     = "str";
+    $props["_locale"]     = "str notNull";
     $props["_locale_desc"]  = "str";
     $props["_locale_court"] = "str";
     $props["_enum_translation"] = "str";
@@ -106,6 +106,12 @@ class CExClassField extends CExListItemsOwner {
   	return $this->_ref_ex_class = $this->loadRefExGroup($cache)->loadRefExClass($cache);
   }
   
+	/**
+	 * CExConcept
+	 * 
+	 * @param object $cache [optional]
+	 * @return 
+	 */
   function loadRefConcept($cache = true){
     return $this->_ref_concept = $this->loadFwdRef("concept_id", $cache);
   }
@@ -127,20 +133,16 @@ class CExClassField extends CExListItemsOwner {
   }
   
   function updateTranslation(){
-  	if ($this->concept_id) {
-  		$concept = $this->loadRefConcept();
-  	}
-		else {
-			$items = $this->loadRefItems();
-			
-			foreach($items as $_item) {
-				
-			}
-			
-	    /*$enum_trans = $this->loadRefEnumTranslations();
-	    foreach($enum_trans as $_enum_trans) {
-	      $_enum_trans->updateLocales($this);
-	    }*/
+  	$list_owner = $this->getRealListOwner();
+		$items = $list_owner->loadRefItems();
+		
+    global $locales;
+		
+		$ex_class = $this->loadRefExClass();
+		
+    $key = $ex_class->getExClassName().".$this->name";
+		foreach($items as $_item) {
+	    $locales["{$key}.$_item->_id"] = $_item->name;
 		}
     
     $trans = $this->loadRefTranslation();
@@ -293,5 +295,16 @@ class CExClassField extends CExListItemsOwner {
     }
     
     return parent::delete();
+  }
+  
+	/**
+	 * @return CExListItemsOwner
+	 */
+  function getRealListOwner(){
+    if ($this->concept_id) {
+      return $this->loadRefConcept()->getRealListOwner();
+    }
+    
+    return parent::getRealListOwner();
   }
 }

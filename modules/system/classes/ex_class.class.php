@@ -54,7 +54,7 @@ class CExClass extends CMbObject {
     }
     
     global $locales;
-    $locales["CExObject_{$this->host_class}_{$this->event}_{$this->_id}"] = $this->_view;
+    $locales[$this->getExClassName()] = $this->_view;
     
     // pas encore obligé d'utiliser l'eval, mais je pense que ca sera le plus simple
     /*$class_name = "CExObject_{$this->host_class}_{$this->event}_{$this->_id}";
@@ -75,6 +75,10 @@ class CExClass extends CMbObject {
     
     return $ret;
   }
+	
+	function getExClassName(){
+		return "CExObject_{$this->host_class}_{$this->event}_{$this->_id}";
+	}
   
   function updateFormFields(){
     parent::updateFormFields();

@@ -21,7 +21,7 @@ class CExListItemsOwner extends CMbObject {
     return $this->_ref_items = $this->loadBackRefs("list_items", "code");
   }
 	
-	private function getBackRefField(){
+	function getBackRefField(){
 		$map = array(
       "CExList"       => "list_id",
       "CExConcept"    => "concept_id",
@@ -37,6 +37,10 @@ class CExListItemsOwner extends CMbObject {
 		);
     return $item->loadIds($where, "name, code");
   }
+	
+	function getRealListOwner(){
+		return $this;
+	}
   
   function loadView(){
     parent::loadView();

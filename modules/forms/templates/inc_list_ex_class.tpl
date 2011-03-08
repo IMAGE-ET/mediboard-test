@@ -27,7 +27,7 @@ Main.add(function(){
 		    <tr>
 		      <td style="padding-left: 1em;">
             {{if $_ex_class->disabled}}
-              <span style="float: right; color: #666;">(inactif)</span>
+              <small style="float: right; color: #666;">(inactif)</small>
             {{/if}}
 		        <a href="#1" onclick="ExClass.edit({{$_ex_class->_id}})">
 		          {{mb_value object=$_ex_class field=name}}

@@ -9,39 +9,38 @@
 *}}
 
 <script type="text/javascript">
-toggleListCustom = function(radio) {
-  var enableList = (radio.value == "concept" && radio.checked);
-  var form = radio.form;
-  
-  var input = form.concept_id_autocomplete_view;
-  var select = form._spec_type;
-  
-  if (input) {
-    input.up(".dropdown").down(".dropdown-trigger").setVisibility(enableList);
-    input.disabled = input.readOnly = !enableList;
-  }
-  
-  if (enableList) {
-    //$V(select, "none");
-  }
-  else {
-    $V(input, "");
-    $V(form.concept_id, "");
-  }
-  
-  select.disabled = select.readOnly = !!$V(form.ex_class_field_id) || enableList;
+toggleListCustom = function(form) {
+  var radio = form._concept_type && form._concept_type[0];
+	
+  if (radio) {
+	  var enableList = (radio.value == "concept" && radio.checked);
+	  
+	  var input = form.concept_id_autocomplete_view;
+	  var select = form._spec_type;
+	  
+	  if (input) {
+	    input.up(".dropdown").down(".dropdown-trigger").setVisibility(enableList);
+	    input.disabled = input.readOnly = !enableList;
+	  }
+	  
+	  if (enableList) {
+	    //$V(select, "none");
+	  }
+	  else {
+	    $V(input, "");
+	    $V(form.concept_id, "");
+	  }
+	  
+	  select.disabled = select.readOnly = !!$V(form.ex_class_field_id) || enableList;
+	}
   
   ExFieldSpec.edit(form);
 }
 
 Main.add(function(){
-  var radio = getForm("editField")._concept_type[0];
-  toggleListCustom.defer(radio);
+  var form = getForm("editField");
+  toggleListCustom.defer(form);
 	
-  var fields = {{$other_fields|@json}};
-	var form = getForm("editField");
-	
-  ExFieldSpec.edit(form);
   form.elements._locale.select();
 });
 
@@ -100,17 +99,20 @@ updateInternalName = function(e){
       <th style="width: 8em;">{{mb_label object=$ex_field field=_locale}}</th>
       <td>
       	{{if $ex_field->_id}}
-          {{mb_field object=$ex_field field=_locale size=40}}
+          {{mb_field object=$ex_field field=_locale size=30}}
 				{{else}}
-      	  {{mb_field object=$ex_field field=_locale onkeyup="updateInternalName(this)" size=40}}
+      	  {{mb_field object=$ex_field field=_locale onkeyup="updateInternalName(this)" size=30}}
 				{{/if}}
 			</td>
-			
-      <th>{{mb_label object=$ex_field field=_locale_desc}}</th>
-      <td>{{mb_field object=$ex_field field=_locale_desc tabIndex="2" size=40}}</td>
+      
+      <th>{{mb_label object=$ex_field field=_locale_court}}</th>
+      <td>{{mb_field object=$ex_field field=_locale_court tabIndex="3" size=30}}</td>
     </tr>
 		
     <tr>
+      <th>{{mb_label object=$ex_field field=_locale_desc}}</th>
+      <td>{{mb_field object=$ex_field field=_locale_desc tabIndex="2" size=30}}</td>
+      
       <th><label for="ex_group_id">Groupe</label></th>
       <td>
         <select name="ex_group_id">
@@ -119,17 +121,17 @@ updateInternalName = function(e){
           {{/foreach}}
         </select>
       </td>
-      
-      <th>{{mb_label object=$ex_field field=_locale_court}}</th>
-      <td>{{mb_field object=$ex_field field=_locale_court tabIndex="3" size=30}}</td>
 		</tr>
+		
 		<tr>
-			
       <th>
         <label>
-          {{if !$ex_field->concept_id}}Type {{/if}}
-          <input type="radio" name="_concept_type" value="custom" {{if $ex_field->_id}}style="display: none;"{{/if}}
-                 {{if !$ex_field->concept_id}}checked="checked"{{/if}} onclick="toggleListCustom(this)" />
+          {{if !$ex_field->concept_id}}Type{{/if}}
+					
+          {{if !$ex_field->_id}}
+					  <input type="radio" {{if !$ex_field->concept_id}}checked="checked"{{/if}} 
+						       onclick="toggleListCustom(this.form)" name="_concept_type" value="custom" />
+					{{/if}}
         </label>
 			</th>
       <td>
@@ -151,8 +153,10 @@ updateInternalName = function(e){
         <label>
           {{if !$ex_field->_id || $ex_field->concept_id}}{{tr}}CExClassField-concept_id{{/tr}}{{/if}}
 					
-          <input type="radio" name="_concept_type" value="concept" {{if $ex_field->_id}}style="display: none;"{{/if}}
-                 {{if $ex_field->concept_id}}checked="checked"{{/if}} onclick="toggleListCustom(this)" />
+					{{if !$ex_field->_id}}
+	          <input type="radio" name="_concept_type" value="concept" onclick="toggleListCustom(form)"
+	                 {{if $ex_field->concept_id}}checked="checked"{{/if}} />
+				  {{/if}}
         </label>
 			</th>
 			<td>

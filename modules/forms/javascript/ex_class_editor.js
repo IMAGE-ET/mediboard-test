@@ -224,12 +224,14 @@ ExFieldSpec = {
   edit: function(form){
     var specType = $V(form._spec_type);
     var prop = $V(form.prop);
+    var concept_id = $V(form.concept_id);
     
     var url = new Url("forms", "ajax_edit_ex_field_spec2");
     url.addParam("prop", prop);
     url.addParam("spec_type", specType);
     url.addParam("form_name", form.getAttribute("name"));
     url.addParam("owner_guid", form.get("object_guid"));
+    url.addParam("ex_concept_id", concept_id);
     url.requestUpdate("fieldSpecEditor");
   }
 };

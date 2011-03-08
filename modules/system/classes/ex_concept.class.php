@@ -197,4 +197,12 @@ class CExConcept extends CExListItemsOwner {
     $spec->_options = $options;
     return $spec;
   }
+  
+  function getRealListOwner(){
+  	if ($this->ex_list_id) {
+  		return $this->loadRefExList();
+  	}
+		
+    return parent::getRealListOwner();
+  }
 }

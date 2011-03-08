@@ -10,18 +10,33 @@
 
 CCanDo::checkEdit();
 
-$prop         = CValue::get("prop");
-$spec_type    = CValue::get("spec_type");
-$form_name    = CValue::get("form_name");
-$ex_list_id   = CValue::get("ex_list_id");
-$owner_guid   = CValue::get("owner_guid");
+$prop          = CValue::get("prop");
+$spec_type     = CValue::get("spec_type");
+$form_name     = CValue::get("form_name");
+$ex_list_id    = CValue::get("ex_list_id");
+$ex_concept_id = CValue::get("ex_concept_id");
+$owner_guid    = CValue::get("owner_guid");
+
+$owner = null;
 
 $ex_list = new CExList;
 if($ex_list_id) {
   $ex_list->load($ex_list_id);
+  $owner = $ex_list->getRealListOwner();
 }
 
-$owner = CMbObject::loadFromGuid($owner_guid);
+$ex_concept = new CExConcept;
+if($ex_concept_id) {
+  $ex_concept->load($ex_concept_id);
+	$prop = $ex_concept->prop;
+	$spec_type = CExConcept::getConceptSpec($prop)->getSpecType();
+	$owner = $ex_concept->getRealListOwner();
+}
+
+if (!$owner) {
+	$owner = CMbObject::loadFromGuid($owner_guid);
+}
+
 $owner->loadView();
 
 $prop_type = explode(" ", $prop);
@@ -50,9 +65,12 @@ if ($spec instanceof CEnumSpec) {
 		unset($spec->_list[0]);
 	}
 	
-	if($ex_list_id) {
+	if($ex_list->_id) {
 	  $ex_list->updateEnumSpec($spec);
 		$prop .= " ".implode("|", $spec->_list);
+	}
+	elseif($ex_concept->_id) {
+		$ex_list = $ex_concept->loadRefExList();
 	}
 }
 
