@@ -183,18 +183,19 @@
 		{{if $line_guid == $_suivi->_guid && $action == "show" && $_suivi->_canEdit}}
 		  <br />
 			{{if $_suivi instanceof CPrescriptionLineElement}}
-		  <form name="editLinePrescriptionSuiviSoins" action="?" method="post">
-        <input type="hidden" name="m" value="dPprescription" />
-        <input type="hidden" name="dosql" value="do_prescription_line_element_aed" />
-        <input type="hidden" name="prescription_line_element_id" value="{{$_suivi->_id}}" />
-        {{mb_field object=$_suivi field="commentaire" onchange="return onSubmitFormAjax(this.form);" size="50"}}
+		    <form name="editLinePrescriptionSuiviSoins" action="?" method="post">
+          <input type="hidden" name="m" value="dPprescription" />
+          <input type="hidden" name="dosql" value="do_prescription_line_element_aed" />
+          <input type="hidden" name="prescription_line_element_id" value="{{$_suivi->_id}}" />
+          {{mb_field object=$_suivi field="commentaire" onchange="return onSubmitFormAjax(this.form);" size="50"}}
+				</form>
 			{{else}}
 			  <form name="editLinePrescriptionSuiviSoins" action="?" method="post">
           <input type="hidden" name="m" value="dPprescription" />
           <input type="hidden" name="dosql" value="do_prescription_line_comment_aed" />
           <input type="hidden" name="prescription_line_comment_id" value="{{$_suivi->_id}}" />
           {{mb_field object=$_suivi field="commentaire" onchange="return onSubmitFormAjax(this.form);" size="50"}}
-      </form> 
+        </form> 
 			{{/if}}
     {{else}}
       {{mb_value object=$_suivi field="commentaire"}}
