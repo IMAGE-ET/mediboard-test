@@ -67,7 +67,7 @@ if ($order_col != "patient_id" && $order_col != "entree_prevue" && $order_col !=
 }
 
 if ($order_col == "patient_id"){
-  $order = "patients.nom $order_way, patients.prenom, sejour.entree_prevue";
+  $order = "patients.nom $order_way, patients.prenom $order_way, sejour.entree_prevue";
 }
 
 if ($order_col == "entree_prevue"){

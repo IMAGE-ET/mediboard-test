@@ -37,12 +37,17 @@ $consult = new CConsultation();
 // Récupération des consultation d'anesthésie du jour
 $ljoin = array();
 $ljoin["plageconsult"] = "consultation.plageconsult_id = plageconsult.plageconsult_id";
+$ljoin["patients"]     = "consultation.patient_id = patients.patient_id";
 $where = array();
 $where["consultation.patient_id"] = "IS NOT NULL";
 $where["consultation.annule"] = "= '0'";
 $where["plageconsult.chir_id"] = CSQLDataSource::prepareIn(array_keys($anesthesistes));
 $where["plageconsult.date"] = "= '$date'";
-$order = "consultation.".$order_col_pre." ".$order_way_pre;
+if ($order_col_pre == "patient_id"){
+  $order = "patients.nom $order_way_pre, patients.prenom $order_way_pre, consultation.heure";
+} else {
+  $order = "consultation.".$order_col_pre." ".$order_way_pre;
+}
 $listConsultations = $consult->loadList($where, $order, null, null, $ljoin);
 foreach($listConsultations as &$curr_consult) {
   $curr_consult->loadRefPatient();
