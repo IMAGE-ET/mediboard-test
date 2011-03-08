@@ -90,17 +90,17 @@ foreach ($ds->loadHashList($sql) as $day => $num3) {
 // Création du template
 $smarty = new CSmartyDP();
 
-$smarty->assign("hier", $hier);
-$smarty->assign("demain", $demain);
+$smarty->assign("hier"         , $hier);
+$smarty->assign("demain"       , $demain);
 
-$smarty->assign("selAdmis", $selAdmis);
-$smarty->assign("selSaisis", $selSaisis);
+$smarty->assign("selAdmis"     , $selAdmis);
+$smarty->assign("selSaisis"    , $selSaisis);
 
 $smarty->assign("bank_holidays", $bank_holidays);
-$smarty->assign('date', $date);
-$smarty->assign('lastmonth', $lastmonth);
-$smarty->assign('nextmonth', $nextmonth);
-$smarty->assign('days', $days);
+$smarty->assign('date'         , $date);
+$smarty->assign('lastmonth'    , $lastmonth);
+$smarty->assign('nextmonth'    , $nextmonth);
+$smarty->assign('days'         , $days);
 
 $smarty->display('inc_vw_all_admissions.tpl');
 
