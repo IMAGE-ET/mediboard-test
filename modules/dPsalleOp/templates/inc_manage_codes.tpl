@@ -55,6 +55,7 @@ function changeCodeToDel(subject_id, code_ccam, actes_ids){
         </fieldset>
         </form>
       </td>
+      {{if !$subject instanceof CConsultation}}
       <td class="halfPane">
         <fieldset>
           <legend>Validation du codage</legend>
@@ -91,6 +92,7 @@ function changeCodeToDel(subject_id, code_ccam, actes_ids){
           {{/if}}
         </fieldset>
       </td>
+      {{/if}}
     </tr>
   </table>
 
