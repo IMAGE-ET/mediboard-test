@@ -69,6 +69,9 @@ if (!$echange_hprim_id) {
         $notification->date_echange = "";
         $notification->store();
       }   
+    } else {
+      $notification->date_echange = "";
+      $notification->store();
     }
   }
 } else {
