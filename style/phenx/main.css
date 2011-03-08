@@ -74,7 +74,7 @@ p em {
 }
 
 fieldset, legend {
-  border: 1px solid #ccc;
+  border: 1px solid #bbb;
   -moz-border-radius: 4px;
   -webkit-border-radius: 4px;
   border-radius: 4px;
@@ -344,12 +344,12 @@ table.form th {
 
 table.form th.title {
   font-size: 1.3em;
-  background-color: #CCC;
+  background-color: #bbb;
   border: none;
 }
 
 table.form th.category {
-  background-color: #CCCCCC;
+  background-color: #ccc;
 }
 
 table.form td {
