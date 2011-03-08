@@ -11,10 +11,10 @@
 CCanDo::checkEdit();
 
 $prop          = CValue::get("prop");
-$spec_type     = CValue::get("spec_type");
+$spec_type     = CValue::get("_spec_type");
 $form_name     = CValue::get("form_name");
 $ex_list_id    = CValue::get("ex_list_id");
-$ex_concept_id = CValue::get("ex_concept_id");
+$ex_concept_id = CValue::get("concept_id");
 $owner_guid    = CValue::get("owner_guid");
 
 $owner = null;

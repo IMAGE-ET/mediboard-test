@@ -222,16 +222,11 @@ ExConcept.editCallback = function(id, obj) {
 ExFieldSpec = {
   options: {},
   edit: function(form){
-    var specType = $V(form._spec_type);
-    var prop = $V(form.prop);
-    var concept_id = $V(form.concept_id);
-    
     var url = new Url("forms", "ajax_edit_ex_field_spec2");
-    url.addParam("prop", prop);
-    url.addParam("spec_type", specType);
+    url.addFormData(form);
+    url.addParam("m", "forms"); // needed
     url.addParam("form_name", form.getAttribute("name"));
     url.addParam("owner_guid", form.get("object_guid"));
-    url.addParam("ex_concept_id", concept_id);
     url.requestUpdate("fieldSpecEditor");
   }
 };
@@ -251,14 +246,9 @@ ExConstraint = {
 ExConceptSpec = {
   options: {},
   edit: function(form){
-    var prop = $V(form.prop);
-    var spec_type = $V(form._spec_type);
-    var ex_list_id = $V(form.ex_list_id);
-		
     var url = new Url("forms", "ajax_edit_ex_field_spec2");
-    url.addParam("spec_type", spec_type);
-    url.addParam("prop", prop);
-    url.addParam("ex_list_id", ex_list_id);
+    url.addFormData(form);
+    url.addParam("m", "forms"); // needed
     url.addParam("form_name", form.getAttribute("name"));
     url.addParam("owner_guid", form.get("object_guid"));
     url.requestUpdate("ExConcept-spec-editor");

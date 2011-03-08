@@ -27,7 +27,7 @@ class CConfigServiceAbstract extends CMbObject {
     return SHM::get($name);
   }
 	
-	static function rembSHM($name) {
+	static function remSHM($name) {
     return SHM::rem($name);
 	}
 }

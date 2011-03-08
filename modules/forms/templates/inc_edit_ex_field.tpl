@@ -10,10 +10,10 @@
 
 <script type="text/javascript">
 toggleListCustom = function(form) {
-  var radio = form._concept_type && form._concept_type[0];
+  var concept_type = $V(form._concept_type);
 	
-  if (radio) {
-	  var enableList = (radio.value == "concept" && radio.checked);
+  if (concept_type) {
+	  var enableList = (concept_type == "concept");
 	  
 	  var input = form.concept_id_autocomplete_view;
 	  var select = form._spec_type;
@@ -124,50 +124,58 @@ updateInternalName = function(e){
 		</tr>
 		
 		<tr>
-      <th>
-        <label>
-          {{if !$ex_field->concept_id}}Type{{/if}}
-					
-          {{if !$ex_field->_id}}
-					  <input type="radio" {{if !$ex_field->concept_id}}checked="checked"{{/if}} 
-						       onclick="toggleListCustom(this.form)" name="_concept_type" value="custom" />
-					{{/if}}
-        </label>
-			</th>
-      <td>
-      	{{if !$ex_field->_id}}
-	        <select {{if $ex_field->_id}}disabled="disabled"{{/if}} name="_spec_type" onchange="ExFieldSpec.edit(this.form)">
-	          {{foreach from="CMbFieldSpecFact"|static:classes item=_class key=_key}}
-	            <option value="{{$_key}}" {{if $_key == $spec_type && !$ex_field->concept_id}}selected="selected"{{/if}}>{{tr}}CMbFieldSpec.type.{{$_key}}{{/tr}}</option>
-	          {{/foreach}}
-	        </select>
-				{{else}}
-				  <input type="hidden" name="_spec_type" value="{{$spec_type}}" />
-					{{if !$ex_field->concept_id}}
-					  {{tr}}CMbFieldSpec.type.{{$spec_type}}{{/tr}}
-					{{/if}}
-				{{/if}}
-      </td>
 			
-      <th>
-        <label>
-          {{if !$ex_field->_id || $ex_field->concept_id}}{{tr}}CExClassField-concept_id{{/tr}}{{/if}}
-					
-					{{if !$ex_field->_id}}
-	          <input type="radio" name="_concept_type" value="concept" onclick="toggleListCustom(form)"
-	                 {{if $ex_field->concept_id}}checked="checked"{{/if}} />
-				  {{/if}}
-        </label>
-			</th>
-			<td>
-        {{if !$ex_field->_id}}
+			{{if $ex_field->_id}}
+			
+			  <th>Type</th>
+				<td colspan="3">
+					<strong>
+						{{if $ex_field->concept_id}}
+		          {{mb_value object=$ex_field field=concept_id}}
+		          {{mb_field object=$ex_field field=concept_id hidden=true}}
+						{{else}}
+						  {{tr}}CMbFieldSpec.type.{{$spec_type}}{{/tr}}
+						{{/if}}
+					</strong>
+				</td>
+				
+			{{else}}
+			
+	      <th>
+	        <label>
+	          {{if !$ex_field->concept_id}}Type{{/if}}
+						
+            <input type="radio" {{if !$ex_field->concept_id}} checked="checked" {{/if}} 
+                   onclick="toggleListCustom(this.form)" name="_concept_type" value="custom" />
+	        </label>
+	      </th>
+	      
+	      <td>
+          <select  name="_spec_type" onchange="ExFieldSpec.edit(this.form)">
+            {{foreach from="CMbFieldSpecFact"|static:classes item=_class key=_key}}
+              <option value="{{$_key}}" {{if $_key == $spec_type && !$ex_field->concept_id}}selected="selected"{{/if}}>
+              	{{tr}}CMbFieldSpec.type.{{$_key}}{{/tr}}
+							</option>
+            {{/foreach}}
+          </select>
+	      </td>
+	      
+	      <th>
+	        <label>
+	          {{if $ex_field->concept_id}}{{tr}}CExClassField-concept_id{{/tr}}{{/if}}
+						
+            <input type="radio" {{if $ex_field->concept_id}} checked="checked" {{/if}}
+						       onclick="toggleListCustom(this.form)" name="_concept_type" value="concept" />
+	        </label>
+	      </th>
+				
+	      <td>
           {{mb_field object=$ex_field field=concept_id form="editField" autocomplete="true,1,50,false,true" 
-					           onchange="ExFieldSpec.edit(this.form)"}}
-        {{else}}
-          {{mb_value object=$ex_field field=concept_id}}
-          {{mb_field object=$ex_field field=concept_id hidden=true}}
-        {{/if}}
-      </td>
+                     onchange="ExFieldSpec.edit(this.form)"}}
+	      </td>
+				
+			{{/if}}
+			
     </tr>
 		
 		<tr>
