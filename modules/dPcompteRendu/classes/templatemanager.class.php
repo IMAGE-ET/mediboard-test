@@ -32,8 +32,8 @@ class CTemplateManager {
   
   function CTemplateManager($parameters = array()) {
     $user = CMediusers::get();
-  	$this->parameters = $parameters;
-		
+    $this->parameters = $parameters;
+    
     $this->addProperty("Courrier - nom destinataire"     , "[Courrier - nom destinataire]");
     $this->addProperty("Courrier - adresse destinataire" , "[Courrier - adresse destinataire]");
     $this->addProperty("Courrier - cp ville destinataire", "[Courrier - cp ville destinataire]");
@@ -44,14 +44,14 @@ class CTemplateManager {
     $this->addTimeProperty("Général - heure courante", $now);
     
     // Connected user
-		$user_complete = $user->_view;
+    $user_complete = $user->_view;
     if ($user->isPraticien()) {
       $user_complete .= $user->titres;
     }
     $this->addProperty("Général - rédacteur"        , $user->_shortview);
     $this->addProperty("Général - rédacteur complet", $user_complete);
   }
-	
+  
   function getParameter($name, $default = null) {
     return CValue::read($this->parameters, $name, $default);
   }
@@ -66,44 +66,44 @@ class CTemplateManager {
   }
   
   function addProperty($field, $value = null, $options = array(), $htmlescape = true) {
-  	if ($htmlescape)
-  	  $value = htmlspecialchars($value);
+    if ($htmlescape)
+      $value = htmlspecialchars($value);
     
     $sec = explode(' - ', $field, 3);
-  	switch(count($sec)) {
-  	  case 3:
-  	    $section  = $sec[0];
-  	    $item     = $sec[1];
-  	    $sub_item = $sec[2];
-  	    break;
-  	  case 2:
-  	    $section  = $sec[0];
-  	    $item     = $sec[1];
-  	    $sub_item = '';
-  	    break;
-  	  default:
-  	    trigger_error("Error while exploding the string", E_USER_ERROR);
-  	    return;
-  	}
-  	
-  	if (!array_key_exists($section, $this->sections)) {
-  		$this->sections[$section] = array();
-  	}
-  	if ($sub_item != '' && !array_key_exists($item, $this->sections[$section])) {
-  	  $this->sections[$section][$item] = array();
-  	}
-  	
-  	if ($sub_item == '') {
-    	$this->sections[$section][$field] = array (
-    	  "view"      => htmlentities($item),
+    switch(count($sec)) {
+      case 3:
+        $section  = $sec[0];
+        $item     = $sec[1];
+        $sub_item = $sec[2];
+        break;
+      case 2:
+        $section  = $sec[0];
+        $item     = $sec[1];
+        $sub_item = '';
+        break;
+      default:
+        trigger_error("Error while exploding the string", E_USER_ERROR);
+        return;
+    }
+    
+    if (!array_key_exists($section, $this->sections)) {
+      $this->sections[$section] = array();
+    }
+    if ($sub_item != '' && !array_key_exists($item, $this->sections[$section])) {
+      $this->sections[$section][$item] = array();
+    }
+    
+    if ($sub_item == '') {
+      $this->sections[$section][$field] = array (
+        "view"      => htmlentities($item),
         "field"     => $field,
         "value"     => $value,
         "fieldHTML" => htmlentities("[{$field}]"),
         "valueHTML" => $value,
-    	  "shortview" => $section . " - " . $item,
+        "shortview" => $section . " - " . $item,
         "options"   => $options
       );
-  	}
+    }
     else {
       $this->sections[$section][$item][$sub_item] = array (
         "view"      => htmlentities($sub_item),
@@ -124,7 +124,13 @@ class CTemplateManager {
       else 
         $src = $_field['fieldHTML'];
       
-      $_field["field"]  = "<img alt=\"$field\" src=\"$src\" ";
+      $_field["field"] = "";
+      
+      if ($options["barcode"]["title"]) {
+        $_field["field"] .= $options["barcode"]["title"]."<br />";
+      }
+      
+      $_field["field"] .= "<img alt=\"$field\" src=\"$src\" ";
       
       foreach($options["barcode"] as $name => $attribute) {
         $_field["field"] .= " $name=\"$attribute\"";
@@ -153,78 +159,80 @@ class CTemplateManager {
     $value = $value ? mbTransformTime(null, $value, CAppUI::conf("datetime")) : "";
     $this->addProperty($field, $value);
   }
-	
+  
   function addListProperty($field, $items = null) {
     $this->addProperty($field, $this->makeList($items), null, false);
   }
-	
-	function makeList($items) {
-		if (!$items) {
-			return;
-		}
+  
+  function makeList($items) {
+    if (!$items) {
+      return;
+    }
 
     // Make a list out of a string
     if (!is_array($items)) {
       $items = array($items);
     }
     
-		// Escape content
+    // Escape content
     $items = array_map("htmlentities", $items);
     
-		// HTML production
-		switch ($default = CAppUI::pref("listDefault")) {
-			case "ulli":
-		    $html = "<ul>";
-		    foreach ($items as $item) {
-		      $html .= "<li>$item</li>";
-		    }
-		    $html.= "</ul>";
-				break;
-			
+    // HTML production
+    switch ($default = CAppUI::pref("listDefault")) {
+      case "ulli":
+        $html = "<ul>";
+        foreach ($items as $item) {
+          $html .= "<li>$item</li>";
+        }
+        $html.= "</ul>";
+        break;
+      
       case "br":
         $html = "";
-				$prefix = CAppUI::pref("listBrPrefix");
+        $prefix = CAppUI::pref("listBrPrefix");
         foreach ($items as $item) {
           $html .= "<br />$prefix $item</li>";
         }
         break;
-				
+        
       case "inline":
-				// Hack: obligé de décoder car dans ce mode le template manager 
-				// le fera une seconde fois s'il ne détecte pas d'entités HTML
+        // Hack: obligé de décoder car dans ce mode le template manager 
+        // le fera une seconde fois s'il ne détecte pas d'entités HTML
         $items = array_map("html_entity_decode", $items);
         $html = "";
         $separator = CAppUI::pref("listInlineSeparator");
-				$html = implode(" $separator ", $items);
+        $html = implode(" $separator ", $items);
         break;
-					
-			default: 
+          
+      default: 
         $html = "";
         trigger_error("Default style for list is unknown '$default'", E_USER_WARNING);
-				break;
-		}	
-	
-		return $html;
-	}
-	
+        break;
+    }  
+  
+    return $html;
+  }
+  
   function addGraph($field, $data, $options = array()) {
     $this->graphs[utf8_encode($field)] = array(
       "data" => $data, 
       "options" => $options, 
       "name" => utf8_encode($field)
     );
-		
-		$this->addProperty($field, $field, null, false);
+    
+    $this->addProperty($field, $field, null, false);
   }
   
   function addBarcode($field, $data, $options = array()) {
-    $options = array(
+    $options = array_replace_recursive(array(
       "barcode" => array(
         "width"  => 220,
         "height" => 60,
-        "class"  => "barcode"
+        "class"  => "barcode",
+        "title"  => "",
       )
-    );
+    ), $options);
+    
     $this->addProperty($field, $data, $options, false);
   }
 
@@ -315,7 +323,7 @@ class CTemplateManager {
   function loadHelpers($user_id, $modeleType) {
     $compte_rendu = new CCompteRendu();
     $ds = $compte_rendu->_spec->ds;
-		
+    
     // Chargement de l'utilisateur courant
     $currUser = new CMediusers();
     $currUser->load($user_id);
@@ -323,12 +331,12 @@ class CTemplateManager {
     $aidesUser = array();
     $aidesFunc = array();
     $order = "name";
-		
+    
     // Where user_id
     $whereUser = array();
     $whereUser["user_id"] = $ds->prepare("= %", $user_id);
     $whereUser["class"]   = $ds->prepare("= %", $compte_rendu->_class_name);
-		
+    
     // Where function_id
     $whereFunc = array();
     $whereFunc["function_id"] = $ds->prepare("= %", $currUser->function_id);
@@ -423,7 +431,7 @@ class CTemplateManager {
         }
       }
     }
-	
+  
     if (count($fields)) {
       $this->document = str_ireplace($fields, $values, $_source);
     }

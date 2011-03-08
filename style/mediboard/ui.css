@@ -436,7 +436,7 @@ ul.control_tabs_vertical li a.active {
 ul.control_tabs.small li a,
 ul.control_tabs_vertical.small li a {
 	font-size: 1em; 
-	padding: 2px 8px;
+	padding: 2px 5px;
 	font-weight: normal;
 }
 
