@@ -55,9 +55,6 @@ updateFieldSpec = function(){
   
   var fieldForm = getForm("{{$form_name}}");
   $V(fieldForm.prop, str);
-  
-  /*if (translations)
-    $V(fieldForm._enum_translation, Object.toJSON(translations));*/
 }
 
 avoidSpaces = function(event) {
@@ -159,14 +156,14 @@ Main.add(function(){
         {{* list *}}
         {{elseif $_type == "list"}}
 				  
-					{{if $ex_list->_id}}
-					  <a class="button edit" href="?m=forms&amp;tab=view_ex_list&amp;object_guid={{$ex_list->_guid}}">{{tr}}CExList-title-modify{{/tr}}</a>
+					{{* {{if $context instanceof CExConcept && $list_owner instanceof CExList}}
+            
 						<table class="tbl" style="width: 1%;">
 						  <col class="narrow" />
 							
 	            <tr>
 	              <th {{if $app->user_prefs.INFOSYSTEM == 0}}style="display: none;"{{/if}}>Valeur</th>
-	              {{if $ex_list->coded}}
+	              {{if $list_owner->coded}}
 								  <th>Code</th>
 								{{/if}}
 	              <th>Nom</th>
@@ -178,7 +175,7 @@ Main.add(function(){
 	                  {{$_value}}
 	                  <input type="hidden" name="{{$_name}}[]" class="internal" value="{{$_value}}" />
 	                </td>
-	                {{if $ex_list->coded}}
+	                {{if $list_owner->coded}}
 									  <td>
 									  	{{$ex_list->_ref_items.$_value->code}}
 										</td>
@@ -188,12 +185,14 @@ Main.add(function(){
 	            {{foreachelse}}
 	              <tr>
 	                <td {{if $app->user_prefs.INFOSYSTEM == 0}}style="display: none;"{{/if}}></td>
-	                <td colspan="{{$ex_list->coded|ternary:3:2}}" class="empty">Aucun élément</td>
+	                <td colspan="{{$list_owner->coded|ternary:3:2}}" class="empty">Aucun élément</td>
 	              </tr>
 	            {{/foreach}}
 		        </table>
-					{{else}}
-					  {{if $owner && $owner->_id}}
+            
+					{{else}} *}}
+          
+					  {{if $context && $context->_id}}
               {{foreach from=$spec->_list key=_key item=_value}}
                 <input type="hidden" name="{{$_name}}[]" class="internal" value="{{$_value}}" />
               {{/foreach}}
@@ -201,7 +200,8 @@ Main.add(function(){
 						{{else}}
               <em>Enregistrez avant d'ajouter des élements</em>
 						{{/if}}
-          {{/if}}
+            
+          {{* {{/if}} *}}
 					 
         {{* class *}}
         {{elseif $_type == "class"}}
@@ -218,6 +218,10 @@ Main.add(function(){
 </table>
 </form>
 
-{{if $spec instanceof CEnumSpec && !$ex_list->_id && $owner && $owner->_id}}
-  {{mb_include module=system template=inc_ex_list_item_edit object=$owner}}
+{{if $spec instanceof CEnumSpec && $context && $context->_id}}
+  {{if $context == $list_owner}}
+    {{mb_include module=system template=inc_ex_list_item_edit}}
+  {{else}}
+    {{mb_include module=system template=inc_ex_list_item_subset}}
+  {{/if}}
 {{/if}}

@@ -57,7 +57,7 @@ table.titleblock td.titlecell {
   font-size: 1.8em; 
   color: #620;
   width: 100%;
-  padding-bottom: 10px;
+	vertical-align: middle;
 }
 
 /* Tab view table */
@@ -73,39 +73,44 @@ table.tabview td {
 }
 
 table.tabmenu {
-  margin-left: 20px;
+  margin-left: 10px;
   border-spacing: 0px;
 }
 
 table.tabmenu td {
-  height: 28px;  
-  line-height: 90%;
-  background: url(./images/icons/tabBg.png) repeat-x bottom;
+  background: url(./images/icons/tabBg.png) repeat-x top;
+	padding: 3px 8px 0 8px;
+	height: 24px;
 }
 
 table.tabmenu td.left,
 table.tabmenu td.right {
-  width: 17px;
+  width: 12px;
+  padding: 0;
 }
 
 table.tabmenu td.left {
-  background: url(./images/icons/tabLeft.png) no-repeat bottom right;
+  background: url(./images/icons/tabLeft.png) no-repeat top right;
 }
 
 table.tabmenu td.right {
-  background: url(./images/icons/tabRight.png) no-repeat bottom left;
+  background: url(./images/icons/tabRight.png) no-repeat top left;
 }
 
 table.tabmenu td.selected {
-  background: url(./images/icons/tabSelectedBg.png) repeat-x;
+  background: url(./images/icons/tabSelectedBg.png) repeat-x top;
+}
+
+table.tabmenu td.selected a {
+  color: white;
 }
 
 table.tabmenu td.selected.left {
-  background: url(./images/icons/tabSelectedLeft.png) no-repeat bottom right;
+  background: url(./images/icons/tabSelectedLeft.png) no-repeat top right;
 }
 
 table.tabmenu td.selected.right {
-  background: url(./images/icons/tabSelectedRight.png) no-repeat bottom left;
+  background: url(./images/icons/tabSelectedRight.png) no-repeat top left;
 }
 
 /* Pane table */

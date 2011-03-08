@@ -19,7 +19,8 @@ cancelEditListItem = function(form) {
 }
   
 Main.add(function(){
-  var form = getForm("edit-{{$object->_guid}}");
+  var form = getForm("edit-{{$context->_guid}}");
+  if (!form || !form.elements.coded) return;
   
   $A(form.elements.coded).each(function(e){
     e.observe("click", function(){
@@ -31,19 +32,18 @@ Main.add(function(){
 
 {{assign var=coded value=false}}
 
-{{if !$object instanceof CExList || $object->coded == 1}}
+{{if $context instanceof CExList && $context->coded == 1}}
   {{assign var=coded value=true}}
 {{/if}}
 
+{{assign var=owner_field value=$context->getBackRefField()}}
+
 <form name="CExListItem-create" method="post" action="?" 
-      onsubmit="return onSubmitFormAjax(this, {onComplete: MbObject.edit.curry('{{$object->_guid}}')})">
+      onsubmit="return onSubmitFormAjax(this, {onComplete: {{if $context instanceof CExClassField}} ExField.edit.curry('{{$context->_id}}') {{else}} MbObject.edit.curry('{{$context->_guid}}') {{/if}} })">
       	
   {{mb_class class=CExListItem}}
   <input type="hidden" name="ex_list_item_id" value="" class="ref" />
-	
-	{{assign var=owner value=$object->getBackRefField()}}
-	
-	<input type="hidden" name="{{$owner}}" value="{{$object->_id}}" />
+	<input type="hidden" name="{{$owner_field}}" value="{{$context->_id}}" />
   
   <table class="main tbl">
     <tr>
@@ -76,7 +76,7 @@ Main.add(function(){
       </td>
     </tr>
     
-    {{foreach from=$object->_back.list_items item=_item}}
+    {{foreach from=$context->_back.list_items item=_item}}
       <tr data-id="{{$_item->_id}}" data-name="{{$_item->name}}" data-code="{{$_item->code}}">
         <td>
           <button class="edit notext" type="button" style="margin: -1px;" onclick="editListItem($(this).up('tr'))">

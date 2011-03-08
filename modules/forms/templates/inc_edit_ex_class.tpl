@@ -109,9 +109,11 @@ toggleGroupLabelEdit = function(link) {
   <tr>
     <td>
       <ul class="control_tabs_vertical small" id="field_groups" style="float: right;">
-			  <li style="margin: 4px;">
-				  <strong>Groupes</strong>
+			  <li style="margin: 3px;">
+				  <strong>Groupes</strong><br />
+          <small>Double-clic pour modifier</small>
 				</li>
+        
         {{foreach from=$ex_class->_ref_groups item=_group}}
           <li>
             <a href="#group-{{$_group->_guid}}" style="white-space: nowrap;" ondblclick="toggleGroupLabelEdit(this)">
@@ -141,7 +143,7 @@ toggleGroupLabelEdit = function(link) {
             <input type="hidden" name="@class" value="CExClassFieldGroup" />
             <input type="hidden" name="ex_class_id" value="{{$ex_class->_id}}" />
 						
-            <button class="add notext" type="button" style="margin: 3px; margin-top: 0;" 
+            <button class="add" type="button" style="margin: 3px; margin-top: 0;" 
 						        onclick="$(this).hide().next('span').show(); $(this.form.elements.name).tryFocus()">
 							{{tr}}CExClassFieldGroup-title-create{{/tr}}
 						</button>

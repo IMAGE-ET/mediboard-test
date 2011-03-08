@@ -155,6 +155,10 @@ ul#nav-vert {
   padding: 2px;
 }
 
+#user .menu a:hover {
+  text-decoration: none;
+}
+
 #user .menu img:hover {
   background-color: #ccc;
 }

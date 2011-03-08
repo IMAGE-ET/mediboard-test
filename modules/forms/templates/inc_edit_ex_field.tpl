@@ -40,23 +40,8 @@ toggleListCustom = function(form) {
 Main.add(function(){
   var form = getForm("editField");
   toggleListCustom.defer(form);
-	
   form.elements._locale.select();
 });
-
-checkExField = function(form) {
-  if (!checkForm(form)) return false;
-	
-	var prop = $V(form.elements.prop);
-	
-	if (prop.indexOf("enum") == 0 && prop.indexOf("list|") == -1) {
-	  alert("Un champ de type Liste de choix nécessite une liste d'options");
-		$(getForm("editFieldSpec").elements["list[]"][0]).tryFocus();
-	  return false;
-	}
-	
-	return true;
-}
 
 updateInternalName = function(e){
   var form = e.form;
@@ -65,11 +50,10 @@ updateInternalName = function(e){
 }
 </script>
 
-<form name="editField" method="post" action="?" data-object_guid="{{$ex_field->_guid}}" onsubmit="return onSubmitFormAjax(this, {check: checkExField,onComplete: ExClass.edit.curry({{$ex_class->_id}})})">
+<form name="editField" method="post" action="?" data-object_guid="{{$ex_field->_guid}}" onsubmit="return onSubmitFormAjax(this, {onComplete: ExClass.edit.curry({{$ex_class->_id}})})">
   <input type="hidden" name="m" value="system" />
   <input type="hidden" name="dosql" value="do_ex_class_field_aed" />
   <input type="hidden" name="del" value="0" />
-  <input type="hidden" name="_enum_translation" value="" />
 	
   {{mb_key object=$ex_field}}
   {{mb_field object=$ex_field field=ex_group_id hidden=true}}
@@ -143,8 +127,7 @@ updateInternalName = function(e){
 			
 	      <th>
 	        <label>
-	          {{if !$ex_field->concept_id}}Type{{/if}}
-						
+	          Type personnalisé
             <input type="radio" {{if !$ex_field->concept_id}} checked="checked" {{/if}} 
                    onclick="toggleListCustom(this.form)" name="_concept_type" value="custom" />
 	        </label>
@@ -162,7 +145,7 @@ updateInternalName = function(e){
 	      
 	      <th>
 	        <label>
-	          {{if $ex_field->concept_id}}{{tr}}CExClassField-concept_id{{/tr}}{{/if}}
+	          {{tr}}CExClassField-concept_id{{/tr}}
 						
             <input type="radio" {{if $ex_field->concept_id}} checked="checked" {{/if}}
 						       onclick="toggleListCustom(this.form)" name="_concept_type" value="concept" />

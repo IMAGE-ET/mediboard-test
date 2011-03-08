@@ -26,7 +26,6 @@ class CExClassField extends CExListItemsOwner {
   var $_locale = null;
   var $_locale_desc = null;
   var $_locale_court = null;
-  var $_enum_translation = null;
   
   var $_ref_ex_group = null;
   var $_ref_ex_class = null;
@@ -70,7 +69,7 @@ class CExClassField extends CExListItemsOwner {
     $props["ex_group_id"] = "ref class|CExClassFieldGroup cascade";
     $props["concept_id"]  = "ref class|CExConcept autocomplete|name";
     $props["name"]        = "str notNull protected canonical";
-    $props["prop"]        = "str notNull";
+    $props["prop"]        = "text notNull";
     
     $props["coord_field_x"] = "num min|0 max|100";
     $props["coord_field_y"] = "num min|0 max|100";
@@ -80,7 +79,6 @@ class CExClassField extends CExListItemsOwner {
     $props["_locale"]     = "str notNull";
     $props["_locale_desc"]  = "str";
     $props["_locale_court"] = "str";
-    $props["_enum_translation"] = "str";
     return $props;
   }
 	
@@ -160,7 +158,7 @@ class CExClassField extends CExListItemsOwner {
   }
   
   function getSpecObject(){
-    return $this->_spec_object = CMbFieldSpecFact::getSpecWithClassName("CExObject", $this->name, $this->prop);
+    return $this->_spec_object = @CMbFieldSpecFact::getSpecWithClassName("CExObject", $this->name, $this->prop);
   }
   
   function getSQLSpec($union = true){
@@ -174,10 +172,11 @@ class CExClassField extends CExListItemsOwner {
 		  if ($db_parsed['type'] === "ENUM") {
 				$prop_parsed = $ds->getDBstruct($this->getTableName(), $this->name, true);
 				
-        mbTrace($prop_parsed, '$prop_parsed');
-        mbTrace($db_parsed, '$db_parsed');
+				if (isset($prop_parsed[$this->name])) {
+				  $db_parsed['params'] = array_merge($db_parsed['params'], $prop_parsed['params']);
+				}
 				
-				$db_parsed['params'] = array_unique(array_merge($db_parsed['params'], $prop_parsed['params']));
+				$db_parsed['params'] = array_unique($db_parsed['params']);
 				
         $spec_obj->list = implode("|", $db_parsed['params']);
         $db_spec = $spec_obj->getFullDBSpec();
@@ -234,7 +233,6 @@ class CExClassField extends CExListItemsOwner {
     $locale       = $this->_locale;
     $locale_desc  = $this->_locale_desc;
     $locale_court = $this->_locale_court;
-    $locale_enum  = $this->_enum_translation;
     
     if ($msg = parent::store()) {
       return $msg;
@@ -248,31 +246,6 @@ class CExClassField extends CExListItemsOwner {
       $trans->court = $locale_court;
       if ($msg = $trans->store()) {
         mbTrace($msg, get_class($this), true);
-      }
-    }
-    
-    // enum translations
-    if ($locale_enum) {
-      $values = json_decode(utf8_encode($locale_enum), true);
-      $spec = $this->getSpecObject();
-      
-      $enum_trans = array_values($this->loadRefEnumTranslations());
-      
-      foreach($values as $i => $value) {
-      	$value = utf8_decode($value);
-				
-        if (!isset($enum_trans[$i])) {
-          $enum_trans[$i] = new CExClassFieldEnumTranslation;
-        }
-        
-        $enum_trans[$i]->ex_class_field_id = $this->_id;
-        $enum_trans[$i]->key = $spec->_list[$i];
-        $enum_trans[$i]->value = $value;
-        $enum_trans[$i]->lang = CAppUI::pref("LOCALE");
-        
-        if ($msg = $enum_trans[$i]->store()) {
-          mbTrace($msg, get_class($this), true);
-        }
       }
     }
   }

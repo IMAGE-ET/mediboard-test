@@ -42,6 +42,21 @@ class CExListItemsOwner extends CMbObject {
 		return $this;
 	}
   
+  function updateEnumSpec(CEnumSpec $spec){
+    $items = $this->loadRefItems();
+    $empty = empty($spec->_locales);
+    
+    foreach($items as $_item) {
+      if (!$empty && !isset($spec->_locales[$_item->_id])) continue;
+      $spec->_locales[$_item->_id] = $_item->name;
+    }
+    
+    unset($spec->_locales[""]);
+    $spec->_list = array_keys($spec->_locales);
+    
+    return $spec;
+  }
+  
   function loadView(){
     parent::loadView();
     $this->loadRefItems();

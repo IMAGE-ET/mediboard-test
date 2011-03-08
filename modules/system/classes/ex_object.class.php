@@ -29,7 +29,7 @@ class CExObject extends CMbMetaObject {
     $this->_ref_ex_class = $ex_class;
     
     $this->_props = $this->getProps();
-    $this->_specs = $this->getSpecs();
+    $this->_specs = @$this->getSpecs(); // when creating the field
     
     $this->_class_name = "CExObject_{$ex_class->host_class}_{$ex_class->event}_{$ex_class->_id}";
     

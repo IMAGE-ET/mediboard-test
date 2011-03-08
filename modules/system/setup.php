@@ -498,6 +498,11 @@ class CSetupsystem extends CSetup {
               )";
     $this->addQuery($query);
     
-    $this->mod_version = "1.0.49";
+    $this->makeRevision("1.0.49");
+    $query = "ALTER TABLE `ex_class_field` 
+              CHANGE `prop` `prop` TEXT NOT NULL";
+    $this->addQuery($query);
+    
+    $this->mod_version = "1.0.50";
   }
 }

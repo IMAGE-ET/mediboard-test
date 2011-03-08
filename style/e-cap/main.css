@@ -234,6 +234,7 @@ table.tabmenu {
 table.tabmenu td {
   height: 25px;
   background: url(./images/icons/tabBg.png) repeat-x center;
+  padding: 0;
 }
 
 table.tabmenu td a {

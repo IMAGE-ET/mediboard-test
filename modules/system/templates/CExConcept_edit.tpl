@@ -49,10 +49,6 @@ Main.add(function(){
     
     {{if $object->_id}}
       {{mb_include module=system template=inc_tag_binder colspan=4}}
-      
-      <tr>
-        <td colspan="4"><hr /></td>
-      </tr>
     {{/if}}
     
     <tr>

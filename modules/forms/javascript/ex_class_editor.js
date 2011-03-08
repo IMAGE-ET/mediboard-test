@@ -226,7 +226,7 @@ ExFieldSpec = {
     url.addFormData(form);
     url.addParam("m", "forms"); // needed
     url.addParam("form_name", form.getAttribute("name"));
-    url.addParam("owner_guid", form.get("object_guid"));
+    url.addParam("context_guid", form.get("object_guid"));
     url.requestUpdate("fieldSpecEditor");
   }
 };
@@ -250,7 +250,7 @@ ExConceptSpec = {
     url.addFormData(form);
     url.addParam("m", "forms"); // needed
     url.addParam("form_name", form.getAttribute("name"));
-    url.addParam("owner_guid", form.get("object_guid"));
+    url.addParam("context_guid", form.get("object_guid"));
     url.requestUpdate("ExConcept-spec-editor");
   }
 };
