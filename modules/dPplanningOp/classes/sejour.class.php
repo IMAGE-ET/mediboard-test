@@ -1052,9 +1052,6 @@ class CSejour extends CCodable {
 		  }
 		}
 
-		
-		
-		
     krsort($this->_ref_suivi_medical);
   }
   
@@ -1509,6 +1506,59 @@ class CSejour extends CCodable {
     $diag = $this->DR ? "$this->DR: {$this->_ext_diagnostic_relie->libelle}" : null;
     $template->addProperty("Sejour - Diagnostic Relié"        , $diag);
     $template->addProperty("Sejour - Remarques", $this->rques);
+		
+		// Chargement du suivi medical (transmissions, observations, prescriptions)
+		$this->loadSuiviMedical();
+		
+		// Transmissions 
+    $transmissions = array();
+		if(isset($this->_back["transmissions"])){
+	    foreach($this->_back["transmissions"] as $_trans){
+	      $datetime = mbTransformTime(null, $_trans->date, CAppUI::conf('datetime'));
+	      $transmissions["$_trans->date $_trans->_guid"] = "$_trans->text, le $datetime, {$_trans->_ref_user->_view}";
+	    }
+		}
+    $template->addListProperty("Sejour - Transmissions", $transmissions);
+    
+    // Observations
+    $observations = array();
+		if(isset($this->_back["observations"])){
+	    foreach($this->_back["observations"] as $_obs){
+	      $datetime = mbTransformTime(null, $_obs->date, CAppUI::conf('datetime'));
+	      $observations["$_obs->date $_obs->_guid"] = "$_obs->text, le $datetime, {$_obs->_ref_user->_view}";
+	    }
+		}
+    $template->addListProperty("Sejour - Observations", $observations);
+    
+    // Prescriptions
+		if(CModule::getActive('dPprescription')){
+			$prescription = $this->_ref_prescription_sejour;
+			$lines = array();
+			if(isset($prescription->_ref_prescription_lines_all_comments)){
+				foreach($prescription->_ref_prescription_lines_all_comments as $_comment){
+					$datetime = mbTransformTime(null, "$_comment->debut $_comment->time_debut", CAppUI::conf('datetime'));
+					$lines["$_comment->debut $_comment->time_debut $_comment->_guid"] = "$_comment->_view, $datetime, {$_comment->_ref_praticien->_view}";
+			  }
+			}
+		  if(isset($prescription->_ref_prescription_lines_element)){
+				foreach($prescription->_ref_prescription_lines_element as $_line_element){
+					$datetime = mbTransformTime(null, "$_line_element->debut $_line_element->time_debut", CAppUI::conf('datetime'));
+					$view = "$_line_element->_view";
+					if($_line_element->commentaire){
+						$view .= " ($_line_element->commentaire)";
+					}
+					$view .= ", $datetime, ".$_line_element->_ref_praticien->_view;
+			    $lines["$_line_element->debut $_line_element->time_debut $_line_element->_guid"] = $view;
+			  }
+			}
+		  krsort($lines);
+			$template->addListProperty("Sejour - Prescription light", $lines);
+		}
+		
+    // Suivi médical: transmissions, observations, prescriptions
+    $suivi_medical = $transmissions + $observations + $lines;
+		krsort($suivi_medical);
+    $template->addListProperty("Sejour - Suivi médical", $suivi_medical);
   }
   
   function fillTemplate(&$template) {
@@ -1540,6 +1590,10 @@ class CSejour extends CCodable {
 		  // Ajout d'un fillTemplate du RPU
       $this->_ref_rpu->fillLimitedTemplate($template);
 		}
+		
+		
+    
+    
   }
   
   /**
