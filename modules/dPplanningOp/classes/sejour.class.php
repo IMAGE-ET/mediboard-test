@@ -1531,9 +1531,10 @@ class CSejour extends CCodable {
     $template->addListProperty("Sejour - Observations", $observations);
     
     // Prescriptions
+		$lines = array();
 		if(CModule::getActive('dPprescription')){
 			$prescription = $this->_ref_prescription_sejour;
-			$lines = array();
+			
 			if(isset($prescription->_ref_prescription_lines_all_comments)){
 				foreach($prescription->_ref_prescription_lines_all_comments as $_comment){
 					$datetime = mbTransformTime(null, "$_comment->debut $_comment->time_debut", CAppUI::conf('datetime'));
@@ -1590,10 +1591,6 @@ class CSejour extends CCodable {
 		  // Ajout d'un fillTemplate du RPU
       $this->_ref_rpu->fillLimitedTemplate($template);
 		}
-		
-		
-    
-    
   }
   
   /**
