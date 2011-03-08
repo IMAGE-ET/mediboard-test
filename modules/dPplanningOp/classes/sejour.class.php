@@ -1028,6 +1028,33 @@ class CSejour extends CCodable {
         $this->_ref_suivi_medical[$curr_trans->date.$curr_trans->_id."trans"] = $curr_trans;
       }
     }
+		
+		
+		if($this->type == "urg" && CAppUI::conf("dPprescription CPrescription prescription_suivi_soins")){
+			$this->loadRefPrescriptionSejour();
+			$prescription = $this->_ref_prescription_sejour;
+			
+		  // Chargement des lignes de prescriptions d'elements
+		  $prescription->loadRefsLinesElement();
+		  $prescription->loadRefsLinesAllComments();
+		  
+		  foreach($prescription->_ref_prescription_lines_all_comments as $_comment){
+		    $_comment->canEdit();
+		    $_comment->countBackRefs("transmissions");
+		    $this->_ref_suivi_medical["$_comment->debut $_comment->time_debut $_comment->_guid"] = $_comment;
+		  }
+		  
+		  // Ajout des lignes de prescription dans la liste du suivi de soins
+		  foreach($prescription->_ref_prescription_lines_element as $_line_element){
+		    $_line_element->canEdit();
+		    $_line_element->countBackRefs("transmissions");
+		    $this->_ref_suivi_medical["$_line_element->debut $_line_element->time_debut $_line_element->_guid"] = $_line_element;
+		  }
+		}
+
+		
+		
+		
     krsort($this->_ref_suivi_medical);
   }
   
@@ -1042,6 +1069,7 @@ class CSejour extends CCodable {
       }
       if ($user_id) {
         $first_log = $_const->loadFirstLog();
+				$first_log->loadRefUser();
         if ($first_log->_ref_user->_id != $user_id) {
           unset($constantes[$_const->_id]);  
         }

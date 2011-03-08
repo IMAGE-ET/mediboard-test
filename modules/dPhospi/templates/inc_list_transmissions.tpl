@@ -45,16 +45,14 @@ toggleTrans = function(trans_class){
     <th>{{tr}}Date{{/tr}}</th>
     <th>{{tr}}Hour{{/tr}}</th>
     <th>{{mb_title class=CTransmissionMedicale field=object_class}}</th>
-		{{if !$readonly}}
-    <th>{{mb_title class=CTransmissionMedicale field=text}}</th>
-		{{/if}}
+		<th>{{mb_title class=CTransmissionMedicale field=text}}</th>
     <th />
   </tr>  
   <tbody {{if !$readonly}} id="transmissions" {{/if}}>
   {{foreach from=$list_transmissions item=_suivi}}
 	<tr {{if !$readonly}}id="{{$_suivi->_guid}}"{{/if}} 
 	    {{if $_suivi instanceof CTransmissionMedicale}} class="{{$_suivi->_cible}} {{if $_suivi->object_id}}{{$_suivi->_ref_object->_guid}}{{/if}}"{{/if}}
-	    {{if $_suivi instanceof CPrescriptionLineElement || $_suivi instanceof CPrescriptionLineComment}}
+	    {{if ($_suivi instanceof CPrescriptionLineElement || $_suivi instanceof CPrescriptionLineComment) && !$readonly}}
 			  onmouseover="highlightTransmissions('{{$_suivi->_guid}}');" onmouseout="removeHighlightTransmissions();"
 			{{/if}}>
  	  {{mb_include module=dPhospi template=inc_line_suivi show_patient=false nodebug=true}}
