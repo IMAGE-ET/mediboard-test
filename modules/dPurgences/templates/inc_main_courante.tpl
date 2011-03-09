@@ -258,6 +258,9 @@
     
 	    {{if $medicalView}}
   	    <td class="text" style="background-color: {{$background}};">
+				  {{if $rpu->accident_travail}} 
+					<img src="images/icons/accident_travail.png" />
+				  {{/if}}
   				{{if $rpu->motif && $conf.dPurgences.diag_prat_view}}
   				  <span onmouseover="ObjectTooltip.createEx(this, '{{$rpu->_guid}}');">
   				  	<strong>{{mb_title class=$rpu field=motif}}</strong> : {{$rpu->motif|nl2br}}

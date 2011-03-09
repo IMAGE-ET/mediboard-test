@@ -87,9 +87,16 @@ function printPage(element){
   						{{mb_value object=$rpu field="ccmu"}}
             {{/if}}
 					</td>
-					<td>{{mb_value object=$rpu field="diag_infirmier"}}</td>    
+					<td class="text">
+	          {{if $rpu->accident_travail}} 
+  	        <img src="images/icons/accident_travail.png" />
+	          {{/if}}
+            <span onmouseover="ObjectTooltip.createEx(this, '{{$rpu->_guid}}');">
+              {{$rpu->diag_infirmier|nl2br}}
+            </span>
+					</td>    
 					<td>{{mb_value object=$consult field="heure"}}</td>      
-			    <td>        {{mb_include module=mediusers template=inc_vw_mediuser mediuser=$sejour->_ref_praticien}}</td>
+			    <td>{{mb_include module=mediusers template=inc_vw_mediuser mediuser=$sejour->_ref_praticien}}</td>
 					<td>
 						{{if $sejour->sortie_reelle}}
 							{{mb_value object=$sejour field="mode_sortie"}}
