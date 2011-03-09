@@ -17,9 +17,10 @@
  */
 class CExchangeSource extends CMbObject {
   static $typeToClass = array (
-    "ftp"  => "CSourceFTP",
-    "soap" => "CSourceSOAP",
-    "smtp" => "CSourceSMTP"
+    "ftp"         => "CSourceFTP",
+    "soap"        => "CSourceSOAP",
+    "smtp"        => "CSourceSMTP",
+    "file_system" => "CSourceFileSystem"
   );
   
   // DB Fields
@@ -130,6 +131,8 @@ class CExchangeSource extends CMbObject {
     $this->_args_list = $argsList;
     $this->_data = $data;
   }
+  
+  function getData($path) {}
     
   function send($evenement_name = null) {}
   

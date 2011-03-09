@@ -503,6 +503,18 @@ class CSetupsystem extends CSetup {
               CHANGE `prop` `prop` TEXT NOT NULL";
     $this->addQuery($query);
     
-    $this->mod_version = "1.0.50";
+    $this->makeRevision("1.0.50");
+    $query = "CREATE TABLE `source_file_system` (
+                `source_file_system_id` INT (11) UNSIGNED NOT NULL auto_increment PRIMARY KEY,
+                `name` VARCHAR (255) NOT NULL,
+                `role` ENUM ('prod','qualif') NOT NULL DEFAULT 'qualif',
+                `host` TEXT NOT NULL,
+                `user` VARCHAR (255),
+                `password` VARCHAR (50),
+                `type_echange` VARCHAR (255)
+              ) /*! ENGINE=MyISAM */;";
+    $this->addQuery($query);
+    
+    $this->mod_version = "1.0.51";
   }
 }

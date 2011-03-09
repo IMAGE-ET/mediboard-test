@@ -147,5 +147,36 @@
       </table> 
       {{/if}}
     </div>
+    
+    <div id="CSourceFileSystem-{{$sourcename}}" style="display:{{if !$source->_allowed_instances && ($source instanceof CSourceFileSystem)}}block{{else}}none{{/if}};">
+      {{if $source->_id && !($source instanceof CSourceFileSystem)}}
+        <div class="small-info">
+          {{tr}}CExchangeSource-already-exist{{/tr}}
+        </div>
+      {{else}}
+      <table class="main">
+        {{assign var="_source_file_system" value=$source}}
+        {{if $source->_class_name == "CExchangeSource"}}
+          {{assign var="_source_file_system" value=$source->_allowed_instances.CSourceFileSystem}}
+        {{/if}}
+        {{if !$source->_id}}
+        <tr>
+          <td class="halfPane">
+            <a class="button new" onclick="$('config-source-file_system-{{$sourcename}}').show()">
+              Créer une source Système de fichiers
+            </a>
+         </td>
+        </tr>
+        {{/if}}
+        <tr>
+          <td id="config-source-file_system-{{$sourcename}}" {{if !$source->_id}}style="display:none"{{/if}}>
+            {{if $_source_file_system instanceof CSourceFileSystem}}
+              {{mb_include module=system template=inc_config_source_file_system source=$_source_file_system}}  
+            {{/if}}     
+          </td>
+        </tr>
+      </table> 
+      {{/if}}
+    </div>
   </div>
 {{/if}}

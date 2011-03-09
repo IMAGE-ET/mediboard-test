@@ -26,8 +26,10 @@ class CSourceFTP extends CExchangeSource {
   var $fileextension_write_end = null;
   var $counter       = null;
   
+  // Form fields
   var $_source_file      = null;
   var $_destination_file = null;
+  var $_path             = null;
   
   function getSpec() {
     $spec = parent::getSpec();
@@ -51,9 +53,15 @@ class CSourceFTP extends CExchangeSource {
     return $specs;
   }
   
-  function send() {
+  function init() {
     $ftp = new CFTP();
     $ftp->init($this);
+    
+    return $ftp;
+  }
+  
+  function send() {
+    $ftp = $this->init($this);
     
     $this->counter++;
       
@@ -75,10 +83,7 @@ class CSourceFTP extends CExchangeSource {
   function getACQ() {}
   
   function receive() {
-    $extension = $this->fileextension;
-
-    $ftp = new CFTP();
-    $ftp->init($this);
+    $ftp = $this->init($this);
 
     try {
       $ftp->connect();
@@ -87,25 +92,45 @@ class CSourceFTP extends CExchangeSource {
     }
     
     $files = array();
+    $this->_path = "$ftp->fileprefix/$this->_path";
     try {
-      $files = $ftp->getListFiles("./".$ftp->fileprefix);
+      $files = $ftp->getListFiles($this->_path);
     } catch (CMbException $e) {
       CAppUI::stepAjax($e->getMessage(), UI_MSG_WARNING); 
     }
     
     if (empty($files)) {
-      CAppUI::stepAjax("Le répertoire ne contient aucun fichier", UI_MSG_ERROR);
+      throw new CMbException("Le répertoire '$this->_path' ne contient aucun fichier");
     }
     
-    foreach($files as $filepath) {
-      if (substr($filepath, -(strlen($extension))) == $extension) {
-        $filename = basename($filepath);
-        
-        $file = $ftp->getFile($filepath, "tmp/ftp_files/$filename");
-        mbTrace($file);
-      }
+    $ftp->close();
+    
+    return $files;
+  }
+  
+  function getData($path) {
+    $ftp = $this->init($this);
+    
+    try {
+      $ftp->connect();
+    } catch (CMbException $e) {
+      CAppUI::stepAjax($e->getMessage(), UI_MSG_WARNING); 
     }
     
+    $file = null;
+    $temp = tempnam(sys_get_temp_dir(), "mb_");
+    try {
+      $file = $ftp->getFile($path, $temp);
+    } catch (CMbException $e) {
+      CAppUI::stepAjax($e->getMessage(), UI_MSG_WARNING); 
+    }
+    $ftp->close();
+    
+    $file_get_content = file_get_contents($file);
+    
+    unlink($temp);
+    
+    return $file_get_content;
   }
   
   function isReachableSource() {
@@ -135,6 +160,9 @@ class CSourceFTP extends CExchangeSource {
       $this->_message   = $e->getMessage();
       return false;
     }
+    
+    $ftp->close();
+    
     return true;
   }
   

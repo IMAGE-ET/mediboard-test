@@ -354,6 +354,10 @@ abstract class CMbPath {
 		$paths[] = $dir;
 		return set_include_path(implode(PATH_SEPARATOR, array_unique($paths)));
 	}
+	
+	static function getFiles($path) {
+	  return array_diff(glob("$path/*"), glob("$path/*", GLOB_ONLYDIR));
+	}
 }
 
 ?>
