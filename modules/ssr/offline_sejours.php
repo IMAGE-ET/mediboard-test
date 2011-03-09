@@ -52,7 +52,7 @@ foreach ($sejours as $_sejour) {
   // Prescription
 	$prescription = $_sejour->loadRefPrescriptionSejour();
 	$prescription->loadRefsLinesElementByCat();
-  $prescription->countRecentModif();
+  $prescription->countFastRecentModif();
 
   // Chargement du planning du sejour
   $args_planning = array();

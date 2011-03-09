@@ -1130,8 +1130,13 @@ class CPrescription extends CMbObject {
   }
   
   
-  /*
-   * Calcul des chapitres modifiés récemments
+  /**
+   * Count recent prescription modifications
+   * acording to service config
+   * Counts by chapter available
+   * NEEDS loaded lines
+   * 
+   * @return void
    */
   function countRecentModif(){
   	$this->_count_recent_modif_presc = false;
@@ -1180,7 +1185,14 @@ class CPrescription extends CMbObject {
     }
   }
 	
-	function getFastRecentModif(){
+	/**
+	 * Count recent prescription modifications
+	 * acording to service config
+	 * DOES NOT NEED loaded lines
+	 * 
+	 * @return int Recent modification count
+	 */
+	function countFastRecentModif(){
 		$service_id = isset($_SESSION["soins"]["service_id"]) && $_SESSION["soins"]["service_id"] ? $_SESSION["soins"]["service_id"] : "none";
       
     if ($service_id == "NP") {
@@ -1206,6 +1218,8 @@ class CPrescription extends CMbObject {
 			$ids = $this->loadBackIds($_backprop);
 			$this->_count_fast_recent_modif += CUserLog::countRecentFor($_object_class, $ids, $recent);
 		}
+		
+		return $this->_count_fast_recent_modif;
 	}
   
   /*

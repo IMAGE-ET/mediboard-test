@@ -126,8 +126,7 @@ foreach ($sejours as $_sejour) {
 	$patient->loadIPP();
 	
   // Modification des prescription
-	$prescription->loadRefsLinesElementByCat();
-	$prescription->countRecentModif();
+	$prescription->countFastRecentModif();
 
   // Praticien demandeur
 	$bilan->loadRefPraticienDemandeur();
