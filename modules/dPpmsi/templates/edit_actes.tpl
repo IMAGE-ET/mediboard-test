@@ -2,6 +2,8 @@
 {{assign var="do_subject_aed" value="do_planning_aed"}}
 {{assign var="module" value="dPpsmi"}}
 {{assign var="object" value=$selOp}}
+{{assign var="sejour" value=$selOp->_ref_sejour}}
+{{assign var="patient" value=$sejour->_ref_patient}}
 {{mb_include module=dPsalleOp template=js_codage_ccam}}
 <script type="text/javascript">
 Main.add (function () {
@@ -12,18 +14,25 @@ Main.add (function () {
 <table class="tbl">
   <tr>
     <th class="title" colspan="2">
-      {{$selOp->_ref_sejour->_ref_patient->_view}} 
-      &mdash; {{$selOp->_datetime|date_format:$conf.longdate}}
-      <br /> Chirurgien : Dr {{$selOp->_ref_chir->_view}}
-      {{if $selOp->_ref_anesth->_id}}
-        <br /> Anesthésiste probable : Dr {{$selOp->_ref_anesth->_view}}
-      {{/if}} 
+      <a class="action" style="float: right;" title="Modifier le dossier administratif" href="?m=dPpatients&amp;tab=vw_edit_patients&amp;patient_id={{$patient->_id}}">
+        <img src="images/icons/edit.png" />
+      </a>
+      
+      {{$patient->_view}}
+      ({{$patient->_age}} ans
+      {{if $patient->_age != "??"}}- {{mb_value object=$patient field="naissance"}}{{/if}})
+      &mdash; Dr {{$selOp->_ref_chir->_view}}
+      <br />
+      
+      {{if $selOp->libelle}}{{$selOp->libelle}} &mdash;{{/if}}
+      {{mb_label object=$selOp field=cote}} : {{mb_value object=$selOp field=cote}}
+      &mdash; {{mb_label object=$selOp field=temp_operation}} : {{mb_value object=$selOp field=temp_operation}}
+      <br />
+      
+      {{tr}}CSejour{{/tr}}
+      du {{mb_value object=$sejour field=entree}}
+      au {{mb_value object=$sejour field=sortie_prevue}}
     </th>
-  </tr>
-
-  <tr>
-    <th>Patient</th>
-    <td>{{$selOp->_ref_sejour->_ref_patient->_view}} &mdash; {{$selOp->_ref_sejour->_ref_patient->_age}} ans</td>
   </tr>
   
   <tr>

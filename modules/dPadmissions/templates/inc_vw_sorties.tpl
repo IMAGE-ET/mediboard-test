@@ -59,11 +59,9 @@
       {{else}}
         {{$curr_sortie->sortie_reelle|date_format:$conf.time}}
       {{/if}}
-      <br />
-      {{tr}}CSejour.mode_sortie.{{$curr_sortie->mode_sortie}}{{/tr}}
+      - {{tr}}CSejour.mode_sortie.{{$curr_sortie->mode_sortie}}{{/tr}}
       {{if $curr_sortie->etablissement_transfert_id}}
-        -
-        {{$curr_sortie->_ref_etabExterne->_view}}
+        - {{$curr_sortie->_ref_etabExterne->_view}}
       {{/if}}
       {{else}}
       <input type="hidden" name="_modifier_sortie" value="1" />

@@ -11,7 +11,7 @@ signerActes = function(object_id, object_class){
 </script>
 
 <table class="form">
-  {{if $subject->_coded}}
+  {{if $subject->_coded && $m != "dPpmsi"}}
   {{if $subject->_class_name == "CConsultation"}}
   <tr>
     <td colspan="10">
@@ -42,7 +42,7 @@ signerActes = function(object_id, object_class){
   {{else}}
 
   <!-- Gestion des codes -->
-  {{if $can->admin || (!$subject->_coded && (($can->edit && ($subject->_class_name == "CConsultation")) || $can->read))}}
+  {{if $can->admin || $m == "dPpmsi" || (!$subject->_coded && (($can->edit && ($subject->_class_name == "CConsultation")) || $can->read))}}
   <tr>
     <td class="text">
       {{include file="../../dPsalleOp/templates/inc_manage_codes.tpl"}}
@@ -53,14 +53,14 @@ signerActes = function(object_id, object_class){
   <tr>
     <td class="text">
       <!-- Codage des actes -->
-      {{if $subject->_coded && !$can->admin}}
+      {{if $subject->_coded && !$can->admin && $m != "dPpmsi"}}
         {{mb_include module=dPsalleOp template=inc_possible_actes_ccam}}
       {{else}}
         {{mb_include module=dPsalleOp template=inc_edit_actes_ccam}}
       {{/if}}
     </td>
   </tr>
-  {{if $can->admin}}
+  {{if $can->admin || $m == "dPpmsi"}}
   <tr>
   {{else}}
   <tr style="display: none;">
