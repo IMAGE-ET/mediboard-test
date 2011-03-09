@@ -23,8 +23,8 @@ $date = CValue::getOrSession("date", mbDate());
 $date_tolerance = CAppUI::conf("dPurgences date_tolerance");
 $date_before = mbDate("-$date_tolerance DAY", $date);
 $date_after  = mbDate("+1 DAY", $date);
-$where[] = "sejour.entree_reelle BETWEEN '$date' AND '$date_after'
-  OR (sejour.sortie_reelle IS NULL AND sejour.entree_reelle BETWEEN '$date_before' AND '$date_after')";
+$where[] = "sejour.entree BETWEEN '$date' AND '$date_after'
+  OR (sejour.sortie_reelle IS NULL AND sejour.entree BETWEEN '$date_before' AND '$date_after')";
 
 // RPUs
 $where[] = CAppUI::pref("showMissingRPU") ?
@@ -32,7 +32,7 @@ $where[] = CAppUI::pref("showMissingRPU") ?
   "rpu.rpu_id IS NOT NULL";
 $where["sejour.group_id"] = "= '".CGroups::loadCurrent()->_id."'";
 
-$order = "sejour.entree_reelle ASC";
+$order = "sejour.entree ASC";
 
 $sejours = $sejour->loadList($where, $order, null, null, $ljoin);
 

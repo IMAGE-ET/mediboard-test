@@ -36,8 +36,8 @@ $sejour = new CSejour;
 $where = array();
 $ljoin["rpu"] = "sejour.sejour_id = rpu.sejour_id";
 $ljoin["patients"] = "sejour.patient_id = patients.patient_id";
-$where[] = "sejour.entree_reelle BETWEEN '$date' AND '$date_after' 
-  OR (sejour.sortie_reelle IS NULL AND sejour.entree_reelle BETWEEN '$date_before' AND '$date_after' AND sejour.annule = '0')";
+$where[] = "sejour.entree BETWEEN '$date' AND '$date_after' 
+  OR (sejour.sortie_reelle IS NULL AND sejour.entree BETWEEN '$date_before' AND '$date_after' AND sejour.annule = '0')";
 $where[] = CAppUI::pref("showMissingRPU") ? 
   "sejour.type = 'urg' OR rpu.rpu_id IS NOT NULL" :
   "rpu.rpu_id IS NOT NULL";
@@ -62,11 +62,11 @@ if ($order_col != "_entree" && $order_col != "ccmu" && $order_col != "_patient_i
 }
 
 if ($order_col == "_entree") {
-  $order = "entree_reelle $order_way, rpu.ccmu $order_way";
+  $order = "entree $order_way, rpu.ccmu $order_way";
 }
 
 if ($order_col == "ccmu") {
-  $order = "rpu.ccmu $order_way, entree_reelle $order_way";
+  $order = "rpu.ccmu $order_way, entree $order_way";
 }
 
 if ($order_col == "_patient_id") {
@@ -96,7 +96,7 @@ foreach ($listSejours as &$sejour) {
   $sejour->_ref_patient->loadIPP();
 
   // Séjours antérieurs  
-	$sejour->_veille = mbDate($sejour->entree_reelle) != $date;
+	$sejour->_veille = mbDate($sejour->entree) != $date;
 }
 
 // Tri pour afficher les sans CCMU en premier

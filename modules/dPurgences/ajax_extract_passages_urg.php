@@ -24,12 +24,12 @@ if (!$debut_selection || !$fin_selection) {
 $sejour = new CSejour;
 $where = array();
 $ljoin["rpu"] = "sejour.sejour_id = rpu.sejour_id";
-$where[] = "sejour.entree_reelle BETWEEN '$debut_selection' AND '$fin_selection' 
-  OR (sejour.sortie_reelle IS NULL AND sejour.entree_reelle BETWEEN '$debut_selection' AND '$fin_selection')";
+$where[] = "sejour.entree BETWEEN '$debut_selection' AND '$fin_selection' 
+  OR (sejour.sortie_reelle IS NULL AND sejour.entree BETWEEN '$debut_selection' AND '$fin_selection')";
 // RPUs
 $where[] = "rpu.rpu_id IS NOT NULL";
 $where["sejour.group_id"] = "= '".CGroups::loadCurrent()->_id."'";
-$order = "sejour.entree_reelle ASC";
+$order = "sejour.entree ASC";
 $sejours = $sejour->loadList($where, $order, null, null, $ljoin);
 
 $count_sejour = 0;

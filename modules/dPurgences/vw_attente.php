@@ -21,7 +21,7 @@ $sejour = new CSejour;
 $where = array();
 $ljoin["rpu"] = "sejour.sejour_id = rpu.sejour_id";
   
-$where["entree_reelle"] = "LIKE '$date%'";
+$where["entree"] = "LIKE '$date%'";
 $where["type"] = "= 'urg'";
 $where[] = "(rpu.radio_debut IS NOT NULL) OR (rpu.bio_depart IS NOT NULL) OR (rpu.specia_att IS NOT NULL)";
 $where["sejour.group_id"] = "= '".CGroups::loadCurrent()->_id."'";

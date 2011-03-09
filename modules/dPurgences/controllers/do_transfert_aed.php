@@ -35,7 +35,7 @@ if (!CAppUI::conf("dPurgences create_sejour_hospit")) {
   $sejour->group_id     = $sejour_rpu->group_id;
   $sejour->entree_prevue = mbDateTime();
   $sejour->sortie_prevue = mbDateTime("+ 1 day");
-  $sejour->entree_reelle = $sejour_rpu->entree_reelle;
+  $sejour->entree_reelle = $sejour_rpu->entree;
   $sejour->chambre_seule = "0";
   $sejour->type = "comp";
   $sejour->DP = $sejour_rpu->DP;
