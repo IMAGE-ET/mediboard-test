@@ -416,6 +416,47 @@ class CFile extends CDocumentItem {
 
     return $res;
   }
+	
+	static function convertTifPagesToPDF($tif_files){
+		if (!class_exists("FPDF")){
+			CAppUI::requireLibraryFile("PDFMerger/fpdf/fpdf");
+		}
+		
+		$pngs = array();
+		foreach($tif_files as $tif) {
+		  $pngs[] = self::convertTifToPng($tif); // "C:\\ImageMagick6.6.0-Q16\\"
+		}
+		
+		$pdf = new FPDF();
+		
+		foreach($pngs as $png) {
+		  $pdf->AddPage();
+		  $pdf->Image($png, 5, 5, 200); // millimeters
+		}
+		
+		$out = $pdf->Output("", 'S');
+		
+		foreach($pngs as $png) {
+		  unlink($png);
+		}
+		
+		return $out;
+	}
+	
+	static function convertTifToPng($path) {
+	  $tmp_tmp = tempnam(sys_get_temp_dir(), "mb_");
+	  unlink($tmp_tmp);
+	  
+	  $tmp  = "$tmp_tmp.png";
+	  
+	  $from = escapeshellarg($path);
+	  $to   = escapeshellarg($tmp);
+	  $exec = "convert $from $to";
+	  
+	  exec($exec, $yaks);
+	  
+	  return $tmp;
+	}
   
   function loadPDFconverted() {
     $file = new CFile();
