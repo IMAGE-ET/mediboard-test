@@ -33,7 +33,7 @@ if ($replacement->_id) {
 $sejour->loadRefPatient();
 $patient =& $sejour->_ref_patient;
 
-// Séjour du patient
+// Séjours du patient
 $patient->loadRefsSejours();
 $sejours =& $patient->_ref_sejours;
 foreach($sejours as $_sejour) {
@@ -47,6 +47,8 @@ $user->loadRefFunction();
 $users = $user->loadUsers(PERM_READ, $user->function_id);
 
 $evenements_counts = array();
+
+CEvenementSSR::getAllTherapeutes($sejour->patient_id, $user->function_id);
 
 // Chargement
 $evenement = new CEvenementSSR();

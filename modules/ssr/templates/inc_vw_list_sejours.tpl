@@ -48,7 +48,11 @@ Main.add(function() {
       {{assign var=replacement value=$_sejour->_ref_replacement}}
 			
       <tr id="replacement-{{$type}}-{{$_sejour->_id}}">
-		    <td colspan="2" class="text {{if $replacement->_id && $type == "kine"}} arretee {{/if}}">
+      	{{assign var=arrete value=""}}
+				{{if $replacement->_id && $type == "kine"}} 
+				{{assign var=arrete value="arretee}}
+        {{/if}}
+		    <td colspan="2" class="text {{$arrete}}">
 					{{assign var=patient value=$_sejour->_ref_patient}}
 				  <big class="CPatient-view" style=""
 					  onmouseover="ObjectTooltip.createEx(this, '{{$patient->_guid}};')" 
@@ -59,18 +63,22 @@ Main.add(function() {
 					{{mb_include module=dPpatients template=inc_vw_ipp ipp=$patient->_IPP}}
           {{$patient->_age}} ans
 		    </td>
-		    <td style="text-align: center;">
+		    <td class="{{$arrete}}" style="text-align: center;">
 		      {{mb_value object=$_sejour field=entree format=$conf.date}}
-		      <div style="text-align: left; opacity: 0.6;">{{$_sejour->_entree_relative}}j</div>
+		      <div class="opacity-60" style="text-align: left;">{{$_sejour->_entree_relative}}j</div>
 		    </td>
-		    <td style="text-align: center;">
+		    <td class="{{$arrete}}" style="text-align: center;">
 		      {{mb_value object=$_sejour field=sortie format=$conf.date}}
-		      <div style="text-align: right; opacity: 0.6;">{{$_sejour->_sortie_relative}}j</div>
+		      <div class="opacity-60" style="text-align: right;">{{$_sejour->_sortie_relative}}j</div>
 		    </td>
         {{if $type == "kine"}}
-        <td style="text-align: left;">
+        <td class="{{$arrete}}" style="text-align: left;">
 				  {{if $replacement->_id}} 
-            {{mb_include module=mediusers template=inc_vw_mediuser mediuser=$replacement->_ref_replacer}}
+            <strong>{{mb_include module=mediusers template=inc_vw_mediuser mediuser=$replacement->_ref_replacer}}</strong>
+				  {{else}}
+					  {{foreach from=$replacement->_ref_guessed_replacers item=_guess}}
+						<div>{{mb_include module=mediusers template=inc_vw_mediuser mediuser=$_guess}}</div>
+            {{/foreach}}
 				  {{/if}}
         </td>
         {{else}}

@@ -223,16 +223,31 @@ class CEvenementSSR extends CMbObject {
 		}
 	}
 	
+	/**
+	 * Load prescription line and associated element
+	 * 
+	 * @return CPrescriptionLineElement
+	 */
 	function loadRefPrescriptionLineElement($cache = true){
 		$this->_ref_prescription_line_element = $this->loadFwdRef("prescription_line_element_id", $cache);
 		$this->_ref_prescription_line_element->loadRefElement();
 		return $this->_ref_prescription_line_element;
 	}
 	
+  /**
+   * Load sejour
+   * 
+   * @return CSejour
+   */
 	function loadRefSejour($cache = true){
 		return $this->_ref_sejour = $this->loadFwdRef("sejour_id", $cache);
 	}
 	
+  /**
+   * Load equipement
+   * 
+   * @return CEquipement
+   */
 	function loadRefEquipement($cache = true){
 		return $this->_ref_equipement = $this->loadFwdRef("equipement_id", $cache);
 	}
@@ -246,11 +261,11 @@ class CEvenementSSR extends CMbObject {
   }
   
 	function loadRefsActesCdARR(){
-		$this->_ref_actes_cdarr = $this->loadBackRefs("actes_cdarr");
+		return $this->_ref_actes_cdarr = $this->loadBackRefs("actes_cdarr");
 	}
 	
 	function loadRefsEvenementsSeance(){
-		$this->_ref_evenements_seance = $this->loadBackRefs("evenements_ssr");
+		return $this->_ref_evenements_seance = $this->loadBackRefs("evenements_ssr");
 	}
 	
 	function getRHS() {
@@ -286,6 +301,60 @@ class CEvenementSSR extends CMbObject {
     }
     return $nb_days;
   }
+	
+	/**
+	 * Find all therapeutes for a patient 
+	 * 
+	 * @param ref<CPatient>  $patient_id  Patient
+	 * @param ref<CFunction> $function_id May restrict to a function
+	 * 
+	 * @return array<CMediusers>
+	 */
+	static function getAllTherapeutes($patient_id, $function_id = null) {
+//		$req = new CRequest;
+//		
+//		// Filter on patient
+//    $req->addLJoinClause("sejour", "sejour.sejour_id = evenement_ssr.sejour_id");
+//    $req->addWhereClause("patient_id", "= '$patient_id'");
+//		
+//		// Filter on function
+//		if ($function_id) {
+//	    $req->addLJoinClause("users_mediboard", "users_mediboard.user_id = evenement_ssr.therapeute_id");
+//	    $req->addWhereClause("users_mediboard.function_id", "= '$function_id'");
+//		}
+//		
+//		// Counting
+//		$req->addGroup("therapeute_id");
+//    $evenement = new self;
+//		$query = $req->getCountRequest($evenement, array("therapeute_id"));
+//		
+//		// Execute query
+//		$ds = $evenement->_spec->ds;
+//		$sorter = array_flip($ds->loadHashList($query));
+		
+    // Filter on patient
+    $join["sejour"] = "sejour.sejour_id = evenement_ssr.sejour_id";
+    $where["patient_id"] =  "= '$patient_id'";
+    
+    // Filter on function
+    if ($function_id) {
+      $join["users_mediboard"] = "users_mediboard.user_id = evenement_ssr.therapeute_id";
+      $where["function_id"] = "= '$function_id'";
+    }
+    
+    // Load grouped
+		$group = "therapeute_id";
+    $evenement = new self;
+		$evenements = $evenement->loadList($where, null, null, $group, $join);
+		
+		// Load therapeutes
+		$therapeutes = CMbObject::massLoadFwdRef($evenements, "therapeute_id");
+		foreach ($therapeutes as $_therapeute) {
+			$_therapeute->loadRefFunction();
+		}
+		
+		return $therapeutes;
+	}
 }
 
 ?>

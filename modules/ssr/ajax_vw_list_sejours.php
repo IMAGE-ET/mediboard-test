@@ -33,7 +33,7 @@ $sejours_count = 0;
 
 // Pour chaque plage de conge, recherche 
 foreach($plages_conge as $_plage_conge){
-	$_plage_conge->loadRefUser();
+	$kine = $_plage_conge->loadRefUser();
 	$_sejours = array();
 	
 	$date_debut = max($monday, $_plage_conge->date_debut);
@@ -47,10 +47,8 @@ foreach($plages_conge as $_plage_conge){
 	  $where = array();
 	  $where["type"] = "= 'ssr'";
 	  $where["group_id"] = "= '$group_id'";
-	  $where[] = "(sejour.entree BETWEEN '$date_debut' AND '$date_fin') OR 
-	              (sejour.sortie BETWEEN '$date_debut' AND '$date_fin') OR
-	              (sejour.entree <= '$date_debut' AND sejour.sortie >= '$date_fin')";
-	              
+    $where["sejour.entree"] = "<= '$date_fin'";
+    $where["sejour.sortie"] = ">= '$date_debut'";
 	  $where["technicien.kine_id"] = " = '$_plage_conge->user_id'";
 	  $_sejours = $sejour->loadList($where, null, null, null, $ljoin);
   }
@@ -91,6 +89,11 @@ foreach($plages_conge as $_plage_conge){
 
       if ($replacement->_id || $type == "kine") {
         $replacement->loadRefReplacer()->loadRefFunction();
+      }
+			
+      if (!$replacement->_id && $type == "kine") {
+        $replacement->_ref_guessed_replacers = CEvenementSSR::getAllTherapeutes($_sejour->patient_id, $kine->function_id);
+				unset($replacement->_ref_guessed_replacers[$kine->_id]);
       }
 
 		  // Bilan SSR
