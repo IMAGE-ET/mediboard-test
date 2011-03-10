@@ -21,6 +21,7 @@ $selOp->load($operation_id);
 $selOp->loadRefs();
 $selOp->countEchangeHprim();
 $selOp->isCoded();
+$selOp->canDo();
 $selOp->_ref_sejour->loadRefsFwd();
 foreach($selOp->_ext_codes_ccam as $key => $value) {
 	$selOp->_ext_codes_ccam[$key] = CCodeCCAM::get($value->code, CCodeCCAM::FULL);
