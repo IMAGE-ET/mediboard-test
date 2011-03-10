@@ -49,7 +49,7 @@ $ljoin = array(
   "users" => "users.user_id = protocole.chir_id"
 );
 
-$list_protocoles  = $protocole->loadList($where, "users.user_username, libelle_sejour, libelle, codes_ccam", "{$page[$type]},40", null, $ljoin);
+$list_protocoles  = $protocole->loadList($where, "users.user_username, libelle, libelle_sejour, codes_ccam", "{$page[$type]},40", null, $ljoin);
 $total_protocoles = $protocole->countList($where, null, null, null, $ljoin);
 
 foreach ($list_protocoles as $_prot){
