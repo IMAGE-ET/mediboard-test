@@ -8,8 +8,6 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
  */
 
-CCanDo::checkRead();
-
 $objects_id     = CValue::post("_objects_id"); // array
 $objects_class  = CValue::post("_objects_class");
 $base_object_id = CValue::post("_base_object_id");
@@ -26,7 +24,7 @@ if (class_exists($objects_class)) {
     $do->_obj->load($base_object_id);
   }
   
-  // Création du nouveau patient
+  // Création du nouvel objet
   if (intval($del)) {
     $do->errorRedirect("Fusion en mode suppression impossible");
   }
@@ -56,7 +54,7 @@ if (class_exists($objects_class)) {
   
   // the result data is binded to the new CMbObject
   $do->doBind();
-
+  
   // the objects are merged with the result
   if ($msg = $do->_obj->merge($objects, $fast)) {
     $do->errorRedirect($msg);
