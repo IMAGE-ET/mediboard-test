@@ -26,24 +26,27 @@
 <script type="text/javascript">
 
 Main.add(function() {
-  var url = new Url("dPcompteRendu", "ajax_modele_autocomplete");
+  var form = getForm('DocumentAdd-{{$unique_id}}-{{$object->_guid}}');
+  var url;
+  
+  url = new Url("dPcompteRendu", "ajax_modele_autocomplete");
   url.addParam("user_id", "{{$praticien->_id}}");
   url.addParam("function_id", "{{$praticien->function_id}}");
   url.addParam("object_class", '{{$object->_class_name}}');
   url.addParam("object_id", '{{$object->_id}}');
-  url.autoComplete(getForm('DocumentAdd-{{$unique_id}}-{{$object->_guid}}').keywords_modele, '', {
+  url.autoComplete(form.keywords_modele, '', {
     minChars: 1,
     afterUpdateElement: createDoc,
     dropdown: true,
     width: "250px"
   });
 
-  var url = new Url("dPcompteRendu", "ajax_pack_autocomplete");
+  url = new Url("dPcompteRendu", "ajax_pack_autocomplete");
   url.addParam("user_id", "{{$praticien->_id}}");
   url.addParam("function_id", "{{$praticien->function_id}}");
   url.addParam("object_class", '{{$object->_class_name}}');
   url.addParam("object_id", '{{$object->_id}}');
-  url.autoComplete(getForm('DocumentAdd-{{$unique_id}}-{{$object->_guid}}').keywords_pack, '', {
+  url.autoComplete(form.keywords_pack, '', {
     minChars: 1,
     afterUpdateElement: createPack,
     dropdown: true,

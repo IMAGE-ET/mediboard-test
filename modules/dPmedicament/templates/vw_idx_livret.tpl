@@ -22,7 +22,8 @@ function updateFieldsProduitLivret(selected) {
 	  Livret.reloadAlpha('', code_cip);
     Livret.reloadATC('', code_cip);
   }
-	$('searchProdLivret_produit').value = "";
+  
+  getForm("searchProdLivret").produit.value = "";
 }
 
 Main.add(function () {
@@ -31,11 +32,8 @@ Main.add(function () {
   // Initialisation des onglets du menu
   Control.Tabs.create('tabs-livret', true);
   
-  // Preparation du formulaire
-  prepareForm(document.searchProdLivret);
-  // Autocomplete
   var url = new Url("dPmedicament", "httpreq_do_medicament_autocomplete");
-  url.autoComplete("searchProdLivret_produit", "produit_livret_auto_complete", {
+  url.autoComplete(getForm("searchProdLivret").produit, "produit_livret_auto_complete", {
     minChars: 3,
     updateElement: updateFieldsProduitLivret,
     callback: 
@@ -63,7 +61,7 @@ var Livret = {
   // Ajout d'un produit dans le livret
   addProduit: function(code_cip, view_produit) {
     // Submit du formulaire d'ajout de produit
-    var oForm = document.addProduit;
+    var oForm = getForm("addProduit");
     oForm.code_cip.value = code_cip;
     submitFormAjax(oForm, 'systemMsg', { 
       onComplete : function(){
@@ -80,7 +78,7 @@ var Livret = {
   // Suppression d'un produit du livret
   delProduit: function(code_cip, lettre, codeATC) {
     // Submit du formulaire de suppression du produit
-    var oForm = document.addProduit;
+    var oForm = getForm("addProduit");
     oForm.code_cip.value = code_cip;
     oForm.del.value = 1;
     submitFormAjax(oForm, 'systemMsg', { 

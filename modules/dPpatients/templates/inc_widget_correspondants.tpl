@@ -5,8 +5,7 @@ Medecin = {
   form: null,
   edit : function(form) {
     this.form = form;
-    var url = new Url();
-    url.setModuleAction("dPpatients", "vw_medecins");
+    var url = new Url("dPpatients", "vw_medecins");
     url.popup(700, 550, "Medecin");
   },
   
@@ -41,8 +40,7 @@ submitMedecin = function(form) {
 
 Main.add(function () {
   var formTraitant = getForm("traitant-edit-{{$patient->_id}}");
-  urlTraitant = new Url();
-  urlTraitant.setModuleAction("dPpatients", "httpreq_do_medecins_autocomplete");
+  var urlTraitant = new Url("dPpatients", "httpreq_do_medecins_autocomplete");
   urlTraitant.autoComplete(formTraitant._view, formTraitant._view.id+'_autocomplete', {
     minChars: 2,
     updateElement : function(element) {
@@ -53,8 +51,7 @@ Main.add(function () {
 	
 	{{if $patient && $patient->_id}}
   var formCorresp = getForm("correspondant-new-{{$patient->_id}}");
-  urlCorresp = new Url();
-  urlCorresp.setModuleAction("dPpatients", "httpreq_do_medecins_autocomplete");
+  var urlCorresp = new Url("dPpatients", "httpreq_do_medecins_autocomplete");
   urlCorresp.autoComplete(formCorresp._view, formCorresp._view.id+'_autocomplete', {
     minChars: 2,
     updateElement : function(element) {

@@ -23,14 +23,14 @@
 var oFormProtocole = getForm("applyProtocoleFirst");
 
 if (oFormProtocole) {
-var url = new Url("dPprescription", "httpreq_vw_select_protocole");
-var autocompleter = url.autoComplete(oFormProtocole.libelle_protocole, "protocole_auto_complete", {
+  var url = new Url("dPprescription", "httpreq_vw_select_protocole");
+  var autocompleter = url.autoComplete(oFormProtocole.libelle_protocole, "protocole_auto_complete", {
     dropdown: true,
     minChars: 1,
     valueElement: oFormProtocole.elements.pack_protocole_id,
     updateElement: function(selectedElement) {
       var node = $(selectedElement).down('.view');
-      $V($("applyProtocoleFirst_libelle_protocole"), (node.innerHTML).replace("&lt;", "<").replace("&gt;",">"));
+      $V(oFormProtocole.libelle_protocole, (node.innerHTML).replace("&lt;", "<").replace("&gt;",">"));
       if (autocompleter.options.afterUpdateElement)
         autocompleter.options.afterUpdateElement(autocompleter.element, selectedElement);
     },
@@ -44,6 +44,7 @@ var autocompleter = url.autoComplete(oFormProtocole.libelle_protocole, "protocol
         }
   } );
 }
+
 addProtocole = function(prescription_id) {
   $V(oFormProtocole.prescription_id, prescription_id);
   if ($V(oFormProtocole.pack_protocole_id) == "") {

@@ -22,12 +22,14 @@ Main.add( function(){
 	  changePraticienElt(document.selPraticienLine.praticien_id.value, '{{$element}}');
   }
   Prescription.refreshTabHeader('div_{{$element}}','{{$prescription->_counts_by_chapitre.$element}}','{{if $prescription->object_id}}{{$prescription->_counts_by_chapitre_non_signee.$element}}{{else}}0{{/if}}');
-  if(document.search{{$element}}){
+
+  var form = getForm("search{{$element}}");
+  if(form){
     var url = new Url("dPprescription", "httpreq_do_element_autocomplete");
     url.addParam("category", "{{$element}}");
-    url.autoComplete("search{{$element}}_libelle", "{{$element}}_auto_complete", {
+    url.autoComplete(form.libelle, "{{$element}}_auto_complete", {
       minChars: 2,
-      updateElement: function(element) { updateFieldsElement(element, 'search{{$element}}', '{{$element}}') }
+      updateElement: function(element) { updateFieldsElement(element, form, '{{$element}}') }
     } );
   }
 	

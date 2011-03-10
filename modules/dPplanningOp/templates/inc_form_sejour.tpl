@@ -423,19 +423,22 @@ Main.add( function(){
 <tr>
   <th>{{mb_label object=$sejour field="DP"}}</th>
   <td colspan="3">
-    {{main}}
-        var url = new Url("dPcim10", "ajax_code_cim10_autocomplete");
-        url.autoComplete(getForm("editSejour").keywords_code, '', {
-          minChars: 1,
-          dropdown: true,
-          width: "250px",
-          select: "code",
-          afterUpdateElement: function(oHidden) {
-            $V(getForm("editSejour").DP, oHidden.value);
-          }
-        });
-      {{/main}}
-    <input type="text" name="keywords_code" id="editSejour_keywords_code" class="autocomplete str code cim10" value="{{$sejour->DP}}" size="10"/>
+    <script type="text/javascript">
+    Main.add(function(){
+      var url = new Url("dPcim10", "ajax_code_cim10_autocomplete");
+      url.autoComplete(getForm("editSejour").keywords_code, '', {
+        minChars: 1,
+        dropdown: true,
+        width: "250px",
+        select: "code",
+        afterUpdateElement: function(oHidden) {
+          $V(getForm("editSejour").DP, oHidden.value);
+        }
+      });
+    });
+    </script>
+    
+    <input type="text" name="keywords_code" class="autocomplete str code cim10" value="{{$sejour->DP}}" size="10"/>
     <button type="button" class="search" onclick="CIM10Selector.init()">{{tr}}button-CCodeCIM10-choix{{/tr}}</button>
     <input type="hidden" name="DP" onchange="$V(this.form.keywords_code, this.value);"/>
   </td>
@@ -721,28 +724,32 @@ Main.add( function(){
 <tr>
   <th>{{tr}}CProtocole-protocole_prescription_chir_id{{/tr}}</th>
   <td colspan="3">
-  {{main}}
-    var form = getForm("editSejour");
-    var url = new Url("dPprescription", "httpreq_vw_select_protocole");
-    var autocompleter = url.autoComplete(form.libelle_protocole, 'protocole_auto_complete', {
-      minChars: 1,
-      dropdown: true,
-      width: "250px",
-      updateElement: function(selectedElement) {
-        var node = $(selectedElement).down('.view');
-        $V($("editSejour_libelle_protocole"), (node.innerHTML).replace("&lt;", "<").replace("&gt;",">"));
-        if (autocompleter.options.afterUpdateElement)
-          autocompleter.options.afterUpdateElement(autocompleter.element, selectedElement);
-      },
-      callback: function(input, queryString){
-        return (queryString + "&praticien_id=" + $V(form.praticien_id));
-      },
-      valueElement: form.elements._protocole_prescription_chir_id
+    <script type="text/javascript">
+    Main.add(function(){
+      var form = getForm("editSejour");
+      var url = new Url("dPprescription", "httpreq_vw_select_protocole");
+      var autocompleter = url.autoComplete(form.libelle_protocole, 'protocole_auto_complete', {
+        minChars: 1,
+        dropdown: true,
+        width: "250px",
+        updateElement: function(selectedElement) {
+          var node = $(selectedElement).down('.view');
+          $V(form.libelle_protocole, node.innerHTML.replace("&lt;", "<").replace("&gt;",">"));
+          if (autocompleter.options.afterUpdateElement)
+            autocompleter.options.afterUpdateElement(autocompleter.element, selectedElement);
+        },
+        callback: function(input, queryString){
+          return (queryString + "&praticien_id=" + $V(form.praticien_id));
+        },
+        valueElement: form.elements._protocole_prescription_chir_id
+      });
     });
-  {{/main}}
-    <input type="text" name="libelle_protocole" id="editSejour_libelle_protocole" class="autocomplete str" value=""/>
+    </script>
+    
+    <input type="text" name="libelle_protocole" class="autocomplete str" value=""/>
     <div style="display:none; width: 150px;" class="autocomplete" id="protocole_auto_complete"></div>
-    <input type="hidden" name="_protocole_prescription_chir_id" /></td>
+    <input type="hidden" name="_protocole_prescription_chir_id" />
+  </td>
 </tr>
 {{/if}}
 </tbody>

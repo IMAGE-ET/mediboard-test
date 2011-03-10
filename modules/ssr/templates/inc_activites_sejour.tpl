@@ -297,7 +297,7 @@ Main.add(function(){
   window.toCheck = false;
   if($('code_auto_complete')){
     var url = new Url("ssr", "httpreq_do_activite_autocomplete");
-    url.autoComplete("editEvenementSSR_code", "code_auto_complete", {
+    url.autoComplete(oFormEvenementSSR.code, "code_auto_complete", {
       dropdown: true,
       minChars: 2,
       select: "value",

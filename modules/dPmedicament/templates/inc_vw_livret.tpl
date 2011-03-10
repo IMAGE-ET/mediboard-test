@@ -16,13 +16,12 @@ function updateFields(selected) {
   if (dn[1]) {
     Livret.addProduit(dn[0].innerHTML, dn[3].innerHTML.strip());
   }
-  $('searchProd_produit').value = "";
+  getForm("searchProd").produit.value = "";
 }
 
 Main.add(function(){
-  // Autocomplete
   var url = new Url("dPmedicament", "httpreq_do_medicament_autocomplete");
-  url.autoComplete("searchProd_produit", "produit_auto_complete", {
+  url.autoComplete(getForm("searchProd").produit, "produit_auto_complete", {
       minChars: 3,
       updateElement: updateFields,
       callback: function(input, queryString){

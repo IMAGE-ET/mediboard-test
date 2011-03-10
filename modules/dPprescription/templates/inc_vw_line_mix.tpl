@@ -12,31 +12,33 @@
 
 Main.add( function(){
   var editPerfForm = getForm('editPerf-{{$line->_id}}');
+  
   {{if $line->type == "PCA"}}
 	  $("bolus-{{$line->_id}}").show();
 	  {{if $line->_perm_edit}}
 		  changeModeBolus(editPerfForm);
 		{{/if}}		
   {{/if}}
+    
 	{{if $line->type_line == "perfusion"}}
 	  toggleContinuiteLineMix(editPerfForm.continuite_perf,'{{$line->_id}}');
   {{/if}}
 
 	//Autocomplete des medicaments dans les aérosols
-	if(getForm("addLineAerosol")){
+  var addLineAerosolForm = getForm("addLineAerosol");
+	if(addLineAerosolForm){
 		var urlAuto = new Url("dPmedicament", "httpreq_do_medicament_autocomplete");
 		urlAuto.addParam("produit_max", 40);
-		window.acAerosol = urlAuto.autoComplete("addLineAerosol_produit", "aerosol_auto_complete", {
+		window.acAerosol = urlAuto.autoComplete(addLineAerosolForm.produit, "aerosol_auto_complete", {
 		  minChars: 3,
 		  updateElement: updateFieldsAerosol,
 		  callback: 
 		    function(input, queryString){
-		      return (queryString + "&inLivret="+($V(getForm("addLineAerosol")._recherche_livret)?'1':'0')+"&hors_specialite=0"); 
+		      return (queryString + "&inLivret="+($V(addLineAerosolForm._recherche_livret)?'1':'0')+"&hors_specialite=0"); 
 		    }
 		} );
 	}
 } );
-
 
 </script>
 

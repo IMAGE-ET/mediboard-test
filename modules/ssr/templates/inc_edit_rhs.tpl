@@ -53,19 +53,20 @@
 <script type="text/javascript">
 
 Main.add( function(){
+  var form = getForm("new-line-{{$rhs->_guid}}");
+  
 	var url = new Url("ssr", "httpreq_do_intervenant_autocomplete");
-	
-	url.autoComplete("new-line-{{$rhs->_guid}}__executant", "{{$rhs->_guid}}_executant_auto_complete", {
+	url.autoComplete(form._executant, "{{$rhs->_guid}}_executant_auto_complete", {
     dropdown: true,
     minChars: 2,
-    updateElement: function(element) { CotationRHS.updateExecutant(element, getForm("new-line-{{$rhs->_guid}}")); }
+    updateElement: function(element) { CotationRHS.updateExecutant(element, form); }
 	} );
+  
 	var url = new Url("ssr", "httpreq_do_activite_autocomplete");
-	
-	url.autoComplete("new-line-{{$rhs->_guid}}_code_activite_cdarr", "{{$rhs->_guid}}_activite_auto_complete", {
+	url.autoComplete(form.code_activite_cdarr, "{{$rhs->_guid}}_activite_auto_complete", {
     dropdown: false,
     minChars: 2,
-    updateElement: function(element) { CotationRHS.updateActivite(element, getForm("new-line-{{$rhs->_guid}}")); }
+    updateElement: function(element) { CotationRHS.updateActivite(element, form); }
 	} );
 } );
 

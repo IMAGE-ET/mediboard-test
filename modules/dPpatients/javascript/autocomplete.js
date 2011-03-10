@@ -10,7 +10,7 @@ var InseeFields = {
     // Autocomplete for CP
 		var url = new Url("dPpatients", "autocomplete_cp_commune");
 		url.addParam("column", "code_postal");
-		url.autoComplete(oField.id, null , {
+		url.autoComplete(oField, null, {
 			width: "250px",
 			minChars: 2,
 			updateElement: function(selected) {
@@ -24,7 +24,7 @@ var InseeFields = {
     // Autocomplete for Commune
     var url = new Url("dPpatients", "autocomplete_cp_commune");
     url.addParam("column", "commune");
-    url.autoComplete(oField.id, null , {
+    url.autoComplete(oField, null, {
       width: "250px",
       minChars: 3,
       updateElement: function(selected) {

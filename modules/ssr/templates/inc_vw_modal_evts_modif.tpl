@@ -43,7 +43,7 @@
 			
 	Main.add(function(){
     var url = new Url("ssr", "httpreq_do_activite_autocomplete");
-    url.autoComplete("editCdarrs_code", "other_code_auto_complete", {
+    url.autoComplete(getForm("editCdarrs").code, "other_code_auto_complete", {
       dropdown: true,
       minChars: 2,
       select: "value",

@@ -22,8 +22,7 @@ toggleTrans = function(trans_class){
 {{if @$addTrans}}
 
 refreshTransmission = function(){
-  var url = new Url;
-  url.setModuleAction("dPprescription", "httpreq_vw_transmissions");
+  var url = new Url("dPprescription", "httpreq_vw_transmissions");
   url.addParam("sejour_id", '{{$sejour_id}}');
   url.addParam("addTrans", true);
   url.addParam("with_filter", '{{$with_filter}}');
@@ -31,11 +30,11 @@ refreshTransmission = function(){
 }
 
 delCibleTransmission = function() {
-  oDiv = $('cibleTrans');
+  var oDiv = $('cibleTrans');
   if(!oDiv) {
     return;
   }
-  oForm = document.forms['editTrans'];
+  var oForm = getForm('editTrans');
   $V(oForm.object_class, '');
   $V(oForm.object_id, '');
   $V(oForm.libelle_ATC, '');
@@ -43,7 +42,7 @@ delCibleTransmission = function() {
 }
 
 function updateFieldsCible(selected) {
-  oForm = document.forms['editTrans'];
+  var oForm = getForm('editTrans');
   Element.cleanWhitespace(selected);
   if(isNaN(selected.id)){
     $V(oForm.libelle_ATC, selected.id);
@@ -57,7 +56,7 @@ function updateFieldsCible(selected) {
 
 Main.add(function () {
   var url = new Url("dPprescription", "httpreq_cible_autocomplete");
-  url.autoComplete("editTrans_cible", "cible_auto_complete", {
+  url.autoComplete(getForm("editTrans").cible, "cible_auto_complete", {
     minChars: 3,
     updateElement: updateFieldsCible
   } );

@@ -19,12 +19,12 @@ Main.add( function(){
   Prescription.refreshTabHeader("div_medicament","{{$prescription->_counts_by_chapitre.med}}","{{if $prescription->object_id}}{{$prescription->_counts_by_chapitre_non_signee.med}}{{else}}0{{/if}}");
  
   if(document.forms.addLine && document.forms.searchProd){
-    var oFormProduit = document.forms.searchProd;
+    var oFormProduit = getForm("searchProd");
 		          
     // Autocomplete des medicaments
     var urlAuto = new Url("dPmedicament", "httpreq_do_medicament_autocomplete");
     urlAuto.addParam("produit_max", 40);
-    window.ac = urlAuto.autoComplete("searchProd_produit", "produit_auto_complete", {
+    window.ac = urlAuto.autoComplete(oFormProduit.produit, "produit_auto_complete", {
       minChars: 3,
       updateElement: updateFieldsMedicament,
       callback: 

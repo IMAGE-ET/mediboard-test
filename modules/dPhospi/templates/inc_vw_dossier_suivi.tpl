@@ -134,11 +134,14 @@ removeHighlightTransmissions = function(){
 }
 
 Main.add(function () {
+  var oFormTrans = getForm("editTrans");
+  
   var url = new Url("dPprescription", "httpreq_cible_autocomplete");
-  url.autoComplete("editTrans_cible", "cible_auto_complete", {
+  url.autoComplete(oFormTrans.cible, "cible_auto_complete", {
     minChars: 3,
     updateElement: updateFieldsCible
   } );
+  
 	if({{$count_trans}} > 0) {
 	  showListTransmissions(0, {{$count_trans}});
 	}
@@ -153,13 +156,12 @@ Main.add(function () {
     start: '{{$date}}',
     stop: '{{$date}}'
   };
-  Calendar.regField(getForm("editTrans").date, dates, options);
+  Calendar.regField(oFormTrans.date, dates, options);
 	
 	// Initialisation du champ dates
-	$("editTrans_date_da").value = "Heure actuelle";
-	$V(getForm("editTrans").date, "now");
+	oFormTrans.date_da.value = "Heure actuelle";
+	$V(oFormTrans.date, "now");
 	
-	var oFormTrans = getForm("editTrans");
   new AideSaisie.AutoComplete(oFormTrans.text, {
             objectClass: "CTransmissionMedicale", 
             //contextUserId: "{{$sejour->_ref_praticien->_id}}",
@@ -185,16 +187,17 @@ Main.add(function () {
 	}
 	
 	if($('form-prescription-suivi-soins')){
+    var oFormAddLineSuivi = getForm("addLineSuivi");
 	  var url = new Url("dPprescription", "httpreq_do_element_autocomplete");
-    url.autoComplete("addLineSuivi_libelle", "line_auto_complete", {
+    url.autoComplete(oFormAddLineSuivi.libelle, "line_auto_complete", {
       minChars: 2,
 			dropdown: true,
       updateElement: function(selected) {
-			  var oFormAddLineSuivi = getForm('addLineElementSuivi');
+			  var oFormAddLineElementSuivi = getForm('addLineElementSuivi');
 			  Element.cleanWhitespace(selected);
 			  var dn = selected.childNodes;
-			  $V(oFormAddLineSuivi.element_prescription_id, dn[0].firstChild.nodeValue);
-				$V(getForm('addLineSuivi').libelle,dn[2].innerHTML.stripTags());
+			  $V(oFormAddLineElementSuivi.element_prescription_id, dn[0].firstChild.nodeValue);
+				$V(oFormAddLineSuivi.libelle, dn[2].innerHTML.stripTags());
 			}
     } );
   }	
@@ -209,7 +212,7 @@ Main.add(function () {
       valueElement: oFormProtocole.elements.pack_protocole_id,
       updateElement: function(selectedElement) {
         var node = $(selectedElement).down('.view');
-        $V($("applyProtocoleSuiviSoins_libelle_protocole"), (node.innerHTML).replace("&lt;", "<").replace("&gt;",">"));
+        $V(oFormProtocole.libelle_protocole, (node.innerHTML).replace("&lt;", "<").replace("&gt;",">"));
         if (autocompleter.options.afterUpdateElement)
           autocompleter.options.afterUpdateElement(autocompleter.element, selectedElement);
       },

@@ -19,7 +19,7 @@ updateAdministration = function(id, object){
 Main.add(function () {
 	// Autocomplete des produits
   var url = new Url("dPmedicament", "httpreq_do_medicament_autocomplete");
-  url.autoComplete("searchProd_produit", "produit_auto_complete", {
+  url.autoComplete(getForm("searchProd").produit, "produit_auto_complete", {
     minChars: 2,
     updateElement: function(selected) {
       var oFormAddLineMedSuivi = getForm('addLineMedInscription');
@@ -31,7 +31,7 @@ Main.add(function () {
 	
 	// Autocomplete des elements
 	var url = new Url("dPprescription", "httpreq_do_element_autocomplete");
-  url.autoComplete("searchElt_libelle", "element_auto_complete", {
+  url.autoComplete(getForm("searchElt").libelle, "element_auto_complete", {
     minChars: 2,
     updateElement: function(selected) {
 	    var oFormAddLineElementSuivi = getForm('addLineElementInscription');

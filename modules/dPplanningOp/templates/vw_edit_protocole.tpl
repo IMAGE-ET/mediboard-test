@@ -302,7 +302,8 @@ Main.add(function () {
             {{mb_label object=$protocole field="DP"}}
           </th>
           <td>
-	          {{main}}
+	          <script type="text/javascript">
+            Main.add(function(){
 	            var url = new Url("dPcim10", "ajax_code_cim10_autocomplete");
 				      url.autoComplete(getForm("editFrm").keywords_code, '', {
 				        minChars: 1,
@@ -313,8 +314,10 @@ Main.add(function () {
                   $V(getForm("editFrm").DP, oHidden.value);
                 }
 				      });
-				    {{/main}}
-				    <input type="text" name="keywords_code" id="editFrm_keywords_code" class="autocomplete str code cim10" value="{{$protocole->DP}}" size="8"/>
+            });
+            </script>
+            
+				    <input type="text" name="keywords_code" class="autocomplete str code cim10" value="{{$protocole->DP}}" size="8"/>
 	          <input type="hidden" name="DP" onchange="$V(this.form.keywords_code, this.value)"/>
 	          <button type="button" class="search" onclick="CIM10Selector.init()">Choisir un code</button>
               <script type="text/javascript">
@@ -354,7 +357,8 @@ Main.add(function () {
         {{if array_key_exists("dPprescription", $modules)}}
         <tr>
           <td colspan="2">
-            {{main}}
+            <script type="text/javascript">
+            Main.add(function(){
               var form = getForm("editFrm");
               var url = new Url("dPprescription", "httpreq_vw_select_protocole");
               var autocompleter = url.autoComplete(form.libelle_protocole, 'protocole_auto_complete', {
@@ -363,7 +367,7 @@ Main.add(function () {
                 width: "250px",
                 updateElement: function(selectedElement) {
                   var node = $(selectedElement).down('.view');
-                  $V($("editFrm_libelle_protocole"), (node.innerHTML).replace("&lt;", "<").replace("&gt;",">"));
+                  $V(form.libelle_protocole, node.innerHTML.replace("&lt;", "<").replace("&gt;",">"));
                   if (autocompleter.options.afterUpdateElement)
                     autocompleter.options.afterUpdateElement(autocompleter.element, selectedElement);
                 },
@@ -372,7 +376,9 @@ Main.add(function () {
                 },
                 valueElement: form.elements.protocole_prescription_chir_id
               });
-            {{/main}}
+            });
+            </script>
+            
             {{mb_label object=$protocole field="protocole_prescription_chir_id"}}
             <input type="text" name="libelle_protocole" id="editFrm_libelle_protocole" class="autocomplete str" value="" />
             <div style="display:none; width: 150px;" class="autocomplete" id="protocole_auto_complete"></div>

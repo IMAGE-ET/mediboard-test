@@ -4,6 +4,7 @@
 
 updateFieldsAutocompleteDM = function(selected) {
   var oFormProduit = getForm("editDM-{{$line_guid}}");
+  
   Element.cleanWhitespace(selected);
   var dn = selected.childNodes;
   if(dn[0].className != 'informal'){
@@ -18,10 +19,12 @@ refreshDM = function(line_id){
 }
 
 Main.add( function(){
-  if($('editDM-{{$line_guid}}_produit')){
+  var oFormProduit = getForm("editDM-{{$line_guid}}");
+  
+  if (oFormProduit.produit) {
 	  // Autocomplete des DM
 	  var urlAuto = new Url("dPmedicament", "httpreq_do_medicament_autocomplete");
-	  urlAuto.autoComplete("editDM-{{$line_guid}}_produit", "dm_auto_complete", {
+	  urlAuto.autoComplete(oFormProduit.produit, "dm_auto_complete", {
 	    minChars: 3,
 	    updateElement: updateFieldsAutocompleteDM,
 	    callback: 

@@ -80,7 +80,7 @@ function changePage (start) {
               <script type="text/javascript">
                 Main.add(function () {
                   var formTraitant = getForm("rechercheDossierClinique");
-                  urlTraitant = new Url("dPpatients", "httpreq_do_medecins_autocomplete");
+                  var urlTraitant = new Url("dPpatients", "httpreq_do_medecins_autocomplete");
                   urlTraitant.autoComplete(formTraitant._view, null, {
                     minChars: 2,
                     updateElement : function(element) {

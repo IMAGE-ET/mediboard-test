@@ -96,7 +96,7 @@ Main.add( function(){
 		  var url = new Url("dPprescription", "httpreq_do_element_autocomplete");
 		  url.addParam("category", "{{$_category->chapitre}}");
 			url.addParam("category_id", "{{$_category->_id}}");
-		  url.autoComplete("search_{{$_category->_guid}}_libelle", "{{$_category->_guid}}_auto_complete", {
+		  url.autoComplete(getForm('search_{{$_category->_guid}}').libelle, "{{$_category->_guid}}_auto_complete", {
 			  dropdown: true,
 		    minChars: 2,
 				updateElement: function(element) { updateFieldsElementSSR(element, getForm('search_{{$_category->_guid}}'), '{{$_category->_id}}') }
@@ -116,7 +116,6 @@ Main.add( function(){
     contextUserId: "{{$app->user_id}}"
   });
 	
-	
   var oFormProtocole = getForm("applyProtocole");
   if(oFormProtocole){
     var url = new Url("dPprescription", "httpreq_vw_select_protocole");
@@ -126,7 +125,7 @@ Main.add( function(){
       valueElement: oFormProtocole.elements.pack_protocole_id,
       updateElement: function(selectedElement) {
         var node = $(selectedElement).down('.view');
-        $V($("applyProtocole_libelle_protocole"), (node.innerHTML).replace("&lt;", "<").replace("&gt;",">"));
+        $V(oFormProtocole.libelle_protocole, node.innerHTML.replace("&lt;", "<").replace("&gt;",">"));
         if (autocompleter.options.afterUpdateElement)
           autocompleter.options.afterUpdateElement(autocompleter.element, selectedElement);
       },
@@ -149,11 +148,9 @@ refreshFormBilanSSR = function(){
 	url.requestUpdate("bilan");
 }
 
-
 refreshAfterDuplicate = function(line_id){
   updateListLines(null, "{{$prescription_SSR->_id}}", line_id);
 	$V(getForm("addLineSSR").callback, "");
-
 }
 
 duplicateSSRLine = function(element_prescription_id, category_id){
@@ -260,7 +257,7 @@ duplicateSSRLine = function(element_prescription_id, category_id){
 						<script type="text/javascript">
 							Main.add( function(){
 							    var url = new Url("ssr", "ajax_autocomplete_prescription_executant");
-							    url.autoComplete("searchElement_libelle", "searchElement_auto_complete", {
+							    url.autoComplete(getForm("searchElement").libelle, "searchElement_auto_complete", {
 							      minChars: 2,
 										dropdown: true,
 							      updateElement: function(selected) { 

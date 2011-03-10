@@ -313,29 +313,27 @@ modifFormDate = function(nb_prises, form_name, protocole,line_id){
 </table>
 
 <script type="text/javascript">
-
-
 	
 if(document.addLine && document.searchProd){
+  var oFormProduit = getForm("searchProd");
+  var oFormAddLine = getForm("addLine");
+  
   // UpdateFields de l'autocomplete de medicaments
   updateFieldsMedicament = function(selected) {
     Element.cleanWhitespace(selected);
     var dn = selected.childNodes;
 		if(dn[0].className != 'informal'){
 	    oFormAddLine.code_cip.value = dn[0].firstChild.nodeValue;
-	    submitFormAjax(document.addLine, 'systemMsg', { onComplete: function() { Prescription.viewSubstitutionLines('{{$line->_id}}', '{{$line->_class_name}}') } });
+	    submitFormAjax(oFormAddLine, 'systemMsg', { onComplete: function() { Prescription.viewSubstitutionLines('{{$line->_id}}', '{{$line->_class_name}}') } });
     }
-		$('searchProd_produit').value = "";
+		oFormProduit.produit.value = "";
   }
-  
-  var oFormProduit = getForm("searchProd");
-  var oFormAddLine = getForm("addLine");
 
   // Autocomplete des medicaments
   var url = new Url("dPmedicament", "httpreq_do_medicament_autocomplete");
   url.addParam("produit_max", 40);
   
-  url.autoComplete("searchProd_produit", "produit_auto_complete", {
+  url.autoComplete(oFormProduit.produit, "produit_auto_complete", {
     minChars: 3,
     updateElement: updateFieldsMedicament,
     callback: 
@@ -347,17 +345,17 @@ if(document.addLine && document.searchProd){
 
 // Ajout d'une ligne de substitution
 addSubstitutionLine = function(code_cip){
-  var oForm = document.addLine;
+  var oForm = getForm("addLine");
   oForm.code_cip.value = code_cip;
-	submitFormAjax(document.addLine, 'systemMsg', { onComplete: function() { Prescription.viewSubstitutionLines('{{$line->_id}}','{{$line->_class_name}}') } });
+	submitFormAjax(oForm, 'systemMsg', { onComplete: function() { Prescription.viewSubstitutionLines('{{$line->_id}}','{{$line->_class_name}}') } });
 }
 
 // Suppression d'une ligne de substitution
 Prescription.delLine =  function(line_id) {
-	var oForm = document.addLine;
+	var oForm = getForm("addLine");
 	oForm.prescription_line_medicament_id.value = line_id;
 	oForm.del.value = 1;
-	submitFormAjax(document.addLine, 'systemMsg', { onComplete: function() { Prescription.viewSubstitutionLines('{{$line->_id}}','{{$line->_class_name}}') } });
+	submitFormAjax(oForm, 'systemMsg', { onComplete: function() { Prescription.viewSubstitutionLines('{{$line->_id}}','{{$line->_class_name}}') } });
 }
 
 </script>
