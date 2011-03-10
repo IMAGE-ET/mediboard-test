@@ -159,6 +159,7 @@ if ($consult->_id){
   $consult->makeFSE();
   $consult->_ref_chir->loadIdCPS();
   $consult->_ref_patient->loadIdVitale();
+  $consult->canDo();
 }
 
 // Chargement des aides à la saisie

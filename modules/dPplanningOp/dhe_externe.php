@@ -50,6 +50,7 @@ $intervention->rques          = CValue::get("intervention_remarques");
 $msg_patient = null;
 $list_fields = array();
 $patient_resultat = new CPatient();
+$patient_ok = false;
 if ($praticien_id) {
   if ($patient->nom && $patient->prenom && $patient->sexe && $patient->naissance) {
     // Recherche d'un patient existant
@@ -57,7 +58,7 @@ if ($praticien_id) {
     // S'il n'y est pas, on le store
     if(!$patient_existant->_id) {
       if (!$msg_patient = $patient_existant->store()) {
-        CAppUI::redirect("m=dPplanningOp&a=vw_edit_planning&chir_id=$praticien_id&pat_id=".$patient_existant->_id);
+        $patient_ok = true;
       }
     // Sinon on vérifie qu'ils sont bien identiques
     } else {
@@ -83,12 +84,12 @@ if ($praticien_id) {
           $patient_existant->$_field = CValue::first($patient_existant->$_field, $patient->$_field);
         }
         if (!$msg_patient = $patient_existant->store()) {
-          CAppUI::redirect("m=dPplanningOp&a=vw_edit_planning&chir_id=$praticien_id&pat_id=".$patient_existant->_id);
+          $patient_op = true;
         }
       }
     }
     // Sinon on propose à l'utilisateur de régler les problèmes
-    if(!$msg_patient) {
+    if(!$msg_patient && !$patient_ok) {
       $patient_resultat = clone $patient;
       foreach($list_fields as $_field => $_state) {
         $patient_resultat->$_field = CValue::first($patient->$_field, $patient_existant->$_field);
@@ -109,6 +110,10 @@ if ($praticien_id) {
       $msg_patient .="<br />- Naissance";
     }
   }
+}
+
+if($patient_ok) {
+  CAppUI::redirect("m=dPplanningOp&a=vw_edit_planning&chir_id=$praticien_id&pat_id=".$patient_existant->_id);
 }
 
 // Création du template

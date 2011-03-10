@@ -49,6 +49,7 @@ $anesth_id = "";
 if ($op) {
   $selOp->load($op);
   
+  $selOp->canDo();
   $selOp->loadRefs();
   $selOp->countEchangeHprim();
   $selOp->isCoded();

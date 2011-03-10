@@ -33,7 +33,7 @@ signerActes = function(object_id, object_class){
   </tr>
   {{/if}}
   {{/if}}
-  {{if (!$can->edit && $subject->_class_name == "CConsultation") || !$can->read}}
+  {{if !$subject->_canRead}}
   <tr>
     <td colspan="10" class="text">
       <div class="small-info">Vous n'avez pas les droits nescessaires pour coder les actes</div>
@@ -42,7 +42,7 @@ signerActes = function(object_id, object_class){
   {{else}}
 
   <!-- Gestion des codes -->
-  {{if $can->admin || $m == "dPpmsi" || (!$subject->_coded && (($can->edit && ($subject->_class_name == "CConsultation")) || $can->read))}}
+  {{if $can->admin || $m == "dPpmsi" || (!$subject->_coded && $subject->_canRead)}}
   <tr>
     <td class="text">
       {{include file="../../dPsalleOp/templates/inc_manage_codes.tpl"}}
