@@ -8,6 +8,8 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
  */
 
+Prototype.Browser.IPad = (navigator.userAgent.match(/iPad/i) != null);
+
 // Javascript error logging
 function errorHandler(errorMsg, url, lineNumber, exception) {
   try {

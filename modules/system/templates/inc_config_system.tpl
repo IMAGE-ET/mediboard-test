@@ -27,11 +27,28 @@ Main.add(function(){
     {{mb_include module=system template=inc_config_str var=mb_id}}
     {{mb_include module=system template=inc_config_bool var=debug}}
     {{mb_include module=system template=inc_config_bool var=readonly}}
-    {{mb_include module=system template=inc_config_enum var=minify_javascript values="0|1|2"}}
 		
+    <tr>
+      <th colspan="2" class="title">
+        Compression des scripts et feuilles de style
+      </th>
+    </tr>
+    {{mb_include module=system template=inc_config_enum var=minify_javascript values="0|1|2"}}
+    {{mb_include module=system template=inc_config_enum var=minify_css values="0|1|2"}}
+		
+    <tr>
+      <th colspan="2" class="title">
+        Fusion des objets
+      </th>
+    </tr>
     {{mb_include module=system template=inc_config_bool var=alternative_mode}}
     {{mb_include module=system template=inc_config_bool var=merge_prevent_base_without_idex}}
     
+    <tr>
+      <th colspan="2" class="title">
+        Paramètres réseau
+      </th>
+    </tr>
     {{assign var="m" value="system"}}
     {{mb_include module=system template=inc_config_str var=reverse_proxy}}
     {{mb_include module=system template=inc_config_str var=website_url size=40}}
@@ -41,7 +58,6 @@ Main.add(function(){
         {{tr}}config-browser_compat{{/tr}}
       </th>
     </tr>
-    
     {{foreach from=$browser_compat key=_browser item=_versions}}
     <tr>
       <th>

@@ -22,6 +22,7 @@ $dPconfig["offline"]           = "0";      // Offline mode (redirect to offline.
 $dPconfig["instance_role"]     = "qualif"; // qualif|prod
 $dPconfig["mb_id"]             = "";       // Instance unique ID
 $dPconfig["minify_javascript"] = "0";      // 0 => no concatenation, 1 => concatenation, 2 => concatenation+minification
+$dPconfig["minify_css"]        = "0";      // 0 => no concatenation, 1 => concatenation, 2 => concatenation+minification
 $dPconfig["currency_symbol"]   = "&euro;"; // Currency symbol (HTML entities allowed)
 $dPconfig["hide_confidential"] = "0";      // Enable if you want to hide confidential fields
 $dPconfig["locale_warn"]       = "0";      // Warn when a translation is not found (for developers and translators)
@@ -35,7 +36,7 @@ $dPconfig["alternative_mode"]  = "0";      // Alternative fusion mode (keeps one
 $dPconfig["merge_prevent_base_without_idex"]  = "1"; // Prevent choosing a base without an external ID
 
 $dPconfig["browser_compat"]    = array(    // minimal browser versions
-  'firefox' => '2.0',
+  'firefox' => '3.0',
   'msie'    => '8.0',
   'opera'   => '9.6',
   'chrome'  => '5.0',

@@ -49,7 +49,7 @@ abstract class CJSLoader extends CHTMLResourceLoader {
       }
       
       $hash = md5(implode("", $files)."-level-$compress");
-      $cachefile = "./tmp/$hash.js";
+      $cachefile = "tmp/$hash.js";
       
       // If it exists, we check if it is up to date
       if (file_exists($cachefile)) {
@@ -80,11 +80,13 @@ abstract class CJSLoader extends CHTMLResourceLoader {
       foreach($excluded as $file) {
         $result .= self::loadFile($file, null, filemtime($file), $type)."\n";
       }
+			
       $result .= self::loadFile($cachefile, null, $last_update, $type)."\n";
     }
     else {
-      foreach(self::$files as $file)
-        $result .= self::loadFile($file, null, null, $type)."\n";
+      foreach(self::$files as $file) {
+        $result .= self::loadFile($file, null, filemtime($file), $type)."\n";
+      }
     }
     
     return $result;
@@ -150,6 +152,6 @@ abstract class CJSLoader extends CHTMLResourceLoader {
   }
   
   static function getLocaleFilePath($language, $label = null) {
-    return "./tmp/locales".($label ? ".$label" : "").".$language.js";
+    return "tmp/locales".($label ? ".$label" : "").".$language.js";
   }
 }
