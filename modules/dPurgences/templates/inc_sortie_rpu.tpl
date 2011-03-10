@@ -49,6 +49,7 @@
 
 <td>
   <button class="search notext" style="float: right;" onclick="ObjectTooltip.createEx(this, '{{$rpu->_guid}}');">
+    {{tr}}Info{{/tr}}
   </button>
 
   <!-- Vérification des champs semi obligatoires -->

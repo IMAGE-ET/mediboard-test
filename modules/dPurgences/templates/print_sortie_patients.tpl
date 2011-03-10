@@ -24,7 +24,9 @@
       {{mb_title class=CSejour field=_entree}} /
       {{mb_title class=CSejour field=_sortie}}
     </th>
+    {{if $conf.dPurgences.check_can_leave}}
     <th>{{mb_title class=CRPU field="_can_leave"}}</th>
+		{{/if}}
   </tr>
   {{foreach from=$listSejours item=sejour}}
       {{assign var=rpu value=$sejour->_ref_rpu}}
@@ -71,6 +73,10 @@
     </td>
     
     <td>
+		  <button class="search notext not-printable" style="float: right;" onclick="ObjectTooltip.createEx(this, '{{$rpu->_guid}}');">
+			  {{tr}}Info{{/tr}}
+		  </button>
+
       <!-- Vérification des champs semi obligatoires -->
       {{if !$rpu->ccmu           }}<div class="warning" style="display: block;">Champ manquant {{mb_label object=$rpu field=ccmu           }}</div>{{/if}}
       {{if !$rpu->gemsa          }}<div class="warning" style="display: block;">Champ manquant {{mb_label object=$rpu field=gemsa          }}</div>{{/if}}
@@ -129,34 +135,37 @@
 		  {{/if}}
     </td>
       
-      <td id="rpu-{{$rpu->_id}}" style="font-weight: bold" class="text {{if !$rpu->sortie_autorisee}}arretee{{/if}} {{$rpu->_can_leave_level}}">
-        {{if $sejour->sortie_reelle}}
-          {{if !$rpu->sortie_autorisee}}
-            {{tr}}CRPU-sortie_assuree.{{$rpu->sortie_autorisee}}{{/tr}}
-          {{/if}}
-        {{elseif $rpu->_can_leave == -1}}
-          {{if $sejour->type != "urg"}}
-            {{mb_value object=$sejour field=type}}<br />
-          {{elseif !$atu->_id}} 
-            Pas encore de prise en charge<br />
-          {{else}}
-            {{tr}}CConsultation{{/tr}} {{tr}}CConsultation.chrono.48{{/tr}} <br />
-          {{/if}}
-          {{tr}}CRPU-sortie_assuree.{{$rpu->sortie_autorisee}}{{/tr}}
-        {{elseif $rpu->_can_leave != -1 && !$rpu->sortie_autorisee}}
-          {{tr}}CConsultation{{/tr}} {{tr}}CConsultation.chrono.64{{/tr}} <br />
-          {{tr}}CRPU-sortie_assuree.0{{/tr}}
-        {{else}}
-          {{if $rpu->_can_leave_since}}
-            {{tr}}CRPU-_can_leave_since{{/tr}}
-          {{/if}}
-          {{if $rpu->_can_leave_about}}
-            {{tr}}CRPU-_can_leave_about{{/tr}}
-          {{/if}}
-          <span title="{{$sejour->sortie_prevue}}">{{mb_value object=$rpu field="_can_leave"}}</span><br />
+    {{if $conf.dPurgences.check_can_leave}}
+    <td id="rpu-{{$rpu->_id}}" style="font-weight: bold" class="text {{if !$rpu->sortie_autorisee}}arretee{{/if}} {{$rpu->_can_leave_level}}">
+      {{if $sejour->sortie_reelle}}
+        {{if !$rpu->sortie_autorisee}}
           {{tr}}CRPU-sortie_assuree.{{$rpu->sortie_autorisee}}{{/tr}}
         {{/if}}
-      </td>
+      {{elseif $rpu->_can_leave == -1}}
+        {{if $sejour->type != "urg"}}
+          {{mb_value object=$sejour field=type}}<br />
+        {{elseif !$atu->_id}} 
+          Pas encore de prise en charge<br />
+        {{else}}
+          {{tr}}CConsultation{{/tr}} {{tr}}CConsultation.chrono.48{{/tr}} <br />
+        {{/if}}
+        {{tr}}CRPU-sortie_assuree.{{$rpu->sortie_autorisee}}{{/tr}}
+      {{elseif $rpu->_can_leave != -1 && !$rpu->sortie_autorisee}}
+        {{tr}}CConsultation{{/tr}} {{tr}}CConsultation.chrono.64{{/tr}} <br />
+        {{tr}}CRPU-sortie_assuree.0{{/tr}}
+      {{else}}
+        {{if $rpu->_can_leave_since}}
+          {{tr}}CRPU-_can_leave_since{{/tr}}
+        {{/if}}
+        {{if $rpu->_can_leave_about}}
+          {{tr}}CRPU-_can_leave_about{{/tr}}
+        {{/if}}
+        <span title="{{$sejour->sortie_prevue}}">{{mb_value object=$rpu field="_can_leave"}}</span><br />
+        {{tr}}CRPU-sortie_assuree.{{$rpu->sortie_autorisee}}{{/tr}}
+      {{/if}}
+    </td>
+		{{/if}}
+		
     {{/if}}
       </tr>
   {{foreachelse}}
