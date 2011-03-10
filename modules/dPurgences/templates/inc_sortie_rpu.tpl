@@ -48,6 +48,9 @@
 </td>
 
 <td>
+  <button class="search notext" style="float: right;" onclick="ObjectTooltip.createEx(this, '{{$rpu->_guid}}');">
+  </button>
+
   <!-- Vérification des champs semi obligatoires -->
   {{if !$rpu->ccmu           }}<div class="warning">Champ manquant {{mb_label object=$rpu field=ccmu           }}</div>{{/if}}
 	
