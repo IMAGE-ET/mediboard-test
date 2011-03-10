@@ -13,6 +13,8 @@ CAppUI::requireSystemClass("mbFieldSpec");
 class CEnumSpec extends CMbFieldSpec {
   
   var $list = null;
+  var $vertical = null;
+	
   var $_list = null;
   var $_locales = null;
   
@@ -37,6 +39,7 @@ class CEnumSpec extends CMbFieldSpec {
     return parent::getOptions() + array(
       'list' => 'list',
       'typeEnum' => array('select', 'radio'),
+      'vertical' => 'bool',
     );
   }
   
@@ -129,7 +132,12 @@ class CEnumSpec extends CMbFieldSpec {
           if($separator != null && $modulo == 0 && $compteur < count($locales)){
             $sHtml  .= $separator;
           }
+ 
+          if ($this->vertical) {
+            $sHtml .= "<br />\n";
+          }
         }
+        
         return $sHtml;
     }
   }

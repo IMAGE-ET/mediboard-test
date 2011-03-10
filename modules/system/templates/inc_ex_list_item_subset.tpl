@@ -1,7 +1,54 @@
+<script type="text/javascript">
+toggleListItem = function(button, value, active) {
+  var form = getForm("editFieldSpec");
+  var item = form.down("input[name='list[]'][value='"+value+"']");
+  var row = button.up('tr');
+  
+  if (item && !active){
+    item.remove();
+    
+    row.addClassName('opacity-30');
+    row.down('button.add').show();
+    button.hide();
+  }
+  else if (active) {
+    if (!item) {
+      form.insert(DOM.input({
+        type: "hidden", 
+        name: "list[]", 
+        value: value, 
+        className: "internal"
+      }));
+    }
+    else {
+      item.disabled = false;
+    }
+    
+    row.removeClassName('opacity-30');
+    row.down('button.remove').show();
+    button.hide();
+  }
+  
+	$("save-to-take-effect").show();
+  updateFieldSpec();
+}
+</script>
+
+{{assign var=coded value=false}}
+
+{{if $list_owner instanceof CExList && $list_owner->coded == 1}}
+  {{assign var=coded value=true}}
+{{/if}}
+
+<div class="small-info" style="display: none;" id="save-to-take-effect">
+	<strong>Enregistrez</strong> pour que la modifiation prenne effet
+</div>
 
 <table class="main tbl">
+	<col class="narrow" />
+	
   <tr>
-    <th colspan="4" class="title">
+    <th colspan="3" class="title">
       {{tr}}CExList-back-list_items{{/tr}}
       
       <a class="button edit" href="?m=forms&amp;tab=view_ex_list&amp;object_guid={{$list_owner->_guid}}">
@@ -12,26 +59,46 @@
 	
   <tr>
     {{if $context instanceof CExClassField}}
-      <th class="narrow"></th>
+      <th></th>
     {{/if}}
-    <th class="narrow code">
-      {{mb_title class=CExListItem field=code}}
-    </th>
+		
+		{{if $coded}}
+	    <th class="narrow code">
+	      {{mb_title class=CExListItem field=code}}
+	    </th>
+		{{/if}}
+		
     <th>
       {{mb_title class=CExListItem field=name}}
     </th>
   </tr>
   
   {{foreach from=$list_owner->_back.list_items item=_item}}
-    <tr data-id="{{$_item->_id}}" data-name="{{$_item->name}}" data-code="{{$_item->code}}">
+	  {{assign var=active value=false}}
+		
+		{{if array_key_exists($_item->_id, $spec->_locales)}}
+	    {{assign var=active value=true}}
+		{{/if}}
+		
+    <tr data-id="{{$_item->_id}}" data-name="{{$_item->name}}" data-code="{{$_item->code}}" {{if !$active}}class="opacity-30"{{/if}}>
       {{if $context instanceof CExClassField}}
       <td>
-        <button class="trash notext" type="button" style="margin: -1px;" onclick="editListItem($(this).up('tr'))">
+        <button class="remove notext" type="button" style="margin: -1px; {{if !$active}}display: none;{{/if}}" 
+				        onclick="toggleListItem(this, {{$_item->_id}}, false);">
           {{tr}}Delete{{/tr}}
+        </button>
+				
+        <button class="add notext" type="button" style="margin: -1px; {{if $active}}display: none;{{/if}}" 
+				        onclick="toggleListItem(this, {{$_item->_id}}, true);">
+          {{tr}}Add{{/tr}}
         </button>
       </td>
       {{/if}}
-      <td class="code">{{mb_value object=$_item field=code}}</td>
+			
+      {{if $coded}}
+        <td class="code">{{mb_value object=$_item field=code}}</td>
+			{{/if}}
+			
       <td>{{mb_value object=$_item field=name}}</td>
     </tr>
   {{foreachelse}}

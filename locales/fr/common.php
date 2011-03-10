@@ -55,6 +55,7 @@ $locales['CMbFieldSpec.sameAs'] = 'Egal à';
 $locales['CMbFieldSpec.seekable'] = 'Recherchable';
 $locales['CMbFieldSpec.show'] = 'Afficher';
 $locales['CMbFieldSpec.siret'] = 'Siret';
+$locales['CMbFieldSpec.vertical'] = 'Vertical';
 $locales['CMbFieldSpec.type.birthDate'] = 'Date de naissance';
 $locales['CMbFieldSpec.type.bool'] = 'Booléen (oui/non)';
 $locales['CMbFieldSpec.type.code'] = 'Code';

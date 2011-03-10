@@ -43,8 +43,9 @@ if ($spec_type) {
 
 function order_specs($a, $b) {
 	$options_order = array(
-	  "notNull",
 	  "list",
+	  "notNull",
+	  "vertical",
 	  "typeEnum",
 	  "length",
 	  "maxLength",

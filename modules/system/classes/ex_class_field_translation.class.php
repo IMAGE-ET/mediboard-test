@@ -41,7 +41,7 @@ class CExClassFieldTranslation extends CMbObject {
   function getKey(){
     $field = $this->loadRefExClassField();
     $class = $field->loadRefExClass();
-    return "CExObject_{$class->host_class}_{$class->event}_{$class->_id}-{$field->name}";
+    return "CExObject_{$class->_id}-{$field->name}";
   }
   
   function updateFormFields(){

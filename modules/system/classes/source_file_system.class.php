@@ -26,7 +26,7 @@ class CSourceFileSystem extends CExchangeSource {
   function updateFormFields() {
     parent::updateFormFields();
     
-    $this->_path = $this->host;
+		$this->_view = $this->host;
   }
   
   function init() {
@@ -37,26 +37,30 @@ class CSourceFileSystem extends CExchangeSource {
     if (!is_dir($this->host)) {
       throw new CMbException("CSourceFileSystem-host-not-a-dir", $this->host);
     }
-    
-    if (!is_dir($this->_path)) {
-      throw new CMbException("CSourceFileSystem-path-not-found", $this->_path);
-    }
-    
-    if (!is_readable($this->_path)) {
-      throw new CMbException("CSourceFileSystem-path-not-readable", $this->_path);
-    }
   }
   
   function receive() {
     $this->init();
     
-    $this->_path = "$this->host/$this->_path";
+    $path = $this->getFullPath($this->_path);
+
+    if (!is_dir($path)) {
+      throw new CMbException("CSourceFileSystem-path-not-found", $path);
+    }
     
-    return $this->_files = CMbPath::getFiles($this->_path);
+    if (!is_readable($path)) {
+      throw new CMbException("CSourceFileSystem-path-not-readable", $path);
+    }
+    
+    return $this->_files = CMbPath::getFiles($path);
   }
   
   function getData($path) {
     return file_get_contents($path);
+  }
+	
+  private function getFullPath($path = ""){
+    return $this->host.DIRECTORY_SEPARATOR.$path;
   }
 }
 ?>

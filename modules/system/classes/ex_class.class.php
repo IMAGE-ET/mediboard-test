@@ -57,7 +57,7 @@ class CExClass extends CMbObject {
     $locales[$this->getExClassName()] = $this->_view;
     
     // pas encore obligé d'utiliser l'eval, mais je pense que ca sera le plus simple
-    /*$class_name = "CExObject_{$this->host_class}_{$this->event}_{$this->_id}";
+    /*$class_name = "CExObject_{$this->_id}";
     
     if (!class_exists($class_name)) {
       $table_name = $this->getTableName();
@@ -77,7 +77,7 @@ class CExClass extends CMbObject {
   }
 	
 	function getExClassName(){
-		return "CExObject_{$this->host_class}_{$this->event}_{$this->_id}";
+		return "CExObject_{$this->_id}";
 	}
   
   function updateFormFields(){
@@ -110,7 +110,7 @@ class CExClass extends CMbObject {
   
   function getTableName(){
     $this->completeField("host_class", "event");
-    return strtolower("ex_{$this->host_class}_{$this->event}_{$this->_id}");
+    return strtolower("ex_object_{$this->_id}");
   }
   
   function checkConstraints(CMbObject $object){

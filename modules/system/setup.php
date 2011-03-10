@@ -514,7 +514,29 @@ class CSetupsystem extends CSetup {
                 `type_echange` VARCHAR (255)
               ) /*! ENGINE=MyISAM */;";
     $this->addQuery($query);
+		
+    $this->makeRevision("1.0.51");
+    function update_ex_object_tables(){
+      $ds = CSQLDataSource::get("std");
+			
+      if ($ds) {
+      	$ex_classes = $ds->loadList("SELECT * FROM ex_class");
+				foreach($ex_classes as $_ex_class) {
+					$_ex_class['host_class'] = strtolower($_ex_class['host_class']);
+					
+					$old_name = "ex_{$_ex_class['host_class']}_{$_ex_class['event']}_{$_ex_class['ex_class_id']}";
+					$new_name = "ex_object_{$_ex_class['ex_class_id']}";
+					
+					$query = "RENAME TABLE `$old_name` TO `$new_name`";
+					$ds->query($query);
+				}
+      }
+			
+      return true;
+    }
+		
+    $this->addFunction("update_ex_object_tables");
     
-    $this->mod_version = "1.0.51";
+    $this->mod_version = "1.0.52";
   }
 }

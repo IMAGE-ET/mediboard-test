@@ -92,15 +92,16 @@ class CSourceFTP extends CExchangeSource {
     }
     
     $files = array();
-    $this->_path = "$ftp->fileprefix/$this->_path";
+    $path = "$ftp->fileprefix/$this->_path";
+		
     try {
-      $files = $ftp->getListFiles($this->_path);
+      $files = $ftp->getListFiles($path);
     } catch (CMbException $e) {
       CAppUI::stepAjax($e->getMessage(), UI_MSG_WARNING); 
     }
     
     if (empty($files)) {
-      throw new CMbException("Le répertoire '$this->_path' ne contient aucun fichier");
+      throw new CMbException("Le répertoire '$path' ne contient aucun fichier");
     }
     
     $ftp->close();

@@ -218,6 +218,10 @@ a.button {
   height: 16px;
 }
 
+table.tbl th a.button {
+  color: #000;
+}
+
 button.notext, 
 a.button.notext {
   font-size: 0;

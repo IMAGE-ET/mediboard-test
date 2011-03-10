@@ -41,7 +41,7 @@ class CExClassFieldEnumTranslation extends CMbObject {
 		$key = "CExObject";
 		
 		if ($class->_id) {
-			$key .= "_{$class->host_class}_{$class->event}_{$class->_id}";
+			$key .= "_{$class->_id}";
 		}
 		
     return "$key.{$field->name}.{$this->key}";

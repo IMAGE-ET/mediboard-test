@@ -20,12 +20,6 @@ updateFieldSpec = function(){
   var fields = {};
   var str = "{{$spec->getSpecType()}}";
   
-  /*var translations = data["__enum[]"];
-  if (translations) {
-    translations.pop(); // pour supprimer l'element vide
-    delete data["__enum[]"];
-  }*/
-  
   Object.keys(data).each(function(k){
     var d = data[k];
     
@@ -86,6 +80,7 @@ updateInternalNameEnum = function(e) {
 
 Main.add(function(){
   var form = getForm("editFieldSpec");
+	
   form.select("input.nospace").invoke("observe", "keypress", avoidSpaces);
   form.select("input, select").invoke("observe", "change", updateFieldSpec);
 	
@@ -102,7 +97,7 @@ Main.add(function(){
     <th class="title" colspan="2">Paramètres</th>
   </tr>
   
-	{{assign var=advanced_controls_limit value=3}}
+	{{assign var=advanced_controls_limit value=4}}
 	
   {{foreach from=$options item=_type key=_name name=specs}}
 	  {{if $smarty.foreach.specs.index == $advanced_controls_limit}}

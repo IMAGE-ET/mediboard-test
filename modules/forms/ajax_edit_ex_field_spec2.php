@@ -42,6 +42,40 @@ if ($spec_type) {
 $spec = CExConcept::getConceptSpec($prop);
 $options = $spec->_options;
 
+function order_specs($a, $b) {
+  $options_order = array(
+    "list",
+    "notNull",
+    "vertical",
+    "typeEnum",
+    "length",
+    "maxLength",
+    "minLength",
+    "min",
+    "max",
+    "pos",
+    "progressive",
+    
+    "ccam",
+    "cim10",
+    "adeli",
+    "insee",
+    "rib",
+    "siret",
+    "order_number",
+    
+    "class",
+    "cascade",
+  );
+  
+  $key_a = array_search($a, $options_order);
+  $key_b = array_search($b, $options_order);
+  
+  return ($key_a === false ? 1000 : $key_a) - ($key_b === false ? 1000 : $key_b);
+}
+
+uksort($options, "order_specs");
+
 if ($spec instanceof CEnumSpec) {
 	unset($spec->_locales[""]);
 	if (reset($spec->_list) === "") {
