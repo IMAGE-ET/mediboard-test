@@ -20,6 +20,12 @@
           <span style="float: right; border-right: 1em solid #{{$tag->color}};" title="{{$tag}}">&nbsp;</span>
         {{/if}}
 				
+				{{foreach from=$_object->_ref_tag_items item=_tag_item}}
+				  {{if $_tag_item->_ref_tag->color}}
+          <span style="float: right; border-right: 0.8em solid #{{$_tag_item->_ref_tag->color}}; margin-left: -3px;" title="{{$_tag_item->_ref_tag}}">&nbsp;</span>
+					{{/if}}
+				{{/foreach}}
+				
 				<a href="#edit.{{$_object->_guid}}" onclick="MbObject.edit(this)" data-object_guid="{{$_object->_guid}}">
 	        <span onmouseover="ObjectTooltip.createEx(this, '{{$_object->_guid}}');">
 					  {{$_object}}

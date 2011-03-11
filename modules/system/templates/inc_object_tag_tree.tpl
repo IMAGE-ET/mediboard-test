@@ -22,9 +22,9 @@
           &mdash;
           <label>
             Nom
-            <input type="text" name="object_name" size="8" />
+            <input type="text" name="object_name" size="8" onkeyup="Tag.filterObject(this)" />
           </label>
-          <button class="cancel notext" type="button" onclick="$V(this.form.object_name, '')">
+          <button class="cancel notext" type="button" onclick="Tag.cancelFilterObject(this.form.object_name)">
             {{tr}}Cancel{{/tr}}
           </button>
         </form>
@@ -72,4 +72,7 @@
       </tr>
     </tbody>
   </table>
+	
+	<table class="object-list main tbl" style="display: none;">
+	</table>
 {{/if}}

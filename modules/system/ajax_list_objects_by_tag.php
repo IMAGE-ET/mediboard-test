@@ -25,7 +25,27 @@ $tag = new CTag;
 }
 
 else {*/
-	if (strpos($tag_id, "none") === 0) {
+  if (strpos($tag_id, "all") === 0) {
+    $parts = explode("-", $tag_id);
+    $object_class = $parts[1];
+    
+		/**
+		 * @var CMbObject
+		 */
+    $object = new $object_class;
+    
+    if (!$keywords) {
+      $keywords = "%";
+    }
+    
+    $objects = $object->seek($keywords, null, 10000, true);
+		foreach($objects as $_object)  {
+			$_object->loadRefsTagItems();
+		}
+		
+    $count_children = $object->_totalSeek;
+  }
+	elseif (strpos($tag_id, "none") === 0) {
 		$parts = explode("-", $tag_id);
 		$object_class = $parts[1];
 		

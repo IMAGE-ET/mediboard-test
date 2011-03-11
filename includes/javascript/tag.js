@@ -138,9 +138,9 @@ var Tag = {
     .requestUpdate("systemMsg", {method: "post", onComplete: onComplete || function(){} });
   },
   filter: function(input) {
-    var table = $(input).up('table.treegrid');
-    var tags = table.select("tbody[data-name]");
-    var lists = table.select("tbody.object-list");
+    var treegrid = $("tag-tree").down('table.treegrid');
+    var tags = treegrid.select("tbody[data-name]");
+    var lists = treegrid.select("tbody.object-list");
     
     tags.invoke("show").invoke("addClassName", "opened");
     lists.invoke("hide");
@@ -153,9 +153,60 @@ var Tag = {
       e.setVisible(visible);
     });
   },
+  filterObject: function(input) {
+    var treegrid = $("tag-tree").down('table.treegrid');
+    var list = $("tag-tree").down('table.object-list');
+		
+    var columns = treegrid.get("columns");
+    var object_class = treegrid.get("object_class");
+    
+    if (columns) {
+      columns = columns.split(",");
+    }
+		
+    var term = $V(input);
+    if (!term) {
+			treegrid.show();
+			list.hide();
+			return;
+		}
+		else {
+      treegrid.hide();
+      list.show();
+		}
+		
+    var url = new Url('system', 'ajax_list_objects_by_tag');
+    
+    if (columns && columns.length) {
+      url.addParam("col[]", columns, true);
+    }
+    
+    url.addParam("tag_id", "all-"+object_class);
+    url.addParam("keywords", term);
+    url.addParam("object_class", object_class);
+    
+    url.requestUpdate(list, {
+      onComplete: function(){
+        /*var tbody = row.next('tbody');
+        if (!tbody.hasClassName("object-list")) return;
+        
+        tbody.className += " "+row.className;
+        tbody.addClassName('tag-'+tagId);
+        tbody.setAttribute("data-parent_tag_id", tagId);
+        
+        var firstCells = tbody.select("td:first-of-type");
+        firstCells.invoke("setStyle", {paddingLeft: offset+"px"});*/
+      }
+    });
+  },
   cancelFilter: function(input) {
     $V(input, "");
     Tag.filter(input);
+    $(input).tryFocus();
+  },
+  cancelFilterObject: function(input) {
+    $V(input, "");
+    Tag.filterObject(input);
     $(input).tryFocus();
   }
 };
