@@ -74,8 +74,7 @@ class CRecordSante400 {
 		// Inject values into query
     foreach ($values as $_value) {
     	$_value = str_replace("'", "\\'", $_value);
-    	$max = 1;
-      $query = str_replace("?", "'$_value'", $query, $max);
+      $query = preg_replace("/\?/", "'$_value'", $query, 1);
     }
     
 		// Geshi rendering
@@ -103,8 +102,8 @@ class CRecordSante400 {
     
     $records = array();
     try {
+      self::traceQuery($query, $values);
       self::connect();
-			self::traceQuery($query, $values);
 
       // Query execution
       $sth = self::$dbh->prepare($query);
@@ -141,8 +140,8 @@ class CRecordSante400 {
    */
   function query($query, $values = array()) {
     try {
-      self::connect();
       self::traceQuery($query, $values);
+      self::connect();
 
       // Query execution and fetching
       $sth = self::$dbh->prepare($query);
