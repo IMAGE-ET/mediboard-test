@@ -12,12 +12,6 @@
 
 
 <form name="DocumentAdd-{{$unique_id}}-{{$object->_guid}}" action="?m={{$m}}" method="post">
-
-
-<!-- Impression de tous les modèles disponibles pour l'objet -->
-<button type="button" class="print notext" style="float: right;" onclick="Document.printSelDocs('{{$object->_id}}', '{{$object_class}}');">
-  {{tr}}Print{{/tr}}
-</button>
 {{if $praticien->_can->edit}}
 
 <input type="text" value="&mdash; Modèle" name="keywords_modele" class="autocomplete str" autocomplete="off" onclick="this.value = ''; this.onclick=null;" style="width: 5em;" />
@@ -91,6 +85,11 @@ Main.add(function() {
 	{{else}}
   Modèles disponibles
   {{/if}}
+</button>
+
+<!-- Impression de tous les modèles disponibles pour l'objet -->
+<button type="button" class="print notext" onclick="Document.printSelDocs('{{$object->_id}}', '{{$object_class}}');">
+  {{tr}}Print{{/tr}}
 </button>
 
 <input type="hidden" name="_modele_id" value="" />
