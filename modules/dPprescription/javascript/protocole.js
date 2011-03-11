@@ -101,5 +101,44 @@ var Protocole = {
     submitFormAjax(oFormDelProtocole, 'systemMsg', { 
     	onComplete: function() { Protocole.viewPack(oFormDelProtocole.prescription_protocole_pack_id.value);  } 
     } );
-  }
+  },
+  importProtocole: function(form) {
+    var oForm = getForm(form);
+    var url = new Url("dPprescription", "ajax_vw_import_protocole");
+    var praticien_id = $V(oForm.praticien_id);
+    var function_id = $V(oForm.function_id);
+    var group_id = $V(oForm.group_id);
+    if (!praticien_id && !function_id && !group_id) {
+      alert("Veuillez choisir un praticien, cabinet ou établissement");
+      return;
+    }
+    url.addParam("praticien_id", $V(oForm.praticien_id));
+    url.addParam("function_id", $V(oForm.function_id));
+    url.addParam("group_id", $V(oForm.group_id));
+    url.popup(400, 150);
+  },
+  exportProtocole: function(prescription_id) {
+    var url = new Url("dPprescription", "ajax_export_protocole");
+    url.addParam("prescription_id", prescription_id);
+    url.addParam("suppressHeaders", 1);
+    url.popup();
+  },
+  exportProtocoles: function() {
+    var oForm = getForm("exportProtocoles");
+    if (!$V(oForm.praticien_id) && !$V(oForm.function_id) && !$V(oForm.group_id)) {
+      alert("Veuillez choisir un praticien, cabinet ou établissement");
+      return;
+    }
+    if (parseInt($V(oForm.lower_bound)) > parseInt($V(oForm.upper_bound))) {
+      alert("{{tr}}CPrescription.export_error_intervalle{{/tr}}");
+      return;
+    }
+    oForm.submit();
+  },
+  exportSchema: function() {
+    var url = new Url("dPprescription", "ajax_create_schema");
+    url.addParam("suppressHeaders", 1);
+    url.addParam("dialog", 1);
+    url.popup();
+  }   
 }

@@ -60,6 +60,11 @@ Main.add( function(){
 	      <button type="button" class="submit" onclick="this.form.submit();">
 	        Créer un protocole
 	      </button>
+        {{if $can->admin}}
+          <button type="button" class="new" type="button" onclick="Protocole.importProtocole('selPrat');">
+          {{tr}}CPrescription.import_protocole{{/tr}}
+          </button>
+        {{/if}}
 	    </form>
 	    <div id="protocoles"></div>
 		 </td>

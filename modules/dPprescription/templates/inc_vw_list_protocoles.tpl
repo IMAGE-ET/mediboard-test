@@ -61,6 +61,9 @@ Main.add(function(){
 	        <input type="hidden" name="del" value="1" />
 	        <input type="hidden" name="prescription_id" value="{{$protocole->_id}}" />
 	        <input type="hidden" name="callback" value="Prescription.reloadDelProt" />
+          {{if $can->admin}}
+            <button class="tick notext" type="button" onclick="Protocole.exportProtocole('{{$protocole->_id}}')">{{tr}}CPrescription.export_protocole{{/tr}}</button>
+          {{/if}}
 	        <button class="print notext" type="button" onclick="Prescription.printPrescription('{{$protocole->_id}}', 1)">{{tr}}Print{{/tr}}</button>
           {{if $owner != "prat" || $app->user_id == $praticien_id || !$is_praticien}}
 	          <button class="trash notext" type="button" onclick="if (confirm('{{tr}}CProtocole-confirm-deletion{{/tr}}{{$protocole->libelle|smarty:nodefaults|JSAttribute}}?'))Protocole.remove(this.form)">Supprimer</button>

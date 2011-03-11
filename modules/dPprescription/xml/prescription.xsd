@@ -1,0 +1,965 @@
+<?xml version="1.0"?>
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <!--Types de base permettant des valeurs vides-->
+  <xsd:simpleType name="MBdate">
+    <xsd:restriction base="xsd:string">
+      <xsd:pattern value="([0-9]{4}-[0-9]{2}-[0-9]{2})?"/>
+    </xsd:restriction>
+  </xsd:simpleType>
+  <xsd:simpleType name="MBdateTime">
+    <xsd:restriction base="xsd:string">
+      <xsd:pattern value="([0-9]{4}-[0-9]{2}-[0-9]{2} [0-9]{2}:[0-9]{2}:[0-9]{2})?"/>
+    </xsd:restriction>
+  </xsd:simpleType>
+  <xsd:simpleType name="MBtime">
+    <xsd:restriction base="xsd:string">
+      <xsd:pattern value="([0-9]{2}:[0-9]{2}:[0-9]{2})?"/>
+    </xsd:restriction>
+  </xsd:simpleType>
+  <xsd:simpleType name="MBbool">
+    <xsd:restriction base="xsd:string">
+      <xsd:pattern value="[01]?"/>
+    </xsd:restriction>
+  </xsd:simpleType>
+  <xsd:simpleType name="MBfloat">
+    <xsd:restriction base="xsd:string">
+      <xsd:pattern value="(-?[0-9]+(\.[0-9]+)?)?"/>
+    </xsd:restriction>
+  </xsd:simpleType>
+  <xsd:simpleType name="MBint">
+    <xsd:restriction base="xsd:string">
+      <xsd:pattern value="(-?[0-9]+)?"/>
+    </xsd:restriction>
+  </xsd:simpleType>
+  <!--Type CMbObjectType de la classe CMbObject-->
+  <xsd:complexType name="CMbObjectType">
+    <xsd:attribute name="id" type="xsd:ID"/>
+  </xsd:complexType>
+  <!--Classe CMbObject parente de toutes les classes exportées-->
+  <xsd:element name="CMbObject" type="CMbObjectType" abstract="true"/>
+  <!--==== Ligne ====-->
+  <xsd:element name="CPrescriptionLineMix" substitutionGroup="CMbObject">
+    <xsd:complexType>
+      <xsd:complexContent>
+        <xsd:extension base="CMbObjectType">
+          <xsd:all>
+            <!--Type-->
+            <xsd:element name="type" minOccurs="0">
+              <xsd:simpleType>
+                <xsd:restriction base="xsd:string">
+                  <!--Classique-->
+                  <xsd:enumeration value="classique"/>
+                  <!--Seringue électrique-->
+                  <xsd:enumeration value="seringue"/>
+                  <!--PCA-->
+                  <xsd:enumeration value="PCA"/>
+                  <!--Masque-->
+                  <xsd:enumeration value="masque"/>
+                  <!--Lunettes-->
+                  <xsd:enumeration value="lunettes"/>
+                  <!--Sonde-->
+                  <xsd:enumeration value="sonde"/>
+                  <!--Nébuliseur ultrasonique-->
+                  <xsd:enumeration value="nebuliseur_ultrasonique"/>
+                  <!--Nébuliseur pneumatique-->
+                  <xsd:enumeration value="nebuliseur_pneumatique"/>
+                  <!--Doseurs-->
+                  <xsd:enumeration value="doseur"/>
+                  <!--Inhalateur à poudre sèche-->
+                  <xsd:enumeration value="inhalateur"/>
+                  <!-- -->
+                  <xsd:enumeration value=""/>
+                </xsd:restriction>
+              </xsd:simpleType>
+            </xsd:element>
+            <!--Libelle-->
+            <xsd:element name="libelle" type="xsd:string" minOccurs="0"/>
+            <!--Voie-->
+            <xsd:element name="voie" type="xsd:string" minOccurs="0"/>
+            <!--Interface-->
+            <xsd:element name="interface" type="xsd:string" minOccurs="0"/>
+            <!--Début-->
+            <xsd:element name="date_debut" type="MBdate" minOccurs="0"/>
+            <!--Heure-->
+            <xsd:element name="time_debut" type="MBtime" minOccurs="0"/>
+            <!--Durée totale-->
+            <xsd:element name="duree" type="MBint" minOccurs="0"/>
+            <!--Unité de durée-->
+            <xsd:element name="unite_duree" minOccurs="0">
+              <xsd:simpleType>
+                <xsd:restriction base="xsd:string">
+                  <!--heures-->
+                  <xsd:enumeration value="heure"/>
+                  <!--jours-->
+                  <xsd:enumeration value="jour"/>
+                  <!--^CPrescriptionLineMix.unite_duree.^-->
+                  <xsd:enumeration value=""/>
+                </xsd:restriction>
+              </xsd:simpleType>
+            </xsd:element>
+            <!--Signature praticien-->
+            <xsd:element name="signature_prat" type="MBbool" minOccurs="0"/>
+            <!--Signture pharmacien-->
+            <xsd:element name="signature_pharma" type="MBbool" minOccurs="0"/>
+            <!--Validation infirmière-->
+            <xsd:element name="validation_infir" type="MBbool" minOccurs="0"/>
+            <!--Date de l'arret-->
+            <xsd:element name="date_arret" type="MBdate" minOccurs="0"/>
+            <!--Heure de l'arret-->
+            <xsd:element name="time_arret" type="MBtime" minOccurs="0"/>
+            <!--En accord avec le praticien-->
+            <xsd:element name="accord_praticien" type="MBbool" minOccurs="0"/>
+            <!--Décalage intervention-->
+            <xsd:element name="decalage_interv" type="MBint" minOccurs="0"/>
+            <!--Commentaire-->
+            <xsd:element name="commentaire" type="xsd:string" minOccurs="0"/>
+            <!--Type de ligne-->
+            <xsd:element name="type_line">
+              <xsd:simpleType>
+                <xsd:restriction base="xsd:string">
+                  <!--Perfusion-->
+                  <xsd:enumeration value="perfusion"/>
+                  <!--Aerosol-->
+                  <xsd:enumeration value="aerosol"/>
+                  <!--Oxygène-->
+                  <xsd:enumeration value="oxygene"/>
+                  <!--Alimentation-->
+                  <xsd:enumeration value="alimentation"/>
+                </xsd:restriction>
+              </xsd:simpleType>
+            </xsd:element>
+            <!--Pose-->
+            <xsd:element name="date_pose" type="MBdate" minOccurs="0"/>
+            <!--Heure de pose-->
+            <xsd:element name="time_pose" type="MBtime" minOccurs="0"/>
+            <!--Retrait-->
+            <xsd:element name="date_retrait" type="MBdate" minOccurs="0"/>
+            <!--Heure de retrait-->
+            <xsd:element name="time_retrait" type="MBtime" minOccurs="0"/>
+            <!--Emplacement-->
+            <xsd:element name="emplacement">
+              <xsd:simpleType>
+                <xsd:restriction base="xsd:string">
+                  <!--Service-->
+                  <xsd:enumeration value="service"/>
+                  <!--Bloc-->
+                  <xsd:enumeration value="bloc"/>
+                  <!--Bloc et Service-->
+                  <xsd:enumeration value="service_bloc"/>
+                </xsd:restriction>
+              </xsd:simpleType>
+            </xsd:element>
+            <!--Toutes les-->
+            <xsd:element name="nb_tous_les" type="MBint" minOccurs="0"/>
+            <!--Quantité totale-->
+            <xsd:element name="quantite_totale" type="MBint" minOccurs="0"/>
+            <!--Durée de passage-->
+            <xsd:element name="duree_passage" type="MBint" minOccurs="0"/>
+            <!--Unité de durée de passage-->
+            <xsd:element name="unite_duree_passage" minOccurs="0">
+              <xsd:simpleType>
+                <xsd:restriction base="xsd:string">
+                  <!--minutes-->
+                  <xsd:enumeration value="minute"/>
+                  <!--heures-->
+                  <xsd:enumeration value="heure"/>
+                  <!--^CPrescriptionLineMix.unite_duree_passage.^-->
+                  <xsd:enumeration value=""/>
+                </xsd:restriction>
+              </xsd:simpleType>
+            </xsd:element>
+            <!--Mode-->
+            <xsd:element name="mode_bolus" minOccurs="0">
+              <xsd:simpleType>
+                <xsd:restriction base="xsd:string">
+                  <!--Sans bolus-->
+                  <xsd:enumeration value="sans_bolus"/>
+                  <!--Seulement bolus-->
+                  <xsd:enumeration value="bolus"/>
+                  <!--Perfusion + Bolus-->
+                  <xsd:enumeration value="perfusion_bolus"/>
+                  <!--Aucun-->
+                  <xsd:enumeration value=""/>
+                </xsd:restriction>
+              </xsd:simpleType>
+            </xsd:element>
+            <!--Dose bolus-->
+            <xsd:element name="dose_bolus" type="MBfloat" minOccurs="0"/>
+            <!--Période interdite-->
+            <xsd:element name="periode_interdite" type="MBint" minOccurs="0"/>
+            <!--Substitut-->
+            <xsd:element name="substitute_for_class" minOccurs="0">
+              <xsd:simpleType>
+                <xsd:restriction base="xsd:string">
+                  <!--Ligne de prescription-->
+                  <xsd:enumeration value="CPrescriptionLineMedicament"/>
+                  <!--Ligne-->
+                  <xsd:enumeration value="CPrescriptionLineMix"/>
+                  <!--Aucun substitut-->
+                  <xsd:enumeration value=""/>
+                </xsd:restriction>
+              </xsd:simpleType>
+            </xsd:element>
+            <!--Active-->
+            <xsd:element name="substitution_active" type="MBbool" minOccurs="0"/>
+            <!--Substitution possible dans le plan de soin-->
+            <xsd:element name="substitution_plan_soin" type="MBbool" minOccurs="0"/>
+            <!--Cond.-->
+            <xsd:element name="conditionnel" type="MBbool" minOccurs="0"/>
+            <!--Condition active-->
+            <xsd:element name="condition_active" type="MBbool" minOccurs="0"/>
+            <!--Jour de décalage-->
+            <xsd:element name="jour_decalage" minOccurs="0">
+              <xsd:simpleType>
+                <xsd:restriction base="xsd:string">
+                  <!--I-->
+                  <xsd:enumeration value="I"/>
+                  <!--M-->
+                  <xsd:enumeration value="N"/>
+                  <!--^CPrescriptionLineMix.jour_decalage.^-->
+                  <xsd:enumeration value=""/>
+                </xsd:restriction>
+              </xsd:simpleType>
+            </xsd:element>
+            <!--Per-op-->
+            <xsd:element name="perop" type="MBbool" minOccurs="0"/>
+            <!--Volume-->
+            <xsd:element name="volume_debit" type="MBfloat" minOccurs="0"/>
+            <!--Durée-->
+            <xsd:element name="duree_debit" type="MBint" minOccurs="0"/>
+          </xsd:all>
+          <!--Ligne-->
+          <xsd:attribute name="prescription_line_mix_id" type="xsd:string"/>
+          <!--Prescription-->
+          <xsd:attribute name="prescription_id" type="xsd:string" use="optional"/>
+          <!--Ligne suivante-->
+          <xsd:attribute name="next_line_id" type="xsd:string" use="optional"/>
+          <!--Praticien-->
+          <xsd:attribute name="praticien_id" type="xsd:string" use="optional"/>
+          <!--Créateur-->
+          <xsd:attribute name="creator_id" type="xsd:string" use="optional"/>
+          <!--Opération-->
+          <xsd:attribute name="operation_id" type="xsd:string" use="optional"/>
+          <!--Substitut-->
+          <xsd:attribute name="substitute_for_id" type="xsd:string" use="optional"/>
+        </xsd:extension>
+      </xsd:complexContent>
+    </xsd:complexType>
+  </xsd:element>
+  <!--==== Element de ligne ====-->
+  <xsd:element name="CPrescriptionLineMixItem" substitutionGroup="CMbObject">
+    <xsd:complexType>
+      <xsd:complexContent>
+        <xsd:extension base="CMbObjectType">
+          <xsd:all>
+            <!--Code cip-->
+            <xsd:element name="code_cip" type="MBint"/>
+            <!--Code ucd-->
+            <xsd:element name="code_ucd" type="MBint" minOccurs="0"/>
+            <!--Code cis-->
+            <xsd:element name="code_cis" type="MBint" minOccurs="0"/>
+            <!--Quantité-->
+            <xsd:element name="quantite" type="MBfloat" minOccurs="0"/>
+            <!--Unité-->
+            <xsd:element name="unite" type="xsd:string" minOccurs="0"/>
+            <!--Solvant-->
+            <xsd:element name="solvant" type="MBbool" minOccurs="0"/>
+            <!--^CPrescriptionLineMixItem-stupefiant^-->
+            <xsd:element name="stupefiant" type="MBbool" minOccurs="0"/>
+          </xsd:all>
+          <!--Identifiant-->
+          <xsd:attribute name="prescription_line_mix_item_id" type="xsd:string"/>
+          <!--Perfusion-->
+          <xsd:attribute name="prescription_line_mix_id" type="xsd:string"/>
+        </xsd:extension>
+      </xsd:complexContent>
+    </xsd:complexType>
+  </xsd:element>
+  <!--==== Variation ====-->
+  <xsd:element name="CPrescriptionLineMixVariation" substitutionGroup="CMbObject">
+    <xsd:complexType>
+      <xsd:complexContent>
+        <xsd:extension base="CMbObjectType">
+          <xsd:all>
+            <!--Débit-->
+            <xsd:element name="debit" type="MBint"/>
+            <!--Date-->
+            <xsd:element name="dateTime" type="MBdateTime"/>
+          </xsd:all>
+          <!--Identifiant-->
+          <xsd:attribute name="prescription_line_mix_variation_id" type="xsd:string"/>
+          <!--Ligne-->
+          <xsd:attribute name="prescription_line_mix_id" type="xsd:string"/>
+        </xsd:extension>
+      </xsd:complexContent>
+    </xsd:complexType>
+  </xsd:element>
+  <!--==== Commentaire de ligne de prescription ====-->
+  <xsd:element name="CPrescriptionLineComment" substitutionGroup="CMbObject">
+    <xsd:complexType>
+      <xsd:complexContent>
+        <xsd:extension base="CMbObjectType">
+          <xsd:all>
+            <!--ALD-->
+            <xsd:element name="ald" type="MBbool" minOccurs="0"/>
+            <!--Signée-->
+            <xsd:element name="signee" type="MBbool" minOccurs="0"/>
+            <!--Début-->
+            <xsd:element name="debut" type="MBdate" minOccurs="0"/>
+            <!--Heure début-->
+            <xsd:element name="time_debut" type="MBtime" minOccurs="0"/>
+            <!--Durée-->
+            <xsd:element name="duree" type="MBint" minOccurs="0"/>
+            <!--Unité-->
+            <xsd:element name="unite_duree" minOccurs="0">
+              <xsd:simpleType>
+                <xsd:restriction base="xsd:string">
+                  <!--minute(s)-->
+                  <xsd:enumeration value="minute"/>
+                  <!--heure(s)-->
+                  <xsd:enumeration value="heure"/>
+                  <!--demi-journée(s)-->
+                  <xsd:enumeration value="demi_journee"/>
+                  <!--jour(s)-->
+                  <xsd:enumeration value="jour"/>
+                  <!--semaine(s)-->
+                  <xsd:enumeration value="semaine"/>
+                  <!--quinzaine(s)-->
+                  <xsd:enumeration value="quinzaine"/>
+                  <!--mois-->
+                  <xsd:enumeration value="mois"/>
+                  <!--trmiestre(s)-->
+                  <xsd:enumeration value="trimestre"/>
+                  <!--semestre(s)-->
+                  <xsd:enumeration value="semestre"/>
+                  <!--an(s)-->
+                  <xsd:enumeration value="an"/>
+                  <!--Indéterminé-->
+                  <xsd:enumeration value=""/>
+                </xsd:restriction>
+              </xsd:simpleType>
+            </xsd:element>
+            <!--date arrêt-->
+            <xsd:element name="date_arret" type="MBdate" minOccurs="0"/>
+            <!--heure arrêt-->
+            <xsd:element name="time_arret" type="MBtime" minOccurs="0"/>
+            <!--^CPrescriptionLineComment-decalage_line^-->
+            <xsd:element name="decalage_line" type="MBint" minOccurs="0"/>
+            <!--^CPrescriptionLineComment-jour_decalage^-->
+            <xsd:element name="jour_decalage" minOccurs="0">
+              <xsd:simpleType>
+                <xsd:restriction base="xsd:string">
+                  <!--E-->
+                  <xsd:enumeration value="E"/>
+                  <!--I-->
+                  <xsd:enumeration value="I"/>
+                  <!--S-->
+                  <xsd:enumeration value="S"/>
+                  <!--N-->
+                  <xsd:enumeration value="N"/>
+                  <!--^CPrescriptionLineComment.jour_decalage.^-->
+                  <xsd:enumeration value=""/>
+                </xsd:restriction>
+              </xsd:simpleType>
+            </xsd:element>
+            <!--^CPrescriptionLineComment-valide_infirmiere^-->
+            <xsd:element name="valide_infirmiere" type="MBbool" minOccurs="0"/>
+            <!--^CPrescriptionLineComment-fin^-->
+            <xsd:element name="fin" type="MBdate" minOccurs="0"/>
+            <!--^CPrescriptionLineComment-jour_decalage_fin^-->
+            <xsd:element name="jour_decalage_fin" minOccurs="0">
+              <xsd:simpleType>
+                <xsd:restriction base="xsd:string">
+                  <!--I-->
+                  <xsd:enumeration value="I"/>
+                  <!--S-->
+                  <xsd:enumeration value="S"/>
+                  <!--^CPrescriptionLineComment.jour_decalage_fin.^-->
+                  <xsd:enumeration value=""/>
+                </xsd:restriction>
+              </xsd:simpleType>
+            </xsd:element>
+            <!--^CPrescriptionLineComment-decalage_line_fin^-->
+            <xsd:element name="decalage_line_fin" type="MBint" minOccurs="0"/>
+            <!--^CPrescriptionLineComment-time_fin^-->
+            <xsd:element name="time_fin" type="MBtime" minOccurs="0"/>
+            <!--^CPrescriptionLineComment-conditionnel^-->
+            <xsd:element name="conditionnel" type="MBbool" minOccurs="0"/>
+            <!--^CPrescriptionLineComment-condition_active^-->
+            <xsd:element name="condition_active" type="MBbool" minOccurs="0"/>
+            <!--^CPrescriptionLineComment-unite_decalage^-->
+            <xsd:element name="unite_decalage" minOccurs="0">
+              <xsd:simpleType>
+                <xsd:restriction base="xsd:string">
+                  <!--jour(s)-->
+                  <xsd:enumeration value="jour"/>
+                  <!--heure(s)-->
+                  <xsd:enumeration value="heure"/>
+                  <!--^CPrescriptionLineComment.unite_decalage.^-->
+                  <xsd:enumeration value=""/>
+                </xsd:restriction>
+              </xsd:simpleType>
+            </xsd:element>
+            <!--^CPrescriptionLineComment-unite_decalage_fin^-->
+            <xsd:element name="unite_decalage_fin" minOccurs="0">
+              <xsd:simpleType>
+                <xsd:restriction base="xsd:string">
+                  <!--jour(s)-->
+                  <xsd:enumeration value="jour"/>
+                  <!--heure(s)-->
+                  <xsd:enumeration value="heure"/>
+                  <!--^CPrescriptionLineComment.unite_decalage_fin.^-->
+                  <xsd:enumeration value=""/>
+                </xsd:restriction>
+              </xsd:simpleType>
+            </xsd:element>
+            <!--^CPrescriptionLineComment-emplacement^-->
+            <xsd:element name="emplacement">
+              <xsd:simpleType>
+                <xsd:restriction base="xsd:string">
+                  <!--Service-->
+                  <xsd:enumeration value="service"/>
+                  <!--Bloc-->
+                  <xsd:enumeration value="bloc"/>
+                  <!--Service - Bloc-->
+                  <xsd:enumeration value="service_bloc"/>
+                </xsd:restriction>
+              </xsd:simpleType>
+            </xsd:element>
+            <!--Commentaire-->
+            <xsd:element name="commentaire" type="xsd:string" minOccurs="0"/>
+            <!--^CPrescriptionLineComment-perop^-->
+            <xsd:element name="perop" type="MBbool" minOccurs="0"/>
+            <!--^CPrescriptionLineComment-inscription^-->
+            <xsd:element name="inscription" type="MBbool" minOccurs="0"/>
+          </xsd:all>
+          <!--Identifiant-->
+          <xsd:attribute name="prescription_line_comment_id" type="xsd:string"/>
+          <!--^CPrescriptionLineComment-category_prescription_id^-->
+          <xsd:attribute name="category_prescription_id" type="xsd:string" use="optional"/>
+          <!--^CPrescriptionLineComment-executant_prescription_line_id^-->
+          <xsd:attribute name="executant_prescription_line_id" type="xsd:string" use="optional"/>
+          <!--^CPrescriptionLineComment-user_executant_id^-->
+          <xsd:attribute name="user_executant_id" type="xsd:string" use="optional"/>
+          <!--Prescription-->
+          <xsd:attribute name="prescription_id" type="xsd:string"/>
+          <!--Praticien-->
+          <xsd:attribute name="praticien_id" type="xsd:string" use="optional"/>
+          <!--Créateur-->
+          <xsd:attribute name="creator_id" type="xsd:string"/>
+          <!--Ligne enfant-->
+          <xsd:attribute name="child_id" type="xsd:string" use="optional"/>
+          <!--^CPrescriptionLineComment-operation_id^-->
+          <xsd:attribute name="operation_id" type="xsd:string" use="optional"/>
+        </xsd:extension>
+      </xsd:complexContent>
+    </xsd:complexType>
+  </xsd:element>
+  <!--==== Ligne d'élément ====-->
+  <xsd:element name="CPrescriptionLineElement" substitutionGroup="CMbObject">
+    <xsd:complexType>
+      <xsd:complexContent>
+        <xsd:extension base="CMbObjectType">
+          <xsd:all>
+            <!--IDE à domicile-->
+            <xsd:element name="ide_domicile" type="MBbool" minOccurs="0"/>
+            <!--^CPrescriptionLineElement-cip_dm^-->
+            <xsd:element name="cip_dm" type="MBint" minOccurs="0"/>
+            <!--Quantité-->
+            <xsd:element name="quantite_dm" type="MBfloat" minOccurs="0"/>
+            <!--ALD-->
+            <xsd:element name="ald" type="MBbool" minOccurs="0"/>
+            <!--Signée-->
+            <xsd:element name="signee" type="MBbool" minOccurs="0"/>
+            <!--Début-->
+            <xsd:element name="debut" type="MBdate" minOccurs="0"/>
+            <!--Heure de début-->
+            <xsd:element name="time_debut" type="MBtime" minOccurs="0"/>
+            <!--Durée-->
+            <xsd:element name="duree" type="MBint" minOccurs="0"/>
+            <!--Unité de durée-->
+            <xsd:element name="unite_duree" minOccurs="0">
+              <xsd:simpleType>
+                <xsd:restriction base="xsd:string">
+                  <!--Minute(s)-->
+                  <xsd:enumeration value="minute"/>
+                  <!--Heure(s)-->
+                  <xsd:enumeration value="heure"/>
+                  <!--Demi-journée(s)-->
+                  <xsd:enumeration value="demi_journee"/>
+                  <!--Jour(s)-->
+                  <xsd:enumeration value="jour"/>
+                  <!--Semaine(s)-->
+                  <xsd:enumeration value="semaine"/>
+                  <!--Quinzaine(s)-->
+                  <xsd:enumeration value="quinzaine"/>
+                  <!--Mois-->
+                  <xsd:enumeration value="mois"/>
+                  <!--Trimestre(s)-->
+                  <xsd:enumeration value="trimestre"/>
+                  <!--Semestre(s)-->
+                  <xsd:enumeration value="semestre"/>
+                  <!--An(s)-->
+                  <xsd:enumeration value="an"/>
+                  <!--^CPrescriptionLineElement.unite_duree.^-->
+                  <xsd:enumeration value=""/>
+                </xsd:restriction>
+              </xsd:simpleType>
+            </xsd:element>
+            <!--Date d'arrêt-->
+            <xsd:element name="date_arret" type="MBdate" minOccurs="0"/>
+            <!--Heure d'arrêt-->
+            <xsd:element name="time_arret" type="MBtime" minOccurs="0"/>
+            <!--Décalage de la ligne-->
+            <xsd:element name="decalage_line" type="MBint" minOccurs="0"/>
+            <!--Jour de décalage-->
+            <xsd:element name="jour_decalage" minOccurs="0">
+              <xsd:simpleType>
+                <xsd:restriction base="xsd:string">
+                  <!--E-->
+                  <xsd:enumeration value="E"/>
+                  <!--I-->
+                  <xsd:enumeration value="I"/>
+                  <!--S-->
+                  <xsd:enumeration value="S"/>
+                  <!--M-->
+                  <xsd:enumeration value="N"/>
+                  <!--^CPrescriptionLineElement.jour_decalage.^-->
+                  <xsd:enumeration value=""/>
+                </xsd:restriction>
+              </xsd:simpleType>
+            </xsd:element>
+            <!--Validation infirmière-->
+            <xsd:element name="valide_infirmiere" type="MBbool" minOccurs="0"/>
+            <!--Fin-->
+            <xsd:element name="fin" type="MBdate" minOccurs="0"/>
+            <!--Jour de décalage de la fin-->
+            <xsd:element name="jour_decalage_fin" minOccurs="0">
+              <xsd:simpleType>
+                <xsd:restriction base="xsd:string">
+                  <!--I-->
+                  <xsd:enumeration value="I"/>
+                  <!--S-->
+                  <xsd:enumeration value="S"/>
+                  <!--^CPrescriptionLineElement.jour_decalage_fin.^-->
+                  <xsd:enumeration value=""/>
+                </xsd:restriction>
+              </xsd:simpleType>
+            </xsd:element>
+            <!--Décalage de la fin de la ligne-->
+            <xsd:element name="decalage_line_fin" type="MBint" minOccurs="0"/>
+            <!--Heure de fin-->
+            <xsd:element name="time_fin" type="MBtime" minOccurs="0"/>
+            <!--Cond.-->
+            <xsd:element name="conditionnel" type="MBbool" minOccurs="0"/>
+            <!--Active-->
+            <xsd:element name="condition_active" type="MBbool" minOccurs="0"/>
+            <!--Unité de décalage-->
+            <xsd:element name="unite_decalage" minOccurs="0">
+              <xsd:simpleType>
+                <xsd:restriction base="xsd:string">
+                  <!--jour(s)-->
+                  <xsd:enumeration value="jour"/>
+                  <!--heure(s)-->
+                  <xsd:enumeration value="heure"/>
+                  <!--Aucune-->
+                  <xsd:enumeration value=""/>
+                </xsd:restriction>
+              </xsd:simpleType>
+            </xsd:element>
+            <!--Unité de décalage fin-->
+            <xsd:element name="unite_decalage_fin" minOccurs="0">
+              <xsd:simpleType>
+                <xsd:restriction base="xsd:string">
+                  <!--jour(s)-->
+                  <xsd:enumeration value="jour"/>
+                  <!--heure(s)-->
+                  <xsd:enumeration value="heure"/>
+                  <!--Aucune-->
+                  <xsd:enumeration value=""/>
+                </xsd:restriction>
+              </xsd:simpleType>
+            </xsd:element>
+            <!--Emplacement-->
+            <xsd:element name="emplacement">
+              <xsd:simpleType>
+                <xsd:restriction base="xsd:string">
+                  <!--Service-->
+                  <xsd:enumeration value="service"/>
+                  <!--Bloc-->
+                  <xsd:enumeration value="bloc"/>
+                  <!--Bloc et Service-->
+                  <xsd:enumeration value="service_bloc"/>
+                </xsd:restriction>
+              </xsd:simpleType>
+            </xsd:element>
+            <!--Commentaire-->
+            <xsd:element name="commentaire" type="xsd:string" minOccurs="0"/>
+            <!--Per-op-->
+            <xsd:element name="perop" type="MBbool" minOccurs="0"/>
+            <!--^CPrescriptionLineElement-inscription^-->
+            <xsd:element name="inscription" type="MBbool" minOccurs="0"/>
+          </xsd:all>
+          <!--Identifiant-->
+          <xsd:attribute name="prescription_line_element_id" type="xsd:string"/>
+          <!--Element de prescription-->
+          <xsd:attribute name="element_prescription_id" type="xsd:string"/>
+          <!--Executant de la ligne-->
+          <xsd:attribute name="executant_prescription_line_id" type="xsd:string" use="optional"/>
+          <!--Executant-->
+          <xsd:attribute name="user_executant_id" type="xsd:string" use="optional"/>
+          <!--Prescription-->
+          <xsd:attribute name="prescription_id" type="xsd:string"/>
+          <!--Praticien-->
+          <xsd:attribute name="praticien_id" type="xsd:string" use="optional"/>
+          <!--Créateur-->
+          <xsd:attribute name="creator_id" type="xsd:string"/>
+          <!--^CPrescriptionLineElement-child_id^-->
+          <xsd:attribute name="child_id" type="xsd:string" use="optional"/>
+          <!--Intervention-->
+          <xsd:attribute name="operation_id" type="xsd:string" use="optional"/>
+        </xsd:extension>
+      </xsd:complexContent>
+    </xsd:complexType>
+  </xsd:element>
+  <!--==== Ligne de médicament ====-->
+  <xsd:element name="CPrescriptionLineMedicament" substitutionGroup="CMbObject">
+    <xsd:complexType>
+      <xsd:complexContent>
+        <xsd:extension base="CMbObjectType">
+          <xsd:all>
+            <!--Code cip-->
+            <xsd:element name="code_cip" type="MBint"/>
+            <!--^CPrescriptionLineMedicament-code_ucd^-->
+            <xsd:element name="code_ucd" type="MBint" minOccurs="0"/>
+            <!--^CPrescriptionLineMedicament-code_cis^-->
+            <xsd:element name="code_cis" type="MBint" minOccurs="0"/>
+            <!--Numéro poso-->
+            <xsd:element name="no_poso" type="MBint" minOccurs="0"/>
+            <!--Validation pharmacien-->
+            <xsd:element name="valide_pharma" type="MBbool" minOccurs="0"/>
+            <!--En accord avec le praticien-->
+            <xsd:element name="accord_praticien" type="MBbool" minOccurs="0"/>
+            <!--Voie-->
+            <xsd:element name="voie" type="xsd:string" minOccurs="0"/>
+            <!--^CPrescriptionLineMedicament-substitute_for_class^-->
+            <xsd:element name="substitute_for_class" minOccurs="0">
+              <xsd:simpleType>
+                <xsd:restriction base="xsd:string">
+                  <!--Ligne de médicament-->
+                  <xsd:enumeration value="CPrescriptionLineMedicament"/>
+                  <!--Ligne mélangée-->
+                  <xsd:enumeration value="CPrescriptionLineMix"/>
+                  <!--^CPrescriptionLineMedicament.substitute_for_class.^-->
+                  <xsd:enumeration value=""/>
+                </xsd:restriction>
+              </xsd:simpleType>
+            </xsd:element>
+            <!--Substitution active-->
+            <xsd:element name="substitution_active" type="MBbool" minOccurs="0"/>
+            <!--^CPrescriptionLineMedicament-substitution_plan_soin^-->
+            <xsd:element name="substitution_plan_soin" type="MBbool" minOccurs="0"/>
+            <!--TP-->
+            <xsd:element name="traitement_personnel" type="MBbool" minOccurs="0"/>
+            <!--Injection par IDE-->
+            <xsd:element name="injection_ide" type="MBbool" minOccurs="0"/>
+            <!--^CPrescriptionLineMedicament-stupefiant^-->
+            <xsd:element name="stupefiant" type="MBbool" minOccurs="0"/>
+            <!--ALD-->
+            <xsd:element name="ald" type="MBbool" minOccurs="0"/>
+            <!--Signée-->
+            <xsd:element name="signee" type="MBbool" minOccurs="0"/>
+            <!--Début-->
+            <xsd:element name="debut" type="MBdate" minOccurs="0"/>
+            <!--Heure de début-->
+            <xsd:element name="time_debut" type="MBtime" minOccurs="0"/>
+            <!--Durée-->
+            <xsd:element name="duree" type="MBint" minOccurs="0"/>
+            <!--Unité de durée-->
+            <xsd:element name="unite_duree" minOccurs="0">
+              <xsd:simpleType>
+                <xsd:restriction base="xsd:string">
+                  <!--Minute(s)-->
+                  <xsd:enumeration value="minute"/>
+                  <!--Heure(s)-->
+                  <xsd:enumeration value="heure"/>
+                  <!--Demi-journée(s)-->
+                  <xsd:enumeration value="demi_journee"/>
+                  <!--Jour(s)-->
+                  <xsd:enumeration value="jour"/>
+                  <!--Semaine(s)-->
+                  <xsd:enumeration value="semaine"/>
+                  <!--Quinzaine(s)-->
+                  <xsd:enumeration value="quinzaine"/>
+                  <!--Mois-->
+                  <xsd:enumeration value="mois"/>
+                  <!--Trimestre(s)-->
+                  <xsd:enumeration value="trimestre"/>
+                  <!--Semestre(s)-->
+                  <xsd:enumeration value="semestre"/>
+                  <!--An(s)-->
+                  <xsd:enumeration value="an"/>
+                  <!--^CPrescriptionLineMedicament.unite_duree.^-->
+                  <xsd:enumeration value=""/>
+                </xsd:restriction>
+              </xsd:simpleType>
+            </xsd:element>
+            <!--Date d'arrêt-->
+            <xsd:element name="date_arret" type="MBdate" minOccurs="0"/>
+            <!--Heure d'arrêt-->
+            <xsd:element name="time_arret" type="MBtime" minOccurs="0"/>
+            <!--^CPrescriptionLineMedicament-decalage_line^-->
+            <xsd:element name="decalage_line" type="MBint" minOccurs="0"/>
+            <!--^CPrescriptionLineMedicament-jour_decalage^-->
+            <xsd:element name="jour_decalage" minOccurs="0">
+              <xsd:simpleType>
+                <xsd:restriction base="xsd:string">
+                  <!--E-->
+                  <xsd:enumeration value="E"/>
+                  <!--I-->
+                  <xsd:enumeration value="I"/>
+                  <!--S-->
+                  <xsd:enumeration value="S"/>
+                  <!--M-->
+                  <xsd:enumeration value="N"/>
+                  <!--^CPrescriptionLineMedicament.jour_decalage.^-->
+                  <xsd:enumeration value=""/>
+                </xsd:restriction>
+              </xsd:simpleType>
+            </xsd:element>
+            <!--Validation infirmière-->
+            <xsd:element name="valide_infirmiere" type="MBbool" minOccurs="0"/>
+            <!--Fin-->
+            <xsd:element name="fin" type="MBdate" minOccurs="0"/>
+            <!--^CPrescriptionLineMedicament-jour_decalage_fin^-->
+            <xsd:element name="jour_decalage_fin" minOccurs="0">
+              <xsd:simpleType>
+                <xsd:restriction base="xsd:string">
+                  <!--I-->
+                  <xsd:enumeration value="I"/>
+                  <!--S-->
+                  <xsd:enumeration value="S"/>
+                  <!--^CPrescriptionLineMedicament.jour_decalage_fin.^-->
+                  <xsd:enumeration value=""/>
+                </xsd:restriction>
+              </xsd:simpleType>
+            </xsd:element>
+            <!--^CPrescriptionLineMedicament-decalage_line_fin^-->
+            <xsd:element name="decalage_line_fin" type="MBint" minOccurs="0"/>
+            <!--^CPrescriptionLineMedicament-time_fin^-->
+            <xsd:element name="time_fin" type="MBtime" minOccurs="0"/>
+            <!--Cond.-->
+            <xsd:element name="conditionnel" type="MBbool" minOccurs="0"/>
+            <!--Activation-->
+            <xsd:element name="condition_active" type="MBbool" minOccurs="0"/>
+            <!--^CPrescriptionLineMedicament-unite_decalage^-->
+            <xsd:element name="unite_decalage" minOccurs="0">
+              <xsd:simpleType>
+                <xsd:restriction base="xsd:string">
+                  <!--jour(s)-->
+                  <xsd:enumeration value="jour"/>
+                  <!--heure(s)-->
+                  <xsd:enumeration value="heure"/>
+                  <!--^CPrescriptionLineMedicament.unite_decalage.^-->
+                  <xsd:enumeration value=""/>
+                </xsd:restriction>
+              </xsd:simpleType>
+            </xsd:element>
+            <!--^CPrescriptionLineMedicament-unite_decalage_fin^-->
+            <xsd:element name="unite_decalage_fin" minOccurs="0">
+              <xsd:simpleType>
+                <xsd:restriction base="xsd:string">
+                  <!--jour(s)-->
+                  <xsd:enumeration value="jour"/>
+                  <!--heure(s)-->
+                  <xsd:enumeration value="heure"/>
+                  <!--^CPrescriptionLineMedicament.unite_decalage_fin.^-->
+                  <xsd:enumeration value=""/>
+                </xsd:restriction>
+              </xsd:simpleType>
+            </xsd:element>
+            <!--Emplacement-->
+            <xsd:element name="emplacement">
+              <xsd:simpleType>
+                <xsd:restriction base="xsd:string">
+                  <!--Service-->
+                  <xsd:enumeration value="service"/>
+                  <!--Bloc-->
+                  <xsd:enumeration value="bloc"/>
+                  <!--Bloc et Service-->
+                  <xsd:enumeration value="service_bloc"/>
+                </xsd:restriction>
+              </xsd:simpleType>
+            </xsd:element>
+            <!--Commentaire-->
+            <xsd:element name="commentaire" type="xsd:string" minOccurs="0"/>
+            <!--Per-op-->
+            <xsd:element name="perop" type="MBbool" minOccurs="0"/>
+            <!--^CPrescriptionLineMedicament-inscription^-->
+            <xsd:element name="inscription" type="MBbool" minOccurs="0"/>
+          </xsd:all>
+          <!--Identifiant-->
+          <xsd:attribute name="prescription_line_medicament_id" type="xsd:string"/>
+          <!--^CPrescriptionLineMedicament-substitution_line_id^-->
+          <xsd:attribute name="substitution_line_id" type="xsd:string" use="optional"/>
+          <!--^CPrescriptionLineMedicament-substitute_for_id^-->
+          <xsd:attribute name="substitute_for_id" type="xsd:string" use="optional"/>
+          <!--Prescription-->
+          <xsd:attribute name="prescription_id" type="xsd:string"/>
+          <!--Praticien-->
+          <xsd:attribute name="praticien_id" type="xsd:string" use="optional"/>
+          <!--Créateur-->
+          <xsd:attribute name="creator_id" type="xsd:string"/>
+          <!--^CPrescriptionLineMedicament-child_id^-->
+          <xsd:attribute name="child_id" type="xsd:string" use="optional"/>
+          <!--Intervention-->
+          <xsd:attribute name="operation_id" type="xsd:string" use="optional"/>
+        </xsd:extension>
+      </xsd:complexContent>
+    </xsd:complexType>
+  </xsd:element>
+  <!--==== Prise de posologie ====-->
+  <xsd:element name="CPrisePosologie" substitutionGroup="CMbObject">
+    <xsd:complexType>
+      <xsd:complexContent>
+        <xsd:extension base="CMbObjectType">
+          <xsd:all>
+            <!--Quantité-->
+            <xsd:element name="quantite" type="MBfloat" minOccurs="0"/>
+            <!--Date de l'urgence-->
+            <xsd:element name="urgence_datetime" type="MBdateTime" minOccurs="0"/>
+            <!--Nombre de fois-->
+            <xsd:element name="nb_fois" type="MBfloat" minOccurs="0"/>
+            <!--Unité fois-->
+            <xsd:element name="unite_fois" minOccurs="0">
+              <xsd:simpleType>
+                <xsd:restriction base="xsd:string">
+                  <!--Minute(s)-->
+                  <xsd:enumeration value="minute"/>
+                  <!--Heure(s)-->
+                  <xsd:enumeration value="heure"/>
+                  <!--Demi-journée(s)-->
+                  <xsd:enumeration value="demi_journee"/>
+                  <!--Jour(s)-->
+                  <xsd:enumeration value="jour"/>
+                  <!--Semaine(s)-->
+                  <xsd:enumeration value="semaine"/>
+                  <!--Quinzaine(s)-->
+                  <xsd:enumeration value="quinzaine"/>
+                  <!--Mois-->
+                  <xsd:enumeration value="mois"/>
+                  <!--Trimestre(s)-->
+                  <xsd:enumeration value="trimestre"/>
+                  <!--Semestre(s)-->
+                  <xsd:enumeration value="semestre"/>
+                  <!--An(s)-->
+                  <xsd:enumeration value="an"/>
+                  <!--^CPrisePosologie.unite_fois.^-->
+                  <xsd:enumeration value=""/>
+                </xsd:restriction>
+              </xsd:simpleType>
+            </xsd:element>
+            <!--Nombre Tous les-->
+            <xsd:element name="nb_tous_les" type="MBfloat" minOccurs="0"/>
+            <!--Unité tous les -->
+            <xsd:element name="unite_tous_les" minOccurs="0">
+              <xsd:simpleType>
+                <xsd:restriction base="xsd:string">
+                  <!--Minute(s)-->
+                  <xsd:enumeration value="minute"/>
+                  <!--Heure(s)-->
+                  <xsd:enumeration value="heure"/>
+                  <!--Demi-journée(s)-->
+                  <xsd:enumeration value="demi_journee"/>
+                  <!--Jour(s)-->
+                  <xsd:enumeration value="jour"/>
+                  <!--Semaine(s)-->
+                  <xsd:enumeration value="semaine"/>
+                  <!--Quinzaine(s)-->
+                  <xsd:enumeration value="quinzaine"/>
+                  <!--Mois-->
+                  <xsd:enumeration value="mois"/>
+                  <!--Trimestre(s)-->
+                  <xsd:enumeration value="trimestre"/>
+                  <!--Semestre(s)-->
+                  <xsd:enumeration value="semestre"/>
+                  <!--An(s)-->
+                  <xsd:enumeration value="an"/>
+                  <!--lundi-->
+                  <xsd:enumeration value="lundi"/>
+                  <!--mardi-->
+                  <xsd:enumeration value="mardi"/>
+                  <!--mercredi-->
+                  <xsd:enumeration value="mercredi"/>
+                  <!--jeudi-->
+                  <xsd:enumeration value="jeudi"/>
+                  <!--vendredi-->
+                  <xsd:enumeration value="vendredi"/>
+                  <!--samedi-->
+                  <xsd:enumeration value="samedi"/>
+                  <!--dimanche-->
+                  <xsd:enumeration value="dimanche"/>
+                  <!--^CPrisePosologie.unite_tous_les.^-->
+                  <xsd:enumeration value=""/>
+                </xsd:restriction>
+              </xsd:simpleType>
+            </xsd:element>
+            <!--Décalage de la prise-->
+            <xsd:element name="decalage_prise" type="MBint" minOccurs="0"/>
+            <!--Unité de prise-->
+            <xsd:element name="unite_prise" type="xsd:string" minOccurs="0"/>
+            <!--Décalage par rapport à l'intervention-->
+            <xsd:element name="decalage_intervention" type="MBint" minOccurs="0"/>
+            <!--^CPrisePosologie-unite_decalage_intervention^-->
+            <xsd:element name="unite_decalage_intervention" minOccurs="0">
+              <xsd:simpleType>
+                <xsd:restriction base="xsd:string">
+                  <!--Minute(s)-->
+                  <xsd:enumeration value="minute"/>
+                  <!--Heure(s)-->
+                  <xsd:enumeration value="heure"/>
+                  <!--^CPrisePosologie.unite_decalage_intervention.^-->
+                  <xsd:enumeration value=""/>
+                </xsd:restriction>
+              </xsd:simpleType>
+            </xsd:element>
+            <!--Heure de prise-->
+            <xsd:element name="heure_prise" type="MBtime" minOccurs="0"/>
+            <!--^CPrisePosologie-condition^-->
+            <xsd:element name="condition" type="xsd:string" minOccurs="0"/>
+            <!--^CPrisePosologie-datetime^-->
+            <xsd:element name="datetime" type="MBdateTime" minOccurs="0"/>
+            <!--Classe de l'objet cible-->
+            <xsd:element name="object_class">
+              <xsd:simpleType>
+                <xsd:restriction base="xsd:string">
+                  <!--Ligne de médicament-->
+                  <xsd:enumeration value="CPrescriptionLineMedicament"/>
+                  <!--Ligne d'élément-->
+                  <xsd:enumeration value="CPrescriptionLineElement"/>
+                </xsd:restriction>
+              </xsd:simpleType>
+            </xsd:element>
+          </xsd:all>
+          <!--Identifiant-->
+          <xsd:attribute name="prise_posologie_id" type="xsd:string"/>
+          <!--Moment unitaire-->
+          <xsd:attribute name="moment_unitaire_id" type="xsd:string" use="optional"/>
+          <!--Identifiant de l'objet cible-->
+          <xsd:attribute name="object_id" type="xsd:string"/>
+        </xsd:extension>
+      </xsd:complexContent>
+    </xsd:complexType>
+  </xsd:element>
+  <xsd:element name="CPrescription">
+    <xsd:complexType>
+      <xsd:sequence>
+        <xsd:element ref="CMbObject" minOccurs="0" maxOccurs="unbounded"/>
+      </xsd:sequence>
+      <xsd:attribute name="libelle" type="xsd:string"/>
+      <xsd:attribute name="type" type="xsd:string"/>
+      <xsd:attribute name="object_class" type="xsd:string"/>
+      <xsd:attribute name="fast_access" type="xsd:string"/>
+    </xsd:complexType>
+  </xsd:element>
+</xsd:schema>
