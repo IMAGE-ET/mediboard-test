@@ -42,7 +42,7 @@ if (strtolower(pathinfo($file['name'] , PATHINFO_EXTENSION) == 'xml')) {
       $temp_doc->setSchema("modules/dPprescription/xml/prescription.xsd");
       $valid = $temp_doc->schemaValidate();
       if (!$valid) {
-        CAppUI::callbackAjax('window.opener.SystemMessage.notify', "<div class='error'>".htmlentities("Document XML mal formé")."</div>");
+        CAppUI::stepAjax("Document XML mal formé", UI_MSG_ERROR);
         CApp::rip();
       } 
     }
@@ -55,7 +55,7 @@ if (strtolower(pathinfo($file['name'] , PATHINFO_EXTENSION) == 'xml')) {
     
     $valid = $xml->schemaValidate();
     if (!$valid) {
-      CAppUI::callbackAjax('window.opener.SystemMessage.notify', "<div class='error'>".htmlentities("Document XML mal formé")."</div>");
+      CAppUI::stepAjax("Document XML mal formé", UI_MSG_ERROR);
       CApp::rip();
     }
     $root = array();
@@ -199,20 +199,16 @@ if (strtolower(pathinfo($file['name'] , PATHINFO_EXTENSION) == 'xml')) {
       }
     }
   }
-  CAppUI::callbackAjax('window.opener.SystemMessage.notify', "<div class='info'>". htmlentities($message . $imported. " protocole(s) importé(s)")."</div>");
+  CAppUI::stepAjax($message . $imported. " protocole(s) importé(s)");
   echo "<script type='text/javascript'>
         try {
           window.opener.Protocole.refreshList(".$prescription->_id.");
           window.opener.Protocole.edit(".$prescription->_id.")
         } catch(e) {}
-        window.close();
      </script>";
 }
 else {
-  CAppUI::callbackAjax('window.opener.SystemMessage.notify', "<div class='info'>".htmlentities("Aucun protocole importé")."</div>");
-  echo "<script type='text/javascript'>
-    window.close();
-    </script>";
+  CAppUI::stepAjax("Aucun protocole importé");
 }
 
 ?>

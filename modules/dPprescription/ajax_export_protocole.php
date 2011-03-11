@@ -160,7 +160,7 @@ $doc->purgeEmptyElements();
 
 $valid = $doc->schemaValidate();
 if (!$valid) {
-  CAppUI::callbackAjax('window.opener.SystemMessage.notify', "<div class='error'>".htmlentities("Document XML mal formé")."</div>");
+  CAppUI::stepAjax("Document XML mal formé", UI_MSG_ERROR);
   CApp::rip();
 }
 
