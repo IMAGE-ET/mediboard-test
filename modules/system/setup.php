@@ -536,7 +536,33 @@ class CSetupsystem extends CSetup {
     }
 		
     $this->addFunction("update_ex_object_tables");
+
+    $this->makeRevision("1.0.52");
+    $query = "CREATE TABLE `view_sender` (
+      `sender_id` INT (11) UNSIGNED NOT NULL auto_increment PRIMARY KEY,
+      `source_id` INT (11) UNSIGNED,
+      `name` VARCHAR (255) NOT NULL,
+      `description` TEXT,
+      `params` TEXT NOT NULL,
+      `period` ENUM ('1','2','3','4','5','6','10','15','20','30'),
+      `offset` INT (11) UNSIGNED
+    ) /*! ENGINE=MyISAM */;";
+    $this->addQuery($query);
     
-    $this->mod_version = "1.0.52";
+    $query = "ALTER TABLE `view_sender` 
+      ADD INDEX (`source_id`);";
+    $this->addQuery($query);
+		
+    $query = "CREATE TABLE `view_sender_source` (
+      `source_id` INT (11) UNSIGNED NOT NULL auto_increment PRIMARY KEY,
+      `name` VARCHAR (255) NOT NULL
+    ) /*! ENGINE=MyISAM */;";
+    $this->addQuery($query);
+    
+    $query = "ALTER TABLE `view_sender` 
+      ADD INDEX (`source_id`);";
+    $this->addQuery($query);
+    
+    $this->mod_version = "1.0.53";
   }
 }
