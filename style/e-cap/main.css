@@ -229,6 +229,7 @@ td.tabox {
 table.tabmenu {
   margin: 5px 10px;
   border-spacing: 0px;
+  line-height: 90%;
 }
 
 table.tabmenu td {
