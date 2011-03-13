@@ -19,7 +19,7 @@ Main.add(function(){
 });
 
 </script>
-{{mb_include_script module="bloodSalvage" script="bloodSalvage"}}
+{{mb_script module="bloodSalvage" script="bloodSalvage"}}
 
 {{assign var=patient value=$selOp->_ref_sejour->_ref_patient}}  
 {{if $blood_salvage->_id }}

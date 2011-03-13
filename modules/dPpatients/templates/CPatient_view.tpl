@@ -41,7 +41,7 @@
 	
 	<tr>
 		<td colspan="2" class="button">
-			{{mb_include_script module="dPpatients" script="patient" ajax="true"}}
+			{{mb_script module="dPpatients" script="patient" ajax="true"}}
 
       {{if $can->edit}}
       <button type="button" class="edit" onclick="Patient.edit('{{$patient->_id}}')">

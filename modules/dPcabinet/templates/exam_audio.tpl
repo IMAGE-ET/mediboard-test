@@ -1,4 +1,4 @@
-{{mb_include_script module=$m script="exam_audio"}}
+{{mb_script module=$m script="exam_audio"}}
 
 <script type="text/javascript">
 

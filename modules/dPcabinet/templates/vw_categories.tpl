@@ -1,4 +1,4 @@
-{{mb_include_script module="dPcabinet" script="icone_selector"}}
+{{mb_script module="dPcabinet" script="icone_selector"}}
 
 <table class="main">
   <tr>

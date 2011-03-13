@@ -20,7 +20,7 @@
   
   <tr>
     <td class="button">
-      {{mb_include_script module="dPplanningOp" script="sejour" ajax="true"}}
+      {{mb_script module="dPplanningOp" script="sejour" ajax="true"}}
 
       {{if $can->edit}}
 			<button type="button" class="edit" onclick="Sejour.edit('{{$sejour->_id}}');">

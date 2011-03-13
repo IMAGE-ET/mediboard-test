@@ -70,7 +70,7 @@ Main.add(function () {
 
 </script>
 
-{{mb_include_script module="dPprescription" script="prescription"}}
+{{mb_script module="dPprescription" script="prescription"}}
 
 <form name="viewSoin" method="get" action="?">
   <input type="hidden" name="m" value="soins" />

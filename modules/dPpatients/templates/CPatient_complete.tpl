@@ -1,4 +1,4 @@
-{{mb_include_script module="dPpatients" script="patient" ajax=true}}
+{{mb_script module="dPpatients" script="patient" ajax=true}}
 
 <table class="tbl">
 	{{if !@$no_header}}

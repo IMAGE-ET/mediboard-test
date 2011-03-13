@@ -66,7 +66,7 @@ function newConsultation(chir_id, pat_id, consult_urgence_id) {
     <td class="button">
       {{if !$app->user_prefs.simpleCabinet}}
 	      {{if @$modules.ecap->mod_active}}
-	      {{mb_include_script module=ecap script=dhe}}
+	      {{mb_script module=ecap script=dhe}}
 	      <div id="dhe"></div>
 	      <script type="text/javascript">DHE.register("{{$consult->patient_id}}", "{{$consult->_praticien_id}}", "dhe");</script>
 	      {{else}}

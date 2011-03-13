@@ -1,5 +1,5 @@
-{{mb_include_script module="mediusers" script="color_selector"}}
-{{mb_include_script module="system" script="object_selector"}}
+{{mb_script module="mediusers" script="color_selector"}}
+{{mb_script module="system" script="object_selector"}}
 
 <script type="text/javascript">
 

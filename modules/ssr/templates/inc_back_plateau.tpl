@@ -34,7 +34,7 @@ Main.add(function () {
 <hr class="control_tabs" />
 
 <div id="equipements" style="display: none;">
-  {{mb_include_script module=ssr script=equipement}}
+  {{mb_script module=ssr script=equipement}}
 	<a class="button new" href="#Edit-CEquipement-0" onclick="Equipement.edit('{{$plateau->_id}}', '0')">
     {{tr}}CEquipement-title-create{{/tr}}
   </a>
@@ -44,7 +44,7 @@ Main.add(function () {
 </div>
 
 <div id="techniciens" style="display: none;">
-  {{mb_include_script module=ssr script=technicien}}
+  {{mb_script module=ssr script=technicien}}
   <a class="button new" href="#Edit-CTechnicien-0" onclick="Technicien.edit('{{$plateau->_id}}', '0')">
     {{tr}}CTechnicien-title-create{{/tr}}
   </a>

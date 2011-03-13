@@ -15,7 +15,7 @@
 {{if $can->edit}}
   <tr>
     <td class="button">
-      {{mb_include_script module="dPcabinet" script="consultation" ajax="true"}}
+      {{mb_script module="dPcabinet" script="consultation" ajax="true"}}
 
       <button type="button" class="edit" onclick="Consultation.edit('{{$consultation->_id}}')">
         {{tr}}Modify{{/tr}}

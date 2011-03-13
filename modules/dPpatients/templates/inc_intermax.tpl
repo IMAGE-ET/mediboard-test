@@ -1,5 +1,5 @@
 <!-- Always load it for easier result handler redefinition -->
-{{mb_include_script script=intermax}}
+{{mb_script script=intermax}}
 {{assign var=debug value="false"}}
 {{if $app->user_prefs.GestionFSE}}
 

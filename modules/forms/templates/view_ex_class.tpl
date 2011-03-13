@@ -8,8 +8,8 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
 *}}
 
-{{mb_include_script module=forms script=ex_class_editor}}
-{{mb_include_script module=system script=object_selector}}
+{{mb_script module=forms script=ex_class_editor}}
+{{mb_script module=system script=object_selector}}
 
 {{main}}
 ExClass.refreshList();

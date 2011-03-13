@@ -1,5 +1,5 @@
-{{mb_include_script module="dPplanningOp" script="ccam_selector"}}
-{{mb_include_script module="dPplanningOp" script="cim10_selector"}}
+{{mb_script module="dPplanningOp" script="ccam_selector"}}
+{{mb_script module="dPplanningOp" script="cim10_selector"}}
 
 
 <script type="text/javascript">

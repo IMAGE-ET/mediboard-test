@@ -119,7 +119,7 @@ function submitCompteRendu(callback){
 
 </script>
 
-{{mb_include_script module=dPcompteRendu script=thumb}}
+{{mb_script module=dPcompteRendu script=thumb}}
 
 <script type="text/javascript">
 

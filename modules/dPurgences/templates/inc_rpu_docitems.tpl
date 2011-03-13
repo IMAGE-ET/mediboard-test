@@ -9,8 +9,8 @@
 *}}
 
 
-{{mb_include_script module=dPcompteRendu script=modele_selector}}
-{{mb_include_script module=dPcompteRendu script=document}}
+{{mb_script module=dPcompteRendu script=modele_selector}}
+{{mb_script module=dPcompteRendu script=document}}
 
 <table class="form">
 

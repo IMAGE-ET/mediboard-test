@@ -1,8 +1,8 @@
 <!-- $Id$ -->
 
-{{mb_include_script module="dPpatients" script="autocomplete"}}
-{{mb_include_script module="dPpatients" script="siblings_checker"}}
-{{mb_include_script module="dPpatients" script="patient"}}
+{{mb_script module="dPpatients" script="autocomplete"}}
+{{mb_script module="dPpatients" script="siblings_checker"}}
+{{mb_script module="dPpatients" script="patient"}}
 
 {{if $app->user_prefs.VitaleVision}}
   {{mb_include template=inc_vitalevision}}

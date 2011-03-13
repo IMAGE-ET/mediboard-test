@@ -13,7 +13,7 @@
   
   <tr>
     <td class="button">
-      {{mb_include_script module="dPplanningOp" script="operation" ajax="true"}}
+      {{mb_script module="dPplanningOp" script="operation" ajax="true"}}
     	
       {{if $can->edit}}
 			<button type="button" class="edit" onclick="Operation.edit('{{$operation->_id}}', '{{$operation->plageop_id}}');">

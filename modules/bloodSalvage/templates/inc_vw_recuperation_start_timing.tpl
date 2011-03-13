@@ -8,7 +8,7 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
 *}}
 
-{{mb_include_script module="bloodSalvage" script="bloodSalvage"}}
+{{mb_script module="bloodSalvage" script="bloodSalvage"}}
 <form name="timing{{$blood_salvage->_id}}" action="?m={{$m}}" method="post">
   <input type="hidden" name="m" value="bloodSalvage" />
   <input type="hidden" name="dosql" value="do_bloodSalvage_aed" />

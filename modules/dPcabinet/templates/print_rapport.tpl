@@ -1,6 +1,6 @@
 <!-- $Id$ -->
 
-{{mb_include_script module=dPcabinet script=reglement}}
+{{mb_script module=dPcabinet script=reglement}}
 {{if !$ajax}} 
 
 <script type="text/javascript">	

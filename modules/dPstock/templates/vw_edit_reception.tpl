@@ -8,7 +8,7 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
 *}}
 
-{{mb_include_script module=dPstock script=order_manager}}
+{{mb_script module=dPstock script=order_manager}}
 
 <script type="text/javascript">
 var reception_id = '{{$reception->_id}}';

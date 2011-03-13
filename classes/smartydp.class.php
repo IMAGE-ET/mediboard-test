@@ -502,7 +502,7 @@ function smarty_function_mb_colonne($params, &$smarty) {
  * - module : Module name to find script, if not provided, use global includes
  * @return HTML script node
  */
-function smarty_function_mb_include_script($params, &$smarty) {
+function smarty_function_mb_script($params, &$smarty) {
   // Path provided
   $extraPath = "";
   $path = CMbArray::extract($params, "path");
@@ -655,7 +655,7 @@ class CSmartyDP extends Smarty {
     $this->register_function("mb_ternary"        , "smarty_function_mb_ternary");
     $this->register_function("mb_colonne"        , "smarty_function_mb_colonne");
     $this->register_function("mb_include"        , "smarty_function_mb_include");
-    $this->register_function("mb_include_script" , "smarty_function_mb_include_script");
+    $this->register_function("mb_script" , "smarty_function_mb_script");
     $this->register_modifier("pad"               , "smarty_modifier_pad");
     $this->register_modifier("json"              , "smarty_modifier_json");
     $this->register_modifier("iso_date"          , "smarty_modifier_iso_date");

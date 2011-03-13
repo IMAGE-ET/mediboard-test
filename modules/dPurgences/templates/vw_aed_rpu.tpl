@@ -8,18 +8,18 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
 *}}
 
-{{mb_include_script module=dPcabinet script=file}}
+{{mb_script module=dPcabinet script=file}}
 {{mb_include module=dPfiles template=yoplet_uploader object=$sejour}}
 
 {{if !$group->service_urgences_id}}
   <div class="small-warning">{{tr}}dPurgences-no-service_urgences_id{{/tr}}</div>
 {{else}}
-	{{mb_include_script module="dPpatients" script="pat_selector"}}
-	{{mb_include_script module="dPurgences" script="contraintes_rpu"}}
-	{{mb_include_script module="dPprescription" script="prescription"}}
-	{{mb_include_script module="dPmedicament" script="medicament_selector"}}
-	{{mb_include_script module="dPmedicament" script="equivalent_selector"}}
-	{{mb_include_script module="dPprescription" script="element_selector"}}
+	{{mb_script module="dPpatients" script="pat_selector"}}
+	{{mb_script module="dPurgences" script="contraintes_rpu"}}
+	{{mb_script module="dPprescription" script="prescription"}}
+	{{mb_script module="dPmedicament" script="medicament_selector"}}
+	{{mb_script module="dPmedicament" script="equivalent_selector"}}
+	{{mb_script module="dPprescription" script="element_selector"}}
 	
 	<script type="text/javascript">
 	

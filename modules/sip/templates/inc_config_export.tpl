@@ -67,7 +67,7 @@
   </table>
 </form>
 
-{{mb_include_script module="sip" script="action"}}
+{{mb_script module="sip" script="action"}}
 <table class="tbl">
 <tr>
   <th class="title" colspan="100">{{tr}}sip-export-classes{{/tr}}</th>

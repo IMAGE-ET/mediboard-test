@@ -1,4 +1,4 @@
-{{mb_include_script module="dPmedicament" script="medicament_selector"}}
+{{mb_script module="dPmedicament" script="medicament_selector"}}
 
 <script type="text/javascript">
 
@@ -37,7 +37,7 @@ Main.add(function () {
   <tr>
     <td>
       <!-- Fiches d'examens -->
-      {{mb_include_script module="dPcabinet" script="exam_dialog"}}
+      {{mb_script module="dPcabinet" script="exam_dialog"}}
       
       <script type="text/javascript">
         {{if !$readonly}}

@@ -49,7 +49,7 @@
     {{if $can->edit}}
     <td class="halfPane">
 
-			{{mb_include_script module="dPpatients" script="autocomplete"}}
+			{{mb_script module="dPpatients" script="autocomplete"}}
 			<script type="text/javascript">
 			Main.add(function () {
 			  InseeFields.initCPVille("group", "cp", "ville", "tel");

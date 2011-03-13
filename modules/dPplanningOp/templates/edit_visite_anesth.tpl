@@ -1,9 +1,9 @@
-{{mb_include_script module="dPmedicament" script="medicament_selector"}}
-{{mb_include_script module="dPmedicament" script="equivalent_selector"}}
-{{mb_include_script module="dPprescription" script="element_selector"}}
-{{mb_include_script module="dPprescription" script="prescription"}}
-{{mb_include_script module="dPplanningOp" script="cim10_selector"}}
-{{mb_include_script module="dPcompteRendu" script="modele_selector"}}
+{{mb_script module="dPmedicament" script="medicament_selector"}}
+{{mb_script module="dPmedicament" script="equivalent_selector"}}
+{{mb_script module="dPprescription" script="element_selector"}}
+{{mb_script module="dPprescription" script="prescription"}}
+{{mb_script module="dPplanningOp" script="cim10_selector"}}
+{{mb_script module="dPcompteRendu" script="modele_selector"}}
 
 <script type="text/javascript">
 

@@ -19,4 +19,4 @@
   {{/if}}
 </applet>
 
-{{mb_include_script script=vitalevision}}
+{{mb_script script=vitalevision}}

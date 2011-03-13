@@ -8,8 +8,8 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
 *}}
 
-{{mb_include_script module="dPcompteRendu" script="document"}}
-{{mb_include_script module="dPcompteRendu" script="modele_selector"}}
+{{mb_script module="dPcompteRendu" script="document"}}
+{{mb_script module="dPcompteRendu" script="modele_selector"}}
 
 <script type="text/javascript">
 function hideIcon(frame) {
@@ -95,7 +95,7 @@ Main.add(function () {
 </script>
 
 <!-- Script won't be evaled in Ajax inclusion. Need to force it -->
-{{mb_include_script script=intermax}}
+{{mb_script script=intermax}}
 
 <table class="main">
   <tr>

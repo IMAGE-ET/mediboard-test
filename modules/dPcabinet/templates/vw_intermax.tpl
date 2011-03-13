@@ -1,6 +1,6 @@
 <!-- $Id$ -->
 
-{{mb_include_script module=dPpatients script=pat_selector}}
+{{mb_script module=dPpatients script=pat_selector}}
 {{mb_include module=dPpatients template=inc_intermax}}
 
 <script type="text/javascript">

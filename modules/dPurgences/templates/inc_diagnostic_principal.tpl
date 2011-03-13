@@ -10,7 +10,7 @@
 
 <th>{{mb_label object=$sejour field="DP"}}</th>
 <td>
-{{mb_include_script module="dPplanningOp" script="cim10_selector"}}
+{{mb_script module="dPplanningOp" script="cim10_selector"}}
 
 <script type="text/javascript">
   function reloadDiagnostic(sejour_id, modeDAS) {

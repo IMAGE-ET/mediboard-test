@@ -1,4 +1,4 @@
-{{mb_include_script module=dPhospi script=vw_affectations}}
+{{mb_script module=dPhospi script=vw_affectations}}
 
 <script type="text/javascript">
 Main.add(function () {

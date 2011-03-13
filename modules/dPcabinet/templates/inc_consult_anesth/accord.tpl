@@ -4,10 +4,10 @@
 {{assign var="do_subject_aed" value="do_consultation_aed"}}
 
 {{mb_include module=dPsalleOp template=js_codage_ccam}}
-{{mb_include_script module="dPmedicament" script="medicament_selector"}}
-{{mb_include_script module="dPmedicament" script="equivalent_selector"}}
-{{mb_include_script module="dPprescription" script="element_selector"}}
-{{mb_include_script module="dPprescription" script="prescription"}}
+{{mb_script module="dPmedicament" script="medicament_selector"}}
+{{mb_script module="dPmedicament" script="equivalent_selector"}}
+{{mb_script module="dPprescription" script="element_selector"}}
+{{mb_script module="dPprescription" script="prescription"}}
 
 <script type="text/javascript">
 

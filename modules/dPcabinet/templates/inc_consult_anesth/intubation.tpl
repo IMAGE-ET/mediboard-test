@@ -1,5 +1,5 @@
 
-{{mb_include_script module=dPcabinet script=intubation}}
+{{mb_script module=dPcabinet script=intubation}}
 
 <script type="text/javascript">
 SchemaDentaire.oListEtats = {{$list_etat_dents|@json}};

@@ -8,8 +8,8 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
 *}}
 
-{{mb_include_script module=dPpatients script=patient}}
-{{mb_include_script module=dPplanningOp script=ccam_selector}}
+{{mb_script module=dPpatients script=patient}}
+{{mb_script module=dPplanningOp script=ccam_selector}}
 
 {{main}}
   getForm('rechercheDossierClinique').onsubmit();

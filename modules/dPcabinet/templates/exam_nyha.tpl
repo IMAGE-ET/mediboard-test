@@ -1,4 +1,4 @@
-{{mb_include_script module=$m script="exam_nyha"}}
+{{mb_script module=$m script="exam_nyha"}}
 {{assign var=consultation value=$exam_nyha->_ref_consult}}
 <script type="text/javascript">
 

@@ -12,11 +12,11 @@
   <div id="prescription_sejour">
 {{/if}}
 
-{{mb_include_script module="dPmedicament" script="medicament_selector"}}
-{{mb_include_script module="dPmedicament" script="equivalent_selector"}}
-{{mb_include_script module="dPprescription" script="element_selector"}}
-{{mb_include_script module="dPprescription" script="prescription"}}
-{{mb_include_script module="dPprescription" script="protocole"}}
+{{mb_script module="dPmedicament" script="medicament_selector"}}
+{{mb_script module="dPmedicament" script="equivalent_selector"}}
+{{mb_script module="dPprescription" script="element_selector"}}
+{{mb_script module="dPprescription" script="prescription"}}
+{{mb_script module="dPprescription" script="protocole"}}
 
 <script type="text/javascript">
 			          

@@ -14,7 +14,7 @@ calculFinAmo = function(){
 
 </script>
 
-{{mb_include_script module="dPpatients" script="widget_correspondants"}}
+{{mb_script module="dPpatients" script="widget_correspondants"}}
 
 <script type="text/javascript">
   var corresp = new Correspondants({{$patient->_id}});

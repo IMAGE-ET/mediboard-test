@@ -1,4 +1,4 @@
-{{mb_include_script module=dPcabinet script=tarif}}
+{{mb_script module=dPcabinet script=tarif}}
 
 <script type="text/javascript">
 

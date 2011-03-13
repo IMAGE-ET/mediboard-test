@@ -1,7 +1,7 @@
 {{if $templateManager->editor == "ckeditor" }}
 
 {{assign var=pdf_thumbnails value=$conf.dPcompteRendu.CCompteRendu.pdf_thumbnails}}
-{{mb_include_script path="lib/ckeditor/ckeditor.js"}}
+{{mb_script path="lib/ckeditor/ckeditor.js"}}
 
 <style type="text/css">
 /* Ugly hack to display labels with plugin buttons */

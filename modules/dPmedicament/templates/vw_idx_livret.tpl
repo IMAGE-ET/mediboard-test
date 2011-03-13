@@ -8,8 +8,8 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
 *}}
 
-{{mb_include_script module="dPmedicament" script="medicament_selector"}}
-{{mb_include_script module="dPprescription" script="prescription"}}
+{{mb_script module="dPmedicament" script="medicament_selector"}}
+{{mb_script module="dPprescription" script="prescription"}}
 
 <script type="text/javascript">
 

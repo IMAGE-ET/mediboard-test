@@ -9,7 +9,7 @@
 *}}
 
 {{if $isImedsInstalled}}
-  {{mb_include_script module="dPImeds" script="Imeds_results_watcher"}}
+  {{mb_script module="dPImeds" script="Imeds_results_watcher"}}
 {{/if}}
 
 <script type="text/javascript">

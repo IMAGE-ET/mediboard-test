@@ -1,10 +1,10 @@
 <!-- $Id$ -->
 
-{{mb_include_script module="dPpatients" script="pat_selector"}}
-{{mb_include_script module="dPcabinet" script="plage_selector"}}
-{{mb_include_script module="dPcompteRendu" script="document"}}
-{{mb_include_script module="dPcompteRendu" script="modele_selector"}}
-{{mb_include_script module="dPcabinet" script="file"}}
+{{mb_script module="dPpatients" script="pat_selector"}}
+{{mb_script module="dPcabinet" script="plage_selector"}}
+{{mb_script module="dPcompteRendu" script="document"}}
+{{mb_script module="dPcompteRendu" script="modele_selector"}}
+{{mb_script module="dPcabinet" script="file"}}
 {{if $consult->_id}}
   {{mb_ternary var=object_consult test=$consult->_is_anesth value=$consult->_ref_consult_anesth other=$consult}}
   {{mb_include module="dPfiles" template="yoplet_uploader" object=$object_consult}}

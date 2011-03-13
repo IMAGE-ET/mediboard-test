@@ -9,7 +9,7 @@
  * @link     http://www.mediboard.org
 *}}
 
-{{mb_include_script module=eai script=exchange_data_format}}
+{{mb_script module=eai script=exchange_data_format}}
 
 <script type="text/javascript">
   Main.add(function () {

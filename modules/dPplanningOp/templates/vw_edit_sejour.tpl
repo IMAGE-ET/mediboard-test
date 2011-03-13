@@ -1,4 +1,4 @@
-{{mb_include_script module="dPplanningOp" script="protocole_selector"}}
+{{mb_script module="dPplanningOp" script="protocole_selector"}}
 
 <script type="text/javascript">
 ProtocoleSelector.init = function(){
@@ -143,8 +143,8 @@ function reloadSejours(checkCollision) {
         </tr>
         <tr>
           <td id="documents">
-            {{mb_include_script module=dPcompteRendu script=document}}
-            {{mb_include_script module=dPcompteRendu script=modele_selector}}
+            {{mb_script module=dPcompteRendu script=document}}
+            {{mb_script module=dPcompteRendu script=modele_selector}}
 				    <script type="text/javascript">
 				    Document.register('{{$sejour->_id}}','{{$sejour->_class_name}}','{{$sejour->praticien_id}}', 'documents');
 				    </script>
@@ -158,7 +158,7 @@ function reloadSejours(checkCollision) {
         </tr>
         <tr>
           <td id="files">
-            {{mb_include_script module=dPcabinet script=file}}
+            {{mb_script module=dPcabinet script=file}}
             <script type="text/javascript">
             File.register('{{$sejour->_id}}','{{$sejour->_class_name}}', 'files');
             </script>

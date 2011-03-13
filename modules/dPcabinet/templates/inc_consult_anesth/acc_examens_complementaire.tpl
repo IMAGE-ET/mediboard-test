@@ -1,4 +1,4 @@
-{{mb_include_script module=dPcabinet script=exam_comp}}
+{{mb_script module=dPcabinet script=exam_comp}}
 
 <script type="text/javascript">
 function calculClairance () {

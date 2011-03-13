@@ -1,6 +1,6 @@
 {{$mediboardScriptStorage|smarty:nodefaults}}
 
-{{mb_include_script module="dPrepas" script="dPrepas"}}
+{{mb_script module="dPrepas" script="dPrepas"}}
 
 <table class='titleblock'>
   <tr>

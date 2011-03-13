@@ -186,7 +186,7 @@ function onSubmitCorrespondant(form) {
     </td>
     
     <td id="addCorres" {{if $dialog}}style="display:none"{{/if}}>
-      {{mb_include_script module="dPpatients" script="autocomplete"}}
+      {{mb_script module="dPpatients" script="autocomplete"}}
     	<script type="text/javascript">
 			Main.add(function () {
 		    InseeFields.initCPVille("editFrm", "cp", "ville","tel");

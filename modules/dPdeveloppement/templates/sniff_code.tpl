@@ -4,6 +4,6 @@ Main.add(function () {
 });
 </script>
 
-{{mb_include_script module=dPdeveloppement script=code_sniffer}}
+{{mb_script module=dPdeveloppement script=code_sniffer}}
 
 {{mb_include template=tree_sniffed_files dir=mediboard basename=mediboard files=$files}}

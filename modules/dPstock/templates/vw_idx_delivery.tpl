@@ -14,7 +14,7 @@
 
 ---------------------------
 
-{{mb_include_script module=dPstock script=filter}}
+{{mb_script module=dPstock script=filter}}
 
 <script type="text/javascript">
 Main.add(function () {

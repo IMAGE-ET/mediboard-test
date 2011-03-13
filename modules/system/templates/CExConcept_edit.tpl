@@ -2,7 +2,7 @@
   {{tr}}{{$object->_class_name}}-title-create{{/tr}}
 </button>
 
-{{mb_include_script module=forms script=ex_class_editor ajax=true}}
+{{mb_script module=forms script=ex_class_editor ajax=true}}
 
 <script type="text/javascript">
 toggleListCustom = function(radio) {

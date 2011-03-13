@@ -17,7 +17,7 @@ Main.add(function() {
 
 );
 </script>
-{{mb_include_script module="bloodSalvage" script="bloodSalvage"}}
+{{mb_script module="bloodSalvage" script="bloodSalvage"}}
 
 {{include file=inc_bs_sspi_header.tpl}}
 

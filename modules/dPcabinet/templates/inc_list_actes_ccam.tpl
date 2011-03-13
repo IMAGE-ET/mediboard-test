@@ -1,4 +1,4 @@
-{{mb_include_script module="dPccam" script="code_ccam" ajax="true"}}
+{{mb_script module="dPccam" script="code_ccam" ajax="true"}}
    
 <!-- S'il y a deja des actes codés, affichage seulement des actes codes -->
 {{if $subject->_ref_actes_ccam && $vue == "complete"}}

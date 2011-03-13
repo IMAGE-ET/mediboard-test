@@ -35,7 +35,7 @@ editSociete = function(societe_id) {
 Main.add(editSociete);
 </script>
 
-{{mb_include_script module=dPstock script=barcode}}
+{{mb_script module=dPstock script=barcode}}
 
 <table class="main">
   <tr>

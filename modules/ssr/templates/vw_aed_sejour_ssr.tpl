@@ -8,12 +8,12 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
 *}}
 
-{{mb_include_script module="dPpatients" script="pat_selector"}}
-{{mb_include_script module="dPplanningOp" script="cim10_selector"}}
-{{mb_include_script module="dPmedicament" script="medicament_selector"}}
-{{mb_include_script module="dPmedicament" script="equivalent_selector"}}
-{{mb_include_script module="ssr" script="cotation_rhs"}}
-{{mb_include_script module="dPcabinet" script="file"}}
+{{mb_script module="dPpatients" script="pat_selector"}}
+{{mb_script module="dPplanningOp" script="cim10_selector"}}
+{{mb_script module="dPmedicament" script="medicament_selector"}}
+{{mb_script module="dPmedicament" script="equivalent_selector"}}
+{{mb_script module="ssr" script="cotation_rhs"}}
+{{mb_script module="dPcabinet" script="file"}}
 
 {{mb_include module=ssr template=inc_form_sejour_ssr}}
 

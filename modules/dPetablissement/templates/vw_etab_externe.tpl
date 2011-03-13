@@ -33,7 +33,7 @@
 		
     <td class="halfPane">
 
-      {{mb_include_script module="dPpatients" script="autocomplete"}}
+      {{mb_script module="dPpatients" script="autocomplete"}}
     	<script type="text/javascript">
 			Main.add(function () {
 			  InseeFields.initCPVille("etabExterne", "cp", "ville","tel");

@@ -1,11 +1,11 @@
-{{mb_include_script module="dPprescription" script="prescription"}}
-{{mb_include_script module="dPprescription" script="prescription_editor"}}
-{{mb_include_script module="dPcompteRendu" script="document"}}
-{{mb_include_script module="dPcompteRendu" script="modele_selector"}}
-{{mb_include_script module="dPmedicament" script="medicament_selector"}}
-{{mb_include_script module="dPmedicament" script="equivalent_selector"}}
-{{mb_include_script module="dPprescription" script="element_selector"}}
-{{mb_include_script module="dPcabinet" script="edit_consultation"}}
+{{mb_script module="dPprescription" script="prescription"}}
+{{mb_script module="dPprescription" script="prescription_editor"}}
+{{mb_script module="dPcompteRendu" script="document"}}
+{{mb_script module="dPcompteRendu" script="modele_selector"}}
+{{mb_script module="dPmedicament" script="medicament_selector"}}
+{{mb_script module="dPmedicament" script="equivalent_selector"}}
+{{mb_script module="dPprescription" script="element_selector"}}
+{{mb_script module="dPcabinet" script="edit_consultation"}}
 
 <script type="text/javascript">
 

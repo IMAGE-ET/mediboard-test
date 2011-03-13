@@ -1,6 +1,6 @@
 <!-- $Id: vw_idx_planning.tpl 7567 2009-12-09 17:03:37Z MyttO $ -->
 
-{{mb_include_script module=mediusers script=color_selector}}
+{{mb_script module=mediusers script=color_selector}}
 
 <script type="text/javascript">
 ColorSelector.init = function(index) {

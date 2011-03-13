@@ -10,7 +10,7 @@
 
 {{assign var="module" value="bloodSalvage"}}
 {{assign var="object" value=$blood_salvage}}
-{{mb_include_script module="bloodSalvage" script="bloodSalvage"}}
+{{mb_script module="bloodSalvage" script="bloodSalvage"}}
 
 <script type="text/javascript">
 Main.add(function () {

@@ -1,7 +1,7 @@
-{{mb_include_script module="dPfiles" script="files"}}
-{{mb_include_script module="system" script="object_selector"}}
-{{mb_include_script module="dPcompteRendu" script="modele_selector"}}
-{{mb_include_script module="dPcompteRendu" script="document"}}
+{{mb_script module="dPfiles" script="files"}}
+{{mb_script module="system" script="object_selector"}}
+{{mb_script module="dPcompteRendu" script="modele_selector"}}
+{{mb_script module="dPcompteRendu" script="document"}}
 
 <table class="main">
   <tr>

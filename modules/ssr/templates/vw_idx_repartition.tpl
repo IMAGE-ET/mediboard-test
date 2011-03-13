@@ -19,7 +19,7 @@ showLegende = function(){
 
 </script>
 
-{{mb_include_script module=ssr script=repartition}}
+{{mb_script module=ssr script=repartition}}
 
 <form name="Edit-CBilanSSR" action="?m={{$m}}" method="post" onsubmit="return checkForm(this)">
 

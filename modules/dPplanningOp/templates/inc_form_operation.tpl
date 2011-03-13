@@ -1,7 +1,7 @@
 <!-- $Id$ -->
 
-{{mb_include_script module="dPplanningOp" script="ccam_selector"}}
-{{mb_include_script module="dPplanningOp" script="plage_selector"}}
+{{mb_script module="dPplanningOp" script="ccam_selector"}}
+{{mb_script module="dPplanningOp" script="plage_selector"}}
 
 <script type="text/javascript">
 Main.add(function(){

@@ -12,7 +12,7 @@
   {{assign var="mutation_id" value=$rpu->mutation_sejour_id}}
 {{/if}}
 
-{{mb_include_script module="dPmedicament" script="equivalent_selector"}}
+{{mb_script module="dPmedicament" script="equivalent_selector"}}
 
 <script type="text/javascript">
 

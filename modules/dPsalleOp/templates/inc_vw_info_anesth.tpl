@@ -90,7 +90,7 @@ Main.add(function(){
     </tr>
     <tr>
       <td>
-        {{mb_include_script module="dPcabinet" script="file"}}
+        {{mb_script module="dPcabinet" script="file"}}
         <div id="files-anesth">
         <script type="text/javascript">
           File.register('{{$consult_anesth->_id}}','{{$consult_anesth->_class_name}}', 'files-anesth');
@@ -99,7 +99,7 @@ Main.add(function(){
       </td>
       <td>
         <div id="documents-anesth">
-          {{mb_include_script module="dPcompteRendu" script="document"}}
+          {{mb_script module="dPcompteRendu" script="document"}}
           <script type="text/javascript">
             Document.register('{{$consult_anesth->_id}}','{{$consult_anesth->_class_name}}','{{$modeles_prat_id}}','documents-anesth');
           </script>

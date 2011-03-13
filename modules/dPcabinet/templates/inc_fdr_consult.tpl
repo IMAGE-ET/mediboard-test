@@ -21,7 +21,7 @@
       <fieldset>
         <legend>{{tr}}CCompteRendu{{/tr}} - {{tr}}{{$object->_class_name}}{{/tr}}</legend>            
         <div id="documents-fdr">
-          {{mb_include_script module="dPcompteRendu" script="document"}}
+          {{mb_script module="dPcompteRendu" script="document"}}
           <script type="text/javascript">
             Document.register('{{$object->_id}}','{{$object->_class_name}}','{{$consult->_praticien_id}}','documents-fdr');
           </script>
@@ -78,7 +78,7 @@
   <tr>
     <!-- Reglement -->
     <td colspan="2">
-      {{mb_include_script module="dPcabinet" script="reglement"}}
+      {{mb_script module="dPcabinet" script="reglement"}}
       <script type="text/javascript">
         Reglement.consultation_id = '{{$consult->_id}}';
         Reglement.user_id = '{{$userSel->_id}}';

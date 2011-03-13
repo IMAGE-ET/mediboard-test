@@ -8,12 +8,12 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
 *}}
 
-{{mb_include_script module="dPfiles" script="files"}}
-{{mb_include_script module="dPpatients" script="pat_selector"}}
-{{mb_include_script module="dPpatients" script="patient"}}
-{{mb_include_script module="hprim21" script="pat_hprim_selector"}}
-{{mb_include_script module="hprim21" script="sejour_hprim_selector"}}
-{{mb_include_script module="dPplanningOp" script="cim10_selector"}}
+{{mb_script module="dPfiles" script="files"}}
+{{mb_script module="dPpatients" script="pat_selector"}}
+{{mb_script module="dPpatients" script="patient"}}
+{{mb_script module="hprim21" script="pat_hprim_selector"}}
+{{mb_script module="hprim21" script="sejour_hprim_selector"}}
+{{mb_script module="dPplanningOp" script="cim10_selector"}}
 
 <script type="text/javascript">
   CIM10Selector.initDP = function(sejour_id){

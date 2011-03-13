@@ -1,4 +1,4 @@
-{{mb_include_script module="dPplanningOp" script="cim10_selector"}}
+{{mb_script module="dPplanningOp" script="cim10_selector"}}
 
 <script type="text/javascript">
 

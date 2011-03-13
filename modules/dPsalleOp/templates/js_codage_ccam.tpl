@@ -1,4 +1,4 @@
-{{mb_include_script module="dPplanningOp" script="ccam_selector"}}
+{{mb_script module="dPplanningOp" script="ccam_selector"}}
 
 <script type="text/javascript">
 

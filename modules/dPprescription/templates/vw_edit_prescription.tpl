@@ -8,11 +8,11 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
 *}}
 
-{{mb_include_script module="dPmedicament" script="medicament_selector"}}
-{{mb_include_script module="dPmedicament" script="equivalent_selector"}}
-{{mb_include_script module="dPprescription" script="element_selector"}}
-{{mb_include_script module="dPprescription" script="prescription"}}
-{{mb_include_script module="dPprescription" script="prescription_editor"}}
+{{mb_script module="dPmedicament" script="medicament_selector"}}
+{{mb_script module="dPmedicament" script="equivalent_selector"}}
+{{mb_script module="dPprescription" script="element_selector"}}
+{{mb_script module="dPprescription" script="prescription"}}
+{{mb_script module="dPprescription" script="prescription_editor"}}
 
 <table class="main">
   <tr>
@@ -29,7 +29,7 @@
           <td>
             {{mb_label object=$filter field=object_id}}
             {{mb_field object=$filter field=object_id hidden="1" onchange="this.form.submit()"}}
-            {{mb_include_script module=system script=object_selector}}
+            {{mb_script module=system script=object_selector}}
             <input type="text" size="60" name="_view" readonly="readonly" value="{{if $object->_id}}{{$object->_view}}{{/if}}" />
             <button type="button" onclick="ObjectSelector.init()" class="search">Rechercher</button>
             <script type="text/javascript">

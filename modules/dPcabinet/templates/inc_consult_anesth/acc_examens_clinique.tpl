@@ -28,7 +28,7 @@ Main.add(function () {
   <tr>
     <td>
       <!-- Fiches d'examens -->
-      {{mb_include_script module="dPcabinet" script="exam_dialog"}}
+      {{mb_script module="dPcabinet" script="exam_dialog"}}
       <script type="text/javascript">
         ExamDialog.register('{{$consult->_id}}','{{$consult->_class_name}}');
       </script>

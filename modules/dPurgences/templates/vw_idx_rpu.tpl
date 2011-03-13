@@ -8,12 +8,12 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
 *}}
 
-{{mb_include_script module=dPurgences script=main_courante}}
-{{mb_include_script module=dPadmissions script=identito_vigilance}}
-{{mb_include_script module=dPpatients script=pat_selector}}
+{{mb_script module=dPurgences script=main_courante}}
+{{mb_script module=dPadmissions script=identito_vigilance}}
+{{mb_script module=dPpatients script=pat_selector}}
 
 {{if $isImedsInstalled}}
-  {{mb_include_script module="dPImeds" script="Imeds_results_watcher"}}
+  {{mb_script module="dPImeds" script="Imeds_results_watcher"}}
 {{/if}}
 
 {{if !$group->service_urgences_id}}

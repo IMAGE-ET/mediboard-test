@@ -1,4 +1,4 @@
-{{mb_include_script module="dPpatients" script="pat_selector"}}
+{{mb_script module="dPpatients" script="pat_selector"}}
 
 <script type="text/javascript">
   function IPPconflict(){

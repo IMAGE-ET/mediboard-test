@@ -166,7 +166,7 @@ duplicateSSRLine = function(element_prescription_id, category_id){
 
 <div id="modal_SSR" style="display: none;"></div>
 
-{{mb_include_script module="dPprescription" script="prescription"}}
+{{mb_script module="dPprescription" script="prescription"}}
 
 <!-- Formulaire de creation de lignes de prescription -->
 <form action="?" method="post" name="addLineSSR" onsubmit="return checkForm(this);">

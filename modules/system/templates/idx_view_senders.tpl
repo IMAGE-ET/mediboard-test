@@ -8,7 +8,7 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
 *}}
 
-{{mb_include_script module=system script=view_sender}}
+{{mb_script module=system script=view_sender}}
 
 <div id="list-senders">
 	<div class="small-info">Liste des exports de vues</div>

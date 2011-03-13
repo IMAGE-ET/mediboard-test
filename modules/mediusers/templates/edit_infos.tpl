@@ -1,4 +1,4 @@
-{{mb_include_script module="dPpatients" script="autocomplete"}}
+{{mb_script module="dPpatients" script="autocomplete"}}
 
 <script type="text/javascript">
 
@@ -29,7 +29,7 @@ Main.add(function () {
 	
 	{{if @$modules.dPpersonnel->_can->read}}
   <li>
-    {{mb_include_script module="dPpersonnel" script="plage"}}
+    {{mb_script module="dPpersonnel" script="plage"}}
     <script type="text/javascript">
     	PlageConge.refresh = function() {
 	      PlageConge.content();

@@ -1,8 +1,8 @@
 {{if @$modules.dPImeds->mod_active}}
-  {{mb_include_script module="dPImeds" script="Imeds_results_watcher"}}
+  {{mb_script module="dPImeds" script="Imeds_results_watcher"}}
 {{/if}}
 
-{{mb_include_script module="dPcompteRendu" script="modele_selector"}}
+{{mb_script module="dPcompteRendu" script="modele_selector"}}
 
 <script type="text/javascript">
 
@@ -302,7 +302,7 @@ function popEtatSejour(sejour_id) {
   <tr>
     <td class="button">
     {{if @$modules.ecap->mod_active}}
-      {{mb_include_script module=ecap script=dhe}}
+      {{mb_script module=ecap script=dhe}}
       <div id="dhe"></div>
       <script type="text/javascript">DHE.register({{$patient->patient_id}}, null, "dhe");</script>
     {{else}}

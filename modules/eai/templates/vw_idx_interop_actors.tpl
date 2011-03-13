@@ -9,7 +9,7 @@
  * @link     http://www.mediboard.org
 *}}
 
-{{mb_include_script module=eai script=interop_actor}}
+{{mb_script module=eai script=interop_actor}}
 
 <script type="text/javascript">
   Main.add(function () {

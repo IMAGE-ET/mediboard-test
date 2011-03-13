@@ -18,7 +18,7 @@ Main.add(function(){
 });
 </script>
 
-{{mb_include_script module=dPstock script=order_manager}}
+{{mb_script module=dPstock script=order_manager}}
 
 <form name="filter-receptions" method="get" action="" onsubmit="return Url.update(this, 'receptions_list')">
   <input type="hidden" name="m" value="dPstock" />

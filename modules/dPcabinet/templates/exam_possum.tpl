@@ -11,7 +11,7 @@ var scorePhysio = {{$exam_possum->_score_physio}};
 var scoreOper   = {{$exam_possum->_score_oper}};
 </script>
 
-{{mb_include_script module=$m script="exam_possum"}}
+{{mb_script module=$m script="exam_possum"}}
 
 
 <form name="editFrmPossum" action="?m=dPcabinet&amp;a=exam_possum&amp;dialog=1" method="post" onsubmit="return checkForm(this)">

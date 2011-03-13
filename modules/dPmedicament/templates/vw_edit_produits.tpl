@@ -19,7 +19,7 @@ function updateUniteDispensation(element){
 }	
 
 </script>
-{{mb_include_script module="dPmedicament" script="medicament_selector"}}
+{{mb_script module="dPmedicament" script="medicament_selector"}}
 
 <table class="main">
   <tr>

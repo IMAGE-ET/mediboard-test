@@ -8,8 +8,8 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
 *}}
  
-{{mb_include_script module="dPpatients" script="pat_selector"}}
-{{mb_include_script module="dPplanningOp" script="cim10_selector"}}
+{{mb_script module="dPpatients" script="pat_selector"}}
+{{mb_script module="dPplanningOp" script="cim10_selector"}}
 
 <script type="text/javascript">
 function checkHeureSortie(){

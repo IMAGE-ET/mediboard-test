@@ -1,7 +1,7 @@
 <!-- $Id$ -->
 
-{{mb_include_script module="dPcompteRendu" script="document"}}
-{{mb_include_script module="dPpatients" script="patient" ajax=true}}
+{{mb_script module="dPcompteRendu" script="document"}}
+{{mb_script module="dPpatients" script="patient" ajax=true}}
 
 <script type="text/javascript">
 

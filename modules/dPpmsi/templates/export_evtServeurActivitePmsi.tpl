@@ -1,6 +1,6 @@
 <!-- $Id$ -->
 
-{{mb_include_script module="system" script="object_selector"}}
+{{mb_script module="system" script="object_selector"}}
 
 <script type="text/javascript">
 

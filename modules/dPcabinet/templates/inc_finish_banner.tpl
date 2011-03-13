@@ -21,7 +21,7 @@ function printConsult() {
 }
 </script>
 
-{{mb_include_script module=dPcabinet script=file}}
+{{mb_script module=dPcabinet script=file}}
 {{mb_include module=dPfiles template=yoplet_uploader object=$consult}}
 
 <form class="watch" name="editFrmFinish" action="?m={{$m}}" method="post" onsubmit="return checkForm(this);">

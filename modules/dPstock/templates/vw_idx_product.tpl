@@ -46,7 +46,7 @@ Main.add(function(){
 });
 </script>
 
-{{mb_include_script module=dPstock script=barcode}}
+{{mb_script module=dPstock script=barcode}}
 
 <table class="main">
   <tr>

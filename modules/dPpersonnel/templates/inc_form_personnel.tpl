@@ -8,7 +8,7 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
 *}}
 
-{{mb_include_script module="system" script="object_selector"}}
+{{mb_script module="system" script="object_selector"}}
 
 <form name="editFrm" action="?m={{$m}}" method="post" onsubmit="return checkForm(this)">
 

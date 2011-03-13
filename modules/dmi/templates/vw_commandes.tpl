@@ -1,4 +1,4 @@
-{{mb_include_script module=dPprescription script=prescription}}
+{{mb_script module=dPprescription script=prescription}}
 
 <script type="text/javascript">
   function orderProduct(form){

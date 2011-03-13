@@ -169,10 +169,10 @@ modifFormDate = function(nb_prises, form_name, protocole,line_id){
 
 {{include file="../../dPprescription/templates/js_functions.tpl"}}
 
-{{mb_include_script module="dPmedicament" script="medicament_selector"}}
-{{mb_include_script module="dPmedicament" script="equivalent_selector"}}
-{{mb_include_script module="dPprescription" script="element_selector"}}
-{{mb_include_script module="dPprescription" script="prescription"}}
+{{mb_script module="dPmedicament" script="medicament_selector"}}
+{{mb_script module="dPmedicament" script="equivalent_selector"}}
+{{mb_script module="dPprescription" script="element_selector"}}
+{{mb_script module="dPprescription" script="prescription"}}
 
 <form name="editVoie" method="post" action="">
   <input type="hidden" name="m" value="dPprescription" />

@@ -8,7 +8,7 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
 *}}
 
-{{mb_include_script module=dPurgences script=main_courante}}
+{{mb_script module=dPurgences script=main_courante}}
 
 <script type="text/javascript">
 var refreshExecuter;

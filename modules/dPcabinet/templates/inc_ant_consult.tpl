@@ -1,5 +1,5 @@
-{{mb_include_script module="dPplanningOp" script="cim10_selector"}}
-{{mb_include_script module="dPmedicament" script="medicament_selector"}}
+{{mb_script module="dPplanningOp" script="cim10_selector"}}
+{{mb_script module="dPmedicament" script="medicament_selector"}}
 
 <script type="text/javascript">
 

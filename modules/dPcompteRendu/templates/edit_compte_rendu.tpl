@@ -1,6 +1,6 @@
 {{assign var=pdf_thumbnails value=$conf.dPcompteRendu.CCompteRendu.pdf_thumbnails}}
 
-{{mb_include_script module=dPcompteRendu script=thumb}}
+{{mb_script module=dPcompteRendu script=thumb}}
 
 <script type="text/javascript">
 window.same_print = {{$conf.dPcompteRendu.CCompteRendu.same_print}};

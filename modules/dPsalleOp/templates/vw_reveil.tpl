@@ -1,4 +1,4 @@
-{{mb_include_script module="bloodSalvage" script="bloodSalvage"}}
+{{mb_script module="bloodSalvage" script="bloodSalvage"}}
 
 {{if $conf.dPsalleOp.CDailyCheckList.active_salle_reveil != '1' || 
      $date < $smarty.now|iso_date || 

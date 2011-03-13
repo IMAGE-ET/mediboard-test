@@ -8,17 +8,17 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
 *}}
 
-{{mb_include_script module="dPcompteRendu" script="document"}}
-{{mb_include_script module="dPcompteRendu" script="modele_selector"}}
-{{mb_include_script module="dPcabinet" script="file"}}
-{{mb_include_script module="dPplanningOp" script="cim10_selector"}}
+{{mb_script module="dPcompteRendu" script="document"}}
+{{mb_script module="dPcompteRendu" script="modele_selector"}}
+{{mb_script module="dPcabinet" script="file"}}
+{{mb_script module="dPplanningOp" script="cim10_selector"}}
 {{if $isImedsInstalled}}
-{{mb_include_script module="dPImeds" script="Imeds_results_watcher"}}
+{{mb_script module="dPImeds" script="Imeds_results_watcher"}}
 {{/if}}
-{{mb_include_script module="dPmedicament" script="medicament_selector"}}
-{{mb_include_script module="dPmedicament" script="equivalent_selector"}}
-{{mb_include_script module="dPprescription" script="element_selector"}}
-{{mb_include_script module="dPprescription" script="prescription"}}
+{{mb_script module="dPmedicament" script="medicament_selector"}}
+{{mb_script module="dPmedicament" script="equivalent_selector"}}
+{{mb_script module="dPprescription" script="element_selector"}}
+{{mb_script module="dPprescription" script="prescription"}}
 
 {{assign var="do_subject_aed" value="do_sejour_aed"}}
 {{assign var="module" value="dPhospi"}}

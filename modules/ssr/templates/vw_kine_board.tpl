@@ -1,6 +1,6 @@
-{{mb_include_script module=ssr script=planning}}
-{{mb_include_script module=ssr script=planification}}
-{{mb_include_script module=ssr script=modal_validation}}
+{{mb_script module=ssr script=planning}}
+{{mb_script module=ssr script=planification}}
+{{mb_script module=ssr script=modal_validation}}
 
 <script type="text/javascript">
 

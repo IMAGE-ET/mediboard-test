@@ -8,7 +8,7 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
 *}}
 
-{{mb_include_script module=ssr script=sejours_ssr}}
+{{mb_script module=ssr script=sejours_ssr}}
 
 {{if $dialog}}
   {{mb_include style=mediboard template=open_printable}}
