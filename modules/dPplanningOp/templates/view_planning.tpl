@@ -96,6 +96,15 @@
     <th class="category" colspan="2">Renseignements relatifs à l'hospitalisation</th>
   </tr>
   
+  {{if $sejour->libelle}}
+  <tr>
+    <th>{{tr}}CSejour-libelle-desc{{/tr}}</th>
+    <td>
+      {{$sejour->libelle}}
+    </td>
+  </tr>
+  {{/if}}
+  
   {{if $sejour->_num_dossier}}
   <tr>
     <th>{{tr}}CSejour-_num_dossier{{/tr}}</th>
