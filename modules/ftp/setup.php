@@ -78,8 +78,14 @@ class CSetupftp extends CSetup {
     $query = "ALTER TABLE `echange_ftp` 
                 ADD INDEX (`date_echange`);";
     $this->addQuery($query);
-              
-    $this->mod_version = "0.03";
+    
+    $this->makeRevision("0.03");
+    
+    $query = "ALTER TABLE `source_ftp` 
+                ADD `active` ENUM ('0','1') NOT NULL DEFAULT '1';";
+    $this->addQuery($query);
+    
+    $this->mod_version = "0.04";
   }
 }
 ?>

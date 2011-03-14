@@ -563,6 +563,16 @@ class CSetupsystem extends CSetup {
       ADD INDEX (`source_id`);";
     $this->addQuery($query);
     
-    $this->mod_version = "1.0.53";
+    $this->makeRevision("1.0.53");
+    
+    $query = "ALTER TABLE `source_smtp` 
+                ADD `active` ENUM ('0','1') NOT NULL DEFAULT '1';";
+    $this->addQuery($query);
+    
+    $query = "ALTER TABLE `source_file_system` 
+                ADD `active` ENUM ('0','1') NOT NULL DEFAULT '1';";
+    $this->addQuery($query);
+    
+    $this->mod_version = "1.0.54";
   }
 }

@@ -30,6 +30,7 @@ class CExchangeSource extends CMbObject {
   var $user         = null;
   var $password     = null;
   var $type_echange = null;
+  var $active       = null;
 	
   // Behaviour Fields
   var $_client            = null;
@@ -41,6 +42,7 @@ class CExchangeSource extends CMbObject {
   var $_reachable         = null;
   var $_message           = null;
   var $_response_time     = null;
+  var $_all_source        = array();
   
   function getProps() {
     $specs = parent::getProps();
@@ -50,6 +52,7 @@ class CExchangeSource extends CMbObject {
     $specs["user"]           = "str";
     $specs["password"]       = "password revealable";
 		$specs["type_echange"]   = "str protected";
+		$specs["active"]         = "bool default|1 notNull";
     
     $specs["_incompatible"]  = "bool";
     $specs["_reachable"]     = "enum list|0|1|2 default|0";
@@ -78,7 +81,8 @@ class CExchangeSource extends CMbObject {
   } 
     
   static function get($name, $type = null, $override = false, $type_echange = null) {
-    foreach (self::getExchangeClasses() as $_class) {
+    $exchange_classes = self::getExchangeClasses(); 
+    foreach ($exchange_classes as $_class) {
       $exchange_source = new $_class;
       $exchange_source->name = $name;
       $exchange_source->loadMatchingObject();

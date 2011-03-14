@@ -19,6 +19,7 @@ $locales['CExchangeSource._reachable.0'] = 'Non';
 $locales['CExchangeSource._reachable.1'] = 'Partiellement';
 $locales['CExchangeSource._reachable.2'] = 'Oui';
 $locales['CExchangeSource-no-source'] = 'Aucune source de définie pour : \'%s\'';
+$locales['CExchangeSource-not-active'] = 'La source n\'est pas active';
 $locales['CExchangeTabular'] = 'Echanges Tabulés';
 $locales['CInteropReceiver'] = 'Destinataire d\'intégration';
 $locales['CInteropReceiver-_exchanges_sources_save-court'] = 'Sources';

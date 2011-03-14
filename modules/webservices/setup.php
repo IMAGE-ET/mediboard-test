@@ -93,7 +93,13 @@ function __construct() {
                 ADD `single_parameter` VARCHAR (255);";
     $this->addQuery($query, true);
     
-    $this->mod_version = "0.18";
+    $this->makeRevision("0.18");
+    
+    $query = "ALTER TABLE `source_soap` 
+                ADD `active` ENUM ('0','1') NOT NULL DEFAULT '1';";
+    $this->addQuery($query);
+    
+    $this->mod_version = "0.19";    
   }
 }
 ?>

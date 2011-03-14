@@ -46,39 +46,12 @@
       
     <hr class="control_tabs" />
     {{/if}} 
-    
+         
     <div id="CSourceFTP-{{$sourcename}}" style="display:{{if !$source->_allowed_instances && ($source instanceof CSourceFTP)}}block{{else}}none{{/if}};">
       {{if !"ftp"|module_active}}
         {{mb_include module=system template=module_missing mod=ftp}}  
       {{else}}
-        {{if $source->_id && !($source instanceof CSourceFTP)}}
-          <div class="small-info">
-            {{tr}}CExchangeSource-already-exist{{/tr}}
-          </div>
-        {{else}}
-        <table class="main">
-          {{assign var="_source_ftp" value=$source}}
-          {{if $source->_class_name == "CExchangeSource"}}
-            {{assign var="_source_ftp" value=$source->_allowed_instances.CSourceFTP}}
-          {{/if}}
-          {{if !$source->_id}}
-          <tr>
-            <td class="halfPane">
-              <a class="button new" onclick="$('config-source-ftp-{{$sourcename}}').show()">
-                Créer une source FTP
-              </a>
-           </td>
-          </tr>
-          {{/if}}
-          <tr>
-            <td id="config-source-ftp-{{$sourcename}}" {{if !$source->_id}}style="display:none"{{/if}}>
-              {{if $_source_ftp instanceof CSourceFTP}}
-                {{mb_include module=ftp template=inc_config_source_ftp source=$_source_ftp}}  
-              {{/if}}     
-            </td>
-          </tr>
-        </table> 
-        {{/if}}
+        {{mb_include module=system template=CExchangeSource_inc_config mod=ftp class="CSourceFTP"}}  
       {{/if}}
     </div>
     
@@ -86,97 +59,21 @@
       {{if !"webservices"|module_active}}
         {{mb_include module=system template=module_missing mod=webservices}}  
       {{else}}
-        {{if $source->_id && !($source instanceof CSourceSOAP)}}
-          <div class="small-info">
-            {{tr}}CExchangeSource-already-exist{{/tr}}
-          </div>
-        {{else}}
-        <table class="main source">
-          {{assign var="_source_soap" value=$source}}
-          {{if $source->_class_name == "CExchangeSource"}}
-            {{assign var="_source_soap" value=$source->_allowed_instances.CSourceSOAP}}
-          {{/if}}
-          {{if !$source->_id}}
-          <tr>
-            <td class="halfPane">
-              <a class="button new" onclick="$('config-source-soap-{{$sourcename}}').show()">
-                Créer une source SOAP
-              </a> 
-           </td>
-          </tr>
-          {{/if}}
-          <tr>
-            <td id="config-source-soap-{{$sourcename}}" {{if !$source->_id}}style="display:none"{{/if}}>
-              {{if $_source_soap instanceof CSourceSOAP}}
-                {{mb_include module=webservices template=inc_config_source_soap source=$_source_soap}}
-              {{/if}}            
-            </td>
-          </tr>
-        </table>
-        {{/if}}
+        {{mb_include module=system template=CExchangeSource_inc_config mod=webservices class="CSourceSOAP"}}  
       {{/if}}
     </div>
     
     <div id="CSourceSMTP-{{$sourcename}}" style="display:{{if !$source->_allowed_instances && ($source instanceof CSourceSMTP)}}block{{else}}none{{/if}};">
-      {{if $source->_id && !($source instanceof CSourceSMTP)}}
-        <div class="small-info">
-          {{tr}}CExchangeSource-already-exist{{/tr}}
-        </div>
-      {{else}}
-      <table class="main">
-        {{assign var="_source_smtp" value=$source}}
-        {{if $source->_class_name == "CExchangeSource"}}
-          {{assign var="_source_smtp" value=$source->_allowed_instances.CSourceSMTP}}
-        {{/if}}
-        {{if !$source->_id}}
-        <tr>
-          <td class="halfPane">
-            <a class="button new" onclick="$('config-source-smtp-{{$sourcename}}').show()">
-              Créer une source SMTP
-            </a>
-         </td>
-        </tr>
-        {{/if}}
-        <tr>
-          <td id="config-source-smtp-{{$sourcename}}" {{if !$source->_id}}style="display:none"{{/if}}>
-            {{if $_source_smtp instanceof CSourceSMTP}}
-              {{mb_include module=system template=inc_config_source_smtp source=$_source_smtp}}  
-            {{/if}}     
-          </td>
-        </tr>
-      </table> 
-      {{/if}}
+      {{mb_include module=system template=CExchangeSource_inc_config mod=system class="CSourceSMTP"}}  
     </div>
     
     <div id="CSourceFileSystem-{{$sourcename}}" style="display:{{if !$source->_allowed_instances && ($source instanceof CSourceFileSystem)}}block{{else}}none{{/if}};">
-      {{if $source->_id && !($source instanceof CSourceFileSystem)}}
-        <div class="small-info">
-          {{tr}}CExchangeSource-already-exist{{/tr}}
-        </div>
-      {{else}}
-      <table class="main">
-        {{assign var="_source_file_system" value=$source}}
-        {{if $source->_class_name == "CExchangeSource"}}
-          {{assign var="_source_file_system" value=$source->_allowed_instances.CSourceFileSystem}}
-        {{/if}}
-        {{if !$source->_id}}
-        <tr>
-          <td class="halfPane">
-            <a class="button new" onclick="$('config-source-file_system-{{$sourcename}}').show()">
-              Créer une source Système de fichiers
-            </a>
-         </td>
-        </tr>
-        {{/if}}
-        <tr>
-          <td id="config-source-file_system-{{$sourcename}}" {{if !$source->_id}}style="display:none"{{/if}}>
-            {{if $_source_file_system instanceof CSourceFileSystem}}
-              {{mb_include module=system template=inc_config_source_file_system source=$_source_file_system}}  
-            {{/if}}     
-          </td>
-        </tr>
-      </table> 
+      {{if $source instanceof CSourceFileSystem && !$source->active}}
+      <div class="small-info">
+        {{tr}}CExchangeSource-not-active{{/tr}}
+      </div>
       {{/if}}
+      {{mb_include module=system template=CExchangeSource_inc_config mod=system class="CSourceFileSystem"}}  
     </div>
   </div>
 {{/if}}

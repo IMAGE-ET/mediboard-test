@@ -24,15 +24,7 @@
               {{tr}}config-source-file_system{{/tr}}
             </th>
           </tr>
-          
-          <tr>
-            <th>{{mb_label object=$source field="name"}}</th>
-            <td>{{mb_field object=$source field="name" readonly="readonly"}}</td>
-          </tr>
-          <tr>
-            <th>{{mb_label object=$source field="host"}}</th>
-            <td>{{mb_field object=$source field="host"}}</td>
-          </tr>
+          {{mb_include module=system template=CExchangeSource_inc}}
           <tr>
             <td class="button" colspan="2">
               {{if $source->_id}}

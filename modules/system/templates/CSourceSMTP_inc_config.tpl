@@ -38,18 +38,10 @@ guessDataFormEmail = function(element){
               {{tr}}config-source-smtp{{/tr}}
             </th>
           </tr>
-          
-          <tr>
-            <th>{{mb_label object=$source field="name"}}</th>
-            <td>{{mb_field object=$source field="name" readonly="readonly"}}</td>
-          </tr>
+          {{mb_include module=system template=CExchangeSource_inc}}
           <tr>
             <th>{{mb_label object=$source field="email"}}</th>
             <td>{{mb_field object=$source field="email" onchange="guessDataFormEmail(this)"}}</td>
-          </tr>
-          <tr>
-            <th>{{mb_label object=$source field="host"}}</th>
-            <td>{{mb_field object=$source field="host"}}</td>
           </tr>
           <tr>
             <th>{{mb_label object=$source field="user"}}</th>
