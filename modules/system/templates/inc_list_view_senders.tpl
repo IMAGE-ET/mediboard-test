@@ -43,7 +43,7 @@
     <td>{{mb_value object=$_sender field=offset}}</td>
     {{assign var=status value=$_sender->active|ternary:"ok":"off"}}
 		{{foreach from=$_sender->_hour_plan key=min item=plan}}
-    <td class="hour-plan {{$plan|ternary:$status:""}}" title="{{$min}}" />
+    <td class="hour-plan min-{{$min}} {{$plan|ternary:$status:""}}" title="{{$min}}" />
 		{{/foreach}}
   </tr>
   {{foreachelse}}
@@ -51,6 +51,16 @@
 		<td class="empty" colspan="3">{{tr}}CViewSender.none{{/tr}}</td>
 	</tr>
   {{/foreach}}
+	<tr style="border-top: 2px solid #888;">
+		<td colspan="5" style="text-align: right;"><strong>Bilan horaire</strong></th>
+	  {{foreach from=$hour_sum key=min item=sum}}
+    {{assign var=status value=""}}
+    {{if $sum == 1}}{{assign var=status value=ok     }}{{/if}}
+    {{if $sum >= 2}}{{assign var=status value=warning}}{{/if}}
+    {{if $sum >= 4}}{{assign var=status value=error  }}{{/if}}
+    <td class="hour-plan {{$plan|ternary:$status:""}}" title="{{$sum}} @ {{$min}}" onclick="ViewSender.highliteMinute({{$min}})" />
+    {{/foreach}}
+  </tr>
   
 </table>
 

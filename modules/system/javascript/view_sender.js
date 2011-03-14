@@ -43,6 +43,14 @@ ViewSender = {
     confirmDeletion(form, options, ajax);		
 	},
 	
+	highliteMinute: function (min) {
+		$$('td.min-'+min).each(function(e) {
+			if (e.hasClassName("ok") || e.hasClassName("off")) {
+        Effect.Pulsate(e, { pulses: 3, duration: 3 });
+			}
+		});
+	},
+	
   refreshList: function() {
 		var url = new Url('system', 'ajax_list_view_senders');
 		url.requestUpdate('list-senders');
