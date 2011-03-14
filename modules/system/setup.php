@@ -566,13 +566,19 @@ class CSetupsystem extends CSetup {
     $this->makeRevision("1.0.53");
     
     $query = "ALTER TABLE `source_smtp` 
-                ADD `active` ENUM ('0','1') NOT NULL DEFAULT '1';";
+      ADD `active` ENUM ('0','1') NOT NULL DEFAULT '1';";
     $this->addQuery($query);
     
     $query = "ALTER TABLE `source_file_system` 
-                ADD `active` ENUM ('0','1') NOT NULL DEFAULT '1';";
+      ADD `active` ENUM ('0','1') NOT NULL DEFAULT '1';";
     $this->addQuery($query);
     
-    $this->mod_version = "1.0.54";
+    $this->makeRevision("1.0.54");
+    
+    $query = "ALTER TABLE `view_sender` 
+      ADD `active` ENUM ('0','1') NOT NULL DEFAULT '0';";
+    $this->addQuery($query);
+
+    $this->mod_version = "1.0.55";
   }
 }

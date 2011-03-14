@@ -20,10 +20,13 @@
     <th class="narrow">
       {{mb_title class=CViewSender field=offset}}
     </th>
+		<th colspan="60">
+			{{tr}}CViewSender-_hour_plan{{/tr}}
+		</th>
 	</tr>
 
   {{foreach from=$senders item=_sender}}
-  <tr>
+  <tr style="min-height: 2em;">
     <td>
       <button class="edit notext" style="float: right;" onclick="ViewSender.edit('{{$_sender->_id}}');">
         {{tr}}Edit{{/tr}}
@@ -38,6 +41,9 @@
 		</td>
     <td>{{mb_value object=$_sender field=period}}</td>
     <td>{{mb_value object=$_sender field=offset}}</td>
+		{{foreach from=$_sender->_hour_plan key=min item=plan}}
+    <td class="hour-plan {{$plan|ternary:"ok":""}}" title="{{$min}}" />
+		{{/foreach}}
   </tr>
   {{foreachelse}}
 	<tr>

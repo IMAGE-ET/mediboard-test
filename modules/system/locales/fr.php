@@ -829,6 +829,7 @@ $locales['CUserLog.type.delete'] = 'Suppression';
 $locales['CUserLog.type.merge'] = 'Fusion';
 $locales['CUserLog.type.store'] = 'Modification';
 $locales['CViewSender'] = 'Export de vue';
+$locales['CViewSender-_hour_plan'] = 'Plan horaire';
 $locales['CViewSender-description'] = 'Description';
 $locales['CViewSender-description-court'] = 'Description';
 $locales['CViewSender-description-desc'] = 'Description de l\'export';

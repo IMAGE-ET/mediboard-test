@@ -1439,6 +1439,10 @@ table.tbl td.trans-data p, table.tbl td.trans-action p, table.tbl td.trans-resul
 	margin-left: 50px;
 }
 
+table.tbl td.hour-plan {
+	height: 3em;
+}
+
 .iconed-text {
   padding-left: 20px !important;
   background-repeat: no-repeat;

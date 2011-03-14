@@ -26,10 +26,14 @@ class CViewSender extends CMbObject {
   var $params      = null;
   var $period      = null;
   var $offset      = null;
+	var $active      = null;
   
   // Form fields
 	var $_params = null;
 	var $_when   = null;
+
+  // Distant properties
+	var $_hour_plan = null;
   
   // Object references
   var $_ref_source;
@@ -49,7 +53,8 @@ class CViewSender extends CMbObject {
     $props["description"] = "text";
     $props["params"     ] = "text notNull";
     $props["period"     ] = "enum list|1|2|3|4|5|6|10|15|20|30 moreThan|offset";
-    $props["offset"     ] = "num pos";
+    $props["offset"     ] = "num min|0";
+    $props["active"     ] = "bool notNull default|0";
     return $props;
   }
 
@@ -59,6 +64,14 @@ class CViewSender extends CMbObject {
 		$this->_params = explode("&", $this->params);
 		$this->_when = "$this->period mn + $this->offset";
   }
+	
+	function makeHourPlan() {
+		$period = intval($this->period);
+		$offset = intval($this->offset);
+		foreach (range(0, 59) as $min) {
+			$this->_hour_plan[$min] = $min % $period == $offset;
+		}
+	}
 }
 
 ?>

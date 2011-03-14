@@ -12,6 +12,9 @@ CCanDo::checkRead();
 
 $sender = new CViewSender();
 $senders = $sender->loadList(null, "name");
+foreach ($senders as $_sender) {
+	$_sender->makeHourPlan();
+}
 
 // Création du template
 $smarty = new CSmartyDP();
