@@ -26,7 +26,7 @@
 	</tr>
 
   {{foreach from=$senders item=_sender}}
-  <tr style="min-height: 2em;">
+  <tr>
     <td>
       <button class="edit notext" style="float: right;" onclick="ViewSender.edit('{{$_sender->_id}}');">
         {{tr}}Edit{{/tr}}
@@ -41,8 +41,9 @@
 		</td>
     <td>{{mb_value object=$_sender field=period}}</td>
     <td>{{mb_value object=$_sender field=offset}}</td>
+    {{assign var=status value=$_sender->active|ternary:"ok":"off"}}
 		{{foreach from=$_sender->_hour_plan key=min item=plan}}
-    <td class="hour-plan {{$plan|ternary:"ok":""}}" title="{{$min}}" />
+    <td class="hour-plan {{$plan|ternary:$status:""}}" title="{{$min}}" />
 		{{/foreach}}
   </tr>
   {{foreachelse}}

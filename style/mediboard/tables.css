@@ -251,6 +251,12 @@ span.ok {
   background-color: #afa !important;
 }
 
+table.tbl td.off,
+table.tbl th.off,
+span.off {
+  background-color: #ccc !important;
+}
+
 table.tbl td.highlight,
 table.tbl th.highlight,
 td.highlight {
