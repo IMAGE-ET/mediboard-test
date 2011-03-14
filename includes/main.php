@@ -269,7 +269,7 @@ if ($tab !== null) {
 $phpChrono->stop();
 
 $performance["genere"]         = number_format($phpChrono->total, 3);
-$performance["memoire"]        = CMbString::toDecaBinary(memory_get_usage());
+$performance["memoire"]        = CMbString::toDecaBinary(memory_get_peak_usage(true));
 $performance["objets"]         = CMbObject::$objectCount;
 $performance["cachableCount"]  = array_sum(CMbObject::$cachableCounts);
 $performance["cachableCounts"] = CMbObject::$cachableCounts;

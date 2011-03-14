@@ -154,7 +154,11 @@ table.layout td.cancelled {
 	background-color: #F00 !important;
 }
 
-label:hover,
+label:hover {
+  cursor: pointer;
+}
+
+label[title]:hover,
 *[onmouseover] {
   border-bottom: 1px dotted #bbb;
   margin-bottom: -1px;

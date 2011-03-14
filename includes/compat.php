@@ -198,6 +198,22 @@ if (!function_exists('memory_get_usage')) {
   }
 }
 
+if (!function_exists('memory_get_peak_usage')) {
+  /**
+   * Returns the peak of memory allocated by PHP
+   * (PHP 5 >= 5.2.0)
+   * requires compiling with --enable-memory-limit before 5.2.1
+   * 
+   * @param bool $real_usage Real memory if true, emalloc() if false
+   * 
+   * @return int Number of bytes
+   * @link http://php.net/memory_get_peak_usage
+   */
+  function memory_get_peak_usage($real_usage = false) {
+    return memory_get_usage($real_usage);
+  }
+}
+
 if (!function_exists('timezone_identifiers_list')) {
 	/**
 	 * Returns numerically index array with all timezone identifiers
