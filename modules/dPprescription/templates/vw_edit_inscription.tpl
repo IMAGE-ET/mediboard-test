@@ -99,6 +99,9 @@ Main.add(function () {
       </div>
   	</td>
   </tr>
-	<tr id="administration">
+	<tr>
+		<td id="administration">
+			
+		</td>
 	</tr>		
 </table>
