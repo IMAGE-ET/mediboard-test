@@ -29,6 +29,7 @@ class CViewSender extends CMbObject {
   
   // Form fields
 	var $_params = null;
+	var $_when   = null;
   
   // Object references
   var $_ref_source;
@@ -53,8 +54,10 @@ class CViewSender extends CMbObject {
   }
 
   function updateFormFields() {
-    parent::updataFormFields();
+    parent::updateFormFields();
     $this->_view = $this->name;
+		$this->_params = explode("&", $this->params);
+		$this->_when = "$this->period mn + $this->offset";
   }
 }
 

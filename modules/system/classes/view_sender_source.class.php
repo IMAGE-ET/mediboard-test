@@ -37,6 +37,12 @@ class CViewSenderSource extends CMbObject {
     return $props;
   }
 	
+	function getBackProps() {
+		return parent::getBackProps() + array(
+      "senders" => "CViewSender source_id",
+		);
+	}
+	
 	function updateFormFields() {
 		parent::updataFormFields();
 		$this->_view = $this->name;

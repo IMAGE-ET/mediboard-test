@@ -10,6 +10,13 @@
 
 {{mb_script module=system script=view_sender}}
 
+<button class="new singleclick" onclick="ViewSender.edit(0);">
+	{{tr}}CViewSender-title-create{{/tr}}
+</button>
+
+<script type="text/javascript">
+	Main.add(ViewSender.refreshList);
+</script>
 <div id="list-senders">
 	<div class="small-info">Liste des exports de vues</div>
 </div>
