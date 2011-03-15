@@ -19,6 +19,7 @@ $chapitre     = CValue::get("chapitre"); // Chapitre a rafraichir
 $object_id    = CValue::get("object_id");
 $object_class = CValue::get("object_class");
 $unite_prise  = CValue::get("unite_prise");
+$without_check_date = CValue::get("without_check_date", "0");
 
 // Permet de gerer le cas ou des unites de prises contiennent des '
 $unite_prise = stripslashes(preg_replace('~&#0*([0-9]+);~e', 'chr(\\1)', $unite_prise));
@@ -63,6 +64,16 @@ if($sejour->_ref_curr_affectation->_id){
 }
 
 $configs = CConfigService::getAllFor($service_id);
+
+if(!$without_check_date && !($object_id && $object_class)){
+	// Si la date actuelle est inférieure a l'heure affichée sur le plan de soins, on affiche le plan de soins de la veille (cas de la nuit)
+	$datetime_limit = mbDateTime($configs["Borne matin min"].":00:00");	
+	if(mbDateTime() < $datetime_limit){
+	  $date = mbDate("- 1 DAY");
+	} else {
+	  $date = mbDate();
+	}
+}
 
 $matin = range($configs["Borne matin min"], $configs["Borne matin max"]);
 $soir = range($configs["Borne soir min"], $configs["Borne soir max"]);

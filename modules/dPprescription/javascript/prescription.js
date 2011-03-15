@@ -408,7 +408,7 @@ Prescription = {
 		url.addParam("sejour_id", sejour_id);
 		url.requestUpdate("perop");
 	},
-	loadTraitement: function(sejour_id, date, nb_decalage, mode_dossier, object_id, object_class, unite_prise, chapitre) {
+	loadTraitement: function(sejour_id, date, nb_decalage, mode_dossier, object_id, object_class, unite_prise, chapitre, without_check_date) {
 		var url = new Url("dPprescription", "httpreq_vw_dossier_soin");
 	  url.addParam("sejour_id", sejour_id);
 	  url.addParam("date", date);
@@ -422,6 +422,7 @@ Prescription = {
 	  url.addParam("object_id", object_id);
     url.addParam("object_class", object_class);
     url.addParam("unite_prise", unite_prise);
+		url.addParam("without_check_date", without_check_date);
 		
     if(object_id && object_class){
       if(object_class == 'CPrescriptionLineMix'){

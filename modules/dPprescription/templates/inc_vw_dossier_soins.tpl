@@ -528,12 +528,12 @@ Main.add(function () {
 	<h1 style="text-align: center;">
 	 		  <button type="button" 
 				       class="left notext" 
-							 {{if $sejour->_entree|iso_date < $date}}onclick="Prescription.loadTraitement('{{$sejour->_id}}','{{$prev_date}}');"{{/if}}
+							 {{if $sejour->_entree|iso_date < $date}}onclick="Prescription.loadTraitement('{{$sejour->_id}}','{{$prev_date}}', null, null, null, null, null, null, '1');"{{/if}}
 				       {{if $sejour->_entree|iso_date >= $date}}style="opacity: 0.5;"{{/if}}></button>	
      Dossier de soin du {{$date|@date_format:"%d/%m/%Y"}}
 		 <button type="button"
 		         class="right notext"
-						 {{if $sejour->_sortie|iso_date > $date}}onclick="Prescription.loadTraitement('{{$sejour->_id}}','{{$next_date}}','','administration');"{{/if}}
+						 {{if $sejour->_sortie|iso_date > $date}}onclick="Prescription.loadTraitement('{{$sejour->_id}}','{{$next_date}}','','administration', null, null, null, null, '1');"{{/if}}
 						 {{if $sejour->_sortie|iso_date <= $date}}style="opacity: 0.5;"{{/if}}></button>
 	</h1>
 	 
