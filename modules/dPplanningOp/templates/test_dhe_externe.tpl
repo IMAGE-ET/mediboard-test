@@ -87,7 +87,10 @@ Main.add(function() {
     <td>{{mb_field object=$patient field=tel2}}</td>
   </tr>
   <tr>
-    <th colspan="2" class="category">Sejour</th>
+    <th colspan="2" class="category">
+      Sejour
+      (pour prendre en compte le séjour, indiquez le libellé)
+    </th>
   </tr>
     <th>{{mb_label object=$sejour field=praticien_id}}</th>
     <td>
@@ -122,6 +125,7 @@ Main.add(function() {
     <th colspan="2" class="category">
       Intervention
       <input type="input" name="sejour_intervention" value="" />
+      (pour prendre en compte l'intervention, veuillez indiquer 1 dans ce champs)
     </th>
   </tr>
   <tr>
