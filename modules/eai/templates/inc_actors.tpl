@@ -9,13 +9,7 @@
  * @link     http://www.mediboard.org
 *}}
 
-<script type="text/javascript">
-  Main.add(function () {
-	  $$('#{{$actor->_class_name}}s img.status').each(function(e) {
-      InteropActor.resfreshImageStatus(e);
-    });
-  });
-</script>
+{{mb_script module=system script=exchange_source}}
 
 <table class="tbl">
   <tr>
@@ -54,9 +48,7 @@
       <td>{{mb_value object=$_actor field="actif"}}</td>
       <td>
         {{foreach from=$_actor->_ref_exchanges_sources item=_exchange_source}}
-          <img class="status" data-id="{{$_exchange_source->_id}}" 
-            data-guid="{{$_exchange_source->_guid}}" src="images/icons/status_grey.png" 
-            title="{{$_exchange_source->name}}"/>
+          {{mb_include module=system template=inc_img_status_source exchange_source=$_exchange_source}}
         {{/foreach}}
       </td>
       <td>

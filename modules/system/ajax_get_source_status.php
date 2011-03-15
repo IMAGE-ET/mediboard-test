@@ -1,6 +1,6 @@
 <?php 
 /**
- * Status source interop receiver EAI
+ * Status exchange source
  *  
  * @category EAI
  * @package  Mediboard
