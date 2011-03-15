@@ -42,6 +42,8 @@ Main.add( function(){
 
 </script>
 
+{{mb_include module="dPprescription" template="inc_header_line"}}
+
 <table class="tbl" id="prescription_line_mix-{{$line->_id}}"> 
 {{assign var=prescription_line_mix_id value=$line->_id}}
   <tr>

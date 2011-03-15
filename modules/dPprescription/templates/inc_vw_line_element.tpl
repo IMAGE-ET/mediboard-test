@@ -23,6 +23,8 @@
 
 {{assign var=line_guid value=$line->_guid}}
 
+{{mb_include module="dPprescription" template="inc_header_line"}}
+
 <table class="tbl elt" id="full_line_element_{{$line->_id}}">
   <!-- Header de la ligne d'element -->
   <tr>    

@@ -18,7 +18,9 @@
 
 {{assign var=typeDate value="Med"}}
 
-<table class="tbl {{if $line->traitement_personnel}}traitement{{else}}med{{/if}}" id="full_line_medicament_{{$line->_id}}">
+{{mb_include module="dPprescription" template="inc_header_line"}}
+
+<table class="tbl {{if $line->traitement_personnel}}traitement{{else}}med{{/if}}" id="full_line_medicament_{{$line->_id}}">	
   <tr>
     <th colspan="2" class="text category {{if $line->traitement_personnel}}traitement{{/if}} {{if $line->perop}}perop{{/if}}">
       <div style="float:left;">

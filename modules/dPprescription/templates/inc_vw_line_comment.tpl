@@ -19,10 +19,12 @@
   {{assign var=div_refresh value="medicament"}}  
 {{/if}}	        
 
+{{mb_include module="dPprescription" template="inc_header_line"}}
+
 <table class="tbl">
 <tbody class="hoverable">
 	 <tr>
-	   <th class="category" colspan="5">
+	   <th class="category">
 	   	  <div style="float: left">
 				 {{if $line->_can_delete_line}}
 	         <form name="delLineComment-{{$line->_id}}" action="" method="post">
@@ -96,14 +98,13 @@
        {{else}}
          {{mb_value object=$line field=commentaire}}
        {{/if}}
+			 
+			 {{if $line->category_prescription_id && $line->_can_vw_form_executant}}
+         <div style="float: right">
+           {{include file="../../dPprescription/templates/line/inc_vw_form_executants.tpl"}}
+         </div>
+       {{/if}}
      </td>
-     {{if $line->category_prescription_id && $line->_can_vw_form_executant}}
-			 <td>
-	       <div style="float: right">
-	         {{include file="../../dPprescription/templates/line/inc_vw_form_executants.tpl"}}
-	       </div>
-	     </td>
-		 {{/if}}
   </tr>
 </tbody>
 </table>

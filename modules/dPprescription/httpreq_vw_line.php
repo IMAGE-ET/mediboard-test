@@ -16,9 +16,11 @@ $mode_protocole = CValue::get("mode_protocole");
 $mode_pharma    = CValue::get("mode_pharma");
 $operation_id   = CValue::get("operation_id");
 $mode_substitution = CValue::get("mode_substitution");
+
 $aides_prescription = array();
 $executants = array();
 $category_id = 0;
+$dossier_medical = array();
 
 // Chargement de la ligne
 $line = CMbObject::loadFromGuid($line_guid);
@@ -30,6 +32,32 @@ $is_praticien = $current_user->isPraticien();
 	
 $line->getAdvancedPerms($is_praticien, $mode_protocole, $mode_pharma, $operation_id);
 
+// Chargement des infos sur le patient
+$line->_ref_prescription->loadRefObject();
+$object = $line->_ref_prescription->_ref_object;
+$object->loadRefPatient();
+$patient = $object->_ref_patient;
+$patient->loadRefPhotoIdentite();
+$patient->loadRefConstantesMedicales();
+
+
+if($line->_ref_prescription->type == "sejour"){
+  $patient->loadRefDossierMedical();
+	  
+	// Chargement du dossier medical
+	$dossier_medical = $patient->_ref_dossier_medical;
+	$dossier_medical->updateFormFields();
+	$dossier_medical->loadRefsAntecedents();
+	$dossier_medical->loadRefsTraitements();
+	$dossier_medical->countAntecedents();
+	$dossier_medical->countAllergies();	
+	
+	// Chargement de l'affectation courante
+	$sejour = $line->_ref_prescription->_ref_object;
+	$sejour->loadRefCurrAffectation();
+}
+			
+			
 if($line instanceof CPrescriptionLineMedicament){
   // Chargement des ref de la ligne
 	$line->loadRefsPrises();
