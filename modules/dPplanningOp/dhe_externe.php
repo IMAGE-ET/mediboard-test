@@ -30,6 +30,7 @@ $patient->tel       = CValue::get("patient_telephone");
 $patient->tel2      = CValue::get("patient_mobile");
 
 $sejour = new CSejour();
+$sejour_id             = CValue::get("sejour_id");
 $sejour->libelle       = CValue::get("sejour_libelle");
 $sejour->type          = CValue::get("sejour_type");
 $sejour->entree_prevue = CValue::get("sejour_entree_prevue");
@@ -52,79 +53,153 @@ $msg_error = null;
 $list_fields = array();
 $patient_existant = new CPatient();
 $patient_resultat = new CPatient();
+$sejour_existant  = new CSejour();
+$sejour_resultat  = new CSejour();
 $patient_ok       = false;
 $sejour_ok        = false;
 $intervention_ok  = false;
 if($patient_id) {
   $patient_resultat->load($patient_id);
   if($patient_resultat->_id) {
+    $patient = $patient_resultat;
     $patient_ok = true;
   }
 }
-if ($praticien_id && !$patient_ok) {
-  if ($patient->nom && $patient->prenom && $patient->sexe && $patient->naissance) {
+if ($praticien_id && (!$patient_ok || $sejour_id)) {
+  if(!$sejour_id) {
     // Recherche d'un patient existant
     $patient_existant = clone $patient;
     $patient_existant->loadMatchingPatient();
     // S'il n'y est pas, on le store
     if(!$patient_existant->_id) {
-      if (!$msg_error = $patient_existant->store()) {
-        $patient = $patient_existant;
+      if (!$msg_error = $patient->check()) {
+        $patient->store();
         $patient_ok = true;
+      } else {
+        $msg_error = "<strong>Impossible de sauvegarder le patient :<strong> ".$msg_error;
       }
     // Sinon on vérifie qu'ils sont bien identiques
     } else {
-      $list_fields = array(
-                       "nom"       => true,
-                       "prenom"    => true,
-                       "naissance" => true,
-                       "sexe"      => true,
-                       "adresse"   => true,
-                       "cp"        => true,
-                       "ville"     => true,
-                       "tel"       => true,
-                       "tel2"      => true);
+      $list_fields = array("action" => "redirectDHESejour",
+                           "fields" => array("nom"       => true,
+                                             "prenom"    => true,
+                                             "naissance" => true,
+                                             "sexe"      => true,
+                                             "adresse"   => true,
+                                             "cp"        => true,
+                                             "ville"     => true,
+                                             "tel"       => true,
+                                             "tel2"      => true));
       $patient->updateFormFields();
       $equals  = true;
-      foreach($list_fields as $_field => $_state) {
-        $list_fields[$_field] = !$patient->$_field || !$patient_existant->$_field || ($patient->$_field == $patient_existant->$_field);
-        $equals &= $list_fields[$_field];
+      foreach($list_fields["fields"] as $_field => $_state) {
+        $list_fields["fields"][$_field] = !$patient->$_field || !$patient_existant->$_field || ($patient->$_field == $patient_existant->$_field);
+        $equals &= $list_fields["fields"][$_field];
       }
       // On complète éventuellement le patient existant avant de le storer
       if ($equals) {
-        foreach($list_fields as $_field => $_state) {
+        foreach($list_fields["fields"] as $_field => $_state) {
           $patient_existant->$_field = CValue::first($patient_existant->$_field, $patient->$_field);
         }
         if (!$msg_error = $patient_existant->store()) {
           $patient = $patient_existant;
           $patient_ok = true;
+        } else {
+          $msg_error = "<strong>Impossible de sauvegarder le patient :<strong> ".$msg_error;
         }
+      // Sinon on propose à l'utilisateur de régler les problèmes
+      } else {
+        $patient_resultat = clone $patient;
+        foreach($list_fields["fields"] as $_field => $_state) {
+          $patient_resultat->$_field = CValue::first($patient->$_field, $patient_existant->$_field);
+        }
+        $list_fields["object"]          = $patient;
+        $list_fields["object_existant"] = $patient_existant;
+        $list_fields["object_resultat"] = $patient_resultat;
       }
     }
-    // Sinon on propose à l'utilisateur de régler les problèmes
-    if(!$msg_error && !$patient_ok) {
-      $patient_resultat = clone $patient;
-      foreach($list_fields as $_field => $_state) {
-        $patient_resultat->$_field = CValue::first($patient->$_field, $patient_existant->$_field);
-      }
-    }
-  } else {
-    $msg_error = "champ(s) obligatoire(s) manquant(s) :";
-    if(!$patient->nom) {
-      $msg_error .="<br />- Nom";
-    }
-    if(!$patient->prenom) {
-      $msg_error .="<br />- Prénom";
-    }
-    if(!$patient->sexe) {
-      $msg_error .="<br />- Sexe";
-    }
-    if(!$patient->naissance) {
-      $msg_error .="<br />- Naissance";
+    if(!$patient_ok) {
+      // Création du template
+      $smarty = new CSmartyDP();
+      $smarty->assign("praticien_id"       , $praticien_id);
+      $smarty->assign("list_fields"        , $list_fields);
+      $smarty->assign("patient"            , $patient);
+      $smarty->assign("sejour"             , $sejour);
+      $smarty->assign("intervention"       , $intervention);
+      $smarty->assign("sejour_intervention", $sejour_intervention);
+      $smarty->assign("msg_error"          , $msg_error);
+      $smarty->display("dhe_externe.tpl");
+      return;
     }
   }
-  if(!$patient_ok) {
-    $msg_error = "<strong>Impossible de sauvegarder le patient :<strong> ".$msg_error;
+
+  // Gestion du séjour
+  if($sejour_id) {
+    $sejour_resultat->load($sejour_id);
+    if($sejour_resultat->_id) {
+      $sejour = $sejour_resultat;
+      if(!$sejour->libelle) {
+        $sejour->libelle = "automatique";
+      }
+      $sejour_ok = true;
+    }
+  }
+  if($praticien_id && $sejour->libelle && !$sejour_ok) {
+    $sejour->group_id = CGroups::loadCurrent()->_id;
+    $sejour->praticien_id = $praticien_id;
+    $sejour->patient_id = $patient->_id;
+    if(!$msg_error = $sejour->check()) {
+      // On recherche un séjour existant
+      $sejour->updateDBFields();
+      $sejour_existant = new CSejour();
+      $collisions = $sejour->getCollisions();
+      // S'il n'y est pas, on le store
+      if(!count($collisions)) {
+        if (!$msg_error = $sejour->store()) {
+          $sejour_ok = true;
+        }
+      // Sinon on vérifie qu'ils sont bien identiques
+      } else {
+        $sejour_existant = reset($collisions);
+        $list_fields = array("action" => "redirectDHESejour",
+                             "fields" => array("group_id"      => true,
+                                               "praticien_id"  => true,
+                                               "patient_id"    => true,
+                                               "libelle"       => true,
+                                               "entree_prevue" => true,
+                                               "sortie_prevue" => true,
+                                               "rques"         => true));
+        $sejour->updateFormFields();
+        $equals  = true;
+        foreach($list_fields["fields"] as $_field => $_state) {
+          $list_fields["fields"][$_field] = !$sejour->$_field || !$sejour_existant->$_field || ($sejour->$_field == $sejour_existant->$_field);
+          $equals &= $list_fields["fields"][$_field];
+        }
+        // On complète éventuellement le séjour existant avant de le storer
+        if ($equals) {
+          foreach($list_fields["fields"] as $_field => $_state) {
+            $sejour_existant->$_field = CValue::first($sejour_existant->$_field, $sejour->$_field);
+          }
+          if (!$msg_error = $sejour_existant->store()) {
+            $sejour = $sejour_existant;
+            $sejour_ok = true;
+          }
+        // Sinon on propose à l'utilisateur de régler les problèmes
+        } else {
+          $sejour_resultat = clone $sejour;
+          foreach($list_fields["fields"] as $_field => $_state) {
+            $sejour_resultat->$_field = CValue::first($sejour->$_field, $sejour_existant->$_field);
+          }
+          $list_fields["object"] = $sejour;
+          $list_fields["object_existant"] = $sejour_existant;
+          $list_fields["object_resultat"] = $sejour_resultat;
+        }   
+      }
+    } else {
+      $msg_error = "<strong>Impossible de sauvegarder le séjour :</strong> ".$msg_error;
+    }
+  }
+  if($sejour->libelle && !$sejour_ok) {
     // Création du template
     $smarty = new CSmartyDP();
     $smarty->assign("praticien_id"       , $praticien_id);
@@ -133,73 +208,11 @@ if ($praticien_id && !$patient_ok) {
     $smarty->assign("sejour"             , $sejour);
     $smarty->assign("intervention"       , $intervention);
     $smarty->assign("sejour_intervention", $sejour_intervention);
-    $smarty->assign("patient_existant"   , $patient_existant);
-    $smarty->assign("patient_resultat"   , $patient_resultat);
     $smarty->assign("msg_error"          , $msg_error);
     $smarty->display("dhe_externe.tpl");
     return;
   }
 
-  // Gestion du séjour
-  if($sejour->libelle && $patient_ok && $sejour->entree_prevue && $sejour->sortie_prevue
-     && $sejour->entree_prevue <= $sejour->sortie_prevue && $sejour->type && $praticien_id) {
-    $sejour->group_id = CGroups::loadCurrent()->_id;
-    $sejour->praticien_id = $praticien_id;
-    $sejour->patient_id = $patient->_id;
-    $sejour->updateDBFields();
-    $collisions = $sejour->getCollisions();
-    $sejour_existant = new CSejour();
-    if(count($collisions)) {
-      $sejour_existant = reset($collisions);
-      $sejour_existant->libelle = $sejour->libelle;
-      if($sejour->rques) {
-        $sejour_existant->rques .= "\n".$sejour->rques;
-      }
-      $sejour_existant->entree_prevue = $sejour->entree_prevue;
-      $sejour_existant->sortie_prevue = $sejour->sortie_prevue;
-      $sejour_existant->type = $sejour->type;
-      if(mbDate($sejour_existant->entree_prevue) == mbDate($sejour_existant->sortie_prevue)
-         && $sejour_existant->type == "comp") {
-        $sejour_existant->type = "ambu";
-      } elseif(mbDate($sejour_existant->entree_prevue) != mbDate($sejour_existant->sortie_prevue)
-         && $sejour_existant->type == "ambu") {
-        $sejour_existant->type = "comp";
-      }
-    } else {
-      $sejour_existant = clone $sejour;
-    }
-    if (!$msg_error = $sejour_existant->store()) {
-      $sejour = $sejour_existant;
-      $sejour_ok = true;
-    }
-  } elseif($sejour->libelle) {
-    $msg_error = "champ(s) obligatoire(s) manquant(s) :";
-    if(!$sejour->entree_prevue) {
-      $msg_error .="<br />- Entree_prevue";
-    }
-    if(!$sejour->sortie_prevue) {
-      $msg_error .="<br />- Sortie prévue";
-    }
-    if($sejour->entree_prevue && $sejour->sortie_prevue
-     && !($sejour->entree_prevue <= $sejour->sortie_prevue)) {
-      $msg_error .="<br />- La sortie doit être supérieur à l'entrée";
-    }
-    if(!$sejour->type) {
-      $msg_error .="<br />- Type de séjour";
-    }
-  }
-  if($sejour->libelle && !$sejour_ok) {
-    $msg_error = "<strong>Impossible de sauvegarder le séjour :</strong> ".$msg_error;
-    // Création du template
-    $smarty = new CSmartyDP();
-    $smarty->assign("praticien_id"       , $praticien_id);
-    $smarty->assign("patient"            , $patient);
-    $smarty->assign("sejour"             , $sejour);
-    $smarty->assign("sejour_intervention", $sejour_intervention);
-    $smarty->assign("msg_error"          , $msg_error);
-    $smarty->display("dhe_externe.tpl");
-    return;
-  }
   // Gestion de l'intervention
   if($sejour_intervention && $intervention->_datetime && $intervention->temp_operation && $intervention->cote) {
     $intervention->chir_id = $praticien_id;
@@ -249,10 +262,10 @@ if ($praticien_id && !$patient_ok) {
   }
 }
 
-if($patient_ok && !$sejour_existant->libelle) {
-  CAppUI::redirect("m=dPplanningOp&a=vw_edit_planning&chir_id=$praticien_id&pat_id=".$patient_existant->_id);
+if($patient_ok && !$sejour->libelle) {
+  CAppUI::redirect("m=dPplanningOp&a=vw_edit_planning&chir_id=$praticien_id&operation_id=0&pat_id=".$patient->_id);
 } elseif($patient_ok && $sejour_ok && !$sejour_intervention) {
-  CAppUI::redirect("m=dPplanningOp&tab=vw_edit_sejour&sejour_id=".$sejour_existant->_id);
+  CAppUI::redirect("m=dPplanningOp&tab=vw_edit_sejour&sejour_id=".$sejour->_id);
 } elseif($patient_ok && $sejour_ok && $intervention_ok && $intervention->plageop_id) {
   CAppUI::redirect("m=dPplanningOp&tab=vw_edit_planning&operation_id=".$intervention->_id);
 }  elseif($patient_ok && $sejour_ok && $intervention_ok && !$intervention->plageop_id) {

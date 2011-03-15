@@ -1,12 +1,12 @@
 <script type="text/javascript">
 
-var submitPatient = function() {
-  oForm = getForm("editPatientFrm");
+var submitFields = function() {
+  oForm = getForm("editFieldsFrm");
   return submitFormAjax(oForm, 'systemMsg');
 }
 
 var redirectDHEPatient = function() {
-  oForm = getForm("editPatientFrm");
+  oForm = getForm("editFieldsFrm");
   url = new Url("dPplanningOp", "dhe_externe");
   url.addParam("praticien_id"                 , '{{$praticien_id}}');
   url.addParam("patient_id"                   , $V(oForm.patient_id));
@@ -30,8 +30,27 @@ var redirectDHEPatient = function() {
   url.redirect();
 }
 
-var changePatientField = function(sField, sValue) {
-  oForm = getForm("editPatientFrm");
+var redirectDHESejour = function() {
+  oForm = getForm("editFieldsFrm");
+  url = new Url("dPplanningOp", "dhe_externe");
+  url.addParam("praticien_id"                 , $V(oForm.praticien_id));
+  url.addParam("patient_id"                   , $V(oForm.patient_id));
+  url.addParam("sejour_id"                    , $V(oForm.sejour_id));
+  url.addParam("sejour_intervention"          , '{{$sejour_intervention}}');
+  {{if isset($intervention|smarty:nodefaults)}}
+  url.addParam("intervention_date"            , '{{$intervention->_datetime}}');
+  url.addParam("intervention_duree"           , '{{$intervention->temp_operation}}');
+  url.addParam("intervention_cote"            , '{{$intervention->cote}}');
+  url.addParam("intervention_horaire_souhaite", '{{$intervention->horaire_voulu}}');
+  url.addParam("intervention_codes_ccam"      , '{{$intervention->codes_ccam}}');
+  url.addParam("intervention_materiel"        , '{{$intervention->materiel}}');
+  url.addParam("intervention_remarques"       , '{{$intervention->rques}}');
+  {{/if}}
+  url.redirect();
+}
+
+var changeField = function(sField, sValue) {
+  oForm = getForm("editFieldsFrm");
   $V(oForm[sField], sValue);
 }
 
@@ -89,44 +108,45 @@ var changePatientField = function(sField, sValue) {
         </ul>
       </div>
       {{/if}}
-      {{elseif isset($patient->_id|smarty:nodefaults)}}
-      <form name="editPatientFrm" action="?" method="post" onsubmit="return onSubmitFormAjax(this, { onComplete : redirectDHEPatient});">
-      <input type="hidden" name="m" value="dPpatients" />
-      <input type="hidden" name="dosql" value="do_patients_aed" />
+      {{elseif isset($list_fields|smarty:nodefaults)}}
+      <form name="editFieldsFrm" action="?" method="post" onsubmit="return onSubmitFormAjax(this, { onComplete : {{$list_fields.action}} });">
+      <input type="hidden" name="m" value="{{$list_fields.object->_ref_module->mod_name}}" />
+      <input type="hidden" name="dosql" value="{{if $list_fields.object->_class_name == 'CPatient'}}do_patient_aed{{else}}do_sejour_aed{{/if}}" />
       <input type="hidden" name="del" value="0" />
       <input type="hidden" name="_purge" value="0" />
-      {{mb_key object=$patient}}
+      {{mb_key object=$list_fields.object_existant}}
       <fieldset>
-        <legend>Validation du patient</legend>
+        <legend>Veuillez choisir les valeurs à conserver</legend>
         <table class="tbl">
           <tr>
             <th class="category narrow"></th>
-            <th class="category" style="width: 33%">patient résultant</th>
-            <th class="category" style="width: 33%">patient proposé</th>
-            <th class="category" style="width: 33%">patient existant</th>
+            <th class="category" style="width: 33%">Résultat</th>
+            <th class="category" style="width: 33%">Proposé</th>
+            <th class="category" style="width: 33%">Existant</th>
           </tr>
-          {{foreach from=$list_fields key=_field item=_state}}
+          {{foreach from=$list_fields.fields key=_field item=_state}}
           <tr>
-            <td style="text-align: right">{{mb_label object=$patient_resultat field=$_field}}</td>
+            <td style="text-align: right">{{mb_label object=$list_fields.object_resultat field=$_field}}</td>
             <td class="{{if $_state}}ok{{else}}warning{{/if}}">
               {{if $_state}}
-              {{mb_value object=$patient_resultat field=$_field}}
+              {{mb_field object=$list_fields.object_resultat field=$_field hidden="hidden" readonly="readonly"}}
+              {{mb_value object=$list_fields.object_resultat field=$_field}}
               {{else}}
-              {{mb_field object=$patient_resultat field=$_field readonly="readonly"}}
+              {{mb_field object=$list_fields.object_resultat field=$_field readonly="readonly"}}
               {{/if}}
               
             </td>
             <td class="{{if $_state}}ok{{else}}warning{{/if}}">
               {{if !$_state}}
-              <input type="radio" name="_choice_{{$_field}}" value="{{$patient->$_field}}" checked="checked" onchange="changePatientField('{{$_field}}', '{{$patient->$_field}}')" />
+              <input type="radio" name="_choice_{{$_field}}" value="{{$list_fields.object->$_field}}" checked="checked" onchange="changeField('{{$_field}}', '{{$list_fields.object->$_field}}')" />
               {{/if}}
-              {{mb_value object=$patient field=$_field}}
+              {{mb_value object=$list_fields.object field=$_field}}
             </td>
             <td class="{{if $_state}}ok{{else}}warning{{/if}}">
               {{if !$_state}}
-              <input type="radio" name="_choice_{{$_field}}" value="{{$patient_existant->$_field}}" onchange="changePatientField('{{$_field}}', '{{$patient_existant->$_field}}')" />
+              <input type="radio" name="_choice_{{$_field}}" value="{{$list_fields.object_existant->$_field}}" onchange="changeField('{{$_field}}', '{{$list_fields.object_existant->$_field}}')" />
               {{/if}}
-              {{mb_value object=$patient_existant field=$_field}}
+              {{mb_value object=$list_fields.object_existant field=$_field}}
             </td>
           </tr>
           <tr>
