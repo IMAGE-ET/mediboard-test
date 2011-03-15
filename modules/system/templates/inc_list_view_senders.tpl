@@ -51,9 +51,12 @@
 		<td class="empty" colspan="65">{{tr}}CViewSender.none{{/tr}}</td>
 	</tr>
   {{/foreach}}
-	<tr style="border-top: 2px solid #888;">
-		<td colspan="5" style="text-align: right;"><strong>Bilan horaire</strong></th>
-	  {{foreach from=$hour_sum key=min item=sum}}
+
+  <!-- Bilan horaire -->
+	{{if count($senders)}} 
+  <tr style="border-top: 2px solid #888;">
+    <td colspan="5" style="text-align: right;"><strong>Bilan horaire</strong></th>
+    {{foreach from=$hour_sum key=min item=sum}}
     {{assign var=status value=""}}
     {{if $sum == 1}}{{assign var=status value=ok     }}{{/if}}
     {{if $sum >= 2}}{{assign var=status value=warning}}{{/if}}
@@ -61,6 +64,7 @@
     <td class="hour-plan {{$plan|ternary:$status:""}}" title="{{$sum}} @ {{$min}}" onclick="ViewSender.highliteMinute({{$min}})" />
     {{/foreach}}
   </tr>
+	{{/if}}
   
 </table>
 
