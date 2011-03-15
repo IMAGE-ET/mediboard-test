@@ -9,15 +9,47 @@
 *}}
 
 {{mb_script module=system script=view_sender}}
-
-<button class="new singleclick" onclick="ViewSender.edit(0);">
-	{{tr}}CViewSender-title-create{{/tr}}
-</button>
+{{mb_script module=system script=view_sender_source}}
 
 <script type="text/javascript">
-	Main.add(ViewSender.refreshList);
+Main.add(function () {
+  Control.Tabs.create('tabs-main', true);
+});
 </script>
-<div id="list-senders">
-	<div class="small-info">Liste des exports de vues</div>
+
+<ul id="tabs-main" class="control_tabs">
+  <li><a href="#senders">{{tr}}CViewSender{{/tr}}</a></li>
+  <li><a href="#sources">{{tr}}CViewSenderSource{{/tr}}</a></li>
+</ul>
+
+<hr class="control_tabs" />
+
+<div id="senders" style="display: none;">
+
+	<button class="new singleclick" onclick="ViewSender.edit(0);">
+	  {{tr}}CViewSender-title-create{{/tr}}
+	</button>
+	
+	<script type="text/javascript">
+	  Main.add(ViewSender.refreshList);
+	</script>
+
+	<div id="list-senders">
+	</div>
+
+</div>
+
+<div id="sources" style="display: none;">
+
+  <button class="new singleclick" onclick="ViewSender.edit(0);">
+    {{tr}}CViewSender-title-create{{/tr}}
+  </button>
+  
+  <script type="text/javascript">
+    Main.add(ViewSender.refreshList);
+  </script>
+
+  <div id="list-senders">
+  </div>
 </div>
 
