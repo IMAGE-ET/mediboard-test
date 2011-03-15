@@ -48,7 +48,7 @@
   </tr>
   {{foreachelse}}
 	<tr>
-		<td class="empty" colspan="3">{{tr}}CViewSender.none{{/tr}}</td>
+		<td class="empty" colspan="65">{{tr}}CViewSender.none{{/tr}}</td>
 	</tr>
   {{/foreach}}
 	<tr style="border-top: 2px solid #888;">
