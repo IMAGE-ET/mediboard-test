@@ -42,13 +42,13 @@ abstract class CJSLoader extends CHTMLResourceLoader {
       
       // We exclude files already in the tmp dir
       foreach($files as $index => $file) {
-        if (strpos($file, "/tmp/") !== false) {
+        if (strpos($file, "tmp/") === 0) {
           $excluded[] = $file;
           unset($files[$index]);
         }
       }
       
-      $hash = md5(implode("", $files)."-level-$compress");
+      $hash = self::getHash(implode("", $files)."-level-$compress");
       $cachefile = "tmp/$hash.js";
       
       // If it exists, we check if it is up to date

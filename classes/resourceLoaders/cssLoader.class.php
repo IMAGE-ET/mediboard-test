@@ -46,7 +46,7 @@ abstract class CCSSLoader extends CHTMLResourceLoader {
     
     $uptodate = false;
     
-    $hash = md5(implode("", $files)."-level-$compress");
+    $hash = self::getHash(implode("", $files)."-level-$compress");
     $cachefile = "tmp/$hash.$theme.css";
     
     // If it exists, we check if it is up to date
@@ -67,6 +67,8 @@ abstract class CCSSLoader extends CHTMLResourceLoader {
         $content = file_get_contents($file);
 				if ($compress == 2) {
           $content = str_replace(array("\r\n", "\r", "\n", "\t"), "", $content); // whitespace
+          $content = preg_replace("/\s*([\{\};:,])\s+/", "$1", $content); // whitespace around { and }
+          $content = preg_replace("/;\}/", "}", $content); // ;} >> }
           $content = preg_replace("!/\*[^*]*\*+([^/][^*]*\*+)*/!", "", $content); // comments
 				}
 				$content = preg_replace("/\@import\s+(?:url\()?[\"']?([^\"\'\)]+)[\"']?\)?;/i", "", $content); // remove @imports

@@ -42,6 +42,10 @@ abstract class CHTMLResourceLoader {
     }
     return $build;
   }
+	
+	static function getHash($string) {
+		return dechex(crc32($string));
+	}
   
   /**
    * Returns an HTML tag
