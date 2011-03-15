@@ -53,7 +53,7 @@ class CViewSender extends CMbObject {
     $props["description"] = "text";
     $props["params"     ] = "text notNull";
     $props["period"     ] = "enum list|1|2|3|4|5|6|10|15|20|30";
-    $props["offset"     ] = "num min|0";
+    $props["offset"     ] = "num min|0 notNull default|0";
     $props["active"     ] = "bool notNull default|0";
     return $props;
   }

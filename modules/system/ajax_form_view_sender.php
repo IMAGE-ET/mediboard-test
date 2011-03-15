@@ -12,6 +12,7 @@ CCanDo::checkEdit();
 
 $sender_id = CValue::get("sender_id");
 $sender = new CViewSender();
+$sender->offset = "0";
 $sender->load($sender_id);
 $sender->loadRefsNotes();
 

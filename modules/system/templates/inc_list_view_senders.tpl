@@ -61,7 +61,7 @@
     {{if $sum == 1}}{{assign var=status value=ok     }}{{/if}}
     {{if $sum >= 2}}{{assign var=status value=warning}}{{/if}}
     {{if $sum >= 4}}{{assign var=status value=error  }}{{/if}}
-    <td class="hour-plan {{$plan|ternary:$status:""}}" title="{{$sum}} @ {{$min}}" onclick="ViewSender.highliteMinute({{$min}})" />
+    <td class="hour-plan {{$status}}" title="{{$sum}} @ {{$min}}" onclick="ViewSender.highliteMinute({{$min}})" />
     {{/foreach}}
   </tr>
 	{{/if}}
