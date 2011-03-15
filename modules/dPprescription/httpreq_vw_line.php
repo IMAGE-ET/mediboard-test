@@ -17,6 +17,8 @@ $mode_pharma    = CValue::get("mode_pharma");
 $operation_id   = CValue::get("operation_id");
 $mode_substitution = CValue::get("mode_substitution");
 $aides_prescription = array();
+$executants = array();
+$category_id = 0;
 
 // Chargement de la ligne
 $line = CMbObject::loadFromGuid($line_guid);
@@ -63,8 +65,19 @@ if($line instanceof CPrescriptionLineMedicament){
 }
 
 if($line instanceof CPrescriptionLineElement){
+  $category_id = $line->_ref_element_prescription->_ref_category_prescription->_id;
   $line->loadRefsPrises();
   $line->loadRefDM();
+}
+
+if ($line instanceof CPrescriptionLineComment) {
+  $category_id = $line->_ref_category_prescription->_id;
+}
+
+if ($line instanceof CPrescriptionLineElement || $line instanceof CPrescriptionLineComment) {
+  // Chargement des executants
+  $executants["externes"] = CExecutantPrescriptionLine::getAllExecutants();
+  $executants["users"] = CFunctionCategoryPrescription::getAllUserExecutants();
 }
 
 if($line instanceof CPrescriptionLineMix){
@@ -108,6 +121,9 @@ $smarty->assign("is_praticien", $is_praticien);
 $smarty->assign("mode_pack", 0);
 $smarty->assign("mode_substitution", $mode_substitution);
 $smarty->assign("aides_prescription", $aides_prescription);
+
+$smarty->assign("executants", $executants);
+$smarty->assign("category_id", $category_id);
 
 // Selection du template en fonction du type de ligne
 switch ($line->_class_name) {
