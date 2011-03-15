@@ -17,7 +17,7 @@
     <td class="info" colspan="2">
     (Prière de vous munir pour la consultation d'anesthésie de la photocopie
      de vos cartes de sécurité sociale, de mutuelle et du résultat de votre
-     bilan sanguin et la liste des médicaments que vous prennez)<br />
+     bilan sanguin et la liste des médicaments que vous prenez)<br />
      {{if $sejour->_ref_group->tel}}
        Pour tout renseignement, téléphonez au 
        {{mb_value object=$sejour->_ref_group field=tel}}
