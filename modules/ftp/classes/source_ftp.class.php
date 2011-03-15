@@ -41,7 +41,7 @@ class CSourceFTP extends CExchangeSource {
   function getProps() {
     $specs = parent::getProps();
     $specs["port"]       = "num default|21";
-    $specs["timeout"]    = "num default|90";
+    $specs["timeout"]    = "num default|5";
     $specs["pasv"]       = "bool default|0";
     $specs["mode"]       = "enum list|FTP_ASCII|FTP_BINARY default|FTP_ASCII";
     $specs["counter"]    = "str protected";

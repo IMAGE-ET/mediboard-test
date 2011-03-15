@@ -33,7 +33,7 @@ if ($ftp->passif_mode) {
 }
 
 try {
-  $files = $ftp->getListFiles();
+  $files = $ftp->getListFiles($ftp->fileprefix);
 } catch (CMbException $e) {
   CAppUI::stepAjax($e->getMessage(), UI_MSG_WARNING); 
   return;
