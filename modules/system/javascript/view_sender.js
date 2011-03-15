@@ -46,7 +46,7 @@ ViewSender = {
 	highliteMinute: function (min) {
 		$$('td.min-'+min).each(function(e) {
 			if (e.hasClassName("ok") || e.hasClassName("off")) {
-        Effect.Pulsate(e, { pulses: 3, duration: 3 });
+        Effect.Pulsate(e.up(), { pulses: 3, duration: 3 });
 			}
 		});
 	},
