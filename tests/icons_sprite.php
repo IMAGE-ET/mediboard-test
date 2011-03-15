@@ -4,10 +4,11 @@ $size_orig = 48;
 $ttl = 60*60; // seconds
 
 $size = isset($_GET["size"]) ? $_GET["size"] : $size_orig;
+$size = min($size, $size_orig);
 
 $icons = glob("../modules/*/images/icon.png");
 
-$hash = md5(implode("", $icons));
+$hash = dechex(crc32(implode("", $icons)));
 $cachefile = "../tmp/$hash.sprite.$size.png";
 
 $out_of_date = !file_exists($cachefile) || (filemtime($cachefile)+$ttl < time());

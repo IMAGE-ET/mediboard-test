@@ -22,7 +22,7 @@
           &mdash;
           <label>
             Nom
-            <input type="text" name="object_name" size="8" onkeyup="Tag.filterObject(this)" />
+            <input type="text" name="object_name" size="8" onkeyup="Tag.launchFilterObject(this)" />
           </label>
           <button class="cancel notext" type="button" onclick="Tag.cancelFilterObject(this.form.object_name)">
             {{tr}}Cancel{{/tr}}

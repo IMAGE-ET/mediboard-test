@@ -33,8 +33,14 @@ class CExList extends CExListItemsOwner {
 
   function getBackProps() {
     $backProps = parent::getBackProps();
-		$backProps["concepts"] = "CExConcept ex_list_id";
+    $backProps["concepts"] = "CExConcept ex_list_id";
+    $backProps["list_items"] = "CExListItem list_id";
     return $backProps;
+  }
+  
+  function loadView(){
+    parent::loadView();
+    $this->loadBackRefs("concepts");
   }
   
   function updateFormFields(){

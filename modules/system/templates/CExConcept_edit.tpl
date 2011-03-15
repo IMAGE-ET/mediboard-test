@@ -33,6 +33,8 @@ toggleListCustom = function(radio) {
 Main.add(function(){
   var radio = getForm("edit-{{$object->_guid}}")._concept_type[0];
   toggleListCustom.defer(radio);
+	
+	Control.Tabs.create("ex-concept-tabs", true);
 });
 </script>
 
@@ -120,4 +122,43 @@ Main.add(function(){
   </table>
 </form>
 
-<div id="ExConcept-spec-editor"></div>
+<ul id="ex-concept-tabs" class="control_tabs">
+  <li>
+    <a href="#ExConcept-spec-editor">Paramètres</a>
+  </li>
+  <li>
+    <a href="#ex-back-class_fields" {{if $object->_back.class_fields|@count == 0}} class="empty" {{/if}}>
+    	{{tr}}CExConcept-back-class_fields{{/tr}} <small>({{$object->_back.class_fields|@count}})</small>
+		</a>
+  </li>
+</ul>
+
+<div id="ExConcept-spec-editor" style="display: none;"></div>
+
+<div id="ex-back-class_fields" style="display: none;">
+  <table class="main tbl">
+    <tr>
+      <th>
+        {{mb_title class=CExClassField field=name}}
+      </th>
+      <th>
+        {{mb_title class=CExClassField field=prop}}
+      </th>
+    </tr>
+    
+    {{foreach from=$object->_back.class_fields item=_field}}
+      <tr>
+        <td>
+          {{mb_value object=$_field field=name}}
+        </td>
+        <td>
+          {{mb_value object=$_field field=prop}}
+        </td>
+      </tr>
+		{{foreachelse}}
+		  <tr>
+		  	<td class="empty" colspan="2">{{tr}}CExClassField.none{{/tr}}</td>
+		  </tr>
+    {{/foreach}}
+  </table>
+</div>

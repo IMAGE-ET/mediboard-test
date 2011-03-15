@@ -21,19 +21,23 @@ function errorHandler(errorMsg, url, lineNumber, exception) {
       } catch (e) {}
     }
     
-    new Ajax.Request("index.php?m=system&a=js_error_handler&suppressHeaders=1&dialog=1", {
-      method: 'post',
-      parameters: 'm=system&a=js_error_handler&' +
-      $H({
-        errorMsg: errorMsg + _IEAdditionalInfo,
-        url: url,
-        lineNumber: lineNumber,
-        stack: exception.stack || exception.stacktrace,// || printStackTrace(),
-        location: location.href
-      }).toQueryString()
-    });
+    var ignored = ["Script error."];
+    
+    if (ignored.indexOf(errorMsg) == -1) {
+      new Ajax.Request("index.php?m=system&a=js_error_handler&suppressHeaders=1&dialog=1", {
+        method: 'post',
+        parameters: 'm=system&a=js_error_handler&' +
+        $H({
+          errorMsg: errorMsg + _IEAdditionalInfo,
+          url: url,
+          lineNumber: lineNumber,
+          stack: exception.stack || exception.stacktrace,// || printStackTrace(),
+          location: location.href
+        }).toQueryString()
+      });
+    }
   } catch (e) {}
-	
+  
   return Prototype.Browser.WebKit; // Webkit handles this differently
 };
 

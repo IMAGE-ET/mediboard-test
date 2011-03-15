@@ -18,7 +18,7 @@ class CExConcept extends CExListItemsOwner {
   var $prop = null; 
   
   var $_ref_ex_list = null;
-	var $_ref_class_fields = null;
+  var $_ref_class_fields = null;
   var $_concept_spec = null;
 
   function getSpec() {
@@ -40,6 +40,7 @@ class CExConcept extends CExListItemsOwner {
   function getBackProps() {
     $backProps = parent::getBackProps();
     $backProps["class_fields"] = "CExClassField concept_id";
+    $backProps["list_items"] = "CExListItem concept_id";
     return $backProps;
   }
   
@@ -47,62 +48,63 @@ class CExConcept extends CExListItemsOwner {
     parent::updateFormFields();
     
     $this->_view = $this->name;
-		
+    
     $this->updatePropFromList();
     
     if ($this->ex_list_id) {
       $list = $this->loadRefExList();
       $this->_view .= " [$list->_view]";
     }
-		else {
-			$spec_type = $this->loadConceptSpec()->getSpecType();
+    else {
+      $spec_type = $this->loadConceptSpec()->getSpecType();
       $this->_view .= " [".CAppUI::tr("CMbFieldSpec.type.$spec_type")."]";
-		}
+    }
   }
-	
-	function updatePropFromList(){
-		$spec = $this->loadConceptSpec();
-		if (!$spec instanceof CEnumSpec) return;
-		
-		if ($this->ex_list_id) {
-	    $list = $this->loadRefExList();
-			$ids = $list->getItemsKeys();
-		}
-		else {
-			$ids = $this->getItemsKeys();
-		}
-		
-		$suffix = " list|".implode("|", $ids);
-		$pattern = "/( list\|[^ ]+)/";
-		
-		if (!preg_match($pattern, $this->prop)) {
-			$this->prop .= $suffix;
-		}
-		else {
-			$this->prop = preg_replace($pattern, $suffix, $this->prop);
-		}
-	}
   
-	/**
-	 * @param bool $cache [optional]
-	 * @return CExList
-	 */
+  function updatePropFromList(){
+    $spec = $this->loadConceptSpec();
+    if (!$spec instanceof CEnumSpec) return;
+    
+    if ($this->ex_list_id) {
+      $list = $this->loadRefExList();
+      $ids = $list->getItemsKeys();
+    }
+    else {
+      $ids = $this->getItemsKeys();
+    }
+    
+    $suffix = " list|".implode("|", $ids);
+    $pattern = "/( list\|[^ ]+)/";
+    
+    if (!preg_match($pattern, $this->prop)) {
+      $this->prop .= $suffix;
+    }
+    else {
+      $this->prop = preg_replace($pattern, $suffix, $this->prop);
+    }
+  }
+  
+  /**
+   * @param bool $cache [optional]
+   * @return CExList
+   */
   function loadRefExList($cache = true){
     return $this->_ref_ex_list = $this->loadFwdRef("ex_list_id", $cache);
   }
-	
-	function loadRefClassFields(){
-		return $this->_ref_class_fields = $this->loadBackRefs("class_fields");
-	}
+  
+  function loadRefClassFields(){
+    return $this->_ref_class_fields = $this->loadBackRefs("class_fields");
+  }
   
   function loadView(){
     parent::loadView();
-		$this->loadConceptSpec();
+    $this->loadConceptSpec();
+    $this->loadBackRefs("class_fields");
   }
-	
-	function loadConceptSpec(){
+  
+  function loadConceptSpec(){
     return $this->_concept_spec = self::getConceptSpec($this->prop);
-	}
+  }
   
   function updateTranslation(){
     $base = $this;
@@ -156,21 +158,21 @@ class CExConcept extends CExListItemsOwner {
     
     return ($key_a === false ? 1000 : $key_a) - ($key_b === false ? 1000 : $key_b);
   }
-	
-	function store(){
-		$prop_changed = $this->fieldModified("prop");
-		
-		if ($msg = parent::store()){
-			return $msg;
-		}
-		
-		if ($prop_changed) {
-			$fields = $this->loadRefClassFields();
-			foreach($fields as $_field) {
-				$_field->prop = $this->prop;
-			}
-		}
-	}
+  
+  function store(){
+    $prop_changed = $this->fieldModified("prop");
+    
+    if ($msg = parent::store()){
+      return $msg;
+    }
+    
+    if ($prop_changed) {
+      $fields = $this->loadRefClassFields();
+      foreach($fields as $_field) {
+        $_field->prop = $this->prop;
+      }
+    }
+  }
   
   /**
    * @param string $prop
@@ -199,10 +201,10 @@ class CExConcept extends CExListItemsOwner {
   }
   
   function getRealListOwner(){
-  	if ($this->ex_list_id) {
-  		return $this->loadRefExList();
-  	}
-		
+    if ($this->ex_list_id) {
+      return $this->loadRefExList();
+    }
+    
     return parent::getRealListOwner();
   }
 }

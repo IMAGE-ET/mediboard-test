@@ -1,4 +1,5 @@
 var Tag = {
+  filterObjectTimer: null,
   attach: function(object_guid, tag_id) {
     var parts = object_guid.split("-");
     
@@ -153,28 +154,32 @@ var Tag = {
       e.setVisible(visible);
     });
   },
+  launchFilterObject: function(input) {
+    clearTimeout(Tag.filterObjectTimer);
+    Tag.filterObjectTimer = Tag.filterObject.delay(0.4, input);
+  },
   filterObject: function(input) {
     var treegrid = $("tag-tree").down('table.treegrid');
     var list = $("tag-tree").down('table.object-list');
-		
+    
     var columns = treegrid.get("columns");
     var object_class = treegrid.get("object_class");
     
     if (columns) {
       columns = columns.split(",");
     }
-		
+    
     var term = $V(input);
     if (!term) {
-			treegrid.show();
-			list.hide();
-			return;
-		}
-		else {
+      treegrid.show();
+      list.hide();
+      return;
+    }
+    else {
       treegrid.hide();
       list.show();
-		}
-		
+    }
+    
     var url = new Url('system', 'ajax_list_objects_by_tag');
     
     if (columns && columns.length) {

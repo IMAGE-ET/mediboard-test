@@ -64,6 +64,14 @@ function mbAutoload($className) {
     return include $classPaths[$className];
   }
   else {
+    /*
+    $contexts = debug_backtrace();
+    foreach($contexts as &$ctx) {
+      unset($ctx['args']);
+      unset($ctx['object']);
+    }
+  	mbTrace($contexts, $className, true );
+  	*/
     updateClassPathCache();
   }
 	

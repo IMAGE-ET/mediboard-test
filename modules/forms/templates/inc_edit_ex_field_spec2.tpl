@@ -92,11 +92,7 @@ Main.add(function(){
   
 <table class="main form">
 	<col class="narrow" />
-  
-	<tr>
-    <th class="title" colspan="2">Paramètres</th>
-  </tr>
-  
+	
 	{{assign var=advanced_controls_limit value=4}}
 	
   {{foreach from=$options item=_type key=_name name=specs}}

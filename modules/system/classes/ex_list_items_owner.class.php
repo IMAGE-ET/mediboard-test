@@ -10,37 +10,31 @@
 
 class CExListItemsOwner extends CMbObject {
   var $_ref_items = null;
-
-  function getBackProps() {
-    $backProps = parent::getBackProps();
-    $backProps["list_items"] = "CExListItem ".$this->getBackRefField();
-    return $backProps;
-  }
   
   function loadRefItems() {
     return $this->_ref_items = $this->loadBackRefs("list_items", "code");
   }
-	
-	function getBackRefField(){
-		$map = array(
+  
+  function getBackRefField(){
+    $map = array(
       "CExList"       => "list_id",
       "CExConcept"    => "concept_id",
       "CExClassField" => "field_id",
     );
-		return CValue::read($map, $this->_class_name);
-	}
+    return CValue::read($map, $this->_class_name);
+  }
   
   function getItemsKeys() {
     $item = new CExListItem;
     $where = array(
-		  $this->getBackRefField() => "= '$this->_id'"
-		);
+      $this->getBackRefField() => "= '$this->_id'"
+    );
     return $item->loadIds($where, "name, code");
   }
-	
-	function getRealListOwner(){
-		return $this;
-	}
+  
+  function getRealListOwner(){
+    return $this;
+  }
   
   function updateEnumSpec(CEnumSpec $spec){
     $items = $this->loadRefItems();

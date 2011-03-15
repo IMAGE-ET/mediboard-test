@@ -17,7 +17,7 @@ class CExClassField extends CExListItemsOwner {
   var $name = null; // != object_class, object_id, ex_ClassName_event_id, 
   var $prop = null; 
   var $concept_id = null;
-	
+  
   var $coord_label_x = null; 
   var $coord_label_y = null; 
   var $coord_field_x = null; 
@@ -30,7 +30,7 @@ class CExClassField extends CExListItemsOwner {
   var $_ref_ex_group = null;
   var $_ref_ex_class = null;
   var $_ref_translation = null;
-	var $_ref_concept = null;
+  var $_ref_concept = null;
   var $_spec_object = null;
   
   var $_dont_drop_column = null;
@@ -75,17 +75,18 @@ class CExClassField extends CExListItemsOwner {
     $props["coord_field_y"] = "num min|0 max|100";
     $props["coord_label_x"] = "num min|0 max|100";
     $props["coord_label_y"] = "num min|0 max|100";
-		
+    
     $props["_locale"]     = "str notNull";
     $props["_locale_desc"]  = "str";
     $props["_locale_court"] = "str";
     return $props;
   }
-	
+  
   function getBackProps() {
     $backProps = parent::getBackProps();
-		$backProps["enum_translations"] = "CExClassFieldEnumTranslation ex_class_field_id";
-		$backProps["field_translations"] = "CExClassFieldTranslation ex_class_field_id";
+    $backProps["enum_translations"] = "CExClassFieldEnumTranslation ex_class_field_id";
+    $backProps["field_translations"] = "CExClassFieldTranslation ex_class_field_id";
+    $backProps["list_items"] = "CExListItem field_id";
     return $backProps;
   }
   
@@ -101,15 +102,15 @@ class CExClassField extends CExListItemsOwner {
   }
   
   function loadRefExClass($cache = true){
-  	return $this->_ref_ex_class = $this->loadRefExGroup($cache)->loadRefExClass($cache);
+    return $this->_ref_ex_class = $this->loadRefExGroup($cache)->loadRefExClass($cache);
   }
   
-	/**
-	 * CExConcept
-	 * 
-	 * @param object $cache [optional]
-	 * @return 
-	 */
+  /**
+   * CExConcept
+   * 
+   * @param object $cache [optional]
+   * @return 
+   */
   function loadRefConcept($cache = true){
     return $this->_ref_concept = $this->loadFwdRef("concept_id", $cache);
   }
@@ -131,17 +132,17 @@ class CExClassField extends CExListItemsOwner {
   }
   
   function updateTranslation(){
-  	$list_owner = $this->getRealListOwner();
-		$items = $list_owner->loadRefItems();
-		
+    $list_owner = $this->getRealListOwner();
+    $items = $list_owner->loadRefItems();
+    
     global $locales;
-		
-		$ex_class = $this->loadRefExClass();
-		
+    
+    $ex_class = $this->loadRefExClass();
+    
     $key = $ex_class->getExClassName().".$this->name";
-		foreach($items as $_item) {
-	    $locales["{$key}.$_item->_id"] = $_item->name;
-		}
+    foreach($items as $_item) {
+      $locales["{$key}.$_item->_id"] = $_item->name;
+    }
     
     $trans = $this->loadRefTranslation();
     $this->_locale       = $trans->std;
@@ -162,27 +163,27 @@ class CExClassField extends CExListItemsOwner {
   }
   
   function getSQLSpec($union = true){
-  	$spec_obj = $this->getSpecObject();
-		$db_spec = $spec_obj->getFullDBSpec();
-		
-		if ($union) {
-			$ds = $this->_spec->ds;
+    $spec_obj = $this->getSpecObject();
+    $db_spec = $spec_obj->getFullDBSpec();
+    
+    if ($union) {
+      $ds = $this->_spec->ds;
       $db_parsed = CMbFieldSpec::parseDBSpec($db_spec, true);
-			
-		  if ($db_parsed['type'] === "ENUM") {
-				$prop_parsed = $ds->getDBstruct($this->getTableName(), $this->name, true);
-				
-				if (isset($prop_parsed[$this->name])) {
-				  $db_parsed['params'] = array_merge($db_parsed['params'], $prop_parsed['params']);
-				}
-				
-				$db_parsed['params'] = array_unique($db_parsed['params']);
-				
+      
+      if ($db_parsed['type'] === "ENUM") {
+        $prop_parsed = $ds->getDBstruct($this->getTableName(), $this->name, true);
+        
+        if (isset($prop_parsed[$this->name])) {
+          $db_parsed['params'] = array_merge($db_parsed['params'], $prop_parsed['params']);
+        }
+        
+        $db_parsed['params'] = array_unique($db_parsed['params']);
+        
         $spec_obj->list = implode("|", $db_parsed['params']);
         $db_spec = $spec_obj->getFullDBSpec();
-			}
-		}
-		
+      }
+    }
+    
     return $db_spec;
   }
   
@@ -190,7 +191,7 @@ class CExClassField extends CExListItemsOwner {
     if (!$this->_id && $this->concept_id) {
       $this->prop = $this->loadRefConcept()->prop;
     }
-		
+    
     if ($msg = $this->check()) return $msg;
     
     if (!preg_match('/^[a-z0-9_]+$/i', $this->name)) {
@@ -228,7 +229,7 @@ class CExClassField extends CExListItemsOwner {
       if (!$ds->query($query)) {
         return "Le champ '$this->name' n'a pas pu être mis à jour (".$ds->error().")";
       }
-		}
+    }
     
     $locale       = $this->_locale;
     $locale_desc  = $this->_locale_desc;
@@ -254,7 +255,7 @@ class CExClassField extends CExListItemsOwner {
     if ($msg = $this->canDeleteEx()) {
       return $msg;
     }
-		
+    
     if (!$this->_dont_drop_column) {
       $this->completeField("name");
       
@@ -270,9 +271,9 @@ class CExClassField extends CExListItemsOwner {
     return parent::delete();
   }
   
-	/**
-	 * @return CExListItemsOwner
-	 */
+  /**
+   * @return CExListItemsOwner
+   */
   function getRealListOwner(){
     if ($this->concept_id) {
       return $this->loadRefConcept()->getRealListOwner();

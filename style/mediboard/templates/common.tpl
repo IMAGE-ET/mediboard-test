@@ -3,7 +3,6 @@
 <head>
   <!-- Content-Type meta tags need to be the first in the page (even before title) -->
   <meta http-equiv="Content-Type" content="text/html;charset={{$localeInfo.charset}}" />
-  <meta name="viewport" content="width=device-width, maximum-scale=1.0, minimum-scale=1.0" />
   
   <title>
     {{if !$dialog}}
@@ -23,6 +22,7 @@
   <!-- iOS specific -->
   {{* Can't use the "apple-mobile-web-app-capable" meta tags because any hyperlink will be opened in Safari *}}
   <link rel="apple-touch-icon" href="images/icons/apple-touch-icon.png?{{$version.build}}" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.5, minimum-scale=1.0" />
   <meta name="format-detection" content="telephone=no" />
   
   <!-- IE9 specific JumpLists -->

@@ -47,10 +47,6 @@ Main.add(function(){
   
   <table class="main tbl">
     <tr>
-      <th colspan="4" class="title">{{tr}}CExList-back-list_items{{/tr}}</th>
-    </tr>
-		
-    <tr>
       <th class="narrow"></th>
       <th class="narrow code" {{if !$coded}}style="display: none"{{/if}}>
         {{mb_title class=CExListItem field=code}}

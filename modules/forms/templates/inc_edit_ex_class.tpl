@@ -97,8 +97,8 @@ toggleGroupLabelEdit = function(link) {
 
 <ul class="control_tabs" id="ExClass-back">
   <li><a href="#fields-specs">{{tr}}CExClass-back-fields{{/tr}}</a></li>
-  <!--<li><a href="#fields-constraints">{{tr}}CExClass-back-constraints{{/tr}}</a></li>
-  <li><a href="#fields-layout">{{tr}}CExClassField-layout{{/tr}}</a></li>-->
+  <li><a href="#fields-constraints">{{tr}}CExClass-back-constraints{{/tr}}</a></li>
+  <li><a href="#fields-layout">{{tr}}CExClassField-layout{{/tr}}</a></li>
 </ul>
 <hr class="control_tabs" />
 
@@ -202,6 +202,17 @@ toggleGroupLabelEdit = function(link) {
 
 <table class="main layout" id="fields-constraints" style="display: none;">
   <tr>
+  	<td>
+		  <table class="main tbl">
+		    <tr>
+		      <td class="empty">En cours de développement</td>
+		    </tr>
+		  </table>
+    </td>
+  </tr>
+	
+  {{* 
+  <tr>
     <td style="width: 20em; padding-right: 5px;">
       <button type="button" class="new" style="float: right;" onclick="ExConstraint.create({{$ex_class->_id}})">
         {{tr}}CExClassConstraint-title-create{{/tr}}
@@ -242,9 +253,15 @@ toggleGroupLabelEdit = function(link) {
       <!-- exConstraintEditor -->&nbsp;
     </td>
   </tr>
+	*}}
 </table>
 
 <div id="fields-layout" style="display: none;">
+	<table class="main tbl">
+	  <tr>
+	    <td class="empty">En cours de développement</td>
+	  </tr>
+	</table>
 {{* 
   <script type="text/javascript">
   	Main.add(ExClass.initLayoutEditor);

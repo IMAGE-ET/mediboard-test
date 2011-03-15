@@ -34,7 +34,8 @@ class CExClassFieldGroup extends CMbObject {
 	
   function getBackProps() {
     $backProps = parent::getBackProps();
-		$backProps["class_fields"] = "CExClassField ex_group_id";
+    $backProps["class_fields"] = "CExClassField ex_group_id";
+    $backProps["host_fields"]  = "CExClassHostField ex_group_id";
     return $backProps;
   }
   

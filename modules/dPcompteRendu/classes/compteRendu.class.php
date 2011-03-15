@@ -96,7 +96,7 @@ class CCompteRendu extends CDocumentItem {
     $specs["function_id"]      = "ref class|CFunctions purgeable";
     $specs["group_id"]         = "ref class|CGroups purgeable";
     $specs["object_id"]        = "ref class|CMbObject meta|object_class purgeable show|1";
-		$specs["content_id"]       = "ref class|CContenthtml show|0";
+    $specs["content_id"]       = "ref class|CContentHTML show|0";
     $specs["object_class"]     = "str notNull class show|0";
     $specs["nom"]              = "str notNull show|0 seekable";
     $specs["type"]             = "enum list|header|body|footer default|body";
