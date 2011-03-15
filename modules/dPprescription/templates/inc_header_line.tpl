@@ -14,7 +14,11 @@
 <table class="main">
    <tr>
      <th class="title">
-       {{if $line->_ref_prescription->type == "sejour"}}
+     	{{if $can->admin}}
+     	  {{mb_include module=system object=$line template=inc_object_history}}
+			{{/if}}
+			
+       {{if $line->_ref_prescription->type == "sejour" && $line->_ref_prescription->_ref_object->_ref_curr_affectation->_id}}
 			   <span style="float: right; font-size: 0.8em;">
            {{$line->_ref_prescription->_ref_object->_ref_curr_affectation->_ref_lit->_view}}
          </span>
