@@ -124,7 +124,7 @@ Main.add(function() {
   <tr>
     <th colspan="2" class="category">
       Intervention
-      <input type="input" name="sejour_intervention" value="" />
+      <input type="input" name="sejour_intervention" size="1" value="" />
       (pour prendre en compte l'intervention, veuillez indiquer 1 dans ce champs)
     </th>
   </tr>
