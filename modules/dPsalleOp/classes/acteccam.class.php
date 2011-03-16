@@ -249,6 +249,9 @@ class CActeCCAM extends CActe {
    * @return bool
    */
   function checkCompat() {
+    if($this->object_class == "CConsultation") {
+      return;
+    }
     $this->loadRefCodeCCAM();
     $this->_ref_code_ccam->getChaps();
     $this->getLinkedActes(false);
