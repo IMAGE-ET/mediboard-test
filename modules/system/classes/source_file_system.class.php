@@ -58,11 +58,15 @@ class CSourceFileSystem extends CExchangeSource {
   }
   
   function getData($path) {
-    return file_get_contents($path);
+  	if (is_readable($path)) {
+      return file_get_contents($path);
+		}
+		else {
+      throw new CMbException("CSourceFileSystem-file-not-readable", $path);
+		}
   }
 	
   private function getFullPath($path = ""){
     return $this->host.DIRECTORY_SEPARATOR.$path;
   }
 }
-?>

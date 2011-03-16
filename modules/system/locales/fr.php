@@ -644,6 +644,7 @@ $locales['CSourceFileSystem-password-court'] = 'Mot de passe';
 $locales['CSourceFileSystem-password-desc'] = 'Mot de passe';
 $locales['CSourceFileSystem-path-not-found'] = 'Répertoire \'%s\' non trouvé';
 $locales['CSourceFileSystem-path-not-readable'] = 'Le répertoire \'%s\' n\'est pas accessible en lecture';
+$locales['CSourceFileSystem-file-not-readable'] = 'Le fichier \'%s\' n\'est pas accessible en lecture';
 $locales['CSourceFileSystem-role'] = 'Rôle';
 $locales['CSourceFileSystem-role-court'] = 'Rôle';
 $locales['CSourceFileSystem-role-desc'] = 'Rôle ';
