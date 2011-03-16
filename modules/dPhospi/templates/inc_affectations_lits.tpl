@@ -30,7 +30,7 @@
   </form>
   <table class="tbl" id="affectation_{{$curr_affectation->_id}}">
     <tr class="patient">
-      <td class="text" style="width: 1%;">
+      <td class="text button" style="width: 1%;">
       {{if $curr_affectation->sejour_id}}
         {{if $can->edit}}
         <script type="text/javascript">new Draggable('affectation_{{$curr_affectation->_id}}', {revert:true})</script>
@@ -42,6 +42,9 @@
         -->
         {{if $sejour->_couvert_cmu}}
         <div><strong>CMU</strong></div>
+        {{/if}}
+        {{if $sejour->_couvert_ald}}
+        <div><strong>ALD</strong></div>
         {{/if}}
         {{if $sejour->type == "ambu"}}
         <img src="images/icons/X.png" alt="X" title="Sortant ce soir" />
@@ -73,7 +76,7 @@
         <font>
           {{/if}}
         {{/if}} 
-        <span onmouseover="ObjectTooltip.createEx(this, '{{$patient->_guid}}')">
+        <span onmouseover="ObjectTooltip.createEx(this, '{{$sejour->_guid}}')">
           {{if $sejour->type == "ambu"}}
 					<strong><em>{{$patient}}</em></strong>
           {{else}}

@@ -45,51 +45,59 @@ Main.add(function() {
 <input type="hidden" name="a" value="dhe_externe" />
 <table class="form">
   <tr>
-    <th colspan="2" class="title">Test de la Demande d'hospitalisation électronique externe</th>
+    <th colspan="3" class="title">Test de la Demande d'hospitalisation électronique externe</th>
   </tr>
   <tr>
-    <th colspan="2" class="category">Patient</th>
+    <th colspan="3" class="category">Patient</th>
   </tr>
   <tr>
     <th>{{mb_label object=$patient field=nom}}</th>
     <td>{{mb_field object=$patient field=nom}}</td>
+    <td class="text">Obligatoire</td>
   </tr>
   <tr>
     <th>{{mb_label object=$patient field=prenom}}</th>
     <td>{{mb_field object=$patient field=prenom}}</td>
+    <td class="text">Obligatoire</td>
   </tr>
   <tr>
     <th>{{mb_label object=$patient field=naissance}}</th>
     <td><input type="text" name="naissance" /></td>
+    <td class="text">Obligatoire</td>
   </tr>
   <tr>
     <th>{{mb_label object=$patient field=sexe}}</th>
     <td>{{mb_field object=$patient field=sexe}}</td>
+    <td class="text">Obligatoire</td>
   </tr>
   <tr>
     <th>{{mb_label object=$patient field=adresse}}</th>
     <td>{{mb_field object=$patient field=adresse}}</td>
+    <td></td>
   </tr>
   <tr>
     <th>{{mb_label object=$patient field=cp}}</th>
     <td>{{mb_field object=$patient field=cp}}</td>
+    <td></td>
   </tr>
   <tr>
     <th>{{mb_label object=$patient field=ville}}</th>
     <td>{{mb_field object=$patient field=ville}}</td>
+    <td></td>
   </tr>
   <tr>
     <th>{{mb_label object=$patient field=tel}}</th>
     <td>{{mb_field object=$patient field=tel}}</td>
+    <td></td>
   </tr>
   <tr>
     <th>{{mb_label object=$patient field=tel2}}</th>
     <td>{{mb_field object=$patient field=tel2}}</td>
+    <td></td>
   </tr>
   <tr>
-    <th colspan="2" class="category">
+    <th colspan="3" class="category">
       Sejour
-      (pour prendre en compte le séjour, indiquez le libellé)
     </th>
   </tr>
     <th>{{mb_label object=$sejour field=praticien_id}}</th>
@@ -100,57 +108,69 @@ Main.add(function() {
       {{/foreach}}
       </select>
     </td>
+    <td>Obligatoire</td>
   </tr>
   </tr>
     <th>{{mb_label object=$sejour field=libelle}}</th>
     <td>{{mb_field object=$sejour field=libelle}}</td>
+    <td class="text">Obligatoire dans le cas d'un séjour</td>
   </tr>
   <tr>
     <th>{{mb_label object=$sejour field=type}}</th>
     <td>{{mb_field object=$sejour field=type}}</td>
+    <td class="text">Obligatoire dans le cas d'un séjour</td>
   </tr>
   <tr>
     <th>{{mb_label object=$sejour field=entree_prevue}}</th>
     <td>{{mb_field object=$sejour field=entree_prevue}}</td>
+    <td class="text">Obligatoire dans le cas d'un séjour</td>
   </tr>
   <tr>
     <th>{{mb_label object=$sejour field=sortie_prevue}}</th>
     <td>{{mb_field object=$sejour field=sortie_prevue}}</td>
+    <td class="text">Obligatoire dans le cas d'un séjour</td>
   </tr>
   <tr>
     <th>{{mb_label object=$sejour field=rques}}</th>
     <td>{{mb_field object=$sejour field=rques}}</td>
+    <td></td>
   </tr>
   <tr>
-    <th colspan="2" class="category">
+    <th colspan="3" class="category">
       Intervention
-      <input type="input" name="sejour_intervention" size="1" value="" />
-      (pour prendre en compte l'intervention, veuillez indiquer 1 dans ce champs)
+      <input name="sejour_intervention" type="radio" value="1" /> oui /
+      <input name="sejour_intervention" type="radio" value="0" checked="checked"/> non
     </th>
   </tr>
   <tr>
     <th>{{mb_label object=$intervention field=_datetime}}</th>
     <td>{{mb_field object=$intervention field=_datetime}}</td>
+    <td class="text">Obligatoire dans le cas d'une intervention - seule la date est prise en compte</td>
   </tr>
   <tr>
     <th>{{mb_label object=$intervention field=temp_operation}}</th>
     <td>{{mb_field object=$intervention field=temp_operation}}</td>
+    <td class="text">Obligatoire dans le cas d'une intervention</td>
   </tr>
   <tr>
     <th>{{mb_label object=$intervention field=cote}}</th>
     <td>{{mb_field object=$intervention field=cote}}</td>
+    <td class="text">Obligatoire dans le cas d'une intervention</td>
   </tr>
   <tr>
     <th>{{mb_label object=$intervention field=horaire_voulu}}</th>
     <td>{{mb_field object=$intervention field=horaire_voulu}}</td>
+    <td></td>
   </tr>
   <tr>
     <th>{{mb_label object=$intervention field=codes_ccam}}</th>
     <td>{{mb_field object=$intervention field=codes_ccam}}</td>
+    <td></td>
   </tr>
   <tr>
     <th>{{mb_label object=$intervention field=materiel}}</th>
     <td>{{mb_field object=$intervention field=materiel}}</td>
+    <td></td>
   </tr>
   <tr>
     <td colspan="2" class="button">

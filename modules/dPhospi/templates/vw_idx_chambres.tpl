@@ -106,6 +106,11 @@ Main.add(function () {
       <td>{{mb_field object=$chambre field=caracteristiques}}</td>
     </tr>
     
+    <tr>
+      <th>{{mb_label object=$chambre field=lits_alpha}}</th>
+      <td>{{mb_field object=$chambre field=lits_alpha}}</td>
+    </tr>
+    
 		<tr>
       <th>{{mb_label object=$chambre field=annule}}</th>
       <td>{{mb_field object=$chambre field=annule}}</td>

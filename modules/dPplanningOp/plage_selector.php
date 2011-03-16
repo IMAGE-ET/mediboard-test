@@ -12,9 +12,7 @@ $can->needsRead();
 $ds = CSQLDataSource::get("std");
 
 $chir         = CValue::get("chir"         , 0);
-$date         = CValue::get("date"         , mbDate());
-$month        = CValue::get("month"        , date("m"));
-$year         = CValue::get("year"         , date("Y"));
+$date         = CValue::getOrSession("date_plagesel", mbDate());
 $group_id     = CValue::get("group_id"     , $g);
 $operation_id = CValue::get("operation_id" , null);
 $curr_op_hour = CValue::get("curr_op_hour" , "25");

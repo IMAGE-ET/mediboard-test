@@ -14,9 +14,16 @@
     {{else}}
     ({{$curr_sejour->type|truncate:1:""|capitalize}})
     {{/if}}
-    {{if $curr_sejour->_couvert_cmu}}
-    <div style="float: right;"><strong>CMU</strong></div>
-    {{/if}}
+      {{if $_sejour->_couvert_cmu || $_sejour->_couvert_ald}}
+      <div style="float: right;"><strong>
+      {{if $_sejour->_couvert_cmu}}
+      CMU
+      {{/if}}
+      {{if $_sejour->_couvert_ald}}
+      ALD
+      {{/if}}
+      </strong></div>
+      {{/if}}
   </td>
 </tr>
 <tr>

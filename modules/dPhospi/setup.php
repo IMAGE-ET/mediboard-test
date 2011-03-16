@@ -313,7 +313,12 @@ class CSetupdPhospi extends CSetup {
     $query = "SELECT 0";
     $this->addQuery($query);
     
-    $this->mod_version = "0.39";
+    $this->makeRevision("0.39");
+    $query = "ALTER TABLE `chambre`
+              ADD `lits_alpha` ENUM ('0','1') DEFAULT '0' AFTER `caracteristiques`;";
+    $this->addQuery($query);
+    
+    $this->mod_version = "0.40";
   }
 }
 ?>

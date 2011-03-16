@@ -29,14 +29,25 @@
       {{/if}}
     </td>
     <td class="patient" onclick="flipSejour({{$_sejour->_id}})">
-      <strong {{if !$_sejour->entree_reelle}}class="patient-not-arrived"{{/if}} {{if $_sejour->septique}}class="septique"{{/if}}><a name="sejour{{$_sejour->_id}}">{{$_sejour->_ref_patient->_view}}</a></strong>
+      <strong {{if !$_sejour->entree_reelle}}class="patient-not-arrived"{{/if}} {{if $_sejour->septique}}class="septique"{{/if}}>
+        <a name="sejour{{$_sejour->_id}}">
+          {{$_sejour->_ref_patient->_view}}
+        </a>
+      </strong>
       {{if $_sejour->type != "ambu" && $_sejour->type != "exte"}}
       ({{$_sejour->_duree}}j - {{$_sejour->_ref_praticien->_shortview}})
       {{else}}
       ({{$_sejour->type|truncate:1:""|capitalize}} - {{$_sejour->_ref_praticien->_shortview}})
       {{/if}}
+      {{if $_sejour->_couvert_cmu || $_sejour->_couvert_ald}}
+      <div style="float: right;"><strong>
       {{if $_sejour->_couvert_cmu}}
-      <div style="float: right;"><strong>CMU</strong></div>
+      CMU
+      {{/if}}
+      {{if $_sejour->_couvert_ald}}
+      ALD
+      {{/if}}
+      </strong></div>
       {{/if}}
     </td>
   </tr> 

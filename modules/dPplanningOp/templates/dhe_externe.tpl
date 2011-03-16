@@ -111,7 +111,7 @@ var changeField = function(sField, sValue) {
       {{elseif isset($list_fields|smarty:nodefaults)}}
       <form name="editFieldsFrm" action="?" method="post" onsubmit="return onSubmitFormAjax(this, { onComplete : {{$list_fields.action}} });">
       <input type="hidden" name="m" value="{{$list_fields.object->_ref_module->mod_name}}" />
-      <input type="hidden" name="dosql" value="{{if $list_fields.object->_class_name == 'CPatient'}}do_patient_aed{{else}}do_sejour_aed{{/if}}" />
+      <input type="hidden" name="dosql" value="{{if $list_fields.object->_class_name == 'CPatient'}}do_patients_aed{{else}}do_sejour_aed{{/if}}" />
       <input type="hidden" name="del" value="0" />
       <input type="hidden" name="_purge" value="0" />
       {{mb_key object=$list_fields.object_existant}}

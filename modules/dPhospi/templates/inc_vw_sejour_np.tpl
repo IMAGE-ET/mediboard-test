@@ -12,7 +12,7 @@
     <a class="text" href="#1" 
        onclick="markAsSelected(this); addSejourIdToSession('{{$curr_sejour->_id}}'); loadViewSejour({{$curr_sejour->_id}},{{$curr_sejour->praticien_id}},{{$curr_sejour->patient_id}},'{{$date}}')">
       <span class="{{if !$curr_sejour->entree_reelle}}patient-not-arrived{{/if}} {{if $curr_sejour->septique}}septique{{/if}}"
-            onmouseover="ObjectTooltip.createEx(this, '{{$curr_sejour->_ref_patient->_guid}}');" >
+            onmouseover="ObjectTooltip.createEx(this, '{{$curr_sejour->_guid}}');" >
         {{$curr_sejour->_ref_patient->_view}}
       </span>
     </a>

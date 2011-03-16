@@ -90,6 +90,7 @@ class CSejour extends CCodable {
   var $_guess_num_dossier  = null;
   var $_at_midnight        = null;
   var $_couvert_cmu        = null;
+  var $_couvert_ald        = null;
   var $_curr_op_id         = null;
   var $_curr_op_date       = null;
   var $_protocole_prescription_anesth_id = null;
@@ -852,6 +853,11 @@ class CSejour extends CCodable {
       $this->_couvert_cmu = 1;
     } else {
       $this->_couvert_cmu = 0;
+    }
+    if($this->_date_sortie_prevue <= $this->_ref_patient->fin_amo && $this->_ref_patient->ald){
+      $this->_couvert_ald = 1;
+    } else {
+      $this->_couvert_ald = 0;
     }
   }
   

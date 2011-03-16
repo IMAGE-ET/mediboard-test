@@ -22,6 +22,7 @@ class CChambre extends CMbObject {
   // DB Fields
   var $nom              = null;
   var $caracteristiques = null; // côté rue, fenêtre, lit accompagnant, ...
+  var $lits_alpha       = null;
   var $annule           = null;
 
   // Form Fields
@@ -58,6 +59,7 @@ class CChambre extends CMbObject {
     $specs["service_id"]       = "ref notNull class|CService seekable";
     $specs["nom"]              = "str notNull seekable";
     $specs["caracteristiques"] = "text confidential";
+    $specs["lits_alpha"]       = "bool default|0";
     $specs["annule"]           = "bool";
     return $specs;
   }
@@ -76,7 +78,11 @@ class CChambre extends CMbObject {
   }
 
   function loadRefsLits() {
-    $order = "lit.nom DESC";
+    if($this->lits_alpha) {
+      $order = "lit.nom ASC";
+    } else {
+      $order = "lit.nom DESC";
+    }
     return $this->_ref_lits = $this->loadBackRefs("lits", $order);
   }
 
