@@ -240,11 +240,25 @@ class CUser extends CMbObject {
   	return parent::store();
   }
   
-  function merge($objects) {
+  function merge($objects, $fast = false) {
+    if (!$this->_id) {
+      return "CUser-merge-alternative-mode-required";
+    }
+    
+    // Fast merging obligatoire
+    $fast = true;
+    $mediusers = array();
     foreach ($objects as $object) {
+      $object->loadRefMediuser();
+      $mediusers[] = $object->_ref_mediuser;
       $object->removePerms();
     }
-    return parent::merge($objects);
+    
+    $this->loadRefMediuser();
+    $this->_ref_mediuser->_force_merge = true;
+    $this->_ref_mediuser->merge($mediusers, $fast);
+    
+    return parent::merge($objects, $fast);
   }
 
   function removePerms() {

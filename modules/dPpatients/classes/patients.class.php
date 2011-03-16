@@ -418,7 +418,7 @@ class CPatient extends CMbObject {
 		}
   }
   
-  function merge($objects = array/*<CPatient>*/()) {
+  function merge($objects = array/*<CPatient>*/(), $fast = false) {
   	// Load the matching CDossierMedical objects 
   	$where = array(
   	  'object_class' => "='$this->_class_name'",
@@ -431,7 +431,7 @@ class CPatient extends CMbObject {
       $object->loadIPP();
     }
     
-  	if ($msg = parent::merge($objects)) return $msg;
+  	if ($msg = parent::merge($objects, $fast)) return $msg;
     
     // Merge them
     if (count($list) > 1) {

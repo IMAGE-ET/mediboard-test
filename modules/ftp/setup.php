@@ -85,7 +85,12 @@ class CSetupftp extends CSetup {
                 ADD `active` ENUM ('0','1') NOT NULL DEFAULT '1';";
     $this->addQuery($query);
     
-    $this->mod_version = "0.04";
+    $this->makeRevision("0.04");
+    $query = "ALTER TABLE `source_ftp` 
+              CHANGE `timeout` `timeout` INT (11) DEFAULT '5';";
+     $this->addQuery($query);
+              
+    $this->mod_version = "0.05";
   }
 }
 ?>

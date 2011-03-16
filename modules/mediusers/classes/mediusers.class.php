@@ -66,7 +66,8 @@ class CMediusers extends CMbObject {
   var $_user_password_weak         = null;
   var $_user_password_strong       = null;
   var $_basic_info                 = null;
-   var $_is_urgentiste             = null;
+  var $_is_urgentiste              = null;
+  var $_force_merge                = false;
   
   // Distant fields
   var $_group_id                   = null;
@@ -279,6 +280,13 @@ class CMediusers extends CMbObject {
     }
 
     return parent::delete();
+  }
+  
+  function merge($objects = array/*<CMbObject>*/(), $fast = false) {
+    if ($this->_force_merge) {
+      return parent::merge($objects, $fast);
+    }
+    return "CMediusers-merge-impossible";
   }
 
   function updateFormFields() {
