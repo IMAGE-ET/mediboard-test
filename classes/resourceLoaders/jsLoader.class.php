@@ -36,6 +36,8 @@ abstract class CJSLoader extends CHTMLResourceLoader {
      * The total size of the JS goes down from 300kB to 230kB (gzipped).
      */
     if ($compress) {
+      $compress = 1; // force Normal compression
+      
       $files = self::$files;
       $excluded = array();
       $uptodate = false;
@@ -70,7 +72,7 @@ abstract class CJSLoader extends CHTMLResourceLoader {
         }
         
         if($compress == 2) {
-          $all_scripts = JSMin::minify($all_scripts);
+          $all_scripts = self::minify($all_scripts);
         }
         
         file_put_contents($cachefile, $all_scripts);
@@ -90,6 +92,10 @@ abstract class CJSLoader extends CHTMLResourceLoader {
     }
     
     return $result;
+  }
+  
+  static function minify($js) {
+    return JSMin::minify($js);
   }
   
   static function writeLocaleFile($language = null, $locales = null, $label = null) {

@@ -65,12 +65,11 @@ abstract class CCSSLoader extends CHTMLResourceLoader {
       $all = "";
       foreach($files as $file) {
         $content = file_get_contents($file);
+        
 				if ($compress == 2) {
-          $content = str_replace(array("\r\n", "\r", "\n", "\t"), "", $content); // whitespace
-          $content = preg_replace("/\s*([\{\};:,])\s+/", "$1", $content); // whitespace around { and }
-          $content = preg_replace("/;\}/", "}", $content); // ;} >> }
-          $content = preg_replace("!/\*[^*]*\*+([^/][^*]*\*+)*/!", "", $content); // comments
+          $content = self::minify($content);
 				}
+				
 				$content = preg_replace("/\@import\s+(?:url\()?[\"']?([^\"\'\)]+)[\"']?\)?;/i", "", $content); // remove @imports
         $content = preg_replace("/(url\s*\(\s*[\"\']?)/", "$1../$path/", $content); // relative paths
         $all .= $content."\n";
@@ -83,5 +82,19 @@ abstract class CCSSLoader extends CHTMLResourceLoader {
     $result .= self::loadFile($cachefile, $media, null, $last_update, $type)."\n";
     
     return $result;
+  }
+  
+  static function minify($css) {
+    $css = str_replace(array("\r\n", "\r", "\n", "\t"), "", $css); // whitespace
+    $css = preg_replace("/\s+/", " ", $css); // multiple spaces
+    $css = preg_replace("!/\*[^*]*\*+([^/][^*]*\*+)*/!", "", $css); // comments
+    $css = preg_replace("/\s*([\{\};:,>])\s*/", "$1", $css); // whitespace around { } ; : , >
+    $css = str_replace(";}", "}", $css); // ;} >> }
+    return $css;
+  }
+  
+  private static function reducePath($matches) {
+    mbTrace($matches, "m", true);
+    return CMbPath::reduce($matches[1]);
   }
 }
