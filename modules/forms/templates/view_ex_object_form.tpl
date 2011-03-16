@@ -31,15 +31,27 @@ if (window.opener && window.opener !== window) {
   {{mb_field object=$ex_object field=object_id hidden=true}}
   
   <input type="hidden" name="del" value="0" />
-		
+	
+	<h2>{{$ex_object->_ref_ex_class}} - {{$object}}</h2>
+	
+	{{main}}
+	  Control.Tabs.create("ex_class-groups-tabs");
+	{{/main}}
+	
+	<ul id="ex_class-groups-tabs" class="control_tabs">
+	{{foreach from=$grid key=_group_id item=_grid}}
+	  <li>
+	  	<a href="#tab-{{$groups.$_group_id->_guid}}">{{$groups.$_group_id}}</a>
+	  </li>
+	{{/foreach}}
+	</ul>
+	
   <table class="main form">
-    <tr>
-      <th class="title" colspan="4">
-        {{$ex_object->_ref_ex_class}} - {{$object}}
-      </th>
-    </tr>
+  	
+		{{foreach from=$grid key=_group_id item=_grid}}
+		<tbody id="tab-{{$groups.$_group_id->_guid}}" style="display: none;">
 		
-    {{foreach from=$grid key=_y item=_line}}
+    {{foreach from=$_grid key=_y item=_line}}
     <tr>
       {{foreach from=$_line key=_x item=_group}}
 	      {{if $_group.object}}
@@ -105,10 +117,10 @@ if (window.opener && window.opener !== window) {
     {{/foreach}}
 		
 		{{* Out of grid *}}
-    {{foreach from=$ex_object->_ref_ex_class->_ref_fields item=_field}}
+    {{foreach from=$groups.$_group_id->_ref_fields item=_field}}
       {{assign var=_field_name value=$_field->name}}
 			
-		  {{if isset($out_of_grid.field.$_field_name|smarty:nodefaults)}}
+		  {{if isset($out_of_grid.$_group_id.field.$_field_name|smarty:nodefaults)}}
 		    <tr>
 		      <th>
 		        {{mb_label object=$ex_object field=$_field->name}}
@@ -149,6 +161,9 @@ if (window.opener && window.opener !== window) {
 		  {{/if}}
     {{/foreach}}
     
+    </tbody>
+    {{/foreach}}
+		
     <tr>
       <td colspan="4" class="button">
         {{if $ex_object->_id}}

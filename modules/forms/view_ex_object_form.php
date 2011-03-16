@@ -32,7 +32,7 @@ $ex_object->setObject($object);
 $ex_object->_ex_class_id = $ex_class_id;
 $ex_object->setExClass();
 
-list($grid, $out_of_grid) = $ex_object->_ref_ex_class->getGrid();
+list($grid, $out_of_grid, $groups) = $ex_object->_ref_ex_class->getGrid();
 
 if ($ex_object_id) {
   $ex_object->load($ex_object_id);
@@ -47,7 +47,9 @@ foreach($ex_object->_specs as $_field => $_spec) {
   }
 }
 
-foreach($ex_object->_ref_ex_class->_ref_fields as $_field) {
+$fields = $ex_object->_ref_ex_class->loadRefsAllFields();
+
+foreach($fields as $_field) {
   $_field->updateTranslation();
 }
 
@@ -62,5 +64,6 @@ $smarty->assign("_element_id",  $_element_id);
 $smarty->assign("event",        $event);
 $smarty->assign("grid",         $grid);
 $smarty->assign("out_of_grid",  $out_of_grid);
+$smarty->assign("groups",       $groups);
 $smarty->assign("readonly",     $readonly);
 $smarty->display("view_ex_object_form.tpl");

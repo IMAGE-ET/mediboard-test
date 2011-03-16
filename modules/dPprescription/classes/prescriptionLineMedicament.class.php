@@ -167,6 +167,10 @@ class CPrescriptionLineMedicament extends CPrescriptionLine {
     $spec->table = 'prescription_line_medicament';
     $spec->key   = 'prescription_line_medicament_id';
     $spec->measureable = true;
+    $spec->events = array(
+      "prescription"   => array("multiple" => false),
+      "administration" => array("multiple" => true),
+    );
     return $spec;
   }
   
