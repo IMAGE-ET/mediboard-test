@@ -152,7 +152,7 @@ if($prescription->_id){
   $historique = $prescription->loadRefsLinesHistorique();
    	
   // Calcul du nombre d'elements dans la prescription
-	$prescription->countLinesMedsElements($praticien_sortie_id);
+	$prescription->countLinesMedsElements($praticien_sortie_id, $operation_id);
 
 	// Chargement des medicaments et commentaires de medicament
 	if ($full_mode || $chapitre == "medicament" || $chapitre == "inscription" || $mode_protocole || $mode_pharma) {
@@ -338,11 +338,11 @@ if($prescription->_id){
 		$executants["users"] = CFunctionCategoryPrescription::getAllUserExecutants();
 
 		// Chargement des lignes de DMI
-	  if (CAppUI::conf("dmi CDMI active") && CModule::getActive('dmi') && $chapitre == 'dmi') {
-	    $prescription->loadRefsLinesDMI();
+	  if ($chapitre === 'dmi' && CAppUI::conf("dmi CDMI active") && CModule::getActive('dmi')) {
+	    $prescription->loadRefsLinesDMI($operation_id);
 	    foreach($prescription->_ref_lines_dmi as $_line_dmi){
 	      $_line_dmi->loadRefsFwd();
-          $_line_dmi->loadRefProductOrderItemReception()->loadRefOrderItem();
+        $_line_dmi->loadRefProductOrderItemReception()->loadRefOrderItem();
 	    }
 	  }
 	  

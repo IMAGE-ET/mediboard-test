@@ -16,6 +16,7 @@ $praticien_sortie_id = CValue::get("praticien_sortie_id");
 $only_dmi            = CValue::get("only_dmi");
 $print               = CValue::get("print", 0);
 $no_pdf              = CValue::get("no_pdf", 0);
+$operation_id        = CValue::get("operation_id");
 $linesDMI = array();
 
 // Chargement de l'etablissement
@@ -72,7 +73,7 @@ foreach($prescription->_ref_prescription_line_mixes as $curr_prescription_line_m
 }
 
 if (CAppUI::conf("dmi CDMI active") && CModule::getActive('dmi')) {
-  $prescription->loadRefsLinesDMI();
+  $prescription->loadRefsLinesDMI($operation_id);
 }
 
 $medicament = 0;

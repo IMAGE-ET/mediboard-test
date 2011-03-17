@@ -947,7 +947,7 @@ class CPrescription extends CMbObject {
   /*
    * Chargement du nombre des medicaments et d'elements
    */
-  function countLinesMedsElements($praticien_sortie_id = null){
+  function countLinesMedsElements($praticien_sortie_id = null, $operation_id = null){
     $this->_counts_by_chapitre_non_signee = array();
     $this->_counts_by_chapitre = array();
     
@@ -1017,7 +1017,7 @@ class CPrescription extends CMbObject {
     }
     
     if (CAppUI::conf("dmi CDMI active") && CModule::getActive('dmi')) {
-      $this->loadRefsLinesDMI();
+      $this->loadRefsLinesDMI($operation_id);
       $this->_counts_by_chapitre["dmi"] = count($this->_ref_lines_dmi);
     }
     
@@ -1467,9 +1467,10 @@ class CPrescription extends CMbObject {
   /*
    * Chargement des lignes de DMI
    */
-  function loadRefsLinesDMI(){
+  function loadRefsLinesDMI($operation_id = null){
     $line_dmi = new CPrescriptionLineDMI();
     $line_dmi->prescription_id = $this->_id;
+    $line_dmi->operation_id = $operation_id ? $operation_id : null;
     $this->_ref_lines_dmi = $line_dmi->loadMatchingList();
   }
  

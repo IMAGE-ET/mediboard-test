@@ -30,7 +30,9 @@
         {{assign var=context value=$contexts.$_context_guid}}
         {{assign var=interv value=$intervs.$_context_guid}}
         
-        <button type="button" class="print notext" style="float: left" onclick="printOrdonnance('{{$contexts.$_context_guid->prescription_id}}', '{{$context->praticien_id}}')"></button>
+        {{* TODO l'interv ici est celle de la derniere du jour courant *}}
+        <button type="button" class="print notext" style="float: left" 
+                onclick="printOrdonnance('{{$contexts.$_context_guid->prescription_id}}', '{{$context->praticien_id}}', '{{$interv->_id}}')"></button>
         
         <span style="float: right;">
           {{if    !$interv->entree_bloc   && !$interv->entree_salle}}  En attente d'entrée au bloc
