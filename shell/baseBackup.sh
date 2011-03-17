@@ -23,7 +23,7 @@ then
 fi
 
 time=7
-args=`getopt t: $*`
+args=`getopt t:b $*`
 
 if [ $? != 0 ] ; then
   echo "Invalid argument. Check your command line"; exit 0;
