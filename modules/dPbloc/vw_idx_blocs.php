@@ -8,10 +8,9 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
  */
  
-global $can;
-$can->needsAdmin();
+CCanDo::checkAdmin();
 
-$bloc_id = CValue::getOrSession("bloc_id", 0);
+$bloc_id = CValue::getOrSession("bloc_id");
 
 // Récupération des blocs de l'etablissement
 $blocs_list = CGroups::loadCurrent()->loadBlocs(PERM_EDIT);
@@ -19,6 +18,7 @@ $blocs_list = CGroups::loadCurrent()->loadBlocs(PERM_EDIT);
 // Récupération du bloc à modifier
 $bloc = new CBlocOperatoire();
 $bloc->load($bloc_id);
+$bloc->loadRefsNotes();
 
 // Création du template
 $smarty = new CSmartyDP();

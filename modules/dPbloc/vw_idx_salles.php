@@ -8,8 +8,7 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
  */
  
-global $can;
-$can->needsAdmin();
+CCanDo::checkAdmin();
 
 $salle_id = CValue::getOrSession("salle_id");
 
@@ -19,6 +18,7 @@ $blocs_list = CGroups::loadCurrent()->loadBlocs(PERM_EDIT);
 // Récupération de la salle à ajouter/editer
 $salle = new CSalle;
 $salle->load($salle_id);
+$salle->loadRefsNotes();
 
 // Création du template
 $smarty = new CSmartyDP();

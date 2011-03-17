@@ -18,10 +18,16 @@
           <th>{{tr}}Salles{{/tr}}</th>
         </tr>
         
-        {{foreach from=$blocs_list item=curr_bloc}}
-        <tr {{if $curr_bloc->_id == $bloc->_id}}class="selected"{{/if}}>
-          <td><a href="?m={{$m}}&amp;tab={{$tab}}&amp;bloc_id={{$curr_bloc->_id}}">{{$curr_bloc->nom}}</a></td>
-          <td>{{$curr_bloc->_ref_salles|@count}}</td>
+        {{foreach from=$blocs_list item=_bloc}}
+        <tr {{if $_bloc->_id == $bloc->_id}}class="selected"{{/if}}>
+          <td><a href="?m={{$m}}&amp;tab={{$tab}}&amp;bloc_id={{$_bloc->_id}}">{{$_bloc}}</a></td>
+          <td>
+          	{{foreach from=$_bloc->_ref_salles item=_salle}}
+          	   <div>{{$_salle}}</div>
+          	{{foreachelse}}
+						<div class="empty">{{tr}}CSalle.none{{/tr}}</div>
+          	{{/foreach}}
+ 				</td>
         </tr>
         {{/foreach}}
       </table>
@@ -30,14 +36,20 @@
     <td class="halfPane">
       <form name="bloc-edit" action="?m={{$m}}" method="post" onsubmit="return checkForm(this)">
         <input type="hidden" name="dosql" value="do_bloc_operatoire_aed" />
-        <input type="hidden" name="bloc_operatoire_id" value="{{$bloc->_id}}" />
         <input type="hidden" name="del" value="0" />
+        {{mb_key object=$bloc}}
+
         <input type="hidden" name="group_id" value="{{$g}}" />
+
         <table class="form">
           <tr>
             <th class="title {{if $bloc->_id}}modify{{/if}}" colspan="2">
             {{if $bloc->_id}}
-              {{tr}}CBlocOperatoire-title-modify{{/tr}} "{{$bloc->nom}}"
+              {{assign var=object value=$bloc}}
+				      {{mb_include module=system template=inc_object_idsante400}}
+				      {{mb_include module=system template=inc_object_history}}
+				      {{mb_include module=system template=inc_object_notes}}
+              {{tr}}CBlocOperatoire-title-modify{{/tr}} "{{$bloc}}"
             {{else}}
               {{tr}}CBlocOperatoire-title-create{{/tr}}
             {{/if}}
