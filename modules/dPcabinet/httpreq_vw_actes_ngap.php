@@ -10,6 +10,7 @@
 
 $object_id = CValue::getOrSession("object_id");
 $object_class = CValue::getOrSession("object_class");
+
 // Chargement de la consultation
 $object = new $object_class;
 $object->load($object_id);
@@ -28,6 +29,7 @@ $smarty = new CSmartyDP();
 
 $smarty->assign("acte_ngap"      , $acte_ngap);
 $smarty->assign("object"         , $object);
+$smarty->assign("subject"        , $object);
 
 $smarty->display("inc_codage_ngap.tpl");
 ?>
