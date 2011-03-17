@@ -8,8 +8,6 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
  */
 
-global $g;
-
 CCanDo::checkRead();
 
 $ds = CSQLDataSource::get("std");
@@ -27,55 +25,42 @@ $hier = mbDate("- 1 day", $date);
 $demain = mbDate("+ 1 day", $date);
 
 // Initialisation du tableau de jours
+$types = array(
+  "ambu",
+	"comp",
+	"exte",
+	"consult"
+);
+
+// Initialisation des totaux
 $days = array();
 for ($day = $month_min; $day < $month_max; $day = mbDate("+1 DAY", $day)) {
-  $days[$day] = array(
-    "ambu"  => "0",
-    "comp" => "0",
-    "exte" => "0",
-  );
+	foreach($types as $_type) {
+    $days[$day][$_type] = 0;		
+	}
 }
 
-// Liste des ambulatoires par jour
-$sql = "SELECT DATE_FORMAT(`sejour`.`sortie`, '%Y-%m-%d') AS `date`, COUNT(`sejour`.`sejour_id`) AS `num`
-    FROM `sejour`
-    WHERE `sejour`.`sortie` BETWEEN '$month_min' AND '$month_max'
-      AND `sejour`.`group_id` = '$g'
-      AND `sejour`.`type` = 'ambu'
-      AND `sejour`.`annule` = '0'
-    GROUP BY `sejour`.`type`, `date`
-    ORDER BY `date`";
-foreach ($ds->loadHashList($sql) as $day => $num1) {
-  $days[$day]["ambu"] = $num1;
-}
-// Liste des hospi complètes par jour
-$sql = "SELECT DATE_FORMAT(`sejour`.`sortie`, '%Y-%m-%d') AS `date`, COUNT(`sejour`.`sejour_id`) AS `num`
-    FROM `sejour`
-    WHERE `sejour`.`sortie` BETWEEN '$month_min' AND '$month_max'
-      AND `sejour`.`group_id` = '$g'
-      AND `sejour`.`type` = 'comp'
-      AND `sejour`.`annule` = '0'
-    GROUP BY `sejour`.`type`, `date`
-    ORDER BY `date`";
-foreach ($ds->loadHashList($sql) as $day => $num1) {
-  $days[$day]["comp"] = $num1;
-}
-// Liste des externes par jour
-$sql = "SELECT DATE_FORMAT(`sejour`.`sortie`, '%Y-%m-%d') AS `date`, COUNT(`sejour`.`sejour_id`) AS `num`
-    FROM `sejour`
-    WHERE `sejour`.`sortie` BETWEEN '$month_min' AND '$month_max'
-      AND `sejour`.`group_id` = '$g'
-      AND `sejour`.`type` = 'exte'
-      AND `sejour`.`annule` = '0'
-    GROUP BY `sejour`.`type`, `date`
-    ORDER BY `date`";
-foreach ($ds->loadHashList($sql) as $day => $num1) {
-  $days[$day]["exte"] = $num1;
+// Comptage des totaux
+$group = CGroups::loadCurrent();
+foreach ($types as $_type) {
+	$query = "SELECT DATE_FORMAT(`sejour`.`sortie`, '%Y-%m-%d') AS `date`, COUNT(`sejour`.`sejour_id`) AS `num`
+		FROM `sejour`
+		WHERE `sejour`.`sortie` BETWEEN '$month_min' AND '$month_max'
+		  AND `sejour`.`group_id` = '$group->_id'
+		  AND `sejour`.`type` = '$_type'
+		  AND `sejour`.`annule` = '0'
+		GROUP BY `sejour`.`type`, `date`
+		ORDER BY `date`";
+			
+	foreach ($ds->loadHashList($query) as $day => $count) {
+	  $days[$day][$_type] = $count;
+	}
 }
 
 // Création du template
 $smarty = new CSmartyDP();
 
+$smarty->assign("types"        , $types);
 $smarty->assign("hier"         , $hier);
 $smarty->assign("demain"       , $demain);
 

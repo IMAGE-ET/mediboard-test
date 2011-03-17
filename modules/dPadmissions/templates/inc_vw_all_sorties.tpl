@@ -10,7 +10,7 @@
 
 <table class="tbl" style="text-align: center;">
   <tr>
-    <th class="title" colspan="4">
+    <th class="title" colspan="{{math equation="count +1" count=$types|@count}}">
       <a style="display: inline;" href="?m={{$m}}&amp;tab=vw_idx_sortie&amp;date={{$lastmonth}}">&lt;&lt;&lt;</a>
       {{$date|date_format:"%b %Y"}}
       <a style="display: inline;" href="?m={{$m}}&amp;tab=vw_idx_sortie&amp;date={{$nextmonth}}">&gt;&gt;&gt;</a>
@@ -22,25 +22,17 @@
   </tr>
 
   <tr>
+  	{{foreach from=$types item=_type}}
     <th class="text">
-      <a class={{if $type_sejour == 'ambu'}}"selected"{{else}}"selectable"{{/if}} title="ambu" href="?m={{$m}}&amp;tab=vw_idx_sortie&amp;type_sejour=ambu">
-        Ambu
+      <a class="{{if $type_sejour == $_type}} selected {{else}} selectable {{/if}}" title="{{$_type}}" href="?m={{$m}}&amp;tab=vw_idx_sortie&amp;type_sejour={{$_type}}">
+        {{tr}}CSejour.type.{{$_type}}.short{{/tr}}
       </a>
     </th>
-    <th class="text">
-      <a class={{if $type_sejour == 'comp'}}"selected"{{else}}"selectable"{{/if}} title="comp" href="?m={{$m}}&amp;tab=vw_idx_sortie&amp;type_sejour=comp">
-        Hospi
-      </a>
-    </th>
-    <th class="text">
-      <a class={{if $type_sejour == 'exte'}}"selected"{{else}}"selectable"{{/if}} title="exte" href="?m={{$m}}&amp;tab=vw_idx_sortie&amp;type_sejour=exte">
-        Ext
-      </a>
-    </th>
+  	{{/foreach}}
   </tr>
 
   {{foreach from=$days key=day item=counts}}
-  <tr {{if $day == $date}}class="selected"{{/if}}>
+  <tr {{if $day == $date}} class="selected" {{/if}}>
     {{assign var=day_number value=$day|date_format:"%w"}}
     <td align="right"
       {{if in_array($day, $bank_holidays)}}
@@ -55,15 +47,12 @@
         </strong>
       </a>
     </td>
-    <td {{if $type_sejour == 'ambu' && $day == $date}}style="font-weight: bold;"{{/if}}>
-      {{if $counts.ambu}}{{$counts.ambu}}{{else}}-{{/if}}
+		
+    {{foreach from=$types item=_type}}
+    <td {{if $type_sejour == $_type && $day == $date}} style="font-weight: bold;" {{/if}}>
+      {{if $counts.$_type}}{{$counts.$_type}}{{else}}-{{/if}}
     </td>
-    <td {{if $type_sejour == 'comp' && $day == $date}}style="font-weight: bold;"{{/if}}>
-      {{if $counts.comp}}{{$counts.comp}}{{else}}-{{/if}}
-    </td>
-    <td {{if $type_sejour == 'exte' && $day == $date}}style="font-weight: bold;"{{/if}}>
-      {{if $counts.exte}}{{$counts.exte}}{{else}}-{{/if}}
-    </td>
+		{{/foreach}}
   </tr>
   {{foreachelse}}
 	<tr>
