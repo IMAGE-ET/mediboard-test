@@ -34,6 +34,8 @@ class CExClassField extends CExListItemsOwner {
   var $_spec_object = null;
   
   var $_dont_drop_column = null;
+	
+	static $_load_lite = false;
   
   static $_indexed_types = array("ref", "date", "dateTime", "time");
   static $_data_type_groups = array(
@@ -94,7 +96,9 @@ class CExClassField extends CExListItemsOwner {
     parent::updateFormFields();
     $this->_view = "$this->name [$this->prop]";
     
-    $this->updateTranslation();
+    if (!self::$_load_lite) {
+      $this->updateTranslation();
+    }
   }
   
   function loadRefExGroup($cache = true){
@@ -158,6 +162,9 @@ class CExClassField extends CExListItemsOwner {
     return $this->loadRefExClass()->getTableName();
   }
   
+  /**
+   * @return CMbFieldSpec
+   */
   function getSpecObject(){
     return $this->_spec_object = @CMbFieldSpecFact::getSpecWithClassName("CExObject", $this->name, $this->prop);
   }
@@ -202,14 +209,14 @@ class CExClassField extends CExListItemsOwner {
     
     if (!$this->_id) {
       $table_name = $this->getTableName();
-      $sql_spec = $this->getSQLSpec();
+      $sql_spec = $this->getSQLSpec(false);
       $query = "ALTER TABLE `$table_name` ADD `$this->name` $sql_spec";
       
       if (!$ds->query($query)) {
         return "Le champ '$this->name' n'a pas pu être ajouté à la table '$table_name' (".$ds->error().")";
       }
       
-      $spec_type = $this->getSpecObject()->getSpecType();
+      $spec_type = $this->_spec_object->getSpecType();
       
       // ajout de l'index
       if (in_array($spec_type, self::$_indexed_types)) {

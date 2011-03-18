@@ -31,7 +31,7 @@
           <tr>
             <th>{{mb_label object=$ex_class field=event}}</th>
             <td>
-              {{if !$ex_class->_id}}
+              
               <select name="_event" class="notNull" onchange="ExClass.setEvent(this)">
                 <option value=""> &ndash; Choisir </option>
                 {{foreach from=$classes item=_events key=_class}}
@@ -47,9 +47,6 @@
                   </optgroup>
                 {{/foreach}}
               </select>
-              {{else}}
-                {{tr}}{{$ex_class->host_class}}{{/tr}} - {{$ex_class->event}}
-              {{/if}}
             </td>
             
             <th>{{mb_label object=$ex_class field=name}}</th>
@@ -57,6 +54,9 @@
             
             <th>{{mb_label object=$ex_class field=disabled}}</th>
             <td>{{mb_field object=$ex_class field=disabled typeEnum=checkbox}}</td>
+            
+            <th>{{mb_label object=$ex_class field=conditional}}</th>
+            <td>{{mb_field object=$ex_class field=conditional typeEnum=checkbox}}</td>
             
             <td>
               {{if $ex_class->_id}}
@@ -108,15 +108,15 @@ toggleGroupLabelEdit = function(link) {
 	
   <tr>
     <td>
-      <ul class="control_tabs_vertical small" id="field_groups" style="float: right;">
+      <ul class="control_tabs_vertical small" id="field_groups" style="float: right; min-width: 14em;">
 			  <li style="margin: 3px;">
 				  <strong>Groupes</strong><br />
           <small>Double-clic pour modifier</small>
 				</li>
         
         {{foreach from=$ex_class->_ref_groups item=_group}}
-          <li>
-            <a href="#group-{{$_group->_guid}}" style="white-space: nowrap;" ondblclick="toggleGroupLabelEdit(this)">
+          <li style="font-size: 0.95em;">
+            <a href="#group-{{$_group->_guid}}" ondblclick="toggleGroupLabelEdit(this)">
 						  <span class="label">
 						  	{{$_group->name}} <small>({{$_group->_ref_fields|@count}})</small>
 							</span>
@@ -174,7 +174,7 @@ toggleGroupLabelEdit = function(link) {
 						</tr>
 		        {{foreach from=$_group->_ref_fields item=_field}}
 		          <tr>
-		            <td title="{{$_field->name}}">
+		            <td class="text" style="min-width: 14em;">
 		              <a href="#1" onclick="ExField.edit({{$_field->_id}})">
 		                {{if $_field->_locale}}
 		                  {{$_field->_locale}}

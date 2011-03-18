@@ -16,7 +16,7 @@ $ex_group_id = CValue::get("ex_group_id");
 
 $ex_field = new CExClassField;
 
-$spec_type = "str";
+$spec_type = "enum";
 
 if ($ex_field->load($ex_field_id)) {
   $spec_type = $ex_field->getSpecObject()->getSpecType();
@@ -43,22 +43,14 @@ $ex_class->loadRefsGroups();
 $other_fields = array();
 
 /*$ex_field->_ref_ex_class->loadRefsFields();
-
-$other_fields = array();
-
 foreach($ex_field->_ref_ex_class->_ref_fields as $_field){
   if ($_field->_id != $ex_field->_id)
     $other_fields[] = $_field->name;
 }*/
-
-$ex_concepts = new CExClassField;
-$where = array("ex_class_id" => "IS NULL");
-$list_concepts = $ex_concepts->loadList($where, "name");
 
 $smarty = new CSmartyDP();
 $smarty->assign("ex_field", $ex_field);
 $smarty->assign("ex_class", $ex_class);
 $smarty->assign("spec_type", $spec_type);
 $smarty->assign("other_fields", $other_fields);
-$smarty->assign("list_concepts", $list_concepts);
 $smarty->display("inc_edit_ex_field.tpl");

@@ -36,8 +36,8 @@ foreach($ex_class->_ref_constraints as $_ex_constraint) {
 
 $classes = array();
 
-if (!$ex_class->_id) {
-  $classes = CApp::getMbClasses(array(), $instances);
+//if (!$ex_class->_id) {
+  /*$classes = CApp::getMbClasses(array(), $instances);
   
   foreach($instances as $class => $instance) {
     if (empty($instance->_spec->events)) {
@@ -49,7 +49,23 @@ if (!$ex_class->_id) {
   }
   
   $ex_class->disabled = 1;
-  $classes = $instances;
+  $classes = $instances;*/
+//}
+
+$classes = CExClass::$_extendable_classes;
+$instances = array();
+
+foreach($classes as $_class) {
+	$instance = new $_class;
+  if (!empty($instance->_spec->events)) {
+    $instances[$_class] = $instance->_spec->events;
+  }
+}
+  
+$classes = $instances;
+
+if (!$ex_class->_id) {
+  $ex_class->disabled = 1;
 }
 
 // Création du template

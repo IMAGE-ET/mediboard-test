@@ -584,7 +584,12 @@ class CSetupsystem extends CSetup {
     $query = "ALTER TABLE `view_sender` 
       CHANGE `offset` `offset` INT (11) UNSIGNED NOT NULL DEFAULT '0';";
     $this->addQuery($query);
+		
+    $this->makeRevision("1.0.56");
+		$query = "ALTER TABLE `ex_class` 
+              ADD `conditional` ENUM ('0','1') NOT NULL DEFAULT '0';";
+    $this->addQuery($query);
     
-    $this->mod_version = "1.0.56";
+    $this->mod_version = "1.0.57";
   }
 }

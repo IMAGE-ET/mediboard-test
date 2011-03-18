@@ -11,7 +11,13 @@ Main.add(function(){
 <ul class="control_tabs" id="tab-classes">
 {{foreach from=$class_tree item=_by_class key=_class}}
   <li>
-  	<a href="#tab-{{$_class}}">{{tr}}{{$_class}}{{/tr}}</a>
+  	<a href="#tab-{{$_class}}">
+  		{{if $_class != "CMbObject"}}
+			  {{tr}}{{$_class}}{{/tr}}
+			{{else}}
+			  Non classé
+			{{/if}}
+		</a>
   </li>
 {{/foreach}}
 </ul>
@@ -20,17 +26,22 @@ Main.add(function(){
 {{foreach from=$class_tree item=_by_class key=_class}}
 	<table class="main tbl" id="tab-{{$_class}}">
     {{foreach from=$_by_class item=_by_event key=_event}}
+		  {{if $_event != "void"}}
 	    <tr>
 	      <td><strong>{{$_event}}</strong></td>
 	    </tr>
+			{{/if}}
+			
       {{foreach from=$_by_event item=_ex_class}}
 		    <tr>
 		      <td style="padding-left: 1em;">
-            {{if $_ex_class->disabled}}
-              <small style="float: right; color: #666;">(inactif)</small>
-            {{/if}}
+            <div style="float: right;">
+              <span {{if $_ex_class->conditional}}style="background: #7e7;" title="{{tr}}CExClass-conditional{{/tr}}"{{/if}}>&nbsp;&nbsp;</span>
+              <span {{if $_ex_class->disabled}}   style="background: #999;" title="{{tr}}CExClass-disabled{{/tr}}"{{/if}}>&nbsp;&nbsp;</span>
+            </div>
+						
 		        <a href="#1" onclick="ExClass.edit({{$_ex_class->_id}})">
-		          {{mb_value object=$_ex_class field=name}}
+							{{mb_value object=$_ex_class field=name}}
 		        </a>
 		      </td>
 		    </tr>

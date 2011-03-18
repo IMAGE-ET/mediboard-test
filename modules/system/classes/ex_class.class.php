@@ -15,13 +15,21 @@ class CExClass extends CMbObject {
   var $event      = null;
   var $name       = null;
   var $disabled   = null;
+  var $conditional= null;
   
   var $_ref_fields = null;
   var $_ref_host_fields = null;
   var $_ref_constraints = null;
+	var $_ref_groups = null;
   
   var $_fields_by_name = null;
   var $_host_class_fields = null;
+	
+	static $_extendable_classes = array(
+	  "CPrescriptionLineElement",
+		"CPrescriptionLineMedicament",
+		"COperation",
+	);
 
   function getSpec() {
     $spec = parent::getSpec();
@@ -37,6 +45,7 @@ class CExClass extends CMbObject {
     $props["event"]      = "str notNull protected canonical";
     $props["name"]       = "str notNull seekable";
     $props["disabled"]   = "bool notNull default|1";
+    $props["conditional"]= "bool notNull default|0";
     return $props;
   }
 

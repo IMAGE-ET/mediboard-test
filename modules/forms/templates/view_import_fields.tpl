@@ -14,10 +14,10 @@ onUploadComplete = function(message){
 }
 </script>
 
-<form name="import-form" action="?m=forms&amp;a=do_import" method="post" 
+<form name="import-form" action="?m=forms&amp;a=do_import_fields" method="post" 
       onsubmit="return checkForm(this)" target="upload_iframe" enctype="multipart/form-data">
   <input type="hidden" name="m" value="forms" />
-  <input type="hidden" name="a" value="do_import" />
+  <input type="hidden" name="a" value="do_import_fields" />
   <input type="hidden" name="suppressHeaders" value="1" />
 	
 	<table class="main form" style="table-layout: fixed;">
@@ -25,20 +25,6 @@ onUploadComplete = function(message){
 			<th class="title" colspan="2">
 				Importation
 			</th>
-		</tr>
-		
-		<tr>
-			<th>
-				<label for="object_class">Type d'éléments à importer</label>
-			</th>
-			<td>
-		    <select name="object_class" class="notNull" onchange="showExtraInputs(this)">
-		    	<option value=""> &ndash; Choisir un type d'élement à importer </option>
-		      {{foreach from=$classes item=_class}}
-		        <option value="{{$_class}}">{{tr}}{{$_class}}{{/tr}}</option>
-		      {{/foreach}}
-		    </select>
-			</td>
 		</tr>
 		
 		<tr>
