@@ -116,22 +116,13 @@ function showEtabEntreeTransfert(mode) {
           <input type="hidden" name="_bind_sejour" value="1" />
           
           <table class="layout" style="width: 100%">
-            <col style="width: 40%" />
+            <col class="narrow" />
             <tr>
-              <td>{{mb_label object=$rpu field="diag_infirmier"}}</td>
-              <td>{{mb_label object=$rpu field="pec_douleur"}}</td>
-            </tr>
-            
-            <tr>
-              <td>
-                {{mb_field object=$rpu field="diag_infirmier" onchange="this.form.onsubmit();" class="autocomplete"}}
-              </td>
-              <td>
-                {{mb_field object=$rpu field="pec_douleur" onchange="this.form.onsubmit();" class="autocomplete"}}
+              <td colspan="2">
                 <script type="text/javascript">
                   Main.add(function() {
                     var form = getForm("editRPU");
-										var options = {
+                    var options = {
                       objectClass: "{{$rpu->_class_name}}",
                       contextUserId: "{{$userSel->_id}}",
                       contextUserView: "{{$userSel->_view}}",
@@ -146,7 +137,20 @@ function showEtabEntreeTransfert(mode) {
                     new AideSaisie.AutoComplete(form.elements.pec_douleur   , options);
                     });
                 </script>
-              </td>
+
+              	<table class="layout" style="width: 100%">
+              		<tr>
+                    <td style="width: 50%">{{mb_label object=$rpu field="diag_infirmier"}}</td>
+                    <td style="width: 50%">{{mb_label object=$rpu field="pec_douleur"}}</td>
+              		</tr>
+									<tr>
+			              <td>{{mb_field object=$rpu field="diag_infirmier" onchange="this.form.onsubmit();" class="autocomplete"}}</td>
+			              <td>{{mb_field object=$rpu field="pec_douleur"    onchange="this.form.onsubmit();" class="autocomplete"}}</td>
+									</tr>
+              	</table>
+								
+							</td>
+
             </tr>
             
             <tr>
