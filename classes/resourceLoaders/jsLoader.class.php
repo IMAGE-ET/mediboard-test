@@ -82,7 +82,7 @@ abstract class CJSLoader extends CHTMLResourceLoader {
       foreach($excluded as $file) {
         $result .= self::loadFile($file, null, filemtime($file), $type)."\n";
       }
-			
+      
       $result .= self::loadFile($cachefile, null, $last_update, $type)."\n";
     }
     else {
@@ -127,21 +127,21 @@ abstract class CJSLoader extends CHTMLResourceLoader {
     
     foreach($languages as $language) {
       $path = self::getLocaleFilePath($language, $label);
-	    if ($fp = fopen($path, 'w')) {
-	      // The callback will filter on empty strings (without it, "0" will be removed too).
-	      $locales = array_filter($locales, "stringNotEmpty");
-	      // TODO: change the invalid keys (with accents) of the locales to simplify this
-	      $keys = array_map('utf8_encode', array_keys($locales));
-	      $values = array_map('utf8_encode', $locales);
+      if ($fp = fopen($path, 'w')) {
+        // The callback will filter on empty strings (without it, "0" will be removed too).
+        $locales = array_filter($locales, "stringNotEmpty");
+        // TODO: change the invalid keys (with accents) of the locales to simplify this
+        $keys = array_map('utf8_encode', array_keys($locales));
+        $values = array_map('utf8_encode', $locales);
         
         foreach($values as &$_value) {
           $_value = CMbString::unslash($_value);
         }
         
-	      $script = '//'.$version['build']."\nwindow.locales=".json_encode(array_combine($keys, $values)).";";
-	      fwrite($fp, $script);
-	      fclose($fp);
-	    }
+        $script = '//'.$version['build']."\nwindow.locales=".json_encode(array_combine($keys, $values)).";";
+        fwrite($fp, $script);
+        fclose($fp);
+      }
     }
   }
 
@@ -158,6 +158,6 @@ abstract class CJSLoader extends CHTMLResourceLoader {
   }
   
   static function getLocaleFilePath($language, $label = null) {
-    return "tmp/locales".($label ? ".$label" : "").".$language.js";
+    return "tmp/locales".($label ? ".$label" : "")."-$language.js";
   }
 }
