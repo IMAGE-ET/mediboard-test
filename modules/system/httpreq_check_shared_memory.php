@@ -29,7 +29,7 @@ foreach (glob("locales/*", GLOB_ONLYDIR) as $localeDir) {
     $_locale = CMbString::unslash($_locale);
   }
   
-  $path = "./tmp/locales.$localeName.js";
+  $path = "./tmp/locales-$localeName.js";
   if (!is_file($path)) {
     CAppUI::stepAjax("Fichier de traductions JS '$localeName' absent", UI_MSG_WARNING);
     continue;
