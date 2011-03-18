@@ -109,36 +109,58 @@ var AideSaisie = {
         DOM.div({className: "textarea-helped"},
         toolbar = DOM.div({className: "toolbar"},
           
-          DOM.div({className: "throbber-background"}), 
-          throbber = DOM.div({className: "throbber"}).hide(),
+          DOM.a({href: "#1", className: "throbber-background"}), 
+          throbber = DOM.a({href: "#1", className: "throbber"}).hide(),
           //buttons.grid   = DOM.a({href: "#1"}, DOM.img({src: "images/icons/grid.png", title: "Mode grille"})),
           buttons.down   = DOM.a({href: "#1"}, DOM.img({src: "style/mediboard/images/buttons/down.png", title: "Voir tous les choix"})),
           buttons.create = DOM.a({href: "#1"},
             DOM.span({style: "display: none;", className: "sub-toolbar"},
-              buttons.newGroup    = DOM.img({style: "", src: "images/icons/group.png", title: "Nouvelle aide pour "+User["group"].view}), DOM.br({}),
+              buttons.newGroup    = DOM.img({style: "", src: "images/icons/group.png"        , title: "Nouvelle aide pour "+User["group"].view}), DOM.br({}),
               buttons.newFunction = DOM.img({style: "", src: "images/icons/user-function.png", title: "Nouvelle aide pour "+User["function"].view}), DOM.br({}),
-              buttons.newUser     = DOM.img({style: "", src: "images/icons/user.png", title: "Nouvelle aide pour "+User.view})
+              buttons.newUser     = DOM.img({style: "", src: "images/icons/user.png"         , title: "Nouvelle aide pour "+User.view})
             ),
             buttons.createIcon = DOM.img({src: "images/icons/new.png", title: "Nouvelle aide"})
           ),
-          buttons.owner  = DOM.a({href: "#1", title: this.options.defaultUserView}, DOM.img({src: "images/icons/user-glow.png"})).setVisible(Preferences.aideOwner == '1'),
+          buttons.owner     = DOM.a({href: "#1"}, DOM.img({src: "images/icons/user-glow.png", title: this.options.defaultUserView})).setVisible(Preferences.aideOwner == '1'),
           buttons.timestamp = DOM.a({href: "#1"}, DOM.img({src: "images/icons/timestamp.png", title: "Ajouter un horodatage"})).setVisible(Preferences.aideTimestamp == '1'),
-          buttons.valid  = DOM.a({href: "#1"}, DOM.img({src: "style/mediboard/images/buttons/submit.png", title: "Valider"})).setVisible(this.options.validate)
+          buttons.valid     = DOM.a({href: "#1"}, DOM.img({src: "style/mediboard/images/buttons/submit.png", title: "Valider"})).setVisible(this.options.validate)
         ).hide(),
         list = $(this.searchField.id + "_auto_complete").setStyle({marginLeft: "-2px"})
       );
-      
+			
+			toolbar.doShow = function() {
+				if (toolbar.timeout) {
+					window.clearTimeout(toolbar.timeout)
+					toolbar.timeout = null;
+				}
+        toolbar.show();
+			}
+			
+			toolbar.doHide = function() {
+				if (toolbar.timeout) {
+					return;
+				}
+				
+				tryHide = function() {
+          toolbar.hide(); 
+          toolbar.select(".sub-toolbar").invoke("hide");
+          toolbar.canHide = false;
+				}
+				
+				toolbar.timeout = tryHide.delay(0.5);
+			};
+			
       this.searchField.up().
-        observe(Preferences.aideShowOver == '1' ? 'mousemove' : 'dblclick', function(){toolbar.show()}).
-        observe('mouseout',  function(){toolbar.hide(); toolbar.select(".sub-toolbar").invoke("hide"); })/*.
-        observe('click',     function(){toolbar.hide()}).
-        observe('keydown',   function(){toolbar.hide()})*/;
+        observe(Preferences.aideShowOver == '1' ? 'mousemove' : 'dblclick', toolbar.doShow).
+        observe('mouseout', toolbar.doHide)/*.
+        observe('click'   , toolbar.doHide).
+        observe('keydown' , toolbar.doHide)*/;
       
       // to prevent mousemove on the list to trigger toolbar.show
       list.observe("mousemove", Event.stop);
       
       if(Preferences.aideShowOver == '0') {
-        toolbar.observe('mousemove', function(){toolbar.show()});
+        toolbar.observe('mousemove', toolbar.doShow);
       }
       
       //buttons.invoke('observe', 'mouseover', Event.stop);
@@ -301,6 +323,9 @@ var AideSaisie = {
         buttons.create.observe('mouseover', function(e){
           buttons.create.down('.sub-toolbar').show();
         });
+        buttons.create.observe('mouseout', function(e){
+          buttons.create.down('.sub-toolbar').hide();
+        });
       }
       
       buttons.createIcon.observe('click', function(e){
@@ -333,7 +358,7 @@ var AideSaisie = {
       }.bindAsEventListener(this));
       
       // We wrap the textarea with the new container
-      this.searchField.insert({after: container});
+      this.searchField.insert({before: container});
       
       // We simulate the blur catch
       if (this.options.validateOnBlur) {

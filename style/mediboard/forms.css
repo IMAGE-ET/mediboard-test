@@ -723,14 +723,14 @@ table.tbl .textarea-helped a {
 
 .textarea-helped .toolbar {
   position: absolute;
-  bottom: 0px;
-  right: 16px;
+  bottom: 1px;
+  right: 1px;
   margin: 2px 1px;
   padding: 0px;
   vertical-align: middle;
   text-align: right;
   background-color: #fff;
-	opacity: 0.6;
+	opacity: 1;
   border: 1px solid #ccc;
   -moz-border-radius: 3px;
   -webkit-border-radius: 3px;
@@ -756,13 +756,13 @@ table.tbl .textarea-helped a {
 
 .textarea-helped .sub-toolbar {
   position: absolute; 
-	bottom: 20px; 
+	top: 20px; 
 	background-color: #fff;
-	margin-bottom: -1px;
+	margin-top: -1px;
   margin-left: -3px;
   padding: 2px;
   border: 1px solid #ccc;
-	border-bottom: none;
+	border-top: none;
   -moz-border-radius: 3px;
   -webkit-border-radius: 3px;
   border-radius: 3px;
