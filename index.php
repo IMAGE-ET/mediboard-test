@@ -68,7 +68,7 @@ if ($dPconfig["migration"]["active"]) {
 
 // Check that the user has correctly set the root directory
 if (!is_file($dPconfig["root_dir"]."/includes/config.php")) {
-  die("ERREUR FATALE: Le rïéertoire racine est probablement mal configuré");
+  die("ERREUR FATALE: Le répertoire racine est probablement mal configuré");
 }
 
 require "./includes/mb_functions.php";
