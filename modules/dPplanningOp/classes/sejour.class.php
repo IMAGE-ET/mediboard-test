@@ -241,8 +241,8 @@ class CSejour extends CCodable {
     $props["DR"]                  = "code cim10 show|0";
     $props["pathologie"]          = "str length|3 show|0";
     $props["septique"]            = "bool show|0";
-    $props["convalescence"]       = "text confidential seekable";
-    $props["rques"]               = "text";
+    $props["convalescence"]       = "text helped";
+    $props["rques"]               = "text helped";
     $props["ATNC"]                = "bool show|0";
     $props["hormone_croissance"]  = "bool";
     $props["lit_accompagnant"]    = "bool";

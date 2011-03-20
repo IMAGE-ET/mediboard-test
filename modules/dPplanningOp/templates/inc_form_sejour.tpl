@@ -716,8 +716,30 @@ Main.add( function(){
   <td class="text" colspan="3">{{mb_label object=$sejour field="rques"}}</td>
 </tr>
 <tr>
-  <td>{{mb_field object=$sejour field="convalescence" rows="3"}}</td>
-  <td colspan="3">{{mb_field object=$sejour field="rques" rows="3"}}</td>
+  <td>
+    <script type="text/javascript">
+      Main.add(function() {
+        new AideSaisie.AutoComplete(getForm("editSejour").elements.convalescence, {
+          objectClass: "{{$sejour->_class_name}}",
+          timestamp: "{{$conf.dPcompteRendu.CCompteRendu.timestamp}}",
+          validateOnBlur: 0
+        });
+      });
+    </script>
+    {{mb_field object=$sejour field="convalescence" rows="3"}}
+  </td>
+  <td colspan="3">
+    <script type="text/javascript">
+      Main.add(function() {
+        new AideSaisie.AutoComplete(getForm("editSejour").elements.rques, {
+          objectClass: "{{$sejour->_class_name}}",
+          timestamp: "{{$conf.dPcompteRendu.CCompteRendu.timestamp}}",
+          validateOnBlur: 0
+        });
+      });
+    </script>
+    {{mb_field object=$sejour field="rques" rows="3"}}
+  </td>
 </tr>
 <tbody class="modeExpert">
 {{if !$sejour->_id && array_key_exists("dPprescription", $modules)}}

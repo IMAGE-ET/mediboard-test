@@ -250,9 +250,42 @@ CCAMSelector.init = function(){
   </tr>
 
   <tr>
-    <td style="width: 33%;">{{mb_field object=$op field="examen"}}</td>
-    <td style="width: 33%;">{{mb_field object=$op field="materiel" onchange="Value.synchronize(this);"}}</td>
-    <td style="width: 33%;">{{mb_field object=$op field="rques" onchange="Value.synchronize(this);"}}</td>
+    <td style="width: 33%;">
+      <script type="text/javascript">
+        Main.add(function() {
+          new AideSaisie.AutoComplete(getForm("editOp").elements.examen, {
+            objectClass: "{{$op->_class_name}}",
+            timestamp: "{{$conf.dPcompteRendu.CCompteRendu.timestamp}}",
+            validateOnBlur: 0
+          });
+        });
+      </script>
+      {{mb_field object=$op field="examen"}}
+    </td>
+    <td style="width: 33%;">
+      <script type="text/javascript">
+        Main.add(function() {
+          new AideSaisie.AutoComplete(getForm("editOp").elements.materiel, {
+            objectClass: "{{$op->_class_name}}",
+            timestamp: "{{$conf.dPcompteRendu.CCompteRendu.timestamp}}",
+            validateOnBlur: 0
+          });
+        });
+      </script>
+      {{mb_field object=$op field="materiel" onchange="Value.synchronize(this);"}}
+    </td>
+    <td style="width: 33%;">
+      <script type="text/javascript">
+        Main.add(function() {
+          new AideSaisie.AutoComplete(getForm("editOp").elements.rques, {
+            objectClass: "{{$op->_class_name}}",
+            timestamp: "{{$conf.dPcompteRendu.CCompteRendu.timestamp}}",
+            validateOnBlur: 0
+          });
+        });
+      </script>
+      {{mb_field object=$op field="rques" onchange="Value.synchronize(this);"}}
+    </td>
   </tr>
   
   {{if $op->_count_actes}}

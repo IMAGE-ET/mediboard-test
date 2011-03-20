@@ -228,10 +228,32 @@
   <tr>
   <td />
   	{{if $conf.dPplanningOp.COperation.easy_materiel}}
-    <td style="width: 33%;" {{if !$conf.dPplanningOp.COperation.easy_remarques}}colspan="2"{{/if}}>{{mb_field object=$op field="materiel" onchange="Value.synchronize(this);"}}</td>
+    <td style="width: 33%;" {{if !$conf.dPplanningOp.COperation.easy_remarques}}colspan="2"{{/if}}>
+      <script type="text/javascript">
+        Main.add(function() {
+          new AideSaisie.AutoComplete(getForm("editOpEasy").elements.materiel, {
+            objectClass: "{{$op->_class_name}}",
+            timestamp: "{{$conf.dPcompteRendu.CCompteRendu.timestamp}}",
+            validateOnBlur: 0
+          });
+        });
+      </script>
+      {{mb_field object=$op field="materiel" onchange="Value.synchronize(this);"}}
+    </td>
 		{{/if}}
 		{{if $conf.dPplanningOp.COperation.easy_remarques}}
-    <td style="width: 33%;" {{if !$conf.dPplanningOp.COperation.easy_materiel}}colspan="2"{{/if}}>{{mb_field object=$op field="rques" onchange="Value.synchronize(this);"}}</td>
+    <td style="width: 33%;" {{if !$conf.dPplanningOp.COperation.easy_materiel}}colspan="2"{{/if}}>
+      <script type="text/javascript">
+        Main.add(function() {
+          new AideSaisie.AutoComplete(getForm("editOpEasy").elements.rques, {
+            objectClass: "{{$op->_class_name}}",
+            timestamp: "{{$conf.dPcompteRendu.CCompteRendu.timestamp}}",
+            validateOnBlur: 0
+          });
+        });
+      </script>
+      {{mb_field object=$op field="rques" onchange="Value.synchronize(this);"}}
+    </td>
 		{{/if}}
   </tr>
 	{{/if}}
