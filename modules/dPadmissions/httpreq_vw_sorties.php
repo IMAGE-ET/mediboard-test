@@ -145,6 +145,7 @@ $smarty->assign("date_max"      , $date_max);
 $smarty->assign("date_demain"   , $date_demain);
 $smarty->assign("date_actuelle" , $date_actuelle);
 $smarty->assign("date"          , $date);
+$smarty->assign("type"          , $type);
 $smarty->assign("selSortis"     , $selSortis);
 $smarty->assign("order_col"     , $order_col);
 $smarty->assign("order_way"     , $order_way);

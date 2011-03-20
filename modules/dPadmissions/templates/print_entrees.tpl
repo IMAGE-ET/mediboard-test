@@ -23,7 +23,11 @@ function printAdmission(id) {
   <tr>
     <th>
       <a href="#" onclick="window.print()">
-        Admissions du {{$date|date_format:"%A %d %b %Y"}} ({{$total}} admissions)
+        Admissions {{tr}}CSejour.type.{{$type}}{{/tr}}
+        du {{$date|date_format:$conf.longdate}} ({{$total}} admissions)
+        {{if $service->_id}}
+          &mdash; {{$service->_view}}
+        {{/if}}
       </a>
     </th>
   </tr>
@@ -69,7 +73,7 @@ function printAdmission(id) {
             </a>
           </td>
           <td>
-            {{if $curr_sejour->_ref_patient->sexe == "m"}}masculin{{else}}féminin{{/if}}
+            {{$curr_sejour->_ref_patient->sexe}}
           </td>
           <td class="text">
             <a href="#" onclick="printAdmission({{$curr_sejour->sejour_id}})">

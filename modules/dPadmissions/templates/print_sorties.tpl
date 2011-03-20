@@ -24,7 +24,10 @@ function printAdmission(id) {
     <th>
       <a href="#" onclick="window.print()">
         Sortie {{tr}}CSejour.type.{{$type}}{{/tr}}
-        du {{$date|date_format:"%A %d %B %Y"}} ({{$total}} sorties)
+        du {{$date|date_format:$conf.longdate}} ({{$total}} sorties)
+        {{if $service->_id}}
+          &mdash; {{$service->_view}}
+        {{/if}}
       </a>
     </th>
   </tr>
@@ -42,7 +45,7 @@ function printAdmission(id) {
       <table class="tbl">
         <tr>
           <th colspan="4"><strong>Patient</strong></th>
-          <th colspan="6"><strong>Sejour</strong></th>
+          <th colspan="7"><strong>Sejour</strong></th>
         </tr>
         <tr>
           <th>Nom / Prenom</th>
@@ -54,6 +57,7 @@ function printAdmission(id) {
           <th>Dur.</th>
           <th>Conv.</th>
           <th>Chambre</th>
+          <th>Prest.</th>
           <th>Remarques</th>
         </tr>
         {{foreach from=$curr_prat.sejours item=curr_sejour}}
@@ -69,7 +73,7 @@ function printAdmission(id) {
             </a>
           </td>
           <td>
-            {{if $curr_sejour->_ref_patient->sexe == "m"}}masculin{{else}}féminin{{/if}}
+            {{$curr_sejour->_ref_patient->sexe}}
           </td>
           <td class="text">
             <a href="#" onclick="printAdmission({{$curr_sejour->sejour_id}})">
@@ -95,6 +99,7 @@ function printAdmission(id) {
             {{/if}}
             ({{tr}}chambre_seule.{{$curr_sejour->chambre_seule}}{{/tr}})
           </td>
+          <td class="text">{{$curr_sejour->_ref_prestation->_view}}</td>
           <td class="text">{{$curr_sejour->rques}}</td>
         </tr>
         {{/foreach}}

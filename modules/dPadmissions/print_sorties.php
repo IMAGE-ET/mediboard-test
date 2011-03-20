@@ -8,30 +8,50 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
  */
 
-global $AppUI, $can, $m;
+CCanDo::checkRead();
 
-$can->needsRead();
+$date       = CValue::get("date", mbDate());
+$type       = CValue::get("type");
+$service_id = CValue::get("service_id");
 
-$date        = CValue::get("date", mbDate());
-$type_sejour = CValue::get("type_sejour", "ambu");
+$date_next = mbDate("+ 1 DAY", $date);
+$service = new CService();
+$service->load($service_id);
+$group = CGroups::loadCurrent();
 
 $sejour = new CSejour;
 $where = array();
-$where[] = "DATE(sejour.sortie_prevue) = '". $date ."'";
-$where["sejour.annule"] = "= '0'";
-$where["sejour.type"] = "= '$type_sejour'";
+$where["sejour.sortie"]   = "BETWEEN '$date' AND '$date_next'";
+$where["sejour.annule"]   = "= '0'";
+$where["sejour.group_id"] = "= '$group->_id'";
+
+if($type == "ambucomp") {
+  $where[] = "`sejour`.`type` = 'ambu' OR `sejour`.`type` = 'comp'";
+} elseif($type) {
+  $where["sejour.type"] = " = '$type'";
+} else {
+  $where[] = "`sejour`.`type` != 'urg' AND `sejour`.`type` != 'seances'";
+}
+
 $ljoin = array();
 $ljoin["users"] = "users.user_id = sejour.praticien_id";
-$order = "users.user_last_name, users.user_first_name, sejour.sortie_prevue";
+if($service->_id) {
+  $ljoin["affectation"]        = "affectation.sejour_id = sejour.sejour_id AND affectation.sortie = sejour.sortie_prevue";
+  $ljoin["lit"]                = "affectation.lit_id = lit.lit_id";
+  $ljoin["chambre"]            = "lit.chambre_id = chambre.chambre_id";
+  $ljoin["service"]            = "chambre.service_id = service.service_id";
+  $where["service.service_id"] = "= '$service->_id'";
+}
+$order = "users.user_last_name, users.user_first_name, sejour.sortie";
 
-$sejours = $sejour->loadGroupList($where, $order, null, null, $ljoin);
+$sejours = $sejour->loadList($where, $order, null, null, $ljoin);
 
 $listByPrat = array();
-
 foreach ($sejours as $key => &$sejour) {
   $sejour->loadRefPraticien();
   $sejour->loadRefsAffectations();
   $sejour->loadRefPatient();
+  $sejour->loadRefPrestation();
   $sejour->_ref_last_affectation->loadRefLit();
   $sejour->_ref_last_affectation->_ref_lit->loadCompleteView();
   
@@ -43,10 +63,11 @@ foreach ($sejours as $key => &$sejour) {
 // Création du template
 $smarty = new CSmartyDP();
 
-$smarty->assign("date"       , $date);
-$smarty->assign("type_sejour", $type_sejour);
-$smarty->assign("listByPrat" , $listByPrat);
-$smarty->assign("total"      , count($sejours));
+$smarty->assign("date"      , $date);
+$smarty->assign("type"      , $type);
+$smarty->assign("service"   , $service);
+$smarty->assign("listByPrat", $listByPrat);
+$smarty->assign("total"     , count($sejours));
 
 $smarty->display("print_sorties.tpl");
 

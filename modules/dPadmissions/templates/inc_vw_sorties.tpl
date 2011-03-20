@@ -23,6 +23,7 @@ Calendar.regField(getForm("changeDateSorties").date, null, {noView: true});
         <input type="hidden" name="date" class="date" value="{{$date}}" onchange="this.form.submit()" />
       </form>
       <a href="?m=dPadmissions&tab=vw_idx_sortie&date={{$demain}}" style="display: inline">>>></a>
+      
       <br />
       
       <em style="float: left; font-weight: normal;">
@@ -38,6 +39,10 @@ Calendar.regField(getForm("changeDateSorties").date, null, {noView: true});
           <option value="{{$_function->_id}}" {{if $_function->_id == $filterFunction}}selected="selected"{{/if}} class="mediuser" style="border-color: #{{$_function->color}};">{{$_function}}</option>
         {{/foreach}}
       </select>
+      
+      {{if $type == "ambu"}}
+      <button class="print" type="button" onclick="printAmbu()">Impression ambu</button>
+      {{/if}}
     </th>
   </tr>
   

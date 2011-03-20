@@ -23,10 +23,12 @@ function printAmbu(){
   url.popup(800,600,"Ambu");
 }
 
-function printPlanning(type) {
+function printPlanning() {
+  var oForm = getForm("selType");
   var url = new Url("dPadmissions", "print_sorties");
-  url.addParam("date", "{{$date}}");
-  url.addParam("type", type);
+  url.addParam("date"       , "{{$date}}");
+  url.addParam("type_sejour", $V(oForm._type_admission));
+  url.addParam("service_id" , $V(oForm.service_id));
   url.popup(700, 550, "Sorties");
 }
 
