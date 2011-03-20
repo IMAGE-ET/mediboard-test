@@ -58,7 +58,7 @@ foreach ($dPconfig["php"] as $key => $value) {
 
 if ($dPconfig["offline"]) {
   header("Location: offline.php");
-  die("Le système est actuellement en cours de maintenance");
+  die("Le systï¿½me est actuellement en cours de maintenance");
 }
 
 if ($dPconfig["migration"]["active"]) {
@@ -68,7 +68,7 @@ if ($dPconfig["migration"]["active"]) {
 
 // Check that the user has correctly set the root directory
 if (!is_file($dPconfig["root_dir"]."/includes/config.php")) {
-  die("ERREUR FATALE: Le répertoire racine est probablement mal configuré");
+  die("ERREUR FATALE: Le rï¿½pertoire racine est probablement mal configurï¿½");
 }
 
 require "./includes/mb_functions.php";
@@ -94,7 +94,7 @@ require "./classes/mysqlDataSource.class.php";
 
 if (!CSQLDataSource::get("std")) {
   header("Location: offline.php?reason=bdd");
-  die("La base de données n'est pas connectée");
+  die("La base de donnï¿½es n'est pas connectï¿½e");
 }
 
 // Write the HTML headers
@@ -122,8 +122,8 @@ $suppressHeaders = CValue::request("suppressHeaders", $wsdl);
 
 // Output the charset header in case of an ajax request
 $ajax = CValue::request("ajax", false);
-// Check if we are in the dialog mode
 
+// Check if we are in the dialog mode
 $dialog = CValue::request("dialog");
 
 // check if the user is trying to log in

@@ -166,7 +166,7 @@ class CApp {
       // Escaped instanciation in case of DSN errors
       $object = @new $class;
       
-      // Classe instanciée ?
+      // Classe instanciï¿½e ?
       if (!$object->_class_name) {
         unset($classes[$key]);
         continue;
