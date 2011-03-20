@@ -22,9 +22,21 @@
   </tr>
 
   <tr>
-    <th class="text"><a class={{if $selAdmis=='0' && $selSaisis=='0'}}"selected"{{else}}"selectable"{{/if}} title="Toutes les admissions"     href="?m={{$m}}&amp;tab=vw_idx_admission&amp;selAdmis=0&amp;selSaisis=0">Adm.     </a></th>
-    <th class="text"><a class={{if $selAdmis=='0' && $selSaisis=='n'}}"selected"{{else}}"selectable"{{/if}} title="Admissions non préparées"  href="?m={{$m}}&amp;tab=vw_idx_admission&amp;selAdmis=0&amp;selSaisis=n">Non prép.</a></th>
-    <th class="text"><a class={{if $selAdmis=='n' && $selSaisis=='0'}}"selected"{{else}}"selectable"{{/if}} title="Admissions non effectuées" href="?m={{$m}}&amp;tab=vw_idx_admission&amp;selAdmis=n&amp;selSaisis=0">Non eff. </a></th>
+    <th class="text">
+      <a class={{if $selAdmis=='0' && $selSaisis=='0'}}"selected"{{else}}"selectable"{{/if}} title="Toutes les admissions" href="?m={{$m}}&amp;tab=vw_idx_admission&amp;selAdmis=0&amp;selSaisis=0">
+        Adm.
+      </a>
+    </th>
+    <th class="text">
+      <a class={{if $selAdmis=='0' && $selSaisis=='n'}}"selected"{{else}}"selectable"{{/if}} title="Admissions non préparées" href="?m={{$m}}&amp;tab=vw_idx_admission&amp;selAdmis=0&amp;selSaisis=n">
+        Non prép.
+      </a>
+    </th>
+    <th class="text">
+      <a class={{if $selAdmis=='n' && $selSaisis=='0'}}"selected"{{else}}"selectable"{{/if}} title="Admissions non effectuées" href="?m={{$m}}&amp;tab=vw_idx_admission&amp;selAdmis=n&amp;selSaisis=0">
+        Non eff.
+      </a>
+    </th>
   </tr>
 
   {{foreach from=$days key=day item=counts}}

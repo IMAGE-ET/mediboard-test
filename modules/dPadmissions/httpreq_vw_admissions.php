@@ -11,14 +11,14 @@
 CCanDo::checkRead();
 
 // Type d'admission
-$type = CValue::getOrSession("type");
-
-$selAdmis  = CValue::getOrSession("selAdmis", "0");
-$selSaisis = CValue::getOrSession("selSaisis", "0");
-$order_col = CValue::getOrSession("order_col", "patient_id");
-$order_way = CValue::getOrSession("order_way", "ASC");
-$date      = CValue::getOrSession("date", mbDate());
-$next      = mbDate("+1 DAY", $date);
+$type           = CValue::getOrSession("type");
+$service_id     = CValue::getOrSession("service_id");
+$selAdmis       = CValue::getOrSession("selAdmis", "0");
+$selSaisis      = CValue::getOrSession("selSaisis", "0");
+$order_col      = CValue::getOrSession("order_col", "patient_id");
+$order_way      = CValue::getOrSession("order_way", "ASC");
+$date           = CValue::getOrSession("date", mbDate());
+$next           = mbDate("+1 DAY", $date);
 $filterFunction = CValue::getOrSession("filterFunction");
 
 $date_actuelle = mbDateTime("00:00:00");
@@ -33,12 +33,25 @@ $date_max = mbDateTime("23:59:00", $date);
 // Chargement des prestations
 $prestations = CPrestation::loadCurrentList();
 
-// Operations de la journée
-$today = new CSejour;
+// Entrées de la journée
+$sejour = new CSejour;
 
+$group = CGroups::loadCurrent();
+
+// Lien avec les patients et les praticiens
 $ljoin["patients"] = "sejour.patient_id = patients.patient_id";
 $ljoin["users"] = "sejour.praticien_id = users.user_id";
 
+// Filtre sur les services
+if($service_id) {
+  $ljoin["affectation"]        = "affectation.sejour_id = sejour.sejour_id AND affectation.sortie = sejour.sortie_prevue";
+  $ljoin["lit"]                = "affectation.lit_id = lit.lit_id";
+  $ljoin["chambre"]            = "lit.chambre_id = chambre.chambre_id";
+  $ljoin["service"]            = "chambre.service_id = service.service_id";
+  $where["service.service_id"] = "= '$service_id'";
+}
+
+// Filtre sur le type du séjour
 if($type == "ambucomp") {
   $where[] = "`sejour`.`type` = 'ambu' OR `sejour`.`type` = 'comp'";
 } elseif($type) {
@@ -47,19 +60,16 @@ if($type == "ambucomp") {
   $where[] = "`sejour`.`type` != 'urg' AND `sejour`.`type` != 'seances'";
 }
 
-global $g;
-$where["group_id"] = "= '$g'";
-
-$where["sejour.entree"] = "BETWEEN '$date' AND '$next'";
+$where["sejour.group_id"] = "= '$group->_id'";
+$where["sejour.entree"]   = "BETWEEN '$date' AND '$next'";
+$where["sejour.annule"]   = "= '0'";
 
 if ($selAdmis != "0") {
   $where[] = "(entree_reelle IS NULL OR entree_reelle = '0000-00-00 00:00:00')";
-  $where["annule"] = "= '0'";
 }
 
 if ($selSaisis != "0") {
-  $where["saisi_SHS"] = "= '0'";
-  $where["annule"] = "= '0'";
+  $where["sejour.saisi_SHS"] = "= '0'";
 }
 
 if ($order_col != "patient_id" && $order_col != "entree_prevue" && $order_col != "praticien_id"){
@@ -78,18 +88,18 @@ if ($order_col == "praticien_id"){
   $order = "users.user_last_name $order_way, users.user_first_name";
 }
 
-$today = $today->loadGroupList($where, $order, null, null, $ljoin);
+$sejours = $sejour->loadList($where, $order, null, null, $ljoin);
 
-CMbObject::massLoadFwdRef($today, "patient_id");
-$praticiens = CMbObject::massLoadFwdRef($today, "praticien_id");
+CMbObject::massLoadFwdRef($sejours, "patient_id");
+$praticiens = CMbObject::massLoadFwdRef($sejours, "praticien_id");
 $functions  = CMbObject::massLoadFwdRef($praticiens, "function_id");
 
-foreach ($today as $sejour_id => $_sejour) {
+foreach ($sejours as $sejour_id => $_sejour) {
   $_sejour->loadRefPraticien(1);
 	$praticien =& $_sejour->_ref_praticien;
   
 	if ($filterFunction && $filterFunction != $praticien->function_id) {
-    unset($today[$sejour_id]);
+    unset($sejours[$sejour_id]);
 	  continue;
   }
   
@@ -132,24 +142,25 @@ if ($filterFunction && !array_key_exists($filterFunction, $functions)){
 // Création du template
 $smarty = new CSmartyDP();
 
-$smarty->assign("hier"         , $hier);
-$smarty->assign("demain"       , $demain);
-$smarty->assign("date_min"     , $date_min);
-$smarty->assign("date_max"     , $date_max);
-$smarty->assign("date_demain"  , $date_demain);
-$smarty->assign("date_actuelle", $date_actuelle);
-$smarty->assign("date"         , $date        );
-$smarty->assign("selAdmis"     , $selAdmis    );
-$smarty->assign("selSaisis"    , $selSaisis   );
-$smarty->assign("order_col"    , $order_col   );
-$smarty->assign("order_way"    , $order_way   );
-$smarty->assign("today"        , $today       );
-$smarty->assign("prestations"  , $prestations );
-$smarty->assign("canAdmissions", CModule::getCanDo("dPadmissions"));
-$smarty->assign("canPatients"  , CModule::getCanDo("dPpatients"));
-$smarty->assign("canPlanningOp", CModule::getCanDo("dPplanningOp"));
-$smarty->assign("functions"    , $functions);
+$smarty->assign("hier"          , $hier);
+$smarty->assign("demain"        , $demain);
+$smarty->assign("date_min"      , $date_min);
+$smarty->assign("date_max"      , $date_max);
+$smarty->assign("date_demain"   , $date_demain);
+$smarty->assign("date_actuelle" , $date_actuelle);
+$smarty->assign("date"          , $date);
+$smarty->assign("selAdmis"      , $selAdmis);
+$smarty->assign("selSaisis"     , $selSaisis);
+$smarty->assign("order_col"     , $order_col);
+$smarty->assign("order_way"     , $order_way);
+$smarty->assign("sejours"       , $sejours);
+$smarty->assign("prestations"   , $prestations);
+$smarty->assign("canAdmissions" , CModule::getCanDo("dPadmissions"));
+$smarty->assign("canPatients"   , CModule::getCanDo("dPpatients"));
+$smarty->assign("canPlanningOp" , CModule::getCanDo("dPplanningOp"));
+$smarty->assign("functions"     , $functions);
 $smarty->assign("filterFunction", $filterFunction);
+
 $smarty->display("inc_vw_admissions.tpl");
 
 ?>

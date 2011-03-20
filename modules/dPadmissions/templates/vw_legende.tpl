@@ -18,23 +18,19 @@
   </tr>
   <tr>
     <td style="background-color:#faa"></td>
-    <td class="text">Admissions ambulatoires</td>
+    <td class="text">Ambulatoire</td>
   </tr>
   <tr>
     <td style="background-color:#fff"></td>
-    <td class="text">Admissions complètes</td>
+    <td class="text">Hospitalisation complète</td>
   </tr>
   <tr>
     <td style="background-color:#afa"></td>
-    <td class="text">Admissions externes</td>
-  </tr>
-  <tr>
-    <td style="background-color:#f33"></td>
-    <td class="text">Admissions annulées</td>
+    <td class="text">Externe</td>
   </tr>
   <tr>
     <td style="background-color:#cfdfff"></td>
-    <td class="text">Admissions consultations</td>
+    <td class="text">Consultations</td>
   </tr>
   <tr>
     <td style="background-image:url(images/icons/ray_vertical.gif); background-repeat:repeat;"></td>

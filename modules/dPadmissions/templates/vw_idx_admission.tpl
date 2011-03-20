@@ -22,8 +22,9 @@ function showLegend() {
 function printPlanning() {
   var oForm = document.selType;
   var url = new Url("dPadmissions", "print_entrees");
-  url.addParam("date", "{{$date}}");
-  url.addParam("type", oForm._type_admission.value);
+  url.addParam("date"      , "{{$date}}");
+  url.addParam("type"      , $V(oForm._type_admission));
+  url.addParam("service_id", $V(oForm.service_id));
   url.popup(700, 550, "Entrees");
 }
 
@@ -39,24 +40,28 @@ function printDepassement(id) {
   url.popup(700, 550, "Depassement");
 }
 
-function reloadFullAdmissions(type, filterFunction) {
-  var admUrl = new Url("dPadmissions", "httpreq_vw_all_admissions");
-  admUrl.addParam("date", "{{$date}}");
-  admUrl.addParam("type", type);
-  admUrl.requestUpdate('allAdmissions');
-	reloadAdmission(type, filterFunction);
+function reloadFullAdmissions(filterFunction) {
+  var oForm = getForm("selType");
+  var url = new Url("dPadmissions", "httpreq_vw_all_admissions");
+  url.addParam("date"      , "{{$date}}");
+  url.addParam("type"      , $V(oForm._type_admission));
+  url.addParam("service_id", $V(oForm.service_id));
+  url.requestUpdate('allAdmissions');
+	reloadAdmission(filterFunction);
 }
 
-function reloadAdmission(type, filterFunction) {
-  var admUrl = new Url("dPadmissions", "httpreq_vw_admissions");
-  admUrl.addParam("selAdmis", "{{$selAdmis}}");
-  admUrl.addParam("selSaisis", "{{$selSaisis}}");
-  admUrl.addParam("date", "{{$date}}");
-  admUrl.addParam("type", type);
+function reloadAdmission(filterFunction) {
+  var oForm = getForm("selType");
+  var url = new Url("dPadmissions", "httpreq_vw_admissions");
+  url.addParam("selAdmis", "{{$selAdmis}}");
+  url.addParam("selSaisis", "{{$selSaisis}}");
+  url.addParam("date"      , "{{$date}}");
+  url.addParam("type"      , $V(oForm._type_admission));
+  url.addParam("service_id", $V(oForm.service_id));
 	if(!Object.isUndefined(filterFunction)){
-	  admUrl.addParam("filterFunction", filterFunction);
+	  url.addParam("filterFunction", filterFunction);
 	}
-  admUrl.requestUpdate('listAdmissions');
+  url.requestUpdate('listAdmissions');
 }
 
 function confirmation(oForm){
@@ -66,7 +71,7 @@ function confirmation(oForm){
 }
 
 function submitCote(oForm) {
-  submitFormAjax(oForm, 'systemMsg', { onComplete : function() { reloadAdmission($V(document.selType._type_admission)) } });
+  submitFormAjax(oForm, 'systemMsg', { onComplete : function() { reloadAdmission() } });
 }
 
 function submitAdmission(oForm, bPassCheck) {
@@ -76,10 +81,10 @@ function submitAdmission(oForm, bPassCheck) {
     if(!bPassCheck && oIPPForm && oNumDosForm && (!$V(oIPPForm.id400) || !$V(oNumDosForm.id400)) ) {
       setExternalIds(oForm);
     } else {
-      submitFormAjax(oForm, 'systemMsg', { onComplete : function() { reloadAdmission($V(document.selType._type_admission)) } });
+      submitFormAjax(oForm, 'systemMsg', { onComplete : function() { reloadAdmission() } });
     }
   {{else}}
-    submitFormAjax(oForm, 'systemMsg', { onComplete : function() { reloadAdmission($V(document.selType._type_admission)) } });
+    submitFormAjax(oForm, 'systemMsg', { onComplete : function() { reloadAdmission() } });
   {{/if}}
 }
 
@@ -94,7 +99,7 @@ var ExtRefManager = {
   },
   
   reloadIPPForm: function() {
-    reloadAdmission($V(document.selType._type_admission));
+    reloadAdmission();
   },
   
   submitNumdosForm: function(sejour_id) {
@@ -104,7 +109,7 @@ var ExtRefManager = {
   },
 
   reloadNumdosForm: function() {
-    reloadAdmission($V(document.selType._type_admission));
+    reloadAdmission();
   }
 }
 
@@ -150,8 +155,14 @@ Main.add(function () {
     <a href="#" onclick="showLegend()" class="button search">Légende</a>
   </td>
   <td style="float: right">
-    <form action="?" name="selType">
-      {{mb_field object=$sejour field="_type_admission" defaultOption="&mdash; Toutes les admissions" onchange="reloadFullAdmissions(this.value)"}}
+    <form action="?" name="selType" method="get">
+      {{mb_field object=$sejour field="_type_admission" defaultOption="&mdash; Toutes les admissions" onchange="reloadFullAdmissions()"}}
+      <select name="service_id" onchange="reloadFullAdmissions();">
+        <option value="">&mdash; Tous les services</option>
+        {{foreach from=$services item=_service}}
+        <option value="{{$_service->_id}}"{{if $_service->_id == $sejour->service_id}}selected="selected"{{/if}}}>{{$_service->_view}}</option>
+        {{/foreach}}
+      </select>
     </form>
     <a href="#" onclick="printPlanning()" class="button print">Imprimer</a>
   </td>

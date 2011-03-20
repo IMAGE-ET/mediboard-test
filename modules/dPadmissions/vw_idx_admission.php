@@ -12,23 +12,27 @@ global $AppUI, $can, $m;
 
 $can->needsRead();
 
-// Initialisation de variables
+// Filtres d'affichage
 
-$selAdmis = CValue::getOrSession("selAdmis", "0");
+$selAdmis  = CValue::getOrSession("selAdmis", "0");
 $selSaisis = CValue::getOrSession("selSaisis", "0");
 $order_way = CValue::getOrSession("order_way", "ASC");
 $order_col = CValue::getOrSession("order_col", "patient_id");
-$date = CValue::getOrSession("date", mbDate());
-$type = CValue::getOrSession("type", "0");
+$date      = CValue::getOrSession("date", mbDate());
+$type       = CValue::getOrSession("type");
+$service_id = CValue::getOrSession("service_id");
 
 $date_actuelle = mbDateTime("00:00:00");
 $date_demain = mbDateTime("00:00:00","+ 1 day");
-
 $hier = mbDate("- 1 day", $date);
 $demain = mbDate("+ 1 day", $date);
 
+$service    = new CService();
+$services   = $service->loadGroupList();
+
 $sejour = new CSejour();
 $sejour->_type_admission = $type;
+$sejour->service_id      = $service_id;
 
 // Création du template
 $smarty = new CSmartyDP();
@@ -41,6 +45,7 @@ $smarty->assign("selAdmis"     , $selAdmis);
 $smarty->assign("selSaisis"    , $selSaisis);
 $smarty->assign("order_way"    , $order_way);
 $smarty->assign("order_col"    , $order_col);
+$smarty->assign("services"     , $services);
 $smarty->assign("hier"         , $hier);
 $smarty->assign("demain"       , $demain);
 

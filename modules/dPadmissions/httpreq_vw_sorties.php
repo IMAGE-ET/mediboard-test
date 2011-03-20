@@ -8,92 +8,129 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
  */
 
-global $AppUI, $can, $m;
+CCanDo::checkRead();
 
-$can->needsRead();
-
-// Type de tri
-$selTri = CValue::getOrSession("selTri", "nom");
-$order_col = CValue::getOrSession("order_col", "patient_id");
-$order_way = CValue::getOrSession("order_way", "ASC");
-$filter_function_id = CValue::getOrSession("filter_function_id");
-
-// Mode => ambu ou comp
-$type_sejour = CValue::getOrSession("type_sejour", "ambu");
-
-// Type d'affichage
-$vue = CValue::getOrSession("vue", 0);
-
-// Récupération des dates
-$date = CValue::getOrSession("date", mbDate());
+$type           = CValue::getOrSession("type");
+$service_id     = CValue::getOrSession("service_id");
+$selSortis      = CValue::getOrSession("selSortis", "0");
+$order_col      = CValue::getOrSession("order_col", "patient_id");
+$order_way      = CValue::getOrSession("order_way", "ASC");
+$date           = CValue::getOrSession("date", mbDate());
+$next           = mbDate("+1 DAY", $date);
+$filterFunction = CValue::getOrSession("filterFunction");
 
 $date_actuelle = mbDateTime("00:00:00");
-$date_demain = mbDateTime("00:00:00","+ 1 day");
+$date_demain   = mbDateTime("00:00:00","+ 1 day");
+
+$hier   = mbDate("- 1 day", $date);
+$demain = mbDate("+ 1 day", $date);
 
 $date_min = mbDateTime("00:00:00", $date);
 $date_max = mbDateTime("23:59:00", $date);
 
+// Sorties de la journée
+$sejour = new CSejour;
 
-$date_sortie = mbDateTime();
+$group = CGroups::loadCurrent();
 
-$now  = mbDate();
+// Lien avec les patients et les praticiens
+$ljoin["patients"]    = "sejour.patient_id = patients.patient_id";
+$ljoin["users"]       = "sejour.praticien_id = users.user_id";
 
-// Récupération des sorties du jour
-$listSejour = new CSejour();
-$limit1 = $date." 00:00:00";
-$limit2 = $date." 23:59:59";
-$ljoin["patients"] = "sejour.patient_id = patients.patient_id";
-$ljoin["users"] = "sejour.praticien_id = users.user_id";
-$ljoin["users_mediboard"] = "sejour.praticien_id = users_mediboard.user_id";
-$where["sejour.sortie"] = "BETWEEN '$limit1' AND '$limit2'";
-$where["sejour.type"] = " = '$type_sejour'";
-$where["sejour.annule"] = " = '0'";
-
-// Afficher seulement les sorties non effectuées (sejour sans date de sortie reelle)
-if($vue) {
-  $where["sejour.sortie_reelle"] = "IS NULL";
+// Filtre sur les services
+if($service_id) {
+  $ljoin["affectation"]        = "affectation.sejour_id = sejour.sejour_id AND affectation.sortie = sejour.sortie_prevue";
+  $ljoin["lit"]                = "affectation.lit_id = lit.lit_id";
+  $ljoin["chambre"]            = "lit.chambre_id = chambre.chambre_id";
+  $ljoin["service"]            = "chambre.service_id = service.service_id";
+  $where["service.service_id"] = "= '$service_id'";
 }
 
-if($order_col != "patient_id" && $order_col != "sortie_prevue" && $order_col != "praticien_id"){
-	$order_col = "patient_id";	
+// Filtre sur le type du séjour
+if($type == "ambucomp") {
+  $where[] = "`sejour`.`type` = 'ambu' OR `sejour`.`type` = 'comp'";
+} elseif($type) {
+  $where["sejour.type"] = " = '$type'";
+} else {
+  $where[] = "`sejour`.`type` != 'urg' AND `sejour`.`type` != 'seances'";
 }
 
-$order = "sejour.type,";
 
+$where["sejour.group_id"] = "= '$group->_id'";
+$where["sejour.sortie"]   = "BETWEEN '$date' AND '$next'";
+$where["sejour.annule"]   = "= '0'";
 
-if($order_col == "patient_id"){
-  $order .= "patients.nom $order_way, patients.prenom, sejour.entree_prevue";
-}
-if($order_col == "sortie_prevue"){
-  $order .= "sejour.sortie_prevue $order_way, patients.nom, patients.prenom";
-}
-if($order_col == "praticien_id"){
-  $order .= "users.user_last_name $order_way, users.user_first_name";
+if ($selSortis != "0") {
+  $where[] = "(sortie_reelle IS NULL)";
 }
 
-if($filter_function_id){
-	$where["users_mediboard.function_id"] = " = '$filter_function_id'";
+
+if ($order_col != "patient_id" && $order_col != "entree_prevue" && $order_col != "praticien_id"){
+  $order_col = "patient_id";  
 }
 
-$listSejour = $listSejour->loadGroupList($where, $order, null, null, $ljoin);
+if ($order_col == "patient_id"){
+  $order = "patients.nom $order_way, patients.prenom $order_way, sejour.sortie_prevue";
+}
 
-foreach($listSejour as $key => $sejour){
-  $sejour->loadRefPatient();
-  $sejour->loadRefPraticien();
-  $sejour->loadRefsAffectations();
-  $sejour->loadRefEtabExterne();
-  $sejour->loadNumDossier();
-  $affectation =& $sejour->_ref_last_affectation;
+if ($order_col == "entree_prevue"){
+  $order = "sejour.sortie_prevue $order_way, patients.nom, patients.prenom";
+}
+
+if ($order_col == "praticien_id"){
+  $order = "users.user_last_name $order_way, users.user_first_name";
+}
+
+$sejours = $sejour->loadList($where, $order, null, null, $ljoin);
+
+CMbObject::massLoadFwdRef($sejours, "patient_id");
+$praticiens = CMbObject::massLoadFwdRef($sejours, "praticien_id");
+$functions  = CMbObject::massLoadFwdRef($praticiens, "function_id");
+
+foreach ($sejours as $sejour_id => $_sejour) {
+  $_sejour->loadRefPraticien(1);
+  $praticien =& $_sejour->_ref_praticien;
   
-  if($affectation->affectation_id){
-  	$affectation->loadReflit();
-  	$affectation->_ref_lit->loadCompleteView();
+  if ($filterFunction && $filterFunction != $praticien->function_id) {
+    unset($sejours[$sejour_id]);
+    continue;
+  }
+  
+  // Chargement du patient
+  $_sejour->loadRefPatient(1);
+  $_sejour->_ref_patient->loadIPP();
+  
+  // Chargment du numéro de dossier
+  $_sejour->loadNumDossier();
+  $whereOperations = array("annulee" => "= '0'");
+
+  // Chargement des interventions
+  $_sejour->loadRefsOperations($whereOperations);
+  $operation = new COperation();
+  foreach ($_sejour->_ref_operations as $operation) {
+    $operation->loadRefsActes();
+    $operation->loadRefsConsultAnesth();
+    $consult_anesth =& $operation->_ref_consult_anesth; 
+    $consult_anesth->loadRefConsultation();
+    $consult_anesth->_ref_consultation->loadRefPlageConsult(1);
+    $consult_anesth->_date_consult =& $consult_anesth->_ref_consultation->_date;
   }
 
-  foreach($sejour->_ref_affectations as $key => $affect){
-    $affect->loadRefLit();
-    $affect->_ref_lit->loadCompleteView();
+  // Chargement des affectation
+  $_sejour->loadRefsAffectations();
+  foreach($_sejour->_ref_affectations as $_aff) {
+    if ($_aff->_id) {
+      $_aff->loadRefLit(1);
+      $_aff->_ref_lit->loadCompleteView();
+    }
   }
+}
+
+// Si la fonction selectionnée n'est pas dans la liste des fonction, on la rajoute
+if ($filterFunction && !array_key_exists($filterFunction, $functions)){
+  $_function = new CFunctions();
+  $_function->load($filterFunction);
+  $functions[$filterFunction] = $_function;
 }
 
 
@@ -101,22 +138,22 @@ foreach($listSejour as $key => $sejour){
 // Création du template
 $smarty = new CSmartyDP();
 
+$smarty->assign("hier"          , $hier);
+$smarty->assign("demain"        , $demain);
 $smarty->assign("date_min"      , $date_min);
 $smarty->assign("date_max"      , $date_max);
+$smarty->assign("date_demain"   , $date_demain);
+$smarty->assign("date_actuelle" , $date_actuelle);
+$smarty->assign("date"          , $date);
+$smarty->assign("selSortis"     , $selSortis);
 $smarty->assign("order_col"     , $order_col);
 $smarty->assign("order_way"     , $order_way);
-$smarty->assign("selTri"        , $selTri);
+$smarty->assign("sejours"       , $sejours);
 $smarty->assign("canAdmissions" , CModule::getCanDo("dPadmissions"));
 $smarty->assign("canPatients"   , CModule::getCanDo("dPpatients"));
 $smarty->assign("canPlanningOp" , CModule::getCanDo("dPplanningOp"));
-$smarty->assign("date_demain"   , $date_demain);
-$smarty->assign("date_actuelle" , $date_actuelle);
-$smarty->assign("date"          , $date );
-$smarty->assign("now"           , $now );
-$smarty->assign("vue"           , $vue );
-$smarty->assign("listSejour"    , $listSejour );
-$smarty->assign("date_sortie"   , $date_sortie);
-$smarty->assign("type_sejour"   , $type_sejour);
+$smarty->assign("functions"     , $functions);
+$smarty->assign("filterFunction", $filterFunction);
 
 $smarty->display("inc_vw_sorties.tpl");
 

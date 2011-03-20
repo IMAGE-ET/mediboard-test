@@ -10,25 +10,27 @@
 
 <table class="tbl" style="text-align: center;">
   <tr>
-    <th class="title" colspan="{{math equation="count +1" count=$types|@count}}">
+    <th class="title" colspan="3">
       <a style="display: inline;" href="?m={{$m}}&amp;tab=vw_idx_sortie&amp;date={{$lastmonth}}">&lt;&lt;&lt;</a>
       {{$date|date_format:"%b %Y"}}
       <a style="display: inline;" href="?m={{$m}}&amp;tab=vw_idx_sortie&amp;date={{$nextmonth}}">&gt;&gt;&gt;</a>
     </th>
   </tr>
-		
-  <tr>
-    <th rowspan="2">Date</th>
-  </tr>
 
   <tr>
-  	{{foreach from=$types item=_type}}
     <th class="text">
-      <a class="{{if $type_sejour == $_type}} selected {{else}} selectable {{/if}}" title="{{$_type}}" href="?m={{$m}}&amp;tab=vw_idx_sortie&amp;type_sejour={{$_type}}">
-        {{tr}}CSejour.type.{{$_type}}.short{{/tr}}
+      Date
+    </th>
+    <th class="text">
+      <a class={{if $selSortis=='0'}}"selected"{{else}}"selectable"{{/if}} title="Toutes les sorties" href="?m={{$m}}&amp;tab=vw_idx_sortie&amp;selSortis=0">
+        Sorties
       </a>
     </th>
-  	{{/foreach}}
+    <th class="text">
+      <a class={{if $selSortis=='n'}}"selected"{{else}}"selectable"{{/if}} title="Sorties non effectuées" href="?m={{$m}}&amp;tab=vw_idx_sortie&amp;selSortis=n">
+        Non Eff.
+      </a>
+    </th>
   </tr>
 
   {{foreach from=$days key=day item=counts}}
@@ -47,12 +49,12 @@
         </strong>
       </a>
     </td>
-		
-    {{foreach from=$types item=_type}}
-    <td {{if $type_sejour == $_type && $day == $date}} style="font-weight: bold;" {{/if}}>
-      {{if $counts.$_type}}{{$counts.$_type}}{{else}}-{{/if}}
+    <td {{if $selSortis=='0' && $day == $date}}style="font-weight: bold;"{{/if}}>
+      {{if $counts.num1}}{{$counts.num1}}{{else}}-{{/if}}
     </td>
-		{{/foreach}}
+    <td {{if $selSortis=='n' && $day == $date}}style="font-weight: bold;"{{/if}}>
+      {{if $counts.num2}}{{$counts.num2}}{{else}}-{{/if}}
+    </td>
   </tr>
   {{foreachelse}}
 	<tr>

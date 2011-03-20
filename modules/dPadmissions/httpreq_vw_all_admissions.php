@@ -8,24 +8,23 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
  */
 
-global $g;
-
 CCanDo::checkRead();
 
 $ds = CSQLDataSource::get("std");
 
 // Initialisation de variables
 $date = CValue::getOrSession("date", mbDate());
-$month_min = mbTransformTime("+ 0 month", $date, "%Y-%m-01");
-$month_max = mbTransformTime("+ 1 month", $month_min, "%Y-%m-01");
-$lastmonth = mbDate("-1 month", $date);
-$nextmonth = mbDate("+1 month", $date);
-$selAdmis  = CValue::getOrSession("selAdmis", "0");
-$selSaisis = CValue::getOrSession("selSaisis", "0");
-$type      = CValue::getOrSession("type", "0");
+$month_min     = mbTransformTime("+ 0 month", $date, "%Y-%m-01");
+$month_max     = mbTransformTime("+ 1 month", $month_min, "%Y-%m-01");
+$lastmonth     = mbDate("-1 month", $date);
+$nextmonth     = mbDate("+1 month", $date);
+$selAdmis      = CValue::getOrSession("selAdmis", "0");
+$selSaisis     = CValue::getOrSession("selSaisis", "0");
+$type          = CValue::getOrSession("type");
+$service_id    = CValue::getOrSession("service_id");
 $bank_holidays = mbBankHolidays($date);
 
-$hier = mbDate("- 1 day", $date);
+$hier   = mbDate("- 1 day", $date);
 $demain = mbDate("+ 1 day", $date);
 
 // Initialisation du tableau de jours
@@ -40,50 +39,74 @@ for ($day = $month_min; $day < $month_max; $day = mbDate("+1 DAY", $day)) {
 
 // filtre sur les types d'admission
 if($type == "ambucomp") {
-  $filterType = "(`sejour`.`type` = 'ambu' OR `sejour`.`type` = 'comp')";
+  $filterType = "AND (`sejour`.`type` = 'ambu' OR `sejour`.`type` = 'comp')";
 } elseif($type) {
-  $filterType = "`sejour`.`type` = '$type'";
+  $filterType = "AND `sejour`.`type` = '$type'";
 } else {
-  $filterType = "`sejour`.`type` != 'urg' AND `sejour`.`type` != 'seances'";
+  $filterType = "AND `sejour`.`type` != 'urg' AND `sejour`.`type` != 'seances'";
 }
 
+// filtre sur les services
+if($service_id) {
+  $leftjoinService = "LEFT JOIN affectation
+                        ON affectation.sejour_id = sejour.sejour_id AND affectation.sortie = sejour.sortie_prevue
+                      LEFT JOIN lit
+                        ON affectation.lit_id = lit.lit_id
+                      LEFT JOIN chambre
+                        ON lit.chambre_id = chambre.chambre_id
+                      LEFT JOIN service
+                        ON chambre.service_id = service.service_id";
+  $filterService = "AND service.service_id = '$service_id'";
+} else {
+  $leftjoinService = $filterService = "";
+}
+
+$group = CGroups::loadCurrent();
+
 // Liste des admissions par jour
-$sql = "SELECT DATE_FORMAT(`sejour`.`entree`, '%Y-%m-%d') AS `date`, COUNT(`sejour`.`sejour_id`) AS `num`
-    FROM `sejour`
-    WHERE `sejour`.`entree` BETWEEN '$month_min' AND '$month_max'
-      AND `sejour`.`group_id` = '$g'
-      AND $filterType
-    GROUP BY `date`
-    ORDER BY `date`";
-foreach ($ds->loadHashList($sql) as $day => $num1) {
+$query = "SELECT DATE_FORMAT(`sejour`.`entree`, '%Y-%m-%d') AS `date`, COUNT(`sejour`.`sejour_id`) AS `num`
+  FROM `sejour`
+  $leftjoinService
+  WHERE `sejour`.`entree` BETWEEN '$month_min' AND '$month_max'
+    AND `sejour`.`group_id` = '$group->_id'
+    AND `sejour`.`annule` = '0'
+    $filterType
+    $filterService
+  GROUP BY `date`
+  ORDER BY `date`";
+foreach ($ds->loadHashList($query) as $day => $num1) {
 	$days[$day]["num1"] = $num1;
 }
 
 // Liste des admissions non effectuées par jour
-$sql = "SELECT DATE_FORMAT(`sejour`.`entree`, '%Y-%m-%d') AS `date`, COUNT(`sejour`.`sejour_id`) AS `num`
-    FROM `sejour`
-    WHERE `sejour`.`entree_prevue` BETWEEN '$month_min' AND '$month_max'
-      AND `sejour`.`group_id` = '$g'
-      AND `sejour`.`entree_reelle` IS NULL
-      AND `sejour`.`annule` = '0'
-      AND $filterType
-    GROUP BY `date`
-    ORDER BY `date`";
-foreach ($ds->loadHashList($sql) as $day => $num2) {
+$query = "SELECT DATE_FORMAT(`sejour`.`entree`, '%Y-%m-%d') AS `date`, COUNT(`sejour`.`sejour_id`) AS `num`
+  FROM `sejour`
+  $leftjoinService
+  WHERE `sejour`.`entree_prevue` BETWEEN '$month_min' AND '$month_max'
+    AND `sejour`.`group_id` = '$group->_id'
+    AND `sejour`.`entree_reelle` IS NULL
+    AND `sejour`.`annule` = '0'
+    $filterType
+    $filterService
+  GROUP BY `date`
+  ORDER BY `date`";
+foreach ($ds->loadHashList($query) as $day => $num2) {
   $days[$day]["num2"] = $num2;
 }
 
 // Liste des admissions non préparées
-$sql = "SELECT DATE_FORMAT(`sejour`.`entree`, '%Y-%m-%d') AS `date`, COUNT(`sejour`.`sejour_id`) AS `num`
+$query = "SELECT DATE_FORMAT(`sejour`.`entree`, '%Y-%m-%d') AS `date`, COUNT(`sejour`.`sejour_id`) AS `num`
     FROM `sejour`
-    WHERE `sejour`.`entree` BETWEEN '$month_min' AND '$month_max'
-      AND `sejour`.`group_id` = '$g'
-      AND `sejour`.`saisi_SHS` = '0'
-      AND `sejour`.`annule` = '0'
-      AND $filterType
-    GROUP BY `date`
-    ORDER BY `date`";
-foreach ($ds->loadHashList($sql) as $day => $num3) {
+  $leftjoinService
+  WHERE `sejour`.`entree` BETWEEN '$month_min' AND '$month_max'
+    AND `sejour`.`group_id` = '$group->_id'
+    AND `sejour`.`saisi_SHS` = '0'
+    AND `sejour`.`annule` = '0'
+    $filterType
+    $filterService
+  GROUP BY `date`
+  ORDER BY `date`";
+foreach ($ds->loadHashList($query) as $day => $num3) {
   $days[$day]["num3"] = $num3;
 }
 

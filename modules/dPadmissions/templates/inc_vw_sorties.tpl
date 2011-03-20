@@ -8,138 +8,169 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
 *}}
 
-<table class="tbl" id="sortie-{{$type_sejour}}">
+<script type="text/javascript">
+Calendar.regField(getForm("changeDateSorties").date, null, {noView: true});
+</script>
+
+<table class="tbl" id="sortie">
   <tr>
-    <th class="title" colspan="7">
-      <span style="float: left"><button type="button" class="print notext" onclick="printPlanning('{{$type_sejour}}');">{{tr}}Print{{/tr}}</button></span>
-      {{if $type_sejour == "ambu"}}
-      <span style="float: right"><button type="button" class="print" onclick="printAmbu();">Impression Ambu</button></span>
+    <th class="title" colspan="10">
+      <a href="?m=dPadmissions&tab=vw_idx_sortie&date={{$hier}}" style="display: inline"><<<</a>
+      {{$date|date_format:$conf.longdate}}
+      <form name="changeDateSorties" action="?" method="get">
+        <input type="hidden" name="m" value="{{$m}}" />
+        <input type="hidden" name="tab" value="vw_idx_sortie" />
+        <input type="hidden" name="date" class="date" value="{{$date}}" onchange="this.form.submit()" />
+      </form>
+      <a href="?m=dPadmissions&tab=vw_idx_sortie&date={{$demain}}" style="display: inline">>>></a>
+      <br />
+      
+      <em style="float: left; font-weight: normal;">
+      {{$sejours|@count}}
+      {{if $selSortis == "n"}}sorties non effectuées
+      {{else}}sorties ce jour
       {{/if}}
-      Sortie {{tr}}CSejour.type.{{$type_sejour}}{{/tr}}
+      </em>
+  
+      <select style="float: right" name="filterFunction" style="width: 16em;" onchange="reloadSorties($V(getForm('selType')._type_admission), this.value);">
+        <option value=""> &mdash; Toutes les fonctions</option>
+        {{foreach from=$functions item=_function}}
+          <option value="{{$_function->_id}}" {{if $_function->_id == $filterFunction}}selected="selected"{{/if}} class="mediuser" style="border-color: #{{$_function->color}};">{{$_function}}</option>
+        {{/foreach}}
+      </select>
     </th>
   </tr>
+  
+  {{assign var=url value="?m=$m&tab=vw_idx_sortie&selSortis=$selSortis"}}
   <tr>
     <th>Effectuer la sortie</th>
     <th>
-      {{mb_colonne class="CSejour" field="patient_id" order_col=$order_col order_way=$order_way url="?m=$m&tab=vw_idx_sortie&date=$date&vue=$vue"}}
+      {{mb_colonne class="CSejour" field="patient_id" order_col=$order_col order_way=$order_way url="$url"}}
     </th>
     <th class="narrow">
-      <input type="text" size="3" onkeyup="Admissions.filter(this, 'sortie-{{$type_sejour}}')" id="filter-patient-name" />
+      <input type="text" size="3" onkeyup="Admissions.filter(this, 'sortie')" id="filter-patient-name" />
     </th>
     <th>
-      {{mb_colonne class="CSejour" field="sortie_prevue" order_col=$order_col order_way=$order_way url="?m=$m&tab=vw_idx_sortie&date=$date&vue=$vue"}}
+      {{mb_colonne class="CSejour" field="praticien_id" order_col=$order_col order_way=$order_way url="?$url"}}
     </th>
     <th>
-      {{mb_colonne class="CSejour" field="praticien_id" order_col=$order_col order_way=$order_way url="?m=$m&tab=vw_idx_sortie&date=$date&vue=$vue"}}
+      {{mb_colonne class="CSejour" field="sortie_prevue" order_col=$order_col order_way=$order_way url="$url"}}
     </th>
     <th>Chambre</th>
   </tr>
   
-  {{foreach from=$listSejour item=curr_sortie}}
+  {{foreach from=$sejours item=_sejour}}
+  {{if $_sejour->type == 'ambu'}} {{assign var=background value="#faa"}}
+  {{elseif $_sejour->type == 'comp'}} {{assign var=background value="#fff"}}
+  {{elseif $_sejour->type == 'exte'}} {{assign var=background value="#afa"}}
+  {{elseif $_sejour->type == 'consult'}} {{assign var=background value="#cfdfff"}}
+  {{else}}
+  {{assign var=background value="#ccc"}}
+  {{/if}}
   <tr>
-    <td class="text" style="{{if !$curr_sortie->facturable}}background-image:url(images/icons/ray_vertical.gif); background-repeat:repeat;{{/if}}">
+    <td class="text" style="background: {{$background}}; {{if !$_sejour->facturable}}background-image:url(images/icons/ray_vertical.gif); background-repeat:repeat;{{/if}}">
       {{if $canAdmissions->edit}}
-      <form name="editFrm{{$curr_sortie->_id}}" action="?m={{$m}}" method="post">
+      <form name="editFrm{{$_sejour->_id}}" action="?m={{$m}}" method="post">
       <input type="hidden" name="m" value="dPplanningOp" />
       <input type="hidden" name="del" value="0" />
       <input type="hidden" name="dosql" value="do_sejour_aed" />
-      <input type="hidden" name="sejour_id" value="{{$curr_sortie->_id}}" />
-      <input type="hidden" name="type" value="{{$curr_sortie->type}}" />
+      <input type="hidden" name="sejour_id" value="{{$_sejour->_id}}" />
+      <input type="hidden" name="type" value="{{$_sejour->type}}" />
       
-      {{if $curr_sortie->sortie_reelle}}
-      <input type="hidden" name="mode_sortie" value="{{$curr_sortie->mode_sortie}}" />
-      <input type="hidden" name="etablissement_transfert_id" value="{{$curr_sortie->etablissement_transfert_id}}" />
+      {{if $_sejour->sortie_reelle}}
+      <input type="hidden" name="mode_sortie" value="{{$_sejour->mode_sortie}}" />
+      <input type="hidden" name="etablissement_transfert_id" value="{{$_sejour->etablissement_transfert_id}}" />
       <input type="hidden" name="_modifier_sortie" value="0" />
-      <button class="cancel" type="button" onclick="submitSortie(this.form,'{{$type_sejour}}')">
+      <button class="cancel" type="button" onclick="submitSortie(this.form)">
         Annuler la sortie
       </button>
       <br />
-      {{if ($curr_sortie->sortie_reelle < $date_min) || ($curr_sortie->sortie_reelle > $date_max)}}
-        {{$curr_sortie->sortie_reelle|date_format:$conf.datetime}}
+      {{if ($_sejour->sortie_reelle < $date_min) || ($_sejour->sortie_reelle > $date_max)}}
+        {{$_sejour->sortie_reelle|date_format:$conf.datetime}}
       {{else}}
-        {{$curr_sortie->sortie_reelle|date_format:$conf.time}}
+        {{$_sejour->sortie_reelle|date_format:$conf.time}}
       {{/if}}
-      - {{tr}}CSejour.mode_sortie.{{$curr_sortie->mode_sortie}}{{/tr}}
-      {{if $curr_sortie->etablissement_transfert_id}}
-        - {{$curr_sortie->_ref_etabExterne->_view}}
+      - {{tr}}CSejour.mode_sortie.{{$_sejour->mode_sortie}}{{/tr}}
+      {{if $_sejour->etablissement_transfert_id}}
+        - {{$_sejour->_ref_etabExterne->_view}}
       {{/if}}
       {{else}}
       <input type="hidden" name="_modifier_sortie" value="1" />
-      <input type="hidden" name="entree_reelle" value="{{$curr_sortie->entree_reelle}}" />
-      <button class="tick" type="button" onclick="confirmation('{{$date_actuelle}}', '{{$date_demain}}', '{{$curr_sortie->sortie_prevue}}', '{{$curr_sortie->entree_reelle}}', this.form, '{{$type_sejour}}');">
+      <input type="hidden" name="entree_reelle" value="{{$_sejour->entree_reelle}}" />
+      <button class="tick" type="button" onclick="confirmation('{{$date_actuelle}}', '{{$date_demain}}', '{{$_sejour->sortie_prevue}}', '{{$_sejour->entree_reelle}}', this.form);">
         Effectuer la sortie
       </button>
       <br />  
-      {{mb_field object=$curr_sortie field="mode_sortie" onchange="this.form._modifier_sortie.value = '0'; submitSortie(this.form, '$type_sejour');"}}
+      {{mb_field object=$_sejour field="mode_sortie" onchange="this.form._modifier_sortie.value = '0'; submitSortie(this.form);"}}
       <br />
-      <div id="listEtabExterne-editFrm{{$curr_sortie->_id}}" style="display: inline;"></div>
+      <div id="listEtabExterne-editFrm{{$_sejour->_id}}" style="display: inline;"></div>
       <script type="text/javascript">
-        loadTransfert(document.editFrm{{$curr_sortie->_id}});
+        loadTransfert(document.editFrm{{$_sejour->_id}});
       </script>
       {{/if}}
       </form>
-      {{elseif $curr_sortie->sortie_reelle}}
-      {{if ($curr_sortie->sortie_reelle < $date_min) || ($curr_sortie->sortie_reelle > $date_max)}}
-        {{$curr_sortie->sortie_reelle|date_format:$conf.datetime}}
+      {{elseif $_sejour->sortie_reelle}}
+      {{if ($_sejour->sortie_reelle < $date_min) || ($_sejour->sortie_reelle > $date_max)}}
+        {{$_sejour->sortie_reelle|date_format:$conf.datetime}}
       {{else}}
-        {{$curr_sortie->sortie_reelle|date_format:$conf.time}}
+        {{$_sejour->sortie_reelle|date_format:$conf.time}}
       {{/if}}
-      {{if $curr_sortie->mode_sortie}}
+      {{if $_sejour->mode_sortie}}
       <br />
-      {{tr}}CSejour.mode_sortie.{{$curr_sortie->mode_sortie}}{{/tr}}
+      {{tr}}CSejour.mode_sortie.{{$_sejour->mode_sortie}}{{/tr}}
       {{/if}}
-      {{if $curr_sortie->etablissement_transfert_id}}
-        <br />{{$curr_sortie->_ref_etabExterne->_view}}
+      {{if $_sejour->etablissement_transfert_id}}
+        <br />{{$_sejour->_ref_etabExterne->_view}}
       {{/if}}
       {{else}}
       -
       {{/if}}
     </td>
     
-    <td class="text CPatient-view" colspan="2" style="{{if !$curr_sortie->facturable}}background-image:url(images/icons/ray_vertical.gif); background-repeat:repeat;{{/if}}">
+    <td class="text CPatient-view" colspan="2" style="background: {{$background}}; {{if !$_sejour->facturable}}background-image:url(images/icons/ray_vertical.gif); background-repeat:repeat;{{/if}}">
       {{if $canPatients->edit}}
-      <a class="action" style="float: right"  title="Modifier le dossier administratif" href="?m=dPpatients&amp;tab=vw_edit_patients&amp;patient_id={{$curr_sortie->_ref_patient->patient_id}}">
+      <a class="action" style="float: right"  title="Modifier le dossier administratif" href="?m=dPpatients&amp;tab=vw_edit_patients&amp;patient_id={{$_sejour->_ref_patient->patient_id}}">
         <img src="images/icons/edit.png" title="{{tr}}Edit{{/tr}}" />
      </a>
      {{/if}}
      {{if $canPlanningOp->read}}
-     <a class="action" style="float: right"  title="Modifier le séjour" href="?m=dPplanningOp&amp;tab=vw_edit_sejour&amp;sejour_id={{$curr_sortie->_id}}">
+     <a class="action" style="float: right"  title="Modifier le séjour" href="?m=dPplanningOp&amp;tab=vw_edit_sejour&amp;sejour_id={{$_sejour->_id}}">
        <img src="images/icons/planning.png" title="{{tr}}Edit{{/tr}}" />
      </a>
       {{/if}}
-      {{mb_include module=dPplanningOp template=inc_vw_numdos num_dossier=$curr_sortie->_num_dossier}}
-      <span onmouseover="ObjectTooltip.createEx(this, '{{$curr_sortie->_ref_patient->_guid}}');">
-        {{$curr_sortie->_ref_patient->_view}}
+      {{mb_include module=dPplanningOp template=inc_vw_numdos num_dossier=$_sejour->_num_dossier}}
+      <span onmouseover="ObjectTooltip.createEx(this, '{{$_sejour->_ref_patient->_guid}}');">
+        {{$_sejour->_ref_patient->_view}}
       </span>
     </td>
-    <td style="{{if !$curr_sortie->facturable}}background-image:url(images/icons/ray_vertical.gif); background-repeat:repeat;{{/if}}">
-      <span onmouseover="ObjectTooltip.createEx(this, '{{$curr_sortie->_guid}}');">
-        {{if ($curr_sortie->sortie_prevue < $date_min) || ($curr_sortie->sortie_prevue > $date_max)}}
-          {{$curr_sortie->sortie_prevue|date_format:$conf.datetime}}
+    <td class="text" style="background: {{$background}}; {{if !$_sejour->facturable}}background-image:url(images/icons/ray_vertical.gif); background-repeat:repeat;{{/if}}">
+      {{mb_include module=mediusers template=inc_vw_mediuser mediuser=$_sejour->_ref_praticien}}
+    </td>
+    <td style="background: {{$background}}; {{if !$_sejour->facturable}}background-image:url(images/icons/ray_vertical.gif); background-repeat:repeat;{{/if}}">
+      <span onmouseover="ObjectTooltip.createEx(this, '{{$_sejour->_guid}}');">
+        {{if ($_sejour->sortie_prevue < $date_min) || ($_sejour->sortie_prevue > $date_max)}}
+          {{$_sejour->sortie_prevue|date_format:$conf.datetime}}
         {{else}}
-          {{$curr_sortie->sortie_prevue|date_format:$conf.time}}
+          {{$_sejour->sortie_prevue|date_format:$conf.time}}
         {{/if}}
       </span>
-      {{if $curr_sortie->_ref_last_affectation->confirme}}
+      {{if $_sejour->_ref_last_affectation->confirme}}
         <img src="images/icons/tick.png" title="Sortie confirmée par le praticien" />
       {{/if}}
         
     </td>
-    <td class="text" style="{{if !$curr_sortie->facturable}}background-image:url(images/icons/ray_vertical.gif); background-repeat:repeat;{{/if}}">
-      {{mb_include module=mediusers template=inc_vw_mediuser mediuser=$curr_sortie->_ref_praticien}}
-    </td>
-    <td class="text" style="{{if !$curr_sortie->facturable}}background-image:url(images/icons/ray_vertical.gif); background-repeat:repeat;{{/if}}">
-      {{if !($curr_sortie->type == 'exte') && !($curr_sortie->type == 'consult') && $curr_sortie->annule != 1}}
-        {{foreach from=$curr_sortie->_ref_affectations item="affectation"}}
-          {{if $affectation->effectue}}
-            <div style="display: inline;" class="effectue">{{$affectation->_ref_lit->_view}}</div>
+    <td class="text" style="background: {{$background}}; {{if !$_sejour->facturable}}background-image:url(images/icons/ray_vertical.gif); background-repeat:repeat;{{/if}}">
+      {{if !($_sejour->type == 'exte') && !($_sejour->type == 'consult') && $_sejour->annule != 1}}
+        {{foreach from=$_sejour->_ref_affectations item=_aff}}
+          {{if $_aff->effectue}}
+            <div style="display: inline;" class="effectue">{{$_aff->_ref_lit->_view}}</div>
           {{else}}
-            {{$affectation->_ref_lit->_view}}
+            {{$_aff->_ref_lit->_view}}
           {{/if}}
           <br />
         {{/foreach}}
         
-        {{if !$curr_sortie->_ref_affectations|@count}}
+        {{if !$_sejour->_ref_affectations|@count}}
           Non placé
         {{/if}}
        {{/if}}  

@@ -13,58 +13,90 @@ CCanDo::checkRead();
 $ds = CSQLDataSource::get("std");
 
 // Initialisation de variables
-$date         = CValue::getOrSession("date", mbDate());
-$month_min    = mbTransformTime("+ 0 month", $date, "%Y-%m-01");
-$month_max    = mbTransformTime("+ 1 month", $month_min, "%Y-%m-01");
-$lastmonth    = mbDate("-1 month", $date);
-$nextmonth    = mbDate("+1 month", $date);
-$type_sejour  = CValue::getOrSession("type_sejour", "ambu");
+$date          = CValue::getOrSession("date", mbDate());
+$month_min     = mbTransformTime("+ 0 month", $date, "%Y-%m-01");
+$month_max     = mbTransformTime("+ 1 month", $month_min, "%Y-%m-01");
+$lastmonth     = mbDate("-1 month", $date);
+$nextmonth     = mbDate("+1 month", $date);
+$selSortis     = CValue::getOrSession("selSortis", "0");
+$type          = CValue::getOrSession("type");
+$service_id    = CValue::getOrSession("service_id");
 $bank_holidays = mbBankHolidays($date);
 
-$hier = mbDate("- 1 day", $date);
+$hier   = mbDate("- 1 day", $date);
 $demain = mbDate("+ 1 day", $date);
-
-// Initialisation du tableau de jours
-$types = array(
-  "ambu",
-	"comp",
-	"exte",
-	"consult"
-);
 
 // Initialisation des totaux
 $days = array();
 for ($day = $month_min; $day < $month_max; $day = mbDate("+1 DAY", $day)) {
-	foreach($types as $_type) {
-    $days[$day][$_type] = 0;		
-	}
+  $days[$day]["num1"] = 0;
+  $days[$day]["num2"] = 0;
 }
 
-// Comptage des totaux
+// filtre sur les types de sortie
+if($type == "ambucomp") {
+  $filterType = "AND (`sejour`.`type` = 'ambu' OR `sejour`.`type` = 'comp')";
+} elseif($type) {
+  $filterType = "AND `sejour`.`type` = '$type'";
+} else {
+  $filterType = "AND `sejour`.`type` != 'urg' AND `sejour`.`type` != 'seances'";
+}
+
+// filtre sur les services
+if($service_id) {
+  $leftjoinService = "LEFT JOIN affectation
+                        ON affectation.sejour_id = sejour.sejour_id AND affectation.sortie = sejour.sortie_prevue
+                      LEFT JOIN lit
+                        ON affectation.lit_id = lit.lit_id
+                      LEFT JOIN chambre
+                        ON lit.chambre_id = chambre.chambre_id
+                      LEFT JOIN service
+                        ON chambre.service_id = service.service_id";
+  $filterService = "AND service.service_id = '$service_id'";
+} else {
+  $leftjoinService = $filterService = "";
+}
+
 $group = CGroups::loadCurrent();
-foreach ($types as $_type) {
-	$query = "SELECT DATE_FORMAT(`sejour`.`sortie`, '%Y-%m-%d') AS `date`, COUNT(`sejour`.`sejour_id`) AS `num`
-		FROM `sejour`
-		WHERE `sejour`.`sortie` BETWEEN '$month_min' AND '$month_max'
-		  AND `sejour`.`group_id` = '$group->_id'
-		  AND `sejour`.`type` = '$_type'
-		  AND `sejour`.`annule` = '0'
-		GROUP BY `sejour`.`type`, `date`
-		ORDER BY `date`";
-			
-	foreach ($ds->loadHashList($query) as $day => $count) {
-	  $days[$day][$_type] = $count;
-	}
+
+// Listes des sorties par jour
+$query = "SELECT DATE_FORMAT(`sejour`.`sortie`, '%Y-%m-%d') AS `date`, COUNT(`sejour`.`sejour_id`) AS `num`
+	FROM `sejour`
+	$leftjoinService
+	WHERE `sejour`.`sortie` BETWEEN '$month_min' AND '$month_max'
+	  AND `sejour`.`group_id` = '$group->_id'
+	  AND `sejour`.`annule` = '0'
+    $filterType
+    $filterService
+	GROUP BY `date`
+	ORDER BY `date`";
+foreach ($ds->loadHashList($query) as $day => $num1) {
+  $days[$day]["num1"] = $num1;
+}
+
+// Liste des sorties non effectuées par jour
+$query = "SELECT DATE_FORMAT(`sejour`.`sortie`, '%Y-%m-%d') AS `date`, COUNT(`sejour`.`sejour_id`) AS `num`
+  FROM `sejour`
+  $leftjoinService
+  WHERE `sejour`.`sortie` BETWEEN '$month_min' AND '$month_max'
+    AND `sejour`.`group_id` = '$group->_id'
+    AND `sejour`.`sortie_reelle` IS NULL
+    AND `sejour`.`annule` = '0'
+    $filterType
+    $filterService
+  GROUP BY `date`
+  ORDER BY `date`";
+foreach ($ds->loadHashList($query) as $day => $num2) {
+  $days[$day]["num2"] = $num2;
 }
 
 // Création du template
 $smarty = new CSmartyDP();
 
-$smarty->assign("types"        , $types);
 $smarty->assign("hier"         , $hier);
 $smarty->assign("demain"       , $demain);
 
-$smarty->assign("type_sejour"  , $type_sejour);
+$smarty->assign("selSortis"    , $selSortis);
 
 $smarty->assign("bank_holidays", $bank_holidays);
 $smarty->assign('date'         , $date);

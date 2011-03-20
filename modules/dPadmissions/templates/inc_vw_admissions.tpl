@@ -26,7 +26,7 @@ Calendar.regField(getForm("changeDateAdmissions").date, null, {noView: true});
 			<br />
 			
       <em style="float: left; font-weight: normal;">
-			{{$today|@count}}
+			{{$sejours|@count}}
       {{if $selAdmis == "n"}}admissions non effectuées
       {{elseif $selSaisis == "n"}}dossiers non préparés
       {{else}}admissions ce jour
@@ -44,6 +44,7 @@ Calendar.regField(getForm("changeDateAdmissions").date, null, {noView: true});
 	
 	{{assign var=url value="?m=$m&tab=vw_idx_admission&selAdmis=$selAdmis&selSaisis=$selSaisis"}}
   <tr>
+    <th class="narrow">Admettre</th>
     <th>
       {{mb_colonne class="CSejour" field="patient_id" order_col=$order_col order_way=$order_way url=$url}}
     </th>
@@ -60,7 +61,6 @@ Calendar.regField(getForm("changeDateAdmissions").date, null, {noView: true});
     </th>
     
     <th class="narrow">Chambre</th>
-    <th class="narrow">Admis</th>
     <th class="narrow">
       {{if $canAdmissions->edit}}
       <form name="editAllAdmFrm" action="?" method="post">
@@ -85,8 +85,8 @@ Calendar.regField(getForm("changeDateAdmissions").date, null, {noView: true});
     {{/if}}
   </tr>
 
-  {{foreach from=$today item=curr_adm}}
-  <tr id="admission{{$curr_adm->sejour_id}}">
+  {{foreach from=$sejours item=_sejour}}
+  <tr id="admission{{$_sejour->sejour_id}}">
     {{mb_include module=dPadmissions template="inc_vw_admission_line" nodebug=true}}
   </tr>
   {{foreachelse}}
