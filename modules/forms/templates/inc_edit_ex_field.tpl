@@ -67,7 +67,7 @@ updateInternalName = function(e){
     {{assign var=object value=$ex_field}}
 		<tr>
 		  {{if $object->_id}}
-		  <th class="title modify" colspan="4">
+		  <th class="title modify text" colspan="4">
 		    {{mb_include module=system template=inc_object_notes}}
 		    {{mb_include module=system template=inc_object_idsante400}}
 		    {{mb_include module=system template=inc_object_history}}
@@ -75,7 +75,7 @@ updateInternalName = function(e){
 		    '{{$object}}'
 		  </th>
 		  {{else}}
-		  <th class="title" colspan="4">
+		  <th class="title text" colspan="4">
 		    {{tr}}{{$object->_class_name}}-title-create{{/tr}} 
 		  </th>
 		  {{/if}}

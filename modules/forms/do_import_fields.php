@@ -90,7 +90,7 @@ else {
 			
 	    $ds = $current_class->_spec->ds;
 	    $where = array(
-	      "name" => $ds->prepareLike($class_name, true),
+	      "name" => $ds->prepare("=%", $class_name),
 	    );
 	    $current_class->loadObject($where);
 	    
@@ -123,7 +123,7 @@ else {
 	  $concept = new CExConcept;
 	  $ds = $concept->_spec->ds;
 	  $where = array(
-	    "name" => $ds->prepareLike($line["concept_name"], true),
+	    "name" => $ds->prepare("=%", $line["concept_name"]),
 	  );
 	  
 	  $concept->loadObject($where);
@@ -139,7 +139,7 @@ else {
 		
 	  $ds = $field->_spec->ds;
 	  $where = array(
-	    "ex_class_field_translation.std" => $ds->prepareLike($line["field_name"], true),
+	    "ex_class_field_translation.std" => $ds->prepare("=%", $line["field_name"]),
 	    "ex_class_field.ex_group_id" => $ds->prepare("=%", $current_group->_id),
 	  );
 		

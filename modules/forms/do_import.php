@@ -81,7 +81,7 @@ else {
           $list = new CExList;
           $ds = $list->_spec->ds;
           $where = array(
-            "name" => $ds->prepareLike($line["list_name"], true),
+            "name" => $ds->prepare("=%", $line["list_name"]),
           );
           
 					$list->loadObject($where);
@@ -104,7 +104,7 @@ else {
           $ds = $list_item->_spec->ds;
           $where = array(
             "list_id" => $ds->prepare("=%", $list->_id),
-            "name"    => $ds->prepareLike($line["item_name"], true),
+            "name"    => $ds->prepare("=%", $line["item_name"]),
           );
           
 					$list_item->loadObject($where);
@@ -150,7 +150,7 @@ else {
           $tag1 = new CTag;
           $ds = $tag1->_spec->ds;
           $where = array(
-            "name"         => $ds->prepareLike($line["tag_name_1"], true),
+            "name"         => $ds->prepare("=%", $line["tag_name_1"]),
             "object_class" => $ds->prepare("=%", $object_class),
           );
           
@@ -173,7 +173,7 @@ else {
           $tag2 = new CTag;
           $ds = $tag2->_spec->ds;
           $where = array(
-            "name"         => $ds->prepareLike($line["tag_name_2"], true),
+            "name"         => $ds->prepare("=%", $line["tag_name_2"]),
             "object_class" => $ds->prepare("=%", $object_class),
           );
           
@@ -213,7 +213,7 @@ else {
           $concept = new CExConcept;
           $ds = $concept->_spec->ds;
           $where = array(
-            "name"         => $ds->prepareLike($line["concept_name"], true),
+            "name"         => $ds->prepare("=%", $line["concept_name"]),
           );
           
           $concept->loadObject($where);
