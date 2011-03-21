@@ -111,6 +111,104 @@ class CAdministration extends CMbMetaObject {
     $this->_ref_log->loadMatchingObject();
     $this->_ref_log->loadRefsFwd();
   }
+	
+	static function getTimingPlanSoins($date){
+		// Recuperation de l'heure courante
+		$time = mbTransformTime(null,null,"%H");
+		
+		// Postes pour affichage du plan de soins (stocké en config)
+		$periods = array("07", "15", "20");
+		$nb_before = 3;
+    $nb_after = 3;
+		
+		$key_periods = array();
+		foreach($periods as $key => $_period){
+		  $key_periods[$_period] = $key; 
+		}
+		
+		$original_periods = $periods;
+		$original_date = $date;
+		// Calcul de la cle de la periode courante
+		$current_period = $periods[0];
+		$current_period_key = null;
+		
+		foreach($periods as $_k => $_period){
+		  if($time >= $_period){
+		    $current_period = $_period;
+		    $current_period_key = $_k;
+		  }
+		}
+		
+		$current_period_key_before = count($periods) - ($current_period_key + 1);
+		
+		// Calcul des periodes precedentes
+		if($nb_before){
+		  $before_periods = $original_periods;
+		  rsort($before_periods);
+		  rsort($periods);
+		
+		  for($i=$current_period_key_before+1; $i < ($nb_before+$current_period_key_before+1); $i++){
+		    if(!isset($periods[$i])){
+		      $date = mbDate("- 1 DAY", $date);
+		      $periods = array_merge($periods, $before_periods);
+		    }
+		    $_periods[$date][] = $periods[$i];
+		  }
+		}
+		
+		// Ajout du period courant
+		$date = $original_date;
+		$_periods[$date][] = $current_period;
+		
+		if($nb_after){
+		  $periods = $original_periods;
+		  for($i=$current_period_key+1; $i < ($nb_after+$current_period_key+1); $i++){
+		    if(!isset($periods[$i])){
+		      $date = mbDate("+ 1 DAY", $date);
+		      $periods = array_merge($periods, $original_periods);
+		    }
+		    $_periods[$date][] = $periods[$i];
+		  }
+		}
+		
+		ksort($_periods);
+		
+		$_p = array();
+		foreach($_periods as $_date => $_periods_b_postesdate){
+		  foreach($_periods_by_date as $_period){
+		    $_postes[$_date][$key_periods[$_period]] = $_period;
+		  }
+		  ksort($_postes[$_date]);
+		}
+		
+		$postes = array();
+		foreach($_postes as $_date => $_poste_by_date){
+		  foreach($_poste_by_date as $_key_period => $_poste){
+		    $real_date = $_date;
+		    if(isset($original_periods[$_key_period+1])){
+		      $next_period = $original_periods[$_key_period+1];
+		
+		      for($i = $_poste; $i < $next_period; $i++){
+		        $i = str_pad($i, 2, '0', STR_PAD_LEFT);
+		        $postes[$_date]["poste-".$_key_period][$real_date]["$i:00:00"] = $i;
+		      }
+		    } 
+		    else {
+		      for($i = $_poste; $i < 24; $i++){
+		        $i = str_pad($i, 2, '0', STR_PAD_LEFT);
+		        $postes[$_date]["poste-".$_key_period][$real_date]["$i:00:00"] = $i;
+		      }
+		      $real_date = mbDate("+ 1 DAY", $_date);
+		      for($i = 0; $i < $original_periods[0]; $i++){
+		        $i = str_pad($i, 2, '0', STR_PAD_LEFT);
+		        $postes[$_date]["poste-".$_key_period][$real_date]["$i:00:00"] = $i;
+		      }
+		    }
+		  }
+		}
+		
+		return $postes;
+	}
 }
 
 ?>

@@ -10,7 +10,7 @@
 
 $service_id = CValue::getOrSession("service_id");
 $date       = mbDate();
-//$date = "2011-02-09";
+//$date = "2011-01-09";
 
 $date_max   = mbDate("+ 1 DAY", $date);
 
@@ -77,16 +77,7 @@ foreach($elements as $_element){
 	$_category = $_element->_ref_category_prescription;
 	$categories[$_category->chapitre][$_category->_id][$_element->_id] = $_element;
 }
-
-
-// Lignes de medicament
-
-// Ligne mix
  
- 
-
-
-
 // Création du template
 $smarty = new CSmartyDP();
 $smarty->assign("service", $service);

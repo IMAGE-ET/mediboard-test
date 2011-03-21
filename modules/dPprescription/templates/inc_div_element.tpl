@@ -195,7 +195,13 @@ Main.add( function(){
 {{if is_array($prescription->_ref_lines_elements_comments) && array_key_exists($element, $prescription->_ref_lines_elements_comments)}}
  <table class="tbl">
    <th style="width:25%;">Libellé</th>
-   <th style="width:35%;">Prises</th>
+   <th style="width:35%;">
+	   {{if $conf.dPprescription.CCategoryPrescription.$element.unite_prise}}
+		   {{$conf.dPprescription.CCategoryPrescription.$element.unite_prise}}
+		 {{else}}
+		  Prises
+		 {{/if}}
+	</th>
    
 	 {{if $prescription->object_id}}
 	   <th style="width:10%;">Début</th>

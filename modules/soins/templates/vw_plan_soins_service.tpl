@@ -13,6 +13,7 @@
 // Refresh du plan de soin
 updatePlanSoinsPatients = function(){
   var url = new Url("soins", "ajax_vw_content_plan_soins_service");
+	// Serialiser => join(-)
 	url.addParam("categories_id[]", $V(getForm("selectElts").elts), true);
 	url.addParam("date", "{{$date}}");
 	url.requestUpdate("content_plan_soins_service");
