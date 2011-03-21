@@ -187,7 +187,7 @@ class CSetupdPsalleOp extends CSetup {
     
     $this->makerevision("0.30");
     $query = "ALTER TABLE `acte_ccam`
-            ADD `regle_dh` ENUM('0','1') DEFAULT 0 AFTER `regle`;";
+            ADD `regle_dh` ENUM('0','1') DEFAULT '0' AFTER `regle`;";
     $this->addQuery($query);
     
     $this->makeRevision("0.31");

@@ -24,7 +24,7 @@ class CSetuphprimxml extends CSetup {
               `url` TEXT NOT NULL,
               `username` VARCHAR (255) NOT NULL,
               `password` VARCHAR (50) NOT NULL,
-              `actif` ENUM ('0','1') NOT NULL DEFAULT 0,
+              `actif` ENUM ('0','1') NOT NULL DEFAULT '0',
     					`group_id` INT (11) UNSIGNED NOT NULL
             ) /*! ENGINE=MyISAM */;";
     $this->addQuery($sql);
@@ -52,7 +52,7 @@ class CSetuphprimxml extends CSetup {
     					`id_permanent` VARCHAR (25),
     					`object_id` INT (11) UNSIGNED DEFAULT NULL,
               `object_class` VARCHAR (255) DEFAULT NULL,
-              `compressed` ENUM ('0','1') DEFAULT 0
+              `compressed` ENUM ('0','1') DEFAULT '0'
             ) /*! ENGINE=MyISAM */;";
     $this->addQuery($sql);
     
@@ -99,7 +99,7 @@ class CSetuphprimxml extends CSetup {
     $this->addQuery($sql); 
     
     $sql = "ALTER TABLE `echange_hprim` 
-              CHANGE `compressed` `purge` ENUM ('0','1') DEFAULT 0,
+              CHANGE `compressed` `purge` ENUM ('0','1') DEFAULT '0',
     					CHANGE `message` `message` MEDIUMTEXT;";
     $this->addQuery($sql);
     
@@ -290,12 +290,12 @@ class CSetuphprimxml extends CSetup {
     $sql = "UPDATE `echange_soap` 
               SET `type` = 'CDestinataireHprim' 
               WHERE `type` = 'hprimxml';"; 
-    $this->addQuery($sql);
+    $this->addQuery($sql, true);
     
     $sql = "UPDATE `source_soap` 
               SET `type_echange` = 'CDestinataireHprim' 
               WHERE `type_echange` = 'hprimxml';"; 
-    $this->addQuery($sql);
+    $this->addQuery($sql, true);
     
     $this->makeRevision("0.30");
     

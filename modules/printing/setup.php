@@ -19,39 +19,39 @@ class CSetupprinting extends CSetup {
     $this->makeRevision("all");
       
     $query = "CREATE TABLE `source_lpr` (
-                `source_lpr_id` INT (11) UNSIGNED NOT NULL auto_increment PRIMARY KEY,
-                `name` VARCHAR (255) NOT NULL,
-                `object_id` BIGINT DEFAULT NULL,
-                `object_class` VARCHAR(30) DEFAULT NULL,
-                `host` TEXT NOT NULL,
-                `port` INT (11) DEFAULT NULL,
-                `user` VARCHAR (255),
-                `printer_name` VARCHAR (50)
-              ) TYPE=MYISAM;";
+      `source_lpr_id` INT (11) UNSIGNED NOT NULL auto_increment PRIMARY KEY,
+      `name` VARCHAR (255) NOT NULL,
+      `object_id` BIGINT DEFAULT NULL,
+      `object_class` VARCHAR(30) DEFAULT NULL,
+      `host` TEXT NOT NULL,
+      `port` INT (11) DEFAULT NULL,
+      `user` VARCHAR (255),
+      `printer_name` VARCHAR (50)
+    ) /*! ENGINE=MyISAM */;";
     $this->addQuery($query);
     
     $this->makeRevision("0.01");
     $query = "CREATE TABLE `source_smb` (
-                `source_smb_id` INT (11) UNSIGNED NOT NULL auto_increment PRIMARY KEY,
-                `name` VARCHAR (255) NOT NULL,
-                `object_id` BIGINT DEFAULT NULL,
-                `object_class` VARCHAR(30) DEFAULT NULL,
-                `host` TEXT NOT NULL,
-                `port` INT (11) DEFAULT NULL,
-                `user` VARCHAR (255),
-                `password` VARCHAR (50),
-                `workgroup` VARCHAR (50), 
-                `printer_name` VARCHAR (50)
-              ) TYPE=MYISAM;";
+      `source_smb_id` INT (11) UNSIGNED NOT NULL auto_increment PRIMARY KEY,
+      `name` VARCHAR (255) NOT NULL,
+      `object_id` BIGINT DEFAULT NULL,
+      `object_class` VARCHAR(30) DEFAULT NULL,
+      `host` TEXT NOT NULL,
+      `port` INT (11) DEFAULT NULL,
+      `user` VARCHAR (255),
+      `password` VARCHAR (50),
+      `workgroup` VARCHAR (50), 
+      `printer_name` VARCHAR (50)
+    ) /*! ENGINE=MyISAM */;";
     $this->addQuery($query);
     
     $this->makeRevision("0.02");
     $query = "CREATE TABLE IF NOT EXISTS `printer` (
-              `printer_id` INT (11) UNSIGNED NOT NULL auto_increment PRIMARY KEY,
-              `function_id` INT (11) DEFAULT NULL,
-              `object_id` INT (11) DEFAULT NULL,
-              `object_class` VARCHAR (255) DEFAULT NULL
-              ) TYPE=MYISAM";
+      `printer_id` INT (11) UNSIGNED NOT NULL auto_increment PRIMARY KEY,
+      `function_id` INT (11) DEFAULT NULL,
+      `object_id` INT (11) DEFAULT NULL,
+      `object_class` VARCHAR (255) DEFAULT NULL
+    ) /*! ENGINE=MyISAM */;";
     $this->addQuery($query);
     
     $this->mod_version = "0.03";

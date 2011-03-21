@@ -103,7 +103,9 @@ class CSetup {
   
   /**
    * Associates an SQL query to a module revision
-   * @param string $query SQL query
+   * 
+   * @param string $query  SQL query
+   * @param bool   $ignore Ignore errors if true
    */
   function addQuery($query, $ignore_errors = false) {
     // Table creation ?

@@ -763,6 +763,7 @@ class CSetupdPstock extends CSetup {
     $this->addQuery($query);
 		
 		// Emplacements de CService
+		$this->addDependency("dPhospi", "0.16");
     $query = "INSERT INTO product_stock_location (
        name, position, group_id, object_class, object_id
     ) SELECT 'Lieu par défaut', 0, service.group_id, 'CService', service.service_id 

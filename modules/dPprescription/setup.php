@@ -1278,6 +1278,7 @@ class CSetupdPprescription extends CSetup {
 							  GROUP BY code_cip, unite_prise";
 			$lines_by_type["perf"] = $ds_std->loadList($query);
 			
+			$prises = array();
 			foreach($lines_by_type as $lines){
 				foreach($lines as $_line){
 				  $code_cip = $_line["code_cip"];
