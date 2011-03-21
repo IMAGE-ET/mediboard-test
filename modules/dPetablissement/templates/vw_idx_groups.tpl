@@ -21,24 +21,24 @@
           <th>Liste des établissements</th>
           <th>Fonctions associées</th>
         </tr>
-        {{foreach from=$listGroups item=curr_group}}
-        <tr {{if $curr_group->_id == $usergroup->_id}}class="selected"{{/if}}>
+        {{foreach from=$groups item=_group}}
+        <tr {{if $_group->_id == $group->_id}} class="selected" {{/if}}>
           <td>
             {{if $can->edit}}
-            <a href="?m={{$m}}&amp;tab={{$tab}}&amp;group_id={{$curr_group->group_id}}">
-              {{$curr_group->text}}
+            <a href="?m={{$m}}&amp;tab={{$tab}}&amp;group_id={{$_group->_id}}">
+              {{$_group->text}}
             </a>
             {{else}}
-            {{$curr_group->text}}
+            {{$_group->text}}
             {{/if}}
           </td>
           <td>
             {{if $can->edit}}
-            <a href="?m={{$m}}&amp;tab={{$tab}}&amp;group_id={{$curr_group->group_id}}">
-              {{$curr_group->_ref_functions|@count}}
+            <a href="?m={{$m}}&amp;tab={{$tab}}&amp;group_id={{$_group->_id}}">
+              {{$_group->_ref_functions|@count}}
             </a>
             {{else}}
-              {{$curr_group->_ref_functions|@count}}
+              {{$_group->_ref_functions|@count}}
             </a>
             {{/if}}
           </td>
@@ -58,15 +58,17 @@
     	
       <form name="group" action="?m={{$m}}" method="post" onsubmit="return checkForm(this)">
       <input type="hidden" name="dosql" value="do_groups_aed" />
-   	  <input type="hidden" name="group_id" value="{{$usergroup->group_id}}" />
+   	  <input type="hidden" name="group_id" value="{{$group->group_id}}" />
       <input type="hidden" name="del" value="0" />
       <table class="form">
         <tr>
-          {{if $usergroup->group_id}}
+          {{if $group->group_id}}
           <th class="title text modify" colspan="2">
-		      {{mb_include module=system template=inc_object_idsante400 object=$usergroup}}
-		      {{mb_include module=system template=inc_object_history object=$usergroup}}
-            Modification de l'établissement &lsquo;{{$usergroup->text}}&rsquo;
+          {{assign var=object value=$group}}
+          {{mb_include module=system template=inc_object_notes     }}
+		      {{mb_include module=system template=inc_object_idsante400}}
+		      {{mb_include module=system template=inc_object_history   }}
+            Modification de l'établissement &lsquo;{{$group->text}}&rsquo;
           {{else}}
           <th class="title text" colspan="2">
             Création d'un établissement
@@ -74,74 +76,74 @@
           </th>
         </tr>
         <tr>
-          <th>{{mb_label object=$usergroup field="text"}}</th>
-          <td>{{mb_field object=$usergroup field="text"}}</td>
+          <th>{{mb_label object=$group field="text"}}</th>
+          <td>{{mb_field object=$group field="text"}}</td>
         </tr>
         <tr>
-          <th>{{mb_label object=$usergroup field="raison_sociale"}}</th>
-          <td>{{mb_field object=$usergroup field="raison_sociale"}}</td>
+          <th>{{mb_label object=$group field="raison_sociale"}}</th>
+          <td>{{mb_field object=$group field="raison_sociale"}}</td>
         </tr>
         <tr>
-          <th>{{mb_label object=$usergroup field="adresse"}}</th>
-          <td>{{mb_field object=$usergroup field="adresse"}}</td>
+          <th>{{mb_label object=$group field="adresse"}}</th>
+          <td>{{mb_field object=$group field="adresse"}}</td>
         </tr>
         <tr>
-          <th>{{mb_label object=$usergroup field="cp"}}</th>
-          <td>{{mb_field object=$usergroup field="cp"}}</td>
+          <th>{{mb_label object=$group field="cp"}}</th>
+          <td>{{mb_field object=$group field="cp"}}</td>
         </tr>
         <tr>
-          <th>{{mb_label object=$usergroup field="ville"}}</th>
-          <td>{{mb_field object=$usergroup field="ville"}}</td>
+          <th>{{mb_label object=$group field="ville"}}</th>
+          <td>{{mb_field object=$group field="ville"}}</td>
         </tr>
         <tr>
-          <th>{{mb_label object=$usergroup field="tel"}}</th>
-		      <td>{{mb_field object=$usergroup field="tel"}}</td>
+          <th>{{mb_label object=$group field="tel"}}</th>
+		      <td>{{mb_field object=$group field="tel"}}</td>
         </tr>
         <tr>
-          <th>{{mb_label object=$usergroup field="fax"}}</th>
-		      <td>{{mb_field object=$usergroup field="fax"}}</td>
+          <th>{{mb_label object=$group field="fax"}}</th>
+		      <td>{{mb_field object=$group field="fax"}}</td>
         </tr>
         <tr>
-          <th>{{mb_label object=$usergroup field="tel_anesth"}}</th>
-		      <td>{{mb_field object=$usergroup field="tel_anesth"}}</td>
+          <th>{{mb_label object=$group field="tel_anesth"}}</th>
+		      <td>{{mb_field object=$group field="tel_anesth"}}</td>
         </tr>
         <tr>
-          <th>{{mb_label object=$usergroup field="mail"}}</th>
-          <td>{{mb_field object=$usergroup field="mail"}}</td>
+          <th>{{mb_label object=$group field="mail"}}</th>
+          <td>{{mb_field object=$group field="mail"}}</td>
         </tr>
         <tr>
-          <th>{{mb_label object=$usergroup field="web"}}</th>
-          <td>{{mb_field object=$usergroup field="web"}}</td>
+          <th>{{mb_label object=$group field="web"}}</th>
+          <td>{{mb_field object=$group field="web"}}</td>
         </tr>
         <tr>
-          <th>{{mb_label object=$usergroup field="directeur"}}</th>
-          <td>{{mb_field object=$usergroup field="directeur"}}</td>
+          <th>{{mb_label object=$group field="directeur"}}</th>
+          <td>{{mb_field object=$group field="directeur"}}</td>
         </tr>
         <tr>
-          <th>{{mb_label object=$usergroup field="domiciliation"}}</th>
-          <td>{{mb_field object=$usergroup field="domiciliation"}}</td>
+          <th>{{mb_label object=$group field="domiciliation"}}</th>
+          <td>{{mb_field object=$group field="domiciliation"}}</td>
         </tr>
         <tr>
-          <th>{{mb_label object=$usergroup field="siret"}}</th>
-          <td>{{mb_field object=$usergroup field="siret"}}</td>
+          <th>{{mb_label object=$group field="siret"}}</th>
+          <td>{{mb_field object=$group field="siret"}}</td>
         </tr>
         <tr>
-          <th>{{mb_label object=$usergroup field="finess"}}</th>
-          <td>{{mb_field object=$usergroup field="finess"}}</td>
+          <th>{{mb_label object=$group field="finess"}}</th>
+          <td>{{mb_field object=$group field="finess"}}</td>
         </tr>
         <tr>
-          <th>{{mb_label object=$usergroup field="ape"}}</th>
-          <td>{{mb_field object=$usergroup field="ape"}}</td>
+          <th>{{mb_label object=$group field="ape"}}</th>
+          <td>{{mb_field object=$group field="ape"}}</td>
      		</tr>
 
-        {{if $usergroup->_id}}
+        {{if $group->_id}}
         <tr>
-          <th>{{mb_label object=$usergroup field="service_urgences_id"}}</th>
+          <th>{{mb_label object=$group field="service_urgences_id"}}</th>
           <td>
             <select name="service_urgences_id">
               <option value="">&mdash; Choisir le service d'urgences</option>
-              {{foreach from=$usergroup->_ref_functions item=_function}}
-              <option value="{{$_function->_id}}" class="mediuser" style="border-color: #{{$_function->color}}" {{if $_function->_id == $usergroup->service_urgences_id}}selected="selected"{{/if}}>
+              {{foreach from=$group->_ref_functions item=_function}}
+              <option value="{{$_function->_id}}" class="mediuser" style="border-color: #{{$_function->color}}" {{if $_function->_id == $group->service_urgences_id}}selected="selected"{{/if}}>
                 {{$_function}}
               </option>
               {{/foreach}}
@@ -150,12 +152,12 @@
         </tr>
         
         <tr>
-          <th>{{mb_label object=$usergroup field="pharmacie_id"}}</th>
+          <th>{{mb_label object=$group field="pharmacie_id"}}</th>
           <td>
             <select name="pharmacie_id">
               <option value="">&mdash; Choisir la pharmacie</option>
-              {{foreach from=$usergroup->_ref_functions item=_function}}
-              <option value="{{$_function->_id}}" class="mediuser" style="border-color: #{{$_function->color}}" {{if $_function->_id == $usergroup->pharmacie_id}}selected="selected"{{/if}}>
+              {{foreach from=$group->_ref_functions item=_function}}
+              <option value="{{$_function->_id}}" class="mediuser" style="border-color: #{{$_function->color}}" {{if $_function->_id == $group->pharmacie_id}}selected="selected"{{/if}}>
                 {{$_function}}
               </option>
               {{/foreach}}
@@ -165,17 +167,17 @@
         {{/if}}
         
         <tr>
-          <th>{{mb_label object=$usergroup field="chambre_particuliere"}}</th>
-          <td>{{mb_field object=$usergroup field="chambre_particuliere"}}</td>
+          <th>{{mb_label object=$group field="chambre_particuliere"}}</th>
+          <td>{{mb_field object=$group field="chambre_particuliere"}}</td>
         </tr>
 
         <tr>
           <td class="button" colspan="2">
-          {{if $usergroup->_id}}
+          {{if $group->_id}}
             <button class="modify" type="submit" name="modify">
               {{tr}}Save{{/tr}}
             </button>
-            <button class="trash" type="button" name="delete" onclick="confirmDeletion(this.form,{typeName:'l\'établissement',objName:'{{$usergroup->text|smarty:nodefaults|JSAttribute}}'})">
+            <button class="trash" type="button" name="delete" onclick="confirmDeletion(this.form,{typeName:'l\'établissement',objName:'{{$group->text|smarty:nodefaults|JSAttribute}}'})">
               {{tr}}Delete{{/tr}}
             </button>
           {{else}}

@@ -700,7 +700,7 @@ class CMediusers extends CMbObject {
     $order = "text";
     $functions = $functions->loadMatchingList($order);
 
-    if ($permType) {
+    if ($permType && $functions) {
       foreach ($functions as $_id => &$function) {
         if (!$function->getPerm($permType)) {
           unset($functions[$_id]);

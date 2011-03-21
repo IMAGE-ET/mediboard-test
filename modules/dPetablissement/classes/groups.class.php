@@ -32,6 +32,7 @@ class CGroups extends CMbObject {
   var $finess              = null;
   var $chambre_particuliere= null;
   var $_cp_court = null;
+  
   // Object References
   var $_ref_functions = null;
   var $_ref_blocs = null;
