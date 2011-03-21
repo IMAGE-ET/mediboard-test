@@ -42,19 +42,7 @@ Main.add(function(){
   <tr>
     <th colspan="10" class="title">
     	
-			{{if "forms"|module_active}}
-			<script type="text/javascript">
-			  // EXCLASS ne pas supprimer ////
-			  Main.add(function(){
-			    ExObject.register("CExObject-{{$selOp->_guid}}-checklist", {
-			      object_guid: "{{$selOp->_guid}}",
-			      event: "checklist", 
-			      title: "{{$selOp}}"
-			    });
-			  });
-			</script>
-			<div id="CExObject-{{$selOp->_guid}}-checklist" style="float: right; font-size: 0.8em;"></div>
-      {{/if}}
+      {{mb_include module=forms template=inc_widget_ex_class_register object=$selOp event=checklist cssStyle="float: right; font-size: 0.8em;"}}
 
       <button class="down" onclick="$('check-lists').toggle(); $(this).toggleClassName('down').toggleClassName('up')">
         Check list Sécurité du Patient

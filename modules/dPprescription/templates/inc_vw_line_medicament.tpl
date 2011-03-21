@@ -23,6 +23,7 @@
 <table class="tbl {{if $line->traitement_personnel}}traitement{{else}}med{{/if}}" id="full_line_medicament_{{$line->_id}}">	
   <tr>
     <th colspan="2" class="text category {{if $line->traitement_personnel}}traitement{{/if}} {{if $line->perop}}perop{{/if}}">
+      
       <div style="float:left;">
         {{if $line->_ref_parent_line->_id}}
           {{assign var=parent_line value=$line->_ref_parent_line}}
@@ -55,7 +56,7 @@
 	      {{/if}}
       </div>
       
-      <!-- AFfichage de la signature du praticien -->
+      <!-- Affichage de la signature du praticien -->
       <div class="mediuser" style="float: right; {{if !$line->_protocole}}border-color: #{{$line->_ref_praticien->_ref_function->color}};{{/if}}">
         {{if $line->_can_view_signature_praticien}}
             {{include file="../../dPprescription/templates/line/inc_vw_signature_praticien.tpl"}}
@@ -80,15 +81,18 @@
             ({{$line->_count_substitution_lines}})
           </button>
         {{/if}}
+        
         <button class="lock notext" onclick="modalPrescription.close(); 
-				{{if @$mode_substitution}}
-				 Prescription.viewSubstitutionLines('{{$line->substitute_for_id}}','{{$line->substitute_for_class}}');
-				{{else}}
-				 Prescription.reload('{{$prescription->_id}}', '', '{{$div_refresh}}', '', '{{$mode_pharma}}', null, '');
-				{{/if}}">
-				
+  				{{if @$mode_substitution}}
+  				 Prescription.viewSubstitutionLines('{{$line->substitute_for_id}}','{{$line->substitute_for_class}}');
+  				{{else}}
+  				 Prescription.reload('{{$prescription->_id}}', '', '{{$div_refresh}}', '', '{{$mode_pharma}}', null, '');
+  				{{/if}}">
 				</button>
       </div>
+      
+      {{mb_include module=forms template=inc_widget_ex_class_register object=$line event=prescription cssStyle="float: right;"}}
+      
       <a href="#produit{{$line->_id}}" onclick="Prescription.viewProduit(null,'{{$line->code_ucd}}','{{$line->code_cis}}');">
         <strong style="font-size: 1.5em;">
           {{$line->_ucd_view}}

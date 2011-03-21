@@ -16,6 +16,8 @@ $_element_id = CValue::get("_element_id");
 
 $object = CMbObject::loadFromGuid($object_guid);
 
+CExObject::$_load_lite = true;
+
 $ex_class = new CExClass;
 $ex_class->host_class = $object->_class_name;
 $ex_class->event = $event;

@@ -33,6 +33,8 @@ class CSetup {
   var $datasources  = array();
   var $config_moves = array();
   
+  static private $_old_pref_system = null;
+  
   function __construct() {
   	$this->ds = CSQLDataSource::get("std");
   }
@@ -132,11 +134,15 @@ class CSetup {
    * @param string $default Default value of the preference
    */
   function addPrefQuery($name, $default) {
+    if (self::$_old_pref_system === null) {
+      $ds = CSQLDataSource::get("std");
+      self::$_old_pref_system = $ds->loadField("user_preferences", "pref_name") != null;
+    }
+    
     // Former pure SQL system
 		// Cannot check against module version or fresh install will generate errors
 		// Very consuming though...
-    $ds = CSQLDataSource::get("std");
-    if ($ds->loadField("user_preferences", "pref_name")) {
+    if (self::$_old_pref_system) {
       $sqlTest = "SELECT * FROM `user_preferences` WHERE `pref_user` = '0' && `pref_name` = '$name'";
       $result = $this->ds->exec($sqlTest);
       if(!$this->ds->numRows($result)) {
@@ -150,9 +156,10 @@ class CSetup {
       $pref = new CPreferences;
       $pref->user_id = 0;
       $pref->key = $name;
-      if (!$pref->loadMatchingObject())
+      if (!$pref->loadMatchingObject()) {
 	      $pref->value = $default;
         $pref->store();
+      }
     }
   }
   

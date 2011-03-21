@@ -105,19 +105,7 @@ updateQuantite = function(ratio_UI, oField){
 
 </script>
 
-{{if "forms"|module_active}}
-	<script type="text/javascript">
-	  // EXCLASS ne pas supprimer ////
-	  Main.add(function(){
-	    ExObject.register("CExObject-{{$line->_guid}}-administration", {
-	      object_guid: "{{$line->_guid}}",
-	      event: "administration", 
-	      title: "{{$line}}"
-	    });
-	  });
-	</script>
-	<div id="CExObject-{{$line->_guid}}-administration" style="float: right;"></div>
-{{/if}}
+{{mb_include module=forms template=inc_widget_ex_class_register object=$line event=administration cssStyle="float: right;"}}
 
 <h2>
   Soins de {{$sejour->_ref_patient->_view}} 

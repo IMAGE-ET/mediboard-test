@@ -149,7 +149,7 @@ Main.add(function(){
     {{foreach from=$object->_back.class_fields item=_field}}
       <tr>
         <td>
-          {{mb_value object=$_field field=name}}
+          {{mb_value object=$_field field=_locale}}
         </td>
         <td>
           {{mb_value object=$_field field=prop}}

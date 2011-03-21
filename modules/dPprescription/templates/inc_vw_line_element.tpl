@@ -69,21 +69,7 @@
 	  <tr>
 	    <!-- Dates -->
 	    <td>
-	      {{* 
-				{{if "forms"|module_active}}
-				<script type="text/javascript">
-	        // EXCLASS ne pas supprimer ////
-				  Main.add(function(){
-	          ExObject.register("CExObject-{{$line->_guid}}-prescription", {
-	            object_guid: "{{$line->_guid}}",
-	            event: "prescription", 
-	            title: "{{$line}}"
-	          });
-	        });
-	      </script>
-	      <div id="CExObject-{{$line->_guid}}-prescription" style="float: right;"></div>
-				{{/if}}
-	      *}}
+				{{mb_include module=forms template=inc_widget_ex_class_register object=$line event=prescription cssStyle="float: right;"}}
 				
 				<fieldset>
 					<legend>

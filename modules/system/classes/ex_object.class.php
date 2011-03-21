@@ -15,6 +15,8 @@ class CExObject extends CMbMetaObject {
   var $_own_ex_class_id = null;
   var $_specs_already_set = false;
   
+  static $_load_lite = false;
+  
   /**
    * @var CExClass
    */
@@ -126,6 +128,10 @@ class CExObject extends CMbMetaObject {
     
     $props = parent::getProps();
     $props["_ex_class_id"] = "ref class|CExClass";
+    
+    if (self::$_load_lite) {
+      return parent::getProps();
+    }
     
     $fields = $this->_ref_ex_class->loadRefsAllFields();
     
