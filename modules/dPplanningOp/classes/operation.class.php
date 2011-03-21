@@ -708,7 +708,7 @@ class COperation extends CCodable {
     $this->loadRefPlageOp();
     $this->_coded = (CAppUI::conf("dPsalleOp COperation modif_actes") == "never") ||
                     (CAppUI::conf("dPsalleOp COperation modif_actes") == "oneday" && $this->date > mbDate()) ||
-                    (CAppUI::conf("dPsalleOp COperation modif_actes") == "button" && !$this->_ref_plageop->actes_locked) ||
+                    (CAppUI::conf("dPsalleOp COperation modif_actes") == "button" && $this->_ref_plageop->actes_locked) ||
                     (CAppUI::conf("dPsalleOp COperation modif_actes") == "facturation" && $this->facture);
     return $this->_coded;
   }
