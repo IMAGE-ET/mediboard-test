@@ -51,7 +51,7 @@ Main.add(function(){
       <th class="narrow code" {{if !$coded}}style="display: none"{{/if}}>
         {{mb_title class=CExListItem field=code}}
       </th>
-      <th>
+      <th {{if $context instanceof CExClassField}}colspan="2"{{/if}}>
         {{mb_title class=CExListItem field=name}}
       </th>
 			<th class="narrow"></th>
@@ -62,7 +62,7 @@ Main.add(function(){
         <button class="add notext" style="margin: -1px;">{{tr}}Add{{/tr}}</button>
       </td>
       <td class="code" {{if !$coded}}style="display: none"{{/if}}>{{mb_field class=CExListItem field=code size=6}}</td>
-      <td>
+      <td {{if $context instanceof CExClassField}}colspan="2"{{/if}}>
         {{mb_field class=CExListItem field=name style="width: 99%;"}}
 			</td>
 			<td>
@@ -81,6 +81,25 @@ Main.add(function(){
         </td>
         <td class="code" {{if !$coded}}style="display: none"{{/if}}>{{mb_value object=$_item field=code}}</td>
         <td>{{mb_value object=$_item field=name}}</td>
+        
+        {{if $context instanceof CExClassField}}
+          {{if $triggerables|@count}}
+            <td>
+              <select class="triggered-data-select" onchange="updateTriggerData(this)">
+                <option value=""> &mdash; </option>
+                {{foreach from=$triggerables item=_triggerable}}
+                  {{assign var=_trigger_value value="`$_triggerable->_id`-`$_item->_id`"}}
+                  <option value="{{$_trigger_value}}" {{if $context->_triggered_data == $_trigger_value}}selected="selected"{{/if}}>
+                    {{$_triggerable->name}}
+                  </option>
+                {{/foreach}}
+              </select>
+            </td>
+          {{else}}
+            <td class="empty">Aucun formulaire à déclencher</td>
+          {{/if}}
+        {{/if}}
+        
 				<td></td>
       </tr>
     {{foreachelse}}

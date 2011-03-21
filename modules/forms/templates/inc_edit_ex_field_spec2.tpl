@@ -78,6 +78,14 @@ updateInternalNameEnum = function(e) {
   $V(target, ExField.slug($V(e)));
 }
 
+updateTriggerData = function(select) {
+  var fieldForm = getForm("{{$form_name}}");
+  $V(fieldForm._triggered_data, $V(select));
+  $$("select.triggered-data-select").without(select).each(function(s){
+    s.selectedIndex = 0;
+  });
+}
+
 Main.add(function(){
   var form = getForm("editFieldSpec");
 	

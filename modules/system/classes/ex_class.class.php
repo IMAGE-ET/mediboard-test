@@ -53,6 +53,7 @@ class CExClass extends CMbObject {
     $backProps = parent::getBackProps();
     $backProps["field_groups"] = "CExClassFieldGroup ex_class_id";
     $backProps["constraints"]  = "CExClassConstraint ex_class_id";
+    $backProps["ex_triggers"]  = "CExClassFieldTrigger ex_class_triggered_id";
     return $backProps;
   }
   

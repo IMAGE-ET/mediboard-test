@@ -71,6 +71,10 @@ toggleListItem = function(button, value, active) {
     <th>
       {{mb_title class=CExListItem field=name}}
     </th>
+    
+    {{if $context instanceof CExClassField}}
+      <th>Formulaire à déclencher</th>
+    {{/if}}
   </tr>
   
   {{foreach from=$list_owner->_back.list_items item=_item}}
@@ -100,10 +104,28 @@ toggleListItem = function(button, value, active) {
 			{{/if}}
 			
       <td>{{mb_value object=$_item field=name}}</td>
+      
+      {{if $context instanceof CExClassField}}
+        {{if $triggerables|@count}}
+          <td>
+            <select class="triggered-data-select" onchange="updateTriggerData(this)">
+              <option value=""> &mdash; </option>
+              {{foreach from=$triggerables item=_triggerable}}
+                {{assign var=_trigger_value value="`$_triggerable->_id`-`$_item->_id`"}}
+                <option value="{{$_trigger_value}}" {{if $context->_triggered_data == $_trigger_value}}selected="selected"{{/if}}>
+                  {{$_triggerable->name}}
+                </option>
+              {{/foreach}}
+            </select>
+          </td>
+        {{else}}
+          <td class="empty">Aucun formulaire à déclencher</td>
+        {{/if}}
+      {{/if}}
     </tr>
   {{foreachelse}}
     <tr>
-      <td class="empty" colspan="3">{{tr}}CExListItem.none{{/tr}}</td>
+      <td class="empty" colspan="4">{{tr}}CExListItem.none{{/tr}}</td>
     </tr>
   {{/foreach}}
 </table>

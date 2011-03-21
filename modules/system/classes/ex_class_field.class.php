@@ -27,6 +27,8 @@ class CExClassField extends CExListItemsOwner {
   var $_locale_desc = null;
   var $_locale_court = null;
   
+  var $_triggered_data = null; 
+  
   var $_ref_ex_group = null;
   var $_ref_ex_class = null;
   var $_ref_translation = null;
@@ -89,6 +91,7 @@ class CExClassField extends CExListItemsOwner {
     $backProps["enum_translations"] = "CExClassFieldEnumTranslation ex_class_field_id";
     $backProps["field_translations"] = "CExClassFieldTranslation ex_class_field_id";
     $backProps["list_items"] = "CExListItem field_id";
+    $backProps["ex_triggers"] = "CExClassFieldTrigger ex_class_field_id";
     return $backProps;
   }
   
@@ -99,6 +102,15 @@ class CExClassField extends CExListItemsOwner {
     if (!self::$_load_lite) {
       $this->updateTranslation();
     }
+  }
+  
+  function loadTriggeredData(){
+    $triggers = $this->loadBackRefs("ex_triggers");
+    
+    if (!count($triggers)) return;
+     
+    $trigger = reset($triggers); // FIXME gerer plusieurs triggers
+    $this->_triggered_data = "$trigger->ex_class_triggered_id-$trigger->trigger_value";
   }
   
   function loadRefExGroup($cache = true){
@@ -241,9 +253,21 @@ class CExClassField extends CExListItemsOwner {
     $locale       = $this->_locale;
     $locale_desc  = $this->_locale_desc;
     $locale_court = $this->_locale_court;
+    $triggered_data = $this->_triggered_data;
     
     if ($msg = parent::store()) {
       return $msg;
+    }
+    
+    // form triggers
+    if ($triggered_data) {
+      list($ex_class_triggered_id, $trigger_value) = explode("-", $triggered_data);
+      $trigger = new CExClassFieldTrigger();
+      $trigger->ex_class_field_id = $this->_id;
+      $trigger->loadMatchingObject();
+      $trigger->ex_class_triggered_id = $ex_class_triggered_id;
+      $trigger->trigger_value = $trigger_value;
+      $trigger->store();
     }
     
     // self translations

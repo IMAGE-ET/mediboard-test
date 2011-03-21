@@ -22,6 +22,7 @@ if ($ex_field->load($ex_field_id)) {
   $spec_type = $ex_field->getSpecObject()->getSpecType();
   $ex_field->loadRefsNotes();
   $ex_field->updateTranslation();
+  $ex_field->loadTriggeredData();
 }
 else {
   $ex_field->ex_class_id = $ex_class_id;

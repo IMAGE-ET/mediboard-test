@@ -116,6 +116,20 @@ if ($spec instanceof CEnumSpec) {
   }
 }*/
 
+$triggerables = array();
+
+if ($context instanceof CExClassField) {
+  $context->loadTriggeredData();
+  $ex_class = $context->loadRefExClass();
+  if (!$ex_class->conditional) {
+    $triggerable = new CExClass;
+    $triggerable->conditional = 1;
+    $triggerable->host_class = $ex_class->host_class;
+    $triggerable->event = $ex_class->event;
+    $triggerables = $triggerable->loadMatchingList();
+  }
+}
+
 $classes = $spec instanceof CRefSpec ? CApp::getMbClasses() : array();
 
 $smarty = new CSmartyDP();
@@ -126,4 +140,5 @@ $smarty->assign("form_name", $form_name);
 $smarty->assign("classes", $classes);
 $smarty->assign("list_owner", $list_owner);
 $smarty->assign("context", $context);
+$smarty->assign("triggerables", $triggerables);
 $smarty->display("inc_edit_ex_field_spec2.tpl");

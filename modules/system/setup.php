@@ -590,6 +590,19 @@ class CSetupsystem extends CSetup {
               ADD `conditional` ENUM ('0','1') NOT NULL DEFAULT '0';";
     $this->addQuery($query);
     
-    $this->mod_version = "1.0.57";
+    $this->makeRevision("1.0.57");
+    $query = "CREATE TABLE `ex_class_field_trigger` (
+              `ex_class_field_trigger_id` INT (11) UNSIGNED NOT NULL auto_increment PRIMARY KEY,
+              `ex_class_field_id` INT (11) UNSIGNED NOT NULL,
+              `ex_class_triggered_id` INT (11) UNSIGNED NOT NULL,
+              `trigger_value` VARCHAR (255) NOT NULL
+              ) /*! ENGINE=MyISAM */;";
+    $this->addQuery($query);
+    $query = "ALTER TABLE `ex_class_field_trigger` 
+              ADD INDEX (`ex_class_field_id`),
+              ADD INDEX (`ex_class_triggered_id`);";
+    $this->addQuery($query);
+    
+    $this->mod_version = "1.0.58";
   }
 }
