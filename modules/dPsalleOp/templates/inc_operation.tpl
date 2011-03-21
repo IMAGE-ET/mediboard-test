@@ -142,7 +142,7 @@ function reloadPrescription(prescription_id){
   {{if $conf.dPplanningOp.COperation.verif_cote && $selOp->cote_bloc && ($selOp->cote == "droit" || $selOp->cote == "gauche")}}
   <!-- Vérification du côté -->
   <tr>
-    <td>
+    <td colspan="2">
       <strong>Côté DHE : {{mb_value object=$selOp field="cote"}}</strong> -
       <span class="{{if !$selOp->cote_admission}}warning{{elseif $selOp->cote_admission != $selOp->cote}}error{{else}}ok{{/if}}">
         Admission : {{mb_value object=$selOp field="cote_admission"}}
