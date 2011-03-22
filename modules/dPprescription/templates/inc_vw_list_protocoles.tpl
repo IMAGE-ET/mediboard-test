@@ -55,7 +55,7 @@ Main.add(function(){
   <tr {{if $protocole->_id == $protocoleSel_id}}class="selected"{{/if}}>
     <td class="text">
       <div style="float:right">
-	      <form name="delProt-{{$protocole->_id}}" action="?" method="post">
+	      <form name="delProt-{{$protocole->_id}}" action="?" method="post" class="prepared">
 	        <input type="hidden" name="dosql" value="do_prescription_aed" />
 	        <input type="hidden" name="m" value="dPprescription" />
 	        <input type="hidden" name="del" value="1" />
