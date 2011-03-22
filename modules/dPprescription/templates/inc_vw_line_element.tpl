@@ -30,6 +30,10 @@
   <tr>    
     <th colspan="8" class="{{if $line->perop}}perop{{/if}}">
       <div style="position: absolute">
+      	<a title="Historique" class="button list notext" href="#1"
+           onclick="Prescription.showLineHistory('{{$line->_guid}}')">
+        </a>
+				
         <!-- Formulaire ALD -->
         {{include file="../../dPprescription/templates/line/inc_vw_form_ald.tpl"}} 
         

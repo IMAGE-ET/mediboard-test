@@ -541,6 +541,10 @@ button.loading:before, a.button.loading:before {
   content: url(images/icons/loading.gif) !important;
 }
 
+button.list:before, a.button.list:before {
+  content: url(images/buttons/list.png);
+}
+
 button.selected {
   border: 2px solid #000;
 }

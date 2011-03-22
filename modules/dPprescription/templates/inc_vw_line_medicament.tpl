@@ -25,10 +25,13 @@
     <th colspan="2" class="text category {{if $line->traitement_personnel}}traitement{{/if}} {{if $line->perop}}perop{{/if}}">
       
       <div style="float:left;">
-        {{if $line->_ref_parent_line->_id}}
-          {{assign var=parent_line value=$line->_ref_parent_line}}
-          <img src="images/icons/history.gif" title="Ligne possédant un historique" onmouseover="ObjectTooltip.createEx(this, '{{$parent_line->_guid}}')"/>
-        {{/if}}
+        <a title="Historique" class="button list notext" href="#1"
+           onclick="Prescription.showLineHistory('{{$line->_guid}}')" 
+           {{if !$line->inscription && $line->_ref_parent_line->_id}}
+           onmouseover="ObjectTooltip.createEx(this, '{{$line->_ref_parent_line->_guid}}')"
+           {{/if}}>
+        </a>
+    
         {{if $line->_can_select_equivalent}}
           {{include file="../../dPprescription/templates/line/inc_vw_equivalents_selector.tpl"}}
         {{/if}}	       

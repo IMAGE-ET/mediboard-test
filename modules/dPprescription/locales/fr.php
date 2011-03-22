@@ -1593,6 +1593,7 @@ $locales['mod-dPprescription-tab-vw_edit_pack_protocole'] = 'Packs de protocoles
 $locales['mod-dPprescription-tab-vw_edit_prescription'] = 'Prescriptions';
 $locales['mod-dPprescription-tab-vw_edit_protocole'] = 'Protocoles';
 $locales['mod-dPprescription-tab-vw_full_alertes'] = 'Alertes';
+$locales['mod-dPprescription-tab-vw_line_history'] = 'Historique d\'une ligne';
 $locales['mod-dPprescription-tab-vw_plan_soin_pdf'] = 'Plan de soins';
 $locales['mod-dPprescription-tab-vw_signature_prescription'] = 'Signature des lignes';
 $locales['mod-dPprescription-tab-vw_stat_posologie'] = 'Statistiques';

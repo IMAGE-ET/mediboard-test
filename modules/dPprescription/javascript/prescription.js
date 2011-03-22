@@ -499,5 +499,10 @@ Prescription = {
   confirmDelLine: function(view) {
     if (confirm("Voulez-vous vraiment supprimer la ligne : " + view + " ?"))
       return true;
-  }  
+  },
+	showLineHistory: function(line_guid){
+		var url = new Url("dPprescription", "vw_line_history");
+		url.addParam("line_guid", line_guid);
+		url.popup(800, 600, "Historique de la ligne");
+	}
 };

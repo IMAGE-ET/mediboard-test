@@ -28,12 +28,13 @@
                 }} );}"></button>
         </form>
       {{/if}}
-							
-			{{if $_prescription_line_mix->_ref_parent_line->_id}}
-        {{assign var=parent_perf value=$_prescription_line_mix->_ref_parent_line}}
-        <img src="images/icons/history.gif" title="Ligne possédant un historique" 
-             onmouseover="ObjectTooltip.createEx(this, '{{$parent_perf->_guid}}')" />
-      {{/if}}
+			
+			{{if $_prescription_line_mix->_ref_parent_line->_id}}		
+				<a title="Ligne possédant un historique" class="button list notext" href="#1"
+	         onclick="Prescription.showLineHistory('{{$_prescription_line_mix->_guid}}')" 
+	         onmouseover="ObjectTooltip.createEx(this, '{{$_prescription_line_mix->_ref_parent_line->_guid}}')">
+				</a>
+		  {{/if}}
   </td>
   <td style="width: 45%" class="text">
     {{foreach from=$_prescription_line_mix->_ref_lines item=_perf_line name=lines}}

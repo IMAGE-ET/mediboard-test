@@ -49,7 +49,13 @@ Main.add( function(){
   <tr>
     <th id="th-perf-{{$line->_id}}" class="text {{if $line->perop}}perop{{/if}}">
       <div style="float: left">
-      	
+      	 <a title="Historique" class="button list notext" href="#1"
+         onclick="Prescription.showLineHistory('{{$line->_guid}}')" 
+         {{if $line->_ref_parent_line->_id}}
+         onmouseover="ObjectTooltip.createEx(this, '{{$line->_ref_parent_line->_guid}}')"  
+         {{/if}}>
+         </a>
+			 
 				{{if $line->_ref_prescription->type != "externe"}}
 				  {{if $line->_perm_edit}}
 					  <form name="editCondPerf-{{$line->_id}}" action="?" method="post">
@@ -73,12 +79,7 @@ Main.add( function(){
 				    {{if $line->conditionnel}}Oui{{else}}Non{{/if}} 
 				  {{/if}}
 				{{/if}}
-
-        {{if $line->_ref_parent_line->_id}}
-	        {{assign var=parent_perf value=$line->_ref_parent_line}}
-	        <img src="images/icons/history.gif" title="Ligne possédant un historique" 
-	             onmouseover="ObjectTooltip.createEx(this, '{{$parent_perf->_guid}}')"/>
-	      {{/if}}
+				
       </div>
       <div style="float: right">
         {{if $line->_protocole && $line->_perm_edit && !$line->substitute_for_id && !$mode_pack}}

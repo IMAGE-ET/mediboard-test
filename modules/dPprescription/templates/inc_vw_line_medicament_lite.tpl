@@ -9,6 +9,7 @@
 *}}
 
 {{assign var=line value=$curr_line}}
+
 <table class="tbl {{if $line->traitement_personnel}}traitement{{else}}med{{/if}}
                   {{if $line->_fin_reelle && $line->_fin_reelle < $now && !$line->_protocole}} line_stopped{{/if}}" id="line_medicament_{{$line->_id}}">
   <!-- Header de la ligne -->
@@ -33,10 +34,11 @@
           });
          {{/if}}
       </script>
-      {{if !$line->inscription && $line->_ref_parent_line->_id}}
-        {{assign var=parent_line value=$line->_ref_parent_line}}
-        <img style="float: right" src="images/icons/history.gif" title="Ligne possédant un historique" 
-             onmouseover="ObjectTooltip.createEx(this, '{{$parent_line->_guid}}')"/>
+      
+			{{if !$line->inscription && $line->_ref_parent_line->_id}}
+				<a title="Ligne possédant un historique" class="button list notext" href="#1"
+				   onclick="Prescription.showLineHistory('{{$line->_guid}}')" 
+					 onmouseover="ObjectTooltip.createEx(this, '{{$line->_ref_parent_line->_guid}}')"></a>
       {{/if}}
 			
        <span>
