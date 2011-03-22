@@ -8,10 +8,6 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
  */
 
-global $can;
-
-$can->needsRead();
-
 $type                 = CValue::get('type');
 $exchange_source_name = CValue::get('exchange_source_name');
 
