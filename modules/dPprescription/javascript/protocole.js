@@ -19,9 +19,11 @@ var Protocole = {
     return onSubmitFormAjax(oForm);
   },
   // Suppression de protocole
-  remove : function(oForm){
-    var oFormPrat = document.selPrat;
-    submitFormAjax(oForm, 'systemMsg', {
+  remove : function(protocole_id){
+		var oFormProt = getForm("delProt");
+		$V(oFormProt.prescription_id, protocole_id);
+		
+    return onSubmitFormAjax(oFormProt, {
       onComplete: function(){
         Protocole.refreshList();
       } 

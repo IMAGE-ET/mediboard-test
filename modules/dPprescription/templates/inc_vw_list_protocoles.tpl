@@ -39,6 +39,15 @@ Main.add(function(){
 </div>
 {{/if}}
 
+<form name="delProt" action="?" method="post" class="prepared">
+  <input type="hidden" name="dosql" value="do_prescription_aed" />
+  <input type="hidden" name="m" value="dPprescription" />
+  <input type="hidden" name="del" value="1" />
+  <input type="hidden" name="prescription_id" value="" />
+  <input type="hidden" name="callback" value="Prescription.reloadDelProt" />
+</form>
+
+
 <table class="tbl" id="all_protocoles">
   {{foreach from=$protocoles key=owner item=_protocoles_by_owner}}
 	<tbody id="list_prot_{{$owner}}" style="display: none;">
@@ -55,7 +64,14 @@ Main.add(function(){
   <tr {{if $protocole->_id == $protocoleSel_id}}class="selected"{{/if}}>
     <td class="text">
       <div style="float:right">
-	   
+	      {{if $can->admin}}
+			    <button class="tick notext" type="button" onclick="Protocole.exportProtocole('{{$protocole->_id}}')">{{tr}}CPrescription.export_protocole{{/tr}}</button>
+			  {{/if}}
+			  <button class="print notext" type="button" onclick="Prescription.printPrescription('{{$protocole->_id}}', 1)">{{tr}}Print{{/tr}}</button>
+				
+			  {{if $owner != "prat" || $app->user_id == $praticien_id || !$is_praticien}}
+			    <button class="trash notext" type="button" onclick="if (confirm('{{tr}}CProtocole-confirm-deletion{{/tr}}{{$protocole->libelle|smarty:nodefaults|JSAttribute}}?'))Protocole.remove('{{$protocole->_id}}')">Supprimer</button>
+			  {{/if}}
       </div>
       <a href="#{{$protocole->_id}}" onclick="markAsSelected(this); Protocole.edit('{{$protocole->_id}}','{{$protocole->praticien_id}}','{{$protocole->function_id}}')">
         {{$protocole->libelle}}
