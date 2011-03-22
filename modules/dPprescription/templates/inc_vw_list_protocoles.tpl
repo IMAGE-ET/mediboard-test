@@ -21,7 +21,7 @@ removeSelectedTr = function(){
 
 Main.add(function(){
   if($('list_protocoles_prescription')){
-    //Control.Tabs.create('list_protocoles_prescription', true);
+    Control.Tabs.create('list_protocoles_prescription', true);
   }
 });
 </script>
@@ -50,7 +50,7 @@ Main.add(function(){
 
 <table class="tbl" id="all_protocoles">
   {{foreach from=$protocoles key=owner item=_protocoles_by_owner}}
-	<tbody id="list_prot_{{$owner}}">
+	<tbody id="list_prot_{{$owner}}" style="display: none;">
   {{if $_protocoles_by_owner|@count}}
   {{foreach from=$_protocoles_by_owner item=_protocoles_by_type key=class_protocole}}
   <tr>
@@ -58,7 +58,7 @@ Main.add(function(){
   </tr>
   {{foreach from=$_protocoles_by_type item=_protocoles key=type_protocole}}
   <tr>
-    <th>Type: {{tr}}CPrescription.type.{{$type_protocole}}{{/tr}}</th>
+    <th>Type: {{tr}}CPrescription.type.{{$type_protocole}}{{/tr}} <small>({{$_protocoles|@count}})</small></th>
   </tr>
   {{foreach from=$_protocoles item=protocole}}
   <tr {{if $protocole->_id == $protocoleSel_id}}class="selected"{{/if}}>
