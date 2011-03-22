@@ -9,11 +9,9 @@
 *}}
 
 {{if $prescription->object_id}}
-	{{if $print}}
 	<script type="text/javascript">
 	Main.add(window.print);
 	</script> 
-	{{/if}}
 	
 	<!-- Fermeture des tableaux -->
 	    </td>
