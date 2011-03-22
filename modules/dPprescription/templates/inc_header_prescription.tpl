@@ -193,8 +193,15 @@ Main.add( function(){
 	  	<th class="title" colspan="2">
         <button style="float: left" type="button" class="hslip notext" onclick="$('list_protocoles').toggle();" title="Afficher/cacher la colonne de gauche"></button>
 			  <span style="float: right">
-		    	<button type="button" class="add" onclick="Protocole.duplicate('{{$prescription->_id}}')">Dupliquer</button> 
+		      <button type="button" class="add" onclick="Protocole.duplicate('{{$prescription->_id}}')">Dupliquer</button> 
+						{{if $can->admin}}
+	           <button class="tick notext" type="button" onclick="Protocole.exportProtocole('{{$prescription->_id}}')">{{tr}}CPrescription.export_protocole{{/tr}}</button>
+	        {{/if}}
+	        {{if $can_edit_protocole}}
+	          <button class="trash notext" type="button" onclick="if (confirm('{{tr}}CProtocole-confirm-deletion{{/tr}}{{$prescription->libelle|smarty:nodefaults|JSAttribute}}?'))Protocole.remove('{{$prescription->_id}}')">Supprimer</button>
+	        {{/if}}
 		    </span>
+
 		    Modification du protocole
 		  </th>
 	  </tr>

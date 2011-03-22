@@ -47,6 +47,7 @@ Main.add(function(){
   <input type="hidden" name="callback" value="Prescription.reloadDelProt" />
 </form>
 
+{{assign var=browser value=$smarty.session.browser}}
 
 <table class="tbl" id="all_protocoles">
   {{foreach from=$protocoles key=owner item=_protocoles_by_owner}}
@@ -64,14 +65,17 @@ Main.add(function(){
   <tr {{if $protocole->_id == $protocoleSel_id}}class="selected"{{/if}}>
     <td class="text">
       <div style="float:right">
-	      {{if $can->admin}}
-			    <button class="tick notext" type="button" onclick="Protocole.exportProtocole('{{$protocole->_id}}')">{{tr}}CPrescription.export_protocole{{/tr}}</button>
-			  {{/if}}
-			  <button class="print notext" type="button" onclick="Prescription.printPrescription('{{$protocole->_id}}', 1)">{{tr}}Print{{/tr}}</button>
-				
-			  {{if $owner != "prat" || $app->user_id == $praticien_id || !$is_praticien}}
-			    <button class="trash notext" type="button" onclick="if (confirm('{{tr}}CProtocole-confirm-deletion{{/tr}}{{$protocole->libelle|smarty:nodefaults|JSAttribute}}?'))Protocole.remove('{{$protocole->_id}}')">Supprimer</button>
-			  {{/if}}
+      	{{* On n'affiche pas les boutons sous ie, probleme de performance avec beaucoup de protocoles *}}
+      	{{if !($browser.name == "msie" && $browser.majorver <= 8)}}
+		      {{if $can->admin}}
+				    <button class="tick notext" type="button" onclick="Protocole.exportProtocole('{{$protocole->_id}}')">{{tr}}CPrescription.export_protocole{{/tr}}</button>
+				  {{/if}}
+				  <button class="print notext" type="button" onclick="Prescription.printPrescription('{{$protocole->_id}}', 1)">{{tr}}Print{{/tr}}</button>
+					
+				  {{if $owner != "prat" || $app->user_id == $praticien_id || !$is_praticien}}
+				    <button class="trash notext" type="button" onclick="if (confirm('{{tr}}CProtocole-confirm-deletion{{/tr}}{{$protocole->libelle|smarty:nodefaults|JSAttribute}}?'))Protocole.remove('{{$protocole->_id}}')">Supprimer</button>
+				  {{/if}}
+				{{/if}}
       </div>
       <a href="#{{$protocole->_id}}" onclick="markAsSelected(this); Protocole.edit('{{$protocole->_id}}','{{$protocole->praticien_id}}','{{$protocole->function_id}}')">
         {{$protocole->libelle}}
