@@ -86,8 +86,8 @@ class CProtocole extends CMbObject {
     $specs["septique"]        = "bool";
     $specs["codes_ccam"]      = "str";
     $specs["temp_operation"]  = "time";
-    $specs["protocole_prescription_chir_id"]   = "ref class|CPrescription";
-    $specs["protocole_prescription_anesth_id"] = "ref class|CPrescription";
+    $specs["protocole_prescription_chir_id"]   = "str";
+    $specs["protocole_prescription_anesth_id"] = "str";
 
     $specs["_hour_op"]        = "";
     $specs["_min_op"]         = "";
@@ -131,13 +131,15 @@ class CProtocole extends CMbObject {
   }
 
   function loadRefPrescriptionChir() {
-    $this->_ref_protocole_prescription_chir = new CPrescription;
-    $this->_ref_protocole_prescription_chir->load($this->protocole_prescription_chir_id);
+    return $this->_ref_protocole_prescription_chir = $this->protocole_prescription_chir_id ?
+      CMbObject::loadFromGuid($this->protocole_prescription_chir_id) :
+      new CPrescription();
   }
 
   function loadRefPrescriptionAnesth() {
-    $this->_ref_protocole_prescription_anesth = new CPrescription;
-    $this->_ref_protocole_prescription_anesth->load($this->protocole_prescription_anesth_id);
+    return $this->_ref_protocole_prescription_anesth = $this->protocole_prescription_anesth_id ?
+      CMbObject::loadFromGuid($this->protocole_prescription_anesth_id) :
+      new CPrescription();
   }
 
   function loadExtCodesCCAM() {

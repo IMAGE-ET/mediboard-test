@@ -597,7 +597,25 @@ class CPrescription extends CMbObject {
         foreach($pack->_ref_protocole_pack_items as $_pack_item){
           $_pack_item->loadRefPrescription();
           $_protocole =& $_pack_item->_ref_prescription;
-          $this->applyProtocole($_protocole->_id, $praticien_id, $date_sel, $operation_id);
+          // Si le pack_item a un type différent de la prescription, alors on cherche la prescription du type adéquat
+          if ($_protocole->type != $this->type) {
+            $prescription = new CPrescription();
+            $prescription->type = $_protocole->type;
+            $prescription->object_class = $this->object_class;
+            $prescription->object_id    = $this->object_id;
+            $prescription->loadMatchingObject();
+            // Si elle n'est pas trouvée, on a la crée
+            if (!$prescription->_id) {
+              if ($msg = $prescription->store()) {
+                CAppUI::setMsg($msg, UI_MSG_ERROR);
+              }
+            }
+            // Puis on applique le protocole
+            $prescription->applyProtocole($_protocole->_id, $praticien_id, $date_sel, $operation_id);
+          }
+          else {
+            $this->applyProtocole($_protocole->_id, $praticien_id, $date_sel, $operation_id);
+          }
         }
       }
       if($protocole_id){

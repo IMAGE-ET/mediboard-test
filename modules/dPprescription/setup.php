@@ -1833,7 +1833,13 @@ class CSetupdPprescription extends CSetup {
 		$query = "ALTER TABLE `category_prescription` ADD `cible_importante` ENUM ('0','1') DEFAULT '0';";
 		$this->addQuery($query);
 		
-		$this->mod_version = "1.33";
+		$this->makeRevision("1.33");
+		$query = "ALTER TABLE `prescription_protocole_pack` 
+              ADD `group_id` INT (11) UNSIGNED, 
+              ADD INDEX (`group_id`);";
+		$this->addQuery($query);
+		
+		$this->mod_version = "1.34";
   }
 }
 

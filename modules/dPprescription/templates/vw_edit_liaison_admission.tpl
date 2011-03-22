@@ -9,6 +9,20 @@
 *}}
 
 {{if $is_anesth || $is_chir || $is_admin}}
+
+<script type="text/javascript">
+updateToGuid = function(element) {
+  var split = $V(element).split("-");
+  var classe = split[0] == "prot" ? "CPrescription" : "CPrescriptionProtocolePack";
+  $V(element, classe + "-" + split[1]);
+}
+
+updateDiv = function(id, type) {
+  var oForm = getForm("selProtocole-"+type+"-"+id);
+  var isPack = $V(oForm.elements["protocole_prescription_"+type+"_id"]).match("Pack") != null;
+  $("prot_"+type+"_"+id).innerHTML = (isPack ? "Pack: " : "Protocole: ") +$V(oForm.libelle_protocole); 
+}
+</script>
 <form name="filtre-protocole" method="get" action="?">
   <input type="hidden" name="m" value="{{$m}}" />
   <input type="hidden" name="tab" value="{{$tab}}" />
@@ -71,66 +85,79 @@
     </td>
     <td>
       {{if $is_anesth || $is_admin}}
-      <form name="selProtocoleAnesth-{{$_protocole->_id}}" action="?" method="post">  
-        <input type="hidden" name="m" value="dPplanningOp" />
-        <input type="hidden" name="dosql" value="do_protocole_aed" />
-        <input type="hidden" name="del" value="0" />
-        <input type="hidden" name="protocole_id" value="{{$_protocole->_id}}" />
-        <select name="protocole_prescription_anesth_id" 
-                onchange="{{if $is_admin}} if(this.value) { $('prot_anesth_{{$_protocole->_id}}').innerHTML = this.options[this.selectedIndex].text; } else { $('prot_anesth_{{$_protocole->_id}}').innerHTML = '' } {{/if}}
-                submitFormAjax(this.form, 'systemMsg');" style="max-width: 15em;">
-          <option value="">&mdash; 
-          {{if $is_admin}}
-            Changer de protocole
-          {{else}}
-            Sélection d'un protocole
-          {{/if}}
-          </option>
-          {{foreach from=$protocoles_list.anesth key=owner item=_protocoles_by_owner}}
-            {{if $_protocoles_by_owner|@count}}
-              <optgroup label="Liste des protocoles {{tr}}CPrescription._owner.{{$owner}}{{/tr}}">
-              {{foreach from=$_protocoles_by_owner item=_protocoles_by_type}}
-              {{foreach from=$_protocoles_by_type item=protocole}}
-                <option value="{{$protocole->_id}}" {{if $_protocole->_ref_protocole_prescription_anesth->_id == $protocole->_id}}seleted="selected"{{/if}}>{{$protocole->libelle}}</option>
-              {{/foreach}}
-              {{/foreach}}
-              </optgroup>
-            {{/if}}
-          {{/foreach}}
-        </select>
-      </form>
-      {{if $is_admin}}
+        <form name="selProtocole-anesth-{{$_protocole->_id}}" action="?" method="post">  
+          <input type="hidden" name="m" value="dPplanningOp" />
+          <input type="hidden" name="dosql" value="do_protocole_aed" />
+          <input type="hidden" name="del" value="0" />
+          <input type="hidden" name="protocole_id" value="{{$_protocole->_id}}" />
+          <input type="hidden" name="protocole_prescription_anesth_id" value="{{$_protocole->protocole_prescription_anesth_id}}"/>
+          <input type="text" name="libelle_protocole" value="&mdash; Choisir un protocole" class="autocomplete"
+            style="font-weight: bold; font-size: 1.3em; width: 200px;"
+            onchange="updateToGuid(this.form.protocole_prescription_anesth_id); updateDiv('{{$_protocole->_id}}', 'anesth');
+            submitFormAjax(this.form, 'systemMsg');" style="max-width: 15em;"/>
+        </form>
+        <script type="text/javascript">
+          var oForm = getForm("selProtocole-anesth-{{$_protocole->_id}}");
+          var url_anesth_{{$_protocole->_id}} = new Url("dPprescription", "httpreq_vw_select_protocole");
+          var autocompleter_anesth_{{$_protocole->_id}} = url_anesth_{{$_protocole->_id}}.autoComplete(oForm.libelle_protocole, null, {
+            dropdown: true,
+            minChars: 1,
+            valueElement: oForm.elements.protocole_prescription_anesth_id,
+            updateElement: function(selectedElement) {
+              if (autocompleter_anesth_{{$_protocole->_id}}.options.afterUpdateElement) {
+                autocompleter_anesth_{{$_protocole->_id}}.options.afterUpdateElement(autocompleter_anesth_{{$_protocole->_id}}.element, selectedElement);
+              }
+              var node = $(selectedElement).down('.view');
+              $V(getForm("selProtocole-anesth-{{$_protocole->_id}}").libelle_protocole, (node.innerHTML).replace("&lt;", "<").replace("&gt;",">"));
+            },
+            callback: 
+              function(input, queryString){
+                return (queryString + "&praticien_id={{$anesth_id}}");  
+              }
+          } );
+        </script>
         <br />
         <div id="prot_anesth_{{$_protocole->_id}}">{{$_protocole->_ref_protocole_prescription_anesth->_view}}</div>
-      {{/if}}
       {{else}}
         {{$_protocole->_ref_protocole_prescription_anesth->_view}}
       {{/if}}
     </td>
     <td>  
       {{if $is_chir || $is_admin}}
-      <form name="selProtocoleChir-{{$_protocole->_id}}" action="?" method="post">  
-        <input type="hidden" name="m" value="dPplanningOp" />
-        <input type="hidden" name="dosql" value="do_protocole_aed" />
-        <input type="hidden" name="del" value="0" />
-        <input type="hidden" name="protocole_id" value="{{$_protocole->_id}}" />
-        <select name="protocole_prescription_chir_id" onchange="submitFormAjax(this.form, 'systemMsg')" style="max-width: 15em;">
-          <option value="">&mdash; Sélection d'un protocole</option>
-          {{foreach from=$protocoles_list.chir key=owner item=_protocoles_by_owner}}
-            {{if $_protocoles_by_owner|@count}}
-              <optgroup label="Protocoles {{tr}}CPrescription._owner.{{$owner}}{{/tr}}">
-              {{foreach from=$_protocoles_by_owner item=_protocoles_by_type}}
-              {{foreach from=$_protocoles_by_type item=protocole}}
-                <option value="{{$protocole->_id}}" {{if $_protocole->_ref_protocole_prescription_chir->_id == $protocole->_id}}selected="selected"{{/if}}>{{$protocole->libelle}}</option>
-              {{/foreach}}
-              {{/foreach}}
-              </optgroup>
-            {{/if}}
-          {{/foreach}}
-        </select>
-      </form>
+        <form name="selProtocole-chir-{{$_protocole->_id}}" action="?" method="post">
+          <input type="hidden" name="m" value="dPplanningOp" />
+          <input type="hidden" name="dosql" value="do_protocole_aed" />
+          <input type="hidden" name="del" value="0" />
+          <input type="hidden" name="protocole_id" value="{{$_protocole->_id}}" />
+          <input type="hidden" name="protocole_prescription_chir_id" value="{{$_protocole->protocole_prescription_chir_id}}"/>
+          <input type="text" name="libelle_protocole" value="&mdash; Choisir un protocole" class="autocomplete"
+            style="font-weight: bold; font-size: 1.3em; width: 200px;"
+            onchange="updateToGuid(this.form.protocole_prescription_chir_id); updateDiv('{{$_protocole->_id}}', 'chir');
+            submitFormAjax(this.form, 'systemMsg');" style="max-width: 15em;"/>
+        </form>
+        <script type="text/javascript">
+          var oForm = getForm("selProtocole-chir-{{$_protocole->_id}}");
+          var url_chir_{{$_protocole->_id}} = new Url("dPprescription", "httpreq_vw_select_protocole");
+          var autocompleter_chir_{{$_protocole->_id}} = url_chir_{{$_protocole->_id}}.autoComplete(oForm.libelle_protocole, null, {
+            dropdown: true,
+            minChars: 1,
+            valueElement: oForm.elements.protocole_prescription_chir_id,
+            updateElement: function(selectedElement) {
+              if (autocompleter_chir_{{$_protocole->_id}}.options.afterUpdateElement) {
+                autocompleter_chir_{{$_protocole->_id}}.options.afterUpdateElement(autocompleter_chir_{{$_protocole->_id}}.element, selectedElement);
+              }
+              var node = $(selectedElement).down('.view');
+              $V(getForm("selProtocole-chir-{{$_protocole->_id}}").libelle_protocole, (node.innerHTML).replace("&lt;", "<").replace("&gt;",">"));
+            },
+            callback: 
+              function(input, queryString){
+                return (queryString + "&praticien_id={{$praticien_id}}");  
+              }
+          } );
+        </script>
+        <div id="prot_chir_{{$_protocole->_id}}">{{$_protocole->_ref_protocole_prescription_chir->_view}}</div>
       {{else}}
-       {{$_protocole->_ref_protocole_prescription_chir->_view}}
+        {{$_protocole->_ref_protocole_prescription_chir->_view}}
       {{/if}}
     </td>
   </tr>

@@ -20,7 +20,7 @@
   
 	<table class="tbl">
 	  <tr>
-	    <th colspan="2" class="title">
+	    <th colspan="3" class="title">
 	      <form name="editLibellePack" action="?" method="post" onsubmit="return onSubmitFormAjax(this, { onComplete: function() { Protocole.refreshListPack('{{$pack->_id}}'); } } )">
 	        <input type="hidden" name="dosql" value="do_prescription_protocole_pack_aed" />
 	        <input type="hidden" name="m" value="dPprescription" />
@@ -31,48 +31,59 @@
 	      </form>
 	    </th>
 	  </tr>
-	  <tr>
-	    <th colspan="2">Protocoles disponibles</th>
-	  </tr>
-	  <!-- Ajout de protocoles dans le pack -->
-	  <tr>
-	    <td style="text-align: center">
-	      <select name="protocole_id" onchange="if(this.value) { Protocole.addProtocoleToPack(this.value); }">
-	        <option value="">&mdash; Choix d'un protocole</option>
-  	      {{foreach from=$protocoles key=owner item=_protocoles_by_owner}}
-  				  {{if $_protocoles_by_owner|@count}}
-  				    <optgroup label="Liste des protocoles {{tr}}CPrescription._owner.{{$owner}}{{/tr}}">
-    				  {{foreach from=$_protocoles_by_owner item=_protocoles_by_type key=type}}
-    				    <optgroup label="{{tr}}CPrescription.type.{{$type}}{{/tr}}" style="padding-left: 10px;">
-    				    {{foreach from=$_protocoles_by_type item=protocole}}
-    				      <option value="{{$protocole->_id}}">{{$protocole->libelle}}</option>
-    				    {{/foreach}}
-    				    </optgroup>
-    				  {{/foreach}}
+    <tr>
+      {{foreach from=$types key=_type item=empty}}
+        <td class="step {{if $_type == $type_prot}}selected{{/if}}">
+          <a href="#1" onclick="Protocole.viewPack('{{$pack->_id}}', '{{$_type}}')">{{tr}}CPrescription.type.{{$_type}}{{/tr}}</a>
+        </td>
+      {{/foreach}}
+      </td>
+    </tr>
+    <tr>
+      <th colspan="3">Protocoles disponibles</th>
+    </tr>
+    <!-- Ajout de protocoles dans le pack -->
+    <tr>
+      <td style="text-align: center" colspan="3">
+        <select name="protocole_id" onchange="if(this.value) { Protocole.addProtocoleToPack(this.value); }">
+          <option value="">&mdash; Choix d'un protocole</option>
+          {{foreach from=$protocoles key=owner item=_protocoles_by_owner}}
+            {{if $_protocoles_by_owner|@count}}
+              <optgroup label="Liste des protocoles {{tr}}CPrescription._owner.{{$owner}}{{/tr}}">
+              {{foreach from=$_protocoles_by_owner item=_protocoles_by_type key=type}}
+                {{foreach from=$_protocoles_by_type item=protocole}}
+                  <option value="{{$protocole->_id}}">{{$protocole->libelle}}</option>
+                {{/foreach}}
+              {{/foreach}}
               </optgroup>
-  				  {{/if}}
-  			  {{/foreach}}
-	      </select>
-	    </td>
-	  </tr>
-	  <!-- Affichage des protocoles du packs -->
-	  <tr>
-	    <th colspan="2">Protocoles utilisés dans le pack sélectionné</th>
-	  </tr>
-	  <tr>
-	    <td colspan="2">
-	      <ul>
-	    {{foreach from=$pack->_ref_protocole_pack_items item=_item_pack}}
-	      <li><button type="button" class="cancel notext" onclick="Protocole.delProtocoleToPack('{{$_item_pack->_id}}')"></button> {{$_item_pack->_view}}</li>
-	    {{/foreach}}
-	    </ul>
-	    </td>
-	  </tr>
+            {{/if}}
+          {{/foreach}}
+        </select>
+      </td>
+    </tr>
+    <!-- Affichage des protocoles du packs -->
+    <tr>
+      <th colspan="3">Protocoles utilisés dans le pack sélectionné</th>
+    </tr>
+    <tr>
+      <td colspan="3">
+        <ul>
+          {{foreach from=`$pack->_ref_protocole_pack_items_by_type.$type_prot` item=_item_pack}}
+            <li><button type="button" class="cancel notext" onclick="Protocole.delProtocoleToPack('{{$_item_pack->_id}}')"></button> {{$_item_pack->_view}}</li>
+          {{/foreach}}
+        </ul>
+      </td>
+    </tr>
+    <tr>
+      <td colspan="3">
+        <!-- Affichage du pack -->
+        {{include file="inc_vw_prescription.tpl" mode_protocole=0 mode_pharma=0 prescription=$prescription}}
+      
+    </tr>
+    </tr>
 	</table>
-	<!-- Affichage du pack -->
-  {{include file="inc_vw_prescription.tpl" mode_protocole=0 mode_pharma=0}}
 {{else}}
-  {{if $praticien_id || $function_id}}
+  {{if $praticien_id || $function_id || $group_id}}
 		<table class="form">
 		  <tr>
 		    <th class="category">Création d'un pack</th>
@@ -84,7 +95,8 @@
 		    <input type="hidden" name="dosql" value="do_prescription_protocole_pack_aed" />
 		    <input type="hidden" name="prescription_protocole_pack_id" value="" />
 		    <input type="hidden" name="praticien_id" value="" />
-		    <input type="hidden" name="function_id" value="" />	
+		    <input type="hidden" name="function_id" value="" />
+        <input type="hidden" name="group_id" value="" />
 		    <input type="hidden" name="callback" value="Protocole.reloadAfterAddPack" />
 		    
 		    <table class="form">

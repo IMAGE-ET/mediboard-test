@@ -1061,7 +1061,24 @@ class CSetupdPplanningOp extends CSetup {
       ADD commentaires_sortie TEXT;";
     $this->addQuery($query);
 
-    $this->mod_version = "1.16";
+    $this->makeRevision("1.16");
+    $query = "ALTER TABLE `protocole` 
+              CHANGE `protocole_prescription_chir_id` `protocole_prescription_chir_id` VARCHAR (255),
+              CHANGE `protocole_prescription_anesth_id` `protocole_prescription_anesth_id` VARCHAR (255);";
+    $this->addQuery($query);
+    
+    $query = "UPDATE `protocole`
+              SET protocole_prescription_chir_id = CONCAT('CPrescription-', protocole_prescription_chir_id)
+              WHERE protocole_prescription_chir_id IS NOT NULL;";
+    $this->addQuery($query);
+    
+    $query = "UPDATE `protocole`
+              SET protocole_prescription_anesth_id = CONCAT('CPrescription-', protocole_prescription_anesth_id)
+              WHERE protocole_prescription_anesth_id IS NOT NULL;";
+    $this->addQuery($query);
+    
+    $this->mod_version = "1.17";
+    
   }
 }
 ?>

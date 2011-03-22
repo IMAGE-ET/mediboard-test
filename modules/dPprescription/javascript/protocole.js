@@ -58,8 +58,9 @@ var Protocole = {
   addPack: function(){
     var oFormPrat = document.selPrat;
     var oForm = document.createPack;
-    oForm.function_id.value = oFormPrat.function_id.value;
-    oForm.praticien_id.value = oFormPrat.praticien_id.value;
+    $V(oForm.function_id, $V(oFormPrat.function_id));
+    $V(oForm.praticien_id, $V(oFormPrat.praticien_id));
+    $V(oForm.group_id, $V(oFormPrat.group_id));
     return onSubmitFormAjax(oForm);
   },
   removePack: function(oFormDel){
@@ -71,16 +72,20 @@ var Protocole = {
       } 
     } );
   },
-  viewPack: function(pack_id){
+  viewPack: function(pack_id, type_prot){
    var url = new Url("dPprescription", "httpreq_vw_pack");
    url.addParam("pack_id", pack_id);
-   url.requestUpdate("view_pack", { onComplete: function(){ Protocole.refreshListPack(pack_id); } } );
+   if (type_prot) {
+     url.addParam("type_prot", type_prot);
+   }
+   url.requestUpdate("view_pack");
   },
   refreshListPack: function(pack_id){
     var oFormPrat = document.selPrat;
     var url = new Url("dPprescription", "httpreq_vw_list_pack");
-    url.addParam("praticien_id", oFormPrat.praticien_id.value);
-    url.addParam("function_id", oFormPrat.function_id.value);
+    url.addParam("praticien_id", $V(oFormPrat.praticien_id));
+    url.addParam("function_id", $V(oFormPrat.function_id));
+    url.addParam("group_id", $V(oFormPrat.group_id));
     url.addParam("pack_id", pack_id);
     url.requestUpdate("view_list_pack");
   },

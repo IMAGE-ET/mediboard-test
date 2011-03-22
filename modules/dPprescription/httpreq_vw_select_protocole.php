@@ -78,7 +78,7 @@ $list["prot"] = $protocoles;
 // Chargement des packs
 $pack = new CPrescriptionProtocolePack();
 $where = array();
-$where[] = "praticien_id = '$praticien_id' OR function_id = '$praticien->function_id'";
+$where[] = "praticien_id = '$praticien_id' OR function_id = '$praticien->function_id' OR group_id = '".CGroups::loadCurrent()->_id."'";
 $where["object_class"] = " = '$prescription->object_class'";
 if($libelle_protocole){
   foreach($_tokens as $_token){

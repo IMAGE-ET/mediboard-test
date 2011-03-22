@@ -16,7 +16,7 @@ Main.add( function(){
 
 
 </script>
-{{if $prescription->_ref_lines_med_comments.med || $prescription->_ref_lines_med_comments.comment}}
+{{if $prescription->_ref_lines_med_comments.med || $prescription->_ref_lines_med_comments.comment || $prescription->_ref_prescription_line_mixes}}
 <table class="tbl">
   <!-- Affichage des lignes de medicaments -->
   {{foreach from=$prescription->_ref_lines_med_comments.med item=curr_line}}

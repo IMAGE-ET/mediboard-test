@@ -30,8 +30,10 @@ Main.add( function(){
 			    <form name="selPrat" action="?" method="get">
 			      <input type="hidden" name="tab" value="vw_edit_pack_protocole" />
 		        <input type="hidden" name="m" value="dPprescription" />
-		        <select name="praticien_id" onchange="this.form.function_id.value=''; Protocole.refreshListPack(); Protocole.viewPack();">
-		          <option value="">&mdash; Sélection d'un praticien</option>
+		        <select name="praticien_id"
+              onchange="this.form.function_id.value = ''; this.form.group_id.value = ''; Protocole.refreshListPack(); Protocole.viewPack();"
+              style="width: 23em">
+		          <option value="">&mdash; {{tr}}CPrescription._owner.prat{{/tr}}</option>
 			        {{foreach from=$praticiens item=praticien}}
 			        <option class="mediuser" 
 			                style="border-color: #{{$praticien->_ref_function->color}};" 
@@ -41,12 +43,23 @@ Main.add( function(){
 			        {{/foreach}}
 			      </select>
 			      <br />
-			      <select name="function_id" onchange="this.form.praticien_id.value=''; Protocole.refreshListPack(); Protocole.viewPack()">
-		          <option value="">&mdash; Choix du cabinet</option>
+			      <select name="function_id"
+              onchange="this.form.praticien_id.value = ''; this.form.group_id.value = ''; Protocole.refreshListPack(); Protocole.viewPack()"
+              style="width: 23em">
+		          <option value="">&mdash; {{tr}}CPrescription._owner.func{{/tr}}</option>
 		          {{foreach from=$functions item=_function}}
 		          <option class="mediuser" style="border-color: #{{$_function->color}}" value="{{$_function->_id}}" {{if $function_id == $_function->_id}}selected=selected{{/if}}>{{$_function->_view}}</option>
 		          {{/foreach}}
 		        </select>
+            <br/>
+            <select name="group_id"
+              onchange="this.form.praticien_id.value = ''; this.form.function_id.value = ''; Protocole.refreshListPack(); Protocole.viewPack()"
+              style="width: 23em">
+              <option value="">&mdash; {{tr}}CPrescription._owner.group{{/tr}}</option>
+              {{foreach from=$groups item=_group}}
+              <option class="mediuser" value="{{$_group->_id}}" {{if $group_id == $_group->_id}}selected=selected{{/if}}>{{$_group->_view}}</option>
+              {{/foreach}}
+            </select>
 			    </form>
 			    <br />
 			    <button type="button" class="submit" onclick="Protocole.viewPack('')">

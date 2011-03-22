@@ -10,7 +10,7 @@
 
 {{if $line->_class_name == "CPrescriptionLineComment"}}
   <tr>
-    <td colspan="8">
+    <td colspan="8" class="text">
     <div style="float: right">
       {{$line->_ref_prescription->_view}}
     </div>
@@ -27,7 +27,7 @@
     </div>
     <div style="float: right">
     {{if ($line->_class_name == "CPrescriptionLineMedicament" && !$line->substitute_for_id) || ($line->_class_name != "CPrescriptionLineMedicament")}}
-	    <form name="modifProtocole" method="get" action="?">
+	    <form name="modifProtocole{{$line->_id}}" method="get" action="?">
 	      <input type="hidden" name="m" value="dPprescription" />
 	      <input type="hidden" name="tab" value="vw_edit_protocole" />
 	      <input type="hidden" name="prescription_id" value="{{$line->_ref_prescription->_id}}" />

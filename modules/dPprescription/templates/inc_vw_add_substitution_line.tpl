@@ -151,18 +151,33 @@ modifFormDate = function(nb_prises, form_name, protocole,line_id){
     
   } else {
     oForm.duree.disabled = false;
-    oForm.jour_decalage.disabled = false;
+    if (oForm.jour_decalage) {
+      oForm.jour_decalage.disabled = false;
+    }
     oForm.decalage_line.disabled = false;
-    oForm.unite_decalage.disabled = false;
+    if (oForm.unite_decalage) {
+      oForm.unite_decalage.disabled = false;
+    }
     oForm.time_debut.disabled = false;
-    oForm.jour_decalage_fin.disabled = false;
-    oForm.decalage_line_fin.disabled = false;
-    oForm.unite_decalage_fin.disabled = false;
-    oForm.time_fin.disabled = false;
+    if (oForm.jour_decalage_fin) {
+      oForm.jour_decalage_fin.disabled = false;
+    }
+    if (oForm.decalage_line_fin) {
+      oForm.decalage_line_fin.disabled = false;
+    }
+    if (oForm.unite_decalage_fin) {
+      oForm.decalage_line_fin.disabled = false;
+    }
+    if (oForm.time_fin) {
+      oForm.time_fin.disabled = false; 
+    }
      
     // The time pickers
     $(oForm.time_debut).previous().select('img,div').invoke('show');
-    $(oForm.time_fin).previous().select('img,div').invoke('show'); 
+    var time_fin = $(oForm.time_fin);
+    if (time_fin) {
+      time_fin.previous().select('img,div').invoke('show');
+    } 
   }
 }
 </script>
