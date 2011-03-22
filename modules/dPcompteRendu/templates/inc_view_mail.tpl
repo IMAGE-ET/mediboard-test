@@ -56,13 +56,15 @@
       // Sinon on peut préparer l'envoi du mail
       destinataire = destinataire[0].up().next();
       var nom = destinataire.next().innerHTML;
-      var email = destinataire.next().innerHTML;
+      var email = '';
       
       if (destinataire.innerHTML.indexOf("Autre") != -1) {
         nom = '';
         email = destinataire.next().down().value;
       }
-      
+      else {
+        email = destinataire.next().next().innerHTML;
+      }
       // Test d'intégrité de l'adresse mail
       if (email.indexOf('@') == -1) {
         alert('L\'adresse n\'est pas valide');
@@ -80,7 +82,7 @@
   }    
 </script>
 
-<form name="formSendMail">
+<form name="formSendMail" method="get">
   <div style="height: 200px; overflow: auto;">
     <table style="width: 100%;" id="tabMail" class="tbl">
       <tr>
