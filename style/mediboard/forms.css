@@ -529,6 +529,14 @@ button.tag-warning:before, a.button.tag-warning:before {
   content: url(images/buttons/tag-warning.png);
 }
 
+button.formula:before, a.button.formula:before {
+  content: url(images/buttons/formula.png);
+}
+
+button.sum:before, a.button.sum:before {
+  content: url(images/buttons/sum.png);
+}
+
 button.loading:before, a.button.loading:before {
   content: url(images/icons/loading.gif) !important;
 }

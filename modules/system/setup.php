@@ -603,6 +603,11 @@ class CSetupsystem extends CSetup {
               ADD INDEX (`ex_class_triggered_id`);";
     $this->addQuery($query);
     
-    $this->mod_version = "1.0.58";
+    $this->makeRevision("1.0.58");
+    $query = "ALTER TABLE `ex_class_field_group` 
+              ADD `formula` TEXT;";
+    $this->addQuery($query);
+    
+    $this->mod_version = "1.0.59";
   }
 }

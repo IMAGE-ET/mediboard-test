@@ -8,6 +8,8 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
  */
 
+global $can;
+
 CAppUI::requireModuleFile("bloodSalvage", "inc_personnel");
 
 $blood_salvage_id = CValue::getOrSession("blood_salvage_id");

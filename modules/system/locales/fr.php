@@ -294,6 +294,7 @@ $locales['CExClassFieldGroup-ex_class_id'] = 'Formulaire';
 $locales['CExClassFieldGroup-ex_class_id-court'] = 'Formulaire';
 $locales['CExClassFieldGroup-ex_class_id-desc'] = 'Formulaire';
 $locales['CExClassFieldGroup-failed-name'] = 'Un groupe possède déjà ce nom';
+$locales['CExClassFieldGroup-formula'] = 'Formule';
 $locales['CExClassFieldGroup-msg-create'] = 'Groupe de champs créé';
 $locales['CExClassFieldGroup-msg-delete'] = 'Groupe de champs supprimé';
 $locales['CExClassFieldGroup-msg-modify'] = 'Groupe de champs modifié';

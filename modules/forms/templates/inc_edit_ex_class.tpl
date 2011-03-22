@@ -126,7 +126,7 @@ toggleGroupLabelEdit = function(link) {
 		            <input type="hidden" name="m" value="system" />
 		            <input type="hidden" name="@class" value="CExClassFieldGroup" />
 		            {{mb_key object=$_group}}
-		            {{mb_field object=$_group field=name size=10}}
+		            {{mb_field object=$_group field=name size=14}}
 								
                 <button onclick="Event.stop(event); this.form.onsubmit();" 
 								        class="submit notext" type="submit" style="margin: -1px;">{{tr}}Save{{/tr}}</button>
@@ -166,8 +166,11 @@ toggleGroupLabelEdit = function(link) {
 				{{foreach from=$ex_class->_ref_groups item=_group}}
 					<tbody id="group-{{$_group->_guid}}">
 						<tr>
-							<td>
-					      <button type="button" class="new" style="float: right;" onclick="ExField.create({{$ex_class->_id}}, '{{$_group->_id}}')">
+							<td style="text-align: right;">
+                <button type="button" class="formula" onclick="ExFormula.edit('{{$_group->_id}}')">
+                  {{tr}}CExClassFieldGroup-formula{{/tr}}
+                </button>
+					      <button type="button" class="new" onclick="ExField.create({{$ex_class->_id}}, '{{$_group->_id}}')">
 					        {{tr}}CExClassField-title-create{{/tr}}
 					      </button>
 							</td>
@@ -175,7 +178,12 @@ toggleGroupLabelEdit = function(link) {
 		        {{foreach from=$_group->_ref_fields item=_field}}
 		          <tr>
 		            <td class="text" style="min-width: 14em;">
-		              <a href="#1" onclick="ExField.edit({{$_field->_id}})">
+                  <button class="right notext insert-formula" style="float: right; margin: -2px; display: none;"
+                          onclick="ExFormula.insertText('[{{$_field->_locale|smarty:nodefaults|JSAttribute}}]')">
+                    Ajouter à la formule
+                  </button>
+                  
+		              <a href="#1" onclick="ExField.edit('{{$_field->_id}}', null, null, '{{$_group->_id}}')">
 		                {{if $_field->_locale}}
 		                  {{$_field->_locale}}
 		                {{else}}

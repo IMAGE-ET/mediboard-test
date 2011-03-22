@@ -179,6 +179,8 @@ ExField = {
       exClassTabs.setActiveTab("fields-specs");
     }
     
+    ExFormula.toggleInsertButtons(ex_group_id, false);
+    
     var url = new Url("forms", "ajax_edit_ex_field");
     
     url.addParam("ex_field_id", id);
@@ -252,5 +254,97 @@ ExConceptSpec = {
     url.addParam("form_name", form.getAttribute("name"));
     url.addParam("context_guid", form.get("object_guid"));
     url.requestUpdate("ExConcept-spec-editor");
+  }
+};
+
+ExFormula = {
+  form: null,
+  options: {},
+  tokens: [],
+  edit: function(ex_group_id){
+    ExFormula.toggleInsertButtons(ex_group_id, true);
+    
+    var url = new Url("forms", "ajax_edit_ex_formula");
+    url.addParam("ex_group_id", ex_group_id);
+    url.requestUpdate("exFieldEditor", {onComplete: function(){
+      ExFormula.form = getForm("editGroupFormula-"+ex_group_id);
+      ExFormula.initTextarea();
+    }});
+  },
+  toggleInsertButtons: function(ex_group_id, value){
+    $("group-CExClassFieldGroup-"+ex_group_id).select(".insert-formula").invoke("setVisible", value);
+  },
+  insertText: function(text){
+    var field = ExFormula.form.formula;
+    var c = field.caret();
+    field.caret(c.begin, c.end, text);
+  },
+  checkTokens: function() {
+    var text = $V(ExFormula.form.formula);
+    var re = /\[([^\]]+)\]/g;
+    var match, bad = [];
+    
+    while (match = re.exec(text)) {
+      if (ExFormula.tokens.indexOf(match[1].strip()) == -1) {
+        bad.push(match[1]);
+      };
+    }
+    
+    return bad;
+  },
+  sumAllFields: function(){
+    var field = ExFormula.form.formula;
+    if ($V(field) && !confirm("Voulez-vous remplacer la formule actuelle ?")) {
+      return false;
+    }
+    
+    var tokens = [];
+    ExFormula.tokens.each(function(t){
+      tokens.push('['+t+']');
+    });
+    
+    $V(field, tokens.join(' + '));
+  },
+  initTextarea: function(){
+    var field = ExFormula.form.formula;
+    
+    field.observe("keyup", function(){
+      var bad = ExFormula.checkTokens();
+      var message = $("formula-unknown-fields").hide();
+      
+      if (bad.length == 0) return;
+      
+      message.show().down("strong").update('"'+bad.join('", "')+'"');
+    });
+    
+    if (Prototype.Browser.IE) return;
+    
+    field.observe("click", function(){
+      var c = field.caret();
+      var text = $V(field).split("");
+      var newC = {begin: null, end: null};
+      
+      // find the beginning
+      for (var i = c.begin; i >= 0; i--) {
+        if (text[i] == '[') {
+          newC.begin = i;
+          break;
+        }
+        
+        if (text[i] == ']') return;
+      }
+      
+      // find the end
+      for (var i = c.begin; i < text.length; i++) {
+        if (text[i] == ']') {
+          newC.end = i+1;
+          break;
+        }
+        
+        if (text[i] == '[') return;
+      }
+      
+      field.caret(newC.begin, newC.end);
+    });
   }
 };
