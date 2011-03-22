@@ -23,7 +23,7 @@ CKEDITOR.plugins.add('mblists',{
        onClick: function(e) { CKEDITOR.dialog.getCurrent().hide(); }
      }
 	],
-    minWidth : 240,
+    minWidth : 350,
     minHeight : 210,
     contents :
     [
@@ -36,7 +36,7 @@ CKEDITOR.plugins.add('mblists',{
             {
               type : 'iframe',
               src : 'modules/dPcompteRendu/fcke_plugins/mblists/dialogs/lists.html',
-              width : 240,
+              width : 350,
               height : 210
             }
           ]
