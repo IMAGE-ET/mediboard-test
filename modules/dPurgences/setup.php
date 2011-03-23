@@ -117,7 +117,7 @@ class CSetupdPurgences extends CSetup {
     
     $this->makeRevision("0.23");
       
-    $sql = "CREATE TABLE `extract_passages` (
+    $query = "CREATE TABLE `extract_passages` (
       `extract_passages_id` INT (11) UNSIGNED NOT NULL auto_increment PRIMARY KEY,
       `date_extract` DATETIME NOT NULL,
       `debut_selection` DATETIME NOT NULL,
@@ -127,36 +127,36 @@ class CSetupdPurgences extends CSetup {
       `message_valide` ENUM ('0','1'),
       `nb_tentatives` INT (11)
     ) /*! ENGINE=MyISAM */;";
-    $this->addQuery($sql);
-    $sql = "ALTER TABLE `extract_passages` 
+    $this->addQuery($query);
+    $query = "ALTER TABLE `extract_passages` 
       ADD INDEX (`date_extract`),
       ADD INDEX (`debut_selection`),
       ADD INDEX (`fin_selection`),
       ADD INDEX (`date_echange`);";
-    $this->addQuery($sql);
+    $this->addQuery($query);
       
-    $sql = "CREATE TABLE `rpu_passage` (
+    $query = "CREATE TABLE `rpu_passage` (
       `rpu_passage_id` INT (11) UNSIGNED NOT NULL auto_increment PRIMARY KEY,
       `rpu_id` INT (11) UNSIGNED NOT NULL,
       `extract_passages_id` INT (11) UNSIGNED NOT NULL
     ) /*! ENGINE=MyISAM */;";
-    $this->addQuery($sql);
-    $sql = "ALTER TABLE `rpu_passage` 
+    $this->addQuery($query);
+    $query = "ALTER TABLE `rpu_passage` 
       ADD INDEX (`rpu_id`),
       ADD INDEX (`extract_passages_id`);";
-    $this->addQuery($sql);
+    $this->addQuery($query);
 		
 		$this->makeRevision("0.24");
       
-    $sql = "ALTER TABLE `rpu` 
+    $query = "ALTER TABLE `rpu` 
       ADD `specia_att` DATETIME,
       ADD `specia_arr` DATETIME;";
-    $this->addQuery($sql);
+    $this->addQuery($query);
 		
-		$sql = "ALTER TABLE `rpu` 
+		$query = "ALTER TABLE `rpu` 
       ADD INDEX (`specia_att`),
       ADD INDEX (`specia_arr`);";
-    $this->addQuery($sql);
+    $this->addQuery($query);
         
     $this->makeRevision("0.25");
     $this->addPrefQuery("defaultRPUSort", "ccmu");
@@ -166,19 +166,19 @@ class CSetupdPurgences extends CSetup {
     
     $this->makeRevision("0.27");
     
-    $sql = "ALTER TABLE `extract_passages` 
+    $query = "ALTER TABLE `extract_passages` 
       ADD `type` ENUM ('rpu','urg') DEFAULT 'rpu';";
-    $this->addQuery($sql);
+    $this->addQuery($query);
     
     $this->makeRevision("0.28");
-    $sql = "ALTER TABLE `rpu`
+    $query = "ALTER TABLE `rpu`
       ADD `pec_douleur` TEXT";
-    $this->addQuery($sql);
+    $this->addQuery($query);
    
     $this->makeRevision("0.29");
-    $sql = "ALTER TABLE `extract_passages` 
+    $query = "ALTER TABLE `extract_passages` 
       ADD `group_id` INT (11) UNSIGNED NOT NULL;";
-    $this->addQuery($sql);
+    $this->addQuery($query);
     
     $this->mod_version = "0.30";
   }  

@@ -15,23 +15,23 @@ class CSetupdPportail extends CSetup {
     $this->mod_name = 'dPportail';
     $this->makeRevision('all');
 
-    $sql = 'CREATE TABLE `forum_theme` (
+    $query = 'CREATE TABLE `forum_theme` (
               `forum_theme_id` INT(11) UNSIGNED NOT NULL AUTO_INCREMENT, 
               `title` TEXT NOT NULL, 
               `desc` TEXT, 
               PRIMARY KEY (`forum_theme_id`)) /*! ENGINE=MyISAM */;';
-    $this->addQuery($sql);
+    $this->addQuery($query);
     
-    $sql = 'CREATE TABLE `forum_message` (
+    $query = 'CREATE TABLE `forum_message` (
               `forum_message_id` INT(11) UNSIGNED NOT NULL AUTO_INCREMENT, 
               `forum_thread_id` INT(11) UNSIGNED NOT NULL, 
               `body` TEXT NOT NULL, 
               `date` DATETIME NOT NULL, 
               `user_id` INT(11) UNSIGNED NOT NULL,
               PRIMARY KEY (`forum_message_id`)) /*! ENGINE=MyISAM */;';
-    $this->addQuery($sql);
+    $this->addQuery($query);
     
-    $sql = 'CREATE TABLE `forum_thread` (
+    $query = 'CREATE TABLE `forum_thread` (
               `forum_thread_id` INT(11) UNSIGNED NOT NULL AUTO_INCREMENT, 
               `forum_theme_id` INT(11) UNSIGNED NOT NULL, 
               `title` TEXT NOT NULL, 
@@ -39,19 +39,19 @@ class CSetupdPportail extends CSetup {
               `date` DATETIME NOT NULL, 
               `user_id` INT(11) UNSIGNED NOT NULL,
               PRIMARY KEY (`forum_thread_id`)) /*! ENGINE=MyISAM */;';
-    $this->addQuery($sql);
+    $this->addQuery($query);
     
     $this->makeRevision("0.10");
-    $sql = "ALTER TABLE `forum_message` 
+    $query = "ALTER TABLE `forum_message` 
               ADD INDEX (`date`),
               ADD INDEX (`user_id`),
               ADD INDEX (`forum_thread_id`);";
-    $this->addQuery($sql);
-    $sql = "ALTER TABLE `forum_thread` 
+    $this->addQuery($query);
+    $query = "ALTER TABLE `forum_thread` 
               ADD INDEX (`forum_theme_id`),
               ADD INDEX (`date`),
               ADD INDEX (`user_id`);";
-    $this->addQuery($sql);
+    $this->addQuery($query);
     
     $this->mod_version = '0.11';
   }

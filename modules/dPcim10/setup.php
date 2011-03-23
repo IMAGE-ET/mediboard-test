@@ -16,24 +16,24 @@ class CSetupdPcim10 extends CSetup {
     $this->mod_name = "dPcim10";
     
     $this->makeRevision("all");
-    $sql = "CREATE TABLE `cim10favoris` (
+    $query = "CREATE TABLE `cim10favoris` (
       `favoris_id` bigint(20) NOT NULL auto_increment,
       `favoris_user` int(11) NOT NULL default '0',
       `favoris_code` varchar(16) NOT NULL default '',
       PRIMARY KEY  (`favoris_id`)
       ) /*! ENGINE=MyISAM */ COMMENT='table des favoris cim10'";
-    $this->addQuery($sql);
+    $this->addQuery($query);
     
     $this->makeRevision("0.1");
-    $sql = "ALTER TABLE `cim10favoris` 
+    $query = "ALTER TABLE `cim10favoris` 
 			CHANGE `favoris_id` `favoris_id` int(11) unsigned NOT NULL AUTO_INCREMENT,
       CHANGE `favoris_user` `favoris_user` int(11) unsigned NOT NULL DEFAULT '0';";
-    $this->addQuery($sql);
+    $this->addQuery($query);
     
     $this->makeRevision("0.11");
-    $sql = "ALTER TABLE `cim10favoris` 
+    $query = "ALTER TABLE `cim10favoris` 
               ADD INDEX (`favoris_user`);";
-    $this->addQuery($sql);
+    $this->addQuery($query);
 
     $this->mod_version = "0.12";
 

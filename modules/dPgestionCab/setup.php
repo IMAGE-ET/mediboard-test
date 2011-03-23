@@ -15,7 +15,7 @@ class CSetupdPgestionCab extends CSetup {
     $this->mod_name = "dPgestionCab";
     
     $this->makeRevision("all");
-    $sql = "CREATE TABLE `gestioncab` (
+    $query = "CREATE TABLE `gestioncab` (
                   `gestioncab_id` INT NOT NULL AUTO_INCREMENT ,
                   `function_id` INT NOT NULL ,
                   `libelle` VARCHAR( 50 ) DEFAULT 'inconnu' NOT NULL ,
@@ -28,37 +28,37 @@ class CSetupdPgestionCab extends CSetup {
                   PRIMARY KEY ( `gestioncab_id` ) ,
                   INDEX ( `function_id` , `rubrique_id` , `mode_paiement_id` )
                 ) /*! ENGINE=MyISAM */ COMMENT = 'Table des lignes de la comptabilité de cabinet';";
-    $this->addQuery($sql);
-    $sql = "CREATE TABLE `rubrique_gestioncab` (
+    $this->addQuery($query);
+    $query = "CREATE TABLE `rubrique_gestioncab` (
                   `rubrique_id` INT NOT NULL AUTO_INCREMENT ,
                   `function_id` INT DEFAULT '0' NOT NULL ,
                   `nom` VARCHAR( 30 ) DEFAULT 'divers' NOT NULL ,
                   PRIMARY KEY ( `rubrique_id` ) ,
                   INDEX ( `function_id` )
                 ) /*! ENGINE=MyISAM */ COMMENT = 'Table des rubriques pour la gestion comptable de cabinet';";
-    $this->addQuery($sql);
-    $sql = "INSERT INTO `rubrique_gestioncab` ( `rubrique_id` , `function_id` , `nom` )
+    $this->addQuery($query);
+    $query = "INSERT INTO `rubrique_gestioncab` ( `rubrique_id` , `function_id` , `nom` )
                 VALUES ('', '0', 'divers');";
-    $this->addQuery($sql);
-    $sql = "CREATE TABLE `mode_paiement` (
+    $this->addQuery($query);
+    $query = "CREATE TABLE `mode_paiement` (
                   `mode_paiement_id` INT NOT NULL AUTO_INCREMENT ,
                   `function_id` INT DEFAULT '0' NOT NULL ,
                   `nom` VARCHAR( 30 ) DEFAULT 'inconnu' NOT NULL ,
                   PRIMARY KEY ( `mode_paiement_id` ) ,
                   INDEX ( `function_id` )
                 ) /*! ENGINE=MyISAM */ COMMENT = 'Table des modes de règlement';";
-    $this->addQuery($sql);
-    $sql = "INSERT INTO `mode_paiement` ( `mode_paiement_id` , `function_id` , `nom` ) VALUES ('', '0', 'Chèque');";
-    $this->addQuery($sql);
-    $sql = "INSERT INTO `mode_paiement` ( `mode_paiement_id` , `function_id` , `nom` ) VALUES ('', '0', 'CB');";
-    $this->addQuery($sql);
-    $sql = "INSERT INTO `mode_paiement` ( `mode_paiement_id` , `function_id` , `nom` ) VALUES ('', '0', 'Virement');";
-    $this->addQuery($sql);
-    $sql = "INSERT INTO `mode_paiement` ( `mode_paiement_id` , `function_id` , `nom` ) VALUES ('', '0', 'Prélèvement');";
-    $this->addQuery($sql);
-    $sql = "INSERT INTO `mode_paiement` ( `mode_paiement_id` , `function_id` , `nom` ) VALUES ('', '0', 'TIP');";
-    $this->addQuery($sql);
-    $sql = "CREATE TABLE `params_paie` (
+    $this->addQuery($query);
+    $query = "INSERT INTO `mode_paiement` ( `mode_paiement_id` , `function_id` , `nom` ) VALUES ('', '0', 'Chèque');";
+    $this->addQuery($query);
+    $query = "INSERT INTO `mode_paiement` ( `mode_paiement_id` , `function_id` , `nom` ) VALUES ('', '0', 'CB');";
+    $this->addQuery($query);
+    $query = "INSERT INTO `mode_paiement` ( `mode_paiement_id` , `function_id` , `nom` ) VALUES ('', '0', 'Virement');";
+    $this->addQuery($query);
+    $query = "INSERT INTO `mode_paiement` ( `mode_paiement_id` , `function_id` , `nom` ) VALUES ('', '0', 'Prélèvement');";
+    $this->addQuery($query);
+    $query = "INSERT INTO `mode_paiement` ( `mode_paiement_id` , `function_id` , `nom` ) VALUES ('', '0', 'TIP');";
+    $this->addQuery($query);
+    $query = "CREATE TABLE `params_paie` (
                   `params_paie_id` BIGINT NOT NULL AUTO_INCREMENT ,
                   `user_id` BIGINT NOT NULL ,
                   `smic` FLOAT NOT NULL ,
@@ -86,8 +86,8 @@ class CSetupdPgestionCab extends CSetup {
                   PRIMARY KEY ( `params_paie_id` ) ,
                   INDEX ( `user_id` )
                 ) /*! ENGINE=MyISAM */ COMMENT = 'Paramètres fiscaux pour les fiches de paie';";
-    $this->addQuery($sql);
-    $sql = "CREATE TABLE `fiche_paie` (
+    $this->addQuery($query);
+    $query = "CREATE TABLE `fiche_paie` (
                   `fiche_paie_id` BIGINT NOT NULL AUTO_INCREMENT ,
                   `params_paie_id` BIGINT NOT NULL ,
                   `debut` DATE NOT NULL ,
@@ -101,21 +101,21 @@ class CSetupdPgestionCab extends CSetup {
                   PRIMARY KEY ( `fiche_paie_id` ) ,
                   INDEX ( `params_paie_id` )
                 ) /*! ENGINE=MyISAM */ COMMENT = 'Table des fiches de paie';";
-    $this->addQuery($sql);
+    $this->addQuery($query);
     
     $this->makeRevision("0.1");
-    $sql = "ALTER TABLE fiche_paie ADD `conges_payes` FLOAT NOT NULL;";
-    $this->addQuery($sql);
+    $query = "ALTER TABLE fiche_paie ADD `conges_payes` FLOAT NOT NULL;";
+    $this->addQuery($query);
     
     $this->makeRevision("0.11");
-    $sql = "ALTER TABLE fiche_paie ADD `prime_speciale` FLOAT NOT NULL";
-    $this->addQuery($sql);
-    $sql = "ALTER TABLE params_paie ADD `matricule` VARCHAR(15)";
-    $this->addQuery($sql);
+    $query = "ALTER TABLE fiche_paie ADD `prime_speciale` FLOAT NOT NULL";
+    $this->addQuery($query);
+    $query = "ALTER TABLE params_paie ADD `matricule` VARCHAR(15)";
+    $this->addQuery($query);
     
     $this->makeRevision("0.12");
     $this->addDependency("mediusers", "0.1");
-    $sql = "CREATE TABLE `employecab` (" .
+    $query = "CREATE TABLE `employecab` (" .
             "\n`employecab_id` INT NOT NULL AUTO_INCREMENT," .
             "\n`function_id` INT NOT NULL DEFAULT '0'," .
             "\n`nom` VARCHAR( 50 ) NOT NULL DEFAULT ''," .
@@ -127,9 +127,9 @@ class CSetupdPgestionCab extends CSetup {
             "PRIMARY KEY ( `employecab_id` ) ," .
             "INDEX ( `function_id` )" .
             ") /*! ENGINE=MyISAM */ COMMENT = 'Table des employes';";
-    $this->addQuery($sql);
-    $sql = "ALTER TABLE `params_paie` CHANGE `user_id` `employecab_id` INT NOT NULL DEFAULT '0';";
-    $this->addQuery($sql);
+    $this->addQuery($query);
+    $query = "ALTER TABLE `params_paie` CHANGE `user_id` `employecab_id` INT NOT NULL DEFAULT '0';";
+    $this->addQuery($query);
     function setup_paie(){
       $param = new CParamsPaie;
       $params = $param->loadList();
@@ -156,7 +156,7 @@ class CSetupdPgestionCab extends CSetup {
     $this->addFunction("setup_paie");
     
     $this->makeRevision("0.13");
-    $sql = "ALTER TABLE `employecab` " .
+    $query = "ALTER TABLE `employecab` " .
                "\nCHANGE `employecab_id` `employecab_id` int(11) unsigned NOT NULL AUTO_INCREMENT," .
                "\nCHANGE `function_id` `function_id` int(11) unsigned NOT NULL DEFAULT '0'," .
                "\nCHANGE `nom` `nom` varchar(255) NOT NULL," .
@@ -165,26 +165,26 @@ class CSetupdPgestionCab extends CSetup {
                "\nCHANGE `adresse` `adresse` varchar(255) NULL," .
                "\nCHANGE `cp` `cp` int(5) unsigned zerofill NULL," .
                "\nCHANGE `ville` `ville` varchar(255) NULL;";
-    $this->addQuery($sql);
-    $sql = "ALTER TABLE `fiche_paie` " .
+    $this->addQuery($query);
+    $query = "ALTER TABLE `fiche_paie` " .
                "\nCHANGE `fiche_paie_id` `fiche_paie_id` int(11) unsigned NOT NULL AUTO_INCREMENT," .
                "\nCHANGE `params_paie_id` `params_paie_id` int(11) unsigned NOT NULL DEFAULT '0'," .
                "\nCHANGE `heures` `heures` tinyint(4) NOT NULL DEFAULT '0'," .
                "\nCHANGE `heures_sup` `heures_sup` tinyint(4) NOT NULL DEFAULT '0';";
-    $this->addQuery($sql);
-    $sql = "ALTER TABLE `gestioncab` " .
+    $this->addQuery($query);
+    $query = "ALTER TABLE `gestioncab` " .
                "\nCHANGE `gestioncab_id` `gestioncab_id` int(11) unsigned NOT NULL AUTO_INCREMENT," .
                "\nCHANGE `function_id` `function_id` int(11) unsigned NOT NULL DEFAULT '0'," .
                "\nCHANGE `libelle` `libelle` varchar(255) NOT NULL DEFAULT 'inconnu'," .
                "\nCHANGE `rubrique_id` `rubrique_id` int(11) unsigned NOT NULL DEFAULT '0'," .
                "\nCHANGE `mode_paiement_id` `mode_paiement_id` int(11) unsigned NOT NULL DEFAULT '0';";
-    $this->addQuery($sql);
-    $sql = "ALTER TABLE `mode_paiement` " .
+    $this->addQuery($query);
+    $query = "ALTER TABLE `mode_paiement` " .
                "\nCHANGE `mode_paiement_id` `mode_paiement_id` int(11) unsigned NOT NULL AUTO_INCREMENT," .
                "\nCHANGE `function_id` `function_id` int(11) unsigned NOT NULL DEFAULT '0'," .
                "\nCHANGE `nom` `nom` varchar(255) NOT NULL DEFAULT 'inconnu';";
-    $this->addQuery($sql);
-    $sql = "ALTER TABLE `params_paie` " .
+    $this->addQuery($query);
+    $query = "ALTER TABLE `params_paie` " .
                "\nCHANGE `params_paie_id` `params_paie_id` int(11) unsigned NOT NULL AUTO_INCREMENT," .
                "\nCHANGE `employecab_id` `employecab_id` int(11) unsigned NOT NULL DEFAULT '0'," .
                "\nCHANGE `nom` `nom` varchar(255) NOT NULL," .
@@ -192,58 +192,58 @@ class CSetupdPgestionCab extends CSetup {
                "\nCHANGE `cp` `cp` int(5) unsigned zerofill NOT NULL," .
                "\nCHANGE `ville` `ville` varchar(255) NOT NULL," .
                "\nCHANGE `siret` `siret` bigint(14) unsigned zerofill NOT NULL;";
-    $this->addQuery($sql);
-    $sql = "ALTER TABLE `rubrique_gestioncab` " .
+    $this->addQuery($query);
+    $query = "ALTER TABLE `rubrique_gestioncab` " .
                "\nCHANGE `rubrique_id` `rubrique_id` int(11) unsigned NOT NULL AUTO_INCREMENT," .
                "\nCHANGE `function_id` `function_id` int(11) unsigned NOT NULL DEFAULT '0'," .
                "\nCHANGE `nom` `nom` varchar(255) NOT NULL DEFAULT 'divers';";
-    $this->addQuery($sql);
+    $this->addQuery($query);
     
     $this->makeRevision("0.14");
-    $sql = "ALTER TABLE `mode_paiement` CHANGE `function_id` `function_id` int(11) unsigned NULL DEFAULT NULL;";
-    $this->addQuery($sql);
-    $sql = "UPDATE `mode_paiement` SET `function_id` = NULL WHERE `function_id` = '0';";
-    $this->addQuery($sql);
-    $sql = "ALTER TABLE `rubrique_gestioncab` CHANGE `function_id` `function_id` int(11) unsigned NULL DEFAULT NULL;";
-    $this->addQuery($sql);
-    $sql = "UPDATE `rubrique_gestioncab` SET `function_id` = NULL WHERE `function_id` = '0';";
-    $this->addQuery($sql);
+    $query = "ALTER TABLE `mode_paiement` CHANGE `function_id` `function_id` int(11) unsigned NULL DEFAULT NULL;";
+    $this->addQuery($query);
+    $query = "UPDATE `mode_paiement` SET `function_id` = NULL WHERE `function_id` = '0';";
+    $this->addQuery($query);
+    $query = "ALTER TABLE `rubrique_gestioncab` CHANGE `function_id` `function_id` int(11) unsigned NULL DEFAULT NULL;";
+    $this->addQuery($query);
+    $query = "UPDATE `rubrique_gestioncab` SET `function_id` = NULL WHERE `function_id` = '0';";
+    $this->addQuery($query);
     
     $this->makeRevision("0.15");
-    $sql = "ALTER TABLE `params_paie` ADD `csp` FLOAT NOT NULL DEFAULT 0";
-    $this->addQuery($sql);
+    $query = "ALTER TABLE `params_paie` ADD `csp` FLOAT NOT NULL DEFAULT 0";
+    $this->addQuery($query);
     
     $this->makeRevision("0.16");
-    $sql = "ALTER TABLE `params_paie`
+    $query = "ALTER TABLE `params_paie`
             CHANGE `ape` `ape` VARCHAR(6);";
-    $this->addQuery($sql);
+    $this->addQuery($query);
     
     $this->makeRevision("0.17");
-    $sql = "ALTER TABLE `fiche_paie`
+    $query = "ALTER TABLE `fiche_paie`
             DROP `mutuelle`,
             ADD `final_file` MEDIUMTEXT;";
-    $this->addQuery($sql);
-    $sql = "ALTER TABLE `params_paie`
+    $this->addQuery($query);
+    $query = "ALTER TABLE `params_paie`
             ADD `ms` FLOAT NOT NULL AFTER `csp`,
             ADD `mp` FLOAT NOT NULL AFTER `ms;";
-    $this->addQuery($sql);
+    $this->addQuery($query);
     
     $this->makeRevision("0.18");
-    $sql = "ALTER TABLE `fiche_paie`
+    $query = "ALTER TABLE `fiche_paie`
             ADD `heures_comp` tinyint(4) NOT NULL DEFAULT '0' AFTER `heures`;";
-    $this->addQuery($sql);
-    $sql = "ALTER TABLE `params_paie`
+    $this->addQuery($query);
+    $query = "ALTER TABLE `params_paie`
             ADD `csgnis` FLOAT NOT NULL AFTER `smic`;";
-    $this->addQuery($sql);
+    $this->addQuery($query);
     
     $this->makeRevision("0.19");
-    $sql = "ALTER TABLE `fiche_paie` 
+    $query = "ALTER TABLE `fiche_paie` 
               ADD INDEX (`debut`),
               ADD INDEX (`fin`);";
-    $this->addQuery($sql);
-    $sql = "ALTER TABLE `gestioncab` 
+    $this->addQuery($query);
+    $query = "ALTER TABLE `gestioncab` 
               ADD INDEX (`date`);";
-    $this->addQuery($sql);
+    $this->addQuery($query);
     
     $this->mod_version = "0.20";
   }

@@ -16,34 +16,34 @@ class CSetupdPfacturation extends CSetup {
     $this->mod_name = "dPfacturation";
     $this->makeRevision("all");
     
-    $sql = "CREATE TABLE `facture` (
+    $query = "CREATE TABLE `facture` (
  			`facture_id` INT(11) UNSIGNED NOT NULL AUTO_INCREMENT, 
  			`date` DATE NOT NULL, 
  			`sejour_id` INT(11) UNSIGNED NOT NULL, 
 			PRIMARY KEY (`facture_id`)) /*! ENGINE=MyISAM */;";
-     $this->addQuery($sql);
+     $this->addQuery($query);
       
-     $sql = "CREATE TABLE `factureitem` (
+     $query = "CREATE TABLE `factureitem` (
  				`factureitem_id` INT(11) UNSIGNED NOT NULL AUTO_INCREMENT, 
  				`facture_id` INT(11) UNSIGNED NOT NULL, 
  				`libelle` TEXT NOT NULL, 
  				`prix_ht` FLOAT NOT NULL, 
  				`taxe` FLOAT, 
 			PRIMARY KEY (`factureitem_id`)) /*! ENGINE=MyISAM */;";
-     $this->addQuery($sql);   
+     $this->addQuery($query);   
      
      $this->makeRevision("0.10");
-     $sql = "ALTER TABLE `facture` ADD `prix` FLOAT NOT NULL";
-     $this->addQuery($sql);
+     $query = "ALTER TABLE `facture` ADD `prix` FLOAT NOT NULL";
+     $this->addQuery($query);
      
      $this->makeRevision("0.11");
-     $sql = "ALTER TABLE `facture` 
+     $query = "ALTER TABLE `facture` 
               ADD INDEX (`date`),
               ADD INDEX (`sejour_id`);";
-     $this->addQuery($sql);
-     $sql = "ALTER TABLE `factureitem` 
+     $this->addQuery($query);
+     $query = "ALTER TABLE `factureitem` 
               ADD INDEX (`facture_id`);";
-     $this->addQuery($sql);
+     $this->addQuery($query);
   
      $this->mod_version = "0.12";
   }

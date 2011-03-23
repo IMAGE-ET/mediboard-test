@@ -16,7 +16,7 @@ class CSetupdPqualite extends CSetup {
     $this->mod_name = "dPqualite";
 
     $this->makeRevision("all");
-    $sql = "CREATE TABLE `doc_ged_suivi` (
+    $query = "CREATE TABLE `doc_ged_suivi` (
                `doc_ged_suivi_id` int(11) NOT NULL auto_increment,
                `user_id` INT(11) NOT NULL DEFAULT 0,
                `doc_ged_id` INT(11) NOT NULL DEFAULT 0,
@@ -27,8 +27,8 @@ class CSetupdPqualite extends CSetup {
                `actif` TINYINT(1) DEFAULT 0,
                PRIMARY KEY  (doc_ged_suivi_id)
                ) /*! ENGINE=MyISAM */ COMMENT='Table de suivie des procedures';";
-    $this->addQuery($sql);
-    $sql = "CREATE TABLE `doc_ged` (
+    $this->addQuery($query);
+    $query = "CREATE TABLE `doc_ged` (
                `doc_ged_id` int( 11 ) NOT NULL AUTO_INCREMENT ,
                `group_id` INT( 11 ) NOT NULL DEFAULT 0,
                `doc_chapitre_id` INT( 11 ) NOT NULL DEFAULT 0,
@@ -42,46 +42,46 @@ class CSetupdPqualite extends CSetup {
                `num_ref` MEDIUMINT(9) UNSIGNED NULL,
                PRIMARY KEY ( doc_ged_id )
                ) /*! ENGINE=MyISAM */ COMMENT = 'Table des procedures';";
-    $this->addQuery($sql);
-    $sql = "CREATE TABLE `doc_chapitres` (
+    $this->addQuery($query);
+    $query = "CREATE TABLE `doc_chapitres` (
                `doc_chapitre_id` int( 11 ) NOT NULL AUTO_INCREMENT ,
                `nom` VARCHAR( 50 ) DEFAULT NULL ,
                `code` VARCHAR( 10 ) DEFAULT NULL ,
                PRIMARY KEY ( doc_chapitre_id )
                ) /*! ENGINE=MyISAM */ COMMENT = 'Table des chapitres pour les procedures';";
-    $this->addQuery($sql);
-    $sql = "CREATE TABLE `doc_themes` (
+    $this->addQuery($query);
+    $query = "CREATE TABLE `doc_themes` (
                `doc_theme_id` int( 11 ) NOT NULL AUTO_INCREMENT ,
                `nom` VARCHAR( 50 ) DEFAULT NULL ,
                PRIMARY KEY ( doc_theme_id )
                ) /*! ENGINE=MyISAM */ COMMENT = 'Table des theme pour les procedures';";
-    $this->addQuery($sql);
-    $sql = "CREATE TABLE `doc_categories` (
+    $this->addQuery($query);
+    $query = "CREATE TABLE `doc_categories` (
                `doc_categorie_id` int( 11 ) NOT NULL AUTO_INCREMENT ,
                `nom` VARCHAR( 50 ) DEFAULT NULL ,
                `code` VARCHAR( 1 ) DEFAULT NULL ,
                PRIMARY KEY ( doc_categorie_id )
                ) /*! ENGINE=MyISAM */ COMMENT = 'Table des categories pour les procedures';";
-    $this->addQuery($sql);
-    $sql = "INSERT INTO `doc_categories` VALUES (1, 'Manuel qualité', 'A');"; $this->addQuery($sql);
-    $sql = "INSERT INTO `doc_categories` VALUES (2, 'Procédure',      'B');"; $this->addQuery($sql);
-    $sql = "INSERT INTO `doc_categories` VALUES (3, 'Protocole',      'C');"; $this->addQuery($sql);
-    $sql = "INSERT INTO `doc_categories` VALUES (4, 'Enregistrement', 'D');"; $this->addQuery($sql);
-    $sql = "INSERT INTO `doc_categories` VALUES (5, 'Données',        'E');"; $this->addQuery($sql);
-    $sql = "CREATE TABLE `ei_categories` (
+    $this->addQuery($query);
+    $query = "INSERT INTO `doc_categories` VALUES (1, 'Manuel qualité', 'A');"; $this->addQuery($query);
+    $query = "INSERT INTO `doc_categories` VALUES (2, 'Procédure',      'B');"; $this->addQuery($query);
+    $query = "INSERT INTO `doc_categories` VALUES (3, 'Protocole',      'C');"; $this->addQuery($query);
+    $query = "INSERT INTO `doc_categories` VALUES (4, 'Enregistrement', 'D');"; $this->addQuery($query);
+    $query = "INSERT INTO `doc_categories` VALUES (5, 'Données',        'E');"; $this->addQuery($query);
+    $query = "CREATE TABLE `ei_categories` (
                 `ei_categorie_id` int( 11 ) NOT NULL AUTO_INCREMENT ,
                 `nom` VARCHAR( 50 ) DEFAULT NULL ,
                 PRIMARY KEY ( ei_categorie_id )
                 ) /*! ENGINE=MyISAM */ COMMENT = 'Table des categories des EI'";
-    $this->addQuery($sql);
-    $sql = "CREATE TABLE `ei_item` (
+    $this->addQuery($query);
+    $query = "CREATE TABLE `ei_item` (
                 `ei_item_id` int( 11 ) NOT NULL AUTO_INCREMENT ,
                 `ei_categorie_id` int( 11 ) NOT NULL DEFAULT 0 ,
                 `nom` VARCHAR( 50 ) DEFAULT NULL ,
                 PRIMARY KEY ( ei_item_id )
                 ) /*! ENGINE=MyISAM */ COMMENT = 'Table des item des categories des EI'";
-    $this->addQuery($sql);
-    $sql = "CREATE TABLE `fiches_ei` (
+    $this->addQuery($query);
+    $query = "CREATE TABLE `fiches_ei` (
                 `fiche_ei_id` int ( 11 ) NOT NULL AUTO_INCREMENT ,
                 `user_id` int ( 11 ) NOT NULL DEFAULT 0,
                 `valid_user_id` int ( 11 ) DEFAULT NULL,
@@ -104,10 +104,10 @@ class CSetupdPqualite extends CSetup {
                 `degre_urgence` int(1) DEFAULT NULL,
                 PRIMARY KEY ( fiche_ei_id )
                 ) /*! ENGINE=MyISAM */ COMMENT ='Table des fiches incidents'";
-    $this->addQuery($sql);
+    $this->addQuery($query);
     
     $this->makeRevision("0.1");
-    $sql = "ALTER TABLE `fiches_ei`".
+    $query = "ALTER TABLE `fiches_ei`".
                "\nADD `service_valid_user_id` int ( 11 ) DEFAULT NULL," .
                "\nADD `service_date_validation` DATETIME," .
                "\nADD `service_actions` TEXT DEFAULT NULL," .
@@ -123,29 +123,29 @@ class CSetupdPqualite extends CSetup {
                "\nCHANGE `plainte` `plainte` ENUM('non', 'oui') NOT NULL DEFAULT 'non'," .
                "\nCHANGE `commission` `commission` ENUM('non', 'oui') NOT NULL DEFAULT 'non'," .
                "\nCHANGE `deja_survenu` `deja_survenu` ENUM('non', 'oui') DEFAULT NULL;";
-    $this->addQuery($sql);
+    $this->addQuery($query);
     
     $this->makeRevision("0.11");
-    $sql = "ALTER TABLE `fiches_ei` ADD `annulee` TINYINT(1) NOT NULL DEFAULT 0," .
+    $query = "ALTER TABLE `fiches_ei` ADD `annulee` TINYINT(1) NOT NULL DEFAULT 0," .
                                  "\nADD `remarques` TEXT DEFAULT NULL;";
-    $this->addQuery($sql);
+    $this->addQuery($query);
     
     $this->makeRevision("0.12");
-    $sql = "ALTER TABLE `fiches_ei` ADD `suite_even_descr` TEXT DEFAULT NULL AFTER `suite_even`;";
-    $this->addQuery($sql);
+    $query = "ALTER TABLE `fiches_ei` ADD `suite_even_descr` TEXT DEFAULT NULL AFTER `suite_even`;";
+    $this->addQuery($query);
     
     $this->makeRevision("0.13");
-    $sql = "ALTER TABLE `doc_categories`" .
+    $query = "ALTER TABLE `doc_categories`" .
                "\nCHANGE `doc_categorie_id` `doc_categorie_id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT," .
                "\nCHANGE `nom` `nom` varchar(50) NOT NULL," .
                "\nCHANGE `code` `code` varchar(1) NOT NULL;";
-    $this->addQuery($sql);
-    $sql = "ALTER TABLE `doc_chapitres`" .
+    $this->addQuery($query);
+    $query = "ALTER TABLE `doc_chapitres`" .
                "\nCHANGE `doc_chapitre_id` `doc_chapitre_id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT," .
                "\nCHANGE `nom` `nom` varchar(50) NOT NULL," .
                "\nCHANGE `code` `code` varchar(10) NOT NULL;";
-    $this->addQuery($sql);
-    $sql = "ALTER TABLE `doc_ged`" .
+    $this->addQuery($query);
+    $query = "ALTER TABLE `doc_ged`" .
                "\nCHANGE `doc_ged_id` `doc_ged_id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT," .
                "\nCHANGE `group_id` `group_id` int(11) UNSIGNED NOT NULL," .
                "\nCHANGE `doc_chapitre_id` `doc_chapitre_id` int(11) UNSIGNED NOT NULL," .
@@ -155,8 +155,8 @@ class CSetupdPqualite extends CSetup {
                "\nCHANGE `etat` `etat` enum('0','16','32','48','64') NOT NULL DEFAULT '16'," .
                "\nCHANGE `annule` `annule` enum('0','1') NOT NULL DEFAULT '0'," .
                "\nCHANGE `num_ref` `num_ref` int(11) NULL;";
-    $this->addQuery($sql);
-    $sql = "ALTER TABLE `doc_ged_suivi`" .
+    $this->addQuery($query);
+    $query = "ALTER TABLE `doc_ged_suivi`" .
                "\nCHANGE `doc_ged_suivi_id` `doc_ged_suivi_id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT," .
                "\nCHANGE `user_id` `user_id` int(11) UNSIGNED NOT NULL," .
                "\nCHANGE `doc_ged_id` `doc_ged_id` int(11) UNSIGNED NOT NULL," .
@@ -164,17 +164,17 @@ class CSetupdPqualite extends CSetup {
                "\nCHANGE `actif` `actif` enum('0','1') NOT NULL DEFAULT '0'," .
                "\nCHANGE `remarques` `remarques` text NOT NULL," .
                "\nCHANGE `file_id` `file_id` int(11) UNSIGNED;";
-    $this->addQuery($sql);
-    $sql = "ALTER TABLE `ei_categories`" .
+    $this->addQuery($query);
+    $query = "ALTER TABLE `ei_categories`" .
                "\nCHANGE `ei_categorie_id` `ei_categorie_id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT," .
                "\nCHANGE `nom` `nom` varchar(50) NOT NULL;";
-    $this->addQuery($sql);
-    $sql = "ALTER TABLE `ei_item`" .
+    $this->addQuery($query);
+    $query = "ALTER TABLE `ei_item`" .
                "\nCHANGE `ei_item_id` `ei_item_id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT," .
                "\nCHANGE `ei_categorie_id` `ei_categorie_id` int(11) UNSIGNED NOT NULL," .
                "\nCHANGE `nom` `nom` varchar(50) NOT NULL;";
-    $this->addQuery($sql);
-    $sql = "ALTER TABLE `fiches_ei`" .
+    $this->addQuery($query);
+    $query = "ALTER TABLE `fiches_ei`" .
                "\nCHANGE `fiche_ei_id` `fiche_ei_id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT," .
                "\nCHANGE `user_id` `user_id` int(11) UNSIGNED NOT NULL," .
                "\nCHANGE `valid_user_id` `valid_user_id` int(11) UNSIGNED NULL," .
@@ -192,49 +192,49 @@ class CSetupdPqualite extends CSetup {
                "\nCHANGE `descr_consequences` `descr_consequences` TEXT NOT NULL ," .
                "\nCHANGE `qualite_date_verification` `qualite_date_verification` DATE NULL," .
                "\nCHANGE `qualite_date_controle` `qualite_date_controle` DATE NULL;";
-    $this->addQuery($sql);
-    $sql = "ALTER TABLE `doc_themes`" .
+    $this->addQuery($query);
+    $query = "ALTER TABLE `doc_themes`" .
                "\nCHANGE `doc_theme_id` `doc_theme_id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT," .
                "\nCHANGE `nom` `nom` varchar(50) NOT NULL;";
-    $this->addQuery($sql);
+    $this->addQuery($query);
     
     $this->makeRevision("0.14");
-    $sql = "ALTER TABLE `fiches_ei`
+    $query = "ALTER TABLE `fiches_ei`
               CHANGE `gravite` `gravite` ENUM('1','2','3','4','5'), 
               ADD `vraissemblance` ENUM('1','2','3','4','5');";
-    $this->addQuery($sql);
+    $this->addQuery($query);
     
     $this->makeRevision("0.15");
-    $sql = "ALTER TABLE `doc_chapitres`
+    $query = "ALTER TABLE `doc_chapitres`
               ADD `pere_id` INT(11) UNSIGNED
               AFTER `doc_chapitre_id`;";
-    $this->addQuery($sql);
+    $this->addQuery($query);
     
     $this->makeRevision("0.16");
-    $sql = "ALTER TABLE `doc_chapitres`
+    $query = "ALTER TABLE `doc_chapitres`
               ADD `group_id` INT(11) UNSIGNED
               AFTER `pere_id`;";
-    $this->addQuery($sql);
-    $sql = "ALTER TABLE `doc_themes`
+    $this->addQuery($query);
+    $query = "ALTER TABLE `doc_themes`
               ADD `group_id` INT(11) UNSIGNED
               AFTER `doc_theme_id`;";
-    $this->addQuery($sql);
+    $this->addQuery($query);
     
     $this->makeRevision("0.17");
-    $sql = "ALTER TABLE `doc_ged`
+    $query = "ALTER TABLE `doc_ged`
               CHANGE `group_id` `group_id` int(11) UNSIGNED DEFAULT NULL;";
-    $this->addQuery($sql);
+    $this->addQuery($query);
     
     $this->makeRevision("0.18");
-    $sql = "ALTER TABLE `doc_ged` CHANGE `num_ref` `num_ref` DECIMAL(5,1) NULL;";
-    $this->addQuery($sql);
+    $query = "ALTER TABLE `doc_ged` CHANGE `num_ref` `num_ref` DECIMAL(5,1) NULL;";
+    $this->addQuery($query);
     
     $this->makeRevision("0.19");
-    $sql = "ALTER TABLE `fiches_ei` CHANGE `elem_concerne` `elem_concerne` ENUM ('pat','vis','pers','med','mat','autre') NOT NULL";
-    $this->addQuery($sql);
+    $query = "ALTER TABLE `fiches_ei` CHANGE `elem_concerne` `elem_concerne` ENUM ('pat','vis','pers','med','mat','autre') NOT NULL";
+    $this->addQuery($query);
     
     $this->makeRevision("0.20");
-    $sql = "ALTER TABLE `fiches_ei` 
+    $query = "ALTER TABLE `fiches_ei` 
               ADD INDEX (`user_id`),
               ADD INDEX (`valid_user_id`),
               ADD INDEX (`date_fiche`),
@@ -246,30 +246,30 @@ class CSetupdPqualite extends CSetup {
               ADD INDEX (`qualite_date_validation`),
               ADD INDEX (`qualite_date_verification`),
               ADD INDEX (`qualite_date_controle`);";
-    $this->addQuery($sql);
-    $sql = "ALTER TABLE `doc_ged` 
+    $this->addQuery($query);
+    $query = "ALTER TABLE `doc_ged` 
               ADD INDEX (`group_id`),
               ADD INDEX (`doc_chapitre_id`),
               ADD INDEX (`doc_theme_id`),
               ADD INDEX (`doc_categorie_id`),
               ADD INDEX (`user_id`);";
-    $this->addQuery($sql);
-    $sql = "ALTER TABLE `doc_ged_suivi` 
+    $this->addQuery($query);
+    $query = "ALTER TABLE `doc_ged_suivi` 
               ADD INDEX (`user_id`),
               ADD INDEX (`doc_ged_id`),
               ADD INDEX (`file_id`),
               ADD INDEX (`date`);";
-    $this->addQuery($sql);
-    $sql = "ALTER TABLE `doc_chapitres` 
+    $this->addQuery($query);
+    $query = "ALTER TABLE `doc_chapitres` 
               ADD INDEX (`pere_id`),
               ADD INDEX (`group_id`);";
-    $this->addQuery($sql);
-    $sql = "ALTER TABLE `ei_item` 
+    $this->addQuery($query);
+    $query = "ALTER TABLE `ei_item` 
               ADD INDEX (`ei_categorie_id`);";
-    $this->addQuery($sql);
-    $sql = "ALTER TABLE `doc_themes` 
+    $this->addQuery($query);
+    $query = "ALTER TABLE `doc_themes` 
               ADD INDEX (`group_id`);";
-    $this->addQuery($sql);
+    $this->addQuery($query);
 
     $this->mod_version = "0.21";
   }

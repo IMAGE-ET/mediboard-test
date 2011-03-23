@@ -16,29 +16,29 @@ class CSetupdmi extends CSetup {
     $this->mod_name = "dmi";
     
     $this->makeRevision("all");
-    $sql = "CREATE TABLE `dmi_category` (
+    $query = "CREATE TABLE `dmi_category` (
 			`category_id` INT (11) UNSIGNED NOT NULL auto_increment PRIMARY KEY,
 			`nom` VARCHAR (255) NOT NULL,
 			`description` VARCHAR (255)
 		) /*! ENGINE=MyISAM */;";
-    $this->addQuery($sql);
+    $this->addQuery($query);
     
     $this->makeRevision("0.01");
-    $sql = "ALTER TABLE `dmi_category` 
+    $query = "ALTER TABLE `dmi_category` 
 			CHANGE `description` `description` TEXT;";
-    $this->addQuery($sql);
+    $this->addQuery($query);
     
     $this->makeRevision("0.02");
-    $sql = "ALTER TABLE `dmi_category` 
+    $query = "ALTER TABLE `dmi_category` 
 			ADD `group_id` INT (11) UNSIGNED NOT NULL;";
-    $this->addQuery($sql);
+    $this->addQuery($query);
 
-    $sql = "ALTER TABLE `dmi_category`
+    $query = "ALTER TABLE `dmi_category`
 			ADD INDEX (`group_id`);";
-    $this->addQuery($sql);
+    $this->addQuery($query);
     
     $this->makeRevision("0.03");
-    $sql = "CREATE TABLE `dmi` (
+    $query = "CREATE TABLE `dmi` (
 		`dmi_id` INT (11) UNSIGNED NOT NULL auto_increment PRIMARY KEY,
 		`nom` VARCHAR (255) NOT NULL,
 		`en_lot` ENUM ('0','1'),
@@ -48,21 +48,21 @@ class CSetupdmi extends CSetup {
 		`dans_livret` ENUM ('0','1'),
 		`category_id` INT (11) UNSIGNED NOT NULL
 		) /*! ENGINE=MyISAM */;";
-    $this->addQuery($sql);
+    $this->addQuery($query);
 
-    $sql = "ALTER TABLE `dmi` 
+    $query = "ALTER TABLE `dmi` 
 	  ADD INDEX (`category_id`);";
-    $this->addQuery($sql);
+    $this->addQuery($query);
     
     $this->makeRevision("0.04");
-    $sql = "ALTER TABLE `dmi` 
+    $query = "ALTER TABLE `dmi` 
     CHANGE `reference` `code` VARCHAR (255) NOT NULL,
     DROP `en_lot`,
     DROP `lot`;";
-    $this->addQuery($sql);
+    $this->addQuery($query);
     
     $this->makeRevision("0.05");
-    $sql = "CREATE TABLE `dm` (
+    $query = "CREATE TABLE `dm` (
 							`dm_id` INT (11) UNSIGNED NOT NULL auto_increment PRIMARY KEY,
 							`category_dm_id` INT (11) UNSIGNED NOT NULL,
 							`nom` VARCHAR (255) NOT NULL,
@@ -70,56 +70,56 @@ class CSetupdmi extends CSetup {
 							`code` VARCHAR (255) NOT NULL,
 							`in_livret` ENUM ('0','1')
 						) /*! ENGINE=MyISAM */;";
-    $this->addQuery($sql);
+    $this->addQuery($query);
     
-    $sql = "CREATE TABLE `category_dm` (
+    $query = "CREATE TABLE `category_dm` (
 							`category_dm_id` INT (11) UNSIGNED NOT NULL auto_increment PRIMARY KEY,
 							`nom` VARCHAR (255) NOT NULL,
 							`description` TEXT,
 							`group_id` INT (11) UNSIGNED NOT NULL
 						) /*! ENGINE=MyISAM */;";
-    $this->addQuery($sql);
+    $this->addQuery($query);
     
-    $sql = "ALTER TABLE `dm` 
+    $query = "ALTER TABLE `dm` 
 						ADD INDEX (`category_dm_id`);";
-    $this->addQuery($sql);
+    $this->addQuery($query);
     
-    $sql = "ALTER TABLE `category_dm` 
+    $query = "ALTER TABLE `category_dm` 
 			      ADD INDEX (`group_id`);";
-    $this->addQuery($sql);
+    $this->addQuery($query);
 
-    $sql = "ALTER TABLE `dmi` 
+    $query = "ALTER TABLE `dmi` 
 	          CHANGE `dans_livret` `in_livret` ENUM ('0','1');";
-    $this->addQuery($sql);
+    $this->addQuery($query);
     
     $this->makeRevision("0.06");
-    $sql = "ALTER TABLE `dmi` 
+    $query = "ALTER TABLE `dmi` 
               ADD `code_lpp` VARCHAR (255),
               CHANGE `in_livret` `in_livret` ENUM ('0','1') DEFAULT '0';";
-    $this->addQuery($sql);
-    $sql = "ALTER TABLE `dmi` 
+    $this->addQuery($query);
+    $query = "ALTER TABLE `dmi` 
               ADD INDEX (`code_lpp`),
               ADD INDEX (`code`);";
-    $this->addQuery($sql);
+    $this->addQuery($query);
     
     $this->makeRevision("0.07");
-    $sql = "ALTER TABLE `dmi` ADD `type` ENUM ('purchase','loan','deposit') NOT NULL DEFAULT 'purchase'";
-    $this->addQuery($sql);
+    $query = "ALTER TABLE `dmi` ADD `type` ENUM ('purchase','loan','deposit') NOT NULL DEFAULT 'purchase'";
+    $this->addQuery($query);
     
     $this->makeRevision("0.08");
-    $sql = "ALTER TABLE `dmi` CHANGE `type` `type` ENUM ('purchase','loan','deposit') NOT NULL DEFAULT 'deposit'";
-    $this->addQuery($sql);
+    $query = "ALTER TABLE `dmi` CHANGE `type` `type` ENUM ('purchase','loan','deposit') NOT NULL DEFAULT 'deposit'";
+    $this->addQuery($query);
     
     $this->addDependency("dPstock", "1.0");
     
     // ajout du product ID pour faire un lien "dur" plutot que par le code
     $this->makeRevision("0.09");
-    $sql = "ALTER TABLE `dmi` ADD `product_id` INT (11) UNSIGNED;";
-    $this->addQuery($sql);
-    $sql = "ALTER TABLE `dmi` ADD INDEX (`product_id`)";
-    $this->addQuery($sql);
-    $sql = "UPDATE `dmi` SET `product_id` = (SELECT `product`.`product_id` FROM `product` WHERE `product`.`code` = `dmi`.`code` LIMIT 1)";
-    $this->addQuery($sql);
+    $query = "ALTER TABLE `dmi` ADD `product_id` INT (11) UNSIGNED;";
+    $this->addQuery($query);
+    $query = "ALTER TABLE `dmi` ADD INDEX (`product_id`)";
+    $this->addQuery($query);
+    $query = "UPDATE `dmi` SET `product_id` = (SELECT `product`.`product_id` FROM `product` WHERE `product`.`code` = `dmi`.`code` LIMIT 1)";
+    $this->addQuery($query);
     
     $this->mod_version = "0.10";
   }

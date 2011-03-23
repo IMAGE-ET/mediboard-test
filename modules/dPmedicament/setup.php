@@ -19,7 +19,7 @@ class CSetupdPmedicament extends CSetup {
     
     $this->makeRevision("0.1");
     
-    $sql = "CREATE TABLE `produit_livret_therapeutique` (
+    $query = "CREATE TABLE `produit_livret_therapeutique` (
             `produit_livret_id` INT(11) UNSIGNED NOT NULL AUTO_INCREMENT, 
             `group_id` INT(11) UNSIGNED NOT NULL, 
             `code_cip` INT(11) NOT NULL, 
@@ -30,31 +30,31 @@ class CSetupdPmedicament extends CSetup {
             `code_interne` INT(11), 
             `commentaire` TEXT, 
             PRIMARY KEY (`produit_livret_id`)) /*! ENGINE=MyISAM */;";
-    $this->addQuery($sql);
+    $this->addQuery($query);
     
     $this->makeRevision("0.11");
     
-    $sql = "ALTER TABLE `produit_livret_therapeutique`
+    $query = "ALTER TABLE `produit_livret_therapeutique`
             ADD `libelle` TEXT;";
-    $this->addQuery($sql);
+    $this->addQuery($query);
     
     $this->makeRevision("0.12");
     
-    $sql = "ALTER TABLE `produit_livret_therapeutique`
+    $query = "ALTER TABLE `produit_livret_therapeutique`
             DROP `libelle`;";
-    $this->addQuery($sql);
+    $this->addQuery($query);
     
     $this->makeRevision("0.13");
-    $sql = "CREATE TABLE `fiche_ATC` (
+    $query = "CREATE TABLE `fiche_ATC` (
 							`fiche_ATC_id` INT (11) UNSIGNED NOT NULL auto_increment PRIMARY KEY,
 							`code_ATC` CHAR (3) NOT NULL,
               `libelle` VARCHAR (255),
 							`description` MEDIUMTEXT
 						) /*! ENGINE=MyISAM */;";
-    $this->addQuery($sql);
+    $this->addQuery($query);
     
 		$this->makeRevision("0.14");
-		$sql = "CREATE TABLE `produit_prescription` (
+		$query = "CREATE TABLE `produit_prescription` (
 						  `produit_prescription_id` INT (11) UNSIGNED NOT NULL auto_increment PRIMARY KEY,
 						  `code_cip` INT (7) UNSIGNED ZEROFILL,
 						  `code_ucd` INT (7) UNSIGNED ZEROFILL,
@@ -65,12 +65,12 @@ class CSetupdPmedicament extends CSetup {
 						  `nb_presentation` INT (11) NOT NULL,
 						  `voie` VARCHAR (255)
 						) /*! ENGINE=MyISAM */;";
-		$this->addQuery($sql);
+		$this->addQuery($query);
 		
 		$this->makeRevision("0.15");
-		$sql = "ALTER TABLE `produit_prescription` 
+		$query = "ALTER TABLE `produit_prescription` 
             ADD `unite_dispensation` VARCHAR (255) NOT NULL;";
-		$this->addQuery($sql);
+		$this->addQuery($query);
     
     $this->makeRevision("0.16");
 		
