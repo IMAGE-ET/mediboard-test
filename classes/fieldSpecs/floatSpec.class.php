@@ -28,11 +28,11 @@ class CFloatSpec extends CMbFieldSpec {
   }
   
   function getOptions(){
-    return parent::getOptions() + array(
+    return array(
       'min' => 'num',
       'max' => 'num',
       'pos' => 'bool',
-    );
+    ) + parent::getOptions();
   }
   
   function checkProperty($object){

@@ -47,14 +47,14 @@ class CNumSpec extends CMbFieldSpec {
   }
   
   function getOptions(){
-    return parent::getOptions() + array(
+    return array(
       'min' => 'num',
       'max' => 'num',
       'pos' => 'bool',
       'length' => 'num',
       'minLength' => 'num',
       'maxLength' => 'num',
-    );
+    ) + parent::getOptions();
   }
 
   function checkProperty($object){

@@ -16,6 +16,12 @@ class CCurrencySpec extends CFloatSpec {
   function getSpecType() {
     return "currency";
   }
+  
+  function getOptions(){
+    return array(
+      'precise' => 'bool',
+    ) + parent::getOptions();
+  }
   	
   function getValue($object, $smarty = null, $params = array()) {
     $propValue = $object->{$this->fieldName};

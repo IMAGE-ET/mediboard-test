@@ -41,10 +41,10 @@ class CNumcharSpec extends CNumSpec {
   }
   
   function getOptions(){
-    return parent::getOptions() + array(
+    return array(
       'control'   => 'str',
       'protected' => 'bool',
-    );
+    ) + parent::getOptions();
   }
  
   function checkProperty($object){

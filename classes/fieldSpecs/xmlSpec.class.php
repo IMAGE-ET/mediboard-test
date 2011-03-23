@@ -20,10 +20,6 @@ class CXmlSpec extends CMbFieldSpec {
     return "MEDIUMTEXT";
   }
   
-  function getOptions(){
-    return parent::getOptions();
-  }
-  
   function getFormHtmlElement($object, $params, $value, $className){
     return $this->getFormElementTextarea($object, $params, $value, $className);
   }

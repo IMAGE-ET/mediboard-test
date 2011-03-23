@@ -40,7 +40,7 @@ class CStrSpec extends CMbFieldSpec {
   }
   
   function getOptions(){
-    return parent::getOptions() + array(
+    return array(
       'length'    => 'num',
       'minLength' => 'num',
       'maxLength' => 'num',
@@ -48,7 +48,7 @@ class CStrSpec extends CMbFieldSpec {
       'class'     => 'class',
       'delimiter' => 'num',
       'canonical' => 'bool',
-    );
+    ) + parent::getOptions();
   }
   
   function getValue($object, $smarty = null, $params = array()) {

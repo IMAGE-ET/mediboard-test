@@ -22,9 +22,9 @@ class CDateSpec extends CMbFieldSpec {
   }
   
   function getOptions(){
-    return parent::getOptions() + array(
+    return array(
       'progressive' => 'bool',
-    );
+    ) + parent::getOptions();
   }
   
   function getValue($object, $smarty = null, $params = array()) {

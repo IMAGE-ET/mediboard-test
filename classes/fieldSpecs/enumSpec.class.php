@@ -13,12 +13,11 @@ CAppUI::requireSystemClass("mbFieldSpec");
 class CEnumSpec extends CMbFieldSpec {
   
   var $list = null;
+  var $typeEnum = null;
   var $vertical = null;
 	
   var $_list = null;
   var $_locales = null;
-  
-  var $typeEnum = null;
   
   function __construct($className, $field, $prop = null, $aProperties = array()) {
     parent::__construct($className, $field, $prop, $aProperties);
@@ -36,11 +35,11 @@ class CEnumSpec extends CMbFieldSpec {
   }
   
   function getOptions(){
-    return parent::getOptions() + array(
+    return array(
       'list' => 'list',
       'typeEnum' => array('select', 'radio'),
       'vertical' => 'bool',
-    );
+    ) + parent::getOptions();
   }
   
   function getValue($object, $smarty = null, $params = array()) {

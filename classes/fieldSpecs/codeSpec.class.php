@@ -44,7 +44,7 @@ class CCodeSpec extends CMbFieldSpec {
   }
   
   function getOptions(){
-    return parent::getOptions() + array(
+    return array(
       'ccam'         => 'bool',
       'cim10'        => 'bool',
       'adeli'        => 'bool',
@@ -52,7 +52,7 @@ class CCodeSpec extends CMbFieldSpec {
       'rib'          => 'bool',
       'siret'        => 'bool',
       'order_number' => 'bool',
-    );
+    ) + parent::getOptions();
   }
   
   function checkProperty($object){

@@ -21,10 +21,10 @@ class CSetSpec extends CEnumSpec {
   }
   
   function getOptions(){
-    return parent::getOptions() + array(
+    return array(
       'list' => 'list',
       'typeEnum' => array(/*'select', */'checkbox'),
-    );
+    ) + parent::getOptions();
   }
   
   function getValue($object, $smarty = null, $params = array()) {

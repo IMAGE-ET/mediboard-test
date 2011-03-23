@@ -26,13 +26,13 @@ class CRefSpec extends CMbFieldSpec {
   }
   
   function getOptions(){
-    return parent::getOptions() + array(
+    return array(
       'class'     => 'class',
       'cascade'   => 'bool',
       'unlink'    => 'bool',
       'meta'      => 'field',
       'purgeable' => 'bool',
-    );
+    ) + parent::getOptions();
   }
   
   function getValue($object, $smarty = null, $params = array()) {

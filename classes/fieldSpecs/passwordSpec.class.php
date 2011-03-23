@@ -23,10 +23,10 @@ class CPasswordSpec extends CMbFieldSpec {
   }
   
   function getOptions(){
-    return parent::getOptions() + array(
+    return array(
       'minLength' => 'num',
       'revealable' => 'bool',
-    );
+    ) + parent::getOptions();
   }
   
   // TODO: Factoriser les check
