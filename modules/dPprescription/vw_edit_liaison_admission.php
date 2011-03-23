@@ -25,7 +25,6 @@ $is_admin  = $mediuser->isFromType(array("Administrator"));
 $praticien = new CMediusers();
 $chir = new CMediusers();
 $anesth = new CMediusers();
-$protocoles_list = array('chir' => array(), 'anesth' => array());
 
 // Chargement des protocoles de l'etablissement
 if($is_anesth || $is_admin){        
@@ -75,17 +74,9 @@ if($is_chir){
   $chir =& $mediuser;
 }
 
-if($chir->_id){
-	$protocoles_list["chir"] = CPrescription::getAllProtocolesFor($chir->_id, null, null, 'CSejour');
-}
-
-if($anesth->_id){
-  $protocoles_list["anesth"] = CPrescription::getAllProtocolesFor($anesth->_id, null, null, 'CSejour');
-}
 
 // Création du template
 $smarty = new CSmartyDP();
-$smarty->assign("protocoles_list", $protocoles_list);
 
 $smarty->assign("praticiens",   $praticiens);
 $smarty->assign("anesths",      $anesths);

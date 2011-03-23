@@ -62,6 +62,14 @@ emptyProtocole = function() {
 	$V(getForm("addPrescription").type, $("type_prescription").value);
 }
 
+// Si la prescription est ouverte en popup, comme dans la dhe,
+// la fonction reloadPrescription est à définir.
+if (!window.reloadPrescription) {
+  reloadPrescription = function(prescription_id) {
+    if (window.opener == null) return;
+    Prescription.reloadPrescSejour(prescription_id, '','', '0', null, null, null,'', null, false);
+  }
+}
 </script>
 
 <table class="main">

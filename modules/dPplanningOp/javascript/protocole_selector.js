@@ -41,7 +41,7 @@ ProtocoleSelector = {
     url.popup(this.options.width, this.options.height, "Protocole");
   },
   
-  set: function(protocole) {
+  set: function(protocole, libelle) {
     var oOpForm     = document.editOp;
     var oSejourForm = document.editSejour;
     var oOpFormEasy = document.editOpEasy;
@@ -71,6 +71,7 @@ ProtocoleSelector = {
       }
       
       $V(oOpForm[this.sRques_op], protocole.rques_operation);
+      $V(oOpForm[this.sProtoPrescAnesth], protocole.protocole_prescription_anesth_id);
     }
     else {
       $V(oSejourForm[this.sChir_id], protocole.chir_id, true);
@@ -105,12 +106,13 @@ ProtocoleSelector = {
       refreshListCCAM("expert");
       refreshListCCAM("easy");
     }
-    
-    if (oSejourForm[this.sProtoPrescAnesth]) {
-      if(protocole.protocole_prescription_anesth_id){
-        $V(oSejourForm[this.sProtoPrescAnesth], "prot-"+protocole.protocole_prescription_anesth_id);
+    if (oSejourForm[this.sProtoPrescChir]) {
+      if(protocole.protocole_prescription_chir_id){
+        $V(oSejourForm[this.sProtoPrescChir], protocole.protocole_prescription_chir_id);
+        $V(oSejourForm["libelle_protocole"], libelle);
       } else {
-        $V(oSejourForm[this.sProtoPrescAnesth], "");
+        $V(oSejourForm[this.sProtoPrescChir], "");
+        $V(oSejourForm["libelle_protocole"], "");
       }
     }
     refreshViewProtocoleAnesth(protocole.protocole_prescription_anesth_id);

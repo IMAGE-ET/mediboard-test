@@ -506,10 +506,23 @@ class CSejour extends CCodable {
     }
     
     if($this->_protocole_prescription_anesth_id){
-      $prescription->applyPackOrProtocole($this->_protocole_prescription_anesth_id, $this->praticien_id, mbDate(), $operation_id);
+      list($class, $id) = split("-", $this->_protocole_prescription_anesth_id);
+      $suffixe = "prot-";
+      
+      if (preg_match("/pack/i",$class) == 1) {
+        $suffixe = "pack-";
+      }
+      $prescription->applyPackOrProtocole($suffixe.$id, $this->praticien_id, mbDate(), $operation_id);
     }
+    
     if($this->_protocole_prescription_chir_id){
-      $prescription->applyPackOrProtocole($this->_protocole_prescription_chir_id, $this->praticien_id, mbDate(), $operation_id);
+      list($class, $id) = split("-", $this->_protocole_prescription_chir_id);
+      $suffixe = "prot-";
+      
+      if (preg_match("/pack/i",$class) == 1) {
+        $suffixe = "pack-";
+      }
+      $prescription->applyPackOrProtocole($suffixe.$id, $this->praticien_id, mbDate(), $operation_id);
     }
   }
     

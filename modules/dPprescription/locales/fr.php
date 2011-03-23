@@ -526,6 +526,7 @@ $locales['CPrescription.type.pre_admission'] = 'Pré-admission';
 $locales['CPrescription.type.sejour'] = 'Séjour';
 $locales['CPrescription.type.sortie'] = 'Sortie';
 $locales['CPrescription.type.traitement'] = 'Traitement';
+$locales['CPrescription.unlink_protocole'] = 'Supprimer le protocole';
 $locales['CPrescriptionCategoryGroup'] = 'Groupe de catégorie de prescription';
 $locales['CPrescriptionCategoryGroup-back-prescription_category_group_items'] = 'Elements du groupe de catégories';
 $locales['CPrescriptionCategoryGroup-back-prescription_category_group_items.empty'] = 'Aucun élément';

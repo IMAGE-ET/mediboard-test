@@ -22,13 +22,20 @@ updateDiv = function(id, type) {
   var isPack = $V(oForm.elements["protocole_prescription_"+type+"_id"]).match("Pack") != null;
   $("prot_"+type+"_"+id).innerHTML = (isPack ? "Pack: " : "Protocole: ") +$V(oForm.libelle_protocole); 
 }
+
+removeProtocole = function(form, type) {
+  $V(form.elements["protocole_prescription_"+type+"_id"], "");
+  $V(form.elements["libelle_protocole"], "");
+  $("prot_"+type+"_"+$V(form.protocole_id)).innerHTML = "";
+  submitFormAjax(form, 'systemMsg');
+}
 </script>
 <form name="filtre-protocole" method="get" action="?">
   <input type="hidden" name="m" value="{{$m}}" />
   <input type="hidden" name="tab" value="{{$tab}}" />
 	<table class="form">
 	  <tr>
-	    <td>
+	   {{*<td>
 	    {{if $anesths|@count}}
         Anesthésiste: 
         <select name="anesth_id" onchange="this.form.submit()">
@@ -38,7 +45,7 @@ updateDiv = function(id, type) {
           {{/foreach}}
         </select>
       {{/if}}
-	    </td>
+	    </td>*}}
       <td>
       {{if $praticiens|@count}}
         Chirurgien: 
@@ -62,7 +69,7 @@ updateDiv = function(id, type) {
 <table class="tbl">
   <tr>
     <th>Chirurgien - Actes CCAM</th>
-    <th>Protocole Anesth</th>
+    <!-- <th>Protocole Anesth</th>-->
     <th>Protocole Chir</th>
   </tr>
   {{foreach from=$protocoles item=_protocole}}
@@ -83,9 +90,9 @@ updateDiv = function(id, type) {
         <br />
       {{/foreach}}
     </td>
-    <td>
+    {{*<td>
       {{if $is_anesth || $is_admin}}
-        <form name="selProtocole-anesth-{{$_protocole->_id}}" action="?" method="post">  
+        <form name="selProtocole-anesth-{{$_protocole->_id}}" action="?" method="post">
           <input type="hidden" name="m" value="dPplanningOp" />
           <input type="hidden" name="dosql" value="do_protocole_aed" />
           <input type="hidden" name="del" value="0" />
@@ -121,7 +128,7 @@ updateDiv = function(id, type) {
       {{else}}
         {{$_protocole->_ref_protocole_prescription_anesth->_view}}
       {{/if}}
-    </td>
+    </td>*}}
     <td>  
       {{if $is_chir || $is_admin}}
         <form name="selProtocole-chir-{{$_protocole->_id}}" action="?" method="post">
@@ -134,6 +141,7 @@ updateDiv = function(id, type) {
             style="font-weight: bold; font-size: 1.3em; width: 200px;"
             onchange="updateToGuid(this.form.protocole_prescription_chir_id); updateDiv('{{$_protocole->_id}}', 'chir');
             submitFormAjax(this.form, 'systemMsg');" style="max-width: 15em;"/>
+          <button type="button" name="delete" class="cancel notext" onclick="removeProtocole(this.form, 'chir')">{{tr}}CPrescription.unlink_protocole{{/tr}}</button>
         </form>
         <script type="text/javascript">
           var oForm = getForm("selProtocole-chir-{{$_protocole->_id}}");

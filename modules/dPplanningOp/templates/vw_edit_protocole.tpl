@@ -124,6 +124,12 @@ function setOperationActive(active) {
   op.select('input, button, select, textarea').each(Form.Element[active ? 'enable' : 'disable']);
 }
 
+updateToGuid = function(element) {
+  var split = $V(element).split("-");
+  var classe = split[0] == "prot" ? "CPrescription" : "CPrescriptionProtocolePack";
+  $V(element, classe + "-" + split[1]);
+}
+
 Main.add(function () {
   refreshListCCAM();
 
@@ -370,6 +376,7 @@ Main.add(function () {
                   $V(form.libelle_protocole, node.innerHTML.replace("&lt;", "<").replace("&gt;",">"));
                   if (autocompleter.options.afterUpdateElement)
                     autocompleter.options.afterUpdateElement(autocompleter.element, selectedElement);
+                  updateToGuid(form.protocole_prescription_chir_id);
                 },
                 callback: function(input, queryString){
                   return (queryString + "&praticien_id=" + $V(form.chir_id));
@@ -380,9 +387,9 @@ Main.add(function () {
             </script>
             
             {{mb_label object=$protocole field="protocole_prescription_chir_id"}}
-            <input type="text" name="libelle_protocole" id="editFrm_libelle_protocole" class="autocomplete str" value="" />
+            <input type="text" name="libelle_protocole" id="editFrm_libelle_protocole" class="autocomplete str" value="{{if $protocole->_id}}{{$protocole->_ref_protocole_prescription_chir->libelle}}{{/if}}" />
             <div style="display:none; width: 150px;" class="autocomplete" id="protocole_auto_complete"></div>
-            <input type="hidden" name="protocole_prescription_chir_id" />
+            <input type="hidden" name="protocole_prescription_chir_id" value="{{$protocole->protocole_prescription_chir_id}}"/>
           </td>
         </tr>
         {{/if}}

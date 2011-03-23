@@ -43,7 +43,7 @@
   <tr {{if $protocole->_id == $_protocole->_id && !$dialog}}class="selected"{{/if}}>    
     <td class="text">
       {{if $dialog}}
-        <a href="#1" onclick="setClose('{{$type}}', {{$_protocole->_id}})">
+        <a href="#1" onclick="setClose('{{$type}}', {{$_protocole->_id}}, '{{$_protocole->_ref_protocole_prescription_chir->libelle|smarty:nodefaults|JSAttribute}}')">
       {{else}}
         <a href="?m={{$m}}&amp;tab=vw_protocoles&amp;protocole_id={{$_protocole->_id}}&amp;page={{$page.$type}}">
       {{/if}}

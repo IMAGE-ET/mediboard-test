@@ -21,7 +21,7 @@ if ($pack->object_class == "CConsultation") {
   $type_prot = "externe";
 }
 else {
-  $type_prot = $type_prot != "externe" ? $type_prot : "sejour";
+  $type_prot = !in_array($type_prot, array("externe", "")) ? $type_prot : "sejour";
 }
 
 $pack->loadRefsPackItemsByType($type_prot);
