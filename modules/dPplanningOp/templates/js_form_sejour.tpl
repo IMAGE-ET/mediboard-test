@@ -11,8 +11,13 @@ function modifPrat(){
   oForm.pathologie.value= sValue ? 
     listCategoriePrat[sValue] || "" : "";
 
-  oForm._protocole_prescription_chir_id.value = "";
-  $("editSejour_libelle_protocole").value = "";
+  if (oForm._protocole_prescription_chir_id) {
+    $V(oForm._protocole_prescription_chir_id, "");
+  }
+  var libelle = $("editSejour_libelle_protocole");
+  if (libelle) {
+    libelle.value = "";
+  }
 }
 
 function refreshViewProtocoleAnesth(prescription_id) {
