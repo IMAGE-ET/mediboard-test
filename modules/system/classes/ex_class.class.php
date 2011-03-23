@@ -155,6 +155,7 @@ class CExClass extends CMbObject {
     
     foreach($list as $_object) {
       $_object->_ex_class_id = $this->_id;
+      $_object->setExClass();
     }
     
     return $list;

@@ -97,10 +97,12 @@ showExClassForm = function(ex_class_id, object_guid, title, ex_object_id, event,
 	  </li>
 	{{else}}
 	  {{foreach from=$_ex_objects item=_ex_object}}
+    <li>
     <a href="#{{$_ex_object->_guid}}" title="{{mb_value object=$_ex_object->_ref_last_log field=date}} &ndash; {{mb_value object=$_ex_object->_ref_last_log field=user_id}}"
        onclick="showExClassForm({{$_ex_class_id}}, '{{$object->_guid}}', '{{$_ex_object}}', '{{$_ex_object->_id}}', '{{$event}}', '{{$_element_id}}')">
       {{$_ex_class->name}}
     </a>
+    </li>
 		{{/foreach}}
 	{{/if}}
 {{/foreach}}

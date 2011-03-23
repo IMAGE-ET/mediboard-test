@@ -28,9 +28,9 @@ $prop_map = array(
   "binaire ssq" => "bool",
   "binaire / ssq" => "bool",
 	
-  "liste fermée" => "enum",
-  "liste fermée ssq" => "enum",
-  "liste fermée / ssq" => "enum",
+  "liste fermée" => "enum vertical|1 typeEnum|radio",
+  "liste fermée ssq" => "enum vertical|1 typeEnum|radio",
+  "liste fermée / ssq" => "enum vertical|1 typeEnum|radio",
 	
   "texte court" => "str",
   "texte long" => "text",

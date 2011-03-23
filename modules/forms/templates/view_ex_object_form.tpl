@@ -46,47 +46,51 @@ getInputValue = function(element){
 
 // computes the result of a form + exGroup(formula, resultField)
 computeResult = function(form, exGroup){
-  if (!exGroup.formula || !exGroup.resultField) return;
-
-  var formula = exGroup.formula.replace(/[\[\]]/g, "");
-
-  var parser = Parser.parse(formula);
-  var vars = parser.variables();
+  var formula = exGroup.formula;
+  var vars = exGroup.variables;
   var values = {};
   
   vars.each(function(v){
     values[v] = getInputValue(form[v]);
   });
 
-  $V(form[exGroup.resultField], parser.evaluate(values));
+  $V(form[exGroup.resultField], formula.evaluate(values));
 }
 
 Main.add(function(){
-  var c, inputs;
+  var c, inputs, formula, parser, vars;
   
   {{foreach from=$grid key=_group_id item=_grid}}
-    c = $("tab-{{$groups.$_group_id->_guid}}");
-    inputs = c.select("input, textarea, select").filter(function(e){ return !e.readonly && !e.disabled });
-    
-    exGroups["{{$groups.$_group_id->_id}}"] = {
-      formula: {{$groups.$_group_id->formula|@json}},
-      resultField: {{$groups.$_group_id->_ref_formula_result_field->name|@json}}
-    };
+    {{if $groups.$_group_id->formula && $groups.$_group_id->formula_result_field_id}}
+      c = $("tab-{{$groups.$_group_id->_guid}}");
+      formula = {{$groups.$_group_id->formula|@json}}.replace(/[\[\]]/g, "");
+      parser = Parser.parse(formula);
+      vars = parser.variables();
 
-    function compute(event) {
-      var element = Event.element(event);
-      computeResult(element.form, exGroups["{{$groups.$_group_id->_id}}"]);
-    }
-    
-    inputs.each(function(input){
-      input.observe("change", compute);
-      input.observe("ui:change", compute);
-    });
+      inputs = c.select("input, textarea, select").filter(function(e){ 
+        return !e.readonly && !e.disabled && (vars.indexOf(e.name) != -1);
+      });
+      
+      exGroups["{{$groups.$_group_id->_id}}"] = {
+        formula: parser,
+        variables: vars,
+        resultField: {{$groups.$_group_id->_ref_formula_result_field->name|@json}}
+      };
+  
+      function compute(form) {
+        computeResult(form, exGroups["{{$groups.$_group_id->_id}}"]);
+      }
+      
+      inputs.each(function(input){
+        input.observe("change", compute.curry(input.form));
+        input.observe("ui:change", compute.curry(input.form));
+      });
+    {{/if}}
   {{/foreach}}
 });
 </script>
 
-{{mb_form name="editExObject" m="system" dosql="do_ex_object_aed" method="post" onsubmit="return onSubmitFormAjax(this, {onComplete: window.close})"}}
+{{mb_form name="editExObject" m="system" dosql="do_ex_object_aed" method="post" onsubmit="return onSubmitFormAjax(this, {onComplete: function(){ window.close() } })"}}
   {{mb_key object=$ex_object}}
   {{mb_field object=$ex_object field=_ex_class_id hidden=true}}
   {{mb_field object=$ex_object field=object_class hidden=true}}
@@ -180,7 +184,7 @@ Main.add(function(){
             {{tr}}Delete{{/tr}}
           </button>
         {{else}}
-          <button class="submit" type="submit">{{tr}}Create{{/tr}}</button>
+          <button class="submit" type="submit">{{tr}}Save{{/tr}}</button>
         {{/if}}
       </td>
     </tr>
@@ -192,30 +196,30 @@ Main.add(function(){
 {{else}}
 
 <table class="main form">
-    <tr>
-      <th class="title" colspan="4">
-        {{$ex_object->_ref_ex_class}} - {{$object}}
-      </th>
-    </tr>
-    
-    {{foreach from=$grid key=_y item=_line}}
-    <tr>
-      {{foreach from=$_line key=_x item=_group}}
-        {{if $_group.label}}
-          {{assign var=_field value=$_group.label}} 
-          <th style="font-weight: bold;">
-            {{mb_label object=$ex_object field=$_field->name}}
-          </th>
-        {{elseif $_group.field}}
-          {{assign var=_field value=$_group.field}} 
-          <td>
-            {{mb_value object=$ex_object field=$_field->name}}
-          </td>
-        {{else}}
-          <td></td>
-        {{/if}}
-      {{/foreach}}
-    </tr>
+  <tr>
+    <th class="title" colspan="4">
+      {{$ex_object->_ref_ex_class}} - {{$object}}
+    </th>
+  </tr>
+  
+  {{foreach from=$grid key=_y item=_line}}
+  <tr>
+    {{foreach from=$_line key=_x item=_group}}
+      {{if $_group.label}}
+        {{assign var=_field value=$_group.label}} 
+        <th style="font-weight: bold;">
+          {{mb_label object=$ex_object field=$_field->name}}
+        </th>
+      {{elseif $_group.field}}
+        {{assign var=_field value=$_group.field}} 
+        <td>
+          {{mb_value object=$ex_object field=$_field->name}}
+        </td>
+      {{else}}
+        <td></td>
+      {{/if}}
     {{/foreach}}
-  </table>
+  </tr>
+  {{/foreach}}
+</table>
 {{/if}}

@@ -67,6 +67,7 @@ class CExObject extends CMbMetaObject {
     return parent::load($id);
   }
   
+  // Used in updateDBFields
   function getDBFields() {
     $this->setExClass();
     return parent::getDBFields();
@@ -75,11 +76,6 @@ class CExObject extends CMbMetaObject {
   function fieldModified($field, $value = null) {
     $this->setExClass();
     return parent::fieldModified($field, $value);
-  }
-  
-  function prepareLog(){
-    $this->setExClass();
-    return parent::prepareLog();
   }
 
   function loadQueryList($sql) {
@@ -184,12 +180,12 @@ class CExObject extends CMbMetaObject {
   }
   
   static function getValidObject($object_class) {
-    if (!preg_match('/^CExObject_([A-Za-z]+)_([A-Za-z0-9_]+)_(\d+)$/', $object_class, $matches)) {
+    if (!preg_match('/^CExObject_(\d+)$/', $object_class, $matches)) {
       return false;
     }
     
     $ex_class = new CExClass();
-    if (!$ex_class->load($matches[3])) {
+    if (!$ex_class->load($matches[1])) {
       return false;
     }
     
