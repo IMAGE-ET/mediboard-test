@@ -47,7 +47,8 @@ foreach($plages_conge as $_plage_conge){
 	  $where = array();
 	  $where["type"] = "= 'ssr'";
 	  $where["group_id"] = "= '$group_id'";
-    $where["sejour.entree"] = "<= '$date_fin'";
+    $where["sejour.annule"] = "!= '1'";
+	  $where["sejour.entree"] = "<= '$date_fin'";
     $where["sejour.sortie"] = ">= '$date_debut'";
 	  $where["technicien.kine_id"] = " = '$_plage_conge->user_id'";
 	  $_sejours = $sejour->loadList($where, null, null, null, $ljoin);
