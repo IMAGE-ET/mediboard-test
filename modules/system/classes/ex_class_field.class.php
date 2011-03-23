@@ -104,6 +104,23 @@ class CExClassField extends CExListItemsOwner {
     }
   }
   
+  function getFormulaValues(){
+    $ret = true;
+    
+    if ($this->concept_id) {
+      $concept = $this->loadRefConcept();
+      if (!$concept->ex_list_id) return $ret;
+      
+      $list = $concept->loadRefExList();
+      if (!$list->coded) return $ret;
+      
+      $items = $list->loadRefItems();
+      $ret = array_combine(CMbArray::pluck($items, "ex_list_item_id"), CMbArray::pluck($items, "code"));
+    }
+    
+    return $ret;
+  }
+  
   function loadTriggeredData(){
     $triggers = $this->loadBackRefs("ex_triggers");
     

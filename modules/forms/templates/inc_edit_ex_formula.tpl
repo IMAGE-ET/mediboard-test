@@ -21,8 +21,20 @@ ExFormula.tokens = {{$field_names|@json}};
     </tr>
     <tr>
       <td>
+        {{mb_label object=$ex_group field=formula_result_field_id}}
+        
+        <select name="formula_result_field_id" class="{{$ex_group->_props.formula_result_field_id}}" style="max-width: 20em;">
+          <option value=""> &ndash; Choisir un champ </option>
+          {{foreach from=$result_fields item=_field}}
+            <option value="{{$_field->_id}}" {{if $ex_group->formula_result_field_id == $_field->_id}} selected="selected" {{/if}}>
+              {{$_field->_locale}}
+            </option>
+          {{/foreach}}
+        </select>
+
         <button class="sum" type="button" onclick="ExFormula.sumAllFields()">Somme de tous les champs</button>
-        {{mb_field object=$ex_group field=formula}}
+
+        {{mb_field object=$ex_group field=_formula}}
       </td>
     </tr>
     <tr>

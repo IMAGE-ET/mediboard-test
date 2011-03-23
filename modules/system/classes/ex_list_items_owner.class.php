@@ -12,7 +12,7 @@ class CExListItemsOwner extends CMbObject {
   var $_ref_items = null;
   
   function loadRefItems() {
-    return $this->_ref_items = $this->loadBackRefs("list_items", "code");
+    return $this->_ref_items = $this->loadBackRefs("list_items", "code, name");
   }
   
   function getBackRefField(){
@@ -29,7 +29,7 @@ class CExListItemsOwner extends CMbObject {
     $where = array(
       $this->getBackRefField() => "= '$this->_id'"
     );
-    return $item->loadIds($where, "name, code");
+    return $item->loadIds($where, "code, name");
   }
   
   function getRealListOwner(){

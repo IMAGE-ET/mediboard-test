@@ -200,7 +200,9 @@ class CExClass extends CMbObject {
         "label" => array(),
       );
     
+      $_ex_group->loadRefFormulaResultField();
       $_ex_group->loadRefsFields();
+      
       foreach($_ex_group->_ref_fields as $_ex_field) {
         $_ex_field->getSpecObject();
         

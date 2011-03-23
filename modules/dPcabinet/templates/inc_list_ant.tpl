@@ -260,8 +260,10 @@ Traitement = {
 
 <script type="text/javascript">
 // FIXME : Modifier le tokenfield, car deux appels à onchange
-oCimField = new TokenField(document.editDiagFrm.codes_cim, { 
-  confirm  : 'Voulez-vous réellement supprimer ce diagnostic ?',
-  onChange : updateTokenCim10
-} ); 
+Main.add(function(){
+  oCimField = new TokenField(getForm("editDiagFrm").codes_cim, { 
+    confirm  : 'Voulez-vous réellement supprimer ce diagnostic ?',
+    onChange : updateTokenCim10
+  });
+});
 </script>      

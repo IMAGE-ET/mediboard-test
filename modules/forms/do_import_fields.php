@@ -32,9 +32,9 @@ $prop_map = array(
   "binaire ssq" => "bool",
   "binaire / ssq" => "bool",
 	
-  "liste fermée" => "enum",
-  "liste fermée ssq" => "enum",
-  "liste fermée / ssq" => "enum",
+  "liste fermée" => "enum vertical|1 typeEnum|radio",
+  "liste fermée ssq" => "enum vertical|1 typeEnum|radio",
+  "liste fermée / ssq" => "enum vertical|1 typeEnum|radio",
 	
   "texte court" => "str",
   "texte long" => "text",
@@ -102,7 +102,7 @@ else {
 				$current_class->conditional = ((stripos($class_name, "SSQ") !== false) ? 1 : 0);
 				
 	      if ($msg = $current_class->store()) {
-	        CAppUI::setMsg($msg, UI_MSG_WARNING);
+	        CAppUI::setMsg("Ligne $line_number : $msg", UI_MSG_WARNING);
 	        continue;
 	      }
 	      else {
@@ -112,6 +112,7 @@ else {
         
       $current_class->loadRefsGroups();
       $current_group = reset($current_class->_ref_groups);
+      continue;
 	  }
 		
 		if (!$current_group || !$current_group->_id) {
@@ -129,7 +130,7 @@ else {
 	  $concept->loadObject($where);
 	  
 	  if (!$concept->_id) {
-	    CAppUI::setMsg("Concept non trouvé : <strong>{$line['concept_name']}</strong>", UI_MSG_WARNING);
+	    CAppUI::setMsg("Ligne $line_number : concept non trouvé : <strong>{$line['concept_name']}</strong>", UI_MSG_WARNING);
 	    continue;
 	  }
 	  
@@ -156,7 +157,7 @@ else {
 			$field->concept_id = $concept->_id;
 			
 	    if ($msg = $field->store()) {
-	      CAppUI::setMsg($msg, UI_MSG_WARNING);
+	      CAppUI::setMsg("Ligne $line_number : $msg", UI_MSG_WARNING);
 	      continue;
 	    }
 	    else {
@@ -167,7 +168,7 @@ else {
 
 	fclose($fp);
   
-  CAppUI::setMsg("Import terminé avec succès", UI_MSG_OK);
+  CAppUI::setMsg("Import terminé", UI_MSG_OK);
 }
 
 // Création du template

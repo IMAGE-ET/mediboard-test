@@ -59,6 +59,9 @@ CJSLoader::$files = array(
   "lib/flotr/lib/base64.js",
   "lib/flotr/lib/canvas2image.js",
   "lib/flotr/lib/canvastext.js",
+  
+  // JS Expression eval
+  "lib/jsExpressionEval/parser.js",
 
   "includes/javascript/common.js",
   "includes/javascript/functions.js",

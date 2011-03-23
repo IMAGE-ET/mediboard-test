@@ -49,9 +49,15 @@ foreach($ex_object->_specs as $_field => $_spec) {
 
 $fields = $ex_object->_ref_ex_class->loadRefsAllFields();
 
+$formula_token_values = array();
+
 foreach($fields as $_field) {
-  $_field->updateTranslation();
+  $formula_token_values[$_field->name] = $_field->getFormulaValues();
 }
+
+/*foreach($fields as $_field) {
+  $_field->updateTranslation();
+}*/
 
 // Création du template
 $smarty = new CSmartyDP();
@@ -66,4 +72,5 @@ $smarty->assign("grid",         $grid);
 $smarty->assign("out_of_grid",  $out_of_grid);
 $smarty->assign("groups",       $groups);
 $smarty->assign("readonly",     $readonly);
+$smarty->assign("formula_token_values", $formula_token_values);
 $smarty->display("view_ex_object_form.tpl");

@@ -15,6 +15,7 @@
     <a href="#ex-back-concepts" {{if $object->_back.concepts|@count == 0}} class="empty" {{/if}}>{{tr}}CExList-back-concepts{{/tr}} <small>({{$object->_back.concepts|@count}})</small></a>
   </li>
 </ul>
+<hr class="control_tabs" />
 
 <div id="ex-back-list_items" style="display: none;">
   {{mb_include module=system template=inc_ex_list_item_edit context=$object}}

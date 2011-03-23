@@ -174,10 +174,12 @@ toggleCancelledAnesth = function(list) {
 </form>
 
 <script type="text/javascript">
-oCimAnesthField = new TokenField(document.editDiagAnesthFrm.codes_cim, { 
-  confirm  : 'Voulez-vous réellement supprimer ce diagnostic ?',
-  onChange : updateTokenCim10Anesth
-} );
+Main.add(function(){
+  oCimAnesthField = new TokenField(getForm("editDiagAnesthFrm").codes_cim, { 
+    confirm  : 'Voulez-vous réellement supprimer ce diagnostic ?',
+    onChange : updateTokenCim10Anesth
+  });
+});
 </script>
 {{else}}
 Aucun séjour sélectionné

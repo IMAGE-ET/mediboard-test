@@ -44,6 +44,8 @@ function reduce_whitespace($str) {
 	return preg_replace("/\s+/", " ", $str);
 }
 
+$line_number = 0;
+
 if (!$object_class) {
   CAppUI::setMsg("Veuillez choisir un type d'objet", UI_MSG_WARNING);
 }
@@ -65,6 +67,8 @@ else {
 				$line = array_fill_keys($keys, "");
 				
 	      while($current_line = fgetcsv($fp, null, $separator, $enclosure)) {
+          $line_number++;
+          
           $current_line = array_map("trim", $current_line);
           $current_line = array_map("reduce_whitespace", $current_line);
           $current_line = array_combine($keys, $current_line);
@@ -91,7 +95,7 @@ else {
             $list->coded = (($line["item_code"] != "") ? 1 : 0);
             
             if ($msg = $list->store()) {
-              CAppUI::setMsg($msg, UI_MSG_WARNING);
+              CAppUI::setMsg("Ligne $line_number : $msg", UI_MSG_WARNING);
               continue;
             }
 						else {
@@ -115,7 +119,7 @@ else {
             $list_item->code = $line["item_code"];
             
             if ($msg = $list_item->store()) {
-              CAppUI::setMsg($msg, UI_MSG_WARNING);
+              CAppUI::setMsg("Ligne $line_number : $msg", UI_MSG_WARNING);
               continue;
             }
             else {
@@ -133,6 +137,8 @@ else {
         $line = array_fill_keys($keys, "");
         
         while($current_line = fgetcsv($fp, null, $separator, $enclosure)) {
+          $line_number++;
+          
           $current_line = array_slice($current_line, 0, count($keys));
           $current_line = array_map("trim", $current_line);
           $current_line = array_map("reduce_whitespace", $current_line);
@@ -161,7 +167,7 @@ else {
             $tag1->object_class = $object_class;
             
             if ($msg = $tag1->store()) {
-              CAppUI::setMsg($msg, UI_MSG_WARNING);
+              CAppUI::setMsg("Ligne $line_number : $msg", UI_MSG_WARNING);
               continue;
             }
             else {
@@ -185,7 +191,7 @@ else {
             $tag2->parent_id = $tag1->_id;
             
             if ($msg = $tag2->store()) {
-              CAppUI::setMsg($msg, UI_MSG_WARNING);
+              CAppUI::setMsg("Ligne $line_number : $msg", UI_MSG_WARNING);
               continue;
             }
             else {
@@ -196,7 +202,7 @@ else {
           // CONCEPT
 					$concept_prop = CValue::read($prop_map, CMbString::lower($line["concept_type"]));
 					if (!$concept_prop) {
-						CAppUI::setMsg("Type de concept invalide : <strong>{$line['concept_type']}</strong>", UI_MSG_WARNING);
+						CAppUI::setMsg("Ligne $line_number : type de concept invalide : <strong>{$line['concept_type']}</strong>", UI_MSG_WARNING);
 						continue;
 					}
 					
@@ -205,7 +211,7 @@ else {
             $_list = new CExList;
             $_list->name = $line["list_name"];
             if (!$_list->loadMatchingObject() ){
-	            CAppUI::setMsg("Nom de liste introuvable : <strong>{$line['list_name']}</strong>", UI_MSG_WARNING);
+	            CAppUI::setMsg("Ligne $line_number : nom de liste introuvable : <strong>{$line['list_name']}</strong>", UI_MSG_WARNING);
 	            continue;
             }
           }
@@ -227,7 +233,7 @@ else {
 	          }
             
             if ($msg = $concept->store()) {
-              CAppUI::setMsg($msg, UI_MSG_WARNING);
+              CAppUI::setMsg("Ligne $line_number : $msg", UI_MSG_WARNING);
               continue;
             }
             else {
@@ -244,7 +250,7 @@ else {
 					
 					if (!$tag_item->_id) {
 						if ($msg = $tag_item->store()) {
-              CAppUI::setMsg($msg, UI_MSG_WARNING);
+              CAppUI::setMsg("Ligne $line_number : $msg", UI_MSG_WARNING);
 						}
             else {
               CAppUI::setMsg("$tag_item->_class_name-msg-create", UI_MSG_OK);
@@ -257,7 +263,7 @@ else {
 		
 		fclose($fp);
     
-    CAppUI::setMsg("Import terminé avec succès", UI_MSG_OK);
+    CAppUI::setMsg("Import terminé", UI_MSG_OK);
   }
 }
 

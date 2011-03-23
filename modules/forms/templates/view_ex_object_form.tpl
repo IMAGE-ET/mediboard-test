@@ -21,12 +21,74 @@ if (window.opener && window.opener !== window) {
     });
   }
 }
+
+formulaTokenValues = {{$formula_token_values|@json}};
+exGroups = {};
+
+// get the input value : coded or non-coded
+getInputValue = function(element){
+  var value = $V(element);
+  
+  if (element instanceof NodeList || element instanceof HTMLCollection) {
+    element = element[0];
+  }
+  
+  var name = element.name;
+  var result = formulaTokenValues[name];
+
+  // non-coded
+  if (result === true)
+    return value;
+
+  // coded
+  return formulaTokenValues[name][value];
+}
+
+// computes the result of a form + exGroup(formula, resultField)
+computeResult = function(form, exGroup){
+  if (!exGroup.formula || !exGroup.resultField) return;
+
+  var formula = exGroup.formula.replace(/[\[\]]/g, "");
+
+  var parser = Parser.parse(formula);
+  var vars = parser.variables();
+  var values = {};
+  
+  vars.each(function(v){
+    values[v] = getInputValue(form[v]);
+  });
+
+  $V(form[exGroup.resultField], parser.evaluate(values));
+}
+
+Main.add(function(){
+  var c, inputs;
+  
+  {{foreach from=$grid key=_group_id item=_grid}}
+    c = $("tab-{{$groups.$_group_id->_guid}}");
+    inputs = c.select("input, textarea, select").filter(function(e){ return !e.readonly && !e.disabled });
+    
+    exGroups["{{$groups.$_group_id->_id}}"] = {
+      formula: {{$groups.$_group_id->formula|@json}},
+      resultField: {{$groups.$_group_id->_ref_formula_result_field->name|@json}}
+    };
+
+    function compute(event) {
+      var element = Event.element(event);
+      computeResult(element.form, exGroups["{{$groups.$_group_id->_id}}"]);
+    }
+    
+    inputs.each(function(input){
+      input.observe("change", compute);
+      input.observe("ui:change", compute);
+    });
+  {{/foreach}}
+});
 </script>
 
 {{mb_form name="editExObject" m="system" dosql="do_ex_object_aed" method="post" onsubmit="return onSubmitFormAjax(this, {onComplete: window.close})"}}
   {{mb_key object=$ex_object}}
   {{mb_field object=$ex_object field=_ex_class_id hidden=true}}
-  
   {{mb_field object=$ex_object field=object_class hidden=true}}
   {{mb_field object=$ex_object field=object_id hidden=true}}
   
@@ -45,11 +107,16 @@ if (window.opener && window.opener !== window) {
 	  </li>
 	{{/foreach}}
 	</ul>
+  <hr class="control_tabs" />
 	
   <table class="main form">
   	
 		{{foreach from=$grid key=_group_id item=_grid}}
 		<tbody id="tab-{{$groups.$_group_id->_guid}}" style="display: none;">
+    {{assign var=has_formula value=false}}
+    {{if $groups.$_group_id->formula != null && $groups.$_group_id->formula_result_field_id}}
+      {{assign var=has_formula value=true}}
+    {{/if}}
 		
     {{foreach from=$_grid key=_y item=_line}}
     <tr>
@@ -62,39 +129,8 @@ if (window.opener && window.opener !== window) {
 		            {{mb_label object=$ex_object field=$_field->name}}
 		          </th>
 					  {{elseif $_group.type == "field"}}
-		          {{assign var=_field value=$_group.object}} 
 		          <td>
-		          	{{assign var=_field_name value=$_field->name}}
-				        {{assign var=_spec value=$ex_object->_specs.$_field_name}}
-				        
-				        {{if $_spec instanceof CRefSpec}}
-				          <script type="text/javascript">
-				          Main.add(function(){
-				            var form = getForm("editExObject");
-				            var url = new Url("system", "ajax_seek_autocomplete");
-				            
-				            url.addParam("object_class", "{{$_spec->class}}");
-				            url.addParam("field", "{{$_field_name}}");
-				            url.addParam("input_field", "_{{$_field_name}}_view");
-				            url.autoComplete(form.elements["_{{$_field_name}}_view"], null, {
-				              minChars: 3,
-				              method: "get",
-				              select: "view",
-				              dropdown: true,
-				              afterUpdateElement: function(field,selected){
-				                $V(field.form["{{$_field_name}}"], selected.getAttribute("id").split("-")[2]);
-				                if ($V(field.form.elements["_{{$_field_name}}_view"]) == "") {
-				                  $V(field.form.elements["_{{$_field_name}}_view"], selected.down('.view').innerHTML);
-				                }
-				              }
-				            });
-				          });
-				          </script>
-				          <input type="text" class="autocomplete" name="_{{$_field_name}}_view" value="{{$ex_object->_fwd.$_field_name}}" size="30" />
-				          {{mb_field object=$ex_object field=$_field->name form=editExObject hidden=true}}
-				        {{else}}
-				          {{mb_field object=$ex_object field=$_field->name register=true increment=true form=editExObject}}
-				        {{/if}}
+                {{mb_include module=forms template=inc_ex_object_field ex_object=$ex_object ex_field=$_group.object has_formula=$has_formula}}
 		          </td>
 						{{/if}}
 					{{else}}
@@ -126,36 +162,7 @@ if (window.opener && window.opener !== window) {
 		        {{mb_label object=$ex_object field=$_field->name}}
 		      </th>
 		      <td colspan="3">
-		        {{assign var=_spec value=$ex_object->_specs.$_field_name}}
-		        
-		        {{if $_spec instanceof CRefSpec}}
-		          <script type="text/javascript">
-		          Main.add(function(){
-		            var form = getForm("editExObject");
-		            var url = new Url("system", "ajax_seek_autocomplete");
-		            
-		            url.addParam("object_class", "{{$_spec->class}}");
-		            url.addParam("field", "{{$_field_name}}");
-		            url.addParam("input_field", "_{{$_field_name}}_view");
-		            url.autoComplete(form.elements["_{{$_field_name}}_view"], null, {
-		              minChars: 3,
-		              method: "get",
-		              select: "view",
-		              dropdown: true,
-		              afterUpdateElement: function(field,selected){
-		                $V(field.form["{{$_field_name}}"], selected.getAttribute("id").split("-")[2]);
-		                if ($V(field.form.elements["_{{$_field_name}}_view"]) == "") {
-		                  $V(field.form.elements["_{{$_field_name}}_view"], selected.down('.view').innerHTML);
-		                }
-		              }
-		            });
-		          });
-		          </script>
-		          <input type="text" class="autocomplete" name="_{{$_field_name}}_view" value="{{$ex_object->_fwd.$_field_name}}" size="30" />
-		          {{mb_field object=$ex_object field=$_field->name form=editExObject hidden=true}}
-		        {{else}}
-		          {{mb_field object=$ex_object field=$_field->name register=true increment=true form=editExObject}}
-		        {{/if}}
+		        {{mb_include module=forms template=inc_ex_object_field ex_object=$ex_object ex_field=$_field}}
 		      </td>
 		    </tr>
 		  {{/if}}

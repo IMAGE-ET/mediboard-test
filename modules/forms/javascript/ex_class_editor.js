@@ -275,12 +275,12 @@ ExFormula = {
     $("group-CExClassFieldGroup-"+ex_group_id).select(".insert-formula").invoke("setVisible", value);
   },
   insertText: function(text){
-    var field = ExFormula.form.formula;
+    var field = ExFormula.form._formula;
     var c = field.caret();
     field.caret(c.begin, c.end, text);
   },
   checkTokens: function() {
-    var text = $V(ExFormula.form.formula);
+    var text = $V(ExFormula.form._formula);
     var re = /\[([^\]]+)\]/g;
     var match, bad = [];
     
@@ -293,7 +293,7 @@ ExFormula = {
     return bad;
   },
   sumAllFields: function(){
-    var field = ExFormula.form.formula;
+    var field = ExFormula.form._formula;
     if ($V(field) && !confirm("Voulez-vous remplacer la formule actuelle ?")) {
       return false;
     }
@@ -306,7 +306,7 @@ ExFormula = {
     $V(field, tokens.join(' + '));
   },
   initTextarea: function(){
-    var field = ExFormula.form.formula;
+    var field = ExFormula.form._formula;
     
     field.observe("keyup", function(){
       var bad = ExFormula.checkTokens();
@@ -319,6 +319,7 @@ ExFormula = {
     
     if (Prototype.Browser.IE) return;
     
+    // Auto-select entire tokens
     field.observe("click", function(){
       var c = field.caret();
       var text = $V(field).split("");

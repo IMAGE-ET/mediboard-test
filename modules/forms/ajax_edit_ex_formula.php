@@ -15,12 +15,23 @@ $ex_group_id = CValue::get("ex_group_id");
 $ex_group = new CExClassFieldGroup;
 $ex_group->load($ex_group_id);
 
-$field_names = CMbArray::pluck($ex_group->loadRefsFields(), "_locale");
+$fields = $ex_group->loadRefsFields();
+
+$field_names = CMbArray::pluck($fields, "_locale");
 $field_names = array_values($field_names);
 $field_names = array_map("utf8_encode", $field_names);
 
+$result_fields = array();
+$good = array("str", "num", "float");
+foreach($fields as $_k => $_field) {
+  $prop = reset(explode(" ", $_field->prop));
+  if (in_array($prop, $good)) {
+    $result_fields[] = $_field;
+  }
+}
 
 $smarty = new CSmartyDP();
 $smarty->assign("ex_group", $ex_group);
 $smarty->assign("field_names", $field_names);
+$smarty->assign("result_fields", $result_fields);
 $smarty->display("inc_edit_ex_formula.tpl");

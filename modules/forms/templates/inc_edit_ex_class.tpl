@@ -178,7 +178,7 @@ toggleGroupLabelEdit = function(link) {
 		        {{foreach from=$_group->_ref_fields item=_field}}
 		          <tr>
 		            <td class="text" style="min-width: 14em;">
-                  <button class="right notext insert-formula" style="float: right; margin: -2px; display: none;"
+                  <button class="right notext insert-formula" style="float: right; margin: -3px; display: none;"
                           onclick="ExFormula.insertText('[{{$_field->_locale|smarty:nodefaults|JSAttribute}}]')">
                     Ajouter à la formule
                   </button>

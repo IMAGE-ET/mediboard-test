@@ -132,6 +132,7 @@ Main.add(function(){
 		</a>
   </li>
 </ul>
+<hr class="control_tabs" />
 
 <div id="ExConcept-spec-editor" style="display: none;"></div>
 

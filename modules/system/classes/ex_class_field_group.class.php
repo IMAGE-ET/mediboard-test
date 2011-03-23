@@ -14,9 +14,12 @@ class CExClassFieldGroup extends CMbObject {
   var $ex_class_id = null;
   var $name = null; // != object_class, object_id, ex_ClassName_event_id, 
   var $formula = null;
+  var $_formula = null;
+  var $formula_result_field_id = null;
   
   var $_ref_ex_class = null;
   var $_ref_ex_fields = null;
+  var $_ref_formula_result_field = null;
   
   static $_formula_token_re = "/\[([^\]]+)\]/";
 
@@ -32,7 +35,9 @@ class CExClassFieldGroup extends CMbObject {
     $props = parent::getProps();
     $props["ex_class_id"] = "ref class|CExClass cascade";
     $props["name"]        = "str notNull";
-    $props["formula"]     = "text";
+    $props["formula"]     = "text"; // canonical tokens
+    $props["_formula"]     = "text"; // Localized tokens
+    $props["formula_result_field_id"] = "ref class|CExClassField";
     return $props;
   }
 	
@@ -44,10 +49,10 @@ class CExClassFieldGroup extends CMbObject {
   }
   
   function formulaToDB($update = true) {
-    if (!$this->formula) return;
+    if (!$this->_formula) return;
     
     $field_names = $this->getFieldNames(false);
-    $formula = $this->formula;
+    $formula = $this->_formula;
     
     if (!preg_match_all(self::$_formula_token_re, $formula, $matches)) {
       return "Formule invalide";
@@ -75,28 +80,6 @@ class CExClassFieldGroup extends CMbObject {
     return "Des éléments n'ont pas été reconnus dans la formule: ".implode(", ", $msg);
   }
   
-  function getFieldNames($name_as_key = true){
-    $ds = $this->_spec->ds;
-    
-    $req = new CRequest();
-    $req->addTable("ex_class_field");
-    $req->addSelect("ex_class_field.name, ex_class_field_translation.std AS locale");
-    $req->addLJoin(array(
-      "ex_class_field_translation" => "ex_class_field_translation.ex_class_field_id = ex_class_field.ex_class_field_id"
-    ));
-    $req->addWhere(array(
-      "ex_group_id" => $ds->prepare("= %", $this->_id),
-    ));
-    
-    $results = $ds->loadList($req->getRequest());
-    
-    if ($name_as_key) {
-      return array_combine(CMbArray::pluck($results, "name"), CMbArray::pluck($results, "locale"));
-    }
-    
-    return array_combine(CMbArray::pluck($results, "locale"), CMbArray::pluck($results, "name"));
-  }
-  
   function formulaFromDB(){
     //$this->completeField("formula"); memory limit :(
     
@@ -117,7 +100,29 @@ class CExClassFieldGroup extends CMbObject {
       }
     }
     
-    $this->formula = $formula;
+    $this->_formula = $formula;
+  }
+  
+  function getFieldNames($name_as_key = true){
+    $ds = $this->_spec->ds;
+    
+    $req = new CRequest();
+    $req->addTable("ex_class_field");
+    $req->addSelect("ex_class_field.name, ex_class_field_translation.std AS locale");
+    $req->addLJoin(array(
+      "ex_class_field_translation" => "ex_class_field_translation.ex_class_field_id = ex_class_field.ex_class_field_id"
+    ));
+    $req->addWhere(array(
+      "ex_group_id" => $ds->prepare("= %", $this->_id),
+    ));
+    
+    $results = $ds->loadList($req->getRequest());
+    
+    if ($name_as_key) {
+      return array_combine(CMbArray::pluck($results, "name"), CMbArray::pluck($results, "locale"));
+    }
+    
+    return array_combine(CMbArray::pluck($results, "locale"), CMbArray::pluck($results, "name"));
   }
   
   function checkFormula(){
@@ -149,5 +154,9 @@ class CExClassFieldGroup extends CMbObject {
 	
   function loadRefsFields(){
     return $this->_ref_fields = $this->loadBackRefs("class_fields");
+  }
+  
+  function loadRefFormulaResultField($cache = true){
+    return $this->_ref_formula_result_field = $this->loadFwdRef("formula_result_field_id", $cache);
   }
 }
