@@ -114,6 +114,7 @@ class CConsultation extends CCodable {
   var $_du_tiers_restant         = null;
   var $_reglements_total_tiers   = null;
   var $_forfait_se               = null;
+  var $_facturable               = null;
   
   // Filter Fields
   var $_date_min	 	           = null;
@@ -202,6 +203,7 @@ class CConsultation extends CCodable {
     $specs["_etat_reglement_patient"]   = "enum list|reglee|non_reglee";
     $specs["_etat_reglement_tiers"  ]   = "enum list|reglee|non_reglee";
     $specs["_forfait_se"]               = "bool default|0";
+    $specs["_facturable"]               = "bool default|1";
     
     $specs["_date"]             = "date";
     $specs["_datetime"]         = "dateTime show|1";
@@ -714,7 +716,7 @@ class CConsultation extends CCodable {
 ANALYSE DU CODE
 1. gestion du désistement
 2. premier if : creation d'une consultation à laquelle on doit attacher un séjour (conf active) : comportement DEPART / ARRIVEE
-3. mise en cache du forfait FSE : uniquement dans le cas d'un séjour
+3. mise en cache du forfait FSE et facturable : uniquement dans le cas d'un séjour
 4. on load le séjour de la consultation
 5. on initialise le _adjust_sejour à false
 6. dans le cas ou on a un séjour
@@ -723,7 +725,7 @@ ANALYSE DU CODE
   6.3. si on a un id (à virer) et que le chrono est modifié en PATIENT_ARRIVE, si on gère les admissions auto (conf) on met une entrée réelle au séjour
 7. Si le patient est modifié, qu'on est pas en train de merger et qu'on a un séjour, on empeche le store
 8. On appelle le parent::store()
-9. On passe le forfait SE au séjour
+9. On passe le forfait SE et facturable au séjour
 10. On propage la modification du patient de la consultation au séjour
 11. si on a ajusté le séjour et qu'on est dans un séjour de type conclut et que le séjour n'a plus de consultations, on essaie de le supprimer, sinon on l'annule
 12. Gestion du tarif et précodage des actes (bindTarif)
@@ -809,6 +811,7 @@ TESTS A EFFECTUER
     }
     
     $forfait_se = $this->_forfait_se; // must be BEFORE loadRefSejour()
+    $facturable = $this->_facturable;
     
     $this->loadRefSejour();
     $this->_adjust_sejour = false;
@@ -918,13 +921,22 @@ TESTS A EFFECTUER
       return $msg;
     }
     
-    // Forfait SE. A laisser apres le store()
-    if ($this->sejour_id && $forfait_se !== null && CAppUI::conf("dPcabinet CConsultation attach_consult_sejour")) {
-      $this->_ref_sejour->forfait_se = $forfait_se;
-      if ($msg = $this->_ref_sejour->store()) {
-        return $msg;
+    // Forfait SE et facturable. A laisser apres le store()
+    if ($this->sejour_id && CAppUI::conf("dPcabinet CConsultation attach_consult_sejour")) {
+      if($forfait_se !== null) {
+        $this->_ref_sejour->forfait_se = $forfait_se;
+        if ($msg = $this->_ref_sejour->store()) {
+          return $msg;
+        }
+        $this->_forfait_se = null;
       }
-      $this->_forfait_se = null;
+      if($facturable !== null) {
+        $this->_ref_sejour->facturable = $facturable;
+        if ($msg = $this->_ref_sejour->store()) {
+          return $msg;
+        }
+        $this->_facturable = null;
+      }
     }
     
     // Changement du patient pour la consult 
@@ -988,6 +1000,7 @@ TESTS A EFFECTUER
     
     if (CAppUI::conf("dPcabinet CConsultation attach_consult_sejour")) {
       $this->_forfait_se = $this->_ref_sejour->forfait_se;
+      $this->_facturable = $this->_ref_sejour->facturable;
     }
   }
   
