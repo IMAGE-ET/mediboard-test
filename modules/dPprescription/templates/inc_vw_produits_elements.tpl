@@ -416,7 +416,13 @@ reloadPerfEvolution = function(perf_id, object){
   <input type="hidden" name="object_class" value="{{$prescription->object_class}}" />
   <input type="hidden" name="praticien_id" value="{{$app->user_id}}" />
   <input type="hidden" name="creator_id" value="{{$app->user_id}}" />  
-  <input type="hidden" name="debut" value="{{$today}}" />
+
+  {{if $prescription->type == "externe"}}
+    <input type="hidden" name="debut" value="" />
+  {{else}}
+    <input type="hidden" name="debut" value="{{$today}}" />
+  {{/if}}
+	
   <input type="hidden" name="time_debut" value="" />
   <input type="hidden" name="duree" value="" />
   <input type="hidden" name="unite_duree" value="" />

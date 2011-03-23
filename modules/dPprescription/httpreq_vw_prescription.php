@@ -398,7 +398,9 @@ foreach($mins as &$min){
 }
 
 $filter_line = new CPrescriptionLineMedicament();
-$filter_line->debut = mbDate();
+if($prescription->type != "externe"){
+  $filter_line->debut = mbDate();
+}
 
 $prise = new CPrisePosologie();
 $prise->quantite = 1.0;

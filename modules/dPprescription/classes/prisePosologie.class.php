@@ -48,6 +48,7 @@ class CPrisePosologie extends CMbMetaObject {
   var $_urgent = null;
   var $_equivalence_unite_prise = null;
   var $_view_unite_prise = null;
+	var $_short_view_unite_prise = null;
 	var $_ref_planifications_systemes = null;
 	var $_quantite_UI = null; // Quantite exprimée en Unité Internationale (UI)
   
@@ -98,10 +99,11 @@ class CPrisePosologie extends CMbMetaObject {
       if(preg_match("/\(([0-9.,]+).*\)/i", $this->unite_prise, $matches)){
         $_quant = end($matches);
         $nb = $this->quantite * $_quant;
-				
+
 				// Suppression des parentheses de l'unite de prise
 				//$unite_prise = preg_replace("/[(|)]/", '', $this->unite_prise);
         $this->_view_unite_prise = str_replace($_quant, "soit $nb", $this->unite_prise);
+				$this->_short_view_unite_prise = str_replace(reset($matches), "", $this->unite_prise);
       }
     }
   }
@@ -200,7 +202,11 @@ class CPrisePosologie extends CMbMetaObject {
       $this->_view .= " ".$this->_ref_object->_unite_prise;
     } else {
       if($this->_view_unite_prise){
-        $this->_view .= " ".$this->_view_unite_prise; 
+      	if($this->_ref_object->_ref_prescription->type == "externe" && $this->_short_view_unite_prise){
+      		$this->_view .= " ".$this->_short_view_unite_prise; 
+      	} else {
+      		$this->_view .= " ".$this->_view_unite_prise; 
+      	}
       } else {
         $this->_view .= " ".$this->unite_prise; 
       }

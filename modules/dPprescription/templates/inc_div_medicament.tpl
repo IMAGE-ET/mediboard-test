@@ -165,7 +165,11 @@ updateModaleAfterAddLine = function(line_id){
   <input type="hidden" name="creator_id" value="{{$app->user_id}}" />
   <input type="hidden" name="code_cip" value=""/>
   <!-- Date de debut -->
-  <input type="hidden" name="debut" value="{{$today}}" />
+	{{if $prescription->type == "externe"}}
+	  <input type="hidden" name="debut" value="" />
+  {{else}}
+	  <input type="hidden" name="debut" value="{{$today}}" />
+  {{/if}}
   <input type="hidden" name="time_debut" value="" />
   <input type="hidden" name="mode_pharma" value="{{$mode_pharma}}" />
   <input type="hidden" name="refresh_pharma" value="{{$refresh_pharma}}" />
