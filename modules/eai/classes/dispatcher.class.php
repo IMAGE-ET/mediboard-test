@@ -16,10 +16,19 @@
  * Dispatcher EAI
  */
 
-class CEAIDispatcher {
-  function dispatch($message) {
-    $exchanges_data_format = CExchangeDataFormat::getChildExchangesDataFormat();
-    
+class CEAIDispatcher {  
+  static function dispatch($data) {
+    $understand = false;
+    //mbTrace($data);
+    foreach (CExchangeDataFormat::getAll() as $_data_format) {
+      $data_format = new $_data_format;
+      $understand = $data_format->understand($data);
+      
+      if ($understand) {
+        return true;
+      }
+    }
+    return false;
   }
 }
 

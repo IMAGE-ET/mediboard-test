@@ -137,13 +137,15 @@ class CExchangeSource extends CMbObject {
   }
   
   function getData($path) {}
-    
+
+  function delFile($path) {}
+  
   function send($evenement_name = null) {}
   
   function getACQ() {}
   
   function receive() {}
-
+  
   /**
    * Source is reachable ?
    * @return boolean reachable

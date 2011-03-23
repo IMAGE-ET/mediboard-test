@@ -34,5 +34,18 @@ InteropActor = {
     var url = new Url("eai", "ajax_receive_files");
 	url.addParam("actor_guid", actor_guid);
 	url.requestUpdate("utilities-exchange-source-receive");
-  }
+  },
+  
+  refreshFormatsAvailable : function(actor_guid) {
+    var url = new Url("eai", "ajax_refresh_formats_available");
+    url.addParam("actor_guid", actor_guid);
+    url.requestUpdate("formats_available_"+actor_guid);
+  },
+  
+  viewMessagesSupported : function(actor_guid, exchange_class_name) {
+	var url = new Url("eai", "ajax_vw_messages_supported");
+	url.addParam("actor_guid", actor_guid);
+	url.addParam("exchange_class_name", exchange_class_name);
+    url.requestModal(800, 350);
+  },
 };

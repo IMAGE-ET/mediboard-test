@@ -9,35 +9,43 @@
  * @link     http://www.mediboard.org
 *}}
 
-<tr>
-  <th class="title" colspan="2">
-    {{tr}}config-exchange-source{{/tr}} '{{mb_value object=$actor field="message"}}'
-  </th>
-</tr>
-<tr>
-  <td colspan="2"> 
-    <table class="form">  
-      <tr>
-        <td>
-          {{foreach from=$actor->_spec->messages key=_message item=_evenements}}
-            {{if $_message == $actor->message}}
-              <ul id="tabs-evenements-{{$actor->_guid}}" class="control_tabs">
+<script type="text/javascript">
+  Main.add(function () {
+    Control.Tabs.create('tabs-evenements-{{$actor->_guid}}', true);
+  });
+</script>
+  
+<table class="form">
+  <tr>
+    <th class="title" colspan="2">
+      {{tr}}config-exchange-source{{/tr}} '{{mb_value object=$actor field="message"}}'
+    </th>
+  </tr>
+  <tr>
+    <td colspan="2"> 
+      <table class="form">  
+        <tr>
+          <td>
+            {{foreach from=$actor->_spec->messages key=_message item=_evenements}}
+              {{if $_message == $actor->message}}
+                <ul id="tabs-evenements-{{$actor->_guid}}" class="control_tabs">
+                  {{foreach from=$_evenements item=_evenement}}
+                    <li><a href="#{{$_evenement}}">{{tr}}{{$_evenement}}{{/tr}}</a></li>
+                  {{/foreach}}
+                </ul>
+                
+                <hr class="control_tabs" />
+                
                 {{foreach from=$_evenements item=_evenement}}
-                  <li><a href="#{{$_evenement}}">{{tr}}{{$_evenement}}{{/tr}}</a></li>
+                  <div id="{{$_evenement}}" style="display:none;">
+                   {{mb_include module=system template=inc_config_exchange_source source=$actor->_ref_exchanges_sources.$_evenement}}
+                  </div>
                 {{/foreach}}
-              </ul>
-              
-              <hr class="control_tabs" />
-              
-              {{foreach from=$_evenements item=_evenement}}
-                <div id="{{$_evenement}}" style="display:none;">
-                 {{mb_include module=system template=inc_config_exchange_source source=$actor->_ref_exchanges_sources.$_evenement}}
-                </div>
-              {{/foreach}}
-            {{/if}}
-          {{/foreach}}
-        </td>
-      </tr>
-    </table>
-  </td>
-</tr>
+              {{/if}}
+            {{/foreach}}
+          </td>
+        </tr>
+      </table>
+    </td>
+  </tr>
+</table>

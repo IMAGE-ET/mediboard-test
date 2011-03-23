@@ -129,5 +129,14 @@ class CEchangeHprim extends CEchangeXML {
       $this->object_class = "CAffectation";
     }
   }
+  
+  function understand($data) {
+    if (!$dom = parent::understand($data)) {
+      return false;
+    }
+    
+    $root = $dom->documentElement;
+    mbTrace($root->nodeName);
+  }
 }
 ?>

@@ -1057,4 +1057,5 @@ $locales['pref-showTemplateSpans'] = 'Puces de templates';
 $locales['pref-showTemplateSpans-desc'] = 'Afficher les puces de templates';
 $locales['utilities-source-file_system-connexion'] = 'Test d\'accessibilité';
 $locales['utilities-source-file_system-getFiles'] = 'Liste des fichiers';
+$locales['utilities-exchange-source-receive'] = 'Récupérer et dispatcher les fichiers';
 ?>

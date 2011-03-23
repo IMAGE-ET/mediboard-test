@@ -72,6 +72,12 @@ class CExchangeTabular extends CExchangeDataFormat {
       }
     }
   }
+  
+  function isWellForm() {}
+  
+  function understand($data) {
+    return false;
+  }
 }
 
 ?>

@@ -17,7 +17,7 @@
  */
 CAppUI::requireSystemClass('mbMetaObject');
 
-class CExchangeDataFormat extends CMbMetaObject {
+class CExchangeDataFormat extends CMbMetaObject {  
   // DB Fields
   var $group_id                = null;
   var $date_production         = null;
@@ -122,10 +122,10 @@ class CExchangeDataFormat extends CMbMetaObject {
    * 
    * @return array CExchangeDataFormat collection 
    */
-  static function getChildExchangesDataFormat() {    
-    return CApp::getChildClasses("CExchangeDataFormat", array(), true);
+  static function getAll($class = "CExchangeDataFormat") {    
+    return CApp::getChildClasses($class, array(), true);
   }
-  
+ 
   function countExchanges() {
     // Total des échanges
     $this->_count_exchanges    = $this->countList();
@@ -140,6 +140,10 @@ class CExchangeDataFormat extends CMbMetaObject {
     $where['acquittement_valide'] = " = '0'";
     $this->_count_ack_invalide = $this->countList($where);
   }
+  
+  function understand($data) {}
+  
+  function isWellForm($data) {}
 }
 
 ?>

@@ -1,0 +1,44 @@
+<?php
+
+/**
+ * Message supported
+ *  
+ * @category EAI
+ * @package  Mediboard
+ * @author   SARL OpenXtrem <dev@openxtrem.com>
+ * @license  GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ * @version  SVN: $Id:$ 
+ * @link     http://www.mediboard.org
+ */
+
+/**
+ * Class CMessageSupported
+ * Message supported
+ */
+
+CAppUI::requireSystemClass('mbMetaObject');
+
+class CMessageSupported extends CMbMetaObject {
+  var $message_supported_id = null;
+  
+  var $message              = null;
+  var $active               = null;
+
+  function getSpec() {
+    $spec = parent::getSpec();
+    $spec->table = "message_supported";
+    $spec->key   = "message_supported_id";
+    return $spec;
+  }
+
+  function getProps() {
+    $props = parent::getProps();
+    $props["object_id"]    = "ref notNull class|CInteropSender meta|object_class";
+    $props["object_class"] = "str notNull class show|0";
+    $props["message"]      = "str notNull";
+    $props["active"]       = "bool default|0";
+    
+    return $props;
+  }
+}
+?>

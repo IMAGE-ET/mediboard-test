@@ -87,6 +87,7 @@ $locales['CSenderFTP-title-modify'] = 'Modification expéditeur FTP ';
 $locales['CSenderFTP.all'] = 'Tous les expéditeurs FTP';
 $locales['CSenderFTP.none'] = 'Aucun expéditeur FTP';
 $locales['CSenderFTP.one'] = 'Expéditeur FTP';
+$locales['CSenderFTP_formats-available'] = 'Formats disponibles';
 $locales['CSourceFTP'] = 'Source FTP';
 $locales['CSourceFTP-_incompatible'] = 'Rôle de la source incompatible avec le rôle de l\'instance';
 $locales['CSourceFTP-_incompatible-court'] = 'Rôle de la source incompatible avec le rôle de l\'instance';

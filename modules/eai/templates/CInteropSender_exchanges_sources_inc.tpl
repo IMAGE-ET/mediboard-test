@@ -9,13 +9,36 @@
  * @link     http://www.mediboard.org
 *}}
 
-<table class="form">  
+{{assign var=exchange_source value=$actor->_ref_exchanges_sources.0}}
+
+<script type="text/javascript">
+  Main.add(function () {
+    Control.Tabs.create('tabs-{{$actor->_guid}}', true);
+  });
+</script>
+  
+<table class="form">
   <tr>
-    <th class="title">
-      {{tr}}config-exchange-source{{/tr}}
-    </th>
-  </tr>
-  <tr>
-    <td> {{mb_include module=system template=inc_config_exchange_source source=$actor->_ref_exchanges_sources.0}} </td>
+    <td colspan="2"> 
+      <table class="form">  
+        <tr>
+          <td>
+            <ul id="tabs-{{$actor->_guid}}" class="control_tabs">
+              <li><a href="#{{$actor->_guid}}">{{tr}}{{$exchange_source->_class_name}}{{/tr}}</a></li>
+              <li onmousedown="InteropActor.refreshFormatsAvailable('{{$actor->_guid}}')">
+                <a href="#formats_available_{{$actor->_guid}}">{{tr}}{{$actor->_class_name}}_formats-available{{/tr}}</a></li>
+            </ul>
+            
+            <hr class="control_tabs" />
+            
+            <div id="{{$actor->_guid}}" style="display:none;">
+              {{mb_include module=system template=inc_config_exchange_source source=$exchange_source}}
+            </div>
+            
+            <div id="formats_available_{{$actor->_guid}}" style="display:none"></div>
+          </td>
+        </tr>
+      </table>
+    </td>
   </tr>
 </table>

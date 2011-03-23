@@ -92,6 +92,19 @@ class CEchangeXML extends CExchangeDataFormat {
     $this->date_echange = mbDateTime();
     $this->store();
   }
+  
+  function isWellForm($data) {
+    $dom = new CMbXMLDocument();
+    if ($dom->loadXML($data, LIBXML_NOWARNING | LIBXML_NOERROR) !== false) {
+      return $dom;
+    }
+  }
+  
+  function understand($data) {
+    if ($dom = $this->isWellForm($data)) {
+      return $dom;
+    }        
+  }
 }
 
 ?>

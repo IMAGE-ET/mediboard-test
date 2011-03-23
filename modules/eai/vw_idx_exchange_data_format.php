@@ -13,7 +13,7 @@
 CCanDo::checkRead();
 
 $exchanges_classes = array();
-foreach (CExchangeDataFormat::getChildExchangesDataFormat() as $key => $_exchange_class) {  
+foreach (CExchangeDataFormat::getAll() as $key => $_exchange_class) {  
   foreach (CApp::getChildClasses($_exchange_class, array(), true) as $under_key => $_under_class) {
     $class = new $_under_class;
     $class->countExchanges();
