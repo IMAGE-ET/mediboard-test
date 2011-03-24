@@ -275,6 +275,13 @@ ExFormula = {
     var field = ExFormula.form._formula;
     var c = field.caret();
     field.caret(c.begin, c.end, text);
+    
+    var value = $V(field);
+    var pos = value.indexOf('^');
+    if (pos != -1) {
+      $V(field, value.replace(/\^/g, ""));
+      field.caret(pos);
+    }
   },
   checkTokens: function() {
     var text = $V(ExFormula.form._formula);

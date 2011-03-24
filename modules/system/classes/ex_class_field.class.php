@@ -61,6 +61,14 @@ class CExClassField extends CExListItemsOwner {
   
   static $_formula_token_re = "/\[([^\]]+)\]/";
   static $_formula_valid_types = array("float", "num");
+  static $_formula_constants = array("DateCourante", "HeureCourante", "DateHeureCourante");
+  static $_formula_intervals = array(
+    "H"   => "Heures", 
+    "J"   => "Jours", 
+    "Sem" => "Semaines",
+    "M"   => "Mois",
+    "A"   => "Années",
+  );
 
   function getSpec() {
     $spec = parent::getSpec();
