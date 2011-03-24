@@ -65,7 +65,7 @@ if($sejour->_ref_curr_affectation->_id){
 
 $configs = CConfigService::getAllFor($service_id);
 
-if(!$without_check_date && !($object_id && $object_class)){
+if(!$without_check_date && !($object_id && $object_class) && !$chapitre){
 	// Si la date actuelle est inférieure a l'heure affichée sur le plan de soins, on affiche le plan de soins de la veille (cas de la nuit)
 	$datetime_limit = mbDateTime($configs["Borne matin min"].":00:00");	
 	if(mbDateTime() < $datetime_limit){
