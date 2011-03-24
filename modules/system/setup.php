@@ -616,6 +616,19 @@ class CSetupsystem extends CSetup {
               ADD INDEX (`formula_result_field_id`);";
     $this->addQuery($query);
     
-    $this->mod_version = "1.0.60";
+    $this->makeRevision("1.0.60");
+    $query = "ALTER TABLE `ex_class_field`
+              ADD `formula` TEXT;";
+    $this->addQuery($query);
+    $query = "UPDATE `ex_class_field` 
+      LEFT JOIN `ex_class_field_group` ON `ex_class_field_group`.`formula_result_field_id` = `ex_class_field`.`ex_class_field_id`
+      SET `ex_class_field`.`formula` = `ex_class_field_group`.`formula`";
+    $this->addQuery($query);
+    $query = "ALTER TABLE `ex_class_field_group` 
+      DROP `formula`, 
+      DROP `formula_result_field_id`;";
+    $this->addQuery($query);
+    
+    $this->mod_version = "1.0.61";
   }
 }

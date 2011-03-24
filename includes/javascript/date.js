@@ -768,6 +768,18 @@ Class.extend(Date, {
     return printf(" %02d:%02d", h, m);
   },
   
+  resetDate: function(){
+    this.setFullYear(1970);
+    this.setMonth(1);
+    this.setDate(1);
+  },
+  
+  resetTime: function(){
+    this.setHours(0);
+    this.setMinutes(0);
+    this.setSeconds(0, 0); // s, ms
+  },
+  
   addDays: function(iDays) {
     this.setDate(this.getDate() + parseInt(iDays, 10));
   },

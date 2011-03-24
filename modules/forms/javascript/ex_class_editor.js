@@ -179,8 +179,6 @@ ExField = {
       exClassTabs.setActiveTab("fields-specs");
     }
     
-    ExFormula.toggleInsertButtons(ex_group_id, false);
-    
     var url = new Url("forms", "ajax_edit_ex_field");
     
     url.addParam("ex_field_id", id);
@@ -261,18 +259,17 @@ ExFormula = {
   form: null,
   options: {},
   tokens: [],
-  edit: function(ex_group_id){
-    ExFormula.toggleInsertButtons(ex_group_id, true);
-    
+  edit: function(ex_field_id){
     var url = new Url("forms", "ajax_edit_ex_formula");
-    url.addParam("ex_group_id", ex_group_id);
-    url.requestUpdate("exFieldEditor", {onComplete: function(){
-      ExFormula.form = getForm("editGroupFormula-"+ex_group_id);
+    url.addParam("ex_field_id", ex_field_id);
+    url.requestUpdate("fieldFormulaEditor", {onComplete: function(){
+      ExFormula.form = getForm("editFieldFormula-"+ex_field_id);
       ExFormula.initTextarea();
     }});
   },
-  toggleInsertButtons: function(ex_group_id, value){
-    $("group-CExClassFieldGroup-"+ex_group_id).select(".insert-formula").invoke("setVisible", value);
+  toggleInsertButtons: function(value){
+    value = value && ExFormula.form._formula;
+    $$(".insert-formula").invoke("setVisible", value);
   },
   insertText: function(text){
     var field = ExFormula.form._formula;
@@ -305,6 +302,7 @@ ExFormula = {
     
     $V(field, tokens.join(' + '));
   },
+  
   initTextarea: function(){
     var field = ExFormula.form._formula;
     

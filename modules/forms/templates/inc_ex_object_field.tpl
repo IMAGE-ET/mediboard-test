@@ -30,8 +30,8 @@
   <fieldset>
     {{mb_field object=$ex_object field=$_field_name register=true increment=true form=editExObject}}
   </fieldset>
-{{elseif $ex_field->_ref_ex_group->formula_result_field_id == $ex_field->_id}}
+{{elseif $ex_field->formula}}
   {{mb_field object=$ex_object field=$_field_name readonly=true}}
 {{else}}
-  {{mb_field object=$ex_object field=$_field_name register=true increment=true form=editExObject}}
+  {{mb_field object=$ex_object field=$_field_name register=true increment=true form=editExObject defaultOption=" &mdash; "}}
 {{/if}}

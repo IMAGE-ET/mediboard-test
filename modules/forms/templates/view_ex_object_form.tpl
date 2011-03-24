@@ -22,71 +22,46 @@ if (window.opener && window.opener !== window) {
   }
 }
 
-formulaTokenValues = {{$formula_token_values|@json}};
-exGroups = {};
-
-// get the input value : coded or non-coded
-getInputValue = function(element){
-  var value = $V(element);
-  
-  if (element instanceof NodeList || element instanceof HTMLCollection) {
-    element = element[0];
-  }
-  
-  var name = element.name;
-  var result = formulaTokenValues[name];
-
-  // non-coded
-  if (result === true)
-    return value;
-
-  // coded
-  return formulaTokenValues[name][value];
-}
-
-// computes the result of a form + exGroup(formula, resultField)
-computeResult = function(form, exGroup){
-  var formula = exGroup.formula;
-  var vars = exGroup.variables;
-  var values = {};
-  
-  vars.each(function(v){
-    values[v] = getInputValue(form[v]);
-  });
-
-  $V(form[exGroup.resultField], formula.evaluate(values));
-}
+ExObjectFormula.tokenData = {{$formula_token_values|@json}};
 
 Main.add(function(){
-  var c, inputs, formula, parser, vars;
-  
-  {{foreach from=$grid key=_group_id item=_grid}}
-    {{if $groups.$_group_id->formula && $groups.$_group_id->formula_result_field_id}}
-      c = $("tab-{{$groups.$_group_id->_guid}}");
-      formula = {{$groups.$_group_id->formula|@json}}.replace(/[\[\]]/g, "");
-      parser = Parser.parse(formula);
-      vars = parser.variables();
+  $H(ExObjectFormula.tokenData).each(function(token){
+    var field = token.key;
+    var data = token.value;
+    var formula = data.formula;
 
-      inputs = c.select("input, textarea, select").filter(function(e){ 
-        return !e.readonly && !e.disabled && (vars.indexOf(e.name) != -1);
-      });
+    if (!formula) return;
+
+    formula = formula.replace(/[\[\]]/g, "");
+    var expr = ExObjectFormula.parser.parse(formula);
+    var variables = expr.variables();
+    
+    var form = getForm("editExObject");
+    var fieldElement = form[field];
+
+    ExObjectFormula.tokenData[field].parser = expr;
+    ExObjectFormula.tokenData[field].variables = variables;
+
+    function compute(input, target) {
+      ExObjectFormula.computeResult(input, target);
+    }
+    
+    variables.each(function(v){
+      if (!form[v]) return;
       
-      exGroups["{{$groups.$_group_id->_id}}"] = {
-        formula: parser,
-        variables: vars,
-        resultField: {{$groups.$_group_id->_ref_formula_result_field->name|@json}}
-      };
-  
-      function compute(form) {
-        computeResult(form, exGroups["{{$groups.$_group_id->_id}}"]);
-      }
+      var inputs = ExObjectFormula.getInputElementsArray(form[v]);
       
       inputs.each(function(input){
-        input.observe("change", compute.curry(input.form));
-        input.observe("ui:change", compute.curry(input.form));
+        if (input.hasClassName("date") || input.hasClassName("dateTime") || input.hasClassName("time")) {
+          input.onchange = compute.curry(input, fieldElement);
+        }
+        else {
+          input.observe("change", compute.curry(input, fieldElement));
+          input.observe("ui:change", compute.curry(input, fieldElement));
+        }
       });
-    {{/if}}
-  {{/foreach}}
+    });
+  });
 });
 </script>
 
@@ -117,11 +92,6 @@ Main.add(function(){
   	
 		{{foreach from=$grid key=_group_id item=_grid}}
 		<tbody id="tab-{{$groups.$_group_id->_guid}}" style="display: none;">
-    {{assign var=has_formula value=false}}
-    {{if $groups.$_group_id->formula != null && $groups.$_group_id->formula_result_field_id}}
-      {{assign var=has_formula value=true}}
-    {{/if}}
-		
     {{foreach from=$_grid key=_y item=_line}}
     <tr>
       {{foreach from=$_line key=_x item=_group}}
@@ -134,7 +104,7 @@ Main.add(function(){
 		          </th>
 					  {{elseif $_group.type == "field"}}
 		          <td>
-                {{mb_include module=forms template=inc_ex_object_field ex_object=$ex_object ex_field=$_group.object has_formula=$has_formula}}
+                {{mb_include module=forms template=inc_ex_object_field ex_object=$ex_object ex_field=$_group.object}}
 		          </td>
 						{{/if}}
 					{{else}}

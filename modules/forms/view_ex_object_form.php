@@ -52,7 +52,10 @@ $fields = $ex_object->_ref_ex_class->loadRefsAllFields();
 $formula_token_values = array();
 
 foreach($fields as $_field) {
-  $formula_token_values[$_field->name] = $_field->getFormulaValues();
+  $formula_token_values[$_field->name] = array(
+    "values"  => $_field->getFormulaValues(),
+    "formula" => $_field->formula,
+  );
 }
 
 /*foreach($fields as $_field) {

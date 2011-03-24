@@ -10,28 +10,26 @@
 
 CCanDo::checkEdit();
 
-$ex_group_id = CValue::get("ex_group_id");
+$ex_field_id = CValue::get("ex_field_id");
 
-$ex_group = new CExClassFieldGroup;
-$ex_group->load($ex_group_id);
+$ex_field = new CExClassField;
+$ex_field->load($ex_field_id);
 
-$fields = $ex_group->loadRefsFields();
+$formula_possible = true;
+$field_names = array();
 
-$field_names = CMbArray::pluck($fields, "_locale");
-$field_names = array_values($field_names);
-$field_names = array_map("utf8_encode", $field_names);
-
-$result_fields = array();
-$good = array("str", "num", "float");
-foreach($fields as $_k => $_field) {
-  $prop = reset(explode(" ", $_field->prop));
-  if (in_array($prop, $good)) {
-    $result_fields[] = $_field;
-  }
+$spec_type = $ex_field->getSpecObject()->getSpecType();
+if (!in_array($spec_type, CExClassField::$_formula_valid_types)) {
+  $formula_possible = false;
+}
+else {
+  $field_names = $ex_field->getFieldNames(true, true);
+  $field_names = array_values($field_names);
+  $field_names = array_map("utf8_encode", $field_names);
 }
 
 $smarty = new CSmartyDP();
-$smarty->assign("ex_group", $ex_group);
+$smarty->assign("ex_field", $ex_field);
 $smarty->assign("field_names", $field_names);
-$smarty->assign("result_fields", $result_fields);
+$smarty->assign("formula_possible", $formula_possible);
 $smarty->display("inc_edit_ex_formula.tpl");

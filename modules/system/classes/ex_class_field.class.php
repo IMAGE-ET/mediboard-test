@@ -18,6 +18,9 @@ class CExClassField extends CExListItemsOwner {
   var $prop = null; 
   var $concept_id = null;
   
+  var $formula = null;
+  var $_formula = null;
+  
   var $coord_label_x = null; 
   var $coord_label_y = null; 
   var $coord_field_x = null; 
@@ -55,6 +58,9 @@ class CExClassField extends CExListItemsOwner {
     array("password", "str"), 
     array("php", "xml", "html", "text"), 
   );
+  
+  static $_formula_token_re = "/\[([^\]]+)\]/";
+  static $_formula_valid_types = array("float", "num");
 
   function getSpec() {
     $spec = parent::getSpec();
@@ -74,6 +80,9 @@ class CExClassField extends CExListItemsOwner {
     $props["concept_id"]  = "ref class|CExConcept autocomplete|name";
     $props["name"]        = "str notNull protected canonical";
     $props["prop"]        = "text notNull";
+    
+    $props["formula"]     = "text"; // canonical tokens
+    $props["_formula"]    = "text"; // localized tokens
     
     $props["coord_field_x"] = "num min|0 max|100";
     $props["coord_field_y"] = "num min|0 max|100";
@@ -99,9 +108,41 @@ class CExClassField extends CExListItemsOwner {
     parent::updateFormFields();
     $this->_view = "$this->name [$this->prop]";
     
+    $this->formulaFromDB();
+    
     if (!self::$_load_lite) {
       $this->updateTranslation();
     }
+  }
+  
+  function getFieldNames($name_as_key = true, $all_groups = true){
+    $ds = $this->_spec->ds;
+    
+    $req = new CRequest();
+    $req->addTable($this->_spec->table);
+    $req->addSelect("ex_class_field.name, ex_class_field_translation.std AS locale");
+    
+    $ljoin = array(
+      "ex_class_field_translation" => "ex_class_field_translation.ex_class_field_id = ex_class_field.ex_class_field_id"
+    );
+    if ($all_groups) {
+      /// TODO
+    }
+    $req->addLJoin($ljoin);
+    
+    $this->completeField("ex_group_id");
+    $where = array(
+      "ex_group_id" => $ds->prepare("= %", $this->ex_group_id),
+    );
+    $req->addWhere($where);
+    
+    $results = $ds->loadList($req->getRequest());
+    
+    if ($name_as_key) {
+      return array_combine(CMbArray::pluck($results, "name"), CMbArray::pluck($results, "locale"));
+    }
+    
+    return array_combine(CMbArray::pluck($results, "locale"), CMbArray::pluck($results, "name"));
   }
   
   function getFormulaValues(){
@@ -119,6 +160,77 @@ class CExClassField extends CExListItemsOwner {
     }
     
     return $ret;
+  }
+  
+  function formulaToDB($update = true) {
+    if (!$this->_formula) return;
+    
+    $field_names = $this->getFieldNames(false);
+    $formula = $this->_formula;
+    
+    if (!preg_match_all(self::$_formula_token_re, $formula, $matches)) {
+      return "Formule invalide";
+    }
+    
+    $msg = array();
+    
+    foreach($matches[1] as $_match) {
+      $_trimmed = trim($_match);
+      if (!array_key_exists($_trimmed, $field_names)) {
+        $msg[] = "\"$_match\"";
+      }
+      else {
+        $formula = str_replace($_match, $field_names[$_trimmed], $formula);
+      }
+    }
+    
+    if (empty($msg)) {
+      if ($update) {
+        $this->formula = $formula;
+      }
+      return;
+    }
+    
+    return "Des éléments n'ont pas été reconnus dans la formule: ".implode(", ", $msg);
+  }
+  
+  function formulaFromDB(){
+    //$this->completeField("formula"); memory limit :(
+    
+    if (!$this->formula) return;
+    
+    $field_names = $this->getFieldNames(true);
+    
+    $formula = $this->formula;
+    
+    if (!preg_match_all(self::$_formula_token_re, $formula, $matches)) {
+      return "Formule invalide";
+    }
+    
+    foreach($matches[1] as $_match) {
+      $_trimmed = trim($_match);
+      if (array_key_exists($_trimmed, $field_names)) {
+        $formula = str_replace($_match, $field_names[$_trimmed], $formula);
+      }
+    }
+    
+    $this->_formula = $formula;
+  }
+  
+  function checkFormula(){
+    return $this->formulaToDB(false);
+  }
+  
+  function check(){
+    if ($msg = $this->checkFormula(false)) {
+      return $msg;
+    }
+    
+    $this->formulaToDB(true);
+    
+    if ($msg = parent::check()) {
+      return $msg;
+    }
   }
   
   function loadTriggeredData(){

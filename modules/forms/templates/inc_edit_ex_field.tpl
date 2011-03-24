@@ -39,8 +39,19 @@ toggleListCustom = function(form) {
 
 Main.add(function(){
   var form = getForm("editField");
+  var field_id = $V(form.ex_class_field_id);
+
   toggleListCustom.defer(form);
   form.elements._locale.select();
+
+  if (field_id)
+    ExFormula.edit(field_id);
+
+  new Control.Tabs("ExClassField-param", {
+    afterChange: function(newContainer){
+      ExFormula.toggleInsertButtons(newContainer.id == "fieldFormulaEditor");
+    }
+  });
 });
 
 updateInternalName = function(e){
@@ -187,4 +198,12 @@ updateInternalName = function(e){
   </table>
 </form>
 
-<div id="fieldSpecEditor" style="white-space: normal;"></div>
+<ul class="control_tabs" id="ExClassField-param">
+  <li><a href="#fieldSpecEditor">Propriétés</a></li>
+  <li><a href="#fieldFormulaEditor" {{if !$ex_field->formula}} class="empty" {{/if}} style="background-image: url(style/mediboard/images/buttons/formula.png); background-repeat: no-repeat; background-position: 2px 2px; padding-left: 18px;">Formule / concaténation</a></li>
+</ul>
+<hr class="control_tabs" />
+
+<div id="fieldSpecEditor" style="white-space: normal; display: none;"></div>
+
+<div id="fieldFormulaEditor" style="display: none;"></div>
