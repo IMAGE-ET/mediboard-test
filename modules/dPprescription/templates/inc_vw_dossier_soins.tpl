@@ -8,6 +8,8 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
 *}}
 
+{{if $sejour->_id}}
+
 <script type="text/javascript">
 
 selColonne = function(hour){
@@ -494,110 +496,115 @@ Main.add(function () {
   <input type="hidden" name="original_dateTime" value="" />
 </form>
 
-<table class="tbl">
-  <tr>
-    <th colspan="10" class="title text">
-    	 <span style="float: right">
-				 <button type="button" class="cancel" style="float: right; display: none;" onclick="modalWindow.close(); if(window.refreshLinePancarte){ refreshLinePancarte('{{$prescription_id}}'); }" id="modal_button">{{tr}}Close{{/tr}}</button>
- 	 	     <button type="button" class="print" style="float: right" onclick="viewDossier('{{$sejour->_id}}');">Dossier</button>
-    	 </span>
-       <a style="float: left" href="?m=dPpatients&amp;tab=vw_full_patients&amp;patient_id={{$patient->_id}}"'>
-        {{include file="../../dPpatients/templates/inc_vw_photo_identite.tpl" patient=$patient size=42}}
-       </a>
-			 
-			 <h2 style="color: #fff; font-weight: bold;">
-	      {{$sejour->_ref_patient->_view}}
-				<span style="font-size: 0.7em;"> - {{$sejour->_shortview|replace:"Du":"Séjour du"}}</span>
-			 </h2>
-			
-		</th>
-  </tr>
-  {{mb_include module=dPprescription template=inc_infos_patients_soins}}
-</table>
-
-<ul id="tab_dossier_soin" class="control_tabs">
-  <li onmousedown="Prescription.loadTraitement('{{$sejour->_id}}','{{$date}}','','administration','','','','med'); refreshTabState();"><a href="#jour">Journée</a></li>
-  <li onmousedown="calculSoinSemaine('{{$date}}','{{$prescription_id}}');"><a href="#semaine">Semaine</a></li>
-	<li onmousedown="updateTasks('{{$sejour->_id}}');"><a href="#tasks">Activités</a></li>
-</ul>
-<hr class="control_tabs" />
-
-<div id="jour" style="display:none">
-
-{{if $prescription_id}}
-	<h1 style="text-align: center;">
-	 		  <button type="button" 
-				       class="left notext" 
-							 {{if $sejour->_entree|iso_date < $date}}onclick="Prescription.loadTraitement('{{$sejour->_id}}','{{$prev_date}}', null, null, null, null, null, null, '1');"{{/if}}
-				       {{if $sejour->_entree|iso_date >= $date}}style="opacity: 0.5;"{{/if}}></button>	
-     Dossier de soin du {{$date|@date_format:"%d/%m/%Y"}}
-		 <button type="button"
-		         class="right notext"
-						 {{if $sejour->_sortie|iso_date > $date}}onclick="Prescription.loadTraitement('{{$sejour->_id}}','{{$next_date}}','','administration', null, null, null, null, '1');"{{/if}}
-						 {{if $sejour->_sortie|iso_date <= $date}}style="opacity: 0.5;"{{/if}}></button>
-	</h1>
-	 
-	 {{if $date != $today}}
-		 <div class="small-warning">
-		 Attention, le dossier de soin que vous êtes en train de visualiser n'est pas celui de la journée courante
-		 </div>
-	 {{/if}}
-	
-	<table style="width: 100%">
-	   <tr>
-	    <td>
-				<button type="button" class="print" onclick="printDossierSoin('{{$prescription_id}}');" title="{{tr}}Print{{/tr}}">
-		      Feuille de soins immédiate
-	      </button>
-	      <button type="button" class="print" onclick="printBons('{{$prescription_id}}');" title="{{tr}}Print{{/tr}}">
-	        Bons
-	      </button>
-				<button type="button" class="print" onclick="Prescription.viewFullAlertes('{{$prescription_id}}')" title="{{tr}}Print{{/tr}}">
-				  Alertes	
-				</button>
-        <button type="button" class="tick" onclick="applyAdministrations();" id="button_administration">
-        </button>
-	    </td>
-	    <td style="text-align: center">
-	      <form name="mode_dossier_soin" action="?" method="get">
-	        <label>
-	          <input type="radio" name="mode_dossier" value="administration" {{if $mode_dossier == "administration" || $mode_dossier == ""}}checked="checked"{{/if}} 
-	          			 onclick="viewDossierSoin($('plan_soin'));"/>Administration
-          </label>
-          <label>
-            <input type="radio" name="mode_dossier" value="planification" {{if $mode_dossier == "planification"}}checked="checked"{{/if}} 
-            			 onclick="viewDossierSoin($('plan_soin'));" />Planification
-          </label>
-       </form>
-	    </td>
-	    <td style="text-align: right">
-	      <button type="button" class="search" onclick="viewLegend();">Légende</button>
-	    </td>
-	  </tr>
-	</table>
-
-	{{assign var=transmissions value=$prescription->_transmissions}}	  
-  {{assign var=count_recent_modif value=$prescription->_count_recent_modif}}
-  {{assign var=count_urgence value=$prescription->_count_urgence}}
-  <table class="main">
+	<table class="tbl">
 	  <tr>
-	    <td style="white-space: nowrap;" class="narrow">
-		 	  <!-- Affichage des onglets du dossier de soins -->
-		 	  {{mb_include module="dPprescription" template="inc_vw_tab_dossier_soins"}}
-			</td>
-		 	<td>
-		 		<!-- Affichage du contenu du dossier de soins -->
-		 	 	{{mb_include module="dPprescription" template="inc_vw_content_dossier_soins"}}
-	    </td>
+	    <th colspan="10" class="title text">
+	    	 <span style="float: right">
+					 <button type="button" class="cancel" style="float: right; display: none;" onclick="modalWindow.close(); if(window.refreshLinePancarte){ refreshLinePancarte('{{$prescription_id}}'); }" id="modal_button">{{tr}}Close{{/tr}}</button>
+	 	 	     <button type="button" class="print" style="float: right" onclick="viewDossier('{{$sejour->_id}}');">Dossier</button>
+	    	 </span>
+	       <a style="float: left" href="?m=dPpatients&amp;tab=vw_full_patients&amp;patient_id={{$patient->_id}}"'>
+	        {{include file="../../dPpatients/templates/inc_vw_photo_identite.tpl" patient=$patient size=42}}
+	       </a>
+				 
+				 <h2 style="color: #fff; font-weight: bold;">
+		      {{$sejour->_ref_patient->_view}}
+					<span style="font-size: 0.7em;"> - {{$sejour->_shortview|replace:"Du":"Séjour du"}}</span>
+				 </h2>
+				
+			</th>
 	  </tr>
-  </table>
+	  {{mb_include module=dPprescription template=inc_infos_patients_soins}}
+	</table>
+	
+	<ul id="tab_dossier_soin" class="control_tabs">
+	  <li onmousedown="Prescription.loadTraitement('{{$sejour->_id}}','{{$date}}','','administration','','','','med'); refreshTabState();"><a href="#jour">Journée</a></li>
+	  <li onmousedown="calculSoinSemaine('{{$date}}','{{$prescription_id}}');"><a href="#semaine">Semaine</a></li>
+		<li onmousedown="updateTasks('{{$sejour->_id}}');"><a href="#tasks">Activités</a></li>
+	</ul>
+	<hr class="control_tabs" />
+	
+	<div id="jour" style="display:none">
+	
+	{{if $prescription_id}}
+		<h1 style="text-align: center;">
+		 		  <button type="button" 
+					       class="left notext" 
+								 {{if $sejour->_entree|iso_date < $date}}onclick="Prescription.loadTraitement('{{$sejour->_id}}','{{$prev_date}}', null, null, null, null, null, null, '1');"{{/if}}
+					       {{if $sejour->_entree|iso_date >= $date}}style="opacity: 0.5;"{{/if}}></button>	
+	     Dossier de soin du {{$date|@date_format:"%d/%m/%Y"}}
+			 <button type="button"
+			         class="right notext"
+							 {{if $sejour->_sortie|iso_date > $date}}onclick="Prescription.loadTraitement('{{$sejour->_id}}','{{$next_date}}','','administration', null, null, null, null, '1');"{{/if}}
+							 {{if $sejour->_sortie|iso_date <= $date}}style="opacity: 0.5;"{{/if}}></button>
+		</h1>
+		 
+		 {{if $date != $today}}
+			 <div class="small-warning">
+			 Attention, le dossier de soin que vous êtes en train de visualiser n'est pas celui de la journée courante
+			 </div>
+		 {{/if}}
+		
+		<table style="width: 100%">
+		   <tr>
+		    <td>
+					<button type="button" class="print" onclick="printDossierSoin('{{$prescription_id}}');" title="{{tr}}Print{{/tr}}">
+			      Feuille de soins immédiate
+		      </button>
+		      <button type="button" class="print" onclick="printBons('{{$prescription_id}}');" title="{{tr}}Print{{/tr}}">
+		        Bons
+		      </button>
+					<button type="button" class="print" onclick="Prescription.viewFullAlertes('{{$prescription_id}}')" title="{{tr}}Print{{/tr}}">
+					  Alertes	
+					</button>
+	        <button type="button" class="tick" onclick="applyAdministrations();" id="button_administration">
+	        </button>
+		    </td>
+		    <td style="text-align: center">
+		      <form name="mode_dossier_soin" action="?" method="get">
+		        <label>
+		          <input type="radio" name="mode_dossier" value="administration" {{if $mode_dossier == "administration" || $mode_dossier == ""}}checked="checked"{{/if}} 
+		          			 onclick="viewDossierSoin($('plan_soin'));"/>Administration
+	          </label>
+	          <label>
+	            <input type="radio" name="mode_dossier" value="planification" {{if $mode_dossier == "planification"}}checked="checked"{{/if}} 
+	            			 onclick="viewDossierSoin($('plan_soin'));" />Planification
+	          </label>
+	       </form>
+		    </td>
+		    <td style="text-align: right">
+		      <button type="button" class="search" onclick="viewLegend();">Légende</button>
+		    </td>
+		  </tr>
+		</table>
+	
+		{{assign var=transmissions value=$prescription->_transmissions}}	  
+	  {{assign var=count_recent_modif value=$prescription->_count_recent_modif}}
+	  {{assign var=count_urgence value=$prescription->_count_urgence}}
+	  <table class="main">
+		  <tr>
+		    <td style="white-space: nowrap;" class="narrow">
+			 	  <!-- Affichage des onglets du dossier de soins -->
+			 	  {{mb_include module="dPprescription" template="inc_vw_tab_dossier_soins"}}
+				</td>
+			 	<td>
+			 		<!-- Affichage du contenu du dossier de soins -->
+			 	 	{{mb_include module="dPprescription" template="inc_vw_content_dossier_soins"}}
+		    </td>
+		  </tr>
+	  </table>
+	{{else}}
+	  <div class="small-info">
+		Ce dossier ne possède pas de prescription de séjour
+	  </div>
+	{{/if}}
+	</div>
+	<div id="semaine" style="display:none"></div>
+	<div id="tasks" style="display:none"></div>
+	<hr />
+	<div id="dossier_suivi"></div>
 {{else}}
   <div class="small-info">
-	Ce dossier ne possède pas de prescription de séjour
+    Veuillez sélectionner un séjour pour pouvoir accéder au suivi de soins.
   </div>
 {{/if}}
-</div>
-<div id="semaine" style="display:none"></div>
-<div id="tasks" style="display:none"></div>
-<hr />
-<div id="dossier_suivi"></div>
