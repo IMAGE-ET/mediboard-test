@@ -49,6 +49,9 @@ Main.add( function(){
     {{assign var=perm_add_line value=0}}  
 	{{/if}}
 
+    
+
+	
   {{if !$prescription->_protocole_locked && $perm_add_line}}
   <tr>
     <th class="title">
@@ -69,6 +72,13 @@ Main.add( function(){
       </button>
       {{/if}}
  
+      {{if $prescription->type == "sejour" && $prescription->object_id && !$prescription->_ref_object->sortie_reelle}}
+        {{if $hide_old_lines}}
+          <button type="button" class="search" style="float: right;" onclick="refreshElementPrescription('{{$element}}', true, '0')">Afficher les prescriptions terminées ({{$hidden_lines_count}})</button>
+        {{else}}
+          <button type="button" class="search" style="float: right;" onclick="refreshElementPrescription('{{$element}}', true, '1')">Masquer les prescriptions terminées</button>
+        {{/if}}
+		 {{/if}}
      {{if !$prescription->_protocole_locked && $perm_add_line}}
       <!-- Formulaire d'elements les plus utilisés -->
 			<form action="?" method="get" name="search{{$element}}" onsubmit="return false;">
@@ -222,12 +232,14 @@ Main.add( function(){
   <!-- Parcours des elements de type $element -->
   {{foreach from=$lines item=lines_cat key=category_id}}
 	  {{assign var=category value=$categories.$element.$category_id}}
+		
+		{{if $lines_cat.element || $lines_cat.comment}}
       <table class="tbl">
         <tr>
           <th class="title" colspan="9">{{$category->_view}}</th>
         </tr>
       </table>	  
-
+    {{/if}}
 	  <!-- Div permettant de classer les elements suivantes la date d'arret -->
 	  <div id="elt_{{$category->_id}}"></div>
 	  <div id="elt_art_{{$category->_id}}"></div>

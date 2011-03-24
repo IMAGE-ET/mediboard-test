@@ -224,8 +224,9 @@ updateModaleAfterAddLine = function(line_id){
       </div>      
     </td>
   </tr>
-  {{/if}}
-  
+  {{/if}}  	
+  </div>
+
 	{{if !$prescription->_protocole_locked && ($is_praticien || $mode_protocole || @$operation_id || $can->admin || $mode_pharma || ($current_user->isInfirmiere() && $conf.dPprescription.CPrescription.droits_infirmiers_med))}}  
   <tr>
     <th class="title">
@@ -249,6 +250,14 @@ updateModaleAfterAddLine = function(line_id){
       {{/if}}
     </button>
     {{/if}}
+		
+		{{if $prescription->type == "sejour" && $prescription->object_id && !$prescription->_ref_object->sortie_reelle}}
+			{{if $hide_old_lines}}
+	      <button type="button" class="search" style="float: right;" onclick="refreshElementPrescription('medicament', true, '0')">Afficher les prescriptions terminées ({{$hidden_lines_count}})</button>
+	    {{else}}
+	      <button type="button" class="search" style="float: right;" onclick="refreshElementPrescription('medicament', true, '1')">Masquer les prescriptions terminées</button>
+	    {{/if}}
+		{{/if}}
 		
     {{if !$prescription->_protocole_locked && ($is_praticien || $mode_protocole || @$operation_id || $can->admin || $mode_pharma || ($current_user->isInfirmiere() && $conf.dPprescription.CPrescription.droits_infirmiers_med))}}  
     
@@ -356,39 +365,42 @@ updateModaleAfterAddLine = function(line_id){
 	    {{/if}}
     {{/if}}
   {{/foreach}}
-   
+  
 	 {{foreach from=$prescription->_ref_prescription_line_mixes_by_type key=type_line item=_lines_mix_by_type}}
-			<table class="tbl">
-			  <tr>
-			    <th colspan="7" class="title">{{tr}}CPrescription._chapitres.{{$type_line}}{{/tr}}</th>
-			  </tr>
-			  <tr>
-			    <th style="width: 5%;" class="narrow"></th>
-			    <th style="width: 45%;">Médicaments</th> 
-			    
-					{{if $type_line == "aerosol"}}
-            <th style="width: 20%;">Interface</th>
-          {{else}}
-	          <th style="width: 5%;">Débit</th>
-	          <th style="width: 15%;">Type / Voie</th>					
-					{{/if}}
-          {{if $prescription->object_id}}
-				    <th style="width: 10%;">Début</th>
-			      <th style="width: 10%;">Durée</th>
-					{{else}}
-					  <th style="20%">Dates</th>
-					{{/if}}
-					<th style="width: 10%;">Prat</th>
-			  </tr>
-			</table>
-			
-		  <!-- Parcours des prescription_line_mixes -->
-		  {{foreach from=$_lines_mix_by_type item=_prescription_line_mix}}
-		    {{if !$praticien_sortie_id || ($praticien_sortie_id == $_prescription_line_mix->praticien_id)}}
-			     {{include file="../../dPprescription/templates/inc_vw_line_mix_lite.tpl"}} 
-		    {{/if}}
-		  {{/foreach}}
+	   {{if $_lines_mix_by_type|@count}}
+				<table class="tbl">
+				  <tr>
+				    <th colspan="7" class="title">{{tr}}CPrescription._chapitres.{{$type_line}}{{/tr}}</th>
+				  </tr>
+				  <tr>
+				    <th style="width: 5%;" class="narrow"></th>
+				    <th style="width: 45%;">Médicaments</th> 
+				    
+						{{if $type_line == "aerosol"}}
+	            <th style="width: 20%;">Interface</th>
+	          {{else}}
+		          <th style="width: 5%;">Débit</th>
+		          <th style="width: 15%;">Type / Voie</th>					
+						{{/if}}
+	          {{if $prescription->object_id}}
+					    <th style="width: 10%;">Début</th>
+				      <th style="width: 10%;">Durée</th>
+						{{else}}
+						  <th style="20%">Dates</th>
+						{{/if}}
+						<th style="width: 10%;">Prat</th>
+				  </tr>
+				</table>
+				
+			  <!-- Parcours des prescription_line_mixes -->
+			  {{foreach from=$_lines_mix_by_type item=_prescription_line_mix}}
+			    {{if !$praticien_sortie_id || ($praticien_sortie_id == $_prescription_line_mix->praticien_id)}}
+				     {{include file="../../dPprescription/templates/inc_vw_line_mix_lite.tpl"}} 
+			    {{/if}}
+			  {{/foreach}}
+			{{/if}}
 		{{/foreach}}
+ 
 
 		<table class="tbl">
 		  {{if $prescription->_ref_lines_med_comments.comment|@count}}

@@ -10,8 +10,12 @@
 
 <table class="tbl">
 {{assign var=prescription_line_mix_id value=$_prescription_line_mix->_id}}
-<tr {{if $_prescription_line_mix->_fin && $_prescription_line_mix->_fin < $now && !$_prescription_line_mix->_protocole}}class="hatching_red"{{/if}}>
-  <td style="width: 5%; text-align: center;" class="text {{if $_prescription_line_mix->perop}}perop{{/if}}">
+<tr class="{{if $_prescription_line_mix->_fin && !$_prescription_line_mix->_protocole}}
+					   {{if $_prescription_line_mix->_fin < $now}}hatching{{/if}}
+					   {{if $_prescription_line_mix->_fin|iso_date < $now|iso_date}}opacity-50{{/if}}
+					 {{/if}}">
+
+	<td style="width: 5%; text-align: center;" class="text {{if $_prescription_line_mix->perop}}perop{{/if}}">
 			     
     {{if $_prescription_line_mix->_can_delete_prescription_line_mix}}
      <form name="editPerfLite-{{$_prescription_line_mix->_id}}" action="" method="post">

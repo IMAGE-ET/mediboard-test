@@ -30,6 +30,10 @@ $mode_anesth     = CValue::getOrSession("mode_anesth");
 $pratSel_id      = CValue::getOrSession("pratSel_id");
 $mode_sejour     = CValue::getOrSession("mode_sejour", false);
 $praticien_for_prot_id = CValue::getOrSession("praticien_for_prot_id");
+$hide_old_lines  = CValue::get("hide_old_lines");
+
+
+$hidden_lines_count = 0;
 
 // Recuperation de l'operation_id stocké en session en salle d'op
 if(!$operation_id && !$mode_sejour){
@@ -115,6 +119,14 @@ if(!$prescription_id && $object_class && $object_id && $type){
   $prescription->loadMatchingObject();
 }
 
+if(!isset($hide_old_lines)){
+  if($prescription->type == "sejour" && $prescription->object_id && !$prescription->_ref_object->sortie_reelle){
+    $hide_old_lines = CAppUI::pref('hide_old_lines');
+  } else {
+    $hide_old_lines = "0";  
+  }
+}
+
 $favoris_praticien_id = "";
 if($prescription->object_id && $prescription->_current_praticien_id){
   $favoris_praticien_id = $prescription->_current_praticien_id;
@@ -170,6 +182,11 @@ if($prescription->_id){
 		$prescription->loadRefsLinesMedComments();
 	  foreach($prescription->_ref_lines_med_comments as $type => $lines_by_type){
 	  	foreach($lines_by_type as $med_id => $_line_med){
+	  	  if($hide_old_lines && $_line_med->_fin_reelle && mbDate($_line_med->_fin_reelle) < mbDate()){
+	  	    unset($prescription->_ref_lines_med_comments[$type][$med_id]);
+					$hidden_lines_count++;
+	  	  }
+				
 	  		$_line_med->getAdvancedPerms($is_praticien, $mode_protocole, $mode_pharma, $operation_id);
 	  	  if($_line_med->_class_name == "CPrescriptionLineMedicament"){
 	  	    $_line_med->countBackRefs("administration");
@@ -182,13 +199,22 @@ if($prescription->_id){
 		
 		// Chargement des prescription_line_mixes
 	  $prescription->loadRefsPrescriptionLineMixes();  
-	  foreach($prescription->_ref_prescription_line_mixes as $_prescription_line_mix){
-	    $_prescription_line_mix->loadRefPraticien();
-	    $_prescription_line_mix->loadRefsLines();
-	    $_prescription_line_mix->loadRefParentLine();
-	    $_prescription_line_mix->getAdvancedPerms($is_praticien, $mode_protocole, $mode_pharma, $operation_id);
-	  }
-	  
+		if($prescription->_ref_prescription_line_mixes_by_type){
+		  foreach($prescription->_ref_prescription_line_mixes_by_type as $_type_line => $_lines_mixes){
+		  	foreach($_lines_mixes as $_line_mix_id => $_prescription_line_mix){
+		  	  if($hide_old_lines && $_prescription_line_mix->_date_fin && mbDate($_prescription_line_mix->_date_fin) < mbDate()){
+		        unset($prescription->_ref_prescription_line_mixes_by_type[$_type_line][$_line_mix_id]);            
+						$hidden_lines_count++;
+		      }
+					
+			    $_prescription_line_mix->loadRefPraticien();
+			    $_prescription_line_mix->loadRefsLines();
+			    $_prescription_line_mix->loadRefParentLine();
+			    $_prescription_line_mix->getAdvancedPerms($is_praticien, $mode_protocole, $mode_pharma, $operation_id);
+		    }
+			}
+		}
+		
 	  // Pour une prescription non protocole
 	  if ($prescription->object_id) {
 	    $object =& $prescription->_ref_object;
@@ -353,6 +379,11 @@ if($prescription->_id){
 	      foreach($cat_by_chap as $name_cat => $lines_by_cat){
 	        foreach($lines_by_cat as $type_elt => $lines_by_type){
 	          foreach($lines_by_type as $key => $_line){
+	          	if($hide_old_lines && $_line->_fin_reelle && mbDate($_line->_fin_reelle) < mbDate()){
+				        unset($prescription->_ref_lines_elements_comments[$name_chap][$name_cat][$type_elt][$key]);
+								$hidden_lines_count++;
+				      }
+			
 	          	if($_line->_class_name == "CPrescriptionLineElement"){
                 $_line->loadRefsPrises();
 								$_line->loadRefDM();
@@ -524,6 +555,9 @@ $smarty->assign("pratSel_id"           , $pratSel_id);
 $smarty->assign("mode_sejour"          , $mode_sejour);
 $smarty->assign("praticien_for_prot_id", $praticien_for_prot_id);
 $smarty->assign("user_id"              , $AppUI->user_id);
+$smarty->assign("hide_old_lines"       , $hide_old_lines);
+$smarty->assign("hidden_lines_count"   , $hidden_lines_count);
+
 if($full_mode){
   $smarty->assign("praticien_sejour", $_sejour->praticien_id);
   $smarty->assign("chir"   , $_chir);

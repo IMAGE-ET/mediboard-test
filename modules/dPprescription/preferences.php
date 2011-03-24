@@ -10,6 +10,7 @@
 // Préférences par Module
 CPreferences::$modules["dPprescription"] = array (
   "easy_mode",
-  "show_transmissions_form"
+  "show_transmissions_form",
+	"hide_old_lines"
 );
 ?>

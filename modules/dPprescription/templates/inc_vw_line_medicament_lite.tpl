@@ -13,8 +13,13 @@
 <table class="tbl {{if $line->traitement_personnel}}traitement{{else}}med{{/if}}
                   {{if $line->_fin_reelle && $line->_fin_reelle < $now && !$line->_protocole}} line_stopped{{/if}}" id="line_medicament_{{$line->_id}}">
   <!-- Header de la ligne -->
-  <tr class="hoverable {{if $line->_fin_reelle && $line->_fin_reelle < $now && !$line->_protocole}}hatching_red{{/if}}">
-    <td style="text-align: center; width: 5%;" class="text">
+  <tr class="hoverable 
+	   {{if !$line->_protocole && $line->_fin_reelle}}
+	     {{if $line->_fin_reelle < $now}}hatching{{/if}}
+		   {{if $line->_fin_reelle|iso_date < $now|iso_date}}opacity-50{{/if}}
+		 {{/if}}">
+  
+	  <td style="text-align: center; width: 5%;" class="text">
       <!-- Suppression de la ligne -->
       {{if $line->_can_delete_line}}
         <button type="button" class="trash notext" onclick="

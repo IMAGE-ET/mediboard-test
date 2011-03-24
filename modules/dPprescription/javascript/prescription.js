@@ -173,7 +173,7 @@ Prescription = {
     url.addParam("mode_pharma", mode_pharma);
     url.requestUpdate("systemMsg");
   },
-  reload: function(prescription_id, element_id, chapitre, mode_protocole, mode_pharma, line_id, full_line_guid) {
+  reload: function(prescription_id, element_id, chapitre, mode_protocole, mode_pharma, line_id, full_line_guid, hide_old_lines) {
       var oForm = document.addLine;    
       if(window.opener && window.opener.PrescriptionEditor){
         window.opener.PrescriptionEditor.refresh(oForm.object_id.value, oForm.object_class.value);
@@ -184,7 +184,11 @@ Prescription = {
       urlPrescription.addParam("chapitre", chapitre);
       urlPrescription.addParam("mode_protocole", mode_protocole);
 			urlPrescription.addParam("mode_pharma", mode_pharma);
-
+			
+			if (hide_old_lines) {
+	  	  urlPrescription.addParam("hide_old_lines", hide_old_lines);
+	    }
+			
       if(mode_pharma == "1"){
           urlPrescription.requestUpdate("div_medicament", { onComplete: function(){ Prescription.testPharma(line_id) } });      
       } else {

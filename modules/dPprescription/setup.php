@@ -1839,7 +1839,10 @@ class CSetupdPprescription extends CSetup {
               ADD INDEX (`group_id`);";
 		$this->addQuery($query);
 		
-		$this->mod_version = "1.34";
+		$this->makeRevision("1.34");
+		$this->addPrefQuery("hide_old_lines", "0");
+		
+		$this->mod_version = "1.35";
   }
 }
 
