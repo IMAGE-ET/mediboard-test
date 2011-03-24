@@ -41,6 +41,7 @@ class CTemplateManager {
 
     $now = mbDateTime();
     $this->addDateProperty("Général - date du jour", $now);
+    $this->addLongDateProperty("Général - date du jour (longue)", $now);
     $this->addTimeProperty("Général - heure courante", $now);
     
     // Connected user
