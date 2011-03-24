@@ -196,6 +196,7 @@ function prepareForm(oForm) {
   while (oLabel = aLabels[i++]) {
     if ((sFor = oLabel.htmlFor) && (sFor.indexOf(sFormName) !== 0)) {
       oLabel.htmlFor = sFormName + "_" + sFor;
+      oLabel.id = oLabel.id || "labelFor_" + sFormName + "_" + sFor;
     }
   }
 

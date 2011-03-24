@@ -397,13 +397,21 @@ Element.addMethods({
     
     if (!element || !element.form || !element.id) return;
     
-    var htmlFor = "", match;
+    var htmlFor = "", match, byId;
     
     if (!strict && /radio|checkbox/i.test(element.type)){
       match = new RegExp("(\.*)_"+RegExp.escape(element.value)+"$", "i").exec(element.id);
       if (match) {
+        if (byId = $("labelFor_"+match[1])) {
+          return byId;
+        }
+        
         htmlFor = "label[for='"+match[1]+"'], ";
       }
+    }
+    
+    if (byId = $("labelFor_"+element.id)) {
+      return byId;
     }
     
     return $(element.form).down(htmlFor+"label[for='"+element.id+"']");
