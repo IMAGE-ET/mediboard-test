@@ -222,7 +222,10 @@ class CPrescriptionLineMix extends CMbObject {
 			}
     }
     if($this->nb_tous_les){
-      $this->_frequence = "toutes les $this->nb_tous_les"."h";
+    	if($this->duree_passage){
+    		$this->_frequence = "en $this->duree_passage min ";
+    	}
+      $this->_frequence .= "toutes les $this->nb_tous_les"."h";
     }
     
     if($this->type == "PCA"){
