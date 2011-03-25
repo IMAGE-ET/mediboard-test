@@ -10,6 +10,7 @@
 
 {{main}}
   ExClass.id = "{{$ex_class->_id}}";
+  $("exClassList").select("tr[data-ex_class_id]").invoke("removeClassName", "selected");
 {{/main}}
 
 <table class="main form">
@@ -49,11 +50,12 @@
               </select>
             </td>
             
-            <th>{{mb_label object=$ex_class field=name}}</th>
-            <td>{{mb_field object=$ex_class field=name}}</td>
-            
             <th>{{mb_label object=$ex_class field=disabled}}</th>
             <td>{{mb_field object=$ex_class field=disabled typeEnum=checkbox}}</td>
+          </tr>
+          <tr>
+            <th>{{mb_label object=$ex_class field=name}}</th>
+            <td>{{mb_field object=$ex_class field=name size=50}}</td>
             
             <th>{{mb_label object=$ex_class field=conditional}}</th>
             <td>{{mb_field object=$ex_class field=conditional typeEnum=checkbox}}</td>
@@ -81,6 +83,7 @@
 Main.add(function(){
   exClassTabs = Control.Tabs.create("ExClass-back", true);
   exFieldGroupsTabs = Control.Tabs.create("field_groups", true);
+  $("exClassList").down("tr[data-ex_class_id={{$ex_class->_id}}]").addClassName("selected");
 });
 
 toggleGroupLabelEdit = function(link) {
@@ -103,19 +106,18 @@ toggleGroupLabelEdit = function(link) {
 <hr class="control_tabs" />
 
 <table class="main layout" id="fields-specs" style="display: none;">
-  <col class="narrow" />
-  <col style="width: 12em; max-width: 300px;" />
+  <col style="width: 16em; max-width: 300px;" />
 	
   <tr>
-    <td>
-      <ul class="control_tabs_vertical small" id="field_groups" style="float: right; min-width: 14em;">
-			  <li style="margin: 3px;">
+    <td colspan="2">
+      <ul class="control_tabs small" id="field_groups">
+			  <li style="margin: 3px; display: none;">
 				  <strong>Groupes</strong><br />
           <small>Double-clic pour modifier</small>
 				</li>
         
         {{foreach from=$ex_class->_ref_groups item=_group}}
-          <li style="font-size: 0.95em;">
+          <li>
             <a href="#group-{{$_group->_guid}}" ondblclick="toggleGroupLabelEdit(this)">
 						  <span class="label">
 						  	{{$_group->name}} <small>({{$_group->_ref_fields|@count}})</small>
@@ -143,20 +145,22 @@ toggleGroupLabelEdit = function(link) {
             <input type="hidden" name="@class" value="CExClassFieldGroup" />
             <input type="hidden" name="ex_class_id" value="{{$ex_class->_id}}" />
 						
-            <button class="add" type="button" style="margin: 3px; margin-top: 0;" 
+            <button class="add" type="button" style="margin: -1px;" 
 						        onclick="$(this).hide().next('span').show(); $(this.form.elements.name).tryFocus()">
 							{{tr}}CExClassFieldGroup-title-create{{/tr}}
 						</button>
 						
 						<span style="display: none;">
-	            <button class="submit notext" type="submit" style="margin: -1px; margin-right: -3px;"></button>
+	            <button class="submit notext" type="submit" style="margin: -1px"></button>
 							{{mb_field class=CExClassFieldGroup field=name size=10 style="margin-right: 4px;"}}
 						</span>
 					</form>
 				</li>
       </ul>
+      <hr class="control_tabs" />
     </td>
-		
+	</tr>
+  <tr>
 		<td>
       <table class="main tbl">
         {{*<tr>

@@ -84,7 +84,7 @@ else {
 	  $line = $current_line;
 	  
 	  // EX CLASS
-	  if (empty($line["field_name"]) || empty($line["concept_name"])) {
+	  if (empty($line["field_name"]) && empty($line["concept_name"])) {
 	    $current_class = new CExClass;
 	    $class_name = reset($line);
 			
@@ -137,10 +137,11 @@ else {
 	  // FIELD
 	  $field = new CExClassField;
 	  CExClassField::$_load_lite = true;
+		$field_name = empty($line["field_name"]) ? $line["concept_name"] : $line["field_name"];
 		
 	  $ds = $field->_spec->ds;
 	  $where = array(
-	    "ex_class_field_translation.std" => $ds->prepare("=%", $line["field_name"]),
+	    "ex_class_field_translation.std" => $ds->prepare("=%", $field_name),
 	    "ex_class_field.ex_group_id" => $ds->prepare("=%", $current_group->_id),
 	  );
 		
@@ -152,7 +153,7 @@ else {
 		
 	  if (!$field->_id) {
 	    $field->name = uniqid("f");
-	    $field->_locale = $line["field_name"];
+	    $field->_locale = $field_name;
 	    $field->ex_group_id = $current_group->_id;
 			$field->concept_id = $concept->_id;
 			

@@ -48,7 +48,7 @@ toggleListItem = function(button, value, active) {
 	<col class="narrow" />
 	
   <tr>
-    <th colspan="3" class="title">
+    <th colspan="4" class="title">
       {{tr}}CExList-back-list_items{{/tr}}
       
       <a class="button edit" href="?m=forms&amp;tab=view_ex_list&amp;object_guid={{$list_owner->_guid}}">

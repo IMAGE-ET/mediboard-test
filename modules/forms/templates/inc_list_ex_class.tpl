@@ -33,7 +33,7 @@ Main.add(function(){
 			{{/if}}
 			
       {{foreach from=$_by_event item=_ex_class}}
-		    <tr>
+		    <tr data-ex_class_id="{{$_ex_class->_id}}">
 		      <td class="text" style="min-width: 15em;">
             <div style="float: right;">
               <span {{if $_ex_class->conditional}}style="background: #7e7;" title="{{tr}}CExClass-conditional{{/tr}}"{{/if}}>&nbsp;&nbsp;</span>
