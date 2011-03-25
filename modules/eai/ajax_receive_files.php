@@ -33,7 +33,7 @@ foreach($all_files as $_file) {
   $file = $exchange_source->getData($_file);
   
   try {
-    CEAIDispatcher::dispatch($file);
+    CEAIDispatcher::dispatch($actor, $file);
   } catch(Exception $e) {
     CAppUI::stepAjax($e->getMessage());
     // création d'un échange Any

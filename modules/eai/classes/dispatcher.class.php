@@ -17,16 +17,19 @@
  */
 
 class CEAIDispatcher {  
-  static function dispatch($data) {
+  static function dispatch(CInteropActor $actor, $data) {
     $understand = false;
-    //mbTrace($data);
     foreach (CExchangeDataFormat::getAll() as $_data_format) {
       $data_format = new $_data_format;
-      $understand = $data_format->understand($data);
+      $understand = $data_format->understand($actor, $data);
       
       if ($understand) {
+        CAppUI::stepAjax("CEAIDispatcher-understand");
         return true;
       }
+    }
+    if (!$understand) {
+      CAppUI::stepAjax("CEAIDispatcher-no-understand", UI_MSG_WARNING);
     }
     return false;
   }

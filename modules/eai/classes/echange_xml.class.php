@@ -100,7 +100,7 @@ class CEchangeXML extends CExchangeDataFormat {
     }
   }
   
-  function understand($data) {
+  function understand(CInteropActor $actor, $data) {
     if ($dom = $this->isWellForm($data)) {
       return $dom;
     }        

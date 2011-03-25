@@ -141,9 +141,37 @@ class CExchangeDataFormat extends CMbMetaObject {
     $this->_count_ack_invalide = $this->countList($where);
   }
   
-  function understand($data) {}
+  function understand(CInteropActor $actor, $data) {}
   
   function isWellForm($data) {}
+  
+  function getMessagesSupported($actor_guid, $all = true, $evenement = null) {
+    list($object_class, $object_id) = explode("-", $actor_guid);
+    $messages = array();
+    
+    $class    = new ReflectionClass($this->_class_name);
+    $statics  = $class->getStaticProperties();
+    foreach ($statics["messages"] as $_message => $_root_class) {
+      $class = new ReflectionClass($_root_class);
+      $statics = $class->getStaticProperties();
+      
+      foreach ($statics["evenements"] as $_evt => $_evt_class) {
+        if ($evenement && ($evenement != $_evt)) {
+          continue;
+        }
+        $message_supported = new CMessageSupported();
+        $message_supported->object_class = $object_class;
+        $message_supported->object_id    = $object_id;
+        $message_supported->message      = $_evt_class;
+        $message_supported->loadMatchingObject();
+        if (!$message_supported->_id && !$all) {
+          continue;
+        }         
+        $messages[$_root_class][] = $message_supported;
+      }
+    }
+    return $messages;
+  }
 }
 
 ?>
