@@ -89,7 +89,7 @@
       <td class="text">
       {{if $_log->object_class|strpos:"CExObject_" === false}} {{* Because the object can't be instanciated *}}
         {{foreach from=$_log->_fields item=_field name=field}}
-         {{if array_key_exists($_field, $object->_specs)}}
+         {{if array_key_exists($_field, $ref_object->_specs)}}
            {{mb_label class=$_log->object_class field=$_field}}
            {{if !$smarty.foreach.field.last}} - {{/if}}
          {{else}}
