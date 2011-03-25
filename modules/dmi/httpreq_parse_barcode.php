@@ -42,7 +42,7 @@ if (isset($comp['id'])) {
   $lots = array($lot->_id => $lot);
 }
 else {
-  $lots = $object->seek($lot, $where, 50, null, $ljoin);
+  $lots = $object->seek($lot, $where, null, null, $ljoin);
 }
 
 foreach($lots as $_id => $_lot) {
