@@ -47,7 +47,7 @@
       {{mb_ditto name=time value=$_log->date|date_format:$conf.time}}
     </td>
     <td rowspan="{{$field_count}}"
-      {{if !count($_log->_fields)}} colspan="4" {{/if}}>
+      {{if !count($_log->_fields) && $object->_id}} colspan="4" {{/if}}>
       <span onmouseover="ObjectTooltip.createEx(this, '{{$_log->_guid}}')">
         {{mb_value object=$_log field=type}}
       </span>
