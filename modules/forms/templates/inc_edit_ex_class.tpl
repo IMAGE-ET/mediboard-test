@@ -110,16 +110,11 @@ toggleGroupLabelEdit = function(link) {
 	
   <tr>
     <td colspan="2">
-      <ul class="control_tabs small" id="field_groups">
-			  <li style="margin: 3px; display: none;">
-				  <strong>Groupes</strong><br />
-          <small>Double-clic pour modifier</small>
-				</li>
-        
+      <ul class="control_tabs" id="field_groups">
         {{foreach from=$ex_class->_ref_groups item=_group}}
           <li>
-            <a href="#group-{{$_group->_guid}}" ondblclick="toggleGroupLabelEdit(this)">
-						  <span class="label">
+            <a href="#group-{{$_group->_guid}}" ondblclick="toggleGroupLabelEdit(this)" title="Double-cliquer pour modifier">
+						  <span class="label" style="font-weight: normal;">
 						  	{{$_group->name}} <small>({{$_group->_ref_fields|@count}})</small>
 							</span>
 							
@@ -145,13 +140,13 @@ toggleGroupLabelEdit = function(link) {
             <input type="hidden" name="@class" value="CExClassFieldGroup" />
             <input type="hidden" name="ex_class_id" value="{{$ex_class->_id}}" />
 						
-            <button class="add" type="button" style="margin: -1px;" 
+            <button class="add" type="button" style="margin: -2px;" 
 						        onclick="$(this).hide().next('span').show(); $(this.form.elements.name).tryFocus()">
 							{{tr}}CExClassFieldGroup-title-create{{/tr}}
 						</button>
 						
 						<span style="display: none;">
-	            <button class="submit notext" type="submit" style="margin: -1px"></button>
+	            <button class="submit notext" type="submit" style="margin: -2px"></button>
 							{{mb_field class=CExClassFieldGroup field=name size=10 style="margin-right: 4px;"}}
 						</span>
 					</form>

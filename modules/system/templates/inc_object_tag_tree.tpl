@@ -12,19 +12,20 @@
     <tr>
       <th colspan="{{$colspan}}">
         <form name="filter-{{$object_class}}" method="get" action="?" onsubmit="return false">
+          Filtrer par : 
           <label>
              Tag
-            <input type="text" name="tag" onkeyup="Tag.filter(this)" size="8" />
+            <input type="text" name="tag" onkeyup="Tag.filter(this)" size="10" />
           </label>
-          <button class="cancel notext" type="button" onclick="Tag.cancelFilter(this.form.tag)">
+          <button class="cancel notext" type="button" onclick="Tag.cancelFilter(this.form.tag)" style="margin-left: -2px;">
             {{tr}}Cancel{{/tr}}
           </button>
-          &mdash;
+          &ndash;
           <label>
             Nom
-            <input type="text" name="object_name" size="8" onkeyup="Tag.launchFilterObject(this)" />
+            <input type="text" name="object_name" size="10" onkeyup="Tag.launchFilterObject(this)" />
           </label>
-          <button class="cancel notext" type="button" onclick="Tag.cancelFilterObject(this.form.object_name)">
+          <button class="cancel notext" type="button" onclick="Tag.cancelFilterObject(this.form.object_name)" style="margin-left: -2px;">
             {{tr}}Cancel{{/tr}}
           </button>
         </form>

@@ -163,7 +163,7 @@ class CExClass extends CMbObject {
   
   static function getTree(){
     $ex_class = new self;
-    $list_ex_class = $ex_class->loadList(null, "host_class, event");
+    $list_ex_class = $ex_class->loadList(null, "host_class, event, name");
     
     $class_tree = array();
     
