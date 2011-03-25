@@ -8,7 +8,7 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
  */
 
-CCanDo::checkEdit();
+CCanDo::checkAdmin();
 
 $file = CValue::read($_FILES, 'import');
 $separator = CValue::post("separator", ',');

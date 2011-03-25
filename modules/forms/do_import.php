@@ -8,7 +8,7 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
  */
 
-CCanDo::checkEdit();
+CCanDo::checkAdmin();
 
 $object_class = CValue::post("object_class");
 $file = CValue::read($_FILES, 'import');

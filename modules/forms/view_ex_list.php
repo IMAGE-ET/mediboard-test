@@ -8,6 +8,8 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
  */
 
+CCanDo::checkEdit();
+
 $_GET["object_class"] = "CExList";
 
 //$_GET["col"] = array("name");

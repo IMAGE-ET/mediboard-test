@@ -8,7 +8,7 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
  */
 
-CCanDo::checkRead();
+//CCanDo::checkRead();
 
 $tag_id   = CValue::get("tag_id");
 $columns  = CValue::get("col");

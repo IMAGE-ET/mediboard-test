@@ -8,11 +8,10 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
  */
 
-CCanDo::checkAdmin();
+CCanDo::checkRead();
 
 $object_class = CValue::get("object_class");
 $object_guid = CValue::get("object_guid");
-
 if (!$object_class && $object_guid) {
 	$parts = explode("-", $object_guid);
 	$object_class = $parts[0];
