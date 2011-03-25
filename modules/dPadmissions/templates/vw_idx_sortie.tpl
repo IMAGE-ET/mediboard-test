@@ -76,7 +76,7 @@ function reloadSorties(filterFunction) {
 }
 
 function submitSortie(oForm) {
-  submitFormAjax(oForm, 'systemMsg', { onComplete : function() { reloadSorties() } });
+  return onSubmitFormAjax(oForm, { onComplete : reloadSorties });
 }
 
 function confirmation(oForm, type){

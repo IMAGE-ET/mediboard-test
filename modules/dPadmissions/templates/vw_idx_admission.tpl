@@ -71,7 +71,7 @@ function confirmation(oForm){
 }
 
 function submitCote(oForm) {
-  submitFormAjax(oForm, 'systemMsg', { onComplete : function() { reloadAdmission() } });
+  return onSubmitFormAjax(oForm, { onComplete : reloadAdmission });
 }
 
 function submitAdmission(oForm, bPassCheck) {
@@ -81,10 +81,10 @@ function submitAdmission(oForm, bPassCheck) {
     if(!bPassCheck && oIPPForm && oNumDosForm && (!$V(oIPPForm.id400) || !$V(oNumDosForm.id400)) ) {
       setExternalIds(oForm);
     } else {
-      submitFormAjax(oForm, 'systemMsg', { onComplete : function() { reloadAdmission() } });
+      return onSubmitFormAjax(oForm, { onComplete : reloadAdmission });
     }
   {{else}}
-    submitFormAjax(oForm, 'systemMsg', { onComplete : function() { reloadAdmission() } });
+    return onSubmitFormAjax(oForm, { onComplete : reloadAdmission });
   {{/if}}
 }
 
