@@ -34,6 +34,8 @@ onSubmitReplacement = function(form, sejour_id, conge_id, type) {
     <th class="title text" colspan="3">
     	Rééducateurs de la fonction 
 			{{mb_include module=mediusers template=inc_vw_function function=$user->_ref_function}}
+			<br />pour 
+		  {{$sejour->_ref_patient}}
 		</th>
   </tr> 
   <tr>
@@ -46,9 +48,9 @@ onSubmitReplacement = function(form, sejour_id, conge_id, type) {
 	<tbody class="hoverable">
 		
   {{foreach from=$_counts_by_sejour key=therapeute_id item=_count name=therapeutes}}
-  <tr>
-  	{{if $smarty.foreach.therapeutes.first}} 
     {{assign var=_sejour value=$sejours.$sejour_id}}
+  <tr {{if $sejour->_id == $_sejour->_id}} class="selected" {{/if}} >
+  	{{if $smarty.foreach.therapeutes.first}} 
     <td rowspan="{{$_counts_by_sejour|@count}}">
     	<span onmouseover="ObjectTooltip.createEx(this, '{{$_sejour->_guid}}')">
     		{{$_sejour}}

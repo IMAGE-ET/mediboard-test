@@ -49,10 +49,9 @@ class CIntervenantCdARR extends CCdARRObject {
 	 **/
   static function get($code) {
     if (!isset(self::$cached[$code])) {
-      $intervennant = new CIntervenantCdARR();
-      if ($intervennant->load($code)) {
-        self::$cached[$code] = $intervennant;
-      }
+      $intervenant = new CIntervenantCdARR();
+      $intervenant->load($code);
+      self::$cached[$code] = $intervenant;
     }
     return self::$cached[$code];
   }

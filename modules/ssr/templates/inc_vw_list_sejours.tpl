@@ -23,10 +23,24 @@ Main.add(function() {
 	  <tr>
 	    <th colspan="5" class="title text">
 	    	{{assign var=plage_conge value=$plages_conge.$plage_conge_id}}
-			  Séjours pendant les congés de 
-        {{mb_include module=mediusers template=inc_vw_mediuser mediuser=$plage_conge->_ref_user}}
-				<br />
-				{{mb_include module=system template=inc_interval_date from=$plage_conge->date_debut to=$plage_conge->date_fin}}
+        {{if !$plage_conge->_activite}}
+				  Séjours pendant les congés de 
+	        {{mb_include module=mediusers template=inc_vw_mediuser mediuser=$plage_conge->_ref_user}}
+					<br />
+					{{mb_value object=$plage_conge field=libelle}}
+					&mdash;
+	        {{mb_include module=system template=inc_interval_date from=$plage_conge->date_debut to=$plage_conge->date_fin}}
+				{{elseif $plage_conge->_activite == "deb"}}
+          Séjours antérieurs au début d'activité de 
+          {{mb_include module=mediusers template=inc_vw_mediuser mediuser=$plage_conge->_ref_user}}
+          <br />
+          {{mb_include module=system template=inc_interval_date from=$plage_conge->date_debut to=$plage_conge->date_debut}}
+        {{elseif $plage_conge->_activite == "fin"}}
+          Séjours postérieurs à la fin d'activité de 
+          {{mb_include module=mediusers template=inc_vw_mediuser mediuser=$plage_conge->_ref_user}}
+          <br />
+          {{mb_include module=system template=inc_interval_date from=$plage_conge->date_fin to=$plage_conge->date_fin}}
+				{{/if}}
 			</th>
 		</tr>
 		<tr>

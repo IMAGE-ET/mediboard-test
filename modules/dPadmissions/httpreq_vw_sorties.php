@@ -88,23 +88,21 @@ $praticiens = CMbObject::massLoadFwdRef($sejours, "praticien_id");
 $functions  = CMbObject::massLoadFwdRef($praticiens, "function_id");
 
 foreach ($sejours as $sejour_id => $_sejour) {
-  $_sejour->loadRefPraticien(1);
-  $praticien =& $_sejour->_ref_praticien;
-  
-  if ($filterFunction && $filterFunction != $praticien->function_id) {
+  // Filtre sur la fonction du praticien
+  $praticien = $_sejour->loadRefPraticien(1);
+	if ($filterFunction && $filterFunction != $praticien->function_id) {
     unset($sejours[$sejour_id]);
     continue;
   }
   
   // Chargement du patient
-  $_sejour->loadRefPatient(1);
-  $_sejour->_ref_patient->loadIPP();
+  $_sejour->loadRefPatient(1)->loadIPP();
   
   // Chargment du numéro de dossier
   $_sejour->loadNumDossier();
-  $whereOperations = array("annulee" => "= '0'");
 
   // Chargement des interventions
+  $whereOperations = array("annulee" => "= '0'");
   $_sejour->loadRefsOperations($whereOperations);
   $operation = new COperation();
   foreach ($_sejour->_ref_operations as $operation) {
@@ -120,10 +118,13 @@ foreach ($sejours as $sejour_id => $_sejour) {
   $_sejour->loadRefsAffectations();
   foreach($_sejour->_ref_affectations as $_aff) {
     if ($_aff->_id) {
-      $_aff->loadRefLit(1);
-      $_aff->_ref_lit->loadCompleteView();
+      $_aff->loadRefLit()->loadCompleteView();
     }
   }
+  
+  // Chargement des modes de sortie
+  $_sejour->loadRefEtabExterne();
+  $_sejour->loadRefServiceMutation();  
 }
 
 // Si la fonction selectionnée n'est pas dans la liste des fonction, on la rajoute
@@ -132,8 +133,6 @@ if ($filterFunction && !array_key_exists($filterFunction, $functions)){
   $_function->load($filterFunction);
   $functions[$filterFunction] = $_function;
 }
-
-
 
 // Création du template
 $smarty = new CSmartyDP();

@@ -61,8 +61,8 @@ class CEvenementSSR extends CMbObject {
     $props["sejour_id"]     = "ref class|CSejour show|0";
     $props["debut"]         = "dateTime show|0";
 
-    $props["_heure_deb"] = "time show|1";
-    $props["_heure_fin"] = "time show|1";
+    $props["_heure_deb"]    = "time show|1";
+    $props["_heure_fin"]    = "time show|1";
     $props["duree"]         = "num min|0";
 
 		$props["therapeute_id"] = "ref class|CMediusers";
@@ -305,33 +305,12 @@ class CEvenementSSR extends CMbObject {
 	/**
 	 * Find all therapeutes for a patient 
 	 * 
-	 * @param ref<CPatient>  $patient_id  Patient
-	 * @param ref<CFunction> $function_id May restrict to a function
+	 * @param ref[CPatient]  $patient_id  Patient
+	 * @param ref[CFunction] $function_id May restrict to a function
 	 * 
-	 * @return array<CMediusers>
+	 * @return array[CMediusers]
 	 */
 	static function getAllTherapeutes($patient_id, $function_id = null) {
-//		$req = new CRequest;
-//		
-//		// Filter on patient
-//    $req->addLJoinClause("sejour", "sejour.sejour_id = evenement_ssr.sejour_id");
-//    $req->addWhereClause("patient_id", "= '$patient_id'");
-//		
-//		// Filter on function
-//		if ($function_id) {
-//	    $req->addLJoinClause("users_mediboard", "users_mediboard.user_id = evenement_ssr.therapeute_id");
-//	    $req->addWhereClause("users_mediboard.function_id", "= '$function_id'");
-//		}
-//		
-//		// Counting
-//		$req->addGroup("therapeute_id");
-//    $evenement = new self;
-//		$query = $req->getCountRequest($evenement, array("therapeute_id"));
-//		
-//		// Execute query
-//		$ds = $evenement->_spec->ds;
-//		$sorter = array_flip($ds->loadHashList($query));
-		
     // Filter on patient
     $join["sejour"] = "sejour.sejour_id = evenement_ssr.sejour_id";
     $where["patient_id"] =  "= '$patient_id'";
@@ -355,6 +334,27 @@ class CEvenementSSR extends CMbObject {
 		
 		return $therapeutes;
 	}
+
+  /**
+   * Find all therapeutes having planned events 
+   * 
+   * @param date $min Minimal date to start from
+   * @param date $max Maximal date to stop to
+   * 
+   * @return array[CMediusers]
+   */
+  static function getActiveTherapeutes($min, $max) {
+  	$max = mbDate("+1 DAY", $max);
+    $query = "SELECT DISTINCT therapeute_id FROM `evenement_ssr` 
+      WHERE debut BETWEEN '$min' AND '$max'";
+    $that = new self;
+    $ds = $that->_spec->ds;
+    $therapeute_ids = $ds->loadColumn($query);
+    
+    $therapeute = new CMediusers();
+    return $therapeute->loadAll($therapeute_ids);
+  }
+	
 }
 
 ?>
