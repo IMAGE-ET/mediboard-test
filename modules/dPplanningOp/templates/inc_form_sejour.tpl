@@ -54,7 +54,7 @@ function checkModeSortie(){
 
 function checkSejour() {
   var oForm = document.editSejour;
-  return checkDureeHospi() && checkModeSortie() && checkForm(oForm);
+  return checkDureeHospi() && checkModeSortie() && OccupationServices.testOccupation() && checkForm(oForm);
 }
 
 function checkPresta(){
@@ -238,8 +238,8 @@ Main.add( function(){
   Calendar.regField(form._date_sortie_prevue, dates);
   
   removePlageOp(false);
-
-  updateOccupation();
+  OccupationServices.initOccupation();
+  OccupationServices.configBlocage = {{$conf.dPplanningOp.CSejour.blocage_occupation}};
   
 });
 </script>
@@ -465,7 +465,7 @@ Main.add( function(){
   <th>{{mb_label object=$sejour field="_date_entree_prevue"}}</th>
   <td>
     {{mb_field object=$sejour form=editSejour field=_date_entree_prevue canNull=false 
-		  onchange="updateOccupation(); modifSejour(); updateSortiePrevue(); reloadSejours(true);"}}
+		  onchange="OccupationServices.updateOccupation(); modifSejour(); updateSortiePrevue(); reloadSejours(true);"}}
   </td>
   <td colspan="2">
     à
@@ -516,7 +516,7 @@ Main.add( function(){
 <tr>
   <th>{{mb_label object=$sejour field="type"}}</th>
   <td>
-    <select name="type" onchange="changeTypeHospi(); updateOccupation(); checkDureeHospi('syncDuree');">
+    <select name="type" onchange="changeTypeHospi(); OccupationServices.updateOccupation(); checkDureeHospi('syncDuree');">
     {{assign var=specType value=$sejour->_specs.type}}
     {{foreach from=$specType->_locales item="curr_type" key="key"}}
       <option value="{{$key}}"

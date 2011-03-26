@@ -331,17 +331,41 @@ function changePat() {
   bChangePat = 1;
 }
 
-function updateOccupation() {
-  var oForm = document.editSejour;
-  var occupationUrl = new Url;
-  occupationUrl.setModuleAction("dPplanningOp", "httpreq_show_occupation_lits");
-  occupationUrl.addElement(oForm.type, "type");
-  occupationUrl.addElement(oForm._date_entree_prevue, "entree");
-  occupationUrl.requestUpdate('occupation');
-  if(document.editOp) {
-    occupationUrl.requestUpdate('occupationeasy');
+var OccupationServices =  {
+  dateInitiale  : null,
+  tauxOccupation: null,
+  configBlocage : null,
+  
+  initOccupation: function() {
+    var oForm = getForm("editSejour");
+    this.dateInitiale = $V(oForm._date_entree_prevue);
+    this.updateOccupation();
+  },
+  
+  updateOccupation: function() {
+    var oForm = getForm("editSejour");
+    var occupationUrl = new Url;
+    occupationUrl.setModuleAction("dPplanningOp", "httpreq_show_occupation_lits");
+    occupationUrl.addElement(oForm.type, "type");
+    occupationUrl.addElement(oForm._date_entree_prevue, "entree");
+    occupationUrl.requestUpdate('occupation');
+    if(document.editOp) {
+      occupationUrl.requestUpdate('occupationeasy');
+    }
+  },
+  
+  testOccupation: function() {
+    if(this.configBlocage != '1') {
+      return true;
+    }
+    var oForm = getForm("editSejour");
+    if(this.dateInitiale != $V(oForm._date_entree_prevue) && this.tauxOccupation >= 100) {
+      alert("L'occupation des services est de "+this.tauxOccupation+"%.\nVeuillez contacter le responsable des services")
+      return false;
+    }
+    return true;
   }
-}
+};
 
 function popRegimes() {
   var oForm = document.editSejour;

@@ -7,6 +7,9 @@
 {{/if}} 
 
 {{if $occupation}}
+<script type="text/javascript">
+  OccupationServices.tauxOccupation = {{$occupation}};
+</script>
 <div class="progressBar">
   <div class="bar {{$backgroundClass}}" style="width: {{$pct}}%;"></div>
   <div class="text" style="text-align: center">{{$occupation|string_format:"%.0f"}} %</div>

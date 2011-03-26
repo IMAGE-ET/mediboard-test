@@ -110,6 +110,8 @@
   {{assign var="var" value="min_intervalle"}}
   {{mb_include module=system template=inc_config_enum var=$var  values=$intervals skip_locales=true}}
 
+  {{assign var="var" value="blocage_occupation"}}
+  {{mb_include module=system template=inc_config_bool var=$var }}
   {{assign var="var" value="service_id_notNull"}}
   {{mb_include module=system template=inc_config_bool var=$var }}
 	{{assign var="var" value="delete_only_admin"}}
