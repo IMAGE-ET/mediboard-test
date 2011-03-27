@@ -81,6 +81,7 @@ if ($type == 'kine') {
 	$where["therapeute_id"] = " = '$kine->_id'";
 	$where["debut"] = "BETWEEN '$date_min' AND '$date_max'";
 	$transfer_count = $evenement->loadList($where);
+	$transfer_counts = array();
 }
 
 // Transfer event counts
