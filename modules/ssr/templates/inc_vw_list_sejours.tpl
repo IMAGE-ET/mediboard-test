@@ -23,23 +23,26 @@ Main.add(function() {
 	  <tr>
 	    <th colspan="5" class="title text">
 	    	{{assign var=plage_conge value=$plages_conge.$plage_conge_id}}
+        {{assign var=user value=$plage_conge->_ref_user}}
         {{if !$plage_conge->_activite}}
 				  Séjours pendant les congés de 
-	        {{mb_include module=mediusers template=inc_vw_mediuser mediuser=$plage_conge->_ref_user}}
+	        {{mb_include module=mediusers template=inc_vw_mediuser mediuser=$user}}
 					<br />
 					{{mb_value object=$plage_conge field=libelle}}
 					&mdash;
 	        {{mb_include module=system template=inc_interval_date from=$plage_conge->date_debut to=$plage_conge->date_fin}}
 				{{elseif $plage_conge->_activite == "deb"}}
           Séjours antérieurs au début d'activité de 
-          {{mb_include module=mediusers template=inc_vw_mediuser mediuser=$plage_conge->_ref_user}}
+          {{mb_include module=mediusers template=inc_vw_mediuser mediuser=$user}}
           <br />
-          {{mb_include module=system template=inc_interval_date from=$plage_conge->date_debut to=$plage_conge->date_debut}}
+          Le {{mb_value object=$user field=deb_activite}}
+          <br/>
         {{elseif $plage_conge->_activite == "fin"}}
           Séjours postérieurs à la fin d'activité de 
-          {{mb_include module=mediusers template=inc_vw_mediuser mediuser=$plage_conge->_ref_user}}
+          {{mb_include module=mediusers template=inc_vw_mediuser mediuser=$user}}
           <br />
-          {{mb_include module=system template=inc_interval_date from=$plage_conge->date_fin to=$plage_conge->date_fin}}
+          Le {{mb_value object=$user field=fin_activite}}
+          <br/>
 				{{/if}}
 			</th>
 		</tr>

@@ -1210,6 +1210,7 @@ class CSejour extends CCodable {
 		$this->_ref_replacement->sejour_id = $this->_id;
 		$this->_ref_replacement->conge_id = $conge_id;
     $this->_ref_replacement->loadMatchingObject();
+    return $this->_ref_replacement;
   }
 	
 	function isReplacer($replacer_id) {

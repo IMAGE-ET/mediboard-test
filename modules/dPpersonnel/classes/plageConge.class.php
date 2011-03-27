@@ -22,8 +22,11 @@ class CPlageConge extends CMbObject {
   var $_ref_user  = null;
   var $_ref_replacer = null;
 	
-  // Form field
+  // Form fields
   var $_duree      = null;
+  
+  // Behaviour fields
+  var $_activite = null; // For pseudo plages
 
   function getSpec() {
 		$specs = parent::getSpec();
@@ -84,7 +87,6 @@ class CPlageConge extends CMbObject {
     return $this->loadList($where, $order);
   }
 
-	
 	function loadRefsReplacementsFor($user_id, $date) {
     $where["replacer_id"] = "= '$user_id'";
     $where[] = "'$date' BETWEEN date_debut AND date_fin";
@@ -96,25 +98,56 @@ class CPlageConge extends CMbObject {
 	}
 	
 	function loadRefUser() {
-    $this->_ref_user = $this->loadFwdRef("user_id");
+    $this->_ref_user = $this->loadFwdRef("user_id", true);
 		$this->_ref_user->loadRefFunction();
 		return $this->_ref_user;
 	}
 
-  function loadRefsFwd() {
-  	$this->loadRefUser(); 
-  }
-  
 	function getPerm($permType) {
-    global $AppUI;
-		if ($this->user_id == $AppUI->user_id) {
+		if ($this->user_id == CAppUI::$user->_id) {
       return true;
     } 
 
-		if(!$this->_ref_user) {
-      $this->loadRefsFwd();
+    return $this->loadRefUser()->getPerm($permType);
+  }
+  
+  /**
+   * Make a pseudo plage corresponding to activity deb/fin for given user
+   * 
+   * @param ref[CUser] $user_id  User
+   * @param string     $type     Either deb or fin     
+   * @param date       $limit    Limit date to build pseudo plage
+   * @return CPlageConge
+   */
+  static function makePseudoPlage($user_id, $activite, $limit) {
+  	// Parameter check
+  	if (!in_array($activite, array("deb", "fin"))) {
+  		trigger_error("Activite '$activite' should be one of 'deb' or 'fin'", E_USER_WARNING);
+  	}
+  	
+  	// Make plage
+    $plage = new self;
+    $plage->_id = "$activite-$user_id";
+    $plage->user_id = $user_id;
+    $plage->_activite = $activite;
+    $plage->libelle   = CAppUI::tr("$plage->_class_name._activite.$activite");
+    
+    // Concerned user
+    $user = CMediusers::get($user_id);
+    
+    // Dates for deb case
+    if ($activite == "deb") {
+      $plage->date_debut = $limit;
+      $plage->date_fin = mbDate("-1 DAY", $user->deb_activite);
     }
-    return $this->_ref_user->getPerm($permType);
+    
+    // Dates for fin case
+    if ($activite == "fin") {
+	    $plage->date_debut = mbDate("+1 DAY", $user->fin_activite);
+	    $plage->date_fin   = $limit;
+    }
+    
+    return $plage;
   }
 }
 ?>

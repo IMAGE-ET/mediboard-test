@@ -13,30 +13,36 @@ CCanDo::checkRead();
 $sejour_id = CValue::getOrSession("sejour_id");
 $conge_id = CValue::getOrSession("conge_id");
 $type = CValue::getOrSession("type");
-
 $sejour = new CSejour();
 $sejour->load($sejour_id);
 
+// Standard plage
 $conge = new CPlageConge();
 $conge->load($conge_id);
 
-// Chargement d'un remplacement
-$sejour->loadRefReplacement($conge_id);
-$replacement =& $sejour->_ref_replacement;
-if ($replacement->_id) {
-  $replacement->loadRefReplacer();
-  $replacement->loadRefsNotes();
-	$replacer =& $replacement->_ref_replacer;
-	$replacer->loadRefFunction();
+// Week dates
+$date = CValue::getOrSession("date", mbDate());
+$monday = mbDate("last monday", mbDate("+1 DAY", $date));
+$sunday = mbDate("next sunday", mbDate("-1 DAY", $date));
+
+// Pseudo plage for user activity
+if (preg_match("/[deb|fin][\W][\d]+/", $conge_id)) {
+  list($activite, $user_id) = explode("-", $conge_id);
+  $limit = $activite == "deb" ? $monday : $sunday;
+  $conge = CPlageConge::makePseudoPlage($user_id, $activite, $limit);
 }
 
-$sejour->loadRefPatient();
-$patient =& $sejour->_ref_patient;
+// Chargement d'un remplacement
+$replacement = $sejour->loadRefReplacement($conge_id);
+if ($replacement->_id) {
+  $replacement->loadRefsNotes();
+	$replacement->loadRefReplacer()->loadRefFunction();
+}
 
 // Séjours du patient
-$patient->loadRefsSejours();
-$sejours =& $patient->_ref_sejours;
-foreach($sejours as $_sejour) {
+$patient = $sejour->loadRefPatient();
+$sejours = $patient->loadRefsSejours();
+foreach ($sejours as $_sejour) {
 	$_sejour->loadRefBilanSSR()->loadRefTechnicien();
 }
 
@@ -48,13 +54,13 @@ $users = $user->loadUsers(PERM_READ, $user->function_id);
 
 $evenements_counts = array();
 
-CEvenementSSR::getAllTherapeutes($sejour->patient_id, $user->function_id);
+$therapeutes = CEvenementSSR::getAllTherapeutes($sejour->patient_id, $user->function_id);
 
 // Chargement
 $evenement = new CEvenementSSR();
 $where["sejour_id"    ] = CSQLDataSource::prepareIn(array_keys($sejours));
-$where["therapeute_id"] = CSQLDataSource::prepareIn(array_keys($users));
-foreach($evenement->loadList($where) as $_evenement) {
+$where["therapeute_id"] = CSQLDataSource::prepareIn(array_keys($therapeutes));
+foreach ($evenement->loadList($where) as $_evenement) {
 	@$evenements_counts[$_evenement->sejour_id][$_evenement->therapeute_id]++;
 }
 
@@ -63,43 +69,55 @@ if (!$replacement->_id) {
   $replacement->sejour_id = $sejour_id;
 }
 
-// Chargement des evenements SSR dont le therapeute est le kine principal pendant sa periode de congé
+// Transfer event count
 if ($type == 'kine') {
-	$sejour->loadRefBilanSSR();
-	$bilan =& $sejour->_ref_bilan_ssr;
-	
-	$bilan->loadRefTechnicien();
-	$kine_id = $bilan->_ref_technicien->kine_id;
-	
-  $date_debut = $conge->date_debut;
-  $date_fin = mbDate("+1 DAY", $conge->date_fin);
-	$evenement = new CEvenementSSR();
+	$bilan = $sejour->loadRefBilanSSR();
+	$kine = $bilan->loadRefTechnicien();
+  $date_min = $conge->date_debut;
+  $date_max = mbDate("+1 DAY", $conge->date_fin);
+
 	$where = array();
-	$where["therapeute_id"] = " = '$kine_id'";
-	$where["sejour_id"] = " = '$sejour->_id'";
-	$where["debut"] = "BETWEEN '$date_debut' AND '$date_fin'";
-	$evenements = $evenement->loadList($where);
+  $where["sejour_id"]     = " = '$sejour->_id'";
+	$where["therapeute_id"] = " = '$kine->_id'";
+	$where["debut"] = "BETWEEN '$date_min' AND '$date_max'";
+	$transfer_count = $evenement->loadList($where);
 }
 
-// Chargement des evenements SSR
+// Transfer event counts
 if ($type == "reeducateur") {
-	$evenement = new CEvenementSSR();
-	$evenement->therapeute_id = $conge->user_id;
-	$evenement->sejour_id = $sejour_id;
-	$evenements = $evenement->loadMatchingList();
+  $date_min = max($monday, $conge->date_debut);
+  $date_max = min($sunday, $conge->date_fin);
+	$where = array();
+  $where["sejour_id"]     = " = '$sejour->_id'";
+  $where["therapeute_id"] = " = '$conge->user_id'";
+  $transfer_count = 0;
+  foreach(range(0,6) as $weekday) {
+  	$day = mbDate("+$weekday DAYS", $monday);
+  	if (!CMbRange::in($day, $date_min, $date_max)) {
+      $transfer_counts[$day] = 0;
+      continue;
+  	}
+  	$after = mbDate("+1 DAY", $day);
+    $where["debut"] = "BETWEEN '$day' AND '$after'";
+    $count = $evenement->countList($where);
+    $transfer_counts[$day] = $count;
+    $transfer_count += $count;
+  }
 }
 
 // Création du template
 $smarty = new CSmartyDP();
 $smarty->assign("evenements_counts", $evenements_counts);
 $smarty->assign("sejours", $sejours);
+$smarty->assign("therapeutes", $therapeutes);
 $smarty->assign("users", $users);
+$smarty->assign("transfer_count", $transfer_count);
+$smarty->assign("transfer_counts", $transfer_counts);
 
 $smarty->assign("sejour", $sejour);
 $smarty->assign("replacement", $replacement);
 $smarty->assign("conge", $conge);
 $smarty->assign("user", $user);
-$smarty->assign("evenements", $evenements);
 $smarty->assign("type", $type);
 $smarty->display("inc_vw_replacement.tpl");
 

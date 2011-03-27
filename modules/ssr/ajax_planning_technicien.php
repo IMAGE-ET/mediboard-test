@@ -143,9 +143,22 @@ foreach($duree_occupation as $_occupation){
   $planning->addDayLabel($_occupation["date"], $_occupation["total"]." mn", null, $color);
 }
 
+// Congés du personnel 
 foreach ($kine->loadBackRefs("plages_conge") as $_plage) {
 	$planning->addUnavailability($_plage->date_debut, $_plage->date_fin);
 }
+
+// Activité du compte
+if ($kine->deb_activite) {
+	$deb = mbDate("-1 DAY", $kine->deb_activite);
+	$planning->addUnavailability(mbDate("-1 WEEK", $deb), $deb);
+}
+
+if ($kine->fin_activite) {
+  $fin = mbDate("+1 DAY", $kine->fin_activite);
+  $planning->addUnavailability($fin, mbDate("+1 WEEK", $fin));
+}
+
 
 // Heure courante
 $planning->showNow();

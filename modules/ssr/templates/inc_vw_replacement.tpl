@@ -51,9 +51,9 @@ onSubmitReplacement = function(form, sejour_id, conge_id, type) {
     {{assign var=_sejour value=$sejours.$sejour_id}}
   <tr {{if $sejour->_id == $_sejour->_id}} class="selected" {{/if}} >
   	{{if $smarty.foreach.therapeutes.first}} 
-    <td rowspan="{{$_counts_by_sejour|@count}}">
+    <td rowspan="{{$_counts_by_sejour|@count}}" class="text">
     	<span onmouseover="ObjectTooltip.createEx(this, '{{$_sejour->_guid}}')">
-    		{{$_sejour}}
+        {{mb_include module=system template=inc_interval_date from=$_sejour->entree to=$_sejour->sortie}}
 			</span>
 		</td>
   	{{/if}}
@@ -61,11 +61,11 @@ onSubmitReplacement = function(form, sejour_id, conge_id, type) {
     <td>
     	{{if $technicien->kine_id == $therapeute_id}}
 			  <strong>
-        {{mb_include module=mediusers template=inc_vw_mediuser mediuser=$users.$therapeute_id}} /
+        {{mb_include module=mediusers template=inc_vw_mediuser mediuser=$therapeutes.$therapeute_id}} /
 				{{mb_value object=$technicien field=plateau_id}}
 				</strong>
       {{else}}
-        {{mb_include module=mediusers template=inc_vw_mediuser mediuser=$users.$therapeute_id}}
+        {{mb_include module=mediusers template=inc_vw_mediuser mediuser=$therapeutes.$therapeute_id}}
       {{/if}}
 			</td>
     <td style="text-align: center;">{{$_count}}</td>
@@ -91,7 +91,8 @@ onSubmitReplacement = function(form, sejour_id, conge_id, type) {
 	<input type="hidden" name="del" value="0" />
 	
     {{mb_field object=$replacement field=sejour_id hidden=1}}
-    {{mb_field object=$replacement field=conge_id hidden=1}}
+    {{* Prop definition cannot be ref due to pseudo plage *}}
+    {{mb_field object=$replacement field=conge_id hidden=1 prop=""}}
 
   <table class="form">
 		<tr>
@@ -101,18 +102,35 @@ onSubmitReplacement = function(form, sejour_id, conge_id, type) {
 				    {{mb_include module=system object=$replacement template=inc_object_idsante400}}
 				    {{mb_include module=system object=$replacement template=inc_object_history   }}
 				    {{mb_include module=system object=$replacement template=inc_object_notes     }}
-						
- 				  	Modification du remplacement du séjour<br />'{{$sejour->_view}}'
+ 				  	Modification du remplacement du séjour<br />'{{$sejour}}'
 				  </th>
 	      {{else}}
 				 <th class="text title" colspan="2">Création d'un remplacement</th>
 	    	{{/if}}
 			{{else}}
 			  <th class="title" colspan="2">
-			    Transfert des évenements SSR
+			    Transfert des '{{$transfer_count}}' évenement(s)
 				</th>
 			{{/if}}
 		</tr>
+    
+    <tr>
+      <td colspan="2">
+        <table class="tbl">
+			    <tr>
+			      </td>
+			      {{foreach from=$transfer_counts key=_day item=_count}}
+			      <th>{{$_day|date_format:"%a"}}<br />{{$_day|date_format:"%d"}}</th>
+			      {{/foreach}}
+			    </tr>
+			    <tr>
+			      {{foreach from=$transfer_counts key=_day item=_count}}
+			      <td style="text-align: center;">{{$_count|ternary:$_count:"-"}}</td>
+			      {{/foreach}}
+			    </tr>
+        </table>
+      </td>
+    </tr>
 		
 		{{if $type == "kine"}}
 		<tr>

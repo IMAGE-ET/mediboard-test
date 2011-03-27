@@ -826,15 +826,18 @@ class CPatient extends CMbObject {
   
   // Backward references
   function loadRefsSejours($where = null) {
-    $sejour = new CSejour;
-    if ($this->patient_id){
-      if ($where === null) {
-        $where = array();
-      }
-      $where["patient_id"] = "= '$this->patient_id'";
-      $order = "entree_prevue DESC";
-      $this->_ref_sejours = $sejour->loadList($where, $order);
+    if (!$this->_id) { 
+    	return array();
     }
+    
+  	$sejour = new CSejour;
+    if ($where === null) {
+      $where = array();
+    }
+
+    $where["patient_id"] = "= '$this->_id'";
+    $order = "entree DESC";
+    return $this->_ref_sejours = $sejour->loadList($where, $order);
   }
   
   function getCurrSejour($dateTime = null) {
