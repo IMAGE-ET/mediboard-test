@@ -54,7 +54,7 @@ foreach ($plateaux as $_plateau) {
 		  $sejour->loadRefPatient(1);
       $sejour->loadRefBilanSSR();
 
-      $all_sejours[] = $_sejour;
+      $all_sejours[] = $sejour;
 		}
   }
 }
