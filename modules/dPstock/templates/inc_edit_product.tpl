@@ -1,10 +1,13 @@
 <script type="text/javascript">
 Main.add(function(){
   selectProduct({{$product->_id}});
-  var referenceTabs = Control.Tabs.create("tabs-stocks-references", true);
-  if (referenceTabs.activeContainer.id == "tab-consumption") {
-    drawConsumptionGraph();
-  }
+	
+	{{if $product->_id}}
+	  var referenceTabs = Control.Tabs.create("tabs-stocks-references", true);
+	  if (referenceTabs.activeContainer.id == "tab-consumption") {
+	    drawConsumptionGraph();
+	  }
+  {{/if}}  
 });
 
 drawConsumptionGraph = function() {

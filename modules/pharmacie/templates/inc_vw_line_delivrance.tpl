@@ -23,9 +23,9 @@
   <script type="text/javascript">
     if (!$V(getForm("filter").display_delivered) && ({{$curr_delivery->_delivered|ternary:1:0}} || '{{$curr_delivery->date_delivery}}')) {
       $("CProductDelivery-{{$curr_delivery->_id}}").hide();
-      Main.add(function(){
-        $("CProductDelivery-{{$curr_delivery->_id}}").remove();
-      });
+      /*Main.add(function(){
+        //$("CProductDelivery-{{$curr_delivery->_id}}").remove();
+      });*/
     }
   </script>
   {{/if}}
