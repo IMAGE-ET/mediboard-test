@@ -91,7 +91,7 @@ class CPrescriptionLineMixItem extends CMbObject {
     if(!$this->_view_unite_prise){
       if(preg_match("/\(([0-9.,]+).*\)/i", $this->unite, $matches)){
         $_quant = end($matches);
-        $nb = round($this->quantite * $_quant);
+        $nb = round($this->quantite * $_quant, 2);
 				
         $this->_view_unite_prise = str_replace($_quant, "soit $nb", $this->unite);
       }
@@ -259,7 +259,7 @@ class CPrescriptionLineMixItem extends CMbObject {
         $this->_quantite_administration = $this->quantite * $coef;
 				
 				if($coef != 1){
-					$this->_quantite_administration = round($this->_quantite_administration);
+					$this->_quantite_administration = round($this->_quantite_administration, 2);
 				}
 
 				if(isset($poids)){
