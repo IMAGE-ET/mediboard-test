@@ -16,7 +16,7 @@ $evenements = array(
   'evt_pmsi'                => array("1.01", "1.05"),
   'evt_serveuretatspatient' => array("1.05"),
   'evt_frais_divers'        => array("1.05"),
-  'evt_patients'            => array("1.05", "1.052"),
+  'evt_patients'            => array("1.05", "1.052", "1.053"),
   'evt_mvtStock'            => array("1.01", "1.02"),
 );
 

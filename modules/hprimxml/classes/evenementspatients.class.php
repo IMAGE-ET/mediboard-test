@@ -294,6 +294,8 @@ class CHPrimXMLEvenementsPatients extends CHPrimXMLEvenements {
       "hsp"  => "comp",
       "cslt" => "consult",
       "sc"   => "seances",
+      "ambu" => "ambu",
+      "exte" => "exte",
     );
 
     // Détermine le type de venue depuis la config des numéros de dossier 
