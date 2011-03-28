@@ -312,6 +312,17 @@ var Url = Class.create({
   },
   
   autoComplete: function(input, populate, oOptions) {
+    var saveInput = input;
+    input = $(input);
+    
+    if (!input) {
+      try {
+        console.warn((saveInput || "$(input)") + " doesn't exist [Url.autoComplete]");
+      } catch (e) {}
+    
+      return;
+    }
+    
     oOptions = Object.extend({
       minChars: 2,
       frequency: 0.5,
@@ -372,7 +383,7 @@ var Url = Class.create({
       }
     }, oOptions);
     
-    input = $(input).addClassName("autocomplete");
+    input.addClassName("autocomplete");
     
     populate = $(populate);
     if (!populate) {
