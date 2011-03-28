@@ -18,35 +18,35 @@ if(!$praticien->canEdit() || !$praticien->isPraticien()) {
 }
 
 $patient = new CPatient();
-$patient_id         = CValue::get("patient_id");
-$patient->nom       = CValue::get("patient_nom");
-$patient->prenom    = CValue::get("patient_prenom");
-$patient->naissance = CValue::get("patient_date_naissance");
-$patient->sexe      = CValue::get("patient_sexe");
-$patient->adresse   = CValue::get("patient_adresse");
-$patient->cp        = CValue::get("patient_code_postal");
-$patient->ville     = CValue::get("patient_ville");
-$patient->tel       = CValue::get("patient_telephone");
-$patient->tel2      = CValue::get("patient_mobile");
+$patient_id         = CValue::get("patient_id"            , CValue::post("patient_id"));
+$patient->nom       = CValue::get("patient_nom"           , CValue::post("patient_nom"));
+$patient->prenom    = CValue::get("patient_prenom"        , CValue::post("patient_prenom"));
+$patient->naissance = CValue::get("patient_date_naissance", CValue::post("patient_date_naissance"));
+$patient->sexe      = CValue::get("patient_sexe"          , CValue::post("patient_sexe"));
+$patient->adresse   = CValue::get("patient_adresse"       , CValue::post("patient_adresse"));
+$patient->cp        = CValue::get("patient_code_postal"   , CValue::post("patient_code_postal"));
+$patient->ville     = CValue::get("patient_ville"         , CValue::post("patient_ville"));
+$patient->tel       = CValue::get("patient_telephone"     , CValue::post("patient_telephone"));
+$patient->tel2      = CValue::get("patient_mobile"        , CValue::post("patient_mobile"));
 
 $sejour = new CSejour();
-$sejour_id             = CValue::get("sejour_id");
-$sejour->libelle       = CValue::get("sejour_libelle");
-$sejour->type          = CValue::get("sejour_type");
-$sejour->entree_prevue = CValue::get("sejour_entree_prevue");
-$sejour->sortie_prevue = CValue::get("sejour_sortie_prevue");
-$sejour->rques         = CValue::get("sejour_remarques");
+$sejour_id             = CValue::get("sejour_id"           , CValue::post("sejour_id"));
+$sejour->libelle       = CValue::get("sejour_libelle"      , CValue::post("sejour_libelle"));
+$sejour->type          = CValue::get("sejour_type"         , CValue::post("sejour_type"));
+$sejour->entree_prevue = CValue::get("sejour_entree_prevue", CValue::post("sejour_entree_prevue"));
+$sejour->sortie_prevue = CValue::get("sejour_sortie_prevue", CValue::post("sejour_sortie_prevue"));
+$sejour->rques         = CValue::get("sejour_remarques"    , CValue::post("sejour_remarques"));
 
 $sejour_intervention = CValue::get("sejour_intervention");
 
 $intervention = new COperation();
-$intervention->_datetime       = CValue::get("intervention_date");
-$intervention->temp_operation = CValue::get("intervention_duree");
-$intervention->cote            = CValue::get("intervention_cote");
-$intervention->horaire_voulu   = CValue::get("intervention_horaire_souhaite");
-$intervention->codes_ccam      = CValue::get("intervention_codes_ccam");
-$intervention->materiel        = CValue::get("intervention_materiel");
-$intervention->rques           = CValue::get("intervention_remarques");
+$intervention->_datetime      = CValue::get("intervention_date"            , CValue::post("intervention_date"));
+$intervention->temp_operation = CValue::get("intervention_duree"           , CValue::post("intervention_duree"));
+$intervention->cote           = CValue::get("intervention_cote"            , CValue::post("intervention_cote"));
+$intervention->horaire_voulu  = CValue::get("intervention_horaire_souhaite", CValue::post("intervention_horaire_souhaite"));
+$intervention->codes_ccam     = CValue::get("intervention_codes_ccam"      , CValue::post("intervention_codes_ccam"));
+$intervention->materiel       = CValue::get("intervention_materiel"        , CValue::post("intervention_materiel"));
+$intervention->rques          = CValue::get("intervention_remarques"       , CValue::post("intervention_remarques"));
 
 $msg_error = null;
 
