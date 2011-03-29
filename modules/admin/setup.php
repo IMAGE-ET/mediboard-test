@@ -19,7 +19,7 @@ class CSetupadmin extends CSetup {
     
     $this->makeRevision("1.0.00");
     $query = "ALTER TABLE `users` 
-		  CHANGE `user_address1` `user_address1` VARCHAR( 50 );";
+      CHANGE `user_address1` `user_address1` VARCHAR( 50 );";
     $this->addQuery($query);
     
     $this->makeRevision("1.0.01");
@@ -119,83 +119,83 @@ class CSetupadmin extends CSetup {
                 
     $this->makeRevision("1.0.02");
     $query = "DELETE FROM `user_preferences` 
-		  WHERE (`pref_name`!='LOCALE' && `pref_name`!='UISTYLE');";
+      WHERE (`pref_name`!='LOCALE' && `pref_name`!='UISTYLE');";
     $this->addQuery($query);
     
     $this->makeRevision("1.0.03");
     $query = "UPDATE `user_preferences` 
-		  SET `pref_name`='AFFCONSULT' WHERE `pref_name`='CABCONSULT';";
+      SET `pref_name`='AFFCONSULT' WHERE `pref_name`='CABCONSULT';";
     $this->addQuery($query);
     
     $this->makeRevision("1.0.04");
     $query = "ALTER TABLE `perm_module`
       CHANGE `perm_module_id` `perm_module_id` int(11) unsigned NOT NULL AUTO_INCREMENT,
-			CHANGE `user_id` `user_id` int(11) unsigned NOT NULL DEFAULT '0',
-			CHANGE `mod_id` `mod_id` int(11) unsigned NOT NULL DEFAULT '0',
-			CHANGE `permission` `permission` tinyint(1) unsigned zerofill NOT NULL DEFAULT '0',
-			CHANGE `view` `view` tinyint(1) unsigned zerofill NOT NULL DEFAULT '0';";
+      CHANGE `user_id` `user_id` int(11) unsigned NOT NULL DEFAULT '0',
+      CHANGE `mod_id` `mod_id` int(11) unsigned NOT NULL DEFAULT '0',
+      CHANGE `permission` `permission` tinyint(1) unsigned zerofill NOT NULL DEFAULT '0',
+      CHANGE `view` `view` tinyint(1) unsigned zerofill NOT NULL DEFAULT '0';";
     $this->addQuery($query);
     $query = "ALTER TABLE `perm_object`
-		  CHANGE `perm_object_id` `perm_object_id` int(11) unsigned NOT NULL AUTO_INCREMENT,
-			CHANGE `user_id` `user_id` int(11) unsigned NOT NULL DEFAULT '0',
-			CHANGE `object_id` `object_id` int(11) unsigned NOT NULL DEFAULT '0',
-			CHANGE `object_class` `object_class` varchar(255) NOT NULL,
-			CHANGE `permission` `permission` tinyint(1) unsigned zerofill NOT NULL DEFAULT '0';";
+      CHANGE `perm_object_id` `perm_object_id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+      CHANGE `user_id` `user_id` int(11) unsigned NOT NULL DEFAULT '0',
+      CHANGE `object_id` `object_id` int(11) unsigned NOT NULL DEFAULT '0',
+      CHANGE `object_class` `object_class` varchar(255) NOT NULL,
+      CHANGE `permission` `permission` tinyint(1) unsigned zerofill NOT NULL DEFAULT '0';";
     $this->addQuery($query);
     $query = "ALTER TABLE `users`
       CHANGE `user_id` `user_id` int(11) unsigned NOT NULL AUTO_INCREMENT,
-			CHANGE `user_password` `user_password` varchar(255) NOT NULL,
-			CHANGE `user_type` `user_type` tinyint(4) NOT NULL DEFAULT '0',
-			CHANGE `user_last_name` `user_last_name` varchar(50) NOT NULL;";
+      CHANGE `user_password` `user_password` varchar(255) NOT NULL,
+      CHANGE `user_type` `user_type` tinyint(4) NOT NULL DEFAULT '0',
+      CHANGE `user_last_name` `user_last_name` varchar(50) NOT NULL;";
     $this->addQuery($query);
     $query = "ALTER TABLE `users`
-		  DROP `user_parent`,
-			DROP `user_company`,
-			DROP `user_department`,
-			DROP `user_home_phone`,
-			DROP `user_address2`,
-			DROP `user_state`,
-			DROP `user_icq`,
-			DROP `user_aol`,
-			DROP `user_owner`;";
+      DROP `user_parent`,
+      DROP `user_company`,
+      DROP `user_department`,
+      DROP `user_home_phone`,
+      DROP `user_address2`,
+      DROP `user_state`,
+      DROP `user_icq`,
+      DROP `user_aol`,
+      DROP `user_owner`;";
     $this->addQuery($query);
     
     $this->makeRevision("1.0.06");
     $query = "ALTER TABLE `perm_object` 
-		  CHANGE `object_id` `object_id` int(11) unsigned NULL DEFAULT NULL;";
+      CHANGE `object_id` `object_id` int(11) unsigned NULL DEFAULT NULL;";
     $this->addQuery($query);
     $query = "UPDATE `perm_object` 
-		  SET object_id = NULL WHERE object_id='0';";
+      SET object_id = NULL WHERE object_id='0';";
     $this->addQuery($query);
     
     $query = "ALTER TABLE `perm_module` 
-		  CHANGE `mod_id` `mod_id` int(11) unsigned NULL DEFAULT NULL;";
+      CHANGE `mod_id` `mod_id` int(11) unsigned NULL DEFAULT NULL;";
     $this->addQuery($query);
     $query = "UPDATE `perm_module` 
-		  SET mod_id = NULL WHERE mod_id='0';";
+      SET mod_id = NULL WHERE mod_id='0';";
     $this->addQuery($query);
     $query = "DELETE FROM `perm_module` 
-		  WHERE user_id='0';";
+      WHERE user_id='0';";
     $this->addQuery($query);
     
     $this->makeRevision("1.0.07");
     $query = "ALTER TABLE `users` 
-		  ADD `user_last_login` DATETIME NULL;";
+      ADD `user_last_login` DATETIME NULL;";
     $this->addQuery($query);
 
     $this->makeRevision("1.0.08");
     $query = "UPDATE `perm_module` 
-		  SET `view` = '2' 
-			WHERE `user_id` = 1 
-			AND `mod_id`IS NULL;";
+      SET `view` = '2' 
+      WHERE `user_id` = 1 
+      AND `mod_id`IS NULL;";
     $this->addQuery($query);
     
     $this->makeRevision("1.0.09");
     $query = "ALTER TABLE `users` 
-		  ADD `template` enum('0','1') NOT NULL default '0';";
+      ADD `template` enum('0','1') NOT NULL default '0';";
     $this->addQuery($query);
     $query = "UPDATE `users` 
-		  SET `template` = '1' WHERE `user_username` like '>>%';";
+      SET `template` = '1' WHERE `user_username` like '>>%';";
     $this->addQuery($query);
     
     $this->makeRevision("1.0.10");
@@ -216,7 +216,7 @@ class CSetupadmin extends CSetup {
     
     $this->makeRevision("1.0.13");
     $query = "ALTER TABLE `users`
-		  CHANGE `user_login_errors` `user_login_errors` TINYINT( 4 ) NULL DEFAULT '0'";
+      CHANGE `user_login_errors` `user_login_errors` TINYINT( 4 ) NULL DEFAULT '0'";
     $this->addQuery($query);
     
     $this->makeRevision("1.0.14");
@@ -236,13 +236,18 @@ class CSetupadmin extends CSetup {
       ADD INDEX (`user_last_login`),
       ADD INDEX (`profile_id`);";
     $this->addQuery($query);
-		
+    
     $this->makeRevision("1.0.16");
     $query = "ALTER TABLE `users` 
-		  CHANGE `user_address1` `user_address1` VARCHAR( 255 );";
+      CHANGE `user_address1` `user_address1` VARCHAR( 255 );";
     $this->addQuery($query);
-		
-    $this->mod_version = "1.0.17";
+    
+    $this->makeRevision("1.0.17");
+    $query = "ALTER TABLE `users` 
+      ADD `dont_log_connection` ENUM ('0','1') DEFAULT '0';";
+    $this->addQuery($query);
+    
+    $this->mod_version = "1.0.18";
   }
 }
 ?>

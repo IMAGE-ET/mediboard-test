@@ -32,6 +32,7 @@ class CUser extends CMbObject {
   var $user_login_errors= null;
   var $template         = null;
   var $profile_id       = null;
+	var $dont_log_connection = null;
 
   var $_user_password   = null;
 	var $_user_password_weak = null;
@@ -107,6 +108,7 @@ class CUser extends CMbObject {
     $specs["user_login_errors"]= "num";
     $specs["template"]        = "bool notNull default|0";
     $specs["profile_id"]      = "ref class|CUser";
+		$specs["dont_log_connection"] = "bool default|0";
 
     // The different levels of security are stored to be usable in JS
     $specs["_user_password_weak"]   = "password minLength|4";
@@ -237,7 +239,18 @@ class CUser extends CMbObject {
   
   function store() {
   	$this->updateSpecs();
-  	return parent::store();
+		
+		$old_loggable = $this->_spec->loggable;
+		
+		if ($this->dont_log_connection && $this->fieldModified("user_last_login")) {
+			$this->_spec->loggable = false;
+		}
+		
+  	$msg = parent::store();
+		
+		$this->_spec->loggable = $old_loggable;
+		
+		return $msg;
   }
   
   function merge($objects, $fast = false) {
