@@ -50,7 +50,7 @@ if ($export_id_max = $sip_config["export_id_max"]) {
 
 if (preg_match("/(\d{4})-(\d{2})-(\d{2})/", $sip_config["export_date_min"]) && 
     preg_match("/(\d{4})-(\d{2})-(\d{2})/", $sip_config["export_date_max"])) {
-  $where['entree_prevue'] = " BETWEEN '".$sip_config["export_date_min"]."' AND '".$sip_config["export_date_max"]."'";
+  $where['entree'] = " BETWEEN '".$sip_config["export_date_min"]."' AND '".$sip_config["export_date_max"]."'";
 }
 
 // Comptage
