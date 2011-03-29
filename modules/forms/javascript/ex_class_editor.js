@@ -268,7 +268,7 @@ ExFormula = {
     }});
   },
   toggleInsertButtons: function(value){
-    value = value && ExFormula.form._formula;
+    value = value && ExFormula.form;
     $$(".insert-formula").invoke("setVisible", value);
   },
   insertText: function(text){

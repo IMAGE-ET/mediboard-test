@@ -34,7 +34,7 @@ Main.add(function(){
 			
       {{foreach from=$_by_event item=_ex_class}}
 		    <tr data-ex_class_id="{{$_ex_class->_id}}">
-		      <td class="text" style="min-width: 15em;">
+		      <td class="text" style="min-width: 16em;">
             <div style="float: right;">
               <span {{if $_ex_class->conditional}}style="background: #7e7;" title="{{tr}}CExClass-conditional{{/tr}}"{{/if}}>&nbsp;&nbsp;</span>
               <span {{if $_ex_class->disabled}}   style="background: #999;" title="{{tr}}CExClass-disabled{{/tr}}"{{/if}}>&nbsp;&nbsp;</span>

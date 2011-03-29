@@ -74,7 +74,19 @@ function order_specs($a, $b) {
   return ($key_a === false ? 1000 : $key_a) - ($key_b === false ? 1000 : $key_b);
 }
 
+function order_items($a, $b) {
+  $order = $GLOBALS["items"];
+  
+  $key_a = array_search($a, $order);
+  $key_b = array_search($b, $order);
+  
+  return ($key_a === false ? 1000 : $key_a) - ($key_b === false ? 1000 : $key_b);
+}
+
 uksort($options, "order_specs");
+
+$items_sub = array();
+$items_all = array();
 
 if ($spec instanceof CEnumSpec) {
 	unset($spec->_locales[""]);
@@ -86,6 +98,9 @@ if ($spec instanceof CEnumSpec) {
 	  $list_owner->updateEnumSpec($spec);
 		$prop .= " ".implode("|", $spec->_list);
 	}
+	
+  $items_sub = $spec->_list;
+  $items_all = $spec->_list;
 }
 
 // to get the right locales
@@ -128,7 +143,14 @@ if ($context instanceof CExClassField) {
     $triggerable->event = $ex_class->event;
     $triggerables = $triggerable->loadMatchingList();
   }
+	
+	if (!empty($context->concept_id) && !empty($context->_ref_concept->_ref_ex_list)) {
+	  $items_all = array_keys($context->_ref_concept->_ref_ex_list->_ref_items);
+	}
 }
+
+$GLOBALS["items"] = $items_sub;
+usort($items_all, "order_items");
 
 $classes = $spec instanceof CRefSpec ? CApp::getMbClasses() : array();
 
@@ -136,6 +158,8 @@ $smarty = new CSmartyDP();
 $smarty->assign("prop", $prop);
 $smarty->assign("spec", $spec);
 $smarty->assign("options", $options);
+$smarty->assign("items_all", $items_all);
+$smarty->assign("items_sub", $items_sub);
 $smarty->assign("form_name", $form_name);
 $smarty->assign("classes", $classes);
 $smarty->assign("list_owner", $list_owner);

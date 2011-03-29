@@ -110,10 +110,10 @@ toggleGroupLabelEdit = function(link) {
 	
   <tr>
     <td colspan="2">
-      <ul class="control_tabs" id="field_groups">
+      <ul class="control_tabs" id="field_groups" style="font-size: 0.9em;">
         {{foreach from=$ex_class->_ref_groups item=_group}}
           <li>
-            <a href="#group-{{$_group->_guid}}" ondblclick="toggleGroupLabelEdit(this)" title="Double-cliquer pour modifier">
+            <a href="#group-{{$_group->_guid}}" ondblclick="toggleGroupLabelEdit(this)" title="Double-cliquer pour modifier" style="padding: 2px 4px;">
 						  <span class="label" style="font-weight: normal;">
 						  	{{$_group->name}} <small>({{$_group->_ref_fields|@count}})</small>
 							</span>

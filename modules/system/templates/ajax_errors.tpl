@@ -14,7 +14,7 @@
     AjaxResponse.onDisconnected();
   {{else}}
     User = {{"utf8_encode"|array_map_recursive:$app->_ref_user->_basic_info|@json}};
-    AjaxResponse.onLoaded({{$smarty.get|@json}}, {{$performance|@json}});
+    AjaxResponse.onLoaded({{"utf8_encode"|array_map_recursive:$smarty.get|@json}}, {{$performance|@json}});
   {{/if}}
 </script>
 

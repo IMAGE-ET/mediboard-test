@@ -32,7 +32,7 @@ onUploadComplete = function(message){
 				<label for="object_class">Type d'éléments à importer</label>
 			</th>
 			<td>
-		    <select name="object_class" class="notNull" onchange="showExtraInputs(this)">
+		    <select name="object_class" class="notNull">
 		    	<option value=""> &ndash; Choisir un type d'élement à importer </option>
 		      {{foreach from=$classes item=_class}}
 		        <option value="{{$_class}}">{{tr}}{{$_class}}{{/tr}}</option>

@@ -10,9 +10,12 @@
 
 CCanDo::checkAdmin();
 
-$class_tree = CExClass::getTree();
+$classes = array(
+  "CExClass" => "do_import_fields",
+  "CExClassFieldGroup" => "do_import_groups",
+);
 
 // Création du template
 $smarty = new CSmartyDP();
-$smarty->assign("class_tree", $class_tree);
+$smarty->assign("classes", $classes);
 $smarty->display("view_import_fields.tpl");

@@ -91,7 +91,15 @@ class CExClass extends CMbObject {
   
   function updateFormFields(){
     parent::updateFormFields();
-    $this->_view = CAppUI::tr($this->host_class) . " - [$this->event] - $this->name";
+		
+		if ($this->host_class === "CMbObject") {
+      $this->_view = "Non classé";
+		}
+		else {
+      $this->_view = CAppUI::tr($this->host_class) . " - [$this->event]";
+		}
+		
+	  $this->_view .= " - $this->name";
   }
   
   function loadRefsGroups(){

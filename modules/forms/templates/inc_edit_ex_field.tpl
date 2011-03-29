@@ -124,7 +124,13 @@ updateInternalName = function(e){
 			
 			{{if $ex_field->_id}}
 			
-			  <th>Type</th>
+			  <th>
+			  	{{if $ex_field->concept_id}}
+					  Concept [liste/type]
+					{{else}}
+			  	  Type
+					{{/if}}
+				</th>
 				<td colspan="3">
 					<strong>
 						{{if $ex_field->concept_id}}

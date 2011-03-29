@@ -12,13 +12,21 @@
 onUploadComplete = function(message){
   SystemMessage.notify(message);
 }
+
+updateA = function(select){
+  var form = select.form;
+	var qp = form.getAttribute("action").toQueryParams();
+	qp.a = $V(select) || "void";
+	form.setAttribute("action", "?"+Object.toQueryString(qp));
+}
 </script>
 
 <form name="import-form" action="?m=forms&amp;a=do_import_fields" method="post" 
       onsubmit="return checkForm(this)" target="upload_iframe" enctype="multipart/form-data">
   <input type="hidden" name="m" value="forms" />
-  <input type="hidden" name="a" value="do_import_fields" />
   <input type="hidden" name="suppressHeaders" value="1" />
+	
+  <input type="hidden" class="str notNull" name="a" value="" />
 	
 	<table class="main form" style="table-layout: fixed;">
 		<tr>
@@ -26,6 +34,20 @@ onUploadComplete = function(message){
 				Importation
 			</th>
 		</tr>
+    
+    <tr>
+      <th>
+        <label for="object_class">Type d'éléments à importer</label>
+      </th>
+      <td>
+        <select name="a" class="str notNull" onchange="updateA(this)">
+          <option value=""> &ndash; Choisir un type d'élement à importer </option>
+          {{foreach from=$classes key=_class item=_action}}
+            <option value="{{$_action}}">{{tr}}{{$_class}}{{/tr}}</option>
+          {{/foreach}}
+        </select>
+      </td>
+    </tr>
 		
 		<tr>
 			<th>

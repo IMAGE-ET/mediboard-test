@@ -4,26 +4,14 @@ toggleListItem = function(button, value, active) {
   var item = form.down("input[name='list[]'][value='"+value+"']");
   var row = button.up('tr');
   
-  if (item && !active){
-    item.remove();
-    
+  if (!active){
+    item.disabled = true;
     row.addClassName('opacity-30');
     row.down('button.add').show();
     button.hide();
   }
-  else if (active) {
-    if (!item) {
-      form.insert(DOM.input({
-        type: "hidden", 
-        name: "list[]", 
-        value: value, 
-        className: "internal"
-      }));
-    }
-    else {
-      item.disabled = false;
-    }
-    
+  else {
+    item.disabled = false;
     row.removeClassName('opacity-30');
     row.down('button.remove').show();
     button.hide();
@@ -32,6 +20,22 @@ toggleListItem = function(button, value, active) {
 	$("save-to-take-effect").show();
   updateFieldSpec();
 }
+
+moveListItem = function(e, way){
+  var currTr = $(e).up("tr");
+  var refTr = currTr[ (way == "up") ? "previous" : "next" ]();
+	
+	if (!refTr) return;
+	
+	if (way == "up")
+	  currTr.insert({after: refTr});
+	else
+    currTr.insert({before: refTr});
+  
+  $("save-to-take-effect").show();
+  updateFieldSpec();
+}
+
 </script>
 
 {{assign var=coded value=false}}
@@ -43,6 +47,9 @@ toggleListItem = function(button, value, active) {
 <div class="small-info" style="display: none;" id="save-to-take-effect">
 	<strong>Enregistrez</strong> pour que la modifiation prenne effet
 </div>
+
+{{foreach from=$items_all item=_value}}
+{{/foreach}}
 
 <table class="main tbl">
 	<col class="narrow" />
@@ -77,7 +84,9 @@ toggleListItem = function(button, value, active) {
     {{/if}}
   </tr>
   
-  {{foreach from=$list_owner->_back.list_items item=_item}}
+	<tbody>
+  {{foreach from=$items_all item=_value}}
+    {{assign var=_item value=$list_owner->_back.list_items.$_value}}
 	  {{assign var=active value=false}}
 		
 		{{if array_key_exists($_item->_id, $spec->_locales)}}
@@ -87,6 +96,8 @@ toggleListItem = function(button, value, active) {
     <tr data-id="{{$_item->_id}}" data-name="{{$_item->name}}" data-code="{{$_item->code}}" {{if !$active}}class="opacity-30"{{/if}}>
       {{if $context instanceof CExClassField}}
       <td>
+				<input type="hidden" name="list[]" class="internal" value="{{$_value}}" {{if !in_array($_value,$items_sub)}}disabled="disabled"{{/if}} />
+
         <button class="remove notext" type="button" style="margin: -1px; {{if !$active}}display: none;{{/if}}" 
 				        onclick="toggleListItem(this, {{$_item->_id}}, false);">
           {{tr}}Delete{{/tr}}
@@ -96,6 +107,9 @@ toggleListItem = function(button, value, active) {
 				        onclick="toggleListItem(this, {{$_item->_id}}, true);">
           {{tr}}Add{{/tr}}
         </button>
+				
+        <button class="down notext" type="button" style="margin: -1px;" onclick="moveListItem(this, 'down')" title="Descendre"></button>
+        <button class="up notext" type="button" style="margin: -1px;" onclick="moveListItem(this, 'up')" title="Monter"></button>
       </td>
       {{/if}}
 			
@@ -128,5 +142,6 @@ toggleListItem = function(button, value, active) {
       <td class="empty" colspan="4">{{tr}}CExListItem.none{{/tr}}</td>
     </tr>
   {{/foreach}}
+	</tbody>
 </table>
 

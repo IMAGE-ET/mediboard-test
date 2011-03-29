@@ -30,7 +30,6 @@ updateFieldSpec = function(){
       }
       
       str += " "+(k.split("[")[0]);
-      
       if (Object.isArray(d))
         str += "|"+d.invoke("replace", /\s|\|/g, "").join("|");
       else {
@@ -192,9 +191,11 @@ Main.add(function(){
 					{{else}} *}}
           
 					  {{if $context && $context->_id}}
-              {{foreach from=$spec->_list key=_key item=_value}}
-                <input type="hidden" name="{{$_name}}[]" class="internal" value="{{$_value}}" />
-              {{/foreach}}
+						  {{if $context == $list_owner}}
+	              {{foreach from=$spec->_list key=_key item=_value}}
+	                <input type="hidden" name="{{$_name}}[]" class="internal" value="{{$_value}}" />
+	              {{/foreach}}
+							{{/if}}
 					    <em>Voir "{{tr}}CExList-back-list_items{{/tr}}"</em>
 						{{else}}
               <em>Enregistrez avant d'ajouter des élements</em>
@@ -215,12 +216,17 @@ Main.add(function(){
     </tr>
   {{/foreach}}
 </table>
-</form>
 
 {{if $spec instanceof CEnumSpec && $context && $context->_id}}
   {{if $context == $list_owner}}
+	  </form>
     {{mb_include module=system template=inc_ex_list_item_edit}}
   {{else}}
     {{mb_include module=system template=inc_ex_list_item_subset}}
+		</form>
   {{/if}}
+{{else}}
+  </form>
 {{/if}}
+
+
