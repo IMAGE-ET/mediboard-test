@@ -52,7 +52,11 @@
     </td>
     <td class="text">
       <a href="?m=dPqualite&amp;tab=vw_incidentvalid&amp;fiche_ei_id={{$currFiche->fiche_ei_id}}">
-        {{$currFiche->_ref_user->_view}}
+        {{if $conf.dPqualite.CFicheEi.mode_anonyme && !$modules.dPcabinet->_can->admin && ($currFiche->_ref_user->user_id != $app->user_id)}}
+          Anonyme
+        {{else}}
+          {{$currFiche->_ref_user->_view}}
+        {{/if}}
       </a>
     </td>
     <td class="text">

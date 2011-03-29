@@ -96,10 +96,10 @@ Main.add(function() {
   <tr>
     <td class="halfPane">
       <form name="filter-ei" action="?" method="get" onsubmit="return filterFiches()">
-        {{mb_field object=$filterFiche field=elem_concerne defaultOption=" &ndash; Cet élément concerne" onchange="this.form.onsubmit()"}}
+        {{mb_field object=$filterFiche field=elem_concerne style="width: 14em;" defaultOption=" &mdash; Cet élément concerne" onchange="this.form.onsubmit()"}}
         
-        <select name="evenements" onchange="this.form.filter_item.value = ''; reloadItems(this.value); this.form.onsubmit()">
-          <option value=""> &ndash; Catégorie</option>
+        <select name="evenements" style="width: 9em;" onchange="this.form.filter_item.value = ''; reloadItems(this.value); this.form.onsubmit()">
+          <option value=""> &mdash; Catégorie</option>
           {{foreach from=$listCategories item=category}}
             <option value="{{$category->_id}}" {{if $category->_id==$evenements}}selected="selected"{{/if}}>
               {{$category}}
@@ -107,7 +107,7 @@ Main.add(function() {
           {{/foreach}}
         </select>
 
-        <select name="filter_item" onchange="this.form.onsubmit()" id="items">
+        <select name="filter_item" style="width: 6em;" onchange="this.form.onsubmit()" id="items">
           <option value=""> &mdash; Item</option>
           {{foreach from=$items item=_item}}
             <option value="{{$_item->_id}}" {{if $_item->_id==$filter_item}}selected="selected"{{/if}}>
@@ -116,7 +116,8 @@ Main.add(function() {
           {{/foreach}}
         </select>
         
-        <select name="selected_user_id" onchange="this.form.onsubmit()">
+        {{if !$conf.dPqualite.CFicheEi.mode_anonyme || $modules.dPcabinet->_can->admin}}
+        <select name="selected_user_id" style="width: 12em;" onchange="this.form.onsubmit()">
         <option value="">&mdash; {{tr}}_CFicheEi_allusers{{/tr}}</option>
         {{foreach from=$listUsersTermine item=curr_user}}
           <option value="{{$curr_user->user_id}}" {{if $curr_user->user_id==$selected_user_id}}selected="selected"{{/if}}>
@@ -124,8 +125,9 @@ Main.add(function() {
           </option>
         {{/foreach}}
         </select>
+        {{/if}}
         
-        <select name="selected_service_valid_user_id" onchange="this.form.onsubmit()">
+        <select name="selected_service_valid_user_id" style="width: 11em;" onchange="this.form.onsubmit()">
         <option value="">&mdash; {{tr}}CFicheEi-service_valid_user_id{{/tr}}</option>
         {{foreach from=$listUsersEdit item=curr_user}}
           <option value="{{$curr_user->user_id}}" {{if $curr_user->user_id==$selected_service_valid_user_id}}selected="selected"{{/if}}>

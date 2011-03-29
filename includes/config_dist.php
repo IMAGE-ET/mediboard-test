@@ -392,15 +392,6 @@ $dPconfig["system"] = array(
   "website_url"    => "http://www.mediboard.org",
 );
 
-$dPconfig["dPqualite"] = array (
-  "CDocGed" => array(
-    "_reference_doc" => 0,
-  ),
-  "CChapitreDoc" => array(
-    "profondeur" => 1,
-  ),
-);
-
 $dPconfig["admin"] = array (
   "CUser" => array(
     "strong_password" => "0",
