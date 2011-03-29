@@ -20,6 +20,7 @@ class CContentXML extends CMbObject {
     $spec = parent::getSpec();
     $spec->table = 'content_xml';
     $spec->key   = 'content_id';
+    $spec->loggable = false;
     return $spec;
   }
   
