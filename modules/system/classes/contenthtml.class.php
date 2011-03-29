@@ -38,4 +38,11 @@ class CContentHTML extends CMbObject {
   	}
   	return parent::check();
   }
+  
+  function getBackProps() {
+    $backProps = parent::getBackProps();
+    $backProps["compte_rendus"] = "CCompteRendu content_id";
+    return $backProps;
+  }
+  
 }
