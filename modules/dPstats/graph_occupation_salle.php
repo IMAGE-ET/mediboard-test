@@ -253,7 +253,7 @@ function graphOccupationSalle($debut = null, $fin = null, $prat_id = 0, $salle_i
         $nb_interv = $nbInterventions[$j]["total"];
         if ($hors_plage) {
           foreach($result_hors_plage as &$r_h) {
-            if ($tick[1] == $r["$type_duree_fr"]) {
+            if ($tick[1] == $r_h["$type_duree_fr"]) {
               $r["moyenne"] = ($r_h["moyenne"] * $r_h["nbInterv"] + $r["moyenne"] * $nb_interv) / ($r_h["nbInterv"] + $nb_interv);
               $nb_interv += $r_h["nbInterv"];
               unset($r_h);
