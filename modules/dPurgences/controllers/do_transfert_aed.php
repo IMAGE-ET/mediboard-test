@@ -106,7 +106,6 @@ else {
 }
 
 // Sauvegarde du RPU
-$rpu->orientation = "HO";
 $rpu->mutation_sejour_id = $sejour->_id;
 $rpu->sortie_autorisee = true;
 $rpu->gemsa = "4";
