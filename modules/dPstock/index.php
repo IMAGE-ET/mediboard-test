@@ -17,7 +17,7 @@ $module->registerTab('vw_idx_stock_service', TAB_EDIT);
 //$module->registerTab('vw_idx_discrepancy',   TAB_EDIT);
 $module->registerTab('vw_idx_reference',     TAB_EDIT);
 $module->registerTab('vw_idx_product',       TAB_EDIT);
-$module->registerTab('vw_idx_report',        TAB_READ);
+//$module->registerTab('vw_idx_report',        TAB_READ);
 
 $module->registerTab('vw_idx_setup',         TAB_EDIT);
 //$module->registerTab('vw_idx_category',      TAB_EDIT);
