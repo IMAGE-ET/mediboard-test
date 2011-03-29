@@ -119,7 +119,6 @@ class CSipObjectHandler extends CMbObjectHandler {
       $mbObject->loadLastLog();
       
       $mbObject->loadRefPatient();
-      $mbObject->_ref_patient->loadIPP();
       $mbObject->loadRefAdresseParPraticien();
 
       // Si Serveur
@@ -177,6 +176,14 @@ class CSipObjectHandler extends CMbObjectHandler {
             $mbObject->_num_dossier = $num_dossier->id400;
           }
           
+          if (!$mbObject->_ref_patient->_IPP) {
+            $IPP = new CIdSante400();
+            //Paramétrage de l'id 400
+            $IPP->loadLatestFor($mbObject->_ref_patient, $_destinataire->_tag_patient);
+    
+            $mbObject->_ref_patient->_IPP = $IPP->id400;
+          }
+                    
           $domEvenementVenuePatient = new CHPrimXMLVenuePatient();
           $domEvenementVenuePatient->_ref_destinataire = $_destinataire;
           $_destinataire->sendEvenementPatient($domEvenementVenuePatient, $mbObject);
@@ -328,6 +335,7 @@ class CSipObjectHandler extends CMbObjectHandler {
     }
     // Traitement Séjour
     else if ($mbObject instanceof CSejour) { 
+      return;
       $sejour = $mbObject;
 
       $sejour_eliminee = new CSejour();
@@ -455,6 +463,7 @@ class CSipObjectHandler extends CMbObjectHandler {
     }
     // Traitement Séjour
     else if ($mbObject instanceof CSejour) {
+      return;
       $sejour = $mbObject;
       $sejour->check();
       $sejour->updateFormFields();
