@@ -84,7 +84,7 @@ class CExClassField extends CExListItemsOwner {
 
   function getProps() {
     $props = parent::getProps();
-    $props["ex_group_id"] = "ref class|CExClassFieldGroup cascade";
+    $props["ex_group_id"] = "ref class|CExClassFieldGroup";
     $props["concept_id"]  = "ref class|CExConcept autocomplete|name";
     $props["name"]        = "str notNull protected canonical";
     $props["prop"]        = "text notNull";

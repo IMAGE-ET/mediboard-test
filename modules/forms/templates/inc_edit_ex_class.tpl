@@ -105,58 +105,68 @@ toggleGroupLabelEdit = function(link) {
 </ul>
 <hr class="control_tabs" />
 
-<table class="main layout" id="fields-specs" style="display: none;">
-  <col style="width: 16em; max-width: 300px;" />
-	
-  <tr>
-    <td colspan="2">
-      <ul class="control_tabs" id="field_groups" style="font-size: 0.9em;">
-        {{foreach from=$ex_class->_ref_groups item=_group}}
-          <li>
-            <a href="#group-{{$_group->_guid}}" ondblclick="toggleGroupLabelEdit(this)" title="Double-cliquer pour modifier" style="padding: 2px 4px;">
-						  <span class="label" style="font-weight: normal;">
-						  	{{$_group->name}} <small>({{$_group->_ref_fields|@count}})</small>
-							</span>
-							
-		          <form name="edit-field-group-{{$_group->_guid}}" action="?" method="post" style="display: none;"
-							      onsubmit="return onSubmitFormAjax(this, {onComplete: ExClass.edit.curry({{$ex_class->_id}})})">
-		            <input type="hidden" name="m" value="system" />
-		            <input type="hidden" name="@class" value="CExClassFieldGroup" />
-		            {{mb_key object=$_group}}
-		            {{mb_field object=$_group field=name size=14}}
-								
-                <button onclick="Event.stop(event); this.form.onsubmit();" 
-								        class="submit notext" type="submit" style="margin: -1px;">{{tr}}Save{{/tr}}</button>
-                <button onclick="toggleGroupLabelEdit($(this).up('a'))" class="cancel notext" type="button" style="margin: -1px; margin-right: -3px;">{{tr}}Cancel{{/tr}}</button>
-		          </form>
-						</a>
-          </li>
-        {{/foreach}}
+<div  id="fields-specs" style="display: none;">
+
+<ul class="control_tabs" id="field_groups" style="font-size: 0.9em;">
+  {{foreach from=$ex_class->_ref_groups item=_group}}
+    <li>
+      <a href="#group-{{$_group->_guid}}" ondblclick="toggleGroupLabelEdit(this)" title="Double-cliquer pour modifier" style="padding: 2px 4px;">
+			  <span class="label" style="font-weight: normal;">
+			  	{{$_group->name}} <small>({{$_group->_ref_fields|@count}})</small>
+				</span>
 				
-				{{* create a new group *}}
-				<li style="white-space: nowrap;">
-				  <form name="create-field-group" action="?" method="post" onsubmit="return onSubmitFormAjax(this, {onComplete: ExClass.edit.curry({{$ex_class->_id}})})">
-            <input type="hidden" name="m" value="system" />
-            <input type="hidden" name="@class" value="CExClassFieldGroup" />
-            <input type="hidden" name="ex_class_id" value="{{$ex_class->_id}}" />
-						
-            <button class="add" type="button" style="margin: -2px;" 
-						        onclick="$(this).hide().next('span').show(); $(this.form.elements.name).tryFocus()">
-							{{tr}}CExClassFieldGroup-title-create{{/tr}}
-						</button>
-						
-						<span style="display: none;">
-	            <button class="submit notext" type="submit" style="margin: -2px"></button>
-							{{mb_field class=CExClassFieldGroup field=name size=10 style="margin-right: 4px;"}}
-						</span>
-					</form>
-				</li>
-      </ul>
-      <hr class="control_tabs" />
-    </td>
-	</tr>
+        <form name="edit-field-group-{{$_group->_guid}}" action="?" method="post" style="display: none;"
+				      onsubmit="return onSubmitFormAjax(this, {onComplete: ExClass.edit.curry({{$ex_class->_id}})})">
+          <input type="hidden" name="m" value="system" />
+          <input type="hidden" name="del" value="0" />
+          <input type="hidden" name="@class" value="CExClassFieldGroup" />
+          {{mb_key object=$_group}}
+          {{mb_field object=$_group field=name size=18}}
+					
+          <button onclick="Event.stop(event); this.form.onsubmit();" 
+					        class="submit notext" type="submit" style="margin: -1px;">
+					  {{tr}}Save{{/tr}}
+					</button>
+          <button onclick="toggleGroupLabelEdit($(this).up('a'))" 
+					        class="cancel notext" type="button" style="margin: -1px; margin-right: -3px;">
+					  {{tr}}Cancel{{/tr}}
+				  </button>
+					
+					{{if $_group->_ref_fields|@count == 0}}
+          <button onclick="return confirmDeletion(this.form, {ajax: true})" 
+                  class="trash notext" type="button" style="margin: -1px; margin-right: -3px;">
+            {{tr}}Delete{{/tr}}
+          </button>
+					{{/if}}
+        </form>
+			</a>
+    </li>
+  {{/foreach}}
+	
+	{{* create a new group *}}
+	<li style="white-space: nowrap;">
+	  <form name="create-field-group" action="?" method="post" onsubmit="return onSubmitFormAjax(this, {onComplete: ExClass.edit.curry({{$ex_class->_id}})})">
+      <input type="hidden" name="m" value="system" />
+      <input type="hidden" name="@class" value="CExClassFieldGroup" />
+      <input type="hidden" name="ex_class_id" value="{{$ex_class->_id}}" />
+			
+      <button class="add" type="button" style="margin: -2px;" 
+			        onclick="$(this).hide().next('span').show(); $(this.form.elements.name).tryFocus()">
+				{{tr}}CExClassFieldGroup-title-create{{/tr}}
+			</button>
+			
+			<span style="display: none;">
+        <button class="submit notext" type="submit" style="margin: -2px"></button>
+				{{mb_field class=CExClassFieldGroup field=name size=10 style="margin-right: 4px;"}}
+			</span>
+		</form>
+	</li>
+</ul>
+<hr class="control_tabs" />
+
+<table class="main layout">
   <tr>
-		<td>
+		<td style="width: 16em; max-width: 300px;">
       <table class="main tbl">
         {{*<tr>
           <th>{{mb_title class=CExClassField field=name}}</th>
@@ -172,7 +182,7 @@ toggleGroupLabelEdit = function(link) {
 							</td>
 						</tr>
 		        {{foreach from=$_group->_ref_fields item=_field}}
-		          <tr>
+		          <tr class="ex-class-field" data-ex_class_field_id="{{$_field->_id}}">
 		            <td class="text" style="min-width: 14em;">
                   <button class="right notext insert-formula" style="float: right; margin: -3px; margin-left: -1px; display: none;"
                           onclick="ExFormula.insertText('[{{$_field->_locale|smarty:nodefaults|JSAttribute}}]')">
@@ -202,11 +212,13 @@ toggleGroupLabelEdit = function(link) {
         {{/foreach}}
       </table>
     </td>
-    <td id="exFieldEditor">
+    <td id="exFieldEditor" style="width: auto;">
       <!-- exFieldEditor -->&nbsp;
     </td>
   </tr>
 </table>
+
+</div>
 
 <table class="main layout" id="fields-constraints" style="display: none;">
   <tr>

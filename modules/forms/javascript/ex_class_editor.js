@@ -273,14 +273,14 @@ ExFormula = {
   },
   insertText: function(text){
     var field = ExFormula.form._formula;
-    var c = field.caret();
-    field.caret(c.begin, c.end, text);
+
+    field.replaceInputSelection(text);
     
     var value = $V(field);
     var pos = value.indexOf('^');
     if (pos != -1) {
       $V(field, value.replace(/\^/g, ""));
-      field.caret(pos);
+      field.setInputSelection(pos, pos);
     }
   },
   checkTokens: function() {
@@ -321,19 +321,17 @@ ExFormula = {
       
       message.show().down("strong").update('"'+bad.join('", "')+'"');
     });
-    
-    if (Prototype.Browser.IE) return;
-    
+
     // Auto-select entire tokens
     field.observe("click", function(){
-      var c = field.caret();
+      var c = field.getInputSelection();
       var text = $V(field).split("");
-      var newC = {begin: null, end: null};
+      var newC = {start: null, end: null};
       
       // find the beginning
-      for (var i = c.begin; i >= 0; i--) {
+      for (var i = c.start; i >= 0; i--) {
         if (text[i] == '[') {
-          newC.begin = i;
+          newC.start = i;
           break;
         }
         
@@ -341,7 +339,7 @@ ExFormula = {
       }
       
       // find the end
-      for (var i = c.begin; i < text.length; i++) {
+      for (var i = c.start; i < text.length; i++) {
         if (text[i] == ']') {
           newC.end = i+1;
           break;
@@ -350,7 +348,8 @@ ExFormula = {
         if (text[i] == '[') return;
       }
       
-      field.caret(newC.begin, newC.end);
+			if (newC.start !== null && newC.end !== null)
+        field.setInputSelection(newC.start, newC.end);
     });
   }
 };

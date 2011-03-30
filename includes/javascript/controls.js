@@ -13,6 +13,7 @@
  * @param begin   Where the selection starts
  * @param end     Where the selection ends
  * @param value   The value replacing the selection
+ * @todo Utiliser les fonctions ci-apres à la place de celle-ci
  * @return If no argument is provided, it returns the selection start and end
  *         If only start is provided, it puts the caret at the start position and returns an empty value
  *         If start and end are provided, it selects the character range and returns the selected string
@@ -68,7 +69,94 @@ Element.addMethods(['input', 'textarea'], {
       }
       return {begin:begin, end:end};
     }
-  }
+  },
+	
+	// new version of the caret function
+  getInputSelection: function(el){
+    var start = 0, end = 0, normalizedValue, range,
+        textInputRange, len, endRange;
+
+    if (typeof el.selectionStart == "number" && typeof el.selectionEnd == "number") {
+      start = el.selectionStart;
+      end = el.selectionEnd;
+    }
+		else {
+      range = document.selection.createRange();
+
+      if (range && range.parentElement() == el) {
+        len = el.value.length;
+        normalizedValue = el.value.replace(/\r\n/g, "\n");
+
+        // Create a working TextRange that lives only in the input
+        textInputRange = el.createTextRange();
+        textInputRange.moveToBookmark(range.getBookmark());
+
+        // Check if the start and end of the selection are at the very end
+        // of the input, since moveStart/moveEnd doesn't return what we want
+        // in those cases
+        endRange = el.createTextRange();
+        endRange.collapse(false);
+
+        if (textInputRange.compareEndPoints("StartToEnd", endRange) > -1) {
+          start = end = len;
+        }
+				else {
+          start = -textInputRange.moveStart("character", -len);
+          start += normalizedValue.slice(0, start).split("\n").length - 1;
+
+          if (textInputRange.compareEndPoints("EndToEnd", endRange) > -1) {
+            end = len;
+          } else {
+            end = -textInputRange.moveEnd("character", -len);
+            end += normalizedValue.slice(0, end).split("\n").length - 1;
+          }
+        }
+      }
+    }
+
+    return {
+      start: start,
+      end: end
+    };
+	},
+	setInputSelection: function(el, start, end){
+    if (typeof el.selectionStart == "number" && typeof el.selectionEnd == "number") {
+      el.selectionStart = start;
+      el.selectionEnd = end;
+    }
+		else {
+			function offsetToRangeCharacterMove(el, offset) {
+			  return offset - (el.value.slice(0, offset).split("\r\n").length - 1);
+			}
+			
+      var range = el.createTextRange();
+      var startCharMove = offsetToRangeCharacterMove(el, start);
+			
+      range.collapse(true);
+      if (start == end) {
+        range.move("character", startCharMove);
+      }
+			else {
+        range.moveEnd("character", offsetToRangeCharacterMove(el, end));
+        range.moveStart("character", startCharMove);
+      }
+      range.select();
+    }
+  },
+	replaceInputSelection: function(element, text) {
+		text += "";
+		
+		element.tryFocus();
+		var sel = element.getInputSelection();
+    var selected = element.value.substring(sel.start, sel.end);
+    var s = element.value.substring(0, sel.start) + 
+        text + 
+        element.value.substring(sel.end, element.value.length);
+				
+    element.value = s;
+		
+		element.setInputSelection(sel.start, sel.start+text.length);
+	}
 });
 
 /** Input mask for text input elements 
