@@ -342,6 +342,18 @@ class CExClassField extends CExListItemsOwner {
     
     return $db_spec;
   }
+	
+	function updateDBFields(){
+		// If we change its group, we need to reset its coordinates
+		if ($this->fieldModified("ex_group_id")) {
+      $this->coord_field_x = "";
+      $this->coord_field_y = "";
+      $this->coord_label_x = "";
+      $this->coord_label_y = "";
+		}
+		
+		return parent::updateDBFields();
+	}
   
   function store(){
     if (!$this->_id && $this->concept_id) {
