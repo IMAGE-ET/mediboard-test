@@ -285,8 +285,34 @@ Main.add( function(){
 	                  {{assign var=types value="CPrescriptionLineMix"|static:"unite_by_line"}}
 	                  {{if $line->_can_modify_prescription_line_mix}}
 	                    {{mb_label object=$line field="volume_debit"}}
-										  {{mb_field object=$line field="volume_debit" size="3" increment=1 min=0 form="editPerf-$prescription_line_mix_id" onchange="Prescription.updateDebit('$prescription_line_mix_id'); this.form.nb_tous_les.value = ''; this.form.duree_passage.value = ''; return onSubmitFormAjax(this.form);"}} ml
-	                    en {{mb_field object=$line field="duree_debit" size="3" increment=1 min=0 form="editPerf-$prescription_line_mix_id" onchange="Prescription.updateDebit('$prescription_line_mix_id'); this.form.nb_tous_les.value = ''; this.form.duree_passage.value = ''; return onSubmitFormAjax(this.form);"}} h
+										  {{mb_field object=$line field="volume_debit" size="3" increment=1 min=0 form="editPerf-$prescription_line_mix_id"}} ml
+                      <script type="text/javascript">
+                        var oForm = getForm("editPerf-{{$line->_id}}");
+                        oForm.volume_debit.onchange = function() {
+                          Prescription.updateDebit('{{$prescription_line_mix_id}}');
+                          oForm.nb_tous_les.value = '';
+                          oForm.duree_passage.value = '';
+                          return onSubmitFormAjax(oForm, {onComplete: function() {
+                            {{foreach from=$line->_ref_lines item=_line_item_update}}
+                              updateDebitProduit({{$_line_item_update->_id}});
+                            {{/foreach}}
+                          } });
+                        }
+                        </script>
+	                    en {{mb_field object=$line field="duree_debit" size="3" increment=1 min=0 form="editPerf-$prescription_line_mix_id"}} h
+                      <script type="text/javascript">
+                        var oForm = getForm("editPerf-{{$line->_id}}");
+                        oForm.duree_debit.onchange = function() {
+                          Prescription.updateDebit('{{$prescription_line_mix_id}}');
+                          oForm.nb_tous_les.value = '';
+                          oForm.duree_passage.value = '';
+                          return onSubmitFormAjax(oForm, {onComplete: function() {
+                            {{foreach from=$line->_ref_lines item=_line_item_update}}
+                              updateDebitProduit({{$_line_item_update->_id}});
+                            {{/foreach}}
+                          } });
+                        }
+                        </script>
 	                    soit <span id="debitLineMix-{{$line->_id}}" style="font-weight: bold; font-size: 1.2em;">{{mb_value object=$line field="_debit"}}</span> ml/h
 										{{else}}
 	                    {{if $line->volume_debit}}
@@ -477,6 +503,14 @@ Main.add( function(){
 		        {{assign var=line_item_id value=$_line_item->_id}}
 						<tr>
 		          <td>
+                {{if $line->type_line == "perfusion"}}
+                  <script type="text/javascript">
+                    Main.add(function() {
+                      updateDebitProduit({{$line_item_id}});
+                      showHideDebitProduit(getForm("editLinePerf-{{$_line_item->_id}}").__solvant, {{$line_item_id}});
+                    });
+                  </script>
+                {{/if}}
 		            <form name="editLinePerf-{{$_line_item->_id}}" action="" method="post">
 		              <input type="hidden" name="m" value="dPprescription" />
 		              <input type="hidden" name="dosql" value="do_prescription_line_mix_item_aed" />
@@ -521,7 +555,7 @@ Main.add( function(){
 						             </strong>
 						          </td>
 				              <td style="border:none; width: 30%;">
-						             <span style="float: right">
+						            <span style="float: right">
 						             	{{if $line->_can_modify_prescription_line_mix_item && $line->type_line == "perfusion"}}
 						             	{{assign var="is_mg" value=false}}
 						             	{{foreach from=$_line_item->_unites_prise item=_unite}}
@@ -536,37 +570,60 @@ Main.add( function(){
 						             	{{/if}}
 													<label>
 													  {{mb_field object=$_line_item field="solvant" typeEnum=checkbox 
-														           onchange="removeSolvant(this.form.__solvant); return onSubmitFormAjax(this.form);"}} 
+														  onchange="removeSolvant(this.form.__solvant); showHideDebitProduit(this.form.__solvant, $line_item_id, 1); updateVolumeTotal($prescription_line_mix_id, $line_item_id, 1); return onSubmitFormAjax(this.form);"}} 
 														Solvant
 												  </label>
 													{{/if}}
-	                        </span>
-													
-												{{mb_label object=$_line_item field=quantite}}:
-						            {{if $line->_can_modify_prescription_line_mix_item}}
-													{{mb_field object=$_line_item field=quantite size=4 increment=1 min=0 form="editLinePerf-$line_item_id" onchange="return onSubmitFormAjax(this.form);"}}
-	
-	                        <!-- Unite de prise -->
-														<select name="unite" style="width: 12em;" onchange="return onSubmitFormAjax(this.form);">
-														  {{if $_line_item->_ref_produit_prescription->_id}}
-															   <option value="{{$_line_item->_ref_produit_prescription->unite_prise}}">{{$_line_item->_ref_produit_prescription->unite_prise}}</option>
-															{{else}}
-														    {{foreach from=$_line_item->_unites_prise item=_unite}}
-														      <option value="{{$_unite}}" {{if $_line_item->unite == $_unite}}selected="selected"{{/if}}>{{$_unite}}</option>
-														    {{/foreach}}
-															{{/if}}
-													  </select>
-												{{else}}
-												  {{if $_line_item->quantite}}
-													  {{mb_value object=$_line_item field=quantite}}
-							              {{mb_value object=$_line_item field=unite}}	
-													{{else}}
-													  <div class="warning" style="display: inline;">Non renseignée</div>
-													{{/if}}
-													{{if $_line_item->solvant && $line->type_line == "perfusion"}}
-													  (Solvant)
-													{{/if}}		            
-											  {{/if}}
+	                      </span>
+                        <span style="float: left">
+  												{{mb_label object=$_line_item field=quantite}}:
+  						            {{if $line->_can_modify_prescription_line_mix_item}}
+  													{{mb_field object=$_line_item field=quantite size=4 increment=1 min=0 form="editLinePerf-$line_item_id"}}
+  	                        <script type="text/javascript">
+                            var oForm = getForm("editLinePerf-{{$_line_item->_id}}");
+                            oForm.quantite.onchange = function() {
+                              return onSubmitFormAjax(oForm, {onComplete: function() {
+                                {{if $line->type_line == "perfusion"}}
+                                  updateVolumeTotal({{$prescription_line_mix_id}}, {{$line_item_id}}, 1);
+                                  {{foreach from=$line->_ref_lines item=_line_item_update}}
+                                    updateDebitProduit({{$_line_item_update->_id}});
+                                  {{/foreach}}
+                                {{/if}}
+                              } });
+                            };
+                            </script>
+  	                        <!-- Unite de prise -->
+  														<select name="unite" style="width: 12em;"
+                                onchange="return onSubmitFormAjax(this.form, {onComplete: function() {
+                                  updateVolumeTotal({{$prescription_line_mix_id}}, {{$line_item_id}}, 1);
+                                  {{foreach from=$line->_ref_lines item=_line_item_update}}
+                                  updateDebitProduit({{$_line_item_update->_id}});
+                                  {{/foreach}}
+                                }});">
+  														  {{if $_line_item->_ref_produit_prescription->_id}}
+  															   <option value="{{$_line_item->_ref_produit_prescription->unite_prise}}">{{$_line_item->_ref_produit_prescription->unite_prise}}</option>
+  															{{else}}
+  														    {{foreach from=$_line_item->_unites_prise item=_unite}}
+  														      <option value="{{$_unite}}" {{if $_line_item->unite == $_unite}}selected="selected"{{/if}}>{{$_unite}}</option>
+  														    {{/foreach}}
+  															{{/if}}
+  													  </select>
+  												{{else}}
+  												  {{if $_line_item->quantite}}
+  													  {{mb_value object=$_line_item field=quantite}}
+  							              {{mb_value object=$_line_item field=unite}}	
+  													{{else}}
+  													  <div class="warning" style="display: inline;">Non renseignée</div>
+  													{{/if}}
+  													{{if $_line_item->solvant && $line->type_line == "perfusion"}}
+  													  (Solvant)
+  													{{/if}}
+  											  {{/if}}
+                        </span>
+                        <span style="margin-left: 5%; display: none;" id="debit_{{$line_item_id}}" class="debit_produit">
+                          Débit :
+                          <span></span>
+                        </span>
 						     		  </td>
 				            </tr>
 			            </table>
@@ -580,6 +637,30 @@ Main.add( function(){
 							</td>
 	          </tr>
 					{{/foreach}}
+          <tr>
+            <td style="text-align: right;">
+              <form name="editQuantiteTotale-{{$prescription_line_mix_id}}" method="get" action="?">
+              <div id="volume_total_{{$line->_id}}" style="display: none;">
+                <hr />
+                  Volume total :
+                  {{mb_field object=$line field=_quantite_totale min=0 increment=1 size=4 form="editQuantiteTotale-$prescription_line_mix_id"}} ml
+              </div>
+              {{if $line->type_line == "perfusion"}}
+                <script type="text/javascript">
+                  Main.add(function() {
+                    updateVolumeTotal({{$prescription_line_mix_id}}, {{$line_item_id}}, 1);
+                  });
+                  getForm("editQuantiteTotale-{{$prescription_line_mix_id}}")._quantite_totale.onchange= function() {
+                    updateSolvant({{$prescription_line_mix_id}}, null, this.value);
+                    {{foreach from=$line->_ref_lines item=_line_item}}
+                      updateDebitProduit({{$_line_item->_id}});
+                    {{/foreach}}
+                  };
+                </script>
+              {{/if}}
+              </form>
+            </td>
+          </tr>
 	      </table>
 		  </fieldset>
     </td>

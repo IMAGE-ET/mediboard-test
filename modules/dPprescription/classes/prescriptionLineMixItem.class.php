@@ -265,10 +265,13 @@ class CPrescriptionLineMixItem extends CMbObject {
 				if(isset($poids)){
           $this->_quantite_administration *= $poids;
         }
-				
+
 				// On rajoute la quantite de produit a la quantite totale seulement si celle ci peut etre exprimée en ml
-				if(isset($this->_ref_produit->rapport_unite_prise[$_unite_prise]["ml"])){
-					$quantite_perf_line = $this->quantite * $this->_ref_produit->rapport_unite_prise[$_unite_prise]["ml"];
+				if($_unite_prise == "ml" || isset($this->_ref_produit->rapport_unite_prise[$_unite_prise]["ml"])){
+					$quantite_perf_line = $this->quantite;
+					if (isset($this->_ref_produit->rapport_unite_prise[$_unite_prise]["ml"])) {
+					  $quantite_perf_line *= $this->_ref_produit->rapport_unite_prise[$_unite_prise]["ml"];
+					}
 					if(isset($poids)){
 						$quantite_perf_line *= $poids;
 					}
