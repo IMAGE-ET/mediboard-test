@@ -239,7 +239,7 @@ Main.add( function(){
   
   removePlageOp(false);
   OccupationServices.initOccupation();
-  OccupationServices.configBlocage = ({{$conf.dPplanningOp.CSejour.blocage_occupation|@json}} == "1") && !{{$modules.dPcabinet->_can->edit}};
+  OccupationServices.configBlocage = ({{$conf.dPplanningOp.CSejour.blocage_occupation|@json}} == "1") && !{{$modules.dPcabinet->_can->edit|@json}};
   
 });
 </script>
