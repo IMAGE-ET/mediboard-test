@@ -247,7 +247,19 @@ class CSetupadmin extends CSetup {
       ADD `dont_log_connection` ENUM ('0','1') DEFAULT '0';";
     $this->addQuery($query);
     
-    $this->mod_version = "1.0.18";
+    $this->makeRevision("1.0.18");
+    $query = "CREATE TABLE `source_ldap` (
+              `source_ldap_id` INT (11) UNSIGNED NOT NULL auto_increment PRIMARY KEY,
+              `name` VARCHAR (255) NOT NULL,
+              `host` TEXT NOT NULL,
+              `port` INT (11) DEFAULT '389',
+              `rootdn` VARCHAR (255) NOT NULL,
+              `ldap_opt_protocol_version` INT (11) DEFAULT '3',
+              `ldap_opt_referrals` ENUM ('0','1') DEFAULT '0'
+             ) /*! ENGINE=MyISAM */;";
+    $this->addQuery($query);
+    
+    $this->mod_version = "1.0.19";
   }
 }
 ?>

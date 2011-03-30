@@ -8,73 +8,32 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
 *}}
 
-<form name="editConfig" action="?m={{$m}}&amp;{{$actionType}}=configure" method="post" onsubmit="return checkForm(this)">
-
-<input type="hidden" name="dosql" value="do_configure" />
-<input type="hidden" name="m" value="system" />
-
-<table class="form">
-
-  {{assign var="class" value="CUser"}}
-  
-  <tr>
-    <th class="category" colspan="2">{{tr}}config-{{$m}}-{{$class}}{{/tr}}</th>
-  </tr>
-  
-  {{assign var="var" value="strong_password"}}
-  <tr>
-    <th>
-      <label for="{{$m}}[{{$class}}][{{$var}}]" title="{{tr}}config-{{$m}}-{{$class}}-{{$var}}{{/tr}}">
-        {{tr}}config-{{$m}}-{{$class}}-{{$var}}{{/tr}}
-      </label>    
-    </th>
-    <td>
-      <label for="{{$m}}[{{$class}}][{{$var}}]_1">Oui</label>       
-      <input type="radio" name="{{$m}}[{{$class}}][{{$var}}]" value="1" {{if $conf.$m.$class.$var == "1"}}checked="checked"{{/if}}/> 
-      <label for="{{$m}}[{{$class}}][{{$var}}]_0">Non</label>
-      <input type="radio" name="{{$m}}[{{$class}}][{{$var}}]" value="0" {{if $conf.$m.$class.$var == "0"}}checked="checked"{{/if}}/> 
-    </td>
-  </tr>
- {{assign var="var" value="max_login_attempts"}}
-  <tr>
-    <th>
-      <label for="{{$m}}[{{$class}}][{{$var}}]" title="{{tr}}config-{{$m}}-{{$class}}-{{$var}}{{/tr}}">
-        {{tr}}config-{{$m}}-{{$class}}-{{$var}}{{/tr}}
-      </label>    
-    </th>
-    <td>
-      <input type="text" name="{{$m}}[{{$class}}][{{$var}}]" value="{{$conf.$m.$class.$var}}" />
-    </td>
-  </tr>
-  <tr>
-    <td class="button" colspan="100">
-      <button class="modify" type="submit">{{tr}}Save{{/tr}}</button>
-    </td>
-    
-  </tr>
-</table>
-
-</form>
-
-
-<h2>Actions</h2>
-
 <script type="text/javascript">
-function checkSiblings() {
-  var CCAMUrl = new Url("admin", "check_siblings");
-  CCAMUrl.requestUpdate("check_siblings");
+Main.add(Control.Tabs.create.curry('tabs-configure', true));
+
+refreshSourceLDAP = function(source_ldap_id) {
+  var url = new Url("admin", "ajax_refresh_source_ldap");
+  url.addParam("source_ldap_id", source_ldap_id);
+  url.requestUpdate("CSourceLDAP");
 }
 </script>
 
-<table class="tbl">
-  <tr>
-    <th>{{tr}}Action{{/tr}}</th>
-    <th>{{tr}}Status{{/tr}}</th>
-  </tr>
-  
-  <tr>
-    <td><button class="tick" onclick="checkSiblings()">{{tr}}mod-admin-action-check_siblings{{/tr}}</button></td>
-    <td id="check_siblings"></td>
-  </tr>
-</table>
+<ul id="tabs-configure" class="control_tabs">
+  <li><a href="#config-permissions">{{tr}}config-permissions{{/tr}}</a></li>
+  <li><a href="#CSourceLDAP">{{tr}}CSourceLDAP{{/tr}}</a></li>
+  <li><a href="#actions">Actions</a></li>
+</ul>
 
+<hr class="control_tabs" />
+
+<div id="config-permissions" style="display: none;">
+  {{mb_include template=inc_config_permissions}}
+</div>
+
+<div id="CSourceLDAP" style="display: none;">
+  {{mb_include template=inc_source_ldap}}
+</div>
+
+<div id="actions" style="display: none;">
+  {{mb_include template=inc_config_actions}}
+</div>

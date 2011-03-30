@@ -392,13 +392,6 @@ $dPconfig["system"] = array(
   "website_url"    => "http://www.mediboard.org",
 );
 
-$dPconfig["admin"] = array (
-  "CUser" => array(
-    "strong_password" => "0",
-    "max_login_attempts" => "5",
-  ),
-);
-
 $dPconfig["hprim21"] = array (
   "CHprim21Reader" => array(
     "hostname"      => "",
