@@ -8,7 +8,7 @@
       minHours    : {{$conf.dPplanningOp.COperation.duree_deb}},
       maxHours    : {{$conf.dPplanningOp.COperation.duree_fin}}
     };
-    {{foreach from=$_intervs item=curr_op}}
+    {{foreach from=$intervs item=curr_op}}
     oForm = getForm("edit-interv-{{$curr_op->operation_id}}");
     Calendar.regField(oForm.temp_operation, null, options);
     if(oForm.pause) {
