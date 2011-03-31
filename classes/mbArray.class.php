@@ -367,7 +367,7 @@ abstract class CMbArray {
     $args = array_slice($args, 2);
     
     foreach ($array as $object) {
-      call_user_method_array($method, $object, $args);
+      call_user_func_array(array($object, $method), $args);
     }
     
     return $array;
