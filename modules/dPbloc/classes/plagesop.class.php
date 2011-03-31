@@ -43,7 +43,6 @@ class CPlageOp extends CMbObject {
   var $_minutedeb    = null;
   var $_heurefin     = null;
   var $_minutefin    = null;
-  var $_min_inter_op = null;
   var $_duree_prevue = null;
   var $_type_repeat  = null;
   
@@ -83,7 +82,7 @@ class CPlageOp extends CMbObject {
     $specs["debut"]            = "time notNull";
     $specs["fin"]              = "time notNull moreThan|debut";
     $specs["unique_chir"]      = "bool default|1";
-    $specs["temps_inter_op"]   = "time notNull";
+    $specs["temps_inter_op"]   = "time";
     $specs["max_intervention"] = "num min|0";
     $specs["delay_repl"]       = "num min|0";
     $specs["actes_locked"]     = "bool";
@@ -93,7 +92,6 @@ class CPlageOp extends CMbObject {
     $specs["_minutedeb"]       = "num min|0 max|59";
     $specs["_heurefin"]        = "num min|0 max|23";
     $specs["_minutefin"]       = "num min|0 max|59";
-    $specs["_min_inter_op"]    = "num min|0 max|59";
     $specs["_type_repeat"]     = "enum list|simple|double|triple|sameweek";
     return $specs;
   }
@@ -296,7 +294,6 @@ class CPlageOp extends CMbObject {
     $this->_minutedeb    = substr($this->debut, 3, 2);
     $this->_heurefin     = substr($this->fin, 0, 2);
     $this->_minutefin    = substr($this->fin, 3, 2);
-    $this->_min_inter_op = substr($this->temps_inter_op, 3, 2);
     $this->_duree_prevue = mbTimeRelative($this->debut, $this->fin);
     $this->_view = "Plage du ".$this->getFormattedValue("date");
   }
@@ -310,9 +307,6 @@ class CPlageOp extends CMbObject {
     }
     if(($this->_year !== null) && ($this->_month !== null) && ($this->_day !== null)) {
       $this->date = "$this->_year-$this->_month-$this->_day";
-    }
-    if($this->_min_inter_op !== null) {
-      $this->temps_inter_op = "00:$this->_min_inter_op:00";
     }
     return parent::updateDBFields();
   }

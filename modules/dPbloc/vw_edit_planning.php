@@ -31,6 +31,9 @@ $listSalles = $bloc->_ref_salles;
 // Informations sur la plage demandée
 $plagesel = new CPlageOp;
 $plagesel->load($plageop_id);
+if(!$plagesel->temps_inter_op) {
+  $plagesel->temps_inter_op = "00:00:00";
+}
 if($plagesel->_id){
   $arrKeySalle = array_keys($listSalles);
   if(!in_array($plagesel->salle_id, $arrKeySalle) || $plagesel->date != $date) {

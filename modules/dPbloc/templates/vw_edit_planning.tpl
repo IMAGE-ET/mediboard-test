@@ -45,16 +45,17 @@ function popPlanning(debut) {
 }
 
 Main.add(function(){
-  var form = getForm('editFrm');
-  Calendar.regField(form.date);
+  var oForm = getForm('editFrm');
+  Calendar.regField(oForm.date);
+  Calendar.regField(oForm.temps_inter_op);
   var options = {
     exactMinutes: false, 
     minInterval: {{"CPlageOp"|static:minutes_interval}},
     minHours: {{"CPlageOp"|static:hours_start}},
     maxHours: {{"CPlageOp"|static:hours_stop}}
   };
-  Calendar.regField(form.debut, null, options);
-  Calendar.regField(form.fin, null, options);
+  Calendar.regField(oForm.debut, null, options);
+  Calendar.regField(oForm.fin, null, options);
 });
 {{/if}}
 </script>
@@ -226,15 +227,8 @@ Main.add(function(){
         <td>
           <input type="text" class="notNull num min|1" name="_repeat" size="1" value="1" />
         </td>
-        <th>{{mb_label object=$plagesel field="_min_inter_op"}}</th>
-        <td>
-          {{if $plagesel->_id}}
-            {{assign var=min_inter_op value=$plagesel->_min_inter_op}}
-          {{else}}
-            {{assign var=min_inter_op value=15}}
-          {{/if}}
-          {{mb_field object=$plagesel field="_min_inter_op" prop="num notNull min|0 max|59" size=1 increment=true form="editFrm" value=$min_inter_op}} min
-        </td>
+        <th>{{mb_label object=$plagesel field="temps_inter_op"}}</th>
+        <td>{{mb_field object=$plagesel field="temps_inter_op"}}</td>
       </tr>
       <tr>
         <th>{{mb_label object=$plagesel field="_type_repeat"}}</th>

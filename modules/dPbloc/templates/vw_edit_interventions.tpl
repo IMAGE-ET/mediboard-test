@@ -10,20 +10,64 @@
 
 <script type="text/javascript">
 
-  printFicheAnesth = function(consultation_id, operation_id) {
+  var printFicheAnesth = function(consultation_id, operation_id) {
     var url = new Url("dPcabinet", "print_fiche"); 
     url.addParam("consultation_id", consultation_id);
     url.addParam("operation_id", operation_id);
     url.popup(700, 500, "printFicheAnesth");
   }
 
-
-  chooseAnesthCallback = function() {
+  var chooseAnesthCallback = function() {
 	  location.reload(); 
   }
+  
+  var reloadAllLists = function() {
+    reloadLeftList();
+    reloadRightList();
+  }
+  
+  var reloadLeftList = function() {
+    var leftListUrl = new Url("dPbloc", "ajax_list_intervs");
+    leftListUrl.addParam("plageop_id", {{$plage->_id}});
+    leftListUrl.addParam("list_type" , "left");
+    leftListUrl.requestUpdate("left_list");
+  }
+  
+  var reloadRightList = function() {
+    var rightListUrl = new Url("dPbloc", "ajax_list_intervs");
+    rightListUrl.addParam("plageop_id", {{$plage->_id}});
+    rightListUrl.addParam("list_type" , "right");
+    rightListUrl.requestUpdate("right_list");
+  }
+  
+  var submitOrder = function(oForm, side) {
+    if(side == "left") {
+      return submitFormAjax(oForm, 'systemMsg', { onComplete: reloadLeftList });
+    }
+    if(side == "right") {
+      return submitFormAjax(oForm, 'systemMsg', { onComplete: reloadRightList });
+    }
+    return submitFormAjax(oForm, 'systemMsg', { onComplete: reloadAllLists });
+  }
+  
+  Main.add(function(){
+    var oForm = getForm("editPlageTiming");
+    var options = {
+      exactMinutes: false, 
+      minInterval : {{"CPlageOp"|static:minutes_interval}},
+      minHours    : {{"CPlageOp"|static:hours_start}},
+      maxHours    : {{"CPlageOp"|static:hours_stop}}
+    };
+    Calendar.regField(oForm.debut, null, options);
+    Calendar.regField(oForm.fin  , null, options);
+    options = {
+      exactMinutes: false
+    };
+    Calendar.regField(oForm.temps_inter_op, null, options);
+    reloadAllLists();
+  });
 
 </script>
-
 <table class="main">
   <tr>
     <th colspan="2">
@@ -33,9 +77,13 @@
         <input type="hidden" name="dosql" value="do_plagesop_aed" />
         <input type="hidden" name="del" value="0" />
         <input type="hidden" name="plageop_id" value="{{$plage->_id}}" />
-        <input type="hidden" name="temps_inter_op" value="{{$plage->temps_inter_op}}" />
         <input type="hidden" name="_repeat" value="1" />
         <input type="hidden" name="_type_repeat" value="simple" />
+        <span style="float: right;">
+          {{mb_field object=$plage field="temps_inter_op" hidden=true onchange="this.form.onsubmit();"}}
+          <br />
+          entre chaque intervention
+        </span>
         {{if $plage->chir_id}}
         Dr {{$plage->_ref_chir->_view}}
         {{if @$modules.messagerie}}
@@ -46,41 +94,11 @@
         {{else}}
         {{$plage->_ref_spec->_view}}
         {{/if}}
+        - {{$plage->date|date_format:$conf.longdate}}
         <br />
-        {{$plage->date|date_format:$conf.longdate}}<br />
-        {{$plage->_ref_salle->nom}} :
-        <select name="_heuredeb" class="notNull num">
-        {{foreach from=$listHours item=heure}}
-          <option value="{{$heure|string_format:"%02d"}}" {{if $plage->_heuredeb == $heure}} selected="selected" {{/if}} >
-            {{$heure|string_format:"%02d"}}
-          </option>
-        {{/foreach}}
-        </select>
-        h
-        <select name="_minutedeb">
-        {{foreach from=$listMins item=minute}}
-          <option value="{{$minute|string_format:"%02d"}}" {{if $plage->_minutedeb == $minute}} selected="selected" {{/if}} >
-            {{$minute|string_format:"%02d"}}
-          </option>
-        {{/foreach}}
-        </select>
-        à
-        <select name="_heurefin" class="notNull num">
-        {{foreach from=$listHours item=heure}}
-          <option value="{{$heure|string_format:"%02d"}}" {{if $plage->_heurefin == $heure}} selected="selected" {{/if}} >
-            {{$heure|string_format:"%02d"}}
-          </option>
-        {{/foreach}}
-        </select>
-        h
-        <select name="_minutefin">
-        {{foreach from=$listMins item=minute}}
-          <option value="{{$minute|string_format:"%02d"}}" {{if $plage->_minutefin == $minute}} selected="selected" {{/if}} >
-          {{$minute|string_format:"%02d"}}
-          </option>
-        {{/foreach}}
-        </select>
-        <button type="submit" class="tick notext">{{tr}}Save{{/tr}}</button>
+        {{$plage->_ref_salle->nom}}
+        de {{mb_field object=$plage field="debut" hidden=true onchange="this.form.onsubmit();"}}
+        à  {{mb_field object=$plage field="fin"   hidden=true onchange="this.form.onsubmit();"}}
       </form>
     </th>
   </tr>
@@ -202,7 +220,7 @@
                 <input type="hidden" name="dosql" value="do_affectation_aed" />
                 <input type="hidden" name="affect_id" value="{{$_affectation->_id}}" />
                 <input type="hidden" name="del" value="1" />
-                <button class='cancel' type='submit'>{{$_affectation->_ref_personnel->_ref_user->_view}}</button>
+                <button class="cancel" type="submit">{{$_affectation->_ref_personnel->_ref_user->_view}}</button>
               </form>
             {{/foreach}}
           </td>
@@ -219,7 +237,7 @@
                 <input type="hidden" name="dosql" value="do_affectation_aed" />
                 <input type="hidden" name="affect_id" value="{{$_affectation->_id}}" />
                 <input type="hidden" name="del" value="1" />
-                <button class='cancel' type='submit'>{{$_affectation->_ref_personnel->_ref_user->_view}}</button>
+                <button class="cancel" type="submit">{{$_affectation->_ref_personnel->_ref_user->_view}}</button>
               </form>
             {{/foreach}}
           </td>
@@ -236,7 +254,7 @@
                 <input type="hidden" name="dosql" value="do_affectation_aed" />
                 <input type="hidden" name="affect_id" value="{{$_affectation->_id}}" />
                 <input type="hidden" name="del" value="1" />
-                <button class='cancel' type='submit'>{{$_affectation->_ref_personnel->_ref_user->_view}}</button>
+                <button class="cancel" type="submit">{{$_affectation->_ref_personnel->_ref_user->_view}}</button>
               </form>
             {{/foreach}}
           </td>
@@ -246,234 +264,9 @@
     </td> 
   </tr>
   <tr>
-    <td class="halfPane">
-      <table class="tbl">
-        <tr>
-          <th class="title" colspan="3">
-            {{if $conf.dPplanningOp.COperation.horaire_voulu}}
-            <form name="editOrderVoulu" action="?m={{$m}}" method="post">
-              <input type="hidden" name="m" value="dPbloc" />
-              <input type="hidden" name="dosql" value="do_order_voulu_op" />
-              <input type="hidden" name="plageop_id" value="{{$plage->_id}}" />
-              <input type="hidden" name="del" value="0" />
-              <button type="submit" class="tick" style="float: right;">Utiliser les horaires souhaités</button>
-            </form>
-            {{/if}}
-            Patients à placer
-          </th>
-        </tr>
-        {{foreach from=$list1 item=curr_op}}
-        <tr>
-          <td style="width: 40%; white-space: nowrap;">
-            {{mb_include module=system template=inc_object_history object=$curr_op}}
-
-            <a style="font-weight: bold;" href="?m=dPpatients&amp;tab=vw_idx_patients&amp;patient_id={{$curr_op->_ref_sejour->_ref_patient->patient_id}}">
-              <span onmouseover="ObjectTooltip.createEx(this, '{{$curr_op->_ref_sejour->_ref_patient->_guid}}');">
-                {{$curr_op->_ref_sejour->_ref_patient->_view}} ({{$curr_op->_ref_sejour->_ref_patient->_age}} ans)
-              </span>
-            </a>
-    				<br />
-    				<span onmouseover="ObjectTooltip.createEx(this, '{{$curr_op->_ref_sejour->_guid}}');" {{if !$curr_op->_ref_sejour->entree_reelle}}style="color: red;"{{/if}}>
-              Admission le {{mb_value object=$curr_op->_ref_sejour field=_entree}} ({{$curr_op->_ref_sejour->type|truncate:1:""|capitalize}})
-            </span>
-            <br />
-            Durée : {{$curr_op->temp_operation|date_format:$conf.time}}
-            {{if $curr_op->horaire_voulu}}
-              <br />
-              Horaire souhaité: {{$curr_op->horaire_voulu|date_format:$conf.time}}
-            {{/if}}
-            {{if $listPlages|@count != '1'}}
-            <br />
-            <form name="changeSalle" action="?m={{$m}}" method="post">
-              <input type="hidden" name="m" value="dPplanningOp" />
-              <input type="hidden" name="dosql" value="do_planning_aed" />
-              <input type="hidden" name="del" value="0" />
-              <input type="hidden" name="rank" value="0" />
-              <input type="hidden" name="operation_id" value="{{$curr_op->_id}}" />
-              Changement de salle
-              <select name="plageop_id" onchange="this.form.submit()">
-                {{foreach from=$listPlages item="_plage"}}
-                <option value="{{$_plage->_id}}" {{if $plage->_id == $_plage->_id}} selected = "selected"{{/if}}>
-                {{$_plage->_ref_salle->nom}} / {{$_plage->debut|date_format:$conf.time}} à {{$plage->fin|date_format:$conf.time}}
-                </option>
-                {{/foreach}}
-              </select>
-            </form>
-            {{/if}}
-          </td>
-          <td class="text">
-            <a href="?m=dPplanningOp&amp;tab=vw_edit_planning&amp;operation_id={{$curr_op->operation_id}}">
-              <span onmouseover="ObjectTooltip.createEx(this, '{{$curr_op->_guid}}');">
-              Dr {{$curr_op->_ref_chir->_view}}
-              <br />
-              {{if $curr_op->libelle}}
-                <em>[{{$curr_op->libelle}}]</em>
-                <br />
-              {{/if}}
-              {{foreach from=$curr_op->_ext_codes_ccam item=curr_code}}
-                <strong>{{$curr_code->code}}</strong> : {{$curr_code->libelleLong}}<br />
-              {{/foreach}}
-              </span>
-            </a>
-            {{if $curr_op->rques}}
-              Remarques: {{$curr_op->rques|nl2br}}
-              <br />
-            {{/if}}
-            Côté : {{tr}}COperation.cote.{{$curr_op->cote}}{{/tr}}
-            <br />
-            <button style="float: right;" class="{{if $curr_op->_ref_consult_anesth->_ref_consultation->_id}}print{{else}}warning{{/if}}" style="width:11em;" type="button" onclick="printFicheAnesth('{{$curr_op->_ref_consult_anesth->_ref_consultation->_id}}', '{{$curr_op->_id}}');">
-              Fiche d'anesthésie
-            </button>
-            <form name="editFrmAnesth{{$curr_op->operation_id}}" action="?m={{$m}}" method="post">
-              <input type="hidden" name="m" value="dPplanningOp" />
-              <input type="hidden" name="dosql" value="do_planning_aed" />
-              <input type="hidden" name="operation_id" value="{{$curr_op->operation_id}}" />
-              <select name="type_anesth" onchange="this.form.submit()" style="width: 10em; float: left;">
-                <option value="">&mdash; Anesthésie &mdash;</option>
-                {{foreach from=$anesth item=curr_anesth}}
-                <option value="{{$curr_anesth->type_anesth_id}}" {{if $curr_op->type_anesth == $curr_anesth->type_anesth_id}} selected="selected" {{/if}} >
-                  {{$curr_anesth->name}}
-                </option>
-                {{/foreach}}
-              </select>
-            </form>
-          </td>
-          <td>
-            {{if $curr_op->annulee}}
-            <img src="images/icons/cross.png" width="12" height="12" border="0" />
-            {{else}}
-            <form name="edit-insert-{{$curr_op->operation_id}}" action="?m={{$m}}" method="post">
-              <input type="hidden" name="m" value="dPplanningOp" />
-              <input type="hidden" name="dosql" value="do_planning_aed" />
-              <input type="hidden" name="_move" value="last" /><!-- Insertion à la fin -->
-              <input type="hidden" name="operation_id" value="{{$curr_op->operation_id}}" />
-              <button type="submit" class="tick notext" title="{{tr}}Add{{/tr}}">{{tr}}Add{{/tr}}</button>
-            </form>
-            {{/if}}
-          </td>
-        </tr>
-        {{/foreach}}
-      </table>
+    <td class="halfPane" id="left_list">
     </td>
-    <td class="halfPane">
-      <table class="tbl">
-        <tr>
-          <th class="title" colspan="3"">Ordre des interventions</th>
-        </tr>
-        {{foreach from=$list2 item=curr_op}}
-        <tr>
-          <td style="width: 40%;">
-            {{mb_include module=system template=inc_object_history object=$curr_op}}
-            <form name="edit-pause-{{$curr_op->operation_id}}" action="?m={{$m}}" method="post">
-              <input type="hidden" name="m" value="dPplanningOp" />
-              <input type="hidden" name="dosql" value="do_planning_aed" />
-              <input type="hidden" name="operation_id" value="{{$curr_op->operation_id}}" />
-              <a style="font-weight: bold;" href="?m=dPpatients&amp;tab=vw_idx_patients&amp;patient_id={{$curr_op->_ref_sejour->_ref_patient->patient_id}}">
-                <span onmouseover="ObjectTooltip.createEx(this, '{{$curr_op->_ref_sejour->_ref_patient->_guid}}');">
-                  {{$curr_op->rank}} - {{$curr_op->_ref_sejour->_ref_patient->_view}} ({{$curr_op->_ref_sejour->_ref_patient->_age}} ans)
-                </span>
-              </a>
-              <br />
-              <span onmouseover="ObjectTooltip.createEx(this, '{{$curr_op->_ref_sejour->_guid}}');" {{if !$curr_op->_ref_sejour->entree_reelle}}style="color: red;"{{/if}}>
-                Admission le {{mb_value object=$curr_op->_ref_sejour field=_entree}} ({{$curr_op->_ref_sejour->type|truncate:1:""|capitalize}})
-              </span>
-              <br />
-              Horaire : {{$curr_op->time_operation|date_format:$conf.time}} - Durée : {{$curr_op->temp_operation|date_format:$conf.time}}
-              {{if $curr_op->horaire_voulu}}
-              <br />
-              Horaire souhaité: {{$curr_op->horaire_voulu|date_format:$conf.time}}
-              {{/if}}
-              <br />
-              Pause : 
-              <select name="_pause_hour">
-                <option selected="selected">{{$curr_op->pause|date_format:"%H"}}</option>
-                <option>00</option>
-                <option>01</option>
-                <option>02</option>
-                <option>03</option>
-                <option>04</option>
-              </select>
-              h
-              <select name="_pause_min">
-                <option selected="selected">{{$curr_op->pause|date_format:"%M"}}</option>
-                <option>00</option>
-                <option>15</option>
-                <option>30</option>
-                <option>45</option>
-              </select>
-              <button class="tick" type="submit">Changer</button>
-            </form>
-        
-          </td>
-          <td class="text">
-            <a href="?m=dPplanningOp&amp;tab=vw_edit_planning&amp;operation_id={{$curr_op->operation_id}}">
-              <span onmouseover="ObjectTooltip.createEx(this, '{{$curr_op->_guid}}');">
-                Dr {{$curr_op->_ref_chir->_view}}
-                <br />
-                {{if $curr_op->libelle}}
-                  <em>[{{$curr_op->libelle}}]</em>
-                  <br />
-                {{/if}}
-                {{foreach from=$curr_op->_ext_codes_ccam item=curr_code}}
-                  <strong>{{$curr_code->code}}</strong> : {{$curr_code->libelleLong}}<br />
-                {{/foreach}}
-              </span>
-            </a>
-            {{if $curr_op->rques}}
-              Remarques: {{$curr_op->rques|nl2br}}<br />
-            {{/if}}
-            Côté : {{tr}}COperation.cote.{{$curr_op->cote}}{{/tr}}
-            <br />
-            <button style="float: right;" class="{{if $curr_op->_ref_consult_anesth->_ref_consultation->_id}}print{{else}}warning{{/if}}" style="width:11em;" type="button" onclick="printFicheAnesth('{{$curr_op->_ref_consult_anesth->_ref_consultation->_id}}', '{{$curr_op->_id}}');">
-              Fiche d'anesthésie
-            </button>
-            <form name="editFrmAnesth{{$curr_op->operation_id}}" action="?m={{$m}}" method="post">
-              <input type="hidden" name="m" value="dPplanningOp" />
-              <input type="hidden" name="dosql" value="do_planning_aed" />
-              <input type="hidden" name="operation_id" value="{{$curr_op->operation_id}}" />
-              <select name="type_anesth" onchange="this.form.submit();" style="width: 10em; float: left;">
-                <option value="">&mdash; Anesthésie &mdash;</option>
-                {{foreach from=$anesth item=curr_anesth}}
-                <option value="{{$curr_anesth->type_anesth_id}}" {{if $curr_op->type_anesth == $curr_anesth->type_anesth_id}} selected="selected" {{/if}} >
-                  {{$curr_anesth->name}}
-                </option>
-                {{/foreach}}
-              </select>
-            </form>
-          </td>
-          <td>
-            {{if $curr_op->rank != 1}}
-            <form name="edit-up-{{$curr_op->operation_id}}" action="?m={{$m}}" method="post">
-              <input type="hidden" name="m" value="dPplanningOp" />
-              <input type="hidden" name="dosql" value="do_planning_aed" />
-              <input type="hidden" name="operation_id" value="{{$curr_op->operation_id}}" />
-              <input type="hidden" name="_move" value="before" />
-              <button type="submit" class="up notext" title="{{tr}}Up{{/tr}}">{{tr}}Up{{/tr}}</button>
-            </form>
-            <br />
-            {{/if}}
-            <form name="edit-del-{{$curr_op->operation_id}}" action="?m={{$m}}" method="post">
-              <input type="hidden" name="m" value="dPplanningOp" />
-              <input type="hidden" name="dosql" value="do_planning_aed" />
-              <input type="hidden" name="operation_id" value="{{$curr_op->operation_id}}" />
-              <input type="hidden" name="_move" value="out" />
-              <button type="submit" class="cancel notext" title="{{tr}}Delete{{/tr}}">{{tr}}Delete{{/tr}}</button>
-            </form>
-            <br />
-            {{if $curr_op->rank != $max}}
-            <form name="edit-down-{{$curr_op->operation_id}}" action="?m={{$m}}" method="post">
-              <input type="hidden" name="m" value="dPplanningOp" />
-              <input type="hidden" name="dosql" value="do_planning_aed" />
-              <input type="hidden" name="operation_id" value="{{$curr_op->operation_id}}" />
-              <input type="hidden" name="_move" value="after" />
-              <button type="submit" class="down notext" title="{{tr}}Down{{/tr}}">{{tr}}Down{{/tr}}</button>
-            </form>
-            <br />
-            {{/if}}
-          </td>
-        </tr>
-        {{/foreach}}
-      </table>
+    <td class="halfPane" id="right_list">
     </td>
   </tr>
 </table>
