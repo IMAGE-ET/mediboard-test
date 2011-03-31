@@ -5,29 +5,37 @@
   aProtocoles['{{$type}}'] = {};
   
   {{foreach from=$list_protocoles item=_protocole}}
-  aProtocoles['{{$type}}'][{{$_protocole->protocole_id}}] = {
-    protocole_id     : {{$_protocole->protocole_id}},
-    chir_id          : {{$_protocole->chir_id}},
-    codes_ccam       : "{{$_protocole->codes_ccam}}",
-    DP               : "{{$_protocole->DP}}",
-    libelle          : "{{$_protocole->libelle|smarty:nodefaults|escape:"javascript"}}",
-    libelle_sejour   : "{{$_protocole->libelle_sejour|smarty:nodefaults|escape:"javascript"}}",
-    _hour_op         : "{{$_protocole->_hour_op}}",
-    _min_op          : "{{$_protocole->_min_op}}",
-    examen           : "{{$_protocole->examen|smarty:nodefaults|escape:"javascript"}}",
-    materiel         : "{{$_protocole->materiel|smarty:nodefaults|escape:"javascript"}}",
-    convalescence    : "{{$_protocole->convalescence|smarty:nodefaults|escape:"javascript"}}",
-    depassement      : "{{$_protocole->depassement}}",
-    forfait          : "{{$_protocole->forfait}}",
-    fournitures      : "{{$_protocole->fournitures}}",
-    type             : "{{$_protocole->type}}",
-    duree_hospi      : {{$_protocole->duree_hospi}},
-    rques_sejour     : "{{$_protocole->rques_sejour|smarty:nodefaults|escape:"javascript"}}",
-    rques_operation  : "{{$_protocole->rques_operation|smarty:nodefaults|escape:"javascript"}}",
-    protocole_prescription_anesth_id: "{{$_protocole->protocole_prescription_anesth_id}}",
-    protocole_prescription_chir_id:   "{{$_protocole->protocole_prescription_chir_id}}",
-    service_id       : "{{$_protocole->service_id}}"
-  };
+    {{assign var="type_prot_chir" value="prot-"}}
+    {{assign var="type_prot_anesth" value="prot-"}}
+    {{if $_protocole->protocole_prescription_anesth_class == "CPrescriptionProtocolePack"}}
+      {{assign var="type_prot_anesth" value="pack-"}}
+    {{/if}}
+      {{if $_protocole->protocole_prescription_chir_class == "CPrescriptionProtocolePack"}}
+      {{assign var="type_prot_chir" value="pack-"}}
+    {{/if}}
+    aProtocoles['{{$type}}'][{{$_protocole->protocole_id}}] = {
+      protocole_id     : {{$_protocole->protocole_id}},
+      chir_id          : {{$_protocole->chir_id}},
+      codes_ccam       : "{{$_protocole->codes_ccam}}",
+      DP               : "{{$_protocole->DP}}",
+      libelle          : "{{$_protocole->libelle|smarty:nodefaults|escape:"javascript"}}",
+      libelle_sejour   : "{{$_protocole->libelle_sejour|smarty:nodefaults|escape:"javascript"}}",
+      _hour_op         : "{{$_protocole->_hour_op}}",
+      _min_op          : "{{$_protocole->_min_op}}",
+      examen           : "{{$_protocole->examen|smarty:nodefaults|escape:"javascript"}}",
+      materiel         : "{{$_protocole->materiel|smarty:nodefaults|escape:"javascript"}}",
+      convalescence    : "{{$_protocole->convalescence|smarty:nodefaults|escape:"javascript"}}",
+      depassement      : "{{$_protocole->depassement}}",
+      forfait          : "{{$_protocole->forfait}}",
+      fournitures      : "{{$_protocole->fournitures}}",
+      type             : "{{$_protocole->type}}",
+      duree_hospi      : {{$_protocole->duree_hospi}},
+      rques_sejour     : "{{$_protocole->rques_sejour|smarty:nodefaults|escape:"javascript"}}",
+      rques_operation  : "{{$_protocole->rques_operation|smarty:nodefaults|escape:"javascript"}}",
+      protocole_prescription_anesth_id: "{{$type_prot_anesth}}{{$_protocole->protocole_prescription_anesth_id}}",
+      protocole_prescription_chir_id:   "{{$type_prot_chir}}{{$_protocole->protocole_prescription_chir_id}}",
+      service_id       : "{{$_protocole->service_id}}"
+    };
   {{/foreach}}
 {{else}}
   Main.add(function(){
@@ -43,7 +51,8 @@
   <tr {{if $protocole->_id == $_protocole->_id && !$dialog}}class="selected"{{/if}}>    
     <td class="text">
       {{if $dialog}}
-        <a href="#1" onclick="setClose('{{$type}}', {{$_protocole->_id}}, '{{$_protocole->_ref_protocole_prescription_chir->libelle|smarty:nodefaults|JSAttribute}}')">
+        <a href="#1"
+        onclick="setClose('{{$type}}', {{$_protocole->_id}}, '{{$_protocole->_ref_protocole_prescription_chir->libelle|smarty:nodefaults|JSAttribute}}')">
       {{else}}
         <a href="?m={{$m}}&amp;tab=vw_protocoles&amp;protocole_id={{$_protocole->_id}}&amp;page={{$page.$type}}">
       {{/if}}

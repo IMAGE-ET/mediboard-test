@@ -51,6 +51,8 @@ class CPrescriptionProtocolePack extends CMbObject {
   function getBackProps() {
     $backProps = parent::getBackProps();
     $backProps["prescription_protocole_pack_items"] = "CPrescriptionProtocolePackItem prescription_protocole_pack_id";
+    $backProps["protocoles_op_chir"]                = "CProtocole protocole_prescription_chir_id";
+    $backProps["protocoles_op_anesth"]              = "CProtocole protocole_prescription_anesth_id";
     return $backProps;
   }
   

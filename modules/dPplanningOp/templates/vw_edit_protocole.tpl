@@ -124,17 +124,16 @@ function setOperationActive(active) {
   op.select('input, button, select, textarea').each(Form.Element[active ? 'enable' : 'disable']);
 }
 
-updateToGuid = function(element) {
-  var split = $V(element).split("-");
+function fillClass(element_id, element_class) {
+  var split = $V(element_id).split("-");
   var classe = split[0] == "prot" ? "CPrescription" : "CPrescriptionProtocolePack";
-  $V(element, classe + "-" + split[1]);
+  element_class.value =  classe;
+  element_id.value = split[1] ? split[1] : '';
 }
 
 Main.add(function () {
   refreshListCCAM();
-
   setOperationActive($V(getForm('editFrm').for_sejour) == 0);
-  
   oCcamField = new TokenField(document.editFrm.codes_ccam, { 
     onChange : refreshListCCAM,
     sProps : "notNull code ccam"
@@ -143,8 +142,8 @@ Main.add(function () {
 
 </script>
 
-<form name="editFrm" action="?m={{$m}}" method="post" onsubmit="return checkFormSejour()">
-
+<form name="editFrm" action="?" method="post" onsubmit="return checkFormSejour()">
+<input type="hidden" name="m" value="dPplanningOp" />
 <input type="hidden" name="dosql" value="do_protocole_aed" />
 <input type="hidden" name="del" value="0" />
 <input type="hidden" name="_class_name_" value="COperation" />
@@ -367,29 +366,31 @@ Main.add(function () {
             Main.add(function(){
               var form = getForm("editFrm");
               var url = new Url("dPprescription", "httpreq_vw_select_protocole");
-              var autocompleter = url.autoComplete(form.libelle_protocole, 'protocole_auto_complete', {
+              var autocompleter = url.autoComplete(form.libelle_protocole, null, {
                 minChars: 1,
                 dropdown: true,
                 width: "250px",
+                valueElement: form.elements.protocole_prescription_chir_id,
                 updateElement: function(selectedElement) {
                   var node = $(selectedElement).down('.view');
                   $V(form.libelle_protocole, node.innerHTML.replace("&lt;", "<").replace("&gt;",">"));
                   if (autocompleter.options.afterUpdateElement)
                     autocompleter.options.afterUpdateElement(autocompleter.element, selectedElement);
-                  updateToGuid(form.protocole_prescription_chir_id);
                 },
                 callback: function(input, queryString){
                   return (queryString + "&praticien_id=" + $V(form.chir_id));
-                },
-                valueElement: form.elements.protocole_prescription_chir_id
+                }
               });
             });
             </script>
             
             {{mb_label object=$protocole field="protocole_prescription_chir_id"}}
-            <input type="text" name="libelle_protocole" id="editFrm_libelle_protocole" class="autocomplete str" value="{{if $protocole->_id}}{{$protocole->_ref_protocole_prescription_chir->libelle}}{{/if}}" />
-            <div style="display:none; width: 150px;" class="autocomplete" id="protocole_auto_complete"></div>
-            <input type="hidden" name="protocole_prescription_chir_id" value="{{$protocole->protocole_prescription_chir_id}}"/>
+            <input type="text" name="libelle_protocole" id="editFrm_libelle_protocole" class="autocomplete str"
+              value="{{if $protocole->_id}}{{$protocole->_ref_protocole_prescription_chir->libelle}}{{/if}}"/>
+            <input type="hidden" name="protocole_prescription_chir_id" value="{{$protocole->protocole_prescription_chir_id}}"
+              onchange="fillClass(this.form.protocole_prescription_chir_id, this.form.protocole_prescription_chir_class);
+              submitFormAjax(this.form, 'systemMsg');"/>
+            <input type="hidden" name="protocole_prescription_chir_class" value="{{$protocole->protocole_prescription_chir_class}}"/>
           </td>
         </tr>
         {{/if}}

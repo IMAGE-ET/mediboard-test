@@ -1077,7 +1077,24 @@ class CSetupdPplanningOp extends CSetup {
               WHERE protocole_prescription_anesth_id IS NOT NULL;";
     $this->addQuery($query);
     
-    $this->mod_version = "1.17";
+    $this->makeRevision("1.17");
+    $query = "ALTER table `protocole`
+              ADD `protocole_prescription_chir_class` ENUM ('CPrescription', 'CPrescriptionProtocolePack') AFTER `protocole_prescription_chir_id`,
+              ADD `protocole_prescription_anesth_class` ENUM ('CPrescription', 'CPrescriptionProtocolePack') AFTER `protocole_prescription_anesth_id`;";
+    $this->addQuery($query);
+    
+    $query = "UPDATE `protocole`
+              SET protocole_prescription_chir_class = SUBSTRING_INDEX(protocole_prescription_chir_id, '-', 1),
+              protocole_prescription_chir_id = SUBSTRING(protocole_prescription_chir_id, LENGTH(SUBSTRING_INDEX(protocole_prescription_chir_id,'-',1))+2),
+              protocole_prescription_anesth_class = SUBSTRING_INDEX(protocole_prescription_anesth_id, '-', 1),
+              protocole_prescription_anesth_id = SUBSTRING(protocole_prescription_anesth_id, LENGTH(SUBSTRING_INDEX(protocole_prescription_anesth_id,'-',1))+2);";
+    $this->addQuery($query);
+    
+    $query = "ALTER TABLE `protocole`
+              CHANGE protocole_prescription_chir_id protocole_prescription_chir_id INT(11),
+              CHANGE protocole_prescription_anesth_id protocole_prescription_anesth_id INT(11)";
+    
+    $this->mod_version = "1.18";
     
   }
 }

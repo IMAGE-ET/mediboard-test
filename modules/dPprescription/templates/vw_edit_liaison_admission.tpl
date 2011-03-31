@@ -11,15 +11,16 @@
 {{if $is_anesth || $is_chir || $is_admin}}
 
 <script type="text/javascript">
-updateToGuid = function(element) {
-  var split = $V(element).split("-");
+fillClass = function(element_id, element_class) {
+  var split = $V(element_id).split("-");
   var classe = split[0] == "prot" ? "CPrescription" : "CPrescriptionProtocolePack";
-  $V(element, classe + "-" + split[1]);
+  $V(element_class, classe);
+  $V(element_id, split[1]);
 }
 
 updateDiv = function(id, type) {
   var oForm = getForm("selProtocole-"+type+"-"+id);
-  var isPack = $V(oForm.elements["protocole_prescription_"+type+"_id"]).match("Pack") != null;
+  var isPack = $V(oForm.elements["protocole_prescription_"+type+"_class"]).match("Pack") != null;
   $("prot_"+type+"_"+id).innerHTML = (isPack ? "Pack: " : "Protocole: ") +$V(oForm.libelle_protocole); 
 }
 
@@ -97,11 +98,12 @@ removeProtocole = function(form, type) {
           <input type="hidden" name="dosql" value="do_protocole_aed" />
           <input type="hidden" name="del" value="0" />
           <input type="hidden" name="protocole_id" value="{{$_protocole->_id}}" />
+          <input type="hidden" name="protocole_prescription_anesth_class" value="{{$_protocole->protocole_prescription_anesth_class}}"/>
           <input type="hidden" name="protocole_prescription_anesth_id" value="{{$_protocole->protocole_prescription_anesth_id}}"/>
           <input type="text" name="libelle_protocole" value="&mdash; Choisir un protocole" class="autocomplete"
             style="font-weight: bold; font-size: 1.3em; width: 200px;"
-            onchange="updateToGuid(this.form.protocole_prescription_anesth_id); updateDiv('{{$_protocole->_id}}', 'anesth');
-            submitFormAjax(this.form, 'systemMsg');" style="max-width: 15em;"/>
+            onchange="fillClass(this.form.protocole_prescription_anesth_id, this.form.protocole_prescription_anesth_class);
+            updateDiv('{{$_protocole->_id}}', 'anesth'); submitFormAjax(this.form, 'systemMsg');" style="max-width: 15em;"/>
         </form>
         <script type="text/javascript">
           var oForm = getForm("selProtocole-anesth-{{$_protocole->_id}}");
@@ -124,9 +126,15 @@ removeProtocole = function(form, type) {
           } );
         </script>
         <br />
-        <div id="prot_anesth_{{$_protocole->_id}}">{{$_protocole->_ref_protocole_prescription_anesth->_view}}</div>
+        <div id="prot_anesth_{{$_protocole->_id}}">
+          {{if $_protocole->_ref_protocole_prescription_anesth->_id}}
+            {{$_protocole->_ref_protocole_prescription_anesth->_view}}
+          {{/if}}
+        </div>
       {{else}}
-        {{$_protocole->_ref_protocole_prescription_anesth->_view}}
+        {{if $_protocole->_ref_protocole_prescription_anesth->_id}}
+          {{$_protocole->_ref_protocole_prescription_anesth->_view}}
+        {{/if}}
       {{/if}}
     </td>*}}
     <td>  
@@ -136,11 +144,12 @@ removeProtocole = function(form, type) {
           <input type="hidden" name="dosql" value="do_protocole_aed" />
           <input type="hidden" name="del" value="0" />
           <input type="hidden" name="protocole_id" value="{{$_protocole->_id}}" />
+          <input type="hidden" name="protocole_prescription_chir_class" value="{{$_protocole->protocole_prescription_chir_class}}"/>
           <input type="hidden" name="protocole_prescription_chir_id" value="{{$_protocole->protocole_prescription_chir_id}}"/>
           <input type="text" name="libelle_protocole" value="&mdash; Choisir un protocole" class="autocomplete"
             style="font-weight: bold; font-size: 1.3em; width: 200px;"
-            onchange="updateToGuid(this.form.protocole_prescription_chir_id); updateDiv('{{$_protocole->_id}}', 'chir');
-            submitFormAjax(this.form, 'systemMsg');" style="max-width: 15em;"/>
+            onchange="fillClass(this.form.protocole_prescription_chir_id, this.form.protocole_prescription_chir_class);
+            updateDiv('{{$_protocole->_id}}', 'chir'); submitFormAjax(this.form, 'systemMsg');" style="max-width: 15em;"/>
           <button type="button" name="delete" class="cancel notext" onclick="removeProtocole(this.form, 'chir')">{{tr}}CPrescription.unlink_protocole{{/tr}}</button>
         </form>
         <script type="text/javascript">
@@ -163,9 +172,15 @@ removeProtocole = function(form, type) {
               }
           } );
         </script>
-        <div id="prot_chir_{{$_protocole->_id}}">{{$_protocole->_ref_protocole_prescription_chir->_view}}</div>
+        <div id="prot_chir_{{$_protocole->_id}}">
+          {{if $_protocole->_ref_protocole_prescription_chir->_id}}
+            {{$_protocole->_ref_protocole_prescription_chir->_view}}
+          {{/if}}
+        </div>
       {{else}}
-        {{$_protocole->_ref_protocole_prescription_chir->_view}}
+        {{if $_protocole->_ref_protocole_prescription_chir->_id}}
+          {{$_protocole->_ref_protocole_prescription_chir->_view}}
+        {{/if}}
       {{/if}}
     </td>
   </tr>

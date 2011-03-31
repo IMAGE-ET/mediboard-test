@@ -22,12 +22,6 @@ function checkHeureSortie(){
   }
 }
 
-updateToGuid = function(element) {
-  var split = $V(element).split("-");
-  var classe = split[0] == "prot" ? "CPrescription" : "CPrescriptionProtocolePack";
-  $V(element, classe + "-" + split[1]);
-}
-
 function loadTransfert(mode_sortie){
   $('listEtabExterne').setVisible(mode_sortie == "transfert");
 }
@@ -765,7 +759,6 @@ Main.add( function(){
           $V(form.libelle_protocole, node.innerHTML.replace("&lt;", "<").replace("&gt;",">"));
           if (autocompleter.options.afterUpdateElement)
             autocompleter.options.afterUpdateElement(autocompleter.element, selectedElement);
-          updateToGuid(form._protocole_prescription_chir_id);
         },
         callback: function(input, queryString){
           return (queryString + "&praticien_id=" + $V(form.praticien_id));

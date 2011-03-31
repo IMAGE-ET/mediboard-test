@@ -40,8 +40,10 @@ class CProtocole extends CMbObject {
   var $libelle_sejour    = null;
 
   // DB fields linked protocols
-  var $protocole_prescription_chir_id   = null;
-  var $protocole_prescription_anesth_id = null;
+  var $protocole_prescription_chir_id      = null;
+  var $protocole_prescription_chir_class   = null;
+  var $protocole_prescription_anesth_id    = null;
+  var $protocole_prescription_anesth_class = null;
 
   // Form fields
   var $_hour_op        = null;
@@ -86,9 +88,11 @@ class CProtocole extends CMbObject {
     $specs["septique"]        = "bool";
     $specs["codes_ccam"]      = "str";
     $specs["temp_operation"]  = "time";
-    $specs["protocole_prescription_chir_id"]   = "str";
-    $specs["protocole_prescription_anesth_id"] = "str";
-
+    $specs["protocole_prescription_chir_id"]      = "ref class|CMbObject meta|protocole_prescription_chir_class";
+    $specs["protocole_prescription_chir_class"]   = "enum list|CPrescription|CPrescriptionProtocolePack";
+    $specs["protocole_prescription_anesth_id"]    = "ref class|CMbObject meta|protocole_prescription_anesth_class";
+    $specs["protocole_prescription_anesth_class"] = "enum list|CPrescription|CPrescriptionProtocolePack";
+    
     $specs["_hour_op"]        = "";
     $specs["_min_op"]         = "";
     return $specs;
@@ -131,15 +135,19 @@ class CProtocole extends CMbObject {
   }
 
   function loadRefPrescriptionChir() {
-    return $this->_ref_protocole_prescription_chir = $this->protocole_prescription_chir_id ?
-      CMbObject::loadFromGuid($this->protocole_prescription_chir_id) :
-      new CPrescription();
+    if (!$this->protocole_prescription_chir_class && !$this->protocole_prescription_chir_id) {
+      return $this->_ref_protocole_prescription_chir = new CPrescription;
+    }
+    $this->_ref_protocole_prescription_chir = new $this->protocole_prescription_chir_class;
+    return $this->_ref_protocole_prescription_chir->load($this->protocole_prescription_chir_id);
   }
 
   function loadRefPrescriptionAnesth() {
-    return $this->_ref_protocole_prescription_anesth = $this->protocole_prescription_anesth_id ?
-      CMbObject::loadFromGuid($this->protocole_prescription_anesth_id) :
-      new CPrescription();
+    if (!$this->protocole_prescription_anesth_class && !$this->protocole_prescription_anesth_id) {
+      return $this->_ref_protocole_prescription_anesth = new CPrescription;
+    }
+    $this->_ref_protocole_prescription_anesth = new $this->protocole_prescription_anesth_class;
+    return $this->_ref_protocole_prescription_anesth->load($this->protocole_prescription_anesth_id);
   }
 
   function loadExtCodesCCAM() {
