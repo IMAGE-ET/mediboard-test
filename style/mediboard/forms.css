@@ -85,6 +85,7 @@ textarea {
 
 select {
   padding: 0;
+  white-space: nowrap;
 }
 
 optgroup, option {
@@ -617,7 +618,7 @@ div.autocomplete {
   margin-bottom: 18px;
   padding:0px;
   z-index: 400;
-  white-space: normal
+  white-space: normal;
 }
 
 div.autocomplete ul {

@@ -69,7 +69,7 @@ Main.add(function(){
 	<span id="view_quantity_{{$line->_id}}">
   {{mb_field object=$prise_posologie field=quantite size=3 increment=1 min=1 form=addPrise$type$line_id}}
   {{if $line->_class_name == "CPrescriptionLineMedicament" && $type != "mode_grille"}}
-  <select name="unite_prise" style="width: 75px;">
+  <select name="unite_prise" style="width: 80px;">
     {{foreach from=$line->_unites_prise item=_unite}}
       <option value="{{$_unite}}">{{$_unite}}</option>
     {{/foreach}}
@@ -99,7 +99,7 @@ Main.add(function(){
 	  {{/if}}
   </span>
 
-	<select name="moment_unitaire_id" style="width: 75px;" onmousedown="completeSelect(this,'{{$line->_id}}','{{$type}}');">
+	<select name="moment_unitaire_id" style="width: 80px;" onmousedown="completeSelect(this,'{{$line->_id}}','{{$type}}');">
 	  <!-- Laisser ces &nbsp; a cause de IE qui va elargir la liste quand on clique dessus et elle va passer a la ligne (desolé!) -->
     <option value="">&mdash; Moment &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; </option>
 	</select>
