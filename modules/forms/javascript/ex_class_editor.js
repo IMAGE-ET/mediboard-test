@@ -2,6 +2,7 @@ exClassTabs = null;
 
 ExClass = {
   id: null,
+  layourEditorReady: false,
   edit: function(id) {
     this.id = id || this.id;
     var url = new Url("forms", "ajax_edit_ex_class");
@@ -58,13 +59,13 @@ ExClass = {
     
     $V(form.elements.callback, "");
     $V(form.del, 0);
-			
+      
     // dest = LIST
     if (drop.hasClassName("out-of-grid")) {
       var del = drag.get("field_id");
-			
+      
       $V(form.elements.callback, "");
-			
+      
       if (del) {
         drag.remove();
         $V(form.del, 1);
@@ -85,19 +86,19 @@ ExClass = {
         });
       }
       drop.update(drag);
-			
-			var id = drag.identify();
-			$V(form.elements.callback, "ExClass.setHostFieldId.curry("+id+")");
+      
+      var id = drag.identify();
+      $V(form.elements.callback, "ExClass.setHostFieldId.curry("+id+")");
     }
     
     onSubmitFormAjax(form);
   },
-	setHostFieldId: function(element_id, object_id, obj) {
-		var drag = $(element_id);
-		if (drag) {
-			drag.setAttribute("data-field_id", object_id);
-		}
-	},
+  setHostFieldId: function(element_id, object_id, obj) {
+    var drag = $(element_id);
+    if (drag) {
+      drag.setAttribute("data-field_id", object_id);
+    }
+  },
   initDraggableHostField: function(d){
     new Draggable(d, {
       revert: 'failure', 
@@ -170,6 +171,8 @@ ExClass = {
         getForm("form-grid-layout").select("input, select").invoke("disable");
       }).defer();
     }
+    
+    ExClass.layourEditorReady = true;
   }
 };
 
@@ -348,7 +351,7 @@ ExFormula = {
         if (text[i] == '[') return;
       }
       
-			if (newC.start !== null && newC.end !== null)
+      if (newC.start !== null && newC.end !== null)
         field.setInputSelection(newC.start, newC.end);
     });
   }

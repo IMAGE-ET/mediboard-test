@@ -1,10 +1,8 @@
 
 <script type="text/javascript">
-  Main.add(function(){
-	  ExClass.initLayoutEditor();
-		Control.Tabs.create("field_groups_layout");
-	});
-
+Main.add(function(){
+  Control.Tabs.create("field_groups_layout");
+});
 </script>
 
 <div class="small-info">Glissez-déposez les champs et leur libellé dans la grille "Disposition"</div>
@@ -80,11 +78,11 @@
   .field-list .field {
     margin-top: 1.2em;
   }
-	
-	.field-list .field .field-content {
+  
+  .field-list .field .field-content {
     max-height: 2.5em;
     overflow-y: hidden;
-	}
+  }
   
   .draggable .overlay {
     position:absolute;
@@ -111,21 +109,21 @@
 
 <ul class="control_tabs" id="field_groups_layout" style="font-size: 0.9em;">
   {{foreach from=$ex_class->_ref_groups item=_group}}
-	{{if $_group->_ref_fields|@count > 0}}
+  {{if $_group->_ref_fields|@count > 0}}
     <li>
       <a href="#group-layout-{{$_group->_guid}}" style="padding: 2px 4px;">
         {{$_group->name}} <small>({{$_group->_ref_fields|@count}})</small>
       </a>
     </li>
-	{{/if}}
+  {{/if}}
   {{/foreach}}
 </ul>
 <hr class="control_tabs" />
 
 {{assign var=groups value=$ex_class->_ref_groups}}
 
-<form name="form-grid-layout" method="post" onsubmit="return false">
-	
+<form name="form-grid-layout" method="post" onsubmit="return false" class="prepared">
+  
 {{foreach from=$grid key=_group_id item=_grid}}
 
 {{if $groups.$_group_id->_ref_fields|@count > 0}}
@@ -138,31 +136,31 @@
     </tr>
     <tr>
       <th>
-      	{{if $ex_class->host_class != "CMbObject"}}
-				  Champs de <strong>{{tr}}{{$ex_class->host_class}}{{/tr}}</strong>
-				{{/if}}
-			</th>
+        {{if $ex_class->host_class != "CMbObject"}}
+          Champs de <strong>{{tr}}{{$ex_class->host_class}}{{/tr}}</strong>
+        {{/if}}
+      </th>
       <th>Libellés</th>
       <th>Champs</th>
       <!--<th>Divers</th>-->
     </tr>
     <tr>
       <td class="hostfield-list" data-x="" data-y="" style="padding: 4px; height: 2em; vertical-align: top;">
-			  {{if $ex_class->host_class != "CMbObject"}}
-	        <div style="height: 100%; overflow-y: scroll; min-height: 100px;">
-	          <ul>
-	          {{foreach from=$host_object->_specs item=_spec key=_field}}
-	            {{if $_spec->show == 1 || $_field == "_view" || ($_spec->show == "" && $_field.0 !== "_")}}
-	              <li>
-	                {{mb_include module=forms template=inc_ex_host_field_draggable}}
-	              </li>
-	            {{/if}}
-	          {{/foreach}}
-	          </ul>
-	        </div>
-				{{else}}
-				  <em>Veuillez lier le formulaire à un événement</em>
-				{{/if}}
+        {{if $ex_class->host_class != "CMbObject"}}
+          <div style="height: 100%; overflow-y: scroll; min-height: 100px;">
+            <ul>
+            {{foreach from=$host_object->_specs item=_spec key=_field}}
+              {{if $_spec->show == 1 || $_field == "_view" || ($_spec->show == "" && $_field.0 !== "_")}}
+                <li>
+                  {{mb_include module=forms template=inc_ex_host_field_draggable}}
+                </li>
+              {{/if}}
+            {{/foreach}}
+            </ul>
+          </div>
+        {{else}}
+          <em>Veuillez lier le formulaire à un événement</em>
+        {{/if}}
       </td>
       
       <td class="label-list" data-x="" data-y="" style="padding: 4px; height: 2em; vertical-align: top;">

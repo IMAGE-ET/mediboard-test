@@ -13,9 +13,9 @@ toggleListCustom = function(radio) {
   var select = form._spec_type;
   
   if (input) {
-	  input.up(".dropdown").down(".dropdown-trigger").setVisibility(enableList);
-		input.disabled = input.readOnly = !enableList;
-	}
+    input.up(".dropdown").down(".dropdown-trigger").setVisibility(enableList);
+    input.disabled = input.readOnly = !enableList;
+  }
   
   if (enableList) {
     //$V(select, "none");
@@ -33,8 +33,8 @@ toggleListCustom = function(radio) {
 Main.add(function(){
   var radio = getForm("edit-{{$object->_guid}}")._concept_type[0];
   toggleListCustom.defer(radio);
-	
-	Control.Tabs.create("ex-concept-tabs", true);
+  
+  Control.Tabs.create("ex-concept-tabs", true);
 });
 </script>
 
@@ -61,16 +61,16 @@ Main.add(function(){
         <label>
           {{if !$object->_id || $object->ex_list_id}}{{tr}}CExConcept-ex_list_id{{/tr}}{{/if}}
           <input type="radio" name="_concept_type" value="list" {{if $object->_id}}style="display: none;"{{/if}}
-					       {{if $object->ex_list_id}}checked="checked"{{/if}} onclick="toggleListCustom(this)" />
+                 {{if $object->ex_list_id}}checked="checked"{{/if}} onclick="toggleListCustom(this)" />
         </label>
       </th>
       <td>
         {{if !$object->_id}}
           {{mb_field object=$object field=ex_list_id form="edit-`$object->_guid`" autocomplete="true,1,50,false,true" onchange="ExConceptSpec.edit(this.form)"}}
-				{{else}}
+        {{else}}
           {{mb_value object=$object field=ex_list_id}}
           {{mb_field object=$object field=ex_list_id hidden=true}}
-				{{/if}}
+        {{/if}}
       </td>
     </tr>
     <tr>
@@ -90,27 +90,27 @@ Main.add(function(){
         <label>
           {{if !$object->ex_list_id}}Type {{/if}}
           <input type="radio" name="_concept_type" value="custom" {{if $object->_id}}style="display: none;"{{/if}}
-					       {{if !$object->ex_list_id}}checked="checked"{{/if}} onclick="toggleListCustom(this)" />
+                 {{if !$object->ex_list_id}}checked="checked"{{/if}} onclick="toggleListCustom(this)" />
         </label>
       </th>
       <td>
         {{assign var=spec_type value=$object->_concept_spec->getSpecType()}}
-				
-      	{{if !$object->_id}}
-	        <select name="_spec_type" onchange="ExConceptSpec.edit(this.form)">
-	          {{foreach from="CMbFieldSpecFact"|static:classes item=_class key=_key}}
-	            <option value="{{$_key}}" {{if $_key == $spec_type && !$object->ex_list_id}}selected="selected"{{/if}}>
-	              {{tr}}CMbFieldSpec.type.{{$_key}}{{/tr}}
-	            </option>
-	          {{/foreach}}
-	        </select>
-				{{else}}
-				  <input type="hidden" name="_spec_type" value="{{$spec_type}}" />
-					
-				  {{if !$object->ex_list_id}}
-					  {{tr}}CMbFieldSpec.type.{{$spec_type}}{{/tr}}
-					{{/if}}
-				{{/if}}
+        
+        {{if !$object->_id}}
+          <select name="_spec_type" onchange="ExConceptSpec.edit(this.form)">
+            {{foreach from="CMbFieldSpecFact"|static:classes item=_class key=_key}}
+              <option value="{{$_key}}" {{if $_key == $spec_type && !$object->ex_list_id}}selected="selected"{{/if}}>
+                {{tr}}CMbFieldSpec.type.{{$_key}}{{/tr}}
+              </option>
+            {{/foreach}}
+          </select>
+        {{else}}
+          <input type="hidden" name="_spec_type" value="{{$spec_type}}" />
+          
+          {{if !$object->ex_list_id}}
+            {{tr}}CMbFieldSpec.type.{{$spec_type}}{{/tr}}
+          {{/if}}
+        {{/if}}
       </td>
     </tr>
     <tr {{if $app->user_prefs.INFOSYSTEM == 0}}style="display: none;"{{/if}}>
@@ -128,8 +128,8 @@ Main.add(function(){
   </li>
   <li>
     <a href="#ex-back-class_fields" {{if $object->_back.class_fields|@count == 0}} class="empty" {{/if}}>
-    	{{tr}}CExConcept-back-class_fields{{/tr}} <small>({{$object->_back.class_fields|@count}})</small>
-		</a>
+      {{tr}}CExConcept-back-class_fields{{/tr}} <small>({{$object->_back.class_fields|@count}})</small>
+    </a>
   </li>
 </ul>
 <hr class="control_tabs" />
@@ -139,27 +139,27 @@ Main.add(function(){
 <div id="ex-back-class_fields" style="display: none;">
   <table class="main tbl">
     <tr>
-      <th>
-        {{mb_title class=CExClassField field=name}}
-      </th>
-      <th>
-        {{mb_title class=CExClassField field=prop}}
-      </th>
+      <th>{{tr}}CExClass{{/tr}}</th>
+      <th>{{tr}}CExClassFieldGroup{{/tr}}</th>
+      <th>{{tr}}CExClassField{{/tr}}</th>
     </tr>
     
     {{foreach from=$object->_back.class_fields item=_field}}
       <tr>
         <td>
-          {{mb_value object=$_field field=_locale}}
+          {{mb_value object=$_field->_ref_ex_group->_ref_ex_class field=name}}
         </td>
         <td>
-          {{mb_value object=$_field field=prop}}
+          {{mb_value object=$_field->_ref_ex_group field=name}}
+        </td>
+        <td>
+          {{mb_value object=$_field field=_locale}}
         </td>
       </tr>
-		{{foreachelse}}
-		  <tr>
-		  	<td class="empty" colspan="2">{{tr}}CExClassField.none{{/tr}}</td>
-		  </tr>
+    {{foreachelse}}
+      <tr>
+        <td class="empty" colspan="2">{{tr}}CExClassField.none{{/tr}}</td>
+      </tr>
     {{/foreach}}
   </table>
 </div>
