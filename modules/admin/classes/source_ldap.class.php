@@ -60,6 +60,15 @@ class CSourceLDAP extends CMbObject{
   }
   
   function ldap_connect() {
+    if (!function_exists("ldap_connect")){
+      throw new CMbException("CSourceLDAP_ldap-functions-not-available");
+    }
+    
+    if (!$fp = fsockopen($this->host, $this->port, $errno, $errstr, 2)){
+      throw new CMbException("CSourceLDAP_unreachable", $this->host);
+    }
+    fclose($fp);
+    
     $ldapconn = ldap_connect($this->host, $this->port);
     if (!$ldapconn) {
       throw new CMbException("CSourceLDAP_no-connexion", $this->host);
@@ -78,21 +87,21 @@ class CSourceLDAP extends CMbObject{
     }
       
     $ldapbind = ldap_bind($ldapconn, $ldaprdn, $ldappass);
-    if (!$ldapbind) {     
-      throw new CMbException("CSourceLDAP_no-authenticate", $ldaprdn);
+    if ($error = (ldap_errno($ldapconn) == 0x31)) {
+      return false;     
+    }
+    if (!$ldapbind) {
+      throw new CMbException("CSourceLDAP_no-authenticate", $this->host, $ldaprdn, ldap_err2str($error));
     }
     
-    return $ldapbind;
+    return true;
   }
   
   function ldap_search($ldapconn, $filter, $attributes = array()) {
-    if (!$ldapconn) {
-      $ldapconn = $this->ldap_bind();
-    }
-    
     $ldapsearch = ldap_search($ldapconn, $this->rootdn, $filter, $attributes);
 
     return ldap_get_entries($ldapconn, $ldapsearch);
   }
+
 }
 ?>

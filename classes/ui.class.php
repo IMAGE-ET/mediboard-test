@@ -472,10 +472,24 @@ class CAppUI {
     // See CUser::updateDBFields
     $user->loadMatchingObject();
     
-    if ($user->template || !self::checkPasswordAttempt($user)) {
+    if ($user->template) {
       return false;
     }
-        
+    
+    $ldap_connection = CAppUI::conf("admin ldap_connection");
+    $bound = false;
+    if ($ldap_connection) {
+      try {
+        $bound = CLDAP::login($user);
+      } catch (Exception $e) {
+        self::setMsg($e->getMessage(), UI_MSG_ERROR);
+      }
+    }
+    
+    if (!$bound && !self::checkPasswordAttempt($user)) {
+      return false;
+    }
+
     // Put user_group in AppUI
     self::$instance->user_remote = 1;
     

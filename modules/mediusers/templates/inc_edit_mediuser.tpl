@@ -49,7 +49,7 @@ Main.add(function () {
     <tr>
       <th>{{mb_label object=$object field="_user_password"}}</th>
       <td>
-        <input type="password" name="_user_password" class="{{$object->_props._user_password}}{{if !$object->user_id}} notNull{{/if}}" onkeyup="checkFormElement(this);" value="" />
+        <input type="password" name="_user_password" class="{{$object->_props._user_password}}{{if !$conf.admin.ldap_connection && !$object->user_id}} notNull{{/if}}" onkeyup="checkFormElement(this);" value="" />
         <span id="mediuser__user_password_message"></span>
       </td>
     </tr>
