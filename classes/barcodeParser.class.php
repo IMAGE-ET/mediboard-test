@@ -408,6 +408,14 @@ class CBarcodeParser {
         $comp["lot"] = $parts[1];
       }
     }
+      
+    //  __REF______ __LOT___
+    // EC1YHPAL20011964210120813E
+    if (empty($comp) && preg_match('/^[A-Z](C1YHPAL\d{4})(\d{9})(\d{4})[A-Z]$/ms', $barcode, $parts)) {
+      $comp["ref"] = $parts[1];
+      $comp["lot"] = $parts[2];
+      $comp["per"] = $parts[3];
+    }
     
     // __LOT___ _SN__
     // 09091602/00736
