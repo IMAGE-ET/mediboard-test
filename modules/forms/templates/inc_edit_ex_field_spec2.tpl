@@ -220,9 +220,9 @@ Main.add(function(){
 {{if $spec instanceof CEnumSpec && $context && $context->_id}}
   {{if $context == $list_owner}}
 	  </form>
-    {{mb_include module=system template=inc_ex_list_item_edit}}
+    {{mb_include module=forms template=inc_ex_list_item_edit}}
   {{else}}
-    {{mb_include module=system template=inc_ex_list_item_subset}}
+    {{mb_include module=forms template=inc_ex_list_item_subset}}
 		</form>
   {{/if}}
 {{else}}

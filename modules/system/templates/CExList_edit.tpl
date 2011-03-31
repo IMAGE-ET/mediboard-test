@@ -18,7 +18,7 @@
 <hr class="control_tabs" />
 
 <div id="ex-back-list_items" style="display: none;">
-  {{mb_include module=system template=inc_ex_list_item_edit context=$object}}
+  {{mb_include module=forms template=inc_ex_list_item_edit context=$object}}
 </div>
 
 <div id="ex-back-concepts" style="display: none;">
