@@ -344,7 +344,7 @@ class CMbObject {
     
     return $this->_nb_files + $this->_nb_docs;
   }
-  	
+    
   /**
    * Load the object database version
    */
@@ -1468,7 +1468,7 @@ class CMbObject {
     return $this->_back[$backName] = $backObject->loadMatchingList($order, $limit, $group, $ljoin);
   }
   
-	
+  
   function loadBackIds($backName, $order = null, $limit = null, $group = null, $ljoin = null) {
     if (!$backSpec = $this->makeBackSpec($backName)) {
       return null;
@@ -1484,7 +1484,7 @@ class CMbObject {
     $fwdSpec =& $backObject->_specs[$backField];
     $backMeta = $fwdSpec->meta;
     
-		// Cas des meta objects
+    // Cas des meta objects
     if ($backMeta) {
       trigger_error("meta case anavailable", E_USER_ERROR);
     }
@@ -1496,10 +1496,10 @@ class CMbObject {
 
     // Vérification de la possibilité de supprimer chaque backref
     $where[$backField] = " = '$this->_id'";
-		
+    
     return $backObject->loadIds($where, $order, $limit, $group, $ljoin);
   }
-	
+  
   /**
    * Load the unique back reference for given collection name
    * Will check for uniqueness
@@ -2345,12 +2345,22 @@ class CMbObject {
     $this->_ref_last_log  = reset($this->_ref_logs);
   }
   
-  function loadLastLogForField($fieldName = null){  
-    $where["object_id"   ] = " = '$this->_id'";
+  function loadLastLogForField($fieldName = null, $strict = false){ 
+    $where = array(); 
+    $where["object_id"]    = " = '$this->_id'";
     $where["object_class"] = " = '$this->_class_name'";
     
-    if ($fieldName){
-      $where["fields"] = " LIKE '%$fieldName%'";
+    if ($fieldName) {
+      if ($strict) {
+        $where[] = "
+          `fields` = '$fieldName' OR 
+          `fields` LIKE '$fieldName %' OR 
+          `fields` LIKE '% $fieldName %' OR 
+          `fields` LIKE '% $fieldName'";
+      }
+      else {
+        $where["fields"] = " LIKE '%$fieldName%'";
+      }
     }
     
     $log = new CUserLog();
@@ -2359,6 +2369,20 @@ class CMbObject {
     if ($log->_id){
       $log->loadRefsFwd();
     }
+    elseif($strict) {
+      $this->completeField($fieldName);
+      if ($this->$fieldName == null) {
+        return $log;
+      }
+      
+      $where = array();
+      $where["object_id"]    = " = '$this->_id'";
+      $where["object_class"] = " = '$this->_class_name'";
+      $where["type"]         = " = 'create'";
+      
+      $log->loadObject($where);
+    }
+    
     return $log;
   }
   
