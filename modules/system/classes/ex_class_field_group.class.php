@@ -16,6 +16,7 @@ class CExClassFieldGroup extends CMbObject {
   
   var $_ref_ex_class = null;
   var $_ref_ex_fields = null;
+  var $_ref_host_fields = null;
 
   function getSpec() {
     $spec = parent::getSpec();
@@ -50,5 +51,9 @@ class CExClassFieldGroup extends CMbObject {
 	
   function loadRefsFields(){
     return $this->_ref_fields = $this->loadBackRefs("class_fields");
+  }
+	
+  function loadRefsHostFields(){
+    return $this->_ref_host_fields = $this->loadBackRefs("host_fields");
   }
 }

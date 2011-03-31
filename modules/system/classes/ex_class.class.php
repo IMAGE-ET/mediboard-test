@@ -18,7 +18,6 @@ class CExClass extends CMbObject {
   var $conditional= null;
   
   var $_ref_fields = null;
-  var $_ref_host_fields = null;
   var $_ref_constraints = null;
 	var $_ref_groups = null;
   
@@ -114,11 +113,6 @@ class CExClass extends CMbObject {
       $fields = array_merge($_group->loadRefsFields(), $fields);
     }
     return $fields;
-  }
-  
-  function loadRefsHostFields(){
-    if (!empty($this->_ref_host_fields)) return $this->_ref_host_fields;
-    return $this->_ref_host_fields = $this->loadBackRefs("host_fields");
   }
   
   function loadRefsConstraints(){
@@ -237,7 +231,7 @@ class CExClass extends CMbObject {
         }
       }
     
-     /* $_ex_group->loadRefsHostFields();
+      $_ex_group->loadRefsHostFields();
       foreach($_ex_group->_ref_host_fields as $_host_field) {
         $label_x = $_host_field->coord_label_x;
         $label_y = $_host_field->coord_label_y;
@@ -254,7 +248,7 @@ class CExClass extends CMbObject {
         if ($value_x !== null && $value_y !== null) {
           $grid[$value_y][$value_x] = array("type" => "value", "object" => $_host_field);
         }
-      }*/
+      }
       
       if ($reduce) {
         $max_filled = 0;

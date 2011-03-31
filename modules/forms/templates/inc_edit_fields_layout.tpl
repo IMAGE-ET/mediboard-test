@@ -24,6 +24,7 @@ Main.add(function(){
   <input type="hidden" name="del" value="0" />
   <input type="hidden" name="ex_class_host_field_id" value="" />
   <input type="hidden" name="ex_class_id" value="{{$ex_class->_id}}" />
+  <input type="hidden" name="ex_group_id" value="" />
   <input type="hidden" name="field" value="" />
   <input type="hidden" name="callback" value="" />
   
@@ -152,7 +153,7 @@ Main.add(function(){
             {{foreach from=$host_object->_specs item=_spec key=_field}}
               {{if $_spec->show == 1 || $_field == "_view" || ($_spec->show == "" && $_field.0 !== "_")}}
                 <li>
-                  {{mb_include module=forms template=inc_ex_host_field_draggable}}
+                  {{mb_include module=forms template=inc_ex_host_field_draggable ex_group_id=$_group_id}}
                 </li>
               {{/if}}
             {{/foreach}}
@@ -165,7 +166,7 @@ Main.add(function(){
       
       <td class="label-list" data-x="" data-y="" style="padding: 4px; height: 2em; vertical-align: top;">
         {{foreach from=$out_of_grid.$_group_id.label item=_field}}
-          {{mb_include module=forms template=inc_ex_field_draggable _type="label"}}
+          {{mb_include module=forms template=inc_ex_field_draggable _type="label" }}
         {{/foreach}}
       </td>
   
@@ -207,7 +208,7 @@ Main.add(function(){
           {{if $_group.object instanceof CExClassField}}
             {{mb_include module=forms template=inc_ex_field_draggable _field=$_group.object _type=$_group.type}}
           {{else}}
-            {{mb_include module=forms template=inc_ex_host_field_draggable _host_field=$_group.object _field=$_group.object->field _type=$_group.type}}
+            {{mb_include module=forms template=inc_ex_host_field_draggable _host_field=$_group.object ex_group_id=$_group_id _field=$_group.object->field _type=$_group.type}}
           {{/if}}
         {{/if}}
       </td>
