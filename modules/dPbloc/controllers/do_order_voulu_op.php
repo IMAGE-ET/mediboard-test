@@ -36,7 +36,8 @@ $order = "horaire_voulu";
 $listOp = $operation->loadList($where, $order);
 
 if(!count($listOp)) {
-  CAppUI::redirect("m=$m");
+  CAppUI::stepAjax("Aucune intervention", UI_MSG_WARNING);
+  CApp::rip();
 }
 
 // Modification de la plage pour la première intervention
@@ -69,5 +70,7 @@ $plageop->updateFormFields();
 $plageop->store();
 $plageop->reorderOp();
 
-CAppUI::redirect("m=$m");
+CAppUI::stepAjax("Placement effectué");
+CApp::rip();
+
 ?>

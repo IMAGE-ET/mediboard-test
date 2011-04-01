@@ -29,7 +29,7 @@
         <input type="hidden" name="dosql" value="do_order_voulu_op" />
         <input type="hidden" name="plageop_id" value="{{$plage->_id}}" />
         <input type="hidden" name="del" value="0" />
-        <button type="button" class="tick" style="float: right;">
+        <button type="button" class="tick oneclick" style="float: right;" onclick="submitOrder(this.form);">
           Utiliser les horaires souhaités
         </button>
       </form>
