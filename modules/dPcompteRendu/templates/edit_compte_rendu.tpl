@@ -6,6 +6,35 @@
 window.same_print = {{$conf.dPcompteRendu.CCompteRendu.same_print}};
 window.pdf_thumbnails = {{$pdf_thumbnails|@json}} == 1;
 window.nb_printers = {{$nb_printers|@json}};
+window.modal_mode_play = null;
+
+function playField(element, class_name, editor_element, name) {
+  var modal = $("play_modal");
+  var field_area = modal.select("td.field_aera")[0];
+  field_area.update();
+  
+  if (class_name == "name") {
+    field_area.insert(new DOM.p({}, name));
+  }
+
+  field_area.insert(element);
+  modal.select(".tick")[0].onclick = function() { replaceField(element, class_name); };
+
+  // Ajout du double clic sur les options
+  if (class_name == "name") {
+    element.ondblclick = function() { replaceField(element, class_name); };
+  }
+  modal.select(".trash")[0].onclick = function() { replaceField(element, class_name, 1); };
+  modal.select(".cancel")[0].onclick = function() {
+    Control.Modal.close();
+    Element.setStyle(editor_element, {backgroundColor: ""});
+  }
+  
+  // Réouverture si la modale est fermée 
+  if (!window.modal_mode_play || !window.modal_mode_play.isOpen) {
+    window.modal_mode_play = Modal.open(modal, {draggable: modal.select(".title")[0], overlayOpacity: 0.3});
+  }
+}
 
 function submitCompteRendu(callback){
   CKEDITOR.instances.htmlarea.document.getBody().setStyle("background", "#ddd");
@@ -150,46 +179,68 @@ function openModalPrinters() {
   }
 {{/if}}
 
-  Main.add(function(){
-    window.onbeforeunload = function() {
-      if (Thumb.contentChanged == false) return;
+Main.add(function(){
+  window.onbeforeunload = function() {
+    if (Thumb.contentChanged == false) return;
 
-      if (window.pdf_thumbnails && window.Preferences.pdf_and_thumbs == 1) {
-        emptyPDF();
-      }
-      
-      return '';
-    };
-    
     if (window.pdf_thumbnails && window.Preferences.pdf_and_thumbs == 1) {
-      PageFormat.init(getForm("editFrm"));
-      Thumb.compte_rendu_id = '{{$compte_rendu->_id}}';
-      Thumb.modele_id = '{{$modele_id}}';
-      Thumb.user_id = '{{$user_id}}';
-      Thumb.mode = "doc";
-      Thumb.object_class = '{{$compte_rendu->object_class}}';
-      Thumb.object_id = '{{$compte_rendu->object_id}}';
+      emptyPDF();
     }
     
-    {{if !$compte_rendu->_id && $switch_mode == 1}}
-      if (window.opener.saveFields) {
-        from = window.opener.saveFields;
-        var to = getForm("editFrm");
-        if (from[0].any(function(elt){ return elt.size > 1; })) {
-          toggleOptions();
-        }
-        from.each(function(elt) {
-          elt.each(function(select) {
-            if (select) {
-              $V(to[select.name], $V(select));
-            }
-          })
-        });
+    return '';
+  };
+  
+  if (window.pdf_thumbnails && window.Preferences.pdf_and_thumbs == 1) {
+    PageFormat.init(getForm("editFrm"));
+    Thumb.compte_rendu_id = '{{$compte_rendu->_id}}';
+    Thumb.modele_id = '{{$modele_id}}';
+    Thumb.user_id = '{{$user_id}}';
+    Thumb.mode = "doc";
+    Thumb.object_class = '{{$compte_rendu->object_class}}';
+    Thumb.object_id = '{{$compte_rendu->object_id}}';
+  }
+  
+  {{if !$compte_rendu->_id && $switch_mode == 1}}
+    if (window.opener.saveFields) {
+      from = window.opener.saveFields;
+      var to = getForm("editFrm");
+      if (from[0].any(function(elt){ return elt.size > 1; })) {
+        toggleOptions();
       }
-    {{/if}}
-  });
+      from.each(function(elt) {
+        elt.each(function(select) {
+          if (select) {
+            $V(to[select.name], $V(select));
+          }
+        })
+      });
+    }
+  {{/if}}
+});
 
 </script>
+
+<!-- Modale pour le mode play -->
+<div style="display: none; width: 260px; height: 130px;" id="play_modal">
+  <table class="form">
+  <tr>
+    <th class="title">
+      {{tr}}CCompteRendu-mode_play{{/tr}}
+    </th>
+  </tr>
+    <tr>
+      <td class="field_aera" style="padding-top: 10px;">
+      </td>
+    </tr>
+    <tr>
+      <td style="text-align: center;">
+        <button class="tick">{{tr}}CCompteRendu-apply_field{{/tr}}</button>
+        <button class="trash">{{tr}}CCompteRendu-empty_field{{/tr}}</button>
+        <button class="cancel">{{tr}}CCompteRendu-close{{/tr}}</button>
+      </td>
+    </tr>
+  </table>
+</div>
 
 <!-- Formulaire pour l'impression server side -->
 <form name="print-server" method="post" action="?m=dPcompteRendu&amp;ajax_print_server">

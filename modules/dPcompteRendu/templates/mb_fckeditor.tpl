@@ -1,4 +1,5 @@
 {{assign var=pdf_thumbnails value=$conf.dPcompteRendu.CCompteRendu.pdf_thumbnails}}
+{{assign var=mode_play value=$app->user_prefs.mode_play}}
 
 // Preloading extra plugins
 CKEDITOR.plugins.addExternal("mbheader"   , "../../modules/dPcompteRendu/fcke_plugins/mbheader/plugin.js");
@@ -7,7 +8,9 @@ CKEDITOR.plugins.addExternal("mbfields"   , "../../modules/dPcompteRendu/fcke_pl
 CKEDITOR.plugins.addExternal("mbfreetext" , "../../modules/dPcompteRendu/fcke_plugins/mbfreetext/plugin.js");
 CKEDITOR.plugins.addExternal("mbhelpers"  , "../../modules/dPcompteRendu/fcke_plugins/mbhelpers/plugin.js");
 CKEDITOR.plugins.addExternal("mblists"    , "../../modules/dPcompteRendu/fcke_plugins/mblists/plugin.js");
-/*CKEDITOR.plugins.addExternal("mbplay"     , "../../modules/dPcompteRendu/fcke_plugins/mbplay/plugin.js");*/
+{{if $mode_play && !$templateManager->isModele}}
+  CKEDITOR.plugins.addExternal("mbplay"     , "../../modules/dPcompteRendu/fcke_plugins/mbplay/plugin.js");
+{{/if}}
 CKEDITOR.plugins.addExternal("mbprint"    , "../../modules/dPcompteRendu/fcke_plugins/mbprint/plugin.js");
 CKEDITOR.plugins.addExternal("mbprinting" , "../../modules/dPcompteRendu/fcke_plugins/mbprinting/plugin.js");
 CKEDITOR.plugins.addExternal("mbprintPDF" , "../../modules/dPcompteRendu/fcke_plugins/mbprintPDF/plugin.js");
@@ -56,7 +59,8 @@ CKEDITOR.editorConfig = function(config) {
       var textForPrint = 'Print';
     {{/if}}
     
-    config.extraPlugins = 'mbfields,mbfreetext,mbhelpers,mblists,mbprint,mbprintPDF,mbheader,mbfooter,mbpagebreak,mblineheight{{if "printing"|module_active && !$templateManager->isModele}},mbprinting{{/if}}';
+    config.extraPlugins =  'mbfields,mbfreetext,mbhelpers,mblists,{{if $mode_play && !$templateManager->isModele}}mbplay,{{/if}},mbprint,mbprintPDF,';
+    config.extraPlugins += 'mbheader,mbfooter,mbpagebreak,mblineheight{{if "printing"|module_active && !$templateManager->isModele}},mbprinting{{/if}}';
     config.toolbar_Full = [
       ['Save','Preview'], [{{if $pdf_thumbnails && $app->user_prefs.pdf_and_thumbs}}'mbprintPDF',{{/if}} textForPrint, 'mbprinting', 'SelectAll', 'Cut', 'Copy', 'PasteText', 'PasteFromWord', 'Undo','Redo', 'Find'],
       [{{if !$templateManager->isModele}}'mbheader', 'mbfooter',{{/if}} 'mbpagebreak'],
@@ -66,7 +70,7 @@ CKEDITOR.editorConfig = function(config) {
       ['RemoveFormat', 'Bold', 'Italic', 'Underline', 'Strike'],
       ['Subscript', 'Superscript', 'JustifyLeft', 'JustifyCenter', 'JustifyRight', 'JustifyBlock', 'NumberedList', 'BulletedList'],
       ['Outdent', 'Indent', 'mblineheight', 'TextColor', 'BGColor'],'/',
-      ['mbfields', {{if $templateManager->isModele}}'mblists', 'mbfreetext', {{/if}}'mbhelpers']];
+      [{{if !$templateManager->isModele && $mode_play}}'mbplay', {{/if}} 'mbfields', {{if $templateManager->isModele}}'mblists', 'mbfreetext', {{/if}}'mbhelpers']];
 
     window.parent.fields = [];
     window.parent.listeChoix = [];

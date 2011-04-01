@@ -531,8 +531,11 @@ class CSetupdPcompteRendu extends CSetup {
     $this->addPrefQuery("aideAutoComplete", "1");
     $this->addPrefQuery("aideShowOver"    , "1");
     
-    $this->mod_version = "0.62";
-
+    $this->makeRevision("0.62");
+    $this->addPrefQuery("mode_play", "0");
+    
+    $this->mod_version = "0.63";
+    
   }
 }
 ?>

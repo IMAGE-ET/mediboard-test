@@ -34,19 +34,24 @@ if (isset($_POST["fast_edit"]) && $_POST["fast_edit"] == 1 && isset($_POST["obje
   $do->request["margin_right"]  = $compte_rendu->margin_right;
 }
 
+if (isset($_POST["_source"])) {
+  $_POST["_source"] = stripslashes($_POST["_source"]);
+}
+
 // Remplacement des zones de texte libre
 if (isset($_POST["_texte_libre"])) {
   $compte_rendu = new CCompteRendu();
-	CMbArray::removeValue('', $_POST["_texte_libre"]);
-	
-	$textes_libres = array();
-	
+	$fields = array();
+	$values = array();
+
 	// Remplacement des \n par des <br>
 	foreach($_POST["_texte_libre"] as $key=>$_texte_libre) {
-		$textes_libres[$_POST["_texte_libre_md5"][$key]] = nl2br($_POST["_texte_libre"][$key]);
+	  if (isset($_POST["_empty_texte_libre"][$key]) || $_POST["_texte_libre"][$key] != '') {
+	    $fields[] = "[[Texte libre - " . $_POST["_texte_libre_md5"][$key] . "]]";
+	    $values[] = nl2br($_POST["_texte_libre"][$key]);
+	  }
 	}
-	
-  $_POST["_source"] = $compte_rendu->replaceFreeTextFields($_POST["_source"], $textes_libres);
+  $_POST["_source"] = str_ireplace($fields, $values, $_POST["_source"]);
   $_POST["_texte_libre"] = null;
 }
 
@@ -56,14 +61,22 @@ if (isset($_POST["_source"])) {
   $values = array();
   if (isset($_POST["_CListeChoix"])) {
     $listes = $_POST["_CListeChoix"];
-    CMbArray::removeValue(array(0 => "undef"), $listes);
     foreach ($listes as $list_id => $options) {
       $options = array_map('htmlentities', $options);
 	    $list = new CListeChoix;
 	    $list->load($list_id);
-	    CMbArray::removeValue("undef", $options);
-	    $fields[] = "[Liste - ".htmlentities($list->nom)."]";
-	    $values[] = nl2br(implode(", ", $options));
+      if (isset($_POST["_empty_list"][$list_id])) {
+        $values[] = "";
+      }
+	    else {
+  	    if ($options === array(0 => "undef")) {
+          continue;
+        }
+	      CMbArray::removeValue("undef", $options);
+	      $values[] = nl2br(implode(", ", $options));
+	    }
+	    $nom = str_replace("#039;", "#39;", htmlentities($list->nom, ENT_QUOTES));
+	    $fields[] = "[Liste - ".$nom."]";
 	  }
   }
   

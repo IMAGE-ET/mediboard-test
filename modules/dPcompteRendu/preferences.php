@@ -20,5 +20,6 @@ CPreferences::$modules["dPcompteRendu"] = array(
   "aideAutoComplete",
   "aideShowOver",
   "pdf_and_thumbs",
+  "mode_play"
 );
 ?>

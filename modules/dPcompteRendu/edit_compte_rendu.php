@@ -184,19 +184,18 @@ $smarty->assign("object_id"     , $object_id);
 $smarty->assign('object_class'  , CValue::get("object_class"));
 $smarty->assign("nb_printers"   , $nb_printers);
 
-$noms_textes_libres = array();
-
 preg_match_all("/(:?\[\[Texte libre - ([^\]]*)\]\])/i",$compte_rendu->_source, $matches);
-$noms_textes_libres = $matches[2];
+
+$templateManager->textes_libres = $matches[2];
 
 // Suppression des doublons
-$noms_textes_libres = array_unique($noms_textes_libres);
+$templateManager->textes_libres = array_unique($templateManager->textes_libres);
 
 if (isset($compte_rendu->_ref_file->_id)) {
   $smarty->assign("file", $compte_rendu->_ref_file);
 }
 
-$smarty->assign("noms_textes_libres", $noms_textes_libres);
+$smarty->assign("textes_libres", $templateManager->textes_libres);
 
 $exchange_source = CExchangeSource::get("mediuser-".CAppUI::$user->_id);
 $smarty->assign("exchange_source", $exchange_source);

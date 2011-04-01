@@ -14,6 +14,7 @@ class CTemplateManager {
   var $helpers = array();
   var $lists = array();
   var $graphs = array();
+  var $textes_libres = array();
   
   var $template = null;
   var $document = null;
@@ -442,7 +443,10 @@ class CTemplateManager {
   function getUsedLists($lists) {
     $this->usedLists = array();
     foreach($lists as $key => $value) {
-      $pos = strpos($this->document, htmlentities(stripslashes("[Liste - $value->nom]")));
+      
+      // Remplacer 039 par 39 car ckeditor remplace ' par &#39;
+      $nom = str_replace("#039;", "#39;", htmlentities(stripslashes("[Liste - $value->nom]"),ENT_QUOTES));
+      $pos = strpos($this->document, $nom);
       if($pos !== false) {
         $this->usedLists[$pos] = $value;
       }

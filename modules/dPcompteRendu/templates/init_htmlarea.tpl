@@ -17,6 +17,9 @@
 window.time_before_thumbs = {{$conf.dPcompteRendu.CCompteRendu.time_before_thumbs}};
 window.time_before_thumbs *= 1000;
 
+window.nb_lists = {{$templateManager->usedLists|@count}};
+window.nb_textes_libres = {{$templateManager->textes_libres|@count}};
+
 function initCKEditor() {
   CKEDITOR.ispasting = false;
   window.old_source = $("htmlarea").value;

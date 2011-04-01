@@ -41,6 +41,7 @@ linkFields = function(ref) {
   return [
     tab.select(".liste"),
     tab.select(".freetext"),
+    tab.select(".empty_field"),
     tab.select(".destinataires"),
     [form.nom, form.file_category_id, form.__private]
   ];
@@ -103,7 +104,7 @@ switchToEditor = function() {
 }
 
 Main.add(function() {
-	{{if $lists|@count == 0 && $noms_textes_libres|@count == 0 && $printers|@count <= 1}}
+	{{if $lists|@count == 0 && $textes_libres|@count == 0 && $printers|@count <= 1}}
 	  {{if $printers|@count == 1}}
       $$(".printerServer")[0].click();
 	  {{else}}
@@ -212,6 +213,8 @@ Main.add(function() {
                   <fieldset>
                     <legend>{{tr}}CListeChoix{{/tr}}</legend>
                   {{foreach from=$lists item=curr_list}}
+                    <input type="checkbox" name="_empty_list[{{$curr_list->_id}}]" title="{{tr}}CListeChoix.empty{{/tr}}"
+                      style="float: left;" class="empty_field"/>
                     <select name="_{{$curr_list->_class_name}}[{{$curr_list->_id}}][]" class="liste">
                       <option value="undef">&mdash; {{$curr_list->nom}}</option>
                       {{foreach from=$curr_list->_valeurs item=curr_valeur}}
@@ -244,17 +247,20 @@ Main.add(function() {
             </tr>
           {{/if}}
           
-          {{if $noms_textes_libres|@count}}
-            {{foreach from=$noms_textes_libres item=_nom}}
+          {{if $textes_libres|@count}}
+            {{foreach from=$textes_libres item=_nom}}
             <tr>
               <td colspan="2">
                 <fieldset>
-                  <legend>{{$_nom|html_entity_decode}}</legend>
+                  <legend>
+                    {{$_nom|html_entity_decode}}
+                    <input type="checkbox" name="_empty_texte_libre[{{$_nom|md5}}]" title="{{tr}}CListeChoix.empty{{/tr}}" class="empty_field"/>
+                  </legend>
                   <textarea class="freetext" name="_texte_libre[{{$_nom|md5}}]"></textarea>
                   <input type="hidden" name="_texte_libre_md5[{{$_nom|md5}}]" value="{{$_nom}}"/>
                 </fieldset>
 	              {{main}}
-	                new AideSaisie.AutoComplete('fastModeForm-{{$uid_fast_mode}}__texte_libre[{{$_nom|md5}}]',
+	                new AideSaisie.AutoComplete(getForm("fastModeForm-{{$uid_fast_mode}}").elements["_texte_libre[{{$_nom|md5}}]"],
                    {
                       objectClass: '{{$compte_rendu->_class_name}}',
                       contextUserId: User.id,
@@ -264,7 +270,7 @@ Main.add(function() {
 		                  resetDependFields: false,
 		                  validateOnBlur: false,
                       property: "_source"
-		                });                      
+		                });
 						    {{/main}}
               </td>
             </tr>
