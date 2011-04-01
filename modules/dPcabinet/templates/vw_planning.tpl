@@ -120,6 +120,8 @@ Main.add(function () {
           {{/foreach}}
         </tr>       
         <!-- foreach sur les heures -->
+        {{assign var=hours_start value=$conf.dPcabinet.CPlageconsult.hours_start}}
+        {{assign var=hours_stop value=$conf.dPcabinet.CPlageconsult.hours_stop}}
         {{foreach from=$listHours item=curr_hour}}
         <tr>
           <th rowspan="{{$nb_intervals_hour}}" scope="row">{{$curr_hour}}h</th>
@@ -134,7 +136,8 @@ Main.add(function () {
               {{assign var="affichage" value=$affichages.$keyAff}}
              
               {{if $affichage === "empty"}}
-                <td class="empty {{if $curr_mins == '00'}}hour_start{{/if}}"></td>
+                <td class="empty {{if $curr_mins == '00'}}hour_start{{/if}} 
+                {{if $curr_hour < $hours_start || $curr_hour > $hours_stop}}opacity-30{{/if}}"></td>
               {{elseif $affichage == "hours"}}
                 <td class="empty hour_start" rowspan="{{$nb_intervals_hour}}"></td>
               {{elseif $affichage === "full"}}

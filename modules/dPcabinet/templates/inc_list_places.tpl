@@ -39,6 +39,7 @@ PlageConsult.addPlaceAfter = function(plage_id) {
   <input type="hidden" name="del" value="0" />
   <input type="hidden" name="debut" value="{{$plage->debut}}" />
   <input type="hidden" name="fin" value="{{$plage->fin}}" />
+  <input type="hidden" name="chir_id" value="{{$plage->chir_id}}" />
   <input type="hidden" name="_repeat" value="1" />
 </form>
 {{/if}}

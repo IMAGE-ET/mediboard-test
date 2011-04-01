@@ -134,6 +134,10 @@ $listPlages = array();
 // Variable permettant de compter les jours pour la suppression du samedi et du dimanche
 $i = 0;
 
+// Détermination des bornes du semainier
+$min = CPlageconsult::$hours_start.":".reset(CPlageconsult::$minutes).":00";
+$max = CPlageconsult::$hours_stop.":".end(CPlageconsult::$minutes).":00";
+
 // Extraction des plagesconsult par date
 foreach($listDays as $keyDate=>$valDate){
   
@@ -151,11 +155,6 @@ foreach($listDays as $keyDate=>$valDate){
   }
   
   $i++;
-  
-  // Détermination des bornes du semainier
-  $min = CPlageconsult::$hours_start.":".reset(CPlageconsult::$minutes).":00";
-  $max = CPlageconsult::$hours_stop.":".end(CPlageconsult::$minutes).":00";
-  
  
   // Détermination des bornes de chaque plage
   foreach($listPlages[$keyDate] as $plage){
@@ -163,14 +162,14 @@ foreach($listDays as $keyDate=>$valDate){
     $plage->countPatients();
     $plage->debut = mbTimeGetNearestMinsWithInterval($plage->debut, CPlageconsult::$minutes_interval);
     $plage->fin   = mbTimeGetNearestMinsWithInterval($plage->fin  , CPlageconsult::$minutes_interval);
-    $plage->fin = min($plage->fin, $max);
-    $plage->debut = max($plage->debut, $min);
+    $min = $min > $plage->debut ? $plage->debut : $min;
+    $max = $max < $plage->fin ? $plage->fin : $max;
     $plage->updateFormFields();
     if($plage->debut >= $plage->fin){
       unset($listPlages[$keyDate][$plage->_id]);
     }
   }
-  
+
   foreach($listPlages[$keyDate] as $plage){
     $plage->_nb_intervals = mbTimeCountIntervals($plage->debut, $plage->fin, "00:".CPlageconsult::$minutes_interval.":00");
     for($time = $plage->debut; $time < $plage->fin; $time = mbTime("+".CPlageconsult::$minutes_interval." minutes", $time) ){
@@ -201,6 +200,36 @@ foreach($listDays as $keyDate=>$valDate){
   }
 }
 
+// Extension du semainier s'il y a des plages qui dépassent des bornes
+// de configuration hours_start et hours_stop
+$hours = CPlageconsult::$hours;
+
+$min_hour = sprintf("%01d", mbTransformTime($min, null, "%H"));
+$max_hour = sprintf("%01d", mbTransformTime($max, null, "%H"));
+
+if (!isset($hours[$min_hour])) {
+  for($i = $min_hour; $i < CPlageconsult::$hours_start; $i++) {
+    $hours[$i] = sprintf("%02d", $i);
+  }
+}
+
+if (!isset($hours[$max_hour])) {
+  for($i = CPlageconsult::$hours_stop + 1; $i < $max_hour + 1; $i++) {
+    $hours[$i] = sprintf("%02d", $i);
+  }
+}
+
+ksort($hours);
+
+foreach ($listDays as $keyDate=>$valDate){
+  foreach ($hours as $keyHours=>$valHours){
+    foreach (CPlageconsult::$minutes as $keyMins=>$valMins){
+      if (!isset($affichages["$keyDate $valHours:$valMins:00"])) {
+        $affichages["$keyDate $valHours:$valMins:00"] = "empty";
+      }
+    }
+  }
+}
 
 // Création du template
 $smarty = new CSmartyDP();
@@ -221,7 +250,7 @@ $smarty->assign("debut"             , $debut);
 $smarty->assign("fin"               , $fin);
 $smarty->assign("prec"              , $prec);
 $smarty->assign("suiv"              , $suiv);
-$smarty->assign("listHours"         , CPlageconsult::$hours);
+$smarty->assign("listHours"         , $hours);
 $smarty->assign("listMins"          , CPlageconsult::$minutes);
 $smarty->assign("nb_intervals_hour" , intval(60/CPlageconsult::$minutes_interval));
 $smarty->assign("count_si_desistement", $count_si_desistement);
