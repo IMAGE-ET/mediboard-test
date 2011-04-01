@@ -121,7 +121,7 @@ class CSejour extends CCodable {
   var $_ref_last_affectation  = null;
   var $_ref_GHM               = array();
   var $_ref_group             = null;
-  var $_ref_etabExterne       = null;
+  var $_ref_etablissement_transfert  = null;
 	var $_ref_service_mutation  = null;
   var $_ref_dossier_medical   = null;
   var $_ref_rpu               = null;
@@ -866,74 +866,99 @@ class CSejour extends CCodable {
     $this->_ref_sejour =& $this;
   }
 
-  
-  function loadRefCurrAffectation($date = ""){
-    if(!$date){
+  /**
+   * Load current affectation relative to a date
+   * 
+   * @param date $date Current date, now if null
+   * 
+   * @return CAffectation
+   */
+  function loadRefCurrAffectation($date = "") {
+    if (!$date) {
       $date = mbDateTime();
     }
-    $this->_ref_curr_affectation = new CAffectation();
+    
+    $affectation = new CAffectation();
     $where = array();
     $where["sejour_id"] = " = '$this->_id'";
     $where["entree"] = "<= '$date'";
     $where["sortie"] = ">= '$date'";
-    $this->_ref_curr_affectation->loadObject($where);
-    if($this->_ref_curr_affectation->_id){
-      $this->_ref_curr_affectation->loadRefLit();
-      $this->_ref_curr_affectation->_ref_lit->loadCompleteView();
+    $affectation->loadObject($where);
+    if ($affectation->_id) {
+      $affectation->loadRefLit()->loadCompleteView();
     }
+    
+    return  $this->_ref_curr_affectation = $affectation;
   }
   
   
-  // Chargement de l'affectation courante (en fct de $date)
-  function loadCurrentAffectation($date = "") {
-    if(!$date){
+  /**
+   * Load surrounding affectations
+   * 
+   * @param date $date Current date, now if null
+   * 
+   * @return array[CAffectation] Affectations array with curr, prev and next keys
+   */
+    function loadSurrAffectations($date = "") {
+    if (!$date) {
       $date = mbDateTime();
     }
   
-    $this->loadRefCurrAffectation($date);
+    // Current affectation
+    $affectations = array();
+    $affectations["curr"] = $this->loadRefCurrAffectation($date);
     
-    $this->_ref_before_affectation = new CAffectation();
+    // Previous affection 
+    $affectation = new CAffectation();
     $where = array();
     $where["sortie"] = " < '$date'";
     $where["sejour_id"] = " = '$this->_id'";
-    $this->_ref_before_affectation->loadObject($where);
-    if($this->_ref_before_affectation->_id){
-      $this->_ref_before_affectation->loadRefLit();
-      $this->_ref_before_affectation->_ref_lit->loadCompleteView();    
+    $affectation->loadObject($where);
+    if ($affectation->_id){
+      $affectation->loadRefLit()->loadCompleteView();    
     }
-    
-    $this->_ref_next_affectation = new CAffectation();
+    $affectations["prev"] = $this->_ref_prev_affectation = $affectation;
+        
+    // Next affectation
+    $affectation = new CAffectation();
     $where = array();
     $where["entree"] = "> '$date'"; 
     $where["sejour_id"] = " = '$this->_id'";
-    $this->_ref_next_affectation->loadObject($where);
-    if($this->_ref_next_affectation->_id){
-      $this->_ref_next_affectation->loadRefLit();
-      $this->_ref_next_affectation->_ref_lit->loadCompleteView(); 
+    $affectation->loadObject($where);
+    if ($affectation->_id){
+      $affectation->loadRefLit()->loadCompleteView();    
     }
+    $affectations["next"] = $this->_ref_next_affectation = $affectation;
+  
+    return $affectations;
   }
     
-  // Chargement du dossier medical du sejour
-  function loadRefDossierMedical(){
-    $this->_ref_dossier_medical = new CDossierMedical();
-    $where["object_id"] = "= '$this->_id'";
-    $where["object_class"] = "= 'CSejour'";
-    $this->_ref_dossier_medical->loadObject($where);
+  /**
+   * @return CDossierMedical
+   */
+  function loadRefDossierMedical() {
+    return $this->_ref_dossier_medical = $this->loadUniqueBackRef("dossier_medical");;
   }
   
-  function loadRefEtabExterne($cache = true){
-    $this->_ref_etabExterne = $this->loadFwdRef("etablissement_transfert_id", $cache);
+  /**
+   * @return CEtabExterne
+   */
+  function loadRefEtablissementTransfert($cache = true){
+    return $this->_ref_etablissement_transfert = $this->loadFwdRef("etablissement_transfert_id", $cache);
   }
 	
-	function loadRefServiceMutation($cache = true){
-    $this->_ref_service_mutation = $this->loadFwdRef("service_mutation_id", $cache);
+  /**
+   * @return CService
+   */
+  function loadRefServiceMutation($cache = true){
+    return $this->_ref_service_mutation = $this->loadFwdRef("service_mutation_id", $cache);
   }
   
   function countNotificationVisite($date = ''){
-    $this->completeField("praticien_id");
-    if(!$date){
+    if (!$date){
       $date = mbDate();
     }
+    $this->completeField("praticien_id");
     $observation = new CObservationMedicale();
     $where = array();
     $where["sejour_id"]  = " = '$this->_id'";
@@ -981,8 +1006,11 @@ class CSejour extends CCodable {
     return $this->_diagnostics_associes;
   }
   
+  /**
+   * @return CPrestation
+   */
   function loadRefPrestation() {
-    $this->_ref_prestation = $this->loadFwdRef("prestation_id", true);
+    return $this->_ref_prestation = $this->loadFwdRef("prestation_id", true);
   }
   
   function loadRefsTransmissions($important = false){
@@ -1001,10 +1029,12 @@ class CSejour extends CCodable {
   	} else {
   		$this->_ref_transmissions = $this->loadBackRefs("transmissions"); 
     }
+    
+    return $this->_ref_transmissions;
   }
 	
 	function loadRefsTasks(){
-    $this->_ref_tasks = $this->loadBackRefs("tasks"); 
+    return $this->_ref_tasks = $this->loadBackRefs("tasks"); 
   }
   
   function loadSuiviMedical() {
@@ -1060,6 +1090,7 @@ class CSejour extends CCodable {
 		}
 
     krsort($this->_ref_suivi_medical);
+    return $this->_ref_suivi_medical;
   }
   
   function loadRefConstantes($user_id = null) {
@@ -1141,6 +1172,8 @@ class CSejour extends CCodable {
         }
       }
     }
+    
+    return $this->_ref_consultations;
   }
   
   /*
@@ -1149,7 +1182,7 @@ class CSejour extends CCodable {
   function loadRefsPrescriptions() {
     $prescriptions = $this->loadBackRefs("prescriptions");
     // Si $prescriptions n'est pas un tableau, module non installé
-    if(!is_array($prescriptions)){
+    if (!is_array($prescriptions)){
       $this->_ref_last_prescription = null;
       return;
     }
@@ -1159,9 +1192,11 @@ class CSejour extends CCodable {
     $this->_ref_prescriptions["sortie"] = new CPrescription();
     
     // Stockage des prescriptions par type
-    foreach($prescriptions as $_prescription){
+    foreach ($prescriptions as $_prescription){
       $this->_ref_prescriptions[$_prescription->type] = $_prescription;
     }
+    
+    return $this->_ref_prescriptions;
   }
   
 	function loadRefPrescriptionSejour(){
@@ -1222,7 +1257,7 @@ class CSejour extends CCodable {
     $this->loadRefPatient($cache);
     $this->loadRefPraticien($cache);
     $this->loadRefEtablissement($cache);
-    $this->loadRefEtabExterne($cache);
+    $this->loadRefEtablissementTransfert($cache);
 		$this->loadRefServiceMutation($cache);
     $this->loadExtCodesCCAM();
   }
