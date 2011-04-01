@@ -14,12 +14,19 @@
 	  pendant {{$perf->duree}} {{$perf->unite_duree}}(s)
 	{{/if}}
 	{{if $perf->_protocole}}
-	  {{if $perf->decalage_interv != NULL}}
-      à partir de I 
-      {{if $perf->decalage_interv >= 0}}+{{/if}}
-        {{mb_value object=$perf field=decalage_interv}}
-         heures
-     {{/if}}
+	  {{if $perf->jour_decalage}}
+			 à partir de
+	     {{mb_value object=$perf field="jour_decalage"}} 
+	     {{if $perf->decalage_line >= 0}}+{{/if}}
+	     {{mb_value object=$perf field=decalage_line}} {{mb_value object=$perf field=unite_decalage}}
+		 {{/if}}
+		 
+     {{if $perf->jour_decalage_fin}}
+			 jusqu'à  
+	     {{mb_value object=$perf field="jour_decalage_fin"}} 
+	     {{if $perf->decalage_line_fin >= 0}}+{{/if}}
+	     {{mb_value object=$perf field=decalage_line_fin}} {{mb_value object=$perf field=unite_decalage_fin}}
+		 {{/if}}
 	{{else}}
 	  {{if $perf->date_debut}}
 	    à partir du {{mb_value object=$perf field="date_debut"}}

@@ -1842,7 +1842,21 @@ class CSetupdPprescription extends CSetup {
 		$this->makeRevision("1.34");
 		$this->addPrefQuery("hide_old_lines", "0");
 		
-		$this->mod_version = "1.35";
+		$this->makeRevision("1.35");
+		$query = "ALTER TABLE `prescription_line_mix` 
+              CHANGE `decalage_interv` `decalage_line` INT (11),
+              CHANGE `jour_decalage` `jour_decalage` ENUM ('E','I','S','N'),
+              ADD `unite_decalage` ENUM ('jour','heure'),
+              ADD `decalage_line_fin` INT (11),
+              ADD `jour_decalage_fin` ENUM ('I','S'),
+              ADD `unite_decalage_fin` ENUM ('jour','heure');";
+		$this->addQuery($query);
+		
+		$query = "UPDATE prescription_line_mix
+		          SET unite_decalage = 'heure';";
+		$this->addQuery($query);
+		
+		$this->mod_version = "1.36";
   }
 }
 

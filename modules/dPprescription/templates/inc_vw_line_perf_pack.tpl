@@ -45,19 +45,20 @@
     </td>
     <td>
       <strong>{{mb_label object=$_prescription_line_mix field="date_debut"}}</strong>:
-      {{if $_prescription_line_mix->decalage_interv != NULL}}
+      {{if $_prescription_line_mix->decalage_line != NULL}}
       à I 
-      {{if $_prescription_line_mix->decalage_interv >= 0}}+{{/if}}
+      {{if $_prescription_line_mix->decalage_line >= 0}}+{{/if}}
      
-        {{mb_value object=$_prescription_line_mix field=decalage_interv}}
-         heures
+        {{mb_value object=$_prescription_line_mix field=decalage_line}}
+        {{mb_value object=$_prescription_line_mix field=unite_decalage}}
       {{else}}
         -
       {{/if}}
 	  </td>
     <td>
 		  <strong>{{mb_label object=$_prescription_line_mix field=duree}}</strong>:
-			{{mb_value object=$_prescription_line_mix field=duree}}heures
+			{{mb_value object=$_prescription_line_mix field=duree}}
+			{{mb_value object=$_prescription_line_mix field=unite_duree}}
 	  </td>	    
 	</td>
   </tr>

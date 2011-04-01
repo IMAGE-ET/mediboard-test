@@ -109,12 +109,25 @@
   </td>  
 	{{else}}
 	<td style="width: 20%" class="text">
-		{{if $_prescription_line_mix->decalage_interv}}
-		A partir de I+{{mb_value object=$_prescription_line_mix field=decalage_interv}}h
-		{{/if}}
 		{{if $_prescription_line_mix->duree}}
-		pendant {{$_prescription_line_mix->duree}} {{mb_value object=$_prescription_line_mix field="unite_duree"}}
-		{{/if}}
+		  Durée de 
+      {{mb_value object=$_prescription_line_mix field=duree}}
+      {{mb_value object=$_prescription_line_mix field=unite_duree}}
+    {{/if}}            
+		
+		{{if $_prescription_line_mix->jour_decalage}}  
+      à partir de
+      {{mb_value object=$_prescription_line_mix field="jour_decalage"}} 
+      {{if $_prescription_line_mix->decalage_line >= 0}}+{{/if}}
+      {{mb_value object=$_prescription_line_mix field=decalage_line}} {{mb_value object=$_prescription_line_mix field=unite_decalage}}
+    {{/if}} 
+		
+		{{if $_prescription_line_mix->jour_decalage_fin}}
+      jusqu'à  
+			{{mb_value object=$_prescription_line_mix field="jour_decalage_fin"}} 
+      {{if $_prescription_line_mix->decalage_line_fin >= 0}}+{{/if}}
+      {{mb_value object=$_prescription_line_mix field=decalage_line_fin}} {{mb_value object=$_prescription_line_mix field=unite_decalage_fin}}
+		{{/if}}							 
 	</td>
 	{{/if}} 
 	

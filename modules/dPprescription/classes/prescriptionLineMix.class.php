@@ -33,21 +33,21 @@ class CPrescriptionLineMix extends CMbObject {
   var $date_arret       = null; // Date d'arret de la perf (si arret anticipé) 
   var $time_arret       = null; // Heure d'arret de la perf (si arret anticipe)
   var $accord_praticien = null;
-  var $decalage_interv  = null; // Nb heures de decalage par rapport à l'intervention (utilisé pour les protocoles de prescription_line_mixes)
+    
   var $operation_id     = null;
   var $commentaire      = null;
 	var $type_line        = null;
 	
-  var $date_pose   = null; // Date de la pose de la perf
-  var $time_pose   = null; // Heure de la pose de la perf
+  var $date_pose        = null; // Date de la pose de la perf
+  var $time_pose        = null; // Heure de la pose de la perf
   
   var $date_retrait     = null; // Date de retrait de la perf
   var $time_retrait     = null; // Heure de retrait de la perf
   var $emplacement      = null;
   var $nb_tous_les      = null;
 	
-	var $quantite_totale = null; // valeur en ml
-	var $duree_passage   = null; // minutes
+	var $quantite_totale     = null; // valeur en ml
+	var $duree_passage       = null; // minutes
 	var $unite_duree_passage = null;
 	
   // Champs specifiques aux PCA
@@ -64,11 +64,21 @@ class CPrescriptionLineMix extends CMbObject {
 	var $conditionnel = null;
 	var $condition_active = null;
 	
-	var $jour_decalage = null;
 	var $perop         = null;
 	
   var $volume_debit     = null; // En ml
   var $duree_debit      = null; // En heures
+	 
+  // Dates relatives
+  var $decalage_line      = null;
+  var $jour_decalage      = null;
+  var $unite_decalage     = null;
+  var $decalage_line_fin  = null;
+  var $jour_decalage_fin  = null;
+  var $unite_decalage_fin = null;
+	var $time_fin           = null; // Permet de definir une heure de fin precise 
+	var $_date_fin          = null;
+
 	
 	// Fwd Refs
   var $_ref_prescription = null;
@@ -172,7 +182,8 @@ class CPrescriptionLineMix extends CMbObject {
     $specs["accord_praticien"]       = "bool";
     $specs["_debut"]                 = "dateTime";
     $specs["_fin"]                   = "dateTime";
-    $specs["decalage_interv"]        = "num";
+    $specs["_date_fin"]              = "dateTime";
+
     $specs["operation_id"]           = "ref class|COperation";
     $specs["mode_bolus"]             = "enum list|sans_bolus|bolus|perfusion_bolus default|sans_bolus";
     $specs["dose_bolus"]             = "float";
@@ -190,14 +201,20 @@ class CPrescriptionLineMix extends CMbObject {
     $specs["commentaire"]            = "text helped";
 		$specs["conditionnel"]           = "bool";
     $specs["condition_active"]       = "bool";
-    $specs["jour_decalage"]          = "enum list|I|N default|I"; // Permet de noter N comme jour de decalage
-	  $specs["quantite_totale"]        = "num";
+		
+    $specs["jour_decalage"]          = "enum list|E|I|S|N";
+    $specs["decalage_line"]          = "num";
+	  $specs["unite_decalage"]         = "enum list|jour|heure";
+    $specs["jour_decalage_fin"]      = "enum list|I|S";
+    $specs["decalage_line_fin"]      = "num";
+		$specs["unite_decalage_fin"]     = "enum list|jour|heure";
+	
+		$specs["quantite_totale"]        = "num";
 		$specs["duree_passage"]          = "num";
 		$specs["unite_duree_passage"]    = "enum list|minute|heure default|minute";
 		$specs["perop"]                  = "bool default|0"; 
 		$specs["_debit"]                 = "num pos";
-		$specs["_quantite_totale"]       = "num";
-		
+    $specs["_quantite_totale"]       = "num";
 		return $specs;
   }
 
@@ -252,6 +269,11 @@ class CPrescriptionLineMix extends CMbObject {
     $this->_date_fin = $this->duree ? mbDateTime("+ $this->duree $increment", "$this->_debut") : $this->_debut;
     $this->_fin = ($this->date_arret && $this->time_arret) ? "$this->date_arret $this->time_arret" 
                                                            : ($this->date_retrait ? "$this->date_retrait $this->time_retrait" : $this->_date_fin); 
+
+
+    if(mbTime($this->_date_fin) == "00:00:00"){
+      $this->_view_date_fin = mbDate(" - 1 DAY", $this->_date_fin);
+    }
 
     $this->loadRefPrescription();
     $this->_protocole = $this->_ref_prescription->object_id ? '0' : '1';

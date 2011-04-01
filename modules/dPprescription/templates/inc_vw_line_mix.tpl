@@ -209,53 +209,74 @@ Main.add( function(){
         <table class="layout main">
           <tr>
           	<td>
-						  <fieldset style="width: 48%; float: left;">
+						  <fieldset>
 						 	  <legend>Durée de la prescription</legend>
 						
 		            <!-- Début -->
 								{{if $line->_protocole}}
-		              {{if $line->_perm_edit}}
-		                <script type="text/javascript">
-		                  Main.add( function(){
-		                    var oForm = document.forms["editPerf-{{$line->_id}}"];
-		                    togglePerfDecalage(oForm);
-		                  } );
-		                </script>
-		              {{/if}}
-		             
-		              <strong>{{mb_label object=$line field="date_debut"}}</strong>
-									  {{if $line->_perm_edit}}
-										  à {{mb_field object=$line field="jour_decalage" onchange="togglePerfDecalage(this.form); return onSubmitFormAjax(this.form);"}} 
-		                  <span id="decalage_interv-{{$line->_id}}">{{mb_field object=$line field=decalage_interv showPlus="1" increment=1 size="2" form="editPerf-$prescription_line_mix_id" onchange="return onSubmitFormAjax(this.form);"}} h</span>
-		                {{else}}
-									    à {{mb_value object=$line field="jour_decalage"}} {{if $line->decalage_interv >= 0}}+{{/if}}{{mb_value object=$line field=decalage_interv}}h
-		                {{/if}}
-		             {{else}}
+									 {{mb_label object=$line field=duree}}
+	                 {{if $line->_can_modify_prescription_line_mix}}
+									   <script type="text/javascript">
+									   	Main.add(function(){
+											  var oForm = getForm("editPerf-{{$line->_id}}");
+												modifUniteDecal(oForm.jour_decalage, oForm.unite_decalage);
+												modifUniteDecal(oForm.jour_decalage_fin, oForm.unite_decalage_fin);
+                      });
+										 </script>
+	                   {{mb_field object=$line field=duree size=1 increment=1 min=0 form="editPerf-$prescription_line_mix_id" onchange="\$V(this.form.jour_decalage_fin, '', false); return onSubmitFormAjax(this.form);"}}
+	                   {{mb_field object=$line field=unite_duree onchange="return onSubmitFormAjax(this.form);"}}
+										 à partir de
+										 {{mb_field object=$line field="jour_decalage" onchange="modifUniteDecal(this, this.form.unite_decalage); return onSubmitFormAjax(this.form);" defaultOption="&mdash; Moment"}} 
+                     {{mb_field object=$line field=decalage_line showPlus="1" increment=1 size="2" form="editPerf-$prescription_line_mix_id" onchange="return onSubmitFormAjax(this.form);"}}
+                     {{mb_field object=$line field=unite_decalage onchange="return onSubmitFormAjax(this.form)" defaultOption="&mdash; Unité"}}
+										 jusqu'à 
+										 {{mb_field object=$line field="jour_decalage_fin" onchange="\$V(this.form.duree, '', false); modifUniteDecal(this, this.form.unite_decalage_fin); return onSubmitFormAjax(this.form);" defaultOption="&mdash; Moment"}} 
+                     {{mb_field object=$line field=decalage_line_fin showPlus="1" increment=1 size="2" form="editPerf-$prescription_line_mix_id" onchange="return onSubmitFormAjax(this.form);"}}
+                     {{mb_field object=$line field=unite_decalage_fin onchange=" return onSubmitFormAjax(this.form);" defaultOption="&mdash; Unité"}}
+	                 {{else}}
+	                   {{if $line->duree}}
+	                     {{mb_value object=$line field=duree}}
+	                     {{mb_value object=$line field=unite_duree}}
+	                   {{else}}
+	                     - 
+	                   {{/if}}
+										 
+										 {{if $line->jour_decalage}}
+											 à partir de
+	                     {{mb_value object=$line field="jour_decalage"}} 
+											 {{if $line->decalage_line >= 0}}+{{/if}}
+											 {{mb_value object=$line field=decalage_line}} {{mb_value object=$line field=unite_decalage}}
+										 {{/if}}
+										 
+										 {{if $line->jour_decalage_fin}}
+	                     jusqu'à  
+	                     {{mb_value object=$line field="jour_decalage_fin"}} 
+											 {{if $line->decalage_line_fin >= 0}}+{{/if}}
+											 {{mb_value object=$line field=decalage_line_fin}} {{mb_value object=$line field=unite_decalage_fin}}
+										 {{/if}}
+                   {{/if}}   
+								{{else}}
 		                <strong>{{mb_label object=$line field="date_debut"}}</strong>
 		                {{if $line->_can_modify_prescription_line_mix}}
 		                  {{mb_field object=$line field=date_debut form="editPerf-$prescription_line_mix_id" onchange="return onSubmitFormAjax(this.form);" register=true}}
 		                  {{mb_field object=$line field=time_debut form="editPerf-$prescription_line_mix_id" onchange="return onSubmitFormAjax(this.form);" register=true}}
-		                {{else}}
+											
+											<strong>{{mb_label object=$line field=duree}}</strong>
+											{{mb_field object=$line field=duree size=1 increment=1 min=0 form="editPerf-$prescription_line_mix_id" onchange="return onSubmitFormAjax(this.form);"}}
+                      {{mb_field object=$line field=unite_duree onchange="return onSubmitFormAjax(this.form);"}}
+										{{else}}
 		                  {{mb_value object=$line field=date_debut}}
 		                  {{mb_value object=$line field=time_debut}}
+											
+											<strong>{{mb_label object=$line field=duree}}</strong>
+											{{mb_value object=$line field=duree}}
+                      {{mb_value object=$line field=unite_duree}}
 		                {{/if}} 
+
 		              {{/if}} 
-		
-		             <strong>{{mb_label object=$line field=duree}}</strong>
-		             {{if $line->_can_modify_prescription_line_mix}}
-		               {{mb_field object=$line field=duree size=1 increment=1 min=0 form="editPerf-$prescription_line_mix_id" onchange="return onSubmitFormAjax(this.form);"}}
-									 {{mb_field object=$line field=unite_duree onchange="return onSubmitFormAjax(this.form);"}}
-		             {{else}}
-								   {{if $line->duree}}
-		                 {{mb_value object=$line field=duree}}
-		                 {{mb_value object=$line field=unite_duree}}
-									 {{else}}
-									   - 
-									 {{/if}}
-		             {{/if}}	 
 							</fieldset> 					
-           
-						  <fieldset style="width: 48%; float: right">
+             
+						  <fieldset>
 						  	<legend>Débit</legend>
 						
 	              {{if $line->type_line != "aerosol"}}

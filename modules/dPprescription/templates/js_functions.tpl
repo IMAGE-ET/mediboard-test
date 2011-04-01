@@ -391,15 +391,6 @@ modifUniteDecal = function(oFieldJour, oFieldUnite){
   }
 }
 
-togglePerfDecalage = function(oForm){
-  if($V(oForm.jour_decalage) == 'N'){
-    $V(oForm.decalage_interv, '0');
-    $('decalage_interv-'+$V(oForm.prescription_line_mix_id)).hide();
-  } else {
-    $('decalage_interv-'+$V(oForm.prescription_line_mix_id)).show();
-  }
-}
-
 toggleContinuiteLineMix = function(radioButton, prescription_line_mix_id){
   var sValueContinuite = $V(radioButton);
   $$(".debit_produit").each(function(debit) {
