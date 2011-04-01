@@ -97,6 +97,9 @@ class CPrescriptionLineHandler extends CMbObjectHandler {
          $_line->decalage_line_fin = 0;
        }
        
+			 $unite_decalage_debut = $_line->unite_decalage === "heure" ? "HOURS" : "DAYS";
+       $unite_decalage_fin   = $_line->unite_decalage_fin === "heure" ? "HOURS" : "DAYS";
+		
 			 // Modification de la date de debut en fonction de la date d'entree
        if($_line->jour_decalage == "E"){  
          $signe = ($_line->decalage_line >= 0) ? "+" : "";
