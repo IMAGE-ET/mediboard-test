@@ -31,7 +31,7 @@
           </span>
         </li>
       {{foreachelse}}
-        <li>{{tr}}CTraitement.none{{/tr}}</li>
+        <li class="empty">{{tr}}CTraitement.none{{/tr}}</li>
       {{/foreach}}
       </ul>
       {{if $dossier_medical->_ref_traitements|@count && $dossier_medical->_ref_prescription->_ref_prescription_lines|@count}}

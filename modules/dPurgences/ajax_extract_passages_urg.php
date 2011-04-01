@@ -67,7 +67,7 @@ foreach ($sejours as &$_sejour) {
   }
 
   // Statistiques de transferts de sejours
-  $etablissement_tranfert = $_sejour->_ref_etabExterne;
+  $etablissement_tranfert = $_sejour->_ref_etablissement_transfert;
   if ($etablissement_tranfert->_id) {
     $stats[$entree_patient]["transferts_count"]++;
   }

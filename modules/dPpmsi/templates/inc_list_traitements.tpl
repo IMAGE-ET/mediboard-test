@@ -24,7 +24,7 @@
             <em>{{$curr_trmt->traitement}}</em>
           </li>
           {{foreachelse}}
-          <li>{{tr}}CTraitement.none{{/tr}}</li>
+          <li class="empty">{{tr}}CTraitement.none{{/tr}}</li>
           {{/foreach}}
         </ul>
       </li>
@@ -41,7 +41,7 @@
             <em>{{$curr_trmt->traitement}}</em>
           </li>
           {{foreachelse}}
-          <li>{{tr}}CTraitement.none{{/tr}}</li>
+          <li class="empty">{{tr}}CTraitement.none{{/tr}}</li>
           {{/foreach}}
         </ul>
       </li>

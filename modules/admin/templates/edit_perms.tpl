@@ -72,7 +72,7 @@ Main.add(function () {
           </td>
           {{if ($smarty.foreach.users.index % $numCols) == ($numCols-1) && !$smarty.foreach.users.last}}</tr><tr>{{/if}}
         {{foreachelse}}
-          <td>{{tr}}CMediusers.none{{/tr}}</td>
+          <td class="empty">{{tr}}CMediusers.none{{/tr}}</td>
         {{/foreach}}
         </tr>
       </table>

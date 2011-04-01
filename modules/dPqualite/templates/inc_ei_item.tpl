@@ -89,7 +89,7 @@
   </tr>
   {{foreachelse}}
   <tr>
-    <td colspan="3">
+    <td colspan="3" class="empty">
       {{tr}}CEiItem.none{{/tr}}
     </td>
   </tr>

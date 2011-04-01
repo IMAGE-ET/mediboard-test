@@ -65,7 +65,7 @@ function printSuivi(){
       {{mb_include module=dPsalleOp template=inc_details_plages salle=$_salle}}
     </td>
     {{foreachelse}}
-    <td>{{tr}}CSalle.none{{/tr}}</td>
+    <td class="empty">{{tr}}CSalle.none{{/tr}}</td>
     {{/foreach}}
   </tr>
 </table>

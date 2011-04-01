@@ -63,7 +63,7 @@ removeSelected = function() {
     </tr>
   {{foreachelse}}
     <tr>
-      <td colspan="2">
+      <td colspan="2" class="empty">
       {{tr}}CModeleEtiquette.none{{/tr}}
       </td>
     </tr>

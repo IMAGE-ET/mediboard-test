@@ -145,7 +145,7 @@ changeReceptionPage = function(start) {
     </tr>
   {{foreachelse}}
   <tr>
-    <td colspan="10">{{tr}}CProductDelivery.global.none{{/tr}}</td>
+    <td colspan="10" class="empty">{{tr}}CProductDelivery.global.none{{/tr}}</td>
   </tr>
   {{/foreach}}
 </table>

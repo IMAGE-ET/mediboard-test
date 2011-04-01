@@ -37,7 +37,7 @@ $poids = $patient->_ref_constantes_medicales->poids;
 $prescription->loadRefObject();
 $sejour =& $prescription->_ref_object;
 $sejour->loadNumDossier();
-$sejour->loadCurrentAffectation(mbDateTime());
+$sejour->loadSurrAffectations();
 
 // Chargement des lignes
 if($chapitre == "" || $chapitre == "med" || $chapitre == "inj" || $chapitre == "all_med"){

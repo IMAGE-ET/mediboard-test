@@ -100,7 +100,9 @@
     {{/foreach}}
     {{/foreach}}
   {{foreachelse}}
-	<tr><td><em>{{tr}}CEvenementSSR.none{{/tr}}</em></td></tr>
+	<tr>
+    <td class="empty">{{tr}}CEvenementSSR.none{{/tr}}</td>
+  </tr>
   {{/foreach}}
 </table>
 </div>

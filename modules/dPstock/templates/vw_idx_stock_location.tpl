@@ -43,7 +43,7 @@ Main.add(editStockLocation);
         </tr>
 				{{foreachelse}}
 				<tr>
-          <td colspan="5">{{tr}}CProductStockLocation.none{{/tr}}</td>
+          <td colspan="5" class="empty">{{tr}}CProductStockLocation.none{{/tr}}</td>
         </tr>
         {{/foreach}}
       </table>  

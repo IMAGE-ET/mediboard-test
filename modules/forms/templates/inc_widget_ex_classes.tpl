@@ -91,7 +91,7 @@ showExClassForm = function(ex_class_id, object_guid, title, ex_object_id, event,
 	        </a>
 	      </li>
 	    {{foreachelse}}
-	      <li><em>{{tr}}CExObject.none{{/tr}}</em></li>
+	      <li class="empty">{{tr}}CExObject.none{{/tr}}</li>
 	    {{/foreach}}
 	    </ul>
 	  </li>

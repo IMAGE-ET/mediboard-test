@@ -39,7 +39,7 @@
     </tr>
   {{foreachelse}}
     <tr>
-      <td colspan="3">{{tr}}CPlageConge.none{{/tr}}</td>
+      <td colspan="3" class="empty">{{tr}}CPlageConge.none{{/tr}}</td>
     </tr>
   {{/foreach}}
 </table>

@@ -150,12 +150,12 @@
     </tbody>
     {{foreachelse}}
       <tr>
-        <td colspan="20">{{tr}}CPrescriptionLineDMI.none{{/tr}}</td>
+        <td colspan="20" class="empty">{{tr}}CPrescriptionLineDMI.none{{/tr}}</td>
       </tr>
     {{/foreach}}
   {{foreachelse}}
     <tr>
-      <td colspan="20">{{tr}}CPrescriptionLineDMI.none{{/tr}}</td>
+      <td colspan="20" class="empty">{{tr}}CPrescriptionLineDMI.none{{/tr}}</td>
     </tr>
   {{/foreach}}
 </table>

@@ -17,7 +17,7 @@
 	
 	{{foreachelse}}
   <tr>
-    <td>{{tr}}CUserLog.none{{/tr}}</td>
+    <td class="empty">{{tr}}CUserLog.none{{/tr}}</td>
   </tr>
   {{/foreach}}
 

@@ -32,9 +32,7 @@
       </tr> 
       {{foreachelse}}
       <tr>
-      <td colspan="3">
-      <i>{{tr}}CCellSaver.none{{/tr}}</i>
-      </td>
+      <td colspan="3" class="empty">{{tr}}CCellSaver.none{{/tr}}</td>
       </tr>
       {{/foreach}}
     </table>

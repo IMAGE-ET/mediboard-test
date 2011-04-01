@@ -42,7 +42,7 @@
 <tr>
 {{/if}}
 	{{foreachelse}}
-	<td colspan="10"><em>{{tr}}CAffectationPersonnel.none{{/tr}}</em></td>
+	<td colspan="10" class="empty">{{tr}}CAffectationPersonnel.none{{/tr}}</td>
   {{/foreach}}
 </tr>
  

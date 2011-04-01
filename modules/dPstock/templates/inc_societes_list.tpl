@@ -58,7 +58,7 @@ td.inactive .societe-type {
   </tr>
   {{foreachelse}}
   <tr>
-    <td colspan="10">{{tr}}CSociete.none{{/tr}}</td>
+    <td colspan="10" class="empty">{{tr}}CSociete.none{{/tr}}</td>
   </tr>
   {{/foreach}}
   

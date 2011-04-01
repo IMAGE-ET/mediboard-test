@@ -53,7 +53,7 @@ Main.add(window.print);
   {{/foreach}}
 {{foreachelse}}
   <tr>
-    <td colspan="10">{{tr}}CProductDeliveryTrace.none{{/tr}}</td>
+    <td colspan="10" class="empty">{{tr}}CProductDeliveryTrace.none{{/tr}}</td>
   </tr>
 {{/foreach}}
 </table>

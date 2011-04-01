@@ -35,11 +35,9 @@
     </tr>
   {{foreachelse}}
     <tr>
-    	<td>
-    		<em>
-    	    {{tr}}{{$object->_class_name}}{{/tr}} :
-    	    {{tr}}CFile.none{{/tr}}
-    	  </em>
+    	<td class="empty">
+        {{tr}}{{$object->_class_name}}{{/tr}} :
+        {{tr}}CFile.none{{/tr}}
     	</td>
     </tr>
   {{/foreach}}

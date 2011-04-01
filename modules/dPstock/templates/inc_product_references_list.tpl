@@ -68,7 +68,7 @@
   </tr>
   {{foreachelse}}
   <tr>
-    <td colspan="10">{{tr}}CProductReference.none{{/tr}}</td>
+    <td colspan="10" class="empty">{{tr}}CProductReference.none{{/tr}}</td>
   </tr>
   {{/foreach}}
 </table>

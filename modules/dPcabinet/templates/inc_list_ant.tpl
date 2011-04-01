@@ -143,7 +143,7 @@ Traitement = {
 	  </li>
 	  {{/foreach}}
 	{{else}}
-		<li><em>{{tr}}CAntecedent.unknown{{/tr}}</em></li>
+		<li class="empty">{{tr}}CAntecedent.unknown{{/tr}}</li>
 	{{/if}}
 </ul>
 
@@ -222,7 +222,7 @@ Traitement = {
   </li>
   {{foreachelse}}
   {{if !($dossier_medical->_ref_prescription && $dossier_medical->_ref_prescription->_ref_prescription_lines|@count)}}
-  <li><em>{{tr}}CTraitement.unknown{{/tr}}</em></li>
+  <li class="empty">{{tr}}CTraitement.unknown{{/tr}}</li>
   {{/if}}
   {{/foreach}}
 </ul>
@@ -243,7 +243,7 @@ Traitement = {
     {{$_code->code}}: {{$_code->libelle}}
   </li>
   {{foreachelse}}
-  <li><em>{{tr}}CDossierMedical-codes_cim.unknown{{/tr}}</em></li>
+  <li class="empty">{{tr}}CDossierMedical-codes_cim.unknown{{/tr}}</li>
   {{/foreach}}
 </ul>
 

@@ -242,7 +242,7 @@ var filterForm = null;
            {{/foreach}}
           </table>
         {{foreachelse}}
-          {{tr}}CEiItem.none{{/tr}}
+          <div class="empty">{{tr}}CEiItem.none{{/tr}}</div>
         {{/foreach}}
       </td>
     </tr>

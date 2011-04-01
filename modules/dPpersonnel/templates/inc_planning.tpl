@@ -125,7 +125,7 @@
       {{/if}}
       {{foreachelse}}
       <tr>
-        <td colspan="{{math equation="x+1" x=$tableau_periode|@count}}">
+        <td colspan="{{math equation="x+1" x=$tableau_periode|@count}}" class="empty">
           {{tr}}CPlageConge.none{{/tr}}
         </td> 
       </tr>

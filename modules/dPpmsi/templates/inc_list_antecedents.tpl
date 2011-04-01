@@ -28,7 +28,7 @@
       </li>
       {{/if}}
       {{foreachelse}}
-      <li>{{tr}}CAntecedent.none{{/tr}}</li>
+      <li class="empty">{{tr}}CAntecedent.none{{/tr}}</li>
       {{/foreach}}
     </ul>
   </li>
@@ -51,7 +51,7 @@
       </li>
       {{/if}}
       {{foreachelse}}
-      <li>{{tr}}CAntecedent.none{{/tr}}</li>
+      <li class="empty">{{tr}}CAntecedent.none{{/tr}}</li>
       {{/foreach}}
     </ul>
   </li>

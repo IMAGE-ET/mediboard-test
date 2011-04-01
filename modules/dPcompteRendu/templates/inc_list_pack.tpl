@@ -56,7 +56,7 @@
     </tr>
     {{foreachelse}}
     <tr>
-      <td colspan="10">{{tr}}CPack.none{{/tr}}</td>
+      <td colspan="10" class="empty">{{tr}}CPack.none{{/tr}}</td>
     </tr>
     {{/foreach}}
   </tbody>
@@ -72,7 +72,7 @@
     </tr>
     {{foreachelse}}
     <tr>
-      <td colspan="10">{{tr}}CPack.none{{/tr}}</td>
+      <td colspan="10" class="empty">{{tr}}CPack.none{{/tr}}</td>
     </tr>
     {{/foreach}}
   </tbody>
@@ -88,7 +88,7 @@
     </tr>
     {{foreachelse}}
     <tr>
-      <td colspan="10">{{tr}}CPack.none{{/tr}}</td>
+      <td colspan="10"  class="empty">{{tr}}CPack.none{{/tr}}</td>
     </tr>
     {{/foreach}}
   </tbody>

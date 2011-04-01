@@ -105,6 +105,6 @@
 </tbody>
 {{foreachelse}}
 <tr>
-  <td colspan="20">{{tr}}CUserLog.none{{/tr}}</td>
+  <td colspan="20" class="empty">{{tr}}CUserLog.none{{/tr}}</td>
 </tr>
 {{/foreach}}

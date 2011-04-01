@@ -34,7 +34,7 @@
     </tr>
    {{foreachelse}}
     <tr>
-      <td colspan="10"><em>{{tr}}{{$category_class}}.none{{/tr}}</em></td>
+      <td colspan="10" class="empty">{{tr}}{{$category_class}}.none{{/tr}}</td>
     </tr>
   {{/foreach}}
 </table>

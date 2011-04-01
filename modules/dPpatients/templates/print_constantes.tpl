@@ -20,7 +20,7 @@
       </tr>
     {{foreachelse}}
       <tr>
-        <td>{{tr}}CConstantesMedicales.none{{/tr}}</td>
+        <td class="empty">{{tr}}CConstantesMedicales.none{{/tr}}</td>
       </tr>
     {{/foreach}}
   </tbody>

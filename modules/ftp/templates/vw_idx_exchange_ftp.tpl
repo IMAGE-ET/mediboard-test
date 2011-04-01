@@ -90,7 +90,7 @@
           </tbody>
         {{foreachelse}}
           <tr>
-            <td colspan="16">
+            <td colspan="16" class="empty">
               {{tr}}CExchangeFTP.none{{/tr}}
             </td>
           </tr>

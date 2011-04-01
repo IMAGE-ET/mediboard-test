@@ -68,7 +68,7 @@
   </tr>
 {{foreachelse}}
   <tr>
-    <td colspan="10">{{tr}}{{$class_name}}.none{{/tr}}</td>
+    <td colspan="10" class="empty">{{tr}}{{$class_name}}.none{{/tr}}</td>
   </tr>
 {{/foreach}}
 </table>

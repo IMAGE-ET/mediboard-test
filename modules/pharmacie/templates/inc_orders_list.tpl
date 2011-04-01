@@ -83,7 +83,7 @@ Main.add(function(){
               {{include file="inc_vw_line_order.tpl" curr_delivery=$_delivery nodebug=true}}
             {{foreachelse}}
             <tr>
-              <td colspan="10">{{tr}}CProductDelivery.order.none{{/tr}}</td>
+              <td colspan="10" class="empty">{{tr}}CProductDelivery.order.none{{/tr}}</td>
             </tr>
           </tbody>
           {{/foreach}}

@@ -467,7 +467,7 @@ Main.add(function () {
         </tr>
         {{foreachelse}}
         <tr>
-          <td colspan="6"><em>{{tr}}CConsultation.none{{/tr}}</em></td>
+          <td colspan="6" class="empty">{{tr}}CConsultation.none{{/tr}}</td>
         </tr>
         {{/foreach}}
       </table>

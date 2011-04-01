@@ -160,9 +160,7 @@ Reconvocation = {
              {{mb_include module=dPcabinet template=inc_list_consult}}
            </td>
          {{foreachelse}}
-           <td>
-             <em>{{tr}}CPlageconsult.none{{/tr}}
-           </td>
+           <td class="empty">{{tr}}CPlageconsult.none{{/tr}}</td>
          {{/foreach}}
        </tr>
      </table>

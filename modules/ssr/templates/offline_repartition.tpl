@@ -46,9 +46,7 @@
 										{{mb_include template=inc_sejour_draggable remplacement=0 sejour=$_sejour}}
 									{{foreachelse}}
 								  <tr>
-                    <td>
-                      <em>{{tr}}CSejour.none{{/tr}}</em>
-                    </td>
+                    <td class="empty">{{tr}}CSejour.none{{/tr}}</td>
                   </tr>
 									{{/foreach}}	
 									{{if count($replacements.$technicien_id)}}

@@ -127,7 +127,7 @@
         {{include file="../../dPstock/templates/inc_bargraph.tpl" stock=$stock->_ref_stock_service}}
       </td>
     {{else}}
-      <td colspan="3">
+      <td colspan="3" class="empty">
         {{tr}}CProductStockService.none{{/tr}}
       </td>
     {{/if}}

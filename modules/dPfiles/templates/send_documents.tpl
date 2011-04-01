@@ -101,7 +101,7 @@
   </tr>
   {{foreachelse}}
 	<tr>
-		<td colspan="5"><em>{{tr}}{{$class}}.none{{/tr}}</em></td>
+		<td colspan="5" class="empty">{{tr}}{{$class}}.none{{/tr}}</td>
 	</tr>
   {{/foreach}}
 {{/foreach}}

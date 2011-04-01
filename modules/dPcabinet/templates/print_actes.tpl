@@ -51,7 +51,7 @@
   </tr>
   {{foreachelse}}
   <tr>
-    <td colspan="8">{{tr}}CActeNGAP.none{{/tr}}</td>
+    <td colspan="8" class="empty">{{tr}}CActeNGAP.none{{/tr}}</td>
   </tr>
   {{/foreach}}
 </table>

@@ -66,7 +66,7 @@
     </tr>
   {{foreachelse}}
     <tr>
-      <td colspan="5">{{tr}}CProductStockService.none{{/tr}}</td>
+      <td colspan="5" class="empty">{{tr}}CProductStockService.none{{/tr}}</td>
     </tr>
   {{/foreach}}
 </table>

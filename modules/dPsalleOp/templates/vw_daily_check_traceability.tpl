@@ -63,7 +63,7 @@
         </tr>
 				{{foreachelse}}
         <tr>
-          <td colspan="10">{{tr}}CDailyCheckList.none{{/tr}}</td>
+          <td colspan="10" class="empty">{{tr}}CDailyCheckList.none{{/tr}}</td>
         </tr>
 				{{/foreach}}
 			</table>
@@ -124,7 +124,7 @@
                 {{assign var=category_id value=$curr_type->category_id}}
               {{foreachelse}}
                 <tr>
-                  <td colspan="3">{{tr}}CDailyCheckItemType.none{{/tr}}</td>
+                  <td colspan="3" class="empty">{{tr}}CDailyCheckItemType.none{{/tr}}</td>
                 </tr>
               {{/foreach}}
               <tr>

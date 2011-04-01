@@ -57,7 +57,7 @@
 		</tr>
 	{{foreachelse}}
 	<tr>
-	  <td colspan="4">{{tr}}CBloodSalvage.none{{/tr}}</td>
+	  <td colspan="4" class="empty">{{tr}}CBloodSalvage.none{{/tr}}</td>
 	</tr>
 	{{/foreach}}
 </table>

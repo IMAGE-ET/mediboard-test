@@ -108,7 +108,7 @@ function saveSortie(oFormSortie, oFormAffectation){
                 </td>
               </tr>
 							{{foreachelse}}
-							<tr><td colspan="6"><em>{{tr}}CSejour.none{{/tr}}</em></td></tr>
+							<tr><td colspan="6" class="empty">{{tr}}CSejour.none{{/tr}}</td></tr>
               {{/foreach}}
             </table>
           </td>
@@ -170,7 +170,7 @@ function saveSortie(oFormSortie, oFormAffectation){
                     <td>{{$_sortie->sortie|date_format:$conf.time}}</td>
                   </tr>
 	              {{foreachelse}}
-  	              <tr><td colspan="5"><em>{{tr}}CSejour.none{{/tr}}</em></td></tr>
+  	              <tr><td colspan="5" class="empty">{{tr}}CSejour.none{{/tr}}</td></tr>
                 {{/foreach}}
               {{/foreach}}
             </table>

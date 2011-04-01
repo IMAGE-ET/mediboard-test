@@ -28,7 +28,7 @@
 	      {{include file="./inc_planning/print_suivi_plages.tpl"}}
 	    </td>
     {{foreachelse}}
-      <td>{{tr}}CSalle.none{{/tr}}</td>
+      <td class="empty">{{tr}}CSalle.none{{/tr}}</td>
     {{/foreach}}
   </tr>
 </table>

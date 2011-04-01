@@ -33,7 +33,7 @@
     </tbody>
   {{foreachelse}}
     <tr>
-      <td colspan="6">{{tr}}CProductEndowment.none{{/tr}}</td>
+      <td colspan="6" class="empty">{{tr}}CProductEndowment.none{{/tr}}</td>
     </tr>
   {{/foreach}}
 </table>

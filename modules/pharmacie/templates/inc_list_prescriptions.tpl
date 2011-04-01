@@ -43,7 +43,7 @@
 	</tr>
 	{{foreachelse}}
 	<tr>
-		<td>
+		<td class="empty">
 			{{tr}}CPrescription.none{{/tr}}
 		</td>
 	</tr>

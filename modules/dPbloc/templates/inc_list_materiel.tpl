@@ -75,6 +75,6 @@
     {{/if}}
   </tr>
   {{foreachelse}}
-	<tr><td colspan="10"><em>{{tr}}COperation.none{{/tr}}</em></td></tr>
+	<tr><td colspan="10" class="empty">{{tr}}COperation.none{{/tr}}</td></tr>
   {{/foreach}}
 </table>

@@ -264,7 +264,7 @@
         </span>
         <br />
       {{foreachelse}}
-        <div>{{tr}}CCorrespondant.none{{/tr}}</div>
+        <div class="empty">{{tr}}CCorrespondant.none{{/tr}}</div>
       {{/foreach}}
     </td>
   </tr>
@@ -272,5 +272,5 @@
 
 <!-- Dossier Médical -->
 {{if $object->_ref_dossier_medical->_canRead}}
-  {{include file=../../dPpatients/templates/CDossierMedical_complete.tpl object=$object->_ref_dossier_medical}}
+  {{mb_include module=dPpatients template=CDossierMedical_complete object=$object->_ref_dossier_medical}}
 {{/if}}

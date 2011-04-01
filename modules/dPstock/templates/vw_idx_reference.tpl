@@ -132,7 +132,7 @@ function filterReferences(form) {
         </tr>
         {{foreachelse}}
         <tr>
-          <td colspan="10"><em>{{tr}}CProductOrder.none{{/tr}}</em></td>
+          <td colspan="10" class="empty">{{tr}}CProductOrder.none{{/tr}}</td>
         </tr>
         {{/foreach}}
       </table>
@@ -153,7 +153,7 @@ function filterReferences(form) {
         </tr>
         {{foreachelse}}
         <tr>
-          <td colspan="10"><em>{{tr}}CProductReception.none{{/tr}}</em></td>
+          <td colspan="10" class="empty">{{tr}}CProductReception.none{{/tr}}</td>
         </tr>
         {{/foreach}}
       </table>

@@ -22,7 +22,7 @@
               <td><a href="?m={{$m}}&amp;tab={{$tab}}&amp;salle_id={{$_salle->_id}}">{{$_salle}}</a></td>
             </tr>
           {{foreachelse}}
-            <tr><td>{{tr}}CSalle.none{{/tr}}</td></tr>
+            <tr><td class="empty">{{tr}}CSalle.none{{/tr}}</td></tr>
           {{/foreach}}
         {{/foreach}}
       </table>

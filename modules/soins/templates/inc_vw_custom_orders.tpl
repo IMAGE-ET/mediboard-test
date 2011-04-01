@@ -26,7 +26,7 @@
   </tr>
 {{foreachelse}}
   <tr>
-    <td colspan="4">
+    <td colspan="4" class="empty">
       {{tr}}CProductDelivery.none{{/tr}}
     </td>
   </tr>

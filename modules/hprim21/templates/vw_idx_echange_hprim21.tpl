@@ -108,7 +108,7 @@ refreshEchange = function(echange_hprim21_id){
           </tbody>
         {{foreachelse}}
           <tr>
-            <td colspan="17">
+            <td colspan="17" class="empty">
               {{tr}}CEchangeHprim21.none{{/tr}}
             </td>
           </tr>

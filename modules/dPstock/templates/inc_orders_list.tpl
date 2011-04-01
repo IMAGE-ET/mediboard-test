@@ -81,7 +81,7 @@ changePage.{{$type}} = function(page) {
 	  </tr>
 	{{foreachelse}}
 	  <tr>
-	    <td colspan="8">{{tr}}CProductOrder.none{{/tr}}</td>
+	    <td colspan="8" class="empty">{{tr}}CProductOrder.none{{/tr}}</td>
 	  </tr>
 	{{/foreach}}
   </tbody>
@@ -161,7 +161,7 @@ changePage.{{$type}} = function(page) {
     </tr>
   {{foreachelse}}
     <tr>
-      <td colspan="8">{{tr}}CProductOrder.none{{/tr}}</td>
+      <td colspan="8" class="empty">{{tr}}CProductOrder.none{{/tr}}</td>
     </tr>
   {{/foreach}}
   </tbody>
@@ -239,7 +239,7 @@ changePage.{{$type}} = function(page) {
     </tr>
   {{foreachelse}}
     <tr>
-      <td colspan="8">{{tr}}CProductOrder.none{{/tr}}</td>
+      <td colspan="8" class="empty">{{tr}}CProductOrder.none{{/tr}}</td>
     </tr>
   {{/foreach}}
   </tbody>
@@ -331,7 +331,7 @@ changePage.{{$type}} = function(page) {
     </tr>
   {{foreachelse}}
     <tr>
-      <td colspan="8">{{tr}}CProductOrder.none{{/tr}}</td>
+      <td colspan="8" class="empty">{{tr}}CProductOrder.none{{/tr}}</td>
     </tr>
   {{/foreach}}
   </tbody>
@@ -408,7 +408,7 @@ changePage.{{$type}} = function(page) {
     </tr>
   {{foreachelse}}
     <tr>
-      <td colspan="8">{{tr}}CProductOrder.none{{/tr}}</td>
+      <td colspan="8" class="empty">{{tr}}CProductOrder.none{{/tr}}</td>
     </tr>
   {{/foreach}}
   </tbody>

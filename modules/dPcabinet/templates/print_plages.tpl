@@ -108,9 +108,7 @@
   
   {{foreachelse}}
   <tr>
-  	<td>
-  	  <em>{{tr}}CPlageconsult.none{{/tr}}</em>
-  	</td>
+  	<td class="empty">{{tr}}CPlageconsult.none{{/tr}}</td>
   </tr>
   {{/foreach}}
 </table>

@@ -20,7 +20,7 @@
   </tbody>
 {{foreachelse}}
   <tr>
-    <td colspan="8">{{tr}}CProductStockGroup.none{{/tr}}</td>
+    <td colspan="8" class="empty">{{tr}}CProductStockGroup.none{{/tr}}</td>
   </tr>
 {{/foreach}}
 </table>

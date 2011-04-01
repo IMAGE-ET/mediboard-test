@@ -53,7 +53,7 @@
 				  {{/foreach}}
 			  {{foreachelse}}
 				<tr>
-					<td>{{tr}}CFicheATC.none{{/tr}}</td>
+					<td class="empty">{{tr}}CFicheATC.none{{/tr}}</td>
 				</tr>
 				{{/foreach}}
 			</table>

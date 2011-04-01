@@ -36,9 +36,7 @@
 
 	{{foreachelse}}
 	<tr>
-	  <td colspan="10">
-	    <em>{{tr}}CCompteRendu.none{{/tr}}</em>
-	  </td>
+	  <td colspan="10" class="empty">{{tr}}CCompteRendu.none{{/tr}}</td>
 	</tr>
   {{/foreach}}
 </table>

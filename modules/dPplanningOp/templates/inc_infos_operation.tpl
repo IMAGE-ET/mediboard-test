@@ -113,7 +113,7 @@ printFicheBloc = function(operation_id) {
                         {{assign var=category_id value=$curr_type->category_id}}
                       {{foreachelse}}
                         <tr>
-                          <td colspan="3" style="border: none;">{{tr}}CDailyCheckItemType.none{{/tr}}</td>
+                          <td colspan="3" class="empty" style="border: none;">{{tr}}CDailyCheckItemType.none{{/tr}}</td>
                         </tr>
                       {{/foreach}}
                       <tr>
@@ -136,7 +136,7 @@ printFicheBloc = function(operation_id) {
     {{/if}}
 	  {{foreachelse}}
 	  <tr>
-	    <td colspan="4"><em>{{tr}}COperation.none{{/tr}}</em></td>
+	    <td colspan="4" class="empty">{{tr}}COperation.none{{/tr}}</td>
 	  </tr>
 	  {{/foreach}}
 	</table>

@@ -170,7 +170,7 @@ function redactionDoc(oForm){
         </tr>
         {{foreachelse}}
         <tr>
-          <td colspan="5">
+          <td colspan="5" class="empty">
             {{tr}}CDocGed.none{{/tr}}
           </td>
         </tr>

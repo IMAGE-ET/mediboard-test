@@ -103,7 +103,7 @@
   </tr>
   {{foreachelse}}
   <tr>
-    <td colspan="10">
+    <td colspan="10" class="empty">
       {{tr}}CUser.none{{/tr}}
     </td>
   </tr>

@@ -86,7 +86,7 @@ Main.add(function(){
     </tbody>
   {{foreachelse}}
     <tr>
-      <td colspan="10">{{tr}}CProductOrderItem.none{{/tr}}</td>
+      <td colspan="10" class="empty">{{tr}}CProductOrderItem.none{{/tr}}</td>
     </tr>
   {{/foreach}}
   <tr>

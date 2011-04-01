@@ -86,7 +86,7 @@ toggleCancelledAnesth = function(list) {
   {{/foreach}}
   {{/foreach}}
 	{{else}}
-		<li><em>{{tr}}CAntecedent.none{{/tr}}</em></li>
+		<li class="empty">{{tr}}CAntecedent.none{{/tr}}</li>
 	{{/if}}
 </ul>
       
@@ -116,7 +116,7 @@ toggleCancelledAnesth = function(list) {
     </form>
   </li>
   {{foreachelse}}
-  <li><em>Pas de traitements</em></li>
+  <li class="empty">Pas de traitements</li>
   {{/foreach}}
 </ul>
 {{/if}}
@@ -144,7 +144,7 @@ toggleCancelledAnesth = function(list) {
 	  </form>
   </li>
   {{foreachelse}}
-  <li><em>Pas de traitements personnels</em></li>
+  <li class="empty">Pas de traitements personnels</li>
   {{/foreach}}
 </ul>
 {{/if}}
@@ -159,7 +159,7 @@ toggleCancelledAnesth = function(list) {
     {{$curr_code->code}}: {{$curr_code->libelle}}
   </li>
   {{foreachelse}}
-  <li><em>Pas de diagnostic</em></li>
+  <li class="empty">Pas de diagnostic</li>
   {{/foreach}}
 </ul>
 

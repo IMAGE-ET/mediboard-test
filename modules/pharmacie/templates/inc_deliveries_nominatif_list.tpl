@@ -83,12 +83,12 @@ Main.add(function(){
                 {{include file="inc_vw_line_delivrance.tpl" curr_delivery=$_delivery}}
               </tr>
             {{foreachelse}}
-              <td colspan="10">{{tr}}CProductDelivery.none{{/tr}}</td>
+              <td colspan="10" class="empty">{{tr}}CProductDelivery.none{{/tr}}</td>
             {{/foreach}}
           </tbody>
         {{foreachelse}}
         <tr>
-          <td colspan="10">{{tr}}CProductDelivery.nominatif.none{{/tr}}</td>
+          <td colspan="10" class="empty">{{tr}}CProductDelivery.nominatif.none{{/tr}}</td>
         </tr>
         {{/foreach}}
       </table>

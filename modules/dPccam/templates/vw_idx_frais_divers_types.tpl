@@ -36,7 +36,7 @@
           </tr>
         {{foreachelse}}
           <tr>
-            <td colspan="4">{{tr}}CFraisDiversType.none{{/tr}}</td>
+            <td colspan="4" class="empty">{{tr}}CFraisDiversType.none{{/tr}}</td>
           </tr>
         {{/foreach}}
         

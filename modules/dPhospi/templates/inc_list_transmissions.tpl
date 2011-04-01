@@ -60,7 +60,7 @@ toggleTrans = function(trans_class){
   {{foreachelse}}
   </tbody>
     <tr>
-      <td colspan="7">{{tr}}CTransmissionMedicale.none{{/tr}}</td>
+      <td colspan="7" class="empty">{{tr}}CTransmissionMedicale.none{{/tr}}</td>
     </tr>
   {{/foreach}}
 </table>

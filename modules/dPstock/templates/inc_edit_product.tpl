@@ -66,7 +66,7 @@ drawConsumptionGraph = function() {
         <td>{{$_stock_group->_ref_location->name}}</td>
         <td>{{include file="inc_bargraph.tpl" stock=$product->_ref_stock_group}}</td>
       {{else}}
-        <td colspan="2">{{tr}}CProductStockGroup.none{{/tr}}</td>
+        <td colspan="2" class="empty">{{tr}}CProductStockGroup.none{{/tr}}</td>
         <td>
           <button class="new" type="button" onclick="window.location='?m=dPstock&amp;tab=vw_idx_stock_group&amp;stock_id=0&amp;product_id={{$product->_id}}'">
             {{tr}}CProductStockGroup-title-create{{/tr}}
@@ -108,7 +108,7 @@ drawConsumptionGraph = function() {
       {{/if}}
     {{foreachelse}}
       <tr>
-        <td colspan="4">
+        <td colspan="4" class="empty">
         {{if !$infinite_stock_service}}
           {{tr}}CProductStockService.none{{/tr}}
         {{else}}
@@ -179,7 +179,7 @@ drawConsumptionGraph = function() {
     </tr>
   {{foreachelse}}
     <tr>
-      <td colspan="4">{{tr}}CProductDeliveryTrace.none{{/tr}}</td>
+      <td colspan="4" class="empty">{{tr}}CProductDeliveryTrace.none{{/tr}}</td>
     </tr>
   {{/foreach}}
 </table>

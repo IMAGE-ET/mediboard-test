@@ -31,7 +31,7 @@
   </tr>
 	{{foreachelse}}
   <tr>
-  	<td colspan="10"><em>{{tr}}CPlateauTechnique.none{{/tr}}</em></td>
+  	<td colspan="10" class="empty">{{tr}}CPlateauTechnique.none{{/tr}}</td>
   </tr>
 	{{/foreach}}
 	

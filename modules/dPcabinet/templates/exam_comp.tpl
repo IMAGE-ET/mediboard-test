@@ -28,8 +28,6 @@
         </form>
 
         <br />
-		  {{foreachelse}}
-			  <em>{{tr}}CExamComp.none{{/tr}}</em>
       {{/foreach}}
     </td>
   </tr>

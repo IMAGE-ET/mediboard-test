@@ -59,7 +59,7 @@
     </tr>
   {{foreachelse}}
     <tr>
-      <td colspan="2">{{tr}}CProductSelectionItem.none{{/tr}}</td>
+      <td colspan="2" class="empty">{{tr}}CProductSelectionItem.none{{/tr}}</td>
     </tr>
   {{/foreach}}
   <tr>

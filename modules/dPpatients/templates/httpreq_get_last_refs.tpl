@@ -29,7 +29,7 @@
   			      </span>
 						</li>
 		      {{foreachelse}}
-			      <li>{{tr}}COperation.none{{/tr}}</li>
+			      <li class="empty">{{tr}}COperation.none{{/tr}}</li>
 		      {{/foreach}}
           
           {{foreach from=$curr_sejour->_ref_consultations item=_consult}}

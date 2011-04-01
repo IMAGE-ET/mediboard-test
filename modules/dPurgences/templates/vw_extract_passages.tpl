@@ -136,7 +136,7 @@
   </tr>
   {{foreachelse}}
   <tr>
-    <td colspan="18">{{tr}}CExtractPassages.none{{/tr}}</td>
+    <td colspan="18" class="empty">{{tr}}CExtractPassages.none{{/tr}}</td>
   </tr>
   {{/foreach}}
 </table>

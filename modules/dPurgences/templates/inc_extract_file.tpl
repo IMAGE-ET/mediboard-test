@@ -12,11 +12,9 @@
   </tr>
   {{foreachelse}}
   <tr>
-    <td>
-      <em>
-        {{tr}}{{$_passage->_class_name}}{{/tr}} :
-        {{tr}}CFile.none{{/tr}}
-      </em>
+    <td class="empty">
+      {{tr}}{{$_passage->_class_name}}{{/tr}} :
+      {{tr}}CFile.none{{/tr}}
     </td>
   </tr>
   {{/foreach}}

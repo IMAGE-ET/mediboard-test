@@ -30,9 +30,11 @@
         {{/foreach}}
       </ul>
       {{/if}}
-      {{foreachelse}}
-        <i>Pas d'antécédents</i>
       {{/foreach}}
+      {{if !count($object->_all_antecedents)}}
+      <div class="empty">{{tr}}CAntecedent.none{{/tr}}</div>
+      
+      {{/if}}
     </td>
     
     {{if is_array($object->_ref_traitements)}}
@@ -49,7 +51,7 @@
           {{mb_value object=$curr_traitement field="traitement"}}
         </li>
       {{foreachelse}}
-        <i>Pas de traitements</i>
+        <div class="empty">{{tr}}CTraitement.none{{/tr}}</div>
       {{/foreach}}
       {{if $object->_ref_traitements|@count}}</ul>{{/if}}
     </td>
@@ -62,7 +64,7 @@
           <strong>{{$curr_code->code}}:</strong> {{$curr_code->libelle}}
         </li>
       {{foreachelse}}
-        <i>Pas de diagnostics</i>
+        <div class="empty">{{tr}}Aucun diagnostic{{/tr}}</div>
       {{/foreach}}
       {{if $object->_ext_codes_cim|@count}}</ul>{{/if}}
     </td>

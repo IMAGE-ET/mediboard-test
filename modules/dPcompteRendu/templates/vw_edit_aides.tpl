@@ -216,7 +216,7 @@ function changeUser(user_id) {
       </tr>
     {{foreachelse}}
     <tr>
-      <td colspan="5"><em>{{tr}}CAideSaisie.none{{/tr}}</em></td>
+      <td colspan="5" class="empty">{{tr}}CAideSaisie.none{{/tr}}</td>
     </tr>
     {{/foreach}}
   </table>

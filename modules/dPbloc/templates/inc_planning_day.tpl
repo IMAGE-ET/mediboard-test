@@ -118,6 +118,6 @@
         {{/if}}
         {{foreachelse}}
         <tr>
-          <td colspan="100">{{tr}}CSalle.none{{/tr}}</td>
+          <td colspan="100" class="empty">{{tr}}CSalle.none{{/tr}}</td>
         </tr> 
         {{/foreach}} 

@@ -31,15 +31,15 @@
 	</tr>
   {{foreachelse}}
   <tr>
-  	<td colspan="2" style="padding-left: 1em;">
-       <em>{{tr}}COperation.none{{/tr}}</em>
+  	<td colspan="2" class="empty" style="padding-left: 1em;">
+       {{tr}}COperation.none{{/tr}}
   	</td>
 	</tr>
   {{/foreach}}
 
   {{foreachelse}}
   <tr>
-    <td><em>{{tr}}CSejour.none{{/tr}}</em></td>
+    <td class="empty">{{tr}}CSejour.none{{/tr}}</td>
   </tr>
   {{/foreach}}
 </table>
@@ -72,7 +72,7 @@
   {{foreachelse}}
   
   <tr>
-    <td colspan="2"><em>{{tr}}CConsultation.none{{/tr}}</em></td>
+    <td colspan="2" class="empty">{{tr}}CConsultation.none{{/tr}}</td>
   </tr>
   {{/foreach}}
 	

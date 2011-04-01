@@ -42,7 +42,7 @@ function addTraitement(rques, type, element) {
       {{if ($i % $numCols) == ($numCols-1) && !$smarty.foreach.helpers.last}}</tr><tr>{{/if}}
     {{/foreach}}
   {{/foreach}}
-  {{if $n == 0}}<td>{{tr}}CAideSaisie.none{{/tr}}</td>{{/if}}
+  {{if $n == 0}}<td class="empty">{{tr}}CAideSaisie.none{{/tr}}</td>{{/if}}
   </tr>
 {{/foreach}}
 </table>

@@ -53,13 +53,13 @@
               </tr>
       				{{foreachelse}}
       				<tr>
-                <td colspan="10">{{tr}}CDailyCheckItemType.none{{/tr}}</td>
+                <td colspan="10" class="empty">{{tr}}CDailyCheckItemType.none{{/tr}}</td>
               </tr>
       				{{/foreach}}
             {{/if}}
           {{foreachelse}}
             <tr>
-              <td colspan="10">{{tr}}CDailyCheckItemCategory.none{{/tr}}</td>
+              <td colspan="10" class="empty">{{tr}}CDailyCheckItemCategory.none{{/tr}}</td>
             </tr>
           {{/foreach}}
           </tbody>

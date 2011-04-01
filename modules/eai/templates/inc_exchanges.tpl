@@ -38,7 +38,7 @@
     </tbody>
   {{foreachelse}}
     <tr>
-      <td colspan="20">
+      <td colspan="20" class="empty">
         {{tr}}{{$exchange->_class_name}}.none{{/tr}}
       </td>
     </tr>

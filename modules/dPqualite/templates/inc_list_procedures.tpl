@@ -70,7 +70,7 @@
   </tr>
   {{foreachelse}}
   <tr>
-    <td colspan="10">{{tr}}CDocGed.none{{/tr}}</td>
+    <td colspan="10" class="empty">{{tr}}CDocGed.none{{/tr}}</td>
   </tr>
   {{/foreach}}
 </table>

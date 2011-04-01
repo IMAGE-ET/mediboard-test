@@ -123,7 +123,7 @@ foreach ($sejours as $sejour_id => $_sejour) {
   }
   
   // Chargement des modes de sortie
-  $_sejour->loadRefEtabExterne();
+  $_sejour->loadRefEtablissementTransfert();
   $_sejour->loadRefServiceMutation();  
 }
 

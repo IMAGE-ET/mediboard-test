@@ -175,7 +175,7 @@ function onSubmitCorrespondant(form) {
           {{/if}}
         </tr>
         {{foreachelse}}
-        <tr><td colspan="20">{{tr}}CMedecin.none{{/tr}}</td></tr>
+        <tr><td colspan="20" class="empty">{{tr}}CMedecin.none{{/tr}}</td></tr>
         {{/foreach}}
       </table>
 

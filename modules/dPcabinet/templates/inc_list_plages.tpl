@@ -32,7 +32,7 @@
       </tr>
       {{foreachelse}}
       <tr>
-        <td colspan="5">{{tr}}CPlageconsult.none{{/tr}}</td>
+        <td colspan="5" class="empty">{{tr}}CPlageconsult.none{{/tr}}</td>
       </tr>
       {{/foreach}}
     </table>

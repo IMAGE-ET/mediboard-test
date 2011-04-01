@@ -130,7 +130,7 @@
           </select>
         </td>
       {{else}}
-        <td colspan="2" style="color: #aaa;">
+        <td colspan="2"  class="empty">
           {{tr}}CProductEndowment.none{{/tr}}
         </td>
       {{/if}}
@@ -202,7 +202,7 @@
     </tbody>
   {{foreachelse}}
     <tr>
-      <td colspan="10">{{tr}}CProductStockGroup.none{{/tr}}</td>
+      <td colspan="10" class="empty">{{tr}}CProductStockGroup.none{{/tr}}</td>
     </tr>
   {{/foreach}}
 </table>

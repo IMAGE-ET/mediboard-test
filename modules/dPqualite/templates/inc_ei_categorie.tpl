@@ -59,7 +59,7 @@
   </tr>
   {{foreachelse}}
   <tr>
-    <td colspan="2">
+    <td colspan="2" class="empty">
       {{tr}}CEiCategorie.none{{/tr}}
     </td>
   </tr>

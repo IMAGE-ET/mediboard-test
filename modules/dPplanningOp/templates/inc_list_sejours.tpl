@@ -15,8 +15,8 @@
     {{/foreach}}
   {{else}}
     <tr>
-      <td>
-        <em>{{tr}}CSejour.none{{/tr}}</em>
+      <td class="empty">
+        {{tr}}CSejour.none{{/tr}}
       </td>
     </tr>
   {{/if}}
