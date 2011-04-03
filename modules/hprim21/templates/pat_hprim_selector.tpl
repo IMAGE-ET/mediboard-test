@@ -82,7 +82,7 @@ var Patient = {
   {{foreachelse}}
   {{if $name || $firstName}}
   <tr>
-    <td class="button" colspan="5">
+    <td class="button empty" colspan="5">
       Aucun résultat exact
     </td>
   </tr>

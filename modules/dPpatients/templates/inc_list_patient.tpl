@@ -203,7 +203,7 @@ reloadPatient = function(patient_id, link){
     {{mb_include module=dPpatients template=inc_list_patient_line}}
   {{foreachelse}}
 	  <tr>
-	    <td colspan="100"><em>{{tr}}dPpatients-CPatient-no-exact-results{{/tr}}</em></td>
+	    <td colspan="100" class="empty">{{tr}}dPpatients-CPatient-no-exact-results{{/tr}}</td>
 	  </tr>
   {{/foreach}}
 	
