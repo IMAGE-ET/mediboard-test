@@ -82,7 +82,7 @@ Main.add(function () {
 						</div>
             <br/>
 			    	{{foreachelse}}
-			    	<em>{{tr}}None{{/tr}}</em>
+			    	<div class="empty">{{tr}}None{{/tr}}</div>
 						{{/foreach}}
 			    </td>
         </tr>
@@ -97,7 +97,7 @@ Main.add(function () {
 				 	    {{mb_include module=system template=CMbObject_view object=$tarif->_new_actes.$_code_ngap}}
 			 		  </div>
           	{{foreachelse}}
-            <em>{{tr}}None{{/tr}}</em>
+            <div class="empty">{{tr}}None{{/tr}}</div>
 	 				{{/foreach}}
           </td>
         </tr>

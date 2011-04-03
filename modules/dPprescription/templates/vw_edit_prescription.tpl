@@ -85,7 +85,7 @@
               {{/if}}
               {{/foreach}}
             {{else}}
-              <li><em>Pas d'antécédents</em></li>
+              <li class="empty">Pas d'antécédents</li>
             {{/if}}
             </ul>
             <strong>Traitements</strong>
@@ -103,7 +103,7 @@
                 </span>
               </li>
               {{foreachelse}}
-              <li><em>Pas de traitements</em></li>
+              <li class="empty">Pas de traitements</li>
               {{/foreach}}
             </ul>
             <strong>Diagnostics</strong>
@@ -113,7 +113,7 @@
                 {{$curr_code->code}}: {{$curr_code->libelle}}
               </li>
               {{foreachelse}}
-              <li><em>Pas de diagnostic</em></li>
+              <li class="empty">Pas de diagnostic</li>
               {{/foreach}}
             </ul>
           </td>

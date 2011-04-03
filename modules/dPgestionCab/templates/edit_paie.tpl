@@ -186,9 +186,7 @@ function saveFiche() {
         </tr>
         {{foreachelse}}
         <tr>
-          <td>
-            <em>CFichePaie.none </em>
-          </td>
+          <td class="empty">{{tr}}CFichePaie.none{{/tr}}</td>
         </tr>
         {{/foreach}}
       </table>

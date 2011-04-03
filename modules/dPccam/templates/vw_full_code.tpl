@@ -152,7 +152,7 @@ Main.add(function () {
                       {{foreach from=$_act->modificateurs item=_mod}}
                       <li>{{$_mod->code}} : {{$_mod->libelle}}</li>
                       {{foreachelse}}
-                      <li><em>Aucun modificateur applicable à cet acte</em></li>
+                      <li class="empty">Aucun modificateur applicable à cet acte</li>
                       {{/foreach}}
                     </ul>
                   </li>

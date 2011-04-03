@@ -144,9 +144,7 @@ Intermax.Triggers['Formater FSE'].aActes = {{$consult->_fse_intermax|@json}};
               {{/if}}
             {{foreachelse}}
             <tr>
-              <td>
-                <em>Aucune FSE associée</em>
-              </td>
+              <td class="empty">Aucune FSE associée</td>
             </tr>
             {{/foreach}}
             {{if $patient->_id_vitale && $praticien->_id_cps}}

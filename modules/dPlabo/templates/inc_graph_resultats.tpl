@@ -50,8 +50,8 @@
       </td>
       <td>{{mb_value object=$_item field=date}}</td>
       {{else}}
-      <td colspan="2" style="text-align: center">
-        <em>Aucun résultat</em>
+      <td colspan="2" class="empty" style="text-align: center">
+        Aucun résultat
       </td>
       {{/if}}
       <td>{{mb_value object=$_item->_ref_prescription_labo field=date format="%d/%m/%Y"}}</td>

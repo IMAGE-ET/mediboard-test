@@ -95,7 +95,7 @@
   </tr>
   {{foreachelse}}
   <tr>
-    <td colspan="100"><em>Aucun résultat exact</em></td>
+    <td colspan="100" class="empty">Aucun résultat exact</td>
   </tr>
   {{/foreach}}
   {{if $patientsSoundex|@count}}

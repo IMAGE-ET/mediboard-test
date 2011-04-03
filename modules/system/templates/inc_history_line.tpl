@@ -81,7 +81,7 @@
             </strong>
           </td>
         {{else}}
-          <td colspan="3" style="font-weight: normal;"><em>{{tr}}Unavailable information{{/tr}}</em></td>
+          <td colspan="3"  class="empty" style="font-weight: normal;">{{tr}}Unavailable information{{/tr}}</td>
         {{/if}}
       {{if !$smarty.foreach.field.last}}</tr><tr>{{/if}}
       {{/foreach}}

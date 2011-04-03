@@ -132,6 +132,6 @@ function filterPatient(input, indicator) {
       {{mb_include module=dPurgences template=inc_sortie_rpu}}
     </tr>
   {{foreachelse}}
-	  <tr><td colspan="{{$conf.dPurgences.responsable_rpu_view|ternary:7:6}}"><em>Aucune sortie à effectuer</em></td></tr>
+	  <tr><td colspan="{{$conf.dPurgences.responsable_rpu_view|ternary:7:6}}" class="empty">Aucune sortie à effectuer</td></tr>
   {{/foreach}}
 </table>

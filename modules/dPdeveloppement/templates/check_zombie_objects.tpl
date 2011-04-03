@@ -49,7 +49,7 @@
             </td>
           </tr>
           {{foreachelse}}
-					<tr><td><em>{{tr}}None{{/tr}}</em></td></tr>
+					<tr><td class="empty">{{tr}}None{{/tr}}</tr>
 	        {{/foreach}}
         </table>
 			</td>

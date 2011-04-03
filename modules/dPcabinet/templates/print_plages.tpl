@@ -100,8 +100,8 @@
     
   {{foreachelse}}
   <tr>
-  	<td colspan="10">
-  	  <em>{{tr}}CConsultation.none{{/tr}}</em>
+  	<td colspan="10" class="empty">
+  	  {{tr}}CConsultation.none{{/tr}}
   	</td>
   </tr>
   {{/foreach}}

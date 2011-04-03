@@ -28,7 +28,7 @@
           </strong>
         </td>
       {{else}}
-        <td colspan="2"><em>{{tr}}Unavailable information{{/tr}}</em></td>
+        <td colspan="2" class="empty">{{tr}}Unavailable information{{/tr}}</td>
       {{/if}}
     </tr>
   {{/foreach}}

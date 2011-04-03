@@ -11,7 +11,7 @@
     </tr>
   {{foreachelse}}
     <tr>
-      <td colspan="2"><em>Aucun DMI retrouvé</em></td>
+      <td colspan="2" class="empty">Aucun DMI retrouvé</td>
     </tr>
   {{/foreach}}
   

@@ -70,7 +70,7 @@
 								</table>
 				      </td>
 				    {{foreachelse}}
-				      <td style="width: 150px;" class="text"><em>{{tr}}CPlateauTechnique-back-techniciens.empty{{/tr}}</em></td>
+				      <td style="width: 150px;" class="text empty">{{tr}}CPlateauTechnique-back-techniciens.empty{{/tr}}</td>
 				    {{/foreach}}
 				  </tr> 
 				</table>

@@ -273,7 +273,7 @@ function toggleList(list, button) {
           (Dr {{$curr_op->_ref_chir}})
         </li>
       {{foreachelse}}
-        <li><em>Pas d'interventions</em></li>
+        <li class="empty">Pas d'interventions</li>
       {{/foreach}}
       </ul>
     </td>

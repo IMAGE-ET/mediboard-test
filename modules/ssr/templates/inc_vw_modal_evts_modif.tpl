@@ -76,7 +76,7 @@
 	</tr>
 	{{foreachelse}}
 	<tr>
-		<td colspan="2"><em>Aucun événement sélectionné</em></td>
+		<td colspan="2" class="empty">Aucun événement sélectionné</td>
 	</tr>	
 	{{/foreach}}
 	<tr>
@@ -111,7 +111,7 @@
 					{{/if}}
 				 </span>
 			{{foreachelse}}
-			  <em>Aucun acte CdARR de disponible</em>
+			  <div class="empty">Aucun acte CdARR de disponible</div>
 			{{/foreach}}
 		</td>
 	</tr>		

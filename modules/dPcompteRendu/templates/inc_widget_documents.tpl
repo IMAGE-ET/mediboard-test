@@ -178,8 +178,8 @@ Main.add(function() {
 	</tr>
   {{foreachelse}}
   <tr>
-    <td colspan="3">
-      <em>{{tr}}{{$object->_class_name}}{{/tr}} : Aucun document</em>
+    <td colspan="3" class="empty">
+      {{tr}}{{$object->_class_name}}{{/tr}} : Aucun document
     </td>
   </tr>
   {{/foreach}}

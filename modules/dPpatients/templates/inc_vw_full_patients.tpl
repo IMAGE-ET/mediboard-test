@@ -201,7 +201,7 @@ function popEtatSejour(sejour_id) {
 {{/if}}
 {{foreachelse}}
 <tr>
-	<td colspan="10"><em>{{tr}}CPatient-back-sejours.empty{{/tr}}</em></td>
+	<td colspan="10" class="empty">{{tr}}CPatient-back-sejours.empty{{/tr}}</td>
 </tr>
 {{/foreach}}
 </tbody>
@@ -256,7 +256,7 @@ function popEtatSejour(sejour_id) {
   {{/if}}
 {{foreachelse}}
 <tr>
-  <td colspan="10"><em>{{tr}}CPatient-back-consultations.empty{{/tr}}</em></td>
+  <td colspan="10" class="empty">{{tr}}CPatient-back-consultations.empty{{/tr}}</td>
 </tr>
 {{/foreach}}
 

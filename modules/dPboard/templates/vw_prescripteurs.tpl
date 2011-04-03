@@ -46,7 +46,7 @@ changePagePrescripteur = function(page) {
   </tr>
 	{{foreachelse}}
 	<tr>
-		<td colspan="2"><em>{{tr}}None{{/tr}}</em></td>
+		<td colspan="2" class="empty">{{tr}}None{{/tr}}</td>
 	</tr>
 	
 	{{/foreach}}

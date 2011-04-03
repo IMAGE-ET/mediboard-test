@@ -82,7 +82,7 @@ Main.add(function () {
     </table>
   </div>
   {{foreachelse}}
-    <em>Pas de documents</em>
+    <div class="empty">Aucun document</div>
   {{/foreach}}
 </div>
 {{/if}}

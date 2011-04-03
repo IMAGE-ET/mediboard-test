@@ -122,7 +122,7 @@ Main.add(function () {
           </td>
         </tr>
         {{foreachelse}}
-        <tr><td><em>Analyse présente dans aucun pack</em></td></tr>
+        <tr><td class="empty">Analyse présente dans aucun pack</td></tr>
         {{/foreach}}
       </table>
       {{/if}}
@@ -174,7 +174,7 @@ Main.add(function () {
           </td>
         </tr>
         {{foreachelse}}
-        <tr><td colspan="2"><em>Absent des autres catalogues</em></td></tr>
+        <tr><td colspan="2" class="empty">Absent des autres catalogues</td></tr>
         {{/foreach}}
       </table>
       {{/if}}

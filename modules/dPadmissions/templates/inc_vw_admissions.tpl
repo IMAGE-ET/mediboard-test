@@ -91,7 +91,7 @@ Calendar.regField(getForm("changeDateAdmissions").date, null, {noView: true});
   </tr>
   {{foreachelse}}
   <tr>
-    <td colspan="10"><em>{{tr}}None{{/tr}}</em></td>
+    <td colspan="10" class="empty">{{tr}}None{{/tr}}</td>
   </tr>
   {{/foreach}}
 </table>

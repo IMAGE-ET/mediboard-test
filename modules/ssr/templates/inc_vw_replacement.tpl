@@ -72,7 +72,7 @@ onSubmitReplacement = function(form, sejour_id, conge_id, type) {
   </tr>
   {{foreachelse}}
   <tr>
-    <td colspan="3"><em>{{tr}}None{{/tr}}</em></td>
+    <td colspan="3" class="empty">{{tr}}None{{/tr}}</td>
   </tr>
   {{/foreach}}
   {{/foreach}}

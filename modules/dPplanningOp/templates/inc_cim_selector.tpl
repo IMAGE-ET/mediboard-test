@@ -22,7 +22,7 @@
 </tr><tr>
 {{/if}}
 {{foreachelse}}
-   <td><em>Aucun code</em></td>
+   <td class="empty">Aucun code</td>
 {{/foreach}}
 </tr>
   

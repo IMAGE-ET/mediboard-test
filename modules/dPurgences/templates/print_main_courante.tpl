@@ -218,9 +218,7 @@ function printPage(element){
 					<strong>{{$_etablissement_transfert.count}}</strong>
 				</li>
       	{{foreachelse}}
-        <li>
-          <em>{{tr}}None{{/tr}}</em>
-        </li>
+        <li class="empty">{{tr}}None{{/tr}}</li>
       	{{/foreach}}
       </ul>
     </td>
@@ -233,9 +231,7 @@ function printPage(element){
           <strong>{{$_service_mutation.count}}</strong>
         </li>
         {{foreachelse}}
-        <li>
-          <em>{{tr}}None{{/tr}}</em>
-        </li>
+        <li class="empty">{{tr}}None{{/tr}}</li>
         {{/foreach}}
       </ul>
     </td>

@@ -21,7 +21,7 @@
   </tr>
   {{foreachelse}}
   <tr>
-    <td colspan="10"><em>Aucune FSE facturée</em></td>
+    <td colspan="10" class="empty">Aucune FSE facturée</td>
   </tr>
 	{{/foreach}}
 </table>
@@ -74,7 +74,7 @@
   </tr>
   {{foreachelse}}
   <tr>
-    <td colspan="10"><em>Aucune FSE facturée</em></td>
+    <td colspan="10" class="empty">Aucune FSE facturée</td>
   </tr>
 	{{/foreach}}
 </table>

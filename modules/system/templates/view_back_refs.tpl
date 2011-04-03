@@ -71,7 +71,7 @@
     </span>
     <br />
   {{foreachelse}}
-  <em>Aucun objet</em>
+  <div class="empty">Aucun objet</div>
   {{/foreach}}
   {{if $_object->_count.$backName != count($_object->_back.$backName)}}
   ...

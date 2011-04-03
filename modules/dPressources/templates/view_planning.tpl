@@ -115,8 +115,8 @@ Main.add(function () {
           </tr>
           {{foreachelse}}
           <tr>
-            <td colspan="2" class="text">
-              <em>Aucun</em>
+            <td colspan="2" class="text empty">
+              Aucun
             </td>
           </tr>
           {{/foreach}}
@@ -141,8 +141,8 @@ Main.add(function () {
           </tr>
           {{foreachelse}}
           <tr>
-            <td colspan="2" class="text">
-              <em>Aucun</em>
+            <td colspan="2" class="text empty">
+              Aucun
             </td>
           </tr>
           {{/foreach}}
@@ -167,8 +167,8 @@ Main.add(function () {
           </tr>
           {{foreachelse}}
           <tr>
-            <td colspan="2" class="text">
-              <em>Aucun</em>
+            <td colspan="2" class="text empty">
+              Aucun
             </td>
           </tr>
           {{/foreach}}

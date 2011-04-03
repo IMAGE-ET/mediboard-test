@@ -379,7 +379,7 @@ printDossierComplet = function(){
               
 							{{if !$visites.effectuee|@count && !$visites.non_effectuee|@count}}
 							<tr>
-							  <td colspan="2"><em>Aucune visite dans la sélection courante</em></td>
+							  <td colspan="2" class="empty">Aucune visite dans la sélection courante</td>
 							</tr>
 							{{/if}}
 							

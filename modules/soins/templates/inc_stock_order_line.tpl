@@ -27,7 +27,7 @@
     {{if $stock->_ref_product->item_title}}
       {{$stock->_ref_product->item_title}}
     {{else}}
-      <em style="color: #aaa">Sans unité de délivrance</em>
+      <div class="empty">Sans unité de délivrance</div>
     {{/if}}
   </td>
 

@@ -58,7 +58,7 @@
   </tr>
   {{foreachelse}}
 	<tr>
-		<td colspan="10"><em>Pas d'admission ce mois</em></td>
+		<td colspan="10" class="empty">Pas d'admission ce mois</td>
 	</tr>
   {{/foreach}}
 </table>
