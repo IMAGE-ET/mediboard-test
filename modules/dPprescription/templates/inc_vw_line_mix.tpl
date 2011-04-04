@@ -601,22 +601,28 @@ Main.add( function(){
   						            {{if $line->_can_modify_prescription_line_mix_item}}
   													{{mb_field object=$_line_item field=quantite size=4 increment=1 min=0 form="editLinePerf-$line_item_id"}}
   	                        <script type="text/javascript">
+                            Main.add(function() {
                             var oForm = getForm("editLinePerf-{{$_line_item->_id}}");
                             oForm.quantite.onchange = function() {
                               return onSubmitFormAjax(oForm, {onComplete: function() {
                                 {{if $line->type_line == "perfusion"}}
-                                  updateVolumeTotal({{$prescription_line_mix_id}}, {{$line_item_id}}, 1);
+                                  var oFormQte = getForm('editQuantiteTotale-{{$prescription_line_mix_id}}');
+                                  var oFormPerf = getForm('editLinePerf-{{$_line_item->_id}}');
+                                  updateVolumeTotal({{$prescription_line_mix_id}}, {{$line_item_id}}, 1, $V(oFormQte._quantite_totale), oFormPerf.__solvant.checked ? 1 : 0);
                                   {{foreach from=$line->_ref_lines item=_line_item_update}}
                                     updateDebitProduit({{$_line_item_update->_id}});
                                   {{/foreach}}
                                 {{/if}}
                               } });
                             };
+                            });
                             </script>
   	                        <!-- Unite de prise -->
   														<select name="unite" style="width: 12em;"
                                 onchange="return onSubmitFormAjax(this.form, {onComplete: function() {
-                                  updateVolumeTotal({{$prescription_line_mix_id}}, {{$line_item_id}}, 1);
+                                  var oFormQte = getForm('editQuantiteTotale-{{$prescription_line_mix_id}}');
+                                  var oFormPerf = getForm('editLinePerf-{{$_line_item->_id}}');
+                                  updateVolumeTotal({{$prescription_line_mix_id}}, {{$line_item_id}}, 1, $V(oFormQte._quantite_totale), oFormPerf.__solvant.checked ? 1 : 0);
                                   {{foreach from=$line->_ref_lines item=_line_item_update}}
                                   updateDebitProduit({{$_line_item_update->_id}});
                                   {{/foreach}}

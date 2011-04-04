@@ -433,9 +433,8 @@ calculDebit = function(line_id, line_item_id){
   url.pop(600, 200, "calculDebit");
 }
 
-updateVolumeTotal = function(prescription_line_mix_id, prescription_line_mix_item_id, modif_qte_totale, quantite_totale) {
+updateVolumeTotal = function(prescription_line_mix_id, prescription_line_mix_item_id, modif_qte_totale, quantite_totale, solvant) {
   var checked = $('lines-'+prescription_line_mix_id).select('input[name=__solvant]:checked')[0];
-
   if(!checked){
     if (modif_qte_totale) {
       $("volume_total_"+prescription_line_mix_id).hide();
@@ -446,6 +445,9 @@ updateVolumeTotal = function(prescription_line_mix_id, prescription_line_mix_ite
   var url = new Url("dPprescription", "httpreq_update_solvant");
   url.addParam("prescription_line_mix_item_id", prescription_line_mix_item_id);
   url.addParam("modif_qte_totale", modif_qte_totale);
+  if (solvant != null) {
+    url.addParam("solvant", solvant);
+  }
   if (quantite_totale) {
     url.addParam("quantite_totale", quantite_totale);
   }
@@ -453,14 +455,14 @@ updateVolumeTotal = function(prescription_line_mix_id, prescription_line_mix_ite
     if(e == null){
       return;
     } 
-    if(modif_qte_totale){
+    if(modif_qte_totale && (solvant == null || solvant == 1)){
       var volume_total = $("volume_total_"+prescription_line_mix_id);
       volume_total.show();
       volume_total.select("input")[0].value = e; 
     } else {
-      var oForm = getForm("editLinePerf-"+prescription_line_mix_item_id);
-      $V(oForm.quantite, e);
-      $V(oForm.unite, 'ml');
+      var td = $$("input[name=__solvant]:checked")[0].up("td");
+      td.select("input[name=quantite]")[0].value = e;
+      td.select("input[name=unite]")[0].value = 'ml';
     }
   });
 }
