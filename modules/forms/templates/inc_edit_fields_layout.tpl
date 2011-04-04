@@ -80,9 +80,16 @@ Main.add(function(){
     margin-top: 1.2em;
   }
   
+  .field .field-content {
+    overflow-y: hidden;
+  }
+  
   .field-list .field .field-content {
     max-height: 2.5em;
-    overflow-y: hidden;
+  }
+  
+  .grid .field .field-content {
+    max-height: 3.5em;
   }
   
   .draggable .overlay {
@@ -128,7 +135,7 @@ Main.add(function(){
 {{foreach from=$grid key=_group_id item=_grid}}
 
 {{if $groups.$_group_id->_ref_fields|@count > 0}}
-<div id="group-layout-{{$groups.$_group_id->_guid}}" style="display: none;">
+<div id="group-layout-{{$groups.$_group_id->_guid}}" style="display: none;" class="group-layout">
   
 <div class="out-of-grid droppable">
   <table class="main tbl" style="table-layout: fixed;">
@@ -188,7 +195,7 @@ Main.add(function(){
   </table>
 </div>
 
-<table class="main tbl" style="border-collapse: collapse;">
+<table class="main tbl drop-grid" style="border-collapse: collapse;">
   <tr>
     <th colspan="10" class="title">Disposition</th>
   </tr>
@@ -203,14 +210,18 @@ Main.add(function(){
   <tr>
     <th style="padding: 4px; width: 2em; text-align: right;">{{$_y}}</th>
     {{foreach from=$_line key=_x item=_group}}
-      <td style="border: 1px dotted #ddd; min-width: 2em;" class="droppable grid" data-x="{{$_x}}" data-y="{{$_y}}">
-        {{if $_group.object}}
-          {{if $_group.object instanceof CExClassField}}
-            {{mb_include module=forms template=inc_ex_field_draggable _field=$_group.object _type=$_group.type}}
-          {{else}}
-            {{mb_include module=forms template=inc_ex_host_field_draggable _host_field=$_group.object ex_group_id=$_group_id _field=$_group.object->field _type=$_group.type}}
-          {{/if}}
-        {{/if}}
+      <td style="border: 1px dotted #aaa; min-width: 2em; padding: 0;">
+			  <div class="droppable grid" data-x="{{$_x}}" data-y="{{$_y}}">
+	        {{if $_group.object}}
+	          {{if $_group.object instanceof CExClassField}}
+	            {{mb_include module=forms template=inc_ex_field_draggable _field=$_group.object _type=$_group.type}}
+	          {{else}}
+	            {{mb_include module=forms template=inc_ex_host_field_draggable _host_field=$_group.object ex_group_id=$_group_id _field=$_group.object->field _type=$_group.type}}
+	          {{/if}}
+					{{else}}
+					  &nbsp;
+	        {{/if}}
+				</div>
       </td>
     {{/foreach}}
   </tr>

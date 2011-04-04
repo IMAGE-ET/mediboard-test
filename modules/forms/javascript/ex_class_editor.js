@@ -38,7 +38,20 @@ ExClass = {
     $V(form["coord_"+type+"_y"].enable(), coord_y);
     
     form.onsubmit();
-    drop.insert(drag);
+    
+    // source parent
+    var oldParent = drag.up();
+    
+    if (drop.hasClassName("grid")) {
+      drop.update(drag);
+    }
+    else {
+      drop.insert(drag);
+    }
+    
+    if (oldParent.hasClassName("grid")) {
+      oldParent.update("&nbsp;");
+    }
   },
   submitLayoutHostField: function(drag, drop) {
     var coord_x = drop.get("x"),
@@ -86,8 +99,8 @@ ExClass = {
           opacity: 1
         });
       }
-      drop.update(drag);
       
+      drop.update(drag);
       var id = drag.identify();
       $V(form.elements.callback, "ExClass.setHostFieldId.curry("+id+")");
     }
@@ -107,11 +120,11 @@ ExClass = {
       ghosting: true,
       onStart: function(drag){
         drag.element.addClassName("dragging");
-        $$(".out-of-grid")[0].addClassName("dropactive");
+        $$(".out-of-grid").invoke("addClassName", "dropactive");
       },
       onEnd: function(drag){
         drag.element.removeClassName("dragging");
-        $$(".out-of-grid")[0].removeClassName("dropactive");
+        $$(".out-of-grid").invoke("removeClassName", "dropactive");
       }
     });
   },
@@ -121,8 +134,16 @@ ExClass = {
         revert: 'failure', 
         scroll: window, 
         ghosting: true,
-        onStart: function(){$$(".out-of-grid")[0].addClassName("dropactive")},
-        onEnd: function(){$$(".out-of-grid")[0].removeClassName("dropactive")}
+        onStart: function(draggable){
+          var element = draggable.element;
+          if (element.up(".out-of-grid")) {
+            element.up(".group-layout").down(".drop-grid").scrollTo();
+          }
+          $$(".out-of-grid").invoke("addClassName", "dropactive");
+        },
+        onEnd: function(){
+          $$(".out-of-grid").invoke("removeClassName", "dropactive");
+        }
       });
     });
     
