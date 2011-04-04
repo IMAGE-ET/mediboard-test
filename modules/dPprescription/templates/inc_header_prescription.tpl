@@ -318,8 +318,10 @@ Main.add( function(){
 			 
       <div style="float: right; text-align: right;">
         <input type="checkbox" id="dci" name="dci"/>
-        <label for="dci">DCI</label>
-      	<button type="button" class="print" onclick="Prescription.printPrescription('{{$prescription->_id}}', 0, '{{$prescription->object_id}}', null, $('dci').checked ? 1: 0);" />Ordonnance</button>
+        <label for="dci" style="font-size: x-small" title="{{tr}}CPrescription.print_dci{{/tr}}">DCI</label>
+        <input type="checkbox" id="globale" name="globale" />
+        <label for="globale" style="font-size: 0.8em" title="{{tr}}CPrescription.print_globale{{/tr}}">Globale</label>
+      	<button type="button" class="print" onclick="Prescription.printPrescription('{{$prescription->_id}}', 0, '{{$prescription->object_id}}', null, $('dci').checked ? 1: 0, $('globale').checked ? 1 : 0);" />Ordonnance</button>
         <br />
        	{{if !$is_praticien && !$mode_protocole && ($operation_id || $can->admin || $mode_pharma || $current_user->isInfirmiere())}}
 				<form name="selPraticienLine" action="?" method="get">

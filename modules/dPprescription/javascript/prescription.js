@@ -307,11 +307,10 @@ Prescription = {
       alert('Pas de prescription en cours');
     }
   },
-  printPrescription: function(prescription_id, print, object_id, no_pdf, dci) {
+  printPrescription: function(prescription_id, print, object_id, no_pdf, dci, globale) {
     // Select de choix du praticien
     var praticien_sortie_id = "";
-    
-    if(document.selPraticienLine){
+    if(document.selPraticienLine && (globale == undefined || globale == 0)){
       praticien_sortie_id = document.selPraticienLine.praticien_id.value;
     }
     
