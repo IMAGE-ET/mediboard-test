@@ -90,10 +90,11 @@ else {
           
 					$list->loadObject($where);
 					
+          $list->coded = (($line["item_code"] != "") ? 1 : 0);
+					$list->multiple = ((!$list->coded || ($line["list_multiple"] != "")) ? 1 : 0);
+					
           if (!$list->_id) {
             $list->name = $line["list_name"];
-            $list->coded = (($line["item_code"] != "") ? 1 : 0);
-						$list->multiple = ((!$list->coded || ($line["list_multiple"] != "")) ? 1 : 0);
             
             if ($msg = $list->store()) {
               CAppUI::setMsg("Ligne $line_number : $msg", UI_MSG_WARNING);
@@ -103,6 +104,15 @@ else {
 							CAppUI::setMsg("$list->_class_name-msg-create", UI_MSG_OK);
 						}
           }
+					else {
+            if ($msg = $list->store()) {
+              CAppUI::setMsg("Ligne $line_number : $msg", UI_MSG_WARNING);
+              continue;
+            }
+            else {
+              CAppUI::setMsg("$list->_class_name-msg-modify", UI_MSG_OK);
+            }
+					}
 					
 					// LIST ITEM
 					$list_item = new CExListItem;
@@ -244,6 +254,23 @@ else {
               CAppUI::setMsg("$concept->_class_name-msg-create", UI_MSG_OK);
             }
           }
+					else {
+            if ($_list && $_list->_id && $line["list_name"]) {
+              $concept->ex_list_id = $_list->_id; 
+							
+              if ($_list->multiple) {
+                $concept->prop = "set vertical|1 typeEnum|checkbox";
+            
+		            if ($msg = $concept->store()) {
+		              CAppUI::setMsg("Ligne $line_number : $msg", UI_MSG_WARNING);
+		              continue;
+		            }
+		            else {
+		              CAppUI::setMsg("$concept->_class_name-msg-modify", UI_MSG_OK);
+		            }
+              }
+            }
+					}
 					
 					// TAG BINDING
           $tag_item = new CTagItem;

@@ -29,7 +29,7 @@ class CExList extends CExListItemsOwner {
     $props = parent::getProps();
     $props["name"]  = "str notNull seekable";
     $props["coded"] = "bool notNull default|0";
-    $props["multiple"] = "bool default|0";
+    $props["multiple"] = "bool default|0 show|0";
     return $props;
   }
 
