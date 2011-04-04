@@ -38,7 +38,7 @@ onSubmitAnt = function (oForm) {
     onComplete : DossierMedical.reloadDossiersMedicaux 
   } );
   
-  oForm.rques.value     = "";
+  oForm.rques.value = "";
 
   return false;
 }
@@ -53,9 +53,7 @@ onSubmitTraitement = function (oForm) {
   } );
   
   // Nettoyage du formulaire
-  oForm._hidden_traitement.value = oForm.traitement.value;
   oForm.traitement.value = "";
-  oForm._helpers_traitement.value = "";
 
   return false;
 }
@@ -109,17 +107,6 @@ DossierMedical = {
     {{/if}}
 	}
 }
-
-refreshAidesAntecedents = function(){
-  var oForm = document.editAntFrm;
-  var url = new Url("dPcompteRendu", "httpreq_vw_select_aides");
-  url.addParam("object_class", "CAntecedent");
-  url.addParam("depend_value_1", oForm.type.value);
-  url.addParam("depend_value_2", oForm.appareil.value);
-  url.addParam("user_id", "{{$userSel->_id}}")
-  url.addParam("field", "rques");
-  url.requestUpdate(document.editAntFrm._helpers_rques);
-}
  
 refreshAddPoso = function(code_cip){
   var url = new Url("dPprescription", "httpreq_vw_select_poso");
@@ -129,6 +116,7 @@ refreshAddPoso = function(code_cip){
 
 Main.add(function () {
   DossierMedical.reloadDossiersMedicaux();
+  
 	if($('tab_traitements_perso')){
 	  Control.Tabs.create('tab_traitements_perso', false);
 	}
