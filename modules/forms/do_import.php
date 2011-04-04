@@ -62,7 +62,7 @@ else {
 			
 			////////////////// LIST ///////////////////////
 			case "CExList":
-				$keys = array("list_name", "list_coded", "item_code", "item_name");
+				$keys = array("list_name", "list_coded", "item_code", "item_name", "list_multiple");
 				$multiline = array("list_name", "list_coded");
 				$line = array_fill_keys($keys, "");
 				
@@ -93,6 +93,7 @@ else {
           if (!$list->_id) {
             $list->name = $line["list_name"];
             $list->coded = (($line["item_code"] != "") ? 1 : 0);
+						$list->multiple = ((!$list->coded || ($line["list_multiple"] != "")) ? 1 : 0);
             
             if ($msg = $list->store()) {
               CAppUI::setMsg("Ligne $line_number : $msg", UI_MSG_WARNING);
@@ -225,12 +226,15 @@ else {
           $concept->loadObject($where);
           
           if (!$concept->_id) {
+	          if ($_list && $_list->_id && $line["list_name"]) {
+	            $concept->ex_list_id = $_list->_id; 
+							if ($_list->multiple) {
+								$concept_prop = "set vertical|1 typeEnum|checkbox";
+							}
+	          }
+						
             $concept->name = $line["concept_name"];
             $concept->prop = $concept_prop;
-          
-	          if ($line["list_name"]) {
-	            $concept->ex_list_id = $_list->_id; 
-	          }
             
             if ($msg = $concept->store()) {
               CAppUI::setMsg("Ligne $line_number : $msg", UI_MSG_WARNING);

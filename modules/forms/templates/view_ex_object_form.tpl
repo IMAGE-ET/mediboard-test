@@ -81,9 +81,11 @@ Main.add(function(){
 	
 	<ul id="ex_class-groups-tabs" class="control_tabs">
 	{{foreach from=$grid key=_group_id item=_grid}}
+	  {{if $groups.$_group_id->_ref_fields|@count}}
 	  <li>
 	  	<a href="#tab-{{$groups.$_group_id->_guid}}">{{$groups.$_group_id}}</a>
 	  </li>
+		{{/if}}
 	{{/foreach}}
 	</ul>
   <hr class="control_tabs" />
@@ -91,6 +93,7 @@ Main.add(function(){
   <table class="main form">
   	
 		{{foreach from=$grid key=_group_id item=_grid}}
+		{{if $groups.$_group_id->_ref_fields|@count}}
 		<tbody id="tab-{{$groups.$_group_id->_guid}}" style="display: none;">
     {{foreach from=$_grid key=_y item=_line}}
     <tr>
@@ -132,7 +135,7 @@ Main.add(function(){
 			
 		  {{if isset($out_of_grid.$_group_id.field.$_field_name|smarty:nodefaults)}}
 		    <tr>
-		      <th>
+		      <th style="font-weight: bold;">
 		        {{mb_label object=$ex_object field=$_field->name}}
 		      </th>
 		      <td colspan="3">
@@ -143,6 +146,7 @@ Main.add(function(){
     {{/foreach}}
     
     </tbody>
+		{{/if}}
     {{/foreach}}
 		
     <tr>

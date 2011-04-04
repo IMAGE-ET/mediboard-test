@@ -190,7 +190,7 @@ ExClass = {
     
     if (Prototype.Browser.IE) {
       (function(){
-        getForm("form-grid-layout").select("input, select").invoke("disable");
+        getForm("form-grid-layout").select("input, select, textarea").invoke("disable");
       }).defer();
     }
     

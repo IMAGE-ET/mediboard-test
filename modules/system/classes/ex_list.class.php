@@ -15,6 +15,7 @@ class CExList extends CExListItemsOwner {
   
   var $name       = null;
   var $coded      = null;
+  var $multiple   = null;
 
   function getSpec() {
     $spec = parent::getSpec();
@@ -28,6 +29,7 @@ class CExList extends CExListItemsOwner {
     $props = parent::getProps();
     $props["name"]  = "str notNull seekable";
     $props["coded"] = "bool notNull default|0";
+    $props["multiple"] = "bool default|0";
     return $props;
   }
 
