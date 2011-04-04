@@ -38,7 +38,7 @@ if ($rapport_unite_prise == null) {
 $qte_admin = $line_mix_item->_quantite_administration;
 
 if (array_key_exists("mg", $rapport_unite_prise)) {
-  $line_mix_item->_quantite_administration = $qte_admin / $rapport_unite_prise["mg"][$line_mix_item->_unite_administration];
+  $qte_admin = $qte_admin / $rapport_unite_prise["mg"][$line_mix_item->_unite_administration];
   $unite = "mg";
 }
 
