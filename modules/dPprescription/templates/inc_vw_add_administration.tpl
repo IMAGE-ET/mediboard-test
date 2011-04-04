@@ -255,7 +255,7 @@ updateQuantite = function(ratio_UI, oField){
 	</tr>
 	<tr>
 	  <td>
-	  <button type="button" class="add" onclick="submitAdmission()">{{tr}}Add{{/tr}}</button>
+	  <button type="button" class="add" onclick="submitAdmission()">{{tr}}Validate{{/tr}}</button>
 		<button type="button" class="cancel" onclick="submitCancelAdm();">{{tr}}Cancel{{/tr}}</button>
 	  </td>
 	</tr>

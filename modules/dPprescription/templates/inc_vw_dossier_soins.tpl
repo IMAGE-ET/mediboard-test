@@ -299,7 +299,7 @@ applyAdministrations = function () {
   url.setModuleAction("dPprescription", "httpreq_add_multiple_administrations");
   url.addParam("mode_dossier", $V(document.mode_dossier_soin.mode_dossier));
 	url.addParam("refresh_popup", "1");
-  url.popup(700, 600, "Administrations multiples", { onComplete: function(){ alert('titi'); } });
+  url.popup(700, 600, "Administrations multiples");
 }
 
 viewLegend = function(){

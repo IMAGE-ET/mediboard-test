@@ -144,7 +144,7 @@ Main.add( function(){
 		                <input type="hidden" name="quantite_prevue" disabled="disabled" value="{{$by_hour.prise->quantite}}" />
 		                <input type="hidden" name="_quantite_prevue" value="{{$by_hour.prise->quantite}}" />
 		                
-		                <b>{{$date|date_format:"%d/%m/%Y"}}, {{$hour}}h</b> : 
+		                <b>{{$date|date_format:"%d/%m/%Y"}}, {{$hour|date_format:"%Hh%M"}}</b> : 
 		                {{mb_label object=$by_hour.prise field=quantite}}
 		                {{mb_field object=$by_hour.prise field=quantite min=0 increment=1 form="addAdministration_$key"}}
 		                {{$unite_prise}}
