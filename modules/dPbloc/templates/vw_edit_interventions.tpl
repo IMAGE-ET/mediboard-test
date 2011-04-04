@@ -80,7 +80,7 @@
         <input type="hidden" name="_repeat" value="1" />
         <input type="hidden" name="_type_repeat" value="simple" />
         <span style="float: right;">
-          {{mb_field object=$plage field="temps_inter_op" hidden=true onchange="this.form.onsubmit();"}}
+          {{mb_field object=$plage field="temps_inter_op" hidden=true onchange="this.form.submit();"}}
           <br />
           entre chaque intervention
         </span>
@@ -97,8 +97,8 @@
         - {{$plage->date|date_format:$conf.longdate}}
         <br />
         {{$plage->_ref_salle->nom}}
-        de {{mb_field object=$plage field="debut" hidden=true onchange="this.form.onsubmit();"}}
-        à  {{mb_field object=$plage field="fin"   hidden=true onchange="this.form.onsubmit();"}}
+        de {{mb_field object=$plage field="debut" hidden=true onchange="this.form.submit();"}}
+        à  {{mb_field object=$plage field="fin"   hidden=true onchange="this.form.submit();"}}
       </form>
     </th>
   </tr>
