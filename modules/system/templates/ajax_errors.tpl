@@ -15,7 +15,7 @@
   {{else}}
     {{assign var=user value=$app->_ref_user}}
 
-    {{if $user->_id}} 
+    {{if $user}} 
     User = {{"utf8_encode"|array_map_recursive:$user->_basic_info|@json}};
     {{else}}
     User = {};
