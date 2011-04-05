@@ -2,7 +2,7 @@
 
 <script type="text/javascript">
 function checkFormPrint() {
-  var form = document.paramFrm;
+  var form = getForm("paramFrm");
   
   if(!(checkForm(form))){
     return false;
@@ -12,7 +12,7 @@ function checkFormPrint() {
 }
 
 function popPlanning() {
-  var form = document.paramFrm;
+  var form = getForm("paramFrm");
 
   var url = new Url;
   url.setModuleAction("dPhospi", "print_planning");
@@ -25,6 +25,9 @@ function popPlanning() {
   url.addElement(form.praticien_id);
   url.addElement(form._specialite);
   url.addElement(form.convalescence);
+  {{if $conf.dPplanningOp.CSejour.consult_accomp}}
+  url.addElement(form.consult_accomp);
+  {{/if}}
   url.addParam("_ccam_libelle", $V(form._ccam_libelle));
   url.addParam("_coordonnees", $V(form._coordonnees));
   url.popup(850, 600, "Planning");
@@ -32,15 +35,15 @@ function popPlanning() {
 }
 
 function changeDate(sDebut, sFin){
-  var oForm = document.paramFrm;
-  oForm._date_min.value = sDebut;
-  oForm._date_max.value = sFin;
-  oForm._date_min_da.value = Date.fromDATETIME(sDebut).toLocaleDateTime();
-  oForm._date_max_da.value = Date.fromDATETIME(sFin).toLocaleDateTime();  
+  var oForm = getForm("paramFrm");
+  $V(oForm._date_min, sDebut);
+  $V(oForm._date_max, sFin);
+  $V(oForm._date_min_da, Date.fromDATETIME(sDebut).toLocaleDateTime());
+  $V(oForm._date_max_da, Date.fromDATETIME(sFin).toLocaleDateTime());  
 }
 
 function changeDateCal(){
-  var oForm = document.paramFrm;
+  var oForm = getForm("paramFrm");
   oForm.select_days[0].checked = false;
   oForm.select_days[1].checked = false;
 }
@@ -144,6 +147,20 @@ function changeDateCal(){
             </select>
           </td>
         </tr>
+        
+        {{if $conf.dPplanningOp.CSejour.consult_accomp}}
+        <tr>
+          <th>{{mb_label object=$filter field="consult_accomp"}}</th>
+          <td>
+            <select name="consult_accomp">
+              <option value="0">&mdash; Indifférent</option>
+              <option value="oui">oui</option>
+              <option value="non">non</option>
+            </select>
+          </td>
+        </tr>
+        {{/if}}
+        
         <tr>
           <th>{{mb_label object=$filter field="_ccam_libelle"}}</th>
           <td>{{mb_field object=$filter field="_ccam_libelle"}}</td>

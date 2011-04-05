@@ -101,7 +101,7 @@ function printAdmission(id) {
               {{if $curr_operation->libelle}}
                 <em>[{{$curr_operation->libelle}}]</em>
                 <br />
-              {{/if}}
+              {{else}}
               {{foreach from=$curr_operation->_ext_codes_ccam item=curr_code}}
                 <em>{{$curr_code->code}}</em>
                 {{if $filter->_ccam_libelle}}
@@ -111,6 +111,7 @@ function printAdmission(id) {
                   ;
                 {{/if}}
               {{/foreach}}
+              {{/if}}
               </ul>
             {{/foreach}}
           </td>
