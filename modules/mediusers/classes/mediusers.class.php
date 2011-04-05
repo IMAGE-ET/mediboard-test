@@ -899,21 +899,20 @@ class CMediusers extends CMbObject {
   
   function getBasicInfo(){
     $this->updateFormFields();
-    $this->loadRefFunction();
-    $this->_ref_function->loadRefGroup();
-    return $this->_basic_info = array(
-      'id' => $this->_id,
+    $this->loadRefFunction()->loadRefGroup();
+    return $this->_basic_info = array (
+      'id'   => $this->_id,
 			'guid' => $this->_guid,
       'view' => $this->_view,
-      'function' => array(
+      'function' => array (
         'id' => $this->_ref_function->_id,
-				'guid' => $this->_ref_function->_guid,
-        'view' => $this->_ref_function->_view,
+				'guid'  => $this->_ref_function->_guid,
+        'view'  => $this->_ref_function->_view,
         'color' => $this->_ref_function->color
       ),
-      'group' => array(
+      'group' => array (
 			  'guid' => $this->_ref_function->_ref_group->_guid,
-        'id' => $this->_ref_function->_ref_group->_id,
+        'id'   => $this->_ref_function->_ref_group->_id,
         'view' => $this->_ref_function->_ref_group->_view,
       )
     );
