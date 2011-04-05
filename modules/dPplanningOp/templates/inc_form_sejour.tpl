@@ -13,7 +13,7 @@
 
 <script type="text/javascript">
 function checkHeureSortie(){
-  var oForm = document.editSejour;
+  var oForm = getForm("editSejour");
   var heure_entree = parseInt(oForm._hour_entree_prevue.value, 10);
   
   if (oForm._hour_sortie_prevue.value < heure_entree + 1) {
@@ -36,7 +36,7 @@ function changeModeSortie(mode_sortie){
 }
 
 function checkModeSortie(){
-  var oForm = document.editSejour;
+  var oForm = getForm("editSejour");
   
   if(oForm.sortie_reelle && oForm.sortie_reelle.value && !oForm.mode_sortie.value) {
     alert("Date de sortie réelle et mode de sortie incompatibles");
@@ -47,13 +47,13 @@ function checkModeSortie(){
 }
 
 function checkSejour() {
-  var oForm = document.editSejour;
+  var oForm = getForm("editSejour");
   return checkDureeHospi() && checkModeSortie() && OccupationServices.testOccupation() && checkForm(oForm);
 }
 
 function checkPresta(){
-  var oForm = document.editSejour;
-  var oFormEasy = document.editOpEasy;
+  var oForm = getForm("editSejour");
+  var oFormEasy = getForm("editOpEasy");
   if($V(oForm.prestation_id) != ""){
     if (oForm) {
       $V(oForm.chambre_seule, "1");
@@ -65,8 +65,8 @@ function checkPresta(){
 }
 
 function checkChambreSejour(){
-  var oForm = document.editSejour;
-  var oFormEasy = document.editOpEasy;
+  var oForm = getForm("editSejour");
+  var oFormEasy = getForm("editOpEasy");
   var valeur_chambre = $V(oForm.chambre_seule);
   
   if (oFormEasy)
@@ -78,8 +78,8 @@ function checkChambreSejour(){
 
 
 function checkChambreSejourEasy(){
-  var oForm = document.editSejour;
-  var oFormEasy = document.editOpEasy;
+  var oForm = getForm("editSejour");
+  var oFormEasy = getForm("editOpEasy");
   
   if (oFormEasy){
     var valeur_chambre = $V(oFormEasy.chambre_seule);
@@ -88,6 +88,26 @@ function checkChambreSejourEasy(){
     if(valeur_chambre == "0"){
       $V(oForm.prestation_id, "", false);
     }
+  }
+}
+
+function checkConsultAccompSejour(){
+  var oForm = getForm("editSejour");
+  var oFormEasy = getForm("editOpEasy");
+  var valeur_consult = $V(oForm.consult_accomp);
+  
+  if (oFormEasy)
+    $V(oFormEasy.consult_accomp, valeur_consult, false);
+}
+
+
+function checkConsultAccompSejourEasy(){
+  var oForm = getForm("editSejour");
+  var oFormEasy = getForm("editOpEasy");
+  
+  if (oFormEasy){
+    var valeur_consult = $V(oFormEasy.consult_accomp);
+    $V(oForm.consult_accomp, valeur_consult);
   }
 }
 
@@ -100,7 +120,7 @@ function printFormSejour() {
 }
 
 PatSelector.init = function(){
-  bOldPat = document.editSejour.patient_id.value;
+  bOldPat = $V(getForm("editSejour").patient_id);
   this.sForm     = "editSejour";
   this.sFormEasy = "editOpEasy";
 
@@ -131,7 +151,7 @@ CIM10Selector.init = function(){
 Medecin = {
   form: null,
   edit : function() {
-    this.form = document.forms.editSejour;
+    this.form = getForm("editSejour");
     var url = new Url("dPpatients", "vw_medecins");
     url.popup(700, 450, "Medecin");
   },
@@ -155,7 +175,7 @@ var Sejour = {
     }
     
     var sejours_collision = this.sejours_collision;
-    var oForm = document.editSejour;
+    var oForm = getForm("editSejour");
     var sejour_courant_id = $V(oForm.sejour_id);
     // Liste des sejours
     if(sejours_collision instanceof Array) {
@@ -182,7 +202,7 @@ var Sejour = {
 
 Main.add( function(){
   Sejour.sejours_collision = {{$sejours_collision|@json}};
-  var oForm = document.editOp;
+  var oForm = getForm("editOp");
   Sejour.preselectSejour($V(oForm._date));
 });
 {{/if}}
@@ -409,7 +429,7 @@ Main.add( function(){
     {{mb_label object=$sejour field="service_id"}}
   </th>
   <td colspan="3">
-    <select name="service_id" class="{{$sejour->_props.service_id}}" onchange="if(document.editOp) {synchroService(this)};" style="max-width: 150px;">
+    <select name="service_id" class="{{$sejour->_props.service_id}}" onchange="if(getForm('editOp')) {synchroService(this)};" style="max-width: 150px;">
       <option value="">&mdash; Choisir un service</option>
       {{foreach from=$listServices item=_service}}
       <option value="{{$_service->_id}}" {{if $sejour->service_id == $_service->_id}} selected="selected" {{/if}}>
@@ -526,7 +546,7 @@ Main.add( function(){
     {{mb_field object=$sejour field="reanimation"}}
     <script type="text/javascript">
       function changeTypeHospi() {
-        var oForm = document.editSejour;
+        var oForm = getForm("editSejour");
         var sValue = $V(oForm.type);
         if (sValue != "comp") {
           $V(oForm.reanimation, '0');
@@ -534,8 +554,8 @@ Main.add( function(){
         
         $(oForm).select(".reanimation").invoke(sValue == "comp" ? "show" : "hide");
       }
-      
-      changeTypeHospi();
+
+    Main.add(changeTypeHospi);
     </script>
   </td>
 </tr>
@@ -545,6 +565,13 @@ Main.add( function(){
   <td colspan="3" id="occupation">
   </td>
 </tr>
+
+{{if $conf.dPplanningOp.CSejour.consult_accomp}}
+<tr>
+  <th>{{mb_label object=$sejour field=consult_accomp}}</th>
+  <td colspan="3">{{mb_field object=$sejour field=consult_accomp typeEnum=radio onchange="checkConsultAccompSejour();"}}</td>
+</tr>
+{{/if}}
 
 <tbody class="modeExpert">
 {{if !$mode_operation}}

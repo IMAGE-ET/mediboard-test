@@ -194,6 +194,13 @@
 		{{/if}}
 	</tr>
 	{{/if}}
+
+  {{if $conf.dPplanningOp.CSejour.consult_accomp}}
+  <tr>
+    <th>{{mb_label object=$sejour field=consult_accomp}}</th>
+    <td colspan="3">{{mb_field object=$sejour field=consult_accomp typeEnum=radio onchange="checkConsultAccompSejourEasy()"}}</td>
+  </tr>
+  {{/if}}
 	
   {{if !$modurgence && $conf.dPplanningOp.COperation.horaire_voulu && $conf.dPplanningOp.COperation.easy_horaire_voulu}}
   <tr>

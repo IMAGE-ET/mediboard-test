@@ -45,6 +45,7 @@ $dPconfig["dPplanningOp"]= array(
 	  "tag_dossier_trash"   => "trash_",
     "blocage_occupation"  => "0",
 	  "service_id_notNull"  => "0",
+    "consult_accomp"      => "0",
 	  "sortie_prevue"       => array(
 	    "comp"    => "24",
 	    "ambu"    => "04",

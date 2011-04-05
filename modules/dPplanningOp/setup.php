@@ -1094,7 +1094,12 @@ class CSetupdPplanningOp extends CSetup {
               CHANGE protocole_prescription_chir_id protocole_prescription_chir_id INT(11),
               CHANGE protocole_prescription_anesth_id protocole_prescription_anesth_id INT(11)";
     
-    $this->mod_version = "1.18";
+    $this->makeRevision("1.18");
+    $query = "ALTER TABLE `sejour` 
+              ADD `consult_accomp` ENUM ('oui','non','nc') DEFAULT 'nc';";
+    $this->addQuery($query);
+    
+    $this->mod_version = "1.19";
     
   }
 }

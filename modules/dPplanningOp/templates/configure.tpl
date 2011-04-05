@@ -114,6 +114,8 @@
   {{mb_include module=system template=inc_config_bool var=$var }}
   {{assign var="var" value="service_id_notNull"}}
   {{mb_include module=system template=inc_config_bool var=$var }}
+  {{assign var="var" value="consult_accomp"}}
+  {{mb_include module=system template=inc_config_bool var=$var }}
 	{{assign var="var" value="delete_only_admin"}}
   {{mb_include module=system template=inc_config_bool var=$var }}
   {{assign var="var" value="max_cancel_time"}}

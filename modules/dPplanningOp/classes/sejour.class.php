@@ -55,6 +55,7 @@ class CSejour extends CCodable {
 
   var $rques              = null;
   var $ATNC               = null;
+  var $consult_accomp     = null;
   var $hormone_croissance = null;
   var $lit_accompagnant   = null;
   var $isolement          = null;
@@ -244,6 +245,7 @@ class CSejour extends CCodable {
     $props["convalescence"]       = "text helped";
     $props["rques"]               = "text helped";
     $props["ATNC"]                = "bool show|0";
+    $props["consult_accomp"]      = "enum list|oui|non|nc default|nc";
     $props["hormone_croissance"]  = "bool";
     $props["lit_accompagnant"]    = "bool";
     $props["isolement"]           = "bool";
