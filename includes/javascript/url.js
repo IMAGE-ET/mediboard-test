@@ -34,15 +34,15 @@ var Url = Class.create({
     this.oParams = {};
     this.oWindow = null;
     this.sFragment = null;
-  	this.oPrefixed = {};
-  	
-  	if(sModule && sAction) {
-  	  if(sType === "action") {
-   	    this.setModuleAction(sModule, sAction);
-   	  } else {
-   	    this.setModuleTab(sModule, sAction);
-   	  }
-  	}
+    this.oPrefixed = {};
+    
+    if(sModule && sAction) {
+      if(sType === "action") {
+         this.setModuleAction(sModule, sAction);
+       } else {
+         this.setModuleTab(sModule, sAction);
+       }
+    }
   },
   
   setModuleAction: function(sModule, sAction) {
@@ -129,11 +129,11 @@ var Url = Class.create({
     if (window.opener && !window.opener.closed) {
       window.opener.location.assign(this.make());
     } 
-		else {
+    else {
       this.redirect();
     }
   },
-	
+  
   pop: function(iWidth, iHeight, sWindowName, sBaseUrl, sPrefix, oPostParameters, iFrame) {
     this.addParam("dialog", 1);
   
@@ -240,7 +240,7 @@ var Url = Class.create({
         iframe.onreadystatechange = null;
       }
     }
-		
+    
     this.modaleObject.observe("onRemoteContentLoaded", function(){
       var iframeWindow = this.container.down("iframe").contentWindow;
       
@@ -263,7 +263,7 @@ var Url = Class.create({
     sBaseUrl = sBaseUrl || "";
     
     var sFeatures = Url.buildPopupFeatures({height: iHeight, width: iWidth});
-		
+    
     // Forbidden characters for IE
     if (Prototype.Browser.IE) {
       sWindowName = sWindowName.replace(/[- '"]/gi, "_");
@@ -329,7 +329,7 @@ var Url = Class.create({
       width: null,
       dropdown: false,
       valueElement: null,
-	    
+      
       // Allows bigger width than input
       onShow: function(element, update) {
         update.style.position = "absolute";
@@ -449,7 +449,7 @@ var Url = Class.create({
       // Show the list
       var showAutocomplete = function(e, dontClear){
         var oldValue;
-				
+        
         if (!dontClear) {
           oldValue = $V(input);
           $V(input, '', false);
@@ -496,24 +496,24 @@ var Url = Class.create({
     if(this.oWindow) this.oWindow.close();
     return this;
   },
-	
+  
   requestModal: function(iWidth, iHeight, oOptions) {
     var div = DOM.div(null,
       DOM.div({
-				className: 'content'
-			}).setStyle({
-				overflowY: 'auto',
-				overflowX: 'hidden',
-				height: iHeight ? iHeight+'px' : '',
-				width: iWidth ? iWidth+'px' : ''
-			})
-		);
+        className: 'content'
+      }).setStyle({
+        overflowY: 'auto',
+        overflowX: 'hidden',
+        height: iHeight ? iHeight+'px' : '',
+        width: iWidth ? iWidth+'px' : ''
+      })
+    );
     $(document.body).insert(div);
 
     // Decoration preparing
     var closeButton  = DOM.button({type: "button", className: "cancel notext"}, $T('Close'));
     var reloadButton = DOM.button({type: "button", className: "change notext"}, $T('Reload'));
-		
+    
     var m = this.oParams['m'];
     var a = this.oParams['a'];
     var titleElement = DOM.div({className: "title"}, $T('mod-'+m+'-tab-'+a));
@@ -524,7 +524,7 @@ var Url = Class.create({
     });
     
     this.modaleObject.observe("afterClose", function(){div.remove()});
-		
+    
     this.modaleObject.container.insert({top: reloadButton});
     this.modaleObject.container.insert({top: closeButton});
     this.modaleObject.container.insert({top: titleElement});   
@@ -533,14 +533,14 @@ var Url = Class.create({
     oOptions = Object.extend({
       onComplete: this.modaleObject.position.bind(this.modaleObject)
     }, oOptions);
-		this.requestUpdate(div.down('.content'), oOptions);
-	
-		reloadButton.onclick = function() {
+    this.requestUpdate(div.down('.content'), oOptions);
+  
+    reloadButton.onclick = function() {
       this.requestUpdate(div.down('.content'), oOptions);
-		}.bind(this);
-		
-		return this;
-	},
+    }.bind(this);
+    
+    return this;
+  },
 
   requestUpdate: function(ioTarget, oOptions) {
     this.addParam("suppressHeaders", 1);
@@ -552,8 +552,8 @@ var Url = Class.create({
       console.warn(ioTarget+" doesn't exist");
       return;
     }
-		
-		var customInsertion = oOptions && oOptions.insertion;
+    
+    var customInsertion = oOptions && oOptions.insertion;
     
     oOptions = Object.extend( {
       waitingText: null,
@@ -575,28 +575,28 @@ var Url = Class.create({
       Element.warnDuplicates();
     });
     
-		// If we have a custom insertion, we should not touch the origin target
-		if (!customInsertion) {
-			// Empty holder gets a div for load notifying
-			if (!/\S/.test(element.innerHTML)) {
-				element.update('<div style="height: 2em;" />');
-			}
-			
-			// Animate system message
-			if (element.id == SystemMessage.id) {
-				oOptions.waitingText = $T("Loading in progress");
-				SystemMessage.doEffect();
-			}
-			// Cover div
-			else {
-				if (!Prototype.Browser.IE || oOptions.coverIE) 
-					WaitingMessage.cover(element);
-			}
-			
-			if (oOptions.waitingText) {
-				element.update('<div class="loading">' + oOptions.waitingText + '...</div>');
-			}
-		}
+    // If we have a custom insertion, we should not touch the origin target
+    if (!customInsertion) {
+      // Empty holder gets a div for load notifying
+      if (!/\S/.test(element.innerHTML)) {
+        element.update('<div style="height: 2em;" />');
+      }
+      
+      // Animate system message
+      if (element.id == SystemMessage.id) {
+        oOptions.waitingText = $T("Loading in progress");
+        SystemMessage.doEffect();
+      }
+      // Cover div
+      else {
+        if (!Prototype.Browser.IE || oOptions.coverIE) 
+          WaitingMessage.cover(element);
+      }
+      
+      if (oOptions.waitingText) {
+        element.update('<div class="loading">' + oOptions.waitingText + '...</div>');
+      }
+    }
 
     var getParams = oOptions.getParameters ? "?" + $H(oOptions.getParameters).toQueryString() : '';
     new Ajax.Updater(element, oOptions.urlBase + "index.php" + getParams, oOptions);
@@ -619,7 +619,7 @@ var Url = Class.create({
     }, oOptions);
     
     oOptions.onSuccess = function(transport){fCallback(transport.responseJSON)};
-  	
+    
     var getParams = oOptions.getParameters ? "?" + $H(oOptions.getParameters).toQueryString() : '';
     new Ajax.Request(oOptions.urlBase + "index.php" + getParams, oOptions);
     
@@ -668,7 +668,7 @@ var Url = Class.create({
       evalScripts: true,
       onComplete: Prototype.emptyFunction
     }, oOptions);
-		
+    
     var updater = new Ajax.PeriodicalUpdater(element, "index.php", oOptions);
     
     updater.options.onComplete = updater.options.onComplete.wrap(function(onComplete) {
@@ -722,6 +722,22 @@ Url.buildPopupFeatures = function(features) {
     menubar: true
   }, features);
   
+  if (features.height == "100%" || features.width == "100%") {
+    var dims = document.viewport.getDimensions();
+    
+    if (features.width == "100%") {
+      //features.fullscreen = true; // REALLY invasive under IE
+      //features.type = "fullWindow";
+      features.width = dims.width - 10;
+      features.left = 0;
+    }
+    
+    if (features.height == "100%") {
+      features.height = dims.height;
+      features.top = 0;
+    }
+  }
+  
   var a = [], value;
   $H(features).each(function(f){
     value = (f.value === true ? 'yes' : (f.value === false ? 'no' : f.value));
@@ -766,5 +782,5 @@ Url.update = function(form, element) {
 };
 
 Url.hashParams = function() {
-	return window.location.hash.substr(1).toQueryParams();
+  return window.location.hash.substr(1).toQueryParams();
 };

@@ -17,7 +17,7 @@ selectExClass = function(element, object_guid, event, _element_id) {
   element.selectedIndex = 0;
 }
 
-var _popup = Control.Overlay.container && Control.Overlay.container.visible();
+var _popup = true;//Control.Overlay.container && Control.Overlay.container.visible();
 
 showExClassForm = function(ex_class_id, object_guid, title, ex_object_id, event, _element_id) {
   var url = new Url("forms", "view_ex_object_form");
@@ -28,7 +28,7 @@ showExClassForm = function(ex_class_id, object_guid, title, ex_object_id, event,
   url.addParam("_element_id", _element_id);
 
   if (_popup) {
-    url.popup(800, 600, title);
+    url.popup("100%", "100%", title);
   }
   else {
     url.modale({title: title});
