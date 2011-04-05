@@ -1,6 +1,6 @@
 <!-- Affichage des techniques complementaire saisies en consult anesth -->
 
-<table class="layout">
+<table class="main layout">
 {{foreach from=$operation->_ref_anesth_perops item=_perop}}
   <tr> 
     <td>
@@ -17,8 +17,12 @@
         {{mb_field object=$_perop field=datetime register=true form="editPerop$perop_id" onchange="this.form.onsubmit();"}}
       </form>
     </td>
-    <td class="text">
-      {{$_perop->libelle}}
+    <td class="text greedyPane">
+      {{if $_perop->incident}}
+      <strong>Incident</strong>
+      <br />
+      {{/if}}
+      {{mb_value object=$_perop field=libelle}}
     </td>
   </tr>
 {{/foreach}}

@@ -4,17 +4,11 @@
 {{/if}}
 
 <script type="text/javascript">
-refreshAidesPreAnesth = function(user_id) {
-  if(!document.visiteAnesth._helpers_rques_visite_anesth){
-	  return;
-	}
-  
-  var url = new Url('dPcompteRendu', 'httpreq_vw_select_aides');
-  url.addParam('object_class', 'COperation');
-  url.addParam('field', 'rques_visite_anesth');
-  url.addParam('user_id', user_id);
-  url.addParam('no_enum', 1);
-  url.requestUpdate(document.visiteAnesth._helpers_rques_visite_anesth);
+
+refreshAidesPreAnesth = function(user_id, user_view) {
+  aideRquesAnesth.options.contextUserId = user_id;
+  aideRquesAnesth.options.contextUserView = user_view;
+  aideRquesAnesth.init();
 }
 
 reloadDocumentsAnesth = function () {
@@ -49,8 +43,23 @@ reloadAnesth = function() {
 
 Main.add(function(){
   var oFormVisiteAnesth = getForm('visiteAnesth');
-	
-  refreshAidesPreAnesth($V(oFormVisiteAnesth.prat_visite_anesth_id));
+  aideRquesAnesth = new AideSaisie.AutoComplete(oFormVisiteAnesth.rques_visite_anesth, {
+            objectClass: "COperation",
+            timestamp: "{{$conf.dPcompteRendu.CCompteRendu.timestamp}}",
+            {{if $selOp->prat_visite_anesth_id}}
+            contextUserId: {{$selOp->prat_visite_anesth_id}},
+            {{/if}}
+            validateOnBlur:0
+          });
+  var oFormAnestPerop = getForm('addAnesthPerop');
+  aidePeropAnesth = new AideSaisie.AutoComplete(oFormAnestPerop.libelle, {
+            objectClass: "CAnesthPerop",
+            timestamp: "{{$conf.dPcompteRendu.CCompteRendu.timestamp}}",
+            {{if $selOp->_ref_anesth->_id}}
+            contextUserId: {{$selOp->_ref_anesth->_id}},
+            {{/if}}
+            validateOnBlur:1
+          });
 	
   {{if !$selOp->date_visite_anesth}}
 	  var dates = {};
@@ -201,7 +210,7 @@ Main.add(function(){
 	      <input name="prat_visite_anesth_id" type="hidden" value="{{$currUser->_id}}" />
 	      Dr {{$currUser->_view}}
 	      {{else}}
-	      <select name="prat_visite_anesth_id" class="notNull" onchange="refreshAidesPreAnesth($V(this))">
+	      <select name="prat_visite_anesth_id" class="notNull" onchange="refreshAidesPreAnesth($V(this), this.options[this.selectedIndex].innerHTML.trim())">
 	        <option value="">&mdash; Anesthésiste</option>
 	        {{foreach from=$listAnesths item=curr_anesth}}
 	        <option value="{{$curr_anesth->user_id}}" {{if $selOp->prat_visite_anesth_id == $curr_anesth->user_id}} selected="selected" {{/if}}>
@@ -215,14 +224,6 @@ Main.add(function(){
 	  <tr>
 	    <th>
 	      {{mb_label object=$selOp field="rques_visite_anesth"}}
-	      {{if !$selOp->date_visite_anesth}}
-	      <!-- Ajout des aides à la saisie : mais il faut les charger selon le praticien qu'on indique !! -->
-	      <select name="_helpers_rques_visite_anesth" style="width: 7em;" onchange="pasteHelperContent(this)" class="helper">
-	      </select>
-				<button class="new notext" title="Ajouter une aide à la saisie" type="button" onclick="addHelp('COperation', this.form.rques_visite_anesth, null, null, null, null, {{$user_id}})">
-				  {{tr}}New{{/tr}}
-				</button>
-	      {{/if}}
 	    </th>
 	    <td class="text">
 	      {{if $selOp->date_visite_anesth}}
@@ -292,17 +293,31 @@ Main.add(function(){
 	        <input type="hidden" name="dosql" value="do_anesth_perop_aed" />
 	        <input type="hidden" name="operation_id" value="{{$selOp->_id}}" />
 	        <input type="hidden" name="datetime" value="now" />
+          {{mb_key object=$anesth_perop}}
 	        
-	        {{mb_key object=$anesth_perop}}
-	        {{mb_label object=$anesth_perop field="libelle"}}
-	        <select name="_helpers_libelle" size="1" onchange="pasteHelperContent(this)" class="helper">
-	          <option value="">&mdash; Aide</option>
-	          {{html_options options=$anesth_perop->_aides.libelle.no_enum}}
-	        </select>
-	        <button class="new notext" title="Ajouter une aide à la saisie" type="button" onclick="addHelp('CAnesthPerop', this.form._hidden_libelle, 'libelle', null, null, null, {{$user_id}})">{{tr}}New{{/tr}}</button><br />
-	        <input type="hidden" name="_hidden_libelle" value="" />
-	        <textarea name="libelle" onblur="if(!$(this).emptyValue()){this.form.onsubmit();}"></textarea>
-	        <button class="submit" type="button">Ajouter</button>
+	        <table class="main layout">
+	          <tr>
+              <td>
+                {{mb_label object=$anesth_perop field="libelle"}}
+              </td>
+            </tr>
+            <tr>  
+              <td>
+                {{mb_field object=$anesth_perop field="libelle"}}
+              </td>
+	          </tr>
+	          <tr>
+              <td>
+                {{mb_field object=$anesth_perop field="incident" typeEnum="checkbox"}}
+                {{mb_label object=$anesth_perop field="incident"}}
+              </td>
+	          </tr>
+	          <tr>
+	            <td colspan="2" class="button">
+	              <button type="submit" class="submit">Ajouter</button>
+	            </td>
+	          </tr>
+	        </table>
 	      </form>
 	    </td>
 	    <td id="list_perops_{{$selOp->_id}}"></td>

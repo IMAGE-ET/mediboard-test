@@ -766,7 +766,15 @@ class CSetupdPsalleOp extends CSetup {
       }
     }
     
-    $this->mod_version = "0.38";
+    $this->makeRevision("0.38");
+    $query = "ALTER TABLE `anesth_perop` 
+              CHANGE `libelle` `libelle` TEXT NOT NULL;";
+    $this->addQuery($query);
+    $query = "ALTER TABLE `anesth_perop` 
+              ADD `incident` ENUM ('0','1') DEFAULT '0';";
+    $this->addQuery($query);
+    
+    $this->mod_version = "0.39";
   }
 }
 ?>

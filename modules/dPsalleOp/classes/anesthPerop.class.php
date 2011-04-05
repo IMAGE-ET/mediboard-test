@@ -18,6 +18,7 @@ class CAnesthPerop extends CMbObject {
 	// DB fields
   var $libelle  = null;
   var $datetime = null;
+  var $incident = null;
 	
 	// Fwd References
   var $_ref_operation = null;
@@ -32,14 +33,14 @@ class CAnesthPerop extends CMbObject {
   function getProps() {
     $specs = parent::getProps();
     $specs["operation_id"] = "ref notNull class|COperation";
-    $specs["libelle"]      = "str notNull helped";
+    $specs["libelle"]      = "text notNull helped";
 		$specs["datetime"]     = "dateTime notNull";
+    $specs["incident"]     = "bool default|0";
     return $specs;
   }
   
 	function updateFormFields(){
 	  $this->_view = "$this->libelle à $this->datetime";
-		
 	}
 	
 	function loadRefOperation(){
