@@ -43,6 +43,10 @@ table.tbl td {
   padding: 0.1em 0.5em;
 }
 
+span.page:before {
+	content: counter(page, none);
+}
+
 @media screen {
   #header,  #footer {
     margin: 10px;

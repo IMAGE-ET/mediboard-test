@@ -70,6 +70,7 @@ class CHtmlToPDF {
 
   function generatePDF($content, $stream, $format, $orientation, $file) {
   	$this->content = $this->fixBlockElements($content);
+  	$this->content = preg_replace("/\[Général - numéro de page\]/", "<span class='page'></span>", $this->content);
   	
     $this->dompdf->set_paper($format, $orientation);
     $this->dompdf->set_protocol(isset($_SERVER["HTTPS"]) ? "https://" : "http://");
