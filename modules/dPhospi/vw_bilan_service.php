@@ -92,6 +92,9 @@ if($do_trans){
   $ljoin["service"] = "chambre.service_id = service.service_id";
   
   $where[] = "(degre = 'high') OR (date >= '$dateTime_min' AND date <= '$dateTime_max')";
+  $where[] = "affectation.entree >= (
+    SELECT max(a2.entree) FROM affectation a2
+    WHERE a2.sejour_id = affectation.sejour_id)";
   $where["service.service_id"] = " = '$service_id'";
   
   $where[] = "(sejour.entree BETWEEN '$dateTime_min' AND '$dateTime_max') OR 
@@ -472,8 +475,8 @@ if (CValue::get("do") && ($do_medicaments || $do_injections || $do_perfusions ||
 						          	$quantite_planifiee = @$administrations_by_hour["quantite_planifiee"];
 							          if($quantite_planifiee){
 							          	
-                          $key1 = $by_patient ? $lit->_id : $name_chap;
-                          $key2 = $by_patient ? $name_chap : $lit->_id;
+                          $key1 = $by_patient ? $lit->_ref_chambre->nom : $name_chap;
+                          $key2 = $by_patient ? $name_chap : $lit->_ref_chambre->nom;
 													
 							            @$lines_by_patient[$key1][$key2][$sejour->_id][$_date][$_hour][$_line_elt->_class_name][$_line_elt->_id]["prevu"] += $quantite_planifiee;
 							            $administrations_by_hour["quantite_planifiee"] = 0;
@@ -492,6 +495,7 @@ if (CValue::get("do") && ($do_medicaments || $do_injections || $do_perfusions ||
 }
 
 // Tri des lignes
+ksort($lines_by_patient, SORT_STRING);
 foreach($lines_by_patient as $name_chap => &$lines_by_chap){
 	ksort($lines_by_chap, SORT_STRING);
 	foreach($lines_by_chap as $lit_view => &$lines_by_sejour){

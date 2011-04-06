@@ -272,9 +272,21 @@ selectPeriode = function(element) {
 			      <th colspan="6" class="text">
               <span style="float: left; text-align: left;">
                 {{foreach from=$sejour->_ref_affectations item=_affectation}}
-                   <strong>{{$_affectation->_view}}</strong>
+                   <strong
+                    {{if $_affectation->entree < $dateTime_min &&
+                      ($_affectation->sortie < $dateTime_min || $_affectation->sortie > $dateTime_max)}}
+                      style="color: #666"
+                    {{/if}}>
+                      {{$_affectation->_view}}
+                    </strong>
                    {{if $sejour->_ref_affectations|@count > 1}}
-                   <small>(du {{$_affectation->entree|date_format:$conf.date}} au {{$_affectation->sortie|date_format:$conf.date}})</small>
+                   <small
+                    {{if $_affectation->entree < $dateTime_min &&
+                      ($_affectation->sortie < $dateTime_min || $_affectation->sortie > $dateTime_max)}}
+                      style="color: #666"
+                    {{/if}}>
+                     (du {{$_affectation->entree|date_format:$conf.date}} au {{$_affectation->sortie|date_format:$conf.date}})
+                   </small>
                   {{/if}}
                   <br />
                 {{/foreach}}
