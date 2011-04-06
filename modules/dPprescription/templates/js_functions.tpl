@@ -433,7 +433,7 @@ calculDebit = function(line_id, line_item_id){
   url.pop(600, 200, "calculDebit");
 }
 
-updateVolumeTotal = function(prescription_line_mix_id, prescription_line_mix_item_id, modif_qte_totale, quantite_totale, solvant) {
+updateVolumeTotal = function(prescription_line_mix_id, modif_qte_totale, quantite_totale, solvant, prescription_line_mix_item_id) {
   var checked = $('lines-'+prescription_line_mix_id).select('input[name=__solvant]:checked')[0];
   if(!checked){
     if (modif_qte_totale) {
@@ -443,13 +443,16 @@ updateVolumeTotal = function(prescription_line_mix_id, prescription_line_mix_ite
   }
   
   var url = new Url("dPprescription", "httpreq_update_solvant");
-  url.addParam("prescription_line_mix_item_id", prescription_line_mix_item_id);
+  url.addParam("prescription_line_mix_id", prescription_line_mix_id);
   url.addParam("modif_qte_totale", modif_qte_totale);
   if (solvant != null) {
     url.addParam("solvant", solvant);
   }
   if (quantite_totale) {
     url.addParam("quantite_totale", quantite_totale);
+  }
+  if (prescription_line_mix_item_id) {
+    url.addParam("prescription_line_mix_item_id", prescription_line_mix_item_id);
   }
   url.requestJSON(function(e){
     if(e == null){
@@ -474,7 +477,7 @@ updateSolvant = function(prescription_line_mix_id, quantite_totale){
   }
   // Ligne de solvant
   var prescription_line_mix_item_id = $V(checked.up('form').prescription_line_mix_item_id);
-  updateVolumeTotal(prescription_line_mix_id, prescription_line_mix_item_id, 1, quantite_totale, 0);
+  updateVolumeTotal(prescription_line_mix_id, 1, quantite_totale, 0, prescription_line_mix_item_id);
 }
 
 updateDebitProduit = function(prescription_line_mix_item_id) {

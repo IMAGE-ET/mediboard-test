@@ -9,14 +9,13 @@
  */
 
 $prescription_line_mix_item_id = CValue::get("prescription_line_mix_item_id");
+$prescription_line_mix_id = CValue::get("prescription_line_mix_id");
 $quantite_solvant  = CValue::get("quantite_totale", null);
 $modif_qte_totale  = CValue::get("modif_qte_totale");
 $solvant           = CValue::get("solvant", true);
-$prescription_line_mix_item = new CPrescriptionLineMixItem();
-$prescription_line_mix_item->load($prescription_line_mix_item_id);
 
-$prescription_line_mix_item->loadRefPerfusion();
-$prescription_line_mix =& $prescription_line_mix_item->_ref_prescription_line_mix;
+$prescription_line_mix = new CPrescriptionLineMix();
+$prescription_line_mix->load($prescription_line_mix_id);
 
 // Calcul de la quantite totale
 $prescription_line_mix->calculQuantiteTotal();
@@ -40,6 +39,8 @@ if ($modif_qte_totale && $solvant){
 	echo round($prescription_line_mix->_quantite_totale, 2);
 }
 else {
+  $prescription_line_mix_item = new CPrescriptionLineMixItem();
+  $prescription_line_mix_item->load($prescription_line_mix_item_id);
   $prescription_line_mix_item->loadRefsFwd();
 	if(in_array("ml", $prescription_line_mix_item->_unites_prise)){
 		if($quantite_solvant < 0){
