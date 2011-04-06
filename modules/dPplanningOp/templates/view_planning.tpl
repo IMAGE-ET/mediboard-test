@@ -16,8 +16,8 @@
   <tr>
     <td class="info" colspan="2">
     (Prière de vous munir pour la consultation d'anesthésie de la photocopie
-     de vos cartes de sécurité sociale, de mutuelle et du résultat de votre
-     bilan sanguin et la liste des médicaments que vous prenez)<br />
+     de vos cartes de sécurité sociale, de mutuelle, du résultat de votre
+     bilan sanguin et de la liste des médicaments que vous prenez)<br />
      {{if $sejour->_ref_group->tel}}
        Pour tout renseignement, téléphonez au 
        {{mb_value object=$sejour->_ref_group field=tel}}
@@ -134,10 +134,11 @@
   
   {{if $operation->_id}}
   <tr>
-    <th>Date d'intervention :</th>
+    <th>Date d'intervention</th>
     <td>le {{$operation->_datetime|date_format:"%A %d/%m/%Y"}}</td>
   </tr>
 	
+	{{if !$simple_DHE}}
   {{if $operation->libelle}}
   <tr>
     <th>Libellé </th>
@@ -160,6 +161,7 @@
     <th>Côté </th>
     <td>{{tr}}COperation.cote.{{$operation->cote}}{{/tr}}</td>
   </tr>
+  {{/if}}
   {{/if}}
 	
   <tr>
@@ -210,6 +212,7 @@
     <td class="info" colspan="2">
       <b>Pour votre hospitalisation, prière de vous munir de :</b>
       <ul>
+        <li>Carte d'identité</li>
         <li>
           Carte Vitale et attestation de sécurité sociale, 
           carte de mutuelle accompagnée de la prise en charge le cas échéant.

@@ -1099,7 +1099,12 @@ class CSetupdPplanningOp extends CSetup {
               ADD `consult_accomp` ENUM ('oui','non','nc') DEFAULT 'nc';";
     $this->addQuery($query);
     
-    $this->mod_version = "1.19";
+    $this->makeRevision("1.19");
+    $query = "ALTER TABLE `groups_config`
+      ADD `dPplanningOp_COperation_DHE_mode_simple` ENUM ('0', '1') NOT NULL DEFAULT '0'";
+    $this->addQuery($query);
+    
+    $this->mod_version = "1.20";
     
   }
 }

@@ -88,31 +88,31 @@ if($selPraticien->isAnesth()) {
     $_interv->loadRefAffectation();
     $_interv->loadRefsFwd(1);
     $_interv->loadRefsConsultAnesth();
-      $_interv->_ref_chir->loadRefFunction();
+    $_interv->_ref_chir->loadRefFunction();
   }
   $listInterv["hospi"]["non_place"]      = $interv->loadList($whereHospi, $order, null, null, $ljoin);
   foreach($listInterv["hospi"]["non_place"] as &$_interv) {
     $_interv->loadRefAffectation();
     $_interv->loadRefsFwd(1);
     $_interv->loadRefsConsultAnesth();
-      $_interv->_ref_chir->loadRefFunction();
+    $_interv->_ref_chir->loadRefFunction();
   }
   $listInterv["hors plage"]["non_place"] = $interv->loadList($whereUrg  , $order, null, null, $ljoin);
   foreach($listInterv["hors plage"]["non_place"] as &$_interv) {
     $_interv->loadRefAffectation();
     $_interv->loadRefsFwd(1);
     $_interv->loadRefsConsultAnesth();
-      $_interv->_ref_chir->loadRefFunction();
+    $_interv->_ref_chir->loadRefFunction();
   }
 
   // Création du template
   $smarty = new CSmartyDP();
   
-  $smarty->assign("date"        , $date        );
-  $smarty->assign("listPrat"    , $listPrat    );
-  $smarty->assign("listInterv"  , $listInterv  );
-  $smarty->assign("services"    , $services    );
-  $smarty->assign("selPrat"     , $selPrat     );
+  $smarty->assign("date"        , $date);
+  $smarty->assign("listPrat"    , $listPrat);
+  $smarty->assign("listInterv"  , $listInterv);
+  $smarty->assign("services"    , $services);
+  $smarty->assign("selPrat"     , $selPrat);
   
   $smarty->display("vw_idx_visite_anesth.tpl");
   
@@ -186,12 +186,12 @@ if($selPraticien->isAnesth()) {
   // Création du template
   $smarty = new CSmartyDP();
   
-  $smarty->assign("date"        , $date        );
-  $smarty->assign("lastmonth"   , $lastmonth   );
-  $smarty->assign("nextmonth"   , $nextmonth   );
-  $smarty->assign("listPrat"    , $listPrat    );
-  $smarty->assign("selPrat"     , $selPrat     );
-  $smarty->assign("listDays"    , $listDays    );
+  $smarty->assign("date"        , $date);
+  $smarty->assign("lastmonth"   , $lastmonth);
+  $smarty->assign("nextmonth"   , $nextmonth);
+  $smarty->assign("listPrat"    , $listPrat);
+  $smarty->assign("selPrat"     , $selPrat);
+  $smarty->assign("listDays"    , $listDays);
   
   $smarty->display("vw_idx_planning.tpl");
 }

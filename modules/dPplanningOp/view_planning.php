@@ -33,12 +33,17 @@ if ($operation_id = CValue::get("operation_id")) {
 
 $today = mbDate();
 
+$group = CGroups::loadCurrent();
+$group->loadConfigValues();
+$simple_DHE = $group->_configs['dPplanningOp_COperation_DHE_mode_simple'];
+
 // Création du template
 $smarty = new CSmartyDP();
 
-$smarty->assign("operation", $operation);
-$smarty->assign("sejour", $sejour);
-$smarty->assign("today"    , $today    );
+$smarty->assign("operation" , $operation);
+$smarty->assign("sejour"    , $sejour);
+$smarty->assign("today"     , $today    );
+$smarty->assign("simple_DHE", $simple_DHE);
 
 $smarty->display("view_planning.tpl");
 
