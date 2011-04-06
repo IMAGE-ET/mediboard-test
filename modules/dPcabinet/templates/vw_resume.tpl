@@ -37,7 +37,7 @@ function newExam(sAction, consultation_id) {
         {{$curr_doc->nom}}
       </a>
       {{foreachelse}}
-      <div class="empty">{{tr}}None{{tr}}</div>
+      <div class="empty">{{tr}}None{{/tr}}</div>
       {{/foreach}}
     </td>
     <td>
@@ -46,7 +46,7 @@ function newExam(sAction, consultation_id) {
         {{$curr_file->file_name}}
       </a>
       {{foreachelse}}
-      <div class="empty">{{tr}}None{{tr}}</div>
+      <div class="empty">{{tr}}None{{/tr}}</div>
       {{/foreach}}
     </td>
   </tr>
