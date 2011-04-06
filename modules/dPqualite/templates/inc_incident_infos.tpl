@@ -30,7 +30,7 @@
  <tr>
    <th>{{tr}}CFicheEi-user_id{{/tr}}</th>
    <td class="text">
-     {{if $conf.dPqualite.CFicheEi.mode_anonyme && !$modules.qualite->_can->admin && ($fiche->_ref_user->user_id != $app->user_id)}}
+     {{if $conf.dPqualite.CFicheEi.mode_anonyme && !$modules.dPqualite->_can->admin && ($fiche->_ref_user->user_id != $app->user_id)}}
        Anonyme
      {{else}}
        {{$fiche->_ref_user->_view}}
