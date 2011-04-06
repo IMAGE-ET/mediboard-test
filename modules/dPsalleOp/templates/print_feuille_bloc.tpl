@@ -84,6 +84,16 @@ Main.add(function(){
           </td>
         </tr>
         <tr>
+          <th>{{mb_label object=$consult_anesth field=ASA}}</th>
+          <td>
+            {{if $consult_anesth->ASA}}
+              {{mb_value object=$consult_anesth field=ASA}}
+            {{else}}
+              &mdash;
+            {{/if}}
+          </td>
+        </tr>
+        <tr>
           <th>{{mb_label object=$operation field=cote}}</th>
           <td>{{mb_value object=$operation field=cote}}</td>
         </tr>
@@ -279,7 +289,7 @@ Main.add(function(){
 
 <table class="print"> 
   <tr>
-    <th class="category" colspan="4">Evenements per-opératoire</th>
+    <th class="category" colspan="4">Evenements per-opératoires</th>
   </tr>   
   {{foreach from=$perops key=datetime item=_perops_by_datetime}}
     {{foreach from=$_perops_by_datetime item=_perop}}

@@ -12,10 +12,10 @@ refreshAidesPreAnesth = function(user_id, user_view) {
 }
 
 reloadDocumentsAnesth = function () {
-  if(document.anesthTiming) {
-    var sAnesth_id = document.anesthTiming.anesth_id.value;
+  if(oForm = getForm("anesthInterv")) {
+    var sAnesth_id = $V(oForm.anesth_id);
   } else {
-    var sAnesth_id = document.visiteAnesth.prat_anesth_id.value;
+    var sAnesth_id = $V(getForm("visiteAnesth").prat_anesth_id);
   }
   $$('.documents-CConsultAnesth-{{$consult_anesth->_id}}').each(function(doc){
     Document.refresh(doc, {praticien_id: sAnesth_id });
@@ -42,7 +42,7 @@ reloadAnesth = function() {
 {{/if}}
 
 Main.add(function(){
-  var oFormVisiteAnesth = getForm('visiteAnesth');
+  var oFormVisiteAnesth = getForm("visiteAnesth");
   aideRquesAnesth = new AideSaisie.AutoComplete(oFormVisiteAnesth.rques_visite_anesth, {
             objectClass: "COperation",
             timestamp: "{{$conf.dPcompteRendu.CCompteRendu.timestamp}}",
@@ -51,7 +51,7 @@ Main.add(function(){
             {{/if}}
             validateOnBlur:0
           });
-  var oFormAnestPerop = getForm('addAnesthPerop');
+  var oFormAnestPerop = getForm("addAnesthPerop");
   aidePeropAnesth = new AideSaisie.AutoComplete(oFormAnestPerop.libelle, {
             objectClass: "CAnesthPerop",
             timestamp: "{{$conf.dPcompteRendu.CCompteRendu.timestamp}}",
@@ -95,28 +95,30 @@ Main.add(function(){
 {{if $consult_anesth->_id}}
   <table class="form">
     <tr>
-      <th colspan="2" class="title">Fichiers / Documents</th>
-    </tr>
-    <tr>
-      <td>
-        {{mb_script module="dPcabinet" script="file"}}
-        <div id="files-anesth">
-        <script type="text/javascript">
-          File.register('{{$consult_anesth->_id}}','{{$consult_anesth->_class_name}}', 'files-anesth');
-        </script>
-        </div>
+      <td class="halfPane">
+        <fieldset>
+          {{mb_script module="dPcabinet" script="file"}}
+          <legend>{{tr}}CFile{{/tr}} - {{tr}}CConsultAnesth{{/tr}}</legend>            
+          <div id="files-anesth">
+            <script type="text/javascript">
+              File.register('{{$consult_anesth->_id}}','{{$consult_anesth->_class_name}}', 'files-anesth');
+            </script>
+          </div>
+        </fieldset>
       </td>
-      <td>
-        <div id="documents-anesth">
-          {{mb_script module="dPcompteRendu" script="document"}}
-          <script type="text/javascript">
-            Document.register('{{$consult_anesth->_id}}','{{$consult_anesth->_class_name}}','{{$modeles_prat_id}}','documents-anesth');
-          </script>
-        </div>
+      <td class="halfPane">
+        {{mb_script module="dPcompteRendu" script="document"}}
+        <fieldset>
+          <legend>{{tr}}CCompteRendu{{/tr}} - {{tr}}CConsultAnesth{{/tr}}</legend>            
+          <div id="documents-anesth">
+            <script type="text/javascript">
+              Document.register('{{$consult_anesth->_id}}','{{$consult_anesth->_class_name}}','{{$modeles_prat_id}}','documents-anesth');
+            </script>
+          </div>
+        </fieldset>
       </td>
     </tr>
   </table>
-	
 {{/if}}
 	
 	
