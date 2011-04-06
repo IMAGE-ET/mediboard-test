@@ -95,6 +95,13 @@ function exportReport(elements, filename) {
   url.pop(20, 20, 'pdf_export', null, null, file, window._tempIframe);
 }
 
+function exportACACIAS(form) {
+  var url = new Url("pharmacie", "export_enquete_acacias");
+	url.addFormData(getForm("year-month-form"));
+  url.addParam("suppressHeaders", 1);
+  url.pop(20, 20, 'acacias');
+}
+
 function updateYearMonth(select){
   var forms = [getForm("filter-product"), getForm("filter-products")];
 	forms.each(function(f){
@@ -103,6 +110,7 @@ function updateYearMonth(select){
 }
 </script>
 
+<form name="year-month-form" method="get" onsubmit="return false" action="?">
 <label>
   Année
   <select name="year" onchange="updateYearMonth(this)">
@@ -120,6 +128,7 @@ function updateYearMonth(select){
     {{/foreach}}
   </select>
 </label>
+</form>
   
 <hr />
 
@@ -128,6 +137,7 @@ function updateYearMonth(select){
   <li><a href="#byselection">Par sélection de produits</a></li>
   <li><a href="#stock-loss">Pertes</a></li>
   <li><a href="#stock-global-value">Valorisation globale</a></li>
+  <li><a href="#acacias">ACACIAS</a></li>
 </ul>
 <hr class="control_tabs" />
 
@@ -309,4 +319,10 @@ function updateYearMonth(select){
     Valeur totale
   </button>
   <div style="font-size: 1.5em; text-align: center;"></div>
+</div>
+
+<div id="acacias" style="display: none;">
+  <button class="change" onclick="exportACACIAS()">
+    Export enquête ACACIAS
+  </button>
 </div>

@@ -331,6 +331,46 @@ class CProduct extends CMbObject {
     return $this->_supply = $this->_spec->ds->loadResult($sql->getRequest());
   }
   
+  /** Computes the weighted average price (PMP)
+   * @param Date $since [optional]
+   * @param Date $date_max [optional]
+   * @return Number
+   */
+  function getWAP($since = "-1 MONTH", $date_max = null){
+  	$qty = $this->getSupply($since, $date_max);
+		
+		if (!$qty) return null;
+		
+    $where = array(
+      "product.product_id" => "= '{$this->_id}'",
+      "product_order_item_reception.date > '".mbDate($since)."'",
+    );
+    
+    if ($date_max) {
+      $where[] = "product_order_item_reception.date <= '".mbDate($date_max)."'";
+    }
+    
+    $ljoin = array(
+      "product_order_item" => "product_order_item.order_item_id = product_order_item_reception.order_item_id",
+      "product_reference" => "product_reference.reference_id = product_order_item.reference_id",
+      "product" => "product.product_id = product_reference.product_id",
+    );
+    
+    $sql = new CRequest();
+    $sql->addTable("product_order_item_reception");
+    $sql->addSelect("SUM(product_order_item_reception.quantity * 
+      product_reference.quantity * 
+      product.quantity * (product_order_item.unit_price / (product_reference.quantity * product.quantity)))");
+    $sql->addLJoin($ljoin);
+    $sql->addWhere($where);
+    
+		$total = $this->_spec->ds->loadResult($sql->getRequest());
+		
+		//mbTrace($total, $this->code);
+		
+    return $total / $qty;
+  }
+  
   function store() {
     $this->completeField("code", 'quantity', 'unit_quantity');
     

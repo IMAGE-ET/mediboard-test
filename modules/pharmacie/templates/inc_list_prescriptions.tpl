@@ -14,10 +14,15 @@
 		<ul class="control_tabs small" id="tab-prescriptions-pharma">
 		  {{foreach from=$prescriptions key=type_score item=_prescriptions_by_score}}
 			  {{if $_prescriptions_by_score|@count}}
-		    <li><a href="#niveau-{{$type_score}}">Score {{tr}}CPrescription.score.{{$type_score}}{{/tr}} - <small>({{$_prescriptions_by_score|@count}})</small></a></li>
+		    <li>
+		    	<a href="#niveau-{{$type_score}}">
+		    		Score {{tr}}CPrescription.score.{{$type_score}}{{/tr}} - <small>({{$_prescriptions_by_score|@count}})</small>
+					</a>
+				</li>
 				{{/if}}
 		  {{/foreach}}
 		</ul>
+		<hr class="control_tabs" />
 	</td>
 </tr>
 {{foreach from=$prescriptions key=type_score item=_prescriptions_by_score}}
