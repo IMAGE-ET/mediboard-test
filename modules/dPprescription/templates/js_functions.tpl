@@ -461,27 +461,20 @@ updateVolumeTotal = function(prescription_line_mix_id, prescription_line_mix_ite
       volume_total.select("input")[0].value = e; 
     } else {
       var td = $$("input[name=__solvant]:checked")[0].up("td");
-      td.select("input[name=quantite]")[0].value = e;
-      td.select("input[name=unite]")[0].value = 'ml';
+      $V(td.select("input[name=quantite]")[0], e);
+      $V(td.select("input[name=unite]")[0], 'ml');
     }
   });
 }
 
-updateSolvant = function(prescription_line_mix_id, line_id, quantite_totale){
+updateSolvant = function(prescription_line_mix_id, quantite_totale){
   var checked = $('lines-'+prescription_line_mix_id).select('input[name=__solvant]:checked')[0];
   if (!checked) {
     return;
   }
   // Ligne de solvant
   var prescription_line_mix_item_id = $V(checked.up('form').prescription_line_mix_item_id);
-
-  var modif_qte_totale = 0;
-  if(line_id && prescription_line_mix_item_id == line_id){
-    modif_qte_totale = 1;
-  }
-  
-  updateVolumeTotal(prescription_line_mix_id, prescription_line_mix_item_id, modif_qte_totale, quantite_totale);
-  
+  updateVolumeTotal(prescription_line_mix_id, prescription_line_mix_item_id, 1, quantite_totale, 0);
 }
 
 updateDebitProduit = function(prescription_line_mix_item_id) {

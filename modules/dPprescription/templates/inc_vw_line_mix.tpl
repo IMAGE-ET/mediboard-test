@@ -527,8 +527,8 @@ Main.add( function(){
                 {{if $line->type_line == "perfusion"}}
                   <script type="text/javascript">
                     Main.add(function() {
-                      updateDebitProduit({{$line_item_id}});
-                      showHideDebitProduit(getForm("editLinePerf-{{$_line_item->_id}}").__solvant, {{$line_item_id}});
+                      updateDebitProduit('{{$line_item_id}}');
+                      showHideDebitProduit(getForm("editLinePerf-{{$_line_item->_id}}").__solvant, '{{$line_item_id}}');
                     });
                   </script>
                 {{/if}}
@@ -608,9 +608,11 @@ Main.add( function(){
                                 {{if $line->type_line == "perfusion"}}
                                   var oFormQte = getForm('editQuantiteTotale-{{$prescription_line_mix_id}}');
                                   var oFormPerf = getForm('editLinePerf-{{$_line_item->_id}}');
-                                  updateVolumeTotal({{$prescription_line_mix_id}}, {{$line_item_id}}, 1, $V(oFormQte._quantite_totale), oFormPerf.__solvant.checked ? 1 : 0);
+                                  updateVolumeTotal('{{$prescription_line_mix_id}}', '{{$line_item_id}}', 1, $V(oFormQte._quantite_totale), oFormPerf.__solvant.checked ? 1 : 0);
                                   {{foreach from=$line->_ref_lines item=_line_item_update}}
-                                    updateDebitProduit({{$_line_item_update->_id}});
+                                    if (oFormPerf.__solvant.checked) {
+                                     updateDebitProduit({{$_line_item_update->_id}});
+                                    }
                                   {{/foreach}}
                                 {{/if}}
                               } });
@@ -622,9 +624,9 @@ Main.add( function(){
                                 onchange="return onSubmitFormAjax(this.form, {onComplete: function() {
                                   var oFormQte = getForm('editQuantiteTotale-{{$prescription_line_mix_id}}');
                                   var oFormPerf = getForm('editLinePerf-{{$_line_item->_id}}');
-                                  updateVolumeTotal({{$prescription_line_mix_id}}, {{$line_item_id}}, 1, $V(oFormQte._quantite_totale), oFormPerf.__solvant.checked ? 1 : 0);
+                                  updateVolumeTotal('{{$prescription_line_mix_id}}', '{{$line_item_id}}', 1, $V(oFormQte._quantite_totale), oFormPerf.__solvant.checked ? 1 : 0);
                                   {{foreach from=$line->_ref_lines item=_line_item_update}}
-                                  updateDebitProduit({{$_line_item_update->_id}});
+                                  updateDebitProduit('{{$_line_item_update->_id}}');
                                   {{/foreach}}
                                 }});">
   														  {{if $_line_item->_ref_produit_prescription->_id}}
@@ -674,13 +676,15 @@ Main.add( function(){
               </div>
               {{if $line->type_line == "perfusion"}}
                 <script type="text/javascript">
-                  Main.add(function() {
-                    updateVolumeTotal({{$prescription_line_mix_id}}, {{$line_item_id}}, 1);
-                  });
+                  {{if @$line_item_id}}
+                    Main.add(function() {
+                      updateVolumeTotal('{{$prescription_line_mix_id}}', '{{$line_item_id}}', 1);
+                    });
+                  {{/if}}
                   getForm("editQuantiteTotale-{{$prescription_line_mix_id}}")._quantite_totale.onchange= function() {
-                    updateSolvant({{$prescription_line_mix_id}}, null, this.value);
+                    updateSolvant('{{$prescription_line_mix_id}}', this.value);
                     {{foreach from=$line->_ref_lines item=_line_item}}
-                      updateDebitProduit({{$_line_item->_id}});
+                      updateDebitProduit('{{$_line_item->_id}}');
                     {{/foreach}}
                   };
                 </script>
