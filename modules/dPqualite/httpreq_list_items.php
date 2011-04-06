@@ -10,10 +10,14 @@
 
 $ei_categorie_id = CValue::get("categorie_id");
 
-$where = array();
-$where["ei_categorie_id"] = " = $ei_categorie_id";
-$item = new CEiItem;
-$items = $item->loadList($where);
+$items = array();
+
+if ($ei_categorie_id) {
+  $where = array();
+  $where["ei_categorie_id"] = " = $ei_categorie_id";
+  $item = new CEiItem;
+  $items = $item->loadList($where);
+}
 
 $smarty = new CSmartyDP();
 $smarty->assign("items", $items);
