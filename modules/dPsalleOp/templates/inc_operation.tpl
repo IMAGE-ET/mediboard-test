@@ -46,6 +46,11 @@ Main.add(function () {
   }
 });
 
+function printFicheBloc(interv_id) {
+  var url = new Url("dPsalleOp", "print_feuille_bloc");
+  url.addParam("operation_id", interv_id);
+  url.popup(700, 700, 'FeuilleBloc');
+}
 
 var constantesMedicalesDrawn = false;
 refreshConstantesHack = function(sejour_id) {
@@ -231,6 +236,7 @@ function reloadPrescription(prescription_id){
   {{if $isImedsInstalled}}
     <li><a href="#Imeds_tab">Labo</a></li>
   {{/if}}
+  <li style="float: right"><button type="button" class="print" onclick="printFicheBloc('{{$selOp->_id}}}');">Feuille de bloc</button></li>
 </ul>
   
 <hr class="control_tabs" />

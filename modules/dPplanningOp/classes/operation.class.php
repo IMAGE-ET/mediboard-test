@@ -79,25 +79,28 @@ class COperation extends CCodable {
   var $autorisation_anesth   = null;
   
   // Form fields
-  var $_hour_op        = null;
-  var $_min_op         = null;
-  var $_hour_urgence   = null;
-  var $_min_urgence    = null;
-  var $_lu_type_anesth = null;
-  var $_codes_ccam     = array();
-  var $_duree_interv   = null;
-  var $_presence_salle = null;
-  var $_hour_voulu     = null;
-  var $_min_voulu      = null;
-  var $_deplacee       = null;
-  var $_compteur_jour  = null;
-  var $_pause_min      = null;
-  var $_pause_hour     = null;
+  var $_hour_op         = null;
+  var $_min_op          = null;
+  var $_hour_urgence    = null;
+  var $_min_urgence     = null;
+  var $_lu_type_anesth  = null;
+  var $_codes_ccam      = array();
+  var $_duree_interv    = null;
+  var $_duree_garrot    = null;
+  var $_duree_induction = null;
+  var $_presence_salle  = null;
+  var $_duree_sspi      = null;
+  var $_hour_voulu      = null;
+  var $_min_voulu       = null;
+  var $_deplacee        = null;
+  var $_compteur_jour   = null;
+  var $_pause_min       = null;
+  var $_pause_hour      = null;
   var $_protocole_prescription_anesth_id = null;
   var $_protocole_prescription_chir_id   = null;
-  var $_move           = null;
+  var $_move            = null;
   var $_password_visite_anesth = null;
-  var $_patient_id     = null;
+  var $_patient_id      = null;
   
   // Distant fields
   var $_datetime          = null;
@@ -213,7 +216,10 @@ class COperation extends CCodable {
     
     
     $specs["_duree_interv"]           = "time";
+    $specs["_duree_garrot"]           = "time";
+    $specs["_duree_induction"]        = "time";
     $specs["_presence_salle"]         = "time";
+    $specs["_duree_sspi"]             = "time";
 
     $specs["_date_min"]               = "date";
     $specs["_date_max"]               = "date moreEquals|_date_min";
@@ -333,8 +339,17 @@ class COperation extends CCodable {
     if($this->debut_op && $this->fin_op && $this->fin_op > $this->debut_op){
       $this->_duree_interv = mbSubTime($this->debut_op,$this->fin_op);
     }
+    if($this->pose_garrot && $this->retrait_garrot && $this->retrait_garrot > $this->pose_garrot){
+      $this->_duree_garrot = mbSubTime($this->pose_garrot,$this->retrait_garrot);
+    }
+    if($this->induction_debut && $this->induction_fin && $this->induction_fin > $this->induction_debut){
+      $this->_duree_induction = mbSubTime($this->induction_debut,$this->induction_fin);
+    }
     if($this->entree_salle && $this->sortie_salle && $this->sortie_salle>$this->entree_salle){
       $this->_presence_salle = mbSubTime($this->entree_salle,$this->sortie_salle);
+    }
+    if($this->entree_reveil && $this->sortie_reveil && $this->sortie_reveil > $this->entree_reveil){
+      $this->_duree_interv = mbSubTime($this->entree_reveil,$this->sortie_reveil);
     }
     if($this->plageop_id) {
       $this->_link_editor = "index.php?m=dPplanningOp&tab=vw_edit_planning&operation_id=".$this->_id;
