@@ -26,12 +26,12 @@
   </tr>
   
   <tr>
-    <th>Date </th>
+    <th>Date</th>
     <td>{{$today|date_format:"%A %d/%m/%Y"}}</td>
   </tr>
   
   <tr>
-    <th>Praticien </th>
+    <th>Praticien</th>
     <td>
     {{if $operation->_id}}
 	    {{if $operation->_ref_chir}}
@@ -52,7 +52,7 @@
   {{assign var="patient" value=$sejour->_ref_patient}}
   
   <tr>
-    <th>Nom / Prénom </th>
+    <th>Nom / Prénom</th>
     <td>{{$patient->_view}}</td>
   </tr>
   
@@ -66,17 +66,17 @@
   </tr>
   
   <tr>
-    <th>Incapable majeur </th>
+    <th>Incapable majeur</th>
     <td>{{tr}}CPatient.incapable_majeur.{{$patient->incapable_majeur}}{{/tr}}</td>
   </tr>
 
   <tr>
-    <th>Téléphone </th>
+    <th>Téléphone</th>
     <td>{{mb_value object=$patient field=tel}}</td>
   </tr>
 
   <tr>
-    <th>Medecin traitant </th>
+    <th>Medecin traitant</th>
     <td>
     {{if $patient->_ref_medecin_traitant}}
       {{$patient->_ref_medecin_traitant->_view}}
@@ -85,7 +85,7 @@
   </tr>
   
   <tr>
-    <th>Adresse </th>
+    <th>Adresse</th>
     <td>
       {{$patient->adresse}} &mdash;
       {{$patient->cp}} {{$patient->ville}}
@@ -115,20 +115,20 @@
   {{/if}}
   
   <tr>
-    <th>Admission </th>
+    <th>Admission</th>
     <td>      
       le {{$sejour->entree_prevue|date_format:"%A %d/%m/%Y à %Hh%M"}} 
     </td>
   </tr>
   
   <tr>
-    <th>Hospitalisation </th>
+    <th>Hospitalisation</th>
     <td>
       {{tr}}CSejour.type.{{$sejour->type}}{{/tr}}
     </td>
   </tr>
   <tr>
-    <th>Chambre particulière </th>
+    <th>Chambre particulière</th>
     <td>{{tr}}CSejour.chambre_seule.{{$sejour->chambre_seule}}{{/tr}}</td>
   </tr>
   
@@ -141,7 +141,7 @@
 	{{if !$simple_DHE}}
   {{if $operation->libelle}}
   <tr>
-    <th>Libellé </th>
+    <th>Libellé</th>
     <td class="text"><em>{{$operation->libelle}}</em></td>
   </tr>
   {{/if}}
@@ -158,14 +158,14 @@
   </tr>
   
   <tr>
-    <th>Côté </th>
+    <th>Côté</th>
     <td>{{tr}}COperation.cote.{{$operation->cote}}{{/tr}}</td>
   </tr>
   {{/if}}
   {{/if}}
 	
   <tr>
-    <th>Durée prévue d'hospitalisation </th>
+    <th>Durée prévue d'hospitalisation</th>
     <td>{{$sejour->_duree_prevue}} nuits</td>
   </tr>
  
