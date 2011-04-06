@@ -42,14 +42,17 @@ if($selPraticien->isAnesth()) {
   $whereAmbu = array(
                  "plagesop.date = '$date' OR operations.date = '$date'",
                  "sejour.type"   => "= 'ambu'",
+                 "sejour.group_id" => "= '".CGroups::loadCurrent()->_id."'",
                );
   $whereHospi = array(
                  "plagesop.date = '$date' OR operations.date = '$date'",
                  "sejour.type"   => "= 'comp'",
+                 "sejour.group_id" => "= '".CGroups::loadCurrent()->_id."'",
                );
   $whereUrg   = array(
                  "plagesop.plageop_id" => "IS NULL",
                  "operations.date"     => "= '$date'",
+                 "sejour.group_id" => "= '".CGroups::loadCurrent()->_id."'",
                );
   foreach($services as $_service) {
     $whereAmbu["service.service_id"]          = "= '$_service->_id'";
