@@ -76,7 +76,9 @@ Main.add(function(){
         </tr>
         {{foreach from=$_list_intervs item=_operation}}
         <tr>
-          <td class="text">Dr {{$_operation->_ref_chir->_view}}</td>
+          <td class="text">
+            {{mb_include module=mediusers template=inc_vw_mediuser mediuser=$_operation->_ref_chir}}
+          </td>
           <td class="text">
             <span onmouseover="ObjectTooltip.createEx(this, '{{$_operation->_ref_sejour->_ref_patient->_guid}}')">
               {{$_operation->_ref_sejour->_ref_patient->_view}}
