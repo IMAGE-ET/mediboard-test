@@ -369,6 +369,19 @@ $library->versionString = 'v0.05 by Nicholas Vrtis';
 
 CLibrary::$all[$library->name] = $library;
 
+/*$library = new CLibrary;
+$library->name = "Growler";
+$library->url = "http://code.google.com/p/kproto/wiki/Growler";
+$library->fileName = "growler1.0.0.tar.gz";
+$library->description = "Lecture de fichiers DBF";
+$library->sourceDir = "growler";
+$library->targetDir = "growler";
+$library->versionFile = "src/Growler.js";
+$library->versionString = 'k.Growler 1.0.0';
+
+CLibrary::$all[$library->name] = $library;
+*/
+
 $library = new CLibrary;
 $library->name = "PDFMerger class";
 $library->url = "http://pdfmerger.codeplex.com/";
@@ -389,7 +402,7 @@ $library->description = "A JavaScript math expression evaluator";
 $library->sourceDir = "jsExpressionEval";
 $library->targetDir = "jsExpressionEval";
 $library->versionFile = "parser.js";
-$library->versionString = "Based on ndef.parser, by Raphael Graf(r@undefined.ch)";
+$library->versionString = "updated:2011-01-07";
 
 CLibrary::$all[$library->name] = $library;
 

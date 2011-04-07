@@ -114,7 +114,12 @@ ExObjectFormula = {
       values[v] = constants[v] || ExObjectFormula.getInputValue(form[v]);
     });
   
-    $V(target, data.parser.evaluate(values));
+    var result = data.parser.evaluate(values);
+    if (isNaN(result)) {
+      result = "";
+    }
+    
+    $V(target, result);
   }
 };
 

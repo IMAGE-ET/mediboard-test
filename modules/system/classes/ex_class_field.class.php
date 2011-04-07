@@ -171,7 +171,12 @@ class CExClassField extends CExListItemsOwner {
   }
   
   function formulaToDB($update = true) {
-    if (!$this->_formula) return;
+    if ($this->_formula === null) return;
+    
+    if ($this->_formula === "") {
+      $this->formula = "";
+      return;
+    }
     
     $field_names = $this->getFieldNames(false);
     $formula = $this->_formula;
