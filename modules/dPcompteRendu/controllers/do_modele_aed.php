@@ -96,8 +96,8 @@ if (isset($_POST["_source"])) {
     $object->load($_POST["object_id"]);
     CDestinataire::makeAllFor($object);
     $allDest = CDestinataire::$destByClass;
-    $bodyTag = '<div id=\"body\">';
-    
+    $bodyTag = '<div id="body">';
+
     // On sort l'en-tête et le pied de page
     $posBody      = strpos($_POST["_source"], $bodyTag);
     if($posBody) {
