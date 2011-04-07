@@ -54,11 +54,14 @@ function submitTransmission(administration_id){
       {{/if}}
       window.opener.loadSuivi('{{$sejour->_id}}');
 			
-      {{if "forms"|module_active}}
-        ExObject.trigger("CAdministration-"+administration_id, "validation");
-      {{/if}}
+	    {{if "forms"|module_active}}
+	      ExObject.trigger("CAdministration-"+administration_id, "validation", {
+	        onTriggered: function(){ window.close(); }
+	      });
+	    {{else}}
+	      window.close();
+	    {{/if}}
 		
-      window.close();
     } } )
   } else {
     {{if $mode_plan}}
@@ -68,10 +71,12 @@ function submitTransmission(administration_id){
     {{/if}}
 		
     {{if "forms"|module_active}}
-      ExObject.trigger("CAdministration-"+administration_id, "validation");
+      ExObject.trigger("CAdministration-"+administration_id, "validation", {
+			  onTriggered: function(){ window.close(); }
+			});
+		{{else}}
+		  window.close();
     {{/if}}
-		
-    window.close();
   }
 }
 

@@ -22,14 +22,19 @@ ExObject = {
     ExObject.register(ExObject.container);
   },
   
-  trigger: function(object_guid, event) {
+  trigger: function(object_guid, event, options) {
+    options = Object.extend({
+      onTriggered: function(){}
+    }, options);
+    
     var url = new Url("forms", "ajax_trigger_ex_classes");
     url.addParam("object_guid", object_guid);
     url.addParam("event", event);
     url.requestJSON(function(ex_classes_id){
       ex_classes_id.each(function(id){
-        showExClassForm(id, object_guid, "", "", event);
+        showExClassForm(id, object_guid, object_guid+"-"+event, "", event);
       });
+      options.onTriggered(object_guid, event);
     });
   }
 };
