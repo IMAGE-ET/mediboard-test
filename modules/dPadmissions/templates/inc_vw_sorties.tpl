@@ -97,7 +97,7 @@ Calendar.regField(getForm("changeDateSorties").date, null, {noView: true});
       {{/if}}
       - {{tr}}CSejour.mode_sortie.{{$_sejour->mode_sortie}}{{/tr}}
       {{if $_sejour->etablissement_transfert_id}}
-        - {{$_sejour->_ref_etabExterne->_view}}
+        - {{$_sejour->_ref_etablissement_transfert}}
       {{/if}}
       {{else}}
       <input type="hidden" name="_modifier_sortie" value="1" />
@@ -125,7 +125,7 @@ Calendar.regField(getForm("changeDateSorties").date, null, {noView: true});
       {{tr}}CSejour.mode_sortie.{{$_sejour->mode_sortie}}{{/tr}}
       {{/if}}
       {{if $_sejour->etablissement_transfert_id}}
-        <br />{{$_sejour->_ref_etabExterne->_view}}
+        <br />{{$_sejour->_ref_etablissement_transfert}}
       {{/if}}
       {{else}}
       -
