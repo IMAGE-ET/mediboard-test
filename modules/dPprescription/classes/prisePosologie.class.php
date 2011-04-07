@@ -532,7 +532,8 @@ class CPrisePosologie extends CMbMetaObject {
     }
 		
     // Moment unitaire
-    if($this->moment_unitaire_id && !array_key_exists($this->unite_tous_les, $jours) && $this->unite_tous_les != "jour"){
+    if($this->moment_unitaire_id && !array_key_exists($this->unite_tous_les, $jours) &&
+      !in_array($this->unite_tous_les, array("jour", "semaine", "quinzaine", "mois", "trimestre", "semestre", "an"))) {
       foreach($dates as $_date){
       	$this->loadRefMoment($service_id);
         $dateTimePrise = mbAddDateTime(mbTime($this->_ref_moment->heure), $_date);
@@ -560,7 +561,41 @@ class CPrisePosologie extends CMbMetaObject {
         }
       }
     }
-  
+    
+    // Nb tous les avec comme unite semaine / quinzaine
+    if (in_array($this->unite_tous_les, array("semaine", "quinzaine"))) {
+      if (!$this->nb_tous_les) {
+        $this->nb_tous_les = 1;
+      }
+      $sejour =& $this->_ref_object->_ref_prescription->_ref_object;
+      $dateTimePrise = $bornes["min"];
+      if ($this->unite_tous_les == "semaine") {
+        $nb_weeks = 7 * $this->nb_tous_les;
+      }
+      else {
+        $nb_weeks = 14 * $this->nb_tous_les;
+      }
+      if($this->_heures){
+        $heure = reset($this->_heures);
+        $dateTimePrise = mbDate($bornes["min"])." $heure";
+      }
+      if ($this->moment_unitaire_id) {
+        $this->loadRefMoment();
+        $dateTimePrise = mbAddDateTime($this->_ref_moment->heure, mbDate($dateTimePrise));
+      }
+      if($this->decalage_prise){
+          $dateTimePrise = mbDateTime("+ $this->decalage_prise DAYS", $dateTimePrise);
+      }
+
+      while ($dateTimePrise < $bornes["max"]) {
+        if((($this->_ref_object->_debut_reel <= $dateTimePrise) && ($this->_ref_object->_fin_reelle) >= $dateTimePrise) &&
+          (($sejour->entree <= $dateTimePrise) && ($sejour->sortie >= $dateTimePrise))){
+          $_planifs[] = array("unite_prise" => $this->unite_prise, "prise_id" => $this->_id, "dateTime" => $dateTimePrise);
+        }
+        $dateTimePrise = mbDateTime("+ $nb_weeks DAYS", $dateTimePrise);
+      }
+    }
+
     // Fois par avec comme unite semaine
     if($this->nb_fois && $this->unite_fois === 'semaine' && $configs["$this->nb_fois fois par semaine"]){
       $list_jours = explode('|',$configs["$this->nb_fois fois par semaine"]);
