@@ -8,12 +8,13 @@
  */
 
 CAppUI::requireModuleClass("dPccam", "codable");
+CAppUI::requireModuleClass("dPpatients", "IPatientRelated");
 
 /**
  * Classe CSejour. 
  * @abstract Gère les séjours en établissement
  */
-class CSejour extends CCodable {
+class CSejour extends CCodable implements IPatientRelated {
   // DB Table key
   var $sejour_id = null;
   
@@ -302,6 +303,10 @@ class CSejour extends CCodable {
     $props["_protocole_prescription_chir_id"]   = "str";
         
     return $props;
+  }
+  
+  function loadRelPatient(){
+    return $this->loadRefPatient();
   }
   
   function check() {

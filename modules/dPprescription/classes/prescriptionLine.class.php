@@ -8,7 +8,9 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
  */
 
-class CPrescriptionLine extends CMbObject {
+CAppUI::requireModuleClass("dPpatients", "IPatientRelated");
+
+class CPrescriptionLine extends CMbObject implements IPatientRelated {
   
   // DB Fields
   var $prescription_id     = null;
@@ -114,6 +116,10 @@ class CPrescriptionLine extends CMbObject {
     return $specs;
   }
   
+  function loadRelPatient(){
+    return $this->loadRefPrescription()->loadRefPatient();
+  }
+  
   function updateFormFields(){
     parent::updateFormFields();
     $this->countParentLine();
@@ -182,14 +188,18 @@ class CPrescriptionLine extends CMbObject {
     $this->loadRefParentLine();
   }
   
-  /*
+  /**
    * Chargement de la prescription
+   * 
+   * @return CPrescription
    */
   function loadRefPrescription() {
     if (!$this->_ref_prescription) {
       $this->_ref_prescription = new CPrescription();
       $this->_ref_prescription = $this->_ref_prescription->getCached($this->prescription_id);
     }
+		
+		return $this->_ref_prescription;
   }
   
   /*

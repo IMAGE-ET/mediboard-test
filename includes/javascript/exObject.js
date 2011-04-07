@@ -32,7 +32,7 @@ ExObject = {
     url.addParam("event", event);
     url.requestJSON(function(ex_classes_id){
       ex_classes_id.each(function(id){
-        showExClassForm(id, object_guid, object_guid+"-"+event, "", event);
+        showExClassForm(id, object_guid, object_guid+"-"+event+"-"+id, "", event);
       });
       options.onTriggered(object_guid, event);
     });

@@ -9,8 +9,9 @@
  */
 
 CAppUI::requireModuleClass("dPccam", "codable");
+CAppUI::requireModuleClass("dPpatients", "IPatientRelated");
 
-class COperation extends CCodable {
+class COperation extends CCodable implements IPatientRelated {
   // DB Table key
   var $operation_id  = null;
 
@@ -240,6 +241,10 @@ class COperation extends CCodable {
     
     return $specs;
   }
+	
+	function loadRelPatient(){
+		return $this->loadRefPatient();
+	}
   
   function getExecutantId($code_activite) {
     $this->loadRefChir();

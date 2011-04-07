@@ -8,7 +8,9 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
  */
 
-class CPrescriptionLineMixItem extends CMbObject {
+CAppUI::requireModuleClass("dPpatients", "IPatientRelated");
+
+class CPrescriptionLineMixItem extends CMbObject implements IPatientRelated {
 	// DB Table key
   var $prescription_line_mix_item_id = null;
   
@@ -79,6 +81,9 @@ class CPrescriptionLineMixItem extends CMbObject {
     return $backProps;
   }
   
+  function loadRelPatient(){
+    return $this->loadRefPerfusion()->loadRefPrescription()->loadRefPatient();
+  }
 
   function updateFormFields(){
     parent::updateFormFields();
@@ -146,14 +151,18 @@ class CPrescriptionLineMixItem extends CMbObject {
     }
   }
 	
-  /*
+  /**
    * Chargement de la prescription_line_mix
+   * 
+   * @return CPrescriptionLineMix
    */
   function loadRefPerfusion(){
     $this->_ref_prescription_line_mix = new CPrescriptionLineMix();
     $this->_ref_prescription_line_mix = $this->_ref_prescription_line_mix->getCached($this->prescription_line_mix_id);
     
     $this->_ref_prescription = $this->_ref_prescription_line_mix->_ref_prescription;
+		
+		return $this->_ref_prescription_line_mix;
   }
   
   /*
@@ -188,13 +197,13 @@ class CPrescriptionLineMixItem extends CMbObject {
         if($_poso->p_kg) {
 	        // On ajoute la poso avec les /kg
 	          $_presentation = "";
-		        if (!preg_match("/$unite/i", $libelle_unite_presentation_pluriel)){
+		        if (stripos($libelle_unite_presentation_pluriel, $unite) === false){
 		          $_presentation = " ($coef_adm $libelle_unite_presentation/kg)";
 		        }
 		        $this->_unites_prise[] = "$unite/kg".$_presentation;
 	      }
         $_presentation = "";
-        if (!preg_match("/$unite/i", $libelle_unite_presentation_pluriel)){
+        if (stripos($libelle_unite_presentation_pluriel, $unite) === false){
           $_presentation = " ($coef_adm $libelle_unite_presentation)";
         }
         $this->_unites_prise[] = $unite.$_presentation;

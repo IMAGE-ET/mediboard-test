@@ -805,12 +805,14 @@ class CPrescriptionLineMix extends CMbObject {
     }
   }
   
-  /*
+  /**
    * Chargement de la prescription
+   * 
+   * @return CPrescription
    */
   function loadRefPrescription(){
     $this->_ref_prescription = new CPrescription();
-    $this->_ref_prescription = $this->_ref_prescription->getCached($this->prescription_id);
+    return $this->_ref_prescription = $this->_ref_prescription->getCached($this->prescription_id);
   }
   
   /*

@@ -8,7 +8,9 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
  */
 
-class CAdministration extends CMbMetaObject {
+CAppUI::requireModuleClass("dPpatients", "IPatientRelated");
+
+class CAdministration extends CMbMetaObject implements IPatientRelated {
   // DB Field
   var $administration_id = null;
   var $administrateur_id = null;  // Utilisateur effectuant l'administration
@@ -66,6 +68,10 @@ class CAdministration extends CMbMetaObject {
     $specs["planification_systeme_id"] = "ref class|CPlanificationSysteme";
     return $specs;
   }
+	
+	function loadRelPatient(){
+		return $this->loadTargetObject()->loadRelPatient();
+	}
 
   function updateFormFields(){
   	parent::updateFormFields();

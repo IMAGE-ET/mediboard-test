@@ -8,7 +8,9 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
  */
 
-class CPrescription extends CMbObject {
+CAppUI::requireModuleClass("dPpatients", "IPatientRelated");
+
+class CPrescription extends CMbObject implements IPatientRelated {
   
   // DB Table key
   var $prescription_id = null;
@@ -158,6 +160,10 @@ class CPrescription extends CMbObject {
     $specs["_type_alerte"] = "enum list|hors_livret|interaction|allergie|profil|IPC";
     $specs["_chapitres"] = "enum list|med|inj|perfusion|oxygene|alimentation|aerosol|anapath|biologie|consult|dmi|imagerie|kine|soin|dm|ds";
     return $specs;
+  }
+  
+  function loadRelPatient(){
+    return $this->loadRefPatient();
   }
   
   function updateFormFields() {
@@ -836,18 +842,24 @@ class CPrescription extends CMbObject {
     }
   }
   
-  /*
+  /**
    * Chargement du patient
+   * 
+   * @return CPatient
    */
   function loadRefPatient(){
     $this->_ref_patient = new CPatient();
+		
     if($this->object_class == "CDossierMedical"){
       $this->_ref_patient = $this->_ref_patient->getCached($this->_ref_object->object_id);  
-    } else {
+    } 
+		else {
       if($this->_ref_object){
         $this->_ref_patient = $this->_ref_patient->getCached($this->_ref_object->patient_id); 
       }
     }
+		
+		return $this->_ref_patient;
   }
   
   /*

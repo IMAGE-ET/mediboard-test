@@ -73,11 +73,24 @@ Main.add(function(){
   
   <input type="hidden" name="del" value="0" />
 	
-	<h2>{{$ex_object->_ref_ex_class}} - {{$object}}</h2>
+	<h2>
+	  {{if in_array("IPatientRelated", class_implements($ex_object->object_class))}}
+	    {{assign var=_patient value=$ex_object->_ref_object->loadRelPatient()}}
+	    <big style="color: #006600; font-weight: bold;" onmouseover="ObjectTooltip.createEx(this, '{{$_patient->_guid}}');">
+			  {{$_patient}}
+			</big>
+			&ndash;
+	  {{/if}}
+		
+		{{$ex_object->_ref_ex_class->name}} - {{$object}}
+	</h2>
 	
-	{{main}}
-	  Control.Tabs.create("ex_class-groups-tabs");
-	{{/main}}
+	<script type="text/javascript">
+		Main.add(function(){
+		  Control.Tabs.create("ex_class-groups-tabs");
+			document.title = "{{$ex_object->_ref_ex_class->name}} - {{$object}}";
+		});
+	</script>
 	
 	<ul id="ex_class-groups-tabs" class="control_tabs">
 	{{foreach from=$grid key=_group_id item=_grid}}
@@ -102,7 +115,7 @@ Main.add(function(){
 	        {{if $_group.object instanceof CExClassField}}
 					  {{if $_group.type == "label"}}
 						  {{assign var=_field value=$_group.object}} 
-		          <th style="font-weight: bold;">
+		          <th style="font-weight: bold; text-align: left;">
 		            {{mb_label object=$ex_object field=$_field->name}}
 		          </th>
 					  {{elseif $_group.type == "field"}}
@@ -113,7 +126,7 @@ Main.add(function(){
 					{{else}}
             {{assign var=_host_field value=$_group.object}} 
 					  	{{if $_group.type == "label"}}
-							  <th style="font-weight: bold;">
+							  <th style="font-weight: bold; text-align: left;">
 					    	  {{mb_label object=$ex_object->_ref_object field=$_host_field->field}}
 								</th>
 							{{else}}
