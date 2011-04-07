@@ -17,11 +17,13 @@ class CMbConfig {
   var $values = array();
   var $sourcePath = "";
   var $targetPath = "";
+  var $overloadPath = "";
   
   function CMbConfig() {
     global $mbpath;
-    $this->sourcePath = $mbpath."includes/config_all.php";
-    $this->targetPath = $mbpath."includes/config.php";
+    $this->sourcePath   = $mbpath."includes/config_dist.php";
+    $this->targetPath   = $mbpath."includes/config.php";
+    $this->overloadPath = $mbpath."includes/config_overload.php";
   }
   
   function guessValues() {
@@ -45,8 +47,9 @@ class CMbConfig {
   function load() {
     $this->values = CMbArray::mergeRecursive(
       $this->loadValuesFromPath($this->sourcePath),
-      $this->loadValuesFromPath($this->targetPath));
-    
+      $this->loadValuesFromPath($this->targetPath),
+      $this->loadValuesFromPath($this->overloadPath)
+    );
     
     if (!is_file($this->targetPath)) {
       $this->guessValues();
