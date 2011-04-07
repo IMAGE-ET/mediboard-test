@@ -54,9 +54,11 @@ function submitTransmission(administration_id){
       {{/if}}
       window.opener.loadSuivi('{{$sejour->_id}}');
 			
-      ExObject.trigger("CAdministration-"+administration_id, "validation");
+      {{if "forms"|module_active}}
+        ExObject.trigger("CAdministration-"+administration_id, "validation");
+      {{/if}}
 		
-      //window.close();
+      window.close();
     } } )
   } else {
     {{if $mode_plan}}
@@ -65,9 +67,11 @@ function submitTransmission(administration_id){
       window.opener.Prescription.loadTraitement('{{$sejour->_id}}','{{$date_sel}}', oFormClick.nb_decalage.value,'{{$mode_dossier}}','{{$line->_id}}','{{$line->_class_name}}',{{$key_tab|json}});
     {{/if}}
 		
-		ExObject.trigger("CAdministration-"+administration_id, "validation");
+    {{if "forms"|module_active}}
+      ExObject.trigger("CAdministration-"+administration_id, "validation");
+    {{/if}}
 		
-    //window.close();
+    window.close();
   }
 }
 
