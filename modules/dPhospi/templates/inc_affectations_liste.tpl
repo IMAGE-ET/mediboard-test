@@ -39,16 +39,27 @@
       {{else}}
       ({{$_sejour->type|truncate:1:""|capitalize}} - {{$_sejour->_ref_praticien->_shortview}})
       {{/if}}
-      {{if $_sejour->_couvert_cmu || $_sejour->_couvert_ald}}
-      <div style="float: right;"><strong>
-      {{if $_sejour->_couvert_cmu}}
-      CMU
-      {{/if}}
-      {{if $_sejour->_couvert_ald}}
-      ALD
-      {{/if}}
-      </strong></div>
-      {{/if}}
+      <div style="float: right;">
+        {{if $_sejour->_couvert_cmu}}
+        <strong>
+          CMU
+        </strong>
+        {{/if}}
+        {{if $_sejour->_couvert_ald}}
+        <strong>
+          ALD
+        </strong>
+        {{/if}}
+        {{if $_sejour->chambre_seule}}
+        <em style="color: #f00;" title="Chambre seule">
+          CS
+        </em>
+        {{else}}
+        <em style="color: #f00;" title="Chambre double">
+          CD
+        </em>
+        {{/if}}
+      </div>
     </td>
   </tr> 
   <tr>
