@@ -11,7 +11,13 @@
 {{assign var="patient" value=$curr_consult->_ref_patient}}
 {{assign var="curr_adm" value=$curr_consult->_ref_consult_anesth->_ref_sejour}}
 {{if !$curr_adm->_id}}
+{{if $curr_consult->_next_sejour_and_operation.COperation->_id}}
+{{assign var="curr_adm" value=$curr_consult->_next_sejour_and_operation.COperation->_ref_sejour}}
+{{assign var="type_event" value="COperation"}}
+{{else}}
 {{assign var="curr_adm" value=$curr_consult->_next_sejour_and_operation.CSejour}}
+{{assign var="type_event" value="CSejour"}}
+{{/if}}
 {{/if}}
 
 <td class="text">
@@ -164,9 +170,25 @@
 </td>
 {{else}}
 <td colspan="4" class="button" style="background: {{$background}}; {{if !$curr_adm->facturable}}background-image:url(images/icons/ray_vertical.gif); background-repeat:repeat;{{/if}}">
+  {{if $type_event == "COperation"}}
+  Intervention non associé à la consultation
+  {{if $canAdmissions->edit}}
+  <br />
+  <form name="addOpFrm-{{$curr_consult->_id}}" action="?m={{$m}}" method="post">
+  <input type="hidden" name="dosql" value="do_consult_anesth_aed" />
+  <input type="hidden" name="del" value="0" />
+  <input type="hidden" name="m" value="dPcabinet" />
+  {{mb_key object=$curr_consult->_ref_consult_anesth}}
+  <input type="hidden" name="operation_id" value="{{$curr_consult->_next_sejour_and_operation.COperation->_id}}" />
+  <button type="submit" class="tick">
+    Associer l'intervention
+  </button>
+  </form>
+  {{/if}}
+  {{else}}
   Séjour non associé à la consultation
   {{if $canAdmissions->edit}}
-  :
+  <br />
   <form name="addOpFrm-{{$curr_consult->_id}}" action="?m={{$m}}" method="post">
   <input type="hidden" name="dosql" value="do_consult_anesth_aed" />
   <input type="hidden" name="del" value="0" />
@@ -177,6 +199,7 @@
     Associer le séjour
   </button>
   </form>
+  {{/if}}
   {{/if}}
 </td>
 {{/if}}

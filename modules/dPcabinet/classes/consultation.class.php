@@ -989,12 +989,12 @@ TESTS A EFFECTUER
     }
   }
   
-  function loadRefPatient($cache = 0) {
+  function loadRefPatient($cache = 1) {
     $this->_ref_patient = $this->loadFwdRef("patient_id", $cache);
   }
   
   // Chargement du sejour et du RPU dans le cas d'une urgence
-  function loadRefSejour($cache = 0){
+  function loadRefSejour($cache = 1){
     $this->_ref_sejour = $this->loadFwdRef("sejour_id", $cache);
     $this->_ref_sejour->loadRefRPU();
     
@@ -1008,7 +1008,7 @@ TESTS A EFFECTUER
     $this->loadRefPlageConsult();
   }
   
-  function loadRefPlageConsult($cache = 0) {
+  function loadRefPlageConsult($cache = 1) {
     if ($this->_ref_plageconsult) {
       return; 
     }
@@ -1026,7 +1026,7 @@ TESTS A EFFECTUER
   }
   
   function loadRefPraticien(){
-  	$this->loadRefPlageConsult(1);
+  	$this->loadRefPlageConsult();
     return $this->_ref_praticien =& $this->_ref_chir;
   }
   
@@ -1053,7 +1053,7 @@ TESTS A EFFECTUER
   	$this->loadRefPlageConsult();
   }
   
-  function loadRefsFwd($cache = 0) {
+  function loadRefsFwd($cache = 1) {
     $this->loadRefPatient($cache);
     $this->_ref_patient->loadRefConstantesMedicales(1);
     $this->loadRefPlageConsult($cache);

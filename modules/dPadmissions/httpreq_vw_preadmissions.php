@@ -48,8 +48,10 @@ if ($order_col_pre == "patient_id"){
 } else {
   $order = "consultation.".$order_col_pre." ".$order_way_pre;
 }
+
 $listConsultations = $consult->loadList($where, $order, null, null, $ljoin);
-foreach($listConsultations as &$curr_consult) {
+
+foreach($listConsultations as $curr_consult) {
   $curr_consult->loadRefPatient();
   $curr_consult->loadRefPlageconsult();
   $curr_consult->_ref_chir->loadRefFunction();
@@ -67,15 +69,18 @@ foreach($listConsultations as &$curr_consult) {
     $curr_sejour->getDroitsCMU();
   } else {
     $curr_consult->_next_sejour_and_operation = $curr_consult->_ref_patient->getNextSejourAndOperation($curr_consult->_ref_plageconsult->date);
-    $curr_consult->_next_sejour_and_operation["CSejour"]->loadRefPatient();
-    $curr_consult->_next_sejour_and_operation["CSejour"]->loadRefPraticien();
-    $curr_consult->_next_sejour_and_operation["CSejour"]->loadNumDossier();
-    $curr_consult->_next_sejour_and_operation["CSejour"]->loadRefsAffectations();
-    foreach($curr_consult->_next_sejour_and_operation["CSejour"]->_ref_affectations as $_aff) {
-      $_aff->loadView();
+    if($curr_consult->_next_sejour_and_operation["COperation"]->_id) {
+      $curr_consult->_next_sejour_and_operation["COperation"]->loadRefSejour();
+      $curr_consult->_next_sejour_and_operation["COperation"]->_ref_sejour->loadRefPraticien();
+      $curr_consult->_next_sejour_and_operation["COperation"]->_ref_sejour->loadNumDossier();
+      $curr_consult->_next_sejour_and_operation["COperation"]->_ref_sejour->loadRefPraticien();
+      $curr_consult->_next_sejour_and_operation["COperation"]->_ref_sejour->loadNumDossier();
+    } elseif($curr_consult->_next_sejour_and_operation["CSejour"]) {
+      $curr_consult->_next_sejour_and_operation["CSejour"]->loadRefPraticien();
+      $curr_consult->_next_sejour_and_operation["CSejour"]->loadNumDossier();
+      $curr_consult->_next_sejour_and_operation["CSejour"]->loadRefPraticien();
+      $curr_consult->_next_sejour_and_operation["CSejour"]->loadNumDossier();
     }
-    $curr_consult->_next_sejour_and_operation["CSejour"]->getDroitsCMU();
-    
   }
 }
 
