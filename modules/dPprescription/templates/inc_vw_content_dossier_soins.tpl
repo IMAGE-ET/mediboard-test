@@ -44,6 +44,9 @@
 	  </tr>
 	  <tr>
 	    <th></th>
+			{{if $conf.dPprescription.CPrescription.manual_planif}}
+			  <th>x</th>
+			{{/if}}
 	    {{foreach from=$tabHours key=_date item=_hours_by_moment}}
 	      {{foreach from=$_hours_by_moment key=moment_journee item=_dates}}
 	        {{foreach from=$_dates key=_date_reelle item=_hours}}

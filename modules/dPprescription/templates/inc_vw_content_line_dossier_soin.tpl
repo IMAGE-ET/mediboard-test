@@ -21,6 +21,27 @@
 {{/if}}
 </script>
 
+{{if $conf.dPprescription.CPrescription.manual_planif}}
+<td style="text-align: center;" class="narrow">
+  {{if array_key_exists($unite_prise, $line->_planifs_systeme)}}
+  {{foreach from=$line->_planifs_systeme.$unite_prise item=_planif_systeme}}
+    <div style="text-align: center; width: 40px;" data-datetime="{{$_planif_systeme->dateTime}}" class="draggable administration manual_planif" id="drag_{{$line_id}}_{{$unite_prise|md5}}_{{$_planif_systeme->dateTime|iso_date}}_{{$_planif_systeme->dateTime|date_format:"%H"}}_{{$_planif_systeme->_quantite}}_">
+      {{$_planif_systeme->_quantite}}
+    </div>
+   
+    <script type="text/javascript">
+      // Pour empecher de deplacer une case ou il y a plusieurs prises
+      var draggable_planif = $("drag_{{$line_id}}_{{$unite_prise|md5}}_{{$_planif_systeme->dateTime|iso_date}}_{{$_planif_systeme->dateTime|date_format:"%H"}}_{{$_planif_systeme->_quantite}}_");
+      new Draggable("drag_{{$line_id}}_{{$unite_prise|md5}}_{{$_planif_systeme->dateTime|iso_date}}_{{$_planif_systeme->dateTime|date_format:"%H"}}_{{$_planif_systeme->_quantite}}_", oDragOptions);
+      draggable_planif.onmousedown = function(){
+        addDroppablesDiv(draggable_planif);
+      }
+    </script>
+  {{/foreach}}
+	{{/if}}
+</td>
+{{/if}}
+
 {{* Parcours du tableau de dates *}}
 {{foreach from=$tabHours key=_view_date item=_hours_by_moment}}
   {{foreach from=$_hours_by_moment key=moment_journee item=_dates}}

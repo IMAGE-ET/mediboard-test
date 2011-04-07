@@ -72,7 +72,7 @@
 	  {{if $_prescription_line_mix->commentaire}}
       <br />
       <span style="font-size: 0.8em; opacity: 0.7">
-      {{$_prescription_line_mix->commentaire|spancate:50}}
+      {{$_prescription_line_mix->commentaire|spancate:50|smarty:nodefaults}}
       </span>
     {{/if}}
   </td> 

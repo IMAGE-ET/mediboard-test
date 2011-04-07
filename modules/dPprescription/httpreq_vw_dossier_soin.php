@@ -111,11 +111,15 @@ if(in_array($time, $nuit)){
                  mbDate("+ 1 DAY", $date) => array("matin" => $matin, "soir" => $soir));
 }
 
+
+
+$bornes_composition_dossier = array();
 $composition_dossier = array();
 foreach($dates as $curr_date => $_date){
   foreach($_date as $moment_journee => $_hours){
     $composition_dossier[] = "$curr_date-$moment_journee";
-    foreach($_hours as $_hour){
+		$bornes_composition_dossier["$curr_date-$moment_journee"]["min"] = "$curr_date ".reset($_hours).":00:00";
+    foreach($_hours as $_hour){ 
       $date_reelle = $curr_date;
       if($moment_journee == "nuit" && $_hour < "12:00:00"){
         $date_reelle = mbDate("+ 1 DAY", $curr_date);
@@ -123,8 +127,10 @@ foreach($dates as $curr_date => $_date){
       $_dates[$date_reelle] = $date_reelle;
       $tabHours[$curr_date][$moment_journee][$date_reelle]["$_hour:00:00"] = $_hour;
     }
+		$bornes_composition_dossier["$curr_date-$moment_journee"]["max"] = "$date_reelle ".end($_hours).":59:59";
   }
 }
+
 
 // Calcul du dossier de soin pour une ligne
 if($object_id && $object_class){
@@ -148,7 +154,7 @@ if($object_id && $object_class){
       $line->_ref_produit->loadClasseATC();
       $line->_ref_produit->loadRefsFichesATC();
       if(($curr_date >= $line->debut && $curr_date <= mbDate($line->_fin_reelle))){     
-			  $line->calculPrises($prescription, $curr_date, null, null, true);
+			  $line->calculPrises($prescription, $curr_date, null, null, true, CAppUI::conf("dPprescription CPrescription manual_planif"));
       }
 		  $line->removePrisesPlanif();
     }
@@ -161,7 +167,7 @@ if($object_id && $object_class){
       $name_chap = $element->_ref_category_prescription->chapitre;
      	$line->calculAdministrations($curr_date);  
   	  if(($curr_date >= $line->debut && $curr_date <= mbDate($line->_fin_reelle))){
-        $line->calculPrises($prescription, $curr_date, $name_chap, $name_cat, true);
+        $line->calculPrises($prescription, $curr_date, $name_chap, $name_cat, true, CAppUI::conf("dPprescription CPrescription manual_planif"));
   	  }
 		  $line->removePrisesPlanif();
     }
@@ -232,9 +238,7 @@ else {
 			$prescription->loadRefsLinesInscriptions();
 			foreach($prescription->_ref_lines_inscriptions as $_inscriptions_by_type){
 				foreach($_inscriptions_by_type as $_inscription){
-		
-        $_inscription->countBackRefs("administration");
-
+          $_inscription->countBackRefs("administration");
 				}
 			}
 		}
@@ -255,7 +259,7 @@ else {
     }
 		
     $with_calcul = $chapitre ? true : false; 
-		$prescription->calculPlanSoin($_dates, 0, null, null, null, $with_calcul);
+		$prescription->calculPlanSoin($_dates, 0, null, null, null, $with_calcul, "", CAppUI::conf("dPprescription CPrescription manual_planif"));
 
 	  // Chargement des operations
 	  if($prescription->_ref_object instanceof CSejour){
@@ -281,6 +285,8 @@ else {
 }
 $signe_decalage = ($nb_decalage < 0) ? "-" : "+";
 
+$count_colspan = CAppUI::conf("dPprescription CPrescription manual_planif") ? 1 : 0;
+
 // Création du template
 $smarty = new CSmartyDP();
 $smarty->assign("signe_decalage"      , $signe_decalage);
@@ -299,10 +305,11 @@ $smarty->assign("real_time"           , mbTime());
 $smarty->assign("categorie"           , new CCategoryPrescription());
 $smarty->assign("operations"          , $operations);
 $smarty->assign("mode_dossier"        , $mode_dossier);
-$smarty->assign("count_matin"         , count($matin)+2);
-$smarty->assign("count_soir"          , count($soir)+2);
-$smarty->assign("count_nuit"          , count($nuit)+2);
+$smarty->assign("count_matin"         , count($matin)+2+$count_colspan);
+$smarty->assign("count_soir"          , count($soir)+2+$count_colspan);
+$smarty->assign("count_nuit"          , count($nuit)+2+$count_colspan);
 $smarty->assign("composition_dossier" , $composition_dossier);
+$smarty->assign("bornes_composition_dossier", $bornes_composition_dossier);
 $smarty->assign("prev_date"           , mbDate("- 1 DAY", $date));
 $smarty->assign("next_date"           , mbDate("+ 1 DAY", $date));
 $smarty->assign("today"               , mbDate());

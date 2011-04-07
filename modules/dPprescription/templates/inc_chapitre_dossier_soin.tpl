@@ -64,11 +64,14 @@
       dosql=do_prescription_line_medicament_aed}}
 	{{/foreach}}
   <tr> 
-    <td class="text" colspan="2"><strong>Nouvelle inscription</strong></td>
+    <td class="text" colspan="{{if $conf.dPprescription.CPrescription.show_categories_plan_soins}}3{{else}}2{{/if}}"><strong>Nouvelle inscription</strong></td>
 	  <th class="before" style="cursor: pointer" onclick="showBefore();" onmouseout="clearTimeout(timeOutBefore);">
 	   <img src="images/icons/a_left.png" />
 	  </th>
-    <td style="display: none;"></td>
+		{{if $conf.dPprescription.CPrescription.manual_planif}}
+    <td class="narrow"></td>
+		{{/if}}
+		<td style="display: none;"></td>
 		{{foreach from=$tabHours key=_view_date item=_hours_by_moment}}
       {{foreach from=$_hours_by_moment key=moment_journee item=_dates}}
         {{foreach from=$_dates key=_date item=_hours}}

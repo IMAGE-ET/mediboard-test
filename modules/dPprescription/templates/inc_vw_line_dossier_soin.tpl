@@ -82,16 +82,12 @@
 		    </th>
 	    {{/if}}
 	  {{/if}}
-		
-		
-		
   {{/if}}
 	
   {{if $line->inscription || $smarty.foreach.$last_foreach.first}}
   <td class="text" rowspan="{{$nb_line}}" {{if $line instanceof CPrescriptionLineMedicament && $line->traitement_personnel}}style="background-color: #BDB"{{/if}}>
 		{{if $line->commentaire}}
       <img src="images/icons/flag.png" title="" style="float: right; margin: 2px;" onmouseover="ObjectTooltip.createDOM(this, 'tooltip-content-comment-{{$line->_guid}}');" />
-      
 			<table class="tbl" id="tooltip-content-comment-{{$line->_guid}}" style="display: none;">
 			  <tr>
 			  	<th>Commentaire - {{$line->_view}}</th>
@@ -251,7 +247,7 @@
 		{{if !$line->inscription}}
 		  {{if $smarty.foreach.$global_foreach.first && $smarty.foreach.$first_foreach.first && $smarty.foreach.$last_foreach.first}}
 			  <th class="before" style="cursor: pointer" onclick="showBefore();" rowspan="{{$nb_lines_chap}}" onmouseout="clearTimeout(timeOutBefore);">
-			   <img src="images/icons/a_left.png" />
+			    <img src="images/icons/a_left.png" />
 				</th>
 			{{/if}}
 		{{else}}

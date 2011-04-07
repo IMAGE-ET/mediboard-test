@@ -73,6 +73,7 @@ class CPrescriptionLine extends CMbObject {
   var $_nb_prises_interv = null; // Nombre de prises qui dependent de l'intervention
   var $_update_planif_systeme = null; // Permet de forcer le calcul des planifs systemes pour une ligne
   var $_count_locked_planif = null;
+	var $_planifs_systeme = array();
 	
   // Can fields
   var $_perm_edit = null;
@@ -602,7 +603,7 @@ class CPrescriptionLine extends CMbObject {
   /*
    * Chargement des prises
    */
-  function calculPrises($prescription, $date, $name_chap = "", $name_cat = "", $with_calcul = true) {
+  function calculPrises($prescription, $date, $name_chap = "", $name_cat = "", $with_calcul = true, $manual_planif = false) {
     $total_day = 0;
 
 		// Chargement des planifications pour la date courante
@@ -610,8 +611,9 @@ class CPrescriptionLine extends CMbObject {
     $where["object_id"] = " = '$this->_id'";
     $where["object_class"] = " = '$this->_class_name'";
     $where["dateTime"] = " LIKE '$date%'";
-    $planifs = $planif->loadList($where, "dateTime");
 		
+    $planifs = $planif->loadList($where, "dateTime");
+			
     foreach($this->_ref_prises as &$_prise) {
     	// Mise a jour de la quantite (en fonction du poids et de l'unite d'administration)
       $_prise->updateQuantite();
@@ -647,20 +649,40 @@ class CPrescriptionLine extends CMbObject {
           continue;
         }
 				
-        $_heure = substr(mbTime($_planif->dateTime), 0, 2);
-				
-        if(!isset($line_plan_soin[$_heure])){
-          $line_plan_soin[$_heure] = array("total" => 0, "total_disp" => 0);
-        }
-        $line_plan_soin[$_heure]["total"] += $_prise->_quantite_administrable;
-        $line_plan_soin[$_heure]["total_disp"] += $_prise->_quantite_dispensation;
-        $line_plan_soin[$_heure][] = array("quantite" => $_prise->_quantite_administrable, "heure_reelle" => $_heure, "full_hour" => substr(mbTime($_planif->dateTime), 0, 5));
-        
-				if(!isset($line_plan_soin[$_heure]["nb_adm"])){
-					$line_plan_soin[$_heure]["nb_adm"] = 0;
+				$_heure = substr(mbTime($_planif->dateTime), 0, 2);
+        $_planif->_quantite = $_prise->_quantite_administrable;
+						
+				if($manual_planif && !preg_match("/[0-9]{1,2}h/i", $_prise->_ref_moment->libelle) && !$_prise->urgence_datetime){
+					// On n'ajoute a la liste que les planifs qui ne sont pas deja planifiées
+	        $_manual_planification = new CAdministration();    
+	        if(is_numeric($key_tab)){
+	          $_manual_planification->prise_id = $key_tab;
+	        } else {
+	          $_manual_planification->unite_prise = addslashes($key_tab);
+	        }
+	        $_manual_planification->original_dateTime = "$date $_heure:00:00";
+	        $_manual_planification->object_id = $this->_id;
+	        $_manual_planification->object_class = $this->_class_name;
+	        $count_planifications = $_manual_planification->countMatchingList();
+	        if($count_planifications == 0){
+	          $this->_planifs_systeme[$key_tab][$_planif->_id] = $_planif;
+	        }
+				} else {
+					// Ajout dans le plan de soins des planifs systemes
+					if(!isset($line_plan_soin[$_heure])){
+	          $line_plan_soin[$_heure] = array("total" => 0, "total_disp" => 0);
+	        }
+	        $line_plan_soin[$_heure]["total"] += $_prise->_quantite_administrable;
+	        $line_plan_soin[$_heure]["total_disp"] += $_prise->_quantite_dispensation;
+	        $line_plan_soin[$_heure][] = array("quantite" => $_prise->_quantite_administrable, "heure_reelle" => $_heure, "full_hour" => substr(mbTime($_planif->dateTime), 0, 5));
+	       
+	        
+	        if(!isset($line_plan_soin[$_heure]["nb_adm"])){
+	          $line_plan_soin[$_heure]["nb_adm"] = 0;
+	        }
+	        $line_plan_soin[$_heure]["nb_adm"]++;
+	        $total_day += $_prise->_quantite_administrable;
 				}
-				$line_plan_soin[$_heure]["nb_adm"]++;
-				$total_day += $_prise->_quantite_administrable;
       }
 			      
       // Stockage du libelle de l'unite de prise

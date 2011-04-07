@@ -427,7 +427,6 @@ class CPrisePosologie extends CMbMetaObject {
 		  }
     }
     
-    // Prise en urgence
     if($this->datetime){
       if((($this->_ref_object->_debut_reel <= $this->datetime) && ($this->_ref_object->_fin_reelle >= $this->datetime))){
         $planifs[] = array("unite_prise" => "", "prise_id" => $this->_id, "dateTime" => $this->datetime);

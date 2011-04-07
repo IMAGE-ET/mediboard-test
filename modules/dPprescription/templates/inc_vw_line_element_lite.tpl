@@ -60,7 +60,7 @@
 	  {{if $line->commentaire}}
       <br />
       <span style="font-size: 0.8em; opacity: 0.7">
-      {{$line->commentaire|spancate:50}}
+      {{$line->commentaire|spancate:50|smarty:nodefaults}}
       </span>
     {{/if}}
 		

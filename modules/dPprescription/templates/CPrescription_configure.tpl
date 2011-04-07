@@ -45,6 +45,7 @@ Main.add(Control.Tabs.create.curry('tab-{{$class}}', true));
 	    {{mb_include module=system template=inc_config_bool var=use_libelle_livret}}
 	    {{mb_include module=system template=inc_config_enum var=max_time_modif_suivi_soins values=$listHours skip_locales=1}}
 			{{mb_include module=system template=inc_config_bool var=show_inscription}}
+			{{mb_include module=system template=inc_config_bool var=manual_planif}}
 		</tbody>
 
     <tbody style="display: none" id="chapters_visible">

@@ -1755,7 +1755,7 @@ class CPrescription extends CMbObject {
   /*
    * Génération du Dossier/Feuille de soin
    */
-  function calculPlanSoin($dates, $mode_feuille_soin = 0, $mode_semainier = 0, $mode_dispensation = 0, $code_cip = "", $with_calcul = true, $code_cis = ""){  
+  function calculPlanSoin($dates, $mode_feuille_soin = 0, $mode_semainier = 0, $mode_dispensation = 0, $code_cip = "", $with_calcul = true, $code_cis = "", $manual_planif = false){  
 	  $this->calculAllPlanifSysteme();
 		
 		// Chargement des lignes d'inscriptions
@@ -1815,7 +1815,7 @@ class CPrescription extends CMbObject {
 	            }
 	            continue;
 	          }
-	          $_line_med->calculPrises($this, $date, null, $with_calcul);
+	          $_line_med->calculPrises($this, $date, null, null, $with_calcul, $manual_planif);
 	        }
 				}
         
@@ -1870,7 +1870,7 @@ class CPrescription extends CMbObject {
 	                  if ((count($_line_element->_ref_prises) < 1) && (!isset($this->_lines["elt"][$name_chap][$name_cat][$_line_element->_id]["aucune_prise"]))){
 	                    $this->_ref_lines_elt_for_plan[$name_chap][$name_cat][$_line_element->_id]["aucune_prise"] = $_line_element;
 	                  }
-	                  $_line_element->calculPrises($this, $date, $name_chap, $name_cat, $with_calcul);
+	                  $_line_element->calculPrises($this, $date, $name_chap, $name_cat, $with_calcul, $manual_planif);
 	                }
 								}
 								

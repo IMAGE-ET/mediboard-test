@@ -35,7 +35,7 @@ oDragOptions = {
   ghosting: true,
   starteffect : function(element) {	
     new Effect.Opacity(element, { duration:0.2, from:1.0, to:0.7 }); 
-    element.hide();
+   // element.hide();
   },
   reverteffect: function(element, top_offset, left_offset) {
     var dur = Math.sqrt(Math.abs(top_offset^2)+Math.abs(left_offset^2))*0.02;
@@ -137,12 +137,37 @@ addPlanification = function(date, time, key_tab, object_id, object_class, elemen
     $V(oForm.original_dateTime, original_date);
   }
   
-	if(original_date != dateTime){
+	
+	if(original_date != dateTime || {{$conf.dPprescription.CPrescription.manual_planif}}){
 	  submitFormAjax(oForm, 'systemMsg', { onComplete: function(){ 
 	    Prescription.loadTraitement('{{$sejour->_id}}','{{$date}}',document.click.nb_decalage.value, 'planification', object_id, object_class, key_tab);
 	  } } ); 
   }
 }
+
+
+addManualPlanification = function(date, time, key_tab, object_id, object_class, original_date, quantite){
+  var prise_id = !isNaN(key_tab) ? key_tab : '';
+  var unite_prise = isNaN(key_tab) ? key_tab : '';
+
+  var oForm = document.addPlanif;
+  $V(oForm.administrateur_id, '{{$app->user_id}}');
+  $V(oForm.object_id, object_id);
+  $V(oForm.object_class, object_class);
+  $V(oForm.unite_prise, unite_prise);
+  $V(oForm.prise_id, prise_id);
+  $V(oForm.quantite, quantite);
+
+  var dateTime = date+" "+time;
+  
+  $V(oForm.dateTime, dateTime);
+  $V(oForm.original_dateTime, original_date);
+  
+  submitFormAjax(oForm, 'systemMsg', { onComplete: function(){ 
+    Prescription.loadTraitement('{{$sejour->_id}}','{{$date}}',document.click.nb_decalage.value, 'planification', object_id, object_class, key_tab);
+  } } ); 
+}
+
 
 refreshDossierSoin = function(mode_dossier, chapitre, force_refresh){
   if(!window[chapitre+'SoinLoaded'] || force_refresh) {
@@ -328,9 +353,25 @@ var composition_dossier = {{$composition_dossier|@json}};
 window.periodicalBefore = null;
 window.periodicalAfter = null;
 
+// Fonction permettant d'afficher/masquer les planifs manuels suivant la période affichée
+toggleManualPlanif = function(periode_visible){
+  var bornes_dossier = {{$bornes_composition_dossier|@json}};
+	var bornes_visibles = bornes_dossier[periode_visible];
+	
+	$$(".manual_planif").each(function(planif){
+	  var date = planif.getAttribute("data-datetime");
+	  if(date >= bornes_visibles["min"] && date <= bornes_visibles["max"]){
+			planif.show();
+		} else {
+		  planif.hide();
+		}
+	});
+}
+
 // Deplacement du dossier de soin
 moveDossierSoin = function(element){
-  periode_visible = composition_dossier[oFormClick.nb_decalage.value];
+  var periode_visible = composition_dossier[oFormClick.nb_decalage.value];
+	
   composition_dossier.each(function(moment){
     listToHide = element.select('.'+moment);
     listToHide.each(function(elt) { 
@@ -366,12 +407,16 @@ showAfter = function(){
   }
 }
 
-viewDossierSoin = function(element){
+viewDossierSoin = function(element){	
   // recuperation du mode d'affichage du dossier (administration ou planification)
   mode_dossier = $V(document.mode_dossier_soin.mode_dossier);
   
   // Dossier en mode Administration
   if(mode_dossier == "administration" || mode_dossier == ""){
+	  {{if $conf.dPprescription.CPrescription.manual_planif}}
+		  $$(".manual_planif").invoke("hide");
+		{{/if}}
+		
     $('button_administration').update("Appliquer les administrations sélectionnées");
     element.select('.colorPlanif').each(function(elt){
        elt.setStyle( { backgroundColor: '#FFD' } );
@@ -387,7 +432,12 @@ viewDossierSoin = function(element){
   
   // Dossier en mode planification
   if(mode_dossier == "planification"){
-    $('button_administration').update("Appliquer les planifications sélectionnées");
+	  {{if $conf.dPprescription.CPrescription.manual_planif}}
+	    var periode_visible = composition_dossier[oFormClick.nb_decalage.value];
+	    toggleManualPlanif(periode_visible);
+	  {{/if}}
+    
+		$('button_administration').update("Appliquer les planifications sélectionnées");
     element.select('.colorPlanif').each(function(elt){
        elt.setStyle( { backgroundColor: '#CAFFBA' } );
     });
@@ -548,9 +598,11 @@ Main.add(function () {
 		<table style="width: 100%">
 		   <tr>
 		    <td>
+		    	<!--
 					<button type="button" class="print" onclick="printDossierSoin('{{$prescription_id}}');" title="{{tr}}Print{{/tr}}">
 			      Feuille de soins immédiate
 		      </button>
+					-->
 		      <button type="button" class="print" onclick="printBons('{{$prescription_id}}');" title="{{tr}}Print{{/tr}}">
 		        Bons
 		      </button>
