@@ -40,8 +40,10 @@ try {
   CAppUI::stepAjax($e->getMessage(), UI_MSG_ERROR);
 }
 
-$association = $mediuser_id ? 0 : 1;  
-
-echo "\n<script type=\"text/javascript\">window.ldap_user_id='$user->_id'; window.ldap_user_actif='$user->_user_actif'; window.no_association='$association'</script>";
+// Création du template
+$smarty = new CSmartyDP();
+$smarty->assign("user"       , $user);
+$smarty->assign("association", $mediuser_id ? 0 : 1);
+$smarty->display("inc_create_user_ldap.tpl");
 
 ?>

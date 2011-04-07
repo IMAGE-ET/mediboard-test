@@ -60,9 +60,9 @@ $smarty = new CSmartyDP();
 $smarty->assign("users"         , $users);
 $smarty->assign("mediuser"      , $mediuser);
 $smarty->assign("nb_users"      , $nb_users);
-$smarty->assign("givenname"     , $mediuser->_user_first_name);
-$smarty->assign("sn"            , $mediuser->_user_last_name);
-$smarty->assign("samaccountname", $mediuser->_user_username);
+$smarty->assign("givenname"     , CMbString::capitalize($mediuser->_user_first_name));
+$smarty->assign("sn"            , strtoupper($mediuser->_user_last_name));
+$smarty->assign("samaccountname", strtolower($mediuser->_user_username));
 $smarty->display("inc_search_user_ldap.tpl");
 
 ?>

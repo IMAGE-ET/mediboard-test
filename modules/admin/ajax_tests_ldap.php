@@ -44,7 +44,6 @@ if ($action == "search") {
     CAppUI::stepAjax($e->getMessage(), UI_MSG_ERROR);
   }
   
-  
   CAppUI::stepAjax("CSourceLDAP_search-results", UI_MSG_OK, $filter);
   
   mbTrace($results);

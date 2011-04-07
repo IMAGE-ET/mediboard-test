@@ -128,10 +128,12 @@ $object = new CMediusers;
 if (CValue::get("no_association")) {
   $object->user_id = $user_id;
   $object->updateFormFields();
-  $object->_user_id = $user_id;
-  $object->_id = null;
-  $actif = CValue::get("ldap_user_actif", 1);
-  $object->actif = $actif;
+  $object->_user_id     = $user_id;
+  $object->_id          = null;
+  $actif                = CValue::get("ldap_user_actif", 1);
+  $object->actif        = $actif;
+  $object->deb_activite = CValue::get("ldap_user_deb_activite");;
+  $object->fin_activite = CValue::get("ldap_user_fin_activite");;
 } else {
   $object->load($user_id);
 }

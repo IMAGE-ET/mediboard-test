@@ -144,8 +144,17 @@ class CLDAP {
     $user->user_last_name  = self::getValue($values, "sn");
     $user->user_phone      = self::getValue($values, "telephonenumber");
     $user->user_email      = self::getValue($values, "mail");
-    $whencreated           = mbDate(mbDateTimeFromAD(self::getValue($values, "whencreated")));
-    $accountexpires        = mbDate(mbDateTimeFromLDAP(self::getValue($values, "accountexpires")));
+    $whencreated = null;
+    if ($when_created = self::getValue($values, "whencreated")) {
+      $whencreated      = mbDate(mbDateTimeFromAD($when_created));
+    }
+    $accountexpires = null;
+    if ($account_expires = self::getValue($values, "accountexpires")) {
+      // 1000000000000000000 = 16-11-4769 01:56:35
+      if ($account_expires < 1000000000000000000) {
+        $accountexpires = mbDate(mbDateTimeFromLDAP($account_expires));
+      }
+    }
     // 66048 = Enabled
     // 66050 = Disabled
     $actif = (self::getValue($values, "useraccountcontrol") == 66048) ? 1 : 0;
@@ -158,8 +167,8 @@ class CLDAP {
       $mediuser->store();
     }
     $user->_user_actif        = $actif;
-    $user->_user_deb_activite = $deb_activite;
-    $user->_user_fin_activite = $fin_activite;
+    $user->_user_deb_activite = $whencreated;
+    $user->_user_fin_activite = $accountexpires;
     
     return $user;
   }

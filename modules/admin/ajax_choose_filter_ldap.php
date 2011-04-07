@@ -66,13 +66,13 @@ if ($user_username || $user_first_name || $user_last_name) {
   }
   
   $mediuser = new CMediusers();
-  
+
   $smarty->assign("users"         , $users);
   $smarty->assign("mediuser"      , $mediuser);
   $smarty->assign("nb_users"      , $nb_users);
-  $smarty->assign("givenname"     , $user_first_name);
-  $smarty->assign("sn"            , $user_last_name);
-  $smarty->assign("samaccountname", $user_username); 
+  $smarty->assign("givenname"     , CMbString::capitalize($user_first_name));
+  $smarty->assign("sn"            , strtoupper($user_last_name));
+  $smarty->assign("samaccountname", strtolower($user_username)); 
   $smarty->display("inc_search_user_ldap.tpl");
 } else {
   $smarty->display("inc_choose_filter_ldap.tpl");
