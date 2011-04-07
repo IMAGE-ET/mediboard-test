@@ -40,7 +40,19 @@ if ($spec_type) {
 }
 
 $spec = CExConcept::getConceptSpec($prop);
+
+$exclude = array(
+  "confidential", "mask", "format", "reported", 
+	"perm", "seekable", "pattern", "autocomplete", 
+	"cascade", "delimiter", "canonical", "protected", 
+	"class", "alphaAndNum"
+);
+
 $options = $spec->_options;
+
+foreach($exclude as $_exclude) {
+	unset($options[$_exclude]);
+}
 
 function order_specs($a, $b) {
   $options_order = array(

@@ -30,7 +30,7 @@ $ex_objects = array();
 $count = 0;
 $count_available = count($ex_classes);
 foreach($ex_classes as $_id => $_ex_class) {
-  if (!$_ex_class->checkConstraints($object)) {
+  if (!$_ex_class->checkConstraints($object) || $_ex_class->conditional) {
     unset($ex_classes[$_id]);
     $count_available--;
   }

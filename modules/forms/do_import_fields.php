@@ -128,7 +128,8 @@ else {
 	      $current_class->name = $class_name;
 				$current_class->host_class = "CMbObject";
 				$current_class->event = "void";
-				$current_class->disabled = 1;
+        $current_class->disabled = 1;
+        $current_class->required = 0;
 				$current_class->conditional = ((stripos($class_name, "SSQ") !== false) ? 1 : 0);
 				
 	      if ($msg = $current_class->store()) {

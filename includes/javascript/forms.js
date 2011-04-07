@@ -104,7 +104,6 @@ function $V (element, value, fire) {
       return (ret && ret.length > 0) ? ret : null;
     }
   }
-  return;
 }
 
 function notNullOK(oEvent) {
@@ -230,24 +229,36 @@ function prepareForm(oForm) {
   // For each element
   var i = 0, oElement;
   while (oElement = $(oForm.elements[i++])) {
-    var sElementName = oElement.getAttribute("name"),
-        props = oElement.getProperties(),
+    var sType = oElement.type;
+    
+    // a SET checkbox input
+    if (sType === "checkbox" && oElement.hasClassName("set-checkbox")) {
+      continue;
+    }
+    
+    var sElementName = oElement.getAttribute("name");
+    
+    if (!sElementName) {
+      continue;
+    }
+    
+    var props = oElement.getProperties(),
         UIchange = false;
-
+    
     // Locked object
     if (oForm.lockAllFields) {
       oElement.disabled = true;
     }
     
     // Default autocomplete deactivation
-    if (oElement.type === "text") {
+    if (sType === "text") {
       oElement.writeAttribute("autocomplete", "off");
     }
     
     // Create id for each element if id is null
     if (!oElement.id && sElementName) {
       oElement.id = sFormName + "_" + sElementName;
-      if (oElement.type === "radio") {
+      if (sType === "radio") {
         oElement.id += "_" + oElement.value;
       }
     }
@@ -308,14 +319,14 @@ function prepareForm(oForm) {
     }
     
     // Won't make it resizable on IE
-    if (oElement.type === "textarea" && 
+    if (sType === "textarea" && 
         oElement.id !== "htmlarea" && 
         !oElement.hasClassName("noresize")) {
       oElement.setResizable({autoSave: true, step: 'font-size'});
     }
     
     // Focus on first text input
-    if (bGiveFormFocus && oElement.type === "text" && 
+    if (bGiveFormFocus && sType === "text" && 
         !oElement.className.match(/autocomplete/) &&
         !oElement.getAttribute("disabled") && !oElement.getAttribute("readonly") && 
         oElement.clientWidth > 0) {
@@ -335,8 +346,8 @@ function prepareForm(oForm) {
           inactiveApplets = applets.length;
           for(i = 0; i < applets.length; i++) {
             if (Prototype.Browser.IE || "isActive" in applets[i] && 
-						    Object.isFunction(applets[i].isActive) && 
-								applets[i].isActive()) inactiveApplets--;
+                Object.isFunction(applets[i].isActive) && 
+                applets[i].isActive()) inactiveApplets--;
             else break;
           }
           if (inactiveApplets == 0) {
@@ -370,10 +381,10 @@ function prepareForms(root) {
         Form.Element.enable.delay(2, element);
       });
     });
-		
+    
     root.select("button.oneclick").invoke("observe", "click", function(e){
-			Event.element(e).disabled = true;
-		});
+      Event.element(e).disabled = true;
+    });
     
     // We set a title on the button if it is a .notext and if it hasn't one yet
     root.select("button.notext:not([title])").each(function(button) {
@@ -417,8 +428,8 @@ function onSubmitFormAjax(oForm, oOptions, ioTarget) {
     useDollarV: false
   }, oOptions);
   
-	ioTarget = ioTarget || SystemMessage.id;
-	
+  ioTarget = ioTarget || SystemMessage.id;
+  
   // Check the form
   if (!oOptions.check(oForm)) {
     return false;
@@ -490,7 +501,7 @@ Object.extend(Form, {
       $V(form.elements[pair.key], pair.value);
     });
   },
-	onSubmitComplete: Prototype.emptyFunction
+  onSubmitComplete: Prototype.emptyFunction
 });
 
 // Form getter
@@ -508,10 +519,11 @@ function getForm (form, prepare) {
 // Return the list of the elements, taking in account that ther can be nodelists of fields (like radio buttons)
 Element.addMethods('form', {
   getElementsEx: function (form) {
-    var list = [];
+    var list = [], present = {};
     form.getElements().each(function (element) {
-      if (!list.find(function (e) {return (!!e && element.name == e.name)}))
-        list.push(form.elements[element.name]);
+      if (present[element.name]) return;
+      list.push(form.elements[element.name]);
+      present[element.name] = true;
     });
     return list;
   }

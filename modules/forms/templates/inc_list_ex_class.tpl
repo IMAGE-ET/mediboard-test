@@ -24,7 +24,7 @@ Main.add(function(){
 <hr class="control_tabs" />
 
 {{foreach from=$class_tree item=_by_class key=_class}}
-	<table class="main tbl" id="tab-{{$_class}}">
+	<table class="main tbl" id="tab-{{$_class}}" style="display: none;">
     {{foreach from=$_by_class item=_by_event key=_event}}
 		  {{if $_event != "void"}}
 	    <tr>

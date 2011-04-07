@@ -53,7 +53,11 @@
             
             <th>{{mb_label object=$ex_class field=disabled}}</th>
             <td>{{mb_field object=$ex_class field=disabled typeEnum=checkbox}}</td>
+            
+            <th>{{mb_label object=$ex_class field=required}}</th>
+            <td>{{mb_field object=$ex_class field=required typeEnum=checkbox}}</td>
           </tr>
+					
           <tr>
             <th>{{mb_label object=$ex_class field=name}}</th>
             <td>{{mb_field object=$ex_class field=name size=50}}</td>
@@ -61,7 +65,7 @@
             <th>{{mb_label object=$ex_class field=conditional}}</th>
             <td>{{mb_field object=$ex_class field=conditional typeEnum=checkbox}}</td>
             
-            <td>
+            <td colspan="2">
               {{if $ex_class->_id}}
                 <button type="submit" class="modify">{{tr}}Save{{/tr}}</button>
                 <button type="button" class="trash" onclick="confirmDeletion(this.form,{ajax:true,typeName:'la classe étendue ',objName:'{{$ex_class->_view|smarty:nodefaults|JSAttribute}}'})">

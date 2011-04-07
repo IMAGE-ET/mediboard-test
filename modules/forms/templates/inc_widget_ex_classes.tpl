@@ -9,41 +9,6 @@
 *}}
 
 {{if $ex_classes|@count}}
-
-<script type="text/javascript">
-selectExClass = function(element, object_guid, event, _element_id) {
-  var view = element.options ? element.options[element.options.selectedIndex].innerHTML : element.innerHTML;
-  showExClassForm($V(element) || element.value, object_guid, view, null, event, _element_id);
-  element.selectedIndex = 0;
-}
-
-var _popup = true;//Control.Overlay.container && Control.Overlay.container.visible();
-
-showExClassForm = function(ex_class_id, object_guid, title, ex_object_id, event, _element_id) {
-  var url = new Url("forms", "view_ex_object_form");
-  url.addParam("ex_class_id", ex_class_id);
-  url.addParam("object_guid", object_guid);
-  url.addParam("ex_object_id", ex_object_id);
-  url.addParam("event", event);
-  url.addParam("_element_id", _element_id);
-
-  if (_popup) {
-    url.popup("100%", "100%", title);
-  }
-  else {
-    url.modale({title: title});
-    url.modaleObject.observe("afterClose", function(){
-      ExObject.register(_element_id, {
-        ex_class_id: ex_class_id, 
-        object_guid: object_guid, 
-        event: event, 
-        _element_id: _element_id
-      });
-    });
-  }
-}
-</script>
-
   <div style="display: inline-block;">
 		{{if $count_available == 1}}
       <!-- Un seul formulaire : bouton -->
@@ -53,7 +18,7 @@ showExClassForm = function(ex_class_id, object_guid, title, ex_object_id, event,
 		  </button>
 		{{elseif $count_available > 1}}
 		  <!-- plusieurs formulaire : select -->
-		  <select onchange="selectExClass(this, '{{$object->_guid}}', '{{$event}}', '{{$_element_id}}')">
+		  <select onchange="selectExClass(this, '{{$object->_guid}}', '{{$event}}', '{{$_element_id}}')" style="width: 12em;">
 		    <option selected="selected" disabled="disabled">
 		      {{$count_available}} formulaire(s) disponible(s)
 		    </option>
@@ -64,6 +29,17 @@ showExClassForm = function(ex_class_id, object_guid, title, ex_object_id, event,
 		  </select>
 		{{/if}}
   </div>
+	
+	{{* <script type="text/javascript">
+  {{foreach from=$ex_classes item=_ex_class}}
+    ExObject.classes["{{$_ex_class->host_class}}"] = ExObject.classes["{{$_ex_class->host_class}}"] || [];
+    ExObject.classes["{{$_ex_class->host_class}}"]["{{$_ex_class->event}}"] = ExObject.classes["{{$_ex_class->event}}"] || [];
+		ExObject.classes["{{$_ex_class->host_class}}"]["{{$_ex_class->event}}"].push({{$_ex_class->getDBFields()|@json}});
+		
+		{{if }}
+  {{/foreach}}
+	</script> 
+	*}}
 	
 {{else}}
   <em style="color: #999;">Aucun formulaire disponible</em>

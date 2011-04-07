@@ -27,6 +27,11 @@ var ElementChecker = {
     var isArray  = (!oElement.options && (Object.isArray(oElement) || Object.isElement(oElement[0])));
     oElement = $(isArray ? oElement[0] : oElement);
 
+    // If the element is a SET checkbox, no need to check it
+    if (oElement.type === "checkbox" && oElement.hasClassName("set-checkbox")) {
+      return;
+    }
+
     this.oForm = oElement.form;
     this.oProperties = oElement.getProperties();
     

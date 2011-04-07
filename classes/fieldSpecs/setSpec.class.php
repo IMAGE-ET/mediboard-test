@@ -80,12 +80,14 @@ class CSetSpec extends CEnumSpec {
         var element = \$('$uid'),
             tokenField = new TokenField(element);
 
-        element.up('form').select('.token$uid').invoke('observe', 'click', function(event){
+        \$('set-container-$uid').select('input').invoke('observe', 'click', function(event){
           var elt = Event.element(event);
           tokenField.toggle(elt.value, elt.checked);
         });
       });
     </script>";
+		
+    $sHtml .= "<span id=\"set-container-$uid\">\n";
     
     if ($alphabet) {
       asort($locales); 
@@ -108,7 +110,6 @@ class CSetSpec extends CEnumSpec {
         }
 				
         $sHtml      .= "\n</select>";
-        return $sHtml;
         */
       default:
       case "checkbox":
@@ -122,7 +123,7 @@ class CSetSpec extends CEnumSpec {
             $selected = "";
           }
           $sHtml .= "\n<label>
-            <input type=\"checkbox\" name=\"_{$field}_{$key}\" value=\"$key\" onclick=\"\" class=\"token$uid\" $selected />
+            <input type=\"checkbox\" name=\"_{$field}_{$key}\" value=\"$key\" onclick=\"\" class=\"set-checkbox token$uid\" $selected />
               $item
             </label> ";
           $compteur++;
@@ -132,8 +133,11 @@ class CSetSpec extends CEnumSpec {
             $sHtml  .= $separator;
           }
         }
-        return $sHtml;
+
+      $sHtml .= "</span>\n";
     }
+		
+    return $sHtml;
   }
   
   function getLabelForElement($object, &$params){

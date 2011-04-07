@@ -633,7 +633,12 @@ class CSetupsystem extends CSetup {
 		$query = "ALTER TABLE `ex_list` 
               ADD `multiple` ENUM ('0','1') DEFAULT '0';";
     $this->addQuery($query);
+		
+		$this->makeRevision("1.0.62");
+		$query = "ALTER TABLE `ex_class` 
+              ADD `required` ENUM ('0','1') NOT NULL DEFAULT '0';";
+    $this->addQuery($query);
     
-    $this->mod_version = "1.0.62";
+    $this->mod_version = "1.0.63";
   }
 }

@@ -101,7 +101,7 @@ Main.add(function(){
 <table class="main form">
   <col class="narrow" />
   
-  {{assign var=advanced_controls_limit value=4}}
+  {{assign var=advanced_controls_limit value=6}}
   
   {{foreach from=$options item=_type key=_name name=specs}}
     {{if $smarty.foreach.specs.index == $advanced_controls_limit}}

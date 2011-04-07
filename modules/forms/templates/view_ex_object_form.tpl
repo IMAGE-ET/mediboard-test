@@ -11,7 +11,7 @@
 {{if !@$readonly}}
 
 <script type="text/javascript">
-if (window.opener && window.opener !== window) {
+if (window.opener && window.opener !== window && window.opener.ExObject) {
   window.onunload = function(){
     window.opener.ExObject.register("{{$_element_id}}", {
       ex_class_id: "{{$ex_class_id}}", 
@@ -135,10 +135,10 @@ Main.add(function(){
 			
 		  {{if isset($out_of_grid.$_group_id.field.$_field_name|smarty:nodefaults)}}
 		    <tr>
-		      <th style="font-weight: bold;">
+		      <th style="font-weight: bold; width: 50%;" colspan="2">
 		        {{mb_label object=$ex_object field=$_field->name}}
 		      </th>
-		      <td colspan="3">
+		      <td colspan="2">
 		        {{mb_include module=forms template=inc_ex_object_field ex_object=$ex_object ex_field=$_field}}
 		      </td>
 		    </tr>

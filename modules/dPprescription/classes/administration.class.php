@@ -38,6 +38,9 @@ class CAdministration extends CMbMetaObject {
     $spec = parent::getSpec();
     $spec->table = 'administration';
     $spec->key   = 'administration_id';
+    $spec->events = array(
+      "validation"   => array("multiple" => false),
+    );
     return $spec;
   }
   

@@ -134,27 +134,49 @@ var Url = Class.create({
     }
   },
   
+  getPopupFeatures: function(){
+    return Object.clone(Url.popupFeatures);
+  },
+  
   pop: function(iWidth, iHeight, sWindowName, sBaseUrl, sPrefix, oPostParameters, iFrame) {
     this.addParam("dialog", 1);
   
-    var iLeft = 50;
-    iWidth = iWidth || 800;
-    iHeight = iHeight || 600;
+    var features = this.getPopupFeatures();
+    console.log(Url.popupFeatures);
+    
+    features = Object.extend(features, {
+      width: iWidth,
+      height: iHeight
+    });
+
+    if (features.height == "100%" || features.width == "100%") {
+      var dims = {width: screen.width, height: screen.height};
+
+      if (features.width == "100%") {
+        //features.fullscreen = true; // REALLY invasive under IE
+        //features.type = "fullWindow";
+        features.width = dims.width;
+        features.left = 0;
+      }
+      
+      if (features.height == "100%") {
+        features.height = dims.height;
+        features.top = 0;
+      }
+    }
+    
     sWindowName = sWindowName || "";
     sBaseUrl = sBaseUrl || "";
     
     // the Iframe argument is used when exporting data (export_csv_array for ex.)
     if (!iFrame) {
-      var sFeatures = Url.buildPopupFeatures({left: iLeft, height: iHeight, width: iWidth});
-    
+      var sFeatures = Url.buildPopupFeatures(features);
+
       // Prefixed window collection
       if (sPrefix && this.oPrefixed[sPrefix]) {
         this.oPrefixed[sPrefix] = this.oPrefixed[sPrefix].reject(function(oWindow) {
           return oWindow.closed;
         });
-            
-        // Purge closed windows
-        iLeft += (iWidth + 8) * this.oPrefixed[sPrefix].length;
       }
     
       // Forbidden characters for IE
@@ -164,6 +186,8 @@ var Url = Class.create({
 
       this.oWindow = window.open(oPostParameters ? "" : (sBaseUrl + this.make()), sWindowName, sFeatures);  
       window.children[sWindowName] = this.oWindow;
+
+      this.oWindow.moveTo(features.left, features.top);
       
       if (!this.oWindow)
         return this.showPopupBlockerAlert(sWindowName);
@@ -711,33 +735,17 @@ Url.activeRequests = {
   get: 0
 };
 
+Url.popupFeatures = {
+  left: 50,
+  top: 50,
+  height: 600,
+  width: 800,
+  scrollbars: true,
+  resizable: true,
+  menubar: true
+ };
+
 Url.buildPopupFeatures = function(features) {
-  features = Object.extend({
-    left: 50,
-    top: 50,
-    height: 600,
-    width: 800,
-    scrollbars: true,
-    resizable: true,
-    menubar: true
-  }, features);
-  
-  if (features.height == "100%" || features.width == "100%") {
-    var dims = document.viewport.getDimensions();
-    
-    if (features.width == "100%") {
-      //features.fullscreen = true; // REALLY invasive under IE
-      //features.type = "fullWindow";
-      features.width = dims.width - 10;
-      features.left = 0;
-    }
-    
-    if (features.height == "100%") {
-      features.height = dims.height;
-      features.top = 0;
-    }
-  }
-  
   var a = [], value;
   $H(features).each(function(f){
     value = (f.value === true ? 'yes' : (f.value === false ? 'no' : f.value));

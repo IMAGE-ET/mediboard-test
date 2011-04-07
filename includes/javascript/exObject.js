@@ -1,5 +1,6 @@
 ExObject = {
   container: null,
+  classes: {},
   register: function(container, options) {
     this.container = $(container);
     
@@ -19,6 +20,17 @@ ExObject = {
   
   refresh: function(){
     ExObject.register(ExObject.container);
+  },
+  
+  trigger: function(object_guid, event) {
+    var url = new Url("forms", "ajax_trigger_ex_classes");
+    url.addParam("object_guid", object_guid);
+    url.addParam("event", event);
+    url.requestJSON(function(ex_classes_id){
+      ex_classes_id.each(function(id){
+        showExClassForm(id, object_guid, "", "", event);
+      });
+    });
   }
 };
 
@@ -108,3 +120,38 @@ ExObjectFormula.parser.ops1 = Object.extend({
   M:   function (ms) { return Math.ceil(ms / Date.month) },
   A:   function (ms) { return Math.ceil(ms / Date.year) }
 }, ExObjectFormula.parser.ops1);
+
+
+
+// TODO put this in the object
+selectExClass = function(element, object_guid, event, _element_id) {
+  var view = element.options ? element.options[element.options.selectedIndex].innerHTML : element.innerHTML;
+  showExClassForm($V(element) || element.value, object_guid, view, null, event, _element_id);
+  element.selectedIndex = 0;
+}
+showExClassForm = function(ex_class_id, object_guid, title, ex_object_id, event, _element_id) {
+  var url = new Url("forms", "view_ex_object_form");
+  url.addParam("ex_class_id", ex_class_id);
+  url.addParam("object_guid", object_guid);
+  url.addParam("ex_object_id", ex_object_id);
+  url.addParam("event", event);
+  url.addParam("_element_id", _element_id);
+
+  var _popup = true;//Control.Overlay.container && Control.Overlay.container.visible();
+
+  if (_popup) {
+    url.popup("100%", "100%", title);
+  }
+  else {
+    url.modale({title: title});
+    url.modaleObject.observe("afterClose", function(){
+      ExObject.register(_element_id, {
+        ex_class_id: ex_class_id, 
+        object_guid: object_guid, 
+        event: event, 
+        _element_id: _element_id
+      });
+    });
+  }
+}
+////////////////////

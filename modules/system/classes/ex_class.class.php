@@ -16,6 +16,7 @@ class CExClass extends CMbObject {
   var $name       = null;
   var $disabled   = null;
   var $conditional= null;
+  var $required   = null;
   
   var $_ref_fields = null;
   var $_ref_constraints = null;
@@ -28,6 +29,7 @@ class CExClass extends CMbObject {
 	  "CPrescriptionLineElement",
 		"CPrescriptionLineMedicament",
 		"COperation",
+		"CAdministration",
 	);
 
   function getSpec() {
@@ -45,6 +47,7 @@ class CExClass extends CMbObject {
     $props["name"]       = "str notNull seekable";
     $props["disabled"]   = "bool notNull default|1";
     $props["conditional"]= "bool notNull default|0";
+    $props["required"]   = "bool notNull default|0";
     return $props;
   }
 
@@ -103,7 +106,7 @@ class CExClass extends CMbObject {
   
   function loadRefsGroups(){
     if (!empty($this->_ref_groups)) return $this->_ref_groups;
-    return $this->_ref_groups = $this->loadBackRefs("field_groups");
+    return $this->_ref_groups = $this->loadBackRefs("field_groups", "ex_class_field_group_id");
   }
   
   function loadRefsAllFields(){
