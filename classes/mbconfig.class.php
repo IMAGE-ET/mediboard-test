@@ -45,11 +45,10 @@ class CMbConfig {
   }
 
   function load() {
-    $this->values = CMbArray::mergeRecursive(
-      $this->loadValuesFromPath($this->sourcePath),
-      $this->loadValuesFromPath($this->targetPath),
-      $this->loadValuesFromPath($this->overloadPath)
-    );
+    $this->values = array();
+    $this->values = CMbArray::mergeRecursive($this->values, $this->loadValuesFromPath($this->sourcePath));
+    $this->values = CMbArray::mergeRecursive($this->values, $this->loadValuesFromPath($this->targetPath));
+    $this->values = CMbArray::mergeRecursive($this->values, $this->loadValuesFromPath($this->overloadPath));
     
     if (!is_file($this->targetPath)) {
       $this->guessValues();
