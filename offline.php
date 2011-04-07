@@ -10,16 +10,16 @@
 
 require("includes/config_all.php");
 
-if ($dPconfig["offline"] != 1) {
-  header("Location: index.php");
-}
-
 switch($_GET["reason"]) {
   case "bdd" :
     $msg = "La base de données n'est pas accessible.";
     break;
   default :
-    $msg = "Le système est désactivé pour cause de maintenance.";
+		if ($dPconfig["offline"] != 1) {
+		  header("Location: index.php");
+		}
+
+  	$msg = "Le système est désactivé pour cause de maintenance.";
 }
 
 header("Content-type: text/html; charset=iso-8859-1");
