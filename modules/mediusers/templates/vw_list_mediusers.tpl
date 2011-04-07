@@ -17,6 +17,9 @@
     </th>
     <th>{{mb_title class=CUser      field=profile_id}}</th>
     <th>{{mb_title class=CMediusers field=remote}}</th>
+    {{if $configLDAP}}
+      <th>{{mb_title class="CUser" field="_ldap_linked"}}</th>
+    {{/if}}
     <th>
       {{mb_colonne class="CUser" field="user_last_login" order_col=$order_col order_way=$order_way url="?m=$m&tab=$tab"}}
     </th>
@@ -47,23 +50,27 @@
          {{mb_value object=$_user field=_user_first_name}}
        </a>
      </td>
-		 
-     <td  class="text" style="text-align: center">
+		
+     <td class="text" style="text-align: center">
      	{{mb_ditto name=function_view value=$_user->_ref_function->_view}}
 		 </td>
 
-     <td  class="text" style="text-align: center">
+     <td class="text" style="text-align: center">
        {{assign var=type value=$_user->_user_type}}
        {{if array_key_exists($type, $utypes)}}
        {{mb_ditto name=type_name value=$utypes.$type}}
 			 {{/if}}
      </td>
       
-     <td  class="text" style="text-align: center">
+     <td class="text" style="text-align: center">
        {{mb_ditto name=profile_name value=$_user->_ref_profile->user_username}}
 		 </td>
      
      <td class="text">{{mb_value object=$_user field=remote}}</td>
+     
+     {{if $configLDAP}}
+     <td>{{mb_value object=$_user->_ref_user field=_ldap_linked}}</td>
+     {{/if}}
       
      <td {{if !$_user->actif}} class="cancelled" {{/if}}>
        {{if $_user->_user_last_login}}
@@ -72,7 +79,7 @@
        </label>
        {{/if}}
      </td>
-
+          
      {{else}}
      <td colspan="10" class="text">
        <div class="small-warning">

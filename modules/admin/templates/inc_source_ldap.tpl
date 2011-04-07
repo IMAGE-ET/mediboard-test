@@ -65,6 +65,36 @@
           </tr>
         </table>
       </form>
+      <form name="editConfigLDAPUser" action="?m={{$m}}&amp;{{$actionType}}=configure" method="post" onsubmit="return checkForm(this)">
+        <input type="hidden" name="dosql" value="do_configure" />
+        <input type="hidden" name="m" value="system" />
+      
+        <table class="form">
+          <tr>
+            <th class="category" colspan="2">
+              {{tr}}config-user-source-ldap{{/tr}}
+            </th>
+          </tr>        
+          {{assign var="class" value="LDAP"}}
+          {{mb_include module=system template=inc_config_str var=ldap_user}}
+          
+          {{assign var="var" value="ldap_password"}}
+          <th>
+            <label title="{{tr}}config-admin-{{$class}}-{{$var}}-desc{{/tr}}">
+              {{tr}}config-admin-{{$class}}-{{$var}}{{/tr}}
+            </label>  
+          </th>
+          <td>
+            {{mb_ternary test=ldapUser var=value value=$conf.admin.$class.$var other=""}}
+            <input type="password" name="admin[{{$class}}][{{$var}}]" value="{{$value}}" />
+          </td>
+          <tr>
+            <td class="button" colspan="100">
+              <button class="modify" type="submit">{{tr}}Save{{/tr}}</button>
+            </td>
+          </tr>
+        </table>
+      </form>
     </td>
     <td class="greedyPane">
       <script type="text/javascript">

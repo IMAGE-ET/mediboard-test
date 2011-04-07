@@ -41,11 +41,18 @@ showMediuser = function(user_id, element){
   url.requestUpdate("vw_mediuser");
 }
 
+createUserFromLDAP = function(){
+  var url = new Url("admin", "ajax_choose_filter_ldap");
+  url.requestModal(800, 350);
+}
+
 function changePage(page) {
 	$V(getForm('listFilter').page,page);
 }
  
 </script>
+
+{{assign var=configLDAP value=$conf.admin.LDAP.ldap_connection}}
 
 <table class="main">
   {{if $can->edit}}
@@ -54,6 +61,12 @@ function changePage(page) {
       <a href="?m={{$m}}&amp;tab={{$tab}}&amp;user_id=0" class="button new">
         {{tr}}CMediusers-title-create{{/tr}}
       </a>
+    
+      {{if $configLDAP}}
+        <button class="new" onclick="createUserFromLDAP()">
+          {{tr}}CMediusers_create-ldap{{/tr}}
+        </button>
+      {{/if}}
     </td>
   </tr>
   {{/if}}
@@ -84,6 +97,9 @@ function changePage(page) {
               <label>
                 <input onchange="$V(this.form.page, 0)" type="checkbox" name="inactif" {{if $inactif}}checked="checked"{{/if}} /> Inactif
               </label>
+              <label>
+                <input onchange="$V(this.form.page, 0)" type="checkbox" name="ldap_bound" {{if $ldap_bound}}checked="checked"{{/if}} /> Associé au LDAP
+              </label>
             </td>
           </tr>
         	<tr>
@@ -96,10 +112,10 @@ function changePage(page) {
           {{mb_include module=system template=inc_pagination total=$total_mediuser current=$page change_page='changePage'}}
 	      {{/if}}
       </form>
-      {{include file="vw_list_mediusers.tpl"}}
+      {{mb_include template=vw_list_mediusers}}
     </td>
     <td style="width: 40%" id="vw_mediuser">
-      {{include file="inc_edit_mediuser.tpl"}}
+      {{mb_include template=inc_edit_mediuser}}
     </td>
   </tr>
 </table>

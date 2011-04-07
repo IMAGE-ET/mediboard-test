@@ -669,8 +669,8 @@ function luhn ($code) {
  */
 function url_exists($url) {
 	$old = ini_set('default_socket_timeout', 5); 
-	
-  $headers = @get_headers($url);
+
+	$headers = @get_headers($url);
 	ini_set('default_socket_timeout', $old); 
   return (preg_match("|200|", $headers[0])); 
 }

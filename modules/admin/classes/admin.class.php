@@ -34,10 +34,12 @@ class CUser extends CMbObject {
   var $profile_id       = null;
 	var $dont_log_connection = null;
 
-  var $_user_password   = null;
-	var $_user_password_weak = null;
+  var $_user_password        = null;
+	var $_user_password_weak   = null;
   var $_user_password_strong = null;
-  var $_login_locked    = null;
+  var $_login_locked         = null;
+  var $_ldap_linked          = null;
+  var $_user_actif           = null;
 
   var $_ref_preferences = null;
   var $_ref_mediuser    = null;
@@ -109,7 +111,7 @@ class CUser extends CMbObject {
     $specs["template"]        = "bool notNull default|0";
     $specs["profile_id"]      = "ref class|CUser";
 		$specs["dont_log_connection"] = "bool default|0";
-
+      
     // The different levels of security are stored to be usable in JS
     $specs["_user_password_weak"]   = "password minLength|4";
     $specs["_user_password_strong"] = "password minLength|6 notContaining|user_username notNear|user_username alphaAndNum";
@@ -119,6 +121,8 @@ class CUser extends CMbObject {
     } else {
       $specs["_user_password"] = $specs["_user_password_weak"];
     }
+    
+    $specs["_ldap_linked"]     = "bool";
 
     return $specs;
   }
@@ -337,6 +341,14 @@ class CUser extends CMbObject {
     }
 
     return null;
+  }
+  
+  function isLDAPLinked() {
+    if (!CAppUI::conf("admin LDAP ldap_connection") || !$this->_id) {
+      return;
+    }
+    $this->loadLastId400(CAppUI::conf("admin LDAP ldap_tag"));
+    $this->_ldap_linked = ($this->_ref_last_id400->_id) ? 1 : 0;
   }
 }
 

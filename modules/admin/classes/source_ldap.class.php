@@ -64,12 +64,12 @@ class CSourceLDAP extends CMbObject{
       throw new CMbException("CSourceLDAP_ldap-functions-not-available");
     }
     
-    if (!$fp = fsockopen($this->host, $this->port, $errno, $errstr, 2)){
+    if (!$fp = @fsockopen($this->host, $this->port, $errno, $errstr, 2)){
       throw new CMbException("CSourceLDAP_unreachable", $this->host);
     }
     fclose($fp);
     
-    $ldapconn = ldap_connect($this->host, $this->port);
+    $ldapconn = @ldap_connect($this->host, $this->port);
     if (!$ldapconn) {
       throw new CMbException("CSourceLDAP_no-connexion", $this->host);
     }
@@ -85,9 +85,9 @@ class CSourceLDAP extends CMbObject{
     if (!$ldapconn) {
       $ldapconn = $this->ldap_connect();
     }
-      
-    $ldapbind = ldap_bind($ldapconn, $ldaprdn, $ldappass);
-    if ($error = (ldap_errno($ldapconn) == 0x31)) {
+    
+    $ldapbind = @ldap_bind($ldapconn, $ldaprdn, $ldappass);
+    if ($error = (ldap_errno($ldapconn) == 49)) {
       return false;     
     }
     if (!$ldapbind) {
@@ -99,9 +99,11 @@ class CSourceLDAP extends CMbObject{
   
   function ldap_search($ldapconn, $filter, $attributes = array()) {
     $ldapsearch = ldap_search($ldapconn, $this->rootdn, $filter, $attributes);
-
-    return ldap_get_entries($ldapconn, $ldapsearch);
+    $results = ldap_get_entries($ldapconn, $ldapsearch);
+    
+    ldap_unbind($ldapconn);
+    
+    return $results;
   }
-
 }
 ?>

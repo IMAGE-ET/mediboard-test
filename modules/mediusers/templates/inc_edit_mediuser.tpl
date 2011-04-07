@@ -1,5 +1,12 @@
 <script type="text/javascript">
-  
+searchUserLDAP = function(object_id) {
+  var url = new Url("admin", "ajax_search_user_ldap");
+  url.addParam("object_id", object_id);
+  url.requestModal(800, 350);
+  url.modaleObject.observe("afterClose", function() { location.reload(); } );
+  window.ldapurl = url;
+}
+	  
 Main.add(function () {
   {{if $object->_id}}
     showPratInfo("{{$object->_user_type}}");
@@ -11,14 +18,33 @@ Main.add(function () {
     form.spec_cpam_id.makeAutocomplete({width: "200px"});
   }
 });
-
 </script>
 
-{{if $object->_id}}
-<a class="button search" style="" href="?m=admin&amp;tab=view_edit_users&amp;user_username={{$object->_user_username}}&amp;user_id={{$object->_id}}">
-  Administrer cet utilisateur
-</a>
+{{assign var=configLDAP value=$conf.admin.LDAP.ldap_connection}}
+{{if $configLDAP && $object->_ref_user && $object->_ref_user->_ldap_linked}}
+  {{assign var=readOnlyLDAP value=true}}
+{{else}}
+  {{assign var=readOnlyLDAP value=null}}
 {{/if}}
+
+{{if $object->_id}}
+  <a class="button search" style="" href="?m=admin&amp;tab=view_edit_users&amp;user_username={{$object->_user_username}}&amp;user_id={{$object->_id}}">
+    {{tr}}CMediusers_administer{{/tr}}
+  </a>
+  
+  {{if $configLDAP}}
+  <button class="search" {{if $readOnlyLDAP}}disabled="disabled"{{/if}} onclick="searchUserLDAP('{{$object->_id}}')">
+    {{tr}}CMediusers_search-ldap{{/tr}}
+  </button>
+  {{/if}}
+{{/if}}
+
+{{if $readOnlyLDAP}}
+<div class="small-warning">
+  {{tr}}CUser_associate-ldap{{/tr}}
+</div>
+{{/if}}
+
 <form name="mediuser" action="?m={{$m}}" method="post" onsubmit="return checkForm(this);">
   {{if !$can->edit}}
   <input name="_locked" value="1" hidden="hidden" />
@@ -26,6 +52,7 @@ Main.add(function () {
   <input type="hidden" name="dosql" value="do_mediusers_aed" />
   <input type="hidden" name="user_id" value="{{$object->_id}}" />
   <input type="hidden" name="del" value="0" />
+  <input type="hidden" name="_user_id" value="{{$object->_user_id}}" />
 
   <table class="form">
     <tr>
@@ -44,22 +71,45 @@ Main.add(function () {
     </tr>
     <tr>
       <th>{{mb_label object=$object field="_user_username"}}</th>
-      <td>{{mb_field object=$object field="_user_username"}}</td>
+      <td>
+        {{if !$readOnlyLDAP}}
+          {{mb_field object=$object field="_user_username"}}
+        {{else}}
+          {{mb_value object=$object field="_user_username"}}
+          {{mb_field object=$object field="_user_username" hidden=true}}
+        {{/if}}
+      </td>
     </tr>
+    {{if !$readOnlyLDAP}}
     <tr>
       <th>{{mb_label object=$object field="_user_password"}}</th>
       <td>
-        <input type="password" name="_user_password" class="{{$object->_props._user_password}}{{if !$conf.admin.ldap_connection && !$object->user_id}} notNull{{/if}}" onkeyup="checkFormElement(this);" value="" />
+        <input type="password" name="_user_password" 
+              class="{{$object->_props._user_password}}{{if !$configLDAP && !$object->user_id}} notNull{{/if}}" 
+              onkeyup="checkFormElement(this);" value="" readonly={{$readOnlyLDAP}} />
         <span id="mediuser__user_password_message"></span>
       </td>
     </tr>
     <tr>
       <th>{{mb_label object=$object field="_user_password2"}}</th>
-      <td><input type="password" name="_user_password2" class="password sameAs|_user_password" value="" /></td>
+      <td>
+        <input type="password" name="_user_password" 
+              class="{{$object->_props._user_password}}{{if !$configLDAP && !$object->user_id}} notNull{{/if}}" 
+              onkeyup="checkFormElement(this);" value="" readonly={{$readOnlyLDAP}} />
+        <span id="mediuser__user_password_message"></span>
+      </td>
     </tr>
-	    <tr>
+    {{/if}}
+	  <tr>
 	    <th>{{mb_label object=$object field="actif"}}</th>
-	    <td>{{mb_field object=$object field="actif"}}</td>
+	    <td>
+        {{if !$readOnlyLDAP}}
+          {{mb_field object=$object field="actif"}}
+        {{else}}
+          {{mb_value object=$object field="actif"}}
+          {{mb_field object=$object field="actif" hidden=true}}
+        {{/if}}
+      </td>
 	  </tr>
 	  
 	  <tr>
@@ -119,21 +169,49 @@ Main.add(function () {
 	  </tr>
 	  <tr>
 	    <th>{{mb_label object=$object field="_user_last_name"}}</th>
-	    <td>{{mb_field object=$object field="_user_last_name"}}</td>
+	    <td>
+	      {{if !$readOnlyLDAP}}
+          {{mb_field object=$object field="_user_last_name"}}
+        {{else}}
+          {{mb_value object=$object field="_user_last_name"}}
+          {{mb_field object=$object field="_user_last_name" hidden=true}}
+        {{/if}}
+      </td>
 	  </tr>
 	  <tr>
 	    <th>{{mb_label object=$object field="_user_first_name"}}</th>
-	    <td>{{mb_field object=$object field="_user_first_name"}}</td>
+	    <td>
+	      {{if !$readOnlyLDAP}}
+          {{mb_field object=$object field="_user_first_name"}}
+        {{else}}
+          {{mb_value object=$object field="_user_first_name"}}
+          {{mb_field object=$object field="_user_first_name" hidden=true}}
+        {{/if}}
+	    </td>
 	  </tr>
 	          
 	  <tr>
 	    <th>{{mb_label object=$object field="_user_email"}}</th>
-	    <td>{{mb_field object=$object field="_user_email"}}</td>
+	    <td>
+	      {{if !$readOnlyLDAP}}
+          {{mb_field object=$object field="_user_email"}}
+        {{else}}
+          {{mb_value object=$object field="_user_email"}}
+          {{mb_field object=$object field="_user_email" hidden=true}}
+        {{/if}}
+	    </td>
 	  </tr>
 	  
 	  <tr>
 	    <th>{{mb_label object=$object field="_user_phone"}}</th>
-	    <td>{{mb_field object=$object field="_user_phone"}}</td>
+	    <td>
+	      {{if !$readOnlyLDAP}}
+          {{mb_field object=$object field="_user_phone"}}
+        {{else}}
+          {{mb_value object=$object field="_user_phone"}}
+          {{mb_field object=$object field="_user_phone" hidden=true}}
+        {{/if}}
+	    </td>
 	  </tr>
 	  
 	  <tr>
@@ -142,9 +220,7 @@ Main.add(function () {
 	  </tr>
 	  
 	  <tbody id="show_prat_info" style="display:none">
-	  
 	    {{include file="inc_infos_praticien.tpl"}}
-	             
 	  </tbody>
 	  
 	  <tr>

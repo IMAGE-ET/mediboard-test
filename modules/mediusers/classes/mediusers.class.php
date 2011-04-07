@@ -68,6 +68,7 @@ class CMediusers extends CMbObject {
   var $_basic_info                 = null;
   var $_is_urgentiste              = null;
   var $_force_merge                = false;
+  var $_user_id                    = null;
   
   // Distant fields
   var $_group_id                   = null;
@@ -250,8 +251,7 @@ class CMediusers extends CMbObject {
    
   function createUser() {
     $user = new CUser();
-    $user->user_id = $this->user_id;
-		
+    $user->user_id = ($this->_user_id) ? $this->_user_id : $this->user_id;
 		$user->user_type        = $this->_user_type;
     $user->user_username    = $this->_user_username;
     $user->_user_password   = $this->_user_password;

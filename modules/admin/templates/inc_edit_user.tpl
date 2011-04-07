@@ -8,6 +8,16 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
 *}}
 
+{{assign var=configLDAP value=$conf.admin.LDAP.ldap_connection}}
+{{if $configLDAP && $user->_ldap_linked}}
+  {{assign var=readOnlyLDAP value=true}}
+  <div class="small-warning">
+    {{tr}}CUser_associate-ldap{{/tr}}
+  </div>
+{{else}}
+  {{assign var=readOnlyLDAP value=null}}
+{{/if}}
+
 <form name="editFrm" action="?m={{$m}}" method="post" onsubmit="return checkForm(this)">
 
 <input type="hidden" name="dosql" value="do_user_aed" />
@@ -25,7 +35,7 @@
       Utilisateur '{{$user}}'
     {{else}}
     <th class="title" colspan="2">
-      Création d'utilisateur
+      {{tr}}CUser-title-create{{/tr}}
     {{/if}}
     </th>
   </tr>
@@ -37,7 +47,14 @@
   
   <tr>
     <th>{{mb_label object=$user field="user_username"}}</th>
-    <td>{{mb_field object=$user field="user_username"}}</td>
+    <td>
+      {{if !$readOnlyLDAP}}
+        {{mb_field object=$user field="user_username"}}
+      {{else}}
+        {{mb_value object=$user field="user_username"}}
+        {{mb_field object=$user field="user_username" hidden=true}}
+      {{/if}}
+    </td>
   </tr>
   <tr>
     <th>{{mb_label object=$user field="template"}}</th>
@@ -47,6 +64,7 @@
     <th>{{mb_label object=$user field="dont_log_connection"}}</th>
     <td>{{mb_field object=$user field="dont_log_connection"}}</td>
   </tr>
+  {{if !$readOnlyLDAP}}
   <tr>
     <th><label for="_user_password" title="Saisir le mot de passe. Obligatoire">Mot de passe</label></th>
     <td><input  type="password" name="_user_password" class="{{$specs._user_password}}{{if !$user->user_id}} notNull{{/if}}" value="" onkeyup="checkFormElement(this)" />
@@ -57,22 +75,35 @@
     <th><label for="_user_password2" title="Re-saisir le mot de passe pour confimer. Obligatoire">Mot de passe (bis)</label></th>
     <td><input type="password" name="_user_password2" class="password sameAs|_user_password" value="" /></td>
   </tr>
-
+  {{/if}}
 
   <tr>
     <th class="category" colspan="2">Identité</th>
   </tr>
 
   <tr>
-    <th>{{mb_label object=$user field="user_last_name" }}</th>
-    <td>{{mb_field object=$user field="user_last_name"}}</td>
+    <th>{{mb_label object=$user field="user_last_name"}}</th>
+    <td>
+      {{if !$readOnlyLDAP}}
+        {{mb_field object=$user field="user_last_name"}}
+      {{else}}
+        {{mb_value object=$user field="user_last_name"}}
+        {{mb_field object=$user field="user_last_name" hidden=true}}
+      {{/if}}
+    </td>
   </tr>
-  
+
   <tr>
     <th>{{mb_label object=$user field="user_first_name"}}</th>
-    <td>{{mb_field object=$user field="user_first_name"}}</td>
+    <td>
+      {{if !$readOnlyLDAP}}
+        {{mb_field object=$user field="user_first_name"}}
+      {{else}}
+        {{mb_value object=$user field="user_first_name"}}
+        {{mb_field object=$user field="user_first_name" hidden=true}}
+      {{/if}}
+    </td>
   </tr>
-  
   <tr>
     <th>{{mb_label object=$user field="user_type"}}</th>
     <td>
@@ -100,11 +131,10 @@
     </td>
   </tr>
   
-  {{if $user->_ref_mediuser}}
   <!-- Link to CMediusers -->
   <tr>
     <td colspan="2" class="button">
-      {{if $user->_ref_mediuser->_id}}
+      {{if $user->_ref_mediuser && $user->_ref_mediuser->_id}}
         <div class="small-success">
           Cet utilisateur est bien intégré à l'organigramme.
           <br />
@@ -124,12 +154,15 @@
           Cet utilisateur n'est pas dans l'organigramme, 
           <br />
           C'est <strong>anormal pour un utilisateur réel</strong>.
+          <br />
+          <a class="button new" href="?m=mediusers&tab=vw_idx_mediusers&user_id={{$user->_id}}&no_association=1">
+            Associer cet utilisateur à l'organigramme
+          </a>
         </div>
         {{/if}}
       {{/if}}
     </td>
   </tr>
-  {{/if}}
   
 </table>
 

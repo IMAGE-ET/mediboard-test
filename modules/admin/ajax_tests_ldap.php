@@ -15,7 +15,7 @@ $source_ldap_id = CValue::get("source_ldap_id");
 $ldaprdn        = CValue::get("ldaprdn");
 $ldappass       = CValue::get("ldappass");
 $filter         = CValue::get("filter", "(samaccountname=*)");
-$attributes     = CValue::get("attributes", array());
+$attributes     = CValue::get("attributes");
 
 $source_ldap = new CSourceLDAP();
 $source_ldap->load($source_ldap_id);
@@ -35,9 +35,11 @@ try {
 CAppUI::stepAjax("CSourceLDAP_authenticate", UI_MSG_OK, $source_ldap->host, $ldaprdn ? $ldaprdn : "anonymous");
 
 if ($action == "search") {
-  $attributes = preg_split("/\s*[,\n\|]\s*/", $attributes);
+  if ($attributes) {
+    $attributes = preg_split("/\s*[,\n\|]\s*/", $attributes);
+  }
   try {
-    $results = $source_ldap->ldap_search($ldapconn, $filter, $attributes);
+    $results = $source_ldap->ldap_search($ldapconn, $filter, $attributes ? $attributes : array());
   } catch(Exception $e) {
     CAppUI::stepAjax($e->getMessage(), UI_MSG_ERROR);
   }

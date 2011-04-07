@@ -98,8 +98,13 @@ class CSetupdPsante400 extends CSetup {
 		$query = "ALTER TABLE `id_sante400` 
               CHANGE `id400` `id400` VARCHAR  (25) NOT NULL;";
     $this->addQuery($query);
+    
+    $this->makeRevision("0.20");
+    $query = "ALTER TABLE `id_sante400` 
+                CHANGE `id400` `id400` VARCHAR  (80) NOT NULL;";
+    $this->addQuery($query);
 		
-    $this->mod_version = "0.20";
+    $this->mod_version = "0.21";
   } 
 }
 ?>

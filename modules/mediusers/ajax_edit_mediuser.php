@@ -21,6 +21,7 @@ $object = new CMediusers;
 $object->load($user_id);
 $object->loadRefFunction();
 $object->loadRefProfile();
+$object->_ref_user->isLDAPLinked();
 
 // Chargement des banques
 $banques = array();

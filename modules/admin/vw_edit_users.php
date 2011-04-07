@@ -18,6 +18,7 @@ $user_id = CValue::getOrSession("user_id", $AppUI->user_id);
 $user = new CUser;
 $user->load($user_id);
 $user->loadRefMediuser();
+$user->isLDAPLinked();
 
 // Récuperation des utilisateurs recherchés
 $user_last_name  = CValue::getOrSession("user_last_name" , "");

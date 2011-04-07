@@ -441,6 +441,8 @@ class CAppUI {
   static function login($force_login = false) {
   	$ds = CSQLDataSource::get("std");
   	
+  	$ldap_connection = CAppUI::conf("admin LDAP ldap_connection");
+  	
     // Test login and password validity
     $user = new CUser;
     
@@ -456,17 +458,30 @@ class CAppUI {
     } 
     // Standard login
     else {
-      if (null == $user->user_username  = trim(CValue::request("username"))) {
-        self::setMsg("Auth-failed-nousername", UI_MSG_ERROR);
-        return false;
+      $username  = trim(CValue::request("username"));
+      $password  = trim(CValue::request("password"));
+      $ldap_guid = CValue::get("ldap_guid");
+      
+      if (!$username && !$password && $ldap_connection && $ldap_guid) {
+        try {  
+          $user = CLDAP::getFromLDAPGuid($ldap_guid);
+        } catch (Exception $e) {
+          self::setMsg($e->getMessage(), UI_MSG_ERROR); 
+          return false;
+        }
+      } else {
+        if (null == $user->user_username  = $username) {
+          self::setMsg("Auth-failed-nousername", UI_MSG_ERROR);
+          return false;
+        }
+  
+        if (null == $user->_user_password = $password) {
+          self::setMsg("Auth-failed-nopassword", UI_MSG_ERROR);
+          return false;
+        }
+        
+        self::$instance->weak_password = self::checkPasswordWeakness($user);
       }
-
-      if (null == $user->_user_password = trim(CValue::request("password"))) {
-        self::setMsg("Auth-failed-nopassword", UI_MSG_ERROR);
-        return false;
-      }
-
-      self::$instance->weak_password = self::checkPasswordWeakness($user);
     }
     
     // See CUser::updateDBFields
@@ -476,16 +491,17 @@ class CAppUI {
       return false;
     }
     
-    $ldap_connection = CAppUI::conf("admin ldap_connection");
+    
     $bound = false;
-    if ($ldap_connection) {
-      try {
-        $bound = CLDAP::login($user);
+    if ($ldap_connection && !($loginas && self::$instance->user_type == 1)) {
+      try {        
+        $user  = CLDAP::login($user);
+        $bound = $user->_bound;
       } catch (Exception $e) {
         self::setMsg($e->getMessage(), UI_MSG_ERROR);
       }
     }
-    
+
     if (!$bound && !self::checkPasswordAttempt($user)) {
       return false;
     }

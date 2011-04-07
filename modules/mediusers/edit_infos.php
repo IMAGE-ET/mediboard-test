@@ -12,6 +12,7 @@ global $AppUI, $m;
 $mediuser = new CMediusers();
 $mediuser->load($AppUI->user_id);
 $mediuser->loadRefsFwd();
+$mediuser->_ref_user->isLDAPLinked();
 
 // Récupération des disciplines
 $disciplines = new CDiscipline;

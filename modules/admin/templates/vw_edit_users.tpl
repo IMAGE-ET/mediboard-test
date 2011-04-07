@@ -12,15 +12,16 @@
   <tr>
     <td class="halfPane">
       <a class="button new" href="?m={{$m}}&amp;user_id=0">
-        Créer un nouvel utilisateur
+        {{tr}}CUser-title-create{{/tr}}
       </a>
-      {{include file="inc_list_users.tpl"}}
+      
+      {{mb_include template="inc_list_users"}}
     </td>
     <td class="halfPane">
       {{if $can->edit}}
-        {{include file="inc_edit_user.tpl"}}
+        {{mb_include template="inc_edit_user"}}
       {{else}}
-        {{include file="inc_vw_user.tpl"}}
+        {{mb_include template="inc_vw_user"}}
       {{/if}}
     </td>
   </tr>

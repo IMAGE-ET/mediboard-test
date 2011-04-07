@@ -9,12 +9,13 @@
 
 CCanDo::checkRead();
 
-$page      = intval(CValue::get('page', 0));
-$pro_sante = CValue::get("pro_sante", array());
-$inactif   = CValue::get("inactif", array());
-$filter    = CValue::getOrSession("filter", "");
-$order_way = CValue::getOrSession("order_way", "ASC");
-$order_col = CValue::getOrSession("order_col", "function_id");
+$page       = intval(CValue::get('page', 0));
+$pro_sante  = CValue::get("pro_sante", array());
+$inactif    = CValue::get("inactif", array());
+$ldap_bound = CValue::get("ldap_bound", array());
+$filter     = CValue::getOrSession("filter", "");
+$order_way  = CValue::getOrSession("order_way", "ASC");
+$order_col  = CValue::getOrSession("order_col", "function_id");
 
 $step = 25;
 
@@ -55,6 +56,12 @@ if ($inactif) {
   $where["users_mediboard.actif"] = "!= '1'";
 }
 
+if ($ldap_bound) {
+  $ljoin["id_sante400"] = "id_sante400.object_id = users.user_id";
+  $where["id_sante400.object_class"] = " = 'CUser'"; 
+  $where["id_sante400.tag"] = " = '".CAppUI::conf("admin LDAP ldap_tag")."'";
+}
+
 $order = null;
 if ($order_col == "function_id") {
   $order = "functions_mediboard.text $order_way, users.user_last_name ASC, users.user_first_name ASC";
@@ -82,6 +89,7 @@ $mediusers = $mediuser->loadList($where, $order, "$page, $step", null, $ljoin);
 foreach($mediusers as &$_mediuser) {
   $_mediuser->loadRefFunction();
   $_mediuser->loadRefProfile();
+  $_mediuser->_ref_user->isLDAPLinked();
 }
 
 // Chargement des banques
@@ -115,8 +123,21 @@ foreach($profiles as $key => $profil){
 // Récupération du user à ajouter/editer 
 // (mis en dernier car interferences avec le chargement 
 // des autres users car utilisation d'une spec commune)
+$user_id = CValue::getOrSession("user_id");
 $object = new CMediusers;
-$object->load(CValue::getOrSession("user_id"));
+if (CValue::get("no_association")) {
+  $object->user_id = $user_id;
+  $object->updateFormFields();
+  $object->_user_id = $user_id;
+  $object->_id = null;
+  $actif = CValue::get("ldap_user_actif", 1);
+  $object->actif = $actif;
+} else {
+  $object->load($user_id);
+}
+if (isset($object->_ref_user)) {
+  $object->_ref_user->isLDAPLinked();
+}
 
 // Création du template
 $smarty = new CSmartyDP();
@@ -125,6 +146,7 @@ $smarty->assign("total_mediuser", $total_mediuser);
 $smarty->assign("page"          , $page         );
 $smarty->assign("pro_sante"     , $pro_sante    );
 $smarty->assign("inactif"       , $inactif      );
+$smarty->assign("ldap_bound"    , $ldap_bound   );
 $smarty->assign("filter"        , $filter       );
 $smarty->assign("mediusers"     , $mediusers    );
 $smarty->assign("tabProfil"     , $tabProfil    );
