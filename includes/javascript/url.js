@@ -142,7 +142,6 @@ var Url = Class.create({
     this.addParam("dialog", 1);
   
     var features = this.getPopupFeatures();
-    console.log(Url.popupFeatures);
     
     features = Object.extend(features, {
       width: iWidth,
