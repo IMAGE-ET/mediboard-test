@@ -633,6 +633,26 @@ function mbDateFromLocale($date) {
 }
 
 /**
+ * Convert a date from LDAP to ISO format
+ * @param string $dateLargeInt nano seconds (yes, nano seconds) since jan 1st 1601
+ * @return string DateTime in ISO format
+ */
+function mbDateTimeFromLDAP($dateLargeInt) {
+  // seconds since jan 1st 1601
+  $secsAfterADEpoch = $dateLargeInt / (10000000); 
+  // unix epoch - AD epoch * number of tropical days * seconds in a day
+  $ADToUnixConvertor = ((1970-1601) * 365.242190) * 86400; 
+  // unix Timestamp version of AD timestamp
+  $unixTsLastLogon = intval($secsAfterADEpoch-$ADToUnixConvertor); 
+  
+  return date("d-m-Y H:i:s", $unixTsLastLogon);
+}
+
+function mbDateTimeFromAD($dateAD) {
+  return preg_replace("/(\d{4})(\d{2})(\d{2})(\d{2})(\d{2})(\d{2})\.0Z/", '$1-$2-$3 $4:$5:$6', $dateAD);
+}
+
+/**
  * Check if a number is a valid Luhn number
  * see http://en.wikipedia.org/wiki/Luhn
  * @param code string String representing a potential Luhn number

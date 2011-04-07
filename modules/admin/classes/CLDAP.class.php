@@ -36,7 +36,7 @@ class CLDAP {
       $ldaprdn  = $user->user_username;
     }
     if (!$ldappass) {
-      $ldappass = $user->user_password;
+      $ldappass = $user->_user_password;
     }
 
     $bound = $source_ldap->ldap_bind($ldapconn, $ldaprdn, $ldappass);
@@ -94,7 +94,12 @@ class CLDAP {
       }
     }   
     $user = self::mapTo($user, $results);
-    $actif = $user->_user_actif;
+    
+    // Save Mediuser variables
+    $actif        = $user->_user_actif;
+    $deb_activite = $user->_user_deb_activite;
+    $fin_activite = $user->_user_fin_activite;
+    
     if (!$user->user_type) {
       $user->user_type = 0;
     }
@@ -110,7 +115,10 @@ class CLDAP {
       throw new CMbException("Auth-failed-user-deactivated");
     }
     
+    // Restore Mediuser variables
     $user->_user_actif = $actif;
+    $user->_user_deb_activite = $deb_activite;
+    $user->_user_fin_activite = $fin_activite;
     
     if (!$id400->_id) {
       $id400->object_id   = $user->_id;
@@ -136,15 +144,22 @@ class CLDAP {
     $user->user_last_name  = self::getValue($values, "sn");
     $user->user_phone      = self::getValue($values, "telephonenumber");
     $user->user_email      = self::getValue($values, "mail");
+    $whencreated           = mbDate(mbDateTimeFromAD(self::getValue($values, "whencreated")));
+    $accountexpires        = mbDate(mbDateTimeFromLDAP(self::getValue($values, "accountexpires")));
     // 66048 = Enabled
     // 66050 = Disabled
     $actif = (self::getValue($values, "useraccountcontrol") == 66048) ? 1 : 0;
     $user->loadRefMediuser();
     if ($user->_id) {
-      $user->_ref_mediuser->actif =  $actif;
-      $user->_ref_mediuser->store();
+      $mediuser = $user->_ref_mediuser;
+      $mediuser->actif =  $actif;
+      $mediuser->deb_activite = $whencreated;
+      $mediuser->fin_activite = $accountexpires;
+      $mediuser->store();
     }
-    $user->_user_actif = $actif;
+    $user->_user_actif        = $actif;
+    $user->_user_deb_activite = $deb_activite;
+    $user->_user_fin_activite = $fin_activite;
     
     return $user;
   }
