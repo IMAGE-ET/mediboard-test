@@ -52,6 +52,9 @@ class CTemplateManager {
     }
     $this->addProperty("Général - rédacteur"        , $user->_shortview);
     $this->addProperty("Général - rédacteur complet", $user_complete);
+    if (CAppUI::conf("dPcompteRendu CCompteRendu pdf_thumbnails") && CAppUI::pref("pdf_and_thumbs")) {
+      $this->addProperty("Général - numéro de page", "[Général - numéro de page]");
+    }
   }
   
   function getParameter($name, $default = null) {
