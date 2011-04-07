@@ -11,7 +11,7 @@
 <table class="form">
 {{foreach from=$sejour->_ref_operations item=curr_op}}
   <tr>
-    <th class="category" colspan="4">
+    <th class="category text" colspan="4">
       Intervention par le Dr {{$curr_op->_ref_chir->_view}}
       &mdash; {{$curr_op->_datetime|date_format:$conf.longdate}}
       &mdash; 
@@ -21,6 +21,16 @@
         Salle inconnue
       {{/if}}
     </th>
+  </tr>
+  <tr>
+    <td class="button" colspan="4">
+      <button {{if $curr_op->_ref_consult_anesth->_ref_consultation->_id}}class="print"{{else}}class="warning"{{/if}} style="width:11em;" type="button" onclick="printFicheAnesth('{{$curr_op->_ref_consult_anesth->_ref_consultation->_id}}', '{{$curr_op->_id}}');">
+        Fiche d'anesthésie
+      </button>
+      <button class="print" onclick="printFicheBloc({{$curr_op->operation_id}})">
+        Feuille de bloc
+      </button>
+    </td>
   </tr>
   {{if $curr_op->libelle}}
   <tr>
@@ -67,12 +77,6 @@
   {{/if}}
   <tr>
     <td class="button" colspan="4">
-        <button {{if $curr_op->_ref_consult_anesth->_ref_consultation->_id}}class="print"{{else}}class="warning"{{/if}} style="width:11em;" type="button" onclick="printFicheAnesth('{{$curr_op->_ref_consult_anesth->_ref_consultation->_id}}', '{{$curr_op->_id}}');">
-          Fiche d'anesthésie
-        </button>
-      <button class="print" onclick="printFicheBloc({{$curr_op->operation_id}})">
-        Feuille de bloc
-      </button>
       <a class="button edit" href="?m=dPpmsi&amp;tab=edit_actes&amp;operation_id={{$curr_op->operation_id}}">
         Modifier les actes
       </a>

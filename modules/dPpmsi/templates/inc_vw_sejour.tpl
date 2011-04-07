@@ -8,6 +8,8 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
 *}}
 
+{{mb_script module="dPprescription" script=prescription}}
+
 <script type="text/javascript">
   Main.add(Control.Tabs.create.curry('tabs-pmsi', true));
 </script>
@@ -16,16 +18,14 @@
   {{assign var=patient value=$sejour->_ref_patient}}
   <table class="form">
     <tr>
-      <th class="title">
-        <a style="float: right" title="Modifier le séjour" href="?m=dPplanningOp&amp;tab=vw_edit_sejour&amp;sejour_id={{$sejour->_id}}">
-          <img src="images/icons/planning.png" alt="Planifier" />
-        </a>
-        <a style="float: right" title="Modifier les diagnostics" href="?m=dPpmsi&amp;tab=labo_groupage&amp;sejour_id={{$sejour->_id}}">
-          <img src="images/icons/edit.png" alt="Planifier" />
-        </a>
-        <button style="float: right" type="button" class="button print" onclick="printDossierComplet('{{$sejour->_id}}');">Dossier complet</button>
-         
-        {{$sejour->_view}}
+      <th class="title text">
+        <span onmouseover="ObjectTooltip.createEx(this, '{{$patient->_guid}}')">
+          {{$patient->_view}}
+        </span>
+        &mdash;
+        <span onmouseover="ObjectTooltip.createEx(this, '{{$sejour->_guid}}')">
+          {{$sejour->_shortview}}
+        </span>
       </th>
     </tr>
     
@@ -47,6 +47,18 @@
   <ul id="tabs-pmsi" class="control_tabs">
     <li><a href="#PMSI">{{tr}}PMSI{{/tr}}</a></li>
     <li><a href="#ServeurActes" {{if !$sejour->_ref_operations}}class="empty"{{/if}}>Actes</a></li>
+    <li style="float: right">
+      <button type="button" class="print" onclick="printDossierComplet('{{$sejour->_id}}');">
+        Dossier complet
+      </button>
+    </li>
+    {{if $sejour->_ref_prescription_sejour->_id}}
+    <li style="float: right">
+      <button type="button" class="print" onclick="Prescription.printPrescription('{{$sejour->_ref_prescription_sejour->_id}}', 0, null, null, 0, 1);">
+        Prescription
+      </button>
+    </li>
+    {{/if}}
   </ul>
   
   <hr class="control_tabs" />

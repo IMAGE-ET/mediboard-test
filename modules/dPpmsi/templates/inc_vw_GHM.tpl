@@ -1,4 +1,7 @@
 {{assign var="GHM" value=$sejour->_ref_GHM}}
+<a style="float: right" title="Modifier les diagnostics" href="?m=dPpmsi&amp;tab=labo_groupage&amp;sejour_id={{$sejour->_id}}">
+  <img src="images/icons/edit.png" alt="Planifier" />
+</a>
 <table class="form">
 {{if $sejour->_ref_GHM->_CM}}
   <tr>

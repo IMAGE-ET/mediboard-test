@@ -74,6 +74,12 @@ Main.add(function(){
           </td>
         </tr>
         <tr>
+          <th>{{mb_label object=$operation field=salle_id}}</th>
+          <td class="text">
+            {{$operation->_ref_salle->_view}}
+          </td>
+        </tr>
+        <tr>
           <th>{{mb_label object=$operation field=libelle}}</th>
           <td class="text">
             {{if $operation->libelle}}
@@ -159,7 +165,27 @@ Main.add(function(){
             {{/if}}
           </td>
         </tr>
-
+        <tr>
+          <th class="category" colspan="2">Visite de pré-anesthésie</th>
+        </tr>
+        {{if $operation->prat_visite_anesth_id}}
+        <tr>
+          <th>{{mb_label object=$operation field=prat_visite_anesth_id}}</th>
+          <td>Dr {{$operation->_ref_anesth_visite->_view}}</td>
+        </tr>
+        <tr>
+          <th>{{mb_label object=$operation field=rques_visite_anesth}}</th>
+          <td>{{mb_value object=$operation field=rques_visite_anesth}}</td>
+        </tr>
+        <tr>
+          <th>{{mb_label object=$operation field=autorisation_anesth}}</th>
+          <td>{{mb_value object=$operation field=autorisation_anesth}}</td>
+        </tr>
+        {{else}}
+        <tr>
+          <td colspan="2">Non saisie</td>
+        </tr>
+        {{/if}}
       </table>
       
     </td>

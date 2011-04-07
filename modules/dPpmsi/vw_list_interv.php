@@ -36,6 +36,7 @@ $where["date"] = "= '$date'";
 $where["salle_id"] = CSQLDataSource::prepareIn(array_keys($listSalles));
 $order = "debut";
 $plages = $plages->loadList($where, $order);
+$_operation = new COperation();
 foreach($plages as &$_plage) {
   $_plage->loadRefsOperations(0);
   foreach($_plage->_ref_operations as $_operation) {
@@ -47,6 +48,7 @@ foreach($plages as &$_plage) {
     $_operation->_ref_sejour->_ref_patient->loadIPP();
     $_operation->loadExtCodesCCAM();
     $_operation->countEchangeHprim();
+    $_operation->countDocs();
 
 		$counts["operations"]["total"]++; 
 		if (count($_operation->_nb_echange_hprim)) {

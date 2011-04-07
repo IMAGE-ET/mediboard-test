@@ -53,6 +53,7 @@ Main.add(function () {
     	{{mb_label object=$operation field=libelle}} +
 			{{mb_label object=$operation field=codes_ccam}}
 		</th>
+		<th>Docs</th>
     <th>{{mb_title object=$operation field=labo}}</th>
     <th>{{mb_title object=$operation field=anapath}}</th>
   </tr>
