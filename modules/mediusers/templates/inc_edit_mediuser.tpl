@@ -86,7 +86,7 @@ Main.add(function () {
       <td>
         <input type="password" name="_user_password" 
               class="{{$object->_props._user_password}}{{if !$configLDAP && !$object->user_id}} notNull{{/if}}" 
-              onkeyup="checkFormElement(this);" value="" readonly={{$readOnlyLDAP}} />
+              onkeyup="checkFormElement(this);" value="" />
         <span id="mediuser__user_password_message"></span>
       </td>
     </tr>
@@ -95,7 +95,7 @@ Main.add(function () {
       <td>
         <input type="password" name="_user_password" 
               class="{{$object->_props._user_password}}{{if !$configLDAP && !$object->user_id}} notNull{{/if}}" 
-              onkeyup="checkFormElement(this);" value="" readonly={{$readOnlyLDAP}} />
+              onkeyup="checkFormElement(this);" value="" />
         <span id="mediuser__user_password_message"></span>
       </td>
     </tr>
