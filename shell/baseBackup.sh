@@ -23,6 +23,7 @@ then
 fi
 
 time=7
+binary_log=0
 args=`getopt t:b $*`
 
 if [ $? != 0 ] ; then
