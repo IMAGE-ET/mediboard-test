@@ -288,7 +288,7 @@ printDossierComplet = function(){
               <input type="hidden" name="m" value="{{$m}}" />
            </th>
 					 <td>
-              <select name="service_id" onchange="this.form.submit()">
+              <select name="service_id" onchange="this.form.submit()" style="max-width: 135px;">
                 <option value="">&mdash; Service</option>
                 {{foreach from=$services item=curr_service}}
                 <option value="{{$curr_service->_id}}" {{if $curr_service->_id == $service_id}} selected="selected" {{/if}}>{{$curr_service->nom}}</option>
@@ -296,7 +296,7 @@ printDossierComplet = function(){
                 <option value="NP" {{if $service_id == "NP"}} selected="selected" {{/if}}>Non placés</option>
               </select>
               {{if $service_id && $isPrescriptionInstalled && $service_id != "NP"}}
-                <button type="button" class="search" onclick="viewBilanService('{{$service_id}}','{{$date}}');">Bilan</button>
+                <button type="button" class="search" onclick="viewBilanService('{{$service_id}}','{{$date}}');" style="margin:-1px;">Bilan</button>
         			{{/if}}
             </td>
 				 </tr>
@@ -307,7 +307,7 @@ printDossierComplet = function(){
 						 <input type="hidden" name="sejour_id" value="" />
 					</th>
 						<td>
-              <select name="praticien_id" onchange="this.form.submit();"  style="width: 135px;">
+              <select name="praticien_id" onchange="this.form.submit();" style="width: 135px;">
                 <option value="">&mdash; Choix du praticien</option>
                 {{foreach from=$praticiens item=_prat}}
                   <option class="mediuser" style="border-color: #{{$_prat->_ref_function->color}};" value="{{$_prat->_id}}" {{if $_prat->_id == $praticien_id}}selected="selected"{{/if}}>

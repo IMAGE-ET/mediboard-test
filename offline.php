@@ -8,8 +8,7 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
  */
 
-require("includes/config_dist.php");
-require("includes/config.php");
+require("includes/config_all.php");
 
 if ($dPconfig["offline"] != 1) {
   header("Location: index.php");

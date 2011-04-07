@@ -20,7 +20,7 @@ class CMbConfig {
   
   function CMbConfig() {
     global $mbpath;
-    $this->sourcePath = $mbpath."includes/config_dist.php";
+    $this->sourcePath = $mbpath."includes/config_all.php";
     $this->targetPath = $mbpath."includes/config.php";
   }
   

@@ -41,8 +41,7 @@ if (!is_file("./includes/config.php")) {
   die("Redirection vers l'assistant d'installation");
 }
 
-require "./includes/config_dist.php";
-require "./includes/config.php";
+require "./includes/config_all.php";
 
 $rootName = basename($dPconfig["root_dir"]);
 

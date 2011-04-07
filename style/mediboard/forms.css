@@ -74,8 +74,8 @@ textarea:focus,
 }
 
 input[type=checkbox].disabled {
-	opacity: 0.7;
-	filter:alpha(opacity=70); /* IE patch */
+  opacity: 0.7;
+  filter:alpha(opacity=70); /* IE patch */
 }
 
 textarea {
@@ -144,15 +144,15 @@ fieldset {
 }
 
 fieldset legend {
-	font-weight: bold;
+  font-weight: bold;
   border: none;
   background: #ddd;
-	padding: 0.2em 1.2em;
-	white-space: nowrap;
+  padding: 0.2em 1.2em;
+  white-space: nowrap;
 }
 
 table.layout td.cancelled {
-	background-color: #F00 !important;
+  background-color: #F00 !important;
 }
 
 label:hover {
@@ -181,16 +181,16 @@ a.button {
   text-align: left;
   font-weight: normal;
   white-space: nowrap;
-	display: inline-block;
-	
+  display: inline-block;
+  
   color: #000;
   background: #eee url(images/buttons/button.png) center center repeat-x;
-	
+  
   border: 1px solid #999;
   -moz-border-radius: 3px;
   -webkit-border-radius: 3px;
   border-radius: 3px;
-	
+  
   vertical-align: middle;
   height: 20px;
   padding: 1px;
@@ -307,8 +307,8 @@ a.button.big {
   height: 50px;
   margin: 4px 10px;
   padding: 4px 8px;
-	border-width: 2px;
-	text-align: center;
+  border-width: 2px;
+  text-align: center;
   -moz-border-radius: 6px;
   -webkit-border-radius: 6px;
   border-radius: 6px;
@@ -363,7 +363,7 @@ button.cancel:hover, a.button.cancel:hover {
 }
 
 button.carriage_return:before, a.button.carriage_return:before {
-	content: url(images/buttons/carriage_return.png);
+  content: url(images/buttons/carriage_return.png);
 } 
 
 button.mail:before, a.button.mail:before {
@@ -427,7 +427,7 @@ button.right-disabled:before, a.button.right-disabled:before {
 }
 
 button.rotate_left:before, a.button.rotate_left:before {
-	content: url(images/buttons/rotate-left.png);
+  content: url(images/buttons/rotate-left.png);
 }
 
 button.rotate_right:before, a.button.rotate_right:before {
@@ -592,6 +592,7 @@ input[type=text][readonly],
 input[type=text][readonly]:focus {
   border: 1px dotted #666;
   background: none;
+  background: rgba(255,255,255,0.4);
 }
 
 input[type=text].date {
@@ -633,8 +634,8 @@ div.autocomplete ul em {
 }
 
 div.autocomplete ul li.selected { 
-	background-color: #fafaa4 !important;
-	/*font-weight:bold;*/
+  background-color: #fafaa4 !important;
+  /*font-weight:bold;*/
 }
 
 div.autocomplete ul li {
@@ -643,11 +644,11 @@ div.autocomplete ul li {
   margin: 0px;
   padding: 2px;  
   cursor: pointer;
-	line-height: 100%;
+  line-height: 100%;
   background-image: url(images/pictures/bg-gradient.png);
   background-position: center top;
-	max-height: 55px;
-	overflow: hidden;
+  max-height: 55px;
+  overflow: hidden;
 }
 
 /*div.autocomplete ul li:nth-of-type(2n+1) {
@@ -743,7 +744,7 @@ table.tbl .textarea-helped a {
   vertical-align: middle;
   text-align: right;
   background-color: #fff;
-	opacity: 1;
+  opacity: 1;
   border: 1px solid #ccc;
   -moz-border-radius: 3px;
   -webkit-border-radius: 3px;
@@ -769,13 +770,13 @@ table.tbl .textarea-helped a {
 
 .textarea-helped .sub-toolbar {
   position: absolute; 
-	top: 20px; 
-	background-color: #fff;
-	margin-top: -1px;
+  top: 20px; 
+  background-color: #fff;
+  margin-top: -1px;
   margin-left: -3px;
   padding: 2px;
   border: 1px solid #ccc;
-	border-top: none;
+  border-top: none;
   -moz-border-radius: 3px;
   -webkit-border-radius: 3px;
   border-radius: 3px;
@@ -931,11 +932,11 @@ span.highlight {
 }
 
 select.helper {
-	max-width: 10em;
+  max-width: 10em;
 }
 
 .color-view {
-	padding: 0 3px; 
-	margin: 0 3px;
-	border: 1px solid #aaa;
+  padding: 0 3px; 
+  margin: 0 3px;
+  border: 1px solid #aaa;
 }

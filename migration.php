@@ -9,8 +9,7 @@
  */
 
 require("includes/mb_functions.php");
-require("includes/config_dist.php");
-require("includes/config.php");
+require("includes/config_all.php");
 
 $config = $dPconfig["migration"];
 
