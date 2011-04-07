@@ -27,7 +27,7 @@ class CPrescriptionLineMixVariation extends CMbObject {
   function getProps() {
     $specs = parent::getProps();
     $specs["prescription_line_mix_id"] = "ref notNull class|CPrescriptionLineMix";
-		$specs["debit"]        = "num notNull";
+		$specs["debit"]        = "float notNull";
 		$specs["dateTime"]     = "dateTime notNull";
     return $specs;
   }

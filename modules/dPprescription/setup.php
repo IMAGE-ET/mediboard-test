@@ -1856,7 +1856,12 @@ class CSetupdPprescription extends CSetup {
 		          SET unite_decalage = 'heure';";
 		$this->addQuery($query);
 		
-		$this->mod_version = "1.36";
+		$this->makeRevision("1.36");
+		$query = "ALTER TABLE `prescription_line_mix_variation` 
+              CHANGE `debit` `debit` FLOAT NOT NULL;";
+		$this->addQuery($query);
+		
+		$this->mod_version = "1.37";
   }
 }
 

@@ -60,7 +60,7 @@
 	{{assign var=variation_id value=$_variation->_id}}
 	<tr>
 		<td>
-			<form name="editVariation-{{$variation_id}}" 
+			<form name="editVariation-{{$variation_id}}" action="?" method="post" 
 			      onsubmit="return onSubmitFormAjax(this, { onComplete: function(){ refreshPerfTiming(); refreshDossierSoin(); } } );">
 			  <input type="hidden" name="m" value="dPprescription" />
 				<input type="hidden" name="dosql" value="do_prescription_line_mix_variation_aed" />
