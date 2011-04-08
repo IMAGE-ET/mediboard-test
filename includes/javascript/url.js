@@ -149,17 +149,15 @@ var Url = Class.create({
     });
 
     if (features.height == "100%" || features.width == "100%") {
-      var dims = {width: screen.width, height: screen.height};
-
       if (features.width == "100%") {
         //features.fullscreen = true; // REALLY invasive under IE
         //features.type = "fullWindow";
-        features.width = dims.width;
+        features.width = screen.availWidth || screen.width;
         features.left = 0;
       }
       
       if (features.height == "100%") {
-        features.height = dims.height;
+        features.height = screen.availHeight || screen.height;
         features.top = 0;
       }
     }

@@ -64,6 +64,8 @@
       <strong style="font-size: 1.5em;">
         {{$line->_ref_element_prescription->_view}}
       </strong>
+			
+			{{mb_include module=forms template=inc_widget_ex_class_register object=$line event=prescription}}
     </th>
   </tr>
 </table>
@@ -73,7 +75,6 @@
 	  <tr>
 	    <!-- Dates -->
 	    <td>
-				{{mb_include module=forms template=inc_widget_ex_class_register object=$line event=prescription cssStyle="float: right;"}}
 				
 				<fieldset>
 					<legend>
