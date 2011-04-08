@@ -639,6 +639,15 @@ class CSetupsystem extends CSetup {
               ADD `required` ENUM ('0','1') NOT NULL DEFAULT '0';";
     $this->addQuery($query);
     
-    $this->mod_version = "1.0.63";
+    $this->makeRevision("1.0.63");
+    $query = "CREATE TABLE `http_redirection` (
+               `http_redirection_id` INT (11) UNSIGNED NOT NULL auto_increment PRIMARY KEY,
+               `priority` INT (11) NOT NULL DEFAULT '0',
+               `from` VARCHAR (255) NOT NULL,
+               `to` VARCHAR (255) NOT NULL
+              ) /*! ENGINE=MyISAM */;";
+    $this->addQuery($query);
+    
+    $this->mod_version = "1.0.64";
   }
 }

@@ -94,6 +94,11 @@ if (!CAppUI::$instance->user_id) {
     $tplAjax->display("ajax_errors.tpl");
   }
   else {
+    $redirection = new CHttpRedirection();
+    $redirections = $redirection->loadList(null, "priority DESC");
+    foreach($redirections as $_redirect) {
+      $_redirect->applyRedirection();
+    }
     $tplLogin = new CSmartyDP("style/$uistyle");
     $tplLogin->assign("localeInfo"           , $locale_info);
     $tplLogin->assign("mediboardShortIcon"   , CFaviconLoader::loadFile("style/$uistyle/images/icons/favicon.ico"));
