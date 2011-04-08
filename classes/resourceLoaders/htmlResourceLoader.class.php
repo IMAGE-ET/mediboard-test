@@ -46,6 +46,11 @@ abstract class CHTMLResourceLoader {
 	static function getHash($string) {
 		return dechex(crc32($string));
 	}
+	
+	static function getLastChange($file) {
+    $stat_cache = stat($file);
+    return max($stat_cache[9], $stat_cache[10]);
+	}
   
   /**
    * Returns an HTML tag

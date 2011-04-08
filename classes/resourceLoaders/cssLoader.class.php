@@ -33,7 +33,7 @@ abstract class CCSSLoader extends CHTMLResourceLoader {
     
     if (!$compress) {
       $css_file = "$path/main.css";
-      return self::loadFile($css_file, $media, null, filemtime($css_file), $type);
+      return self::loadFile($css_file, $media, null, self::getLastChange($css_file), $type);
     }
     
     if(file_exists("$path/css.list")) {
@@ -59,9 +59,9 @@ abstract class CCSSLoader extends CHTMLResourceLoader {
     // If it exists, we check if it is up to date
     if (file_exists($cachefile)) {
       $uptodate = true;
-      $last_update = filemtime($cachefile);
+      $last_update = self::getLastChange($cachefile);
       foreach($files as $file) {
-        if (filemtime($file) > $last_update) {
+        if (self::getLastChange($file) > $last_update) {
           $uptodate = false;
           break;
         }

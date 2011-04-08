@@ -56,9 +56,9 @@ abstract class CJSLoader extends CHTMLResourceLoader {
       // If it exists, we check if it is up to date
       if (file_exists($cachefile)) {
         $uptodate = true;
-        $last_update = filemtime($cachefile);
+        $last_update = self::getLastChange($cachefile);
         foreach($files as $file) {
-          if (filemtime($file) > $last_update) {
+          if (self::getLastChange($file) > $last_update) {
             $uptodate = false;
             break;
           }
@@ -80,14 +80,14 @@ abstract class CJSLoader extends CHTMLResourceLoader {
       }
       
       foreach($excluded as $file) {
-        $result .= self::loadFile($file, null, filemtime($file), $type)."\n";
+        $result .= self::loadFile($file, null, self::getLastChange($file), $type)."\n";
       }
       
       $result .= self::loadFile($cachefile, null, $last_update, $type)."\n";
     }
     else {
       foreach(self::$files as $file) {
-        $result .= self::loadFile($file, null, filemtime($file), $type)."\n";
+        $result .= self::loadFile($file, null, self::getLastChange($file), $type)."\n";
       }
     }
     
