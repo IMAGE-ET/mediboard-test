@@ -108,6 +108,7 @@ Main.add(function(){
       </td>
       <td class="halfPane">
         {{mb_script module="dPcompteRendu" script="document"}}
+        {{mb_script module="dPcompteRendu" script="modele_selector"}}
         <fieldset>
           <legend>{{tr}}CCompteRendu{{/tr}} - {{tr}}CConsultAnesth{{/tr}}</legend>            
           <div id="documents-anesth">
