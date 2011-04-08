@@ -8,6 +8,12 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
 *}}
 
+<style type="text/css">
+fieldset {
+	margin: 0px;
+}
+</style>
+
 {{if !@$readonly}}
 
 <script type="text/javascript">
