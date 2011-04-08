@@ -18,7 +18,7 @@ $ex_class->loadRefsGroups();
 $ex_class->loadRefsConstraints();
 $ex_class->loadRefsNotes();
 
-list($grid, $out_of_grid) = $ex_class->getGrid(4, 20, false);
+list($grid, $out_of_grid) = $ex_class->getGrid(4, 30, false);
 
 $ex_object = new CExObject;
 $ex_object->_ex_class_id = $ex_class->_id;

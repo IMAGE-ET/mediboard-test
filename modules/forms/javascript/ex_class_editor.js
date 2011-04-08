@@ -53,6 +53,36 @@ ExClass = {
       oldParent.update("&nbsp;");
     }
   },
+  submitLayoutMessage: function(drag, drop) {
+    var coord_x = drop.get("x"),
+        coord_y = drop.get("y"),
+        type    = drag.get("type").split("_")[1],
+        form = getForm("form-layout-message");
+    
+    $(form).select('input.coord').each(function(coord){
+      $V(coord.disable(), '');
+    });
+    
+    $V(form.ex_class_message_id, drag.get("message_id"));
+    $V(form["coord_"+type+"_x"].enable(), coord_x);
+    $V(form["coord_"+type+"_y"].enable(), coord_y);
+    
+    form.onsubmit();
+    
+    // source parent
+    var oldParent = drag.up();
+    
+    if (drop.hasClassName("grid")) {
+      drop.update(drag);
+    }
+    else {
+      drop.insert(drag);
+    }
+    
+    if (oldParent.hasClassName("grid")) {
+      oldParent.update("&nbsp;");
+    }
+  },
   submitLayoutHostField: function(drag, drop) {
     var coord_x = drop.get("x"),
         coord_y = drop.get("y"),
@@ -176,14 +206,25 @@ ExClass = {
             if (drag.hasClassName('label')) {
               drop = drop.down(".label-list");
             }
+            
+            if (drag.hasClassName('message_title')) {
+              drop = drop.down(".message_title-list");
+            }
+            
+            if (drag.hasClassName('message_text')) {
+              drop = drop.down(".message_text-list");
+            }
           }
           
           if (drag.hasClassName('hostfield')) {
             ExClass.submitLayoutHostField(drag, drop);
           }
-          else {
+          else if (drag.hasClassName('field')) {
             ExClass.submitLayout(drag, drop);
           }
+					else {
+            ExClass.submitLayoutMessage(drag, drop);
+					}
         }
       });
     });
@@ -229,6 +270,21 @@ ExField = {
       .replace(/_+/g, '_'); // Suppression des underscore répétés
       
     return str;
+  }
+};
+
+ExMessage = {
+  edit: function(id, ex_group_id) {
+    var url = new Url("forms", "ajax_edit_ex_message");
+    url.addParam("ex_message_id", id);
+    url.addParam("ex_group_id", ex_group_id);
+    url.requestUpdate("exFieldEditor");
+  },
+  editCallback: function(id, obj) {
+    // void
+  },
+  create: function(ex_group_id) {
+    this.edit("0", ex_group_id);
   }
 };
 

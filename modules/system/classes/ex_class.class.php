@@ -210,8 +210,15 @@ class CExClass extends CMbObject {
       $out_of_grid = array(
         "field" => array(), 
         "label" => array(),
+        "message_title" => array(),
+        "message_text" => array(),
       );
       
+			/**
+			 * @var CExClassFieldGroup
+			 */
+			$_ex_group;
+			
       $_ex_group->loadRefsFields();
       
       foreach($_ex_group->_ref_fields as $_ex_field) {
@@ -240,6 +247,7 @@ class CExClass extends CMbObject {
         }
       }
     
+		  // Host fields
       $_ex_group->loadRefsHostFields();
       foreach($_ex_group->_ref_host_fields as $_host_field) {
         $label_x = $_host_field->coord_label_x;
@@ -256,6 +264,32 @@ class CExClass extends CMbObject {
         // value
         if ($value_x !== null && $value_y !== null) {
           $grid[$value_y][$value_x] = array("type" => "value", "object" => $_host_field);
+        }
+      }
+    
+		  // Messages
+      $_ex_group->loadRefsMessages();
+      foreach($_ex_group->_ref_messages as $_message) {
+        $title_x = $_message->coord_title_x;
+        $title_y = $_message->coord_title_y;
+        
+        $text_x = $_message->coord_text_x;
+        $text_y = $_message->coord_text_y;
+        
+        // label
+        if ($title_x === null || $title_y === null) {
+        	$out_of_grid["message_title"][$_message->_id] = $_message;
+				}
+				else {
+          $grid[$title_y][$title_x] = array("type" => "message_title", "object" => $_message);
+        }
+        
+        // value
+        if ($text_x === null || $text_y === null) {
+          $out_of_grid["message_text"][$_message->_id] = $_message;
+        }
+        else {
+          $grid[$text_y][$text_x] = array("type" => "message_text", "object" => $_message);
         }
       }
       

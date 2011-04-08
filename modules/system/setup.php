@@ -647,7 +647,24 @@ class CSetupsystem extends CSetup {
                `to` VARCHAR (255) NOT NULL
               ) /*! ENGINE=MyISAM */;";
     $this->addQuery($query);
+		
+    $this->makeRevision("1.0.64");
+    $query = "CREATE TABLE `ex_class_message` (
+              `ex_class_message_id` INT (11) UNSIGNED NOT NULL auto_increment PRIMARY KEY,
+              `ex_group_id` INT (11) UNSIGNED NOT NULL,
+              `type` ENUM ('info','warning','error'),
+              `title` VARCHAR (255) NOT NULL,
+              `text` TEXT NOT NULL,
+              `coord_title_x` TINYINT (4) UNSIGNED,
+              `coord_title_y` TINYINT (4) UNSIGNED,
+              `coord_text_x` TINYINT (4) UNSIGNED,
+              `coord_text_y` TINYINT (4) UNSIGNED
+              ) /*! ENGINE=MyISAM */";
+    $this->addQuery($query);
+    $query = "ALTER TABLE `ex_class_message` 
+              ADD INDEX (`ex_group_id`);";
+    $this->addQuery($query);
     
-    $this->mod_version = "1.0.64";
+    $this->mod_version = "1.0.65";
   }
 }

@@ -137,15 +137,28 @@ Main.add(function(){
                 {{mb_include module=forms template=inc_ex_object_field ex_object=$ex_object ex_field=$_group.object}}
 		          </td>
 						{{/if}}
-					{{else}}
+          {{elseif $_group.object instanceof CExClassHostField}}
             {{assign var=_host_field value=$_group.object}} 
-					  	{{if $_group.type == "label"}}
+              {{if $_group.type == "label"}}
+                <th style="font-weight: bold; text-align: left;">
+                  {{mb_title object=$ex_object->_ref_object field=$_host_field->field}}
+                </th>
+              {{else}}
+                <td>
+                  {{mb_value object=$ex_object->_ref_object field=$_host_field->field}}
+                </td>
+              {{/if}}
+					{{else}}
+            {{assign var=_message value=$_group.object}} 
+					  	{{if $_group.type == "message_title"}}
 							  <th style="font-weight: bold; text-align: left;">
-					    	  {{mb_title object=$ex_object->_ref_object field=$_host_field->field}}
+					    	  {{$_message->title}}
 								</th>
 							{{else}}
                 <td>
-                  {{mb_value object=$ex_object->_ref_object field=$_host_field->field}}
+                	<div class="small-{{$_message->type}}">
+                    {{mb_value object=$_message field=text}}
+									</div>
                 </td>
 							{{/if}}
 					{{/if}}

@@ -185,6 +185,7 @@ var Url = Class.create({
       window.children[sWindowName] = this.oWindow;
 
       this.oWindow.moveTo(features.left, features.top);
+      this.oWindow.resizeTo(features.width, features.height);
       
       if (!this.oWindow)
         return this.showPopupBlockerAlert(sWindowName);

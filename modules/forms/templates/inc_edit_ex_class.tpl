@@ -189,7 +189,7 @@ toggleGroupLabelEdit = function(link) {
         {{foreach from=$ex_class->_ref_groups item=_group}}
           <tbody id="group-{{$_group->_guid}}" style="display: none;">
             <tr>
-              <td style="text-align: right;">
+              <td style="text-align: right; min-width: 14em;">
                 <button type="button" class="new" onclick="ExField.create({{$ex_class->_id}}, '{{$_group->_id}}')">
                   {{tr}}CExClassField-title-create{{/tr}}
                 </button>
@@ -197,7 +197,7 @@ toggleGroupLabelEdit = function(link) {
             </tr>
             {{foreach from=$_group->_ref_fields item=_field}}
               <tr class="ex-class-field" data-ex_class_field_id="{{$_field->_id}}">
-                <td class="text" style="min-width: 14em;">
+                <td class="text">
                   <button class="right notext insert-formula" style="float: right; margin: -3px; margin-left: -1px; display: none;"
                           onclick="ExFormula.insertText('[{{$_field->_locale|smarty:nodefaults|JSAttribute}}]')">
                     Ajouter à la formule
@@ -215,13 +215,37 @@ toggleGroupLabelEdit = function(link) {
                     {{/if}}
                   </a>
                 </td>
-                {{*<td>{{$_field->prop}}</td>*}}
               </tr>
             {{foreachelse}}
               <tr>
                 <td colspan="2" class="empty">{{tr}}CExClassField.none{{/tr}}</td>
               </tr>
             {{/foreach}}
+						
+						<tr>
+							<th class="category">{{tr}}CExClassFieldGroup-back-class_messages{{/tr}}</th>
+						</tr>
+            <tr>
+              <td style="text-align: right;">
+                <button type="button" class="new" onclick="ExMessage.create('{{$_group->_id}}')">
+                  {{tr}}CExClassMessage-title-create{{/tr}}
+                </button>
+              </td>
+            </tr>
+            {{foreach from=$_group->_ref_messages item=_message}}
+              <tr class="ex-class-message" data-ex_class_message_id="{{$_message->_id}}">
+                <td class="text">
+                  <a href="#1" onclick="ExMessage.edit('{{$_message->_id}}', '{{$_group->_id}}')">
+                    {{$_message->title}}
+                  </a>
+                </td>
+              </tr>
+            {{foreachelse}}
+              <tr>
+                <td colspan="2" class="empty">{{tr}}CExClassMessage.none{{/tr}}</td>
+              </tr>
+            {{/foreach}}
+						
           </tbody>
         {{/foreach}}
       </table>

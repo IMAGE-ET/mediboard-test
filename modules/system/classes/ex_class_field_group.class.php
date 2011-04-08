@@ -15,7 +15,8 @@ class CExClassFieldGroup extends CMbObject {
   var $name = null; // != object_class, object_id, ex_ClassName_event_id, 
   
   var $_ref_ex_class = null;
-  var $_ref_ex_fields = null;
+  var $_ref_fields = null;
+  var $_ref_messages = null;
   var $_ref_host_fields = null;
 
   function getSpec() {
@@ -37,6 +38,7 @@ class CExClassFieldGroup extends CMbObject {
     $backProps = parent::getBackProps();
     $backProps["class_fields"] = "CExClassField ex_group_id";
     $backProps["host_fields"]  = "CExClassHostField ex_group_id";
+    $backProps["class_messages"] = "CExClassMessage ex_group_id";
     return $backProps;
   }
   
@@ -55,5 +57,9 @@ class CExClassFieldGroup extends CMbObject {
 	
   function loadRefsHostFields(){
     return $this->_ref_host_fields = $this->loadBackRefs("host_fields");
+  }
+  
+  function loadRefsMessages(){
+    return $this->_ref_messages = $this->loadBackRefs("class_messages");
   }
 }

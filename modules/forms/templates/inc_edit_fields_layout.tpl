@@ -2,6 +2,7 @@
 <script type="text/javascript">
 Main.add(function(){
   Control.Tabs.create("field_groups_layout");
+  Control.Tabs.create("class-message-layout-tabs");
 });
 </script>
 
@@ -32,6 +33,17 @@ Main.add(function(){
   <input type="hidden" name="coord_label_y" class="coord" value="" />
   <input type="hidden" name="coord_value_x" class="coord" value="" />
   <input type="hidden" name="coord_value_y" class="coord" value="" />
+</form>
+
+<form name="form-layout-message" method="post" action="" onsubmit="return onSubmitFormAjax(this)">
+  <input type="hidden" name="m" value="system" />
+  <input type="hidden" name="dosql" value="do_ex_class_message_aed" />
+  <input type="hidden" name="ex_class_message_id" value="" />
+  
+  <input type="hidden" name="coord_title_x" class="coord" value="" />
+  <input type="hidden" name="coord_title_y" class="coord" value="" />
+  <input type="hidden" name="coord_text_x" class="coord" value="" />
+  <input type="hidden" name="coord_text_y" class="coord" value="" />
 </form>
 
 <style type="text/css">
@@ -138,60 +150,81 @@ Main.add(function(){
 <div id="group-layout-{{$groups.$_group_id->_guid}}" style="display: none;" class="group-layout">
   
 <div class="out-of-grid droppable">
+	<ul class="control_tabs" id="class-message-layout-tabs">
+    <li>
+      <a href="#outofgrid-class-fields">Champs</a>
+    </li>
+		<li>
+			<a href="#outofgrid-hostfields-and-messages">Champs de {{tr}}{{$ex_class->host_class}}{{/tr}} / Messages</a>
+		</li>
+	</ul>
+	<hr class="control_tabs" />
+	
   <table class="main tbl" style="table-layout: fixed;">
-    <tr>
-      <th colspan="3" class="title">Eléments non placés</th>
-    </tr>
-    <tr>
-      <th>
-        {{if $ex_class->host_class != "CMbObject"}}
-          Champs de <strong>{{tr}}{{$ex_class->host_class}}{{/tr}}</strong>
-        {{/if}}
-      </th>
-      <th>Libellés</th>
-      <th>Champs</th>
-      <!--<th>Divers</th>-->
-    </tr>
-    <tr>
-      <td class="hostfield-list" data-x="" data-y="" style="padding: 4px; height: 2em; vertical-align: top;">
-        {{if $ex_class->host_class != "CMbObject"}}
-          <div style="height: 100%; overflow-y: scroll; min-height: 100px;">
-            <ul>
-            {{foreach from=$host_object->_specs item=_spec key=_field}}
-              {{if $_spec->show == 1 || $_field == "_view" || ($_spec->show == "" && $_field.0 !== "_")}}
-                <li>
-                  {{mb_include module=forms template=inc_ex_host_field_draggable ex_group_id=$_group_id}}
-                </li>
-              {{/if}}
-            {{/foreach}}
-            </ul>
-          </div>
-        {{else}}
-          <em>Veuillez lier le formulaire à un événement</em>
-        {{/if}}
-      </td>
-      
-      <td class="label-list" data-x="" data-y="" style="padding: 4px; height: 2em; vertical-align: top;">
-        {{foreach from=$out_of_grid.$_group_id.label item=_field}}
-          {{mb_include module=forms template=inc_ex_field_draggable _type="label" }}
-        {{/foreach}}
-      </td>
-  
-      <td class="field-list" data-x="" data-y="" style="padding: 4px; vertical-align: top;">
-        {{foreach from=$out_of_grid.$_group_id.field item=_field}}
-          {{mb_include module=forms template=inc_ex_field_draggable _type="field"}}
-        {{/foreach}}
-      </td>
-      
-      <!--
-      <td>
-        Séparateur horizontal
-        <div class="draggable hr">
-          <hr />
-        </div>
-      </td>
-      -->
-    </tr>
+	  <!-- Fields -->
+    <tbody id="outofgrid-class-fields" style="display: none;">
+	    <tr>
+	      <th>Libellés</th>
+	      <th>Champs</th>
+	    </tr>
+	    <tr>
+	      <td class="label-list" data-x="" data-y="" style="padding: 4px; height: 2em; vertical-align: top;">
+	        {{foreach from=$out_of_grid.$_group_id.label item=_field}}
+	          {{mb_include module=forms template=inc_ex_field_draggable _type="label" }}
+	        {{/foreach}}
+	      </td>
+	  
+	      <td class="field-list" data-x="" data-y="" style="padding: 4px; vertical-align: top;">
+	        {{foreach from=$out_of_grid.$_group_id.field item=_field}}
+	          {{mb_include module=forms template=inc_ex_field_draggable _type="field"}}
+	        {{/foreach}}
+	      </td>
+	    </tr>
+    </tbody>
+		
+		<!-- Messages -->
+    <tbody id="outofgrid-hostfields-and-messages" style="display: none;">
+      <tr>
+        <th>
+          {{if $ex_class->host_class != "CMbObject"}}
+            Champs de <strong>{{tr}}{{$ex_class->host_class}}{{/tr}}</strong>
+          {{/if}}
+        </th>
+        <th>Titres</th>
+        <th>Textes</th>
+      </tr>
+      <tr>
+        <td class="hostfield-list" data-x="" data-y="" style="padding: 4px; height: 2em; vertical-align: top;">
+          {{if $ex_class->host_class != "CMbObject"}}
+            <div style="height: 100%; overflow-y: scroll; min-height: 100px;">
+              <ul>
+              {{foreach from=$host_object->_specs item=_spec key=_field}}
+                {{if $_spec->show == 1 || $_field == "_view" || ($_spec->show == "" && $_field.0 !== "_")}}
+                  <li>
+                    {{mb_include module=forms template=inc_ex_host_field_draggable ex_group_id=$_group_id}}
+                  </li>
+                {{/if}}
+              {{/foreach}}
+              </ul>
+            </div>
+          {{else}}
+            <em>Veuillez lier le formulaire à un événement</em>
+          {{/if}}
+        </td>
+    
+        <td class="message_title-list" data-x="" data-y="" style="padding: 4px; vertical-align: top;">
+          {{foreach from=$out_of_grid.$_group_id.message_title item=_field}}
+            {{mb_include module=forms template=inc_ex_message_draggable _type="message_title"}}
+          {{/foreach}}
+        </td>
+    
+        <td class="message_text-list" data-x="" data-y="" style="padding: 4px; vertical-align: top;">
+          {{foreach from=$out_of_grid.$_group_id.message_text item=_field}}
+            {{mb_include module=forms template=inc_ex_message_draggable _type="message_text"}}
+          {{/foreach}}
+        </td>
+      </tr>
+    </tbody>
   </table>
 </div>
 
@@ -215,9 +248,11 @@ Main.add(function(){
 	        {{if $_group.object}}
 	          {{if $_group.object instanceof CExClassField}}
 	            {{mb_include module=forms template=inc_ex_field_draggable _field=$_group.object _type=$_group.type}}
-	          {{else}}
+	          {{elseif $_group.object instanceof CExClassHostField}}
 	            {{mb_include module=forms template=inc_ex_host_field_draggable _host_field=$_group.object ex_group_id=$_group_id _field=$_group.object->field _type=$_group.type}}
-	          {{/if}}
+	          {{else}}
+              {{mb_include module=forms template=inc_ex_message_draggable _field=$_group.object ex_group_id=$_group_id _type=$_group.type}}
+            {{/if}}
 					{{else}}
 					  &nbsp;
 	        {{/if}}

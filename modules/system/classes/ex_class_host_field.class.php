@@ -50,4 +50,16 @@ class CExClassHostField extends CMbObject {
   function loadRefExGroup($cache = true){
     return $this->_ref_ex_group = $this->loadFwdRef("ex_group_id", $cache);
   }
+  
+  function updateDBFields(){
+    // If we change its group, we need to reset its coordinates
+    if ($this->fieldModified("ex_group_id")) {
+      $this->coord_title_x = "";
+      $this->coord_title_y = "";
+      $this->coord_text_x = "";
+      $this->coord_text_y = "";
+    }
+    
+    return parent::updateDBFields();
+  }
 }
