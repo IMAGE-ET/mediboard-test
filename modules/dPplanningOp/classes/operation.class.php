@@ -354,7 +354,7 @@ class COperation extends CCodable implements IPatientRelated {
       $this->_presence_salle = mbSubTime($this->entree_salle,$this->sortie_salle);
     }
     if($this->entree_reveil && $this->sortie_reveil && $this->sortie_reveil > $this->entree_reveil){
-      $this->_duree_interv = mbSubTime($this->entree_reveil,$this->sortie_reveil);
+      $this->_duree_sspi = mbSubTime($this->entree_reveil,$this->sortie_reveil);
     }
     if($this->plageop_id) {
       $this->_link_editor = "index.php?m=dPplanningOp&tab=vw_edit_planning&operation_id=".$this->_id;

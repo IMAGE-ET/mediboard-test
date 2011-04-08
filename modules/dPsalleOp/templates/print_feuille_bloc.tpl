@@ -174,6 +174,10 @@ Main.add(function(){
           <td>Dr {{$operation->_ref_anesth_visite->_view}}</td>
         </tr>
         <tr>
+          <th>{{mb_label object=$operation field=date_visite_anesth}}</th>
+          <td>{{$operation->date_visite_anesth|date_format:$conf.date}}</td>
+        </tr>
+        <tr>
           <th>{{mb_label object=$operation field=rques_visite_anesth}}</th>
           <td>{{mb_value object=$operation field=rques_visite_anesth}}</td>
         </tr>
@@ -265,10 +269,6 @@ Main.add(function(){
           <td class="halfPane">{{mb_value object=$operation field=_duree_garrot}}</td>
         </tr>
         {{/if}}
-        <tr>
-          <th>{{mb_label object=$operation field=_duree_induction}}</th>
-          <td class="halfPane">{{mb_value object=$operation field=_duree_induction}}</td>
-        </tr>
         <tr>
           <th>{{mb_label object=$operation field=_duree_sspi}}</th>
           <td class="halfPane">{{mb_value object=$operation field=_duree_sspi}}</td>
