@@ -40,6 +40,11 @@ class CMbConfig {
     
     $config = new Config;
     $configContainer = $config->parseConfig($path, $this->configType, $this->options);
+    
+    if ($configContainer instanceof PEAR_Error) {
+      return array();
+    }
+    
     $rootConfig = $configContainer->toArray();
     return $rootConfig["root"];
   }
