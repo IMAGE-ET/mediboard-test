@@ -116,10 +116,16 @@ Main.add(function(){
 	      {{if $_group.object}}
 	        {{if $_group.object instanceof CExClassField}}
 					  {{if $_group.type == "label"}}
-						  {{assign var=_field value=$_group.object}} 
-		          <th style="font-weight: bold; text-align: left;">
-		            {{mb_label object=$ex_object field=$_field->name}}
-		          </th>
+						  {{assign var=_field value=$_group.object}}
+							{{if $_field->coord_field_x == $_field->coord_label_x+1}}
+                <th style="font-weight: bold; vertical-align: middle;">
+                  {{mb_label object=$ex_object field=$_field->name}}
+                </th>
+							{{else}}
+                <td style="font-weight: bold; text-align: left;">
+                  {{mb_label object=$ex_object field=$_field->name}}
+                </td>
+							{{/if}}
 					  {{elseif $_group.type == "field"}}
 		          <td>
                 {{mb_include module=forms template=inc_ex_object_field ex_object=$ex_object ex_field=$_group.object}}
@@ -129,7 +135,7 @@ Main.add(function(){
             {{assign var=_host_field value=$_group.object}} 
 					  	{{if $_group.type == "label"}}
 							  <th style="font-weight: bold; text-align: left;">
-					    	  {{mb_label object=$ex_object->_ref_object field=$_host_field->field}}
+					    	  {{mb_title object=$ex_object->_ref_object field=$_host_field->field}}
 								</th>
 							{{else}}
                 <td>
@@ -150,7 +156,7 @@ Main.add(function(){
 			
 		  {{if isset($out_of_grid.$_group_id.field.$_field_name|smarty:nodefaults)}}
 		    <tr>
-		      <th style="font-weight: bold; width: 50%;" colspan="2">
+		      <th style="font-weight: bold; width: 50%; vertical-align: middle;" colspan="2">
 		        {{mb_label object=$ex_object field=$_field->name}}
 		      </th>
 		      <td colspan="2">
