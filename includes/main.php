@@ -96,8 +96,11 @@ if (!CAppUI::$instance->user_id) {
   else {
     $redirection = new CHttpRedirection();
     $redirections = $redirection->loadList(null, "priority DESC");
+    $passThrough = false;
     foreach($redirections as $_redirect) {
-      $_redirect->applyRedirection();
+      if(!$passThrough) {
+        $passThrough = $_redirect->applyRedirection();
+      }
     }
     $tplLogin = new CSmartyDP("style/$uistyle");
     $tplLogin->assign("localeInfo"           , $locale_info);

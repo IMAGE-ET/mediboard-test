@@ -60,4 +60,8 @@
 
 </table>
 
+<div class="big-info text">
+  Pour indiquer que la redirection prend en charge toutes les adresses de provenance, indiquez * dans le champs de provenance.
+</div>
+
 </form>

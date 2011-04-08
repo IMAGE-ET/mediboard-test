@@ -49,20 +49,26 @@ class CHttpRedirection extends CMbObject {
   }
   
   function applyRedirection() {
-    if($this->from == "*") {
-      header("Location: $this->to");
-    }
-    $this->parseUrl();
     $scheme = "http".(isset($_SERVER["HTTPS"]) ? "s" : "");
     $host   = $_SERVER["SERVER_NAME"];
     $port   = ($_SERVER["SERVER_PORT"] == 80) ? "" : ":{$_SERVER['SERVER_PORT']}";
     $params = $_SERVER["REQUEST_URI"];
+    $this->parseUrl();
+    if($this->_complete_to["scheme"] == $scheme && $this->_complete_to["host"] == $host) {
+      return true;
+    }
+    if($this->from == "*") {
+      header("Location: $this->to$params");
+      return true;
+    }
     if($this->_complete_from["scheme"] == $scheme && $this->_complete_from["host"] == $host) {
       $scheme = $this->_complete_to["scheme"];
       $host   = $this->_complete_to["host"];
       $redirection = $scheme."://".$host.$params;
       header("Location: $redirection");
+      return true;
     }
+    return false;
   }
 }
 
