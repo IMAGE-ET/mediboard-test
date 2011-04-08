@@ -96,6 +96,15 @@ class CCanDo {
     global $can;
     $can->needsRead();
   }
+
+  /** 
+   * Return the global READ permission
+   * @return bool
+   */
+  static function read() {
+    global $can;
+    return $can->read;
+  }
   
   /** 
    * Check if the connected user has EDIT rights on the current page
@@ -105,6 +114,15 @@ class CCanDo {
     global $can;
     $can->needsEdit();
   }
+
+  /** 
+   * Return the global EDIT permission
+   * @return bool
+   */
+  static function edit() {
+    global $can;
+    return $can->edit;
+  }
   
   /** 
    * Check if the connected user has ADMIN rights on the current page
@@ -113,5 +131,14 @@ class CCanDo {
   static function checkAdmin() {
     global $can;
     $can->needsAdmin();
+  }
+
+  /** 
+   * Return the global ADMIN permission
+   * @return bool
+   */
+  static function admin() {
+    global $can;
+    return $can->admin;
   }
 }
