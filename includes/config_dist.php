@@ -20,6 +20,7 @@ $dPconfig["base_url"]          = "http://localhost/mediboard/";
 
 $dPconfig["offline"]           = "0";      // Offline mode (redirect to offline.php)
 $dPconfig["instance_role"]     = "qualif"; // qualif|prod
+$dPconfig["http_redirections"] = "0";      // 0 => no redirections, 1 => redirections actives
 $dPconfig["mb_id"]             = "";       // Instance unique ID
 $dPconfig["minify_javascript"] = "0";      // 0 => no concatenation, 1 => concatenation, 2 => concatenation+minification
 $dPconfig["minify_css"]        = "0";      // 0 => no concatenation, 1 => concatenation, 2 => concatenation+minification

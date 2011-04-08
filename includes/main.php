@@ -87,13 +87,8 @@ if (!CAppUI::$instance->user_id) {
   // HTTP 403 header
   //header('HTTP/1.0 403 Forbidden');
   
-  // Ajax login alert
-  if ($ajax) {
-    $tplAjax = new CSmartyDP("modules/system");
-    $tplAjax->assign("performance", $performance);
-    $tplAjax->display("ajax_errors.tpl");
-  }
-  else {
+  // Http Redirections
+  if(CAppUI::conf("http_redirections")) {
     $redirection = new CHttpRedirection();
     $redirections = $redirection->loadList(null, "priority DESC");
     $passThrough = false;
@@ -102,6 +97,15 @@ if (!CAppUI::$instance->user_id) {
         $passThrough = $_redirect->applyRedirection();
       }
     }
+  }
+  
+  // Ajax login alert
+  if ($ajax) {
+    $tplAjax = new CSmartyDP("modules/system");
+    $tplAjax->assign("performance", $performance);
+    $tplAjax->display("ajax_errors.tpl");
+  }
+  else {
     $tplLogin = new CSmartyDP("style/$uistyle");
     $tplLogin->assign("localeInfo"           , $locale_info);
     $tplLogin->assign("mediboardShortIcon"   , CFaviconLoader::loadFile("style/$uistyle/images/icons/favicon.ico"));

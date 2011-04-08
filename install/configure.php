@@ -60,6 +60,11 @@ showHeader();
       </select>
     </td>
   </tr>
+  
+  <tr>
+    <th><label for="http_redirections" title="Active les redirections http définies dans Mediboard">Redirections http actives</label></th>
+    <td><input type="text" size="1" maxlength="1" name="http_redirections" value="<?php echo @$dPconfig['http_redirections']; ?>" /></td>
+  </tr>
 
   <tr>
     <th><label for="offline" title="Mode maintenance">Mode maintenance</label></th>

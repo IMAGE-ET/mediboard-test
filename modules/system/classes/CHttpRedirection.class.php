@@ -59,14 +59,14 @@ class CHttpRedirection extends CMbObject {
     }
     if($this->from == "*") {
       header("Location: $this->to$params");
-      return true;
+      CApp::rip();
     }
     if($this->_complete_from["scheme"] == $scheme && $this->_complete_from["host"] == $host) {
       $scheme = $this->_complete_to["scheme"];
       $host   = $this->_complete_to["host"];
       $redirection = $scheme."://".$host.$params;
       header("Location: $redirection");
-      return true;
+      CApp::rip();
     }
     return false;
   }
