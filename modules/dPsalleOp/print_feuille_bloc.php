@@ -1,14 +1,15 @@
 <?php /* $Id$ */
 
 /**
-* @package Mediboard
-* @subpackage dPsalleOp
-* @version $Revision$
-* @author Sébastien Fillonneau
+ * @package Mediboard
+ * @subpackage dPsalleOp
+ * @version $Revision$
+ * @author SARL OpenXtrem
+ * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
 */
 
-global $AppUI, $can, $m;
-
+global $can;
+$can->read |= CModule::getActive("dPbloc")->_can->read;
 $can->needsRead();
 
 $operation_id  = CValue::getOrSession("operation_id", null);
@@ -31,9 +32,9 @@ $prescription_id = $sejour->_ref_prescription_sejour->_id;
 
 $administration = new CAdministration();
 $ljoin["prescription_line_medicament"] = "prescription_line_medicament.prescription_line_medicament_id = administration.object_id AND administration.object_class = 'CPrescriptionLineMedicament'";
-$ljoin["prescription_line_element"] = "prescription_line_element.prescription_line_element_id = administration.object_id AND administration.object_class = 'CPrescriptionLineElement'";
-$ljoin["prescription_line_mix_item"] = "prescription_line_mix_item.prescription_line_mix_item_id = administration.object_id AND administration.object_class = 'CPrescriptionLineMixItem'";
-$ljoin["prescription_line_mix"] = "prescription_line_mix.prescription_line_mix_id = prescription_line_mix_item.prescription_line_mix_id";
+$ljoin["prescription_line_element"]    = "prescription_line_element.prescription_line_element_id = administration.object_id AND administration.object_class = 'CPrescriptionLineElement'";
+$ljoin["prescription_line_mix_item"]   = "prescription_line_mix_item.prescription_line_mix_item_id = administration.object_id AND administration.object_class = 'CPrescriptionLineMixItem'";
+$ljoin["prescription_line_mix"]        = "prescription_line_mix.prescription_line_mix_id = prescription_line_mix_item.prescription_line_mix_id";
                                                                                        
 $ljoin["prescription"] = "(prescription_line_medicament.prescription_id = prescription.prescription_id) OR
                           (prescription_line_element.prescription_id = prescription.prescription_id) OR
