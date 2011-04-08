@@ -8,10 +8,11 @@ Main.add(function(){
   {{tr}}CExClass-title-create{{/tr}}
 </button>
 
-<ul class="control_tabs" id="tab-classes">
+<ul class="control_tabs small wide" id="tab-classes">
 {{foreach from=$class_tree item=_by_class key=_class}}
-  <li>
+  <li style="text-align: left;">
   	<a href="#tab-{{$_class}}">
+  		{{* <small>({{$_by_class|@count}})</small> *}}
   		{{if $_class != "CMbObject"}}
 			  {{tr}}{{$_class}}{{/tr}}
 			{{else}}

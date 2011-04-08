@@ -27,7 +27,7 @@ var ElementChecker = {
     var isArray  = (!oElement.options && (Object.isArray(oElement) || Object.isElement(oElement[0])));
     oElement = $(isArray ? oElement[0] : oElement);
 
-    // If the element is a SET checkbox, no need to check it
+    // If the element is a SET checkbox, no need to prepare it
     if (oElement.type === "checkbox" && oElement.hasClassName("set-checkbox")) {
       return;
     }
@@ -355,7 +355,7 @@ Object.extend(ElementChecker, {
 			
 			// If it is a "set"
 			if (this.oProperties["set"]) {
-				var values = this.sValue.split('|'),
+				var values = this.sValue.split('|').without(""),
 				    intersect = list.intersect(values);
 						
 				if (intersect.length != values.length) {
@@ -562,7 +562,8 @@ function checkForm(oForm) {
 
     if (!oFirstElement.className ||
         oFirstElement.getAttribute("readonly") ||
-        oFirstElement.hasClassName("nocheck")) return;
+        oFirstElement.hasClassName("nocheck") ||
+        oFirstElement.hasClassName("set-checkbox")) return;
     
     // Element checker preparing and error checking
     ElementChecker.prepare(oElement);

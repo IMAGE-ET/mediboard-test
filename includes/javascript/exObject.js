@@ -119,7 +119,7 @@ ExObjectFormula = {
       result = "";
     }
     
-    $V(target, result);
+    $V(target, (result+""));
   }
 };
 
@@ -130,7 +130,6 @@ ExObjectFormula.parser.ops1 = Object.extend({
   M:   function (ms) { return Math.ceil(ms / Date.month) },
   A:   function (ms) { return Math.ceil(ms / Date.year) }
 }, ExObjectFormula.parser.ops1);
-
 
 
 // TODO put this in the object

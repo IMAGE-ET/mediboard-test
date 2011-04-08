@@ -186,6 +186,12 @@ class CExClass extends CMbObject {
       
       $class_tree[$host_class][$event][] = $_ex_class;
     }
+		
+		if (isset($class_tree["CMbObject"])) {
+			$not_sorted = $class_tree["CMbObject"];
+			unset($class_tree["CMbObject"]);
+			$class_tree["CMbObject"] = $not_sorted;
+		}
     
     return $class_tree;
   }

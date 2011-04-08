@@ -13,7 +13,7 @@
 <script type="text/javascript">
 if (window.opener && window.opener !== window && window.opener.ExObject) {
   window.onunload = function(){
-    window.opener.ExObject.register("{{$_element_id}}", {
+    window.opener.ExObject.register.defer("{{$_element_id}}", {
       ex_class_id: "{{$ex_class_id}}", 
       object_guid: "{{$object_guid}}", 
       event: "{{$event}}", 
@@ -56,8 +56,10 @@ Main.add(function(){
           input.onchange = compute.curry(input, fieldElement);
         }
         else {
-          input.observe("change", compute.curry(input, fieldElement));
-          input.observe("ui:change", compute.curry(input, fieldElement));
+				  var callback = compute.curry(input, fieldElement);
+          input.observe("change", callback)
+					     .observe("ui:change", callback)
+							 .observe("click", callback);
         }
       });
     });

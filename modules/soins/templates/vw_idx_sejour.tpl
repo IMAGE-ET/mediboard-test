@@ -409,7 +409,7 @@ printDossierComplet = function(){
               {{if $curr_affectation->_ref_sejour->_id != ""}}
               <tr {{if $object->_id == $curr_affectation->_ref_sejour->_id}}class="selected '{{$curr_affectation->_ref_sejour->type }}'" {{else}} class='{{$curr_affectation->_ref_sejour->type }}' {{/if}}>
                 <td style="padding: 0;">
-                  <button class="lookup notext" onclick="popEtatSejour({{$curr_affectation->_ref_sejour->_id}});">
+                  <button class="lookup notext" style="margin:0;" onclick="popEtatSejour({{$curr_affectation->_ref_sejour->_id}});">
                     {{tr}}Lookup{{/tr}}
                   </button>
                 </td>

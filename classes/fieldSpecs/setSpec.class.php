@@ -72,22 +72,22 @@ class CSetSpec extends CEnumSpec {
     $className     = htmlspecialchars(trim("$className $this->prop"));
 		
     $uid = uniqid();
-		
-    $sHtml         = "<input type=\"hidden\" name=\"$field\" id=\"$uid\" value=\"$value\" class=\"$className\" $extra />\n";
+    
+    $sHtml          = "<span id=\"set-container-$uid\">\n";
+    $sHtml         .= "<input type=\"hidden\" name=\"$field\" value=\"$value\" class=\"$className\" $extra />\n";
 		
     $sHtml         .= "<script type=\"text/javascript\">
       Main.add(function(){
-        var element = \$('$uid'),
+      	var cont = \$('set-container-$uid'),
+      	    element = cont.down('input'),
             tokenField = new TokenField(element);
 
-        \$('set-container-$uid').select('input').invoke('observe', 'click', function(event){
+        cont.select('input').invoke('observe', 'click', function(event){
           var elt = Event.element(event);
           tokenField.toggle(elt.value, elt.checked);
         });
       });
     </script>";
-		
-    $sHtml .= "<span id=\"set-container-$uid\">\n";
     
     if ($alphabet) {
       asort($locales); 
@@ -116,14 +116,14 @@ class CSetSpec extends CEnumSpec {
         $compteur = 0;
         
         foreach ($locales as $key => $item){
+          $selected = "";
+					
           if (!empty($value) && in_array($key, $value)) {
             $selected = " checked=\"checked\""; 
           }
-					else {
-            $selected = "";
-          }
+					
           $sHtml .= "\n<label>
-            <input type=\"checkbox\" name=\"_{$field}_{$key}\" value=\"$key\" onclick=\"\" class=\"set-checkbox token$uid\" $selected />
+              <input type=\"checkbox\" name=\"_{$field}_{$key}\" value=\"$key\" class=\"set-checkbox token$uid\" $selected />
               $item
             </label> ";
           $compteur++;
@@ -133,10 +133,9 @@ class CSetSpec extends CEnumSpec {
             $sHtml  .= $separator;
           }
         }
-
-      $sHtml .= "</span>\n";
     }
 		
+    $sHtml .= "</span>\n";
     return $sHtml;
   }
   
