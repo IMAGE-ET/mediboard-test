@@ -11,14 +11,15 @@ announce_script "Database daily backup"
 
 if [ "$#" -lt 5 ]
 then 
-  echo "Usage: $0 <method> <username> <password> <database> <backup_path> \[<time>\]"
-  echo " <method> is hotcopy or dump method, eg hotcopy"
-  echo " <username> is username for mysql, eg admindb"
-  echo " <password> is password for mysql, eg dbadmin"
-  echo " <database> is database, eg mediboard"
+  echo "Usage: $0 <method> <username> <password> <database> <backup_path> options"
+  echo " <method> is hotcopy or dump method"
+  echo " <username> to access database"
+  echo " <password> authenticate user"
+  echo " <database> to backup, eg mediboard"
   echo " <backup_path> is the backup path, eg /var/backup"
-  echo " [-t <time>] is time of removal of files (day), default 7"
-  echo " [-b <binary_log>] is create mysql binary log"
+  echo " Options:"
+  echo "   [-t <time>] is time in days before removal of files, default 7"
+  echo "   [-b ] to create mysql binary log index"
   exit 1
 fi
 
@@ -75,7 +76,7 @@ case $1 in
     if [ $binary_log -eq 1 ]; then
       databasebinlog=$database-${DATETIME}.binlog.position
       mysql --user=$username --password=$password $database < $SHELL_PATH/mysql_show_master_status.sql > $SHELL_PATH/databasebinlog
-      check_errs $? "Failed to create MySQL Binary Log" "MySQL Binary Log done!"
+      check_errs $? "Failed to create MySQL Binary log index" "MySQL Binary log index done!"
     fi
     ;;
   dump)

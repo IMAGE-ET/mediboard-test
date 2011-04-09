@@ -12,7 +12,7 @@ announce_script "Mediboard replace base"
 if [ "$#" -lt 5 ]
 then 
   echo "Usage: $0 <source_location> <source_directory> <source_database> <target_directory> <target_database> (-r <with_restart>) (-s <safe>) (-m <mysql_directory>)(-p <port>)"
-  echo " <source_location>  is the remote location, ie root@oxmytto.homelinux.com"
+  echo " <source_location>  is the remote location, ie user@host"
   echo " <source_directory> is the remote directory, /var/backup/mediboard"
   echo " <source_database>  is the source database name, ie mediboard"
   echo " <target_directory> is the target directory location, /var/backup/"
