@@ -51,17 +51,15 @@ backup_path=$5
 
 # Make shell path
 SHELL_PATH=`pwd`/$BASH_PATH
-echo "BASH_PATH : $BASH_PATH"
-echo "SHELL_PATH : $SHELL_PATH"
 
 # Make backup path
-BACKUPPATH=$5
-force_dir $BACKUPPATH
+BACKUP_PATH=$5
+force_dir $BACKUP_PATH
 
 # Make database path
-BASEPATH=${BACKUPPATH}/$database-db
-force_dir $BASEPATH
-cd ${BASEPATH}
+BASE_PATH=${BACKUP_PATH}/$database-db
+force_dir $BASE_PATH
+cd ${BASE_PATH}
 
 ## Make MySQL medthod
 
@@ -72,12 +70,12 @@ case $1 in
   hotcopy)
     result=$database/
     
-    mysqlhotcopy -u $username -p $password $database $BASEPATH
+    mysqlhotcopy -u $username -p $password $database $BASE_PATH
     check_errs $? "Failed to create MySQL hot copy" "MySQL hot copy done!"
     
     if [ $binary_log -eq 1 ]; then
       databasebinlog=$database-${DATETIME}.binlog.position
-      mysql --user=$username --password=$password $database < $BASH_PATH/mysql_show_master_status.sql > $SHELL_PATH/databasebinlog
+      mysql --user=$username --password=$password $database < $BASH_PATH/mysql_show_master_status.sql > $BACKUP_PATH/binlog.index
       check_errs $? "Failed to create MySQL Binary log index" "MySQL Binary log index done!"
     fi
     ;;
@@ -94,7 +92,7 @@ case $1 in
 esac
 
 # deleting file whose date is greater than 7 days
-find ${BASEPATH} -name "$database*.tar.gz" -ctime +$time -exec /bin/rm '{}' ';'
+find ${BASE_PATH} -name "$database*.tar.gz" -ctime +$time -exec /bin/rm '{}' ';'
 check_errs $? "Failed to delete files" "Files deleted"
 
 # Compress archive and remove files
