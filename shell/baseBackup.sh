@@ -51,6 +51,8 @@ backup_path=$5
 
 # Make shell path
 SHELL_PATH=`pwd`/$BASH_PATH
+echo "BASH_PATH : $BASH_PATH"
+echo "SHELL_PATH : $SHELL_PATH"
 
 # Make backup path
 BACKUPPATH=$5
@@ -75,7 +77,7 @@ case $1 in
     
     if [ $binary_log -eq 1 ]; then
       databasebinlog=$database-${DATETIME}.binlog.position
-      mysql --user=$username --password=$password $database < $SHELL_PATH/mysql_show_master_status.sql > $SHELL_PATH/databasebinlog
+      mysql --user=$username --password=$password $database < $BASH_PATH/mysql_show_master_status.sql > $SHELL_PATH/databasebinlog
       check_errs $? "Failed to create MySQL Binary log index" "MySQL Binary log index done!"
     fi
     ;;
