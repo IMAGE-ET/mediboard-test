@@ -20,7 +20,7 @@ file=$1
 
 ## Make the log line
 dt=$(date '+%Y-%m-%dT%H:%M:%S'); 
-up=$(uptime | awk '{print $10 $11 $12 }'); 
+up=$(uptime | sed 's/\(.*\): \([0-9.]*\)[,]* \([0-9.]*\)[,]* \([0-9.]*\)/1mn:\2\t5mn:\3\t15mn:\4/'); 
 
 ## Log the line
 echo "$dt $up" >> $file
