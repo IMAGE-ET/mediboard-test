@@ -80,12 +80,16 @@
   
       <!-- Actions -->
       <td>
-        {{if $mbmodule->_upgradable && $can->admin}}
+        {{if $mbmodule->_too_new}}
+        <div class="warning">
+          {{tr}}Module-_too_new-msg{{/tr}} ({{$mbmodule->_latest}})
+        </div>
+        {{elseif $mbmodule->_upgradable && $can->admin}}
         <a class="button change action" href="{{$cmd}}=upgrade" onclick="return confirm('{{tr}}CModule-confirm-upgrade{{/tr}}')">
           {{tr}}Upgrade{{/tr}} &gt; {{$mbmodule->_latest}}
         </a>
         {{elseif $mbmodule->_upgradable}}
-        {{tr}}Out of date{{/tr}} : {{$mbmodule->_latest}}
+          {{tr}}Out of date{{/tr}} : {{$mbmodule->_latest}}
         {{elseif $mbmodule->mod_type != "core" && $can->admin}}
         <a class="button cancel action"  href="{{$cmd}}=remove" onclick="return confirm('{{tr}}CModule-confirm-deletion{{/tr}}');">
           {{tr}}Remove{{/tr}}
@@ -121,7 +125,9 @@
         </td>
     
         <td>
-          {{mb_value object=$mbmodule field=mod_version}}
+          <div {{if $mbmodule->_too_new}} class="warning" {{/if}}>
+            {{mb_value object=$mbmodule field=mod_version}}
+          </div>
         </td>
     
         <td style="text-align: center;" class="narrow">

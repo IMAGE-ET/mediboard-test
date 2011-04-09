@@ -956,6 +956,7 @@ $locales['Currency Format'] = 'Format de monnaie';
 $locales['Menu Icon'] = 'Menu icones';
 $locales['Menu Status'] = 'Menu Etat';
 $locales['Menu Text'] = 'Menu Texte';
+$locales['Module-_too_new-msg'] = 'Trop à jour par rapport à la version installée !';
 $locales['config-admin-dsn'] = 'Création de la source de données';
 $locales['config-alternative_mode'] = 'Mode de fusion alternatif';
 $locales['config-alternative_mode-desc'] = 'Mode de fusion d\'objets alternatif';

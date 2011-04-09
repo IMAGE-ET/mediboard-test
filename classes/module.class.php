@@ -45,6 +45,7 @@ class CModule extends CMbObject {
 
   // Form Fields
   var $_latest        = null;
+  var $_too_new       = null;
   var $_upgradable    = null;
   var $_configable    = null;
   var $_files_missing = null;
@@ -111,6 +112,7 @@ class CModule extends CMbObject {
     $props["mod_ui_order"]  = "num";
 
     $props["_latest"]       = "str notNull maxLength|6";
+    $props["_too_new"]      = "bool";
     $props["_upgradable"]   = "bool";
     $props["_configable"]   = "bool";
     $props["_dependencies"] = "str";
@@ -129,7 +131,9 @@ class CModule extends CMbObject {
     $this->loadMatchingObject();
     $this->mod_type = $setup->mod_type;
     $this->_latest  = $setup->mod_version;
-    $this->_upgradable = $this->mod_version != $this->_latest;
+    $this->_upgradable = $this->mod_version < $this->_latest;
+    $this->_too_new    = $this->mod_version > $this->_latest;
+    
     $this->_configable = is_file("modules/$this->mod_name/configure.php");
     $this->_dsns = $setup->getDatasources();
     $this->_dependencies = $setup->dependencies;
