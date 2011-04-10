@@ -286,25 +286,28 @@ class COperation extends CCodable implements IPatientRelated {
   }
   
   function check() {
-    global $AppUI;
     $msg = null;
     $this->completeField("chir_id", "plageop_id", "sejour_id");
     if(!$this->_id && !$this->chir_id) {
       $msg .= "Praticien non valide ";
     }
 
-    $this->loadRefSejour();
+    // Bornes du séjour
+    $sejour = $this->loadRefSejour();
     $this->loadRefPlageOp();
-    
-    if($this->plageop_id !== null){
-      if (!CMbRange::in(mbDate($this->_datetime), mbDate($this->_ref_sejour->entree_prevue), mbDate($this->_ref_sejour->sortie_prevue))) {
-   	    $msg .= "Intervention du ".mbDate($this->_datetime)." en dehors du séjour (".mbDate($this->_ref_sejour->entree_prevue)." - ".mbDate($this->_ref_sejour->sortie_prevue).")";
+    if ($this->plageop_id !== null) {
+    	$date = mbDate($this->_datetime);
+    	$entree = mbDate($sejour->entree_prevue);
+    	$sortie = mbDate($sejour->sortie_prevue);
+      if (!CMbRange::in($date, $entree, $sortie)) {
+   	    $msg .= "Intervention du $date en dehors du séjour du $entree au $sortie";
       }
     }
     
     // Vérification de la signature de l'anesthésiste pour la
     // visite de pré-anesthésie
-    if($this->fieldModified("prat_visite_anesth_id") && $this->prat_visite_anesth_id !== null && $this->prat_visite_anesth_id != $AppUI->user_id) {
+    $user = CAppUI::$user;
+    if ($this->fieldModified("prat_visite_anesth_id") && $this->prat_visite_anesth_id !== null && $this->prat_visite_anesth_id != $user->_id) {
       $anesth = new CUser();
       $anesth->load($this->prat_visite_anesth_id);
       if($anesth->user_password != md5($this->_password_visite_anesth)) {
@@ -569,7 +572,7 @@ class COperation extends CCodable implements IPatientRelated {
     return $this->_ref_chir;
   }
   
-  function loadRefPraticien($cache = 0){
+  function loadRefPraticien($cache = 0) {
     $this->loadRefChir($cache);
     $this->_ref_praticien =& $this->_ref_chir;
   }
@@ -656,6 +659,7 @@ class COperation extends CCodable implements IPatientRelated {
 
     $this->_view = "Intervention du ";
     $this->_view .= mbTransformTime(null, $this->_datetime, CAppUI::conf("date"));
+    return $this->_ref_plageop;
   }
   
   function preparePossibleActes() {
@@ -674,7 +678,7 @@ class COperation extends CCodable implements IPatientRelated {
   }
   
   function loadRefSejour($cache = false) {
-    $this->_ref_sejour = $this->loadFwdRef("sejour_id", $cache);
+    return $this->_ref_sejour = $this->loadFwdRef("sejour_id", $cache);
   }
   
 	 /*

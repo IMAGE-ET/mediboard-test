@@ -205,9 +205,9 @@ CCAMSelector.init = function(){
       <input type="hidden" name="_date" value="{{$plage->date}}" 
       onchange="Value.synchronize(this); 
                 if(this.value){ 
-                  this.form._locale_date.value = Date.fromDATE(this.value).toLocaleDate() 
+                  this.form._locale_date.value = Date.fromDATE(this.value).toLocaleDate();
                 } else { 
-                  this.form._locale_date.value = '' 
+                  this.form._locale_date.value = '';
                 }; 
                 Sejour.preselectSejour(this.value);" />
     </th>

@@ -280,7 +280,7 @@ Main.add( function(){
 <!-- Champ de copie des informations de l'intervention dans le cas ou il y en une -->
 {{if $op->_id}}
   <input type="hidden" name="_curr_op_id"   value="{{$op->_id}}" />
-  <input type="hidden" name="_curr_op_date" value="{{$op->_ref_plageop->date}}" />
+  <input type="hidden" name="_curr_op_date" value="{{$op->_datetime|iso_date}}" />
 {{else}}
   <input type="hidden" name="_curr_op_id"   value="" />
   <input type="hidden" name="_curr_op_date" value="" />

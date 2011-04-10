@@ -326,17 +326,16 @@ class CSejour extends CCodable implements IPatientRelated {
       $sortie = $this->sortie_prevue;
   
       if ($entree !== null && $sortie !== null) {
+        $entree = mbDate($entree);
+        $sortie = mbDate($sortie);
         $this->makeDatesOperations();
-        foreach($this->_dates_operations as $operation_id => $date_operation){
-          $isCurrOp = $this->_curr_op_id == $operation_id;
-          if ($isCurrOp) {
-            $opInBounds = $this->_curr_op_date >= mbDate($entree) && $this->_curr_op_date <= mbDate($sortie);
+        foreach ($this->_dates_operations as $operation_id => $date_operation){
+          if ($this->_curr_op_id == $operation_id) {
+            $date_operation = $this->_curr_op_date;
           } 
-          else {
-            $opInBounds = $date_operation >= mbDate($entree) && $date_operation <= mbDate($sortie);
-          }
-          if (!$opInBounds) {
-             $msg.= "Interventions en dehors des nouvelles dates du séjour";  
+
+          if (!CMbRange::in($date_operation, $entree, $sortie)) {
+             $msg.= "Intervention du $date_operation en dehors des nouvelles dates du séjour du $entree au $sortie";  
           } 
         }
 
@@ -1664,7 +1663,7 @@ class CSejour extends CCodable implements IPatientRelated {
       $this->loadRefsOperations();
     }
     
-    foreach ($this->_ref_operations as &$operation) {
+    foreach ($this->_ref_operations as $operation) {
       if ($operation->annulee){
         continue;
       }
