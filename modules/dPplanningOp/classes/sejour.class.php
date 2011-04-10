@@ -1490,6 +1490,7 @@ class CSejour extends CCodable implements IPatientRelated {
     } else {
       $this->_ref_last_operation = new COperation;
     }
+    return $this->_ref_operations;
   }
   
   function loadRefsBack() {
@@ -1610,35 +1611,44 @@ class CSejour extends CCodable implements IPatientRelated {
     $suivi_medical = $transmissions + $observations + $lines;
 		krsort($suivi_medical);
     $template->addListProperty("Sejour - Suivi médical", $suivi_medical);
+		    
+    // Interventions
+    foreach ($this->loadRefsOperations() as $_operation) {
+    	$_operation->loadRefPlageOp(true);
+    	$datetime = $_operation->getFormattedValue("_datetime");
+      $chir = $_operation->loadRefChir(true);
+    	$operations[] = "le $datetime, par $chir->_view";
+    }
+    $template->addListProperty("Sejour - Intervention - Liste", $operations);
+    
+    // Dernière intervention
+    $this->_ref_last_operation->fillLimitedTemplate($template);
   }
   
   function fillTemplate(&$template) {
     
-    $this->loadRefsFwd();
-    
     // Chargement du fillTemplate du praticien
-    $this->_ref_praticien->fillTemplate($template);
+    $this->loadRefPraticien()->fillTemplate($template);
     
     // Ajout d'un fillTemplate du patient
-    $this->_ref_patient->fillTemplate($template);
+    $this->loadRefPatient()->fillTemplate($template);
     
     $this->fillLimitedTemplate($template);
     
-    $this->loadRefDossierMedical();
     // Dossier médical
-    $this->_ref_dossier_medical->fillTemplate($template, "Sejour");
+    $this->loadRefDossierMedical()->fillTemplate($template, "Sejour");
     
-    if(CModule::getActive('dPprescription')){
-      // Chargement du fillTemplate de la prescription
+    // Prescription
+    if (CModule::getActive('dPprescription')){
       $this->loadRefsPrescriptions();
       $prescription = isset($this->_ref_prescriptions["sejour"]) ? $this->_ref_prescriptions["sejour"] : new CPrescription();
       $prescription->type = "sejour";
       $prescription->fillLimitedTemplate($template);
     }
 		
+    // RPU
 		$this->loadRefRPU();
 		if ($this->_ref_rpu) {
-		  // Ajout d'un fillTemplate du RPU
       $this->_ref_rpu->fillLimitedTemplate($template);
 		}
   }
