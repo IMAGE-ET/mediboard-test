@@ -130,16 +130,19 @@ CCAMSelector.init = function(){
   <tr>
     <th>{{mb_label object=$op field="type_anesth"}}</th>
     <td colspan="2">
-      <select name="type_anesth" onchange="submitAnesth(this.form);">
-        <option value="">&mdash; Type d'anesthésie</option>
-        {{foreach from=$listAnesthType item=curr_anesth}}
-        <option value="{{$curr_anesth->type_anesth_id}}" {{if $op->type_anesth == $curr_anesth->type_anesth_id}} selected="selected" {{/if}} >
-          {{$curr_anesth->name}}
-        </option>
-       {{/foreach}}
-      </select>
+      {{mb_field object=$op field="type_anesth" options=$listAnesthType onchange="submitAnesth(this.form);"}}
     </td>
   </tr> 
+
+  {{if $can->admin}}
+  <tr>
+    <th>{{mb_label object=$op field="anesth_id"}}</th>
+    <td colspan="2">
+      {{mb_field object=$op field="anesth_id" options=$anesthesistes"}}
+    </td>
+  </tr> 
+  {{/if}}
+  
 
   <tr>
     <th>{{mb_label object=$op field="_hour_op"}}</th>

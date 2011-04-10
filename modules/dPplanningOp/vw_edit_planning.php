@@ -7,9 +7,7 @@
 * @author Romain Ollivier
 */
 
-global $AppUI, $can, $m, $tab;
-
-$can->needsEdit();
+CCanDo::checkEdit();
 
 // Liste des Etablissements selon Permissions
 $etablissements = CMediusers::loadEtablissements(PERM_READ);
@@ -25,10 +23,9 @@ $today        = mbDate();
 $tomorow      = mbDate("+1 DAY");
 
 // L'utilisateur est-il un praticien
-$curr_user = new CMediusers;
-$curr_user->load($AppUI->user_id);
-if ($curr_user->isPraticien() and !$chir_id) {
-  $chir_id = $curr_user->user_id;
+$user = CAppUI::$user;
+if ($user->isPraticien() and !$chir_id) {
+  $chir_id = $user->_id;
 }
 
 // Chargement du praticien
@@ -51,11 +48,12 @@ if ($patient_id && !$operation_id && !$sejour_id) {
 }
 
 // Vérification des droits sur les praticiens
-if($curr_user->isAnesth()) {
+if ($user->isAnesth()) {
   $listPraticiens = $chir->loadPraticiens(null);
 } else {
   $listPraticiens = $chir->loadPraticiens(PERM_EDIT);
 }
+
 $categorie_prat = array();
 foreach($listPraticiens as &$_prat){
   $_prat->loadRefsFwd();
@@ -80,6 +78,9 @@ $listAnesthType = new CTypeAnesth;
 $orderanesth = "name";
 $listAnesthType = $listAnesthType->loadList(null,$orderanesth);
 
+// Liste des anesthésistes
+$anesthesistes = $user->loadAnesthesistes(PERM_READ);
+
 // On récupère l'opération
 $op = new COperation;
 $op->load($operation_id);
@@ -100,6 +101,7 @@ if ($op->_id){
   
   $patient =& $sejour->_ref_patient;
   
+  global $m, $tab;
 //  // On vérifie que l'utilisateur a les droits sur l'operation et le sejour
 //  if(!$op->canEdit() || !$sejour->canEdit()) {
 //    CAppUI::setMsg("Vous n'avez pas accès à cette opération", UI_MSG_WARNING);
@@ -217,6 +219,7 @@ $smarty->assign("prestations", $prestations);
 $smarty->assign("correspondantsMedicaux", $correspondantsMedicaux);
 $smarty->assign("listEtab"              , $listEtab);
 $smarty->assign("listAnesthType"        , $listAnesthType);
+$smarty->assign("anesthesistes"         , $anesthesistes);
 $smarty->assign("medecin_adresse_par"   , $medecin_adresse_par);
 
 $smarty->display("vw_edit_planning.tpl");

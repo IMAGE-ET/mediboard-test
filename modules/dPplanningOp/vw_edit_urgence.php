@@ -104,6 +104,9 @@ $listAnesthType = new CTypeAnesth;
 $orderanesth = "name";
 $listAnesthType = $listAnesthType->loadList(null,$orderanesth);
 
+// Liste des anesthésistes
+$anesthesistes = $chir->loadAnesthesistes(PERM_READ);
+
 // Compléments de chargement du séjour
 $sejour->makeDatesOperations();
 $sejour->loadNumDossier();
@@ -184,6 +187,7 @@ $smarty->assign("tomorow"   , $tomorow);
 $smarty->assign("categorie_prat", $categorie_prat);
 $smarty->assign("listPraticiens", $listPraticiens);
 $smarty->assign("listAnesthType", $listAnesthType);
+$smarty->assign("anesthesistes" , $anesthesistes);
 $smarty->assign("listServices"  , $listServices);
 $smarty->assign("etablissements", $etablissements);
 
