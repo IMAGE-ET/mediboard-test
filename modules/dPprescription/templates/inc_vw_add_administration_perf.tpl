@@ -30,7 +30,7 @@ refreshAdministrations = function(){
 
 </script>
 
-<form name="removeAdministration">
+<form name="removeAdministration" action="?" method="post">
   <input type="hidden" name="dosql" value="do_administration_aed" />
   <input type="hidden" name="m" value="dPprescription" />
   <input type="hidden" name="del" value="1" />
