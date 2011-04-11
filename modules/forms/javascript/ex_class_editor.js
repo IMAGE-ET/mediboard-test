@@ -104,14 +104,18 @@ ExClass = {
     $V(form.elements.callback, "");
     $V(form.del, 0);
       
+    // source parent
+    var oldParent = drag.up();
+      
     // dest = LIST
     if (drop.hasClassName("out-of-grid")) {
       var del = drag.get("field_id");
       
       $V(form.elements.callback, "");
-      
+		
       if (del) {
         drag.remove();
+        oldParent.update("&nbsp;");
         $V(form.del, 1);
       }
       else {
@@ -131,6 +135,7 @@ ExClass = {
       }
       
       drop.update(drag);
+      oldParent.update("&nbsp;");
       var id = drag.identify();
       $V(form.elements.callback, "ExClass.setHostFieldId.curry("+id+")");
     }
@@ -219,7 +224,7 @@ ExClass = {
           if (drag.hasClassName('hostfield')) {
             ExClass.submitLayoutHostField(drag, drop);
           }
-          else if (drag.hasClassName('field')) {
+          else if (drag.hasClassName('field') || drag.hasClassName('label')) {
             ExClass.submitLayout(drag, drop);
           }
 					else {
