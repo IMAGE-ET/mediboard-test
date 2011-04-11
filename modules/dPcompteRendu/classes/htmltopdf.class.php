@@ -9,10 +9,6 @@
 
 if (!is_dir("lib/dompdf")) return;
 
-CAppUI::requireModuleFile("dPcompteRendu", "dompdf_config");
-CAppUI::requireLibraryFile("dompdf/dompdf_config.inc");
-CAppUI::requireLibraryFile("dompdf/include/dompdf.cls");
-
 class CHtmlToPDF {
 
   var $nbpages = null;
@@ -58,6 +54,9 @@ class CHtmlToPDF {
   );
   
   function __construct() {
+		CAppUI::requireModuleFile("dPcompteRendu", "dompdf_config");
+		CAppUI::requireLibraryFile("dompdf/dompdf_config.inc");
+		
     $this->dompdf = new DOMPDF;
   }
 
@@ -70,7 +69,7 @@ class CHtmlToPDF {
 
   function generatePDF($content, $stream, $format, $orientation, $file) {
   	$this->content = $this->fixBlockElements($content);
-  	$this->content = preg_replace("/\[Général - numéro de page\]/", "<span class='page'></span>", $this->content);
+  	$this->content = str_replace("[Général - numéro de page]", "<span class='page'></span>", $this->content);
   	
     $this->dompdf->set_paper($format, $orientation);
     $this->dompdf->set_protocol(isset($_SERVER["HTTPS"]) ? "https://" : "http://");
