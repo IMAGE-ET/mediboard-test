@@ -1,7 +1,7 @@
 <script type="text/javascript">
 
 function setClose(date, salle_id) {
-  var form = document.frmSelector;
+  var form = getForm("plageSelectorFrm");;
   
   var list = form.list;
   if(date == '') {
@@ -28,13 +28,13 @@ function setClose(date, salle_id) {
     min_entree  = form.min_veille.value;
   }
     
-  window.opener.PlageOpSelector.set(plage_id, salle_id, date, adm, typeHospi, hour_entree, min_entree);  
+  window.parent.PlageOpSelector.set(plage_id, salle_id, date, adm, typeHospi, hour_entree, min_entree);  
   window.close();
 }  
 
 Main.add(function () {
-  var oFormSejour = window.opener.document.editSejour;
-  var form = document.frmSelector;   
+  var oFormSejour = window.parent.document.editSejour;
+  var form = getForm("plageSelectorFrm");   
   $V(form.admission, "aucune");
   if (!oFormSejour.sejour_id.value) {
     $V(form.admission, ["ambu", "exte"].include(oFormSejour.type.value) ? "jour" : "veille");
@@ -74,7 +74,7 @@ Main.add(function () {
   </tr>
 </table>
 
-<form action="?" name="frmSelector" method="get">
+<form action="?" name="plageSelectorFrm" method="get">
 <input type="hidden" name="m" value="dPplanningOp" />
 <input type="hidden" name="a" value="plage_selector" />
 <input type="hidden" name="dialog" value="1" />
@@ -201,7 +201,7 @@ Main.add(function () {
             }}
             <input type="radio" name="list" value="{{$_plage->plageop_id}}"
                ondblclick="setClose('{{$_plage->date}}', '{{$_plage->salle_id}}')"
-               onclick="document.frmSelector._date.value='{{$_plage->date}}'; document.frmSelector._salle_id.value='{{$_plage->salle_id}}';"/>
+               onclick="getForm('plageSelectorFrm')._date.value='{{$_plage->date}}'; getForm('plageSelectorFrm')._salle_id.value='{{$_plage->salle_id}}';"/>
             {{else}}
               <img src="images/icons/warning.png" 
                 {{if $_plage->max_intervention && $_plage->_nb_operations >= $_plage->max_intervention}}

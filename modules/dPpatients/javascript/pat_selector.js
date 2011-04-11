@@ -19,7 +19,6 @@ var PatSelector = {
   pop: function() {
     var url = new Url("dPpatients", "pat_selector");
     url.addParam("useVitale", this.options.useVitale);
-    //url.popup(this.options.width, this.options.height, "Patient");
     url.modale(this.options);
   },
   

@@ -33,15 +33,16 @@ PlageOpSelector = {
       url.addParam("curr_op_min" , iMin_op);
       url.addParam("group_id"    , iGroup_id);
       url.addParam("operation_id", iOperation_id);
-      url.popup(this.options.width, this.options.height, "Plage");
+      url.modale(this.options);
+      //url.popup(this.options.width, this.options.height, "Plage");
     }
   },
 
   set: function(plage_id, salle_id, sDate, bAdm, typeHospi, hour_entree, min_entree) {
     // Declaration de formulaires
-    var oOpForm     = document.editOp;
-    var oSejourForm = document.editSejour;
-    var oOpFormEasy = document.editOpEasy;
+    var oOpForm     = getForm("editOp");
+    var oSejourForm = getForm("editSejour");
+    var oOpFormEasy = getForm("editOpEasy");
     
     if(!oSejourForm._duree_prevue.value) {
       oSejourForm._duree_prevue.value = 0;
@@ -93,8 +94,8 @@ PlageOpSelector = {
   
   
   doSet: function(){
-    var oOpForm     = document.editOp;
-    var oSejourForm = document.editSejour;
+    var oOpForm     = getForm("editOp");
+    var oSejourForm = getForm("editSejour");
    
     $V(oOpForm[PlageOpSelector.sPlage_id], PlageOpSelector.prepared.plage_id);
     $V(oOpForm[PlageOpSelector.sSalle_id], PlageOpSelector.prepared.salle_id);
