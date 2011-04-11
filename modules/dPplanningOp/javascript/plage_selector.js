@@ -19,10 +19,7 @@ PlageOpSelector = {
     dAdm : null
   },
   
-  options : {
-    width : 600,
-    height: 450
-  },
+  options : {},
 
   pop: function(iChir, iHour_op, iMin_op, iGroup_id, iOperation_id) {
     if (checkChir() && checkDuree()) {

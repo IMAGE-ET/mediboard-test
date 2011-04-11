@@ -26,25 +26,23 @@ ProtocoleSelector = {
   sProtoPrescChir  : null,
   sServiceId	   : null,
   sServiceId_easy  : null,
-  options : {
-    width : 800,
-    height: 500
-  },
+  options : {},
 
   pop: function() {
-    var oForm     = (this.sForm && getForm(this.sForm)) || document.editOp;
-    var oFormEasy = document.editOpEasy;
-    var oSejourForm = document.editSejour;
+    var oForm     = (this.sForm && getForm(this.sForm)) || getForm("editOp");
+    var oFormEasy = getForm("editOpEasy");
+    var oSejourForm = getForm("editSejour");
     var url = new Url("dPplanningOp", "vw_protocoles");
     url.addParam("chir_id", oForm[this.sChir_id].value);
     url.setFragment(this.sForSejour == 1 ? 'sejour': 'interv');
-    url.popup(this.options.width, this.options.height, "Protocole");
+    //url.popup(this.options.width, this.options.height, "Protocole");
+    url.modale(this.options);
   },
   
   set: function(protocole, libelle) {
-    var oOpForm     = document.editOp;
-    var oSejourForm = document.editSejour;
-    var oOpFormEasy = document.editOpEasy;
+    var oOpForm     = getForm("editOp");
+    var oSejourForm = getForm("editSejour");
+    var oOpFormEasy = getForm("editOpEasy");
     
     // Champs de l'intervention
     if (oOpForm) {

@@ -15,7 +15,7 @@
 {{/if}}
 
 setClose = function(type, protocole_id, libelle) {
-  window.opener.ProtocoleSelector.set(aProtocoles[type][protocole_id], libelle);
+  window.parent.ProtocoleSelector.set(aProtocoles[type][protocole_id], libelle);
   window.close();
 }
 
