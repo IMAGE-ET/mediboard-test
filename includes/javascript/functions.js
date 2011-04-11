@@ -913,6 +913,10 @@ window.modal = function(container, options) {
 // Multiple mocals
 Object.extend(Control.Modal,{
     stack: [],
+    close: function(){
+			if (!Control.Modal.stack.length) return;
+			Control.Modal.stack.last().close();
+    },
     Observers: {
         beforeOpen: function(){
             if(!this.overlayFinishedOpening && Control.Modal.stack.length == 0){
