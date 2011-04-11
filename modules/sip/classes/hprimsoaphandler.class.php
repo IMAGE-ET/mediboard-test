@@ -8,7 +8,7 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
  */
 
-CAppUI::loadClass("CSoapHandler");
+CAppUI::requireModuleClass("webservices", "soap_handler");
 
 /**
  * The CHprimSoapHandler class
@@ -106,14 +106,14 @@ class CHprimSoapHandler extends CSoapHandler {
         $messageAcquittement = $domGetEvenement->enregistrementPatient($domAcquittement, $newPatient, $data);
       } 
       // Fusion de deux ipp
-      else if($domGetEvenement instanceof CHPrimXMLFusionPatient) {
+      /*else if($domGetEvenement instanceof CHPrimXMLFusionPatient) {
         $data = array_merge($data, $domGetEvenement->getContentsXML());
         $echange_hprim->id_permanent = $data['idSourcePatient'];
         if ($messageAcquittement = $domGetEvenement->isActionValide($data['action'], $domAcquittement)) {
           return $messageAcquittement;
         }
         $messageAcquittement = $domGetEvenement->fusionPatient($domAcquittement, $newPatient, $data);
-      } 
+      } */
       // Venue d'un patient dans l'établissement avec son numéro de venue
       else if($domGetEvenement instanceof CHPrimXMLVenuePatient) {
         $data = array_merge($data, $domGetEvenement->getContentsXML());
