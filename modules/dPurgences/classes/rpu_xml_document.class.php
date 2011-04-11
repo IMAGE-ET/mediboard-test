@@ -87,7 +87,7 @@ class CRPUXMLDocument extends CMbXMLDocument {
     }
     $this->addElement($elParent, "TRANSPORT", strtoupper($mbObject->transport));
     $this->addElement($elParent, "TRANSPORT_PEC", strtoupper($mbObject->pec_transport));
-    $this->addElement($elParent, "MOTIF", $mbObject->motif);
+    $this->addElement($elParent, "MOTIF", htmlspecialchars($mbObject->motif));
     $this->addElement($elParent, "GRAVITE", strtoupper($mbObject->ccmu));
 
     $this->addElement($elParent, "DP", $mbObject->_DP[0].preg_replace("/[^\d]/", "", substr($mbObject->_DP, 1)));
