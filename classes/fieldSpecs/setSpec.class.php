@@ -50,12 +50,6 @@ class CSetSpec extends CEnumSpec {
     }
   }
   
-  function sample(&$object, $consistent = true){
-    parent::sample($object, $consistent);
-    $specFragments = $this->class ? $this->getClassList() : explode('|', $this->list);
-    $object->{$this->fieldName} = self::randomString($specFragments, 1);
-  }
-  
   function getFormHtmlElement($object, $params, $value, $className){
     $field         = htmlspecialchars($this->fieldName);
     $locales       = $this->_locales;

@@ -910,6 +910,43 @@ window.modal = function(container, options) {
   return Control.Modal.open(container, options);
 };
 
+// Multiple mocals
+Object.extend(Control.Modal,{
+    stack: [],
+    Observers: {
+        beforeOpen: function(){
+            if(!this.overlayFinishedOpening && Control.Modal.stack.length == 0){
+                Control.Overlay.observeOnce('afterShow',function(){
+                    this.overlayFinishedOpening = true;
+                    this.open();
+                }.bind(this));
+                Control.Overlay.show(this.options.overlayOpacity,this.options.fade ? this.options.fadeDuration : false);
+                throw $break;
+            }/*else
+            Control.Window.windows.without(this).invoke('close');*/
+        },
+        afterOpen: function(){
+            //Control.Modal.current = this;
+            var overlay = Control.Overlay.container;
+            Control.Modal.stack.push(this);
+            overlay.style.zIndex = this.container.style.zIndex - 1;
+        },
+        afterClose: function(){
+          Control.Modal.stack.pop().close();
+					
+          if (Control.Modal.stack.length == 0) {
+            Control.Overlay.hide(this.options.fade ? this.options.fadeDuration : false);
+          }
+          else {
+						var overlay = Control.Overlay.container;
+            overlay.style.zIndex = Control.Modal.stack.last().container.style.zIndex - 1;
+          }
+            //Control.Modal.current = false;
+            this.overlayFinishedOpening = false;
+        }
+    }
+});
+
 Class.extend(Control.Modal, {
   restore: function() {
     this.container.removeClassName("modal");
