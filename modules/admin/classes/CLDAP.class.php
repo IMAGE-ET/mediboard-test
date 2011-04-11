@@ -52,7 +52,7 @@ class CLDAP {
       $person = $user->user_username;
     }
     if (!$filter) {
-      $filter="(samaccountname=$person*)";
+      $filter="(samaccountname=$person)";
     }
 
     $results = $source_ldap->ldap_search($ldapconn, $filter);
