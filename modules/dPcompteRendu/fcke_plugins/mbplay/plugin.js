@@ -25,8 +25,8 @@ CKEDITOR.plugins.add('mbplay',{
 
 function unescapeHtml(str) {
   var temp = document.createElement("div");
-  if (/^\s*$/.test(str)) {
-    return str;
+  if (/^\s*$/.test(str) || str == null) {
+    return '';
   }
   temp.innerHTML = str;
   var result = temp.childNodes[0].nodeValue;
@@ -99,18 +99,20 @@ function mbplay_onclick(editor) {
     
     // Cas des listes de choix
     if (class_span == "name") {
-      var listes = window_parent.$$("div.listeChoixCR")[0].select("select");
-      window_parent.$A(listes).each(function(list) {
-        var list_name = unescapeHtml(list.getAttribute("data-nom"));
-        if (list_name && list_name.indexOf(name_escape) != -1) {
-          // On supprime la 1ère option (nom de la liste de choix)
-          window_parent.Element.remove(list.down());
-          list.selectedIndex = -1;
-          Element.setStyle(list, {width: "100%"});
-          element = list;
-          throw window_parent.$break;
-        }
-      });
+      if (window_parent.$$("div.listeChoixCR").length != 0) {
+        var listes = window_parent.$$("div.listeChoixCR")[0].select("select");
+        window_parent.$A(listes).each(function(list) {
+          var list_name = unescapeHtml(list.getAttribute("data-nom"));
+          if (list_name && list_name.indexOf(name_escape) != -1) {
+            // On supprime la 1ère option (nom de la liste de choix)
+            window_parent.Element.remove(list.down());
+            list.selectedIndex = -1;
+            Element.setStyle(list, {width: "100%"});
+            element = list;
+            throw window_parent.$break;
+          }
+        });
+      }
     }
     // Zones de texte libre
     else {
