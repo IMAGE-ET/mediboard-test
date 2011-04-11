@@ -1612,6 +1612,7 @@ class CSejour extends CCodable implements IPatientRelated {
     $template->addListProperty("Sejour - Suivi médical", $suivi_medical);
 		    
     // Interventions
+    $operations = array();
     foreach ($this->loadRefsOperations() as $_operation) {
     	$_operation->loadRefPlageOp(true);
     	$datetime = $_operation->getFormattedValue("_datetime");
