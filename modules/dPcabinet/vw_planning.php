@@ -162,9 +162,14 @@ foreach($listDays as $keyDate=>$valDate){
     $plage->countPatients();
     $plage->debut = mbTimeGetNearestMinsWithInterval($plage->debut, CPlageconsult::$minutes_interval);
     $plage->fin   = mbTimeGetNearestMinsWithInterval($plage->fin  , CPlageconsult::$minutes_interval);
+    // Si la plage se finit à 23h59, il faut y rester sinon on passe au lendemain.
+    if ($plage->fin == "24:00:00") {
+      $plage->fin = "23:59:59";
+    }
     $min = $min > $plage->debut ? $plage->debut : $min;
     $max = $max < $plage->fin ? $plage->fin : $max;
     $plage->updateFormFields();
+    
     if($plage->debut >= $plage->fin){
       unset($listPlages[$keyDate][$plage->_id]);
     }
@@ -172,8 +177,15 @@ foreach($listDays as $keyDate=>$valDate){
 
   foreach($listPlages[$keyDate] as $plage){
     $plage->_nb_intervals = mbTimeCountIntervals($plage->debut, $plage->fin, "00:".CPlageconsult::$minutes_interval.":00");
-    for($time = $plage->debut; $time < $plage->fin; $time = mbTime("+".CPlageconsult::$minutes_interval." minutes", $time) ){
+    $i = 0;
+    for($time = $plage->debut; $time <= $plage->fin; $time = mbTime("+".CPlageconsult::$minutes_interval." minutes", $time) ){
+      // Si la plage se finit à 23h59, alors on sort losque tous les créneaux sont passés.
+      // time vaut alors 00:00:00, mais de la journée suivante.
+      if ($i == $plage->_nb_intervals) {
+        break;
+      }
       $affichages["$keyDate $time"] = "full";
+      $i++;
     } 
     $affichages["$keyDate $plage->debut"] = $plage->_id;
   }
@@ -230,7 +242,7 @@ foreach ($listDays as $keyDate=>$valDate){
     }
   }
 }
-
+mbTrace($affichages,'',1);
 // Création du template
 $smarty = new CSmartyDP();
 
