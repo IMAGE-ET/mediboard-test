@@ -49,7 +49,7 @@ class CAdministration extends CMbMetaObject implements IPatientRelated {
   function getBackProps() {
     $backProps = parent::getBackProps();
     $backProps["transmissions"]  = "CTransmissionMedicale object_id";
-    $backProps["echanges_phast"] = "CPhastEchange object_id";
+    //$backProps["echanges_phast"] = "CPhastEchange object_id";
     return $backProps;
   }
   
