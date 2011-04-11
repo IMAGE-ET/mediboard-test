@@ -2,7 +2,6 @@
 <script type="text/javascript">
 Main.add(function(){
   Control.Tabs.create("field_groups_layout");
-  Control.Tabs.create("class-message-layout-tabs");
 });
 </script>
 
@@ -150,19 +149,25 @@ Main.add(function(){
 <div id="group-layout-{{$groups.$_group_id->_guid}}" style="display: none;" class="group-layout">
   
 <div class="out-of-grid droppable">
-	<ul class="control_tabs" id="class-message-layout-tabs">
+	<script type="text/javascript">
+	Main.add(function(){
+	  Control.Tabs.create("class-message-layout-tabs-{{$_group_id}}");
+	});
+	</script>
+	
+	<ul class="control_tabs" id="class-message-layout-tabs-{{$_group_id}}">
     <li>
-      <a href="#outofgrid-class-fields">Champs</a>
+      <a href="#outofgrid-class-fields-{{$_group_id}}">Champs</a>
     </li>
 		<li>
-			<a href="#outofgrid-hostfields-and-messages">Champs de {{tr}}{{$ex_class->host_class}}{{/tr}} / Messages</a>
+			<a href="#outofgrid-hostfields-and-messages-{{$_group_id}}">Champs de {{tr}}{{$ex_class->host_class}}{{/tr}} / Messages</a>
 		</li>
 	</ul>
 	<hr class="control_tabs" />
 	
   <table class="main tbl" style="table-layout: fixed;">
 	  <!-- Fields -->
-    <tbody id="outofgrid-class-fields" style="display: none;">
+    <tbody id="outofgrid-class-fields-{{$_group_id}}" style="display: none;">
 	    <tr>
 	      <th>Libellés</th>
 	      <th>Champs</th>
@@ -183,7 +188,7 @@ Main.add(function(){
     </tbody>
 		
 		<!-- Messages -->
-    <tbody id="outofgrid-hostfields-and-messages" style="display: none;">
+    <tbody id="outofgrid-hostfields-and-messages-{{$_group_id}}" style="display: none;">
       <tr>
         <th>
           {{if $ex_class->host_class != "CMbObject"}}

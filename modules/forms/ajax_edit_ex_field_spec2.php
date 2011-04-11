@@ -101,11 +101,6 @@ $items_sub = array();
 $items_all = array();
 
 if ($spec instanceof CEnumSpec) {
-	unset($spec->_locales[""]);
-	if (reset($spec->_list) === "") {
-		unset($spec->_list[0]);
-	}
-	
 	if($list_owner->_id) {
 	  $list_owner->updateEnumSpec($spec);
 		$prop .= " ".implode("|", $spec->_list);

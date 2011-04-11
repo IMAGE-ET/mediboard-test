@@ -21,9 +21,23 @@ class CEnumSpec extends CMbFieldSpec {
   
   function __construct($className, $field, $prop = null, $aProperties = array()) {
     parent::__construct($className, $field, $prop, $aProperties);
-    foreach ($this->_list = explode('|', $this->list) as $value) {
+
+    $this->_list = $this->getListValues($this->list);
+    $this->_locales = array();
+    
+    foreach ($this->_list as $value) {
       $this->_locales[$value] = CAppUI::tr("$className.$field.$value");
     }
+  }
+	
+  protected function getListValues($string){
+    $list = array();
+    
+    if ($string !== "" && $string !== null) {
+      $list = explode('|', $string);
+    }
+    
+    return $list;
   }
   
   function getSpecType() {
@@ -57,7 +71,7 @@ class CEnumSpec extends CMbFieldSpec {
   
   function checkProperty($object){
     $propValue = $object->{$this->fieldName};
-    $specFragments = explode('|', $this->list);
+    $specFragments = $this->getListValues($this->list);
     if (!in_array($propValue, $specFragments)) {
       return "N'a pas une valeur possible";
     }
@@ -65,7 +79,7 @@ class CEnumSpec extends CMbFieldSpec {
   
   function sample(&$object, $consistent = true){
     parent::sample($object, $consistent);
-    $specFragments = explode('|', $this->list);
+    $specFragments = $this->getListValues($this->list);
     $object->{$this->fieldName} = self::randomString($specFragments, 1);
   }
   

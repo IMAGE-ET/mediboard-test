@@ -305,16 +305,18 @@ hr.control_tabs {
   clear: both;
   border: none;
   border-top: 1px solid #458;
+	margin-bottom: 0;
 }
   
 ul.control_tabs,
 ul.control_tabs_vertical {
   list-style: none;
   clear: both;
-  padding: 3px 6px;
+  padding: 1px 6px;
 }
   
-ul.full_width li {
+ul.full_width li,
+ul.control_tabs.wide li {
 	width: 100%;
 }
 
@@ -323,6 +325,7 @@ ul.control_tabs_vertical li {
   float: left;
   margin: 0px 2px;
   text-align: center;
+	margin-top: 2px;
 }
 
 ul.control_tabs li.linebreak, 
@@ -442,10 +445,6 @@ ul.control_tabs_vertical.small li a {
 	font-size: 1em; 
 	padding: 2px 5px;
 	font-weight: normal;
-}
-
-ul.control_tabs.wide li {
-  width: 100%;
 }
 
 div.progressBar {

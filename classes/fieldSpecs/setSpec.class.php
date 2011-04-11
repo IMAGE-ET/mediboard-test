@@ -29,7 +29,7 @@ class CSetSpec extends CEnumSpec {
   
   function getValue($object, $smarty = null, $params = array()) {
     $fieldName = $this->fieldName;
-    $propValue = explode('|', $object->$fieldName);
+    $propValue = $this->getListValues($object->$fieldName);
 		
     $ret = array();
     foreach ($propValue as $_value) {
@@ -40,8 +40,8 @@ class CSetSpec extends CEnumSpec {
   }
   
   function checkProperty($object){
-    $propValue = explode('|', $object->{$this->fieldName});
-    $specFragments = explode('|', $this->list);
+    $propValue = $this->getListValues($object->{$this->fieldName});
+    $specFragments = $this->getListValues($this->list);
 
     $diff = array_diff($propValue, $specFragments);
 
@@ -87,7 +87,7 @@ class CSetSpec extends CEnumSpec {
       asort($locales); 
     }
     
-    $value = explode("|", $value);
+    $value = $this->getListValues($value);
     
     switch ($typeEnum) {
       case "select":

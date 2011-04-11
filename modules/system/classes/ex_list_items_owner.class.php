@@ -45,7 +45,6 @@ class CExListItemsOwner extends CMbObject {
       $spec->_locales[$_item->_id] = $_item->name;
     }
     
-    unset($spec->_locales[""]);
     $spec->_list = array_keys($spec->_locales);
     
     return $spec;
