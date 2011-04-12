@@ -32,9 +32,9 @@
     <script type="text/javascript">
       // Pour empecher de deplacer une case ou il y a plusieurs prises
       var draggable_planif = $("drag_{{$line_id}}_{{$unite_prise|md5}}_{{$_planif_systeme->dateTime|iso_date}}_{{$_planif_systeme->dateTime|date_format:"%H"}}_{{$_planif_systeme->_quantite}}_");
-      new Draggable("drag_{{$line_id}}_{{$unite_prise|md5}}_{{$_planif_systeme->dateTime|iso_date}}_{{$_planif_systeme->dateTime|date_format:"%H"}}_{{$_planif_systeme->_quantite}}_", oDragOptions);
+      new Draggable("drag_{{$line_id}}_{{$unite_prise|md5}}_{{$_planif_systeme->dateTime|iso_date}}_{{$_planif_systeme->dateTime|date_format:"%H"}}_{{$_planif_systeme->_quantite}}_", PlanSoins.oDragOptions);
       draggable_planif.onmousedown = function(){
-        addDroppablesDiv(draggable_planif);
+        PlanSoins.addDroppablesDiv(draggable_planif);
       }
     </script>
   {{/foreach}}
@@ -130,12 +130,12 @@
 					  		{{if ($line->_fin_reelle && ($line->_fin_reelle|date_format:"%Y-%m-%d %H:00:00" < $_date_hour)) || $line->_debut_reel|date_format:"%Y-%m-%d %H:00:00" > $_date_hour || !$line->_active}}
 						      style="background-color: #ccc"
 						      {{if $conf.dPprescription.CAdministration.hors_plage}}
-						        onclick='toggleSelectForAdministration(this, {{$line_id}}, "{{$quantite}}", "{{$unite_prise}}", "{{$line_class}}","{{$_date}} {{$_hour}}:00:00");'
-					          ondblclick='addAdministration({{$line_id}}, "{{$quantite}}", "{{$unite_prise}}", "{{$line_class}}","{{$_date}} {{$_hour}}:00:00","{{$list_administrations}}","{{$planification_id}}","{{$multiple_adm}}");'
+						        onclick='PlanSoins.toggleSelectForAdministration(this, {{$line_id}}, "{{$quantite}}", "{{$unite_prise}}", "{{$line_class}}","{{$_date}} {{$_hour}}:00:00");'
+					          ondblclick='PlanSoins.addAdministration({{$line_id}}, "{{$quantite}}", "{{$unite_prise}}", "{{$line_class}}","{{$_date}} {{$_hour}}:00:00","{{$list_administrations}}","{{$planification_id}}","{{$multiple_adm}}");'
 						      {{/if}}
 						    {{else}}
-						      onclick='toggleSelectForAdministration(this, {{$line_id}}, "{{$quantite}}", "{{$unite_prise}}", "{{$line_class}}","{{$_date}} {{$_hour}}:00:00","{{$list_administrations}}","{{$planification_id}}");'
-					        ondblclick='addAdministration({{$line_id}}, "{{$quantite}}", "{{$unite_prise}}", "{{$line_class}}","{{$_date}} {{$_hour}}:00:00","{{$list_administrations}}","{{$planification_id}}","{{$multiple_adm}}");'
+						      onclick='PlanSoins.toggleSelectForAdministration(this, {{$line_id}}, "{{$quantite}}", "{{$unite_prise}}", "{{$line_class}}","{{$_date}} {{$_hour}}:00:00","{{$list_administrations}}","{{$planification_id}}");'
+					        ondblclick='PlanSoins.addAdministration({{$line_id}}, "{{$quantite}}", "{{$unite_prise}}", "{{$line_class}}","{{$_date}} {{$_hour}}:00:00","{{$list_administrations}}","{{$planification_id}}","{{$multiple_adm}}");'
 						    {{/if}}
 						  
 						     class="{{if $quantite!="-" && @$line->_quantity_by_date.$unite_prise.$_date.quantites.$_hour|@count < 5}}draggablePlanif{{/if}} administration
@@ -200,8 +200,8 @@
 											  a_administrer 
 											{{/if}}" 
 											style="margin: 2px;"
-											onclick='toggleSelectForAdministration(this,{{$line_id}}, "{{$_sub_adm.quantite}}", "{{$unite_prise}}", "{{$line_class}}","{{$_date}} {{$_sub_adm.full_hour}}:00");'
-                      ondblclick='addAdministration({{$line_id}}, "{{$_sub_adm.quantite}}", "{{$unite_prise}}", "{{$line_class}}","{{$_date}} {{$_sub_adm.full_hour}}:00","","");'>
+											onclick='PlanSoins.toggleSelectForAdministration(this,{{$line_id}}, "{{$_sub_adm.quantite}}", "{{$unite_prise}}", "{{$line_class}}","{{$_date}} {{$_sub_adm.full_hour}}:00");'
+                      ondblclick='PlanSoins.addAdministration({{$line_id}}, "{{$_sub_adm.quantite}}", "{{$unite_prise}}", "{{$line_class}}","{{$_date}} {{$_sub_adm.full_hour}}:00","","");'>
 									  
 										{{$_sub_adm.full_hour|date_format:"%Hh%M"}}:
 										{{if isset($adm_in_hour.$minute|smarty:nodefaults) && $adm_in_hour.$minute != $_sub_adm.quantite}}
@@ -222,7 +222,7 @@
 					{{if $quantite && @$line->_quantity_by_date.$unite_prise.$_date.quantites.$_hour|@count < 5}}
 			    <script type="text/javascript">
 			      // Pour empecher de deplacer une case ou il y a plusieurs prises
-		        drag = new Draggable("drag_{{$line_id}}_{{$unite_prise|md5}}_{{$_date}}_{{$heure_reelle}}_{{$_quantite}}_{{$planification_id}}", oDragOptions);
+		        drag = new Draggable("drag_{{$line_id}}_{{$unite_prise|md5}}_{{$_date}}_{{$heure_reelle}}_{{$_quantite}}_{{$planification_id}}", PlanSoins.oDragOptions);
           </script>
 				  {{/if}}
 

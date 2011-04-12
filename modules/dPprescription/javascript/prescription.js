@@ -431,7 +431,7 @@ Prescription = {
       if(object_class == 'CPrescriptionLineMix'){
         url.requestUpdate("line_"+object_class+"-"+object_id, { onComplete: function() { 
           $("line_"+object_class+"-"+object_id).hide();
-          moveDossierSoin($("line_"+object_class+"-"+object_id));
+          PlanSoins.moveDossierSoin($("line_"+object_class+"-"+object_id));
         } } );
       }
       else {
@@ -457,7 +457,7 @@ Prescription = {
         url.requestUpdate(first_td, {
           insertion: Insertion.After,
           onComplete: function(){
-            moveDossierSoin($("line_"+object_class+"_"+object_id+"_"+unite_prise));
+            PlanSoins.moveDossierSoin($("line_"+object_class+"_"+object_id+"_"+unite_prise));
 					  first_td.hide().colSpan = 1;
           }
         } );
@@ -476,7 +476,7 @@ Prescription = {
           chapitre = "_cat-"+chapitre;
         }
 				if($(chapitre)){
-          url.requestUpdate(chapitre, { onComplete: function() { moveDossierSoin($(chapitre)); } } );
+          url.requestUpdate(chapitre, { onComplete: function() { PlanSoins.moveDossierSoin($(chapitre)); } } );
         }
 				
 			} else {

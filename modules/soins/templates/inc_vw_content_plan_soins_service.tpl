@@ -1,50 +1,116 @@
-<table class="tbl" id="">
+<script type="text/javascript">
+	
+Main.add(function(){
+	PlanSoins.init({
+		composition_dossier: {{$composition_dossier|@json}}, 
+		date: "{{$date}}", 
+		manual_planif: "{{$conf.dPprescription.CPrescription.manual_planif}}",
+	  bornes_composition_dossier:  {{$bornes_composition_dossier|@json}}
+	});
+
+  $("plan_soin").show();
+	PlanSoins.moveDossierSoin($('plan_soin'));
+});
+
+</script>
+
+<table class="tbl" id="plan_soin" style="display: none;">
 	<tr>
-	  <th class="title">
+	  <th class="title" colspan="100">
 	    <button class="change notext" style="float: left" onclick="updatePlanSoinsPatients();">{{tr}}Refresh{{/tr}}</button>
-	    Patients
-	  </th>
-		<th class="title">
-		  Ligne - Prises
-		</th>	
-	  <th class="title">08</th>
-	  <th class="title">09</th>
-	  <th class="title">10</th>
-	  <th class="title">11</th>
-	  <th class="title">12</th>
-	  <th class="title">13</th>
-	  <th class="title">14</th>
-	  <th class="title">15</th>
-	  <th class="title">16</th>
-	  <th class="title">17</th>
-	  <th class="title">18</th>
-	  <th class="title">19</th>
-	  <th class="title">20</th>   
-	</tr>
-	{{foreach from=$lines_by_patient key=patient_id item=_lines}}
-	  <tr>
-	  	<th rowspan="{{$_lines|@count}}" class="narrow">
-	  		{{assign var=patient value=$patients.$patient_id}}
-        {{$patient->_view}}
-	  	</th>
-		
-	  {{foreach from=$_lines item=_line name=elts}}
-		  {{if !$smarty.foreach.elts.first}}
-		  <tr>
-		  {{/if}}
-		   <td class="text" style="width: 20%;">
-		  		{{$_line->_view}}
-					
-					{{if $_line->_ref_prises|@count}}
-					  <br />
-	          <span style="opacity: 0.7">
-			  		{{foreach from=$_line->_ref_prises item=_prise name=prises}}
-						{{$_prise->_view}}{{if !$smarty.foreach.prises.last}}, {{/if}}
-					  {{/foreach}}
-						</span>
-					{{/if}}
-		  	</td>
-	    </tr>   
+			<form name="mode_dossier_soin" action="?" method="get">
+        <label>
+          <input type="radio" name="mode_dossier" value="administration" {{if $mode_dossier == "administration" || $mode_dossier == ""}}checked="checked"{{/if}} 
+                 onclick="PlanSoins.viewDossierSoin($('plan_soin'));"/>Administration
+        </label>
+        <label>
+          <input type="radio" name="mode_dossier" value="planification" {{if $mode_dossier == "planification"}}checked="checked"{{/if}} 
+                 onclick="PlanSoins.viewDossierSoin($('plan_soin'));" />Planification
+        </label>
+     </form>
+		 
+		 <button type="button" class="tick" onclick="PlanSoins.applyAdministrations();" id="button_administration">
+     </button>
+	</th>
+</tr>
+   <tr>
+      {{if $conf.dPprescription.CPrescription.show_categories_plan_soins}}
+      <th rowspan="2" class="title">Catégorie</th>
+      {{/if}}
+			<th rowspan="2" class="title">Patient</th>
+      <th rowspan="2" class="title">Libellé</th>
+      <th rowspan="2" class="title">Posologie</th>
+      
+      {{foreach from=$tabHours key=_date item=_hours_by_moment}}
+        {{foreach from=$_hours_by_moment key=moment_journee item=_dates}}
+          <th class="{{$_date}}-{{$moment_journee}} title"
+              colspan="{{if $moment_journee == 'soir'}}{{$count_soir}}{{/if}}
+                       {{if $moment_journee == 'nuit'}}{{$count_nuit}}{{/if}}
+                       {{if $moment_journee == 'matin'}}{{$count_matin}}{{/if}}">
+                       
+            <a href="#1" onclick="PlanSoins.showBefore()" style="float: left" onmousedown="periodicalBefore = new PeriodicalExecuter(PlanSoins.showBefore, 0.2);" onmouseup="periodicalBefore.stop();">
+              <img src="images/icons/prev.png" alt="&lt;"/>
+            </a>        
+            <a href="#1" onclick="PlanSoins.showAfter()" style="float: right" onmousedown="periodicalAfter = new PeriodicalExecuter(PlanSoins.showAfter, 0.2);" onmouseup="periodicalAfter.stop();">
+              <img src="images/icons/next.png" alt="&gt;" />
+            </a>     
+            <strong>
+              <a href="#1" onclick="PlanSoins.selColonne('{{$_date}}-{{$moment_journee}}')">
+                {{$moment_journee}} du {{$_date|date_format:"%d/%m"}}
+              </a>
+            </strong>
+          </th>
+        {{/foreach}} 
+      {{/foreach}}
+      <th colspan="2" class="title">Sign.</th>
+    </tr>
+		<tr>
+      <th></th>
+      {{if $conf.dPprescription.CPrescription.manual_planif}}
+        <th>x</th>
+      {{/if}}
+      {{foreach from=$tabHours key=_date item=_hours_by_moment}}
+        {{foreach from=$_hours_by_moment key=moment_journee item=_dates}}
+          {{foreach from=$_dates key=_date_reelle item=_hours}}
+            {{foreach from=$_hours key=_heure_reelle item=_hour}}
+              <th class="{{$_date}}-{{$moment_journee}}" 
+                  style='width: 50px; text-align: center; 
+                {{if array_key_exists("$_date $_hour:00:00", $operations)}}border-right: 3px solid black;{{/if}}'>
+                <a href="#1" onclick="PlanSoins.selColonne('{{$_date}}-{{$_hour}}');">{{$_hour}}h</a>
+                {{if array_key_exists("$_date $_hour:00:00", $operations)}}
+                  {{assign var=_hour_op value="$_date $_hour:00:00"}}
+                  <a style="color: white; font-weight: bold; font-style: normal;" href="#" title="Intervention à {{$operations.$_hour_op|date_format:'%Hh%M'}}">Interv.</a>
+                {{/if}}
+              </th>   
+            {{/foreach}}
+          {{/foreach}}
+        {{/foreach}} 
+      {{/foreach}}
+      <th></th>
+      <th>Dr</th>
+      <th>Ph</th>
+    </tr>
+
+  {{assign var=first_iteration value=1}}
+	{{foreach from=$prescriptions item=prescription name="foreach_presc"}}
+    {{foreach from=$prescription->_ref_lines_elt_for_plan key=name_chap item=_elements_by_chap}}
+		  {{foreach from=$_elements_by_chap item=elements_cat key=name_cat name="foreach_chap"}}
+        {{assign var=categorie value=$categories.$name_chap.$name_cat}}
+        {{foreach from=$elements_cat item=_element name="foreach_cat"}}
+          {{foreach from=$_element key=unite_prise item=element name="foreach_elt"}}       
+            {{include file="../../dPprescription/templates/inc_vw_line_dossier_soin.tpl" 
+                      line=$element
+                      nodebug=true
+                      first_foreach=foreach_cat
+                      last_foreach=foreach_elt
+                      global_foreach=foreach_chap
+                      nb_line=$_element|@count
+                      dosql=do_prescription_line_element_aed
+											show_patient=true}}
+              {{assign var=first_iteration value=0}}
+	        {{/foreach}}
+        {{/foreach}}
+      {{/foreach}}
 		{{/foreach}}
 	{{/foreach}}
 </table>

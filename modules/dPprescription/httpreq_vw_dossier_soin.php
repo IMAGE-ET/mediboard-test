@@ -24,6 +24,13 @@ $without_check_date = CValue::get("without_check_date", "0");
 // Permet de gerer le cas ou des unites de prises contiennent des '
 $unite_prise = stripslashes(preg_replace('~&#0*([0-9]+);~e', 'chr(\\1)', $unite_prise));
 
+// Recuperation du sejour_id si seulement l'object est passé
+if($object_id && $object_class){
+	$object = new $object_class;
+	$object->load($object_id);
+	$sejour_id = $object->_ref_prescription->object_id;
+}
+
 // Initialisations
 $operation = new COperation();
 $operations = array();

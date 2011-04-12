@@ -8,19 +8,10 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
 *}}
 
+
 {{if $sejour->_id}}
 
 <script type="text/javascript">
-
-selColonne = function(hour){
-	$('plan_soin').select('div.non_administre:not(.perfusion), div.a_administrer:not(.perfusion)').each(function(oDiv){
-	  if(oDiv.up("tbody").visible() && oDiv.up("td").hasClassName(hour)){
-	    if(Object.isFunction(oDiv.onclick)){
-			  oDiv.onclick();
-			}
-	  }
-	});
-}
 
 viewFicheATC = function(fiche_ATC_id){
   var url = new Url;
@@ -28,124 +19,7 @@ viewFicheATC = function(fiche_ATC_id){
   url.addParam("fiche_ATC_id", fiche_ATC_id);
   url.popup(700, 550, "Fiche ATC");  
 }
-
-oDragOptions = {
-  constraint: 'horizontal',
-  revert: true,
-  ghosting: true,
-  starteffect : function(element) {	
-    new Effect.Opacity(element, { duration:0.2, from:1.0, to:0.7 }); 
-   // element.hide();
-  },
-  reverteffect: function(element, top_offset, left_offset) {
-    var dur = Math.sqrt(Math.abs(top_offset^2)+Math.abs(left_offset^2))*0.02;
-    element._revert = new Effect.Move(element, { 
-      x: -left_offset, 
-      y: -top_offset, 
-      duration: 0
-    } );
-   // Suppression des zones droppables sur le revert
-   Droppables.drops.clear(); 
-   element.show();
-  },
-  endeffect: function(element) { 
-    new Effect.Opacity(element, { duration:0.2, from:0.7, to:1.0 } ); 
-  }       
-}
-
-addDroppablesDiv = function(draggable){
-  $('plan_soin').select('.before').each(function(td_before) {
-    td_before.onmouseover = function(){
-      timeOutBefore = setTimeout(showBefore, 1000);
-    }
-  });
-  $('plan_soin').select('.after').each(function(td_after) {
-    td_after.onmouseover = function(){
-      timeOutAfter = setTimeout(showAfter, 1000);
-    }
-  });
-  
-  $(draggable).up(1).select('td').each(function(td) {
-	  if(td.hasClassName("canDrop")){
-	    Droppables.add(td.id, {
-	      onDrop: function(element) {
-			    var _td = td.id.split("_");
-			    line_id = _td[1];
-			    line_class = _td[2];
-			    unite_prise = td.getAttribute("data-uniteprise");
-			    date = _td[4];
-			    hour = _td[5];
-			    
-				  // Hack pour corriger le probleme des planifications sur aucune prise prevue
-				  if(_td[3] == 'aucune' && _td[4] == 'prise'){
-				    unite_prise = "aucune_prise";
-				    date = _td[5];
-				    hour = _td[6];
-				  }
-				  // Ajout de la planification
-	        addPlanification(date, hour+":00:00", unite_prise, line_id, line_class, element.id);
-	        // Suppression des zones droppables
-	        Droppables.drops.clear(); 
-				  $('plan_soin').select('.before').each(function(td_before) {
-				    td_before.onmouseover = null;
-				  });
-				  $('plan_soin').select('.after').each(function(td_after) {
-				    td_after.onmouseover = null;
-				  });
-	      },
-	      hoverclass:'soin-selected'
-	    } );
-    } 
-  });
-}
-
-addPlanification = function(date, time, key_tab, object_id, object_class, element_id){
-  // Split de l'element_id
-  var element = element_id.split("_");
-  var original_date = element[3]+" "+element[4]+":00:00";
-  var quantite = element[5];
-  var planification_id = element[6];
-
-	// Hack pour corriger le probleme des planifications sur aucune prise prevue
-	if(element[2] == 'aucune' && element[3] == 'prise'){
-	  original_date = element[4]+" "+element[5]+":00:00";
-	  quantite = element[6];
-    planification_id = element[7];
-	}
-
-	var oForm = document.addPlanif;
-  $V(oForm.administrateur_id, '{{$app->user_id}}');
-  
-  $V(oForm.object_id, object_id);
-  $V(oForm.object_class, object_class);
-  
-  var prise_id = !isNaN(key_tab) ? key_tab : '';
-  var unite_prise = isNaN(key_tab) ? key_tab : '';
-
-  $V(oForm.unite_prise, unite_prise);
-  $V(oForm.prise_id, prise_id);
-	$V(oForm.quantite, quantite);
-
-  var dateTime = date+" "+time;
-  
-  $V(oForm.dateTime, dateTime);
-  if(planification_id){
-    $V(oForm.administration_id, planification_id);
-    oForm.original_dateTime.writeAttribute("disabled", "disabled");
-  } else { 
-    oForm.original_dateTime.enable();
-    $V(oForm.original_dateTime, original_date);
-  }
-  
 	
-	if(original_date != dateTime || {{$conf.dPprescription.CPrescription.manual_planif}}){
-	  submitFormAjax(oForm, 'systemMsg', { onComplete: function(){ 
-	    Prescription.loadTraitement('{{$sejour->_id}}','{{$date}}',document.click.nb_decalage.value, 'planification', object_id, object_class, key_tab);
-	  } } ); 
-  }
-}
-
-
 addManualPlanification = function(date, time, key_tab, object_id, object_class, original_date, quantite){
   var prise_id = !isNaN(key_tab) ? key_tab : '';
   var unite_prise = isNaN(key_tab) ? key_tab : '';
@@ -167,7 +41,6 @@ addManualPlanification = function(date, time, key_tab, object_id, object_class, 
     Prescription.loadTraitement('{{$sejour->_id}}','{{$date}}',document.click.nb_decalage.value, 'planification', object_id, object_class, key_tab);
   } } ); 
 }
-
 
 refreshDossierSoin = function(mode_dossier, chapitre, force_refresh){
   if(!window[chapitre+'SoinLoaded'] || force_refresh) {
@@ -204,39 +77,6 @@ addCibleTransmission = function(object_class, object_id, view, libelle_ATC) {
   }
   oDiv.innerHTML = view;
   oForm.text.focus();
-}
-
-addAdministration = function(line_id, quantite, key_tab, object_class, dateTime, administrations, planification_id, multiple_adm) {
-  /*
-	 Dans le cas des administrations multiples, si on clique sur la case principale, 
-	 on selectionne toutes les administrations et on lance la fenetre d'administrations multiples
-	*/
-	if(multiple_adm == 1){
-	  var date_time = dateTime.replace(' ', '_').substring(0,13);
-	  $('subadm_'+line_id+'_'+object_class+'_'+key_tab+'_'+date_time).select('div').each(function(e){
-		  e.onclick.bind(e)();
-		});
-		applyAdministrations();
-    return;
-	}
-	
-	// On ne permet pas de faire des planifications sur des lignes de medicament
-	if(!planification_id && (object_class == "CPrescriptionLineMedicament") && ($V(document.mode_dossier_soin.mode_dossier) == "planification")){
-	  return;
-	}
-	
-  var url = new Url("dPprescription", "httpreq_add_administration");
-  url.addParam("line_id",  line_id);
-  url.addParam("quantite", quantite);
-  url.addParam("key_tab", key_tab);
-  url.addParam("object_class", object_class);
-	url.addParam("dateTime", dateTime);
-	url.addParam("administrations", administrations);
-  url.addParam("planification_id", planification_id);
-  url.addParam("date_sel", "{{$date}}");
-  url.addParam("mode_dossier", $V(document.mode_dossier_soin.mode_dossier));
-	url.addParam("multiple_adm", multiple_adm);
-  url.popup(800,600,"Administration");
 }
 
 addAdministrationPerf = function(prescription_line_mix_id, date, hour, time_prevue, mode_dossier, sejour_id){
@@ -283,49 +123,6 @@ submitRetraitPerf = function(oFormPerf){
   } } )
 }
 
-toggleSelectForAdministration = function (element, line_id, quantite, key_tab, object_class, dateTime) {	
-  element = $(element);
-
-  // si la case est une administration multiple, on selectionne tous les elements à l'interieur
-	if(element.hasClassName('multiple_adm')){
-	  element.next('div').select('div').invoke('onclick');
-	}
-	
-	if (element._administration) {
-    element.removeClassName('administration-selected');
-    element._administration = null;
-  }
-  else {
-    element.addClassName('administration-selected');
-    element._administration = {
-      line_id: line_id,
-      quantite: quantite,
-      key_tab: key_tab,
-      object_class: object_class,
-      dateTime: dateTime,
-			date_sel: '{{$date}}'
-    };
-  }
-}
-
-applyAdministrations = function () {
-  var administrations = {};
-   
-	$$('div.administration-selected').each(function(element) { 
-	  if(!element.hasClassName('multiple_adm')){
-		  var adm = element._administration;
-      administrations[adm.line_id+'_'+adm.key_tab+'_'+adm.dateTime] = adm; 
-		}
-	});
-	
-	$V(getForm("adm_multiple")._administrations, Object.toJSON(administrations));
-	
-  var url = new Url;
-  url.setModuleAction("dPprescription", "httpreq_add_multiple_administrations");
-  url.addParam("mode_dossier", $V(document.mode_dossier_soin.mode_dossier));
-	url.addParam("refresh_popup", "1");
-  url.popup(700, 600, "Administrations multiples");
-}
 
 viewLegend = function(){
   var url = new Url("dPhospi", "vw_lengende_dossier_soin");
@@ -346,112 +143,8 @@ calculSoinSemaine = function(date, prescription_id){
 }
 
 // Initialisation
-var planSoin;
-var oFormClick = document.click;
-var composition_dossier = {{$composition_dossier|@json}};
-
 window.periodicalBefore = null;
 window.periodicalAfter = null;
-
-// Fonction permettant d'afficher/masquer les planifs manuels suivant la période affichée
-toggleManualPlanif = function(periode_visible){
-  var bornes_dossier = {{$bornes_composition_dossier|@json}};
-	var bornes_visibles = bornes_dossier[periode_visible];
-	
-	$$(".manual_planif").each(function(planif){
-	  var date = planif.getAttribute("data-datetime");
-	  if(date >= bornes_visibles["min"] && date <= bornes_visibles["max"]){
-			planif.show();
-		} else {
-		  planif.hide();
-		}
-	});
-}
-
-// Deplacement du dossier de soin
-moveDossierSoin = function(element){
-  var periode_visible = composition_dossier[oFormClick.nb_decalage.value];
-	
-  composition_dossier.each(function(moment){
-    listToHide = element.select('.'+moment);
-    listToHide.each(function(elt) { 
-      elt.show();
-    });  
-  });
-  composition_dossier.each(function(moment){
-    if(moment != periode_visible){
-	    listToHide = element.select('.'+moment);
-	    listToHide.each(function(elt) { 
-	      elt.hide();
-	    });  
-    }
-  });
-  viewDossierSoin(element);
-}
-
-timeOutBefore = null;
-timeOutAfter = null;
-
-// Deplacement du dossier vers la gauche
-showBefore = function(){
-  if(oFormClick.nb_decalage.value >= 1){
-    oFormClick.nb_decalage.value = parseInt(oFormClick.nb_decalage.value) - 1;
-    moveDossierSoin($('plan_soin'));
-  }
-}
-// Deplacement du dossier de soin vers la droite
-showAfter = function(){
-  if(oFormClick.nb_decalage.value <= 3){
-    oFormClick.nb_decalage.value = parseInt(oFormClick.nb_decalage.value) + 1;
-    moveDossierSoin($('plan_soin'));
-  }
-}
-
-viewDossierSoin = function(element){	
-  // recuperation du mode d'affichage du dossier (administration ou planification)
-  mode_dossier = $V(document.mode_dossier_soin.mode_dossier);
-  
-  // Dossier en mode Administration
-  if(mode_dossier == "administration" || mode_dossier == ""){
-	  {{if $conf.dPprescription.CPrescription.manual_planif}}
-		  $$(".manual_planif").invoke("hide");
-		{{/if}}
-		
-    $('button_administration').update("Appliquer les administrations sélectionnées");
-    element.select('.colorPlanif').each(function(elt){
-       elt.setStyle( { backgroundColor: '#FFD' } );
-    });
-    element.select('.draggablePlanif').each(function(elt){
-       elt.removeClassName("draggable");
-       elt.onmousedown = null;
-    });
-    element.select('.canDropPlanif').each(function(elt){
-       elt.removeClassName("canDrop");
-    });
-  }
-  
-  // Dossier en mode planification
-  if(mode_dossier == "planification"){
-	  {{if $conf.dPprescription.CPrescription.manual_planif}}
-	    var periode_visible = composition_dossier[oFormClick.nb_decalage.value];
-	    toggleManualPlanif(periode_visible);
-	  {{/if}}
-    
-		$('button_administration').update("Appliquer les planifications sélectionnées");
-    element.select('.colorPlanif').each(function(elt){
-       elt.setStyle( { backgroundColor: '#CAFFBA' } );
-    });
-    element.select('.draggablePlanif').each(function(elt){
-       elt.addClassName("draggable");
-       elt.onmousedown = function(){
-         addDroppablesDiv(element);
-       }
-    });
-    element.select('.canDropPlanif').each(function(elt){
-       elt.addClassName("canDrop");
-    });
-  }
-}
 
 tabs = null;
 
@@ -494,13 +187,21 @@ showDebit = function(div, color){
 }
 
 Main.add(function () {
+
+  PlanSoins.init({
+    composition_dossier: {{$composition_dossier|@json}}, 
+    date: "{{$date}}", 
+    manual_planif: "{{$conf.dPprescription.CPrescription.manual_planif}}",
+    bornes_composition_dossier:  {{$bornes_composition_dossier|@json}}
+  });
+
   if(window.loadSuivi){
 	  loadSuivi('{{$sejour->_id}}');
 	}
 	
 	// Deplacement du dossier de soin
 	if($('plan_soin')){
-    moveDossierSoin($('tbody_date'));
+    PlanSoins.moveDossierSoin($('tbody_date'));
 	}
 	
   new Control.Tabs('tab_dossier_soin');
@@ -609,18 +310,18 @@ Main.add(function () {
 					<button type="button" class="print" onclick="Prescription.viewFullAlertes('{{$prescription_id}}')" title="{{tr}}Print{{/tr}}">
 					  Alertes	
 					</button>
-	        <button type="button" class="tick" onclick="applyAdministrations();" id="button_administration">
+	        <button type="button" class="tick" onclick="PlanSoins.applyAdministrations();" id="button_administration">
 	        </button>
 		    </td>
 		    <td style="text-align: center">
 		      <form name="mode_dossier_soin" action="?" method="get">
 		        <label>
 		          <input type="radio" name="mode_dossier" value="administration" {{if $mode_dossier == "administration" || $mode_dossier == ""}}checked="checked"{{/if}} 
-		          			 onclick="viewDossierSoin($('plan_soin'));"/>Administration
+		          			 onclick="PlanSoins.viewDossierSoin($('plan_soin'));"/>Administration
 	          </label>
 	          <label>
 	            <input type="radio" name="mode_dossier" value="planification" {{if $mode_dossier == "planification"}}checked="checked"{{/if}} 
-	            			 onclick="viewDossierSoin($('plan_soin'));" />Planification
+	            			 onclick="PlanSoins.viewDossierSoin($('plan_soin'));" />Planification
 	          </label>
 	       </form>
 		    </td>

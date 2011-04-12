@@ -65,7 +65,7 @@
 	{{/foreach}}
   <tr> 
     <td class="text" colspan="{{if $conf.dPprescription.CPrescription.show_categories_plan_soins}}3{{else}}2{{/if}}"><strong>Nouvelle inscription</strong></td>
-	  <th class="before" style="cursor: pointer" onclick="showBefore();" onmouseout="clearTimeout(timeOutBefore);">
+	  <th class="before" style="cursor: pointer" onclick="PlanSoins.showBefore();" onmouseout="clearTimeout(PlanSoins.timeOutBefore);">
 	   <img src="images/icons/a_left.png" />
 	  </th>
 		{{if $conf.dPprescription.CPrescription.manual_planif}}
@@ -84,7 +84,7 @@
       {{/foreach}}
     {{/foreach}}
     <td style="display: none;"></td>
-    <th class="after" style="cursor: pointer" onclick="showAfter();" onmouseout="clearTimeout(timeOutAfter);">
+    <th class="after" style="cursor: pointer" onclick="showAfter();" onmouseout="clearTimeout(PlanSoins.timeOutAfter);">
       <img src="images/icons/a_right.png" />
     </th>
 	  <td style="text-align: center"></td>

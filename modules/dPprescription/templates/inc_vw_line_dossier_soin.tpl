@@ -23,6 +23,11 @@
 
 
 <tr id="line_{{$line_class}}_{{$line_id}}_{{$unite_prise|regex_replace:'/[^a-z0-9_-]/i':'_'}}">
+	{{if @$show_patient}}
+	<td style="text-align: center;" class="text">
+    {{mb_ditto name="patient" value=$prescription->_ref_patient->_view}}
+	</td>
+	{{/if}}
   {{if $conf.dPprescription.CPrescription.show_categories_plan_soins && !$line->inscription}}
 		{{if $smarty.foreach.$first_foreach.first && $smarty.foreach.$last_foreach.first}}
 	    {{if $line_class == "CPrescriptionLineMedicament"}}
@@ -245,11 +250,19 @@
   </td>
   
 		{{if !$line->inscription}}
-		  {{if $smarty.foreach.$global_foreach.first && $smarty.foreach.$first_foreach.first && $smarty.foreach.$last_foreach.first}}
-			  <th class="before" style="cursor: pointer" onclick="showBefore();" rowspan="{{$nb_lines_chap}}" onmouseout="clearTimeout(timeOutBefore);">
-			    <img src="images/icons/a_left.png" />
-				</th>
-			{{/if}}
+			{{if @$nb_lines_element}}
+			  {{if $first_iteration}}
+			    <th class="before" style="cursor: pointer" onclick="PlanSoins.showBefore();" rowspan="{{$nb_lines_element}}" onmouseout="clearTimeout(PlanSoins.timeOutBefore);">
+            <img src="images/icons/a_left.png" />
+          </th>
+				{{/if}}
+			{{else}}
+			  {{if $smarty.foreach.$global_foreach.first && $smarty.foreach.$first_foreach.first && $smarty.foreach.$last_foreach.first}}
+				  <th class="before" style="cursor: pointer" onclick="PlanSoins.showBefore();" rowspan="{{$nb_lines_chap}}" onmouseout="clearTimeout(PlanSoins.timeOutBefore);">
+				    <img src="images/icons/a_left.png" />
+					</th>
+				{{/if}}
+		 	{{/if}}
 		{{else}}
 	    <th></th>
 	  {{/if}}
@@ -275,11 +288,20 @@
 	  </td>
  
    {{if !$line->inscription}}
-		 {{if $smarty.foreach.$global_foreach.first &&  $smarty.foreach.$first_foreach.first  && $smarty.foreach.$last_foreach.first}}
-		   <th class="after" style="cursor: pointer" onclick="showAfter();" rowspan="{{$nb_lines_chap}}" onmouseout="clearTimeout(timeOutAfter);">
-		       <img src="images/icons/a_right.png" />
-			  </th>
+	   {{if @$nb_lines_element}}
+		   {{if $first_iteration}}
+			    <th class="after" style="cursor: pointer" onclick="showAfter();" rowspan="{{$nb_lines_element}}" onmouseout="clearTimeout(PlanSoins.timeOutAfter);">
+	          <img src="images/icons/a_right.png" />
+	        </th>
+				{{/if}}
+		 {{else}}
+	     {{if $smarty.foreach.$global_foreach.first &&  $smarty.foreach.$first_foreach.first  && $smarty.foreach.$last_foreach.first}}
+	       <th class="after" style="cursor: pointer" onclick="showAfter();" rowspan="{{$nb_lines_chap}}" onmouseout="clearTimeout(PlanSoins.timeOutAfter);">
+	           <img src="images/icons/a_right.png" />
+	        </th>
+	     {{/if}}		 
 		 {{/if}}
+
 	 {{else}}
 	   <th></th>
 	 {{/if}}

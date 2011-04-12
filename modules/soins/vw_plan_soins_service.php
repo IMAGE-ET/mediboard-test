@@ -10,8 +10,7 @@
 
 $service_id = CValue::getOrSession("service_id");
 $date       = mbDate();
-//$date = "2011-01-09";
-
+$nb_decalage   = CValue::get("nb_decalage", 2);
 $date_max   = mbDate("+ 1 DAY", $date);
 
 /*
@@ -72,6 +71,7 @@ $elements = $element->loadList($where, null, null, null, $ljoin);
 CMbObject::massLoadFwdRef($elements, "category_prescription_id");
 
 // Chargement des catégories des elements
+$categories = array();
 foreach($elements as $_element){
 	$_element->loadRefCategory();
 	$_category = $_element->_ref_category_prescription;
@@ -82,5 +82,7 @@ foreach($elements as $_element){
 $smarty = new CSmartyDP();
 $smarty->assign("service", $service);
 $smarty->assign("categories", $categories);
+$smarty->assign("date", $date);
+$smarty->assign("nb_decalage", $nb_decalage);
 $smarty->assign("date", $date);
 $smarty->display('vw_plan_soins_service.tpl');

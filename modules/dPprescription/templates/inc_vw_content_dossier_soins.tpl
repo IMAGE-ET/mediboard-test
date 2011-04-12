@@ -26,14 +26,14 @@
 	                     {{if $moment_journee == 'nuit'}}{{$count_nuit}}{{/if}}
 	                     {{if $moment_journee == 'matin'}}{{$count_matin}}{{/if}}">
 	                     
-	          <a href="#1" onclick="showBefore()" style="float: left" onmousedown="periodicalBefore = new PeriodicalExecuter(showBefore, 0.2);" onmouseup="periodicalBefore.stop();">
+	          <a href="#1" onclick="PlanSoins.showBefore()" style="float: left" onmousedown="periodicalBefore = new PeriodicalExecuter(PlanSoins.showBefore, 0.2);" onmouseup="periodicalBefore.stop();">
 	            <img src="images/icons/prev.png" alt="&lt;"/>
 	          </a>        
-	          <a href="#1" onclick="showAfter()" style="float: right" onmousedown="periodicalAfter = new PeriodicalExecuter(showAfter, 0.2);" onmouseup="periodicalAfter.stop();">
+	          <a href="#1" onclick="PlanSoins.showAfter()" style="float: right" onmousedown="periodicalAfter = new PeriodicalExecuter(PlanSoins.showAfter, 0.2);" onmouseup="periodicalAfter.stop();">
 	            <img src="images/icons/next.png" alt="&gt;" />
 	          </a>     
 	          <strong>
-	            <a href="#1" onclick="selColonne('{{$_date}}-{{$moment_journee}}')">
+	            <a href="#1" onclick="PlanSoins.selColonne('{{$_date}}-{{$moment_journee}}')">
 	              {{$moment_journee}} du {{$_date|date_format:"%d/%m"}}
 	            </a>
 	          </strong>
@@ -54,7 +54,7 @@
 	            <th class="{{$_date}}-{{$moment_journee}}" 
 	                style='width: 50px; text-align: center; 
 	              {{if array_key_exists("$_date $_hour:00:00", $operations)}}border-right: 3px solid black;{{/if}}'>
-	              <a href="#1" onclick="selColonne('{{$_date}}-{{$_hour}}');">{{$_hour}}h</a>
+	              <a href="#1" onclick="PlanSoins.selColonne('{{$_date}}-{{$_hour}}');">{{$_hour}}h</a>
 	              {{if array_key_exists("$_date $_hour:00:00", $operations)}}
 	                {{assign var=_hour_op value="$_date $_hour:00:00"}}
 	                <a style="color: white; font-weight: bold; font-style: normal;" href="#" title="Intervention à {{$operations.$_hour_op|date_format:'%Hh%M'}}">Interv.</a>

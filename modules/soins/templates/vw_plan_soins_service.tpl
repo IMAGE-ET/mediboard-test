@@ -8,8 +8,11 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
 *}}
 
+{{mb_script module="dPprescription" script="plan_soins"}}
+{{mb_script module="dPprescription" script="prescription"}}
+
 <script type="text/javascript">
-	
+
 // Refresh du plan de soin
 updatePlanSoinsPatients = function(){
   var url = new Url("soins", "ajax_vw_content_plan_soins_service");
@@ -59,18 +62,43 @@ Main.add(function(){
 
 </script>
 
+<form name="adm_multiple" action="?" method="get">
+  <input type="hidden" name="_administrations">
+</form>
+
+<form name="click" action="?" method="get">
+  <input type="hidden" name="nb_decalage" value="{{$nb_decalage}}" />
+</form>
+
+<form name="addPlanif" action="" method="post">
+  <input type="hidden" name="dosql" value="do_administration_aed" />
+  <input type="hidden" name="m" value="dPprescription" />
+  <input type="hidden" name="del" value="0" />
+  <input type="hidden" name="administration_id" value="" />
+  <input type="hidden" name="planification" value="1" />
+  <input type="hidden" name="administrateur_id" value="" />
+  <input type="hidden" name="dateTime" value="" />
+  <input type="hidden" name="quantite" value="" />
+  <input type="hidden" name="unite_prise" value="" />
+  <input type="hidden" name="prise_id" value="" />
+  <input type="hidden" name="object_id" value="" />
+  <input type="hidden" name="object_class" value="" />
+  <input type="hidden" name="original_dateTime" value="" />
+</form>
+
 <table class="main">
 	<tr>
-		<th class="title" colspan="3">Gestion des activités du service {{$service->_view}}</th>
+		<th class="title" colspan="3">Gestion des activités du service {{$service->_view}} le {{$date|date_format:$conf.date}}</th>
 	</tr>
 	<tr>
-		<td class="narrow">
+		<td style="width: 20%;">
 			<form name="selectElts" action="?" method="get">
 				<table class="tbl" id="categories">
 					<tr>
 						<th class="title">
 							<button class="cancel notext" style="float: left">{{tr}}Reset{{/tr}}</button>
-	            Activités</th>
+	            Activités
+						</th>
 					</tr>
 				  {{foreach from=$categories key=_chapitre item=_cats_by_chap}}
 				    <tr>
@@ -103,6 +131,7 @@ Main.add(function(){
 				</table>
       </form>
 		</td>
-		<td id="content_plan_soins_service"></td>
+		<td id="content_plan_soins_service">
+		</td>
   </tr>
 </table>
