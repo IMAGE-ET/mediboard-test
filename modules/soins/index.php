@@ -14,6 +14,7 @@ $module->registerTab("vw_idx_sejour"        , TAB_READ);
 if(CModule::getActive('dPprescription')){
   $module->registerTab("vw_pancarte_service"  , TAB_READ);
 	$module->registerTab("vw_bilan_prescription", TAB_READ);
+	$module->registerTab("vw_plan_soins_service", TAB_ADMIN);
 }
 
 if (isset(CModule::$active["dPstock"])) {

@@ -290,13 +290,13 @@
    {{if !$line->inscription}}
 	   {{if @$nb_lines_element}}
 		   {{if $first_iteration}}
-			    <th class="after" style="cursor: pointer" onclick="showAfter();" rowspan="{{$nb_lines_element}}" onmouseout="clearTimeout(PlanSoins.timeOutAfter);">
+			    <th class="after" style="cursor: pointer" onclick="PlanSoins.showAfter();" rowspan="{{$nb_lines_element}}" onmouseout="clearTimeout(PlanSoins.timeOutAfter);">
 	          <img src="images/icons/a_right.png" />
 	        </th>
 				{{/if}}
 		 {{else}}
 	     {{if $smarty.foreach.$global_foreach.first &&  $smarty.foreach.$first_foreach.first  && $smarty.foreach.$last_foreach.first}}
-	       <th class="after" style="cursor: pointer" onclick="showAfter();" rowspan="{{$nb_lines_chap}}" onmouseout="clearTimeout(PlanSoins.timeOutAfter);">
+	       <th class="after" style="cursor: pointer" onclick="PlanSoins.showAfter();" rowspan="{{$nb_lines_chap}}" onmouseout="clearTimeout(PlanSoins.timeOutAfter);">
 	           <img src="images/icons/a_right.png" />
 	        </th>
 	     {{/if}}		 

@@ -320,7 +320,4 @@ PlanSoins = {
 	  url.addParam("refresh_popup", "1");
 	  url.popup(700, 600, "Administrations multiples");
 	}
-	
-
-
 };

@@ -84,7 +84,7 @@
       {{/foreach}}
     {{/foreach}}
     <td style="display: none;"></td>
-    <th class="after" style="cursor: pointer" onclick="showAfter();" onmouseout="clearTimeout(PlanSoins.timeOutAfter);">
+    <th class="after" style="cursor: pointer" onclick="PlanSoins.showAfter();" onmouseout="clearTimeout(PlanSoins.timeOutAfter);">
       <img src="images/icons/a_right.png" />
     </th>
 	  <td style="text-align: center"></td>
