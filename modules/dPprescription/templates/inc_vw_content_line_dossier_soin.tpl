@@ -252,9 +252,6 @@
 					   </ul>
 				     {{/if}}
 	         </div>
-					 
-				
-					 
 					 </div>
 			   </td> 
      {{/foreach}}
