@@ -7,7 +7,7 @@
 <script type="text/javascript">
 
 Main.add(function () {
-  new Control.Tabs('reveil_tabs');
+  new Control.Tabs.create('reveil_tabs', true);
   Calendar.regField(getForm("selection").date, null, {noView: true});
 	
   var url = new Url("dPsalleOp", "httpreq_reveil");

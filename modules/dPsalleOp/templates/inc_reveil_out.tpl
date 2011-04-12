@@ -47,8 +47,7 @@ submitSortieForm = function(oFormSortie) {
         <input type="hidden" name="operation_id" value="{{$_operation->_id}}" />
         <input type="hidden" name="del" value="0" />
         {{assign var=_operation_id value=$_operation->_id}}
-        {{mb_field object=$_operation field=sortie_salle form="editSortieBlocFrm$_operation_id"}}
-     <button class="tick notext" type="button" onclick="submitSortieForm(this.form);">{{tr}}Modify{{/tr}}</button>
+        {{mb_field object=$_operation field=sortie_salle form="editSortieBlocFrm$_operation_id" onchange="submitSortieForm(this.form);}}
       </form>
       {{else}}
       {{mb_value object=$_operation field="sortie_salle}}
@@ -62,8 +61,7 @@ submitSortieForm = function(oFormSortie) {
         <input type="hidden" name="dosql" value="do_planning_aed" />
         <input type="hidden" name="operation_id" value="{{$_operation->_id}}" />
         <input type="hidden" name="del" value="0" />
-        {{mb_field object=$_operation field=entree_reveil form="editEntreeReveilFrm$_operation_id"}}
-        <button class="tick notext" type="button" onclick="submitSortieForm(this.form);">{{tr}}Modify{{/tr}}</button>
+        {{mb_field object=$_operation field=entree_reveil form="editEntreeReveilFrm$_operation_id" onchange="submitSortieForm(this.form);"}}
       </form>
       {{else}}
       {{mb_value object=$_operation field="entree_reveil"}}
@@ -84,21 +82,8 @@ submitSortieForm = function(oFormSortie) {
         <input type="hidden" name="dosql" value="do_planning_aed" />
         <input type="hidden" name="operation_id" value="{{$_operation->_id}}" />
         <input type="hidden" name="del" value="0" />
-        {{if $can->edit}}
-        {{mb_field object=$_operation field=sortie_reveil form="editSortieReveilFrm$_operation_id"}}
-        <button class="tick notext" type="button" onclick="submitSortieForm(this.form);">{{tr}}Modify{{/tr}}</button>
-
-        <button class="cancel notext" type="button" onclick="$V(this.form.sortie_reveil, ''); submitSortieForm(this.form);">{{tr}}Cancel{{/tr}}</button>
-        {{elseif $modif_operation}}
-        <select name="sortie_reveil" onchange="submitSortieForm(this.form);">
-          <option value="">-</option>
-          {{foreach from=$timing.$key.sortie_reveil|smarty:nodefaults item=curr_time}}
-          <option value="{{$curr_time}}" {{if $curr_time == $_operation->sortie_reveil}}selected="selected"{{/if}}>
-            {{$curr_time|date_format:$conf.time}}
-          </option>
-          {{/foreach}}
-        </select>
-        <button class="cancel notext" type="button" onclick="$V(this.form.sortie_reveil, ''); submitSortieForm(this.form);">{{tr}}Cancel{{/tr}}</button>
+        {{if $modif_operation}}
+          {{mb_field object=$_operation field=sortie_reveil register=true form="editSortieReveilFrm$_operation_id" onchange="submitSortieForm(this.form);"}}
         {{else}}
           {{mb_value object=$_operation field="sortie_reveil"}}
         {{/if}}

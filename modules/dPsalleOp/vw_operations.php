@@ -41,7 +41,6 @@ CValue::setSession("bloc_id", $salle->bloc_id);
 
 // Opération selectionnée
 $selOp = new COperation();
-$timing = array();
 $prescription = new CPrescription();
 $protocoles = array();
 $anesth_id = "";
@@ -83,22 +82,6 @@ if ($op) {
   $selOp->loadPossibleActes();
   
   $selOp->_ref_plageop->loadRefsFwd();
-  
-  // Tableau des timings
-  $timing["entree_salle"]    = array();
-  $timing["pose_garrot"]     = array();
-  $timing["debut_op"]        = array();
-  $timing["fin_op"]          = array();
-  $timing["retrait_garrot"]  = array();
-  $timing["sortie_salle"]    = array();
-  $timing["induction_debut"] = array();
-  $timing["induction_fin"]   = array();
-  
-  foreach($timing as $key => $value) {
-    for($i = -CAppUI::conf("dPsalleOp max_sub_minutes"); $i < CAppUI::conf("dPsalleOp max_add_minutes") && $selOp->$key !== null; $i++) {
-      $timing[$key][] = mbTime("$i minutes", $selOp->$key);
-    }
-  }
 
 	// Affichage des données
 	$listChamps = array(
@@ -231,7 +214,6 @@ $smarty->assign("listAnesths"            , $listAnesths);
 $smarty->assign("listChirs"              , $listChirs);
 $smarty->assign("modeDAS"                , CAppUI::conf("dPsalleOp CDossierMedical DAS"));
 $smarty->assign("selOp"                  , $selOp);
-$smarty->assign("timing"                 , $timing);
 $smarty->assign("date"                   , $date);
 $smarty->assign("modif_operation"        , $modif_operation);
 $smarty->assign("listValidateurs"        , $listValidateurs);

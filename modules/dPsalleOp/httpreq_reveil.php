@@ -17,8 +17,6 @@ $type    = CValue::get("type"); // Type d'affichage => encours, ops, reveil, out
 
 $modif_operation = $can->edit || $date >= mbDate();
 
-$timing = array();
-
 // Selection des plages opératoires de la journée
 $plage = new CPlageOp();
 $plage->date = $date;
@@ -78,17 +76,6 @@ foreach($listOperations as $key => &$op) {
 	$op->loadRefPatient(1);
 	$op->loadAffectationsPersonnel();
 	
-	if($type == 'reveil' || $type == 'out'){
-	  // Creation du tableau des timings
-	  $timing[$key]["entree_reveil"] = array();
-	  $timing[$key]["sortie_reveil"] = array();
-	  foreach($timing[$key] as $key2 => $value2) {
-	    for($i = -CAppUI::conf("dPsalleOp max_sub_minutes"); $i < CAppUI::conf("dPsalleOp max_add_minutes") && $key2 !== null; $i++) {
-	      $timing[$key][$key2][] = mbTime("$i minutes", $op->$key2);
-	    }
-	  }
-	}
-	
 	if (($type == "ops" || $type == "reveil") && CModule::getActive("bloodSalvage")) {
     $op->blood_salvage= new CBloodSalvage;
     $where = array();
@@ -124,7 +111,6 @@ $smarty = new CSmartyDP();
 $smarty->assign("personnels"             , $personnels);
 $smarty->assign("listOperations"         , $listOperations);
 $smarty->assign("plages"                 , $plages);
-$smarty->assign("timing"                 , $timing);
 $smarty->assign("date"                   , $date);
 $smarty->assign("isbloodSalvageInstalled", CModule::getActive("bloodSalvage"));
 $smarty->assign("hour"                   , mbTime());

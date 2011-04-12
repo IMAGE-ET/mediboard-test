@@ -89,7 +89,6 @@ submitPersonnel = function(oForm){
     <input type="hidden" name="realise" value="0" />
     
     {{assign var="affectation_id" value=$affectation->_id}}
-    {{assign var="timing" value=$timingAffect.$affectation_id}}
     {{assign var="form" value="affectationPersonnel-$affectation_id"}}
 		<table class="form">
       <tr>
@@ -122,7 +121,6 @@ submitPersonnel = function(oForm){
     <input type="hidden" name="realise" value="0" />
     
     {{assign var="affectation_id" value=$affectation->_id}}
-    {{assign var="timing" value=$timingAffect.$affectation_id}}
     {{assign var="form" value="affectationPersonnel-$affectation_id"}}
 
     <table class="form">

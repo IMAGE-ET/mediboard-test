@@ -1,10 +1,5 @@
 <script type="text/javascript">
 
-cancelReveil = function(oFormOperation){
-  oFormOperation.entree_reveil.value = '';
-  submitReveilForm(oFormOperation);
-}
-
 submitReveilForm = function(oFormOperation) {
   submitFormAjax(oFormOperation,'systemMsg', {onComplete: function(){refreshTabsReveil()}});
 }
@@ -137,20 +132,8 @@ submitReveilForm = function(oFormOperation) {
         <input type="hidden" name="del" value="0" />
         {{if $_operation->_ref_sejour->type=="exte"}}
         -
-        {{elseif $can->edit}}
-        {{mb_field object=$_operation field="entree_reveil" register=true form="editEntreeReveilFrm$_operation_id"}}
-        <button class="tick notext" type="button" onclick="submitReveilForm(this.form);">{{tr}}Modify{{/tr}}</button>
-        <button class="cancel notext" type="button" onclick="cancelReveil(this.form);">{{tr}}Cancel{{/tr}}</button>
         {{elseif $modif_operation}}
-        <select name="entree_reveil" onchange="submitReveilForm(this.form);">
-          <option value="">-</option>
-          {{foreach from=$timing.$key.entree_reveil|smarty:nodefaults item=curr_time}}
-          <option value="{{$curr_time}}" {{if $curr_time == $_operation->entree_reveil}}selected="selected"{{/if}}>
-            {{$curr_time|date_format:$conf.time}}
-          </option>
-          {{/foreach}}
-        </select>
-        <button class="cancel notext" type="button" onclick="$V(this.form.entree_reveil, '') ; submitReveilForm(this.form);">{{tr}}Cancel{{/tr}}</button>
+        {{mb_field object=$_operation field="entree_reveil" form="editEntreeReveilFrm$_operation_id" onchange="submitReveilForm(this.form);"}}
         {{else}}
           {{mb_value object=$_operation field="entree_reveil"}}
         {{/if}}

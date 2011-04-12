@@ -64,11 +64,11 @@ submitPrepaForm = function(oFormPrepa) {
           <input type="hidden" name="del" value="0" />
           {{if $_operation->debut_prepa_preop}}
             {{assign var=_operation_id value=$_operation->_id}}
-            {{mb_field object=$_operation field=debut_prepa_preop form="editDebutPreopFrm$_operation_id"}}
+            {{mb_field object=$_operation field=debut_prepa_preop form="editDebutPreopFrm$_operation_id" onchange="submitPrepaForm(this.form);"}}
           {{else}}
             <input type="hidden" name="debut_prepa_preop" value="now" />
+            <button class="tick notext" type="button" onclick="submitPrepaForm(this.form);">{{tr}}Modify{{/tr}}</button>
           {{/if}}
-          <button class="tick notext" type="button" onclick="submitPrepaForm(this.form);">{{tr}}Modify{{/tr}}</button>
         </form>
       {{else}}
         {{mb_value object=$_operation field="debut_prepa_preop"}}
@@ -83,11 +83,11 @@ submitPrepaForm = function(oFormPrepa) {
           <input type="hidden" name="del" value="0" />
           {{if $_operation->fin_prepa_preop}}
             {{assign var=_operation_id value=$_operation->_id}}
-            {{mb_field object=$_operation field=fin_prepa_preop form="editFinPreopFrm$_operation_id"}}
+            {{mb_field object=$_operation field=fin_prepa_preop form="editFinPreopFrm$_operation_id" onchange="submitPrepaForm(this.form);"}}
           {{else}}
             <input type="hidden" name="fin_prepa_preop" value="now" />
+            <button class="tick notext" type="button" onclick="submitPrepaForm(this.form);">{{tr}}Modify{{/tr}}</button>
           {{/if}}
-          <button class="tick notext" type="button" onclick="submitPrepaForm(this.form);">{{tr}}Modify{{/tr}}</button>
         </form>
       {{else}}
         {{mb_value object=$_operation field="fin_prepa_preop"}}

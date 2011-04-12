@@ -21,8 +21,6 @@ $where = array();
 $where["date"] = "= '$date'";
 $plages = $plages->loadList($where);
 
-$timing = array();
-
 $listReveil = new COperation;
 $where = array();
 $where[] = "`plageop_id` ".CSQLDataSource::prepareIn(array_keys($plages))." OR (`plageop_id` IS NULL AND `date` = '$date')";
@@ -41,21 +39,12 @@ foreach($listReveil as $key => $value) {
     $listReveil[$key]->_ref_sejour->_ref_first_affectation->_ref_lit->loadCompleteView();
   }
   $listReveil[$key]->_ref_plageop->loadRefsFwd();
-  //Tableau des timings
-  $timing[$key]["entree_reveil"] = array();
-  $timing[$key]["sortie_reveil"] = array();
-  foreach($timing[$key] as $key2 => $value2) {
-    for($i = -10; $i < 10 && $value->$key2 !== null; $i++) {
-      $timing[$key][$key2][] = mbTime("$i minutes", $value->$key2);
-    }
-  }
 }
 // Création du template
 $smarty = new CSmartyDP();
 
 $smarty->assign("hour"           , $hour        );
 $smarty->assign("listReveil"     , $listReveil  );
-$smarty->assign("timing"         , $timing      );
 $smarty->assign("date"           , $date        );
 $smarty->assign("modif_operation", $modif_operation);
 

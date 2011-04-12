@@ -20,7 +20,6 @@ $selOp->loadRefPlageOp();
 
 // Creation du tableau d'affectation de personnel
 $tabPersonnel = array();
-$timingAffect = array();
 
 // Chargement de la liste du personnel  
 $listPersIADE = CPersonnel::loadListPers("iade");
@@ -112,25 +111,6 @@ foreach($listPersPanseuse as $key => $pers){
   }
 }
 
-// Initialisations des tableaux de timing
-foreach($tabPersonnel as $key_type => $type_affectation){
-  foreach($type_affectation as $key => $affectation){
-    $timingAffect[$affectation->_id]["_debut"] = array();
-    $timingAffect[$affectation->_id]["_fin"] = array();
-  }
-}
-
-// Remplissage tu tableau de timing
-foreach($tabPersonnel as $cle => $type_affectation){
-  foreach($type_affectation as $cle_type =>$affectation){
-    foreach($timingAffect[$affectation->_id] as $key => $value){
-      for($i = -10; $i < 10 && $affectation->$key !== null; $i++) {
-        $timingAffect[$affectation->_id][$key][] = mbTime("$i minutes", $affectation->$key);
-      }  
-    } 
-  }
-}
-
 // Création du template
 $smarty = new CSmartyDP();
 $smarty->assign("selOp"           , $selOp           );
@@ -138,7 +118,6 @@ $smarty->assign("tabPersonnel"    , $tabPersonnel    );
 $smarty->assign("listPersIADE"    , $listPersIADE  );
 $smarty->assign("listPersAideOp"  , $listPersAideOp  );
 $smarty->assign("listPersPanseuse", $listPersPanseuse);
-$smarty->assign("timingAffect"    , $timingAffect    );
 $smarty->assign("modif_operation" , $modif_operation );
 $smarty->display("inc_vw_personnel.tpl");
 
