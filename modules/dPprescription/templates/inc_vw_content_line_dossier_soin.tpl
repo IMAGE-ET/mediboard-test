@@ -124,9 +124,8 @@
                </span>
 						   
 					  <div id="drag_{{$line_id}}_{{$unite_prise|md5}}_{{$_date}}_{{$heure_reelle}}_{{$_quantite}}_{{$planification_id}}"
-					       onmouseover='{{if $origine_date_planif || @is_array($line->_administrations.$unite_prise.$_date.$_hour.administrations)}}
-					  										ObjectTooltip.createDOM(this, "tooltip-content-{{$line_id}}-{{$unite_prise|md5}}-{{$_date}}-{{$_hour}}");
-					  								  {{/if}}'
+					       {{if $origine_date_planif || @is_array($line->_administrations.$unite_prise.$_date.$_hour.administrations)}}
+								 onmouseover='ObjectTooltip.createDOM(this, "tooltip-content-{{$line_id}}-{{$unite_prise|md5}}-{{$_date}}-{{$_hour}}");'{{/if}}
 					  		{{if ($line->_fin_reelle && ($line->_fin_reelle|date_format:"%Y-%m-%d %H:00:00" < $_date_hour)) || $line->_debut_reel|date_format:"%Y-%m-%d %H:00:00" > $_date_hour || !$line->_active}}
 						      style="background-color: #ccc"
 						      {{if $conf.dPprescription.CAdministration.hors_plage}}
@@ -219,7 +218,7 @@
            </div>
          {{/if}}
 
-					{{if $quantite && @$line->_quantity_by_date.$unite_prise.$_date.quantites.$_hour|@count < 5}}
+					{{if $quantite && $quantite != '-' && @$line->_quantity_by_date.$unite_prise.$_date.quantites.$_hour|@count < 5}}
 			    <script type="text/javascript">
 			      // Pour empecher de deplacer une case ou il y a plusieurs prises
 		        drag = new Draggable("drag_{{$line_id}}_{{$unite_prise|md5}}_{{$_date}}_{{$heure_reelle}}_{{$_quantite}}_{{$planification_id}}", PlanSoins.oDragOptions);
