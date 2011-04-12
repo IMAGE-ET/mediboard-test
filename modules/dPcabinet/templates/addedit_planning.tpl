@@ -15,7 +15,7 @@
 Medecin = {
   form: null,
   edit : function() {
-    this.form = document.forms.editFrm;
+    this.form = getForm("editFrm");
     var url = new Url("dPpatients", "vw_medecins");
     url.popup(700, 450, "Medecin");
   },
@@ -34,7 +34,7 @@ function refreshListCategorie(praticien_id){
 }
 
 function changePause(){
-  var oForm = document.editFrm;
+  var oForm = getForm("editFrm");
   if(oForm._pause.checked){
     oForm.patient_id.value = "";
     oForm._pat_name.value = "";
@@ -46,7 +46,7 @@ function changePause(){
 }
 
 function requestInfoPat() {
-  var oForm = document.editFrm;
+  var oForm = getForm("editFrm");
   if(!oForm.patient_id.value){
     return false;
   }
@@ -57,7 +57,7 @@ function requestInfoPat() {
 }
 
 function ClearRDV(){
-  var oForm = document.editFrm;
+  var oForm = getForm("editFrm");
   $V(oForm.plageconsult_id, "", true);
   $V(oForm._date, "");
   $V(oForm.heure, "");
@@ -101,13 +101,13 @@ function checkFormRDV(oForm){
 
 function printForm() {
   var url = new Url("dPcabinet", "view_consultation"); 
-  url.addElement(document.editFrm.consultation_id);
+  url.addElement(getForm("editFrm").consultation_id);
   url.popup(700, 500, "printConsult");
   return;
 }
 
 function printDocument(iDocument_id) {
-	var oForm = document.editFrm;
+	var oForm = getForm("editFrm");
   if (iDocument_id.value != 0) {
     var url = new Url("dPcompteRendu", "edit_compte_rendu");
     url.addElement(oForm.consultation_id, "object_id");
@@ -119,22 +119,22 @@ function printDocument(iDocument_id) {
 }
 
 checkCorrespondantMedical = function(){
-  form = getForm("editFrm");
+  oForm = getForm("editFrm");
   var url = new Url("dPplanningOp", "ajax_check_correspondant_medical");
-  url.addParam("patient_id", $V(form.patient_id));
-  url.addParam("object_id" , $V(form.consultation_id));
+  url.addParam("patient_id", $V(oForm.patient_id));
+  url.addParam("object_id" , $V(oForm.consultation_id));
   url.addParam("object_class", '{{$consult->_class_name}}');
   url.requestUpdate("correspondant_medical");
 }
 
 Main.add(function () {
-  var oForm = document.editFrm;
+  var oForm = getForm("editFrm");
 
   requestInfoPat();
 
   {{if $plageConsult->_id && !$consult->_id}}
-  oForm.plageconsult_id.value = {{$plageConsult->_id}};
-  oForm.chir_id.value = {{$plageConsult->chir_id}};
+  $V(oForm.chir_id, '{{$plageConsult->chir_id}}');
+  $V(oForm.plageconsult_id, '{{$plageConsult->_id}}');
   refreshListCategorie({{$plageConsult->chir_id}});
   PlageConsultSelector.init();
   {{/if}}
@@ -213,7 +213,7 @@ Main.add(function () {
             <label for="chir_id" title="Praticien pour la consultation">Praticien</label>
           </th>
           <td>
-            <select name="chir_id" style="max-width: 150px" class="notNull" onChange="ClearRDV(); refreshListCategorie(this.value); if (this.value != '') $V(this.form._function_id, '');">
+            <select name="chir_id" style="width: 14em;" class="notNull" onChange="ClearRDV(); refreshListCategorie(this.value); if (this.value != '') $V(this.form._function_id, '');">
               <option value="">&mdash; Choisir un praticien</option>
               {{foreach from=$listPraticiens item=curr_praticien}}
               <option class="mediuser" style="border-color: #{{$curr_praticien->_ref_function->color}};" value="{{$curr_praticien->user_id}}" {{if $chir->user_id == $curr_praticien->user_id}} selected="selected" {{/if}}>
@@ -231,7 +231,7 @@ Main.add(function () {
             {{mb_label object=$consult field="patient_id"}}
           </th>
           <td>
-          	{{mb_field object=$pat field="patient_id" hidden=1 ondblclick="PatSelector.init()" onchange="requestInfoPat(); $('button-edit-patient').setVisible(this.value);"}}
+          	{{mb_field object=$pat field="patient_id" canNull=false hidden=1 ondblclick="PatSelector.init()" onchange="requestInfoPat(); $('button-edit-patient').setVisible(this.value);"}}
           	<input type="text" name="_pat_name" size="35" value="{{$pat->_view}}" readonly="readonly" ondblclick="PatSelector.init()" onchange="checkCorrespondantMedical()"/>
 						<button class="search" type="button" onclick="PatSelector.init()">{{tr}}Search{{/tr}}</button>
 	          <script type="text/javascript">
