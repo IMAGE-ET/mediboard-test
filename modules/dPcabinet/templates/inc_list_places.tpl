@@ -2,16 +2,16 @@
 <script type="text/javascript">
 
 PlageConsult.setClose = function(time) {
-  window.opener.PlageConsultSelector.set(time,
+  window.parent.PlageConsultSelector.set(time,
     "{{$plage->_id}}",
     "{{$plage->date|date_format:"%A %d/%m/%Y"}}",
     "{{$plage->freq}}",
     "{{$plage->chir_id}}",
     "{{$plage->_ref_chir->_view|smarty:nodefaults|escape:"javascript"}}");
-  window.close();
+  window.parent.Control.Modal.close();
 };
 PlageConsult.addPlaceBefore = function(plage_id) {
-  var oForm = document.editPlage;
+  var oForm = getForm("editPlage");
   var date = new Date();
   date.setHours({{$plage->debut|date_format:"%H"}});
   date.setMinutes({{$plage->debut|date_format:"%M"}} - {{$plage->freq|date_format:"%M"}});
@@ -20,7 +20,7 @@ PlageConsult.addPlaceBefore = function(plage_id) {
   submitFormAjax(oForm, "systemMsg", { onComplete: function() { PlageConsult.refreshPlage(); } });
 };
 PlageConsult.addPlaceAfter = function(plage_id) {
-  var oForm = document.editPlage;
+  var oForm = getForm("editPlage");
   var date = new Date();
   date.setHours({{$plage->fin|date_format:"%H"}});
   date.setMinutes({{$plage->fin|date_format:"%M"}} + {{$plage->freq|date_format:"%M"}});

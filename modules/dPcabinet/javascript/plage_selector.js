@@ -8,18 +8,15 @@ var PlageConsultSelector = {
   sDuree           : null,
   sChir_id         : null,
   sFunction_id     : null,
-  options : {
-    width : 900,
-    height: 650
-  },
+  options 		   : {},
 
-  pop: function() {
+  modale: function() {
     var oForm = getForm(this.sForm);
     var url = new Url("dPcabinet", "plage_selector");
     url.addParam("chir_id", oForm[this.sChir_id].value);
     url.addParam("function_id", oForm[this.sFunction_id].value);
     url.addParam("plageconsult_id", oForm[this.sPlageconsult_id].value);
-    url.popup(this.options.width, this.options.height, "PlageConsult");
+    url.modale(this.options);
   },
 
   set: function(heure, id, date, freq, chir_id, chirname) {

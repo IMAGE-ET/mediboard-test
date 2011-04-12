@@ -281,19 +281,16 @@ Main.add(function () {
     <td style="width: 50%;">
 
       <table class="form">
-        <tr><th class="category" colspan="3">Rendez-vous</th></tr>
+        <tr><th class="category" colspan="2">Rendez-vous</th></tr>
 
         <tr>
-          <th style="width: 35%;">{{mb_label object=$consult field="premiere"}}</th>
-          <td style="width: 65%;">
+          <th>{{mb_label object=$consult field="premiere"}}</th>
+          <td>
             <input type="checkbox" name="_check_premiere" value="1"
               {{if $consult->_check_premiere}} checked="checked" {{/if}}
               onchange="this.form.premiere.value = this.checked ? 1 : 0;" />
             {{mb_field object=$consult field="premiere" hidden="hidden"}}
             {{mb_label object=$consult field="_check_premiere"}}
-          </td>
-          <td rowspan="7" class="button">
-            <button class="search" type="button" onclick="PlageConsultSelector.init()">Choix de l'horaire</button>
           </td>
         </tr>
 
@@ -358,9 +355,10 @@ Main.add(function () {
               this.sDuree           = "duree";
               this.sChir_id         = "chir_id";
               this.sFunction_id     = "_function_id";
-              this.pop();
+              this.modale();
             }
            </script> 
+           <button class="search" type="button" onclick="PlageConsultSelector.init()">Choix de l'horaire</button>
           </td>
         </tr>
 
@@ -413,7 +411,7 @@ Main.add(function () {
           </td>
         </tr>
         <tr>
-          <td colspan="5">
+          <td colspan="2">
             {{if $conf.dPcabinet.CConsultAnesth.format_auto_rques}}
               <div class="small-info">
               Si vous laissez les champs <strong>Remarques</strong> ou <strong>Motif</strong> vides, <br />
