@@ -25,7 +25,7 @@ tri_transmissions = function(order_col, order_way){
 <table class="form">
   <tr>
     <th class="title">
-      <form name="filter_trans">
+      <form name="filter_trans" method="get" action="?">
 	      <span style="float: right">
 	        <input type="checkbox" name="observations" onclick="refreshtransmissions();" checked="checked" /> Observations         
           <input type="checkbox" name="transmissions" onclick="refreshtransmissions();" checked="checked" /> Transmissions
