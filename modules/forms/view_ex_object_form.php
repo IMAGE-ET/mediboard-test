@@ -62,6 +62,8 @@ foreach($fields as $_field) {
   $_field->loadTriggers();
 }
 
+$ex_object->getReportedValues();
+
 $formula_token_values = array();
 foreach($fields as $_field) {
   $formula_token_values[$_field->name] = array(

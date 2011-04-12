@@ -33,8 +33,9 @@ class CTestClass extends CMbObject {
     foreach (CMbFieldSpecFact::$classes as $spec => $class) {
       $specs[$spec] = $spec;
     }
-    $specs['enum'] = 'enum list|1|2|3|4';
-    $specs['ref'] += 'enum class|CMbObject';
+    $specs['enum'] .= ' list|1|2|3|4';
+    $specs['set']  .= ' list|1|2|3|4';
+    $specs['ref']  .= ' class|CMbObject';
     return $specs;
   }
 }

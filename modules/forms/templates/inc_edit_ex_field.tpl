@@ -181,12 +181,11 @@ updateInternalName = function(e){
 	      </td>
 				
 			{{/if}}
-			
     </tr>
 		
 		<tr>
 			<th></th>
-      <td colspan="3">
+      <th colspan="2">
         {{if $ex_field->_id}}
           <button type="submit" class="modify">{{tr}}Save{{/tr}}</button>
           <button type="button" class="trash" onclick="confirmDeletion(this.form,{ajax:true,typeName:'le champ ',objName:'{{$ex_field->_view|smarty:nodefaults|JSAttribute}}'})">
@@ -195,7 +194,13 @@ updateInternalName = function(e){
         {{else}}
           <button type="submit" class="submit">{{tr}}Create{{/tr}}</button>
         {{/if}}
-      </td>
+      </th>
+			<td>
+				<label>
+					{{mb_field object=$ex_field field=reported typeEnum=checkbox}}
+	        {{tr}}CExClassField-reported{{/tr}}
+				</label>
+			</td>
     </tr>
 		
 		<tr {{if $app->user_prefs.INFOSYSTEM == 0}}style="display: none"{{/if}}>

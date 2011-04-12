@@ -41,7 +41,10 @@ class CAdministration extends CMbMetaObject implements IPatientRelated {
     $spec->table = 'administration';
     $spec->key   = 'administration_id';
     $spec->events = array(
-      "validation"   => array("multiple" => false),
+      "validation" => array(
+        "multiple"  => false,
+        "reference" => "object_id.prescription_id.object_id"
+      ),
     );
     return $spec;
   }

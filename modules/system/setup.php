@@ -664,7 +664,30 @@ class CSetupsystem extends CSetup {
     $query = "ALTER TABLE `ex_class_message` 
               ADD INDEX (`ex_group_id`);";
     $this->addQuery($query);
+		
+    $this->makeRevision("1.0.65");
+		function setup_system_addExReferenceFields(){
+      set_time_limit(1800);
+      ignore_user_abort(1);
+      
+      $ds = CSQLDataSource::get("std");
+ 
+      // Changement des chirurgiens
+      $query = "SELECT ex_class_id FROM ex_class";
+      $list_ex_class = $ds->loadHashAssoc($query);
+      foreach($list_ex_class as $key => $hash) {
+        $query = "ALTER TABLE `ex_object_$key` 
+              ADD `reference_id` INT (11) UNSIGNED AFTER `object_class`,
+              ADD `reference_class` VARCHAR(80) AFTER `object_class`";
+        $ds->exec($query);
+      }
+      return true;
+		}
+		$this->addFunction("setup_system_addExReferenceFields");
+    $query = "ALTER TABLE `ex_class_field`
+              ADD `reported` ENUM ('0','1') NOT NULL DEFAULT '0'";
+    $this->addQuery($query);
     
-    $this->mod_version = "1.0.65";
+    $this->mod_version = "1.0.66";
   }
 }

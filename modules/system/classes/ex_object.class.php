@@ -10,6 +10,9 @@
 
 class CExObject extends CMbMetaObject {
   var $ex_object_id = null;
+	
+  var $reference_class = null;
+  var $reference_id = null;
   
   var $_ex_class_id = null;
   var $_own_ex_class_id = null;
@@ -21,6 +24,11 @@ class CExObject extends CMbMetaObject {
    * @var CExClass
    */
   public $_ref_ex_class = null;
+	
+  /**
+   * @var CMbObject
+   */
+  var $_ref_reference_object = null;
 
   function setExClass() {
     if ($this->_specs_already_set || !$this->_ex_class_id && !$this->_own_ex_class_id) return;
@@ -47,6 +55,32 @@ class CExObject extends CMbMetaObject {
     return $this->_ref_ex_class = $ex_class; // can't use loadFwdRef here
   }
   
+  function setReferenceObject(CMbObject $reference) {
+    $this->_ref_reference_object = $reference;
+    $this->reference_class = $reference->_class_name;
+    $this->reference_id = $reference->_id;
+  }
+	
+	function getReportedValues(){
+		if ($this->_id) return;
+		
+		$object = $this->loadTargetObject();
+		
+		$ex_class = $this->_ref_ex_class;
+		$reference = $ex_class->resolveReferenceObject($object);
+		$latest = $ex_class->getLatestExObject($reference);
+		
+		if (!$latest->_id) return;
+		
+		$fields = $this->_ref_ex_class->loadRefsAllFields(true);
+    
+    foreach($fields as $_field) {
+    	if (!$_field->reported) continue;
+    	$field_name = $_field->name;
+      $this->$field_name = $latest->$field_name;
+    }
+	}
+  
   function loadOldObject() {
     if (!$this->_old) {
       $this->_old = new self;
@@ -55,6 +89,20 @@ class CExObject extends CMbMetaObject {
       $this->_old->load($this->_id);
     }
   }
+	
+	function store(){
+		if ($msg = $this->check()) {
+			return $msg;
+		}
+		
+		if (!$this->_id && !$this->reference_id && !$this->reference_class) {
+			$object = $this->loadTargetObject();
+			$reference = $this->_ref_ex_class->resolveReferenceObject($object);
+			$this->setReferenceObject($reference);
+		}
+		
+		return parent::store();
+	}
   
   /// Low level methods ///////////
   function bind($hash, $doStripSlashes = true) {
@@ -123,7 +171,9 @@ class CExObject extends CMbMetaObject {
     $this->_spec->table = $ex_class->getTableName();
     
     $props = parent::getProps();
-    $props["_ex_class_id"] = "ref class|CExClass";
+    $props["_ex_class_id"]    = "ref class|CExClass";
+    $props["reference_class"] = "str class";
+    $props["reference_id"]    = "ref class|CMbObject meta|reference_class";
     
     if (self::$_load_lite) {
       return parent::getProps();

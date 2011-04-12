@@ -73,12 +73,8 @@ class CRefSpec extends CMbFieldSpec {
     }
     
     // Gestion des objets étendus ayant une pseudo-classe
-    if (!class_exists($class)) {
-      $ex_object = CExObject::getValidObject($class);
-      if ($ex_object === false) {
-        return "La classe '$class' n'existe pas";
-      }
-      
+    $ex_object = CExObject::getValidObject($class);
+    if ($ex_object) {
       if (!$this->unlink && !$ex_object->load($propValue)) {
         return "Objet référencé de type '$class' introuvable";      
       }

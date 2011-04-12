@@ -9,7 +9,7 @@ $size = min($size, $size_orig);
 $icons = glob("../modules/*/images/icon.png");
 
 $hash = dechex(crc32(implode("", $icons)));
-$cachefile = "../tmp/$hash.sprite.$size.png";
+$cachefile = "../tmp/$hash-sprite-$size.png";
 
 $out_of_date = !file_exists($cachefile) || (filemtime($cachefile)+$ttl < time());
 
@@ -25,7 +25,7 @@ if (!$out_of_date) {
 }
 
 if ($out_of_date) {
-  $img = imagecreatetruecolor($size, $size*count($icons));
+  $img = imagecreatetruecolor($size*count($icons), $size);
   $background = imagecolorallocate($img, 0, 0, 0);
   imagecolortransparent($img, $background); // make the new temp image all transparent
   imagesavealpha($img, true);
@@ -35,10 +35,10 @@ if ($out_of_date) {
     $_img = imagecreatefrompng($_icon);
     
     if ($size != $size_orig) {
-      imagecopyresampled($img, $_img, 0, $i*$size, 0, 0, $size, $size, $size_orig, $size_orig);
+      imagecopyresampled($img, $_img, $i*$size, 0, 0, 0, $size, $size, $size_orig, $size_orig);
     }
     else {
-      imagecopy($img, $_img, 0, $i*$size, 0, 0, $size_orig, $size_orig);
+      imagecopy($img, $_img, $i*$size, 0, 0, 0, $size_orig, $size_orig);
     }
   }
   

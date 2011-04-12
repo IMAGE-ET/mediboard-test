@@ -20,10 +20,13 @@ class CExClass extends CMbObject {
   
   var $_ref_fields = null;
   var $_ref_constraints = null;
-	var $_ref_groups = null;
+  var $_ref_groups = null;
+  var $_ref_reference_object = null;
   
   var $_fields_by_name = null;
   var $_host_class_fields = null;
+  var $_host_class_options = null;
+  var $_latest_ex_cobject = null;
 	
 	static $_extendable_classes = array(
 	  "CPrescriptionLineElement",
@@ -57,6 +60,44 @@ class CExClass extends CMbObject {
     $backProps["constraints"]  = "CExClassConstraint ex_class_id";
     $backProps["ex_triggers"]  = "CExClassFieldTrigger ex_class_triggered_id";
     return $backProps;
+  }
+  
+  function getLatestExObject(CMbObject $object){
+    $ex_object = new CExObject;
+    $ex_object->_ex_class_id = $this->_id;
+    $ex_object->setExClass();
+
+    $where = array(
+      "reference_class" => "= '$object->_class_name'",
+      "reference_id"    => "= '$object->_id'",
+		);
+		$ex_object->loadObject($where, "ex_object_id DESC");
+		$ex_object->load(); // needed !!!!!!!
+
+    return $this->_latest_ex_cobject = $ex_object;
+  }
+	
+	function getHostClassOptions(){
+		if (!$this->host_class || !$this->event) return;
+		
+		$object = new $this->host_class;
+		return $this->_host_class_options = $object->_spec->events[$this->event];
+	}
+  
+  function resolveReferenceObject(CMbObject $object){
+    $options = $this->getHostClassOptions();
+		$path = CValue::read($options, "reference");
+		
+		if (!$path) return;
+		
+		$parts = explode(".", $path);
+		
+		$reference = $object;
+		foreach($parts as $_fwd) {
+			$reference = $reference->loadFwdRef($_fwd);
+		}
+		
+		return $this->_ref_reference_object = $reference;
   }
   
   function load($id = null) {
@@ -109,11 +150,12 @@ class CExClass extends CMbObject {
     return $this->_ref_groups = $this->loadBackRefs("field_groups", "ex_class_field_group_id");
   }
   
-  function loadRefsAllFields(){
+  function loadRefsAllFields($cache = false){
     $groups = $this->loadRefsGroups();
     $fields = array();
     foreach($groups as $_group) {
-      $fields = array_merge($_group->loadRefsFields(), $fields);
+    	$_fields = $_group->loadRefsFields($cache);
+      $fields = array_merge($_fields, $fields);
     }
     return $fields;
   }

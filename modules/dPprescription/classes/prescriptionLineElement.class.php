@@ -50,8 +50,14 @@ class CPrescriptionLineElement extends CPrescriptionLine {
     $spec->table = 'prescription_line_element';
     $spec->key   = 'prescription_line_element_id';
     $spec->events = array(
-      "prescription"   => array("multiple" => false),
-      "administration" => array("multiple" => true),
+      "prescription"   => array(
+        "multiple"  => false, 
+        "reference" => "prescription_id.object_id"
+      ),
+      "administration" => array(
+        "multiple"  => true,
+        "reference" => "prescription_id.object_id",
+      ),
     );
     return $spec;
   }

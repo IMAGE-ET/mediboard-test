@@ -51,7 +51,8 @@ class CExClassFieldGroup extends CMbObject {
     return $this->_ref_ex_class = $this->loadFwdRef("ex_class_id", $cache);
   }
 	
-  function loadRefsFields(){
+  function loadRefsFields($cache = false){
+  	if ($cache && !empty($this->_ref_fields)) return $this->_ref_fields;
     return $this->_ref_fields = $this->loadBackRefs("class_fields");
   }
 	
