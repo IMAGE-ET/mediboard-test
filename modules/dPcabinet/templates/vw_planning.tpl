@@ -78,7 +78,7 @@ Main.add(function () {
       <form action="?" name="selection" method="get">
         <input type="hidden" name="m" value="{{$m}}" />
         <input type="hidden" name="tab" value="{{$tab}}" />
-        <select name="chirSel" style="width: 16em;" onchange="this.form.submit()">
+        <select name="chirSel" style="width: 15em;" onchange="this.form.submit()">
           <option value="-1" {{if $chirSel == -1}} selected="selected" {{/if}}>&mdash; Choisir un professionnel</option>
           {{foreach from=$listChirs item=curr_chir}}
           <option class="mediuser" style="border-color: #{{$curr_chir->_ref_function->color}};" value="{{$curr_chir->user_id}}" {{if $chirSel == $curr_chir->user_id}} selected="selected" {{/if}}>
@@ -86,8 +86,6 @@ Main.add(function () {
           </option>
           {{/foreach}}
         </select>
-        
-        <label for="vue1" title="Type de vue du planning de consultation">Type de vue</label>
         <select name="vue1" onchange="this.form.submit()">
           <option value="0"{{if !$vue}}selected="selected"{{/if}}>Tout afficher</option>
           <option value="1"{{if $vue}}selected="selected"{{/if}}>Cacher les payés</option>
@@ -97,7 +95,7 @@ Main.add(function () {
       <br />
       
       {{if $chirSel && $chirSel != -1}}
-        <button type="button" class="lookup" style="float: right;" 
+        <button type="button" class="lookup" 
                 {{if !$count_si_desistement}}disabled="disabled"{{/if}}
                 onclick="showConsultSiDesistement()">
           {{tr}}CConsultation-si_desistement{{/tr}} ({{$count_si_desistement}})

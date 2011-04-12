@@ -77,7 +77,7 @@ $vue = CValue::getOrSession("vue2", 0);
 
 foreach ($listPlage as &$plage) {
   $plage->_ref_chir =& $userSel;
-  $plage->loadRefsConsultations(true, !$vue);
+  $plage->loadRefsConsultations(false, !$vue);
 	$plage->loadRefsNotes();
 	
 	// Mass preloading
