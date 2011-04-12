@@ -242,7 +242,7 @@ foreach ($listDays as $keyDate=>$valDate){
     }
   }
 }
-mbTrace($affichages,'',1);
+
 // Création du template
 $smarty = new CSmartyDP();
 
