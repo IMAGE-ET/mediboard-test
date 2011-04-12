@@ -198,16 +198,22 @@ toggleGroupLabelEdit = function(link) {
             {{foreach from=$_group->_ref_fields item=_field}}
               <tr class="ex-class-field" data-ex_class_field_id="{{$_field->_id}}">
                 <td class="text">
-                  <button class="right notext insert-formula" style="float: right; margin: -3px; margin-left: -1px; display: none;"
-                          onclick="ExFormula.insertText('[{{$_field->_locale|smarty:nodefaults|JSAttribute}}]')">
-                    Ajouter à la formule
-                  </button>
+                	<span style="float: right;">
+									  {{if $_field->reported}}
+	                	  <img src="./images/icons/reported.png" title="{{tr}}CExClassField-reported{{/tr}}"/>
+										{{/if}}
+										
+                    {{if $_field->formula}}
+                      <img src="style/mediboard/images/buttons/formula.png" />
+                    {{/if}}
+										
+	                  <button class="right notext insert-formula" style="margin: -3px; margin-left: -1px; display: none;"
+	                          onclick="ExFormula.insertText('[{{$_field->_locale|smarty:nodefaults|JSAttribute}}]')">
+	                    Ajouter à la formule
+	                  </button>
+									</span>
                   
                   <a href="#1" onclick="ExField.edit('{{$_field->_id}}', null, null, '{{$_group->_id}}')">
-                    {{if $_field->formula}}
-                      <img src="style/mediboard/images/buttons/formula.png" style="float: right;" />
-                    {{/if}}
-                    
                     {{if $_field->_locale}}
                       {{$_field->_locale}}
                     {{else}}

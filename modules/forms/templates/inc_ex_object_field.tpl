@@ -43,3 +43,7 @@
 {{else}}
   {{mb_field object=$ex_object field=$_field_name register=true increment=true form=editExObject defaultOption=" &mdash; "}}
 {{/if}}
+
+{{if $ex_field->reported}}
+  <img src="./images/icons/reported.png" title="Valeur reportée"/>
+{{/if}}
