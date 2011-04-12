@@ -253,6 +253,14 @@ Main.add(function(){
         </td>
       </tr>
       <tr>
+        <td colspan="4" class="text">
+          <div class="small-info">
+            Pour modifier plusieurs plages (nombre de plages > 1),
+            veuillez ne pas changer les champs début et fin en même temps
+          </div>
+        </td>
+      </tr>
+      <tr>
         <td class="button" colspan="4">
         {{if $plagesel->plageop_id}}
           <button type="submit" class="modify">Modifier</button>

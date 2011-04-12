@@ -311,6 +311,14 @@ Main.add(function () {
               <td>{{mb_field object=$plageSel field="locked" typeEnum="checkbox"}}</td>
             </tr>
             <tr>
+              <td colspan="4" class="text">
+                <div class="small-info">
+                  Pour modifier plusieurs plages (nombre de plages > 1),
+                  veuillez ne pas changer les champs début et fin en même temps
+                </div>
+              </td>
+            </tr>
+            <tr>
               {{if !$plageSel->_id}}
               <td class="button" colspan="4"><button type="submit" class="submit">{{tr}}Create{{/tr}}</button></td>
               {{else}}
