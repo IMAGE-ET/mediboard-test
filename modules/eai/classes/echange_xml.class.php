@@ -81,8 +81,10 @@ class CEchangeXML extends CExchangeDataFormat {
   }
   
   function setObjectIdClass($object_class, $object_id) {
-    $this->object_id    = $object_id;
-    $this->object_class = $object_class;
+    if ($object_id) {
+      $this->object_id    = $object_id;
+      $this->object_class = $object_class;
+    }
   }
   
   function setAckError($doc_valid, $messageAcquittement, $statut_acquittement) {
@@ -100,7 +102,7 @@ class CEchangeXML extends CExchangeDataFormat {
     }
   }
   
-  function understand(CInteropActor $actor, $data) {
+  function understand(CInteropSender $actor, $data) {
     if ($dom = $this->isWellForm($data)) {
       return $dom;
     }        

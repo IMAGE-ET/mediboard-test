@@ -8,12 +8,14 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
 *}}
 
+{{assign var=mod_name value=$exchange->_ref_module->mod_name}}
+
 {{if $total_exchanges != 0}}
   {{mb_include module=system template=inc_pagination total=$total_exchanges current=$page change_page='ExchangeDataFormat.changePage' jumper='10'}}
 {{/if}}
 <table class="tbl">
   <tr>
-    <th class="title" colspan="20">{{tr}}{{$exchange->_class_name}}{{/tr}} - {{$type}}</th>
+    <th class="title" colspan="20">{{tr}}{{$exchange->_class_name}}{{/tr}} - {{$exchange->_ref_group}} - {{tr}}{{$mod_name}}-msg-{{$type}}{{/tr}}</th>
   </tr>
   <tr>
     <th></th>

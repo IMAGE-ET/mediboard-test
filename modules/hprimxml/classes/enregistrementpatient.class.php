@@ -427,9 +427,9 @@ class CHPrimXMLEnregistrementPatient extends CHPrimXMLEvenementsPatients {
         $newPatient = $this->mappingPatient($data['patient'], $newPatient);
         // Notifier les autres destinataires
         $newPatient->_hprim_initiateur_group_id = $dest_hprim->group_id;
-        
-        // Patient retrouvé      
+              
         if (!$newPatient->_id) {
+          // Patient retrouvé
           if ($newPatient->loadMatchingPatient()) {
             // Mapping du patient
             $newPatient = $this->mappingPatient($data['patient'], $newPatient);

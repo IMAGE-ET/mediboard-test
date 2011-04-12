@@ -36,21 +36,22 @@ class CExchangeDataFormat extends CMbMetaObject {
   var $object_class            = null;
   
   // Filter fields
-  var $_date_min           = null;
-  var $_date_max           = null;
+  var $_date_min                = null;
+  var $_date_max                = null;
   
   // Form fields
-  var $_self_emetteur      = null;
-  var $_self_destinataire  = null;
-  var $_message            = null;
-  var $_acquittement       = null;
-  var $_count_exchanges    = null;
-  var $_count_msg_invalide = null;
-  var $_count_ack_invalide = null;
-  var $_observations       = array();
-  var $_doc_errors_msg     = array();
-  var $_doc_errors_ack     = array();
-  var $_load_content       = true;
+  var $_self_emetteur           = null;
+  var $_self_destinataire       = null;
+  var $_message                 = null;
+  var $_acquittement            = null;
+  var $_count_exchanges         = null;
+  var $_count_msg_invalide      = null;
+  var $_count_ack_invalide      = null;
+  var $_observations            = array();
+  var $_doc_errors_msg          = array();
+  var $_doc_errors_ack          = array();
+  var $_load_content            = true;
+  var $_message_supported_class = null;
   
   // Forward references
   var $_ref_group          = null;
@@ -141,9 +142,11 @@ class CExchangeDataFormat extends CMbMetaObject {
     $this->_count_ack_invalide = $this->countList($where);
   }
   
+  function isWellForm($data) {}
+  
   function understand(CInteropActor $actor, $data) {}
   
-  function isWellForm($data) {}
+  function handle($data) {}
   
   function getMessagesSupported($actor_guid, $all = true, $evenement = null) {
     list($object_class, $object_id) = explode("-", $actor_guid);

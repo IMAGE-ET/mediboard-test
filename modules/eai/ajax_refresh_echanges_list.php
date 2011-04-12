@@ -71,6 +71,8 @@ if ($object_id) {
 
 $group_id = $group_id ? $group_id : CGroups::loadCurrent()->_id;
 $where["group_id"] = " = '$group_id'";
+$exchange->group_id = $group_id;
+$exchange->loadRefGroups();
 
 $total_exchanges = $itemExchange->countList($where);
 $order = "date_production DESC";

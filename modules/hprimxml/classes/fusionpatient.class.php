@@ -116,7 +116,7 @@ class CHPrimXMLFusionPatient extends CHPrimXMLEvenementsPatients {
         $commentaire = !$mbPatient->_id ? "Le patient $mbPatient->_id est inconnu dans Mediboard." : "Le patient $mbPatientElimine->_id est inconnu dans Mediboard.";
         return $domAcquittement->generateAcquittementsError("E012", $commentaire, $newPatient);
       }
-      
+
       // Passage en trash de l'IPP du patient a éliminer
       $id400PatientElimine->tag = CAppUI::conf('dPpatients CPatient tag_ipp_trash').$dest_hprim->_tag_patient;
       $id400PatientElimine->store();
@@ -138,16 +138,14 @@ class CHPrimXMLFusionPatient extends CHPrimXMLEvenementsPatients {
         $commentaire = "La fusion des données des patients a échoué : $msg";
         return $domAcquittement->generateAcquittementsError("E011", $commentaire, $newPatient);
       }
-      
       $mbPatientElimine_id = $mbPatientElimine->_id;
       
       /** @todo mergeDBfields resets the _id */
       $mbPatient->_id = $first_patient_id;
       
       // Notifier les autres destinataires
-      $newPatient->_hprim_initiateur_group_id = $dest_hprim->group_id;
-            
-      $mbPatient->_merging = array_keys($patientsElimine_array);
+      $mbPatient->_hprim_initiateur_group_id = $dest_hprim->group_id;
+      $mbPatient->_merging = CMbArray::pluck($patientsElimine_array, "_id");
       $msg = $mbPatient->merge($patientsElimine_array);
       
       $codes = array ($msg ? "A010" : "I010");

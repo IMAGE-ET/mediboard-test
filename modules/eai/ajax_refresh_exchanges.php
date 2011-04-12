@@ -13,6 +13,8 @@
 CCanDo::checkRead();
 
 $exchange_class_name = CValue::getOrSession("exchange_class_name");
+$exchange_type       = CValue::getOrSession("exchange_type");
+$exchange_group_id   = CValue::getOrSession("exchange_group_id");
 
 $_date_min = CValue::getOrSession('_date_min', mbDateTime("-7 day"));
 $_date_max = CValue::getOrSession('_date_max', mbDateTime("+1 day"));
@@ -26,9 +28,11 @@ foreach ($filtre_types as $type) {
   $types[$type] = !isset($t) || in_array($type, $t);
 }
 
-$exchange = new $exchange_class_name;
+$exchange            = new $exchange_class_name;
 $exchange->_date_min = $_date_min;
 $exchange->_date_max = $_date_max;
+$exchange->type      = $exchange_type;
+$exchange->group_id  = $exchange_group_id;
 
 $class    = new ReflectionClass($exchange);
 $statics  = $class->getStaticProperties();

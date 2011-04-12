@@ -54,7 +54,8 @@
       <td>
         {{assign var=last_message value=$_actor->_ref_last_message}}
         {{if isset($last_message|smarty:nodefaults)}}
-          <a title="{{mb_value object=$last_message field="date_echange"}}" href="?m=eai&tab=vw_idx_exchange_data_format#exchange_class_name={{$last_message->_class_name}}&exchange_type={{$last_message->type}}">
+          <a title="{{mb_value object=$last_message field="date_echange"}}" 
+            href="?m=eai&tab=vw_idx_exchange_data_format#exchange_class_name={{$last_message->_class_name}}&exchange_type={{$last_message->type}}&exchange_group_id={{$last_message->group_id}}">
             {{mb_value object=$last_message field="date_echange" format=relative}}
           </a>
         {{/if}}

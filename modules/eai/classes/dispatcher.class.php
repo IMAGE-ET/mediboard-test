@@ -17,21 +17,27 @@
  */
 
 class CEAIDispatcher {  
-  static function dispatch(CInteropActor $actor, $data) {
+  static function dispatch(CInteropSender $actor, $data) {
     $understand = false;
     foreach (CExchangeDataFormat::getAll() as $_data_format) {
       $data_format = new $_data_format;
-      $understand = $data_format->understand($actor, $data);
-      
+      // Test si le message est bien formé et si l'expéditeur traite le type
+      $understand = $data_format->understand($actor, $data);     
       if ($understand) {
-        CAppUI::stepAjax("CEAIDispatcher-understand");
-        return true;
+        break;
       }
     }
     if (!$understand) {
       CAppUI::stepAjax("CEAIDispatcher-no-understand", UI_MSG_WARNING);
+      return false;
     }
-    return false;
+    
+    // Traitement par le handler du format
+    try {
+      $data_format->handle($actor, $data);    
+    } catch(Exception $e) {
+      CAppUI::stepAjax($e->getMessage(), UI_MSG_ERROR);
+    }
   }
 }
 

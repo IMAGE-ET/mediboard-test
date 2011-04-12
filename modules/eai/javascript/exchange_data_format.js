@@ -13,16 +13,17 @@ ExchangeDataFormat = {
   evenements : null,	
   target: "exchange_data_format",
   
-  refreshExchanges : function(exchange_class_name, exchange_type){
+  refreshExchanges : function(exchange_class_name, exchange_type, exchange_group_id){
     var url = new Url("eai", "ajax_refresh_exchanges");
     url.addParam("exchange_class_name", exchange_class_name);
+    url.addParam("exchange_type"	  , exchange_type);
+    url.addParam("exchange_group_id"  , exchange_group_id);
     url.requestUpdate("exchanges", { onComplete : function() {
     	if (!exchange_type) {
     	  return;
     	}
     	var form = getForm("filterExchange");
 		if (form) {
-		  $V(form.elements.type, exchange_type, false); 
 		  ExchangeDataFormat.refreshExchangesList(form);
 		}
 	} });

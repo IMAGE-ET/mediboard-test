@@ -54,6 +54,10 @@ ExchangeDataFormat.evenements = {{$evenements|@json}};
             <td colspan="2">{{mb_field object=$exchange field=$exchange->_spec->key}}</td>
           </tr>
           <tr>
+            <th colspan="2">{{mb_label object=$exchange field="object_id}}</th>
+            <td colspan="2">{{mb_field object=$exchange field="object_id}}</td>
+          </tr>
+          <tr>
             <th colspan="2">{{mb_label object=$exchange field="id_permanent"}}</th>
             <td colspan="2">{{mb_field object=$exchange field="id_permanent"}}</td>
           </tr>
@@ -64,7 +68,7 @@ ExchangeDataFormat.evenements = {{$evenements|@json}};
               <select class="str" name="type" onchange="ExchangeDataFormat.fillSelect(this, this.form.elements.evenement, '{{$mod_name}}')">
                 <option value="">&mdash; Messages &mdash;</option>
                 {{foreach from=$messages key=_message item=_class_message}}
-                  <option value="{{$_message}}"> {{tr}}{{$mod_name}}-msg-{{$_message}}{{/tr}}</option>
+                  <option value="{{$_message}}" {{if $exchange->type == $_message}}selected="selected"{{/if}}> {{tr}}{{$mod_name}}-msg-{{$_message}}{{/tr}}</option>
                 {{/foreach}}
               </select>
             </td>

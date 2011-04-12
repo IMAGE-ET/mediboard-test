@@ -30,7 +30,12 @@
         })">
       </button>
     </form>
-    <button class="change notext" onclick="ExchangeDataFormat.reprocessing('{{$object->_guid}}')" type="button">{{tr}}Reprocess{{/tr}}</button>
+    {{if $object->_self_destinataire}}
+      <button class="change notext" onclick="ExchangeDataFormat.reprocessing('{{$object->_guid}}')" type="button">{{tr}}Reprocess{{/tr}}</button>
+    {{/if}}
+    {{if $object->_self_emetteur}}
+      <button class="send notext" onclick="ExchangeDataFormat.sendMessage('{{$object->_guid}}')" type="button">{{tr}}Reprocess{{/tr}}</button>
+    {{/if}}
   </td>
   <td class="narrow">
     <button type="button" onclick="ExchangeDataFormat.viewExchange('{{$object->_guid}}')" class="search">

@@ -8,7 +8,7 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
  */
 
-CAppUI::loadClass('CEchangeXML');
+CAppUI::requireModuleClass("eai", "echange_xml");
 
 class CEchangeHprim extends CEchangeXML {
 	static $messages = array(
@@ -130,7 +130,7 @@ class CEchangeHprim extends CEchangeXML {
     }
   }
   
-  function understand(CInteropActor $actor, $data) {
+  function understand(CInteropSender $actor, $data) {
     if (!$dom = parent::understand($actor, $data)) {
       return false;
     }
@@ -144,10 +144,16 @@ class CEchangeHprim extends CEchangeXML {
       }
       foreach ($this->getMessagesSupported($actor->_guid, false) as $_message_supported_class => $_message_supported) {
         if ($_root_class == $_message_supported_class) {
+          $this->_message_supported_class = $_message_supported_class;
           return true;
         }
       }
     }    
   }
+  
+  function handle(CInteropSender $actor, $data) {
+    mbTrace($this);
+    CHprimXMLSoapHandler::event($data);
+  } 
 }
 ?>

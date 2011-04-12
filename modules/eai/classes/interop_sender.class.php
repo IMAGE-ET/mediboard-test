@@ -22,6 +22,12 @@ class CInteropSender extends CInteropActor {
     $this->_parent_class_name = "CInteropSender";
   }
   
+  function getBackProps() {
+    $backProps = parent::getBackProps();
+    $backProps["messages_supported"] = "CMessageSupported object_id";
+    return $backProps;
+  }
+  
   /**
    * Get child senders
    * 

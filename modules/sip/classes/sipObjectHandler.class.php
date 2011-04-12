@@ -311,8 +311,9 @@ class CSipObjectHandler extends CMbObjectHandler {
           $id400PatientElimine->object_class = "CPatient";
           $id400PatientElimine->object_id    = $patient_elimine->_id;
           $id400sPatientElimine = $id400PatientElimine->loadMatchingList();
-          
+
           $id400s = array_merge($id400sPatient, $id400sPatientElimine);
+
           if (count($id400s) > 1) {
             foreach ($id400s as $_id_400) {
               // On continue pour ne pas mettre en trash l'IPP du patient que l'on garde
@@ -324,7 +325,7 @@ class CSipObjectHandler extends CMbObjectHandler {
               $_id_400->store();
             }
           }
-                      
+
           $mbObject->_fusion[$_group->_id] = array (
             "patientElimine" => $patient_elimine,
             "patient1_ipp"   => $patient1_ipp,

@@ -32,18 +32,8 @@ after_edit_source_lpr = function(id) {
       {{/if}}
     </tr>
     <tr>
-      <td>
-        {{mb_label object=$source_lpr field=name}}
-      </td>
-      <td>
-        {{mb_field object=$source_lpr field=name}}
-      </td>
-      <td>
-        {{mb_label object=$source_lpr field=host}}
-      </td>
-      <td>
-        {{mb_field object=$source_lpr field=host}}
-      </td>
+      <th> {{mb_label object=$source_lpr field=name}} </th>
+      <td> {{mb_field object=$source_lpr field=name}} </td>
     </tr>
     <tr>
       <td>
