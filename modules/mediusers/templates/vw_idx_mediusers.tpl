@@ -97,9 +97,11 @@ function changePage(page) {
               <label>
                 <input onchange="$V(this.form.page, 0)" type="checkbox" name="inactif" {{if $inactif}}checked="checked"{{/if}} /> Inactif
               </label>
+              {{if $configLDAP}}
               <label>
                 <input onchange="$V(this.form.page, 0)" type="checkbox" name="ldap_bound" {{if $ldap_bound}}checked="checked"{{/if}} /> Associé au LDAP
               </label>
+              {{/if}}
             </td>
           </tr>
         	<tr>
