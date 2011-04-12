@@ -8,6 +8,8 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
 *}}
 
+{{mb_script module="dPprescription" script="plan_soins"}}
+
 <style type="text/css">
 
 .modal div{
