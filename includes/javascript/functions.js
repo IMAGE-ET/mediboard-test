@@ -887,7 +887,7 @@ if (window.parent && window.parent != window) {
   
   window.close = function(){
     try {
-      var modale = window.parent.Control.Modal.current;
+      var modale = window.parent.Control.Modal.stack.last();
       modale.close();
       modale.destroy();
     } catch (e) {
