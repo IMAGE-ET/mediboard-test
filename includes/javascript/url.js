@@ -740,8 +740,9 @@ Url.popupFeatures = {
   width: 800,
   scrollbars: true,
   resizable: true,
-  menubar: true
- };
+  menubar: false,
+	toolbar: false
+};
 
 Url.buildPopupFeatures = function(features) {
   var a = [], value;

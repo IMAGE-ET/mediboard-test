@@ -20,13 +20,17 @@
 		{{if $_administration->quantite}}
 			<tr>
 		    <td class="text">
-		      <a href="#" onmouseover="ObjectTooltip.createEx(this, '{{$prescription->_ref_object->_guid}}')" onclick="viewDossierSoin('{{$prescription->_ref_object->_id}}','{{$line_debut}}');">
-		        {{$prescription->_ref_object->_ref_patient->_view}}
+		      <a href="#" onclick="viewDossierSoin('{{$prescription->_ref_object->_id}}','{{$line_debut}}');">
+		        <span onmouseover="ObjectTooltip.createEx(this, '{{$prescription->_ref_object->_guid}}')">
+		        	{{$prescription->_ref_object->_ref_patient->_view}}
+		        </span>
 		      </a>
 		    </td>
 				<td class="text">
 					<strong>
-						<a href="#" onclick="Prescription.viewProduit('{{$_administration->_ref_object->code_cip}}');">{{$_administration->_ref_object->_view}}</a>
+						<a href="#" onclick="Prescription.viewProduit('{{$_administration->_ref_object->code_cip}}');">
+							{{$_administration->_ref_object->_view}}
+						</a>
 					</strong>
 				</td>
 				<td class="text">
@@ -39,7 +43,7 @@
 	  {{/if}}
 	{{foreachelse}}
   <tr>
-    <td colspan="4">
+    <td colspan="4" class="empty">
       Aucune administration de stupéfiant pour les dates sélectionnées
     </td>
   </tr>

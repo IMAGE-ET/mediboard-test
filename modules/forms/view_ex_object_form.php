@@ -34,6 +34,12 @@ $ex_object->setExClass();
 
 list($grid, $out_of_grid, $groups) = $ex_object->_ref_ex_class->getGrid();
 
+foreach($groups as $_group) {
+	foreach($_group->_ref_fields as $_field) {
+    $_field->loadTriggers();
+	}
+}
+
 if ($ex_object_id) {
   $ex_object->load($ex_object_id);
 }
@@ -47,10 +53,16 @@ foreach($ex_object->_specs as $_field => $_spec) {
   }
 }
 
-$fields = $ex_object->_ref_ex_class->loadRefsAllFields();
+$fields = array();
+foreach($groups as $_group) {
+  $fields = array_merge($_group->_ref_fields, $fields);
+}
+
+foreach($fields as $_field) {
+  $_field->loadTriggers();
+}
 
 $formula_token_values = array();
-
 foreach($fields as $_field) {
   $formula_token_values[$_field->name] = array(
     "values"  => $_field->getFormulaValues(),

@@ -1,12 +1,20 @@
 {{assign var=_field_name value=$ex_field->name}}
 {{assign var=_spec value=$ex_object->_specs.$_field_name}}
+
+{{if $ex_field->_triggers_map|@count}}
+  <script type="text/javascript">
+  Main.add(function(){
+    var form = getForm("editExObject");
+    ExObject.initTriggers({{$ex_field->_triggers_map|@json}}, form, "{{$_field_name}}");
+  });
+  </script>
+{{/if}}
   
 {{if $_spec instanceof CRefSpec}}
   <script type="text/javascript">
   Main.add(function(){
     var form = getForm("editExObject");
     var url = new Url("system", "ajax_seek_autocomplete");
-    
     url.addParam("object_class", "{{$_spec->class}}");
     url.addParam("field", "{{$_field_name}}");
     url.addParam("input_field", "_{{$_field_name}}_view");

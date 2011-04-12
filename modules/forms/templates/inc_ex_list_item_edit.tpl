@@ -101,6 +101,15 @@ Main.add(function(){
         {{/if}}
         
 				<td></td>
+        {{*  
+        <td>
+          {{if $spec instanceof CSetSpec}}
+            <input type="checkbox" name="__default" />
+          {{else}}
+            <input type="radio" name="__default" />
+          {{/if}}
+        </td>
+				*}}
       </tr>
     {{foreachelse}}
       <tr>

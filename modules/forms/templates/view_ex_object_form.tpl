@@ -28,48 +28,9 @@ if (window.opener && window.opener !== window && window.opener.ExObject) {
   }
 }
 
-ExObjectFormula.tokenData = {{$formula_token_values|@json}};
-
 Main.add(function(){
-  $H(ExObjectFormula.tokenData).each(function(token){
-    var field = token.key;
-    var data = token.value;
-    var formula = data.formula;
-
-    if (!formula) return;
-
-    formula = formula.replace(/[\[\]]/g, "");
-    var expr = ExObjectFormula.parser.parse(formula);
-    var variables = expr.variables();
-    
-    var form = getForm("editExObject");
-    var fieldElement = form[field];
-
-    ExObjectFormula.tokenData[field].parser = expr;
-    ExObjectFormula.tokenData[field].variables = variables;
-
-    function compute(input, target) {
-      ExObjectFormula.computeResult(input, target);
-    }
-    
-    variables.each(function(v){
-      if (!form[v]) return;
-      
-      var inputs = ExObjectFormula.getInputElementsArray(form[v]);
-      
-      inputs.each(function(input){
-        if (input.hasClassName("date") || input.hasClassName("dateTime") || input.hasClassName("time")) {
-          input.onchange = compute.curry(input, fieldElement);
-        }
-        else {
-				  var callback = compute.curry(input, fieldElement);
-          input.observe("change", callback)
-					     .observe("ui:change", callback)
-							 .observe("click", callback);
-        }
-      });
-    });
-  });
+  ExObjectFormula.init({{$formula_token_values|@json}});
+	ExObject.current = {object_guid: "{{$object_guid}}", event: "{{$event}}"};
 });
 </script>
 

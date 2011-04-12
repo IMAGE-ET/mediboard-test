@@ -37,6 +37,7 @@ class CExClassField extends CExListItemsOwner {
   var $_ref_translation = null;
   var $_ref_concept = null;
   var $_spec_object = null;
+	var $_triggers_map = null;
   
   var $_dont_drop_column = null;
 	
@@ -253,6 +254,17 @@ class CExClassField extends CExListItemsOwner {
      
     $trigger = reset($triggers); // FIXME gerer plusieurs triggers
     $this->_triggered_data = "$trigger->ex_class_triggered_id-$trigger->trigger_value";
+  }
+  
+  function loadTriggers(){
+    $triggers = $this->loadBackRefs("ex_triggers");
+    
+		$triggers_map = array();
+		foreach($triggers as $_trigger) {
+			$triggers_map[$_trigger->trigger_value] = $_trigger->ex_class_triggered_id;
+		}
+		
+    return $this->_triggers_map = $triggers_map;
   }
   
   function loadRefExGroup($cache = true){

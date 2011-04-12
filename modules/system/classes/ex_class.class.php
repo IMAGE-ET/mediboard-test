@@ -293,7 +293,7 @@ class CExClass extends CMbObject {
         }
       }
       
-      if ($reduce) {
+      if ($reduce && empty($out_of_grid)) {
         $max_filled = 0;
         
         foreach($grid as $_y => $_line) {

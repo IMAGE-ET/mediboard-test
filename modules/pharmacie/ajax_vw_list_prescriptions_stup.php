@@ -13,6 +13,7 @@ CCanDo::checkRead();
 $date_min = CValue::get("date_min");
 $date_max = CValue::get("date_max");
 $print = CValue::get("print");
+$service_id = CValue::get("service_id");
 
 $min = $date_min;
 $max = mbDate("+ 1 DAY", $date_max);
@@ -33,6 +34,14 @@ $where[] = "sejour.entree <= '$max' AND sejour.sortie >= '$min'";
 $where["substitution_active"] = " = '1'";
 $where["stupefiant"] = " = '1'";
 $where["sejour.group_id"] = " = '$group_id'";
+
+if ($service_id) {
+  $ljoin["affectation"] = "sejour.sejour_id = affectation.sejour_id";
+  $ljoin["lit"]         = "affectation.lit_id = lit.lit_id";
+  $ljoin["chambre"]     = "lit.chambre_id = chambre.chambre_id";
+  $where["chambre.service_id"] = " = '$service_id'";
+}
+
 $lines_med = $prescription_line_medicament->loadList($where, null, null, null, $ljoin);
 
 $prescription_line_mix_item = new CPrescriptionLineMixItem();

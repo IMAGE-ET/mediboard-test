@@ -22,6 +22,7 @@ $ex_class = new CExClass;
 $ex_class->host_class = $object->_class_name;
 $ex_class->event = $event;
 $ex_class->disabled = 0;
+$ex_class->conditional = 0;
 
 $ex_classes = $ex_class->loadMatchingList();
 
@@ -30,7 +31,7 @@ $ex_objects = array();
 $count = 0;
 $count_available = count($ex_classes);
 foreach($ex_classes as $_id => $_ex_class) {
-  if (!$_ex_class->checkConstraints($object) || $_ex_class->conditional) {
+  if (!$_ex_class->checkConstraints($object)) {
     unset($ex_classes[$_id]);
     $count_available--;
   }

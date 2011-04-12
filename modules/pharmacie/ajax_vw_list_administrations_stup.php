@@ -13,12 +13,17 @@ CCanDo::checkRead();
 $date_min = CValue::get("date_min");
 $date_max = CValue::get("date_max");
 $print = CValue::get("print");
+$service_id = CValue::get("service_id");
 
 $min = "$date_min 00:00:00";
 $max = "$date_max 23:59:59";
 
 $order_way = CValue::getOrSession("order_way", "ASC");
 $order_col = CValue::getOrSession("order_col", "patient_id");
+
+if (!$order_way) {
+	$order_way = "ASC";
+}
 
 $group_id = CGroups::loadCurrent()->_id;
 
@@ -27,18 +32,33 @@ $where_default["sejour.group_id"] = " = '$group_id'";
 $where_default["administration.dateTime"] = " BETWEEN  '$min' AND '$max'";
 $where_default["planification"] = " = '0'";
 
-// Chargement des administrations de stupefiants dans les lignes de medicament
+$ljoin_service = array();
+if ($service_id) {
+  $ljoin_service["affectation"] = "sejour.sejour_id = affectation.sejour_id";
+  $ljoin_service["lit"]         = "affectation.lit_id = lit.lit_id";
+  $ljoin_service["chambre"]     = "lit.chambre_id = chambre.chambre_id";
+  $ljoin_service["service"]     = "chambre.service_id = service.service_id";
+
+  // Recupération de l'affectation courante
+  $where_default[] = "(affectation.entree BETWEEN '$min' AND '$max') OR 
+              (affectation.sortie BETWEEN '$min' AND '$max') OR
+              (affectation.entree <= '$min' AND affectation.sortie >= '$max')";
+  $where_default["service.service_id"] = " = '$service_id'";
+}
+
 $administration = new CAdministration();
+
+// Chargement des administrations de stupefiants dans les lignes de medicament
 $ljoin = array();
 $ljoin["prescription_line_medicament"] = "(prescription_line_medicament.prescription_line_medicament_id = administration.object_id) AND 
                                           (administration.object_class = 'CPrescriptionLineMedicament')";
 $ljoin["prescription"] = "(prescription_line_medicament.prescription_id = prescription.prescription_id)";               
 $ljoin["sejour"] = "prescription.object_id = sejour.sejour_id AND prescription.object_class = 'CSejour'";
+$ljoin += $ljoin_service;
 
 $where_med = $where_default;
 $where_med[] = "prescription_line_medicament.stupefiant = '1'";
 $administrations_med = $administration->loadList($where_med, null, null, null, $ljoin);
-
 
 // Chargement des administrations de stupefiants dans les mix items
 $ljoin = array();
@@ -47,6 +67,7 @@ $ljoin["prescription_line_mix_item"] = "(prescription_line_mix_item.prescription
 $ljoin["prescription_line_mix"] = "prescription_line_mix.prescription_line_mix_id = prescription_line_mix_item.prescription_line_mix_id";                                                                                 
 $ljoin["prescription"] = "(prescription_line_mix.prescription_id = prescription.prescription_id)";                  
 $ljoin["sejour"] = "prescription.object_id = sejour.sejour_id AND prescription.object_class = 'CSejour'";
+$ljoin += $ljoin_service;
 
 $where_mix = $where_default;
 $where_mix[] = "prescription_line_mix_item.stupefiant = '1'";

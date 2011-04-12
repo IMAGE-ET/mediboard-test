@@ -20,13 +20,19 @@
 			{{assign var=line_fin value=$_line->_ref_prescription_line_mix->_fin}}
 	  {{/if}}
 		<tr>
-			<td class="text" onmouseover="ObjectTooltip.createEx(this, '{{$prescription->_ref_object->_guid}}')" onclick="viewDossierSoin('{{$prescription->_ref_object->_id}}','{{$line_debut}}');">
-        {{$prescription->_ref_object->_ref_patient->_view}} 
+			<td class="text">
+				<a href="#1" onclick="viewDossierSoin('{{$prescription->_ref_object->_id}}','{{$line_debut}}');">
+					<span onmouseover="ObjectTooltip.createEx(this, '{{$prescription->_ref_object->_guid}}')">
+            {{$prescription->_ref_object->_ref_patient->_view}}
+					</span>
+				</a>
       </td>
 			<td class="text">
-				<strong>
-				  <a href="#" onmouseover="ObjectTooltip.createEx(this, '{{$_line->_guid}}')" onclick="Prescription.viewProduit('{{$_line->code_cip}}');">{{$_line->_ucd_view}}</a>
-				</strong>
+				<a href="#1" onclick="Prescription.viewProduit('{{$_line->code_cip}}');">
+          <strong onmouseover="ObjectTooltip.createEx(this, '{{$_line->_guid}}')">
+				  	{{$_line->_ucd_view}}
+          </strong>
+			  </a>
 			</td>
 			<td class="text">
 				{{if $_line instanceof CPrescriptionLineMedicament}}
@@ -54,7 +60,7 @@
 		</tr>
 	{{foreachelse}}
 		<tr>
-			<td colspan="3">
+			<td colspan="5" class="empty">
 				Aucune prescription de stupéfiant pour les dates sélectionnées
 			</td>
 		</tr>

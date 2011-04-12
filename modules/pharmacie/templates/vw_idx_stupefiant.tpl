@@ -9,7 +9,8 @@ Main.add(function(){
 updateListPrescriptions = function(order_col, order_way){
 	var url = new Url("pharmacie", "ajax_vw_list_prescriptions_stup");
 	url.addParam("date_min", $V(oFilterForm._date_entree));
-	url.addParam("date_max", $V(oFilterForm._date_sortie));
+  url.addParam("date_max", $V(oFilterForm._date_sortie));
+  url.addParam("service_id", $V(oFilterForm.service_id));
   url.addParam("order_col", order_col);
   url.addParam("order_way", order_way);
 	url.requestUpdate("prescriptions");
@@ -19,6 +20,7 @@ updateListAdministrations = function(order_col, order_way){
   var url = new Url("pharmacie", "ajax_vw_list_administrations_stup");
   url.addParam("date_min", $V(oFilterForm._date_entree));
   url.addParam("date_max", $V(oFilterForm._date_sortie));
+  url.addParam("service_id", $V(oFilterForm.service_id));
 	url.addParam("order_col", order_col);
 	url.addParam("order_way", order_way);
   url.requestUpdate("administrations");
@@ -53,17 +55,26 @@ function viewDossierSoin(sejour_id, date){
   <input type="hidden" name="_active_tab" value="dossier_soins" /> 
 </form>
 
-<form name="filterForm" action="?">
-	<table>
+<form name="filterForm" action="?" method="get">
+	<table class="main form">
 	  <tr>
 		  <th>A partir du</th>
 		  <td>  
 		    {{mb_field object=$filter_sejour field="_date_entree" form=filterForm canNull=false register=true onchange="updateVisibleList();"}}
 		  </td>
-		  <th>Jusqu'au</th>
-		  <td>
-		    {{mb_field object=$filter_sejour field="_date_sortie" form=filterForm canNull=false register=true onchange="updateVisibleList();"}}
-		  </td>
+      <th>Jusqu'au</th>
+      <td>
+        {{mb_field object=$filter_sejour field="_date_sortie" form=filterForm canNull=false register=true onchange="updateVisibleList();"}}
+      </td>
+      <th>{{mb_label object=$filter_sejour field="service_id"}}</th>
+      <td>
+        <select name="service_id" onchange="updateVisibleList();">
+        	<option value=""> &ndash; Tous les services </option>
+        {{foreach from=$services item=_service}}
+          <option value="{{$_service->_id}}" {{if $filter_sejour->service_id==$_service->_id}}selected="selected"{{/if}}>{{$_service->nom}}</option>
+        {{/foreach}}
+        </select>
+      </td>
 	  </tr>
   </table>
 </form>

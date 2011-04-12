@@ -36,18 +36,84 @@ ExObject = {
       });
       options.onTriggered(object_guid, event);
     });
-  }
+  },
+	
+	initTriggers: function(triggers, form, elementName){
+		var inputs = Form.getInputsArray(form[elementName]);
+    
+		var triggerFunc = function(input, triggers) {
+			var ex_class_id = triggers[$V(input)];
+			triggers[$V(input)] = null;
+			if (ex_class_id) {
+				var form = input.form;
+				var object_guid = ExObject.current.object_guid;
+				var event = ExObject.current.event;
+				showExClassForm(ex_class_id, object_guid, object_guid+"-"+event+"-"+ex_class_id, "", event);
+			}
+		} 
+		
+    inputs.each(function(input){
+      var callback = triggerFunc.curry(input, triggers);
+      input.observe("change", callback)
+           .observe("ui:change", callback)
+           .observe("click", callback);
+    });
+	}
 };
 
 ExObjectFormula = {
   tokenData: null,
   parser: new Parser,
+	
+  init: function(tokenData) {
+    ExObjectFormula.tokenData = tokenData;
+    
+    $H(ExObjectFormula.tokenData).each(function(token){
+      var field = token.key;
+      var data = token.value;
+      var formula = data.formula;
+  
+      if (!formula) return;
+  
+      formula = formula.replace(/[\[\]]/g, "");
+      var expr = ExObjectFormula.parser.parse(formula);
+      var variables = expr.variables();
+      
+      var form = getForm("editExObject");
+      var fieldElement = form[field];
+  
+      ExObjectFormula.tokenData[field].parser = expr;
+      ExObjectFormula.tokenData[field].variables = variables;
+  
+      function compute(input, target) {
+        ExObjectFormula.computeResult(input, target);
+      }
+      
+      variables.each(function(v){
+        if (!form[v]) return;
+        
+        var inputs = Form.getInputsArray(form[v]);
+        
+        inputs.each(function(input){
+          if (input.hasClassName("date") || input.hasClassName("dateTime") || input.hasClassName("time")) {
+            input.onchange = compute.curry(input, fieldElement);
+          }
+          else {
+            var callback = compute.curry(input, fieldElement);
+            input.observe("change", callback)
+                 .observe("ui:change", callback)
+                 .observe("click", callback);
+          }
+        });
+      });
+    });
+  },
   
   //get the input value : coded or non-coded
   getInputValue: function(element){
     var value = $V(element);
     
-    element = ExObjectFormula.getInputElementsArray(element)[0];
+    element = Form.getInputsArray(element)[0];
     
     var name = element.name;
     var result = ExObjectFormula.tokenData[name].values;
@@ -78,14 +144,6 @@ ExObjectFormula = {
 
     // coded
     return ExObjectFormula.tokenData[name].values[value];
-  },
-  
-  getInputElementsArray: function(element){
-    if (element instanceof NodeList || element instanceof HTMLCollection) {
-     return $A(element);
-    }
-
-    return [element];
   },
 
   //computes the result of a form + exGroup(formula, resultField)

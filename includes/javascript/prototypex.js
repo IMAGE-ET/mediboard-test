@@ -510,6 +510,14 @@ Element.addMethods('form', {
   }
 });
 
+Form.getInputsArray = function(element) {
+  if (element instanceof NodeList || element instanceof HTMLCollection) {
+    return $A(element);
+  }
+
+  return [element];
+};
+
 Object.extend(Event, {
   key: function(e){
     return (window.event && (window.event.keyCode || window.event.which)) || e.which || e.keyCode || false;
@@ -560,6 +568,21 @@ Object.extend(Event, {
         !shiftOn && keys[c]) return true;*/
 
     return false;
+  },
+  wheel: function (event){
+    var delta = 0;
+		
+    if (!event) event = window.event;
+		
+    if (event.wheelDelta) {
+      delta = event.wheelDelta/120; 
+      if (window.opera) delta = -delta;
+    } 
+		else if (event.detail) { 
+		  delta = -event.detail/3; 
+		}
+		
+    return Math.round(delta); //Safari Round
   }
 });
 
