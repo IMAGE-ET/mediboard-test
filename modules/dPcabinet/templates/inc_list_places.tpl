@@ -8,7 +8,7 @@ PlageConsult.setClose = function(time) {
     "{{$plage->freq}}",
     "{{$plage->chir_id}}",
     "{{$plage->_ref_chir->_view|smarty:nodefaults|escape:"javascript"}}");
-  window.parent.Control.Modal.close();
+  window.close();
 };
 PlageConsult.addPlaceBefore = function(plage_id) {
   var oForm = getForm("editPlage");
