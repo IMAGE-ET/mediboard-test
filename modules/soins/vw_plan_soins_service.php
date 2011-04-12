@@ -64,7 +64,6 @@ $ljoin["sejour"] = "sejour.sejour_id = prescription.object_id AND prescription.o
 
 $where = array();
 $where["sejour.sejour_id"] = CSQLDataSource::prepareIn($sejours_id);
-//TODO Rajouter des conditions sur les dates des prescriptions
 
 $elements = $element->loadList($where, null, null, null, $ljoin);
 

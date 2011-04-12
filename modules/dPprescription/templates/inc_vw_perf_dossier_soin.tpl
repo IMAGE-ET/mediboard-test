@@ -25,7 +25,7 @@
   {{/if}}
 	
 	{{if $_prescription_line_mix->commentaire}}
-    <img style="float: right; margin: 2px;" src="images/icons/flag.png" title="" onmouseover="ObjectTooltip.createDOM(this, 'tooltip-content-comment-{{$_prescription_line_mix->_guid}}');" />
+    <img style="float: right; margin: 2px;" src="images/icons/postit.png" title="" onmouseover="ObjectTooltip.createDOM(this, 'tooltip-content-comment-{{$_prescription_line_mix->_guid}}');" />
    
     <table class="tbl" id="tooltip-content-comment-{{$_prescription_line_mix->_guid}}" style="display: none;">
       <tr>

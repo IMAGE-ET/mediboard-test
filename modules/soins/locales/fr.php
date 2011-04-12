@@ -28,6 +28,7 @@ $locales['CSejourTask.one'] = 'Une activité';
 $locales['config-soins-constantes_show'] = 'Affichage des constantes avec les transmissions';
 $locales['config-soins-constantes_show-desc'] = 'Affichage des constantes avec les transmissions';
 $locales['mod-soins-tab-ajax_calcul_debit'] = 'Calcul des débits';
+$locales['mod-soins-tab-ajax_modal_task'] = 'Activité';
 $locales['mod-soins-tab-configure'] = 'Configurer';
 $locales['mod-soins-tab-print_dossier_soins'] = 'Impression des dossiers de soins';
 $locales['mod-soins-tab-print_dossiers_service'] = 'Impression des dossiers du service';
@@ -35,8 +36,8 @@ $locales['mod-soins-tab-vw_bilan_prescription'] = 'Bilan des prescriptions';
 $locales['mod-soins-tab-vw_idx_sejour'] = 'Consulter un séjour';
 $locales['mod-soins-tab-vw_legende_pancarte'] = 'Légende de la pancarte';
 $locales['mod-soins-tab-vw_pancarte_service'] = 'Pancarte des services';
+$locales['mod-soins-tab-vw_plan_soins_service'] = 'Activités';
 $locales['mod-soins-tab-vw_stocks_service'] = 'Commande / Réception';
-$locales['mod-soins-tab-ajax_modal_task'] = 'Activité';
 $locales['module-soins-court'] = 'Dossier de soins';
 $locales['module-soins-long'] = 'Dossier de soins';
 ?>

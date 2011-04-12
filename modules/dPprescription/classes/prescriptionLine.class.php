@@ -694,6 +694,11 @@ class CPrescriptionLine extends CMbObject implements IPatientRelated {
 	        $total_day += $_prise->_quantite_administrable;
 				}
       }
+			if($manual_planif && $this->_planifs_systeme){
+				foreach($this->_planifs_systeme as &$_planifs_by_key){
+					krsort($_planifs_by_key);
+				}
+			}
 			      
       // Stockage du libelle de l'unite de prise
       if($_prise->moment_unitaire_id || $_prise->heure_prise || $_prise->condition || $_prise->datetime){

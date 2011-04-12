@@ -37,6 +37,15 @@ selectCategory = function(oCheckboxCat){
   selectTr(counter);
 }
 
+resetCheckbox = function() {
+	($('categories').select('input[#checkbox]')).each(function(oCheckbox){
+    oCheckbox.checked = null;
+  });
+	$('categories').select('tr').each(function(tr){
+    tr.removeClassName('selected');
+  });
+}
+
 // Mise a jour du compteur lors de la selection d'un element
 updateCountCategory = function(checkbox, category_guid){
   var counter = $('countSelected_'+category_guid);
@@ -96,7 +105,7 @@ Main.add(function(){
 				<table class="tbl" id="categories">
 					<tr>
 						<th class="title">
-							<button class="cancel notext" style="float: left">{{tr}}Reset{{/tr}}</button>
+							<button type="button" class="cancel notext" style="float: left" onclick="resetCheckbox();">{{tr}}Reset{{/tr}}</button>
 	            Activités
 						</th>
 					</tr>

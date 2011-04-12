@@ -210,16 +210,26 @@ PlanSoins = {
 	  var bornes_dossier = PlanSoins.bornes_composition_dossier;
 	  var bornes_visibles = bornes_dossier[periode_visible];
 	  
-	  $$(".manual_planif").each(function(planif){
-	    var date = planif.getAttribute("data-datetime");
-	    if(date >= bornes_visibles["min"] && date <= bornes_visibles["max"]){
-	      planif.show();
-	    } else {
-	      planif.hide();
-	    }
-	  });
+		$$("div.manual_planif_line").each(function(planifs){
+			var margin_top  = 0;
+			var margin_left = 0;
+			planifs.select("div.manual_planif").each(function(planif){
+				var date = planif.getAttribute("data-datetime");
+	      if(date >= bornes_visibles["min"] && date <= bornes_visibles["max"]){
+	        planif.setStyle({
+						marginTop: margin_top + "px",
+						marginLeft: margin_left + "px"
+					})
+					planif.show();
+          margin_top = margin_top - 8;
+				  margin_left = margin_left + 5;
+	      } else {
+	        planif.hide();
+	      }
+			});
+		});
 	},
-
+	
 	// Deplacement du dossier de soin
 	moveDossierSoin: function(element){
 	  var periode_visible = PlanSoins.composition_dossier[PlanSoins.formClick.nb_decalage.value];
@@ -253,7 +263,7 @@ PlanSoins = {
 	    }
 	  });
 	  
-	  $(draggable).up(1).select('td').each(function(td) {
+	  $(draggable).up('tr').select('td').each(function(td) {
 	    if(td.hasClassName("canDrop")){
 	      Droppables.add(td.id, {
 	        onDrop: function(element) {

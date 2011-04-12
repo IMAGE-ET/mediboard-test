@@ -25,7 +25,9 @@
 <tr id="line_{{$line_class}}_{{$line_id}}_{{$unite_prise|regex_replace:'/[^a-z0-9_-]/i':'_'}}">
 	{{if @$show_patient}}
 	<td style="text-align: center;" class="text">
+	  <span onmouseover="ObjectTooltip.createEx(this, '{{$prescription->_ref_object->_guid}}')">
     {{mb_ditto name="patient" value=$prescription->_ref_patient->_view}}
+		</span>
 	</td>
 	{{/if}}
   {{if $conf.dPprescription.CPrescription.show_categories_plan_soins && !$line->inscription}}
@@ -92,7 +94,7 @@
   {{if $line->inscription || $smarty.foreach.$last_foreach.first}}
   <td class="text" rowspan="{{$nb_line}}" {{if $line instanceof CPrescriptionLineMedicament && $line->traitement_personnel}}style="background-color: #BDB"{{/if}}>
 		{{if $line->commentaire}}
-      <img src="images/icons/flag.png" title="" style="float: right; margin: 2px;" onmouseover="ObjectTooltip.createDOM(this, 'tooltip-content-comment-{{$line->_guid}}');" />
+      <img src="images/icons/postit.png" title="" style="float: right; margin: 2px;" onmouseover="ObjectTooltip.createDOM(this, 'tooltip-content-comment-{{$line->_guid}}');" />
 			<table class="tbl" id="tooltip-content-comment-{{$line->_guid}}" style="display: none;">
 			  <tr>
 			  	<th>Commentaire - {{$line->_view}}</th>

@@ -17,8 +17,10 @@ Main.add(function(){
 <table class="tbl" id="plan_soin" style="display: none;">
 	<tr>
 	  <th class="title" colspan="100">
-	    <button class="change notext" style="float: left" onclick="updatePlanSoinsPatients();">{{tr}}Refresh{{/tr}}</button>
-			<form name="mode_dossier_soin" action="?" method="get">
+	  	<button type="button" class="tick" onclick="PlanSoins.applyAdministrations();" id="button_administration" style="float: right">
+     </button>
+	    <button class="change" style="float: left" onclick="updatePlanSoinsPatients();">{{tr}}Search{{/tr}}</button>
+			<form name="mode_dossier_soin" action="?" method="get" style="font-size: 0.8em;">
         <label>
           <input type="radio" name="mode_dossier" value="administration" {{if $mode_dossier == "administration" || $mode_dossier == ""}}checked="checked"{{/if}} 
                  onclick="PlanSoins.viewDossierSoin($('plan_soin'));"/>Administration
@@ -28,9 +30,6 @@ Main.add(function(){
                  onclick="PlanSoins.viewDossierSoin($('plan_soin'));" />Planification
         </label>
      </form>
-		 
-		 <button type="button" class="tick" onclick="PlanSoins.applyAdministrations();" id="button_administration">
-     </button>
 	</th>
 </tr>
    <tr>
@@ -112,5 +111,11 @@ Main.add(function(){
         {{/foreach}}
       {{/foreach}}
 		{{/foreach}}
+	{{foreachelse}}
+	<tr>
+		<td class="empty" colspan="20">
+			{{tr}}Aucune prescription{{/tr}}
+		</td>
+	</tr>
 	{{/foreach}}
 </table>
