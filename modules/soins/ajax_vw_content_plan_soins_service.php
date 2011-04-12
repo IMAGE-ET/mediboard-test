@@ -170,7 +170,6 @@ $smarty->assign("composition_dossier", $composition_dossier);
 $smarty->assign("bornes_composition_dossier", $bornes_composition_dossier);
 $smarty->assign("categories", $categories);
 
-
 $count_colspan = CAppUI::conf("dPprescription CPrescription manual_planif") ? 1 : 0;
 $smarty->assign("tabHours", $tabHours);
 $smarty->assign("count_matin"         , count($matin)+2+$count_colspan);
@@ -183,7 +182,8 @@ $smarty->assign("mode_dossier", $mode_dossier);
 $smarty->assign("nb_lines_element", $nb_lines_element);
 $smarty->assign("now", mbDateTime());
 $smarty->assign("date", $date);
-
+$smarty->assign("move_dossier_soin", false);
+ 
 $smarty->display('inc_vw_content_plan_soins_service.tpl');
 
 ?>
