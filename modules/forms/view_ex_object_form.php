@@ -69,6 +69,7 @@ foreach($fields as $_field) {
   $formula_token_values[$_field->name] = array(
     "values"  => $_field->getFormulaValues(),
     "formula" => $_field->formula,
+    "formulaView" => utf8_encode($_field->_formula),
   );
 }
 

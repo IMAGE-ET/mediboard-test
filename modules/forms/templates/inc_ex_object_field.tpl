@@ -39,7 +39,7 @@
     {{mb_field object=$ex_object field=$_field_name register=true increment=true form=editExObject}}
   </fieldset>
 {{elseif $ex_field->formula}}
-  {{mb_field object=$ex_object field=$_field_name readonly=true style="font-weight: bold;"}}
+  {{mb_field object=$ex_object field=$_field_name readonly=true style="font-weight: bold; background-color: #aaff56;"}}
 {{else}}
   {{mb_field object=$ex_object field=$_field_name register=true increment=true form=editExObject defaultOption=" &mdash; "}}
 {{/if}}

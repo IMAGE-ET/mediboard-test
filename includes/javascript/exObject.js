@@ -72,15 +72,22 @@ ExObjectFormula = {
       var field = token.key;
       var data = token.value;
       var formula = data.formula;
-  
+			
       if (!formula) return;
   
       formula = formula.replace(/[\[\]]/g, "");
-      var expr = ExObjectFormula.parser.parse(formula);
-      var variables = expr.variables();
       
       var form = getForm("editExObject");
       var fieldElement = form[field];
+			
+			try {
+				var expr = ExObjectFormula.parser.parse(formula);
+				var variables = expr.variables();
+			}
+			catch(e) {
+				fieldElement.insert({after: DOM.div({className: 'small-error'}, "Formule invalide: <br /><strong>"+data.formulaView+"</strong>")});
+				return;
+			}
   
       ExObjectFormula.tokenData[field].parser = expr;
       ExObjectFormula.tokenData[field].variables = variables;
