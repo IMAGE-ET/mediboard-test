@@ -15,10 +15,12 @@
 
 // Refresh du plan de soin
 updatePlanSoinsPatients = function(){
-  var url = new Url("soins", "ajax_vw_content_plan_soins_service");
-	url.addParam("categories_id[]", $V(getForm("selectElts").elts), true);
-	url.addParam("date", "{{$date}}");
-	url.requestUpdate("content_plan_soins_service");
+  if($('content_plan_soins_service')){
+    var url = new Url("soins", "ajax_vw_content_plan_soins_service");
+	  url.addParam("categories_id[]", $V(getForm("selectElts").elts), true);
+	  url.addParam("date", "{{$date}}");
+	  url.requestUpdate("content_plan_soins_service");
+	}
 }
 
 // Selection ou deselection de tous les elements d'une catégorie
@@ -104,6 +106,7 @@ Main.add(function(){
         
 			  Gestion des activités du service 
 				<select name="service_id" onchange="this.form.submit();">
+					<option value="">&mdash; Service</option>
 				  {{foreach from=$services item=_service}}
 					  <option value="{{$_service->_id}}" {{if $_service->_id == $service->_id}}selected="selected"{{/if}}>{{$_service->_view}}</option>
 					{{/foreach}}
@@ -113,6 +116,8 @@ Main.add(function(){
 		  </form>
 		</th>
 	</tr>
+	
+	{{if $service->_id}}
 	<tr>
 		<td style="width: 20%;">
 			<form name="selectElts" action="?" method="get">
@@ -164,4 +169,13 @@ Main.add(function(){
 		<td id="content_plan_soins_service">
 		</td>
   </tr>
+	{{else}}
+	<tr>
+		<td>
+			<div class="small-info">
+				Veuillez sélectionner un service pour accéder à la gestion des activités de celui-ci.
+			</div>
+		</td>
+	</tr>
+	{{/if}}
 </table>
