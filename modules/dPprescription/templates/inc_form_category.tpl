@@ -78,6 +78,10 @@
       <th>{{mb_label object=$category field="cible_importante"}}</th>
       <td>{{mb_field object=$category field="cible_importante"}}</td>
     </tr>
+    <tr>
+      <th>{{mb_label object=$category field="only_cible"}}</th>
+      <td>{{mb_field object=$category field="only_cible"}}</td>
+    </tr>
 	  <tr>
 	    <td class="button" colspan="2">
 	    {{if $category->_id}}

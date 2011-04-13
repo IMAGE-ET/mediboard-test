@@ -13,7 +13,10 @@ global $AppUI;
 // chargement des categories de prescription et des elements associés
 $chapitres = CCategoryPrescription::loadCategoriesByChap(null, "current");
 foreach($chapitres as &$categories){
-	foreach($categories as &$category){
+	foreach($categories as $key=>&$category){
+	  if ($category->only_cible) {
+	    unset($categories[$key]); continue;
+	  }
 		$category->loadElementsPrescription(false);
 	}
 }

@@ -1861,7 +1861,12 @@ class CSetupdPprescription extends CSetup {
               CHANGE `debit` `debit` FLOAT NOT NULL;";
 		$this->addQuery($query);
 		
-		$this->mod_version = "1.37";
+		$this->makeRevision("1.37");
+		$query = "ALTER TABLE `category_prescription`
+		          ADD `only_cible` ENUM ('0','1') DEFAULT '0';";
+		$this->addQuery($query);
+		
+		$this->mod_version = "1.38";
   }
 }
 
