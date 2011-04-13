@@ -41,8 +41,7 @@
 
   <div style="cursor: pointer; padding: 2px;" class="{{if @$transmissions.CPrescriptionLineMix.$prescription_line_mix_id|@count}}transmission{{else}}transmission_possible{{/if}}"
      onmouseover="ObjectTooltip.createEx(this, '{{$_prescription_line_mix->_guid}}')" 
-	   onclick='editPerf("{{$_prescription_line_mix->_id}}","{{$date}}",document.mode_dossier_soin.mode_dossier.value, "{{$sejour->_id}}");
-	            addCibleTransmission("CPrescriptionLineMix","{{$_prescription_line_mix->_id}}","{{$_prescription_line_mix->_view}}");'>
+	   onclick="editPerf('{{$_prescription_line_mix->_id}}','{{$date}}',document.mode_dossier_soin.mode_dossier.value, '{{$sejour->_id}}');">
     {{tr}}CPrescriptionLineMix.type.{{$_prescription_line_mix->type}}{{/tr}} 
 		{{if $_prescription_line_mix->voie}}
 		  ({{$_prescription_line_mix->voie}})
@@ -235,7 +234,7 @@
 							      {{if isset($_prescription_line_mix->_prises_prevues.$_date.$_hour|smarty:nodefaults)}}
 										onclick="ObjectTooltip.createDOM(this, 'tooltip-content-prises-{{$_prescription_line_mix->_guid}}-{{$_date}}-{{$_hour}}', { duration: 0 } );"
 										{{else}}
-										ondblclick='addAdministrationPerf("{{$_prescription_line_mix->_id}}","{{$_date}}","{{$_hour}}", null,document.mode_dossier_soin.mode_dossier.value, "{{$sejour->_id}}");'
+										ondblclick='addAdministrationPerf("{{$_prescription_line_mix->_id}}","{{$_date}}","{{$_hour}}", null,$V(document.mode_dossier_soin.mode_dossier), "{{$sejour->_id}}");'
 										{{/if}}
 										{{/if}}
                     class="administration {{$etat}} perfusion">
@@ -259,7 +258,7 @@
 									  <table class="tbl">
 									    <tr>
 									    	<th colspan="2">
-									    	  <button class="search" type="button" onclick='addAdministrationPerf("{{$_prescription_line_mix->_id}}","{{$_date}}","{{$_hour}}","{{$_prise}}",document.mode_dossier_soin.mode_dossier.value, "{{$sejour->_id}}");'>Administrations de {{$_prise|date_format:$conf.time}}</button>
+									    	  <button class="search" type="button" onclick='addAdministrationPerf("{{$_prescription_line_mix->_id}}","{{$_date}}","{{$_hour}}","{{$_prise}}",$V(document.mode_dossier_soin.mode_dossier), "{{$sejour->_id}}");'>Administrations de {{$_prise|date_format:$conf.time}}</button>
 												</th>
 									    </tr>
 											{{foreach from=$_prescription_line_mix->_ref_lines item=_perf_line}}

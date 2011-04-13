@@ -62,21 +62,8 @@ printBons = function(prescription_id){
   url.popup(900, 600, "Impression des bons");
 }
 
-addCibleTransmission = function(object_class, object_id, view, libelle_ATC) {
-  oDiv = $('cibleTrans');
-  if(!oDiv) {
-    return;
-  }
-  oForm = document.forms['editTrans'];
-  if(object_id && object_class){
-	  $V(oForm.object_class, object_class);
-	  $V(oForm.object_id, object_id);
-  }
-  if(libelle_ATC){
-    $V(oForm.libelle_ATC, libelle_ATC);
-  }
-  oDiv.innerHTML = view;
-  oForm.text.focus();
+addCibleTransmission = function(object_class, object_id, libelle_ATC) {
+  addTransmission('{{$sejour->_id}}', '{{$app->user_id}}', null, object_id, object_class, libelle_ATC);
 }
 
 addAdministrationPerf = function(prescription_line_mix_id, date, hour, time_prevue, mode_dossier, sejour_id){
@@ -186,6 +173,44 @@ showDebit = function(div, color){
 	});
 }
 
+submitSuivi = function(oForm, del) {
+  sejour_id = oForm.sejour_id.value;
+  submitFormAjax(oForm, 'systemMsg', { onComplete: function() {
+    if (!del) {
+      Control.Modal.close();
+    }
+    if($V(oForm.object_class)|| $V(oForm.libelle_ATC)){
+      // Refresh de la partie administration
+      if($('jour').visible()){
+        Prescription.loadTraitement(sejour_id,'{{$date}}','','administration');
+      }
+      // Refresh de la partie plan de soin
+      if($('semaine').visible()){
+        calculSoinSemaine('{{$date}}', '{{$prescription_id}}');
+      }
+    }
+    if ($('dossier_suivi').visible()) {
+      loadSuivi(sejour_id);
+    }
+    updateNbTrans(sejour_id);
+  } });
+}
+
+updateNbTrans = function(sejour_id) {
+  var url = new Url("dPhospi", "ajax_count_transmissions");
+  url.addParam("sejour_id", sejour_id);
+  url.requestJSON(function(elt)  {
+    var nb_trans = $("nb_trans");
+    if (!elt) {
+      nb_trans.up().addClassName("empty");
+    }
+    else {
+      nb_trans.up().removeClassName("empty")
+    }
+    nb_trans.update("("+elt+")");
+  });
+}
+
 Main.add(function () {
 
   PlanSoins.init({
@@ -198,7 +223,9 @@ Main.add(function () {
   if(window.loadSuivi){
 	  loadSuivi('{{$sejour->_id}}');
 	}
-	
+
+  updateNbTrans('{{$sejour->_id}}');
+  
 	// Deplacement du dossier de soin
 	if($('plan_soin')){
     PlanSoins.moveDossierSoin($('tbody_date'));
@@ -272,6 +299,7 @@ Main.add(function () {
 	  <li onmousedown="Prescription.loadTraitement('{{$sejour->_id}}','{{$date}}','','administration','','','','med'); refreshTabState();"><a href="#jour">Journée</a></li>
 	  <li onmousedown="calculSoinSemaine('{{$date}}','{{$prescription_id}}');"><a href="#semaine">Semaine</a></li>
 		<li onmousedown="updateTasks('{{$sejour->_id}}');"><a href="#tasks">Activités</a></li>
+    <li onmousedown="loadSuivi('{{$sejour->_id}}')"><a href="#dossier_suivi">{{tr}}CMbObject-back-transmissions{{/tr}} <span id="nb_trans"></span></a></li>
 	</ul>
 	<hr class="control_tabs" />
 	
@@ -354,8 +382,7 @@ Main.add(function () {
 	</div>
 	<div id="semaine" style="display:none"></div>
 	<div id="tasks" style="display:none"></div>
-	<hr />
-	<div id="dossier_suivi"></div>
+  <div id="dossier_suivi" style="display:none"></div>
 {{else}}
   <div class="small-info">
     Veuillez sélectionner un séjour pour pouvoir accéder au suivi de soins.

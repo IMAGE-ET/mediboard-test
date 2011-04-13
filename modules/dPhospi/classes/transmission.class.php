@@ -27,8 +27,12 @@ class CTransmissionMedicale extends CMbMetaObject {
   var $_ref_user   = null;
   var $_ref_cible  = null;
   
+  // Form fields
   var $_cible      = null;
-    
+  var $_text_data   = null;
+  var $_text_action = null;
+  var $_text_result = null;
+  
   function getSpec() {
     $spec = parent::getSpec();
     $spec->table = 'transmission_medicale';
@@ -44,9 +48,12 @@ class CTransmissionMedicale extends CMbMetaObject {
     $props["user_id"]      = "ref notNull class|CMediusers";
     $props["degre"]        = "enum notNull list|low|high default|low";
     $props["date"]         = "dateTime notNull";
-    $props["text"]         = "text helped|type|degre";
+    $props["text"]         = "text helped|type|object_id";
     $props["type"]         = "enum list|data|action|result";
     $props["libelle_ATC"]  = "text";
+    $props["_text_data"]   = "text helped|type|object_id";
+    $props["_text_action"] = "text helped|type|object_id";
+    $props["_text_result"] = "text helped|type|object_id";
     return $props;
   }
   

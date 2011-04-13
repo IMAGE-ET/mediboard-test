@@ -16,12 +16,11 @@
 
 <script type="text/javascript">
 
-function loadSuivi(sejour_id, user_id, line_guid) {
+function loadSuivi(sejour_id, user_id) {
   if(sejour_id) {
     var urlSuivi = new Url("dPhospi", "httpreq_vw_dossier_suivi");
     urlSuivi.addParam("sejour_id", sejour_id);
     urlSuivi.addParam("user_id", user_id);
-		urlSuivi.addParam("line_guid", line_guid);
     urlSuivi.requestUpdate("suivisoins");
   }
 }

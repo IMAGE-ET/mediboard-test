@@ -16,7 +16,7 @@
   </td>
 	{{/if}}
  	<td class="text">
- 	  <div onclick='addCibleTransmission("CPrescriptionLineMix","{{$_prescription_line_mix->_id}}","{{$_prescription_line_mix->_view}}");' 
+ 	  <div onclick="addCibleTransmission('CPrescriptionLineMix', '{{$_prescription_line_mix->_id}}')" 
 	       class="{{if @$transmissions.CPrescriptionLineMix.$prescription_line_mix_id|@count}}transmission{{else}}transmission_possible{{/if}}">
 	    <a href="#{{$_prescription_line_mix->_guid}}" onmouseover="ObjectTooltip.createEx(this, '{{$_prescription_line_mix->_guid}}')">
 	      {{$_prescription_line_mix}} 

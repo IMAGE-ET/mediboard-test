@@ -17,6 +17,15 @@ $text          = utf8_decode(CValue::get("text", CValue::post("text", "")));
 $depend_value_1 = CValue::get("depend_value_1");
 $depend_value_2 = CValue::get("depend_value_2");
 
+// Si les depend values sont sur des objets
+$class_depend_value_1 = "";
+$class_depend_value_2 = "";
+
+switch ($class) {
+  case "CTransmissionMedicale" :
+    $class_depend_value_2 = "CCategoryPrescription";
+}
+
 // Liste des users accessibles
 $listPrat = new CMediusers();
 $listFct = $listPrat->loadFonctions(PERM_EDIT);
@@ -33,15 +42,27 @@ $dependValues = array();
 
 // To set the depend values always as an array (empty or not)
 $helped = array();
+
 if ($object->_specs[$field]->helped && !is_bool($object->_specs[$field]->helped)) {
-	if (!is_array($object->_specs[$field]->helped)) 
+	if (!is_array($object->_specs[$field]->helped)) {
 	  $helped = array($object->_specs[$field]->helped);
-	else 
+	}
+	else {
 	  $helped = $object->_specs[$field]->helped;
+	}
 }
+
 foreach ($helped as $i => $depend_field) {
   $key = "depend_value_" . ($i+1);
-  $dependValues[$key] = @$object->_specs[$depend_field]->_locales;
+  $spec = $object->_specs[$depend_field];
+
+  switch(get_class($spec)) {
+    case "CEnumSpec":
+      $dependValues[$key] = $spec->_locales;
+      break;
+    case "CRefSpec":
+      $dependValues[$key] = array("CRefSpec" => ${'class_'.$key} ? ${'class_'.$key} : $spec->class );
+  }
 }
 
 // Liste des aides

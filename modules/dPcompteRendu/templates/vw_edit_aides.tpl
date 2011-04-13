@@ -1,3 +1,4 @@
+{{mb_script module=system script=object_selector}}
 
 <script type="text/javascript">
 Main.add(function () {
@@ -127,31 +128,104 @@ function changeUser(user_id) {
     </tr>
   
     {{if array_key_exists('depend_value_1', $dependValues)}}
-    <tr>
-      <th>{{mb_label object=$aide field="depend_value_1"}}</th>
-      <td>
-        <select name="depend_value_1" class="{{$aide->_props.depend_value_1}}">
-          <option value="">&mdash; Tous</option>
-          {{foreach from=$dependValues.depend_value_1 key=_value item=_translation}}
-          <option value="{{$_value}}" {{if $_value == $aide->depend_value_1}}selected="selected"{{/if}}>{{$_translation}}</option>
-          {{/foreach}}
-        </select>
-      </td>
-    </tr>
+      <tr>
+        <th>{{mb_label object=$aide field="depend_value_1"}}</th>
+        <td>
+          {{if array_key_exists('CRefSpec', $dependValues.depend_value_1)}}
+            {{assign var=object_class_dp_1 value=$dependValues.depend_value_1.CRefSpec}}
+            
+            {{mb_field object=$aide field="depend_value_1" hidden=true}}
+            <input type="hidden" name="_ref_class_depend_value_1" value="{{$object_class_dp_1}}" />
+            <input type="text" name="_depend_value_1_view" value="{{$aide->depend_value_1}}" />
+            <button type="button" class="search notext" onclick="ObjectSelector.init()"></button>
+            <script type="text/javascript">
+              Main.add(function(){
+                var form = getForm("editAides");
+                
+                var url = new Url("system", "ajax_seek_autocomplete");
+                url.addParam("object_class", "{{$object_class_dp_1}}");
+                url.addParam("field", "depend_value_1");
+                url.addParam("input_field", "_depend_value_1_view");
+                url.autoComplete(form.elements._depend_value_1_view, null, {
+                  minChars: 3,
+                  method: "get",
+                  select: "view",
+                  dropdown: true,
+                  afterUpdateElement: function(field,selected){
+                    var value = selected.down('.view').innerHTML;
+                    $V(field.form.elements.depend_value_1, value);
+                  }
+                });
+              });
+              ObjectSelector.init = function(){  
+                this.sForm     = "editAides";
+                this.sView     = "keywords_dp1";
+                this.sClass    = "_ref_class_depend_value_1";
+                this.onlyclass = "false";
+                this.pop();
+                this.pop();
+              }
+            </script>
+          {{else}}
+            <select name="depend_value_1" class="{{$aide->_props.depend_value_1}}">
+              <option value="">&mdash; Tous</option>
+              {{foreach from=$dependValues.depend_value_1 key=_value item=_translation}}
+              <option value="{{$_value}}" {{if $_value == $aide->depend_value_1}}selected="selected"{{/if}}>{{$_translation}}</option>
+              {{/foreach}}
+            </select>
+          {{/if}}
+        </td>
+      </tr>
     {{/if}}
   
     {{if array_key_exists('depend_value_2', $dependValues)}}
-    <tr>
-      <th>{{mb_label object=$aide field="depend_value_2"}}</th>
-      <td>
-        <select name="depend_value_2" class="{{$aide->_props.depend_value_2}}">
-          <option value="">&mdash; Tous</option>
-          {{foreach from=$dependValues.depend_value_2 key=_value item=_translation}}
-          <option value="{{$_value}}" {{if $_value == $aide->depend_value_2}}selected="selected"{{/if}}>{{$_translation}}</option>
-          {{/foreach}}
-        </select>
-      </td>
-    </tr>
+      <tr>
+        <th>{{mb_label object=$aide field="depend_value_2"}}</th>
+        <td>
+          {{if array_key_exists('CRefSpec', $dependValues.depend_value_2)}}
+            {{assign var=object_class_dp_2 value=$dependValues.depend_value_2.CRefSpec}}
+            
+            {{mb_field object=$aide field="depend_value_2" hidden=true}}
+            <input type="hidden" name="_ref_class_depend_value_2" value="{{$object_class_dp_2}}" />
+            <input type="text" name="_depend_value_2_view" value="{{$aide->depend_value_2}}" />
+            <button type="button" class="search notext" onclick="ObjectSelector.init()"></button>
+            <script type="text/javascript">
+              Main.add(function(){
+                var form = getForm("editAides");
+                
+                var url = new Url("system", "ajax_seek_autocomplete");
+                url.addParam("object_class", "{{$object_class_dp_2}}");
+                url.addParam("field", "depend_value_2");
+                url.addParam("input_field", "_depend_value_2_view");
+                url.autoComplete(form.elements._depend_value_2_view, null, {
+                  minChars: 3,
+                  method: "get",
+                  select: "view",
+                  dropdown: true,
+                  afterUpdateElement: function(field,selected){
+                    var value = selected.down('.view').innerHTML;
+                    $V(field.form.elements.depend_value_2, value);
+                  }
+                });
+              });
+              ObjectSelector.init = function(){  
+                this.sForm     = "editAides";
+                this.sView     = "keywords_dp2";
+                this.sClass    = "_ref_class_depend_value_2";
+                this.onlyclass = "false";
+                this.pop();
+              }
+            </script>
+          {{else}}
+            <select name="depend_value_2" class="{{$aide->_props.depend_value_2}}">
+              <option value="">&mdash; Tous</option>
+              {{foreach from=$dependValues.depend_value_2 key=_value item=_translation}}
+              <option value="{{$_value}}" {{if $_value == $aide->depend_value_2}}selected="selected"{{/if}}>{{$_translation}}</option>
+              {{/foreach}}
+            </select>
+          {{/if}}
+        </td>
+      </tr>
     {{/if}}
     
     <tr>
@@ -207,11 +281,26 @@ function changeUser(user_id) {
         <td class="text">
           {{mb_value object=$_aide field="text"}}
         </td>
+        
         <td class="text">
-          {{mb_value object=$_aide field="depend_value_1"}}
+          {{if !array_key_exists('CRefSpec', $dependValues.depend_value_1)}}
+            {{assign var=key_dp value=$_aide->depend_value_1}}
+            {{if array_key_exists($key_dp, $dependValues.depend_value_1)}}
+              {{$dependValues.depend_value_1.$key_dp}}
+            {{/if}}
+          {{else}}
+            {{$_aide->depend_value_1}}
+          {{/if}}
         </td>
         <td class="text">
-          {{mb_value object=$_aide field="depend_value_2"}}
+          {{if !array_key_exists('CRefSpec', $dependValues.depend_value_2) && $_aide->depend_value_2}}
+            {{assign var=key_dp value=$_aide->depend_value_2}}
+            {{if array_key_exists($key_dp, $dependValues.depend_value_2)}}
+              {{$dependValues.depend_value_2.$key_dp}}
+            {{/if}}
+          {{else}}
+            {{$_aide->depend_value_2}}
+          {{/if}}
         </td>
       </tr>
     {{foreachelse}}

@@ -25,13 +25,13 @@
 	
 	ContraintesRPU.contraintesProvenance = {{$contrainteProvenance|@json}};
 	
-	function loadSuivi(sejour_id, user_id, line_guid) {
+	function loadSuivi(sejour_id, user_id, cible) {
 	  if(sejour_id) {
 	    var urlSuivi = new Url("dPhospi", "httpreq_vw_dossier_suivi");
 	    urlSuivi.addParam("sejour_id", sejour_id);
 	    urlSuivi.addParam("user_id", user_id);
-			urlSuivi.addParam("libe_guid", line_guid);
-	    urlSuivi.requestUpdate("suivisoins");
+			urlSuivi.addParam("cible", cible);
+	    urlSuivi.requestUpdate("suivisoins", {onComplete: function() { Control.Modal.close(); } });
 	  }
 	}
 	

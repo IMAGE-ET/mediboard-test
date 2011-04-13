@@ -151,7 +151,7 @@ Main.add(function () {
     </th>
     <th>{{tr}}Hour{{/tr}}</th>
     <th>Cible</th>
-    <th>{{mb_title class=CTransmissionMedicale field=text}}</th>
+    <th colspan="2">{{mb_title class=CTransmissionMedicale field=text}}</th>
   </tr>
   <tbody id="list_transmissions">
   {{assign var=date value=""}}

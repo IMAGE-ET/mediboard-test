@@ -24,7 +24,7 @@ submitTiming = function(){
 submitTransmissions = function(){
   var oForm = document.forms['editTrans'];
   submitFormAjax(oForm,'systemMsg', { onComplete: function() { 
-  	refreshPerfTransmissions(); 
+  	refreshPerfTransmissions();
     refreshDossierSoin();
 		window.opener.loadSuivi('{{$sejour_id}}');
   } } );
@@ -43,17 +43,17 @@ refreshPerfTiming = function(){
   url.requestUpdate("perf_timing");
 }
 
-refreshPerfTransmissions = function(){
-  var url = new Url;
-  url.setModuleAction("dPprescription", "edit_perf_dossier_soin");
-  url.addParam("prescription_line_mix_id", "{{$prescription_line_mix_id}}");
-  url.addParam("mode_refresh", "trans");
+refreshPerfTransmissions = function(transmission_id){
+  var url = new Url("dPhospi", "ajax_transmission");
+  url.addParam("sejour_id"   , "{{$transmission->sejour_id}}");
+  url.addParam("user_id"     , '{{$transmission->user_id}}');
+  url.addParam("object_id"   , '{{$prescription_line_mix_id}}');
+  url.addParam("object_class", "CPrescriptionLineMix");
   url.requestUpdate("perf_trans");
 }
 
 Main.add( function(){
   refreshPerfTiming();
-  refreshPerfTransmissions();
 } );
 
 </script>
@@ -62,4 +62,7 @@ Main.add( function(){
 <div id="perf_timing"></div>
 
 <!-- Gestion des transmissions -->
-<div id="perf_trans"></div>
+<div id="perf_trans">
+{{assign var=hide_cible value=1}}
+{{mb_include module=dPhospi template=inc_transmission}}
+</div>

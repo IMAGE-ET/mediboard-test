@@ -252,7 +252,7 @@ selectPeriode = function(element) {
 <br />
 <table class="tbl">
 	<tr>
-		<th colspan="6" class="title">Transmissions  - 
+		<th colspan="7" class="title">Transmissions  - 
     {{$service->_view}} - du {{$dateTime_min|date_format:$conf.datetime}} au {{$dateTime_max|date_format:$conf.datetime}}
 		</th>
 	</tr>
@@ -269,7 +269,7 @@ selectPeriode = function(element) {
   			  {{assign var=patient value=$sejour->_ref_patient}}
           {{assign var=operation value=$sejour->_ref_last_operation}}
 					<tr>
-			      <th colspan="6" class="text">
+			      <th colspan="7" class="text">
               <span style="float: left; text-align: left;">
                 {{foreach from=$sejour->_ref_affectations item=_affectation}}
                    <strong
@@ -305,7 +305,7 @@ selectPeriode = function(element) {
 			      </th>
 			    </tr>
 			    <tr>
-			      <th class="element text" colspan="6" style="text-align: left">
+			      <th class="element text" colspan="7" style="text-align: left">
 			        <strong>{{$operation->libelle}}</strong> 
 			        {{if !$operation->libelle}}
 			          {{foreach from=$operation->_ext_codes_ccam item=curr_ext_code}}

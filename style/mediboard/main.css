@@ -772,6 +772,11 @@ table#weber td {
   width: 150px;	
 }
 
+.listeChoixCR input {
+  margin: 1px;
+  float: left; 
+}
+
 /* Installation wizard */
 .wizard {
   padding: 20px;

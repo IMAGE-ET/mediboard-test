@@ -7,7 +7,9 @@ var AideSaisie = {
     initialize: function(element, options){
       this.element = $(element);
       this.options = Object.extend({
-        dependField1: null, 
+        dependField1: null,
+        classDependField1: null,
+        classDependField2: null,
         dependField2: null, 
         searchField: null, 
         objectClass: null, 
@@ -333,10 +335,12 @@ var AideSaisie = {
           this.options.objectClass, 
           this.element, 
           this.options.property, 
-          $V(this.options.dependField1), 
+          $V(this.options.dependField1),
           $V(this.options.dependField2), 
           this.text,
-          this.options.defaultUserId
+          this.options.defaultUserId,
+          this.options.classDependField1,
+          this.options.classDependField2
         );
       }.bindAsEventListener(this));
 
@@ -377,7 +381,7 @@ var AideSaisie = {
     }
   }),
   
-  create: function (objectClass, field, name, dependValue1, dependValue2, text, userId) {
+  create: function (objectClass, field, name, dependValue1, dependValue2, text, userId, class_depend_value_1, class_depend_value_2) {
     var url = new Url("dPcompteRendu", "edit_aide");
     url.addParam("user_id"     , userId);
     url.addParam("class"       , objectClass);
@@ -385,6 +389,8 @@ var AideSaisie = {
     url.addParam("text"        , text || field.value);
     url.addParam("depend_value_1", dependValue1 || null);
     url.addParam("depend_value_2", dependValue2 || null);
+    url.addParam("class_depend_value_1", class_depend_value_1 || null);
+    url.addParam("class_depend_value_2", class_depend_value_2 || null);
     url.popup(600, 400, "AidesSaisie");
   }
 };

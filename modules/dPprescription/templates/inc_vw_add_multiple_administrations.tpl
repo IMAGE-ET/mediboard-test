@@ -16,7 +16,7 @@ function submitAllAdministrations() {
   var submitForms = $('administrations').select('form');
   var transForm = getForm('editTrans');
 
-	if (transForm.text.value) {
+	if (transForm._text_data.value || transForm._text_action.value || transForm._text_result.value) {
 	  submitFormAjax(transForm, 'systemMsg');
 	}
 		
@@ -168,27 +168,8 @@ Main.add( function(){
 		  </tr>
 		  <tr>
 		    <td>
-		      <form name="editTrans" action="?m={{$m}}" method="post" onsubmit="return checkForm(this)">
-		        <input type="hidden" name="dosql" value="do_transmission_aed" />
-		        <input type="hidden" name="del" value="0" />
-		        <input type="hidden" name="m" value="dPhospi" />
-		        <input type="hidden" name="object_class" value="" />
-		        <input type="hidden" name="object_id" value="" />
-		        <input type="hidden" name="sejour_id" value="{{$sejour->_id}}" />
-		        <input type="hidden" name="user_id" value="{{$app->user_id}}" />
-		        <input type="hidden" name="date" value="now" />
-						<div style="float: right">
-              <select name="_helpers_text" size="1" onchange="pasteHelperContent(this);" class="helper">
-                <option value="">&mdash; Aide</option>
-                {{html_options options=$transmission->_aides.text.no_enum}}
-              </select>
-              <button class="new notext" title="Ajouter une aide à la saisie" type="button" onclick="addHelp('CTransmissionMedicale', this.form.text, '', '', '', '', {{$user_id}})">{{tr}}New{{/tr}}</button><br />      
-            </div>
-            {{mb_field object=$transmission field="degre"}}
-            {{mb_field object=$transmission field="type" typeEnum=radio}}
-            <br />
-            {{mb_field object=$transmission field="text"}}
-		      </form>
+          {{assign var=hide_button_add value=1}}
+          {{mb_include module=dPhospi template=inc_transmission}}
 		    </td>
 		  </tr>
 		</table>

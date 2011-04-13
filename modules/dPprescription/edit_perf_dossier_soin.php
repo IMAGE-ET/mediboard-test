@@ -22,34 +22,25 @@ $prescription_line_mix->loadRefsLines();
 $prescription_line_mix->loadVoies();
 $prescription_line_mix->loadRefsVariations();
 
-// Refresh des transmissions
-if($mode_refresh == "trans"){
-  $transmissions = array();
-  // Chargement des transmissions
-  $transmission = new CTransmissionMedicale();
-  $transmission->object_id = $prescription_line_mix_id;
-  $transmission->object_class = "CPrescriptionLineMix";
-  $transmissions = $transmission->loadMatchingList();
-  foreach($transmissions as $_transmission){
-    $_transmission->loadRefsFwd();
-  }
-}
+$transmission = new CTransmissionMedicale();
+$transmission->sejour_id = $sejour_id;
+$transmission->user_id   = CAppUI::$user->_id;
+$transmission->object_id = $prescription_line_mix_id;
+$transmission->object_class = "CPrescriptionLineMix";
 
 // Création du template
 $smarty = new CSmartyDP();
 $smarty->assign("prescription_line_mix", $prescription_line_mix);
-$smarty->assign("date", $date);
+$smarty->assign("date"        , $date);
 $smarty->assign("mode_dossier", $mode_dossier);
-$smarty->assign("sejour_id", $sejour_id);
+$smarty->assign("sejour_id"   , $sejour_id);
+$smarty->assign("transmission", $transmission);
+$smarty->assign("date"        , mbDate());
+$smarty->assign("hour"        , mbTransformTime(null, mbTime(), "%H"));
 
 if($mode_refresh == "timing"){
   $smarty->display("inc_perf_timing.tpl");
 } 
-if($mode_refresh == "trans"){
-  $smarty->assign("transmission", $transmission);
-  $smarty->assign("transmissions", $transmissions);
-  $smarty->display("inc_perf_transmissions.tpl");
-}
 
 if(!$mode_refresh){
   $smarty->display("edit_perf_dossier_soin.tpl");

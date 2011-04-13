@@ -25,10 +25,11 @@ class CAideSaisie extends CMbObject {
   var $depend_value_2     = null;
   
   // Form Fields
-  var $_depend_field_1     = null;
-  var $_depend_field_2     = null;
-  var $_owner              = null;
-  
+  var $_depend_field_1    = null;
+  var $_depend_field_2    = null;
+  var $_owner             = null;
+  var $_vw_depend_field_1 = null;
+  var $_vw_depend_field_2 = null;
   // Referenced objects
   var $_ref_user          = null;
   var $_ref_function      = null;
@@ -58,6 +59,8 @@ class CAideSaisie extends CMbObject {
     
     $specs["_depend_field_1"] = "str";
     $specs["_depend_field_2"] = "str";
+    $specs["_vw_depend_field_1"] = "str";
+    $specs["_vw_depend_field_2"] = "str";
     $specs["_owner"]          = "enum list|user|func|etab";
     
     return $specs;
@@ -146,6 +149,17 @@ class CAideSaisie extends CMbObject {
       $this->loadRefsFwd();
     }
     return $this->_ref_user->getPerm($permType);
+  }
+  
+  function loadViewDependValues($object) {
+    $this->_vw_depend_field_1 = CAppUI::tr("$object->_class_name.$this->_depend_field_1.$this->depend_value_1");
+    if (substr($this->_vw_depend_field_1, 0, 1) == '^') {
+      $this->_vw_depend_field_1 = $this->depend_value_1;
+    }
+    $this->_vw_depend_field_2 = CAppUI::tr("$object->_class_name.$this->_depend_field_2.$this->depend_value_2");
+    if (substr($this->_vw_depend_field_2, 0, 1) == '^') {
+      $this->_vw_depend_field_2 = $this->depend_value_2;
+    }
   }
 }
 

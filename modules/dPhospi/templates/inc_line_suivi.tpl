@@ -1,6 +1,3 @@
-{{if !@$line_guid}}
-  {{assign var=line_guid value=""}}
-{{/if}}
 {{if $_suivi instanceof CObservationMedicale}}
   {{if @$show_patient}}
   <td><strong>{{$_suivi->_ref_sejour->_ref_patient}}</strong></td>
@@ -24,36 +21,21 @@
     {{if $_suivi->degre == "high"}} style="background-color: #faa" {{/if}} 
     {{if $_suivi->degre == "info"}} style="background-color: #aaf" {{/if}}>
     <div>
-      {{if $line_guid == $_suivi->_guid && $action == "show" && $_suivi->_canEdit}}
-       <form name="editObsSuiviSoins" action="?" method="post">
-        <input type="hidden" name="m" value="dPhospi" />
-        <input type="hidden" name="dosql" value="do_observation_aed" />
-        <input type="hidden" name="observation_medicale_id" value="{{$_suivi->_id}}" />
-        {{mb_field object=$_suivi field="text" onchange="return onSubmitFormAjax(this.form);" size="20"}}
-      </form> 
-	    {{else}}
-	      <strong>{{mb_value object=$_suivi field=text}}</strong>
-	    {{/if}}
+	    <strong>{{mb_value object=$_suivi field=text}}</strong>
     </div>
   </td>
-  
-	<td class="button">
-	  {{if !$readonly && $_suivi->_canEdit}}
-	    <form name="Del-{{$_suivi->_guid}}" action="?m={{$m}}" method="post" onsubmit="return checkForm(this)">
-	      <input type="hidden" name="dosql" value="do_observation_aed" />
-	      <input type="hidden" name="del" value="1" />
-	      <input type="hidden" name="m" value="dPhospi" />
-	      <input type="hidden" name="observation_medicale_id" value="{{$_suivi->_id}}" />
-	      <input type="hidden" name="sejour_id" value="{{$_suivi->sejour_id}}" />
-	      <button type="button" class="trash notext" onclick="submitSuivi(this.form)">{{tr}}Delete{{/tr}}</button>
-	    </form>
-	   
-		  {{if $line_guid == $_suivi->_guid && $action == "show"}}
-	      <button type="button" class="lock notext" onclick="refreshLineSuivi('{{$_suivi->_guid}}','hide');"></button>
-	    {{else}}
-				<button type="button" class="edit notext" onclick="refreshLineSuivi('{{$_suivi->_guid}}','show');"></button>
-			{{/if}}
-	  {{/if}}
+	<td>
+  	{{if !$readonly && $_suivi->_canEdit}}
+      <form name="Del-{{$_suivi->_guid}}" action="?m={{$m}}" method="post" onsubmit="return checkForm(this)">
+        <input type="hidden" name="dosql" value="do_observation_aed" />
+        <input type="hidden" name="del" value="1" />
+        <input type="hidden" name="m" value="dPhospi" />
+        <input type="hidden" name="observation_medicale_id" value="{{$_suivi->_id}}" />
+        <input type="hidden" name="sejour_id" value="{{$_suivi->sejour_id}}" />
+        <button type="button" class="trash notext" onclick="submitSuivi(this.form, 1)">{{tr}}Delete{{/tr}}</button>
+      </form>
+  	  <button type="button" class="edit notext" onclick="addObservation(null, null, '{{$_suivi->_id}}');"></button>
+    {{/if}}
   </td>
 {{/if}}
 
@@ -70,32 +52,31 @@
   <td class="narrow">{{$_suivi->date|date_format:$conf.time}}</td>
   <td class="text" style="height: 22px;">
 	  {{if $_suivi->object_id && $_suivi->object_class}}
-	    <a href="#1" onclick="if($('cibleTrans')){ $('cibleTrans').update('{{$_suivi->_ref_object}}'); $V(document.forms.editTrans.object_id, '{{$_suivi->object_id}}'); 
-	    											$V(document.forms.editTrans.object_class, '{{$_suivi->object_class}}'); }">
-	    	{{$_suivi->_ref_object->_view}}
-				
-			  {{if $_suivi->_ref_object instanceof CPrescriptionLineElement && $_suivi->_ref_object->commentaire}}
-				  ({{$_suivi->_ref_object->commentaire}})
-				{{/if}}
-
+      {{assign var=classes value=' '|explode:"CPrescriptionLineMedicament CPrescriptionLineElement CAdministration CPrescriptionLineMix"}}
+      {{if in_array($_suivi->object_class, $classes)}}
+        <span
+         title="{{$_suivi->_ref_object->_view}} {{if $_suivi->_ref_object instanceof CPrescriptionLineElement && $_suivi->_ref_object->commentaire}}({{$_suivi->_ref_object->commentaire}}){{/if}}"
+          style="float: left; border: 2px solid #800; width: 5px; height: 11px; margin-right: 3px;">
+        </span>
+      {{/if}}
+	    <a href="#1" onclick="if (window.addTransmission) { addTransmission('{{$_suivi->sejour_id}}', '{{$app->user_id}}', null, '{{$_suivi->object_id}}', '{{$_suivi->object_class}}'); }">
+        {{if !in_array($_suivi->object_class, $classes)}}
+          {{$_suivi->_ref_object->_view}}
+        {{/if}}
 	    	{{if $_suivi->object_class == "CPrescriptionLineMedicament"}}
-	    	<br />
 	    	[{{$_suivi->_ref_object->_ref_produit->_ref_ATC_2_libelle}}]
 	    	{{/if}}
 	    	
 	    	{{if $_suivi->object_class == "CPrescriptionLineElement"}}
-	    	<br />
 	    	[{{$_suivi->_ref_object->_ref_element_prescription->_ref_category_prescription->_view}}]
 	    	{{/if}}
 	    	
 	    	{{if $_suivi->object_class == "CAdministration"}}
 	    	  {{if $_suivi->_ref_object->object_class == "CPrescriptionLineMedicament"}}
-	    	    <br />
 	    	    [{{$_suivi->_ref_object->_ref_object->_ref_produit->_ref_ATC_2_libelle}}]
 	    	  {{/if}}
 	    	  
 	    	  {{if $_suivi->_ref_object->object_class == "CPrescriptionLineElement"}}
-	    	    <br />
 	    	    [{{$_suivi->_ref_object->_ref_object->_ref_element_prescription->_ref_category_prescription->_view}}]
 	    	  {{/if}}
 	    	{{/if}}
@@ -103,23 +84,14 @@
 	    </a>
 	  {{/if}}
 	  {{if $_suivi->libelle_ATC}}
-	    <a href="#1" onclick="if($('cibleTrans')){ $('cibleTrans').update('{{$_suivi->libelle_ATC}}'); $V(document.forms.editTrans.libelle_ATC, '{{$_suivi->libelle_ATC}}'); }">{{$_suivi->libelle_ATC}}</a>
+	    <a href="#1" onclick="if (window.addTransmission) { addTransmission('{{$_suivi->sejour_id}}', '{{$_suivi->user_id}}', null, null, null, '{{$_suivi->libelle_ATC|smarty:nodefaults|JSAttribute}}'); }">{{$_suivi->libelle_ATC}}</a>
 	  {{/if}}
   </td>
   <td class="text {{if $_suivi->type}}trans-{{$_suivi->type}}{{/if}} libelle_trans" {{if $_suivi->degre == "high"}} style="background-color: #faa" {{/if}}>
-    
-		{{if $line_guid == $_suivi->_guid && $action == "show" && $_suivi->_canEdit}}
-		   <form name="editTransSuiviSoins" action="?" method="post">
-        <input type="hidden" name="m" value="dPhospi" />
-        <input type="hidden" name="dosql" value="do_transmission_aed" />
-        <input type="hidden" name="transmission_medicale_id" value="{{$_suivi->_id}}" />
-        {{mb_field object=$_suivi field="text" onchange="return onSubmitFormAjax(this.form);" size="20"}}
-      </form> 
-		{{else}}
-		  {{mb_value object=$_suivi field=text}}
-		{{/if}}
+		{{mb_value object=$_suivi field=text}}
   </td>
-  <td class="button narrow" style="white-space: nowrap;">
+  
+  <td style="white-space: nowrap;">
     {{if !$readonly && $_suivi->_canEdit}}
 			<form name="Del-{{$_suivi->_guid}}" action="?m={{$m}}" method="post" onsubmit="return checkForm(this)">
 				<input type="hidden" name="dosql" value="do_transmission_aed" />
@@ -127,16 +99,12 @@
 				<input type="hidden" name="m" value="dPhospi" />
 				<input type="hidden" name="transmission_medicale_id" value="{{$_suivi->_id}}" />
 				<input type="hidden" name="sejour_id" value="{{$_suivi->sejour_id}}" />
-				<button type="button" class="trash notext" onclick="submitSuivi(this.form)">{{tr}}Delete{{/tr}}</button>
+				<button type="button" class="trash notext" onclick="submitSuivi(this.form, 1)">{{tr}}Delete{{/tr}}</button>
 			</form>
-	
-		  {{if $line_guid == $_suivi->_guid && $action == "show"}}
-	      <button type="button" class="lock notext" onclick="refreshLineSuivi('{{$_suivi->_guid}}','hide');"></button>
-	    {{else}}
-				<button type="button" class="edit notext" onclick="refreshLineSuivi('{{$_suivi->_guid}}','show');"></button>
-			{{/if}}	
-    {{/if}}
+		  <button type="button" class="edit notext" onclick="addTransmission(null, null, '{{$_suivi->_id}}')"></button>
+		{{/if}}
 	</td>
+  
 {{/if}}
 
 {{if $_suivi instanceof CConstantesMedicales}}
@@ -173,61 +141,31 @@
 	</td>
 	<td>{{mb_value object=$_suivi field="time_debut"}}</td>
   <td colspan="2">
-  	{{if !($line_guid == $_suivi->_guid && $action == "show") && !$readonly}}
+  	{{if !$readonly}}
 		  <button type="button" class="tick" onclick="addTransmissionAdm('{{$_suivi->_id}}','{{$_suivi->_class_name}}');" style="float: right;">Réaliser ({{$_suivi->_count.transmissions}})</button>
 		{{/if}}
 		
 		{{if $_suivi instanceof CPrescriptionLineElement}}
 		<strong>{{$_suivi->_view}}</strong>
 		{{/if}}
-		{{if $line_guid == $_suivi->_guid && $action == "show" && $_suivi->_canEdit}}
-		  <br />
-			{{if $_suivi instanceof CPrescriptionLineElement}}
-		    <form name="editLinePrescriptionSuiviSoins" action="?" method="post">
-          <input type="hidden" name="m" value="dPprescription" />
-          <input type="hidden" name="dosql" value="do_prescription_line_element_aed" />
-          <input type="hidden" name="prescription_line_element_id" value="{{$_suivi->_id}}" />
-          {{mb_field object=$_suivi field="commentaire" onchange="return onSubmitFormAjax(this.form);" size="50"}}
-				</form>
-			{{else}}
-			  <form name="editLinePrescriptionSuiviSoins" action="?" method="post">
-          <input type="hidden" name="m" value="dPprescription" />
-          <input type="hidden" name="dosql" value="do_prescription_line_comment_aed" />
-          <input type="hidden" name="prescription_line_comment_id" value="{{$_suivi->_id}}" />
-          {{mb_field object=$_suivi field="commentaire" onchange="return onSubmitFormAjax(this.form);" size="50"}}
-        </form> 
-			{{/if}}
-    {{else}}
-      {{mb_value object=$_suivi field="commentaire"}}
-		{{/if}}
+    {{mb_value object=$_suivi field="commentaire"}}
 	</td>
 	<td>
     {{if !$readonly && $_suivi->_canEdit}}
-			{{if $_suivi instanceof CPrescriptionLineElement}}
-	      <form name="removeLine" action="?" method="post">
-	        <input type="hidden" name="m" value="dPprescription" />
-	        <input type="hidden" name="dosql" value="do_prescription_line_element_aed" />
-	        <input type="hidden" name="del" value="1" />
-	        <input type="hidden" name="prescription_line_element_id" value="{{$_suivi->_id}}" />
-	        <input type="hidden" name="sejour_id" value="{{$_suivi->_ref_prescription->object_id}}" />
-	        <button type="button" class="trash notext" onclick="submitSuivi(this.form);"></button>
-	      </form>
-	    {{else}}
-	      <form name="removeLine" action="?" method="post">
-	        <input type="hidden" name="m" value="dPprescription" />
-	        <input type="hidden" name="dosql" value="do_prescription_line_comment_aed" />
-	        <input type="hidden" name="del" value="1" />
-	        <input type="hidden" name="prescription_line_comment_id" value="{{$_suivi->_id}}" />
-	        <input type="hidden" name="sejour_id" value="{{$_suivi->_ref_prescription->object_id}}" />
-	        <button type="button" class="trash notext" onclick="submitSuivi(this.form);"></button>
-	      </form>
-	    {{/if}}
-			
-	    {{if $line_guid == $_suivi->_guid && $action == "show"}}
-				<button type="button" class="lock notext" onclick="refreshLineSuivi('{{$_suivi->_guid}}','hide');">{{tr}}Edit{{/tr}}</button>
-			{{else}}
-	  	  <button type="button" class="edit notext" onclick="refreshLineSuivi('{{$_suivi->_guid}}','show');">{{tr}}Edit{{/tr}}</button>
-			{{/if}}
+      <form name="Del-{{$_suivi->_guid}}" action="?" method="post">
+        <input type="hidden" name="m" value="dPprescription" />
+        {{if $_suivi instanceof CPrescriptionLineElement}}
+          <input type="hidden" name="dosql" value="do_prescription_line_element_aed" />
+        {{else}}
+          <input type="hidden" name="dosql" value="do_prescription_line_comment_aed" />
+        {{/if}}
+        <input type="hidden" name="del" value="1" />
+        {{mb_key object=$_suivi}}
+        <input type="hidden" name="sejour_id" value="{{$_suivi->_ref_prescription->object_id}}" />
+        <button type="button" class="trash notext" onclick="submitSuivi(this.form, 1);"></button>
+      </form>
+      <button type="button" class="edit notext"
+        onclick="addPrescription('{{$_suivi->_ref_prescription->object_id}}', '{{$app->user_id}}', '{{$_suivi->_id}}', '{{$_suivi->_class_name}}');">{{tr}}Edit{{/tr}}</button>
     {{/if}}
-	</td>
-{{/if}}
+    </td>
+  {{/if}}

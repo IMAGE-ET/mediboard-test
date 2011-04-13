@@ -98,21 +98,27 @@ if (count($adm) > 0) {
 	}
 }
 
-$user = CAppUI::$user;
-
+$user_id = CAppUI::$user->_id;
 $transmission = new CTransmissionMedicale();
-$transmission->loadAides($user->_id);
+
+if (count($adm) > 0) {
+  $transmission->sejour_id = $sejour->_id;
+  $transmission->user_id = $user_id;
+  $tranmission->object_class = get_class($line);
+}
 
 // Création du template
 $smarty = new CSmartyDP();
+
 $smarty->assign("administrations", $list_administrations);
-$smarty->assign("date_sel", $date_sel);
-$smarty->assign("sejour", $sejour);
-$smarty->assign("transmission", $transmission);
-$smarty->assign("mode_dossier", $mode_dossier);
-$smarty->assign("tabs_refresh", $tabs_refresh);
-$smarty->assign("user_id", $user->_id);
-$smarty->assign("refresh_popup", $refresh_popup);
+$smarty->assign("date_sel"       , $date_sel);
+$smarty->assign("sejour"        , $sejour);
+$smarty->assign("transmission"  , $transmission);
+$smarty->assign("mode_dossier"  , $mode_dossier);
+$smarty->assign("tabs_refresh"  , $tabs_refresh);
+$smarty->assign("user_id"       , $user_id);
+$smarty->assign("refresh_popup" , $refresh_popup);
+
 $smarty->display("inc_vw_add_multiple_administrations.tpl");
 
 ?>

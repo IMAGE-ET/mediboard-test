@@ -7,24 +7,15 @@
 * @author Romain Ollivier
 */
 
-global $AppUI, $can, $m, $g;
-
-$user = new CMediusers();
-$user->load($AppUI->user_id);
+$user = CAppUI::$user;
 
 if(!$user->isPraticien()) {
-  $can->needsRead();
+  CCanDo::checkRead();
 }
 
 $sejour_id = CValue::get("sejour_id", 0);
-$user_id = CValue::get("user_id");
-$cible = CValue::get("cible");
-
-$observation  = new CObservationMedicale();
-$transmission = new CTransmissionMedicale();
-
-$observation->loadAides($AppUI->user_id);
-$transmission->loadAides($AppUI->user_id);
+$user_id   = CValue::get("user_id");
+$cible     = CValue::get("cible");
 
 // Chargement du sejour
 $sejour = new CSejour;
@@ -69,7 +60,7 @@ foreach($sejour->_ref_suivi_medical as $_suivi) {
 
 //TODO: Revoir l'ajout des constantes dans le suivi de soins 
 //Ajout des constantes
-if(!$cible && CAppUI::conf("soins constantes_show")){
+if (!$cible && CAppUI::conf("soins constantes_show")){
   $sejour->loadRefConstantes($user_id);
 }
 
@@ -93,22 +84,20 @@ $sejour->_ref_suivi_medical = $list_trans_const;
 
 // Création du template
 $smarty = new CSmartyDP();
-$smarty->assign("params"              , CConstantesMedicales::$list_constantes);
-$smarty->assign("page_step"           , 10);
-$smarty->assign("readOnly"            , CValue::get("readOnly",false));
-$smarty->assign("count_trans"         , $count_trans);
-$smarty->assign("observation"         , $observation);
-$smarty->assign("transmission"        , $transmission);
-$smarty->assign("user"                , $user);
-$smarty->assign("isPraticien"         , $user->isPraticien());
-$smarty->assign("sejour"              , $sejour);
-$smarty->assign("prescription"        , $prescription);
-$smarty->assign("cibles"              , $cibles);
-$smarty->assign("cible"               , $cible);
-$smarty->assign("users"               , $users);
-$smarty->assign("user_id"             , $user_id);
-$smarty->assign("date"                , mbDate());
-$smarty->assign("hour"                , mbTransformTime(null, mbTime(), "%H"));
+
+$smarty->assign("params"      , CConstantesMedicales::$list_constantes);
+$smarty->assign("page_step"   , 10);
+$smarty->assign("readOnly"    , CValue::get("readOnly",false));
+$smarty->assign("count_trans" , $count_trans);
+$smarty->assign("user"        , $user);
+$smarty->assign("isPraticien" , $user->isPraticien());
+$smarty->assign("sejour"      , $sejour);
+$smarty->assign("prescription", $prescription);
+$smarty->assign("cibles"      , $cibles);
+$smarty->assign("cible"       , $cible);
+$smarty->assign("users"       , $users);
+$smarty->assign("user_id"     , $user_id);
+
 $smarty->display("inc_vw_dossier_suivi.tpl");
 
 ?>

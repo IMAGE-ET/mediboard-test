@@ -149,9 +149,25 @@ function loadResultLabo(sejour_id) {
   url.requestUpdate('Imeds');
 }
 
+function updateNbTrans(sejour_id) {
+  var url = new Url("dPhospi", "ajax_count_transmissions");
+  url.addParam("sejour_id", sejour_id);
+  url.requestJSON(function(elt)  {
+    var nb_trans = $("nb_trans");
+    if (!elt) {
+      nb_trans.up().addClassName("empty");
+    }
+    else {
+      nb_trans.up().removeClassName("empty")
+    }
+    nb_trans.update("("+elt+")");
+  });
+}
+
 function loadSuivi(sejour_id, user_id, cible) {
   if(!sejour_id) return;
-  
+
+  updateNbTrans(sejour_id);
   var urlSuivi = new Url("dPhospi", "httpreq_vw_dossier_suivi");
   urlSuivi.addParam("sejour_id", sejour_id);
   urlSuivi.addParam("user_id", user_id);
@@ -161,18 +177,21 @@ function loadSuivi(sejour_id, user_id, cible) {
 
 function submitSuivi(oForm) {
   sejour_id = oForm.sejour_id.value;
-  submitFormAjax(oForm, 'systemMsg', { onComplete: function() { 
-    loadSuivi(sejour_id); 
-    if(oForm.object_class.value != "" || oForm.libelle_ATC.value != ''){
+  submitFormAjax(oForm, 'systemMsg', { onComplete: function() {
+    if($V(oForm.object_class)|| $V(oForm.libelle_ATC)){
       // Refresh de la partie administration
       if($('jour').visible()){
         Prescription.loadTraitement(sejour_id,'{{$date}}','','administration');
       }
       // Refresh de la partie plan de soin
       if($('semaine').visible()){
-        calculSoinSemaine('{{$date}}');
-      }  
-    }  
+        calculSoinSemaine('{{$date}}', '{{$object->_ref_prescriptions.sejour->_id}}');
+      }
+    }
+    if ($('dossier_suivi').visible()) {
+      loadSuivi(sejour_id);
+    }
+    updateNbTrans(sejour_id);
   } });
 }
 

@@ -14,10 +14,10 @@
       <div class="depend1" style="display:none">{{$depend_value_1}}</div>
       <div class="depend2" style="display:none">{{$depend_value_2}}</div>
       <strong>
-        {{if $depend_value_1}}{{tr}}{{$object->_class_name}}.{{$_aide->_depend_field_1}}.{{$depend_value_1}}{{/tr}} - {{/if}}
-        {{if $depend_value_2}}{{tr}}{{$object->_class_name}}.{{$_aide->_depend_field_2}}.{{$depend_value_2}}{{/tr}} - {{/if}}
+        {{if $depend_value_1}}{{$_aide->_vw_depend_field_1}} - {{/if}}
+        {{if $depend_value_2}}{{$_aide->_vw_depend_field_2}} - {{/if}}
       </strong>
-  	
+    
       <span>{{$_aide->name|emphasize:$needle}}</span>
       <br/>
       

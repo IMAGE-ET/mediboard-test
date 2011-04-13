@@ -38,7 +38,7 @@ class CCategoryPrescription extends CMbObject {
   function getProps() {
   	$specs = parent::getProps();
     //$specs["chapitre"]    = "enum notNull list|".implode('|',self::$chapitres_elt);
-    $specs["nom"]         = "str notNull seekable";
+    $specs["nom"]         = "str notNull seekable autocomplete";
     $specs["description"] = "text";
     $specs["header"]      = "text";
     $specs["group_id"]    = "ref class|CGroups";

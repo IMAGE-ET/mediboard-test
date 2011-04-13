@@ -36,7 +36,7 @@
 	      {{assign var=libelle_ATC value=$line->_ref_produit->_ref_ATC_2_libelle}}
 	      <!-- Cas d'une ligne de medicament -->
 	      <th class="text {{if @$transmissions.ATC.$libelle_ATC|@count}}transmission{{else}}transmission_possible{{/if}}" rowspan="{{$prescription->_nb_produit_by_cat.$type.$_key_cat_ATC}}" 
-	          onclick="addCibleTransmission('','','{{$libelle_ATC}}','{{$libelle_ATC}}');"
+	          onclick="addCibleTransmission(null, null,'{{$libelle_ATC}}')"
 						style="font-weight: normal; font-size: 0.9em;">
 		      <span onmouseover="ObjectTooltip.createDOM(this, 'tooltip-content-{{$libelle_ATC}}')">
 	          {{$libelle_ATC|smarty:nodefaults}}
@@ -71,7 +71,7 @@
 	        {{assign var=categorie_id value=$categorie->_id}}
 	        <th class="text {{if @$transmissions.CCategoryPrescription.$name_cat|@count}}transmission{{else}}transmission_possible{{/if}}" 
 	            rowspan="{{$prescription->_nb_produit_by_cat.$name_cat}}" 
-	            onclick="addCibleTransmission('CCategoryPrescription','{{$name_cat}}','{{tr}}CCategoryPrescription.chapitre.{{$name_chap}}{{/tr}} - {{$categorie->nom}}');">
+	            onclick="addCibleTransmission('CCategoryPrescription','{{$name_cat}}');">
 	          <span onmouseover="ObjectTooltip.createDOM(this, 'tooltip-content-{{$name_cat}}')">
 	            {{$categorie->nom}}
 	          </span>
@@ -115,7 +115,7 @@
       <img style="float: right" src="images/icons/ampoule_urgence.png" title="Urgence"/>
     {{/if}}
 		
-		<span onclick='addCibleTransmission("{{$line_class}}","{{$line->_id}}","{{$line->_view}}");' 
+		<div onclick="addCibleTransmission('{{$line_class}}', '{{$line->_id}}');" 
 	       class="{{if @$transmissions.$line_class.$line_id|@count}}transmission{{else}}transmission_possible{{/if}}"
 				 onmouseover="ObjectTooltip.createEx(this, '{{$line->_guid}}')"
 				 style="font-weight: bold">
@@ -134,7 +134,7 @@
 						{{/if}}
 					</div>
 				{{/if}} 
-	  </span>
+	  </div>
 		  
     {{if $line->conditionnel}}
       <form action="?" method="post" name="activeCondition-{{$line_id}}-{{$line_class}}">

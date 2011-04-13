@@ -12,13 +12,13 @@
       <img style="float: right; clear: both; margin: -1px;" 
         src="images/icons/{{$owner_icon}}.png" />
       
-      {{if $_modele->fast_edit}}
-        <img style="float: right;" src="images/icons/lightning.png"/>
-      {{/if}}
       {{if $_modele->fast_edit_pdf}}
         <img style="float: right;" src="modules/dPcompteRendu/fcke_plugins/mbprintPDF/images/mbprintPDF.png"/>
       {{elseif $_modele->fast_edit}}
         <img style="float: right;" src="modules/dPcompteRendu/fcke_plugins/mbprinting/images/mbprinting.png"/>
+      {{/if}}
+      {{if $_modele->fast_edit}}
+        <img style="float: right;" src="images/icons/lightning.png"/>
       {{/if}}
       <div {{if $_modele->fast_edit}}class="fast_edit"{{/if}}>
         {{$_modele->nom|emphasize:$keywords}}

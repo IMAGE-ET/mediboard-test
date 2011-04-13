@@ -1,17 +1,3 @@
-<script type="text/javascript">
-
-toggleTrans = function(trans_class){
-	$('transmissions').select('tr').each(function(element){
-	  trans_class ? (element.hasClassName(trans_class) ?  element.show() : element.hide()) : element.show();
-	});
-}
-
-</script>
-
-{{if !@$line_guid}}
-  {{assign var=line_guid value=""}}
-{{/if}}
-
 <table class="tbl">
   <tr>
     <th colspan="7" class="title">

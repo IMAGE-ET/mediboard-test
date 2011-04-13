@@ -110,9 +110,12 @@ foreach($hours as &$_hour){
   $_hour = str_pad($_hour, 2, "0", STR_PAD_LEFT);
 }
 
+$user_id = CAppUI::$user->_id;
+
 // Transmission
 $transmission = new CTransmissionMedicale();
-$transmission->loadAides(CAppUI::$instance->user_id);
+$transmission->sejour_id = $sejour->_id;
+$transmission->user_id = $user_id;
 
 // Création du template
 $smarty = new CSmartyDP();
@@ -132,6 +135,8 @@ $smarty->assign("mode_plan", $mode_plan);
 $smarty->assign("hours", $hours);
 $smarty->assign("prescription_id", $prescription_id);
 $smarty->assign("mode_dossier", $mode_dossier);
-$smarty->assign("user_id", CAppUI::$instance->user_id);
+$smarty->assign("user_id", $user_id);
+$smarty->assign("date", mbDate());
+$smarty->assign("hour", mbTransformTime(null, mbTime(), "%H"));
 $smarty->display("inc_vw_add_administration.tpl");
 ?>

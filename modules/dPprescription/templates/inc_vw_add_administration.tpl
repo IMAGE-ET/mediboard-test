@@ -20,7 +20,7 @@ function submitAdmission(){
 
 function submitCancelAdm(){
   var oFormTransmission   = getForm("editTrans");
-  $V(oFormTransmission.text, "Administration annulée");
+  $V(oFormTransmission._text_data, "Administration annulée");
   
 	var oFormAdministration = getForm("addAdministration");
   $V(oFormAdministration.quantite, '0');
@@ -45,39 +45,23 @@ function submitTransmission(administration_id){
   var oFormTransmission   = getForm("editTrans");
   oFormTransmission.object_class.value = "CAdministration";
   oFormTransmission.object_id.value = administration_id;
-  if(oFormTransmission.text.value != ''){
-    submitFormAjax(oFormTransmission, 'systemMsg', { onComplete: function(){ 
-      {{if $mode_plan}}
-        window.opener.calculSoinSemaine('{{$date_sel}}',"{{$prescription_id}}"); 
-      {{else}}
-        window.opener.Prescription.loadTraitement('{{$sejour->_id}}','{{$date_sel}}', oFormClick.nb_decalage.value,'{{$mode_dossier}}','{{$line->_id}}','{{$line->_class_name}}',{{$key_tab|json}});
-      {{/if}}
-      window.opener.loadSuivi('{{$sejour->_id}}');
-			
-	    {{if "forms"|module_active}}
-	      ExObject.trigger("CAdministration-"+administration_id, "validation", {
-	        onTriggered: function(){ window.close(); }
-	      });
-	    {{else}}
-	      window.close();
-	    {{/if}}
-		
-    } } )
-  } else {
+  
+  submitFormAjax(oFormTransmission, 'systemMsg', { onComplete: function(){
     {{if $mode_plan}}
       window.opener.calculSoinSemaine('{{$date_sel}}',"{{$prescription_id}}"); 
     {{else}}
       window.opener.Prescription.loadTraitement('{{$sejour->_id}}','{{$date_sel}}', oFormClick.nb_decalage.value,'{{$mode_dossier}}','{{$line->_id}}','{{$line->_class_name}}',{{$key_tab|json}});
     {{/if}}
+    window.opener.loadSuivi('{{$sejour->_id}}');
 		
     {{if "forms"|module_active}}
       ExObject.trigger("CAdministration-"+administration_id, "validation", {
-			  onTriggered: function(){ window.close(); }
-			});
-		{{else}}
-		  window.close();
+        onTriggered: function(){ window.close(); }
+      });
+    {{else}}
+      window.close();
     {{/if}}
-  }
+  } } );
 }
 
 function cancelAdministration(administration_id){
@@ -244,39 +228,11 @@ updateQuantite = function(ratio_UI, oField){
 	</table>
 </form>
 
-<table class="form">
-  <tr>
-    <td>
-			<form name="editTrans" action="?m={{$m}}" method="post" onsubmit="return checkForm(this)">
-				<input type="hidden" name="dosql" value="do_transmission_aed" />
-				<input type="hidden" name="del" value="0" />
-				<input type="hidden" name="m" value="dPhospi" />
-				<input type="hidden" name="object_class" value="" />
-				<input type="hidden" name="object_id" value="" />
-				<input type="hidden" name="sejour_id" value="{{$sejour->_id}}" />
-				<input type="hidden" name="user_id" value="{{$app->user_id}}" />
-				<input type="hidden" name="date" value="now" />
-				<div style="float: right">
-			    <select name="_helpers_text" size="1" onchange="pasteHelperContent(this);" class="helper">
-			      <option value="">&mdash; Aide</option>
-			      {{html_options options=$transmission->_aides.text.no_enum}}
-			    </select>
-			    <button class="new notext" title="Ajouter une aide à la saisie" type="button" onclick="addHelp('CTransmissionMedicale', this.form.text, null, null, null, null, {{$user_id}})">{{tr}}New{{/tr}}</button><br />      
-		    </div>
-				{{mb_field object=$transmission field="degre"}}
-				{{mb_field object=$transmission field="type" typeEnum=radio}}
-				<br />
-				{{mb_field object=$transmission field="text"}}
-			</form>
-	  </td>
-	</tr>
-	<tr>
-	  <td>
-	  <button type="button" class="add" onclick="submitAdmission()">{{tr}}Validate{{/tr}}</button>
-		<button type="button" class="cancel" onclick="submitCancelAdm();">{{tr}}Cancel{{/tr}}</button>
-	  </td>
-	</tr>
-</table>
+{{assign var=hide_cible value=1}}
+{{assign var=hide_button_add value=1}}
+{{mb_include module=dPhospi template=inc_transmission}}
+<button type="button" class="add" onclick="submitAdmission()">{{tr}}Validate{{/tr}}</button>
+<button type="button" class="cancel" onclick="submitCancelAdm();">{{tr}}Cancel{{/tr}}</button>
 {{/if}}
 
 {{if $mode_dossier == "planification"}}
