@@ -101,12 +101,6 @@ function loadCategory(value) {
 }
 
 function submitCompteRendu(callback){
-	if (window.pdf_thumbnails && window.Preferences.pdf_and_thumbs == 1) {
-    if (Thumb.modele_id > 0) {
-      FormObserver.changes = 0;
-      FormObserver.onChanged();
-    }
-  }
   (function(){
     var form = getForm("editFrm");
     if(checkForm(form) && User.id) {
@@ -127,8 +121,8 @@ Main.add(function () {
   loadObjectClass('{{$compte_rendu->object_class}}');
   loadCategory('{{$compte_rendu->file_category_id}}');
   {{if $compte_rendu->_id && $droit && $pdf_thumbnails && $app->user_prefs.pdf_and_thumbs}}
-    Thumb.compte_rendu_id = {{$compte_rendu->_id}};
-		Thumb.user_id = {{$user_id}};
+    Thumb.modele_id = '{{$compte_rendu->_id}}';
+		Thumb.user_id = '{{$user_id}}';
 		Thumb.mode = "modele";
 		PageFormat.init(getForm("editFrm"));
   {{/if}}
@@ -252,24 +246,23 @@ Main.add(function () {
           </td>
         </tr>
         
-        {{if $compte_rendu->type == "body"}}
+        {{if $compte_rendu->type == "body" || !$compte_rendu->_id}}
           <tr>
             <th>{{mb_label object=$compte_rendu field="fast_edit"}}</th>
             <td>
               {{mb_field object=$compte_rendu field="fast_edit"}}
             </td>
           </tr>
-        {{/if}}
         
-        {{if $pdf_thumbnails && $app->user_prefs.pdf_and_thumbs}}
-          <tr>
-            <th>{{mb_label object=$compte_rendu field="fast_edit_pdf"}}</th>
-            <td>
-              {{mb_field object=$compte_rendu field="fast_edit_pdf"}}
-            </td>
-          </tr>
+          {{if $pdf_thumbnails && $app->user_prefs.pdf_and_thumbs}}
+            <tr>
+              <th>{{mb_label object=$compte_rendu field="fast_edit_pdf"}}</th>
+              <td>
+                {{mb_field object=$compte_rendu field="fast_edit_pdf"}}
+              </td>
+            </tr>
+          {{/if}}
         {{/if}}
-        
         <tr>
           <th>{{mb_label object=$compte_rendu field=type}}</th>
           <td>
