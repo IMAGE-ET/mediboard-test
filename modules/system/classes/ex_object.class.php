@@ -75,8 +75,13 @@ class CExObject extends CMbMetaObject {
 		$fields = $this->_ref_ex_class->loadRefsAllFields(true);
     
     foreach($fields as $_field) {
+      $field_name = $_field->name;
+			
+    	$spec_obj = $_field->getSpecObject();
+			$this->$field_name = $spec_obj->default;
+			
     	if (!$_field->reported) continue;
-    	$field_name = $_field->name;
+			
       $this->$field_name = $latest->$field_name;
     }
 	}

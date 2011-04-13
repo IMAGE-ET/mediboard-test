@@ -720,7 +720,7 @@ class CMbFieldSpec {
   }
   
   function isTextBlob(){
-    return in_array($this->getSpecType(), array("text", "html", "php", "xml"));
+    return in_array($this->getSpecType(), array("text", "html", "php", "xml", "set"));
   }
 
   function getFullDBSpec(){

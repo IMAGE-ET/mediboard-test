@@ -12,6 +12,14 @@ CAppUI::requireSystemClass("fieldSpecs/enumSpec");
 
 class CSetSpec extends CEnumSpec {
   
+  var $_list_default = null;
+  
+  function __construct($className, $field, $prop = null, $aProperties = array()) {
+    parent::__construct($className, $field, $prop, $aProperties);
+
+    $this->_list_default = $this->getListValues($this->default);
+  }
+	
   function getSpecType() {
     return "set";
   }

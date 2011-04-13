@@ -48,10 +48,10 @@ moveListItem = function(e, way){
 	<strong>Enregistrez</strong> pour que la modifiation prenne effet
 </div>
 
-<input type="text" name="__default" value="{{$spec_value}}" />
-
+{{*  
 {{foreach from=$items_all item=_value}}
 {{/foreach}}
+*}}
 
 <table class="main tbl">
 	<col class="narrow" />
@@ -142,11 +142,7 @@ moveListItem = function(e, way){
       {{/if}}
 			
       <td style="text-align: center;">
-        {{if $spec instanceof CSetSpec}}
-          <input type="checkbox" name="__default_item" />
-        {{else}}
-          <input type="radio" name="__default_item" />
-        {{/if}}
+        {{mb_include module=forms template=inc_ex_list_default_value value=$_value}}
       </td>
     </tr>
   {{foreachelse}}

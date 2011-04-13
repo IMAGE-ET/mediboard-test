@@ -55,7 +55,10 @@ Main.add(function(){
       <th {{if $context instanceof CExClassField}}colspan="2"{{/if}}>
         {{mb_title class=CExListItem field=name}}
       </th>
-			<th class="narrow"></th>
+      <th class="narrow"></th>
+      <th class="narrow">
+      	Coché par<br />défaut
+      </th>
     </tr>
     
     <tr>
@@ -71,6 +74,9 @@ Main.add(function(){
           {{tr}}Cancel{{/tr}}
         </button>
       </td>
+			<td style="text-align: center;" title="Aucune valeur par défaut">
+			  {{mb_include module=forms template=inc_ex_list_default_value value=""}}
+			</td>
     </tr>
     
     {{foreach from=$context->_back.list_items item=_item}}
@@ -102,17 +108,13 @@ Main.add(function(){
         {{/if}}
         
 				<td></td>
-        <td>
-          {{if $spec instanceof CSetSpec}}
-            <input type="checkbox" name="__default_item" />
-          {{else}}
-            <input type="radio" name="__default_item" />
-          {{/if}}
+        <td style="text-align: center;">
+          {{mb_include module=forms template=inc_ex_list_default_value value=$_item->_id}}
         </td>
       </tr>
     {{foreachelse}}
       <tr>
-        <td class="empty" colspan="4">{{tr}}CExListItem.none{{/tr}}</td>
+        <td class="empty" colspan="5">{{tr}}CExListItem.none{{/tr}}</td>
       </tr>
     {{/foreach}}
   </table>
