@@ -44,6 +44,7 @@ Main.add(function(){
   {{mb_class class=CExListItem}}
   <input type="hidden" name="ex_list_item_id" value="" class="ref" />
 	<input type="hidden" name="{{$owner_field}}" value="{{$context->_id}}" />
+  <input type="text" name="__default" value="{{$spec_value}}" />
   
   <table class="main tbl">
     <tr>
@@ -101,15 +102,13 @@ Main.add(function(){
         {{/if}}
         
 				<td></td>
-        {{*  
         <td>
           {{if $spec instanceof CSetSpec}}
-            <input type="checkbox" name="__default" />
+            <input type="checkbox" name="__default_item" />
           {{else}}
-            <input type="radio" name="__default" />
+            <input type="radio" name="__default_item" />
           {{/if}}
         </td>
-				*}}
       </tr>
     {{foreachelse}}
       <tr>

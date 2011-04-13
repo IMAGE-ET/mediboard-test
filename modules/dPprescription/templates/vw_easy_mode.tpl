@@ -18,13 +18,10 @@
 // Ajout de tous les elements d'une categorie
 function addCategorie(categorie_id, oTokenField){
   // Parcours de tous les boutons
-  $$('input.'+categorie_id).each( function(oCheckbox) {
-    elt = oCheckbox.id;
-    elts = elt.split("-");
-    id  = elts[1];
-    
+  $$('input.cat-'+categorie_id).each( function(oCheckbox) {
     // Si element pas encore selectionné
     if(!oCheckbox.checked){
+      var id = oCheckbox.get("element_id");
       oCheckbox.checked = true;
       oTokenField.add(id);
     }
@@ -35,14 +32,12 @@ function resetModeEasy(){
   $$('input').each( function(oCheckbox) {
     if(oCheckbox.checked){
       if(!oCheckbox.hasClassName("med")){
-	      elt = oCheckbox.id;
-	      elts = elt.split("-");
-	      id = elts[1];
-	      if($('label-'+id)){
-	        $('label-'+id).setStyle("color: #070");
-		    }
-		  }
-		  oCheckbox.checked = false;
+        var label = oCheckbox.getLabel();
+        if(label){
+          label.setStyle({color: "#070"});
+        }
+      }
+      oCheckbox.checked = false;
     }
   });
   
@@ -51,8 +46,8 @@ function resetModeEasy(){
   oFormToken.token_elt.value = '';
 
   $$('input.valeur').each( function(input) {
-	   input.value = '';
-	});
+     input.value = '';
+  });
   
   $(document.forms.addPrisemode_grille).hide();
 }
@@ -61,7 +56,7 @@ function submitAllElements(){
   $$('input.valeur').each( function(input) {
      input.value = '';
   });
-	
+  
   // Divs
   var oDivFoisPar = $('foisParmode_grille');
   var oDivTousLes = $('tousLesmode_grille');
@@ -138,7 +133,7 @@ Main.add( function(){
   menuTabs.setActiveTab('{{$chapitre}}');
   
   // Initialisation des TokenFields
-  oEltField = new TokenField(document.add_med_element.token_elt); 
+  window.oEltField = new TokenField(document.add_med_element.token_elt); 
   
   // Modification du praticien_id si celui-ci est spécifié
   if(window.opener.document.selPraticienLine){
@@ -148,21 +143,21 @@ Main.add( function(){
   }
   
   // Elements deja dans la prescription
-	var elements = {{$elements|@json}};
-	$$('input').each( function(oCheckbox) {
-	  if(!oCheckbox.hasClassName("cat")){
-		  var _id = oCheckbox.id;
-		  var elts = _id.split("-");
-		  var id = elts[1];
-		  if(elements.include(id)){
-		    $('label-'+id).setStyle("color: #070");
-		  }
-	  }
-	});
-	 
-} );
-
-
+  var elements = {{$elements|@json}};
+  var elementsObj = {};
+  
+  elements.each(function(e){
+    elementsObj[e] = true;
+  });
+  
+  $$('input.element-select').each( function(oCheckbox) {
+    var id = oCheckbox.get("element_id");
+    if(elementsObj[id]){
+      var label = oCheckbox.getLabel();
+      label.setStyle({color: "#070"});
+    }
+  });
+});
 </script>
 
 <table class="form">
@@ -171,32 +166,32 @@ Main.add( function(){
   </tr>
   <tr>
     <td colspan="2">
-	    {{include file="../../dPprescription/templates/line/inc_vw_dates.tpl" 
-	              perm_edit=1
-	              dosql=CPrescriptionLineElement}}	      
-	              
-	     <script type="text/javascript">
-	       var oForm;
+      {{include file="../../dPprescription/templates/line/inc_vw_dates.tpl" 
+                perm_edit=1
+                dosql=CPrescriptionLineElement}}        
+                
+       <script type="text/javascript">
+         var oForm;
          if (oForm = getForm("editDates-{{$typeDate}}-")){
-  				 {{if !$line->fin}} 
-  	         Calendar.regField(oForm.debut);
-  	         Calendar.regField(oForm._fin);
-  	       {{else}}
-  	         Calendar.regField(oForm.fin);
-  	       {{/if}}
+           {{if !$line->fin}} 
+             Calendar.regField(oForm.debut);
+             Calendar.regField(oForm._fin);
+           {{else}}
+             Calendar.regField(oForm.fin);
+           {{/if}}
          }
-	     </script>
-	  </td>
-	</tr>
-	<tr>
-	  <th class="category">Fréquence</th>
-	  <th class="category">Commentaire</th>
-	</tr>
-	<tr>
-	  <td>
-	    {{include file="../../dPprescription/templates/line/inc_vw_add_posologies.tpl"}}
-	  </td>
-	  <td style="text-align: center">
+       </script>
+    </td>
+  </tr>
+  <tr>
+    <th class="category">Fréquence</th>
+    <th class="category">Commentaire</th>
+  </tr>
+  <tr>
+    <td>
+      {{include file="../../dPprescription/templates/line/inc_vw_add_posologies.tpl"}}
+    </td>
+    <td style="text-align: center">
       <form name="addCommentaire" action="?" method="get">
         {{mb_field object=$line field="commentaire" size="50"}}
       </form>
@@ -204,35 +199,35 @@ Main.add( function(){
   </tr>
   <tr>
     <td colspan="2" style="text-align: center">
-		  <form name="add_med_element" action="?" method="post" onsubmit="return submitAllElements();">
-			  <input type="hidden" name="m" value="dPprescription" />
-			  <input type="hidden" name="dosql" value="do_add_elements_easy_aed" />
-			  <input type="hidden" name="token_elt" value="" />
-			  <input type="hidden" name="prescription_id" value="{{$prescription_id}}" />
-			  <input type="hidden" name="praticien_id" value="{{$app->user_id}}" />
-			  <input type="hidden" name="debut" value="" />
-			  <input type="hidden" name="duree" value="" />
-			  <input type="hidden" name="unite_duree" value="jour" />
-			  <input type="hidden" name="mode_protocole" value="{{$mode_protocole}}" />
-			  <input type="hidden" name="mode_pharma" value="{{$mode_pharma}}" />
-			  <input type="hidden" name="decalage_line" value="" />
-			  <input type="hidden" name="jour_decalage" value="" />
-			  <input type="hidden" name="time_debut" value="" />
-			  <input type="hidden" name="jour_decalage_fin" value="" />
-			  <input type="hidden" name="decalage_line_fin" value="" />
-			  <input type="hidden" name="time_fin" value="" />
-			  <input type="hidden" name="commentaire" value="" />
-			  <input class="valeur" type="hidden" name="quantite" value="" />
-			  <input class="valeur" type="hidden" name="nb_fois" value="" />
-			  <input class="valeur" type="hidden" name="unite_fois" value="" />
-			  <input class="valeur" type="hidden" name="moment_unitaire_id" value="" />
-			  <input class="valeur" type="hidden" name="nb_tous_les" value="" />
-			  <input class="valeur" type="hidden" name="unite_tous_les" value="" />
-			  <input class="valeur" type="hidden" name="decalage_prise" value="" />
-			  <button type="button" 
-			          class="submit" 
-			          onclick="this.form.onsubmit()">Ajouter les éléments sélectionnés à la prescription</button>
-			</form>
+      <form name="add_med_element" action="?" method="post" onsubmit="return submitAllElements();">
+        <input type="hidden" name="m" value="dPprescription" />
+        <input type="hidden" name="dosql" value="do_add_elements_easy_aed" />
+        <input type="hidden" name="token_elt" value="" />
+        <input type="hidden" name="prescription_id" value="{{$prescription_id}}" />
+        <input type="hidden" name="praticien_id" value="{{$app->user_id}}" />
+        <input type="hidden" name="debut" value="" />
+        <input type="hidden" name="duree" value="" />
+        <input type="hidden" name="unite_duree" value="jour" />
+        <input type="hidden" name="mode_protocole" value="{{$mode_protocole}}" />
+        <input type="hidden" name="mode_pharma" value="{{$mode_pharma}}" />
+        <input type="hidden" name="decalage_line" value="" />
+        <input type="hidden" name="jour_decalage" value="" />
+        <input type="hidden" name="time_debut" value="" />
+        <input type="hidden" name="jour_decalage_fin" value="" />
+        <input type="hidden" name="decalage_line_fin" value="" />
+        <input type="hidden" name="time_fin" value="" />
+        <input type="hidden" name="commentaire" value="" />
+        <input class="valeur" type="hidden" name="quantite" value="" />
+        <input class="valeur" type="hidden" name="nb_fois" value="" />
+        <input class="valeur" type="hidden" name="unite_fois" value="" />
+        <input class="valeur" type="hidden" name="moment_unitaire_id" value="" />
+        <input class="valeur" type="hidden" name="nb_tous_les" value="" />
+        <input class="valeur" type="hidden" name="unite_tous_les" value="" />
+        <input class="valeur" type="hidden" name="decalage_prise" value="" />
+        <button type="button" 
+                class="submit" 
+                onclick="this.form.onsubmit()">Ajouter les éléments sélectionnés à la prescription</button>
+      </form>
     </td>
   </tr>
 </table>
@@ -249,54 +244,55 @@ Main.add( function(){
 </ul>
 <hr class="control_tabs" />
 
-<form action="" method="get" onsubmit="return false;">
+<form action="" method="get" onsubmit="return false;" name="gridForm" class="prepared">
 <!-- Affichage des elements -->
 {{assign var=numCols value=4}}
 <table class="main">
   <tr>
   <td>
-		{{foreach from=$chapitres key=name_chap item=chapitre}}
+    {{foreach from=$chapitres key=name_chap item=chapitre}}
     <div id="div_{{$name_chap}}" style="display: none;">
-	    <table class="tbl">
-	    {{foreach from=$chapitre item=categorie}}
-	      <tr>
-	        <th colspan="{{$numCols*2}}">
+      <table class="tbl">
+      {{foreach from=$chapitre item=categorie}}
+        <tr>
+          <th colspan="{{$numCols*2}}">
             {{assign var=categorie_id value=$categorie->_id}}
-            <button id="{{$categorie->_id}}" class="cat tick" title="Ajouter cet élément"
+            <button class="cat tick" title="Ajouter cet élément"
                     style="float: right; margin: -1px;" onclick="addCategorie('{{$categorie->_id}}',oEltField);">
               Ajouter tous les éléments de la catégorie
             </button>
             
-	          {{$categorie->_view}}
-	        </th>
-	      </tr>
-	      {{if $categorie->_ref_elements_prescription|@count}}
-	      <tr>
-	      {{/if}}
-	      {{foreach from=$categorie->_ref_elements_prescription item=element name=elements}}
-	        {{assign var=i value=$smarty.foreach.elements.iteration}}
-	        <td style="width: 1%;">
-	          <input type="checkbox" name="elt-{{$element->_id}}" 
-	                  class="{{$categorie->_id}}" 
-	                  onclick="oEltField.toggle('{{$element->_id}}', this.checked);" />    
-          </td>
-          <td class="text">		         
-            <label id="label-{{$element->_id}}" for="elt-{{$element->_id}}">{{$element->_view}}</label>
-	        </td>
-	        {{if (($i % $numCols) == 0)}}</tr>{{if !$smarty.foreach.elements.last}}<tr>{{/if}}{{/if}}
-	      {{foreachelse}}
-				  <td colspan="8"><div class="small-info">Aucun élément dans cette catégorie</div></td>
-        {{/foreach}}
-	    {{foreachelse}}
+            {{$categorie->_view}}
+          </th>
+        </tr>
+        {{if $categorie->_ref_elements_prescription|@count}}
         <tr>
-  			  <td>
-  			    <div class="small-info">
-    			    Aucun élément dans la catégorie {{tr}}CCategoryPrescription.chapitre.{{$name_chap}}{{/tr}}
-    			  </div>
+        {{/if}}
+        {{foreach from=$categorie->_ref_elements_prescription item=element name=elements}}
+          {{assign var=i value=$smarty.foreach.elements.iteration}}
+          {{* The IDs are set here because of IE, and the form is not prepared *}}
+          <td style="width: 1%;">
+            <input type="checkbox" id="gridForm-elt-{{$element->_id}}" name="elt-{{$element->_id}}" 
+                   class="element-select cat-{{$categorie->_id}}" data-element_id="{{$element->_id}}"
+                   onclick="oEltField.toggle('{{$element->_id}}', this.checked);" />
+          </td>
+          <td class="text">             
+            <label id="labelFor-gridForm-elt-{{$element->_id}}" for="gridForm-elt-{{$element->_id}}">{{$element->_view}}</label>
+          </td>
+          {{if (($i % $numCols) == 0)}}</tr>{{if !$smarty.foreach.elements.last}}<tr>{{/if}}{{/if}}
+        {{foreachelse}}
+          <td colspan="8"><div class="small-info">Aucun élément dans cette catégorie</div></td>
+        {{/foreach}}
+      {{foreachelse}}
+        <tr>
+          <td>
+            <div class="small-info">
+              Aucun élément dans la catégorie {{tr}}CCategoryPrescription.chapitre.{{$name_chap}}{{/tr}}
+            </div>
           </td>
         </tr>
-	    {{/foreach}}
-	    </table>
+      {{/foreach}}
+      </table>
     </div>
     {{/foreach}}
     </td>

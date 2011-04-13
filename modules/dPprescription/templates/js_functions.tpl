@@ -15,8 +15,8 @@ completeSelect = function(oSelect, line_id, type_elt){
                         window.opener.document.moment_unitaire.moment_unitaire_id :
                         document.moment_unitaire.moment_unitaire_id;
   
-  oFormPrise = document.forms['addPrise'+type_elt+line_id].show();
-	
+  document.forms['addPrise'+type_elt+line_id].show();
+
   if(oSelect.options.length == 1){
     oSelect.down().remove();
     $A(selectMoments.childNodes).each(function (child) {
@@ -96,7 +96,7 @@ selDivPoso = function(type, line_id, type_elt){
       oFormPrise.unite_tous_les.enable().show();
       oFormPrise.decalage_prise.enable().show();
       
-      oFormPrise.moment_unitaire_id.setStyle( { 'float': '' } );
+      oFormPrise.moment_unitaire_id.setStyle( { float: "none" } );
       $("tous_les_"+type_elt+"_"+line_id).insert(oFormPrise.moment_unitaire_id);
       oFormPrise.moment_unitaire_id.onchange = null;
       oFormPrise.moment_unitaire_id.enable().show();
@@ -118,7 +118,7 @@ selDivPoso = function(type, line_id, type_elt){
 
       } else {
         $("tous_les_"+type_elt+"_"+line_id).insert(oFormPrise.moment_unitaire_id);
-        oFormPrise.moment_unitaire_id.setStyle( { float: null } );
+        oFormPrise.moment_unitaire_id.setStyle( { float: "none" } );
       }
       oFormPrise.moment_unitaire_id.enable().show();
       oFormPrise.moment_unitaire_id.onchange = oFormPrise.onsubmit.bind(oFormPrise);

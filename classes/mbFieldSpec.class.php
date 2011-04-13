@@ -108,7 +108,7 @@ class CMbFieldSpec {
     if ($parentClass = get_parent_class($this->className)) {
       if ($parent = @new $parentClass) {
         return isset($parent->_prop[$this->fieldName]);
-	    }
+      }
     }
     
     return false;
@@ -206,9 +206,9 @@ class CMbFieldSpec {
       $masked = self::formattedToMasked($propValue, $this->mask, $this->format);
 
       if (!preg_match($regex, $propValue)) {
-      	if (!preg_match($regex, $masked)) {
+        if (!preg_match($regex, $masked)) {
           return "La donnée '$propValue' ne respecte pas le masque '$this->mask'";
-      	} // else, that means the value is already the formatted value
+        } // else, that means the value is already the formatted value
       } else {
         $object->{$this->fieldName} = $formatted;
       }
@@ -226,13 +226,13 @@ class CMbFieldSpec {
 
  /**
   *  99/99/9999 >> 
-		array	(
-		  array('[0-9]', 2),
-		  '/',
-		  array('[0-9]', 2),
-		  '/',
-		  array('[0-9]', 4)
-		)
+    array  (
+      array('[0-9]', 2),
+      '/',
+      array('[0-9]', 2),
+      '/',
+      array('[0-9]', 4)
+    )
   * 
   */
   static function maskToLexemes($mask) {
@@ -301,11 +301,11 @@ class CMbFieldSpec {
     
     // If no format is provided, this is the raw value
     if (!$format) {
-	    // Could be shorter, using str_replace
-	    for ($i = 0; $i < strlen($mask); $i++) {
-	      if (isset(self::$charmap[$mask[$i]]) && isset($data[$i])) {
-	        $formatted .= $data[$i];
-	      }
+      // Could be shorter, using str_replace
+      for ($i = 0; $i < strlen($mask); $i++) {
+        if (isset(self::$charmap[$mask[$i]]) && isset($data[$i])) {
+          $formatted .= $data[$i];
+        }
       }
     } 
     // else, we match the data to the format
@@ -315,9 +315,9 @@ class CMbFieldSpec {
       
       $matches = array();
       preg_match($regex, $data, $matches);
-	    for ($i = 1; ($i < count($matches) && $i < 10); $i++) {
-	      $formatted = str_replace('$'.$i, $matches[$i], $formatted);
-	    }
+      for ($i = 1; ($i < count($matches) && $i < 10); $i++) {
+        $formatted = str_replace('$'.$i, $matches[$i], $formatted);
+      }
     }
     
     return $formatted;
@@ -328,51 +328,51 @@ class CMbFieldSpec {
   *   Or        1985-10-31 >> 31/10/1985 with the format $3-$2-$1
   */
   static function formattedToMasked($rawdata, $mask, $format = null) {
-  	$mask = str_replace(array('S', 'P'), array(' ', '|'), $mask);
-  	$masked = '';
-  	
-  	if (!$format) {
-	  	$n = 0;
-	    for ($i = 0; $i < strlen($mask); $i++) {
+    $mask = str_replace(array('S', 'P'), array(' ', '|'), $mask);
+    $masked = '';
+    
+    if (!$format) {
+      $n = 0;
+      for ($i = 0; $i < strlen($mask); $i++) {
         $masked .= isset(self::$charmap[$mask[$i]]) && isset($rawdata[$n]) ? 
                      $rawdata[$n++] :
                      $mask[$i];
-	    }
-  	} 
-  	else {
-			$lexemes = self::maskToLexemes($mask);
-			$areas = array();
-			$placeToLexeme = array(); // Makes the correspondance between the $1, $2, $3... in the format and the lexemes
-			
-			// We collect only the variable lexemes
-			$n = 0;
-			for ($i = 0; $i < count($lexemes); $i++) {
-			  if (is_array($lexemes[$i])) {
-			    $areas[++$n] = $lexemes[$i];
-			    $placeToLexeme[$n] = $i;
-			  }
-			}
+      }
+    } 
+    else {
+      $lexemes = self::maskToLexemes($mask);
+      $areas = array();
+      $placeToLexeme = array(); // Makes the correspondance between the $1, $2, $3... in the format and the lexemes
+      
+      // We collect only the variable lexemes
+      $n = 0;
+      for ($i = 0; $i < count($lexemes); $i++) {
+        if (is_array($lexemes[$i])) {
+          $areas[++$n] = $lexemes[$i];
+          $placeToLexeme[$n] = $i;
+        }
+      }
 
-			$positions = array();
-			$formatRegex = "/^$format$/";
-			for ($i = 1; $i <= count($areas); $i++) {
+      $positions = array();
+      $formatRegex = "/^$format$/";
+      for ($i = 1; $i <= count($areas); $i++) {
         $pos = strpos($formatRegex, '$'.$i);
         $positions[$pos] = $i;
-			  $formatRegex = str_replace('$'.$i, ('('.$areas[$i][0].'{'.$areas[$i][1].'})'), $formatRegex);
-			}
-			
-			ksort($positions); // sort by key
-			$positions = array_values($positions); // to make keys contiguous
-    
-	    $matches = array();
-	    preg_match($formatRegex, $rawdata, $matches);
-      if (count($matches)) {
-		    foreach ($areas as $key => $area) {
-		      $lexemes[$placeToLexeme[$key]] = $matches[$positions[$key-1]];
-		    }
-	      $masked = implode('', $lexemes);
+        $formatRegex = str_replace('$'.$i, ('('.$areas[$i][0].'{'.$areas[$i][1].'})'), $formatRegex);
       }
-  	}
+      
+      ksort($positions); // sort by key
+      $positions = array_values($positions); // to make keys contiguous
+    
+      $matches = array();
+      preg_match($formatRegex, $rawdata, $matches);
+      if (count($matches)) {
+        foreach ($areas as $key => $area) {
+          $lexemes[$placeToLexeme[$key]] = $matches[$positions[$key-1]];
+        }
+        $masked = implode('', $lexemes);
+      }
+    }
     
     return $masked;
   }
@@ -482,7 +482,7 @@ class CMbFieldSpec {
    * @return string Rendered HTML
    */
   function getTitleElement($object, $params) {
-		$desc  = CAppUI::tr("$object->_class_name-$this->fieldName-desc");
+    $desc  = CAppUI::tr("$object->_class_name-$this->fieldName-desc");
     $desc = htmlentities($desc);
     $title = CAppUI::tr("$object->_class_name-$this->fieldName-court");
     return "<label title=\"$desc\" >$title</label>";
@@ -524,55 +524,55 @@ class CMbFieldSpec {
     @list($activated, $minChars, $limit, $wholeString, $dropdown) = explode(',', $autocomplete);
     
     if ($this->autocomplete && $form && $activated === 'true') {
-    	if ($minChars    === null || $minChars    === "")    $minChars = 2;
-    	if ($limit       === null || $limit       === "")       $limit = 30;
-    	if ($wholeString === null || $wholeString === "") $wholeString = false;
+      if ($minChars    === null || $minChars    === "")    $minChars = 2;
+      if ($limit       === null || $limit       === "")       $limit = 30;
+      if ($wholeString === null || $wholeString === "") $wholeString = false;
       if ($dropdown    === null || $dropdown    === "" || $dropdown === "false") $dropdown = false;
-    	
+      
       $options = explode('|', $this->autocomplete);
       $view_field = reset($options);
       $show_view = isset($options[1]);
-			
+      
       if ($spec instanceof CRefSpec && $this->autocomplete) {
-	      $ref_object = new $spec->class;
-	      $ref_object->load($value);
-	      $view = $ref_object->$view_field;
-	      
-	      $sHtml  = "<input type=\"hidden\" name=\"$field\" value=\"".htmlspecialchars($value)."\" 
-	                  class=\"".htmlspecialchars("$className $this->prop")."\" $extra />";
-	      $sHtml .= "<input type=\"text\" name=\"{$field}_autocomplete_view\" value=\"".htmlspecialchars($view)."\" 
-	                  class=\"autocomplete\" onchange='if(!this.value){this.form[\"".$field."\"].value=\"\"}' $extra />";
-	      $ref = true;
-	    }
-	    else {
-	      $sHtml  = "<input type=\"text\" name=\"$field\" value=\"".htmlspecialchars($value)."\"
-	                  class=\"".htmlspecialchars("$className $this->prop")."\" $extra />";
-	    }
-    	
-    	$id = $form.'_'.$field.($ref ? '_autocomplete_view' : '');
-    	$sHtml .= '<script type="text/javascript">
-    	Main.add(function(){
-    	  var input = $("'.$id.'");
-			  var url = new Url("system", "httpreq_field_autocomplete");
-			  url.addParam("class", "'.$object->_class_name.'");
-			  url.addParam("field", "'.$field.'");
-			  url.addParam("limit", '.$limit.');
-			  url.addParam("view_field", "'.$view_field.'");
-			  url.addParam("show_view", '.($show_view ? 'true' : 'false').');
-			  url.addParam("input_field", "'.$field.($ref ? '_autocomplete_view' : '').'");
-			  url.addParam("wholeString", '.$wholeString.');
-			  url.autoComplete(input, "'.$id.'_autocomplete", {
-			    minChars: '.$minChars.',
-			    method: "get",
+        $ref_object = new $spec->class;
+        $ref_object->load($value);
+        $view = $ref_object->$view_field;
+        
+        $sHtml  = "<input type=\"hidden\" name=\"$field\" value=\"".htmlspecialchars($value)."\" 
+                    class=\"".htmlspecialchars("$className $this->prop")."\" $extra />";
+        $sHtml .= "<input type=\"text\" name=\"{$field}_autocomplete_view\" value=\"".htmlspecialchars($view)."\" 
+                    class=\"autocomplete\" onchange='if(!this.value){this.form[\"".$field."\"].value=\"\"}' $extra />";
+        $ref = true;
+      }
+      else {
+        $sHtml  = "<input type=\"text\" name=\"$field\" value=\"".htmlspecialchars($value)."\"
+                    class=\"".htmlspecialchars("$className $this->prop")."\" $extra />";
+      }
+      
+      $id = $form.'_'.$field.($ref ? '_autocomplete_view' : '');
+      $sHtml .= '<script type="text/javascript">
+      Main.add(function(){
+        var input = $("'.$id.'");
+        var url = new Url("system", "httpreq_field_autocomplete");
+        url.addParam("class", "'.$object->_class_name.'");
+        url.addParam("field", "'.$field.'");
+        url.addParam("limit", '.$limit.');
+        url.addParam("view_field", "'.$view_field.'");
+        url.addParam("show_view", '.($show_view ? 'true' : 'false').');
+        url.addParam("input_field", "'.$field.($ref ? '_autocomplete_view' : '').'");
+        url.addParam("wholeString", '.$wholeString.');
+        url.autoComplete(input, "'.$id.'_autocomplete", {
+          minChars: '.$minChars.',
+          method: "get",
           select: "view",
- 			    dropdown: '.(!$ref || $dropdown ? 'true' : 'false');
-    	
-    	if ($ref) {
-			  $sHtml .= ',
-		      afterUpdateElement: function(field,selected){
-		        $V(field.form["'.$field.'"], selected.getAttribute("id").split("-")[2]);
+           dropdown: '.(!$ref || $dropdown ? 'true' : 'false');
+      
+      if ($ref) {
+        $sHtml .= ',
+          afterUpdateElement: function(field,selected){
+            $V(field.form["'.$field.'"], selected.getAttribute("id").split("-")[2]);
           }';
-    	}
+      }
       if ($this->dependsOn) {
         $sHtml .= ',
           callback: function(element, query){
@@ -581,8 +581,8 @@ class CMbFieldSpec {
             return query + "&where['.$this->dependsOn.']=" + $V(element);
           }';
       }
-    	
-    	$sHtml .= '});});</script>';
+      
+      $sHtml .= '});});</script>';
       $sHtml .= '<div style="display:none; width:0;" class="autocomplete" id="'.$id.'_autocomplete"></div>';
     }
     else {
@@ -642,9 +642,9 @@ class CMbFieldSpec {
     $form     = CMbArray::extract($params, "form");
     $register = CMbArray::extract($params, "register");
     
-		// Tab index in display input
-		$tabindex = CMbArray::extract($params, "tabindex");
-	
+    // Tab index in display input
+    $tabindex = CMbArray::extract($params, "tabindex");
+  
     $id    = $form.'_'.$field;
     $extra = CMbArray::makeXmlAttributes($params);
     $html = array();
@@ -683,41 +683,45 @@ class CMbFieldSpec {
   }
 
   function getDBSpec(){}
-	
-	static function parseDBSpec($db_spec, $reduce_strings = false) {
-	  $props = array(
-	    'type' => null,
-	    'params' => null,
-	    'unsigned' => null,
-	    'zerofill' => null,
-	  );
-		
-	  $props['type']    = $db_spec;
-	  $props['unsigned'] = stristr($db_spec, 'unsigned') != false;
-	  $props['zerofill'] = stristr($db_spec, 'zerofill') != false;
-	  $props['type'] = trim(str_ireplace(array('unsigned', 'zerofill'), '', $props['type']));
-	  $props['params']  = null;
-		
-	  if ($pos = strpos($props['type'], '(')) {
-	    $props['params'] = explode(',', substr($props['type'], $pos+1, strpos($props['type'], ')')-$pos-1));
-	    $props['params'] = array_map('trim', $props['params']);
-			
-			if ($reduce_strings) {
-				foreach($props['params'] as &$v) {
-					if ($v[0] === "'") 
-					  $v = trim($v, "'");
-					else 
-					  $v = (int)$v;
-				}
-			}
-			
-	    $props['type']   = substr($props['type'], 0, $pos);
-	  }
-		
-	  $props['type'] = strtoupper(trim($props['type']));
-		
-	  return $props;
-	}
+  
+  static function parseDBSpec($db_spec, $reduce_strings = false) {
+    $props = array(
+      'type' => null,
+      'params' => null,
+      'unsigned' => null,
+      'zerofill' => null,
+    );
+    
+    $props['type']    = $db_spec;
+    $props['unsigned'] = stristr($db_spec, 'unsigned') != false;
+    $props['zerofill'] = stristr($db_spec, 'zerofill') != false;
+    $props['type'] = trim(str_ireplace(array('unsigned', 'zerofill'), '', $props['type']));
+    $props['params']  = null;
+    
+    if ($pos = strpos($props['type'], '(')) {
+      $props['params'] = explode(',', substr($props['type'], $pos+1, strpos($props['type'], ')')-$pos-1));
+      $props['params'] = array_map('trim', $props['params']);
+      
+      if ($reduce_strings) {
+        foreach($props['params'] as &$v) {
+          if ($v[0] === "'") 
+            $v = trim($v, "'");
+          else 
+            $v = (int)$v;
+        }
+      }
+      
+      $props['type']   = substr($props['type'], 0, $pos);
+    }
+    
+    $props['type'] = strtoupper(trim($props['type']));
+    
+    return $props;
+  }
+  
+  function isTextBlob(){
+    return in_array($this->getSpecType(), array("text", "html", "php", "xml"));
+  }
 
   function getFullDBSpec(){
     $object = new $this->className;
@@ -733,12 +737,16 @@ class CMbFieldSpec {
                  $this instanceof CTimeSpec ||
                  isset($this->index)) ? "INDEX" : '',*/
      'extra' => $is_key ? 'auto_increment' : null,
-     'default' => (isset($this->default) ? 
-                     "DEFAULT '$this->default'" : 
-                     (isset($this->defaultOption) ?
-                       "DEFAULT ('$this->defaultOption')" :
-                       ''))
     );
+    
+    if (!$this->isTextBlob()) {
+      if (isset($this->default)) {
+        $props['default'] = "DEFAULT '$this->default'";
+      }
+      elseif (isset($this->defaultOption)) {
+        $props['default'] = "DEFAULT '$this->defaultOption'";
+      }
+    }
     
     return implode(' ', $props);
   }

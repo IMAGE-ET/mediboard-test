@@ -21,6 +21,8 @@ updateFieldSpec = function(){
   var str = "{{$spec->getSpecType()}}";
   
   Object.keys(data).each(function(k){
+	  if (k.indexOf("__") === 0) return;
+		
     var d = data[k];
     
     if (d !== "") {
@@ -113,14 +115,14 @@ Main.add(function(){
       </tr>
     {{/if}}
     
-    <tr {{if $smarty.foreach.specs.index >= $advanced_controls_limit}}class="advanced" style="display: none;"{{/if}}>
+    <tr {{if ($_name == "default" && $spec instanceof CEnumSpec) || $smarty.foreach.specs.index >= $advanced_controls_limit}}class="advanced" style="display: none;"{{/if}}>
       <th><label for="{{$_name}}" title="{{$_name}}">{{tr}}CMbFieldSpec.{{$_name}}{{/tr}}</label></th>
       <td>
         {{assign var=spec_value value=$spec->$_name}}
         
         {{* str *}}
         {{if $_type == "str"}}
-          <input type="text" name="{{$_name}}" value="{{$spec_value}}" class="str nospace regex|^\s*[a-zA-Z0-9_]*\s*$|gi" />
+          <input type="text" name="{{$_name}}" value="{{$spec_value}}" class="str {{if $_name != "default"}}nospace regex|^\s*[a-zA-Z0-9_]*\s*$|gi{{/if}}" />
           
         {{* num *}}
         {{elseif $_type == "num"}}
