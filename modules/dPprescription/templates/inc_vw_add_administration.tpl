@@ -230,7 +230,7 @@ updateQuantite = function(ratio_UI, oField){
 
 {{assign var=hide_cible value=1}}
 {{assign var=hide_button_add value=1}}
-{{mb_include module=dPhospi template=inc_transmission}}
+{{mb_include module=dPhospi template=inc_transmission refreshTrans=0}}
 <button type="button" class="add" onclick="submitAdmission()">{{tr}}Validate{{/tr}}</button>
 <button type="button" class="cancel" onclick="submitCancelAdm();">{{tr}}Cancel{{/tr}}</button>
 {{/if}}

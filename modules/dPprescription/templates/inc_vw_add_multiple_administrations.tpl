@@ -169,7 +169,7 @@ Main.add( function(){
 		  <tr>
 		    <td>
           {{assign var=hide_button_add value=1}}
-          {{mb_include module=dPhospi template=inc_transmission}}
+          {{mb_include module=dPhospi template=inc_transmission refreshTrans=0}}
 		    </td>
 		  </tr>
 		</table>

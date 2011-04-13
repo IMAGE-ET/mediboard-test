@@ -64,5 +64,5 @@ Main.add( function(){
 <!-- Gestion des transmissions -->
 <div id="perf_trans">
 {{assign var=hide_cible value=1}}
-{{mb_include module=dPhospi template=inc_transmission}}
+{{mb_include module=dPhospi template=inc_transmission refreshTrans=0}}
 </div>
