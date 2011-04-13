@@ -32,7 +32,7 @@ loadSejour = function(sejour_id) {
 
 Main.add(function () {
   viewListPrescription();
-  bilanTabs = Control.Tabs.create('bilanTabs', false);
+  Control.Tabs.create('bilanTabs');
 });
 
 </script>
