@@ -4,22 +4,18 @@
 	<script type="text/javascript">
 	  Main.add(window.print);
 	</script>
-	<button class="print not-printable" onclick="window.print()">{{tr}}Print{{/tr}}</button>
 
 	</td>
 	</tr>
   </table>
-
   {{assign var=tbl_class value="print"}}
-{{else}}
-  <button class="print not-printable" onclick="$('modal-{{$sejour->_id}}').down('.modal-content').print()">{{tr}}Print{{/tr}}</button>
 {{/if}}
 
 <div class="modal-content" style="text-align: left;">
 
 <table class="{{$tbl_class}}">
   <tr>
-    <th class="title" colspan="4" style="font-size: 16px">
+    <th class="title" colspan="4" style="font-size: 16px; cursor: pointer;" onclick="window.print()">
       Dossier d'urgence de <span style="font-size: 20px">{{$patient->_view}}</span> {{mb_include module=dPpatients template=inc_vw_ipp ipp=$patient->_IPP}} <br />
       né(e) le {{mb_value object=$patient field=naissance}} de sexe {{if $patient->sexe == "m"}} masculin {{else}} féminin {{/if}} <br /> <hr />
       <span style="font-size: 14px">par le Dr {{$consult->_ref_praticien}} le {{mb_value object=$consult field=_date}} - Dossier {{mb_include module=dPplanningOp template=inc_vw_numdos num_dossier=$sejour->_num_dossier}}</span>
