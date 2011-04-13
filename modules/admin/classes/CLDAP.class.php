@@ -106,6 +106,7 @@ class CLDAP {
     // Pas de profil
     $user->template = 0;
     $user->user_login_errors = 0;
+    $user->repair();
     $msg = $user->store();
     if ($msg) {
       throw new CMbException($msg);
