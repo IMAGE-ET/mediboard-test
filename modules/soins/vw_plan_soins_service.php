@@ -9,13 +9,9 @@
  */
 
 $service_id = CValue::getOrSession("service_id");
-$date       = mbDate();
+$date       = CValue::getOrSession("date", mbDate());
 $nb_decalage   = CValue::get("nb_decalage", 2);
 $date_max   = mbDate("+ 1 DAY", $date);
-
-/*
- *  Recuperation des Id des sejours de tous les patients du service 
- */
  
 // Chargement du service
 $service = new CService();
@@ -76,6 +72,9 @@ foreach($elements as $_element){
 	$_category = $_element->_ref_category_prescription;
 	$categories[$_category->chapitre][$_category->_id][$_element->_id] = $_element;
 }
+
+// Chargement de la liste des services
+$services = $service->loadListWithPerms();
  
 // Création du template
 $smarty = new CSmartyDP();
@@ -84,4 +83,5 @@ $smarty->assign("categories", $categories);
 $smarty->assign("date", $date);
 $smarty->assign("nb_decalage", $nb_decalage);
 $smarty->assign("date", $date);
+$smarty->assign("services", $services);
 $smarty->display('vw_plan_soins_service.tpl');

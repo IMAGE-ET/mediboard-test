@@ -16,7 +16,6 @@
 // Refresh du plan de soin
 updatePlanSoinsPatients = function(){
   var url = new Url("soins", "ajax_vw_content_plan_soins_service");
-	// Serialiser => join(-)
 	url.addParam("categories_id[]", $V(getForm("selectElts").elts), true);
 	url.addParam("date", "{{$date}}");
 	url.requestUpdate("content_plan_soins_service");
@@ -67,6 +66,7 @@ selectTr = function(counter){
 
 Main.add(function(){
   updatePlanSoinsPatients();
+	Calendar.regField(getForm("updateActivites").date);
 });	
 
 </script>
@@ -97,11 +97,28 @@ Main.add(function(){
 
 <table class="main">
 	<tr>
-		<th class="title" colspan="3">Gestion des activités du service {{$service->_view}} le {{$date|date_format:$conf.date}}</th>
+		<th class="title" colspan="3">
+			<form name="updateActivites" action="?" method="get">
+				<input type="hidden" name="m" value="{{$m}}" />
+				<input type="hidden" name="tab" value="{{$tab}}" />
+        
+			  Gestion des activités du service 
+				<select name="service_id" onchange="this.form.submit();">
+				  {{foreach from=$services item=_service}}
+					  <option value="{{$_service->_id}}" {{if $_service->_id == $service->_id}}selected="selected"{{/if}}>{{$_service->_view}}</option>
+					{{/foreach}}
+				</select>
+				le
+				<input type="hidden" name="date" class="date" value="{{$date}}" onchange="this.form.submit()" />
+		  </form>
+		</th>
 	</tr>
 	<tr>
 		<td style="width: 20%;">
 			<form name="selectElts" action="?" method="get">
+				<!-- Checkbox vide permettant d'eviter que le $V considere qu'il faut retourner true ou false s'il n'y a qu'une seule checkbox -->
+				<input type="checkbox" name="elts" value="" style="display: none;"/>
+                      
 				<table class="tbl" id="categories">
 					<tr>
 						<th class="title">
@@ -136,7 +153,11 @@ Main.add(function(){
 				        </tr>
 				      {{/foreach}}
 				    {{/foreach}}
-				  {{/foreach}}			
+				  {{foreachelse}}
+					<tr>
+						<td class="empty">Aucune activité</td>
+					</tr>
+					{{/foreach}}			
 				</table>
       </form>
 		</td>

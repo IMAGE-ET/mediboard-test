@@ -14,6 +14,7 @@ $date_max      = mbDate("+ 1 DAY", $date);
 $service_id    = CValue::getOrSession("service_id");
 $nb_decalage   = CValue::get("nb_decalage", 2);
 $mode_dossier  = CValue::get("mode_dossier", "administration");
+
 /*
  * Code a supprimer
  */
@@ -125,19 +126,17 @@ foreach($lines as $_line_element){
   }
 	
   // Chargement des administrations et des transmissions
-  foreach($_dates as $date){
-    $_line_element->calculAdministrations($date);
-  }
+  foreach($_dates as $_date){
+    $_line_element->calculAdministrations($_date);
 
-  foreach($_dates as $date){
     // Pre-remplissage des prises prevues dans le dossier de soin
-    if(($date >= $_line_element->debut && $date <= mbDate($_line_element->_fin_reelle))){
+    if(($_date >= $_line_element->debut && $_date <= mbDate($_line_element->_fin_reelle))){
       // Si aucune prise  
       if ((count($_line_element->_ref_prises) < 1) && (!isset($prescription->_lines["elt"][$name_chap][$name_cat][$_line_element->_id]["aucune_prise"]))){
         $prescription->_ref_lines_elt_for_plan[$name_chap][$name_cat][$_line_element->_id]["aucune_prise"] = $_line_element;
        
 			}
-      $_line_element->calculPrises($prescription, $date, $name_chap, $name_cat, 1, CAppUI::conf("dPprescription CPrescription manual_planif"));
+      $_line_element->calculPrises($prescription, $_date, $name_chap, $name_cat, 1, CAppUI::conf("dPprescription CPrescription manual_planif"));
 		}
   }
 

@@ -13,7 +13,6 @@ Main.add(function(){
 });
 
 </script>
-
 <table class="tbl" id="plan_soin" style="display: none;">
 	<tr>
 	  <th class="title" colspan="100">
