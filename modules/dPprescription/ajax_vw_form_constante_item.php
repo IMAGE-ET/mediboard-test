@@ -20,6 +20,7 @@ $constante_item->category_prescription_id = $category_prescription_id;
 $constante_item->loadRefCategoryPrescription();
 $smarty = new CSmartyDP;
 $smarty->assign("constante_item", $constante_item);
+$smarty->assign("category_prescription_id", $category_prescription_id);
 $smarty->display("inc_form_constante_item.tpl");
 
 ?>
