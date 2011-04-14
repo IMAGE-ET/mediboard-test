@@ -93,7 +93,7 @@ $count_composition_dossier = array();
 $tabHours = CAdministration::getTimingPlanSoins($date, $configs);
 foreach($tabHours as $_key_date => $_period_date){
   foreach($_period_date as $_key_periode => $_period_dates){
-		$count_composition_dossier[$_key_date][$_key_periode] = CAppUI::conf("dPprescription CPrescription manual_planif") ? 3 : 1;
+		$count_composition_dossier[$_key_date][$_key_periode] = CAppUI::conf("dPprescription CPrescription manual_planif") ? 3 : 2;
 		$first_date = reset(array_keys($_period_dates));
     $first_time = reset(reset($_period_dates));
     $last_date = end(array_keys($_period_dates));
@@ -264,8 +264,6 @@ else {
 	$prescription->loadAllTransmissions();
 }
 $signe_decalage = ($nb_decalage < 0) ? "-" : "+";
-
-$count_colspan = CAppUI::conf("dPprescription CPrescription manual_planif") ? 1 : 0;
 
 // Création du template
 $smarty = new CSmartyDP();
