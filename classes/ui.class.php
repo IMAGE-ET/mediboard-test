@@ -718,6 +718,16 @@ class CAppUI {
     return $paths;
   }
 
+   /**
+   * Check translated statement exists
+   * @param string $str statement to translate
+   * @return boolean if translated statement exists
+   */
+  static function isTranslated($str) {
+    global $locales;
+    return array_key_exists($str, $locales);
+  }
+  
   /**
    * Translate given statement
    * @param string $str statement to translate
