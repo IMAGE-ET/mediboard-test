@@ -6,7 +6,15 @@
       	{{$_field->title}}
       </div>
     {{else}}
-      <div class="small-{{$_field->type}}">{{mb_value object=$_field field=text}}</div>
+      {{if $_field->type == "title"}}
+        <div class="ex-message-title">
+          {{$_field->text}}
+        </div>
+      {{else}}
+        <div class="small-{{$_field->type}}">
+          {{mb_value object=$_field field=text}}
+        </div>
+      {{/if}}
     {{/if}}
     <div class="overlay"></div>
   </div>

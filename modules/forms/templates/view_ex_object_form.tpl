@@ -13,10 +13,13 @@ fieldset {
 	margin: 0px;
 }
 
-div.small-title {
+div.ex-message-title {
   font-weight: bold;
 	border-bottom: 1px solid #666;
 	font-size: 1.2em;
+	left: 0.5em; 
+	right: 0.5em; 
+	position: absolute;
 }
 </style>
 
@@ -144,9 +147,16 @@ Main.add(function(){
 	              {{/if}}
 							{{else}}
                 <td>
-                	<div class="small-{{$_message->type}}">
-                    {{mb_value object=$_message field=text}}
-									</div>
+                	{{if $_message->type == "title"}}
+                    <div class="ex-message-title">
+                      {{$_message->text}}
+										</div>
+                    &nbsp;
+									{{else}}
+										<div class="small-{{$_message->type}}">
+	                    {{mb_value object=$_message field=text}}
+										</div>
+									{{/if}}
                 </td>
 							{{/if}}
 					{{/if}}

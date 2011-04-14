@@ -124,6 +124,15 @@ Main.add(function(){
   .draggable.hr {
     padding: 6px;
   }
+
+	div.ex-message-title {
+	  font-weight: bold;
+	  border-bottom: 1px solid #666;
+	  font-size: 1.2em;
+	  /*left: 0.5em; 
+	  right: 0.5em; 
+	  position: absolute;*/
+	}
 </style>
 
 <ul class="control_tabs" id="field_groups_layout" style="font-size: 0.9em;">
