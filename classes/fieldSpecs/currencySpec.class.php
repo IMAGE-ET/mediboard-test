@@ -26,7 +26,11 @@ class CCurrencySpec extends CFloatSpec {
   function getValue($object, $smarty = null, $params = array()) {
     $propValue = $object->{$this->fieldName};
     
-    $decimals = CMbArray::extract($params, "decimals", $this->precise ? 4 : 2);
+    $decimals = CMbArray::extract($params, "decimals", $this->decimals);
+    if ($decimals == null) {
+      $decimals = isset($this->precise) ? 4 : 2;
+    }
+		
     return ($propValue !== null && $propValue !== "") ? 
       number_format($propValue, $decimals, ',', ' ').' '.CAppUI::conf("currency_symbol") : 
       "-";

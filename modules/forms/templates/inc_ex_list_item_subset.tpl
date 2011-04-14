@@ -57,7 +57,7 @@ moveListItem = function(e, way){
 	<col class="narrow" />
 	
   <tr>
-    <th colspan="4" class="title">
+    <th colspan="5" class="title">
       {{tr}}CExList-back-list_items{{/tr}}
       
       <a class="button edit" href="?m=forms&amp;tab=view_ex_list&amp;object_guid={{$list_owner->_guid}}">
@@ -82,7 +82,7 @@ moveListItem = function(e, way){
     </th>
     
     {{if $context instanceof CExClassField}}
-      <th>Formulaire à déclencher</th>
+      <th class="narrow">Formulaire à déclencher</th>
     {{/if}}
 		
 		<th class="narrow">Coché <br />par défaut</th>
@@ -121,12 +121,12 @@ moveListItem = function(e, way){
         <td class="code">{{mb_value object=$_item field=code}}</td>
 			{{/if}}
 			
-      <td>{{mb_value object=$_item field=name}}</td>
+      <td class="text">{{mb_value object=$_item field=name}}</td>
       
       {{if $context instanceof CExClassField}}
         {{if $triggerables|@count}}
           <td>
-            <select class="triggered-data-select" onchange="updateTriggerData(this)">
+            <select class="triggered-data-select" onchange="updateTriggerData(this)" style="max-width: 20em;">
               <option value=""> &mdash; </option>
               {{foreach from=$triggerables item=_triggerable}}
                 {{assign var=_trigger_value value="`$_triggerable->_id`-`$_item->_id`"}}

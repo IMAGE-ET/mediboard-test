@@ -18,12 +18,12 @@ Options -Indexes
   </FilesMatch>
   
   # 1 week cache for not versionned resources
-  <FilesMatch "\.(flv|gif|jpg|jpeg|png|ico|swf|pdf)$">
+  <FilesMatch "\.(flv|gif|jpg|jpeg|png|ico|swf|pdf|jar)$">
   Header set Cache-Control "max-age=604800, public"
   </FilesMatch>
   
   # 1 month cache for versionned resources
-  <FilesMatch "\.(js|css|flv|gif|jpg|jpeg|png|ico|swf|pdf)(\?[^&]+)$">
+  <FilesMatch "\.(js|css|flv|gif|jpg|jpeg|png|ico|swf|pdf|jar)(\?[^&]+)$">
   Header set Cache-Control "max-age=2592000"
   </FilesMatch>
 </IfModule>

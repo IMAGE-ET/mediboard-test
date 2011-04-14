@@ -3,7 +3,11 @@
     {{if $_type == "field"}}
       <div class="field-info" style="display: none;">{{if $_field->_locale}}{{tr}}{{$_field->_locale}}{{/tr}}{{else}}{{$_field->name}}{{/if}}</div>
 			<div class="field-content">
+				{{mb_include module=forms template=inc_ex_object_field ex_field=$_field mode=layout form="form-grid-layout"}}
+				
+				{{* 
 			  {{mb_field object=$ex_object field=$_field->name register=true increment=true form="form-grid-layout" rows=1}}
+				 *}}
 			</div>
     {{else}}
       {{mb_label object=$ex_object field=$_field->name}}

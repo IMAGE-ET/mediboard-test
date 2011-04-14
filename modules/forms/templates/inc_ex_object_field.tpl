@@ -1,7 +1,10 @@
+{{mb_default var=form value=editExObject}}
+{{mb_default var=mode value=normal}}
+
 {{assign var=_field_name value=$ex_field->name}}
 {{assign var=_spec value=$ex_object->_specs.$_field_name}}
 
-{{if $ex_field->_triggers_map|@count}}
+{{if $mode == "normal" && $ex_field->_triggers_map|@count}}
   <script type="text/javascript">
   Main.add(function(){
     var form = getForm("editExObject");
@@ -10,7 +13,7 @@
   </script>
 {{/if}}
   
-{{if $_spec instanceof CRefSpec}}
+{{if $mode == "normal" && $_spec instanceof CRefSpec}}
   <script type="text/javascript">
   Main.add(function(){
     var form = getForm("editExObject");
@@ -33,15 +36,15 @@
   });
   </script>
   <input type="text" class="autocomplete" name="_{{$_field_name}}_view" value="{{$ex_object->_fwd.$_field_name}}" size="30" />
-  {{mb_field object=$ex_object field=$_field_name form=editExObject hidden=true}}
+  {{mb_field object=$ex_object field=$_field_name form=$form hidden=true}}
 {{elseif $_spec instanceof CEnumSpec && $_spec->vertical}}
   <fieldset>
-    {{mb_field object=$ex_object field=$_field_name register=true increment=true form=editExObject}}
+    {{mb_field object=$ex_object field=$_field_name register=true increment=true form=$form}}
   </fieldset>
 {{elseif $ex_field->formula}}
   {{mb_field object=$ex_object field=$_field_name readonly=true style="font-weight: bold; background-color: #aaff56;"}}
 {{else}}
-  {{mb_field object=$ex_object field=$_field_name register=true increment=true form=editExObject defaultOption=" &mdash; "}}
+  {{mb_field object=$ex_object field=$_field_name register=true increment=true form=$form defaultOption=" &mdash; "}}
 {{/if}}
 
 {{if $ex_field->reported}}

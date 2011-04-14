@@ -35,7 +35,7 @@ class CExClassMessage extends CMbObject {
   function getProps() {
     $props = parent::getProps();
     $props["ex_group_id"] = "ref notNull class|CExClassFieldGroup cascade";
-    $props["type"]        = "enum list|info|warning|error";
+    $props["type"]        = "enum list|title|info|warning|error";
 		
     $props["title"]       = "str notNull";
     $props["text"]        = "text notNull";

@@ -180,9 +180,15 @@ ExObjectFormula = {
     });
   
     var result = data.parser.evaluate(values);
-    if (isNaN(result)) {
+    if (!isFinite(result)) {
       result = "";
     }
+		else {
+			var props = target.getProperties();
+			if (props.decimals) {
+				result = (result*1).toFixed(props.decimals);
+			}
+		}
     
     $V(target, (result+""));
   }

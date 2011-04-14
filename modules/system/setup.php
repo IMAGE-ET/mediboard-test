@@ -687,7 +687,12 @@ class CSetupsystem extends CSetup {
     $query = "ALTER TABLE `ex_class_field`
               ADD `reported` ENUM ('0','1') NOT NULL DEFAULT '0'";
     $this->addQuery($query);
+		
+		$this->makeRevision("1.0.66");
+		$query = "ALTER TABLE `ex_class_message` 
+              CHANGE `type` `type` ENUM ('title','info','warning','error');";
+    $this->addQuery($query);
     
-    $this->mod_version = "1.0.66";
+    $this->mod_version = "1.0.67";
   }
 }

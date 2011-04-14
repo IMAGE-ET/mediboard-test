@@ -14,6 +14,7 @@ class CFloatSpec extends CMbFieldSpec {
   var $min    = null;
   var $max    = null;
   var $pos    = null;
+  var $decimals = null;
 	
   static function equals($value1, $value2) {
     return round($value1, 2) == round($value2, 2);
@@ -32,6 +33,7 @@ class CFloatSpec extends CMbFieldSpec {
       'min' => 'num',
       'max' => 'num',
       'pos' => 'bool',
+      'decimals' => 'num',
     ) + parent::getOptions();
   }
   
@@ -99,7 +101,7 @@ class CFloatSpec extends CMbFieldSpec {
     $new_value = CMbArray::extract($params, "value");
     if ($new_value !== null) $value = $new_value;
     
-    $decimals = CMbArray::extract($params, "decimals");
+    $decimals = CMbArray::extract($params, "decimals", $this->decimals);
     if ($decimals == null) {
       $decimals = isset($this->precise) ? 4 : 2;
     }

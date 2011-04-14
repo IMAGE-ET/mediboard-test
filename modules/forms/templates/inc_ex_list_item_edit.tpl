@@ -86,12 +86,12 @@ Main.add(function(){
           </button>
         </td>
         <td class="code" {{if !$coded}}style="display: none"{{/if}}>{{mb_value object=$_item field=code}}</td>
-        <td>{{mb_value object=$_item field=name}}</td>
+        <td class="text">{{mb_value object=$_item field=name}}</td>
         
         {{if $context instanceof CExClassField}}
           {{if $triggerables|@count}}
             <td>
-              <select class="triggered-data-select" onchange="updateTriggerData(this)">
+              <select class="triggered-data-select" onchange="updateTriggerData(this)" style="max-width: 20em;">
                 <option value=""> &mdash; </option>
                 {{foreach from=$triggerables item=_triggerable}}
                   {{assign var=_trigger_value value="`$_triggerable->_id`-`$_item->_id`"}}

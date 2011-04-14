@@ -663,6 +663,10 @@ Class.extend(String, {
     term = term.replace(new RegExp('(\\' + specials.join('|\\') + ')', "g"), '\\$1');
     
     return !!this.match(new RegExp(term.trim().allowDiacriticsInRegexp(), "i"));
+  },
+  htmlDecode: function() {
+    var e = DOM.div({}, this);
+    return e.textContent || e.innerText;
   }
 });
 

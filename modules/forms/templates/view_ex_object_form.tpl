@@ -12,6 +12,12 @@
 fieldset {
 	margin: 0px;
 }
+
+div.small-title {
+  font-weight: bold;
+	border-bottom: 1px solid #666;
+	font-size: 1.2em;
+}
 </style>
 
 {{if !@$readonly}}

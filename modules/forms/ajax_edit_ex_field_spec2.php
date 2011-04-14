@@ -60,6 +60,7 @@ function order_specs($a, $b) {
     "notNull",
     "vertical",
     "typeEnum",
+    "decimals",
     "length",
     "maxLength",
     "minLength",
@@ -145,10 +146,10 @@ if ($context instanceof CExClassField) {
   $ex_class = $context->loadRefExClass();
   if (!$ex_class->conditional) {
     $triggerable = new CExClass;
-    $triggerable->conditional = 1;
+    //$triggerable->conditional = 1;
     $triggerable->host_class = $ex_class->host_class;
     $triggerable->event = $ex_class->event;
-    $triggerables = $triggerable->loadMatchingList();
+    $triggerables = $triggerable->loadMatchingList("conditional DESC");
   }
 	
 	if (!empty($context->concept_id) && !empty($context->_ref_concept->_ref_ex_list)) {
