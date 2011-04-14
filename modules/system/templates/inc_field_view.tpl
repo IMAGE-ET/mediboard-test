@@ -31,7 +31,7 @@
 
   {{elseif $spec instanceof CTextSpec}}
     {{* FIXME: smarty:nodefault is required because HTML entities are double escaped *}}
-	  {{$value|smarty:nodefaults|truncate:40}}
+	  {{$value|smarty:nodefaults|truncate:200|nl2br}}
 		
   {{else}}
     {{mb_value object=$object field=$prop}}

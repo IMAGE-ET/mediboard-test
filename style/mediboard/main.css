@@ -1390,9 +1390,26 @@ div.ssr-sejour-bar {
   background-color: #fff;
 }
 
+div.ecap-sejour-bar {
+  position: absolute; 
+  top: 0; 
+  right: 0; 
+  border: 1px solid #aaa; 
+  height: 5px; 
+  width: 100%;  
+  background-color: #fff;
+	margin: 2px;
+}
+
+
 div.ssr-sejour-bar div {
-	background: #444;
+  background: #444;
   height: 4px; 
+}
+
+div.ecap-sejour-bar div {
+  background: #444;
+  height: 6px; 
 }
 
 td.ssr-repartition {

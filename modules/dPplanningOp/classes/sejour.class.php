@@ -106,9 +106,10 @@ class CSejour extends CCodable implements IPatientRelated {
 	var $_not_collides       = array ("urg", "consult", "seances", "exte"); // Séjour dont on ne test pas la collision
   
   // Behaviour fields
-  var $_check_bounds = true;
-  var $_en_mutation  = null;
-  var $_no_synchro   = null;
+  var $_check_bounds  = true;
+  var $_en_mutation   = null;
+  var $_unique_lit_id = null;
+  var $_no_synchro    = null;
 
   // HPRIM Fields
   var $_hprim_initiateur_group_id  = null; // group initiateur du message HPRIM
@@ -301,6 +302,8 @@ class CSejour extends CCodable implements IPatientRelated {
     $props["_sortie_autorisee"]   = "bool";
     $props["_protocole_prescription_anesth_id"] = "str";
     $props["_protocole_prescription_chir_id"]   = "str";
+    
+    $props["_unique_lit_id"]   = "ref class|Clit";
         
     return $props;
   }
@@ -599,6 +602,29 @@ class CSejour extends CCodable implements IPatientRelated {
         $this->_ref_last_affectation->effectue = $this->sortie_reelle ? 1 : 0;
         $this->_ref_last_affectation->store();
       }
+    }
+    
+    // Unique affectation de lit
+    if ($this->_unique_lit_id) {
+    	// Une affectation maximum
+    	if (count($this->_ref_affectations) > 1) {
+    		foreach ($this->_ref_affectations as $_affectation) {
+    			if ($msg = $_affectation->delete()) {
+    				return "Impossible de supprimer une ancienne affectation: $msg";
+    			}
+    		}
+    	}
+    	
+    	// Affectation unique sur le lit
+    	$this->loadRefsAffectations();
+    	$unique = $this->_ref_first_affectation;
+    	$unique->sejour_id = $this->_id;
+    	$unique->entree = $this->_entree;
+      $unique->sortie = $this->_sortie;
+      $unique->lit_id = $this->_unique_lit_id;
+	    if ($msg = $unique->store()) {
+	      return "Impossible d'affecter un lit unique: $msg";
+	    }
     }
     
   }

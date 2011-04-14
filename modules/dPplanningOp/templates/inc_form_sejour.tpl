@@ -440,6 +440,40 @@ Main.add( function(){
   </td>
 </tr>
 
+{{if $can->admin}}
+<tr>
+  <th>
+    {{mb_label object=$sejour field=_unique_lit_id}}
+  </th>
+  <td colspan="3">
+    {{mb_field object=$sejour field=_unique_lit_id hidden=true}}
+    <input type="text" name="_unique_lit_id_view" value="" />
+            <script type="text/javascript">
+              Main.add(function(){
+                var form = getForm("editSejour");
+                
+                var url = new Url("system", "ajax_seek_autocomplete");
+                url.addParam("object_class", "CLit");
+                url.addParam("field", "_unique_lit_id");
+                url.addParam("input_field", "_unique_lit_id_view");
+                url.autoComplete(form.elements._unique_lit_id_view, null, {
+                  minChars: 2,
+                  method: "get",
+                  select: "view",
+                  dropdown: true,
+                  afterUpdateElement: function(field, selected){
+                    var value = selected.id.split('-')[2];
+                    console.log(field);
+                    console.log(value);
+                    $V(form._unique_lit_id, value);
+                  }
+                });
+              });
+            </script>
+  </td>
+</tr>
+{{/if}}
+
 <tr>
   <th>{{mb_label object=$sejour field="DP"}}</th>
   <td colspan="3">
