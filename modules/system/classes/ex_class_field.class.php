@@ -373,17 +373,36 @@ class CExClassField extends CExListItemsOwner {
 		
 		return parent::updateDBFields();
 	}
+	
+	static function getUniqueName(){
+    $sibling = new self;
+		
+		do {
+	    $uniqid = uniqid("f");
+	    $where = array(
+	      "name" => "= '$uniqid'",
+	    );
+			$sibling->loadObject($where);
+		}
+		while($sibling->_id);
+		
+		return $uniqid;
+	}
   
   function store(){
     if (!$this->_id && $this->concept_id) {
       $this->prop = $this->loadRefConcept()->prop;
     }
+		
+		if (!$this->_id) {
+			$this->name = self::getUniqueName();
+		}
     
     if ($msg = $this->check()) return $msg;
     
-    if (!preg_match('/^[a-z0-9_]+$/i', $this->name)) {
+    /*if (!preg_match('/^[a-z0-9_]+$/i', $this->name)) {
       return "Nom de champ invalide ($this->name)";
-    }
+    }*/
     
     $ds = $this->_spec->ds;
     

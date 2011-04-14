@@ -57,12 +57,6 @@ Main.add(function(){
   $$("tr.ex-class-field.selected").invoke("removeClassName", "selected");
   $$("tr.ex-class-field[data-ex_class_field_id='{{$ex_field->_id}}']")[0].addClassName("selected");
 });
-
-updateInternalName = function(e){
-  var form = e.form;
-	var str = ExField.slug($V(e));
-	$V(form.elements.name, str);
-}
 </script>
 
 <form name="editField" method="post" action="?" data-object_guid="{{$ex_field->_guid}}" onsubmit="return onSubmitFormAjax(this, {onComplete: ExClass.edit.curry({{$ex_class->_id}})})">
@@ -74,8 +68,6 @@ updateInternalName = function(e){
 	
   {{mb_key object=$ex_field}}
   {{mb_field object=$ex_field field=ex_group_id hidden=true}}
-	
-	{{mb_field object=$ex_field field=name hidden=true}}
   
   <table class="form">
   	
@@ -102,7 +94,7 @@ updateInternalName = function(e){
       	{{if $ex_field->_id}}
           {{mb_field object=$ex_field field=_locale size=30}}
 				{{else}}
-      	  {{mb_field object=$ex_field field=_locale onkeyup="updateInternalName(this)" size=30}}
+      	  {{mb_field object=$ex_field field=_locale size=30}}
 				{{/if}}
 			</td>
       

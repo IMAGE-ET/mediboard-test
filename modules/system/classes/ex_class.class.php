@@ -335,7 +335,7 @@ class CExClass extends CMbObject {
         }
       }
       
-      if ($reduce && empty($out_of_grid)) {
+      if ($reduce) {
         $max_filled = 0;
         
         foreach($grid as $_y => $_line) {
@@ -354,9 +354,11 @@ class CExClass extends CMbObject {
           $max_filled = max($max_filled, $x_filled);
         }
         
-        foreach($grid as $_y => $_line) {
-          $grid[$_y] = array_slice($_line, 0, $max_filled+1);
-        }
+				if (empty($out_of_grid)) {
+	        foreach($grid as $_y => $_line) {
+	          $grid[$_y] = array_slice($_line, 0, $max_filled+1);
+	        }
+				}
       }
       
       $big_grid       [$_ex_group->_id] = $grid;

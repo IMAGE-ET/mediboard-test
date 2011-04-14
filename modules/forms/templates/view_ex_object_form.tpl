@@ -105,8 +105,8 @@ Main.add(function(){
       {{foreach from=$_line key=_x item=_group}}
 	      {{if $_group.object}}
 	        {{if $_group.object instanceof CExClassField}}
+            {{assign var=_field value=$_group.object}}
 					  {{if $_group.type == "label"}}
-						  {{assign var=_field value=$_group.object}}
 							{{if $_field->coord_field_x == $_field->coord_label_x+1}}
                 <th style="font-weight: bold; vertical-align: middle;">
                   {{mb_label object=$ex_object field=$_field->name}}
@@ -118,7 +118,7 @@ Main.add(function(){
 							{{/if}}
 					  {{elseif $_group.type == "field"}}
 		          <td>
-                {{mb_include module=forms template=inc_ex_object_field ex_object=$ex_object ex_field=$_group.object}}
+                {{mb_include module=forms template=inc_ex_object_field ex_object=$ex_object ex_field=$_field}}
 		          </td>
 						{{/if}}
           {{elseif $_group.object instanceof CExClassHostField}}
@@ -191,10 +191,12 @@ Main.add(function(){
       <td colspan="4" class="button">
         {{if $ex_object->_id}}
           <button class="modify" type="submit">{{tr}}Save{{/tr}}</button>
-                
-          <button type="button" class="trash" onclick="confirmDeletion(this.form,{ajax: true, typeName:'', objName:'{{$ex_object->_view|smarty:nodefaults|JSAttribute}}'})">
-            {{tr}}Delete{{/tr}}
-          </button>
+          
+					{{if $forms_admin}}
+	          <button type="button" class="trash" onclick="confirmDeletion(this.form,{ajax: true, typeName:'', objName:'{{$ex_object->_view|smarty:nodefaults|JSAttribute}}'})">
+	            {{tr}}Delete{{/tr}}
+	          </button>
+					{{/if}}
         {{else}}
           <button class="submit" type="submit">{{tr}}Save{{/tr}}</button>
         {{/if}}
@@ -207,31 +209,140 @@ Main.add(function(){
 
 {{else}}
 
-<table class="main form">
-  <tr>
-    <th class="title" colspan="4">
-      {{$ex_object->_ref_ex_class}} - {{$object}}
-    </th>
-  </tr>
+{{* ----   READONLY   ---- *}}
   
-  {{foreach from=$grid key=_y item=_line}}
+<script type="text/javascript">
+  Main.add(function(){
+    document.title = "{{$ex_object->_ref_ex_class->name}} - {{$object}}".htmlDecode();
+  });
+</script>
+
+<table class="main print">
+	<tr>
+		<td colspan="4">
+			<h2 style="font-weight: bold; font-size: 1.2em;">
+			  {{if in_array("IPatientRelated", class_implements($ex_object->object_class))}}
+			    {{assign var=_patient value=$ex_object->_ref_object->loadRelPatient()}}
+			    <big style="color: #006600;" 
+			         onmouseover="ObjectTooltip.createEx(this, '{{$_patient->_guid}}');">
+			      {{$_patient}}
+			    </big>
+			    &ndash;
+			  {{/if}}
+			  
+			  {{if $ex_object->_ref_reference_object && $ex_object->_ref_reference_object->_id}}
+			    {{assign var=reference value=$ex_object->_ref_reference_object}}
+			  {{else}}
+			    {{assign var=reference value=$ex_object->_ref_ex_class->_ref_reference_object}}
+			  {{/if}}
+			  
+			  {{if $reference->_id}}
+			    <big onmouseover="ObjectTooltip.createEx(this, '{{$reference->_guid}}');">
+			      {{$reference}}
+			    </big>
+			  {{/if}}
+			  
+			  <hr style="border-color: #333; margin: 4px 0;"/>
+			  {{$ex_object->_ref_ex_class->name}} - {{$object}}
+			</h2>
+		</td>
+	</tr>
+  
+  {{foreach from=$grid key=_group_id item=_grid}}
+	
+  {{if $groups.$_group_id->_ref_fields|@count}}
+  <tbody id="tab-{{$groups.$_group_id->_guid}}">
+  	<tr>
+  		<th class="title" colspan="4">{{$groups.$_group_id}}</th>
+		</tr>
+		
+  {{foreach from=$_grid key=_y item=_line}}
   <tr>
     {{foreach from=$_line key=_x item=_group}}
-      {{if $_group.label}}
-        {{assign var=_field value=$_group.label}} 
-        <th style="font-weight: bold;">
-          {{mb_label object=$ex_object field=$_field->name}}
-        </th>
-      {{elseif $_group.field}}
-        {{assign var=_field value=$_group.field}} 
-        <td>
-          {{mb_value object=$ex_object field=$_field->name}}
-        </td>
+      {{if $_group.object}}
+        {{if $_group.object instanceof CExClassField}}
+          {{assign var=_field value=$_group.object}}
+          {{if $_group.type == "label"}}
+            {{if $_field->coord_field_x == $_field->coord_label_x+1}}
+              <th style="font-weight: bold; vertical-align: middle; white-space: normal;">
+                {{mb_label object=$ex_object field=$_field->name}}
+              </th>
+            {{else}}
+              <td style="font-weight: bold; text-align: left;">
+                {{mb_label object=$ex_object field=$_field->name}}
+              </td>
+            {{/if}}
+          {{elseif $_group.type == "field"}}
+            <td>
+            	{{mb_value object=$ex_object field=$_field->name}}
+            </td>
+          {{/if}}
+        {{elseif $_group.object instanceof CExClassHostField}}
+          {{assign var=_host_field value=$_group.object}} 
+            {{if $_group.type == "label"}}
+              <th style="font-weight: bold; text-align: left; white-space: normal;">
+                {{mb_title object=$ex_object->_ref_object field=$_host_field->field}}
+              </th>
+            {{else}}
+              <td>
+                {{mb_value object=$ex_object->_ref_object field=$_host_field->field}}
+              </td>
+            {{/if}}
+        {{else}}
+          {{assign var=_message value=$_group.object}} 
+            {{if $_group.type == "message_title"}}
+            
+              {{if $_message->coord_text_x == $_message->coord_title_x+1}}
+                <th style="font-weight: bold; vertical-align: middle; white-space: normal;">
+                  {{$_message->title}}
+                </th>
+              {{else}}
+                <td style="font-weight: bold; text-align: left;">
+                  {{$_message->title}}
+                </td>
+              {{/if}}
+            {{else}}
+              <td>
+                {{if $_message->type == "title"}}
+                  <div class="ex-message-title">
+                    {{$_message->text}}
+                  </div>
+                  &nbsp;
+                {{else}}
+                  <div class="small-{{$_message->type}}">
+                    {{mb_value object=$_message field=text}}
+                  </div>
+                {{/if}}
+              </td>
+            {{/if}}
+        {{/if}}
       {{else}}
         <td></td>
       {{/if}}
     {{/foreach}}
   </tr>
   {{/foreach}}
+  
+  {{* Out of grid *}}
+  {{foreach from=$groups.$_group_id->_ref_fields item=_field}}
+    {{assign var=_field_name value=$_field->name}}
+    
+    {{if isset($out_of_grid.$_group_id.field.$_field_name|smarty:nodefaults)}}
+      <tr>
+        <th style="font-weight: bold; width: 50%; vertical-align: middle; white-space: normal;" colspan="2">
+          {{mb_label object=$ex_object field=$_field_name}}
+        </th>
+        <td colspan="2">
+          {{mb_value object=$ex_object field=$_field_name}}
+        </td>
+      </tr>
+    {{/if}}
+  {{/foreach}}
+  
+  </tbody>
+  {{/if}}
+  {{/foreach}}
+  
 </table>
+
 {{/if}}

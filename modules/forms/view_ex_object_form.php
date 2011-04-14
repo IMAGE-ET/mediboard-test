@@ -78,6 +78,8 @@ foreach($fields as $_field) {
   );
 }
 
+$forms_admin = CModule::getInstalled("forms")->canAdmin();
+
 /*foreach($fields as $_field) {
   $_field->updateTranslation();
 }*/
@@ -96,4 +98,5 @@ $smarty->assign("out_of_grid",  $out_of_grid);
 $smarty->assign("groups",       $groups);
 $smarty->assign("readonly",     $readonly);
 $smarty->assign("formula_token_values", $formula_token_values);
+$smarty->assign("forms_admin", $forms_admin);
 $smarty->display("view_ex_object_form.tpl");

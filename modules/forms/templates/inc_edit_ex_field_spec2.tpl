@@ -72,13 +72,6 @@ confirmDelEnum = function(button) {
   return true;
 }
 
-updateInternalNameEnum = function(e) {
-  var target = $(e).up('tr').down('input.internal');
-  if (target.readOnly) return;
-  
-  $V(target, ExField.slug($V(e)));
-}
-
 updateTriggerData = function(select) {
   var fieldForm = getForm("{{$form_name}}");
   $V(fieldForm._triggered_data, $V(select));
