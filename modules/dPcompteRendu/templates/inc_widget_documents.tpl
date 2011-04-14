@@ -29,7 +29,7 @@ Main.add(function() {
   url.addParam("object_class", '{{$object->_class_name}}');
   url.addParam("object_id", '{{$object->_id}}');
   url.autoComplete(form.keywords_modele, '', {
-    minChars: 1,
+    minChars: 2,
     afterUpdateElement: createDoc,
     dropdown: true,
     width: "250px"
@@ -41,7 +41,7 @@ Main.add(function() {
   url.addParam("object_class", '{{$object->_class_name}}');
   url.addParam("object_id", '{{$object->_id}}');
   url.autoComplete(form.keywords_pack, '', {
-    minChars: 1,
+    minChars: 2,
     afterUpdateElement: createPack,
     dropdown: true,
     width: "250px"

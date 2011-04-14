@@ -32,7 +32,7 @@ function changePage(page){
   var oForm = getForm("searchIntervenant");
   var url = new Url("ssr", "ajax_interv_autocomplete");
   url.autoComplete(oForm.keywords_nom, '', {
-    minChars: 1,
+    minChars: 2,
     dropdown: true,
     width: "250px",
     select: "interv",

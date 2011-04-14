@@ -22,7 +22,7 @@
       var autocompleter = url.autoComplete(oFormProtocole.libelle_protocole, "protocole_auto_complete_suivi_soins", {
         dropdown: true,
         width: "190px",
-        minChars: 1,
+        minChars: 2,
         valueElement: oFormProtocole.elements.pack_protocole_id,
         updateElement: function(selectedElement) {
           var node = $(selectedElement).down('.view');

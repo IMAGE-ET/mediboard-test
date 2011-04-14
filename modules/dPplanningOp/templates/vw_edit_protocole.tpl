@@ -367,7 +367,7 @@ Main.add(function () {
               var form = getForm("editFrm");
               var url = new Url("dPprescription", "httpreq_vw_select_protocole");
               var autocompleter = url.autoComplete(form.libelle_protocole, null, {
-                minChars: 1,
+                minChars: 2,
                 dropdown: true,
                 width: "250px",
                 valueElement: form.elements.protocole_prescription_chir_id,

@@ -778,7 +778,7 @@ Main.add( function(){
       var form = getForm("editSejour");
       var url = new Url("dPprescription", "httpreq_vw_select_protocole");
       var autocompleter = url.autoComplete(form.libelle_protocole, 'protocole_auto_complete', {
-        minChars: 1,
+        minChars: 2,
         dropdown: true,
         width: "250px",
         updateElement: function(selectedElement) {

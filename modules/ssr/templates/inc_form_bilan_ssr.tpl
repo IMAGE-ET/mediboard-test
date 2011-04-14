@@ -121,7 +121,7 @@ Main.add( function(){
     var url = new Url("dPprescription", "httpreq_vw_select_protocole");
     var autocompleter = url.autoComplete(oFormProtocole.libelle_protocole, "protocole_auto_complete", {
       dropdown: true,
-      minChars: 1,
+      minChars: 2,
       valueElement: oFormProtocole.elements.pack_protocole_id,
       updateElement: function(selectedElement) {
         var node = $(selectedElement).down('.view');

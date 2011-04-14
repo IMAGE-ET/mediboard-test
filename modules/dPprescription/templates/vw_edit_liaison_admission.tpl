@@ -110,7 +110,7 @@ removeProtocole = function(form, type) {
           var url_anesth_{{$_protocole->_id}} = new Url("dPprescription", "httpreq_vw_select_protocole");
           var autocompleter_anesth_{{$_protocole->_id}} = url_anesth_{{$_protocole->_id}}.autoComplete(oForm.libelle_protocole, null, {
             dropdown: true,
-            minChars: 1,
+            minChars: 2,
             valueElement: oForm.elements.protocole_prescription_anesth_id,
             updateElement: function(selectedElement) {
               if (autocompleter_anesth_{{$_protocole->_id}}.options.afterUpdateElement) {
@@ -157,7 +157,7 @@ removeProtocole = function(form, type) {
           var url_chir_{{$_protocole->_id}} = new Url("dPprescription", "httpreq_vw_select_protocole");
           var autocompleter_chir_{{$_protocole->_id}} = url_chir_{{$_protocole->_id}}.autoComplete(oForm.libelle_protocole, null, {
             dropdown: true,
-            minChars: 1,
+            minChars: 2,
             valueElement: oForm.elements.protocole_prescription_chir_id,
             updateElement: function(selectedElement) {
               if (autocompleter_chir_{{$_protocole->_id}}.options.afterUpdateElement) {
