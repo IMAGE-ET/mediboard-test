@@ -165,12 +165,13 @@ PlanSoins = {
 	  // recuperation du mode d'affichage du dossier (administration ou planification)
 	  mode_dossier = $V(document.mode_dossier_soin.mode_dossier);
 	  
+		if (PlanSoins.manual_planif) {
+		  var periode_visible = PlanSoins.composition_dossier[PlanSoins.formClick.nb_decalage.value];
+      PlanSoins.toggleManualPlanif(periode_visible);
+		}
+		
 	  // Dossier en mode Administration
 	  if(mode_dossier == "administration" || mode_dossier == ""){
-	    if (PlanSoins.manual_planif) {
-	      $$(".manual_planif").invoke("hide");
-	    }
-	    
 	    $('button_administration').update("Appliquer les administrations sélectionnées");
 	    element.select('.colorPlanif').each(function(elt){
 	       elt.setStyle( { backgroundColor: '#FFD' } );
@@ -185,12 +186,7 @@ PlanSoins = {
 	  }
 	  
 	  // Dossier en mode planification
-	  if(mode_dossier == "planification"){
-	    if (PlanSoins.manual_planif) {
-	      var periode_visible = PlanSoins.composition_dossier[PlanSoins.formClick.nb_decalage.value];
-	      PlanSoins.toggleManualPlanif(periode_visible);
-	    }
-	    
+	  if(mode_dossier == "planification"){	    
 	    $('button_administration').update("Appliquer les planifications sélectionnées");
 	    element.select('.colorPlanif').each(function(elt){
 	       elt.setStyle( { backgroundColor: '#CAFFBA' } );
@@ -212,17 +208,14 @@ PlanSoins = {
 	  var bornes_visibles = bornes_dossier[periode_visible];
 	  
 		$$("div.manual_planif_line").each(function(planifs){
-			var margin_top  = 0;
-			var margin_left = 0;
+			var margin_left    = 0;
 			planifs.select("div.manual_planif").each(function(planif){
 				var date = planif.getAttribute("data-datetime");
 	      if(date >= bornes_visibles["min"] && date <= bornes_visibles["max"]){
 	        planif.setStyle({
-						marginTop: margin_top + "px",
 						marginLeft: margin_left + "px"
 					})
 					planif.show();
-          margin_top = margin_top - 8;
 				  margin_left = margin_left + 5;
 	      } else {
 	        planif.hide();

@@ -28,7 +28,7 @@
 
   <div class="manual_planif_line"> 
   {{foreach from=$line->_planifs_systeme.$unite_prise item=_planif_systeme}}
-    <div style="text-align: center; width: 40px; background-color: #fff;" data-datetime="{{$_planif_systeme->dateTime}}" class="draggable administration manual_planif" id="drag_{{$line_id}}_{{$unite_prise|md5}}_{{$_planif_systeme->dateTime|iso_date}}_{{$_planif_systeme->dateTime|date_format:"%H"}}_{{$_planif_systeme->_quantite}}_">
+    <div style="text-align: center; width: 40px; background-color: #fff; margin-top: -5px; margin-bottom: -5px" data-datetime="{{$_planif_systeme->dateTime}}" class="draggable administration manual_planif" id="drag_{{$line_id}}_{{$unite_prise|md5}}_{{$_planif_systeme->dateTime|iso_date}}_{{$_planif_systeme->dateTime|date_format:"%H"}}_{{$_planif_systeme->_quantite}}_">
       {{$_planif_systeme->_quantite}}
     </div>
    
