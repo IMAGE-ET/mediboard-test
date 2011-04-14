@@ -42,22 +42,36 @@ Main.add(function(){
   
   <input type="hidden" name="del" value="0" />
 	
-	<h2>
+	<h2 style="font-weight: bold;">
 	  {{if in_array("IPatientRelated", class_implements($ex_object->object_class))}}
 	    {{assign var=_patient value=$ex_object->_ref_object->loadRelPatient()}}
-	    <big style="color: #006600; font-weight: bold;" onmouseover="ObjectTooltip.createEx(this, '{{$_patient->_guid}}');">
+	    <big style="color: #006600;" 
+			     onmouseover="ObjectTooltip.createEx(this, '{{$_patient->_guid}}');">
 			  {{$_patient}}
 			</big>
 			&ndash;
 	  {{/if}}
 		
-		{{$ex_object->_ref_ex_class->name}} - {{$object}}
+		{{if $ex_object->_ref_reference_object && $ex_object->_ref_reference_object->_id}}
+      {{assign var=reference value=$ex_object->_ref_reference_object}}
+		{{else}}
+      {{assign var=reference value=$ex_object->_ref_ex_class->_ref_reference_object}}
+		{{/if}}
+		
+		{{if $reference->_id}}
+		  <big onmouseover="ObjectTooltip.createEx(this, '{{$reference->_guid}}');">
+		  	{{$reference}}
+		  </big>
+		{{/if}}
+    
+    <hr style="border-color: #333; margin: 4px 0;"/>
+    {{$ex_object->_ref_ex_class->name}} - {{$object}}
 	</h2>
 	
 	<script type="text/javascript">
 		Main.add(function(){
 		  Control.Tabs.create("ex_class-groups-tabs");
-			document.title = "{{$ex_object->_ref_ex_class->name}} - {{$object}}";
+			document.title = "{{$ex_object->_ref_ex_class->name}} - {{$object}}".htmlDecode();
 		});
 	</script>
 	
@@ -112,9 +126,16 @@ Main.add(function(){
 					{{else}}
             {{assign var=_message value=$_group.object}} 
 					  	{{if $_group.type == "message_title"}}
-							  <th style="font-weight: bold; text-align: left;">
-					    	  {{$_message->title}}
-								</th>
+							
+	              {{if $_message->coord_text_x == $_message->coord_title_x+1}}
+	                <th style="font-weight: bold; vertical-align: middle;">
+	                  {{$_message->title}}
+	                </th>
+	              {{else}}
+	                <td style="font-weight: bold; text-align: left;">
+	                  {{$_message->title}}
+	                </td>
+	              {{/if}}
 							{{else}}
                 <td>
                 	<div class="small-{{$_message->type}}">

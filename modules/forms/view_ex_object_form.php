@@ -47,7 +47,11 @@ if ($ex_object_id) {
 // loadAllFwdRefs ne marche pas bien (a cause de la clé primaire)
 foreach($ex_object->_specs as $_field => $_spec) {
   if ($_spec instanceof CRefSpec && $_field != $ex_object->_spec->key) {
-    $obj = new $_spec->class;
+  	$class = $_spec->meta ? $ex_object->{$_spec->meta} : $_spec->class;
+		
+		if (!$class) continue;
+		
+    $obj = new $class;
     $obj->load($ex_object->$_field);
     $ex_object->_fwd[$_field] = $obj;
   }
@@ -62,6 +66,7 @@ foreach($fields as $_field) {
   $_field->loadTriggers();
 }
 
+$ex_object->loadRefReferenceObject();
 $ex_object->getReportedValues();
 
 $formula_token_values = array();

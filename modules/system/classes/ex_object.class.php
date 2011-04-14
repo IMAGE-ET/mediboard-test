@@ -61,6 +61,10 @@ class CExObject extends CMbMetaObject {
     $this->reference_id = $reference->_id;
   }
 	
+	function loadRefReferenceObject(){
+		return $this->_ref_reference_object = $this->loadFwdRef("reference_id");
+	}
+	
 	function getReportedValues(){
 		if ($this->_id) return;
 		
@@ -181,7 +185,7 @@ class CExObject extends CMbMetaObject {
     $props["reference_id"]    = "ref class|CMbObject meta|reference_class";
     
     if (self::$_load_lite) {
-      return parent::getProps();
+      return $props;
     }
     
     $fields = $this->_ref_ex_class->loadRefsAllFields();
