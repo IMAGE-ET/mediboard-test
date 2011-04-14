@@ -130,11 +130,20 @@ Main.add(function () {
 	    <th rowspan="2" class="title narrow">Patient</th>
 	    <th rowspan="2" class="title narrow">Lit</th>
 	    <th rowspan="2" class="title narrow">Praticien</th>
-	      {{foreach from=$tabHours key=_date item=_hours_by_moment}}
-	        {{foreach from=$_hours_by_moment key=moment_journee item=_dates}}
-	          <th class="{{$_date}}-{{$moment_journee}} title"
-	              colspan="{{if $moment_journee == 'soir'}}{{$count_soir}}{{/if}}{{if $moment_journee == 'nuit'}}{{$count_nuit}}{{/if}}{{if $moment_journee == 'matin'}}{{$count_matin}}{{/if}}">
-		            <strong>{{$moment_journee}} du {{$_date|date_format:"%d/%m"}}</strong>
+	     {{foreach from=$count_composition_dossier key=_date item=_hours_by_moment}}
+        {{foreach from=$_hours_by_moment key=moment_journee item=_count}}
+				
+					  {{if $composition_dossier|@count == 1}}
+	            {{assign var=view_poste value="Journée"}}
+	          {{else}}
+						  {{assign var=tab_poste value='-'|explode:$moment_journee}}
+		          {{assign var=num_poste value=$tab_poste|@end}}
+		          {{assign var=libelle_poste value="Libelle poste $num_poste"}}
+		          {{assign var=view_poste value=$configs.$libelle_poste}}
+						{{/if}}	
+					
+	          <th class="{{$_date}}-{{$moment_journee}} title" colspan="{{$_count}}">
+		            <strong>{{$view_poste}} du {{$_date|date_format:"%d/%m"}}</strong>
 			    {{/foreach}} 
 		    {{/foreach}}
 	  </tr>

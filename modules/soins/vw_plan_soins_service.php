@@ -8,11 +8,11 @@
  *  @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
  */
 
-$service_id = CValue::getOrSession("service_id");
-$date       = CValue::getOrSession("date", mbDate());
-$nb_decalage   = CValue::get("nb_decalage", 2);
-$date_max   = mbDate("+ 1 DAY", $date);
- 
+$service_id  = CValue::getOrSession("service_id");
+$date        = CValue::getOrSession("date", mbDate());
+$nb_decalage = CValue::get("nb_decalage", 2);
+$date_max    = mbDate("+ 1 DAY", $date);
+
 // Chargement du service
 $service = new CService();
 $service->load($service_id);

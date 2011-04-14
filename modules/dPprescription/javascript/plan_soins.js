@@ -16,6 +16,7 @@ PlanSoins = {
 	date: null,
 	manual_planif: null,
 	bornes_composition_dossier: null,
+	nb_postes : null,
 	
   init: function(options){
 		Object.extend(PlanSoins, options);
@@ -306,7 +307,7 @@ PlanSoins = {
 	
 	// Deplacement du dossier de soin vers la droite
 	showAfter: function(){
-	  if(PlanSoins.formClick.nb_decalage.value <= 3){
+    if(PlanSoins.formClick.nb_decalage.value < (PlanSoins.nb_postes - 1)){
 	    PlanSoins.formClick.nb_decalage.value = parseInt(PlanSoins.formClick.nb_decalage.value) + 1;
 	    PlanSoins.moveDossierSoin($('plan_soin'));
 	  }

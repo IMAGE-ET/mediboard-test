@@ -49,12 +49,6 @@ refreshDossierSoin = function(mode_dossier, chapitre, force_refresh){
   }
 }
 
-printDossierSoin = function(prescription_id){
-  var url = new Url("dPprescription", "vw_plan_soin_pdf");
-  url.addParam("prescription_id", prescription_id);
-  url.popup(900, 600, "Plan de soin");
-}
-
 printBons = function(prescription_id){
   var url = new Url("dPprescription", "print_bon");
   url.addParam("prescription_id", prescription_id);
@@ -217,7 +211,8 @@ Main.add(function () {
     composition_dossier: {{$composition_dossier|@json}}, 
     date: "{{$date}}", 
     manual_planif: "{{$conf.dPprescription.CPrescription.manual_planif}}",
-    bornes_composition_dossier:  {{$bornes_composition_dossier|@json}}
+    bornes_composition_dossier:  {{$bornes_composition_dossier|@json}},
+		nb_postes: {{$bornes_composition_dossier|@count}}
   });
 
   if(window.loadSuivi){
@@ -327,11 +322,6 @@ Main.add(function () {
 		<table style="width: 100%">
 		   <tr>
 		    <td>
-		    	<!--
-					<button type="button" class="print" onclick="printDossierSoin('{{$prescription_id}}');" title="{{tr}}Print{{/tr}}">
-			      Feuille de soins immédiate
-		      </button>
-					-->
 		      <button type="button" class="print" onclick="printBons('{{$prescription_id}}');" title="{{tr}}Print{{/tr}}">
 		        Bons
 		      </button>

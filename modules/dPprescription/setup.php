@@ -1866,7 +1866,37 @@ class CSetupdPprescription extends CSetup {
 		          ADD `only_cible` ENUM ('0','1') DEFAULT '0';";
 		$this->addQuery($query);
 		
-		$this->mod_version = "1.38";
+		$this->makeRevision("1.38");
+
+    $query = "UPDATE `config_service` SET `name` = 'Poste 1' WHERE `name` = 'Borne matin min'";
+		$this->addQuery($query);
+		
+		$query = "UPDATE `config_service` SET `name` = 'Poste 2' WHERE `name` = 'Borne soir min'";
+    $this->addQuery($query);
+    
+		$query = "UPDATE `config_service` SET `name` = 'Poste 3' WHERE `name` = 'Borne nuit min'";
+    $this->addQuery($query);
+    
+		$query = "INSERT INTO `config_service` (`config_service_id`,`name`,`value`,`service_id`,`group_id`) VALUES
+      ('','Poste 4',NULL,NULL,NULL),
+      ('','Libelle poste 1','Matin',NULL,NULL),
+      ('','Libelle poste 2','Soir',NULL,NULL),
+      ('','Libelle poste 3','Nuit',NULL,NULL),
+      ('','Libelle poste 4','',NULL,NULL),
+			('','Nombre postes avant','3',NULL,NULL),
+      ('','Nombre postes apres','3',NULL,NULL);";
+    $this->addQuery($query);
+    
+		$query = "DELETE FROM `config_service` WHERE `name` = 'Borne matin max';";
+		$this->addQuery($query);
+		
+    $query = "DELETE FROM `config_service` WHERE `name` = 'Borne soir max';";
+    $this->addQuery($query);
+    
+    $query = "DELETE FROM `config_service` WHERE `name` = 'Borne nuit max';";
+    $this->addQuery($query);
+    
+	  $this->mod_version = "1.39";
   }
 }
 

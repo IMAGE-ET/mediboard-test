@@ -124,14 +124,26 @@ class CAdministration extends CMbMetaObject implements IPatientRelated {
     $this->_ref_log->loadRefsFwd();
   }
 	
-	static function getTimingPlanSoins($date){
+	static function getTimingPlanSoins($date, $configs, $periods="", $nb_before="", $nb_after=""){
 		// Recuperation de l'heure courante
 		$time = mbTransformTime(null,null,"%H");
 		
 		// Postes pour affichage du plan de soins (stocké en config)
-		$periods = array("07", "15", "20");
-		$nb_before = 3;
-    $nb_after = 3;
+		if($periods == ""){
+			$list_postes = array("Poste 1", "Poste 2", "Poste 3", "Poste 4");
+	    foreach ($list_postes as $_hour_poste){
+	      if($configs[$_hour_poste] && ($configs[$_hour_poste] != '#')){
+	        $periods[] = $configs[$_hour_poste];
+	      }
+	    }	
+		}
+		
+		if($nb_before == ""){
+			$nb_before = $configs["Nombre postes avant"];
+		}
+		if($nb_after == ""){
+      $nb_after = $configs["Nombre postes apres"];
+    }
 		
 		$key_periods = array();
 		foreach($periods as $key => $_period){
@@ -140,9 +152,10 @@ class CAdministration extends CMbMetaObject implements IPatientRelated {
 		
 		$original_periods = $periods;
 		$original_date = $date;
+		
 		// Calcul de la cle de la periode courante
-		$current_period = $periods[0];
-		$current_period_key = null;
+		$current_period = end($periods);
+		$current_period_key = end(array_keys($periods));
 		
 		foreach($periods as $_k => $_period){
 		  if($time >= $_period){
@@ -150,7 +163,6 @@ class CAdministration extends CMbMetaObject implements IPatientRelated {
 		    $current_period_key = $_k;
 		  }
 		}
-		
 		$current_period_key_before = count($periods) - ($current_period_key + 1);
 		
 		// Calcul des periodes precedentes
@@ -186,7 +198,7 @@ class CAdministration extends CMbMetaObject implements IPatientRelated {
 		ksort($_periods);
 		
 		$_p = array();
-		foreach($_periods as $_date => $_periods_b_postesdate){
+		foreach($_periods as $_date => $_periods_by_date){
 		  foreach($_periods_by_date as $_period){
 		    $_postes[$_date][$key_periods[$_period]] = $_period;
 		  }
@@ -196,24 +208,26 @@ class CAdministration extends CMbMetaObject implements IPatientRelated {
 		$postes = array();
 		foreach($_postes as $_date => $_poste_by_date){
 		  foreach($_poste_by_date as $_key_period => $_poste){
+		  	$_view_nb_period = $_key_period + 1;
+				
 		    $real_date = $_date;
 		    if(isset($original_periods[$_key_period+1])){
 		      $next_period = $original_periods[$_key_period+1];
 		
 		      for($i = $_poste; $i < $next_period; $i++){
 		        $i = str_pad($i, 2, '0', STR_PAD_LEFT);
-		        $postes[$_date]["poste-".$_key_period][$real_date]["$i:00:00"] = $i;
+		        $postes[$_date]["poste-".$_view_nb_period][$real_date]["$i:00:00"] = $i;
 		      }
 		    } 
 		    else {
 		      for($i = $_poste; $i < 24; $i++){
 		        $i = str_pad($i, 2, '0', STR_PAD_LEFT);
-		        $postes[$_date]["poste-".$_key_period][$real_date]["$i:00:00"] = $i;
+		        $postes[$_date]["poste-".$_view_nb_period][$real_date]["$i:00:00"] = $i;
 		      }
 		      $real_date = mbDate("+ 1 DAY", $_date);
 		      for($i = 0; $i < $original_periods[0]; $i++){
 		        $i = str_pad($i, 2, '0', STR_PAD_LEFT);
-		        $postes[$_date]["poste-".$_key_period][$real_date]["$i:00:00"] = $i;
+		        $postes[$_date]["poste-".$_view_nb_period][$real_date]["$i:00:00"] = $i;
 		      }
 		    }
 		  }

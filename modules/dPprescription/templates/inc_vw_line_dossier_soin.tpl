@@ -273,11 +273,10 @@
 	  </td>
 	  
 		{{if !$line->signee && $line->_class_name == "CPrescriptionLineMedicament" && $conf.dPprescription.CPrescription.show_unsigned_med_msg}}
-    {{foreach from=$tabHours key=_view_date item=_hours_by_moment}}
-      {{foreach from=$_hours_by_moment key=moment_journee item=_dates}}
-        <td class="{{$_view_date}}-{{$moment_journee}}" colspan="{{if $moment_journee == 'soir'}}{{$count_soir-2}}{{/if}}
-                             {{if $moment_journee == 'nuit'}}{{$count_nuit-2}}{{/if}}
-                             {{if $moment_journee == 'matin'}}{{$count_matin-2}}{{/if}}">
+		
+		{{foreach from=$count_composition_dossier key=_view_date item=_hours_by_moment}}
+      {{foreach from=$_hours_by_moment key=moment_journee item=_count}}
+        <td class="{{$_view_date}}-{{$moment_journee}}" colspan="{{$_count}}">
 	        <div class="small-warning">Ligne non signée</div>
 	      </td>      
 	      {{/foreach}}

@@ -13,7 +13,7 @@ $can->needsRead();
 
 $sejour_id    = CValue::getOrSession("sejour_id");
 $date         = CValue::getOrSession("date");
-$nb_decalage  = CValue::get("nb_decalage", 2);
+$nb_decalage  = CValue::get("nb_decalage");
 $mode_dossier = CValue::get("mode_dossier", "administration");
 $chapitre     = CValue::get("chapitre"); // Chapitre a rafraichir
 $object_id    = CValue::get("object_id");
@@ -72,9 +72,13 @@ if($sejour->_ref_curr_affectation->_id){
 
 $configs = CConfigService::getAllFor($service_id);
 
+if(!$nb_decalage){
+	$nb_decalage = $configs["Nombre postes avant"];
+}
+
 if(!$without_check_date && !($object_id && $object_class) && !$chapitre){
 	// Si la date actuelle est inférieure a l'heure affichée sur le plan de soins, on affiche le plan de soins de la veille (cas de la nuit)
-	$datetime_limit = mbDateTime($configs["Borne matin min"].":00:00");	
+	$datetime_limit = mbDateTime($configs["Poste 1"].":00:00");	
 	if(mbDateTime() < $datetime_limit){
 	  $date = mbDate("- 1 DAY");
 	} else {
@@ -82,62 +86,31 @@ if(!$without_check_date && !($object_id && $object_class) && !$chapitre){
 	}
 }
 
-$matin = range($configs["Borne matin min"], $configs["Borne matin max"]);
-$soir = range($configs["Borne soir min"], $configs["Borne soir max"]);
-$nuit_soir = range($configs["Borne nuit min"], 23);
-$nuit_matin = range(00, $configs["Borne nuit max"]);
-
-foreach($matin as &$_hour_matin){
-  $_hour_matin = str_pad($_hour_matin, 2, "0", STR_PAD_LEFT);  
-}
-foreach($soir as &$_soir_matin){
-  $_soir_matin = str_pad($_soir_matin, 2, "0", STR_PAD_LEFT);  
-}
-foreach($nuit_soir as &$_hour_nuit_soir){
-  $nuit[] = str_pad($_hour_nuit_soir, 2, "0", STR_PAD_LEFT);
-}
-foreach($nuit_matin as &$_hour_nuit_matin){
-  $nuit[] = str_pad($_hour_nuit_matin, 2, "0", STR_PAD_LEFT);
-}
-
-// Recuperation de l'heure courante
-$time = mbTransformTime(null,null,"%H");
-
-// Construction de la structure de date à parcourir dans le tpl
-if(in_array($time, $matin)){
-  $dates = array(mbDate("- 1 DAY", $date) => array("soir" => $soir, "nuit" => $nuit), 
-                 $date                    => array("matin" => $matin, "soir" => $soir, "nuit" => $nuit));
-}
-if(in_array($time, $soir)){
-  $dates = array(mbDate("- 1 DAY", $date) => array("nuit" => $nuit),
-                 $date                    => array("matin" => $matin, "soir" => $soir, "nuit" => $nuit),
-                 mbDate("+ 1 DAY", $date) => array("matin" => $matin));
-}
-if(in_array($time, $nuit)){
-  $dates = array($date                    => array("matin" => $matin, "soir" => $soir, "nuit" => $nuit), 
-                 mbDate("+ 1 DAY", $date) => array("matin" => $matin, "soir" => $soir));
-}
-
-
-
-$bornes_composition_dossier = array();
 $composition_dossier = array();
-foreach($dates as $curr_date => $_date){
-  foreach($_date as $moment_journee => $_hours){
-    $composition_dossier[] = "$curr_date-$moment_journee";
-		$bornes_composition_dossier["$curr_date-$moment_journee"]["min"] = "$curr_date ".reset($_hours).":00:00";
-    foreach($_hours as $_hour){ 
-      $date_reelle = $curr_date;
-      if($moment_journee == "nuit" && $_hour < "12:00:00"){
-        $date_reelle = mbDate("+ 1 DAY", $curr_date);
-      }
-      $_dates[$date_reelle] = $date_reelle;
-      $tabHours[$curr_date][$moment_journee][$date_reelle]["$_hour:00:00"] = $_hour;
+$bornes_composition_dossier = array();
+$count_composition_dossier = array();
+
+$tabHours = CAdministration::getTimingPlanSoins($date, $configs);
+foreach($tabHours as $_key_date => $_period_date){
+  foreach($_period_date as $_key_periode => $_period_dates){
+		$count_composition_dossier[$_key_date][$_key_periode] = CAppUI::conf("dPprescription CPrescription manual_planif") ? 3 : 1;
+		$first_date = reset(array_keys($_period_dates));
+    $first_time = reset(reset($_period_dates));
+    $last_date = end(array_keys($_period_dates));
+    $last_time = end(end($_period_dates));
+		
+    $composition_dossier[] = "$_key_date-$_key_periode";
+		
+    $bornes_composition_dossier["$_key_date-$_key_periode"]["min"] = "$first_date $first_time:00:00";
+    $bornes_composition_dossier["$_key_date-$_key_periode"]["max"] = "$last_date $last_time:00:00";
+		
+    
+		foreach($_period_dates as $_key_real_date => $_period_hours){
+			$count_composition_dossier[$_key_date][$_key_periode] += count($_period_hours);
+      $_dates[$_key_real_date] = $_key_real_date;
     }
-		$bornes_composition_dossier["$curr_date-$moment_journee"]["max"] = "$date_reelle ".end($_hours).":59:59";
   }
 }
-
 
 // Calcul du dossier de soin pour une ligne
 if($object_id && $object_class){
@@ -312,15 +285,14 @@ $smarty->assign("real_time"           , mbTime());
 $smarty->assign("categorie"           , new CCategoryPrescription());
 $smarty->assign("operations"          , $operations);
 $smarty->assign("mode_dossier"        , $mode_dossier);
-$smarty->assign("count_matin"         , count($matin)+2+$count_colspan);
-$smarty->assign("count_soir"          , count($soir)+2+$count_colspan);
-$smarty->assign("count_nuit"          , count($nuit)+2+$count_colspan);
+$smarty->assign("count_composition_dossier", $count_composition_dossier);
 $smarty->assign("composition_dossier" , $composition_dossier);
 $smarty->assign("bornes_composition_dossier", $bornes_composition_dossier);
 $smarty->assign("prev_date"           , mbDate("- 1 DAY", $date));
 $smarty->assign("next_date"           , mbDate("+ 1 DAY", $date));
 $smarty->assign("today"               , mbDate());
 $smarty->assign("move_dossier_soin"   , false);
+$smarty->assign("configs"             , $configs);
 
 // Affichage d'une ligne
 if($object_id && $object_class){

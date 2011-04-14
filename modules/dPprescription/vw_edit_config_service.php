@@ -20,7 +20,7 @@ $config_service = new CConfigService();
 $where = array();
 $where["group_id"] = "IS NULL";
 $where["service_id"] = "IS NULL";
-$order = "config_service_id ASC";
+$order = "name ASC";
 $configs = $config_service->loadList($where, $order);
 
 $all_configs = array();
