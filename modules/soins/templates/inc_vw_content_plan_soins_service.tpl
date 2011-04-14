@@ -118,7 +118,7 @@ Main.add(function(){
 		{{/foreach}}
 	{{foreachelse}}
 	<tr>
-		<td class="empty" colspan="20">
+		<td class="empty" colspan="100">
 			{{tr}}Aucune prescription{{/tr}}
 		</td>
 	</tr>
