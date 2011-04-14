@@ -54,9 +54,31 @@ submitProtocole = function(){
   }
 	if(document.selPraticienLine){
 	  oForm.praticien_id.value = document.selPraticienLine.praticien_id.value;
-	  oForm.pratSel_id.value = document.selPraticienLine.praticien_id.value
-  }	
+	  oForm.pratSel_id.value = document.selPraticienLine.praticien_id.value;
+  }
   return onSubmitFormAjax(oForm);
+}
+
+selectLines = function(prescription_id, protocole_id) {
+  var oForm = getForm("applyProtocole");
+  // Si c'est un protocole avancé, ouverture de la modale pour choisir les lignes
+  if ($V(oForm._advanced_protocole) == 1) {
+    $V(oForm._advanced_protocole, 0);
+    var url = new Url("dPprescription", "ajax_select_lines");
+    url.addParam("prescription_id", prescription_id);
+    url.addParam("protocole_id", protocole_id);
+    url.addParam("pratSel_id", $V(oForm.pratSel_id));
+    url.addParam("praticien_id", $V(oForm.praticien_id));
+    url.requestModal(700, 300);
+    // Si on ferme la modale, alors reload de la prescription
+    url.modaleObject.options.closeOnClick.observe("click", function() {
+      Prescription.reloadPrescSejour(prescription_id, null, null, null, null, null, null, null, $V(oForm.pratSel_id), null, $V(oForm.praticien_id));
+    });
+  }
+  // Sinon reload de la prescription
+  else {
+    Prescription.reloadPrescSejour(prescription_id, null, null, null, null, null, null, null, $V(oForm.pratSel_id), null, $V(oForm.praticien_id));
+  }
 }
 
 popupTransmission = function(sejour_id){
@@ -152,6 +174,12 @@ Main.add( function(){
 			updateElement: function(selectedElement) {
 			  var node = $(selectedElement).down('.view');
 			  $V($("applyProtocole_libelle_protocole"), (node.innerHTML).replace("&lt;", "<").replace("&gt;",">"));
+        // Si le protocole choisi est de mode avancé, les lignes sont rattachées également à ce protocole
+        // à leur création. 
+        if (selectedElement.get("advanced_protocole") == 1) {
+          $V(oFormProtocole._advanced_protocole, 1);
+          $V(oFormProtocole.protocole_id, selectedElement.get("id"));
+        }
 				if (autocompleter.options.afterUpdateElement)
 			    autocompleter.options.afterUpdateElement(autocompleter.element, selectedElement);
 			},
@@ -280,6 +308,16 @@ Main.add( function(){
          {{/if}}
        </td>
 		 </tr>
+     <tr>
+       <th>{{mb_label object=$prescription field="advanced_protocole"}}</th>
+       <td>
+         {{if $can_edit_protocole}}
+           {{mb_field object=$prescription field="advanced_protocole" onchange="onSubmitFormAjax(this.form);"}}
+         {{else}}
+           {{mb_value object=$prescription field="advanced_protocole"}}
+         {{/if}}
+       </td>
+     </tr>
   </table>
 </form>
 <table class="form">
@@ -486,7 +524,8 @@ Main.add( function(){
 	      <input type="hidden" name="prescription_id" value="{{$prescription->_id}}" />
 	      <input type="hidden" name="praticien_id" value="{{$app->user_id}}" />
 	      <input type="hidden" name="pratSel_id" value="" />
-        
+        <input type="hidden" name="_advanced_protocole" value="0" />
+        <input type="hidden" name="protocole_id" value="" />
 	      <input type="hidden" name="pack_protocole_id" value="" />
 	      <input type="text" name="libelle_protocole" value="&mdash; Choisir un protocole" class="autocomplete" style="font-weight: bold; font-size: 1.3em; width: 300px;" />
 	      <div style="display:none; width: 350px;" class="autocomplete" id="protocole_auto_complete"></div>

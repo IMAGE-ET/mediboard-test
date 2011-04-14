@@ -243,6 +243,12 @@ class CConstantesMedicales extends CMbObject {
     return $specs;
   }
 
+  function getBackProps() {
+    $backProps = parent::getBackProps();
+    $backProps["administrations"]   = "CAdministration constantes_medicales_id";
+    return $backProps;
+  }
+  
   function updateFormFields() {
     parent::updateFormFields();
     

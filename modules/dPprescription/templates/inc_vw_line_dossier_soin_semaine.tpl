@@ -189,6 +189,18 @@
 							     {{foreach from=$line->_transmissions.$unite_prise.$date.$hour.list.$administration_id item=_transmission}}
 				             <li>{{$_transmission->_view}} le {{$_transmission->date|date_format:$conf.datetime}}:<br /> {{$_transmission->text}}</li>
 							     {{/foreach}}
+                   {{if $_log_administration->_ref_object->_ref_constantes_medicales && $_log_administration->_ref_object->_ref_constantes_medicales->_id}}
+                     {{assign var=constantes_med value=$_log_administration->_ref_object->_ref_constantes_medicales}}
+                     <li>
+                       {{tr}}CConstantesMedicales{{/tr}} de {{$constantes_med->_ref_user}} le {{$constantes_med->datetime|date_format:$conf.datetime}} <br/>
+                       {{foreach from=$params key=_key item=_field name="const"}}
+                         {{if $constantes_med->$_key != null && $_key|substr:0:1 != "_"}}
+                           {{mb_title object=$constantes_med field=$_key}} :
+                           {{mb_value object=$constantes_med field=$_key}}{{$_field.unit}},
+                         {{/if}}
+                       {{/foreach}}
+                     </li>
+                   {{/if}}
 							   </ul>
 							   {{/if}}
 						   {{/foreach}}

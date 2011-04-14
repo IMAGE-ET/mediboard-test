@@ -39,6 +39,7 @@ Main.add( function(){
         <th>{{mb_label class=CCategoryPrescription field=nom}}</th>
         <th>{{mb_label class=CCategoryPrescription field=group_id}}</th>
 				<th class="narrow">Eléments</th>
+        <th class="narrow">{{tr}}CConstanteItem.all{{/tr}}</th>
         <th></th>
       </tr>
       {{foreach from=$_categories item=_cat}}
@@ -56,6 +57,7 @@ Main.add( function(){
             {{/if}}
           </td>
 					<td style="text-align: right;">{{$_cat->_count_elements_prescription}}</td>
+          <td style="text-align: right;">{{$_cat->_count_constantes_items}}</td>
           <td style="width: 1em; {{if $_cat->color}}background-color: #{{$_cat->color}}{{/if}}">
           </td>
         </tr>

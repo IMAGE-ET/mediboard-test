@@ -1895,8 +1895,54 @@ class CSetupdPprescription extends CSetup {
     
     $query = "DELETE FROM `config_service` WHERE `name` = 'Borne nuit max';";
     $this->addQuery($query);
+
+	  $this->makeRevision("1.39");
+    $query = "ALTER TABLE `prescription` 
+              ADD `advanced_protocole` ENUM ('0','1') DEFAULT '0' AFTER `fast_access`;";
+    $this->addQuery($query);
+
+    $query = "ALTER TABLE `prescription_line_comment` 
+              ADD `protocole_id` INT (11) UNSIGNED,
+              ADD INDEX (`protocole_id`);";
+    $this->addQuery($query);
     
-	  $this->mod_version = "1.39";
+    $query = "ALTER TABLE `prescription_line_dmi` 
+              ADD `protocole_id` INT (11) UNSIGNED,
+              ADD INDEX (`protocole_id`);";
+    $this->addQuery($query);
+    
+    $query = "ALTER TABLE `prescription_line_element` 
+              ADD `protocole_id` INT (11) UNSIGNED,
+              ADD INDEX (`protocole_id`);";
+    $this->addQuery($query);
+    
+    $query = "ALTER TABLE `prescription_line_medicament` 
+              ADD `protocole_id` INT (11) UNSIGNED,
+              ADD INDEX (`protocole_id`);";
+    $this->addQuery($query);
+    
+    $query = "ALTER TABLE `prescription_line_mix` 
+              ADD `protocole_id` INT (11) UNSIGNED,
+              ADD INDEX (`protocole_id`);";
+    $this->addQuery($query);
+    
+    $query = "ALTER TABLE `administration`
+              ADD `constantes_medicales_id` INT (11) UNSIGNED,
+              ADD INDEX (`constantes_medicales_id`);";
+    $this->addQuery($query);
+    
+    $query = "CREATE TABLE `constante_item` (
+              `constante_item_id` INT (11) UNSIGNED NOT NULL auto_increment PRIMARY KEY,
+              `category_prescription_id` INT (11) UNSIGNED NOT NULL,
+              `field_constante` VARCHAR (80),
+              `commentaire` VARCHAR (255)) /*! ENGINE=MyISAM */;";
+    $this->addQuery($query);
+    
+    $query = "ALTER TABLE `constante_item` 
+              ADD INDEX (`category_prescription_id`);";
+    $this->addQuery($query);
+    
+    $this->mod_version = "1.40";
   }
 }
 

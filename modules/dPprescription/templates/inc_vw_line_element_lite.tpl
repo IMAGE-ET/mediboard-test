@@ -8,6 +8,7 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
 *}}
 
+{{mb_default var=advanced_prot value=0}}
 {{assign var=line value=$_line_element}}
 
 <!-- Header de la ligne d'element -->
@@ -18,25 +19,33 @@
 					  {{if $line->_fin_reelle|iso_date < $now|iso_date}}opacity-50{{/if}}
 					{{/if}}">    
   <td style="width: 5%; text-align: center">
-  	{{if $line->_can_delete_line}}
-      <button type="button" class="trash notext"
-        onclick="
-          if (Prescription.confirmDelLine('{{$line->_view|smarty:nodefaults|JSAttribute}}')) { 
-            Prescription.delLineElement('{{$line->_id}}','{{$element}}');
-          }">
-        {{tr}}Delete{{/tr}}
-      </button>
+    {{if !$advanced_prot}}
+    	{{if $line->_can_delete_line}}
+        <button type="button" class="trash notext"
+          onclick="
+            if (Prescription.confirmDelLine('{{$line->_view|smarty:nodefaults|JSAttribute}}')) { 
+              Prescription.delLineElement('{{$line->_id}}','{{$element}}');
+            }">
+          {{tr}}Delete{{/tr}}
+        </button>
+      {{/if}}
+    {{else}}
+      <input type="checkbox" checked="checked" name="_view_{{$_line->_guid}}"
+        onchange="$V(this.next(), this.checked ? 1 : 0)"/>
+      <input type="hidden" value="1" name="lines[{{$_line->_guid}}]" />
     {{/if}}
 	</td>	
 	
 	<td style="width:20%;" class="text {{if $line->perop}}perop{{/if}}">
-    <script type="text/javascript">
-    	{{if !$line->inscription}}
-        Main.add( function(){
-          moveTbodyElt($('line_element_{{$line->_id}}'),'{{$category->_id}}');
-        });
-			{{/if}}
-    </script>
+    {{if !$advanced_prot}}
+      <script type="text/javascript">
+      	{{if !$line->inscription}}
+          Main.add( function(){
+            moveTbodyElt($('line_element_{{$line->_id}}'),'{{$category->_id}}');
+          });
+  			{{/if}}
+      </script>
+    {{/if}}
 		<span style="float: right">
 	    {{if $line->conditionnel}}{{mb_label object=$line field="conditionnel"}}&nbsp;{{/if}}
 	    {{if $line->ald}}{{mb_label object=$line field="ald"}}&nbsp;{{/if}}
@@ -125,27 +134,27 @@
 	<td style="width:10%;" class="text">
    {{if $line->executant_prescription_line_id || $line->user_executant_id}}{{$line->_ref_executant->_view}}{{else}}{{tr}}None{{/tr}}{{/if}}
   </td>
-
-	<td style="width:10%;" class="text">
-    <button style="float: right" class="edit notext" onclick="Prescription.reloadLine('{{$line->_guid}}','{{$mode_protocole}}','{{$mode_pharma}}','{{$operation_id}}');"></button>
-    {{if !$line->_protocole}}
-    <div class="mediuser" style="border-color: #{{$line->_ref_praticien->_ref_function->color}};">
-        {{if @$modules.messagerie}}
-        <a class="action" href="#nothing" onclick="MbMail.create({{$line->_ref_praticien->_id}}, '{{$line->_view}}')">
-          <img src="images/icons/mbmail.png" title="Envoyer un message" />
-        </a>
-        {{/if}}
-        {{if $line->signee}}
-          <img src="images/icons/tick.png" title="Ligne signée par le praticien" />
-        {{else}}
-          <img src="images/icons/cross.png" title="Ligne non signée par le praticien" />
-        {{/if}}
-        <label title="{{$line->_ref_praticien->_view}}">{{$line->_ref_praticien->_shortview}}</label>
-    </div>
-    {{else}}
-    - 
-    {{/if}}
-  </td>
-	
+  {{if !$advanced_prot}}
+  	<td style="width:10%;" class="text">
+      <button style="float: right" class="edit notext" onclick="Prescription.reloadLine('{{$line->_guid}}','{{$mode_protocole}}','{{$mode_pharma}}','{{$operation_id}}');"></button>
+      {{if !$line->_protocole}}
+      <div class="mediuser" style="border-color: #{{$line->_ref_praticien->_ref_function->color}};">
+          {{if @$modules.messagerie}}
+          <a class="action" href="#nothing" onclick="MbMail.create({{$line->_ref_praticien->_id}}, '{{$line->_view}}')">
+            <img src="images/icons/mbmail.png" title="Envoyer un message" />
+          </a>
+          {{/if}}
+          {{if $line->signee}}
+            <img src="images/icons/tick.png" title="Ligne signée par le praticien" />
+          {{else}}
+            <img src="images/icons/cross.png" title="Ligne non signée par le praticien" />
+          {{/if}}
+          <label title="{{$line->_ref_praticien->_view}}">{{$line->_ref_praticien->_shortview}}</label>
+      </div>
+      {{else}}
+      - 
+      {{/if}}
+    </td>
+	{{/if}}
 </tr>
 </table>

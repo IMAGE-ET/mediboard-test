@@ -30,6 +30,8 @@ class CPrescription extends CMbObject implements IPatientRelated {
 	
 	var $score = null;
 	
+	var $advanced_protocole = null;
+	
   // Form fields
   var $_owner          = null;
   
@@ -149,6 +151,7 @@ class CPrescription extends CMbObject implements IPatientRelated {
     $specs["libelle"]       = "str";
     $specs["type"]          = "enum notNull list|traitement|pre_admission|sejour|sortie|externe";
     $specs["fast_access"]   = "bool default|0";
+    $specs["advanced_protocole"] = "bool default|0";
 		$specs["planif_removed"]= "bool default|0";
 		$specs["_type_sejour"]  = "enum notNull list|pre_admission|sejour|sortie";
     $specs["_dateTime_min"] = "dateTime";
@@ -262,7 +265,8 @@ class CPrescription extends CMbObject implements IPatientRelated {
   
   
   function applyDateProtocole(&$_line, $praticien_id, $date_sel, $operation_id, $debut_sejour, $fin_sejour, $date_operation, 
-                              $hour_operation, $operation, $sejour){
+                              $hour_operation, $operation, $sejour, $protocole_base_id){
+    $_line->protocole_id = $protocole_base_id;
     
 		// Chargement des lignes ou des prises suivant le type d'objet    
 		if($_line instanceof CPrescriptionLineMix){
@@ -468,7 +472,7 @@ class CPrescription extends CMbObject implements IPatientRelated {
   }
   
   // Permet d'appliquer un protocole à une prescription
-  function applyProtocole($protocole_id, $praticien_id, $date_sel, $operation_id, $debut_sejour="", $fin_sejour="", $date_operation="") {
+  function applyProtocole($protocole_id, $praticien_id, $date_sel, $operation_id, $debut_sejour="", $fin_sejour="", $date_operation="", $protocole_base_id) {
     global $AppUI;
     
     // Chargement du protocole
@@ -510,7 +514,7 @@ class CPrescription extends CMbObject implements IPatientRelated {
       
       // Creation et modification de la ligne en fonction des dates
       $this->applyDateProtocole($_line_med, $praticien_id, $date_sel, $operation_id, $debut_sejour, $fin_sejour, 
-                                $date_operation, $hour_operation, $operation, $sejour);
+                                $date_operation, $hour_operation, $operation, $sejour, $protocole_base_id);
                                 
       // Creation d'une nouvelle ligne de substitution qui pointe vers la ligne qui vient d'etre crée
       foreach($_substitutions as $_line_subst_by_chap){
@@ -518,7 +522,7 @@ class CPrescription extends CMbObject implements IPatientRelated {
           $_line_subst->substitute_for_id = $_line_med->_id;
           $_line_subst->substitute_for_class = $_line_med->_class_name;
           $this->applyDateProtocole($_line_subst, $praticien_id, $date_sel, $operation_id, $debut_sejour, $fin_sejour, 
-                                    $date_operation, $hour_operation, $operation, $sejour);
+                                    $date_operation, $hour_operation, $operation, $sejour, $protocole_base_id);
         }
       }
     }
@@ -529,7 +533,7 @@ class CPrescription extends CMbObject implements IPatientRelated {
         foreach($elements_by_cat as &$_lines){
           foreach($_lines as $_line_elt){
             $this->applyDateProtocole($_line_elt, $praticien_id, $date_sel, $operation_id, $debut_sejour, $fin_sejour, 
-                                      $date_operation, $hour_operation, $operation, $sejour);
+                                      $date_operation, $hour_operation, $operation, $sejour, $protocole_base_id);
           } 
         }
       }
@@ -542,7 +546,7 @@ class CPrescription extends CMbObject implements IPatientRelated {
       
 
       $this->applyDateProtocole($_prescription_line_mix, $praticien_id, $date_sel, $operation_id, $debut_sejour, $fin_sejour, 
-                                $date_operation, $hour_operation, $operation, $sejour);
+                                $date_operation, $hour_operation, $operation, $sejour, $protocole_base_id);
       
   
       foreach($_substitutions_perf as $_line_subst_by_chap){
@@ -550,7 +554,7 @@ class CPrescription extends CMbObject implements IPatientRelated {
           $_line_subst->substitute_for_id = $_prescription_line_mix->_id;
           $_line_subst->substitute_for_class = $_prescription_line_mix->_class_name;
           $this->applyDateProtocole($_line_subst, $praticien_id, $date_sel, $operation_id, $debut_sejour, $fin_sejour, 
-                                    $date_operation, $hour_operation, $operation, $sejour);
+                                    $date_operation, $hour_operation, $operation, $sejour, $protocole_base_id);
         }
       }                  
     }
@@ -561,7 +565,7 @@ class CPrescription extends CMbObject implements IPatientRelated {
       $line_comment->prescription_id = $this->_id;
       $line_comment->praticien_id = $praticien_id;
       $line_comment->creator_id = $AppUI->user_id;
-			
+			$line_comment->protocole_id = $protocole_base_id;
 			if($this->_ref_object instanceof CSejour && $this->_ref_object->type == "urg" && CAppUI::conf("dPprescription CPrescription prescription_suivi_soins")){
         $line_comment->debut = mbDate();
         $line_comment->time_debut = mbTime();  
@@ -576,7 +580,7 @@ class CPrescription extends CMbObject implements IPatientRelated {
   /*
    * Permet d'applique un protocole ou un pack à partir d'un identifiant (pack-$id ou prot-$id)
    */
-  function applyPackOrProtocole($pack_protocole_id, $praticien_id, $date_sel, $operation_id){
+  function applyPackOrProtocole($pack_protocole_id, $praticien_id, $date_sel, $operation_id, $protocole_id){
     // Aplication du protocole/pack chir
     if($pack_protocole_id){
       $pack_protocole = explode("-", $pack_protocole_id);
@@ -602,16 +606,13 @@ class CPrescription extends CMbObject implements IPatientRelated {
                 CAppUI::setMsg($msg, UI_MSG_ERROR);
               }
             }
-            // Puis on applique le protocole
-            $prescription->applyProtocole($_protocole->_id, $praticien_id, $date_sel, $operation_id);
           }
-          else {
-            $this->applyProtocole($_protocole->_id, $praticien_id, $date_sel, $operation_id);
-          }
+          // Puis on applique le protocole
+          $this->applyProtocole($_protocole->_id, $praticien_id, $date_sel, $operation_id, '', '', '', $protocole_id);
         }
       }
       if($protocole_id){
-        $this->applyProtocole($protocole_id, $praticien_id, $date_sel, $operation_id);
+        $this->applyProtocole($protocole_id, $praticien_id, $date_sel, $operation_id, '', '', '', $protocole_id);
       }
     }
   }
@@ -763,18 +764,21 @@ class CPrescription extends CMbObject implements IPatientRelated {
   /*
    * Chargement des prescription_line_mixes
    */
-  function loadRefsPrescriptionLineMixes($chapitre = "", $with_child = 0, $with_subst_active = 1){
+  function loadRefsPrescriptionLineMixes($chapitre = "", $with_child = 0, $with_subst_active = 1, $protocole_id = ''){
     if($this->_ref_prescription_line_mixes){
     	return;
     }
     $prescription_line_mix = new CPrescriptionLineMix();
 		$where = array();
     $where["prescription_id"] = " = '$this->_id'";
-		if($chapitre){
+		if ($chapitre){
 			$where["type_line"] = " = '$chapitre'";
 		}
-		if($with_child != 1){
+		if ($with_child != 1){
       $where["next_line_id"] = "IS NULL";
+    }
+    if ($protocole_id) {
+      $where["protocole_id"] = " = '$protocole_id'";
     }
     // Permet de ne pas afficher les lignes de substitutions
     $where["substitution_active"] = " = '$with_subst_active'";
@@ -963,7 +967,7 @@ class CPrescription extends CMbObject implements IPatientRelated {
   /*
    * Chargement du nombre des medicaments et d'elements
    */
-  function countLinesMedsElements($praticien_sortie_id = null, $operation_id = null){
+  function countLinesMedsElements($praticien_sortie_id = null, $operation_id = null, $protocole_id=""){
     $this->_counts_by_chapitre_non_signee = array();
     $this->_counts_by_chapitre = array();
     
@@ -981,9 +985,15 @@ class CPrescription extends CMbObject implements IPatientRelated {
     $whereMed["substitution_line_id"] = "IS NULL";
     $whereMed["substitution_active"] = " = '1'";
     $whereMed["inscription"] = " = '0'";
-		if($praticien_sortie_id){
-      $where["praticien_id"] = " = '$praticien_sortie_id'";
+		
+    if ($praticien_sortie_id){
+      $where["praticien_id"]    = " = '$praticien_sortie_id'";
       $whereMed["praticien_id"] = " = '$praticien_sortie_id'";
+    }
+    
+    if ($protocole_id) {
+      $where["protocole_id"]    = " = '$protocole_id'";
+      $whereMed["protocole_id"] = " = '$protocole_id'";
     }
     $this->_counts_by_chapitre["med"] = $line_med->countList($whereMed);
     $this->_counts_by_chapitre["med"] += $line_comment_med->countList($where, null, null, null, $ljoin_comment);
@@ -1273,7 +1283,7 @@ class CPrescription extends CMbObject implements IPatientRelated {
   /*
    * Chargement des lignes de prescription de médicament
    */
-  function loadRefsLinesMed($with_child = 0, $with_subst = 0, $emplacement="", $order="") {
+  function loadRefsLinesMed($with_child = 0, $with_subst = 0, $emplacement="", $order="", $protocole_id = "") {
     if ($this->_ref_prescription_lines) {
       return;
     }
@@ -1289,6 +1299,10 @@ class CPrescription extends CMbObject implements IPatientRelated {
     }
     // Permet de ne pas afficher les lignes de substitutions
     $where["substitution_active"] = " = '1'";
+    
+    if ($protocole_id) {
+      $where["protocole_id"] = " = '$protocole_id'";
+    }
     
     if(!$order){
       $order = "prescription_line_medicament_id DESC";
@@ -1315,11 +1329,11 @@ class CPrescription extends CMbObject implements IPatientRelated {
   /*
    * Chargement des lignes de medicaments (medicaments + commentaires)
    */
-  function loadRefsLinesMedComments($withRefs = "1", $order=""){
+  function loadRefsLinesMedComments($withRefs = "1", $order="", $protocole_id=""){
     // Chargement des lignes de medicaments
-    $this->loadRefsLinesMed(0,0,"",$order);
+    $this->loadRefsLinesMed(0, 0, "", $order, $protocole_id);
     // Chargement des lignes de commentaire du medicament
-    $this->loadRefsLinesComment("medicament");
+    $this->loadRefsLinesComment("medicament", "1", $protocole_id);
     
     // Initialisation du tableau de fusion
     $this->_ref_lines_med_comments["med"] = array();
@@ -1343,7 +1357,7 @@ class CPrescription extends CMbObject implements IPatientRelated {
   /*
    * Chargement des lignes d'element
    */
-  function loadRefsLinesElement($chapitre = "", $withRefs = "1", $emplacement="", $order=""){
+  function loadRefsLinesElement($chapitre = "", $withRefs = "1", $emplacement="", $order="", $protocole_id = ""){
     $line = new CPrescriptionLineElement();
     $where = array();
     $ljoin = array();
@@ -1360,6 +1374,10 @@ class CPrescription extends CMbObject implements IPatientRelated {
       $ljoin["category_prescription"] = "element_prescription.category_prescription_id = category_prescription.category_prescription_id";
       $order = "category_prescription.nom , element_prescription.libelle";
     }
+    if ($protocole_id) {
+      $where["protocole_id"] = " = '$protocole_id'";
+    }
+    
     $this->_ref_prescription_lines_element = $line->loadList($where, $order, null, null, $ljoin);
     
     if(count($this->_ref_prescription_lines_element)){
@@ -1378,12 +1396,12 @@ class CPrescription extends CMbObject implements IPatientRelated {
   /*
    * Chargement des lignes d'elements par catégorie
    */
-  function loadRefsLinesElementByCat($withRefs = "1", $chapitre = "", $emplacement="", $order=""){
+  function loadRefsLinesElementByCat($withRefs = "1", $chapitre = "", $emplacement="", $order="", $protocole_id = ""){
     if ($this->_ref_prescription_lines_element_by_cat) {
       return;
     }
     
-    $this->loadRefsLinesElement($chapitre, $withRefs, $emplacement, $order);
+    $this->loadRefsLinesElement($chapitre, $withRefs, $emplacement, $order, $protocole_id);
     $this->_ref_prescription_lines_element_by_cat = array();
     
     if(count($this->_ref_prescription_lines_element)){
@@ -1400,7 +1418,7 @@ class CPrescription extends CMbObject implements IPatientRelated {
   /*
    * Chargement des lignes de commentaires
    */
-  function loadRefsLinesComment($chapitre = null, $withRefs = "1"){
+  function loadRefsLinesComment($chapitre = null, $withRefs = "1", $protocole_id = ""){
     $this->_ref_prescription_lines_comment = array();
     
     // Initialisation des tableaux
@@ -1424,7 +1442,9 @@ class CPrescription extends CMbObject implements IPatientRelated {
     if ($chapitre === "medicament"){
       $where["category_prescription_id"] = " IS NULL";    
     }
-    
+    if ($protocole_id) {
+      $where["protocole_id"] = " = '$protocole_id'";
+    }
     $commentaires = $line_comment->loadList($where, $order, null, null, $ljoin);
     
     if(count($commentaires)){
@@ -1457,9 +1477,9 @@ class CPrescription extends CMbObject implements IPatientRelated {
   /*
    * Chargement des lignes d'elements (Elements + commentaires)
    */
-  function loadRefsLinesElementsComments($withRefs = "1", $chapitre="", $order=""){
-    $this->loadRefsLinesElementByCat($withRefs, $chapitre,"",$order);
-    $this->loadRefsLinesComment("",$withRefs);
+  function loadRefsLinesElementsComments($withRefs = "1", $chapitre="", $order="", $protocole_id=""){
+    $this->loadRefsLinesElementByCat($withRefs, $chapitre, "", $order, $protocole_id);
+    $this->loadRefsLinesComment("", $withRefs, $protocole_id);
     
     // Suppression des ligne de medicaments
     unset($this->_ref_lines_elements_comments["medicament"]);   
@@ -1483,10 +1503,11 @@ class CPrescription extends CMbObject implements IPatientRelated {
   /*
    * Chargement des lignes de DMI
    */
-  function loadRefsLinesDMI($operation_id = null){
+  function loadRefsLinesDMI($operation_id = null, $protocole_id = null){
     $line_dmi = new CPrescriptionLineDMI();
     $line_dmi->prescription_id = $this->_id;
-    $line_dmi->operation_id = $operation_id ? $operation_id : null;
+    $line_dmi->operation_id = $operation_id;
+    $line_dmi->protocole_id = $protocole_id;
     $this->_ref_lines_dmi = $line_dmi->loadMatchingList();
   }
  

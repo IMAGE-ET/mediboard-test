@@ -1,3 +1,6 @@
+{{mb_default var=hide_save_button value=0}}
+{{mb_default var=callback_administration value=0}}
+
 <script type="text/javascript">
 calculImcVst = function(form) {
   var imcInfo, imc, vst,
@@ -72,7 +75,9 @@ Main.add(function () {
   {{mb_field object=$constantes field=context_class hidden=1}}
   {{mb_field object=$constantes field=context_id hidden=1}}
   {{mb_field object=$constantes field=patient_id hidden=1}}
-  
+  {{if $callback_administration}}
+    <input type="hidden" name="callback" value="submitAdmission" />
+  {{/if}}
   {{assign var=const value=$latest_constantes.0}}
   {{assign var=dates value=$latest_constantes.1}}
   
@@ -169,22 +174,24 @@ Main.add(function () {
         <td colspan="4">{{mb_field object=$constantes field=datetime form="edit-constantes-medicales" register=true}}</td>
       </tr>
       {{/if}}
-      <tr>      
-        <td colspan="5" class="button">
-          <button class="modify" onclick="return submitConstantesMedicales(this.form);">
-            {{if !$constantes->datetime}}
-              {{tr}}Create{{/tr}}
-            {{else}}
-              {{tr}}Save{{/tr}}
+      <tr>
+        {{if !$hide_save_button}}
+          <td colspan="5" class="button">
+            <button class="modify" onclick="return submitConstantesMedicales(this.form);">
+              {{if !$constantes->datetime}}
+                {{tr}}Create{{/tr}}
+              {{else}}
+                {{tr}}Save{{/tr}}
+              {{/if}}
+            </button>
+            {{if $constantes->datetime}}
+              <button class="new" type="button" onclick="$V(this.form.constantes_medicales_id, ''); $V(this.form._new_constantes_medicales, 1); return submitConstantesMedicales(this.form);">
+                {{tr}}Create{{/tr}}
+              </button>
+              <button class="trash" type="button" onclick="if (confirm('Etes-vous sûr de vouloir supprimer ce relevé ?')) {$V(this.form.del, 1); return submitConstantesMedicales(this.form);}">
+                {{tr}}CConstantesMedicales.delete_all{{/tr}}
+              </button>
             {{/if}}
-          </button>
-          {{if $constantes->datetime}}
-            <button class="new" type="button" onclick="$V(this.form.constantes_medicales_id, ''); $V(this.form._new_constantes_medicales, 1); return submitConstantesMedicales(this.form);">
-              {{tr}}Create{{/tr}}
-            </button>
-            <button class="trash" type="button" onclick="if (confirm('Etes-vous sûr de vouloir supprimer ce relevé ?')) {$V(this.form.del, 1); return submitConstantesMedicales(this.form);}">
-              {{tr}}CConstantesMedicales.delete_all{{/tr}}
-            </button>
           {{/if}}
         </td>
       </tr>

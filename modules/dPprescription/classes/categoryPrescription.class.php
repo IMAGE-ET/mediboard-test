@@ -25,7 +25,9 @@ class CCategoryPrescription extends CMbObject {
   
   // BackRefs
   var $_ref_elements_prescription = null;
+  var $_ref_constantes_items = null;
 	var $_count_elements_prescription = null;
+  var $_count_constantes_items = null;
   
 	static $chapitres_elt = array('anapath','biologie','imagerie','consult','kine','soin','dm','dmi','ds','med_elt');
 	
@@ -67,6 +69,7 @@ class CCategoryPrescription extends CMbObject {
     $backProps["comments_prescription"]   = "CPrescriptionLineComment category_prescription_id";
     $backProps["transmissions"]           = "CTransmissionMedicale object_id";
     $backProps["prescription_category_group_items"] = "CPrescriptionCategoryGroupItem category_prescription_id";
+    $backProps["constantes_items"]        = "CConstanteItem category_prescription_id";
     return $backProps;
   }     
   
@@ -94,7 +97,15 @@ class CCategoryPrescription extends CMbObject {
 	function countElementsPrescription() {
     $this->_count_elements_prescription = $this->countBackRefs("elements_prescription","libelle");
   }
-	
+  
+  function countConstantesItems() {
+    $this->_count_constantes_items = $this->countBackRefs("constantes_items");
+  }
+  
+  function loadConstantesItems() {
+    $this->_ref_constantes_items = $this->loadBackRefs("constantes_items");
+  }
+  
   /**
    * Charge toutes les categories triées par chapitre
    * @param $chapitre string Permet de restreindre à un seul chapitre

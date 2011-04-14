@@ -23,10 +23,12 @@ Main.add( function(){
 	refreshListCategories('{{$category_prescription_id}}', true);
 	{{if $category_prescription_id}}
     refreshListElement('{{$element_prescription_id}}','{{$category_prescription_id}}', true);
+    refreshListConstantesItems('{{$category_prescription_id}}');
 	{{/if}}
 	{{if $element_prescription_id}}
     refreshListCdarr('{{$element_prescription_to_cdarr_id}}','{{$element_prescription_id}}');
 	{{/if}}
+	  Control.Tabs.create('elements-tabs');
 });
 
 // Refresh Categories
@@ -47,6 +49,28 @@ refreshListCategories = function(category_prescription_id, without_refresh_eleme
 	} } );
 }
 
+refreshListConstantesItems = function(constante_item_id, category_prescription_id) {
+  var url = new Url("dPprescription", "ajax_vw_list_constantes_items");
+  url.addParam("constante_item_id", constante_item_id);
+  url.addParam("category_prescription_id", category_prescription_id);
+  url.requestUpdate("constantes_items-list", { onComplete: refreshFormConstanteItem.curry(constante_item_id, category_prescription_id) });
+}
+
+refreshFormConstanteItem = function(constante_item_id, category_prescription_id) {
+  var url = new Url("dPprescription", "ajax_vw_form_constante_item");
+  url.addParam("constante_item_id", constante_item_id)
+  url.addParam("category_prescription_id", category_prescription_id)
+  url.requestUpdate("constantes_items-form");
+}
+
+onSelectConstanteItem = function(constante_item_id, category_prescription_id, selected_tr) {
+  refreshFormConstanteItem(constante_item_id, category_prescription_id);
+  $('constantes_items-list').select('tr').invoke('removeClassName', 'selected');
+  if (selected_tr) {
+    selected_tr.addClassName('selected');
+  }
+}
+
 refreshListCategoriesCallback = function(category_prescription_id){
   refreshListCategories(category_prescription_id);
 }
@@ -55,6 +79,7 @@ onSelectCategory = function(category_prescription_id, selected_tr){
 	refreshFormCategory(category_prescription_id);
 	refreshListElement(null, category_prescription_id);
 	refreshListCdarr();
+	refreshListConstantesItems('', category_prescription_id);
 	$('categories-list').select('tr').invoke('removeClassName', 'selected'); 
 	if(selected_tr){
 	  selected_tr.addClassName('selected');
@@ -97,25 +122,31 @@ onSelectElement = function(element_prescription_id, category_prescription_id, se
 
 // Refresh Cdarrs
 refreshListCdarr = function(element_prescription_to_cdarr_id, element_prescription_id){
-  var url = new Url("dPprescription", "httpreq_vw_list_cdarr");
-	url.addParam("element_prescription_to_cdarr_id", element_prescription_to_cdarr_id);
-  url.addParam("element_prescription_id", element_prescription_id);
-	url.requestUpdate("cdarrs-list", { onComplete: refreshFormCdarr.curry(element_prescription_to_cdarr_id, element_prescription_id) });
+  {{if 'ssr'|module_active}}
+    var url = new Url("dPprescription", "httpreq_vw_list_cdarr");
+  	url.addParam("element_prescription_to_cdarr_id", element_prescription_to_cdarr_id);
+    url.addParam("element_prescription_id", element_prescription_id);
+  	url.requestUpdate("cdarrs-list", { onComplete: refreshFormCdarr.curry(element_prescription_to_cdarr_id, element_prescription_id) });
+	{{/if}}
 }
 
 refreshFormCdarr = function(element_prescription_to_cdarr_id, element_prescription_id){
-  var url = new Url("dPprescription", "httpreq_vw_form_cdarr");
-  url.addParam("element_prescription_to_cdarr_id", element_prescription_to_cdarr_id);
-  url.addParam("element_prescription_id", element_prescription_id);
-  url.requestUpdate("cdarr-form");
+  {{if 'ssr'|module_active}}
+    var url = new Url("dPprescription", "httpreq_vw_form_cdarr");
+    url.addParam("element_prescription_to_cdarr_id", element_prescription_to_cdarr_id);
+    url.addParam("element_prescription_id", element_prescription_id);
+    url.requestUpdate("cdarr-form");
+  {{/if}}
 }
 
 onSelectCdarr = function(element_prescription_to_cdarr_id, element_prescription_id, selected_tr){
-  refreshFormCdarr(element_prescription_to_cdarr_id, element_prescription_id);
-  $('cdarrs-list').select('tr').invoke('removeClassName', 'selected'); 
-  if(selected_tr){
-    selected_tr.addUniqueClassName('selected');
-  }
+  {{if 'ssr'|module_active}}
+    refreshFormCdarr(element_prescription_to_cdarr_id, element_prescription_id);
+    $('cdarrs-list').select('tr').invoke('removeClassName', 'selected'); 
+    if(selected_tr){
+      selected_tr.addUniqueClassName('selected');
+    }
+  {{/if}}
 }
 
 // refresh des executants
@@ -162,8 +193,39 @@ refreshFormExecutant = function(executant_prescription_line_id, category_id){
     <td id="elements-list"></td>
     <td id="element-form"></td>
   </tr>
+</table>
+<table class="main">
   <tr>
-    <td id="cdarrs-list"></td>
-    <td id="cdarr-form"></td>
+    <td>
+      <ul id="elements-tabs" class="control_tabs">
+        <li>
+          <a href="#constantes_items-area">{{tr}}CConstanteItem{{/tr}}</a>
+        </li>
+        {{if 'ssr'|module_active}}
+          <li>
+            <a href="#cdarrs-area">{{tr}}CCdARRObject{{/tr}}</a>
+          </li>
+        {{/if}}
+      </ul>
+      <hr class="control_tabs" />
+      <div id="constantes_items-area">
+        <table class="main">
+          <tr>
+            <td id="constantes_items-list" style="width: 50%"></td>
+            <td id="constantes_items-form" style="width: 50%"></td>
+          </tr>
+        </table>
+      </div>
+      {{if 'ssr'|module_active}}
+        <div id="cdarrs-area" style="display: none;">
+          <table class="main">
+            <tr>
+              <td id="cdarrs-list" style="width: 50%"></td>
+              <td id="cdarr-form" style="width: 50%"></td>
+            </tr>
+          </table>
+        </div>
+      {{/if}}
+    </td>
   </tr>
 </table>

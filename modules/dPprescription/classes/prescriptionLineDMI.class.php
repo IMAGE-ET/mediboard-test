@@ -23,6 +23,7 @@ class CPrescriptionLineDMI extends CMbObject {
   var $type                    = null;
   var $quantity                = null;
   var $signed                  = null;
+	var $protocole_id            = null;
 	
 	// Form fields
 	var $_patient_id             = null;
@@ -58,7 +59,7 @@ class CPrescriptionLineDMI extends CMbObject {
     $specs["type"]            = "enum notNull list|purchase|loan|deposit default|purchase"; // achat/pret/depot
     $specs["quantity"]        = "num notNull min|1 default|1";
     $specs["signed"]          = "bool notNull default|0";
-
+    $specs["protocole_id"]    = "ref class|CPrescription";
     // Form fields
     $specs["_can_view_form_signature_praticien"] = "bool";
     $specs["_patient_id"]     = "ref class|CPatient";

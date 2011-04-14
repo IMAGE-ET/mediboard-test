@@ -8,6 +8,7 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
 *}}
 
+{{mb_default var=advanced_prot value=0}}
 {{assign var=line value=$_line_comment}}  
 
 {{if $line->category_prescription_id}}
@@ -22,20 +23,26 @@
 <tbody class="hoverable">
    <tr>
      <td style="width: 5%; text-align: center;" class="text">
-			 {{if $line->_can_delete_line}}
-       <form name="delLineComment-{{$line->_id}}" action="" method="post">
-         <input type="hidden" name="m" value="dPprescription" />
-         <input type="hidden" name="dosql" value="do_prescription_line_comment_aed" />
-         <input type="hidden" name="del" value="1" />
-         <input type="hidden" name="prescription_line_comment_id" value="{{$line->_id}}" />
-         <button type="button" class="trash notext" onclick="
-           if (Prescription.confirmDelLine('{{$line->_view|smarty:nodefaults|JSAttribute}}')) {
-             return onSubmitFormAjax(this.form, { onComplete: function() {
-                 Prescription.reload('{{$prescription->_id}}',null,'{{$div_refresh}}','{{$mode_protocole}}','{{$mode_pharma}}'); } });
-           }">
-           {{tr}}Delete{{/tr}}
-         </button>
-        </form>
+       {{if !$advanced_prot}}
+  			 {{if $line->_can_delete_line}}
+         <form name="delLineComment-{{$line->_id}}" action="" method="post">
+           <input type="hidden" name="m" value="dPprescription" />
+           <input type="hidden" name="dosql" value="do_prescription_line_comment_aed" />
+           <input type="hidden" name="del" value="1" />
+           <input type="hidden" name="prescription_line_comment_id" value="{{$line->_id}}" />
+           <button type="button" class="trash notext" onclick="
+             if (Prescription.confirmDelLine('{{$line->_view|smarty:nodefaults|JSAttribute}}')) {
+               return onSubmitFormAjax(this.form, { onComplete: function() {
+                   Prescription.reload('{{$prescription->_id}}',null,'{{$div_refresh}}','{{$mode_protocole}}','{{$mode_pharma}}'); } });
+             }">
+             {{tr}}Delete{{/tr}}
+           </button>
+          </form>
+        {{/if}}
+      {{else}}
+        <input type="checkbox" checked="checked" name="_view_{{$_line->_guid}}"
+          onchange="$V(this.next(), this.checked ? 1 : 0)"/>
+        <input type="hidden" value="1" name="lines[{{$_line->_guid}}]" />
       {{/if}}
 		</td>
 		 
@@ -54,26 +61,28 @@
 				 {{/if}}
      {{/if}}
 		 </td>
-		 
-		 <td style="width: 10%;">  
-		  <button style="float: right" class="edit notext" onclick="Prescription.reloadLine('{{$line->_guid}}','{{$mode_protocole}}','{{$mode_pharma}}','{{$operation_id}}');"></button>
-      {{if !$line->_protocole}}
-        <div class="mediuser" style="border-color: #{{$line->_ref_praticien->_ref_function->color}};">
-            {{if @$modules.messagerie}}
-            <a class="action" href="#nothing" onclick="MbMail.create({{$line->_ref_praticien->_id}}, '{{$line->_view}}')">
-              <img src="images/icons/mbmail.png" title="Envoyer un message" />
-            </a>
-            {{/if}}
-            {{if $line->signee}}
-              <img src="images/icons/tick.png" title="Ligne signée par le praticien" />
-            {{else}}
-              <img src="images/icons/cross.png" title="Ligne non signée par le praticien" />
-            {{/if}}
-            <label title="{{$line->_ref_praticien->_view}}">{{$line->_ref_praticien->_shortview}}</label>
-          </div>
-        {{else}}
-          - 
-        {{/if}}
-     </td>
+     
+		 {{if !$advanced_prot}}
+  		 <td style="width: 10%;">
+  		  <button style="float: right" class="edit notext" onclick="Prescription.reloadLine('{{$line->_guid}}','{{$mode_protocole}}','{{$mode_pharma}}','{{$operation_id}}');"></button>
+        {{if !$line->_protocole}}
+          <div class="mediuser" style="border-color: #{{$line->_ref_praticien->_ref_function->color}};">
+              {{if @$modules.messagerie}}
+              <a class="action" href="#nothing" onclick="MbMail.create({{$line->_ref_praticien->_id}}, '{{$line->_view}}')">
+                <img src="images/icons/mbmail.png" title="Envoyer un message" />
+              </a>
+              {{/if}}
+              {{if $line->signee}}
+                <img src="images/icons/tick.png" title="Ligne signée par le praticien" />
+              {{else}}
+                <img src="images/icons/cross.png" title="Ligne non signée par le praticien" />
+              {{/if}}
+              <label title="{{$line->_ref_praticien->_view}}">{{$line->_ref_praticien->_shortview}}</label>
+            </div>
+          {{else}}
+            - 
+          {{/if}}
+       </td>
+     {{/if}}
   </tr>
 </tbody>

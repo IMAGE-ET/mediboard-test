@@ -68,7 +68,9 @@ class CPrescriptionLineMix extends CMbObject {
 	
   var $volume_debit     = null; // En ml
   var $duree_debit      = null; // En heures
-	 
+
+  var $protocole_id     = null;
+  
   // Dates relatives
   var $decalage_line      = null;
   var $jour_decalage      = null;
@@ -184,6 +186,7 @@ class CPrescriptionLineMix extends CMbObject {
     $specs["_fin"]                   = "dateTime";
     $specs["_date_fin"]              = "dateTime";
 
+    $specs["protocole_id"]           = "ref class|CPrescription";
     $specs["operation_id"]           = "ref class|COperation";
     $specs["mode_bolus"]             = "enum list|sans_bolus|bolus|perfusion_bolus default|sans_bolus";
     $specs["dose_bolus"]             = "float";

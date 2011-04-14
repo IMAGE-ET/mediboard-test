@@ -20,7 +20,7 @@ $date_sel        = CValue::post("debut");
 $praticien_id    = CValue::post("praticien_id", $AppUI->user_id);
 $operation_id    = CValue::post("operation_id");
 $pratSel_id      = CValue::post("pratSel_id");
-
+$protocole_id    = CValue::post("protocole_id");
 
 // Si aucun pack/protocole selectionne, on ne fait rien
 if (!$pack_protocole_id){
@@ -91,10 +91,10 @@ if ($prescription_id) {
 }
 
 // On applique le protocole ou le pack
-$prescription->applyPackOrProtocole($pack_protocole_id, $praticien_id, $date_sel, $operation_id);
+$prescription->applyPackOrProtocole($pack_protocole_id, $praticien_id, $date_sel, $operation_id, $protocole_id);
 
 // Lancement du refresh des lignes de la prescription
-echo "<script type='text/javascript'>Prescription.reloadPrescSejour($prescription->_id, null, null, null, null, null, null, null, '$pratSel_id', null, '$praticien_id')</script>";
+echo "<script type='text/javascript'>selectLines('$prescription->_id', '$protocole_id')</script>";
 echo CAppUI::getMsg();
 CApp::rip();
 

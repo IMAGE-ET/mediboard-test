@@ -41,7 +41,7 @@ class CPrescriptionLine extends CMbObject implements IPatientRelated {
   var $commentaire         = null;
   var $perop               = null;
 	var $inscription         = null;
-	
+	var $protocole_id        = null;
   // Form Fields
   var $_fin                = null;
   var $_protocole          = null;
@@ -111,6 +111,7 @@ class CPrescriptionLine extends CMbObject implements IPatientRelated {
     $specs["operation_id"]      = "ref class|COperation";
     $specs["perop"]             = "bool default|0"; 
     $specs["inscription"]       = "bool default|0";
+    $specs["protocole_id"]      = "ref class|CPrescription";
     $specs["_fin"]              = "date moreEquals|debut";
     $specs["_fin_reelle"]       = "date";
     return $specs;
@@ -520,6 +521,7 @@ class CPrescriptionLine extends CMbObject implements IPatientRelated {
       }
       // Administrations
       else {
+        $_administration->loadRefConstantesMedicales();
         // Stockage des administrations en fonction de l'heure
 				$minute = mbTransformTime(null, $_administration->dateTime, "%M");
 				if(!isset($administrations["adm_in_hour"][$minute])){

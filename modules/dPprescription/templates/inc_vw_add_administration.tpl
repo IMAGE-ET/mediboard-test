@@ -12,8 +12,15 @@
 
 var oFormClick = window.opener.document.click;
 
-function submitAdmission(){
+function submitConstantes(){
+  var oFormConstantes = getForm("edit-constantes-medicales");
+  checkForm(oFormConstantes);
+  return onSubmitFormAjax(oFormConstantes);
+}
+
+function submitAdmission(constantes_medicales_id){
   var oFormAdministration = getForm("addAdministration");
+  $V(oFormAdministration.constantes_medicales_id, constantes_medicales_id);
   checkForm(oFormAdministration);
   return onSubmitFormAjax(oFormAdministration);
 }
@@ -102,6 +109,14 @@ updateQuantite = function(ratio_UI, oField){
   }
 }
 
+chooseSubmit = function() {
+  {{if $line->_class_name == "CPrescriptionLineElement" && $selection|@count}}
+    submitConstantes();
+  {{else}}
+    submitAdmission();
+  {{/if}}
+}
+
 </script>
 
 {{*  
@@ -128,111 +143,143 @@ updateQuantite = function(ratio_UI, oField){
 <hr class="control_tabs" />
 
 {{if $mode_dossier == "administration" || $mode_plan}}
-{{if $administrations || $mode_plan}}
-	<table class="form">
-	  <tr>
-	    <th class="title">Liste des soins</th>
-	  </tr>
-	  {{foreach from=$administrations item=_administration}}
-	  {{assign var=log value=$_administration->_ref_log}}
-	  <tr>
-	    <td>
-	      <button class="cancel notext" type="button" onclick="cancelAdministration('{{$_administration->_id}}')"></button>
-	      {{$log->_ref_object->quantite}} 
-	      {{if $line->_class_name == "CPrescriptionLineMedicament"}}
-				  {{if $line->_ref_produit_prescription->_id}}
-					  {{$_administration->_ref_object->_ref_produit_prescription->unite_prise}} 
-          {{else}}
-	          {{$_administration->_ref_object->_ref_produit->libelle_unite_presentation}} 
-					{{/if}}
-	      {{else}}
-	        {{$line->_unite_prise}}
-	      {{/if}}
-	      administré par {{$log->_ref_user->_view}} le {{$log->_ref_object->dateTime|date_format:$conf.datetime}}
-	    </td>
-	  </tr>
-	  {{foreachelse}}
-	  <tr>
-	    <td>Aucune administration</td>
-	  </tr>
-	  {{/foreach}}
-	</table>
-{{/if}}
-
-<form name="addAdministration" method="post" action="?" onsubmit="return checkTransmission('{{$prise->quantite}}', this.quantite.value)">
-  <input type="hidden" name="dosql" value="do_administration_aed" />
-  <input type="hidden" name="m" value="dPprescription" />
-  <input type="hidden" name="del" value="0" />
-  <input type="hidden" name="administration_id" value="" />
-  <input type="hidden" name="administrateur_id" value="{{$app->user_id}}" />
-  <input type="hidden" name="object_id" value="{{$line->_id}}" />
-  <input type="hidden" name="object_class" value="{{$line->_class_name}}" />
-  <input type="hidden" name="unite_prise" value="{{$unite_prise}}" />
-  <input type="hidden" name="dateTime" value="{{$dateTime}}" />
-  <input type="hidden" name="prise_id" value="{{$prise_id}}" />
-  <input type="hidden" name="callback" value="submitTransmission" />
-  <input type="hidden" name="_quantite_prevue" value="{{$prise->quantite}}" />
-	<table class="form">
-	  <tr>
-	    <th class="title" colspan="2">Administration de {{$line->_view}}<br />{{$dateTime|date_format:"%d/%m/%Y à %H:%M"}}</th>
-	  </tr>
-	  <tr>
-	    <td>
-        {{if $notToday}}
-          <div class="small-info">
-            {{if $mode_plan}}
-              Attention, vous êtes sur le point d'administrer pour le {{$dateTime|date_format:"%d/%m/%Y"}}, 
-	            or nous sommes le {{$smarty.now|date_format:"%d/%m/%Y"}}.
-	          {{else}}
-	            Attention, cette prise est pour le {{$dateTime|date_format:"%d/%m/%Y à %H:%M"}}, 
-	            or nous sommes le {{$smarty.now|date_format:"%d/%m/%Y"}}.
+  {{if $administrations || $mode_plan}}
+  	<table class="form">
+  	  <tr>
+  	    <th class="title">Liste des soins</th>
+  	  </tr>
+  	  {{foreach from=$administrations item=_administration}}
+  	  {{assign var=log value=$_administration->_ref_log}}
+  	  <tr>
+  	    <td>
+  	      <button class="cancel notext" type="button" onclick="cancelAdministration('{{$_administration->_id}}')"></button>
+  	      {{$log->_ref_object->quantite}} 
+  	      {{if $line->_class_name == "CPrescriptionLineMedicament"}}
+  				  {{if $line->_ref_produit_prescription->_id}}
+  					  {{$_administration->_ref_object->_ref_produit_prescription->unite_prise}} 
+            {{else}}
+  	          {{$_administration->_ref_object->_ref_produit->libelle_unite_presentation}} 
+  					{{/if}}
+  	      {{else}}
+  	        {{$line->_unite_prise}}
+  	      {{/if}}
+  	      administré par {{$log->_ref_user->_view}} le {{$log->_ref_object->dateTime|date_format:$conf.datetime}}
+          <br/>
+          <ul style="margin-left: 2em;">
+            {{if $_administration->_ref_constantes_medicales && $_administration->_ref_constantes_medicales->_id}}
+              {{assign var=constantes_med value=$_administration->_ref_constantes_medicales}}
+                <li>
+                  {{tr}}CConstantesMedicales{{/tr}} de {{$constantes_med->_ref_user}} le {{$constantes_med->datetime|date_format:$conf.datetime}} <br/>
+                  {{foreach from=$params key=_key item=_field name="const"}}
+                    {{if $constantes_med->$_key != null && $_key|substr:0:1 != "_"}}
+                      {{mb_title object=$constantes_med field=$_key}} :
+                      {{mb_value object=$constantes_med field=$_key}}{{$_field.unit}},
+                    {{/if}}
+                  {{/foreach}}
+                </li>
             {{/if}}
-          </div>
-        {{/if}}
-				
-				{{assign var=ratio_UI value=""}}
-				{{if $line instanceof CPrescriptionLineMedicament}}
-				{{assign var=ratio_UI value=$line->_ref_produit->_ratio_UI}}
-				{{/if}}
-				
-				{{mb_label object=$prise field=quantite}}
-	      {{mb_field object=$prise field=quantite min=0 increment=1 form=addAdministration onchange="updateQuantite('$ratio_UI', this)"}}
-	      
-	      {{if $line instanceof CPrescriptionLineMedicament}}
-				  {{if $line->_ref_produit_prescription->_id}}
-					  {{$line->_ref_produit_prescription->unite_prise}}
-					{{else}}
-	          {{$line->_ref_produit->libelle_unite_presentation}}
-					{{/if}}
-	      {{else}}
-	        {{$line->_unite_prise}}
-	      {{/if}} 
-	      
-	      {{if $mode_plan}}
-	      à
-	      <select name="_hour" class="notNull" onchange="$V(this.form.dateTime, '{{$dateTime}} '+this.value);">
-	        <option value="">&mdash; Heure</option>
-	        {{foreach from=$hours item=_hour}}
-	        <option value="{{$_hour}}:00:00">{{$_hour}}h</option>
-	        {{/foreach}}
-	      </select>
-	      {{/if}}
-				
-				{{if $line instanceof CPrescriptionLineMedicament && $line->_ref_produit->_ratio_UI}}
-					soit 
-				  {{mb_field object=$prise field=_quantite_UI min=0 increment=1 form=addAdministration onchange="updateQuantite('$ratio_UI', this)"}} UI
-        {{/if}}
-				
-	    </td>
-	  </tr>
-	</table>
-</form>
-
-{{assign var=hide_cible value=1}}
-{{assign var=hide_button_add value=1}}
-{{mb_include module=dPhospi template=inc_transmission refreshTrans=0}}
-<button type="button" class="add" onclick="submitAdmission()">{{tr}}Validate{{/tr}}</button>
-<button type="button" class="cancel" onclick="submitCancelAdm();">{{tr}}Cancel{{/tr}}</button>
+            {{foreach from=$_administration->_ref_transmissions item=_transmission}}
+              <li>
+                {{tr}}CTransmissionMedicale{{/tr}} de {{$_transmission->_ref_user}} le {{$_transmission->date|date_format:$conf.datetime}} <br/>
+                {{mb_value object=$_transmission field=text}}
+              </li>
+            {{/foreach}}
+          </ul>
+  	    </td>
+  	  </tr>
+  	  {{foreachelse}}
+  	  <tr>
+  	    <td>Aucune administration</td>
+  	  </tr>
+  	  {{/foreach}}
+  	</table>
+  {{/if}}
+  
+  <form name="addAdministration" method="post" action="?" onsubmit="return checkTransmission('{{$prise->quantite}}', this.quantite.value)">
+    <input type="hidden" name="dosql" value="do_administration_aed" />
+    <input type="hidden" name="m" value="dPprescription" />
+    <input type="hidden" name="del" value="0" />
+    <input type="hidden" name="administration_id" value="" />
+    <input type="hidden" name="administrateur_id" value="{{$app->user_id}}" />
+    <input type="hidden" name="object_id" value="{{$line->_id}}" />
+    <input type="hidden" name="object_class" value="{{$line->_class_name}}" />
+    <input type="hidden" name="unite_prise" value="{{$unite_prise}}" />
+    <input type="hidden" name="dateTime" value="{{$dateTime}}" />
+    <input type="hidden" name="prise_id" value="{{$prise_id}}" />
+    <input type="hidden" name="callback" value="submitTransmission" />
+    <input type="hidden" name="_quantite_prevue" value="{{$prise->quantite}}" />
+    <input type="hidden" name="constantes_medicales_id" value="" />
+  	<table class="form">
+  	  <tr>
+  	    <th class="title" colspan="2">Administration de {{$line->_view}}<br />{{$dateTime|date_format:"%d/%m/%Y à %H:%M"}}</th>
+  	  </tr>
+  	  <tr>
+  	    <td>
+          {{if $notToday}}
+            <div class="small-info">
+              {{if $mode_plan}}
+                Attention, vous êtes sur le point d'administrer pour le {{$dateTime|date_format:"%d/%m/%Y"}}, 
+  	            or nous sommes le {{$smarty.now|date_format:"%d/%m/%Y"}}.
+  	          {{else}}
+  	            Attention, cette prise est pour le {{$dateTime|date_format:"%d/%m/%Y à %H:%M"}}, 
+  	            or nous sommes le {{$smarty.now|date_format:"%d/%m/%Y"}}.
+              {{/if}}
+            </div>
+          {{/if}}
+  				
+  				{{assign var=ratio_UI value=""}}
+  				{{if $line instanceof CPrescriptionLineMedicament}}
+  				{{assign var=ratio_UI value=$line->_ref_produit->_ratio_UI}}
+  				{{/if}}
+  				
+  				{{mb_label object=$prise field=quantite}}
+  	      {{mb_field object=$prise field=quantite min=0 increment=1 form=addAdministration onchange="updateQuantite('$ratio_UI', this)"}}
+  	      
+  	      {{if $line instanceof CPrescriptionLineMedicament}}
+  				  {{if $line->_ref_produit_prescription->_id}}
+  					  {{$line->_ref_produit_prescription->unite_prise}}
+  					{{else}}
+  	          {{$line->_ref_produit->libelle_unite_presentation}}
+  					{{/if}}
+  	      {{else}}
+  	        {{$line->_unite_prise}}
+  	      {{/if}} 
+  	      
+  	      {{if $mode_plan}}
+  	      à
+  	      <select name="_hour" class="notNull" onchange="$V(this.form.dateTime, '{{$dateTime}} '+this.value);">
+  	        <option value="">&mdash; Heure</option>
+  	        {{foreach from=$hours item=_hour}}
+  	        <option value="{{$_hour}}:00:00">{{$_hour}}h</option>
+  	        {{/foreach}}
+  	      </select>
+  	      {{/if}}
+  				
+  				{{if $line instanceof CPrescriptionLineMedicament && $line->_ref_produit->_ratio_UI}}
+  					soit 
+  				  {{mb_field object=$prise field=_quantite_UI min=0 increment=1 form=addAdministration onchange="updateQuantite('$ratio_UI', this)"}} UI
+          {{/if}}
+  				
+  	    </td>
+  	  </tr>
+  	</table>
+  </form>
+  <br/>
+  
+  {{if $line->_class_name == "CPrescriptionLineElement" && $selection|@count}}
+    {{assign var=patient value=$sejour->_ref_patient}}
+    {{assign var=context_guid value=$sejour->_guid}}
+    {{assign var=readonly value=0}}
+    {{assign var=hide_save_button value=1}}
+    {{assign var=callback_administration value=1}}
+    {{mb_include module=dPhospi template=inc_form_edit_constantes_medicales}}
+  {{/if}}
+  
+  {{assign var=hide_cible value=1}}
+  {{assign var=hide_button_add value=1}}
+  {{mb_include module=dPhospi template=inc_transmission refreshTrans=0}}
+  <button type="button" class="add" onclick="chooseSubmit()">{{tr}}Validate{{/tr}}</button>
+  <button type="button" class="cancel" onclick="submitCancelAdm();">{{tr}}Cancel{{/tr}}</button>
 {{/if}}
 
 {{if $mode_dossier == "planification"}}

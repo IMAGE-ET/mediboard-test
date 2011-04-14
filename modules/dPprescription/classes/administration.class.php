@@ -20,6 +20,7 @@ class CAdministration extends CMbMetaObject implements IPatientRelated {
   var $commentaire       = null;  // Commentaire sur l'administration
   var $prise_id          = null;
   var $planification_systeme_id  = null;
+	var $constantes_medicales_id   = null;
 	
   // Gestion des replanifications
   var $planification     = null;  // Flag permettant de gerer les plannifications
@@ -69,6 +70,7 @@ class CAdministration extends CMbMetaObject implements IPatientRelated {
     $specs["planification"]     = "bool default|0";
     $specs["original_dateTime"] = "dateTime";
     $specs["planification_systeme_id"] = "ref class|CPlanificationSysteme";
+    $specs["constantes_medicales_id"] = "ref class|CConstantesMedicales";
     return $specs;
   }
 	
@@ -76,6 +78,11 @@ class CAdministration extends CMbMetaObject implements IPatientRelated {
 		return $this->loadTargetObject()->loadRelPatient();
 	}
 
+	function loadRefConstantesMedicales() {
+	  $constantes_medicales = new CConstantesMedicales;
+	  return $this->_ref_constantes_medicales = $constantes_medicales->load($this->constantes_medicales_id);
+	}
+	
   function updateFormFields(){
   	parent::updateFormFields();
   	$this->_heure = substr(mbTime($this->dateTime), 0, 2);

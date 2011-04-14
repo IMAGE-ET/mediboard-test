@@ -81,6 +81,8 @@ $smarty->assign("monday"       , $monday);
 $smarty->assign("sunday"       , $sunday);
 $smarty->assign("prev_week"    , $prev_week);
 $smarty->assign("next_week"    , $next_week);
+$smarty->assign("params"       , CConstantesMedicales::$list_constantes);
+
 $smarty->display("../../dPprescription/templates/inc_vw_dossier_soin_semaine.tpl");
 
 ?>

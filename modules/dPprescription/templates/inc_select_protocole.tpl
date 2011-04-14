@@ -11,7 +11,9 @@
 <ul>
   {{foreach from=$list key=type item=prots}}
      {{foreach from=$prots item=_prot}}
-      <li class="{{if $_prot->praticien_id}}user{{elseif $_prot->function_id}}function{{else}}group{{/if}}">
+      <li class="{{if $_prot->praticien_id}}user{{elseif $_prot->function_id}}function{{else}}group{{/if}}"
+        {{if $type == 'prot'}}data-advanced_protocole="{{$_prot->advanced_protocole}}"{{/if}}
+        data-id='{{$_prot->_id}}'>
         <small style="display: none;" class="value">{{$type}}-{{$_prot->_id}}</small>
         <span style="display: none;" class="view">{{$_prot->libelle}}</span>
         {{if $type == "prot"}}Protocole{{else}}Pack{{/if}}:

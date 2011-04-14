@@ -26,12 +26,14 @@ $multiple_adm         = CValue::get("multiple_adm");
 
 $administrations      = array();
 $planification        = new CAdministration();
-
+$selection            = array();
+$constantes           = new CConstantesMedicales;
+$latest_constantes    = array();
 // Chargement de la ligne
 $line = new $object_class;
 $line->load($line_id);
 
-if($line instanceof CPrescriptionLineMedicament){
+if ($line instanceof CPrescriptionLineMedicament) {
   $line->_ref_produit->loadConditionnement();
 }
 
@@ -43,6 +45,11 @@ if($list_administrations){
     $administration->load($_administration_id);
     $administration->loadRefsFwd();
     $administration->loadRefLog();
+    $administration->loadRefsTransmissions();
+    $administration->loadRefConstantesMedicales();
+    if ($administration->_ref_constantes_medicales && $administration->_ref_constantes_medicales->_id) {
+      $administration->_ref_constantes_medicales->loadRefUser();
+    }
     $line =& $administration->_ref_object;
     $line->loadRefsFwd();
     if($line instanceof CPrescriptionLineMedicament){
@@ -51,8 +58,9 @@ if($list_administrations){
     }
     $administrations[$administration->_id] = $administration;
   }
-} else {
-	// Recherche d'administration
+}
+// Recherche d'administration
+else {
 	$administration = new CAdministration();
 	$administration->dateTime = $dateTime;
 	$administration->prise_id = $prise_id;
@@ -61,6 +69,11 @@ if($list_administrations){
 	foreach($administrations as $_administration){
 	  $_administration->loadRefsFwd();
     $_administration->loadRefLog();
+    $_administration->loadRefsTransmissions();
+    $_administration->loadRefConstantesMedicales();
+    if ($_administration->_ref_constantes_medicales && $_administration->_ref_constantes_medicales->_id) {
+      $_administration->_ref_constantes_medicales->loadRefUser();
+    }
     $line =& $_administration->_ref_object;
     $line->loadRefsFwd();
     if($line instanceof CPrescriptionLineMedicament){
@@ -117,6 +130,23 @@ $transmission = new CTransmissionMedicale();
 $transmission->sejour_id = $sejour->_id;
 $transmission->user_id = $user_id;
 
+// Constantes médicales
+if ($line instanceof CPrescriptionLineElement) {
+  $category = $line->_ref_element_prescription->_ref_category_prescription;
+  $category->loadConstantesItems();
+  foreach($category->_ref_constantes_items as $_constante_item) {
+    $selection[] = $_constante_item->field_constante;
+  }
+  $selection = array_flip($selection);
+  $selection = array_intersect_key(CConstantesMedicales::$list_constantes, $selection);
+  $constantes->patient_id = $sejour->_ref_patient->_id;
+  $constantes->loadRefPatient();
+  $constantes->context_id = $sejour->_id;
+  $constantes->context_class = $sejour->_class_name;
+  $constantes->loadRefContext();
+  $latest_constantes = $patient->loadRefConstantesMedicales();
+}
+
 // Création du template
 $smarty = new CSmartyDP();
 $smarty->assign("key_tab", $key_tab);
@@ -138,5 +168,9 @@ $smarty->assign("mode_dossier", $mode_dossier);
 $smarty->assign("user_id", $user_id);
 $smarty->assign("date", mbDate());
 $smarty->assign("hour", mbTransformTime(null, mbTime(), "%H"));
+$smarty->assign("selection", $selection);
+$smarty->assign("constantes", $constantes);
+$smarty->assign("latest_constantes", $latest_constantes);
+$smarty->assign("params", CConstantesMedicales::$list_constantes);
 $smarty->display("inc_vw_add_administration.tpl");
 ?>

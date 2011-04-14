@@ -291,6 +291,7 @@ $smarty->assign("next_date"           , mbDate("+ 1 DAY", $date));
 $smarty->assign("today"               , mbDate());
 $smarty->assign("move_dossier_soin"   , false);
 $smarty->assign("configs"             , $configs);
+$smarty->assign("params"              , CConstantesMedicales::$list_constantes);
 
 // Affichage d'une ligne
 if($object_id && $object_class){
