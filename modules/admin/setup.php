@@ -259,7 +259,12 @@ class CSetupadmin extends CSetup {
              ) /*! ENGINE=MyISAM */;";
     $this->addQuery($query);
     
-    $this->mod_version = "1.0.19";
+    $this->makeRevision("1.0.19");
+    $query = "ALTER TABLE `source_ldap` 
+                ADD `bind_rdn_suffix` VARCHAR (255);";
+    $this->addQuery($query);
+    
+    $this->mod_version = "1.0.20";
   }
 }
 ?>

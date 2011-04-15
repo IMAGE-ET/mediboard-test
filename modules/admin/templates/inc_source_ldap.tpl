@@ -42,6 +42,10 @@
             <td> {{mb_field object=$source_ldap field=rootdn}} </td>
           </tr>
           <tr>
+            <th> {{mb_label object=$source_ldap field=bind_rdn_suffix}} </th>
+            <td> {{mb_field object=$source_ldap field=bind_rdn_suffix}} </td>
+          </tr>
+          <tr>
             <th> {{mb_label object=$source_ldap field=ldap_opt_protocol_version}} </th>
             <td> {{mb_field object=$source_ldap field=ldap_opt_protocol_version increment=true form=edit_source_ldap min=2 max=3}} </td>
           </tr>

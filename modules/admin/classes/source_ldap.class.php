@@ -25,6 +25,7 @@ class CSourceLDAP extends CMbObject{
   var $host                      = null;
   var $port                      = null;
   var $rootdn                    = null;
+  var $bind_rdn_suffix           = null;
   var $ldap_opt_protocol_version = null;
   var $ldap_opt_referrals        = null;
   
@@ -45,6 +46,7 @@ class CSourceLDAP extends CMbObject{
     $props["host"]                      = "text notNull";
     $props["port"]                      = "num default|389";
     $props["rootdn"]                    = "str notNull";
+    $props["bind_rdn_suffix"]           = "str";
     $props["ldap_opt_protocol_version"] = "num default|3";
     $props["ldap_opt_referrals"]        = "bool default|0";
     return $props;
@@ -84,6 +86,10 @@ class CSourceLDAP extends CMbObject{
   function ldap_bind($ldapconn = null, $ldaprdn = null, $ldappass = null, $showInvalidCredentials = false) {
     if (!$ldapconn) {
       $ldapconn = $this->ldap_connect();
+    }
+    
+    if ($this->bind_rdn_suffix) {
+      $ldaprdn = $ldaprdn.$this->bind_rdn_suffix;
     }
     
     $ldapbind = @ldap_bind($ldapconn, $ldaprdn, $ldappass);

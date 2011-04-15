@@ -32,7 +32,9 @@ try {
 } catch(Exception $e) {
   CAppUI::stepAjax($e->getMessage(), UI_MSG_ERROR);
 }
-CAppUI::stepAjax("CSourceLDAP_authenticate", UI_MSG_OK, $source_ldap->host, $ldaprdn ? $ldaprdn : "anonymous");
+$user = $ldaprdn ? $ldaprdn : "anonymous";
+$user = $source_ldap->bind_rdn_suffix ? $ldaprdn.$source_ldap->bind_rdn_suffix : $user;
+CAppUI::stepAjax("CSourceLDAP_authenticate", UI_MSG_OK, $source_ldap->host, $user);
 
 if ($action == "search") {
   if ($attributes) {
