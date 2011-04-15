@@ -231,7 +231,7 @@ Main.add(function () {
             {{mb_label object=$consult field="patient_id"}}
           </th>
           <td>
-          	{{mb_field object=$pat field="patient_id" canNull=false hidden=1 ondblclick="PatSelector.init()" onchange="requestInfoPat(); $('button-edit-patient').setVisible(this.value);"}}
+          	{{mb_field object=$pat field="patient_id" hidden=1 ondblclick="PatSelector.init()" onchange="requestInfoPat(); $('button-edit-patient').setVisible(this.value);"}}
           	<input type="text" name="_pat_name" size="35" value="{{$pat->_view}}" readonly="readonly" ondblclick="PatSelector.init()" onchange="checkCorrespondantMedical()"/>
 						<button class="search" type="button" onclick="PatSelector.init()">{{tr}}Search{{/tr}}</button>
 	          <script type="text/javascript">
