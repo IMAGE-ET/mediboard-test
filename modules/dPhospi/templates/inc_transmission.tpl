@@ -62,7 +62,8 @@ Main.add(function() {
       timestamp: "{{$conf.dPcompteRendu.CCompteRendu.timestamp}}",
       dependField1: oFormTrans._type_data,
       dependField2: oFormTrans.cible,
-      validateOnBlur:0
+      validateOnBlur:0,
+      strict: false
     });
     
     new AideSaisie.AutoComplete(oFormTrans._text_action, {
@@ -71,7 +72,8 @@ Main.add(function() {
       timestamp: "{{$conf.dPcompteRendu.CCompteRendu.timestamp}}",
       dependField1: oFormTrans._type_action,
       dependField2: oFormTrans.cible,
-      validateOnBlur:0
+      validateOnBlur:0,
+      strict: false
     });
 
     new AideSaisie.AutoComplete(oFormTrans._text_result, {
@@ -80,7 +82,8 @@ Main.add(function() {
       timestamp: "{{$conf.dPcompteRendu.CCompteRendu.timestamp}}",
       dependField1: oFormTrans._type_result,
       dependField2: oFormTrans.cible,
-      validateOnBlur:0
+      validateOnBlur:0,
+      strict: false
     });
   {{else}}
     new AideSaisie.AutoComplete(oFormTrans.text, {
@@ -88,7 +91,8 @@ Main.add(function() {
       timestamp: "{{$conf.dPcompteRendu.CCompteRendu.timestamp}}",
       dependField1: oFormTrans.type,
       dependField2: oFormTrans.cible,
-      validateOnBlur:0
+      validateOnBlur:0,
+      strict: false
     });
   {{/if}}
  
