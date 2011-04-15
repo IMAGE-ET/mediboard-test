@@ -163,6 +163,13 @@ function mbplay_onclick(editor) {
 window.parent.replaceField = function(elt, class_name, empty) {
   var window_parent = window.parent;
   window_parent.current_playing = null;
+  
+  //Le contenu de l'éditeur a changé.
+  window_parent.Thumb.contentChanged = true;
+  window_parent.Thumb.changed = true;
+  window_parent.Thumb.old();
+  CKEDITOR.instances.htmlarea.removeListener("key", loadOld);
+  
   var textReplacement = "";
   if (!empty) {
     switch(class_name) {

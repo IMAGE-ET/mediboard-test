@@ -17,9 +17,19 @@ CKEDITOR.plugins.add('mbprintPDF',{
 });
 
 function mbprintPDF_onclick(editor) {
+  if (window.parent.Thumb.mode == "doc") {
+    window.parent.submitCompteRendu(function() {
+      streamPDF(editor);
+    });
+  }
+  else {
+    streamPDF(editor);
+  }
+}
+
+function streamPDF(editor) {
   var content = editor.getData();
   var form = window.parent.document.forms["download-pdf-form"];
   form.elements.content.value = encodeURIComponent(content);
   form.onsubmit();
 }
-

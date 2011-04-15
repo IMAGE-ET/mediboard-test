@@ -33,11 +33,25 @@
 </table>
 
 <ul id="tabs-owner" class="control_tabs">
-  <li><a href="#owner-user">{{$userSel}} <small>({{$packsUser|@count}})</small></a></li>
-  <li><a href="#owner-func">{{$userSel->_ref_function}} <small>({{$packsFunc|@count}})</small></a></li>
-  <li><a href="#owner-etab">{{$userSel->_ref_function->_ref_group}} <small>({{$packsEtab|@count}})</small></a></li>
+  <li>
+    <a href="#owner-user" {{if !$packsUser|@count}}class="empty"{{/if}}>
+      {{$userSel}} <small>({{$packsUser|@count}})</small>
+    </a>
+  </li>
+  <li>
+    <a href="#owner-func" {{if !$packsFunc|@count}}class="empty"{{/if}}>
+      {{$userSel->_ref_function}} <small>({{$packsFunc|@count}})</small>
+    </a>
+  </li>
+  <li>
+    <a href="#owner-etab" {{if !$packsEtab|@count}}class="empty"{{/if}}>
+      {{$userSel->_ref_function->_ref_group}} <small>({{$packsEtab|@count}})</small>
+    </a>
+  </li>
 </ul>
-    <hr class="control_tabs" />
+
+<hr class="control_tabs" />
+
 <table class="tbl">
   <tr>
     <th>Nom</th>

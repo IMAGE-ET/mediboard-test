@@ -102,7 +102,8 @@ if (isset($_POST["_source"])) {
     $posBody      = strpos($_POST["_source"], $bodyTag);
     if($posBody) {
       $headerfooter = substr($_POST["_source"], 0, $posBody);
-      $body         = substr($_POST["_source"], $posBody+strlen($bodyTag), -strlen("</div>") - 1);
+      $index_div = strrpos($_POST["_source"], "</div>")-($posBody+strlen($bodyTag)+1);
+      $body         = substr($_POST["_source"], $posBody+strlen($bodyTag), $index_div);
     } else {
       $headerfooter = "";
       $body         = $_POST["_source"];

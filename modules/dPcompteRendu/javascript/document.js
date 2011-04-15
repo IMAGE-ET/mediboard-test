@@ -138,7 +138,20 @@ var Document = {
     url.addParam("suppressHeaders", 1);
     url.addParam("compte_rendu_id", document_id);
     var sUrl = url.make();
-    oIframe.onload = function() { window.frames[oIframe.name].print(); };
+
+    if (Prototype.Browser.IE) {
+      oIframe.onload = null;
+      oIframe.onreadystatechange = function(){
+        if (oIframe.readyState !== "complete") {
+          return;
+        }
+        oIframe.contentWindow.document.execCommand('print', false, null);
+        oIframe.onreadystatechange = null;
+      }
+    }
+    else {
+      oIframe.onload = function() { window.frames[oIframe.name].print(); };
+    }
     oIframe.src = sUrl;
   },
   

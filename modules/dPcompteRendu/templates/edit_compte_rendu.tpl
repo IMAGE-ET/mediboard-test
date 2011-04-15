@@ -170,24 +170,36 @@ function openModalPrinters() {
     // de la fenêtre principale, car on est en train de fermer la popup
     var f = getForm("download-pdf-form");
 
-    var url = new window.opener.Url();
+    if (Prototype.Browser.IE) {
+      var url = new Url();
+    }
+    else {
+      var url = new window.opener.Url();
+    }
     url.addParam("m", "dPcompteRendu");
     url.addParam("dosql", "do_modele_aed");
     url.addParam("_do_empty_pdf", 1);
     url.addParam("compte_rendu_id", $V(f.compte_rendu_id));
-    url.requestJSON(function(){}, { method: "post"});
+    
+    url.requestJSON(function(){}, {method: "post"});
   }
 {{/if}}
 
 Main.add(function(){
-  window.onbeforeunload = function() {
+  window.onbeforeunload = function(e) {
+    var e = e || window.event;
+    
     if (Thumb.contentChanged == false) return;
 
-    if (window.pdf_thumbnails && window.Preferences.pdf_and_thumbs == 1) {
+    if (window.pdf_thumbnails && window.Preferences.pdf_and_thumbs == 1 && Thumb.contentChanged == true) {
       emptyPDF();
     }
     
-    return '';
+    if (e) {
+      e.returnValue = ' ';
+    }
+    
+    return ' ';
   };
   
   if (window.pdf_thumbnails && window.Preferences.pdf_and_thumbs == 1) {
