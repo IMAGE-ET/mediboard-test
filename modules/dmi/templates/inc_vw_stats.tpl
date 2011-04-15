@@ -23,7 +23,13 @@
 					</span>
 	      {{/if}}
 			</td>
-			<td>{{$_stat.total}}</td>
+			<td>{{$_stat.sum}}</td>
 		</tr>
+	{{foreachelse}}
+	  <tr>
+	  	<td colspan="2" class="empty">
+	  		Aucune valeur pour ces critères
+	  	</td>
+	  </tr>
 	{{/foreach}}
 </table>

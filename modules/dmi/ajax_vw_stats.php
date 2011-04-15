@@ -34,10 +34,12 @@ $ljoin = array(
   "operations" => "operations.operation_id = prescription_line_dmi.operation_id",
   //"product" => "product.product_id = prescription_line_dmi.product_id",
   "product_reference" => "product_reference.product_id = prescription_line_dmi.product_id",
+	"plagesop" => "plagesop.plageop_id = operations.plageop_id",
 );
 $fields = array(
   "prescription_line_dmi.praticien_id",
 	"product_reference.societe_id",
+	"SUM(prescription_line_dmi.quantity) AS sum"
 );
 
 if ($chir_id) {
@@ -48,13 +50,20 @@ if ($labo_id) {
   $where["product_reference.societe_id"] = $ds->prepare("=%", $labo_id);
 }
 
+if ($date_min) {
+  $where[] = "IF(operations.date, operations.date, plagesop.date) >= '$date_min'";
+}
+
+if ($date_max) {
+  $where[] = "IF(operations.date, operations.date, plagesop.date) <= '$date_max'";
+}
+
 $group_by_map = array(
 	"praticien" => "prescription_line_dmi.praticien_id",
 	"labo"      => "product_reference.societe_id",
 );
 
 $dmi_lines_count = $dmi_line->countMultipleList($where, "total DESC", null, $group_by_map[$group_by], $ljoin, $fields);
-$dmi_lines = array();//$dmi_line->loadList($where);
 
 foreach($dmi_lines_count as &$_stat) {
 	$mediuser = new CMediusers;
@@ -67,14 +76,8 @@ foreach($dmi_lines_count as &$_stat) {
   $_stat["labo"] = $labo;
 }
 
-/*foreach($dmi_lines as $_line) {
-	$_line->loadFwdRefs();
-}*/
-
-
 // Création du template
 $smarty = new CSmartyDP();
-$smarty->assign("dmi_lines", $dmi_lines);
 $smarty->assign("dmi_lines_count", $dmi_lines_count);
 $smarty->assign("group_by", $group_by);
 $smarty->assign("septic", $septic);
