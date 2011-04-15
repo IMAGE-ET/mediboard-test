@@ -81,13 +81,14 @@ class CSourceLDAP extends CMbObject{
     return $ldapconn;
   }
   
-  function ldap_bind($ldapconn = null, $ldaprdn = null, $ldappass = null) {
+  function ldap_bind($ldapconn = null, $ldaprdn = null, $ldappass = null, $showInvalidCredentials = false) {
     if (!$ldapconn) {
       $ldapconn = $this->ldap_connect();
     }
     
     $ldapbind = @ldap_bind($ldapconn, $ldaprdn, $ldappass);
-    if ($error = (ldap_errno($ldapconn) == 49)) {
+    $error = ldap_errno($ldapconn);
+    if (!$showInvalidCredentials && ($error == 49)) {
       return false;     
     }
     if (!$ldapbind) {

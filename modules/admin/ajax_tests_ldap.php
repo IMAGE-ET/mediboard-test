@@ -28,7 +28,7 @@ try {
 CAppUI::stepAjax("CSourceLDAP_connect", UI_MSG_OK, $source_ldap->host);
 
 try {
-  $source_ldap->ldap_bind($ldapconn, $ldaprdn, $ldappass);
+  $source_ldap->ldap_bind($ldapconn, $ldaprdn, $ldappass, true);
 } catch(Exception $e) {
   CAppUI::stepAjax($e->getMessage(), UI_MSG_ERROR);
 }
