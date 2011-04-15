@@ -20,6 +20,9 @@ $prescription_id = $sejour->_ref_prescription_sejour->_id;
 $lines = array();
 
 if($prescription_id){
+  $prescription = $sejour->_ref_prescription_sejour;
+	$prescription->calculAllPlanifSysteme();
+
 	// Chargement des lignes de medicaments perop
 	$prescription_line_medicament = new CPrescriptionLineMedicament();
 	$prescription_line_medicament->prescription_id = $prescription_id;
