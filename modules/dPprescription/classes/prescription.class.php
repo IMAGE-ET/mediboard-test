@@ -580,7 +580,7 @@ class CPrescription extends CMbObject implements IPatientRelated {
   /*
    * Permet d'applique un protocole ou un pack à partir d'un identifiant (pack-$id ou prot-$id)
    */
-  function applyPackOrProtocole($pack_protocole_id, $praticien_id, $date_sel, $operation_id, $protocole_id){
+  function applyPackOrProtocole($pack_protocole_id, $praticien_id, $date_sel, $operation_id, $protocole_base_id = null){
     // Aplication du protocole/pack chir
     if($pack_protocole_id){
       $pack_protocole = explode("-", $pack_protocole_id);
@@ -608,11 +608,11 @@ class CPrescription extends CMbObject implements IPatientRelated {
             }
           }
           // Puis on applique le protocole
-          $this->applyProtocole($_protocole->_id, $praticien_id, $date_sel, $operation_id, '', '', '', $protocole_id);
+          $this->applyProtocole($_protocole->_id, $praticien_id, $date_sel, $operation_id, '', '', '', $protocole_base_id);
         }
       }
       if($protocole_id){
-        $this->applyProtocole($protocole_id, $praticien_id, $date_sel, $operation_id, '', '', '', $protocole_id);
+        $this->applyProtocole($protocole_id, $praticien_id, $date_sel, $operation_id, '', '', '', $protocole_base_id);
       }
     }
   }
