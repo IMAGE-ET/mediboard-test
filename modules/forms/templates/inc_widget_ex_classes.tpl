@@ -82,10 +82,10 @@
 	       onclick="showExClassForm({{$_ex_class_id}}, '{{$object->_guid}}', '{{$_ex_object}}', '{{$_ex_object->_id}}', '{{$event}}', '{{$_element_id}}')">
 	      {{$_ex_class->name}}
 	    </a>
-			<ul>
+			<ul style="min-width: 25em;">
 				{{foreach from=$_ex_object->_ref_logs|@array_reverse item=_log}}
 				  <li>
-				  	<span style="float: right">
+				  	<span style="float: right;">
 				  		{{mb_include module=mediusers template=inc_vw_mediuser mediuser=$_log->_ref_user->_ref_mediuser}}
 							 &ndash; {{mb_value object=$_log field=date}}
 				  	</span>
