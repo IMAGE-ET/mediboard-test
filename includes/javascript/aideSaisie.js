@@ -25,6 +25,7 @@ var AideSaisie = {
         defaultUserId: null,
         defaultUserView: null,
         property: '',
+        strict: true,
         timestamp: "-- %n %p - dd/MM/y HH:mm"
       }, options);
       this.init();
@@ -193,7 +194,7 @@ var AideSaisie = {
             query += options.dependField1 ? ("&depend_value_1=" + ($V(options.dependField1) || "")) : '';
             query += options.dependField2 ? ("&depend_value_2=" + ($V(options.dependField2) || "")) : '';
           }
-          return query+"&hide_empty_list=1&hide_exact_match=1";
+          return query+"&hide_empty_list=1&hide_exact_match=1&strict="+options.strict;
         },
         dontSelectFirst: true,
         onAfterShow: function(element, update){

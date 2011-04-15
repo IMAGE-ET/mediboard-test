@@ -2227,7 +2227,7 @@ class CMbObject {
    * @param ref|CUser $user_id ID de l'utilisateur
    * @param string $keywords Permet de filtrer les aides commançant par le filtre, si non null
    */
-  function loadAides($user_id, $keywords = null, $depend_value_1 = null, $depend_value_2 = null, $object_field = null) {
+  function loadAides($user_id, $keywords = null, $depend_value_1 = null, $depend_value_2 = null, $object_field = null, $strict = "true") {
     foreach ($this->_specs as $field => $spec) {
       if (isset($spec->helped)) {
         $this->_aides[$field] = array("no_enum" => null);
@@ -2251,12 +2251,22 @@ class CMbObject {
                 
     $where["class"]   = $ds->prepare("= %", $this->_class_name);
 
-    if ($depend_value_1){
-      $where["depend_value_1"] = " = '$depend_value_1'";
+    if ($strict == "true") {
+      if ($depend_value_1){
+        $where["depend_value_1"] = " = '$depend_value_1'";
+      }
+      
+      if ($depend_value_2){
+        $where["depend_value_2"] = " = '$depend_value_2'";
+      }
     }
-    
-    if ($depend_value_2){
-      $where["depend_value_2"] = " = '$depend_value_2'";
+    else {
+      if ($depend_value_1){
+        $where[] = "(depend_value_1 = '$depend_value_1' OR depend_value_1 IS NULL)";
+      }
+      if ($depend_value_2){
+        $where[] = "(depend_value_2 = '$depend_value_2' OR depend_value_2 IS NULL)";
+      }
     }
     
     if($object_field){

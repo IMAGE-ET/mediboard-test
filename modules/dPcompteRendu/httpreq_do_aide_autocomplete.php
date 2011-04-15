@@ -16,9 +16,9 @@ $depend_value_2 = CValue::post("depend_value_2", null);
 $needle         = CValue::post("_search");
 $hide_empty_list = CValue::post("hide_empty_list");
 $hide_exact_match = CValue::post("hide_exact_match");
-
+$strict           = CValue::post("strict");
 $object = new $object_class;
-$object->loadAides($user_id, $needle, $depend_value_1, $depend_value_2, $property);
+$object->loadAides($user_id, $needle, $depend_value_1, $depend_value_2, $property, $strict);
 
 // On supprime les aides dont le text est exactement le meme que ce quon vient de taper
 if ($hide_exact_match) {
