@@ -16,13 +16,6 @@ var ViewFullPatient = {
     // Select current row
     this.idCurrent = $(eLink).up(1).identify();
     $(this.idCurrent).addClassName("selected");
-  },
-  
-  main: function() {
-    PairEffect.initGroup("patientEffect", {
-      bStartAllVisible: true,
-      bStoreInCookie: true
-    } );
   }
 }
 
@@ -32,6 +25,25 @@ function popEtatSejour(sejour_id) {
   url.pop(1000, 550, 'Etat du Séjour');
 }
 
+window.checkedMerge = [];
+checkOnlyTwoSelected = function(checkbox) {
+  checkedMerge = checkedMerge.without(checkbox);
+    
+  if (checkbox.checked)
+    checkedMerge.push(checkbox);
+    
+  if (checkedMerge.length > 2)
+    checkedMerge.shift().checked = false;
+}
+
+function doMerge(oForm) {
+  var url = new Url();
+  url.setModuleAction("system", "object_merger");
+  url.addParam("objects_class", "CSejour");
+  url.addParam("objects_id", $V(oForm["objects_id[]"]).join("-"));
+  url.popup(800, 600, "merge_sejours");
+}
+
 {{if $isImedsInstalled}}
   Main.add(function(){
     ImedsResultsWatcher.loadResults();
@@ -39,6 +51,8 @@ function popEtatSejour(sejour_id) {
 {{/if}}
  
 </script>
+
+<form name="fusion" action="?" method="get" onsubmit="return false;">
 
 <table class="tbl" style="vertical-align: middle;">
 
@@ -64,20 +78,29 @@ function popEtatSejour(sejour_id) {
 
 {{if !$app->user_prefs.simpleCabinet}}
 <!-- Séjours -->
-<tr id="sejours-trigger">
+<tr>
   <th colspan="4">
+    {{if $can->admin}}
+    <button type="button" class="merge notext" title="{{tr}}Merge{{/tr}}" style="margin: -1px; float: left;" onclick="doMerge(this.form);">
+      {{tr}}Merge{{/tr}}
+    </button>
+    {{/if}}
   	{{tr}}CPatient-back-sejours{{/tr}}
 		<small>({{$patient->_ref_sejours|@count}})</small>
 	</th>
 </tr>
-<tbody class="patientEffect" style="display: none" id="sejours">
+<tbody id="sejours">
 {{foreach from=$patient->_ref_sejours item=_sejour}}
   {{if $_sejour->group_id == $g || $conf.dPpatients.CPatient.multi_group == "full"}}
     <tr id="CSejour-{{$_sejour->_id}}">
       <td class="narrow">
         <button class="lookup notext" onclick="popEtatSejour({{$_sejour->_id}});">{{tr}}Lookup{{/tr}}</button>
       </td>
-			<td>   
+			<td>
+        {{if $can->admin}}
+          <input type="checkbox" name="objects_id[]" value="{{$_sejour->_id}}" class="merge" style="float: left;"
+            {{if $conf.alternative_mode}}onclick="checkOnlyTwoSelected(this)"{{/if}} />
+        {{/if}}
         <a href="#" onclick="{{if $can_view_dossier_medical}}loadSejour('{{$_sejour->_id}}');{{else}}viewCompleteItem('{{$_sejour->_guid}}');{{/if}} ViewFullPatient.select(this)">
           <span onmouseover="ObjectTooltip.createEx(this, '{{$_sejour->_guid}}');">
             {{$_sejour->_shortview}} 
@@ -209,14 +232,14 @@ function popEtatSejour(sejour_id) {
 
 <!-- Consultations -->
 
-<tr id="consultations-trigger">
+<tr>
   <th colspan="4">
     {{tr}}CPatient-back-consultations{{/tr}}
     <small>({{$patient->_ref_consultations|@count}})</small>
   </th>
 </tr>
 
-<tbody class="patientEffect" style="display: none" id="consultations">
+<tbody id="consultations">
 
 {{foreach from=$patient->_ref_consultations item=_consult}}
   {{if $_consult->_ref_chir->_ref_function->group_id == $g || $conf.dPpatients.CPatient.multi_group == "full"}}
@@ -263,6 +286,8 @@ function popEtatSejour(sejour_id) {
 </tbody>
 
 </table>
+
+</form>
   
 <hr/>
   
@@ -270,11 +295,11 @@ function popEtatSejour(sejour_id) {
 
 <table class="tbl">
 
-<tr id="planifier-trigger">
+<tr>
   <th colspan="2" class="title">Planifier</th>
 </tr>
 
-<tbody class="patientEffect" style="display: none" id="planifier">
+<tbody id="planifier">
   <tr><th class="category" colspan="2">Evènements</th></tr>
   {{if $app->user_prefs.simpleCabinet}}
   <tr>

@@ -30,6 +30,18 @@
 	    url.redirect();
 	  }
 	}
+	
+	function doMerge(oForm) {
+	  var url = new Url();
+	  url.setModuleAction("system", "object_merger");
+	  url.addParam("objects_class", "CPatient");
+	  url.addParam("objects_id", $V(oForm["objects_id[]"]).join("-"));
+	  url.popup(800, 600, "merge_patients");
+	}
+	
+	onMergeComplete = function() {
+	  location.reload();
+	} 
   
   window.checkedMerge = [];
   checkOnlyTwoSelected = function(checkbox) {
@@ -167,17 +179,13 @@ reloadPatient = function(patient_id, link){
 </div>
 {{/if}}
 
-<form name="fusion" action="?" method="get">
-<input type="hidden" name="m" value="system" />
-<input type="hidden" name="a" value="object_merger" />
-<input type="hidden" name="readonly_class" value="1" />
-<input type="hidden" name="objects_class" value="CPatient" />
+<form name="fusion" action="?" method="get" onsubmit="return false;">
 
 <table class="tbl" id="list_patients">
   <tr>
     {{if ((!$conf.dPpatients.CPatient.merge_only_admin || $can->admin)) && $can->edit}}
     <th class="narrow">
-    	<button type="submit" class="merge notext" title="{{tr}}Merge{{/tr}}" style="margin: -1px;">
+    	<button type="button" class="merge notext" title="{{tr}}Merge{{/tr}}" style="margin: -1px;" onclick="doMerge(this.form);">
     		{{tr}}Merge{{/tr}}
     	</button>
     </th>

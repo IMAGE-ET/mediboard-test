@@ -64,8 +64,6 @@ function view_labo_sejour(sejour_id) {
 
 Main.add(function () {
   
-  ViewFullPatient.main();
-  
   {{if $consultation_id}}
   viewCompleteItem('CConsultation-{{$consultation_id}}');
   {{/if}}
