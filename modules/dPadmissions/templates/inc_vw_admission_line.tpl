@@ -78,6 +78,15 @@
   <a class="action" style="float: right" title="Modifier le séjour" href="?m=dPplanningOp&amp;tab=vw_edit_sejour&amp;sejour_id={{$_sejour->_id}}">
     <img src="images/icons/planning.png" />
   </a>
+  {{foreach from=$_sejour->_ref_operations item=curr_op}}
+  <a class="action" style="float: right" title="Imprimer la DHE de l'intervention" href="#1" onclick="printDHE('operation_id', {{$curr_op->_id}}); return false;">
+    <img src="images/icons/print.png" />
+  </a>
+  {{foreachelse}}
+  <a class="action" style="float: right" title="Imprimer la DHE du séjour" href="#1" onclick="printDHE('sejour_id', {{$_sejour->_id}}); return false;">
+    <img src="images/icons/print.png" />
+  </a>
+  {{/foreach}}
   {{/if}}
   
   {{if $patient->_ref_IPP}}
@@ -135,28 +144,22 @@
   {{/if}}
   {{/if}}
   {{mb_include module=dPplanningOp template=inc_vw_numdos num_dossier=$_sejour->_num_dossier}}
-  <a class="action" style="margin-right: 18px;" name="adm{{$_sejour->sejour_id}}" href="#1" onclick="printAdmission({{$_sejour->sejour_id}})">
-    <span class="CPatient-view" onmouseover="ObjectTooltip.createEx(this, '{{$patient->_guid}}');">
-      {{$patient}}
-    </span>
-  </a>
+  <span class="CPatient-view" onmouseover="ObjectTooltip.createEx(this, '{{$patient->_guid}}');">
+    {{$patient}}
+  </span>
 </td>
 
 <td class="text" style="background: {{$background}}; {{if !$_sejour->facturable}}background-image:url(images/icons/ray_vertical.gif); background-repeat:repeat;{{/if}}">
-  <a href="#1" onclick="printAdmission({{$_sejour->sejour_id}})">
-    {{mb_include module=mediusers template=inc_vw_mediuser mediuser=$_sejour->_ref_praticien}}
-  </a>
+  {{mb_include module=mediusers template=inc_vw_mediuser mediuser=$_sejour->_ref_praticien}}
 </td>
 
 <td style="background: {{$background}}; {{if !$_sejour->facturable}}background-image:url(images/icons/ray_vertical.gif); background-repeat:repeat;{{/if}}">
-  <a href="#1" onclick="printAdmission({{$_sejour->sejour_id}})">
-    <span onmouseover="ObjectTooltip.createEx(this, '{{$_sejour->_guid}}');">
+  <span onmouseover="ObjectTooltip.createEx(this, '{{$_sejour->_guid}}');">
     {{$_sejour->entree_prevue|date_format:$conf.time}} 
     <br />
 		{{$_sejour->type|upper|truncate:1:"":true}}
     {{$_sejour->_ref_operations|@count}} Int.
-    </span>
-  </a>
+  </span>
 </td>
 
 <td class="text" style="background: {{$background}}; {{if !$_sejour->facturable}}background-image:url(images/icons/ray_vertical.gif); background-repeat:repeat;{{/if}}">

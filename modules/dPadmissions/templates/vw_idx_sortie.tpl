@@ -32,6 +32,12 @@ function printPlanning() {
   url.popup(700, 550, "Sorties");
 }
 
+function printDHE(type, object_id) {
+  var url = new Url("dPplanningOp", "view_planning");
+  url.addParam(type, object_id);
+  url.popup(700, 550, "DHE");
+}
+
 function loadTransfert(oForm){
   sejour_id   = $V(oForm.sejour_id)
   mode_sortie = $V(oForm.mode_sortie);

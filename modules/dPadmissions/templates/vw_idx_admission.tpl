@@ -28,10 +28,10 @@ function printPlanning() {
   url.popup(700, 550, "Entrees");
 }
 
-function printAdmission(id) {
-  var url = new Url("dPadmissions", "print_admission");
-  url.addParam("id", id);
-  url.popup(700, 550, "Patient");
+function printDHE(type, object_id) {
+  var url = new Url("dPplanningOp", "view_planning");
+  url.addParam(type, object_id);
+  url.popup(700, 550, "DHE");
 }
 
 function printDepassement(id) {

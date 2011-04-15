@@ -63,6 +63,7 @@ foreach($listConsultations as $curr_consult) {
     $curr_sejour->loadRefPraticien();
     $curr_sejour->loadNumDossier();
     $curr_sejour->loadRefsAffectations();
+    $curr_sejour->loadRefsOperations();
     foreach($curr_sejour->_ref_affectations as $_aff) {
       $_aff->loadView();
     }

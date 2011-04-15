@@ -133,15 +133,19 @@ Calendar.regField(getForm("changeDateSorties").date, null, {noView: true});
     </td>
     
     <td class="text CPatient-view" colspan="2" style="background: {{$background}}; {{if !$_sejour->facturable}}background-image:url(images/icons/ray_vertical.gif); background-repeat:repeat;{{/if}}">
-      {{if $canPatients->edit}}
-      <a class="action" style="float: right"  title="Modifier le dossier administratif" href="?m=dPpatients&amp;tab=vw_edit_patients&amp;patient_id={{$_sejour->_ref_patient->patient_id}}">
-        <img src="images/icons/edit.png" title="{{tr}}Edit{{/tr}}" />
-     </a>
-     {{/if}}
-     {{if $canPlanningOp->read}}
-     <a class="action" style="float: right"  title="Modifier le séjour" href="?m=dPplanningOp&amp;tab=vw_edit_sejour&amp;sejour_id={{$_sejour->_id}}">
-       <img src="images/icons/planning.png" title="{{tr}}Edit{{/tr}}" />
-     </a>
+      {{if $canPlanningOp->read}}
+      <a class="action" style="float: right"  title="Modifier le séjour" href="?m=dPplanningOp&amp;tab=vw_edit_sejour&amp;sejour_id={{$_sejour->_id}}">
+        <img src="images/icons/planning.png" title="{{tr}}Edit{{/tr}}" />
+      </a>
+      {{foreach from=$_sejour->_ref_operations item=curr_op}}
+      <a class="action" style="float: right" title="Imprimer la DHE de l'intervention" href="#1" onclick="printDHE('operation_id', {{$curr_op->_id}}); return false;">
+        <img src="images/icons/print.png" />
+      </a>
+      {{foreachelse}}
+      <a class="action" style="float: right" title="Imprimer la DHE du séjour" href="#1" onclick="printDHE('sejour_id', {{$_sejour->_id}}); return false;">
+        <img src="images/icons/print.png" />
+      </a>
+      {{/foreach}}
       {{/if}}
       {{mb_include module=dPplanningOp template=inc_vw_numdos num_dossier=$_sejour->_num_dossier}}
       <span onmouseover="ObjectTooltip.createEx(this, '{{$_sejour->_ref_patient->_guid}}');">

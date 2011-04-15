@@ -21,10 +21,16 @@
 {{/if}}
 
 <td class="text">
-  {{if $canPatients->edit}}
-  <a class="action" style="float: right"  title="Modifier le dossier administratif" href="?m=dPpatients&amp;tab=vw_edit_patients&amp;patient_id={{$patient->patient_id}}">
-    <img src="images/icons/edit.png" title="{{tr}}Edit{{/tr}}" />
+  {{if $curr_adm->_id && !$curr_adm->annule && $curr_consult->_ref_consult_anesth->_ref_sejour->_id}}
+  {{foreach from=$curr_adm->_ref_operations item=curr_op}}
+  <a class="action" style="float: right" title="Imprimer la DHE de l'intervention" href="#1" onclick="printDHE('operation_id', {{$curr_op->_id}}); return false;">
+    <img src="images/icons/print.png" />
   </a>
+  {{foreachelse}}
+  <a class="action" style="float: right" title="Imprimer la DHE du séjour" href="#1" onclick="printDHE('sejour_id', {{$curr_adm->_id}}); return false;">
+    <img src="images/icons/print.png" />
+  </a>
+  {{/foreach}}
   {{/if}}
   <span onmouseover="ObjectTooltip.createEx(this, '{{$patient->_guid}}');">
     {{$patient->_view}}
@@ -171,6 +177,9 @@
 {{else}}
 <td colspan="4" class="button" style="background: {{$background}}; {{if !$curr_adm->facturable}}background-image:url(images/icons/ray_vertical.gif); background-repeat:repeat;{{/if}}">
   {{if $type_event == "COperation"}}
+  <a class="action" style="float: right" title="Imprimer la DHE de l'intervention" href="#1" onclick="printDHE('operation_id', {{$curr_consult->_next_sejour_and_operation.COperation->_id}}); return false;">
+    <img src="images/icons/print.png" />
+  </a>
   Intervention non associé à la consultation
   {{if $canAdmissions->edit}}
   <br />
@@ -186,6 +195,9 @@
   </form>
   {{/if}}
   {{else}}
+  <a class="action" style="float: right" title="Imprimer la DHE du séjour" href="#1" onclick="printDHE('sejour_id', {{$curr_adm->_id}}); return false;">
+    <img src="images/icons/print.png" />
+  </a>
   Séjour non associé à la consultation
   {{if $canAdmissions->edit}}
   <br />

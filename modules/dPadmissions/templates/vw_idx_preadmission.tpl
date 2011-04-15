@@ -15,6 +15,12 @@ function showLegend() {
   url.popup(300, 170, "Legende");
 }
 
+function printDHE(type, object_id) {
+  var url = new Url("dPplanningOp", "view_planning");
+  url.addParam(type, object_id);
+  url.popup(700, 550, "DHE");
+}
+
 function submitPreAdmission(oForm) {
   submitFormAjax(oForm, 'systemMsg', { onComplete : reloadPreAdmission });
 }
