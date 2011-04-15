@@ -41,7 +41,7 @@
 	
 	onMergeComplete = function() {
 	  location.reload();
-	} 
+	}
   
   window.checkedMerge = [];
   checkOnlyTwoSelected = function(checkbox) {

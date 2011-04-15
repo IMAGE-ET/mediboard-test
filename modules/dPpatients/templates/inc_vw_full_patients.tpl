@@ -44,6 +44,10 @@ function doMerge(oForm) {
   url.popup(800, 600, "merge_sejours");
 }
 
+onMergeComplete = function() {
+  location.reload();
+} 
+
 {{if $isImedsInstalled}}
   Main.add(function(){
     ImedsResultsWatcher.loadResults();
