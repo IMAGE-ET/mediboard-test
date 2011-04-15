@@ -86,6 +86,10 @@ class CUserLog extends CMbMetaObject {
     return $this->_old_values;
   }
   
+	/**
+	 * @param bool $cache [optional]
+	 * @return CUser
+	 */
   function loadRefUser($cache = true) {
     return $this->_ref_user = $this->loadFwdRef("user_id", $cache);
   }

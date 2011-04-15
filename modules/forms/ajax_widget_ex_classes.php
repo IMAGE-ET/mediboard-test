@@ -47,6 +47,9 @@ foreach($ex_classes as $_id => $_ex_class) {
   
   foreach($objects as $_object) {
     $_object->loadLogs();
+		foreach($_object->_ref_logs as $_log) {
+			$_log->loadRefUser()->loadRefMediuser()->loadRefFunction();
+		}
   }
   
   $ex_objects[$_ex_class->_id] = $objects;

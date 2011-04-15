@@ -166,12 +166,16 @@ class CUser extends CMbObject {
 		return $user->getCached(CValue::first($user_id, CAppUI::$instance->user_id));
   }
 	
+	/**
+	 * @return CMediusers
+	 */
   function loadRefMediuser() {
     $user = new CMediusers();
     if ($user->isInstalled()) {
 	    $user->load($this->_id);
 	    $this->_ref_mediuser = $user;
     }
+		return $user;
   }
   
   /**

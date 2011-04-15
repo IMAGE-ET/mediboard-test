@@ -71,11 +71,11 @@ Main.add(function(){
     white-space: normal;
   }
   
-  .field:hover .field-info,
+  .grid .field:hover .field-info,
   .field-list .field .field-info {
     display: block !important;
     position: absolute;
-    top: -1.4em;
+    top: -1.5em;
     color: #333;
     background: #ddd;
     padding: 0px 1em;
@@ -85,6 +85,11 @@ Main.add(function(){
     -webkit-border-top-right-radius: 4px;
     border-radius-topleft: 4px;
     border-radius-topright: 4px;
+  }
+  
+  .grid .field:hover .field-info {
+    color: #fff;
+    background: #999;
   }
   
   .field-list .field {
