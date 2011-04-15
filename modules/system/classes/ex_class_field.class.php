@@ -312,6 +312,8 @@ class CExClassField extends CExListItemsOwner {
     $ex_class = $this->loadRefExClass();
     
     $key = $ex_class->getExClassName().".$this->name";
+    $locales["{$key}."] = CAppUI::tr("Undefined");
+		
     foreach($items as $_item) {
       $locales["{$key}.$_item->_id"] = $_item->name;
     }

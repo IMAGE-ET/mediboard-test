@@ -37,6 +37,19 @@ if (window.opener && window.opener !== window && window.opener.ExObject) {
   }
 }
 
+confirmSavePrint = function(form){
+  confirm("Pour imprimer le formulaire, il est nécessaire de l'enregistrer, souhaitez-vous continuer ?") && 
+	         onSubmitFormAjax(form, {onComplete: function(){ 
+					   $("printIframe").src = "about:blank";
+					   $("printIframe").src = "?{{$smarty.server.QUERY_STRING|html_entity_decode}}&readonly=1&print=1";
+					} });
+	return false;
+}
+
+updateExObjectId = function(id) {
+  $V(getForm("editExObject").ex_object_id, id);
+}
+
 Main.add(function(){
   ExObjectFormula.init({{$formula_token_values|@json}});
 	ExObject.current = {object_guid: "{{$object_guid}}", event: "{{$event}}"};
@@ -50,6 +63,14 @@ Main.add(function(){
   {{mb_field object=$ex_object field=object_id hidden=true}}
   
   <input type="hidden" name="del" value="0" />
+  <input type="hidden" name="callback" value="updateExObjectId" />
+	
+	{{if !$print}}
+		<iframe id="printIframe" width="0" height="0" style="display: none;"></iframe>
+		<button type="button" class="print" onclick="confirmSavePrint(this.form)" style="float: right;">
+			{{tr}}Print{{/tr}}
+		</button>
+	{{/if}}
 	
 	<h2 style="font-weight: bold;">
 	  {{if in_array("IPatientRelated", class_implements($ex_object->object_class))}}
@@ -212,9 +233,19 @@ Main.add(function(){
 {{* ----   READONLY   ---- *}}
   
 <script type="text/javascript">
-  Main.add(function(){
+Main.add(function(){
+  {{if $print}}
+		if (document.execCommand) {
+		  window.focus();
+      document.execCommand('print', false, null);
+		}
+		else {
+		  window.print();
+		}
+	{{else}}
     document.title = "{{$ex_object->_ref_ex_class->name}} - {{$object}}".htmlDecode();
-  });
+  {{/if}}
+});
 </script>
 
 <table class="main print">

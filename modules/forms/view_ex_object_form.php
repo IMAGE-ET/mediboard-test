@@ -14,8 +14,10 @@ $ex_class_id  = CValue::get("ex_class_id");
 $ex_object_id = CValue::get("ex_object_id");
 $object_guid  = CValue::get("object_guid");
 $_element_id  = CValue::get("_element_id");
-$readonly     = CValue::get("readonly");
 $event        = CValue::get("event");
+
+$readonly     = CValue::get("readonly");
+$print        = CValue::get("print");
 
 if (!$ex_class_id) {
   $msg = "Impossible d'afficher le formulaire sans connaître la classe de base";
@@ -96,7 +98,9 @@ $smarty->assign("event",        $event);
 $smarty->assign("grid",         $grid);
 $smarty->assign("out_of_grid",  $out_of_grid);
 $smarty->assign("groups",       $groups);
-$smarty->assign("readonly",     $readonly);
 $smarty->assign("formula_token_values", $formula_token_values);
-$smarty->assign("forms_admin", $forms_admin);
+$smarty->assign("forms_admin",  $forms_admin);
+
+$smarty->assign("readonly",     $readonly);
+$smarty->assign("print",        $print);
 $smarty->display("view_ex_object_form.tpl");
