@@ -10,6 +10,11 @@
 
 CCanDo::checkAdmin();
 
+global $can;
+if (CAppUI::$user->_user_type =! 1) {
+  $can->redirect();
+}
+
 $patient_id = CValue::getOrSession("patient_id");
 
 // Patient à analyser
