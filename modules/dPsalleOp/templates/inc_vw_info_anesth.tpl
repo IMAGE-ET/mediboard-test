@@ -289,7 +289,7 @@ Main.add(function(){
 	    <td style="width: 50%">
 	      <!-- Affichage et gestion des gestes perop -->
 	      <form name="addAnesthPerop" action="?" method="post" 
-	            onsubmit="return onSubmitFormAjax(this, { onComplete: function(){ refreshAnesthPerops('{{$selOp->_id}}'); $V(this.libelle, ''); }.bind(this)  } )">
+	            onsubmit="return onSubmitFormAjax(this, { onComplete: function(){ refreshAnesthPerops('{{$selOp->_id}}'); $V(this.libelle, ''); $V(this.incident, ''); $V(this.__incident, '')}.bind(this)  } )">
 	
 	        <input type="hidden" name="m" value="dPsalleOp" />
 	        <input type="hidden" name="del" value="0" />
