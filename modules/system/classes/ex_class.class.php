@@ -165,9 +165,25 @@ class CExClass extends CMbObject {
   }
   
   function getTableName(){
-    $this->completeField("host_class", "event");
-    return strtolower("ex_object_{$this->_id}");
+    return "ex_object_{$this->_id}";
   }
+	
+	function check(){
+		if ($msg = parent::check()) {
+			return $msg;
+		}
+		
+		if ($this->fieldModified("host_class")) {
+			$groups = $this->loadRefsGroups();
+			foreach($groups as $_group) {
+				if ($_group->countBackRefs("host_fields")) {
+					$old_class = $this->_old->host_class;
+					return "Impossible de changer le type d'objet hôte de ce formulaire car il comporte
+					 des champs de <strong>".CAppUI::tr($old_class)."</strong> dans la grille de disposition";
+				}
+			}
+    }
+	}
   
   function checkConstraints(CMbObject $object){
     $constraints = $this->loadRefsConstraints();
@@ -394,6 +410,8 @@ class CExClass extends CMbObject {
         `ex_object_id` INT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
         `object_id` INT UNSIGNED NOT NULL,
         `object_class` VARCHAR(80) NOT NULL,
+        `reference_id` INT UNSIGNED NOT NULL,
+        `reference_class` VARCHAR(80) NOT NULL,
         INDEX ( `object_id` ),
         INDEX ( `object_class` )
       ) /*! ENGINE=MyISAM */;";
@@ -401,17 +419,6 @@ class CExClass extends CMbObject {
       $ds = $this->_spec->ds;
       if (!$ds->query($query)) {
         return "La table '$table_name' n'a pas pu être créée (".$ds->error().")";
-      }
-    }
-    
-    else if ($this->fieldModified("event")) {
-      $table_name_old = $this->_old->getTableName();
-      $table_name     = $this->getTableName();
-      $query = "ALTER TABLE `$table_name_old` RENAME `$table_name`";
-      
-      $ds = $this->_spec->ds;
-      if (!$ds->query($query)) {
-        return "La table '$table_name' n'a pas pu être renommée (".$ds->error().")";
       }
     }
     

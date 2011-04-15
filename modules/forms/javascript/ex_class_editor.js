@@ -125,7 +125,10 @@ ExClass = {
     
     // dest = GRID
     else {
+			var fromGrid = true;
+			
       if (!drag.up(".grid")) {
+				fromGrid = false;
         drag = drag.clone(true);
         ExClass.initDraggableHostField(drag);
         drag.setStyle({
@@ -135,7 +138,11 @@ ExClass = {
       }
       
       drop.update(drag);
-      oldParent.update("&nbsp;");
+			
+			if (fromGrid) {
+			  oldParent.update("&nbsp;");
+			}
+      
       var id = drag.identify();
       $V(form.elements.callback, "ExClass.setHostFieldId.curry("+id+")");
     }
@@ -233,12 +240,6 @@ ExClass = {
         }
       });
     });
-    
-    if (Prototype.Browser.IE) {
-      (function(){
-        getForm("form-grid-layout").select("input, select, textarea").invoke("disable");
-      }).defer();
-    }
     
     ExClass.layourEditorReady = true;
   }

@@ -447,6 +447,11 @@ ul.control_tabs_vertical.small li a {
 	font-weight: normal;
 }
 
+ul.control_tabs.small li button,
+ul.control_tabs_vertical.small li button {
+  margin: 0;
+}
+
 div.progressBar {
   font-size: 0.9em;
   background: #fff;

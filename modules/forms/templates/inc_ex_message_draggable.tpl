@@ -16,6 +16,6 @@
         </div>
       {{/if}}
     {{/if}}
-    <div class="overlay"></div>
+    <div class="overlay opacity-0"></div>
   </div>
 </div>
