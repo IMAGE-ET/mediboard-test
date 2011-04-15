@@ -21,7 +21,7 @@ $lines = array();
 
 if($prescription_id){
   $prescription = $sejour->_ref_prescription_sejour;
-	$prescription->calculAllPlanifSysteme();
+	$prescription->calculAllPlanifSysteme(true);
 
 	// Chargement des lignes de medicaments perop
 	$prescription_line_medicament = new CPrescriptionLineMedicament();

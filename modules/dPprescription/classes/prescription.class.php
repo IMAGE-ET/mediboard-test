@@ -1705,7 +1705,7 @@ class CPrescription extends CMbObject implements IPatientRelated {
   /*
    * Creation de toutes les planifications systeme pour un sejour si celles-ci ne sont pas deja créées
    */
-  function calculAllPlanifSysteme(){
+  function calculAllPlanifSysteme($perop = false){
   	if (!$this->_id) {
   		return;
   	}
@@ -1720,8 +1720,8 @@ class CPrescription extends CMbObject implements IPatientRelated {
   	$this->completeField("object_id");
 		$planif = new CPlanificationSysteme();
 		$planif->sejour_id = $this->object_id;
-    
-		if(!$this->object_id || ($this->type != "sejour") || $planif->countMatchingList()){
+		
+		if(!$this->object_id || ($this->type != "sejour") || ($planif->countMatchingList() && !$perop)){
 	   return;
     }
 
@@ -1738,6 +1738,7 @@ class CPrescription extends CMbObject implements IPatientRelated {
       $planif = new CPlanificationSysteme();
       $planif->object_id = $_line_med->_id;
       $planif->object_class = $_line_med->_class_name;
+
       if(!$planif->countMatchingList()){
         $_line_med->calculPlanifSysteme();
       }
