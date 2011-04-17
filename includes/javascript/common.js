@@ -196,12 +196,70 @@ var References = {
 };
 
 /** l10n functions */
-function $T() {
-  var args = $A(arguments),
-      key = args[0];
-  args[0] = (window.locales ? (window.locales[key] || key) : key);
-  return printf.apply(null, args);
+Localize = {
+  strings: [],
+
+  that: function() {
+	  var args = $A(arguments),
+	  string = args[0];
+	  args[0] = (window.locales ? (window.locales[string] || string) : string);
+	  if (window.locales && !window.locales[string]) {
+	    Localize.addString(string);
+	  }
+	  
+	  return printf.apply(null, args);
+  },
+  
+  populate: function(strings) {
+	if (strings.length) {
+	  strings.each(Localize.addString.bind(Localize));
+	}
+  },
+  
+  addString: function(string) {
+	if (this.strings.include(string)) {
+      return;
+	}
+
+    this.strings.push(string);
+
+	// Try and show unloc warning
+	var div = $('UnlocDiv');
+	if (div) {
+	  div.down('strong').update(this.strings.length);
+	  div.show();
+	}
+	
+	// Add a row in form
+    var name = 'tableau['+string+']';
+    var form = getForm('UnlocForm');
+    if (form) {
+      var tbody = form.down('tbody');
+      tbody.insert(
+        DOM.tr({}, 
+          DOM.th({}, string),
+          DOM.td({}, 
+            DOM.input({ size: '70', type: 'text', name: name, value: '' })
+          )
+        )
+      );
+    }
+  },
+  
+  showForm: function() {
+    var form = getForm('UnlocForm')
+    modal(form, { 
+      closeOnClick: form.down('button.cancel'),
+      height: "50px"
+    } );
+  },
+  
+  onSubmit: function(form) {
+    return onSubmitFormAjax(form, { onComplete: location.reload.bind(location) } );
+  }
 }
+
+var $T = Localize.that;
 
 function closeWindowByEscape(e) {
   if(Event.key(e) == Event.KEY_ESC){

@@ -899,16 +899,7 @@ else {
   window.launcher = window.opener;
 }
 
-
-window.modal = function(container, options) {
-  options = Object.extend({
-    className: 'modal',
-    closeOnClick: null,
-    overlayOpacity: 0.5
-  }, options);
-  
-  return Control.Modal.open(container, options);
-};
+window.modal = Modal.open;
 
 // Multiple mocals
 Object.extend(Control.Modal,{

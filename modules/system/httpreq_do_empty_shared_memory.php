@@ -23,33 +23,32 @@ foreach (glob("locales/*", GLOB_ONLYDIR) as $localeDir) {
   $sharedName = "locales-$localeName";
   
   if (!SHM::get($sharedName)) {
-    CAppUI::stepAjax("Table absente en mémoire pour langage '$localeName'", UI_MSG_OK);
+    CAppUI::stepAjax("Locales-shm-none", UI_MSG_OK, $localeName);
     continue;
   }
   
   if (!SHM::rem($sharedName)) {
-    CAppUI::stepAjax("Impossible de supprimer la table pour le langage '$localeName'", UI_MSG_ERROR);
+    CAppUI::stepAjax("Locales-shm-rem-ko", UI_MSG_ERROR, $localeName);
     continue;
   }
   
-  CAppUI::stepAjax("Table supprimée pour langage '$localeName'", UI_MSG_OK);
+  CAppUI::stepAjax("Locales-shm-rem-ok", UI_MSG_OK, $localeName);
 }
 
 // Remove class paths
 if (!SHM::get("class-paths")) {
-  CAppUI::stepAjax("Table des classes absente en mémoire", UI_MSG_WARNING);
+  CAppUI::stepAjax("Classes-shm-none", UI_MSG_WARNING);
 }
 else {
 	if (!SHM::rem("class-paths")) {
-	  CAppUI::stepAjax("Impossible de supprimer la table des classes", UI_MSG_ERROR);
+	  CAppUI::stepAjax("Classes-shm-rem-ko", UI_MSG_ERROR);
 	}
 	
-	CAppUI::stepAjax("Table des classes supprimée", UI_MSG_OK);
+	CAppUI::stepAjax("Classes-shm-rem-ok", UI_MSG_OK);
 }
   
-
 CJSLoader::writeLocaleFile();
-CAppUI::stepAjax("Fichiers de locales mis à jour", UI_MSG_OK);
+CAppUI::stepAjax("Locales-javascript-cache-allup", UI_MSG_OK);
 
 // Module specific removals
 foreach (glob("modules/*/empty_shared_memory.php") as $script) {

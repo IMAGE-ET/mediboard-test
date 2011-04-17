@@ -295,6 +295,7 @@ $performance["ccam"] = array (
   "useCount"   => class_exists('CCodeCCAM') ? CCodeCCAM::$useCount : 0
 );
 
+// Data sources performances
 foreach (CSQLDataSource::$dataSources as $dsn => $ds) {
   if (!$ds) continue;
   
@@ -304,6 +305,12 @@ foreach (CSQLDataSource::$dataSources as $dsn => $ds) {
     "time" => $chrono->total,
   );
 }
+
+// Unlocalized strings
+CAppUI::$unlocalized = array_map("utf8_encode", CAppUI::$unlocalized);
+
+$unloc = new CSmartyDP("modules/system");
+$unloc->display("inc_unlocalized_strings.tpl");
 
 // Inclusion du footer
 if (!$suppressHeaders) {

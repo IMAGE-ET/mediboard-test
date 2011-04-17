@@ -742,16 +742,20 @@ class CAppUI {
     }
     
     // Defined and not empty
-    if (isset($locales[$str]) && $locales[$str] !== "") {
-      $str = $locales[$str];
-    }
-		// Other wise keep it in a stack...
-    else {
-    	self::$unlocalized[$str] = true;
-			// ... and decorate
-	    if (self::$locale_mask) {
-        $str = sprintf(self::$locale_mask, $str);
-			}
+    if (count($locales)) {
+	    if (isset($locales[$str]) && $locales[$str] !== "") {
+	      $str = $locales[$str];
+	    }
+	    // Other wise keep it in a stack...
+	    else {
+	      if (!in_array($str, self::$unlocalized)) {
+	        self::$unlocalized[] = $str;
+	      }
+	      // ... and decorate
+	      if (self::$locale_mask) {
+	        $str = sprintf(self::$locale_mask, $str);
+	      }
+	    }
     }
 				
     if ($args) {
