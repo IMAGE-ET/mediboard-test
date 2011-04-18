@@ -283,7 +283,7 @@ function changeUser(user_id) {
         </td>
         
         <td class="text">
-          {{if !array_key_exists('CRefSpec', $dependValues.depend_value_1)}}
+          {{if array_key_exists('depend_value_1', $dependValues) && !array_key_exists('CRefSpec', $dependValues.depend_value_1) && $_aide->depend_value_1}}
             {{assign var=key_dp value=$_aide->depend_value_1}}
             {{if array_key_exists($key_dp, $dependValues.depend_value_1)}}
               {{$dependValues.depend_value_1.$key_dp}}
@@ -293,7 +293,7 @@ function changeUser(user_id) {
           {{/if}}
         </td>
         <td class="text">
-          {{if !array_key_exists('CRefSpec', $dependValues.depend_value_2) && $_aide->depend_value_2}}
+          {{if array_key_exists('depend_value_2', $dependValues) && !array_key_exists('CRefSpec', $dependValues.depend_value_2) && $_aide->depend_value_2}}
             {{assign var=key_dp value=$_aide->depend_value_2}}
             {{if array_key_exists($key_dp, $dependValues.depend_value_2)}}
               {{$dependValues.depend_value_2.$key_dp}}
