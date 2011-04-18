@@ -90,7 +90,7 @@ Main.add(function () {
         </tr>
         <tr>
           <td>
-            <button class="cancel" onclick="Templates.empty()">
+            <button class="cancel singleclick" onclick="Templates.empty()">
               Vider les caches template Smarty
             </button>
           </td>
@@ -98,7 +98,7 @@ Main.add(function () {
         </tr>
         <tr>
           <td>
-            <button class="cancel" onclick="SharedMemory.empty(); ">
+            <button class="cancel singleclick" onclick="SharedMemory.empty(); ">
               Vider les variables de la mémoire partagée
             </button>
           </td>

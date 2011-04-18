@@ -307,10 +307,11 @@ foreach (CSQLDataSource::$dataSources as $dsn => $ds) {
 }
 
 // Unlocalized strings
-CAppUI::$unlocalized = array_map("utf8_encode", CAppUI::$unlocalized);
-
-$unloc = new CSmartyDP("modules/system");
-$unloc->display("inc_unlocalized_strings.tpl");
+if (!$suppressHeaders || $ajax) {
+  CAppUI::$unlocalized = array_map("utf8_encode", CAppUI::$unlocalized);
+	$unloc = new CSmartyDP("modules/system");
+	$unloc->display("inc_unlocalized_strings.tpl");
+}
 
 // Inclusion du footer
 if (!$suppressHeaders) {
