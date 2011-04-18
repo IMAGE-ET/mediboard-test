@@ -1708,10 +1708,10 @@ class CPrescription extends CMbObject implements IPatientRelated {
    * Creation de toutes les planifications systeme pour un sejour si celles-ci ne sont pas deja créées
    */
   function calculAllPlanifSysteme($perop = false){
-  	if (!$this->_id) {
+		if (!$this->_id) {
   		return;
   	}
-		
+	
   	$this->completeField("planif_removed");
 		
   	// Si les planifications ont ete supprimées de la prescriptions, on force le calcul en les supprimant toutes
@@ -1722,12 +1722,30 @@ class CPrescription extends CMbObject implements IPatientRelated {
   	$this->completeField("object_id", "type");
 		
 		$planif = new CPlanificationSysteme();
-		$planif->sejour_id = $this->object_id;
+		$where = array();
+		$where["sejour_id"] = " = '$this->object_id'";
 		
-		if(!$this->object_id || ($this->type != "sejour") || ($planif->countMatchingList() && !$perop)){
+		$ljoin = array();
+		$ljoin["prescription_line_medicament"] = "prescription_line_medicament.prescription_line_medicament_id = planification_systeme.object_id AND 
+		                                          planification_systeme.object_class = 'CPrescriptionLineMedicament'";
+																							
+    $ljoin["prescription_line_element"] = "prescription_line_element.prescription_line_element_id = planification_systeme.object_id AND 
+                                              planification_systeme.object_class = 'CPrescriptionLineElement'";																							
+		
+    $ljoin["prescription_line_mix_item"] = "prescription_line_mix_item.prescription_line_mix_item_id = planification_systeme.object_id AND 
+                                              planification_systeme.object_class = 'CPrescriptionLineMixItem'";		
+		
+		
+		$ljoin["prescription_line_mix"] = "prescription_line_mix_item.prescription_line_mix_id = prescription_line_mix.prescription_line_mix_id";   
+		
+		$where[] = "prescription_line_medicament.perop = '0' OR  prescription_line_medicament.perop IS NULL";
+		$where[] = "prescription_line_element.perop = '0' OR  prescription_line_element.perop IS NULL";
+    $where[] = "prescription_line_mix.perop = '0' OR  prescription_line_mix.perop IS NULL";
+    
+		if(!$this->object_id || ($this->type != "sejour") || ($planif->countList($where, null, null, null, $ljoin) && !$perop)){
 	   return;
     }
-
+		
     // Chargement de toutes les lignes
     $this->loadRefsLinesMedByCat("1","1");
     $this->loadRefsLinesElementByCat("1");
@@ -1765,17 +1783,7 @@ class CPrescription extends CMbObject implements IPatientRelated {
 		
 		// Parcours des prescription_line_mixes
 		foreach($this->_ref_prescription_line_mixes as $_prescription_line_mix){
-			$_prescription_line_mix->loadRefsLines();
-			$lines_mix_id = array_keys($_prescription_line_mix->_ref_lines);
-			
-			$planif = new CPlanificationSysteme();
-			$where = array();
-			$where["object_id"] = CSQLDataSource::prepareIn($lines_mix_id);
-			$where["object_class"] = " = 'CPrescriptionLineMixItem'";
-     
-      if(!$planif->countList($where)){
-        $_prescription_line_mix->calculPlanifsPerf();
-      }
+      $_prescription_line_mix->calculPlanifsPerf(true);
 		}
 		
 		// On vide planif_removed

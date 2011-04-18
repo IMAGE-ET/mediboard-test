@@ -581,7 +581,7 @@ class CPrescriptionLineMix extends CMbObject {
     }
   }
 	
-	function calculPlanifsPerf(){
+	function calculPlanifsPerf($check_planif = false){
 		// Calcul de la quantite totale de la perf en fonction des produits
     $this->calculQuantiteTotal();
 		
@@ -677,6 +677,16 @@ class CPrescriptionLineMix extends CMbObject {
 		
     // Creation des planifications
 		foreach($this->_ref_lines as $_perf_line){
+			if($check_planif){
+				$planif = new CPlanificationSysteme();
+		    $where = array();
+		    $where["object_id"] = " = '$_perf_line->_id'";
+		    $where["object_class"] = " = 'CPrescriptionLineMixItem'";
+        if($planif->countList($where)){
+          continue;
+        }
+			}
+   
       foreach($dates_planif as $_datetime){
         if ($prescription->type == "sejour" &&
             ($sejour->_entree > $_datetime || $sejour->_sortie < $_datetime)) {
