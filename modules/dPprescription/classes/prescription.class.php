@@ -1719,7 +1719,8 @@ class CPrescription extends CMbObject implements IPatientRelated {
   		$this->removeAllPlanifSysteme();
 		}
 		
-  	$this->completeField("object_id");
+  	$this->completeField("object_id", "type");
+		
 		$planif = new CPlanificationSysteme();
 		$planif->sejour_id = $this->object_id;
 		
@@ -1764,7 +1765,17 @@ class CPrescription extends CMbObject implements IPatientRelated {
 		
 		// Parcours des prescription_line_mixes
 		foreach($this->_ref_prescription_line_mixes as $_prescription_line_mix){
-			$_prescription_line_mix->calculPlanifsPerf();
+			$_prescription_line_mix->loadRefsLines();
+			$lines_mix_id = array_keys($_prescription_line_mix->_ref_lines);
+			
+			$planif = new CPlanificationSysteme();
+			$where = array();
+			$where["object_id"] = CSQLDataSource::prepareIn($lines_mix_id);
+			$where["object_class"] = " = 'CPrescriptionLineMixItem'";
+     
+      if(!$planif->countList($where)){
+        $_prescription_line_mix->calculPlanifsPerf();
+      }
 		}
 		
 		// On vide planif_removed
