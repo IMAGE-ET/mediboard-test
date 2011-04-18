@@ -6,8 +6,13 @@
 <div class="big-warning" id="UnlocDiv" style="display: none; position: fixed; top: 10px; left: 10px;">
   {{tr}}system-msg-unlocalized_warning{{/tr}} : 
   <div style="text-align: center; font-size: 200%;"><strong>-</strong> !<br />
+
   <button class="change" type="button" onclick="Localize.showForm();">
     {{tr}}system-button-unlocalized_fix{{/tr}}
+  </button>
+
+  <button class="cancel notext opacity-10" type="button" onclick="if (confirm($T('UnlocDiv-AYRRS'))) if (confirm($T('UnlocDiv-RRRS'))) $('UnlocDiv').hide(); ">
+    {{tr}}Close{{/tr}}
   </button>
   </div>
 </div>
