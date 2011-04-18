@@ -742,7 +742,7 @@ class CAppUI {
     }
     
     // Defined and not empty
-    if (count($locales)) {
+    if (isset($locales)) {
 	    if (isset($locales[$str]) && $locales[$str] !== "") {
 	      $str = $locales[$str];
 	    }
