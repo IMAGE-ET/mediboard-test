@@ -86,6 +86,7 @@ class CLit extends CMbObject {
   function loadRefChambre() {
     $this->_ref_chambre =  $this->loadFwdRef("chambre_id", true);	
     $this->_view = "{$this->_ref_chambre->nom} - $this->nom";
+    return $this->_ref_chambre;
   }
 
   function loadRefsFwd() {
