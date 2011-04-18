@@ -142,7 +142,7 @@ class CLDAP {
   static function mapTo(CUser $user, $values) {
     $user->user_username   = self::getValue($values, "samaccountname");
     $user->user_first_name = self::getValue($values, "givenname");
-    $user->user_last_name  = self::getValue($values, "sn");
+    $user->user_last_name  = self::getValue($values, "sn") ? self::getValue($values, "sn") : self::getValue($values, "samaccountname");
     $user->user_phone      = self::getValue($values, "telephonenumber");
     $user->user_email      = self::getValue($values, "mail");
     $whencreated = null;
