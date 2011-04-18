@@ -13,12 +13,13 @@ class CConstanteItem extends CMbObject {
   var $constante_item_id = null;
   
   // DB Fields
-  var $category_prescription_id = null;
+  var $element_prescription_id = null;
   var $field_constante = null;
   var $commentaire = null;
   
-  // Form Fields
-  var $_ref_category_prescription = null;
+  // Ref Fields
+  var $_ref_element_prescription = null;
+  
   function getSpec() {
     $spec = parent::getSpec();
     $spec->table = 'constante_item';
@@ -28,14 +29,14 @@ class CConstanteItem extends CMbObject {
   
   function getProps() {
     $specs = parent::getProps();
-    $specs["category_prescription_id"] = "ref notNull class|CCategoryPrescription";
+    $specs["element_prescription_id"] = "ref notNull class|CElementPrescription";
     $specs["field_constante"] = "enum list|".implode("|", array_keys(CConstantesMedicales::$list_constantes)) . " seekable";
     $specs["commentaire"] = "str";
     return $specs;
   }
 
-  function loadRefCategoryPrescription() {
-    $category_prescription = new CCategoryPrescription;
-    return $this->_ref_category_prescription = $category_prescription->load($this->category_prescription_id);
+  function loadRefElementPrescription() {
+    $element_prescription = new CElementPrescription;
+    return $this->_ref_element_prescription = $element_prescription->load($this->element_prescription_id);
   }
 }

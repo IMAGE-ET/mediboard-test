@@ -20,7 +20,6 @@ $countElements = array();
 foreach ($_categories as $categorie) {
   $categorie->loadRefGroup();
   $categorie->countElementsPrescription();
-  $categorie->countConstantesItems();
   $categories[$categorie->chapitre]["$categorie->_id"] = $categorie;
   if(!isset($countElements[$categorie->chapitre])){
     $countElements[$categorie->chapitre] = 0;

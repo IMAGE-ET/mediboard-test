@@ -10,6 +10,7 @@
 
 {{assign var=line value=$curr_line}}
 {{mb_default var=advanced_prot value=0}}
+{{mb_default var=checked_lines value=0}}
 
 <table class="tbl {{if $line->traitement_personnel}}traitement{{else}}med{{/if}}
                   {{if $line->_fin_reelle && $line->_fin_reelle < $now && !$line->_protocole}} line_stopped{{/if}}" id="line_medicament_{{$line->_id}}">
@@ -32,9 +33,9 @@
           </button>
         {{/if}}
 		  {{else}}
-        <input type="checkbox" checked="checked" name="_view_{{$_line->_guid}}"
+        <input type="checkbox" {{if $checked_lines}}checked="checked"{{/if}} name="_view_{{$_line->_guid}}"
             onchange="$V(this.next(), this.checked ? 1 : 0)" />
-        <input type="hidden" value="1" name="lines[{{$_line->_guid}}]" />
+        <input type="hidden" value="{{$checked_lines}}" name="lines[{{$_line->_guid}}]" />
       {{/if}}
     </td>
     

@@ -59,8 +59,9 @@
 		      <th>Libelle</th>
 		      <th>Description</th>
 		      {{if @$modules.ssr->mod_active}}
-		      <th>CdARR</th>
-		      {{/if}}
+		        <th>CdARR</th>
+          {{/if}}
+          <th class="narrow">{{tr}}CConstanteItem.all{{/tr}}</th>
 		      <th></th>
 		    </tr>
 				{{foreach from=$category->_ref_elements_prescription item=_element}}
@@ -76,21 +77,22 @@
 		      <td class="text">
 		        {{$_element->description}}
 		      </td>
-		      {{if  @$modules.ssr->mod_active}}
-		      <td style="text-align: right">
-		      	{{if $_element->_count.cdarrs}} 
-						{{$_element->_count.cdarrs}}
-({{foreach from=$_element->_count_cdarr_by_type key=_type_cdarr item=_count_elt name=counts_cdarr}}
-{{$_count_elt}} {{$_type_cdarr}}{{if !$smarty.foreach.counts_cdarr.last}},{{/if}}
-{{/foreach}})
-		      	{{/if}}
-		      </td>
+		      {{if 'ssr'|module_active}}
+  		      <td style="text-align: right">
+  		      	{{if $_element->_count.cdarrs}} 
+    						{{$_element->_count.cdarrs}}
+                ({{foreach from=$_element->_count_cdarr_by_type key=_type_cdarr item=_count_elt name=counts_cdarr}}
+                  {{$_count_elt}} {{$_type_cdarr}}{{if !$smarty.foreach.counts_cdarr.last}},{{/if}}
+                {{/foreach}})
+  		      	{{/if}}
+  		      </td>
 		      {{/if}}
+          <td style="text-align: right;">{{$_element->_count_constantes_items}}</td>
 		      <td style="width: 1em; {{if $_element->color}}background-color: #{{$_element->color}}{{/if}}">
 		    </tr>
 		    {{foreachelse}}
 		     <tr>
-		      <td colspan="4">
+		      <td colspan="{{if 'ssr'|module_active}}5{{else}}4{{/if}}">
 		        Aucun element dans cette catégorie
 		      </td>
 		     </tr>

@@ -132,11 +132,13 @@ $transmission->user_id = $user_id;
 
 // Constantes médicales
 if ($line instanceof CPrescriptionLineElement) {
-  $category = $line->_ref_element_prescription->_ref_category_prescription;
-  $category->loadConstantesItems();
-  foreach($category->_ref_constantes_items as $_constante_item) {
+  $element = $line->_ref_element_prescription;
+  $element->loadBackRefs("constantes_items");
+  
+  foreach($element->_back["constantes_items"] as $_constante_item) {
     $selection[] = $_constante_item->field_constante;
   }
+  
   $selection = array_flip($selection);
   $selection = array_intersect_key(CConstantesMedicales::$list_constantes, $selection);
   $constantes->patient_id = $sejour->_ref_patient->_id;

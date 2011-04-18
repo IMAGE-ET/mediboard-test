@@ -9,6 +9,7 @@
 *}}
 
 {{mb_default var=advanced_prot value=0}}
+{{mb_default var=checked_lines value=0}}
 {{assign var=line value=$_line_element}}
 
 <!-- Header de la ligne d'element -->
@@ -30,9 +31,9 @@
         </button>
       {{/if}}
     {{else}}
-      <input type="checkbox" checked="checked" name="_view_{{$_line->_guid}}"
+      <input type="checkbox" {{if $checked_lines}}checked="checked"{{/if}} name="_view_{{$_line->_guid}}"
         onchange="$V(this.next(), this.checked ? 1 : 0)"/>
-      <input type="hidden" value="1" name="lines[{{$_line->_guid}}]" />
+      <input type="hidden" value="{{$checked_lines}}" name="lines[{{$_line->_guid}}]" />
     {{/if}}
 	</td>	
 	

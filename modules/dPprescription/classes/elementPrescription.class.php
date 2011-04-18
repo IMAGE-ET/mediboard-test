@@ -28,6 +28,10 @@ class CElementPrescription extends CMbObject {
   var $_color                     = null;
 	var $_ref_cdarrs_by_type        = null;
 	var $_ref_cdarrs                = null;
+
+	// Back Refs fields
+	var $_ref_constantes_items      = null;
+	var $_count_constantes_items    = null;
 	
   function getSpec() {
     $spec = parent::getSpec();
@@ -50,6 +54,7 @@ class CElementPrescription extends CMbObject {
     $backProps = parent::getBackProps();
     $backProps["prescription_lines"] = "CPrescriptionLineElement element_prescription_id";
 		$backProps["cdarrs"] = "CElementPrescriptionToCdarr element_prescription_id";
+		$backProps["constantes_items"] = "CConstanteItem element_prescription_id";
     return $backProps;
   }
   
@@ -91,8 +96,12 @@ class CElementPrescription extends CMbObject {
   	$this->_ref_category_prescription = $category->getCached($this->category_prescription_id);	
   }
 	
-	function loadRefsCdarrs(){
+	function loadRefsCdarrs() {
 		$this->_ref_cdarrs = $this->loadBackRefs("cdarrs");
+	}
+	
+	function countRefsConstantesItems() {
+	  return $this->_count_constantes_items = $this->countBackRefs("constantes_items");
 	}
 }
 

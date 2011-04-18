@@ -1,11 +1,11 @@
-{{if $category_prescription->_id}}
+{{if $element_prescription->_id}}
   <hr />
-  <a href="#1" onclick="onSelectConstanteItem('', '{{$category_prescription->_id}}')" class="button new">
+  <a href="#1" onclick="onSelectConstanteItem('', '{{$element_prescription->_id}}')" class="button new">
     {{tr}}CConstanteItem.create{{/tr}}
   </a>
   <table class="tbl">
     <tr>
-      <th colspan="2" class="title">{{tr}}CConstanteItem.all{{/tr}} ({{$category_prescription->_view}})</th>
+      <th colspan="2" class="title">{{tr}}CConstanteItem.all{{/tr}} ({{$element_prescription->_view}})</th>
     </tr>
   </table>
   
@@ -18,7 +18,7 @@
       {{foreach from=$constantes_items item=_constante_item}}
         <tr {{if $constante_item_id == $_constante_item->_id}}class="selected"{{/if}}>
           <td>
-             <a href="#1" onclick="onSelectConstanteItem('{{$_constante_item->_id}}','{{$category_prescription->_id}}', this.up('tr'))">
+             <a href="#1" onclick="onSelectConstanteItem('{{$_constante_item->_id}}','{{$element_prescription->_id}}', this.up('tr'))">
               {{mb_value object=$_constante_item field=field_constante}}
              </a>
           </td>

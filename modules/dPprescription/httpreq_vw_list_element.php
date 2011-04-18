@@ -29,6 +29,7 @@ if($category_prescription_id){
   foreach ($category->_ref_elements_prescription as $_element) {
 	  $_element->_count_cdarr_by_type = array();
 		$_element->loadBackRefs("cdarrs");
+		$_element->countRefsConstantesItems();
 		$_element->_count["cdarrs"] = count($_element->_back["cdarrs"]);
 		
 		if(is_array($_element->_back["cdarrs"])){

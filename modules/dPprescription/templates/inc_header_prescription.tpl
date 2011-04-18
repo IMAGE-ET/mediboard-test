@@ -318,6 +318,16 @@ Main.add( function(){
          {{/if}}
        </td>
      </tr>
+     <tr>
+       <th>{{mb_label object=$prescription field="checked_lines"}}</th>
+       <td>
+         {{if $can_edit_protocole}}
+           {{mb_field object=$prescription field="checked_lines" onchange="onSubmitFormAjax(this.form);"}}
+         {{else}}
+           {{mb_value object=$prescription field="checked_lines"}}
+         {{/if}}
+       </td>
+     </tr>
   </table>
 </form>
 <table class="form">

@@ -1942,7 +1942,19 @@ class CSetupdPprescription extends CSetup {
               ADD INDEX (`category_prescription_id`);";
     $this->addQuery($query);
     
-    $this->mod_version = "1.40";
+    $this->makeRevision("1.40");
+    $query = "ALTER TABLE `constante_item`
+              DROP `category_prescription_id`,
+              ADD `element_prescription_id` INT (11) UNSIGNED NOT NULL AFTER `constante_item_id`";
+    $this->addQuery($query);
+    
+    $query = "ALTER TABLE `prescription` 
+              ADD `checked_lines` ENUM ('0','1') DEFAULT '0' AFTER `advanced_protocole`;";
+    $this->addQuery($query);
+    
+    $this->mod_version = "1.41";
+    
+    
   }
 }
 
