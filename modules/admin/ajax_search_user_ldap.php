@@ -28,7 +28,7 @@ try {
 $filter="(|(givenname=$mediuser->_user_first_name*)
           (sn=$mediuser->_user_last_name*)
           (samaccountname=$mediuser->_user_username*))";
-
+$filter = utf8_encode($filter);
 try {
   $results = $source_ldap->ldap_search($source_ldap->_ldapconn, $filter);
 } catch(Exception $e) {

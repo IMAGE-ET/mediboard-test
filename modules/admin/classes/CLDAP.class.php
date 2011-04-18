@@ -51,6 +51,7 @@ class CLDAP {
     if (!$person) {
       $person = $user->user_username;
     }
+    $person = utf8_encode($person);
     if (!$filter) {
       $filter="(samaccountname=$person)";
     }
@@ -133,9 +134,12 @@ class CLDAP {
     return $user;
   }
   
-  static function getValue($values = array(), $name, $single = true) {
+  static function getValue($values = array(), $name, $single = true, $utf8_decode = true) {
     if (array_key_exists($name, $values)) {
-      return $single ? $values[$name][0] : $values[$name];
+      
+      return $single ? 
+              ($utf8_decode ? utf8_decode($values[$name][0]) : $values[$name][0]) : 
+              ($utf8_decode ? utf8_decode($values[$name]) : $values[$name]);
     }
   }
   
@@ -176,7 +180,7 @@ class CLDAP {
   
   static function getObjectGUID($values) {
     // Passage en hexadécimal de l'objectguid
-    $objectguid = unpack('H*', self::getValue($values, "objectguid"));
+    $objectguid = unpack('H*', self::getValue($values, "objectguid", true, false));
     
     return $objectguid[1];
   }

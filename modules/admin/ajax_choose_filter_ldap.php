@@ -38,7 +38,7 @@ if ($user_username || $user_first_name || $user_last_name) {
     $choose_filter .= "(sn=$user_last_name*)";
   }
   $filter="(|$choose_filter)";
-  
+  $filter = utf8_encode($filter);
   try {
     $results = $source_ldap->ldap_search($source_ldap->_ldapconn, $filter);
   } catch(Exception $e) {
