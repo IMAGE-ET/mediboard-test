@@ -1,4 +1,5 @@
 {{if $element_prescription_id}}
+  <hr />
   <form name="editConstanteItem" method="post" action="?" onsubmit="return onSubmitFormAjax(this)">
     <input type="hidden" name="m" value="dPprescription" />
     <input type="hidden" name="dosql" value="do_constante_item_aed" />
@@ -6,6 +7,7 @@
     <input type="hidden" name="del" value="0" />
     {{mb_key object=$constante_item}}
     {{mb_field object=$constante_item field=element_prescription_id hidden=true}}
+    
     <table class="form">
       <tr>
          {{if $constante_item->_id}}

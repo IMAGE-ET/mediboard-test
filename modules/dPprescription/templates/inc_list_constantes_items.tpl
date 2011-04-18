@@ -5,7 +5,7 @@
   </a>
   <table class="tbl">
     <tr>
-      <th colspan="2" class="title">{{tr}}CConstanteItem.all{{/tr}} ({{$element_prescription->_view}})</th>
+      <th colspan="2" class="title text">{{tr}}CConstanteItem.all{{/tr}} ({{$element_prescription->_view}})</th>
     </tr>
   </table>
   

@@ -15,7 +15,7 @@
 	</a>
 	<table class="tbl">
 		<tr>
-      <th colspan="2" class="title">Codes CdARR de '{{$element_prescription->_view}}'</th>
+      <th colspan="2" class="text title">Codes CdARR de '{{$element_prescription->_view}}'</th>
     </tr>
   </table>
 	
