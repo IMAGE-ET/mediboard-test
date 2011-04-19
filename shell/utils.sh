@@ -20,13 +20,13 @@ check_errs()
 
   if [ "${RETURNCODE}" -ne "0" ]
   then
-    echo "ERROR # ${RETURNCODE} : ${FAILURETEXT}"
+    echo ">> status: ERROR # ${RETURNCODE} : ${FAILURETEXT}"
     # as a bonus, make our script exit with the right error code.
     echo "...Exiting..."
     exit ${RETURNCODE}
   fi
 
-  echo ${SUCCESSTEXT}
+  echo ">> status: ${SUCCESSTEXT}"
 }
 
 announce_script()
