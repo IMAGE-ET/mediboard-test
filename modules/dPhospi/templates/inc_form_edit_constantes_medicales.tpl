@@ -1,5 +1,6 @@
 {{mb_default var=hide_save_button value=0}}
 {{mb_default var=callback_administration value=0}}
+{{mb_default var=display_graph value=1}}
 
 <script type="text/javascript">
 calculImcVst = function(form) {
@@ -87,7 +88,7 @@ Main.add(function () {
     <tr>
       <th class="category">Constantes</th>
       {{if $real_context}}<th class="category">Nouvelles</th>{{/if}}
-      <th class="category" colspan="2">Dernières</th>
+      <th class="category" colspan="{{if $display_graph}}2{{else}}1{{/if}}">Dernières</th>
       <th class="category"></th>
     </tr>
     
@@ -143,11 +144,13 @@ Main.add(function () {
             <input type="hidden" name="_last_{{$_constante}}" value="{{$const->$_constante}}" />
           </td>
         {{/if}}
-        <td class="narrow">
-				  {{if $_constante.0 != "_"}}
-            <input type="checkbox" name="checkbox-constantes-medicales-{{$_constante}}" onchange="$('constantes-medicales-{{$_constante}}').setVisible(this.checked)" tabIndex="100" />
-          {{/if}}
-				</td>
+        {{if $display_graph}}
+          <td class="narrow">
+  				  {{if $_constante.0 != "_"}}
+              <input type="checkbox" name="checkbox-constantes-medicales-{{$_constante}}" onchange="$('constantes-medicales-{{$_constante}}').setVisible(this.checked)" tabIndex="100" />
+            {{/if}}
+  				</td>
+        {{/if}}
 				<td>
 				  {{if $_readonly !="readonly" && $real_context == 1 && $constantes->$_constante != ""}}
 				    {{if array_key_exists("formfields", $_params)}}

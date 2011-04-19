@@ -111,7 +111,12 @@ updateQuantite = function(ratio_UI, oField){
 
 chooseSubmit = function() {
   {{if $line->_class_name == "CPrescriptionLineElement" && $selection|@count}}
-    submitConstantes();
+    if (getForm("edit-constantes-medicales").select("input[type='text']").all(function(elt){ return elt.value == ''})) {
+      submitAdmission();
+    }
+    else {
+      submitConstantes();
+    }
   {{else}}
     submitAdmission();
   {{/if}}
@@ -272,6 +277,7 @@ chooseSubmit = function() {
     {{assign var=readonly value=0}}
     {{assign var=hide_save_button value=1}}
     {{assign var=callback_administration value=1}}
+    {{assign var=display_graph value=0}}
     {{mb_include module=dPhospi template=inc_form_edit_constantes_medicales}}
   {{/if}}
   
