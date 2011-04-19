@@ -13,6 +13,11 @@
 // refresh du nombre d'elements d'incriptions dans le volet	
 Main.add( function(){
   Prescription.refreshTabHeader('div_inscription','{{$prescription->_counts_by_chapitre.inscription}}','{{$prescription->_counts_by_chapitre_non_signee.inscription}}');
+	
+	var oForm = getForm("addLine");
+	oForm.prescription_line_medicament_id.value = "";
+	oForm.del.value = "0";
+
 });	
 	
 </script>

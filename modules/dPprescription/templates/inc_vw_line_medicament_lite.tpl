@@ -25,9 +25,15 @@
       {{if !$advanced_prot}}
         <!-- Suppression de la ligne -->
         {{if $line->_can_delete_line}}
+				  {{if $line->inscription}}
+            {{assign var=chapitre value="inscription"}}
+          {{else}}
+            {{assign var=chapitre value="medicament"}}
+          {{/if}}
+							
           <button type="button" class="trash notext" onclick="
             if (Prescription.confirmDelLine('{{$line->_view|smarty:nodefaults|JSAttribute}}')) {
-              Prescription.delLine({{$line->_id}})
+              Prescription.delLine('{{$line->_id}}', '{{$chapitre}}')
              }" style="">
             {{tr}}Delete{{/tr}}
           </button>

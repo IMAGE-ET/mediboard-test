@@ -125,14 +125,15 @@ Prescription = {
     oForm.del.value = 1;
     submitFormAjax(oForm, 'systemMsg');
   },
-  delLine: function(line_id) {
+  delLine: function(line_id, chapitre) {
+	  chapitre = chapitre || 'medicament';
     var oForm = document.addLine;
     oForm.prescription_line_medicament_id.value = line_id;
     oForm.del.value = 1;
     var mode_pharma = oForm.mode_pharma.value;
     return onSubmitFormAjax(oForm, { 
       onComplete : function(){ 
-        Prescription.reload(oForm.prescription_id.value, '', 'medicament','',mode_pharma);
+        Prescription.reload(oForm.prescription_id.value, '', chapitre,'',mode_pharma);
        } 
     });
   },

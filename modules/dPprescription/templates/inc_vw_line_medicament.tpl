@@ -399,11 +399,16 @@
 				  	<legend>Actions</legend>
 					  <!-- Suppression de la ligne -->
 				    {{if $line->_can_delete_line}}
+						  {{if $line->inscription}}
+							  {{assign var=chapitre value="inscription"}}
+							{{else}}
+						    {{assign var=chapitre value="medicament"}}
+						  {{/if}}
 				      <button type="button" class="trash"
 				        onclick="
 				          if (Prescription.confirmDelLine('{{$line->_view}}')) {
 				            modalPrescription.close();
-				            Prescription.delLine({{$line->_id}});
+				            Prescription.delLine('{{$line->_id}}', '{{$chapitre}}');
 				          }">
 				       {{tr}}Delete{{/tr}}
 				      </button>
