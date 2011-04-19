@@ -303,7 +303,7 @@ class CSejour extends CCodable implements IPatientRelated {
     $props["_protocole_prescription_anesth_id"] = "str";
     $props["_protocole_prescription_chir_id"]   = "str";
     
-    $props["_unique_lit_id"]   = "ref class|Clit";
+    $props["_unique_lit_id"]   = "ref class|CLit";
         
     return $props;
   }

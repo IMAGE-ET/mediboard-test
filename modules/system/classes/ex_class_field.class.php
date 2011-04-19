@@ -16,7 +16,7 @@ class CExClassField extends CExListItemsOwner {
   var $ex_group_id = null;
   var $name = null; // != object_class, object_id, ex_ClassName_event_id, 
   var $prop = null; 
-  var $reported = null;
+  var $report_level = null;
   var $concept_id = null;
   
   var $formula = null;
@@ -89,7 +89,7 @@ class CExClassField extends CExListItemsOwner {
     $props["ex_group_id"] = "ref class|CExClassFieldGroup";
     $props["concept_id"]  = "ref class|CExConcept autocomplete|name";
     $props["name"]        = "str notNull protected canonical";
-    $props["reported"]    = "bool notNull default|0";
+    $props["report_level"]= "enum list|1|2";
     $props["prop"]        = "text notNull";
     
     $props["formula"]     = "text"; // canonical tokens

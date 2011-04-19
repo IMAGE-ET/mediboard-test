@@ -68,7 +68,7 @@ foreach($fields as $_field) {
   $_field->loadTriggers();
 }
 
-$ex_object->loadRefReferenceObject();
+$ex_object->loadRefReferenceObjects();
 $ex_object->getReportedValues();
 
 $formula_token_values = array();

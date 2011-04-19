@@ -10,9 +10,12 @@
 
 class CExObject extends CMbMetaObject {
   var $ex_object_id = null;
-	
+  
   var $reference_class = null;
   var $reference_id = null;
+  
+  var $reference2_class = null;
+  var $reference2_id = null;
   
   var $_ex_class_id = null;
   var $_own_ex_class_id = null;
@@ -24,11 +27,16 @@ class CExObject extends CMbMetaObject {
    * @var CExClass
    */
   public $_ref_ex_class = null;
-	
+  
   /**
    * @var CMbObject
    */
-  var $_ref_reference_object = null;
+  var $_ref_reference_object_1 = null;
+  
+  /**
+   * @var CMbObject
+   */
+  var $_ref_reference_object_2 = null;
 
   function setExClass() {
     if ($this->_specs_already_set || !$this->_ex_class_id && !$this->_own_ex_class_id) return;
@@ -55,40 +63,54 @@ class CExObject extends CMbMetaObject {
     return $this->_ref_ex_class = $ex_class; // can't use loadFwdRef here
   }
   
-  function setReferenceObject(CMbObject $reference) {
-    $this->_ref_reference_object = $reference;
+  function setReferenceObject_1(CMbObject $reference) {
+    $this->_ref_reference_object_1 = $reference;
     $this->reference_class = $reference->_class_name;
     $this->reference_id = $reference->_id;
   }
-	
-	function loadRefReferenceObject(){
-		return $this->_ref_reference_object = $this->loadFwdRef("reference_id");
-	}
-	
-	function getReportedValues(){
-		if ($this->_id) return;
-		
-		$object = $this->loadTargetObject();
-		
-		$ex_class = $this->_ref_ex_class;
-		$reference = $ex_class->resolveReferenceObject($object);
-		$latest = $ex_class->getLatestExObject($reference);
-		
-		if (!$latest->_id) return;
-		
-		$fields = $this->_ref_ex_class->loadRefsAllFields(true);
+  
+  function setReferenceObject_2(CMbObject $reference) {
+    $this->_ref_reference_object_2 = $reference;
+    $this->reference2_class = $reference->_class_name;
+    $this->reference2_id = $reference->_id;
+  }
+  
+  function loadRefReferenceObjects(){
+    $this->_ref_reference_object_1 = $this->loadFwdRef("reference_id");
+    $this->_ref_reference_object_2 = $this->loadFwdRef("reference2_id");
+  }
+  
+  // FIXME charger aussi les valeurs des champs du meme concept
+  function getReportedValues(){
+    if ($this->_id) return;
+    
+    $object = $this->loadTargetObject();
+    
+    $ex_class = $this->_ref_ex_class;
+    
+    $this->_ref_reference_object_1 = $ex_class->resolveReferenceObject($object, 1);
+    $this->_ref_reference_object_2 = $ex_class->resolveReferenceObject($object, 2);
+    
+    $latest_1 = $ex_class->getLatestExObject($this->_ref_reference_object_1, 1);
+    $latest_2 = $ex_class->getLatestExObject($this->_ref_reference_object_2, 2);
+    
+    if (!$latest_1->_id && !$latest_2->_id) return;
+    
+    $fields = $this->_ref_ex_class->loadRefsAllFields(true);
     
     foreach($fields as $_field) {
       $field_name = $_field->name;
-			
-    	$spec_obj = $_field->getSpecObject();
-			$this->$field_name = $spec_obj->default;
-			
-    	if (!$_field->reported) continue;
-			
-      $this->$field_name = $latest->$field_name;
+      
+      $spec_obj = $_field->getSpecObject();
+      $this->$field_name = $spec_obj->default;
+      
+      if (!$_field->report_level) continue;
+      
+      $level = $_field->report_level;
+      
+      $this->$field_name = (($level == 1) ? $latest_1->$field_name : $latest_2->$field_name);
     }
-	}
+  }
   
   function loadOldObject() {
     if (!$this->_old) {
@@ -98,20 +120,28 @@ class CExObject extends CMbMetaObject {
       $this->_old->load($this->_id);
     }
   }
-	
-	function store(){
-		if ($msg = $this->check()) {
-			return $msg;
-		}
-		
-		if (!$this->_id && !$this->reference_id && !$this->reference_class) {
-			$object = $this->loadTargetObject();
-			$reference = $this->_ref_ex_class->resolveReferenceObject($object);
-			$this->setReferenceObject($reference);
-		}
-		
-		return parent::store();
-	}
+  
+  function store(){
+    if ($msg = $this->check()) {
+      return $msg;
+    }
+    
+    if (!$this->_id) {
+      $object = $this->loadTargetObject();
+      
+      if (!$this->reference_id && !$this->reference_class) {
+        $reference = $this->_ref_ex_class->resolveReferenceObject($object, 1);
+        $this->setReferenceObject_1($reference);
+      }
+      
+      if (!$this->reference2_id && !$this->reference2_class) {
+        $reference = $this->_ref_ex_class->resolveReferenceObject($object, 2);
+        $this->setReferenceObject_2($reference);
+      }
+    }
+    
+    return parent::store();
+  }
   
   /// Low level methods ///////////
   function bind($hash, $doStripSlashes = true) {
@@ -154,7 +184,7 @@ class CExObject extends CMbMetaObject {
     $ds->freeResult($cur);
     return $list;
   }
-	
+  
   // needed or will throw errors in the field specs
   function checkProperty($propName) {
     $class_name = $this->_class_name;
@@ -181,8 +211,12 @@ class CExObject extends CMbMetaObject {
     
     $props = parent::getProps();
     $props["_ex_class_id"]    = "ref class|CExClass";
+    
     $props["reference_class"] = "str class";
     $props["reference_id"]    = "ref class|CMbObject meta|reference_class";
+    
+    $props["reference2_class"] = "str class";
+    $props["reference2_id"]    = "ref class|CMbObject meta|reference2_class";
     
     if (self::$_load_lite) {
       return $props;
@@ -219,7 +253,7 @@ class CExObject extends CMbMetaObject {
   function loadLogs(){
     $this->setExClass();
     $ds = $this->_spec->ds;
-		
+    
     $where = array(
       "object_class" => $ds->prepare("=%", $this->_class_name),
       "object_id"    => $ds->prepare("=%", $this->_id)

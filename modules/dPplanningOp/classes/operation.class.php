@@ -125,17 +125,17 @@ class COperation extends CCodable implements IPatientRelated {
   var $_nb_echange_hprim   = null;
   var $_ref_echange_hprim  = null;
   var $_ref_anesth_perops  = null;
-	
+  
   // External references
   var $_ext_codes_ccam = null;
 
  //Filter Fields
-  var $_date_min	 	 = null;
-  var $_date_max 		 = null;
-  var $_plage 			 = null;
-  var $_service 		 = null;
+  var $_date_min      = null;
+  var $_date_max      = null;
+  var $_plage        = null;
+  var $_service      = null;
   var $_intervention = null;
-  var $_specialite 	 = null;
+  var $_specialite    = null;
   var $_scodes_ccam  = null;
   var $_prat_id      = null;
   var $_bloc_id      = null;
@@ -152,7 +152,11 @@ class COperation extends CCodable implements IPatientRelated {
     $spec->key   = 'operation_id';
     $spec->measureable = true;
     $spec->events = array(
-      "checklist" => array("multiple" => false),
+      "checklist" => array(
+        "multiple"   => false,
+        "reference1" => array("CSejour",  "sejour_id"),
+        "reference2" => array("CPatient", "sejour_id.patient_id"),
+      ),
     );
     return $spec;
   }
@@ -241,10 +245,10 @@ class COperation extends CCodable implements IPatientRelated {
     
     return $specs;
   }
-	
-	function loadRelPatient(){
-		return $this->loadRefPatient();
-	}
+  
+  function loadRelPatient(){
+    return $this->loadRefPatient();
+  }
   
   function getExecutantId($code_activite) {
     $this->loadRefChir();
@@ -252,22 +256,22 @@ class COperation extends CCodable implements IPatientRelated {
     return ($code_activite == 4 ? $this->_ref_anesth->user_id : $this->chir_id);
   }
   
-	function getBackProps() {
-	  $backProps = parent::getBackProps();
-	  $backProps["blood_salvages"]           = "CBloodSalvage operation_id";
-	  $backProps["dossiers_anesthesie"]      = "CConsultAnesth operation_id";
-	  $backProps["naissances"]               = "CNaissance operation_id";
-	  $backProps["prescription_elements"]    = "CPrescriptionLineElement operation_id";
-	  $backProps["prescription_medicaments"] = "CPrescriptionLineMedicament operation_id";
-	  $backProps["prescription_comments"]    = "CPrescriptionLineComment operation_id";
-	  $backProps["prescription_dmis"]        = "CPrescriptionLineDMI operation_id";
-	  $backProps["prescription_line_mix"]    = "CPrescriptionLineMix operation_id";
+  function getBackProps() {
+    $backProps = parent::getBackProps();
+    $backProps["blood_salvages"]           = "CBloodSalvage operation_id";
+    $backProps["dossiers_anesthesie"]      = "CConsultAnesth operation_id";
+    $backProps["naissances"]               = "CNaissance operation_id";
+    $backProps["prescription_elements"]    = "CPrescriptionLineElement operation_id";
+    $backProps["prescription_medicaments"] = "CPrescriptionLineMedicament operation_id";
+    $backProps["prescription_comments"]    = "CPrescriptionLineComment operation_id";
+    $backProps["prescription_dmis"]        = "CPrescriptionLineDMI operation_id";
+    $backProps["prescription_line_mix"]    = "CPrescriptionLineMix operation_id";
       $backProps["check_lists"]              = "CDailyCheckList object_id";
-	  $backProps["anesth_perops"]            = "CAnesthPerop operation_id";
-	  $backProps["echanges_hprim"]           = "CEchangeHprim object_id";
+    $backProps["anesth_perops"]            = "CAnesthPerop operation_id";
+    $backProps["echanges_hprim"]           = "CEchangeHprim object_id";
       $backProps["product_orders"]           = "CProductOrder object_id";
-	  return $backProps;
-	}
+    return $backProps;
+  }
 
   function getTemplateClasses(){
     $this->loadRefsFwd();
@@ -296,11 +300,11 @@ class COperation extends CCodable implements IPatientRelated {
     $sejour = $this->loadRefSejour();
     $this->loadRefPlageOp();
     if ($this->plageop_id !== null) {
-    	$date = mbDate($this->_datetime);
-    	$entree = mbDate($sejour->entree_prevue);
-    	$sortie = mbDate($sejour->sortie_prevue);
+      $date = mbDate($this->_datetime);
+      $entree = mbDate($sejour->entree_prevue);
+      $sortie = mbDate($sejour->sortie_prevue);
       if (!CMbRange::in($date, $entree, $sortie)) {
-   	    $msg .= "Intervention du $date en dehors du séjour du $entree au $sortie";
+         $msg .= "Intervention du $date en dehors du séjour du $entree au $sortie";
       }
     }
     
@@ -377,7 +381,7 @@ class COperation extends CCodable implements IPatientRelated {
       $this->codes_ccam = strtoupper($this->codes_ccam);
       $codes_ccam = explode("|", $this->codes_ccam);
       $XPosition = true;
-			// @TODO: change it to use removeValue
+      // @TODO: change it to use removeValue
       while($XPosition !== false) {
         $XPosition = array_search("-", $codes_ccam);
         if ($XPosition !== false) {
@@ -431,10 +435,10 @@ class COperation extends CCodable implements IPatientRelated {
         break;
         
         case 'last':
-	        if ($op->loadMatchingObject('rank DESC')) {
-		        $this->rank = $op->rank+1;
-		      }
-		    break;
+          if ($op->loadMatchingObject('rank DESC')) {
+            $this->rank = $op->rank+1;
+          }
+        break;
         default;
       }
       $this->_move = null;
@@ -463,7 +467,7 @@ class COperation extends CCodable implements IPatientRelated {
         $msgAlerte .= "L'intervention a été déplacée du ".mbTransformTime(null, $this->_old->_datetime, CAppUI::conf("date"))." au ".mbTransformTime(null, $this->_datetime, CAppUI::conf("date")).".";
         $isAlerte = true;
       } elseif($this->fieldModified("materiel") && $this->commande_mat) {
-      	$msgAlerte .= "Le materiel a été modifié \n - Ancienne valeur : ".$this->_old->materiel." \n - Nouvelle valeur : ".$this->materiel;
+        $msgAlerte .= "Le materiel a été modifié \n - Ancienne valeur : ".$this->_old->materiel." \n - Nouvelle valeur : ".$this->materiel;
         $isAlerte = true;
       }
       if($this->_old->rank) {
@@ -550,17 +554,17 @@ class COperation extends CCodable implements IPatientRelated {
    * Load list overlay for current group
    */
   function loadGroupList($where = array(), $order = null, $limit = null, $groupby = null, $ljoin = array()) {
-		$ljoin["sejour"] = "sejour.sejour_id = operations.sejour_id";
+    $ljoin["sejour"] = "sejour.sejour_id = operations.sejour_id";
     // Filtre sur l'établissement
-		$g = CGroups::loadCurrent();
-		$where["sejour.group_id"] = "= '$g->_id'";
+    $g = CGroups::loadCurrent();
+    $where["sejour.group_id"] = "= '$g->_id'";
     
     return $this->loadList($where, $order, $limit, $groupby, $ljoin);
   }
   
   function loadComplete() {
     parent::loadComplete();
-		$this->loadRefPatient();
+    $this->loadRefPatient();
     foreach ($this->_ref_actes_ccam as &$acte_ccam) {
       $acte_ccam->loadRefsFwd();
     }
@@ -603,13 +607,13 @@ class COperation extends CCodable implements IPatientRelated {
       $this->_deplacee = $this->_ref_plageop->salle_id != $this->salle_id;
     }
     
-	  // Evite de recharger la salle quand ce n'est pas nécessaire  
+    // Evite de recharger la salle quand ce n'est pas nécessaire  
     if ($this->plageop_id && !$this->_deplacee) {
       $this->_ref_salle =& $this->_ref_plageop->_ref_salle;
     }
     else {
-	    $salle = new CSalle;
-	    $this->_ref_salle = $salle->getCached($this->salle_id);
+      $salle = new CSalle;
+      $this->_ref_salle = $salle->getCached($this->salle_id);
     }
   }
   
@@ -619,7 +623,7 @@ class COperation extends CCodable implements IPatientRelated {
     
     $this->_ref_plageop = $this->loadFwdRef("plageop_id", $cache);
     // Avec plage d'opération
-		if ($this->_ref_plageop->_id) {
+    if ($this->_ref_plageop->_id) {
       $this->_ref_plageop->loadRefsFwd($cache);
       
       if (!$this->anesth_id) {
@@ -627,7 +631,7 @@ class COperation extends CCodable implements IPatientRelated {
       }
       
       $date = $this->_ref_plageop->date;
-		}
+    }
     // Hors plage
     else {
       $date = $this->date;
@@ -681,21 +685,21 @@ class COperation extends CCodable implements IPatientRelated {
     return $this->_ref_sejour = $this->loadFwdRef("sejour_id", $cache);
   }
   
-	 /*
+   /*
    * Chargement des gestes perop
    */
   function loadRefsAnesthPerops(){
     $this->_ref_anesth_perops = $this->loadBackRefs("anesth_perops", "datetime");
   }
   
-	
+  
   function loadRefPatient($cache = false) {
     $this->loadRefSejour($cache);
     $this->_ref_sejour->loadRefPatient($cache);
     $this->_ref_patient =& $this->_ref_sejour->_ref_patient;
-		$this->_patient_id = $this->_ref_patient->_id;
-		$this->loadFwdRef("_patient_id", $cache);
-		return $this->_ref_patient;
+    $this->_patient_id = $this->_ref_patient->_id;
+    $this->loadFwdRef("_patient_id", $cache);
+    return $this->_ref_patient;
   }
   
   function loadRefsFwd($cache = false) {
@@ -706,7 +710,7 @@ class COperation extends CCodable implements IPatientRelated {
     $this->_ref_consult_anesth->_ref_consultation->canEdit();
     $this->loadRefPlageOp($cache);
     $this->loadExtCodesCCAM();
-		
+    
     $this->loadRefChir($cache);
     $this->loadRefPatient($cache);
     $this->_view = "Intervention de {$this->_ref_sejour->_ref_patient->_view} par le Dr {$this->_ref_chir->_view}";
@@ -723,8 +727,8 @@ class COperation extends CCodable implements IPatientRelated {
     // Récupération de tous les échanges produits
     $this->_ref_echange_hprim = $this->loadBackRefs("echanges_hprim", $order);
   }
-	
-	function countEchangeHprim() {
+  
+  function countEchangeHprim() {
     // Récupération de tous les échanges produits
     $this->_nb_echange_hprim = $this->countBackRefs("echanges_hprim");
   }
@@ -818,7 +822,7 @@ class COperation extends CCodable implements IPatientRelated {
     $this->loadAffectationsPersonnel();
     foreach ($this->_ref_affectations_personnel as $emplacement => $affectations) {
       $locale = CAppUI::tr("CPersonnel.emplacement.$emplacement");
-			$property = implode(" - ", CMbArray::pluck($affectations, "_ref_personnel", "_ref_user", "_view"));
+      $property = implode(" - ", CMbArray::pluck($affectations, "_ref_personnel", "_ref_user", "_view"));
       $template->addProperty("Opération - personnel réel - $locale", $property);
     }
     

@@ -56,6 +56,7 @@ function mb_form($params, $content, &$smarty, &$repeat){
     "name"   => CMbArray::extract($params, "name", null, true),
     "method" => CMbArray::extract($params, "method", "get"),
     "action" => CMbArray::extract($params, "action", "?"),
+    "class"  => CMbArray::extract($params, "className", ""),
   );
   
   $attributes += $params;

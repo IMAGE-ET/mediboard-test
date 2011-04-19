@@ -11,28 +11,28 @@
 <script type="text/javascript">
 toggleListCustom = function(form) {
   var concept_type = $V(form._concept_type);
-	
+  
   if (concept_type) {
-	  var enableList = (concept_type == "concept");
-	  
-	  var input = form.concept_id_autocomplete_view;
-	  var select = form._spec_type;
-	  
-	  if (input) {
-	    input.up(".dropdown").down(".dropdown-trigger").setVisibility(enableList);
-	    input.disabled = input.readOnly = !enableList;
-	  }
-	  
-	  if (enableList) {
-	    //$V(select, "none");
-	  }
-	  else {
-	    $V(input, "");
-	    $V(form.concept_id, "");
-	  }
-	  
-	  select.disabled = select.readOnly = !!$V(form.ex_class_field_id) || enableList;
-	}
+    var enableList = (concept_type == "concept");
+    
+    var input = form.concept_id_autocomplete_view;
+    var select = form._spec_type;
+    
+    if (input) {
+      input.up(".dropdown").down(".dropdown-trigger").setVisibility(enableList);
+      input.disabled = input.readOnly = !enableList;
+    }
+    
+    if (enableList) {
+      //$V(select, "none");
+    }
+    else {
+      $V(input, "");
+      $V(form.concept_id, "");
+    }
+    
+    select.disabled = select.readOnly = !!$V(form.ex_class_field_id) || enableList;
+  }
   
   ExFieldSpec.edit(form);
 }
@@ -52,8 +52,8 @@ Main.add(function(){
       ExFormula.toggleInsertButtons(newContainer.id == "fieldFormulaEditor");
     }
   });
-	
-	// highlight current field
+  
+  // highlight current field
   $$("tr.ex-class-field.selected").invoke("removeClassName", "selected");
   $$("tr.ex-class-field[data-ex_class_field_id='{{$ex_field->_id}}']")[0].addClassName("selected");
 });
@@ -65,43 +65,43 @@ Main.add(function(){
   <input type="hidden" name="del" value="0" />
   
   <input type="hidden" name="_triggered_data" value="{{$ex_field->_triggered_data}}" />
-	
+  
   {{mb_key object=$ex_field}}
   {{mb_field object=$ex_field field=ex_group_id hidden=true}}
   
   <table class="form">
-  	
+    
     {{assign var=object value=$ex_field}}
-		<tr>
-		  {{if $object->_id}}
-		  <th class="title modify text" colspan="4">
-		    {{mb_include module=system template=inc_object_notes}}
-		    {{mb_include module=system template=inc_object_idsante400}}
-		    {{mb_include module=system template=inc_object_history}}
-		    {{tr}}{{$object->_class_name}}-title-modify{{/tr}} 
-		    '{{$object}}'
-		  </th>
-		  {{else}}
-		  <th class="title text" colspan="4">
-		    {{tr}}{{$object->_class_name}}-title-create{{/tr}} 
-		  </th>
-		  {{/if}}
-		</tr>
+    <tr>
+      {{if $object->_id}}
+      <th class="title modify text" colspan="4">
+        {{mb_include module=system template=inc_object_notes}}
+        {{mb_include module=system template=inc_object_idsante400}}
+        {{mb_include module=system template=inc_object_history}}
+        {{tr}}{{$object->_class_name}}-title-modify{{/tr}} 
+        '{{$object}}'
+      </th>
+      {{else}}
+      <th class="title text" colspan="4">
+        {{tr}}{{$object->_class_name}}-title-create{{/tr}} 
+      </th>
+      {{/if}}
+    </tr>
     
     <tr>
       <th style="width: 8em;">{{mb_label object=$ex_field field=_locale}}</th>
       <td>
-      	{{if $ex_field->_id}}
+        {{if $ex_field->_id}}
           {{mb_field object=$ex_field field=_locale size=30}}
-				{{else}}
-      	  {{mb_field object=$ex_field field=_locale size=30}}
-				{{/if}}
-			</td>
+        {{else}}
+          {{mb_field object=$ex_field field=_locale size=30}}
+        {{/if}}
+      </td>
       
       <th>{{mb_label object=$ex_field field=_locale_court}}</th>
       <td>{{mb_field object=$ex_field field=_locale_court tabIndex="3" size=30}}</td>
     </tr>
-		
+    
     <tr>
       <th>{{mb_label object=$ex_field field=_locale_desc}}</th>
       <td>{{mb_field object=$ex_field field=_locale_desc tabIndex="2" size=30}}</td>
@@ -114,70 +114,77 @@ Main.add(function(){
           {{/foreach}}
         </select>
       </td>
-		</tr>
-		
-		<tr>
-			
-			{{if $ex_field->_id}}
-			
-			  <th>
-			  	{{if $ex_field->concept_id}}
-					  Concept [liste/type]
-					{{else}}
-			  	  Type
-					{{/if}}
-				</th>
-				<td colspan="3">
-					<strong>
-						{{if $ex_field->concept_id}}
-		          {{mb_value object=$ex_field field=concept_id}}
-		          {{mb_field object=$ex_field field=concept_id hidden=true}}
-						{{else}}
-						  {{tr}}CMbFieldSpec.type.{{$spec_type}}{{/tr}}
-						{{/if}}
-					</strong>
-				</td>
-				
-			{{else}}
-			
-	      <th>
-	        <label>
-	          Type personnalisé
+    </tr>
+    
+    <tr>
+      
+      {{if $ex_field->_id}}
+      
+        <th>
+          {{if $ex_field->concept_id}}
+            Concept [liste/type]
+          {{else}}
+            Type
+          {{/if}}
+        </th>
+        <td colspan="3">
+          <strong>
+            {{if $ex_field->concept_id}}
+              {{mb_value object=$ex_field field=concept_id}}
+              {{mb_field object=$ex_field field=concept_id hidden=true}}
+            {{else}}
+              {{tr}}CMbFieldSpec.type.{{$spec_type}}{{/tr}}
+            {{/if}}
+          </strong>
+        </td>
+        
+      {{else}}
+      
+        <th>
+          <label>
+            Type personnalisé
             <input type="radio" {{if !$ex_field->concept_id}} checked="checked" {{/if}} 
                    onclick="toggleListCustom(this.form)" name="_concept_type" value="custom" />
-	        </label>
-	      </th>
-	      
-	      <td>
+          </label>
+        </th>
+        
+        <td>
           <select  name="_spec_type" onchange="ExFieldSpec.edit(this.form)">
             {{foreach from="CMbFieldSpecFact"|static:classes item=_class key=_key}}
               <option value="{{$_key}}" {{if $_key == $spec_type && !$ex_field->concept_id}}selected="selected"{{/if}}>
-              	{{tr}}CMbFieldSpec.type.{{$_key}}{{/tr}}
-							</option>
+                {{tr}}CMbFieldSpec.type.{{$_key}}{{/tr}}
+              </option>
             {{/foreach}}
           </select>
-	      </td>
-	      
-	      <th>
-	        <label>
-	          {{tr}}CExClassField-concept_id{{/tr}}
-						
+        </td>
+        
+        <th>
+          <label>
+            {{tr}}CExClassField-concept_id{{/tr}}
+            
             <input type="radio" {{if $ex_field->concept_id}} checked="checked" {{/if}}
-						       onclick="toggleListCustom(this.form)" name="_concept_type" value="concept" />
-	        </label>
-	      </th>
-				
-	      <td>
+                   onclick="toggleListCustom(this.form)" name="_concept_type" value="concept" />
+          </label>
+        </th>
+        
+        <td>
           {{mb_field object=$ex_field field=concept_id form="editField" autocomplete="true,1,50,false,true" 
                      onchange="ExFieldSpec.edit(this.form)"}}
-	      </td>
-				
-			{{/if}}
+        </td>
+        
+      {{/if}}
     </tr>
-		
-		<tr>
-			<th></th>
-      <th colspan="2">
+    
+    <tr>
+      <th>Report de valeur</th>
+      <td>
+        {{assign var=class_options value=$ex_field->_ref_ex_group->_ref_ex_class->_host_class_options}}
+        <label><input type="radio" name="report_level" value=""  {{if $ex_field->report_level == ""}}  checked="checked" {{/if}} /> Aucun </label>
+        <label><input type="radio" name="report_level" value="1" {{if $ex_field->report_level == "1"}} checked="checked" {{/if}} /> {{tr}}{{$class_options.reference1.0}}{{/tr}} </label>
+        <label><input type="radio" name="report_level" value="2" {{if $ex_field->report_level == "2"}} checked="checked" {{/if}} /> {{tr}}{{$class_options.reference2.0}}{{/tr}} </label>
+      </td>
+      
+      <td colspan="2">
         {{if $ex_field->_id}}
           <button type="submit" class="modify">{{tr}}Save{{/tr}}</button>
           <button type="button" class="trash" onclick="confirmDeletion(this.form,{ajax:true,typeName:'le champ ',objName:'{{$ex_field->_view|smarty:nodefaults|JSAttribute}}'})">
@@ -186,22 +193,16 @@ Main.add(function(){
         {{else}}
           <button type="submit" class="submit">{{tr}}Create{{/tr}}</button>
         {{/if}}
-      </th>
-			<td>
-				<label>
-					{{mb_field object=$ex_field field=reported typeEnum=checkbox}}
-	        {{tr}}CExClassField-reported{{/tr}}
-				</label>
-			</td>
+      </td>
     </tr>
-		
-		<tr {{if $app->user_prefs.INFOSYSTEM == 0}}style="display: none"{{/if}}>
-			<th></th>
-			<td colspan="3">
-				{{mb_field object=$ex_field field=prop readonly="readonly" size=50}}
-			</td>
+    
+    <tr {{if $app->user_prefs.INFOSYSTEM == 0}}style="display: none"{{/if}}>
+      <th></th>
+      <td colspan="3">
+        {{mb_field object=$ex_field field=prop readonly="readonly" size=50}}
+      </td>
     </tr>
-		
+    
   </table>
 </form>
 

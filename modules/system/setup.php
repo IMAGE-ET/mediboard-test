@@ -693,6 +693,29 @@ class CSetupsystem extends CSetup {
               CHANGE `type` `type` ENUM ('title','info','warning','error');";
     $this->addQuery($query);
     
-    $this->mod_version = "1.0.67";
+    $this->makeRevision("1.0.67");
+    function setup_system_addExReferenceFields2(){
+      set_time_limit(1800);
+      ignore_user_abort(1);
+      
+      $ds = CSQLDataSource::get("std");
+ 
+      // Changement des chirurgiens
+      $query = "SELECT ex_class_id FROM ex_class";
+      $list_ex_class = $ds->loadHashAssoc($query);
+      foreach($list_ex_class as $key => $hash) {
+        $query = "ALTER TABLE `ex_object_$key` 
+              ADD `reference2_id` INT (11) UNSIGNED AFTER `reference_id`,
+              ADD `reference2_class` VARCHAR(80) AFTER `reference_id`";
+        $ds->exec($query);
+      }
+      return true;
+    }
+    $this->addFunction("setup_system_addExReferenceFields2");
+    $query = "ALTER TABLE `ex_class_field` 
+              CHANGE `reported` `report_level` ENUM ('1','2')";
+    $this->addQuery($query);
+    
+    $this->mod_version = "1.0.68";
   }
 }

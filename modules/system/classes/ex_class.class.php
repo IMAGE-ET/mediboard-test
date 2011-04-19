@@ -21,19 +21,17 @@ class CExClass extends CMbObject {
   var $_ref_fields = null;
   var $_ref_constraints = null;
   var $_ref_groups = null;
-  var $_ref_reference_object = null;
   
   var $_fields_by_name = null;
   var $_host_class_fields = null;
   var $_host_class_options = null;
-  var $_latest_ex_cobject = null;
-	
-	static $_extendable_classes = array(
-	  "CPrescriptionLineElement",
-		"CPrescriptionLineMedicament",
-		"COperation",
-		"CAdministration",
-	);
+  
+  static $_extendable_classes = array(
+    "CPrescriptionLineElement",
+    "CPrescriptionLineMedicament",
+    "COperation",
+    "CAdministration",
+  );
 
   function getSpec() {
     $spec = parent::getSpec();
@@ -62,42 +60,51 @@ class CExClass extends CMbObject {
     return $backProps;
   }
   
-  function getLatestExObject(CMbObject $object){
+  function getHostClassOptions(){
+    if (!$this->host_class || !$this->event) return;
+    
+    $object = new $this->host_class;
+    return $this->_host_class_options = $object->_spec->events[$this->event];
+  }
+  
+  function getLatestExObject(CMbObject $object, $level = 1){
     $ex_object = new CExObject;
     $ex_object->_ex_class_id = $this->_id;
     $ex_object->setExClass();
 
-    $where = array(
-      "reference_class" => "= '$object->_class_name'",
-      "reference_id"    => "= '$object->_id'",
-		);
-		$ex_object->loadObject($where, "ex_object_id DESC");
-		$ex_object->load(); // needed !!!!!!!
+    if ($level == 1) {
+      $where = array(
+        "reference_class" => "= '$object->_class_name'",
+        "reference_id"    => "= '$object->_id'",
+      );
+    }
+    else {
+      $where = array(
+        "reference2_class" => "= '$object->_class_name'",
+        "reference2_id"    => "= '$object->_id'",
+      );
+    }
+    
+    $ex_object->loadObject($where, "ex_object_id DESC");
+    $ex_object->load(); // needed !!!!!!!
 
-    return $this->_latest_ex_cobject = $ex_object;
+    return $ex_object;
   }
-	
-	function getHostClassOptions(){
-		if (!$this->host_class || !$this->event) return;
-		
-		$object = new $this->host_class;
-		return $this->_host_class_options = $object->_spec->events[$this->event];
-	}
   
-  function resolveReferenceObject(CMbObject $object){
+  function resolveReferenceObject(CMbObject $object, $level = 1){
     $options = $this->getHostClassOptions();
-		$path = CValue::read($options, "reference");
-		
-		if (!$path) return;
-		
-		$parts = explode(".", $path);
-		
-		$reference = $object;
-		foreach($parts as $_fwd) {
-			$reference = $reference->loadFwdRef($_fwd);
-		}
-		
-		return $this->_ref_reference_object = $reference;
+    list($ref_class, $path) = CValue::read($options, "reference$level");
+    
+    if (!$path) return;
+    
+    $parts = explode(".", $path);
+    
+    $reference = $object;
+    foreach($parts as $_fwd) {
+      $reference = $reference->loadFwdRef($_fwd);
+    }
+    
+    return $reference;
   }
   
   function load($id = null) {
@@ -134,15 +141,15 @@ class CExClass extends CMbObject {
   
   function updateFormFields(){
     parent::updateFormFields();
-		
-		if ($this->host_class === "CMbObject") {
+    
+    if ($this->host_class === "CMbObject") {
       $this->_view = "Non classé";
-		}
-		else {
+    }
+    else {
       $this->_view = CAppUI::tr($this->host_class) . " - [$this->event]";
-		}
-		
-	  $this->_view .= " - $this->name";
+    }
+    
+    $this->_view .= " - $this->name";
   }
   
   function loadRefsGroups(){
@@ -154,7 +161,7 @@ class CExClass extends CMbObject {
     $groups = $this->loadRefsGroups();
     $fields = array();
     foreach($groups as $_group) {
-    	$_fields = $_group->loadRefsFields($cache);
+      $_fields = $_group->loadRefsFields($cache);
       $fields = array_merge($_fields, $fields);
     }
     return $fields;
@@ -167,23 +174,23 @@ class CExClass extends CMbObject {
   function getTableName(){
     return "ex_object_{$this->_id}";
   }
-	
-	function check(){
-		if ($msg = parent::check()) {
-			return $msg;
-		}
-		
-		if ($this->fieldModified("host_class")) {
-			$groups = $this->loadRefsGroups();
-			foreach($groups as $_group) {
-				if ($_group->countBackRefs("host_fields")) {
-					$old_class = $this->_old->host_class;
-					return "Impossible de changer le type d'objet hôte de ce formulaire car il comporte
-					 des champs de <strong>".CAppUI::tr($old_class)."</strong> dans la grille de disposition";
-				}
-			}
+  
+  function check(){
+    if ($msg = parent::check()) {
+      return $msg;
     }
-	}
+    
+    if ($this->fieldModified("host_class")) {
+      $groups = $this->loadRefsGroups();
+      foreach($groups as $_group) {
+        if ($_group->countBackRefs("host_fields")) {
+          $old_class = $this->_old->host_class;
+          return "Impossible de changer le type d'objet hôte de ce formulaire car il comporte
+           des champs de <strong>".CAppUI::tr($old_class)."</strong> dans la grille de disposition";
+        }
+      }
+    }
+  }
   
   function checkConstraints(CMbObject $object){
     $constraints = $this->loadRefsConstraints();
@@ -244,12 +251,12 @@ class CExClass extends CMbObject {
       
       $class_tree[$host_class][$event][] = $_ex_class;
     }
-		
-		if (isset($class_tree["CMbObject"])) {
-			$not_sorted = $class_tree["CMbObject"];
-			unset($class_tree["CMbObject"]);
-			$class_tree["CMbObject"] = $not_sorted;
-		}
+    
+    if (isset($class_tree["CMbObject"])) {
+      $not_sorted = $class_tree["CMbObject"];
+      unset($class_tree["CMbObject"]);
+      $class_tree["CMbObject"] = $not_sorted;
+    }
     
     return $class_tree;
   }
@@ -258,7 +265,7 @@ class CExClass extends CMbObject {
     $big_grid = array();
     $big_out_of_grid = array();
     $groups = $this->loadRefsGroups();
-		
+    
     foreach($groups as $_ex_group) {
       $grid = array_fill(0, $h, array_fill(0, $w, array(
         "type" => null, 
@@ -272,11 +279,11 @@ class CExClass extends CMbObject {
         "message_text" => array(),
       );
       
-			/**
-			 * @var CExClassFieldGroup
-			 */
-			$_ex_group;
-			
+      /**
+       * @var CExClassFieldGroup
+       */
+      $_ex_group;
+      
       $_ex_group->loadRefsFields();
       
       foreach($_ex_group->_ref_fields as $_ex_field) {
@@ -305,7 +312,7 @@ class CExClass extends CMbObject {
         }
       }
     
-		  // Host fields
+      // Host fields
       $_ex_group->loadRefsHostFields();
       foreach($_ex_group->_ref_host_fields as $_host_field) {
         $label_x = $_host_field->coord_label_x;
@@ -325,7 +332,7 @@ class CExClass extends CMbObject {
         }
       }
     
-		  // Messages
+      // Messages
       $_ex_group->loadRefsMessages();
       foreach($_ex_group->_ref_messages as $_message) {
         $title_x = $_message->coord_title_x;
@@ -336,9 +343,9 @@ class CExClass extends CMbObject {
         
         // label
         if ($title_x === null || $title_y === null) {
-        	$out_of_grid["message_title"][$_message->_id] = $_message;
-				}
-				else {
+          $out_of_grid["message_title"][$_message->_id] = $_message;
+        }
+        else {
           $grid[$title_y][$title_x] = array("type" => "message_title", "object" => $_message);
         }
         
@@ -370,11 +377,11 @@ class CExClass extends CMbObject {
           $max_filled = max($max_filled, $x_filled);
         }
         
-				if (empty($out_of_grid)) {
-	        foreach($grid as $_y => $_line) {
-	          $grid[$_y] = array_slice($_line, 0, $max_filled+1);
-	        }
-				}
+        if (empty($out_of_grid)) {
+          foreach($grid as $_y => $_line) {
+            $grid[$_y] = array_slice($_line, 0, $max_filled+1);
+          }
+        }
       }
       
       $big_grid       [$_ex_group->_id] = $grid;
@@ -384,8 +391,8 @@ class CExClass extends CMbObject {
     return array(
       $big_grid, $big_out_of_grid, $groups,
       "grid"        => $big_grid, 
-			"out_of_grid" => $big_out_of_grid, 
-			"groups"      => $groups,
+      "out_of_grid" => $big_out_of_grid, 
+      "groups"      => $groups,
     );
   }
   
@@ -412,6 +419,8 @@ class CExClass extends CMbObject {
         `object_class` VARCHAR(80) NOT NULL,
         `reference_id` INT UNSIGNED NOT NULL,
         `reference_class` VARCHAR(80) NOT NULL,
+        `reference2_id` INT UNSIGNED NOT NULL,
+        `reference2_class` VARCHAR(80) NOT NULL,
         INDEX ( `object_id` ),
         INDEX ( `object_class` )
       ) /*! ENGINE=MyISAM */;";

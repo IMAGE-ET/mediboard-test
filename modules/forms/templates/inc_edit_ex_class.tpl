@@ -57,7 +57,7 @@
             <th>{{mb_label object=$ex_class field=required}}</th>
             <td>{{mb_field object=$ex_class field=required typeEnum=checkbox}}</td>
           </tr>
-					
+          
           <tr>
             <th>{{mb_label object=$ex_class field=name}}</th>
             <td>{{mb_field object=$ex_class field=name size=50}}</td>
@@ -198,20 +198,20 @@ toggleGroupLabelEdit = function(link) {
             {{foreach from=$_group->_ref_fields item=_field}}
               <tr class="ex-class-field" data-ex_class_field_id="{{$_field->_id}}">
                 <td class="text">
-                	<span style="float: right;">
-									  {{if $_field->reported}}
-	                	  <img src="./images/icons/reported.png" title="{{tr}}CExClassField-reported{{/tr}}"/>
-										{{/if}}
-										
+                  <span style="float: right;">
+                    {{if $_field->report_level}}
+                      <img src="./images/icons/reported.png" title="{{tr}}CExClassField-reported{{/tr}}"/>
+                    {{/if}}
+                    
                     {{if $_field->formula}}
                       <img src="style/mediboard/images/buttons/formula.png" />
                     {{/if}}
-										
-	                  <button class="right notext insert-formula" style="margin: -3px; margin-left: -1px; display: none;"
-	                          onclick="ExFormula.insertText('[{{$_field->_locale|smarty:nodefaults|JSAttribute}}]')">
-	                    Ajouter à la formule
-	                  </button>
-									</span>
+                    
+                    <button class="right notext insert-formula" style="margin: -3px; margin-left: -1px; display: none;"
+                            onclick="ExFormula.insertText('[{{$_field->_locale|smarty:nodefaults|JSAttribute}}]')">
+                      Ajouter à la formule
+                    </button>
+                  </span>
                   
                   <a href="#1" onclick="ExField.edit('{{$_field->_id}}', null, null, '{{$_group->_id}}')">
                     {{if $_field->_locale}}
@@ -227,10 +227,10 @@ toggleGroupLabelEdit = function(link) {
                 <td colspan="2" class="empty">{{tr}}CExClassField.none{{/tr}}</td>
               </tr>
             {{/foreach}}
-						
-						<tr>
-							<th class="category">{{tr}}CExClassFieldGroup-back-class_messages{{/tr}}</th>
-						</tr>
+            
+            <tr>
+              <th class="category">{{tr}}CExClassFieldGroup-back-class_messages{{/tr}}</th>
+            </tr>
             <tr>
               <td style="text-align: right;">
                 <button type="button" class="new" onclick="ExMessage.create('{{$_group->_id}}')">
@@ -251,7 +251,7 @@ toggleGroupLabelEdit = function(link) {
                 <td colspan="2" class="empty">{{tr}}CExClassMessage.none{{/tr}}</td>
               </tr>
             {{/foreach}}
-						
+            
           </tbody>
         {{/foreach}}
       </table>

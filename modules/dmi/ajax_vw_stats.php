@@ -81,4 +81,6 @@ $smarty = new CSmartyDP();
 $smarty->assign("dmi_lines_count", $dmi_lines_count);
 $smarty->assign("group_by", $group_by);
 $smarty->assign("septic", $septic);
+$smarty->assign("date_min", $date_min);
+$smarty->assign("date_max", $date_max);
 $smarty->display("inc_vw_stats.tpl");

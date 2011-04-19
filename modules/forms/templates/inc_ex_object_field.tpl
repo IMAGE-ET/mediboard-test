@@ -47,6 +47,6 @@
   {{mb_field object=$ex_object field=$_field_name register=true increment=true form=$form defaultOption=" &mdash; "}}
 {{/if}}
 
-{{if $ex_field->reported}}
+{{if $ex_field->report_level}}
   <img src="./images/icons/reported.png" title="Valeur reportée"/>
 {{/if}}

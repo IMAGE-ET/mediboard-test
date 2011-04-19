@@ -1,3 +1,26 @@
+<script type="text/javascript">
+function loadDetails(element, params) {
+  if (element.visible()) {
+    element.hide();
+    return;
+  }
+  
+  element.show();
+  
+  var url = new Url("dmi", "ajax_vw_stats_detail");
+  url.mergeParams(params);
+  url.requestUpdate(element);
+}
+
+function downloadDetails(params) {
+  var url = new Url("dmi", "ajax_vw_stats_detail");
+  url.mergeParams(params);
+  url.addParam("csv", 1);
+	url.addParam("suppressHeaders", 1);
+  url.pop(10, 10, "export", null, null, {}, Element.getTempIframe());
+}
+</script>
+
 
 <form name="filter-dmi-stats" method="get" action="?" onsubmit="return Url.update(this, 'stats-list')">
   <input type="hidden" name="m" value="dmi" />

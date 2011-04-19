@@ -169,12 +169,14 @@ class CPrescriptionLineMedicament extends CPrescriptionLine {
     $spec->measureable = true;
     $spec->events = array(
       "prescription"   => array(
-        "multiple" => false,
-        "reference" => "prescription_id.object_id",
+        "multiple"   => false,
+        "reference1" => array("CSejour",  "prescription_id.object_id"),
+        "reference2" => array("CPatient", "prescription_id.object_id.patient_id"),
       ),
       "administration" => array(
-        "multiple" => true,
-        "reference" => "prescription_id.object_id",
+        "multiple"   => true,
+        "reference1" => array("CSejour",  "prescription_id.object_id"),
+        "reference2" => array("CPatient", "prescription_id.object_id.patient_id"),
       ),
     );
     return $spec;

@@ -10,16 +10,16 @@
 
 <style type="text/css">
 fieldset {
-	margin: 0px;
+  margin: 0px;
 }
 
 div.ex-message-title {
   font-weight: bold;
-	border-bottom: 1px solid #666;
-	font-size: 1.2em;
-	left: 0.5em; 
-	right: 0.5em; 
-	position: absolute;
+  border-bottom: 1px solid #666;
+  font-size: 1.2em;
+  left: 0.5em; 
+  right: 0.5em; 
+  position: absolute;
 }
 </style>
 
@@ -38,12 +38,13 @@ if (window.opener && window.opener !== window && window.opener.ExObject) {
 }
 
 confirmSavePrint = function(form){
-  confirm("Pour imprimer le formulaire, il est nécessaire de l'enregistrer, souhaitez-vous continuer ?") && 
-	         onSubmitFormAjax(form, {onComplete: function(){ 
-					   $("printIframe").src = "about:blank";
-					   $("printIframe").src = "?{{$smarty.server.QUERY_STRING|html_entity_decode}}&readonly=1&print=1";
-					} });
-	return false;
+  (FormObserver.changes == 0 || confirm("Pour imprimer le formulaire, il est nécessaire de l'enregistrer, souhaitez-vous continuer ?")) && 
+           onSubmitFormAjax(form, {onComplete: function(){ 
+             FormObserver.changes = 0;
+             $("printIframe").src = "about:blank";
+             $("printIframe").src = "?{{$smarty.server.QUERY_STRING|html_entity_decode}}&readonly=1&print=1";
+          } });
+  return false;
 }
 
 updateExObjectId = function(id) {
@@ -52,11 +53,12 @@ updateExObjectId = function(id) {
 
 Main.add(function(){
   ExObjectFormula.init({{$formula_token_values|@json}});
-	ExObject.current = {object_guid: "{{$object_guid}}", event: "{{$event}}"};
+  ExObject.current = {object_guid: "{{$object_guid}}", event: "{{$event}}"};
 });
 </script>
 
-{{mb_form name="editExObject" m="system" dosql="do_ex_object_aed" method="post" onsubmit="return onSubmitFormAjax(this, {onComplete: function(){ window.close() } })"}}
+{{mb_form name="editExObject" m="system" dosql="do_ex_object_aed" method="post" className="watched"
+          onsubmit="return onSubmitFormAjax(this, {onComplete: function(){ window.close() } })"}}
   {{mb_key object=$ex_object}}
   {{mb_field object=$ex_object field=_ex_class_id hidden=true}}
   {{mb_field object=$ex_object field=object_class hidden=true}}
@@ -64,84 +66,85 @@ Main.add(function(){
   
   <input type="hidden" name="del" value="0" />
   <input type="hidden" name="callback" value="updateExObjectId" />
-	
-	{{if !$print}}
-		<iframe id="printIframe" width="0" height="0" style="display: none;"></iframe>
-		<button type="button" class="print" onclick="confirmSavePrint(this.form)" style="float: right;">
-			{{tr}}Print{{/tr}}
-		</button>
-	{{/if}}
-	
-	<h2 style="font-weight: bold;">
-	  {{if in_array("IPatientRelated", class_implements($ex_object->object_class))}}
-	    {{assign var=_patient value=$ex_object->_ref_object->loadRelPatient()}}
-	    <big style="color: #006600;" 
-			     onmouseover="ObjectTooltip.createEx(this, '{{$_patient->_guid}}');">
-			  {{$_patient}}
-			</big>
-			&ndash;
-	  {{/if}}
-		
-		{{if $ex_object->_ref_reference_object && $ex_object->_ref_reference_object->_id}}
-      {{assign var=reference value=$ex_object->_ref_reference_object}}
-		{{else}}
-      {{assign var=reference value=$ex_object->_ref_ex_class->_ref_reference_object}}
-		{{/if}}
-		
-		{{if $reference->_id}}
-		  <big onmouseover="ObjectTooltip.createEx(this, '{{$reference->_guid}}');">
-		  	{{$reference}}
-		  </big>
-		{{/if}}
+  
+  {{if !$print}}
+    <iframe id="printIframe" width="0" height="0" style="display: none;"></iframe>
+    <button type="button" class="print" onclick="confirmSavePrint(this.form)" style="float: right;">
+      {{tr}}Print{{/tr}}
+    </button>
+  {{/if}}
+  
+  <h2 style="font-weight: bold;">
+    {{if $ex_object->_ref_reference_object_2 && $ex_object->_ref_reference_object_2->_id}}
+      <big style="color: #006600;" 
+           onmouseover="ObjectTooltip.createEx(this, '{{$ex_object->_ref_reference_object_2->_guid}}');">
+        {{$ex_object->_ref_reference_object_2}} 
+      </big>
+    {{else}}
+      {{if in_array("IPatientRelated", class_implements($ex_object->object_class))}}
+        {{assign var=_patient value=$ex_object->_ref_object->loadRelPatient()}}
+        <big style="color: #006600;" 
+             onmouseover="ObjectTooltip.createEx(this, '{{$_patient->_guid}}');">
+          {{$_patient}}
+        </big>
+      {{/if}}
+    {{/if}}
     
-    <hr style="border-color: #333; margin: 4px 0;"/>
+    {{if $ex_object->_ref_reference_object_1 && $ex_object->_ref_reference_object_1->_id}}
+      &ndash;
+      <big onmouseover="ObjectTooltip.createEx(this, '{{$ex_object->_ref_reference_object_1->_guid}}');">
+        {{$ex_object->_ref_reference_object_1}}
+      </big>
+    {{/if}}
+    
+    <hr style="border-color: #333; margin: 4px 0;" />
     {{$ex_object->_ref_ex_class->name}} - {{$object}}
-	</h2>
-	
-	<script type="text/javascript">
-		Main.add(function(){
-		  Control.Tabs.create("ex_class-groups-tabs");
-			document.title = "{{$ex_object->_ref_ex_class->name}} - {{$object}}".htmlDecode();
-		});
-	</script>
-	
-	<ul id="ex_class-groups-tabs" class="control_tabs">
-	{{foreach from=$grid key=_group_id item=_grid}}
-	  {{if $groups.$_group_id->_ref_fields|@count}}
-	  <li>
-	  	<a href="#tab-{{$groups.$_group_id->_guid}}">{{$groups.$_group_id}}</a>
-	  </li>
-		{{/if}}
-	{{/foreach}}
-	</ul>
+  </h2>
+  
+  <script type="text/javascript">
+    Main.add(function(){
+      Control.Tabs.create("ex_class-groups-tabs");
+      document.title = "{{$ex_object->_ref_ex_class->name}} - {{$object}}".htmlDecode();
+    });
+  </script>
+  
+  <ul id="ex_class-groups-tabs" class="control_tabs">
+  {{foreach from=$grid key=_group_id item=_grid}}
+    {{if $groups.$_group_id->_ref_fields|@count}}
+    <li>
+      <a href="#tab-{{$groups.$_group_id->_guid}}">{{$groups.$_group_id}}</a>
+    </li>
+    {{/if}}
+  {{/foreach}}
+  </ul>
   <hr class="control_tabs" />
-	
+  
   <table class="main form">
-  	
-		{{foreach from=$grid key=_group_id item=_grid}}
-		{{if $groups.$_group_id->_ref_fields|@count}}
-		<tbody id="tab-{{$groups.$_group_id->_guid}}" style="display: none;">
+    
+    {{foreach from=$grid key=_group_id item=_grid}}
+    {{if $groups.$_group_id->_ref_fields|@count}}
+    <tbody id="tab-{{$groups.$_group_id->_guid}}" style="display: none;">
     {{foreach from=$_grid key=_y item=_line}}
     <tr>
       {{foreach from=$_line key=_x item=_group}}
-	      {{if $_group.object}}
-	        {{if $_group.object instanceof CExClassField}}
+        {{if $_group.object}}
+          {{if $_group.object instanceof CExClassField}}
             {{assign var=_field value=$_group.object}}
-					  {{if $_group.type == "label"}}
-							{{if $_field->coord_field_x == $_field->coord_label_x+1}}
+            {{if $_group.type == "label"}}
+              {{if $_field->coord_field_x == $_field->coord_label_x+1}}
                 <th style="font-weight: bold; vertical-align: middle;">
                   {{mb_label object=$ex_object field=$_field->name}}
                 </th>
-							{{else}}
+              {{else}}
                 <td style="font-weight: bold; text-align: left;">
                   {{mb_label object=$ex_object field=$_field->name}}
                 </td>
-							{{/if}}
-					  {{elseif $_group.type == "field"}}
-		          <td>
+              {{/if}}
+            {{elseif $_group.type == "field"}}
+              <td>
                 {{mb_include module=forms template=inc_ex_object_field ex_object=$ex_object ex_field=$_field}}
-		          </td>
-						{{/if}}
+              </td>
+            {{/if}}
           {{elseif $_group.object instanceof CExClassHostField}}
             {{assign var=_host_field value=$_group.object}} 
               {{if $_group.type == "label"}}
@@ -153,77 +156,77 @@ Main.add(function(){
                   {{mb_value object=$ex_object->_ref_object field=$_host_field->field}}
                 </td>
               {{/if}}
-					{{else}}
+          {{else}}
             {{assign var=_message value=$_group.object}} 
-					  	{{if $_group.type == "message_title"}}
-							
-	              {{if $_message->coord_text_x == $_message->coord_title_x+1}}
-	                <th style="font-weight: bold; vertical-align: middle;">
-	                  {{$_message->title}}
-	                </th>
-	              {{else}}
-	                <td style="font-weight: bold; text-align: left;">
-	                  {{$_message->title}}
-	                </td>
-	              {{/if}}
-							{{else}}
+              {{if $_group.type == "message_title"}}
+              
+                {{if $_message->coord_text_x == $_message->coord_title_x+1}}
+                  <th style="font-weight: bold; vertical-align: middle;">
+                    {{$_message->title}}
+                  </th>
+                {{else}}
+                  <td style="font-weight: bold; text-align: left;">
+                    {{$_message->title}}
+                  </td>
+                {{/if}}
+              {{else}}
                 <td>
-                	{{if $_message->type == "title"}}
+                  {{if $_message->type == "title"}}
                     <div class="ex-message-title">
                       {{$_message->text}}
-										</div>
+                    </div>
                     &nbsp;
-									{{else}}
-										<div class="small-{{$_message->type}}">
-	                    {{mb_value object=$_message field=text}}
-										</div>
-									{{/if}}
+                  {{else}}
+                    <div class="small-{{$_message->type}}">
+                      {{mb_value object=$_message field=text}}
+                    </div>
+                  {{/if}}
                 </td>
-							{{/if}}
-					{{/if}}
+              {{/if}}
+          {{/if}}
         {{else}}
           <td></td>
-				{{/if}}
+        {{/if}}
       {{/foreach}}
     </tr>
     {{/foreach}}
-		
-		{{* Out of grid *}}
+    
+    {{* Out of grid *}}
     {{foreach from=$groups.$_group_id->_ref_fields item=_field}}
       {{assign var=_field_name value=$_field->name}}
-			
-		  {{if isset($out_of_grid.$_group_id.field.$_field_name|smarty:nodefaults)}}
-		    <tr>
-		      <th style="font-weight: bold; width: 50%; vertical-align: middle;" colspan="2">
-		        {{mb_label object=$ex_object field=$_field->name}}
-		      </th>
-		      <td colspan="2">
-		        {{mb_include module=forms template=inc_ex_object_field ex_object=$ex_object ex_field=$_field}}
-		      </td>
-		    </tr>
-		  {{/if}}
+      
+      {{if isset($out_of_grid.$_group_id.field.$_field_name|smarty:nodefaults)}}
+        <tr>
+          <th style="font-weight: bold; width: 50%; vertical-align: middle;" colspan="2">
+            {{mb_label object=$ex_object field=$_field->name}}
+          </th>
+          <td colspan="2">
+            {{mb_include module=forms template=inc_ex_object_field ex_object=$ex_object ex_field=$_field}}
+          </td>
+        </tr>
+      {{/if}}
     {{/foreach}}
     
     </tbody>
-		{{/if}}
+    {{/if}}
     {{/foreach}}
-		
+    
     <tr>
       <td colspan="4" class="button">
         {{if $ex_object->_id}}
           <button class="modify" type="submit">{{tr}}Save{{/tr}}</button>
           
-					{{if $forms_admin}}
-	          <button type="button" class="trash" onclick="confirmDeletion(this.form,{ajax: true, typeName:'', objName:'{{$ex_object->_view|smarty:nodefaults|JSAttribute}}'})">
-	            {{tr}}Delete{{/tr}}
-	          </button>
-					{{/if}}
+          {{if $forms_admin}}
+            <button type="button" class="trash" onclick="confirmDeletion(this.form,{ajax: true, typeName:'', objName:'{{$ex_object->_view|smarty:nodefaults|JSAttribute}}'})">
+              {{tr}}Delete{{/tr}}
+            </button>
+          {{/if}}
         {{else}}
           <button class="submit" type="submit">{{tr}}Save{{/tr}}</button>
         {{/if}}
       </td>
     </tr>
-		
+    
   </table>
 
 {{/mb_form}}
@@ -235,58 +238,58 @@ Main.add(function(){
 <script type="text/javascript">
 Main.add(function(){
   {{if $print}}
-		if (document.execCommand) {
-		  window.focus();
+    if (document.execCommand) {
+      window.focus();
       document.execCommand('print', false, null);
-		}
-		else {
-		  window.print();
-		}
-	{{else}}
+    }
+    else {
+      window.print();
+    }
+  {{else}}
     document.title = "{{$ex_object->_ref_ex_class->name}} - {{$object}}".htmlDecode();
   {{/if}}
 });
 </script>
 
 <table class="main print">
-	<tr>
-		<td colspan="4">
-			<h2 style="font-weight: bold; font-size: 1.2em;">
-			  {{if in_array("IPatientRelated", class_implements($ex_object->object_class))}}
-			    {{assign var=_patient value=$ex_object->_ref_object->loadRelPatient()}}
-			    <big style="color: #006600;" 
-			         onmouseover="ObjectTooltip.createEx(this, '{{$_patient->_guid}}');">
-			      {{$_patient}}
-			    </big>
-			    &ndash;
-			  {{/if}}
-			  
-			  {{if $ex_object->_ref_reference_object && $ex_object->_ref_reference_object->_id}}
-			    {{assign var=reference value=$ex_object->_ref_reference_object}}
-			  {{else}}
-			    {{assign var=reference value=$ex_object->_ref_ex_class->_ref_reference_object}}
-			  {{/if}}
-			  
-			  {{if $reference->_id}}
-			    <big onmouseover="ObjectTooltip.createEx(this, '{{$reference->_guid}}');">
-			      {{$reference}}
-			    </big>
-			  {{/if}}
-			  
-			  <hr style="border-color: #333; margin: 4px 0;"/>
-			  {{$ex_object->_ref_ex_class->name}} - {{$object}}
-			</h2>
-		</td>
-	</tr>
+  <tr>
+    <td colspan="4">
+      <h2 style="font-weight: bold; font-size: 1.2em;">
+        {{if in_array("IPatientRelated", class_implements($ex_object->object_class))}}
+          {{assign var=_patient value=$ex_object->_ref_object->loadRelPatient()}}
+          <big style="color: #006600;" 
+               onmouseover="ObjectTooltip.createEx(this, '{{$_patient->_guid}}');">
+            {{$_patient}}
+          </big>
+          &ndash;
+        {{/if}}
+        
+        {{if $ex_object->_ref_reference_object && $ex_object->_ref_reference_object->_id}}
+          {{assign var=reference value=$ex_object->_ref_reference_object}}
+        {{else}}
+          {{assign var=reference value=$ex_object->_ref_ex_class->_ref_reference_object}}
+        {{/if}}
+        
+        {{if $reference->_id}}
+          <big onmouseover="ObjectTooltip.createEx(this, '{{$reference->_guid}}');">
+            {{$reference}}
+          </big>
+        {{/if}}
+        
+        <hr style="border-color: #333; margin: 4px 0;"/>
+        {{$ex_object->_ref_ex_class->name}} - {{$object}}
+      </h2>
+    </td>
+  </tr>
   
   {{foreach from=$grid key=_group_id item=_grid}}
-	
+  
   {{if $groups.$_group_id->_ref_fields|@count}}
   <tbody id="tab-{{$groups.$_group_id->_guid}}">
-  	<tr>
-  		<th class="title" colspan="4">{{$groups.$_group_id}}</th>
-		</tr>
-		
+    <tr>
+      <th class="title" colspan="4">{{$groups.$_group_id}}</th>
+    </tr>
+    
   {{foreach from=$_grid key=_y item=_line}}
   <tr>
     {{foreach from=$_line key=_x item=_group}}
@@ -305,7 +308,7 @@ Main.add(function(){
             {{/if}}
           {{elseif $_group.type == "field"}}
             <td>
-            	{{mb_value object=$ex_object field=$_field->name}}
+              {{mb_value object=$ex_object field=$_field->name}}
             </td>
           {{/if}}
         {{elseif $_group.object instanceof CExClassHostField}}
