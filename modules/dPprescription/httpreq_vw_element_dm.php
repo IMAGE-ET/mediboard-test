@@ -13,6 +13,7 @@ $prescription_line_element_id = CValue::getOrSession("prescription_line_element_
 $line = new CPrescriptionLineElement();
 $line->load($prescription_line_element_id);
 $line->loadRefDM();
+$line->getAdvancedPerms();
 
 // Création du template
 $smarty = new CSmartyDP();
