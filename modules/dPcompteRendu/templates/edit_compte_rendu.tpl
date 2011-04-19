@@ -69,6 +69,10 @@ function submitCompteRendu(callback){
 }
 
 function refreshZones(id, obj) {
+  // Dans le cas de la génération d'un document par correspondant,
+  // mise à jour du nom du document dans la popup
+  $V(getForm("editFrm").nom, obj.nom);
+  
   if (window.pdf_thumbnails && window.Preferences.pdf_and_thumbs == 1) {
     Thumb.compte_rendu_id = id;
     Thumb.modele_id = 0;

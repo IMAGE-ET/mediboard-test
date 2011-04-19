@@ -35,6 +35,15 @@
       </td>
     </tr>
   {{/if}}
+  
+  <tr>
+    <th class="category" colspan="2">{{tr}}config-dPcompteRendu-CCompteRendu-correspondants{{/tr}}</th>
+  </tr>
+  <tr>
+    {{assign var="var" value="multiple_doc_correspondants"}}
+    {{mb_include module=system template=inc_config_bool}}
+  </tr>
+  
   {{if isset($conf.dPcabinet.CConsultation.aide_autocomplete|smarty:nodefaults)}}
     {{assign var=aide_autocomplete value=$conf.dPcabinet.CConsultation.aide_autocomplete}}
     {{if $aide_autocomplete == 1}}

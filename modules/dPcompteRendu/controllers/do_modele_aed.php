@@ -7,8 +7,6 @@
 * @author Romain Ollivier
 */
 
-global $AppUI, $m;
-
 if( isset($_POST["_do_empty_pdf"])) {
   $compte_rendu_id = CValue::post("compte_rendu_id");
   $compte_rendu = new CCompteRendu();
@@ -22,7 +20,7 @@ if( isset($_POST["_do_empty_pdf"])) {
 }
 
 $do = new CDoObjectAddEdit("CCompteRendu", "compte_rendu_id");
-$do->redirectDelete = "m=$m&new=1";
+$do->redirectDelete = "m=dPcompteRendu&new=1";
 
 // Récupération des marges du modele en fast mode
 if (isset($_POST["fast_edit"]) && $_POST["fast_edit"] == 1 && isset($_POST["object_id"]) && $_POST["object_id"] != '') {
@@ -55,6 +53,8 @@ if (isset($_POST["_texte_libre"])) {
   $_POST["_texte_libre"] = null;
 }
 
+$destinataires = array();
+
 if (isset($_POST["_source"])) {
   // Application des listes de choix
   $fields = array();
@@ -83,7 +83,6 @@ if (isset($_POST["_source"])) {
   $_POST["_source"] = str_ireplace($fields, $values, $_POST["_source"]);
 
   // Application des destinataires
-  $destinataires = array();
   foreach($_POST as $key => $value) {
     // Remplacement des destinataires
     if(preg_match("/_dest_([\w]+)_([0-9]+)/", $key, $dest)) {
@@ -91,7 +90,7 @@ if (isset($_POST["_source"])) {
     }
   }
   
-  if(count($destinataires)) {
+  if (count($destinataires)) {
     $object = new $_POST["object_class"];
     $object->load($_POST["object_id"]);
     CDestinataire::makeAllFor($object);
@@ -102,9 +101,10 @@ if (isset($_POST["_source"])) {
     $posBody      = strpos($_POST["_source"], $bodyTag);
     if($posBody) {
       $headerfooter = substr($_POST["_source"], 0, $posBody);
-      $index_div = strrpos($_POST["_source"], "</div>")-($posBody+strlen($bodyTag)+1);
+      $index_div    = strrpos($_POST["_source"], "</div>")-($posBody+strlen($bodyTag)+1);
       $body         = substr($_POST["_source"], $posBody+strlen($bodyTag), $index_div);
-    } else {
+    }
+    else {
       $headerfooter = "";
       $body         = $_POST["_source"];
     }
@@ -113,7 +113,17 @@ if (isset($_POST["_source"])) {
     foreach($destinataires as $curr_dest) {
       $copyTo .= $allDest[$curr_dest[1]][$curr_dest[2]]->nom."; ";
     }
+    
+    // On fait le doBind avant le foreach si la config est à 1.
+    if (CAppUI::conf("dPcompteRendu CCompteRendu multiple_doc_correspondants")) {
+      $do->doBind();
+    }
+    
     $allSources = array();
+    $modele_base = clone $do->_obj;
+    $has_object_id = $do->_obj->object_id;
+    $doc_id = $do->_obj->_id;
+    
     foreach($destinataires as &$curr_dest) {
       $fields = array(
         htmlentities("[Courrier - nom destinataire]"),
@@ -127,46 +137,75 @@ if (isset($_POST["_source"])) {
         $allDest[$curr_dest[1]][$curr_dest[2]]->cpville,
         $copyTo
       );
-      $allSources[] = str_ireplace($fields, $values, $body);
+      if (!CAppUI::conf("dPcompteRendu CCompteRendu multiple_doc_correspondants")) {
+        $allSources[] = str_ireplace($fields, $values, $body);
+      }
+      else {
+        // Création d'un document par correspondant
+        $body = str_ireplace($fields, $values, $body);
+        $content = $body;
+        
+        if ($headerfooter) {
+          $content = $headerfooter . "<div id=\"body\">" . $body . "</div>";
+        }
+        
+        // Clone du modèle
+        $compte_rendu = clone $modele_base;
+        $compte_rendu->_id     = null;
+        $compte_rendu->nom     .= " à {$allDest[$curr_dest[1]][$curr_dest[2]]->nom}";
+        $compte_rendu->_source = $content;
+        $compte_rendu->_ref_content = null;
+        $compte_rendu->chir_id    = null;
+        $comte_rendu->function_id = null;
+        $compte_rendu->group_id   = null;
+        
+        $do->_obj = $compte_rendu;
+        $do->doStore();
+      }
     }
-    // On concatène les en-tête, pieds de page et body's
-    if($headerfooter) {
-      $_POST["_source"] = $headerfooter;
-      $_POST["_source"] .= "<div id=\"body\">";
-      $_POST["_source"] .= implode("<hr class=\"pageBreak\" />", $allSources);
-      $_POST["_source"] .= "</div>";
-    } else {
-      $_POST["_source"] = implode("<hr class=\"pageBreak\" />", $allSources);
+    if (!CAppUI::conf("dPcompteRendu CCompteRendu multiple_doc_correspondants")) {
+      // On concatène les en-tête, pieds de page et body's
+      if ($headerfooter) {
+        $_POST["_source"] = $headerfooter;
+        $_POST["_source"] .= "<div id=\"body\">";
+        $_POST["_source"] .= implode("<hr class=\"pageBreak\" />", $allSources);
+        $_POST["_source"] .= "</div>";
+      }
+      else {
+        $_POST["_source"] = implode("<hr class=\"pageBreak\" />", $allSources);
+      }
     }
   }
-  
 }
 
-$do->doBind();
-if (intval(CValue::post("del"))) {
-  $do->doDelete();
-} else {
-  $do->doStore();
-  // Pour le fast mode en impression navigateur, on envoie la source du document complet.
-  $margins = array($do->_obj->margin_top,
-                 $do->_obj->margin_right,
-                 $do->_obj->margin_bottom,
-                 $do->_obj->margin_left);
-  $do->_obj->_entire_doc = CCompteRendu::loadHTMLcontent($do->_obj->_source, "doc",'','','','','',$margins);
+if (!count($destinataires) || !CAppUI::conf("dPcompteRendu CCompteRendu multiple_doc_correspondants")) {
+  $do->doBind();
+  if (intval(CValue::post("del"))) {
+    $do->doDelete();
+  }
+  else {
+    $do->doStore();
+    // Pour le fast mode en impression navigateur, on envoie la source du document complet.
+    $margins = array(
+      $do->_obj->margin_top,
+      $do->_obj->margin_right,
+      $do->_obj->margin_bottom,
+      $do->_obj->margin_left);
+    $do->_obj->_entire_doc = CCompteRendu::loadHTMLcontent($do->_obj->_source, "doc",'','','','','',$margins);
+  }
 }
 
-if($do->ajax){
+if ($do->ajax) {
   $do->doCallback();
 }
-
 else {
   // Si c'est un compte rendu
   if($do->_obj->object_id && !intval(CValue::post("del"))) {
-    $do->redirect = "m=$m&a=edit_compte_rendu&dialog=1&compte_rendu_id=".$do->_obj->_id;
+    $do->redirect = "m=dPcompteRendu&a=edit_compte_rendu&dialog=1&compte_rendu_id=".$do->_obj->_id;
   } 
   // Si c'est un modèle de compte rendu
   else { 
-    $do->redirect = "m=$m&tab=addedit_modeles&compte_rendu_id=".$do->_obj->_id;
+    $do->redirect = "m=dPcompteRendu&tab=addedit_modeles&compte_rendu_id=".$do->_obj->_id;
   }
   $do->doRedirect();
 }
