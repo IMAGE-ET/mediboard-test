@@ -272,7 +272,7 @@ Main.add(function () {
 	<ul id="tab_dossier_soin" class="control_tabs">
 	  <li onmousedown="Prescription.loadTraitement('{{$sejour->_id}}','{{$date}}','','administration','','','','med'); refreshTabState();"><a href="#jour">Journée</a></li>
 	  <li onmousedown="calculSoinSemaine('{{$date}}','{{$prescription_id}}');"><a href="#semaine">Semaine</a></li>
-		<li onmousedown="updateTasks('{{$sejour->_id}}');"><a href="#tasks">Activités</a></li>
+		<li onmousedown="updateTasks('{{$sejour->_id}}');"><a href="#tasks">Tâches</a></li>
     <li onmousedown="loadSuivi('{{$sejour->_id}}')"><a href="#dossier_suivi">{{tr}}CMbObject-back-transmissions{{/tr}} <span id="nb_trans"></span></a></li>
 	</ul>
 	<hr class="control_tabs" />

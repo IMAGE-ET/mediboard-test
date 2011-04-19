@@ -180,6 +180,12 @@ modifFormDate = function(nb_prises, form_name, protocole,line_id){
     } 
   }
 }
+
+addAerosol = function(){
+  var oFormAerosol = getForm("add_aerosol");
+  return onSubmitFormAjax(oFormAerosol, { onComplete: function() { Prescription.viewSubstitutionLines('{{$line->_id}}','{{$line->_class_name}}') } });
+}
+
 </script>
 
 {{include file="../../dPprescription/templates/js_functions.tpl"}}
@@ -253,6 +259,24 @@ modifFormDate = function(nb_prises, form_name, protocole,line_id){
   <input type="hidden" name="substitution_active" value="0" />
 </form>
 
+<form name="add_aerosol" action="?" method="post">
+  <input type="hidden" name="m" value="dPprescription" />
+  <input type="hidden" name="dosql" value="do_prescription_line_mix_aed" />
+  <input type="hidden" name="del" value="0" />
+  <input type="hidden" name="prescription_line_mix_id" value="" />
+  <input type="hidden" name="prescription_id" value="{{$prescription->_id}}" />
+  <input type="hidden" name="type_line" value="aerosol" />
+  <input type="hidden" name="type" value="nebuliseur_ultrasonique" />
+  <input type="hidden" name="praticien_id" value="{{$app->user_id}}" />
+  <input type="hidden" name="creator_id" value="{{$app->user_id}}" />
+  <input type="hidden" name="unite_duree" value="jour" />
+  <input type="hidden" name="unite_duree_passage" value="minute" />
+  <input type="hidden" name="date_debut" value="" />
+	<input type="hidden" name="substitute_for_id" value="{{$line->_id}}" />
+  <input type="hidden" name="substitute_for_class" value="{{$line->_class_name}}" />
+	<input type="hidden" name="substitution_active" value="0" />
+</form>
+
 {{if $line->_class_name == "CPrescriptionLineMedicament"}}
   {{assign var=dosql value="do_prescription_line_medicament_aed"}}
 {{else}}
@@ -275,6 +299,9 @@ modifFormDate = function(nb_prises, form_name, protocole,line_id){
 			    Livret Thérap.
 			    <div style="display:none;" class="autocomplete" id="produit_auto_complete"></div>
 			    <button type="button" class="search" onclick="MedSelector.init('produit');">Rechercher</button>
+					
+					<button  class="new" onclick="addAerosol();" type="button">Aérosol</button>
+					
 			    <input type="hidden" name="code_cip" onchange="addSubstitutionLine(this.value);"/>
 			    <script type="text/javascript">
 			      MedSelector.init = function(onglet){

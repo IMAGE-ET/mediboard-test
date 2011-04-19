@@ -510,7 +510,7 @@ Main.add( function(){
 									<input type="text" name="produit" value="" size="20" style="width: 300px;" class="autocomplete" />
 	                <div style="display:none; width: 350px;" class="autocomplete" id="aerosol_auto_complete"></div>
 	   						  <input type="hidden" name="code_cip" value="" onchange="onSubmitFormAjax(this.form, { onComplete: function(){ 
-									  Prescription.reloadLine('{{$line->_guid}}','{{$line->_protocole}}', '{{$mode_pharma}}');
+									  Prescription.reloadLine('{{$line->_guid}}','{{$line->_protocole}}', '{{$mode_pharma}}', null, '{{$mode_substitution}}');
 									} } )" />
 	                <label title="Recherche dans le livret thérapeutique">
 	                  <input type="checkbox" value="1" name="_recherche_livret" {{if $prescription->type=="sejour" && $conf.dPprescription.CPrescription.preselect_livret}}checked="checked"{{/if}} onchange="if($V(getForm('addLineAerosol').produit)) { acAerosol.activate.bind(acAerosol)() };" />

@@ -31,8 +31,13 @@
                if (Prescription.confirmDelLine('{{$_prescription_line_mix->_view|smarty:nodefaults|JSAttribute}}')) {
                  return onSubmitFormAjax(this.form, { 
                    onComplete: function(){
-                     Prescription.reloadPrescPerf('{{$_prescription_line_mix->prescription_id}}','{{$_prescription_line_mix->_protocole}}','{{$mode_pharma}}');
-                 }} );}"></button>
+									   {{if @$mode_substitution}}
+                       Prescription.viewSubstitutionLines.defer('{{$_prescription_line_mix->substitute_for_id}}','{{$_prescription_line_mix->substitute_for_class}}');
+									   {{else}}
+                       Prescription.reloadPrescPerf('{{$_prescription_line_mix->prescription_id}}','{{$_prescription_line_mix->_protocole}}','{{$mode_pharma}}');
+                     {{/if}}
+								 
+								 }} );}"></button>
          </form>
       {{/if}}
       {{if $_prescription_line_mix->_ref_parent_line->_id}}    
