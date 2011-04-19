@@ -12,13 +12,6 @@
 {{if $sejour->_id}}
 
 <script type="text/javascript">
-
-viewFicheATC = function(fiche_ATC_id){
-  var url = new Url;
-  url.setModuleAction("dPmedicament", "vw_fiche_ATC");
-  url.addParam("fiche_ATC_id", fiche_ATC_id);
-  url.popup(700, 550, "Fiche ATC");  
-}
 	
 addManualPlanification = function(date, time, key_tab, object_id, object_class, original_date, quantite){
   var prise_id = !isNaN(key_tab) ? key_tab : '';
@@ -49,13 +42,6 @@ refreshDossierSoin = function(mode_dossier, chapitre, force_refresh){
   }
 }
 
-printBons = function(prescription_id){
-  var url = new Url("dPprescription", "print_bon");
-  url.addParam("prescription_id", prescription_id);
-  url.addParam("debut", "{{$date}}");
-  url.popup(900, 600, "Impression des bons");
-}
-
 addCibleTransmission = function(object_class, object_id, libelle_ATC) {
   addTransmission('{{$sejour->_id}}', '{{$app->user_id}}', null, object_id, object_class, libelle_ATC);
 }
@@ -70,13 +56,6 @@ addAdministrationPerf = function(prescription_line_mix_id, date, hour, time_prev
   url.addParam("sejour_id", sejour_id);
   url.addParam("date_sel", "{{$date}}");
   url.popup(800,600,"Administration d'une prescription_line_mix");
-}
-
-addInscription = function(datetime, prescription_id){
-  var url = new Url("dPprescription", "vw_edit_inscription");
-  url.addParam("datetime", datetime);
-	url.addParam("prescription_id", prescription_id);
-  url.popup(800, 600, "Ajout d'une inscription");
 }
 
 editPerf = function(prescription_line_mix_id, date, mode_dossier, sejour_id){
@@ -322,7 +301,7 @@ Main.add(function () {
 		<table style="width: 100%">
 		   <tr>
 		    <td>
-		      <button type="button" class="print" onclick="printBons('{{$prescription_id}}');" title="{{tr}}Print{{/tr}}">
+		      <button type="button" class="print" onclick="PlanSoins.printBons('{{$prescription_id}}');" title="{{tr}}Print{{/tr}}">
 		        Bons
 		      </button>
 					<button type="button" class="print" onclick="Prescription.viewFullAlertes('{{$prescription_id}}')" title="{{tr}}Print{{/tr}}">

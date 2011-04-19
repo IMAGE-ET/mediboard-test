@@ -323,5 +323,26 @@ PlanSoins = {
 	  url.addParam("mode_dossier", $V(document.mode_dossier_soin.mode_dossier));
 	  url.addParam("refresh_popup", "1");
 	  url.popup(700, 600, "Administrations multiples");
+	},
+	
+	addInscription: function(datetime, prescription_id){
+	  var url = new Url("dPprescription", "vw_edit_inscription");
+	  url.addParam("datetime", datetime);
+	  url.addParam("prescription_id", prescription_id);
+	  url.popup(800, 600, "Ajout d'une inscription");
+	},
+	
+	viewFicheATC: function(fiche_ATC_id){
+	  var url = new Url;
+	  url.setModuleAction("dPmedicament", "vw_fiche_ATC");
+	  url.addParam("fiche_ATC_id", fiche_ATC_id);
+	  url.popup(700, 550, "Fiche ATC");  
+	}, 
+	
+	printBons: function(prescription_id){
+	  var url = new Url("dPprescription", "print_bon");
+	  url.addParam("prescription_id", prescription_id);
+	  url.addParam("debut", PlanSoins.date);
+	  url.popup(900, 600, "Impression des bons");
 	}
 };

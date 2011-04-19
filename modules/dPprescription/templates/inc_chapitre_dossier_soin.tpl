@@ -77,7 +77,7 @@
         {{foreach from=$_dates key=_date item=_hours}}
           {{foreach from=$_hours key=_heure_reelle item=_hour}} 
             <td class="{{$_view_date}}-{{$moment_journee}}">
-              <div class="administration" ondblclick="addInscription('{{$_date}} {{$_hour}}:00:00', '{{$prescription->_id}}');"></div>
+              <div class="administration" ondblclick="PlanSoins.addInscription('{{$_date}} {{$_hour}}:00:00', '{{$prescription->_id}}');"></div>
 						</td>
 					{{/foreach}}
 				{{/foreach}}                           

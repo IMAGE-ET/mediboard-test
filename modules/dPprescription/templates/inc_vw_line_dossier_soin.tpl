@@ -61,7 +61,7 @@
 		          <strong>Fiches disponibles</strong><br />
 		          <ul>
 		          {{foreach from=$line->_ref_produit->_ref_fiches_ATC item=_fiche_ATC}}
-		            <li><a href="#{{$_fiche_ATC->_id}}" onclick="viewFicheATC('{{$_fiche_ATC->_id}}');">Fiche ATC {{if $_fiche_ATC->libelle}}{{$_fiche_ATC->libelle}}{{/if}}</a></li>
+		            <li><a href="#{{$_fiche_ATC->_id}}" onclick="PlanSoins.viewFicheATC('{{$_fiche_ATC->_id}}');">Fiche ATC {{if $_fiche_ATC->libelle}}{{$_fiche_ATC->libelle}}{{/if}}</a></li>
 		          {{/foreach}}
 		          </ul>
 		      </div>

@@ -57,7 +57,7 @@ $where = array();
 $where["element_prescription_id"] =  CSQLDataSource::prepareIn($categories_id);
 $where[] = "'$date' <= sejour.sortie && '$date_max' >= sejour.entree";
 $where["service.service_id"] = " = '$service_id'";
-
+$where["inscription"] = " = '0'";
 $lines = $line->loadList($where, null, null, null, $ljoin);
 
 // Chargement du patient pour chaque sejour

@@ -103,6 +103,7 @@ Main.add(function(){
         {{foreach from=$elements_cat item=_element name="foreach_cat"}}
           {{foreach from=$_element key=unite_prise item=element name="foreach_elt"}}       
             {{include file="../../dPprescription/templates/inc_vw_line_dossier_soin.tpl" 
+						          chapitre=$element->_chapitre
                       line=$element
                       nodebug=true
                       first_foreach=foreach_cat

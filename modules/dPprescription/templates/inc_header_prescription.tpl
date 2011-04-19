@@ -139,12 +139,6 @@ changeManualDate = function(){
 	}
 }
 
-printBons = function(prescription_id){
-  var url = new Url("dPprescription", "print_bon");
-  url.addParam("prescription_id", prescription_id);
-  url.popup(900, 600, "Impression des bons");
-}
-
 Main.add( function(){	
 	var oFormProtocole = getForm("applyProtocole");
   var praticien_id;
@@ -644,7 +638,7 @@ Main.add( function(){
 			{{/if}}			
 			<button type="button" class="print" onclick="Prescription.printPrescription('{{$prescription->_id}}', 0, '{{$prescription->object_id}}');" />Ordonnance</button>
       {{if $prescription->object_id && $prescription->object_class == "CSejour"}}
-			  <button type="button" class="print" onclick="printBons('{{$prescription->_id}}');" title="{{tr}}Print{{/tr}}">Bons</button>
+			  <button type="button" class="print" onclick="PlanSoins.printBons('{{$prescription->_id}}');" title="{{tr}}Print{{/tr}}">Bons</button>
       {{/if}}
 			
 			{{if !$mode_protocole && $can->admin && $prescription->type == "sejour"}}
