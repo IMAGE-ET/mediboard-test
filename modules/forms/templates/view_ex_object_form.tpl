@@ -255,29 +255,28 @@ Main.add(function(){
   <tr>
     <td colspan="4">
       <h2 style="font-weight: bold; font-size: 1.2em;">
-        {{if in_array("IPatientRelated", class_implements($ex_object->object_class))}}
-          {{assign var=_patient value=$ex_object->_ref_object->loadRelPatient()}}
-          <big style="color: #006600;" 
-               onmouseover="ObjectTooltip.createEx(this, '{{$_patient->_guid}}');">
-            {{$_patient}}
-          </big>
-          &ndash;
-        {{/if}}
-        
-        {{if $ex_object->_ref_reference_object && $ex_object->_ref_reference_object->_id}}
-          {{assign var=reference value=$ex_object->_ref_reference_object}}
-        {{else}}
-          {{assign var=reference value=$ex_object->_ref_ex_class->_ref_reference_object}}
-        {{/if}}
-        
-        {{if $reference->_id}}
-          <big onmouseover="ObjectTooltip.createEx(this, '{{$reference->_guid}}');">
-            {{$reference}}
-          </big>
-        {{/if}}
-        
-        <hr style="border-color: #333; margin: 4px 0;"/>
-        {{$ex_object->_ref_ex_class->name}} - {{$object}}
+        {{if $ex_object->_ref_reference_object_2 && $ex_object->_ref_reference_object_2->_id}}
+		      <big style="color: #006600;">
+		        {{$ex_object->_ref_reference_object_2}} 
+		      </big>
+		    {{else}}
+		      {{if in_array("IPatientRelated", class_implements($ex_object->object_class))}}
+		        {{assign var=_patient value=$ex_object->_ref_object->loadRelPatient()}}
+		        <big style="color: #006600;">
+		          {{$_patient}}
+		        </big>
+		      {{/if}}
+		    {{/if}}
+		    
+		    {{if $ex_object->_ref_reference_object_1 && $ex_object->_ref_reference_object_1->_id}}
+		      &ndash;
+		      <big>
+		        {{$ex_object->_ref_reference_object_1}}
+		      </big>
+		    {{/if}}
+		    
+		    <hr style="border-color: #333; margin: 4px 0;" />
+		    {{$ex_object->_ref_ex_class->name}} - {{$object}}
       </h2>
     </td>
   </tr>
