@@ -61,6 +61,7 @@ class CCompteRendu extends CDocumentItem {
 	// Other fields
 	var $_is_pack          = false;
 	var $_entire_doc       = null;
+	var $_ids_corres       = null;
   static $_page_formats = array(
     'a3'      => array(29.7 , 42),
     'a4'      => array(21   , 29.7),
@@ -120,6 +121,7 @@ class CCompteRendu extends CDocumentItem {
     $specs["_page_format"]     = "enum list|".implode("|", array_keys(self::$_page_formats));
     $specs["_source"]          = "html helped|_list_classes";
     $specs["_entire_doc"]      = "html";
+    $specs["_ids_corres"]      = "str";
     return $specs;
   }
   

@@ -54,6 +54,7 @@ if (isset($_POST["_texte_libre"])) {
 }
 
 $destinataires = array();
+$ids_corres    = "";
 
 if (isset($_POST["_source"])) {
   // Application des listes de choix
@@ -121,9 +122,10 @@ if (isset($_POST["_source"])) {
     
     $allSources = array();
     $modele_base = clone $do->_obj;
+    $source_base = $body;
     $has_object_id = $do->_obj->object_id;
     $doc_id = $do->_obj->_id;
-    
+
     foreach($destinataires as &$curr_dest) {
       $fields = array(
         htmlentities("[Courrier - nom destinataire]"),
@@ -142,7 +144,8 @@ if (isset($_POST["_source"])) {
       }
       else {
         // Création d'un document par correspondant
-        $body = str_ireplace($fields, $values, $body);
+        $body = str_ireplace($fields, $values, $source_base);
+        
         $content = $body;
         
         if ($headerfooter) {
@@ -161,6 +164,7 @@ if (isset($_POST["_source"])) {
         
         $do->_obj = $compte_rendu;
         $do->doStore();
+        $ids_corres .= "{$do->_obj->_id}-";
       }
     }
     if (!CAppUI::conf("dPcompteRendu CCompteRendu multiple_doc_correspondants")) {
@@ -193,6 +197,10 @@ if (!count($destinataires) || !CAppUI::conf("dPcompteRendu CCompteRendu multiple
       $do->_obj->margin_left);
     $do->_obj->_entire_doc = CCompteRendu::loadHTMLcontent($do->_obj->_source, "doc",'','','','','',$margins);
   }
+}
+
+if (strlen($ids_corres)) {
+  $do->_obj->_ids_corres = $ids_corres;
 }
 
 if ($do->ajax) {

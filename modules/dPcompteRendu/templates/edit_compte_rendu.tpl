@@ -72,7 +72,7 @@ function refreshZones(id, obj) {
   // Dans le cas de la génération d'un document par correspondant,
   // mise à jour du nom du document dans la popup
   $V(getForm("editFrm").nom, obj.nom);
-  
+  $V(getForm("download-pdf-form")._ids_corres, obj._ids_corres);
   if (window.pdf_thumbnails && window.Preferences.pdf_and_thumbs == 1) {
     Thumb.compte_rendu_id = id;
     Thumb.modele_id = 0;
@@ -280,6 +280,7 @@ Main.add(function(){
   <input type="hidden" name="stream" value="1"/>
   <input type="hidden" name="page_format" value=""/>
   <input type="hidden" name="orientation" value=""/>
+  <input type="hidden" name="_ids_corres" value="" />
 </form>
 
 <form name="editFrm" action="?m={{$m}}" method="post"

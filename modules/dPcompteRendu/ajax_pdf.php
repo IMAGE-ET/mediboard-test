@@ -21,6 +21,7 @@ $stream      = CValue::post("stream");
 $content     = stripslashes(urldecode(CValue::post("content", $compte_rendu->_source)));
 $save_content = $content;
 
+$ids_corres  = CValue::post("_ids_corres");
 $write_page  = CValue::post("write_page", 0);
 $page_format = CValue::post("page_format",$compte_rendu->_page_format);
 $orientation = CValue::post("orientation",$compte_rendu->_orientation);
@@ -32,6 +33,18 @@ $margins     = CValue::post("margins", array($compte_rendu->margin_top,
                                              $compte_rendu->margin_right,
                                              $compte_rendu->margin_bottom,
                                              $compte_rendu->margin_left));
+
+if ($ids_corres) {
+  $ids = explode("-", $ids_corres);
+  $_GET["nbDoc"] = array();
+  foreach($ids as $doc_id) {
+    if ($doc_id) {
+      $_GET["nbDoc"][$doc_id] = 1;
+    }
+  }
+  include_once "modules/dPcompteRendu/print_docs.php";
+  CApp::rip();
+} 
 
 $file = new CFile;
 if ($compte_rendu->_id) {
