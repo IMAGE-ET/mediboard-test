@@ -1,7 +1,11 @@
 <ul style="text-align: left;">
   {{foreach from=$packs item=_pack}}
     {{if $_pack->_owner == "user"}}
-      {{assign var=owner_icon value="user"}}
+      {{if $_pack->chir_id == $app->user_id}}
+        {{assign var=owner_icon value="user-glow"}}
+      {{else}}
+        {{assign var=owner_icon value="user"}}
+      {{/if}}
     {{elseif $_pack->_owner == "func"}}
       {{assign var=owner_icon value="user-function"}}
     {{else}}

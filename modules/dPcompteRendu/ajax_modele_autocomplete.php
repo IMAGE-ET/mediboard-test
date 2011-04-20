@@ -22,7 +22,7 @@ $order        = "nom";
 $where = array();
 $where["object_class"] = "= '$object_class'";
 $where["type"] = "= 'body'";
-$where["chir_id"] = " = '$user->_id'";
+$where["chir_id"] = "IN ('$user->_id', '".CAppUI::$user->_id."')";
 $modeles = array_merge($modeles, $compte_rendu->seek($keywords, $where, null, null, null, $order));
 
 $where = array();

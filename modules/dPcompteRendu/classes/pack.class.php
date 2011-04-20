@@ -46,7 +46,7 @@ class CPack extends CMbObject {
     $specs["chir_id"]      = "ref class|CMediusers";
     $specs["function_id"]  = "ref class|CFunctions";
     $specs["group_id"]     = "ref class|CGroups";
-    $specs["nom"]          = "str notNull confidential";
+    $specs["nom"]          = "str notNull seekable confidential";
     $specs["object_class"] = "enum notNull list|CPatient|CConsultAnesth|COperation|CConsultation|CSejour default|COperation";
     $specs["_owner"]       = "enum list|user|func|etab";
     return $specs;
