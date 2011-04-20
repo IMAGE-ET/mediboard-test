@@ -42,4 +42,6 @@
     {{/foreach}}
   {{/foreach}}
 </ul>
-{{mb_include module=system template=inc_autocomplete_limit results=$list.prot limit=$limit}}
+{{if $count_protocoles > $limit}}
+  {{mb_include module=system template=inc_autocomplete_limit results=$count_protocoles limit=$limit}}
+{{/if}}

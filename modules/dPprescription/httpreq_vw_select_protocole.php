@@ -16,6 +16,8 @@ $limit             = CValue::get("limit", 50);
 
 $_tokens = explode(" ", $libelle_protocole);
 
+$count_protocoles = 0;
+
 // Chargement du praticien
 $praticien = new CMediusers();
 $praticien->load($praticien_id);
@@ -58,9 +60,11 @@ if($perop){
 	            prescription_line_element.perop = '1' OR 
 							prescription_line_mix.perop = '1'";
 	
-  $protocoles = $protocole->loadList($where, "libelle", null, null, $ljoin);
+  $protocoles = $protocole->loadList($where, "libelle", $limit, null, $ljoin);
+  $count_protocoles = $protocole->countList($where, "libelle", null, null, $ljoin);
 } else {
-	$protocoles = $protocole->loadList($where, "libelle");
+	$protocoles = $protocole->loadList($where, "libelle", $limit);
+	$count_protocoles = $protocole->countList($where, "libelle");
 }
 
 
@@ -88,7 +92,11 @@ if($libelle_protocole){
     $where[] = "libelle LIKE '%$_token%'";
   }
 }
-$packs = !$perop ? $pack->loadList($where, "libelle") : array();
+$packs = !$perop ? $pack->loadList($where, "libelle", $limit) : array();
+
+if (!$perop) {
+  $count_protocoles += $pack->countList($where, "libelle", $limit);
+}
 
 // Chargement du nombre d'element par chapitre dans les packs
 foreach($packs as $_pack){
@@ -113,6 +121,7 @@ $smarty->assign("list", $list);
 $smarty->assign("token_search", $token_search);
 $smarty->assign("token_replace", $token_replace);
 $smarty->assign("limit", $limit);
+$smarty->assign("count_protocoles", $count_protocoles);
 $smarty->display("../../dPprescription/templates/inc_select_protocole.tpl");
 
 ?>

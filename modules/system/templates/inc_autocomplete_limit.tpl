@@ -1,3 +1,5 @@
-<div>
-  {{$results|@count}} {{tr}}Results{{/tr}}(s) ( Limite : {{$limit}} )
+<div style="text-align: center">
+  <em>
+   {{$results}} {{tr}}Results{{/tr}} (Limite : {{$limit}})
+  </em>
 </div>
