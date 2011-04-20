@@ -181,6 +181,12 @@ var AideSaisie = {
         }
       }.bind(this) : Prototype.emptyFunction;
       
+      var autocompleteDelays = {
+        "short": 0.5,
+        "medium": 1.0,
+        "long": 1.5
+      };
+      
       // Setup the autocompleter
       var autocomplete = url.autoComplete(this.searchField, list, {
         minChars: Preferences.aideAutoComplete == '0' ? 65536 : 2,
@@ -189,6 +195,7 @@ var AideSaisie = {
         select: "text", 
         paramName: "_search",
         caretBounds: true,
+        frequency: autocompleteDelays[Preferences.autocompleteDelay],
         callback: function(input, query){
           if (options.filterWithDependFields) {
             query += options.dependField1 ? ("&depend_value_1=" + ($V(options.dependField1) || "")) : '';

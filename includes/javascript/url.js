@@ -345,9 +345,15 @@ var Url = Class.create({
       return;
     }
     
+    var autocompleteDelays = {
+        "short": 0.5,
+        "medium": 1.0,
+        "long": 1.5
+      };
+    
     oOptions = Object.extend({
       minChars: 2,
-      frequency: 0.5,
+      frequency: autocompleteDelays[Preferences.autocompleteDelay],
       width: null,
       dropdown: false,
       valueElement: null,

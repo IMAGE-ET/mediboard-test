@@ -19,7 +19,8 @@ CPreferences::$modules["common"] = array (
   "tooltipAppearenceTimeout",
   "showLastUpdate",
   "directory_to_watch",
-  "debug_yoplet"
+  "debug_yoplet",
+  "autocompleteDelay"
 );  
   
 CPreferences::$modules["system"] = array (

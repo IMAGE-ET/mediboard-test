@@ -715,7 +715,10 @@ class CSetupsystem extends CSetup {
     $query = "ALTER TABLE `ex_class_field` 
               CHANGE `reported` `report_level` ENUM ('1','2')";
     $this->addQuery($query);
+
+    $this->makeRevision("1.0.68");
+    $this->addPrefQuery("autocompleteDelay", "short");
     
-    $this->mod_version = "1.0.68";
+    $this->mod_version = "1.0.69";
   }
 }
