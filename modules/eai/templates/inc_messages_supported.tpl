@@ -29,7 +29,7 @@
           <input type="hidden" name="object_class" value="{{$_message_supported->object_class}}" />
           <input type="hidden" name="message" value="{{$_message_supported->message}}" />
           
-          {{mb_field object=$_message_supported field=active onchange="this.form.onsubmit()"}}
+          {{mb_field object=$_message_supported field=active onchange="this.form.onsubmit(); InteropActor.refreshFormatsAvailable('$actor_guid')"}}
         </form>
       </td>
     </tr>

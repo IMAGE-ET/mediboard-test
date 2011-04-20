@@ -26,10 +26,14 @@
         
         <label for="object_handlers_{{$_object_server}}_1">{{tr}}bool.1{{/tr}}</label>
         <input type="radio" name="object_handlers[{{$_object_server}}]" value="1" onchange="this.form.onsubmit();" 
-          {{if $conf.object_handlers.$_object_server == "1"}}checked="checked"{{/if}}/>
+          {{if array_key_exists($_object_server, $conf.object_handlers) &&
+            $conf.object_handlers.$_object_server == "1"}}checked="checked"
+          {{/if}}/>
         <label for="object_handlers_{{$_object_server}}_0">{{tr}}bool.0{{/tr}}</label>
         <input type="radio" name="object_handlers[{{$_object_server}}]" value="0" onchange="this.form.onsubmit();" 
-          {{if $conf.object_handlers.$_object_server == "0"}}checked="checked"{{/if}}/>
+          {{if array_key_exists($_object_server, $conf.object_handlers) &&
+            $conf.object_handlers.$_object_server == "0"}}checked="checked"
+          {{/if}}/>
       </form>
     </td>
   </tr>

@@ -173,6 +173,7 @@ class CExchangeDataFormat extends CMbMetaObject {
         $messages[$_root_class][] = $message_supported;
       }
     }
+
     return $messages;
   }
 }

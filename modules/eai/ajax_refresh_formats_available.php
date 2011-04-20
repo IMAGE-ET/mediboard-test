@@ -14,20 +14,24 @@ CCanDo::checkRead();
 
 $actor_guid = CValue::getOrSession("actor_guid");
 
-$formats_xml     = CExchangeDataFormat::getAll("CEchangeXML");
+$formats_xml = CExchangeDataFormat::getAll("CEchangeXML");
+foreach ($formats_xml as &$_format_xml) {
+  $_format_xml = new $_format_xml;
+}
 $formats_tabular = CExchangeDataFormat::getAll("CExchangeTabular");
+foreach ($formats_tabular as &$_format_tabular) {
+  $_format_tabular = new $_format_tabular;
+}
 
 $messages_xml = array();
 foreach ($formats_xml as $_format_xml) {
-  $data_format = new $_format_xml;
-  $temp = $data_format->getMessagesSupported($actor_guid, false);
+  $temp = $_format_xml->getMessagesSupported($actor_guid, false);
   $messages_xml = array_merge($messages_xml, $temp);
 }
 
 $messages_tabular = array();
 foreach ($formats_tabular as $_format_tabular) {
-  $data_format = new $_format_tabular;
-  $temp = $data_format->getMessagesSupported($actor_guid, false);
+  $temp = $_format_tabular->getMessagesSupported($actor_guid, false);
   $messages_tabular = array_merge($messages_tabular, $temp);
 }
 

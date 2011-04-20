@@ -13,25 +13,13 @@
   <legend>{{tr}}CExchangeTabular{{/tr}}</legend>
   
   {{foreach from=$formats_tabular item=_format_tabular}}
-    <button class="none" onclick="InteropActor.viewMessagesSupported('{{$actor_guid}}', '{{$_format_tabular}}')">
-      {{tr}}{{$_format_tabular}}{{/tr}}
+    <button class="none" onclick="InteropActor.viewMessagesSupported('{{$actor_guid}}', '{{$_format_tabular->_class_name}}')">
+      <img src="modules/{{$_format_tabular->_ref_module->mod_name}}/images/icon.png" width="16"/> {{tr}}{{$_format_tabular->_class_name}}{{/tr}}
     </button>
   {{/foreach}}
   
   {{foreach from=$messages_tabular key=_message_tabular item=_messages_tabular_supported}}
-    <fieldset>
-      <legend>{{tr}}{{$_message_tabular}}{{/tr}}</legend>
-      
-      <table class="tbl">
-      {{foreach from=$_messages_tabular_supported item=_message_tabular_supported}}
-        <tr>
-          <th class="category narrow">{{tr}}{{$_message_tabular_supported->message}}{{/tr}}</th>
-          <td> {{mb_value object=$_message_tabular_supported field=active}} </td>
-        </tr>
-      {{/foreach}}
-      </table>
-      
-    </fieldset>
+    {{mb_include template="inc_messages_available" message=$_message_tabular messages_supported=$_messages_tabular_supported}}
   {{/foreach}}
 </fieldset>
 
@@ -39,24 +27,12 @@
   <legend>{{tr}}CEchangeXML{{/tr}}</legend>
   
   {{foreach from=$formats_xml item=_format_xml}}
-    <button class="none" onclick="InteropActor.viewMessagesSupported('{{$actor_guid}}', '{{$_format_xml}}')">
-      {{tr}}{{$_format_xml}}{{/tr}}
+    <button onclick="InteropActor.viewMessagesSupported('{{$actor_guid}}', '{{$_format_xml->_class_name}}')">
+      <img src="modules/{{$_format_xml->_ref_module->mod_name}}/images/icon.png" width="16"/>{{tr}}{{$_format_xml->_class_name}}{{/tr}}
     </button>
   {{/foreach}}
   
   {{foreach from=$messages_xml key=_message_xml item=_messages_xml_supported}}
-    <fieldset>
-      <legend>{{tr}}{{$_message_xml}}{{/tr}}</legend>
-      
-      <table class="tbl">
-      {{foreach from=$_messages_xml_supported item=_message_xml_supported}}
-        <tr>
-          <th class="category narrow">{{tr}}{{$_message_xml_supported->message}}{{/tr}}</th>
-          <td> {{mb_value object=$_message_xml_supported field=active}} </td>
-        </tr>
-      {{/foreach}}
-      </table>
-      
-    </fieldset>
-    {{/foreach}}
+    {{mb_include template="inc_messages_available" message=$_message_xml messages_supported=$_messages_xml_supported}}
+  {{/foreach}}
 </fieldset>

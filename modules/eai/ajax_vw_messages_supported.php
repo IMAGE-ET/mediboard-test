@@ -20,7 +20,8 @@ $messages = $data_format->getMessagesSupported($actor_guid);
 
 // Création du template
 $smarty = new CSmartyDP();
-$smarty->assign("messages"    , $messages);
+$smarty->assign("messages"  , $messages);
+$smarty->assign("actor_guid", $actor_guid);
 $smarty->display("inc_messages_supported.tpl");
 
 ?>
