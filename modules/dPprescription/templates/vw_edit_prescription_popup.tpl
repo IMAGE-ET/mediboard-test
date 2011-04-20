@@ -70,8 +70,10 @@ emptyProtocole = function() {
 // la fonction reloadPrescription est à définir.
 if (!window.reloadPrescription) {
   reloadPrescription = function(prescription_id) {
-    if (window.opener == null) return;
-    Prescription.reloadPrescSejour(prescription_id, '','', '0', null, null, null,'', null, false);
+    try {
+      Prescription.reloadPrescSejour(prescription_id, '','', '0', null, null, null,'', null, false);
+    }
+    catch(e){ }
   }
 }
 
