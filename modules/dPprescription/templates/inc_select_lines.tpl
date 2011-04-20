@@ -12,7 +12,7 @@
 </script>
 
 <ul id="tabs-protocole" class="control_tabs">
-  {{if $prescription->_ref_lines_med_comments.med|@count || $prescription->_ref_lines_med_comments.comment|@count}}
+  {{if $prescription->_ref_lines_med_comments.med|@count || $prescription->_ref_prescription_line_mixes || $prescription->_ref_lines_med_comments.comment|@count}}
     <li><a href="#medicaments">{{tr}}CPrescription._chapitres.med{{/tr}}
       (<span id="nb_med">{{$prescription->_counts_by_chapitre.med}}</span>)</a></li>
   {{/if}}

@@ -16,7 +16,7 @@
                   {{if $line->_fin_reelle && $line->_fin_reelle < $now && !$line->_protocole}} line_stopped{{/if}}" id="line_medicament_{{$line->_id}}">
   <!-- Header de la ligne -->
   <tr class="hoverable 
-	   {{if !$line->_protocole && $line->_fin_reelle}}
+	   {{if !$line->_protocole && $line->_fin_reelle && !$advanced_prot}}
 	     {{if $line->_fin_reelle < $now}}hatching{{/if}}
 		   {{if $line->_fin_reelle|iso_date < $now|iso_date}}opacity-50{{/if}}
 		 {{/if}}">

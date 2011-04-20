@@ -15,7 +15,7 @@
 <!-- Header de la ligne d'element -->
 <table class="tbl elt {{if $line->_fin_reelle && $line->_fin_reelle < $now && !$line->_protocole}}line_stopped{{/if}}" id="line_element_{{$line->_id}}"> 
 <tr class="hoverable 
-          {{if $line->_fin_reelle && !$line->_protocole && !$line->inscription}}
+          {{if $line->_fin_reelle && !$line->_protocole && !$line->inscription && !$advanced_prot}}
 					  {{if $line->_fin_reelle < $now}}hatching{{/if}}
 					  {{if $line->_fin_reelle|iso_date < $now|iso_date}}opacity-50{{/if}}
 					{{/if}}">    

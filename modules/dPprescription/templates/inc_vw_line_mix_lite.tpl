@@ -13,7 +13,7 @@
 
 <table class="tbl">
 {{assign var=prescription_line_mix_id value=$_prescription_line_mix->_id}}
-<tr class="{{if $_prescription_line_mix->_fin && !$_prescription_line_mix->_protocole}}
+<tr class="{{if $_prescription_line_mix->_fin && !$_prescription_line_mix->_protocole && !$advanced_prot}}
              {{if $_prescription_line_mix->_fin < $now}}hatching{{/if}}
              {{if $_prescription_line_mix->_fin|iso_date < $now|iso_date}}opacity-50{{/if}}
            {{/if}}">

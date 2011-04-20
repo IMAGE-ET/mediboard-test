@@ -39,20 +39,21 @@ foreach ($prescription->_ref_lines_med_comments["comment"] as $key=>$_line) {
   }
 }
 
-foreach ($prescription->_ref_lines_elements_comments as &$chapitre) {
-  foreach ($chapitre as $key=>$_line) {
-    foreach($chapitre as &$cat) {
-      foreach ($cat as &$_elements) {
-        foreach ($_elements as $key=>$_line) {
-          if ($_line->signee) {
-            unset($_elements[$key]);
+if ($prescription->_ref_lines_elements_comments) {
+  foreach ($prescription->_ref_lines_elements_comments as &$chapitre) {
+    foreach ($chapitre as $key=>$_line) {
+      foreach($chapitre as &$cat) {
+        foreach ($cat as &$_elements) {
+          foreach ($_elements as $key=>$_line) {
+            if ($_line->signee) {
+              unset($_elements[$key]);
+            }
           }
         }
       }
     }
   }
 }
-
 foreach ($prescription->_ref_prescription_line_mixes as $key=>$_line_mix) {
   if ($_line_mix->signature_prat) {
     unset($prescription->_ref_prescription_line_mixes[$key]);
