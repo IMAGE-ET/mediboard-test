@@ -1176,6 +1176,12 @@ class CMbObject {
 
     $this->loadOldObject();
     
+    if (CAppUI::conf("readonly")) {
+      return CAppUI::tr($this->_class_name) . 
+        CAppUI::tr("CMbObject-msg-check-failed") .
+        CAppUI::tr("Mode-readonly-msg");
+      }
+    
     if ($msg = $this->check()) {
       return CAppUI::tr($this->_class_name) . 
         CAppUI::tr("CMbObject-msg-check-failed") .
@@ -1196,7 +1202,9 @@ class CMbObject {
     }
 
     if (!$ret) {
-      return "$this->_class_name::store failed <br />" . $spec->ds->error();
+      return CAppUI::tr($this->_class_name) . 
+        CAppUI::tr("CMbObject-msg-store-failed") .
+        $spec->ds->error();
     }
     
     // Préparation du log, doit être fait AVANT $this->load()
