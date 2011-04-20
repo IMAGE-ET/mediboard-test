@@ -15,7 +15,15 @@ $object_id = CValue::get("object_id");
 
 // Liste des classes
 $classes = array();
-foreach (CApp::getInstalledClasses() as $class) {
+
+if (!$onlyclass) {
+	$installed_classes = CApp::getInstalledClasses();
+}
+else {
+	$installed_classes = array($selClass);
+}
+
+foreach ($installed_classes as $class) {
   $object = @new $class;
   $classes[$class] = array_keys($object->getSeekables());
 }

@@ -41,22 +41,26 @@ function setClose(selClass,keywords,key,val){
 {{/if}}
 <table class="form">
   <tr>
-    <th class="title" colspan="3">Critères de sélection</th>
+    <th class="title" colspan="2">Critères de sélection</th>
   </tr>
   <tr>
-    <th><label for="selClass" title="Veuillez Sélectionner une Class">Choix du type d'objet</label></th>
+    <th><label for="selClass">Type d'objet</label></th>
     <td colspan="2">
-      <select class="notNull str" name="selClass" {{if $onlyclass=='true'}}disabled="disabled"{{/if}}>
-        <option value="">&mdash; {{tr}}Choose{{/tr}}</option>
-        {{foreach from=$classes key=_class item=_fields}}
-        <option value="{{$_class}}" 
-        	{{if $selClass == $_class}} selected="selected" {{/if}}
-        	{{if !$_fields|@count}} style="opacity: .6" {{/if}}
-        >	
-        	{{tr}}{{$_class}}{{/tr}}
-        </option>
-        {{/foreach}}
-       </select>
+    	{{if $onlyclass == 'true'}}
+			  <strong>{{tr}}{{$selClass}}{{/tr}}</strong>
+			{{else}}
+	      <select class="notNull str" name="selClass">
+	        <option value="">&mdash; {{tr}}Choose{{/tr}}</option>
+	        {{foreach from=$classes key=_class item=_fields}}
+	        <option value="{{$_class}}" 
+	        	{{if $selClass == $_class}} selected="selected" {{/if}}
+	        	{{if !$_fields|@count}} style="opacity: .6" {{/if}}
+	        >	
+	        	{{tr}}{{$_class}}{{/tr}}
+	        </option>
+	        {{/foreach}}
+	       </select>
+			 {{/if}}
     </td>
   </tr>
 
@@ -72,13 +76,12 @@ function setClose(selClass,keywords,key,val){
 	{{if $selClass}}
   {{assign var=fields value=$classes.$selClass}}
   <tr>
-    <td colspan="10" class="text">
+    <td colspan="2" class="text">
       {{if $fields|@count}}
 	      <div class="small-info">
 	        Mots clés recherchés dans les champs suivants :
 	        {{foreach from=$fields item=_field name=field}}
-					{{mb_label class=$selClass field=$_field}}
-					{{$smarty.foreach.field.last value='.' other=','}}
+						{{mb_label class=$selClass field=$_field}}{{$smarty.foreach.field.last|ternary:'.':','}}
 					{{/foreach}}
 	      </div>
 			{{else}}
@@ -113,7 +116,7 @@ function setClose(selClass,keywords,key,val){
 {{if $selClass}}
 <table class="tbl">
   <tr>
-    <th class="title" style="text-align: center;" colspan="2">{{tr}}Results{{/tr}}</th>
+    <th class="title" colspan="2">{{tr}}Results{{/tr}}</th>
   </tr>
   
   {{foreach from=$list item=_object}}
@@ -127,6 +130,12 @@ function setClose(selClass,keywords,key,val){
       	</button>
       </td>
     </tr>
+	{{foreachelse}}
+	  <tr>
+	  	<td colspan="2" class="empty">
+	  		{{tr}}{{$selClass}}.none{{/tr}}
+	  	</td>
+	  </tr>
   {{/foreach}}
 </table>
 {{/if}}

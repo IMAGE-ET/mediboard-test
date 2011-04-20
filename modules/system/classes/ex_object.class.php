@@ -173,6 +173,7 @@ class CExObject extends CMbMetaObject {
     while ($row = $ds->fetchAssoc($cur)) {
       $newObject = new self; // $this->_class_name >>>> "self"
       //$newObject->_ex_class_id = $this->_ex_class_id;
+      //$newObject->setExClass();
       $newObject->bind($row, false);
       
       $newObject->checkConfidential();
@@ -206,7 +207,7 @@ class CExObject extends CMbMetaObject {
   
   function getProps() {
     $ex_class = $this->loadRefExClass();
-    
+    //mbTrace($ex_class);
     $this->_spec->table = $ex_class->getTableName();
     
     $props = parent::getProps();
