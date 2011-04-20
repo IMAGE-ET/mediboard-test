@@ -13,10 +13,12 @@ Main.add(function(){
   Control.Tabs.create("nominatif-deliveries-tabs", true);
   $$('a[href=#list-nominatives] small')[0].update('({{$deliveries|@count}})'); 
   
-  var tabs = $("nominatif-deliveries-tabs");
-  Event.observe(window, "scroll", function(){
-    tabs.setStyle({marginTop: document.viewport.getScrollOffsets().top+"px"});
-  });
+	{{if $deliveries_by_service|@count < 25}}
+	  var tabs = $("nominatif-deliveries-tabs");
+	  Event.observe(window, "scroll", function(){
+	    tabs.setStyle({marginTop: document.viewport.getScrollOffsets().top+"px"});
+	  });
+	{{/if}}
 });
 </script>
 
@@ -31,7 +33,7 @@ Main.add(function(){
         <button type="submit" class="print" style="font-weight: normal;">Plan cueillette</button>
         <br /><!-- BR required (rendering bug in Chrome) -->
       
-        <ul class="control_tabs_vertical" id="nominatif-deliveries-tabs" style="font-size: 0.9em;">
+        <ul class="control_tabs_vertical small" id="nominatif-deliveries-tabs" style="font-size: 0.9em;">
         {{foreach from=$deliveries_by_service item=_deliveries key=service_id}}
           <li>
             {{math assign="remaining" equation="x-y" x=$_deliveries|@count y=$delivered_counts.$service_id}}
