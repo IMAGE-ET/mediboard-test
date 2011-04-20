@@ -66,15 +66,15 @@ cecho ()
   color=${2:-"default"}        # Defaults to nothing, if not specified.
 
   case $color in
-    bold    ) color="\033[1m"    ;;
-    black   ) color="\033[0;30m" ;;
-    red     ) color="\033[0;31m" ;;
-    green   ) color="\033[0;32m" ;;
-    yellow  ) color="\033[0;33m" ;;
-    blue    ) color="\033[0;34m" ;;
-    magenta ) color="\033[0;35m" ;;
-    cyan    ) color="\033[0;36m" ;;
-    white   ) color="\033[0;37m" ;;
+    bold    ) color="\E[1m"    ;;
+    black   ) color="\E[0;30m" ;;
+    red     ) color="\E[0;31m" ;;
+    green   ) color="\E[0;32m" ;;
+    yellow  ) color="\E[0;33m" ;;
+    blue    ) color="\E[0;34m" ;;
+    magenta ) color="\E[0;35m" ;;
+    cyan    ) color="\E[0;36m" ;;
+    white   ) color="\E[0;37m" ;;
     default ) color='' ;;
     *) 
       echo "Usage: second color param should be one of black, red, green, yellow, blue, magenta, cyan, white" 
