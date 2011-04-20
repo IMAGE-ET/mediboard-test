@@ -24,6 +24,9 @@ submitTiming = function(){
 submitTransmissions = function(){
   var oForm = document.forms['editTrans'];
   submitFormAjax(oForm,'systemMsg', { onComplete: function() { 
+    if (window.opener.updateNbTrans) {
+      window.opener.updateNbTrans('{{$sejour_id}}');
+    }
   	refreshPerfTransmissions();
     refreshDossierSoin();
 		window.opener.loadSuivi('{{$sejour_id}}');

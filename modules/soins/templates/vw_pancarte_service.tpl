@@ -70,7 +70,7 @@ refreshLinePancarte = function(prescription_id){
 
 loadSuivi = function(sejour_id, user_id, cible) {
   if(!sejour_id) return;
-  
+  updateNbTrans(sejour_id);
   var urlSuivi = new Url("dPhospi", "httpreq_vw_dossier_suivi");
   urlSuivi.addParam("sejour_id", sejour_id);
   urlSuivi.addParam("user_id", user_id);

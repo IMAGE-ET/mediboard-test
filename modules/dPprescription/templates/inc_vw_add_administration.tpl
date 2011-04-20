@@ -60,6 +60,10 @@ function submitTransmission(administration_id){
       window.opener.PlanSoins.loadTraitement('{{$sejour->_id}}','{{$date_sel}}', oFormClick.nb_decalage.value,'{{$mode_dossier}}','{{$line->_id}}','{{$line->_class_name}}',{{$key_tab|json}});
     {{/if}}
     window.opener.loadSuivi('{{$sejour->_id}}');
+    
+		if (window.opener.updateNbTrans) {
+		  window.opener.updateNbTrans('{{$sejour->_id}}');
+		}
 		
     {{if "forms"|module_active}}
       ExObject.trigger("CAdministration-"+administration_id, "validation", {

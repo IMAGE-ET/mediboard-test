@@ -11,6 +11,9 @@
     var oForm = getForm("editLine");
     return onSubmitFormAjax(oForm, {onComplete: function() {
       window.opener.refreshDossierSoin(null, 'inscription', true);
+      if (window.opener.updateNbTrans) {
+        window.opener.updateNbTrans($V(getForm('editTrans').sejour_id));
+      }
       window.close();
     } });
   }
