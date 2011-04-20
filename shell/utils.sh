@@ -17,24 +17,24 @@ check_errs()
   RETURNCODE=$1
   FAILURETEXT=$2
   SUCCESSTEXT=$3
+ 
+  cecho ">> status: \c" bold
 
   if [ "${RETURNCODE}" -ne "0" ]
   then
-    echo ">> status: ERROR # ${RETURNCODE} : ${FAILURETEXT}"
+    cecho "ERROR # ${RETURNCODE} : ${FAILURETEXT}" red
     # as a bonus, make our script exit with the right error code.
-    echo "...Exiting..."
+    cecho "...Exiting..." bold
     exit ${RETURNCODE}
   fi
 
-  echo ">> status: ${SUCCESSTEXT}"
+  cecho "${SUCCESSTEXT}"
 }
 
 announce_script()
 {
   SCRIPTNAME=$1
-
-  echo 
-  echo "--- $SCRIPTNAME ($(date)) ---"
+  cecho "--- $SCRIPTNAME ($(date)) ---" bold
 }
 
 force_file()
@@ -57,3 +57,32 @@ package_lib()
   check_errs $? "Failed to package $1" "$1 packaged!";
   mv ./tmp/$1-$3.tar.gz libpkg/;
 }
+
+cecho ()
+{
+  # $1 = message
+  # $2 = color
+  message=$1                   
+  color=${2:-"default"}        # Defaults to nothing, if not specified.
+
+  case $color in
+    bold    ) color="\033[1m"    ;;
+    black   ) color="\033[0;30m" ;;
+    red     ) color="\033[0;31m" ;;
+    green   ) color="\033[0;32m" ;;
+    yellow  ) color="\033[0;33m" ;;
+    blue    ) color="\033[0;34m" ;;
+    magenta ) color="\033[0;35m" ;;
+    cyan    ) color="\033[0;36m" ;;
+    white   ) color="\033[0;37m" ;;
+    default ) color='' ;;
+    *) 
+      echo "Usage: second color param should be one of black, red, green, yellow, blue, magenta, cyan, white" 
+      return 1
+      ;;
+  esac
+
+  echo "$color$message"
+  tput sgr0                    # Reset to normal.
+}
+
