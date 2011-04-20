@@ -1178,7 +1178,7 @@ class CMbObject {
     
     if (CAppUI::conf("readonly")) {
       return CAppUI::tr($this->_class_name) . 
-        CAppUI::tr("CMbObject-msg-check-failed") .
+        CAppUI::tr("CMbObject-msg-store-failed") .
         CAppUI::tr("Mode-readonly-msg");
       }
     
