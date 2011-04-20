@@ -41,73 +41,55 @@
     $prescription->_ref_lines_med_comments.comment|@count ||
     $prescription->_ref_prescription_line_mixes|@count}}
     <div id="medicaments">
-      <table class="tbl">
       {{foreach from=$prescription->_ref_lines_med_comments.med item=_line}}
-        <tr>
-          <td>
-            {{mb_include template=inc_vw_line_medicament_lite curr_line=$_line}}
-          </td>
-        </tr>
+        {{mb_include template=inc_vw_line_medicament_lite curr_line=$_line}}
       {{/foreach}}
+      
+      <table class="tbl">
       {{foreach from=$prescription->_ref_lines_med_comments.comment item=_line}}
-          <tr>
-            <td>
-              <table class="tbl">
-                {{mb_include template=inc_vw_line_comment_lite _line_comment=$_line}}
-              </table>
-            </td>
-          </tr>
-      {{/foreach}}
-      {{foreach from=$prescription->_ref_prescription_line_mixes item=_line}}
-        <tr>
-          <td>
-           {{mb_include template=inc_vw_line_mix_lite _prescription_line_mix=$_line}}
-          </td>
-        </tr>
+        {{mb_include template=inc_vw_line_comment_lite _line_comment=$_line}}
       {{/foreach}}
       </table>
+      
+      {{foreach from=$prescription->_ref_prescription_line_mixes item=_line}}
+        {{mb_include template=inc_vw_line_mix_lite _prescription_line_mix=$_line}}
+      {{/foreach}}
     </div>
   {{/if}}
     
   {{foreach from=$prescription->_ref_lines_elements_comments item=_lines_by_chap key=chap}}
     <div id="element_{{$chap}}">
-      <table class="tbl">
       {{assign var=has_element value=0}}
       {{foreach from=$_lines_by_chap item=_lines_by_cat}}
         {{foreach from=$_lines_by_cat.element item=_line name=foreach_elt}}
           {{if $smarty.foreach.foreach_elt.first}}
             {{assign var=has_element value=1}}
-            <tr>
-              <th class="category">
-                {{$_line->_ref_element_prescription->_ref_category_prescription->_view}}
-              </th>
-            </tr>
+            <table class="tbl">
+              <tr>
+                <th class="category">
+                  {{$_line->_ref_element_prescription->_ref_category_prescription->_view}}
+                </th>
+              </tr>
+            </table>
           {{/if}}
-          <tr>
-            <td>
-              {{mb_include template=inc_vw_line_element_lite _line_element=$_line}}
-            </td>
-          </tr>
+          {{mb_include template=inc_vw_line_element_lite _line_element=$_line}}
         {{/foreach}}
+        
         {{foreach from=$_lines_by_cat.comment item=_line name=foreach_elt}}
           {{if $smarty.foreach.foreach_elt.first && !$has_element}}
+          <table class="tbl">
             <tr>
               <th class="category">
                 {{$_line->_ref_category_prescription->_view}}
               </th>
             </tr>
+            </table>
           {{/if}}
-          
-          <tr>
-            <td>
-              <table class="tbl">
-                {{mb_include template=inc_vw_line_comment_lite _line_comment=$_line}}
-              </table>
-            </td>
-          </tr>
+          <table class="tbl">
+            {{mb_include template=inc_vw_line_comment_lite _line_comment=$_line}}
+          </table>
         {{/foreach}}
       {{/foreach}}
-      </table>
     </div>
   {{/foreach}}
   </table>

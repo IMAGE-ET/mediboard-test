@@ -12,6 +12,7 @@ $praticien_id      = CValue::post("praticien_id");
 $prescription_id   = CValue::post("prescription_id");
 $libelle_protocole = CValue::post("libelle_protocole");
 $perop             = CValue::post("perop", false);
+$limit             = CValue::get("limit", 50);
 
 $_tokens = explode(" ", $libelle_protocole);
 
@@ -111,6 +112,7 @@ $smarty->assign("nodebug", true);
 $smarty->assign("list", $list);
 $smarty->assign("token_search", $token_search);
 $smarty->assign("token_replace", $token_replace);
+$smarty->assign("limit", $limit);
 $smarty->display("../../dPprescription/templates/inc_select_protocole.tpl");
 
 ?>

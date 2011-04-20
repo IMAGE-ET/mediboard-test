@@ -451,6 +451,9 @@ var Url = Class.create({
     autocompleter.startIndicator = function(){
       if(this.options.indicator) Element.show(this.options.indicator);
       input.addClassName("throbbing");
+      if (this.request) {
+        this.request.abort();
+      }
     };
     autocompleter.stopIndicator = function(){
       if(this.options.indicator) Element.hide(this.options.indicator);

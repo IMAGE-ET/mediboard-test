@@ -42,3 +42,4 @@
     {{/foreach}}
   {{/foreach}}
 </ul>
+{{mb_include module=system template=inc_autocomplete_limit results=$list.prot limit=$limit}}

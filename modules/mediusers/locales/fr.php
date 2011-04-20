@@ -276,4 +276,5 @@ $locales['mod-mediusers-tab-vw_idx_functions'] = 'Fonctions des utilisateurs';
 $locales['mod-mediusers-tab-vw_idx_mediusers'] = 'Utilisateurs';
 $locales['module-mediusers-court'] = 'Mediusers';
 $locales['module-mediusers-long'] = 'Gestion des utilisateurs';
+
 ?>

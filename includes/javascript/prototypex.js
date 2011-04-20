@@ -242,6 +242,12 @@ Class.extend(Autocompleter.Base, {
   }
 });
 
+Class.extend(Ajax.Request, {
+  abort: function() {
+    this.transport.abort();
+  }
+});
+
 // Fix to get better window size ( document.documentElement instead of document.body )
 // Needs to be done after everything
 (function(){
