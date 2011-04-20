@@ -13,6 +13,10 @@
  * @link       http://www.mediboard.org
  */
 
+if (CAppUI::conf("readonly")) {
+	return;
+}
+
 global $m, $action;
 
 $ds = CSQLDataSource::get("std");
