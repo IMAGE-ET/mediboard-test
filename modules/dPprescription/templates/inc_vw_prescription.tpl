@@ -27,12 +27,18 @@ Main.add(function () {
   if(form){
     preselectType("CSejour", form);
   }
+	
+	// Si la modale n'existe pas, on la crée
+	if(!$('modalPrescriptionLine')){
+	  $(document.body).insert(
+			DOM.div({id: "modalPrescriptionLine"}).setStyle({
+	      width: '90%',
+	      diplay: 'none'
+	  }))
+  }
 });
 
 </script>
-
-<!-- Modale permettant d'afficher les lignes de prescription en mode modification -->
-<div id="modalPrescriptionLine" style="width: 90%; display: none;"></div>
 
 <!-- Formulaire de creation du protocole -->
 {{if !$prescription->_id && $mode_protocole && !$mode_pharma}}

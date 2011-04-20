@@ -58,7 +58,7 @@ function submitSuivi(oForm) {
     loadSuivi(sejour_id); 
     if(oForm.object_class.value != "" || oForm.libelle_ATC.value != ''){
       // Refresh de la partie administration
-      Prescription.loadTraitement(sejour_id,'{{$date}}','','administration');
+      PlanSoins.loadTraitement(sejour_id,'{{$date}}','','administration');
     }  
   } });
 }
@@ -117,7 +117,7 @@ Main.add(function () {
 	  <li><a href="#viewSejourHospi">Séjour</a></li>
 		  <li onmousedown="refreshConstantesHack('{{$sejour->_id}}');"><a href="#constantes">Constantes</a></li>
 		{{if $isPrescriptionInstalled}}
-	    <li onmousedown="Prescription.loadTraitement('{{$sejour->_id}}','{{$date}}','','administration');"><a href="#dossier_traitement">Soins</a></li>
+	    <li onmousedown="PlanSoins.loadTraitement('{{$sejour->_id}}','{{$date}}','','administration');"><a href="#dossier_traitement">Soins</a></li>
 		  <li onmousedown="Prescription.reloadPrescSejour('','{{$sejour->_id}}', null, null, null, null, null);"><a href="#prescription_sejour">Prescription</a></li>
 	  {{/if}}  
 		<li><a href="#dossier_tab">Documents</a></li>

@@ -8,7 +8,6 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
 *}}
 
-
 {{if $sejour->_id}}
 
 <script type="text/javascript">
@@ -31,13 +30,13 @@ addManualPlanification = function(date, time, key_tab, object_id, object_class, 
   $V(oForm.original_dateTime, original_date);
   
   submitFormAjax(oForm, 'systemMsg', { onComplete: function(){ 
-    Prescription.loadTraitement('{{$sejour->_id}}','{{$date}}',document.click.nb_decalage.value, 'planification', object_id, object_class, key_tab);
+    PlanSoins.loadTraitement('{{$sejour->_id}}','{{$date}}',document.click.nb_decalage.value, 'planification', object_id, object_class, key_tab);
   } } ); 
 }
 
 refreshDossierSoin = function(mode_dossier, chapitre, force_refresh){
   if(!window[chapitre+'SoinLoaded'] || force_refresh) {
-    Prescription.loadTraitement('{{$sejour->_id}}','{{$date}}',document.click.nb_decalage.value, mode_dossier, null, null, null, chapitre);
+    PlanSoins.loadTraitement('{{$sejour->_id}}','{{$date}}',document.click.nb_decalage.value, mode_dossier, null, null, null, chapitre);
     window[chapitre+'SoinLoaded'] = true;
   }
 }
@@ -71,7 +70,7 @@ submitPosePerf = function(oFormPerf){
   $V(oFormPerf.date_pose, 'current');
   $V(oFormPerf.time_pose, 'current');
   submitFormAjax(oFormPerf, 'systemMsg', { onComplete: function(){ 
-    Prescription.loadTraitement('{{$sejour->_id}}','{{$date}}', document.click.nb_decalage.value,'{{$mode_dossier}}',oFormPerf.prescription_line_mix_id.value,'CPrescriptionLineMix','');
+    PlanSoins.loadTraitement('{{$sejour->_id}}','{{$date}}', document.click.nb_decalage.value,'{{$mode_dossier}}',oFormPerf.prescription_line_mix_id.value,'CPrescriptionLineMix','');
   } } )
 }
 
@@ -79,7 +78,7 @@ submitRetraitPerf = function(oFormPerf){
   $V(oFormPerf.date_retrait, 'current');
   $V(oFormPerf.time_retrait, 'current');
   submitFormAjax(oFormPerf, 'systemMsg', { onComplete: function(){ 
-    Prescription.loadTraitement('{{$sejour->_id}}','{{$date}}', document.click.nb_decalage.value,'{{$mode_dossier}}',oFormPerf.prescription_line_mix_id.value,'CPrescriptionLineMix','');
+    PlanSoins.loadTraitement('{{$sejour->_id}}','{{$date}}', document.click.nb_decalage.value,'{{$mode_dossier}}',oFormPerf.prescription_line_mix_id.value,'CPrescriptionLineMix','');
   } } )
 }
 
@@ -155,7 +154,7 @@ submitSuivi = function(oForm, del) {
     if($V(oForm.object_class)|| $V(oForm.libelle_ATC)){
       // Refresh de la partie administration
       if($('jour').visible()){
-        Prescription.loadTraitement(sejour_id,'{{$date}}','','administration');
+        PlanSoins.loadTraitement(sejour_id,'{{$date}}','','administration');
       }
       // Refresh de la partie plan de soin
       if($('semaine').visible()){
@@ -270,10 +269,13 @@ Main.add(function () {
 	</table>
 	
 	<ul id="tab_dossier_soin" class="control_tabs">
-	  <li onmousedown="Prescription.loadTraitement('{{$sejour->_id}}','{{$date}}','','administration','','','','med'); refreshTabState();"><a href="#jour">Journée</a></li>
+	  <li onmousedown="PlanSoins.loadTraitement('{{$sejour->_id}}','{{$date}}','','administration','','','','med'); refreshTabState();"><a href="#jour">Journée</a></li>
 	  <li onmousedown="calculSoinSemaine('{{$date}}','{{$prescription_id}}');"><a href="#semaine">Semaine</a></li>
 		<li onmousedown="updateTasks('{{$sejour->_id}}');"><a href="#tasks">Tâches</a></li>
     <li onmousedown="loadSuivi('{{$sejour->_id}}')"><a href="#dossier_suivi">{{tr}}CMbObject-back-transmissions{{/tr}} <span id="nb_trans"></span></a></li>
+		{{if $show_prescription}}
+		<li onmousedown="Prescription.reloadPrescSejour('{{$prescription_id}}');"><a href="#prescription_sejour">Prescription</a></li>
+    {{/if}}
 	</ul>
 	<hr class="control_tabs" />
 	
@@ -283,12 +285,12 @@ Main.add(function () {
 		<h1 style="text-align: center;">
 		 		  <button type="button" 
 					       class="left notext" 
-								 {{if $sejour->_entree|iso_date < $date}}onclick="Prescription.loadTraitement('{{$sejour->_id}}','{{$prev_date}}', null, null, null, null, null, null, '1');"{{/if}}
+								 {{if $sejour->_entree|iso_date < $date}}onclick="PlanSoins.loadTraitement('{{$sejour->_id}}','{{$prev_date}}', null, null, null, null, null, null, '1');"{{/if}}
 					       {{if $sejour->_entree|iso_date >= $date}}style="opacity: 0.5;"{{/if}}></button>	
 	     Dossier de soin du {{$date|@date_format:"%d/%m/%Y"}}
 			 <button type="button"
 			         class="right notext"
-							 {{if $sejour->_sortie|iso_date > $date}}onclick="Prescription.loadTraitement('{{$sejour->_id}}','{{$next_date}}','','administration', null, null, null, null, '1');"{{/if}}
+							 {{if $sejour->_sortie|iso_date > $date}}onclick="PlanSoins.loadTraitement('{{$sejour->_id}}','{{$next_date}}','','administration', null, null, null, null, '1');"{{/if}}
 							 {{if $sejour->_sortie|iso_date <= $date}}style="opacity: 0.5;"{{/if}}></button>
 		</h1>
 		 
@@ -352,6 +354,9 @@ Main.add(function () {
 	<div id="semaine" style="display:none"></div>
 	<div id="tasks" style="display:none"></div>
   <div id="dossier_suivi" style="display:none"></div>
+	{{if $show_prescription}}
+	<div id="prescription_sejour" style="display:none"></div>
+  {{/if}}
 {{else}}
   <div class="small-info">
     Veuillez sélectionner un séjour pour pouvoir accéder au suivi de soins.

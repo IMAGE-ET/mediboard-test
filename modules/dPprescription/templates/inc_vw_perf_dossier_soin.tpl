@@ -53,7 +53,7 @@
 	
 	{{if $_prescription_line_mix->_debit && $_prescription_line_mix->type_line != "oxygene"}}
 		<form style="white-space: nowrap" name="modifDebit-{{$prescription_line_mix_id}}" method="post" action="?" onsubmit="return onSubmitFormAjax(this, { onComplete: function() { 
-                            Prescription.loadTraitement('{{$_prescription_line_mix->_ref_prescription->object_id}}','{{$date}}','','administration');} } )">
+                            PlanSoins.loadTraitement('{{$_prescription_line_mix->_ref_prescription->object_id}}','{{$date}}','','administration');} } )">
 		  <input type="hidden" name="m" value="dPprescription" />
 			<input type="hidden" name="dosql" value="do_prescription_line_mix_variation_aed" />
       <input type="hidden" name="prescription_line_mix_variation_id" value="" />
@@ -120,7 +120,7 @@
       <input type="hidden" name="dosql" value="do_substitution_line_aed" />
       <select name="object_guid" style="width: 75px;" 
               onchange="submitFormAjax(this.form, 'systemMsg', { onComplete: function() { 
-      										Prescription.loadTraitement('{{$_prescription_line_mix->_ref_prescription->object_id}}','{{$date}}','','administration');} } )">
+      										PlanSoins.loadTraitement('{{$_prescription_line_mix->_ref_prescription->object_id}}','{{$date}}','','administration');} } )">
         <option value="">Subst.</option>
         {{foreach from=$_prescription_line_mix->_ref_substitution_lines item=lines_subst_by_chap}}
           {{foreach from=$lines_subst_by_chap item=_line_subst}}

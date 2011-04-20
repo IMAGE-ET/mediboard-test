@@ -31,7 +31,7 @@ $pratSel_id      = CValue::getOrSession("pratSel_id");
 $mode_sejour     = CValue::getOrSession("mode_sejour", false);
 $praticien_for_prot_id = CValue::getOrSession("praticien_for_prot_id");
 $hide_old_lines  = CValue::get("hide_old_lines");
-
+$hide_header = CValue::get("hide_header", "0");
 
 $hidden_lines_count = 0;
 
@@ -511,13 +511,13 @@ $smarty = new CSmartyDP();
 $smarty->assign("mode_substitution", 0);
 
 // Mode permettant de supprimer qq elements de la ligne en salle d'op (Anesthesie)
-$smarty->assign("current_user", $current_user);
-$smarty->assign("aides_prescription", $aides_prescription);
-$smarty->assign("mode_anesth", $mode_anesth);
-$smarty->assign("historique", $historique);
-$smarty->assign("filter_line", $filter_line);
-$smarty->assign("hours", $hours);
-$smarty->assign("mins", $mins);
+$smarty->assign("current_user"         , $current_user);
+$smarty->assign("aides_prescription"   , $aides_prescription);
+$smarty->assign("mode_anesth"          , $mode_anesth);
+$smarty->assign("historique"           , $historique);
+$smarty->assign("filter_line"          , $filter_line);
+$smarty->assign("hours"                , $hours);
+$smarty->assign("mins"                 , $mins);
 $smarty->assign("praticien_sortie_id"  , $praticien_sortie_id);
 $smarty->assign("contexteType"         , $contexteType);
 $smarty->assign("httpreq"              , 1);
@@ -549,7 +549,7 @@ $smarty->assign("prescriptions_sejour" , $prescriptions_sejour);
 $smarty->assign("dossier_medical"      , $dossier_medical);
 $smarty->assign("now_time"             , mbTime());
 $smarty->assign("mode_pack"            , "0");
-$smarty->assign("prescription_line_mix"            , new CPrescriptionLineMix());
+$smarty->assign("prescription_line_mix", new CPrescriptionLineMix());
 $smarty->assign("operation_id"         , $operation_id);
 $smarty->assign("pratSel_id"           , $pratSel_id);
 $smarty->assign("mode_sejour"          , $mode_sejour);
@@ -557,6 +557,7 @@ $smarty->assign("praticien_for_prot_id", $praticien_for_prot_id);
 $smarty->assign("user_id"              , $AppUI->user_id);
 $smarty->assign("hide_old_lines"       , $hide_old_lines);
 $smarty->assign("hidden_lines_count"   , $hidden_lines_count);
+$smarty->assign("hide_header"          , $hide_header);
 
 if($full_mode){
   $smarty->assign("praticien_sejour", $_sejour->praticien_id);

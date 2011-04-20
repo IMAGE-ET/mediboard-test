@@ -19,7 +19,7 @@ Main.add(function () {
   {{/if}}
   
   if($('dossier_traitement')){
-    Prescription.loadTraitement('{{$selOp->sejour_id}}','{{$date}}','','administration');
+    PlanSoins.loadTraitement('{{$selOp->sejour_id}}','{{$date}}','','administration');
   }
   
   if($('antecedents')){
@@ -85,7 +85,7 @@ function submitSuivi(oForm) {
     loadSuivi(sejour_id); 
     if(oForm.object_class.value != "" || oForm.libelle_ATC.value != ''){
       // Refresh de la partie administration
-      Prescription.loadTraitement(sejour_id,'{{$date}}','','administration');
+      PlanSoins.loadTraitement(sejour_id,'{{$date}}','','administration');
     }  
   } });
 }
@@ -229,7 +229,7 @@ function reloadPrescription(prescription_id){
 
 	  {{if $isPrescriptionInstalled}}
       <li><a href="#prescription_sejour_tab">Prescription</a></li>
-      <li onmouseup="Prescription.loadTraitement('{{$selOp->sejour_id}}','{{$date}}','','administration');"><a href="#dossier_traitement">Soins</a></li>
+      <li onmouseup="PlanSoins.loadTraitement('{{$selOp->sejour_id}}','{{$date}}','','administration');"><a href="#dossier_traitement">Soins</a></li>
 	  {{/if}}
 	{{/if}}
   

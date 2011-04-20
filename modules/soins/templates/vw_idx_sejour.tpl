@@ -121,7 +121,7 @@ function loadViewSejour(sejour_id, praticien_id, patient_id, date){
   }
   if($('dossier_traitement')){
     if($('dossier_traitement').visible()) {
-      Prescription.loadTraitement(sejour_id, date,'','administration');
+      PlanSoins.loadTraitement(sejour_id, date,'','administration');
     }
   }
   if($('constantes-medicales')){
@@ -181,7 +181,7 @@ function submitSuivi(oForm) {
     if($V(oForm.object_class)|| $V(oForm.libelle_ATC)){
       // Refresh de la partie administration
       if($('jour').visible()){
-        Prescription.loadTraitement(sejour_id,'{{$date}}','','administration');
+        PlanSoins.loadTraitement(sejour_id,'{{$date}}','','administration');
       }
       // Refresh de la partie plan de soin
       if($('semaine').visible()){
@@ -531,7 +531,7 @@ printDossierComplet = function(){
         <li><a href="#viewSejourHospi">Séjour</a></li>
         <li onmousedown="refreshConstantesHack(document.form_prescription.sejour_id.value)"><a href="#constantes-medicales">Constantes</a></li>
         {{if $isPrescriptionInstalled}}
-        <li onmousedown="Prescription.loadTraitement(document.form_prescription.sejour_id.value,'{{$date}}','','administration')"><a href="#dossier_traitement">Suivi de soins</a></li>
+        <li onmousedown="PlanSoins.loadTraitement(document.form_prescription.sejour_id.value,'{{$date}}','','administration')"><a href="#dossier_traitement">Suivi de soins</a></li>
         <li onmousedown="$('prescription_sejour').update(''); Prescription.reloadPrescSejour('', document.form_prescription.sejour_id.value, null, null, null, null, null, '', null, false);">
           <a href="#prescription_sejour">Prescription</a>
         </li>

@@ -17,6 +17,7 @@ PlanSoins = {
 	manual_planif: null,
 	bornes_composition_dossier: null,
 	nb_postes : null,
+	show_prescription: false,
 	
   init: function(options){
 		Object.extend(PlanSoins, options);
@@ -130,7 +131,7 @@ PlanSoins = {
 	  
 	  if(original_date != dateTime || PlanSoins.manual_planif){
 	    submitFormAjax(oForm, 'systemMsg', { onComplete: function(){ 
-	      Prescription.loadTraitement(null,date, $V(getForm("click").nb_decalage), 'planification', object_id, object_class, key_tab);
+	      PlanSoins.loadTraitement(null,date, $V(getForm("click").nb_decalage), 'planification', object_id, object_class, key_tab);
 	    } } ); 
 	  }
 	},
@@ -160,7 +161,79 @@ PlanSoins = {
 	    };
 	  }
 	},
-	
+	loadTraitement: function(sejour_id, date, nb_decalage, mode_dossier, object_id, object_class, unite_prise, chapitre, without_check_date) {
+    var url = new Url("dPprescription", "httpreq_vw_dossier_soin");
+    url.addParam("sejour_id", sejour_id);
+    url.addParam("date", date);
+    url.addParam("line_type", "bloc");
+    url.addParam("mode_bloc", "0");
+    url.addParam("mode_dossier", mode_dossier);
+    if(nb_decalage){
+      url.addParam("nb_decalage", nb_decalage);
+    }
+    url.addParam("chapitre", chapitre);
+    url.addParam("object_id", object_id);
+    url.addParam("object_class", object_class);
+    url.addParam("unite_prise", unite_prise);
+    url.addParam("without_check_date", without_check_date);
+    url.addParam("show_prescription", PlanSoins.show_prescription ? 1 : 0);
+    if(object_id && object_class){
+      if(object_class == 'CPrescriptionLineMix'){
+        url.requestUpdate("line_"+object_class+"-"+object_id, { onComplete: function() { 
+          $("line_"+object_class+"-"+object_id).hide();
+          PlanSoins.moveDossierSoin($("line_"+object_class+"-"+object_id));
+        } } );
+      }
+      else {
+        unite_prise = unite_prise.replace(/[^a-z0-9_-]/gi, '_');
+   
+        var first_td = $('first_'+object_id+"_"+object_class+"_"+unite_prise);
+        var last_td = $('last_'+object_id+"_"+object_class+"_"+unite_prise);
+        
+        // Suppression des td entre les 2 td bornes
+        var td = first_td;
+        var colSpan = 0;
+        
+        while(td.next().id != last_td.id){
+          if(td.next().visible()){
+            colSpan++;
+          }
+          td.next().remove();
+          first_td.show();
+        }
+        
+        first_td.colSpan = colSpan;
+                
+        url.requestUpdate(first_td, {
+          insertion: Insertion.After,
+          onComplete: function(){
+            PlanSoins.moveDossierSoin($("line_"+object_class+"_"+object_id+"_"+unite_prise));
+            first_td.hide().colSpan = 1;
+          }
+        } );
+      }
+    } else {
+      if(chapitre){
+        if(chapitre == "med" || 
+           chapitre == "perfusion" || 
+           chapitre == "oxygene" || 
+           chapitre == "alimentation" ||
+           chapitre == "aerosol" ||
+           chapitre == "inj" ||
+           chapitre == "inscription"){
+          chapitre = "_"+chapitre;
+        } else {
+          chapitre = "_cat-"+chapitre;
+        }
+        if($(chapitre)){
+          url.requestUpdate(chapitre, { onComplete: function() { PlanSoins.moveDossierSoin($(chapitre)); } } );
+        }
+        
+      } else {
+        url.requestUpdate("dossier_traitement");
+      }
+    }
+  },
 	viewDossierSoin: function(element){  
 	  // recuperation du mode d'affichage du dossier (administration ou planification)
 	  mode_dossier = $V(document.mode_dossier_soin.mode_dossier);

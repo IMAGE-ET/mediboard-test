@@ -364,7 +364,9 @@ Main.add( function(){
         <input type="checkbox" id="globale" name="globale" />
         <label for="globale" style="font-size: 0.8em" title="{{tr}}CPrescription.print_globale{{/tr}}">Globale</label>
       	<button type="button" class="print" onclick="Prescription.printPrescription('{{$prescription->_id}}', 0, '{{$prescription->object_id}}', null, $('dci').checked ? 1: 0, $('globale').checked ? 1 : 0);" />Ordonnance</button>
-        <br />
+        {{if !$hide_header}}
+				<br />
+				{{/if}}
        	{{if !$is_praticien && !$mode_protocole && ($operation_id || $can->admin || $mode_pharma || $current_user->isInfirmiere())}}
 				<form name="selPraticienLine" action="?" method="get">
 				  <select style="font-size: 0.8em; width: 15em;" name="praticien_id" onchange="changePraticienMed(this.value); {{if !$mode_pharma}}changePraticienElt(this.value);{{/if}} if($('protocole_prat_name')) { $('protocole_prat_name').update('Dr '+this.options[this.selectedIndex].text); }">
@@ -397,7 +399,9 @@ Main.add( function(){
           <img title="Ecrire une note" src="images/icons/note_grey.png" />
         </div>
       {{/if}}
-      {{if !$mode_protocole}}
+			
+			
+      {{if !$mode_protocole && !$hide_header}}
         {{if $prescription->type == "externe"}}
          <span style="float: left">
          {{include file="../../dPpatients/templates/inc_vw_photo_identite.tpl" patient=$prescription->_ref_patient size=42}}
@@ -408,7 +412,9 @@ Main.add( function(){
          </a>
        {{/if}}
       {{/if}}
-      {{if !$mode_protocole}}
+			
+			
+      {{if !$mode_protocole && !$hide_header}}
 			  <h2 style="color: #fff; font-weight: bold;">
           {{$prescription->_ref_patient->_view}}  
 					
@@ -426,6 +432,7 @@ Main.add( function(){
 	    {{/if}}
     </th>
   </tr>
+	{{if !$hide_header}}
 	<tr>
 		<td>
 	 	<table class="form">
@@ -435,6 +442,7 @@ Main.add( function(){
 		<hr />
 		</td>
   </tr>
+	{{/if}}
   {{/if}}
   
 	{{assign var=easy_mode value=$app->user_prefs.easy_mode}}

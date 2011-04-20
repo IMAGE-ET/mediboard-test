@@ -32,7 +32,7 @@ submitTransmissions = function(){
 
 refreshDossierSoin = function(){
   var oFormClick = window.opener.document.click;
-	window.opener.Prescription.loadTraitement('{{$sejour_id}}','{{$date}}', oFormClick.nb_decalage.value,'{{$mode_dossier}}','{{$prescription_line_mix->_id}}','{{$prescription_line_mix->_class_name}}','');
+	window.opener.PlanSoins.loadTraitement('{{$sejour_id}}','{{$date}}', oFormClick.nb_decalage.value,'{{$mode_dossier}}','{{$prescription_line_mix->_id}}','{{$prescription_line_mix->_class_name}}','');
 }
 
 refreshPerfTiming = function(){

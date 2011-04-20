@@ -62,7 +62,7 @@ function closeApplyAdministrations(dontClose) {
     if (anyFormSubmitted && window.opener) {
       // refresh des chapitres concernés
       {{foreach from=$tabs_refresh key=chapitre item=_tab_refresh}}
-        window.opener.Prescription.loadTraitement('{{$sejour->_id}}','{{$date_sel}}', oFormClick.nb_decalage.value,'{{$mode_dossier}}', null, null, null, '{{$chapitre}}');
+        window.opener.PlanSoins.loadTraitement('{{$sejour->_id}}','{{$date_sel}}', oFormClick.nb_decalage.value,'{{$mode_dossier}}', null, null, null, '{{$chapitre}}');
       {{/foreach}}
 			if(window.opener.loadSuivi){
         window.opener.loadSuivi('{{$sejour->_id}}');
