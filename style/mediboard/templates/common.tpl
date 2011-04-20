@@ -97,6 +97,14 @@
   {{include file="../../mediboard/templates/ie.tpl" nodebug=true}}
 {{/if}}
 
+{{if $conf.readonly}}
+<div class="big-info">
+  <big>{{tr}}Mode-readonly-title{{/tr}}</big>
+  <div>{{tr}}Mode-readonly-description{{/tr}}</div>
+  <div>{{tr}}Mode-readonly-disclaimer{{/tr}}</div>
+</div>
+{{/if}}
+
 <!-- Loading divs -->
 <div id="waitingMsgMask" style="display: none;"></div>
 
