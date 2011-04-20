@@ -101,7 +101,7 @@
 				<input type="hidden" name="sejour_id" value="{{$_suivi->sejour_id}}" />
 				<button type="button" class="trash notext" onclick="submitSuivi(this.form, 1)">{{tr}}Delete{{/tr}}</button>
 			</form>
-		  <button type="button" class="edit notext" onclick="addTransmission(null, null, '{{$_suivi->_id}}')"></button>
+		  <button type="button" class="edit notext" onclick="addTransmission(null, null, '{{$_suivi->_id}}', null, null, null, 1)"></button>
 		{{/if}}
 	</td>
   
