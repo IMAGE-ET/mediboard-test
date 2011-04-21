@@ -94,7 +94,7 @@ class CPrescriptionLine extends CMbObject implements IPatientRelated {
     $specs["unite_duree"]       = "enum list|minute|heure|demi_journee|jour|semaine|quinzaine|mois|trimestre|semestre|an default|jour";
     $specs["date_arret"]        = "date";
     $specs["time_arret"]        = "time";
-    $specs["child_id"]          = "ref class|$this->_class_name";
+    $specs["child_id"]          = "ref class|$this->_class_name unlink";
     $specs["decalage_line"]     = "num";
     $specs["jour_decalage"]     = "enum list|E|I|S|N default|E";
     $specs["fin"]               = "date";
@@ -321,17 +321,18 @@ class CPrescriptionLine extends CMbObject implements IPatientRelated {
     $line = new $this->_class_name;
     $line->child_id = $this->_id;
     $line->loadMatchingObject();
+
     if($line->_id){
-      // On vide le child_id
-      $line->child_id = "";
-      if($msg = $line->store()){
-        return $msg;
+      if (!$this->canDeleteEx()) {
+        // On vide le child_id
+        $line->child_id = "";
+        if($msg = $line->store()){
+          return $msg;
+        }
       }
     }
     // Suppression de la ligne
-    if($msg = parent::delete()){
-      return $msg;
-    }
+    return parent::delete();
   }
     
   /*
