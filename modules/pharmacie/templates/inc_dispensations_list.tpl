@@ -70,7 +70,7 @@ toggleDoneDispensations = function(){
   {{if $mode_nominatif}}
 	<tr>
 		<td colspan="10">
-			<form name="editBorneDisp">
+			<form name="editBorneDisp" method="get" action="?">
 				A partir du  {{$date_min|date_format:$conf.date}} à <input type="hidden" class="time" name="borne_min" value="{{$borne_min}}" />
 				au {{$date_max|date_format:$conf.date}} à <input type="hidden" class="time" name="borne_max" value="{{$borne_max}}" />
 				<button type="button" onclick="$V(getForm('filter').borne_min, $V(this.form.borne_min)); $V(getForm('filter').borne_max, $V(this.form.borne_max)); refreshLists();" class="search">

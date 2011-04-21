@@ -219,6 +219,22 @@ Main.add(function () {
 	if(window.modalWindow){
 	  $('modal_button').show();
 	}
+
+	var options = {
+      minHours: '0',
+      maxHours: '9'
+    };
+  
+	var dates = {};
+  dates.limit = {
+    start: '{{$sejour->entree_prevue|date_format:"%Y-%m-%d"}}',
+    stop: '{{$sejour->sortie_prevue|date_format:"%Y-%m-%d"}}'
+  };
+  
+  var oFormDate = getForm("changeDateDossier");
+  if (oFormDate) {
+    Calendar.regField(oFormDate.date, dates, options);
+  }
 });
 
 </script>
@@ -292,6 +308,9 @@ Main.add(function () {
 			         class="right notext"
 							 {{if $sejour->_sortie|iso_date > $date}}onclick="PlanSoins.loadTraitement('{{$sejour->_id}}','{{$next_date}}','','administration', null, null, null, null, '1');"{{/if}}
 							 {{if $sejour->_sortie|iso_date <= $date}}style="opacity: 0.5;"{{/if}}></button>
+       <form name="changeDateDossier" method="get" action="?" onsubmit="return false" style="font-size: 11px">
+         <input type="hidden" name="date" class="date" value="{{$date}}" onchange="PlanSoins.loadTraitement('{{$sejour->_id}}',this.value,'','administration', null, null, null, null, '1');"/>
+       </form>
 		</h1>
 		 
 		 {{if $date != $today}}

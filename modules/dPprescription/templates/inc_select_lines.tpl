@@ -94,5 +94,5 @@
   {{/foreach}}
   </table>
   
-  <button type="button" class="save" onclick="submitChangedLines()">{{tr}}CPrescription.apply_advanced_protocole{{/tr}}</button>
+  <button type="button" class="save oneclick" onclick="submitChangedLines()">{{tr}}CPrescription.apply_advanced_protocole{{/tr}}</button>
 </form>
