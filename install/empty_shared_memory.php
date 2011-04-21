@@ -34,4 +34,4 @@ if (!SHM::rem("class-paths")) {
   return;
 }
 
-echo "Table des classes supprimée<br />";
+echo "Table des classes supprimée";

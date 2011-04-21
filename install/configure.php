@@ -55,32 +55,47 @@ showHeader();
     <th><label for="instance_role" title="Instance">Rôle de l'instance</label></th>
     <td>
       <select name="instance_role" size="1">
-        <option value="prod"   <?php if ($dPconfig['instance_role'] == 'prod'  ) { echo 'selected="selected"'; } ?> >Production</option>
-        <option value="qualif" <?php if ($dPconfig['instance_role'] == 'qualif') { echo 'selected="selected"'; } ?> >Qualification</option>
+        <option value="prod"   <?php if ($dPconfig['instance_role'] == 'prod'  ) echo 'selected="1"'; ?> >Production</option>
+        <option value="qualif" <?php if ($dPconfig['instance_role'] == 'qualif') echo 'selected="1"'; ?> >Qualification</option>
       </select>
     </td>
   </tr>
   
   <tr>
     <th><label for="http_redirections" title="Active les redirections http définies dans Mediboard">Redirections http actives</label></th>
-    <td><input type="text" size="1" maxlength="1" name="http_redirections" value="<?php echo @$dPconfig['http_redirections']; ?>" /></td>
+    <td>
+      <input type="radio" name="http_redirections" value="0" id="http_redirections_0" <?php if ($dPconfig['http_redirections'] == "0") echo 'checked="1"'; ?> />
+      <label for="http_redirections_0">Non</label>
+      <input type="radio" name="http_redirections" value="1" id="http_redirections_1" <?php if ($dPconfig['http_redirections'] == "1") echo 'checked="1"'; ?> />
+      <label for="http_redirections_1">Oui</label>
+    </td>
   </tr>
 
   <tr>
     <th><label for="offline" title="Mode maintenance">Mode maintenance</label></th>
-    <td><input type="text" size="1" maxlength="1" name="offline" value="<?php echo $dPconfig['offline'] ?>" /></td>
+    <td>
+      <input type="radio" name="offline" value="0" id="offline_0" <?php if ($dPconfig['offline'] == "0") echo 'checked="1"'; ?> />
+      <label for="offline_0">Non</label>
+      <input type="radio" name="offline" value="1" id="offline_1" <?php if ($dPconfig['offline'] == "1") echo 'checked="1"'; ?> />
+      <label for="offline_1">Oui</label>
+    </td>
   </tr>
   
   <tr>
     <th><label for="migration[active]" title="Affiche une page avec les nouvelles adresse de Mediboard aux utilisateur">Mode migration</label></th>
-    <td><input type="text" size="1" maxlength="1" name="migration[active]" value="<?php echo @$dPconfig['migration']['active']; ?>" /></td>
+    <td>
+      <input type="radio" name="migration[active]" value="0" id="migration[active]_0" <?php if ($dPconfig['migration']['active'] == "0") echo 'checked="1"'; ?> />
+      <label for="migration[active]_0">Non</label>
+      <input type="radio" name="migration[active]" value="1" id="migration[active]_1" <?php if ($dPconfig['migration']['active'] == "1") echo 'checked="1"'; ?> />
+      <label for="migration[active]_1">Oui</label>
+    </td>
   </tr>
 
   <tr>
     <th><label for="shared_memory" title="Choisir quelle extension doit tenter de gérer la mémoire partagée (celle-ci doit être installée)">Mémoire partagée</label></th>
     <td>
-      <div style="float: right">
-      <?php require_once("empty_shared_memory.php"); ?>
+      <div class="small-info" style='float: right;'> 
+        <?php require_once("empty_shared_memory.php"); ?>
       </div>
       <select name="shared_memory" size="1">
         <option value="none"         <?php if ($dPconfig['shared_memory'] == 'none'        ) { echo 'selected="selected"'; } ?> >Disque</option>
