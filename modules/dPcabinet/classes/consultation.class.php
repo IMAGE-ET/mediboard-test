@@ -773,6 +773,8 @@ TESTS A EFFECTUER
       $this->si_desistement = 0;
     }
     
+    $facturable = $this->_facturable;
+    
     // Consultation dans un séjour
     if (!$this->_id && !$this->sejour_id && 
         CAppUI::conf("dPcabinet CConsultation attach_consult_sejour") && $this->patient_id) {
@@ -784,6 +786,7 @@ TESTS A EFFECTUER
       $where['annule']     = " = '0'";
       $where['patient_id'] = " = '$this->patient_id'";
       $where['group_id']   = " = '".CGroups::loadCurrent()->_id."'";
+      $where['facturable']     = " = '$facturable'";
       $datetime_before     = mbDateTime("+$minutes_before_consult_sejour minute", "$this->_date $this->heure");
       $where[] = "`sejour`.`entree` <= '$datetime_before' AND `sejour`.`sortie` >= '$datetime'";
 
@@ -796,6 +799,7 @@ TESTS A EFFECTUER
         $sejour->praticien_id = $this->_ref_chir->_id;
         $sejour->group_id = CGroups::loadCurrent()->_id;
         $sejour->type = "consult";
+        $sejour->facturable = $facturable;
         $datetime = ($this->_date && $this->heure) ? "$this->_date $this->heure" : NULL;
         if ($this->chrono == self::PLANIFIE) {
           $sejour->entree_prevue = $datetime;
@@ -811,7 +815,6 @@ TESTS A EFFECTUER
     }
     
     $forfait_se = $this->_forfait_se; // must be BEFORE loadRefSejour()
-    $facturable = $this->_facturable;
     
     $this->loadRefSejour();
     $this->_adjust_sejour = false;
