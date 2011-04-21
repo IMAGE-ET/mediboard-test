@@ -6,16 +6,11 @@
   <col class="narrow" />
   
   <tr>
-    <th colspan="2" class="title">
-      Sous formulaires
-    </th>
-  </tr>
-  
-  <tr>
-    <th>
-      Valeur
-    </th>
+    <th>Valeur</th>
     <th>Formulaire à déclencher</th>
+    <th class="narrow">
+      Coché par<br />défaut
+    </th>
   </tr>
   
   <tbody>
@@ -38,6 +33,10 @@
       {{else}}
         <td class="empty">Aucun formulaire à déclencher</td>
       {{/if}}
+			
+			<td style="text-align: center;">
+				<input type="radio" name="default" value="{{$_value}}" {{if $spec->default == $_value}}checked="checked"{{/if}} />
+			</td>
     </tr>
   {{/foreach}}
   </tbody>

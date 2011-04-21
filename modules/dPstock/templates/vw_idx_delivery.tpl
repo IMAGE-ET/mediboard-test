@@ -41,7 +41,7 @@ function deliver(oForm, sign) {
   oForm.quantity.value = $V(oForm.quantity) * sign;
   var stock_id = $V(oForm.stock_id);
   
-  submitFormAjax(oForm, 'systemMsg', {
+  return onSubmitFormAjax(oForm, {
     onComplete: function() {
       refreshValue('CProductStockGroup-'+stock_id, 'bargraph', function(v){$('stock-'+stock_id+'-bargraph').update(v)});
       refreshDeliveriesList();

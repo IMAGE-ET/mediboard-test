@@ -55,7 +55,12 @@ Main.add(function(){
   
   // highlight current field
   $$("tr.ex-class-field.selected").invoke("removeClassName", "selected");
-  $$("tr.ex-class-field[data-ex_class_field_id='{{$ex_field->_id}}']")[0].addClassName("selected");
+	
+	var selected = $$("tr.ex-class-field[data-ex_class_field_id='{{$ex_field->_id}}']");
+	
+	if (selected.length) {
+	  selected[0].addClassName("selected");
+	}
 });
 </script>
 

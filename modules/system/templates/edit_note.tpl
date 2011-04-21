@@ -13,7 +13,7 @@ function submitNote(){
   var oForm = document.editFrm;
   
   if (checkForm(oForm)){
-    submitFormAjax(oForm, 'systemMsg', { onComplete: function() { window.opener.initNotes(true); window.close()} });
+    onSubmitFormAjax(oForm, { onComplete: function() { window.opener.initNotes(true); window.close()} });
     oForm.reset();
   }
 }

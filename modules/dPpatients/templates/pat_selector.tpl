@@ -39,7 +39,7 @@ var Patient = {
   selectAndUpdate: function(patient_id) {
     var oForm = document.patientEdit;
     oForm.patient_id.value = patient_id;
-    submitFormAjax(oForm, 'systemMsg');
+    onSubmitFormAjax(oForm);
     Patient.select(patient_id, oForm.nom.value);
   },
   

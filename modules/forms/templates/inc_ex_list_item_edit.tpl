@@ -51,9 +51,10 @@ Main.add(function(){
       <th class="narrow code" {{if !$coded}}style="display: none"{{/if}}>
         {{mb_title class=CExListItem field=code}}
       </th>
-      <th {{if $context instanceof CExClassField}}colspan="2"{{/if}}>
+      <th>
         {{mb_title class=CExListItem field=name}}
       </th>
+      <th class="narrow">Formulaire à déclencher</th>
       <th class="narrow"></th>
       
       {{if $context instanceof CExClassField}}

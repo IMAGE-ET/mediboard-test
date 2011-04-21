@@ -56,10 +56,10 @@ refreshCat = function(category_id){
 		<tr>
 		  <td colspan="2" class="button">
 		  	{{if $category->_id}}
-				  <button type="button" class="trash" onclick="this.form.del.value = 1; submitFormAjax(this.form, 'systemMsg', { onComplete: function() { refreshCat('0') } } )">Supprimer</button>
-				  <button type="button" class="submit" onclick="submitFormAjax(this.form, 'systemMsg', { onComplete: function(){ viewListCat('{{$category->_class_name}}','{{$category->_id}}') } } );">{{tr}}Save{{/tr}}</button>
+				  <button type="button" class="trash" onclick="this.form.del.value = 1; return onSubmitFormAjax(this.form, { onComplete: function() { refreshCat('0') } } )">Supprimer</button>
+				  <button type="button" class="submit" onclick="return onSubmitFormAjax(this.form, { onComplete: function(){ viewListCat('{{$category->_class_name}}','{{$category->_id}}') } } );">{{tr}}Save{{/tr}}</button>
 			  {{else}}
-			  	<button type="button" class="submit" onclick="submitFormAjax(this.form, 'systemMsg');">{{tr}}Save{{/tr}}</button>
+			  	<button type="button" class="submit" onclick="return onSubmitFormAjax(this.form)">{{tr}}Save{{/tr}}</button>
 			  {{/if}}
 		  </td>
 		</tr>

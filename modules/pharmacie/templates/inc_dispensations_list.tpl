@@ -25,7 +25,7 @@ loadSuivi = function(sejour_id, user_id) {
 }
 
 submitSuivi = function(oForm) {
-  submitFormAjax(oForm, 'systemMsg', { onComplete: function() { 
+  return onSubmitFormAjax(oForm, { onComplete: function() { 
     loadSuivi(oForm.sejour_id.value);
   } });
 }

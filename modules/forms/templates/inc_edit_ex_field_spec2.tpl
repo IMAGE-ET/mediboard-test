@@ -96,7 +96,7 @@ Main.add(function(){
 <table class="main form">
   <col class="narrow" />
   
-  {{assign var=advanced_controls_limit value=6}}
+  {{assign var=advanced_controls_limit value=50}}
   {{assign var=concept_based value=false}}
   
   {{if $context instanceof CExClassField && $context->concept_id}}
@@ -222,13 +222,17 @@ Main.add(function(){
           
         {{else}}
         
-				  {{if $_type != "list"}}
+				  {{if $_type != "list" && $_type != "bool"}}
             <input type="hidden" name="{{$_name}}" value="{{$spec_value}}" />
 					{{/if}}
         
           {{* str *}}
           {{if $_type == "str"}}
+					  {{if $_name != "default"}}
             {{$spec_value}}
+						{{else}}
+						
+						{{/if}}
             
           {{* num *}}
           {{elseif $_type == "num"}}
