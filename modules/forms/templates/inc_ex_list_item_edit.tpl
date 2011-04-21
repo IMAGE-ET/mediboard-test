@@ -40,10 +40,10 @@ Main.add(function(){
 
 <form name="CExListItem-create" method="post" action="?" 
       onsubmit="return onSubmitFormAjax(this, {onComplete: {{if $context instanceof CExClassField}} ExField.edit.curry('{{$context->_id}}') {{else}} MbObject.edit.curry('{{$context->_guid}}') {{/if}} })">
-      	
+        
   {{mb_class class=CExListItem}}
   <input type="hidden" name="ex_list_item_id" value="" class="ref" />
-	<input type="hidden" name="{{$owner_field}}" value="{{$context->_id}}" />
+  <input type="hidden" name="{{$owner_field}}" value="{{$context->_id}}" />
   
   <table class="main tbl">
     <tr>
@@ -55,9 +55,12 @@ Main.add(function(){
         {{mb_title class=CExListItem field=name}}
       </th>
       <th class="narrow"></th>
-      <th class="narrow">
-      	Coché par<br />défaut
-      </th>
+      
+      {{if $context instanceof CExClassField}}
+        <th class="narrow">
+          Coché par<br />défaut
+        </th>
+      {{/if}}
     </tr>
     
     <tr>
@@ -67,15 +70,18 @@ Main.add(function(){
       <td class="code" {{if !$coded}}style="display: none"{{/if}}>{{mb_field class=CExListItem field=code size=6}}</td>
       <td {{if $context instanceof CExClassField}}colspan="2"{{/if}}>
         {{mb_field class=CExListItem field=name style="width: 99%;"}}
-			</td>
-			<td>
+      </td>
+      <td>
         <button class="cancel notext" type="button" onclick="cancelEditListItem(this.form)" style="margin: -1px; visibility: hidden;">
           {{tr}}Cancel{{/tr}}
         </button>
       </td>
-			<td style="text-align: center;" title="Aucune valeur par défaut">
-			  {{mb_include module=forms template=inc_ex_list_default_value value=""}}
-			</td>
+      
+      {{if $context instanceof CExClassField}}
+        <td style="text-align: center;" title="Aucune valeur par défaut">
+          {{mb_include module=forms template=inc_ex_list_default_value value=""}}
+        </td>
+      {{/if}}
     </tr>
     
     {{foreach from=$context->_back.list_items item=_item}}
@@ -106,10 +112,13 @@ Main.add(function(){
           {{/if}}
         {{/if}}
         
-				<td></td>
-        <td style="text-align: center;">
-          {{mb_include module=forms template=inc_ex_list_default_value value=$_item->_id}}
-        </td>
+        <td></td>
+        
+        {{if $context instanceof CExClassField}}
+          <td style="text-align: center;">
+            {{mb_include module=forms template=inc_ex_list_default_value value=$_item->_id}}
+          </td>
+        {{/if}}
       </tr>
     {{foreachelse}}
       <tr>

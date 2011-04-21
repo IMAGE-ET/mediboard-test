@@ -47,6 +47,7 @@ class CExList extends CExListItemsOwner {
   
   function updateFormFields(){
     parent::updateFormFields();
-    $this->_view = $this->name;
+		$this->_view  = $this->coded ? "# " : "";
+    $this->_view .= $this->name;
   }
 }

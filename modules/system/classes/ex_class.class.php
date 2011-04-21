@@ -61,7 +61,7 @@ class CExClass extends CMbObject {
   }
   
   function getHostClassOptions(){
-    if (!$this->host_class || !$this->event) return;
+    if (!$this->host_class || !$this->event || $this->event === "void") return;
     
     $object = new $this->host_class;
     return $this->_host_class_options = $object->_spec->events[$this->event];

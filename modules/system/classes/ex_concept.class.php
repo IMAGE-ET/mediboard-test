@@ -84,6 +84,31 @@ class CExConcept extends CExListItemsOwner {
     }
   }
   
+  function updateFieldProp($prop){
+    //$concept_spec = $this->loadConceptSpec();
+    $list_re    = "/(\slist\|[^\s]+)/";
+    $default_re = "/(\sdefault\|[^\s]+)/";
+		
+    $list_prop = "";
+    $default_prop = "";
+		
+		$new_prop = $this->prop;
+		
+    // extract $prop's list|XXX
+		if (preg_match($list_re, $prop, $matches)) {
+			$list_prop = $matches[1];
+			$new_prop = preg_replace($list_re, "", $new_prop);  
+			
+		  // extract $prop's default|XXX
+		  if (preg_match($default_re, $prop, $matches)) {
+		    $default_prop = $matches[1];
+		    $new_prop = preg_replace($default_re, "", $new_prop);
+		  }
+		}
+		
+		return $new_prop.$list_prop.$default_prop;
+  }
+  
   /**
    * @param bool $cache [optional]
    * @return CExList
@@ -169,7 +194,21 @@ class CExConcept extends CExListItemsOwner {
     if ($prop_changed) {
       $fields = $this->loadRefClassFields();
       foreach($fields as $_field) {
-        $_field->prop = $this->prop;
+      	$new_prop = $this->updateFieldProp($_field->prop);
+				
+				//mbTrace($new_prop, "new prop");
+        //mbTrace($_field->prop, "before");
+				$modif = ($_field->prop != $new_prop);
+				
+        $_field->prop = $new_prop;
+				
+				if ($msg = $_field->store()) {
+					
+				}
+				else if ($modif) {
+					$_field->updateTranslation();
+					CAppUI::displayMsg($msg, "Champ <strong>$_field->_view</strong> mis à jour");
+				}
       }
     }
   }
