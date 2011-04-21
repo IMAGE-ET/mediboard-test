@@ -10,6 +10,20 @@
 
 $debug = CAppUI::pref("INFOSYSTEM");
 
+// Http Redirections
+if (CAppUI::conf("http_redirections")) {
+  if (!CAppUI::$instance->user_id || CValue::get("login")) {
+	  $redirection = new CHttpRedirection();
+	  $redirections = $redirection->loadList(null, "priority DESC");
+	  $passThrough = false;
+	  foreach($redirections as $_redirect) {
+	    if (!$passThrough) {
+	      $passThrough = $_redirect->applyRedirection();
+	    }
+	  }
+  }	
+}
+
 // Get the user's style
 $uistyle = CAppUI::pref("UISTYLE");
 if (!file_exists("style/$uistyle/templates/header.tpl")) {
@@ -85,19 +99,7 @@ if (!CAppUI::$instance->user_id) {
   $_SESSION["locked"] = null;
   
   // HTTP 403 header
-  //header('HTTP/1.0 403 Forbidden');
-  
-  // Http Redirections
-  if(CAppUI::conf("http_redirections")) {
-    $redirection = new CHttpRedirection();
-    $redirections = $redirection->loadList(null, "priority DESC");
-    $passThrough = false;
-    foreach($redirections as $_redirect) {
-      if(!$passThrough) {
-        $passThrough = $_redirect->applyRedirection();
-      }
-    }
-  }
+  //header('HTTP/1.0 403 Forbidden');  
   
   // Ajax login alert
   if ($ajax) {
