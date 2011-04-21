@@ -493,9 +493,9 @@ class CAppUI {
     
     
     $bound = false;
-    if (!$ldap_guid && $ldap_connection && !($loginas && self::$instance->user_type == 1)) {
+    if ($ldap_connection && !($loginas && self::$instance->user_type == 1)) {
       try {        
-        $user  = CLDAP::login($user);
+        $user  = CLDAP::login($user, $ldap_guid);
         $bound = $user->_bound;
       } catch (Exception $e) {
         self::setMsg($e->getMessage(), UI_MSG_ERROR);

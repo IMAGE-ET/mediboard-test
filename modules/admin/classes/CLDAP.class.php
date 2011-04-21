@@ -9,8 +9,15 @@
  */
 
 class CLDAP {
-  static function login(CUser $user) {
-    $source_ldap = self::bind($user);
+  static function login(CUser $user, $ldap_guid) {
+    if (!$ldap_guid) {
+      $source_ldap = self::bind($user);
+    } else {
+      $ldaprdn  = CAppUI::conf("admin LDAP ldap_user");
+      $ldappass = CAppUI::conf("admin LDAP ldap_password");
+      
+      $source_ldap = self::bind($user, $ldaprdn, $ldappass);
+    }
     
     // Logging succesfull
     if ($user->_bound) {
@@ -20,8 +27,8 @@ class CLDAP {
 
     return $user;
   }
-
-  static function bind(CUser $user = null, $ldaprdn = null, $ldappass = null) {
+  
+  static function connect() {
     $source_ldap = new CSourceLDAP();
     $source_ldap->loadObject();
     
@@ -31,6 +38,13 @@ class CLDAP {
     
     $ldapconn = $source_ldap->ldap_connect();
     $source_ldap->_ldapconn = $ldapconn;
+    
+    return $source_ldap;
+  }
+
+  static function bind(CUser $user = null, $ldaprdn = null, $ldappass = null) {
+    $source_ldap = CLDAP::connect();
+    $ldapconn = $source_ldap->_ldapconn;
     
     if (!$ldaprdn) {
       $ldaprdn  = $user->user_username;
