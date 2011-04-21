@@ -188,14 +188,16 @@ class CLDAP {
       $second_segment = substr($objectguid, 0, 4);
       $third_segment  = substr($objectguid, 8, 4);
       $fourth_segment = substr($objectguid, 12, 4);
-      $fifth_segment  = substr($objectguid, 16, 16);
+      $fifth_segment  = substr($objectguid, 16, 4);
+      $sixth_segment  = substr($objectguid, 20, 12);
       
       $first_segment  = implode("", array_reverse(str_split($first_segment, 2)));
       $second_segment = implode("", array_reverse(str_split($second_segment, 2)));
       $third_segment  = implode("", array_reverse(str_split($third_segment, 2)));
       $fourth_segment = implode("", array_reverse(str_split($fourth_segment, 2)));
+      $fourth_segment = implode("", array_reverse(str_split($fourth_segment, 2)));
     
-      $objectguid = "$first_segment$second_segment-$third_segment-$fourth_segment-$fifth_segment";
+      $objectguid = "$first_segment$second_segment-$third_segment-$fourth_segment-$fifth_segment-$sixth_segment";
     }
     
     return $objectguid;
