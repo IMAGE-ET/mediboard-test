@@ -7,6 +7,7 @@ window.same_print = {{$conf.dPcompteRendu.CCompteRendu.same_print}};
 window.pdf_thumbnails = {{$pdf_thumbnails|@json}} == 1;
 window.nb_printers = {{$nb_printers|@json}};
 window.modal_mode_play = null;
+window.documentGraphs = {{$templateManager->graphs|@json}};
 
 function playField(element, class_name, editor_element, name) {
   var modal = $("play_modal");
@@ -205,6 +206,23 @@ Main.add(function(){
     
     return ' ';
   };
+  
+  var htmlarea = $('htmlarea');
+  
+  $H(documentGraphs).each(function(pair){
+    var g = pair.value;
+    $('graph-container').update();
+    g.options.fontSize = 14;
+    g.options.resolution = 2;
+    g.options.legend = {
+      labelBoxWidth: 28,
+      labelBoxHeight: 20
+    };
+    g.options.pie.explode = 0;
+    var f = new Flotr.Graph($('graph-container'), g.data, g.options);
+    g.dataURL = f.canvas.toDataURL();
+    oFCKeditor.value = htmlarea.value = htmlarea.value.replace('<span class="field">'+g.name+'</span>', '<img src="'+g.dataURL+'" width="450" height="300" />');
+  });
   
   if (window.pdf_thumbnails && window.Preferences.pdf_and_thumbs == 1) {
     PageFormat.init(getForm("editFrm"));

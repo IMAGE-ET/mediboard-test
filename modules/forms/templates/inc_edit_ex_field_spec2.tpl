@@ -125,7 +125,12 @@ Main.add(function(){
             
           {{* num *}}
           {{elseif $_type == "num"}}
-            <input type="text" name="{{$_name}}" value="{{$spec_value}}" class="str nospace regex|^\s*-?[\d\.]*\s*$" size="2" />
+					  <script type="text/javascript">
+					  	Main.add(function(){
+							  getForm("editFieldSpec")["{{$_name}}"].addSpinner();
+							});
+						</script>
+            <input type="text" name="{{$_name}}" value="{{$spec_value}}" class="float" size="2" />
             
           {{* bool *}}
           {{elseif $_type == "bool"}}
