@@ -125,6 +125,11 @@ $ajax = CValue::request("ajax", false);
 // Check if we are in the dialog mode
 $dialog = CValue::request("dialog");
 
+// Check ldap_guid
+if (CValue::get("ldap_guid")) {
+  $_REQUEST["login"] = 1;
+}
+
 // check if the user is trying to log in
 if (isset($_REQUEST["login"])) {
   include "./locales/core.php";

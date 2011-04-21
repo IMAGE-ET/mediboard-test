@@ -493,7 +493,7 @@ class CAppUI {
     
     
     $bound = false;
-    if ($ldap_connection && !($loginas && self::$instance->user_type == 1)) {
+    if (!$ldap_guid && $ldap_connection && !($loginas && self::$instance->user_type == 1)) {
       try {        
         $user  = CLDAP::login($user);
         $bound = $user->_bound;
