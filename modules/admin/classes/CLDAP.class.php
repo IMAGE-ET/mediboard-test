@@ -195,7 +195,6 @@ class CLDAP {
       $second_segment = implode("", array_reverse(str_split($second_segment, 2)));
       $third_segment  = implode("", array_reverse(str_split($third_segment, 2)));
       $fourth_segment = implode("", array_reverse(str_split($fourth_segment, 2)));
-      $fourth_segment = implode("", array_reverse(str_split($fourth_segment, 2)));
     
       $objectguid = "$first_segment$second_segment-$third_segment-$fourth_segment-$fifth_segment-$sixth_segment";
     }
