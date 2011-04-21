@@ -14,10 +14,11 @@ $dPconfig["admin"] = array (
     "max_login_attempts" => "5",
   ),
   "LDAP" => array(
-    "ldap_connection" => "0",
-    "ldap_tag"        => "",
-    "ldap_user"       => "",
-    "ldap_password"   => "",
+    "ldap_connection"  => "0",
+    "ldap_tag"         => "",
+    "ldap_user"        => "",
+    "ldap_password"    => "",
+    "object_guid_mode" => "hexa"
   ),
 );
 
