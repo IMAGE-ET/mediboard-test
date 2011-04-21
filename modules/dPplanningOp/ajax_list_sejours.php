@@ -12,6 +12,9 @@
 $patient_id      = CValue::get("patient_id");
 $sejour_id       = CValue::get("sejour_id");
 $check_collision = CValue::get("check_collision");
+$date_entree_prevue = CValue::get("date_entree_prevue");
+$hour_entree_prevue = CValue::get("hour_entree_prevue");
+$min_entree_prevue  = CValue::get("min_entree_prevue");
 $collision_sejour = null;
 
 $patient = new CPatient;
@@ -24,7 +27,18 @@ if (!$patient->_id) {
   return;
 }
 
+$date = $date_entree_prevue;
+$date .= " ".str_pad($hour_entree_prevue, 2, "0", STR_PAD_LEFT);
+$date .= ":".str_pad($min_entree_prevue, 2, "0", STR_PAD_LEFT);
+$date .= ":00";
+
 foreach($patient->_ref_sejours as $_sejour) {
+  // Séjours proches
+  if ($_sejour->sortie_reelle) {
+    if (mbDateTime("+". CAppUI::conf("dPplanningOp CSejour hours_sejour_proche") ."HOUR", $_sejour->sortie_reelle) > $date && $date > $_sejour->sortie_reelle) {
+      $_sejour->_is_proche = 1;
+    }
+  }
   $_sejour->loadNumDossier();
   $_sejour->loadRefPraticien();
 }
@@ -41,12 +55,12 @@ if ($check_collision) {
   }
   
 	// Simulation du formulaire
-  $sejour->_date_entree_prevue = CValue::get("date_entree_prevue");
+  $sejour->_date_entree_prevue = $date_entree_prevue;
   $sejour->_date_sortie_prevue = CValue::get("date_sortie_prevue");
-  $sejour->_hour_entree_prevue = CValue::get("hour_entree_prevue");
+  $sejour->_hour_entree_prevue = $hour_entree_prevue;
   $sejour->_hour_sortie_prevue = CValue::get("hour_sortie_prevue");
-  $sejour->_min_entree_prevue = CValue::get("min_entree_prevue");
-  $sejour->_min_sortie_prevue = CValue::get("min_sortie_prevue");
+  $sejour->_min_entree_prevue  = $min_entree_prevue;
+  $sejour->_min_sortie_prevue  = CValue::get("min_sortie_prevue");
   $sejour->updateDBFields();
 
   // Calcul des collisions potentielles

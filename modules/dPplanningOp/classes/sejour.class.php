@@ -104,6 +104,7 @@ class CSejour extends CCodable implements IPatientRelated {
   var $_entree_relative    = null;
   var $_sortie_relative    = null;
 	var $_not_collides       = array ("urg", "consult", "seances", "exte"); // Séjour dont on ne test pas la collision
+  var $_is_proche          = null;
   
   // Behaviour fields
   var $_check_bounds  = true;

@@ -530,8 +530,8 @@ $locales['CSejour-_specialite-desc'] = 'Spécialité';
 $locales['CSejour-_type_admission'] = 'Type d\'admission';
 $locales['CSejour-_type_admission-court'] = 'Type';
 $locales['CSejour-_type_admission-desc'] = 'Type d\'admission';
-$locales['CSejour-_unique_lit_id-desc'] = 'Donne lieu à une affectation unique sur toute la durée du séjour. Susceptible de supprimer les affectations existantes.';
 $locales['CSejour-_unique_lit_id'] = 'Affecter un lit';
+$locales['CSejour-_unique_lit_id-desc'] = 'Donne lieu à une affectation unique sur toute la durée du séjour. Susceptible de supprimer les affectations existantes.';
 $locales['CSejour-adresse_par_class'] = 'Mode d\'entrée du patient';
 $locales['CSejour-adresse_par_class-court'] = 'Mode d\'entrée du patient';
 $locales['CSejour-adresse_par_class-desc'] = 'Mode d\'entrée du patient';
@@ -880,6 +880,8 @@ $locales['config-dPplanningOp-CSejour-heure_sortie_ambu'] = 'Heure de sortie amb
 $locales['config-dPplanningOp-CSejour-heure_sortie_ambu-desc'] = 'Heure de sortie ambulatoire par défaut';
 $locales['config-dPplanningOp-CSejour-heure_sortie_autre'] = 'Heure de sortie autre (>=1 jour)';
 $locales['config-dPplanningOp-CSejour-heure_sortie_autre-desc'] = 'Heure de sortie autre par défaut (>=1 jour)';
+$locales['config-dPplanningOp-CSejour-hours_sejour_proche'] = 'Nombre d\'heures pour les séjours proches';
+$locales['config-dPplanningOp-CSejour-hours_sejour_proche-desc'] = 'Nombre d\'heures de recherche de séjours proches';
 $locales['config-dPplanningOp-CSejour-locked'] = 'Séjour bloqué';
 $locales['config-dPplanningOp-CSejour-locked-desc'] = 'Impossibilité de modifier un séjour';
 $locales['config-dPplanningOp-CSejour-max_cancel_time'] = 'Temps maximal d\'annulation d\'un dossier';

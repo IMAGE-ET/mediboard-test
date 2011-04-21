@@ -50,14 +50,16 @@ function reloadSejours(checkCollision) {
   url.addParam("check_collision", checkCollision);
   url.addParam("patient_id", patient_id);
 
-  // Dans le cas où on va checker la collision
-  // On envoie également l'entrée prévue et la sortie prévue
+  // L'entrée prévue est envoyée pour chercher les séjours datant de moins de 48h
+  url.addParam("date_entree_prevue", $V(oForm._date_entree_prevue));
+  url.addParam("hour_entree_prevue", $V(oForm._hour_entree_prevue));
+  url.addParam("min_entree_prevue" , $V(oForm._min_entree_prevue));
+  
+  // Dans le cas où on va checker la collision,
+  // on envoie également la sortie prévue
   if (checkCollision) {
-    url.addParam("date_entree_prevue", $V(oForm._date_entree_prevue));
     url.addParam("date_sortie_prevue", $V(oForm._date_sortie_prevue));
-    url.addParam("hour_entree_prevue", $V(oForm._hour_entree_prevue));
     url.addParam("hour_sortie_prevue", $V(oForm._hour_sortie_prevue));
-    url.addParam("min_entree_prevue" , $V(oForm._min_entree_prevue));
     url.addParam("min_sortie_prevue" , $V(oForm._min_sortie_prevue));
     url.addParam("sejour_id"         , $V(oForm.sejour_id));
   }

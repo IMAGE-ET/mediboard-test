@@ -8,6 +8,8 @@
 <tr {{if $object->_guid == $selected_guid}} class="selected" {{/if}}
   {{if isset($collision_sejour|smarty:nodefaults) && $object->_id == $collision_sejour}}
     style="border: 2px solid red;"
+  {{elseif $object->_is_proche}}
+    style="border: 2px solid blue;"
   {{/if}}>
   <td class="text">
     {{if $object->_canEdit}}

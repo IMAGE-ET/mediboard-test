@@ -2,6 +2,10 @@
   Main.add(function() {
     getForm("editConfig")["dPplanningOp[CSejour][max_cancel_time]"].addSpinner({min:0, max:24});
   });
+  Main.add(function() {
+    getForm("editConfig")["dPplanningOp[CSejour][hours_sejour_proche]"].addSpinner({min:0, max:96});
+  });
+  
   Main.add(function () {
     Control.Tabs.create('tabs-configure', true);
   });
@@ -35,7 +39,7 @@
   {{mb_include module=system template=inc_config_bool var=$var }}
   {{assign var="var"   value="easy_chambre_simple"}}
   {{mb_include module=system template=inc_config_bool var=$var }}
-  
+    
   {{assign var="class" value="COperation"}}
   {{assign var="var"   value="easy_horaire_voulu"}}
   {{mb_include module=system template=inc_config_bool var=$var }}
@@ -45,6 +49,7 @@
   {{mb_include module=system template=inc_config_bool var=$var }}
   {{assign var="var"   value="easy_regime"}}
   {{mb_include module=system template=inc_config_bool var=$var }}
+  
   <tr>
     <td class="button" colspan="2">
       <button class="modify" type="submit">{{tr}}Save{{/tr}}</button>
@@ -119,6 +124,8 @@
 	{{assign var="var" value="delete_only_admin"}}
   {{mb_include module=system template=inc_config_bool var=$var }}
   {{assign var="var" value="max_cancel_time"}}
+  {{mb_include module=system template=inc_config_str  var=$var  size="2" suffix="h"}}
+  {{assign var="var"   value="hours_sejour_proche"}}
   {{mb_include module=system template=inc_config_str  var=$var  size="2" suffix="h"}}
   
   <tr>

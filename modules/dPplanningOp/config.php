@@ -58,6 +58,7 @@ $dPconfig["dPplanningOp"]= array(
 	  ),
 	  "delete_only_admin"   => "1",
 	  "max_cancel_time"     => "0",
+	  "hours_sejour_proche" => "48"
 	),
 );
 
