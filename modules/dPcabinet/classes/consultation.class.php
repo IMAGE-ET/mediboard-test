@@ -774,10 +774,10 @@ TESTS A EFFECTUER
     }
     
     $facturable = $this->_facturable;
-    if (!$facturable) {
+    if ($facturable === null) {
       $facturable = 1;  
     }
-    
+
     // Consultation dans un séjour
     if (!$this->_id && !$this->sejour_id && 
         CAppUI::conf("dPcabinet CConsultation attach_consult_sejour") && $this->patient_id) {
