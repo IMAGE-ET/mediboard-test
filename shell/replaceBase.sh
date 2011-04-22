@@ -72,7 +72,7 @@ check_errs $? "Failed to retrieve archive" "Succesfully retrieve archive!"
 
 # Extract base
 cd $target_directory
-tar -xvf $archive
+tar -xf $archive
 check_errs $? "Failed to extract files" "Succesfully extracted files"
 
 # Stop mysql
