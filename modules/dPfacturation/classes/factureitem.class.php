@@ -17,9 +17,12 @@ class CFactureItem extends CMbObject {
   var $libelle = null;
   var $prix_ht = null;
   var $taxe = null;
+  var $facture_catalogue_item_id = null;
+  var $reduction 		= null;
   
   // References
   var $_ref_facture = null;
+  var $_ref_facture_catalogue_item = null;//
    
   var $_ttc = null;
   
@@ -35,15 +38,18 @@ class CFactureItem extends CMbObject {
     $specs["facture_id"] = "ref notNull class|CFacture";
     $specs["libelle"]    = "text notNull";
     $specs["prix_ht"]    = "currency notNull";
+    $specs["reduction"]	 = "currency";
     $specs["taxe"]       = "pct notNull";
     $specs["_ttc"]		   = "currency";
+    $specs["facture_catalogue_item_id"]	= "ref class|CFacturecatalogueitem";
     return $specs;
   }
     
   function updateFormFields() {
     parent::updateFormFields();
     $this->_view = $this->libelle;
-    $this->_ttc += $this->prix_ht * ($this->taxe/100) + $this->prix_ht;
+    $prixReduit = $this->prix_ht - $this->reduction;
+    $this->_ttc += $prixReduit * ($this->taxe/100) + $prixReduit;
   }
   
   function loadRefsFwd(){ 

@@ -45,7 +45,26 @@ class CSetupdPfacturation extends CSetup {
               ADD INDEX (`facture_id`);";
      $this->addQuery($query);
   
-     $this->mod_version = "0.12";
+     $this->makeRevision("0.12");
+     $query = "CREATE TABLE `facturecatalogueitem` (
+              `facturecatalogueitem_id` INT (11) UNSIGNED NOT NULL auto_increment PRIMARY KEY,
+              `libelle` TEXT NOT NULL,
+              `prix_ht` DECIMAL (10,3) NOT NULL,
+              `taxe` FLOAT NOT NULL,
+              `type` ENUM ('produit','service')
+     ) /*! ENGINE=MyISAM */;";
+     $this->addQuery($query);
+     
+     $this->makeRevision("0.13");
+     $query = "ALTER TABLE `factureitem` 
+              ADD `ref_facture_catalogue_item_id` INT (11) UNSIGNED NOT NULL,
+							ADD `reduction` DECIMAL (10,3);";
+     $this->addQuery($query);
+     $query = "ALTER TABLE `factureitem` 
+               ADD INDEX (`facture_catalogue_item_id`)";
+     $this->addQuery($query);
+     
+     $this->mod_version = "0.14";
   }
 }
 ?>

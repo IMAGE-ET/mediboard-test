@@ -13,12 +13,12 @@ class CFacture extends CMbObject {
   var $facture_id = null;
   
   // DB Fields
-  var $date        = null;
+  var $date      = null;
   var $sejour_id = null;
-  var $prix = null;
+  var $prix      = null;
   
   // Distan fields
-  var $_total = null;
+  var $_total    = null;
   
   // Object References
   var $_ref_sejour = null;
@@ -56,7 +56,7 @@ class CFacture extends CMbObject {
   	$item->facture_id = $this->_id;
   	$this->_ref_items = $item->loadMatchingList();
   	$this->_total = 0;
-  	foreach($this->_ref_items as $_item) {
+  	foreach ($this->_ref_items as $_item) {
   		$this->_total += $_item->_ttc;
   	}
   } 
