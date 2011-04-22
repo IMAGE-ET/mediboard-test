@@ -10,7 +10,8 @@
 
   {{mb_include module=system template=inc_config_bool var=ooo_active}}
   {{mb_include module=system template=inc_config_str var=ooo_path size=40}}
-    
+  {{mb_include module=system template=inc_config_str var=python_path size=40}}
+  
   <tr>
     <td class="button" colspan="100">
       <button class="modify" type="submit">{{tr}}Save{{/tr}}</button>
@@ -40,9 +41,6 @@
 	</code>
   <br/>
   <code>
-    >	<em>[path]</em>/soffice 
-			-accept="socket,host=localhost,port=8100;urp;StarOffice.ServiceManager" \
-		  -no-logo -headless -nofirststartwizard -no-restore \
-			>> /dev/null
+    >	<em>[path]</em>/soffice -accept="socket,host=localhost,port=8100;urp;StarOffice.ServiceManager" -no-logo -headless -nofirststartwizard -no-restore >> /dev/null &
 	</code>
 </div>

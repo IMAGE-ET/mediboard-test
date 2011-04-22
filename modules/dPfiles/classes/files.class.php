@@ -411,8 +411,9 @@ class CFile extends CDocumentItem {
       CAppUI::setMsg($msg, UI_MSG_ERROR);
       return 0;
     }
+    $path_python = CAppUI::conf("dPfiles CFile python_path") ? CAppUI::conf("dPfiles CFile python_path") ."/": "";
     
-    $res = exec("python ./modules/dPfiles/script/doctopdf.py {$this->_file_path} {$file->_file_path}");
+    $res = exec("{$cmd_python}python ./modules/dPfiles/script/doctopdf.py {$this->_file_path} {$file->_file_path}");
 
     return $res;
   }

@@ -14,7 +14,8 @@ $dPconfig["dPfiles"] = array (
   "CFile" => array(
     "upload_directory"  => "files",
     "ooo_active"        => "0",
-    "ooo_path"          => ""
+    "ooo_path"          => "",
+    "python_path"       => ""
   ),
 
   "CFilesCategory" => array(
