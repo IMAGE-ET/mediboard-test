@@ -67,7 +67,7 @@ fi
 
 # Retrieve archive 
 archive="archive.tar.gz"
-scp $source_location:$source_directory/$source_database-latest.tar.gz $target_directory/$archive
+scp $source_location:$source_directory/$source_database-db/$source_database-latest.tar.gz $target_directory/$archive
 check_errs $? "Failed to retrieve archive" "Succesfully retrieve archive!"
 
 # Extract base
