@@ -19,10 +19,16 @@ CMbArray::extract($_POST, "suppressHeaders");
 $ajax = CMbArray::extract($_POST, "ajax");
 
 $mbConfig = new CMbConfig;
-$mbConfig->update($_POST);
-$mbConfig->load();
-CAppUI::setMsg("Configure-msg_modify");
 
+$result = $mbConfig->update($_POST);
+if (PEAR::isError($result)) {
+  CAppUI::setMsg("Configure-failed-modify", UI_MSG_ERROR, $result->getMessage());
+}
+else {
+  CAppUI::setMsg("Configure-success-modify");
+}
+
+$mbConfig->load();
 $dPconfig = $mbConfig->values;
 
 // Cas Ajax
