@@ -57,11 +57,12 @@ class CSetupdPfacturation extends CSetup {
      
      $this->makeRevision("0.13");
      $query = "ALTER TABLE `factureitem` 
-              ADD `ref_facture_catalogue_item_id` INT (11) UNSIGNED NOT NULL,
-							ADD `reduction` DECIMAL (10,3);";
+                ADD `facture_catalogue_item_id` INT (11) UNSIGNED NOT NULL,
+							  ADD `reduction` DECIMAL (10,3);";
      $this->addQuery($query);
+     
      $query = "ALTER TABLE `factureitem` 
-               ADD INDEX (`facture_catalogue_item_id`)";
+                 ADD INDEX (`facture_catalogue_item_id`);";
      $this->addQuery($query);
      
      $this->mod_version = "0.14";

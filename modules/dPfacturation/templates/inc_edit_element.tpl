@@ -37,9 +37,6 @@ updateFactureItem = function(select){
 
 </script>
 
-
-
-
 {{if $can->edit}}
 <form name="editfactureitem" action="?m={{$m}}" method="post" onsubmit="return submitFactureItem(this)">
 	<input type="hidden" name="m" value="dPfacturation" />
@@ -58,7 +55,7 @@ updateFactureItem = function(select){
 	  </tr>
 	  {{if !$factureitem->_id}}
 	  <tr>
-	  	<td>
+	  	<td colspan="2">
 	  		<select name="facture_catalogue_item_id" size="1" onchange="updateFactureItem(this)">
 		  		<option value="">&mdash; Choisir un item du catalogue &mdash;</option>
 		  		{{foreach from=$listCatalogueItem item=_item}}

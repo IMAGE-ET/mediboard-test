@@ -8,7 +8,6 @@
  */
 
 class CFacturecatalogueitem extends CMbObject {
-	
   // DB Table key
   var $facturecatalogueitem_id = null;
 	
@@ -19,11 +18,7 @@ class CFacturecatalogueitem extends CMbObject {
   var $type					= null;
   
   var $_ttc 				= null;
-
-  
-  
-  //les deux fonctions getSpec et getProps vont servir à générer la table SQL representative de la classe
-  
+    
   //configure la classe (ou table SQL)
   function getSpec() {
     $spec = parent::getSpec();

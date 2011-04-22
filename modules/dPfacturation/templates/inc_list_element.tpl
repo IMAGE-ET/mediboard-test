@@ -37,7 +37,7 @@ showElementFacture = function(factureItem_id, facture_id){
 	    	<a href="#1" onclick="showElementFacture('{{$_item->_id}}')" title="{{tr}}CFactureItem-title-modify{{/tr}}">
               {{$_item->libelle}}
         </a>
-        </td>
+      </td>
 	    <td>{{mb_value object=$_item field="prix_ht"}}</td>
 	    <td>{{mb_value object=$_item field="reduction"}}</td>
 	    <td>{{mb_value object=$_item field="taxe"}}</td>
@@ -45,7 +45,7 @@ showElementFacture = function(factureItem_id, facture_id){
 	  </tr>
 	{{foreachelse}}
 	  <tr>
-	   	<td class="button" colspan="4">{{tr}}CFacture-back-items.empty{{/tr}}</td>
+	   	<td class="button" colspan="5">{{tr}}CFacture-back-items.empty{{/tr}}</td>
 	  </tr>
 	{{/foreach}}
 	  <tr>
