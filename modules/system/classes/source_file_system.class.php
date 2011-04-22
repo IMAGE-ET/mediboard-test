@@ -67,6 +67,8 @@ class CSourceFileSystem extends CExchangeSource {
   }
 	
   private function getFullPath($path = ""){
-    return $this->host.DIRECTORY_SEPARATOR.$path;
+  	$path = ltrim($path, "/\\");
+		$host = rtrim($this->host, "/\\");
+    return $host.($path ? DIRECTORY_SEPARATOR.$path : "");
   }
 }
