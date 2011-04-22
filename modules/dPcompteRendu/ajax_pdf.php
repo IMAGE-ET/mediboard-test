@@ -124,6 +124,10 @@ else {
     $file->forceDir();
   }
   
+  if ($file->_id && !file_exists($file->_file_path)) {
+    $file->forceDir();
+  }
+  
   $file->file_name  = $compte_rendu->nom . ".pdf";
   
   $c1 = preg_replace("!\s!",'',$save_content);
@@ -131,7 +135,7 @@ else {
   
   // Si la source envoyée et celle présente en base sont différentes, on regénère le PDF
   // Suppression des espaces, tabulations, retours chariots et sauts de lignes pour effectuer le md5
-  if (md5($c1) != md5($c2) || !$file->_id || file_get_contents($file->_file_path) == "") {
+  if (md5($c1) != md5($c2) || !$file->_id || !file_exists($file->_file_path) || file_get_contents($file->_file_path) == "") {
     $htmltopdf = new CHtmlToPDF;
     $htmltopdf->generatePDF($content, 0, $page_format, $orientation, $file);
     $file->file_size = filesize($file->_file_path);
