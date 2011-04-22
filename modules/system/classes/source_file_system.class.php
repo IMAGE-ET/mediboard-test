@@ -28,7 +28,7 @@ class CSourceFileSystem extends CExchangeSource {
   function updateFormFields() {
     parent::updateFormFields();
     
-		$this->_view = $this->host;
+    $this->_view = $this->host;
   }
   
   function init() {
@@ -58,17 +58,18 @@ class CSourceFileSystem extends CExchangeSource {
   }
   
   function getData($path) {
-  	if (is_readable($path)) {
+    if (is_readable($path)) {
       return file_get_contents($path);
-		}
-		else {
+    }
+    else {
       throw new CMbException("CSourceFileSystem-file-not-readable", $path);
-		}
+    }
   }
-	
+  
   private function getFullPath($path = ""){
-  	$path = ltrim($path, "/\\");
-		$host = rtrim($this->host, "/\\");
-    return $host.($path ? DIRECTORY_SEPARATOR.$path : "");
+    $host = rtrim($this->host, "/\\");
+    $path = ltrim($path, "/\\");
+    $path = $host.($path ? "/$path" : "");
+    return str_replace(array("\\", "/"), DIRECTORY_SEPARATOR, $path);
   }
 }
