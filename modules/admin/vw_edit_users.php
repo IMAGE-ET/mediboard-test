@@ -8,16 +8,13 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
  */
 
-global $AppUI, $can, $m;
-
 CCanDo::checkEdit();
 
-$user_id = CValue::getOrSession("user_id", $AppUI->user_id);
-
 // Récuperation de l'utilisateur sélectionné
-$user = new CUser;
-$user->load($user_id);
+$user_id = CValue::getOrSession("user_id");
+$user = CUser::get($user_id);
 $user->loadRefMediuser();
+$user->loadRefsNotes();
 $user->isLDAPLinked();
 
 // Récuperation des utilisateurs recherchés
