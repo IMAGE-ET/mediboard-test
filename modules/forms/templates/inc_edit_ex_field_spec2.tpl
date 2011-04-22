@@ -222,17 +222,13 @@ Main.add(function(){
           
         {{else}}
         
-				  {{if $_type != "list" && $_type != "bool"}}
+				  {{if !($_type == "list" || $_type == "bool" && $_name == "default")}}
             <input type="hidden" name="{{$_name}}" value="{{$spec_value}}" />
 					{{/if}}
         
           {{* str *}}
           {{if $_type == "str"}}
-					  {{if $_name != "default"}}
             {{$spec_value}}
-						{{else}}
-						
-						{{/if}}
             
           {{* num *}}
           {{elseif $_type == "num"}}
