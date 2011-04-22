@@ -11,6 +11,8 @@ CAppUI::requireLibraryFile("phpThumb/phpthumb.class");
 include_once "lib/phpThumb/phpThumb.config.php";
 //require_once("./lib/phpThumb/phpthumb.class.php");
 //trigger_error("Source is $file->_file");
+    
+ob_clean();
 
 // Direct acces needs Administrator rights
 $file_path = CValue::get("file_path");
