@@ -331,9 +331,7 @@ onMergeComplete = function() {
   <tr>
     <td class="button">
     {{if @$modules.ecap->mod_active}}
-      {{mb_script module=ecap script=dhe}}
-      <div id="dhe"></div>
-      <script type="text/javascript">DHE.register({{$patient->patient_id}}, null, "dhe");</script>
+      {{mb_include module=ecap template=inc_button_dhe patient_id=$patient->_id praticien_id=""}}
     {{else}}
       <a class="button new" href="?m=dPplanningOp&amp;tab=vw_edit_sejour&amp;patient_id={{$patient->patient_id}}&amp;sejour_id=0">
         Séjour
