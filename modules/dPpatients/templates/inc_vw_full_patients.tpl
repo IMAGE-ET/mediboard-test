@@ -329,7 +329,7 @@ onMergeComplete = function() {
     </td>
   </tr>
   <tr>
-    <td class="button">
+    <td class="button" colspan="2">
     {{if @$modules.ecap->mod_active}}
       {{mb_include module=ecap template=inc_button_dhe patient_id=$patient->_id praticien_id=""}}
     {{else}}
