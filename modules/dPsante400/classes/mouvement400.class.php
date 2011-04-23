@@ -89,7 +89,7 @@ class CMouvement400 extends CRecordSante400 {
     $query.= $this->getFilterClause();
 		$query.= "\n ORDER BY $this->idField";
  
-    $mouvs = CRecordSante400::multipleLoad($query, array(), $max, get_class($this));
+    $mouvs = CRecordSante400::loadMultiple($query, array(), $max, get_class($this));
 
     // Multiple checkout
     foreach ($mouvs as &$mouv) {
@@ -210,7 +210,7 @@ class CMouvement400 extends CRecordSante400 {
     	WHERE $this->markField NOT IN ('', 'OKOKOKOK')";
     $query.= $this->getFilterClause();
     $query.= "\n ORDER BY $this->idField DESC";
-    $mouvs = CRecordSante400::multipleLoad($query, array(), $max, get_class($this));
+    $mouvs = CRecordSante400::loadMultiple($query, array(), $max, get_class($this));
     foreach ($mouvs as &$mouv) {
       $mouv->initialize();
     }
