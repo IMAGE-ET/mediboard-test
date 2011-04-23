@@ -68,6 +68,23 @@
     
     return $mbObject->_id;
   }
+
+  /**
+   * Loads list of idex for a given object and a wildcarded tag
+   * @return array|CMbObject found ideces
+   */
+  function loadLikeListFor($mbObject, $tag = null) {
+    $object_class = get_class($mbObject);
+    if (!$mbObject instanceof CMbObject) {
+      trigger_error("Impossible d'associer un identifiant Santé 400 à un objet de classe '$object_class'");
+    }
+        
+    $where["object_id"   ] = "= '$mbObject->_id'";
+    $where["object_class"] = "= '$mbObject->_class_name'";
+    $where["tag"] = "LIKE '$tag'";
+    
+    return $this->loadList($where);
+  }
   
   /**
    * Tries to get an already bound object if id400 is not older than delay
