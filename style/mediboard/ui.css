@@ -924,8 +924,9 @@ table.active {
 }
 
 .modal > div {
-  padding: 0.5em;
   text-align: center;
+/* breaks all div.[small|big]-[warning|sucess|error|etc] */
+/* padding: 0.5em;*/
 }
 
 .modal.popup > .title,
