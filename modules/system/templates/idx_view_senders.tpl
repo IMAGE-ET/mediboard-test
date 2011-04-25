@@ -12,9 +12,7 @@
 {{mb_script module=system script=view_sender_source}}
 
 <script type="text/javascript">
-Main.add(function () {
-  Control.Tabs.create('tabs-main', true);
-});
+Main.add(Control.Tabs.create.curry('tabs-main', true));
 </script>
 
 <ul id="tabs-main" class="control_tabs">
@@ -46,10 +44,10 @@ Main.add(function () {
   </button>
   
   <script type="text/javascript">
-    Main.add(ViewSender.refreshList);
+    Main.add(ViewSenderSource.refreshList);
   </script>
 
-  <div id="list-senders">
+  <div id="list-sources">
   </div>
 </div>
 

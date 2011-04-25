@@ -1084,6 +1084,7 @@ $locales['config-timezone-desc'] = 'Fuseau horaire';
 $locales['config-ui'] = 'Interface utilisateur';
 $locales['mod-system-tab-about'] = 'A propos...';
 $locales['mod-system-tab-access_denied'] = 'Accès refusé';
+$locales['mod-system-tab-ajax_form_view_sender'] = 'Formulaire d\'export de vue';
 $locales['mod-system-tab-configure'] = 'Configuration';
 $locales['mod-system-tab-domodsql'] = 'Modification d\'un module';
 $locales['mod-system-tab-edit_note'] = 'Note utilisateur';

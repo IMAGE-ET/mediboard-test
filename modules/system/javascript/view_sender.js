@@ -16,43 +16,35 @@ ViewSender = {
 		url.addParam('sender_id', sender_id);
     url.requestModal(400);
 	  this.modal = url.modaleObject;
-	},
+  },
 
   onSubmit: function(form) {
     return onSubmitFormAjax(form, { 
-		  onComplete: function() {
-				ViewSender.refreshList();
-				ViewSender.modal.close();
-			}
-		} )
-	},
-	
-	confirmDeletion: function(form) {
-		var options = {
-      typeName:'export', 
-      objName: $V(form.name),
-      ajax: 1
-		}
-		var ajax = {
       onComplete: function() {
         ViewSender.refreshList();
         ViewSender.modal.close();
       }
-		}
-		
-    confirmDeletion(form, options, ajax);		
-	},
-	
-	highliteMinute: function (min) {
-		$$('td.min-'+min).each(function(e) {
-			if (e.hasClassName("ok") || e.hasClassName("off")) {
-        Effect.Pulsate(e.up(), { pulses: 3, duration: 3 });
-			}
-		});
-	},
-	
+    } )
+  },
+  
+  confirmDeletion: function(form) {
+    var options = {
+      typeName:'export', 
+      objName: $V(form.name),
+      ajax: 1
+    }
+    var ajax = {
+      onComplete: function() {
+        ViewSender.refreshList();
+        ViewSender.modal.close();
+      }
+    }
+    
+    confirmDeletion(form, options, ajax);    
+  },
+  
   refreshList: function() {
-		var url = new Url('system', 'ajax_list_view_senders');
-		url.requestUpdate('list-senders');
-	}
+    var url = new Url('system', 'ajax_list_view_senders');
+    url.requestUpdate('list-senders');
+  }
 };

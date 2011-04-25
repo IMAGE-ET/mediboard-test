@@ -37,7 +37,7 @@
       {{mb_value object=$_sender field=description}}
     </td>
     <td class="text compact">
-    	{{mb_value object=$_sender field=params}}
+    	{{$_sender->params|nl2br|replace:"=":" = "}}
 		</td>
     <td>{{mb_value object=$_sender field=period}}</td>
     <td>{{mb_value object=$_sender field=offset}}</td>
@@ -61,7 +61,7 @@
     {{if $sum == 1}}{{assign var=status value=ok     }}{{/if}}
     {{if $sum >= 2}}{{assign var=status value=warning}}{{/if}}
     {{if $sum >= 4}}{{assign var=status value=error  }}{{/if}}
-    <td class="hour-plan {{$status}}" title="{{$sum}} @ {{$min}}" onclick="ViewSender.highliteMinute({{$min}})" />
+    <td class="hour-plan {{$status}}" title="{{$sum}} @ {{$min}}" />
     {{/foreach}}
   </tr>
 	{{/if}}
