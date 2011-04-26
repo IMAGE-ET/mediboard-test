@@ -45,9 +45,9 @@ function submitCompteRendu(callback){
     mess.stopObserving("click");
   }
   (function(){
-	  var html = CKEDITOR.instances.htmlarea.getData();
-	  $V($("htmlarea"), html, false);
-	  
+    var html = CKEDITOR.instances.htmlarea.getData();
+    $V($("htmlarea"), html, false);
+    
     var form = getForm("editFrm");
     
     if(checkForm(form) && User.id) {
@@ -95,15 +95,15 @@ function refreshZones(id, obj) {
   //Remise du content sauvegardé, avec l'impression en callback
   CKEDITOR.instances.htmlarea.setData(obj._source, window.callback);
   
-	var url = new Url("dPcompteRendu", "edit_compte_rendu");
-	url.addParam("compte_rendu_id", id);
-	url.addParam("reloadzones", 1);
-	url.requestUpdate("reloadzones",
-			{onComplete: function(){
+  var url = new Url("dPcompteRendu", "edit_compte_rendu");
+  url.addParam("compte_rendu_id", id);
+  url.addParam("reloadzones", 1);
+  url.requestUpdate("reloadzones",
+      {onComplete: function(){
          window.resizeEditor();
-		     var form = getForm("editFrm");
-		     form.onsubmit = function() { Url.ping({onComplete: submitCompteRendu}); return false;};
-		     $V(form.compte_rendu_id, id);
+         var form = getForm("editFrm");
+         form.onsubmit = function() { Url.ping({onComplete: submitCompteRendu}); return false;};
+         $V(form.compte_rendu_id, id);
   }});
 }
 
@@ -200,6 +200,7 @@ Main.add(function(){
     Thumb.object_class = '{{$compte_rendu->object_class}}';
     Thumb.object_id = '{{$compte_rendu->object_id}}';
   }
+  
   window.onbeforeunload = function(e) {
     var e = e || window.event;
     
@@ -218,20 +219,23 @@ Main.add(function(){
   
   var htmlarea = $('htmlarea');
   
-  $H(documentGraphs).each(function(pair){
-    var g = pair.value;
-    $('graph-container').update();
-    g.options.fontSize = 14;
-    g.options.resolution = 2;
-    g.options.legend = {
-      labelBoxWidth: 28,
-      labelBoxHeight: 20
-    };
-    g.options.pie.explode = 0;
-    var f = new Flotr.Graph($('graph-container'), g.data, g.options);
-    g.dataURL = f.canvas.toDataURL();
-    oFCKeditor.value = htmlarea.value = htmlarea.value.replace('<span class="field">'+g.name+'</span>', '<img src="'+g.dataURL+'" width="450" height="300" />');
-  });
+  // documentGraphs est un tableau si vide ($H donnera les mauvaises clés), un objet sinon
+  if (documentGraphs.length !== 0) {
+    $H(documentGraphs).each(function(pair){
+      var g = pair.value;
+      $('graph-container').update();
+      g.options.fontSize = 14;
+      g.options.resolution = 2;
+      g.options.legend = {
+        labelBoxWidth: 28,
+        labelBoxHeight: 20
+      };
+      g.options.pie.explode = 0;
+      var f = new Flotr.Graph($('graph-container'), g.data, g.options);
+      g.dataURL = f.canvas.toDataURL();
+      oFCKeditor.value = htmlarea.value = htmlarea.value.replace('<span class="field">'+g.name+'</span>', '<img src="'+g.dataURL+'" width="450" height="300" />');
+    });
+  }
   
   {{if !$compte_rendu->_id && $switch_mode == 1}}
     if (window.opener.saveFields) {
@@ -252,6 +256,10 @@ Main.add(function(){
 });
 
 </script>
+
+<div style="position: absolute; top: -1500px;">
+  <div style="position: relative; width: 900px; height: 600px;" id="graph-container"></div>
+</div>
 
 <!-- Modale pour le mode play -->
 <div style="display: none; width: 260px; height: 130px;" id="play_modal">
