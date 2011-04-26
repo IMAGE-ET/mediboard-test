@@ -4,11 +4,11 @@
 {{assign var=_field_name value=$ex_field->name}}
 {{assign var=_spec value=$ex_object->_specs.$_field_name}}
 
-{{if $mode == "normal" && $ex_field->_triggers_map|@count}}
+{{if $mode == "normal" && $ex_field->_triggered_data|@count}}
   <script type="text/javascript">
   Main.add(function(){
     var form = getForm("editExObject");
-    ExObject.initTriggers({{$ex_field->_triggers_map|@json}}, form, "{{$_field_name}}");
+    ExObject.initTriggers({{$ex_field->_triggered_data|@json}}, form, "{{$_field_name}}");
   });
   </script>
 {{/if}}

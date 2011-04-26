@@ -1,6 +1,3 @@
-<div class="small-info" style="display: none;" id="save-to-take-effect">
-  <strong>Enregistrez</strong> pour que la modifiation prenne effet
-</div>
 
 <table class="main tbl">
   <col class="narrow" />
@@ -20,11 +17,11 @@
       
       {{if $triggerables|@count}}
         <td>
-          <select class="triggered-data-select" onchange="updateTriggerData(this)" style="max-width: 20em;">
+          <select class="triggered-data-select" onchange="updateTriggerData($V(this), '{{$_value}}')" style="max-width: 20em;">
             <option value=""> &mdash; </option>
             {{foreach from=$triggerables item=_triggerable}}
-              {{assign var=_trigger_value value="`$_triggerable->_id`-`$_value`"}}
-              <option value="{{$_trigger_value}}" {{if $context->_triggered_data == $_trigger_value}}selected="selected"{{/if}}>
+              {{assign var=_trigger_value value=$_triggerable->_id}}
+              <option value="{{$_trigger_value}}" {{if array_key_exists($_value, $context->_triggered_data) && $context->_triggered_data.$_value == $_trigger_value}}selected="selected"{{/if}}>
                 {{$_triggerable->name}}
               </option>
             {{/foreach}}

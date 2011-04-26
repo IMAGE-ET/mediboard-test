@@ -72,12 +72,19 @@ confirmDelEnum = function(button) {
   return true;
 }
 
-updateTriggerData = function(select) {
+updateTriggerData = function(trigger, value) {
   var fieldForm = getForm("{{$form_name}}");
-  $V(fieldForm._triggered_data, $V(select));
-  $$("select.triggered-data-select").without(select).each(function(s){
-    s.selectedIndex = 0;
-  });
+	var trigger_data = $V(fieldForm._triggered_data);
+	var trigger_object = trigger_data ? trigger_data.evalJSON() : {};
+	
+	if (trigger_object.length === 0) {
+	  trigger_object = {};
+	}
+	
+  trigger_object[value] = trigger;
+	
+	$V(fieldForm._triggered_data, Object.toJSON(trigger_object));
+	
   $("save-to-take-effect").show();
 }
 
@@ -310,6 +317,10 @@ Main.add(function(){
     </tr>
   {{/foreach}}
 </table>
+
+<div class="small-info" style="display: none;" id="save-to-take-effect">
+  <strong>Enregistrez</strong> pour que la modifiation prenne effet
+</div>
 
 {{if $spec instanceof CEnumSpec && $context && $context->_id}}
   {{if $context == $list_owner}}

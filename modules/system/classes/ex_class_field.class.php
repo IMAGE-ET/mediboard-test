@@ -38,7 +38,6 @@ class CExClassField extends CExListItemsOwner {
   var $_ref_translation = null;
   var $_ref_concept = null;
   var $_spec_object = null;
-	var $_triggers_map = null;
   
   var $_dont_drop_column = null;
 	
@@ -251,22 +250,15 @@ class CExClassField extends CExListItemsOwner {
   
   function loadTriggeredData(){
     $triggers = $this->loadBackRefs("ex_triggers");
-    
+		
+    $this->_triggered_data = array();
+		
     if (!count($triggers)) return;
      
-    $trigger = reset($triggers); // FIXME gerer plusieurs triggers
-    $this->_triggered_data = "$trigger->ex_class_triggered_id-$trigger->trigger_value";
-  }
-  
-  function loadTriggers(){
-    $triggers = $this->loadBackRefs("ex_triggers");
-    
-		$triggers_map = array();
-		foreach($triggers as $_trigger) {
-			$triggers_map[$_trigger->trigger_value] = $_trigger->ex_class_triggered_id;
-		}
+    $keys   = CMbArray::pluck($triggers, "trigger_value");
+    $values = CMbArray::pluck($triggers, "ex_class_triggered_id");
 		
-    return $this->_triggers_map = $triggers_map;
+    $this->_triggered_data = array_combine($keys, $values);
   }
   
   function loadRefExGroup($cache = true){
@@ -450,13 +442,24 @@ class CExClassField extends CExListItemsOwner {
     
     // form triggers
     if ($triggered_data) {
-      list($ex_class_triggered_id, $trigger_value) = explode("-", $triggered_data);
-      $trigger = new CExClassFieldTrigger();
-      $trigger->ex_class_field_id = $this->_id;
-      $trigger->loadMatchingObject();
-      $trigger->ex_class_triggered_id = $ex_class_triggered_id;
-      $trigger->trigger_value = $trigger_value;
-      $trigger->store();
+    	$triggered_object = json_decode($triggered_data, true);
+			
+			if (is_array($triggered_object)) {
+				foreach($triggered_object as $_value => $_class_trigger_id) {
+		      $trigger = new CExClassFieldTrigger();
+		      $trigger->ex_class_field_id = $this->_id;
+	        $trigger->trigger_value = $_value;
+		      $trigger->loadMatchingObject();
+					
+					if ($_class_trigger_id) {
+		        $trigger->ex_class_triggered_id = $_class_trigger_id;
+		        $trigger->store();
+					}
+					else {
+						$trigger->delete();
+					}
+				}
+			}
     }
     
     // self translations

@@ -36,11 +36,11 @@ $ex_object->setExClass();
 
 list($grid, $out_of_grid, $groups) = $ex_object->_ref_ex_class->getGrid();
 
-foreach($groups as $_group) {
+/*foreach($groups as $_group) {
 	foreach($_group->_ref_fields as $_field) {
-    $_field->loadTriggers();
+    $_field->loadTriggeredData();
 	}
-}
+}*/
 
 if ($ex_object_id) {
   $ex_object->load($ex_object_id);
@@ -65,7 +65,7 @@ foreach($groups as $_group) {
 }
 
 foreach($fields as $_field) {
-  $_field->loadTriggers();
+  $_field->loadTriggeredData();
 }
 
 $ex_object->loadRefReferenceObjects();

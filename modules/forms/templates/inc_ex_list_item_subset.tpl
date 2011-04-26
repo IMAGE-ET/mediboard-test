@@ -44,10 +44,6 @@ moveListItem = function(e, way){
   {{assign var=coded value=true}}
 {{/if}}
 
-<div class="small-info" style="display: none;" id="save-to-take-effect">
-	<strong>Enregistrez</strong> pour que la modifiation prenne effet
-</div>
-
 {{*  
 {{foreach from=$items_all item=_value}}
 {{/foreach}}
@@ -91,6 +87,7 @@ moveListItem = function(e, way){
 	<tbody>
   {{foreach from=$items_all item=_value}}
     {{assign var=_item value=$list_owner->_back.list_items.$_value}}
+    {{assign var=_item_id value=$_item->_id}}
 	  {{assign var=active value=false}}
 		
 		{{if array_key_exists($_item->_id, $spec->_locales)}}
@@ -126,11 +123,11 @@ moveListItem = function(e, way){
       {{if $context instanceof CExClassField}}
         {{if $triggerables|@count}}
           <td>
-            <select class="triggered-data-select" onchange="updateTriggerData(this)" style="max-width: 20em;">
+            <select class="triggered-data-select" onchange="updateTriggerData($V(this), '{{$_item->_id}}')" style="max-width: 20em;">
               <option value=""> &mdash; </option>
               {{foreach from=$triggerables item=_triggerable}}
-                {{assign var=_trigger_value value="`$_triggerable->_id`-`$_item->_id`"}}
-                <option value="{{$_trigger_value}}" {{if $context->_triggered_data == $_trigger_value}}selected="selected"{{/if}}>
+                {{assign var=_trigger_value value=$_triggerable->_id}}
+                <option value="{{$_trigger_value}}" {{if array_key_exists($_item_id, $context->_triggered_data) && $context->_triggered_data.$_item_id == $_trigger_value}}selected="selected"{{/if}}>
                   {{$_triggerable->name}}
                 </option>
               {{/foreach}}

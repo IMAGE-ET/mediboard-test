@@ -22,15 +22,15 @@ class CExClassFieldTrigger extends CMbObject {
     $spec = parent::getSpec();
     $spec->table = "ex_class_field_trigger";
     $spec->key   = "ex_class_field_trigger_id";
-    $spec->uniques["ex_class_triggered"] = array("ex_class_field_id", "ex_class_triggered_id");
+    $spec->uniques["ex_class_triggered"] = array("ex_class_field_id", "trigger_value");
     return $spec;
   }
 
   function getProps() {
     $props = parent::getProps();
-    $props["ex_class_field_id"] = "ref notNull class|CExClassField";
-    $props["ex_class_triggered_id"]  = "ref notNull class|CExClass";
-    $props["trigger_value"]  = "str notNull";
+    $props["ex_class_field_id"]     = "ref notNull class|CExClassField";
+    $props["ex_class_triggered_id"] = "ref notNull class|CExClass";
+    $props["trigger_value"]         = "str notNull";
     return $props;
   }
   

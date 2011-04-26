@@ -69,7 +69,7 @@ Main.add(function(){
   <input type="hidden" name="dosql" value="do_ex_class_field_aed" />
   <input type="hidden" name="del" value="0" />
   
-  <input type="hidden" name="_triggered_data" value="{{$ex_field->_triggered_data}}" />
+  <input type="hidden" name="_triggered_data" value="{{$ex_field->_triggered_data|@json|smarty:nodefaults|JSAttribute}}" />
   
   {{mb_key object=$ex_field}}
   {{mb_field object=$ex_field field=ex_group_id hidden=true}}
@@ -184,9 +184,16 @@ Main.add(function(){
       <th>Report de valeur</th>
       <td>
         {{assign var=class_options value=$ex_field->_ref_ex_group->_ref_ex_class->_host_class_options}}
+				
         <label><input type="radio" name="report_level" value=""  {{if $ex_field->report_level == ""}}  checked="checked" {{/if}} /> Aucun </label>
-        <label><input type="radio" name="report_level" value="1" {{if $ex_field->report_level == "1"}} checked="checked" {{/if}} /> {{tr}}{{$class_options.reference1.0}}{{/tr}} </label>
-        <label><input type="radio" name="report_level" value="2" {{if $ex_field->report_level == "2"}} checked="checked" {{/if}} /> {{tr}}{{$class_options.reference2.0}}{{/tr}} </label>
+				
+				{{if $class_options.reference1.0}}
+          <label><input type="radio" name="report_level" value="1" {{if $ex_field->report_level == "1"}} checked="checked" {{/if}} /> {{tr}}{{$class_options.reference1.0}}{{/tr}} </label>
+				{{/if}}
+				
+				{{if $class_options.reference2.0}}
+          <label><input type="radio" name="report_level" value="2" {{if $ex_field->report_level == "2"}} checked="checked" {{/if}} /> {{tr}}{{$class_options.reference2.0}}{{/tr}} </label>
+				{{/if}}
       </td>
       
       <td colspan="2">

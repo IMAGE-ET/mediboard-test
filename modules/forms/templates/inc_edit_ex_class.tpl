@@ -142,13 +142,13 @@ toggleGroupLabelEdit = function(link) {
             {{tr}}Save{{/tr}}
           </button>
           <button onclick="toggleGroupLabelEdit($(this).up('a'))" 
-                  class="cancel notext" type="button" style="margin: -1px; margin-right: -3px;">
+                  class="cancel notext" type="button" style="margin: -1px;">
             {{tr}}Cancel{{/tr}}
           </button>
           
           {{if $_group->_ref_fields|@count == 0}}
           <button onclick="return confirmDeletion(this.form, {ajax: true})" 
-                  class="trash notext" type="button" style="margin: -1px; margin-right: -3px;">
+                  class="trash notext" type="button" style="margin: -1px;">
             {{tr}}Delete{{/tr}}
           </button>
           {{/if}}
