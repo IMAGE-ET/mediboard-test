@@ -816,6 +816,9 @@ class CMediusers extends CMbObject {
     $template->addProperty("Praticien - spécialité", $this->_ref_discipline->_view);
     $template->addProperty("Praticien - titres"    , $this->titres);
     $template->addProperty("Praticien - ADELI"     , $this->adeli);
+    $template->addBarcode("Praticien - Code barre ADELI", $this->adeli, array("barcode" => array(
+      "title" => CAppUI::tr("{$this->_class_name}-adeli")
+    )));
     $template->addProperty("Praticien - RPPS"      , $this->rpps);
     $template->addBarcode("Praticien - Code barre RPPS", $this->rpps, array("barcode" => array(
       "title" => CAppUI::tr("{$this->_class_name}-rpps")
