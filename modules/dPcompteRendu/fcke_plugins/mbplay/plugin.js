@@ -50,8 +50,9 @@ function mbplay_onclick(editor) {
   var instance = CKEDITOR.instances.htmlarea; 
   var bodyEditor = editor.document.getBody().$;
   
-  // Si la modale a été fermée, alors on relance l'étape courante
-  if (window_parent.current_playing) {
+  // Si la modale a été fermée, alors on relance l'étape courante,
+  // à moins qu'un petit malin ait supprimé le champ
+  if (window_parent.current_playing && window_parent.current_playing.innerHTML) {
     Element.setStyle(current_playing, {backgroundColor: "#ffd700"});
     window_parent.modal_mode_play.open();
     setTimeout(function() { bodyEditor.scrollTop = window_parent.save_scroll}, 10);
