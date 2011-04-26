@@ -83,7 +83,8 @@
     $where["object_class"] = "= '$mbObject->_class_name'";
     $where["tag"] = "LIKE '$tag'";
     
-    return $this->loadList($where);
+    $order = "last_update ASC";
+    return $this->loadList($where, $order);
   }
   
   /**
