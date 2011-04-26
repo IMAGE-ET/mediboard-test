@@ -191,6 +191,15 @@ function openModalPrinters() {
 {{/if}}
 
 Main.add(function(){
+  if (window.pdf_thumbnails && window.Preferences.pdf_and_thumbs == 1) {
+    PageFormat.init(getForm("editFrm"));
+    Thumb.compte_rendu_id = '{{$compte_rendu->_id}}';
+    Thumb.modele_id = '{{$modele_id}}';
+    Thumb.user_id = '{{$user_id}}';
+    Thumb.mode = "doc";
+    Thumb.object_class = '{{$compte_rendu->object_class}}';
+    Thumb.object_id = '{{$compte_rendu->object_id}}';
+  }
   window.onbeforeunload = function(e) {
     var e = e || window.event;
     
@@ -223,16 +232,6 @@ Main.add(function(){
     g.dataURL = f.canvas.toDataURL();
     oFCKeditor.value = htmlarea.value = htmlarea.value.replace('<span class="field">'+g.name+'</span>', '<img src="'+g.dataURL+'" width="450" height="300" />');
   });
-  
-  if (window.pdf_thumbnails && window.Preferences.pdf_and_thumbs == 1) {
-    PageFormat.init(getForm("editFrm"));
-    Thumb.compte_rendu_id = '{{$compte_rendu->_id}}';
-    Thumb.modele_id = '{{$modele_id}}';
-    Thumb.user_id = '{{$user_id}}';
-    Thumb.mode = "doc";
-    Thumb.object_class = '{{$compte_rendu->object_class}}';
-    Thumb.object_id = '{{$compte_rendu->object_id}}';
-  }
   
   {{if !$compte_rendu->_id && $switch_mode == 1}}
     if (window.opener.saveFields) {
