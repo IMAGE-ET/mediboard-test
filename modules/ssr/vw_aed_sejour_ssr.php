@@ -70,19 +70,10 @@ else {
   $sejour->sortie_prevue = mbDate()." 18:00:00";
 }
 
-// Aides à la saisie
-$sejour->loadAides($user->_id);
-
-$traitement = new CTraitement();
-$traitement->loadAides($user->_id);
-
-$antecedent = new CAntecedent();
-$antecedent->loadAides($user->_id);
-
 // Chargement des categories de prescription
 $categories = array();
 $category = new CCategoryPrescription();
-$where[] = "chapitre = 'kine' OR chapitre = 'soin' OR chapitre = 'consult'";
+$where[] = "chapitre = 'kine'";
 $group_id = CGroups::loadCurrent()->_id;
 $where[] = "group_id = '$group_id' OR group_id IS NULL";
 
@@ -111,8 +102,6 @@ $smarty = new CSmartyDP();
 
 $smarty->assign("can_view_dossier_medical", $can_view_dossier_medical);
 $smarty->assign("today"               , mbDate());
-$smarty->assign("traitement"          , $traitement);
-$smarty->assign("antecedent"          , $antecedent);
 $smarty->assign("sejour"              , $sejour);
 $smarty->assign("fiche_autonomie"     , $fiche_autonomie);
 $smarty->assign("bilan"               , $bilan);
