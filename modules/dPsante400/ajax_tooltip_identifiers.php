@@ -8,11 +8,10 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
  */
 
-global $can;
-$can->needsRead();
+CCanDo::checkRead();
 
 $object = mbGetObjectFromGet("object_class", "object_id", "object_guid");
-$identifiers = $object->loadBackRefs("identifiants", "last_update DESC");
+$identifiers = $object->loadBackRefs("identifiants", "tag ASC, last_update DESC");
 
 // Création du template
 $smarty = new CSmartyDP();
