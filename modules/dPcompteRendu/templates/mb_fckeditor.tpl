@@ -32,6 +32,8 @@ CKEDITOR.editorConfig = function(config) {
   config.contentsCss = "style/mediboard/htmlarea.css?build={{$version.build}}";
   config.docType = '<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">';
   config.filebrowserImageBrowseUrl = "lib/kcfinder/browse.php?type=image";
+  config.tabSpaces = 3;
+  config.disableNativeSpellChecker = false;
   config.resize_maxWidth = "100%";
   config.resize_minWidth = "100%";
   // Suppression du redimensionnement manuel

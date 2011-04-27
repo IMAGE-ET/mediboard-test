@@ -248,7 +248,7 @@ $library->description = "Composant Javascript d'édition de texte au format HTML"
 $library->sourceDir = "ckeditor";
 $library->targetDir = "ckeditor";
 $library->versionFile = "ckeditor.js";
-$library->versionString = "version:'3.5.3'";
+$library->versionString = "version:'3.5.3b'";
 
 $patch = new CLibraryPatch;
 $patch->dirName = "ckeditor";

@@ -57,7 +57,13 @@ function submitCompteRendu(callback){
         emptyPDF();
       }
       clearTimeout(window.thumbs_timeout);
+      if (window.pdf_thumbnails) {
+        deleteStyle();
+      }
       onSubmitFormAjax(form,{ useDollarV: true, onComplete: function() {
+        if (window.pdf_thumbnails) {
+          restoreStyle();
+        } 
         Thumb.contentChanged = false;
         if (!window.pdf_thumbnails || window.Preferences.pdf_and_thumbs == 0 && window.opener.Document.refreshList) {
           window.opener.Document.refreshList($V(form.object_class), $V(form.object_id));

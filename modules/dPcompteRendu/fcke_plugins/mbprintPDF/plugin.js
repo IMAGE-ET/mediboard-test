@@ -28,7 +28,9 @@ function mbprintPDF_onclick(editor) {
 }
 
 function streamPDF(editor) {
+  restoreStyle();
   var content = editor.getData();
+  deleteStyle();
   var form = window.parent.document.forms["download-pdf-form"];
   form.elements.content.value = encodeURIComponent(content);
   form.onsubmit();
