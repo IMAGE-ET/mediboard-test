@@ -111,6 +111,25 @@ function submitCompteRendu(callback){
   }).defer();
 }
 
+function reloadHeadersFooters() {
+  {{if $compte_rendu->_id}}
+    if ($("headers") && $("footers")) {
+      var oForm = getForm("editFrm");
+      var url = new Url("dPcompteRendu", "ajax_headers_footers");
+      url.addParam("compte_rendu_id", $V(oForm.compte_rendu_id));
+      url.addParam("object_class", $V(oForm.object_class));
+      url.addParam("type", "header");
+      url.requestUpdate(oForm.header_id);
+
+      var url = new Url("dPcompteRendu", "ajax_headers_footers");
+      url.addParam("compte_rendu_id", $V(oForm.compte_rendu_id));
+      url.addParam("object_class", $V(oForm.object_class));
+      url.addParam("type", "footer");
+      url.requestUpdate(oForm.footer_id);
+    } 
+  {{/if}}
+}
+
 </script>
 
 {{mb_script module=dPcompteRendu script=thumb}}
@@ -272,50 +291,51 @@ Main.add(function () {
               {{mb_field object=$compte_rendu field=type disabled="disabled" style="width: 15em;"}}
             {{/if}}
           
-            {{if $compte_rendu->_id}}
             <script type="text/javascript">
-            function updateType() {
-              var oForm = document.editFrm;
-              var bBody = oForm.type.value == "body";
-              var bHeader = oForm.type.value == "header";
+              function updateType() {
+                {{if $compte_rendu->_id}}
+                  var oForm = document.editFrm;
+                  var bBody = oForm.type.value == "body";
+                  var bHeader = oForm.type.value == "header";
+                  
+                  if(bHeader) {
+                    $("preview_page").insert({top: $("header_footer_content").remove()});
+                    $("preview_page").insert({bottom: $("body_content").remove()});
+                  }
+                  else {
+                    $("preview_page").insert({bottom: $("header_footer_content").remove()});
+                    $("preview_page").insert({top: $("body_content").remove()});
+                  }
+                  // layout
+    							if (window.pdf_thumbnails && window.Preferences.pdf_and_thumbs == 1) {
+                    $("page_layout").setVisible(bBody);
+                  }
+                  $("layout_header_footer").setVisible(!bBody);
+                  
+                  // Height
+                  $("height").setVisible(!bBody);
+                  if (bBody) $V(oForm.height, '');
+    
+                  // Footers
+                  var oFooter = $("footers");
+                  if (oFooter) {
+                    oFooter.setVisible(bBody);
+                    if (!bBody) $V(oForm.footer_id, '');
+                  }
+    
+                  // Headers
+                  var oHeader = $("headers");
+                  if (oHeader) {
+                    oHeader.setVisible(bBody);
+                    if (!bBody) $V(oForm.header_id, '');
+                  }
+                  Modele.preview_layout();
+                {{/if}}
+              }
               
-              if(bHeader) {
-                $("preview_page").insert({top: $("header_footer_content").remove()});
-                $("preview_page").insert({bottom: $("body_content").remove()});
-              }
-              else {
-                $("preview_page").insert({bottom: $("header_footer_content").remove()});
-                $("preview_page").insert({top: $("body_content").remove()});
-              }
-              // layout
-							if (window.pdf_thumbnails && window.Preferences.pdf_and_thumbs == 1) {
-                $("page_layout").setVisible(bBody);
-              }
-              $("layout_header_footer").setVisible(!bBody);
-              
-              // Height
-              $("height").setVisible(!bBody);
-              if (bBody) $V(oForm.height, '');
-
-              // Footers
-              var oFooter = $("footers");
-              if (oFooter) {
-                oFooter.setVisible(bBody);
-                if (!bBody) $V(oForm.footer_id, '');
-              }
-
-              // Headers
-              var oHeader = $("headers");
-              if (oHeader) {
-                oHeader.setVisible(bBody);
-                if (!bBody) $V(oForm.header_id, '');
-              }
-              Modele.preview_layout();           
-            }
-            
-            Main.add(updateType);
+              Main.add(updateType);
             </script>
-            {{/if}}
+            
           </td>
         </tr>
         
@@ -364,7 +384,7 @@ Main.add(function () {
         <tr>
           <th>{{mb_label object=$compte_rendu field="object_class"}}</th>
           <td>
-            <select name="object_class" class="{{$compte_rendu->_props.object_class}}" onchange="loadCategory()" style="width: 15em;">
+            <select name="object_class" class="{{$compte_rendu->_props.object_class}}" onchange="loadCategory(); reloadHeadersFooters();" style="width: 15em;">
               <option value="">&mdash; {{tr}}CCompteRendu-set-object{{/tr}}</option>
             </select>
           </td>
