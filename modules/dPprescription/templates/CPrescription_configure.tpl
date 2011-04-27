@@ -22,7 +22,7 @@
   <li>
     <a href="#general">Général</a>
     <a href="#chapters_visible">Chapitres visibles</a>
-    <a href="#chapters_nursable">Chapitres prescriptibles par IDE</a>
+    <a href="#chapters_nursable">Chapitres prescriptibles par les exécutants</a>
     <a href="#scores">Scores</a>
    </li>
 </ul>
