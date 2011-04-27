@@ -56,6 +56,18 @@
 		   </td>
 		 </tr>
 		 <tr>
+      <th>{{mb_label object=$element_prescription field="prescriptible_kine"}}</th>
+      <td>{{mb_field object=$element_prescription field="prescriptible_kine"}}</td>
+    </tr>
+		<tr>
+      <th>{{mb_label object=$element_prescription field="prescriptible_infirmiere"}}</th>
+      <td>{{mb_field object=$element_prescription field="prescriptible_infirmiere"}}</td>
+    </tr>
+		<tr>
+      <th>{{mb_label object=$element_prescription field="prescriptible_AS"}}</th>
+      <td>{{mb_field object=$element_prescription field="prescriptible_AS"}}</td>
+    </tr>
+		 <tr>
 		   <td colspan="2" class="text">
 		   </td>
 		 </tr>

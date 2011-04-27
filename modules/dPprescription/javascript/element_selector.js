@@ -9,10 +9,11 @@
  */
  
 ElementSelector = {
-  sForm     : null,
-  sLibelle  : null,
-  sType     : null,
+  sForm       : null,
+  sLibelle    : null,
+  sType       : null,
   sElement_id : null,
+	sUserId    : null,
   options : {
     width : 350,
     height: 450
@@ -26,6 +27,8 @@ ElementSelector = {
     if (oForm[this.sLibelle].value.indexOf(String.fromCharCode("8212")) == -1)
       this.oUrl.addParam("libelle", oForm[this.sLibelle].value);
     this.oUrl.addParam("type"  , this.sType);
+		this.oUrl.addParam("user_id"  , this.sUserId);
+    
     this.oUrl.popup(this.options.width, this.options.height, "Element Prescription Selector");
   },
   

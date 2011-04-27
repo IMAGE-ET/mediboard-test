@@ -18,8 +18,8 @@ oForm.element_prescription_id.value = "";
 
 // On met à jour les valeurs de praticien_id
 Main.add( function(){
-  if(document.selPraticienLine){
-	  changePraticienElt(document.selPraticienLine.praticien_id.value, '{{$element}}');
+  if(getForm("selPraticienLine")){
+	  changePraticienElt(getForm("selPraticienLine").praticien_id.value, '{{$element}}');
   }
   Prescription.refreshTabHeader('div_{{$element}}','{{$prescription->_counts_by_chapitre.$element}}','{{if $prescription->object_id}}{{$prescription->_counts_by_chapitre_non_signee.$element}}{{else}}0{{/if}}');
 
@@ -27,6 +27,9 @@ Main.add( function(){
   if(form){
     var url = new Url("dPprescription", "httpreq_do_element_autocomplete");
     url.addParam("category", "{{$element}}");
+		{{if !$is_praticien && !$operation_id}}
+		url.addParam("user_id", $V(getForm("addLineElement").praticien_id));
+		{{/if}}
     url.autoComplete(form.libelle, "{{$element}}_auto_complete", {
       minChars: 2,
       updateElement: function(element) { updateFieldsElement(element, form, '{{$element}}') }
@@ -43,15 +46,11 @@ Main.add( function(){
 <table class="form">
 	{{assign var=variable_droits value="droits_infirmiers_$element"}}
 
-	{{if ($is_praticien || $mode_protocole || @$operation_id || $can->admin || ($current_user->isInfirmiere() && $conf.dPprescription.CPrescription.$variable_droits))}}
+  {{assign var=perm_add_line value=0}}  
+	{{if $is_praticien || $mode_protocole || @$operation_id || $can->admin || ($current_user->isExecutantPrescription() && $conf.dPprescription.CPrescription.$variable_droits)}}
 	  {{assign var=perm_add_line value=1}}
-	{{else}}
-    {{assign var=perm_add_line value=0}}  
 	{{/if}}
 
-    
-
-	
   {{if !$prescription->_protocole_locked && $perm_add_line}}
   <tr>
     <th class="title">
@@ -83,12 +82,15 @@ Main.add( function(){
       <!-- Formulaire d'elements les plus utilisés -->
 			<form action="?" method="get" name="search{{$element}}" onsubmit="return false;">
 			  <!-- Affichage des produits les plus utilises -->
+				{{if $is_praticien || $mode_protocole || @$operation_id || $can->admin || ($current_user->isExecutantPrescription() && !$conf.dPprescription.CPrescription.role_propre)}}
         <select name="favoris" onchange="Prescription.addLineElement(this.value,'{{$element}}'); this.value = '';" 
 				        style="width: 140px;" onclick="updateFavoris('{{$favoris_praticien_id}}','{{$element}}', this); headerPrescriptionTabs.setActiveTab('div_ajout_lignes');">
           <option value="">&mdash; les plus utilisés</option>
         </select>
-				
-			  <!-- Boutons d'ajout d'elements et de commentaires -->
+				{{/if}}
+			  
+				{{if $is_praticien || $mode_protocole || @$operation_id || $can->admin || ($current_user->isExecutantPrescription() && !$conf.dPprescription.CPrescription.role_propre)}}
+				<!-- Boutons d'ajout d'elements et de commentaires -->
 				<span id="addComment-{{$element}}">
 				  {{if $conf.dPprescription.CPrescription.add_element_category}}
 				  <button class="new" onclick="toggleFieldComment(this, $('add_{{$element}}'), 'élément'); headerPrescriptionTabs.setActiveTab('div_ajout_lignes');">Ajouter élément</button>
@@ -96,7 +98,9 @@ Main.add( function(){
 				  <button class="new" onclick="toggleFieldComment(this, $('add_line_comment_{{$element}}'), 'commentaire');" type="button">Ajouter commentaire</button>
 				  <br />
 			  </span>
-			  <!-- Selecteur d'elements -->
+			  {{/if}}
+				
+				<!-- Selecteur d'elements -->
 			  <input type="text" name="libelle" value="&mdash; {{tr}}CPrescription.select_element{{/tr}}" class="autocomplete"
                onclick="this.value = ''; headerPrescriptionTabs.setActiveTab('div_ajout_lignes');" style="font-weight: bold; font-size: 1.3em; width: 300px;"/>
 			  <input type="hidden" name="element_id" onchange="Prescription.addLineElement(this.value,'{{$element}}');" />
@@ -109,6 +113,9 @@ Main.add( function(){
 			      this.sElement_id = "element_id";
 			      this.sType = type;
 			      this.selfClose = false;
+						{{if !$is_praticien && !$operation_id}}
+				      this.sUserId = $V(getForm("addLineElement").praticien_id);
+				    {{/if}}
 			      this.pop();
 			    }
 			  </script>
@@ -188,8 +195,8 @@ Main.add( function(){
 				      <br />
 				      <div style="text-align: center;">
 					      <button class="submit" type="button" 
-					              onclick="if(document.selPraticienLine){
-					                         this.form.praticien_id.value = document.selPraticienLine.praticien_id.value;
+					              onclick="if(document.forms.selPraticienLine){
+					                         this.form.praticien_id.value = document.forms.selPraticienLine.praticien_id.value;
 					                       }                        
 					                       this.form.onsubmit();">Ajouter</button>
 				      </div>

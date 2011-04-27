@@ -13,6 +13,7 @@ global $AppUI, $can, $m, $g;
 
 $type = CValue::get("type");
 $libelle = CValue::get("libelle");
+$user_id = CValue::get("user_id");
 
 if(!$libelle){
   $libelle = '%';
@@ -38,6 +39,20 @@ if($libelle){
 	$where["libelle"] = "LIKE '$libelle%'";
 	$where["cancelled"] = " = '0'";
 	$order = "libelle";
+	
+	if($user_id){
+	  $user = new CMediusers();
+    $user->load($user_id);
+	
+	  if($user->isInfirmiere()){
+	    $where["prescriptible_infirmiere"] = " = '1'";
+	  } elseif ($user->isAideSoignant()){
+	    $where["prescriptible_AS"] = " = '1'";
+	  } elseif ($user->isKine()){
+	    $where["prescriptible_kine"] = " = '1'";
+	  }
+  }
+	
 	$elements = $element_prescription->loadList($where, $order);
 }
 // Rangement des elements trouvés par categorie

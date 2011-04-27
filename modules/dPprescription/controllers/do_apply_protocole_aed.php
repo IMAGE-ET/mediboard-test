@@ -32,7 +32,7 @@ if (!$pack_protocole_id){
 // Si l'utilisateur est une infirmiere, on verifie si le protocole ne contient pas des lignes non prescriptibles
 $current_user = new CMediusers();
 $current_user->load($AppUI->user_id);
-if($current_user->isInfirmiere() && !CModule::getCanDo("dPprescription")->admin){
+if($current_user->isExecutantPrescription() && !CModule::getCanDo("dPprescription")->admin){
 	$count = array();
 	
   $pack_protocole = explode("-", $pack_protocole_id);
@@ -59,14 +59,51 @@ if($current_user->isInfirmiere() && !CModule::getCanDo("dPprescription")->admin)
 	
 	// Parcours des chapitres non vides
 	$errors = array();
+	$errors_role = array();
 	foreach($count as $chapitre => $count_by_chap){
 		if(!CAppUI::conf("dPprescription CPrescription droits_infirmiers_$chapitre")){
 			$errors[] = $chapitre;
 		}
 	}
 	
-	if(count($errors)){
-		CAppUI::setMsg("Impossible d'appliquer le protocole sélectionné car le compte infirmier ne permet pas de créer des lignes dans les chapitres suivants: ".join(", ", $errors), UI_MSG_ERROR);
+	// Cas des prescriptions en roles propre, verification que les lignes peuvent etre prescrites
+	if(!count($errors) && CAppUI::conf("dPprescription CPrescription role_propre")){
+		$selected_user = new CMediusers();
+		$selected_user->load($praticien_id);
+		
+		$is_inf = $selected_user->isInfirmiere();
+		$is_as = $selected_user->isAideSoignant();
+    $is_kine = $selected_user->isKine();
+    
+		if($protocole_id){
+			$_prot->loadRefsLinesElement();
+			foreach ($_prot->_ref_prescription_lines_element as $_line_element){
+				if($is_inf && !$_line_element->prescriptible_infirmiere || $is_as && !$_line_element->prescriptible_AS || $is_kine && !$_line_element->prescriptible_kine){
+				  $errors_role[] = $_line_element->_view;
+		    }
+			}
+		}
+		if($pack_id){
+			foreach($_pack->_ref_protocole_pack_items as $_pack_item){
+	      $_pack_item->loadRefPrescription();
+	      $_prescription = $_pack_item->_ref_prescription; 
+				$_prescription->loadRefsLinesElement();
+	      foreach ($_prescription->_ref_prescription_lines_element as $_line_element){
+          if($is_inf && !$_line_element->prescriptible_infirmiere || $is_as && !$_line_element->prescriptible_AS || $is_kine && !$_line_element->prescriptible_kine){
+            $errors_role[] = $_line_element->_view;
+          }
+        }
+	    }
+		}
+	}
+	
+	if(count($errors) || count($errors_role)){
+		if(count($errors)){
+		  CAppUI::setMsg("Impossible d'appliquer le protocole sélectionné car le compte utilisé ne permet pas de créer des lignes dans les chapitres suivants: ".join(", ", $errors), UI_MSG_ERROR);
+    }
+		if(count($errors_role)){
+      CAppUI::setMsg("Impossible d'appliquer le protocole sélectionné car le compte utilisé ne permet pas de créer ces lignes en role propre: ".join(", ", $errors_role), UI_MSG_ERROR);
+    }
 		if ($prescription_id) {
 		  echo "<script type='text/javascript'>Prescription.reloadPrescSejour($prescription_id, null, null, null, null, null, null, null, '$pratSel_id', null, '$praticien_id')</script>";
 		}

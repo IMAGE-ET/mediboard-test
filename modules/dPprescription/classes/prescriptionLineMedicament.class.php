@@ -343,7 +343,7 @@ class CPrescriptionLineMedicament extends CPrescriptionLine {
       } else {
 			  $perm_edit = ($can->admin && !$mode_pharma) || 
 			               ((!$this->signee || $mode_pharma) && 
-                     ($this->praticien_id == $AppUI->user_id || $is_praticien || $mode_pharma || $operation_id || ($current_user->isInfirmiere() && CAppUI::conf("dPprescription CPrescription droits_infirmiers_med"))));
+                     ($this->praticien_id == $AppUI->user_id || $is_praticien || $mode_pharma || $operation_id || ($current_user->isExecutantPrescription() && CAppUI::conf("dPprescription CPrescription droits_infirmiers_med") && !CAppUI::conf("dPprescription CPrescription role_propre"))));
 			}
 		}
     $this->_perm_edit = $perm_edit;

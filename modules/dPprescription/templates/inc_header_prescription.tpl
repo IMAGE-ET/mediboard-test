@@ -52,9 +52,9 @@ submitProtocole = function(){
 	    oForm.debut.value = debut_date;
 	  }
   }
-	if(document.selPraticienLine){
-	  oForm.praticien_id.value = document.selPraticienLine.praticien_id.value;
-	  oForm.pratSel_id.value = document.selPraticienLine.praticien_id.value;
+	if(document.forms.selPraticienLine){
+	  oForm.praticien_id.value = document.forms.selPraticienLine.praticien_id.value;
+	  oForm.pratSel_id.value = document.forms.selPraticienLine.praticien_id.value;
   }
   return onSubmitFormAjax(oForm);
 }
@@ -143,19 +143,23 @@ Main.add( function(){
 	var oFormProtocole = getForm("applyProtocole");
   var praticien_id;
   initNotes();
-  if(document.selPraticienLine){
-    praticien_id = document.selPraticienLine.praticien_id.value;
+  if(document.forms.selPraticienLine){
+    praticien_id = document.forms.selPraticienLine.praticien_id.value;
 		{{if $praticien_for_prot_id}}
-      document.selPraticienLine.praticien_id.value = {{$praticien_for_prot_id}};   
+      document.forms.selPraticienLine.praticien_id.value = {{$praticien_for_prot_id}};   
     {{/if}}
     changePraticien(praticien_id);
 
-		pratSelect = document.selPraticienLine.praticien_id;
+		pratSelect = document.forms.selPraticienLine.praticien_id;
 		if($('protocole_prat_name')){
 		  $('protocole_prat_name').update('Dr '+pratSelect.options[pratSelect.selectedIndex].text);
 		}
   } else {
-    praticien_id = '{{$prescription->_ref_current_praticien->_id}}';
+	 {{if $conf.dPprescription.CPrescription.role_propre}}
+	   praticien_id = '{{$app->user_id}}';  
+   {{else}}
+     praticien_id = '{{$prescription->_ref_current_praticien->_id}}';
+   {{/if}}
   }
   headerPrescriptionTabs = Control.Tabs.create('header_prescription', false);
 
@@ -179,8 +183,8 @@ Main.add( function(){
 			},
 	    callback: 
 	      function(input, queryString){
-				  if(document.selPraticienLine){
-	          return (queryString + "&prescription_id={{$prescription->_id}}&praticien_id="+$V(document.selPraticienLine.praticien_id)); 
+				  if(getForm("selPraticienLine")){
+	          return (queryString + "&prescription_id={{$prescription->_id}}&praticien_id="+$V(document.forms.selPraticienLine.praticien_id)); 
 					} else {
 					  return (queryString + "&prescription_id={{$prescription->_id}}&praticien_id="+praticien_id); 
 	        }
@@ -367,7 +371,8 @@ Main.add( function(){
         {{if !$hide_header}}
 				<br />
 				{{/if}}
-       	{{if !$is_praticien && !$mode_protocole && ($operation_id || $can->admin || $mode_pharma || $current_user->isInfirmiere())}}
+				
+       	{{if !$is_praticien && !$mode_protocole && ($operation_id || $can->admin || $mode_pharma || ($current_user->isExecutantPrescription() && !$conf.dPprescription.CPrescription.role_propre))}}
 				<form name="selPraticienLine" action="?" method="get">
 				  <select style="font-size: 0.8em; width: 15em;" name="praticien_id" onchange="changePraticienMed(this.value); {{if !$mode_pharma}}changePraticienElt(this.value);{{/if}} if($('protocole_prat_name')) { $('protocole_prat_name').update('Dr '+this.options[this.selectedIndex].text); }">
 						<optgroup label="Responsables">

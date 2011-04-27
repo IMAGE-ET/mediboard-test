@@ -792,8 +792,8 @@ Main.add( function(){
 				
 		         <button type="button" class="new" onclick="$V(this.form.callback, 'reloadPerfEvolution'); 
 		                                                  $V(this.form._add_perf_contigue, '1');
-		                                                  if(document.selPraticienLine){
-		                                                    this.form._praticien_id.value = document.selPraticienLine.praticien_id.value;
+		                                                  if(document.forms.selPraticienLine){
+		                                                    this.form._praticien_id.value = document.forms.selPraticienLine.praticien_id.value;
 		                                                  }
 		                                                  return onSubmitFormAjax(this.form);">Faire évoluer</button>
 		         <input type="hidden" name="_add_perf_contigue" value="" />

@@ -12,8 +12,8 @@
 Main.add(function(){
   var form = getForm("apply-dmi");
   
-  if(document.selPraticienLine) {
-    form.praticien_id.value = document.selPraticienLine.praticien_id.value;
+  if(document.forms.selPraticienLine) {
+    form.praticien_id.value = document.forms.selPraticienLine.praticien_id.value;
   }
 });
 </script>

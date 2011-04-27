@@ -71,7 +71,7 @@
 	    </td>
 	  </tr>
 		<tr>
-		  <th>{{mb_label object=$category field="prescription_executant"}}</th>
+		  <th>{{mb_label object=$category field="prescription_executant"}} (Module SSR)</th>
       <td>{{mb_field object=$category field="prescription_executant"}}</td>
 		</tr>
     <tr>

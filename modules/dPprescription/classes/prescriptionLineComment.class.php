@@ -118,7 +118,10 @@ class CPrescriptionLineComment extends CPrescriptionLine {
         $perm_edit = $protocole->_ref_group->canEdit();
       }
     } else {
-		  $perm_edit = $can->admin || (!$this->signee && ($this->praticien_id == $AppUI->user_id || $is_praticien || $operation_id  || ($current_user->isInfirmiere() && CAppUI::conf("dPprescription CPrescription droits_infirmiers_$chapitre"))));             
+		  $perm_edit = $can->admin || (!$this->signee && ($this->praticien_id == $AppUI->user_id || 
+			                                                $is_praticien || 
+																											$operation_id || 
+																											($current_user->isExecutantPrescription() && CAppUI::conf("dPprescription CPrescription droits_infirmiers_$chapitre") && !CAppUI::conf("dPprescription CPrescription role_propre"))));             
 		}
 		$this->_perm_edit = $perm_edit;
     

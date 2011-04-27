@@ -10,6 +10,8 @@
 
 $chapitre = CValue::get("category");  // Chapitre
 $category_id = CValue::get("category_id");
+$user_id = CValue::get("user_id");
+
 $libelle = CValue::post("libelle", "aaa");
 
 if(!$category_id){
@@ -31,6 +33,21 @@ if($category_id){
 } else {
   $where["category_prescription_id"] = CSQLDataSource::prepareIn(array_keys($categories));
 }
+
+// Filtre sur le user_id pour les prescriptions en role propre
+if($user_id){
+	$user = new CMediusers();
+	$user->load($user_id);
+	
+	if($user->isInfirmiere()){
+		$where["prescriptible_infirmiere"] = " = '1'";
+	} elseif ($user->isAideSoignant()){
+		$where["prescriptible_AS"] = " = '1'";
+	} elseif ($user->isKine()){
+		$where["prescriptible_kine"] = " = '1'";
+	}
+}
+
 
 $where["cancelled"] = " = '0'";
 $elements = $element_prescription->seek($libelle, $where);

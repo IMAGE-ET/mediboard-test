@@ -12,8 +12,8 @@
 
 // On met à jour les valeurs de praticien_id
 Main.add( function(){
-  if(document.selPraticienLine){
-    changePraticienMed(document.selPraticienLine.praticien_id.value);
+  if(document.forms.selPraticienLine){
+    changePraticienMed(document.forms.selPraticienLine.praticien_id.value);
   }
   
   Prescription.refreshTabHeader("div_medicament","{{$prescription->_counts_by_chapitre.med}}","{{if $prescription->object_id}}{{$prescription->_counts_by_chapitre_non_signee.med}}{{else}}0{{/if}}");
@@ -42,7 +42,7 @@ Main.add( function(){
           } 
 					// Prescription
 					else {
-					  praticien_id = document.selPraticienLine ? $V(document.selPraticienLine.praticien_id) : '{{$prescription->_ref_current_praticien->_id}}';
+					  praticien_id = document.forms.selPraticienLine ? $V(document.forms.selPraticienLine.praticien_id) : '{{$prescription->_ref_current_praticien->_id}}';
           }
           return (queryString + "&inLivret="+($V(oFormProduit._recherche_livret)?'1':'0')+"&praticien_id="+praticien_id+"&function_id="+function_id+"&group_id="+group_id+"&type="+'{{$prescription->type}}'{{if !$mode_pharma}}+"&fast_access='1'"{{/if}});
         }
@@ -227,13 +227,26 @@ updateModaleAfterAddLine = function(line_id){
   {{/if}}  	
   </div>
 
-	{{if !$prescription->_protocole_locked && ($is_praticien || $mode_protocole || @$operation_id || $can->admin || $mode_pharma || ($current_user->isInfirmiere() && $conf.dPprescription.CPrescription.droits_infirmiers_med))}}  
+
+  {{assign var=perm_add_med value=0}}
+	{{if (!$prescription->_protocole_locked &&
+	     ($is_praticien || $mode_protocole || @$operation_id || $can->admin || $mode_pharma || ($current_user->isExecutantPrescription() && $conf.dPprescription.CPrescription.droits_infirmiers_med && !$conf.dPprescription.CPrescription.role_propre)))}} 
+	  {{assign var=perm_add_med value=1}} 		 
+  {{/if}}
+	
+	{{if $perm_add_med}} 
   <tr>
     <th class="title">
     	{{if $app->user_prefs.easy_mode}}
       <button type="button" class="add notext" onclick="toggleSearchOptions('searchProd','med');" style="float: left">Détails</button>
 			{{/if}}
-			Nouvelle ligne de prescription - Médicaments
+			Nouvelle ligne de prescription - Médicaments - 
+			{{if ($operation_id)}}
+		  Oui {{$operation_id}}
+			{{else}}
+			Non
+			{{/if}}
+		
 		</th>
   </tr>
   {{/if}}
@@ -259,8 +272,7 @@ updateModaleAfterAddLine = function(line_id){
 	    {{/if}}
 		{{/if}}
 		
-    {{if !$prescription->_protocole_locked && ($is_praticien || $mode_protocole || @$operation_id || $can->admin || $mode_pharma || ($current_user->isInfirmiere() && $conf.dPprescription.CPrescription.droits_infirmiers_med))}}  
-    
+    {{if $perm_add_med}}
 			<!-- Affichage des div des medicaments et autres produits -->
 			  <form action="?" method="get" name="searchProd" onsubmit="return false;">
 					<!-- Affichage des produits les plus utilises -->

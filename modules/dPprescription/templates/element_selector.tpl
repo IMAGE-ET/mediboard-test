@@ -24,7 +24,7 @@ function setClose(element_id) {
   </tr>
   <tr>
     <td style="text-align: center">
-      <form name="searchElement" action="?">
+      <form name="searchElement" action="?" method="get">
         <input type="hidden" name="m" value="dPprescription" />
         <input type="hidden" name="a" value="element_selector" />
         <input type="hidden" name="dialog" value="1" />

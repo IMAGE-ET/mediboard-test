@@ -332,8 +332,8 @@ class CPrescriptionLineMix extends CMbObject {
 				$perm_edit = 0;
 			} else {
         $perm_edit = ($can->admin && !$mode_pharma) ||
-				             ((!$this->signature_prat || $mode_pharma) && 
-                     ($this->praticien_id == $AppUI->user_id || $is_praticien || $operation_id || $mode_pharma || ($current_user->isInfirmiere() && CAppUI::conf("dPprescription CPrescription droits_infirmiers_med"))));
+				             ((!$this->signature_prat || $mode_pharma) &&
+                     ($this->praticien_id == $AppUI->user_id || $is_praticien || $operation_id || $mode_pharma || ($current_user->isExecutantPrescription() && CAppUI::conf("dPprescription CPrescription droits_infirmiers_med") && !CAppUI::conf("dPprescription CPrescription role_propre"))));
 			}
 		}
     $this->_perm_edit = $perm_edit;

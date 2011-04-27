@@ -265,8 +265,8 @@ syncDate = function(oForm, curr_line_id, fieldName, type, object_class, cat_id) 
 }
 
 addLineContigue = function(oForm){
-  if(document.selPraticienLine){
-    oForm.praticien_id.value = document.selPraticienLine.praticien_id.value;
+  if(document.forms.selPraticienLine){
+    oForm.praticien_id.value = document.forms.selPraticienLine.praticien_id.value;
   }
   onSubmitFormAjax(oForm);
 }

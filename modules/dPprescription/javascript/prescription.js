@@ -174,17 +174,18 @@ Prescription = {
       url.addParam("date", $V(document.selDateLine.debut));
       url.addParam("time_debut", $V(document.selDateLine.time_debut));
     }
-    if(document.selPraticienLine) {
-      url.addParam("praticien_id", $V(document.selPraticienLine.praticien_id));
+    if(document.forms.selPraticienLine) {
+      url.addParam("praticien_id", $V(document.forms.selPraticienLine.praticien_id));
     }
     url.addParam("mode_pharma", mode_pharma);
     url.requestUpdate("systemMsg");
   },
   reload: function(prescription_id, element_id, chapitre, mode_protocole, mode_pharma, line_id, full_line_guid, hide_old_lines) {
       var oForm = document.addLine;    
-      if(window.opener && window.opener.PrescriptionEditor){
+      
+			try {
         window.opener.PrescriptionEditor.refresh(oForm.object_id.value, oForm.object_class.value);
-      }
+      } catch (e){ }
       var urlPrescription = new Url("dPprescription", "httpreq_vw_prescription");
       urlPrescription.addParam("prescription_id", prescription_id);
       urlPrescription.addParam("element_id", element_id);
@@ -243,8 +244,8 @@ Prescription = {
 
     // Permet de garder le praticien selectionné pour l'ajout de ligne et l'application de protocoles
     if(!praticien_for_prot_id){
-      if(document.selPraticienLine){
-        praticien_for_prot_id = document.selPraticienLine.praticien_id.value;
+      if(document.forms.selPraticienLine){
+        praticien_for_prot_id = document.forms.selPraticienLine.praticien_id.value;
       }
     }
 		
@@ -317,8 +318,8 @@ Prescription = {
   printPrescription: function(prescription_id, print, object_id, no_pdf, dci, globale) {
     // Select de choix du praticien
     var praticien_sortie_id = "";
-    if(document.selPraticienLine && (globale == undefined || globale == 0)){
-      praticien_sortie_id = document.selPraticienLine.praticien_id.value;
+    if(document.forms.selPraticienLine && (globale == undefined || globale == 0)){
+      praticien_sortie_id = document.forms.selPraticienLine.praticien_id.value;
     }
     
     if(prescription_id){
@@ -404,7 +405,7 @@ Prescription = {
     var url = new Url("dPprescription", "vw_signature_prescription");
     url.addParam("prescription_id", prescription_id);
     url.addParam("annulation", annulation);
-    url.addParam("praticien_id", $V(document.selPraticienLine.praticien_id));
+    url.addParam("praticien_id", $V(document.forms.selPraticienLine.praticien_id));
     url.popup(400,400,"Signatures des lignes de prescription");
   },
   viewStatPoso: function(code_cip, praticien_id){

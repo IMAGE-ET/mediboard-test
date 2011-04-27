@@ -302,8 +302,9 @@ class CPrescriptionLineElement extends CPrescriptionLine {
 			
 			$chapitre = $this->_ref_element_prescription->_ref_category_prescription->chapitre;
 			
-      $perm_edit = $can->admin || ((!$this->signee) && 
-                 ($this->praticien_id == $AppUI->user_id || $operation_id || $is_praticien || ($current_user->isInfirmiere() && CAppUI::conf("dPprescription CPrescription droits_infirmiers_$chapitre"))));
+      $perm_edit = $can->admin || ((!$this->signee) &&
+                 ($this->praticien_id == $AppUI->user_id || $operation_id || $is_praticien || 
+								 ($current_user->isExecutantPrescription() && CAppUI::conf("dPprescription CPrescription droits_infirmiers_$chapitre") && !CAppUI::conf("dPprescription CPrescription role_propre"))));
     }
     
     $this->_perm_edit = $perm_edit;
@@ -325,16 +326,12 @@ class CPrescriptionLineElement extends CPrescriptionLine {
     if(!$this->_protocole){
     	$this->_can_view_signature_praticien = 1;
     }
+		
     // Affichage du formulaire de signature praticien
-    if(!$this->_protocole && $is_praticien){
+    if(!$this->_protocole && ($is_praticien || $this->praticien_id == CAppUI::$user->_id)){
     	$this->_can_view_form_signature_praticien = 1;
     }
-    // Affichage du formulaire de signature infirmiere
-		/*
-    if(!$this->_protocole && !$is_praticien && !$this->signee && $this->creator_id == $AppUI->user_id && $this->_ref_prescription->type != "externe"){
-    	$this->_can_view_form_signature_infirmiere = 1;
-    }
-    */
+
     // Suppression de la ligne
     if ($perm_edit) {
   	  $this->_can_delete_line = 1;

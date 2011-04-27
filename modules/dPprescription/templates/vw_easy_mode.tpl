@@ -136,8 +136,8 @@ Main.add( function(){
   window.oEltField = new TokenField(document.add_med_element.token_elt); 
   
   // Modification du praticien_id si celui-ci est spécifié
-  if(window.opener.document.selPraticienLine){
-    var oFormPraticien = window.opener.document.selPraticienLine;
+  if(window.opener.document.forms.selPraticienLine){
+    var oFormPraticien = window.opener.document.forms.selPraticienLine;
     var oForm = document.add_med_element;
     oForm.praticien_id.value = oFormPraticien.praticien_id.value;
   }

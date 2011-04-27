@@ -63,6 +63,7 @@ class CMediusers extends CMbObject {
   var $_is_secretaire              = null;
   var $_is_anesth                  = null;
   var $_is_infirmiere              = null;
+	var $_is_aide_soignant           = null;
   var $_user_password_weak         = null;
   var $_user_password_strong       = null;
   var $_basic_info                 = null;
@@ -772,6 +773,10 @@ class CMediusers extends CMbObject {
     return $this->_is_infirmiere = $this->isFromType(array("Infirmière"));
   }
   
+  function isAideSoignant () {
+    return $this->_is_aide_soignant = $this->isFromType(array("Aide soignant"));
+  }
+  
   /**
    * Check whether user is a secretary
    * @return bool
@@ -786,6 +791,10 @@ class CMediusers extends CMbObject {
    */
   function isMedical() {
     return $this->isFromType(array("Administrator", "Chirurgien", "Anesthésiste", "Infirmière", "Médecin", "Kinesitherapeute", "Sage Femme"));
+  }
+	
+	function isExecutantPrescription() {
+	  return $this->isFromType(array("Infirmière", "Aide soignant", "Kinesitherapeute"));
   }
 	
   /**

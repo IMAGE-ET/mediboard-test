@@ -22,6 +22,9 @@ class CElementPrescription extends CMbObject {
   var $description                = null;
 	var $cancelled                  = null;
   var $color                      = null;
+	var $prescriptible_kine         = null;
+  var $prescriptible_infirmiere   = null;
+  var $prescriptible_AS           = null;
 	
   // FwdRefs
   var $_ref_category_prescription = null;
@@ -43,10 +46,13 @@ class CElementPrescription extends CMbObject {
   function getProps() {
   	$specs = parent::getProps();
     $specs["category_prescription_id"] = "ref notNull class|CCategoryPrescription";
-    $specs["libelle"]      = "str notNull seekable";
-    $specs["description"]  = "text";
-		$specs["cancelled"]    = "bool default|0";
-    $specs["color"]        = "str length|6";
+    $specs["libelle"]                 = "str notNull seekable";
+    $specs["description"]             = "text";
+		$specs["cancelled"]               = "bool default|0";
+    $specs["color"]                   = "str length|6";
+		$specs["prescriptible_kine"]       = "bool default|0";
+		$specs["prescriptible_infirmiere"] = "bool default|0";
+    $specs["prescriptible_AS"]         = "bool default|0";
     return $specs;
   }
   

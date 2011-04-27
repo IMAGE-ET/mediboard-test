@@ -1952,9 +1952,14 @@ class CSetupdPprescription extends CSetup {
               ADD `checked_lines` ENUM ('0','1') DEFAULT '0' AFTER `advanced_protocole`;";
     $this->addQuery($query);
     
-    $this->mod_version = "1.41";
-    
-    
+		$this->makeRevision("1.41");
+		$query = "ALTER TABLE `element_prescription` 
+              ADD `prescriptible_kine` ENUM ('0','1') DEFAULT '0',
+              ADD `prescriptible_infirmiere` ENUM ('0','1') DEFAULT '0',
+              ADD `prescriptible_AS` ENUM ('0','1') DEFAULT '0';";
+		$this->addQuery($query);
+		
+    $this->mod_version = "1.42";
   }
 }
 
