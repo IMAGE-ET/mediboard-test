@@ -10,12 +10,17 @@
 
 CCanDo::checkRead();
 
+// Minute courante
+$minute = mbTransformTime(null, null, "%M");
+
+// Chargement des senders
 $sender = new CViewSender();
 $senders = $sender->loadList(null, "name");
 foreach ($senders as $_sender) {
-	$_sender->makeHourPlan();
+	$_sender->makeHourPlan($minute);
 }
 
+// Tableau de charges
 $hour_sum = array();
 foreach (range(0, 59) as $min) {
 	$hour_sum[$min] = 0;
@@ -28,4 +33,5 @@ foreach (range(0, 59) as $min) {
 $smarty = new CSmartyDP();
 $smarty->assign("senders", $senders);
 $smarty->assign("hour_sum", $hour_sum);
+$smarty->assign("minute", $minute);
 $smarty->display("inc_list_view_senders.tpl");

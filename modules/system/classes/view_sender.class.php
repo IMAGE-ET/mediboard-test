@@ -31,6 +31,7 @@ class CViewSender extends CMbObject {
   // Form fields
 	var $_params = null;
 	var $_when   = null;
+	var $_active = null;
 
   // Distant properties
 	var $_hour_plan = null;
@@ -65,12 +66,19 @@ class CViewSender extends CMbObject {
 		$this->_when = "$this->period mn + $this->offset";
   }
 	
-	function makeHourPlan() {
+	function makeHourPlan($minute = null) {
 		$period = intval($this->period);
 		$offset = intval($this->offset);
+
+		// Hour plan
 		foreach (range(0, 59) as $min) {
 			$this->_hour_plan[$min] = $min % $period == $offset;
 		}
+
+		// Active
+    if ($minute !== null) {
+      $this->_active = $this->active && $this->_hour_plan[$minute];
+    }
 	}
 }
 
