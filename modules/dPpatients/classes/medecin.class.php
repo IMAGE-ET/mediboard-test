@@ -85,7 +85,10 @@ class CMedecin extends CMbObject {
     	$this->_view = "Dr $this->nom $this->prenom";
     }
     else {
-    	$this->_view = "$this->nom $this->prenom ({$this->_specs['type']->_locales[$this->type]})";
+    	$this->_view = "$this->nom $this->prenom";
+    	if ($this->type) {
+    	  $this->_view .= " ({$this->_specs['type']->_locales[$this->type]})";
+    	} 
     }
   }
 	 
@@ -95,14 +98,22 @@ class CMedecin extends CMbObject {
     $this->_ref_patients = $obj->loadList("medecin_traitant = '$this->medecin_id'");
   }
   
-  function loadExactSiblings() {
+  function loadExactSiblings($strict_cp = true) {
     $medecin = new CMedecin();
-    $medecin->nom    = $this->nom;
-    $medecin->prenom = $this->prenom;
-    $medecin->cp     = $this->cp;
+    $where           = array();
+    $where["nom"]    = $this->_spec->ds->prepare(" = %", $this->nom);
+    $where["prenom"] = $this->_spec->ds->prepare(" = %", $this->prenom);
+    
+    if (!$strict_cp) {
+      $cp = substr($this->cp, 0, 2);
+      $where["cp"] = " LIKE '{$cp}___'";
+    } else {
+      $where["cp"] = " = '$this->cp'";
+    }
+    
     $medecin->escapeValues();
 
-    $siblings = $medecin->loadMatchingList();
+    $siblings = $medecin->loadList($where);
     unset($siblings[$this->_id]);
 
     return $siblings;
