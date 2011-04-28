@@ -132,6 +132,10 @@ span.page:before {
     overflow: hidden;
     border: 0px solid #888;
   }
+	
+  table {
+    border-collapse: collapse !important;
+  }
 
   #header {
     top: 0em;
