@@ -379,7 +379,9 @@ class CFile extends CDocumentItem {
   }
 	
   function file_empty() {
-    file_put_contents($this->_file_path, '');
+    if (file_exists($this->_file_path)) {
+      file_put_contents($this->_file_path, '');
+    }
   }
   
   function isPDFconvertible() {
