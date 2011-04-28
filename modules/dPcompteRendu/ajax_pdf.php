@@ -56,7 +56,7 @@ if ($compte_rendu->_id) {
 // pour le mode document
 if ($mode != "modele" &&
      (((!$file || !$file->_id) && $first_time == 1 && !$compte_rendu->object_id) ||
-     ($file && $file->_id && $first_time == 1 && !is_file($file->_file_path) && file_get_contents($file->_file_path) == ""))) {
+     ($file && $file->_id && $first_time == 1 && (!is_file($file->_file_path) || file_get_contents($file->_file_path) == "")))) {
   CAppUI::stepAjax(CAppUI::tr("CCompteRendu-no-pdf-generated"));
   return;
 }
