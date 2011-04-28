@@ -14,7 +14,7 @@
 	  <tbody>
 		  <tr>
 		  	<td>
-		  		<button class="lookup notext" onclick="loadDetails($(this).up('tbody').next('tbody'), {
+		  		<button class="lookup" onclick="loadDetails($(this).up('tbody').next('tbody'), {
              _date_min: '{{$date_min}}', 
              _date_max: '{{$date_max}}', 
 						 {{if $group_by == "praticien"}} 
@@ -26,7 +26,7 @@
 					})">
 					  {{tr}}Details{{/tr}}
 					</button>
-					<button class="save notext" onclick="downloadDetails({
+					<button class="save" onclick="downloadDetails({
              _date_min: '{{$date_min}}', 
              _date_max: '{{$date_max}}', 
              {{if $group_by == "praticien"}} 
@@ -36,7 +36,7 @@
              {{/if}}
              septic: '{{$septic}}'
           })">
-            {{tr}}Details{{/tr}}
+            Télécharger fichier CSV
 					</button>
 		    </td>
 		  	<td colspan="3" style="font-weight: bold;">
