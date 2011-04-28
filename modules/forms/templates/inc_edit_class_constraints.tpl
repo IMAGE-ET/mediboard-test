@@ -1,4 +1,6 @@
 <table class="main layout">
+
+{{if true}}
   <tr>
     <td>
       <table class="main tbl">
@@ -9,7 +11,7 @@
     </td>
   </tr>
   
-  {{* 
+{{else}}
   <tr>
     <td style="width: 20em; padding-right: 5px;">
       <button type="button" class="new" style="float: right;" onclick="ExConstraint.create({{$ex_class->_id}})">
@@ -27,11 +29,11 @@
             <td>
               <a href="#1" onclick="ExConstraint.edit({{$_constraint->_id}})">
                 <strong>
-                  {{tr}}{{$_constraint->_ref_ex_class->host_class}}-{{$_constraint->field}}{{/tr}}
+                  {{$_constraint}}
                 </strong>
               </a>
             </td>
-            <td>{{mb_value object=$_constraint field=operator}}</td>
+            <td style="text-align: center;">{{mb_value object=$_constraint field=operator}}</td>
             <td>
               {{if $_constraint->_ref_target_object->_id}}
                 {{$_constraint->_ref_target_object}}
@@ -42,7 +44,7 @@
           </tr>
         {{foreachelse}}
           <tr>
-            <td colspan="3">{{tr}}CExClassConstraint.none{{/tr}}</td>
+            <td colspan="3" class="empty">{{tr}}CExClassConstraint.none{{/tr}}</td>
           </tr>
         {{/foreach}}
       </table>
@@ -51,5 +53,6 @@
       <!-- exConstraintEditor -->&nbsp;
     </td>
   </tr>
-  *}}
+{{/if}}
+
 </table>

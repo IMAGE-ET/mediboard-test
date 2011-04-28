@@ -175,11 +175,11 @@ var SystemMessage = {
   autohidable: function() {
     return $(this.id).select(".error, .warning, .loading").length == 0;
   },
-	
-	notify: function(text, append) {
-		$(this.id)[append ? "insert" : "update"](text);
-		this.doEffect();
-	},
+  
+  notify: function(text, append) {
+    $(this.id)[append ? "insert" : "update"](text);
+    this.doEffect();
+  },
 
   // show/hide the div
   doEffect : function (delay, forceFade) {
@@ -672,8 +672,15 @@ Object.extend (Control.Tabs, {
   create: function (name, storeInCookie, options) {
     if ($(name)) {
       var tab = new Control.Tabs(name, options);
+      
       if (storeInCookie) {
+        var oldAfterChange = tab.options.afterChange;
+        
         tab.options.afterChange = function (tab, tabName) {
+          if (oldAfterChange && Object.isFunction(oldAfterChange)) {
+            oldAfterChange(tab, tabName);
+          }
+          
           Control.Tabs.storeTab(name, tab.id);
         }
         var tabName = Control.Tabs.loadTab(name);
@@ -905,8 +912,8 @@ window.modal = Modal.open;
 Object.extend(Control.Modal,{
     stack: [],
     close: function(){
-			if (!Control.Modal.stack.length) return;
-			Control.Modal.stack.last().close();
+      if (!Control.Modal.stack.length) return;
+      Control.Modal.stack.last().close();
     },
     Observers: {
         beforeOpen: function(){
@@ -928,12 +935,12 @@ Object.extend(Control.Modal,{
         },
         afterClose: function(){
           Control.Modal.stack.pop().close();
-					
+          
           if (Control.Modal.stack.length == 0) {
             Control.Overlay.hide(this.options.fade ? this.options.fadeDuration : false);
           }
           else {
-						var overlay = Control.Overlay.container;
+            var overlay = Control.Overlay.container;
             overlay.style.zIndex = Control.Modal.stack.last().container.style.zIndex - 1;
           }
             //Control.Modal.current = false;

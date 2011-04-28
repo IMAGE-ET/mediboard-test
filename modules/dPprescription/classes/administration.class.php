@@ -70,8 +70,8 @@ class CAdministration extends CMbMetaObject implements IPatientRelated {
     $specs["commentaire"]       = "text";
     $specs["planification"]     = "bool default|0";
     $specs["original_dateTime"] = "dateTime";
-    $specs["planification_systeme_id"] = "ref class|CPlanificationSysteme";
-    $specs["constantes_medicales_id"] = "ref class|CConstantesMedicales";
+    $specs["planification_systeme_id"] = "ref class|CPlanificationSysteme show|0";
+    $specs["constantes_medicales_id"] = "ref class|CConstantesMedicales show|0";
     return $specs;
   }
 	

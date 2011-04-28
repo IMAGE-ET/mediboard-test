@@ -20,8 +20,8 @@
     </option>
     
     {{foreach from=$_module->_tabs item=_tab}}
-      <option value="{{$mod_name}}-{{$_tab}}" {{if "$mod_name-$_tab" == $pref.user}} selected="selected" {{/if}} style="padding-left: 1em;">
-        {{tr}}mod-{{$_module->mod_name}}-tab-{{$_tab}}{{/tr}}
+      <option value="{{$mod_name}}-{{$_tab}}" {{if "$mod_name-$_tab" == $pref.user}} selected="selected" {{/if}}>
+        &nbsp; |&ndash; {{tr}}mod-{{$_module->mod_name}}-tab-{{$_tab}}{{/tr}}
       </option>
     {{/foreach}}
 

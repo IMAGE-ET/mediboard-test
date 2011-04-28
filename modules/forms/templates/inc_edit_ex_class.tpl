@@ -34,15 +34,19 @@
             <th>{{mb_label object=$ex_class field=event}}</th>
             <td>
               
-              <select name="_event" class="notNull" onchange="ExClass.setEvent(this)">
+              <select name="_event" class="notNull" onchange="ExClass.setEvent(this)" style="max-width: 20em;">
                 <option value=""> &ndash; Choisir </option>
                 {{foreach from=$classes item=_events key=_class}}
                   <optgroup label="{{tr}}{{$_class}}{{/tr}}">
                     {{foreach from=$_events item=_params key=_event_name}}
-                      <option value="{{$_class}}.{{$_event_name}}" {{if $_class == $ex_class->host_class && $_event_name == $ex_class->event}}selected="selected"{{/if}}>
+                      <option value="{{$_class}}.{{$_event_name}}" {{if $_class == $ex_class->host_class && $_event_name == $ex_class->event}} selected="selected" {{/if}}>
                         {{tr}}{{$_class}}{{/tr}} - {{$_event_name}}
                         {{if array_key_exists("multiple", $_params) && $_params.multiple}}
                           (multiple)
+                        {{/if}}
+                        
+                        {{if $_event_name == "administration"}}
+                          (Utiliser "Administration - validation" à la place)
                         {{/if}}
                       </option>
                     {{/foreach}}
@@ -86,7 +90,7 @@
 
 <script type="text/javascript">
 Main.add(function(){
-  exClassTabs = new Control.Tabs("ExClass-back", {
+  exClassTabs = Control.Tabs.create("ExClass-back", true, {
     afterChange: function(newContainer){
       if (ExClass.layourEditorReady || newContainer.id != "fields-layout") return;
       

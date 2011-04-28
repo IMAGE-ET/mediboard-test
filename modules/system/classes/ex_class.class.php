@@ -192,14 +192,19 @@ class CExClass extends CMbObject {
     }
   }
   
+  // constraint1 OR constraint2 OR ...
   function checkConstraints(CMbObject $object){
     $constraints = $this->loadRefsConstraints();
     
-    foreach($constraints as $_constraint) {
-      if (!$_constraint->checkConstraint($object)) return false;
+    if (empty($constraints)) {
+      return true;
     }
     
-    return true;
+    foreach($constraints as $_constraint) {
+      if ($_constraint->checkConstraint($object)) return true;
+    }
+    
+    return false;
   }
   
   function getAvailableFields(){
@@ -207,8 +212,45 @@ class CExClass extends CMbObject {
     $this->_host_class_fields = $object->_specs;
     
     foreach($this->_host_class_fields as $_field => $_spec) {
-      if ($_field[0] === "_") {
+      if ($_field == $object->_spec->key) {
         unset($this->_host_class_fields[$_field]);
+        continue;
+      }
+      
+      /*if ($_spec instanceof CRefSpec && $_spec->meta) {
+        unset($this->_host_class_fields[$_spec->meta]);
+        continue;
+      }*/
+      
+      if ($_field[0] === "_" || // form field
+          !($_spec->show === null || $_spec->show == 1) || // not shown
+          $_spec instanceof CRefSpec && $_spec->meta && !$this->_host_class_fields[$_spec->meta] instanceof CEnumSpec // not a finite meta class field
+          ) {
+        unset($this->_host_class_fields[$_field]);
+        continue;
+      }
+      
+      if ($_spec instanceof CRefSpec) {
+        $this->_host_class_fields[$_field]->_subspecs = array();
+        
+        $_class = $_spec->class;
+        
+        if (!$_class) continue;
+        
+        $_target = new $_class;
+        
+        foreach($_target->_specs as $_subfield => $_subspec) {
+          if (!$_subfield || $_subfield === $_target->_spec->key) continue;
+          
+          if ($_subfield[0] === "_" || // form field
+              !($_subspec->show === null || $_subspec->show == 1) || // not shown
+              $_subspec instanceof CRefSpec && $_subspec->meta && !$this->_host_class_fields[$_subspec->meta] instanceof CEnumSpec // not a finite meta class field
+              ) {
+            continue;
+          }
+          
+          $this->_host_class_fields[$_field]->_subspecs[$_subfield] = $_subspec;
+        }
       }
     }
     

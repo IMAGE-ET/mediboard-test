@@ -99,6 +99,10 @@ class CMbFieldSpec {
       'pattern'       => 'str',
     );
   }
+  
+  function __toString(){
+    return $this->prop;
+  }
 
   /**
    * Check whether prop has been declared in parent class

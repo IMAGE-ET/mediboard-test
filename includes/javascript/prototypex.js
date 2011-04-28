@@ -414,6 +414,15 @@ Element.addMethods({
   getSurroundingForm: function(element) {
     if (element.form) return $(element.form);
     return $(element).up('form');
+  },
+  
+  enableInputs: function(element) {
+    element.select("input,select,textarea").invoke("enable");
+    return element.show();
+  },
+  disableInputs: function(element) {
+    element.select("input,select,textarea").invoke("disable");
+    return element.hide();
   }
 });
 
@@ -577,17 +586,17 @@ Object.extend(Event, {
   },
   wheel: function (event){
     var delta = 0;
-		
+    
     if (!event) event = window.event;
-		
+    
     if (event.wheelDelta) {
       delta = event.wheelDelta/120; 
       if (window.opera) delta = -delta;
     } 
-		else if (event.detail) { 
-		  delta = -event.detail/3; 
-		}
-		
+    else if (event.detail) { 
+      delta = -event.detail/3; 
+    }
+    
     return Math.round(delta); //Safari Round
   }
 });
