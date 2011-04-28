@@ -1,6 +1,9 @@
-<table class="main layout">
 
-{{if true}}
+<table class="main layout" id="exClassConstraintList">
+
+{{assign var=wip value=true}}
+
+{{if $wip}}
   <tr>
     <td>
       <table class="main tbl">
@@ -25,12 +28,10 @@
           <th>{{mb_title class=CExClassConstraint field=value}}</th>
         </tr>
         {{foreach from=$ex_class->_ref_constraints item=_constraint}}
-          <tr>
+          <tr data-constraint_id="{{$_constraint->_id}}">
             <td>
               <a href="#1" onclick="ExConstraint.edit({{$_constraint->_id}})">
-                <strong>
-                  {{$_constraint}}
-                </strong>
+                {{$_constraint}}
               </a>
             </td>
             <td style="text-align: center;">{{mb_value object=$_constraint field=operator}}</td>
@@ -50,7 +51,10 @@
       </table>
     </td>
     <td id="exConstraintEditor">
-      <!-- exConstraintEditor -->&nbsp;
+      <div class="small-info">
+      	Les contraintes permettent de définir dans quelles conditions les formulaires seront présentés à l'utilisateur.<br />
+			  Le formulaire sera présenté s'il n'y a <strong>aucune contrainte</strong>, ou si <strong>au moins une des contraintes</strong> est satisfaite.
+      </div>
     </td>
   </tr>
 {{/if}}

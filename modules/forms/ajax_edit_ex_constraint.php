@@ -24,7 +24,6 @@ else {
 }
 
 $ex_constraint->loadRefExClass();
-$ex_constraint->_ref_ex_class->getAvailableFields();
 $ex_constraint->loadTargetObject();
 
 $smarty = new CSmartyDP();

@@ -423,6 +423,9 @@ Element.addMethods({
   disableInputs: function(element) {
     element.select("input,select,textarea").invoke("disable");
     return element.hide();
+  },
+  getText: function(element) {
+    return ""+(element.textContent || element.innerText);
   }
 });
 

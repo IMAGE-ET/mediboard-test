@@ -46,18 +46,28 @@ class CExClassConstraint extends CMbObject {
   }
   
   function resolveSpec($ref_object){
-    if (strpos($this->field, "-") === false) {
+    $parts = explode("-", $this->field);
+		
+    if (count($parts) == 1) {
       $spec = $ref_object->_specs[$this->field];
     }
     else {
-      $parts = explode("-", $this->field);
-      $_spec = $ref_object->_specs[$parts[0]];
+      $subparts = explode(".", $parts[0]);
       
-      if (!$_spec->class) {
-        return;
-      }
+      $_spec = $ref_object->_specs[$subparts[0]];
+			
+			if (count($subparts) > 1) {
+				$class = $subparts[1];
+			}
+			else {
+	      if (!$_spec->class) {
+	        return;
+	      }
+				
+				$class = $_spec->class;
+			}
       
-      $obj = new $_spec->class;
+      $obj = new $class;
       $spec = $obj->_specs[$parts[1]];
     }
     
@@ -93,23 +103,30 @@ class CExClassConstraint extends CMbObject {
     parent::updateFormFields();
     
     $this->loadRefExClass();
+		
+    $parts = explode("-", $this->field);
     
-    if (strpos($this->field, "-") === false) {
+    if (count($parts) == 1) {
       $this->_view = CAppUI::tr("{$this->_ref_ex_class->host_class}-{$this->field}");
     }
     else {
-      $parts = explode("-", $this->field);
-      
-      $this->_view = CAppUI::tr("{$this->_ref_ex_class->host_class}-{$parts[0]}");
-      
-      $ref_object = new $this->_ref_ex_class->host_class;
-      $_spec = $ref_object->_specs[$parts[0]];
-      
-      if (!$_spec->class) {
-        return;
+			$subparts = explode(".", $parts[0]);
+			
+      if (count($subparts) > 1) {
+      	$this->_view = CAppUI::tr("{$this->_ref_ex_class->host_class}-{$subparts[0]}")." de type ".CAppUI::tr("{$subparts[1]}");
       }
-      
-      $this->_view .= " / ".CAppUI::tr("{$_spec->class}-{$parts[1]}");
+			else {
+	      $this->_view = CAppUI::tr("{$this->_ref_ex_class->host_class}-{$parts[0]}");
+	      
+	      $ref_object = new $this->_ref_ex_class->host_class;
+	      $_spec = $ref_object->_specs[$parts[0]];
+	      
+	      if (!$_spec->class) {
+	        return;
+	      }
+	      
+	      $this->_view .= " / ".CAppUI::tr("{$_spec->class}-{$parts[1]}");
+			}
     }
   }
   

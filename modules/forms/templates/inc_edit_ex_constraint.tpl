@@ -10,14 +10,36 @@
 
 <script type="text/javascript">
 Main.add(function(){
+  $("exClassConstraintList").down("tr[data-constraint_id={{$ex_constraint->_id}}]").addUniqueClassName("selected");
+	
   var form = getForm("editConstraint");
-  toggleObjectSelector(form.elements.field);
+  toggleObjectSelector(form.elements.field, form.elements.field);
+	
+  var form = getForm("editConstraint");
+  var url = new Url("forms", "ajax_autocomplete_hostfields");
+  url.addParam("ex_class_id", "{{$ex_constraint->ex_class_id}}");
+  url.autoComplete(form.elements._host_field_view, null, {
+    minChars: 2,
+    method: "get",
+    //select: "view",
+    dropdown: true,
+    afterUpdateElement: function(field, selected){
+      toggleObjectSelector(field, selected);
+      $V(field.form.elements.field, selected.get("value"));
+      $V(field.form.elements._host_field_view, selected.down(".view").getText().strip());
+			
+      /*if ($V(field.form.elements._host_field_view) == "") {
+        $V(field.form.elements._host_field_view, selected.down('.view').innerHTML);
+      }*/
+    }
+  });
 });
 
-toggleObjectSelector = function(select) {
-  var selected = select.options[select.selectedIndex];
-  var specType = selected.className.split(" ")[0];
-  var spec = selected.getProperties();
+toggleObjectSelector = function(input, selected) {
+  var prop = selected.get("prop");
+  var specType = prop.split(" ")[0];
+	var dummy = DOM.div({className: prop});
+  var spec = dummy.getProperties();
   
   $$('.specfield').invoke("disableInputs");
   
@@ -34,7 +56,7 @@ toggleObjectSelector = function(select) {
       break;
     
     case "ref":
-      $V(select.form._object_class, spec.class);
+      $V(input.form._object_class, spec.class);
       break;
       
     case "enum":
@@ -58,68 +80,23 @@ toggleObjectSelector = function(select) {
         {{mb_label object=$ex_constraint field=field}}
       </th>
       <td>
-        <select name="field" class="{{$ex_constraint->_props.field}}"
-                tabIndex="1" onchange="toggleObjectSelector(this)">
-          <option value=""> &mdash; </option>
-          {{foreach from=$ex_constraint->_ref_ex_class->_host_class_fields key=_field item=_spec name=_constraint}}
-            <option class="{{$_spec}}" value="{{$_field}}" 
-                    {{if $ex_constraint->field==$_field}} selected="selected" {{/if}}>
-              {{tr}}{{$ex_constraint->_ref_ex_class->host_class}}-{{$_field}}{{/tr}} 
-              
-              [ 
-                {{if $_spec instanceof CRefSpec && $_spec->class}}
-                  {{if $_spec->meta}}
-                    {{assign var=_meta value=$_spec->meta}}
-                    {{assign var=_meta_spec value=$ex_constraint->_ref_ex_class->_host_class_fields.$_meta}}
-                    {{" OU "|@implode:$_meta_spec->_locales}}
-                  {{else}}
-                    {{tr}}{{$_spec->class}}{{/tr}}
-                  {{/if}}
-                {{else}}
-                  {{tr}}CMbFieldSpec.type.{{$_spec->getSpecType()}}{{/tr}}
-                {{/if}}
-              ]
-            </option>
-            
-            {{if $_spec instanceof CRefSpec}}
-              {{foreach from=$_spec->_subspecs key=_subfield item=_subspec}}
-                <option class="{{$_subspec}}" value="{{$_field}}-{{$_subfield}}" 
-                        {{if $ex_constraint->field == "$_field-$_subfield" }} selected="selected" {{/if}}>
-                  &nbsp; |&ndash; {{tr}}{{$_subspec->className}}-{{$_subfield}}{{/tr}} 
-                  
-                  [ 
-                    {{if $_subspec instanceof CRefSpec && $_subspec->class}}
-                      {{if $_subspec->meta}}
-                        {{assign var=_meta value=$_subspec->meta}}
-                        {{assign var=_meta_spec value=$ex_constraint->_ref_ex_class->_host_class_fields.$_meta}}
-                        {{" OU "|@implode:$_meta_spec->_locales}}
-                      {{else}}
-                        {{tr}}{{$_subspec->class}}{{/tr}}
-                      {{/if}}
-                    {{else}}
-                      {{tr}}CMbFieldSpec.type.{{$_subspec->getSpecType()}}{{/tr}}
-                    {{/if}}
-                  ]
-                </option>
-              {{/foreach}}
-            {{/if}}
-          {{/foreach}}
-        </select>
+			  <input type="text" class="autocomplete" name="_host_field_view" value="{{$ex_constraint}}" size="60" />
+        <input type="hidden" name="field" class="{{$ex_constraint->_props.field}}" tabIndex="1" value="{{$ex_constraint->field}}" />
       </td>
       
-      <!--
+      {{* 
       <th>{{mb_label object=$ex_constraint field=_locale}}</th>
       <td>{{mb_field object=$ex_constraint field=_locale tabIndex="4"}}</td>
-      -->
+      *}}
     </tr>
     <tr>
       <th>{{mb_label object=$ex_constraint field=operator}}</th>
       <td>{{mb_field object=$ex_constraint field=operator tabIndex="2"}}</td>
       
-      <!--
+      {{* 
       <th>{{mb_label object=$ex_constraint field=_locale_court}}</th>
       <td>{{mb_field object=$ex_constraint field=_locale_court tabIndex="5"}}</td>
-      -->
+      *}}
     </tr>
     <tr>
       <th>{{mb_label object=$ex_constraint field=value}}</th>
@@ -134,6 +111,7 @@ toggleObjectSelector = function(select) {
         
         <div class="specfield spectype-ref">
           <input type="hidden" name="_object_class" value="{{$ex_constraint->_ref_target_object->_class_name}}" />
+					
           <input type="text" name="_object_view" readonly="readonly" value="{{$ex_constraint->_ref_target_object}}" />
           <button type="button" class="search notext" onclick="ObjectSelector.init()">{{tr}}Search{{/tr}}</button>
           <script type="text/javascript">
@@ -160,10 +138,10 @@ toggleObjectSelector = function(select) {
         </div>
       </td>
       
-      <!--
+      {{* 
       <th>{{mb_label object=$ex_constraint field=_locale_desc}}</th>
       <td>{{mb_field object=$ex_constraint field=_locale_desc tabIndex="6"}}</td>
-      -->
+      *}}
     </tr>
       
     <tr>

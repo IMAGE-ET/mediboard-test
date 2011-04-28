@@ -3,7 +3,7 @@
 <!-- Locales warns -->
 
 {{if !$ajax}}
-<div class="big-warning" id="UnlocDiv" style="display: none; position: fixed; top: 10px; left: 10px;">
+<div class="small-warning" id="UnlocDiv" style="display: none; position: fixed; bottom: 10px; right: 10px;">
   {{tr}}system-msg-unlocalized_warning{{/tr}} : 
   <div style="text-align: center; font-size: 200%;"><strong>-</strong> !<br />
 
