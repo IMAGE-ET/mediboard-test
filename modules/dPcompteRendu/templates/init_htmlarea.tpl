@@ -59,11 +59,11 @@ function initCKEditor() {
     ck_instance.on("beforerenderColors", toggleContentEditable.curry(true));
     ck_instance.on("afterrenderColors" , toggleContentEditable.curry(false));*/
 
-    if (window.pdf_thumbnails) {
+    /*if (window.pdf_thumbnails) {
       window.save_style = deleteStyle();
       ck_instance.on("beforePreview", function() { restoreStyle(); });
       ck_instance.on("afterPreview", function() { deleteStyle(); });
-    }
+    }*/
     
 	  // Redimensionnement de l'éditeur
 		window.resizeEditor();

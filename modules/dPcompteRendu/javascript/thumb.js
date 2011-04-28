@@ -189,20 +189,20 @@ function pdfAndPrintServer(compte_rendu_id) {
 }
 
 function restoreStyle() {
-  var instance = CKEDITOR.instances.htmlarea;
+  /*var instance = CKEDITOR.instances.htmlarea;
   
   if (!window.save_style) return;
   var tag = instance.document.getBody().getFirst();
   if (tag.$.tagName == "STYLE") return;
-  window.save_style.insertBefore(tag);
+  window.save_style.insertBefore(tag);*/
 }
 
 function deleteStyle() {
-  var instance = CKEDITOR.instances.htmlarea;
+  /*var instance = CKEDITOR.instances.htmlarea;
   
   if (!instance.document) return;
   var styleTag = instance.document.getBody().getFirst();
   if (styleTag.$.tagName == "STYLE") {
     return styleTag.remove();
-  }
+  }*/
 }
