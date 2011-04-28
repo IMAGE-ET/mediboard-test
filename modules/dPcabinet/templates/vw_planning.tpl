@@ -86,10 +86,16 @@ Main.add(function () {
           </option>
           {{/foreach}}
         </select>
-        <select name="vue1" onchange="this.form.submit()">
-          <option value="0"{{if !$vue}}selected="selected"{{/if}}>Tout afficher</option>
-          <option value="1"{{if $vue}}selected="selected"{{/if}}>Cacher les payés</option>
-        </select>
+        
+        Cacher les : 
+          <label>
+            <input type="checkbox" onchange="$V(this.form.hide_payees, this.checked ? 1 : 0); this.form.submit()" {{if $hide_payees}}checked="checked"{{/if}} name="_hide_payees"> payées
+            <input type="hidden" name="hide_payees" value="{{$hide_payees}}" />
+          </label>
+          <label>
+            <input type="checkbox" onchange="$V(this.form.hide_annulees, this.checked ? 1 : 0); this.form.submit()" {{if $hide_annulees}}checked="checked"{{/if}} name="_hide_annulees"> annulées
+            <input type="hidden" name="hide_annulees" value="{{$hide_annulees}}" />
+          </label>
       </form>
       
       <br />
@@ -343,7 +349,7 @@ Main.add(function () {
 	        <tr>
 	          <td class="button" colspan="2">
 	            <button class="trash" type='button' onclick="confirmDeletion(this.form,{typeName:'la plage de consultations du',objName:'{{$plageSel->date|date_format:$conf.longdate}}'})">
-	              Supprimer
+	              {{tr}}Delete{{/tr}}
 	            </button>
 	          </td>
 	        </tr>
@@ -362,7 +368,7 @@ Main.add(function () {
             {{if $plageSel->_id}}
             <button class="print" onclick="printPlage({{$plageSel->_id}})" style="float:right">{{tr}}Print{{/tr}}</button>
             {{mb_include module=system template=inc_object_notes object=$plageSel}}
-            Consultations du {{$plageSel->date|date_format:$conf.longdate}}
+              Consultations du {{$plageSel->date|date_format:$conf.longdate}}
             {{else}}
             {{tr}}CPlageconsult.none{{/tr}}
             {{/if}}
@@ -398,9 +404,15 @@ Main.add(function () {
           <td {{$style|smarty:nodefaults}}>
             <div style="float: left">
             {{if $patient->_id}}
-              <a href="{{$href_consult}}" title="Voir la consultation">{{$_consult->heure|date_format:$conf.time}}</a>
+              <a href="{{$href_consult}}" title="Voir la consultation">
+                <span onmouseover="ObjectTooltip.createEx(this, '{{$_consult->_guid}}')">
+                  {{$_consult->heure|date_format:$conf.time}}
+                </span>
+               </a>
             {{else}}
-              {{mb_value object=$_consult field=heure}}
+              <span onmouseover="ObjectTooltip.createEx(this, '{{$_consult->_guid}}')">
+                {{mb_value object=$_consult field=heure}}
+              </span>
             {{/if}}
             </div>
             
@@ -414,7 +426,7 @@ Main.add(function () {
 
           <td class="text" {{$style|smarty:nodefaults}}>
             {{if !$patient->_id}}
-            [PAUSE]
+              [PAUSE]
             {{else}}
             <a style="float: right"  title="Modifier le dossier administratif" href="?m=dPpatients&amp;tab=vw_edit_patients&amp;patient_id={{$patient->_id}}">
               <img src="images/icons/edit.png" alt="modifier" />
@@ -469,7 +481,11 @@ Main.add(function () {
             </a>
             {{/if}}
           </td>
-          <td {{$style|smarty:nodefaults}}>{{if $patient->_id}}{{$_consult->_etat}}{{/if}}</td>
+          <td {{$style|smarty:nodefaults}} {{if $_consult->annule}}class="error"{{/if}}>
+            {{if $patient->_id}}
+              {{$_consult->_etat}}
+            {{/if}}
+          </td>
         </tr>
         {{foreachelse}}
         <tr>

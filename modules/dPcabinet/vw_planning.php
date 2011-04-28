@@ -23,7 +23,8 @@ if ($mediuser->isPraticien()) {
 }
 
 // Type de vue
-$vue = CValue::getOrSession("vue1");
+$hide_payees   = CValue::getOrSession("hide_payees"  , 0);
+$hide_annulees = CValue::getOrSession("hide_annulees", 1);
 
 // Praticien selectionné
 $chirSel = CValue::getOrSession("chirSel", $chir ? $chir->user_id : null);
@@ -71,7 +72,13 @@ if ($plageSel->_affected) {
 
 // Détails sur les consultation affichées
 foreach ($plageSel->_ref_consultations as $keyConsult => &$consultation) {
-  if ($vue && $consultation->patient_date_reglement) {
+  // Cache les payées
+  if ($hide_payees && $consultation->patient_date_reglement) {
+    unset($plageSel->_ref_consultations[$keyConsult]);
+    continue;
+  }
+  // Cache les annulées
+  if ($hide_annulees && $consultation->annule) {
     unset($plageSel->_ref_consultations[$keyConsult]);
     continue;
   }
@@ -251,7 +258,8 @@ $smarty->assign("listPlages"        , $listPlages);
 $smarty->assign("_firstconsult_time", $_firstconsult_time);
 $smarty->assign("_lastconsult_time" , $_lastconsult_time);
 $smarty->assign("plageconsult_id"   , $plageconsult_id);
-$smarty->assign("vue"               , $vue);
+$smarty->assign("hide_payees"       , $hide_payees);
+$smarty->assign("hide_annulees"     , $hide_annulees);
 $smarty->assign("chirSel"           , $chirSel);
 $smarty->assign("plageSel"          , $plageSel);
 $smarty->assign("listChirs"         , $listChirs);
