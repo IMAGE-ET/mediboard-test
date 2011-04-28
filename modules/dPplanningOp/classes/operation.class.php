@@ -391,16 +391,16 @@ class COperation extends CCodable implements IPatientRelated {
       $this->codes_ccam = implode("|", $codes_ccam);
     }
     if($this->_hour_op !== null and $this->_min_op !== null) {
-      $this->temp_operation = "$this->_hour_op:$this->_min_op:00";
+      $this->temp_operation = sprintf("%02d:%02d:00", $this->_hour_op, $this->_min_op);
     }
     if($this->_hour_urgence !== null and $this->_min_urgence !== null) {
-      $this->time_operation = "$this->_hour_urgence:$this->_min_urgence:00";
+      $this->time_operation = sprintf("%02d:%02d:00", $this->_hour_urgence, $this->_min_urgence);
     }
     if($this->_hour_voulu != null and $this->_min_voulu != null) {
-      $this->horaire_voulu = "$this->_hour_voulu:$this->_min_voulu:00";
+      $this->horaire_voulu = sprintf("%02d:%02d:00", $this->_hour_voulu, $this->_min_voulu);
     }
     if($this->_pause_hour !== null and $this->_pause_min !== null) {
-      $this->pause = "$this->_pause_hour:$this->_pause_min:00";
+      $this->pause = sprintf("%02d:%02d:00", $this->_pause_hour, $this->_pause_min);
     }
     
     $this->completeField('rank');
