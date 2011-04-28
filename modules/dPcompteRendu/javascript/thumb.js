@@ -38,13 +38,7 @@ var Thumb = {
     var content = '';
     
     if (window.CKEDITOR && CKEDITOR.instances.htmlarea.getData) {
-      if (window.pdf_thumbnails) {
-        restoreStyle();
-      }
       content = CKEDITOR.instances.htmlarea.getData();
-      if (window.pdf_thumbnails) {
-        deleteStyle();
-      }
     } else {
       content = $V(form._source);
     }
@@ -186,23 +180,4 @@ function pdfAndPrintServer(compte_rendu_id) {
   url.addParam("write_page", 1);
   url.addParam("print", 1);
   url.requestUpdate("pdf_area", {method: "post", getParameters: {m: "dPcompteRendu", a: "ajax_pdf"}});
-}
-
-function restoreStyle() {
-  /*var instance = CKEDITOR.instances.htmlarea;
-  
-  if (!window.save_style) return;
-  var tag = instance.document.getBody().getFirst();
-  if (tag.$.tagName == "STYLE") return;
-  window.save_style.insertBefore(tag);*/
-}
-
-function deleteStyle() {
-  /*var instance = CKEDITOR.instances.htmlarea;
-  
-  if (!instance.document) return;
-  var styleTag = instance.document.getBody().getFirst();
-  if (styleTag.$.tagName == "STYLE") {
-    return styleTag.remove();
-  }*/
 }

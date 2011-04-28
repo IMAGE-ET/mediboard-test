@@ -41,7 +41,7 @@ CKEDITOR.editorConfig = function(config) {
   // Suppression du bouton de masquage des barres d'outils
   config.toolbarCanCollapse = false;
   // Suppression de la barre d'état avec la dom
-  config.removePlugins = 'elementspath';
+  config.removePlugins = 'elementspath,undo,redo';
   {{if $templateManager->printMode}}
     config.toolbar_Full = [['Preview', 'Print', '-','Find']];
 
@@ -64,7 +64,7 @@ CKEDITOR.editorConfig = function(config) {
     config.extraPlugins =  'mbfields,mbfreetext,mbhelpers,mblists,{{if $mode_play && !$templateManager->isModele}}mbplay,{{/if}},mbprint,mbprintPDF,';
     config.extraPlugins += 'mbheader,mbfooter,mbpagebreak,mblineheight{{if "printing"|module_active && !$templateManager->isModele}},mbprinting{{/if}}';
     config.toolbar_Full = [
-      ['Save','Preview'], [{{if $pdf_thumbnails && $app->user_prefs.pdf_and_thumbs}}'mbprintPDF',{{/if}} textForPrint, 'mbprinting', 'SelectAll', 'Cut', 'Copy', 'PasteText', 'PasteFromWord', 'Undo','Redo', 'Find'],
+      ['Save','Preview'], [{{if $pdf_thumbnails && $app->user_prefs.pdf_and_thumbs}}'mbprintPDF',{{/if}} textForPrint, 'mbprinting', 'SelectAll', 'Cut', 'Copy', 'PasteText', 'PasteFromWord', 'Find'],
       [{{if !$templateManager->isModele}}'mbheader', 'mbfooter',{{/if}} 'mbpagebreak'],
       ['Table','HorizontalRule','Image','SpecialChar'],
       ['Maximize', 'Source'], '/',
