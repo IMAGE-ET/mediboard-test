@@ -180,7 +180,7 @@ CKEDITOR.editorConfig = function(config) {
     options: aOptionsHelpers
   });
   
-  window.parent.destinataires = {{$templateManager->destinataires|@json|smarty:nodefaults}};
+  window.parent.destinataires = {{"utf8_encode"|array_map_recursive:$templateManager->destinataires|@json|smarty:nodefaults}};
 {{/if}}
 
 
