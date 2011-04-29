@@ -105,6 +105,14 @@ class CBilanSSR extends CMbObject {
 	}
 	
   /**
+   * Chargement du séjour 
+   * @return CSejour sejour
+   */
+  function loadRefSejour() {
+    return $this->_ref_sejour = $this->loadFwdRef("sejour_id", true);
+  }
+	
+  /**
    * Chargement du technicien 
    * @return CTechnicien technicien
    */
@@ -135,7 +143,7 @@ class CBilanSSR extends CMbObject {
     $this->_ref_kine_journee = $this->_ref_kine_referent;
 
     // Recherche d'un remplacement
-		$sejour = $this->loadFwdRef("sejour_id", true);
+		$sejour = $this->loadRefSejour();
 		foreach ($sejour->loadRefReplacements() as $_replacement) {
 	    if ($_replacement->_id) {
 	      $_replacement->loadRefConge();
@@ -166,7 +174,7 @@ class CBilanSSR extends CMbObject {
   	}
 		
 		// Requête
-  	$sejour_ssr = $this->loadFwdRef("sejour_id", true);
+  	$sejour_ssr = $this->loadRefSejour();
 		$tolerance = CAppUI::conf("ssr CBilanSSR tolerance_sejour_demandeur");
 		$date_min = mbDate("- $tolerance DAYS", $sejour_ssr->entree);
     $date_max = mbDate("+ $tolerance DAYS", $sejour_ssr->entree);
