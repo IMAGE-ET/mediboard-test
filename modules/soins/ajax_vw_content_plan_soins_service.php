@@ -12,7 +12,7 @@ $categories_id = CValue::getOrSession("categories_id");
 $date          = CValue::getOrSession("date");
 $date_max      = mbDate("+ 1 DAY", $date);
 $service_id    = CValue::getOrSession("service_id", "none");
-$nb_decalage   = CValue::get("nb_decalage", 2);
+$nb_decalage   = CValue::get("nb_decalage");
 $mode_dossier  = CValue::get("mode_dossier", "administration");
 
 $composition_dossier = array();
@@ -20,6 +20,10 @@ $bornes_composition_dossier = array();
 $count_composition_dossier = array();
 
 $configs = CConfigService::getAllFor($service_id);
+
+if(!$nb_decalage){
+  $nb_decalage = $configs["Nombre postes avant"];
+}
 
 $tabHours = CAdministration::getTimingPlanSoins($date, $configs);
 foreach($tabHours as $_key_date => $_period_date){

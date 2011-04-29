@@ -10,12 +10,18 @@
 
 $service_id  = CValue::getOrSession("service_id");
 $date        = CValue::getOrSession("date", mbDate());
-$nb_decalage = CValue::get("nb_decalage", 2);
+$nb_decalage = CValue::get("nb_decalage");
 $date_max    = mbDate("+ 1 DAY", $date);
 
 // Chargement du service
 $service = new CService();
 $service->load($service_id);
+
+$configs = CConfigService::getAllFor($service_id);
+
+if(!$nb_decalage){
+  $nb_decalage = $configs["Nombre postes avant"];
+}
 
 // Chargement des sejours pour le service selectionné
 $affectation = new CAffectation();
