@@ -19,8 +19,7 @@ $collision_sejour = null;
 
 $patient = new CPatient;
 $patient->load($patient_id);
-$where = array("group_id" => "= '".CGroups::loadCurrent()->_id."'");
-$patient->loadRefsSejours($where);
+$patient->loadRefsSejours();
 
 if (!$patient->_id) {
   CAppUI::stepMessage(UI_MSG_WARNING, "Patient '%s' inexistant", $patient_id);
