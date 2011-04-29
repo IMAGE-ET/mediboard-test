@@ -75,27 +75,21 @@ function refreshZones(id, obj) {
   // mise à jour du nom du document dans la popup
   $V(getForm("editFrm").nom, obj.nom);
   $V(getForm("download-pdf-form")._ids_corres, obj._ids_corres);
+  $V(getForm("download-pdf-form").compte_rendu_id, id);
+  var refresh = function(){};
   if (window.pdf_thumbnails && window.Preferences.pdf_and_thumbs == 1) {
     Thumb.compte_rendu_id = id;
     Thumb.modele_id = 0;
-    
     var refresh = function() { window.thumbs_timeout = setTimeout(function() {
       Thumb.refreshThumbs(0, Thumb.print);
     }, 0)};
-    window.callback == null ?
-      window.callback = refresh :
-      window.callback =
-        window.callback.wrap(function(callOriginal) {
-          refresh();
-          return callOriginal();
-        });
   }
   else if (Thumb.print) {
     pdfAndPrintServer(id);
   }
   
   //Remise du content sauvegardé, avec l'impression en callback
-  CKEDITOR.instances.htmlarea.setData(obj._source, window.callback);
+  CKEDITOR.instances.htmlarea.setData(obj._source, refresh);
   
   var url = new Url("dPcompteRendu", "edit_compte_rendu");
   url.addParam("compte_rendu_id", id);
