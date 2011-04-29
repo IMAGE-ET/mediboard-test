@@ -78,8 +78,10 @@ if($current_user->isExecutantPrescription() && !CModule::getCanDo("dPprescriptio
 		if($protocole_id){
 			$_prot->loadRefsLinesElement();
 			foreach ($_prot->_ref_prescription_lines_element as $_line_element){
-				if($is_inf && !$_line_element->prescriptible_infirmiere || $is_as && !$_line_element->prescriptible_AS || $is_kine && !$_line_element->prescriptible_kine){
-				  $errors_role[] = $_line_element->_view;
+				if(($is_inf && !$_line_element->_ref_element_prescription->prescriptible_infirmiere) || 
+				   ($is_as && !$_line_element->_ref_element_prescription->prescriptible_AS) || 
+					 ($is_kine && !$_line_element->_ref_element_prescription->prescriptible_kine)){
+					 $errors_role[] = $_line_element->_view;
 		    }
 			}
 		}
@@ -89,14 +91,15 @@ if($current_user->isExecutantPrescription() && !CModule::getCanDo("dPprescriptio
 	      $_prescription = $_pack_item->_ref_prescription; 
 				$_prescription->loadRefsLinesElement();
 	      foreach ($_prescription->_ref_prescription_lines_element as $_line_element){
-          if($is_inf && !$_line_element->prescriptible_infirmiere || $is_as && !$_line_element->prescriptible_AS || $is_kine && !$_line_element->prescriptible_kine){
+          if(($is_inf && !$_line_element->_ref_element_prescription->prescriptible_infirmiere) || 
+             ($is_as && !$_line_element->_ref_element_prescription->prescriptible_AS) || 
+             ($is_kine && !$_line_element->_ref_element_prescription->prescriptible_kine)){
             $errors_role[] = $_line_element->_view;
           }
         }
 	    }
 		}
 	}
-	
 	if(count($errors) || count($errors_role)){
 		if(count($errors)){
 		  CAppUI::setMsg("Impossible d'appliquer le protocole sélectionné car le compte utilisé ne permet pas de créer des lignes dans les chapitres suivants: ".join(", ", $errors), UI_MSG_ERROR);

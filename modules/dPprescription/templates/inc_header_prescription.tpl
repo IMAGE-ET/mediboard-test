@@ -199,6 +199,9 @@ Main.add( function(){
 
 </script>
 
+
+{{assign var=is_executant_prescription value=$current_user->isExecutantPrescription()}}
+
 {{assign var=praticien value=$prescription->_ref_praticien}}
 {{if !$prescription->praticien_id ||
   ($prescription->praticien_id && ($prescription->praticien_id==$current_user->_id) || !$is_praticien)}}
@@ -372,7 +375,7 @@ Main.add( function(){
 				<br />
 				{{/if}}
 				
-       	{{if !$is_praticien && !$mode_protocole && ($operation_id || $can->admin || $mode_pharma || ($current_user->isExecutantPrescription() && !$conf.dPprescription.CPrescription.role_propre))}}
+       	{{if !$is_praticien && !$mode_protocole && ($operation_id || $can->admin || $mode_pharma || ($is_executant_prescription && !$conf.dPprescription.CPrescription.role_propre))}}
 				<form name="selPraticienLine" action="?" method="get">
 				  <select style="font-size: 0.8em; width: 15em;" name="praticien_id" onchange="changePraticienMed(this.value); {{if !$mode_pharma}}changePraticienElt(this.value);{{/if}} if($('protocole_prat_name')) { $('protocole_prat_name').update('Dr '+this.options[this.selectedIndex].text); }">
 						<optgroup label="Responsables">
@@ -454,22 +457,22 @@ Main.add( function(){
 	<tr>
   	<td colspan="3">
 			<ul id="header_prescription" class="control_tabs small">
-				{{if !$mode_protocole && !$mode_pharma && ($is_praticien || @$operation_id || $can->admin || $current_user->isInfirmiere())}}
+				{{if !$mode_protocole && !$mode_pharma && ($is_praticien || @$operation_id || $can->admin || $is_executant_prescription)}}
 				<li><a href="#div_protocoles">Protocoles <span id="protocole_prat_name"></span></a></li>
 				{{/if}}
-				{{if !$mode_protocole && ($is_praticien || @$operation_id || $can->admin || $current_user->isInfirmiere())}}
+				{{if !$mode_protocole && ($is_praticien || @$operation_id || $can->admin || $is_executant_prescription)}}
 				<li id="ajout_ligne" {{if $easy_mode && !$mode_pharma}}style="display: none"{{/if}}><a href="#div_ajout_lignes">Date de début de la ligne de prescription</a></li>
 				{{/if}}
 				<li id="outils" {{if $easy_mode && !$mode_protocole && !$mode_pharma}}style="display: none"{{/if}}><a href="#div_outils">Outils</a></li>
 				
-				{{if $easy_mode && !$mode_protocole && !$mode_pharma && ($is_praticien || @$operation_id || $can->admin || $current_user->isInfirmiere())}}
+				{{if $easy_mode && !$mode_protocole && !$mode_pharma && ($is_praticien || @$operation_id || $can->admin || $is_executant_prescription)}}
         <li><a onclick="$('ajout_ligne').show(); $('outils').show(); this.up().hide();">+</a></li>
 				{{/if}}
 				
 				<li style="float: right; button">		
-					{{if $prescription->object_id && ($is_praticien || $mode_protocole || @$operation_id || $can->admin || $current_user->_is_infirmiere)}}
+					{{if $prescription->object_id && ($is_praticien || $mode_protocole || @$operation_id || $can->admin || $is_executant_prescription)}}
 		        {{if !$mode_pharma}}
-		          {{if $is_praticien}}
+		          {{if $is_praticien || ($is_executant_prescription && $conf.dPprescription.CPrescription.role_propre)}}
 		            <form name="signaturePrescription" method="post" action="">
 		              <input type="hidden" name="dosql" value="do_valide_all_lines_aed" />
 		              <input type="hidden" name="m" value="dPprescription" />
@@ -508,7 +511,7 @@ Main.add( function(){
 		            	Annuler signatures
 								</button>
 								
-								{{if $current_user->_is_infirmiere || @$operation_id}}
+								{{if $is_executant_prescription || @$operation_id}}
 									<form name="removeLines" method="post" action="">
 		                  <input type="hidden" name="dosql" value="do_remove_lines" />
 		                  <input type="hidden" name="m" value="dPprescription" />
@@ -531,7 +534,7 @@ Main.add( function(){
 		</td>
   </tr>
   <tr>
-  {{if !$mode_protocole && !$mode_pharma && ($is_praticien || @$operation_id || $can->admin || $current_user->isInfirmiere())}}
+  {{if !$mode_protocole && !$mode_pharma && ($is_praticien || @$operation_id || $can->admin || $is_executant_prescription)}}
    <td id="div_protocoles" colspan="3">
       <!-- Formulaire de selection protocole -->
       <form name="applyProtocole" method="post" action="?" onsubmit="return false;">
@@ -580,7 +583,7 @@ Main.add( function(){
     </td>  
   {{/if}}
   
-  {{if !$mode_protocole && ($is_praticien || @$operation_id || $can->admin || $current_user->isInfirmiere())}}
+  {{if !$mode_protocole && ($is_praticien || @$operation_id || $can->admin || $is_executant_prescription)}}
       <td id="div_ajout_lignes" colspan="3" style="display: none;">
 			  <strong>Début de la ligne</strong>
 		    <form name="selDateLine" action="?" method="get"> 

@@ -28,7 +28,7 @@ $mediuser->load($AppUI->user_id);
 $mediuser->isPraticien();
 
 if(!$mode_pharma){
-	if($mediuser->_is_praticien){
+	if($mediuser->_is_praticien || ($mediuser->isExecutantPrescription() && CAppUI::conf("dPprescription CPrescription role_propre"))){
 	  // Si le user est un praticien
 	  $praticien_id = $AppUI->user_id;  
 	} else {
@@ -292,7 +292,7 @@ foreach($prescriptions as $prescription_id){
 if(!$prescriptions_pharma){
 	// Refresh de la prescription
 	if($chapitre == "all"){
-	  if($mediuser->_is_praticien){
+	  if($mediuser->_is_praticien || ($mediuser->isExecutantPrescription() && CAppUI::conf("dPprescription CPrescription role_propre"))){
 	     // Dans le cas de la signature directement dans la prescription 
 	     echo "<script type='text/javascript'>Prescription.reloadPrescSejour($prescription->_id, null, null, null, null, null, null);</script>";  
 	     echo CAppUI::getMsg();
