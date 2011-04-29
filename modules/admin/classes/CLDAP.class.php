@@ -18,7 +18,7 @@ class CLDAP {
       
       $source_ldap = self::bind($user, $ldaprdn, $ldappass);
     }
-    
+
     // Logging succesfull
     if ($user->_bound) {
       $user = self::searchAndMap($user, $source_ldap, $source_ldap->_ldapconn);
@@ -71,7 +71,11 @@ class CLDAP {
     }
 
     $results = $source_ldap->ldap_search($ldapconn, $filter);
-
+    
+    if (!$results) {
+      return $user;
+    }
+    
     if ($results["count"] > 1) {
       throw new CMbException("CSourceLDAP_too-many-results");
     }

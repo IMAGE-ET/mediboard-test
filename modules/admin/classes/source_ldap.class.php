@@ -105,8 +105,11 @@ class CSourceLDAP extends CMbObject{
   }
   
   function ldap_search($ldapconn, $filter, $attributes = array()) {
-    $ldapsearch = ldap_search($ldapconn, $this->rootdn, $filter, $attributes);
-    $results = ldap_get_entries($ldapconn, $ldapsearch);
+    $results= null;
+    $ldapsearch = @ldap_search($ldapconn, $this->rootdn, $filter, $attributes);
+    if ($ldapsearch) {
+      $results = ldap_get_entries($ldapconn, $ldapsearch);
+    }
     
     ldap_unbind($ldapconn);
     
