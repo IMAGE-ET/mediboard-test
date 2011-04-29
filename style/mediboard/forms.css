@@ -244,8 +244,9 @@ a.button.notext {
   padding-right: 1px;
 }
 
-button:before,
-a.button:before {
+button:before, 
+a.button:before,
+button img {
   line-height: 8px;
   margin-right: 1px;
   vertical-align: text-bottom;

@@ -18,7 +18,7 @@ if (!$username) {
 }
 
 // If admin: no need to  give a password
-else if ($AppUI->user_type == 1) {
+else if (($AppUI->user_type == 1) && !CAppUI::conf("admin LDAP ldap_connection")) {
   $_REQUEST['loginas'] = $username;
   CAppUI::login();
 }

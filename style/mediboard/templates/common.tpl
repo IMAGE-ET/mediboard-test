@@ -137,10 +137,10 @@
     <input type="hidden" name="m" value="admin" />
     <input type="hidden" name="dosql" value="do_login_as" />
     <div style="text-align: right;">
-      <label for="username">{{tr}}User{{/tr}} </label><input name="username" tabIndex="1000" type="text" class="notNull" />
+      <label for="username">{{tr}}User{{/tr}} </label> <input name="username" tabIndex="1000" type="text" class="notNull" />
       
-      {{if $app->user_type != 1}}
-        <br /><label for="password">{{tr}}Password{{/tr}} </label><input name="password" tabIndex="1001" type="password" />
+      {{if ($app->user_type != 1) || $conf.admin.LDAP.ldap_connection}}
+        <br /><label for="password">{{tr}}Password{{/tr}} </label> <input name="password" tabIndex="1001" type="password" />
       {{/if}}
     </div>
     <div>
