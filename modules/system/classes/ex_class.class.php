@@ -246,7 +246,7 @@ class CExClass extends CMbObject {
 		        
 		        $_target = new $_class;
             
-            $this->_host_class_fields[$_key] = new CRefSpec($_class, $_field);
+            $this->_host_class_fields[$_key] = new CRefSpec($this->host_class, $_field, "ref class|$_class");
             $this->_host_class_fields[$_key]->_subspecs = array();
 		        
 		        foreach($_target->_specs as $_subfield => $_subspec) {
@@ -276,10 +276,10 @@ class CExClass extends CMbObject {
           
           foreach($_target->_specs as $_subfield => $_subspec) {
             if (!$_subfield || $_subfield === $_target->_spec->key) continue;
-            
+						
             if ($_subfield[0] === "_" || // form field
                 !($_subspec->show === null || $_subspec->show == 1) || // not shown
-                $_subspec instanceof CRefSpec && $_subspec->meta && !$object->_specs[$_subspec->meta] instanceof CEnumSpec // not a finite meta class field
+                $_subspec instanceof CRefSpec && $_subspec->meta && isset($object->_specs[$_subspec->meta]) && !$object->_specs[$_subspec->meta] instanceof CEnumSpec // not a finite meta class field
                 ) {
               continue;
             }
@@ -292,6 +292,85 @@ class CExClass extends CMbObject {
     
     return $this->_host_class_fields;
   }
+	
+	function buildHostFieldsList() {
+		$this->getAvailableFields();
+		
+		$list = array();
+		foreach($this->_host_class_fields as $_field => $_spec) {
+		  $element = array(
+		    "prop"  => $_spec,
+		    "title" => null,
+		    "view"  => null,
+		    "type"  => null,
+		    "level" => 0,
+		  );
+		  
+		  $_subfield = explode(".", $_field);
+		  
+		  // Level 1 title
+		  if ($_spec instanceof CRefSpec && $_spec->class) {
+		    if ($_spec->meta) {
+		      $_meta_spec = $this->_host_class_fields[$_spec->meta];
+		      $element["type"] = implode(" OU ", $_meta_spec->_locales);
+		    }
+		    else {
+		      $element["type"] = CAppUI::tr($_spec->class);
+		    }
+		  }
+		  else {
+		    $element["type"] = CAppUI::tr("CMbFieldSpec.type.".$_spec->getSpecType());
+		  }
+		  
+		  // Level 1 type
+		  if (count($_subfield) > 1) {
+		    $element["title"] = CAppUI::tr("$this->host_class-$_subfield[0]")." de type ".CAppUI::tr("$_subfield[1]");
+		  }
+		  else {
+		    $element["title"] = CAppUI::tr("$this->host_class-$_field");
+		  }
+		  
+		  $element["view"] = $element["title"];
+		  $parent_view = $element["view"];
+		  
+		  $list[$_field] = $element;
+		  
+		  // Level 2
+		  if ($_spec instanceof CRefSpec) {
+		    foreach ($_spec->_subspecs as $_key => $_subspec) {
+		      $_subfield = explode(".", $_key);
+		      $_subfield = reset($_subfield);
+		      
+		      $element = array(
+		        "prop"  => $_subspec,
+		        "title" => null,
+		        "type"  => null,
+		        "level" => 1,
+		      );
+		      
+		      if ($_subspec instanceof CRefSpec && $_subspec->class) {
+		        if ($_subspec->meta) {
+		          //$_meta_spec = $ex_class->_host_class_fields[$_spec->meta];
+		          //$element["type"] = implode(" OU ", $_meta_spec->_locales);
+		        }
+		        else {
+		          $element["type"] = CAppUI::tr("$_subspec->class");
+		        }
+		      }
+		      else {
+		        $element["type"] = CAppUI::tr("CMbFieldSpec.type.".$_subspec->getSpecType());
+		      }
+		      
+		      $element["view"] = $parent_view." / ".CAppUI::tr("$_subspec->className-$_subfield");
+		      $element["title"] = " |- ".CAppUI::tr("$_subspec->className-$_subfield");
+		      
+		      $list["$_field-$_key"] = $element;
+		    }
+		  }
+		}
+		
+		return $list;
+	}
   
   function loadExObjects(CMbObject $object) {
     $ex_object = new CExObject;

@@ -32,12 +32,15 @@ if ($ex_class->_id)
 foreach($ex_class->_ref_constraints as $_ex_constraint) {
   $_ex_constraint->loadRefExClass();
   $_ex_constraint->loadTargetObject();
+	if ($_ex_constraint->_ref_target_object instanceof CMediusers) {
+		$_ex_constraint->_ref_target_object->loadRefFunction();
+	}
 }
 
-$classes = array();
+/*$classes = array();
 
-//if (!$ex_class->_id) {
-  /*$classes = CApp::getMbClasses(array(), $instances);
+if (!$ex_class->_id) {
+  $classes = CApp::getMbClasses(array(), $instances);
   
   foreach($instances as $class => $instance) {
     if (empty($instance->_spec->events)) {
@@ -49,8 +52,8 @@ $classes = array();
   }
   
   $ex_class->disabled = 1;
-  $classes = $instances;*/
-//}
+  $classes = $instances;
+}*/
 
 $classes = CExClass::$_extendable_classes;
 $instances = array();

@@ -53,8 +53,8 @@
 {{/foreach}}
 *}}
 
-{{foreach from=$host_fields item=element}}
-  <li data-prop="{{$element.prop}}" data-value="{{$element.value}}">
+{{foreach from=$host_fields item=element key=value}}
+  <li data-prop="{{$element.prop}}" data-value="{{$value}}">
   	<small style="float: right; color: #666;">
       {{$element.type}}
     </small>
@@ -63,7 +63,7 @@
       {{$element.view}}
     </span>
 		
-		<span style="{{if $show_views}} display: none; {{/if}} padding-left: {{$element.level}}em; {{if $element.level > 0}}font-weight: bold{{/if}}">
+		<span style="{{if $show_views}} display: none; {{/if}} padding-left: {{$element.level}}em; {{if $element.level == 0}}font-weight: bold{{/if}}">
 			{{$element.title}}
 		</span>
   </li>

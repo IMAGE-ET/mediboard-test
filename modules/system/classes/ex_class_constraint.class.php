@@ -28,7 +28,7 @@ class CExClassConstraint extends CMbObject {
     $spec = parent::getSpec();
     $spec->table = "ex_class_constraint";
     $spec->key   = "ex_class_constraint_id";
-    $spec->uniques["constraint"] = array("ex_class_id", "field");
+    $spec->uniques["constraint"] = array("ex_class_id", "field", "value");
     return $spec;
   }
 
@@ -73,20 +73,53 @@ class CExClassConstraint extends CMbObject {
     
     return $spec;
   }
+	
+	function resolveObjectField($object){
+    $parts = explode("-", $this->field);
+    
+    if (count($parts) == 1) {
+      return array(
+			  "object" => $object,
+				"field"  => $parts[0],
+			);
+    }
+    else {
+      $subparts = explode(".", $parts[0]);
+      $field = $subparts[0];
+			
+      $_spec = $object->_specs[$field];
+      
+      if (count($subparts) > 1) {
+        $class = $subparts[1];
+      }
+      else {
+        if (!$_spec->class) {
+          return;
+        }
+        
+        $class = $_spec->class;
+      }
+			
+			return array(
+			  "object" => $object->loadFwdRef($field),
+				"field"  => $parts[1],
+			);
+    }
+	}
   
   function loadTargetObject(){
     $this->loadRefExClass();
     $this->completeField("field", "value");
     
-    $ref_object = new $this->_ref_ex_class->host_class;
-    
     if (!$this->_id) {
       return $this->_ref_target_object = new CMbObject;
     }
     
+    $ref_object = new $this->_ref_ex_class->host_class;
+    
     $spec = $this->resolveSpec($ref_object);
     
-    if ($spec instanceof CRefSpec && $this->value) {
+    if ($spec instanceof CRefSpec && $this->value && preg_match("/[a-z][a-z0-9_]+-[0-9]+/i", $this->value)) {
       $this->_ref_target_object = CMbObject::loadFromGuid($this->value);
     }
     else {
@@ -105,35 +138,54 @@ class CExClassConstraint extends CMbObject {
     $this->loadRefExClass();
 		
     $parts = explode("-", $this->field);
+    $subparts = explode(".", $parts[0]);
+		$host_class = $this->_ref_ex_class->host_class;
     
-    if (count($parts) == 1) {
-      $this->_view = CAppUI::tr("{$this->_ref_ex_class->host_class}-{$this->field}");
+	  // first part
+    if (count($subparts) > 1) {
+      $this->_view = CAppUI::tr("$host_class-{$subparts[0]}")." de type ".CAppUI::tr("{$subparts[1]}");
     }
+    // second part
     else {
-			$subparts = explode(".", $parts[0]);
-			
-      if (count($subparts) > 1) {
-      	$this->_view = CAppUI::tr("{$this->_ref_ex_class->host_class}-{$subparts[0]}")." de type ".CAppUI::tr("{$subparts[1]}");
+      $this->_view = CAppUI::tr("$host_class-{$this->field}");
+    }
+		
+		// 2 levels
+    if (count($parts) > 1) {
+      if (isset($subparts[1])) {
+        $class = $subparts[1];
       }
 			else {
-	      $this->_view = CAppUI::tr("{$this->_ref_ex_class->host_class}-{$parts[0]}");
-	      
-	      $ref_object = new $this->_ref_ex_class->host_class;
-	      $_spec = $ref_object->_specs[$parts[0]];
-	      
-	      if (!$_spec->class) {
-	        return;
-	      }
-	      
-	      $this->_view .= " / ".CAppUI::tr("{$_spec->class}-{$parts[1]}");
+				$host_object = new $host_class;
+				$_spec = $host_object->_specs[$subparts[0]];
+				$class = $_spec->class;
 			}
+			
+      /*if ($_spec instanceof CRefSpec) {
+      	$class = 
+      }*/
+			
+			$this->_view .= " / ".CAppUI::tr("{$class}-{$parts[1]}");
     }
   }
   
   function checkConstraint(CMbObject $object) {
     $this->completeField("field", "value");
-    $object->completeField($this->field);
-    $value = $object->{$this->field};
+		
+		$object_field = $this->resolveObjectField($object);
+		
+		if (!$object_field) return false;
+		
+    $object = $object_field["object"];
+    $field  = $object_field["field"];
+		
+    $value = $object->$field;
+		
+		if ($object->_specs[$field] instanceof CRefSpec) {
+			$_obj = $object->loadFwdRef($field);
+			$value = $_obj->_guid;
+		}
+		
     $cons = $this->value;
     
     // =|!=|>|>=|<|<=|startsWith|endsWith|contains default|=

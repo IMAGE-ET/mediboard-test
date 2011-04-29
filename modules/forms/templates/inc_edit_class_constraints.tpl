@@ -1,7 +1,7 @@
 
 <table class="main layout" id="exClassConstraintList">
 
-{{assign var=wip value=true}}
+{{assign var=wip value=false}}
 
 {{if $wip}}
   <tr>
@@ -16,7 +16,7 @@
   
 {{else}}
   <tr>
-    <td style="width: 20em; padding-right: 5px;">
+    <td style="width: 30em; padding-right: 5px;">
       <button type="button" class="new" style="float: right;" onclick="ExConstraint.create({{$ex_class->_id}})">
         {{tr}}CExClassConstraint-title-create{{/tr}}
       </button>
@@ -29,15 +29,21 @@
         </tr>
         {{foreach from=$ex_class->_ref_constraints item=_constraint}}
           <tr data-constraint_id="{{$_constraint->_id}}">
-            <td>
+            <td class="text">
               <a href="#1" onclick="ExConstraint.edit({{$_constraint->_id}})">
                 {{$_constraint}}
               </a>
             </td>
             <td style="text-align: center;">{{mb_value object=$_constraint field=operator}}</td>
-            <td>
+            <td class="text">
               {{if $_constraint->_ref_target_object->_id}}
-                {{$_constraint->_ref_target_object}}
+							  {{if $_constraint->_ref_target_object instanceof CMediusers}}
+								  {{mb_include module=mediusers template=inc_vw_mediuser mediuser=$_constraint->_ref_target_object}}
+							  {{else}}
+	                <span onmouseover="ObjectTooltip.createEx(this, '{{$_constraint->_ref_target_object->_guid}}');">
+	                	{{$_constraint->_ref_target_object}}
+	                </span>
+								{{/if}}
               {{else}}
                 {{mb_value object=$_constraint field=value}}
               {{/if}}

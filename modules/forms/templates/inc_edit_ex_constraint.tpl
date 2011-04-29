@@ -36,12 +36,23 @@ Main.add(function(){
 });
 
 toggleObjectSelector = function(input, selected) {
-  var prop = selected.get("prop");
+  var prop = $(selected).get("prop");
   var specType = prop.split(" ")[0];
-	var dummy = DOM.div({className: prop});
+	var dummy = DOM.input({className: prop});
   var spec = dummy.getProperties();
-  
-  $$('.specfield').invoke("disableInputs");
+	
+	var reset = selected.name !== "field";
+	
+  $$('.specfield').invoke("disableInputs", reset);
+	
+	console.log(selected);
+	
+	// if "selected" is not the input 
+	if (reset) {
+	  $V(input.form.elements.value, "");
+	}
+	
+	input.form.elements.value.enable();
   
   var specElements = $$('.spectype-'+specType);
   
@@ -56,12 +67,19 @@ toggleObjectSelector = function(input, selected) {
       break;
     
     case "ref":
-      $V(input.form._object_class, spec.class);
+      $V(input.form._object_class, spec["class"]); // "class" is a reserved word !!! 
       break;
       
     case "enum":
       break;
   }
+}
+
+selectSugg = function(button) {
+  var form = button.form;
+  $V(form.elements.field, button.get("value")); 
+	$V(form.elements._host_field_view, button.getText().strip());
+	toggleObjectSelector(button, button);
 }
 </script>
 
@@ -80,8 +98,23 @@ toggleObjectSelector = function(input, selected) {
         {{mb_label object=$ex_constraint field=field}}
       </th>
       <td>
+      	{{if $host_field_suggestions|@count}}
+				  <strong>Suggestions</strong>:<br />
+	      	{{foreach from=$host_field_suggestions item=_sugg}}
+					  <button type="button" class="tick" data-value="{{$_sugg}}" data-prop="{{$class_fields.$_sugg.prop}}" onclick="selectSugg(this)">
+					  	{{$class_fields.$_sugg.view}}
+						</button><br />
+					{{/foreach}}
+					
+					<br />
+					<strong>Autres</strong>:<br />
+				{{/if}}
+				
+        {{assign var=field value=$ex_constraint->field}}
 			  <input type="text" class="autocomplete" name="_host_field_view" value="{{$ex_constraint}}" size="60" />
-        <input type="hidden" name="field" class="{{$ex_constraint->_props.field}}" tabIndex="1" value="{{$ex_constraint->field}}" />
+        <input type="hidden" name="field" class="{{$ex_constraint->_props.field}}" tabIndex="1" 
+				       value="{{$ex_constraint->field}}" 
+							 data-prop="{{if $ex_constraint->_id}}{{$class_fields.$field.prop}}{{/if}}" />
       </td>
       
       {{* 
@@ -89,6 +122,11 @@ toggleObjectSelector = function(input, selected) {
       <td>{{mb_field object=$ex_constraint field=_locale tabIndex="4"}}</td>
       *}}
     </tr>
+		<tr>
+			<td colspan="2">
+				<hr />
+			</td>
+		</tr>
     <tr>
       <th>{{mb_label object=$ex_constraint field=operator}}</th>
       <td>{{mb_field object=$ex_constraint field=operator tabIndex="2"}}</td>
@@ -106,13 +144,13 @@ toggleObjectSelector = function(input, selected) {
         </div>
         
         <div class="specfield spectype-bool">
-          {{mb_field object=$ex_constraint prop="bool" field=value tabIndex="3"}}
+          <label>{{tr}}Yes{{/tr}} <input type="radio" name="_spectype_bool" value="1" {{if $ex_constraint->value === "1"}} checked="checked" {{/if}} onclick="$V(this.form.elements.value, this.value)" /></label>
+          <label>{{tr}}No{{/tr}}  <input type="radio" name="_spectype_bool" value="0" {{if $ex_constraint->value === "0"}} checked="checked" {{/if}} onclick="$V(this.form.elements.value, this.value)" /></label>
         </div>
         
         <div class="specfield spectype-ref">
           <input type="hidden" name="_object_class" value="{{$ex_constraint->_ref_target_object->_class_name}}" />
-					
-          <input type="text" name="_object_view" readonly="readonly" value="{{$ex_constraint->_ref_target_object}}" />
+          <input type="text" name="_object_view" readonly="readonly" ondblclick="ObjectSelector.init()" value="{{$ex_constraint->_ref_target_object}}" size="60" />
           <button type="button" class="search notext" onclick="ObjectSelector.init()">{{tr}}Search{{/tr}}</button>
           <script type="text/javascript">
             ObjectSelector.init = function(){  
@@ -127,12 +165,12 @@ toggleObjectSelector = function(input, selected) {
             ObjectSelector.set = function(oObject) {
               var oForm = getForm(this.sForm);
               
-              if (oForm[this.sView]) {
-                $V(oForm[this.sView], oObject.view);
+              if (oForm.elements[this.sView]) {
+                $V(oForm.elements[this.sView], oObject.view);
               }
               
-              $V(oForm[this.sClass], oObject.objClass);
-              $V(oForm[this.sId], oObject.objClass+"-"+oObject.id);
+              $V(oForm.elements[this.sClass], oObject.objClass);
+              $V(oForm.elements[this.sId], oObject.objClass+"-"+oObject.id);
             }
           </script>
         </div>

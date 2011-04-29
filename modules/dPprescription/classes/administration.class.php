@@ -46,6 +46,10 @@ class CAdministration extends CMbMetaObject implements IPatientRelated {
         "multiple"   => false,
         "reference1" => array("CSejour",  "object_id.prescription_id.object_id"),
         "reference2" => array("CPatient", "object_id.prescription_id.object_id.patient_id"),
+        "hostfield_sugg" => array(
+          "object_id.CPrescriptionLineElement-element_prescription_id",
+          "object_id.CPrescriptionLineMedicament-code_ucd",
+        ),
       ),
     );
     return $spec;

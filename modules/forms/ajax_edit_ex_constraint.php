@@ -26,6 +26,13 @@ else {
 $ex_constraint->loadRefExClass();
 $ex_constraint->loadTargetObject();
 
+$options = $ex_constraint->_ref_ex_class->getHostClassOptions();
+$host_field_suggestions = CValue::read($options, "hostfield_sugg", array());
+
+$list = $ex_constraint->_ref_ex_class->buildHostFieldsList();
+
 $smarty = new CSmartyDP();
 $smarty->assign("ex_constraint", $ex_constraint);
+$smarty->assign("class_fields", $list);
+$smarty->assign("host_field_suggestions", $host_field_suggestions);
 $smarty->display("inc_edit_ex_constraint.tpl");

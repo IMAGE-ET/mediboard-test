@@ -417,11 +417,16 @@ Element.addMethods({
   },
   
   enableInputs: function(element) {
-    element.select("input,select,textarea").invoke("enable");
+    var inputs = element.select("input,select,textarea");
+    inputs.invoke("enable");
     return element.show();
   },
-  disableInputs: function(element) {
-    element.select("input,select,textarea").invoke("disable");
+  disableInputs: function(element, reset) {
+    var inputs = element.select("input,select,textarea");
+    inputs.invoke("disable");
+    if (reset) {
+      inputs.each(function(i) { $V(i, ""); });
+    }
     return element.hide();
   },
   getText: function(element) {
