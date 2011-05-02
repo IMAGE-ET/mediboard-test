@@ -87,7 +87,7 @@ function refreshZones(id, obj) {
   else if (Thumb.print) {
     pdfAndPrintServer(id);
   }
-  else {
+  else if (window.callback){
     window.callback();
   }
          
