@@ -87,7 +87,10 @@ function refreshZones(id, obj) {
   else if (Thumb.print) {
     pdfAndPrintServer(id);
   }
-  
+  else {
+    window.callback();
+  }
+         
   //Remise du content sauvegardé, avec l'impression en callback
   CKEDITOR.instances.htmlarea.setData(obj._source, refresh);
   
