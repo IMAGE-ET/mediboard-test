@@ -31,14 +31,20 @@ else if (!$password) {
 else {
   $_REQUEST['loginas'] = $username;
   
-  $user = new CUser;
-  $user->user_username = trim($username);
-  $user->loadMatchingObject();
-	
-  if (md5($password) != $user->user_password) {
-    CAppUI::setMsg("Auth-failed-combination", UI_MSG_ERROR);
+  if (CAppUI::conf("admin LDAP ldap_connection")) {
+    $_REQUEST['passwordas'] = $password;
+    
+    CAppUI::login(true);
+  } else {
+    $user = new CUser;
+    $user->user_username = trim($username);
+    $user->loadMatchingObject();
+    
+    if (md5($password) != $user->user_password) {
+      CAppUI::setMsg("Auth-failed-combination", UI_MSG_ERROR);
+    }
+    else CAppUI::login(true);
   }
-  else CAppUI::login(true);
 }
 
 if ($msg = CAppUI::getMsg()) {

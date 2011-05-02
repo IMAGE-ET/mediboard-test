@@ -22,7 +22,6 @@ class CLDAP {
     // Logging succesfull
     if ($user->_bound) {
       $user = self::searchAndMap($user, $source_ldap, $source_ldap->_ldapconn);
-      $user->_bound = true;
     }
 
     return $user;
@@ -73,6 +72,7 @@ class CLDAP {
     $results = $source_ldap->ldap_search($ldapconn, $filter);
     
     if (!$results) {
+      $user->_bound = false;
       return $user;
     }
     
@@ -112,6 +112,7 @@ class CLDAP {
         $user->_user_password = $_user_password;
       }
     }   
+    $user->_bound = true;
     $user = self::mapTo($user, $results);
     
     // Save Mediuser variables

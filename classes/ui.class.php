@@ -442,6 +442,7 @@ class CAppUI {
   	$ds = CSQLDataSource::get("std");
   	
   	$ldap_connection = CAppUI::conf("admin LDAP ldap_connection");
+  	$ldap_guid = CValue::get("ldap_guid");
   	
     // Test login and password validity
     $user = new CUser;
@@ -454,13 +455,12 @@ class CAppUI {
       }
       
       $user->user_username = trim($loginas);
-      $user->_user_password = null;
+      $user->_user_password = $ldap_connection ? CValue::request("passwordas") : null;
     } 
     // Standard login
     else {
       $username  = trim(CValue::request("username"));
       $password  = trim(CValue::request("password"));
-      $ldap_guid = CValue::get("ldap_guid");
       
       if (!$username && !$password && $ldap_connection && $ldap_guid) {
         try {  
@@ -490,10 +490,9 @@ class CAppUI {
     if ($user->template) {
       return false;
     }
-    
-    
+        
     $bound = false;
-    if ($ldap_connection && !($loginas && self::$instance->user_type == 1)) {
+    if ($ldap_connection) {
       try {        
         $user  = CLDAP::login($user, $ldap_guid);
         $bound = $user->_bound;
@@ -605,7 +604,7 @@ class CAppUI {
     $sibling->user_username = $user->user_username;
     $sibling->loadMatchingObject();
     $sibling->loadRefMediuser();
-    
+
     if ($sibling->_ref_mediuser && $sibling->_ref_mediuser->_id && !$sibling->_ref_mediuser->actif) {
       self::setMsg("Auth-failed-user-deactivated", UI_MSG_ERROR);
       return false;
