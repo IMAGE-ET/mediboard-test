@@ -19,6 +19,14 @@
 {{/foreach}}
 *}}
 
+<script type="text/javascript">
+printExObject = function(ex_object_id, ex_class_id, object_guid) {
+  var printIframe = $("printIframe");
+  printIframe.src = "about:blank";
+  printIframe.src = "?m=forms&a=view_ex_object_form&ex_object_id="+ex_object_id+"&ex_class_id="+ex_class_id+"&object_guid="+object_guid+"&dialog=1&readonly=1&print=1";
+}
+</script>
+
 {{foreach from=$ex_objects_by_class item=_ex_objects key=_ex_class_id}}
   {{assign var=_ex_obj value=$_ex_objects|@reset}}
 
@@ -32,6 +40,7 @@
 		  {{foreach from=$_ex_objects item=_ex_object name=_ex_object}}
 			  <th class="narrow">
 			  	{{mb_value object=$_ex_object->_ref_first_log field=date}}
+					<button class="print notext" onclick="printExObject('{{$_ex_object->_id}}', '{{$_ex_object->_ex_class_id}}', '{{$_ex_object->_ref_object->_guid}}')">{{tr}}Print{{/tr}}</button>
 				</th>
 			{{/foreach}}
     </tr>

@@ -1,6 +1,12 @@
 
 {{mb_script module="system" script="object_selector"}}
 
+<iframe id="printIframe" width="0" height="0" style="display: none;"></iframe>
+
+<div class="small-info">
+	Cet outil de consultation est en cours de développement
+</div>
+
 <form name="filter-ex_object" method="get" onsubmit="return Url.update(this, 'list-ex_object')">
   <input type="hidden" name="m" value="forms" />
   <input type="hidden" name="a" value="ajax_list_ex_object" />

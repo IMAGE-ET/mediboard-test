@@ -52,6 +52,7 @@ foreach($ex_classes as $_ex_class) {
 		$_ex->_ex_class_id = $_ex_class->_id;
 		$_ex->setExClass();
 		$_ex->load();
+		$_ex->loadTargetObject();
 		
 		foreach($_ex->_ref_ex_class->_ref_groups as $_group) {
 			$_group->loadRefsFields();
