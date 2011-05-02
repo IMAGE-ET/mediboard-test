@@ -17,6 +17,14 @@ button img, a.button img {
   margin-top: 0 2px;
 }
 
+/* the :not pseudo selector is not recognized, 
+ * and the input's type is set to "submit" if
+ * not set or unknown  */
+form button[type="submit"] {
+  border-color: #000;
+  font-weight: bold;
+}
+
 a.button img,
 button img {
   margin-left: 0;

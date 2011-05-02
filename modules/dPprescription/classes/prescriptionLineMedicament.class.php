@@ -190,21 +190,21 @@ class CPrescriptionLineMedicament extends CPrescriptionLine {
     $specs["no_poso"]                = "num max|128";
     $specs["valide_pharma"]          = "bool";
     $specs["accord_praticien"]       = "bool";
-    $specs["substitution_line_id"]   = "ref class|CPrescriptionLineMedicament";
-    $specs["substitute_for_id"]      = "ref class|CMbObject meta|substitute_for_class cascade";
-    $specs["substitute_for_class"]   = "enum list|CPrescriptionLineMedicament|CPrescriptionLineMix default|CPrescriptionLineMedicament";
+    $specs["substitution_line_id"]   = "ref class|CPrescriptionLineMedicament show|0";
+    $specs["substitute_for_id"]      = "ref class|CMbObject meta|substitute_for_class cascade show|0";
+    $specs["substitute_for_class"]   = "enum list|CPrescriptionLineMedicament|CPrescriptionLineMix default|CPrescriptionLineMedicament show|0";
     $specs["substitution_active"]    = "bool";
     $specs["_unite_prise"]           = "str";
     $specs["voie"]                   = "str";
-    $specs["substitution_plan_soin"] = "bool";
+    $specs["substitution_plan_soin"] = "bool show|0";
     $specs["traitement_personnel"]   = "bool";
-		$specs["injection_ide"]          = "bool";
-		$specs["stupefiant"]             = "bool default|0";
-		$specs["_ucd_view"]              = "str";
-		$specs["_dci_view"]              = "str";
-		$specs["_fin_reelle"]            = "dateTime";
+    $specs["injection_ide"]          = "bool";
+    $specs["stupefiant"]             = "bool default|0";
+    $specs["_ucd_view"]              = "str";
+    $specs["_dci_view"]              = "str";
+    $specs["_fin_reelle"]            = "dateTime";
     $specs["_debut_reel"]            = "dateTime";
-		$specs["_duree"]                 = "num min|0";
+    $specs["_duree"]                 = "num min|0";
     return $specs;
   }
   

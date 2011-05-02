@@ -76,11 +76,11 @@ class CPrisePosologie extends CMbMetaObject {
     $specs["decalage_intervention"] = "num";
     $specs["heure_prise"]           = "time";
     $specs["urgence_datetime"]   = "dateTime";          
-		$specs["unite_decalage_intervention"] = "enum list|minute|heure default|heure";  
-		$specs["condition"] = "str";
-		$specs["datetime"] = "dateTime";
+    $specs["unite_decalage_intervention"] = "enum list|minute|heure default|heure show|0";  
+    $specs["condition"] = "str show|0";
+    $specs["datetime"] = "dateTime show|0";
     $specs["_urgent"] = "bool";
-	  $specs["_quantite_UI"]          = "float";
+    $specs["_quantite_UI"]          = "float";
     return $specs;
   }
   

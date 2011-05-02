@@ -37,8 +37,10 @@ Main.add(function(){
 		    <tr data-ex_class_id="{{$_ex_class->_id}}">
 		      <td class="text" style="min-width: 16em;">
             <div style="float: right;">
-              <span {{if $_ex_class->conditional}}style="background: #7e7;" title="{{tr}}CExClass-conditional{{/tr}}"{{/if}}>&nbsp;&nbsp;</span>
-              <span {{if $_ex_class->disabled}}   style="background: #999;" title="{{tr}}CExClass-disabled{{/tr}}"{{/if}}>&nbsp;&nbsp;</span>
+              <span {{if $_ex_class->conditional}}style="background: #7e7;" title="{{tr}}CExClass-conditional{{/tr}}"{{/if}}>&nbsp;
+              </span><span {{if $_ex_class->required}}style="background: #e77;" title="{{tr}}CExClass-required{{/tr}}"{{/if}}>&nbsp;
+							</span><span {{if $_ex_class->disabled}}style="background: #aaa;" title="{{tr}}CExClass-disabled{{/tr}}"{{/if}}>&nbsp;&nbsp;
+							</span>
             </div>
 						
 		        <a href="#1" onclick="ExClass.edit({{$_ex_class->_id}})">

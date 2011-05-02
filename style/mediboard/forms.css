@@ -213,7 +213,7 @@ a.button:focus {
   outline: 1px dotted #000;
 }
 
-form button[type=submit],
+form button[type="submit"],
 form button:not([type]) {
   border-color: #000;
   font-weight: bold;

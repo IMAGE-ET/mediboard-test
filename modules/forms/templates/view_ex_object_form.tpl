@@ -26,17 +26,6 @@ div.ex-message-title {
 {{if !@$readonly}}
 
 <script type="text/javascript">
-if (window.opener && window.opener !== window && window.opener.ExObject) {
-  window.onunload = function(){
-    window.opener.ExObject.register.defer("{{$_element_id}}", {
-      ex_class_id: "{{$ex_class_id}}", 
-      object_guid: "{{$object_guid}}", 
-      event: "{{$event}}", 
-      _element_id: "{{$_element_id}}"
-    });
-  }
-}
-
 confirmSavePrint = function(form){
   (FormObserver.changes == 0 || confirm("Pour imprimer le formulaire, il est nécessaire de l'enregistrer, souhaitez-vous continuer ?")) && 
            onSubmitFormAjax(form, {onComplete: function(){ 
@@ -55,6 +44,17 @@ Main.add(function(){
   ExObjectFormula.init({{$formula_token_values|@json}});
   ExObject.current = {object_guid: "{{$object_guid}}", event: "{{$event}}"};
 });
+
+if (window.opener && !window.opener.closed && window.opener !== window && window.opener.ExObject) {
+  window.onunload = function(){
+    window.opener.ExObject.register.defer("{{$_element_id}}", {
+      ex_class_id: "{{$ex_class_id}}", 
+      object_guid: "{{$object_guid}}", 
+      event: "{{$event}}", 
+      _element_id: "{{$_element_id}}"
+    });
+  }
+}
 </script>
 
 {{mb_form name="editExObject" m="system" dosql="do_ex_object_aed" method="post" className="watched"

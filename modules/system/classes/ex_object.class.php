@@ -38,6 +38,17 @@ class CExObject extends CMbMetaObject {
    */
   var $_ref_reference_object_2 = null;
 
+  function __construct(){
+  	parent::__construct();
+		
+		$class = get_class($this);
+	  unset(self::$spec[$class]);
+	  unset(self::$props[$class]);
+	  unset(self::$specs[$class]);
+	  unset(self::$backProps[$class]);
+	  unset(self::$backSpecs[$class]);
+  }
+
   function setExClass() {
     if ($this->_specs_already_set || !$this->_ex_class_id && !$this->_own_ex_class_id) return;
     
@@ -238,7 +249,7 @@ class CExObject extends CMbMetaObject {
     $ex_class = $this->loadRefExClass();
     $this->_class_name = get_class($this)."_{$ex_class->_id}";
     
-    $specs = parent::getSpecs();
+    $specs = @parent::getSpecs(); // sometimes there is "list|"
         
     foreach($specs as $_field => $_spec) {
       if ($_spec instanceof CEnumSpec) {

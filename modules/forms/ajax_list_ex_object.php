@@ -28,6 +28,7 @@ $ex_class = new CExClass;
 $ex_classes = $ex_class->loadList();
 
 $all_ex_objects = array();
+$ex_objects_by_class = array();
 
 foreach($ex_classes as $_ex_class) {
 	$_ex_class->loadRefsGroups();
@@ -50,12 +51,7 @@ foreach($ex_classes as $_ex_class) {
 	foreach($_ex_objects as $_ex) {
 		$_ex->_ex_class_id = $_ex_class->_id;
 		$_ex->setExClass();
-    //$_ex->_ref_ex_class->getGrid();
-		
-    $_ex->_ref_ex_class = $_ex_class;
-		
-    $_ex->getProps();
-    $_ex->getSpecs();
+		$_ex->load();
 		
 		foreach($_ex->_ref_ex_class->_ref_groups as $_group) {
 			$_group->loadRefsFields();
@@ -67,6 +63,11 @@ foreach($ex_classes as $_ex_class) {
     $_ex->loadLogs();
 		$_log = $_ex->_ref_first_log;
 		$all_ex_objects["$_log->date $_ex->_id"] = $_ex;
+    $ex_objects_by_class[$_ex_class->_id]["$_log->date $_ex->_id"] = $_ex;
+	}
+	
+	if (isset($ex_objects_by_class[$_ex_class->_id])) {
+		ksort($ex_objects_by_class[$_ex_class->_id]);
 	}
 }
 
@@ -78,4 +79,6 @@ $smarty->assign("reference_class", $reference_class);
 $smarty->assign("reference_id",    $reference_id);
 $smarty->assign("reference",       $reference);
 $smarty->assign("all_ex_objects",  $all_ex_objects);
+$smarty->assign("ex_objects_by_class",  $ex_objects_by_class);
+$smarty->assign("ex_classes",  $ex_classes);
 $smarty->display("inc_list_ex_object.tpl");

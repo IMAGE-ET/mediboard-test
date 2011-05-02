@@ -5,7 +5,7 @@
   <input type="hidden" name="m" value="forms" />
   <input type="hidden" name="a" value="ajax_list_ex_object" />
 	
-	<table class="main form">
+	<table class="main form" style="width: auto;">
 		<tr>
 			<th>Type d'objet de référence</th>
 			<td>
@@ -31,12 +31,24 @@
 	        }
 	      </script>
 	    </td>
-			
 			<td>
 				<button type="submit" class="search">{{tr}}Filter{{/tr}}</button>
 			</td>
 		</tr>
 	</table>
 </form>
+
+<style type="text/css">
+.vertical th span {
+  writing-mode:tb-rl;
+  /*-webkit-transform:rotate(90deg);
+  -moz-transform:rotate(90deg);
+  -o-transform: rotate(90deg);
+  white-space:nowrap;
+  display:block;
+	position: absolute;
+  bottom:0;*/
+}
+</style>
 
 <div id="list-ex_object"></div>
