@@ -110,15 +110,14 @@ class CSalle extends CMbObject {
 	  $order = "debut";
 		$this->_ref_plages = $plages->loadList($where, $order);
 		foreach ($this->_ref_plages as &$plage) {
-		  $plage->loadRefs(0);
+		  $plage->loadRefs(0, 1);
       $plage->loadRefsNotes();
 		  $plage->_unordered_operations = array();
 		  foreach ($plage->_ref_operations as &$operation) {
-		    $operation->loadRefChir();
-		    $operation->loadRefPatient();
+		    $operation->loadRefChir(1);
+		    $operation->loadRefPatient(1);
 		    $operation->loadExtCodesCCAM();
-		    $operation->loadRefPlageOp();
-		    $operation->updateSalle();
+		    $operation->loadRefPlageOp(1);
 
 		    if(CAppUI::conf("dPbloc CPlageOp chambre_operation")) {
 		    	$operation->loadRefAffectation();
@@ -144,10 +143,10 @@ class CSalle extends CMbObject {
 		$order = "operations.time_operation";
 		$this->_ref_deplacees = $deplacees->loadList($where, $order, null, null, $ljoin);
 		foreach ($this->_ref_deplacees as &$deplacee) {
-		  $deplacee->loadRefChir();
-		  $deplacee->loadRefPatient();
+		  $deplacee->loadRefChir(1);
+		  $deplacee->loadRefPatient(1);
 		  $deplacee->loadExtCodesCCAM();
-		  $deplacee->loadRefPlageOp();
+		  $deplacee->loadRefPlageOp(1);
 		}
 
 		// Urgences
@@ -158,10 +157,10 @@ class CSalle extends CMbObject {
 	  $order = "chir_id";
 	  $this->_ref_urgences = $urgences->loadList($where);
 	  foreach($this->_ref_urgences as &$urgence) {
-	    $urgence->loadRefChir();
-	    $urgence->loadRefPatient();
+	    $urgence->loadRefChir(1);
+	    $urgence->loadRefPatient(1);
 	    $urgence->loadExtCodesCCAM();
-		  $urgence->loadRefPlageOp();
+		  $urgence->loadRefPlageOp(1);
 	  }
   }
   

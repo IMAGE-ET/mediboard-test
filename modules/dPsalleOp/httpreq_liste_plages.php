@@ -7,8 +7,8 @@
  * @author Sébastien Fillonneau
  */
 
-global $can, $g;
-$can->needsRead();
+
+CCanDo::checkRead();
 
 $salle_id     = CValue::getOrSession("salle");
 $bloc_id      = CValue::getOrSession("bloc_id");
@@ -23,10 +23,11 @@ $listAnesths = $listAnesths->loadAnesthesistes(PERM_READ);
 // Selection des salles
 $listBlocs = CGroups::loadCurrent()->loadBlocs(PERM_READ);
 
+
 // Selection des plages opératoires de la journée
 $salle = new CSalle;
 if ($salle->load($salle_id)) {
-  $salle->loadRefsForDay($date); 
+  $salle->loadRefsForDay($date);
 }
 
 if ($hide_finished == 1 && $salle->_ref_plages) {
@@ -70,7 +71,6 @@ if($salle->_ref_urgences){
 	  $_operation->countActes();
 	}
 }
-
 
 // Création du template
 $smarty = new CSmartyDP();
