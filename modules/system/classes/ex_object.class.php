@@ -22,6 +22,7 @@ class CExObject extends CMbMetaObject {
   var $_specs_already_set = false;
   
   static $_load_lite = false;
+  static $_multiple_load = false;
   
   /**
    * @var CExClass
@@ -40,13 +41,15 @@ class CExObject extends CMbMetaObject {
 
   function __construct(){
   	parent::__construct();
-		
-		$class = get_class($this);
+	
+    if (self::$_multiple_load) {
+      $class = get_class($this);
 	  unset(self::$spec[$class]);
 	  unset(self::$props[$class]);
 	  unset(self::$specs[$class]);
 	  unset(self::$backProps[$class]);
 	  unset(self::$backSpecs[$class]);
+    }
   }
 
   function setExClass() {

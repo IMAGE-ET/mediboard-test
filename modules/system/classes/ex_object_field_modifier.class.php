@@ -16,6 +16,7 @@ class CExObjectFieldModifier extends CMbObject {
   var $ex_object_id = null;
   var $ex_class_field_id = null;
 	
+  var $type  = null;
   var $value = null;
   
   var $_ref_ex_class_field = null;
@@ -33,10 +34,7 @@ class CExObjectFieldModifier extends CMbObject {
     $props = parent::getProps();
     $props["ex_object_id"] = "ref notNull class|CExObject cascade";
     $props["ex_class_field_id"] = "ref notNull class|CExClassField cascade";
-    $props["lang"]  = "enum list|fr|en"; // @todo: en fonction des repertoires
-    $props["std"]   = "str";
-    $props["desc"]  = "str";
-    $props["court"] = "str";
+    $props["value"]  = "str notNull";
     return $props;
   }
   

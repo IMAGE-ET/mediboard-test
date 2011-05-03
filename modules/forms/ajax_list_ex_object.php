@@ -28,8 +28,10 @@ $ex_class = new CExClass;
 $ex_classes = $ex_class->loadList();
 
 $all_ex_objects = array();
-$ex_objects_by_class = array();
+$ex_objects_by_event = array();
 
+CExObject::$_multiple_load = true;
+	
 foreach($ex_classes as $_ex_class) {
 	$_ex_class->loadRefsGroups();
 	
@@ -64,14 +66,15 @@ foreach($ex_classes as $_ex_class) {
     $_ex->loadLogs();
 		$_log = $_ex->_ref_first_log;
 		$all_ex_objects["$_log->date $_ex->_id"] = $_ex;
-    $ex_objects_by_class[$_ex_class->_id]["$_log->date $_ex->_id"] = $_ex;
+    $ex_objects_by_event[$_ex_class->host_class."-".$_ex_class->event][$_ex_class->_id]["$_log->date $_ex->_id"] = $_ex;
 	}
 	
-	if (isset($ex_objects_by_class[$_ex_class->_id])) {
-		ksort($ex_objects_by_class[$_ex_class->_id]);
+	if (isset($ex_objects_by_event[$_ex_class->host_class."-".$_ex_class->event][$_ex_class->_id])) {
+		ksort($ex_objects_by_event[$_ex_class->host_class."-".$_ex_class->event][$_ex_class->_id]);
 	}
 }
-
+  
+ksort($ex_objects_by_event);
 ksort($all_ex_objects);
 
 // Création du template
@@ -80,6 +83,6 @@ $smarty->assign("reference_class", $reference_class);
 $smarty->assign("reference_id",    $reference_id);
 $smarty->assign("reference",       $reference);
 $smarty->assign("all_ex_objects",  $all_ex_objects);
-$smarty->assign("ex_objects_by_class",  $ex_objects_by_class);
+$smarty->assign("ex_objects_by_event",  $ex_objects_by_event);
 $smarty->assign("ex_classes",  $ex_classes);
 $smarty->display("inc_list_ex_object.tpl");
