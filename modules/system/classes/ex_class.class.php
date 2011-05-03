@@ -181,6 +181,11 @@ class CExClass extends CMbObject {
     }
     
     if ($this->fieldModified("host_class")) {
+    	$count_constraints = $this->countBackRefs("constraints");
+    	if ($count_constraints > 0) {
+    		return "Impossible de changer le type d'objet hôte de ce formulaire car il possède $count_constraints contrainte(s)";
+    	}
+			
       $groups = $this->loadRefsGroups();
       foreach($groups as $_group) {
         if ($_group->countBackRefs("host_fields")) {
