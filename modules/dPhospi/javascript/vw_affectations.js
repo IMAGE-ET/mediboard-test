@@ -194,12 +194,11 @@ function reloadTableau() {
   }
   selected_lit = null;
   
-  var oFormChgAff  = getForm("chgAff");
-  var oFormChgMode = getForm("chgMode");
+  var oForm  = getForm("chgAff");
   url = new Url;
-  url.addElement(oFormChgAff.date);
-  url.addParam("list_services[]", $V(oFormChgAff["list_services[]"]), true);
-  url.addElement(oFormChgMode.mode)
+  url.addElement(oForm.date);
+  url.addParam("list_services[]", $V(oForm["list_services[]"]), true);
+  url.addElement(oForm.mode)
   url.setModuleAction("dPhospi", "ajax_tableau_affectations_lits");
   url.requestUpdate("tableauAffectations");
 }

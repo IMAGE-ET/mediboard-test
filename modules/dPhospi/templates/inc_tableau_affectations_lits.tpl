@@ -32,11 +32,14 @@ Main.add(function () {
       <button type="button" onclick="showRapport('{{$date}}')" class="print">Rapport</button>
     </td>
     <td>
-      {{include file="inc_mode_hospi.tpl"}}
       <form name="chgAff" action="?m={{$m}}" method="get">
       <input type="hidden" name="m" value="dPhospi" />
       <input type="hidden" name="tab" value="vw_affectations" />
       <input type="hidden" name="date" class="date" value="{{$date}}" onchange="this.form.submit()" />
+        <select name="mode" onchange="reloadTableau();" style="float: right;">
+          <option value="0" {{if $mode == 0}}selected="selected"{{/if}}>{{tr}}Instant view{{/tr}}</option>
+          <option value="1" {{if $mode == 1}}selected="selected"{{/if}}>{{tr}}Day view{{/tr}}</option>
+        </select>
       
       {{foreach from=$services item=curr_service}}
         <label title="Afficher le service {{$curr_service->nom}}">
