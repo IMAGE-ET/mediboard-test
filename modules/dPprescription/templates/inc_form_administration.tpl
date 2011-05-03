@@ -8,14 +8,20 @@
     } });
   }
   afterEditLine = function() {
-    var oForm = getForm("editLine");
-    return onSubmitFormAjax(oForm, {onComplete: function() {
+    var reloadAfter = function() {
       window.opener.refreshDossierSoin(null, 'inscription', true);
       if (window.opener.updateNbTrans) {
         window.opener.updateNbTrans($V(getForm('editTrans').sejour_id));
       }
       window.close();
-    } });
+    }
+    var oForm = getForm("editLine");
+    if (oForm) {
+      return onSubmitFormAjax(oForm, {onComplete: reloadAfter});
+    }
+    else {
+      reloadAfter();
+    }
   }
 </script>
 <table class="form">
