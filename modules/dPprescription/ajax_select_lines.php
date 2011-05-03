@@ -30,6 +30,7 @@ $protocole->load($protocole_id);
 foreach ($prescription->_ref_lines_med_comments["med"] as $key=>$_line) {
   if ($_line->signee) {
     unset($prescription->_ref_lines_med_comments["med"][$key]);
+    $prescription->_counts_by_chapitre["med"] --;
   }
 }
 
@@ -40,14 +41,13 @@ foreach ($prescription->_ref_lines_med_comments["comment"] as $key=>$_line) {
 }
 
 if ($prescription->_ref_lines_elements_comments) {
-  foreach ($prescription->_ref_lines_elements_comments as &$chapitre) {
-    foreach ($chapitre as $key=>$_line) {
-      foreach($chapitre as &$cat) {
-        foreach ($cat as &$_elements) {
-          foreach ($_elements as $key=>$_line) {
-            if ($_line->signee) {
-              unset($_elements[$key]);
-            }
+  foreach ($prescription->_ref_lines_elements_comments as $chap_key=>&$chapitre) {
+    foreach ($chapitre as &$cat) {
+      foreach ($cat as &$_elements) {
+        foreach ($_elements as $element_key=>$_line) {
+          if ($_line->signee) {
+            unset($_elements[$element_key]);
+            $prescription->_counts_by_chapitre[$chap_key] --;
           }
         }
       }
@@ -56,6 +56,7 @@ if ($prescription->_ref_lines_elements_comments) {
 }
 foreach ($prescription->_ref_prescription_line_mixes as $key=>$_line_mix) {
   if ($_line_mix->signature_prat) {
+    $prescription->_counts_by_chapitre["med"] -= $_line_mix->countBackRefs("lines_mix");
     unset($prescription->_ref_prescription_line_mixes[$key]);
   }
   else {

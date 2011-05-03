@@ -988,7 +988,7 @@ class CPrescription extends CMbObject implements IPatientRelated {
     $whereMed["substitution_active"] = " = '1'";
     $whereMed["inscription"] = " = '0'";
 		
-    if ($praticien_sortie_id){
+    if ($praticien_sortie_id) {
       $where["praticien_id"]    = " = '$praticien_sortie_id'";
       $whereMed["praticien_id"] = " = '$praticien_sortie_id'";
     }
@@ -1033,10 +1033,13 @@ class CPrescription extends CMbObject implements IPatientRelated {
     $where = array();
     $where["prescription_id"] = " = '$this->_id'";
     $where["inscription"] = " = '0'";
-		if($praticien_sortie_id){
+		if ($praticien_sortie_id){
       $where["praticien_id"] = " = '$praticien_sortie_id'";
     }
     
+    if ($protocole_id) {
+      $where["protocole_id"] = " = '$protocole_id'";
+    }
     foreach ($chapitres as $chapitre) {
       $where["category_prescription.chapitre"] = " = '$chapitre'";
       $nb_element = $line_element->countList($where, null, null, null, $ljoin_element);
