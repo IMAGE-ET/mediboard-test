@@ -21,11 +21,10 @@ $_POST["sortie"] = $_POST["_date_split"];
 $do->redirect = null;
 $do->redirectStore = null;
 $do->doIt();
-mbTrace($_POST, "POST", true);
 // Créer le second
 $do = new CDoObjectAddEdit("CAffectation", "affectation_id");
 
-$_POST["ajax"]   = 1;
+$_POST["ajax"] = 1;
 $_POST["entree"] = $_POST["_date_split"];
 $_POST["sortie"] = $sortie;
 $_POST["lit_id"] = $_POST["_new_lit_id"];
