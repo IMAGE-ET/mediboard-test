@@ -59,9 +59,9 @@ if($perop){
 	$where[] = "prescription_line_medicament.perop = '1' OR
 	            prescription_line_element.perop = '1' OR 
 							prescription_line_mix.perop = '1'";
-	
-  $protocoles = $protocole->loadList($where, "libelle", $limit, null, $ljoin);
-  $count_protocoles = $protocole->countList($where, "libelle", null, null, $ljoin);
+	$group_by = "prescription.prescription_id";
+  $protocoles = $protocole->loadList($where, "prescription.libelle", $limit, $group_by, $ljoin);
+  $count_protocoles = $protocole->countList($where, "prescription.libelle", null, $group_by, $ljoin);
 } else {
 	$protocoles = $protocole->loadList($where, "libelle", $limit);
 	$count_protocoles = $protocole->countList($where, "libelle");
