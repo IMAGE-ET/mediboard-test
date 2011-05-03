@@ -29,22 +29,26 @@ Document.refreshList = function() {
   </tr>
   <tr>
     <td class="button" colspan="10">
-	    {{if !$app->user_prefs.simpleCabinet}}
-		    {{if $canPlanningOp->edit}}
-		      <a class="button new" href="?m=dPplanningOp&amp;tab=vw_edit_planning&amp;pat_id={{$patient->_id}}&amp;operation_id=0&amp;sejour_id=0">
-		        {{tr}}COperation{{/tr}}
-		      </a>
-		    {{/if}}
-		    {{if $canPlanningOp->read}}
-		      <a class="button new" href="?m=dPplanningOp&amp;tab=vw_edit_urgence&amp;pat_id={{$patient->_id}}&amp;operation_id=0&amp;sejour_id=0">
-		        Interv. hors plage
-		      </a>
-		      <a class="button new" href="?m=dPplanningOp&amp;tab=vw_edit_sejour&amp;patient_id={{$patient->_id}}&amp;sejour_id=0">
-            {{tr}}CSejour{{/tr}}
-		      </a>
-		    {{/if}}
-	    {{/if}}
-	
+      {{if @$modules.ecap->mod_active}}
+        {{mb_include module=ecap template=inc_button_dhe patient_id=$patient->_id praticien_id=""}}
+      {{else}}
+        {{if !$app->user_prefs.simpleCabinet}}
+          {{if $canPlanningOp->edit}}
+            <a class="button new" href="?m=dPplanningOp&amp;tab=vw_edit_planning&amp;pat_id={{$patient->_id}}&amp;operation_id=0&amp;sejour_id=0">
+              {{tr}}COperation{{/tr}}
+            </a>
+          {{/if}}
+          {{if $canPlanningOp->read}}
+            <a class="button new" href="?m=dPplanningOp&amp;tab=vw_edit_urgence&amp;pat_id={{$patient->_id}}&amp;operation_id=0&amp;sejour_id=0">
+              Interv. hors plage
+            </a>
+            <a class="button new" href="?m=dPplanningOp&amp;tab=vw_edit_sejour&amp;patient_id={{$patient->_id}}&amp;sejour_id=0">
+              {{tr}}CSejour{{/tr}}
+            </a>
+          {{/if}}
+        {{/if}}
+      {{/if}}
+  
 	    {{if $canCabinet->read}}
 		    <a class="button new" href="?m=dPcabinet&amp;tab=edit_planning&amp;pat_id={{$patient->_id}}&amp;consultation_id=0">
 		      {{tr}}CConsultation{{/tr}}

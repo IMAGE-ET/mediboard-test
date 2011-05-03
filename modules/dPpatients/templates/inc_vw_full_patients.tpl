@@ -315,18 +315,18 @@ onMergeComplete = function() {
   </tr>
   {{else}}
   <tr>
-    <td class="button">
+    <td class="button" {{if !@$modules.ecap->mod_active}}colspan="2"{{/if}}> 
       <a class="button new" href="?m=dPcabinet&amp;tab=edit_planning&amp;pat_id={{$patient->patient_id}}&amp;consultation_id=0">
         Consultation
       </a>
     </td>
+    {{if !@$modules.ecap->mod_active}}
     <td class="button">
-      {{if !@$modules.ecap->mod_active}}
       <a class="button new" href="?m=dPplanningOp&amp;tab=vw_edit_planning&amp;pat_id={{$patient->patient_id}}&amp;operation_id=0&amp;sejour_id=0">
         Intervention
-      </a>
-      {{/if}}
+      </a>      
     </td>
+    {{/if}}
   </tr>
   <tr>
     <td class="button" colspan="2">
