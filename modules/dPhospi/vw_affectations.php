@@ -7,22 +7,24 @@
 * @author Thomas Despoix
 */
 
-global $AppUI, $can, $m, $g;
+global $can;
 
-CAppUI::requireModuleFile($m, "inc_vw_affectations");
+CCanDo::checkRead();
+
+CAppUI::requireModuleFile("dPhospi", "inc_vw_affectations");
 
 $pathos = new CDiscipline();
 
-$can->needsRead();
 $ds = CSQLDataSource::get("std");
+
+$g = CGroups::loadCurrent()->_id;
 
 // A passer en variable de configuration
 $heureLimit = "16:00:00";
-
 $date            = CValue::getOrSession("date", mbDate()); 
 $mode            = CValue::getOrSession("mode", 0); 
-$triAdm          = CValue::getOrSession("triAdm", "praticien");
 $list_services   = CValue::getOrSession("list_services");
+$triAdm          = CValue::getOrSession("triAdm", "praticien");
 $_type_admission = CValue::getOrSession("_type_admission", "ambucomp");
 $filterFunction  = CValue::getOrSession("filterFunction");
 
@@ -49,7 +51,7 @@ $where_service = "service_id IN (".join($list_services, ',').") OR service_id IS
 
 global $phpChrono;
 
-// Chargment des services
+// Chargement des services
 foreach ($services as &$service) {
   if (!in_array($service->_id, $list_services)){
     continue;

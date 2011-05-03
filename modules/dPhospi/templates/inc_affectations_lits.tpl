@@ -19,7 +19,7 @@
   {{assign var="aff_prev" value=$curr_affectation->_ref_prev}}
   {{assign var="aff_next" value=$curr_affectation->_ref_next}}
   <form name="addAffectationaffectation_{{$curr_affectation->_id}}" action="?m={{$m}}" method="post">
-
+    <input type="hidden" name="m" value="dPhospi" />
     <input type="hidden" name="dosql" value="do_affectation_aed" />
     <input type="hidden" name="affectation_id" value="{{$curr_affectation->_id}}" />
     <input type="hidden" name="lit_id" value="" />
@@ -30,8 +30,8 @@
   </form>
   <table class="tbl" id="affectation_{{$curr_affectation->_id}}">
     <tr class="patient">
-      <td class="text button" style="width: 1%;">
       {{if $curr_affectation->sejour_id}}
+      <td class="text button" style="width: 1%;">
         {{if $can->edit}}
         <script type="text/javascript">new Draggable('affectation_{{$curr_affectation->_id}}', {revert:true})</script>
         {{/if}}
@@ -88,17 +88,15 @@
           {{$curr_affectation->entree|date_format:"%d/%m %Hh%M"}}
         {{/if}}
         </font>
-      {{else}}
-        <strong><em>[LIT BLOQUE]</em></strong>
-      {{/if}}
       </td>
-      {{if $curr_affectation->sejour_id}}
       <td class="action" style="background:#{{$sejour->_ref_praticien->_ref_function->color}}" 
-  	    onmouseover="ObjectTooltip.createTimeHospi(this, '{{$sejour->praticien_id}}', '{{$sejour->_codes_ccam_operations}}' );">
+        onmouseover="ObjectTooltip.createTimeHospi(this, '{{$sejour->praticien_id}}', '{{$sejour->_codes_ccam_operations}}' );">
         {{$sejour->_ref_praticien->_shortview}}
       </td>
       {{else}}
-      <td></td>
+      <td colspan="2">
+        <strong><em>[LIT BLOQUE]</em></strong>
+      </td>
       {{/if}}
     </tr>
     {{if !$curr_affectation->sejour_id}}
@@ -106,9 +104,10 @@
       <td class="text" colspan="2">
         {{if $can->edit}}
         <form name="entreeAffectation{{$curr_affectation->_id}}" action="?m={{$m}}" method="post" style="float: right;">
+          <input type="hidden" name="m" value="dPhospi" />
           <input type="hidden" name="dosql" value="do_affectation_aed" />
           <input type="hidden" name="affectation_id" value="{{$curr_affectation->_id}}" />
-          <input type="hidden" name="entree" class="dateTime notNull" value="{{$curr_affectation->entree}}" onchange="this.form.submit()" />
+          <input type="hidden" name="entree" class="dateTime notNull" value="{{$curr_affectation->entree}}" />
         </form>
         {{/if}}
         <strong>Du</strong>:
@@ -118,6 +117,7 @@
       <td class="action">
         {{if $can->edit}}
         <form name="rmvAffectation{{$curr_affectation->_id}}" action="?m={{$m}}" method="post">
+          <input type="hidden" name="m" value="dPhospi" />
           <input type="hidden" name="dosql" value="do_affectation_aed" />
           <input type="hidden" name="del" value="1" />
           <input type="hidden" name="affectation_id" value="{{$curr_affectation->_id}}" />
@@ -132,9 +132,10 @@
       <td class="text" colspan="2">
         {{if $can->edit && (!$sejour->sortie_reelle || $aff_next->_id)}}
         <form name="sortieAffectation{{$curr_affectation->_id}}" action="?m={{$m}}" method="post" style="float: right;">
+          <input type="hidden" name="m" value="dPhospi" />
           <input type="hidden" name="dosql" value="do_affectation_aed" />
           <input type="hidden" name="affectation_id" value="{{$curr_affectation->_id}}" />
-          <input type="hidden" name="sortie" class="dateTime notNull" value="{{$curr_affectation->sortie}}" onchange="this.form.submit()" />
+          <input type="hidden" name="sortie" class="dateTime notNull" value="{{$curr_affectation->sortie}}" />
         </form>
         {{/if}}
         <strong>Au</strong>:
@@ -158,9 +159,10 @@
       <td class="text" colspan="2">
         {{if $can->edit && (!$sejour->entree_reelle || $aff_prev->_id)}}
         <form name="entreeAffectation{{$curr_affectation->_id}}" action="?m={{$m}}" method="post" style="float: right;">
+          <input type="hidden" name="m" value="dPhospi" />
           <input type="hidden" name="dosql" value="do_affectation_aed" />
           <input type="hidden" name="affectation_id" value="{{$curr_affectation->_id}}" />
-          <input type="hidden" name="entree" class="dateTime notNull" value="{{$curr_affectation->entree}}" onchange="this.form.submit()" />
+          <input type="hidden" name="entree" class="dateTime notNull" value="{{$curr_affectation->entree}}" onchange="return onSubmitFormAjax(this.form, {onComplete: reloadTableau});" />
         </form>
         {{/if}}
         
@@ -175,6 +177,7 @@
       <td class="action">
         {{if $can->edit}}
         <form name="rmvAffectation{{$curr_affectation->_id}}" action="?m={{$m}}" method="post">
+          <input type="hidden" name="m" value="dPhospi" />
           <input type="hidden" name="dosql" value="do_affectation_aed" />
           <input type="hidden" name="del" value="1" />
           <input type="hidden" name="affectation_id" value="{{$curr_affectation->_id}}" />
@@ -189,9 +192,10 @@
       <td class="text" colspan="2">
         {{if $can->edit && (!$sejour->sortie_reelle || $aff_next->_id)}}
         <form name="sortieAffectation{{$curr_affectation->_id}}" action="?m={{$m}}" method="post" style="float: right;">
+          <input type="hidden" name="m" value="dPhospi" />
           <input type="hidden" name="dosql" value="do_affectation_aed" />
           <input type="hidden" name="affectation_id" value="{{$curr_affectation->_id}}" />
-          <input type="hidden" name="sortie" class="dateTime notNull" value="{{$curr_affectation->sortie}}" onchange="this.form.submit()" />
+          <input type="hidden" name="sortie" class="dateTime notNull" value="{{$curr_affectation->sortie}}" onchange="return onSubmitFormAjax(this.form, {onComplete: reloadTableau});" />
         </form>
         {{/if}}
         
@@ -207,6 +211,7 @@
       <td class="action">
         {{if $can->edit && !$aff_next->_id}}
         <form name="splitAffectation{{$curr_affectation->_id}}" action="?m={{$m}}" method="post">
+          <input type="hidden" name="m" value="dPhospi" />
           <input type="hidden" name="dosql" value="do_affectation_split" />
           <input type="hidden" name="affectation_id" value="{{$curr_affectation->_id}}" />
           <input type="hidden" name="sejour_id" value="{{$curr_affectation->sejour_id}}" />

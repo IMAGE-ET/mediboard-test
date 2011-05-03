@@ -19,7 +19,6 @@ function selectHospitalisation(sejour_id) {
 }
 
 var selected_lit = null;
-
 function selectLit(lit_id) {
   var element = $("lit" + selected_lit);
   if (element) {
@@ -32,12 +31,13 @@ function selectLit(lit_id) {
 function submitAffectation() {
   if (selected_lit && selected_hospi) {
     if(selected_hospitalisation){
-      var form = getForm("addAffectationsejour_" + selected_hospitalisation);
+      var oForm = getForm("addAffectationsejour_" + selected_hospitalisation);
     }else{
-      var form = getForm("addAffectationsejour");
+      var oForm = getForm("addAffectationsejour");
     }
-    form.lit_id.value = selected_lit;
-    form.submit();
+    oForm.lit_id.value = selected_lit;
+    
+    return onSubmitFormAjax(oForm, {onComplete: reloadTableau});
   }
 }
 
@@ -57,26 +57,25 @@ function DragDropSejour(sejour_id, lit_id){
   }
   var oForm = getForm("addAffectation" + sejour_id);
   oForm.lit_id.value = lit_id;
-  oForm.submit();
+  return onSubmitFormAjax(oForm, {onComplete: reloadTableau});
 }
 
-function submitAffectationSplit(form) {
-  form._new_lit_id.value = selected_lit;
+function submitAffectationSplit(oForm) {
+  oForm._new_lit_id.value = selected_lit;
   if (!selected_lit) {
     alert("Veuillez sélectionner un nouveau lit et revalider la date");
     return;
   }
   
-  if (form._date_split.value <= form.entree.value || 
-      form._date_split.value >= form.sortie.value) {
-    var msg = "La date de déplacement (" + form._date_split.value + ") doit être comprise entre";
-    msg += "\n- la date d'entrée: " + form.entree.value; 
-    msg += "\n- la date de sortie: " + form.sortie.value;
+  if (oForm._date_split.value <= oForm.entree.value || 
+      oForm._date_split.value >= oForm.sortie.value) {
+    var msg = "La date de déplacement (" + oForm._date_split.value + ") doit être comprise entre";
+    msg += "\n- la date d'entrée: " + oForm.entree.value;
+    msg += "\n- la date de sortie: " + oForm.sortie.value;
     alert(msg);
     return;
   }
-  
-  form.submit();
+  return onSubmitFormAjax(oForm, {onComplete: reloadTableau});
 }
 
 Calendar.setupAffectation = function(affectation_id, options) {
@@ -186,3 +185,21 @@ ObjectTooltip.createTimeHospi = function (element, chir_id, codes) {
 		javascript : 0 
 	} );
 };
+
+function reloadTableau() {
+  if(selected_hospi && selected_lit && selected_hospitalisation) {
+    $("sejour_"+selected_hospitalisation).remove();
+    selected_hospitalisation = null;
+    selected_hospi = false;
+  }
+  selected_lit = null;
+  
+  var oFormChgAff  = getForm("chgAff");
+  var oFormChgMode = getForm("chgMode");
+  url = new Url;
+  url.addElement(oFormChgAff.date);
+  url.addParam("list_services[]", $V(oFormChgAff["list_services[]"]), true);
+  url.addElement(oFormChgMode.mode)
+  url.setModuleAction("dPhospi", "ajax_tableau_affectations_lits");
+  url.requestUpdate("tableauAffectations");
+}
