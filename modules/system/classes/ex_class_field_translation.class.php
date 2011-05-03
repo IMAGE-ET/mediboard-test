@@ -50,8 +50,8 @@ class CExClassFieldTranslation extends CMbObject {
     global $locales;
     $key = $this->getKey();
     $locales[$key] = $this->std;
-    $locales["{$key}_$this->desc"]  = $this->desc  ? $this->desc  : $this->std;
-    $locales["{$key}_$this->court"] = $this->court ? $this->court : $this->std;
+    $locales["{$key}-desc"]  = $this->desc  ? $this->desc  : $this->std;
+    $locales["{$key}-court"] = $this->court ? $this->court : $this->std;
     
     $this->_view = $this->std;
   }
