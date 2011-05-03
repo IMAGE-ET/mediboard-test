@@ -45,13 +45,6 @@ emptyAndSubmit = function(const_name) {
 
 Main.add(function () {
   var oForm = getForm('edit-constantes-medicales');
-
-  /*$H(data).each(function(d){
-    var checkbox = oForm["checkbox-constantes-medicales-"+d.key];
-    checkbox.checked = (d.value.series.last().data.length > 1); // Not the first as it could be the "grey" line
-    $('constantes-medicales-'+d.key).setVisible(checkbox.checked);
-  });*/
-  
   calculImcVst(oForm);
 });
 </script>
@@ -102,7 +95,12 @@ Main.add(function () {
     {{/if}}>
       <tr>
         <th>
-          {{mb_title object=$constantes field=$_constante}} {{if $_params.unit}}({{$_params.unit}}){{/if}}
+          {{* a mb_title doesn't have a "for" attribute which speeds up prepareForm in IE
+          {{mb_title object=$constantes field=$_constante for=$_constante}} 
+          *}}
+          <label for="{{$_constante}}">{{tr}}CConstantesMedicales-{{$_constante}}-court{{/tr}}</label>
+
+          {{if $_params.unit}}({{$_params.unit}}){{/if}}
         </th>
         
         {{if array_key_exists("formfields", $_params)}}
@@ -146,10 +144,10 @@ Main.add(function () {
         {{/if}}
         {{if $display_graph}}
           <td class="narrow">
-  				  {{if $_constante.0 != "_"}}
-              <input type="checkbox" name="checkbox-constantes-medicales-{{$_constante}}" onchange="$('constantes-medicales-{{$_constante}}').setVisible(this.checked)" tabIndex="100" />
+            {{if $_constante.0 != "_"}}
+              <input type="checkbox" name="checkbox-constantes-medicales-{{$_constante}}" onclick="toggleGraph('{{$_constante}}', this.checked)" tabIndex="100" />
             {{/if}}
-  				</td>
+          </td>
         {{/if}}
 				<td>
 				  {{if $_readonly !="readonly" && $real_context == 1 && $constantes->$_constante != ""}}
@@ -191,6 +189,7 @@ Main.add(function () {
               <button class="new" type="button" onclick="$V(this.form.constantes_medicales_id, ''); $V(this.form._new_constantes_medicales, 1); return submitConstantesMedicales(this.form);">
                 {{tr}}Create{{/tr}}
               </button>
+							<br />
               <button class="trash" type="button" onclick="if (confirm('Etes-vous sûr de vouloir supprimer ce relevé ?')) {$V(this.form.del, 1); return submitConstantesMedicales(this.form);}">
                 {{tr}}CConstantesMedicales.delete_all{{/tr}}
               </button>

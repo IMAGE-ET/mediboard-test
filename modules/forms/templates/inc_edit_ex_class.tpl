@@ -8,11 +8,13 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
 *}}
 
-{{main}}
+<script type="text/javascript">
+Main.add(function(){
   ExClass.id = "{{$ex_class->_id}}";
   ExClass.layourEditorReady = false;
   $("exClassList").select("tr[data-ex_class_id]").invoke("removeClassName", "selected");
-{{/main}}
+});
+</script>
 
 <table class="main form">
   {{mb_include module=system template=inc_form_table_header object=$ex_class colspan="2" css_class="text"}}

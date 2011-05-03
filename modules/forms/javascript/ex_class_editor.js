@@ -7,7 +7,13 @@ ExClass = {
     this.id = id || this.id;
     var url = new Url("forms", "ajax_edit_ex_class");
     url.addParam("ex_class_id", this.id);
-    url.requestUpdate("exClassEditor");
+    
+    id = this.id;
+    url.requestUpdate("exClassEditor", { onComplete: function(){
+      if (ExField.latest._id && ExField.latest._ex_class_id == id) {
+        ExField.edit(ExField.latest._id);
+      }
+    }});
   },
   editCallback: function(id) {
     ExClass.edit(id);
@@ -112,7 +118,7 @@ ExClass = {
       var del = drag.get("field_id");
       
       $V(form.elements.callback, "");
-		
+    
       if (del) {
         drag.remove();
         oldParent.update("&nbsp;");
@@ -125,10 +131,10 @@ ExClass = {
     
     // dest = GRID
     else {
-			var fromGrid = true;
-			
+      var fromGrid = true;
+      
       if (!drag.up(".grid")) {
-				fromGrid = false;
+        fromGrid = false;
         drag = drag.clone(true);
         ExClass.initDraggableHostField(drag);
         drag.setStyle({
@@ -138,10 +144,10 @@ ExClass = {
       }
       
       drop.update(drag);
-			
-			if (fromGrid) {
-			  oldParent.update("&nbsp;");
-			}
+      
+      if (fromGrid) {
+        oldParent.update("&nbsp;");
+      }
       
       var id = drag.identify();
       $V(form.elements.callback, "ExClass.setHostFieldId.curry("+id+")");
@@ -234,9 +240,9 @@ ExClass = {
           else if (drag.hasClassName('field') || drag.hasClassName('label')) {
             ExClass.submitLayout(drag, drop);
           }
-					else {
+          else {
             ExClass.submitLayoutMessage(drag, drop);
-					}
+          }
         }
       });
     });
@@ -246,6 +252,14 @@ ExClass = {
 };
 
 ExField = {
+  latest: {},
+  saveLatest: function(id, obj) {
+    ExField.latest = {};
+    if (id) {
+      obj._id = id;
+      ExField.latest = obj;
+    }
+  },
   edit: function(id, ex_class_id, target, ex_group_id) {
     if (window.exClassTabs) {
       exClassTabs.setActiveTab("fields-specs");

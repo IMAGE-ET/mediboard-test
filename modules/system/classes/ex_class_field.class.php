@@ -38,6 +38,7 @@ class CExClassField extends CExListItemsOwner {
   var $_ref_translation = null;
   var $_ref_concept = null;
   var $_spec_object = null;
+  var $_ex_class_id = null;
   
   var $_dont_drop_column = null;
 	
@@ -98,6 +99,8 @@ class CExClassField extends CExListItemsOwner {
     $props["coord_field_y"] = "num min|0 max|100";
     $props["coord_label_x"] = "num min|0 max|100";
     $props["coord_label_y"] = "num min|0 max|100";
+		
+    $props["_ex_class_id"]  = "ref class|CExClass";
     
     $props["_locale"]     = "str notNull";
     $props["_locale_desc"]  = "str";
@@ -121,6 +124,7 @@ class CExClassField extends CExListItemsOwner {
     $this->formulaFromDB();
     
     if (!self::$_load_lite) {
+			$this->_ex_class_id = $this->loadRefExGroup()->ex_class_id;
       $this->updateTranslation();
     }
   }

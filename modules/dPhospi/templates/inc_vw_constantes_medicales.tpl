@@ -156,7 +156,8 @@ initializeGraph(data.{{$name}}, options);
 
 drawGraph = function() {
   var c = $('constantes-medicales-graph');
-  
+  if (!c) return;
+	
   var width, height;
   
   {{if $print}}
@@ -167,29 +168,49 @@ drawGraph = function() {
     height = "130px";
   {{/if}}
   
-  if (c) {
-    $H(data).each(function(pair){
-      g.push(insertGraph(c, pair.value, 'constantes-medicales-'+pair.key, width, height));
-      last_date = null;
-    });
-    
-    {{if !$print}}
-    g.each(function(graph){
-      graph.spreadsheet.tabs.data.observe('click', function(e){
-        g.each(function(graph2){
-          graph2.spreadsheet.showTab('data');
-        });
-      });
-      
-      graph.spreadsheet.tabs.graph.observe('click', function(e){
-        g.each(function(graph2){
-          graph2.spreadsheet.showTab('graph');
-        });
-      });
-    });
-    {{/if}}
-  }
+  $H(data).each(function(pair){
+	  var id = 'constantes-medicales-'+pair.key;
+		
+		data[pair.key].draw = function(){(function(c, d, id, width, height){
+	    var graph = insertGraph(c, d, id, width, height);
+	    
+	    {{if !$print}}
+	      var tabs = graph.spreadsheet.tabs;
+	      
+	      tabs.data.observe('click', function(e){
+	        g.each(function(graph2){
+	          graph2.spreadsheet.showTab('data');
+	        });
+	      });
+	      
+	      tabs.graph.observe('click', function(e){
+	        g.each(function(graph2){
+	          graph2.spreadsheet.showTab('graph');
+	        });
+	      });
+	    {{/if}}
+	    
+	    last_date = null;
+		})(c, pair.value, id, width, height)};
+		
+		{{if $print}}
+		  data[pair.key].draw();
+			data[pair.key].draw = null;
+		{{/if}}
+  });
 };
+
+toggleGraph = function (key, b) {
+  if (b && data[key].draw) {
+    data[key].draw();
+    data[key].draw = null;
+  }
+	
+	var c = $('constantes-medicales-'+key);
+	if (c) {
+	  c.setVisible(b);
+	}
+}
 
 Main.add(function () {
   var oForm = document.forms['edit-constantes-medicales'];
@@ -207,7 +228,7 @@ Main.add(function () {
     {{foreach from=$data item=curr_data key=key}}
       checkbox = oForm["checkbox-constantes-medicales-{{$key}}"];
       checkbox.checked = (data.{{$key}}.series.last().data.length > 1);
-      $('constantes-medicales-{{$key}}').setVisible(checkbox.checked);
+			toggleGraph("{{$key}}", checkbox.checked);
     {{/foreach}}
   {{/if}}
 });

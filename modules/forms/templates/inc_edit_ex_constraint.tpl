@@ -45,8 +45,6 @@ toggleObjectSelector = function(input, selected) {
 	
   $$('.specfield').invoke("disableInputs", reset);
 	
-	console.log(selected);
-	
 	// if "selected" is not the input 
 	if (reset) {
 	  $V(input.form.elements.value, "");

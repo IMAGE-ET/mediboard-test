@@ -242,9 +242,6 @@ function prepareForm(oForm) {
       continue;
     }
     
-    var props = oElement.getProperties(),
-        UIchange = false;
-    
     // Locked object
     if (oForm.lockAllFields) {
       oElement.disabled = true;
@@ -268,6 +265,58 @@ function prepareForm(oForm) {
     if (oElement.tagName === "INPUT" && !oElement.getAttribute("type")) {
       oElement.type = "text";
     }
+    
+    // Won't make it resizable on IE
+    if (sType === "textarea" && 
+        oElement.id !== "htmlarea" && 
+        !oElement.hasClassName("noresize")) {
+      oElement.setResizable({autoSave: true, step: 'font-size'});
+    }
+    
+    // Focus on first text input
+    if (bGiveFormFocus && sType === "text" && 
+        !oElement.className.match(/autocomplete/) &&
+        !oElement.getAttribute("disabled") && !oElement.getAttribute("readonly") && 
+        oElement.clientWidth > 0) {
+        // oElement.clientWidth MUST be at the end. This "call" slows down IE a LOT
+
+      oElement.writeAttribute("autofocus", "autofocus");
+      
+      var i, applets = document.applets;
+      
+      if (applets.length) {
+        window._focusElement = oElement;
+        
+        var inactiveApplets;
+        var tries = 50;
+            
+        function waitForApplet() {
+          inactiveApplets = applets.length;
+          for(i = 0; i < applets.length; i++) {
+            if (Prototype.Browser.IE || "isActive" in applets[i] && 
+                Object.isFunction(applets[i].isActive) && 
+                applets[i].isActive()) inactiveApplets--;
+            else break;
+          }
+          if (inactiveApplets == 0) {
+            window._focusElement.focus();
+            return;
+          }
+          else if (tries--) setTimeout(waitForApplet, 200);
+        }
+
+        waitForApplet();
+      }
+      else oElement.focus();
+      bGiveFormFocus = false;
+    }
+    
+    if (oElement.className == "") {
+      //continue; // TODO : this speeds up everything
+    }
+		
+    var props = oElement.getProperties(),
+        UIchange = false;
 
     // If the element has a mask and other properties, they may conflict
     if (Preferences.INFOSYSTEM && props.mask) {
@@ -316,51 +365,6 @@ function prepareForm(oForm) {
     if (mask) {
       mask = mask.gsub('S', ' ').gsub('P', '|');
       oElement.mask(mask);
-    }
-    
-    // Won't make it resizable on IE
-    if (sType === "textarea" && 
-        oElement.id !== "htmlarea" && 
-        !oElement.hasClassName("noresize")) {
-      oElement.setResizable({autoSave: true, step: 'font-size'});
-    }
-    
-    // Focus on first text input
-    if (bGiveFormFocus && sType === "text" && 
-        !oElement.className.match(/autocomplete/) &&
-        !oElement.getAttribute("disabled") && !oElement.getAttribute("readonly") && 
-        oElement.clientWidth > 0) {
-        // oElement.clientWidth MUST be at the end. This "call" slows down IE a LOT
-
-      oElement.writeAttribute("autofocus", "autofocus");
-      
-      var i, applets = document.applets;
-      
-      if (applets.length) {
-        window._focusElement = oElement;
-        
-        var inactiveApplets;
-        var tries = 50;
-            
-        function waitForApplet() {
-          inactiveApplets = applets.length;
-          for(i = 0; i < applets.length; i++) {
-            if (Prototype.Browser.IE || "isActive" in applets[i] && 
-                Object.isFunction(applets[i].isActive) && 
-                applets[i].isActive()) inactiveApplets--;
-            else break;
-          }
-          if (inactiveApplets == 0) {
-            window._focusElement.focus();
-            return;
-          }
-          else if (tries--) setTimeout(waitForApplet, 200);
-        }
-
-        waitForApplet();
-      }
-      else oElement.focus();
-      bGiveFormFocus = false;
     }
   }
   

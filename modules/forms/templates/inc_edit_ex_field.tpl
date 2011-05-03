@@ -68,6 +68,7 @@ Main.add(function(){
   <input type="hidden" name="m" value="system" />
   <input type="hidden" name="dosql" value="do_ex_class_field_aed" />
   <input type="hidden" name="del" value="0" />
+  <input type="hidden" name="callback" value="ExField.saveLatest" />
   
   <input type="hidden" name="_triggered_data" value="{{$ex_field->_triggered_data|@json|smarty:nodefaults|JSAttribute}}" />
   

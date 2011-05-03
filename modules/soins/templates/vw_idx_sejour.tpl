@@ -339,7 +339,7 @@ printDossierComplet = function(){
 					 </tr>
 					 <tr>
 						 <th>
-						   {{mb_label class=CSejour field="type"}}
+						   {{mb_title class=CSejour field="type"}}
 						 </th>
 						 <td>
 						   {{assign var=type_admission value=$object->_specs.type}} 
