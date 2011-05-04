@@ -14,6 +14,7 @@ $dPconfig["dPcompteRendu"] = array (
     "same_print" => '0',
     "timestamp" => '-- %n %p - dd/MM/y HH:mm',
     "time_before_thumbs" => '3',
-    "multiple_doc_correspondants" => "0"
+    "multiple_doc_correspondants" => "0",
+    "header_footer_fly" => "0"
   ),
 );

@@ -44,6 +44,14 @@
     {{mb_include module=system template=inc_config_bool}}
   </tr>
   
+  <tr>
+    <th class="category" colspan="2">{{tr}}config-dPcompteRendu-CCompteRendu-other_params{{/tr}}</th>
+  </tr>
+  <tr>
+    {{assign var="var" value="header_footer_fly"}}
+    {{mb_include module=system template=inc_config_bool}}
+  </tr>
+  
   {{if isset($conf.dPcabinet.CConsultation.aide_autocomplete|smarty:nodefaults)}}
     {{assign var=aide_autocomplete value=$conf.dPcabinet.CConsultation.aide_autocomplete}}
     {{if $aide_autocomplete == 1}}
@@ -95,6 +103,7 @@
     </tr>
     {{/if}}
 	{{/if}}
+  
   <tr>
     <td class="button" colspan="2">
       <button class="modify" type="submit">{{tr}}Save{{/tr}}</button>

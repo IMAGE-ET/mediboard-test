@@ -92,6 +92,55 @@
       </td>
     </tr>
   {{/if}}
+  
+  {{if $conf.dPcompteRendu.CCompteRendu.header_footer_fly}}
+    <tr>
+      {{if $headers|@count > 0}}
+        <th>
+        {{mb_label object=$compte_rendu field=header_id}} :
+        </th>
+        <td>
+          <select name="header_id" onchange="Thumb.old();" class="{{$compte_rendu->_props.header_id}}" style="width: 15em;">
+            <option value="">&mdash; {{tr}}CCompteRendu-set-header{{/tr}}</option>
+            {{foreach from=$headers item=headersByOwner key=owner}}
+              {{if $headersByOwner|@count}}
+                <optgroup label="{{tr}}CCompteRendu._owner.{{$owner}}{{/tr}}">
+                  {{foreach from=$headersByOwner item=_header}}
+                  <option value="{{$_header->_id}}" {{if $compte_rendu->header_id == $_header->_id}}selected="selected"{{/if}}>{{$_header->nom}}</option>
+                  {{foreachelse}}
+                  <option value="" disabled="disabled">{{tr}}None{{/tr}}</option>
+                  {{/foreach}}
+                </optgroup>
+              {{/if}}
+            {{/foreach}}
+          </select>
+        </td>
+      {{/if}}
+      <br />
+      {{if $footers|@count > 0}}
+      <th>
+       {{mb_label object=$compte_rendu field=footer_id}} :
+       </th>
+       <td>
+          <select name="footer_id" onchange="Thumb.old();" class="{{$compte_rendu->_props.footer_id}}" style="width: 15em;">
+            <option value="">&mdash; {{tr}}CCompteRendu-set-footer{{/tr}}</option>
+            {{foreach from=$footers item=footersByOwner key=owner}}
+              {{if $footersByOwner|@count}}
+                <optgroup label="{{tr}}CCompteRendu._owner.{{$owner}}{{/tr}}">
+                  {{foreach from=$footersByOwner item=_footer}}
+                  <option value="{{$_footer->_id}}" {{if $compte_rendu->footer_id == $_footer->_id}}selected="selected"{{/if}}>{{$_footer->nom}}</option>
+                  {{foreachelse}}
+                  <option value="" disabled="disabled">{{tr}}None{{/tr}}</option>
+                  {{/foreach}}
+                </optgroup>
+              {{/if}}
+            {{/foreach}}
+          </select>
+        </td>
+      {{/if}}
+    </tr>
+  {{/if}}
+  
   {{if $exchange_source->_id}}
     <tr>
       <td style="button text" colspan="2">

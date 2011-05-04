@@ -57,6 +57,15 @@ $destinataires = array();
 $ids_corres    = "";
 
 if (isset($_POST["_source"])) {
+  // Ajout d'entête / pied de page à la volée
+  $header_id = CValue::post("header_id");
+  $footer_id = CValue::post("footer_id");
+  
+  if ($header_id || $footer_id) {
+    $cr = new CCompteRendu;
+    $_POST["_source"] = $cr->generateDocFromModel($_POST["_source"], $header_id, $footer_id);
+  }
+  
   // Application des listes de choix
   $fields = array();
   $values = array();

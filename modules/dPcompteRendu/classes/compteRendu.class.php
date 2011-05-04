@@ -679,7 +679,7 @@ class CCompteRendu extends CDocumentItem {
     return $this->_ref_file->store();
   }
   
-  function generateDocFromModel($other_source = null) {
+  function generateDocFromModel($other_source = null, $header_id = null, $footer_id = null) {
     $source = $this->_source;
     if ($other_source) {
     	$source = $other_source;
@@ -692,8 +692,18 @@ class CCompteRendu extends CDocumentItem {
       $header = $this->_ref_header;
       $footer = $this->_ref_footer;
     }
+    else {
+      $header = new CCompteRendu;
+      $footer = new CCompteRendu;
+      if ($header_id) {
+        $header->load($header_id);
+      }
+      if ($footer_id) {
+        $footer->load($footer_id);
+      }
+    }
     
-    if (isset($header) || isset($footer)) {
+    if ($header->_id || $footer->_id) {
       $header->height = isset($header->height) ? $header->height : 20;
       $footer->height = isset($footer->height) ? $footer->height : 20;
     
