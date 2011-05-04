@@ -43,6 +43,8 @@ class CCompteRendu extends CDocumentItem {
   var $_page_format      = null;
   var $_orientation      = null;
   var $_list_classes     = null;
+  var $_date             = null;
+  
 /*  var $_is_editable      = true;*/
 
   // Distant field
@@ -122,6 +124,7 @@ class CCompteRendu extends CDocumentItem {
     $specs["_source"]          = "html helped|_list_classes";
     $specs["_entire_doc"]      = "html";
     $specs["_ids_corres"]      = "str";
+    $specs["_date"]            = "dateTime show|1";
     return $specs;
   }
   
@@ -415,6 +418,7 @@ class CCompteRendu extends CDocumentItem {
   	parent::loadView();
 		$this->loadContent();
     $this->loadFile();
+    $this->_date = $this->loadFirstLog()->date;
   }
     
   function getPerm($permType) {
