@@ -38,7 +38,7 @@ class CPrescriptionLine extends CMbObject implements IPatientRelated {
   var $unite_decalage_fin  = null;
   var $operation_id        = null;
   var $emplacement         = null;
-  var $commentaire         = null;
+  
   var $perop               = null;
 	var $inscription         = null;
 	var $protocole_id        = null;
@@ -106,7 +106,6 @@ class CPrescriptionLine extends CMbObject implements IPatientRelated {
     $specs["condition_active"]  = "bool";
     $specs["unite_decalage"]    = "enum list|jour|heure default|jour show|0";
     $specs["unite_decalage_fin"]= "enum list|jour|heure default|jour show|0";
-    $specs["commentaire"]       = "text helped";
     $specs["emplacement"]       = "enum notNull list|service|bloc|service_bloc default|service";
     $specs["operation_id"]      = "ref class|COperation";
     $specs["perop"]             = "bool default|0"; 

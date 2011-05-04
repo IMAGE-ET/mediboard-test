@@ -16,15 +16,11 @@ $field         = CValue::get("field");
 $text          = utf8_decode(CValue::get("text", CValue::post("text", "")));
 $depend_value_1 = CValue::get("depend_value_1");
 $depend_value_2 = CValue::get("depend_value_2");
+$class_depend_value_1 = CValue::get("class_depend_value_1");
+$class_depend_value_2 = CValue::get("class_depend_value_2");
 
-// Si les depend values sont sur des objets
-$class_depend_value_1 = "";
-$class_depend_value_2 = "";
-
-switch ($class) {
-  case "CTransmissionMedicale" :
-    $class_depend_value_2 = "CCategoryPrescription";
-}
+$depend_value_1 = utf8_decode($depend_value_1);
+$depend_value_2 = utf8_decode($depend_value_2);
 
 // Liste des users accessibles
 $listPrat = new CMediusers();
@@ -60,8 +56,18 @@ foreach ($helped as $i => $depend_field) {
     case "CEnumSpec":
       $dependValues[$key] = $spec->_locales;
       break;
+    case "CStrSpec":
+    case "CTextChar":
+    case "CNumcharSpec":
+      if (${$key}) {
+        $dependValues[$key][${$key}] = ${$key};
+      }
+      break;
     case "CRefSpec":
       $dependValues[$key] = array("CRefSpec" => ${'class_'.$key} ? ${'class_'.$key} : $spec->class );
+      if (!${'class_'.$key}) {
+        ${'class_'.$key} = $spec->class;
+      }
   }
 }
 
@@ -91,6 +97,12 @@ $aide = new CAideSaisie();
 if($aide_id) {
   // Chargement de l'aide
   $aide->load($aide_id);
+  if ($aide->depend_value_1 && !array_key_exists($aide->depend_value_1, $dependValues)) {
+    $dependValues["depend_value_1"][$aide->depend_value_1] = $aide->depend_value_1;
+  }
+  if ($aide->depend_value_2 && !array_key_exists($aide->depend_value_2, $dependValues)) {
+    $dependValues["depend_value_2"][$aide->depend_value_2] = $aide->depend_value_2;
+  }
 } else {
   // Nouvelle Aide à la saisie
   $aide->class        = $class;
@@ -107,6 +119,7 @@ if($aide_id) {
     /*case "group":*/ $aide->group_id = $group->_id;
   //}
 }
+
 
 $fields = array(
     "user_id"     => $user_id,
@@ -127,5 +140,9 @@ $smarty->assign("user"         , $user);
 $smarty->assign("group"        , $group);
 $smarty->assign("choicepratcab", $choicepratcab);
 $smarty->assign("fields"       , $fields);
+$smarty->assign("depend_value_1", $depend_value_1);
+$smarty->assign("depend_value_2", $depend_value_2);
+$smarty->assign("class_depend_value_1", $class_depend_value_1);
+$smarty->assign("class_depend_value_2", $class_depend_value_2);
 $smarty->display("vw_edit_aides.tpl");
 ?>

@@ -22,6 +22,7 @@ class CPrescriptionLineMedicament extends CPrescriptionLine {
   var $valide_pharma    = null; 
   var $accord_praticien = null;
   var $voie             = null;
+  var $commentaire         = null;
   
   // Substitution sous forme d'historique
   var $substitution_line_id = null;
@@ -205,6 +206,7 @@ class CPrescriptionLineMedicament extends CPrescriptionLine {
     $specs["_fin_reelle"]            = "dateTime";
     $specs["_debut_reel"]            = "dateTime";
     $specs["_duree"]                 = "num min|0";
+		$specs["commentaire"]            = "text helped|code_ucd";
     return $specs;
   }
   

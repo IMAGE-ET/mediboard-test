@@ -160,11 +160,18 @@
             objectClass: "{{$line->_class_name}}", 
             contextUserId: "{{$_line_praticien_id}}",
             resetSearchField: false,
-            validateOnBlur: false
+            validateOnBlur: false,
+            strict: false,
+            dependField1: getForm("libelleProduit").element_prescription_id
           });
         });
       </script>
-   
+      
+     <!-- Input caché pour l'autocomplete -->
+     <form name="libelleProduit" method="get" action="?">
+       <input type="hidden" name="element_prescription_id" value="{{$line->_ref_element_prescription->libelle}}" />
+     </form>
+     
       <form name="editCommentaire-{{$line->_guid}}" method="post" action="?" onsubmit="return onSubmitFormAjax(this);">
         <input type="hidden" name="m" value="dPprescription" />
         <input type="hidden" name="dosql" value="do_prescription_line_element_aed" />

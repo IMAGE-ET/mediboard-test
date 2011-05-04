@@ -316,7 +316,9 @@
               objectClass: "{{$line->_class_name}}", 
               contextUserId: "{{$_line_praticien_id}}",
               resetSearchField: false,
-  						validateOnBlur: false
+  						validateOnBlur: false,
+              strict: false,
+              dependField1: oFormCommentaireElement.code_ucd
             });
           });
         </script>
@@ -324,6 +326,7 @@
       <form name="editCommentaire-{{$line->_guid}}" method="post" action="?" onsubmit="testPharma({{$line->_id}}); return onSubmitFormAjax(this);">
         <input type="hidden" name="m" value="dPprescription" />
         <input type="hidden" name="dosql" value="do_prescription_line_medicament_aed" />
+        <input type="hidden" name="code_ucd" value="{{$line->code_ucd}}" />
         <input type="hidden" name="del" value="0" />
         {{mb_key object=$line}}
         

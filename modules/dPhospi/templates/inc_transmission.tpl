@@ -62,6 +62,7 @@ Main.add(function() {
       timestamp: "{{$conf.dPcompteRendu.CCompteRendu.timestamp}}",
       dependField1: oFormTrans._type_data,
       dependField2: oFormTrans.cible,
+      classDependField2: "CCategoryPrescription",
       validateOnBlur:0,
       strict: false
     });
@@ -72,6 +73,7 @@ Main.add(function() {
       timestamp: "{{$conf.dPcompteRendu.CCompteRendu.timestamp}}",
       dependField1: oFormTrans._type_action,
       dependField2: oFormTrans.cible,
+      classDependField2: "CCategoryPrescription",
       validateOnBlur:0,
       strict: false
     });
@@ -82,6 +84,7 @@ Main.add(function() {
       timestamp: "{{$conf.dPcompteRendu.CCompteRendu.timestamp}}",
       dependField1: oFormTrans._type_result,
       dependField2: oFormTrans.cible,
+      classDependField2: "CCategoryPrescription",
       validateOnBlur:0,
       strict: false
     });
@@ -91,6 +94,7 @@ Main.add(function() {
       timestamp: "{{$conf.dPcompteRendu.CCompteRendu.timestamp}}",
       dependField1: oFormTrans.type,
       dependField2: oFormTrans.cible,
+      classDependField2: "CCategoryPrescription",
       validateOnBlur:0,
       strict: false
     });

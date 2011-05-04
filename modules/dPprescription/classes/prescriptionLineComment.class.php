@@ -16,6 +16,7 @@ class CPrescriptionLineComment extends CPrescriptionLine {
   var $category_prescription_id  = null;
   var $executant_prescription_line_id = null;
   var $user_executant_id              = null;
+  var $commentaire = null;
   
   // Object references
   var $_ref_category_prescription = null;
@@ -45,6 +46,7 @@ class CPrescriptionLineComment extends CPrescriptionLine {
     $specs["category_prescription_id"]       = "ref class|CCategoryPrescription";
     $specs["executant_prescription_line_id"] = "ref class|CExecutantPrescriptionLine";
     $specs["user_executant_id"]              = "ref class|CMediusers";
+    $specs["commentaire"]                    = "text helped";
     return $specs;
   }
   

@@ -20,6 +20,7 @@ class CPrescriptionLineElement extends CPrescriptionLine {
 	var $ide_domicile = null;
 	var $cip_dm = null;
 	var $quantite_dm = null;
+	var $commentaire = null;
 	
   // Object references
   var $_ref_element_prescription      = null;
@@ -72,6 +73,7 @@ class CPrescriptionLineElement extends CPrescriptionLine {
 		$specs["ide_domicile"]                   = "bool default|0";
 		$specs["cip_dm"]                         = "numchar length|7";
     $specs["quantite_dm"]                    = "float";
+    $specs["commentaire"]                    = "text helped|element_prescription_id";
     return $specs;
   }
   

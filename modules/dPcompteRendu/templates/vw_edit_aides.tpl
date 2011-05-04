@@ -5,13 +5,15 @@ Main.add(function () {
   Control.Tabs.create('tab-modules', false);
 });
 
-function editAide(aide_id, classname, field, user_id) {
+function editAide(aide_id, classname, field, user_id, class_depend_value_1, class_depend_value_2) {
   var url = new Url("dPcompteRendu","edit_aide");
   url.addParam("dialog", 1);
   url.addParam("aide_id", aide_id);
   url.addParam("class", classname);
   url.addParam("field", field);
   url.addParam("user_id", user_id);
+  url.addParam("class_depend_value_1", class_depend_value_1);
+  url.addParam("class_depend_value_2", class_depend_value_2);
   url.redirect();
 }
 
@@ -40,7 +42,8 @@ function changeUser(user_id) {
   <select name="user_id" class="{{$aide->_props.user_id}}" onchange="changeUser(this.value);">
     <option value="">&mdash; {{tr}}CAideSaisie.select-user{{/tr}} &mdash;</option>
     {{foreach from=$listPrat item=curr_prat}}
-      <option class="mediuser" style="border-color: #{{$curr_prat->_ref_function->color}};" value="{{$curr_prat->user_id}}" {{if $curr_prat->user_id == $user->_id}} selected="selected" {{/if}}>
+      <option class="mediuser" style="border-color: #{{$curr_prat->_ref_function->color}};" value="{{$curr_prat->user_id}}"
+        {{if $curr_prat->user_id == $user->_id}} selected="selected" {{/if}}>
         {{$curr_prat}}
       </option>
     {{/foreach}}
@@ -77,7 +80,10 @@ function changeUser(user_id) {
   <table class="form">
     <tr>
       <td colspan="2">
-        <button class="new" type="button" onclick="editAide('','{{$aide->class}}','{{$aide->field}}', '{{$user->_id}}')">Création d'une nouvelle aide</button>
+        <button class="new" type="button" 
+          onclick="editAide('','{{$aide->class}}','{{$aide->field}}', '{{$user->_id}}', '{{$class_depend_value_1}}', '{{$class_depend_value_2}}')">
+         Création d'une nouvelle aide
+        </button>
       </td>
     </tr>
     
@@ -131,7 +137,7 @@ function changeUser(user_id) {
       <tr>
         <th>{{mb_label object=$aide field="depend_value_1"}}</th>
         <td>
-          {{if array_key_exists('CRefSpec', $dependValues.depend_value_1)}}
+          {{if is_array($dependValues.depend_value_1) && array_key_exists('CRefSpec', $dependValues.depend_value_1)}}
             {{assign var=object_class_dp_1 value=$dependValues.depend_value_1.CRefSpec}}
             
             {{mb_field object=$aide field="depend_value_1" hidden=true}}
@@ -182,7 +188,7 @@ function changeUser(user_id) {
       <tr>
         <th>{{mb_label object=$aide field="depend_value_2"}}</th>
         <td>
-          {{if array_key_exists('CRefSpec', $dependValues.depend_value_2)}}
+          {{if is_array($dependValues.depend_value_2) && array_key_exists('CRefSpec', $dependValues.depend_value_2)}}
             {{assign var=object_class_dp_2 value=$dependValues.depend_value_2.CRefSpec}}
             
             {{mb_field object=$aide field="depend_value_2" hidden=true}}
@@ -287,6 +293,8 @@ function changeUser(user_id) {
             {{assign var=key_dp value=$_aide->depend_value_1}}
             {{if array_key_exists($key_dp, $dependValues.depend_value_1)}}
               {{$dependValues.depend_value_1.$key_dp}}
+            {{else}}
+              {{$_aide->depend_value_1}}
             {{/if}}
           {{else}}
             {{$_aide->depend_value_1}}
@@ -297,6 +305,8 @@ function changeUser(user_id) {
             {{assign var=key_dp value=$_aide->depend_value_2}}
             {{if array_key_exists($key_dp, $dependValues.depend_value_2)}}
               {{$dependValues.depend_value_2.$key_dp}}
+            {{else}}
+              {{$_aide->depend_value_2}}
             {{/if}}
           {{else}}
             {{$_aide->depend_value_2}}
