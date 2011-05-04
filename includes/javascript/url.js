@@ -181,11 +181,15 @@ var Url = Class.create({
         sWindowName = sWindowName.replace(/[- '"]/gi, "_");
       }
 
+      var wasClosedBefore = !window.children[sWindowName] || window.children[sWindowName].closed;
+      
       this.oWindow = window.open(oPostParameters ? "" : (sBaseUrl + this.make()), sWindowName, sFeatures);  
       window.children[sWindowName] = this.oWindow;
-
-      this.oWindow.moveTo(features.left, features.top);
-      this.oWindow.resizeTo(features.width, features.height);
+      
+      if (wasClosedBefore) {
+        this.oWindow.moveTo(features.left, features.top);
+        this.oWindow.resizeTo(features.width, features.height);
+      }
       
       if (!this.oWindow)
         return this.showPopupBlockerAlert(sWindowName);

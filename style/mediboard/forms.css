@@ -558,8 +558,9 @@ optgroup.group {
 
 form label.notNull,
 form label.canNull,
-form label.notNullOK,
-form label.checkNull {
+form label.notNullOK
+/*,
+form label.checkNull*/ {
   padding-right: 7px;
   font-weight: bold;
   background-position: center right;
@@ -578,9 +579,11 @@ form label.notNullOK {
   background-image: url(../mediboard/images/icons/notNullOK.png);
 }
 
+/*
 form label.checkNull {
   background-image: url(../mediboard/images/icons/checkNull.png);
 }
+*/
 
 form label.error,
 table.form th.category label.error {

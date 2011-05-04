@@ -312,7 +312,7 @@ function prepareForm(oForm) {
     }
     
     if (oElement.className == "") {
-      //continue; // TODO : this speeds up everything
+      continue; // TODO : this speeds up everything
     }
 		
     var props = oElement.getProperties(),

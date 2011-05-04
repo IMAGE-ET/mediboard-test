@@ -20,6 +20,7 @@ class CApp {
    */
   static function checkPeace() {
     if (!self::$inPeace) {
+      header("HTTP/1.1 500 Application died unexpectedly");
       trigger_error("Application died unexpectedly", E_USER_ERROR);      
     }
   }
