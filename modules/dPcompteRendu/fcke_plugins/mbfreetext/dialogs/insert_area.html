@@ -10,29 +10,10 @@
         font: inherit;
     }
     </style>
-	<script type="text/javascript" src="../../../../../lib/scriptaculous/lib/prototype.js"></script>
+  <script type="text/javascript" src="../../../../../lib/scriptaculous/lib/prototype.js"></script>
   <script type="text/javascript">
-	  var CKEDITOR = window.parent.parent.CKEDITOR;
-
-	  window.onload = function () {
-	    document.getElementById("txtData").focus();
-			CKEDITOR.dialog.getCurrent().on("ok", Ok, null, null, 1);
-	  }
-
-	  var Ok = function(e) {
-	    var content = $('txtData').value;
-        if (content != '') {
-          var sHtml = "<span class='field'>[[Texte libre - " + content + "]]</span>&nbsp;";
-          if (CKEDITOR.env.gecko) {
-            insertSpecialChar(sHtml);
-          } else {
-            CKEDITOR.instances.htmlarea.insertHtml(sHtml);
-          }
-          CKEDITOR.instances.htmlarea.fire("key", []);
-        }
-        return true ;
-	  }
-
+    var CKEDITOR = window.parent.parent.CKEDITOR;
+    
     function insertSpecialChar(specialChar) { 
       var selection = CKEDITOR.instances.htmlarea.getSelection(), 
           ranges    = selection.getRanges(), 
@@ -49,9 +30,33 @@
       range.select(); 
     }
 
-    window.onunload = function() {
-      CKEDITOR.dialog.getCurrent().removeListener("ok", Ok);
+
+    function Ok(e) {
+      var content = $('txtData').value;
+        if (content != '') {
+          var sHtml = "<span class='field'>[[Texte libre - " + content + "]]</span>&nbsp;";
+          if (CKEDITOR.env.gecko) {
+            insertSpecialChar(sHtml);
+          } else {
+            CKEDITOR.instances.htmlarea.insertHtml(sHtml);
+          }
+          CKEDITOR.instances.htmlarea.fire("key", []);
+        }
+        removeListeners();
+        return true ;
     }
+    
+    function removeListeners() {
+      CKEDITOR.dialog.getCurrent().removeListener("ok", Ok);
+      CKEDITOR.dialog.getCurrent().removeListener("cancel", removeListeners);
+    }
+    
+    window.onload = function () {
+      document.getElementById("txtData").focus();
+      CKEDITOR.dialog.getCurrent().on("ok", Ok);
+      CKEDITOR.dialog.getCurrent().on("cancel", removeListeners);
+    }
+
   </script>
 
 </head>
@@ -62,11 +67,11 @@
           Veuillez donner un nom à la zone de texte libre : <input id="txtData" type="text"/> <br />
       </td>
     </tr>
-		<tr id="empty-name" style="display: none;">
-			<td>
-				<div style="font-weight: bold; color: #800;">Le nom doit contenir au moins un caractère</div>
-			</td>
-		</tr>
+    <tr id="empty-name" style="display: none;">
+      <td>
+        <div style="font-weight: bold; color: #800;">Le nom doit contenir au moins un caractère</div>
+      </td>
+    </tr>
   </table>
 </body>
 </html>
