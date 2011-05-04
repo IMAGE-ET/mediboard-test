@@ -326,9 +326,10 @@ class CCompteRendu extends CDocumentItem {
    * @param $prat_id ref|CMediuser L'utilisateur concerné
    * @param $object_class string Nom de la classe d'objet, optionnel. Doit être un CMbObject
    * @param $type enum list|header|body|footer Type de composant, optionnel
+   * @param $fast_edit boolean Inclue les modèles en édition rapide
    * @return array ("prat" => array<CCompteRendu>, "func" => array<CCompteRendu>, "etab" => array<CCompteRendu>)
    */
-  static function loadAllModelesFor($id, $owner = 'prat', $object_class = null, $type = null) {
+  static function loadAllModelesFor($id, $owner = 'prat', $object_class = null, $type = null, $fast_edit = 1) {
     $modeles = array(
       "prat" => array(),
       "func" => array(),
@@ -348,6 +349,11 @@ class CCompteRendu extends CDocumentItem {
     
     if ($type) {
       $where["type"] = "= '$type'";
+    }
+    
+    if (!$fast_edit) {
+      $where["fast_edit"]     = " = '0'";
+      $where["fast_edit_pdf"] = " = '0'";
     }
     
     $order = "object_class, type, nom";

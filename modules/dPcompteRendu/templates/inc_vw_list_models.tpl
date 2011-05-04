@@ -1,4 +1,32 @@
+<script type="text/javascript">
+  Main.add(function() {
+    var url = new Url("dPcompteRendu", "ajax_modele_autocomplete");
+    url.addParam("user_id", "{{$praticien->_id}}");
+    url.addParam("object_class", '{{$class}}');
+    url.addParam("object_id"   , '{{$target_id}}');
+    url.addParam("fast_edit"   , 0);
+    url.autoComplete(getForm("chooseDoc_{{$class}}").keywords_modele, '', {
+      minChars: 2,
+      updateElement: createDoc,
+      dropdown: true,
+      width: "250px"
+    });
+  });
+  function createDoc(selected) {
+    var id = selected.down(".id").innerHTML;
+    setClose(id, '{{$modelesId.$class}}');
+  }
+</script>
+
 <table class="form" id="{{$class}}" style="display: none;">
+  <tr>
+    <td>
+      <!-- Autocomplete pour choisir un modèle -->
+      <form name="chooseDoc_{{$class}}" method="get" action="?">
+        <input type="text" value="&mdash; Modèle" name="keywords_modele" class="autocomplete str" autocomplete="off" style="width: 215px;" />
+      </form>
+    </td>
+  </tr>
   <tr>
   {{foreach from=$modeles item=owned_modeles key=owner}}
     <th class="category">{{tr}}CCompteRendu._owner.{{$owner}}{{/tr}}</th>

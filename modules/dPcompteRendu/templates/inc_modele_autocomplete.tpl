@@ -24,9 +24,8 @@
       {{if $_modele->fast_edit || $_modele->fast_edit_pdf}}
         <img style="float: right;" src="images/icons/lightning.png"/>
       {{/if}}
-      <div {{if $_modele->fast_edit}}class="fast_edit"{{/if}}>
-        {{$_modele->nom|emphasize:$keywords}}
-      </div>
+      
+      <div {{if $_modele->fast_edit}}class="fast_edit"{{/if}}>{{$_modele->nom|emphasize:$keywords}}</div>
       
       <!--{{if $_modele->file_category_id}}
         <small style="color: #666; margin-left: 1em;" class="text">
