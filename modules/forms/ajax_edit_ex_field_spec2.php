@@ -41,6 +41,11 @@ if ($spec_type) {
 
 $spec = CExConcept::getConceptSpec($prop);
 
+// UGLY hack because of the default value of the Boolspec
+if ($spec instanceof CBoolSpec && strpos($prop, "default|") === false) {
+	$spec->default = null;
+}
+
 $exclude = array(
   "confidential", "mask", "format", "reported", 
 	"perm", "seekable", "pattern", "autocomplete", 

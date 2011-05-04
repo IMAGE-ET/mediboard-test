@@ -2,7 +2,7 @@
 //=======================================================================
 // File:  JPGRAPH.PHP
 // Description: PHP Graph Plotting library. Base module.
-// Created:   2001-01-08
+// Created:   2001-01-08 - 2010-12-15
 // Ver:   $Id: jpgraph.php 793 2006-11-16 20:17:32Z ljp $
 //
 // Copyright 2006 (c) Aditus Consulting. All rights reserved.
@@ -6170,7 +6170,7 @@ class Image {
       }
   }
   else {
-      if( strpos("\n",$txt) !== false ) { 
+      if( strpos($txt, "\n") !== false ) { 
     $tmp = explode("\n",$txt);
     for($i=0; $i < count($tmp); ++$i) {
         $w1 = $this->GetTextWidth($tmp[$i]);

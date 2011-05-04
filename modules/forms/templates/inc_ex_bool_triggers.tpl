@@ -32,10 +32,20 @@
       {{/if}}
 			
 			<td style="text-align: center;">
-				<input type="radio" name="default" value="{{$_value}}" {{if $spec->default == $_value}}checked="checked"{{/if}} />
+				<label style="display: block;">
+					<input type="radio" name="default" value="{{$_value}}" {{if $spec->default == $_value}}checked="checked"{{/if}} />
+				</label>
 			</td>
     </tr>
   {{/foreach}}
+	<tr>
+		<td colspan="2">{{tr}}Undefined{{/tr}}</td>
+		<td style="text-align: center;">
+      <label style="display: block;">
+        <input type="radio" name="default" value="" {{if $spec->default == ""}}checked="checked"{{/if}} />
+			</label>
+		</td>
+	</tr>
   </tbody>
 </table>
 
