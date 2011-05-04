@@ -1,20 +1,27 @@
 #!/bin/sh
 
+BASH_PATH=$(dirname $0)
+. $BASH_PATH/utils.sh
+MB_PATH=$(dirname $BASH_PATH)
+
 # Compilation de ttf2ufm
-cd lib/dompdf/lib/ttf2ufm/ttf2ufm-src/
-make all
+make -C $MB_PATH/lib/dompdf/lib/ttf2ufm/src/ all
 
 # Création du répertoires temporaires
-cd ../../../../../shell
-mkdir temp_fonts
+cd $MB_PATH/tmp
+mkdir tmp_fonts
 
-cd temp_fonts
+cd tmp_fonts
 
 # Récupération des polices
-wget -i ../font_list.txt
+wget -i ../../shell/font_list.txt
+
+check_errs $? "Failed to get the fonts" "Fonts getted!"
 
 # Extraction de toutes ces polices
 cabextract --lowercase *.exe
+
+check_errs $? "Failed to extract fonts" "Fonts extracted!"
 
 # Conversion en afm de ces polices et installation
 php ../../lib/dompdf/load_font.php Arial arial.ttf arialbd.ttf ariali.ttf arialbi.ttf
@@ -26,4 +33,6 @@ php ../../lib/dompdf/load_font.php 'Times New Roman' times.ttf timesbd.ttf times
 
 # Nettoyage
 cd ../
-rm -Rf temp_fonts
+rm -Rf tmp_fonts
+
+check_errs $? "Failed to remove tmp_fonts directory" "tmp_fonts directory removed!"
