@@ -201,6 +201,7 @@ function toggleColumn(className) {
 Main.add(function () {
   if (window.opener && window.opener.onMergeComplete) {
     window.opener.onMergeComplete();
+		window.close();
   }
 } );
 
