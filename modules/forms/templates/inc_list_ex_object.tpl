@@ -49,8 +49,9 @@ Main.add(function(){
 	  <table class="main tbl vertical" style="width: 1%;">
 		  <!-- First line -->
 		  <tr>
-	      <th class="narrow"></th>
-	      <th class="narrow"></th>
+	      <th class="narrow">
+	      </th>
+	      <th style="min-width: 20em;">Champ</th>
 			  {{foreach from=$_ex_objects item=_ex_object name=_ex_object}}
 				  <th class="narrow">
 				  	{{mb_value object=$_ex_object->_ref_first_log field=date}}
@@ -61,12 +62,12 @@ Main.add(function(){
 			
 		  {{foreach from=$_ex_obj->_ref_ex_class->_ref_groups item=_ex_group name=_ex_group}}
 				<tr>
-					<th rowspan="{{$_ex_group->_ref_fields|@count}}" style="word-wrap: break-word; white-space: normal;">
-						<span>{{$_ex_group}}</span>
+					<th rowspan="{{$_ex_group->_ref_fields|@count}}">
+						{{vertical}}{{$_ex_group}}{{/vertical}}
 					</th>
 					
 	        {{foreach from=$_ex_group->_ref_fields item=_ex_field}}
-					  <td style="font-weight: bold;">
+					  <td class="text" style="font-weight: bold;">
 						  {{mb_label object=$_ex_obj field=$_ex_field->name}}</span>
 						</td>
 						

@@ -44,17 +44,4 @@
 	</table>
 </form>
 
-<style type="text/css">
-.vertical th span {
-  writing-mode:tb-rl;
-  /*-webkit-transform:rotate(90deg);
-  -moz-transform:rotate(90deg);
-  -o-transform: rotate(90deg);
-  white-space:nowrap;
-  display:block;
-	position: absolute;
-  bottom:0;*/
-}
-</style>
-
 <div id="list-ex_object"></div>

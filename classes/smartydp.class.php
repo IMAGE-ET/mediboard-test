@@ -36,6 +36,26 @@ function do_translation($params, $content, &$smarty, &$repeat) {
   }
 }
 
+/*
+ * Diplays veritcal text
+ */
+function smarty_vertical($params, $content, &$smarty, &$repeat) {
+  if (isset($content)) {
+  	$orig = $content;
+    $content = strip_tags($content);
+		$content = preg_replace("/\s+/", chr(0xA0), $content); // == nbsp
+		
+		$letters = str_split($content);
+		
+		$html = "";
+		foreach($letters as $_letter) {
+			$html .= "<div>$_letter</div>";
+		}
+		
+		return "<span class=\"vertical\"><span class=\"nowm\">$html</span><span class=\"orig\">$orig</span></span>";
+  }
+}
+
 function script_main($params, $content, &$smarty, &$repeat){
   // Let the whitespace around $content
   return "
@@ -643,6 +663,7 @@ class CSmartyDP extends Smarty {
     $this->register_block   ("tr"                , "do_translation"); 
     $this->register_block   ("main"              , "script_main"); 
     $this->register_block   ("mb_form"           , "mb_form"); 
+    $this->register_block   ("vertical"          , "smarty_vertical"); 
     $this->register_function("thumb"             , "thumb");
     $this->register_function("unique_id"         , "smarty_function_unique_id");
     $this->register_function("mb_default"        , "smarty_function_mb_default");
