@@ -67,7 +67,12 @@ function initCKEditor() {
 		  window.resizeEditor();
     });
 		{{if $templateManager->printMode}}
-      CKEDITOR.instances.htmlarea.document.getBody().$.contentEditable=false;
+      CKEDITOR.instances.htmlarea.element.$.disabled=true;
+      CKEDITOR.instances.htmlarea.element.$.contentEditable=false;
+      CKEDITOR.instances.htmlarea.element.$.designMode="Off";
+      ck_instance.on('key', function(keyEvent) {
+        keyEvent.cancel();
+      });
     {{else}}
 		  {{if $pdf_thumbnails && $app->user_prefs.pdf_and_thumbs}}
   		  Thumb.content = ck_instance.getData();
