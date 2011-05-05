@@ -105,7 +105,8 @@ onMergeComplete = function() {
           <input type="checkbox" name="objects_id[]" value="{{$_sejour->_id}}" class="merge" style="float: left;"
             {{if $conf.alternative_mode}}onclick="checkOnlyTwoSelected(this)"{{/if}} />
         {{/if}}
-        <a href="#" onclick="{{if $can_view_dossier_medical}}loadSejour('{{$_sejour->_id}}');{{else}}viewCompleteItem('{{$_sejour->_guid}}');{{/if}} ViewFullPatient.select(this)">
+        <a href="#" onclick="{{if $can_view_dossier_medical}}loadSejour('{{$_sejour->_id}}');{{else}}viewCompleteItem('{{$_sejour->_guid}}');{{/if}} ViewFullPatient.select(this)"
+          {{if $can->admin}}style="padding-right: 14px;"{{/if}}>
           <span onmouseover="ObjectTooltip.createEx(this, '{{$_sejour->_guid}}');">
             {{$_sejour->_shortview}} 
           </span>
