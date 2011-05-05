@@ -74,7 +74,7 @@ Main.add(function(){
             <td colspan="2">
               {{if $ex_class->_id}}
                 <button type="submit" class="modify">{{tr}}Save{{/tr}}</button>
-                <button type="button" class="trash" onclick="confirmDeletion(this.form,{ajax:true,typeName:'la classe étendue ',objName:'{{$ex_class->_view|smarty:nodefaults|JSAttribute}}'})">
+                <button type="button" class="trash" onclick="confirmDeletion(this.form,{ajax:true,typeName:'le formulaire ',objName:'{{$ex_class->_view|smarty:nodefaults|JSAttribute}}'})">
                   {{tr}}Delete{{/tr}}
                 </button>
               {{else}}

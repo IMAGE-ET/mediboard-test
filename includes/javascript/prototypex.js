@@ -242,6 +242,20 @@ Class.extend(Autocompleter.Base, {
   }
 });
 
+
+// FIX in Scriptaculous
+Droppables.isAffected = function(point, element, drop) {
+  Position.prepare();
+  return (
+    (drop.element!=element) &&
+    ((!drop._containers) ||
+      this.isContained(element, drop)) &&
+    ((!drop.accept) ||
+      (Element.classNames(element).detect(
+        function(v) { return drop.accept.include(v) } ) )) &&
+    Position.withinIncludingScrolloffsets(drop.element, point[0], point[1]) );
+};
+
 Class.extend(Ajax.Request, {
   abort: function() {
     this.transport.abort();
