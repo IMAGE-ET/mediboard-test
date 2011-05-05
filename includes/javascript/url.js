@@ -110,7 +110,7 @@ var Url = Class.create({
   },
   
   make: function(questionMark) {
-    var sUrl = questionMark ? "&" : "?" + $H(this.oParams).toQueryString();
+    var sUrl = (questionMark ? "&" : "?") + $H(this.oParams).toQueryString();
     if (this.sFragment) sUrl += "#"+this.sFragment;
     return sUrl;
   },
