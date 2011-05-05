@@ -9,7 +9,7 @@ reloadCallback = function() {
   }
   // Redirection du message de l'iframe dans le systemMsg
   var systemMsg = $("systemMsg").update();
-  systemMsg.insert(window.parent.$("upload-{{$object->_guid}}").contentDocument.documentElement.getElementsByClassName("info")[0]);
+  systemMsg.insert(window.parent.$("upload-{{$object->_guid}}").contentDocument.documentElement.getElementsByClassName("info")[0].cloneNode(true));
   systemMsg.show();
   window.parent.$("upload-{{$object->_guid}}").up().up().select(".cancel")[0].click();
 }
@@ -21,10 +21,27 @@ showLoading = function(){
 }
 
 var count_files = 0;
+// Les images ne sont pas converties en PDF,
+// donc le bouton de fusion reste grisé tant que l'on rajoute une image
+var extensions = ["bmp", "gif", "jpeg", "jpg", "png"];
 
 addFile = function(elt) {
+  {{if $conf.dPfiles.CFile.merge_to_pdf}}
+    var add_and_merge = $("add_and_merge");
+    
+    var oForm = getForm("uploadFrm");
+    
+    if (add_and_merge.disabled) {
+      var name_file = oForm.elements["formfile["+count_files+"]"].value;
+      var extension = name_file.substring(name_file.lastIndexOf(".")+1);
+    
+      if (extensions.indexOf(extension) == -1) {
+        add_and_merge.disabled = "";
+      }
+    }
+  {{/if}}
+    
   count_files ++;
-  
   // Incrément du rowspan pour le th du label
   var label = $("labelfile-{{$object->_id}}");
   label.writeAttribute("rowspan", count_files + 1);
@@ -55,6 +72,7 @@ addFile = function(elt) {
 <input type="hidden" name="object_class" value="{{$object->_class_name}}" />
 <input type="hidden" name="object_id" value="{{$object->_id}}" />
 <input type="hidden" name="for_identite" value="{{$for_identite}}" />
+<input type="hidden" name="_merge_files" value="0" />
 {{if $for_identite}}
   <input type="hidden" name="_rename" value="{{$_rename}}" />
 {{/if}}
@@ -124,6 +142,11 @@ addFile = function(elt) {
   <tr>
     <td class="button" colspan="7">
       <button class="submit" type="submit" onclick="showLoading();">{{tr}}Add{{/tr}}</button>
+      {{if $conf.dPfiles.CFile.merge_to_pdf}}
+        <button class="hslip" id="add_and_merge" disabled="disabled" onclick="$V(this.form._merge_files, 1); this.form.submit(); showLoading();">
+          {{tr}}CFile-_add_and_merge{{/tr}}
+        </button>
+      {{/if}}
     </td>
   </tr>
 

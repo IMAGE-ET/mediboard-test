@@ -77,59 +77,156 @@ class CFileAddEdit extends CDoObjectAddEdit {
         if (!$for_identite) {
           $rename = $rename ? $rename . strrchr($upload["name"][$fileNumber], '.') : "";
         }
-        
-        $aFiles[] = array(
-          "name"             => $upload["name"][$fileNumber],
-          "type"             => $upload["type"][$fileNumber],
-          "tmp_name"         => $upload["tmp_name"][$fileNumber],
-          "error"            => $upload["error"][$fileNumber],
-          "size"             => $upload["size"][$fileNumber],
-          "file_category_id" => $_file_category_id,
-          "object_id"        => CValue::post("object_id"),
-          "object_class"     => CValue::post("object_class"),
-          "_rename"          => $rename
-        );
+
+        if ($upload["name"][$fileNumber]) {
+          $aFiles[] = array(
+            "name"             => $upload["name"][$fileNumber],
+            "type"             => $upload["type"][$fileNumber],
+            "tmp_name"         => $upload["tmp_name"][$fileNumber],
+            "error"            => $upload["error"][$fileNumber],
+            "size"             => $upload["size"][$fileNumber],
+            "file_category_id" => $_file_category_id,
+            "object_id"        => CValue::post("object_id"),
+            "object_class"     => CValue::post("object_class"),
+            "_rename"          => $rename
+          );
+        }
       }
-
-      foreach ($aFiles as $file) {
-        if ($file["error"] == UPLOAD_ERR_NO_FILE) {
-          continue;
-        }
-        
-        if ($file["error"] != 0) {
-          CAppUI::setMsg(CAppUI::tr("CFile-msg-upload-error-".$file["error"]), UI_MSG_ERROR);
-          continue;
-        }
-        
-        // Reinstanciate
-
+      
+      $merge_files = CValue::post("_merge_files");
+      
+      if ($merge_files) {
+        CAppUI::requireLibraryFile("PDFMerger/PDFMerger");
+        $pdf = new PDFMerger;
         $this->_obj = new $this->_obj->_class_name;
         $obj = $this->_obj;
+        $file_name = "";
+        $nb_converted = 0;
+
+        foreach($aFiles as $key=>$file) {
+          $converted = 0;
+          if ($file["error"] == UPLOAD_ERR_NO_FILE) {
+              continue;
+          }
+          
+          if ($file["error"] != 0) {
+            CAppUI::setMsg(CAppUI::tr("CFile-msg-upload-error-".$file["error"]), UI_MSG_ERROR);
+            continue;
+          }
+          
+          // Si c'est un pdf, on le rajoute sans aucun traitement
+          if (substr(strrchr($file["name"], '.'),1) == "pdf") {
+            $file_name .= substr($file["name"], 0, strpos($file["name"], '.'));
+            $pdf->addPDF($file["tmp_name"], 'all');
+            $nb_converted ++;
+            $converted = 1;
+          }
+          // Si le fichier est convertible en pdf
+          else if ($obj->isPDFconvertible($file["name"]) && $obj->convertToPDF($file["tmp_name"], $file["tmp_name"]."_converted")) {
+            $pdf->addPDF($file["tmp_name"]."_converted", 'all'); 
+            $file_name .= substr($file["name"], 0, strpos($file["name"], '.'));
+            $nb_converted ++;
+            $converted = 1;
+          }
+          // Sinon création d'un cfile
+          else {
+            $other_file = new CFile;
+            $other_file->bind($file);
+            $other_file->file_name = $file["name"];
+            $other_file->file_type = $file["type"];
+            $other_file->file_size = $file["size"];
+            $other_file->fillFields();
+            $other_file->private = CValue::post("private");
+            
+            if (false == $res = $other_file->moveTemp($file)) {
+              CAppUI::setMsg("Fichier non envoyé", UI_MSG_ERROR);
+              continue;
+            }
+            $other_file->file_owner = CAppUI::$user->_id;
+  
+            if ($msg = $other_file->store()) {
+              CAppUI::setMsg("Fichier non enregistré: $msg", UI_MSG_ERROR);
+              continue;
+            }
+  
+            CAppUI::setMsg("Fichier enregistré", UI_MSG_OK);
+          }
+          // Pour le nom du pdf de fusion, on concatène les noms des fichiers
+          if ($key != count($aFiles)-1 && $converted) {
+            $file_name .= "-";
+          }
+        }
         
-        $obj->bind($file);
-        $obj->file_name = empty($file["_rename"]) ? $file["name"] : $file["_rename"];
-        $obj->file_type = $file["type"];
-        $obj->file_size = $file["size"];
-        $obj->fillFields();
-        $obj->private   = CValue::post("private");
-        if (false == $res = $obj->moveTemp($file)) {
-          CAppUI::setMsg("Fichier non envoyé", UI_MSG_ERROR);
-          continue;
+        // Si des fichiers ont été convertis et ajoutés à PDFMerger,
+        // création du cfile.
+        if ($nb_converted) {
+          $obj->file_name = $file_name.".pdf";
+          $obj->file_type = "application/pdf";
+          $obj->file_owner = CAppUI::$user->_id;
+          $obj->private = CValue::post("private");
+          $obj->object_id = CValue::post("object_id");
+          $obj->object_class = CValue::post("object_class");
+          $obj->updateFormFields();
+          $obj->fillFields();
+          $obj->forceDir();
+          $tmpname = tempnam("/tmp", "pdf_");
+          $pdf->merge('file', $tmpname);
+          $obj->file_size = strlen(file_get_contents($tmpname));
+          $obj->moveFile($tmpname);
+          //rename($tmpname, $obj->_file_path . "/" .$obj->file_real_filename);
+          
+          if ($msg = $obj->store()) {
+            CAppUI::setMsg("Fichier non enregistré: $msg", UI_MSG_ERROR);
+          }
+          else {
+            CAppUI::setMsg("Fichier enregistré", UI_MSG_OK);
+          }
         }
-
-        // File owner on creation
-        if (!$obj->file_id) {
-          $obj->file_owner = $AppUI->user_id;
-        }
-
-        if ($msg = $obj->store()) {
-          CAppUI::setMsg("Fichier non enregistré: $msg", UI_MSG_ERROR);
-          continue;
-        }
-
-        CAppUI::setMsg("Fichier enregistré", UI_MSG_OK);
       }
-
+      else {
+        foreach ($aFiles as $file) {
+          if ($file["error"] == UPLOAD_ERR_NO_FILE) {
+            continue;
+          }
+          
+          if ($file["error"] != 0) {
+            CAppUI::setMsg(CAppUI::tr("CFile-msg-upload-error-".$file["error"]), UI_MSG_ERROR);
+            continue;
+          }
+          
+          // Reinstanciate
+  
+          $this->_obj = new $this->_obj->_class_name;
+          $obj = $this->_obj;
+          $obj->bind($file);
+          $obj->file_name = empty($file["_rename"]) ? $file["name"] : $file["_rename"];
+          $obj->file_type = $file["type"];
+           
+          if ($obj->file_type == "application/x-download") {
+            $obj->file_type = CMbPath::guessMimeType($obj->file_name);
+          }
+          
+          $obj->file_size = $file["size"];
+          $obj->fillFields();
+          $obj->private   = CValue::post("private");
+          if (false == $res = $obj->moveTemp($file)) {
+            CAppUI::setMsg("Fichier non envoyé", UI_MSG_ERROR);
+            continue;
+          }
+  
+          // File owner on creation
+          if (!$obj->file_id) {
+            $obj->file_owner = CAppUI::$user->_id;
+          }
+  
+          if ($msg = $obj->store()) {
+            CAppUI::setMsg("Fichier non enregistré: $msg", UI_MSG_ERROR);
+            continue;
+          }
+  
+          CAppUI::setMsg("Fichier enregistré", UI_MSG_OK);
+        }
+      }
       // Redaction du message et renvoi
       if (@count($AppUI->messages[UI_MSG_OK]) && $this->redirectStore) {
         $this->redirect =& $this->redirectStore;

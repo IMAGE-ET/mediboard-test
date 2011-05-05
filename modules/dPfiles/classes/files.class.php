@@ -35,7 +35,8 @@ class CFile extends CDocumentItem {
   // Behavior fields
   var $_rotate      = null;
 	var $_rename      = null;
-
+  var $_merge_files = null;
+  
   // References
   var $_ref_file_owner = null;
 
@@ -86,6 +87,7 @@ class CFile extends CDocumentItem {
 		// Behavior fields
     $specs["_rotate"]       = "enum list|left|right";
     $specs["_rename"]       = "str";
+    $specs["_merge_files"]  = "bool";
     return $specs;
   }
   
@@ -384,38 +386,49 @@ class CFile extends CDocumentItem {
     }
   }
   
-  function isPDFconvertible() {
+  function isPDFconvertible($file_name = null) {
+    if (!$file_name) {
+      $file_name = $this->file_name;
+    }
     return
-      in_array(substr(strrchr($this->file_name, '.'),1), preg_split("/[\s]+/", CFile::$file_types)) &&
+      in_array(substr(strrchr($file_name, '.'),1), preg_split("/[\s]+/", CFile::$file_types)) &&
       (CAppUI::conf("dPfiles CFile ooo_active") == 1);
   }
  
-  function convertToPDF() {
-    // Vérifier si openoffice est lancé
+  function openoffice_launched() {
     exec("sh shell/ooo_state.sh", $res);
-
-    if ($res[0] == 0 ){
+    return $res[0];
+  }
+  
+  function convertToPDF($file_path = null, $pdf_path = null) {
+    // Vérifier si openoffice est lancé
+    if (!$this->openoffice_launched() ){
       return 0;
     }
     
-    $file = new CFile();
-    $file->setObject($this);
-    $file->private = $this->private;
-    $file->file_name  = $this->file_name . ".pdf";
-    $file->file_type  = "application/pdf";
-    $file->file_owner = CAppUI::$user->_id;
-    $file->fillFields();
-    $file->updateFormFields();
-    $file->forceDir();
-    $save_name = $this->_file_path;
-    
-    if ($msg = $file->store()) {
-      CAppUI::setMsg($msg, UI_MSG_ERROR);
-      return 0;
+    if (!$file_path && !$pdf_path) {
+      $file = new CFile();
+      $file->setObject($this);
+      $file->private = $this->private;
+      $file->file_name  = $this->file_name . ".pdf";
+      $file->file_type  = "application/pdf";
+      $file->file_owner = CAppUI::$user->_id;
+      $file->fillFields();
+      $file->updateFormFields();
+      $file->forceDir();
+      $save_name = $this->_file_path;
+      
+      if ($msg = $file->store()) {
+        CAppUI::setMsg($msg, UI_MSG_ERROR);
+        return 0;
+      }
+      $file_path = $this->_file_path;
+      $pdf_path  = $file->_file_path;
     }
+    
     $path_python = CAppUI::conf("dPfiles CFile python_path") ? CAppUI::conf("dPfiles CFile python_path") ."/": "";
     
-    $res = exec("{$path_python}python ./modules/dPfiles/script/doctopdf.py {$this->_file_path} {$file->_file_path}");
+    $res = exec("{$path_python}python ./modules/dPfiles/script/doctopdf.py {$file_path} {$pdf_path}");
 
     return $res;
   }

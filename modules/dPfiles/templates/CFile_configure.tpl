@@ -13,7 +13,9 @@
   {{assign var=class value=""}}
   {{mb_include module=system template=inc_config_str var=upload_max_filesize maxlength=4 size=2}}
   {{mb_include module=system template=inc_config_str var=extensions_yoplet}}
-
+  {{assign var=class value="CFile"}}
+  {{mb_include module=system template=inc_config_bool var=merge_to_pdf}}
+  
   <tr>
     <td class="button" colspan="100">
       <button class="modify" type="submit">{{tr}}Save{{/tr}}</button>
