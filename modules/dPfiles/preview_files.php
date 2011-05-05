@@ -205,6 +205,24 @@ if($popup==1){
       }
     }
     
+    // Récupération des destinataires pour l'envoi par mail
+    $destinataires = array();
+    CDestinataire::makeAllFor($object);
+    $list_destinataires = CDestinataire::$destByClass;
+    
+    foreach($list_destinataires as $_destinataires_by_class) {
+      foreach($_destinataires_by_class as $_destinataire) {
+        if (!isset($_destinataire->nom) || strlen($_destinataire->nom) == 0 || $_destinataire->nom === " ") continue;
+        $destinataires[] =
+          array("nom"   => $_destinataire->nom,
+                "email" => $_destinataire->email,
+                "tag"   => $_destinataire->tag);
+      }
+    }
+    
+    $exchange_source = CExchangeSource::get("mediuser-".CAppUI::$user->_id);
+    $smarty->assign("exchange_source", $exchange_source);
+    $smarty->assign("destinataires"  , $destinataires);
     $smarty->assign("nonavig"  , $nonavig);
     $smarty->assign("filePrev" , $fileprev);
     $smarty->assign("fileNext" , $filenext);

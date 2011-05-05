@@ -116,12 +116,13 @@
           </select>
         </td>
       {{/if}}
-      <br />
+      
       {{if $footers|@count > 0}}
-      <th>
-       {{mb_label object=$compte_rendu field=footer_id}} :
-       </th>
-       <td>
+        <br />
+        <th>
+          {{mb_label object=$compte_rendu field=footer_id}} :
+        </th>
+        <td>
           <select name="footer_id" onchange="Thumb.old();" class="{{$compte_rendu->_props.footer_id}}" style="width: 15em;">
             <option value="">&mdash; {{tr}}CCompteRendu-set-footer{{/tr}}</option>
             {{foreach from=$footers item=footersByOwner key=owner}}

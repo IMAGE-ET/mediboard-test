@@ -10,7 +10,9 @@
 
 <script type="text/javascript">
   var destinataires = window.opener.destinataires;
-  var CKEDITOR = window.opener.CKEDITOR; 
+  {{if $type == "doc"}}
+    var CKEDITOR = window.opener.CKEDITOR;
+  {{/if}} 
   Main.add(function() {
     var tabMail = $("tabMail");
     destinataires.each(function(item) {
@@ -74,7 +76,12 @@
       var url = new window.opener.Url("dPcompteRendu", "ajax_send_mail");
       url.addParam("nom", nom);
       url.addParam("email", email);
-      url.addParam("content", CKEDITOR.instances.htmlarea.getData());
+      url.addParam("type", '{{$type}}');
+      {{if $type == "doc"}}
+        url.addParam("content", CKEDITOR.instances.htmlarea.getData());
+      {{else}}
+        url.addParam("file_id", window.opener.file_id);
+      {{/if}}
       window.opener.document.body.down("#systemMsg").style.display="block";
       url.requestUpdate(window.opener.document.body.down("#systemMsg"), {method: 'post', getParameters: {m: 'dPcompteRendu', a: 'ajax_send_mail'}});
       window.close();

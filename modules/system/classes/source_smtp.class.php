@@ -81,8 +81,8 @@ class CSourceSMTP extends CExchangeSource {
     $this->_mail->AltBody = "Pour visualiser ce message, veuillez utiliser un client mail compatible HTML"; // optional - MsgHTML will create an alternate automatically
   }
   
-  function addAttachment($file_path) {
-    $this->_mail->AddAttachment($file_path);
+  function addAttachment($file_path, $name='') {
+    $this->_mail->AddAttachment($file_path, $name);
   }
   
   function addEmbeddedImage($file_path, $cid) {

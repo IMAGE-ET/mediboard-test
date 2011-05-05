@@ -8,6 +8,14 @@ function goToPage(numpage){
 window.onbeforeunload= function () {
 }
 
+function openWindowMail() {
+  var url = new Url("dPcompteRendu", "ajax_view_mail");
+  url.addParam("type", "file");
+  url.popup(700, 320, "Envoi mail");
+}
+
+window.destinataires = {{"utf8_encode"|array_map_recursive:$destinataires|@json|smarty:nodefaults}};
+window.file_id = {{$fileSel->_id}};
 </script>
 
 <table class="main form">
@@ -22,7 +30,6 @@ window.onbeforeunload= function () {
       {{tr}}CDocumentItem-next{{/tr}}
     </button>
   {{/if}}
-  
 	<!-- Nom du fichier -->
   {{if $fileSel}}
     <strong>
@@ -45,6 +52,12 @@ window.onbeforeunload= function () {
       {{mb_label object=$fileSel field=file_date}} :
       {{mb_value object=$fileSel field=file_date}}
     {{/if}}
+    
+    {{if $exchange_source->_id}}
+      <br />
+      <button type="button" class="mail" onclick="openWindowMail();">{{tr}}CCompteRendu.send_mail{{/tr}}</button>
+    {{/if}}
+    
   {{/if}}
 </div>
 

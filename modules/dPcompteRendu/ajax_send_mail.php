@@ -10,14 +10,24 @@
 
 $nom     = CValue::post("nom");
 $email   = CValue::post("email");
+$type    = CValue::post("type");
+$file_id = CValue::post("file_id");
 
-$content = stripslashes(CValue::post("content"));
+// CCompteRendu
+if ($type == "doc") {
+  $content = stripslashes(CValue::post("content"));
+  // L'attribut css height dans l'attribut style d'une image est remplacé par height-min
+  // Il faut donc le remplacer par l'attribut height de l'image.l
+  $content = preg_replace("/height\s*:\s*([0-9]*)px\s*;/i","\" height=\"$1\" style=\"", $content);
+  
+  preg_match_all("/<img[^>]*src\s*=\s*[\"']([^\"']+)[\"'][^>]*>/i", $content, $matches);
+}
+// CFile
+else {
+  $file = new CFile;
+  $file->load($file_id);
+}
 
-// L'attribut css height dans l'attribut style d'une image est remplacé par height-min
-// Il faut donc le remplacer par l'attribut height de l'image.l
-$content = preg_replace("/height\s*:\s*([0-9]*)px\s*;/i","\" height=\"$1\" style=\"", $content);
-
-preg_match_all("/<img[^>]*src\s*=\s*[\"']([^\"']+)[\"'][^>]*>/i", $content, $matches);
 
 $exchange_source = CExchangeSource::get("mediuser-" . CAppUI::$user->_id);
 
@@ -25,15 +35,23 @@ $exchange_source->init();
 
 try {
   $exchange_source->setRecipient($email, $nom);
-  $exchange_source->setSubject("Envoi de compte-rendu");
   
-  // Inclusion des images contenues dans le compte-rendu
-  foreach ($matches[1] as $key=>$_match) {
-    $content = str_replace($_match, "cid:$key", $content);
-    $exchange_source->addEmbeddedImage($_SERVER['DOCUMENT_ROOT'] . $_match, $key);
-  }
+  if ($type == "doc") {
+    $exchange_source->setSubject("Mediboard - Envoi de compte-rendu");
+    // Inclusion des images contenues dans le compte-rendu
+    foreach ($matches[1] as $key=>$_match) {
+      $content = str_replace($_match, "cid:$key", $content);
+      $exchange_source->addEmbeddedImage($_SERVER['DOCUMENT_ROOT'] . $_match, $key);
+    }
 
-  $exchange_source->setBody($content);
+    $exchange_source->setBody($content);
+  }
+  else {
+    $exchange_source->setSubject("Mediboard - Envoi de fichier");
+    $exchange_source->addAttachment($file->_file_path, $file->file_name);
+    $exchange_source->setBody("Ce document vous a été envoyé via l'application Mediboard.");
+  }
+  
   $exchange_source->send();
   CAppUI::displayAjaxMsg("Message envoyé");
   } catch(phpmailerException $e) {
