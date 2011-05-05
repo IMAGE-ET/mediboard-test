@@ -137,7 +137,7 @@ var Protocole = {
       return;
     }
     if (parseInt($V(oForm.lower_bound)) > parseInt($V(oForm.upper_bound))) {
-      alert("{{tr}}CPrescription.export_error_intervalle{{/tr}}");
+      alert("Erreur d'intervalle !");
       return;
     }
     oForm.submit();

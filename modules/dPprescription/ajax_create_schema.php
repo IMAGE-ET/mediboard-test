@@ -192,6 +192,16 @@ $fast_access_node->setAttribute("name", "fast_access");
 $fast_access_node->setAttribute("type", "xsd:string");
 $complexType->appendChild($fast_access_node);
 
+$advanced_protocole_node = $xsd->createElement("xsd:attribute");
+$advanced_protocole_node->setAttribute("name", "advanced_protocole");
+$advanced_protocole_node->setAttribute("type", "xsd:string");
+$complexType->appendChild($advanced_protocole_node);
+
+$protocole_id_node = $xsd->createElement("xsd:attribute");
+$protocole_id_node->setAttribute("name", "protocole_id");
+$protocole_id_node->setAttribute("type", "xsd:string");
+$complexType->appendChild($protocole_id_node);
+
 $debug = false;
 
 if ($debug) {

@@ -109,8 +109,6 @@
             <xsd:element name="time_arret" type="MBtime" minOccurs="0"/>
             <!--En accord avec le praticien-->
             <xsd:element name="accord_praticien" type="MBbool" minOccurs="0"/>
-            <!--Décalage intervention-->
-            <xsd:element name="decalage_interv" type="MBint" minOccurs="0"/>
             <!--Commentaire-->
             <xsd:element name="commentaire" type="xsd:string" minOccurs="0"/>
             <!--Type de ligne-->
@@ -208,12 +206,24 @@
             <xsd:element name="conditionnel" type="MBbool" minOccurs="0"/>
             <!--Condition active-->
             <xsd:element name="condition_active" type="MBbool" minOccurs="0"/>
+            <!--Per-op-->
+            <xsd:element name="perop" type="MBbool" minOccurs="0"/>
+            <!--Volume-->
+            <xsd:element name="volume_debit" type="MBfloat" minOccurs="0"/>
+            <!--Durée-->
+            <xsd:element name="duree_debit" type="MBint" minOccurs="0"/>
+            <!--Décalage intervention-->
+            <xsd:element name="decalage_line" type="MBint" minOccurs="0"/>
             <!--Jour de décalage-->
             <xsd:element name="jour_decalage" minOccurs="0">
               <xsd:simpleType>
                 <xsd:restriction base="xsd:string">
+                  <!--E-->
+                  <xsd:enumeration value="E"/>
                   <!--I-->
                   <xsd:enumeration value="I"/>
+                  <!--S-->
+                  <xsd:enumeration value="S"/>
                   <!--M-->
                   <xsd:enumeration value="N"/>
                   <!--^CPrescriptionLineMix.jour_decalage.^-->
@@ -221,12 +231,47 @@
                 </xsd:restriction>
               </xsd:simpleType>
             </xsd:element>
-            <!--Per-op-->
-            <xsd:element name="perop" type="MBbool" minOccurs="0"/>
-            <!--Volume-->
-            <xsd:element name="volume_debit" type="MBfloat" minOccurs="0"/>
-            <!--Durée-->
-            <xsd:element name="duree_debit" type="MBint" minOccurs="0"/>
+            <!--^CPrescriptionLineMix-unite_decalage^-->
+            <xsd:element name="unite_decalage" minOccurs="0">
+              <xsd:simpleType>
+                <xsd:restriction base="xsd:string">
+                  <!--jour(s)-->
+                  <xsd:enumeration value="jour"/>
+                  <!--heure(s)-->
+                  <xsd:enumeration value="heure"/>
+                  <!--^CPrescriptionLineMix.unite_decalage.^-->
+                  <xsd:enumeration value=""/>
+                </xsd:restriction>
+              </xsd:simpleType>
+            </xsd:element>
+            <!--^CPrescriptionLineMix-decalage_line_fin^-->
+            <xsd:element name="decalage_line_fin" type="MBint" minOccurs="0"/>
+            <!--^CPrescriptionLineMix-jour_decalage_fin^-->
+            <xsd:element name="jour_decalage_fin" minOccurs="0">
+              <xsd:simpleType>
+                <xsd:restriction base="xsd:string">
+                  <!--I-->
+                  <xsd:enumeration value="I"/>
+                  <!--S-->
+                  <xsd:enumeration value="S"/>
+                  <!--^CPrescriptionLineMix.jour_decalage_fin.^-->
+                  <xsd:enumeration value=""/>
+                </xsd:restriction>
+              </xsd:simpleType>
+            </xsd:element>
+            <!--^CPrescriptionLineMix-unite_decalage_fin^-->
+            <xsd:element name="unite_decalage_fin" minOccurs="0">
+              <xsd:simpleType>
+                <xsd:restriction base="xsd:string">
+                  <!--jour(s)-->
+                  <xsd:enumeration value="jour"/>
+                  <!--heure(s)-->
+                  <xsd:enumeration value="heure"/>
+                  <!--^CPrescriptionLineMix.unite_decalage_fin.^-->
+                  <xsd:enumeration value=""/>
+                </xsd:restriction>
+              </xsd:simpleType>
+            </xsd:element>
           </xsd:all>
           <!--Ligne-->
           <xsd:attribute name="prescription_line_mix_id" type="xsd:string"/>
@@ -242,6 +287,8 @@
           <xsd:attribute name="operation_id" type="xsd:string" use="optional"/>
           <!--Substitut-->
           <xsd:attribute name="substitute_for_id" type="xsd:string" use="optional"/>
+          <!--^CPrescriptionLineMix-protocole_id^-->
+          <xsd:attribute name="protocole_id" type="xsd:string" use="optional"/>
         </xsd:extension>
       </xsd:complexContent>
     </xsd:complexType>
@@ -252,11 +299,11 @@
       <xsd:complexContent>
         <xsd:extension base="CMbObjectType">
           <xsd:all>
-            <!--Code cip-->
+            <!--Code CIP-->
             <xsd:element name="code_cip" type="MBint"/>
-            <!--Code ucd-->
+            <!--Code UCD-->
             <xsd:element name="code_ucd" type="MBint" minOccurs="0"/>
-            <!--Code cis-->
+            <!--Code CIS-->
             <xsd:element name="code_cis" type="MBint" minOccurs="0"/>
             <!--Quantité-->
             <xsd:element name="quantite" type="MBfloat" minOccurs="0"/>
@@ -264,7 +311,7 @@
             <xsd:element name="unite" type="xsd:string" minOccurs="0"/>
             <!--Solvant-->
             <xsd:element name="solvant" type="MBbool" minOccurs="0"/>
-            <!--^CPrescriptionLineMixItem-stupefiant^-->
+            <!--Stupéfiant-->
             <xsd:element name="stupefiant" type="MBbool" minOccurs="0"/>
           </xsd:all>
           <!--Identifiant-->
@@ -282,7 +329,7 @@
         <xsd:extension base="CMbObjectType">
           <xsd:all>
             <!--Débit-->
-            <xsd:element name="debit" type="MBint"/>
+            <xsd:element name="debit" type="MBfloat"/>
             <!--Date-->
             <xsd:element name="dateTime" type="MBdateTime"/>
           </xsd:all>
@@ -300,6 +347,8 @@
       <xsd:complexContent>
         <xsd:extension base="CMbObjectType">
           <xsd:all>
+            <!--Commentaire-->
+            <xsd:element name="commentaire" type="xsd:string" minOccurs="0"/>
             <!--ALD-->
             <xsd:element name="ald" type="MBbool" minOccurs="0"/>
             <!--Signée-->
@@ -426,8 +475,6 @@
                 </xsd:restriction>
               </xsd:simpleType>
             </xsd:element>
-            <!--Commentaire-->
-            <xsd:element name="commentaire" type="xsd:string" minOccurs="0"/>
             <!--^CPrescriptionLineComment-perop^-->
             <xsd:element name="perop" type="MBbool" minOccurs="0"/>
             <!--^CPrescriptionLineComment-inscription^-->
@@ -451,6 +498,8 @@
           <xsd:attribute name="child_id" type="xsd:string" use="optional"/>
           <!--^CPrescriptionLineComment-operation_id^-->
           <xsd:attribute name="operation_id" type="xsd:string" use="optional"/>
+          <!--^CPrescriptionLineComment-protocole_id^-->
+          <xsd:attribute name="protocole_id" type="xsd:string" use="optional"/>
         </xsd:extension>
       </xsd:complexContent>
     </xsd:complexType>
@@ -467,6 +516,8 @@
             <xsd:element name="cip_dm" type="MBint" minOccurs="0"/>
             <!--Quantité-->
             <xsd:element name="quantite_dm" type="MBfloat" minOccurs="0"/>
+            <!--Commentaire-->
+            <xsd:element name="commentaire" type="xsd:string" minOccurs="0"/>
             <!--ALD-->
             <xsd:element name="ald" type="MBbool" minOccurs="0"/>
             <!--Signée-->
@@ -593,11 +644,9 @@
                 </xsd:restriction>
               </xsd:simpleType>
             </xsd:element>
-            <!--Commentaire-->
-            <xsd:element name="commentaire" type="xsd:string" minOccurs="0"/>
             <!--Per-op-->
             <xsd:element name="perop" type="MBbool" minOccurs="0"/>
-            <!--^CPrescriptionLineElement-inscription^-->
+            <!--Inscription-->
             <xsd:element name="inscription" type="MBbool" minOccurs="0"/>
           </xsd:all>
           <!--Identifiant-->
@@ -618,6 +667,8 @@
           <xsd:attribute name="child_id" type="xsd:string" use="optional"/>
           <!--Intervention-->
           <xsd:attribute name="operation_id" type="xsd:string" use="optional"/>
+          <!--^CPrescriptionLineElement-protocole_id^-->
+          <xsd:attribute name="protocole_id" type="xsd:string" use="optional"/>
         </xsd:extension>
       </xsd:complexContent>
     </xsd:complexType>
@@ -628,11 +679,11 @@
       <xsd:complexContent>
         <xsd:extension base="CMbObjectType">
           <xsd:all>
-            <!--Code cip-->
+            <!--Code CIP-->
             <xsd:element name="code_cip" type="MBint"/>
-            <!--^CPrescriptionLineMedicament-code_ucd^-->
+            <!--Code UCD-->
             <xsd:element name="code_ucd" type="MBint" minOccurs="0"/>
-            <!--^CPrescriptionLineMedicament-code_cis^-->
+            <!--Code CIS-->
             <xsd:element name="code_cis" type="MBint" minOccurs="0"/>
             <!--Numéro poso-->
             <xsd:element name="no_poso" type="MBint" minOccurs="0"/>
@@ -642,6 +693,8 @@
             <xsd:element name="accord_praticien" type="MBbool" minOccurs="0"/>
             <!--Voie-->
             <xsd:element name="voie" type="xsd:string" minOccurs="0"/>
+            <!--Commentaire-->
+            <xsd:element name="commentaire" type="xsd:string" minOccurs="0"/>
             <!--^CPrescriptionLineMedicament-substitute_for_class^-->
             <xsd:element name="substitute_for_class" minOccurs="0">
               <xsd:simpleType>
@@ -663,7 +716,7 @@
             <xsd:element name="traitement_personnel" type="MBbool" minOccurs="0"/>
             <!--Injection par IDE-->
             <xsd:element name="injection_ide" type="MBbool" minOccurs="0"/>
-            <!--^CPrescriptionLineMedicament-stupefiant^-->
+            <!--Stupéfiant-->
             <xsd:element name="stupefiant" type="MBbool" minOccurs="0"/>
             <!--ALD-->
             <xsd:element name="ald" type="MBbool" minOccurs="0"/>
@@ -791,11 +844,9 @@
                 </xsd:restriction>
               </xsd:simpleType>
             </xsd:element>
-            <!--Commentaire-->
-            <xsd:element name="commentaire" type="xsd:string" minOccurs="0"/>
             <!--Per-op-->
             <xsd:element name="perop" type="MBbool" minOccurs="0"/>
-            <!--^CPrescriptionLineMedicament-inscription^-->
+            <!--Inscription-->
             <xsd:element name="inscription" type="MBbool" minOccurs="0"/>
           </xsd:all>
           <!--Identifiant-->
@@ -814,6 +865,8 @@
           <xsd:attribute name="child_id" type="xsd:string" use="optional"/>
           <!--Intervention-->
           <xsd:attribute name="operation_id" type="xsd:string" use="optional"/>
+          <!--^CPrescriptionLineMedicament-protocole_id^-->
+          <xsd:attribute name="protocole_id" type="xsd:string" use="optional"/>
         </xsd:extension>
       </xsd:complexContent>
     </xsd:complexType>
@@ -960,6 +1013,8 @@
       <xsd:attribute name="type" type="xsd:string"/>
       <xsd:attribute name="object_class" type="xsd:string"/>
       <xsd:attribute name="fast_access" type="xsd:string"/>
+      <xsd:attribute name="advanced_protocole" type="xsd:string"/>
+      <xsd:attribute name="protocole_id" type="xsd:string"/>
     </xsd:complexType>
   </xsd:element>
 </xsd:schema>

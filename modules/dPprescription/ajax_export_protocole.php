@@ -19,7 +19,7 @@ $doc = new CMbXMLDocument(null);
 
 $root = $doc->createElement("CPrescription");
 
-$attributes = array("libelle", "object_class", "type", "fast_access");
+$attributes = array("libelle", "object_class", "type", "fast_access", "advanced_protocole");
 foreach($attributes as $_attribute) {
   ${$_attribute . "_att"} = $doc->createAttribute($_attribute);
   ${$_attribute . "_value"} = $doc->createTextNode(utf8_encode($prescription->$_attribute));
@@ -29,56 +29,57 @@ foreach($attributes as $_attribute) {
 
 $doc->appendChild($root);
 
-function exportXML($object, &$doc, $substitution_id = 0, $id_line = 0) {
-  // Propriétés à insérer comme attributs
-  $keys =
-    array("prescription_line_medicament_id", "prise_posologie_id", "prescription_line_mix_id",
-          "prescription_line_mix_item_id", "prescription_line_mix_variation_id", "prescription_line_element_id",
-          "prescription_id", "substitution_line_id", "moment_unitaire_id", "substitute_for_id", "praticien_id",
-          "creator_id", "child_id", "operation_id", "object_id", "executant_prescription_line_id",
-          "user_executant_id", "next_line_id", "prescription_line_comment_id");
-  $db_fields = $object->getDBfields();
-  $class_name = get_class($object);
-  $$class_name = $doc->createElement($class_name);
-
-  foreach ($db_fields as $key => $field) {
-    if (in_array($key, $keys)) {
-      ${$key}   = $doc->createAttribute($key);
-      $id_value = $doc->createTextNode("id-".$object->$key);
-      ${$key}->appendChild($id_value);
-      ${$class_name}->appendChild(${$key});
-    }
-    else {
-      if ($class_name == "CPrescriptionLineComment" && $key == "category_prescription_id") {
-        $category = new CCategoryPrescription;
-        $category->load($object->$key);
-        $value_category = "";
-        if ($category->_id) {
-          $value_category = utf8_encode($category->chapitre . "#" . $category->nom);
-        }
-        ${$key} = $doc->createAttribute($key);
-        $id_value = $doc->createTextNode($value_category);
-        ${$key}->appendChild($id_value);
-        ${$class_name}->appendChild(${$key});
-      }
-      else if ($class_name == "CPrescriptionLineElement" && $key == "element_prescription_id") {
-        $element_prescription = new CElementPrescription;
-        $element_prescription->load($object->$key);
-        $category = $element_prescription->_ref_category_prescription;
-        ${$key} = $doc->createAttribute($key);
-        $id_value = $doc->createTextNode(utf8_encode($element_prescription->libelle . "#" . $category->chapitre . "#" . $category->nom));
+if (!function_exists('exportXML')) {
+  function exportXML($object, &$doc, $substitution_id = 0, $id_line = 0) {
+    // Propriétés à insérer comme attributs
+    $keys =
+      array("prescription_line_medicament_id", "prise_posologie_id", "prescription_line_mix_id",
+            "prescription_line_mix_item_id", "prescription_line_mix_variation_id", "prescription_line_element_id",
+            "prescription_id", "substitution_line_id", "moment_unitaire_id", "substitute_for_id", "praticien_id",
+            "creator_id", "child_id", "operation_id", "object_id", "executant_prescription_line_id",
+            "user_executant_id", "next_line_id", "prescription_line_comment_id", "protocole_id", "advanced_protocole");
+    $db_fields = $object->getDBfields();
+    $class_name = get_class($object);
+    $$class_name = $doc->createElement($class_name);
+  
+    foreach ($db_fields as $key => $field) {
+      if (in_array($key, $keys)) {
+        ${$key}   = $doc->createAttribute($key);
+        $id_value = $doc->createTextNode("id-".$object->$key);
         ${$key}->appendChild($id_value);
         ${$class_name}->appendChild(${$key});
       }
       else {
-        ${$key} = $doc->createElement($key, utf8_encode($object->$key));
+        if ($class_name == "CPrescriptionLineComment" && $key == "category_prescription_id") {
+          $category = new CCategoryPrescription;
+          $category->load($object->$key);
+          $value_category = "";
+          if ($category->_id) {
+            $value_category = utf8_encode($category->chapitre . "#" . $category->nom);
+          }
+          ${$key} = $doc->createAttribute($key);
+          $id_value = $doc->createTextNode($value_category);
+          ${$key}->appendChild($id_value);
+          ${$class_name}->appendChild(${$key});
+        }
+        else if ($class_name == "CPrescriptionLineElement" && $key == "element_prescription_id") {
+          $element_prescription = new CElementPrescription;
+          $element_prescription->load($object->$key);
+          $category = $element_prescription->_ref_category_prescription;
+          ${$key} = $doc->createAttribute($key);
+          $id_value = $doc->createTextNode(utf8_encode($element_prescription->libelle . "#" . $category->chapitre . "#" . $category->nom));
+          ${$key}->appendChild($id_value);
+          ${$class_name}->appendChild(${$key});
+        }
+        else {
+          ${$key} = $doc->createElement($key, utf8_encode($object->$key));
+        }
       }
+      ${$class_name}->appendChild(${$key});
     }
-    ${$class_name}->appendChild(${$key});
+    $doc->documentElement->appendChild(${$class_name});
   }
-  $doc->documentElement->appendChild(${$class_name});
 }
-
 // Chargement des lignes 
 $prescription->loadRefsLinesMed();
 $prescription->loadRefsLinesElement();
