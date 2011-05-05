@@ -187,6 +187,10 @@ ObjectTooltip.createTimeHospi = function (element, chir_id, codes) {
 };
 
 function reloadTableau() {
+  $("hospitalisation").checked = false;
+  if(selected_hospi && selected_hospitalisation) {
+    $("hospitalisation" + selected_hospitalisation).checked = false;
+  }
   if(selected_hospi && selected_lit && selected_hospitalisation) {
     $("sejour_"+selected_hospitalisation).remove();
     selected_hospitalisation = null;
