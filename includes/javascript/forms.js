@@ -267,7 +267,8 @@ function prepareForm(oForm) {
     }
     
     // Won't make it resizable on IE
-    if (sType === "textarea" && 
+    if (!Prototype.Browser.IPad &&
+        sType === "textarea" && 
         oElement.id !== "htmlarea" && 
         !oElement.hasClassName("noresize")) {
       oElement.setResizable({autoSave: true, step: 'font-size'});

@@ -16,6 +16,7 @@ function main() {
     WaitingMessage.init();
     initNotes();
     Element.warnDuplicates();
+    Event.preventBackspace();
     Main.init();
   }
   catch (e) {

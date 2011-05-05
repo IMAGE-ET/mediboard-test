@@ -814,4 +814,13 @@ Element.warnDuplicates = function(){
     Element._duplicates = Element._duplicates.concat(dups);
     console.error("Method-less forms: ", dups);
   }
+};
+
+Event.preventBackspace = function() {
+  document.observe("keydown", function(e){
+    if(Event.key(e) == Event.KEY_BACKSPACE && 
+      !Event.element(e).tagName.match(/input|textarea/i)){
+      Event.stop(e);
+    }
+  });
 }

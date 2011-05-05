@@ -270,13 +270,13 @@ ul#nav-vert {
 
 .touchscreen .numericField .arrows div {
   width: 2.2em;
-  height: 13px;
+  height: 14px;
   right: -3px;
 }
 
 .touchscreen .numericField .arrows div.up {
   top: -3px;
-  height: 14px;
+  height: 15px;
 }
 
 .touchscreen .numericField .arrows div.down {
@@ -298,6 +298,10 @@ ul#nav-vert {
 .touchscreen div.dropdown-trigger {
   height: 24px;
   width: 24px;
+}
+
+.touchscreen div.dropdown {
+  padding-right: 25px;
 }
 
 /* control tabs */

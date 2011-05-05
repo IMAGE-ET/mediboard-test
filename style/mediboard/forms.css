@@ -944,3 +944,8 @@ select.helper {
   margin: 0 3px;
   border: 1px solid #aaa;
 }
+
+.ipad textarea {
+  min-height: 5em;
+  resize: vertical;
+}
