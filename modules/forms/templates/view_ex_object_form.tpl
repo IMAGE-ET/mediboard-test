@@ -252,34 +252,37 @@ Main.add(function(){
 </script>
 
 <table class="main print">
-  <tr>
-    <td colspan="4">
-      <h2 style="font-weight: bold; font-size: 1.2em;">
-        {{if $ex_object->_ref_reference_object_2 && $ex_object->_ref_reference_object_2->_id}}
-		      <big style="color: #006600;">
-		        {{$ex_object->_ref_reference_object_2}} 
-		      </big>
-		    {{else}}
-		      {{if in_array("IPatientRelated", class_implements($ex_object->object_class))}}
-		        {{assign var=_patient value=$ex_object->_ref_object->loadRelPatient()}}
-		        <big style="color: #006600;">
-		          {{$_patient}}
-		        </big>
-		      {{/if}}
-		    {{/if}}
-		    
-		    {{if $ex_object->_ref_reference_object_1 && $ex_object->_ref_reference_object_1->_id}}
-		      &ndash;
-		      <big>
-		        {{$ex_object->_ref_reference_object_1}}
-		      </big>
-		    {{/if}}
-		    
-		    <hr style="border-color: #333; margin: 4px 0;" />
-		    {{$ex_object->_ref_ex_class->name}} - {{$object}}
-      </h2>
-    </td>
-  </tr>
+	<thead>
+	  <tr>
+	    <td colspan="4">
+	      <p style="font-weight: bold; font-size: 1.1em;">
+	        {{if $ex_object->_ref_reference_object_2 && $ex_object->_ref_reference_object_2->_id}}
+			      <big style="color: #006600;">
+			        {{$ex_object->_ref_reference_object_2}} 
+			      </big>
+			    {{else}}
+			      {{if in_array("IPatientRelated", class_implements($ex_object->object_class))}}
+			        {{assign var=_patient value=$ex_object->_ref_object->loadRelPatient()}}
+			        <big style="color: #006600;">
+			          {{$_patient}}
+			        </big>
+			      {{/if}}
+			    {{/if}}
+			    
+			    {{if $ex_object->_ref_reference_object_1 && $ex_object->_ref_reference_object_1->_id}}
+			      &ndash;
+			      <big>
+			        {{$ex_object->_ref_reference_object_1}}
+			      </big>
+			    {{/if}}
+			    
+			    <br />
+			    {{$ex_object->_ref_ex_class->name}} - {{$object}}
+	      </p>
+        <hr style="border-color: #333; margin: 4px 0;" />
+	    </td>
+	  </tr>
+	</thead>
   
   {{foreach from=$grid key=_group_id item=_grid}}
   
