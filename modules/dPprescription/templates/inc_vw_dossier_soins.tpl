@@ -233,7 +233,7 @@ Main.add(function () {
   
   var oFormDate = getForm("changeDateDossier");
   if (oFormDate) {
-    Calendar.regField(oFormDate.date, dates, options);
+    Calendar.regField(oFormDate.date, dates, {noView: true});
   }
 });
 
