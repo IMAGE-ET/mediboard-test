@@ -52,7 +52,7 @@
 	    {{if $line->ald}}{{mb_label object=$line field="ald"}}&nbsp;{{/if}}
 			{{if $line->perop}}{{mb_label object=$line field="perop"}}&nbsp;{{/if}}
 		</span>
-    <strong>{{$line->_ref_element_prescription->_view}}</strong>
+    <strong onmouseover="ObjectTooltip.createEx(this, '{{$line->_guid}}');">{{$line->_ref_element_prescription->_view}}</strong>
 		{{if $line->cip_dm}}
 		<br /><small style="opacity: 0.7;">({{$line->_ref_dm->libelle}})</small>
 		{{/if}}

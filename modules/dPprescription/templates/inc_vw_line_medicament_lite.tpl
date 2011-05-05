@@ -67,7 +67,8 @@
         {{include file="../../dPprescription/templates/inc_vw_info_line_medicament.tpl"}}
       </span>
       
-      <a href="#produit{{$line->_id}}" onclick="Prescription.viewProduit(null,'{{$line->code_ucd}}','{{$line->code_cis}}');" style="font-weight: bold; display: inline;">
+      <a href="#produit{{$line->_id}}" onclick="Prescription.viewProduit(null,'{{$line->code_ucd}}','{{$line->code_cis}}');"
+        style="font-weight: bold; display: inline;" onmouseover="ObjectTooltip.createEx(this, '{{$line->_guid}}')">
         {{$line->_ucd_view}}
       </a>
 	    <br />
