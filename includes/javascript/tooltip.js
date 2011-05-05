@@ -18,6 +18,8 @@ var ObjectTooltip = Class.create({
   initialize: function(eTrigger, oOptions) {
     eTrigger = $(eTrigger);
     
+    if (!eTrigger) return;
+    
     this.sTrigger = eTrigger.identify();
     this.sTooltip = null;
     this.idTimeout = null;
@@ -76,6 +78,8 @@ var ObjectTooltip = Class.create({
     
     var eTooltip = $(this.sTooltip);
     
+    if (!eTooltip) return;
+    
     if (eTooltip.empty()) {
       this.load();
     }
@@ -129,6 +133,9 @@ var ObjectTooltip = Class.create({
 
   createContainer: function() {
     var eTrigger = $(this.sTrigger);
+    
+    if (!eTrigger) return;
+    
     var eTooltip = DOM.div({className: this.mode.sClass}).hide();
     
     $((Prototype.Browser.IE ? document.body : eTrigger.up(".tooltip")) || document.body).insert(eTooltip);
@@ -196,6 +203,8 @@ Object.extend(ObjectTooltip, {
   },
   
   create: function(eTrigger, oOptions) {
+    if (!eTrigger) return;
+    
     if (!eTrigger.oTooltip) {
       eTrigger.oTooltip = new ObjectTooltip(eTrigger, oOptions);
     }
