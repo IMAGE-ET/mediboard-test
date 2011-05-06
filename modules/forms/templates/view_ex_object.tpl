@@ -7,9 +7,10 @@
 	Cet outil de consultation est en cours de développement
 </div>
 
-<form name="filter-ex_object" method="get" onsubmit="return Url.update(this, 'list-ex_object')">
+<form name="filter-ex_object" method="get" onsubmit="">
   <input type="hidden" name="m" value="forms" />
   <input type="hidden" name="a" value="ajax_list_ex_object" />
+  <input type="hidden" name="detail" value="0" />
 	
 	<table class="main form" style="width: auto;">
 		<tr>
@@ -37,8 +38,11 @@
 	        }
 	      </script>
 	    </td>
-			<td>
-				<button type="submit" class="search">{{tr}}Filter{{/tr}}</button>
+		</tr>
+		<tr>
+			<td colspan="4" class="button">
+        <button type="submit" class="search" onclick="$V(this.form.detail, 1); return Url.update(this.form, 'list-ex_object')">Affichage complet</button>
+        <button type="submit" class="search" onclick="$V(this.form.detail, 0); return Url.update(this.form, 'list-ex_object')">Liste des formulaires</button>
 			</td>
 		</tr>
 	</table>

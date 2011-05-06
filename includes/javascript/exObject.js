@@ -32,7 +32,7 @@ ExObject = {
     url.addParam("event", event);
     url.requestJSON(function(ex_classes_id){
       ex_classes_id.each(function(id){
-        showExClassForm(id, object_guid, object_guid+"-"+event+"-"+id, "", event);
+        showExClassForm(id, object_guid, /*object_guid+"_"+*/event+"_"+id, "", event);
       });
       options.onTriggered(object_guid, event);
     });
@@ -48,7 +48,7 @@ ExObject = {
 				var form = input.form;
 				var object_guid = ExObject.current.object_guid;
 				var event = ExObject.current.event;
-				showExClassForm(ex_class_id, object_guid, object_guid+"-"+event+"-"+ex_class_id, "", event);
+				showExClassForm(ex_class_id, object_guid, /*object_guid+"_"+*/event+"_"+ex_class_id, "", event);
 			}
 		} 
 		

@@ -478,30 +478,22 @@ var TokenField = Class.create({
   }
 });
 
-function view_log(classe, id) {
-  var url = new Url("system", "view_history");
-  url.addParam("object_class", classe);
-  url.addParam("object_id", id);
+function guid_log(guid) {
+  var parts = guid.split("-");
+	var url = new Url("system", "view_history");
+  url.addParam("object_class", parts[0]);
+  url.addParam("object_id", parts[1]);
   url.addParam("user_id", "");
   url.addParam("type", "");
   url.popup(600, 500, "history");
 }
 
-function guid_log(guid) {
-  var parts = guid.split("-");
-  view_log(parts[0], parts[1]);
-}
-
-function view_idsante400(classe, id) {
-  var url = new Url("dPsante400", "view_identifiants");
-  url.addParam("object_class", classe);
-  url.addParam("object_id", id);
-  url.popup(750, 400, "sante400");
-}
-
 function guid_ids(guid) {
   var parts = guid.split("-");
-  view_idsante400(parts[0], parts[1]);
+	var url = new Url("dPsante400", "view_identifiants");
+  url.addParam("object_class", parts[0]);
+  url.addParam("object_id", parts[1]);
+  url.popup(750, 400, "sante400");
 }
 
 function uploadFile(object_class, object_id, file_category_id, _rename, for_identite){

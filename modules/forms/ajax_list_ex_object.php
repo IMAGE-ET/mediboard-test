@@ -12,6 +12,7 @@ CCanDo::checkEdit();
 
 $reference_class = CValue::get("reference_class");
 $reference_id    = CValue::get("reference_id");
+$detail          = CValue::get("detail");
 
 CValue::setSession('reference_class', $reference_class);
 CValue::setSession('reference_id',    $reference_id);
@@ -23,21 +24,17 @@ if ($reference_id) {
 }
 
 CExClassField::$_load_lite = true;
+CExObject::$_multiple_load = true;
+CExObject::$_load_lite = !$detail;
 
 $ex_class = new CExClass;
 $ex_classes = $ex_class->loadList();
 
 $all_ex_objects = array();
 $ex_objects_by_event = array();
-
-CExObject::$_multiple_load = true;
 	
 foreach($ex_classes as $_ex_class) {
 	$_ex_class->loadRefsGroups();
-	
-	CExObject::$_load_lite = true;
-	
-	//$_class_name = $_ex_class->getClassName();
 	$_ex_object = new CExObject;
 	$_ex_object->_ex_class_id = $_ex_class->_id;
 	$_ex_object->setExClass();
@@ -48,18 +45,19 @@ foreach($ex_classes as $_ex_class) {
 	);
 	$_ex_objects = $_ex_object->loadList($where);
 	
-	CExObject::$_load_lite = false;
-	
 	foreach($_ex_objects as $_ex) {
 		$_ex->_ex_class_id = $_ex_class->_id;
 		$_ex->setExClass();
 		$_ex->load();
 		$_ex->loadTargetObject();
+		$_ex->_ref_object->loadComplete();
 		
-		foreach($_ex->_ref_ex_class->_ref_groups as $_group) {
-			$_group->loadRefsFields();
-			foreach($_group->_ref_fields as $_field) {
-				$_field->updateTranslation();
+		if ($detail) {
+			foreach($_ex->_ref_ex_class->_ref_groups as $_group) {
+				$_group->loadRefsFields();
+				foreach($_group->_ref_fields as $_field) {
+					$_field->updateTranslation();
+				}
 			}
 		}
 		
@@ -70,7 +68,7 @@ foreach($ex_classes as $_ex_class) {
 	}
 	
 	if (isset($ex_objects_by_event[$_ex_class->host_class."-".$_ex_class->event][$_ex_class->_id])) {
-		ksort($ex_objects_by_event[$_ex_class->host_class."-".$_ex_class->event][$_ex_class->_id]);
+		krsort($ex_objects_by_event[$_ex_class->host_class."-".$_ex_class->event][$_ex_class->_id]);
 	}
 }
   
@@ -83,6 +81,7 @@ $smarty->assign("reference_class", $reference_class);
 $smarty->assign("reference_id",    $reference_id);
 $smarty->assign("reference",       $reference);
 $smarty->assign("all_ex_objects",  $all_ex_objects);
-$smarty->assign("ex_objects_by_event",  $ex_objects_by_event);
-$smarty->assign("ex_classes",  $ex_classes);
+$smarty->assign("ex_objects_by_event", $ex_objects_by_event);
+$smarty->assign("ex_classes",      $ex_classes);
+$smarty->assign("detail",          $detail);
 $smarty->display("inc_list_ex_object.tpl");

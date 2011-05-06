@@ -547,6 +547,10 @@ button.list:before, a.button.list:before {
   content: url(images/buttons/list.png);
 }
 
+button.history:before, a.button.history:before {
+  content: url(images/buttons/history.gif);
+}
+
 button.selected {
   border: 2px solid #000;
 }

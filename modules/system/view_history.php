@@ -24,16 +24,28 @@ $filter->user_id      = CValue::getOrSession("user_id");
 $filter->object_id    = CValue::getOrSession("object_id");
 $filter->object_class = CValue::getOrSession("object_class");
 $filter->type         = CValue::getOrSession("type");
+$ex_class_id          = CValue::get("ex_class_id");
 
 $object = new CMbObject();
 if($filter->object_id && $filter->object_class) {
 	$object = new $filter->object_class;
+	
+	if ($ex_class_id && $filter->object_class == "CExObject") {
+		$object->_ex_class_id = $ex_class_id;
+		$object->setExClass();
+		$filter->object_class .= "_$ex_class_id";
+	}
+	
 	$object->load($filter->object_id);
 	$object->loadHistory();
 }
 
 // Récupération de la liste des classes disponibles
-$listClasses = CApp::getChildClasses();
+$listClasses = array();
+
+if (!$dialog) {
+  $listClasses = CApp::getChildClasses();
+}
 
 // Récupération de la liste des utilisateurs disponibles
 $user = new CUser;
