@@ -38,7 +38,7 @@ ExObject = {
       url.addParam("readonly", 1);
 		}
 		
-    url.pop("100%", "100%");
+    url.pop("100%", "100%", mode+"-"+ex_object_id);
 	},
 	
 	display: function(ex_object_id, ex_class_id, object_guid){

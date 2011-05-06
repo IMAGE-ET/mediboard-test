@@ -1571,6 +1571,11 @@ span.vertical {
   writing-mode: tb-rl;
   width: 1.1em;
   display: inline-block;
+  -webkit-transform: rotate(180deg);
+  -moz-transform: rotate(180deg);
+  -o-transform: rotate(180deg);
+  transform: rotate(180deg);
+  filter: flipv fliph;
 }
 
 span.vertical div {
@@ -1578,7 +1583,7 @@ span.vertical div {
   -moz-transform: scaleY(0.8) rotate(90deg);
   -o-transform: scaleY(0.8) rotate(90deg);
   transform: scaleY(0.8) rotate(90deg);
-  margin-bottom: -40%;
+  margin-bottom: -45%;
 }
 
 span.vertical .nowm {

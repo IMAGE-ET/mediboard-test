@@ -17,6 +17,7 @@ class CExClass extends CMbObject {
   var $disabled   = null;
   var $conditional= null;
   var $required   = null;
+  //var $unicity    = null;
   
   var $_ref_fields = null;
   var $_ref_constraints = null;
@@ -49,6 +50,7 @@ class CExClass extends CMbObject {
     $props["disabled"]   = "bool notNull default|1";
     $props["conditional"]= "bool notNull default|0";
     $props["required"]   = "bool notNull default|0";
+    //$props["unicity"]    = "enum notNull list|host|ref1|ref2 default|host";
     return $props;
   }
 

@@ -95,6 +95,9 @@ class CExObject extends CMbMetaObject {
   }
   
   // FIXME charger aussi les valeurs des champs du meme concept
+	/*
+	 * attention aux dates, il faut surement checker le log de derniere modif des champs du concept
+	 */
   function getReportedValues(){
     if ($this->_id) return;
     
@@ -105,6 +108,35 @@ class CExObject extends CMbMetaObject {
     $this->_ref_reference_object_1 = $ex_class->resolveReferenceObject($object, 1);
     $this->_ref_reference_object_2 = $ex_class->resolveReferenceObject($object, 2);
     
+    /*$fields = $this->_ref_ex_class->loadRefsAllFields(true);
+    
+    foreach($fields as $_field) {
+      $field_name = $_field->name;
+      
+      $spec_obj = $_field->getSpecObject();
+      $this->$field_name = $spec_obj->default;
+      
+      if (!$_field->report_level) continue;
+      
+      $_level = $_field->report_level;
+			
+			if ($_field->concept_id) {
+				$_concept = $_field->loadRefConcept();
+				$_concept_fields = $_concept->loadRefClassFields();
+				
+				foreach($_concept_fields as $_concept_field) {
+					mbTrace($_concept_field->_view, "field de $_concept->_view");
+					
+					
+				}
+			}
+			else {
+				// ceux de la meme exclass
+			}
+      
+      //$this->$field_name = (($_level == 1) ? $latest_1->$field_name : $latest_2->$field_name);
+    }*/
+	
     $latest_1 = $ex_class->getLatestExObject($this->_ref_reference_object_1, 1);
     $latest_2 = $ex_class->getLatestExObject($this->_ref_reference_object_2, 2);
     
