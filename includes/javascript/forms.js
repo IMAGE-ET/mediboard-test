@@ -133,7 +133,7 @@ var FormObserver = {
   checkChanges  : function() {
     return !this.changes;
   },
-  elementChanged : function() {
+  elementChanged : function(form, value) {
     this.changes++;
   },
   FCKChanged : function(timer) {
@@ -171,11 +171,6 @@ function prepareForm(oForm) {
   
   oForm = $(oForm);
   if (!oForm || oForm.hasClassName("prepared")) return;
-  
-  // Event Observer
-  if(oForm.hasClassName("watched")) {
-    new Form.Observer(oForm, 1, function() { FormObserver.elementChanged(); });
-  }
   
   // Autofill of the form disabled (useful for the login form for example)
   oForm.setAttribute("autocomplete", "off");
@@ -369,6 +364,14 @@ function prepareForm(oForm) {
     }
   }
   
+  // Event Observer
+  if(oForm.hasClassName("watched")) {
+		// Deferred to let the time for all the inputs to be prepared
+		(function(){
+			new Form.Observer(oForm, 0.5, function(form, value) { FormObserver.elementChanged(form, value); });
+		}).defer();
+  }
+	
   // We mark this form as prepared
   oForm.addClassName("prepared");
 }
