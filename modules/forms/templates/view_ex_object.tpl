@@ -16,7 +16,7 @@
 		<tr>
 			<th>Type d'objet de référence</th>
 			<td>
-				<select name="reference_class" class="str notNull">
+				<select name="reference_class" class="str notNull" onchange="$V(this.form.reference_id, ''); $V(this.form._reference_view, '')">
 					{{foreach from=$reference_classes item=_class}}
 					  <option value="{{$_class}}" {{if $reference_class == $_class}} selected="selected" {{/if}}>{{tr}}{{$_class}}{{/tr}}</option>
 					{{/foreach}}

@@ -1569,7 +1569,7 @@ td.loading {
 
 span.vertical {
   writing-mode: tb-rl;
-  width: 11px;
+  width: 1.1em;
   display: inline-block;
 }
 
@@ -1578,12 +1578,13 @@ span.vertical div {
   -moz-transform: scaleY(0.8) rotate(90deg);
   -o-transform: scaleY(0.8) rotate(90deg);
   transform: scaleY(0.8) rotate(90deg);
-  margin-bottom: -50%;
+  margin-bottom: -40%;
 }
 
 span.vertical .nowm {
 	padding: 0 2px;
   font-family: "lucida console", "courier new", courier, monospace;
+	font-size: 1.1em;
 }
 
 span.vertical .orig {

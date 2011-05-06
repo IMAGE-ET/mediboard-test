@@ -56,7 +56,7 @@ ExObject = {
     url.addParam("ex_class_id", ex_class_id);
 	  url.addParam("user_id", "");
 	  url.addParam("type", "");
-	  url.popup(600, 500, "history");
+	  url.popup(900, 600, "history");
   }
 }
 
@@ -91,7 +91,6 @@ Main.add(function(){
 	      <th style="min-width: 20em;">Champ</th>
 			  {{foreach from=$_ex_objects item=_ex_object name=_ex_object}}
 				  <th class="narrow">
-						
              
             {{mb_value object=$_ex_object->_ref_first_log field=date}}
              <hr />
@@ -120,12 +119,14 @@ Main.add(function(){
 	    </tr>
 			
 		  {{foreach from=$_ex_obj->_ref_ex_class->_ref_groups item=_ex_group name=_ex_group}}
+			  
+        <tbody style="border-bottom: 2px solid black;">
 				<tr>
 					<th rowspan="{{$_ex_group->_ref_fields|@count}}">
 						{{vertical}}{{$_ex_group}}{{/vertical}}
 					</th>
 					
-	        {{foreach from=$_ex_group->_ref_fields item=_ex_field}}
+	        {{foreach from=$_ex_group->_ref_fields item=_ex_field name=_ex_field}}
 					  <td class="text" style="font-weight: bold;">
 						  {{mb_label object=$_ex_obj field=$_ex_field->name}}</span>
 						</td>
@@ -139,6 +140,10 @@ Main.add(function(){
 							  </tr>
 							{{/if}}
 					  {{/foreach}}
+						
+            {{if $smarty.foreach._ex_field.last}}
+              </tbody>
+            {{/if}}
 	        {{/foreach}}
 			{{/foreach}}
 	  </table>
