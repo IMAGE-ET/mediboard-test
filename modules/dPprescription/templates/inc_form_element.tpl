@@ -67,6 +67,10 @@
       <th>{{mb_label object=$element_prescription field="prescriptible_AS"}}</th>
       <td>{{mb_field object=$element_prescription field="prescriptible_AS"}}</td>
     </tr>
+		<tr>
+      <th>{{mb_label object=$element_prescription field="rdv"}}</th>
+      <td>{{mb_field object=$element_prescription field="rdv"}}</td>
+    </tr>
 		 <tr>
 		   <td colspan="2" class="text">
 		   </td>

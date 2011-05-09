@@ -11,16 +11,17 @@
 class CSejourTask extends CMbObject {
   
   // DB Table key
-  var $sejour_task_id = null;
+  var $sejour_task_id  = null;
   
 	// DB Fields
-	var $sejour_id      = null;
-	var $description    = null;
-	var $realise        = null;
-	var $resultat       = null;
-	
-	var $_ref_sejour    = null;
-	
+	var $sejour_id       = null;
+	var $description     = null;
+	var $realise         = null;
+	var $resultat        = null;
+	var $prescription_line_element_id = null;
+
+	var $_ref_sejour     = null;
+ 
   function getSpec() {
     $spec = parent::getSpec();
     $spec->table = 'sejour_task';
@@ -34,6 +35,7 @@ class CSejourTask extends CMbObject {
     $specs["description"] = "text notNull helped";
 		$specs["realise"]     = "bool default|0";
 		$specs["resultat"]    = "text helped";
+		$specs["prescription_line_element_id"] = "ref class|CPrescriptionLineElement";
     return $specs;
   }
 

@@ -25,6 +25,7 @@ class CElementPrescription extends CMbObject {
 	var $prescriptible_kine         = null;
   var $prescriptible_infirmiere   = null;
   var $prescriptible_AS           = null;
+	var $rdv                        = null;
 	
   // FwdRefs
   var $_ref_category_prescription = null;
@@ -53,6 +54,7 @@ class CElementPrescription extends CMbObject {
 		$specs["prescriptible_kine"]       = "bool default|0";
 		$specs["prescriptible_infirmiere"] = "bool default|0";
     $specs["prescriptible_AS"]         = "bool default|0";
+		$specs["rdv"]                      = "bool default|0";
     return $specs;
   }
   

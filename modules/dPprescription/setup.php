@@ -1959,7 +1959,21 @@ class CSetupdPprescription extends CSetup {
               ADD `prescriptible_AS` ENUM ('0','1') DEFAULT '0';";
 		$this->addQuery($query);
 		
-    $this->mod_version = "1.42";
+		$this->makeRevision("1.42");
+		$query = "ALTER TABLE `element_prescription`
+              ADD `rdv` ENUM ('0','1') DEFAULT '0';";
+		$this->addQuery($query);
+		
+		$this->makeRevision("1.43");
+		$query = "ALTER TABLE `sejour_task` 
+              ADD `prescription_line_element_id` INT (11) UNSIGNED;";
+		$this->addQuery($query);
+		
+		$query = "ALTER TABLE `sejour_task` 
+              ADD INDEX (`prescription_line_element_id`);";
+		$this->addQuery($query);	
+		
+    $this->mod_version = "1.44";
   }
 }
 
