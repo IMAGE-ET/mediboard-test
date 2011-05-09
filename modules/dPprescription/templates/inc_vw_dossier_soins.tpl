@@ -304,13 +304,13 @@ Main.add(function () {
 								 {{if $sejour->_entree|iso_date < $date}}onclick="PlanSoins.loadTraitement('{{$sejour->_id}}','{{$prev_date}}', null, null, null, null, null, null, '1');"{{/if}}
 					       {{if $sejour->_entree|iso_date >= $date}}style="opacity: 0.5;"{{/if}}></button>	
 	     Dossier de soin du {{$date|@date_format:"%d/%m/%Y"}}
+       <form name="changeDateDossier" method="get" action="?" onsubmit="return false" style="font-size: 11px">
+         <input type="hidden" name="date" class="date" value="{{$date}}" onchange="PlanSoins.loadTraitement('{{$sejour->_id}}',this.value,'','administration', null, null, null, null, '1');"/>
+       </form>
 			 <button type="button"
 			         class="right notext"
 							 {{if $sejour->_sortie|iso_date > $date}}onclick="PlanSoins.loadTraitement('{{$sejour->_id}}','{{$next_date}}','','administration', null, null, null, null, '1');"{{/if}}
 							 {{if $sejour->_sortie|iso_date <= $date}}style="opacity: 0.5;"{{/if}}></button>
-       <form name="changeDateDossier" method="get" action="?" onsubmit="return false" style="font-size: 11px">
-         <input type="hidden" name="date" class="date" value="{{$date}}" onchange="PlanSoins.loadTraitement('{{$sejour->_id}}',this.value,'','administration', null, null, null, null, '1');"/>
-       </form>
 		</h1>
 		 
 		 {{if $date != $today}}
