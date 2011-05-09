@@ -147,6 +147,11 @@ class CPrescription extends CMbObject implements IPatientRelated {
     $backProps["protocoles_op_chir"]               = "CProtocole protocole_prescription_chir_id";
     $backProps["protocoles_op_anesth"]             = "CProtocole protocole_prescription_anesth_id";
     $backProps["prescription_line_dmi"]            = "CPrescriptionLineDMI prescription_id";
+    $backProps["protocoles_med"]                   = "CPrescriptionLineMedicament protocole_id";
+    $backProps["protocoles_element"]               = "CPrescriptionLineElement protocole_id";
+    $backProps["protocoles_dmi"]                   = "CPrescriptionLineDMI protocole_id";
+    $backProps["protocoles_mix"]                   = "CPrescriptionLineMix protocole_id";
+    $backProps["protocoles_comment"]               = "CPrescriptionLineComment protocole_id";
     return $backProps;
   }
   
