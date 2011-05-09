@@ -150,8 +150,10 @@ $smarty->assign("is_praticien", $is_praticien);
 $smarty->assign("mode_pack", 0);
 $smarty->assign("mode_substitution", $mode_substitution);
 $smarty->assign("aides_prescription", $aides_prescription);
-$smarty->assign("advanced_prot", $advanced_prot);
 
+if ($advanced_prot) {
+  $smarty->assign("advanced_prot", $advanced_prot);
+}
 $smarty->assign("executants", $executants);
 $smarty->assign("category_id", $category_id);
 
