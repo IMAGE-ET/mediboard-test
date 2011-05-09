@@ -308,7 +308,8 @@ class CExClass extends CMbObject {
 		  $element = array(
 		    "prop"  => $_spec,
 		    "title" => null,
-		    "view"  => null,
+        "view"  => null,
+        "longview"  => null,
 		    "type"  => null,
 		    "level" => 0,
 		  );
@@ -331,10 +332,12 @@ class CExClass extends CMbObject {
 		  
 		  // Level 1 type
 		  if (count($_subfield) > 1) {
-		    $element["title"] = CAppUI::tr("$this->host_class-$_subfield[0]")." de type ".CAppUI::tr("$_subfield[1]");
+        $element["title"] = CAppUI::tr("$this->host_class-$_subfield[0]")." de type ".CAppUI::tr("$_subfield[1]");
+        $element["longview"] = CAppUI::tr("$this->host_class-$_subfield[0]-desc")." de type ".CAppUI::tr("$_subfield[1]");
 		  }
 		  else {
 		    $element["title"] = CAppUI::tr("$this->host_class-$_field");
+        $element["longview"] = CAppUI::tr("$this->host_class-$_field-desc");
 		  }
 		  
 		  $element["view"] = $element["title"];
@@ -369,7 +372,8 @@ class CExClass extends CMbObject {
 		      }
 		      
 		      $element["view"] = $parent_view." / ".CAppUI::tr("$_subspec->className-$_subfield");
-		      $element["title"] = " |- ".CAppUI::tr("$_subspec->className-$_subfield");
+          $element["longview"] = $parent_view." / ".CAppUI::tr("$_subspec->className-$_subfield-desc");
+          $element["title"] = " |- ".CAppUI::tr("$_subspec->className-$_subfield");
 		      
 		      $list["$_field-$_key"] = $element;
 		    }

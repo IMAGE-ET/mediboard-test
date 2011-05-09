@@ -251,7 +251,7 @@ Main.add(function(){
 });
 </script>
 
-<table class="main print">
+<table class="main {{if $print}} print {{else}} form {{/if}}">
 	<thead>
 	  <tr>
 	    <td colspan="4">

@@ -120,7 +120,9 @@ Main.add(function(){
       </tr>
     {{/if}}
     
-    <tr {{if ($_name == "default" && $spec instanceof CEnumSpec) || $smarty.foreach.specs.index >= $advanced_controls_limit}}class="advanced" style="display: none;"{{/if}}>
+    <tr {{if ($_name == "default" && $spec instanceof CEnumSpec) || 
+		         ($_name == "notNull" && $context instanceof CExConcept) || 
+						 $smarty.foreach.specs.index >= $advanced_controls_limit}}class="advanced" style="display: none;"{{/if}}>
       <th><label for="{{$_name}}" title="{{$_name}}">{{tr}}CMbFieldSpec.{{$_name}}{{/tr}}</label></th>
       <td>
         {{assign var=spec_value value=$spec->$_name}}
@@ -229,7 +231,7 @@ Main.add(function(){
           
         {{else}}
         
-				  {{if !($_type == "list" || $_type == "bool" && $_name == "default")}}
+				  {{if !($_type == "list" || $_type == "bool" && $_name == "default" || $_type == "bool" && $_name == "notNull")}}
             <input type="hidden" name="{{$_name}}" value="{{$spec_value}}" />
 					{{/if}}
         
@@ -243,9 +245,15 @@ Main.add(function(){
             
           {{* bool *}}
           {{elseif $_type == "bool"}}
-            {{if $spec_value === null || $spec_value === ""}}{{tr}}Undefined{{/tr}}{{/if}}
-            {{if $spec_value === 0 || $spec_value === "0"}}{{tr}}No{{/tr}}{{/if}}
-            {{if $spec_value == 1}}{{tr}}Yes{{/tr}}{{/if}}
+            {{if $_name == "notNull"}}
+	            <label><input type="radio" name="{{$_name}}" value=""  {{if $spec_value === null || $spec_value === ""}}checked="checked"{{/if}} /> {{tr}}Undefined{{/tr}}</label>
+	            <label><input type="radio" name="{{$_name}}" value="0" {{if $spec_value === 0 || $spec_value === "0"}}checked="checked"{{/if}} /> {{tr}}No{{/tr}}</label>
+	            <label><input type="radio" name="{{$_name}}" value="1" {{if $spec_value == 1}}checked="checked"{{/if}} /> {{tr}}Yes{{/tr}}</label>
+            {{else}}
+							{{if $spec_value === null || $spec_value === ""}}{{tr}}Undefined{{/tr}}{{/if}}
+	            {{if $spec_value === 0 || $spec_value === "0"}}{{tr}}No{{/tr}}{{/if}}
+	            {{if $spec_value == 1}}{{tr}}Yes{{/tr}}{{/if}}
+						{{/if}}
             
           {{* enum *}}
           {{elseif is_array($_type)}}
