@@ -206,7 +206,7 @@ Class.extend(Autocompleter.Base, {
     
     // This has been added so that the token bounds are relative to the current cert position
     if (this.options.caretBounds) {
-      var caret = this.element.caret().begin;
+      var caret = this.element.getInputSelection().start;
       var start = value.substr(0, caret).lastIndexOf("\n")+1;
       var end = value.substr(caret).indexOf("\n")+caret+1;
       return (this.tokenBounds = [start, end]);
