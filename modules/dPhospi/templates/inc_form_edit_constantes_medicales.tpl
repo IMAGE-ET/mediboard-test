@@ -100,7 +100,13 @@ Main.add(function () {
           *}}
           <label for="{{$_constante}}">{{tr}}CConstantesMedicales-{{$_constante}}-court{{/tr}}</label>
 
-          {{if $_params.unit}}({{$_params.unit}}){{/if}}
+          {{if $_params.unit}}
+            {{if in_array($_constante, " "|explode:"ta ta_gauche ta_droit")}}
+              {{$conf.dPpatients.CConstantesMedicales.unite_ta}}
+            {{else}}
+            ({{$_params.unit}})
+            {{/if}}
+          {{/if}}
         </th>
         
         {{if array_key_exists("formfields", $_params)}}

@@ -147,9 +147,9 @@ newExam = function(sAction, consultation_id) {
     </td>
     <td class="text">
       <strong>TA :</strong>
-      {{if $const_med->ta}}
+      {{if $const_med->ta_gauche}}
       <i>
-        {{$const_med->_ta_systole}} / {{$const_med->_ta_diastole}} cm Hg
+        {{$const_med->_ta_gauche_systole}} / {{$const_med->_ta_gauche_diastole}} cm Hg
       </i>
       {{/if}}
     </td>

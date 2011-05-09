@@ -1214,8 +1214,19 @@ class CSetupdPpatients extends CSetup {
     $query = "ALTER TABLE `groups_config`
       ADD `dPpatients_CPatient_nom_jeune_fille_mandatory` ENUM ('0', '1') NOT NULL DEFAULT '0'";
     $this->addQuery($query);
-    $this->mod_version = "1.10";
     
+    $this->makeRevision("1.10");
+    $query = "ALTER TABLE `constantes_medicales`
+      CHANGE `ta` `ta_gauche` VARCHAR (10),
+      ADD `ta` VARCHAR(10) AFTER `taille`,
+      ADD PVC FLOAT UNSIGNED,
+      ADD perimetre_abdo FLOAT UNSIGNED,
+      ADD perimetre_cuisse FLOAT UNSIGNED,
+      ADD perimetre_cou FLOAT UNSIGNED,
+      ADD perimetre_thoracique FLOAT UNSIGNED";
+    $this->addQuery($query);
+    
+    $this->mod_version = "1.11";
   }
 }
 

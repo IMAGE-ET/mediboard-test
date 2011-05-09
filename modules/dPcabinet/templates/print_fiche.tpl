@@ -317,8 +317,8 @@
           </td>
           <th style="font-weight: normal;">TA</th>
           <td style="font-weight: bold; white-space: nowrap;">
-            {{if $const_med->ta}}
-              {{$const_med->_ta_systole}} / {{$const_med->_ta_diastole}} cm Hg
+            {{if $const_med->ta_gauche}}
+              {{$const_med->_ta_gauche_systole}} / {{$const_med->_ta_gauche_diastole}} cm Hg
             {{else}}
             ?
             {{/if}}

@@ -72,7 +72,7 @@
     <td class="button">{{$const_med->poids}} kg</td>
     <td class="button">{{$const_med->taille}} cm</td>
     <td class="button">{{tr}}CConsultAnesth.groupe.{{$curr_op->_ref_consult_anesth->groupe}}{{/tr}} {{tr}}CConsultAnesth.rhesus.{{$curr_op->_ref_consult_anesth->rhesus}}{{/tr}}</td>
-    <td class="button">{{$const_med->_ta_systole}}/{{$const_med->_ta_diastole}}</td>
+    <td class="button">{{$const_med->_ta_gauche_systole}}/{{$const_med->_ta_gauche_diastole}}</td>
   </tr>
   {{/if}}
   <tr>

@@ -16,6 +16,10 @@
   {{assign var=field  value="$m[$class][$var]"}}
   {{assign var=value  value=$conf.$m.$class.$var}}
   {{assign var=locale value=config-$m-$class-$var}}
+  
+  <tr>
+    {{mb_include module=system template=inc_config_enum var=unite_ta values=cmHg|mmHg}}
+  </tr>
   <tr>
     <th>
       <label for="{{$field}}" title="{{tr}}{{$locale}}-desc{{/tr}}">
@@ -42,7 +46,6 @@
       {{/foreach}}
     </td>
   </tr>
-
   <tr>
     <td class="button" colspan="100">
       <button class="modify" type="submit">{{tr}}Save{{/tr}}</button>

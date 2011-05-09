@@ -32,7 +32,8 @@ $dPconfig["dPpatients"] = array (
   ),
   
   "CConstantesMedicales" => array(
-    "important_constantes" => "poids|pouls|ta|temperature"
+    "important_constantes" => "poids|pouls|ta_gauche|temperature",
+    "unite_ta" => "cmHg"
   ),
   
   "CMedecin" => array(

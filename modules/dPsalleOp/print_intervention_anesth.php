@@ -61,7 +61,7 @@ foreach($operation->_ref_anesth_perops as $_perop){
   $perops[$_perop->datetime][$_perop->_guid] = $_perop;
 }
 
-$constantes = array("pouls", "ta", "frequence_respiratoire", "score_sedation", "spo2", "diurese");
+$constantes = array("pouls", "ta_gauche", "frequence_respiratoire", "score_sedation", "spo2", "diurese");
 foreach ($sejour->_list_constantes_medicales as $_constante_medicale) {
   foreach ($constantes as $_constante) {
   	$perops[$_constante_medicale->datetime][$_constante_medicale->_guid][$_constante] = $_constante_medicale->$_constante;
