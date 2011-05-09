@@ -22,8 +22,10 @@ editTask = function(task_id){
 <table class="tbl">	
   <tr>
     <th colspan="4" class="title">
-    	<button type="button" class="add notext" onclick="editTask('0');" style="float: right;"></button>
-    	Activités {{if $sejour->_ref_tasks}}({{$sejour->_ref_tasks|@count}}){{/if}}
+    	{{if !$mode_realisation}}
+    	  <button type="button" class="add notext" onclick="editTask('0');" style="float: right;"></button>
+			{{/if}}
+    	Tâches {{if $sejour->_ref_tasks}}({{$sejour->_ref_tasks|@count}}){{/if}}
 		</th>
 	</tr>		
 	<tr>
@@ -36,7 +38,24 @@ editTask = function(task_id){
 	  	<td class="narrow"><input type="checkbox" disabled="disabled" {{if $_task->realise}}checked="checked"{{/if}} /></td>
 	    <td {{if $_task->realise}}style="text-decoration: line-through"{{/if}}>{{mb_value object=$_task field="description"}}</td>
 	    <td>{{mb_value object=$_task field="resultat"}}</td>
-			<td class="narrow"><button type="button" class="edit notext" onclick="editTask('{{$_task->_id}}');"></button></td>
+			<td class="narrow">
+				{{if $mode_realisation}}
+				  <form name="closeTask-{{$_task->_id}}" action="?" method="post" 
+					      onsubmit="return onSubmitFormAjax(this, { onComplete: function(){
+								             refreshLineSejour('{{$sejour->_id}}');
+								             $('tooltip-content-tasks-{{$sejour->_id}}').up('.tooltip').remove();
+													} });">
+				  	<input type="hidden" name="m" value="soins" />
+						<input type="hidden" name="dosql" value="do_sejour_task_aed" />
+						<input type="hidden" name="del" value="" />
+						<input type="hidden" name="sejour_task_id" value="{{$_task->_id}}" />
+						<input type="hidden" name="realise" value="1" />
+				    <button type="submit" class="tick notext"></button>
+					</form> 
+      	{{else}}
+				  <button type="button" class="edit notext" onclick="editTask('{{$_task->_id}}');"></button>
+				{{/if}}
+			</td>
 	  </tr>
 	{{foreachelse}}
 	  <tr>

@@ -9,6 +9,7 @@
  */
 
 $sejour_id = CValue::getOrSession("sejour_id");
+$mode_realisation = CValue::get("mode_realisation");
 
 $sejour = new CSejour();
 $sejour->load($sejour_id);
@@ -19,5 +20,6 @@ $sejour->loadRefsTasks();
 $smarty = new CSmartyDP();
 $smarty->assign("sejour", $sejour);
 $smarty->assign("task", new CSejourTask());
+$smarty->assign("mode_realisation", $mode_realisation);
 $smarty->display("inc_vw_tasks_sejour.tpl");
 
