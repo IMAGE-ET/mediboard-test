@@ -78,7 +78,6 @@ class CPrescriptionAlerteHandler extends CMbObjectHandler {
 			$_view_poso = "";
 	    foreach($object->_ref_prises as $_poso){
 	    	$_poso->loadRefsFwd();
-	    	mbTrace($_poso->_view);
 	      $_view_poso .= "$_poso->_view, ";
 	    }
 			$alerte->comments = "$object->_view - $object->_duree_prise - $_view_poso";
