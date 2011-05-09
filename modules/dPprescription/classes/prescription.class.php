@@ -1897,9 +1897,9 @@ class CPrescription extends CMbObject implements IPatientRelated {
 		}
 
     // Parcours des lignes de smedicaments
+		$this->_nb_lines_plan_soins["med"] = 0;
+    $this->_nb_lines_plan_soins["inj"] = 0;
 		if($alert_handler){
-			$this->_nb_lines_plan_soins["med"] = 0;
-	    $this->_nb_lines_plan_soins["inj"] = 0;
 	    $this->_count_recent_modif["med"] = false;
 			$this->_count_recent_modif["inj"] = false;
 	    $this->_count_urgence["med"] = false;
@@ -1987,8 +1987,8 @@ class CPrescription extends CMbObject implements IPatientRelated {
     if(!$mode_dispensation){
       if($this->_ref_prescription_lines_element_by_cat){
         foreach($this->_ref_prescription_lines_element_by_cat as $name_chap => $elements_chap){
-        	if($alert_handler){
-        	  $this->_nb_lines_plan_soins[$name_chap] = 0;
+          $this->_nb_lines_plan_soins[$name_chap] = 0;
+					if($alert_handler){
             $this->_count_recent_modif[$name_chap] = false;
 					  $this->_count_urgence[$name_chap] = false;
 					}
