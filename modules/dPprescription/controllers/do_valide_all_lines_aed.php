@@ -50,9 +50,10 @@ if(!$mode_pharma){
 	      return;
 		  }
 		}
+		
 		$user->loadMatchingObject();
 		if(!$user->_id){
-		  CAppUI::displayMsg("Login incorrect","Signature des lignes");
+		  CAppUI::displayMsg("Mot de passe incorrect", "Signature des lignes");
 	    return;
 		}	
 	}

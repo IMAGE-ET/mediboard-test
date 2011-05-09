@@ -264,7 +264,7 @@
 	          {{include file="../../dPprescription/templates/line/inc_vw_add_posologies.tpl" type="Med"}}   
 	        {{else}}
 	          <div class="small-warning">
-	            Ce produit ne contient les informations nécessaires pour pouvoir gérer des posologies.
+	            Ce produit ne contient pas les informations nécessaires pour pouvoir gérer des posologies.
 	          </div>    
 	        {{/if}}
 				</fieldset>		
