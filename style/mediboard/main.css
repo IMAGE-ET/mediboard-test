@@ -1462,7 +1462,11 @@ table.tbl td.trans-data p, table.tbl td.trans-action p, table.tbl td.trans-resul
 }
 
 table.tbl td.hour-plan {
-	height: 3em;
+  height: 3em;
+}
+
+table.tbl td.hour-plan.active {
+  outline: 2px solid #000;
 }
 
 .iconed-text {

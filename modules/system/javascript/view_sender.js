@@ -13,7 +13,7 @@ ViewSender = {
 	
 	edit: function(sender_id) {
     var url = new Url('system', 'ajax_form_view_sender');
-		url.addParam('sender_id', sender_id);
+    url.addParam('sender_id', sender_id);
     url.requestModal(400);
 	  this.modal = url.modaleObject;
   },
@@ -33,6 +33,7 @@ ViewSender = {
       objName: $V(form.name),
       ajax: 1
     }
+    
     var ajax = {
       onComplete: function() {
         ViewSender.refreshList();
@@ -46,5 +47,14 @@ ViewSender = {
   refreshList: function() {
     var url = new Url('system', 'ajax_list_view_senders');
     url.requestUpdate('list-senders');
-  }
+  },
+  
+  doSend: function(username, password) {
+    var url = new Url('system', 'ajax_send_views');
+    if (username) url.addParam("username", username);
+    if (password) url.addParam("password", password);
+    url.requestUpdate('send-views');
+	return false;
+}
+  
 };

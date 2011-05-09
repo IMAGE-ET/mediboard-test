@@ -198,6 +198,21 @@ abstract class CMbString {
 	static function isUTF8($string) {
 	  return (mb_detect_encoding($string) == "UTF-8");
 	}
+	
+  /**
+   * Get a query string from params array. (reciproque parse_str)
+   * @param array $params Parameters
+   * @return string Query string
+   **/
+  static function toQuery($params) {
+  	$_params = array();
+    foreach ($params as $key => $value) {
+      $_params[] = "$key=$value";
+    }
+    return implode("&", $_params);
+  }
+  
+	
 	 
 }
 ?>

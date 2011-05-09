@@ -29,25 +29,30 @@ Main.add(Control.Tabs.create.curry('tabs-main', true));
 	</button>
 	
 	<script type="text/javascript">
-	  Main.add(ViewSender.refreshList);
+    Main.add(ViewSender.refreshList);
+    Main.add(ViewSender.doSend);
 	</script>
 
 	<div id="list-senders">
 	</div>
 
+  <div id="send-views">
+  </div>
+
 </div>
 
 <div id="sources" style="display: none;">
 
-  <button class="new singleclick" onclick="ViewSender.edit(0);">
-    {{tr}}CViewSender-title-create{{/tr}}
+  <button class="new singleclick" onclick="ViewSenderSource.edit(0);">
+    {{tr}}CViewSenderSource-title-create{{/tr}}
   </button>
   
+  <div id="list-sources">
+  </div>
+
   <script type="text/javascript">
     Main.add(ViewSenderSource.refreshList);
   </script>
-
-  <div id="list-sources">
-  </div>
+    
 </div>
 

@@ -32,7 +32,9 @@ class CViewSender extends CMbObject {
 	var $_params = null;
 	var $_when   = null;
 	var $_active = null;
-
+  var $_url    = null;
+  var $_file   = null;
+  	
   // Distant properties
 	var $_hour_plan = null;
   
@@ -56,16 +58,26 @@ class CViewSender extends CMbObject {
     $props["period"     ] = "enum list|1|2|3|4|5|6|10|15|20|30";
     $props["offset"     ] = "num min|0 notNull default|0";
     $props["active"     ] = "bool notNull default|0";
+
+    $props["_url"       ] = "str";
+    $props["_file"       ] = "str";
     return $props;
   }
 
   function updateFormFields() {
     parent::updateFormFields();
     $this->_view = $this->name;
-		$this->_params = explode("&", $this->params);
 		$this->_when = "$this->period mn + $this->offset";
   }
 	
+  function getActive($minute) {
+    $period = intval($this->period);
+    $offset = intval($this->offset);
+    $minute = intval($minute);
+  	
+    return $this->_active =  $minute % $period == $offset;
+  }
+  
 	function makeHourPlan($minute = null) {
 		$period = intval($this->period);
 		$offset = intval($this->offset);
@@ -77,9 +89,34 @@ class CViewSender extends CMbObject {
 
 		// Active
     if ($minute !== null) {
-      $this->_active = $this->active && $this->_hour_plan[$minute];
+      $this->getActive($minute);
     }
+    
+    return $this->_hour_plan;
 	}
+	
+	function makeUrl($user) {
+    $base = CAppUI::conf("base_url");
+    $params = array();
+    parse_str(strtr($this->params, "\n", "&"), $params);
+    $params["login"] = "1";
+    $params["username"] = $user->user_username;
+    $params["password"] = $user->user_password;
+    $params["dialog"] = "1";
+    $params["aio"] = "1";
+    $query = CMbString::toQuery($params);
+    $url = "$base/?$query";
+    return $this->_url = $url;  
+	}
+
+  function makeFile() {
+  	$file = tempnam("", "view");
+  	
+  	// Store result in $file with wget
+  	
+  	return $this->_file = $file;
+  }
+	
 }
 
 ?>

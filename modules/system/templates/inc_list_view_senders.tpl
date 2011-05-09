@@ -8,6 +8,8 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
 *}}
 
+<h1>Plan horaire</h1>
+
 <table class="tbl">
 	<tr>
     <th colspan="2">{{mb_title class=CViewSender field=name}}</th>
@@ -31,7 +33,6 @@
       <button class="edit notext" style="float: right;" onclick="ViewSender.edit('{{$_sender->_id}}');">
         {{tr}}Edit{{/tr}}
       </button> 
-      {{$_sender->_active}}
     </td>
     <td {{if ($_sender->_active)}}style="font-weight: bold;"{{/if}}>
       {{mb_value object=$_sender field=name}}
@@ -79,5 +80,8 @@
   </tr>
 	{{/if}}
   
+  {{foreach from=$senders item=_sender}}
+  {{foreachelse}}
+  
+  {{/foreach}}
 </table>
-

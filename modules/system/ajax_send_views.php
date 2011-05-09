@@ -14,26 +14,25 @@ CCanDo::checkRead();
 $time = mbTime();
 $minute = intval(mbTransformTime($time, null, "%M"));
 
+$user = new CUser;
+$user->user_username = CValue::get("username", CUser::get()->user_username);
+$user->user_password = CValue::get("password");
+
 // Chargement des senders
 $sender = new CViewSender();
 $senders = $sender->loadList(null, "name");
 foreach ($senders as $_sender) {
-	$_sender->makeHourPlan($minute);
-}
-
-// Tableau de charges
-$hour_sum = array();
-foreach (range(0, 59) as $min) {
-	$hour_sum[$min] = 0;
-	foreach ($senders as $_sender) {
-	  $hour_sum[$min] += $_sender->_hour_plan[$min] ? 1 : 0;
+	if ($_sender->getActive($minute)) {
+    $_sender->makeUrl($user);
+    $_sender->makeFile();
 	}
 }
+
 
 // Création du template
 $smarty = new CSmartyDP();
 $smarty->assign("senders", $senders);
-$smarty->assign("hour_sum", $hour_sum);
 $smarty->assign("time", $time);
+$smarty->assign("user", $user);
 $smarty->assign("minute", $minute);
-$smarty->display("inc_list_view_senders.tpl");
+$smarty->display("inc_send_views.tpl");
