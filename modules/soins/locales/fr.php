@@ -1,4 +1,14 @@
 <?php
+$locales['CConstantesMedicales-PVC-court'] = 'OVC';
+$locales['CConstantesMedicales-PVC-desc'] = 'PV';
+$locales['CConstantesMedicales-perimetre_abdo-court'] = 'Périmètre abdominal';
+$locales['CConstantesMedicales-perimetre_abdo-desc'] = 'Périmètre abdominal';
+$locales['CConstantesMedicales-perimetre_cou-court'] = 'Périmètre cou';
+$locales['CConstantesMedicales-perimetre_cou-desc'] = 'Périmètre cou';
+$locales['CConstantesMedicales-perimetre_cuisse-court'] = 'Périmètre cuisse';
+$locales['CConstantesMedicales-perimetre_cuisse-desc'] = 'Périmètre cuisse';
+$locales['CConstantesMedicales-perimetre_thoracique-court'] = 'Périmètre thoracique';
+$locales['CConstantesMedicales-perimetre_thoracique-desc'] = 'Périmètre thoracique';
 $locales['CSejour-back-tasks'] = 'Activités';
 $locales['CSejour-back-tasks.empty'] = 'Aucune activité';
 $locales['CSejourTask'] = 'Activité';
