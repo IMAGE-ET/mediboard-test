@@ -64,7 +64,8 @@ class CPrescriptionLine extends CMbObject implements IPatientRelated {
   var $_ref_prises         = null;
   var $_ref_administrations = null;
   var $_ref_transmissions   = null;
-  
+  var $_ref_alerte = null;
+	
   // Dossier/Feuille de soin
   var $_administrations = null;          // Administrations d'une ligne stockées par date, heure, type de prise
   var $_administrations_by_line = null; // Administrations d'une ligne stockées par date
@@ -76,6 +77,7 @@ class CPrescriptionLine extends CMbObject implements IPatientRelated {
   var $_update_planif_systeme = null; // Permet de forcer le calcul des planifs systemes pour une ligne
   var $_count_locked_planif = null;
 	var $_planifs_systeme = array();
+	var $_urgence = null;
 	
   // Can fields
   var $_perm_edit = null;
@@ -461,22 +463,40 @@ class CPrescriptionLine extends CMbObject implements IPatientRelated {
     }
   }
 	
+  function loadRefAlerte(){
+    $this->_ref_alerte = new CAlert();
+    $this->_ref_alerte->setObject($this);
+    $this->_ref_alerte->handled = "0";
+    $this->_ref_alerte->loadMatchingObject();
+  }
+	
   /*
    * Permet de savoir si la ligne a ete recemment modifiée
    */
   function getRecentModification(){
-    $service_id = isset($_SESSION["soins"]["service_id"]) && $_SESSION["soins"]["service_id"] ?
+		if(@CAppUI::conf("object_handlers CPrescriptionAlerteHandler")){
+			$this->loadRefAlerte();
+			if($this->_ref_alerte->_id){
+				$this->_recent_modification = true;
+        if($this->_ref_alerte->level == "high"){
+					 $this->_urgence = true;
+        }
+			}
+		
+		} else {
+			$service_id = isset($_SESSION["soins"]["service_id"]) && $_SESSION["soins"]["service_id"] ?
       $_SESSION["soins"]["service_id"] : "none";
-      
-    if ($service_id == "NP") {
-      $service_id = "none";
-    }
-    
-    $configs = CConfigService::getAllFor($service_id);
-    
-		// modification recente si moins de $nb_hours heures
-    $nb_hours = $configs["Affichage alertes de modifications"];
-    $this->_recent_modification = $this->hasRecentLog($nb_hours);
+	      
+	    if ($service_id == "NP") {
+	      $service_id = "none";
+	    }
+	    
+	    $configs = CConfigService::getAllFor($service_id);
+	    
+	    // modification recente si moins de $nb_hours heures
+	    $nb_hours = $configs["Affichage alertes de modifications"];
+	    $this->_recent_modification = $this->hasRecentLog($nb_hours);
+		}
   }
   
   /*

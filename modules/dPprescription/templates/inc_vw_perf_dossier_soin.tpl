@@ -21,8 +21,41 @@
   {{/if}}
   
   {{if $_prescription_line_mix->_recent_modification}}
-    <img style="float: right; margin: 2px;" src="images/icons/ampoule.png" title="Ligne recemment modifiée" />
-  {{/if}}
+    {{if @$conf.object_handlers.CPrescriptionAlerteHandler && $_prescription_line_mix->_ref_alerte->_id}}
+        <div id="alert_manuelle_{{$_prescription_line_mix->_ref_alerte->_id}}">
+          <img style="float: right" src="images/icons/ampoule.png" onmouseover="alerte_prescription = ObjectTooltip.createDOM(this, 'editAlerte-{{$_prescription_line_mix->_ref_alerte->_id}}'); "/>
+           
+          <div id="editAlerte-{{$_prescription_line_mix->_ref_alerte->_id}}" style="display: none;">
+            <table class="form">
+              <tr>
+                <th class="category">Alerte</th>
+              </tr> 
+              <tr>
+                <td class="text" style="width: 300px;">{{$_prescription_line_mix->_ref_alerte->comments}}</td>
+              </tr>
+              <tr>
+                <td class="button">
+                  <form name="modifyAlert-{{$_prescription_line_mix->_ref_alerte->_id}}" action="?" method="post" class="form-alerte"
+                        onsubmit="return onSubmitFormAjax(this, { 
+                                    onComplete: function() { $('alert_manuelle_{{$_prescription_line_mix->_ref_alerte->_id}}').hide(); if(alerte_prescription) { alerte_prescription.hide(); } } });">
+                    <input type="hidden" name="m" value="system" />
+                    <input type="hidden" name="dosql" value="do_alert_aed" />
+                    <input type="hidden" name="del" value="" />
+                    <input type="hidden" name="alert_id" value="{{$_prescription_line_mix->_ref_alerte->_id}}" />
+                    <input type="hidden" name="handled" value="1" />
+                    <button type="submit" class="tick">
+                      Traiter
+                    </button>
+                  </form>
+                </td>
+              </tr>
+            </table>
+          </div>
+        </div>
+      {{else}}
+        <img style="float: right" src="images/icons/ampoule.png" title="Ligne récemment modifiée"/>
+      {{/if}}  
+		{{/if}}
 	
 	{{if $_prescription_line_mix->commentaire}}
     <img style="float: right; margin: 2px;" src="images/icons/postit.png" title="" onmouseover="ObjectTooltip.createDOM(this, 'tooltip-content-comment-{{$_prescription_line_mix->_guid}}');" />

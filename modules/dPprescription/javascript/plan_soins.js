@@ -417,5 +417,17 @@ PlanSoins = {
 	  url.addParam("prescription_id", prescription_id);
 	  url.addParam("debut", PlanSoins.date);
 	  url.popup(900, 600, "Impression des bons");
+	},
+	
+	closeAllAlertes: function(chapitre, ampoule, urgence){
+    // Application de toutes les alertes du chapitre
+		var form_name = urgence ? 'form-alerte-urgence' : 'form-alerte'; 
+		$(chapitre).select("form."+form_name).each(function(oForm){
+			onSubmitFormAjax(oForm, { onComplete: function(){ 
+			  // On masque les ampoules pour chaque lignes
+				$('alert_manuelle_'+$V(oForm.alert_id)).hide();
+			}});
+		});
+		ampoule.hide();
 	}
 };

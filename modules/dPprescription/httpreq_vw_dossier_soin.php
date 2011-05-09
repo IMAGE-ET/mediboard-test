@@ -231,10 +231,13 @@ else {
       // Chargement des lignes d'elements
 		  $prescription->loadRefsLinesElementByCat("1",null);
 			
-		  // Calcul des modifications recentes par chapitre
-		  $prescription->countRecentModif();
-		  $prescription->countUrgence($date);
-    } else {
+			if(@!CAppUI::conf("object_handlers CPrescriptionAlerteHandler")){
+		    // Calcul des modifications recentes par chapitre
+		    $prescription->countRecentModif();
+		    $prescription->countUrgence($date);
+			}
+		
+		} else {
       // Chargement des lignes d'elements  avec pour chapitre $chapitre
 		  $prescription->loadRefsLinesElementByCat("1",$chapitre);
     }

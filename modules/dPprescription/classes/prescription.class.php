@@ -55,6 +55,9 @@ class CPrescription extends CMbObject implements IPatientRelated {
   var $_ref_lines_inscriptions                = null;
 	var $_count_inscriptions                    = null;
 	
+	// Distant Ref
+	var $_ref_alertes = null;
+	
   // Others Fields
   var $_type_sejour = null;
   var $_counts_by_chapitre = null;
@@ -99,7 +102,12 @@ class CPrescription extends CMbObject implements IPatientRelated {
   var $_purge_planifs_systemes = null;
 	var $_chapitres = null;
 	var $_count_recent_modif_presc = null;
+	var $_count_recent_modif = null;
 	
+	var $_count_alertes = null;
+	var $_count_urgences = null;
+	
+	var $_nb_lines_plan_soins = null;
 	var $_ref_prescription_lines_by_cat = null;
 	var $_protocole_locked = null;
 	
@@ -1159,8 +1167,8 @@ class CPrescription extends CMbObject implements IPatientRelated {
     }
     return $historique;
   }
-  
-  
+
+	
   /**
    * Count recent prescription modifications
    * acording to service config
@@ -1252,7 +1260,62 @@ class CPrescription extends CMbObject implements IPatientRelated {
 		
 		return $this->_count_fast_recent_modif;
 	}
+	
+	function countAlertes($level = "medium"){
+		
+		$alert = new CAlert();
+		$where = array();
+		$where["handled"] = " = '0'";
+		$where["level"] = " = '$level'";
+		$where["prescription.prescription_id"] = " = '$this->_id'";
+    
+		$ljoin["prescription_line_medicament"] = "(prescription_line_medicament.prescription_line_medicament_id = alert.object_id) 
+                                             AND (alert.object_class = 'CPrescriptionLineMedicament')";
+                                             
+    $ljoin["prescription_line_element"] = "(prescription_line_element.prescription_line_element_id = alert.object_id) 
+                                           AND (alert.object_class = 'CPrescriptionLineElement')";
+                                             
+    $ljoin["prescription_line_mix"] = "(prescription_line_mix.prescription_line_mix_id = alert.object_id) 
+                                       AND (alert.object_class = 'CPrescriptionLineMix')";                   
+                                             
+    $ljoin["prescription_line_comment"] = "(prescription_line_comment.prescription_line_comment_id = alert.object_id) 
+                                           AND (alert.object_class = 'CPrescriptionLineComment')";      
+    
+		$ljoin["prescription"] = "(prescription_line_medicament.prescription_id = prescription.prescription_id) OR
+                          (prescription_line_element.prescription_id = prescription.prescription_id) OR
+                          (prescription_line_mix.prescription_id = prescription.prescription_id) OR
+													(prescription_line_comment.prescription_id = prescription.prescription_id)";
+		
+		return $alert->countList($where, null, null, null, $ljoin);											
+	}
   
+	function loadRefsAlertes($level = "medium"){
+		$alert = new CAlert();
+		$where = array();
+    $where["handled"] = " = '0'";
+		$where["level"] = " = '$level'";
+    $where["prescription.prescription_id"] = " = '$this->_id'";
+    
+    $ljoin["prescription_line_medicament"] = "(prescription_line_medicament.prescription_line_medicament_id = alert.object_id) 
+                                             AND (alert.object_class = 'CPrescriptionLineMedicament')";
+                                             
+    $ljoin["prescription_line_element"] = "(prescription_line_element.prescription_line_element_id = alert.object_id) 
+                                           AND (alert.object_class = 'CPrescriptionLineElement')";
+                                             
+    $ljoin["prescription_line_mix"] = "(prescription_line_mix.prescription_line_mix_id = alert.object_id) 
+                                       AND (alert.object_class = 'CPrescriptionLineMix')";                   
+                                             
+    $ljoin["prescription_line_comment"] = "(prescription_line_comment.prescription_line_comment_id = alert.object_id) 
+                                           AND (alert.object_class = 'CPrescriptionLineComment')";      
+    
+    $ljoin["prescription"] = "(prescription_line_medicament.prescription_id = prescription.prescription_id) OR
+                          (prescription_line_element.prescription_id = prescription.prescription_id) OR
+                          (prescription_line_mix.prescription_id = prescription.prescription_id) OR
+                          (prescription_line_comment.prescription_id = prescription.prescription_id)";
+	
+	  $this->_ref_alertes = $alert->loadList($where, null, null, null, $ljoin);                
+    
+	}
   /*
    * Calcul des chapitres qui possedent des prises urgentes 
    */
@@ -1814,7 +1877,9 @@ class CPrescription extends CMbObject implements IPatientRelated {
    * Génération du Dossier/Feuille de soin
    */
   function calculPlanSoin($dates, $mode_feuille_soin = 0, $mode_semainier = 0, $mode_dispensation = 0, $code_cip = "", $with_calcul = true, $code_cis = "", $manual_planif = false){  
-	  $this->calculAllPlanifSysteme();
+	  $alert_handler = @CAppUI::conf("object_handlers CPrescriptionAlerteHandler");
+		
+		$this->calculAllPlanifSysteme();
 		
 		// Chargement des lignes d'inscriptions
 		$this->loadRefsLinesInscriptions();
@@ -1832,6 +1897,15 @@ class CPrescription extends CMbObject implements IPatientRelated {
 		}
 
     // Parcours des lignes de smedicaments
+		if($alert_handler){
+			$this->_nb_lines_plan_soins["med"] = 0;
+	    $this->_nb_lines_plan_soins["inj"] = 0;
+	    $this->_count_recent_modif["med"] = false;
+			$this->_count_recent_modif["inj"] = false;
+	    $this->_count_urgence["med"] = false;
+	    $this->_count_urgence["inj"] = false;
+		}
+		
     if(count($this->_ref_prescription_lines)){
       foreach($this->_ref_prescription_lines as &$_line_med){
       	if($_line_med->perop){
@@ -1864,7 +1938,20 @@ class CPrescription extends CMbObject implements IPatientRelated {
         $code_ATC = $produit->_ref_ATC_2_code;
         
 				foreach($dates as $date){
-	        if(($date >= $_line_med->debut && $date <= mbDate($_line_med->_fin_reelle))){     
+	        if(($date >= $_line_med->debut && $date <= mbDate($_line_med->_fin_reelle))){
+	        	$type_med = $_line_med->_is_injectable ? "inj" : "med";
+					  $this->_nb_lines_plan_soins[$type_med]++;
+						
+						if($alert_handler){
+							if($_line_med->_recent_modification){
+	              if($_line_med->_urgence){
+								  $this->_count_urgence[$type_med] = true;
+								} else {
+								  $this->_count_recent_modif[$type_med] = true;
+                }
+							}
+						}
+						
 	          if ((count($_line_med->_ref_prises) < 1) && (!isset($this->_lines["med"][$code_ATC][$_line_med->_id]["aucune_prise"]))){
 	            if($_line_med->_is_injectable){
 	              $this->_ref_injections_for_plan[$code_ATC][$_line_med->_id]["aucune_prise"] = $_line_med;  
@@ -1873,6 +1960,7 @@ class CPrescription extends CMbObject implements IPatientRelated {
 	            }
 	            continue;
 	          }
+						
 	          $_line_med->calculPrises($this, $date, null, null, $with_calcul, $manual_planif);
 	        }
 				}
@@ -1899,6 +1987,11 @@ class CPrescription extends CMbObject implements IPatientRelated {
     if(!$mode_dispensation){
       if($this->_ref_prescription_lines_element_by_cat){
         foreach($this->_ref_prescription_lines_element_by_cat as $name_chap => $elements_chap){
+        	if($alert_handler){
+        	  $this->_nb_lines_plan_soins[$name_chap] = 0;
+            $this->_count_recent_modif[$name_chap] = false;
+					  $this->_count_urgence[$name_chap] = false;
+					}
           foreach($elements_chap as $name_cat => $elements_cat){
             foreach($elements_cat as &$_elements){
               foreach($_elements as &$_line_element){
@@ -1924,6 +2017,17 @@ class CPrescription extends CMbObject implements IPatientRelated {
                 foreach($dates as $date){
 	                // Pre-remplissage des prises prevues dans le dossier de soin
 	                if(($date >= $_line_element->debut && $date <= mbDate($_line_element->_fin_reelle))){
+	                	$this->_nb_lines_plan_soins[$name_chap]++;
+										
+										if($alert_handler){
+										  if($_line_element->_recent_modification){
+				                if($_line_element->_urgence){
+				                	$this->_count_urgence[$name_chap] = true;
+				                } else {
+				                  $this->_count_recent_modif[$name_chap] = true;
+                        }
+											}
+										}
 	                  // Si aucune prise  
 	                  if ((count($_line_element->_ref_prises) < 1) && (!isset($this->_lines["elt"][$name_chap][$name_cat][$_line_element->_id]["aucune_prise"]))){
 	                    $this->_ref_lines_elt_for_plan[$name_chap][$name_cat][$_line_element->_id]["aucune_prise"] = $_line_element;
@@ -1950,8 +2054,17 @@ class CPrescription extends CMbObject implements IPatientRelated {
       }
     }
   
+	
 	  // Parcours des prescription_line_mixes
     if($this->_ref_prescription_line_mixes){
+    	if($alert_handler){
+				$this->_count_recent_modif["aerosol"] = false;
+				$this->_count_recent_modif["oxygene"] = false;
+	      $this->_count_recent_modif["perfusion"] = false;
+	      $this->_count_urgence["aerosol"] = false;
+	      $this->_count_urgence["oxygene"] = false;
+	      $this->_count_urgence["perfusion"] = false;
+			}
       foreach($this->_ref_prescription_line_mixes as &$_prescription_line_mix){
          if($_prescription_line_mix->perop){
            continue;
@@ -1962,6 +2075,14 @@ class CPrescription extends CMbObject implements IPatientRelated {
 				 $_prescription_line_mix->calculQuantiteTotal();
 				 foreach($dates as $date){
 	         if(($date >= mbDate($_prescription_line_mix->_debut)) && ($date <= mbDate($_prescription_line_mix->_fin))){
+	         	@$this->_nb_lines_plan_soins[$_prescription_line_mix->type_line]++;
+            
+						if($_prescription_line_mix->_recent_modification){
+							if($alert_handler){
+							  $this->_count_recent_modif[$_prescription_line_mix->type_line] = true;
+							}
+						}
+
 	           if($with_calcul){
 	           	 $_prescription_line_mix->calculPrisesPrevues($date);
 	           }

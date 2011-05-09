@@ -88,7 +88,8 @@ class CPrescriptionLineMix extends CMbObject {
   
   // Back Refs
   var $_ref_lines        = null;
-  
+  var $_ref_alerte       = null;
+		
   // Form fields
   var $_debut             = null; // Debut de la prescription_line_mix (dateTime)
   var $_fin               = null; // Fin de la prescription_line_mix (dateTime)
@@ -366,19 +367,33 @@ class CPrescriptionLineMix extends CMbObject {
   	}
 	}
   
+	function loadRefAlerte(){
+    $this->_ref_alerte = new CAlert();
+    $this->_ref_alerte->setObject($this);
+    $this->_ref_alerte->handled = "0";    
+    $this->_ref_alerte->loadMatchingObject();
+  }
+	
 	function getRecentModification(){
-	  $service_id = isset($_SESSION["soins"]["service_id"]) && $_SESSION["soins"]["service_id"] ?
-	    $_SESSION["soins"]["service_id"] : "none";
-    
-	  if ($service_id == "NP") {
-      $service_id = "none";
-    }  
-	  
-    $configs = CConfigService::getAllFor($service_id);
-
-    // modification recente si moins de $nb_hours heures
-    $nb_hours = $configs["Affichage alertes de modifications"];
-    $this->_recent_modification = $this->hasRecentLog($nb_hours);
+		if(@CAppUI::conf("object_handlers CPrescriptionAlerteHandler")){
+      $this->loadRefAlerte();
+			if($this->_ref_alerte->_id){
+        $this->_recent_modification = true;
+      }
+    } else {
+		  $service_id = isset($_SESSION["soins"]["service_id"]) && $_SESSION["soins"]["service_id"] ?
+		  $_SESSION["soins"]["service_id"] : "none";
+	    
+		  if ($service_id == "NP") {
+	      $service_id = "none";
+	    }  
+		  
+	    $configs = CConfigService::getAllFor($service_id);
+	
+	    // modification recente si moins de $nb_hours heures
+	    $nb_hours = $configs["Affichage alertes de modifications"];
+	    $this->_recent_modification = $this->hasRecentLog($nb_hours);
+		}
 	}
 	
 	function countLockedPlanif(){

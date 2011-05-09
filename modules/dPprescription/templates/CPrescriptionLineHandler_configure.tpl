@@ -8,16 +8,14 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
 *}}
 
-{{assign var=class value=CPrescriptionLineHandler}}
 
-<form name="EditConfig-{{$class}}" action="?m={{$m}}&amp;{{$actionType}}=configure" method="post" onsubmit="return onSubmitFormAjax(this)">
+<form name="EditConfig-Handler" action="?m={{$m}}&amp;{{$actionType}}=configure" method="post" onsubmit="return onSubmitFormAjax(this)">
   <input type="hidden" name="dosql" value="do_configure" />
   <input type="hidden" name="m" value="system" />
 
 	<table class="form">
-
-    {{mb_include module=system template=configure_handler class_handler=$class}}   
-		
+    {{mb_include module=system template=configure_handler class_handler=CPrescriptionLineHandler}}   
+		{{mb_include module=system template=configure_handler class_handler=CPrescriptionAlerteHandler}}   
 	  <tr>
 	    <td class="button" colspan="2">
 	      <button class="modify" type="submit">{{tr}}Save{{/tr}}</button>

@@ -51,6 +51,9 @@ class CPrescriptionLineHandler extends CMbObjectHandler {
       return;
     }
     
+		// On desactive le handler des alertes
+    CMbObject::ignoreHandler("CPrescriptionAlerteHandler");
+		
     if($mbObject instanceof CSejour){
       if(!$mbObject->fieldModified("_entree") && !$mbObject->fieldModified("_sortie")){
         return;
@@ -72,6 +75,8 @@ class CPrescriptionLineHandler extends CMbObjectHandler {
       $prescription->removeAllPlanifSysteme();   
       return;
     }
+		
+		
 		
    // On charge toutes les lignes qui sont définies en fonction de l'entree du sejour
    if($mbObject->_class_name == "COperation"){

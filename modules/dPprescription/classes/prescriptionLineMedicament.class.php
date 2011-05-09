@@ -516,7 +516,7 @@ class CPrescriptionLineMedicament extends CPrescriptionLine {
   
   
   function applyPoso($poso){ 
-    // Chargement d'une ligne possedant la poso la plus utilisée
+	  // Chargement d'une ligne possedant la poso la plus utilisée
 		$line_medicament = new CPrescriptionLineMedicament();
     $line_medicament->load($poso['prescription_line_medicament_id']);
 		$line_medicament->loadRefsPrises();
@@ -527,6 +527,7 @@ class CPrescriptionLineMedicament extends CPrescriptionLine {
 	      $_prise->_id = '';
 	      $_prise->object_id = $this->_id;
 	      $_prise->object_class = $this->_class_name;
+        $_prise->_ref_object = null;
 	      $_prise->store();
       }
     }
