@@ -54,7 +54,10 @@ class CPrescriptionAlerteHandler extends CMbObjectHandler {
     $alerte = new CAlert();
 		
     $object = $this->getAlerteObject($mbObject);
-
+    if($object->_protocole){
+    	return;
+    }
+		
     $alerte->setObject($object);
     $alerte->tag = "prescription_modification";
     $alerte->loadMatchingObject();
