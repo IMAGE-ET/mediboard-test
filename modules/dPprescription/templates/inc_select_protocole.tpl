@@ -12,7 +12,8 @@
   {{foreach from=$list key=type item=prots}}
     {{foreach from=$prots item=_prot}}
       <li class="{{if $_prot->praticien_id}}user{{elseif $_prot->function_id}}function{{else}}group{{/if}}"
-        {{if $type == 'prot'}}data-advanced_protocole="{{$_prot->advanced_protocole}}"{{/if}}
+        {{if $type == 'prot'}}data-advanced_protocole="{{$_prot->advanced_protocole}}"
+        data-fast_access="{{$_prot->fast_access}}"{{/if}}
         data-id='{{$_prot->_id}}'>
         {{if $type == "prot"}}
           <a href="#" onclick="Prescription.printPrescription('{{$_prot->_id}}', 0, '{{$_prot->object_id}}', 1);" style="float: right">

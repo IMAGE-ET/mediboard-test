@@ -15,6 +15,11 @@ $libelle_cible = CValue::post("cible");
 $category = new CCategoryPrescription();
 $where = array();
 $where["nom"] = "LIKE '%$libelle_cible%'";
+
+if (CAppUI::conf("dPprescription CCategoryPrescription show_only_cible")) {
+  $where["only_cible"] = " = '1'";
+}
+
 $cibles["cat"] = $category->loadList($where);
 
 // Recherche dans les noms de classes ATC de niveau 2

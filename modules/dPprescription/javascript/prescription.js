@@ -180,8 +180,14 @@ Prescription = {
     url.addParam("mode_pharma", mode_pharma);
     url.requestUpdate("systemMsg");
   },
-  reload: function(prescription_id, element_id, chapitre, mode_protocole, mode_pharma, line_id, full_line_guid, hide_old_lines) {
+  reload: function(prescription_id, element_id, chapitre, mode_protocole, mode_pharma, line_id, full_line_guid, hide_old_lines, advanced_prot) {
       var oForm = document.addLine;    
+
+      // Rechargement de la modale de protocole avancé
+      if (advanced_prot) {
+        window.selectLines.modaleObject.container.select(".change")[0].click();
+        return;
+      }
       
 			try {
         window.opener.PrescriptionEditor.refresh(oForm.object_id.value, oForm.object_class.value);
@@ -272,7 +278,7 @@ Prescription = {
 			}
 		} } );
   },
-	reloadLine: function(line_guid, mode_protocole, mode_pharma, operation_id, mode_substitution){
+	reloadLine: function(line_guid, mode_protocole, mode_pharma, operation_id, mode_substitution, advanced_prot){
 		if (window.modalPrescription) {
 			modalPrescription.close();
 	  }
@@ -282,6 +288,7 @@ Prescription = {
 		url.addParam("line_guid", line_guid);
 		url.addParam("mode_protocole", mode_protocole);
 		url.addParam("mode_pharma", mode_pharma);
+		url.addParam("advanced_prot", advanced_prot);
 		if (window.DMI_operation_id) {
 	  	url.addParam("operation_id", window.DMI_operation_id);
 	  }

@@ -28,6 +28,9 @@
 {{assign var=mode_pharma value=0}}
 {{assign var=operation_id value=''}}
 {{assign var=element value=''}}
+{{assign var=mode_substitution value=''}}
+{{assign var=mode_protocole value=''}}
+{{assign var=mode_pharma value=''}}
 
 <form name="selLines" method="post" action="?">
   <input type="hidden" name="m" value="dPprescription"/>

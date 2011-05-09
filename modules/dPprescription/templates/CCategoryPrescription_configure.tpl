@@ -19,6 +19,7 @@
     <!-- Affichage du header et de la description des chapitres lors de l'impression des ordonnances -->
     {{mb_include module=system template=inc_config_bool var=show_header}}
     {{mb_include module=system template=inc_config_bool var=show_description}}
+    {{mb_include module=system template=inc_config_bool var=show_only_cible}}
     <tr> 
       <td colspan="2">
         <table class="form">

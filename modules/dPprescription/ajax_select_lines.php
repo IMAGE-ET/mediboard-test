@@ -61,15 +61,18 @@ foreach ($prescription->_ref_prescription_line_mixes as $key=>$_line_mix) {
   }
   else {
     $_line_mix->loadRefsLines();
+    $_line_mix->loadRefPraticien();
   }
 }
+
+$checked_lines = CAppUI::conf("dPprescription CPrescription show_modal") ? 1 : $protocole->checked_lines;
 
 $smarty = new CSmartyDP;
 $smarty->assign("prescription"   , $prescription);
 $smarty->assign("pratSel_id"     , $pratSel_id);
 $smarty->assign("praticien_id"   , $praticien_id);
 $smarty->assign("prescription_id", $prescription_id);
-$smarty->assign("checked_lines"  , $protocole->checked_lines);
+$smarty->assign("checked_lines"  , $checked_lines);
 $smarty->assign("now", mbDate());
 $smarty->display("inc_select_lines.tpl");
 

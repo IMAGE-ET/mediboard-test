@@ -168,35 +168,34 @@
 	     {{/if}}
 		 </td>
 		{{/if}}
-    {{if !$advanced_prot}}
-  		<td class="text" style="width: 10%" >
-  			<button style="float: right;" class="edit notext" onclick="Prescription.reloadLine('{{$line->_guid}}','{{$line->_protocole}}','{{$mode_pharma}}','{{$operation_id}}','{{$mode_substitution}}');"></button>
+    
+    <td class="text" style="width: 10%" >
+  	  <button style="float: right;" class="edit notext" type="button" onclick="Prescription.reloadLine('{{$line->_guid}}','{{$line->_protocole}}','{{$mode_pharma}}','{{$operation_id}}','{{$mode_substitution}}', {{$advanced_prot}});"></button>
   
-        {{if !$line->_protocole}}
-          <div class="mediuser" style="border-color: #{{$line->_ref_praticien->_ref_function->color}};">
-            {{if @$modules.messagerie}}
+      {{if !$line->_protocole}}
+        <div class="mediuser" style="border-color: #{{$line->_ref_praticien->_ref_function->color}};">
+          {{if @$modules.messagerie}}
             <a class="action" href="#nothing" onclick="MbMail.create({{$line->_ref_praticien->_id}}, '{{$line->_view}}')">
               <img src="images/icons/mbmail.png" title="Envoyer un message" />
             </a>
-            {{/if}}
-            {{if $line->signee}}
-              <img src="images/icons/tick.png" title="Ligne signée par le praticien" />
+          {{/if}}
+          {{if $line->signee}}
+            <img src="images/icons/tick.png" title="Ligne signée par le praticien" />
+          {{else}}
+            <img src="images/icons/cross.png" title="Ligne non signée par le praticien" />
+          {{/if}}
+          {{if $prescription->type == "sejour"}}
+            {{if $line->valide_pharma}}
+              <img src="images/icons/signature_pharma.png" title="Signée par le pharmacien" />
             {{else}}
-              <img src="images/icons/cross.png" title="Ligne non signée par le praticien" />
+              <img src="images/icons/signature_pharma_barre.png" title="Non signée par le pharmacien" />
             {{/if}}
-            {{if $prescription->type == "sejour"}}
-              {{if $line->valide_pharma}}
-                <img src="images/icons/signature_pharma.png" title="Signée par le pharmacien" />
-              {{else}}
-                <img src="images/icons/signature_pharma_barre.png" title="Non signée par le pharmacien" />
-              {{/if}}
-            {{/if}}
-           <label title="{{$line->_ref_praticien->_view}}">{{$line->_ref_praticien->_shortview}}</label>
-         </div>
-         {{else}}
+          {{/if}}
+         <label title="{{$line->_ref_praticien->_view}}">{{$line->_ref_praticien->_shortview}}</label>
+       </div>
+       {{else}}
          -
-         {{/if}}
-      </td>
-    {{/if}}
-  </tr>
+       {{/if}}
+     </td>
+   </tr>
 </table>

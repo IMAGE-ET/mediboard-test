@@ -8,6 +8,7 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
 *}}
 
+{{mb_default var=advanced_prot value=0}}
 {{assign var=element value=$line->_chapitre}}
 <!-- Initialisation des variables -->
 {{assign var=dosql value="do_prescription_line_element_aed"}}
@@ -58,7 +59,7 @@
         {{elseif !$line->_protocole}}
           {{$line->_ref_praticien->_view}}    
         {{/if}}
-        <button class="lock notext" onclick="modalPrescription.close(); Prescription.reload.defer('{{$prescription->_id}}', '', '{{$div_refresh}}', '', '{{$mode_pharma}}', null, '');"></button>
+        <button class="lock notext" onclick="modalPrescription.close(); Prescription.reload.defer('{{$prescription->_id}}', '', '{{$div_refresh}}', '', '{{$mode_pharma}}', null, '', null, {{$advanced_prot}});"></button>
       </div>
       <!-- View de l'element -->
       <strong style="font-size: 1.5em;">
@@ -246,7 +247,7 @@
 		     {{/if}}
 		  {{/if}}
 
-      {{if $line->_can_delete_line || ($line->signee && ($app->user_id == $line->praticien_id || $line->inscription) || !$line->signee)}}
+      {{if ($line->_can_delete_line || ($line->signee && ($app->user_id == $line->praticien_id || $line->inscription) || !$line->signee)) && !$advanced_prot}}
 			<fieldset style="float: right; width: 48%;">
 			 	<legend>
 			 		Actions

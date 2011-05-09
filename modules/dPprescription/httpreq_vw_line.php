@@ -16,6 +16,7 @@ $mode_protocole = CValue::get("mode_protocole");
 $mode_pharma    = CValue::get("mode_pharma");
 $operation_id   = CValue::get("operation_id");
 $mode_substitution = CValue::get("mode_substitution");
+$advanced_prot  = CValue::get("advanced_prot");
 
 $aides_prescription = array();
 $executants = array();
@@ -149,6 +150,7 @@ $smarty->assign("is_praticien", $is_praticien);
 $smarty->assign("mode_pack", 0);
 $smarty->assign("mode_substitution", $mode_substitution);
 $smarty->assign("aides_prescription", $aides_prescription);
+$smarty->assign("advanced_prot", $advanced_prot);
 
 $smarty->assign("executants", $executants);
 $smarty->assign("category_id", $category_id);

@@ -145,29 +145,28 @@
     {{/if}}               
   </td>
   {{/if}} 
-  {{if !$advanced_prot}}
-    <td style="width: 10%" class="text">
-      <button style="float: right;" class="edit notext" onclick="Prescription.reloadLine('{{$_prescription_line_mix->_guid}}','{{$_prescription_line_mix->_protocole}}','{{$mode_pharma}}','{{$operation_id}}','{{$mode_substitution}}');"></button>
-       {{if !$_prescription_line_mix->_protocole}}
-       <div class="mediuser" style="border-color: #{{$_prescription_line_mix->_ref_praticien->_ref_function->color}};">
-          {{if $_prescription_line_mix->signature_prat}}
-            <img src="images/icons/tick.png" title="Ligne signée par le praticien" />
+
+  <td style="width: 10%" class="text">
+    <button style="float: right;" class="edit notext" type="button" onclick="Prescription.reloadLine('{{$_prescription_line_mix->_guid}}','{{$_prescription_line_mix->_protocole}}','{{$mode_pharma}}','{{$operation_id}}','{{$mode_substitution}}', {{$advanced_prot}});"></button>
+     {{if !$_prescription_line_mix->_protocole}}
+     <div class="mediuser" style="border-color: #{{$_prescription_line_mix->_ref_praticien->_ref_function->color}};">
+        {{if $_prescription_line_mix->signature_prat}}
+          <img src="images/icons/tick.png" title="Ligne signée par le praticien" />
+        {{else}}
+          <img src="images/icons/cross.png" title="Ligne non signée par le praticien" />
+        {{/if}}
+        {{if $prescription->type != "externe"}}
+          {{if $_prescription_line_mix->signature_pharma}}
+            <img src="images/icons/signature_pharma.png" title="Signée par le pharmacien" />
           {{else}}
-            <img src="images/icons/cross.png" title="Ligne non signée par le praticien" />
-          {{/if}}
-          {{if $prescription->type != "externe"}}
-            {{if $_prescription_line_mix->signature_pharma}}
-              <img src="images/icons/signature_pharma.png" title="Signée par le pharmacien" />
-            {{else}}
-              <img src="images/icons/signature_pharma_barre.png" title="Non signée par le pharmacien" />
-            {{/if}} 
-          {{/if}}
-          <label title="{{$_prescription_line_mix->_ref_praticien->_view}}">{{$_prescription_line_mix->_ref_praticien->_shortview}}</label>
-       </div>
-       {{else}}
-         -
-       {{/if}}
-    </td>
-  {{/if}}
-  </tr>
+            <img src="images/icons/signature_pharma_barre.png" title="Non signée par le pharmacien" />
+          {{/if}} 
+        {{/if}}
+        <label title="{{$_prescription_line_mix->_ref_praticien->_view}}">{{$_prescription_line_mix->_ref_praticien->_shortview}}</label>
+     </div>
+     {{else}}
+       -
+     {{/if}}
+  </td>
+</tr>
 </table>

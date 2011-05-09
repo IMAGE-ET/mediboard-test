@@ -48,6 +48,7 @@ Main.add(Control.Tabs.create.curry('tab-{{$class}}', true));
 			{{mb_include module=system template=inc_config_bool var=show_inscription}}
 			{{mb_include module=system template=inc_config_bool var=manual_planif}}
 			{{mb_include module=system template=inc_config_bool var=role_propre}}
+      {{mb_include module=system template=inc_config_bool var=show_modal}}
 		</tbody>
 
     <tbody style="display: none" id="chapters_visible">

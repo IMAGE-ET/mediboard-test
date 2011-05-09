@@ -74,7 +74,8 @@ $dPconfig["dPprescription"] = array (
 		"preselect_livret"      => "1",
 		"use_libelle_livret"    => "0",
 		"manual_planif"         => "0",
-		"role_propre"           => "0"
+		"role_propre"           => "0",
+    "show_modal"            => "0",
   ),
   
   "CCategoryPrescription" => array (
@@ -119,7 +120,8 @@ $dPconfig["dPprescription"] = array (
       "unite_prise" => ""
     ),
     "show_description" => "0",
-    "show_header" => "0"
+    "show_header" => "0",
+    "show_only_cible" => "0"
   ),
   
   "CMomentUnitaire" => array(

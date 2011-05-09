@@ -8,6 +8,7 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
 *}}
 
+{{mb_default var=advanced_prot value=0}}
 {{assign var=dosql value="do_prescription_line_medicament_aed"}}
 
 {{if $line->inscription}}
@@ -89,7 +90,7 @@
   				{{if @$mode_substitution}}
   				 Prescription.viewSubstitutionLines('{{$line->substitute_for_id}}','{{$line->substitute_for_class}}');
   				{{else}}
-  				 Prescription.reload('{{$prescription->_id}}', '', '{{$div_refresh}}', '', '{{$mode_pharma}}', null, '');
+  				 Prescription.reload('{{$prescription->_id}}', '', '{{$div_refresh}}', '', '{{$mode_pharma}}', null, '', null, {{$advanced_prot}});
   				{{/if}}">
 				</button>
       </div>
@@ -360,7 +361,7 @@
 	          <input type="hidden" name="dosql" value="do_substitution_line_aed" />
 	          <select name="object_guid" style="width: 150px;" 
 	                  onchange="onSubmitFormAjax(this.form, { onComplete:   
-	                               Prescription.reloadLine.curry(this.value)
+	                               Prescription.reloadLine.curry(this.value, null, null, null, null, {{$advanced_prot}})
 	                              } )">
 	            <option value="">Variantes</option>
 	            {{foreach from=$line->_ref_substitution_lines item=lines_subst_by_chap}}
@@ -396,8 +397,8 @@
 	          {{include file="../../dPprescription/templates/line/inc_vw_form_add_line_contigue.tpl"}}
 	        </fieldset>
 	      {{/if}}
-			 
-			  {{if $line->_can_delete_line || $mode_pharma || ($line->signee && ($app->user_id == $line->praticien_id || $line->inscription) || !$line->signee)}}
+
+			  {{if ($line->_can_delete_line || $mode_pharma || ($line->signee && ($app->user_id == $line->praticien_id || $line->inscription) || !$line->signee)) && !$advanced_prot}}
 				  <fieldset style="float: right; width: 48%; vertical-align: top;">
 				  	<legend>Actions</legend>
 					  <!-- Suppression de la ligne -->

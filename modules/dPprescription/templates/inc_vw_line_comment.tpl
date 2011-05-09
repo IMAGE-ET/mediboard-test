@@ -9,7 +9,8 @@
 *}}
 
 {{assign var=dosql value="do_prescription_line_comment_aed"}}
-			
+{{mb_default var=advanced_prot value=0}}
+
 {{if $line->category_prescription_id}}
 	<!-- Commentaire d'elements -->
 	{{assign var=category value=$line->_ref_category_prescription}}
@@ -26,7 +27,7 @@
 	 <tr>
 	   <th class="category">
 	   	  <div style="float: left">
-				 {{if $line->_can_delete_line}}
+				 {{if $line->_can_delete_line && !$advanced_prot}}
 	         <form name="delLineComment-{{$line->_id}}" action="" method="post">
 	           <input type="hidden" name="m" value="dPprescription" />
 	           <input type="hidden" name="dosql" value="do_prescription_line_comment_aed" />
@@ -59,7 +60,7 @@
          {{if $line->_can_view_form_signature_praticien}} 
            {{include file="../../dPprescription/templates/line/inc_vw_form_signature_praticien.tpl"}}
          {{/if}}
-         <button class="lock notext" onclick="modalPrescription.close(); Prescription.reload.defer('{{$prescription->_id}}', '', '{{$div_refresh}}', '', '{{$mode_pharma}}', null, '');"></button>
+         <button class="lock notext" onclick="modalPrescription.close(); Prescription.reload.defer('{{$prescription->_id}}', '', '{{$div_refresh}}', '', '{{$mode_pharma}}', null, '', null, {{$advanced_prot}});"></button>
        </div>
 			 <strong style="font-size: 1.5em;">
 			   Ligne de commentaire

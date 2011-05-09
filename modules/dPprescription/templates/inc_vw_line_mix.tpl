@@ -8,6 +8,7 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
 *}}
 
+{{mb_default var=advanced_prot value=0}}
 <script type="text/javascript">
 
 Main.add( function(){
@@ -91,9 +92,9 @@ Main.add( function(){
         
          <button class="lock notext" onclick="modalPrescription.close();
 				 {{if @$mode_substitution}}
-         Prescription.viewSubstitutionLines.defer('{{$line->substitute_for_id}}','{{$line->substitute_for_class}}');
+           Prescription.viewSubstitutionLines.defer('{{$line->substitute_for_id}}','{{$line->substitute_for_class}}');
 				 {{else}}
-				 Prescription.reload.defer('{{$prescription->_id}}', '', 'medicament', '', '{{$mode_pharma}}', null, '');
+				   Prescription.reload.defer('{{$prescription->_id}}', '', 'medicament', '', '{{$mode_pharma}}', null, '', null, {{$advanced_prot}});
 				 {{/if}}"></button>
 		  </div>
 		  <!-- Accord du praticien -->
@@ -510,7 +511,7 @@ Main.add( function(){
 									<input type="text" name="produit" value="" size="20" style="width: 300px;" class="autocomplete" />
 	                <div style="display:none; width: 350px;" class="autocomplete" id="aerosol_auto_complete"></div>
 	   						  <input type="hidden" name="code_cip" value="" onchange="onSubmitFormAjax(this.form, { onComplete: function(){ 
-									  Prescription.reloadLine('{{$line->_guid}}','{{$line->_protocole}}', '{{$mode_pharma}}', null, '{{$mode_substitution}}');
+									  Prescription.reloadLine('{{$line->_guid}}','{{$line->_protocole}}', '{{$mode_pharma}}', null, '{{$mode_substitution}}', {{$advanced_prot}});
 									} } )" />
 	                <label title="Recherche dans le livret thérapeutique">
 	                  <input type="checkbox" value="1" name="_recherche_livret" {{if $prescription->type=="sejour" && $conf.dPprescription.CPrescription.preselect_livret}}checked="checked"{{/if}} onchange="if($V(getForm('addLineAerosol').produit)) { acAerosol.activate.bind(acAerosol)() };" />
@@ -548,7 +549,7 @@ Main.add( function(){
 				                    	{{if @$mode_substitution}}
 										  		      Prescription.viewSubstitutionLines('{{$line->substitute_for_id}}','{{$line->substitute_for_class}}');
 										  		    {{else}}
-										  			    Prescription.reloadLine('{{$line->_guid}}','{{$_line_item->_protocole}}','{{$mode_pharma}}');
+										  			    Prescription.reloadLine('{{$line->_guid}}','{{$_line_item->_protocole}}','{{$mode_pharma}}', null, null, {{$advanced_prot}});
 				                      {{/if}}
 										  			}
 				                  } ); }"></button>
@@ -752,7 +753,7 @@ Main.add( function(){
 	          <input type="hidden" name="m" value="dPprescription" />
 	          <input type="hidden" name="dosql" value="do_substitution_line_aed" />
 	          <select name="object_guid" style="width: 150px;" 
-	                  onchange="onSubmitFormAjax(this.form, { onComplete: Prescription.reloadLine.curry(this.value) } )">
+	                  onchange="onSubmitFormAjax(this.form, { onComplete: Prescription.reloadLine.curry(this.value, null, null, null, null, {{$advanced_prot}}) } )">
 	            <option value="">Variantes</option>
 	            {{foreach from=$line->_ref_substitution_lines item=lines_subst_by_chap}}
 	                {{foreach from=$lines_subst_by_chap item=_line_subst}}
@@ -819,9 +820,9 @@ Main.add( function(){
 				{{/if}}
 				
 				<!-- Actions -->
-				{{if $line->_can_delete_prescription_line_mix || 
+				{{if ($line->_can_delete_prescription_line_mix || 
 				    ($line->signature_prat &&  ($app->user_id == $line->praticien_id) || !$line->signature_prat) || 
-						$line->_can_vw_form_signature_pharmacien}}
+						$line->_can_vw_form_signature_pharmacien) && !$advanced_prot}}
 					<fieldset style="float: right; width: 48%;">
 						<legend>
 							Actions
