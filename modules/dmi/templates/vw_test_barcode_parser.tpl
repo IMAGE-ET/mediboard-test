@@ -46,7 +46,7 @@
     <td style="width: 25%" class="{{$result.ok|ternary:'ok':'error'}}">{{mb_include module="dmi" template="inc_vw_result_barcode" object=$result.parsed}}</td>
 		
     {{if $isPhastInstalled}}
-	    <td style="width: 25%">
+	    <td style="width: 25%" id="phast_barcode_{{$smarty.foreach.barcode.index}}">
 	      <button type="submit" class="tick notext" onclick="parsePhastBarcode('{{$barcode}}', this.next(), '{{$smarty.foreach.barcode.index}}')">{{tr}}Search{{/tr}}</button>
 	      <div class="result"></div>
 	    </td>

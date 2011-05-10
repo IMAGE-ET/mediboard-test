@@ -47,7 +47,7 @@
     <hr class="control_tabs" />
     {{/if}} 
          
-    <div id="CSourceFTP-{{$sourcename}}" style="display:{{if !$source->_allowed_instances && ($source instanceof CSourceFTP)}}block{{else}}none{{/if}};">
+    <div id="CSourceFTP-{{$sourcename}}" class="source" style="display:{{if !$source->_allowed_instances && ($source instanceof CSourceFTP)}}block{{else}}none{{/if}};">
       {{if !"ftp"|module_active}}
         {{mb_include module=system template=module_missing mod=ftp}}  
       {{else}}
@@ -55,7 +55,7 @@
       {{/if}}
     </div>
     
-    <div id="CSourceSOAP-{{$sourcename}}" style="display:{{if !$source->_allowed_instances && ($source instanceof CSourceSOAP)}}block{{else}}none{{/if}};">
+    <div id="CSourceSOAP-{{$sourcename}}" class="source" style="display:{{if !$source->_allowed_instances && ($source instanceof CSourceSOAP)}}block{{else}}none{{/if}};">
       {{if !"webservices"|module_active}}
         {{mb_include module=system template=module_missing mod=webservices}}  
       {{else}}
@@ -63,11 +63,11 @@
       {{/if}}
     </div>
     
-    <div id="CSourceSMTP-{{$sourcename}}" style="display:{{if !$source->_allowed_instances && ($source instanceof CSourceSMTP)}}block{{else}}none{{/if}};">
+    <div id="CSourceSMTP-{{$sourcename}}" class="source" style="display:{{if !$source->_allowed_instances && ($source instanceof CSourceSMTP)}}block{{else}}none{{/if}};">
       {{mb_include module=system template=CExchangeSource_inc_config mod=system class="CSourceSMTP"}}  
     </div>
     
-    <div id="CSourceFileSystem-{{$sourcename}}" style="display:{{if !$source->_allowed_instances && ($source instanceof CSourceFileSystem)}}block{{else}}none{{/if}};">
+    <div id="CSourceFileSystem-{{$sourcename}}" class="source" style="display:{{if !$source->_allowed_instances && ($source instanceof CSourceFileSystem)}}block{{else}}none{{/if}};">
       {{if $source instanceof CSourceFileSystem && !$source->active}}
       <div class="small-info">
         {{tr}}CExchangeSource-not-active{{/tr}}
