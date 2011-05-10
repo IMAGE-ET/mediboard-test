@@ -77,8 +77,7 @@ class CPrescriptionLineMix extends CMbObject {
   var $unite_decalage     = null;
   var $decalage_line_fin  = null;
   var $jour_decalage_fin  = null;
-  var $unite_decalage_fin = null;
-	var $time_fin           = null; // Permet de definir une heure de fin precise 
+  var $unite_decalage_fin = null; 
 	var $_date_fin          = null;
 
 	
