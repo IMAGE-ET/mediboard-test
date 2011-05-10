@@ -65,6 +65,7 @@ if (!function_exists('exportXML')) {
         else if ($class_name == "CPrescriptionLineElement" && $key == "element_prescription_id") {
           $element_prescription = new CElementPrescription;
           $element_prescription->load($object->$key);
+          $element_prescription->loadRefCategory();
           $category = $element_prescription->_ref_category_prescription;
           ${$key} = $doc->createAttribute($key);
           $id_value = $doc->createTextNode(utf8_encode($element_prescription->libelle . "#" . $category->chapitre . "#" . $category->nom));
