@@ -715,6 +715,7 @@ class CMbObject {
   
   /**
    * Object list by a request constructor
+   * @param array $where Where SQL statement
    * @param array|string $order Order SQL statement
    * @param string $limit Limit SQL statement
    * @param array|string $group Group by SQL statement

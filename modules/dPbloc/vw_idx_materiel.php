@@ -39,15 +39,17 @@ $where["operations.plageop_id"] = "IS NOT NULL";
 
 $order = "plagesop.date, rank";
 
+$limit = "0, 100";
+
 $operation = new COperation;
 
 $where["commande_mat"] = "!= '1'";
 $where["annulee"]      = "!= '1'";
-$operations["0"] = $operation->loadList($where, $order, null, null, $ljoin);
+$operations["0"] = $operation->loadList($where, $order, $limit, null, $ljoin);
 
 $where["commande_mat"] = "= '1'";
 $where["annulee"]      = "= '1'";
-$operations["1"] = $operation->loadList($where, $order, null, null, $ljoin);
+$operations["1"] = $operation->loadList($where, $order, $limit, null, $ljoin);
 
 foreach($operations as &$_operations) {
   foreach($_operations as $_operation) {
