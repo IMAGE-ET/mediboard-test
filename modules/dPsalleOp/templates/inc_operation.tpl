@@ -223,14 +223,14 @@ function reloadPrescription(prescription_id){
     {{if !$currUser->_is_praticien || ($currUser->_is_praticien && $can->edit) || ($currUser->_is_praticien && !$currUser->_is_anesth)}}
       <li><a href="#dossier_tab">Chir.</a></li>
     {{/if}}
-		
-    <li onmousedown="refreshConstantesHack('{{$selOp->sejour_id}}');"><a href="#constantes-medicales">Constantes</a></li>
-		<li><a href="#antecedents">Atcd.</a></li>
 
-	  {{if $isPrescriptionInstalled}}
+    {{if $isPrescriptionInstalled}}
+      <li onmouseup="PlanSoins.loadTraitement('{{$selOp->sejour_id}}','{{$date}}','','administration');"><a href="#dossier_traitement">Suivi de soins</a></li>
       <li><a href="#prescription_sejour_tab">Prescription</a></li>
-      <li onmouseup="PlanSoins.loadTraitement('{{$selOp->sejour_id}}','{{$date}}','','administration');"><a href="#dossier_traitement">Soins</a></li>
-	  {{/if}}
+    {{/if}}
+		
+    <li onmousedown="refreshConstantesHack('{{$selOp->sejour_id}}');"><a href="#constantes-medicales">Surveillance</a></li>
+		<li><a href="#antecedents">Atcd.</a></li>
 	{{/if}}
   
   {{if $isImedsInstalled}}
