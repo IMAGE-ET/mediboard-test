@@ -34,6 +34,10 @@ else {
 
 $transmission->loadTargetObject();
 
+if ($transmission->object_class == "CAdministration") {
+  $transmission->_ref_object->loadRefsFwd();
+}
+
 $smarty = new CSmartyDP;
 
 $smarty->assign("transmission", $transmission);
