@@ -16,7 +16,11 @@ Main.add(function(){
 
 <!-- Modale de creation / modification d'une activite --> 
 <form name="addTask-{{$sejour_id}}" action="?" method="post" 
-      onsubmit="if(window.submitActivite){ return submitActivite(this); } else { return onSubmitFormAjax(this, { onComplete: function(){ PlanSoins.refreshTask('{{$task->prescription_line_element_id}}'); Control.Modal.close(); } }) }">
+      onsubmit="{{if $task_element}}
+			return onSubmitFormAjax(this, { onComplete: function(){ PlanSoins.refreshTask('{{$task->prescription_line_element_id}}'); Control.Modal.close(); } })
+			{{else}}
+			return submitActivite(this);
+			{{/if}}">
   <input type="hidden" name="m" value="soins" />
   <input type="hidden" name="dosql" value="do_sejour_task_aed" />
   <input type="hidden" name="del" value="0" />

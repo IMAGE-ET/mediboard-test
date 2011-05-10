@@ -47,6 +47,9 @@
     if (window.refreshLinePancarte){
       refreshLinePancarte('{{$prescription_id}}');
     }
+		if(window.refreshLineSejour){ 
+		  refreshLineSejour('{{$sejour->_id}}'); 
+		}
   }
   
   Main.add(function() {

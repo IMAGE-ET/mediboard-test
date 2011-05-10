@@ -18,22 +18,18 @@ if($task_id){
   $task->load($task_id);
 }
 
-$chapitre = "";
+$task_element = false;
 if($prescription_line_element_id){
 	$task->prescription_line_element_id = $prescription_line_element_id;
 	$task->loadMatchingObject();
-	
-	// Chargement de la ligne
-	$line_element = new CPrescriptionLineElement();
-	$line_element->load($prescription_line_element_id);
-	$chapitre = $line_element->_chapitre;
+	$task_element = true;
 }
 
 // Smarty template
 $smarty = new CSmartyDP();
 $smarty->assign("sejour_id", $sejour_id);
 $smarty->assign("task", $task);
-$smarty->assign("chapitre", $chapitre);
+$smarty->assign("task_element", $task_element);
 $smarty->display("inc_modal_task.tpl");
 
 ?>
