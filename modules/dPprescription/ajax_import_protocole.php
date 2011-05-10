@@ -161,10 +161,9 @@ if (strtolower(pathinfo($file['name'] , PATHINFO_EXTENSION) == 'xml')) {
           
           $element_presc = new CElementPrescription;
           $element_presc->libelle = addslashes($libelle);
-  
-          if (!$element_presc->loadMatchingObject()) {
-            $element_presc->category_prescription_id = $category_prescription->_id;
-            
+          $element_presc->category_prescription_id = $category_prescription->_id;
+          
+          if (!$element_presc->loadMatchingObject()) {  
             if ($msg = $element_presc->store()) {
               $message .= $msg . "<br/>";
             }
