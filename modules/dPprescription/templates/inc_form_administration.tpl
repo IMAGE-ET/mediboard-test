@@ -26,7 +26,7 @@
 </script>
 <table class="form">
 	<tr>
-    <th class="category" {{if $line instanceof CPrescriptionLineMedicament || $line instanceof CPrescriptionLineMix}}colspan="2"{{/if}}>
+    <th class="category" colspan="2">
       Administration - {{$line->_view}}
     </th>
   </tr>
@@ -52,7 +52,8 @@
 			</form>
 		</td>
     <td style="width: 50%">
-      {{if $line instanceof CPrescriptionLineMedicament || $line instanceof CPrescriptionLineMix}}
+      {{if $line instanceof CPrescriptionLineMedicament ||
+           $line instanceof CPrescriptionLineMix}}
         <form name="editLine" action="?" method="post">
           <input type="hidden" name="m" value="dPprescription" />
           {{if $line instanceof CPrescriptionLineMedicament}}
@@ -73,7 +74,7 @@
     </td>
 	</tr>
   <tr>
-    <td {{if $line instanceof CPrescriptionLineMedicament || $line instanceof CPrescriptionLineMix}}colspan="2"{{/if}}>
+    <td colspan="2">
       {{assign var=hide_cible value=1}}
       {{assign var=hide_button_add value=1}}
       {{mb_include module=dPhospi template=inc_transmission refreshTrans=0}}

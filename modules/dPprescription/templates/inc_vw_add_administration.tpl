@@ -20,9 +20,15 @@ function submitConstantes(){
 
 function submitAdmission(constantes_medicales_id){
   var oFormAdministration = getForm("addAdministration");
-  $V(oFormAdministration.constantes_medicales_id, constantes_medicales_id);
-  checkForm(oFormAdministration);
-  return onSubmitFormAjax(oFormAdministration);
+  var quantite = $V(oFormAdministration.quantite);
+  if (quantite && quantite > 0) {
+    $V(oFormAdministration.constantes_medicales_id, constantes_medicales_id);
+    checkForm(oFormAdministration);
+    return onSubmitFormAjax(oFormAdministration);
+  }
+  else {
+    submitTransmission();
+  }
 }
 
 function submitCancelAdm(){
@@ -50,14 +56,27 @@ function submitPlanification(){
 // Fonction appelée en callback du formulaire d'administration
 function submitTransmission(administration_id){
   var oFormTransmission   = getForm("editTrans");
-  oFormTransmission.object_class.value = "CAdministration";
-  oFormTransmission.object_id.value = administration_id;
+  if (administration_id) {
+    $V(oFormTransmission.object_class, "CAdministration", false);
+    $V(oFormTransmission.object_id, administration_id, false);
+  }
+  else {
+    $V(oFormTransmission.object_class, '{{$line->_class_name}}', false);
+    $V(oFormTransmission.object_id, '{{$line->_id}}', false);
+  }
   
   submitFormAjax(oFormTransmission, 'systemMsg', { onComplete: function(){
     {{if $mode_plan}}
       window.opener.calculSoinSemaine('{{$date_sel}}',"{{$prescription_id}}"); 
     {{else}}
-      window.opener.PlanSoins.loadTraitement('{{$sejour->_id}}','{{$date_sel}}', oFormClick.nb_decalage.value,'{{$mode_dossier}}','{{$line->_id}}','{{$line->_class_name}}',{{$key_tab|json}});
+      // Si les transmissions sont sur une administration, reload de la ligne dans le plan de soin
+      if (administration_id) {
+        window.opener.PlanSoins.loadTraitement('{{$sejour->_id}}','{{$date_sel}}', oFormClick.nb_decalage.value,'{{$mode_dossier}}','{{$line->_id}}','{{$line->_class_name}}',{{$key_tab|json}});
+      }
+      // Sinon rechargement de toute la zone
+      else {
+        window.opener.refreshTabState();
+      }
     {{/if}}
     window.opener.loadSuivi('{{$sejour->_id}}');
     
