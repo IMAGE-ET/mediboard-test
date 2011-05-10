@@ -1,16 +1,26 @@
 {{assign var=patient value=$sejour->_ref_patient}}
 
 <script type="text/javascript">
-  modalViewComplete = function(object_guid) {
+  modalViewComplete = function(object_guid, title) {
     var url = new Url("system", "httpreq_vw_complete_object");
     url.addParam("object_guid", object_guid);
-    url.requestModal(700, 400);
+    url.requestModal(800, 500, { title: title });
   }
   popEtatSejour = function(sejour_id) {
     var url = new Url("dPhospi", "vw_parcours");
     url.addParam("sejour_id", '{{$sejour->_id}}');
     url.requestModal(700, 550);
   }
+	
+	{{if "forms"|module_active}}
+  Main.add(function(){
+    var url = new Url("forms", "ajax_list_ex_object");
+    url.addParam("reference_class", "{{$sejour->_class_name}}");
+    url.addParam("reference_id", "{{$sejour->_id}}");
+    url.addParam("detail", 0);
+    url.requestUpdate("list-ex_objects");
+  });
+	{{/if}}
 </script>
 
 <table style="text-align: left; width: 100%">
@@ -58,7 +68,7 @@
         <tr>
           <th colspan="2" class="category">
             <span style="float: right">
-              <button type="button" class="search" onclick="modalViewComplete('{{$patient->_guid}}')">Détail</button>
+              <button type="button" class="search" onclick="modalViewComplete('{{$patient->_guid}}', 'Détail du séjour')">Patient</button>
             </span>
             <span style="float: left;">
               <button class="lookup notext" style="margin: 0;" onclick="popEtatSejour();">Etat du séjour</button>
@@ -130,7 +140,7 @@
       </table>
     </td>
     <!-- Correspondance -->
-    <td style="vertical-align: top;">
+    <td style="vertical-align: top;" rowspan="2">
       <table class="tbl">
         <tr>
           <th style="width: 1%;">
@@ -163,7 +173,7 @@
           <td>
             <strong>Personne de confiance</strong>
           </td>
-          <td
+          <td>
             {{mb_value object=$patient field="confiance_nom"}}
           </td>
           <td>
@@ -176,7 +186,7 @@
         <tr>
           <td>
             <strong>Employeur</strong>
-          </th>
+          </td>
           <td>
             {{mb_value object=$patient field="employeur_nom"}}
           </td>
@@ -186,6 +196,17 @@
           </td>
         </tr>
       </table>
+			
+			{{if "forms"|module_active}}
+				<table class="main tbl">
+					<tr>
+						<th>Formulaires</th>
+					</tr>
+					<tr>
+						<td id="list-ex_objects"></td>
+					</tr>
+				</table>
+			{{/if}}
     </td>
   </tr>
   <tr>
@@ -195,7 +216,7 @@
         <tr>
           <th class="category" colspan="2">
             <span style="float: right">
-              <button type="button" class="search" onclick="modalViewComplete('{{$sejour->_guid}}')">Détail</button>
+              <button type="button" class="search" onclick="modalViewComplete('{{$sejour->_guid}}', 'Détail du séjour')">Détail</button>
             </span>
             {{tr}}CSejour{{/tr}}
           </th>
@@ -232,9 +253,6 @@
           </td>
         </tr>
       </table>
-    </td>
-    <!-- Formulaires -->
-    <td>
     </td>
   </tr>
 </table>

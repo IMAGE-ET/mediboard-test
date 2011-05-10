@@ -27,13 +27,15 @@ Main.add(function(){
 
 </script>
 
-<ul class="control_tabs" id="exclass_tabs">
-{{foreach from=$ex_objects_by_event item=ex_objects_by_class key=_host_event}}
-  {{assign var=parts value="-"|explode:$_host_event}}
-  <li><a href="#tab-{{$_host_event}}">{{tr}}{{$parts.0}}{{/tr}} - {{$parts.1}}</a></li>
-{{/foreach}}
-</ul>
-<hr class="control_tabs" />
+{{if $ex_objects_by_event|@count}}
+	<ul class="control_tabs" id="exclass_tabs">
+	{{foreach from=$ex_objects_by_event item=ex_objects_by_class key=_host_event}}
+	  {{assign var=parts value="-"|explode:$_host_event}}
+	  <li><a href="#tab-{{$_host_event}}">{{tr}}{{$parts.0}}{{/tr}} - {{$parts.1}}</a></li>
+	{{/foreach}}
+	</ul>
+	<hr class="control_tabs" />
+{{/if}}
 
 {{if $detail}}
 
@@ -80,7 +82,8 @@ Main.add(function(){
 	    </tr>
 			
 		  {{foreach from=$_ex_obj->_ref_ex_class->_ref_groups item=_ex_group name=_ex_group}}
-			  
+			  {{if $_ex_group->_ref_fields|@count}}
+				
         <tbody style="border-bottom: 2px solid black;">
 				<tr>
 					<th rowspan="{{$_ex_group->_ref_fields|@count}}">
@@ -106,6 +109,8 @@ Main.add(function(){
               </tbody>
             {{/if}}
 	        {{/foreach}}
+					
+				{{/if}}
 			{{/foreach}}
 	  </table>
 	
@@ -122,7 +127,7 @@ Main.add(function(){
   {{foreach from=$ex_objects_by_class item=_ex_objects key=_ex_class_id}}
     {{assign var=_ex_obj value=$_ex_objects|@reset}}
   
-    <h3>{{$ex_classes.$_ex_class_id->name}}</h3>
+    <h3 style="margin: 0.5em 1em;">{{$ex_classes.$_ex_class_id->name}}</h3>
     
 		<ul>
     {{foreach from=$_ex_objects item=_ex_object name=_ex_object}}
