@@ -17,12 +17,15 @@ class CViewSenderSource extends CMbObject {
   var $source_id = null; 
   
   // DB fields
-  var $name        = null;
+  var $name      = null;
+  var $libelle   = null;
+  var $group_id  = null;
+  var $actif     = null;
   
   // Form fields
-  
-  // Object references
-    
+  var $_ref_source_ftp = null;
+  var $_reachable      = null;
+      
   function getSpec() {
     $spec = parent::getSpec();
     $spec->table = "view_sender_source";
@@ -33,7 +36,12 @@ class CViewSenderSource extends CMbObject {
 
   function getProps() {
     $props = parent::getProps();
-    $props["name"       ] = "str notNull";
+    $props["name"]     = "str notNull";
+    $props["libelle"]  = "str";
+    $props["group_id"] = "ref notNull class|CGroups autocomplete|text";
+    $props["actif"]    = "bool notNull";
+    
+    $props["_reachable"] = "bool";
     return $props;
   }
 	
@@ -44,10 +52,19 @@ class CViewSenderSource extends CMbObject {
 	}
 	
 	function updateFormFields() {
-		parent::updataFormFields();
-		$this->_view = $this->name;
+		parent::updateFormFields();
+		
+		$this->_type_echange = $this->_class_name;
+		$this->_view         = $this->libelle ? $this->libelle : $this->nom;
 	}
 
+  function loadRefGroup() {
+    return $this->_ref_group = $this->loadFwdRef("group_id", 1);
+  }
+  
+  function loadRefSourceFTP() {
+    return $this->_ref_source_ftp = CExchangeSource::get("$this->_guid", "ftp", true, $this->_type_echange);
+  }
 }
 
 ?>

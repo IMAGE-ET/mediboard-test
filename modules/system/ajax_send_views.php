@@ -18,16 +18,23 @@ $user = new CUser;
 $user->user_username = CValue::get("username", CUser::get()->user_username);
 $user->user_password = CValue::get("password");
 
-// Chargement des senders
-$sender = new CViewSender();
-$senders = $sender->loadList(null, "name");
-foreach ($senders as $_sender) {
-	if ($_sender->getActive($minute)) {
-    $_sender->makeUrl($user);
-    $_sender->makeFile();
-	}
-}
 
+$senders = array();
+if (!$user->user_password) {
+  CAppUI::stepAjax("CViewSender-send-no-password", UI_MSG_WARNING);
+} else {
+  // Chargement des senders
+  $sender  = new CViewSender();
+  $senders = $sender->loadList(null, "name");
+  
+  foreach ($senders as $_sender) {
+    if ($_sender->getActive($minute)) {
+      $_sender->makeUrl($user);
+      $_sender->makeFile();
+      $_sender->sendFile();
+    }
+  }
+}
 
 // Création du template
 $smarty = new CSmartyDP();

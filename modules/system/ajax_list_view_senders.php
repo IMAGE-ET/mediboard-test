@@ -19,6 +19,7 @@ $sender = new CViewSender();
 $senders = $sender->loadList(null, "name");
 foreach ($senders as $_sender) {
 	$_sender->makeHourPlan($minute);
+	$_sender->loadRefSendersSource();
 }
 
 // Tableau de charges

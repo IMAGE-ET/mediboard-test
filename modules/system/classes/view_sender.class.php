@@ -34,12 +34,16 @@ class CViewSender extends CMbObject {
 	var $_active = null;
   var $_url    = null;
   var $_file   = null;
+  
+  var $_file_download_duration = null;
+  var $_file_download_size     = null;
+  var $_files_upload_stats     = array();
   	
   // Distant properties
 	var $_hour_plan = null;
   
   // Object references
-  var $_ref_source;
+  var $_ref_senders_source;
     
   function getSpec() {
     $spec = parent::getSpec();
@@ -51,23 +55,27 @@ class CViewSender extends CMbObject {
 
   function getProps() {
     $props = parent::getProps();
-    $props["source_id"  ] = "ref class|CViewSenderSource";
     $props["name"       ] = "str notNull";
     $props["description"] = "text";
     $props["params"     ] = "text notNull";
     $props["period"     ] = "enum list|1|2|3|4|5|6|10|15|20|30";
     $props["offset"     ] = "num min|0 notNull default|0";
     $props["active"     ] = "bool notNull default|0";
-
+    
     $props["_url"       ] = "str";
-    $props["_file"       ] = "str";
+    $props["_file"      ] = "str";
+    $props["_file_download_duration" ] = "str";
+    $props["_file_download_size"     ] = "str";
+
     return $props;
   }
 
   function updateFormFields() {
     parent::updateFormFields();
-    $this->_view = $this->name;
-		$this->_when = "$this->period mn + $this->offset";
+
+    $this->_view         = $this->name;
+		$this->_params       = explode("&", $this->params);
+		$this->_when         = "$this->period mn + $this->offset";
   }
 	
   function getActive($minute) {
@@ -94,7 +102,21 @@ class CViewSender extends CMbObject {
     
     return $this->_hour_plan;
 	}
-	
+
+	function loadRefSendersSource() {
+	  $source_to_vw_sender = new CSourceToViewSender();
+    $source_to_vw_sender->sender_id = $this->_id;
+
+    $this->_ref_senders_source = array();
+    foreach ($source_to_vw_sender->loadMatchingList() as $_sender_source) {
+      $_sender_source->loadRefSource();
+      $_sender_source->_ref_source->loadRefSourceFTP();
+      $this->_ref_senders_source[] = $_sender_source;
+    }
+
+    return $this->_ref_senders_source;
+	}
+
 	function makeUrl($user) {
     $base = CAppUI::conf("base_url");
     $params = array();
@@ -106,17 +128,105 @@ class CViewSender extends CMbObject {
     $params["aio"] = "1";
     $query = CMbString::toQuery($params);
     $url = "$base/?$query";
+    
     return $this->_url = $url;  
 	}
 
   function makeFile() {
+    global $phpChrono;
+    
   	$file = tempnam("", "view");
   	
-  	// Store result in $file with wget
-  	
+    $phpChrono->stop();
+    
+    $chrono = new Chronometer();
+    $chrono->start();
+    
+  	// On récupère et écrit les données dans le fichier temporaire
+  	$contents = file_get_contents($this->_url);
+    if (file_put_contents($file, $contents) === false) {
+      throw new CMbException("CViewSender-ko-file_put_contents");
+    }
+    $chrono->stop();
+    $phpChrono->start();
+    
+    $this->_file_download_duration = $chrono->total;
+    $this->_file_download_size     = CMbString::toDecaBinary(filesize($file));
+    
   	return $this->_file = $file;
   }
-	
+  
+  function sendFile() {
+    global $phpChrono;
+       
+    $phpChrono->stop();
+    
+    // On transmet aux sources le fichier
+    foreach($this->loadRefSendersSource() as $_sender_source) {
+      $this->_files_upload_stats[$_sender_source->_id] = array(
+        "duration" => 0,
+        "status"   => false,
+        "size"     => 0,
+      );
+  
+      $chrono = new Chronometer();
+      $chrono->start();
+      
+      $this->_files_upload_stats[$_sender_source->_id]["status"] = false; 
+      
+      $source_ftp = $_sender_source->_ref_source->_ref_source_ftp;
+      if ($source_ftp->_id && $source_ftp->active) {     
+        $basename = "view-$this->name";
+        $destination_basename = $source_ftp->fileprefix.$basename;
+        
+        try {
+          $ftp = $source_ftp->init($source_ftp);
+          if ($ftp->connect()) {
+            $this->_files_upload_stats[$_sender_source->_id]["status"] = $ftp->sendFile($this->_file, "$destination_basename.html");
+            $this->_files_upload_stats[$_sender_source->_id]["size"]   = $ftp->getSize("$destination_basename.html");
+            
+            $source_ftp->counter++;
+            $source_ftp->store();          
+          }
+          
+          $this->archiveFile($ftp, $source_ftp, $basename);
+
+          $ftp->close();
+        } catch(Exception $e) {}
+      }
+      
+      $chrono->stop();
+      $this->_files_upload_stats[$_sender_source->_id]["duration"] = $chrono->total;
+    }
+    
+    $phpChrono->start();
+    
+    unlink($this->_file);
+  }
+  
+  function archiveFile(CFTP $ftp, CSourceFTP $source_ftp, $basename) {
+    $dateTime = mbTransformTime(null, null, "%Y-%m-%d-%H.%M.%S");   
+    
+    $directory = $source_ftp->fileprefix.$this->name;
+    
+    $ftp->createDirectory($directory);
+      
+    $basename = "$basename-$dateTime.html";
+
+    $ftp->sendFile($this->_file, "$directory/$basename");
+    
+    $files = $ftp->getListFiles($directory);
+    if (count($files) < 10) {
+      return;
+    }    
+   
+    rsort($files);
+    $rm_files = array_slice($files, 10);
+    
+    foreach ($rm_files as $_rm_file) {
+      $ftp->delFile($_rm_file);
+    }
+  }
 }
 
 ?>

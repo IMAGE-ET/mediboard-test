@@ -251,6 +251,28 @@ class CFTP {
     $this->connexion = null;
     return true;
   }
+  
+  private function _getSize($file) {
+    if (!$this->connexion) {
+      throw new CMbException("CSourceFTP-connexion-failed", $this->hostname);
+    }
+    
+    // Rename the file
+    $size = ftp_size($this->connexion, $file);
+    if ($size == -1) {
+      throw new CMbException("CSourceFTP-size-file-failed", $file);
+    }
+    
+    return CMbString::toDecaBinary($size);
+  }
+  
+  private function _createDirectory($directory) {
+    if (!$this->connexion) {
+      throw new CMbException("CSourceFTP-connexion-failed", $this->hostname);
+    }
+    
+    return @ftp_mkdir($this->connexion, $directory);
+  }
 }
 
 ?>

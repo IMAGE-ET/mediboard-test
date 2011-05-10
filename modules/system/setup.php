@@ -719,6 +719,36 @@ class CSetupsystem extends CSetup {
     $this->makeRevision("1.0.68");
     $this->addPrefQuery("autocompleteDelay", "short");
     
-    $this->mod_version = "1.0.69";
+    $this->makeRevision("1.0.69");
+    
+    $query = "ALTER TABLE `view_sender_source` 
+                ADD `libelle` VARCHAR (255),
+                ADD `group_id` INT (11) UNSIGNED NOT NULL,
+                ADD `actif` ENUM ('0','1') NOT NULL DEFAULT '0';"; 
+    $this->addQuery($query);
+    
+    $query = "ALTER TABLE `view_sender_source` 
+                ADD INDEX (`group_id`);"; 
+    $this->addQuery($query);
+    
+    $this->makeRevision("1.0.70");
+    
+    $query = "ALTER TABLE `view_sender` 
+                DROP `source_id`;";
+    $this->addQuery($query);
+    
+    $query = "CREATE TABLE `source_to_view_sender` (
+                `source_to_view_sender_id` INT (11) UNSIGNED NOT NULL auto_increment PRIMARY KEY,
+                `source_id` INT (11) UNSIGNED NOT NULL,
+                `sender_id` INT (11) UNSIGNED NOT NULL
+              ) /*! ENGINE=MyISAM */;";
+    $this->addQuery($query);
+    
+    $query = "ALTER TABLE `source_to_view_sender` 
+                ADD INDEX (`source_id`),
+                ADD INDEX (`sender_id`);";
+    $this->addQuery($query);
+    
+    $this->mod_version = "1.0.71";
   }
 }

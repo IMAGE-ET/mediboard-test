@@ -13,7 +13,7 @@ ExchangeSource = {
   status_images : ["images/icons/status_red.png", "images/icons/status_orange.png", "images/icons/status_green.png"],
   
   resfreshImageStatus : function(element){
-    if (!element.getAttribute('data-id')) {
+    if (!element.get('id')) {
       return;
     }
 
@@ -22,7 +22,7 @@ ExchangeSource = {
     element.title = "";
     element.src   = "style/mediboard/images/icons/loading.gif";
     
-    url.addParam("source_guid", element.getAttribute('data-guid'));
+    url.addParam("source_guid", element.get('guid'));
     url.requestJSON(function(status) {
       element.src = ExchangeSource.status_images[status.reachable];
       element.onmouseover = function() { 

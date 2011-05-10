@@ -9,13 +9,14 @@
  */
 
 ViewSender = {
-	modal: null,
-	
-	edit: function(sender_id) {
+  status_images : ["images/icons/status_red.png", "images/icons/status_orange.png", "images/icons/status_green.png"],
+  modal: null,
+  
+  edit: function(sender_id) {
     var url = new Url('system', 'ajax_form_view_sender');
-    url.addParam('sender_id', sender_id);
+	url.addParam('sender_id', sender_id);
     url.requestModal(400);
-	  this.modal = url.modaleObject;
+	this.modal = url.modaleObject;
   },
 
   onSubmit: function(form) {
@@ -24,7 +25,7 @@ ViewSender = {
         ViewSender.refreshList();
         ViewSender.modal.close();
       }
-    } )
+    })
   },
   
   confirmDeletion: function(form) {
@@ -55,6 +56,21 @@ ViewSender = {
     if (password) url.addParam("password", password);
     url.requestUpdate('send-views');
 	return false;
-}
+  },
   
+  resfreshImageStatus : function(element){
+    if (!element.get('id')) {
+      return;
+    }
+
+    var url = new Url("system", "ajax_get_source_status");
+    
+    element.title = "";
+    element.src   = "style/mediboard/images/icons/loading.gif";
+    
+    url.addParam("source_guid", element.get('guid'));
+    url.requestJSON(function(status) {
+      element.src = ViewSender.status_images[status.reachable];
+    });
+  }
 };

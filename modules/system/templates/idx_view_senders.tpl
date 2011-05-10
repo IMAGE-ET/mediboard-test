@@ -10,6 +10,8 @@
 
 {{mb_script module=system script=view_sender}}
 {{mb_script module=system script=view_sender_source}}
+{{mb_script module=system script=source_to_view_sender}}
+{{mb_script module=system script=exchange_source}}
 
 <script type="text/javascript">
 Main.add(Control.Tabs.create.curry('tabs-main', true));
