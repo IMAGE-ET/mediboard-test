@@ -20,45 +20,6 @@
 *}}
 
 <script type="text/javascript">
-	
-ExObject = {
-  print: function(ex_object_id, ex_class_id, object_guid) {
-	  var printIframe = $("printIframe");
-	  printIframe.src = "about:blank";
-	  printIframe.src = "?m=forms&a=view_ex_object_form&ex_object_id="+ex_object_id+"&ex_class_id="+ex_class_id+"&object_guid="+object_guid+"&dialog=1&readonly=1&print=1";
-	},
-	
-	show: function(mode, ex_object_id, ex_class_id, object_guid){
-    var url = new Url("forms", "view_ex_object_form");
-    url.addParam("ex_object_id", ex_object_id);
-    url.addParam("ex_class_id", ex_class_id);
-    url.addParam("object_guid", object_guid);
-		
-		if (mode == "display") {
-      url.addParam("readonly", 1);
-		}
-		
-    url.pop("100%", "100%", mode+"-"+ex_object_id);
-	},
-	
-	display: function(ex_object_id, ex_class_id, object_guid){
-	  ExObject.show("display", ex_object_id, ex_class_id, object_guid);
-	},
-  
-  edit: function(ex_object_id, ex_class_id, object_guid){
-    ExObject.show("edit", ex_object_id, ex_class_id, object_guid);
-  },
-  
-  history: function(ex_object_id, ex_class_id){
-	  var url = new Url("system", "view_history");
-	  url.addParam("object_class", "CExObject");
-    url.addParam("object_id", ex_object_id);
-    url.addParam("ex_class_id", ex_class_id);
-	  url.addParam("user_id", "");
-	  url.addParam("type", "");
-	  url.popup(900, 600, "history");
-  }
-}
 
 Main.add(function(){
   Control.Tabs.create("exclass_tabs");
