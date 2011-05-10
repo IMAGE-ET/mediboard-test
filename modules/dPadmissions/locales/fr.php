@@ -1,4 +1,5 @@
 <?php
+$locales['Admission'] = 'Admission';
 $locales['CPatient-_nomPatient'] = 'Patient';
 $locales['CPatient-_nomPatient-desc'] = 'Tri par patient';
 $locales['CSejour-_nomPatient'] = 'Patient';

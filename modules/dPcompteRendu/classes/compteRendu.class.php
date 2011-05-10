@@ -543,6 +543,19 @@ class CCompteRendu extends CDocumentItem {
     return parent::handleSend();
   }
 	
+  /**
+   * Tell whether object has a document with the same name has this one
+   * @param CMbObject $object
+   * @return boolean
+   */
+  function existsFor(CMbObject $object) {
+    $ds = $this->_spec->ds;
+    $doc = new CCompteRendu();
+    $doc->setObject($object);
+    $doc->nom = $ds->escape($this->nom);
+    return $doc->countMatchingList();
+  }
+  
   static function getTemplatedClasses() {
     if (self::$templated_classes !== null) {
       return self::$templated_classes;

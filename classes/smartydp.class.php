@@ -330,11 +330,17 @@ function smarty_function_mb_field($params, &$smarty) {
   }
   
   $field   = CMbArray::extract($params, "field" , null, true);
-  $propKey = array_key_exists("prop", $params);
   $prop    = CMbArray::extract($params, "prop");
   $canNull = CMbArray::extract($params, "canNull");
- 
-  $spec = $propKey ?  CMbFieldSpecFact::getSpec($object, $field, $prop) : $object->_specs[$field];
+  
+  if (null !== $value = CMbArray::extract($params, "value")) {
+    $object->$field = $value;
+  }
+    
+  // Get spec, may create it
+  $spec = $prop !== null ? 
+    CMbFieldSpecFact::getSpec($object, $field, $prop) : 
+    $object->_specs[$field];
   
   if ($canNull === "true" || $canNull === true) {
     $spec->notNull = 0;
