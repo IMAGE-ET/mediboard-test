@@ -15,7 +15,7 @@
 
 <table style="text-align: left; width: 100%">
   <tr>
-    <th class="title" colspan="2">
+    <th class="title" colspan="2" style="background-color: #6688CC">
     {{mb_include module=system template=inc_object_notes object=$patient}}
       <span style="float: left;">
         {{include file="../../dPpatients/templates/inc_vw_photo_identite.tpl" mode="read" size=32}}
@@ -133,8 +133,8 @@
     <td style="vertical-align: top;">
       <table class="tbl">
         <tr>
-          <td style="width: 1%;">
-          </td>
+          <th style="width: 1%;">
+          </th>
           <th>
             {{mb_label object=$patient field="prevenir_nom"}}
           </th>
