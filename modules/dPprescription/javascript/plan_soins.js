@@ -429,5 +429,18 @@ PlanSoins = {
 			}});
 		});
 		ampoule.hide();
+	},
+	
+	editTask: function(sejour_id, prescription_line_element_id){
+	  var url = new Url("soins", "ajax_modal_task");
+	  url.addParam("sejour_id", sejour_id);
+	  url.addParam("prescription_line_element_id", prescription_line_element_id);
+	  url.requestModal(600);
+  },
+	
+	refreshTask: function(prescription_line_element_id){
+	  var url = new Url("soins", "ajax_update_task_icon");
+		url.addParam("prescription_line_element_id", prescription_line_element_id);
+		url.requestUpdate("show_task_"+prescription_line_element_id);
 	}
 };

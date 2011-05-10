@@ -83,6 +83,10 @@ foreach($lines as $_line_element){
 	$name_chap = $category->chapitre;
 	$name_cat = $category->_id;
 
+  if($_line_element->_ref_element_prescription->rdv){
+    $_line_element->loadRefTask();
+  }
+								
   // Chargement des planificatoins systemes	
   $planif = new CPlanificationSysteme();
   $planif->object_id = $_line_element->_id;

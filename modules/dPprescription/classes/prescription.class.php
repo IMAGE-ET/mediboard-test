@@ -2011,6 +2011,10 @@ class CPrescription extends CMbObject implements IPatientRelated {
 									$_line_element->loadRefDM();
 								}
 								
+								if($_line_element->_ref_element_prescription->rdv){
+									$_line_element->loadRefTask();
+								}
+								
                 // Chargement des administrations et des transmissions
                 if($with_calcul){
                 	foreach($dates as $date){

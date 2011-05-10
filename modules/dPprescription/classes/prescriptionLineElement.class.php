@@ -28,7 +28,7 @@ class CPrescriptionLineElement extends CPrescriptionLine {
   var $_executant                     = null;
   
 	var $_ref_dm = null;
-	
+	var $_ref_task = null;
 	
 	var $_chapitre = null;
 	var $_unite_prise = null;
@@ -90,7 +90,7 @@ class CPrescriptionLineElement extends CPrescriptionLine {
     $backProps["prise_posologie"] = "CPrisePosologie object_id";
     $backProps["planifications"]  = "CPlanificationSysteme object_id";
 		$backProps["evenements_ssr"]  = "CEvenementSSR prescription_line_element_id";
-		$backProps["task"] = "CSejourTask prescription_line_element_id";
+		$backProps["task"]            = "CSejourTask prescription_line_element_id";
     return $backProps;
   }
   
@@ -386,6 +386,10 @@ class CPrescriptionLineElement extends CPrescriptionLine {
       }
     }
   }
+	
+	function loadRefTask() {
+		$this->_ref_task = $this->loadUniqueBackRef("task");
+	}
 }
 
 ?>

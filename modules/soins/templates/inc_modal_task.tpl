@@ -15,13 +15,16 @@ Main.add(function(){
 </script>
 
 <!-- Modale de creation / modification d'une activite --> 
-<form name="addTask-{{$sejour_id}}" action="?" method="post" onsubmit="return submitActivite(this);">
+<form name="addTask-{{$sejour_id}}" action="?" method="post" 
+      onsubmit="if(window.submitActivite){ return submitActivite(this); } else { return onSubmitFormAjax(this, { onComplete: function(){ PlanSoins.refreshTask('{{$task->prescription_line_element_id}}'); Control.Modal.close(); } }) }">
   <input type="hidden" name="m" value="soins" />
   <input type="hidden" name="dosql" value="do_sejour_task_aed" />
   <input type="hidden" name="del" value="0" />
   <input type="hidden" name="sejour_id" value="{{$sejour_id}}" />
   <input type="hidden" name="sejour_task_id" value="{{$task->_id}}" />
-	<input type="hidden" name="realise" value="{{$task->realise}}" />			
+	<input type="hidden" name="realise" value="{{$task->realise}}" />
+	<input type="hidden" name="prescription_line_element_id" value="{{$task->prescription_line_element_id}}" />
+  			
 	<table class="form">
 		<tr>
 			<th class="title {{if $task->_id}} modify{{/if}}">

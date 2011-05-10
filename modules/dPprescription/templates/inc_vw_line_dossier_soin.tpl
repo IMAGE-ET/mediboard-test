@@ -116,7 +116,7 @@
 					 {{if $line->_urgence}}
 					   {{assign var=img_src value="ampoule_urgence"}}
 					 {{/if}}
-					  <img style="float: right" src="images/icons/{{$img_src}}.png" onmouseover="alerte_prescription = ObjectTooltip.createDOM(this, 'editAlerte-{{$line->_ref_alerte->_id}}'); "/>
+					 <img style="float: right" src="images/icons/{{$img_src}}.png" onmouseover="alerte_prescription = ObjectTooltip.createDOM(this, 'editAlerte-{{$line->_ref_alerte->_id}}'); "/>
 	         
 				  <div id="editAlerte-{{$line->_ref_alerte->_id}}" style="display: none;">
 					  <table class="form">
@@ -153,6 +153,13 @@
     	{{/if}}
 		{{/if}}
 
+    <!-- Gestion de la prise de RDV pour une ligne d'element -->
+		{{if $line instanceof CPrescriptionLineElement && $line->_ref_element_prescription->rdv}}
+		<span id="show_task_{{$line->_id}}">
+			{{mb_include module=soins template=inc_vw_task_icon}}
+		</span>
+    {{/if}}
+		
 		<div onclick="addCibleTransmission('{{$line_class}}', '{{$line->_id}}');" 
 	       class="{{if @$transmissions.$line_class.$line_id|@count}}transmission{{else}}transmission_possible{{/if}}"
 				 onmouseover="ObjectTooltip.createEx(this, '{{$line->_guid}}')"
