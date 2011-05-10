@@ -298,6 +298,7 @@ class CSejour extends CCodable implements IPatientRelated {
     
     $props["_duree_prevue"]   = "num";
     $props["_duree_reelle"]   = "num";
+    $props["_duree"]   = "num";
     $props["_date_entree_prevue"] = "date";
     $props["_date_sortie_prevue"] = "date moreEquals|_date_entree_prevue";
     $props["_sortie_autorisee"]   = "bool";

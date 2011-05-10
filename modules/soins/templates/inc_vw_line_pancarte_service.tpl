@@ -1,6 +1,6 @@
 <td>
   {{include file="../../dPpatients/templates/inc_vw_photo_identite.tpl" patient=$_prescription->_ref_patient size=14 nodebug=true}}
-     <a href="#1" onclick="showPlanSoins('{{$_prescription->_ref_object->_id}}','{{$date}}')" style="display: inline;">
+     <a href="#1" onclick="showDossierSoins('{{$_prescription->_ref_object->_id}}','{{$date}}')" style="display: inline;">
      {{assign var=sejour value=$_prescription->_ref_object}}
      <span class="{{if !$sejour->entree_reelle}}patient-not-arrived{{/if}} {{if $sejour->septique}}septique{{/if}}"
            onmouseover="ObjectTooltip.createEx(this, '{{$_prescription->_ref_patient->_guid}}');">           

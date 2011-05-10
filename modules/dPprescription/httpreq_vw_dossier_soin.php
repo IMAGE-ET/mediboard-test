@@ -20,7 +20,7 @@ $object_id    = CValue::get("object_id");
 $object_class = CValue::get("object_class");
 $unite_prise  = CValue::get("unite_prise");
 $without_check_date = CValue::get("without_check_date", "0");
-$show_prescription = CValue::get("show_prescription", "0");
+$hide_close  = CValue::get("hide_close", 0);
 
 // Permet de gerer le cas ou des unites de prises contiennent des '
 $unite_prise = stripslashes(preg_replace('~&#0*([0-9]+);~e', 'chr(\\1)', $unite_prise));
@@ -296,7 +296,8 @@ $smarty->assign("today"               , mbDate());
 $smarty->assign("move_dossier_soin"   , false);
 $smarty->assign("configs"             , $configs);
 $smarty->assign("params"              , CConstantesMedicales::$list_constantes);
-$smarty->assign("show_prescription"   , $show_prescription);
+$smarty->assign("hide_close"          , $hide_close);
+
 // Affichage d'une ligne
 if($object_id && $object_class){
   $smarty->assign("move_dossier_soin", true);

@@ -215,11 +215,13 @@ Main.add(function () {
 		  $$(".tooltip").invoke("hide");
   	}
   });
-	
-	if(window.modalWindow){
-	  $('modal_button').show();
-	}
 
+  {{if !$hide_close}}
+  	if(window.modalWindow){
+  	  $('modal_button').show();
+  	}
+  {{/if}}
+ 
 	var options = {
       minHours: '0',
       maxHours: '9'
@@ -267,9 +269,11 @@ Main.add(function () {
 	  <tr>
 	    <th colspan="10" class="title text">
 	    	 <span style="float: right">
-					 <button type="button" class="cancel" style="float: right; display: none;" 
-					         onclick="modalWindow.close(); if(window.refreshLinePancarte){ refreshLinePancarte('{{$prescription_id}}'); }
-									                               if(window.refreshLineSejour){ refreshLineSejour('{{$sejour->_id}}'); }" id="modal_button">{{tr}}Close{{/tr}}</button>
+           {{if !$hide_close}}
+					   <button type="button" class="cancel" style="float: right; display: none;"
+             onclick="modalWindow.close(); if(window.refreshLinePancarte){ refreshLinePancarte('{{$prescription_id}}'); }
+					            if(window.refreshLineSejour){ refreshLineSejour('{{$sejour->_id}}'); }" id="modal_button">{{tr}}Close{{/tr}}</button>
+           {{/if}}
 	 	 	     <button type="button" class="print" style="float: right" onclick="viewDossier('{{$sejour->_id}}');">Dossier</button>
 	    	 </span>
 	       <a style="float: left" href="?m=dPpatients&amp;tab=vw_full_patients&amp;patient_id={{$patient->_id}}"'>
@@ -291,9 +295,6 @@ Main.add(function () {
 	  <li onmousedown="calculSoinSemaine('{{$date}}','{{$prescription_id}}');"><a href="#semaine">Semaine</a></li>
 		<li onmousedown="updateTasks('{{$sejour->_id}}');"><a href="#tasks">Tâches</a></li>
     <li onmousedown="loadSuivi('{{$sejour->_id}}')"><a href="#dossier_suivi">{{tr}}CMbObject-back-transmissions{{/tr}} <span id="nb_trans"></span></a></li>
-		{{if $show_prescription}}
-		<li onmousedown="Prescription.reloadPrescSejour('{{$prescription_id}}');"><a href="#prescription_sejour">Prescription</a></li>
-    {{/if}}
 	</ul>
 	<hr class="control_tabs" />
 	
@@ -375,9 +376,6 @@ Main.add(function () {
 	<div id="semaine" style="display:none"></div>
 	<div id="tasks" style="display:none"></div>
   <div id="dossier_suivi" style="display:none"></div>
-	{{if $show_prescription}}
-	<div id="prescription_sejour" style="display:none"></div>
-  {{/if}}
 {{else}}
   <div class="small-info">
     Veuillez sélectionner un séjour pour pouvoir accéder au suivi de soins.

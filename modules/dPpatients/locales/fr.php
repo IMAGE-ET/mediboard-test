@@ -837,6 +837,7 @@ $locales['CPatient.sexe.'] = 'Indéterminé';
 $locales['CPatient.sexe.f'] = 'Féminin';
 $locales['CPatient.sexe.j'] = 'Femme Célibataire';
 $locales['CPatient.sexe.m'] = 'Masculin';
+$locales['CPatient.surveillance'] = 'Surveillance';
 $locales['CPaysInsee'] = 'Pays INSEE';
 $locales['CSejour-_ext_codes_ccam'] = 'Actes prévus';
 $locales['CSejour-_ref_actes_ccam'] = 'Actes codés';

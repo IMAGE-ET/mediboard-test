@@ -8,10 +8,16 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
 *}}
 
+{{mb_script module="dPpatients" script="patient"}}
 {{mb_script module="dPprescription" script="plan_soins"}}
 {{mb_script module="dPmedicament" script="medicament_selector"}}
 {{mb_script module="dPmedicament" script="equivalent_selector"}}
 {{mb_script module="dPprescription" script="element_selector"}}
+{{mb_script module="dPplanningOp" script="cim10_selector"}}
+{{mb_script module="dPprescription" script="prescription"}}
+{{mb_script module="dPcompteRendu" script="document"}}
+{{mb_script module="dPcompteRendu" script="modele_selector"}}
+{{mb_script module="dPcabinet" script="file"}}
 
 <style type="text/css">
 
@@ -55,10 +61,12 @@ function viewTransmissions(service_id, user_id, degre, observations, transmissio
   }
 }       
 
-showPlanSoins = function(sejour_id, date){
-  $('dossier_traitement').update("");
-  PlanSoins.loadTraitement(sejour_id, date);
-	modalWindow = modal($('dossier_traitement'));
+showDossierSoins = function(sejour_id, date){
+  $('dossier_sejour').update("");
+  var url = new Url("soins", "ajax_vw_dossier_sejour");
+  url.addParam("sejour_id", sejour_id);
+  url.requestUpdate($('dossier_sejour'));
+	modalWindow = modal($('dossier_sejour'));
 }
 
 
@@ -81,14 +89,6 @@ loadSuivi = function(sejour_id, user_id, cible) {
 Main.add(function () {
   var tab_sejour = Control.Tabs.create('tab-pancarte', false);
   viewTransmissions($V(document.selService.service_id), null, null, '1', '1');
-	
-	Prescription.init({
-    hide_header: true, 
-  });
-	
-	PlanSoins.init({
-    show_prescription: true, 
-  });
 });
 
 </script>
@@ -187,4 +187,4 @@ Main.add(function () {
 	</div>
 </div>
 
-<div id="dossier_traitement" style="width: 80%; height: 600px; overflow: auto;"></div>	
+<div id="dossier_sejour" style="width: 80%; height: 600px; overflow: auto;"></div>	

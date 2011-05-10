@@ -17,7 +17,6 @@ PlanSoins = {
 	manual_planif: null,
 	bornes_composition_dossier: null,
 	nb_postes : null,
-	show_prescription: false,
 	
   init: function(options){
 		Object.extend(PlanSoins, options);
@@ -161,7 +160,7 @@ PlanSoins = {
 	    };
 	  }
 	},
-	loadTraitement: function(sejour_id, date, nb_decalage, mode_dossier, object_id, object_class, unite_prise, chapitre, without_check_date) {
+	loadTraitement: function(sejour_id, date, nb_decalage, mode_dossier, object_id, object_class, unite_prise, chapitre, without_check_date, hide_close) {
     var url = new Url("dPprescription", "httpreq_vw_dossier_soin");
     url.addParam("sejour_id", sejour_id);
     url.addParam("date", date);
@@ -176,7 +175,9 @@ PlanSoins = {
     url.addParam("object_class", object_class);
     url.addParam("unite_prise", unite_prise);
     url.addParam("without_check_date", without_check_date);
-    url.addParam("show_prescription", PlanSoins.show_prescription ? 1 : 0);
+    if (hide_close) {
+      url.addParam("hide_close", hide_close);
+    }
     if(object_id && object_class){
       if(object_class == 'CPrescriptionLineMix'){
         url.requestUpdate("line_"+object_class+"-"+object_id, { onComplete: function() { 
