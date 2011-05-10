@@ -71,15 +71,23 @@ function submitTransmission(administration_id){
     {{else}}
       // Si les transmissions sont sur une administration, reload de la ligne dans le plan de soin
       if (administration_id) {
-        window.opener.PlanSoins.loadTraitement('{{$sejour->_id}}','{{$date_sel}}', oFormClick.nb_decalage.value,'{{$mode_dossier}}','{{$line->_id}}','{{$line->_class_name}}',{{$key_tab|json}});
+        if (window.opener.PlanSoins.loadTraitement) {
+          window.opener.PlanSoins.loadTraitement('{{$sejour->_id}}','{{$date_sel}}', oFormClick.nb_decalage.value,'{{$mode_dossier}}','{{$line->_id}}','{{$line->_class_name}}',{{$key_tab|json}});
+        }
       }
       // Sinon rechargement de toute la zone
       else {
-        window.opener.refreshTabState();
+        if (window.opener.refreshTabState) {
+          window.opener.refreshTabState();
+        }
+        if (window.opener.updatePlanSoinsPatients) {
+          window.opener.updatePlanSoinsPatients();
+        }
       }
     {{/if}}
-    window.opener.loadSuivi('{{$sejour->_id}}');
-    
+    if (window.opener.loadSuivi) {
+      window.opener.loadSuivi('{{$sejour->_id}}');
+    }
 		if (window.opener.updateNbTrans) {
 		  window.opener.updateNbTrans('{{$sejour->_id}}');
 		}

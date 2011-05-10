@@ -20,7 +20,7 @@
 	      <!-- Cas d'une ligne de medicament -->
 	      <th class="text {{if @$transmissions.ATC.$libelle_ATC|@count}}transmission{{else}}transmission_possible{{/if}}" 
 	          rowspan="{{$prescription->_nb_produit_by_cat.$type.$_key_cat_ATC}}"
-	          onclick="addCibleTransmission(null, null, '{{$libelle_ATC}}')">
+	          onclick="addCibleTransmission('{{$line->_ref_prescription->object_id}}',null, null, '{{$libelle_ATC}}')">
 		      <span onmouseover="ObjectTooltip.createDOM(this, 'tooltip-content-{{$libelle_ATC}}')">
 	            {{$libelle_ATC}}
 	        </span>
@@ -41,7 +41,7 @@
 	        {{assign var=categorie_id value=$categorie->_id}}
 	        <th class="text {{if @$transmissions.CCategoryPrescription.$name_cat|@count}}transmission{{else}}transmission_possible{{/if}}" 
 	            rowspan="{{$prescription->_nb_produit_by_cat.$name_cat}}" 
-	            onclick="addCibleTransmission('CCategoryPrescription','{{$name_cat}}')">
+	            onclick="addCibleTransmission('{{$line->_ref_prescription->object_id}}','CCategoryPrescription','{{$name_cat}}')">
 	          <span onmouseover="ObjectTooltip.createDOM(this, 'tooltip-content-{{$name_cat}}')">
 	            {{$categorie->nom}}
 	          </span>
@@ -64,7 +64,7 @@
    <!-- Affichage du libelle de la ligne -->
    <td class="text narrow">
     
-       <div onclick="addCibleTransmission('{{$line_class}}', '{{$line->_id}}')" 
+       <div onclick="addCibleTransmission('{{$line->_ref_prescription->object_id}}','{{$line_class}}', '{{$line->_id}}')" 
 	       class="{{if @$transmissions.$line_class.$line_id|@count}}transmission{{else}}transmission_possible{{/if}}">
 	    <a href="#{{$line->_guid}}" onmouseover="ObjectTooltip.createEx(this, '{{$line->_guid}}')">
 	      {{if $line_class == "CPrescriptionLineMedicament"}}

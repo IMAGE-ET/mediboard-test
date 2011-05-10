@@ -8,13 +8,14 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
  */
 
-$transmission_id = CValue::get("transmission_id");
+$transmission_id  = CValue::get("transmission_id");
 $sejour_id       = CValue::get("sejour_id");
-$user_id         = CValue::get("user_id");
-$object_id       = CValue::get("object_id");
-$object_class    = CValue::get("object_class");
-$libelle_ATC     = CValue::get("libelle_ATC");
-$refreshTrans    = CValue::get("refreshTrans", 0);
+$user_id          = CValue::get("user_id");
+$object_id        = CValue::get("object_id");
+$object_class     = CValue::get("object_class");
+$libelle_ATC      = CValue::get("libelle_ATC");
+$refreshTrans     = CValue::get("refreshTrans", 0);
+$update_plan_soin = CValue::get("update_plan_soin", 0);
 
 $transmission =  new CTransmissionMedicale;
 if ($transmission_id) {
@@ -42,6 +43,7 @@ $smarty = new CSmartyDP;
 
 $smarty->assign("transmission", $transmission);
 $smarty->assign("refreshTrans", $refreshTrans);
+$smarty->assign("update_plan_soin", $update_plan_soin);
 $smarty->assign("date", mbDate());
 $smarty->assign("hour", mbTransformTime(null, mbTime(), "%H"));
 

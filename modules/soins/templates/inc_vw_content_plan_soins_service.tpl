@@ -33,10 +33,7 @@ Main.add(function(){
 	</th>
 </tr>
    <tr>
-      {{if $conf.dPprescription.CPrescription.show_categories_plan_soins}}
-      <th rowspan="2" class="title">Catégorie</th>
-      {{/if}}
-			<th rowspan="2" class="title">Patient</th>
+      <th rowspan="2" class="title">Patient</th>
       <th rowspan="2" class="title">Libellé</th>
       <th rowspan="2" class="title">Posologie</th>
       
@@ -111,7 +108,8 @@ Main.add(function(){
                       global_foreach=foreach_chap
                       nb_line=$_element|@count
                       dosql=do_prescription_line_element_aed
-											show_patient=true}}
+											show_patient=true
+                      update_plan_soin=1}}
               {{assign var=first_iteration value=0}}
 	        {{/foreach}}
         {{/foreach}}

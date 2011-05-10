@@ -41,8 +41,8 @@ refreshDossierSoin = function(mode_dossier, chapitre, force_refresh){
   }
 }
 
-addCibleTransmission = function(object_class, object_id, libelle_ATC) {
-  addTransmission('{{$sejour->_id}}', '{{$app->user_id}}', null, object_id, object_class, libelle_ATC);
+addCibleTransmission = function(sejour_id, object_class, object_id, libelle_ATC) {
+  addTransmission(sejour_id, '{{$app->user_id}}', null, object_id, object_class, libelle_ATC);
 }
 
 addAdministrationPerf = function(prescription_line_mix_id, date, hour, time_prevue, mode_dossier, sejour_id){

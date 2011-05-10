@@ -1,5 +1,7 @@
 {{mb_default var=hide_cible value=0}}
 {{mb_default var=hide_button_add value=0}}
+{{mb_default var=update_plan_soin value=0}}
+
 <script type="text/javascript">
 updateListTransmissions = function(data, object_class) {
   var url = new Url("dPhospi", "ajax_list_transmissions_short");
@@ -18,7 +20,7 @@ Main.add(function() {
   var oFormTrans = getForm("editTrans");
   {{if !$hide_cible}}  
     var url = new Url("dPprescription", "httpreq_cible_autocomplete");
-    var autocompleter = url.autoComplete(oFormTrans._cible, "_cible_auto_complete", {
+    var autocompleter = url.autoComplete(oFormTrans.cible, "cible_auto_complete", {
       minChars: 3,
       dropdown: 1,
       updateElement: function(selected) {
@@ -117,11 +119,16 @@ updateCible = function(elt) {
 }
 
 submitTrans = function(form) {
-  {{if $refreshTrans}}
+  {{if $refreshTrans || $update_plan_soin}}
     submitFormAjax(form, 'systemMsg', {onComplete: function() {
+      {{if $refreshTrans}}
       loadSuivi('{{$transmission->sejour_id}}');
       Control.Modal.close();
       updateNbTrans('{{$transmission->sejour_id}}')
+      {{else}}
+        Control.Modal.close();
+        updatePlanSoinsPatients();
+      {{/if}}
     } });
   {{else}}
     if (window.submitSuivi) {
@@ -153,11 +160,11 @@ submitTrans = function(form) {
           </legend>
           {{if !$hide_cible}}
             {{tr}}CTransmissionMedicale-object_class{{/tr}} :
-            <input name="_cible" type="text"
+            <input name="cible" type="text"
             value="{{if $transmission->_ref_object}}{{$transmission->_ref_object->_view}}{{else}}{{$transmission->libelle_ATC}}{{/if}}"
             class="autocomplete" style="width: 400px;"
             onchange="updateCible(this);"/>
-            <div style="display:none; width: 350px; white-space: normal; text-align: left;" class="autocomplete" id="_cible_auto_complete"></div>
+            <div style="display:none; width: 350px; white-space: normal; text-align: left;" class="autocomplete" id="cible_auto_complete"></div>
             <br />
           {{/if}}
           {{tr}}CTransmissionMedicale-degre{{/tr}} : {{mb_field object=$transmission field=degre}}

@@ -66,6 +66,29 @@ selectTr = function(counter){
 	count ? counter.up("tr").addClassName("selected") : counter.up("tr").removeClassName("selected");
 }
 
+addTransmission = function(sejour_id, user_id, transmission_id, object_id, object_class, libelle_ATC, update_plan_soin) {
+  var url = new Url("dPhospi", "ajax_transmission");
+  url.addParam("sejour_id", sejour_id);
+  url.addParam("user_id", user_id);
+  url.addParam("update_plan_soin", update_plan_soin);
+  
+  if (transmission_id != undefined) {
+    url.addParam("transmission_id", transmission_id);
+  }
+  if (object_id != undefined && object_class !=undefined) {
+    url.addParam("object_id",    object_id);
+    url.addParam("object_class", object_class);
+  }
+  if (libelle_ATC != undefined) {
+    url.addParam("libelle_ATC", libelle_ATC);
+  }
+  url.requestModal(600, 400);
+}
+
+addCibleTransmission = function(sejour_id, object_class, object_id, libelle_ATC, update_plan_soin) {
+  addTransmission(sejour_id, '{{$app->user_id}}', null, object_id, object_class, libelle_ATC, update_plan_soin);
+}
+
 Main.add(function(){
   updatePlanSoinsPatients();
 	Calendar.regField(getForm("updateActivites").date);
