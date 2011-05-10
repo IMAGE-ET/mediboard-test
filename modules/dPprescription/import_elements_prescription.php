@@ -51,7 +51,7 @@ foreach ($domCatalogue->chapitre as $domChapitre) {
     
     $where = array();
     $where["chapitre"] = " = '$chapitre'";
-    $where["nom"] = "= '$nom'";
+    $where["nom"] = "= '.".addslashes($nom)."'";
     
     if($group_id == "no_group"){
 		  $where["group_id"] = " IS NULL";
