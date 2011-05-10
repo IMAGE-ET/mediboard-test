@@ -240,13 +240,7 @@ updateModaleAfterAddLine = function(line_id){
     	{{if $app->user_prefs.easy_mode}}
       <button type="button" class="add notext" onclick="toggleSearchOptions('searchProd','med');" style="float: left">Détails</button>
 			{{/if}}
-			Nouvelle ligne de prescription - Médicaments - 
-			{{if ($operation_id)}}
-		  Oui {{$operation_id}}
-			{{else}}
-			Non
-			{{/if}}
-		
+			Nouvelle ligne de prescription - Médicaments
 		</th>
   </tr>
   {{/if}}
