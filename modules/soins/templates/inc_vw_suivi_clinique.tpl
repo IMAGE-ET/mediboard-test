@@ -68,7 +68,7 @@
         <tr>
           <th colspan="2" class="category">
             <span style="float: right">
-              <button type="button" class="search" onclick="modalViewComplete('{{$patient->_guid}}', 'Détail du séjour')">Patient</button>
+              <button type="button" class="search" onclick="modalViewComplete('{{$patient->_guid}}', 'Détail du patient')">Patient</button>
             </span>
             <span style="float: left;">
               <button class="lookup notext" style="margin: 0;" onclick="popEtatSejour();">Etat du séjour</button>
