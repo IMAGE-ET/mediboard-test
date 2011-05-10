@@ -29,6 +29,11 @@ foreach ($categories_par_chapitre as $chapitre => $categories) {
     $domCategorie = $doc->addElement($domChapitre, "categorie");
     $doc->addElement($domCategorie, "nom"        , $categorie->nom);
     $doc->addElement($domCategorie, "description", $categorie->description);
+    $doc->addElement($domCategorie, "header"     , $categorie->header);
+    $doc->addElement($domCategorie, "color"      , $categorie->color);
+    $doc->addElement($domCategorie, "prescription_executant", $categorie->prescription_executant);
+    $doc->addElement($domCategorie, "cible_importante", $categorie->cible_importante);
+    $doc->addElement($domCategorie, "only_cible" , $categorie->only_cible);
     
     foreach ($categorie->_ref_elements_prescription as $element) {
     	if(!$element->cancelled){
@@ -36,6 +41,11 @@ foreach ($categories_par_chapitre as $chapitre => $categories) {
 	      $domElement = $doc->addElement($domCategorie, "element");
 	      $doc->addElement($domElement, "libelle"    , $element->libelle);
 	      $doc->addElement($domElement, "description", $element->description);
+	      $doc->addElement($domElement, "color"      , $element->color);
+	      $doc->addElement($domElement, "prescriptible_kine", $element->prescriptible_kine);
+	      $doc->addElement($domElement, "prescriptible_infirmiere", $element->prescriptible_infirmiere);
+	      $doc->addElement($domElement, "prescriptible_AS", $element->prescriptible_AS);
+	      $doc->addElement($domElement, "rdv"        , $element->rdv);
 			}
     }
   }

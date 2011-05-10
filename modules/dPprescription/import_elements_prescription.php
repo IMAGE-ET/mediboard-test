@@ -52,7 +52,7 @@ foreach ($domCatalogue->chapitre as $domChapitre) {
     $where = array();
     $where["chapitre"] = " = '$chapitre'";
     $where["nom"] = "= '.".addslashes($nom)."'";
-    
+
     if($group_id == "no_group"){
 		  $where["group_id"] = " IS NULL";
 		} else {
@@ -69,7 +69,11 @@ foreach ($domCatalogue->chapitre as $domChapitre) {
         $categorie->group_id = $group_id;
       }
     }
-    
+    $categorie->header = utf8_decode((string) $domCategorie->header[0]);
+    $categorie->color = utf8_decode((string) $domCategorie->color[0]);
+    $categorie->prescription_executant = utf8_decode((string) $domCategorie->prescription_executant[0]);
+    $categorie->cible_importante = utf8_decode((string) $domCategorie->cible_importante[0]);
+    $categorie->only_cible = utf8_decode((string) $domCategorie->only_cible[0]);
     $categorie->unescapeValues();
         
     $categorie_id = $categorie->_id;
@@ -95,6 +99,11 @@ foreach ($domCatalogue->chapitre as $domChapitre) {
       
       $element_id = $element->_id;
       $element->description = utf8_decode((string) $domElement->description);
+      $element->color = utf8_decode((string) $domElement->color);
+      $element->prescriptible_kine = utf8_decode((string) $domElement->prescriptible_kine);
+      $element->prescriptible_infirmiere = utf8_decode((string) $domElement->prescriptible_infirmiere);
+      $element->prescriptible_AS = utf8_decode((string) $domElement->prescriptible_AS);
+      $element->rdv = utf8_decode((string) $domElement->rdv);
       
 	    if ($msg = $element->store()) {
 	      CAppUI::stepAjax("Erreur import élement: $msg", UI_MSG_WARNING);

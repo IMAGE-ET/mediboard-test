@@ -22,6 +22,11 @@
   	<xs:sequence>
   		<xs:element name="nom" type="Nom"></xs:element>
   		<xs:element name="description" type="xs:string"></xs:element>
+      <xs:element name="header" type="xs:string"></xs:element>
+      <xs:element name="color" type="xs:string"></xs:element>
+      <xs:element name="prescription_executant" type="xs:string"></xs:element>
+      <xs:element name="cible_importante" type="xs:string"></xs:element>
+      <xs:element name="only_cible" type="xs:string"></xs:element>
   		<xs:element name="element" type="Element" maxOccurs="unbounded" minOccurs="0"></xs:element>
   	</xs:sequence>
   </xs:complexType>
@@ -30,6 +35,11 @@
   	<xs:sequence>
   		<xs:element name="libelle" type="Nom"></xs:element>
   		<xs:element name="description" type="xs:string"></xs:element>
+      <xs:element name="color" type="xs:string"></xs:element>
+      <xs:element name="prescriptible_kine" type="xs:string"></xs:element>
+      <xs:element name="prescriptible_infirmiere" type="xs:string"></xs:element>
+      <xs:element name="prescriptible_AS" type="xs:string"></xs:element>
+      <xs:element name="rdv" type="xs:string"></xs:element>
   	</xs:sequence>
   </xs:complexType>
 
