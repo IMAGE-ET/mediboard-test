@@ -221,6 +221,17 @@ class CFTP {
       throw new CMbException("CSourceFTP-connexion-failed", $this->hostname);
     }
 
+    // Check for path, try to build it if needed 
+    // @todo Make it recursive
+    $dir = dirname($destination_file);
+    if ($dir != ".") {
+      $pwd = ftp_pwd($this->connexion);
+    	if (!@ftp_chdir($this->connexion, $dir)) {
+    		@ftp_mkdir($this->connexion, $dir);
+    	}	
+    	ftp_chdir($this->connexion, $pwd);
+    }
+    
     // Upload the file
     if (!@ftp_put($this->connexion, $destination_file, $source_file, constant($this->mode))) {
       throw new CMbException("CSourceFTP-upload-file-failed", $source_file, $destination_file);

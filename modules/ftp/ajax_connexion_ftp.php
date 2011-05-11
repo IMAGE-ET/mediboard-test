@@ -22,48 +22,29 @@ $ftp->init($exchange_source);
 
 try {
   $ftp->testSocket();
-  CAppUI::stepAjax("Connecté au serveur $ftp->hostname sur le port $ftp->port");
-} catch (CMbException $e) {
-  CAppUI::stepAjax($e->getMessage(), UI_MSG_WARNING); 
-  return;
-}
+  CAppUI::stepAjax("CFTP-success-connection", E_USER_NOTICE, $ftp->hostname, $ftp->port);
 
-try {
   $ftp->connect();
-  CAppUI::stepAjax("Connecté au serveur $ftp->hostname et authentifié en tant que $ftp->username");
-} catch (CMbException $e) {
-  CAppUI::stepAjax($e->getMessage(), UI_MSG_WARNING); 
-  return;
-}
+  CAppUI::stepAjax("CFTP-success-authentification", E_USER_NOTICE, $ftp->username);
 
-if ($ftp->passif_mode) {
-  CAppUI::stepAjax("Activation du mode passif");
-}
+	if ($ftp->passif_mode) {
+	  CAppUI::stepAjax("CFTP-msg-passive_mode"); 
+	}
+	
+	$sent_file = CAppUI::conf('root_dir')."/offline.php";
+	$remote_file = $ftp->fileprefix . "test.txt";
 
-$local_file = CAppUI::conf('root_dir')."/offline.php";
-$remote_file = "offline.php";
+  $ftp->sendFile($sent_file, $remote_file);
+  CAppUI::stepAjax("CFTP-success-transfer_out", E_USER_NOTICE, $sent_file, $remote_file);
 
-try {
-  $ftp->sendFile($local_file, $remote_file);
-  CAppUI::stepAjax("Fichier source $local_file copié en fichier cible $remote_file");
-} catch (CMbException $e) {
-  CAppUI::stepAjax($e->getMessage(), UI_MSG_WARNING); 
-  return;
-}
-
-$destination_file = "tmp/offline.php";
-try {
-  $ftp->getFile($remote_file, $destination_file);
-  CAppUI::stepAjax("Fichier source $remote_file récupéré en fichier cible $destination_file");
-} catch (CMbException $e) {
-  CAppUI::stepAjax($e->getMessage(), UI_MSG_WARNING); 
-  return;
-}
-
-try {
+  $get_file = "tmp/offline.php";
+  $ftp->getFile($remote_file, $get_file);
+  CAppUI::stepAjax("CFTP-success-transfer_in", E_USER_NOTICE, $remote_file, $get_file);
+  
   $ftp->delFile($remote_file);
-  CAppUI::stepAjax("Fichier $remote_file supprimé");
-} catch (CMbException $e) {
-  CAppUI::stepAjax($e->getMessage(), UI_MSG_WARNING); 
-  return;
+  CAppUI::stepAjax("CFTP-success-deletion", E_USER_NOTICE, $remote_file);
+} 
+catch (CMbException $e) {
+  $e->stepAjax();
 }
+?>

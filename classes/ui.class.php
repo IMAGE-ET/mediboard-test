@@ -728,7 +728,13 @@ class CAppUI {
   }
   
   /**
-   * Translate given statement
+   * Localization skipped if false
+   * @var boolean
+   */
+  static $localize = true;
+  
+  /**
+   * Localize given statement
    * @param string $str statement to translate
    * @return string translated statement
    */
@@ -741,7 +747,7 @@ class CAppUI {
     }
     
     // Defined and not empty
-    if (isset($locales)) {
+    if (isset($locales) && self::$localize) {
 	    if (isset($locales[$str]) && $locales[$str] !== "") {
 	      $str = $locales[$str];
 	    }

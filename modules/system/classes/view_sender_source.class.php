@@ -23,6 +23,7 @@ class CViewSenderSource extends CMbObject {
   var $actif     = null;
   
   // Form fields
+  var $_type_echange   = null;
   var $_ref_source_ftp = null;
   var $_reachable      = null;
       
@@ -55,7 +56,7 @@ class CViewSenderSource extends CMbObject {
 		parent::updateFormFields();
 		
 		$this->_type_echange = $this->_class_name;
-		$this->_view         = $this->libelle ? $this->libelle : $this->nom;
+		$this->_view         = $this->libelle ? $this->libelle : $this->name;
 	}
 
   function loadRefGroup() {
