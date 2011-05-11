@@ -1,3 +1,16 @@
+{{if $popup}}
+{{mb_script module="dPpatients" script="patient"}}
+{{mb_script module="dPprescription" script="plan_soins"}}
+{{mb_script module="dPmedicament" script="medicament_selector"}}
+{{mb_script module="dPmedicament" script="equivalent_selector"}}
+{{mb_script module="dPprescription" script="element_selector"}}
+{{mb_script module="dPplanningOp" script="cim10_selector"}}
+{{mb_script module="dPprescription" script="prescription"}}
+{{mb_script module="dPcompteRendu" script="document"}}
+{{mb_script module="dPcompteRendu" script="modele_selector"}}
+{{mb_script module="dPcabinet" script="file"}}
+{{/if}}
+
 {{if $isImedsInstalled}}
   {{mb_script module="dPImeds" script="Imeds_results_watcher"}}
 {{/if}}
@@ -54,9 +67,16 @@
   
   Main.add(function() {
     tab_sejour = Control.Tabs.create('tab-sejour');
-    tab_sejour.setActiveTab('dossier_traitement');
+    tab_sejour.setActiveTab('{{$default_tab}}');
+		
+		{{if $default_tab == "dossier_traitement"}}
     loadSuiviSoins();
-
+    {{/if}}
+		
+		{{if $default_tab == "prescription_sejour"}}
+    loadPrescription();
+    {{/if}}
+    
     {{if $isImedsInstalled}}
       if($('Imeds')){
         loadResultLabo(sejour_id);
@@ -78,8 +98,10 @@
   <li><a href="#docs" onmousedown="loadDocuments();">{{tr}}CMbObject-back-documents{{/tr}}</a></li>
   <li><a href="#antecedents" onmousedown="loadAntecedents();">{{tr}}IDossierMedical-back-antecedents{{/tr}}</a></li>
   <li style="float: right">
-    <button type="button" class="cancel" onclick="closeModal();">{{tr}}Close{{/tr}}</button>
-  </li>
+    {{if !$popup}}
+	    <button type="button" class="cancel" onclick="closeModal();">{{tr}}Close{{/tr}}</button>
+    {{/if}}
+	</li>
 </ul>
 
 <hr class="control_tabs" />
