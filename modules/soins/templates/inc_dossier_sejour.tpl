@@ -30,9 +30,9 @@
 
   loadPrescription = function() {
     $('prescription_sejour').update('');
-    Prescription.reloadPrescSejour('{{$prescription_id}}');
+    Prescription.reloadPrescSejour('{{$prescription_id}}','{{$sejour->_id}}');
   }
-    
+
   loadLabo = function() {
     loadResultLabo('{{$sejour->_id}}');
   }
