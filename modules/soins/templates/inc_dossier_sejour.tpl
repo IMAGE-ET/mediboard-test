@@ -86,7 +86,7 @@
     
     {{if $isImedsInstalled}}
       if($('Imeds')){
-        loadResultLabo(sejour_id);
+        loadResultLabo('{{$sejour->_id}}');
       }
     {{/if}}
   });
