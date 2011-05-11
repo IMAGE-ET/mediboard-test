@@ -904,10 +904,16 @@ window.modal = Modal.open;
 // Multiple mocals
 Object.extend(Control.Modal,{
     stack: [],
-    close: function(){
+    close: function() {
       if (!Control.Modal.stack.length) return;
       Control.Modal.stack.last().close();
     },
+    
+    position: function() {
+      if (!Control.Modal.stack.length) return;
+      Control.Modal.stack.last().position();
+    },
+    
     Observers: {
         beforeOpen: function(){
             if(!this.overlayFinishedOpening && Control.Modal.stack.length == 0){
