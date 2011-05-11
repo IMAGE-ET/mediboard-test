@@ -712,8 +712,8 @@ class CCompteRendu extends CDocumentItem {
       if (!$this->_is_pack) {
     	  $this->loadComponents();
       }
-      $header = $this->_ref_header;
-      $footer = $this->_ref_footer;
+      $header = isset($this->_ref_header) ? $this->_ref_header : new CCompteRendu;
+      $footer = isset($this->_ref_footer) ? $this->_ref_footer : new CCompteRendu;
     }
     else {
       $header = new CCompteRendu;
