@@ -52,11 +52,11 @@ printFicheBloc = function(operation_id) {
 	    	{{mb_include module=dPplanningOp template=inc_vw_operation}}
 	    </td>
 	    <td class="narrow">
-        <button class="{{if $_operation->_ref_consult_anesth->_ref_consultation->_id}}print{{else}}warning{{/if}}" style="width: 100%;" type="button" onclick="printFicheAnesth('{{$_operation->_ref_consult_anesth->_ref_consultation->_id}}', '{{$_operation->_id}}');">
+        <button class="{{if $_operation->_ref_consult_anesth->_ref_consultation->_id}}print{{else}}warning{{/if}}" type="button" onclick="printFicheAnesth('{{$_operation->_ref_consult_anesth->_ref_consultation->_id}}', '{{$_operation->_id}}');">
           Fiche d'anesthésie
         </button>
         <br />
-        <button class="print" style="width: 100%;" type="button" onclick="printFicheBloc('{{$_operation->_id}}');">
+        <button class="print" style="width: 100%; min-width: 10em;" type="button" onclick="printFicheBloc('{{$_operation->_id}}');">
           Feuille de bloc
         </button>
 	    </td>
