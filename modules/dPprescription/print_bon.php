@@ -47,7 +47,7 @@ $all_bons = array();
 $lines = array();
 
 // Liste des chapitres concernés par l'impression des bons
-$chapitres = array("anapath", "biologie", "imagerie");
+$chapitres = array("anapath", "biologie", "imagerie", "consult");
 
 // Stockage des bons
 if(count($prescription->_ref_lines_elt_for_plan)){
