@@ -15,7 +15,7 @@ $dPconfig["admin"] = array (
   ),
   "LDAP" => array(
     "ldap_connection"  => "0",
-    "ldap_tag"         => "",
+    "ldap_tag"         => "ldap",
     "ldap_user"        => "",
     "ldap_password"    => "",
     "object_guid_mode" => "hexa"

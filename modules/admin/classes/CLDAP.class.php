@@ -70,9 +70,9 @@ class CLDAP {
     }
 
     $results = $source_ldap->ldap_search($ldapconn, $filter);
-    
-    if (!$results) {
+    if (!$results || ($results["count"] == 0)) {
       $user->_bound = false;
+      $user->_count_ldap = 0;
       return $user;
     }
     
@@ -131,7 +131,7 @@ class CLDAP {
     if ($msg) {
       throw new CMbException($msg);
     }
-   
+
     if ((!$force_create && !$user->_ref_mediuser->actif) || ($force_create && !$actif)) {
       throw new CMbException("Auth-failed-user-deactivated");
     }
@@ -140,6 +140,7 @@ class CLDAP {
     $user->_user_actif = $actif;
     $user->_user_deb_activite = $deb_activite;
     $user->_user_fin_activite = $fin_activite;
+    $user->_count_ldap = 1;
     
     if (!$id400->_id) {
       $id400->object_id   = $user->_id;
@@ -179,15 +180,17 @@ class CLDAP {
         $accountexpires = mbDate(mbDateTimeFromLDAP($account_expires));
       }
     }
-    // 66048 = Enabled
+    // 66048,Account: Enabled - DONT_EXPIRE_PASSWORD
+    // 66080,Account: Enabled - DONT_EXPIRE_PASSWORD - PASSWD_NOTREQD
     // 66050 = Disabled
-    $actif = (self::getValue($values, "useraccountcontrol") == 66048) ? 1 : 0;
+    $actif = (self::getValue($values, "useraccountcontrol") == 66050) ? 0 : 1;
     $user->loadRefMediuser();
     if ($user->_id) {
       $mediuser = $user->_ref_mediuser;
-      $mediuser->actif =  $actif;
+      $mediuser->actif        =  $actif;
       $mediuser->deb_activite = $whencreated;
       $mediuser->fin_activite = $accountexpires;
+      
       $mediuser->store();
     }
     $user->_user_actif        = $actif;
