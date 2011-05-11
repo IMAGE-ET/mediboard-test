@@ -12,8 +12,6 @@
 
 
 <form name="DocumentAdd-{{$unique_id}}-{{$object->_guid}}" action="?m={{$m}}" method="post">
-{{if $praticien->_can->edit}}
-
 <input type="text" value="&mdash; Modèle" name="keywords_modele" class="autocomplete str" autocomplete="off" onclick="this.value = ''; this.onclick=null;" style="width: 5em;" />
 <input type="text" value="&mdash; Pack" name="keywords_pack" class="autocomplete str" autocomplete="off" onclick="this.value = ''; this.onclick=null;" style="width: 4em;"/>
 
@@ -70,8 +68,6 @@ Main.add(function() {
   } 
 });
 </script>
-
-{{/if}}
 
 <!-- Création via ModeleSelector -->
 
