@@ -318,7 +318,14 @@ class CSetupdPhospi extends CSetup {
               ADD `lits_alpha` ENUM ('0','1') DEFAULT '0' AFTER `caracteristiques`;";
     $this->addQuery($query);
     
-    $this->mod_version = "0.40";
+		$this->makeRevision("0.40");
+		$query = "ALTER TABLE `modele_etiquette`
+		          ADD texte_2 TEXT AFTER texte,
+							ADD texte_3 TEXT AFTER texte_2,
+							ADD texte_4 TEXT AFTER texte_3;";
+	  $this->addQuery($query);
+		
+    $this->mod_version = "0.41";
   }
 }
 ?>

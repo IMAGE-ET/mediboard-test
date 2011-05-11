@@ -16,8 +16,11 @@ class CModeleEtiquette extends CMbMetaObject {
   // DB Fields
   var $nom           = null;
   var $texte         = null;
+	var $texte_2       = null;
+	var $texte_3       = null;
+	var $texte_4       = null;
   var $largeur_page  = null;
-  var $hauteur_page = null;
+  var $hauteur_page  = null;
   var $nb_lignes     = null;
   var $nb_colonnes   = null;
   var $marge_horiz   = null;
@@ -25,11 +28,14 @@ class CModeleEtiquette extends CMbMetaObject {
   var $hauteur_ligne = null;
   var $font          = null;
   
+	// Form fields
+	var $_write_bold   = null;
+	
   static $fields = array("CPatient" =>
-      array("[DATE NAISS]", "[IPP]", "[LIEU NAISSANCE]",
-            "[NOM]", "[NOM JF]",  "[NUM SECU]",
-            "[PRENOM]", "[SEXE]"),
-      "CSejour" => array("[NDOS]", "[DATE ENT]", "[PRAT RESPONSABLE]"));
+      array("DATE NAISS", "IPP", "LIEU NAISSANCE",
+            "NOM", "NOM JF",  "NUM SECU",
+            "PRENOM", "SEXE"),
+      "CSejour" => array("NDOS", "DATE ENT", "PRAT RESPONSABLE"));
   
   static $listfonts =
       array("dejavusansmono" => "DejaVu Sans Mono",
@@ -47,6 +53,9 @@ class CModeleEtiquette extends CMbMetaObject {
     $specs = parent::getProps();
     $specs["nom"]           = "str notNull";
     $specs["texte"]         = "text notNull";
+		$specs["texte_2"]       = "text";
+		$specs["texte_3"]       = "text";
+		$specs["texte_4"]       = "text";
     $specs["largeur_page"]  = "float notNull default|21";
     $specs["hauteur_page"]  = "float notNull default|29.7";
     $specs["marge_horiz"]   = "float notNull default|0.3";
@@ -57,6 +66,7 @@ class CModeleEtiquette extends CMbMetaObject {
     $specs["object_id"]     = "ref class|CMbObject meta|object_class purgeable";
     $specs["object_class"]  = "str notNull class show|0";
     $specs["font"]          = "text show|0";
+		$specs["_write_bold"]   = "bool";
     return $specs;
   }
   
@@ -67,10 +77,12 @@ class CModeleEtiquette extends CMbMetaObject {
   
   function replaceFields($array_fields) {
   	foreach($array_fields as $_key=>$_field) {
-  		if (in_array($_key, array("[NOM]", "[NOM JF]", "[PRENOM]"))) {
-  			$_field = "<b>" . $_field . "</b>";
-  		}
-  		$this->texte = str_replace($_key, $_field, $this->texte);
+  	  $search = array("[".$_key."]", "*".$_key."*");
+  	  $replace = array($_field, "<b>$_field</b>");
+  		$this->texte = str_replace($search, $replace, $this->texte);
+			$this->texte_2 = str_replace($search, $replace, $this->texte_2);
+			$this->texte_3 = str_replace($search, $replace, $this->texte_3);
+			$this->texte_4 = str_replace($search, $replace, $this->texte_4);
   	}
   }
   
@@ -95,6 +107,25 @@ class CModeleEtiquette extends CMbMetaObject {
 		
 		$pdf->AddPage();
 		
+		$distinct_texts = 1;
+		$textes = array();
+		$textes[] = preg_replace("/[\t\r\n\f]/", '', utf8_encode(nl2br($this->texte)));
+		
+		if ($this->texte_2) {
+			$distinct_texts++;
+		  $textes[] = preg_replace("/[\t\r\n\f]/", '', utf8_encode(nl2br($this->texte_2)));
+	  }
+		
+		if ($this->texte_3) {
+			$distinct_texts++;
+      $textes[] = preg_replace("/[\t\r\n\f]/", '', utf8_encode(nl2br($this->texte_3)));
+		}
+    
+		if ($this->texte_4) {
+      $distinct_texts++;
+      $textes[] = preg_replace("/[\t\r\n\f]/", '', utf8_encode(nl2br($this->texte_4)));
+    }
+		  
 		// Création de la grille d'étiquettes et écriture du contenu.
 		for ($i = 0; $i < $this->nb_lignes * $this->nb_colonnes; $i++) {
 		  if (round($pdf->GetX()) >= ($this->largeur_page - 2 * $this->marge_horiz)) {
@@ -114,7 +145,7 @@ class CModeleEtiquette extends CMbMetaObject {
       
 		  // La fonction nl2br ne fait qu'ajouter la balise <br />, elle ne supprime pas le \n.
 		  // Il faut donc le faire manuellement.
-		  $pdf->WriteHTML("<div>" . preg_replace("/[\t\r\n\f]/", '', utf8_encode(nl2br($this->texte))) . "</div>", false);
+		  $pdf->WriteHTML("<div>" . $textes[$i %$distinct_texts] . "</div>", false);
 		  $x = $x + $largeur_etiq;
 		  $pdf->SetY($y);
 		  $pdf->SetX($x);

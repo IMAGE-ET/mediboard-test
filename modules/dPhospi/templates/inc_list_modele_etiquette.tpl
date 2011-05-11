@@ -23,7 +23,7 @@ removeSelected = function() {
   </tr>
   <tr>
     <td colspan="2">
-      <form name="filter_etiq">
+      <form name="filter_etiq" method="get" action="?">
         <!--  Par object class -->
         <select name="filter_class">
           <option value="all">&mdash; Tous les types d'objets</option>

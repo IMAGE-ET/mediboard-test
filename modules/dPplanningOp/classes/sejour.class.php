@@ -1850,8 +1850,8 @@ class CSejour extends CCodable implements IPatientRelated {
   function completeLabelFields() {
   	$this->loadRefPraticien();
   	$this->loadNumDossier();
-    return array("[DATE ENT]" => mbDateToLocale($this->entree), "[PRAT RESPONSABLE]" => $this->_ref_praticien->_view,
-                 "[NDOS]"     => $this->_num_dossier); 
+    return array("DATE ENT" => mbDateToLocale($this->entree), "PRAT RESPONSABLE" => $this->_ref_praticien->_view,
+                 "NDOS"     => $this->_num_dossier); 
   }
 	
 	function checkMerge($sejours = array()/*<CSejour>*/) {

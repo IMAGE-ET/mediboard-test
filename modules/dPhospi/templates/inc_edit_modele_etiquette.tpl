@@ -1,13 +1,27 @@
 <script type="text/javascript">
-texte_etiq = $('edit_etiq_texte');
+window.text_focused = null;
+
 after_edit_modele_etiq = function(id) {
 	editEtiq(id);
 	refreshList('');
 }
 
 insertField = function(elem) {
+  var texte_etiq = window.text_focused;
+  if (!texte_etiq) {
+	  texte_etiq = $("edit_etiq_texte");
+	}
 	var caret = texte_etiq.caret();
-  texte_etiq.caret(caret.begin, caret.end, elem.value + " ");
+	var oForm = getForm("edit_etiq");
+	var bold = oForm.elements["_write_bold"][0].checked;
+	var content = elem.value;
+	if (bold) {
+	  content = "*" + content + "*";
+	}
+	else {
+	  content = "[" + content + "]";
+	}
+  texte_etiq.caret(caret.begin, caret.end, content + " ");
 	texte_etiq.caret(texte_etiq.value.length);
 	texte_etiq.fire('ui:change');
 	$V(getForm('edit_etiq').fields, '');
@@ -25,9 +39,20 @@ previewEtiq = function() {
 	$V(form_download.hauteur_ligne, $V(form_edit.hauteur_ligne));
 	$V(form_download.nom, $V(form_edit.nom));
 	$V(form_download.texte, $V(form_edit.texte));
+	$V(form_download.texte_2, $V(form_edit.texte_2));
+	$V(form_download.texte_3, $V(form_edit.texte_3));
+	$V(form_download.texte_4, $V(form_edit.texte_4));
 	$V(form_download.font, $V(form_edit.font));
 	form_download.submit();
 }
+
+Main.add(function() {
+  var oForm = getForm("edit_etiq");
+	oForm.texte.observe("focus", function(e) { window.text_focused = e.target; });
+	oForm.texte_2.observe("focus", function(e) { window.text_focused = e.target });
+	oForm.texte_3.observe("focus", function(e) { window.text_focused = e.target });
+	oForm.texte_4.observe("focus", function(e) { window.text_focused = e.target });
+});
 </script>
 
 <form name="edit_etiq" onsubmit="return onSubmitFormAjax(this);" method="post">
@@ -122,9 +147,7 @@ previewEtiq = function() {
 	    <td colspan="3">
 	      {{mb_field object=$modele_etiquette field=nom}}
 	    </td>
-	    
 	  </tr>
-	  <tr>
 	  <tr>
       <th>
         {{mb_label object=$modele_etiquette field=object_class}}
@@ -141,34 +164,54 @@ previewEtiq = function() {
       </td>
     </tr>
     <tr>
+    	<!-- Contenu principal de l'étiquette -->
 	    <th>
 	      {{mb_label object=$modele_etiquette field=texte}}
 	    </th>
-	    <!-- Contenu de l'étiquette -->
 	    <td colspan="2">
 	      {{mb_field object=$modele_etiquette field=texte}}
 	    </td>
-	    <!--  Liste des champs disponibles -->
-	    <td>
-	      <b>{{tr}}CModeleEtiquette.fields{{/tr}} :</b>
-	      <br/>
-	      {{foreach from=$fields key=_class_name item=_by_class}}
+			<!--  Liste des champs disponibles -->
+      <td rowspan="4">
+        <b>{{tr}}CModeleEtiquette.fields{{/tr}} :</b>
+        <br/>
+        {{tr}}CModeleEtiquette._write_bold{{/tr}} :
+        {{mb_field object=$modele_etiquette field="_write_bold" typeEnum="radio"}}
+        <br/>
+        {{foreach from=$fields key=_class_name item=_by_class}}
           {{tr}}{{$_class_name}}{{/tr}} :<br />
           {{foreach from=$_by_class item=_field}}
             <button style="display: block;" type="button" value='{{$_field}}' onclick='insertField(this);'>{{$_field}}</button>
           {{/foreach}}
         {{/foreach}}
-	      <!-- 
-	      <select name="fields" onchange='insertField(this);'>
-	        <option value=''>&mdash; {{tr}}CModeleEtiquette.choose_field{{/tr}}</option>
-	        {{foreach from=$fields item=_field}}
-	          <option value='{{$_field}}''>{{$_field}}</option>
-	        {{/foreach}}
-	      </select>
-	       -->
-	      <br/>
-	    </td>
+        <br/>
+      </td>
 	  </tr>
+		<tr>
+			<!-- Autres contenus possibles -->
+			<th>
+        {{mb_label object=$modele_etiquette field=texte_2}}
+      </th>
+      <td colspan="2">
+        {{mb_field object=$modele_etiquette field=texte_2}}
+      </td>
+   </tr>
+	 <tr>
+			<th>
+        {{mb_label object=$modele_etiquette field=texte_3}}
+      </th>
+      <td colspan="2">
+        {{mb_field object=$modele_etiquette field=texte_3}}
+      </td>
+	</tr>
+	<tr>
+			<th>
+        {{mb_label object=$modele_etiquette field=texte_4}}
+      </th>
+      <td colspan="2">
+        {{mb_field object=$modele_etiquette field=texte_4}}
+      </td>
+	</tr>
 	  <tr>
 	    <td colspan="4" style="text-align: center">
 	     <button class="search" type="button" onclick = "if (checkForm(this.form)) previewEtiq();">
@@ -202,5 +245,8 @@ previewEtiq = function() {
   <input type="hidden" name="hauteur_ligne" value="" />
   <input type="hidden" name="nom" value="" />
   <input type="hidden" name="texte" value="" />
+	<input type="hidden" name="texte_2" value="" />
+	<input type="hidden" name="texte_3" value="" />
+	<input type="hidden" name="texte_4" value="" />
   <input type="hidden" name="font" value="" />
 </form>

@@ -19,6 +19,9 @@ $modele_etiquette->marge_vert    = CValue::post("marge_vert");
 $modele_etiquette->hauteur_ligne = CValue::post("hauteur_ligne");
 $modele_etiquette->nom           = CValue::post("nom");
 $modele_etiquette->texte         = CValue::post("texte");
+$modele_etiquette->texte_2       = CValue::post("texte_2");
+$modele_etiquette->texte_3       = CValue::post("texte_3");
+$modele_etiquette->texte_4       = CValue::post("texte_4");
 $modele_etiquette->font          = CValue::post("font");
 
 $modele_etiquette->printEtiquettes();

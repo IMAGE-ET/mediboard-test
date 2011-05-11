@@ -1707,11 +1707,11 @@ class CPatient extends CMbObject {
   
   function completeLabelFields() {
   	$this->loadIPP();
-    return array("[DATE NAISS]"     => mbDateToLocale($this->naissance), "[IPP]"    => $this->_IPP,
-                 "[LIEU NAISSANCE]" => $this->lieu_naissance,
-                 "[NOM]"            => $this->nom,       "[NOM JF]" => $this->nom_jeune_fille,
-                 "[NUM SECU]"       => $this->matricule, "[PRENOM]" => $this->prenom,
-                 "[SEXE]"           => $this->sexe);
+    return array("DATE NAISS"     => mbDateToLocale($this->naissance), "IPP"    => $this->_IPP,
+                 "LIEU NAISSANCE" => $this->lieu_naissance,
+                 "NOM"            => $this->nom,       "NOM JF" => $this->nom_jeune_fille,
+                 "NUM SECU"       => $this->matricule, "PRENOM" => $this->prenom,
+                 "SEXE"           => $this->sexe);
   }
 }
 
