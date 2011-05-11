@@ -7,7 +7,11 @@
         {{assign var=owner_icon value="user"}}
       {{/if}}
     {{elseif $_modele->_owner == "func"}}
-      {{assign var=owner_icon value="user-function"}}
+      {{if $_modele->function_id == $app->_ref_user->function_id}}
+        {{assign var=owner_icon value="user-function-glow"}}
+      {{else}}
+        {{assign var=owner_icon value="user-function"}}
+      {{/if}}
     {{elseif $_modele->_owner == "etab"}}
       {{assign var=owner_icon value="group"}}
     {{/if}}

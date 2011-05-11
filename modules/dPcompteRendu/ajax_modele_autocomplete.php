@@ -36,7 +36,7 @@ unset($where["chir_id"]);
 
 $where["object_class"] = "= '$object_class'";
 $where["type"] = "= 'body'";
-$where["function_id"] = " = '$user->function_id'";
+$where["function_id"] = " IN ('$user->function_id', '".CAppUI::$user->function_id."')";
 $modeles = array_merge($modeles, $compte_rendu->seek($keywords, $where, null, null, null, $order));
 
 unset($where["function_id"]);
