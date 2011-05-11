@@ -48,7 +48,7 @@ $sejour->loadAides($AppUI->user_id);
 // Chargement des categories de prescription
 $categories = array();
 $category = new CCategoryPrescription();
-$where[] = "chapitre = 'kine' OR chapitre = 'soin' OR chapitre = 'consult'";
+$where[] = "chapitre = 'kine'";
 $group_id = CGroups::loadCurrent()->_id;
 $where[] = "group_id = '$group_id' OR group_id IS NULL";
 
