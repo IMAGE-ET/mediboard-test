@@ -17,6 +17,7 @@ $only_dmi            = CValue::get("only_dmi");
 $print               = CValue::get("print", 0);
 $no_pdf              = CValue::get("no_pdf", 0);
 $operation_id        = CValue::get("operation_id");
+$globale             = CValue::get("globale");
 $linesDMI = array();
 
 // Chargement de l'etablissement
@@ -45,7 +46,7 @@ if($praticien_sortie_id){
 // si le user courant est un praticien, on affiche ces lignes
 $mediuser = new CMediusers();
 $mediuser->load($AppUI->user_id);
-if($mediuser->isPraticien()){
+if($mediuser->isPraticien() && !$globale){
 	$praticien = $mediuser;
 }
 

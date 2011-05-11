@@ -328,13 +328,16 @@ Prescription = {
     if(document.forms.selPraticienLine && (globale == undefined || globale == 0)){
       praticien_sortie_id = document.forms.selPraticienLine.praticien_id.value;
     }
-    
+    if (globale == undefined) {
+      globale = 0;
+    }
     if(prescription_id){
       var url = new Url("dPprescription", "print_prescription");
       url.addParam("prescription_id", prescription_id);
       if(!object_id && !no_pdf) {
 	  	  url.addParam("suppressHeaders", 1);
 	    }
+      url.addParam("globale", globale);
       url.addParam("dci", dci);
       url.addParam("praticien_sortie_id", praticien_sortie_id);
       url.addParam("print", print);
