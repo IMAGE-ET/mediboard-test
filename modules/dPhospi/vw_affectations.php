@@ -47,8 +47,10 @@ if(!$list_services){
   }
 }
 
-$where_service = "service_id IN (".join($list_services, ',').") OR service_id IS NULL"; 
-
+$where_service = "";
+if (reset($list_services)) {
+  $where_service = "service_id IN (".join($list_services, ',').") OR service_id IS NULL"; 
+}
 global $phpChrono;
 
 // Chargement des services
@@ -80,7 +82,10 @@ if($_type_admission == "ambucomp") {
 if($_type_admission != "seances") {
   $where[] = "affectation.affectation_id IS NULL";
 }
-$where[]                  = $where_service;
+
+if ($where_service) {
+  $where[]                  = $where_service;
+}
 $leftjoin["affectation"]  = "sejour.sejour_id = affectation.sejour_id";
 
 // Filtre sur les fonctions
@@ -100,8 +105,9 @@ $groupSejourNonAffectes = array();
 if ($can->edit) {
 	$where = array();
 	$where["sejour.annule"] = "= '0'";
-  $where[] = $where_service;
-	
+	if ($where_service) {
+    $where[] = $where_service;
+	}
   switch ($triAdm) {
     case "date_entree" :
       $order = "entree_prevue ASC";
