@@ -134,7 +134,7 @@ if ($prescription_id) {
 $prescription->applyPackOrProtocole($pack_protocole_id, $praticien_id, $date_sel, $operation_id, $protocole_id);
 
 // Lancement du refresh des lignes de la prescription
-echo "<script type='text/javascript'>selectLines('$prescription->_id', '$protocole_id')</script>";
+echo "<script type='text/javascript'>if(window.selectLines){ selectLines('$prescription->_id', '$protocole_id'); }</script>";
 echo CAppUI::getMsg();
 CApp::rip();
 
