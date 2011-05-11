@@ -18,6 +18,13 @@
 {{assign var=prescription_id value=$sejour->_ref_prescription_sejour->_id}}
 
 <script type="text/javascript">
+	
+	loadResultLabo = function(sejour_id) {
+    var url = new Url("dPImeds", "httpreq_vw_sejour_results");
+    url.addParam("sejour_id", sejour_id);
+    url.requestUpdate('Imeds');
+  }
+
   loadSuiviClinique = function() {
     var url = new Url("soins", "ajax_vw_suivi_clinique");
     url.addParam("sejour_id", '{{$sejour->_id}}');
