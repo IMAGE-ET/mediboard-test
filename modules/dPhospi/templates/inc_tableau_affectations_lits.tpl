@@ -54,6 +54,12 @@ Main.add(function () {
           {{$curr_service->nom}}
         </label>
       {{/foreach}}
+      
+      <!--  Hack des sous-bois, cf $V -->
+      {{if $services|@count == 1}}
+        <input type="hidden" name="list_services[]" value="" />
+      {{/if}}
+      
         <button class="search" type="button" onclick="reloadTableau();">Afficher</button> 
       </form>
     </td>
