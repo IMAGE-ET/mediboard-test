@@ -15,12 +15,13 @@
 {{assign var=transmissions value=$prescription->_transmissions}}
 {{mb_default var=update_plan_soin value=0}}
 
-{{if $line instanceof CPrescriptionLineMedicament}}
-  {{assign var=nb_lines_chap value=$prescription->_nb_produit_by_chap.$type}}
-{{else}}
-  {{assign var=nb_lines_chap value=$prescription->_nb_produit_by_chap.$name_chap}}
+{{if !$line->inscription}}
+  {{if $line instanceof CPrescriptionLineMedicament}}
+    {{assign var=nb_lines_chap value=$prescription->_nb_produit_by_chap.$type}}
+  {{else}}
+    {{assign var=nb_lines_chap value=$prescription->_nb_produit_by_chap.$name_chap}}
+  {{/if}}
 {{/if}}
-
 
 <tr id="line_{{$line_class}}_{{$line_id}}_{{$unite_prise|regex_replace:'/[^a-z0-9_-]/i':'_'}}">
 	{{if @$show_patient}}
@@ -163,12 +164,7 @@
 		
 		<div onclick="addCibleTransmission('{{$line->_ref_prescription->object_id}}', '{{$line_class}}', '{{$line->_id}}', null, '{{$update_plan_soin}}');" 
 	       class="{{if @$transmissions.$line_class.$line_id|@count}}transmission{{else}}transmission_possible{{/if}}"
-				 onmouseover="
-           {{if $line instanceof CPrescriptionLineMedicament || $line instanceof CPrescriptionLineMix }}
-             ObjectTooltip.createEx(this, '{{$line->_guid}}');
-           {{else}}
-             ObjectTooltip.createEx(this, '{{$line->_ref_element_prescription->_guid}}');
-           {{/if}}"
+				 onmouseover="ObjectTooltip.createEx(this, '{{$line->_guid}}');"
 				 style="font-weight: bold">
 	   
 	      {{if $line_class == "CPrescriptionLineMedicament"}}
