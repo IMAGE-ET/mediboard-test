@@ -19,20 +19,16 @@ $user     = $mediuser->_ref_user;
 $ldaprdn  = CAppUI::conf("admin LDAP ldap_user");
 $ldappass = CAppUI::conf("admin LDAP ldap_password");
 
-try {
-  $source_ldap = CLDAP::bind($user, $ldaprdn, $ldappass);
-} catch(Exception $e) {
-  CAppUI::stepAjax($e->getMessage(), UI_MSG_ERROR);
-}
-
 $filter="(|(givenname=$mediuser->_user_first_name*)
           (sn=$mediuser->_user_last_name*)
           (samaccountname=$mediuser->_user_username*))";
 $filter = utf8_encode($filter);
+
 try {
+  $source_ldap = CLDAP::bind($user, $ldaprdn, $ldappass);
   $results = $source_ldap->ldap_search($source_ldap->_ldapconn, $filter);
 } catch(Exception $e) {
-  CAppUI::stepAjax($e->getMessage(), UI_MSG_ERROR);
+  $e->stepAjax(UI_MSG_ERROR);
 }
 
 $nb_users = $results["count"];

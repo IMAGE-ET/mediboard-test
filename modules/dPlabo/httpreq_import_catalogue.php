@@ -240,8 +240,7 @@ try {
   importCatalogue($cat);
 } 
 catch (Exception $e) {
-  mbTrace($e);
-  CAppUI::stepAjax("Couldn't import catalogue for the  reason stated above", UI_MSG_ERROR);
+  $e->stepAjax();
 }
 
 ?>

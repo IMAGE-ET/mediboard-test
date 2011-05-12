@@ -25,19 +25,15 @@ if ($exchange_source_name) {
 foreach ($exchanges_source as $_exchange_source) {
   $extension = $_exchange_source->fileextension;
   
+  $list = array();
+  
   $ftp = new CFTP();
   $ftp->init($_exchange_source);
   try {
     $ftp->connect();
-  } catch (CMbException $e) {
-    CAppUI::stepAjax($e->getMessage(), UI_MSG_WARNING); 
-  }
-  
-  $list = array();
-  try {
     $list = $ftp->getListFiles("./");
   } catch (CMbException $e) {
-    CAppUI::stepAjax($e->getMessage(), UI_MSG_WARNING); 
+    $e->stepAjax();
   }
   
   if (empty($list)) {

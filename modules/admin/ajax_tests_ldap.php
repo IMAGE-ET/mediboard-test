@@ -22,19 +22,15 @@ $source_ldap->load($source_ldap_id);
 
 try {
   $ldapconn = $source_ldap->ldap_connect();
-} catch(Exception $e) {
-  CAppUI::stepAjax($e->getMessage(), UI_MSG_ERROR);
-}
-CAppUI::stepAjax("CSourceLDAP_connect", UI_MSG_OK, $source_ldap->host);
-
-try {
+  CAppUI::stepAjax("CSourceLDAP_connect", UI_MSG_OK, $source_ldap->host);
+  
   $source_ldap->ldap_bind($ldapconn, $ldaprdn, $ldappass, true);
+  $user = $ldaprdn ? $ldaprdn : "anonymous";
+  $user = $source_ldap->bind_rdn_suffix ? $ldaprdn.$source_ldap->bind_rdn_suffix : $user;
+  CAppUI::stepAjax("CSourceLDAP_authenticate", UI_MSG_OK, $source_ldap->host, $user);
 } catch(Exception $e) {
-  CAppUI::stepAjax($e->getMessage(), UI_MSG_ERROR);
+  $e->stepAjax(UI_MSG_ERROR);
 }
-$user = $ldaprdn ? $ldaprdn : "anonymous";
-$user = $source_ldap->bind_rdn_suffix ? $ldaprdn.$source_ldap->bind_rdn_suffix : $user;
-CAppUI::stepAjax("CSourceLDAP_authenticate", UI_MSG_OK, $source_ldap->host, $user);
 
 if ($action == "search") {
   if ($attributes) {
@@ -43,7 +39,7 @@ if ($action == "search") {
   try {
     $results = $source_ldap->ldap_search($ldapconn, $filter, $attributes ? $attributes : array());
   } catch(Exception $e) {
-    CAppUI::stepAjax($e->getMessage(), UI_MSG_ERROR);
+    $e->stepAjax(UI_MSG_ERROR);
   }
   
   CAppUI::stepAjax("CSourceLDAP_search-results", UI_MSG_OK, $filter);

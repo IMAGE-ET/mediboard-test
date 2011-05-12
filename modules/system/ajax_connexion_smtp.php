@@ -43,7 +43,7 @@ if($type_action == "connexion") {
   } catch(phpmailerException $e) {
     CAppUI::stepAjax($e->errorMessage(), UI_MSG_WARNING);
   } catch(Exception $e) {
-    CAppUI::stepAjax($e->getMessage(), UI_MSG_WARNING);
+    $e->stepAjax();
   }
 } else {
 	CAppUI::stepAjax("Type de test non supporté : $type_action", UI_MSG_ERROR);

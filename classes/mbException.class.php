@@ -16,9 +16,12 @@ class CMbException extends Exception {
     parent::__construct($text, 0); 
   } 
   
-  public function stepAjax() {
+  public function stepAjax($type = UI_MSG_WARNING) {
+    $args = func_get_args();
+    $msg = CAppUI::tr($this->getMessage(), array_slice($args, 1));
+    
   	CAppUI::$localize = false;
-    CAppUI::stepAjax($this->getMessage(), UI_MSG_WARNING); 
+    CAppUI::stepAjax($msg, $type); 
     CAppUI::$localize = true;
   }
 }

@@ -206,15 +206,9 @@ $file = "tmp/dPlabo/export_prescription.xml";
 
 try {
   $ftp->connect();
-} catch (CMbException $e) {
-  CAppUI::stepAjax($e->getMessage(), UI_MSG_WARNING); 
-  redirect();
-}
-
-try {
   $ftp->sendFile($file, "$destination_basename.xml");
 } catch (CMbException $e) {
-  CAppUI::stepAjax($e->getMessage(), UI_MSG_WARNING);
+  $e->stepAjax();
   $ftp->close(); 
   redirect();
 }

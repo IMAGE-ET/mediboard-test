@@ -54,10 +54,10 @@ try {
   
   $exchange_source->send();
   CAppUI::displayAjaxMsg("Message envoyé");
-  } catch(phpmailerException $e) {
-    CAppUI::displayAjaxMsg($e->errorMessage(), UI_MSG_WARNING);
-  } catch(Exception $e) {
-    CAppUI::displayAjaxMsg($e->getMessage(), UI_MSG_WARNING);
-  }
+} catch(phpmailerException $e) {
+  CAppUI::displayAjaxMsg($e->errorMessage(), UI_MSG_WARNING);
+} catch(Exception $e) {
+  $e->stepAjax();
+}
 
 ?>

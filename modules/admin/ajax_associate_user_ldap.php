@@ -30,14 +30,9 @@ if (!$mediuser->_id) {
 
 try {
   $source_ldap = CLDAP::bind($user, $ldaprdn, $ldappass);
-} catch(Exception $e) {
-  CAppUI::stepAjax($e->getMessage(), UI_MSG_ERROR);
-}
-
-try {
   $user = CLDAP::searchAndMap($user, $source_ldap, $source_ldap->_ldapconn, $samaccountname, null, true);
 } catch(Exception $e) {
-  CAppUI::stepAjax($e->getMessage(), UI_MSG_ERROR);
+  $e->stepAjax(UI_MSG_ERROR);
 }
 
 // Création du template

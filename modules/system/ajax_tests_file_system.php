@@ -25,7 +25,7 @@ if ($type_action == "connexion") {
   try {
     $exchange_source->init();
   } catch (Exception $e) {
-    CAppUI::stepAjax($e->getMessage(), UI_MSG_ERROR);
+    $e->stepAjax(UI_MSG_ERROR);
   }
   
   CAppUI::stepAjax("CSourceFileSystem-host-is-a-dir", UI_MSG_OK, $exchange_source->host);
@@ -34,7 +34,7 @@ else if ($type_action == "getFiles") {
   try {
     $files = $exchange_source->receive();
   } catch (Exception $e) {
-    CAppUI::stepAjax($e->getMessage(), UI_MSG_ERROR);
+    $e->stepAjax(UI_MSG_ERROR);
   }
   
   CAppUI::stepAjax("Le dossier '$exchange_source->host' contient : ".CMbPath::countFiles($exchange_source->host)." fichier(s)");

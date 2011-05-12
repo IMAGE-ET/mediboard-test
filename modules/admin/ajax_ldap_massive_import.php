@@ -48,9 +48,6 @@ if (!$do_import) {
   foreach($users as $_user) { 
     try {
       $source_ldap = CLDAP::bind($_user, $ldaprdn, $ldappass);
-    } catch(Exception $e) {}
-    
-    try {
       $_user = CLDAP::searchAndMap($_user, $source_ldap, $source_ldap->_ldapconn, $_user->user_username, null);
     } catch(Exception $e) {}
     

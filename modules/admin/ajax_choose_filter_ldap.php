@@ -24,7 +24,7 @@ if ($user_username || $user_first_name || $user_last_name) {
   try {
     $source_ldap = CLDAP::bind(null, $ldaprdn, $ldappass);
   } catch(Exception $e) {
-    CAppUI::stepAjax($e->getMessage(), UI_MSG_ERROR);
+    $e->stepAjax(UI_MSG_ERROR);
   }
   
   $choose_filter = "";
@@ -42,7 +42,7 @@ if ($user_username || $user_first_name || $user_last_name) {
   try {
     $results = $source_ldap->ldap_search($source_ldap->_ldapconn, $filter);
   } catch(Exception $e) {
-    CAppUI::stepAjax($e->getMessage(), UI_MSG_ERROR);
+    $e->stepAjax(UI_MSG_ERROR);
   }
   
   $nb_users = $results["count"];

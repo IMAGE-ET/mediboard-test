@@ -24,7 +24,7 @@ try {
   $ftp->connect();
   CAppUI::stepAjax("Connecté au serveur $ftp->hostname et authentifié en tant que $ftp->username");
 } catch (CMbException $e) {
-  CAppUI::stepAjax($e->getMessage(), UI_MSG_WARNING); 
+  $e->stepAjax();
   return;
 }
 
@@ -35,7 +35,7 @@ if ($ftp->passif_mode) {
 try {
   $files = $ftp->getListFiles($ftp->fileprefix);
 } catch (CMbException $e) {
-  CAppUI::stepAjax($e->getMessage(), UI_MSG_WARNING); 
+  $e->stepAjax();
   return;
 }
 

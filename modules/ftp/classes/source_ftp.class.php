@@ -89,17 +89,13 @@ class CSourceFTP extends CExchangeSource {
 
     try {
       $ftp->connect();
-    } catch (CMbException $e) {
-      CAppUI::stepAjax($e->getMessage(), UI_MSG_WARNING); 
-    }
-    
-    $files = array();
-    $path = "$ftp->fileprefix/$this->_path";
-		
-    try {
+      
+      $files = array();
+      $path = "$ftp->fileprefix/$this->_path";
+      
       $files = $ftp->getListFiles($path);
     } catch (CMbException $e) {
-      CAppUI::stepAjax($e->getMessage(), UI_MSG_WARNING); 
+      $e->stepAjax();
     }
     
     if (empty($files)) {
@@ -116,16 +112,13 @@ class CSourceFTP extends CExchangeSource {
     
     try {
       $ftp->connect();
-    } catch (CMbException $e) {
-      CAppUI::stepAjax($e->getMessage(), UI_MSG_WARNING); 
-    }
-    
-    $file = null;
-    $temp = tempnam(sys_get_temp_dir(), "mb_");
-    try {
+      
+      $file = null;
+      $temp = tempnam(sys_get_temp_dir(), "mb_");
+      
       $file = $ftp->getFile($path, $temp);
     } catch (CMbException $e) {
-      CAppUI::stepAjax($e->getMessage(), UI_MSG_WARNING); 
+      $e->stepAjax();
     }
     $ftp->close();
     
