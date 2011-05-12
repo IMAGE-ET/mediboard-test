@@ -203,7 +203,8 @@
 {{if !$_prescription_line_mix->signature_prat && $conf.dPprescription.CPrescription.show_unsigned_med_msg}}
    {{foreach from=$count_composition_dossier key=_view_date item=_hours_by_moment}}
      {{foreach from=$_hours_by_moment key=moment_journee item=_count}}
-      <td class="{{$_view_date}}-{{$moment_journee}}" colspan="{{$_count}}">
+     {{assign var=count_colspan value=$_count-2}}
+      <td class="{{$_view_date}}-{{$moment_journee}}" colspan="{{$count_colspan}}">
         <div class="small-warning">Ligne non signée</div>
       </td>      
     {{/foreach}}
