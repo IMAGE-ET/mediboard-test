@@ -193,7 +193,7 @@ class CLDAP {
       $mediuser->actif        =  $actif;
       $mediuser->deb_activite = $whencreated;
       $mediuser->fin_activite = $accountexpires;
-      
+      $mediuser->_ldap_store = true;
       $mediuser->store();
     }
     $user->_user_actif        = $actif;
