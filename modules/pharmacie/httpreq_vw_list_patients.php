@@ -59,6 +59,8 @@ if ($prescriptions) {
 	}
 }
 
+array_multisort(CMbArray::pluck($patients, "nom"), SORT_ASC, $patients);
+
 // Smarty template
 $smarty = new CSmartyDP();
 $smarty->assign("sejours"             , $sejours);
