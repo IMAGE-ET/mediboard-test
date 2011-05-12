@@ -255,7 +255,11 @@ class CMediusers extends CMbObject {
     $user->user_id = ($this->_user_id) ? $this->_user_id : $this->user_id;
 		$user->user_type        = $this->_user_type;
     $user->user_username    = $this->_user_username;
-    $user->user_password    = $this->_user_password;
+    if (isset($this->_ldap_store)) {
+      $user->user_password    = $this->_user_password;
+    } else {
+      $user->_user_password    = $this->_user_password;
+    }
     $user->user_first_name  = $this->_user_first_name;
     $user->user_last_name   = $this->_user_last_name;
     $user->user_email       = $this->_user_email;
