@@ -24,7 +24,7 @@ $exchange_source = CExchangeSource::get($exchange_source_name);
 if ($type_action == "connexion") {
   try {
     $exchange_source->init();
-  } catch (Exception $e) {
+  } catch (CMbException $e) {
     $e->stepAjax(UI_MSG_ERROR);
   }
   
@@ -33,7 +33,7 @@ if ($type_action == "connexion") {
 else if ($type_action == "getFiles") {
   try {
     $files = $exchange_source->receive();
-  } catch (Exception $e) {
+  } catch (CMbException $e) {
     $e->stepAjax(UI_MSG_ERROR);
   }
   

@@ -29,8 +29,8 @@ if($type_action == "connexion") {
 		CAppUI::stepAjax("Connecté au serveur $exchange_source->host sur le port $exchange_source->port");
   } catch(phpmailerException $e) {
 		CAppUI::stepAjax($e->errorMessage(), UI_MSG_WARNING);
-	} catch(Exception $e) {
-		CAppUI::stepAjax($e->getMessage(), UI_MSG_WARNING);
+	} catch(CMbException $e) {
+	  $e->stepAjax(UI_MSG_WARNING);
 	}
 } elseif($type_action == "envoi") {
   try {
@@ -42,7 +42,7 @@ if($type_action == "connexion") {
     CAppUI::stepAjax("Message envoyé au serveur $exchange_source->host sur le port $exchange_source->port");
   } catch(phpmailerException $e) {
     CAppUI::stepAjax($e->errorMessage(), UI_MSG_WARNING);
-  } catch(Exception $e) {
+  } catch(CMbException $e) {
     $e->stepAjax();
   }
 } else {

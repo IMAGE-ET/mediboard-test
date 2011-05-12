@@ -491,17 +491,28 @@ class CAppUI {
       return false;
     }
         
-    $bound = false;
     if ($ldap_connection) {
-      try {        
-        $user  = CLDAP::login($user, $ldap_guid);
-        $bound = $user->_bound;
-      } catch (Exception $e) {
-        self::setMsg($e->getMessage(), UI_MSG_ERROR);
+      $user_ldap = new CUser();
+      $user_ldap->user_username = $username;
+      $user_ldap->loadMatchingObject();
+      $user_ldap->loadLastId400(CAppUI::conf("admin LDAP ldap_tag"));
+      if ($user_ldap->_ref_last_id400->_id) {
+        $user_ldap->_user_password = $password;
+        $user_ldap->_bound = false;
+        try {        
+          $user_ldap = CLDAP::login($user_ldap, $ldap_guid);
+        } catch (CMbException $e) {
+          $e->stepAjax(UI_MSG_ERROR);
+        }
+
+        if (!$user_ldap->_bound) {
+          self::setMsg("Auth-failed-combination", UI_MSG_ERROR);
+          return false;
+        }
       }
     }
 
-    if (!$bound && !self::checkPasswordAttempt($user)) {
+    if (!self::checkPasswordAttempt($user)) {
       return false;
     }
 

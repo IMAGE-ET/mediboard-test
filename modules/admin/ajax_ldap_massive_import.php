@@ -49,7 +49,7 @@ if (!$do_import) {
     try {
       $source_ldap = CLDAP::bind($_user, $ldaprdn, $ldappass);
       $_user = CLDAP::searchAndMap($_user, $source_ldap, $source_ldap->_ldapconn, $_user->user_username, null);
-    } catch(Exception $e) {}
+    } catch(CMbException $e) {}
     
     if ($_user->_count_ldap != 0) {
       $count_associate++;
@@ -70,7 +70,7 @@ if (!$do_import) {
   CAppUI::stepAjax("$count_no_associate comptes non associés", UI_MSG_WARNING);
   
   CValue::setSession("start", $next);
-  CAppUI::stepAjax("On continuera au n° $next / ".count($users_all));
+  CAppUI::stepAjax("On continuera au n° $next / ".count($users)." restants");
 }
 
 ?>

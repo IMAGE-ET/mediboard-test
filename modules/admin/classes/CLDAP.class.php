@@ -88,6 +88,11 @@ class CLDAP {
     
     $id400->id400        = self::getObjectGUID($results);
     $id400->loadMatchingObject();
+    
+    // On sauvegarde le password renseigné
+    $user_password  = $user->user_password;
+    $_user_password = $user->_user_password;
+        
     // objectguid retrouvé on charge le user
     if ($id400->_id) {
       $user = new CUser();
@@ -98,8 +103,6 @@ class CLDAP {
       // Si on est pas en mode création on le recherche
       if (!$force_create) {
         // Suppression du password pour le loadMatchingObject
-        $user_password  = $user->user_password;
-        $_user_password = $user->_user_password;
         $user->user_password  = null;
         $user->_user_password = null;
         
@@ -107,11 +110,8 @@ class CLDAP {
         if (!$user->_id) {
           throw new CMbException("Auth-failed-user-unknown");
         }
-        
-        $user->user_password  = $user_password;
-        $user->_user_password = $_user_password;
       }
-    }   
+    } 
     $user->_bound = true;
     $user = self::mapTo($user, $results);
     
@@ -120,6 +120,9 @@ class CLDAP {
     $deb_activite = $user->_user_deb_activite;
     $fin_activite = $user->_user_fin_activite;
     
+    // Restore User password variables
+    $user->user_password  = $user_password;
+    $user->_user_password = $_user_password; 
     if (!$user->user_type) {
       $user->user_type = 0;
     }

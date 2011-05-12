@@ -239,7 +239,7 @@ $cat = new SimpleXMLElement($content);
 try {
   importCatalogue($cat);
 } 
-catch (Exception $e) {
+catch (CMbException $e) {
   $e->stepAjax();
 }
 

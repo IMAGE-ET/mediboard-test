@@ -31,7 +31,7 @@ if (!$mediuser->_id) {
 try {
   $source_ldap = CLDAP::bind($user, $ldaprdn, $ldappass);
   $user = CLDAP::searchAndMap($user, $source_ldap, $source_ldap->_ldapconn, $samaccountname, null, true);
-} catch(Exception $e) {
+} catch(CMbException $e) {
   $e->stepAjax(UI_MSG_ERROR);
 }
 

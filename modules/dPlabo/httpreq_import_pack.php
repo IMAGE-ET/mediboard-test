@@ -165,7 +165,7 @@ $packs = new SimpleXMLElement($content);
 try {
   importPacks($packs);
 } 
-catch (Exception $e) {
+catch (CMbException $e) {
   $e->stepAjax();
 }
 

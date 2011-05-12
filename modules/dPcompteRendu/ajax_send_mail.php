@@ -56,7 +56,7 @@ try {
   CAppUI::displayAjaxMsg("Message envoyé");
 } catch(phpmailerException $e) {
   CAppUI::displayAjaxMsg($e->errorMessage(), UI_MSG_WARNING);
-} catch(Exception $e) {
+} catch(CMbException $e) {
   $e->stepAjax();
 }
 

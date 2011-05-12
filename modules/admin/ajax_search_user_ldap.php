@@ -27,7 +27,7 @@ $filter = utf8_encode($filter);
 try {
   $source_ldap = CLDAP::bind($user, $ldaprdn, $ldappass);
   $results = $source_ldap->ldap_search($source_ldap->_ldapconn, $filter);
-} catch(Exception $e) {
+} catch(CMbException $e) {
   $e->stepAjax(UI_MSG_ERROR);
 }
 

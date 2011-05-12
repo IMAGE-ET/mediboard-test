@@ -23,7 +23,7 @@ if ($user_username || $user_first_name || $user_last_name) {
 
   try {
     $source_ldap = CLDAP::bind(null, $ldaprdn, $ldappass);
-  } catch(Exception $e) {
+  } catch(CMbException $e) {
     $e->stepAjax(UI_MSG_ERROR);
   }
   
@@ -41,7 +41,7 @@ if ($user_username || $user_first_name || $user_last_name) {
   $filter = utf8_encode($filter);
   try {
     $results = $source_ldap->ldap_search($source_ldap->_ldapconn, $filter);
-  } catch(Exception $e) {
+  } catch(CMbException $e) {
     $e->stepAjax(UI_MSG_ERROR);
   }
   
