@@ -17,14 +17,15 @@ $rpu->loadRefSejour();
 // Chargement du patient
 $rpu->_ref_sejour->loadRefPatient();
 
-// Récupération des valeurs des champs;
-$fields = $rpu->_ref_sejour->completeLabelFields();
-$fields = array_merge($fields, $rpu->_ref_sejour->_ref_patient->completeLabelFields());
-
 // Chargement des modèles d'étiquettes
 $modele_etiquette = new CModeleEtiquette;
 $where = array();
 $where['object_class'] = " = 'CRPU'";
+
+// Récupération des valeurs des champs;
+$fields = $rpu->_ref_sejour->completeLabelFields();
+$fields = array_merge($fields, $rpu->_ref_sejour->_ref_patient->completeLabelFields());
+$fields = array_merge($fields, $modele_etiquette->completeLabelFields());
 
 if (count($modeles_etiquettes = $modele_etiquette->loadList($where))) {
 	// TODO: faire une modale pour proposer les modèles d'étiquettes

@@ -34,8 +34,10 @@ class CModeleEtiquette extends CMbMetaObject {
   static $fields = array("CPatient" =>
       array("DATE NAISS", "IPP", "LIEU NAISSANCE",
             "NOM", "NOM JF",  "NUM SECU",
-            "PRENOM", "SEXE"),
-      "CSejour" => array("NDOS", "DATE ENT", "PRAT RESPONSABLE"));
+            "PRENOM", "SEXE", "CIVILITE", "CIVILITE LONGUE",
+            "ACCORD GENRE"),
+      "CSejour" => array("NDOS", "DATE ENT", "PRAT RESPONSABLE"),
+      "General" => array("DATE COURANTE", "HEURE COURANTE"));
   
   static $listfonts =
       array("dejavusansmono" => "DejaVu Sans Mono",
@@ -86,6 +88,13 @@ class CModeleEtiquette extends CMbMetaObject {
   	}
   }
   
+  function completeLabelFields() {
+    return array(
+      "DATE COURANTE" => mbDateToLocale(mbDate()),
+      "HEURE COURANTE" => mbTime()
+    );
+  }
+  
   function printEtiquettes() {
   	// Affectation de la police par défault si aucune n'est choisie
 		if ($this->font == "")
@@ -109,7 +118,7 @@ class CModeleEtiquette extends CMbMetaObject {
 		
 		$distinct_texts = 1;
 		$textes = array();
-		$textes[] = preg_replace("/[\t\r\n\f]/", '', utf8_encode(nl2br($this->texte)));
+		$textes[1] = preg_replace("/[\t\r\n\f]/", '', utf8_encode(nl2br($this->texte)));
 		
 		if ($this->texte_2) {
 			$distinct_texts++;
@@ -125,9 +134,17 @@ class CModeleEtiquette extends CMbMetaObject {
       $distinct_texts++;
       $textes[] = preg_replace("/[\t\r\n\f]/", '', utf8_encode(nl2br($this->texte_4)));
     }
-		  
+		
+    $nb_etiqs = $this->nb_lignes * $this->nb_colonnes;
+    $increment = floor( $nb_etiqs/ $distinct_texts);
+    $current_text = 1;
+
 		// Création de la grille d'étiquettes et écriture du contenu.
-		for ($i = 0; $i < $this->nb_lignes * $this->nb_colonnes; $i++) {
+		for ($i = 0; $i < $nb_etiqs; $i++) {
+		  if ($i != 0 && $i % $increment == 0 && isset($textes[$current_text+1])) {
+		    $current_text++;
+		  }
+		  
 		  if (round($pdf->GetX()) >= ($this->largeur_page - 2 * $this->marge_horiz)) {
 		    $pdf->SetX(0);
 		    $pdf->SetLeftMargin($this->marge_horiz);
@@ -145,7 +162,7 @@ class CModeleEtiquette extends CMbMetaObject {
       
 		  // La fonction nl2br ne fait qu'ajouter la balise <br />, elle ne supprime pas le \n.
 		  // Il faut donc le faire manuellement.
-		  $pdf->WriteHTML("<div>" . $textes[$i %$distinct_texts] . "</div>", false);
+		  $pdf->WriteHTML("<div>" . $textes[$current_text] . "</div>", false);
 		  $x = $x + $largeur_etiq;
 		  $pdf->SetY($y);
 		  $pdf->SetX($x);

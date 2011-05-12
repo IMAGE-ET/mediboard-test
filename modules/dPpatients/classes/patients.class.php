@@ -1711,7 +1711,8 @@ class CPatient extends CMbObject {
                  "LIEU NAISSANCE" => $this->lieu_naissance,
                  "NOM"            => $this->nom,       "NOM JF" => $this->nom_jeune_fille,
                  "NUM SECU"       => $this->matricule, "PRENOM" => $this->prenom,
-                 "SEXE"           => $this->sexe);
+                 "SEXE"           => $this->sexe, "CIVILITE" => $this->civilite,
+                 "CIVILITE LONGUE" => $this->_civilite_long, "ACCORD GENRE" => $this->sexe == "f" ? "e" : "");
   }
 }
 
