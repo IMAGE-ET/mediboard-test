@@ -13,7 +13,7 @@
 viewListPrescription = function(){
   var url = new Url("soins", "httpreq_vw_bilan_list_prescriptions");
 	var oFilterForm = getForm("bilanPrescriptions");
-  url.addParam('type', $V(oFilterForm.type));
+  url.addParam('type_prescription', $V(oFilterForm.type_prescription));
 	url.addParam('signee', $V(oFilterForm.signee));
   url.addParam('praticien_id', $V(oFilterForm.praticien_id));
   url.addParam('_date_entree_prevue', $V(oFilterForm._date_entree_prevue));
@@ -54,10 +54,10 @@ Main.add(function () {
 	        <tr>
 	          <td>
 	            Type de prescription
-	            <select name="type">
-	              <option value="sejour" {{if $type == "sejour"}}selected="selected"{{/if}}>Séjour</option>
-	              <option value="sortie_manquante" {{if $type == "sortie_manquante"}}selected="selected"{{/if}}>Sortie manquante</option>
-	              <option value="externe" {{if $type == "externe"}}selected="selected"{{/if}}>Externe</option>
+	            <select name="type_prescription">
+	              <option value="sejour" {{if $type_prescription == "sejour"}}selected="selected"{{/if}}>Séjour</option>
+	              <option value="sortie_manquante" {{if $type_prescription == "sortie_manquante"}}selected="selected"{{/if}}>Sortie manquante</option>
+	              <option value="externe" {{if $type_prescription == "externe"}}selected="selected"{{/if}}>Externe</option>
 	            </select>
 	          </td>
 	          <td>

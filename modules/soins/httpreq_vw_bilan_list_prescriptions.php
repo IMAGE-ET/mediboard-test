@@ -12,11 +12,11 @@ global $can, $m, $AppUI;
 
 $can->needsRead();
 
-$praticien_id = CValue::getOrSession("praticien_id" , $AppUI->user_id);
-$signee       = CValue::getOrSession("signee"       , 0);  // par default les non signees
-$date_min     = CValue::getOrSession("_date_entree_prevue"     , mbDate());  // par default, date du jour
-$date_max     = CValue::getOrSession("_date_sortie_prevue"     , mbDate());
-$type         = CValue::getOrSession("type"         , "sejour");  // sejour - externe - sortie_manquante
+$praticien_id      = CValue::getOrSession("praticien_id" , $AppUI->user_id);
+$signee            = CValue::getOrSession("signee"       , 0);  // par default les non signees
+$date_min          = CValue::getOrSession("_date_entree_prevue"     , mbDate());  // par default, date du jour
+$date_max          = CValue::getOrSession("_date_sortie_prevue"     , mbDate());
+$type_prescription = CValue::getOrSession("type_prescription"       , "sejour");  // sejour - externe - sortie_manquante
 
 $date_min = $date_min . " 00:00:00";
 $date_max = $date_max . " 23:59:59";
@@ -27,7 +27,7 @@ $praticiens = $mediuser->loadPraticiens();
 
 // Recherche des prescriptions
 $where = array();
-if($type == "sejour" || $type == "sortie_manquante"){
+if($type_prescription == "sejour" || $type_prescription == "sortie_manquante"){
   $ljoin["sejour"] = "prescription.object_id = sejour.sejour_id";
   $ljoin["patients"] = "patients.patient_id = sejour.patient_id";
   $where["prescription.type"] = " = 'sejour'";
@@ -69,7 +69,7 @@ $order = "patients.nom";
 $group_by = "prescription_id";
 $prescriptions = $prescription->loadList($where, $order, null, $group_by, $ljoin);
 
-if($type == "sortie_manquante"){
+if($type_prescription == "sortie_manquante"){
   foreach($prescriptions as $_prescription){
     // Recherche d'une prescription de sortie correspondant à la prescription de sejour
     $_prescription_sortie = new CPrescription();

@@ -12,11 +12,11 @@ global $can, $m, $AppUI;
 
 $can->needsRead();
 
-$praticien_id = CValue::getOrSession("praticien_id" , $AppUI->user_id);
-$signee       = CValue::getOrSession("signee"       , 0);  // par default les non signees
-$date_min     = CValue::getOrSession("_date_entree_prevue"     , mbDate());  // par default, date du jour
-$date_max     = CValue::getOrSession("_date_sortie_prevue"     , mbDate());
-$type         = CValue::getOrSession("type"         , "sejour");  // sejour - externe - sortie_manquante
+$praticien_id      = CValue::getOrSession("praticien_id" , $AppUI->user_id);
+$signee            = CValue::getOrSession("signee"       , 0);  // par default les non signees
+$date_min          = CValue::getOrSession("_date_entree_prevue"     , mbDate());  // par default, date du jour
+$date_max          = CValue::getOrSession("_date_sortie_prevue"     , mbDate());
+$type_prescription = CValue::getOrSession("type_prescription"       , "sejour");  // sejour - externe - sortie_manquante
 
 // Chargement de la liste des praticiens
 $mediuser = new CMediusers();
@@ -40,7 +40,7 @@ $smarty->assign("praticiens", $praticiens);
 $smarty->assign("praticien_id", $praticien_id);
 $smarty->assign("signee", $signee);
 $smarty->assign("sejour", $sejour);
-$smarty->assign("type", $type);
+$smarty->assign("type_prescription", $type_prescription);
 $smarty->display('vw_bilan_prescription.tpl');
 
 ?>
