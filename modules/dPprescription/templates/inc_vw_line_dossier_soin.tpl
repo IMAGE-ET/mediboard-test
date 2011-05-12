@@ -323,11 +323,12 @@
 	  <td id="first_{{$line_id}}_{{$line_class}}_{{$unite_prise|regex_replace:'/[^a-z0-9_-]/i':'_'}}" style="display: none;">
 	  </td>
 	  
-		{{if !$line->signee && $line->_class_name == "CPrescriptionLineMedicament" && $conf.dPprescription.CPrescription.show_unsigned_med_msg}}
+		{{if !$line->signee && $line->_class_name == "CPrescriptionLineMedicament" && $conf.dPprescription.CPrescription.show_unsigned_med_msg && !$line->inscription}}
 		
 		{{foreach from=$count_composition_dossier key=_view_date item=_hours_by_moment}}
       {{foreach from=$_hours_by_moment key=moment_journee item=_count}}
-        <td class="{{$_view_date}}-{{$moment_journee}}" colspan="{{$_count}}">
+			  {{assign var=count_colspan value=$_count-2}}
+        <td class="{{$_view_date}}-{{$moment_journee}}" colspan="{{$count_colspan}}">
 	        <div class="small-warning">Ligne non signée</div>
 	      </td>      
 	      {{/foreach}}

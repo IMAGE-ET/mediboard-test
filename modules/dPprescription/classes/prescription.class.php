@@ -1896,6 +1896,11 @@ class CPrescription extends CMbObject implements IPatientRelated {
               $_inscription->calculAdministrations($date, $mode_dispensation);
             }
           }
+					
+					if ($_inscription instanceof CPrescriptionLineElement && $_inscription->_ref_element_prescription->rdv){
+            $_inscription->loadRefTask();
+          }
+					
           $this->_ref_inscriptions_for_plan[$_inscription->_id] = $_inscription;
 				}
 			}
