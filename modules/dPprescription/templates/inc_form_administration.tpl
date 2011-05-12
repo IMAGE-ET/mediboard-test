@@ -1,8 +1,26 @@
 <script type="text/javascript">
+  submitAdministration = function() {
+    var oForm = getForm('addAdministration');
+    var quantite = $V(oForm.quantite);
+    // On crée l'administration seulement si la quantité est remplie
+    if (quantite && quantite > 0) {
+      return onSubmitFormAjax(oForm);
+    }
+    else {
+      afterAdministration();
+    }
+  }
   afterAdministration = function(administration_id) {
     var oForm = getForm('editTrans');
-    $V(oForm.object_id, administration_id);
-    $V(oForm.object_class, "CAdministration");
+    if (administration_id) {
+      $V(oForm.object_id, administration_id);
+      $V(oForm.object_class, "CAdministration");
+    }
+    // Si pas d'administration, la ou les transmissions sont associées à la ligne
+    else {
+      $V(oForm.object_id, '{{$line->_id}}');
+      $V(oForm.object_class, '{{$line->_class_name}}');
+    }
     return onSubmitFormAjax(oForm, {onComplete: function() {
      afterEditLine();
     } });
@@ -79,7 +97,7 @@
       {{assign var=hide_button_add value=1}}
       {{mb_include module=dPhospi template=inc_transmission refreshTrans=0}}
       <button type="button" class="submit" 
-        onclick="return onSubmitFormAjax(getForm('addAdministration'));">
+        onclick="submitAdministration();">
         {{tr}}Save{{/tr}}
       </button>
     </td>
