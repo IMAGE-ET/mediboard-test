@@ -33,7 +33,7 @@
  	</td>
 	
 	{{if !$_prescription_line_mix->signature_prat && $conf.dPprescription.CPrescription.show_unsigned_med_msg}}
-	  <td colspan="5">
+	  <td colspan="7">
 	  	<div class="small-warning">Ligne non signée</div>
 	  </td>
 	{{else}}

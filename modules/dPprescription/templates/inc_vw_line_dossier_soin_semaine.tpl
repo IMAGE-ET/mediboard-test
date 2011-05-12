@@ -85,7 +85,7 @@
    </td>
    
 	 {{if !$line->signee && $line->_class_name == "CPrescriptionLineMedicament" && $conf.dPprescription.CPrescription.show_unsigned_med_msg && !$line->inscription}}
-	  <td colspan="6">
+	  <td colspan="8">
 	  	<div class="small-warning">
 	  		Ligne non signée
 	  	</div>
