@@ -392,8 +392,7 @@ PlanSoins = {
 	  
 	  $V(getForm("adm_multiple")._administrations, Object.toJSON(administrations));
 	  
-	  var url = new Url;
-	  url.setModuleAction("dPprescription", "httpreq_add_multiple_administrations");
+	  var url = new Url("dPprescription", "httpreq_add_multiple_administrations");
 	  url.addParam("mode_dossier", $V(document.mode_dossier_soin.mode_dossier));
 	  url.addParam("refresh_popup", "1");
 	  url.popup(700, 600, "Administrations multiples");
@@ -407,8 +406,7 @@ PlanSoins = {
 	},
 	
 	viewFicheATC: function(fiche_ATC_id){
-	  var url = new Url;
-	  url.setModuleAction("dPmedicament", "vw_fiche_ATC");
+	  var url = new Url("dPmedicament", "vw_fiche_ATC");
 	  url.addParam("fiche_ATC_id", fiche_ATC_id);
 	  url.popup(700, 550, "Fiche ATC");  
 	}, 

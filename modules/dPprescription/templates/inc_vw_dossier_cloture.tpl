@@ -37,7 +37,7 @@
        <td>
          {{if $line->_class_name == "CPrescriptionLineMedicament"}}
            {{$line->_ucd_view}} 
-           <span style="opacity: 0.7; font-size: 0.8em;">
+           <span style="font-size: 0.8em;" class="opacity-70">
            {{if $line->_forme_galenique}}({{$line->_forme_galenique}}){{/if}}
            </span>
          {{elseif $line->_class_name == "CPrescriptionLineMixItem"}}

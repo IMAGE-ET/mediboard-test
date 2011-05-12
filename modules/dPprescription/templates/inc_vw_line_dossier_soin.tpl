@@ -177,7 +177,7 @@
 					  {{$line->_view}}
 						{{if $line->cip_dm}}
 						  <br />
-						  <span style="opacity: 0.7; font-size: 0.8em;">({{$line->_ref_dm->libelle}})</span>
+						  <span style="font-size: 0.8em;" class="opacity-70">({{$line->_ref_dm->libelle}})</span>
 						{{/if}}
 					</div>
 				{{/if}} 
@@ -276,7 +276,7 @@
 
     {{if $line instanceof CPrescriptionLineMedicament}}
 	    <!-- Affichage de la forme galenique -->
-			<div style="opacity: 0.7;">
+			<div class="opacity-70">
 			{{if !$line->inscription}}
 			  <hr style="width: 70%; border-color: #AAA; margin: 1px auto;" />
 	    {{/if}}

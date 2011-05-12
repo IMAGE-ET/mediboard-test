@@ -22,7 +22,8 @@
  *}}
  
 {{foreach from=$ex_object->_ref_ex_class->_ref_groups item=_ex_group}}
-  <span style="color: #4086FF;">{{$_ex_group}}</span>
+  {{* <span style="color: #4086FF;">{{$_ex_group}}</span> *}}
+  <h4 style="margin: 0.5em;">{{$_ex_group}}</h4>
 	
 	<ul>
   {{assign var=any value=false}}

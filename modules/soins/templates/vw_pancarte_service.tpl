@@ -37,7 +37,7 @@ function viewDossierSoin(sejour_id){
        
 function viewLegendPancarte(){
   var url = new Url("soins", "vw_legende_pancarte");
-  url.popup(300, 400, "Légende de la pancarte");
+  url.popup(300, 500, "Légende de la pancarte");
 }
        
 function viewTransmissions(service_id, user_id, degre, observations, transmissions, refresh, order_col, order_way){
@@ -103,26 +103,27 @@ Main.add(function () {
   <input type="hidden" name="mode" value="1" />
   <input type="hidden" name="_active_tab" value="dossier_soins" /> 
 </form>
-
-<button type="button" class="search" onclick="viewLegendPancarte();" style="float: right;">Légende</button>
-<div style="text-align: center">
-	<form name="selService" action="?" method="get">
-		<input type="hidden" name="m" value="{{$m}}" />
-		<input type="hidden" name="tab" value="vw_pancarte_service" />
-		<select name="service_id" onchange="this.form.submit();">
-		  <option value="">&mdash; Choix d'un service</option>
-		  {{foreach from=$services item=_service}}
-		    <option value="{{$_service->_id}}" {{if $_service->_id == $service_id}}selected="selected"{{/if}}>{{$_service->_view}}</option>
-		  {{/foreach}}
-		</select>
-		le
-		{{mb_field object=$filter_line field="debut" register=true form=selService onchange="this.form.submit();"}}
-  </form>
-</div>
 			
 <ul id="tab-pancarte" class="control_tabs">
   <li><a href="#viewPancarte">Pancarte {{$service->_view}}</a></li>
   <li><a href="#viewTransmissions">Transmissions</a></li>
+	<li style="margin-top: 2px; padding-left: 2em; vertical-align: top;">
+	  <form name="selService" action="?" method="get">
+	    <input type="hidden" name="m" value="{{$m}}" />
+	    <input type="hidden" name="tab" value="vw_pancarte_service" />
+	    <select name="service_id" onchange="this.form.submit();">
+	      <option value="">&mdash; Choix d'un service</option>
+	      {{foreach from=$services item=_service}}
+	        <option value="{{$_service->_id}}" {{if $_service->_id == $service_id}}selected="selected"{{/if}}>{{$_service->_view}}</option>
+	      {{/foreach}}
+	    </select>
+	    le
+	    {{mb_field object=$filter_line field="debut" register=true form=selService onchange="this.form.submit();"}}
+	  </form>
+	</li>
+	<li style="float: right;">
+		<button type="button" class="search" onclick="viewLegendPancarte();">Légende</button>
+	</li>
 </ul>
 <hr class="control_tabs" />
 
@@ -142,7 +143,7 @@ Main.add(function () {
 	    <th rowspan="2" class="title narrow">Lit</th>
 	    <th rowspan="2" class="title narrow">Praticien</th>
 	     {{foreach from=$count_composition_dossier key=_date item=_hours_by_moment}}
-        {{foreach from=$_hours_by_moment key=moment_journee item=_count}}
+         {{foreach from=$_hours_by_moment key=moment_journee item=_count}}
 				
 					  {{if $composition_dossier|@count == 1}}
 	            {{assign var=view_poste value="Journée"}}
@@ -155,6 +156,7 @@ Main.add(function () {
 					
 	          <th class="{{$_date}}-{{$moment_journee}} title" colspan="{{$_count}}">
 		            <strong>{{$view_poste}} du {{$_date|date_format:"%d/%m"}}</strong>
+						</th>
 			    {{/foreach}} 
 		    {{/foreach}}
 	  </tr>
@@ -176,7 +178,7 @@ Main.add(function () {
 		 	</tr>
 		{{foreachelse}}
 		  <tr>
-		  	<td colspan="30">
+		  	<td colspan="30" class="empty">
 		  		Aucune prise
 		  	</td>
 		  </tr>
@@ -187,4 +189,4 @@ Main.add(function () {
 	</div>
 </div>
 
-<div id="dossier_sejour" style="width: 80%; height: 600px; overflow: auto;"></div>	
+<div id="dossier_sejour" style="width: 80%; height: 600px; overflow: auto; display: none;"></div>	

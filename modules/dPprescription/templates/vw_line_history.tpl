@@ -61,7 +61,7 @@
 	          {{mb_value object=$_line field=unite_duree}}
 	        {{elseif $_line->_ref_prescription->type == "sejour"}}
 					  {{if $_line instanceof CPrescriptionLineMedicament}}
-	          <span style="opacity: 0.7;">{{mb_value object=$_line field=_duree}} Jour(s) <br />(Fin du séjour)</span>
+	          <span class="opacity-70">{{mb_value object=$_line field=_duree}} Jour(s) <br />(Fin du séjour)</span>
 						{{elseif $_line instanceof CPrescriptionLineElement}}
 						1 Jour
 						{{/if}}

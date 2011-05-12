@@ -54,7 +54,7 @@
 		</span>
     <strong onmouseover="ObjectTooltip.createEx(this, '{{$line->_guid}}');">{{$line->_ref_element_prescription->_view}}</strong>
 		{{if $line->cip_dm}}
-		<br /><small style="opacity: 0.7;">({{$line->_ref_dm->libelle}})</small>
+		<br /><small class="opacity-70">({{$line->_ref_dm->libelle}})</small>
 		{{/if}}
   </td>
 	
@@ -69,7 +69,7 @@
 		
 	  {{if $line->commentaire}}
       <br />
-      <span style="font-size: 0.8em; opacity: 0.7">
+      <span style="font-size: 0.8em;" class="opacity-70">
       {{$line->commentaire|spancate:50|smarty:nodefaults}}
       </span>
     {{/if}}

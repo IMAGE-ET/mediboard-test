@@ -573,7 +573,7 @@ Main.add( function(){
 	                        <img src="images/icons/medicament_barre.gif" title="Produit supprimé" />
 	                      {{/if}}
 						            <strong>{{$_line_item->_ucd_view}}
-						                <span style="font-size: 0.8em; opacity: 0.7">({{$_line_item->_forme_galenique}})</span>
+						                <span style="font-size: 0.8em;" class="opacity-70">({{$_line_item->_forme_galenique}})</span>
 						             </strong>
 						          </td>
 				              <td style="border:none; width: 30%;">

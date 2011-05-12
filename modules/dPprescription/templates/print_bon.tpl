@@ -124,6 +124,7 @@ Main.add( function(){
 	</table>
 </form>
 <br />
+
 {{if $print}}
 <div class="header">
   <span style="float: right">
@@ -168,10 +169,13 @@ Main.add( function(){
 
 {{foreach from=$bons key=chapitre item=_bons_by_hour name=foreach_chap}}
 	  {{foreach from=$_bons_by_hour key=hour item=_bons_by_cat name=foreach_hour}}
-	    <div class="{{if $smarty.foreach.foreach_chap.last && $smarty.foreach.foreach_hour.last}}bodyWithoutPageBreak{{else}}body{{/if}}">
+	    <div style="font-size: 11px; font-size: 1.0rem;"
+			     class="{{if $smarty.foreach.foreach_chap.last && $smarty.foreach.foreach_hour.last}}bodyWithoutPageBreak{{else}}body{{/if}}">
 		    <table class="tbl">
 				  <tr>
-				    <th colspan="2" class="title">{{tr}}CPrescription._chapitres.{{$chapitre}}{{/tr}} - Examens demandés pour le {{$debut|date_format:$conf.date}} à {{$hour}} h</th>
+				    <th colspan="2" class="title">
+				    	{{tr}}CPrescription._chapitres.{{$chapitre}}{{/tr}} - Examens demandés pour le {{$debut|date_format:$conf.date}} à {{$hour}} h
+						</th>
 				  </tr>
 				  {{foreach from=$_bons_by_cat item=_bons key=name_cat}}
 				  <tr>
@@ -199,6 +203,19 @@ Main.add( function(){
               </td>
             </tr>
             {{/if}}
+						
+            {{assign var=line_guid value=$line->_guid}}
+            {{foreach from=$ex_objects.$line_guid item=_ex_object}}
+			        <tr>
+			          <td colspan="2">
+			          	<strong>
+									  Questionnaire - 
+										<span style="text-decoration: underline;">{{$_ex_object->_ref_ex_class->name}}</span>
+									</strong>
+			            {{mb_include module=forms template=inc_vw_ex_object ex_object=$_ex_object}}
+			          </td>
+			        </tr>
+            {{/foreach}}
 			    {{/foreach}}
           
 			    {{/foreach}}

@@ -186,7 +186,7 @@ var Url = Class.create({
       this.oWindow = window.open(oPostParameters ? "" : (sBaseUrl + this.make()), sWindowName, sFeatures);  
       window.children[sWindowName] = this.oWindow;
       
-      if (wasClosedBefore) {
+      if (wasClosedBefore && this.oWindow.history.length == 0) {
         this.oWindow.moveTo(features.left, features.top);
         this.oWindow.resizeTo(features.width, features.height);
       }

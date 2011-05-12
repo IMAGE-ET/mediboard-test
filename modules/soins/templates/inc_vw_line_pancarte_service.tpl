@@ -137,7 +137,7 @@
                            {{assign var=line value=$list_lines.$chapitre.$line_id}}
                            {{if $line instanceof CPrescriptionLineMedicament}}
                              <span onmouseover="ObjectTooltip.createEx(this, '{{$line->_guid}}');">{{$line->_ucd_view}}</span><br />
-                             <span style="opacity: 0.5; font-size:0.8em;">
+                             <span class="opacity-50" style="font-size:0.8em;">
                                {{$line->_forme_galenique}}
                              </span>
                            {{/if}}

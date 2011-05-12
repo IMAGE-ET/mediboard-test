@@ -36,7 +36,7 @@
 			<br />
 			{{* if !$search_libelle_long && $search_by_cis *}}
 			<small>
-				<span style="opacity: 0.5">
+				<span class="opacity-50">
 					{{if $produit->dci}}
 					  DCI: {{$produit->dci|upper|emphasize:$tokens}} - 
 					{{/if}}
@@ -61,7 +61,7 @@
       		<img src="images/icons/a_right.png" />
           {{$_protocole->libelle}}
 					<br />
-					<span style="opacity: 0.5; font-size: 0.8em; padding-left: 1em;">
+					<span class="opacity-50" style="font-size: 0.8em; padding-left: 1em;">
         	{{foreach from=$_protocole->_counts_by_chapitre key=chapitre item=_count_chapitre name=chapitres}}
           {{if $_count_chapitre}}
             {{$_count_chapitre}} {{tr}}CPrescription._chapitres.{{$chapitre}}{{/tr}}{{if !$smarty.foreach.chapitres.last}}, {{/if}}

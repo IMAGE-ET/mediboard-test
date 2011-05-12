@@ -178,7 +178,7 @@
      <li style="margin-bottom: 7px;">
 		   <small>
 		   	 {{$_line->_ucd_view}}<br />
-		      <span style="opacity: 0.5;"> {{$_line->_posologie}}</span>
+		      <span class="opacity-50"> {{$_line->_posologie}}</span>
 			 </small>
 			 
       {{if $_line->_unite_administration && $_line->_unite_administration != "ml"}}
@@ -188,7 +188,7 @@
      </li>
    {{/foreach}}
   </ul>
-	<span style="opacity: 0.5; white-space: nowrap;">
+	<span style="white-space: nowrap;" class="opacity-50">
 	<small>
 	{{if $_prescription_line_mix->_frequence}}
 	  {{if $_prescription_line_mix->type_line == "perfusion"}}Débit initial: {{/if}}
@@ -308,7 +308,7 @@
 						<!-- Affichage de la durée de passage indiquée dans la prescription -->
             {{if $_prescription_line_mix->_active}}
 							{{if $nb_prevue && $_prescription_line_mix->duree_passage}}
-						    <div style="opacity: 0.7; font-size: 0.8em; height: 1em; text-align: center; background-color: #ccc; padding: 2px;">
+						    <div class="opacity-70" style="font-size: 0.8em; height: 1em; text-align: center; background-color: #ccc; padding: 2px;">
 	                {{$_prescription_line_mix->duree_passage}} min
 							  </div>
 	            {{else}}

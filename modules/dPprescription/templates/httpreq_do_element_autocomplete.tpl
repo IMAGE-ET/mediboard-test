@@ -16,11 +16,11 @@
       
 			<strong {{if $element->_color}}class="mediuser" style="border-left-color: #{{$element->_color}};"{{/if}}>{{$element->libelle|emphasize:$libelle}}</strong><br />
 			{{if !$category_id}}
-			  <span style="opacity: 0.7">
+			  <span class="opacity-70">
 			 	  {{$element->_ref_category_prescription}}
 			  </span>
 			{{else}}
-			  <span style="opacity: 0.7">
+			  <span class="opacity-70">
 				  {{$element->description|truncate:60:"...":false}}
 			  </span>
       {{/if}}

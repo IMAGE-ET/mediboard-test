@@ -606,7 +606,7 @@ class CExClass extends CMbObject {
     if ($msg = $this->canDeleteEx()) return $msg;
     
     // suppression des objets des champs sans supprimer les colonnes de la table
-    $fields = $this->loadBackRefs("fields");
+    $fields = $this->loadRefsAllFields();
     foreach($fields as $_field) {
       $_field->_dont_drop_column = true;
       $_field->delete();

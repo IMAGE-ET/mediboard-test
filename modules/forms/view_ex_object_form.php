@@ -18,6 +18,7 @@ $event        = CValue::get("event");
 
 $readonly     = CValue::get("readonly");
 $print        = CValue::get("print");
+$only_filled  = CValue::get("only_filled");
 
 if (!$ex_class_id) {
   $msg = "Impossible d'afficher le formulaire sans connaître la classe de base";
@@ -103,4 +104,5 @@ $smarty->assign("forms_admin",  $forms_admin);
 
 $smarty->assign("readonly",     $readonly);
 $smarty->assign("print",        $print);
+$smarty->assign("only_filled",  $only_filled);
 $smarty->display("view_ex_object_form.tpl");

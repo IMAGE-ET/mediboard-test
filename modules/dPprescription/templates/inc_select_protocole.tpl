@@ -31,7 +31,7 @@
         <strong>{{$_prot->libelle|upper|replace:$token_search:$token_replace}}</strong>
         <br />
         {{if is_array($_prot->_counts_by_chapitre)}}
-          <span style="opacity: 0.5; font-size: 0.8em; padding-left: 1em;">
+          <span class="opacity-50" style="font-size: 0.8em; padding-left: 1em;">
   					{{foreach from=$_prot->_counts_by_chapitre key=chapitre item=_count_chapitre name=chapitres}}
   	        {{if $_count_chapitre}}
   	          {{$_count_chapitre}} {{tr}}CPrescription._chapitres.{{$chapitre}}{{/tr}}{{if !$smarty.foreach.chapitres.last}}, {{/if}}

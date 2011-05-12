@@ -65,12 +65,6 @@ ExObject = {
            .observe("click", callback);
     });
 	},
-	
-  print: function(ex_object_id, ex_class_id, object_guid) {
-    var printIframe = $("printIframe");
-    printIframe.src = "about:blank";
-    printIframe.src = "?m=forms&a=view_ex_object_form&ex_object_id="+ex_object_id+"&ex_class_id="+ex_class_id+"&object_guid="+object_guid+"&dialog=1&readonly=1&print=1";
-  },
   
   show: function(mode, ex_object_id, ex_class_id, object_guid){
     var url = new Url("forms", "view_ex_object_form");
@@ -78,11 +72,20 @@ ExObject = {
     url.addParam("ex_class_id", ex_class_id);
     url.addParam("object_guid", object_guid);
     
-    if (mode == "display") {
+    if (mode == "display" || mode == "print") {
       url.addParam("readonly", 1);
+    }
+		
+    if (mode == "print") {
+      url.addParam("print", 1);
+      url.addParam("only_filled", 1);
     }
     
     url.pop("100%", "100%", mode+"-"+ex_object_id);
+  },
+	
+  print: function(ex_object_id, ex_class_id, object_guid){
+    ExObject.show("print", ex_object_id, ex_class_id, object_guid);
   },
   
   display: function(ex_object_id, ex_class_id, object_guid){

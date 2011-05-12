@@ -73,7 +73,7 @@
       </a>
 	    <br />
 	 
-      <span style="font-size: 0.8em; opacity: 0.7">
+      <span style="font-size: 0.8em;" class="opacity-70">
         {{$line->_forme_galenique}}
 	      {{if $line->voie != "none"}}
 	        - {{$line->voie}}
@@ -98,7 +98,7 @@
 			</span>
 			{{if $line->commentaire}}
 			  <br />
-			  <span style="font-size: 0.8em; opacity: 0.7">
+			  <span style="font-size: 0.8em;" class="opacity-70">
 			  {{$line->commentaire|spancate:50|smarty:nodefaults}}
 				</span>
 			{{/if}}
@@ -125,7 +125,7 @@
 	          {{mb_value object=$line field=duree}}  
 	          {{mb_value object=$line field=unite_duree}}
 	        {{elseif $line->_ref_prescription->type == "sejour"}}
-					  <span style="opacity: 0.7;">{{mb_value object=$line field=_duree}} Jour(s) <br />(Fin du séjour)</span>
+					  <span class="opacity-70">{{mb_value object=$line field=_duree}} Jour(s) <br />(Fin du séjour)</span>
 					{{/if}}
 	      </td>
 			{{/if}}

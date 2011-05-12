@@ -138,6 +138,42 @@ foreach($all_bons as $_chap => &$_all_bons){
   ksort($_all_bons);
 }
 
+$ex_class = new CExClass;
+$ex_class->host_class = 'CPrescriptionLineElement';
+$ex_class->event      = 'prescription';
+
+$ex_classes = $ex_class->loadMatchingList();
+CExObject::$_multiple_load = true;
+
+$ex_objects = array();
+foreach($lines as $_line) {
+  $ex_objects[$_line->_guid] = array();
+}
+
+foreach($ex_classes as $_ex_class) {
+	foreach($lines as $_line) {
+		$where = array(
+      "object_class" => "='$_line->_class_name'",
+      "object_id"    => "='$_line->_id'",
+		);
+		
+	  $ex_object = new CExObject;
+	  $ex_object->_ex_class_id = $_ex_class->_id;
+	  $ex_object->setExClass();
+		$ex_object->loadObject($where, "ex_object_id");
+		
+		if ($ex_object->_id) {
+      $ex_object->_ex_class_id = $_ex_class->_id;
+      $ex_object->setExClass();
+      $ex_object->load();
+      $ex_object->loadTargetObject();
+      $ex_object->_ref_object->loadComplete();
+	    
+	    $ex_objects[$_line->_guid][] = $ex_object;
+		}
+	}
+}
+
 // Creation d'un tableau des affectations pour la date courante
 $prescription->_ref_object->loadRefsAffectations();
 
@@ -165,6 +201,7 @@ $smarty->assign("categories", $categories);
 $smarty->assign("debut", $debut);
 $smarty->assign("print", $print);
 $smarty->assign("list_bons", $list_bons);
+$smarty->assign("ex_objects", $ex_objects);
 $smarty->display("print_bon.tpl");
 
 ?>

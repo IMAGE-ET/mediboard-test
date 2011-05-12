@@ -303,17 +303,17 @@ Main.add(function () {
 	{{if $prescription_id}}
 		<h1 style="text-align: center;">
 		 		  <button type="button" 
-					       class="left notext" 
+					       class="left notext {{if $sejour->_entree|iso_date >= $date}}opacity-50{{/if}}" 
 								 {{if $sejour->_entree|iso_date < $date}}onclick="PlanSoins.loadTraitement('{{$sejour->_id}}','{{$prev_date}}', null, null, null, null, null, null, '1');"{{/if}}
-					       {{if $sejour->_entree|iso_date >= $date}}style="opacity: 0.5;"{{/if}}></button>	
+					       ></button>	
 	     Dossier de soin du {{$date|@date_format:"%d/%m/%Y"}}
        <form name="changeDateDossier" method="get" action="?" onsubmit="return false" style="font-size: 11px">
          <input type="hidden" name="date" class="date" value="{{$date}}" onchange="PlanSoins.loadTraitement('{{$sejour->_id}}',this.value,'','administration', null, null, null, null, '1');"/>
        </form>
 			 <button type="button"
-			         class="right notext"
+			         class="right notext {{if $sejour->_sortie|iso_date <= $date}}opacity-50{{/if}}"
 							 {{if $sejour->_sortie|iso_date > $date}}onclick="PlanSoins.loadTraitement('{{$sejour->_id}}','{{$next_date}}','','administration', null, null, null, null, '1');"{{/if}}
-							 {{if $sejour->_sortie|iso_date <= $date}}style="opacity: 0.5;"{{/if}}></button>
+							 ></button>
 		</h1>
 		 
 		 {{if $date != $today}}
