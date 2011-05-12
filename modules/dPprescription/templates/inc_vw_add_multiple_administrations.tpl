@@ -17,9 +17,20 @@ function submitAllAdministrations() {
   var transForm = getForm('editTrans');
 
 	if (transForm._text_data.value || transForm._text_action.value || transForm._text_result.value) {
-	  submitFormAjax(transForm, 'systemMsg');
+	  submitFormAjax(transForm, 'systemMsg', {onComplete: function() {
+  	 // Pas de formulaire d'administration
+	    if (submitForms.length == 1) {
+	      if (window.opener.loadSuivi){
+	        window.opener.loadSuivi('{{$sejour->_id}}');
+	      }
+	      if (window.opener.updatePlanSoinsPatients) {
+	        window.opener.updatePlanSoinsPatients();
+	      }
+	      window.close();
+	      return true;
+	    }
+	  }});
 	}
-		
 	for (var i = 0; i < submitForms.length; i++) {
     var f = submitForms[i];  
     if (f != transForm) {
@@ -64,9 +75,12 @@ function closeApplyAdministrations(dontClose) {
       {{foreach from=$tabs_refresh key=chapitre item=_tab_refresh}}
         window.opener.PlanSoins.loadTraitement('{{$sejour->_id}}','{{$date_sel}}', oFormClick.nb_decalage.value,'{{$mode_dossier}}', null, null, null, '{{$chapitre}}');
       {{/foreach}}
-			if(window.opener.loadSuivi){
+			if (window.opener.loadSuivi){
         window.opener.loadSuivi('{{$sejour->_id}}');
 			}
+      if (window.opener.updatePlanSoinsPatients) {
+        window.opener.updatePlanSoinsPatients();
+      }
     }
   {{/if}}
   if (!dontClose) {
