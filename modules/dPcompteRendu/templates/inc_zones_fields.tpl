@@ -95,7 +95,7 @@
   
   {{if $conf.dPcompteRendu.CCompteRendu.header_footer_fly}}
     <tr>
-      {{if $headers|@count > 0}}
+      {{if $headers|@count && ($headers.prat|@count > 0 || $headers.func|@count > 0 || $headers.etab|@count > 0)}}
         <th>
         {{mb_label object=$compte_rendu field=header_id}} :
         </th>
@@ -117,7 +117,7 @@
         </td>
       {{/if}}
       
-      {{if $footers|@count > 0}}
+      {{if $footers|@count && ($footers.prat|@count > 0 || $footers.func|@count > 0 || $footers.etab|@count > 0)}}
         <br />
         <th>
           {{mb_label object=$compte_rendu field=footer_id}} :
