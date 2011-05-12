@@ -36,6 +36,8 @@
     <td>
       {{mb_label object=$line field="_fin"}}: {{mb_value object=$line field="_fin"}}
     </td>
+    {{else}}
+      <td colspan="2"></td>
     {{/if}}
     {{else}}
     <td colspan="3">
@@ -116,4 +118,19 @@
 		<td colspan="2" class="text">{{mb_value object=$line->_ref_element_prescription field=description}}</td>
 	</tr>
 	{{/if}}
+
+  {{assign var=element_prescription value=$line->_ref_element_prescription}}
+  {{assign var=category value=$element_prescription->_ref_category_prescription}}
+    
+  <tr>
+    <th colspan="3">Element</th>
+  </tr>
+  <tr>
+    <td>
+      {{mb_label object=$element_prescription field=description}} :
+    </td>
+    <td colspan="2">
+      {{mb_value object=$element_prescription field=description}}
+    </td>
+  </tr>
 </table>
