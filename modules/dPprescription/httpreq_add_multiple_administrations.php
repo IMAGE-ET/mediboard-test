@@ -18,6 +18,8 @@ $adm = json_decode(stripslashes(utf8_encode($adm)), true);
 $sejour = new CSejour();
 $date_sel = null;
 $tabs_refresh = array();
+$sejour_id = null;
+$nb_patients = 1;
 
 if (count($adm) > 0) {
 	foreach ($adm as $ad) {
@@ -88,12 +90,20 @@ if (count($adm) > 0) {
 		$curr_adm['notToday'] = ($date != mbDate());
 		
 		if (!$date_sel)  $date_sel  = isset($ad['date_sel']) ? $ad['date_sel'] : null;
-		if (!$sejour->_id) {
-			$line->_ref_prescription->loadRefObject();
+		
+		$line->_ref_prescription->loadRefObject();
+		
+		// Si plusieurs patients, ne pas afficher le nom du premier patient trouvé 
+		if ($sejour_id != null && $sejour_id != $line->_ref_prescription->_ref_object->_id) {
+		  $nb_patients ++;
+		}
+		
+	  if (!$sejour->_id) {
 			$sejour = $line->_ref_prescription->_ref_object;
 			$sejour->loadRefPatient();
 			$sejour->_ref_patient->loadRefsAffectations();
 			$sejour->_ref_patient->_ref_curr_affectation->loadView();
+			$sejour_id = $sejour->_id;
 		}
 	}
 }
@@ -118,7 +128,7 @@ $smarty->assign("mode_dossier"  , $mode_dossier);
 $smarty->assign("tabs_refresh"  , $tabs_refresh);
 $smarty->assign("user_id"       , $user_id);
 $smarty->assign("refresh_popup" , $refresh_popup);
-
+$smarty->assign("nb_patients"   , $nb_patients);
 $smarty->display("inc_vw_add_multiple_administrations.tpl");
 
 ?>

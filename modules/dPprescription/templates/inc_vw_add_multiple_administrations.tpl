@@ -104,14 +104,20 @@ Main.add( function(){
 </form>
 
 {{if $sejour->_id}}
-		<h2>
-		  Soins de {{$sejour->_ref_patient->_view}} 
-		  ({{if $sejour->_ref_patient->_ref_curr_affectation->_id}}
-		    {{$sejour->_ref_patient->_ref_curr_affectation->_view}}
-		  {{else}}
-		    Non placé actuellement
-		  {{/if}})
-		</h2>
+    {{if $nb_patients == 1}}
+  		<h2>
+  		  Soins de {{$sejour->_ref_patient->_view}} 
+  		  ({{if $sejour->_ref_patient->_ref_curr_affectation->_id}}
+  		    {{$sejour->_ref_patient->_ref_curr_affectation->_view}}
+  		  {{else}}
+  		    Non placé actuellement
+  		  {{/if}})
+  		</h2>
+    {{else}}
+      <h2>
+        Soins multiples
+      </h2>
+    {{/if}}
 {{/if}}
 
 {{if $mode_dossier == "administration"}}
