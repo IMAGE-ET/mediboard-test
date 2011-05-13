@@ -74,7 +74,7 @@ Main.add(function(){
             <td colspan="2">
               {{if $ex_class->_id}}
                 <button type="submit" class="modify">{{tr}}Save{{/tr}}</button>
-                <button type="button" class="trash" onclick="confirmDeletion(this.form,{ajax:true,typeName:'le formulaire ',objName:'{{$ex_class->_view|smarty:nodefaults|JSAttribute}}'})">
+                <button type="button" class="trash" onclick="confirmDeletion(this.form,{ajax:true,typeName:'{{tr}}CExClass.one{{/tr}}',objName:'{{$ex_class->_view|smarty:nodefaults|JSAttribute}}'})">
                   {{tr}}Delete{{/tr}}
                 </button>
               {{else}}
@@ -215,7 +215,7 @@ toggleGroupLabelEdit = function(link) {
                     
                     <button class="right notext insert-formula" style="margin: -3px; margin-left: -1px; display: none;"
                             onclick="ExFormula.insertText('[{{$_field->_locale|smarty:nodefaults|JSAttribute}}]')">
-                      Ajouter à la formule
+                      {{tr}}CExClassField.add_to_formula{{/tr}}
                     </button>
                   </span>
                   

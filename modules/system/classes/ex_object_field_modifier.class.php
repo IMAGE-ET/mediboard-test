@@ -8,8 +8,6 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
  */
 
-return;
-
 class CExObjectFieldModifier extends CMbObject {
   var $ex_object_field_modifier_id = null;
   
@@ -26,7 +24,6 @@ class CExObjectFieldModifier extends CMbObject {
     $spec = parent::getSpec();
     $spec->table = "ex_object_field_modifier";
     $spec->key   = "ex_object_field_modifier_id";
-    $spec->uniques["lang"] = array("ex_class_field_id", "lang");
     return $spec;
   }
 
@@ -35,6 +32,7 @@ class CExObjectFieldModifier extends CMbObject {
     $props["ex_object_id"] = "ref notNull class|CExObject cascade";
     $props["ex_class_field_id"] = "ref notNull class|CExClassField cascade";
     $props["value"]  = "str notNull";
+    $props["type"]   = "enum list|intensity|side";
     return $props;
   }
   

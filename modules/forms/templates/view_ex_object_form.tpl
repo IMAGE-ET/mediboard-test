@@ -31,7 +31,7 @@ confirmSavePrint = function(form){
            onSubmitFormAjax(form, {onComplete: function(){ 
              FormObserver.changes = 0;
              $("printIframe").src = "about:blank";
-             $("printIframe").src = "?{{$smarty.server.QUERY_STRING|html_entity_decode}}&readonly=1&print=1";
+             $("printIframe").src = "?{{$smarty.server.QUERY_STRING|html_entity_decode}}&readonly=1&print=1&autoprint=1";
           } });
   return false;
 }
@@ -243,6 +243,16 @@ if (window.opener && !window.opener.closed && window.opener !== window && window
 <script type="text/javascript">
 Main.add(function(){
   document.title = "{{$ex_object->_ref_ex_class->name}} - {{$object}}".htmlDecode();
+	
+  {{if $autoprint}}
+	  if (document.execCommand) {
+	    window.focus();
+	    document.execCommand('print', false, null);
+	  }
+	  else {
+	    window.print();
+	  }
+  {{/if}}    
 });
 
 function switchMode(){

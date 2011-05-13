@@ -88,7 +88,7 @@
     <td colspan="10" style="padding: 0.5em; font-size: 1.1em;">
       <span style="float: right; text-align: right;">
         <strong>{{tr}}Total{{/tr}} : {{mb_value object=$order field=_total}}</strong><br />
-        <strong>{{tr}}Total TTC{{/tr}} : {{mb_value object=$order field=_total_tva}}</strong><br />
+        <strong>{{tr}}CProductOrder-_total_tva{{/tr}} : {{mb_value object=$order field=_total_tva}}</strong><br />
         {{mb_label object=$order->_ref_societe field=carriage_paid}} : {{mb_value object=$order->_ref_societe field=carriage_paid}}
       </span>
     </td>

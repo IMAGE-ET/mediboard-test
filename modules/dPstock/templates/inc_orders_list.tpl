@@ -205,7 +205,7 @@ changePage.{{$type}} = function(page) {
       <td>{{mb_value object=$curr_order field=date_ordered}}</td>
       <td class="currency" style="text-align: right;">{{mb_value object=$curr_order field=_total}}</td>
       <td>
-        <button type="button" class="tick" onclick="popupReception({{$curr_order->_id}});">{{tr}}Recevoir{{/tr}}</button>
+        <button type="button" class="tick" onclick="popupReception({{$curr_order->_id}});">{{tr}}Receive{{/tr}}</button>
         
         <form name="order-reset-{{$curr_order->_id}}" action="?" method="post">
           <input type="hidden" name="m" value="{{$m}}" />

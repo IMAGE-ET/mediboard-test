@@ -1,20 +1,5 @@
 
 <table class="main layout" id="exClassConstraintList">
-
-{{assign var=wip value=false}}
-
-{{if $wip}}
-  <tr>
-    <td>
-      <table class="main tbl">
-        <tr>
-          <td class="empty">En cours de développement</td>
-        </tr>
-      </table>
-    </td>
-  </tr>
-  
-{{else}}
   <tr>
     <td style="width: 30em; padding-right: 5px;">
       <button type="button" class="new" style="float: right;" onclick="ExConstraint.create({{$ex_class->_id}})">
@@ -63,6 +48,4 @@
       </div>
     </td>
   </tr>
-{{/if}}
-
 </table>

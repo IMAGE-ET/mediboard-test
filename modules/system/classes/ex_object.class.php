@@ -46,11 +46,11 @@ class CExObject extends CMbMetaObject {
   
     if (self::$_multiple_load) {
       $class = get_class($this);
-    unset(self::$spec[$class]);
-    unset(self::$props[$class]);
-    unset(self::$specs[$class]);
-    unset(self::$backProps[$class]);
-    unset(self::$backSpecs[$class]);
+	    unset(self::$spec[$class]);
+	    unset(self::$props[$class]);
+	    unset(self::$specs[$class]);
+	    unset(self::$backProps[$class]);
+	    unset(self::$backSpecs[$class]);
     }
   }
 

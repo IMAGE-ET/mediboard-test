@@ -18,6 +18,7 @@ $event        = CValue::get("event");
 
 $readonly     = CValue::get("readonly");
 $print        = CValue::get("print");
+$autoprint    = CValue::get("autoprint");
 $only_filled  = CValue::get("only_filled");
 
 if (!$ex_class_id) {
@@ -104,5 +105,6 @@ $smarty->assign("forms_admin",  $forms_admin);
 
 $smarty->assign("readonly",     $readonly);
 $smarty->assign("print",        $print);
+$smarty->assign("autoprint",    $autoprint);
 $smarty->assign("only_filled",  $only_filled);
 $smarty->display("view_ex_object_form.tpl");
