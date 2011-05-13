@@ -9,7 +9,7 @@ var ViewFullPatient = {
     }
     this.eCurrent = eLink.parentNode.parentNode;
     Element.classNames(this.eCurrent).add("selected");
-  },
+  }
   
 }
 

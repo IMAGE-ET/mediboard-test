@@ -37,9 +37,7 @@ function reloadListFile(sAction){
   if(sAction == "add" || sAction == "delete"){
     url = new Url("dPpatients", "httpreq_vw_full_patient");
     url.addParam("patient_id", "{{$patient->_id}}");
-    url.requestUpdate('listInfosPat', { 
-      onComplete: ViewFullPatient.main
-    } );
+    url.requestUpdate('listInfosPat');
   }
 }
 
