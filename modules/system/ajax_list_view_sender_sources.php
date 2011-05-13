@@ -13,9 +13,10 @@ CCanDo::checkRead();
 // Chargement des senders sources
 $sender_source = new CViewSenderSource();
 $senders_source = $sender_source->loadList(null, "name");
-foreach ($senders_source as $_sender_source) {
-  $_sender_source->loadRefGroup();
-  $_sender_source->loadRefSourceFTP();
+foreach ($senders_source as $_source) {
+  $_source->loadRefGroup();
+  $_source->loadRefSourceFTP();
+  $_source->loadRefSenders();
 }
 
 // Création du template

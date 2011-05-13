@@ -13,8 +13,8 @@
     <th colspan="2">{{mb_title class=CViewSenderSource field=name}}</th>
     <th>{{mb_title class=CViewSenderSource field=libelle}}</th>
     <th>{{mb_title class=CViewSenderSource field=group_id}}</th>
-    <th>{{mb_title class=CViewSenderSource field=actif}}</th>
-    <th>{{mb_title class=CViewSenderSource field="_reachable"}}</th>
+    <th class="narrow" colspan="2">{{mb_title class=CViewSenderSource field=actif}}</th>
+    <th>{{tr}}CViewSenderSource-back-senders_link{{/tr}}</th>
   </tr>
 
   {{foreach from=$senders_source item=_sender_source}}
@@ -27,9 +27,16 @@
     <td>{{mb_value object=$_sender_source field=name}}</td>
     <td class="text compact">{{mb_value object=$_sender_source field=libelle}}</td>
     <td class="text compact">{{mb_value object=$_sender_source field=group_id}}</td>
-    <td class="narrow">{{mb_value object=$_sender_source field=actif}}</td>
+    <td>{{mb_value object=$_sender_source field=actif}}</td>
     <td>
       {{mb_include module=system template=inc_img_status_source exchange_source=$_sender_source->_ref_source_ftp}}
+    </td>
+    <td>
+      {{foreach from=$_sender_source->_ref_senders item=_sender}}
+      <div><span onmouseover="ObjectTooltip.createEx(this, '{{$_sender->_guid}}');">{{$_sender}}</span></div>
+      {{foreachelse}}
+      <div class="empty">{{tr}}CViewSenderSource-back-senders_link.empty{{/tr}}</div>
+      {{/foreach}}
     </td>
   </tr>
   {{foreachelse}}

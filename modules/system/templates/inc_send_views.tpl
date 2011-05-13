@@ -37,12 +37,14 @@
 <table class="tbl">
   <tr>
     <th>{{mb_title class=CViewSender field=name}}</th>
-    <th>{{mb_title class=CViewSender field=_url}} / {{mb_title class=CViewSender field=_file}}</th>
+    <th>
+      {{mb_title class=CViewSender field=_url}} / 
+      {{mb_title class=CViewSender field=_file}}
+    </th>
     <th>Temps / Poids</th>
     <th>Statut / Temps / Poids</th>
   </tr>
 	{{foreach from=$senders item=_sender}}
-  {{if $_sender->_active}}
   <tr>
     <td>{{mb_value object=$_sender field=name}}</td>
     <td class="text compact">
@@ -51,13 +53,14 @@
       {{mb_value object=$_sender field=_file}}
     </td>
     <td>
-      {{$_sender->_file_download_duration|round:3}} s / {{mb_value object=$_sender field=_file_download_size}}
+      {{$_sender->_file_download_duration|round:3}}s / 
+      {{mb_value object=$_sender field=_file_download_size}}
     </td>
     <td>
       {{foreach from=$_sender->_files_upload_stats item=_file_upload_stats name=_file_upload_stats}}
         {{mb_ternary test=$_file_upload_stats.status var=status value="green" other="red"}}
         <img class="status" src="images/icons/status_{{$status}}.png" /> /
-        {{$_file_upload_stats.duration|round:3}} s /
+        {{$_file_upload_stats.duration|round:3}}s /
         {{$_file_upload_stats.size}} <br />
         {{if $_file_upload_stats.size != $_sender->_file_download_size}}
           <div class="small-warning">Taille de fichier incorrecte</div>
@@ -65,8 +68,13 @@
       {{/foreach}}
     </td>
   </tr
-  {{/if}}
+
 	{{foreachelse}}
-  <tr><td colspan="7" class="empty">Aucune active</td></tr>
+  <tr>
+    <td colspan="7" class="empty">
+      {{tr}}CViewSender.noneactive{{/tr}}
+    </td>
+  </tr>
 	{{/foreach}}
+  
 </table>

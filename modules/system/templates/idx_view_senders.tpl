@@ -20,6 +20,7 @@ Main.add(Control.Tabs.create.curry('tabs-main', true));
 <ul id="tabs-main" class="control_tabs">
   <li><a href="#senders">{{tr}}CViewSender{{/tr}}</a></li>
   <li><a href="#sources">{{tr}}CViewSenderSource{{/tr}}</a></li>
+  <li><a href="#dosend">{{tr}}CViewSender-title-dosend{{/tr}}</a></li>
 </ul>
 
 <hr class="control_tabs" />
@@ -38,9 +39,6 @@ Main.add(Control.Tabs.create.curry('tabs-main', true));
 	<div id="list-senders">
 	</div>
 
-  <div id="send-views">
-  </div>
-
 </div>
 
 <div id="sources" style="display: none;">
@@ -49,12 +47,16 @@ Main.add(Control.Tabs.create.curry('tabs-main', true));
     {{tr}}CViewSenderSource-title-create{{/tr}}
   </button>
   
-  <div id="list-sources">
-  </div>
-
   <script type="text/javascript">
     Main.add(ViewSenderSource.refreshList);
   </script>
     
+  <div id="list-sources">
+  </div>
+
 </div>
 
+<div id="dosend" style="display: none;">
+  <div id="send-views">
+  </div>
+</div>

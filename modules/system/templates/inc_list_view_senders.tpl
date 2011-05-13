@@ -15,7 +15,7 @@
     <th colspan="2">{{mb_title class=CViewSender field=name}}</th>
 		<th>{{mb_title class=CViewSender field=description}}</th>
     <th>{{mb_title class=CViewSender field=params}}</th>
-    <th class="narrow">{{tr}}CViewSenderSource{{/tr}}</th>
+    <th class="narrow" colspan="2">{{tr}}CViewSender-back-sources_link{{/tr}}</th>
     <th class="narrow">
       {{mb_title class=CViewSender field=period}}
     </th>
@@ -34,9 +34,6 @@
         <button class="edit notext" onclick="ViewSender.edit('{{$_sender->_id}}');">
           {{tr}}Edit{{/tr}}
         </button> 
-        <button class="add notext" onclick="SourceToViewSender.edit('{{$_sender->_id}}');">
-          {{tr}}Add{{/tr}}
-        </button> 
       </td>
       <td {{if ($_sender->_active)}}style="font-weight: bold;"{{/if}}>
         {{mb_value object=$_sender field=name}}
@@ -48,6 +45,11 @@
       	{{$_sender->params|nl2br|replace:"=":" = "}}
   		</td>
   		<td>  		    
+        <button class="add notext" onclick="SourceToViewSender.edit('{{$_sender->_id}}');">
+          {{tr}}Add{{/tr}}
+        </button> 
+      </td>
+      <td>
   		  {{foreach from=$senders_source item=_sender_source}}
   		    {{assign var=source_ftp value=$_sender_source->_ref_source->_ref_source_ftp}}
   		    {{unique_id var=uid}}
@@ -60,6 +62,8 @@
             data-guid="{{$source_ftp->_guid}}" src="images/icons/status_grey.png" 
             title="{{$source_ftp->name}}"
             onmouseover="ObjectTooltip.createEx(this, '{{$_sender_source->_guid}}');"/>
+        {{foreachelse}}
+        <div class="empty">{{tr}}CViewSender-back-sources_link.empty{{/tr}}</div>
         {{/foreach}}
   		</td>
       <td style="text-align: right; padding-right: 0.5em;">{{mb_value object=$_sender field=period}}</td>
@@ -83,7 +87,7 @@
 	{{if count($senders)}} 
   <tr style="height: 2px; border-top: 2px solid #888;"></tr>
   <tr>
-    <td colspan="7" style="text-align: right;"><strong>Bilan horaire</strong></th>
+    <td colspan="8" style="text-align: right;"><strong>Bilan horaire</strong></th>
     {{foreach from=$hour_sum key=min item=sum}}
 
     {{assign var=status value=""}}
@@ -98,8 +102,4 @@
     {{/foreach}}
   </tr>
 	{{/if}}
-  
-  {{foreach from=$senders item=_sender}}
-  {{foreachelse}}
-  {{/foreach}}
 </table>
