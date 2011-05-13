@@ -317,6 +317,7 @@ ul.control_tabs_vertical {
   list-style: none;
   clear: both;
   padding: 1px 6px;
+  line-height: normal;
 }
   
 ul.full_width li,

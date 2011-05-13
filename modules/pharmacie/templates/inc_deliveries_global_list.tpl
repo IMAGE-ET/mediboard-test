@@ -38,7 +38,7 @@ Main.add(function(){
           <li>
             {{math assign="remaining" equation="x-y" x=$_deliveries|@count y=$delivered_counts.$service_id}}
             
-            <input type="checkbox" style="float: right; margin: 3px;" 
+            <input type="checkbox" style="float: right; margin: 2px;" 
                    name="service_id[]" value="{{$service_id}}"
                    title="Cocher pour inclure ce service dans le plan de cueillette" />
                    

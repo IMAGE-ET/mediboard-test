@@ -110,7 +110,7 @@ toggleGroupLabelEdit = function(link) {
   link = $(link);
   link.down('span.label').toggle();
   
-  var form = link.down('form');
+  var form = link.next('form');
   var input = form.elements.name;
   
   form.toggle();
@@ -134,32 +134,32 @@ toggleGroupLabelEdit = function(link) {
         <span class="label" style="font-weight: normal;">
           {{$_group->name}} <small>({{$_group->_ref_fields|@count}})</small>
         </span>
-        
-        <form name="edit-field-group-{{$_group->_guid}}" action="?" method="post" style="display: none;"
-              onsubmit="return onSubmitFormAjax(this, {onComplete: ExClass.edit.curry({{$ex_class->_id}})})">
-          <input type="hidden" name="m" value="system" />
-          <input type="hidden" name="del" value="0" />
-          <input type="hidden" name="@class" value="CExClassFieldGroup" />
-          {{mb_key object=$_group}}
-          {{mb_field object=$_group field=name size=18}}
-          
-          <button onclick="Event.stop(event); this.form.onsubmit();" 
-                  class="submit notext" type="submit" style="margin: -1px;">
-            {{tr}}Save{{/tr}}
-          </button>
-          <button onclick="toggleGroupLabelEdit($(this).up('a'))" 
-                  class="cancel notext" type="button" style="margin: -1px;">
-            {{tr}}Cancel{{/tr}}
-          </button>
-          
-          {{if $_group->_ref_fields|@count == 0}}
-          <button onclick="return confirmDeletion(this.form, {ajax: true})" 
-                  class="trash notext" type="button" style="margin: -1px;">
-            {{tr}}Delete{{/tr}}
-          </button>
-          {{/if}}
-        </form>
       </a>
+        
+      <form name="edit-field-group-{{$_group->_guid}}" action="?" method="post" style="display: none;"
+            onsubmit="return onSubmitFormAjax(this, {onComplete: ExClass.edit.curry({{$ex_class->_id}})})">
+        <input type="hidden" name="m" value="system" />
+        <input type="hidden" name="del" value="0" />
+        <input type="hidden" name="@class" value="CExClassFieldGroup" />
+        {{mb_key object=$_group}}
+        {{mb_field object=$_group field=name size=18}}
+        
+        <button onclick="Event.stop(event); this.form.onsubmit();" 
+                class="submit notext" type="submit" style="margin: -1px;">
+          {{tr}}Save{{/tr}}
+        </button>
+        <button onclick="toggleGroupLabelEdit($(this).up('li').down('a'))" 
+                class="cancel notext" type="button" style="margin: -1px;">
+          {{tr}}Cancel{{/tr}}
+        </button>
+        
+        {{if $_group->_ref_fields|@count == 0}}
+        <button onclick="return confirmDeletion(this.form, {ajax: true})" 
+                class="trash notext" type="button" style="margin: -1px;">
+          {{tr}}Delete{{/tr}}
+        </button>
+        {{/if}}
+      </form>
     </li>
   {{/foreach}}
   
