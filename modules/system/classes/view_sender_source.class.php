@@ -26,6 +26,9 @@ class CViewSenderSource extends CMbObject {
   var $_type_echange   = null;
   var $_ref_source_ftp = null;
   var $_reachable      = null;
+  
+  // Distant refs
+  var $_ref_senders = null;
       
   function getSpec() {
     $spec = parent::getSpec();
@@ -48,7 +51,7 @@ class CViewSenderSource extends CMbObject {
 	
 	function getBackProps() {
 		return parent::getBackProps() + array(
-      "senders" => "CViewSender source_id",
+      "senders_link" => "CSourceToViewSender source_id",
 		);
 	}
 	
@@ -65,6 +68,11 @@ class CViewSenderSource extends CMbObject {
   
   function loadRefSourceFTP() {
     return $this->_ref_source_ftp = CExchangeSource::get("$this->_guid", "ftp", true, $this->_type_echange);
+  }
+  
+  function loadRefSenders() {
+  	$senders_link = $this->loadBackRefs("senders_link");
+  	return $this->_ref_senders = CMbObject::massLoadFwdRef($senders_link, "sender_id");
   }
 }
 

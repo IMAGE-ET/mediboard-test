@@ -70,6 +70,12 @@ class CViewSender extends CMbObject {
     return $props;
   }
 
+  function getBackProps() {
+    return parent::getBackProps() + array(
+      "sources_link" => "CSourceToViewSender sender_id",
+    );
+  }
+  
   function updateFormFields() {
     parent::updateFormFields();
 
