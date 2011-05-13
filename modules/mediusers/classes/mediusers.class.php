@@ -836,6 +836,7 @@ class CMediusers extends CMbObject {
     $template->addBarcode("Praticien - Code barre RPPS", $this->rpps, array("barcode" => array(
       "title" => CAppUI::tr("{$this->_class_name}-rpps")
     )));
+    $template->addProperty("Praticien - email"     , $this->_user_email);
   }
   
   /**
