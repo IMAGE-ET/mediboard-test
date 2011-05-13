@@ -46,6 +46,7 @@ tickFormatter = function (n) {
 
 tickFormatterSpreadsheet = function (n) {
   n = parseInt(n);
+	if (!dates[n] || !hours[n]) return " ";
   return dates[n]+' '+hours[n];
 };
 
@@ -301,8 +302,8 @@ loadConstantesMedicales  = function(context_guid) {
   <table class="main">
     <tr>
       <td colspan="2">
-        <button class="hslip" title="Afficher/Cacher" onclick="$('constantes-medicales-form').toggle();" type="button">
-          Formulaire
+        <button class="hslip notext" title="Afficher/Cacher" onclick="$('constantes-medicales-form').toggle();" type="button">
+          Formulaire constantes
         </button>
       </td>
     </tr>

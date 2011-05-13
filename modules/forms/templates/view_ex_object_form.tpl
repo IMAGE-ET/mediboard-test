@@ -130,14 +130,18 @@ if (window.opener && !window.opener.closed && window.opener !== window && window
         {{if $_group.object}}
           {{if $_group.object instanceof CExClassField}}
             {{assign var=_field value=$_group.object}}
+            {{assign var=_field_name value=$_field->name}}
+						
             {{if $_group.type == "label"}}
               {{if $_field->coord_field_x == $_field->coord_label_x+1}}
                 <th style="font-weight: bold; vertical-align: middle;">
-                  {{mb_label object=$ex_object field=$_field->name}}
+                  {{mb_label object=$ex_object field=$_field_name}}
+                  {{mb_include module=forms template=inc_reported_value ex_object=$ex_object ex_field=$_field}}
                 </th>
               {{else}}
                 <td style="font-weight: bold; text-align: left;">
-                  {{mb_label object=$ex_object field=$_field->name}}
+                  {{mb_label object=$ex_object field=$_field_name}}
+                  {{mb_include module=forms template=inc_reported_value ex_object=$ex_object ex_field=$_field}}
                 </td>
               {{/if}}
             {{elseif $_group.type == "field"}}
@@ -199,6 +203,7 @@ if (window.opener && !window.opener.closed && window.opener !== window && window
         <tr>
           <th style="font-weight: bold; width: 50%; vertical-align: middle;" colspan="2">
             {{mb_label object=$ex_object field=$_field->name}}
+					  {{mb_include module=forms template=inc_reported_value ex_object=$ex_object ex_field=$_field}}
           </th>
           <td colspan="2">
             {{mb_include module=forms template=inc_ex_object_field ex_object=$ex_object ex_field=$_field}}
@@ -240,16 +245,6 @@ Main.add(function(){
   document.title = "{{$ex_object->_ref_ex_class->name}} - {{$object}}".htmlDecode();
 });
 
-function printPage(){
-  if (document.execCommand) {
-    window.focus();
-    document.execCommand('print', false, null);
-  }
-  else {
-    window.print();
-  }
-}
-
 function switchMode(){
   var only_filled = Url.parse().query.toQueryParams().only_filled;
   location.href = location.href.replace('only_filled='+only_filled, 'only_filled='+(only_filled == 1 ? 0 : 1));
@@ -261,7 +256,7 @@ function switchMode(){
 	  <button class="change" onclick="switchMode()">
 	  	Tous les champs
 		</button>
-		<button class="print" onclick="printPage()">{{tr}}Print{{/tr}}</button>
+		<button class="print" onclick="window.print()">{{tr}}Print{{/tr}}</button>
 	</div>
 {{/if}}
 

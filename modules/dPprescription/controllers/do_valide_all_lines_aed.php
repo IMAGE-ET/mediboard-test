@@ -67,7 +67,7 @@ if($prescriptions_pharma){
   $prescriptions[] = $prescription_id;
 }
 
-$forms = array();
+$ex_classes = array();
 
 foreach($prescriptions as $prescription_id){
 	if($prescription_id){
@@ -290,38 +290,14 @@ foreach($prescriptions as $prescription_id){
     
 		  if (!$annulation) {
 		    // chargement des formulaires obligatoires à ouvrir
-		    $ex_class = new CExClass;
-	      $ex_class->host_class = $_line->_class_name;
-	      $ex_class->event = "signature";
-				$ex_class->disabled = 0;
-				$ex_class->required = 1;
-				$ex_class->conditional = 0;
-				
-				$ex_classes = $ex_class->loadMatchingList();
-				
-				foreach($ex_classes as $_id => $_ex_class) {
-					if (isset($forms[$_id])) continue;
-					
-				  if ($_ex_class->checkConstraints($_line)) {
-				    $forms[$_id] = array(
-	            "ex_class_id" => $_id,
-	            "object_guid" => $_line->_guid,
-	            "event" => "signature",
-						);
-				  }
-				}
+		    $ex_classes = array_merge($ex_classes, CExClass::getExClassesForObject($_line, "signature", "required", array_keys($ex_classes)));
 			}
 		}
 	}
 }
 
 if(!$prescriptions_pharma){
-	if (count($forms)){
-	  echo "
-	  <script type='text/javascript'>
-	    window.opener.ExObject.triggerMulti(".json_encode(array_values($forms)).");
-	  </script>";
-	}
+	echo CExClass::getJStrigger($ex_classes);
 
 	// Refresh de la prescription
 	if($chapitre == "all"){

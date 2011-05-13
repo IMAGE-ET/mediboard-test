@@ -475,7 +475,7 @@ Main.add( function(){
         <li><a onclick="$('ajout_ligne').show(); $('outils').show(); this.up().hide();">+</a></li>
 				{{/if}}
 				
-				<li style="float: right; button">		
+				<li style="float: right;">		
 					{{if $prescription->object_id && ($is_praticien || $mode_protocole || @$operation_id || $can->admin || $is_executant_prescription)}}
 		        {{if !$mode_pharma}}
 		          {{if $is_praticien || ($is_executant_prescription && $conf.dPprescription.CPrescription.role_propre)}}

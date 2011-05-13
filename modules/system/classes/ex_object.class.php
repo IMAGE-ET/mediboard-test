@@ -38,17 +38,19 @@ class CExObject extends CMbMetaObject {
    * @var CMbObject
    */
   var $_ref_reference_object_2 = null;
+  
+  var $_reported_fields = array();
 
   function __construct(){
-  	parent::__construct();
-	
+    parent::__construct();
+  
     if (self::$_multiple_load) {
       $class = get_class($this);
-	  unset(self::$spec[$class]);
-	  unset(self::$props[$class]);
-	  unset(self::$specs[$class]);
-	  unset(self::$backProps[$class]);
-	  unset(self::$backSpecs[$class]);
+    unset(self::$spec[$class]);
+    unset(self::$props[$class]);
+    unset(self::$specs[$class]);
+    unset(self::$backProps[$class]);
+    unset(self::$backSpecs[$class]);
     }
   }
 
@@ -95,15 +97,15 @@ class CExObject extends CMbMetaObject {
   }
   
   // FIXME pas DU TOUT optimisé
-	/*
-	 * attention aux dates, il faut surement checker le log de derniere modif des champs du concept
-	 */
+  /*
+   * attention aux dates, il faut surement checker le log de derniere modif des champs du concept
+   */
   function getReportedValues(){
     if ($this->_id) return;
     
-		self::$_multiple_load = true;
-		CExClassField::$_load_lite = true;
-		
+    self::$_multiple_load = true;
+    CExClassField::$_load_lite = true;
+    
     $object = $this->loadTargetObject();
     
     $ex_class = $this->_ref_ex_class;
@@ -111,83 +113,93 @@ class CExObject extends CMbMetaObject {
     $this->_ref_reference_object_1 = $ex_class->resolveReferenceObject($object, 1);
     $this->_ref_reference_object_2 = $ex_class->resolveReferenceObject($object, 2);
     
-		$latest_1 = $ex_class->getLatestExObject($this->_ref_reference_object_1, 1);
+    $latest_1 = $ex_class->getLatestExObject($this->_ref_reference_object_1, 1);
     $latest_2 = $ex_class->getLatestExObject($this->_ref_reference_object_2, 2);
-		
+    
     $fields = $this->_ref_ex_class->loadRefsAllFields(true);
     
-		// on cherche les champs reportés de l'objet courant
+    // on cherche les champs reportés de l'objet courant
     foreach($fields as $_field) {
       $field_name = $_field->name;
+      $this->_reported_fields[$field_name] = null;
       
-			// valeur par défaut
+      // valeur par défaut
       $spec_obj = $_field->getSpecObject();
       $this->$field_name = $spec_obj->default;
       
-			// si champ pas reporté, on passe au suivant
+      // si champ pas reporté, on passe au suivant
       if (!$_field->report_level) continue;
       
       $_level = $_field->report_level;
-			
-			// si champ basé sur un concept, il faut parcourir 
-			// tous les formulaires qui ont un champ du meme concept
-			if ($_field->concept_id) {
-				$_concept = $_field->loadRefConcept();
-				$_concept_fields = $_concept->loadRefClassFields();
-				
-			  $_latest = null;
+      
+      // si champ basé sur un concept, il faut parcourir 
+      // tous les formulaires qui ont un champ du meme concept
+      if ($_field->concept_id) {
+        $_concept = $_field->loadRefConcept();
+        $_concept_fields = $_concept->loadRefClassFields();
+        
+        $_latest = null;
         $_latest_value = null;
-				
-				// on regarde tous les champs du concept
-				foreach($_concept_fields as $_concept_field) {
+        
+        // on regarde tous les champs du concept
+        foreach($_concept_fields as $_concept_field) {
           
-					$_ex_class = $_concept_field->loadRefExClass();
-					
-					// en fonction du niveau
-		      if ($_level == 1) {
-		      	$_concept_latest = $_ex_class->getLatestExObject($this->_ref_reference_object_1, 1);
-		      }
-					else {
-						$_concept_latest = $_ex_class->getLatestExObject($this->_ref_reference_object_2, 2);
-					}
-					
-					// si pas d'objet precedemment enregistré
-					if (!$_concept_latest->_id) continue;
-					
-					// on regarde le log pour voir lequel a été saisi en dernier
-					//$_log = $_concept_latest->loadLastLogForField($_concept_field->name); // FIXME ne donne rien quand type=create 
-					$_log = $_concept_latest->loadLastLog();
-					
-					if (!$_latest) {
-						$_latest = $_concept_latest;
-						$_latest_value = $_latest->{$_concept_field->name};
-					}
-					else {
-						if ($_log->date > $_latest->_ref_last_log->date) {
-							$_latest = $_concept_latest;
+          $_ex_class = $_concept_field->loadRefExClass();
+          
+          // en fonction du niveau
+          if ($_level == 1) {
+            $_concept_latest = $_ex_class->getLatestExObject($this->_ref_reference_object_1, 1);
+          }
+          else {
+            $_concept_latest = $_ex_class->getLatestExObject($this->_ref_reference_object_2, 2);
+          }
+          
+          // si pas d'objet precedemment enregistré
+          if (!$_concept_latest->_id || $_concept_latest->{$_concept_field->name} == "") continue;
+          
+          // on regarde le log pour voir lequel a été saisi en dernier
+          //$_log = $_concept_latest->loadLastLogForField($_concept_field->name); // FIXME ne donne rien quand type=create 
+          $_log = $_concept_latest->loadLastLog();
+          
+          if (!$_latest) {
+            $_latest = $_concept_latest;
+            $_latest_value = $_latest->{$_concept_field->name};
+          }
+          else {
+            if ($_log->date > $_latest->_ref_last_log->date) {
+              $_latest = $_concept_latest;
               $_latest_value = $_latest->{$_concept_field->name};
-						}
-					}
-					
+            }
+          }
+          
           //mbTrace($_latest->{$_concept_field->name}, "field de $_concept_field->_ref_ex_class");
-					
-				}
-				
-				if ($_latest) {
+        }
+        
+        if ($_latest) {
+          $this->_reported_fields[$field_name] = $_latest;
+          $_latest->loadTargetObject();
           $this->$field_name = $_latest_value;
-				}
-			}
-			else {
-				// ceux de la meme exclass
-				if (!$latest_1->_id && !$latest_2->_id) continue;
+        }
+      }
+      else {
+        // ceux de la meme exclass
+        if (!$latest_1->_id && !$latest_2->_id) continue;
+        
+				$_base = (($_level == 1) ? $latest_1 : $latest_2);
 				
-        $this->$field_name = (($_level == 1) ? $latest_1->$field_name : $latest_2->$field_name);
-			}
+				if ($_base->$field_name == "") continue;
+				
+        $_base->loadTargetObject();
+				$_base->loadLastLog();
+				
+				$this->_reported_fields[$field_name] = $_base;
+        $this->$field_name = $_base->$field_name;
+      }
     }
     
     self::$_multiple_load = false;
     CExClassField::$_load_lite = false;
-	
+  
     /*
     if (!$latest_1->_id && !$latest_2->_id) return;
     

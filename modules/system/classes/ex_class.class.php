@@ -183,11 +183,11 @@ class CExClass extends CMbObject {
     }
     
     if ($this->fieldModified("host_class")) {
-    	$count_constraints = $this->countBackRefs("constraints");
-    	if ($count_constraints > 0) {
-    		return "Impossible de changer le type d'objet hôte de ce formulaire car il possède $count_constraints contrainte(s)";
-    	}
-			
+      $count_constraints = $this->countBackRefs("constraints");
+      if ($count_constraints > 0) {
+        return "Impossible de changer le type d'objet hôte de ce formulaire car il possède $count_constraints contrainte(s)";
+      }
+      
       $groups = $this->loadRefsGroups();
       foreach($groups as $_group) {
         if ($_group->countBackRefs("host_fields")) {
@@ -238,41 +238,41 @@ class CExClass extends CMbObject {
         continue;
       }
       
-			// LEVEL 2
+      // LEVEL 2
       if ($_spec instanceof CRefSpec) {
-      	
-				// LEVEL 2 + Class list
-      	if ($_spec->meta && $this->_host_class_fields[$_spec->meta] instanceof CEnumSpec) {
-      		unset($this->_host_class_fields[$_field]);
-					
-	      	// boucle sur les classes du enum
-					$classes = $this->_host_class_fields[$_spec->meta]->_list;
-					
-					foreach($classes as $_class) {
-						$_key = "$_field.$_class";
-		        
-		        $_target = new $_class;
+        
+        // LEVEL 2 + Class list
+        if ($_spec->meta && $this->_host_class_fields[$_spec->meta] instanceof CEnumSpec) {
+          unset($this->_host_class_fields[$_field]);
+          
+          // boucle sur les classes du enum
+          $classes = $this->_host_class_fields[$_spec->meta]->_list;
+          
+          foreach($classes as $_class) {
+            $_key = "$_field.$_class";
+            
+            $_target = new $_class;
             
             $this->_host_class_fields[$_key] = new CRefSpec($this->host_class, $_field, "ref class|$_class");
             $this->_host_class_fields[$_key]->_subspecs = array();
-		        
-		        foreach($_target->_specs as $_subfield => $_subspec) {
-		          if (!$_subfield || $_subfield === $_target->_spec->key) continue;
-		          
-		          if ($_subfield[0] === "_" || // form field
-		              !($_subspec->show === null || $_subspec->show == 1) || // not shown
-		              $_subspec instanceof CRefSpec && $_subspec->meta && !$_target->_specs[$_subspec->meta] instanceof CEnumSpec // not a finite meta class field
-		              ) {
-		            continue;
-		          }
-		          
-		          $this->_host_class_fields[$_key]->_subspecs[$_subfield] = $_subspec;
-		        }
-					}
-				}
-				
-				// LEVEL 2 + Single class
-				else {
+            
+            foreach($_target->_specs as $_subfield => $_subspec) {
+              if (!$_subfield || $_subfield === $_target->_spec->key) continue;
+              
+              if ($_subfield[0] === "_" || // form field
+                  !($_subspec->show === null || $_subspec->show == 1) || // not shown
+                  $_subspec instanceof CRefSpec && $_subspec->meta && !$_target->_specs[$_subspec->meta] instanceof CEnumSpec // not a finite meta class field
+                  ) {
+                continue;
+              }
+              
+              $this->_host_class_fields[$_key]->_subspecs[$_subfield] = $_subspec;
+            }
+          }
+        }
+        
+        // LEVEL 2 + Single class
+        else {
           $_key = $_field;
           $this->_host_class_fields[$_key]->_subspecs = array();
           
@@ -283,7 +283,7 @@ class CExClass extends CMbObject {
           
           foreach($_target->_specs as $_subfield => $_subspec) {
             if (!$_subfield || $_subfield === $_target->_spec->key) continue;
-						
+            
             if ($_subfield[0] === "_" || // form field
                 !($_subspec->show === null || $_subspec->show == 1) || // not shown
                 $_subspec instanceof CRefSpec && $_subspec->meta && isset($object->_specs[$_subspec->meta]) && !$object->_specs[$_subspec->meta] instanceof CEnumSpec // not a finite meta class field
@@ -293,95 +293,95 @@ class CExClass extends CMbObject {
             
             $this->_host_class_fields[$_key]->_subspecs[$_subfield] = $_subspec;
           }
-				}
+        }
       }
     }
     
     return $this->_host_class_fields;
   }
-	
-	function buildHostFieldsList() {
-		$this->getAvailableFields();
-		
-		$list = array();
-		foreach($this->_host_class_fields as $_field => $_spec) {
-		  $element = array(
-		    "prop"  => $_spec,
-		    "title" => null,
+  
+  function buildHostFieldsList() {
+    $this->getAvailableFields();
+    
+    $list = array();
+    foreach($this->_host_class_fields as $_field => $_spec) {
+      $element = array(
+        "prop"  => $_spec,
+        "title" => null,
         "view"  => null,
         "longview"  => null,
-		    "type"  => null,
-		    "level" => 0,
-		  );
-		  
-		  $_subfield = explode(".", $_field);
-		  
-		  // Level 1 title
-		  if ($_spec instanceof CRefSpec && $_spec->class) {
-		    if ($_spec->meta) {
-		      $_meta_spec = $this->_host_class_fields[$_spec->meta];
-		      $element["type"] = implode(" OU ", $_meta_spec->_locales);
-		    }
-		    else {
-		      $element["type"] = CAppUI::tr($_spec->class);
-		    }
-		  }
-		  else {
-		    $element["type"] = CAppUI::tr("CMbFieldSpec.type.".$_spec->getSpecType());
-		  }
-		  
-		  // Level 1 type
-		  if (count($_subfield) > 1) {
+        "type"  => null,
+        "level" => 0,
+      );
+      
+      $_subfield = explode(".", $_field);
+      
+      // Level 1 title
+      if ($_spec instanceof CRefSpec && $_spec->class) {
+        if ($_spec->meta) {
+          $_meta_spec = $this->_host_class_fields[$_spec->meta];
+          $element["type"] = implode(" OU ", $_meta_spec->_locales);
+        }
+        else {
+          $element["type"] = CAppUI::tr($_spec->class);
+        }
+      }
+      else {
+        $element["type"] = CAppUI::tr("CMbFieldSpec.type.".$_spec->getSpecType());
+      }
+      
+      // Level 1 type
+      if (count($_subfield) > 1) {
         $element["title"] = CAppUI::tr("$this->host_class-$_subfield[0]")." de type ".CAppUI::tr("$_subfield[1]");
         $element["longview"] = CAppUI::tr("$this->host_class-$_subfield[0]-desc")." de type ".CAppUI::tr("$_subfield[1]");
-		  }
-		  else {
-		    $element["title"] = CAppUI::tr("$this->host_class-$_field");
+      }
+      else {
+        $element["title"] = CAppUI::tr("$this->host_class-$_field");
         $element["longview"] = CAppUI::tr("$this->host_class-$_field-desc");
-		  }
-		  
-		  $element["view"] = $element["title"];
-		  $parent_view = $element["view"];
-		  
-		  $list[$_field] = $element;
-		  
-		  // Level 2
-		  if ($_spec instanceof CRefSpec) {
-		    foreach ($_spec->_subspecs as $_key => $_subspec) {
-		      $_subfield = explode(".", $_key);
-		      $_subfield = reset($_subfield);
-		      
-		      $element = array(
-		        "prop"  => $_subspec,
-		        "title" => null,
-		        "type"  => null,
-		        "level" => 1,
-		      );
-		      
-		      if ($_subspec instanceof CRefSpec && $_subspec->class) {
-		        if ($_subspec->meta) {
-		          //$_meta_spec = $ex_class->_host_class_fields[$_spec->meta];
-		          //$element["type"] = implode(" OU ", $_meta_spec->_locales);
-		        }
-		        else {
-		          $element["type"] = CAppUI::tr("$_subspec->class");
-		        }
-		      }
-		      else {
-		        $element["type"] = CAppUI::tr("CMbFieldSpec.type.".$_subspec->getSpecType());
-		      }
-		      
-		      $element["view"] = $parent_view." / ".CAppUI::tr("$_subspec->className-$_subfield");
+      }
+      
+      $element["view"] = $element["title"];
+      $parent_view = $element["view"];
+      
+      $list[$_field] = $element;
+      
+      // Level 2
+      if ($_spec instanceof CRefSpec) {
+        foreach ($_spec->_subspecs as $_key => $_subspec) {
+          $_subfield = explode(".", $_key);
+          $_subfield = reset($_subfield);
+          
+          $element = array(
+            "prop"  => $_subspec,
+            "title" => null,
+            "type"  => null,
+            "level" => 1,
+          );
+          
+          if ($_subspec instanceof CRefSpec && $_subspec->class) {
+            if ($_subspec->meta) {
+              //$_meta_spec = $ex_class->_host_class_fields[$_spec->meta];
+              //$element["type"] = implode(" OU ", $_meta_spec->_locales);
+            }
+            else {
+              $element["type"] = CAppUI::tr("$_subspec->class");
+            }
+          }
+          else {
+            $element["type"] = CAppUI::tr("CMbFieldSpec.type.".$_subspec->getSpecType());
+          }
+          
+          $element["view"] = $parent_view." / ".CAppUI::tr("$_subspec->className-$_subfield");
           $element["longview"] = $parent_view." / ".CAppUI::tr("$_subspec->className-$_subfield-desc");
           $element["title"] = " |- ".CAppUI::tr("$_subspec->className-$_subfield");
-		      
-		      $list["$_field-$_key"] = $element;
-		    }
-		  }
-		}
-		
-		return $list;
-	}
+          
+          $list["$_field-$_key"] = $element;
+        }
+      }
+    }
+    
+    return $list;
+  }
   
   function loadExObjects(CMbObject $object) {
     $ex_object = new CExObject;
@@ -427,6 +427,58 @@ class CExClass extends CMbObject {
     }
     
     return $class_tree;
+  }
+  
+  static function getExClassesForObject($object, $event, $type = "required", $exclude_ex_class_ids = array()) {
+    if (is_string($object)) {
+      $object = CMbObject::loadFromGuid($object);
+    }
+    
+    $ex_class = new self;
+    $ex_class->host_class = $object->_class_name;
+    $ex_class->event = $event;
+    $ex_class->disabled = 0;
+    $ex_class->required = 0;
+    $ex_class->conditional = 0;
+    
+    switch($type) {
+      case "required":    $ex_class->required = 1;    break;
+      case "disabled":    $ex_class->disabled = 1;    break;
+      case "conditional": $ex_class->conditional = 1; break;
+    }
+    
+    $ex_classes = $ex_class->loadMatchingList();
+    
+    foreach($ex_classes as $_id => $_ex_class) {
+      if (isset($exclude_ex_class_ids[$_id]) || !$_ex_class->checkConstraints($object)) {
+        unset($ex_classes[$_id]);
+      }
+      else {
+        $_ex_class->_host_object = $object;
+      }
+    }
+    
+    return $ex_classes;
+  }
+  
+  static function getJStrigger($ex_classes) {
+    if (count($ex_classes) == 0) return "";
+    
+    $forms = array();
+    
+    foreach($ex_classes as $_ex_class) {
+      $forms[$_ex_class->_id] = array(
+        "ex_class_id" => $_ex_class->_id,
+        "object_guid" => $_ex_class->_host_object->_guid,
+        "event" => "signature",
+      );
+    }
+    
+    return "
+    <script type='text/javascript'>
+      var forms = ".json_encode(array_values($forms)).";
+      (window.ExObject || window.opener.ExObject).triggerMulti(forms);
+    </script>";
   }
   
   function getGrid($w = 4, $h = 20, $reduce = true) {
