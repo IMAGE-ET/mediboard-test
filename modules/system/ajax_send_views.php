@@ -42,8 +42,6 @@ foreach ($senders as $_sender) {
   }
 }
 
-mbTrace(count($senders));
-
 // Création du template
 $smarty = new CSmartyDP();
 $smarty->assign("senders", $senders);

@@ -131,7 +131,7 @@ class CViewSender extends CMbObject {
     $params["username"] = $user->user_username;
     $params["password"] = $user->user_password;
     $params["dialog"] = "1";
-    $params["aio"] = "1";
+    $params["_aio"] = "1";
     $query = CMbString::toQuery($params);
     $url = "$base/?$query";
     
@@ -182,7 +182,7 @@ class CViewSender extends CMbObject {
       
       $source_ftp = $_sender_source->_ref_source->_ref_source_ftp;
       if ($source_ftp->_id && $source_ftp->active) {     
-        $basename = "view-$this->name";
+        $basename = $this->name;
         $destination_basename = $source_ftp->fileprefix.$basename;
         
         try {
@@ -211,26 +211,20 @@ class CViewSender extends CMbObject {
   }
   
   function archiveFile(CFTP $ftp, CSourceFTP $source_ftp, $basename) {
-    $dateTime = mbTransformTime(null, null, "%Y-%m-%d-%H.%M.%S");   
-    
-    $directory = $source_ftp->fileprefix.$this->name;
-    
+  	// Répertoire d'archivage
+  	$directory = $ftp->fileprefix.$basename;
+  	$datetime = mbTransformTime(null, null, "%Y-%m-%d_%H-%M-%S");   
     $ftp->createDirectory($directory);
-      
-    $basename = "$basename-$dateTime.html";
-
-    $ftp->sendFile($this->_file, "$directory/$basename");
+  	
+    // Transmission de la copie
+    $archive  = "$directory/archive-$datetime.html";
+    $ftp->sendFile($this->_file, $archive);
     
+    // Rotation des 10 fichiers
     $files = $ftp->getListFiles($directory);
-    if (count($files) < 10) {
-      return;
-    }    
-   
     rsort($files);
-    $rm_files = array_slice($files, 10);
-    
-    foreach ($rm_files as $_rm_file) {
-      $ftp->delFile($_rm_file);
+    foreach (array_slice($files, 10) as $_file) {
+      $ftp->delFile($_file);
     }
   }
 }
