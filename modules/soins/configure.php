@@ -10,9 +10,12 @@
 
 CCanDo::checkAdmin();
 
+$service  = new CService;
+$services = $service->loadListWithPerms(PERM_READ);
 
 // Création du template
 $smarty = new CSmartyDP();
+$smarty->assign("services", $services);
 $smarty->display("configure.tpl");
 
 ?>

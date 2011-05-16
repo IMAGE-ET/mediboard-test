@@ -20,5 +20,10 @@ Sejour = {
     new Url("dPurgences", "vw_aed_rpu", "tab").
       addParam("sejour_id", sejour_id).
       redirectOpener();
+  },
+  showDossierSoins: function(sejour_id) {
+    new Url("soins", "vw_dossier_sejour", "tab").
+      addParam("sejour_id", sejour_id).
+      redirectOpener();
   }
 };

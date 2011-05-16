@@ -34,6 +34,7 @@ $service_id   = CValue::getOrSession("service_id");
 $by_patient   = CValue::get("by_patient", false);
 $show_inactive = CValue::get("show_inactive", "0");
 $_present_only = CValue::get("_present_only", 1);
+$offline     = CValue::get("offline", 0);
 
 $date_min = mbDate($dateTime_min);
 $date_max = mbDate($dateTime_max);
@@ -572,6 +573,7 @@ $smarty->assign("all_groups"      , $all_groups);
 $smarty->assign("by_patient"      , $by_patient);
 $smarty->assign("show_inactive"   , $show_inactive);
 $smarty->assign("_present_only"   , $_present_only);
+$smarty->assign("offline"         , $offline);
 $smarty->assign("cat_group_id"    , CValue::get("cat_group_id"));
 $smarty->assign("params"          , CConstantesMedicales::$list_constantes);
 $smarty->display('vw_bilan_service.tpl');

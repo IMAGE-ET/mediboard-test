@@ -32,6 +32,9 @@
 			<button type="button" class="search" onclick="Sejour.admission('{{$sejour->_date_entree_prevue}}');">
 				{{tr}}Admission{{/tr}}
 			</button>
+      <button type="button" class="search" onclick="Sejour.showDossierSoins('{{$sejour->_id}}')">
+        {{tr}}module-soins-court{{/tr}}
+      </button>
 			{{/if}}
 
       {{if $sejour->type == "ssr" && @$modules.ssr->_can->read}}

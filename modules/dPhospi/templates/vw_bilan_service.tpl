@@ -93,7 +93,7 @@ selectPeriode = function(element) {
 }
 
 </script>
-
+{{if !$offline}}
 <form name="filter_prescription" action="?" method="get" class="not-printable">
   <input type="hidden" name="token_cat" value="{{$token_cat}}" />     
   <input type="hidden" name="m" value="dPhospi" />
@@ -247,6 +247,11 @@ selectPeriode = function(element) {
     </tr>
   </table>
 </form>
+{{/if}}
+
+{{if $offline}}
+  <button class="print not-printable" style="float: right;" onclick="window.print();">{{tr}}Print{{/tr}}</button>
+{{/if}}
 
 {{if $trans_and_obs|@count}}
 <br />

@@ -304,6 +304,7 @@ $locales['CService-urgence'] = 'Urgence';
 $locales['CService-urgence-court'] = 'Urg';
 $locales['CService-urgence-desc'] = 'Urgence';
 $locales['CService.all'] = 'Tous les services';
+$locales['CService.bilan'] = "Bilan de service";
 $locales['CService.none'] = 'Aucun service';
 $locales['CService.one'] = 'Un service';
 $locales['CService.select'] = 'Choisir un service';
