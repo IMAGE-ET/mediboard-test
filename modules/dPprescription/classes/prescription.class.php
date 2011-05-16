@@ -970,7 +970,7 @@ class CPrescription extends CMbObject implements IPatientRelated {
   /*
    * Compte le nombre de lignes non validées dans la prescription
    */ 
-  function countNoValideLines(){
+  function countNoValideLines($praticien_id = null){
     $this->_counts_no_valide = 0;
     if($this->_id){
       $line = new CPrescriptionLineMedicament();
@@ -979,7 +979,27 @@ class CPrescription extends CMbObject implements IPatientRelated {
       $where["prescription_id"] = " = '$this->_id'";
       $where["child_id"] = "IS NULL";
       $where["substitution_line_id"] = "IS NULL";
+      if ($praticien_id) {
+        $where["praticien_id"] = " = '$praticien_id'";
+      } 
       $this->_counts_no_valide = $line->countList($where);
+
+      unset($where["substitution_line_id"]);
+      
+      $line = new CPrescriptionLineElement();
+      $this->_counts_no_valide += $line->countList($where);
+      
+      $line = new CPrescriptionLineComment();
+      $this->_counts_no_valide += $line->countList($where);
+      
+      $line = new CPrescriptionLineMix();
+      $where = array();
+      $where["prescription_id"] = " = '$this->_id'";
+      $where["signature_prat"] = " = '0'";
+      if ($praticien_id) {
+        $where["praticien_id"] = " = '$praticien_id'";
+      } 
+      $this->_counts_no_valide += $line->countList($where);
     }
   }
   
