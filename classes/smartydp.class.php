@@ -191,11 +191,22 @@ function smarty_modifier_currency($value) {
  * @param float $value The value to format
  */
 function smarty_modifier_spancate($string, $length = 80, $etc = '...', $break_words = true, $middle = false) {
-	CAppUI::requireLibraryFile("smarty/libs/plugins/modifier.truncate");
+  CAppUI::requireLibraryFile("smarty/libs/plugins/modifier.truncate");
   $string = html_entity_decode($string);
-	$truncated = smarty_modifier_truncate($string, $length, $etc, $break_words, $middle);
+  $truncated = smarty_modifier_truncate($string, $length, $etc, $break_words, $middle);
   $string = htmlentities($string);
-	return strlen($string) > $length ? "<span title=\"$string\">$truncated</span>" : $truncated;
+  return strlen($string) > $length ? "<span title=\"$string\">$truncated</span>" : $truncated;
+}
+
+/**
+ * @abstract Converts a value to decabinary format
+ *
+ * Example:  {$value|decabinary}
+ * @param float $value The value to format
+ */
+function smarty_modifier_decabinary($value) {
+  $decabinary = CMbString::toDecaBinary($value);
+  return "<span title=\"$value\">$decabinary</span>";
 }
 
 /**
@@ -698,6 +709,7 @@ class CSmartyDP extends Smarty {
     $this->register_modifier("currency"          , "smarty_modifier_currency");
     $this->register_modifier("percent"           , "smarty_modifier_percent");
     $this->register_modifier("spancate"          , "smarty_modifier_spancate");
+    $this->register_modifier("decabinary"        , "smarty_modifier_decabinary");
     $this->register_modifier("module_installed"  , "smarty_modifier_module_installed");
     $this->register_modifier("module_active"     , "smarty_modifier_module_active");
     $this->register_modifier("JSAttribute"       , "JSAttribute");

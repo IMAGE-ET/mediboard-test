@@ -744,11 +744,29 @@ class CSetupsystem extends CSetup {
               ) /*! ENGINE=MyISAM */;";
     $this->addQuery($query);
     
+    $this->makeRevision("1.0.71");
+    
+    $query = "ALTER TABLE `view_sender` 
+              ADD `max_archives` INT (11) UNSIGNED NOT NULL DEFAULT '10';";
+    $this->addQuery($query);
+
     $query = "ALTER TABLE `source_to_view_sender` 
-                ADD INDEX (`source_id`),
-                ADD INDEX (`sender_id`);";
+              ADD `last_datetime` DATETIME,
+              ADD `last_status` ENUM ('triggered','uploaded','checked'),
+              ADD `last_count` INT (11) UNSIGNED;";
     $this->addQuery($query);
     
-    $this->mod_version = "1.0.71";
+    $query = "ALTER TABLE `source_to_view_sender` 
+              ADD INDEX (`last_datetime`);";
+    $this->addQuery($query);
+    
+    $this->makeRevision("1.0.72");
+
+    $query = "ALTER TABLE `source_to_view_sender` 
+              ADD `last_duration` FLOAT,
+              ADD `last_size` INT (11) UNSIGNED;";
+    $this->addQuery($query);
+    
+    $this->mod_version = "1.0.73";
   }
 }

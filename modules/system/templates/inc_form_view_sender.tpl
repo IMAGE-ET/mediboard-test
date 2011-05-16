@@ -62,6 +62,11 @@
 </tr>
 
 <tr>
+  <th>{{mb_label object=$sender field=max_archives}}</th>
+  <td>{{mb_field object=$sender field=max_archives}}</td>
+</tr>
+
+<tr>
   <td class="button" colspan="2">
     {{if $sender->_id}}
     <button class="modify" type="submit">{{tr}}Save{{/tr}}</button>

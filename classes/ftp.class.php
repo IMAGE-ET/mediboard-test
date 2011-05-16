@@ -274,7 +274,7 @@ class CFTP {
       throw new CMbException("CSourceFTP-size-file-failed", $file);
     }
     
-    return CMbString::toDecaBinary($size);
+    return $size;
   }
   
   private function _createDirectory($directory) {

@@ -41,33 +41,58 @@
       {{mb_title class=CViewSender field=_url}} / 
       {{mb_title class=CViewSender field=_file}}
     </th>
-    <th>Temps / Poids</th>
-    <th>Statut / Temps / Poids</th>
+    <th>{{mb_title class=CViewSender field=_file_download_duration}}</th>
+    <th>{{mb_title class=CViewSender field=_file_download_size}}</th>
+    <th>{{mb_title class=CSourceToViewSender field=source_id}}</th>
+    <th>{{mb_title class=CSourceToViewSender field=last_duration}}</th>
+    <th>{{mb_title class=CSourceToViewSender field=last_size}}</th>
+    <th>{{mb_title class=CSourceToViewSender field=last_status}}</th>
+    <th>{{mb_title class=CSourceToViewSender field=last_count}}</th>
   </tr>
 	{{foreach from=$senders item=_sender}}
-  <tr>
-    <td>{{mb_value object=$_sender field=name}}</td>
-    <td class="text compact">
-      {{mb_value object=$_sender field=_url}}
-      <br />
-      {{mb_value object=$_sender field=_file}}
-    </td>
-    <td>
-      {{$_sender->_file_download_duration|round:3}}s / 
-      {{mb_value object=$_sender field=_file_download_size}}
-    </td>
-    <td>
-      {{foreach from=$_sender->_files_upload_stats item=_file_upload_stats name=_file_upload_stats}}
-        {{mb_ternary test=$_file_upload_stats.status var=status value="green" other="red"}}
-        <img class="status" src="images/icons/status_{{$status}}.png" /> /
-        {{$_file_upload_stats.duration|round:3}}s /
-        {{$_file_upload_stats.size}} <br />
-        {{if $_file_upload_stats.size != $_sender->_file_download_size}}
-          <div class="small-warning">Taille de fichier incorrecte</div>
-        {{/if}}
-      {{/foreach}}
-    </td>
-  </tr
+  <tbody class="hoverable">
+	  <tr>
+	    {{assign var=count_sources value=$_sender->_ref_senders_source|@count}}
+	
+	    <td rowspan="{{$count_sources}}">{{mb_value object=$_sender field=name}}</td>
+	    <td rowspan="{{$count_sources}}" class="text compact">
+	      {{mb_value object=$_sender field=_url}}
+	      <br />
+	      {{mb_value object=$_sender field=_file}}
+	    </td>
+	    <td rowspan="{{$count_sources}}">
+	      {{$_sender->_file_download_duration|round:3}}s
+	    </td>
+	    <td rowspan="{{$count_sources}}"> 
+	      {{$_sender->_file_download_size|decabinary}}
+	    </td>
+	    
+	    {{foreach from=$_sender->_ref_senders_source item=_sender_source name=sender_source}}
+	    <td>{{mb_value object=$_sender_source field=source_id tooltip=true}}</td>
+	    <td>{{$_sender_source->last_duration|round:3}}s</td>
+	    <td>{{$_sender_source->last_size|decabinary}}</td>
+      
+      {{assign var=class value=ok}}
+      {{if $_sender_source->last_status != "checked"}} 
+      {{assign var=class value=error}}
+      {{/if}}
+	    <td class="{{$class}}">
+        {{mb_value object=$_sender_source field=last_status}}
+      </td>
+
+      {{assign var=class value=ok}}
+      {{if $_sender_source->last_count != $_sender->max_archives}} 
+      {{assign var=class value=warning}}
+      {{/if}}
+	    <td class="{{$class}}">
+        {{mb_value object=$_sender_source field=last_count}} / 
+        {{mb_value object=$_sender field=max_archives}} 
+      </td>
+      
+	    {{if !$smarty.foreach.sender_source.last}}</tr><tr>{{/if}}
+	    {{/foreach}}
+	  </tr>
+  </tbody>
 
 	{{foreachelse}}
   <tr>

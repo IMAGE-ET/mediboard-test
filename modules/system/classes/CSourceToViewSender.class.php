@@ -15,7 +15,12 @@ class CSourceToViewSender extends CMbObject {
   // DB fields
   var $source_id = null;
   var $sender_id = null;
-  
+  var $last_datetime = null;
+  var $last_duration = null;
+  var $last_size     = null;
+  var $last_status   = null;
+  var $last_count    = null;
+    
   // Form fields
   var $_ref_source = null;
   var $_ref_sender = null;
@@ -24,6 +29,7 @@ class CSourceToViewSender extends CMbObject {
     $spec = parent::getSpec();
     $spec->table = "source_to_view_sender";
     $spec->key   = "source_to_view_sender_id";
+    $spec->loggable = false;
     return $spec;
   }
 
@@ -31,6 +37,11 @@ class CSourceToViewSender extends CMbObject {
     $props = parent::getProps();
     $props["sender_id"] = "ref class|CViewSender notNull autocomplete|name";
     $props["source_id"] = "ref class|CViewSenderSource notNull autocomplete|name";
+    $props["last_datetime"] = "dateTime";
+    $props["last_duration"] = "float";
+    $props["last_size"    ] = "num min|0";
+    $props["last_status"  ] = "enum list|triggered|uploaded|checked";
+    $props["last_count"   ] = "num min|0";
     return $props;
   }
   

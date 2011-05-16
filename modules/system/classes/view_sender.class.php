@@ -20,13 +20,13 @@ class CViewSender extends CMbObject {
   var $sender_id = null; 
   
   // DB fields
-  var $source_id   = null;
-  var $name        = null;
-  var $description = null;
-  var $params      = null;
-  var $period      = null;
-  var $offset      = null;
-	var $active      = null;
+  var $name         = null;
+  var $description  = null;
+  var $params       = null;
+  var $period       = null;
+  var $offset       = null;
+	var $active       = null;
+	var $max_archives = null;
   
   // Form fields
 	var $_params = null;
@@ -37,7 +37,6 @@ class CViewSender extends CMbObject {
   
   var $_file_download_duration = null;
   var $_file_download_size     = null;
-  var $_files_upload_stats     = array();
   	
   // Distant properties
 	var $_hour_plan = null;
@@ -55,17 +54,18 @@ class CViewSender extends CMbObject {
 
   function getProps() {
     $props = parent::getProps();
-    $props["name"       ] = "str notNull";
-    $props["description"] = "text";
-    $props["params"     ] = "text notNull";
-    $props["period"     ] = "enum list|1|2|3|4|5|6|10|15|20|30";
-    $props["offset"     ] = "num min|0 notNull default|0";
-    $props["active"     ] = "bool notNull default|0";
+    $props["name"        ] = "str notNull";
+    $props["description" ] = "text";
+    $props["params"      ] = "text notNull";
+    $props["period"      ] = "enum list|1|2|3|4|5|6|10|15|20|30";
+    $props["offset"      ] = "num min|0 notNull default|0";
+    $props["active"      ] = "bool notNull default|0";
+    $props["max_archives"] = "num min|1 notNull default|10";
     
     $props["_url"       ] = "str";
     $props["_file"      ] = "str";
-    $props["_file_download_duration" ] = "str";
-    $props["_file_download_size"     ] = "str";
+    $props["_file_download_duration" ] = "float";
+    $props["_file_download_size"     ] = "num pos";
 
     return $props;
   }
@@ -110,17 +110,12 @@ class CViewSender extends CMbObject {
 	}
 
 	function loadRefSendersSource() {
-	  $source_to_vw_sender = new CSourceToViewSender();
-    $source_to_vw_sender->sender_id = $this->_id;
-
-    $this->_ref_senders_source = array();
-    foreach ($source_to_vw_sender->loadMatchingList() as $_sender_source) {
-      $_sender_source->loadRefSource();
-      $_sender_source->_ref_source->loadRefSourceFTP();
-      $this->_ref_senders_source[] = $_sender_source;
+		$senders_source = $this->loadBackRefs("sources_link"); 
+    foreach ($senders_source as $_sender_source) {
+      $_sender_source->loadRefSource()->loadRefSourceFTP();
     }
 
-    return $this->_ref_senders_source;
+    return $this->_ref_senders_source = $senders_source;
 	}
 
 	function makeUrl($user) {
@@ -157,7 +152,7 @@ class CViewSender extends CMbObject {
     $phpChrono->start();
     
     $this->_file_download_duration = $chrono->total;
-    $this->_file_download_size     = CMbString::toDecaBinary(filesize($file));
+    $this->_file_download_size     = filesize($file);
     
   	return $this->_file = $file;
   }
@@ -169,40 +164,40 @@ class CViewSender extends CMbObject {
     
     // On transmet aux sources le fichier
     foreach($this->loadRefSendersSource() as $_sender_source) {
-      $this->_files_upload_stats[$_sender_source->_id] = array(
-        "duration" => 0,
-        "status"   => false,
-        "size"     => 0,
-      );
-  
+      $_sender_source->last_datetime = mbDateTime();
+      $_sender_source->last_status   = "triggered";
+      $_sender_source->last_duration = null;
+      $_sender_source->last_size     = null;
+
       $chrono = new Chronometer();
       $chrono->start();
-      
-      $this->_files_upload_stats[$_sender_source->_id]["status"] = false; 
       
       $source_ftp = $_sender_source->_ref_source->_ref_source_ftp;
       if ($source_ftp->_id && $source_ftp->active) {     
         $basename = $this->name;
         $destination_basename = $source_ftp->fileprefix.$basename;
-        
+
         try {
           $ftp = $source_ftp->init($source_ftp);
           if ($ftp->connect()) {
-            $this->_files_upload_stats[$_sender_source->_id]["status"] = $ftp->sendFile($this->_file, "$destination_basename.html");
-            $this->_files_upload_stats[$_sender_source->_id]["size"]   = $ftp->getSize("$destination_basename.html");
-            
+            $ftp->sendFile($this->_file, "$destination_basename.html");
+            $_sender_source->last_status = "uploaded";
+            $_sender_source->last_size   = $ftp->getSize("$destination_basename.html");
+            if ($_sender_source->last_size == $this->_file_download_size) {
+              $_sender_source->last_status = "checked";
+            }
             $source_ftp->counter++;
             $source_ftp->store();          
           }
           
-          $this->archiveFile($ftp, $source_ftp, $basename);
+          $_sender_source->last_count = $this->archiveFile($ftp, $basename);
 
           $ftp->close();
-        } catch(Exception $e) {}
+        } catch (Exception $e) {}
       }
       
       $chrono->stop();
-      $this->_files_upload_stats[$_sender_source->_id]["duration"] = $chrono->total;
+      $_sender_source->last_duration = $chrono->total;
     }
     
     $phpChrono->start();
@@ -210,7 +205,14 @@ class CViewSender extends CMbObject {
     unlink($this->_file);
   }
   
-  function archiveFile(CFTP $ftp, CSourceFTP $source_ftp, $basename) {
+  /**
+   * Populate archive directory up to max_archives files
+   * 
+   * @param CFTP $ftp        FTP connector 
+   * @param string $basename Base name for archive directory
+   * @return int             Current archive count
+   */
+  function archiveFile(CFTP $ftp, $basename) {
   	// Répertoire d'archivage
   	$directory = $ftp->fileprefix.$basename;
   	$datetime = mbTransformTime(null, null, "%Y-%m-%d_%H-%M-%S");   
@@ -223,9 +225,11 @@ class CViewSender extends CMbObject {
     // Rotation des 10 fichiers
     $files = $ftp->getListFiles($directory);
     rsort($files);
-    foreach (array_slice($files, 10) as $_file) {
+    foreach (array_slice($files, $this->max_archives) as $_file) {
       $ftp->delFile($_file);
     }
+    
+    return count($ftp->getListFiles($directory));
   }
 }
 

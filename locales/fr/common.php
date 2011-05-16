@@ -237,6 +237,7 @@ $locales['State'] = 'Etat';
 $locales['Status'] = 'Statut';
 $locales['Stop'] = 'Stop';
 $locales['Submit'] = 'Envoyer';
+$locales['Suggestion'] = 'Suggestion';
 $locales['Summary'] = 'Résumé';
 $locales['Switch'] = 'Changer';
 $locales['Table'] = 'Table';
