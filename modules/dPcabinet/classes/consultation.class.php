@@ -772,16 +772,15 @@ TESTS A EFFECTUER
     if ($this->si_desistement === null) {
       $this->si_desistement = 0;
     }
-    
-    $facturable = $this->_facturable;
-    if ($facturable === null) {
-      $facturable = 1;  
-    }
 
     // Consultation dans un séjour
     if (!$this->_id && !$this->sejour_id && 
         CAppUI::conf("dPcabinet CConsultation attach_consult_sejour") && $this->patient_id) {
       // Recherche séjour englobant
+      $facturable = $this->_facturable;
+      if ($facturable === null) {
+        $facturable = 1;  
+      }
       $this->loadRefPlageConsult();
       $datetime = $this->_datetime;
       $minutes_before_consult_sejour = CAppUI::conf("dPcabinet CConsultation minutes_before_consult_sejour");
@@ -817,7 +816,9 @@ TESTS A EFFECTUER
       $this->sejour_id = $sejour->_id;
     }
     
-    $forfait_se = $this->_forfait_se; // must be BEFORE loadRefSejour()
+    // must be BEFORE loadRefSejour()
+    $facturable = $this->_facturable;
+    $forfait_se = $this->_forfait_se;
     
     $this->loadRefSejour();
     $this->_adjust_sejour = false;
