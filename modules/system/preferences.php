@@ -25,6 +25,7 @@ CPreferences::$modules["common"] = array (
   
 CPreferences::$modules["system"] = array (
   "INFOSYSTEM",
-  "showTemplateSpans"
+  "showTemplateSpans",
+  "moduleFavicon"
 );
 ?>

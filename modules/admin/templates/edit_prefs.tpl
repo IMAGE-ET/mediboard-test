@@ -196,6 +196,7 @@ Preferences.onSubmit = function(form) {
 
   {{mb_include template=inc_pref spec=bool var=INFOSYSTEM}}
   {{mb_include template=inc_pref spec=bool var=showTemplateSpans}}
+  {{mb_include template=inc_pref spec=bool var=moduleFavicon}}
     
   </tbody>
   {{/if}}

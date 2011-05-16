@@ -755,7 +755,7 @@ class CSetupsystem extends CSetup {
               ADD `last_status` ENUM ('triggered','uploaded','checked'),
               ADD `last_count` INT (11) UNSIGNED;";
     $this->addQuery($query);
-    
+           
     $query = "ALTER TABLE `source_to_view_sender` 
               ADD INDEX (`last_datetime`);";
     $this->addQuery($query);
@@ -767,6 +767,10 @@ class CSetupsystem extends CSetup {
               ADD `last_size` INT (11) UNSIGNED;";
     $this->addQuery($query);
     
-    $this->mod_version = "1.0.73";
+    $this->makeRevision("1.0.73");
+    
+    $this->addPrefQuery("moduleFavicon", "0");
+    
+    $this->mod_version = "1.0.74";
   }
 }
