@@ -198,6 +198,7 @@ class CViewSender extends CMbObject {
       
       $chrono->stop();
       $_sender_source->last_duration = $chrono->total;
+      $_sender_source->store();
     }
     
     $phpChrono->start();

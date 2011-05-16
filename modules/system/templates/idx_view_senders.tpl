@@ -14,13 +14,16 @@
 {{mb_script module=system script=exchange_source}}
 
 <script type="text/javascript">
-Main.add(Control.Tabs.create.curry('tabs-main', true));
+Main.add(function() {
+  Control.Tabs.create('tabs-main', true).activeLink.onmouseup();
+});
 </script>
 
 <ul id="tabs-main" class="control_tabs">
-  <li><a href="#senders">{{tr}}CViewSender{{/tr}}</a></li>
-  <li><a href="#sources">{{tr}}CViewSenderSource{{/tr}}</a></li>
-  <li><a href="#dosend">{{tr}}CViewSender-title-dosend{{/tr}}</a></li>
+  <li><a href="#senders" onmouseup="ViewSender.refreshList();"      >{{tr}}CViewSender{{/tr}}</a></li>
+  <li><a href="#sources" onmouseup="ViewSenderSource.refreshList();">{{tr}}CViewSenderSource{{/tr}}</a></li>
+  <li><a href="#dosend"  onmouseup="ViewSender.doSend();"           >{{tr}}CViewSender-title-dosend{{/tr}}</a></li>
+  <li><a href="#monitor" onmouseup="ViewSender.refreshMonitor();"   >{{tr}}CViewSender-title-monitor{{/tr}}</a></li>
 </ul>
 
 <hr class="control_tabs" />
@@ -31,11 +34,6 @@ Main.add(Control.Tabs.create.curry('tabs-main', true));
 	  {{tr}}CViewSender-title-create{{/tr}}
 	</button>
 	
-	<script type="text/javascript">
-    Main.add(ViewSender.refreshList);
-    Main.add(ViewSender.doSend);
-	</script>
-
 	<div id="list-senders">
 	</div>
 
@@ -47,16 +45,13 @@ Main.add(Control.Tabs.create.curry('tabs-main', true));
     {{tr}}CViewSenderSource-title-create{{/tr}}
   </button>
   
-  <script type="text/javascript">
-    Main.add(ViewSenderSource.refreshList);
-  </script>
-    
   <div id="list-sources">
   </div>
 
 </div>
 
 <div id="dosend" style="display: none;">
-  <div id="send-views">
-  </div>
+</div>
+
+<div id="monitor" style="display: none;">
 </div>

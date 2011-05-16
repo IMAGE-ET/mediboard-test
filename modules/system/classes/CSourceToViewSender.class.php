@@ -22,6 +22,9 @@ class CSourceToViewSender extends CMbObject {
   var $last_count    = null;
     
   // Form fields
+  var $_last_age = null;
+  
+  // Object references
   var $_ref_source = null;
   var $_ref_sender = null;
     
@@ -42,11 +45,15 @@ class CSourceToViewSender extends CMbObject {
     $props["last_size"    ] = "num min|0";
     $props["last_status"  ] = "enum list|triggered|uploaded|checked";
     $props["last_count"   ] = "num min|0";
+
+    $props["_last_age"   ] = "num";
     return $props;
   }
   
   function loadRefSender() {
-    return $this->_ref_sender = $this->loadFwdRef("sender_id", 1);
+    $sender = $this->loadFwdRef("sender_id", 1);
+    $this->_last_age = mbMinutesRelative($this->last_datetime, mbDateTime());
+  	return $this->_ref_sender = $sender;
   }
   
   function loadRefSource() {

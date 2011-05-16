@@ -23,7 +23,6 @@ if (!$user->user_password) {
 } 
 
 // Chargement des senders
-$senders = array();
 $sender  = new CViewSender();
 $senders = $sender->loadList(null, "name");
 

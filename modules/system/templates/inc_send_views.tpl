@@ -22,7 +22,7 @@
   </tr>
   <tr>
     <th>{{mb_label object=$user field=user_password}}</th>
-    <td>{{mb_field object=$user field=user_password}}</td>
+    <td>{{mb_field object=$user field=user_password prop=password}}</td>
   </tr>
   
   <tr>

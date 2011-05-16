@@ -50,11 +50,16 @@ ViewSender = {
     url.requestUpdate('list-senders');
   },
   
+  refreshMonitor: function() {
+    var url = new Url('system', 'ajax_monitor_senders');
+    url.requestUpdate('monitor');
+  },
+
   doSend: function(username, password) {
     var url = new Url('system', 'ajax_send_views');
     if (username) url.addParam("username", username);
     if (password) url.addParam("password", password);
-    url.requestUpdate('send-views');
+    url.requestUpdate('dosend');
 	return false;
   },
   
