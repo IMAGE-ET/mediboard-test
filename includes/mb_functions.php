@@ -95,7 +95,7 @@ function mbBankHolidays($date = null) {
     mbDate("+1 DAY", $paques),   // Lundi de paques
     "$year-05-01",               // Fête du travail
     "$year-05-08",               // Victoire de 1945
-    mbDate("+40 DAYS", $paques), // Jeudi de l'ascension
+    mbDate("+39 DAYS", $paques), // Jeudi de l'ascension
     mbDate("+50 DAYS", $paques), // Lundi de pentecôte
     "$year-07-14",               // Fête nationnale
     "$year-08-15",               // Assomption
