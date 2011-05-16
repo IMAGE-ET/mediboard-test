@@ -46,6 +46,16 @@ $sejour->loadRefPraticien();
 $patient =& $sejour->_ref_patient;
 $patient->loadRefPhotoIdentite();
 $patient->loadRefConstantesMedicales();
+$patient->loadRefDossierMedical();
+$dossier_medical = $patient->_ref_dossier_medical;
+
+if($dossier_medical->_id){
+  $dossier_medical->loadRefsAllergies();
+  $dossier_medical->loadRefsAntecedents();
+  $dossier_medical->countAntecedents();
+  $dossier_medical->countAllergies();
+}
+
 $const_med = $patient->_ref_constantes_medicales;
 $poids = $const_med->poids;
 

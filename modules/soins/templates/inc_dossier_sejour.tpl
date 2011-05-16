@@ -71,6 +71,14 @@
 		  refreshLineSejour('{{$sejour->_id}}'); 
 		}
   }
+
+  refreshConstantesMedicales = function(context_guid) {
+    if(context_guid) {
+      var url = new Url("dPhospi", "httpreq_vw_constantes_medicales");
+      url.addParam("context_guid", context_guid);
+      url.requestUpdate("constantes");
+    }
+  }
   
   Main.add(function() {
     tab_sejour = Control.Tabs.create('tab-sejour');

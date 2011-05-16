@@ -193,13 +193,29 @@
         {{if !$line->condition_active}}
 	      <!-- Activation -->
 	      <input type="hidden" name="condition_active" value="1" />
-	      <button class="tick" type="button" onclick="submitFormAjax(this.form, 'systemMsg', { onComplete: function(){ refreshDossierSoin('','{{$chapitre}}', true); } });">
+	      <button class="tick" type="button" onclick="submitFormAjax(this.form, 'systemMsg', {
+            onComplete: function(){
+              if (window.refreshDossierSoin) {
+                refreshDossierSoin('','{{$chapitre}}', true);
+              }
+              if (window.updatePlanSoinsPatients) {
+                updatePlanSoinsPatients();
+              }
+            } });">
 	        Activer
 	      </button>
 	      {{else}}
  				<!-- Activation -->
 	      <input type="hidden" name="condition_active" value="0" />
-	      <button class="cancel" type="button" onclick="submitFormAjax(this.form, 'systemMsg', { onComplete: function(){ refreshDossierSoin('','{{$chapitre}}', true); } });">
+	      <button class="cancel" type="button" onclick="submitFormAjax(this.form, 'systemMsg', {
+            onComplete: function(){
+              if (window.refreshDossierSoin) {
+                refreshDossierSoin('','{{$chapitre}}', true);
+              }
+              if (window.updatePlanSoinsPatients) {
+                updatePlanSoinsPatients();
+              }
+	        }});">
 	        Désactiver
 	      </button>
 	       {{/if}}
