@@ -1941,7 +1941,11 @@ class CPrescription extends CMbObject implements IPatientRelated {
 		}
 		
     if(count($this->_ref_prescription_lines)){
+      
+      // La variable count permet d'incrément une seule fois le nombre de lignes
+      // dans le cas de plusieurs journées
       foreach($this->_ref_prescription_lines as &$_line_med){
+        $count = 0;
       	if($_line_med->perop){
       		continue;
       	}
@@ -1973,8 +1977,9 @@ class CPrescription extends CMbObject implements IPatientRelated {
         
 				foreach($dates as $date){
 	        if(($date >= $_line_med->debut && $date <= mbDate($_line_med->_fin_reelle))){
+	          $count ++;
 	        	$type_med = $_line_med->_is_injectable ? "inj" : "med";
-					  $this->_nb_lines_plan_soins[$type_med]++;
+					  if ($count == 1) $this->_nb_lines_plan_soins[$type_med]++;
 						
 						if($alert_handler){
 							if($_line_med->_recent_modification){
@@ -2044,6 +2049,10 @@ class CPrescription extends CMbObject implements IPatientRelated {
 									$_line_element->loadRefTask();
 								}
 								
+								// Incrément du nombre de lignes seulement quand count vaudra 1
+								// (cas de plusieurs journées)
+								$count = 0;
+								
                 // Chargement des administrations et des transmissions
                 if($with_calcul){
                 	foreach($dates as $date){
@@ -2055,8 +2064,10 @@ class CPrescription extends CMbObject implements IPatientRelated {
                 foreach($dates as $date){
 	                // Pre-remplissage des prises prevues dans le dossier de soin
 	                if(($date >= $_line_element->debut && $date <= mbDate($_line_element->_fin_reelle))){
-	                	$this->_nb_lines_plan_soins[$name_chap]++;
-										
+	                  $count ++;
+	                  if ($count == 1) {
+	                	  $this->_nb_lines_plan_soins[$name_chap]++;
+	                  }
 										if($alert_handler){
 										  if($_line_element->_recent_modification){
 				                if($_line_element->_urgence){
