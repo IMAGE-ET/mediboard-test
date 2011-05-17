@@ -22,8 +22,6 @@ function submitTiming(oForm) {
   		reloadTiming(oForm.operation_id.value) 
   	} 
   });
-  oAnesthForm = getForm("anesthTiming");
-  submitAnesth(oAnesthForm);
 }
 
 function reloadTiming(operation_id){
