@@ -178,7 +178,7 @@ var Url = Class.create({
     
       // Forbidden characters for IE
       if (Prototype.Browser.IE) {
-        sWindowName = sWindowName.replace(/[- '"]/gi, "_");
+        sWindowName = sWindowName.replace(/[^a-z0-9_]/gi, "_");
       }
 
       var wasClosedBefore = !window.children[sWindowName] || window.children[sWindowName].closed;
@@ -292,7 +292,7 @@ var Url = Class.create({
     
     // Forbidden characters for IE
     if (Prototype.Browser.IE) {
-      sWindowName = sWindowName.replace(/[- '"]/gi, "_");
+      sWindowName = sWindowName.replace(/[^a-z0-9_]/gi, "_");
     }
     var questionMark = sBaseUrl.indexOf("?") != -1;
     this.oWindow = window.open(sBaseUrl + this.make(questionMark), sWindowName, sFeatures);

@@ -144,6 +144,7 @@ $ex_class->event      = 'prescription';
 
 $ex_classes = $ex_class->loadMatchingList();
 CExObject::$_multiple_load = true;
+CExClassField::$_load_lite = true;
 
 $ex_objects = array();
 foreach($lines as $_line) {
@@ -151,25 +152,31 @@ foreach($lines as $_line) {
 }
 
 foreach($ex_classes as $_ex_class) {
+  $ex_object = new CExObject;
+  $ex_object->_ex_class_id = $_ex_class->_id;
+  $ex_object->setExClass();
+		
 	foreach($lines as $_line) {
 		$where = array(
       "object_class" => "='$_line->_class_name'",
       "object_id"    => "='$_line->_id'",
 		);
 		
-	  $ex_object = new CExObject;
-	  $ex_object->_ex_class_id = $_ex_class->_id;
-	  $ex_object->setExClass();
-		$ex_object->loadObject($where, "ex_object_id");
+		$_ex_objects = $ex_object->loadList($where, "ex_object_id DESC", 1);
+		$_ex_object = reset($_ex_objects);
 		
-		if ($ex_object->_id) {
-      $ex_object->_ex_class_id = $_ex_class->_id;
-      $ex_object->setExClass();
-      $ex_object->load();
-      $ex_object->loadTargetObject();
-      $ex_object->_ref_object->loadComplete();
+    
+		
+		if ($_ex_object && $_ex_object->_id) {
+			CExClassField::$_load_lite = false;
+	      $_ex_object->_ex_class_id = $_ex_class->_id;
+	      $_ex_object->setExClass();
+	      $_ex_object->load();
+	      $_ex_object->loadTargetObject();
+	      $_ex_object->_ref_object->loadComplete();
+			CExClassField::$_load_lite = true;
 	    
-	    $ex_objects[$_line->_guid][] = $ex_object;
+	    $ex_objects[$_line->_guid][] = $_ex_object;
 		}
 	}
 }
