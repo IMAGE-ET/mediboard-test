@@ -56,7 +56,7 @@
 		</li>
 		{{if $fast_access && array_key_exists($code_cip, $protocoles)}}
 			{{foreach from=$protocoles.$code_cip item=_protocole}}
-			  <li style="text-align: left; padding-left: 10px;" data-fast_access="{{$_protocole->fast_access}}">
+			  <li style="text-align: left; padding-left: 10px;" data-fast_access="{{$_protocole->fast_access}}" data-id="{{$_protocole->_id}}">
 				  <small style="display: none;" class="protocole">{{$_protocole->_id}}</small>
       		<img src="images/icons/a_right.png" />
           {{$_protocole->libelle}}
