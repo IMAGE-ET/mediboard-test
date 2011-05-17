@@ -1047,6 +1047,9 @@ class CPrescription extends CMbObject implements IPatientRelated {
     $wherePerf["prescription_line_mix.prescription_id"] = " = '$this->_id'";
     $wherePerf["prescription_line_mix.next_line_id"] = " IS NULL";
     $wherePerf["prescription_line_mix.substitution_active"] = " = '1'";
+    if ($protocole_id) {
+      $wherePerf["protocole_id"] = " = '$protocole_id'";
+    }
     $this->_counts_by_chapitre["med"] += $prescription_line_mix_item->countList($wherePerf, null, null, null, $ljoinPerf);
     $wherePerf["signature_prat"] = " = '0'";
     $this->_counts_by_chapitre_non_signee["med"] += $prescription_line_mix_item->countList($wherePerf, null, null, null, $ljoinPerf);
@@ -2174,12 +2177,12 @@ class CPrescription extends CMbObject implements IPatientRelated {
       return $modele;
     }
     $modele->object_class = "CPrescription";
-    $modele->chir_id = $praticien->_id;
+    $modele->user_id = $praticien->_id;
     $modele->type = $type;
     $modele->loadMatchingObject();
     if(!$modele->_id){
       // Recherche du modele au niveau de la fonction
-      $modele->chir_id = null;
+      $modele->user_id = null;
       $modele->function_id = $praticien->function_id;
       $modele->loadMatchingObject();
       if(!$modele->_id){
