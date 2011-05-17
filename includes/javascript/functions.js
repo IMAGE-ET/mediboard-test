@@ -1118,12 +1118,19 @@ Element.addMethods({
     
     var win = iframe.contentWindow;
     var doc = win.document;
+    var styleTag = "<style type='text/css'>";
     
-    doc.write("<html><head></head><body></body></html>");
-    
+    document.documentElement.select("style").each(function(elt) {
+      styleTag += elt.innerHTML;
+    })
+    styleTag += "</style>";
+
+    doc.write("<html><head></head><body>"+styleTag+"</body></html>");
+
     // !! Don't use PrototypeJS functions here, this is an iframe
     var head = doc.head || doc.getElementsByTagName('head')[0];
     var body = doc.body || doc.getElementsByTagName('body')[0];
+    
     var elements;
     
     if (Object.isElement(element))

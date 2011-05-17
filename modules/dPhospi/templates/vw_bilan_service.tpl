@@ -516,6 +516,9 @@ selectPeriode = function(element) {
 	</table>
 {{/foreach}}
 
+{{if !$trans_and_obs|@count && !$lines_by_patient|@count && $token_cat}}
+  <h2>Aucun résultat</h2>
+{{/if}}
 <table>
 	<tr>
 		<td>

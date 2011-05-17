@@ -54,6 +54,8 @@ foreach($service->_ref_chambres as &$_chambre){
 
 $smarty = new CSmartyDP;
 $smarty->assign("date", $date);
+$smarty->assign("hour", mbTime());
+$smarty->assign("service", $service);
 $smarty->assign("sejours", $sejours);
 $smarty->assign("dossiers_complets", $dossiers_complets);
 $smarty->display("offline_sejours.tpl");

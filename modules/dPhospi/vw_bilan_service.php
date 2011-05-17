@@ -41,6 +41,18 @@ $date_max = mbDate($dateTime_max);
 
 // Filtres du sejour
 $token_cat = CValue::get("token_cat","");
+
+if ($token_cat == "all") {
+  $token_cat = "trans|med|inj|perf|aerosol";
+  $categories = CCategoryPrescription::loadCategoriesByChap(null, "current");
+  
+  foreach ($categories as $categories_by_chap) {
+    foreach($categories_by_chap as $category_id => $_categorie) {
+      $token_cat .= "|$category_id";
+    }
+  }
+}
+
 $elts = $cats = explode("|",$token_cat);
 
 CMbArray::removeValue("med", $elts);
