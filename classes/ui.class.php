@@ -454,8 +454,8 @@ class CAppUI {
         return false;
       }
       
-      $user->user_username = trim($loginas);
-      $user->_user_password = $ldap_connection ? CValue::request("passwordas") : null;
+      $username = $user->user_username = trim($loginas);
+      $password = $user->_user_password = $ldap_connection ? CValue::request("passwordas") : null;
     } 
     // Standard login
     else {
