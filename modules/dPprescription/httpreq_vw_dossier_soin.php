@@ -176,7 +176,7 @@ if($object_id && $object_class){
 		// Calcul des prises prevues
 		$line->calculQuantiteTotal();
 		foreach($_dates as $curr_date){
-      $line->calculPrisesPrevues($curr_date);
+      $line->calculPrisesPrevues($curr_date, CAppUI::conf("dPprescription CPrescription manual_planif"));
 		}
     $line->calculAdministrations();
     
@@ -253,7 +253,7 @@ else {
     }
 		
     $with_calcul = $chapitre ? true : false; 
-		$prescription->calculPlanSoin($_dates, 0, null, null, null, $with_calcul, "", CAppUI::conf("dPprescription CPrescription manual_planif"));
+		$prescription->calculPlanSoin($_dates, 0, null, null, null, $with_calcul, "");
 
 	  // Chargement des operations
 	  if($prescription->_ref_object instanceof CSejour){

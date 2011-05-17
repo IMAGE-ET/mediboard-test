@@ -1893,7 +1893,10 @@ class CPrescription extends CMbObject implements IPatientRelated {
    * Suppression des planifications systemes
    */
   function removeAllPlanifSysteme(){
-    $planifSysteme = new CPlanificationSysteme();
+    if(!$this->_id){
+      return;
+    }
+		$planifSysteme = new CPlanificationSysteme();
     $planifSysteme->sejour_id = $this->object_id;
     $planifs = $planifSysteme->loadMatchingList();
     foreach($planifs as $_planif){
@@ -1908,7 +1911,9 @@ class CPrescription extends CMbObject implements IPatientRelated {
   /*
    * Génération du Dossier/Feuille de soin
    */
-  function calculPlanSoin($dates, $mode_feuille_soin = 0, $mode_semainier = 0, $mode_dispensation = 0, $code_cip = "", $with_calcul = true, $code_cis = "", $manual_planif = false){  
+  function calculPlanSoin($dates, $mode_feuille_soin = 0, $mode_semainier = 0, $mode_dispensation = 0, $code_cip = "", $with_calcul = true, $code_cis = ""){
+		$manual_planif = $mode_dispensation ? 0 : CAppUI::conf("dPprescription CPrescription manual_planif");
+		 
 	  $alert_handler = @CAppUI::conf("object_handlers CPrescriptionAlerteHandler");
 		
 		$this->calculAllPlanifSysteme();
@@ -2124,11 +2129,15 @@ class CPrescription extends CMbObject implements IPatientRelated {
          if(!$_prescription_line_mix->signature_prat && !CAppUI::conf("dPprescription CPrescription show_unsigned_lines")){
            continue;  
          }
+				 $count = 0;
 				 $_prescription_line_mix->calculQuantiteTotal();
 				 foreach($dates as $date){
 	         if(($date >= mbDate($_prescription_line_mix->_debut)) && ($date <= mbDate($_prescription_line_mix->_fin))){
-	         	@$this->_nb_lines_plan_soins[$_prescription_line_mix->type_line]++;
-            
+	         	 $count ++;
+	           if ($count == 1) {
+	             @$this->_nb_lines_plan_soins[$_prescription_line_mix->type_line]++;
+	           }
+						
 						if($_prescription_line_mix->_recent_modification){
 							if($alert_handler){
 							  $this->_count_recent_modif[$_prescription_line_mix->type_line] = true;
@@ -2136,7 +2145,7 @@ class CPrescription extends CMbObject implements IPatientRelated {
 						}
 
 	           if($with_calcul){
-	           	 $_prescription_line_mix->calculPrisesPrevues($date);
+	           	 $_prescription_line_mix->calculPrisesPrevues($date, $manual_planif);
 	           }
 	           $this->_ref_prescription_line_mixes_for_plan[$_prescription_line_mix->_id] = $_prescription_line_mix;
 	           $this->_ref_prescription_line_mixes_for_plan_by_type[$_prescription_line_mix->type_line][$_prescription_line_mix->_id] = $_prescription_line_mix;

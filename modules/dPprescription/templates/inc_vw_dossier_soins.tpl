@@ -45,17 +45,6 @@ addCibleTransmission = function(sejour_id, object_class, object_id, libelle_ATC)
   addTransmission(sejour_id, '{{$app->user_id}}', null, object_id, object_class, libelle_ATC);
 }
 
-addAdministrationPerf = function(prescription_line_mix_id, date, hour, time_prevue, mode_dossier, sejour_id){
-  var url = new Url("dPprescription", "httpreq_add_administration_perf");
-  url.addParam("prescription_line_mix_id", prescription_line_mix_id);
-  url.addParam("date", date);
-  url.addParam("hour", hour);
-  url.addParam("time_prevue", time_prevue);
-  url.addParam("mode_dossier", mode_dossier);
-  url.addParam("sejour_id", sejour_id);
-  url.addParam("date_sel", "{{$date}}");
-  url.popup(800,600,"Administration d'une prescription_line_mix");
-}
 
 editPerf = function(prescription_line_mix_id, date, mode_dossier, sejour_id){
   var url = new Url("dPprescription", "edit_perf_dossier_soin");
@@ -259,6 +248,17 @@ Main.add(function () {
   <input type="hidden" name="original_dateTime" value="" />
 </form>
 
+<form name="addManualPlanifPerf" action="" method="post">
+	<input type="hidden" name="dosql" value="do_planif_line_mix_aed" />
+  <input type="hidden" name="m" value="dPprescription" />
+  <input type="hidden" name="del" value="0" />
+  <input type="hidden" name="administrateur_id" value="{{$app->user_id}}" />
+  <input type="hidden" name="datetime" value="" />
+  <input type="hidden" name="planification_systeme_id" value="" />
+	<input type="hidden" name="prescription_line_mix_id" value="" />
+	<input type="hidden" name="original_datetime" value="" />
+</form>
+		
 	<table class="tbl">
 	  <tr>
 	    <th colspan="10" class="title text">

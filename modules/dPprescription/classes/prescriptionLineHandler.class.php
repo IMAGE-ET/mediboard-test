@@ -91,6 +91,8 @@ class CPrescriptionLineHandler extends CMbObjectHandler {
    foreach($lines as $type => $lines_by_type){
      foreach($lines_by_type as $_line){
      	 $_line->countLockedPlanif();
+			 
+			 // Si la ligne a des administrations liées a des planif systemes, on ne passe pas dans le handler
 			 if($_line->_count_locked_planif > 0){
 			 	 continue;
 			 }
@@ -150,7 +152,7 @@ class CPrescriptionLineHandler extends CMbObjectHandler {
               $operation->loadRefPlageOp();
             } else {
               continue;
-            }            
+            }
           }  
           // Si la ligne ne possede pas d'operation_id et qu'on manipule une operation, on lui affecte l'id de l'operation          
           $hour_operation = $operation->fin_op ? $operation->fin_op : ($operation->debut_op ? $operation->debut_op : $operation->time_operation);

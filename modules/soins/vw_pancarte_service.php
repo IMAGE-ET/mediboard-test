@@ -185,6 +185,23 @@ foreach($prescriptions as $_prescription){
 				continue;
 			}
 			
+			if (CAppUI::conf("dPprescription CPrescription manual_planif")){
+				if($_planif->_ref_object->_ref_prescription_line_mix->_continuite == "discontinue"){
+					$planification = new CAdministration();
+		      $where = array();
+		      $where["object_class"] = " = 'CPrescriptionLineMixItem'";
+		      $where["object_id"] = " = '{$_planif->_ref_object->_id}'";
+		      $where["original_dateTime"] = " = '$_planif->dateTime'";
+		      $where["planification"] = " = '1'";
+		      $count_planif = $planification->countList($where);
+		      if($count_planif){
+		        continue;
+		      }	
+				} else {
+					continue;
+				}
+			}
+				
       $_planif->_ref_object->updateQuantiteAdministration();
 			$list_lines[$type_line][$_planif->_ref_object->_ref_prescription_line_mix->_id] = $_planif->_ref_object->_ref_prescription_line_mix;
       $list_lines["perf_line"][$_planif->_ref_object->_id] = $_planif->_ref_object; 

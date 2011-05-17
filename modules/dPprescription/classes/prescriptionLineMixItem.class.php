@@ -43,6 +43,8 @@ class CPrescriptionLineMixItem extends CMbObject implements IPatientRelated {
   var $_unite_administration = null;
   
   var $_administrations = null;
+	var $_planifications = null;
+  
 	var $_ref_produit_prescription = null;
   
   // Can fields
@@ -51,6 +53,7 @@ class CPrescriptionLineMixItem extends CMbObject implements IPatientRelated {
   var $_can_vw_hospi = null;
 	
   var $_ref_administrations = null;
+	var $_ref_planifications = null;
   var $_view_unite_prise = null;
   var $_quantite_ml = null;
 	
@@ -334,8 +337,21 @@ class CPrescriptionLineMixItem extends CMbObject implements IPatientRelated {
 	}
 	
   function loadRefsAdministrations(){
-    $this->_ref_administrations = $this->loadBackRefs("administrations");
+    $administration = new CAdministration();
+    $administration->setObject($this);
+    $administration->planification = 0;
+    $this->_ref_administrations = $administration->loadMatchingList();
   }
+	
+	function loadRefsPlanifications($date){
+    $administration = new CAdministration();
+		$where = array();
+		$where["object_id"] = " = '$this->_id'";
+		$where["object_class"] = " = '$this->_class_name'";
+    $where["planification"] = " = '1'";
+		$where["dateTime"] = " LIKE '$date%'";
+		$this->_ref_planifications = $administration->loadList($where);
+	}
 	
   function loadRefProduitPrescription(){
     $this->_ref_produit_prescription = new CProduitPrescription();

@@ -38,7 +38,35 @@ foreach($prescription_line_mix->_ref_lines as $_perf_line){
   $where["object_id"] = " = '$_perf_line->_id'";
   $where["object_class"] = " = '$_perf_line->_class_name'";
   $where["dateTime"] = " LIKE '$date $_hour%'";
+	if($mode_dossier == "planification"){
+	  $where["planification"] = " = '1'";
+	} else {
+	  $where["planification"] = " = '0'";
+  }
   $administrations[$_perf_line->_id] = $administration->loadList($where);
+}
+
+$quantites = array();
+
+// Si une planification a ete faite, chargement des valeur de celle-ci
+if($mode_dossier == "administration"){
+	foreach($prescription_line_mix->_ref_lines as $_perf_line){
+		$planif = new CAdministration();
+		$planifications = array();
+	  $where = array();
+	  $where["object_id"] = " = '$_perf_line->_id'";
+	  $where["object_class"] = " = '$_perf_line->_class_name'";
+	  $where["dateTime"] = " LIKE '$date $_hour%'";
+	  $where["planification"] = " = '1'";
+	  $planifications = $administration->loadList($where);
+		
+		if(count($planifications)){
+			$_perf_line->_quantite_administration = 0;
+	    foreach($planifications as $_planif){
+	      $_perf_line->_quantite_administration += $_planif->quantite;
+	    }	
+		}
+	}
 }
 
 foreach($administrations as $_administrations){

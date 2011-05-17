@@ -210,22 +210,54 @@
     {{/foreach}}
   {{/foreach}}
 {{else}}
+  <!-- Affichage des planifications manuelles -->
+
   {{assign var=nb_prevue value=""}}
 	{{if $conf.dPprescription.CPrescription.manual_planif}}
-	  <td></td>
+	  <td>
+		 {{if $_prescription_line_mix->_continuite == "discontinue"}}
+		   <div class="manual_planif_line"> 
+			   {{foreach from=$_prescription_line_mix->_planifs_systeme item=_planifs_systeme}}
+				   {{foreach from=$_planifs_systeme item=_planif_systeme}}
+			     <div style="text-align: center; width: 40px; background-color: #fff; margin-top: -5px; margin-bottom: -5px;" 
+					      data-datetime="{{$_planif_systeme->dateTime}}"
+								data-planif_id="{{$_planif_systeme->_id}}" 
+								data-prescription_line_mix_id="{{$_prescription_line_mix->_id}}"
+             
+								class="draggable administration manual_planif"
+								id="drag_{{$_planif_systeme->_id}}">
+	           {{foreach from=$_prescription_line_mix->_ref_lines item=_perf_line name="lines_planif"}}
+						   {{assign var=nb_prevue value=$_perf_line->_quantite_administration}} 
+	             {{$nb_prevue}} {{if !$smarty.foreach.lines_planif.last}}<hr style="margin:0" />{{/if}}
+						 {{/foreach}}
+			     </div>
+			     <script type="text/javascript">
+            var draggable_planif = $("drag_{{$_planif_systeme->_id}}");
+            new Draggable("drag_{{$_planif_systeme->_id}}", PlanSoins.oDragOptions);
+            draggable_planif.onmousedown = function(){
+              PlanSoins.addDroppablesPerfDiv(draggable_planif);
+            }
+          </script>
+					{{/foreach}}
+			   {{/foreach}}
+			  </div>
+      {{/if}}
+	  </td>
 	{{/if}}
 	{{foreach from=$tabHours key=_view_date item=_hours_by_moment}}
     {{foreach from=$_hours_by_moment key=moment_journee item=_dates}}
       {{foreach from=$_dates key=_date item=_hours}}
         {{foreach from=$_hours key=_heure_reelle item=_hour}}
 		      {{assign var=_date_hour value="$_date $_heure_reelle"}}	
-			    <td class="{{$_view_date}}-{{$moment_journee}} td_hour_adm" style='text-align: center; padding: 0; width: 100px; cursor: pointer; {{if array_key_exists("$_date $_hour:00:00", $operations)}}border-right: 3px solid black;{{/if}}'>
+			    <td class="{{$_view_date}}-{{$moment_journee}} td_hour_adm colorPlanif 
+					           {{if @!array_key_exists(manual, $_prescription_line_mix->_prises_prevues.$_date.$_hour)}}canDrop{{/if}}"
+					    data-datetime="{{$_date}} {{$_hour}}:00:00"
+							style='text-align: center; padding: 0; width: 100px; cursor: pointer; {{if array_key_exists("$_date $_hour:00:00", $operations)}}border-right: 3px solid black;{{/if}}'>
 						
-						
-						  <div style="position: relative;">   
-               <span class="hour_adm">
-                 {{$_hour}}h
-               </span>
+						<div style="position: relative;">
+             <span class="hour_adm">
+               {{$_hour}}h
+             </span>
 						
 						{{foreach from=$_prescription_line_mix->_ref_lines item=_perf_line name="foreach_perf_line"}}
 					     {{if isset($_perf_line->_administrations.$_date.$_hour|smarty:nodefaults)}}
@@ -235,9 +267,18 @@
 					     {{/if}}
 
 							 {{if isset($_prescription_line_mix->_prises_prevues.$_date.$_hour|smarty:nodefaults)}} 
-							   {{assign var=count_prises value=$_prescription_line_mix->_prises_prevues.$_date.$_hour.real_hour|@count}}
-                 {{assign var=nb_prevue value=$_perf_line->_quantite_administration*$count_prises}} 
-                 {{assign var=hour_prevue value=$_prescription_line_mix->_prises_prevues.$_date.$_hour.real_hour}}
+							   {{if array_key_exists('real_hour', $_prescription_line_mix->_prises_prevues.$_date.$_hour)}}
+								   {{assign var=count_prises value=$_prescription_line_mix->_prises_prevues.$_date.$_hour.real_hour|@count}}
+	                 {{assign var=nb_prevue value=$_perf_line->_quantite_administration*$count_prises}} 
+	                 {{assign var=hour_prevue value=$_prescription_line_mix->_prises_prevues.$_date.$_hour.real_hour}}
+								 {{else}}
+								   {{assign var=perf_line_id value=$_perf_line->_id}}
+									 {{if array_key_exists($perf_line_id, $_prescription_line_mix->_prises_prevues.$_date.$_hour.manual)}}
+								     {{assign var=nb_prevue value=$_prescription_line_mix->_prises_prevues.$_date.$_hour.manual.$perf_line_id}}
+									 {{else}} 
+                     {{assign var=nb_prevue value=""}}
+                   {{/if}}
+								 {{/if}}
 							 {{else}}
 							   {{assign var=nb_prevue value=""}}
 							   {{assign var=hour_prevue value=""}}
@@ -258,19 +299,28 @@
 								 {{/if}}
                {{/if}}
 							 
-               <div style="margin: 3px;
+							 {{if $nb_prevue && $conf.dPprescription.CPrescription.manual_planif}}
+			          <script type="text/javascript">
+			            // Pour empecher de deplacer une case ou il y a plusieurs prises
+			            drag = new Draggable("drag-{{$_perf_line->_id}}-{{$_date}}-{{$_hour}}", PlanSoins.oDragOptions);
+			          </script>
+			         {{/if}}
+							 
+               <div id="drag-{{$_perf_line->_id}}-{{$_date}}-{{$_hour}}" style="margin: 3px;
 							       {{if ($_prescription_line_mix->_fin && ($_prescription_line_mix->_fin|date_format:"%Y-%m-%d %H:00:00" < $_date_hour)) || ($_prescription_line_mix->_debut|date_format:"%Y-%m-%d %H:00:00" > $_date_hour) || !$_prescription_line_mix->_active}}
 		                  background-color: #ccc
 											{{/if}}"
 										{{if $_prescription_line_mix->_active}}
-							      {{if isset($_prescription_line_mix->_prises_prevues.$_date.$_hour|smarty:nodefaults)}}
+							      {{if isset($_prescription_line_mix->_prises_prevues.$_date.$_hour.real_hour|smarty:nodefaults)}}
 										onclick="ObjectTooltip.createDOM(this, 'tooltip-content-prises-{{$_prescription_line_mix->_guid}}-{{$_date}}-{{$_hour}}', { duration: 0 } );"
 										{{else}}
-										ondblclick='addAdministrationPerf("{{$_prescription_line_mix->_id}}","{{$_date}}","{{$_hour}}", null,$V(document.mode_dossier_soin.mode_dossier), "{{$sejour->_id}}");'
+										ondblclick='PlanSoins.addAdministrationPerf("{{$_prescription_line_mix->_id}}","{{$_date}}","{{$_hour}}", null,"{{$sejour->_id}}");'
 										{{/if}}
 										{{/if}}
-                    class="administration {{$etat}} perfusion">
-										
+                    class="administration {{$etat}} perfusion {{if $nb_prevue && $conf.dPprescription.CPrescription.manual_planif}}draggablePlanif{{/if}}"
+										data-prescription_line_mix_id="{{$_prescription_line_mix->_id}}"
+										data-original_dateTime="{{$_date}} {{$_hour}}:00:00">
+				
 								 {{* Affichage des prises prevues et des administrations *}}
 								 {{if $nb_adm}}{{$nb_adm}}
 								 {{elseif $nb_prevue && $_prescription_line_mix->_active}}0{{/if}}
@@ -282,26 +332,25 @@
 							 </div>
 						{{/foreach}}
 						
-						
-						{{if isset($_prescription_line_mix->_prises_prevues.$_date.$_hour|smarty:nodefaults)}}
+						{{if isset($_prescription_line_mix->_prises_prevues.$_date.$_hour.real_hour|smarty:nodefaults)}}
 						  <div id="tooltip-content-prises-{{$_prescription_line_mix->_guid}}-{{$_date}}-{{$_hour}}" style="display: none;">
-							  {{foreach from=$_prescription_line_mix->_prises_prevues.$_date.$_hour.real_hour item=_prises}}
-								  {{foreach from=$_prises item=_prise}}
-									  <table class="tbl">
-									    <tr>
-									    	<th colspan="2">
-									    	  <button class="search" type="button" onclick='addAdministrationPerf("{{$_prescription_line_mix->_id}}","{{$_date}}","{{$_hour}}","{{$_prise}}",$V(document.mode_dossier_soin.mode_dossier), "{{$sejour->_id}}");'>Administrations de {{$_prise|date_format:$conf.time}}</button>
-												</th>
-									    </tr>
-											{{foreach from=$_prescription_line_mix->_ref_lines item=_perf_line}}
-											<tr>
-											  <td>{{$_perf_line->_ref_produit->libelle_abrege}}</td>
-												<td>{{$_perf_line->_quantite_administration}} {{$_perf_line->_unite_administration}}</td
-                      </tr>
-										  {{/foreach}}
-                    </table>	
-									 {{/foreach}} 
-							  {{/foreach}}
+							  	{{foreach from=$_prescription_line_mix->_prises_prevues.$_date.$_hour.real_hour item=_prises}}
+									  {{foreach from=$_prises item=_prise}}
+										  <table class="tbl">
+										    <tr>
+										    	<th colspan="2">
+										    	  <button class="search" type="button" onclick='PlanSoins.addAdministrationPerf("{{$_prescription_line_mix->_id}}","{{$_date}}","{{$_hour}}","{{$_prise}}","{{$sejour->_id}}");'>Administrations de {{$_prise|date_format:$conf.time}}</button>
+													</th>
+										    </tr>
+												{{foreach from=$_prescription_line_mix->_ref_lines item=_perf_line}}
+												<tr>
+												  <td>{{$_perf_line->_ref_produit->libelle_abrege}}</td>
+													<td>{{$_perf_line->_quantite_administration}} {{$_perf_line->_unite_administration}}</td
+	                      </tr>
+											  {{/foreach}}
+	                    </table>	
+										 {{/foreach}} 
+								  {{/foreach}}
 							</div>
 						{{/if}}
 						

@@ -90,6 +90,18 @@ PlanSoins = {
 	  url.popup(800,600,"Administration");
 	},
 	
+	addAdministrationPerf: function(prescription_line_mix_id, date, hour, time_prevue, sejour_id){
+	  var url = new Url("dPprescription", "httpreq_add_administration_perf");
+	  url.addParam("prescription_line_mix_id", prescription_line_mix_id);
+	  url.addParam("date", date);
+	  url.addParam("hour", hour);
+	  url.addParam("time_prevue", time_prevue);
+	  url.addParam("mode_dossier", $V(document.mode_dossier_soin.mode_dossier));
+	  url.addParam("sejour_id", sejour_id);
+	  url.addParam("date_sel", PlanSoins.date);
+	  url.popup(800,600,"Administration d'une prescription_line_mix");
+	},
+
 	addPlanification: function(date, time, key_tab, object_id, object_class, element_id){
 	  // Split de l'element_id
 	  var element = element_id.split("_");
@@ -133,6 +145,18 @@ PlanSoins = {
 	      PlanSoins.loadTraitement(null,date, $V(getForm("click").nb_decalage), 'planification', object_id, object_class, key_tab);
 	    } } ); 
 	  }
+	},
+	
+	addPlanificationPerf: function(planif_id, datetime, prescription_line_mix_id, original_datetime){    
+		var oFormPlanifPerf = getForm("addManualPlanifPerf");
+		$V(oFormPlanifPerf.planification_systeme_id, planif_id);
+		$V(oFormPlanifPerf.datetime, datetime);
+		$V(oFormPlanifPerf.prescription_line_mix_id, prescription_line_mix_id);
+    $V(oFormPlanifPerf.original_datetime, original_datetime);
+    
+    return onSubmitFormAjax(oFormPlanifPerf, { onComplete: function(){
+		  PlanSoins.loadTraitement(null, PlanSoins.date, $V(getForm("click").nb_decalage), 'planification', prescription_line_mix_id, 'CPrescriptionLineMix','');	
+		} });
 	},
 	
 	
@@ -268,7 +292,11 @@ PlanSoins = {
 	    element.select('.draggablePlanif').each(function(elt){
 	       elt.addClassName("draggable");
 	       elt.onmousedown = function(){
-	         PlanSoins.addDroppablesDiv(element);
+				 	 if(elt.hasClassName('perfusion')){
+             PlanSoins.addDroppablesPerfDiv(element);
+           } else {
+             PlanSoins.addDroppablesDiv(element);
+           }
 	       }
 	    });
 	    element.select('.canDropPlanif').each(function(elt){
@@ -364,6 +392,44 @@ PlanSoins = {
 	    } 
 	  });
 	},
+	
+	// Ajouts des zones droppables pour les perfusions
+	addDroppablesPerfDiv: function(draggable){
+		$('plan_soin').select('.before').each(function(td_before) {
+      td_before.onmouseover = function(){
+        PlanSoins.timeOutBefore = setTimeout(PlanSoins.showBefore, 1000);
+      }
+    });
+    $('plan_soin').select('.after').each(function(td_after) {
+      td_after.onmouseover = function(){
+        PlanSoins.timeOutAfter = setTimeout(PlanSoins.showAfter, 1000);
+      }
+    });
+    
+		$(draggable).up('tr').select('td.canDrop').each(function(td) {
+        Droppables.add(td, {
+          onDrop: function(element) {
+						var dateTime = td.get("datetime");
+						var prescription_line_mix_id = element.get("prescription_line_mix_id");
+						var planif_id = element.get("planif_id");
+						var original_dateTime = element.get("original_dateTime");
+						
+            // Ajout de la planification
+            PlanSoins.addPlanificationPerf(planif_id, dateTime, prescription_line_mix_id, original_dateTime);
+            // Suppression des zones droppables
+            Droppables.drops.clear(); 
+            $('plan_soin').select('.before').each(function(td_before) {
+              td_before.onmouseover = null;
+            });
+            $('plan_soin').select('.after').each(function(td_after) {
+              td_after.onmouseover = null;
+            });
+          },
+          hoverclass:'soin-selected'
+        } );
+    });
+	},
+	
 	// Deplacement du dossier vers la gauche
 	showBefore: function(){
 	  if(PlanSoins.formClick.nb_decalage.value >= 1){

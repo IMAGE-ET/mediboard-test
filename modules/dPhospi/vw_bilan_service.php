@@ -318,9 +318,15 @@ if (CValue::get("do") && ($do_medicaments || $do_injections || $do_perfusions ||
 			              $list_lines[$_perf_line->_class_name][$_perf_line->_id] = $_perf_line;
 										
 										// Plusieurs prises pdt la meme heure
-										$count_prises_by_hour = count($_prescription_line_mix->_prises_prevues[$_date][$_hour]["real_hour"]);
-										$lines_by_patient[$key1][$key2][$sejour->_id][$_date][$_hour]['CPrescriptionLineMix'][$_prescription_line_mix->_id][$_perf_line->_id]["prevu"] = $_perf_line->_quantite_administration * $count_prises_by_hour;
-			            }
+										if(array_key_exists("real_hour", $_prescription_line_mix->_prises_prevues[$_date][$_hour])){
+										  $count_prises_by_hour = count($_prescription_line_mix->_prises_prevues[$_date][$_hour]["real_hour"]);
+										  $lines_by_patient[$key1][$key2][$sejour->_id][$_date][$_hour]['CPrescriptionLineMix'][$_prescription_line_mix->_id][$_perf_line->_id]["prevu"] = $_perf_line->_quantite_administration * $count_prises_by_hour;
+										}
+									
+								    if(array_key_exists("manual", $_prescription_line_mix->_prises_prevues[$_date][$_hour])){
+											$lines_by_patient[$key1][$key2][$sejour->_id][$_date][$_hour]['CPrescriptionLineMix'][$_prescription_line_mix->_id][$_perf_line->_id]["prevu"] = $_prescription_line_mix->_prises_prevues[$_date][$_hour]["manual"][$_perf_line->_id];
+                    }
+									}
 			          }
 			        }
 		        }

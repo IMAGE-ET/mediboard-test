@@ -135,6 +135,7 @@ class CPrescriptionLineMix extends CMbObject {
 	var $_variations = null;
 	var $_last_variation = null;
 	var $_count_locked_planif = null;
+	var $_planifs_systeme = null;
 	
 	static $type_by_line = array(
 	  "perfusion"    => array("classique", "seringue", "PCA"),
@@ -561,24 +562,59 @@ class CPrescriptionLineMix extends CMbObject {
 	/*
    * Calcul des prises prevues pour la prescription_line_mix
    */
-  function calculPrisesPrevues($date){
+  function calculPrisesPrevues($date, $manual_planif){
   	if(!$this->_ref_lines){
   		return;
   	}
+		
+		$line_perf_ids = CMbArray::pluck($this->_ref_lines, "_id");
   	$line_perf = reset($this->_ref_lines);
 		
 		$planif = new CPlanificationSysteme();
+		$where = array();
 		$where["object_id"] = " = '$line_perf->_id'";
 		$where["object_class"] = " = '$line_perf->_class_name'";
 		$where["dateTime"] = " LIKE '$date%'";
 		$planifs = $planif->loadList($where, "dateTime ASC");
 		
-		foreach($planifs as $_planif){
-			$date = mbDate($_planif->dateTime);
-      $hour = mbTransformTime(null, $_planif->dateTime, "%H");
-			$this->_prises_prevues[$date][$hour]["real_hour"][] = mbTime($_planif->dateTime);
-			$this->_prises_prevues[$date][$hour]["plan_hour"] = "$hour:00:00";
-    }
+		if($manual_planif){
+			foreach($planifs as $_planif_id => $_planif){
+				$planification = new CAdministration();
+				$where = array();
+				$where["object_class"] = " = 'CPrescriptionLineMixItem'";
+        $where["object_id"] = CSQLDataSource::prepareIn($line_perf_ids); 
+				$where["original_dateTime"] = " = '$_planif->dateTime'";
+				$where["planification"] = " = '1'";
+				$count_planif = $planification->countList($where);
+				if($count_planif){
+					unset($planifs[$_planif_id]);
+				}
+			}
+		
+			$this->_planifs_systeme[$date] = $planifs;
+	
+		  // Parcours des lines items
+			foreach($this->_ref_lines as $_line_mix_item){
+	      $_line_mix_item->loadRefsPlanifications($date);
+				
+				// Parcours des planifications des lin
+        foreach($_line_mix_item->_ref_planifications as $_planif){
+		      $_date = mbDate($_planif->dateTime);
+		      $_hour = mbTransformTime(null, $_planif->dateTime, "%H");
+					if(!isset($this->_prises_prevues[$_date][$_hour]["manual"][$_line_mix_item->_id])){
+						$this->_prises_prevues[$_date][$_hour]["manual"][$_line_mix_item->_id] = 0;
+					}
+          $this->_prises_prevues[$_date][$_hour]["manual"][$_line_mix_item->_id] += $_planif->quantite;
+        }
+	    }
+		} else {
+			foreach($planifs as $_planif){
+        $_date = mbDate($_planif->dateTime);
+        $_hour = mbTransformTime(null, $_planif->dateTime, "%H");
+        $this->_prises_prevues[$_date][$_hour]["real_hour"][] = mbTime($_planif->dateTime);
+        $this->_prises_prevues[$_date][$_hour]["plan_hour"] = "$_hour:00:00";
+      }
+		}		
   }
 	
 	/*
@@ -893,7 +929,7 @@ class CPrescriptionLineMix extends CMbObject {
       }
     }
   }
-  
+	  
   /*
    * Chargement du praticien
    */

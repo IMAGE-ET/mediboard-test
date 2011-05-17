@@ -123,7 +123,7 @@
 				   		style='display: none; text-align: center; {{if array_key_exists("$_date $_hour:00:00", $operations)}}border-right: 3px solid black;{{/if}}'>
 				  
 					
-					 	<div style="position: relative;">		
+					 	<div style="position: relative;">
 						   <span class="hour_adm">
                  {{$_hour}}h
                </span>
