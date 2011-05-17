@@ -17,12 +17,12 @@ $list_bons = CValue::get("list_bons");
 // Recuperation des bons à imprimer
 $_list_bons = array();
 if(count($list_bons)){
-	foreach($list_bons as $_key_bon){
-		$explode_bon = explode("-", $_key_bon);
-		$line_bon = $explode_bon[0];
-		$hour_bon = $explode_bon[1];
-		$_list_bons[$line_bon][] = $hour_bon;
-	}
+  foreach($list_bons as $_key_bon){
+    $explode_bon = explode("-", $_key_bon);
+    $line_bon = $explode_bon[0];
+    $hour_bon = $explode_bon[1];
+    $_list_bons[$line_bon][] = $hour_bon;
+  }
 }
 
 $prescription = new CPrescription();
@@ -51,81 +51,81 @@ $chapitres = array("anapath", "biologie", "imagerie", "consult");
 
 // Stockage des bons
 if(count($prescription->_ref_lines_elt_for_plan)){
-	foreach($prescription->_ref_lines_elt_for_plan as $_name_chap => $lines_by_cat){
-	  if(!in_array($_name_chap, $chapitres) || ($sel_chapitre && $sel_chapitre != $_name_chap)){
-	    continue;
-	  }
-	  foreach($lines_by_cat as $_name_cat => $_lines){
-	    foreach($_lines as $lines_by_unite){
-	      foreach($lines_by_unite as $_line){
-	        if(is_array($_line->_quantity_by_date)){
-		        foreach($_line->_quantity_by_date as $unite => $_quantity_by_date){
-		          foreach($_quantity_by_date as $_date => $quantites){
-		            foreach($quantites as $_quantites){
-			            if(is_array($_quantites)){  
-			              foreach($_quantites as $_hour => $_quantite){
-			                $print_bon = false;
-											// Si le bon n'a pas ete selectionné
-											if(array_key_exists($_line->_id, $_list_bons) && in_array($_hour, $_list_bons[$_line->_id])){
-			                  $print_bon = true;
-											}
+  foreach($prescription->_ref_lines_elt_for_plan as $_name_chap => $lines_by_cat){
+    if(!in_array($_name_chap, $chapitres) || ($sel_chapitre && $sel_chapitre != $_name_chap)){
+      continue;
+    }
+    foreach($lines_by_cat as $_name_cat => $_lines){
+      foreach($_lines as $lines_by_unite){
+        foreach($lines_by_unite as $_line){
+          if(is_array($_line->_quantity_by_date)){
+            foreach($_line->_quantity_by_date as $unite => $_quantity_by_date){
+              foreach($_quantity_by_date as $_date => $quantites){
+                foreach($quantites as $_quantites){
+                  if(is_array($_quantites)){  
+                    foreach($_quantites as $_hour => $_quantite){
+                      $print_bon = false;
+                      // Si le bon n'a pas ete selectionné
+                      if(array_key_exists($_line->_id, $_list_bons) && in_array($_hour, $_list_bons[$_line->_id])){
+                        $print_bon = true;
+                      }
 
-											if(isset($_line->_administrations[$unite][$_date][$_hour]["quantite_planifiee"])){
-			                	$quantite = $_line->_administrations[$unite][$_date][$_hour]["quantite_planifiee"];
-												if($print_bon){
-			                    @$bons[$_name_chap][$_hour][$_name_cat][$_line->_id] += $quantite;
-												}
-												@$all_bons[$_name_chap][$_hour][$_name_cat][$_line->_id] += $quantite;
-			                }
-											
-											if(isset($_quantite["total"]) && $_quantite["total"]){
-												if($print_bon){		                  
-			                    @$bons[$_name_chap][$_hour][$_name_cat][$_line->_id] += $_quantite["total"];
-												}
-												@$all_bons[$_name_chap][$_hour][$_name_cat][$_line->_id] += $_quantite["total"];
-			                }
+                      if(isset($_line->_administrations[$unite][$_date][$_hour]["quantite_planifiee"])){
+                        $quantite = $_line->_administrations[$unite][$_date][$_hour]["quantite_planifiee"];
+                        if($print_bon){
+                          @$bons[$_name_chap][$_hour][$_name_cat][$_line->_id] += $quantite;
+                        }
+                        @$all_bons[$_name_chap][$_hour][$_name_cat][$_line->_id] += $quantite;
+                      }
+                      
+                      if(isset($_quantite["total"]) && $_quantite["total"]){
+                        if($print_bon){                      
+                          @$bons[$_name_chap][$_hour][$_name_cat][$_line->_id] += $_quantite["total"];
+                        }
+                        @$all_bons[$_name_chap][$_hour][$_name_cat][$_line->_id] += $_quantite["total"];
+                      }
 
-			                if(!array_key_exists($_line->_id, $lines)){
-			                  $lines[$_line->_id] = $_line;
-			                }
-			              
-										}
-			            }
-		            }
-		          }
-		        }
-	        }
-	        if(is_array($_line->_administrations)){
-			      foreach($_line->_administrations as $unite_prise => &$administrations_by_unite){
-			        foreach($administrations_by_unite as $_date => &$administrations_by_date){
-			          foreach($administrations_by_date as $_hour => &$administrations_by_hour){
-	                if(is_numeric($_hour)){
-                	  $print_bon = false;
+                      if(!array_key_exists($_line->_id, $lines)){
+                        $lines[$_line->_id] = $_line;
+                      }
+                    
+                    }
+                  }
+                }
+              }
+            }
+          }
+          if(is_array($_line->_administrations)){
+            foreach($_line->_administrations as $unite_prise => &$administrations_by_unite){
+              foreach($administrations_by_unite as $_date => &$administrations_by_date){
+                foreach($administrations_by_date as $_hour => &$administrations_by_hour){
+                  if(is_numeric($_hour)){
+                    $print_bon = false;
                     // Si le bon ne fait pas parti de ceux selectionnes
                     if(array_key_exists($_line->_id, $_list_bons) && in_array($_hour, $_list_bons[$_line->_id])){
                      $print_bon = true;
                     }
-										
-				          	$quantite_planifiee = @$administrations_by_hour["quantite_planifiee"];
-					          if($quantite_planifiee){
-		                	if($print_bon){
-			                  @$bons[$_name_chap][$_hour][$_name_cat][$_line->_id] += $quantite_planifiee;
-											}
-											@$all_bons[$_name_chap][$_hour][$_name_cat][$_line->_id] += $quantite_planifiee;
-					          }
-										
-	                	if(!array_key_exists($_line->_id, $lines)){
-			                $lines[$_line->_id] = $_line;
-			              }
-	                }
-			          }
-			        }
-			      }
-		      }
-	      }
-	    }
-	  }
-	}
+                    
+                    $quantite_planifiee = @$administrations_by_hour["quantite_planifiee"];
+                    if($quantite_planifiee){
+                      if($print_bon){
+                        @$bons[$_name_chap][$_hour][$_name_cat][$_line->_id] += $quantite_planifiee;
+                      }
+                      @$all_bons[$_name_chap][$_hour][$_name_cat][$_line->_id] += $quantite_planifiee;
+                    }
+                    
+                    if(!array_key_exists($_line->_id, $lines)){
+                      $lines[$_line->_id] = $_line;
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
 }
 
 // Tri par heures
@@ -138,47 +138,50 @@ foreach($all_bons as $_chap => &$_all_bons){
   ksort($_all_bons);
 }
 
-$ex_class = new CExClass;
-$ex_class->host_class = 'CPrescriptionLineElement';
-$ex_class->event      = 'prescription';
-
-$ex_classes = $ex_class->loadMatchingList();
-CExObject::$_multiple_load = true;
-CExClassField::$_load_lite = true;
-
 $ex_objects = array();
-foreach($lines as $_line) {
-  $ex_objects[$_line->_guid] = array();
-}
 
-foreach($ex_classes as $_ex_class) {
-  $ex_object = new CExObject;
-  $ex_object->_ex_class_id = $_ex_class->_id;
-  $ex_object->setExClass();
-		
-	foreach($lines as $_line) {
-		$where = array(
-      "object_class" => "='$_line->_class_name'",
-      "object_id"    => "='$_line->_id'",
-		);
-		
-		$_ex_objects = $ex_object->loadList($where, "ex_object_id DESC", 1);
-		$_ex_object = reset($_ex_objects);
-		
-    
-		
-		if ($_ex_object && $_ex_object->_id) {
-			CExClassField::$_load_lite = false;
-	      $_ex_object->_ex_class_id = $_ex_class->_id;
-	      $_ex_object->setExClass();
-	      $_ex_object->load();
-	      $_ex_object->loadTargetObject();
-	      $_ex_object->_ref_object->loadComplete();
-			CExClassField::$_load_lite = true;
-	    
-	    $ex_objects[$_line->_guid][] = $_ex_object;
-		}
-	}
+if ($print) {
+  $ex_class = new CExClass;
+  $ex_class->host_class = 'CPrescriptionLineElement';
+  $ex_class->event      = 'prescription';
+  
+  $ex_classes = $ex_class->loadMatchingList();
+  CExObject::$_multiple_load = true;
+  CExClassField::$_load_lite = true;
+  
+  foreach($lines as $_line) {
+    $ex_objects[$_line->_guid] = array();
+  }
+  
+  foreach($ex_classes as $_ex_class) {
+    $ex_object = new CExObject;
+    $ex_object->_ex_class_id = $_ex_class->_id;
+    $ex_object->setExClass();
+      
+    foreach($lines as $_line) {
+      $where = array(
+        "object_class" => "='$_line->_class_name'",
+        "object_id"    => "='$_line->_id'",
+      );
+      
+      $_ex_objects = $ex_object->loadList($where, "ex_object_id DESC", 1);
+      $_ex_object = reset($_ex_objects);
+      
+      
+      
+      if ($_ex_object && $_ex_object->_id) {
+        CExClassField::$_load_lite = false;
+          $_ex_object->_ex_class_id = $_ex_class->_id;
+          $_ex_object->setExClass();
+          $_ex_object->load();
+          $_ex_object->loadTargetObject();
+          $_ex_object->_ref_object->loadComplete();
+        CExClassField::$_load_lite = true;
+        
+        $ex_objects[$_line->_guid][] = $_ex_object;
+      }
+    }
+  }
 }
 
 // Creation d'un tableau des affectations pour la date courante
