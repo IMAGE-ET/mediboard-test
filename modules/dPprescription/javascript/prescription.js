@@ -427,6 +427,7 @@ Prescription = {
 	updatePerop: function(sejour_id){
 		var url = new Url("dPprescription", "httpreq_vw_perop");
 		url.addParam("sejour_id", sejour_id);
+		url.addParam("operation_id", window.DMI_operation_id);
 		url.requestUpdate("perop");
 	},
 	updateDebit: function(line_id) {
