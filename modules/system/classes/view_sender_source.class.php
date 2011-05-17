@@ -59,7 +59,7 @@ class CViewSenderSource extends CMbObject {
 		parent::updateFormFields();
 		
 		$this->_type_echange = $this->_class_name;
-		$this->_view         = $this->libelle ? $this->libelle : $this->name;
+		$this->_view         = $this->name . ($this->libelle ? " - $this->libelle" : "");
 	}
 
   function loadRefGroup() {
