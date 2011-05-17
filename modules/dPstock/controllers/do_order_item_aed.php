@@ -25,6 +25,7 @@ if(CValue::post("_create_order")) {
   );
   
   $septic = null;
+	$comments = null;
   
   // If a context is provided
   if ($context_guid = CValue::post("_context_guid")) {
@@ -48,7 +49,7 @@ if(CValue::post("_create_order")) {
   $order = new CProductOrder;
   $orders = $order->search("waiting", null, 1, $where);
 
-  if ($context_guid && count($orders) == 0) {
+  if (($context_guid || $comments == CProductOrder::$_return_form_label) && count($orders) == 0) {
     $orders = $order->search("locked", null, 1, $where);
   }
 

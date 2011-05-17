@@ -1,5 +1,12 @@
 
+<script type="text/javascript">
+  function orderProduct(form){
+    return true;
+  }
+</script>
+
 {{mb_form name="filterSocietes" m="dmi" tab=$tab}}
+  Laboratoire:
   {{mb_field object=$product field=societe_id form="filterSocietes" autocomplete="true,1,50,true,true"}}
   
   <button type="submit" class="search">{{tr}}Search{{/tr}}</button>

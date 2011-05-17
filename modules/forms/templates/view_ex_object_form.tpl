@@ -99,6 +99,12 @@ if (window.opener && !window.opener.closed && window.opener !== window && window
     
     <hr style="border-color: #333; margin: 4px 0;" />
     {{$ex_object->_ref_ex_class->name}} - {{$object}}
+		
+		{{if $parent_view}}
+			<span style="float: right; color: #666;">
+				Formulaire parent: {{$parent_view|smarty:nodefaults}}
+			</span>
+		{{/if}}
   </h2>
   
   <script type="text/javascript">

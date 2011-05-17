@@ -8,7 +8,7 @@
   <script type="text/javascript">
   Main.add(function(){
     var form = getForm("editExObject");
-    ExObject.initTriggers({{$ex_field->_triggered_data|@json}}, form, "{{$_field_name}}");
+    ExObject.initTriggers({{$ex_field->_triggered_data|@json}}, form, "{{$_field_name}}", "{{$ex_object->_ref_ex_class->name}}");
   });
   </script>
 {{/if}}

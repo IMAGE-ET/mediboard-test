@@ -44,7 +44,7 @@ ExObject = {
     });
   },
 	
-	initTriggers: function(triggers, form, elementName){
+	initTriggers: function(triggers, form, elementName, parent_view){
 		var inputs = Form.getInputsArray(form[elementName]);
     
 		var triggerFunc = function(input, triggers) {
@@ -54,9 +54,9 @@ ExObject = {
 				var form = input.form;
 				var object_guid = ExObject.current.object_guid;
 				var event = ExObject.current.event;
-				showExClassForm(ex_class_id, object_guid, /*object_guid+"_"+*/event+"_"+ex_class_id, "", event);
+				showExClassForm(ex_class_id, object_guid, /*object_guid+"_"+*/event+"_"+ex_class_id, "", event, null, parent_view);
 			}
-		} 
+		}
 		
     inputs.each(function(input){
       var callback = triggerFunc.curry(input, triggers);
@@ -255,13 +255,14 @@ selectExClass = function(element, object_guid, event, _element_id) {
   showExClassForm($V(element) || element.value, object_guid, view, null, event, _element_id);
   element.selectedIndex = 0;
 }
-showExClassForm = function(ex_class_id, object_guid, title, ex_object_id, event, _element_id) {
+showExClassForm = function(ex_class_id, object_guid, title, ex_object_id, event, _element_id, parent_view) {
   var url = new Url("forms", "view_ex_object_form");
   url.addParam("ex_class_id", ex_class_id);
   url.addParam("object_guid", object_guid);
   url.addParam("ex_object_id", ex_object_id);
   url.addParam("event", event);
   url.addParam("_element_id", _element_id);
+  url.addParam("parent_view", parent_view);
 
   var _popup = true;//Control.Overlay.container && Control.Overlay.container.visible();
 

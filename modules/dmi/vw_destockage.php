@@ -45,6 +45,7 @@ foreach($receptions as $_id => $_reception) {
   $_reception->_used_quantity = $_reception->countBackRefs('lines_dmi');
   $_reception->_remaining_quantity = $qty - $_reception->_used_quantity;
   $_reception->_new_order_item = new CProductOrderItem;
+  $_reception->_new_order_item->renewal = 0;
   
   $_reception->loadRefOrderItem();
   $_reception->_ref_order_item->loadReference();
