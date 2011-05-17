@@ -88,12 +88,6 @@ viewLegend = function(){
   url.modale("Légende");
 }
 
-viewDossier = function(sejour_id){
-  var url = new Url("dPprescription", "vw_dossier_cloture");
-  url.addParam("sejour_id", sejour_id);
-  url.popup(800,600,"Dossier cloturé");
-}
-
 calculSoinSemaine = function(date, prescription_id){
   var url = new Url("dPprescription", "httpreq_vw_dossier_soin_semaine");
   url.addParam("date", date);
@@ -274,7 +268,6 @@ Main.add(function () {
              onclick="modalWindow.close(); if(window.refreshLinePancarte){ refreshLinePancarte('{{$prescription_id}}'); }
 					            if(window.refreshLineSejour){ refreshLineSejour('{{$sejour->_id}}'); }" id="modal_button">{{tr}}Close{{/tr}}</button>
            {{/if}}
-	 	 	     <button type="button" class="print" style="float: right" onclick="viewDossier('{{$sejour->_id}}');">Dossier</button>
 	    	 </span>
 	       <a style="float: left" href="?m=dPpatients&amp;tab=vw_full_patients&amp;patient_id={{$patient->_id}}"'>
 	        {{include file="../../dPpatients/templates/inc_vw_photo_identite.tpl" patient=$patient size=42}}
