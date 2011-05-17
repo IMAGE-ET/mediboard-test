@@ -1228,7 +1228,7 @@ class CSetupdPpatients extends CSetup {
     
     $this->makeRevision("1.11");
     
-    function changeTa() {
+    /*function changeTa() {
       $mbConfig = new CMbConfig;
       $mbConfig->load();
       $important_constants = $mbConfig->get("dPpatients CConstantesMedicales important_constantes");
@@ -1240,7 +1240,7 @@ class CSetupdPpatients extends CSetup {
       $mbConfig->update(array("dPpatients"=> array("CConstantesMedicales" => array("important_constantes" => $important_constants))));
       return true;
     }
-    $this->addFunction("changeTa");
+    $this->addFunction("changeTa");*/
     
     $query = "UPDATE constantes_medicales
               SET ta_gauche = ta, ta = NULL
