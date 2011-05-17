@@ -1232,7 +1232,11 @@ class CSetupdPpatients extends CSetup {
       $mbConfig = new CMbConfig;
       $mbConfig->load();
       $important_constants = $mbConfig->get("dPpatients CConstantesMedicales important_constantes");
-      $important_constants = preg_replace("/(|)*ta(|)*/", "ta_gauche", $important_constants);
+      $important_constants = preg_replace("/^ta$/", "ta_gauche", $important_constants);
+      $important_constants = preg_replace("/ta\|/", "ta_gauche|" , $important_constants);
+      $important_constants = preg_replace("/\|ta\|/", "|ta_gauche|", $important_constants);
+      $important_constants = preg_replace("/\|ta$/", "|ta_gauche", $important_constants);
+
       $mbConfig->update(array("dPpatients"=> array("CConstantesMedicales" => array("important_constantes" => $important_constants))));
       return true;
     }
