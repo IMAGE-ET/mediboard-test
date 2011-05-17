@@ -1226,7 +1226,24 @@ class CSetupdPpatients extends CSetup {
       ADD perimetre_thoracique FLOAT UNSIGNED";
     $this->addQuery($query);
     
-    $this->mod_version = "1.11";
+    $this->makeRevision("1.11");
+    
+    function changeTa() {
+      $mbConfig = new CMbConfig;
+      $mbConfig->load();
+      $important_constants = $mbConfig->get("dPpatients CConstantesMedicales important_constantes");
+      $important_constants = preg_replace("/(|)*ta(|)*/", "ta_gauche", $important_constants);
+      $mbConfig->update(array("dPpatients"=> array("CConstantesMedicales" => array("important_constantes" => $important_constants))));
+      return true;
+    }
+    $this->addFunction("changeTa");
+    
+    $query = "UPDATE constantes_medicales
+              SET ta_gauche = ta, ta = NULL
+              WHERE ta IS NOT NULL AND ta_gauche IS NULL";
+    $this->addQuery($query);
+    
+    $this->mod_version = "1.12";
   }
 }
 
