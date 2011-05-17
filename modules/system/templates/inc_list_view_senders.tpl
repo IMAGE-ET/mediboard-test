@@ -51,17 +51,9 @@
       </td>
       <td>
   		  {{foreach from=$senders_source item=_sender_source}}
-  		    {{assign var=source_ftp value=$_sender_source->_ref_source->_ref_source_ftp}}
-  		    {{unique_id var=uid}}
+        {{assign var=source value=$_sender_source->_ref_source}}
 
-          {{main}}
-            ViewSender.resfreshImageStatus($('{{$uid}}'));
-          {{/main}}
-
-          <img class="status" id="{{$uid}}" data-id="{{$source_ftp->_id}}" 
-            data-guid="{{$source_ftp->_guid}}" src="images/icons/status_grey.png" 
-            title="{{$source_ftp->name}}"
-            onmouseover="ObjectTooltip.createEx(this, '{{$_sender_source->_guid}}');"/>
+        <div><span onmouseover="ObjectTooltip.createEx(this, '{{$source->_guid}}');">{{$source}}</span></div>
         {{foreachelse}}
         <div class="empty">{{tr}}CViewSender-back-sources_link.empty{{/tr}}</div>
         {{/foreach}}
