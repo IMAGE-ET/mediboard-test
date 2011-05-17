@@ -249,7 +249,7 @@ class CActeCCAM extends CActe {
    * @return bool
    */
   function checkCompat() {
-    if($this->object_class == "CConsultation") {
+    if($this->object_class == "CConsultation" || $this->_permissive) {
       return;
     }
     $this->loadRefCodeCCAM();

@@ -23,6 +23,7 @@ class CActe extends CMbMetaObject {
   
   // Behaviour fields
   var $_check_coded  = true;
+  var $_permissive   = null;
   
   // Distant object
   var $_ref_sejour = null;
