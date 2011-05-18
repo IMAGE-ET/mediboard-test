@@ -949,6 +949,7 @@ Object.extend(Control.Modal,{
           else {
             var overlay = Control.Overlay.container;
             overlay.style.zIndex = Control.Modal.stack.last().container.style.zIndex - 1;
+            Control.Overlay.positionIFrameShim();
           }
             //Control.Modal.current = false;
             this.overlayFinishedOpening = false;
