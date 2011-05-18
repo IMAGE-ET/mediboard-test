@@ -311,12 +311,6 @@ Main.add(function () {
 							 {{if $sejour->_sortie|iso_date > $date}}onclick="PlanSoins.loadTraitement('{{$sejour->_id}}','{{$next_date}}','','administration', null, null, null, null, '1');"{{/if}}
 							 ></button>
 		</h1>
-		 
-		 {{if $date != $today}}
-			 <div class="small-warning">
-			 Attention, le dossier de soin que vous êtes en train de visualiser n'est pas celui de la journée courante
-			 </div>
-		 {{/if}}
 		
 		<table style="width: 100%">
 		   <tr>
