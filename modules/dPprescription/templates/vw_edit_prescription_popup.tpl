@@ -215,11 +215,11 @@ selectLines = function(prescription_id, protocole_id) {
   </tr>
   {{else}}
    {{if $full_mode && $sejour_id}}
-    <tr>
+	  <tr>
       <td>
 				  <table class="form">
 				    <tr>
-				      {{if !$is_praticien}}
+				      {{if $can->admin || (!$is_praticien && !$conf.dPprescription.CPrescription.role_propre)}}
                 <th class="title">Praticien</th>
               {{/if}}
               {{if $operations|@count > 1}}
@@ -229,7 +229,7 @@ selectLines = function(prescription_id, protocole_id) {
 				      <th class="title" >Protocole</th>
 				    </tr>
 				    <tr>
-				    {{if !$is_praticien}}
+				    {{if $can->admin || (!$is_praticien && !$conf.dPprescription.CPrescription.role_propre)}}
 				      <td>
 				      <select name="praticien_id" id="choix_prat" onchange="$V(getForm('applyProtocoleFirst').praticien_id, this.value); emptyProtocole();">
 			         <optgroup label="Responsables">

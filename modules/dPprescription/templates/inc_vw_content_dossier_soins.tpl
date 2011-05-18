@@ -38,8 +38,17 @@
 	            <img src="images/icons/next.png" alt="&gt;" />
 	          </a>     
 	          <strong>
+	          
+						{{assign var=key_borne value="$_date-$moment_journee"}}	
+						{{assign var=bornes_poste value=$bornes_composition_dossier.$key_borne}}
+
 	            <a href="#1" onclick="PlanSoins.selColonne('{{$_date}}-{{$moment_journee}}')">
-	              {{$view_poste}} du {{$_date|date_format:"%d/%m"}}
+	              {{$view_poste}} du 
+								{{if $bornes_poste.min|iso_date != $bornes_poste.max|iso_date}}
+								  {{$bornes_poste.min|date_format:"%d/%m"}} au {{$bornes_poste.max|date_format:"%d/%m"}}
+								{{else}}
+								  {{$_date|date_format:"%d/%m"}}
+								{{/if}}
 	            </a>
 	          </strong>
 	        </th>

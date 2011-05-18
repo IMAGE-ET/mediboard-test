@@ -244,7 +244,6 @@ class CAdministration extends CMbMetaObject implements IPatientRelated {
 		    }
 		  }
 		}
-		
 		return $postes;
 	}
 }
