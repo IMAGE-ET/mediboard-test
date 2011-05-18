@@ -500,7 +500,7 @@ PlanSoins = {
 	  var url = new Url("soins", "ajax_modal_task");
 	  url.addParam("sejour_id", sejour_id);
 	  url.addParam("prescription_line_element_id", prescription_line_element_id);
-	  url.requestModal(600);
+	  url.requestModal(600, 200);
   },
 	
 	refreshTask: function(prescription_line_element_id){

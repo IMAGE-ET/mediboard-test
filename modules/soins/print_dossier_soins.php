@@ -24,6 +24,7 @@ $sejour->loadComplete();
 $sejour->loadListConstantesMedicales();
 $sejour->loadRefsOperations();
 $sejour->canRead();
+$sejour->loadRefsTasks();
 
 foreach($sejour->_ref_operations as $_interv) {
   $_interv->loadRefPraticien();

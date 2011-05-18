@@ -26,7 +26,8 @@ var AideSaisie = {
         defaultUserView: null,
         property: '',
         strict: true,
-        timestamp: "-- %n %p - dd/MM/y HH:mm"
+        timestamp: "-- %n %p - dd/MM/y HH:mm",
+        height: "auto"
       }, options);
       this.init();
     },
@@ -60,7 +61,8 @@ var AideSaisie = {
       var list = new Element("div", {
         id: this.searchField.id + "_auto_complete"
       }).addClassName("autocomplete").setStyle({
-        width: "400px"
+        width: "400px",
+        height: this.options.height
       }).hide();
       
       this.searchField.insert({after: list});

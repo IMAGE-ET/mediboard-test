@@ -128,6 +128,10 @@
    {{/foreach}}
 </table>
 
+<br style="page-break-after: always;" />
+
+{{mb_include module=soins template=inc_vw_tasks_sejour mode_realisation=0 readonly=1}}
+
 {{if !@$offline}}
 
 <!-- re-ouverture du tableau -->

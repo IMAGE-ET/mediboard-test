@@ -4,11 +4,13 @@ Main.add(function(){
 	var oForm = getForm("addTask-{{$sejour_id}}");
 	           
 	new AideSaisie.AutoComplete(oForm.description, {
-	  objectClass: "CSejourTask"
+	  objectClass: "CSejourTask",
+    height: "100px"
 	});
 	   
 	new AideSaisie.AutoComplete(oForm.resultat, {
-	  objectClass: "CSejourTask"
+	  objectClass: "CSejourTask",
+    height: "100px"
 	});   
 });	
 	
