@@ -302,8 +302,9 @@ class CRecordSante400 {
       return null;
     }    
     
-    $h = $array[1] % 24;
-    $m = $array[2] % 60;
+    // Escape crazy values
+    $h = str_pad($array[1] % 24, 2, "0", STR_PAD_LEFT);
+    $m = str_pad($array[2] % 60, 2, "0", STR_PAD_LEFT);
     return "$h:$m:00";
   }
 
