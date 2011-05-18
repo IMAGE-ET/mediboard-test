@@ -20,7 +20,7 @@ var Console = {
     }
     
     var eDiv = new Element("div", {className: sClass});
-    eDiv.innerHTML = sContent.toString().escapeHTML();
+    eDiv.innerHTML = (sContent+"").escapeHTML();
 
     if (nIndent) {
       eDiv.setStyle({ marginLeft: nIndent + "em" });
@@ -197,7 +197,20 @@ var Console = {
     var dStop = new Date;
     this.debug(dStop - this.dStart, "Duration in milliseconds");
     this.dStart = null;
-  }
+  },
+	
+	exec: function(form) {
+		try {
+			var ret = eval(form.elements.code.value);
+			Console.trace(ret);
+		} catch(e) {
+			Console.error(e);
+		}
+		
+		form.elements.code.value = "";
+		
+		return false;
+	}
 };
 
 // If there is no console object, it uses the Mediboard Console
@@ -205,6 +218,17 @@ if (typeof console === "undefined") {
   Console.log = Console.debug;
   window.console = Console;
   window.console._mediboard = true;
+}
+else {
+  try {
+    document.observe("keydown", function(e){
+      var key = Event.key(e);
+			if (e.altKey && key == 123) {
+				$(Console.id).show();
+				getForm("debug-console").elements.code.tryFocus();
+			}
+    });
+	} catch(e) {}
 }
 
 /**

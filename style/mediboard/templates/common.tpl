@@ -159,6 +159,10 @@
     Javascript console
   </div>
   <div class="body"></div>
+	<form name="debug-console" method="get" onsubmit="return Console.exec(this)">
+	  <input type="text" size="90" name="code" value="" />
+	  <button class="tick notext" onclick=""></button>
+	</form>
 </div>
 
 <!-- Mails -->
