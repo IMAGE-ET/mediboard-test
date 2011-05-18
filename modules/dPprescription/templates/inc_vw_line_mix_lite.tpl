@@ -93,14 +93,17 @@
   </td> 
   
   {{if $_prescription_line_mix->type_line == "aerosol"}}
-    <td style="width: 20%">
+    <td style="width: 8%;" class="text">
+      {{$_prescription_line_mix->_frequence}}
+    </td>
+    <td style="width: 12%">
       {{if $_prescription_line_mix->interface}}
         {{tr}}CPrescriptionLineMix.interface.{{$_prescription_line_mix->interface}}{{/tr}}
       {{/if}}
     </td>
   {{else}}
     <td style="width: 5%;" class="text">
-    {{$_prescription_line_mix->_frequence}}
+      {{$_prescription_line_mix->_frequence}}
     </td>
     <td style="width: 15%;" class="text">
       <a href=# onmouseover="ObjectTooltip.createEx(this, '{{$_prescription_line_mix->_guid}}');" style="display: inline; font-weight: bold;">

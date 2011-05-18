@@ -89,6 +89,13 @@ addCibleTransmission = function(sejour_id, object_class, object_id, libelle_ATC,
   addTransmission(sejour_id, '{{$app->user_id}}', null, object_id, object_class, libelle_ATC, update_plan_soin);
 }
 
+viewBilanService = function(service_id, date){
+  var url = new Url("dPhospi", "vw_bilan_service");
+  url.addParam("service_id", service_id);
+  url.addParam("date", date);
+  url.popup(800,500,"Bilan par service");
+}
+
 Main.add(function(){
   updatePlanSoinsPatients();
 	Calendar.regField(getForm("updateActivites").date);
@@ -123,6 +130,9 @@ Main.add(function(){
 <table class="main">
 	<tr>
 		<th class="title" colspan="3">
+      <span style="float: right;">
+        <button class="search" onclick="viewBilanService('{{$service->_id}}', '{{$date}}');">Bilan</button>
+      </span>
 			<form name="updateActivites" action="?" method="get">
 				<input type="hidden" name="m" value="{{$m}}" />
 				<input type="hidden" name="tab" value="{{$tab}}" />

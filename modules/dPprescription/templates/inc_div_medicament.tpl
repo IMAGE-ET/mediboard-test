@@ -382,8 +382,9 @@ updateModaleAfterAddLine = function(line_id){
 				    <th style="width: 5%;" class="narrow"></th>
 				    <th style="width: 45%;">Médicaments</th> 
 				    
-						{{if $type_line == "aerosol"}}
-	            <th style="width: 20%;">Interface</th>
+				    {{if $type_line == "aerosol"}}
+  						<th style="width: 8%;">Fréquence</th>
+	            <th style="width: 12%;">Interface</th>
 	          {{else}}
 		          <th style="width: 5%;">Débit</th>
 		          <th style="width: 15%;">Type / Voie</th>					

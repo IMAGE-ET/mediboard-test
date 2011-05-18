@@ -760,6 +760,7 @@ Main.add( function(){
 	                <option value="{{$_line_subst->_guid}}">
 	                   {{if $_line_subst->_class_name == "CPrescriptionLineMix"}}
 	                     {{$_line_subst->_short_view}}
+                       ({{$_line_subst->_frequence}})
 	                   {{else}}
 	                     {{$_line_subst->_view}}
 	                   {{/if}}
