@@ -979,12 +979,18 @@ class CPrescription extends CMbObject implements IPatientRelated {
       $where["prescription_id"] = " = '$this->_id'";
       $where["child_id"] = "IS NULL";
       $where["substitution_line_id"] = "IS NULL";
+      $where["substitute_for_id"] = "IS NULL";
+      $where["substitution_active"] = " = '1'";
+      
       if ($praticien_id) {
         $where["praticien_id"] = " = '$praticien_id'";
       } 
+      
       $this->_counts_no_valide = $line->countList($where);
-
+      
       unset($where["substitution_line_id"]);
+      unset($where["substitute_for_id"]);
+      unset($where["substitution_active"]);
       
       $line = new CPrescriptionLineElement();
       $this->_counts_no_valide += $line->countList($where);
@@ -994,7 +1000,10 @@ class CPrescription extends CMbObject implements IPatientRelated {
       
       $line = new CPrescriptionLineMix();
       $where = array();
+      $where["substitute_for_id"] = "IS NULL";
+      $where["substitution_active"] = " = '1'";
       $where["prescription_id"] = " = '$this->_id'";
+      
       $where["signature_prat"] = " = '0'";
       if ($praticien_id) {
         $where["praticien_id"] = " = '$praticien_id'";
