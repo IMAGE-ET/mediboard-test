@@ -772,6 +772,10 @@ Control.Window.baseZIndex = 499;
 Control.Overlay.styles.zIndex = 498;
 Control.Overlay.ieStyles.zIndex = 498;
 
+if (document.documentMode >= 8) {
+	Control.Overlay.ieStyles.position = "fixed";
+}
+
 // Replacements for the javascript alert() and confirm()
 var Modal = {
   alert: function(message, options) {

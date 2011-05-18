@@ -183,7 +183,11 @@ var Url = Class.create({
 
       var wasClosedBefore = !window.children[sWindowName] || window.children[sWindowName].closed;
       
-      this.oWindow = window.open(oPostParameters ? "" : (sBaseUrl + this.make()), sWindowName, sFeatures);  
+      try {
+        this.oWindow = window.open(oPostParameters ? "" : (sBaseUrl + this.make()), sWindowName, sFeatures);
+      } catch(e) {
+        return;
+      }
       window.children[sWindowName] = this.oWindow;
       
       if (wasClosedBefore && this.oWindow.history.length == 0) {
