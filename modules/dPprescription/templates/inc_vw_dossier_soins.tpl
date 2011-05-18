@@ -194,9 +194,13 @@ Main.add(function () {
   refreshTabState();
 	
   document.observe("mousedown", function(e){
-    if (!Event.element(e).up(".tooltip")){
-		  $$(".tooltip").invoke("hide");
-  	}
+	 // fait crasher IE quand ouvert dans une iframe dans un showModalDialog:
+	 // l'evenement est lancé sur la balise html et ca plante
+	  try {
+	    if (!Event.element(e).up(".tooltip")){
+			  $$(".tooltip").invoke("hide");
+	  	}
+		} catch(e) {}
   });
 
   {{if !$hide_close}}
