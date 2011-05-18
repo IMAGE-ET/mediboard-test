@@ -480,7 +480,7 @@ var TokenField = Class.create({
 
 function guid_log(guid) {
   var parts = guid.split("-");
-	var url = new Url("system", "view_history");
+  var url = new Url("system", "view_history");
   url.addParam("object_class", parts[0]);
   url.addParam("object_id", parts[1]);
   url.addParam("user_id", "");
@@ -490,7 +490,7 @@ function guid_log(guid) {
 
 function guid_ids(guid) {
   var parts = guid.split("-");
-	var url = new Url("dPsante400", "view_identifiants");
+  var url = new Url("dPsante400", "view_identifiants");
   url.addParam("object_class", parts[0]);
   url.addParam("object_id", parts[1]);
   url.popup(750, 400, "sante400");
@@ -773,7 +773,7 @@ Control.Overlay.styles.zIndex = 498;
 Control.Overlay.ieStyles.zIndex = 498;
 
 if (document.documentMode >= 8) {
-	Control.Overlay.ieStyles.position = "fixed";
+  Control.Overlay.ieStyles.position = "fixed";
 }
 
 // Replacements for the javascript alert() and confirm()
@@ -783,7 +783,8 @@ var Modal = {
       className: 'modal alert big-warning',
       okLabel: 'OK',
       onValidate: Prototype.emptyFunction,
-      closeOnClick: null
+      closeOnClick: null,
+      iframeshim: false
     }, options);
     
     // Display element
@@ -810,7 +811,8 @@ var Modal = {
       onOK: Prototype.emptyFunction,
       onKO: Prototype.emptyFunction,
       onValidate: Prototype.emptyFunction,
-      closeOnClick: null
+      closeOnClick: null,
+      iframeshim: false
     }, options);
     
     // Display element  
@@ -865,7 +867,8 @@ var Modal = {
     options = Object.extend({
       className: 'modal',
       closeOnClick: null,
-      overlayOpacity: 0.5
+      overlayOpacity: 0.5,
+      iframeshim: false
     }, options);
     
     return Control.Modal.open(container, options);
@@ -877,7 +880,8 @@ window.open = function(element, title, options) {
     className: 'modal popup',
     width: 800,
     height: 500,
-    iframe: true
+    iframe: true,
+    iframeshim: false
   }, options);
   
   Control.Modal.open(element, options);
