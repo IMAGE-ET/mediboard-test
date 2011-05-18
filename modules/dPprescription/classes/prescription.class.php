@@ -2186,12 +2186,12 @@ class CPrescription extends CMbObject implements IPatientRelated {
       return $modele;
     }
     $modele->object_class = "CPrescription";
-    $modele->user_id = $praticien->_id;
+    $modele->chir_id = $praticien->_id;
     $modele->type = $type;
     $modele->loadMatchingObject();
     if(!$modele->_id){
       // Recherche du modele au niveau de la fonction
-      $modele->user_id = null;
+      $modele->chir_id = null;
       $modele->function_id = $praticien->function_id;
       $modele->loadMatchingObject();
       if(!$modele->_id){
