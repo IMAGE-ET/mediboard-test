@@ -67,7 +67,8 @@
 	          {{foreach from=$_hours key=_heure_reelle item=_hour}}
 	            <th class="{{$_date}}-{{$moment_journee}}" 
 	                style='width: 50px; text-align: center; 
-	              {{if array_key_exists("$_date $_hour:00:00", $operations)}}border-right: 3px solid black;{{/if}}'>
+	              {{if array_key_exists("$_date $_hour:00:00", $operations)}}border-right: 3px solid black;{{/if}}
+								{{if $now|date_format:"%Y-%m-%d %H" == "$_date_reelle $_hour"}}background-color: #fff;{{/if}}'>
 	              <a href="#1" onclick="PlanSoins.selColonne('{{$_date}}-{{$_hour}}');">{{$_hour}}h</a>
 	              {{if array_key_exists("$_date $_hour:00:00", $operations)}}
 	                {{assign var=_hour_op value="$_date $_hour:00:00"}}
@@ -76,7 +77,7 @@
 	            </th>   
 	          {{/foreach}}
 	        {{/foreach}}
-	      {{/foreach}} 
+	      {{/foreach}}
 	    {{/foreach}}
 	    <th></th>
 	    <th>Dr</th>
