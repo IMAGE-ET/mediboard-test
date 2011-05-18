@@ -1,17 +1,5 @@
 <!-- $Id$ -->
 
-<script type="text/javascript">
-
-function printAdmission(id) {
-  var url = new Url;
-  url.setModuleAction("dPadmissions", "print_admission");
-  url.addParam("id", id);
-  url.popup(700, 550, "Patient");
-}
-
-</script>
-
-
 <table class="main">
   <tr>
     <th>
@@ -92,22 +80,22 @@ function printAdmission(id) {
           {{/if}}
           <!-- Patient -->
           <td class="text">
-            <a href="#" onclick="printAdmission({{$sejour->_id}})">
+            <span onmouseover="ObjectTooltip.createEx(this, '{{$patient->_guid}}');">
               {{$patient->_view}}
-            </a>
+            </span>
           </td>
           <td>
-            <a href="#" onclick="printAdmission({{$sejour->_id}})">
-              {{$patient->naissance|date_format:"%d/%m/%Y"}}
-            </a>
+            {{$patient->naissance|date_format:"%d/%m/%Y"}}
           </td>
       
           <!-- Sejour -->
           <td class="text">
-            {{mb_value object=$sejour field=_entree}}
+            <span onmouseover="ObjectTooltip.createEx(this, '{{$sejour->_guid}}');">
+              {{mb_value object=$sejour field=entree}}
+            </span>
           </td>
           <td class="text">
-            {{mb_value object=$sejour field=_sortie}}
+            {{mb_value object=$sejour field=sortie}}
           </td>
           <td class="text">
             {{assign var="affectation" value=$sejour->_ref_first_affectation}}
@@ -132,7 +120,9 @@ function printAdmission(id) {
           {{/if}}
           </td>
           <td class="text">
-            {{$curr_op->libelle}}
+            <span onmouseover="ObjectTooltip.createEx(this, '{{$curr_op->_guid}}');">
+              {{$curr_op->libelle}}
+            </span>
           </td>
           <td>
             <ul>

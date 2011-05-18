@@ -8,17 +8,6 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
 *}}
 
-<script type="text/javascript">
-
-function printAdmission(id) {
-  var url = new Url;
-  url.setModuleAction("dPadmissions", "print_admission");
-  url.addParam("id", id);
-  url.popup(700, 550, 'Admissions');
-}
-
-</script>
-
 <table class="main">
   <tr>
     <th>
@@ -63,24 +52,24 @@ function printAdmission(id) {
         {{foreach from=$curr_prat.sejours item=curr_sejour}}
         <tr>
           <td>
-            <a href="#" onclick="printAdmission({{$curr_sejour->_id}})">
+            <span onmouseover="ObjectTooltip.createEx(this, '{{$curr_sejour->_ref_patient->_guid}}');">
               {{$curr_sejour->_ref_patient->_view}}
-            </a>
+            </span>
           </td>
           <td>
-            <a href="#" onclick="printAdmission({{$curr_sejour->_id}})">
-              {{mb_value object=$curr_sejour->_ref_patient field="naissance"}} ({{$curr_sejour->_ref_patient->_age}} ans)
-            </a>
+            {{mb_value object=$curr_sejour->_ref_patient field="naissance"}} ({{$curr_sejour->_ref_patient->_age}} ans)
           </td>
           <td>
             {{$curr_sejour->_ref_patient->sexe}}
           </td>
           <td class="text">
-            <a href="#" onclick="printAdmission({{$curr_sejour->sejour_id}})">
-              {{$curr_sejour->_ref_patient->rques}}
-            </a>
+            {{$curr_sejour->_ref_patient->rques}}
           </td>
-          <td>{{$curr_sejour->entree_prevue|date_format:$conf.time}}</td>
+          <td>
+            <span onmouseover="ObjectTooltip.createEx(this, '{{$curr_sejour->_guid}}');">
+              {{$curr_sejour->entree|date_format:$conf.time}}
+            </span>
+          </td>
           <td>
             {{if !$curr_sejour->facturable}}
             <strong>NF</strong>

@@ -8,16 +8,6 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
 *}}
 
-<script type="text/javascript">
-
-function printAdmission(id) {
-  var url = new Url("dPadmissions", "print_admission");
-  url.addParam("id", id);
-  url.popup(700, 550, "Patient");
-}
-
-</script>
-
 <table class="main">
   <tr>
     <th>

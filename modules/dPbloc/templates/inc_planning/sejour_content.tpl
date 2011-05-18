@@ -14,7 +14,9 @@
         ({{$sejour->_duree_prevue}}j)
       </td>
 		  <td>
-		    {{mb_value object=$sejour field=_entree}}
+		    <span onmouseover="ObjectTooltip.createEx(this, '{{$sejour->_ref_patient->_guid}}');">
+		      {{mb_value object=$sejour field=entree}}
+		    </span>
 		  </td>
 		  <td class="text">
         {{assign var="affectation" value=$sejour->_ref_first_affectation}}

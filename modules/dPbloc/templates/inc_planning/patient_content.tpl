@@ -10,14 +10,12 @@
 
 <!-- Patient -->
 		  <td>
-		    <a href="#" onclick="printAdmission({{$sejour->_id}})">
+		    <span onmouseover="ObjectTooltip.createEx(this, '{{$patient->_guid}}');">
 		      {{$patient->_view}}
-		    </a>
+		    </span>
 		  </td>
 		  <td>
-		    <a href="#" onclick="printAdmission({{$sejour->_id}})">
-		      {{$patient->_age}} ans
-		    </a>
+		    {{$patient->_age}} ans
 		  </td>
 		  {{if $_coordonnees}}
 		  <td>

@@ -1,16 +1,5 @@
 <!-- $Id$ -->
 
-<script type="text/javascript">
-
-function printAdmission(id) {
-  var url = new Url;
-  url.setModuleAction("dPadmissions", "print_admission");
-  url.addParam("id", id);
-  url.popup(700, 550, 'Admissions');
-}
-
-</script>
-
 <table class="main">
   <tr>
     <th>
@@ -98,6 +87,7 @@ function printAdmission(id) {
           <td class="text">
             {{foreach from=$curr_sejour->_ref_operations item=curr_operation}}
               <ul style="padding-left: 0px;">
+              <span onmouseover="ObjectTooltip.createEx(this, '{{$curr_operation->_guid}}');">
               {{if $curr_operation->libelle}}
                 <em>[{{$curr_operation->libelle}}]</em>
                 <br />
@@ -110,6 +100,7 @@ function printAdmission(id) {
                 {{else}}
                   ;
                 {{/if}}
+              </span>
               {{/foreach}}
               {{/if}}
               </ul>
@@ -136,14 +127,12 @@ function printAdmission(id) {
           
           {{assign var=patient value=$curr_sejour->_ref_patient}}
           <td>
-            <a href="#" onclick="printAdmission({{$curr_sejour->_id}})">
+            <span onmouseover="ObjectTooltip.createEx(this, '{{$patient->_guid}}');">
               {{$patient->_view}}
-            </a>
+            </span>
           </td>
           <td>
-            <a href="#" onclick="printAdmission({{$curr_sejour->_id}})">
-              {{mb_value object=$patient field="naissance"}} ({{$patient->_age}} ans)
-            </a>
+            {{mb_value object=$patient field="naissance"}} ({{$patient->_age}} ans)
           </td>
           
 			    {{if $filter->_coordonnees}}
@@ -161,9 +150,7 @@ function printAdmission(id) {
 			    {{/if}}
 			    
           <td class="text">
-            <a href="#" onclick="printAdmission({{$curr_sejour->sejour_id}})">
-              {{$patient->rques}}
-            </a>
+            {{$patient->rques}}
           </td>
         </tr>
         {{/foreach}}
