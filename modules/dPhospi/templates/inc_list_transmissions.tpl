@@ -2,6 +2,13 @@
   <tr>
     <th colspan="7" class="title">
 			{{if !$readonly}}
+        {{if $isPraticien}}
+          <span style="float: left;">
+            <input name="_show_obs_view" id="_show_obs_view" type="checkbox" {{if $_show_obs}}checked="checked"{{/if}}
+              onchange="loadSuivi('{{$sejour->_id}}', '', '', this.checked ? 1 : 0)"/>
+            <label for="_show_obs_view">{{tr}}CObservationMedicale._show_obs{{/tr}}</label>
+          </span>
+        {{/if}}
 				<div style="float: right">
 			    <select style="width:150px" name="selCible" onchange="loadSuivi('{{$sejour->_id}}','',this.value)" >
 			      <option value="">&mdash; Toutes les cibles</option>

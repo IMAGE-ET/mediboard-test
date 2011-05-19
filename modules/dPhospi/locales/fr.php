@@ -233,6 +233,7 @@ $locales['CObservationMedicale.degre.info'] = 'information';
 $locales['CObservationMedicale.degre.low'] = 'normal';
 $locales['CObservationMedicale.none'] = 'Pas d\'observation médicale';
 $locales['CObservationMedicale.one'] = 'Une observation médicale';
+$locales['CObservationMedicale._show_obs'] = 'Afficher les observations';
 $locales['CPrestation'] = 'Prestation';
 $locales['CPrestation-description'] = 'Description';
 $locales['CPrestation-description-court'] = 'Desc';

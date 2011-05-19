@@ -14,7 +14,10 @@ $transmission = new CTransmissionMedicale;
 $where = array();
 $where["sejour_id"] = " = '$sejour_id'";
 
-$nb_trans = $transmission->countList($where);
+$nb_trans_obs = $transmission->countList($where);
 
-echo $nb_trans;
+$observation = new CObservationMedicale;
+$nb_trans_obs += $observation->countList($where);
+
+echo $nb_trans_obs;
 ?>
