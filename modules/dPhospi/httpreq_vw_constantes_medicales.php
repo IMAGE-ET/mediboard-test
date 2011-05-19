@@ -224,9 +224,16 @@ if ($list_constantes) {
   }
 }
 
+// Pour les tensions artérielles, changer les unités suivant la config
+$unite_ta = CAppUI::conf("dPpatients CConstantesMedicales unite_ta");
+
 foreach($data as $name => &$_data) {
   $params = CConstantesMedicales::$list_constantes[$name];
-        
+  
+  if (in_array($name, array("ta", "ta_gauche", "ta_droit"))) {
+    $params['unit'] = $unite_ta;
+  }
+  
   // And the options
   if (isset($params["standard"])) {
     $_data["standard"] = $params["standard"];
