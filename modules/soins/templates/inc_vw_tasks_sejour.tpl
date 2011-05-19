@@ -38,7 +38,11 @@ editTask = function(task_id){
 	{{foreach from=$sejour->_ref_tasks item=_task}}
 	  <tr>
 	  	<td class="narrow"><input type="checkbox" disabled="disabled" {{if $_task->realise}}checked="checked"{{/if}} /></td>
-	    <td {{if $_task->realise}}style="text-decoration: line-through"{{/if}}>{{mb_value object=$_task field="description"}}</td>
+	    <td {{if $_task->realise}}style="text-decoration: line-through"{{/if}}>{{mb_value object=$_task field="description"}}
+			  {{if $_task->prescription_line_element_id}}
+				  <strong>{{$_task->_ref_prescription_line_element->_view}}</strong>
+				{{/if}}
+			</td>
 	    <td>{{mb_value object=$_task field="resultat"}}</td>
       {{if !$readonly}}
   			<td class="narrow">

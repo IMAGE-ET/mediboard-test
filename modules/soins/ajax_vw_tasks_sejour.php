@@ -15,6 +15,9 @@ $sejour = new CSejour();
 $sejour->load($sejour_id);
 
 $sejour->loadRefsTasks();
+foreach($sejour->_ref_tasks as $_task){
+  $_task->loadRefPrescriptionLineElement();	
+}
 
 // Smarty template
 $smarty = new CSmartyDP();

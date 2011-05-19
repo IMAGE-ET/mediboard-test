@@ -21,7 +21,8 @@ class CSejourTask extends CMbObject {
 	var $prescription_line_element_id = null;
 
 	var $_ref_sejour     = null;
- 
+  var $_prescription_line_element = null;
+	
   function getSpec() {
     $spec = parent::getSpec();
     $spec->table = 'sejour_task';
@@ -48,6 +49,10 @@ class CSejourTask extends CMbObject {
     $this->_ref_sejour = new CSejour();
     $this->_ref_sejour = $this->_ref_sejour->getCached($this->sejour_id);
   }
+	
+	function loadRefPrescriptionLineElement(){
+		$this->_ref_prescription_line_element = $this->loadFwdRef("prescription_line_element_id");
+	}
 }
   
 ?>
