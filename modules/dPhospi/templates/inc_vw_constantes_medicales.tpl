@@ -299,23 +299,39 @@ loadConstantesMedicales  = function(context_guid) {
 {{if $print}}
   <div id="constantes-medicales-graph" style="margin-left: 5px; text-align: center;"></div>
 {{else}}
-  <table class="main">
+  {{if "forms"|module_active && $curr_context instanceof CSejour}}
+	  <script type="text/javascript">
+	  	Main.add(function(){
+			  Control.Tabs.create("surveillance-tab");
+			});
+	  </script>
+		
+	  <ul class="control_tabs" id="surveillance-tab">
+	  	<li>
+	  		<a href="#tab-constantes-medicales">Constantes</a>
+	  	</li>
+	    <li>
+	      <a href="#tab-ex_class-list" onmousedown="this.onmousedown=null; ExObject.loadExObjects('{{$curr_context->_class_name}}', '{{$curr_context->_id}}', 'tab-ex_class-list', 0)">
+	      	Formulaires
+				</a>
+	    </li>
+	  </ul>
+		<hr class="control_tabs" />
+	{{/if}}
+	
+  <table class="main" id="tab-constantes-medicales">
     <tr>
-      <td colspan="2">
-        <button class="hslip notext" title="Afficher/Cacher" onclick="$('constantes-medicales-form').toggle();" type="button">
-          Formulaire constantes
-        </button>
-      </td>
-    </tr>
-    <tr>
-      <td class="narrow">
-        <div id="constantes-medicales-form">
-  			  {{include file="inc_form_edit_constantes_medicales.tpl" context_guid=$context_guid}}
-  			</div>
+      <td class="narrow" id="constantes-medicales-form">
+  			{{include file="inc_form_edit_constantes_medicales.tpl" context_guid=$context_guid}}
       </td>
       <td>
+        <button class="hslip notext" title="Afficher/Cacher le formulaire" onclick="$('constantes-medicales-form').toggle();" type="button">
+          Formulaire constantes
+        </button>
         <div id="constantes-medicales-graph" style="margin-left: 5px; text-align: center;"></div>
       </td>
     </tr>
   </table>
+	
+	<div id="tab-ex_class-list" style="display: none;"></div>
 {{/if}}

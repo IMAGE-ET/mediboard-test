@@ -104,7 +104,19 @@ ExObject = {
     url.addParam("user_id", "");
     url.addParam("type", "");
     url.popup(900, 600, "history");
-  }
+  },
+	
+	loadExObjects: function(object_class, object_id, target, detail, ex_class_id) {
+		detail = detail || 0;
+		ex_class_id = ex_class_id || "";
+		
+		var url = new Url("forms", "ajax_list_ex_object");
+    url.addParam("detail", detail);
+    url.addParam("reference_id", object_id);
+    url.addParam("reference_class", object_class);
+    url.addParam("ex_class_id", ex_class_id);
+    url.requestUpdate(target);
+	}
 };
 
 ExObjectFormula = {

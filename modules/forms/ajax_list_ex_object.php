@@ -12,7 +12,8 @@ CCanDo::checkEdit();
 
 $reference_class = CValue::get("reference_class");
 $reference_id    = CValue::get("reference_id");
-$detail          = CValue::get("detail");
+$detail          = CValue::get("detail", 1);
+$ex_class_id     = CValue::get("ex_class_id");
 
 CValue::setSession('reference_class', $reference_class);
 CValue::setSession('reference_id',    $reference_id);
@@ -25,10 +26,16 @@ if ($reference_id) {
 
 CExClassField::$_load_lite = true;
 CExObject::$_multiple_load = true;
-CExObject::$_load_lite = !$detail;
+CExObject::$_load_lite = $detail < 2;
+
+$where = array();
+
+if ($ex_class_id) {
+	$where['ex_class_id'] = "= '$ex_class_id'";
+}
 
 $ex_class = new CExClass;
-$ex_classes = $ex_class->loadList();
+$ex_classes = $ex_class->loadList($where);
 
 $all_ex_objects = array();
 $ex_objects_by_event = array();
@@ -52,7 +59,7 @@ foreach($ex_classes as $_ex_class) {
 		$_ex->loadTargetObject();
 		$_ex->_ref_object->loadComplete();
 		
-		if ($detail) {
+		if ($detail == 2) {
 			foreach($_ex->_ref_ex_class->_ref_groups as $_group) {
 				$_group->loadRefsFields();
 				foreach($_group->_ref_fields as $_field) {
@@ -84,4 +91,5 @@ $smarty->assign("all_ex_objects",  $all_ex_objects);
 $smarty->assign("ex_objects_by_event", $ex_objects_by_event);
 $smarty->assign("ex_classes",      $ex_classes);
 $smarty->assign("detail",          $detail);
+$smarty->assign("ex_class_id",     $ex_class_id);
 $smarty->display("inc_list_ex_object.tpl");
