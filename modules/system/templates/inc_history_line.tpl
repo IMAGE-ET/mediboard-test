@@ -77,6 +77,14 @@
             {{assign var=log_id value=$_log->_id}}
             {{assign var=new_value value=$object->_history.$log_id.$_field}}
             <strong>
+              {{*
+                Pour le log le plus récent, si c'est un champ qui a été supprimé (donc qui vaut null) :
+                dans la fonction mb_value le champ value est utilisé seulement s'il est différent de null.
+                Donc affectation d'une chaîne vide au lieu de null
+              *}}
+              {{if $new_value === null}}
+                {{assign var=new_value value=""}}
+              {{/if}}
               {{mb_value object=$object field=$_field value=$new_value tooltip=1}}
             </strong>
           </td>
