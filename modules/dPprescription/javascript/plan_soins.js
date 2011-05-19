@@ -187,8 +187,9 @@ PlanSoins = {
 	loadTraitement: function(sejour_id, date, nb_decalage, mode_dossier, object_id, object_class, unite_prise, chapitre, without_check_date, hide_close) {
     var url = new Url("dPprescription", "httpreq_vw_dossier_soin");
     url.addParam("sejour_id", sejour_id);
-    url.addParam("date", date);
-    url.addParam("line_type", "bloc");
+    url.addParam("date", PlanSoins.date);
+		
+		url.addParam("line_type", "bloc");
     url.addParam("mode_bloc", "0");
     url.addParam("mode_dossier", mode_dossier);
     if(nb_decalage){
