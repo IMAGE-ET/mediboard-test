@@ -291,7 +291,7 @@ Main.add(function () {
 	</table>
 	
 	<ul id="tab_dossier_soin" class="control_tabs">
-	  <li onmousedown="PlanSoins.loadTraitement('{{$sejour->_id}}','{{$date}}','','administration','','','','med'); refreshTabState();"><a href="#jour">Journée</a></li>
+	  <li onmousedown="PlanSoins.loadTraitement('{{$sejour->_id}}','{{$date}}','','administration','','','','med', '{{$hide_close}}'); refreshTabState();"><a href="#jour">Journée</a></li>
 	  <li onmousedown="calculSoinSemaine('{{$date}}','{{$prescription_id}}');"><a href="#semaine">Semaine</a></li>
 		<li onmousedown="updateTasks('{{$sejour->_id}}');"><a href="#tasks">Tâches</a></li>
     <li onmousedown="loadSuivi('{{$sejour->_id}}')"><a href="#dossier_suivi">{{tr}}CMbObject-back-transmissions{{/tr}} <span id="nb_trans"></span></a></li>
@@ -304,15 +304,15 @@ Main.add(function () {
 		<h1 style="text-align: center;">
 		 		  <button type="button" 
 					       class="left notext {{if $sejour->_entree|iso_date >= $date}}opacity-50{{/if}}" 
-								 {{if $sejour->_entree|iso_date < $date}}onclick="PlanSoins.loadTraitement('{{$sejour->_id}}','{{$prev_date}}', null, null, null, null, null, null, '1');"{{/if}}
+								 {{if $sejour->_entree|iso_date < $date}}onclick="PlanSoins.loadTraitement('{{$sejour->_id}}','{{$prev_date}}', null, null, null, null, null, null, '1', '{{$hide_close}}');"{{/if}}
 					       ></button>	
 	     Dossier de soin du {{$date|@date_format:"%d/%m/%Y"}}
        <form name="changeDateDossier" method="get" action="?" onsubmit="return false" style="font-size: 11px">
-         <input type="hidden" name="date" class="date" value="{{$date}}" onchange="PlanSoins.loadTraitement('{{$sejour->_id}}',this.value,'','administration', null, null, null, null, '1');"/>
+         <input type="hidden" name="date" class="date" value="{{$date}}" onchange="PlanSoins.loadTraitement('{{$sejour->_id}}',this.value,'','administration', null, null, null, null, '1', '{{$hide_close}}');"/>
        </form>
 			 <button type="button"
 			         class="right notext {{if $sejour->_sortie|iso_date <= $date}}opacity-50{{/if}}"
-							 {{if $sejour->_sortie|iso_date > $date}}onclick="PlanSoins.loadTraitement('{{$sejour->_id}}','{{$next_date}}','','administration', null, null, null, null, '1');"{{/if}}
+							 {{if $sejour->_sortie|iso_date > $date}}onclick="PlanSoins.loadTraitement('{{$sejour->_id}}','{{$next_date}}','','administration', null, null, null, null, '1', '{{$hide_close}}');"{{/if}}
 							 ></button>
 		</h1>
 		
