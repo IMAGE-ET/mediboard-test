@@ -17,7 +17,7 @@
     var url = new Url("forms", "ajax_list_ex_object");
     url.addParam("reference_class", "{{$sejour->_class_name}}");
     url.addParam("reference_id", "{{$sejour->_id}}");
-    url.addParam("detail", 0);
+    url.addParam("detail", 1);
     url.requestUpdate("list-ex_objects");
   });
 	{{/if}}
