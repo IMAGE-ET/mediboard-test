@@ -165,7 +165,7 @@
 		<div onclick="addCibleTransmission('{{$line->_ref_prescription->object_id}}', '{{$line_class}}', '{{$line->_id}}', null, '{{$update_plan_soin}}');" 
 	       class="{{if @$transmissions.$line_class.$line_id|@count}}transmission{{else}}transmission_possible{{/if}}"
 				 onmouseover="ObjectTooltip.createEx(this, '{{$line->_guid}}');"
-				 style="font-weight: bold">
+				 style="font-weight: bold; text-decoration: none; line-height: 1;">
 	   
 	      {{if $line_class == "CPrescriptionLineMedicament"}}
 					{{$line->_ucd_view}}
