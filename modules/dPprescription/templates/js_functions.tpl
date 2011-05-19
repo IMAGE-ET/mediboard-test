@@ -509,6 +509,9 @@ updateDebitProduit = function(prescription_line_mix_item_id) {
 }
 
 showHideDebitProduit = function(elt, prescription_line_mix_item_id) {
+  if (!elt) {
+    return;
+  }
   var debit = $("debit_" + prescription_line_mix_item_id);
   
   if (!elt.checked && debit.down().innerHTML != "") {
