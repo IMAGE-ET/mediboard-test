@@ -163,6 +163,7 @@ toggleEmptyRows = function(){
 {{* NO DETAIL *}}
 {{else}}
 
+{{if $ex_objects_by_event|@count > 0}}
 <table class="main layout">
 	<tr>
     <td class="narrow" style="min-width: 20em;">
@@ -193,10 +194,15 @@ toggleEmptyRows = function(){
     </td>
     <td id="ex_class-list">
     	<div class="small-info">
-    		Cliquez sur le bouton correspondant au formulaire au formulaire dont vous voulez voir le détail
+    		Cliquez sur le bouton correspondant au formulaire dont vous voulez voir le détail
     	</div>
     </td>
 	</tr>
 </table>
+{{else}}
+  <div class="small-info">
+    Aucun formulaire saisi
+  </div>
+{{/if}}
 
 {{/if}}
