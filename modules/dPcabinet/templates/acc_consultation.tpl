@@ -16,14 +16,14 @@
 
 <script type="text/javascript">
 
-function loadSuivi(sejour_id, user_id, cible, show_obs) {
+function loadSuivi(sejour_id, user_id, cible, hide_obs) {
   if(sejour_id) {
     var urlSuivi = new Url("dPhospi", "httpreq_vw_dossier_suivi");
     urlSuivi.addParam("sejour_id", sejour_id);
     urlSuivi.addParam("user_id", user_id);
     urlSuivi.addParam("cible", cible);
-    if (show_obs != null) {
-      urlSuivi.addParam("_show_obs", show_obs);
+    if (hide_obs != null) {
+      urlSuivi.addParam("_hide_obs", hide_obs);
     }
     urlSuivi.requestUpdate("suivisoins");
   }

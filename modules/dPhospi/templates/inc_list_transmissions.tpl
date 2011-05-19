@@ -4,9 +4,9 @@
 			{{if !$readonly}}
         {{if $isPraticien}}
           <span style="float: left;">
-            <input name="_show_obs_view" id="_show_obs_view" type="checkbox" {{if $_show_obs}}checked="checked"{{/if}}
+            <input name="_hide_obs_view" id="_hide_obs_view" type="checkbox" {{if $_hide_obs}}checked="checked"{{/if}}
               onchange="loadSuivi('{{$sejour->_id}}', '', '', this.checked ? 1 : 0)"/>
-            <label for="_show_obs_view">{{tr}}CObservationMedicale._show_obs{{/tr}}</label>
+            <label for="_hide_obs_view">{{tr}}CObservationMedicale._hide_obs{{/tr}}</label>
           </span>
         {{/if}}
 				<div style="float: right">
