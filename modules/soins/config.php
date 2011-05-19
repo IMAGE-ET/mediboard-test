@@ -9,5 +9,7 @@
  */
 
 $dPconfig["soins"] = array (
-  "constantes_show" => "1"
+  "constantes_show" => "1",
+  "CLit" => array (
+    "align_right" => "1")
 );

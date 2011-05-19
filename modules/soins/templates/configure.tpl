@@ -30,6 +30,12 @@
     <col style="width: 50%" />
     <tr>
       <th class="category" colspan="2">
+      {{tr}}CLit{{/tr}}
+      </th>
+    </tr>
+    {{mb_include module=system template=inc_config_bool class=CLit var=align_right}}
+    <tr>
+      <th class="category" colspan="2">
       {{tr}}CConstantesMedicales{{/tr}}
       </th>
     </tr>
