@@ -134,10 +134,10 @@ Main.add(function(){
         <button class="search" onclick="viewBilanService('{{$service->_id}}', '{{$date}}');">Bilan</button>
       </span>
 			<form name="updateActivites" action="?" method="get">
-				<input type="hidden" name="m" value="{{$m}}" />
-				<input type="hidden" name="tab" value="{{$tab}}" />
+        <input type="hidden" name="m" value="{{$m}}" />
+				<input type="hidden" name="{{$actionType}}" value="{{$action}}" />
         
-			  Gestion des activités du service 
+        Gestion des activités du service 
 				<select name="service_id" onchange="this.form.submit();">
 					<option value="">&mdash; Service</option>
 				  {{foreach from=$services item=_service}}
