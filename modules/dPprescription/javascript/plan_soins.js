@@ -438,6 +438,7 @@ PlanSoins = {
 	    PlanSoins.formClick.nb_decalage.value = parseInt(PlanSoins.formClick.nb_decalage.value) - 1;
 	    PlanSoins.moveDossierSoin($('plan_soin'));
 	  }
+		PlanSoins.togglePeriodNavigation();
 	},
 	
 	// Deplacement du dossier de soin vers la droite
@@ -446,8 +447,22 @@ PlanSoins = {
 	    PlanSoins.formClick.nb_decalage.value = parseInt(PlanSoins.formClick.nb_decalage.value) + 1;
 	    PlanSoins.moveDossierSoin($('plan_soin'));
 	  }
+		PlanSoins.togglePeriodNavigation();
 	},
 	
+	togglePeriodNavigation: function(){
+		if(PlanSoins.formClick.nb_decalage.value >= 1){
+      $("plan_soin").select("a.prevPeriod").invoke("show");
+    } else {
+      $("plan_soin").select("a.prevPeriod").invoke("hide");
+    }
+		if(PlanSoins.formClick.nb_decalage.value < (PlanSoins.nb_postes - 1)){
+      $("plan_soin").select("a.nextPeriod").invoke("show");
+    } else {
+      $("plan_soin").select("a.nextPeriod").invoke("hide");
+    }
+	},
+  
 	applyAdministrations: function () {
 	  var administrations = {};
 	   

@@ -8,6 +8,14 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
 *}}
 
+<script type="text/javascript">
+	
+Main.add(function(){
+ PlanSoins.togglePeriodNavigation();
+});
+
+</script>
+
 <table class="tbl" id="plan_soin">
 	<tbody id="tbody_date">
 	{{if $prescription->_ref_lines_med_for_plan|@count || $prescription->_ref_lines_elt_for_plan|@count || 
@@ -31,10 +39,10 @@
 					{{/if}}
 	        <th class="{{$_date}}-{{$moment_journee}} title" colspan="{{$_count}}">
 
-	          <a href="#1" onclick="PlanSoins.showBefore()" style="float: left" onmousedown="periodicalBefore = new PeriodicalExecuter(PlanSoins.showBefore, 0.2);" onmouseup="periodicalBefore.stop();">
+	          <a href="#1" onclick="PlanSoins.showBefore()" class="prevPeriod" style="float: left" onmousedown="periodicalBefore = new PeriodicalExecuter(PlanSoins.showBefore, 0.2);" onmouseup="periodicalBefore.stop();">
 	            <img src="images/icons/prev.png" alt="&lt;"/>
 	          </a>        
-	          <a href="#1" onclick="PlanSoins.showAfter()" style="float: right" onmousedown="periodicalAfter = new PeriodicalExecuter(PlanSoins.showAfter, 0.2);" onmouseup="periodicalAfter.stop();">
+	          <a href="#1" onclick="PlanSoins.showAfter()" class="nextPeriod" style="float: right" onmousedown="periodicalAfter = new PeriodicalExecuter(PlanSoins.showAfter, 0.2);" onmouseup="periodicalAfter.stop();">
 	            <img src="images/icons/next.png" alt="&gt;" />
 	          </a>     
 	          <strong>
