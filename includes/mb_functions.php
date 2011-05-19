@@ -695,6 +695,24 @@ function url_exists($url) {
   return (preg_match("|200|", $headers[0])); 
 }
 
+function http_request_post($url, $data) {
+  $data_url = http_build_query($data);
+  $data_len = strlen($data_url);
+  $ctx = stream_context_create(array(
+           'https' => array(
+             'method' => 'POST',
+             'header'=> array (
+                "Content-Type: application/x-www-form-urlencoded",
+                "Content-Length: $data_len", 
+                "User-Agent: ".$_SERVER['HTTP_USER_AGENT']),
+             'content' => $data_url
+           )
+         ));
+  $contents = file_get_contents($url, false, $ctx);
+  
+  return $contents;
+}
+
 /**
  * Check responsetime for a webbserver
  * @param string $url URL to check

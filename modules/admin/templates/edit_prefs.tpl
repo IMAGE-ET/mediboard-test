@@ -248,6 +248,16 @@ Preferences.onSubmit = function(form) {
   </tbody>
   {{/if}}
   
+  {{assign var="module" value="rtm"}}
+  {{if $prefs.$module}}  
+  <tbody style="display: none" id="{{$module}}">
+  <!-- Préférences pour le module {{$module}} -->
+
+  {{mb_include template=inc_pref spec=bool var=search_all_lists}}
+
+  </tbody>
+  {{/if}}
+  
   <tr>
     <td class="button" colspan="4">
       <button type="submit" class="submit singleclick">{{tr}}Save{{/tr}}</button>

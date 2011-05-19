@@ -138,9 +138,7 @@ var Url = Class.create({
     return Object.clone(Url.popupFeatures);
   },
   
-  pop: function(iWidth, iHeight, sWindowName, sBaseUrl, sPrefix, oPostParameters, iFrame) {
-    this.addParam("dialog", 1);
-  
+  pop: function(iWidth, iHeight, sWindowName, sBaseUrl, sPrefix, oPostParameters, iFrame) {  
     var features = this.getPopupFeatures();
     
     features = Object.extend(features, {
@@ -165,6 +163,12 @@ var Url = Class.create({
     sWindowName = sWindowName || "";
     sBaseUrl = sBaseUrl || "";
     
+    var questionMark = true;
+    if (!sBaseUrl) {
+      this.addParam("dialog", 1);
+      questionMark = false;
+    }
+
     // the Iframe argument is used when exporting data (export_csv_array for ex.)
     if (!iFrame) {
       var sFeatures = Url.buildPopupFeatures(features);
@@ -184,7 +188,7 @@ var Url = Class.create({
       var wasClosedBefore = !window.children[sWindowName] || window.children[sWindowName].closed;
       
       try {
-        this.oWindow = window.open(oPostParameters ? "" : (sBaseUrl + this.make()), sWindowName, sFeatures);
+        this.oWindow = window.open(oPostParameters ? "" : (sBaseUrl + this.make(questionMark)), sWindowName, sFeatures);
       } catch(e) {
         return;
       }
@@ -202,7 +206,7 @@ var Url = Class.create({
     if (oPostParameters) {
       var form = DOM.form({
         method: "post", 
-        action: sBaseUrl + this.make(), 
+        action: sBaseUrl + this.make(questionMark), 
         target: (iFrame ? iFrame.getAttribute("name") : sWindowName)
       });
       
@@ -225,7 +229,7 @@ var Url = Class.create({
   },
   
   modale: function(options) {
-    this.addParam("dialog", 1);
+    
     
     var closeButton = DOM.button({type: "button", className: "cancel notext"});
 
@@ -235,16 +239,23 @@ var Url = Class.create({
       height: 600,
       iframe: true,
       title: "",
+      baseUrl: "",
       closeOnClick: closeButton,
       closeOnEscape: true
     }, options);
     
+    var questionMark = true;
+    if (!options.baseUrl) {
+      this.addParam("dialog", 1);
+      questionMark = false;
+    }
+    
     var viewport = document.viewport.getDimensions();
     options.height = Math.min(viewport.height-50, options.height);
     options.width = Math.min(viewport.width-50, options.width);
-  
+        
     // Hack
-    this.modaleObject = Control.Modal.open(new Element("a", {href: this.make()}), options);
+    this.modaleObject = Control.Modal.open(new Element("a", {href: options.baseUrl + this.make(questionMark)}), options);
     
     var titleElement = DOM.div({className: "title"}, options.title || "&nbsp;");
     

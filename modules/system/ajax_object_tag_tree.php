@@ -15,9 +15,7 @@ $columns = CValue::get("col");
 $parent_tag = new CTag();
 $parent_tag->load($parent_tag_id);
 
-$object = new $object_class;
-
-$tree = CTag::getTree($object, $parent_tag);
+$tree = CTag::getTree($object_class, $parent_tag);
 
 $smarty = new CSmartyDP();
 $smarty->assign("tree", $tree);

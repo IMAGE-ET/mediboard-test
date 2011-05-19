@@ -48,7 +48,7 @@ class CTag extends CMbObject {
   function updateFormFields() {
     parent::updateFormFields();
 		$parent = $this->loadRefParent();
-		$this->_view = ($parent->_id ? "$parent->_view // " : "").$this->name;
+		$this->_view = ($parent->_id ? "$parent->_view >> " : "").$this->name;
   }
 	
 	function loadRefItems(){
@@ -103,9 +103,7 @@ class CTag extends CMbObject {
 		$list = array();
 		
 		if ($keywords === "%" || $keywords == "") {
-			$class = $this->object_class;
-			$obj = new $class;
-			$tree = self::getTree($obj);
+			$tree = self::getTree($this->object_class);
 			self::appendItemsRecursive($list, $tree);
 			
       foreach($list as $_tag) {
@@ -137,9 +135,7 @@ class CTag extends CMbObject {
 		return $this->_deepness = $d;
 	}
 	
-	static function getTree(CMbObject $object, CTag $parent = null, &$tree = array()) {
-		$object_class = $object->_class_name;
-		
+	static function getTree($object_class, CTag $parent = null, &$tree = array()) {
 		$tag = new self;
 		$where = array(
 		  "object_class" => "= '$object_class'",
@@ -153,7 +149,7 @@ class CTag extends CMbObject {
 		
 		foreach($tags as $_tag) {
 			$_tag->getDeepness();
-			self::getTree($object, $_tag, $sub_tree);
+			self::getTree($object_class, $_tag, $sub_tree);
 			$tree["children"][] = $sub_tree;
 		}
 		
