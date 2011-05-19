@@ -2,95 +2,97 @@
 	</tr>
 	</table>
 <script type="text/javascript">
-
-Main.add( function(){
-  oCatField = new TokenField(document.filter_prescription.token_cat); 
+{{if !$offline}}
+  Main.add( function(){
+    oCatField = new TokenField(document.filter_prescription.token_cat); 
+    
+    var cats = {{$cats|@json}};
+    $$('input[type=checkbox]').each( function(oCheckbox) {
+      if(cats.include(oCheckbox.value)){
+        oCheckbox.checked = true;
+      }
+    });
+    
+    getForm("filter_prescription")._dateTime_min.observe("ui:change", resetPeriodes);
+    getForm("filter_prescription")._dateTime_max.observe("ui:change", resetPeriodes);
+  } );
   
-  var cats = {{$cats|@json}};
-  $$('input[type=checkbox]').each( function(oCheckbox) {
-    if(cats.include(oCheckbox.value)){
-      oCheckbox.checked = true;
+  
+  var groups = {{$all_groups|@json}};
+  
+  function preselectCat(cat_group_id){
+    // On efface la selection de toutes les checkbox
+    // (sauf par patient et seulement les présents)
+    $$('input[type=checkbox]').each( function(oCheckbox) {
+      if (oCheckbox.name != "_present_only_vw" && oCheckbox.name != "by_patient") {
+        oCheckbox.checked = false;
+        oCatField.remove(oCheckbox.value);
+      }
+    });
+    
+    if (!cat_group_id) {
+      return;
     }
-  });
-  
-  getForm("filter_prescription")._dateTime_min.observe("ui:change", resetPeriodes);
-  getForm("filter_prescription")._dateTime_max.observe("ui:change", resetPeriodes);
-} );
-
-var groups = {{$all_groups|@json}};
-
-function preselectCat(cat_group_id){
-  // On efface la selection de toutes les checkbox
-  // (sauf par patient et seulement les présents)
-  $$('input[type=checkbox]').each( function(oCheckbox) {
-    if (oCheckbox.name != "_present_only_vw" && oCheckbox.name != "by_patient") {
-      oCheckbox.checked = false;
-      oCatField.remove(oCheckbox.value);
-    }
-  });
-  
-  if (!cat_group_id) {
-    return;
+    
+  	// Selection des checkbox en fonction du groupe selectionné
+    group = groups[cat_group_id];
+    group.each( function(item_id){
+      $(item_id).checked = true;
+      $(item_id).onclick();
+    });
   }
   
-	// Selection des checkbox en fonction du groupe selectionné
-  group = groups[cat_group_id];
-  group.each( function(item_id){
-    $(item_id).checked = true;
-    $(item_id).onclick();
-  });
-}
-
-function resetPeriodes() {
-  getForm("filter_prescription").select('input[name=periode]').each(function(e) {
-    e.checked = false;
-  });
-}
-
-selectChap = function(name_chap, oField){
-  $$('input.'+name_chap).each(function(oCheckbox) { 
-    if(!oCheckbox.checked){
-      oCheckbox.checked = true;
-      oField.add(oCheckbox.value);
-    }
-  });
-}
-
-var periodes = {{$conf.dPprescription.CPrisePosologie.heures|@json}};
-selectPeriode = function(element) {
-  var form = getForm("filter_prescription");
-  var start = form.elements._dateTime_min;
-  var end = form.elements._dateTime_max;
-  
-  var startDate = Date.fromDATETIME($V(start));
-  var endDate = Date.fromDATETIME($V(start));
-  
-  if (element.value == 'matin' || element.value == 'soir' || element.value == 'nuit') {
-    startDate.setHours(periodes[element.value].min);
-
-    var dayOffset = 0;
-    if (periodes[element.value].max < periodes[element.value].min) {
-      dayOffset = 1;
-    }
-    endDate.setDate(startDate.getDate()+dayOffset);
-    endDate.setHours(periodes[element.value].max);
-  }
-  else {
-    startDate.setHours(0);
-    startDate.setMinutes(0);
-    startDate.setSeconds(0);
-    endDate.setTime(startDate.getTime()+24*60*60*1000-1000);
+  function resetPeriodes() {
+    getForm("filter_prescription").select('input[name=periode]').each(function(e) {
+      e.checked = false;
+    });
   }
   
-  form._dateTime_min_da.value = startDate.toLocaleDateTime();
-  form._dateTime_max_da.value = endDate.toLocaleDateTime();
+  selectChap = function(name_chap, oField){
+    $$('input.'+name_chap).each(function(oCheckbox) { 
+      if(!oCheckbox.checked){
+        oCheckbox.checked = true;
+        oField.add(oCheckbox.value);
+      }
+    });
+  }
   
-  startDate = startDate.toDATETIME(true);
-  endDate = endDate.toDATETIME(true);
+  var periodes = {{$conf.dPprescription.CPrisePosologie.heures|@json}};
+  selectPeriode = function(element) {
+    var form = getForm("filter_prescription");
+    var start = form.elements._dateTime_min;
+    var end = form.elements._dateTime_max;
+    
+    var startDate = Date.fromDATETIME($V(start));
+    var endDate = Date.fromDATETIME($V(start));
+    
+    if (element.value == 'matin' || element.value == 'soir' || element.value == 'nuit') {
+      startDate.setHours(periodes[element.value].min);
   
-  $V(start, startDate, false);
-  $V(end, endDate, false);
-}
+      var dayOffset = 0;
+      if (periodes[element.value].max < periodes[element.value].min) {
+        dayOffset = 1;
+      }
+      endDate.setDate(startDate.getDate()+dayOffset);
+      endDate.setHours(periodes[element.value].max);
+    }
+    else {
+      startDate.setHours(0);
+      startDate.setMinutes(0);
+      startDate.setSeconds(0);
+      endDate.setTime(startDate.getTime()+24*60*60*1000-1000);
+    }
+    
+    form._dateTime_min_da.value = startDate.toLocaleDateTime();
+    form._dateTime_max_da.value = endDate.toLocaleDateTime();
+    
+    startDate = startDate.toDATETIME(true);
+    endDate = endDate.toDATETIME(true);
+    
+    $V(start, startDate, false);
+    $V(end, endDate, false);
+  }
+{{/if}}
 
 </script>
 {{if !$offline}}
