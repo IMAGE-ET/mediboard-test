@@ -10,7 +10,8 @@
 
 $do = new CDoObjectAddEdit("CAdministration", "administration_id");
 $do->doBind();
-if ($do->_objBefore->planification == 1) {
+
+if ($do->_objBefore->planification == 1 || $do->_obj->planification == 1) {
   $do->createMsg = CAppUI::tr("CAdministration-planification-msg-create");
   $do->modifyMsg = CAppUI::tr("CAdministration-planification-msg-modify");
   $do->deleteMsg = CAppUI::tr("CAdministration-planification-msg-delete");
@@ -18,7 +19,8 @@ if ($do->_objBefore->planification == 1) {
 
 if (intval(CValue::read($do->request, 'del'))) {
   $do->doDelete();
-} else {
+}
+else {
   $do->doStore();
 }
 $do->doRedirect();
