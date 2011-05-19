@@ -57,7 +57,16 @@ Main.add(function(){
 	                {{assign var=libelle_poste value="Libelle poste $num_poste"}}
 	                {{assign var=view_poste value=$configs.$libelle_poste}}
 								{{/if}}
-                {{$view_poste}} du {{$_date|date_format:"%d/%m"}}
+								
+								{{assign var=key_borne value="$_date-$moment_journee"}} 
+                {{assign var=bornes_poste value=$bornes_composition_dossier.$key_borne}}
+
+                {{$view_poste}} du 
+								{{if $bornes_poste.min|iso_date != $bornes_poste.max|iso_date}}
+                  {{$bornes_poste.min|date_format:"%d/%m"}} au {{$bornes_poste.max|date_format:"%d/%m"}}
+                {{else}}
+                  {{$_date|date_format:"%d/%m"}}
+                {{/if}}
               </a>
             </strong>
           </th>
