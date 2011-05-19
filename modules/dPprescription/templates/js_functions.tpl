@@ -12,17 +12,21 @@
 
 completeSelect = function(oSelect, line_id, type_elt){
   var selectMoments = (type_elt == "mode_grille") ? 
-                        window.opener.document.moment_unitaire.moment_unitaire_id :
+                        window.opener.document.moment_unitaire.moment_unitaire_id.cloneNode(true) :
                         document.moment_unitaire.moment_unitaire_id;
   
   document.forms['addPrise'+type_elt+line_id].show();
 
   if(oSelect.options.length == 1){
-    oSelect.down().remove();
-    $A(selectMoments.childNodes).each(function (child) {
-      oSelect.appendChild(child.cloneNode(true));
-    });
-    //oSelect.innerHTML = selectMoments.innerHTML; // ne fonctionne pas sous IE
+    if (Prototype.Browser.IE) {
+      oSelect.down().remove();
+      $A(selectMoments.childNodes).each(function (child) {
+        oSelect.insert(child.outerHTML);
+      });
+    }
+    else {
+      oSelect.innerHTML = selectMoments.innerHTML;
+    }
   }
 }
 
