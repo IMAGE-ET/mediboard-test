@@ -78,6 +78,11 @@ if($line instanceof CPrescriptionLineMedicament){
   
    $line->countBackRefs("administration");
    $line->loadRefsSubstitutionLines();
+   
+   foreach($line->_ref_substitution_lines["CPrescriptionLineMedicament"] as $_line_med) {
+     $_line_med->loadRefsPrises();
+   }
+   
    $line->loadRefParentLine(); 
 	 
 	 if($line->_is_perfusable){

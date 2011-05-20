@@ -370,7 +370,12 @@
 	                  {{if $_line_subst->_class_name == "CPrescriptionLineMix"}}
 	                    {{$_line_subst->_short_view}} ({{$_line_subst->_frequence}})
 	                  {{else}}
-	                    {{$_line_subst->_view}} ({{$_line_subst->_frequence}})
+	                    {{$_line_subst->_view}}
+                      {{foreach from=$_line_subst->_ref_prises item=_prise_variante name=prises}}
+                        {{if !$smarty.foreach.prises.last}}
+                        ,
+                        {{/if}} {{$_prise_variante->_view}}
+                      {{/foreach}}
 	                  {{/if}}
 	                {{if !$_line_subst->substitute_for_id}}(originale){{/if}}</option>
 	              {{/foreach}}
