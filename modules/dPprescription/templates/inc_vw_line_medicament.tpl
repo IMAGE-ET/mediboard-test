@@ -368,9 +368,9 @@
 	                {{foreach from=$lines_subst_by_chap item=_line_subst}}
 	                <option value="{{$_line_subst->_guid}}">
 	                  {{if $_line_subst->_class_name == "CPrescriptionLineMix"}}
-	                    {{$_line_subst->_short_view}}
+	                    {{$_line_subst->_short_view}} ({{$_line_subst->_frequence}})
 	                  {{else}}
-	                    {{$_line_subst->_view}}
+	                    {{$_line_subst->_view}} ({{$_line_subst->_frequence}})
 	                  {{/if}}
 	                {{if !$_line_subst->substitute_for_id}}(originale){{/if}}</option>
 	              {{/foreach}}
