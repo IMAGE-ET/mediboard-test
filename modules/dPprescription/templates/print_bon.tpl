@@ -12,6 +12,12 @@
 {{assign var=sejour value=$prescription->_ref_object}}
 
 <script type="text/javascript">
+toggleAll = function(state) {
+  $A(getForm("filtreBons").elements["list_bons[]"]).each(function(elt) {
+    elt.checked = state;
+  });
+}
+
 
 Main.add( function(){
   var oForm = getForm("filtreBons");
@@ -25,10 +31,14 @@ Main.add( function(){
   };
   Calendar.regField(oForm.debut, dates);
 	
-	
 	{{if $print}}
-	window.print();
+	  window.print();
 	{{/if}}
+  
+  // Cochage du bouton radio Tout cocher si tous les bons sont cochés
+	if ($A(oForm.elements["list_bons[]"]).all(function(elt) { return elt.checked})) {
+    oForm.check_all.checked = true;
+	}
 });
 </script>  
   
@@ -89,7 +99,7 @@ Main.add( function(){
 	    <th>Bon</th>
 	    <th>Prescripteur</th>
 	    <th>Heure</th>
-	    <th></th>
+	    <th><input type="checkbox" onchange="toggleAll(this.checked);" name="check_all" title="{{tr}}CPrescription.check_uncheck{{/tr}}"/></th>
 		</tr>
 		{{foreach from=$all_bons key=chapitre item=_bons_by_hour key=_chap name=foreach_chap}}
 		  {{foreach from=$_bons_by_hour key=hour item=_bons_by_cat name=foreach_hour}}

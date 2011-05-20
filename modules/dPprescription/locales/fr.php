@@ -602,6 +602,7 @@ $locales['CPrescription._type_sejour.sortie'] = 'Sortie';
 $locales['CPrescription._type_sejour.traitement'] = 'Traitement';
 $locales['CPrescription.all'] = 'Toutes les prescriptions';
 $locales['CPrescription.apply_advanced_protocole'] = 'Appliquer les changements';
+$locales['CPrescription.check_uncheck'] = "Tout cocher / décocher";
 $locales['CPrescription.choose_file'] = 'Choisir un fichier';
 $locales['CPrescription.detail_protocole'] = 'Détail';
 $locales['CPrescription.export_protocole'] = 'Exporter le protocole';
