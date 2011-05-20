@@ -167,7 +167,7 @@ if (isset($_POST["_source"])) {
         $compte_rendu->nom     .= " à {$allDest[$curr_dest[1]][$curr_dest[2]]->nom}";
         $compte_rendu->_source = $content;
         $compte_rendu->_ref_content = null;
-        $compte_rendu->chir_id    = null;
+        $compte_rendu->user_id    = null;
         $comte_rendu->function_id = null;
         $compte_rendu->group_id   = null;
         

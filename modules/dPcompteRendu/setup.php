@@ -534,7 +534,20 @@ class CSetupdPcompteRendu extends CSetup {
     $this->makeRevision("0.62");
     $this->addPrefQuery("mode_play", "0");
     
-    $this->mod_version = "0.63";
+    $this->makeRevision("0.63");
+    $query = "ALTER TABLE `compte_rendu`
+              CHANGE chir_id user_id INT (11) UNSIGNED;";
+    $this->addQuery($query);
+    
+    $query = "ALTER TABLE `pack`
+              CHANGE chir_id user_id INT (11) UNSIGNED;";
+    $this->addQuery($query);
+    
+    $query = "ALTER TABLE `liste_choix`
+              CHANGE chir_id user_id INT (11) UNSIGNED;";
+    $this->addQuery($query);
+    
+    $this->mod_version = "0.64";
     
   }
 }

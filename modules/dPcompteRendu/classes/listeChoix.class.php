@@ -12,7 +12,7 @@ class CListeChoix extends CMbObject {
   var $liste_choix_id = null;
 
   // DB References
-  var $chir_id     = null; // not null when associated to a user
+  var $user_id     = null; // not null when associated to a user
   var $function_id = null; // not null when associated to a function
   var $group_id    = null; // not null when associated to a group
 
@@ -27,7 +27,7 @@ class CListeChoix extends CMbObject {
   var $_del     = null;
   
   // Referenced objects
-  var $_ref_chir     = null;
+  var $_ref_user     = null;
   var $_ref_function = null;
   var $_ref_group    = null;
   var $_ref_modele   = null;
@@ -36,13 +36,13 @@ class CListeChoix extends CMbObject {
     $spec = parent::getSpec();
     $spec->table = 'liste_choix';
     $spec->key   = 'liste_choix_id';
-    $spec->xor["owner"] = array("chir_id", "function_id", "group_id");
+    $spec->xor["owner"] = array("user_id", "function_id", "group_id");
     return $spec;
   }
 
   function getProps() {
   	$props = parent::getProps();
-    $props["chir_id"]         = "ref class|CMediusers";
+    $props["user_id"]         = "ref class|CMediusers";
     $props["function_id"]     = "ref class|CFunctions";
     $props["group_id"]        = "ref class|CGroups";
     $props["nom"]             = "str notNull";
@@ -54,7 +54,7 @@ class CListeChoix extends CMbObject {
   }
   
   function loadRefUser() {
-    return $this->_ref_user = $this->loadFwdRef("chir_id", true);
+    return $this->_ref_user = $this->loadFwdRef("user_id", true);
   }
   
   function loadRefFunction() {
@@ -83,7 +83,7 @@ class CListeChoix extends CMbObject {
     $this->_valeurs = $this->valeurs != "" ? explode("|", $this->valeurs) : array();
     natcasesort($this->_valeurs);
 
-    if ($this->chir_id    ) $this->_owner = "prat";
+    if ($this->user_id    ) $this->_owner = "prat";
     if ($this->function_id) $this->_owner = "func";
     if ($this->group_id   ) $this->_owner = "etab";
 

@@ -190,7 +190,7 @@ class CMediusers extends CMbObject {
     $backProps["actes_ngap_executes"]             = "CActeNGAP executant_id";
     $backProps["administrations"]                 = "CAdministration administrateur_id";
     $backProps["aides_saisie"]                    = "CAideSaisie user_id";
-    $backProps["modeles"]                         = "CCompteRendu chir_id";
+    $backProps["modeles"]                         = "CCompteRendu user_id";
     $backProps["documents_ged"]                   = "CDocGed user_id";
     $backProps["suivis__ged"]                     = "CDocGedSuivi user_id";
     $backProps["examens"]                         = "CExamenLabo realisateur";
@@ -202,14 +202,14 @@ class CMediusers extends CMbObject {
     $backProps["forum_messages"]                  = "CForumMessage user_id";
     $backProps["forum_threads"]                   = "CForumThread user_id";
     $backProps["hprim21_medecins"]                = "CHprim21Medecin user_id";
-    $backProps["listes_choix"]                    = "CListeChoix chir_id";
+    $backProps["listes_choix"]                    = "CListeChoix user_id";
     $backProps["mails_sent"]                      = "CMbMail from";
     $backProps["mails_received"]                  = "CMbMail to";
     $backProps["owned_notes"]                     = "CNote user_id";
     $backProps["observations"]                    = "CObservationMedicale user_id";
     $backProps["operations_chir"]                 = "COperation chir_id";
     $backProps["operations_anesth"]               = "COperation anesth_id";
-    $backProps["packs"]                           = "CPack chir_id";
+    $backProps["packs"]                           = "CPack user_id";
     $backProps["prescription_line_mixes"]         = "CPrescriptionLineMix praticien_id";
     $backProps["prescription_line_mixes_0"]       = "CPrescriptionLineMix creator_id";
     $backProps["personnels"]                      = "CPersonnel user_id";
@@ -370,7 +370,7 @@ class CMediusers extends CMbObject {
   }
 
   function loadRefsBack() {
-    $where = array("chir_id" => "= '$this->user_id'");
+    $where = array("user_id" => "= '$this->user_id'");
     $packs = new CPack;
     $this->_ref_packs = $packs->loadList($where);
   }

@@ -314,7 +314,7 @@ Main.add(function(){
   <input type="hidden" name="del" value="0" />
   <input type="hidden" name="dosql" value="do_modele_aed" />
   <input type="hidden" name="function_id" value="" />
-  <input type="hidden" name="chir_id" value="" />
+  <input type="hidden" name="user_id" value="" />
   <input type="hidden" name="group_id" value="" />
   <input type="hidden" name="fast_edit" value="0"/>
   <input type="hidden" name="fast_edit_pdf" value="0"/>

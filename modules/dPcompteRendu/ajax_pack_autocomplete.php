@@ -17,7 +17,7 @@ $keywords     = CValue::post("keywords_pack");
 $where = array();
 $where["object_class"] = "= '$object_class'";
 $where[] = "(
-  pack.chir_id IN ('".$user_id."', '".CAppUI::$user->_id."') OR
+  pack.user_id IN ('".$user_id."', '".CAppUI::$user->_id."') OR
   pack.function_id = '$function_id' OR 
   pack.group_id = '$group_id'
 )";

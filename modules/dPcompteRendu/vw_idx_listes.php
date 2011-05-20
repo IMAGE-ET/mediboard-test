@@ -43,7 +43,7 @@ foreach($listes as $_listes) {
 
 // Liste sélectionnée
 $liste = new CListeChoix();
-$liste->chir_id = $user->_id;
+$liste->user_id = $user->_id;
 $liste->load($liste_id); 
 $liste->loadRefOwner();
 $liste->loadRefModele();

@@ -301,7 +301,7 @@ class CTemplateManager {
       $user->load($user_id);
       $user->loadRefFunction();
       $where[] = "(
-        chir_id = '$user->user_id' OR 
+        user_id = '$user->user_id' OR 
         function_id = '$user->function_id' OR 
         group_id = '{$user->_ref_function->group_id}'
       )";

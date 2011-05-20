@@ -45,9 +45,9 @@ $object_guid = '';
 if($pack->_id) {
   $pack->loadRefsFwd();
   $pack->loadBackRefs("modele_links");
-  if ($pack->chir_id) {
+  if ($pack->user_id) {
     $user = new CMediUsers;
-    $user->load($pack->chir_id);
+    $user->load($pack->user_id);
     $object_guid = $user->_guid;
   } else if ($pack->function_id) {
   	$function = new CFunctions;
@@ -59,7 +59,7 @@ if($pack->_id) {
   	$object_guid = $group->_guid;
   }
 } else {
-  $pack->chir_id = $userSel->_id;
+  $pack->user_id = $userSel->_id;
   
 }
 

@@ -15,9 +15,9 @@ $type            = CValue::get("type");
 $compte_rendu = new CCompteRendu;
 $compte_rendu->load($compte_rendu_id);
 
-if ($compte_rendu->chir_id) {
+if ($compte_rendu->user_id) {
   $owner = 'prat';
-  $id = $compte_rendu->chir_id;
+  $id = $compte_rendu->user_id;
 }
 else if ($compte_rendu->function_id) {
   $owner = 'func';

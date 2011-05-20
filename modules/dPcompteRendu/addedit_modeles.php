@@ -68,7 +68,7 @@ $secretaire = $mediuser->isFromType(array("Secrétaire", "Administrator"));
 // si l'utilisateur courant est la secretaire ou le proprietaire du modele alors droit dessus, sinon, seulement droit en lecture
 $droit = (!($compte_rendu->_id) ||
            ($secretaire) ||
-           ($compte_rendu->chir_id == $mediuser->user_id) ||
+           ($compte_rendu->user_id == $mediuser->user_id) ||
            ($compte_rendu->function_id == $mediuser->function_id) ||
            $compte_rendu->canEdit());
 
@@ -76,10 +76,10 @@ $templateManager->printMode = !$droit;
 
 if ($compte_rendu->_id) {
   if ($droit) {
-    $prat_id = $compte_rendu->chir_id;
+    $prat_id = $compte_rendu->user_id;
     $templateManager->valueMode = false;
-    $templateManager->loadLists($compte_rendu->chir_id, $compte_rendu->_id);
-    $templateManager->loadHelpers($compte_rendu->chir_id, $compte_rendu->object_class);
+    $templateManager->loadLists($compte_rendu->user_id, $compte_rendu->_id);
+    $templateManager->loadHelpers($compte_rendu->user_id, $compte_rendu->object_class);
     $templateManager->applyTemplate($compte_rendu);
   }
 
@@ -109,9 +109,9 @@ $headers = array();
 
 if ($compte_rendu->_id) {
   // Si modèle de fonction, on charge en fonction d'un des praticiens de la fonction
-  if ($compte_rendu->chir_id) {
+  if ($compte_rendu->user_id) {
     $owner = 'prat';
-    $id = $compte_rendu->chir_id;
+    $id = $compte_rendu->user_id;
   }
   else if ($compte_rendu->function_id) {
     $owner = 'func';

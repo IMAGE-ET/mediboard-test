@@ -17,13 +17,13 @@ Main.add(function () {
 </tr>
 
 <tr>
-  <th>{{mb_label object=$filtre field=chir_id}}</th>
+  <th>{{mb_label object=$filtre field=user_id}}</th>
   <td>
-    <select name="chir_id" onchange="submit()">
+    <select name="user_id" onchange="submit()">
       <option value="">&mdash; {{tr}}CCompteRendu-choose-user{{/tr}}</option>
       {{foreach from=$praticiens item=curr_prat}}
         <option class="mediuser" style="border-color: #{{$curr_prat->_ref_function->color}};" value="{{$curr_prat->_id}}" 
-        	{{if $curr_prat->_id == $filtre->chir_id}} selected="selected" {{/if}}>
+        	{{if $curr_prat->_id == $filtre->user_id}} selected="selected" {{/if}}>
           {{$curr_prat->_view}}
         </option>
       {{/foreach}}

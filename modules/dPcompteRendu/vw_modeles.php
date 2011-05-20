@@ -15,18 +15,18 @@ $praticiens = $user->loadUsers(PERM_EDIT);
 
 // Filtres
 $filtre = new CCompteRendu();
-$filtre->chir_id      = CValue::getOrSession("chir_id", $user->_id);
+$filtre->user_id      = CValue::getOrSession("user_id", $user->_id);
 $filtre->object_class = CValue::getOrSession("object_class");
 $filtre->type         = CValue::getOrSession("type");
 
 // Praticien
 $user = new CMediusers;
-$user->load($filtre->chir_id);
+$user->load($filtre->user_id);
 if ($user->isPraticien()) {
   CValue::setSession("prat_id", $user->_id);
 }
 
-$modeles = CCompteRendu::loadAllModelesFor($filtre->chir_id, 'prat', $filtre->object_class, $filtre->type);
+$modeles = CCompteRendu::loadAllModelesFor($filtre->user_id, 'prat', $filtre->object_class, $filtre->type);
 $owners = $user->getOwners();
 
 // On ne met que les classes qui ont une methode filTemplate

@@ -21,7 +21,7 @@ $name_object_id = "";
 switch($object->_class_name) {
 	case "CMediusers" :
     $type = "prat";
-    $name_object_id = "chir_id";
+    $name_object_id = "user_id";
 		break;
 	case "CFunctions" :
 	  $type = "func";

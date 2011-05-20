@@ -100,11 +100,11 @@ Main.add(function () {
     {{mb_include module=system template=inc_form_table_header object=$liste}}
   
     <tr>
-      <th>{{mb_label object=$liste field=chir_id}}</th>
+      <th>{{mb_label object=$liste field=user_id}}</th>
       <td>
-        <select name="chir_id" class="{{$liste->_props.chir_id}}" style="width: 12em;">
+        <select name="user_id" class="{{$liste->_props.user_id}}" style="width: 12em;">
           <option value="">&mdash; {{tr}}Choose{{/tr}}</option>
-					{{mb_include module=mediusers template=inc_options_mediuser list=$prats selected=$liste->chir_id}}
+					{{mb_include module=mediusers template=inc_options_mediuser list=$prats selected=$liste->user_id}}
         </select>
       </td>
     </tr>

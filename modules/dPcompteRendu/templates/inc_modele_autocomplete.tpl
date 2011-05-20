@@ -1,7 +1,7 @@
 <ul style="text-align: left;">
   {{foreach from=$modeles item=_modele}}
     {{if $_modele->_owner == "prat"}}
-      {{if $_modele->chir_id == $app->user_id}}
+      {{if $_modele->user_id == $app->user_id}}
         {{assign var=owner_icon value="user-glow"}}
       {{else}}
         {{assign var=owner_icon value="user"}}

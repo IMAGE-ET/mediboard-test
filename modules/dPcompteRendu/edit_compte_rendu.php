@@ -46,7 +46,7 @@ else {
 	$compte_rendu->loadFile();
   $compte_rendu->loadContent();
   $compte_rendu->_id = null;
-  $compte_rendu->chir_id = $praticien_id;
+  $compte_rendu->user_id = $praticien_id;
   $compte_rendu->function_id = null;
   $compte_rendu->object_id = $object_id;
   $compte_rendu->_ref_object = null;
@@ -153,14 +153,14 @@ $templateManager->applyTemplate($compte_rendu);
 
 $where = array();
 $where[] = "(
-  chir_id = '$user->_id' OR 
+  user_id = '$user->_id' OR 
   function_id = '$user->function_id' OR 
   group_id = '{$user->_ref_function->group_id}'
 )";
-$order = "chir_id, function_id, group_id";
-$chirLists = new CListeChoix;
-$chirLists = $chirLists->loadList($where, $order);
-$lists = $templateManager->getUsedLists($chirLists);
+$order = "user_id, function_id, group_id";
+$userLists = new CListeChoix;
+$userLists = $userLists->loadList($where, $order);
+$lists = $templateManager->getUsedLists($userLists);
 
 // Récupération des éléments de destinataires de courrier
 $isCourrier = $templateManager->isCourrier();

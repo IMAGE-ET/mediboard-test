@@ -30,9 +30,9 @@ $pack = new CPack;
 if ($filter_class)
   $pack->object_class = $filter_class;
 
-$pack->chir_id = $userSel->_id;
+$pack->user_id = $userSel->_id;
 $packsUser = $pack->loadMatchingList($orderby);
-$pack->chir_id = null;
+$pack->user_id = null;
 
 $pack->function_id = $userSel->function_id;
 $packsFunc = $pack->loadMatchingList($orderby);

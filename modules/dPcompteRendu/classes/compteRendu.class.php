@@ -14,7 +14,7 @@ class CCompteRendu extends CDocumentItem {
   var $compte_rendu_id   = null;
   
   // DB References
-  var $chir_id           = null; // not null when is a template associated to a user
+  var $user_id           = null; // not null when is a template associated to a user
   var $function_id       = null; // not null when is a template associated to a function
   var $group_id          = null; // not null when is a template associated to a group
   var $content_id        = null;
@@ -51,7 +51,7 @@ class CCompteRendu extends CDocumentItem {
   var $_source           = null;
   
   // Referenced objects
-  var $_ref_chir         = null;
+  var $_ref_user         = null;
   var $_ref_category     = null;
   var $_ref_function     = null;
   var $_ref_group        = null;
@@ -80,7 +80,7 @@ class CCompteRendu extends CDocumentItem {
     $spec->table = 'compte_rendu';
     $spec->key   = 'compte_rendu_id';
     $spec->measureable = true;
-    $spec->xor["owner"] = array("chir_id", "function_id", "group_id", "object_id");
+    $spec->xor["owner"] = array("user_id", "function_id", "group_id", "object_id");
     return $spec;
   }
   
@@ -95,7 +95,7 @@ class CCompteRendu extends CDocumentItem {
   
   function getProps() {
     $specs = parent::getProps();
-    $specs["chir_id"]          = "ref class|CMediusers purgeable show|1";
+    $specs["user_id"]          = "ref class|CMediusers purgeable show|1";
     $specs["function_id"]      = "ref class|CFunctions purgeable";
     $specs["group_id"]         = "ref class|CGroups purgeable";
     $specs["object_id"]        = "ref class|CMbObject meta|object_class purgeable show|1";
@@ -180,7 +180,7 @@ class CCompteRendu extends CDocumentItem {
     $this->_view = $this->object_id ? "" : "Modèle : ";
     $this->_view.= $this->nom;
     
-    if ($this->chir_id    ) $this->_owner = "prat";
+    if ($this->user_id    ) $this->_owner = "prat";
     if ($this->function_id) $this->_owner = "func";
     if ($this->group_id   ) $this->_owner = "etab";
 
@@ -260,22 +260,22 @@ class CCompteRendu extends CDocumentItem {
 
     $this->_ref_object->loadRefsFwd();
     
-    // Chirurgien
-    $this->_ref_chir = new CMediusers;
-    if($this->chir_id) {
-      $this->_ref_chir->load($this->chir_id);
+    // Utilisateur
+    $this->_ref_user = new CMediusers;
+    if($this->user_id) {
+      $this->_ref_user->load($this->user_id);
     } 
     elseif($this->object_id) {
       switch($this->object_class) {
         case "CConsultation" :
-          $this->_ref_chir->load($this->_ref_object->_ref_plageconsult->chir_id);
+          $this->_ref_user->load($this->_ref_object->_ref_plageconsult->chir_id);
           break;
         case "CConsultAnesth" :
           $this->_ref_object->_ref_consultation->loadRefsFwd();
-          $this->_ref_chir->load($this->_ref_object->_ref_consultation->_ref_plageconsult->chir_id);
+          $this->_ref_user->load($this->_ref_object->_ref_consultation->_ref_plageconsult->chir_id);
           break;
         case "COperation" :
-          $this->_ref_chir->load($this->_ref_object->chir_id);
+          $this->_ref_user->load($this->_ref_object->chir_id);
           break;
       }
     }
@@ -368,7 +368,7 @@ class CCompteRendu extends CDocumentItem {
         if (!$prat->load($id)) return $modeles;
         $prat->loadRefFunction();
 
-        $where["chir_id"]     = "= '$prat->_id'";
+        $where["user_id"]     = "= '$prat->_id'";
         $where["function_id"] = "IS NULL";
         $where["group_id"]    = "IS NULL";
         $modeles["prat"] = $modele->loadlist($where, $order);
@@ -383,7 +383,7 @@ class CCompteRendu extends CDocumentItem {
           $func_id = $func->_id;
         }
         
-        $where["chir_id"]     = "IS NULL";
+        $where["user_id"]     = "IS NULL";
         $where["function_id"] = "= '$func_id'";
         $where["group_id"]    = "IS NULL";
         $modeles["func"] = $modele->loadlist($where, $order);
@@ -406,7 +406,7 @@ class CCompteRendu extends CDocumentItem {
           $etab_id = $func->group_id;
         }
         
-        $where["chir_id"]     = "IS NULL";
+        $where["user_id"]     = "IS NULL";
         $where["function_id"] = "IS NULL";
         $where["group_id"]    = " = '$etab_id'";
         $modeles["etab"] = $modele->loadlist($where, $order);
@@ -423,14 +423,14 @@ class CCompteRendu extends CDocumentItem {
   }
     
   function getPerm($permType) {
-    if(!($this->_ref_chir || $this->_ref_function || $this->_ref_group) || !$this->_ref_object) {
+    if(!($this->_ref_user || $this->_ref_function || $this->_ref_group) || !$this->_ref_object) {
       $this->loadRefsFwd();
     }
     if($this->_ref_object->_id){
       $can = $this->_ref_object->getPerm($permType);
     }
-    elseif($this->_ref_chir->_id) {
-      $can = $this->_ref_chir->getPerm($permType);
+    elseif($this->_ref_user->_id) {
+      $can = $this->_ref_user->getPerm($permType);
     }
     elseif($this->_ref_function->_id) {
       $can = $this->_ref_function->getPerm($permType);

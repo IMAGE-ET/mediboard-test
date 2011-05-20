@@ -12,7 +12,7 @@ class CPack extends CMbObject {
   var $pack_id       = null;
 
   // DB References
-  var $chir_id       = null;
+  var $user_id       = null;
   var $function_id   = null;
   var $group_id      = null;
 
@@ -29,7 +29,7 @@ class CPack extends CMbObject {
   var $_owner        = null;
   
   // Referenced objects
-  var $_ref_chir     = null;
+  var $_ref_user     = null;
   var $_ref_function = null;
   var $_ref_group    = null;
   
@@ -37,13 +37,13 @@ class CPack extends CMbObject {
     $spec = parent::getSpec();
     $spec->table = 'pack';
     $spec->key   = 'pack_id';
-    $spec->xor["owner"] = array("chir_id", "function_id", "group_id");
+    $spec->xor["owner"] = array("user_id", "function_id", "group_id");
     return $spec;
   }
 
   function getProps() {
   	$specs = parent::getProps();
-    $specs["chir_id"]      = "ref class|CMediusers";
+    $specs["user_id"]      = "ref class|CMediusers";
     $specs["function_id"]  = "ref class|CFunctions";
     $specs["group_id"]     = "ref class|CGroups";
     $specs["nom"]          = "str notNull seekable confidential";
@@ -59,7 +59,7 @@ class CPack extends CMbObject {
   }
   
   function loadRefsFwd($cached = false) {
-    $this->_ref_chir = $this->loadFwdRef("chir_id", $cached);
+    $this->_ref_user = $this->loadFwdRef("user_id", $cached);
     $this->_ref_function = $this->loadFwdRef("function_id", $cached);
     $this->_ref_group = $this->loadFwdRef("group_id", $cached);
   }
@@ -68,7 +68,7 @@ class CPack extends CMbObject {
     parent::updateFormFields();
     $this->_view = $this->nom;
     
-    if ($this->chir_id    ) $this->_owner = "user";
+    if ($this->user_id    ) $this->_owner = "user";
     if ($this->function_id) $this->_owner = "func";
     if ($this->group_id   ) $this->_owner = "etab";
     
@@ -128,7 +128,7 @@ class CPack extends CMbObject {
         if (!$user->load($id)) return $packs;
         $user->loadRefFunction();
 
-        $where["chir_id"]     = "= '$user->_id'";
+        $where["user_id"]     = "= '$user->_id'";
         $where["function_id"] = "IS NULL";
         $where["group_id"]    = "IS NULL";
         $packs["user"] = $pack->loadlist($where, $order);
@@ -143,7 +143,7 @@ class CPack extends CMbObject {
           $func_id = $func->_id;
         }
         
-        $where["chir_id"]     = "IS NULL";
+        $where["user_id"]     = "IS NULL";
         $where["function_id"] = "= '$func_id'";
         $where["group_id"]    = "IS NULL";
         $packs["func"] = $pack->loadlist($where, $order);
@@ -166,7 +166,7 @@ class CPack extends CMbObject {
           $etab_id = $func->group_id;
         }
         
-        $where["chir_id"]     = "IS NULL";
+        $where["user_id"]     = "IS NULL";
         $where["function_id"] = "IS NULL";
         $where["group_id"]    = " = '$etab_id'";
         $packs["etab"] = $pack->loadlist($where, $order);
@@ -176,10 +176,10 @@ class CPack extends CMbObject {
   }
   
   function getPerm($permType) {
-    if(!$this->_ref_chir) {
+    if(!$this->_ref_user) {
       $this->loadRefsFwd();
     }
-    return $this->_ref_chir->getPerm($permType);
+    return $this->_ref_user->getPerm($permType);
   }
 }
 

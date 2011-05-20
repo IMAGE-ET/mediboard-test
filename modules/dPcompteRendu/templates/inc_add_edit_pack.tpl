@@ -16,8 +16,8 @@ addEditPackCallback = function(id) {
 changeClass = function(class_name){
 	var oForm = getForm("editFrm");
 	var object_guid = '';
-	if ($V(oForm.chir_id) != '')
-		object_guid = 'CMediUsers-' + $V(oForm.chir_id);
+	if ($V(oForm.user_id) != '')
+		object_guid = 'CMediUsers-' + $V(oForm.user_id);
 	else if ($V(oForm.function_id) != '')
 		object_guid = 'CFunctions-' + $V(oForm.function_id);
 	else
@@ -53,12 +53,12 @@ Main.add(function() {
     </tr>
 
     <tr>
-      <th>{{mb_label object=$pack field="chir_id"}}</th>
+      <th>{{mb_label object=$pack field="user_id"}}</th>
       <td>
-        <select name="chir_id" class="{{$pack->_props.chir_id}}" style="width: 12em;" {{if $pack->_id}}onchange="reloadListModele(this.form.object_class.value,'CMediUsers-'+this.value);"{{/if}}>
+        <select name="user_id" class="{{$pack->_props.user_id}}" style="width: 12em;" {{if $pack->_id}}onchange="reloadListModele(this.form.object_class.value,'CMediUsers-'+this.value);"{{/if}}>
           <option value="">&mdash; Associer &mdash;</option>
           {{foreach from=$listUser item=_user}}
-            <option class="mediuser" style="border-color: #{{$_user->_ref_function->color}};" value="{{$_user->_id}}" {{if $_user->_id == $pack->chir_id}}selected="selected"{{/if}}>
+            <option class="mediuser" style="border-color: #{{$_user->_ref_function->color}};" value="{{$_user->_id}}" {{if $_user->_id == $pack->user_id}}selected="selected"{{/if}}>
               {{$_user}}
             </option>
           {{/foreach}}

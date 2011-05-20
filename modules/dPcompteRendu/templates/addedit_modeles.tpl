@@ -18,7 +18,7 @@ var Modele = {
         $V(oForm.compte_rendu_id, "");
         
         {{if $isPraticien}}
-        $V(oForm.chir_id, "{{$user_id}}");
+        $V(oForm.user_id, "{{$user_id}}");
         $V(oForm.function_id, "");
         {{/if}}
         
@@ -27,7 +27,7 @@ var Modele = {
       }
     {{else}}
       $V(oForm.compte_rendu_id, "");
-      $V(oForm.chir_id, "{{$user_id}}");
+      $V(oForm.user_id, "{{$user_id}}");
       $V(oForm.nom, "Copie de "+ $V(oForm.nom));
       oForm.onsubmit();
     {{/if}}
@@ -188,11 +188,11 @@ Main.add(function () {
       {{mb_key object=$compte_rendu}}
       {{mb_field object=$compte_rendu field="object_id" hidden=1}}
       {{if $compte_rendu->_id}}
-      <button class="new" type="button" onclick="Modele.create()">
-        {{tr}}CCompteRendu-title-create{{/tr}}
-      </button>
+        <button class="new" type="button" onclick="Modele.create()">
+          {{tr}}CCompteRendu-title-create{{/tr}}
+        </button>
       {{/if}}
-      <table class="form">
+      <table class="form" id="info_model">
         <tr>
           <th class="category" colspan="2">
             {{if $compte_rendu->_id}}
@@ -249,15 +249,15 @@ Main.add(function () {
         </tr>
                 
         <tr>
-          <th>{{mb_label object=$compte_rendu field="chir_id"}}</th>
+          <th>{{mb_label object=$compte_rendu field="user_id"}}</th>
           <td>
             {{if !$droit}}
-              <input type="hidden" name="chir_id" value="{{$mediuser->_id}}" />
+              <input type="hidden" name="user_id" value="{{$mediuser->_id}}" />
             {{/if}}
-            <select {{if !$droit}}disabled='disabled'{{/if}} name="chir_id" class="{{$compte_rendu->_props.chir_id}}" style="width: 15em;">
+            <select {{if !$droit}}disabled='disabled'{{/if}} name="user_id" class="{{$compte_rendu->_props.user_id}}" style="width: 15em;">
               <option value="">&mdash; {{tr}}CCompteRendu-set-user{{/tr}}</option>
               {{foreach from=$listPrat item=curr_prat}}
-              <option class="mediuser" style="border-color: #{{$curr_prat->_ref_function->color}};" value="{{$curr_prat->_id}}" {{if $curr_prat->_id == $compte_rendu->chir_id}} selected="selected" {{/if}}>
+              <option class="mediuser" style="border-color: #{{$curr_prat->_ref_function->color}};" value="{{$curr_prat->_id}}" {{if $curr_prat->_id == $compte_rendu->user_id}} selected="selected" {{/if}}>
               {{$curr_prat->_view}}
               </option>
               {{/foreach}}
@@ -275,7 +275,12 @@ Main.add(function () {
         
           {{if $pdf_thumbnails && $app->user_prefs.pdf_and_thumbs}}
             <tr>
-              <th>{{mb_label object=$compte_rendu field="fast_edit_pdf"}}</th>
+              <th style="text-align: right;">
+                {{mb_label object=$compte_rendu field="fast_edit_pdf" style="display: none"}}
+                <label class="notNullOK" title="{{tr}}CCompteRendu-fast_edit_pdf-desc{{/tr}}">
+                  <strong>PDF</strong>
+                </label>
+              </th>
               <td>
                 {{mb_field object=$compte_rendu field="fast_edit_pdf"}}
               </td>
