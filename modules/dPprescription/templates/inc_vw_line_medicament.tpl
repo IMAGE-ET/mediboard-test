@@ -371,11 +371,12 @@
 	                    {{$_line_subst->_short_view}} ({{$_line_subst->_frequence}})
 	                  {{else}}
 	                    {{$_line_subst->_view}}
+                      {{if $_line_subst->_ref_prises|@count}} ({{/if}}
                       {{foreach from=$_line_subst->_ref_prises item=_prise_variante name=prises}}
-                        {{if !$smarty.foreach.prises.last}}
-                        ,
-                        {{/if}} {{$_prise_variante->_view}}
+                        {{$_prise_variante->_view}}
+                        {{if !$smarty.foreach.prises.last}} ,{{/if}}
                       {{/foreach}}
+                      {{if $_line_subst->_ref_prises|@count}} ) {{/if}}
 	                  {{/if}}
 	                {{if !$_line_subst->substitute_for_id}}(originale){{/if}}</option>
 	              {{/foreach}}
