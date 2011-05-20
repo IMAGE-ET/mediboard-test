@@ -979,6 +979,7 @@ $locales['mod-dPpatients-tab-vw_idx_patients'] = 'Chercher un dossier';
 $locales['mod-dPpatients-tab-vw_medecins'] = 'Correspondants médicaux';
 $locales['mod-dPpatients-tab-vw_recherche'] = 'Recherche dossiers cliniques';
 $locales['mod-dPpatients-tab-vw_recherche_dossier_clinique'] = 'Recherche dossiers cliniques';
+$locales['mod-ecap-tab-ajax_refresh_dhe_service'] = 'Choix du service';
 $locales['module-dPpatients-court'] = 'Dossiers patient';
 $locales['module-dPpatients-long'] = 'Gestion des dossiers patient';
 $locales['pref-VitaleVision'] = 'Préférer VitaleVision';
