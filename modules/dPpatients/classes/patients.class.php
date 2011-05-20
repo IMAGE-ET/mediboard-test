@@ -1626,13 +1626,17 @@ class CPatient extends CMbObject {
   function updateNomPaysInsee() {
   	$pays = new CPaysInsee();
   	if ($this->pays_naissance_insee) {
-	  	$pays->numerique = $this->pays_naissance_insee;
-	    $pays->loadMatchingObject();
+  	  $where = array(
+  	    "numerique" => $pays->_spec->ds->prepare("= %", $this->pays_naissance_insee),
+  	  );
+	    $pays->loadObject($where);
 	    $this->_pays_naissance_insee = $pays->nom_fr;
   	}
   	if ($this->assure_pays_naissance_insee) {
-  		$pays->numerique = $this->assure_pays_naissance_insee;
-      $pays->loadMatchingObject();
+      $where = array(
+        "numerique" => $pays->_spec->ds->prepare("= %", $this->assure_pays_naissance_insee),
+      );
+      $pays->loadObject($where);
       $this->_assure_pays_naissance_insee = $pays->nom_fr;
   	}
   }
