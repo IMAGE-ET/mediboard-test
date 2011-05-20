@@ -25,16 +25,25 @@ function getCurrentLit($sejour, $_date, $_hour, &$lits, &$affectations){
   }
   return $lit;
 }			            
-			            
-$date         = CValue::getOrSession("date", mbDate());
-$dateTime_min = CValue::getOrSession("_dateTime_min", "$date 00:00:00");
-$dateTime_max = CValue::getOrSession("_dateTime_max", "$date 23:59:59");
-$periode      = CValue::get("periode");
-$service_id   = CValue::getOrSession("service_id");
-$by_patient   = CValue::get("by_patient", false);
+
+$periode       = CValue::get("periode");
+$service_id    = CValue::getOrSession("service_id");
+$by_patient    = CValue::get("by_patient", false);
 $show_inactive = CValue::get("show_inactive", "0");
 $_present_only = CValue::get("_present_only", 1);
-$offline     = CValue::get("offline", 0);
+$offline       = CValue::get("offline", 0);
+$date          = CValue::getOrSession("date", mbDate());
+$do            = CValue::get("do");
+
+if($offline){
+	$by_patient = true;
+	$do = 1;
+  $dateTime_min = mbDateTime(" - 12 HOURS");
+	$dateTime_max = mbDateTime(" + 24 HOURS");
+} else {
+	$dateTime_min = CValue::getOrSession("_dateTime_min", "$date 00:00:00");
+  $dateTime_max = CValue::getOrSession("_dateTime_max", "$date 23:59:59");
+}
 
 $date_min = mbDate($dateTime_min);
 $date_max = mbDate($dateTime_max);
@@ -227,7 +236,7 @@ foreach($trans_and_obs as &$_trans) {
   krsort($_trans, SORT_STRING);
 }
 
-if (CValue::get("do") && ($do_medicaments || $do_injections || $do_perfusions || $do_aerosols || $do_elements)) {
+if ($do && ($do_medicaments || $do_injections || $do_perfusions || $do_aerosols || $do_elements)) {
 	// Chargement de toutes les prescriptions
 	$where = array();
 	$ljoin = array();

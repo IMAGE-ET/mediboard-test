@@ -513,6 +513,14 @@
 	      {{/foreach}}  
 		  {{/foreach}}
 		{{/foreach}}
+		
+		{{if $offline && $by_patient && $smarty.foreach.foreach_lines.last}}
+		  <tr>
+		  	<th colspan="6">
+		  		Fin du dossier pour le patient {{$patient->_view}}
+				</th>
+		  </tr>
+		{{/if}}
 	  {{/foreach}}
 	{{/foreach}}
 	</table>
