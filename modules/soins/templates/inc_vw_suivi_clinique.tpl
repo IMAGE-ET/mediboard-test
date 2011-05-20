@@ -27,9 +27,11 @@
   <tr>
     <th class="title" colspan="2" style="background-color: #6688CC">
     {{mb_include module=system template=inc_object_notes object=$patient}}
-      <span style="float: left;">
-        {{include file="../../dPpatients/templates/inc_vw_photo_identite.tpl" mode="read" size=32}}
-      </span>
+      <a href="?m=dPpatients&tab=vw_full_patients&patient_id={{$patient->_id}}">
+        <span style="float: left;">
+          {{include file="../../dPpatients/templates/inc_vw_photo_identite.tpl" mode="read" size=32}}
+        </span>
+      </a>
       
       {{mb_include module=system template=inc_object_idsante400 object=$patient}}
       {{mb_include module=system template=inc_object_history object=$patient}}
@@ -50,6 +52,12 @@
       </a>
       {{/if}}
 
+      {{if $patient->date_lecture_vitale}}
+        <div style="float: right;">
+          <img src="images/icons/carte_vitale.png" title="{{tr}}CPatient-date-lecture-vitale{{/tr}} : {{mb_value object=$patient field="date_lecture_vitale" format=relative}}" />
+        </div>
+      {{/if}}
+      
       <form name="actionPat" action="?" method="get">
         <input type="hidden" name="m" value="dPpatients" />
         <input type="hidden" name="tab" value="vw_idx_patients" />

@@ -20,7 +20,7 @@
 {{mb_script module="dPprescription" script="element_selector"}}
 {{mb_script module="dPprescription" script="plan_soins"}}
 {{mb_script module="dPprescription" script="prescription"}}
-
+{{mb_script module="dPpatients" script="patient"}}
 {{assign var="do_subject_aed" value="do_sejour_aed"}}
 {{assign var="module" value="dPhospi"}}
 {{mb_include module=dPsalleOp template=js_codage_ccam}}
@@ -34,18 +34,10 @@ function loadActesNGAP(sejour_id){
   url.requestUpdate('listActesNGAP');
 }
 
-function loadPatient(patient_id) {
-  var url = new Url("system", "httpreq_vw_complete_object");
-  url.addParam("object_class","CPatient");
-  url.addParam("object_id",patient_id);
-  url.requestUpdate('viewPatient');
-}
-
-function loadSejour(sejour_id) {
-  var url = new Url("system", "httpreq_vw_complete_object");
-  url.addParam("object_class","CSejour");
-  url.addParam("object_id",sejour_id);
-  url.requestUpdate('viewSejourHospi');
+function loadSuiviClinique(sejour_id) {
+  var url = new Url("soins", "ajax_vw_suivi_clinique");
+  url.addParam("sejour_id", sejour_id);
+  url.requestUpdate("suivi_clinique");
 }
 
 function loadDocuments(sejour_id) {
@@ -100,8 +92,7 @@ function loadViewSejour(sejour_id, praticien_id, patient_id, date){
 	  }
   {{/if}}
   
-  loadPatient(patient_id);
-  loadSejour(sejour_id); 
+  loadSuiviClinique(sejour_id);
   loadDocuments(sejour_id);
   
   {{if $isImedsInstalled}}
@@ -534,9 +525,8 @@ printDossierComplet = function(){
         <li>
           <button type="button" class="hslip notext" onclick="$('left-column').toggle();" title="Afficher/cacher la colonne de gauche"></button>
         </li>
-        <li><a href="#viewPatient">Patient</a></li>
-        <li><a href="#viewSejourHospi">Séjour</a></li>
-        <li onmousedown="refreshConstantesHack(document.form_prescription.sejour_id.value)"><a href="#constantes-medicales">Constantes</a></li>
+        <li><a href="#suivi_clinique">{{tr}}CSejour.suivi_clinique{{/tr}}</a></li>
+        <li onmousedown="refreshConstantesHack(document.form_prescription.sejour_id.value)"><a href="#constantes-medicales">{{tr}}CPatient.surveillance{{/tr}}</a></li>
         {{if $isPrescriptionInstalled}}
         <li onmousedown="PlanSoins.loadTraitement(document.form_prescription.sejour_id.value,'{{$date}}','','administration')"><a href="#dossier_traitement">Suivi de soins</a></li>
         <li onmousedown="$('prescription_sejour').update(''); Prescription.reloadPrescSejour('', document.form_prescription.sejour_id.value, null, null, null, null, null, '', null, false);">
@@ -561,17 +551,10 @@ printDossierComplet = function(){
       <hr class="control_tabs" />
       
       <!-- Tabs -->
-      <div id="viewPatient" style="display: none;">
+      <div id="suivi_clinique" style="display: none;">
         <div class="small-info">
           Veuillez sélectionner un séjour dans la liste de gauche pour afficher
-          ici toutes les informations sur le patient.
-        </div>
-      </div>
-      
-      <div id="viewSejourHospi" style="display: none;">
-        <div class="small-info">
-          Veuillez sélectionner un séjour dans la liste de gauche pour afficher
-          ici toutes les informations le concernant.
+          ici toutes les informations sur le patient et le séjour.
         </div>
       </div>
       
