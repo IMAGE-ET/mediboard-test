@@ -320,6 +320,15 @@ function smarty_modifier_ternary($value, $option1, $option2) {
 }
 
 /**
+ * Trace modifier
+ * @param object $value The condition
+ * @return void
+ */
+function smarty_modifier_trace($value) {
+  mbTrace($value);
+}
+
+/**
  * @param array params tableau des parametres
  * - object          : Objet
  * - field           : Nom du champ a afficher (le champs doit avoir des specs sinon "spec" non optionnel) 
@@ -706,6 +715,7 @@ class CSmartyDP extends Smarty {
     $this->register_modifier("stripslashes"      , "smarty_modifier_stripslashes");
     $this->register_modifier("emphasize"         , "smarty_modifier_emphasize");
     $this->register_modifier("ternary"           , "smarty_modifier_ternary");
+    $this->register_modifier("trace"             , "smarty_modifier_trace");
     $this->register_modifier("currency"          , "smarty_modifier_currency");
     $this->register_modifier("percent"           , "smarty_modifier_percent");
     $this->register_modifier("spancate"          , "smarty_modifier_spancate");
