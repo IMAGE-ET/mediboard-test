@@ -12,6 +12,9 @@
  * @abstract Gère les lits d'hospitalisation
  */
 class CLit extends CMbObject {
+  
+  static $_prefixe = null;
+  
   // DB Table key
 	var $lit_id = null;	
   
@@ -69,8 +72,8 @@ class CLit extends CMbObject {
   
   function updateFormFields() {
     parent::updateFormFields();
-    $this->_view = $this->nom;
-    $this->_short_view = $this->nom;
+    $this->_shortview = self::$_prefixe . $this->nom;
+    $this->_view      = $this->_shortview;
   }
   
   function loadCompleteView() {
@@ -79,13 +82,12 @@ class CLit extends CMbObject {
     $chambre =& $this->_ref_chambre;
     $chambre->loadRefsFwd();
     
-    $this->_view = "{$chambre->_ref_service->nom} $chambre->nom $this->nom";
-    $this->_short_view = $this->nom;
+    $this->_view = "{$chambre->_ref_service->_view} $chambre->_view $this->_shortview";
   }
   
   function loadRefChambre() {
     $this->_ref_chambre =  $this->loadFwdRef("chambre_id", true);	
-    $this->_view = "{$this->_ref_chambre->nom} - $this->nom";
+    $this->_view = "{$this->_ref_chambre->_view} - $this->_shortview";
     return $this->_ref_chambre;
   }
 
@@ -142,6 +144,8 @@ class CLit extends CMbObject {
     $this->_ref_next_dispo->loadObject($where, $order);
     $this->_ref_next_dispo->checkDaysRelative($date);
   }
-  
 }
+
+CLit::$_prefixe = CAppUI::conf("dPhospi CLit prefixe");
+
 ?>

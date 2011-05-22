@@ -364,7 +364,7 @@
 	        <span style="float: left">
             <strong>{{$lit->_ref_chambre->_view}}</strong>
             <br />
-	          <strong>{{$lit->_short_view}}</strong>
+	          <strong>{{$lit->_shortview}}</strong>
 	        </span>
 			    <span style="float: right">
 			      DE: {{$sejour->_entree|date_format:"%d/%m/%Y"}}<br />

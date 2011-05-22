@@ -14,6 +14,7 @@
 
 <ul id="tabs-configure" class="control_tabs">
   <li><a href="#config-dPhospi">{{tr}}config-dPhospi{{/tr}}</a></li>
+  <li><a href="#CLit">{{tr}}CLit{{/tr}}</a></li>
   <li><a href="#CService">{{tr}}CService{{/tr}}</a></li>
   <li><a href="#config-synchro_sejour_affectation">{{tr}}config-synchro_sejour_affectation{{/tr}}</a></li>
 </ul>
@@ -22,6 +23,10 @@
 
 <div id="config-dPhospi" style="display: none;">
   {{mb_include template=inc_config_dPhospi}}
+</div>
+
+<div id="CLit" style="display: none;">
+  {{mb_include template=CLit_config}}
 </div>
 
 <div id="CService" style="display: none;">

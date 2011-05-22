@@ -51,7 +51,7 @@ Main.add(function () {
 <table class="tbl main">
   {{if $typeVue == 0}}
   <tr>
-    <th class="title" colspan="4"">
+    <th class="title" colspan="4">
       {{$date_recherche|date_format:$conf.datetime}} : {{$libre|@count}} lit(s) disponible(s)
     </th>
   </tr>

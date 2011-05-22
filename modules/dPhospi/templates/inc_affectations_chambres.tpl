@@ -55,7 +55,7 @@
       {{/if}}
 
       <a name="chambre{{$curr_chambre->_id}}" style="font-weight: bold;">
-        {{$curr_chambre->nom}}
+        {{$curr_chambre->_shortview}}
       </a>
     </th>
   </tr>

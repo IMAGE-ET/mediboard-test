@@ -71,7 +71,7 @@ function validationRepas(typerepas_id){
           {{foreach from=$curr_chambre->_ref_lits item=curr_lit}}
             {{foreach from=$curr_lit->_ref_affectations item=curr_affect}}
               <tr>
-                <td>{{$curr_chambre->nom}} - {{$curr_lit->_view}}</td>
+                <td>{{$curr_chambre->_shortview}} - {{$curr_lit->_shortview}}</td>
                 <td>{{$curr_affect->_ref_sejour->_ref_patient->_view}}</td>
                 {{foreach from=$listTypeRepas key=keyType item=curr_type}}
                 <td class="button">

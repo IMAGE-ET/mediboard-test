@@ -41,7 +41,7 @@
         <tr>
           <th class="category" colspan="6" style="font-size: 0.9em; {{if !$curr_lit->_ref_affectations|@count}}opacity: 0.5;{{/if}}">
             <span style="float: left;">{{$curr_chambre}}</span>
-            <span style="float: right;">{{$curr_lit->nom}}</span>
+            <span style="float: right;">{{$curr_lit->_shortview}}</span>
           </th>
         </tr> 
         {{foreach from=$curr_lit->_ref_affectations item=curr_affectation}}

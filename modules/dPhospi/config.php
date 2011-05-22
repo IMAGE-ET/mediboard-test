@@ -12,6 +12,12 @@ $dPconfig["dPhospi"] = array (
     "psy"        => "",
     "urg"        => "",
     "consult"    => ""
+  ),
+  "CLit" => array(
+    "prefixe" => ""
+  ),
+  "CChambre" => array(
+    "prefixe" => ""
   )
 );
 

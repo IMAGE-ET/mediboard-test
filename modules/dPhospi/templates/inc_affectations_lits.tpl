@@ -3,7 +3,7 @@
     {{if $curr_lit->_overbooking}}
       <img src="images/icons/warning.png" alt="warning" title="Over-booking: {{$curr_lit->_overbooking}} collisions" />
     {{/if}}
-    {{$curr_lit->nom}}
+    {{$curr_lit->_shortview}}
   </td>
   <td class="action">
     {{if $can->edit}}
@@ -167,7 +167,7 @@
         {{/if}}
         
         {{if $aff_prev->_id}}
-          <strong>Déplacé</strong> (chambre: {{$aff_prev->_ref_lit->_ref_chambre->nom}}):
+          <strong>Déplacé</strong> (chambre: {{$aff_prev->_ref_lit->_ref_chambre->_shortview}}):
         {{else}}
           <strong>Entrée</strong>:
         {{/if}}
@@ -200,7 +200,7 @@
         {{/if}}
         
         {{if $aff_next->_id}}
-        <strong>Déplacé</strong> (chambre: {{$aff_next->_ref_lit->_ref_chambre->nom}}):
+        <strong>Déplacé</strong> (chambre: {{$aff_next->_ref_lit->_ref_chambre->_shortview}}):
         {{else}}
         <strong>Sortie</strong>:
         {{/if}}

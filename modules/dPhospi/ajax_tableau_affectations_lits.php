@@ -17,8 +17,6 @@ CCanDo::checkRead();
 
 CAppUI::requireModuleFile("dPhospi", "inc_vw_affectations");
 
-$ds = CSQLDataSource::get("std");
-
 $g = CGroups::loadCurrent()->_id;
 
 // A passer en variable de configuration
@@ -34,7 +32,6 @@ $filterFunction  = CValue::getOrSession("filterFunction");
 $emptySejour = new CSejour;
 $emptySejour->_type_admission = $_type_admission;
 
-// Récupération du service à ajouter/éditer
 $totalLits = 0;
 
 // Récupération des chambres/services

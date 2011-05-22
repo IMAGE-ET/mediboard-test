@@ -29,6 +29,7 @@ Main.add(function () {
   <tr>
     <td>
       <button type="button" onclick="showLegend()" class="search">Légende</button>
+      <button type="button" onclick="printTableau()" class="print">Impression</button>
       <button type="button" onclick="showRapport('{{$date}}')" class="print">Rapport</button>
     </td>
     <td>
@@ -67,7 +68,7 @@ Main.add(function () {
 
   <tr>
     <td class="greedyPane" colspan="2">
-      <table class="affectations">
+      <table class="layout affectations">
         <tr>
         {{foreach from=$services item=curr_service}}
           {{if $curr_service->_ref_chambres|@count}}

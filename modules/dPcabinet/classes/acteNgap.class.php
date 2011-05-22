@@ -21,9 +21,6 @@ class CActeNGAP extends CActe {
   var $complement  = null;
   var $libelle     = null;
   
-  // Form fields
-  var $_short_view = null;
-  
   // Distant fields
   var $_execution = null;
   

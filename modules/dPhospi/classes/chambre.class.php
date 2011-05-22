@@ -13,6 +13,9 @@
  * - contient des lits
  */
 class CChambre extends CMbObject {
+  
+  static $_prefixe = null;
+  
   // DB Table key
 	var $chambre_id = null;	
   
@@ -66,7 +69,8 @@ class CChambre extends CMbObject {
   
   function updateFormFields() {
     parent::updateFormFields();
-    $this->_view = $this->nom;
+    $this->_shortview = self::$_prefixe . $this->nom;
+    $this->_view      = $this->_shortview;
   }
 	
 	function loadRefService() {
@@ -184,5 +188,7 @@ class CChambre extends CMbObject {
     $this->_conflits_chirurgiens /= 2;
   }
 }
-  
+
+CChambre::$_prefixe = CAppUI::conf("dPhospi CChambre prefixe");
+
 ?>

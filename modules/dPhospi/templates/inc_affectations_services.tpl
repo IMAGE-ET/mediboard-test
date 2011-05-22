@@ -2,7 +2,8 @@
   <tr>
     <th>
       {{$curr_service->nom}}
-      / {{$curr_service->_nb_lits_dispo}} lit(s) dispo
+      <br />
+      <span style="font-size: 80%;">{{$curr_service->_nb_lits_dispo}} lit(s) dispo</span>
     </th>
   </tr>
 </table>

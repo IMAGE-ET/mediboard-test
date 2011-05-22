@@ -15,8 +15,6 @@ CAppUI::requireModuleFile("dPhospi", "inc_vw_affectations");
 
 $pathos = new CDiscipline();
 
-$ds = CSQLDataSource::get("std");
-
 $g = CGroups::loadCurrent()->_id;
 
 // A passer en variable de configuration

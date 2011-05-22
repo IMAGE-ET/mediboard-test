@@ -186,6 +186,16 @@ ObjectTooltip.createTimeHospi = function (element, chir_id, codes) {
 	} );
 };
 
+function printTableau() {
+  var oForm = getForm("chgAff");
+  var url = new Url;
+  url.setModuleAction("dPhospi", "print_tableau");
+  url.addParam("date", $V(oForm.date));
+  url.addParam("mode", $V(oForm.mode));
+  url.addParam("services[]", $V(oForm["list_services[]"]), true);
+  url.popup(850, 600, "printAffService");
+}
+
 function reloadTableau() {
   $("hospitalisation").checked = false;
   if(selected_hospi && selected_hospitalisation) {
