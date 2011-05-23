@@ -138,7 +138,7 @@
       {{if $show_statut == 1}}
         <div style="clear: both; font-weight: bold; padding-top: 3px;">
           <form name="editRPU-{{$rpu->_id}}"
-            onsubmit="return onSubmitFormAjax(this, {onComplete: function() { MainCourante.start() }});">
+            onsubmit="return onSubmitFormAjax(this, {onComplete: function() { MainCourante.start() }});" method="get" action="?">
             <input type="hidden" name="m" value="dPurgences" />
             <input type="hidden" name="dosql" value="do_rpu_aed" />
             <input type="hidden" name="del" value="0" />
