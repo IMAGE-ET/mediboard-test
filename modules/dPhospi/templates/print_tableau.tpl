@@ -6,6 +6,9 @@ Main.add(function () {
 
 <table class="main layout affectations">
   <tr>
+    <th colspan="100">Affectations du {{$date|date_format:$conf.longdate}}</th>
+  </tr>
+  <tr>
   {{foreach from=$services item=_service}}
     {{if $_service->_ref_chambres|@count}}
     <td>
