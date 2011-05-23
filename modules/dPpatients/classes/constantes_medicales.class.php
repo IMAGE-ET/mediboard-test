@@ -163,6 +163,10 @@ class CConstantesMedicales extends CMbObject {
       "unit" => "ml", 
       "min" => 0, "max" => 2000
     ),
+    "diurese_miction"   => array(
+      "unit" => "ml",
+      "min" => 0, "max" => 2000
+    ),
     "injection"         => array(
       "unit" => "", 
       "formfields" => array("_inj", "_inj_essai"), 
@@ -272,6 +276,7 @@ class CConstantesMedicales extends CMbObject {
     $specs['redon_2']                = 'float pos min|0 max|1000';
     $specs['redon_3']                = 'float pos min|0 max|1000';
     $specs['diurese']                = 'float min|0';
+    $specs['diurese_miction']        = 'float min|0';
     $specs['injection']              = 'str maxLength|10';
     $specs["PVC"]                    = "float min|0";
     $specs["perimetre_abdo"]         = "float min|0";

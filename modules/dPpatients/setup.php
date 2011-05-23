@@ -1247,7 +1247,14 @@ class CSetupdPpatients extends CSetup {
               WHERE ta IS NOT NULL AND ta_gauche IS NULL";
     $this->addQuery($query);
     
-    $this->mod_version = "1.12";
+    $this->makeRevision("1.12");
+    $query = "ALTER TABLE `constantes_medicales` 
+              ADD `diurese_miction` FLOAT UNSIGNED AFTER `diurese`;";
+    $this->addQuery($query);
+    
+    $this->mod_version = "1.13";
+    
+    
   }
 }
 
