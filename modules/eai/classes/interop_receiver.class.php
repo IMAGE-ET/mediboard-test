@@ -93,7 +93,8 @@ class CInteropReceiver extends CInteropActor {
       foreach ($objects[$_interop_receiver] as $_receiver) {
         $_receiver->loadRefGroup();
         $_receiver->isReachable();
-        $_receiver->lastMessage();
+        // Pose des problèmes de performances (SLOW QUERY)
+        //$_receiver->lastMessage();
       }
     }
     

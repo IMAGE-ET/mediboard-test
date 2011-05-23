@@ -13,7 +13,7 @@
 
 <table class="tbl">
   <tr>
-    <th class="title" colspan="6">
+    <th class="title" colspan="5">
       <a style="float: right" class="button change notext" href="#" onclick="InteropActor.refreshActors('{{$actor->_class_name}}');">
         {{tr}}reload{{/tr}} {{tr}}{{$actor->_class_name}}{{/tr}}
       </a>
@@ -25,7 +25,6 @@
     <th>{{mb_label object=$actor field="group_id"}}</th>
     <th>{{mb_label object=$actor field="actif"}}</th>
     <th>{{mb_label object=$actor field="_reachable"}}</th>
-    <th>{{mb_label object=$actor field="_ref_last_message"}}</th>
   </tr>
   {{foreach from=$actors key=type_actor item=_actors}}
     <tr>
@@ -50,15 +49,6 @@
         {{foreach from=$_actor->_ref_exchanges_sources item=_exchange_source}}
           {{mb_include module=system template=inc_img_status_source exchange_source=$_exchange_source}}
         {{/foreach}}
-      </td>
-      <td>
-        {{assign var=last_message value=$_actor->_ref_last_message}}
-        {{if isset($last_message|smarty:nodefaults)}}
-          <a title="{{mb_value object=$last_message field="date_echange"}}" 
-            href="?m=eai&tab=vw_idx_exchange_data_format#exchange_class_name={{$last_message->_class_name}}&exchange_type={{$last_message->type}}&exchange_group_id={{$last_message->group_id}}">
-            {{mb_value object=$last_message field="date_echange" format=relative}}
-          </a>
-        {{/if}}
       </td>
     </tr>
     {{/foreach}}
