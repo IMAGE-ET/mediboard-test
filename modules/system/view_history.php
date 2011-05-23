@@ -18,12 +18,24 @@ if (!$can->edit && !$dialog) {
 }
 
 $filter = new CUserLog();
-$filter->_date_min    = CValue::getOrSession("_date_min");
-$filter->_date_max    = CValue::getOrSession("_date_max");
-$filter->user_id      = CValue::getOrSession("user_id");
-$filter->object_id    = CValue::getOrSession("object_id");
-$filter->object_class = CValue::getOrSession("object_class");
-$filter->type         = CValue::getOrSession("type");
+
+if (!$dialog) {
+	$filter->_date_min    = CValue::getOrSession("_date_min");
+	$filter->_date_max    = CValue::getOrSession("_date_max");
+	$filter->user_id      = CValue::getOrSession("user_id");
+	$filter->object_id    = CValue::getOrSession("object_id");
+	$filter->object_class = CValue::getOrSession("object_class");
+	$filter->type         = CValue::getOrSession("type");
+}
+else {
+	$filter->_date_min    = CValue::get("_date_min");
+	$filter->_date_max    = CValue::get("_date_max");
+	$filter->user_id      = CValue::get("user_id");
+	$filter->object_id    = CValue::get("object_id");
+	$filter->object_class = CValue::get("object_class");
+	$filter->type         = CValue::get("type");
+}
+
 $ex_class_id          = CValue::get("ex_class_id");
 
 $object = new CMbObject();
