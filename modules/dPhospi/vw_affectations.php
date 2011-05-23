@@ -39,6 +39,8 @@ $services = new CService;
 $order = "nom";
 $services = $services->loadListWithPerms(PERM_READ,$where, $order);
 
+CMbArray::removeValue(null, $list_services);
+
 if(!$list_services){
   foreach($services as $_service){
     $list_services[] = $_service->_id;
