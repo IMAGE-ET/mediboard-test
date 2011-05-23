@@ -56,7 +56,7 @@ class CInteropSender extends CInteropActor {
       foreach ($objects[$_interop_sender] as $_sender) {
         $_sender->loadRefGroup();
         $_sender->isReachable();
-        $_sender->lastMessage();
+        //$_sender->lastMessage();
       }
     }
     
