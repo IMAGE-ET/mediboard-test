@@ -1,6 +1,6 @@
 <?php
-$locales['CConstantesMedicales-PVC-court'] = 'OVC';
-$locales['CConstantesMedicales-PVC-desc'] = 'PV';
+$locales['CConstantesMedicales-PVC-court'] = 'PVC';
+$locales['CConstantesMedicales-PVC-desc'] = 'PVC';
 $locales['CConstantesMedicales-perimetre_abdo-court'] = 'Périmètre abdominal';
 $locales['CConstantesMedicales-perimetre_abdo-desc'] = 'Périmètre abdominal';
 $locales['CConstantesMedicales-perimetre_cou-court'] = 'Périmètre cou';
