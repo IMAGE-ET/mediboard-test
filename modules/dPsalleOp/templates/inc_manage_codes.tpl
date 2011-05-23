@@ -34,6 +34,8 @@ function changeCodeToDel(subject_id, code_ccam, actes_ids){
             {{tr}}Search{{/tr}}
           </button>
        
+          <input type="text" size="10" name="_codes_ccam" />
+          
           <script type="text/javascript">   
             CCAMSelector.init = function(){
               this.sForm = "manageCodes";
@@ -42,12 +44,22 @@ function changeCodeToDel(subject_id, code_ccam, actes_ids){
               {{if ($subject->_class_name=="COperation")}}
               this.sAnesth = "_anesth";
               {{/if}}
-              this.sView = "_newCode";
+              this.sView = "_codes_ccam";
             this.pop();
             }
+
+            var oForm = getForm("manageCodes");
+            var url = new Url("dPccam", "httpreq_do_ccam_autocomplete");
+            url.autoComplete(oForm._codes_ccam, '', {
+              minChars: 1,
+              dropdown: true,
+              width: "250px",
+              updateElement: function(selected) {
+                $V(oForm._codes_ccam, selected.down("strong").innerHTML);
+                ActesCCAM.add('{{$subject->_id}}','{{$subject->_praticien_id}}');
+              }
+            });
           </script>
-          
-          <input type="text" size="10" name="_newCode" />
           
           <button class="add" name="addCode" type="button" onclick="ActesCCAM.add('{{$subject->_id}}','{{$subject->_praticien_id}}')">
             {{tr}}Add{{/tr}}

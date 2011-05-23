@@ -11,8 +11,12 @@
 global $can;
 $ds = CSQLDataSource::get("ccamV2");
 
-if($codeacte = @$_POST["codeacte"]){
-  $sql = "SELECT CODE, LIBELLELONG FROM actes WHERE CODE LIKE '" . addslashes($codeacte) . "%' and DATEFIN = '00000000'";
+$codeacte = @$_POST["_codes_ccam"];
+
+if ($codeacte == '') $codeacte = '%%';
+
+if ($codeacte){
+  $sql = "SELECT CODE, LIBELLELONG FROM actes WHERE CODE LIKE '" . addslashes($codeacte) . "%' and DATEFIN = '00000000' LIMIT 100";
 }
 
 $result = $ds->loadList($sql, null);
@@ -22,7 +26,7 @@ if ($can->read) {
   $smarty = new CSmartyDP();
   $smarty->debugging = false;
 
-  $smarty->assign("codeacte"  , $codeacte);
+  $smarty->assign("_codes_ccam"  , $codeacte);
   $smarty->assign("result"    , $result);
   $smarty->assign("nodebug", true);
 

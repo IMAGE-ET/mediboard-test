@@ -30,7 +30,9 @@ ActesCCAM = {
     var oCcamField = new TokenField(oForm.codes_ccam, {
       sProps : "notNull code ccam"
     } );
-    if(oCcamField.add(oForm._newCode.value, true)){
+    
+    if(oCcamField.add(oForm._codes_ccam.value, true)){
+      $V(getForm("manageCodes")._codes_ccam, "");
       submitFormAjax(oForm, 'systemMsg', oDefaultOptions);
     }
   },
@@ -95,7 +97,7 @@ ActesCCAM = {
 
 function setCodeTemp(code){
   var oForm = getForm("manageCodes");
-  oForm._newCode.value = code;
+  oForm._codes_ccam.value = code;
   oForm.addCode.onclick();
 }
 

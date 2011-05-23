@@ -89,7 +89,7 @@ function setToNow(element) {
                   <button class="add" type="button" onclick="Event.stop(event);
                     {{if $acte->_anesth_associe && $subject->_class_name == "COperation"}}
                     if(confirm('Cet acte ne comporte pas l\'activité d\'anesthésie.\nVoulez-vous ajouter le code d\'anesthésie complémentaire {{$acte->_anesth_associe}} ?')) {
-                      document.manageCodes._newCode.value = '{{$acte->_anesth_associe}}';
+                      document.manageCodes._codes_ccam.value = '{{$acte->_anesth_associe}}';
                       ActesCCAM.add('{{$subject->_id}}','{{$subject->_praticien_id}}');
                     }
                     {{/if}}

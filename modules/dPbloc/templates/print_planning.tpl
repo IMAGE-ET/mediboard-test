@@ -218,13 +218,25 @@ function showCheckboxAnesth(element){
           <td><input type="text" name="_codes_ccam" size="10" value="" />
           <button type="button" class="search" onclick="CCAMSelector.init()">Chercher un code</button>
           <script type="text/javascript">
-          CCAMSelector.init = function(){
-            this.sForm  = "paramFrm";
-            this.sClass = "_class_name";
-            this.sChir  = "_chir";
-            this.sView  = "_codes_ccam";
-            this.pop();
-          }
+            CCAMSelector.init = function(){
+              this.sForm  = "paramFrm";
+              this.sClass = "_class_name";
+              this.sChir  = "_chir";
+              this.sView  = "_codes_ccam";
+              this.pop();
+            }
+            var oForm = getForm('paramFrm');
+            Main.add(function() {
+              var url = new Url("dPccam", "httpreq_do_ccam_autocomplete");
+              url.autoComplete(oForm._codes_ccam, '', {
+                minChars: 1,
+                dropdown: true,
+                width: "250px",
+                updateElement: function(selected) {
+                  $V(oForm._codes_ccam, selected.down("strong").innerHTML);
+                }
+              });
+            });
           </script>
           </td>
         </tr>

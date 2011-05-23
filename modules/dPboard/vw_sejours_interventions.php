@@ -29,11 +29,11 @@ $filterSejour->_date_max_stat = mbDate("-1 DAY", $filterSejour->_date_max_stat);
 
 $filterSejour->praticien_id = $prat->_id;
 $filterSejour->type = CValue::getOrSession("type", 1);
-$filterOperation->codes_ccam = strtoupper(CValue::getOrSession("codes_ccam", ""));
+$filterOperation->_codes_ccam = strtoupper(CValue::getOrSession("_codes_ccam", ""));
 
 $graphs = array(
 	graphPatParTypeHospi($filterSejour->_date_min_stat, $filterSejour->_date_max_stat, $filterSejour->praticien_id, null, $filterSejour->type),
-	graphActivite($filterSejour->_date_min_stat, $filterSejour->_date_max_stat, $filterSejour->praticien_id, null, null, null, $filterOperation->codes_ccam, null, 0),
+	graphActivite($filterSejour->_date_min_stat, $filterSejour->_date_max_stat, $filterSejour->praticien_id, null, null, null, $filterOperation->_codes_ccam, null, 0),
 );
 
 // Variables de templates

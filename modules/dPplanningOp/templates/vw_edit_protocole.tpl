@@ -23,7 +23,7 @@ function refreshListCCAM() {
   var oCcamNode = $("listCodesCcam");
 
   var oForm = document.editFrm;
-  oForm._codeCCAM.value="";
+  $V(oForm._codes_ccam, "");
   var aCcam = oForm.codes_ccam.value.split("|");
   // Si la chaine est vide, il crée un tableau à un élément vide donc :
   aCcam = aCcam.without("");
@@ -47,7 +47,7 @@ function checkCCAM() {
   var oForm = document.editFrm;
   if ($V(oForm.for_sejour) == 1) return true;
   
-  var sCcam = oForm._codeCCAM.value;
+  var sCcam = $V(oForm._codes_ccam);
   if(sCcam != "") {
     if(!oCcamField.add(sCcam,true)) {
       return false;
@@ -222,13 +222,26 @@ Main.add(function () {
             {{mb_label object=$protocole field="codes_ccam"}}
           </th>
           <td colspan="2">
-            <input type="text" name="_codeCCAM" ondblclick="CCAMSelector.init()" size="10" value="" />
-            <button class="add notext" type="button" onclick="oCcamField.add(this.form._codeCCAM.value,true)">{{tr}}Add{{/tr}}</button>
+            <input type="text" name="_codes_ccam" ondblclick="CCAMSelector.init()" size="10" value="" />
+            <button class="add notext" type="button" onclick="oCcamField.add($V(this.form._codes_ccam), true)">{{tr}}Add{{/tr}}</button>
             <button class="search" type="button" onclick="CCAMSelector.init()">Choisir un code</button>
             <script type="text/javascript">
+              var oForm = getForm('editFrm');
+              Main.add(function() {
+                var url = new Url("dPccam", "httpreq_do_ccam_autocomplete");
+                url.autoComplete(oForm._codes_ccam, '', {
+                  minChars: 1,
+                  dropdown: true,
+                  width: "250px",
+                  updateElement: function(selected) {
+                    $V(oForm._codes_ccam, selected.down("strong").innerHTML);
+                    oCcamField.add($V(oForm._codes_ccam), true);
+                  }
+                });
+              });
               CCAMSelector.init = function(){
                 this.sForm  = "editFrm";
-                this.sView  = "_codeCCAM";
+                this.sView  = "_codes_ccam";
                 this.sChir  = "chir_id";
                 this.sClass = "_class_name_";
                 this.pop();

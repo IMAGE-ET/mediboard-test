@@ -30,7 +30,7 @@ PlageOpSelector.init = function(){
 
 CCAMSelector.init = function(){
   this.sForm  = "editOp";
-  this.sView  = "_codeCCAM";
+  this.sView  = "_codes_ccam";
   this.sChir  = "chir_id";
   this.sClass = "_class_name";
   this.pop();
@@ -102,10 +102,24 @@ CCAMSelector.init = function(){
   </tr>
   
   <tr>
-    <th>{{mb_label object=$op field="codes_ccam" defaultFor="_codeCCAM"}}</th>
+    <th>{{mb_label object=$op field="codes_ccam" defaultFor="_codes_ccam"}}</th>
     <td>
-      <input type="text" name="_codeCCAM" ondblclick="CCAMSelector.init()" size="10" value="" onblur="oCcamField.add(this.form._codeCCAM.value,true)" />
-      <button class="add notext" type="button" onclick="oCcamField.add(this.form._codeCCAM.value,true)">{{tr}}Add{{/tr}}</button>
+      <input type="text" name="_codes_ccam" ondblclick="CCAMSelector.init()" size="10" value="" class="autocomplete"/>
+      <div style="display: none; width: 200px !important" class="autocomplete" id="_codes_ccam_auto_complete"></div>
+      <script type="text/javascript">
+        var oForm = getForm('editOp');
+        var url = new Url("dPccam", "httpreq_do_ccam_autocomplete");
+        url.autoComplete(oForm._codes_ccam, '', {
+          minChars: 1,
+          dropdown: true,
+          width: "250px",
+          updateElement: function(selected) {
+            $V(oForm._codes_ccam, selected.down("strong").innerHTML);
+            oCcamField.add($V(oForm._codes_ccam), true);
+          }
+        });
+      </script>
+      <button class="add notext" type="button" onclick="oCcamField.add(this.form._codes_ccam.value,true)">{{tr}}Add{{/tr}}</button>
     </td>
     <td class="button">
       <button type="button" class="search" onclick="CCAMSelector.init()">{{tr}}button-CCodeCCAM-choix{{/tr}}</button>

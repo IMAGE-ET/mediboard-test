@@ -6,7 +6,7 @@ var oCcamField = null;
 function updateTokenCcam(){
   refreshListCCAM("expert");
   refreshListCCAM("easy");
-  document.editOp._codeCCAM.value="";
+  $V(document.editOp._codes_ccam, "");
   modifOp();
 }
 
@@ -78,7 +78,7 @@ function checkFormOperation() {
 
 function checkCCAM() {
   var oForm = document.editOp;
-  var sCcam = oForm._codeCCAM.value;
+  var sCcam = $V(oForm._codes_ccam);
   if(sCcam != "") {
     if(!oCcamField.add(sCcam,true)) {
       return false;

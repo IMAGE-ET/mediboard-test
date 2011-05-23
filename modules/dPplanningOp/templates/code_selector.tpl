@@ -49,7 +49,7 @@ Main.add(function () {
 </script>
 
 <!-- Filtre principal -->
-<form name="selView" action="?">
+<form name="selView" action="?" method="get">
 <input type="hidden" name="type" value="{{$type}}" />
 <input type="hidden" name="chir" value="{{$chir}}" />
 <input type="hidden" name="anesth" value="{{$anesth}}" />

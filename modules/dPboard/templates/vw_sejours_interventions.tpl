@@ -53,18 +53,28 @@ Main.add(function(){
         {{/foreach}}
       </select>
     </td>
-    <td>{{mb_label object=$filterOperation field="codes_ccam"}}</td>
+    <td>{{mb_label object=$filterOperation field="_codes_ccam"}}</td>
     <td>
-      {{mb_field object=$filterOperation field="codes_ccam" canNull="true" size="20"}}
+      {{mb_field object=$filterOperation field="_codes_ccam" canNull="true" size="20"}}
       <button class="search notext" type="button" onclick="CCAMSelector.init()">{{tr}}Search{{/tr}}</button>   
       <script type="text/javascript">
         CCAMSelector.init = function(){
           this.sForm = "filters";
-          this.sView = "codes_ccam";
+          this.sView = "_codes_ccam";
           this.sChir = "_chir";
           this.sClass = "_class_name";
           this.pop();
         }
+        var oForm = getForm("filters");
+        var url = new Url("dPccam", "httpreq_do_ccam_autocomplete");
+        url.autoComplete(oForm._codes_ccam, '', {
+          minChars: 1,
+          dropdown: true,
+          width: "250px",
+          updateElement: function(selected) {
+            $V(oForm._codes_ccam, selected.down("strong").innerHTML);
+          }
+        });
       </script>
     </td>
   </tr>

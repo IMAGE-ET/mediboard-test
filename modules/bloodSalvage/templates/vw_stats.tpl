@@ -83,6 +83,17 @@ Main.add(function () {
   updateTokenCcam($V(filterForm["filters[codes_ccam]"]));
   
   switchMode("{{$mode}}");
+
+  var url = new Url("dPccam", "httpreq_do_ccam_autocomplete");
+  url.autoComplete(filterForm._codes_ccam, '', {
+    minChars: 1,
+    dropdown: true,
+    width: "250px",
+    updateElement: function(selected) {
+      $V(filterForm._codes_ccam, selected.down("strong").innerHTML);
+      oCcamField.add($V(filterForm._codes_ccam), true);
+    }
+  });
 });
 
 function switchMode(mode) {
@@ -106,7 +117,7 @@ function switchMode(mode) {
 
 CCAMSelector.init = function() {
   this.sForm  = "stats-filter";
-  this.sView  = "_code_ccam";
+  this.sView  = "_codes_ccam";
   this.sChir  = "filters[chir_id]";
   this.sClass = "_class_name";
   this.pop();
@@ -118,7 +129,7 @@ function updateTokenCcam(v) {
     codes[i] += '<button class="remove notext" type="button" onclick="oCcamField.remove(\''+codes[i]+'\')"></button>';
   }
   $("list_codes_ccam").update(codes.join(", "));
-  $V(filterForm._code_ccam, '');
+  $V(filterForm._codes_ccam, '');
 }
 </script>
 
@@ -136,21 +147,21 @@ function updateTokenCcam(v) {
         </select>
       </td>
       <th>
-        <label for="_code_ccam">Codes CCAM</label>
+        <label for="_codes_ccam">Codes CCAM</label>
         <!--
         <span class="comparison">
-          <input type="checkbox" value="1" name="comparison[_code_ccam]" />
-          <input type="radio" value="_code_ccam" name="comparison_left" />
-          <input type="radio" value="_code_ccam" name="comparison_right" />
+          <input type="checkbox" value="1" name="comparison[_codes_ccam]" />
+          <input type="radio" value="_codes_ccam" name="comparison_left" />
+          <input type="radio" value="_codes_ccam" name="comparison_right" />
         </span>
         -->
       </th>
       <td>
         <input type="hidden" name="filters[codes_ccam]" value="{{$filters.codes_ccam}}" />
         <input type="hidden" name="_class_name" value="COperation" />
-        <input type="text" name="_code_ccam" ondblclick="CCAMSelector.init()" size="10" value="" />
+        <input type="text" name="_codes_ccam" ondblclick="CCAMSelector.init()" size="10" value="" />
         <button class="search notext" type="button" onclick="CCAMSelector.init()">{{tr}}Search{{/tr}}</button>
-        <button class="tick notext" type="button" onclick="oCcamField.add($V(this.form['_code_ccam']))">{{tr}}Add{{/tr}}</button>
+        <button class="tick notext" type="button" onclick="oCcamField.add($V(this.form['_codes_ccam']))">{{tr}}Add{{/tr}}</button>
       </td>
       
       <td rowspan="4" style="white-space: normal;">
