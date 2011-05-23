@@ -267,7 +267,7 @@ class CRecordSante400 {
    */
   function consumeDate($valueName) {
     $date = $this->consume($valueName);
-    if ($date == "0" or $date == "99999999") {
+    if ($date == "0" || $date == "99999999") {
       return null;
     }
     
@@ -290,7 +290,7 @@ class CRecordSante400 {
    */
   function consumeTime($valueName) {
     $time = $this->consume($valueName);
-    if ($time === "0") {
+    if ($time === "0" ||  $time = "9999") {
       return null;
     }
         
