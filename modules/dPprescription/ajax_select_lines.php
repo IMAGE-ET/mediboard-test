@@ -65,7 +65,7 @@ foreach ($prescription->_ref_prescription_line_mixes as $key=>$_line_mix) {
   }
 }
 
-$checked_lines = CAppUI::conf("dPprescription CPrescription show_modal") ? 1 : $protocole->checked_lines;
+$checked_lines = $protocole->checked_lines;
 
 $smarty = new CSmartyDP;
 $smarty->assign("prescription"   , $prescription);
