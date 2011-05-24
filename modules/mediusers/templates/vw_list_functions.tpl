@@ -6,8 +6,8 @@
   </tr>
   {{foreach from=$functions item=_function}}
   <tr {{if $_function->_id == $function->_id}}class="selected"{{/if}}>
-    <td>
-      <a href="#" onclick="showFunction('{{$_function->_id}}', this)">
+    <td class="text">
+      <a href="#{{$_function->_guid}}" onclick="showFunction('{{$_function->_id}}', this)">
         {{$_function->text}}
       </a>
     </td>

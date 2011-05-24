@@ -9,12 +9,12 @@
 
 <tr>
   {{if $mark->_id}}
-  <th class="title modify" colspan="2">
+  <th class="title modify text" colspan="2">
     {{mb_include module=system template=inc_object_history object=$mark}}
     {{tr}}CTriggerMark-title-modify{{/tr}} '{{$mark}}'
   </th>
   {{else}}
-  <th class="title" colspan="2">
+  <th class="title text" colspan="2">
     {{tr}}CTriggerMark-title-create{{/tr}}
   </th>
   {{/if}}

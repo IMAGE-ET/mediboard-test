@@ -53,7 +53,7 @@
   		  {{foreach from=$senders_source item=_sender_source}}
         {{assign var=source value=$_sender_source->_ref_source}}
 
-        <div><span onmouseover="ObjectTooltip.createEx(this, '{{$source->_guid}}');">{{$source}}</span></div>
+        <div><span onmouseover="ObjectTooltip.createEx(this, '{{$_sender_source->_guid}}');">{{$source}}</span></div>
         {{foreachelse}}
         <div class="empty">{{tr}}CViewSender-back-sources_link.empty{{/tr}}</div>
         {{/foreach}}
