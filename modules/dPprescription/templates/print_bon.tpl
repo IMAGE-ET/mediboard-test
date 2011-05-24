@@ -99,7 +99,7 @@ Main.add( function(){
 	    <th>Bon</th>
 	    <th>Prescripteur</th>
 	    <th>Heure</th>
-	    <th><input type="checkbox" onchange="toggleAll(this.checked);" name="check_all" title="{{tr}}CPrescription.check_uncheck{{/tr}}"/></th>
+	    <th><input type="checkbox" onclick="toggleAll(this.checked);" name="check_all" title="{{tr}}CPrescription.check_uncheck{{/tr}}"/></th>
 		</tr>
 		{{foreach from=$all_bons key=chapitre item=_bons_by_hour key=_chap name=foreach_chap}}
 		  {{foreach from=$_bons_by_hour key=hour item=_bons_by_cat name=foreach_hour}}
