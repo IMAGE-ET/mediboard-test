@@ -29,6 +29,12 @@ class CApp {
    * Make application die properly
    */
   static function rip() {
+    // If the client doesn't support cookies, we destroy its session
+    if (empty($_COOKIE)) {
+      session_unset();
+      @session_destroy(); // Escaped because of an unknown error
+    }
+    
     self::$inPeace = true;
     die;
   }
