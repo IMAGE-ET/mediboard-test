@@ -143,7 +143,7 @@ class CMediusers extends CMbObject {
     
     $specs["_group_id"]              = "ref notNull class|CGroups";
     
-    $specs["_user_username"]         = "str notNull minLength|4 reported";
+    $specs["_user_username"]         = "str notNull minLength|3 reported";
     $specs["_user_password2"]        = "password sameAs|_user_password reported";
     $specs["_user_first_name"]       = "str reported";
     $specs["_user_last_name"]        = "str notNull confidential reported";
