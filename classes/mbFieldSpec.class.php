@@ -578,12 +578,18 @@ class CMbFieldSpec {
           }';
       }
       if ($this->dependsOn) {
+        $wheres = explode("|", $this->dependsOn);
         $sHtml .= ',
           callback: function(element, query){
-            element = input.form.elements["'.$this->dependsOn.'"];
-            if (!element) return query;
-            return query + "&where['.$this->dependsOn.']=" + $V(element);
-          }';
+            var field;';
+        
+        foreach($wheres as $_where) {
+          $sHtml .= "field = input.form.elements[\"".$_where."\"];
+          if (field) query += \"&where[$_where]=\" + \$V(field);";
+        }
+        
+        $sHtml .= "  return query;";
+        $sHtml .= '}';
       }
       
       $sHtml .= '});});</script>';

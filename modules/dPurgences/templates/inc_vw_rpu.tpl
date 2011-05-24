@@ -175,7 +175,10 @@ function showEtabEntreeTransfert(mode) {
             
             <tr id="service_entree_transfert" {{if $rpu->mode_entree != '6'}}style="display:none"{{/if}}>
               <th>{{mb_label object=$rpu field="_service_entree_mutation_id"}}</th>
-              <td>{{mb_field object=$rpu field="_service_entree_mutation_id" form="editRPU" autocomplete="true,1,50,true,true" onchange="this.form.onsubmit();"}}</td> 
+              <td>
+                {{mb_field object=$rpu field="_service_entree_mutation_id" form="editRPU" autocomplete="true,1,50,true,true" onchange="this.form.onsubmit();"}}
+                <input type="hidden" name="cancelled" value="0" />
+              </td> 
             </tr>
             
             {{if $conf.dPurgences.old_rpu == "1"}}

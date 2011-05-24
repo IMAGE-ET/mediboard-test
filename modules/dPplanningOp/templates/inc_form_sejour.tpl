@@ -642,6 +642,7 @@ Main.add( function(){
       </div>
       <div id="services" {{if !$sejour->service_mutation_id}}style="display:none"{{/if}}>
         {{mb_field object=$sejour field="service_mutation_id" form="editSejour" autocomplete="true,1,50,true,true"}}
+        <input type="hidden" name="cancelled" value="0" />
       </div>
     {{else}}
       {{mb_value object=$sejour field=mode_sortie}}

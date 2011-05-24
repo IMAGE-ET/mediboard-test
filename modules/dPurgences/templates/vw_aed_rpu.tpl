@@ -255,6 +255,7 @@
         </div>
         <div id="service_entree_mutation" {{if !$rpu->_service_entree_mutation_id}}style="display:none"{{/if}}>
           {{mb_field object=$rpu field="_service_entree_mutation_id" form="editRPU" autocomplete="true,1,50,true,true"}}
+          <input type="hidden" name="cancelled" value="0" />
         </div>
 			</td>	
 	  </tr>

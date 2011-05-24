@@ -58,7 +58,10 @@
 
   <tr id="service_sortie_transfert" {{if $sejour->mode_sortie != "mutation"}} style="display:none;" {{/if}}>
   	<th>{{mb_label object=$sejour field="service_mutation_id"}}</th>
-		<td>{{mb_field object=$sejour field="service_mutation_id" form="editSejour" autocomplete="true,1,50,true,true" onchange="this.form.onsubmit();"}}</td>
+		<td>
+      {{mb_field object=$sejour field="service_mutation_id" form="editSejour" autocomplete="true,1,50,true,true" onchange="this.form.onsubmit();"}}
+      <input type="hidden" name="cancelled" value="0" />
+    </td>
   </tr>
 	
   <tr id="commentaires_sortie" {{if $sejour->mode_sortie == "" || $sejour->mode_sortie == "normal"}} style="display:none;" {{/if}}>
