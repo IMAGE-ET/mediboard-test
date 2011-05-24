@@ -49,7 +49,7 @@ foreach($listSejours as &$_sejour) {
 $where = array();
 $order = "nom";
 $where["object_class"] = "= 'COperation'";
-$where["chir_id"] = $ds->prepare("= %", $chirSel);
+$where["user_id"] = $ds->prepare("= %", $chirSel);
 $crList    = CCompteRendu::loadModeleByCat("Opération", $where, $order, true);
 $hospiList = CCompteRendu::loadModeleByCat("Hospitalisation", $where, $order, true);
 
