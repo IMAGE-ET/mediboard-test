@@ -179,6 +179,11 @@ class CExClassConstraint extends CMbObject {
     $object = $object_field["object"];
     $field  = $object_field["field"];
 		
+		// cas ou l'objet retrouvé n'a pas le champ (meta objet avec classe differente)
+		if (!isset($object->_specs[$field])) {
+			return false;
+		}
+		
     $value = $object->$field;
 		
 		if ($object->_specs[$field] instanceof CRefSpec) {
