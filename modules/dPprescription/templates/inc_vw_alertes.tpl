@@ -10,7 +10,7 @@
 
 <table class="tbl">
 	<tr>
-		<th class="title">
+		<th class="title" colspan="2">
 			{{$alertes|@count}} alertes
 			<form name="closeAlertes-{{$level}}-{{$prescription_id}}" action="?" method="post" 
 			      onSubmit="return onSubmitFormAjax(this, { onComplete: function(){ refreshLineSejour('{{$sejour_id}}'); $('tooltip-content-alertes-{{$level}}-{{$sejour_id}}').hide(); } })">
@@ -26,14 +26,17 @@
   </tr>
 {{foreach from=$alertes item=_alerte}}
   <tr>
-  	<td class="text">
-  		<form name="editAlert-{{$level}}-{{$_alerte->_id}}" action="?" method="post" onsubmit="return onSubmitFormAjax(this, { onComplete: function(){ refreshLineSejour('{{$sejour_id}}'); $('tooltip-content-alertes-{{$level}}-{{$sejour_id}}').up('.tooltip').remove(); } })">
-  			<input type="hidden" name="m" value="system" />
-				<input type="hidden" name="dosql" value="do_alert_aed" />
+    <td class="narrow">
+      <form name="editAlert-{{$level}}-{{$_alerte->_id}}" action="?" method="post" onsubmit="return onSubmitFormAjax(this, { onComplete: function(){ refreshLineSejour('{{$sejour_id}}'); $('tooltip-content-alertes-{{$level}}-{{$sejour_id}}').up('.tooltip').remove(); } })">
+        <input type="hidden" name="m" value="system" />
+        <input type="hidden" name="dosql" value="do_alert_aed" />
         <input type="hidden" name="alert_id" value="{{$_alerte->_id}}" />
         <input type="hidden" name="handled" value="1" />
-        <button type="submit" class="tick">Traiter</button> {{$_alerte->comments}}
-  		</form>
+        <button type="submit" class="tick notext">Traiter</button>
+      </form>
+    </td>
+    <td class="text compact">
+      {{mb_value object=$_alerte field=comments}}
 		</td>
 	</tr>
 {{/foreach}}

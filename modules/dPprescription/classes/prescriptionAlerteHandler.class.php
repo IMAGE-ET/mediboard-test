@@ -78,12 +78,14 @@ class CPrescriptionAlerteHandler extends CMbObjectHandler {
 			if(!$object->_ref_prises){
 				$object->loadRefsPrises();
       }
-			$_view_poso = "";
-	    foreach($object->_ref_prises as $_poso){
+			$_poso_views = array();
+	    foreach ($object->_ref_prises as $_poso){
 	    	$_poso->loadRefsFwd();
-	      $_view_poso .= "$_poso->_view, ";
+	      $_poso_views[] = $_poso->_view;
 	    }
-			$alerte->comments = "$object->_view - $object->_duree_prise - $_view_poso";
+	    $_poso_views = implode(", ", $_poso_views);
+	    
+			$alerte->comments = "$object->_view - $object->_duree_prise : \n$_poso_views";
 		}
 
     if($object instanceof CPrescriptionLineComment){

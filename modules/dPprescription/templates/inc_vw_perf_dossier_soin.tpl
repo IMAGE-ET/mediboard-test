@@ -31,7 +31,9 @@
                 <th class="category">Alerte</th>
               </tr> 
               <tr>
-                <td class="text" style="width: 300px;">{{$_prescription_line_mix->_ref_alerte->comments}}</td>
+                <td class="text" style="width: 300px;">
+                  {{mb_value object=$_prescription_line_mix->_ref_alerte field=comments}}
+                </td>
               </tr>
               <tr>
                 <td class="button">
@@ -75,6 +77,7 @@
   <div style="cursor: pointer; padding: 2px;" class="{{if @$transmissions.CPrescriptionLineMix.$prescription_line_mix_id|@count}}transmission{{else}}transmission_possible{{/if}}"
      onmouseover="ObjectTooltip.createEx(this, '{{$_prescription_line_mix->_guid}}')" 
 	   onclick="editPerf('{{$_prescription_line_mix->_id}}','{{$date}}',document.mode_dossier_soin.mode_dossier.value, '{{$sejour->_id}}');">
+     <strong>
     {{tr}}CPrescriptionLineMix.type.{{$_prescription_line_mix->type}}{{/tr}} 
 		{{if $_prescription_line_mix->voie}}
 		  ({{$_prescription_line_mix->voie}})
@@ -82,6 +85,7 @@
 		{{if $_prescription_line_mix->interface}}
       ({{tr}}CPrescriptionLineMix.interface.{{$_prescription_line_mix->interface}}{{/tr}})
     {{/if}}
+    </strong>
   </div>
 	
 	{{if $_prescription_line_mix->_debit && $_prescription_line_mix->type_line != "oxygene"}}
@@ -172,30 +176,26 @@
   {{/if}}
 </td>
 
-<td style="font-size: 1em; width: 200px;" class="text">
-  <ul style="list-style-type: none; padding-left: 0px;">
+<td style="width: 200px;" class="text compact">
    {{foreach from=$_prescription_line_mix->_ref_lines item=_line}}
-     <li style="margin-bottom: 7px;">
-		   <small>
-		   	 {{$_line->_ucd_view}}<br />
-		      <span class="opacity-50"> {{$_line->_posologie}}</span>
-			 </small>
-			 
-      {{if $_line->_unite_administration && $_line->_unite_administration != "ml"}}
-			  [{{$_line->_unite_administration}}]
- 	    {{/if}}
-     </small>
-     </li>
+     <div style="margin: 5px 0;">
+		   <strong>{{$_line->_ucd_view}}</strong>
+		   <div>
+         {{$_line->_posologie}}
+	       {{if $_line->_unite_administration && $_line->_unite_administration != "ml"}}
+	         [{{$_line->_unite_administration}}]
+	       {{/if}}
+       </div>
+     </div>      
    {{/foreach}}
-  </ul>
-	<span style="white-space: nowrap;" class="opacity-50">
-	<small>
+
+  <hr style="width: 70%; border-color: #aaa; margin: 1px auto;">
+	<div style="white-space: nowrap;">
 	{{if $_prescription_line_mix->_frequence}}
 	  {{if $_prescription_line_mix->type_line == "perfusion"}}Débit initial: {{/if}}
 		{{$_prescription_line_mix->_frequence}}
 	{{/if}}
-	</small>
-	</span>
+  </div> 
 </td>
 	
 <th></th>

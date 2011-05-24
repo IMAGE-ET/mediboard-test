@@ -126,7 +126,9 @@
 					  	  <th class="category">Alerte</th>
 							</tr>	
 					  	<tr>
-					  		<td class="text" style="width: 300px;">{{$line->_ref_alerte->comments}}</td>
+					  		<td class="text" style="width: 300px;">
+                  {{mb_value object=$line->_ref_alerte field=comments}}
+                </td>
 					  	</tr>
 							<tr>
 								<td class="button">
@@ -253,15 +255,15 @@
   {{/if}}
   
   <!-- Affichage des posologies de la ligne -->
-  <td class="text">
+  <td class="text compact">
   	{{if !$line->signee && $line instanceof CPrescriptionLineMedicament && $conf.dPprescription.CPrescription.show_unsigned_med_msg}}
 		
 		{{else}}
-	    <small style="font-weight: bold;">
+	    <strong>
 	    {{if @$line->_prises_for_plan.$unite_prise}}
 	      {{if is_numeric($unite_prise)}}
 	        <!-- Cas des posologies de type "tous_les", "fois par" ($unite_prise == $prise->_id) -->
-	        <div style="white-space: nowrap;">
+	        <div style="white-space: nowrap; font-weight: bold;">
 		        {{assign var=prise value=$line->_prises_for_plan.$unite_prise}}
 		        {{$prise->_short_view}}
 	        </div>
@@ -287,12 +289,12 @@
 			Inscription
 		  {{/if}}	
 	    {{/if}}
-	    </small>
+	    </strong>
 		{{/if}}
 
     {{if $line instanceof CPrescriptionLineMedicament}}
 	    <!-- Affichage de la forme galenique -->
-			<div class="opacity-70">
+			<div>
 			{{if !$line->inscription}}
 			  <hr style="width: 70%; border-color: #AAA; margin: 1px auto;" />
 	    {{/if}}
