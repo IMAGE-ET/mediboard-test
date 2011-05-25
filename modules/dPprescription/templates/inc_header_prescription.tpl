@@ -52,6 +52,13 @@ submitProtocole = function(){
 	    oForm.debut.value = debut_date;
 	  }
   }
+	
+	{{if $prescription->type != "externe"}}
+	  var oFormDateSelection = getForm("selDateLine");
+    $V(oForm.debut, $V(oFormDateSelection.debut));
+	  $V(oForm.time_debut, $V(oFormDateSelection.time_debut));
+	{{/if}}
+	 
 	if(document.forms.selPraticienLine){
 	  oForm.praticien_id.value = document.forms.selPraticienLine.praticien_id.value;
 	  oForm.pratSel_id.value = document.forms.selPraticienLine.praticien_id.value;
@@ -553,10 +560,14 @@ Main.add( function(){
         <input type="hidden" name="_advanced_protocole" value="0" />
         <input type="hidden" name="protocole_id" value="" />
 	      <input type="hidden" name="pack_protocole_id" value="" />
+				<input type="hidden" name="time_debut" value="" />
+        
 	      <input type="text" name="libelle_protocole" value="&mdash; Choisir un protocole" class="autocomplete" style="font-weight: bold; font-size: 1.3em; width: 300px;" />
 	      <div style="display:none; width: 350px;" class="autocomplete" id="protocole_auto_complete"></div>
 	
  				{{if $prescription->type != "externe"}}
+					<input type="hidden" name="debut" value="" />
+	        
  				  {{if $prescription->_dates_dispo}}
 	 				  {{if $prescription->_dates_dispo|@count == 1}}
 						<input type="hidden" name="operation_id" value="{{$prescription->_dates_dispo|@array_keys|@reset}}" />

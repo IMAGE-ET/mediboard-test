@@ -517,11 +517,11 @@ class CSejour extends CCodable implements IPatientRelated {
     }
     
     if($this->_protocole_prescription_anesth_id){
-      $prescription->applyPackOrProtocole($this->_protocole_prescription_anesth_id, $this->praticien_id, mbDate(), $operation_id);
+      $prescription->applyPackOrProtocole($this->_protocole_prescription_anesth_id, $this->praticien_id, mbDate(), null, $operation_id);
     }
     
     if($this->_protocole_prescription_chir_id){
-      $prescription->applyPackOrProtocole($this->_protocole_prescription_chir_id, $this->praticien_id, mbDate(), $operation_id);
+      $prescription->applyPackOrProtocole($this->_protocole_prescription_chir_id, $this->praticien_id, mbDate(), null, $operation_id);
     }
   }
     

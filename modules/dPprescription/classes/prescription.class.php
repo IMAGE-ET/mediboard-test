@@ -279,7 +279,7 @@ class CPrescription extends CMbObject implements IPatientRelated {
   }
   
   
-  function applyDateProtocole(&$_line, $praticien_id, $date_sel, $operation_id, $debut_sejour, $fin_sejour, $date_operation, 
+  function applyDateProtocole(&$_line, $praticien_id, $date_sel, $time_sel, $operation_id, $debut_sejour, $fin_sejour, $date_operation, 
                               $hour_operation, $operation, $sejour, $protocole_base_id){
     $_line->protocole_id = $protocole_base_id;
     
@@ -347,7 +347,10 @@ class CPrescription extends CMbObject implements IPatientRelated {
     $unite_decalage_fin   = $_line->unite_decalage_fin === "heure" ? "HOURS" : "DAYS";
 
     if(!$_line->jour_decalage){
-      $date_debut = $date_sel;  
+      $date_debut = $date_sel;
+			if($time_sel){
+				$date_debut .= " $time_sel";
+			}
     }
 		
 		 if(!$_line->decalage_line){
@@ -448,7 +451,6 @@ class CPrescription extends CMbObject implements IPatientRelated {
 		// On vide la reference, elle sera mauvaise car la ligne est appliquée à une nouvelle prescription
 		$_line->_ref_prescription = null;
 		
-		
 	  // Store de la ligne
     $msg = $_line->store();
     CAppUI::displayMsg($msg, "{$_line->_class_name}-msg-create");  
@@ -491,7 +493,7 @@ class CPrescription extends CMbObject implements IPatientRelated {
   }
   
   // Permet d'appliquer un protocole à une prescription
-  function applyProtocole($protocole_id, $praticien_id, $date_sel, $operation_id, $debut_sejour="", $fin_sejour="", $date_operation="", $protocole_base_id) {
+  function applyProtocole($protocole_id, $praticien_id, $date_sel, $time_sel, $operation_id, $debut_sejour="", $fin_sejour="", $date_operation="", $protocole_base_id) {
     global $AppUI;
     
     // Chargement du protocole
@@ -532,7 +534,7 @@ class CPrescription extends CMbObject implements IPatientRelated {
         $_substitutions = $_line_med->_ref_substitution_lines;
       
       // Creation et modification de la ligne en fonction des dates
-      $this->applyDateProtocole($_line_med, $praticien_id, $date_sel, $operation_id, $debut_sejour, $fin_sejour, 
+      $this->applyDateProtocole($_line_med, $praticien_id, $date_sel, $time_sel, $operation_id, $debut_sejour, $fin_sejour, 
                                 $date_operation, $hour_operation, $operation, $sejour, $protocole_base_id);
                                 
       // Creation d'une nouvelle ligne de substitution qui pointe vers la ligne qui vient d'etre crée
@@ -540,7 +542,7 @@ class CPrescription extends CMbObject implements IPatientRelated {
         foreach($_line_subst_by_chap as $_line_subst){
           $_line_subst->substitute_for_id = $_line_med->_id;
           $_line_subst->substitute_for_class = $_line_med->_class_name;
-          $this->applyDateProtocole($_line_subst, $praticien_id, $date_sel, $operation_id, $debut_sejour, $fin_sejour, 
+          $this->applyDateProtocole($_line_subst, $praticien_id, $date_sel, $time_sel, $operation_id, $debut_sejour, $fin_sejour, 
                                     $date_operation, $hour_operation, $operation, $sejour, $protocole_base_id);
         }
       }
@@ -551,7 +553,7 @@ class CPrescription extends CMbObject implements IPatientRelated {
       foreach($elements_by_chap as &$elements_by_cat){
         foreach($elements_by_cat as &$_lines){
           foreach($_lines as $_line_elt){
-            $this->applyDateProtocole($_line_elt, $praticien_id, $date_sel, $operation_id, $debut_sejour, $fin_sejour, 
+            $this->applyDateProtocole($_line_elt, $praticien_id, $date_sel, $time_sel, $operation_id, $debut_sejour, $fin_sejour, 
                                       $date_operation, $hour_operation, $operation, $sejour, $protocole_base_id);
           } 
         }
@@ -564,7 +566,7 @@ class CPrescription extends CMbObject implements IPatientRelated {
       $_substitutions_perf = $_prescription_line_mix->_ref_substitution_lines;
       
 
-      $this->applyDateProtocole($_prescription_line_mix, $praticien_id, $date_sel, $operation_id, $debut_sejour, $fin_sejour, 
+      $this->applyDateProtocole($_prescription_line_mix, $praticien_id, $date_sel, $time_sel, $operation_id, $debut_sejour, $fin_sejour, 
                                 $date_operation, $hour_operation, $operation, $sejour, $protocole_base_id);
       
   
@@ -572,7 +574,7 @@ class CPrescription extends CMbObject implements IPatientRelated {
         foreach($_line_subst_by_chap as $_line_subst){
           $_line_subst->substitute_for_id = $_prescription_line_mix->_id;
           $_line_subst->substitute_for_class = $_prescription_line_mix->_class_name;
-          $this->applyDateProtocole($_line_subst, $praticien_id, $date_sel, $operation_id, $debut_sejour, $fin_sejour, 
+          $this->applyDateProtocole($_line_subst, $praticien_id, $date_sel, $time_sel, $operation_id, $debut_sejour, $fin_sejour, 
                                     $date_operation, $hour_operation, $operation, $sejour, $protocole_base_id);
         }
       }                  
@@ -599,7 +601,7 @@ class CPrescription extends CMbObject implements IPatientRelated {
   /*
    * Permet d'applique un protocole ou un pack à partir d'un identifiant (pack-$id ou prot-$id)
    */
-  function applyPackOrProtocole($pack_protocole_id, $praticien_id, $date_sel, $operation_id, $protocole_base_id = null){
+  function applyPackOrProtocole($pack_protocole_id, $praticien_id, $date_sel, $time_sel, $operation_id, $protocole_base_id = null){
     // Aplication du protocole/pack chir
     if($pack_protocole_id){
       $pack_protocole = explode("-", $pack_protocole_id);
@@ -627,11 +629,11 @@ class CPrescription extends CMbObject implements IPatientRelated {
             }
           }
           // Puis on applique le protocole
-          $this->applyProtocole($_protocole->_id, $praticien_id, $date_sel, $operation_id, '', '', '', $protocole_base_id);
+          $this->applyProtocole($_protocole->_id, $praticien_id, $date_sel, $time_sel, $operation_id, '', '', '', $protocole_base_id);
         }
       }
       if($protocole_id){
-        $this->applyProtocole($protocole_id, $praticien_id, $date_sel, $operation_id, '', '', '', $protocole_base_id);
+        $this->applyProtocole($protocole_id, $praticien_id, $date_sel, $time_sel, $operation_id, '', '', '', $protocole_base_id);
       }
     }
   }
