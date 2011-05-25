@@ -142,7 +142,13 @@ function smarty_modifier_pad($string, $length, $pad_string = ' ', $pad_type = 'l
  * Example:  {$object|json}
  * @param any $object The object to be encoded
  */
-function smarty_modifier_json($object) {
+function smarty_modifier_json($object, $force_object = false) {
+	// $options = $force_object ? JSON_FORCE_OBJECT : 0; // Only PHP 5.3 !!
+	
+	if ($force_object && is_array($object) && empty($object)) {
+		return "{}";
+	}
+	
   return json_encode($object);
 }
 
