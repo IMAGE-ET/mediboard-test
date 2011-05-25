@@ -53,8 +53,8 @@ Main.add(function () {
   <tr>
   	<td>
 			<ul class="control_tabs" id="inscriptions-tabs">
-			  <li><a href="#tab-med">Médicaments</a></li>
-			  <li><a href="#tab-elt">Elements</a></li>
+			  <li onclick="getForm('searchProd').produit.focus();"><a href="#tab-med" >Médicaments</a></li>
+			  <li onclick="getForm('searchElt').libelle.focus();"><a href="#tab-elt">Elements</a></li>
 			</ul>
 			<hr class="control_tabs" />
 			
@@ -73,7 +73,7 @@ Main.add(function () {
 					<input type="hidden" name="callback" value="updateAdministration" />
 				</form>
 	      <form action="?" method="get" name="searchProd">
-	        <input type="text" style="width: 350px;" name="produit" class="autocomplete" />
+	        <input type="text" style="width: 350px;" name="produit" class="autocomplete" autofocus="autofocus"/>
 	        <div style="display:none;" class="autocomplete" id="produit_auto_complete"></div>
 	      </form>
       </div>
@@ -93,7 +93,7 @@ Main.add(function () {
 					<input type="hidden" name="callback" value="updateAdministration" />
         </form>
         <form action="?" method="get" name="searchElt">
-        	<input type="text" style="width: 350px;" name="libelle" class="autocomplete" />
+        	<input type="text" style="width: 350px;" name="libelle" class="autocomplete" autofocus="autofocus"/>
           <div style="display:none;" class="autocomplete" id="element_auto_complete"></div>      
         </form>      	
       </div>

@@ -41,6 +41,9 @@
       reloadAfter();
     }
   }
+  Main.add(function() {
+    setTimeout("getForm('addAdministration').quantite.focus()", 1);
+  });
 </script>
 <table class="form">
 	<tr>
