@@ -299,7 +299,6 @@
 			  <hr style="width: 70%; border-color: #AAA; margin: 1px auto;" />
 	    {{/if}}
 			
-			  <small>
 	        {{$line->_forme_galenique}}
 	        {{if $line->_ref_produit_prescription->unite_prise}}
 	          ({{$line->_ref_produit_prescription->unite_prise}})
@@ -308,10 +307,11 @@
 	            ({{$line->_unite_administration}})
 	          {{/if}}
 	        {{/if}}
-					{{if $line->voie}}
-					  ({{$line->voie}})
-					{{/if}}
-	      </small>
+	        <strong>
+			{{if $line->voie}}
+			  [{{$line->voie}}]
+			{{/if}}
+	        </strong>
 	    </div>
 	  {{/if}}
   </td>

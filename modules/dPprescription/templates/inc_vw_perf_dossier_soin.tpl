@@ -74,18 +74,16 @@
     </table>
   {{/if}}
 
-  <div style="cursor: pointer; padding: 2px;" class="{{if @$transmissions.CPrescriptionLineMix.$prescription_line_mix_id|@count}}transmission{{else}}transmission_possible{{/if}}"
+  <div style="cursor: pointer; padding: 2px; font-weight: bold;" class="{{if @$transmissions.CPrescriptionLineMix.$prescription_line_mix_id|@count}}transmission{{else}}transmission_possible{{/if}}"
      onmouseover="ObjectTooltip.createEx(this, '{{$_prescription_line_mix->_guid}}')" 
-	   onclick="editPerf('{{$_prescription_line_mix->_id}}','{{$date}}',document.mode_dossier_soin.mode_dossier.value, '{{$sejour->_id}}');">
-     <strong>
-    {{tr}}CPrescriptionLineMix.type.{{$_prescription_line_mix->type}}{{/tr}} 
+	 onclick="editPerf('{{$_prescription_line_mix->_id}}','{{$date}}',document.mode_dossier_soin.mode_dossier.value, '{{$sejour->_id}}');">
+        {{tr}}CPrescriptionLineMix.type.{{$_prescription_line_mix->type}}{{/tr}} 
 		{{if $_prescription_line_mix->voie}}
-		  ({{$_prescription_line_mix->voie}})
+		  <div style="white-space: nowrap;">[{{$_prescription_line_mix->voie}}]</div>
 		{{/if}}
 		{{if $_prescription_line_mix->interface}}
-      ({{tr}}CPrescriptionLineMix.interface.{{$_prescription_line_mix->interface}}{{/tr}})
+          <div style="white-space: nowrap;">[{{tr}}CPrescriptionLineMix.interface.{{$_prescription_line_mix->interface}}{{/tr}}]</div>
     {{/if}}
-    </strong>
   </div>
 	
 	{{if $_prescription_line_mix->_debit && $_prescription_line_mix->type_line != "oxygene"}}

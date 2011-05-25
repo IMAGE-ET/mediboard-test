@@ -1246,7 +1246,7 @@ ul.select-tree .highlight {
 }
 
 .transmission, table.tbl th.transmission {
-  border: 2px solid #900;
+  border: 2px solid #900 !important;
 }
 
 .transmission_possible, a.transmission_possible {
