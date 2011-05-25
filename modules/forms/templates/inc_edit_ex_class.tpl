@@ -41,14 +41,17 @@ Main.add(function(){
                 {{foreach from=$classes item=_events key=_class}}
                   <optgroup label="{{tr}}{{$_class}}{{/tr}}">
                     {{foreach from=$_events item=_params key=_event_name}}
-                      <option value="{{$_class}}.{{$_event_name}}" {{if $_class == $ex_class->host_class && $_event_name == $ex_class->event}} selected="selected" {{/if}}>
-                        {{tr}}{{$_class}}{{/tr}} - {{$_event_name}}
+                      <option value="{{$_class}}.{{$_event_name}}" 
+											        {{if $_class == $ex_class->host_class && $_event_name == $ex_class->event}} selected="selected" {{/if}}
+															{{if $_event_name == "administration"}} disabled="disabled" {{/if}}
+															>
+                        {{tr}}{{$_class}}{{/tr}} - {{tr}}{{$_class}}-event-{{$_event_name}}{{/tr}}
                         {{if array_key_exists("multiple", $_params) && $_params.multiple}}
                           (multiple)
                         {{/if}}
                         
                         {{if $_event_name == "administration"}}
-                          (Utiliser "Administration - validation" à la place)
+                          (Utiliser "Administration - Validation" à la place)
                         {{/if}}
                       </option>
                     {{/foreach}}

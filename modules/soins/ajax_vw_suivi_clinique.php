@@ -15,6 +15,7 @@ $sejour->load($sejour_id);
 $sejour->canRead();
 $sejour->loadRelPatient();
 $sejour->_ref_patient->loadRefPhotoIdentite();
+$sejour->_ref_patient->loadRefsNotes();
 $sejour->loadRefPraticien();
 $sejour->loadRefsOperations();
 
@@ -22,6 +23,7 @@ foreach($sejour->_ref_operations as $_operation) {
   $_operation->loadRefsFwd();
   $_operation->_ref_chir->loadRefFunction();
 }
+
 $sejour->loadRefsConsultAnesth();
 $sejour->_ref_consult_anesth->loadRefConsultation();
 

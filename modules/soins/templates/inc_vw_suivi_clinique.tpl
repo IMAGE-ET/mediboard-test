@@ -214,6 +214,8 @@
 						<td id="list-ex_objects"></td>
 					</tr>
 				</table>
+				
+				{{* {{mb_include module=forms template=inc_widget_ex_class_register object=$sejour event=suivi_clinique}} *}}
 			{{/if}}
     </td>
   </tr>

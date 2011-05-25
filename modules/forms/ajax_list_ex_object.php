@@ -39,6 +39,7 @@ $ex_classes = $ex_class->loadList($where);
 
 $all_ex_objects = array();
 $ex_objects_by_event = array();
+$ex_classes_creation = array();
 	
 foreach($ex_classes as $_ex_class) {
 	$_ex_class->loadRefsGroups();
@@ -47,8 +48,9 @@ foreach($ex_classes as $_ex_class) {
 	$_ex_object->setExClass();
 	
 	$where = array(
-	  "(reference_class  = '$reference_class' AND reference_id = '$reference_id') OR 
-		 (reference2_class = '$reference_class' AND reference2_id = '$reference_id')"
+	  "(reference_class  = '$reference_class' AND reference_id  = '$reference_id') OR 
+     (reference2_class = '$reference_class' AND reference2_id = '$reference_id') OR 
+     (object_class     = '$reference_class' AND object_id     = '$reference_id')"
 	);
 	$_ex_objects = $_ex_object->loadList($where);
 	
@@ -74,6 +76,17 @@ foreach($ex_classes as $_ex_class) {
     $ex_objects_by_event[$_ex_class->host_class."-".$_ex_class->event][$_ex_class->_id]["$_log->date $_ex->_id"] = $_ex;
 	}
 	
+	if (!isset($ex_classes_creation[$_ex_class->host_class."-".$_ex_class->event])) {
+		$ex_classes_creation[$_ex_class->host_class."-".$_ex_class->event] = array();
+	}
+	
+	if ($_ex_class->host_class == $reference_class && !$_ex_class->disabled) {
+		$ex_classes_creation[$_ex_class->host_class."-".$_ex_class->event][$_ex_class->_id] = $_ex_class;
+		if (count($_ex_objects) == 0){
+		  $ex_objects_by_event[$_ex_class->host_class."-".$_ex_class->event][$_ex_class->_id] = array();
+		}
+	}
+	
 	if (isset($ex_objects_by_event[$_ex_class->host_class."-".$_ex_class->event][$_ex_class->_id])) {
 		krsort($ex_objects_by_event[$_ex_class->host_class."-".$_ex_class->event][$_ex_class->_id]);
 	}
@@ -89,6 +102,7 @@ $smarty->assign("reference_id",    $reference_id);
 $smarty->assign("reference",       $reference);
 $smarty->assign("all_ex_objects",  $all_ex_objects);
 $smarty->assign("ex_objects_by_event", $ex_objects_by_event);
+$smarty->assign("ex_classes_creation", $ex_classes_creation);
 $smarty->assign("ex_classes",      $ex_classes);
 $smarty->assign("detail",          $detail);
 $smarty->assign("ex_class_id",     $ex_class_id);

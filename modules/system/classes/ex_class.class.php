@@ -31,6 +31,8 @@ class CExClass extends CMbObject {
     "CPrescriptionLineElement",
     "CPrescriptionLineMedicament",
     "COperation",
+    "CSejour",
+    "CConsultation",
     "CAdministration",
   );
 
@@ -148,7 +150,7 @@ class CExClass extends CMbObject {
       $this->_view = "Non classé";
     }
     else {
-      $this->_view = CAppUI::tr($this->host_class) . " - [$this->event]";
+      $this->_view = CAppUI::tr($this->host_class) . " - [".CAppUI::tr("$this->host_class-event-$this->event")."]";
     }
     
     $this->_view .= " - $this->name";

@@ -29,7 +29,7 @@ Main.add(function(){
     {{foreach from=$_by_class item=_by_event key=_event}}
 		  {{if $_event != "void"}}
 	    <tr>
-	      <td><strong>{{$_event}}</strong></td>
+	      <th>{{tr}}{{$_class}}-event-{{$_event}}{{/tr}}</th>
 	    </tr>
 			{{/if}}
 			

@@ -189,6 +189,13 @@ class CSejour extends CCodable implements IPatientRelated {
     $spec->table = 'sejour';
     $spec->key   = 'sejour_id';
     $spec->measureable = true;
+    $spec->events = array(
+      "suivi_clinique" => array(
+        "multiple"   => true,
+        "reference1" => array("CMediusers", "praticien_id"),
+        "reference2" => array("CPatient",   "patient_id"),
+      ),
+    );
     return $spec;
   }
   
