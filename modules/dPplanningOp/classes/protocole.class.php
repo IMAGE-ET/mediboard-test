@@ -72,8 +72,8 @@ class CProtocole extends CMbObject {
     $specs["for_sejour"]      = "bool notNull default|0";
     $specs["type"]            = "enum list|comp|ambu|exte|seances|ssr|psy default|comp";
     $specs["DP"]              = "code cim10";
-    $specs["convalescence"]   = "text confidential";
-    $specs["rques_sejour"]    = "text confidential";
+    $specs["convalescence"]   = "text";
+    $specs["rques_sejour"]    = "text";
     $specs["libelle"]         = "str seekable";
     $specs["libelle_sejour"]  = "str seekable";
     $specs["service_id"]      = "ref".(CAppUI::conf("dPplanningOp CSejour service_id_notNull") == 1 ? ' notNull' : '')." class|CService seekable";
@@ -86,27 +86,35 @@ class CProtocole extends CMbObject {
     $specs["fournitures"]     = "currency min|0 confidential";
     $specs["pathologie"]      = "str length|3";
     $specs["septique"]        = "bool";
-    $specs["codes_ccam"]      = "str";
+    $specs["codes_ccam"]      = "str seekable";
     $specs["temp_operation"]  = "time";
     $specs["protocole_prescription_chir_id"]      = "ref class|CMbObject meta|protocole_prescription_chir_class";
     $specs["protocole_prescription_chir_class"]   = "enum list|CPrescription|CPrescriptionProtocolePack";
     $specs["protocole_prescription_anesth_id"]    = "ref class|CMbObject meta|protocole_prescription_anesth_class";
     $specs["protocole_prescription_anesth_class"] = "enum list|CPrescription|CPrescriptionProtocolePack";
     
-    $specs["_hour_op"]        = "";
-    $specs["_min_op"]         = "";
+    $specs["_hour_op"]        = "num";
+    $specs["_min_op"]         = "num";
     return $specs;
   }
 
   function updateFormFields() {
     parent::updateFormFields();
     $this->codes_ccam = strtoupper($this->codes_ccam);
-    if($this->codes_ccam)
+    if($this->codes_ccam) {
       $this->_codes_ccam = explode("|", $this->codes_ccam);
-    else
+    } else {
       $this->_codes_ccam = array();
+      }
     $this->_hour_op = intval(substr($this->temp_operation, 0, 2));
     $this->_min_op  = intval(substr($this->temp_operation, 3, 2));
+    if($this->libelle_sejour) {
+      $this->_view = $this->libelle_sejour;
+    } elseif($this->libelle) {
+      $this->_view = $this->libelle;
+    } else {
+      $this->_view = $this->codes_ccam;
+    }
   }
 
   function updateDBFields() {

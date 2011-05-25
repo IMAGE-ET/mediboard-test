@@ -24,7 +24,7 @@ ProtocoleSelector = {
   sRques_sej       : null,
   sProtoPrescAnesth: null,
   sProtoPrescChir  : null,
-  sServiceId	   : null,
+  sServiceId	     : null,
   sServiceId_easy  : null,
   options : {},
 
@@ -39,7 +39,7 @@ ProtocoleSelector = {
     url.modale(this.options);
   },
   
-  set: function(protocole, libelle) {
+  set: function(protocole) {
     var oOpForm     = getForm("editOp");
     var oSejourForm = getForm("editSejour");
     var oOpFormEasy = getForm("editOpEasy");
@@ -105,12 +105,11 @@ ProtocoleSelector = {
       refreshListCCAM("easy");
     }
     if (oSejourForm[this.sProtoPrescChir]) {
-      if(protocole.protocole_prescription_chir_id){
+      if(protocole.protocole_prescription_chir_id != 'prot-'){
+        alert(protocole.protocole_prescription_chir_id);
         $V(oSejourForm[this.sProtoPrescChir], protocole.protocole_prescription_chir_id);
-        $V(oSejourForm["libelle_protocole"], libelle);
       } else {
         $V(oSejourForm[this.sProtoPrescChir], "");
-        $V(oSejourForm["libelle_protocole"], "");
       }
     }
     refreshViewProtocoleAnesth(protocole.protocole_prescription_anesth_id);

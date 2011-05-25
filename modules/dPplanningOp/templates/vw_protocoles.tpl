@@ -14,8 +14,19 @@
   });
 {{/if}}
 
-setClose = function(type, protocole_id, libelle) {
-  window.parent.ProtocoleSelector.set(aProtocoles[type][protocole_id], libelle);
+chooseProtocole = function(protocole_id) {
+  {{if $dialog}}
+  setClose(protocole_id);
+  {{else}}
+  var url =  new Url();
+  url.setModuleTab("dPplanningOp", "vw_edit_protocole");
+  url.addParam("protocole_id", protocole_id);
+  url.redirect();
+  {{/if}}
+}
+
+setClose = function(protocole_id) {
+  window.parent.ProtocoleSelector.set(aProtocoles[protocole_id]);
   window.close();
 }
 
@@ -29,12 +40,10 @@ refreshList = function(form, types, reset) {
   }
   
   var url = new Url("dPplanningOp","httpreq_vw_list_protocoles");
-  url.addParam("protocole_id", '{{$protocole->_id}}');
   url.addParam("page[interv]", $V(form["page[interv]"]));
   url.addParam("page[sejour]", $V(form["page[sejour]"]));
   url.addParam("chir_id", $V(form.chir_id));
   url.addParam("dialog", $V(form.dialog));
-  url.addParam("code_ccam", $V(form.code_ccam));
   
   types.each(function(type){
     url.addParam("type", type);
@@ -58,7 +67,30 @@ reloadPage = function(form) {
 }
 
 Main.add(function(){
-  refreshList(getForm("selectFrm"));
+  var oForm = getForm("selectFrm");
+  var urlComponents = Url.parse();
+  
+  refreshList(oForm);
+  
+  var url = new Url("system"      , "ajax_seek_autocomplete");
+  url.addParam("object_class"     , "CProtocole");
+  url.addParam("field"            , "protocole_id");
+  url.addParam("input_field"      , "search_protocole");
+  url.addParam("where[chir_id]"   , $V(oForm.chir_id));
+  if(urlComponents.fragment == 'interv') {
+    url.addParam("where[for_sejour]", '0');
+  } else if(urlComponents.fragment == 'sejour') {
+    url.addParam("where[for_sejour]", '1');
+  }
+  url.autoComplete(oForm.elements.search_protocole, null, {
+    minChars: 3,
+    method: "get",
+    select: "view",
+    dropdown: true,
+    afterUpdateElement: function(field,selected){
+        chooseProtocole(selected.id.split("-")[2]);
+    }
+  });
 });
 </script>
 <table class="main">
@@ -86,16 +118,9 @@ Main.add(function(){
                 {{/foreach}}
               </select>
             </td>
-            <th><label for="code_ccam" title="Filtrer avec un code CCAM">Code CCAM</label></th>
+            <th>Recherche</th>
             <td>
-              <select name="code_ccam" onchange="refreshList(this.form)">
-                <option value="" >&mdash; Tous les codes</option>
-                {{foreach from=$listCodes|smarty:nodefaults key=curr_code item=code_nomber}}
-                <option value="{{$curr_code}}" {{if $code_ccam == $curr_code}} selected="selected" {{/if}}>
-                  {{$curr_code}} ({{$code_nomber}})
-                </option>
-                {{/foreach}}
-              </select>
+              <input name="search_protocole" />
             </td>
           </tr>
         </table>
@@ -124,12 +149,6 @@ Main.add(function(){
       
       <div style="display: none;" id="interv"></div>
       <div style="display: none;" id="sejour"></div>
-    </td>
-    
-    {{if $protocole->_id && !$dialog}}
-      <td class="halfPane">
-        {{include file=inc_details_protocole.tpl}}
-      </td>
-    {{/if}} 
+    </td> 
   </tr>
 </table>

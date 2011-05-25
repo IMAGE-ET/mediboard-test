@@ -2,7 +2,9 @@
 
 <script type="text/javascript">
 {{if $dialog}}
-  aProtocoles['{{$type}}'] = {};
+  if(!aProtocoles) {
+    aProtocoles = {};
+  }
   
   {{foreach from=$list_protocoles item=_protocole}}
     {{assign var="type_prot_chir" value="prot-"}}
@@ -13,7 +15,7 @@
       {{if $_protocole->protocole_prescription_chir_class == "CPrescriptionProtocolePack"}}
       {{assign var="type_prot_chir" value="pack-"}}
     {{/if}}
-    aProtocoles['{{$type}}'][{{$_protocole->protocole_id}}] = {
+    aProtocoles[{{$_protocole->protocole_id}}] = {
       protocole_id     : {{$_protocole->protocole_id}},
       chir_id          : {{$_protocole->chir_id}},
       codes_ccam       : "{{$_protocole->codes_ccam}}",
@@ -42,20 +44,16 @@
     $$("a[href=#{{$type}}] small")[0].update("({{$total_protocoles}})");
   });
 {{/if}}
+
 </script>
 
 {{mb_include module=system template=inc_pagination total=$total_protocoles current=$page.$type change_page="changePage.$type" step=40}}
 
 <table class="tbl">
   {{foreach from=$list_protocoles item=_protocole}}
-  <tr {{if $protocole->_id == $_protocole->_id && !$dialog}}class="selected"{{/if}}>    
+  <tr>    
     <td class="text">
-      {{if $dialog}}
-        <a href="#1"
-        onclick="setClose('{{$type}}', {{$_protocole->_id}}, '{{$_protocole->_ref_protocole_prescription_chir->libelle|smarty:nodefaults|JSAttribute}}')">
-      {{else}}
-        <a href="?m={{$m}}&amp;tab=vw_protocoles&amp;protocole_id={{$_protocole->_id}}&amp;page={{$page.$type}}">
-      {{/if}}
+      <a href="#1" onclick="chooseProtocole({{$_protocole->_id}}); return false;">
         <strong>
           {{$_protocole->_ref_chir->_view}}
           

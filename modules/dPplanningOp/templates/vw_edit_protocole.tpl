@@ -142,7 +142,7 @@ Main.add(function () {
 
 </script>
 
-<form name="editFrm" action="?" method="post" onsubmit="return checkFormSejour()">
+<form name="editFrm" action="?m={{$m}}" method="post" onsubmit="return checkFormSejour()">
 <input type="hidden" name="m" value="dPplanningOp" />
 <input type="hidden" name="dosql" value="do_protocole_aed" />
 <input type="hidden" name="del" value="0" />

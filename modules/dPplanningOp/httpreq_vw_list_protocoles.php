@@ -22,7 +22,6 @@ $mediuser->load($AppUI->user_id);
 $chir_id      = $mediuser->isPraticien() ? $mediuser->user_id : null;
 
 $chir_id      = CValue::getOrSession("chir_id", $chir_id);
-$protocole_id = CValue::getOrSession("protocole_id");
 $code_ccam    = CValue::getOrSession("code_ccam");
 $type         = CValue::getOrSession("type", "interv"); 
 $page         = CValue::get("page");
@@ -56,22 +55,15 @@ foreach ($list_protocoles as $_prot){
   $_prot->loadRefsFwd();
 }
 
-// Protocole selectionné
-$protocole = new CProtocole;
-if($protocole->load($protocole_id)) {
-  $protocole->loadRefs();
-}
-
 // Création du template
 $smarty = new CSmartyDP();
 
-$smarty->assign("list_protocoles", $list_protocoles);
+$smarty->assign("list_protocoles" , $list_protocoles);
 $smarty->assign("total_protocoles", $total_protocoles);
-$smarty->assign("page"      , $page      );
-$smarty->assign("protocole" , $protocole   );
-$smarty->assign("chir_id"   , $chir_id   );
-$smarty->assign("code_ccam" , $code_ccam );
-$smarty->assign("type"      , $type      );
+$smarty->assign("page"            , $page      );
+$smarty->assign("chir_id"         , $chir_id   );
+$smarty->assign("code_ccam"       , $code_ccam );
+$smarty->assign("type"            , $type      );
 
 $smarty->display("inc_list_protocoles.tpl");
 
