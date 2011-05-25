@@ -4,10 +4,9 @@
       display: block !important;
       height: auto !important;
       width: 100% !important;
-      page-break-after: always;
       font-size: 8pt !important;
       left: auto !important;
-      top: auto !important;\
+      top: auto !important;
       position: static !important;
     }
     table.table_print {
@@ -16,6 +15,14 @@
     table {
       width: 100% !important;
       font-size: inherit; !important
+    }
+  }
+  @media screen {
+    div.modal_view {
+      width: 700px;
+      height: 500px;
+      overflow-x: hidden;
+      overflow-y: scroll;
     }
   }
 </style>
@@ -84,8 +91,11 @@
   {{/foreach}}
 </table>
 
-{{foreach from=$dossiers_complets item=_dossier key=sejour_id}}
-  <div id="dossier-{{$sejour_id}}" class="modal modal_view" style="display: none; width: 700px; height: 500px; overflow-x: hidden; overflow-y: scroll;">
+{{foreach from=$dossiers_complets item=_dossier key=sejour_id name=dossier}}
+  <div id="dossier-{{$sejour_id}}" class="modal modal_view" style="display: none;">
     {{$_dossier|smarty:nodefaults}}
   </div>
+  {{if !$smarty.foreach.dossier.last}}
+    <br style="page-break-after: always;"/>
+  {{/if}}
 {{/foreach}}
