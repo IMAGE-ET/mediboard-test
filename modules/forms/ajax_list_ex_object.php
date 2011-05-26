@@ -14,6 +14,7 @@ $reference_class = CValue::get("reference_class");
 $reference_id    = CValue::get("reference_id");
 $detail          = CValue::get("detail", 1);
 $ex_class_id     = CValue::get("ex_class_id");
+$target_element  = CValue::get("target_element");
 
 CValue::setSession('reference_class', $reference_class);
 CValue::setSession('reference_id',    $reference_id);
@@ -106,4 +107,5 @@ $smarty->assign("ex_classes_creation", $ex_classes_creation);
 $smarty->assign("ex_classes",      $ex_classes);
 $smarty->assign("detail",          $detail);
 $smarty->assign("ex_class_id",     $ex_class_id);
+$smarty->assign("target_element",  $target_element);
 $smarty->display("inc_list_ex_object.tpl");

@@ -47,12 +47,19 @@ Main.add(function(){
 
 if (window.opener && !window.opener.closed && window.opener !== window && window.opener.ExObject) {
   window.onunload = function(){
-    window.opener.ExObject.register.defer("{{$_element_id}}", {
-      ex_class_id: "{{$ex_class_id}}", 
-      object_guid: "{{$object_guid}}", 
-      event: "{{$event}}", 
-      _element_id: "{{$_element_id}}"
-    });
+	  var element_id = "{{$_element_id}}";
+		
+		if (element_id.charAt(0) == "@") {
+		  window.opener[element_id.substr(1)]();
+		}
+		else {
+	    window.opener.ExObject.register.defer("{{$_element_id}}", {
+	      ex_class_id: "{{$ex_class_id}}", 
+	      object_guid: "{{$object_guid}}", 
+	      event: "{{$event}}", 
+	      _element_id: "{{$_element_id}}"
+	    });
+		}
   }
 }
 </script>

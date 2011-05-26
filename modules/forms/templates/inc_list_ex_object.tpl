@@ -67,6 +67,10 @@ toggleEmptyRows = function(){
   container.toggleClassName("hide-empty-rows", show);
 }
 
+refreshSelf = function(){
+  ExObject.loadExObjects('{{$reference_class}}', '{{$reference_id}}', '{{$target_element}}', '{{$detail}}', '{{$ex_class_id}}');
+}
+
 </script>
 
 {{* FULL DETAIL *}}
@@ -126,7 +130,7 @@ toggleEmptyRows = function(){
 		  	<tr>
 		  		<td style="text-align: right;">Remplir un nouveau formulaire:</td>
 					<td>
-						<select onchange="selectExClass(this, '{{$reference_class}}-{{$reference_id}}', '{{$_parts.1}}', 'systemMsg')">
+						<select onchange="selectExClass(this, '{{$reference_class}}-{{$reference_id}}', '{{$_parts.1}}', '@refreshSelf')">
 	            <option>&ndash; Formulaires disponibles</option>
 	            {{foreach from=$ex_classes_creation.$_host_event item=_ex_class key=_ex_class_id}}
 	              <option value="{{$_ex_class->_id}}">{{$_ex_class->name}}</option>
@@ -146,7 +150,7 @@ toggleEmptyRows = function(){
       <h3 style="margin: 0.5em 1em;">
         {{if $_ex_class->host_class == $reference_class}}
           <button style="margin: -1px; float: right;" class="new" 
-                  onclick="showExClassForm('{{$_ex_class_id}}', '{{$reference_class}}-{{$reference_id}}', '{{$_ex_class->host_class}}-{{$_ex_class->event}}', null, '{{$_ex_class->event}}')">
+                  onclick="showExClassForm('{{$_ex_class_id}}', '{{$reference_class}}-{{$reference_id}}', '{{$_ex_class->host_class}}-{{$_ex_class->event}}', null, '{{$_ex_class->event}}', '@refreshSelf')">
             {{tr}}New{{/tr}}
           </button>
         {{/if}}

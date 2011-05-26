@@ -15,7 +15,7 @@ ExObject = {
     url.addParam("ex_class_id", options.ex_class_id);
     url.addParam("event", options.event);
     url.addParam("_element_id", this.container.identify());
-    url.requestUpdate(this.container, options);
+    url.requestUpdate(container, options);
   },
   
   refresh: function(){
@@ -115,6 +115,7 @@ ExObject = {
     url.addParam("reference_id", object_id);
     url.addParam("reference_class", object_class);
     url.addParam("ex_class_id", ex_class_id);
+    url.addParam("target_element", target);
     url.requestUpdate(target);
 	}
 };

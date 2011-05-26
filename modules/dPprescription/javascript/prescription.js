@@ -282,8 +282,16 @@ Prescription = {
 		if (window.modalPrescription) {
 			modalPrescription.close();
 	  }
+		
     $('modalPrescriptionLine').update('');
-		modalPrescription = modal($('modalPrescriptionLine'));
+		
+		modalPrescription = modal($('modalPrescriptionLine')/*, {
+			afterClose: function() {
+				// trigger ex_classes
+				ExObject.trigger(line_guid, "fermeture");
+			}
+		}*/);
+		
 		var url = new Url("dPprescription", "httpreq_vw_line");
 		url.addParam("line_guid", line_guid);
 		url.addParam("mode_protocole", mode_protocole);

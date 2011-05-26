@@ -463,23 +463,28 @@ class CExClass extends CMbObject {
     return $ex_classes;
   }
   
-  static function getJStrigger($ex_classes) {
-    if (count($ex_classes) == 0) return "";
-    
+  static function getFormsStruct($ex_classes) {
     $forms = array();
     
     foreach($ex_classes as $_ex_class) {
       $forms[$_ex_class->_id] = array(
         "ex_class_id" => $_ex_class->_id,
         "object_guid" => $_ex_class->_host_object->_guid,
-        "event" => "signature",
+        "event" => $_ex_class->event,
       );
     }
     
+    return array_values($forms);
+  }
+  
+  static function getJStrigger($ex_classes) {
+    if (count($ex_classes) == 0) return "";
+    
+    $forms = self::getFormsStruct($ex_classes);
+    
     return "
     <script type='text/javascript'>
-      var forms = ".json_encode(array_values($forms)).";
-      (window.ExObject || window.opener.ExObject).triggerMulti(forms);
+      (window.ExObject || window.opener.ExObject).triggerMulti(".json_encode($forms).");
     </script>";
   }
   

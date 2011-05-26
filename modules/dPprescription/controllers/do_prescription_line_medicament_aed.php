@@ -23,7 +23,7 @@ else {
 	if ($prescription_line_medicament_id && CValue::post("signee") == 1) {
 		$guid = "CPrescriptionLineMedicament-$prescription_line_medicament_id";
 		$ex_classes = CExClass::getExClassesForObject($guid, "signature", "required");
-		echo CExClass::getJStrigger($ex_classes, $guid);
+		echo CExClass::getJStrigger($ex_classes);
 	}
 	
 	$do = new CDoObjectAddEdit("CPrescriptionLineMedicament", "prescription_line_medicament_id");

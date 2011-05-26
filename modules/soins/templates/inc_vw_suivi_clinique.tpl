@@ -11,16 +11,12 @@
     url.addParam("sejour_id", '{{$sejour->_id}}');
     url.requestModal(700, 550);
   }
-	
-	{{if "forms"|module_active}}
+  
+  {{if "forms"|module_active}}
   Main.add(function(){
-    var url = new Url("forms", "ajax_list_ex_object");
-    url.addParam("reference_class", "{{$sejour->_class_name}}");
-    url.addParam("reference_id", "{{$sejour->_id}}");
-    url.addParam("detail", 1);
-    url.requestUpdate("list-ex_objects");
+    ExObject.loadExObjects("{{$sejour->_class_name}}", "{{$sejour->_id}}", "list-ex_objects", 1);
   });
-	{{/if}}
+  {{/if}}
 </script>
 
 <table style="text-align: left; width: 100%">
@@ -204,19 +200,19 @@
           </td>
         </tr>
       </table>
-			
-			{{if "forms"|module_active}}
-				<table class="main tbl">
-					<tr>
-						<th>Formulaires</th>
-					</tr>
-					<tr>
-						<td id="list-ex_objects"></td>
-					</tr>
-				</table>
-				
-				{{* {{mb_include module=forms template=inc_widget_ex_class_register object=$sejour event=suivi_clinique}} *}}
-			{{/if}}
+      
+      {{if "forms"|module_active}}
+        <table class="main tbl">
+          <tr>
+            <th>Formulaires</th>
+          </tr>
+          <tr>
+            <td id="list-ex_objects"></td>
+          </tr>
+        </table>
+        
+        {{* {{mb_include module=forms template=inc_widget_ex_class_register object=$sejour event=suivi_clinique}} *}}
+      {{/if}}
     </td>
   </tr>
   <tr>
