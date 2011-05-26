@@ -303,16 +303,17 @@ Main.add(function () {
 	{{if $prescription_id}}
 		<h1 style="text-align: center;">
 		 		  <button type="button" 
-					       class="left notext {{if $sejour->_entree|iso_date >= $date}}opacity-50{{/if}}" 
-								 {{if $sejour->_entree|iso_date < $date}}onclick="PlanSoins.loadTraitement('{{$sejour->_id}}','{{$prev_date}}', null, null, null, null, null, null, '1', '{{$hide_close}}');"{{/if}}
-					       ></button>	
+					       class="left notext {{if $sejour->_entree >= $bornes_composition_dossier|@reset|@reset}}opacity-50{{/if}}" 
+								 {{if $sejour->_entree < $bornes_composition_dossier|@reset|@reset}}onclick="PlanSoins.loadTraitement('{{$sejour->_id}}','{{$prev_date}}', null, null, null, null, null, null, '1', '{{$hide_close}}');"{{/if}}
+					       ></button>
+  
 	     Dossier de soin du {{$date|@date_format:"%d/%m/%Y"}}
        <form name="changeDateDossier" method="get" action="?" onsubmit="return false" style="font-size: 11px">
          <input type="hidden" name="date" class="date" value="{{$date}}" onchange="PlanSoins.loadTraitement('{{$sejour->_id}}',this.value,'','administration', null, null, null, null, '1', '{{$hide_close}}');"/>
        </form>
 			 <button type="button"
-			         class="right notext {{if $sejour->_sortie|iso_date <= $date}}opacity-50{{/if}}"
-							 {{if $sejour->_sortie|iso_date > $date}}onclick="PlanSoins.loadTraitement('{{$sejour->_id}}','{{$next_date}}','','administration', null, null, null, null, '1', '{{$hide_close}}');"{{/if}}
+			         class="right notext {{if $sejour->_sortie <= $bornes_composition_dossier|@end|@end}}opacity-50{{/if}}"
+							 {{if $sejour->_sortie > $bornes_composition_dossier|@end|@end}}onclick="PlanSoins.loadTraitement('{{$sejour->_id}}','{{$next_date}}','','administration', null, null, null, null, '1', '{{$hide_close}}');"{{/if}}
 							 ></button>
 		</h1>
 		
