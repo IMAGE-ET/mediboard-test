@@ -240,6 +240,8 @@ WeekPlanning = Class.create({
     }, this);
   },
 	observeEvent: function(eventName, handler) {
+		if (!handler) return;
+		
 	  this.container.observe(eventName, function(event) {
 	    var element = event.element();
 	    if (element.tagName == "DIV") {
