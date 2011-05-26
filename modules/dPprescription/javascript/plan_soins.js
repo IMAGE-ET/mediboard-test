@@ -295,9 +295,9 @@ PlanSoins = {
 	       elt.addClassName("draggable");
 	       elt.onmousedown = function(){
 				 	 if(elt.hasClassName('perfusion')){
-             PlanSoins.addDroppablesPerfDiv(element);
+             PlanSoins.addDroppablesPerfDiv(elt);
            } else {
-             PlanSoins.addDroppablesDiv(element);
+             PlanSoins.addDroppablesDiv(elt);
            }
 	       }
 	    });
@@ -365,9 +365,6 @@ PlanSoins = {
 	  
 	  $(draggable).up('tr').select('td').each(function(td) {
 	    if(td.hasClassName("canDrop")){
-				if(!td.id){
-					return;
-				}
 	      Droppables.add(td.id, {
 	        onDrop: function(element) {
 	          var _td = td.id.split("_");
