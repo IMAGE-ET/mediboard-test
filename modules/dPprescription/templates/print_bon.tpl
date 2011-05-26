@@ -207,7 +207,10 @@ Main.add( function(){
 			      {{assign var=line value=$lines.$line_id}}
 			      <tr>
 				      <td>
-				      	{{$_bon}} {{$line->_unite_prise}} {{$line->_view}}
+				      	{{$_bon.quantite}} {{$line->_unite_prise}} {{$line->_view}}
+								{{if array_key_exists('urgence', $_bon)}}
+								  <strong>(Urgence)</strong>
+								{{/if}}
 				      </td>
 				      <td style="width: 20%">
 				        Prescripteur: {{$line->_ref_praticien->_view}} ({{$line->_ref_praticien->adeli}})

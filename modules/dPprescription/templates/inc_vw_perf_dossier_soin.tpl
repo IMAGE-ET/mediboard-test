@@ -212,7 +212,7 @@
 
   {{assign var=nb_prevue value=""}}
 	{{if $conf.dPprescription.CPrescription.manual_planif}}
-	  <td>
+	  <td id="manual_planifs_{{$_prescription_line_mix->_guid}}">
 		 {{if $_prescription_line_mix->_continuite == "discontinue"}}
 		   <div class="manual_planif_line"> 
 			   {{foreach from=$_prescription_line_mix->_planifs_systeme item=_planifs_systeme}}
@@ -312,7 +312,14 @@
 							      {{if isset($_prescription_line_mix->_prises_prevues.$_date.$_hour.real_hour|smarty:nodefaults)}}
 										onclick="ObjectTooltip.createDOM(this, 'tooltip-content-prises-{{$_prescription_line_mix->_guid}}-{{$_date}}-{{$_hour}}', { duration: 0 } );"
 										{{else}}
-										ondblclick='PlanSoins.addAdministrationPerf("{{$_prescription_line_mix->_id}}","{{$_date}}","{{$_hour}}", null,"{{$sejour->_id}}");'
+											ondblclick='
+											  var planifs = $("manual_planifs_{{$_prescription_line_mix->_guid}}") ? $("manual_planifs_{{$_prescription_line_mix->_guid}}").select("div.planif_poste") : "";
+												if (($V(getForm("mode_dossier_soin").mode_dossier) == "planification") && planifs && (planifs.length >= 1) && {{$conf.dPprescription.CPrescription.manual_planif}} && "{{$nb_prevue}}" == ""){
+												  var last_planif = planifs.last();
+													PlanSoins.addPlanificationPerf(last_planif.get("planif_id"), "{{$_date}} {{$_hour}}:00:00", "{{$_prescription_line_mix->_id}}", last_planif.get("datetime"));
+										    } else {
+											    PlanSoins.addAdministrationPerf("{{$_prescription_line_mix->_id}}","{{$_date}}","{{$_hour}}", null,"{{$sejour->_id}}");
+	                    	}'
 										{{/if}}
 										{{/if}}
                     class="administration {{$etat}} perfusion {{if $nb_prevue && $conf.dPprescription.CPrescription.manual_planif}}draggablePlanif{{/if}}"

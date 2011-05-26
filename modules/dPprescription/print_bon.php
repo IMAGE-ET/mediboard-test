@@ -64,7 +64,7 @@ if(count($prescription->_ref_lines_elt_for_plan)){
                 foreach($quantites as $_quantites){
                   if(is_array($_quantites)){  
                     foreach($_quantites as $_hour => $_quantite){
-                      $print_bon = false;
+                    	$print_bon = false;
                       // Si le bon n'a pas ete selectionné
                       if(array_key_exists($_line->_id, $_list_bons) && in_array($_hour, $_list_bons[$_line->_id])){
                         $print_bon = true;
@@ -73,16 +73,22 @@ if(count($prescription->_ref_lines_elt_for_plan)){
                       if(isset($_line->_administrations[$unite][$_date][$_hour]["quantite_planifiee"])){
                         $quantite = $_line->_administrations[$unite][$_date][$_hour]["quantite_planifiee"];
                         if($print_bon){
-                          @$bons[$_name_chap][$_hour][$_name_cat][$_line->_id] += $quantite;
+                          @$bons[$_name_chap][$_hour][$_name_cat][$_line->_id]["quantite"] += $quantite;
+													if($_quantite["urgence"]){
+		                        @$bons[$_name_chap][$_hour][$_name_cat][$_line->_id]["urgence"] = true;
+		                      }
                         }
-                        @$all_bons[$_name_chap][$_hour][$_name_cat][$_line->_id] += $quantite;
+                        @$all_bons[$_name_chap][$_hour][$_name_cat][$_line->_id]["quantite"] += $quantite;
                       }
                       
                       if(isset($_quantite["total"]) && $_quantite["total"]){
                         if($print_bon){                      
-                          @$bons[$_name_chap][$_hour][$_name_cat][$_line->_id] += $_quantite["total"];
+                          @$bons[$_name_chap][$_hour][$_name_cat][$_line->_id]["quantite"] += $_quantite["total"];
+													if($_quantite["urgence"]){
+		                        @$bons[$_name_chap][$_hour][$_name_cat][$_line->_id]["urgence"] = true;
+		                      }
                         }
-                        @$all_bons[$_name_chap][$_hour][$_name_cat][$_line->_id] += $_quantite["total"];
+                        @$all_bons[$_name_chap][$_hour][$_name_cat][$_line->_id]["quantite"] += $_quantite["total"];
                       }
 
                       if(!array_key_exists($_line->_id, $lines)){
@@ -109,9 +115,9 @@ if(count($prescription->_ref_lines_elt_for_plan)){
                     $quantite_planifiee = @$administrations_by_hour["quantite_planifiee"];
                     if($quantite_planifiee){
                       if($print_bon){
-                        @$bons[$_name_chap][$_hour][$_name_cat][$_line->_id] += $quantite_planifiee;
+                        @$bons[$_name_chap][$_hour][$_name_cat][$_line->_id]["quantite"] += $quantite_planifiee;
                       }
-                      @$all_bons[$_name_chap][$_hour][$_name_cat][$_line->_id] += $quantite_planifiee;
+                      @$all_bons[$_name_chap][$_hour][$_name_cat][$_line->_id]["quantite"] += $quantite_planifiee;
                     }
                     
                     if(!array_key_exists($_line->_id, $lines)){

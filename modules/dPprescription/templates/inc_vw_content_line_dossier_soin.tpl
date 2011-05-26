@@ -20,29 +20,31 @@
   });
 {{/if}}
 </script>
-
+	
 {{if $conf.dPprescription.CPrescription.manual_planif}}
-<td style="text-align: center;" class="narrow">
-
+<td style="text-align: center;" class="narrow" id="manual_planifs_{{$line->_guid}}_{{$unite_prise|md5}}">
 	{{if array_key_exists($unite_prise, $line->_planifs_systeme)}}
+	  <div class="manual_planif_line"> 
+		  {{foreach from=$line->_planifs_systeme.$unite_prise item=_planif_systeme name="_planifications"}}
 
-  <div class="manual_planif_line"> 
-  {{foreach from=$line->_planifs_systeme.$unite_prise item=_planif_systeme}}
-    <div style="text-align: center; width: 40px; background-color: #fff; margin-top: -5px; margin-bottom: -5px" data-datetime="{{$_planif_systeme->dateTime}}" class="draggable administration manual_planif" id="drag_{{$line_id}}_{{$unite_prise|md5}}_{{$_planif_systeme->dateTime|iso_date}}_{{$_planif_systeme->dateTime|date_format:"%H"}}_{{$_planif_systeme->_quantite}}_">
-      {{$_planif_systeme->_quantite}}
-    </div>
-   
-    <script type="text/javascript">
-      // Pour empecher de deplacer une case ou il y a plusieurs prises
-      var draggable_planif = $("drag_{{$line_id}}_{{$unite_prise|md5}}_{{$_planif_systeme->dateTime|iso_date}}_{{$_planif_systeme->dateTime|date_format:"%H"}}_{{$_planif_systeme->_quantite}}_");
-      new Draggable("drag_{{$line_id}}_{{$unite_prise|md5}}_{{$_planif_systeme->dateTime|iso_date}}_{{$_planif_systeme->dateTime|date_format:"%H"}}_{{$_planif_systeme->_quantite}}_", PlanSoins.oDragOptions);
-      draggable_planif.onmousedown = function(){
-        PlanSoins.addDroppablesDiv(draggable_planif);
-      }
-    </script>
-	  
-  {{/foreach}}
-	</div>
+		    <div style="text-align: center; width: 40px; background-color: #fff; margin-top: -5px; margin-bottom: -5px" 
+				     data-datetime="{{$_planif_systeme->dateTime}}" 
+						 class="draggable administration manual_planif {{if $smarty.foreach._planifications.last}}lastPlanif-{{$line->_guid}}{{/if}}" 
+						 id="drag_{{$line_id}}_{{$unite_prise|md5}}_{{$_planif_systeme->dateTime|iso_date}}_{{$_planif_systeme->dateTime|date_format:"%H"}}_{{$_planif_systeme->_quantite}}_">
+		          {{$_planif_systeme->_quantite}}							
+		    </div>
+		   
+		    <script type="text/javascript">
+		      // Pour empecher de deplacer une case ou il y a plusieurs prises
+		      var draggable_planif = $("drag_{{$line_id}}_{{$unite_prise|md5}}_{{$_planif_systeme->dateTime|iso_date}}_{{$_planif_systeme->dateTime|date_format:"%H"}}_{{$_planif_systeme->_quantite}}_");
+		      new Draggable("drag_{{$line_id}}_{{$unite_prise|md5}}_{{$_planif_systeme->dateTime|iso_date}}_{{$_planif_systeme->dateTime|date_format:"%H"}}_{{$_planif_systeme->_quantite}}_", PlanSoins.oDragOptions);
+		      draggable_planif.onmousedown = function(){
+		        PlanSoins.addDroppablesDiv(draggable_planif);
+		      }
+		    </script>
+			  
+		  {{/foreach}}
+		</div>
 	{{/if}}
 </td>
 {{/if}}
@@ -139,10 +141,16 @@
 						      {{/if}}
 						    {{else}}
 						      onclick='PlanSoins.toggleSelectForAdministration(this, {{$line_id}}, "{{$quantite}}", "{{$unite_prise}}", "{{$line_class}}","{{$_date}} {{$_hour}}:00:00","{{$list_administrations}}","{{$planification_id}}");'
-					        ondblclick='PlanSoins.addAdministration({{$line_id}}, "{{$quantite}}", "{{$unite_prise}}", "{{$line_class}}","{{$_date}} {{$_hour}}:00:00","{{$list_administrations}}","{{$planification_id}}","{{$multiple_adm}}");'
-						    {{/if}}
+									ondblclick='
+									  var planifs =  $("manual_planifs_{{$line->_guid}}_{{$unite_prise|md5}}") ? $("manual_planifs_{{$line->_guid}}_{{$unite_prise|md5}}").select("div.planif_poste") : "";
+                    if(($V(getForm("mode_dossier_soin").mode_dossier) == "planification") && planifs && (planifs.length >= 1) && {{$conf.dPprescription.CPrescription.manual_planif}} && "{{$quantite}}" == "-"){
+                      PlanSoins.addPlanification("{{$_date}}", "{{$_hour}}:00:00", "{{$unite_prise}}", "{{$line_id}}",  "{{$line_class}}", $("manual_planifs_{{$line->_guid}}_{{$unite_prise|md5}}").select("div.planif_poste").last().id);
+										} else {
+                      PlanSoins.addAdministration({{$line_id}}, "{{$quantite}}", "{{$unite_prise}}", "{{$line_class}}","{{$_date}} {{$_hour}}:00:00","{{$list_administrations}}","{{$planification_id}}","{{$multiple_adm}}");
+                    }'
+								{{/if}}
 						  
-						     class="{{if $quantite!="-" && @$line->_quantity_by_date.$unite_prise.$_date.quantites.$_hour|@count < 5}}draggablePlanif{{/if}} administration
+						     class="{{if $quantite!="-" && @$line->_quantity_by_date.$unite_prise.$_date.quantites.$_hour|@count < 6}}draggablePlanif{{/if}} administration
 									      {{if $quantite > 0}}
 											    {{if @array_key_exists($_hour, $line->_administrations.$unite_prise.$_date) && @$administrations_in_hour.quantite != ''}}
 												    {{if @$administrations_in_hour.quantite == $quantite}} administre 
@@ -223,7 +231,7 @@
            </div>
          {{/if}}
 
-					{{if $quantite && $quantite != '-' && @$line->_quantity_by_date.$unite_prise.$_date.quantites.$_hour|@count < 5}}
+					{{if $quantite && $quantite != '-' && @$line->_quantity_by_date.$unite_prise.$_date.quantites.$_hour|@count < 6}}
 			    <script type="text/javascript">
 			      // Pour empecher de deplacer une case ou il y a plusieurs prises
 		        drag = new Draggable("drag_{{$line_id}}_{{$unite_prise|md5}}_{{$_date}}_{{$heure_reelle}}_{{$_quantite}}_{{$planification_id}}", PlanSoins.oDragOptions);

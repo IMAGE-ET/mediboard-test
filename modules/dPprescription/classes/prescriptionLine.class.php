@@ -708,7 +708,8 @@ class CPrescriptionLine extends CMbObject implements IPatientRelated {
 	        $line_plan_soin[$_heure]["total_disp"] += $_prise->_quantite_dispensation;
 	        $line_plan_soin[$_heure][] = array("quantite" => $_prise->_quantite_administrable, "heure_reelle" => $_heure, "full_hour" => substr(mbTime($_planif->dateTime), 0, 5));
 	       
-	        
+				  $line_plan_soin[$_heure]["urgence"] = $_prise->urgence_datetime ? true : false;
+				  
 	        if(!isset($line_plan_soin[$_heure]["nb_adm"])){
 	          $line_plan_soin[$_heure]["nb_adm"] = 0;
 	        }

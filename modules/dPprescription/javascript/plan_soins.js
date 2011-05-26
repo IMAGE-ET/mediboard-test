@@ -320,9 +320,11 @@ PlanSoins = {
 						marginLeft: margin_left + "px"
 					})
 					planif.show();
+					planif.addClassName("planif_poste");
 				  margin_left = margin_left + 5;
 	      } else {
 	        planif.hide();
+					planif.removeClassName("planif_poste");
 	      }
 			});
 		});
