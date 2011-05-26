@@ -365,6 +365,9 @@ PlanSoins = {
 	  
 	  $(draggable).up('tr').select('td').each(function(td) {
 	    if(td.hasClassName("canDrop")){
+				if(!td.id){
+					return;
+				}
 	      Droppables.add(td.id, {
 	        onDrop: function(element) {
 	          var _td = td.id.split("_");
