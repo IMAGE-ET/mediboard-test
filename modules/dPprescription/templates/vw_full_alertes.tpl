@@ -103,7 +103,7 @@
 
 <table class="tbl" id="IPC" style="display: none;">
   <tr>
-    <th class="title">{{$alertesIPC|@count}} incompatibilité(s) pysico-chimiques</th>
+    <th class="title">{{$alertesIPC|@count}} incompatibilité(s) physico-chimiques</th>
   </tr>
 </table>
 
