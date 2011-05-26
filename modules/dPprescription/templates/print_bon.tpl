@@ -13,9 +13,16 @@
 
 <script type="text/javascript">
 toggleAll = function(state) {
-  $A(getForm("filtreBons").elements["list_bons[]"]).each(function(elt) {
-    elt.checked = state;
-  });
+  var list_bons = getForm("filtreBons").elements["list_bons[]"];
+  // Un seul élément
+  if (list_bons.length == undefined) {
+    list_bons.checked = state;
+  }
+  else {
+    $A(list_bons).each(function(elt) {
+      elt.checked = state;
+    });
+  }
 }
 
 
