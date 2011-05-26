@@ -23,7 +23,7 @@
   {{if $_prescription_line_mix->_recent_modification}}
     {{if @$conf.object_handlers.CPrescriptionAlerteHandler && $_prescription_line_mix->_ref_alerte->_id}}
         <div id="alert_manuelle_{{$_prescription_line_mix->_ref_alerte->_id}}">
-          <img style="float: right" src="images/icons/ampoule.png" onmouseover="alerte_prescription = ObjectTooltip.createDOM(this, 'editAlerte-{{$_prescription_line_mix->_ref_alerte->_id}}'); "/>
+          <img style="float: right" src="images/icons/ampoule.png" onclick="alerte_prescription = ObjectTooltip.createDOM(this, 'editAlerte-{{$_prescription_line_mix->_ref_alerte->_id}}', { duration: 0}); "/>
            
           <div id="editAlerte-{{$_prescription_line_mix->_ref_alerte->_id}}" style="display: none;">
             <table class="form">

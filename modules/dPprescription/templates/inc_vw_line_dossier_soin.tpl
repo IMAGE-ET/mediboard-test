@@ -118,7 +118,7 @@
 					 {{if $line->_urgence}}
 					   {{assign var=img_src value="ampoule_urgence"}}
 					 {{/if}}
-					 <img style="float: right" src="images/icons/{{$img_src}}.png" onmouseover="alerte_prescription = ObjectTooltip.createDOM(this, 'editAlerte-{{$line->_ref_alerte->_id}}'); "/>
+					 <img style="float: right" src="images/icons/{{$img_src}}.png" onclick="alerte_prescription = ObjectTooltip.createDOM(this, 'editAlerte-{{$line->_ref_alerte->_id}}', { duration: 0}); "/>
 	         
 				  <div id="editAlerte-{{$line->_ref_alerte->_id}}" style="display: none;">
 					  <table class="form">
