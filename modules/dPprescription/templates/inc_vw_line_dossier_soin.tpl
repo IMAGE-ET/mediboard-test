@@ -132,7 +132,7 @@
 					  	</tr>
 							<tr>
 								<td class="button">
-									<form name="modifyAlert-{{$line->_ref_alerte->_id}}" action="?" method="post" class="form-alerte{{if $line->_urgence}}-urgence{{/if}}"
+									<form name="modifyAlert-{{$line->_ref_alerte->_id}}" action="?" method="post" class="form-alerte{{if $line->_urgence}}-urgence{{/if}}-_{{if $line instanceof CPrescriptionLineMedicament}}{{$type}}{{else}}{{$name_chap}}{{/if}}"
 									      onsubmit="return onSubmitFormAjax(this, { 
 												            onComplete: function() { $('alert_manuelle_{{$line->_ref_alerte->_id}}').hide(); if(alerte_prescription) { alerte_prescription.hide(); } } });">
 									  <input type="hidden" name="m" value="system" />

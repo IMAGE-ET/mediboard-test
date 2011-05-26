@@ -86,7 +86,7 @@
         <img src="images/icons/ampoule.png"
           {{if @$conf.object_handlers.CPrescriptionAlerteHandler}}
 					  title="Fermer les alertes du chapitre"
-            onclick="PlanSoins.closeAllAlertes('_cat-{{$_chapitre}}', this);"
+            onclick="PlanSoins.closeAllAlertes('_{{$_chapitre}}', this);"
           {{else}}
            title="Ligne recemment modifiée" 
           {{/if}} />
@@ -95,7 +95,7 @@
           <img src="images/icons/ampoule_urgence.png"
 					{{if @$conf.object_handlers.CPrescriptionAlerteHandler}}
             title="Fermer les urgences"
-            onclick="PlanSoins.closeAllAlertes('_cat-{{$_chapitre}}', this, true);"
+            onclick="PlanSoins.closeAllAlertes('_{{$_chapitre}}', this, true);"
 	        {{else}}
 	           title="Urgence" 
 	        {{/if}} />

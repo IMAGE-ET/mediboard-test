@@ -505,8 +505,9 @@ PlanSoins = {
 	
 	closeAllAlertes: function(chapitre, ampoule, urgence){
     // Application de toutes les alertes du chapitre
-		var form_name = urgence ? 'form-alerte-urgence' : 'form-alerte'; 
-		$(chapitre).select("form."+form_name).each(function(oForm){
+		var form_name = urgence ? 'form-alerte-urgence-' : 'form-alerte-';
+        form_name += chapitre;
+		$$("form."+form_name).each(function(oForm){
 			onSubmitFormAjax(oForm, { onComplete: function(){ 
 			  // On masque les ampoules pour chaque lignes
 				$('alert_manuelle_'+$V(oForm.alert_id)).hide();
