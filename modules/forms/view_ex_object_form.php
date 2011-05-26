@@ -8,7 +8,7 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
  */
 
-//CCanDo::checkAdmin();
+CCanDo::checkRead();
 
 $ex_class_id  = CValue::get("ex_class_id");
 $ex_object_id = CValue::get("ex_object_id");

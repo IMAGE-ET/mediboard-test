@@ -8,7 +8,7 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
  */
 
-CCanDo::checkEdit();
+CCanDo::checkRead();
 
 $reference_class = CValue::get("reference_class");
 $reference_id    = CValue::get("reference_id");
