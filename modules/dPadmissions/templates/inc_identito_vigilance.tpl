@@ -131,6 +131,8 @@ Voir les séjour :
   </tbody>
   {{/if}}
 
+  {{foreachelse}}
+  <tr><td colspan="10" class="empty">{{tr}}None{{/tr}}</td></tr>
   {{/foreach}}
 	
 

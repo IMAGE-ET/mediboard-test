@@ -305,6 +305,6 @@
   </tr>
   
   {{foreachelse}}
-  <tr><td colspan="10"><em>{{tr}}CSejour.none_main_courante{{/tr}}</em></td></tr>
+  <tr><td colspan="10" class="empty">{{tr}}CSejour.none_main_courante{{/tr}}</td></tr>
   {{/foreach}}
 </table>
