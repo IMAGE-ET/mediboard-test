@@ -10,10 +10,11 @@
  
 <script type="text/javascript">
 
-viewDossier = function(sejour_id){
-  var url = new Url("dPprescription", "vw_dossier_cloture");
+printDossierComplet = function(sejour_id){
+  var url = new Url;
+  url.setModuleAction("soins", "print_dossier_soins");
   url.addParam("sejour_id", sejour_id);
-  url.popup(800,600,"Dossier cloturé");
+  url.popup("850", "500", "Dossier complet");
 }
 
 printDossier = function(rpu_id) {
@@ -36,7 +37,7 @@ printDossier = function(rpu_id) {
       </a>
 	    
       <div style="float: right;">
-        <button type="button" class="print" onclick="viewDossier('{{$sejour->_id}}');">Dossier Soins</button> 
+        <button type="button" class="print" onclick="printDossierComplet('{{$sejour->_id}}');">Dossier Soins</button> 
         {{if $object->_ref_rpu && $object->_ref_rpu->_id}}
         <button type="button" class="print" onclick="printDossier({{$object->_ref_rpu->_id}})">Dossier Urgences</button>
         {{/if}}

@@ -95,6 +95,13 @@
     }
   }
   
+	printDossierSoins = function(){
+	  var url = new Url;
+	  url.setModuleAction("soins", "print_dossier_soins");
+	  url.addParam("sejour_id", "{{$sejour->_id}}");
+	  url.popup("850", "500", "Dossier complet");
+	}
+	
   Main.add(function() {
     tab_sejour = Control.Tabs.create('tab-sejour');
     tab_sejour.setActiveTab('{{$default_tab}}');
@@ -128,6 +135,7 @@
   <li><a href="#docs" onmousedown="loadDocuments();">{{tr}}CMbObject-back-documents{{/tr}}</a></li>
   <li><a href="#antecedents" onmousedown="loadAntecedents();">{{tr}}IDossierMedical-back-antecedents{{/tr}}</a></li>
   <li style="float: right">
+  	<button type="button" class="button print" onclick="printDossierSoins();">Dossier soins</button>
     {{if !$popup}}
 	    <button type="button" class="cancel" onclick="closeModal();">{{tr}}Close{{/tr}}</button>
     {{/if}}
