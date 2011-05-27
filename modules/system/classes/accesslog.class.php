@@ -107,6 +107,8 @@ class CAccessLog extends CMbObject {
 				`module`, 
 				`action`, 
 				`period`,
+        AVG(duration/hits) AS _average_duration,
+        AVG(request/hits)  AS _average_request,
 		    SUM(hits)     AS hits, 
 		    SUM(size)     AS size, 
 		    SUM(duration) AS duration, 
@@ -127,5 +129,31 @@ class CAccessLog extends CMbObject {
     $log = new self;
     return $log->loadQueryList($query);
 	}
+  
+  static function loadAvgAgregation($start, $end, $groupmod = 0, $module = null) {
+    $query = "SELECT 
+        accesslog_id, 
+        module, 
+        action,
+        AVG(duration/hits) AS hits,
+        0 AS grouping
+      FROM access_log
+      USE INDEX (period)
+      WHERE period BETWEEN '$start' AND '$end' ";
+            
+    if ($module && !$groupmod) {
+      $query .= "AND module = '$module' ";
+    }
+    
+    switch ($groupmod) {
+      case 2 :  $query .= "GROUP BY grouping "; break;
+      case 1 :  $query .= "GROUP BY module ORDER BY module "; break;
+      case 0 :  $query .= "GROUP BY module, action ORDER BY module, action "; break;
+
+    }
+   
+    $log = new self;
+    return $log->loadQueryList($query);
+  }
 }
 ?>

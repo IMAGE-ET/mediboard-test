@@ -13,6 +13,9 @@ var graphs = {{$graphs|@json}};
 
 function drawGraphs() {
   $A(graphs).each(function(g, key){
+    {{if $element == "_average_duration" || $element == "_average_request"}}
+    g.options.pie.labelFormatter = function(obj) {return Math.round(obj.value*1000) + "ms"};
+    {{/if}}
     Flotr.draw($('graph-'+key), g.series, g.options);
   });
 }
@@ -47,7 +50,10 @@ Main.add(function () {
       <label for="element" title="Choix de la mesure">Type de mesure</label>
       <select name="element" onchange="this.form.submit()">
         <option value="duration"{{if $element == "duration"}}selected="selected"{{/if}}>Durée totale (php + DB)</option>
+        <option value="_average_duration"{{if $element == "_average_duration"}}selected="selected"{{/if}}>Durée totale (php + DB) par hit</option>
         <option value="request"{{if $element == "request"}}selected="selected"{{/if}}>Durée DB</option>
+        <option value="_average_request"{{if $element == "_average_request"}}selected="selected"{{/if}}>Durée DB par hit</option>
+        <option value="hits"{{if $element == "hits"}}selected="selected"{{/if}}>Hits</option>
       </select>
       &mdash;
       <label for="groupres" title="Type de vue des graphiques">Type de vue</label>
