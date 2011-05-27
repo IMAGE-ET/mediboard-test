@@ -344,7 +344,7 @@ class CPrescriptionLineMix extends CMbObject {
     	$this->_can_modify_prescription_line_mix = 1;
     	$this->_can_modify_prescription_line_mix_item = 1;
     }
-    if($this->signature_prat){
+    if($this->signature_prat && !(CMediusers::get()->isExecutantPrescription() && CAppUI::conf("dPprescription CPrescription role_propre"))){
       $this->_can_vw_form_add_perf_contigue = 1;
   		$this->_can_vw_form_stop_perf = 1;
     }

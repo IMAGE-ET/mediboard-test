@@ -778,7 +778,7 @@ Main.add( function(){
 		<tr>
 			<td>
 				<!-- Evolution -->
-				{{if $line->signature_prat}}
+				{{if $line->_can_vw_form_add_perf_contigue}}
 					<fieldset style="float: left; width: 48%;">
 						<legend>
 							Evolution

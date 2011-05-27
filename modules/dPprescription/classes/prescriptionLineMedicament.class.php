@@ -405,8 +405,9 @@ class CPrescriptionLineMedicament extends CPrescriptionLine {
     if ($perm_edit){
       $this->_can_delete_line = 1;
   	}
+		
   	// Affichage du bouton "Modifier une ligne"
-  	if(!$this->_protocole && $this->_ref_prescription->type !== "externe" && $this->signee){
+  	if(!$this->_protocole && $this->_ref_prescription->type !== "externe" && $this->signee && !(CMediusers::get()->isExecutantPrescription() && CAppUI::conf("dPprescription CPrescription role_propre"))){
   		$this->_can_vw_form_add_line_contigue = 1;
   	}
 	}
