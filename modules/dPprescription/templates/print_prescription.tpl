@@ -122,7 +122,7 @@ div.footer {
 
 					</td>
           <td class="right">
-          	le {{$date|date_format:"%d %B %Y"}}
+          	le {{$date|date_format:"%d %B %Y"}}<br />
 						A l'attention de 
             <br />          
             <strong>{{$prescription->_ref_patient->_view}}</strong>
