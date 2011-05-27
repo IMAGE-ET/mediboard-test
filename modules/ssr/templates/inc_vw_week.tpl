@@ -37,13 +37,15 @@ Main.add(function() {
 <div class="planning {{if $planning->large}} large {{/if}} {{if $planning->has_load}} load {{/if}}" id="{{$planning->guid}}" style="display: none;">
   {{assign var=nb_days value=$planning->nb_days}}
   <table class="tbl" style="table-layout: fixed;">
-    <col style="width: 3.0em;" />
-    <col span="{{$nb_days}}" />
-    <col style="width: 18px;"/>
+    <colgroup>
+      <col style="width: 3.0em;" />
+      <col span="{{$nb_days}}" />
+      <col style="width: 18px;"/>
+    </colgroup>
     <tr>
     	<th class="title {{if $planning->selectable}}selector{{/if}}" colspan="{{$nb_days+2}}" 
 			  {{if $planning->selectable}} onclick="window['planning-{{$planning->guid}}'].selectAllEvents()" {{/if}}>
-    		<div class="nbSelectedEvents" style="float: left; font-size: smaller; width: 20px;">(-)</div>
+    		<div class="nbSelectedEvents" style="float: left; font-size: smaller; width: 20px;">(-) {{$date|date_format:$conf.datetime}}</div>
 			  {{$planning->title}}
 			</th>
     </tr>
@@ -75,9 +77,10 @@ Main.add(function() {
   
   <div style="overflow-y: scroll; overflow-x: hidden; {{if $planning->height}}height: {{$planning->height}}px;{{/if}}" class="week-container">
     <table class="tbl hours" style="table-layout: fixed; overflow: hidden;">
-      <col style="width: 3.0em;" />
-      <col span="{{$nb_days}}" />
-      
+      <colgroup>
+        <col style="width: 3.0em;" />
+        <col span="{{$nb_days}}" />
+      </colgroup>
       {{foreach from=$planning->hours item=_hour}}
         <tr class="hour-{{$_hour}} {{if in_array($_hour, $planning->pauses)}}pause{{/if}}">
           <th class="hour">{{$_hour}}h</th>

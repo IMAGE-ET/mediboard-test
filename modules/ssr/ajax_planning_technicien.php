@@ -166,6 +166,8 @@ $planning->showNow();
 // Création du template
 $smarty = new CSmartyDP();
 $smarty->assign("planning", $planning);
+$smarty->assign("date"    , mbDateTime());
+
 $smarty->display("inc_vw_week.tpl");
 
 ?>

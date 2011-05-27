@@ -1,6 +1,48 @@
 {{mb_script module=ssr script=planning}}
 {{mb_script module=ssr script=planification}}
 
+<style type="text/css">
+@media print {
+  div.planning_kine {
+    display: block !important;
+    width: 100% !important;
+    height: auto !important;
+    font-size: 8pt !important;
+  }
+  table {
+    display: table !important;
+    font-size: inherit !important;
+    width: 100% !important;
+    height: auto !important;
+    border: none !important;
+  }
+  div.week-container {
+    display: block !important;
+    height: auto !important;
+    width: 100% !important;
+    position: static !important;
+  }
+  div.time, div.body, div.event, div.planning {
+    font-size: 6pt !important;
+    top: auto !important;
+    left: auto !important;
+    width: 100% !important;
+    height: auto !important;
+    position: static !important;
+    padding: auto !important;
+  }
+  div#print_plannings {
+    display: block;
+  }
+}
+
+@media screen {
+  div#print_plannings {
+    display: none;
+  }
+}
+</style>
+
 <script type="text/javascript">
 
 Main.add(function () {
@@ -17,6 +59,35 @@ showPlanningOffline = function(kine_id, kine_guid, type){
   }).defer();
 }
 
+printPlanning = function(kine_id) {
+  var print_plannings = $("print_plannings").update();
+  
+  $("planning_technicien_"+kine_id).select("table").each(function(table) {
+    print_plannings.insert(table.clone(true));
+  });
+
+  print_plannings.insert(DOM.br({style: "page-break-before: always;"}));
+  
+  $("planning_surveillance_"+kine_id).select("table").each(function(table) {
+    print_plannings.insert(table.clone(true));
+  });
+  print_plannings.print();
+}
+
+printPlannings = function() {
+  var print_plannings = $("print_plannings").update();
+  var plannings = $$(".planning_kine");
+  plannings.each(function(planning) {
+    planning.select("table").each(function(table) {
+      print_plannings.insert(table.clone(true));
+    });
+    if (planning !== $A(plannings).last()) {
+      print_plannings.insert(DOM.br({style: "page-break-before: always;"}));
+    }
+  });
+  print_plannings.print();
+}
+
 </script>
 
 <h1 style="text-align: center;">
@@ -25,39 +96,52 @@ showPlanningOffline = function(kine_id, kine_guid, type){
   {{assign var=month_max value=$sunday|date_format:'%B'}}
   {{$month_min}}{{if $month_min != $month_max}}-{{$month_max}}{{/if}}
   {{$date|date_format:'%Y'}}
+  <button class="print notext" onclick="printPlannings()"></button>
 </h1>
 
-<ul id="tabs_plannings_kines" class="control_tabs">
-	{{foreach from=$plannings key=kine_id item=_planning}}
-	  {{assign var=kine value=$kines.$kine_id}}
-		<li onmouseup="showPlanningOffline('{{$kine->_id}}', '{{$kine->_guid}}', 'tech');">
-			<a href="#planning_{{$kine_id}}">{{$kine->_view}}</a>
-		</li>
-  {{/foreach}}
-<hr class="control_tabs" />
+<table class="main">
+  <tr>
+    <td style="width: 10%">
+      <ul id="tabs_plannings_kines" class="control_tabs_vertical">
+        {{foreach from=$plannings key=kine_id item=_planning}}
+          {{assign var=kine value=$kines.$kine_id}}
+          <li onmouseup="showPlanningOffline('{{$kine->_id}}', '{{$kine->_guid}}', 'tech');">
+            <span style="float: left;">
+              <button class="print notext" onclick="printPlanning('{{$kine->_id}}');"></button>
+              </span>
+            <a href="#planning_{{$kine_id}}">{{$kine->_view}}</a>
+          </li>
+        {{/foreach}}
+      </ul>
+    <td>
+      {{foreach from=$plannings key=kine_id item=_planning}}
+        {{assign var=kine value=$kines.$kine_id}}
+      
+        <div id="planning_{{$kine_id}}" style="display: none;">
+          <script type="text/javascript">
+            Main.add(function () {
+              window['tab-{{$kine_id}}'] = Control.Tabs.create("tabs_plannings_select_{{$kine_id}}");
+            });
+          </script>
+      
+          <ul id="tabs_plannings_select_{{$kine_id}}" class="control_tabs small">
+            <li><a href="#planning_technicien_{{$kine_id}}">Planning rééducateur</a></li>
+            <li onmouseup="showPlanningOffline('{{$kine->_id}}', '{{$kine->_guid}}', 'surv');"><a href="#planning_surveillance_{{$kine_id}}">Planning de surveillance</a></li>
+          </ul>
+          <hr class="control_tabs" />
+          <div id="planning_technicien_{{$kine_id}}" style="display: none;" class="planning_kine">
+            
+            {{$_planning.technicien|smarty:nodefaults}}     
+          </div>
+      
+          <div id="planning_surveillance_{{$kine_id}}" style="display: none;" class="planning_kine">
+            {{$_planning.surveillance|smarty:nodefaults}}
+          </div>
+        </div>
+      {{/foreach}}
+    </td>
+  </tr>
+</table>
 
-<br />
-{{foreach from=$plannings key=kine_id item=_planning}}
-  {{assign var=kine value=$kines.$kine_id}}
-
-  <div id="planning_{{$kine_id}}" style="display: none;">
-	  <script type="text/javascript">
-			Main.add(function () {
-			  window['tab-{{$kine_id}}'] = Control.Tabs.create("tabs_plannings_select_{{$kine_id}}");
-			});
-		</script>
-
-	  <ul id="tabs_plannings_select_{{$kine_id}}" class="control_tabs small">
-	    <li><a href="#planning_technicien_{{$kine_id}}">Planning rééducateur</a></li>
-			<li onmouseup="showPlanningOffline('{{$kine->_id}}', '{{$kine->_guid}}', 'surv');"><a href="#planning_surveillance_{{$kine_id}}">Planning de surveillance</a></li>
-		</ul>
-		<hr class="control_tabs" />
-		<div id="planning_technicien_{{$kine_id}}" style="display: none;">
-      {{$_planning.technicien|smarty:nodefaults}}			
-		</div>
-
-  	<div id="planning_surveillance_{{$kine_id}}" style="display: none;">
-      {{$_planning.surveillance|smarty:nodefaults}}
-    </div>
-  </div>
-{{/foreach}}	
+<div id="print_plannings">
+</div>

@@ -1164,7 +1164,7 @@ Element.addMethods({
         if (e.styleSheet) {
           var css = e.styleSheet.cssText;
           
-          // Si elle a un href (feuille de style externe=
+          // Si elle a un href (feuille de style externe)
           if (e.href) {
             var matchHref = e.href.match(/(.*\/)[^\/]+$/);
             var pattern = /@import\s*(?:url\s*\(\s*)?["']?([^"'\)]+)\)?["']?/g;
@@ -1184,12 +1184,23 @@ Element.addMethods({
           doc.write(e.outerHTML);
         }
       });
-      
-      //console.log(doc.body.innerHTML);
       doc.execCommand('print', false, null);
     }
     else {
-      head.innerHTML = parentHead.innerHTML;
+      if (Prototype.Browser.Gecko) {
+        $(parentHead).childElements().each(function(e) {
+          if (e.nodeName === "LINK" && /css/.test(e.getAttribute("href"))) {
+            var css = "";
+            $A(e.sheet.cssRules).each(function(rule) {
+              css += rule.cssText;
+            });
+            head.innerHTML += "<"+"style type='text/css'>"+css+"<"+"/style>";
+          }
+        });
+      }
+      else {
+        head.innerHTML = parentHead.innerHTML;
+      }
       win.focus();
       win.print();
     }
