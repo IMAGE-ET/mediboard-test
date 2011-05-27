@@ -52,7 +52,7 @@ foreach($listBlocs as &$bloc) {
   $bloc->loadRefsSalles();
 }
 
-$praticien = CMediuser::get();
+$praticien = CMediusers::get();
 // Création du template
 $smarty = new CSmartyDP();
 

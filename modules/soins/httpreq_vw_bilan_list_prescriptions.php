@@ -9,7 +9,7 @@
  */
 
 CCanDo::checkRead();
-$user = CMediuser::get();
+$user = CMediusers::get();
 
 $praticien_id      = CValue::getOrSession("praticien_id" , $user->_id);
 $signee            = CValue::getOrSession("signee"       , 0);  // par default les non signees

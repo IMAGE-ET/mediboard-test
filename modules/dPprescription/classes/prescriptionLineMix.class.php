@@ -310,7 +310,7 @@ class CPrescriptionLineMix extends CMbObject {
   function getAdvancedPerms($is_praticien = 0, $mode_protocole = 0, $mode_pharma = 0, $operation_id = 0) {
 		global $can;
     
-    $user = CMediuser::get();
+    $user = CMediusers::get();
 
     // Cas d'une ligne de protocole  
     if($this->_protocole){
