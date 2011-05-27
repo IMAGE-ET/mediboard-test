@@ -13,7 +13,7 @@
 {{mb_script module="dPplanningOp" script="cim10_selector"}}
 
 <script type="text/javascript">
-  function reloadDiagnostic(sejour_id, modeDAS) {
+  reloadDiagnostic = function(sejour_id, modeDAS) {
 	  var url = new Url("dPurgences", "ajax_diagnostic_principal");
 	  url.addParam("sejour_id", sejour_id);
 	  url.requestUpdate("dp_"+sejour_id);
@@ -23,7 +23,7 @@
 	  url.addParam("modeDAS", modeDAS);
 	  url.requestUpdate("cim");
   }
-  function deleteCodeCim10() {
+  deleteCodeCim10 = function() {
 	  var oForm = getForm("editSejour");
 	  $V(oForm.keywords_code, '');
 	  $V(oForm.DP, '');

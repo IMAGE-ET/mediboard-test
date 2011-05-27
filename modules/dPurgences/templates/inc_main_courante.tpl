@@ -25,6 +25,16 @@
     $V(oForm[type], "current");
     oForm.onsubmit();
   }
+
+  fillDiag = function(rpu_id) {
+    MainCourante.stop();
+    var url = new Url("dPurgences", "ajax_edit_diag");
+    url.addParam("rpu_id", rpu_id);
+    url.requestModal(500, 200);
+    url.modaleObject.observe("afterClose", function(){
+      MainCourante.start();
+    });
+  }
 </script>
 
 <div class="small-info" style="display: none;" id="filter-indicator">
@@ -258,6 +268,9 @@
     
 	    {{if $medicalView}}
   	    <td class="text" style="background-color: {{$background}};">
+          {{if $admin_urgences}}
+            <button class="edit notext" style="float: right;" title="{{tr}}CRPU-modif_diag_infirmier{{/tr}}" onclick="fillDiag('{{$rpu->_id}}')"></button>
+          {{/if}}
 				  {{if $rpu->accident_travail}} 
 					<img src="images/icons/accident_travail.png" />
 				  {{/if}}

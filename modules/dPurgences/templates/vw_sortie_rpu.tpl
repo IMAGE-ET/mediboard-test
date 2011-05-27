@@ -9,6 +9,7 @@
 *}}
 
 {{mb_script module=dPurgences script=main_courante}}
+{{mb_script module="dPplanningOp" script="cim10_selector"}}
 
 <script type="text/javascript">
 var refreshExecuter;
@@ -68,6 +69,20 @@ function filterPatient(input, indicator) {
   });
 }
 
+function editFieldsRpu(rpu_id) {
+  refreshExecuter.stop();
+  var url = new Url("dPurgences", "ajax_edit_fields_rpu");
+  url.addParam("rpu_id", rpu_id);
+  url.requestModal(500, 240);
+  url.modaleObject.observe("afterClose", function(){
+    refreshExecuter.resume();
+    Sortie.refresh(rpu_id);  
+  });
+}
+
+function submitSejour() {
+  return onSubmitFormAjax(getForm("editSejour"));
+}
 </script>
 
 <table class="main">

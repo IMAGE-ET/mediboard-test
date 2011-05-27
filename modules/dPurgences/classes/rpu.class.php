@@ -118,7 +118,7 @@ class CRPU extends CMbObject {
       "sortie_autorisee" => "bool",
       "accident_travail" => "date",
       
-      "_DP"              => "code cim10 show|0",
+      "_DP"              => "code cim10 show|1",
       "_mode_sortie"     => "enum list|6|7|8|9 default|8",
       "_sortie"          => "dateTime",
       "_patient_id"      => "ref notNull class|CPatient",

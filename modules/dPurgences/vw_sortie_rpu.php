@@ -81,6 +81,18 @@ $group = CGroups::loadCurrent();
 
 $listPrats = CAppUI::$user->loadPraticiens(PERM_READ, $group->service_urgences_id);
 
+// Si accès au module PMSI : peut modifier le diagnostic principal
+$access_pmsi = 0;
+if (CModule::exists("dPpmsi")) {
+  $module = new CModule;
+  $module->mod_name = "dPpmsi";
+  $module->loadMatchingObject();
+  $access_pmsi = $module->getPerm(PERM_EDIT);
+}
+
+// Si praticien : peut modifier le CCMU, GEMSA et diagnostic principal
+$is_praticien = CAppUI::$user->isPraticien();
+
 // Création du template
 $smarty = new CSmartyDP();
 $smarty->assign("contrainteDestination", $contrainteDestination);
@@ -92,6 +104,8 @@ $smarty->assign("listSejours", $listSejours);
 $smarty->assign("aff_sortie", $aff_sortie);
 $smarty->assign("listPrats", $listPrats);
 $smarty->assign("date", $date);
+$smarty->assign("access_pmsi", $access_pmsi);
+$smarty->assign("is_praticien", $is_praticien);
 $smarty->assign("today", mbDate());
 
 $smarty->display("vw_sortie_rpu.tpl");

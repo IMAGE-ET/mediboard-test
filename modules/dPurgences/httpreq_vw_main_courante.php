@@ -120,6 +120,13 @@ foreach (CService::loadServicesUrgence() as $service) {
   }
 }
 
+// Si admin sur le module urgences, alors modification autorisée du diagnostic
+// infirmier depuis la main courante.
+$module = new CModule;
+$module->mod_name = "dPurgences";
+$module->loadMatchingObject();
+$admin_urgences = $module->canAdmin();
+
 // Création du template
 $smarty = new CSmartyDP();
 
@@ -134,6 +141,6 @@ $smarty->assign("date"        , $date);
 $smarty->assign("date_before" , $date_before);
 $smarty->assign("today"       , mbDate());
 $smarty->assign("isImedsInstalled", (CModule::getActive("dPImeds") && CImeds::getTagCIDC(CGroups::loadCurrent())));
-
+$smarty->assign("admin_urgences", $admin_urgences);
 $smarty->display("inc_main_courante.tpl");
 ?>

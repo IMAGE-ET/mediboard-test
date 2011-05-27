@@ -43,6 +43,18 @@ $contrainteOrientation["normal"] = array("", "FUGUE", "SCAM", "PSA", "REO");
 // Praticiens urgentistes
 $listPrats = $user->loadPraticiens(PERM_READ, $group->service_urgences_id);
 
+// Si accès au module PMSI : peut modifier le diagnostic principal
+$access_pmsi = 0;
+if (CModule::exists("dPpmsi")) {
+  $module = new CModule;
+  $module->mod_name = "dPpmsi";
+  $module->loadMatchingObject();
+  $access_pmsi = $module->getPerm(PERM_EDIT);
+}
+
+// Si praticien : peut modifier le CCMU, GEMSA et diagnostic principal
+$is_praticien = CAppUI::$user->isPraticien();
+
 // Création du template
 $smarty = new CSmartyDP();
 $smarty->assign("contrainteDestination", $contrainteDestination);
@@ -50,6 +62,8 @@ $smarty->assign("contrainteOrientation", $contrainteOrientation);
 $smarty->assign("services", $services);
 $smarty->assign("listPrats", $listPrats);
 $smarty->assign("sejour" , $sejour);
+$smarty->assign("access_pmsi", $access_pmsi);
+$smarty->assign("is_praticien", $is_praticien);
 $smarty->assign("date" , CValue::getOrSession("date", mbDate()));
 
 $smarty->display("inc_sortie_rpu.tpl");
