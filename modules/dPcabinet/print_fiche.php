@@ -7,12 +7,11 @@
 * @author Romain Ollivier
 */
 
-global $AppUI, $can, $m;
-
 if(!CModule::getCanDo('dPcabinet')->edit && !CModule::getCanDo('soins')->read){
   CModule::getCanDo('dPcabinet')->redirect();
 }
-//$can->needsEdit();
+
+//CCanDo::checkEdit();
 
 $date = CValue::getOrSession("date", mbDate());
 $print = CValue::getOrSession("print", false);

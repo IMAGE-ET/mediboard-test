@@ -9,8 +9,7 @@
  */
 
 CCanDo::checkRead();
-
-global $AppUI, $m, $tab;
+$user = CUser::get();
 
 $sejour_id = CValue::getOrSession("sejour_id");
 
@@ -43,7 +42,7 @@ if ($prescription_SSR->_id){
 
 
 // Aides à la saisie
-$sejour->loadAides($AppUI->user_id);
+$sejour->loadAides($user->_id);
 
 // Chargement des categories de prescription
 $categories = array();
@@ -60,9 +59,9 @@ $can_view_dossier_medical =
   CModule::getCanDo('dPcabinet')->edit ||
   CModule::getCanDo('dPbloc')->edit ||
   CModule::getCanDo('dPplanningOp')->edit || 
-  $AppUI->_ref_user->isFromType(array("Infirmière"));
+  $user->isFromType(array("Infirmière"));
 
-$can_edit_prescription = $AppUI->_ref_user->isPraticien() || $AppUI->_ref_user->isAdmin();
+$can_edit_prescription = $user->isPraticien() || $user->isAdmin();
 
 // Suppression des categories vides
 if(!$can_edit_prescription){

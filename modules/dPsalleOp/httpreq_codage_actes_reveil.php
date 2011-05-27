@@ -7,8 +7,6 @@
 * @author Alexis Granger
 */
 
-global $AppUI, $can, $m, $g;
-
 $operation_id = CValue::getOrSession("operation_id");
 
 $date  = CValue::getOrSession("date", mbDate());

@@ -8,9 +8,7 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
  */
 
-global $AppUI, $can, $m;
-
-$can->needsRead();
+CCanDo::checkRead();
 
 $prescription_line_id = CValue::getOrSession("prescription_line_id");
 $typeDate = CValue::getOrSession("chapitre");

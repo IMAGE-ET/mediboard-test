@@ -7,16 +7,14 @@
 * @author Romain Ollivier
 */
 
-global $AppUI, $can, $m;
+CCanDo::checkRead();
 
-$can->needsRead();
 $patient_id = CValue::get("patient_id");
 
 $patient = new CPatient;
 $patient->load($patient_id);
 
-$user = new CMediusers;
-$user->load($AppUI->user_id);
+$user = CMediusers::get();
 if(CAppUI::pref("pratOnlyForConsult", 1)) {
   $listPrat = $user->loadPraticiens(PERM_EDIT);
 } else {

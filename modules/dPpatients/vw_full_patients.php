@@ -7,9 +7,8 @@
 * @author Romain Ollivier
 */
 
-global $AppUI;
-
 CCanDo::checkRead();
+$user = CMediusers::get();
 
 $patient_id = CValue::getOrSession("patient_id", 0);
 
@@ -52,7 +51,7 @@ $can_view_dossier_medical =
   CModule::getCanDo('dPcabinet')->edit ||
   CModule::getCanDo('dPbloc')->edit ||
   CModule::getCanDo('dPplanningOp')->edit || 
-  $AppUI->_ref_user->isFromType(array("Infirmière"));
+  $user->isFromType(array("Infirmière"));
   
 // Création du template
 $smarty = new CSmartyDP();

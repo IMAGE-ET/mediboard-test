@@ -7,9 +7,7 @@
 * @author Sébastien Fillonneau
 */
 
-global $AppUI, $can, $m, $g;
-
-$can->needsEdit();
+CCanDo::checkEdit();
 
 $date           = CValue::getOrSession("date"           , mbDate());
 $typerepas_id   = CValue::getOrSession("typerepas_id"   , null);

@@ -7,9 +7,7 @@
 * @author Romain Ollivier
 */
 
-global $AppUI, $can, $m;
-
-$can->needsEdit();
+CCanDo::checkEdit();
 
 $sejour_id  = CValue::getOrSession("sejour_id");
 

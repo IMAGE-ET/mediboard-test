@@ -8,9 +8,6 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
  */
 
-
-global $AppUI;
-
 $object_guid = CValue::post("object_guid");
 
 // Chargement de la ligne à rendre active

@@ -7,8 +7,6 @@
 * @author Romain Ollivier
 */
 
-global $AppUI, $can, $m, $g;
-
 $sejour_id = CValue::getOrSession("sejour_id");
 $modeDAS   = CValue::getOrSession("modeDAS", 1);
 

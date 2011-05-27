@@ -8,9 +8,6 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
  */
 
-
-global $AppUI;
-
 $category_prescription_id = CValue::post("category_prescription_id");
 $category_dest_id = CValue::post("category_dest_id");
 

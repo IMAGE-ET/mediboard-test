@@ -7,7 +7,7 @@
 * @author Romain Ollivier
 */
 
-global $AppUI, $can, $m, $g;
+global $can, $m, $g;
 
 $can->needsRead();
 
@@ -17,11 +17,10 @@ $hide_finished = CValue::getOrSession("hide_finished", 0);
 $praticien_id = CValue::getOrSession("praticien_id");
 
 // Chargement de l'utilisateur courant
-$user = new CMediusers();
-$user->load($AppUI->user_id);
+$user = CMediusers::get();
 
 if(!$praticien_id && $user->isPraticien() && !$user->isAnesth()){
-	$praticien_id = $AppUI->user_id;
+	$praticien_id = $user->user_id;
 }
 
 // Selection des salles

@@ -7,8 +7,6 @@
 * @author Alexis Granger
 */
 
-global $AppUI, $can, $m, $g;
-
 $affichage_patho = CValue::getOrSession("affichage_patho");
 $date = CValue::getOrSession("date", mbDate()); 
 $pathos = new CDiscipline();

@@ -7,9 +7,8 @@
 * @author Sébastien Fillonneau
 */
 
-global $AppUI, $can, $m, $g;
-
-$can->needsRead();
+CCanDo::checkRead();
+$group = CGroups::loadCurrent();
 
 $type       = CValue::getOrSession("type"       , null);
 $service_id = CValue::getOrSession("service_id" , null);
@@ -20,7 +19,7 @@ $service = null;
 // Liste des services
 $services = new CService;
 $where = array();
-$where["group_id"] = "= '$g'";
+$where["group_id"] = "= '$group->_id'";
 $order = "nom";
 $services = $services->loadListWithPerms(PERM_READ,$where, $order);
 

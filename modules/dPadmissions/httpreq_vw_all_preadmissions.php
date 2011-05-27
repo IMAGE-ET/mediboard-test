@@ -8,10 +8,9 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
  */
 
-global $AppUI, $can, $m, $g;
 $ds = CSQLDataSource::get("std");
 
-$can->needsRead();
+CCanDo::checkRead();
 
 // Initialisation de variables
 $date = CValue::getOrSession("date", mbDate());

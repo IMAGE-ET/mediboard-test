@@ -8,9 +8,8 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
  */
 
-global $AppUI, $can, $m, $g;
-
-$can->needsEdit();
+CCanDo::checkEdit();
+$group = CGroups::loadCurrent();
 
 $doc_ged_id = CValue::getOrSession("doc_ged_id",0);
 $fileSel = new CFile;
@@ -41,7 +40,7 @@ if(!$docGed->_lastentry){
 $modeles = new CDocGed;
 $where = array();
 $where["doc_ged.etat"]   = "= '0'";
-$where["group_id"] = "= '$g'";
+$where["group_id"] = "= '$group->_id'";
 $order = "titre ASC";
 $ljoin = array();
 $ljoin["doc_ged_suivi"] = "doc_ged.doc_ged_id = doc_ged_suivi.doc_ged_id";

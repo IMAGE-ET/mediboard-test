@@ -8,25 +8,22 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
  */
 
-global $AppUI, $can, $smarty, $prat;
-
-$can->needsRead();
+CCanDo::checkRead();
 
 // Chargement de l'utilisateur courant
-$user = new CMediusers;
-$user->load($AppUI->user_id);
+$user = CMediusers::get();
 
 if (!$user->isPraticien() && !$user->isSecretaire()) {
   CAppUI::redirect("m=system&a=access_denied");
 }
 
 $praticiens = null;
+$prat = new CMediusers();
 
 // Si le user est secretaire
 if ($user->_is_secretaire) {
   // Chargement de la liste de praticien
   $praticiens = $user->loadPraticiens(PERM_EDIT);
-  $prat = new CMediusers();
   $prat->load(CValue::postOrSession("praticien_id"));
 }
 

@@ -7,12 +7,9 @@
 * @author Romain Ollivier
 */
 
-global $AppUI, $can, $g;
+CCanDo::checkRead();
 
-$can->needsRead();
-
-$mediuser = new CMediusers;
-$mediuser->load($AppUI->user_id);
+$mediuser = CMediusers::get();
 
 $showCount = 30;
 

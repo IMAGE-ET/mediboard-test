@@ -7,9 +7,7 @@
 * @author Sébastien Fillonneau
 */
 
-global $AppUI, $can, $m;
-  
-$can->needsEdit();
+CCanDo::checkEdit();
 
 $selConsult  = CValue::getOrSession("selConsult", 0);
 

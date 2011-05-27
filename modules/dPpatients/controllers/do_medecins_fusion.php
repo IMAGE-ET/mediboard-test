@@ -7,7 +7,6 @@
 * @author Romain Ollivier
 */
 
-global $AppUI, $m;
 $ds = CSQLDataSource::get("std");
 $medecin1 = new CMedecin;
 $medecin1->load($_POST["medecin1_id"]);

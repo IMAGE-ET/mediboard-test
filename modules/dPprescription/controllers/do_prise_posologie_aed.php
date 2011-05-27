@@ -8,8 +8,6 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
  */
 
-global $AppUI;
-
 $del = CValue::post("del");
 $moment_unitaire_id = CValue::post("moment_unitaire_id");
 $mode_checkbox = false;

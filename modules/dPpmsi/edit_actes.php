@@ -7,9 +7,7 @@
 * @author Romain Ollivier
 */
 
-global $AppUI, $can, $m;
-
-$can->needsEdit();
+CCanDo::checkEdit();
 
 $operation_id = CValue::getOrSession("operation_id", 0);
 if(!$operation_id) {

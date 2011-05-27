@@ -7,9 +7,7 @@
 * @author Romain Ollivier
 */
 
-global $AppUI, $can;
-
-$can->needsRead();
+CCanDo::checkRead();
 
 $prat_id         = CValue::getOrSession("selPrat");
 $compte_rendu_id = CValue::getOrSession("compte_rendu_id");
@@ -28,21 +26,15 @@ $listUser = new CMediusers();
 //$listUser = $listUser->loadPraticiens(PERM_EDIT);
 $listUser = $listUser->loadUsers(PERM_EDIT);
 
+$mediuser = CMediusers::get();
 
 // L'utilisateur est-il praticien?
 if (!$prat_id) {
-  $mediuser = new CMediusers;
-  $mediuser->load($AppUI->user_id);
-
   if ($mediuser->isPraticien()) {
-    $prat_id = $AppUI->user_id;
+    $prat_id = $mediuser->user_id;
     CValue::setSession("selPrat", $prat_id);
   }
 }
-
-$med = new CMediusers();
-$user_id = $AppUI->user_id;
-$userCourant = $med->load($user_id);
 
 // Compte-rendu selectionné
 $compte_rendu = new CCompteRendu();
@@ -61,8 +53,6 @@ $templateManager = new CTemplateManager($_GET);
 $templateManager->editor = "ckeditor";
 
 // L'utilisateur est il une secretaire ou un administrateur?
-$mediuser = new CMediusers();
-$mediuser->load($AppUI->user_id);
 $secretaire = $mediuser->isFromType(array("Secrétaire", "Administrator"));
 
 // si l'utilisateur courant est la secretaire ou le proprietaire du modele alors droit dessus, sinon, seulement droit en lecture
@@ -145,8 +135,8 @@ $formats = CCompteRendu::$_page_formats;
 $smarty = new CSmartyDP();
 
 $smarty->assign("mediuser"            , $mediuser);
-$smarty->assign("isPraticien"         , $userCourant->isPraticien());
-$smarty->assign("user_id"             , $user_id);
+$smarty->assign("isPraticien"         , $mediuser->isPraticien());
+$smarty->assign("user_id"             , $mediuser->_id);
 $smarty->assign("prat_id"             , $prat_id);
 $smarty->assign("compte_rendu_id"     , $compte_rendu_id);
 $smarty->assign("listPrat"            , $listUser);

@@ -7,8 +7,7 @@
 * @author Poiron Yohann
 */
 
-global $AppUI, $can, $m, $g;
-$can->needsRead();
+CCanDo::checkRead();
 
 $today = mbDateTime();
 $sejour_id 		= CValue::getOrSession("sejour_id",0);

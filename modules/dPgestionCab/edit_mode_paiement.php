@@ -7,12 +7,9 @@
 * @author Poiron Yohann
 */
 
-global $AppUI, $can, $m;
+CCanDo::checkRead();
 
-$can->needsRead();
-
-$user = new CMediusers();
-$user->load($AppUI->user_id);
+$user = CMediusers::get();
 $user->loadRefsFwd();
 $user->_ref_function->loadRefsFwd();
 
@@ -46,10 +43,10 @@ foreach($listFunc as $function) {
 // Création du template
 $smarty = new CSmartyDP();
 
-$smarty->assign("etablissement"       		, $etablissement);
-$smarty->assign("listFunc" 		   			, $listFunc);
-$smarty->assign("modePaiement" 	   			, $modePaiement);
-$smarty->assign("listModePaiementGroup" 	, $listModePaiementGroup);
+$smarty->assign("etablissement"       		 , $etablissement);
+$smarty->assign("listFunc" 		   			     , $listFunc);
+$smarty->assign("modePaiement" 	   			   , $modePaiement);
+$smarty->assign("listModePaiementGroup" 	 , $listModePaiementGroup);
 $smarty->assign("listModePaiementFonction" , $listModePaiementFonction);
 
 $smarty->display("edit_mode_paiement.tpl");

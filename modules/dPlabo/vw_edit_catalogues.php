@@ -6,14 +6,11 @@
  *	@version $Revision$
  *  @author Romain Ollivier
  */
- 
-global $can, $AppUI;
 
-$can->needsRead();
+CCanDo::checkRead();
 
 // Fonction de l'utilisateur courant
-$user = new CMediusers();
-$user->load($AppUI->user_id);
+$user = CMediusers::get();
 $function_id = $user->function_id;
 
 // Liste des fonctions disponibles

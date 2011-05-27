@@ -8,7 +8,7 @@
 */
 
 
-global $AppUI, $a, $can, $m, $g;
+global $a;
 
 $praticien_id = CValue::getOrSession("praticien_id");
 $date = CValue::getOrSession("date", mbDate());

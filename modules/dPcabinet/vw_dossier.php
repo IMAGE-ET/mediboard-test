@@ -7,9 +7,7 @@
 * @author Romain Ollivier
 */
 
-global $AppUI, $can, $m;
-
-$can->needsEdit();
+CCanDo::checkEdit();
 
 $pat_id = CValue::getOrSession("patSel");
 

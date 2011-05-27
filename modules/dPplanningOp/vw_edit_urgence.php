@@ -7,9 +7,9 @@
 * @author Romain Ollivier
 */
 
-global $AppUI, $can, $m, $tab;
+global $can, $m, $tab;
 
-$can->needsRead();
+CCanDo::checkRead();
 
 $hors_plage = new CIntervHorsPlage();
 if(!$hors_plage->canRead()) {
@@ -29,8 +29,7 @@ $today        = mbDate();
 $tomorow      = mbDate("+1 DAY");
 
 // L'utilisateur est-il un praticien
-$chir = new CMediusers;
-$chir->load($AppUI->user_id);
+$chir = CMediusers::get();
 if ($chir->isPraticien() and !$chir_id) {
   $chir_id = $chir->user_id;
 }

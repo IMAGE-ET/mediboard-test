@@ -8,8 +8,6 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
  */
 
-global $AppUI, $can, $m, $g;
-
 $doc_ged_id = 0;
 $file_id = null;
 $_firstModeleGed  = CValue::post("_firstModeleGed", null);
@@ -17,7 +15,6 @@ $erreur_file=null;
 
 class CDoDocGedAddEdit extends CDoObjectAddEdit {
   function CDoDocGedAddEdit() {
-    global $AppUI;
     $this->CDoObjectAddEdit("CDocGed", "doc_ged_id");
     
     $this->createMsg = CAppUI::tr("msg-$this->className-create_modele");
@@ -26,7 +23,6 @@ class CDoDocGedAddEdit extends CDoObjectAddEdit {
   }
   
   function doBind() {
-    global $AppUI;
     
     $this->ajax = CValue::post("ajax");
     $this->suppressHeaders = CValue::post("suppressHeaders");
@@ -42,7 +38,7 @@ class CDoDocGedAddEdit extends CDoObjectAddEdit {
 
 
   function doStore() {
-    global $AppUI, $doc_ged_id, $file_id, $_firstModeleGed;
+    global $doc_ged_id, $file_id, $_firstModeleGed;
     
     $file_upload_ok = false;
     
@@ -80,7 +76,6 @@ class CDoDocGedAddEdit extends CDoObjectAddEdit {
 
 class CDoDocGedSuiviAddEdit extends CDoObjectAddEdit {
   function CDoDocGedSuiviAddEdit() {
-    global $AppUI;
     $this->CDoObjectAddEdit("CDocGedSuivi", "doc_ged_suivi_id");
     
     $this->createMsg = CAppUI::tr("msg-$this->className-create_modele");
@@ -89,7 +84,6 @@ class CDoDocGedSuiviAddEdit extends CDoObjectAddEdit {
   }
   
   function doBind() {
-    global $AppUI;
     
     $this->ajax = CValue::post("ajax");
     $this->suppressHeaders = CValue::post("suppressHeaders");
@@ -104,7 +98,7 @@ class CDoDocGedSuiviAddEdit extends CDoObjectAddEdit {
   }
   
   function doStore() {
-    global $AppUI,$doc_ged_id,$file_id,$_validation;
+    global $doc_ged_id,$file_id,$_validation;
     $this->_obj->date       = mbDateTime();
     $this->_obj->remarques  = CAppUI::tr("Modele");
     $this->_obj->doc_ged_id = $doc_ged_id;
@@ -123,7 +117,7 @@ class CDoDocGedSuiviAddEdit extends CDoObjectAddEdit {
 
 
 $do1 = new CDoDocGedAddEdit;
-if(!$can->admin){
+if(!CCanDo::admin()){
   $do1->doRedirect();
 }
 $do1->doIt();

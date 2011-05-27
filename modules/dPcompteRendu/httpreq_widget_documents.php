@@ -7,8 +7,8 @@
 * @author Romain Ollivier
 */
 
-global $can, $AppUI;  
-$can->needsEdit();
+CCanDo::checkEdit();
+$user = CMediusers::get();
 
 $object_class = CValue::getOrSession("object_class");
 $object_id    = CValue::getOrSession("object_id");
@@ -28,11 +28,7 @@ if (!$object->_id) {
 }
 
 // Praticien concerné
-if ($AppUI->_ref_user->isPraticien()) {
-  $user = $AppUI->_ref_user;
-}
-else {
-	$user = new CMediusers();
+if (!$user->isPraticien()) {
 	$user->load($user_id);
 }
 

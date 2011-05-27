@@ -7,8 +7,7 @@
 * @author Romain Ollivier
 */
 
-global $can, $g, $AppUI;
-$can->needsRead();
+CCanDo::checkRead();
 
 $name          = CValue::get("name"       );
 $firstName     = CValue::get("firstName"  );

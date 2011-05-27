@@ -7,13 +7,11 @@
 * @author Sébastien Fillonneau
 */
 
-global $AppUI, $can, $m, $g;
-
-$can->needsRead();
+CCanDo::checkRead();
 
 $date = CValue::getOrSession("date", mbDate());
 $hour = mbTime(null);
-$modif_operation = $can->edit || $date >= mbDate();
+$modif_operation = CCanDo::edit() || $date >= mbDate();
 
 // Selection des plages opératoires de la journée
 $plages = new CPlageOp;

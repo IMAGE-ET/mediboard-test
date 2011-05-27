@@ -103,7 +103,6 @@ class CHPrimXMLDocument extends CMbXMLDocument {
   }
   
   function addEnteteMessage($elParent) {
-    global $AppUI;
     
     $echg_hprim      = $this->_ref_echange_hprim;
     $dest            = $this->_ref_destinataire;
@@ -122,7 +121,8 @@ class CHPrimXMLDocument extends CMbXMLDocument {
     $this->addAgent($agents, "application", "MediBoard", "Gestion des Etablissements de Santé");
     $group = CGroups::loadCurrent();
     $group->loadLastId400();
-    $this->addAgent($agents, "acteur", "user$AppUI->user_id", "$AppUI->user_first_name $AppUI->user_last_name");
+    $user = CAppUI::$user;
+    $this->addAgent($agents, "acteur", "user$user->_id", $user->_view);
     $code_systeme = (CAppUI::conf('hprimxml code_transmitter_sender') == "finess") ? $group->finess : CAppUI::conf('mb_id');
     $this->addAgent($agents, "système", $code_systeme, $group->text);
     

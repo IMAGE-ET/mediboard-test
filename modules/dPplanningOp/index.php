@@ -7,10 +7,7 @@
 * @author Romain Ollivier
 */
 
-global $AppUI;
-
-$user = new CMediusers();
-$user->load($AppUI->user_id);
+$user = CMediusers::get();
 
 $module = CModule::getInstalled(basename(dirname(__FILE__)));
 

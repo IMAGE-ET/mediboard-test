@@ -7,15 +7,12 @@
 * @author Romain Ollivier
 */
 
-global $AppUI, $can, $m;
-  
-$can->needsEdit();
+CCanDo::checkEdit();
 
 // Utilisateur sélectionné ou utilisateur courant
 $prat_id = CValue::getOrSession("chirSel", 0);
 
-$userSel = new CMediusers;
-$userSel->load($prat_id ? $prat_id : $AppUI->user_id);
+$userSel = CMediusers::get($prat_id);
 $userSel->loadRefs();
 $canUserSel = $userSel->canDo();
 
@@ -52,7 +49,7 @@ $consult->_ref_chir = $userSel;
 if ($selConsult) {
   $consult->load($selConsult);
   
-  $can->needsObject($consult);
+  CCanDo::checkObject($consult);
   $canConsult = $consult->canDo();
   $canConsult->needsEdit();
   

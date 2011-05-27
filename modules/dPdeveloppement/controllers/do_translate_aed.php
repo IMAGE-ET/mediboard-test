@@ -15,10 +15,12 @@ function redirect() {
   CAppUI::redirect();
 }
 
-global $AppUI, $can, $m;
+global $can;
+
+$user = CUser::get();
 
 // only user_type of Administrator (1) can access this page
-$can->edit |= ($AppUI->user_type != 1);
+$can->edit |= ($user->user_type != 1);
 $can->needsEdit();
 
 $module = CValue::post("module", null);

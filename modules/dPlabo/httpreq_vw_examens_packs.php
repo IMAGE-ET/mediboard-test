@@ -6,13 +6,10 @@
  *	@version $Revision$
  *  @author Romain Ollivier
  */
- 
-global $AppUI, $can, $m;
 
-$can->needsRead();
+CCanDo::checkRead();
 
-$user = new CMediusers;
-$user->load($AppUI->user_id);
+$user = CMediusers::get();
 
 $pack_examens_labo_id = CValue::getOrSession("pack_examens_labo_id");
 
@@ -24,7 +21,7 @@ $pack->loadRefs();
 // Création du template
 $smarty = new CSmartyDP();
 
-$smarty->assign("pack"     , $pack     );
+$smarty->assign("pack", $pack);
 
 $smarty->display("inc_vw_examens_packs.tpl");
 

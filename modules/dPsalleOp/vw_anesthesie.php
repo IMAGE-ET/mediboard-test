@@ -7,9 +7,8 @@
 * @author Sébastien Fillonneau
 */
 
-global $AppUI, $can, $m, $g;
+CCanDo::checkRead();
 
-$can->needsRead();
 $ds = CSQLDataSource::get("std");
 
 $op    = CValue::getOrSession("op");

@@ -7,9 +7,9 @@
 * @author Romain Ollivier
 */
 
-global $AppUI, $can, $m;
-
 CAppUI::requireModuleClass("dPsalleOp", "acteccam");
+
+$user = CUser::get();
 
 $ds = CSQLDataSource::get("std");
 
@@ -23,7 +23,7 @@ $object_class = CValue::get("object_class");
 $profiles = array (
   "chir"   => $chir,
   "anesth" => $anesth,
-  "user"   => $AppUI->user_id,
+  "user"   => $user->_id,
 );
 
 if ($profiles["user"] == $profiles["anesth"] || $profiles["user"] == $profiles["chir"]) {
@@ -37,11 +37,11 @@ if (!$profiles["anesth"]) {
 
 $listByProfile = array();
 $users = array();
-foreach ($profiles as $profile => $user_id) {
+foreach ($profiles as $profile => $_user_id) {
   // Chargement du user du profile
-  $user = new CMediusers();
-  $user->load($user_id);
-  $users[$profile] = $user;
+  $_user = new CMediusers();
+  $_user->load($_user_id);
+  $users[$profile] = $_user;
   
   $list = array();
 	if ($type == "ccam") {
@@ -49,7 +49,7 @@ foreach ($profiles as $profile => $user_id) {
 	   * Favoris
 	   */
 	  if ($mode == "favoris") {
-			$condition = "favoris_user = '$user_id'";
+			$condition = "favoris_user = '$_user_id'";
 			if ($object_class != "") { 
 			  $condition .= " AND object_class = '$object_class'";
 			}
@@ -78,7 +78,7 @@ foreach ($profiles as $profile => $user_id) {
 	  
 		  // Appel de la fonction listant les codes les plus utilisés pour un praticien 
 		  $actes = new CActeCCAM();
-		  $codes = $actes->getFavoris($user_id, $object_class);
+		  $codes = $actes->getFavoris($_user_id, $object_class);
 		
 		  foreach ($codes as $key => $value) {
 		    // Attention à bien cloner le code CCAM car on rajoute une champ à la volée
@@ -99,7 +99,7 @@ foreach ($profiles as $profile => $user_id) {
 	  if ($mode == "favoris") {
 		  $sql = "select favoris_code
 					from cim10favoris
-					where favoris_user = '$user_id'
+					where favoris_user = '$_user_id'
 					order by favoris_code";
 			$codes = $ds->loadlist($sql);
 			
@@ -120,7 +120,7 @@ foreach ($profiles as $profile => $user_id) {
 		  
 		  $sql = "SELECT DP, count(DP) as nb_code
 		          FROM `sejour`
-		          WHERE sejour.praticien_id = '$user_id'
+		          WHERE sejour.praticien_id = '$_user_id'
 		          AND DP IS NOT NULL
 		          AND DP != ''
 		          GROUP BY DP

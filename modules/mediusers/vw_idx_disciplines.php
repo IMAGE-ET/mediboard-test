@@ -7,9 +7,7 @@
 * @author Sébastien Fillonneau
 */
 
-global $AppUI, $can, $m;
-
-$can->needsRead();
+CCanDo::checkRead();
 
 $discipline_id = CValue::getOrSession("discipline_id");
 

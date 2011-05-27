@@ -8,7 +8,7 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
  */
 
-global $AppUI;
+$user = CUser::get();
 
 $prescription_id = CValue::post("prescription_id");
 $prescription_line_medicament_id = CValue::post("prescription_line_medicament_id");
@@ -29,7 +29,7 @@ if(!$prescription_line_mix_id){
   $prescription_line_mix->prescription_id = $prescription_id;
   $prescription_line_mix->voie = $line_med->voie;
   $prescription_line_mix->type = $type;
-  $prescription_line_mix->creator_id = $AppUI->user_id;
+  $prescription_line_mix->creator_id = $user->_id;
   $prescription_line_mix->praticien_id = $line_med->praticien_id;
   $prescription_line_mix->date_debut = $line_med->debut;
   $prescription_line_mix->time_debut = $line_med->time_debut;

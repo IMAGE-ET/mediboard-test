@@ -7,7 +7,7 @@
 * @author Thomas Despoix
 */
 
-global $AppUI, $can, $m;
+global $can;
 
 $can->edit &= CAppUI::pref("GestionFSE");
 $can->needsEdit();
@@ -77,8 +77,7 @@ else {
 }
 
 // Praticiens autorisés
-$mediuser = new CMediusers();
-$mediuser->load($AppUI->user_id);
+$mediuser = CMediusers::get();
 $mediuser->loadRefFunction();
 
 // Liste des praticiens du cabinet -> on ne doit pas voir les autres...

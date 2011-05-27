@@ -7,11 +7,10 @@
 * @author Romain Ollivier
 */
 
-global $AppUI, $can;
+global $can;
 
 // Chargement de l'utilisateur courant
-$user = new CMediusers;
-$user->load($AppUI->user_id);
+$user = CMediusers::get();
 $user->isPraticien();
 
 $module = CModule::getInstalled(basename(dirname(__FILE__)));

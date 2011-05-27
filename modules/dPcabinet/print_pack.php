@@ -9,8 +9,6 @@
 
 // !! Attention, régression importante si ajout de type de paiement
 
-global $AppUI, $can, $m;
-
 // Récupération des paramètres
 $operation_id = CValue::get("operation_id", null);
 $op = new COperation;

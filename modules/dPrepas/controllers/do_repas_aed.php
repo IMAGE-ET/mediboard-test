@@ -30,7 +30,6 @@ class CDoRepasAddEdit extends CDoObjectAddEdit {
   }
   
   function doRedirect($demandeSynchro = false) {
-    global $AppUI, $root;
 
     if ($this->ajax) {
       if($this->synchro){
@@ -59,7 +58,6 @@ class CDoRepasAddEdit extends CDoObjectAddEdit {
   }
 
   function doIt() {
-    global $AppUI;
     $this->doBind();
     
     if($this->synchro){

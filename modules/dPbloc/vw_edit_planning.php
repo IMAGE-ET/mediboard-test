@@ -8,8 +8,6 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
  */
 
-global $AppUI, $can, $m, $g;
-
 $date       = CValue::getOrSession("date", mbDate());
 $plageop_id = CValue::getOrSession("plageop_id");
 

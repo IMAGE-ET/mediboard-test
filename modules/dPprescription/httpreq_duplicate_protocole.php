@@ -8,9 +8,6 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
  */
 
-
-global $AppUI;
-
 $protocole_id      = CValue::get("protocole_id");
 $protocole_dest_id = CValue::get("protocole_dest_id");
 

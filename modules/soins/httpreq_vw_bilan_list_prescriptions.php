@@ -8,11 +8,10 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
  */
 
-global $can, $m, $AppUI;
+CCanDo::checkRead();
+$user = CMediuser::get();
 
-$can->needsRead();
-
-$praticien_id      = CValue::getOrSession("praticien_id" , $AppUI->user_id);
+$praticien_id      = CValue::getOrSession("praticien_id" , $user->_id);
 $signee            = CValue::getOrSession("signee"       , 0);  // par default les non signees
 $date_min          = CValue::getOrSession("_date_entree_prevue"     , mbDate());  // par default, date du jour
 $date_max          = CValue::getOrSession("_date_sortie_prevue"     , mbDate());
@@ -87,12 +86,8 @@ $sejour = new CSejour();
 $sejour->_date_min = $date_min;
 $sejour->_date_max = $date_max;
 
-if(!$praticien_id){
-  $user_courant = new CMediusers();
-  $user_courant->load($AppUI->user_id);
-  if($user_courant->isPraticien()){
-    $praticien_id = $user_courant->_id;
-  }
+if(!$praticien_id && $user->isPraticien()){
+  $praticien_id = $user->_id;
 }
 
 foreach($prescriptions as $_prescription){

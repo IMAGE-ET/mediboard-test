@@ -7,8 +7,6 @@
 * @author Romain Ollivier
 */
 
-global $AppUI;
-
 $do = new CDoObjectAddEdit("CPrescriptionLaboExamen", "prescription_labo_examen_id");
 
 $pack = new CPackExamensLabo();

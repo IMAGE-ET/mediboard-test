@@ -8,9 +8,11 @@
 */
 
 
-global $AppUI, $can, $m;
+global $m;
 
-$can->needsEdit();
+CCanDO::checkEdit();
+
+$user = CUser::get();
 
 $date  = CValue::getOrSession("date", mbDate());
 $vue   = CValue::getOrSession("vue2", CAppUI::pref("AFFCONSULT", 0));
@@ -25,7 +27,7 @@ if(!isset($current_m)){
   $current_m = CValue::get("current_m", $m);
 }
 
-$prat_id      = CValue::getOrSession("chirSel", $AppUI->user_id);
+$prat_id      = CValue::getOrSession("chirSel", $user->_id);
 $selConsult   = CValue::getOrSession("selConsult", null);
 
 $listChirs = new CMediusers;
@@ -212,7 +214,7 @@ if ($consult->_ref_sejour && $consult->_ref_sejour->_id){
   $consult->_ref_chir->isUrgentiste();
   if ($consult->_ref_chir->_is_urgentiste) {
     
-    $consult->_ref_sejour->_ref_rpu->loadAides($AppUI->user_id);
+    $consult->_ref_sejour->_ref_rpu->loadAides($user->_id);
     $consult->_ref_sejour->_ref_rpu->loadRefSejourMutation();
   
     // Chargement des etablissements externes

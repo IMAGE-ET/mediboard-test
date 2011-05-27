@@ -8,13 +8,11 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
  */
 
-global $AppUI, $can, $m, $g;
-
 $praticien_id = CValue::getOrSession("praticien_id");
 $anesth_id = CValue::getOrSession("anesth_id");
 $all_prot = CValue::getOrSession("all_prot");
 
-$mediuser =& $AppUI->_ref_user;
+$mediuser = CMediusers::get();
 
 $protocoles = array();
 $praticiens = array();

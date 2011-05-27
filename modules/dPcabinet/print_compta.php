@@ -8,7 +8,6 @@
 */
 
 // !! Attention, régression importante si ajout de type de paiement
-global $AppUI, $can, $m;
 
 $today = mbDate();
 
@@ -42,8 +41,7 @@ if ($filter->_mode_reglement) {
 }
 
 // Tri sur les praticiens
-$mediuser = new CMediusers();
-$mediuser->load($AppUI->user_id);
+$mediuser = CMediusers::get();
 $mediuser->loadRefFunction();
 
 $prat = new CMediusers;

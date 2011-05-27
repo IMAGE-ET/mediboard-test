@@ -8,7 +8,9 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
  */
 
-global $AppUI, $can;
+global $can;
+
+$user = CUser::get();
 
 $note_id     = CValue::get("note_id");
 $object_guid = CValue::get("object_guid");
@@ -18,7 +20,7 @@ if($note_id) {
   $note->load($note_id);
 } else {
   $note->setObject(CMbObject::loadFromGuid($object_guid));
-  $note->user_id = $AppUI->user_id;
+  $note->user_id = $user->_id;
   $note->date = mbDateTime();
 }
 

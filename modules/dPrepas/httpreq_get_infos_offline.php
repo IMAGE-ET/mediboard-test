@@ -7,9 +7,7 @@
 * @author Sébastien Fillonneau
 */
 
-global $AppUI, $can, $m, $g;
-
-$can->needsRead();
+CCanDo::checkRead();
 
 CAppUI::requireModuleFile("dPhospi", "inc_vw_affectations");
 

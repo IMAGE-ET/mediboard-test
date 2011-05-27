@@ -10,8 +10,6 @@
 
 date_default_timezone_set("UTC");
 
-global $AppUI, $can, $m;
-
 $intervalle = CValue::get("intervalle", "none");
 
 // Vide la table contenant les données

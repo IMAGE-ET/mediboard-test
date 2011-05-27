@@ -6,17 +6,16 @@
  *	@version $Revision$
  *  @author Romain Ollivier
  */
- 
-global $can, $AppUI;
 
-$can->needsRead();
+CCanDo::checkRead();
+$user = CUser::get();
 
 $typeListe = CValue::getOrSession("typeListe");
 
 // Chargement de l'item choisi
 $prescriptionItem = new CPrescriptionLaboExamen;
 $prescriptionItem->load(CValue::getOrSession("prescription_labo_examen_id"));
-$prescriptionItem->loadAides($AppUI->user_id);
+$prescriptionItem->loadAides($user->_id);
 if ($prescriptionItem->_id) {
   $prescriptionItem->date = mbDate();
 }
@@ -38,7 +37,7 @@ $smarty = new CSmartyDP();
 
 $smarty->assign("prescriptionItem", $prescriptionItem);
 $smarty->assign("siblingItems", $siblingItems);
-$smarty->assign("user_id", $AppUI->user_id);
+$smarty->assign("user_id", $user->_id);
 
 $smarty->display("inc_edit_resultat.tpl");
 ?>

@@ -6,19 +6,19 @@
 * @version $Revision$
 * @author Thomas Despoix
 */
- 
-global $AppUI, $can;
-$can->needsRead();
+
+CCanDo::checkRead();
+$user = CUser::get();
 
 $mbmail = new CMbMail();
-$mbmail->from    = $AppUI->user_id;
+$mbmail->from    = $user->_id;
 $mbmail->to      = CValue::get("to");
 $mbmail->subject = CValue::get("subject");
 $mbmail->load(CValue::getOrSession("mbmail_id"));
 $mbmail->loadRefsFwd();
 
 // Vérifiction de la première lecture par le destinataire
-if ($mbmail->to == $AppUI->user_id && $mbmail->date_sent && ! $mbmail->date_read) {
+if ($mbmail->to == $user->_id && $mbmail->date_sent && ! $mbmail->date_read) {
   $mbmail->date_read = mbDateTime();
   $mbmail->store();
 }
@@ -54,8 +54,8 @@ $templateManager->initHTMLArea();
 // Création du template
 $smarty = new CSmartyDP();
 
-$smarty->assign("mbmail", $mbmail);
-$smarty->assign("functions" , $functions);
+$smarty->assign("mbmail"   , $mbmail);
+$smarty->assign("functions", $functions);
 
 $smarty->display("write_mbmail.tpl");
 

@@ -7,20 +7,19 @@
 * @author Thomas Despoix
 */
 
-global $AppUI, $can, $m;
-$can->needsEdit();
+CCanDo::checkEdit();
 
 // Gestion des bouton radio des dates
 $now             = mbDate();
-$yesterday       = mbDate("-1 DAY"     , $now);
-$week_deb        = mbDate("last sunday", $now);
-$week_fin        = mbDate("next sunday", $week_deb);
-$week_deb        = mbDate("+1 day"     , $week_deb);
+$yesterday       = mbDate("-1 DAY"         , $now);
+$week_deb        = mbDate("last sunday"    , $now);
+$week_fin        = mbDate("next sunday"    , $week_deb);
+$week_deb        = mbDate("+1 day"         , $week_deb);
 $rectif          = mbTransformTime("+0 DAY", $now, "%d")-1;
-$month_deb       = mbDate("-$rectif DAYS", $now);
-$month_fin       = mbDate("+1 month"     , $month_deb);
-$three_month_deb = mbDate("-3 month"     , $month_fin);
-$month_fin       = mbDate("-1 day"       , $month_fin);
+$month_deb       = mbDate("-$rectif DAYS"  , $now);
+$month_fin       = mbDate("+1 month"       , $month_deb);
+$three_month_deb = mbDate("-3 month"       , $month_fin);
+$month_fin       = mbDate("-1 day"         , $month_fin);
 
 $filter = new CConsultation;
 
@@ -34,8 +33,7 @@ $filter_reglement = new CReglement();
 $filter_reglement->mode = CValue::getOrSession("mode", 0);
 
 // L'utilisateur est-il praticien ?
-$mediuser = new CMediusers();
-$mediuser->load($AppUI->user_id);
+$mediuser = CMediusers::get();
 $mediuser->loadRefFunction();
 
 $is_praticien           = $mediuser->isPraticien();

@@ -7,10 +7,7 @@
 * @author Alexis Granger
 */
 
-global $AppUI, $can, $m;
-
-$user = new CMediusers();
-$user->load($AppUI->user_id);
+$user = CMediusers::get();
 $user->loadRefFunction();
 
 $selCabinet = CValue::getOrSession("selCabinet", $user->function_id);

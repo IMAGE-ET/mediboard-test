@@ -7,17 +7,14 @@
 * @author Romain Ollivier
 */
 
-global $AppUI, $can, $m;
-
-$can->needsEdit();
+CCanDo::checkEdit();
 $ds = CSQLDataSource::get("std");
 $date      = CValue::getOrSession("date", mbDate());
 $lastmonth = mbDate("-1 month", $date);
 $nextmonth = mbDate("+1 month", $date);
 
 // Sélection du praticien
-$mediuser = new CMediusers;
-$mediuser->load($AppUI->user_id);
+$mediuser = CMediusers::get();
 $listPrat = $mediuser->loadPraticiens(PERM_EDIT);
 
 $selPrat = CValue::getOrSession("selPrat", $mediuser->isPraticien() ? $mediuser->user_id : null);

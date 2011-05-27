@@ -8,7 +8,7 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
  */
 
-global $AppUI;
+$user = CUser::get();
 
 // Charge toutes les transmissions liées a un sejour si un sejour_id est passé
 // Sinon, charge les transmissions des dernieres 24 heures pour le praticien_id
@@ -119,14 +119,14 @@ if($order_way == "ASC"){
 }
 
 $_transmission_medicale = new CTransmissionMedicale();
-$_transmission_medicale->loadAides($AppUI->user_id);
+$_transmission_medicale->loadAides($user->_id);
 
 // Variables de templates
 $smarty = new CSmartyDP();
 $smarty->assign("with_filter", $with_filter);
 $smarty->assign("order_way", $order_way);
 $smarty->assign("order_col", $order_col);
-$smarty->assign("user_id"  , $AppUI->user_id);
+$smarty->assign("user_id"  , $user->_id);
 $smarty->assign("trans_and_obs", $trans_and_obs);
 $smarty->assign("addTrans", $addTrans);
 $smarty->assign("sejour_id", $sejour_id);

@@ -7,9 +7,7 @@
 * @author Sébastien Fillonneau
 */
 
-global $AppUI, $can, $m, $g;
-
-$can->needsRead();
+CCanDo::checkRead();
 $ds = CSQLDataSource::get("std");
 
 $menu_id  = CValue::getOrSession("menu_id" , null);

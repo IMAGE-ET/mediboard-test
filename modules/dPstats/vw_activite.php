@@ -8,9 +8,7 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
  */
 
-global $AppUI, $can, $m;
-
-$can->needsEdit();
+CCanDo::checkEdit();
 
 $debutact      = CValue::getOrSession("debutact", mbDate());
 $finact        = CValue::getOrSession("finact", mbDate());

@@ -6,12 +6,9 @@
  *	@version $Revision$
  *  @author Romain Ollivier
  */
- 
-global $AppUI, $can, $m;
 
-$can->needsRead();
-$user = new CMediusers;
-$user->load($AppUI->user_id);
+CCanDo::checkRead();
+$user = CMediusers::get();
 
 $pack_examens_labo_id = CValue::getOrSession("pack_examens_labo_id");
 $typeListe            = CValue::getOrSession("typeListe");

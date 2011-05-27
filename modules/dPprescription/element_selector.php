@@ -8,8 +8,7 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
  */
 
-
-global $AppUI, $can, $m, $g;
+$group = CGroups::loadCurrent();
 
 $type = CValue::get("type");
 $libelle = CValue::get("libelle");
@@ -26,7 +25,7 @@ $elements = array();
 // Chargement de la liste des categories
 $category_prescription = new CCategoryPrescription();
 $where["chapitre"] = "= '$type'";
-$where[] = "group_id = '$g' OR group_id IS NULL";
+$where[] = "group_id = '$group->_id' OR group_id IS NULL";
 
 if($libelle){
   $categories = $category_prescription->loadList($where);

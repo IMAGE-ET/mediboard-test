@@ -13,8 +13,6 @@ if(!CModule::getActive('bcb')){
   return;
 }
 
-global $AppUI, $can, $m;
-
 // Recuperation des valeurs
 $code_moment_id = CValue::getOrSession("code_moment_id");
 

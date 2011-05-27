@@ -7,9 +7,8 @@
 * @author Sébastien Fillonneau
 */
 
-global $AppUI, $can, $m, $g;
-
-$can->needsRead();
+CCanDo::checkRead();
+$group = CGroups::loadCurrent();
 
 CAppUI::requireModuleFile("dPhospi", "inc_vw_affectations");
 
@@ -22,7 +21,7 @@ $service = null;
 // Liste des services
 $services = new CService;
 $where = array();
-$where["group_id"] = "= '$g'";
+$where["group_id"] = "= '$group->_id'";
 $order = "nom";
 $services = $services->loadListWithPerms(PERM_READ,$where, $order);
 foreach($services as &$service){

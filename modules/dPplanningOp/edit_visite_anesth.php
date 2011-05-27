@@ -8,7 +8,7 @@
  *  @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
  */
 
-global $AppUI, $can, $m, $g;
+$user = CUser::get();
 
 $operation_id= CValue::get("operation_id");
 
@@ -21,8 +21,7 @@ $operation->_ref_sejour->loadRefsFwd();
 $operation->_ref_sejour->loadRefsConsultAnesth();
 
 // Récupération de l'utilisateur courant
-$currUser = new CMediusers();
-$currUser->load($AppUI->user_id);
+$currUser = CMediusers::get();
 $currUser->isAnesth();
 
 // Chargement des anesthésistes
@@ -33,7 +32,7 @@ $listAnesths = $listAnesths->loadAnesthesistes(PERM_DENY);
 $smarty = new CSmartyDP();
 
 $smarty->assign("currUser"               , $currUser);
-$smarty->assign("user_id"                , $AppUI->user_id);
+$smarty->assign("user_id"                , $user->_id);
 $smarty->assign("listAnesths"            , $listAnesths);
 $smarty->assign("isPrescriptionInstalled", CModule::getActive("dPprescription"));
 $smarty->assign("isImedsInstalled"       , (CModule::getActive("dPImeds") && CImeds::getTagCIDC(CGroups::loadCurrent())));

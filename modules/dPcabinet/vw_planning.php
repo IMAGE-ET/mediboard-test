@@ -7,17 +7,14 @@
 * @author Romain Ollivier
 */
 
-global $AppUI, $can, $m;
-
-$can->needsRead();
+CCanDo::checkRead();
 
 $_firstconsult_time  = null;
 $_lastconsult_time   = null;
 
 // L'utilisateur est-il praticien ?
 $chir = null;
-$mediuser = new CMediusers();
-$mediuser->load($AppUI->user_id);
+$mediuser = CMediusers::get();
 if ($mediuser->isPraticien()) {
   $chir = $mediuser->createUser();
 }

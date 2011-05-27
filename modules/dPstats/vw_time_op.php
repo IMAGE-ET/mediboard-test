@@ -10,9 +10,8 @@
 
 date_default_timezone_set("UTC");
 
-global $AppUI, $can, $m;
-
-$can->needsRead();
+CCanDo::checkRead();
+$user = CUser::get();
 
 $typeVue        = CValue::getOrSession("typeVue"       , 2);
 $nb_sejour_mini = CValue::getOrSession("nb_sejour_mini", 3);
@@ -51,7 +50,7 @@ if ($typeVue == 2) {
   $smarty->assign("type"      , $type);
 }
 
-$smarty->assign("user_id"       , $AppUI->user_id);
+$smarty->assign("user_id"       , $user->_id);
 $smarty->assign("listTemps"     , $listTemps);
 $smarty->assign("total"         , $total);
 $smarty->assign("typeVue"       , $typeVue);

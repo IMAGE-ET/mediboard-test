@@ -6,10 +6,8 @@
  *	@version $Revision$
  *  @author Romain Ollivier
  */
- 
-global $AppUI, $can, $m;
 
-$can->needsRead();
+CCanDo::checkRead();
 
 //Chargement de tous les catalogues
 $catalogue = new CCatalogueLabo;

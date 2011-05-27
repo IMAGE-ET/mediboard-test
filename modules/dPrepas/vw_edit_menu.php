@@ -7,10 +7,10 @@
 * @author Sébastien Fillonneau
 */
 
-global $AppUI, $can, $m, $g;
-
-$can->needsEdit();
+CCanDo::checkEdit();
 $ds = CSQLDataSource::get("std");
+$group = CGroups::loadCurrent();
+
 $menu_id      = CValue::getOrSession("menu_id", null);
 $plat_id      = CValue::getOrSession("plat_id", null);
 $typerepas_id = CValue::getOrSession("typerepas_id", null);
@@ -18,7 +18,7 @@ $typeVue      = CValue::getOrSession("typeVue", 0);
 
 // Liste des Type de Repas
 $listTypeRepas = new CTypeRepas;
-$where = array("group_id" => $ds->prepare("= %", $g) );
+$where = array("group_id" => $ds->prepare("= %", $group->_id) );
 $order = "debut, fin, nom";
 $listTypeRepas = $listTypeRepas->loadList($where,$order);
 
@@ -32,7 +32,7 @@ if($typeVue == 2){
   // Chargement du type de repas demandé
   $typeRepas = new CTypeRepas;
   $typeRepas->load($typerepas_id); 
-  if($typeRepas->group_id != $g){
+  if($typeRepas->group_id != $group->_id){
     $typeRepas = new CTypeRepas;
     $typerepas_id = null;
     CValue::setSession("typerepas_id", null);
@@ -51,7 +51,7 @@ if($typeVue == 2){
   // Chargement du plat demandé
   $plat = new CPlat;
   $plat->load($plat_id);
-  if($plat->group_id != $g){
+  if($plat->group_id != $group->_id){
     $plat = new CPlat;
     $plat_id = null;
     CValue::setSession("plat_id", null);
@@ -61,7 +61,7 @@ if($typeVue == 2){
   
   // Liste des plats
   $listPlats = new CPlat;
-  $where = array("group_id" => $ds->prepare("= %", $g) );
+  $where = array("group_id" => $ds->prepare("= %", $group->_id) );
   $order = "nom, type";
   $listPlats = $listPlats->loadList($where,$order);
   
@@ -72,7 +72,7 @@ if($typeVue == 2){
   // Chargement du menu demandé
   $menu = new CMenu;
   $menu->load($menu_id);
-  if($menu->group_id != $g){
+  if($menu->group_id != $group->_id){
     $menu = new CMenu;
     $menu_id = null;
     CValue::setSession("menu_id", null);
@@ -80,7 +80,7 @@ if($typeVue == 2){
   
   // Liste des menus
   $listMenus = new CMenu;
-  $where = array("group_id" => $ds->prepare("= %", $g) );
+  $where = array("group_id" => $ds->prepare("= %", $group->_id) );
   $order = "nom";
   $listMenus = $listMenus->loadList($where, $order);
   

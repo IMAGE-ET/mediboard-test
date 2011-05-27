@@ -6,9 +6,10 @@
  * @version $Revision$
  * @author Fabien
  */
- 
-global $AppUI, $can;
-$can->needsRead();
+
+CCanDo::checkRead();
+
+$user = CUser::get();
 
 // Chargement du thread demandé
 $forum_thread_id = CValue::getOrSession('forum_thread_id');
@@ -17,7 +18,7 @@ $forum_thread->load($forum_thread_id);
 if($forum_thread->_id) {
     $forum_thread->loadRefs();
 } else {
-    $forum_thread->user_id = $AppUI->user_id;
+    $forum_thread->user_id = $user->_id;
     $forum_thread->date = mbDateTime();
 }
 

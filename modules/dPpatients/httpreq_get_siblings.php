@@ -7,9 +7,7 @@
 * @author Sébastien Fillonneau
 */
 
-global $AppUI, $can, $m;
-
-$can->needsRead();
+CCanDo::checkRead();
 
 $patient_id      = CValue::get("patient_id", null);
 $nom             = CValue::get("nom"       , null);

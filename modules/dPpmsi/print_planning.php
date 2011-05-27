@@ -7,10 +7,8 @@
 * @author Romain Ollivier
 */
 
-global $AppUI, $can, $m, $g;
+CCanDo::checkRead();
 $ds = CSQLDataSource::get("std");
-
-$can->needsRead();
 
 $now       = mbDate();
 $filter = new COperation;
@@ -38,8 +36,7 @@ $where["date"] =  $ds->prepare("BETWEEN %1 AND %2", $filter->_date_min, $filter-
 $order = "date, salle_id, debut";
 
 $chir_id = CValue::get("chir");
-$user = new CMediusers();
-$user->load($AppUI->user_id);
+$user = CMediusers::get();
 
 // En fonction du praticien
 if($filter->_prat_id) {

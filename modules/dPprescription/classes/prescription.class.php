@@ -494,7 +494,7 @@ class CPrescription extends CMbObject implements IPatientRelated {
   
   // Permet d'appliquer un protocole à une prescription
   function applyProtocole($protocole_id, $praticien_id, $date_sel, $time_sel, $operation_id, $debut_sejour="", $fin_sejour="", $date_operation="", $protocole_base_id) {
-    global $AppUI;
+    $user = CUser::get();
     
     // Chargement du protocole
     $protocole = new CPrescription();
@@ -585,7 +585,7 @@ class CPrescription extends CMbObject implements IPatientRelated {
       $line_comment->_id = "";
       $line_comment->prescription_id = $this->_id;
       $line_comment->praticien_id = $praticien_id;
-      $line_comment->creator_id = $AppUI->user_id;
+      $line_comment->creator_id = $user->_id;
 			$line_comment->protocole_id = $protocole_base_id;
 			if($this->_ref_object instanceof CSejour && $this->_ref_object->type == "urg" && CAppUI::conf("dPprescription CPrescription prescription_suivi_soins")){
         $line_comment->debut = mbDate();
@@ -642,7 +642,7 @@ class CPrescription extends CMbObject implements IPatientRelated {
    * Calcul du praticien_id responsable de la prescription
    */
   function calculPraticienId(){
-    global $AppUI;
+    $user = CMediusers::get();
     
     if ($this->object_id !== null && $this->object_class !== null && $this->type !== null && $this->object_id){
       // Chargement de l'object
@@ -652,7 +652,7 @@ class CPrescription extends CMbObject implements IPatientRelated {
       
       if($this->type !== "sejour"){
         if($this->type != 'traitement'){
-          $this->praticien_id = $AppUI->_ref_user->isPraticien() ? $AppUI->_ref_user->_id : $object->_praticien_id;
+          $this->praticien_id = $user->isPraticien() ? $user->_id : $object->_praticien_id;
         }
       }
       else {
@@ -841,9 +841,9 @@ class CPrescription extends CMbObject implements IPatientRelated {
       return;
     }
 
-    global $AppUI;
-    if ($AppUI->_ref_user->isPraticien()) {
-      $this->_ref_current_praticien = $AppUI->_ref_user;
+    $user = CMediusers::get();
+    if ($user->isPraticien()) {
+      $this->_ref_current_praticien = $user;
     }
     else {
       if($this->_ref_object->_class_name == "CSejour"){

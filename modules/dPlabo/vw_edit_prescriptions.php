@@ -6,10 +6,8 @@
  *	@version $Revision$
  *  @author Romain Ollivier
  */
- 
-global $AppUI, $can, $m;
 
-$can->needsRead();
+CCanDo::checkRead();
 
 $patient_id = CValue::getOrSession("patient_id");
 $typeListe  = CValue::getOrSession("typeListe");

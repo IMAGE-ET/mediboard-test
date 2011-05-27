@@ -7,9 +7,11 @@
 * @author Thomas Despoix
 */
 
-global $AppUI, $can, $m;
+global $m;
+
+CCanDo::checkRead();
+
 $ds = CSQLDataSource::get("std");
-$can->needsRead();
 
 // Utilisateur sélectionné ou utilisateur courant
 $filter_user_id = CValue::getOrSession("filter_user_id");
@@ -78,8 +80,7 @@ $listFunc = $listFunc->loadSpecialites(PERM_EDIT);
 
 $listEtab = CGroups::loadGroups(PERM_EDIT);
 
-$userSel = new CMediusers;
-$userSel->load($filter_user_id ? $filter_user_id : $AppUI->user_id);
+$userSel = CMediusers::get($filter_user_id);
 $userSel->loadRefs();
 $userSel->_ref_function->loadRefGroup();
 

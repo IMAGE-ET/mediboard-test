@@ -62,7 +62,6 @@ class CActe extends CMbMetaObject {
   }
   
   function loadListExecutants($guess = true) {
-    global $AppUI;
     
     $list_executants = new CMediusers;
     $this->_list_executants = $list_executants->loadProfessionnelDeSante(PERM_READ);
@@ -74,8 +73,7 @@ class CActe extends CMbMetaObject {
         return;
       }
       else {
-        $user = new CMediusers();
-        $user->load($AppUI->user_id);
+        $user = CMediusers::get();
         if ($user->isPraticien() || $user->isInfirmiere()) {
           $this->executant_id = $user->_id;
           return;

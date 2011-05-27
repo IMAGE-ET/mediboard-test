@@ -259,8 +259,6 @@ class CModule extends CMbObject {
       CAppUI::redirect("m=system&a=access_denied");
     }
     
-    CAppUI::savePlace();
-    
     // Tab becomes an action if unique
     if (count($this->_tabs) == 1) {
       $a = $tab;

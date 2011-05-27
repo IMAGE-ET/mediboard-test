@@ -7,9 +7,8 @@
 * @author Romain OLLIVIER
 */
 
-global $AppUI, $can, $m;
+CCanDo::checkRead();
 
-$can->needsRead();
 $ds = CSQLDataSource::get("std");
 
 // Période
@@ -41,8 +40,7 @@ for ($i = 8; $i <= 20; $i++) {
 }
 
 // Etat du compte
-$prat = new CMediusers;
-$prat->load($AppUI->user_id);
+$prat = CMediusers::get();
 $compte = array();
 $isprat = $prat->isPraticien();
 if($isprat) {

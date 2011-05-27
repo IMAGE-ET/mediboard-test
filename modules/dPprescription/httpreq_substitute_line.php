@@ -8,8 +8,7 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
  */
 
-
-global $AppUI;
+$user = CUser::get();
 
 $code_cip    = CValue::get("code_cip");
 $line_id     = CValue::get("line_id");
@@ -26,7 +25,7 @@ $line->loadRefsSubstitutionLines();
 // Creation de la nouvelle ligne
 $line->_id = "";
 $line->code_cip = $code_cip;
-$line->creator_id = $AppUI->user_id;
+$line->creator_id = $user->_id;
 $line->accord_praticien = "";
 $line->debut = mbDate();
 $line->time_debut = mbTime();

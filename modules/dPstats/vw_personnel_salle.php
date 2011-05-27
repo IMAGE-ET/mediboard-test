@@ -8,7 +8,7 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
  */
 
-global $AppUI, $can, $m;
+global $can, $m;
 
 $can->needsRead();
 
@@ -16,8 +16,7 @@ $deb_personnel  = CValue::getOrSession("deb_personnel" , mbDate("-1 WEEK"));
 $fin_personnel  = CValue::getOrSession("fin_personnel" , mbDate(""));
 $prat_personnel = CValue::getOrSession("prat_personnel", null);
 
-$user = new CMediusers();
-$user->load($AppUI->user_id);
+$user = CMediusers::get();
 $listPrats = $user->loadPraticiens(PERM_READ);
   
 $total["duree_prevue"]             = "00:00:00";

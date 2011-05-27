@@ -7,8 +7,6 @@
 * @author Romain Ollivier
 */
 
-global $AppUI, $can, $m;
-
 // Récupération des paramètres
 $filter = new CPlageconsult();
 
@@ -24,8 +22,7 @@ $where["consultation.tiers_date_reglement"] = "IS NULL";
 $where["plageconsult.date"]                 = "BETWEEN '$filter->_date_min' AND '$filter->_date_max'";
 
 // Tri sur les praticiens
-$mediuser = new CMediusers();
-$mediuser->load($AppUI->user_id);
+$mediuser = CMediusers::get();
 $mediuser->loadRefFunction();
 
 $prat = new CMediusers;

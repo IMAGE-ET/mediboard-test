@@ -10,11 +10,8 @@
 
 CCanDo::checkEdit();
 
-global $AppUI;
-
 // Utilisateur courant
-$curr_user = new CMediusers();
-$curr_user->load($AppUI->user_id);
+$curr_user = CMediusers::get();
 
 // RHS concernés
 $rhs = new CRHS();

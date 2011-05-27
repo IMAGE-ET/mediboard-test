@@ -7,8 +7,6 @@
 * @author Romain Ollivier
 */
 
-global $AppUI, $can, $m, $tab;
-
 $mode_operation = CValue::get("mode_operation", 0);
 $sejour_id      = CValue::get("sejour_id"     , 0);
 $patient_id     = CValue::get("patient_id"    , 0);
@@ -57,8 +55,7 @@ if ($sejour->adresse_par_prat_id && ($sejour->adresse_par_prat_id != $patient->_
 }
 
 // L'utilisateur est-il un praticien
-$mediuser = new CMediusers;
-$mediuser->load($AppUI->user_id);
+$mediuser = CMediusers::get();
 
 // Vérification des droits sur les praticiens
 $listPraticiens = $mediuser->loadPraticiens(PERM_EDIT);

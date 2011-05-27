@@ -28,7 +28,6 @@ class CFileAddEdit extends CDoObjectAddEdit {
   }
 
   function doStore() {
-    global $AppUI;
     $upload     = null;
     $multifiles = false;
 
@@ -228,11 +227,11 @@ class CFileAddEdit extends CDoObjectAddEdit {
         }
       }
       // Redaction du message et renvoi
-      if (@count($AppUI->messages[UI_MSG_OK]) && $this->redirectStore) {
+      if (CAppUI::isMsgOK() && $this->redirectStore) {
         $this->redirect =& $this->redirectStore;
       }
       
-      if (!@count($AppUI->messages[UI_MSG_OK]) && $this->redirectError) {
+      if (!CAppUI::isMsgOK() && $this->redirectError) {
         $this->redirect =& $this->redirectError;
       }
     }

@@ -8,11 +8,13 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
  */
 
-global $AppUI, $m;
+global $m;
 
 CCanDo::checkEdit();
 
-$user_id = CValue::getOrSession("user_id", $AppUI->user_id);
+$user = CUser::get(CValue::getOrSession("user_id"));
+
+$user_id = CValue::getOrSession("user_id", $user->_id);
 
 if(!$user_id) {
   CAppUI::setMsg("Vous devez selectionner un utilisateur");
@@ -21,10 +23,6 @@ if(!$user_id) {
 
 $modulesInstalled = CModule::getInstalled();
 $isAdminPermSet   = false;
-
-// Récuperation de l'utilisateur sélectionné
-$user = new CUser;
-$user->load($user_id);
 
 $profile = new CUser();
 if($user->profile_id){

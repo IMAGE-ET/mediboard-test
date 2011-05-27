@@ -8,9 +8,9 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
  */
 
-global $AppUI, $can, $g, $m, $listMins,$listHours,$HeureMax,$MinMax,$HeureMin,$MinMin,$aAffichage;
+global $listMins,$listHours,$HeureMax,$MinMax,$HeureMin,$MinMin,$aAffichage;
 
-$can->needsRead();
+CCanDo::checkRead();
 
 // Récupération des paramètres
 $chirSel   = CValue::getOrSession("chirSel", 25);

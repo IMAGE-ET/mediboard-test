@@ -8,9 +8,8 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
  */
 
-global $AppUI, $can, $m, $g;
-
-$can->needsRead();
+CCanDo::checkRead();
+$user = CUser::get();
 
 // Ne pas supprimer, utilisé pour mettre le particien en session
 $praticien_id    = CValue::getOrSession("praticien_id");
@@ -19,11 +18,11 @@ $salle_id        = CValue::getOrSession("salle");
 $bloc_id         = CValue::getOrSession("bloc_id");
 $op              = CValue::getOrSession("op");
 $date            = CValue::getOrSession("date", mbDate());
-$modif_operation = $can->edit || $date >= mbDate();
+$modif_operation = CCanDo::edit() || $date >= mbDate();
 
 // Récupération de l'utilisateur courant
 $currUser = new CMediusers();
-$currUser->load($AppUI->user_id);
+$currUser->load($user->_id);
 $currUser->isAnesth();
 $currUser->isPraticien();
 
@@ -186,7 +185,7 @@ foreach($operation_check_list->_specs["type"]->_list as $type) {
 }
 
 $anesth_perop = new CAnesthPerop();
-$anesth_perop->loadAides($AppUI->user_id);
+$anesth_perop->loadAides($user->_id);
 
 $anesth = new CMediusers();
 $anesth->load($anesth_id);
@@ -226,7 +225,7 @@ $smarty->assign("protocoles"             , $protocoles);
 $smarty->assign("anesth_id"              , $anesth_id);
 $smarty->assign("anesth"                 , $anesth);
 $smarty->assign("hide_finished"          , $hide_finished);
-$smarty->assign("user_id"                , $AppUI->user_id);
+$smarty->assign("user_id"                , $user->_id);
 $smarty->assign("create_dossier_anesth"  , 1);
 
 // Check lists

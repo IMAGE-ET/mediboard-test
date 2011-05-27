@@ -7,9 +7,7 @@
 * @author Sébastien Fillonneau
 */
 
-global $AppUI, $can, $m;
-
-$can->needsAdmin();
+CCanDo::checkAdmin();
 
 $smarty = new CSmartyDP();
 $smarty->display("vw_create_archive.tpl");

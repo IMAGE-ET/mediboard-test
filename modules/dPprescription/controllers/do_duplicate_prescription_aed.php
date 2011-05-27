@@ -8,10 +8,10 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
  */
 
-global $AppUI;
+$user = CUser::get();
 
 $prescription_id = CValue::post("prescription_id");
-$praticien_id = CValue::post("praticien_id", $AppUI->user_id);
+$praticien_id = CValue::post("praticien_id", $user->_id);
 $type = CValue::post("type");
 $ajax = CValue::post("ajax");
 
@@ -90,7 +90,7 @@ foreach($lines as $cat => $lines_by_type){
 	  $line->prescription_id = $prescription->_id;
 	  $line->signee = 0;
 	  $line->valide_infirmiere = 0;
-	  $line->creator_id = $AppUI->user_id;
+	  $line->creator_id = $user->_id;
 	  if($line instanceOf CPrescriptionLineMedicament){
 	    $line->valide_pharma = 0;
 	  }

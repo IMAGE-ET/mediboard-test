@@ -8,7 +8,7 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
  */
 
-global $AppUI, $can, $m;
+global $can, $m;
 
 $can->needsRead();
 
@@ -62,8 +62,7 @@ $executants           = array();
 $dossier_medical      = new CDossierMedical();
 
 // Chargement de l'utilisateur courant
-$current_user = new CMediusers();
-$current_user->load($AppUI->user_id);
+$current_user = CMediusers::get();
 $is_praticien = $current_user->isPraticien();
 $current_user->isInfirmiere();
 
@@ -138,7 +137,7 @@ if($prescription->object_id && $prescription->_current_praticien_id){
   } else {
   // Sinon, on charge les favoris du user courant si c'est un praticien (protocole de cabinet et d'etablissement)
     if($is_praticien){
-      $favoris_praticien_id = $AppUI->user_id;
+      $favoris_praticien_id = $current_user->user_id;
     }
   }
 }
@@ -443,7 +442,7 @@ $prescription_line_mix = new CPrescriptionLineMix();
 
 $aides_prescription = array();
 if($prescription->_id){
-  $_users = $prescription->object_id ? $prescription->_praticiens : array($AppUI->user_id => "");
+  $_users = $prescription->object_id ? $prescription->_praticiens : array($current_user->user_id => "");
   if(count($_users)){
     foreach($_users as $praticien_id => $praticien->_view){
       $prescriptionLineMedicament->loadAides($praticien_id);
@@ -472,9 +471,9 @@ if (!$prescription->_id) {
 	  $_operation->loadRefPlageOp();
 }
 
-$_chir_id   = $chir_id   ? $chir_id : ($AppUI->_ref_user->isPraticien() ? $AppUI->user_id : $_sejour->praticien_id);
-$_anesth_id = $anesth_id ? $anesth_id : ($AppUI->_ref_user->isFromType(array("Anesthésiste")) ? 
-                                            $AppUI->user_id : 
+$_chir_id   = $chir_id   ? $chir_id : ($current_user->isPraticien() ? $current_user->user_id : $_sejour->praticien_id);
+$_anesth_id = $anesth_id ? $anesth_id : ($current_user->isFromType(array("Anesthésiste")) ? 
+                                            $current_user->user_id : 
                                             ($operation->_id ? $operation->_ref_plageop->anesth_id : null));
 
 $_chir = new CMediusers();
@@ -554,7 +553,7 @@ $smarty->assign("operation_id"         , $operation_id);
 $smarty->assign("pratSel_id"           , $pratSel_id);
 $smarty->assign("mode_sejour"          , $mode_sejour);
 $smarty->assign("praticien_for_prot_id", $praticien_for_prot_id);
-$smarty->assign("user_id"              , $AppUI->user_id);
+$smarty->assign("user_id"              , $current_user->user_id);
 $smarty->assign("hide_old_lines"       , $hide_old_lines);
 $smarty->assign("hidden_lines_count"   , $hidden_lines_count);
 $smarty->assign("hide_header"          , $hide_header);

@@ -7,9 +7,9 @@
 * @author Sébastien Fillonneau
 */
 
-global $AppUI, $can, $m, $g;
+CCanDo::checkEdit();
+$group = CGroups::loadCurrent();
 
-$can->needsEdit();
 $ds = CSQLDataSource::get("std");
 $service_id = CValue::getOrSession("service_id" , null);
 $type       = CValue::getOrSession("type"       , null);
@@ -17,8 +17,8 @@ $date       = CValue::getOrSession("date"       , mbDate());
 
 $listRepas   = new CRepas;
 $where = array();
-$where["group_id"]    = $ds->prepare("= %", $g);
-$where["date"]        = $ds->prepare("= %", $date);
+$where["group_id"]  = $ds->prepare("= %", $group->_id);
+$where["date"]      = $ds->prepare("= %", $date);
 $where["typerepas"] = $ds->prepare("= %", $type);
 
 $ljoin = array("menu" => "repas.menu_id = menu.menu_id");
@@ -72,7 +72,7 @@ $listTypeRepas = $listTypeRepas->loadList(null,$order);
 // Liste des services
 $services = new CService;
 $where = array();
-$where["group_id"] = "= '$g'";
+$where["group_id"] = "= '$group->_id'";
 $order = "nom";
 $services = $services->loadListWithPerms(PERM_READ,$where, $order);
 foreach($services as &$service){

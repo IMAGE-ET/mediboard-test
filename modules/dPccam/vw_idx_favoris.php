@@ -8,22 +8,20 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
  */
 
-global $AppUI, $can, $m;
+CCanDo::checkRead();
 
 CAppUI::requireModuleClass("dPsalleOp", "acteccam");
 
 $class = CValue::get("class","");
-
-$can->needsRead();
 $list = array();
 
-$user = $AppUI->user_id;
+$user = CUser::get();
 
 $actes = new CActeCCAM();
-$codes = $actes->getFavoris($user,$class,"");
+$codes = $actes->getFavoris($user->_id,$class,"");
 $i = 0;
 
-$codesByChap = CFavoriCCAM::getOrdered($user,$class);
+$codesByChap = CFavoriCCAM::getOrdered($user->_id,$class);
 
 foreach($codes as $key => $value) {	
   $code = CCodeCCAM::get($value["code_acte"], CCodeCCAM::LITE);

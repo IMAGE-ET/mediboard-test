@@ -8,8 +8,6 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
  */
 
-global $AppUI, $m;
-
 CCanDo::checkAdmin();
 
 $module = CValue::getOrSession("module" , "admin");

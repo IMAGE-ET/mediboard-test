@@ -7,9 +7,7 @@
 * @author Romain Ollivier
 */
 
-global $AppUI, $can, $m, $g;
-
-$can->needsRead();
+CCanDo::checkRead();
 
 $type_admission = CValue::getOrSession("type_admission", "ambucomp");
 
@@ -19,12 +17,14 @@ $listPats = array();
 
 // Récupération des admissions à affecter
 function loadSejourNonAffectes($where) {
-  global $listChirs, $listPats, $listFunctions, $g;
+  global $listChirs, $listPats, $listFunctions;
+  
+  $group = CGroups::loadCurrent();
   
   $leftjoin = array(
     "affectation"     => "sejour.sejour_id = affectation.sejour_id"
   );
-  $where["sejour.group_id"] = "= '$g'";
+  $where["sejour.group_id"] = "= '$group->_id'";
   $where[] = "affectation.affectation_id IS NULL";
   
   $sejourNonAffectes = new CSejour;

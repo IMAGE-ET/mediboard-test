@@ -7,13 +7,10 @@
 * @author Alexis Granger
 */
 
-global $AppUI, $can, $m, $tab;
-
-$user = new CMediusers();
-$user->load($AppUI->user_id);
+$user = CMediusers::get();
 
 // Si ni praticien ni admin, redirect
-if(!$user->isPraticien() && $can->needsAdmin()){
+if(!$user->isPraticien() && CCanDo::checkAdmin()){
   CAppUI::redirect();
 }
  
@@ -31,10 +28,6 @@ $month_fin  = mbDate("-1 day", $month_fin);
 $filter = new COperation();
 $filter->_date_min = $now;
 $filter->_date_max = $now;
-
-// Chargement du user courant
-$user = new CMediusers();
-$user->load($AppUI->user_id);
 
 // Chargement de la liste de tous les praticiens
 $praticien = new CMediusers();

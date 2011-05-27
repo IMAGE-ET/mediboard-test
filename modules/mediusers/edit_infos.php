@@ -6,11 +6,10 @@
 * @version $Revision$
 * @author Sébastien Fillonneau
 */
-global $AppUI, $m;
+global $m;
 
 
-$mediuser = new CMediusers();
-$mediuser->load($AppUI->user_id);
+$mediuser = CMediusers::get();
 $mediuser->loadRefsFwd();
 $mediuser->_ref_user->isLDAPLinked();
 

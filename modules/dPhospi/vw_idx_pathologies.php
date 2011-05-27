@@ -7,10 +7,7 @@
 * @author Alexis Granger
 */
 
-
-
-global $AppUI, $can, $m, $g;
-CAppUI::requireModuleFile($m, "inc_vw_affectations");
+CAppUI::requireModuleFile("dPhospi", "inc_vw_affectations");
 
 $affichage_patho = CValue::postOrSession("affichage_patho","non_complet"); 
 
@@ -21,7 +18,7 @@ $heureLimit = "16:00:00";
 // Liste des patients à placer
 $groupSejourNonAffectes = array();
 
-if ($can->edit) {
+if (CCanDo::edit()) {
   // Admissions de la veille
   $dayBefore = mbDate("-1 days", $date);
   $where = array(

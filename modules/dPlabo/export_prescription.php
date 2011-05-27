@@ -7,14 +7,12 @@
 * @author Thomas Despoix
 */
 
-global $AppUI, $can, $m;
-
 if (!class_exists("DOMDocument")) {
   trigger_error("sorry, DOMDocument is needed");
   return;
 }
 
-$can->needsRead();
+CCanDo::checkRead();
 
 $mbPrescription = new CPrescriptionLabo();
 $doc = new CMbXMLDocument();

@@ -7,9 +7,7 @@
  * @author Romain Ollivier
  */
 
-global $AppUI, $can, $m;
-
-$can->needsRead();
+CCanDo::checkRead();
 
 $fiche_paie_id = CValue::getOrSession("fiche_paie_id", null);
 

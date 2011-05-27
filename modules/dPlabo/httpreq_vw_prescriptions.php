@@ -6,13 +6,10 @@
  *	@version $Revision$
  *  @author Romain Ollivier
  */
- 
-global $AppUI, $can, $m;
 
-$can->needsRead();
+CCanDo::checkRead();
 
-$user = new CMediusers;
-$user->load($AppUI->user_id);
+$user = CMediusers::get();
 
 $patient_id = CValue::getOrSession("patient_id");
 

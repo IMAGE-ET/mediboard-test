@@ -8,8 +8,7 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
  */
 
-global $can, $AppUI;
-$can->needsRead();
+CCanDo::checkRead();
 
 $owner_guid = CValue::get('owner_guid');
 $file = isset($_FILES['import']) ? $_FILES['import'] : null;

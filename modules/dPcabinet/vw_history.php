@@ -7,10 +7,7 @@
 * @author Sébastien Fillonneau
 */
 
-global $AppUI, $can, $m;
-
-
-$can->needsRead();
+CCanDo::checkRead();
 
 // Définition des variables
 $consultation_id = CValue::get("consultation_id", 0);

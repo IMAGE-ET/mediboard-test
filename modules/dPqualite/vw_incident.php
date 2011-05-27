@@ -8,9 +8,7 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
  */
 
-global $AppUI, $can, $m, $g;
-
-$can->needsRead();
+CCanDo::checkRead();
 
 $fiche_ei_id = CValue::get("fiche_ei_id",0);
 
@@ -22,12 +20,12 @@ $fiche  = new CFicheEi();
 $listFct = new CFunctions();
 
 // Droit admin et edition de fiche
-if($can->admin && $fiche_ei_id){
+if(CCanDo::admin() && $fiche_ei_id){
   $fiche->load($fiche_ei_id);
 }
 
 // Chargement des Utilisateurs
-if($can->admin) {
+if(CCanDo::admin()) {
   $listFct = CMediusers::loadFonctions(PERM_READ);
   foreach($listFct as &$fct) {
     $fct->loadRefsBack();

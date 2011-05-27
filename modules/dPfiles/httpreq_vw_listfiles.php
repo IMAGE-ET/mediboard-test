@@ -8,9 +8,7 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
  */
 
-global $AppUI, $can, $m;
-
-//$can->needsRead();
+//CCanDO::checkRead();
 
 $object_class  = CValue::getOrSession("selClass", null);
 $object_id     = CValue::getOrSession("selKey"  , null);
@@ -21,12 +19,8 @@ $reloadlist = 1;
 // Liste des Class
 $listCategory = CFilesCategory::listCatClass($object_class);
 
-// Id de l'utilisateur courant
-$user_id = $AppUI->user_id;
-
 // Chargement de l'utilisateur courant
-$mediuser = new CMediusers;
-$mediuser->load($user_id);
+$mediuser = CMediusers::get();
 $mediuser->loadRefs();
 
 $object = null;

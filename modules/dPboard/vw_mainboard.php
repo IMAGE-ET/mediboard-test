@@ -8,9 +8,7 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
  */
 
-global $AppUI, $can;
-
-$can->needsRead();
+CCanDo::checkRead();
 
 $date = CValue::getOrSession("date", mbDate());
 $view = CValue::getOrSession("view", "week");
@@ -18,8 +16,7 @@ $praticien_id = CValue::postOrSession("praticien_id");
 $prat = false;
 
 // Chargement de l'utilisateur courant
-$userCourant = new CMediusers;
-$userCourant->load($AppUI->user_id);
+$userCourant = CMediusers::get();
 
 // Test du type de l'utilisateur courant
 $secretaire = $userCourant->isFromType(array("Secrétaire"));

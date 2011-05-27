@@ -8,8 +8,7 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
  */
 
-global $AppUI, $can;
-$can->needsRead();
+CCanDO::checkRead();
 
 // Utilisateur sélectionné ou utilisateur courant
 $filter_user_id = CValue::getOrSession("filter_user_id");
@@ -17,8 +16,7 @@ $filter_class   = CValue::getOrSession("filter_class");
 $start          = CValue::getOrSession("start");
 $keywords       = CValue::getOrSession("keywords");
 
-$userSel = new CMediusers;
-$userSel->load($filter_user_id ? $filter_user_id : $AppUI->user_id);
+$userSel = CMediusers::get($filter_user_id);
 $userSel->loadRefs();
 $userSel->_ref_function->loadRefGroup();
 

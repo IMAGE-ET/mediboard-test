@@ -9,7 +9,7 @@
 */
 
 
-global $AppUI;
+$user = CUser::get();
 
 $code_cip = CValue::post("code_cip");
 if(!$code_cip){
@@ -44,7 +44,7 @@ if(!$dossier_medical->_ref_prescription->_id){
 $line = new CPrescriptionLineMedicament();
 $line->prescription_id = $prescription_id;
 $line->code_cip = $code_cip;
-$line->creator_id = $AppUI->user_id;
+$line->creator_id = $user->_id;
 $line->praticien_id = $praticien_id;
 $line->debut = $debut;
 $line->fin = $fin;

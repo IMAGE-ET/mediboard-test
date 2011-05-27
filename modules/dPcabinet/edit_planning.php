@@ -7,9 +7,9 @@
 * @author Romain Ollivier
 */
 
-global $AppUI, $can, $m;
+CCanDO::checkRead();
 
-$can->needsRead();
+$user = CUser::get();
 
 // Recuperation de l'id de la consultation du passage en urgence
 $consult_urgence_id = CValue::get("consult_urgence_id");
@@ -20,11 +20,10 @@ $pat = new CPatient;
 $plageConsult = new CPlageconsult();
 
 //Chargement des aides
-$consult->loadAides($AppUI->user_id);
+$consult->loadAides($user->_id);
 
 // L'utilisateur est-il praticien?
-$mediuser = new CMediusers();
-$mediuser->load($AppUI->user_id);
+$mediuser = CMediusers::get();
 if ($mediuser->isMedical()) {
   $chir = $mediuser;
 }

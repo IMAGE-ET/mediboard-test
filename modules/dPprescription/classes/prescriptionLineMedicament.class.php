@@ -323,7 +323,9 @@ class CPrescriptionLineMedicament extends CPrescriptionLine {
    * Calcul des droits
    */
   function getAdvancedPerms($is_praticien = 0, $mode_protocole = 0, $mode_pharma = 0, $operation_id = 0) {
-		global $AppUI, $can;
+		global $can;
+    
+    $current_user = CMediusers::get();
 	
     // Cas d'une ligne de protocole  
     if($this->_protocole){
@@ -332,7 +334,7 @@ class CPrescriptionLineMedicament extends CPrescriptionLine {
         $protocole->loadRefPraticien();
 				
 				$is_praticien = CAppUI::$user->isPraticien();
-				$perm_edit = (!$is_praticien || ($is_praticien && CAppUI::$user->_id == $protocole->praticien_id)) ? 1 : 0;
+				$perm_edit = (!$is_praticien || ($is_praticien && $current_user->user_id == $protocole->praticien_id)) ? 1 : 0;
 	      
       } elseif($protocole->function_id){
         $protocole->loadRefFunction();
@@ -342,15 +344,13 @@ class CPrescriptionLineMedicament extends CPrescriptionLine {
         $perm_edit = $protocole->_ref_group->canEdit();
       }
     } else {
-    	$current_user = new CMediusers();
-			$current_user->load($AppUI->user_id);
 
       if($mode_pharma && $this->valide_pharma){
         $perm_edit = 0;
       } else {
 			  $perm_edit = ($can->admin && !$mode_pharma) || 
 			               ((!$this->signee || $mode_pharma) && 
-                     ($this->praticien_id == $AppUI->user_id || $is_praticien || $mode_pharma || $operation_id || ($current_user->isExecutantPrescription() && CAppUI::conf("dPprescription CPrescription droits_infirmiers_med") && !CAppUI::conf("dPprescription CPrescription role_propre"))));
+                     ($this->praticien_id == $current_user->user_id || $is_praticien || $mode_pharma || $operation_id || ($current_user->isExecutantPrescription() && CAppUI::conf("dPprescription CPrescription droits_infirmiers_med") && !CAppUI::conf("dPprescription CPrescription role_propre"))));
 			}
 		}
     $this->_perm_edit = $perm_edit;

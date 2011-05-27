@@ -9,7 +9,6 @@
  */
 
 // This script has to be launched via installer
-// DO NOT USE $AppUI facilities
 global $can;
 
 // Only check permissions when connected to mediboard, not to the installer

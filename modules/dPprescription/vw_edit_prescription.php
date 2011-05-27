@@ -8,8 +8,7 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
  */
 
-global $AppUI, $can, $dialog;
-$can->needsRead();
+CCanDo::checkRead();
 
 $filter = new CPrescription();
 $filter->object_class    = CValue::get("object_class", "CSejour");

@@ -8,8 +8,6 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
  */
 
-global $AppUI;
-
 // Dans le cas de la validation de la totalite des prescriptions
 $prescription_id = CValue::post("prescription_id");
 
@@ -23,14 +21,13 @@ $only_perop = CValue::post("only_perop", false);
 // Tableau de prescription pour la validation multiple de la pharmacie
 $prescriptions_pharma = CValue::post("prescriptions_pharma");
 
-$mediuser = new CMediusers();
-$mediuser->load($AppUI->user_id);
+$mediuser = CMediusers::get();
 $mediuser->isPraticien();
 
 if(!$mode_pharma){
 	if($mediuser->_is_praticien || ($mediuser->isExecutantPrescription() && CAppUI::conf("dPprescription CPrescription role_propre"))){
 	  // Si le user est un praticien
-	  $praticien_id = $AppUI->user_id;  
+	  $praticien_id = $mediuser->user_id;  
 	} else {
 	  // Sinon, on controle son password
 	  $praticien_id = CValue::post("praticien_id");

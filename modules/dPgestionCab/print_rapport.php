@@ -7,12 +7,9 @@
  * @author Romain Ollivier
  */
 
-global $AppUI, $can, $m;
-
-$can->needsRead();
+CCanDo::checkRead();
 $ds = CSQLDataSource::get("std");
-$user = new CMediusers();
-$user->load($AppUI->user_id);
+$user = CMediusers::get();
 
 $libelle          = CValue::getOrSession("libelle"          , "");
 $rubrique_id      = CValue::getOrSession("rubrique_id"      , 0);

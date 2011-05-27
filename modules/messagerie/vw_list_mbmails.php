@@ -6,15 +6,15 @@
 * @version $Revision$
 * @author Fabien
 */
- 
-global $AppUI, $can;
-$can->needsRead();
+
+CCanDo::checkRead();
+$user = CUser::get();
 
 $mbmail = new CMbMail();
 
 // Liste des messages reçus
 $where = array();
-$where["to"]        = "= '$AppUI->user_id'";
+$where["to"]        = "= '$user->_id'";
 $where["date_sent"] = "IS NOT NULL";
 $where["archived"]  = "!= '1'";
 $order = "date_sent DESC";
@@ -25,9 +25,9 @@ foreach($listInbox as &$mail) {
 
 // Liste des messages archivés
 $where = array();
-$where["to"]            = "= '$AppUI->user_id'";
-$where["date_sent"]     = "IS NOT NULL";
-$where["archived"] = "= '1'";
+$where["to"]        = "= '$user->_id'";
+$where["date_sent"] = "IS NOT NULL";
+$where["archived"]  = "= '1'";
 $order = "date_sent DESC";
 $listArchived = $mbmail->loadList($where, $order);
 foreach($listArchived as &$mail) {
@@ -36,8 +36,8 @@ foreach($listArchived as &$mail) {
 
 // Liste des messages envoyés
 $where = array();
-$where["from"]            = "= '$AppUI->user_id'";
-$where["date_sent"]     = "IS NOT NULL";
+$where["from"]      = "= '$user->_id'";
+$where["date_sent"] = "IS NOT NULL";
 $order = "date_sent DESC";
 $listSent = $mbmail->loadList($where, $order);
 foreach($listSent as &$mail) {
@@ -46,8 +46,8 @@ foreach($listSent as &$mail) {
 
 // Liste des brouillons
 $where = array();
-$where["from"]            = "= '$AppUI->user_id'";
-$where["date_sent"]     = "IS NULL";
+$where["from"]      = "= '$user->_id'";
+$where["date_sent"] = "IS NULL";
 $order = "date_sent DESC";
 $listDraft = $mbmail->loadList($where, $order);
 foreach($listDraft as &$mail) {

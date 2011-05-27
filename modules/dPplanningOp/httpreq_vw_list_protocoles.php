@@ -7,17 +7,16 @@
 * @author Thomas Despoix
 */
 
-global $AppUI, $can, $m, $dialog;
+global $dialog;
 
 if($dialog) {
-  $can->needsRead();
+  CCanDo::checkRead();
 } else {
-  $can->needsEdit();
+  CCanDo::checkEdit();
 }
 
 // L'utilisateur est-il chirurgien?
-$mediuser = new CMediusers;
-$mediuser->load($AppUI->user_id);
+$mediuser = CMediusers::get();
 
 $chir_id      = $mediuser->isPraticien() ? $mediuser->user_id : null;
 

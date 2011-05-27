@@ -7,12 +7,9 @@
 * @author Poiron Yohann
 */
 
-global $AppUI, $can, $m;
+CCanDo::checkRead();
 
-$can->needsRead();
-
-$user = new CMediusers();
-$user->load($AppUI->user_id);
+$user = CMediusers::get();
 $user->loadRefsFwd();
 $user->_ref_function->loadRefsFwd();
 

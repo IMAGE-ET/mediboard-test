@@ -8,10 +8,7 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
  */
 
-global $AppUI, $can, $m, $g;
-
-$can->needsAdmin();
-
+CCanDo::checkAdmin();
 
 $doc_ged_id        = CValue::getOrSession("doc_ged_id",0);
 $procAnnuleVisible = CValue::getOrSession("procAnnuleVisible" , 0);

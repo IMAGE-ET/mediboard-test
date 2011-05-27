@@ -7,8 +7,6 @@
 * @author Romain Ollivier
 */
 
-global $AppUI, $can, $m;
-
 $ds = CSQLDataSource::get("std");
 
 // Initialisation des variables

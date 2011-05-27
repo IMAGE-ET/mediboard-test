@@ -10,8 +10,6 @@
 
 CCanDo::checkRead();
 
-global $AppUI, $m, $tab;
-
 $current = intval(CValue::get('current', 0));
 $step    = intval(CValue::get('step', 20));
 $interv  = CValue::get("interv", "");

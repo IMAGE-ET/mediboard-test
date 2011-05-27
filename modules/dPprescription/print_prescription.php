@@ -8,7 +8,7 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
  */
 
-global $AppUI, $can;
+global $can;
 
 $can->needsRead();
 
@@ -44,8 +44,7 @@ if($praticien_sortie_id){
 }
 
 // si le user courant est un praticien, on affiche ces lignes
-$mediuser = new CMediusers();
-$mediuser->load($AppUI->user_id);
+$mediuser = CMediusers::get();
 if($mediuser->isPraticien() && !$globale){
 	$praticien = $mediuser;
 }

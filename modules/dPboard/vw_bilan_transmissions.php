@@ -8,14 +8,14 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
  */
 
-global $AppUI;
+$user = CUser::get();
 
 $ds = CSQLDataSource::get("std");
 $datetime = mbDateTime();
 $date_max = $datetime;
 $date_min = mbDateTime("-1 DAY", $date_max);
 
-$praticien_id = CValue::get("praticien_id", $AppUI->user_id);
+$praticien_id = CValue::get("praticien_id", $user->_id);
 
 // Chargement des praticiens
 $mediuser = new CMediusers();

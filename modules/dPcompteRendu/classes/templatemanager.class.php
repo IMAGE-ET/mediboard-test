@@ -297,9 +297,9 @@ class CTemplateManager {
     $compte_rendu->load($compte_rendu_id);
     
     $where = array();
+    $user = CMediusers::get($user_id);
+    $user->loadRefFunction();
     if($user_id){
-      $user->load($user_id);
-      $user->loadRefFunction();
       $where[] = "(
         user_id = '$user->user_id' OR 
         function_id = '$user->function_id' OR 
@@ -307,9 +307,6 @@ class CTemplateManager {
       )";
     }
     else {
-      global $AppUI;
-      $user->load($AppUI->user_id);
-      $user->loadRefFunction();
       $where[] = "(
         function_id IN('$user->function_id', '$compte_rendu->function_id') OR 
         group_id IN('{$user->_ref_function->group_id}', '$compte_rendu->group_id')

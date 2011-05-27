@@ -12,8 +12,6 @@ Pour acceder à cette page ==>
 http://localhost/mediboard/index.php?m=dPhospi&a=get_etat_lits_txt&dialog=1&suppressHeaders=1;  
 */
 
-global $AppUI, $can, $m, $g;
-
 // Date actuelle
 $date = mbDateTime();
 

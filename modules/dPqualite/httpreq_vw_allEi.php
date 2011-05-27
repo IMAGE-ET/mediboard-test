@@ -8,8 +8,9 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
  */
 
-global $can, $AppUI;
-$can->needsRead();
+CCanDo::checkRead();
+
+$user = CUser::get();
 
 $type              = CValue::get("type");
 $first             = CValue::get("first");
@@ -41,8 +42,8 @@ if($selected_service_valid_user_id){
 }
 
 $user_id = null;
-if($type == "AUTHOR" || ($can->edit && !$can->admin)){
-  $user_id = $AppUI->user_id;
+if($type == "AUTHOR" || (CCanDo::edit() && !CCanDo::admin())){
+  $user_id = $user->_id;
 }
 
 if ($evenements) {

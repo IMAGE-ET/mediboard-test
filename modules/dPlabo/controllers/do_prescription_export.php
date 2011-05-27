@@ -8,8 +8,6 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
  */
 
-global $AppUI, $can, $m;
-
 function redirect() {
   echo CAppUI::getMsg();
   CApp::rip();
@@ -20,7 +18,7 @@ if (!class_exists("DOMDocument")) {
   return;
 }
 
-$can->needsRead();
+CCanDo::checkRead();
 
 $doc = new CMbXMLDocument();
 

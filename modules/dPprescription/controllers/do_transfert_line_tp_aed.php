@@ -8,7 +8,7 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
  */
 
-global $AppUI, $can;
+$user = CUser::get();
 
 $prescription_line_medicament_id = CValue::post("prescription_line_medicament_id");
 $prescription_id = CValue::post("prescription_id");
@@ -33,7 +33,7 @@ $line->_id = "";
 $line->traitement_personnel = 1;
 $line->prescription_id = $prescription->_id;
 $line->praticien_id = $praticien_id;
-$line->creator_id = $AppUI->user_id;
+$line->creator_id = $user->_id;
 $line->debut = $debut;
 $line->time_debut = $time_debut;
 $line->jour_decalage = $jour_decalage;

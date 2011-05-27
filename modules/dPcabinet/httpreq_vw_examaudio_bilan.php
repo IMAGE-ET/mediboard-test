@@ -7,7 +7,7 @@
 * @author Sébastien Fillonneau
 */
 
-global $AppUI, $m, $frequences;
+global $frequences;
 
 $examaudio_id = CValue::getOrSession("examaudio_id");
 

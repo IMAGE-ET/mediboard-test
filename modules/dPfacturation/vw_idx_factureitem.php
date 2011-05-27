@@ -8,13 +8,12 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
  */
  
-global $AppUI;
-
+$user = CUser::get();
 CCanDo::checkRead();
 
 // Chargement de l'item choisi
 $libelleItem = new CFactureItem;
-$libelleItem->loadAides($AppUI->user_id);
+$libelleItem->loadAides($user->_id);
 
 // Reception de l'id de la facture a partir de l'url
 $facture_id = CValue::getOrSession("facture_id");
@@ -46,6 +45,6 @@ $smarty->assign("facture", $facture);
 $smarty->assign("factureitem", $factureitem);
 $smarty->assign("listFacture", $listFacture);
 $smarty->assign("libelleItem", $libelleItem);
-$smarty->assign("user_id", $AppUI->user_id);
+$smarty->assign("user_id", $user->_id);
 $smarty->display("vw_idx_factureitem.tpl");
 ?>

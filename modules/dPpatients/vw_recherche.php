@@ -7,15 +7,13 @@
 * @author Alexis Granger
 */
 
-global $AppUI, $can, $m;
-
 // Droit sur les consultations
 $canCabinet = CModule::getCanDo("dPcabinet");
 
 // Droit sur les interventions et séjours
 $canPlanningOp = CModule::getCanDo("dPplanningOp");
 
-$user_id = $AppUI->user_id;
+$user = CUser::get();
 
 // Récupération des critères de recherche
 $antecedent_patient    = CValue::getOrSession("antecedent_patient");
@@ -355,7 +353,7 @@ $smarty->assign("patients_consult"      , $patients_consult);
 $smarty->assign("patients_sejour"       , $patients_sejour);
 $smarty->assign("patients_intervention" , $patients_intervention);
 
-$smarty->assign("user_id"               , $user_id);
+$smarty->assign("user_id"               , $user->_id);
 
 $smarty->display("vw_recherche.tpl");
 

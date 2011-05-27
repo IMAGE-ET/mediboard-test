@@ -7,9 +7,7 @@
 * @author Sébastien Fillonneau
 */
 
-global $AppUI, $can, $m;
-
-$can->needsAdmin();
+CCanDo::checkAdmin();
 
 $file_category_id = CValue::getOrSession("file_category_id");
 

@@ -7,9 +7,8 @@
 * @author Romain Ollivier
 */
 
-global $AppUI, $can, $m, $g;
-
-$can->needsRead();
+CCanDo::checkRead();
+$group = CGroups::loadCurrent();
 
 $date = CValue::getOrSession("date", mbDate());
 $next = mbDate("+1 day", $date);
@@ -18,7 +17,7 @@ $sejour = new CSejour;
 $where = array();
 $where["entree_prevue"] = "< '$next'";
 $where["sortie_prevue"] = "> '$date'";
-$where["group_id"]      = "= '$g'";
+$where["group_id"]      = "= '$group->_id'";
 $where["annule"]        = "= '0'";
 $order = array();
 $order[] = "sortie_prevue";

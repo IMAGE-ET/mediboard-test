@@ -7,8 +7,6 @@
 * @author Alexis Granger
 */
 
-global $AppUI;
-
 $object_class   = CValue::get("object_class");
 $field          = CValue::get("field");
 $depend_value_1 = CValue::get("depend_value_1");

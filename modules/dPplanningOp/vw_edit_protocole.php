@@ -7,12 +7,12 @@
 * @author Romain Ollivier
 */
 
-global $AppUI, $can, $m, $tab;
+global $m, $tab;
 
-$can->needsEdit();
+CCanDo::checkEdit();
 
 $protocole_id = CValue::getOrSession("protocole_id", 0);
-$mediuser     = CAppUI::$instance->_ref_user;
+$mediuser     = CMediusers::get();
 $is_praticien = $mediuser->isPraticien();
 $chir_id      = CValue::getOrSession("chir_id", $is_praticien ? $mediuser->user_id : null);
 

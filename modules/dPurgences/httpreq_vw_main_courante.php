@@ -24,9 +24,7 @@ $date_before = mbDate("-$date_tolerance DAY", $date);
 $date_after  = mbDate("+1 DAY", $date);
 
 // L'utilisateur doit-il voir les informations médicales
-global $AppUI;
-$user = new CMediusers();
-$user->load($AppUI->user_id);
+$user = CMediusers::get();
 $medicalView = $user->isMedical();
 
 $group = CGroups::loadCurrent();

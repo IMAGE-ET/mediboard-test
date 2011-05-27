@@ -7,9 +7,8 @@
 * @author Romain OLLIVIER
 */
 
-global $AppUI, $can, $m;
+CCanDo::checkEdit();
 
-$can->needsEdit();
 $ds = CSQLDataSource::get("std");
 
 //Recuperation des identifiants pour les filtres

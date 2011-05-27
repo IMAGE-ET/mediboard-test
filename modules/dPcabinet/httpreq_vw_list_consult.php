@@ -7,11 +7,13 @@
 * @author Romain Ollivier
 */
 
-global $AppUI, $can, $m;
- 
+global $m;
+
+$user = CUser::get();
+CCanDO::checkEdit();
+
 $current_m = CValue::get("current_m", $m);
 
-$can->needsEdit();
 $ds = CSQLDataSource::get("std");
 $date      = CValue::getOrSession("date", mbDate());
 $hour      = mbTime();
@@ -19,7 +21,7 @@ $board     = CValue::get("board", 0);
 $boardItem = CValue::get("boardItem", 0);
 $plageconsult_id = CValue::get("plageconsult_id");
 
-$prat_id    = CValue::getOrSession("chirSel", $AppUI->user_id);
+$prat_id    = CValue::getOrSession("chirSel", $user->_id);
 $selConsult = CValue::getOrSession("selConsult");
 
 $consult = new CConsultation;

@@ -8,11 +8,9 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
  */
 
-global $AppUI, $can, $m;
+CCanDo::checkRead();
 
-$can->needsRead();
-
-$user = $AppUI->user_id;
+$user = CUser::get();
 
 $lang = CValue::getOrSession("lang", CCodeCIM10::LANG_FR);
 
@@ -20,7 +18,7 @@ $lang = CValue::getOrSession("lang", CCodeCIM10::LANG_FR);
 
 $favoris = new CFavoricim10();
 $where = array();
-$where["favoris_user"] = "= '$AppUI->user_id'";
+$where["favoris_user"] = "= '$user->_id'";
 $order = "favoris_code";
 $favoris = $favoris->loadList($where, $order);
 
@@ -36,7 +34,7 @@ foreach($favoris as $key => $value) {
 $ds = CSQLDataSource::get("std");
 $sql = "SELECT DP, count(DP) as nb_code
         FROM `sejour`
-        WHERE sejour.praticien_id = '$AppUI->user_id'
+        WHERE sejour.praticien_id = '$user->_id'
         AND DP IS NOT NULL
         AND DP != ''
         GROUP BY DP

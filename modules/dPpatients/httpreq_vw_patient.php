@@ -7,9 +7,8 @@
 * @author Sébastien Fillonneau
 */
 
-global $AppUI, $can, $m;
-
-$can->needsRead();
+CCanDo::checkRead();
+$user = CMediusers::get();
 
 $patient_id = CValue::getOrSession("patient_id", 0);
 
@@ -29,17 +28,17 @@ if ($patient->_id) {
 }
 
 $vip = 0;
-if($patient->vip && !$can->admin) {
+if($patient->vip && !CCanDo::admin()) {
 	$user_in_list_prat = false;
   $user_in_logs      = false;
   foreach($patient->_ref_praticiens as $_prat) {
-		if($AppUI->user_id == $_prat->user_id) {
+		if($user->_id == $_prat->user_id) {
       $user_in_list_prat = true;
     }
   }
   $patient->loadLogs();
   foreach($patient->_ref_logs as $_log) {
-    if($AppUI->user_id == $_log->user_id) {
+    if($user->_id == $_log->user_id) {
       $user_in_logs = true;
     }
   }
@@ -50,7 +49,6 @@ if($vip) {
 	CValue::setSession("patient_id", 0);
 }
 
-$user = new CMediusers();
 $listPrat = $user->loadPraticiens(PERM_EDIT);
 
 // Création du template

@@ -13,15 +13,14 @@
  * courante en historique
  */
 
-global $AppUI, $can, $m;
+CCanDo::checkRead();
 
-$can->needsRead();
+$user = CUser::get();
 
 $prescription_line_id = CValue::post("prescription_line_id");
-$prescription_id = CValue::post("prescription_id");
-$praticien_id = CValue::post("praticien_id", $AppUI->user_id);
-
-$mode_pharma = CValue::post("mode_pharma");
+$prescription_id      = CValue::post("prescription_id");
+$praticien_id         = CValue::post("praticien_id", $user->_id);
+$mode_pharma          = CValue::post("mode_pharma");
 
 $prescriptionLine = new CPrescriptionLineMedicament();
 $prescriptionLine->load($prescription_line_id);

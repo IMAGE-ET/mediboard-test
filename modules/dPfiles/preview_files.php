@@ -7,8 +7,6 @@
 * @author Sébastien Fillonneau
 */
 
-global $AppUI, $can, $m;
-
 // Récupération des variables
 $objectClass  = CValue::get("objectClass"  , null);
 $objectId     = CValue::get("objectId"     , null);

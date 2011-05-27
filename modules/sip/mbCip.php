@@ -8,9 +8,9 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
  */
 
-global $can, $g, $m, $AppUI;
+global $m;
 
-$can->needsRead();
+CCanDo::checkRead();
 ini_set("soap.wsdl_cache_enabled", "0");
 
 try {

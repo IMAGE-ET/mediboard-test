@@ -7,9 +7,8 @@
  * @author SARL OpenXtrem
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
  */
- 
-global $AppUI, $can;
-$can->needsRead();
+
+CCanDo::checkRead();
 
 $now = mbDate();
 
@@ -53,13 +52,12 @@ foreach($listBlocs as &$bloc) {
   $bloc->loadRefsSalles();
 }
 
-$praticien = new CMediusers();
-$praticien->load($AppUI->user_id);
+$praticien = CMediuser::get();
 // Création du template
 $smarty = new CSmartyDP();
 
 $smarty->assign("praticien"    , $praticien);
-$smarty->assign("chir"         , $AppUI->user_id);
+$smarty->assign("chir"         , $praticien->user_id);
 $smarty->assign("filter"       , $filter);
 $smarty->assign("filterSejour" , $filterSejour);
 $smarty->assign("now"          , $now);

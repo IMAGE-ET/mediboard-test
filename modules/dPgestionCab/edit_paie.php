@@ -7,12 +7,9 @@
  * @author Romain Ollivier
  */
 
-global $AppUI, $can, $m;
+CCanDo::checkRead();
 
-$can->needsRead();
-
-$user = new CMediusers();
-$user->load($AppUI->user_id);
+$user = CMediusers::get();
 
 $employecab_id = CValue::getOrSession("employecab_id", null);
 $fiche_paie_id = CValue::getOrSession("fiche_paie_id", null);

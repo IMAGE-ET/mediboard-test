@@ -7,9 +7,6 @@
 * @author Alexis Granger
 */
 
-
-global $AppUI, $can, $m, $g;
-
 $date = CValue::getOrSession("date");
 
 // Chargement des praticiens

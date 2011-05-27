@@ -8,9 +8,8 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
  */
 
-global $AppUI, $can;
-
-$can->needsEdit();
+CCanDo::checkEdit();
+$user = CUser::get();
 
 $doc_ged_id = CValue::getOrSession("doc_ged_id",0);
 
@@ -33,7 +32,7 @@ if($docGed->etat==CDocGed::TERMINE){
 }
 
 //Procédure Terminé et/ou Refusé
-$procTermine = CDocGed::loadProcTermineOuRefuse($AppUI->user_id);
+$procTermine = CDocGed::loadProcTermineOuRefuse($user->_id);
 foreach($procTermine as $keyProc => &$currProc){
   $currProc->loadRefs();
   $currProc->getEtatRedac();
@@ -43,7 +42,7 @@ foreach($procTermine as $keyProc => &$currProc){
 }
 
 // Procédure en Cours de demande
-$procDemande = CDocGed::loadProcDemande($AppUI->user_id);
+$procDemande = CDocGed::loadProcDemande($user->_id);
 foreach($procDemande as $keyProc => &$currProc){
   $currProc->loadRefs();
   $currProc->getEtatRedac();
@@ -52,7 +51,7 @@ foreach($procDemande as $keyProc => &$currProc){
 }
 
 // Procédure en Attente de Rédaction
-$procEnCours = CDocGed::loadProcRedacAndValid($AppUI->user_id);
+$procEnCours = CDocGed::loadProcRedacAndValid($user->_id);
 foreach($procEnCours as $keyProc => &$currProc){
 	$currProc->loadRefs();
   $currProc->getEtatRedac();
@@ -60,8 +59,8 @@ foreach($procEnCours as $keyProc => &$currProc){
 }
 
 // Liste des Etablissements selon Permissions
-$etablissements = new CMediusers();
-$etablissements = $etablissements->loadEtablissements(PERM_READ);
+$mediuser = new CMediusers();
+$etablissements = $mediuser->loadEtablissements(PERM_READ);
 
 // Création du template
 $smarty = new CSmartyDP();

@@ -6,9 +6,11 @@
 * @author Romain Ollivier
 */
 
-global $AppUI;
+$user = CUser::get();
+
 CAppUI::requireLibraryFile("phpThumb/phpthumb.class");
 include_once "lib/phpThumb/phpThumb.config.php";
+
 //require_once("./lib/phpThumb/phpthumb.class.php");
 //trigger_error("Source is $file->_file");
     
@@ -21,7 +23,7 @@ if ($file_path) {
   $file_type = "text/xml";
   $file_name = basename($file_path);
   
-  if ($AppUI->user_type == 1) {
+  if ($user->user_type == 1) {
     // BEGIN extra headers to resolve IE caching bug (JRP 9 Feb 2003)
     // [http://bugs.php.net/bug.php?id=16173]
     header("Pragma: ");

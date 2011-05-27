@@ -308,7 +308,9 @@ class CPrescriptionLineMix extends CMbObject {
   }
   
   function getAdvancedPerms($is_praticien = 0, $mode_protocole = 0, $mode_pharma = 0, $operation_id = 0) {
-		global $AppUI, $can;
+		global $can;
+    
+    $user = CMediuser::get();
 
     // Cas d'une ligne de protocole  
     if($this->_protocole){
@@ -326,15 +328,12 @@ class CPrescriptionLineMix extends CMbObject {
         $perm_edit = $protocole->_ref_group->canEdit();
       }
     } else {
-    	$current_user = new CMediusers();
-      $current_user->load($AppUI->user_id);
-			
 			if($mode_pharma && $this->signature_pharma){
 				$perm_edit = 0;
 			} else {
         $perm_edit = ($can->admin && !$mode_pharma) ||
 				             ((!$this->signature_prat || $mode_pharma) &&
-                     ($this->praticien_id == $AppUI->user_id || $is_praticien || $operation_id || $mode_pharma || ($current_user->isExecutantPrescription() && CAppUI::conf("dPprescription CPrescription droits_infirmiers_med") && !CAppUI::conf("dPprescription CPrescription role_propre"))));
+                     ($this->praticien_id == $user->_id || $is_praticien || $operation_id || $mode_pharma || ($user->isExecutantPrescription() && CAppUI::conf("dPprescription CPrescription droits_infirmiers_med") && !CAppUI::conf("dPprescription CPrescription role_propre"))));
 			}
 		}
     $this->_perm_edit = $perm_edit;

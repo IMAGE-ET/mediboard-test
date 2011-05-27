@@ -287,7 +287,9 @@ class CPrescriptionLineElement extends CPrescriptionLine {
    * Calcul des droits
    */
   function getAdvancedPerms($is_praticien = 0, $mode_protocole = 0, $mode_pharma = 0, $operation_id = 0) {	
-		global $AppUI, $can;
+		global $can;
+    
+    $current_user = CMediusers::get();
 
     // Cas d'une ligne de protocole  
     if($this->_protocole){
@@ -305,13 +307,11 @@ class CPrescriptionLineElement extends CPrescriptionLine {
         $perm_edit = $protocole->_ref_group->canEdit();
       }
     } else {
-    	$current_user = new CMediusers();
-      $current_user->load($AppUI->user_id);
 			
 			$chapitre = $this->_ref_element_prescription->_ref_category_prescription->chapitre;
 			
       $perm_edit = $can->admin || ((!$this->signee) &&
-                 ($this->praticien_id == $AppUI->user_id || $operation_id || $is_praticien || 
+                 ($this->praticien_id == $current_user->user_id || $operation_id || $is_praticien || 
 								 ($current_user->isExecutantPrescription() && CAppUI::conf("dPprescription CPrescription droits_infirmiers_$chapitre") && !CAppUI::conf("dPprescription CPrescription role_propre"))));
     }
     
@@ -336,7 +336,7 @@ class CPrescriptionLineElement extends CPrescriptionLine {
     }
 		
     // Affichage du formulaire de signature praticien
-    if(!$this->_protocole && ($is_praticien || $this->praticien_id == CAppUI::$user->_id)){
+    if(!$this->_protocole && ($is_praticien || $this->praticien_id == $current_user->_id)){
     	$this->_can_view_form_signature_praticien = 1;
     }
 

@@ -7,8 +7,6 @@
 * @author Alexis Granger
 */
 
-global $AppUI, $m;
-
 $date = CValue::post("date");
 $dialog = CValue::post("dialog");
 $praticien_id = CValue::post("praticien_id");

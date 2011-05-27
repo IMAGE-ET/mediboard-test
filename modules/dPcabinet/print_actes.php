@@ -7,9 +7,8 @@
 * @author Romain Ollivier
 */
 
-global $AppUI, $can, $m;
+CCanDo::checkEdit();
 
-$can->needsEdit();
 $consultation_id = CValue::get("consultation_id");
 
 // Consultation courante

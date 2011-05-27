@@ -7,9 +7,7 @@
 * @author Sébastien Fillonneau
 */
 
-global $AppUI, $can, $m, $g;
-
-$can->needsRead();
+CCanDo::checkRead();
 
 $patient_id = CValue::getOrSession("patient_id", 0);
 
@@ -30,8 +28,7 @@ $patient->loadRefDossierMedical();
 $patient->_ref_dossier_medical->loadRefsAntecedents();
 $patient->_ref_dossier_medical->loadRefsTraitements();
 
-$userSel = new CMediusers;
-$userSel->load($AppUI->user_id);
+$userSel = CMediusers::get();
 
 // Suppression des consultations d'urgences
 foreach($patient->_ref_consultations as $keyConsult => $consult){
@@ -44,7 +41,7 @@ $can_view_dossier_medical =
   CModule::getCanDo('dPcabinet')->edit ||
   CModule::getCanDo('dPbloc')->edit ||
   CModule::getCanDo('dPplanningOp')->edit || 
-  $AppUI->_ref_user->isFromType(array("Infirmière"));
+  $userSel->isFromType(array("Infirmière"));
 
 // Création du template
 $smarty = new CSmartyDP();

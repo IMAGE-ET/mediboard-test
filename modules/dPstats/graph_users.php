@@ -8,14 +8,10 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
  */
 
-global $AppUI, $can, $m;
-
 CAppUI::requireLibraryFile("jpgraph/src/mbjpgraph");
 CAppUI::requireLibraryFile("jpgraph/src/jpgraph_bar");
 
-$user_id = CValue::get("user_id", $AppUI->user_id);
-$user = new CMediusers;
-$user->load($user_id);
+$user = CMediusers::get(CValue::get("user_id"));
 $debut = CValue::get("debut", mbDate("-1 WEEK"));
 $fin = CValue::get("fin", mbDate());
 
@@ -23,7 +19,7 @@ $sql = "SELECT COUNT(user_log.user_log_id) AS total," .
     "\nDATE_FORMAT(user_log.date, '%Y-%m-%d') AS day" .
     "\nFROM user_log" .
     "\nWHERE user_log.date BETWEEN '$debut' AND '$fin 23:59:59'" .
-    "\nAND user_log.user_id = '$user_id'" .
+    "\nAND user_log.user_id = '$user->_id'" .
     "\nGROUP BY day" .
     "\nORDER BY day";
 $ds = CSQLDataSource::get("std");

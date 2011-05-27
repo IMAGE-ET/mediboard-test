@@ -8,8 +8,6 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
  */
 
-global $AppUI;
-
 $praticien_id = CValue::getOrSession("praticien_id");
 $function_id = CValue::getOrSession("function_id");
 $group_id = CValue::getOrSession("group_id");

@@ -7,8 +7,6 @@
 * @author Sébastien Fillonneau
 */
 
-global $AppUI, $m;
-
 CValue::getOrSession("selClass");
 CValue::getOrSession("selKey");
 ?>

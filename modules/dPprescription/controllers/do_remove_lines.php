@@ -8,8 +8,6 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
  */
 
-global $AppUI;
-
 $prescription_id = CValue::post("prescription_id");
 $praticien_id    = CValue::post("praticien_id");
 $operation_id    = CValue::post("operation_id");
@@ -39,8 +37,8 @@ $prescription_line_mix->praticien_id = $praticien_id;
 $prescription_line_mix->prescription_id = $prescription_id;
 $lines["prescription_line_mix"] = $prescription_line_mix->loadMatchingList();
 
-$current_user = new CMediusers();
-$current_user->load($AppUI->user_id);
+
+$current_user = CMediusers::get();
 $current_user->isPraticien();
 
 foreach($lines as $lines_by_type){

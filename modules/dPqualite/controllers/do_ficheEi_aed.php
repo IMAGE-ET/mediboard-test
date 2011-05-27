@@ -8,7 +8,6 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
  */
 
-global $AppUI, $can, $m, $g;
 
 $_validation   = CValue::post("_validation", null);
 
@@ -18,7 +17,7 @@ class CDoFicheEiAddEdit extends CDoObjectAddEdit {
   }
 
   function doStore() {
-    global $AppUI, $_validation, $m;
+    global $_validation, $m;
 
     
     if(!$_validation){

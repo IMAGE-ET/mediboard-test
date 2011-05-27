@@ -7,8 +7,8 @@
  * @author SARL OpenXtrem
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
  */
- 
-global $AppUI;
+
+$user = CUser::get();
 
 $username = trim(CValue::post('username'));
 $password = trim(CValue::post('password'));
@@ -18,7 +18,7 @@ if (!$username) {
 }
 
 // If admin: no need to  give a password
-else if (($AppUI->user_type == 1) && !CAppUI::conf("admin LDAP ldap_connection")) {
+else if (($user->user_type == 1) && !CAppUI::conf("admin LDAP ldap_connection")) {
   $_REQUEST['loginas'] = $username;
   CAppUI::login();
 }
@@ -27,7 +27,6 @@ else if (!$password) {
   CAppUI::setMsg("Auth-failed-nopassword", UI_MSG_ERROR);
 }
 
-// @Todo: pass the username as a $AppUI->login argument
 else {
   $_REQUEST['loginas'] = $username;
   
@@ -36,11 +35,11 @@ else {
     
     CAppUI::login(true);
   } else {
-    $user = new CUser;
-    $user->user_username = trim($username);
-    $user->loadMatchingObject();
+    $new_user = new CUser;
+    $new_user->user_username = trim($username);
+    $new_user->loadMatchingObject();
     
-    if (md5($password) != $user->user_password) {
+    if (md5($password) != $new_user->user_password) {
       CAppUI::setMsg("Auth-failed-combination", UI_MSG_ERROR);
     }
     else CAppUI::login(true);

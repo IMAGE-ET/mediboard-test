@@ -6,8 +6,6 @@
 * @version $Revision:
 * @author Alexis Granger
 */
-
-global $AppUI, $can, $m;
   
 $praticien_id = CValue::getOrSession("praticien_id");
 $prat = new CMediusers();

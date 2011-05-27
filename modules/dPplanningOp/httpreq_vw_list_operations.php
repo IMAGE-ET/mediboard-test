@@ -7,17 +7,13 @@
 * @author Romain OLLIVIER
 */
 
-global $AppUI, $m, $g;
-
 CCanDo::checkRead();
 
+$userSel   = CMediusers::get(CValue::getOrSession("pratSel"));
+
 $date      = CValue::getOrSession("date", mbDate());
-$pratSel   = CValue::getOrSession("pratSel", $AppUI->user_id);
 $board     = CValue::get("board", 0);
 $boardItem = CValue::get("boardItem", 0);
-
-$userSel = new CMediusers;
-$userSel->load($pratSel);
 
 // Urgences du jour
 $listUrgences = array();
@@ -74,10 +70,10 @@ if($userSel->_id){
 }
 
 // Praticien concerné
-if ($AppUI->_ref_user->isPraticien()) {
-  $praticien = $AppUI->_ref_user;
-}
-else {
+$user = CMediusers::get();
+if ($user->isPraticien()) {
+  $praticien = $user;
+} else {
   $praticien = new CMediusers();
   $praticien->load(CValue::getOrSession("pratSel", CValue::getOrSession("praticien_id")));
 }

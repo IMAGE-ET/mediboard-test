@@ -7,27 +7,23 @@
 * @author Alexis Granger
 */
 
-global $AppUI, $can, $m;
-
-
 $sejour_id = CValue::getOrSession("sejour_id");
 
 $sejour = new CSejour();
 $sejour->load($sejour_id);
 
-$userSel = new CMediusers();
-$userSel->load($AppUI->user_id);
+$userSel = CMediusers::get();
 
 $sejour->loadRefPatient();
 $patient =& $sejour->_ref_patient;
-$patient->loadStaticCIM10($AppUI->user_id);
+$patient->loadStaticCIM10($userSel->user_id);
 
 // Chargement des aides à la saisie
 $antecedent = new CAntecedent();
-$antecedent->loadAides($AppUI->user_id);
+$antecedent->loadAides($userSel->user_id);
 
 $traitement = new CTraitement();
-$traitement->loadAides($AppUI->user_id);
+$traitement->loadAides($userSel->user_id);
 
 
 // Création du template

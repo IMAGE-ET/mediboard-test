@@ -7,8 +7,6 @@
 * @author Romain Ollivier
 */
 
-global $AppUI, $m, $g;
-
 CCanDo::checkRead();
 $ds = CSQLDataSource::get("std");
 

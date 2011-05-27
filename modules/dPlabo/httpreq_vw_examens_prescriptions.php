@@ -6,10 +6,8 @@
  *	@version $Revision$
  *  @author Romain Ollivier
  */
- 
-global $AppUI, $can, $m;
 
-$can->needsRead();
+CCanDo::checkRead();
 
 $prescription_labo_id = CValue::getOrSession("prescription_labo_id");
 

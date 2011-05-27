@@ -128,15 +128,10 @@ class CPermModule extends CMbObject {
       return true;
     }
     
-    global $AppUI, $userPermsModules;
+    global $userPermsModules;
     
     // Déclaration du user
-    $user = new CUser();
-    if($user_id !== null){
-      $user->load($user_id);
-    } else {
-      $user->load($AppUI->user_id);
-    }
+    $user = CUser::get($user_id);
 
     //Declaration des tableaux de droits 
     $permsProfil = array();

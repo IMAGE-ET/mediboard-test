@@ -6,10 +6,10 @@
 * @version $Revision$
 * @author Romain Ollivier
 */
- 
-global $AppUI, $can, $m, $g;
 
-$can->needsRead();
+CCanDo::checkRead();
+
+$group = CGroups::loadCurrent();
 
 $filter = new CSejour();
 $today      = mbDate();
@@ -33,7 +33,7 @@ $listSpec = $listSpec->loadSpecialites(PERM_READ);
 
 $listServ = new CService();
 $where = array();
-$where["group_id"] = "= '$g'";
+$where["group_id"] = "= '$group->_id'";
 $listServ = $listServ->loadListWithPerms(PERM_READ,$where);
 
 $yesterday  = mbDate("-1 day", $today);

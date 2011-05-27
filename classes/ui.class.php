@@ -72,6 +72,11 @@ class CAppUI {
   	return self::$instance = new CAppUI;
   }
   
+  function __sleep() {
+   unset($this->_ref_user);
+   return array_keys(get_object_vars($this));
+ }
+  
   /**
    * Used to load a php class file from its name
    * @param string $className The class name
@@ -229,23 +234,6 @@ class CAppUI {
     }
   }
 
-  /**
-	 * Save the url query string
-	 * Also saves one level of history. This is useful for returning from a delete
-	 * operation where the record more not now exist. Returning to a view page
-	 * would be a nonsense in this case.
-	 * @param string If not set then the current url query string is used
-	 */
-  static function savePlace($query = "") {
-    if (!$query) {
-      $query = @$_SERVER["QUERY_STRING"];
-    }
-    if ($query != @self::$instance->state["SAVEDPLACE"]) {
-      self::$instance->state["SAVEDPLACE-1"] = @self::$instance->state["SAVEDPLACE"];
-      self::$instance->state["SAVEDPLACE"] = $query;
-    }
-  }
-
 /**
 	* Redirects the browser to a new page.
 	*
@@ -256,16 +244,10 @@ class CAppUI {
 	* @param string The URL query string to append to the URL
 	* @param string A marker for a historic "place", only -1 or an empty string is valid.
 	*/
-  static function redirect($params="", $hist="") {
+  static function redirect($params="") {
     $session_id = SID;
 
     session_write_close();
-  
-    // are the params empty
-    if (!$params) {
-    // has a place been saved
-      $params = !empty(self::$instance->state["SAVEDPLACE$hist"]) ? self::$instance->state["SAVEDPLACE$hist"] : self::$instance->defaultRedirect;
-    }
     
     if(!CValue::get("dontRedirect")) {
       if (CValue::get("dialog")) {

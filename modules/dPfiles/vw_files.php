@@ -7,9 +7,7 @@
 * @author Sébastien Fillonneau
 */
 
-global $AppUI, $can, $m;
-
-$can->needsRead();
+CCanDo::checkRead();
 
 $keywords      = CValue::getOrSession("keywords", null);
 $selClass      = CValue::getOrSession("selClass", null);

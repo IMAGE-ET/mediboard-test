@@ -8,12 +8,12 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
  */
 
-global $can, $m, $AppUI;
+global $can;
 
 $dialog = CValue::get("dialog");
 $start  = CValue::get("start", 0);
 
-if (!$can->edit && !$dialog) {
+if (!CCanDo::edit() && !$dialog) {
   $can->redirect();
 }
 

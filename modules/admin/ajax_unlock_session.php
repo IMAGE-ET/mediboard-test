@@ -7,8 +7,6 @@
  * @author SARL OpenXtrem
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
  */
- 
-global $AppUI;
 
 $password = trim(CValue::post('password'));
 $lock = CValue::post('lock');
@@ -18,8 +16,7 @@ if ($lock) {
   return;
 }
 else {
-  $user = new CUser;
-  $user->load($AppUI->user_id);
+  $user = CUser::get();
   
   if (!$password) {
     CAppUI::setMsg("Auth-failed-nopassword", UI_MSG_ERROR);

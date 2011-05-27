@@ -8,8 +8,8 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
  */
 
-global $AppUI, $can;
-$can->needsRead();
+CCanDo::checkRead();
+$user = CUser::get();
 
 $fiche_ei_id         = CValue::getOrSession("fiche_ei_id",null);
 $ficheAnnuleVisible  = CValue::getOrSession("ficheAnnuleVisible" , 0);
@@ -25,8 +25,8 @@ $catFiche = array();
 $fiche = new CFicheEi();
 
 $droitFiche = !$fiche->load($fiche_ei_id);
-$droitFiche = $droitFiche || (!$can->edit && $fiche->user_id != $AppUI->user_id);
-$droitFiche = $droitFiche || ($can->edit && !$can->admin && $fiche->user_id != $AppUI->user_id && $fiche->service_valid_user_id != $AppUI->user_id);
+$droitFiche = $droitFiche || (!CCanDo::edit() && $fiche->user_id != $user->_id);
+$droitFiche = $droitFiche || (CCanDo::edit() && !CCanDo::admin() && $fiche->user_id != $user->_id && $fiche->service_valid_user_id != $user->_id);
 
 // Liste des Catégories d'EI
 $listCategories = new CEiCategorie;

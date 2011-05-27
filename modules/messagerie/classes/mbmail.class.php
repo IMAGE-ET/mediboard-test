@@ -63,10 +63,10 @@ class CMbMail extends CMbObject {
   function loadVisibleList() {
     if (!$this->_ref_module) return null;
     
-    global $AppUI;
-    $where["to"] = "= '$AppUI->user_id'";
+    $user = CUser::get();
+    $where["to"]        = "= '$user->_id'";
     $where["date_sent"] = "IS NOT NULL";
-    $where[] = "date_read IS NULL OR starred = '1'";
+    $where[]            = "date_read IS NULL OR starred = '1'";
     $order = "date_sent";
 		
     $mails = array();

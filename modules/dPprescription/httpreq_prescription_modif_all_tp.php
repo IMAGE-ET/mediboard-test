@@ -8,10 +8,10 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
  */
 
-global $AppUI;
+$user = CUser::get();
 
 $prescription_id = CValue::get("prescription_id");
-$praticien_id    = CValue::get("praticien_id", $AppUI->user_id);
+$praticien_id    = CValue::get("praticien_id", $user->_id);
 $date            = CValue::get("date", mbDate());
 $time            = CValue::get("time_debut");
 $actionType      = CValue::get("actionType", "stop");

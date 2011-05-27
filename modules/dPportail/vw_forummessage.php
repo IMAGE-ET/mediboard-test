@@ -6,9 +6,10 @@
 * @version $Revision$
 * @author Fabien
 */
- 
-global $AppUI, $can;
-$can->needsRead();
+
+CCanDo::checkRead();
+
+$user = CUser::get();
 
 /** Chargement du message demandé **/
 // s'il est indiqué dans le GET ou la session on charge l'objet
@@ -17,7 +18,7 @@ $forum_message->load(CValue::getOrSession('forum_message_id'));
 if($forum_message->_id) {
     $forum_message->loadRefs();
 } else { // sinon on en crée un nouveau
-    $forum_message->user_id = $AppUI->user_id;
+    $forum_message->user_id = $user->_id;
     $forum_message->date = mbDateTime();
 }
 

@@ -8,7 +8,7 @@
  *  @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
  */
 
-global $AppUI;
+$user = CUser::get();
 
 $token_elt          = CValue::post("token_elt");
 $prescription_id    = CValue::post("prescription_id");
@@ -30,8 +30,8 @@ $jour_decalage_fin  = CValue::post("jour_decalage_fin");
 $decalage_line_fin  = CValue::post("decalage_line_fin");
 $time_fin           = CValue::post("time_fin"); 
 $decalage_prise     = CValue::post("decalage_prise");
-$praticien_id = CValue::post("praticien_id", $AppUI->user_id);
-$commentaire = CValue::post("commentaire");
+$praticien_id       = CValue::post("praticien_id", $user->_id);
+$commentaire        = CValue::post("commentaire");
 
 // Initialisation des tableaux
 $lines = array();
@@ -48,7 +48,7 @@ foreach($elements as $element_id){
 	$line_element->element_prescription_id = $element_id;
 	$line_element->prescription_id = $prescription_id;
 	$line_element->praticien_id = $praticien_id;
-	$line_element->creator_id = $AppUI->user_id;
+	$line_element->creator_id = $user->_id;
   $line_element->commentaire = $commentaire;
 	$msg = $line_element->store();
 	CAppUI::displayMsg($msg, "CPrescriptionLineElement-msg-create");

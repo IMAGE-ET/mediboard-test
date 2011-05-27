@@ -9,6 +9,8 @@
  */
 
 CCanDo::checkRead();
+$user = CMediusers::get();
+$group = CGroups::loadCurrent();
 
 $rpu_id = CValue::get("rpu_id");
 
@@ -39,10 +41,7 @@ $contrainteOrientation["transfert"] = array("", "HDT", "HO", "SC", "SI", "REA", 
 $contrainteOrientation["normal"] = array("", "FUGUE", "SCAM", "PSA", "REO");
 
 // Praticiens urgentistes
-$group = CGroups::loadCurrent();
-
-global $AppUI;
-$listPrats = $AppUI->_ref_user->loadPraticiens(PERM_READ, $group->service_urgences_id);
+$listPrats = $user->loadPraticiens(PERM_READ, $group->service_urgences_id);
 
 // Création du template
 $smarty = new CSmartyDP();

@@ -8,8 +8,6 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
  */
 
-global $AppUI, $can, $m, $g;
-
 $sejour_id = CValue::getOrSession("sejour_id");
 
 // Chargement du sejour

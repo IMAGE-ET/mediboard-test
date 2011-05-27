@@ -197,7 +197,7 @@ class CMbXMLDocument extends DOMDocument {
    * @return string store-like message, null if successful
    */
   function addFile(CMbObject $object) {
-    global $AppUI;
+    $user = CUser::get();
     $this->saveFile();
     $file = new CFile();
     $file->object_id          = $object->_id;
@@ -207,7 +207,7 @@ class CMbXMLDocument extends DOMDocument {
     $file->file_size          = filesize($this->documentfilename);
     $file->file_date          = mbDateTime();
     $file->file_real_filename = uniqid(rand());
-    $file->file_owner         = $AppUI->user_id;
+    $file->file_owner         = $user->_id;
     $file->private            = 0;
      if (!$file->moveFile($this->documentfilename)) {
       return "error-CFile-move-file";

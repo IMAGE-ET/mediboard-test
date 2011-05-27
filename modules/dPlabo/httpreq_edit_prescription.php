@@ -6,12 +6,10 @@
  *	@version $Revision$
  *  @author Romain Ollivier
  */
- 
-global $AppUI, $can;
 
-$can->needsRead();
+CCanDo::checkRead();
 
-$user = new CMediusers();
+$user = CMediusers::get();
 
 $listPrats = $user->loadPraticiens(PERM_EDIT);
 
@@ -21,7 +19,7 @@ $prescription->load($prescription_labo_id = CValue::get("prescription_labo_id"))
 if (!$prescription->_id) {
   $prescription->patient_id = CValue::get("patient_id");
   $prescription->date = mbDateTime();
-  $prescription->praticien_id = $AppUI->user_id;
+  $prescription->praticien_id = $user->_id;
 }
 
 $prescription->loadRefsFwd();

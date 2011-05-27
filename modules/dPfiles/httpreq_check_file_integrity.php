@@ -7,9 +7,7 @@
 * @author Thomas Despoix
 */
 
-global $AppUI, $can, $m;
-
-$can->needsEdit();
+CCanDo::checkEdit();
 
 set_time_limit(300);
 

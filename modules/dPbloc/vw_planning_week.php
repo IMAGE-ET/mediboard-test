@@ -8,8 +8,6 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
  */
 
-global $AppUI, $can, $m, $g;
-
 $date    = CValue::getOrSession("date", mbDate());
 
 $date = mbDate("last sunday", $date);

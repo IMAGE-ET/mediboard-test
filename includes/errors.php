@@ -149,7 +149,7 @@ function print_infos($var, $name = '') {
  * @return null
  */
 function errorHandler($errorCode, $errorText, $errorFile, $errorLine, $errContext, $backTrace = null) {
-  global $divClasses, $errorTypes, $errorCategories, $AppUI, $performance;
+  global $divClasses, $errorTypes, $errorCategories, $performance;
   
 // See ALL errors
 //  echo "<br />[$errno] : $errorText, $errorFile : $errorLine";
@@ -176,8 +176,9 @@ function errorHandler($errorCode, $errorText, $errorFile, $errorLine, $errContex
   array_shift($contexts);
   $log = "\n\n<div class='$divClass' title='$hash'>";
   
-  if ($AppUI && $AppUI->user_id){
-    $log .= "\n<strong>User: </strong>$AppUI->user_first_name $AppUI->user_last_name ($AppUI->user_id)";
+  $user = CUser::get();
+  if ($user->_id){
+    $log .= "\n<strong>User: </strong>$user->_view ($user->_id)";
   }
 
   // Erreur générale
@@ -234,7 +235,7 @@ set_error_handler("errorHandler");
  * @return null
  */
 function exceptionHandler($exception) {
-  global $divClasses, $errorTypes, $errorCategories, $AppUI;
+  global $divClasses, $errorTypes, $errorCategories;
   
   $divClass = "big-warning";
   
@@ -247,8 +248,9 @@ function exceptionHandler($exception) {
   
   $log = "\n\n<div class='$divClass' title='$hash'>";
   
-  if ($AppUI && $AppUI->user_id) {
-    $log .= "\n<strong>User: </strong>$AppUI->user_first_name $AppUI->user_last_name ($AppUI->user_id)";
+  $user = CUser::get();
+  if ($user->_id){
+    $log .= "\n<strong>User: </strong>$user->_view ($user->_id)";
   }
   
   // Erreur générale

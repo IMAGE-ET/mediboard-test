@@ -6,10 +6,8 @@
  *	@version $Revision$
  *  @author Romain Ollivier
  */
- 
-global $AppUI, $can, $m;
 
-$can->needsRead();
+CCanDo::checkRead();
 
 $catalogue_labo_id = CValue::getOrSession("catalogue_labo_id");
 $typeListe  = CValue::getOrSession("typeListe");

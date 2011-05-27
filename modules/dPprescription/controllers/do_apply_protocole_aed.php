@@ -8,10 +8,8 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
  */
 
-
-global $AppUI, $can;
-
-$can->needsRead();
+CCanDo::checkRead();
+$user = CUser::get();
 
 $prescription_id   = CValue::post("prescription_id");
 $pack_protocole_id = CValue::post("pack_protocole_id");
@@ -19,7 +17,7 @@ $pack_protocole_id = CValue::post("pack_protocole_id");
 $date_sel        = CValue::post("debut");
 $time_sel        = CValue::post("time_debut");
 
-$praticien_id    = CValue::post("praticien_id", $AppUI->user_id);
+$praticien_id    = CValue::post("praticien_id", $user->_id);
 $operation_id    = CValue::post("operation_id");
 $pratSel_id      = CValue::post("pratSel_id");
 $protocole_sel_id    = CValue::post("protocole_id");
@@ -33,7 +31,7 @@ if (!$pack_protocole_id){
 
 // Si l'utilisateur est une infirmiere, on verifie si le protocole ne contient pas des lignes non prescriptibles
 $current_user = new CMediusers();
-$current_user->load($AppUI->user_id);
+$current_user->load($user->_id);
 if($current_user->isExecutantPrescription() && !CModule::getCanDo("dPprescription")->admin){
 	$count = array();
 	

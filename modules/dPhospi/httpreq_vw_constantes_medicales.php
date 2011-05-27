@@ -7,10 +7,9 @@
 * @author Fabien Ménager
 */
 
-global $AppUI, $can, $m;
+global $m;
 
-$user = new CMediusers();
-$user->load($AppUI->user_id);
+$user = CMediusers::get();
 
 if(!$user->isMedical() &&
    !CModule::getCanDo('soins')->read && 

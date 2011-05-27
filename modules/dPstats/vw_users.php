@@ -8,13 +8,9 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
  */
 
-global $AppUI, $can, $m;
+CCanDo::checkAdmin();
 
-$can->needsAdmin();
-
-$user_id = CValue::getOrSession("user_id", $AppUI->user_id);
-$user    = new CMediusers;
-$user->load($user_id);
+$user      = CMediusers::get(CValue::getOrSession("user_id"));
 $listUsers = $user->loadListFromType();
 $debutlog  = CValue::getOrSession("debutlog", mbDate("-1 WEEK"));
 $finlog    = CValue::getOrSession("finlog", mbDate());

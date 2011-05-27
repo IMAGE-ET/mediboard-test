@@ -8,8 +8,6 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
  */
 
-global $AppUI;
-
 // chargement des categories de prescription et des elements associés
 $chapitres = CCategoryPrescription::loadCategoriesByChap(null, "current");
 foreach($chapitres as &$categories){

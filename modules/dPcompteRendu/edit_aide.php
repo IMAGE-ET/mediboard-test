@@ -7,8 +7,8 @@
 * @author Romain OLLIVIER
 */
 
-global $AppUI, $can;
-$can->needsRead();
+CCanDo::checkRead();
+
 $choicepratcab = CAppUI::pref("choicepratcab");
 $aide_id       = CValue::get("aide_id", CValue::post("aide_id", ''));
 $class         = CValue::get("class");

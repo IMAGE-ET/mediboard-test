@@ -7,9 +7,7 @@
 * @author Romain OLLIVIER
 */
 
-global $AppUI, $can, $m;
-
-$can->needsEdit();
+CCanDo::checkEdit();
 
 // Liste des prats
 $listPrat = new CMediusers;

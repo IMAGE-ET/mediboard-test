@@ -8,8 +8,6 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
  */
 
-global $AppUI, $can, $m, $g;
-
 $type    = CValue::get("type", "semaine");
 $date    = CValue::get("date", mbDate());
 $bloc_id = CValue::get("bloc_id");

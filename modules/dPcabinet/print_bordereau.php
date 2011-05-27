@@ -7,8 +7,6 @@
 * @author Alexis Granger
 */
 
-global $AppUI, $can, $m;
-
 $date = mbDate();
 
 // Dates selectionnees

@@ -10,9 +10,7 @@
 
 date_default_timezone_set("UTC");
 
-global $AppUI, $can, $m;
-
-$can->needsEdit();
+CCanDo::checkEdit();
 
 $intervalle = CValue::get("intervalle", "none");
 

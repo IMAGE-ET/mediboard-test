@@ -7,11 +7,11 @@
 * @author Romain Ollivier
 */
 
-global $AppUI, $can, $m, $g;
+CAppUI::requireModuleFile("dPhospi", "inc_vw_affectations");
 
-CAppUI::requireModuleFile($m, "inc_vw_affectations");
+CCanDo::checkRead();
 
-$can->needsRead();
+$group = CGroups::loadCurrent();
 
 $filter = new CSejour();
 $filter->_date_min      = CValue::get("_date_min", mbDate() ." 06:00:00");
@@ -37,7 +37,7 @@ $sejourReq->addLJoinClause("patients", "patients.patient_id = sejour.patient_id"
 $sejourReq->addLJoinClause("users", "users.user_id = sejour.praticien_id");
 
 $sejourReq->addWhereClause("sejour.$filter->_horodatage", "BETWEEN '$filter->_date_min' AND '$filter->_date_max'");
-$sejourReq->addWhereClause("sejour.group_id", "= '$g'");
+$sejourReq->addWhereClause("sejour.group_id", "= '$group->_id'");
 $sejourReq->addWhereClause("sejour.annule", "= '0'");
 
 // On supprime les sejours d'urgence
@@ -88,7 +88,7 @@ $listPrats = array();
 // Liste des services
 $services = new CService;
 $where = array();
-$where["group_id"] = "= '$g'";
+$where["group_id"] = "= '$group->_id'";
 $order = "nom";
 $services = $services->loadListWithPerms(PERM_READ,$where, $order);
 

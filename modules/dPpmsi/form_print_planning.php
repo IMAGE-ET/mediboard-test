@@ -6,9 +6,10 @@
 * @version $Revision$
 * @author Romain Ollivier
 */
- 
-global $AppUI, $can, $g;
-$can->needsRead();
+
+CCanDO::checkRead();
+
+$user = CUser::get();
 
 $now = mbDate();
 
@@ -28,11 +29,11 @@ $filterSejour->type = CValue::getOrSession("type");
 
 $yesterday  = mbDate("-1 day", $now);
 
-$listPrat = new CMediusers();
-$listPrat = $listPrat->loadPraticiens(PERM_READ);
+$mediuser = new CMediusers();
+$listPrat = $mediuser->loadPraticiens(PERM_READ);
 
-$listSpec = new CFunctions();
-$listSpec = $listSpec->loadSpecialites(PERM_READ);
+$function = new CFunctions();
+$listSpec = $function->loadSpecialites(PERM_READ);
 
 // Récupération des salles
 $listBlocs = CGroups::loadCurrent()->loadBlocs(PERM_EDIT);
@@ -40,7 +41,7 @@ $listBlocs = CGroups::loadCurrent()->loadBlocs(PERM_EDIT);
 // Création du template
 $smarty = new CSmartyDP();
 
-$smarty->assign("chir"         , $AppUI->user_id);
+$smarty->assign("chir"         , $user->_id);
 $smarty->assign("filter"       , $filter);
 $smarty->assign("filterSejour" , $filterSejour);
 $smarty->assign("now"          , $now);

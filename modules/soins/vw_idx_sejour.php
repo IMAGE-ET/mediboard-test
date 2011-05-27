@@ -8,7 +8,7 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
  */
 
-global $AppUI, $can, $m, $g;
+global $can, $m, $g;
 CAppUI::requireModuleFile("dPhospi", "inc_vw_affectations");
 
 $can->needsRead();
@@ -25,8 +25,7 @@ $type_admission = CValue::getOrSession("type");
 $tab_sejour = array();
 
 // Chargement de l'utilisateur courant
-$userCourant = new CMediusers;
-$userCourant->load($AppUI->user_id);
+$userCourant = CMediusers::get();
 
 $prescription_sejour = new CPrescription();
 
@@ -130,7 +129,7 @@ if($praticien_id && !$service_id){
 	
 	$sejours = $sejour->loadList($where);
 	foreach($sejours as &$_sejour){
-	  if($praticien && $_sejour->praticien_id == $AppUI->user_id){
+	  if($praticien && $_sejour->praticien_id == $userCourant->user_id){
 	    $tab_sejour[$_sejour->_id]= $_sejour;
 	  }
 		$affectations = array();
@@ -164,7 +163,7 @@ foreach ($sejoursParService as $key => $_service) {
 	      foreach ($_lit->_ref_affectations as $_affectation) {
 	        $_affectation->loadRefSejour();
 	        $_sejour =& $_affectation->_ref_sejour;
-	        if($praticien && $_sejour->praticien_id == $AppUI->user_id){
+	        if($praticien && $_sejour->praticien_id == $userCourant->user_id){
 	          $tab_sejour[$_sejour->_id]= $_sejour;
 	        }
 	      	$_sejour->loadRefsPrescriptions();
@@ -254,7 +253,7 @@ if($service_id){
 	  if($praticien){
 			foreach($groupSejourNonAffectes as $sejours_by_moment){
 		    foreach($sejours_by_moment as $sejour){
-		      if($sejour->praticien_id == $AppUI->user_id){
+		      if($sejour->praticien_id == $userCourant->user_id){
 		        $tab_sejour[$sejour->_id] = $sejour;
 		      }
 		    }
@@ -269,7 +268,7 @@ if($service_id){
 		foreach($service->_ref_chambres as &$_chambre){
 			foreach($_chambre->_ref_lits as &$_lits){
 				foreach($_lits->_ref_affectations as &$_affectation){
-				  if($praticien && $_affectation->_ref_sejour->praticien_id == $AppUI->user_id){
+				  if($praticien && $_affectation->_ref_sejour->praticien_id == $userCourant->user_id){
 				    $tab_sejour[$_affectation->_ref_sejour->_id]= $_affectation->_ref_sejour;
 				  }
 					$_affectation->_ref_sejour->loadRefsPrescriptions();
@@ -307,7 +306,7 @@ $can_view_dossier_medical =
   CModule::getCanDo('dPcabinet')->edit ||
   CModule::getCanDo('dPbloc')->edit ||
   CModule::getCanDo('dPplanningOp')->edit || 
-  $AppUI->_ref_user->isFromType(array("Infirmière"));
+  $userCourant->isFromType(array("Infirmière"));
 
 if ($type_admission) {
   $sejour->type = $type_admission;

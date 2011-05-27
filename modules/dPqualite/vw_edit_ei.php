@@ -7,10 +7,8 @@
  * @author SARL OpenXtrem
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
  */
- 
-global $AppUI, $can, $m;
 
-$can->needsAdmin();
+CCanDo::checkAdmin();
 
 $ei_categorie_id = CValue::getOrSession("ei_categorie_id",0);
 $ei_item_id      = CValue::getOrSession("ei_item_id",0);

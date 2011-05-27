@@ -8,11 +8,13 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
  */
 
-global $AppUI;
+// Chargement du user_courant
+$user = CMediusers::get();
+$is_praticien = $user->isPraticien();
 
 $object_id = CValue::get("object_id");
 $object_class = CValue::get("object_class");
-$praticien_id = CValue::get("praticien_id", $AppUI->user_id);
+$praticien_id = CValue::get("praticien_id", $user->user_id);
 $suffixe = CValue::get("suffixe");
 
 $prescription = new CPrescription();
@@ -45,10 +47,7 @@ if ($object->_id){
   }
 }
 
-// Chargement du user_courant
-$user = new CMediusers();
-$user->load($AppUI->user_id);
-$is_praticien = $user->isPraticien();
+
 
 
 $type ="";

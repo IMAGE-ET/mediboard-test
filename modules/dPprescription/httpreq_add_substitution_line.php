@@ -8,7 +8,7 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
  */
 
-global $AppUI;
+$user = CUser::get();
 
 $object_id    = CValue::get("object_id");
 $object_class = CValue::get("object_class");
@@ -18,8 +18,7 @@ $mode_pack = CValue::get("mode_pack", "0");
 $object = new $object_class;
 $object->load($object_id);
 
-$user = new CMediusers();
-$user->load($AppUI->user_id);
+$user = CMediusers::get();
 $is_praticien = $user->isPraticien();
 
 // Chargement des lignes de substitutions de la ligne
@@ -62,10 +61,10 @@ $moments = CMomentUnitaire::loadAllMomentsWithPrincipal();
 // Chargement des aides
 $prescriptionLineMedicament = new CPrescriptionLineMedicament();
 $prescription_line_mix = new CPrescriptionLineMix();
-$prescriptionLineMedicament->loadAides($AppUI->user_id);
-$aides_prescription[$AppUI->user_id]["CPrescriptionLineMedicament"] = $prescriptionLineMedicament->_aides["commentaire"]["no_enum"];
-$prescription_line_mix->loadAides($AppUI->user_id);
-$aides_prescription[$AppUI->user_id]["CPrescriptionLineMix"] = $prescription_line_mix->_aides["commentaire"]["no_enum"];
+$prescriptionLineMedicament->loadAides($user->_id);
+$aides_prescription[$user->_id]["CPrescriptionLineMedicament"] = $prescriptionLineMedicament->_aides["commentaire"]["no_enum"];
+$prescription_line_mix->loadAides($user->_id);
+$aides_prescription[$user->_id]["CPrescriptionLineMix"] = $prescription_line_mix->_aides["commentaire"]["no_enum"];
 
 // Création du template
 $smarty = new CSmartyDP();

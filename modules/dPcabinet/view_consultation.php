@@ -7,9 +7,7 @@
 * @author Yohann Poiron
 */
 
-global $AppUI, $can, $m;
-
-$can->needsRead();
+CCanDo::checkRead();
 
 $consultation_id = CValue::get("consultation_id");
 

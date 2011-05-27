@@ -8,10 +8,9 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
  */
 
-global $AppUI, $can, $m, $g;
-$ds = CSQLDataSource::get("std");
+CCanDo::checkRead();
 
-$can->needsRead();
+$ds = CSQLDataSource::get("std");
 
 $now       = mbDate();
 $filter = new COperation;
@@ -47,8 +46,7 @@ $whereOperations = array();
 $wherePlagesop["plagesop.date"]     =  $ds->prepare("BETWEEN %1 AND %2", $filter->_date_min, $filter->_date_max);
 $whereOperations["operations.date"] =  $ds->prepare("BETWEEN %1 AND %2", $filter->_date_min, $filter->_date_max);
 
-$user = new CMediusers();
-$user->load($AppUI->user_id);
+$user = CMediusers::get();
 
 $praticien = new CMediusers();
 $praticien->load($filter->_prat_id);
