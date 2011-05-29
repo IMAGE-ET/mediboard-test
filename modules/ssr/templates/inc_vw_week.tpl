@@ -44,10 +44,12 @@ Main.add(function() {
     </colgroup>
     <tr>
     	<th class="title {{if $planning->selectable}}selector{{/if}}" colspan="{{$nb_days+2}}" 
-			  {{if $planning->selectable}} onclick="window['planning-{{$planning->guid}}'].selectAllEvents()" {{/if}}>
-    		<div class="nbSelectedEvents" style="float: left; font-size: smaller; width: 20px;">(-) {{$date|date_format:$conf.datetime}}</div>
-			  {{$planning->title}}
-			</th>
+			{{if $planning->selectable}} onclick="window['planning-{{$planning->guid}}'].selectAllEvents()" {{/if}}>
+    		<div class="nbSelectedEvents" style="float: left; font-size: smaller; width: 20px;">
+    		  (-) {{if @$date}} {{$date|date_format:$conf.datetime}} {{/if}}
+    		</div>
+		    {{$planning->title}}
+		</th>
     </tr>
     <tr>
        <th></th>
