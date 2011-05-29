@@ -31,7 +31,7 @@
       </tr>
     {{foreachelse}}
       <tr>
-        <td colspan="4">
+        <td colspan="4" class="empty">
           {{tr}}CTransmissionMedicale.none{{/tr}}
         </td>
       </tr>

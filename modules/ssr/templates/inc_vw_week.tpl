@@ -46,7 +46,7 @@ Main.add(function() {
     	<th class="title {{if $planning->selectable}}selector{{/if}}" colspan="{{$nb_days+2}}" 
 			{{if $planning->selectable}} onclick="window['planning-{{$planning->guid}}'].selectAllEvents()" {{/if}}>
     		<div class="nbSelectedEvents" style="float: left; font-size: smaller; width: 20px;">
-    		  (-) {{if @$date}} {{$date|date_format:$conf.datetime}} {{/if}}
+    		  (-) {{if @$date && $dialog}} {{$date|date_format:$conf.datetime}} {{/if}}
     		</div>
 		    {{$planning->title}}
 		</th>
