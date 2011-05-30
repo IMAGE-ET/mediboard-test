@@ -58,7 +58,8 @@ foreach ($sejours as &$_sejour) {
 	$_sejour->_ref_patient->loadIPP();
   $_sejour->loadRefRPU();
   $_sejour->_ref_rpu->loadRefSejourMutation();
-
+  $_sejour->_veille = mbDate($_sejour->entree) != $date;
+  
   // Statistiques de sortie
   if (mbDate($_sejour->sortie) == $date) {
     $stats["sortie"]["total"]++;

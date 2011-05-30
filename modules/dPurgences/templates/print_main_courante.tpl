@@ -71,7 +71,12 @@ function printPage(element){
 			  {{assign var=patient value=$sejour->_ref_patient}}
 			  {{assign var=consult value=$rpu->_ref_consult}}
 			  <tr>
-          <td style="text-align: right;">{{mb_value object=$sejour field=entree}}</td>
+          <td style="text-align: right;">
+            {{mb_value object=$sejour field=entree}}
+            {{if $sejour->_veille}}
+              <br/> Admis la veille
+            {{/if}}
+          </td>
 			    <td class="text">
 						{{if $offline && $rpu->_id}}
 	            <button class="search notext not-printable" onclick="$('modal-{{$sejour->_id}}').up('tr').show(); modalwindow = modal($('modal-{{$sejour->_id}}'));">
