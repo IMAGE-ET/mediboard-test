@@ -13,6 +13,12 @@ $user = CUser::get();
 $username = trim(CValue::post('username'));
 $password = trim(CValue::post('password'));
 
+// If substitution happens when a session is locked
+$is_locked = CValue::get("is_locked");
+if ($is_locked) {
+  $_SESSION['locked'] = false; 
+}
+
 if (!$username) {
   CAppUI::setMsg("Auth-failed-nousername", UI_MSG_ERROR);
 }

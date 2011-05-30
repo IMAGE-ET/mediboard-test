@@ -125,6 +125,7 @@
     <div>
       <button type="submit" class="tick">{{tr}}Unlock{{/tr}}</button>
       <button type="button" class="cancel" onclick="Session.close()">{{tr}}Logout{{/tr}}</button>
+      <button type="button" class="tick" onclick="Session.window.close(); $('main').show(); UserSwitch.popup();">{{tr}}User switch{{/tr}}</button>
     </div>
     <div class="login-message"></div>
   </form>

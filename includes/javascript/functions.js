@@ -976,7 +976,9 @@ Class.extend(Control.Modal, {
 
 var Session = {
   window: null,
+  isLocked: false,
   lock: function(){
+    this.isLocked = true;
     var url = new Url;
     url.addParam("lock", true);
     url.requestUpdate("systemMsg", {
@@ -1046,13 +1048,17 @@ var UserSwitch = {
       method: "post",
       getParameters: {
         m: 'admin',
-        a: 'ajax_login_as'
+        a: 'ajax_login_as',
+        is_locked: Session.isLocked
       }
     });
     return false;
   },
   cancel: function(){
     this.window.close();
+    if (Session.isLocked) {
+      Session.lock();
+    }
   }
 };
 
