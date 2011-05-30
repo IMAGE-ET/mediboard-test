@@ -167,7 +167,7 @@ function errorHandler($errorCode, $errorText, $errorFile, $errorLine, $errContex
   
   // Contextes 
   $contexts = $backTrace ? $backTrace : debug_backtrace();
-  foreach($contexts as &$ctx) {
+  foreach ($contexts as &$ctx) {
     unset($ctx['args']);
     unset($ctx['object']);
   }
@@ -176,9 +176,11 @@ function errorHandler($errorCode, $errorText, $errorFile, $errorLine, $errContex
   array_shift($contexts);
   $log = "\n\n<div class='$divClass' title='$hash'>";
   
-  $user = CUser::get();
-  if ($user->_id){
-    $log .= "\n<strong>User: </strong>$user->_view ($user->_id)";
+  if (class_exists("CUser")) {
+    $user = CUser::get();
+    if ($user->_id){
+      $log .= "\n<strong>User: </strong>$user->_view ($user->_id)";
+    }
   }
 
   // Erreur générale
