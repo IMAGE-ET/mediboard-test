@@ -134,9 +134,9 @@ if (CValue::get("ldap_guid")) {
 if (isset($_REQUEST["login"])) {
   include "./locales/core.php";
   if (null == $ok = CAppUI::login()) {
+    CAppUI::$instance->user_id = null;
+		
     // we delete the session in case the user was deactivated
-    session_unset();
-    @session_destroy();
     CAppUI::setMsg("Auth-failed", UI_MSG_ERROR);
   }
 
