@@ -165,8 +165,16 @@ class CFTP {
     if (!$this->connexion) {
       throw new CMbException("CSourceFTP-connexion-failed", $this->hostname);
     }
-        
-    return ftp_nlist($this->connexion, $folder);
+
+    $files = ftp_nlist($this->connexion, $folder);
+    foreach ($files as &$_file) {
+      // Some FTP servers do not retrieve whole paths
+      if ($folder && $folder != "." && strpos($_file, "$folder/") !== 0) {
+      	$_file = "$folder/$_file";
+      }
+    }
+
+    return $files;
   }
   
   private function _delFile($file) {

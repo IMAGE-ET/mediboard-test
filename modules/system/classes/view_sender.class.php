@@ -214,22 +214,27 @@ class CViewSender extends CMbObject {
    * @return int             Current archive count
    */
   function archiveFile(CFTP $ftp, $basename) {
-  	// Répertoire d'archivage
-  	$directory = $ftp->fileprefix.$basename;
-  	$datetime = mbTransformTime(null, null, "%Y-%m-%d_%H-%M-%S");   
-    $ftp->createDirectory($directory);
-  	
-    // Transmission de la copie
-    $archive  = "$directory/archive-$datetime.html";
-    $ftp->sendFile($this->_file, $archive);
-    
-    // Rotation des 10 fichiers
-    $files = $ftp->getListFiles($directory);
-    rsort($files);
-    foreach (array_slice($files, $this->max_archives) as $_file) {
-      $ftp->delFile($_file);
-    }
-    
+  	try {
+      // Répertoire d'archivage
+      $directory = $ftp->fileprefix.$basename;
+      $datetime = mbTransformTime(null, null, "%Y-%m-%d_%H-%M-%S");   
+      $ftp->createDirectory($directory);
+      
+      // Transmission de la copie
+      $archive  = "$directory/archive-$datetime.html";
+      $ftp->sendFile($this->_file, $archive);
+      
+      // Rotation des fichiers
+      $files = $ftp->getListFiles($directory);
+      rsort($files);
+      foreach (array_slice($files, $this->max_archives) as $_file) {
+      	$ftp->delFile($_file);
+      }
+      
+     }
+     catch (CMbException $e) {
+     	$e->stepAjax();
+     }
     return count($ftp->getListFiles($directory));
   }
 }
