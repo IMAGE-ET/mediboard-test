@@ -25,7 +25,7 @@ try {
 
 $list = array();
 try {
-  $list = $ftp->getListFiles("./");
+  $list = $ftp->getListFiles(".");
 } catch (CMbException $e) {
   CAppUI::stepAjax($e->getMessage(), UI_MSG_WARNING); 
 }
