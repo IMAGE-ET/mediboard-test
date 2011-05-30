@@ -29,18 +29,25 @@ Reconvocation = {
   
   choosePatient: function() {
     Consultations.stop();
-		
-    if (!Reconvocation.checkPraticien()) {
-      return false;
-    }
+
+    {{if !$mode_urgence}}
+      if (!Reconvocation.checkPraticien()) {
+        return false;
+      }
+    {{/if}}
     
 		{{if $mode_urgence}}
-		  PatSelector.init();
+      this.createConsult();
 		{{/if}}
 		
     return false;
   },
-  
+  createConsult: function() {
+    var oForm = getForm("Create-Reconvocation");
+    var url = new Url("dPcabinet", "ajax_create_reconvoc");
+    url.addParam("prat_id", $V(oForm.prat_id));
+    url.requestModal(500);
+  },
   submit: function() {
     var form = getForm('Create-Reconvocation');
     return onSubmitFormAjax(form, { onComplete: Consultations.start.curry(80) });  
@@ -75,7 +82,7 @@ Reconvocation = {
 					{{mb_include module=mediusers template=inc_options_mediuser list=$all_prats selected=$app->user_id}}
         </select>
         
-        <input type="hidden" name="motif" value="Reconvocation immédiate" />   
+        <input type="hidden" name="motif" value="" />   
         <button type="submit" class="new">Reconvocation immédiate</button>
       </form>
 			

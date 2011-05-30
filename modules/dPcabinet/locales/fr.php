@@ -516,6 +516,7 @@ $locales['CConsultation.patient_regle.1'] = '1';
 $locales['CConsultation.premiere.'] = ' ';
 $locales['CConsultation.premiere.0'] = '0';
 $locales['CConsultation.premiere.1'] = '1';
+$locales['CConsultation.reconvoc_immediate'] = 'Reconvocation immédiate';
 $locales['CConsultation.select'] = 'Choisir une consultation';
 $locales['CConsultation.tiers_mode_reglement.CB'] = 'CB';
 $locales['CConsultation.tiers_mode_reglement.autre'] = 'Autre';
