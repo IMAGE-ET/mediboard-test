@@ -27,7 +27,7 @@ if($user->_id){
   // Mot de passe actuel correct
   if ($new_pwd1 == $new_pwd2){
     $user->_user_password = $new_pwd1;
-    if ($msg = $verif_user->store()) {
+    if ($msg = $user->store()) {
       return CAppUI::setMsg($msg);
     }
 
