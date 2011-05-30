@@ -122,7 +122,6 @@ class CUserLog extends CMbMetaObject {
       }
     }
   }
-	
 	 
   static function countRecentFor($object_class, $ids, $recent){
     $log = new CUserLog();
@@ -132,6 +131,34 @@ class CUserLog extends CMbMetaObject {
     $where["object_id"] = CSQLDataSource::prepareIn($ids);
     return $log->countList($where);
   }
+	
+	static function getObjectValueAtDate(CMbObject $object, $date, $field) {
+    $where = array(
+      "object_class" => "= '$object->_class_name'",
+      "object_id"    => "= '$object->_id'",
+      "type"         => "IN('store', 'merge')",
+      "extra IS NOT NULL AND extra != '[]'",
+    );
+    
+    if ($date) {
+      $where["date"] = ">= '$date'";
+    }
+    
+    $where[] = "
+      fields LIKE '$field' OR 
+			fields LIKE '$field %' OR 
+      fields LIKE '% $field' OR 
+      fields LIKE '% $field %'";
+    
+    $user_log = new self;
+    $user_log->loadObject($where, "date ASC");
+    
+    if ($user_log->_id) {
+      $user_log->getOldValues();
+    }
+    
+    return CValue::read($user_log->_old_values, $field, $object->$field);
+	}
 	
 	function store(){
 		if ($msg = $this->check()) {

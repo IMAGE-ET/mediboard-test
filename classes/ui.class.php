@@ -19,6 +19,9 @@ define("UI_MSG_ERROR"  , 4);
  * @TODO Is being split into CApp et CUI classes
  */
 class CAppUI {
+	/**
+	 * @var CAppUI
+	 */
   static $instance = null;
   
   /** 

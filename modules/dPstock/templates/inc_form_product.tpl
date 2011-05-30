@@ -140,7 +140,7 @@ duplicateObject = function (form) {
     <th>{{tr}}CProduct-back-selections{{/tr}}</th>
     <td>
       {{foreach from=$product->_back.selections item=_selection name=selection}}
-        <button class="remove notext"></button>
+        <!--<button class="remove notext"></button>-->
         {{$_selection->_ref_selection}}{{$smarty.foreach.selection.last|ternary:"":","}}
       {{foreachelse}}
         <div class="empty">{{tr}}CProductSelection.none{{/tr}}</div>
