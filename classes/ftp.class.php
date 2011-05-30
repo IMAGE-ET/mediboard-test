@@ -165,11 +165,14 @@ class CFTP {
     if (!$this->connexion) {
       throw new CMbException("CSourceFTP-connexion-failed", $this->hostname);
     }
-
+    
     $files = ftp_nlist($this->connexion, $folder);
+    if (substr($folder, -1) != "/") {
+      $folder = "$folder/";
+    }
     foreach ($files as &$_file) {
       // Some FTP servers do not retrieve whole paths
-      if ($folder && $folder != "." && strpos($_file, "$folder/") !== 0) {
+      if ($folder && $folder != "." && strpos($_file, $folder) !== 0) {
       	$_file = "$folder/$_file";
       }
     }
