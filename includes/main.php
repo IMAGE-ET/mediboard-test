@@ -136,13 +136,14 @@ if (null == $m = CAppUI::checkFileName(CValue::get("m", 0))) {
   $m = CPermModule::getFirstVisibleModule();
   $parts = explode("-", CAppUI::pref("DEFMODULE"), 2);
   
-  if (count($parts) == 2) {
-    $tab = $parts[1];
-  }
-  
   $pref_module = $parts[0];
   if ($pref_module && CPermModule::getViewModule(CModule::getInstalled($pref_module)->mod_id, PERM_READ)) {
     $m = $pref_module;
+  }
+  
+  if (count($parts) == 2) {
+    $tab = $parts[1];
+    CValue::setSession("tab", $tab);
   }
 }
 
