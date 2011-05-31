@@ -131,7 +131,7 @@ function reloadPrescription(prescription_id){
       {{tr}}CSejour{{/tr}}
       du {{mb_value object=$sejour field=entree}}
       au 
-      {{if $sejour->canEdit()}}
+      {{if $sejour->canEdit() || $currUser->_is_praticien}}
       {{assign var=sejour_guid value=$sejour->_guid}}
       <form name="editSortiePrevue-{{$sejour_guid}}" method="post" action="?"
             style="font-size: 0.9em;" onsubmit="return onSubmitFormAjax(this)">
