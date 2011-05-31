@@ -39,12 +39,16 @@ class CRPU extends CMbObject {
   var $box_id          = null;
   var $sortie_autorisee = null;
   var $accident_travail = null;
+  var $circonstance    = null;
   
   // Legacy Sherpa fields
   var $type_pathologie = null; // Should be $urtype
   var $urprov = null;
   var $urmuta = null;
   var $urtrau = null;
+  
+  // Form fields
+  var $_libelle_circonstance = null;
   
   // Distant Fields
   var $_attente           = null;
@@ -117,7 +121,8 @@ class CRPU extends CMbObject {
       "box_id"           => "ref class|CLit",
       "sortie_autorisee" => "bool",
       "accident_travail" => "date",
-      
+      "circonstance"     => "str",
+    
       "_DP"              => "code cim10 show|1",
       "_mode_sortie"     => "enum list|6|7|8|9 default|8",
       "_sortie"          => "dateTime",
@@ -202,6 +207,11 @@ class CRPU extends CMbObject {
 		
 		// @todo: A supprimer du updateFormFields
 		$this->loadRefConsult();
+		
+		// Récupération du libellé de la circonstance si actif dans la configuration
+		if (CAppUI::conf("dPurgences gerer_circonstance")) {
+		  $this->getCirconstance();
+		}
   }
   
   function loadRefsFwd() {
@@ -377,6 +387,27 @@ class CRPU extends CMbObject {
     $this->_ref_sejour->loadComplete();
   }
 
+  function getCirconstance() {
+    $ds = $this->_spec->ds;
+    
+    $module_orumip = CModule::getActive("orumip");
+    $orumip_active = $module_orumip && $module_orumip->mod_active;
+    
+    $request = new CRequest;
+    $request->addSelect("libelle");
+    
+    if ($orumip_active) {
+      $request->addTable("orumip_circonstance");
+      $request->addWhere("code = '".$this->circonstance."'");
+      $this->_libelle_circonstance = $ds->loadResult($request->getRequest());
+    }
+    else {
+      $request->addTable("circonstance");
+      $request->addWhere("code = '".$this->circonstance."'");
+      $this->_libelle_circonstance = $ds->loadResult($request->getRequest());
+    }
+  }
+  
 	function fillLimitedTemplate(&$template) {
 	  $this->loadRefConsult();
 	  $this->_ref_consult->loadRefPraticien();

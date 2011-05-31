@@ -35,7 +35,8 @@ $dPconfig["dPurgences"] = array (
   "show_statut"               => "0",
   "attente_first_part"        => "00:30:00",
   "attente_second_part"       => "02:00:00",
-  "attente_third_part"        => "04:00:00"
+  "attente_third_part"        => "04:00:00",
+  "gerer_circonstance"        => "0"
 );
 
 

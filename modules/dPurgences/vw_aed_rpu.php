@@ -72,6 +72,10 @@ $contrainteProvenance[8] = array("", 5, 8);
 // Chargement des boxes d'urgences
 $listServicesUrgence = CService::loadServicesUrgence();
 
+
+$module_orumip = CModule::getActive("orumip");
+$orumip_active = $module_orumip && $module_orumip->mod_active;
+
 // Création du template
 $smarty = new CSmartyDP();
 $smarty->assign("group"               , $group);
@@ -88,6 +92,7 @@ $smarty->assign("patient"             , $patient);
 $smarty->assign("listResponsables"    , $listResponsables);
 $smarty->assign("listPrats"           , $listPrats);
 $smarty->assign("praticien"           , $praticien);
+$smarty->assign("orumip_active"       , $orumip_active);
 $smarty->assign("isPrescriptionInstalled", CModule::getActive("dPprescription"));
 $smarty->assign("isImedsInstalled"    , (CModule::getActive("dPImeds") && CImeds::getTagCIDC(CGroups::loadCurrent())));
 $smarty->display("vw_aed_rpu.tpl");

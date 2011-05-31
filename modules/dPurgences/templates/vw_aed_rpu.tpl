@@ -10,6 +10,7 @@
 
 {{mb_script module=dPcabinet script=file}}
 {{mb_include module=dPfiles template=yoplet_uploader object=$sejour}}
+{{assign var=gerer_circonstance value=$conf.dPurgences.gerer_circonstance}}
 
 {{if !$group->service_urgences_id}}
   <div class="small-warning">{{tr}}dPurgences-no-service_urgences_id{{/tr}}</div>
@@ -316,75 +317,102 @@
 	  
 	   <!-- Selection du service -->
 	  <tr>
-		  <th>
-		    {{mb_label object=$rpu field="_service_id"}}
-		  </th>
-		  <td>
-		    {{if $listServicesUrgence|@count == 1}}
-		      {{assign var=first_service value=$listServicesUrgence|@reset}}
-		      {{$first_service->_view}}
-		    {{else}}
-		    <select name="_service_id" class="{{$sejour->_props.service_id}}">
-		      <option value="">&mdash; Choisir un service</option>
-		      {{foreach from=$listServicesUrgence item=_service}}
-		      <option value="{{$_service->_id}}" {{if "Urgences" == $_service->nom}} selected="selected" {{/if}}>
-		        {{$_service->_view}}
-		      </option>
-		      {{/foreach}}
-		    </select>
-		    {{/if}}
-		  </td>
 		  <th>{{mb_label object=$rpu field="pec_transport"}}</th>
-	    <td>{{mb_field object=$rpu field="pec_transport" defaultOption="&mdash; Prise en charge"}}</td>
+	    <td colspan="3">{{mb_field object=$rpu field="pec_transport" defaultOption="&mdash; Prise en charge"}}</td>
 		</tr>
 	
 	  <tr>
 	    <th>{{mb_label object=$rpu field="box_id"}}</th>
-	    <td>
+	    <td style="vertical-align: middle;">
 	      {{include file="../../dPhospi/templates/inc_select_lit.tpl"
 	      		field=box_id 
 	      		selected_id=$rpu->box_id 
 	      		ajaxSubmit=0 
 	      		listService=$listServicesUrgence}}
-			</td>
+        &mdash; {{tr}}CRPU-_service_id{{/tr}} :
+        {{if $listServicesUrgence|@count == 1}}
+          {{assign var=first_service value=$listServicesUrgence|@reset}}
+          {{$first_service->_view}}
+        {{else}}
+        <select name="_service_id" class="{{$sejour->_props.service_id}}">
+          <option value="">&mdash; Choisir un service</option>
+          {{foreach from=$listServicesUrgence item=_service}}
+          <option value="{{$_service->_id}}" {{if "Urgences" == $_service->nom}} selected="selected" {{/if}}>
+            {{$_service->_view}}
+          </option>
+          {{/foreach}}
+        </select>
+        {{/if}}
+      </td>
 			<th>{{mb_label object=$rpu field="accident_travail"}}</th>
 	    <td>{{mb_field object=$rpu field="accident_travail" form="editRPU" register=true}}</td>
 	  </tr>
 	
 	  {{if $can->edit}}
-	  <tr>
-	    <th>{{mb_label object=$rpu field="diag_infirmier"}}</th> 
-	    <td>
-	      {{mb_field object=$rpu field="diag_infirmier" class="autocomplete"}}
-	    </td>
-	    <th>{{mb_label object=$rpu field="pec_douleur"}}</th>
-	    <td>
-	     {{mb_field object=$rpu field="pec_douleur" class="autocomplete"}}
-	     <script type="text/javascript">
-          Main.add(function() {
-              new AideSaisie.AutoComplete(getForm("editRPU").elements.diag_infirmier, {
-                  objectClass: "{{$rpu->_class_name}}",
-                  contextUserId: "{{$userSel->_id}}",
-                  contextUserView: "{{$userSel->_view}}",
-                  timestamp: "{{$conf.dPcompteRendu.CCompteRendu.timestamp}}",
-                  resetSearchField: false,
-                  resetDependFields: false,
-                  validateOnBlur: false
+      {{if $gerer_circonstance}}
+        <tr>
+          <th>{{mb_label object=$rpu field="circonstance"}}</th>
+          <td colspan="3">
+            <input type="hidden" name="circonstance" value="{{$rpu->circonstance}}" />
+            <input type="text" name="_keywords_circonstance" value="{{if $orumip_active}}{{$rpu->_libelle_circonstance}}{{else}}{{$rpu->circonstance}}{{/if}}" class="autocomplete"/>
+            <br/>
+            <span id="libelle_circonstance" onclick="emptyCirconstance()" style="width: 150px;">{{$rpu->_libelle_circonstance}}</span>
+            <script type="text/javascript">
+              function emptyCirconstance() {
+                var oForm = getForm("editRPU");
+                $V(oForm.circonstance, "");
+                $V(oForm._keywords_circonstance, "");
+                $("libelle_circonstance").update();
+              }
+              Main.add(function(){
+                var url = new Url("dPurgences", "ajax_circonstance_autocomplete");
+                url.autoComplete(getForm("editRPU")._keywords_circonstance, '', {
+                  minChars: 1,
+                  dropdown: true,
+                  width: "250px",
+                  select: ".view",
+                  afterUpdateElement: function(input, selected) {
+                    $V(getForm("editRPU").circonstance, selected.select(".code")[0].innerHTML);
+                    $("libelle_circonstance").innerHTML = selected.select(".libelle_circonstance")[0].innerHTML;
+                  }
                 });
-              new AideSaisie.AutoComplete(getForm("editRPU").elements.pec_douleur, {
-                  objectClass: "{{$rpu->_class_name}}",
-                  contextUserId: "{{$userSel->_id}}",
-                  contextUserView: "{{$userSel->_view}}",
-                  timestamp: "{{$conf.dPcompteRendu.CCompteRendu.timestamp}}",
-                  resetSearchField: false,
-                  resetDependFields: false,
-                  validateOnBlur: false
-                });
-            });
-        </script>
-	    </td>
-	    
-	  </tr>
+              });
+            </script>
+          </td>
+        </tr>
+      {{/if}}
+  	  <tr>
+  	    <th>{{mb_label object=$rpu field="diag_infirmier"}}</th> 
+  	    <td>
+  	      {{mb_field object=$rpu field="diag_infirmier" class="autocomplete"}}
+  	    </td>
+  	    <th>{{mb_label object=$rpu field="pec_douleur"}}</th>
+  	    <td>
+  	     {{mb_field object=$rpu field="pec_douleur" class="autocomplete"}}
+  	     <script type="text/javascript">
+            Main.add(function() {
+                new AideSaisie.AutoComplete(getForm("editRPU").elements.diag_infirmier, {
+                    objectClass: "{{$rpu->_class_name}}",
+                    contextUserId: "{{$userSel->_id}}",
+                    contextUserView: "{{$userSel->_view}}",
+                    timestamp: "{{$conf.dPcompteRendu.CCompteRendu.timestamp}}",
+                    resetSearchField: false,
+                    resetDependFields: false,
+                    validateOnBlur: false
+                  });
+                new AideSaisie.AutoComplete(getForm("editRPU").elements.pec_douleur, {
+                    objectClass: "{{$rpu->_class_name}}",
+                    contextUserId: "{{$userSel->_id}}",
+                    contextUserView: "{{$userSel->_view}}",
+                    timestamp: "{{$conf.dPcompteRendu.CCompteRendu.timestamp}}",
+                    resetSearchField: false,
+                    resetDependFields: false,
+                    validateOnBlur: false
+                  });
+              });
+          </script>
+  	    </td>
+  	  </tr>
 	  {{/if}}
 	  
 	  <tr>

@@ -25,6 +25,7 @@
     {{mb_include module=system template=inc_config_bool var=only_prat_responsable}}
     {{mb_include module=system template=inc_config_bool var=gerer_reconvoc}}
 	  {{mb_include module=system template=inc_config_bool var=gerer_hospi}}
+    {{mb_include module=system template=inc_config_bool var=gerer_circonstance}}
 	  {{mb_include module=system template=inc_config_str var=sibling_hours size="2" suffix="h"}}
 	  {{mb_include module=system template=inc_config_bool var=pec_change_prat}}
 	  {{mb_include module=system template=inc_config_bool var=create_sejour_hospit}}

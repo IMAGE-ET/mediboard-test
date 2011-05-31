@@ -180,7 +180,97 @@ class CSetupdPurgences extends CSetup {
       ADD `group_id` INT (11) UNSIGNED NOT NULL;";
     $this->addQuery($query);
     
-    $this->mod_version = "0.30";
+    $this->makeRevision("0.30");
+    $query = "CREATE TABLE `circonstance` (
+       `code` VARCHAR (15) NOT NULL,
+       `libelle` VARCHAR (100),
+       `commentaire` TEXT
+    ) /*! ENGINE=MyISAM */;";
+    $this->addQuery($query);
+    
+    $query = "INSERT INTO `circonstance` VALUES ( 'AVP', 'AVP', 'Accident de transport de toute nature.');";
+    $this->addQuery($query);
+    
+    $query = "INSERT INTO `circonstance` VALUES ( 'DEFENEST', 'Chute de grande hauteur', 'Chute supérieure à 3 m.');";
+    $this->addQuery($query);
+    
+    $query = "INSERT INTO `circonstance` VALUES ( 'AGRESSION', 'Autres agression, rixe ou morsure ', 'Pour toute agression ou rixe".
+      "sans usage d\'arme à feu ou d\'arme blanche. Pour toute morsure ou piqures multiples ou vénéneuses.');";
+    $this->addQuery($query);
+    
+    $query = "INSERT INTO `circonstance` VALUES ( 'NOYADE', 'Noyade, plongée, eau', 'Pour les noyades, ".
+      "accident de plongée ou de décompression.');";
+    $this->addQuery($query);
+    
+    $query = "INSERT INTO `circonstance` VALUES ( 'ARMEFEU', 'Arme à feu', 'Pour toute agression, rixe, accident et suicide".
+      " ou tentative par agent vulnérant type arme à feu.');";
+    $this->addQuery($query);
+    
+    $query = "INSERT INTO `circonstance` VALUES ( 'COUTEAU', 'Objet tranchant ou perforant', 'Pour toute agression, rixe, accident et ".
+      "suicide ou tentative par agent vulnérant type arme blanche.');";
+    $this->addQuery($query);
+    
+    $query = "INSERT INTO `circonstance` VALUES ( 'SPORT', 'Accident de sport ou de loisir', 'Traumatisme en rapport ".
+      "avec une activité sportive ou de loisir.');";
+    $this->addQuery($query);
+    
+    $query = "INSERT INTO `circonstance` VALUES ( 'PENDU', 'Pendaison, strangulation', 'Pendaison, strangulation ".
+      "sans présagé du caractère médico-légal ou non.');";
+    $this->addQuery($query);
+    
+    $query = "INSERT INTO `circonstance` VALUES ( 'FEU', 'Feu, agent thermique, fumée', 'Toute source de chaleur intense ".
+      "ayant provoqué des brulures, un coup de chaleur ou une insolation. Y compris incendie, ".
+      "fumée d\'incendie et dégagement de CO au décours d\'un feu.');";
+    $this->addQuery($query);
+    
+    $query = "INSERT INTO `circonstance` VALUES ( 'EXPLOSIF', 'Explosion', 'Explosion de grande intensité même suivi ".
+      "ou précédé d\'un incendie, même si notion d\'écrasement.');";
+    $this->addQuery($query);
+    
+    $query = "INSERT INTO `circonstance` VALUES ( 'ECRASE', 'Ecrasement', 'Notion d\'écrasement, hors contexe accident ".
+      "de circulation, explosion ou incendie.');";
+    $this->addQuery($query);
+    
+    $query = "INSERT INTO `circonstance` VALUES ( 'TOXIQUE', 'Exposition à produits chimiques ou toxiques', ".
+      "'Lésion en rapport avec une exposition à un produit liquide, solide ou gazeux toxique.".
+      " Hors contexte NRBC, incendie, intoxication par médicament, alcool ou drogues illicites.');";
+    $this->addQuery($query);
+    
+    $query = "INSERT INTO `circonstance` VALUES ( 'CHUTE', 'Chute, traumatisme bénin', 'Traumatisme bénin du ".
+      "ou non à une chute de sa hauteur ou de très faible hauteur.');";
+    $this->addQuery($query);
+    
+    $query = "INSERT INTO `circonstance` VALUES ( 'ELEC', 'Electricité, foudre', 'Effet du courant électrique ".
+      "par action directe ou à distance (arc électrique, effet de la foudre).');";
+    $this->addQuery($query);
+    
+    $query = "INSERT INTO `circonstance` VALUES ( 'PRO', 'Trauma par machine à usage professionnel', 'Toute lésion ".
+      "traumatique provoquée par un matériel à usage professionnel.');";
+    $this->addQuery($query);
+    
+    $query = "INSERT INTO `circonstance` VALUES ( 'DOMJEU', 'Trauma par appareillage domestique', 'Toute lésion ".
+      "traumatique provoquée par un matériel à usage domestique ou un accessoire de jeu ou de loisir.');";
+    $this->addQuery($query);
+    
+    $query = "INSERT INTO `circonstance` VALUES ( 'SECOND', 'Transfert secondaire', 'Pour tout transfert secondaire.');";
+    $this->addQuery($query);
+    
+    $query = "INSERT INTO `circonstance` VALUES ( 'AUTRE', 'Autres', 'Autre traumatisme avec circonstance particulière non répertorié.');";
+    $this->addQuery($query);
+    
+    $query = "INSERT INTO `circonstance` VALUES ( 'CATA', 'Accident nombreuses victimes', 'Accident catastrophique mettant ".
+      "en cause de nombreuses victimes et nécessitant un plan d\'intervention particulier.');";
+    $this->addQuery($query);
+    
+    $query = "INSERT INTO `circonstance` VALUES ( '00000', 'Pathologie non traumatique, non cironstancielle', ".
+     "'Pathologie médicale non traumatique ou sans circonstance de survenue particulière.');";
+    $this->addQuery($query);
+    
+    $query = "ALTER TABLE `rpu`
+      ADD `circonstance` VARCHAR (50);";
+    $this->addQuery($query);
+    
+    $this->mod_version = "0.31";
   }  
 }
 
