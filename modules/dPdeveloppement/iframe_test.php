@@ -9,8 +9,10 @@
 
 CCanDo::checkRead();
 
+ob_clean();
+
 // Création du template
 $smarty = new CSmartyDP();
 $smarty->display('iframe_test.tpl');
 
-?>
+CApp::rip();

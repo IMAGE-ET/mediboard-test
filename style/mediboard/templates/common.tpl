@@ -57,6 +57,8 @@
           actionType: "{{$actionType}}",
           dialog: "{{$dialog}}"
         };
+		
+		var Mediboard = {{$version|@json}};
   </script>
   
   {{$mediboardShortIcon|smarty:nodefaults}}

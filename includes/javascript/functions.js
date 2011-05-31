@@ -888,14 +888,18 @@ window.open = function(element, title, options) {
   return false;
 }*/
 
+window._close = function() {
+  window.close();
+}
+
 // We replace the window.close method for iframes (modal windows)
-if (window.parent && window.parent != window) {
+if (window.parent && window.parent != window && window.parent.Mediboard) {
   window.launcher = window.parent;
+	
   window.oldClose = window.close;
-  
-  window.close = function(){
+  window.close = window._close = function(){
     try {
-      var modale = window.parent.Control.Modal.stack.last();
+      var modale = window.launcher.Control.Modal.stack.last();
       modale.close();
       modale.destroy();
     } catch (e) {

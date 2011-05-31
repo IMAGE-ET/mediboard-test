@@ -27,7 +27,7 @@ chooseProtocole = function(protocole_id) {
 
 setClose = function(protocole_id) {
   window.parent.ProtocoleSelector.set(aProtocoles[protocole_id]);
-  window.close();
+  window._close();
 }
 
 refreshList = function(form, types, reset) {

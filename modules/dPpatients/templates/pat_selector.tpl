@@ -9,7 +9,6 @@
 {{/if}}
 
 <script type="text/javascript">
-
 var Patient = {
   create: function(useVitale) {
     this.edit(0, useVitale);
@@ -45,7 +44,7 @@ var Patient = {
   
   select: function(patient_id, patient_view) {
 		window.launcher.PatSelector.set(patient_id, patient_view);
-    window.close();
+    window._close();
   }
 }
 

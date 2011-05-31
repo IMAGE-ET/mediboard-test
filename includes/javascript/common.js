@@ -38,7 +38,7 @@ function errorHandler(errorMsg, url, lineNumber, exception) {
     }
   } catch (e) {}
   
-  return Prototype.Browser.WebKit; // Webkit handles this differently
+  return Prototype.Browser.IE || Prototype.Browser.WebKit; // Webkit and IE handle this differently
 };
 
 /*

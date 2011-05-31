@@ -29,7 +29,7 @@ function setClose(date, salle_id) {
   }
     
   window.parent.PlageOpSelector.set(plage_id, salle_id, date, adm, typeHospi, hour_entree, min_entree);  
-  window.close();
+  window._close();
 }  
 
 Main.add(function () {
@@ -318,7 +318,7 @@ Main.add(function () {
         </tr>
         <tr>
           <td colspan="3" class="button">
-            <button class="cancel" type="button" onclick="window.close()">{{tr}}Cancel{{/tr}}</button>
+            <button class="cancel" type="button" onclick="window._close()">{{tr}}Cancel{{/tr}}</button>
             <button class="tick" type="button" onclick="setClose('', '')">{{tr}}OK{{/tr}}</button>          
           </td>
         </tr>
