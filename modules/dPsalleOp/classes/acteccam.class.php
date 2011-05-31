@@ -575,8 +575,7 @@ class CActeCCAM extends CActe {
     }
     
     // 1 actes + 1 acte du chap. 18 ou du chap. 19.02 (règles B) (règle supprimée pour l'instant à cause de l'interface factu)
-    /**
-    if($numActes == 2)) {
+    if($numActes == 2) {
       // 1 acte + 1 geste complémentaire chap. 18 (règle B)
       if($numChap18 == 1) {
         $this->_guess_association = "";
@@ -590,7 +589,7 @@ class CActeCCAM extends CActe {
         return $this->_guess_association;
       }
     }
-     */
+    
      
     // 1 acte + 1 ou pls geste complémentaire chap. 18 + 1 ou pls supplément des chap. 19.02 (règle C)
     if($numActes >= 3 && $numActes - ($numChap18 + $numChap1902) == 1 && $numChap18 && $numChap1902) {
