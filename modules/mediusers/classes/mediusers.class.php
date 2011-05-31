@@ -63,7 +63,7 @@ class CMediusers extends CMbObject {
   var $_is_secretaire              = null;
   var $_is_anesth                  = null;
   var $_is_infirmiere              = null;
-	var $_is_aide_soignant           = null;
+  var $_is_aide_soignant           = null;
   var $_user_password_weak         = null;
   var $_user_password_strong       = null;
   var $_basic_info                 = null;
@@ -90,7 +90,7 @@ class CMediusers extends CMbObject {
   
   // Object references per day
   var $_ref_plages                 = null;
-	var $_ref_plages_conge        = null;
+  var $_ref_plages_conge        = null;
   var $_ref_urgences               = null;
   var $_ref_deplacees              = null;
   
@@ -105,7 +105,7 @@ class CMediusers extends CMbObject {
     return $user_id ? $user->getCached($user_id) : $user;
   }
 
-	
+  
   function getSpec() {
     $spec = parent::getSpec();
     $spec->table = 'users_mediboard';
@@ -135,7 +135,7 @@ class CMediusers extends CMbObject {
     $specs["compte"]                 = "code rib confidential mask|99999S99999S99999999999S99 show|0";
     $specs["banque_id"]              = "ref class|CBanque show|0";
     $specs["code_intervenant_cdarr"] = "str length|2";
-		$specs["secteur"]                = "enum list|1|2";
+    $specs["secteur"]                = "enum list|1|2";
     $specs["cab"]                    = "str";
     $specs["conv"]                   = "str";  
     $specs["zisd"]                   = "str";
@@ -244,8 +244,8 @@ class CMediusers extends CMbObject {
     $backProps["visites_anesth"]                  = "COperation prat_visite_anesth_id";
     $backProps["checked_lists"]                   = "CDailyCheckList validator_id";
     $backProps["evenements_ssr"]                  = "CEvenementSSR therapeute_id";
-		$backProps["activites_rhs"]                   = "CLigneActivitesRHS executant_id";
-		$backProps["replacements"]                    = "CReplacement replacer_id";
+    $backProps["activites_rhs"]                   = "CLigneActivitesRHS executant_id";
+    $backProps["replacements"]                    = "CReplacement replacer_id";
     $backProps["frais_divers"]                    = "CFraisDivers executant_id";
     return $backProps;
   }
@@ -253,7 +253,7 @@ class CMediusers extends CMbObject {
   function createUser() {
     $user = new CUser();
     $user->user_id = ($this->_user_id) ? $this->_user_id : $this->user_id;
-		$user->user_type        = $this->_user_type;
+    $user->user_type        = $this->_user_type;
     $user->user_username    = $this->_user_username;
     if (isset($this->_ldap_store)) {
       $user->user_password    = $this->_user_password;
@@ -348,7 +348,7 @@ class CMediusers extends CMbObject {
   function loadRefFunction() {
     $this->_ref_function = $this->loadFwdRef("function_id", true);
     $this->_group_id     = $this->_ref_function->group_id;
-		return $this->_ref_function;
+    return $this->_ref_function;
   }
 
   function loadRefDiscipline() {
@@ -390,15 +390,15 @@ class CMediusers extends CMbObject {
     $this->_ref_protocoles = $protocoles->loadList($where, "libelle_sejour, libelle, codes_ccam");
   }
   
-	function getOwners() {
-		$func = $this->loadRefFunction();
+  function getOwners() {
+    $func = $this->loadRefFunction();
     $etab = $func->loadRefGroup();
     return array(
-		  "prat" => $this,
-			"func" => $func,
-			"etab" => $etab,
-		);
-	}
+      "prat" => $this,
+      "func" => $func,
+      "etab" => $etab,
+    );
+  }
 
   /**
    * Lie une numéro de lecture de CPS au Mediuser
@@ -610,16 +610,16 @@ class CMediusers extends CMbObject {
 
   function loadListFromType($user_types = null, $permType = PERM_READ, $function_id = null, $name = null, $secondary = false) {
     
-  	$where = array();
+    $where = array();
     $ljoin = array();
     
-  	if($function_id) {
-  		if($secondary) {
-  			$ljoin["secondary_function"] = "`users_mediboard`.`user_id` = `secondary_function`.`user_id`";
-  			$where[] = "`users_mediboard`.`function_id` = '$function_id' OR `secondary_function`.`function_id` = '$function_id'";
-  		} else {
+    if($function_id) {
+      if($secondary) {
+        $ljoin["secondary_function"] = "`users_mediboard`.`user_id` = `secondary_function`.`user_id`";
+        $where[] = "`users_mediboard`.`function_id` = '$function_id' OR `secondary_function`.`function_id` = '$function_id'";
+      } else {
         $where["users_mediboard.function_id"] = "= '$function_id'";
-  		}
+      }
     }
     
     $where["users_mediboard.actif"] = "= '1'";
@@ -796,11 +796,11 @@ class CMediusers extends CMbObject {
   function isMedical() {
     return $this->isFromType(array("Administrator", "Chirurgien", "Anesthésiste", "Infirmière", "Médecin", "Kinesitherapeute", "Sage Femme"));
   }
-	
-	function isExecutantPrescription() {
-	  return $this->isFromType(array("Infirmière", "Aide soignant", "Kinesitherapeute"));
+  
+  function isExecutantPrescription() {
+    return $this->isFromType(array("Infirmière", "Aide soignant", "Kinesitherapeute"));
   }
-	
+  
   /**
    * Check whether user is a kine
    * @return bool
@@ -919,16 +919,16 @@ class CMediusers extends CMbObject {
     $this->loadRefFunction()->loadRefGroup();
     return $this->_basic_info = array (
       'id'   => $this->_id,
-			'guid' => $this->_guid,
+      'guid' => $this->_guid,
       'view' => $this->_view,
       'function' => array (
         'id' => $this->_ref_function->_id,
-				'guid'  => $this->_ref_function->_guid,
+        'guid'  => $this->_ref_function->_guid,
         'view'  => $this->_ref_function->_view,
         'color' => $this->_ref_function->color
       ),
       'group' => array (
-			  'guid' => $this->_ref_function->_ref_group->_guid,
+        'guid' => $this->_ref_function->_ref_group->_guid,
         'id'   => $this->_ref_function->_ref_group->_id,
         'view' => $this->_ref_function->_ref_group->_view,
       )
@@ -941,7 +941,7 @@ class CMediusers extends CMbObject {
     $this->_user_username = $lp;
     $this->_user_password = $lp;
   }
-	
+  
   function getNbJoursPlanningSSR($date){
     $sunday = mbDate("next sunday", mbDate("- 1 DAY", $date));
     $saturday = mbDate("-1 DAY", $sunday);
@@ -966,7 +966,17 @@ class CMediusers extends CMbObject {
     }
     return $nb_days;
   }
-	
+  
+  function getAutocompleteList($keywords, $where = null, $limit = null) {
+    $list = parent::getAutocompleteList($keywords, $where, $limit);
+    
+    foreach($list as $_mediuser) {
+      $_mediuser->loadRefFunction();
+    }
+    
+    return $list;
+  }
+  
   /**
    * Construit le tag Mediusers en fonction des variables de configuration
    * @param $group_id Permet de charger l'id externe d'un Mediuser pour un établissement donné si non null

@@ -31,7 +31,7 @@ class CExchangeSource extends CMbObject {
   var $password     = null;
   var $type_echange = null;
   var $active       = null;
-	
+  
   // Behaviour Fields
   var $_client            = null;
   var $_data              = null;
@@ -51,8 +51,8 @@ class CExchangeSource extends CMbObject {
     $specs["host"]           = "text notNull";
     $specs["user"]           = "str";
     $specs["password"]       = "password revealable";
-		$specs["type_echange"]   = "str protected";
-		$specs["active"]         = "bool default|1 notNull";
+    $specs["type_echange"]   = "str protected";
+    $specs["active"]         = "bool default|1 notNull";
     
     $specs["_incompatible"]  = "bool";
     $specs["_reachable"]     = "enum list|0|1|2 default|0";
@@ -60,9 +60,17 @@ class CExchangeSource extends CMbObject {
     
     return $specs;
   }
+  
+  static $_child_classes = array(
+    "CSourceFileSystem",
+    "CSourceFTP",
+    "CSourceSMTP",
+    "CSourceSOAP",
+  );
    
   static function getExchangeClasses() {
-    return CApp::getChildClasses("CExchangeSource");
+    //return CApp::getChildClasses("CExchangeSource");
+    return self::$_child_classes;
   }
   
   static function getObjects($name, $type = null, $type_echange = null) {
@@ -74,7 +82,7 @@ class CExchangeSource extends CMbObject {
     foreach (self::getExchangeClasses() as $_class) {
       $exchange_objects[$_class] = new $_class;
       $exchange_objects[$_class]->name = $name;
-			$exchange_objects[$_class]->type_echange = $type_echange;
+      $exchange_objects[$_class]->type_echange = $type_echange;
     }
     
     return $exchange_objects;
@@ -108,7 +116,7 @@ class CExchangeSource extends CMbObject {
     }
 
     $source->name = $name;
-		$source->type_echange = $type_echange;
+    $source->type_echange = $type_echange;
     $source->_wanted_type = $type;
     $source->_allowed_instances = self::getObjects($name, $type, $type_echange);
     return $source;
