@@ -32,6 +32,8 @@ if ($user->_is_praticien){
   $prat = $user;
 }
 
+global $smarty;
+
 // Création du template
 $smarty = new CSmartyDP();
 
