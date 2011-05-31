@@ -60,17 +60,9 @@ class CExchangeSource extends CMbObject {
     
     return $specs;
   }
-  
-  static $_child_classes = array(
-    "CSourceFileSystem",
-    "CSourceFTP",
-    "CSourceSMTP",
-    "CSourceSOAP",
-  );
-   
+
   static function getExchangeClasses() {
-    //return CApp::getChildClasses("CExchangeSource");
-    return self::$_child_classes;
+    return self::$typeToClass;
   }
   
   static function getObjects($name, $type = null, $type_echange = null) {
