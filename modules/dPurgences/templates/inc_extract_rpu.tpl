@@ -42,7 +42,7 @@
   </tr>
   <tr>
     <td>
-      <button class="tick" type="button" id="encrypt_rpu" onclick="encrypt('rpu')">Chiffrer</button>
+      <button class="tick" type="button" id="encrypt_rpu" onclick="encrypt('rpu')">Générer le fichier</button>
     </td>
     <td id="td_encrypt_rpu">
       

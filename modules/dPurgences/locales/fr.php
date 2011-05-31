@@ -50,6 +50,7 @@ $locales['CExtractPassages.type.rpu'] = 'RPU';
 $locales['CExtractPassages.type.urg'] = 'URG';
 $locales['CLit-back-affectations_rpu'] = 'Urgences affectées';
 $locales['CLit-back-affectations_rpu.empty'] = 'Box non utilisé';
+$locales['COrumipSender'] = 'Oru-Mip';
 $locales['COscourSender'] = 'Oscour';
 $locales['COuralSender'] = 'Oural';
 $locales['CRPU'] = 'Résumé de passage aux urgences';

@@ -70,7 +70,7 @@ class CRPUXMLDocument extends CMbXMLDocument {
     parent::save($this->documentfinalfilename);
   }
   
-  function addRPU($elParent, $mbObject) { 
+  function addRPU($elParent, CRPU $mbObject) { 
     $this->addElement($elParent, "CP", $mbObject->_cp);
     $this->addElement($elParent, "COMMUNE", $mbObject->_ville);
     $this->addElement($elParent, "NAISSANCE", mbTransformTime($mbObject->_naissance, null, "%d/%m/%Y"));
@@ -87,7 +87,16 @@ class CRPUXMLDocument extends CMbXMLDocument {
     }
     $this->addElement($elParent, "TRANSPORT", strtoupper($mbObject->transport));
     $this->addElement($elParent, "TRANSPORT_PEC", strtoupper($mbObject->pec_transport));
-    $this->addElement($elParent, "MOTIF", htmlspecialchars($mbObject->motif));
+    
+    $motif = htmlspecialchars($mbObject->motif);
+    if (CAppUI::conf("dPurgences gerer_circonstance")) {
+      $module_orumip = CModule::getActive("orumip");
+      $orumip_active = $module_orumip && $module_orumip->mod_active;
+      
+      $motif = $orumip_active ? $mbObject->circonstance : htmlspecialchars($mbObject->_libelle_circonstance); 
+    }
+    
+    $this->addElement($elParent, "MOTIF", $motif);
     $this->addElement($elParent, "GRAVITE", strtoupper($mbObject->ccmu));
 
     $this->addElement($elParent, "DP", $mbObject->_DP[0].preg_replace("/[^\d]/", "", substr($mbObject->_DP, 1)));

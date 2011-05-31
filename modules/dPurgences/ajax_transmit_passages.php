@@ -8,9 +8,7 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
  */
 
-global $can;
-
-$can->needsAdmin();
+CCanDo::checkAdmin();
 
 $extract_passages_id = CValue::get("extract_passages_id");
 
@@ -22,7 +20,6 @@ $rpuSender = $extractPassages->getRPUSender();
 
 if ($extract_passages_id) {
   $extractPassages->load($extract_passages_id);
-  
   if (!$extractPassages->_id) {
     CAppUI::stepAjax("Impossible de charger le document XML.", UI_MSG_ERROR);
   }
