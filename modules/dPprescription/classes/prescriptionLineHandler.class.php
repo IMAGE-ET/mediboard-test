@@ -28,14 +28,18 @@ class CPrescriptionLineHandler extends CMbObjectHandler {
       $prescription_sejour_id = $sejour->_ref_prescriptions["sejour"]->_id;
     }
     // Chargement des lignes de medicaments et d'elements définies en fonction de $param
-    $where["prescription_id"] = " = '$prescription_sejour_id'";
-    $where[] = "jour_decalage IS NOT NULL OR jour_decalage_fin IS NOT NULL";
+    $whereElt["prescription_id"] = " = '$prescription_sejour_id'";
+		$whereElt[] = "jour_decalage IS NOT NULL OR jour_decalage_fin IS NOT NULL";
+    
+		$whereMed["prescription_id"] = " = '$prescription_sejour_id'";
+    $whereMed[] = "jour_decalage IS NOT NULL OR jour_decalage_fin IS NOT NULL OR
+		            (jour_decalage IS NULL AND jour_decalage_fin IS NULL AND duree IS NULL)";
     
     $line_medicament = new CPrescriptionLineMedicament();
     $line_element = new CPrescriptionLineElement();
     $lines = array();
-    $lines["med"] = $line_medicament->loadList($where);
-    $lines["elt"] = $line_element->loadList($where);
+    $lines["med"] = $line_medicament->loadList($whereMed);
+    $lines["elt"] = $line_element->loadList($whereElt);
     
     $prescription_line_mix = new CPrescriptionLineMix();
     $wherePerf = array();
@@ -50,7 +54,7 @@ class CPrescriptionLineHandler extends CMbObjectHandler {
     if (!$this->isHandled($mbObject)) {
       return;
     }
-    
+	  
 		// On desactive le handler des alertes
     CMbObject::ignoreHandler("CPrescriptionAlerteHandler");
 		
@@ -76,8 +80,6 @@ class CPrescriptionLineHandler extends CMbObjectHandler {
       return;
     }
 		
-		
-		
    // On charge toutes les lignes qui sont définies en fonction de l'entree du sejour
    if($mbObject->_class_name == "COperation"){
      $mbObject->loadRefSejour();
@@ -87,16 +89,27 @@ class CPrescriptionLineHandler extends CMbObjectHandler {
    }  
               
    $lines = $this->getLines($sejour);
-     
+  
    foreach($lines as $type => $lines_by_type){
      foreach($lines_by_type as $_line){
      	 $_line->countLockedPlanif();
-			 
+       
+			 // Modification des lignes de medicaments non issues d'un protocole
+			 if($_line instanceof CPrescriptionLineMedicament && !$_line->jour_decalage && !$_line->jour_decalage_fin){
+     	 	 if($_line->_count_locked_planif == 0 && !$_line->inscription){
+	         $_line->removePlanifSysteme();
+	         if(!$_line->substitution_line_id && $_line->substitution_active){
+	           $_line->calculPlanifSysteme();
+	         }
+	       }
+				 continue;
+			 }
+       
 			 // Si la ligne a des administrations liées a des planif systemes, on ne passe pas dans le handler
 			 if($_line->_count_locked_planif > 0){
 			 	 continue;
 			 }
-			
+			 
        if(!$_line->decalage_line){
          $_line->decalage_line = 0;
        }
@@ -227,6 +240,7 @@ class CPrescriptionLineHandler extends CMbObjectHandler {
 			      }
 	        }
 				}
+				
         $_line->store();
       }
     }
