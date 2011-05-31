@@ -21,6 +21,10 @@ Main.add(function(){
 });
 </script>
 
+<button class="new" onclick="showModalDialog('?m=dPdeveloppement&a=iframe_test&dialog=1', null, 'dialogHeight:600px;dialogWidth:900px;center:yes;resizable:no;scroll:no;')">showModalDialog</button>
+<button class="new" onclick="open('?m=dPdeveloppement&a=iframe_test&dialog=1', 'test', '')">popup</button>
+
+<hr />
 <button class="change" onclick="$$('body')[0].toggleClassName('touchscreen')">Touchscreen</button>
 
 <h1>header 1</h1>
