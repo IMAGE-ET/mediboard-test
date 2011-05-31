@@ -41,6 +41,7 @@
     </th>
   </tr>
 </table>
+
 {{mb_include module=dPplanningOp template=CSejour_complete no_header=true}}
 
 {{if $dossier|@count}}
@@ -52,6 +53,16 @@
 <br style="page-break-after: always;" />
 
 <table class="tbl">
+  {{if $offline}}
+    <thead>
+      <tr>
+        <th class="title">
+          {{$sejour->_view}}
+          {{mb_include module=dPplanningOp template=inc_vw_numdos num_dossier=$sejour->_num_dossier}}
+        </th>
+      </tr>
+    </thead>
+  {{/if}}
   <tr>
     <th class="title">
       Prescription

@@ -1,5 +1,17 @@
+{{mb_default var=offline value=0}}
 {{unique_id var=uniq_ditto}}
+
 <table class="tbl" style="width: 100%;">
+  {{if $offline && isset($sejour|smarty:nodefaults)}}
+    <thead>
+      <tr>
+        <th class="title" colspan="19">
+          {{$sejour->_view}}
+          {{mb_include module=dPplanningOp template=inc_vw_numdos num_dossier=$sejour->_num_dossier}}
+        </th>
+      </tr>
+    </thead>
+  {{/if}}
   <tbody>
     {{foreach from=$csteByTime item=_cstes_dates}}
       <tr>

@@ -1,4 +1,16 @@
+{{mb_default var=offline value=0}}
+
 <table class="tbl">
+  {{if $offline}}
+    <thead>
+      <tr>
+        <th class="title" colspan="7">
+          {{$object->_view}}
+          {{mb_include module=dPplanningOp template=inc_vw_numdos num_dossier=$object->_num_dossier}}
+        </th>
+      </tr>
+    </thead>
+  {{/if}}
   <tr>
     <th colspan="7" class="title">
 			{{if !$readonly}}

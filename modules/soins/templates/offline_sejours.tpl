@@ -24,6 +24,9 @@
       overflow-x: hidden;
       overflow-y: scroll;
     }
+    thead {
+      display: none;
+    }
   }
 </style>
 <script type="text/javascript">
