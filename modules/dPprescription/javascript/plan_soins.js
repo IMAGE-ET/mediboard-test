@@ -71,8 +71,8 @@ PlanSoins = {
 	    return;
 	  }
 	  
-	  // On ne permet pas de faire des planifications sur des lignes de medicament
-	  if(!planification_id && (object_class == "CPrescriptionLineMedicament") && ($V(document.mode_dossier_soin.mode_dossier) == "planification")){
+	  // On ne permet pas de faire des planifications sur des lignes de medicament    
+		if(!planification_id && (object_class == "CPrescriptionLineMedicament") && ($V(document.mode_dossier_soin.mode_dossier) == "planification") && (PlanSoins.manual_planif == 0)){
 	    return;
 	  }
 	  
