@@ -20,7 +20,8 @@ CPreferences::$modules["common"] = array (
   "showLastUpdate",
   "directory_to_watch",
   "debug_yoplet",
-  "autocompleteDelay"
+  "autocompleteDelay",
+	"showCounterTip"
 );  
   
 CPreferences::$modules["system"] = array (

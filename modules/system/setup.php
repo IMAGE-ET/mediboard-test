@@ -771,6 +771,9 @@ class CSetupsystem extends CSetup {
     
     $this->addPrefQuery("moduleFavicon", "0");
     
-    $this->mod_version = "1.0.74";
+		$this->makeRevision("1.0.74");
+		$this->addPrefQuery("showCounterTip", "1");
+		
+    $this->mod_version = "1.0.75";
   }
 }

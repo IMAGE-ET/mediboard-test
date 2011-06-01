@@ -110,6 +110,7 @@ Preferences.onSubmit = function(form) {
   {{mb_include template=inc_pref spec=bool var=touchscreen}}
   {{mb_include template=inc_pref spec=enum var=tooltipAppearenceTimeout values="short|medium|long" value_locale_prefix=""}}
   {{mb_include template=inc_pref spec=enum var=autocompleteDelay values="short|medium|long" value_locale_prefix=""}}
+	{{mb_include template=inc_pref spec=bool var=showCounterTip}}
   {{mb_include template=inc_pref spec=bool var=showLastUpdate}}
   
   </tbody>

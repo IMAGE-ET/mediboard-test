@@ -1092,3 +1092,16 @@ td.td_hour_adm:hover {
 td.td_hour_adm:hover .hour_adm {
  display: inline;
 }
+
+span.countertip {
+	position: absolute; 
+	background-color: #ddd; 
+	font-size: 0.7em; 
+	margin-top: -7px; 
+	margin-left: -8px; 
+  -webkit-border-radius: 30px;
+  -moz-border-radius: 30px;
+  border-radius: 30px; 
+	border: 1px solid #888;
+	width: 10px;
+}
