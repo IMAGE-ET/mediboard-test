@@ -436,6 +436,7 @@ $locales['mod-dPurgences-tab-vw_legende'] = 'Legende';
 $locales['mod-dPurgences-tab-vw_sortie_rpu'] = 'Sortie des patients';
 $locales['mod-dPurgences-tab-vw_stats'] = 'Statistiques';
 $locales['mod-dPurgences-tab-vw_stock_order'] = 'Commandes / Réception';
+$locales['mod-ecap-tab-ajax_non_prevue'] = 'Mode création de Non prévu';
 $locales['module-dPurgences-court'] = 'Urgences';
 $locales['module-dPurgences-long'] = 'Service d\'urgences';
 $locales['pref-defaultRPUSort'] = 'Tri main courante';

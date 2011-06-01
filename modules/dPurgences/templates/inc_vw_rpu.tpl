@@ -315,16 +315,19 @@ function showEtabEntreeTransfert(mode) {
               Reconvoquer
             </button>
           {{/if}}
-          
-          {{if $conf.dPurgences.gerer_hospi == "1"}} 
-            <!-- Hospitalisation immediate, creation d'un sejour et transfert des actes dans le nouveau sejour -->
-            <form name="transfertHospi" method="post" action="?m={{$m}}" onsubmit="return confirm($T('confirm-RPU-Hospitalisation'));">
-              <input type="hidden" name="dosql" value="do_transfert_aed" />
-              <input type="hidden" name="m" value="dPurgences" />
-              <input type="hidden" name="del" value="0" />
-              <input type="hidden" name="rpu_id" value="{{$rpu->_id}}" />
-              <button class="new" type="submit">Hospitaliser</button>
-            </form>
+          {{if @$modules.ecap->mod_active}}
+            {{mb_include module=ecap template=inc_button_non_prevue patient_id=$rpu->_patient_id}}
+          {{else}}
+            {{if $conf.dPurgences.gerer_hospi == "1"}} 
+              <!-- Hospitalisation immediate, creation d'un sejour et transfert des actes dans le nouveau sejour -->
+              <form name="transfertHospi" method="post" action="?m={{$m}}" onsubmit="return confirm($T('confirm-RPU-Hospitalisation'));">
+                <input type="hidden" name="dosql" value="do_transfert_aed" />
+                <input type="hidden" name="m" value="dPurgences" />
+                <input type="hidden" name="del" value="0" />
+                <input type="hidden" name="rpu_id" value="{{$rpu->_id}}" />
+                <button class="new" type="submit">Hospitaliser</button>
+              </form>
+            {{/if}}
           {{/if}}
         {{/if}}
         <!--  Autoriser sortie du patient --> <!--  Autoriser sortie du patient et valider la sortie -->
