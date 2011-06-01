@@ -12,25 +12,31 @@ class CAccessLog extends CMbObject {
   var $accesslog_id = null;
   
   // DB Fields
-  var $module   = null;
-  var $action   = null;
-  var $period   = null;
-  var $hits     = null;
-  var $duration = null;
-  var $request  = null;
-  var $size     = null;
-  var $errors   = null;
-  var $warnings = null;
-  var $notices  = null;
+  var $module      = null;
+  var $action      = null;
+  var $period      = null;
+  var $hits        = null;
+  var $duration    = null;
+  var $processus   = null;
+  var $processor   = null;
+  var $request     = null;
+  var $peak_memory = null;
+  var $size        = null;
+  var $errors      = null;
+  var $warnings    = null;
+  var $notices     = null;
   
   // Form fields
-  var $_average_duration = 0;
-  var $_average_request  = 0;
-  var $_average_errors   = 0;
-  var $_average_warnings = 0;
-  var $_average_notices  = 0;
-  var $_average_hits     = 0;
-  var $_average_size     = 0;
+  var $_average_hits        = 0;
+  var $_average_duration    = 0;
+  var $_average_processus   = 0;
+  var $_average_processor   = 0;
+  var $_average_request     = 0;
+  var $_average_peak_memory = 0;
+  var $_average_size        = 0;
+  var $_average_errors      = 0;
+  var $_average_warnings    = 0;
+  var $_average_notices     = 0;
   
   function getSpec() {
     $spec = parent::getSpec();
@@ -42,31 +48,37 @@ class CAccessLog extends CMbObject {
 
   function getProps() {
   	$specs = parent::getProps();
-    $specs["module"]   = "str notNull";
-    $specs["action"]   = "str notNull";
-    $specs["period"]   = "dateTime notNull";
-    $specs["hits"]     = "num pos";
-    $specs["duration"] = "float";
-    $specs["request"]  = "float";
-    $specs["size"]     = "num min|0";
-    $specs["errors"]   = "num min|0";
-    $specs["warnings"] = "num min|0";
-    $specs["notices"]  = "num min|0";
+    $specs["module"]      = "str notNull";
+    $specs["action"]      = "str notNull";
+    $specs["period"]      = "dateTime notNull";
+    $specs["hits"]        = "num pos";
+    $specs["duration"]    = "float";
+    $specs["processus"]   = "float";
+    $specs["processor"]   = "float";
+    $specs["request"]     = "float";
+    $specs["peak_memory"] = "num min|0";
+    $specs["size"]        = "num min|0";
+    $specs["errors"]      = "num min|0";
+    $specs["warnings"]    = "num min|0";
+    $specs["notices"]     = "num min|0";
     return $specs;
   }
   
   function updateFormFields() {
     parent::updateFormFields();
     if ($this->hits) {
-      $this->_average_duration = $this->duration / $this->hits; // Response time
-      $this->_average_request  = $this->request  / $this->hits; // DB time
-      $this->_average_errors   = $this->errors   / $this->hits;
-      $this->_average_warnings = $this->warnings / $this->hits;
-      $this->_average_notices  = $this->notices  / $this->hits;
+      $this->_average_duration    = $this->duration    / $this->hits;
+      $this->_average_processus   = $this->processus   / $this->hits;
+      $this->_average_processor   = $this->processor   / $this->hits;
+      $this->_average_request     = $this->request     / $this->hits;
+      $this->_average_peak_memory = $this->peak_memory / $this->hits;
+      $this->_average_errors      = $this->errors      / $this->hits;
+      $this->_average_warnings    = $this->warnings    / $this->hits;
+      $this->_average_notices     = $this->notices     / $this->hits;
     }
     // If time period == 1 hour
-    $this->_average_hits = $this->hits / 60;
-    $this->_average_size = $this->size / 3600;
+    $this->_average_hits = $this->hits / 60;   // hits per min
+    $this->_average_size = $this->size / 3600; // size per sec
   }
   
   static function loadAgregation($start, $end, $groupmod = 0, $module = null) {
@@ -74,13 +86,16 @@ class CAccessLog extends CMbObject {
 			  accesslog_id, 
 				module, 
 				action,
-	      SUM(hits)     AS hits, 
-	      SUM(size)     AS size, 
-	      SUM(duration) AS duration, 
-	      SUM(request)  AS request, 
-	      SUM(errors)   AS errors, 
-	      SUM(warnings) AS warnings, 
-	      SUM(notices)  AS notices, 
+	      SUM(hits)        AS hits,
+	      SUM(size)        AS size,
+	      SUM(duration)    AS duration, 
+        SUM(duration)    AS processus, 
+        SUM(duration)    AS processor, 
+        SUM(request)     AS request,
+        SUM(peak_memory) AS peak_memory,
+	      SUM(errors)      AS errors,
+	      SUM(warnings)    AS warnings,
+	      SUM(notices)     AS notices,
 	      0 AS grouping
 	    FROM access_log
       USE INDEX (period)
@@ -107,15 +122,21 @@ class CAccessLog extends CMbObject {
 				`module`, 
 				`action`, 
 				`period`,
-        AVG(duration/hits) AS _average_duration,
-        AVG(request/hits)  AS _average_request,
-		    SUM(hits)     AS hits, 
-		    SUM(size)     AS size, 
-		    SUM(duration) AS duration, 
-		    SUM(request)  AS request, 
-		    SUM(errors)   AS errors, 
-		    SUM(warnings) AS warnings, 
-		    SUM(notices)  AS notices,
+        AVG(duration/hits)    AS _average_duration,
+        AVG(processus/hits)   AS _average_processus,
+        AVG(processor/hits)   AS _average_processor,
+        AVG(request/hits)     AS _average_request,
+        AVG(peak_memory/hits) AS _average_peak_memory,
+		    SUM(hits)             AS hits, 
+		    SUM(size)             AS size, 
+		    SUM(duration)         AS duration, 
+        SUM(processus)        AS processus, 
+        SUM(processor)        AS processor, 
+		    SUM(request)          AS request, 
+        SUM(peak_memory)      AS peak_memory, 
+		    SUM(errors)           AS errors, 
+		    SUM(warnings)         AS warnings, 
+		    SUM(notices)          AS notices,
 		  DATE_FORMAT(`period`, '$period_format') AS `gperiod`
 		  FROM `access_log`
 		  USE INDEX (period)
@@ -129,31 +150,5 @@ class CAccessLog extends CMbObject {
     $log = new self;
     return $log->loadQueryList($query);
 	}
-  
-  static function loadAvgAgregation($start, $end, $groupmod = 0, $module = null) {
-    $query = "SELECT 
-        accesslog_id, 
-        module, 
-        action,
-        AVG(duration/hits) AS hits,
-        0 AS grouping
-      FROM access_log
-      USE INDEX (period)
-      WHERE period BETWEEN '$start' AND '$end' ";
-            
-    if ($module && !$groupmod) {
-      $query .= "AND module = '$module' ";
-    }
-    
-    switch ($groupmod) {
-      case 2 :  $query .= "GROUP BY grouping "; break;
-      case 1 :  $query .= "GROUP BY module ORDER BY module "; break;
-      case 0 :  $query .= "GROUP BY module, action ORDER BY module, action "; break;
-
-    }
-   
-    $log = new self;
-    return $log->loadQueryList($query);
-  }
 }
 ?>

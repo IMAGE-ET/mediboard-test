@@ -106,6 +106,7 @@ Main.add(function () {
         <select name="left_mode" onchange="this.form.submit()">
           <option value="request_time" {{if $left_mode == 'request_time'}}selected="selected"{{/if}}>Temps de réponse</option>
           <option value="errors" {{if $left_mode == 'errors'}}selected="selected"{{/if}}>Erreurs</option>
+          <option value="memory_peak" {{if $left_mode == 'memory_peak'}}selected="selected"{{/if}}>Pics de mémoire</option>
         </select>
         <select name="left_sampling" onchange="this.form.submit()">
           <option value="total" {{if $left_sampling == 'total'}}selected="selected"{{/if}}>Total</option>

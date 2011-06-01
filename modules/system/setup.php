@@ -771,9 +771,18 @@ class CSetupsystem extends CSetup {
     
     $this->addPrefQuery("moduleFavicon", "0");
     
-		$this->makeRevision("1.0.74");
-		$this->addPrefQuery("showCounterTip", "1");
-		
-    $this->mod_version = "1.0.75";
+    $this->makeRevision("1.0.74");
+    
+    $this->makeRevision("1.0.75");
+    
+    $this->addPrefQuery("showCounterTip", "1");
+    
+    $query = "ALTER TABLE `access_log`
+              ADD `processus` FLOAT,
+              ADD `processor` FLOAT,
+              ADD `peak_memory` INT (11) UNSIGNED;";
+    $this->addQuery($query);
+    
+    $this->mod_version = "1.0.76";
   }
 }

@@ -214,6 +214,23 @@ if (!function_exists('memory_get_peak_usage')) {
   }
 }
 
+if (!function_exists('getrusage')) {
+  /**
+   * Gets the current resource usages
+   * 
+   * @param bool $who If who is 1, getrusage will be called with RUSAGE_CHILDREN
+   * 
+   * @return array Results
+   * @link http://php.net/memory_get_peak_usage
+   */
+  function getrusage($who = 0) {
+    return array(
+      "ru_utime.tv_usec" => -1,
+      "ru_stime.tv_usec" => -1
+    );
+  }
+}
+
 if (!function_exists('timezone_identifiers_list')) {
 	/**
 	 * Returns numerically index array with all timezone identifiers

@@ -51,11 +51,13 @@ function graphAccessLog($module_name, $action_name, $startx, $endx, $interval = 
 	
 	$logs = CAccessLog::loadPeriodAggregation($startx, $endx, $period_format, $module_name, $action_name);
   
-	$duration = array();
-	$request = array();
-  $errors = array();
-  $warnings = array();
-  $notices = array();
+	$duration  = array();
+  $processus = array();
+  $processor = array();
+	$request   = array();
+  $errors    = array();
+  $warnings  = array();
+  $notices   = array();
   
   $hits = array();
   $size = array();
@@ -63,22 +65,28 @@ function graphAccessLog($module_name, $action_name, $startx, $endx, $interval = 
   $errors_total = 0;
 	foreach($datax as $x) {
 	  // Needed
-    $duration[$x[0]] = array($x[0], 0);
-    $request[$x[0]]  = array($x[0], 0);
-    $errors[$x[0]]   = array($x[0], 0);
-    $warnings[$x[0]] = array($x[0], 0);
-    $notices[$x[0]]  = array($x[0], 0);
+    $duration[$x[0]]    = array($x[0], 0);
+    $processus[$x[0]]   = array($x[0], 0);
+    $processor[$x[0]]   = array($x[0], 0);
+    $request[$x[0]]     = array($x[0], 0);
+    $peak_memory[$x[0]] = array($x[0], 0);
+    $errors[$x[0]]      = array($x[0], 0);
+    $warnings[$x[0]]    = array($x[0], 0);
+    $notices[$x[0]]     = array($x[0], 0);
     
     $hits[$x[0]] = array($x[0], 0);
     $size[$x[0]] = array($x[0], 0);
     
 	  foreach($logs as $log) {
 	    if($x[1] == mbTransformTime(null, $log->period, $period_format)) {
-	      $duration[$x[0]] = array($x[0], $log->{($left[1] == 'mean' ? '_average_' : '').'duration'});
-	      $request[$x[0]]  = array($x[0], $log->{($left[1] == 'mean' ? '_average_' : '').'request'});
-        $errors[$x[0]]   = array($x[0], $log->{($left[1] == 'mean' ? '_average_' : '').'errors'});
-        $warnings[$x[0]] = array($x[0], $log->{($left[1] == 'mean' ? '_average_' : '').'warnings'});
-        $notices[$x[0]]  = array($x[0], $log->{($left[1] == 'mean' ? '_average_' : '').'notices'});
+	      $duration[$x[0]]    = array($x[0], $log->{($left[1] == 'mean' ? '_average_' : '').'duration'});
+        $processus[$x[0]]   = array($x[0], $log->{($left[1] == 'mean' ? '_average_' : '').'processus'});
+        $processor[$x[0]]   = array($x[0], $log->{($left[1] == 'mean' ? '_average_' : '').'processor'});
+        $request[$x[0]]     = array($x[0], $log->{($left[1] == 'mean' ? '_average_' : '').'request'});
+	      $peak_memory[$x[0]] = array($x[0], $log->{($left[1] == 'mean' ? '_average_' : '').'peak_memory'});
+        $errors[$x[0]]      = array($x[0], $log->{($left[1] == 'mean' ? '_average_' : '').'errors'});
+        $warnings[$x[0]]    = array($x[0], $log->{($left[1] == 'mean' ? '_average_' : '').'warnings'});
+        $notices[$x[0]]     = array($x[0], $log->{($left[1] == 'mean' ? '_average_' : '').'notices'});
         $errors_total += $log->_average_errors + $log->_average_warnings + $log->_average_notices;
         
         $hits[$x[0]] = array($x[0], $log->{($right[1] == 'mean' ? '_average_' : '').'hits'} / ($right[1] == 'mean' ? $hours : 1));
@@ -108,7 +116,7 @@ function graphAccessLog($module_name, $action_name, $startx, $endx, $interval = 
 	  ),
 	  'yaxis' => array(
 	    'min' => 0,
-      'title' => utf8_encode(($left[0] == 'request_time' ? 'Temps de réponse' : 'Erreurs') . ($left[1] == 'mean' ? ' (par hit)' : '')),
+      'title' => utf8_encode(($left[0] == 'request_time' ? 'Temps de réponse' : $left[0] == 'errors' ? 'Erreurs' : 'Mémoire') . ($left[1] == 'mean' ? ' (par hit)' : '')),
 	    'autoscaleMargin' => 1
 	  ),
 	  'y2axis' => array(
@@ -161,13 +169,25 @@ function graphAccessLog($module_name, $action_name, $startx, $endx, $interval = 
     );
       
     $series[] = array(
+     'label' => 'Process (s)',
+     'data' => $processus,
+     'lines' => array('show' => true),
+    );
+      
+    $series[] = array(
+     'label' => 'CPU (s)',
+     'data' => $processor,
+     'lines' => array('show' => true),
+    );
+      
+    $series[] = array(
      'label' => 'DB (s)',
      'data' => $request,
      'lines' => array('show' => true),
     );
   }
   
-  else {
+  elseif ($left[0] == 'errors') {
     if ($errors_total == 0) {
       $options['yaxis']['max'] = 1;
     }
@@ -190,6 +210,14 @@ function graphAccessLog($module_name, $action_name, $startx, $endx, $interval = 
      'label' => 'Notices',
      'data' => $notices,
      'color' => 'yellow',
+     'lines' => array('show' => true),
+    );
+  }
+  
+  else {
+    $series[] = array(
+     'label' => 'Pic (byte)',
+     'data' => $peak_memory,
      'lines' => array('show' => true),
     );
   }
