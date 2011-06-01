@@ -336,7 +336,7 @@ class CSipObjectHandler extends CMbObjectHandler {
     }
     // Traitement Séjour
     else if ($mbObject instanceof CSejour) { 
-      return;
+      
       $sejour = $mbObject;
 
       $sejour_eliminee = new CSejour();
@@ -352,6 +352,7 @@ class CSipObjectHandler extends CMbObjectHandler {
       if (!CAppUI::conf('sip server')) {
         $mbObject->_fusion = array();
         foreach (CGroups::loadGroups() as $_group) {
+          
           if ($mbObject->_hprim_initiateur_group_id == $_group->_id) {
             continue;
           }
@@ -359,14 +360,14 @@ class CSipObjectHandler extends CMbObjectHandler {
           $sejour->_num_dossier = null;
           $sejour->loadNumDossier($_group->_id);
           $sejour1_nda = $sejour->_num_dossier;
-          
+
           $sejour_eliminee->_num_dossier = null;
           $sejour_eliminee->loadNumDossier($_group->_id);
           $sejour2_nda = $sejour_eliminee->_num_dossier;
           
           // Passage en trash des NDA des séjours
-          $tap_NDA = CPatient::getTagIPP($_group->_id);
-          
+          $tap_NDA = CSejour::getTagNumDossier($_group->_id);
+
           $id400Sejour               = new CIdSante400();
           $id400Sejour->tag          = $tap_NDA;
           $id400Sejour->object_class = "CSejour";
@@ -464,7 +465,6 @@ class CSipObjectHandler extends CMbObjectHandler {
     }
     // Traitement Séjour
     else if ($mbObject instanceof CSejour) {
-      return;
       $sejour = $mbObject;
       $sejour->check();
       $sejour->updateFormFields();

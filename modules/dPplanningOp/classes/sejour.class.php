@@ -1413,14 +1413,18 @@ class CSejour extends CCodable implements IPatientRelated {
     return str_replace('$g', $group_id, $tag_dossier);
   }
   
-  function loadNumDossier() {
+  /**
+   * Charge le NDA du séjour pour l'établissement courant
+   * @param $group_id Permet de charger le NDA pour un établissement donné si non null
+   */
+  function loadNumDossier($group_id = null) {
     // Objet inexistant
     if (!$this->_id) {
       return "-";
     }
     
     // Aucune configuration de numéro de dossier
-    if (null == $tag_dossier = $this->getTagNumDossier()) {
+    if (null == $tag_dossier = $this->getTagNumDossier($group_id)) {
       $this->_num_dossier = str_pad($this->_id, 6, "0", STR_PAD_LEFT);
       return;
     }  
