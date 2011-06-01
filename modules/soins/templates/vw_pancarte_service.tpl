@@ -144,7 +144,7 @@ Main.add(function () {
 	  <tr>
 	    <th rowspan="2" class="title narrow">Patient</th>
 	    <th rowspan="2" class="title narrow">Lit</th>
-	    <th rowspan="2" class="title narrow">Praticien</th>
+	    <th rowspan="2" class="title narrow">Prat.</th>
 	     {{foreach from=$count_composition_dossier key=_date item=_hours_by_moment}}
          {{foreach from=$_hours_by_moment key=moment_journee item=_count}}
 				
@@ -168,7 +168,7 @@ Main.add(function () {
 	      {{foreach from=$_hours_by_moment key=moment_journee item=_dates}}
 	         {{foreach from=$_dates key=_date_reelle item=_hours}}
 	           {{foreach from=$_hours key=_heure_reelle item=_hour}}
-	             <th>{{$_hour}}h</th>   
+	             <th style="font-size: 0.8em;">{{$_hour}}h</th>   
 		        {{/foreach}}
 		      {{/foreach}}
 		    {{/foreach}} 

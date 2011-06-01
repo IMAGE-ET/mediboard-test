@@ -9,7 +9,8 @@
    </a>
 </td>
 <td>
-  {{$_prescription->_ref_object->_ref_curr_affectation->_ref_lit->_view}}
+	{{$_prescription->_ref_object->_ref_curr_affectation->_ref_lit->_ref_chambre->_view}}
+  {{$_prescription->_ref_object->_ref_curr_affectation->_ref_lit->_shortview}}
 </td>
 <td>
   <div class="mediuser" style="border-color: #{{$_prescription->_ref_praticien->_ref_function->color}};">
@@ -37,9 +38,9 @@
                 <img src="{{$images.$chapitre}}" 
 						 	  {{if $_date_hour <= $smarty.now|date_format:"%Y-%m-%d %H:%M:%S"}}
 						 		  {{if @$alertes.$_prescription_id.$_date_hour.$chapitre == '1'}}
-	                  style="border-bottom: 3px solid {{if !@$nb_adm.$_prescription_id.$_date_hour.$chapitre}}red{{else}}#FB4{{/if}}; height: 100%;"
+	                  style="border-bottom: 3px solid {{if !@$nb_adm.$_prescription_id.$_date_hour.$chapitre}}red{{else}}#FB4{{/if}}; height: 13px; margin: -1px;"
 	                {{else}}
-	                  style="border-bottom: 3px solid #0F0; height: 100%;"
+	                  style="border-bottom: 3px solid #0F0; height: 13px; margin: -1px;"
 	                {{/if}}
 							  {{/if}} />
               {{/foreach}}
