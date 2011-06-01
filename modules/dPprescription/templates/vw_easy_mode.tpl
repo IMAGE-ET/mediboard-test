@@ -16,15 +16,20 @@
  
 <script type="text/javascript">
 // Ajout de tous les elements d'une categorie
-function addCategorie(categorie_id, oTokenField){
+function addCategorie(button, categorie_id, oTokenField){
+  var action = button.hasClassName('tick') ? 'add' : 'remove';
+	button.toggleClassName('tick').toggleClassName('remove');
+	
   // Parcours de tous les boutons
   $$('input.cat-'+categorie_id).each( function(oCheckbox) {
-    // Si element pas encore selectionné
-    if(!oCheckbox.checked){
-      var id = oCheckbox.get("element_id");
-      oCheckbox.checked = true;
-      oTokenField.add(id);
-    }
+	  var id = oCheckbox.get("element_id");
+    if(action == 'add'){
+		  oCheckbox.checked = true;
+	    oTokenField.add(id);
+	  } else {
+		  oCheckbox.checked = false;
+      oTokenField.remove(id);
+		}
   }); 
 }
 
@@ -258,8 +263,8 @@ Main.add( function(){
           <th colspan="{{$numCols*2}}">
             {{assign var=categorie_id value=$categorie->_id}}
             <button class="cat tick" title="Ajouter cet élément"
-                    style="float: right; margin: -1px;" onclick="addCategorie('{{$categorie->_id}}',oEltField);">
-              Ajouter tous les éléments de la catégorie
+                    style="float: right; margin: -1px;" onclick="addCategorie(this, '{{$categorie->_id}}',oEltField);">
+              Tous les éléments
             </button>
             
             {{$categorie->_view}}
