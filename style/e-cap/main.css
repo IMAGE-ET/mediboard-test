@@ -450,3 +450,39 @@ fieldset legend {
 fieldset legend {
   background-color: #ddd;
 }
+
+/* Shadow for clearer white fonts */
+
+#menubar a.textSelected {
+  text-shadow: 1px 1px 0 #fff; 
+}
+
+#menubar a.textNonSelected {
+  text-shadow: 1px 1px 0 #000; 
+}
+
+#menubar a:hover {
+  text-shadow: none; 
+}
+
+table.tabmenu td a {
+  text-shadow: 1px 1px 0 #000;
+}
+
+table.tabmenu td.selected a {
+  text-shadow: none;
+}
+
+ul.control_tabs li a, 
+ul.control_tabs_vertical li a {
+  text-shadow: 1px 1px 0 #000;
+}
+
+ul.control_tabs li a.active, 
+ul.control_tabs_vertical li a.active {
+  text-shadow: none;
+}
+
+table.main th.title {
+  text-shadow: 1px 1px 0 #000;
+}
