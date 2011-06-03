@@ -61,6 +61,7 @@ Main.add(function() {
   <input type="hidden" name="callback" value="after_edit_modele_etiq" />
   <input type="hidden" name="del" value="0" />
   {{mb_key object=$modele_etiquette}}
+  <input type="hidden" name="group_id" value="{{$modele_etiquette->group_id}}" />
   
   <table class="form">
   {{if $modele_etiquette->_id}}

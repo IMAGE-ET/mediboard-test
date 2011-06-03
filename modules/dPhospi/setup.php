@@ -320,12 +320,22 @@ class CSetupdPhospi extends CSetup {
     
 		$this->makeRevision("0.40");
 		$query = "ALTER TABLE `modele_etiquette`
-		          ADD texte_2 TEXT AFTER texte,
-							ADD texte_3 TEXT AFTER texte_2,
-							ADD texte_4 TEXT AFTER texte_3;";
+		  ADD texte_2 TEXT AFTER texte,
+			ADD texte_3 TEXT AFTER texte_2,
+			ADD texte_4 TEXT AFTER texte_3;";
 	  $this->addQuery($query);
 		
-    $this->mod_version = "0.41";
+	  $this->makeRevision("0.41");
+	  $query = "ALTER TABLE `modele_etiquette`
+	    ADD `group_id` INT (11) UNSIGNED;";
+	  $this->addQuery($query);
+	  
+	  $query = "UPDATE `modele_etiquette`
+	    SET `group_id` = '".CGroups::loadCurrent()->_id."'
+	    WHERE `group_id` IS NULL;";
+	  $this->addQuery($query);
+	  
+    $this->mod_version = "0.42";
   }
 }
 ?>

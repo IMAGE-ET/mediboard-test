@@ -98,6 +98,7 @@ class CGroups extends CMbObject {
     $backProps["destinataires_hprim21"]   = "CDestinataireHprim21 group_id";
     $backProps["senders_ftp"]             = "CSenderFTP group_id";
     $backProps["view_sender_sources"]     = "CViewSenderSource group_id";
+    $backProps["modeles_etiquette"]      = "CModeleEtiquette group_id";
     
     return $backProps;
   }

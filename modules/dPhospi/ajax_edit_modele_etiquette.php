@@ -12,13 +12,19 @@ CCanDo::checkEdit();
 $modele_etiquette_id = CValue::getOrSession("modele_etiquette_id",'');
 
 $modele_etiquette = new CModeleEtiquette;
+$group_id = CGroups::loadCurrent()->_id;
 
-if ($modele_etiquette_id)
+if ($modele_etiquette_id) {
   $modele_etiquette->load($modele_etiquette_id);
-else
-  // Chargement des valeurs par défaut si pas de modele_etiquette_id
-  $modele_etiquette->valueDefaults();
+}
 
+// Nouveau modèle d'étiquette dans le cas d'un changement d'établissement
+if (!$modele_etiquette_id || $modele_etiquette->group_id != $group_id) {
+  // Chargement des valeurs par défaut si pas de modele_etiquette_id
+  $modele_etiquette = new CModeleEtiquette;
+  $modele_etiquette->valueDefaults();
+  $modele_etiquette->group_id = $group_id;
+}
 // Création du template
 $smarty = new CSmartyDP();
 

@@ -27,6 +27,7 @@ class CModeleEtiquette extends CMbMetaObject {
   var $marge_vert    = null;
   var $hauteur_ligne = null;
   var $font          = null;
+  var $group_id      = null;
   
 	// Form fields
 	var $_write_bold   = null;
@@ -68,6 +69,7 @@ class CModeleEtiquette extends CMbMetaObject {
     $specs["object_id"]     = "ref class|CMbObject meta|object_class purgeable";
     $specs["object_class"]  = "str notNull class show|0";
     $specs["font"]          = "text show|0";
+    $specs["group_id"]      = "ref class|CGroups notNull";
 		$specs["_write_bold"]   = "bool";
     return $specs;
   }

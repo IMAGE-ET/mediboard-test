@@ -16,6 +16,7 @@ $modele_etiquette_id = CValue::getOrSession("modele_etiquette_id");
 $modele_etiquette = new CModeleEtiquette;
 
 $where = array();
+$where["group_id"] = " = '" . CGroups::loadCurrent()->_id . "'";
 
 if ($filter_class != "all")
   $where["object_class"] = " = '$filter_class'";

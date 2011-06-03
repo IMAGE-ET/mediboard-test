@@ -21,6 +21,7 @@ $rpu->_ref_sejour->loadRefPatient();
 $modele_etiquette = new CModeleEtiquette;
 $where = array();
 $where['object_class'] = " = 'CRPU'";
+$where["group_id"] = " = '".CGroups::loadCurrent()->_id."'";
 
 // Récupération des valeurs des champs;
 $fields = $rpu->_ref_sejour->completeLabelFields();
