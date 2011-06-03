@@ -244,19 +244,26 @@ class CMbObject {
   
   /**
    * Chargement des notes sur l'objet
+   * @param $perm One of PERM_READ | PERM_EDIT
+   * @return int Note count
    */
   function loadRefsNotes($perm = PERM_READ) {
     $this->_ref_notes = array();
-    $this->_high_notes = false;
+    $this->_degree_notes = null;
+    $notes_levels = array();
     
     if ($this->_id) {
       $this->_ref_notes = CNote::loadNotesForObject($this, $perm);
+      
+      // Find present levels
       foreach($this->_ref_notes as $_note) {
-        if ($_note->degre === "high") {
-          $this->_high_notes = true;
-          break;
-        }
+      	$notes_levels[$_note->degre] = true;
       }
+      
+      // Note highest level 
+      if (isset($notes_levels["low"   ])) $this->_degree_notes = "low";
+      if (isset($notes_levels["medium"])) $this->_degree_notes = "medium";
+      if (isset($notes_levels["high"  ])) $this->_degree_notes = "high";
     }
 
     return count($this->_ref_notes);

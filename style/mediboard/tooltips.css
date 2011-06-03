@@ -62,6 +62,9 @@ table.note th.high {
   background-color: #faa;
 }
 
+table.note th.medium {
+  background-color: #fc0;
+}
 table.note th.low {
   background-color: #afa;
 }

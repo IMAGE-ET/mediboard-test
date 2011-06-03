@@ -17,11 +17,13 @@
   >
   
   {{if count($object->_ref_notes)}}
-	  {{if $object->_high_notes}}
-	  <img src="images/icons/note_red.png" width="16" height="16" />
-	  {{else}}
-	  <img src="images/icons/note_green.png" width="16" height="16" />
-	  {{/if}}
+    {{if $object->_degree_notes == "high"}}
+    <img src="images/icons/note_red.png" width="16" height="16" />
+    {{elseif $object->_degree_notes == "medium"}}
+    <img src="images/icons/note_orange.png" width="16" height="16" />
+    {{elseif $object->_degree_notes == "low"}}
+    <img src="images/icons/note_green.png" width="16" height="16" />
+  {{/if}}
   {{elseif $mode == "edit"}}
     <img src="images/icons/note_transparent.png" width="16" height="16" />
   {{/if}}

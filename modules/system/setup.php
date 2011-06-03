@@ -782,7 +782,13 @@ class CSetupsystem extends CSetup {
               ADD `processor` FLOAT,
               ADD `peak_memory` INT (11) UNSIGNED;";
     $this->addQuery($query);
+
+    $this->makeRevision("1.0.76");
+    $query = "ALTER TABLE `note` 
+      CHANGE `degre` `degre` ENUM ('low','medium','high') NOT NULL DEFAULT 'low',
+      CHANGE `object_class` `object_class` VARCHAR (80) NOT NULL;";
+    $this->addQuery($query);
     
-    $this->mod_version = "1.0.76";
+    $this->mod_version = "1.0.77";
   }
 }
