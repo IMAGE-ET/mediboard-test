@@ -352,6 +352,11 @@ table.tbl th.title {
   color: #fff;
 }
 
+table.tbl th.title a {
+  color: #ddd;
+}
+
+
 tbody.hoverable:hover tr td,
 table.tbl tr:hover td,
 div.tree-header:hover,
@@ -452,13 +457,13 @@ fieldset legend {
 }
 
 /* Shadow for clearer white fonts */
-
+/*
 #menubar a.textSelected {
-  text-shadow: 1px 1px 0 #fff; 
+  text-shadow: 0px 0px 2px #fff; 
 }
 
 #menubar a.textNonSelected {
-  text-shadow: 1px 1px 0 #000; 
+  text-shadow: 0px 0px 2px #000; 
 }
 
 #menubar a:hover {
@@ -466,7 +471,7 @@ fieldset legend {
 }
 
 table.tabmenu td a {
-  text-shadow: 1px 1px 0 #000;
+  text-shadow: 0px 0px 2px #000;
 }
 
 table.tabmenu td.selected a {
@@ -475,7 +480,7 @@ table.tabmenu td.selected a {
 
 ul.control_tabs li a, 
 ul.control_tabs_vertical li a {
-  text-shadow: 1px 1px 0 #000;
+  text-shadow: 0px 0px 2px #000;
 }
 
 ul.control_tabs li a.active, 
@@ -484,5 +489,11 @@ ul.control_tabs_vertical li a.active {
 }
 
 table.main th.title {
-  text-shadow: 1px 1px 0 #000;
+  text-shadow: 0px 0px 2px #000;
 }
+
+table th.title h2 {
+  text-shadow: 0px 0px 2px #000;
+}
+
+*/
