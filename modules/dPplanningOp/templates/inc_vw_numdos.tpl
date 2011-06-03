@@ -1,6 +1,10 @@
 {{mb_default var=_doss_id value=0}}
 {{assign var=show_modal_identifiant value=$conf.sip.show_modal_identifiant}}
-{{assign var=sip_handler value=$conf.object_handlers.CSipObjectHandler}}
+{{if "sip"|module_active && array_key_exists('CSipObjectHandler', $conf.object_handlers)}}
+  {{assign var=sip_handler value=$conf.object_handlers.CSipObjectHandler}}
+{{else}}
+  {{assign var=sip_handler value=0}}
+{{/if}}
 
 {{if @$hide_empty}}
   {{if $num_dossier}}
