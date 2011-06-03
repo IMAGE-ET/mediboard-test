@@ -441,7 +441,7 @@ printDossierComplet = function(){
                   <a class="text" href="#1" 
                      onclick="markAsSelected(this); addSejourIdToSession('{{$sejour->_id}}'); loadViewSejour('{{$sejour->_id}}', {{$sejour->praticien_id}}, {{$sejour->patient_id}}, '{{$date}}');">
                     <span class="{{if !$sejour->entree_reelle}}patient-not-arrived{{/if}} {{if $sejour->septique}}septique{{/if}}"
-                          onmouseover="ObjectTooltip.createEx(this, '{{$sejour->_guid}}');" >
+                          onmouseover="ObjectTooltip.createEx(this, '{{$sejour->_guid}}'); this.oTooltip = null;" >
                       {{$sejour->_ref_patient->_view}}
                     </span>
                   </a>

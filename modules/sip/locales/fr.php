@@ -1,8 +1,8 @@
 <?php
 $locales['CSipObjectHandler'] = 'Gestionnaire SIP';
-$locales['config-object_handlers-CSipObjectHandler-desc'] = 'Permet d\'utiliser des gestionnaire d\'objets pour ajouter du comportement événementiel de façon non intrusive.';
 $locales['SIP'] = 'SIP';
 $locales['config-object_handlers-CSipObjectHandler'] = 'Activer le gestionnaire SIP';
+$locales['config-object_handlers-CSipObjectHandler-desc'] = 'Permet d\'utiliser des gestionnaire d\'objets pour ajouter du comportement événementiel de façon non intrusive.';
 $locales['config-sip'] = 'Configuration mode SIP';
 $locales['config-sip-batch_count'] = 'Nombre de traitement';
 $locales['config-sip-batch_count-desc'] = 'Nombre de traitement par lot du cron';
@@ -31,6 +31,8 @@ $locales['config-sip-send_sej_pa'] = 'Envoi que les séjours de pré-admission';
 $locales['config-sip-send_sej_pa-desc'] = 'Envoi que les séjours de pré-admission';
 $locales['config-sip-server'] = 'Mode Serveur';
 $locales['config-sip-server-desc'] = 'Mode Serveur';
+$locales['config-sip-show_modal_identifiant'] = 'Montrer la modale d\'identifiants externes';
+$locales['config-sip-show_modal_identifiant-desc'] = 'Montrer la modale au clic sur l\'identifiant externe';
 $locales['config-sip-soap-sip_name'] = 'Nom instance SIP';
 $locales['config-sip-soap-sip_name-desc'] = 'Nom de l\'instance SIP';
 $locales['config-sip-tag_dossier'] = 'Tag NumDos du SIP';

@@ -25,14 +25,14 @@
   {{assign var=href value="?m=dPsante400&$actionType=$action&dialog=$dialog"}}
   
   {{foreach from=$list_idSante400 item=_idSante400}}
-  <tr {{if $_idSante400->_id == $idSante400->_id}}class="selected"{{/if}}>
+  <tr {{if $_idSante400->_id == $idSante400_id}}class="selected"{{/if}}>
     {{if !$dialog}}
     <td>{{$_idSante400->object_class}}</td>
     <td>{{$_idSante400->object_id}}</td>
     <td>
       {{assign var="object" value=$_idSante400->_ref_object}}
       {{if $object->_id}}
-      <a href="{{$href}}&amp;object_class={{$object->_class_name}}&amp;object_id={{$object->_id}}">
+      <a href="#1" onclick="toggleSelected(this.up('tr')); editId400('{{$_idSante400->_id}}');">
       <span onmouseover="ObjectTooltip.createEx(this, '{{$object->_guid}}')">
         {{$object}}
       </span>
@@ -43,7 +43,7 @@
     </td>
     {{/if}}
     <td>
-      <a href="{{$href}}&amp;id_sante400_id={{$_idSante400->_id}}" >
+      <a href="#1" onclick="toggleSelected(this.up('tr')); editId400('{{$_idSante400->_id}}');">
         {{$_idSante400->last_update|date_format:$conf.datetime}}
       </a>
     </td>
@@ -51,4 +51,13 @@
     <td>{{$_idSante400->tag}}</td>
   </tr>
   {{/foreach}}
+  <tr>
+    <td colspan="6" style="background: #fff;">
+      {{$list_idSante400|@count}} identifiants 
+      {{if $list_idSante400|@count != $count_idSante400}}
+      sur {{$count_idSante400}}
+      {{/if}}
+      trouvés
+    </td>
+  </tr>
 </table>

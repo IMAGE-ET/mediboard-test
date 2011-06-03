@@ -103,7 +103,7 @@ Voir les séjour :
           {{tr}}None{{/tr}}
        </div>
     	{{else}}
-      <strong>{{mb_include module=dPplanningOp template=inc_vw_numdos num_dossier=$_sejour->_num_dossier}}</strong>
+      <strong>{{mb_include module=dPplanningOp template=inc_vw_numdos num_dossier=$_sejour->_num_dossier _doss_id=$_sejour->_id}}</strong>
     	{{/if}}
 		</td>
     

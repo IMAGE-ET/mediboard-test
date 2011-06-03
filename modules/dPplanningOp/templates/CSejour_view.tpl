@@ -6,7 +6,7 @@
   <tr>
     <th class="category {{if $sejour->sortie_reelle}}arretee{{/if}}" colspan="4">
       {{tr}}CSejour-_etat.{{$sejour->_etat}}{{/tr}}
-      {{mb_include module=dPplanningOp template=inc_vw_numdos num_dossier=$sejour->_num_dossier}}
+      {{mb_include module=dPplanningOp template=inc_vw_numdos num_dossier=$sejour->_num_dossier _doss_id=$sejour->_id}}
     </th>
   </tr>
   

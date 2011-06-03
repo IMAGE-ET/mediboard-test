@@ -41,7 +41,11 @@ ElementChecker.check.dontMatch = function(){
       
       {{mb_include module=system template=inc_config_bool var=notify_all_destinataires"}}
     {{/if}}
-    	    
+    
+    <tr>
+      {{mb_include module=system template=inc_config_bool var=show_modal_identifiant}}
+    </tr> 
+    
     <tr>
       <td class="button" colspan="10">
         <button class="modify" type="submit">{{tr}}Save{{/tr}}</button>

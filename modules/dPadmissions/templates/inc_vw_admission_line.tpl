@@ -143,7 +143,7 @@
   </form>
   {{/if}}
   {{/if}}
-  {{mb_include module=dPplanningOp template=inc_vw_numdos num_dossier=$_sejour->_num_dossier}}
+  {{mb_include module=dPplanningOp template=inc_vw_numdos num_dossier=$_sejour->_num_dossier _doss_id=$_sejour->_id}}
   <span class="CPatient-view" onmouseover="ObjectTooltip.createEx(this, '{{$patient->_guid}}');">
     {{$patient}}
   </span>
