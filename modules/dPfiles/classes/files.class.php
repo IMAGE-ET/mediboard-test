@@ -391,7 +391,7 @@ class CFile extends CDocumentItem {
       $file_name = $this->file_name;
     }
     return
-      in_array(substr(strrchr($file_name, '.'),1), preg_split("/[\s]+/", CFile::$file_types)) &&
+      in_array(substr(strrchr(strtolower($file_name), '.'),1), preg_split("/[\s]+/", CFile::$file_types)) &&
       (CAppUI::conf("dPfiles CFile ooo_active") == 1);
   }
  
