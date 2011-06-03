@@ -9,13 +9,14 @@
  */
 
 $nb_files = CValue::get("nb_files", 20);
+$extensions = CValue::get("extensions", CFile::$file_types);
 $file = new CFile();
 $where = array();
 $where["object_class"] = " NOT LIKE 'CFile'";
 
 // Ne convertir que les fichiers dont le nom se finit par une extension convertible
 $rlike = "";
-$types = preg_split("/[\s]+/", CFile::$file_types);
+$types = preg_split("/[\s]+/", $extensions);
 
 foreach($types as $key => $_type) {
   $rlike .= " file_name RLIKE '.".$_type."$'";
@@ -26,7 +27,9 @@ foreach($types as $key => $_type) {
 $where[] = $rlike;
 $where[] = "file_id NOT IN (SELECT object_id from files_mediboard WHERE object_class LIKE 'CFile')";
 
-$files = $file->loadList($where, null, $nb_files);
+$order = "file_id DESC";
+
+$files = $file->loadList($where, $order, $nb_files);
 
 $converted = 0;
 $not_converted = "";
