@@ -459,39 +459,22 @@ fieldset legend {
 /* Shadow for clearer white fonts */
 
 #menubar a.textSelected {
-  text-shadow: 0px 0px 2px #fff; 
+  text-shadow: 0px 0px 2px rgba(255, 255, 255, 0.5); 
 }
 
-#menubar a.textNonSelected {
-  text-shadow: 0px 0px 2px #000; 
-}
-
-#menubar a:hover {
-  text-shadow: none; 
-}
-
-table.tabmenu td a {
-  text-shadow: 0px 0px 2px #000;
-}
-
-table.tabmenu td.selected a {
-  text-shadow: none;
-}
-
+#menubar a.textNonSelected,
+table.tabmenu td a,
 ul.control_tabs li a, 
-ul.control_tabs_vertical li a {
-  text-shadow: 0px 0px 2px #000;
+ul.control_tabs_vertical li a,
+table.main th.title,
+table th.title h2
+ {
+  text-shadow: 0px 0px 2px rgba(0, 0, 0, 0.5); 
 }
 
+#menubar a:hover,
+table.tabmenu td.selected a,
 ul.control_tabs li a.active, 
 ul.control_tabs_vertical li a.active {
-  text-shadow: none;
-}
-
-table.main th.title {
-  text-shadow: 0px 0px 2px #000;
-}
-
-table th.title h2 {
-  text-shadow: 0px 0px 2px #000;
+  text-shadow: none; 
 }
