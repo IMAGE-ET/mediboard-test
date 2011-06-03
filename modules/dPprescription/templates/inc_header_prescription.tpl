@@ -153,9 +153,8 @@ changeManualDate = function(){
 **/
 
 Main.add( function(){	
-	var oFormProtocole = getForm("applyProtocole");
+  var oFormProtocole = getForm("applyProtocole");
   var praticien_id;
-  initNotes();
   if(document.forms.selPraticienLine){
     praticien_id = document.forms.selPraticienLine.praticien_id.value;
 		{{if $praticien_for_prot_id}}

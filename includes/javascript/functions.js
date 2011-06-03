@@ -14,7 +14,7 @@ function main() {
     prepareForms();
     SystemMessage.init();
     WaitingMessage.init();
-    initNotes();
+    Note.refresh();
     Element.warnDuplicates();
     Event.preventBackspace();
     Main.init();
@@ -515,24 +515,53 @@ function popChgPwd() {
   url.popup(400, 300, "ChangePassword");
 }
 
-var Note = Class.create({
-  initialize: function(object_guid) {
+var Note = {
+  init: function() {
     this.url = new Url("system", "edit_note");
-    if (object_guid)
-      this.create(object_guid);
   },
+  
   create: function (object_guid) {
+	this.init();
     this.url.addParam("object_guid", object_guid);
-    this.popup();
+    this.modal();
   },
+
   edit: function(note_id) {
+	this.init();
     this.url.addParam("note_id", note_id);
-    this.popup();
+    this.modal();
   },
-  popup: function () {
-    this.url.popup(600, 300, "note");
+
+  modal: function () {
+    this.url.requestModal(500);
+  },
+  
+  submit: function (form) {
+    return onSubmitFormAjax(form, { onComplete: function() { 
+      Note.refresh(true); 
+      Note.close();
+    }});
+  },
+  
+  close: function() {
+    this.url.modaleObject.close();
+  },
+  
+  refresh: function(force) {
+    var selector = "div.noteDiv";
+    
+    // Specific guid if forced, non initialized otherwise
+    selector += force ? ("."+Note.url.oParams['object_guid']) : ":not(.initialized)";
+    $$(selector).each(function(element) {
+      element.addClassName("initialized");
+      var url = new Url("system", "httpreq_get_notes_image");
+      url.addParam("object_guid", element.className.split(" ")[1]);
+      url.requestUpdate(element, {
+        coverIE: false
+      });
+    });
   }
-});
+};
 
 // *******
 var notWhitespace   = /\S/;

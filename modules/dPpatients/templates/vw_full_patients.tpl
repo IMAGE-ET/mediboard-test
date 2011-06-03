@@ -10,19 +10,14 @@
 function viewCompleteItem(object_guid) {
   var url = new Url("system", "httpreq_vw_complete_object");
   url.addParam("object_guid", object_guid);
-  url.requestUpdate("listView", { 
-    onComplete: initNotes
-  } );
+  url.requestUpdate("listView");
 }
 
 function loadSejour(sejour_id){
   var url = new Url("dPpatients","httpreq_vw_dossier_sejour");
   url.addParam("sejour_id",sejour_id);
-  url.requestUpdate("listView", {
-    onComplete: initNotes
-  } );
+  url.requestUpdate("listView");
 }
-
 
 function reloadListFile(sAction){
   if(sAction == "delete" && file_preview == file_deleted){
@@ -73,8 +68,6 @@ Main.add(function () {
   {{if $sejour_id}}
   loadSejour('{{$sejour_id}}');
   {{/if}}
-  
-  initNotes();
 });
 
 </script>

@@ -627,7 +627,7 @@ var Url = Class.create({
     
     oOptions.onComplete = oOptions.onComplete.wrap(function(onComplete) {
       prepareForms(element);
-      initNotes();
+      Note.refresh();
       onComplete();
       Element.warnDuplicates();
     });
@@ -730,7 +730,7 @@ var Url = Class.create({
     
     updater.options.onComplete = updater.options.onComplete.wrap(function(onComplete) {
       prepareForms(element);
-      initNotes();
+      Note.refresh();
       onComplete();
       Element.warnDuplicates();
     });

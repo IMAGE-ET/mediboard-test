@@ -8,17 +8,8 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
 *}}
 
-<script type="text/javascript">
-function submitNote(){
-  var oForm = document.editFrm;
-  
-  if (checkForm(oForm)){
-    onSubmitFormAjax(oForm, { onComplete: function() { window.opener.initNotes(true); window.close()} });
-    oForm.reset();
-  }
-}
-</script>
-<form name="editFrm" action="?m={{$m}}" method="post" onsubmit="return checkForm(this)">
+<form name="editFrm" action="?m={{$m}}" method="post" onsubmit="return Note.submit(this);">
+
 <input type="hidden" name="dosql" value="do_note_aed" />
 <input type="hidden" name="del" value="0" />
 <input type="hidden" name="m" value="system" />
@@ -56,7 +47,7 @@ function submitNote(){
   </tr>
   <tr>
     <th>{{mb_label object=$note field="degre"}}</th>
-    <td>{{mb_field object=$note field="degre"}}</td>
+    <td>{{mb_field object=$note field="degre" typeEnum=radio}}</td>
   </tr>
   <tr>
     <th>{{mb_label object=$note field="libelle"}}</th>
@@ -69,13 +60,12 @@ function submitNote(){
   <tr>
     <td class="button" colspan="2">
       {{if $note->_id}}
-      <button type="submit" class="submit">Modifier</button>
+      <button type="submit" class="submit">{{tr}}Modify{{/tr}}</button>
       <button type="button" class="trash" onclick="confirmDeletion(this.form,{typeName:'la ',objName:'{{$note->_view|smarty:nodefaults|JSAttribute}}'})">
-        Supprimer
+        {{tr}}Delete{{/tr}}
       </button>
       {{else}}
-      <button type="button" class="submit" onclick="submitNote()">Créer</button>
-      <button type="button" class="cancel" onclick="window.close();">Fermer</button>
+      <button type="submit" class="submit singleclick">{{tr}}Create{{/tr}}</button>
       {{/if}}
     </td>
   </tr>

@@ -12,7 +12,7 @@
 <span style="float: {{$float|default:'left'}};"
   onmouseover="ObjectTooltip.createEx(this, '{{$object->_guid}}', 'objectNotes')"
 	{{if $mode == "edit"}}
-	  onclick="new Note('{{$object->_guid}}')"
+	  onclick="Note.create('{{$object->_guid}}')"
   {{/if}}
   >
   

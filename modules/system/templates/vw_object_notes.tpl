@@ -17,7 +17,8 @@
         </span>
         
         <label title="{{$curr_note->date|date_format:$conf.datetime}}">
-          {{$curr_note->_date_relative.count}} {{tr}}{{$curr_note->_date_relative.unit}}{{if $curr_note->_date_relative.count > 1}}s{{/if}}{{/tr}}
+          {{$curr_note->_date_relative.count}} 
+          {{tr}}{{$curr_note->_date_relative.unit}}{{if $curr_note->_date_relative.count > 1}}s{{/if}}{{/tr}}
         </label>
       </th>
     </tr>
@@ -30,7 +31,10 @@
             <input type="hidden" name="dosql" value="do_note_aed" />
             {{mb_key object=$curr_note}}
             
-            <button style="float: right;" class="cancel notext" type="button" onclick="confirmDeletion(this.form, {typeName:'cette note',ajax:1,target:'systemMsg'},{onComplete: function(){initNotes(true)} })"></button>
+            <button style="float: right;" class="cancel notext" type="button" 
+            	onclick="confirmDeletion(this.form, {typeName:'cette note',ajax:1 }, { onComplete: Note.refresh.curry(true) })">
+              {{tr}}Delete{{/tr}}
+            </button>
           </form>
         {{/if}}
         <strong>{{$curr_note->libelle}}</strong>

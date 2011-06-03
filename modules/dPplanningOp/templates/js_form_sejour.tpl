@@ -252,7 +252,9 @@ function reloadSejour(sejour_id) {
   if(oFormOp) {
     sejoursUrl.addParam("mode_operation", 1);
   }
-  sejoursUrl.requestUpdate('inc_form_sejour', { onComplete: function() {initNotes(); checkNewSejour(sDP,  sDateEntree, sHeureEntree, sMinutesEntree, sDateSortie, sHeureSortie, sMinutesSortie);} } );
+  sejoursUrl.requestUpdate('inc_form_sejour', { onComplete: function() { 
+    checkNewSejour(sDP,  sDateEntree, sHeureEntree, sMinutesEntree, sDateSortie, sHeureSortie, sMinutesSortie);} 
+  } );
 }
 
 function checkNewSejour(sDP,  sDateEntree, sHeureEntree, sMinutesEntree, sDateSortie, sHeureSortie, sMinutesSortie) {

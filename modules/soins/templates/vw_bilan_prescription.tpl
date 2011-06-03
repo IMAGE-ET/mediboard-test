@@ -25,9 +25,7 @@ loadSejour = function(sejour_id) {
   var url = new Url("system", "httpreq_vw_complete_object");
   url.addParam("object_class","CSejour");
   url.addParam("object_id",sejour_id);
-  url.requestUpdate('bilan_sejour', {
-   onComplete: initNotes
-  } );
+  url.requestUpdate('bilan_sejour');
 }
 
 Main.add(function () {

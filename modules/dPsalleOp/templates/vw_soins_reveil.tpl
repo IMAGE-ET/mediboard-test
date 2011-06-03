@@ -29,18 +29,14 @@ function loadPatient(patient_id) {
   var url = new Url("system", "httpreq_vw_complete_object");
   url.addParam("object_class","CPatient");
   url.addParam("object_id",patient_id);
-  url.requestUpdate('viewPatient', {
-   onComplete: initNotes
-  } );
+  url.requestUpdate('viewPatient');
 }
 
 function loadSejour(sejour_id) {
   var url = new Url("system", "httpreq_vw_complete_object");
   url.addParam("object_class","CSejour");
   url.addParam("object_id",sejour_id);
-  url.requestUpdate('viewSejourHospi', {
-   onComplete: initNotes
-  } );
+  url.requestUpdate('viewSejourHospi');
 }
 
 function loadSuivi(sejour_id, user_id, cible, hide_obs) {
