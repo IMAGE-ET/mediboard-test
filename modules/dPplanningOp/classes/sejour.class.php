@@ -25,8 +25,8 @@ class CSejour extends CCodable implements IPatientRelated {
   
   var $etablissement_transfert_id        = null;
   var $etablissement_entree_transfert_id = null;
-	var $service_entree_mutation_id        = null; // Service d'entrée du séjour
-	var $service_mutation_id               = null; // Service du séjour de mutation
+  var $service_entree_mutation_id        = null; // Service d'entrée du séjour
+  var $service_mutation_id               = null; // Service du séjour de mutation
   
   // DB Fields
   var $type               = null; 
@@ -72,8 +72,8 @@ class CSejour extends CCodable implements IPatientRelated {
   var $adresse_par_etab_id = null;
   var $libelle             = null;  
   var $forfait_se          = null;
-	var $commentaires_sortie = null;   
-	
+  var $commentaires_sortie = null;   
+  
   // Form Fields
   var $_entree             = null;
   var $_sortie             = null;
@@ -103,7 +103,7 @@ class CSejour extends CCodable implements IPatientRelated {
   var $_etat               = null;
   var $_entree_relative    = null;
   var $_sortie_relative    = null;
-	var $_not_collides       = array ("urg", "consult", "seances", "exte"); // Séjour dont on ne test pas la collision
+  var $_not_collides       = array ("urg", "consult", "seances", "exte"); // Séjour dont on ne test pas la collision
   var $_is_proche          = null;
   
   // Behaviour fields
@@ -126,11 +126,11 @@ class CSejour extends CCodable implements IPatientRelated {
   var $_ref_GHM               = array();
   var $_ref_group             = null;
   var $_ref_etablissement_transfert  = null;
-	var $_ref_service_mutation  = null;
+  var $_ref_service_mutation  = null;
   var $_ref_dossier_medical   = null;
   var $_ref_rpu               = null;
   var $_ref_bilan_ssr         = null;
-	var $_ref_fiche_autonomie   = null;
+  var $_ref_fiche_autonomie   = null;
   var $_ref_consult_anesth    = null;
   var $_ref_consultations     = null;
   var $_ref_consult_atu       = null;
@@ -142,12 +142,12 @@ class CSejour extends CCodable implements IPatientRelated {
   var $_ref_prescription_sejour = null;
   var $_ref_replacements        = null;
   var $_ref_replacement         = null;
-	var $_ref_tasks               = null;
-	
+  var $_ref_tasks               = null;
+  
   // External objects
   var $_ext_diagnostic_principal = null;
   var $_ext_diagnostic_relie     = null;
-	var $_nb_echange_hprim         = null;
+  var $_nb_echange_hprim         = null;
   var $_ref_echange_hprim        = null;
   
   // Distant fields
@@ -220,10 +220,10 @@ class CSejour extends CCodable implements IPatientRelated {
     $backProps["echanges_hprim"]       = "CEchangeHprim object_id";
     $backProps["planifications"]       = "CPlanificationSysteme sejour_id";
     $backProps["rhss"]                 = "CRHS sejour_id";
-		$backProps["evenements_ssr"]       = "CEvenementSSR sejour_id";
-		$backProps["replacements"]         = "CReplacement sejour_id";
-		$backProps["echanges_hprim21"]     = "CEchangeHprim21 object_id";
-		$backProps["tasks"]                = "CSejourTask sejour_id";
+    $backProps["evenements_ssr"]       = "CEvenementSSR sejour_id";
+    $backProps["replacements"]         = "CReplacement sejour_id";
+    $backProps["echanges_hprim21"]     = "CEchangeHprim21 object_id";
+    $backProps["tasks"]                = "CSejourTask sejour_id";
     return $backProps;
   }
 
@@ -269,8 +269,8 @@ class CSejour extends CCodable implements IPatientRelated {
     $props["facturable"]          = "bool notNull default|1 show|0";
     $props["etablissement_transfert_id"]        = "ref class|CEtabExterne autocomplete|nom";
     $props["etablissement_entree_transfert_id"] = "ref class|CEtabExterne autocomplete|nom";
-		$props["service_entree_mutation_id"]        = "ref class|CService autocomplete|nom dependsOn|group_id|cancelled";
-		$props["service_mutation_id"]               = "ref class|CService autocomplete|nom dependsOn|group_id|cancelled";
+    $props["service_entree_mutation_id"]        = "ref class|CService autocomplete|nom dependsOn|group_id|cancelled";
+    $props["service_mutation_id"]               = "ref class|CService autocomplete|nom dependsOn|group_id|cancelled";
     $props["adresse_par_prat_id"] = "ref class|CMedecin";
     $props["adresse_par_etab_id"] = "ref class|CEtabExterne autocomplete|nom";
     $props["libelle"]             = "str seekable autocomplete dependsOn|praticien_id";
@@ -280,7 +280,7 @@ class CSejour extends CCodable implements IPatientRelated {
     
     $props["_time_entree_prevue"] = "time";
     $props["_time_sortie_prevue"] = "time";
-		
+    
     $props["_entree"]         = "dateTime show";
     $props["_sortie"]         = "dateTime show";
     $props["_date_entree"]    = "date";
@@ -361,18 +361,18 @@ class CSejour extends CCodable implements IPatientRelated {
       }
       
       $this->completeField("entree_reelle", "annule");
-			if ($this->fieldModified("annule", "1")) {
-				$max_cancel_time = CAppUI::conf("dPplanningOp CSejour max_cancel_time");
-	      if ((mbDateTime("+ $max_cancel_time HOUR", $this->entree_reelle) < mbDateTime())) {
-	        $msg .= "Impossible d'annuler un dossier ayant une entree réelle depuis plus de $max_cancel_time heures.<br />";
-	      }
-			}
+      if ($this->fieldModified("annule", "1")) {
+        $max_cancel_time = CAppUI::conf("dPplanningOp CSejour max_cancel_time");
+        if ((mbDateTime("+ $max_cancel_time HOUR", $this->entree_reelle) < mbDateTime())) {
+          $msg .= "Impossible d'annuler un dossier ayant une entree réelle depuis plus de $max_cancel_time heures.<br />";
+        }
+      }
       
-			if (!$this->_merging && !$this->_forwardRefMerging) {
+      if (!$this->_merging && !$this->_forwardRefMerging) {
         foreach ($this->getCollisions() as $collision) {
           $msg .= "Collision avec le séjour du $collision->entree au $collision->sortie"; 
         }
-			}
+      }
     }
     
     return $msg . parent::check();
@@ -423,7 +423,7 @@ class CSejour extends CCodable implements IPatientRelated {
     
     return $collisions;
   }
-	
+  
   /**
    * Cherche des séjours les dates d'entrée ou sortie sont proches, 
    * pour le même patient dans le même établissement
@@ -432,39 +432,39 @@ class CSejour extends CCodable implements IPatientRelated {
    * 
    * @return array|CSejour
    */
-	function getSiblings($tolerance = 1, $use_type = false) {
-		$sejour = new CSejour;
-		$sejour->patient_id = $this->patient_id;
-		$sejour->group_id   = $this->group_id;
-		
-		// Si on veut rechercher pour un type de séjour donné
-		if ($use_type) {
-		  $sejour->type   = $this->type;
-		}   
+  function getSiblings($tolerance = 1, $use_type = false) {
+    $sejour = new CSejour;
+    $sejour->patient_id = $this->patient_id;
+    $sejour->group_id   = $this->group_id;
     
-		$siblings = $sejour->loadMatchingList();
+    // Si on veut rechercher pour un type de séjour donné
+    if ($use_type) {
+      $sejour->type   = $this->type;
+    }   
+    
+    $siblings = $sejour->loadMatchingList();
 
     $this->updateFormFields();
-		
-		// Entree et sortie ne sont pas forcément stored
+    
+    // Entree et sortie ne sont pas forcément stored
     $entree = $this->entree_reelle ? $this->entree_reelle : $this->entree_prevue;
     $sortie = $this->sortie_reelle ? $this->sortie_reelle : $this->sortie_prevue;
 
-		foreach($siblings as $_sibling) {
+    foreach($siblings as $_sibling) {
       if ($_sibling->_id == $this->_id) {
         unset($siblings[$_sibling->_id]);
-				continue;
+        continue;
       }
-	    			
-	    $entree_relative = abs(mbHoursRelative($entree, $_sibling->entree));
+            
+      $entree_relative = abs(mbHoursRelative($entree, $_sibling->entree));
       $sortie_relative = abs(mbHoursRelative($sortie, $_sibling->sortie));
-	    if ($entree_relative > $tolerance && $sortie_relative > $tolerance) {
-	      unset($siblings[$_sibling->_id]);
-	    }
-	  }
-		
-		return $siblings;
-	}
+      if ($entree_relative > $tolerance && $sortie_relative > $tolerance) {
+        unset($siblings[$_sibling->_id]);
+      }
+    }
+    
+    return $siblings;
+  }
   
   /**
    * Check is the object collide another
@@ -476,11 +476,11 @@ class CSejour extends CCodable implements IPatientRelated {
     if ($this->_id && $sejour->_id && $this->_id == $sejour->_id) {
       return false;
     }
-		
+    
     if ($this->annule || $sejour->annule) {
       return false;
     }
-		
+    
     if (in_array($this->type, $this->_not_collides) || in_array($sejour->type, $this->_not_collides)) {
       return false;
     }
@@ -494,8 +494,8 @@ class CSejour extends CCodable implements IPatientRelated {
     }
 
     switch ($this->conf("check_collisions")) {
-    	case "no":
-				return;
+      case "no":
+        return;
       case "date":
         $lower1 = mbDate($this->entree);
         $upper1 = mbDate($this->sortie);
@@ -509,7 +509,7 @@ class CSejour extends CCodable implements IPatientRelated {
         $upper2 = $sejour->sortie;
         break;
     }
-		
+    
     return CMbRange::collides($lower1, $upper1, $lower2, $upper2);
   }
   
@@ -615,25 +615,25 @@ class CSejour extends CCodable implements IPatientRelated {
     
     // Unique affectation de lit
     if ($this->_unique_lit_id) {
-    	// Une affectation maximum
-    	if (count($this->_ref_affectations) > 1) {
-    		foreach ($this->_ref_affectations as $_affectation) {
-    			if ($msg = $_affectation->delete()) {
-    				return "Impossible de supprimer une ancienne affectation: $msg";
-    			}
-    		}
-    	}
-    	
-    	// Affectation unique sur le lit
-    	$this->loadRefsAffectations();
-    	$unique = $this->_ref_first_affectation;
-    	$unique->sejour_id = $this->_id;
-    	$unique->entree = $this->_entree;
+      // Une affectation maximum
+      if (count($this->_ref_affectations) > 1) {
+        foreach ($this->_ref_affectations as $_affectation) {
+          if ($msg = $_affectation->delete()) {
+            return "Impossible de supprimer une ancienne affectation: $msg";
+          }
+        }
+      }
+      
+      // Affectation unique sur le lit
+      $this->loadRefsAffectations();
+      $unique = $this->_ref_first_affectation;
+      $unique->sejour_id = $this->_id;
+      $unique->entree = $this->_entree;
       $unique->sortie = $this->_sortie;
       $unique->lit_id = $this->_unique_lit_id;
-	    if ($msg = $unique->store()) {
-	      return "Impossible d'affecter un lit unique: $msg";
-	    }
+      if ($msg = $unique->store()) {
+        return "Impossible d'affecter un lit unique: $msg";
+      }
     }
     
   }
@@ -661,21 +661,21 @@ class CSejour extends CCodable implements IPatientRelated {
     $this->updateFormFields();
   }
   
-	function updateEntreeSortie() {
+  function updateEntreeSortie() {
     $this->_entree = CValue::first($this->entree_reelle, $this->entree_prevue);
     $this->_sortie = CValue::first($this->sortie_reelle, $this->sortie_prevue);
-	}
-	
+  }
+  
   function updateFormFields() {
     parent::updateFormFields();
-		$this->updateEntreeSortie();
+    $this->updateEntreeSortie();
     
     $this->_duree_prevue       = mbDaysRelative($this->entree_prevue, $this->sortie_prevue);
     $this->_duree_reelle       = mbDaysRelative($this->entree_reelle, $this->sortie_reelle);
     $this->_duree              = mbDaysRelative($this->_entree, $this->_sortie);
-		
+    
     $this->_time_entree_prevue = mbTransformTime(null, $this->entree_prevue, "%H:%M:00");
-	  $this->_time_sortie_prevue = mbTransformTime(null, $this->sortie_prevue, "%H:%M:00");
+    $this->_time_sortie_prevue = mbTransformTime(null, $this->sortie_prevue, "%H:%M:00");
 
     $this->_date_entree_prevue = mbDate(null, $this->entree_prevue);
     $this->_date_sortie_prevue = mbDate(null, $this->sortie_prevue);
@@ -737,15 +737,15 @@ class CSejour extends CCodable implements IPatientRelated {
     }
   }
 
-	
+  
   function updateDBFields() {
-  	// Annulation / Récusation
-		$this->completeField("annule", "recuse");
+    // Annulation / Récusation
+    $this->completeField("annule", "recuse");
     if ($this->fieldModified("recuse", "1")) $this->annule = "1";
     if ($this->fieldModified("annule", "0")) $this->recuse = "0";
 
     // Détail heure d'entrée
-		// @todo Passer au TimePicker
+    // @todo Passer au TimePicker
     if ($this->_hour_entree_prevue !== null and $this->_min_entree_prevue !== null) {
       $this->entree_prevue = "$this->_date_entree_prevue";
       $this->entree_prevue.= " ".str_pad($this->_hour_entree_prevue, 2, "0", STR_PAD_LEFT);
@@ -987,7 +987,7 @@ class CSejour extends CCodable implements IPatientRelated {
   function loadRefEtablissementTransfert($cache = true){
     return $this->_ref_etablissement_transfert = $this->loadFwdRef("etablissement_transfert_id", $cache);
   }
-	
+  
   /**
    * @return CService
    */
@@ -1017,14 +1017,14 @@ class CSejour extends CCodable implements IPatientRelated {
     if (substr($this->_view, 0, 9) == "Séjour du") {
       $this->_view = $this->_ref_patient->_view . " - " . $this->_view;
     }
-		
-		return $this->_ref_patient;
+    
+    return $this->_ref_patient;
   }
   
   function loadRefPraticien($cache = 0) {
     $this->_ref_praticien = $this->loadFwdRef("praticien_id", $cache);
     $this->_ref_praticien->loadRefFunction();
-		return $this->_ref_praticien;
+    return $this->_ref_praticien;
   }
   
   function loadExtDiagnostics() {
@@ -1055,26 +1055,26 @@ class CSejour extends CCodable implements IPatientRelated {
   }
   
   function loadRefsTransmissions($important = false){
-		if($important){
-			// Chargement des transmissions ciblées sur une catégorie importante
-		  $transmission = new CTransmissionMedicale();
-			$ljoin = array();
-			$ljoin["category_prescription"] = "category_prescription.category_prescription_id = transmission_medicale.object_id";
+    if($important){
+      // Chargement des transmissions ciblées sur une catégorie importante
+      $transmission = new CTransmissionMedicale();
+      $ljoin = array();
+      $ljoin["category_prescription"] = "category_prescription.category_prescription_id = transmission_medicale.object_id";
       
-			$where = array();
-			$where["object_class"] = " = 'CCategoryPrescription'";
-			$where["sejour_id"] = " = '$this->_id'";
+      $where = array();
+      $where["object_class"] = " = 'CCategoryPrescription'";
+      $where["sejour_id"] = " = '$this->_id'";
       $where["category_prescription.cible_importante"] = " = '1'";
-			
-			$this->_ref_transmissions = $transmission->loadList($where, null, null, null, $ljoin);
-  	} else {
-  		$this->_ref_transmissions = $this->loadBackRefs("transmissions"); 
+      
+      $this->_ref_transmissions = $transmission->loadList($where, null, null, null, $ljoin);
+    } else {
+      $this->_ref_transmissions = $this->loadBackRefs("transmissions"); 
     }
     
     return $this->_ref_transmissions;
   }
-	
-	function loadRefsTasks(){
+  
+  function loadRefsTasks(){
     return $this->_ref_tasks = $this->loadBackRefs("tasks"); 
   }
   
@@ -1106,29 +1106,29 @@ class CSejour extends CCodable implements IPatientRelated {
         $this->_ref_suivi_medical[$curr_trans->date.$curr_trans->_id."trans"] = $curr_trans;
       }
     }
-		
-		
-		if($this->type == "urg" && CAppUI::conf("dPprescription CPrescription prescription_suivi_soins")){
-			$this->loadRefPrescriptionSejour();
-			$prescription = $this->_ref_prescription_sejour;
-			
-		  // Chargement des lignes de prescriptions d'elements
-		  $prescription->loadRefsLinesElement();
-		  $prescription->loadRefsLinesAllComments();
-		  
-		  foreach($prescription->_ref_prescription_lines_all_comments as $_comment){
-		    $_comment->canEdit();
-		    $_comment->countBackRefs("transmissions");
-		    $this->_ref_suivi_medical["$_comment->debut $_comment->time_debut $_comment->_guid"] = $_comment;
-		  }
-		  
-		  // Ajout des lignes de prescription dans la liste du suivi de soins
-		  foreach($prescription->_ref_prescription_lines_element as $_line_element){
-		    $_line_element->canEdit();
-		    $_line_element->countBackRefs("transmissions");
-		    $this->_ref_suivi_medical["$_line_element->debut $_line_element->time_debut $_line_element->_guid"] = $_line_element;
-		  }
-		}
+    
+    
+    if($this->type == "urg" && CAppUI::conf("dPprescription CPrescription prescription_suivi_soins")){
+      $this->loadRefPrescriptionSejour();
+      $prescription = $this->_ref_prescription_sejour;
+      
+      // Chargement des lignes de prescriptions d'elements
+      $prescription->loadRefsLinesElement();
+      $prescription->loadRefsLinesAllComments();
+      
+      foreach($prescription->_ref_prescription_lines_all_comments as $_comment){
+        $_comment->canEdit();
+        $_comment->countBackRefs("transmissions");
+        $this->_ref_suivi_medical["$_comment->debut $_comment->time_debut $_comment->_guid"] = $_comment;
+      }
+      
+      // Ajout des lignes de prescription dans la liste du suivi de soins
+      foreach($prescription->_ref_prescription_lines_element as $_line_element){
+        $_line_element->canEdit();
+        $_line_element->countBackRefs("transmissions");
+        $this->_ref_suivi_medical["$_line_element->debut $_line_element->time_debut $_line_element->_guid"] = $_line_element;
+      }
+    }
 
     krsort($this->_ref_suivi_medical);
     return $this->_ref_suivi_medical;
@@ -1145,7 +1145,7 @@ class CSejour extends CCodable implements IPatientRelated {
       }
       if ($user_id) {
         $first_log = $_const->loadFirstLog();
-				$first_log->loadRefUser();
+        $first_log->loadRefUser();
         if ($first_log->_ref_user->_id != $user_id) {
           unset($constantes[$_const->_id]);  
         }
@@ -1166,15 +1166,15 @@ class CSejour extends CCodable implements IPatientRelated {
     return $this->_ref_rpu = $this->loadUniqueBackRef("rpu");
   }
   
-	/**
-	 * Load associated BilanSSR
-	 * @return CBilanSSR
-	 */
+  /**
+   * Load associated BilanSSR
+   * @return CBilanSSR
+   */
   function loadRefBilanSSR() {
     return $this->_ref_bilan_ssr = $this->loadUniqueBackRef("bilan_ssr");
   }
   
-	function loadRefFicheAutonomie() {
+  function loadRefFicheAutonomie() {
     return $this->_ref_fiche_autonomie = $this->loadUniqueBackRef("fiche_autonomie");
   }
   
@@ -1209,7 +1209,7 @@ class CSejour extends CCodable implements IPatientRelated {
         if ($praticien->isUrgentiste()) {
           $this->_ref_consult_atu = $_consult;
           $this->_ref_consult_atu->countDocItems();
-					break;
+          break;
         }
       }
     }
@@ -1240,15 +1240,15 @@ class CSejour extends CCodable implements IPatientRelated {
     return $this->_ref_prescriptions;
   }
   
-	function loadRefPrescriptionSejour(){
-		$this->_ref_prescription_sejour = new CPrescription();
-		$this->_ref_prescription_sejour->object_class = "CSejour";
-		$this->_ref_prescription_sejour->object_id = $this->_id;
+  function loadRefPrescriptionSejour(){
+    $this->_ref_prescription_sejour = new CPrescription();
+    $this->_ref_prescription_sejour->object_class = "CSejour";
+    $this->_ref_prescription_sejour->object_id = $this->_id;
     $this->_ref_prescription_sejour->type = "sejour";
-		$this->_ref_prescription_sejour->loadMatchingObject();
-		return $this->_ref_prescription_sejour;
-	}
-	
+    $this->_ref_prescription_sejour->loadMatchingObject();
+    return $this->_ref_prescription_sejour;
+  }
+  
   function loadRefsPrescripteurs(){
     $prescription_sejour = new CPrescription();
     $this->loadRefsPrescriptions();
@@ -1270,19 +1270,19 @@ class CSejour extends CCodable implements IPatientRelated {
   }
   
   function loadRefReplacement($conge_id) {
-  	$this->_ref_replacement = new CReplacement;
-		$this->_ref_replacement->sejour_id = $this->_id;
-		$this->_ref_replacement->conge_id = $conge_id;
+    $this->_ref_replacement = new CReplacement;
+    $this->_ref_replacement->sejour_id = $this->_id;
+    $this->_ref_replacement->conge_id = $conge_id;
     $this->_ref_replacement->loadMatchingObject();
     return $this->_ref_replacement;
   }
-	
-	function isReplacer($replacer_id) {
-		$replacement = new CReplacement;
+  
+  function isReplacer($replacer_id) {
+    $replacement = new CReplacement;
     $replacement->sejour_id   = $this->_id;
     $replacement->replacer_id = $replacer_id;
-		return $replacement->countMatchingList();
-	}
+    return $replacement->countMatchingList();
+  }
   
   function loadListConstantesMedicales($where = array()) {
     if ($this->_list_constantes_medicales) return;
@@ -1299,7 +1299,7 @@ class CSejour extends CCodable implements IPatientRelated {
     $this->loadRefPraticien($cache);
     $this->loadRefEtablissement($cache);
     $this->loadRefEtablissementTransfert($cache);
-		$this->loadRefServiceMutation($cache);
+    $this->loadRefServiceMutation($cache);
     $this->loadExtCodesCCAM();
   }
   
@@ -1373,10 +1373,10 @@ class CSejour extends CCodable implements IPatientRelated {
         $where[] = "DATE(sortie_prevue) = '$date_sortie' OR DATE(sortie_reelle) = '$date_sortie'";
       }
     }
-		
-		if ($notCancel) {
-			$where["annule"] = " = '0'";
-		}
+    
+    if ($notCancel) {
+      $where["annule"] = " = '0'";
+    }
     
     $this->loadObject($where);
     return $this->countList($where);
@@ -1549,12 +1549,12 @@ class CSejour extends CCodable implements IPatientRelated {
   }
   
   function loadEchangeHprim() {
-  	$order = "date_production DESC";
-		// Récupération de tous les échanges produits
-		$this->_ref_echange_hprim = $this->loadBackRefs("echanges_hprim", $order);
+    $order = "date_production DESC";
+    // Récupération de tous les échanges produits
+    $this->_ref_echange_hprim = $this->loadBackRefs("echanges_hprim", $order);
   }
-	
-	function countEchangeHprim() {
+  
+  function countEchangeHprim() {
     // Récupération de tous les échanges produits
     $this->_nb_echange_hprim = $this->countBackRefs("echanges_hprim");
   }
@@ -1595,68 +1595,68 @@ class CSejour extends CCodable implements IPatientRelated {
     $diag = $this->DR ? "$this->DR: {$this->_ext_diagnostic_relie->libelle}" : null;
     $template->addProperty("Sejour - Diagnostic Relié"        , $diag);
     $template->addProperty("Sejour - Remarques", $this->rques);
-		
-		// Chargement du suivi medical (transmissions, observations, prescriptions)
-		$this->loadSuiviMedical();
-		
-		// Transmissions 
+    
+    // Chargement du suivi medical (transmissions, observations, prescriptions)
+    $this->loadSuiviMedical();
+    
+    // Transmissions 
     $transmissions = array();
-		if(isset($this->_back["transmissions"])){
-	    foreach($this->_back["transmissions"] as $_trans){
-	      $datetime = mbTransformTime(null, $_trans->date, CAppUI::conf('datetime'));
-	      $transmissions["$_trans->date $_trans->_guid"] = "$_trans->text, le $datetime, {$_trans->_ref_user->_view}";
-	    }
-		}
+    if(isset($this->_back["transmissions"])){
+      foreach($this->_back["transmissions"] as $_trans){
+        $datetime = mbTransformTime(null, $_trans->date, CAppUI::conf('datetime'));
+        $transmissions["$_trans->date $_trans->_guid"] = "$_trans->text, le $datetime, {$_trans->_ref_user->_view}";
+      }
+    }
     $template->addListProperty("Sejour - Transmissions", $transmissions);
     
     // Observations
     $observations = array();
-		if(isset($this->_back["observations"])){
-	    foreach($this->_back["observations"] as $_obs){
-	      $datetime = mbTransformTime(null, $_obs->date, CAppUI::conf('datetime'));
-	      $observations["$_obs->date $_obs->_guid"] = "$_obs->text, le $datetime, {$_obs->_ref_user->_view}";
-	    }
-		}
+    if(isset($this->_back["observations"])){
+      foreach($this->_back["observations"] as $_obs){
+        $datetime = mbTransformTime(null, $_obs->date, CAppUI::conf('datetime'));
+        $observations["$_obs->date $_obs->_guid"] = "$_obs->text, le $datetime, {$_obs->_ref_user->_view}";
+      }
+    }
     $template->addListProperty("Sejour - Observations", $observations);
     
     // Prescriptions
-		$lines = array();
-		if(CModule::getActive('dPprescription')){
-			$prescription = $this->_ref_prescription_sejour;
-			
-			if(isset($prescription->_ref_prescription_lines_all_comments)){
-				foreach($prescription->_ref_prescription_lines_all_comments as $_comment){
-					$datetime = mbTransformTime(null, "$_comment->debut $_comment->time_debut", CAppUI::conf('datetime'));
-					$lines["$_comment->debut $_comment->time_debut $_comment->_guid"] = "$_comment->_view, $datetime, {$_comment->_ref_praticien->_view}";
-			  }
-			}
-		  if(isset($prescription->_ref_prescription_lines_element)){
-				foreach($prescription->_ref_prescription_lines_element as $_line_element){
-					$datetime = mbTransformTime(null, "$_line_element->debut $_line_element->time_debut", CAppUI::conf('datetime'));
-					$view = "$_line_element->_view";
-					if($_line_element->commentaire){
-						$view .= " ($_line_element->commentaire)";
-					}
-					$view .= ", $datetime, ".$_line_element->_ref_praticien->_view;
-			    $lines["$_line_element->debut $_line_element->time_debut $_line_element->_guid"] = $view;
-			  }
-			}
-		  krsort($lines);
-			$template->addListProperty("Sejour - Prescription light", $lines);
-		}
-		
+    $lines = array();
+    if(CModule::getActive('dPprescription')){
+      $prescription = $this->_ref_prescription_sejour;
+      
+      if(isset($prescription->_ref_prescription_lines_all_comments)){
+        foreach($prescription->_ref_prescription_lines_all_comments as $_comment){
+          $datetime = mbTransformTime(null, "$_comment->debut $_comment->time_debut", CAppUI::conf('datetime'));
+          $lines["$_comment->debut $_comment->time_debut $_comment->_guid"] = "$_comment->_view, $datetime, {$_comment->_ref_praticien->_view}";
+        }
+      }
+      if(isset($prescription->_ref_prescription_lines_element)){
+        foreach($prescription->_ref_prescription_lines_element as $_line_element){
+          $datetime = mbTransformTime(null, "$_line_element->debut $_line_element->time_debut", CAppUI::conf('datetime'));
+          $view = "$_line_element->_view";
+          if($_line_element->commentaire){
+            $view .= " ($_line_element->commentaire)";
+          }
+          $view .= ", $datetime, ".$_line_element->_ref_praticien->_view;
+          $lines["$_line_element->debut $_line_element->time_debut $_line_element->_guid"] = $view;
+        }
+      }
+      krsort($lines);
+      $template->addListProperty("Sejour - Prescription light", $lines);
+    }
+    
     // Suivi médical: transmissions, observations, prescriptions
     $suivi_medical = $transmissions + $observations + $lines;
-		krsort($suivi_medical);
+    krsort($suivi_medical);
     $template->addListProperty("Sejour - Suivi médical", $suivi_medical);
-		    
+        
     // Interventions
     $operations = array();
     foreach ($this->loadRefsOperations() as $_operation) {
-    	$_operation->loadRefPlageOp(true);
-    	$datetime = $_operation->getFormattedValue("_datetime");
+      $_operation->loadRefPlageOp(true);
+      $datetime = $_operation->getFormattedValue("_datetime");
       $chir = $_operation->loadRefChir(true);
-    	$operations[] = "le $datetime, par $chir->_view";
+      $operations[] = "le $datetime, par $chir->_view";
     }
     $template->addListProperty("Sejour - Intervention - Liste", $operations);
     
@@ -1684,12 +1684,12 @@ class CSejour extends CCodable implements IPatientRelated {
       $prescription->type = "sejour";
       $prescription->fillLimitedTemplate($template);
     }
-		
+    
     // RPU
-		$this->loadRefRPU();
-		if ($this->_ref_rpu) {
+    $this->loadRefRPU();
+    if ($this->_ref_rpu) {
       $this->_ref_rpu->fillLimitedTemplate($template);
-		}
+    }
   }
   
   /**
@@ -1797,46 +1797,46 @@ class CSejour extends CCodable implements IPatientRelated {
       $_sejour->store();
     }
   }
-	
-	/**
-	 * Count evenement SSR for a given date;
-	 * @param date $date 
-	 * @return 
-	 */
-	function countEvenementsSSR($date) {
-		if (!$this->_id) {
-			return;
-		}
-		
-		$evenement = new CEvenementSSR;
-		$ljoin = array();
-    $ljoin[] = "evenement_ssr AS evt_seance ON (evt_seance.seance_collective_id = evenement_ssr.evenement_ssr_id)";
-		$where[] = "(evenement_ssr.sejour_id = '$this->_id') OR (evenement_ssr.sejour_id IS NULL AND evt_seance.sejour_id = '$this->_id')";
-    $where["evenement_ssr.debut"] = "BETWEEN '$date 00:00:00' AND '$date 23:59:59'";
-		return $this->_count_evenements_ssr = $evenement->countList($where, null, null, null, $ljoin);
-	}
-	
-	function countEvenementsSSRWeek($kine_id, $date_min, $date_max) {
+  
+  /**
+   * Count evenement SSR for a given date;
+   * @param date $date 
+   * @return 
+   */
+  function countEvenementsSSR($date) {
     if (!$this->_id) {
       return;
     }
     
     $evenement = new CEvenementSSR;
-		$ljoin[] = "evenement_ssr AS evt_seance ON (evt_seance.seance_collective_id = evenement_ssr.evenement_ssr_id)";
+    $ljoin = array();
+    $ljoin[] = "evenement_ssr AS evt_seance ON (evt_seance.seance_collective_id = evenement_ssr.evenement_ssr_id)";
     $where[] = "(evenement_ssr.sejour_id = '$this->_id') OR (evenement_ssr.sejour_id IS NULL AND evt_seance.sejour_id = '$this->_id')";
-		$where["evenement_ssr.therapeute_id"] = "= '$kine_id'";
+    $where["evenement_ssr.debut"] = "BETWEEN '$date 00:00:00' AND '$date 23:59:59'";
+    return $this->_count_evenements_ssr = $evenement->countList($where, null, null, null, $ljoin);
+  }
+  
+  function countEvenementsSSRWeek($kine_id, $date_min, $date_max) {
+    if (!$this->_id) {
+      return;
+    }
+    
+    $evenement = new CEvenementSSR;
+    $ljoin[] = "evenement_ssr AS evt_seance ON (evt_seance.seance_collective_id = evenement_ssr.evenement_ssr_id)";
+    $where[] = "(evenement_ssr.sejour_id = '$this->_id') OR (evenement_ssr.sejour_id IS NULL AND evt_seance.sejour_id = '$this->_id')";
+    $where["evenement_ssr.therapeute_id"] = "= '$kine_id'";
     $this->_count_evenements_ssr      = $evenement->countList($where, null, null, null, $ljoin);
-		
+    
     $where["evenement_ssr.debut"] = "BETWEEN '$date_min 00:00:00' AND '$date_max 23:59:59'";
-		$this->_count_evenements_ssr_week = $evenement->countList($where, null, null, null, $ljoin);
-	}
-	
-	function getNbJourPlanning($date){
+    $this->_count_evenements_ssr_week = $evenement->countList($where, null, null, null, $ljoin);
+  }
+  
+  function getNbJourPlanning($date){
     $sunday = mbDate("next sunday", mbDate("- 1 DAY", $date));
     $saturday = mbDate("-1 DAY", $sunday);
     
     $_evt = new CEvenementSSR();
-		$ljoin = array();
+    $ljoin = array();
     $ljoin[] = "evenement_ssr AS evt_seance ON (evt_seance.seance_collective_id = evenement_ssr.evenement_ssr_id)";
     $where = array();
     $where["evenement_ssr.debut"] = "BETWEEN '$sunday 00:00:00' AND '$sunday 23:59:59'";
@@ -1856,28 +1856,28 @@ class CSejour extends CCodable implements IPatientRelated {
       }
     }
     return $nb_days;
-	}
-	
+  }
+  
   function completeLabelFields() {
-  	$this->loadRefPraticien();
-  	$this->loadNumDossier();
+    $this->loadRefPraticien();
+    $this->loadNumDossier();
     return array("DATE ENT" => mbDateToLocale($this->entree), "PRAT RESPONSABLE" => $this->_ref_praticien->_view,
                  "NDOS"     => $this->_num_dossier); 
   }
-	
-	function checkMerge($sejours = array()/*<CSejour>*/) {
+  
+  function checkMerge($sejours = array()/*<CSejour>*/) {
     if ($msg = parent::checkMerge($sejours)) {
       return $msg;
     }
     $count_prescription = 0;
     foreach ($sejours as $_sejour) {
       $_sejour->loadRefPrescriptionSejour();
-			if($_sejour->_ref_prescription_sejour->_id){
-				if($count_prescription == 1){
-	        return "Impossible de fusionner des sejours qui comportent chacun des prescriptions de séjour";
-	      }
-				$count_prescription++;
-			}
+      if($_sejour->_ref_prescription_sejour->_id){
+        if($count_prescription == 1){
+          return "Impossible de fusionner des sejours qui comportent chacun des prescriptions de séjour";
+        }
+        $count_prescription++;
+      }
     }
   }
 }

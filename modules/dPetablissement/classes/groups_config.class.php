@@ -19,7 +19,8 @@ class CGroupsConfig extends CMbObject {
   var $codage_prat = null;
   var $dPpatients_CPatient_nom_jeune_fille_mandatory = null;
   var $dPplanningOp_COperation_DHE_mode_simple = null;
-
+  var $ecap_CRPU_notes_creation = null;
+  
   function getSpec() {
     $spec = parent::getSpec();
     $spec->table = "groups_config";
@@ -37,6 +38,7 @@ class CGroupsConfig extends CMbObject {
     $specs["codage_prat"] = "bool default|0";
     $specs["dPpatients_CPatient_nom_jeune_fille_mandatory"] = "bool default|0";
     $specs["dPplanningOp_COperation_DHE_mode_simple"]       = "bool default|0";
+    $specs["ecap_CRPU_notes_creation"]                      = "bool default|0";
     return $specs;
   }
 }

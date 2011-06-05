@@ -33,8 +33,8 @@ class CRPU extends CMbObject {
   var $radio_fin       = null;
   var $bio_depart      = null;
   var $bio_retour      = null;
-	var $specia_att      = null;
-	var $specia_arr      = null;
+  var $specia_att      = null;
+  var $specia_arr      = null;
   var $mutation_sejour_id = null;
   var $box_id          = null;
   var $sortie_autorisee = null;

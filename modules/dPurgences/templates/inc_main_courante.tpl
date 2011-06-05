@@ -132,7 +132,7 @@
 	  {{else}}
 
     <td class="text" style="background-color: {{$background}}; text-align: center;">
-			{{mb_include module=system template=inc_get_notes_image object=$_sejour mode=view float=right}}
+			{{mb_include module=system template=inc_object_notes object=$_sejour mode=view float=right}}
       
 			{{if $isImedsInstalled}}
 			  {{mb_include module=dPImeds template=inc_sejour_labo sejour=$_sejour link="$rpu_link#Imeds"}}
