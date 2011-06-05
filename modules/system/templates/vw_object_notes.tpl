@@ -24,7 +24,7 @@
     </tr>
     <tr>
       <td class="text">
-        {{if $user == $_note->user_id}}
+        {{if !$_note->user_id || $user == $_note->user_id}}
           <form name="Del-{{$_note->_guid}}" action="" method="post">
             <input type="hidden" name="m" value="system" />
             <input type="hidden" name="del" value="0" />
@@ -32,7 +32,7 @@
             {{mb_key object=$_note}}
             
             <button style="float: right;" class="cancel notext" type="button" 
-              onclick="confirmDeletion(this.form, { typeName: 'cette note', ajax: 1 }, { onComplete: Note.refresh.curry(true) })">
+              onclick="confirmDeletion(this.form, { typeName: 'cette note', ajax: 1 }, { onComplete: Note.refresh.curry(true, '{{$object->_guid}}') })">
               {{tr}}Delete{{/tr}}
             </button>
           </form>

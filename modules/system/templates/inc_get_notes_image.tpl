@@ -9,10 +9,10 @@
 *}}
 
 {{if $mode != "view" || count($object->_ref_notes)}}
-<span style="float: {{$float|default:'left'}};"
+<span
   onmouseover="ObjectTooltip.createEx(this, '{{$object->_guid}}', 'objectNotes')"
-	{{if $mode == "edit"}}
-	  onclick="Note.create('{{$object->_guid}}')"
+  {{if $mode == "edit"}}
+    onclick="Note.create('{{$object->_guid}}')"
   {{/if}}
   >
   
@@ -23,7 +23,7 @@
     <img src="images/icons/note_orange.png" width="16" height="16" />
     {{elseif $object->_degree_notes == "low"}}
     <img src="images/icons/note_green.png" width="16" height="16" />
-  {{/if}}
+    {{/if}}
   {{elseif $mode == "edit"}}
     <img src="images/icons/note_transparent.png" width="16" height="16" />
   {{/if}}

@@ -38,7 +38,7 @@ class CNote extends CMbMetaObject {
 
   function getProps() {
   	$specs = parent::getProps();
-    $specs["user_id"]      = "ref notNull class|CMediusers";
+    $specs["user_id"]      = "ref class|CMediusers";
     $specs["public"]       = "bool notNull";
     $specs["degre"]        = "enum notNull list|low|medium|high default|low";
     $specs["date"]         = "dateTime notNull";

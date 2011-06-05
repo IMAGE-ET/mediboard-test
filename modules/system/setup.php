@@ -789,6 +789,11 @@ class CSetupsystem extends CSetup {
       CHANGE `object_class` `object_class` VARCHAR (80) NOT NULL;";
     $this->addQuery($query);
     
-    $this->mod_version = "1.0.77";
+    $this->makeRevision("1.0.77");
+    $query = "ALTER TABLE `note` 
+      CHANGE `user_id` `user_id` INT (11) UNSIGNED;";
+    $this->addQuery($query);
+    
+    $this->mod_version = "1.0.78";
   }
 }
