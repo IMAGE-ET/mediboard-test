@@ -20,5 +20,6 @@ foreach ($object->_ref_notes as $note) {
 // Création du template
 $smarty = new CSmartyDP();
 $smarty->assign("notes", $object->_ref_notes);
+$smarty->assign("object", $object);
 $smarty->display("vw_object_notes.tpl");
 ?>

@@ -547,11 +547,16 @@ var Note = {
     this.url.modaleObject.close();
   },
   
-  refresh: function(force) {
+  refresh: function(force, object_guid) {
     var selector = "div.noteDiv";
     
+    if (force) {
+      object_guid = object_guid || Note.url.oParams['object_guid'];
+    }
+    
     // Specific guid if forced, non initialized otherwise
-    selector += force ? ("."+Note.url.oParams['object_guid']) : ":not(.initialized)";
+    selector += force ? ("."+object_guid) : ":not(.initialized)";
+    
     $$(selector).each(function(element) {
       element.addClassName("initialized");
       var url = new Url("system", "httpreq_get_notes_image");
