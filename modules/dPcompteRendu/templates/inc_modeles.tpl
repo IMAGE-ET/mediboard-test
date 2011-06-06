@@ -1,8 +1,8 @@
 <table class="tbl">
 	<tr>
-	  <th>{{mb_title class=CCompteRendu field=nom}}</th>
-	  <th>{{mb_title class=CCompteRendu field=object_class}}</th>
-	  <th>{{mb_title class=CCompteRendu field=type}}</th>
+    <th>{{mb_colonne class=CCompteRendu field=nom order_col=$order_col order_way=$order_way url="?m=dPcompteRendu&tab=vw_modeles"}}</th>
+    <th>{{mb_colonne class=CCompteRendu field=object_class order_col=$order_col order_way=$order_way url="?m=dPcompteRendu&tab=vw_modeles"}}</th>
+    <th>{{mb_colonne class=CCompteRendu field=type order_col=$order_col order_way=$order_way url="?m=dPcompteRendu&tab=vw_modeles"}}</th>
 	  <th>{{tr}}Action{{/tr}}</th>
 	</tr>
 

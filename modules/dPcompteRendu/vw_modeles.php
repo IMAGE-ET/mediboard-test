@@ -9,6 +9,21 @@
 
 CCanDo::checkRead();
 
+$order_col = CValue::get("order_col", "object_class");
+$order_way = CValue::get("order_way", "ASC");
+
+$order = "";
+
+switch ($order_col) {
+  case "object_class":
+    $order = "object_class $order_way, type, nom";
+    break;
+  case "nom":
+    $order = "nom $order_way, object_class, type";
+  case "type":
+   $order = "type $order_way, object_class, nom";
+}
+
 // Liste des praticiens et cabinets accessibles
 $user = CMediusers::get();
 $praticiens = $user->loadUsers(PERM_EDIT);
@@ -26,7 +41,7 @@ if ($user->isPraticien()) {
   CValue::setSession("prat_id", $user->_id);
 }
 
-$modeles = CCompteRendu::loadAllModelesFor($filtre->user_id, 'prat', $filtre->object_class, $filtre->type);
+$modeles = CCompteRendu::loadAllModelesFor($filtre->user_id, 'prat', $filtre->object_class, $filtre->type, 1, "$order_col $order_way");
 $owners = $user->getOwners();
 
 // On ne met que les classes qui ont une methode filTemplate
@@ -40,7 +55,8 @@ $smarty->assign("filtre"    , $filtre);
 $smarty->assign("praticiens", $praticiens);
 $smarty->assign("modeles"   , $modeles);
 $smarty->assign("owners"    , $owners);
-
+$smarty->assign("order_way" , $order_way);
+$smarty->assign("order_col" , $order_col);
 $smarty->display("vw_modeles.tpl");
 
 ?>
