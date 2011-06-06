@@ -8,6 +8,10 @@
     {{assign var=_columns value=""}}
   {{/if}}
   
+  <button style="float: right;" class="tag-edit" type="button" onclick="Tag.manage('{{$object_class}}')">
+    Gérer les tags
+  </button>
+	
   <table class="main tbl" data-columns="{{$_columns}}" data-object_class="{{$object_class}}">
     <tr>
       <th colspan="{{$colspan}}">

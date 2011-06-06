@@ -16,9 +16,6 @@ $idSante400 = new CIdSante400;
 $idSante400->load(CValue::get("idSante400_id"));
 $idSante400->loadRefs();
 
-// Récupération de la liste des classes disponibles
-$listClasses = CApp::getInstalledClasses();
-
 // Chargement du filtre
 $filter = new CIdSante400;
 $filter->object_id    = CValue::get("object_id"   );
@@ -34,6 +31,14 @@ $dialog = CValue::get("dialog");
 if ($dialog && $idSante400->_id) {
   $filter->object_class = $idSante400->object_class;
   $filter->object_id    = $idSante400->object_id   ;
+}
+
+// Récupération de la liste des classes disponibles
+if ($filter->object_class && $filter->object_id) {
+  $listClasses = array($filter->object_class);
+}
+else {
+  $listClasses = CApp::getInstalledClasses();
 }
 
 // Chargement de la cible si oBjet unique

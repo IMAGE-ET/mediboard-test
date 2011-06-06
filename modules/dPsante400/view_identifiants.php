@@ -22,11 +22,16 @@ $filter->id400        = CValue::get("id400");
 $filter->nullifyEmptyFields();
 
 // Par défaut, édition du premier id400
-$list = $filter->loadMatchingList("last_update DESC", 30);
+$list = $filter->loadMatchingList("last_update DESC", 1);
 $firstId400 = reset($list);
 
 // Récupération de la liste des classes disponibles
-$listClasses = CApp::getInstalledClasses();
+if ($filter->object_class && $filter->object_id) {
+  $listClasses = array($filter->object_class);
+}
+else {
+  $listClasses = CApp::getInstalledClasses();
+}
 
 // Création du template
 $smarty = new CSmartyDP();
@@ -34,7 +39,6 @@ $smarty->assign("filter", $filter);
 $smarty->assign("idSante400_id", $firstId400 ? $firstId400->_id : 0);
 $smarty->assign("canSante400", $canSante400);
 $smarty->assign("dialog", $dialog);
-$smarty->assign("listClasses", $listClasses);
 $smarty->display("view_identifiants.tpl");
 
 ?>

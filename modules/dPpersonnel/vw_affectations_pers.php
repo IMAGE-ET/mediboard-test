@@ -38,9 +38,6 @@ if($affect_id == 0){
   $user_id = "";
 }
 
-// Liste des classes disponibles
-$classes = CApp::getInstalledClasses();
-
 // Liste des utilisateur faisant parti du personnel
 $personnel = new CPersonnel();
 $groupby = "user_id";

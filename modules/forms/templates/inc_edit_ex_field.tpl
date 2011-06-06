@@ -185,15 +185,19 @@ Main.add(function(){
       <th>Report de valeur</th>
       <td>
         {{assign var=class_options value=$ex_field->_ref_ex_group->_ref_ex_class->_host_class_options}}
-				
-        <label><input type="radio" name="report_level" value=""  {{if $ex_field->report_level == ""}}  checked="checked" {{/if}} /> Aucun </label>
-				
-				{{if $class_options.reference1.0}}
-          <label><input type="radio" name="report_level" value="1" {{if $ex_field->report_level == "1"}} checked="checked" {{/if}} /> {{tr}}{{$class_options.reference1.0}}{{/tr}} </label>
-				{{/if}}
-				
-				{{if $class_options.reference2.0}}
-          <label><input type="radio" name="report_level" value="2" {{if $ex_field->report_level == "2"}} checked="checked" {{/if}} /> {{tr}}{{$class_options.reference2.0}}{{/tr}} </label>
+			
+				{{if $ex_field->_id}}
+	        <label><input type="radio" name="report_level" value=""  {{if $ex_field->report_level == ""}}  checked="checked" {{/if}} /> Aucun </label>
+					
+					{{if $class_options.reference1.0}}
+	          <label><input type="radio" name="report_level" value="1" {{if $ex_field->report_level == "1"}} checked="checked" {{/if}} /> {{tr}}{{$class_options.reference1.0}}{{/tr}} </label>
+					{{/if}}
+					
+					{{if $class_options.reference2.0}}
+	          <label><input type="radio" name="report_level" value="2" {{if $ex_field->report_level == "2"}} checked="checked" {{/if}} /> {{tr}}{{$class_options.reference2.0}}{{/tr}} </label>
+					{{/if}}
+				{{else}}
+				  <em>Enregistrez le champ avant de définir le type de report</em>
 				{{/if}}
       </td>
       
@@ -221,10 +225,15 @@ Main.add(function(){
 
 <ul class="control_tabs" id="ExClassField-param">
   <li><a href="#fieldSpecEditor">Propriétés</a></li>
-  <li><a href="#fieldFormulaEditor" {{if !$ex_field->formula}} class="empty" {{/if}} style="background-image: url(style/mediboard/images/buttons/formula.png); background-repeat: no-repeat; background-position: 2px 2px; padding-left: 18px;">Formule / concaténation</a></li>
+	
+  {{if $ex_field->_id}}
+    <li><a href="#fieldFormulaEditor" {{if !$ex_field->formula}} class="empty" {{/if}} style="background-image: url(style/mediboard/images/buttons/formula.png); background-repeat: no-repeat; background-position: 2px 2px; padding-left: 18px;">Formule / concaténation</a></li>
+  {{/if}}
 </ul>
 <hr class="control_tabs" />
 
 <div id="fieldSpecEditor" style="white-space: normal; display: none;"></div>
 
-<div id="fieldFormulaEditor" style="display: none;"></div>
+<div id="fieldFormulaEditor" style="display: none;">
+  Enregistrez le champ pour modifier sa formule
+</div>
