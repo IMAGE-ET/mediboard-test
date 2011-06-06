@@ -371,7 +371,7 @@
                   minChars: 1,
                   dropdown: true,
                   width: "250px",
-                  select: ".view",
+                  select: "view",
                   afterUpdateElement: function(input, selected) {
                     $V(getForm("editRPU").circonstance, selected.select(".code")[0].innerHTML);
                     $("libelle_circonstance").innerHTML = selected.select(".libelle_circonstance")[0].innerHTML;
