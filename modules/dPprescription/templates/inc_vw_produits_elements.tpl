@@ -146,7 +146,7 @@ viewEasyMode = function(mode_protocole, mode_pharma, chapitre){
 
 refreshElementPrescription = function(chapitre, force, hide_old_lines) {
   if (!window[chapitre+'Loaded'] || force) {
-    Prescription.reload('{{$prescription->_id}}', null, chapitre, null, null, null, null, hide_old_lines);
+    Prescription.reload('{{$prescription->_id}}', null, chapitre, null, '{{$mode_pharma}}', null, null, hide_old_lines);
     WaitingMessage.cover("div_"+chapitre);
     window[chapitre+'Loaded'] = true;
   }
