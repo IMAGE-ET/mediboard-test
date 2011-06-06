@@ -8,6 +8,12 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
 *}}
 
+{{assign var=range value=1}}
+
+{{if $prescription->type == "externe"}}
+  {{assign var=range value=2}}
+{{/if}}
+
 {{if $prescription->object_id}}
 	<script type="text/javascript">
 	Main.add(window.print);
@@ -60,7 +66,10 @@ div.footer {
   height: {{$footer}}px;
 }
 
-
+p.duplicata {
+  font-size: 1.5em;
+  text-align: center;
+}
 </style>
 
 <div class="header" onclick="window.print();" style="cursor: pointer">
@@ -207,6 +216,10 @@ div.footer {
   <div style="display: none;">
 {{/if}}
 
+{{foreach from=1|range:$range item=i}}
+  {{if $i == 2}}
+    <span style="page-break-before: always;"></span>
+  {{/if}}
 <!-- Affichage en mode ALD -->
 {{if $lines.medicaments.med.ald || $lines.medicaments.med.no_ald ||
      $lines.medicaments.comment.ald || $lines.medicaments.comment.no_ald}}
@@ -215,6 +228,12 @@ div.footer {
   <div class="body">
   {{else}}
   <div class="bodyWithoutPageBreak">
+  {{/if}}
+  
+  {{if $i==2}}
+    <p class="duplicata opacity-70">
+      Duplicata ne permettant pas la délivrance de médicaments
+    </p>
   {{/if}}
   
 {{if $lines.medicaments.med.ald || $lines.medicaments.comment.ald || $lines.medicaments.dm.ald}}
@@ -276,6 +295,11 @@ div.footer {
 		   </ul>
 			 </div>
 			 <div class="body">
+       {{if $i==2}}
+          <p class="duplicata opacity-70">
+            Duplicata ne permettant pas la délivrance de médicaments
+          </p>
+        {{/if}}
 			 <ul>
 			{{/if}}
 		
@@ -348,6 +372,12 @@ div.footer {
      {{else}} 
        <div class="body">
      {{/if}}
+
+     {{if $i==2}}
+        <p class="duplicata opacity-70">
+          Duplicata ne permettant pas la délivrance de médicaments
+        </p>
+      {{/if}}
 
      <h2>{{$conf.dPprescription.CCategoryPrescription.$name_chap.phrase}}</h2>
      {{if array_key_exists("ald", $elements) && $elements.ald|@count}}
@@ -428,6 +458,7 @@ div.footer {
 	     </ul>
      </div>
   {{/foreach}}
+{{/foreach}}
 {{/foreach}}
 
 {{if $only_dmi}}
