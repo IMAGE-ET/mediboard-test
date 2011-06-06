@@ -20,18 +20,29 @@ $prescription_line_mix->load($prescription_line_mix_id);
 // Calcul de la quantite totale
 $prescription_line_mix->calculQuantiteTotal();
 
+$line_solvant = null;
+
 if ($quantite_solvant){
   // Calcul de la quantite de solvant
-	if($modif_qte_totale){
-		foreach($prescription_line_mix->_ref_lines as $_perf_line){
-			if(!$_perf_line->solvant){
-			  $_unite_prise = str_replace('/kg', '', $_perf_line->unite);
-			  if (isset($_perf_line->_ref_produit->rapport_unite_prise[$_unite_prise]["ml"]) || $_unite_prise == "ml") {
-				  $quantite_solvant -= $_perf_line->_quantite_administration;
-			  } 
-			}
-		}
-	}
+  if($modif_qte_totale){
+    foreach($prescription_line_mix->_ref_lines as $_perf_line){
+      if(!$_perf_line->solvant){
+        $_unite_prise = str_replace('/kg', '', $_perf_line->unite);
+        if (isset($_perf_line->_ref_produit->rapport_unite_prise[$_unite_prise]["ml"]) || $_unite_prise == "ml") {
+          $quantite_solvant -= $_perf_line->_quantite_administration;
+        } 
+      }
+      else {
+        $line_solvant = $_perf_line;
+      }
+    }
+  }
+}
+
+if ($line_solvant) {
+  if (preg_match("/([0-9\.]+)\s*ml/", $line_solvant->unite, $matches)) {
+    $quantite_solvant /= $matches[1];
+  }
 }
 
 // Passage de la quantite à mettre à jour (quantite de solvant ou quantite totale)
