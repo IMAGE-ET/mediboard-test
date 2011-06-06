@@ -45,7 +45,6 @@ Reconvocation = {
   createConsult: function() {
     var oForm = getForm("Create-Reconvocation");
     var url = new Url("dPcabinet", "ajax_create_reconvoc");
-    url.addParam("prat_id", $V(oForm.prat_id));
     url.requestModal(500);
   },
   submit: function() {
@@ -76,12 +75,7 @@ Reconvocation = {
 
         <input type="hidden" name="patient_id" class="ref notNull" onchange="Reconvocation.submit();"/>   
         <input type="hidden" name="_patient_view" />   
-				
-        <select name="prat_id" class="ref notNull">
-          <option value="">&mdash; {{tr}}Choose{{/tr}}</option>
-					{{mb_include module=mediusers template=inc_options_mediuser list=$all_prats selected=$app->user_id}}
-        </select>
-        
+        <input type="hidden" name="prat_id" value="" />
         <input type="hidden" name="motif" value="" />   
         <button type="submit" class="new">Reconvocation immédiate</button>
       </form>
