@@ -149,7 +149,7 @@ $ex_objects = array();
 if ($print) {
   $ex_class = new CExClass;
   $ex_class->host_class = 'CPrescriptionLineElement';
-  $ex_class->event      = 'prescription';
+  //$ex_class->event      = 'prescription';
   
   $ex_classes = $ex_class->loadMatchingList();
   CExObject::$_multiple_load = true;
