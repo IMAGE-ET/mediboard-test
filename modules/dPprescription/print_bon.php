@@ -74,7 +74,7 @@ if(count($prescription->_ref_lines_elt_for_plan)){
                         $quantite = $_line->_administrations[$unite][$_date][$_hour]["quantite_planifiee"];
                         if($print_bon){
                           @$bons[$_name_chap][$_hour][$_name_cat][$_line->_id]["quantite"] += $quantite;
-													if($_quantite["urgence"]){
+													if(isset($_quantite["urgence"]) && $_quantite["urgence"]){
 		                        @$bons[$_name_chap][$_hour][$_name_cat][$_line->_id]["urgence"] = true;
 		                      }
                         }
@@ -84,7 +84,7 @@ if(count($prescription->_ref_lines_elt_for_plan)){
                       if(isset($_quantite["total"]) && $_quantite["total"]){
                         if($print_bon){                      
                           @$bons[$_name_chap][$_hour][$_name_cat][$_line->_id]["quantite"] += $_quantite["total"];
-													if($_quantite["urgence"]){
+													if(isset($_quantite["urgence"]) && $_quantite["urgence"]){
 		                        @$bons[$_name_chap][$_hour][$_name_cat][$_line->_id]["urgence"] = true;
 		                      }
                         }
