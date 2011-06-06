@@ -317,9 +317,10 @@
 	  
 	   <!-- Selection du service -->
 	  <tr>
+	    <td colspan="2"></td>
 		  <th>{{mb_label object=$rpu field="pec_transport"}}</th>
-	    <td colspan="3">{{mb_field object=$rpu field="pec_transport" defaultOption="&mdash; Prise en charge"}}</td>
-		</tr>
+	    <td>{{mb_field object=$rpu field="pec_transport" defaultOption="&mdash; Prise en charge"}}</td>
+      </tr>
 	
 	  <tr>
 	    <th>{{mb_label object=$rpu field="box_id"}}</th>
