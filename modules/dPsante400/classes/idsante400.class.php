@@ -23,6 +23,10 @@
   // Derivate fields
   var $_last_id      = null;
   
+  // Filter fields
+  var $_start_date   = null;
+  var $_end_date     = null;
+  
   function getSpec() {
     $spec = parent::getSpec();
     $spec->table = 'id_sante400';
@@ -36,6 +40,9 @@
     $specs["id400"]        = "str notNull maxLength|80";
     $specs["tag"]          = "str maxLength|80";
     $specs["last_update"]  = "dateTime notNull";
+    
+    $specs["_start_date"]  = "dateTime";
+    $specs["_end_date"]    = "dateTime";
     return $specs;
   }
   

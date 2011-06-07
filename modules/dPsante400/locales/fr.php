@@ -1,5 +1,9 @@
 <?php
 $locales['CIdSante400'] = 'Identifiant Externe';
+$locales['CIdSante400-_end_date'] = 'Date max.';
+$locales['CIdSante400-_end_date-desc'] = 'Date maximale de modification de l\'identifiant';
+$locales['CIdSante400-_start_date'] = 'Date min.';
+$locales['CIdSante400-_start_date-desc'] = 'Date minimale de modification de l\'identifiant';
 $locales['CIdSante400-id400'] = 'ID Externe';
 $locales['CIdSante400-id400-court'] = 'ID Externe';
 $locales['CIdSante400-id400-desc'] = 'Identifiant Externe de l\'objet';
@@ -26,7 +30,7 @@ $locales['CIdSante400-title-create'] = 'Création de l\'identifiant externe';
 $locales['CIdSante400-title-delete'] = 'Suppression de l\'identifiant externe';
 $locales['CIdSante400-title-modify'] = 'Modification de l\'identifiant externe';
 $locales['CIdSante400.all'] = 'Tous les identifiants externes';
-$locales['CIdSante400.cannot_modify_id400'] = 'Vous ne pouvez pas modifier ces informations. \n Pour les modifier, veuillez contactez le responsable identito-vigilance.';
+$locales['CIdSante400.cannot_modify_id400'] = 'Vous ne pouvez pas modifier ces informations. n Pour les modifier, veuillez contactez le responsable identito-vigilance.';
 $locales['CIdSante400.none'] = 'Pas d\'identifiant externe';
 $locales['CIdSante400.one'] = 'Un identifiant externe';
 $locales['CIdSante400.select'] = 'Choisir un identifiant';
@@ -88,6 +92,7 @@ $locales['config-interop-mode_compat'] = 'Mode de compalité';
 $locales['config-interop-mode_compat-default'] = 'Aucun';
 $locales['config-interop-mode_compat-medicap'] = 'Medicap';
 $locales['mod-dPsante400-tab-configure'] = 'Configuration';
+$locales['mod-dPsante400-tab-delete_duplicates'] = 'Suppr. doublons';
 $locales['mod-dPsante400-tab-easycom'] = 'Tests EasyCom';
 $locales['mod-dPsante400-tab-httpreq_do_moves'] = 'Action sur les mouvements';
 $locales['mod-dPsante400-tab-stats_identifiants'] = 'Statistiques';
