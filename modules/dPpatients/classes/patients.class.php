@@ -190,6 +190,8 @@ class CPatient extends CMbObject {
   var $_age_assure  = null;
   var $_civilite    = null;
   var $_civilite_long = null;
+  var $_assure_civilite = null;
+  var $_assure_civilite_long = null;
   var $_longview    = null;
   var $_art115      = null;
   var $_type_exoneration = null;
@@ -362,7 +364,6 @@ class CPatient extends CMbObject {
     $specs["assure_tel2"]                 = "numchar confidential length|10 mask|$phone_number_format";
     $specs["assure_pays"]                 = "str";
     $specs["assure_pays_insee"]           = "str";
-    $specs["assure_lieu_naissance"]       = "str";
     $specs["assure_lieu_naissance"]       = "str";
     $specs["assure_cp_naissance"]         = "numchar minLength|4 maxLength|5";
     $specs["assure_pays_naissance_insee"] = "str";
@@ -691,6 +692,13 @@ class CPatient extends CMbObject {
       $this->_civilite_long = $this->sexe === "m" ? CAppUI::tr("CPatient.civilite.le_jeune") : CAppUI::tr("CPatient.civilite.la_jeune");
     } else {
     	$this->_civilite_long = CAppUI::tr("CPatient.civilite.$this->civilite-long");
+    }
+    
+    $this->_assure_civilite = CAppUI::tr("CPatient.civilite.$this->assure_civilite");
+    if ($this->assure_civilite === "enf") {
+      $this->_assure_civilite_long = $this->assure_sexe === "m" ? CAppUI::tr("CPatient.civilite.le_jeune") : CAppUI::tr("CPatient.civilite.la_jeune");
+    } else {
+      $this->_assure_civilite_long = CAppUI::tr("CPatient.civilite.$this->assure_civilite-long");
     }
     
     $nom_naissance   = $this->nom_jeune_fille && $this->nom_jeune_fille != $this->nom ? " ($this->nom_jeune_fille)" : "";
@@ -1602,7 +1610,45 @@ class CPatient extends CMbObject {
     $template->addProperty("Patient - Pouls",  $const_med->pouls);
     $template->addProperty("Patient - IMC",    $const_med->_imc);
     $template->addProperty("Patient - VST",    $const_med->_vst);
-    $template->addProperty("Patient - TA",     ($const_med->ta ? "$const_med->_ta_systole / $const_med->_ta_diastole" : ""));   
+    $template->addProperty("Patient - TA",     ($const_med->ta ? "$const_med->_ta_systole / $const_med->_ta_diastole" : ""));
+    
+    // Assuré social
+    $template->addProperty("Patient - Assuré social - nom", $this->assure_nom);
+    $template->addProperty("Patient - Assuré social - nom jeune fille", $this->assure_nom_jeune_fille);
+    $template->addProperty("Patient - Assuré social - prénom", $this->assure_prenom);
+    $template->addDateProperty("Patient - Assuré social - date de naissance", $this->assure_naissance);
+    $template->addProperty("Patient - Assuré social - article", $this->_assure_civilite);
+    $template->addProperty("Patient - Assuré social - article long", $this->_assure_civilite_long);
+    $template->addProperty("Patient - Assuré social - adresse", $this->assure_adresse);
+    $template->addProperty("Patient - Assuré social - ville", $this->assure_ville);
+    $template->addProperty("Patient - Assuré social - cp", $this->assure_cp);
+    $template->addProperty("Patient - Assuré social - pays", $this->assure_pays);
+    $template->addProperty("Patient - Assuré social - téléphone", $this->assure_tel);
+    $template->addProperty("Patient - Assuré social - mobile", $this->assure_tel2);
+    $template->addProperty("Patient - Assuré social - cp naissance", $this->assure_cp_naissance);
+    $template->addProperty("Patient - Assuré social - lieu de naissance", $this->assure_lieu_naissance);
+    $template->addProperty("Patient - Assuré social - profession", $this->assure_profession);
+    
+    // Bénéficiaire de soins
+    $template->addProperty("Patient - Bénéficiaire de soin - code régime", $this->code_regime);
+    $template->addProperty("Patient - Bénéficiaire de soin - caisse gest", $this->caisse_gest);
+    $template->addProperty("Patient - Bénéficiaire de soin - centre gest", $this->centre_gest);
+    $template->addProperty("Patient - Bénéficiaire de soin - code gest"  , $this->code_gestion);
+    $template->addProperty("Patient - Bénéficiaire de soin - régime santé", $this->regime_sante);
+    $template->addDateProperty("Patient - Bénéficiaire de soin - début période", $this->deb_amo);
+    $template->addDateProperty("Patient - Bénéficiaire de soin - fin période", $this->fin_amo);
+    $template->addProperty("Patient - Bénéficiaire de soin - régime am"  , $this->getFormattedValue("regime_am"));
+    $template->addProperty("Patient - Bénéficiaire de soin - ald"        , $this->getFormattedValue("ald"));
+    $template->addProperty("Patient - Bénéficiaire de soin - incapable majeur", $this->getFormattedValue("incapable_majeur"));
+    $template->addProperty("Patient - Bénéficiaire de soin - cmu"        , $this->getFormattedValue("cmu"));
+    $template->addProperty("Patient - Bénéficiaire de soin - ATNC"       , $this->getFormattedValue("ATNC"));
+    $template->addDateProperty("Patient - Bénéficiaire de soin - validité vitale", $this->fin_validite_vitale);
+    $template->addProperty("Patient - Bénéficiaire de soin - médecin traitant déclaré", $this->getFormattedValue("medecin_traitant_declare"));
+    $template->addProperty("Patient - Bénéficiaire de soin - types contrat mutuelle", addslashes($this->mutuelle_types_contrat));
+    $template->addProperty("Patient - Bénéficiaire de soin - notes amo"  , addslashes($this->notes_amo));
+    $template->addProperty("Patient - Bénéficiaire de soin - libellé exo", addslashes($this->libelle_exo));
+    $template->addProperty("Patient - Bénéficiaire de soin - notes amc"  , addslashes($this->notes_amc));
+    
   }
   
   function fillTemplate(&$template) {
