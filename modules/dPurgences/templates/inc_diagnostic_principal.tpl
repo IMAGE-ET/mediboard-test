@@ -14,14 +14,17 @@
 
 <script type="text/javascript">
   reloadDiagnostic = function(sejour_id, modeDAS) {
-	  var url = new Url("dPurgences", "ajax_diagnostic_principal");
-	  url.addParam("sejour_id", sejour_id);
-	  url.requestUpdate("dp_"+sejour_id);
-
-	  var url = new Url("dPsalleOp", "httpreq_diagnostic_principal");
-	  url.addParam("sejour_id", sejour_id);
-	  url.addParam("modeDAS", modeDAS);
-	  url.requestUpdate("cim");
+    if ($("dp_"+sejour_id)) {
+  	  var url = new Url("dPurgences", "ajax_diagnostic_principal");
+  	  url.addParam("sejour_id", sejour_id);
+  	  url.requestUpdate("dp_"+sejour_id);
+    }
+    if ($("cim")) {
+  	  var url = new Url("dPsalleOp", "httpreq_diagnostic_principal");
+  	  url.addParam("sejour_id", sejour_id);
+  	  url.addParam("modeDAS", modeDAS);
+  	  url.requestUpdate("cim");
+    }
   }
   deleteCodeCim10 = function() {
 	  var oForm = getForm("editSejour");
@@ -39,7 +42,6 @@
       width: "250px",
       afterUpdateElement: function(oHidden) {
   	    $V(getForm('editSejour').DP, oHidden.value);
-  	    submitSejour('{{$sejour->_id}}');
       }
     });
   });
@@ -48,7 +50,7 @@
   <input type="hidden" name="praticien_id" value="{{$sejour->praticien_id}}"/>
 
   <input type="text" name="keywords_code" id="editSejour_keywords_code" class="autocomplete str" value="{{$sejour->DP}}" size="10"/>
-  <input type="hidden" name="DP"/>
+  <input type="hidden" name="DP" onchange="$V(this.form.keywords_code, this.value); submitSejour('{{$sejour->_id}}');"/>
   <script type="text/javascript">
     CIM10Selector.initDP = function() {
       this.sForm     = "editSejour";
