@@ -12,9 +12,6 @@ CCanDo::checkAdmin();
 
 set_time_limit(1200);
 
-$product = new CProduct;
-$products = $product->loadList(null, null, 100);
-
 function append_user_logs(&$all_logs, $logs) {
   foreach($logs as $_log) {
     $all_logs[$_log->date][$_log->_id] = $_log;
@@ -22,6 +19,8 @@ function append_user_logs(&$all_logs, $logs) {
 }
 
 //CSQLDataSource::$trace = true;
+
+// ---------------------
 
 CProductOrderItemReception::$_load_lite = true;
 $oir = new CProductOrderItemReception;
@@ -34,6 +33,8 @@ $oir_ljoin = array(
   "product"            => "product_reference.product_id = product.product_id",
 );
 
+// ---------------------
+
 CProductOrderItem::$_load_lite = true;
 $oi = new CProductOrderItem;
 $oi_where = array(
@@ -45,16 +46,27 @@ $oi_ljoin = array(
   "user_log"           => "product_order_item.order_item_id = user_log.object_id AND user_log.object_class = 'CProductOrderItem'",
 );
 
+// ---------------------
+
 CProductReference::$_load_lite = true;
 $ref = new CProductReference;
 $ref_where = array(
   "product_reference.units_fixed = '0'",
 );
 
+
+$product = new CProduct;
+$pr_ljoin = array(
+  "product_reference"  => "product.product_id = product_reference.product_id",
+);
+$product->load(1177);
+$products = array($product); //$product->loadList($ref_where, null, 50, null, $pr_ljoin);
+mbTrace(count($products));
+// ---------------------
+
 // Chargement des CProduct
 foreach($products as $_product) {
 	mbTrace($_product->_view, " ######################## ");
-	$quantity_product = $_product->quantity;
 	$old_date = mbDateTime();
   
   //$_references = $_product->loadRefsReferences();
@@ -70,6 +82,7 @@ foreach($products as $_product) {
   append_user_logs($product_logs, $product_logs_quantity);
 	
 	foreach($_references as $_reference) {
+    $quantity_product   = $_product->quantity;
 		$quantity_reference = $_reference->orig_quantity;
     $price_reference    = $_reference->orig_price;
 		
@@ -88,9 +101,12 @@ foreach($products as $_product) {
 	  
 	  foreach($logs as $_date => $_logs) {
 	    foreach($_logs as $_log) {
-				if ($_date == $old_date) continue;
+				if ($_date == $old_date) {
+					mbTrace("DATE IDEM");
+					continue;
+				}
 				
-        mbTrace("$old_date >> $_date");
+        mbTrace($_log->getOldValues(), "$_log->object_class : $old_date >> $_date");
         
         // CProductOrderItem : quantity and price
         // need to join on the latest log :(
@@ -100,14 +116,14 @@ foreach($products as $_product) {
         //mbTrace("OI  ".count($ois));
 				
 				foreach($ois as $_oi) {
-					mbTrace(sprintf("%d\t >> %d\t", $_oi->quantity, $_oi->quantity * $quantity_reference * $quantity_product), "OIR QTY");
+					mbTrace(sprintf("%d\t >> %d\t", $_oi->quantity, $_oi->quantity * $quantity_reference * $quantity_product), "OI  QTY");
           $_oi->quantity = $_oi->quantity * $quantity_reference * $quantity_product;
 					
-          mbTrace(sprintf("%.5f\t >> %.5f\t", $_oi->unit_price, $_oi->unit_price / ($quantity_reference * $quantity_product)), "OIR PRI");
+          mbTrace(sprintf("%.5f\t >> %.5f\t", $_oi->unit_price, $_oi->unit_price / ($quantity_reference * $quantity_product)), "OI  PRI");
           $_oi->unit_price = $_oi->unit_price / ($quantity_reference * $quantity_product);
 					
 					$_oi->units_fixed = 1;
-					//$_oi->store();
+					$_oi->store();
 				}
 				
 				// CProductOrderItemReception : quantity
@@ -117,18 +133,21 @@ foreach($products as $_product) {
         //mbTrace("OIR ".count($oirs));
         
         foreach($oirs as $_oir) {
-          mbTrace(sprintf("%d\t >> %d\t", $_oir->quantity, $_oir->quantity * $quantity_reference * $quantity_product), "OI  QTY");
+          mbTrace(sprintf("%d\t >> %d\t", $_oir->quantity, $_oir->quantity * $quantity_reference * $quantity_product), "OIR QTY");
           $_oir->quantity = $_oir->quantity * $quantity_reference * $quantity_product;
           
           $_oir->units_fixed = 1;
-          //$_oir->store();
+          $_oir->store();
         }
 				
 				// Update values and date
         $old_date = $_date;
         $old_values = $_log->getOldValues();
         
-        if (empty($old_values)) continue;
+        if (empty($old_values)) {
+        	mbTrace("OLD VALUES EMPTY");
+        	continue;
+				}
 				
         switch ($_log->object_class) {
           case "CProduct":
@@ -163,7 +182,7 @@ foreach($products as $_product) {
 						//mbTrace($old_values);
 						$new_values = json_encode($old_values);
 						$_log->extra = $new_values;
-						//$_log->store();
+						$_log->store();
 						
             break;
         }
@@ -172,6 +191,6 @@ foreach($products as $_product) {
 		
 	  // process last CProductReference
     $_reference->units_fixed = 1;
-		//$_reference->store();
+		$_reference->store();
 	}
 }
