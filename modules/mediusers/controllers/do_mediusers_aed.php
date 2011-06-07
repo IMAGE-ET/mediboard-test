@@ -8,7 +8,7 @@
 */
 
 // we don't allow anybody to change his user type or profile
-if (!CAppUI::$user->isAdmin() && !CModule::getCanDo("admin")->admin) {
+if ($_POST["user_id"] && !CAppUI::$user->isAdmin() && !CModule::getCanDo("admin")->admin) {
   unset($_POST['_user_type']);
   unset($_POST['_profile_id']);
 }

@@ -153,23 +153,23 @@ Main.add(function() {
       	
         <tr class="prenoms_list" style="display: none;">
           <th>{{mb_label object=$patient field="prenom_2"}}</th>
-          <td>{{mb_field object=$patient field="prenom_2" onchange="copyIdentiteAssureValues(this)"}} </td>
+          <td>{{mb_field object=$patient field="prenom_2" onchange="checkDoublon(); copyIdentiteAssureValues(this)"}} </td>
         </tr>
         
         <tr class="prenoms_list" style="display: none;">
           <th>{{mb_label object=$patient field="prenom_3"}}</th>
-          <td>{{mb_field object=$patient field="prenom_3" onchange="copyIdentiteAssureValues(this)"}}</td>
+          <td>{{mb_field object=$patient field="prenom_3" onchange="checkDoublon(); copyIdentiteAssureValues(this)"}}</td>
         </tr>
         
         <tr class="prenoms_list" style="display: none;">
           <th>{{mb_label object=$patient field="prenom_4"}}</th>
-          <td>{{mb_field object=$patient field="prenom_4" onchange="copyIdentiteAssureValues(this)"}} </td>
+          <td>{{mb_field object=$patient field="prenom_4" onchange="checkDoublon(); copyIdentiteAssureValues(this)"}} </td>
         </tr>
         
         <tr>
           <th>{{mb_label object=$patient field="nom_jeune_fille"}}</th>
           <td>
-            {{mb_field object=$patient field="nom_jeune_fille" onchange="copyIdentiteAssureValues(this)"}}
+            {{mb_field object=$patient field="nom_jeune_fille" onchange="checkDoublon(); copyIdentiteAssureValues(this)"}}
             <button type="button" class="carriage_return notext" title="{{tr}}CPatient.name_recopy{{/tr}}"
               onclick="$V(getForm('editFrm').nom_jeune_fille, $V(getForm('editFrm').nom));" tabIndex="1000"></button>
             {{if $patient->_id && $patient->sexe == "f" && $nom_jeune_fille_mandatory}}
