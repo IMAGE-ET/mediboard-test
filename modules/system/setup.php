@@ -794,6 +794,14 @@ class CSetupsystem extends CSetup {
       CHANGE `user_id` `user_id` INT (11) UNSIGNED;";
     $this->addQuery($query);
     
-    $this->mod_version = "1.0.78";
+    $this->makeRevision("1.0.78");
+    $query = "CREATE TABLE `content_any` (
+                `content_id` INT (11) UNSIGNED NOT NULL auto_increment PRIMARY KEY,
+                `content` TEXT,
+                `import_id` INT (11)
+              ) /*! ENGINE=MyISAM */;";
+    $this->addQuery($query);
+    
+    $this->mod_version = "1.0.79";
   }
 }
