@@ -161,6 +161,7 @@ function printPage(element){
                 
                 {{assign var=sejour_id value=$sejour->_id}}
                 {{assign var=dossier_medical value=$patient->_ref_dossier_medical}}
+                {{assign var=object value=$sejour}}
                 
                 {{if array_key_exists($sejour_id, $csteByTimeAll)}}
                   {{assign var=csteByTime value=$csteByTimeAll.$sejour_id}}
