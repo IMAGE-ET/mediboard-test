@@ -10,6 +10,8 @@
 
 CCanDo::checkRead();
 
+global $prat;
+
 // Chargement de l'utilisateur courant
 $user = CMediusers::get();
 
