@@ -19,7 +19,7 @@
   
   <table class="form">
     <tr>
-      <th class="title" colspan="4">
+      <th class="title" colspan="6">
         Filtre
       </th>
     </tr>
@@ -38,6 +38,8 @@
       </td>
       <th>{{mb_label object=$filter field="_start_date" form="filterFrm" register=true}}</th>
       <td>{{mb_field object=$filter field="_start_date" form="filterFrm" register=true}}</td>
+      <th>Nombre de résultats</th>
+      <td><input type="text" name="limit_duplicates" value="{{$limit_duplicates}}" /></td>
     </tr>
     <tr>
       <th>{{mb_label object=$filter field="object_id"}}</th>
@@ -56,10 +58,12 @@
       </td>
       <th>{{mb_label object=$filter field="_end_date" form="filterFrm" register=true}}</th>
       <td>{{mb_field object=$filter field="_end_date" form="filterFrm" register=true}}</td>
+      <th>Traiter les résultats</th>
+      <td><input type="checkbox" name="do_delete" /></td>
     </tr>
   
     <tr>
-      <td class="button" colspan="4">
+      <td class="button" colspan="6">
         <button class="search" type="submit">Afficher</button>
       </td>
     </tr>
@@ -78,7 +82,15 @@
   </tr>
   {{foreach from=$list item=_ids}}
   <tr>
-    <td><button class="trash" type="button" onclick="cleanIds('{{$_ids.object_id}}', '{{$_ids.object_class}}', '{{$_ids.tag}}', '{{$_ids.id400}}', this)">Nettoyer</button></td>
+    <td class="text">
+      {{if $_ids.msg}}
+        {{$_ids.msg|smarty:nodefaults}}
+      {{else}}
+        <button class="trash" type="button" onclick="cleanIds('{{$_ids.object_id}}', '{{$_ids.object_class}}', '{{$_ids.tag}}', '{{$_ids.id400}}', this)">
+          Nettoyer
+        </button>
+      {{/if}}
+    </td>
     <td>{{$_ids.object_id}}</td>
     <td>{{tr}}{{$_ids.object_class}}{{/tr}}</td>
     <td>{{$_ids.tag}}</td>
