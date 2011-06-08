@@ -9,9 +9,8 @@
 
 CCanDo::checkRead();
 
-$order_col = CValue::get("order_col", "object_class");
-$order_way = CValue::get("order_way", "ASC");
-
+$order_col = CValue::getOrSession("order_col", "object_class");
+$order_way = CValue::getOrSession("order_way", "ASC");
 $order = "";
 
 switch ($order_col) {
@@ -20,6 +19,7 @@ switch ($order_col) {
     break;
   case "nom":
     $order = "nom $order_way, object_class, type";
+    break;
   case "type":
    $order = "type $order_way, object_class, nom";
 }
@@ -41,7 +41,7 @@ if ($user->isPraticien()) {
   CValue::setSession("prat_id", $user->_id);
 }
 
-$modeles = CCompteRendu::loadAllModelesFor($filtre->user_id, 'prat', $filtre->object_class, $filtre->type, 1, "$order_col $order_way");
+$modeles = CCompteRendu::loadAllModelesFor($filtre->user_id, 'prat', $filtre->object_class, $filtre->type, 1, $order);
 $owners = $user->getOwners();
 
 // On ne met que les classes qui ont une methode filTemplate
