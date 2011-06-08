@@ -14,24 +14,19 @@ if ($_keywords_circonstance == "") {
   $_keywords_circonstance = "%%";
 }
 
-$ds = CSQLDataSource::get("std");
-
 $module_orumip = CModule::getActive("orumip");
 $orumip_active = $module_orumip && $module_orumip->mod_active;
 
-$request = new CRequest;
-$request->addSelect(array("code", "libelle"));
+$circonstances = array();
 
-if ($orumip_active) {  
-  $request->addTable("orumip_circonstance");
-  $request->addWhere("libelle LIKE '%".addslashes($_keywords_circonstance)."%'");
+if ($orumip_active) {
+  $circonstance = new COrumip;
+  $circonstances = $circonstance->seek($_keywords_circonstance);
 }
 else {
-  $request->addTable("circonstance");
-  $request->addWhere("code LIKE '%".addslashes($_keywords_circonstance)."%'");  
+  $circonstance = new CCirconstance;
+  $circonstances = $circonstance->seek($_keywords_circonstance);
 }
-
-$circonstances = $ds->loadList($request->getRequest());
 
 $smarty = new CSmartyDP;
 $smarty->assign("circonstances", $circonstances);

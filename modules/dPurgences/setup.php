@@ -270,7 +270,12 @@ class CSetupdPurgences extends CSetup {
       ADD `circonstance` VARCHAR (50);";
     $this->addQuery($query);
     
-    $this->mod_version = "0.31";
+    $this->makeRevision("0.31");
+    $query = "ALTER TABLE `circonstance`
+      ADD `circonstance_id` INT (11) UNSIGNED NOT NULL auto_increment PRIMARY KEY FIRST;";
+    $this->addQuery($query);
+    
+    $this->mod_version = "0.32";
   }  
 }
 
