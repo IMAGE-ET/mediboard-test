@@ -17,11 +17,11 @@ $filter->_date_min     = CValue::get("_date_min", $now);
 $filter->_date_max     = CValue::get("_date_max", $now);
 $filter->_prat_id      = CValue::getOrSession("_prat_id");
 $filter->salle_id      = CValue::getOrSession("salle_id");
-$filter->_plage        = CValue::getOrSession("_plage");
+$filter->_plage        = CValue::getOrSession("_plage", CAppUI::conf("dPbloc CPlageOp plage_vide"));
 $filter->_intervention = CValue::getOrSession("_intervention");
 $filter->_specialite   = CValue::getOrSession("_specialite");
 $filter->_codes_ccam   = CValue::getOrSession("_codes_ccam");
-$filter->_ccam_libelle = CValue::getOrSession("_ccam_libelle");
+$filter->_ccam_libelle = CValue::getOrSession("_ccam_libelle", CAppUI::conf("dPbloc CPlageOp libelle_ccam"));
 
 $filterSejour = new CSejour;
 $filterSejour->type = CValue::getOrSession("type");
