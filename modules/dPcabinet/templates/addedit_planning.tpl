@@ -204,224 +204,211 @@ Main.add(function () {
   {{/if}}
   <tr>
     <td style="width: 50%;">
-      <table class="form">
-        <tr>
-        	<th class="category" colspan="3">Informations sur la consultation</th>
-			  </tr>
-        <tr>
-          <th class="narrow">
-            <label for="chir_id" title="Praticien pour la consultation">Praticien</label>
-          </th>
-          <td>
-            <select name="chir_id" style="width: 14em;" class="notNull" onChange="ClearRDV(); refreshListCategorie(this.value); if (this.value != '') $V(this.form._function_id, '');">
-              <option value="">&mdash; Choisir un praticien</option>
-              {{foreach from=$listPraticiens item=curr_praticien}}
-              <option class="mediuser" style="border-color: #{{$curr_praticien->_ref_function->color}};" value="{{$curr_praticien->user_id}}" {{if $chir->user_id == $curr_praticien->user_id}} selected="selected" {{/if}}>
-                {{$curr_praticien->_view}}
-              </option>
-             {{/foreach}}
-            </select>
-						<input type="checkbox" name="_pause" value="1" onclick="changePause()" {{if $consult->_id && $consult->patient_id==0}} checked="checked" {{/if}} {{if $attach_consult_sejour && $consult->_id}}disabled="disabled"{{/if}}/>
-            <label for="_pause" title="Planification d'une pause">Pause</label>
-          </td>
-        </tr>
-
-        <tr id="viewPatient" {{if $consult->_id && $consult->patient_id==0}}style="display:none;"{{/if}}>
-          <th>
-            {{mb_label object=$consult field="patient_id"}}
-          </th>
-          <td>
-          	{{mb_field object=$pat field="patient_id" hidden=1 ondblclick="PatSelector.init()" onchange="requestInfoPat(); $('button-edit-patient').setVisible(this.value);"}}
-          	<input type="text" name="_pat_name" size="35" value="{{$pat->_view}}" readonly="readonly" ondblclick="PatSelector.init()" onchange="checkCorrespondantMedical()"/>
-						<button class="search" type="button" onclick="PatSelector.init()">{{tr}}Search{{/tr}}</button>
-	          <script type="text/javascript">
-	            PatSelector.init = function(){
-	              this.sForm = "editFrm";
-	              this.sId   = "patient_id";
-	              this.sView = "_pat_name";
-	              this.pop();
-	            }
-	          </script>
-						<button id="button-edit-patient" type="button" 
-						        onclick="location.href='?m=dPpatients&amp;tab=vw_edit_patients&amp;patient_id='+this.form.patient_id.value" 
-										class="edit" {{if !$pat->_id}}style="display: none;"{{/if}}>
-						  {{tr}}Edit{{/tr}}
-					  </button>
-					</td>
-        </tr>
-        
-        
-        <tr>
-          <th>
-            {{mb_label object=$consult field="motif"}}<br />
-            <select name="_helpers_motif" size="1" onchange="pasteHelperContent(this)" class="helper">
-              <option value="">&mdash; Aide</option>
-              {{html_options options=$consult->_aides.motif.no_enum}}
-            </select><br />
-            <button class="new notext" title="Ajouter une aide à la saisie" type="button" onclick="addHelp('CConsultation', this.form.motif)">{{tr}}New{{/tr}}</button>            
-          </th>
-          <td>{{mb_field object=$consult field="motif" rows="3"}}</td>
-        </tr>
-
-        <tr>
-          <th>
-            {{mb_label object=$consult field="rques"}}<br />
-            <select name="_helpers_rques" size="1" onchange="pasteHelperContent(this)" class="helper">
-              <option value="">&mdash; Aide</option>
-              {{html_options options=$consult->_aides.rques.no_enum}}
-            </select><br />
-            <button class="new notext" title="Ajouter une aide à la saisie" type="button" onclick="addHelp('CConsultation', this.form.rques)">{{tr}}New{{/tr}}</button>
-          </th>
-          <td>{{mb_field object=$consult field="rques" rows="3"}}</td>
-        </tr>
-
-      </table>
-
+      <fieldset>
+        <legend>Informations sur la consultation</legend>
+          <table class="form">
+    
+            <tr>
+              <th class="narrow">
+                <label for="chir_id" title="Praticien pour la consultation">Praticien</label>
+              </th>
+              <td>
+                <select name="chir_id" style="width: 14em;" class="notNull" onChange="ClearRDV(); refreshListCategorie(this.value); if (this.value != '') $V(this.form._function_id, '');">
+                  <option value="">&mdash; Choisir un praticien</option>
+                  {{foreach from=$listPraticiens item=curr_praticien}}
+                  <option class="mediuser" style="border-color: #{{$curr_praticien->_ref_function->color}};" value="{{$curr_praticien->user_id}}" {{if $chir->user_id == $curr_praticien->user_id}} selected="selected" {{/if}}>
+                    {{$curr_praticien->_view}}
+                  </option>
+                 {{/foreach}}
+                </select>
+    						<input type="checkbox" name="_pause" value="1" onclick="changePause()" {{if $consult->_id && $consult->patient_id==0}} checked="checked" {{/if}} {{if $attach_consult_sejour && $consult->_id}}disabled="disabled"{{/if}}/>
+                <label for="_pause" title="Planification d'une pause">Pause</label>
+              </td>
+            </tr>
+    
+            <tr id="viewPatient" {{if $consult->_id && $consult->patient_id==0}}style="display:none;"{{/if}}>
+              <th>
+                {{mb_label object=$consult field="patient_id"}}
+              </th>
+              <td>
+              	{{mb_field object=$pat field="patient_id" hidden=1 ondblclick="PatSelector.init()" onchange="requestInfoPat(); $('button-edit-patient').setVisible(this.value);"}}
+              	<input type="text" name="_pat_name" size="35" value="{{$pat->_view}}" readonly="readonly" ondblclick="PatSelector.init()" onchange="checkCorrespondantMedical()"/>
+    						<button class="search" type="button" onclick="PatSelector.init()">{{tr}}Search{{/tr}}</button>
+    	          <script type="text/javascript">
+    	            PatSelector.init = function(){
+    	              this.sForm = "editFrm";
+    	              this.sId   = "patient_id";
+    	              this.sView = "_pat_name";
+    	              this.pop();
+    	            }
+    	          </script>
+    						<button id="button-edit-patient" type="button" 
+    						        onclick="location.href='?m=dPpatients&amp;tab=vw_edit_patients&amp;patient_id='+this.form.patient_id.value" 
+    										class="edit" {{if !$pat->_id}}style="display: none;"{{/if}}>
+    						  {{tr}}Edit{{/tr}}
+    					  </button>
+    					</td>
+            </tr>           
+            
+            <tr>
+              <th>{{mb_label object=$consult field="motif"}}</th> 
+              <td>
+                {{mb_field object=$consult field="motif" class="autocomplete" rows=5}}
+                <script type="text/javascript">
+                  Main.add(function() {
+                	  new AideSaisie.AutoComplete(getForm("editFrm").motif, {
+              		    objectClass: "{{$consult->_class_name}}", 
+              		    contextUserId: "{{$app->user_id}}"
+              		  });
+                  });
+                </script>
+              </td>
+            </tr>
+      
+            <tr>
+              <th>{{mb_label object=$consult field="rques"}}</th> 
+              <td>
+                {{mb_field object=$consult field="rques" class="autocomplete" rows=5}}
+                <script type="text/javascript">
+                  Main.add(function() {
+                    new AideSaisie.AutoComplete(getForm("editFrm").motif, {
+                      objectClass: "{{$consult->_class_name}}", 
+                      contextUserId: "{{$app->user_id}}"
+                    });
+                  });
+                </script>
+              </td>
+            </tr>
+          </table>
+       </fieldset>
     </td>
     <td style="width: 50%;">
-
-      <table class="form">
-        <tr><th class="category" colspan="2">Rendez-vous</th></tr>
-
-        <tr>
-          <th>{{mb_label object=$consult field="premiere"}}</th>
-          <td>
-            <input type="checkbox" name="_check_premiere" value="1"
-              {{if $consult->_check_premiere}} checked="checked" {{/if}}
-              onchange="this.form.premiere.value = this.checked ? 1 : 0;" />
-            {{mb_field object=$consult field="premiere" hidden="hidden"}}
-            {{mb_label object=$consult field="_check_premiere"}}
-          </td>
-        </tr>
-
-        <tr>
-          <th>{{mb_label object=$consult field="adresse"}}</th>
-          <td>
-            <input type="checkbox" name="_check_adresse" value="1"
-              {{if $consult->_check_adresse}} checked="checked" {{/if}}
-              onchange="$('correspondant_medical').toggle();
-              $('_adresse_par_prat').toggle();
-              if (this.checked) {
-                this.form.adresse.value = 1;
-              } else {
-                this.form.adresse.value = 0;
-                this.form.adresse_par_prat_id.value = '';
-              }" />
-            {{mb_field object=$consult field="adresse" hidden="hidden"}}
-          </td>
-        </tr>
-        
-        <tr id="correspondant_medical" {{if !$consult->_check_adresse}}style="display: none;"{{/if}}>
-          {{assign var="object" value=$consult}}
-          {{mb_include module=dPplanningOp template=inc_check_correspondant_medical}}
-        </tr>
-        
-        <tr>
-          <td></td>
-          <td colspan="3">
-            <div id="_adresse_par_prat" style="{{if !$medecin_adresse_par}}display:none{{/if}}; width: 300px;">
-              {{if $medecin_adresse_par}}Autres : {{$medecin_adresse_par->_view}}{{/if}}
-            </div>
-          </td>
-        </tr>
-        
-        <tr>
-          <th>{{mb_label object=$consult field="si_desistement"}}</th>
-          <td>{{mb_field object=$consult field="si_desistement" typeEnum="checkbox"}}</td>
-        </tr>
-        
-        {{if $conf.dPcabinet.CConsultation.attach_consult_sejour}}
-        <tr>
-          <th>{{mb_label object=$consult field="_forfait_se"}}</th>
-          <td>{{mb_field object=$consult field="_forfait_se" typeEnum="checkbox"}}</td>
-        </tr>
-        <tr>
-          <th>{{mb_label object=$consult field="_facturable"}}</th>
-          <td>{{mb_field object=$consult field="_facturable" typeEnum="checkbox"}}</td>
-        </tr>
-        {{/if}}
-        
-        <tr>
-          <th>{{mb_label object=$consult field="plageconsult_id"}}</th>
-          <td>
-            <input type="text" name="_date" value="{{$consult->_date|date_format:"%A %d/%m/%Y"}}" ondblclick="PlageConsultSelector.init()" readonly="readonly" onchange="if (this.value != '') $V(this.form._function_id, '')"/>
-            {{mb_field object=$consult field="plageconsult_id" hidden=1 ondblclick="PlageConsultSelector.init()"}}
-            <script type="text/javascript">
-            PlageConsultSelector.init = function(){
-              this.sForm            = "editFrm";
-              this.sHeure           = "heure";
-              this.sPlageconsult_id = "plageconsult_id";
-              this.sDate            = "_date";
-              this.sDuree           = "duree";
-              this.sChir_id         = "chir_id";
-              this.sFunction_id     = "_function_id";
-              this.modale();
-            }
-           </script> 
-           <button class="search" type="button" onclick="PlageConsultSelector.init()">Choix de l'horaire</button>
-          </td>
-        </tr>
-
-
-        <tr>
-          <th>{{mb_label object=$consult field="heure"}}</th>
-          <td>
-            <input type="text" name="heure" value="{{$consult->heure}}" size="4" readonly="readonly" />
-          </td>
-        </tr>
-        <tr>
-          <th>{{mb_label object=$consult field="duree"}}</th>
-          <td>
-            <select name="duree">
-              <option value="1" {{if $consult->duree == 1}} selected="selected" {{/if}}>x1</option>
-              <option value="2" {{if $consult->duree == 2}} selected="selected" {{/if}}>x2</option>
-              <option value="3" {{if $consult->duree == 3}} selected="selected" {{/if}}>x3</option>
-              <option value="4" {{if $consult->duree == 4}} selected="selected" {{/if}}>x4</option>
-              <option value="5" {{if $consult->duree == 5}} selected="selected" {{/if}}>x5</option>
-              <option value="6" {{if $consult->duree == 6}} selected="selected" {{/if}}>x6</option>
-            </select>
-          </td>
-        </tr>
-        <tbody id="listCategorie">
-          {{if $consult->_id || $chir->_id}}
-	          {{include file="httpreq_view_list_categorie.tpl" 
-          		categorie_id=$consult->categorie_id 
-          		categories=$categories
-          		listCat=$listCat}}
-          {{elseif $chir->_id}}
-          {{assign var="categorie_id" value=""}}
-          {{assign var="categories" value=$categories}}
-          {{include file="httpreq_view_list_categorie.tpl"
-          		categorie_id=""
-          		categories=$categories
-          		listCat=$listCat}}
-          {{/if}}
-        </tbody>
-        <tr>
-          <th>Choix par cabinet</th>
-          <td>
-            <select name="_function_id" style="max-width: 130px;" onchange = "if (this.value != '') { $V(this.form.chir_id, ''); $V(this.form._date, '');}">
-              <option value="">&mdash; choisir un cabinet</option>
-              {{foreach from=$listFunctions item=_function}}
-              <option value="{{$_function->_id}}" class="mediuser" style="border-color: #{{$_function->color}};">
-                {{$_function->_view}}
-              </option>
-              {{/foreach}}
-            </select>
-          </td>
-        </tr>
-        <tr>
-          <td colspan="2">
-            {{if $conf.dPcabinet.CConsultAnesth.format_auto_rques}}
-              <div class="small-info">
-              Si vous laissez les champs <strong>Remarques</strong> ou <strong>Motif</strong> vides, <br />
-              ils seront pré-remplis selon <a href="?m=dPcabinet&amp;tab=configure">la configuration du module</a>.
+      <fieldset>
+        <legend>Rendez-vous</legend>
+            
+        <table class="form">
+          <tr>
+            <th>{{mb_label object=$consult field="plageconsult_id"}}</th>
+            <td>
+              <input type="text" name="_date" value="{{$consult->_date|date_format:"%A %d/%m/%Y"}}" ondblclick="PlageConsultSelector.init()" readonly="readonly" onchange="if (this.value != '') $V(this.form._function_id, '')"/>
+              {{mb_field object=$consult field="plageconsult_id" hidden=1 ondblclick="PlageConsultSelector.init()"}}
+              <script type="text/javascript">
+                PlageConsultSelector.init = function(){
+                  this.sForm            = "editFrm";
+                  this.sHeure           = "heure";
+                  this.sPlageconsult_id = "plageconsult_id";
+                  this.sDate            = "_date";
+                  this.sDuree           = "duree";
+                  this.sChir_id         = "chir_id";
+                  this.sFunction_id     = "_function_id";
+                  this.modale();
+                }
+             </script> 
+             <button class="search" type="button" onclick="PlageConsultSelector.init()">Choix de l'horaire</button>
+            </td>
+          </tr>
+  
+          <tr>
+            <th>{{mb_label object=$consult field="heure"}}</th>
+            <td>
+              <input type="text" name="heure" value="{{$consult->heure}}" size="6" readonly="readonly" />
+            </td>
+          </tr>
+            
+          <tr>
+            <th>{{mb_label object=$consult field="premiere"}}</th>
+            <td>
+              <input type="checkbox" name="_check_premiere" value="1"
+                {{if $consult->_check_premiere}} checked="checked" {{/if}}
+                onchange="this.form.premiere.value = this.checked ? 1 : 0;" />
+              {{mb_field object=$consult field="premiere" hidden="hidden"}}
+              {{mb_label object=$consult field="_check_premiere"}}
+            </td>
+          </tr>
+  
+          <tr>
+            <th>{{mb_label object=$consult field="adresse"}}</th>
+            <td>
+              <input type="checkbox" name="_check_adresse" value="1"
+                {{if $consult->_check_adresse}} checked="checked" {{/if}}
+                onchange="$('correspondant_medical').toggle();
+                $('_adresse_par_prat').toggle();
+                if (this.checked) {
+                  this.form.adresse.value = 1;
+                } else {
+                  this.form.adresse.value = 0;
+                  this.form.adresse_par_prat_id.value = '';
+                }" />
+              {{mb_field object=$consult field="adresse" hidden="hidden"}}
+            </td>
+          </tr>
+          
+          <tr id="correspondant_medical" {{if !$consult->_check_adresse}}style="display: none;"{{/if}}>
+            {{assign var="object" value=$consult}}
+            {{mb_include module=dPplanningOp template=inc_check_correspondant_medical}}
+          </tr>
+          
+          <tr>
+            <td></td>
+            <td colspan="3">
+              <div id="_adresse_par_prat" style="{{if !$medecin_adresse_par}}display:none{{/if}}; width: 300px;">
+                {{if $medecin_adresse_par}}Autres : {{$medecin_adresse_par->_view}}{{/if}}
               </div>
+            </td>
+          </tr>
+          
+          <tr>
+            <th>{{mb_label object=$consult field="si_desistement"}}</th>
+            <td>{{mb_field object=$consult field="si_desistement" typeEnum="checkbox"}}</td>
+          </tr>
+          
+          {{if $conf.dPcabinet.CConsultation.attach_consult_sejour}}
+          <tr>
+            <th>{{mb_label object=$consult field="_forfait_se"}}</th>
+            <td>{{mb_field object=$consult field="_forfait_se" typeEnum="checkbox"}}</td>
+          </tr>
+          <tr>
+            <th>{{mb_label object=$consult field="_facturable"}}</th>
+            <td>{{mb_field object=$consult field="_facturable" typeEnum="checkbox"}}</td>
+          </tr>
+          {{/if}}
+          
+          <tr>
+            <th>{{mb_label object=$consult field="duree"}}</th>
+            <td>
+              <select name="duree">
+                <option value="1" {{if $consult->duree == 1}} selected="selected" {{/if}}>x1</option>
+                <option value="2" {{if $consult->duree == 2}} selected="selected" {{/if}}>x2</option>
+                <option value="3" {{if $consult->duree == 3}} selected="selected" {{/if}}>x3</option>
+                <option value="4" {{if $consult->duree == 4}} selected="selected" {{/if}}>x4</option>
+                <option value="5" {{if $consult->duree == 5}} selected="selected" {{/if}}>x5</option>
+                <option value="6" {{if $consult->duree == 6}} selected="selected" {{/if}}>x6</option>
+              </select>
+            </td>
+          </tr>
+          <tbody id="listCategorie">
+            {{if $consult->_id || $chir->_id}}
+  	          {{mb_include template="httpreq_view_list_categorie" 
+            		categorie_id=$consult->categorie_id 
+            		categories=$categories
+            		listCat=$listCat}}
             {{/if}}
-          </td>
-        </tr>
-      </table>
-    
+          </tbody>
+          <tr>
+            <th>Choix par cabinet</th>
+            <td>
+              <select name="_function_id" style="max-width: 130px;" onchange = "if (this.value != '') { $V(this.form.chir_id, ''); $V(this.form._date, '');}">
+                <option value="">&mdash; choisir un cabinet</option>
+                {{foreach from=$listFunctions item=_function}}
+                <option value="{{$_function->_id}}" class="mediuser" style="border-color: #{{$_function->color}};">
+                  {{$_function->_view}}
+                </option>
+                {{/foreach}}
+              </select>
+            </td>
+          </tr>
+        </table>
+      </fieldset>
     </td>
   </tr>
 

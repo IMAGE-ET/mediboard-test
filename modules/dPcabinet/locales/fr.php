@@ -379,6 +379,7 @@ $locales['CConsultation-banque_id-desc'] = 'Banque du patient';
 $locales['CConsultation-categorie_id'] = 'Catégorie';
 $locales['CConsultation-categorie_id-court'] = 'Cat.';
 $locales['CConsultation-categorie_id-desc'] = 'Catégorie de la consultation';
+$locales['CConsultation-categorie_id.none'] = 'Aucune catégorie';
 $locales['CConsultation-chrono'] = 'Etat';
 $locales['CConsultation-chrono-court'] = 'Etat';
 $locales['CConsultation-chrono-desc'] = 'Etat de la consultation';
