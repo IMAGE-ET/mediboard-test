@@ -29,7 +29,7 @@ choosePatient = function() {
       <td>
         <select name="prat_id" class="ref notNull">
           <option value="">&mdash; {{tr}}Choose{{/tr}}</option>
-          {{mb_include module=mediusers template=inc_options_mediuser list=$praticiens selected=$prat_id}}
+          {{mb_include module=mediusers template=inc_options_mediuser list=$praticiens}}
         </select>
       </td>
     </tr>
