@@ -106,7 +106,6 @@ ProtocoleSelector = {
     }
     if (oSejourForm[this.sProtoPrescChir]) {
       if(protocole.protocole_prescription_chir_id != 'prot-'){
-        alert(protocole.protocole_prescription_chir_id);
         $V(oSejourForm[this.sProtoPrescChir], protocole.protocole_prescription_chir_id);
       } else {
         $V(oSejourForm[this.sProtoPrescChir], "");
