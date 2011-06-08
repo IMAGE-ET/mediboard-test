@@ -330,6 +330,7 @@
 	      		selected_id=$rpu->box_id 
 	      		ajaxSubmit=0 
 	      		listService=$listServicesUrgence}}
+        <button type="button" class="cancel opacity-60 notext" onclick="this.form.elements['box_id'].selectedIndex=0"></button>
         &mdash; {{tr}}CRPU-_service_id{{/tr}} :
         {{if $listServicesUrgence|@count == 1}}
           {{assign var=first_service value=$listServicesUrgence|@reset}}
