@@ -4,8 +4,9 @@
   <tr class="clear">
     <th colspan="10">
       <a href="#" onclick="window.print()">
-        {{if $filter->_id}}
-        Plage du {{mb_value object=$filter field=_date}}
+        {{if $filter->plageconsult_id}}
+        Plage du {{mb_value object=$filter->_ref_plageconsult field=date}}
+        de {{mb_value object=$filter->_ref_plageconsult field=debut}} à {{mb_value object=$filter->_ref_plageconsult field=fin}}
         {{else}}
         Rapport du {{mb_value object=$filter field=_date_min}}
         {{if $filter->_date_min != $filter->_date_max}}
