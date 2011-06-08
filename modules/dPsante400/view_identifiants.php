@@ -38,6 +38,7 @@ $smarty = new CSmartyDP();
 $smarty->assign("filter", $filter);
 $smarty->assign("idSante400_id", $firstId400 ? $firstId400->_id : 0);
 $smarty->assign("canSante400", $canSante400);
+$smarty->assign("listClasses", $listClasses);
 $smarty->assign("dialog", $dialog);
 $smarty->display("view_identifiants.tpl");
 
