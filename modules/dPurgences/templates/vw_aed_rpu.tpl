@@ -22,21 +22,26 @@
 	{{mb_script module="dPmedicament" script="equivalent_selector"}}
 	{{mb_script module="dPprescription" script="element_selector"}}
 	
+	{{mb_script module=dPcompteRendu script=modele_selector}}
+  {{mb_script module=dPcompteRendu script=document}}
+
 	<script type="text/javascript">
 	
 	ContraintesRPU.contraintesProvenance = {{$contrainteProvenance|@json}};
 	
 	function loadSuivi(sejour_id, user_id, cible, hide_obs) {
-	  if(sejour_id) {
-	    var urlSuivi = new Url("dPhospi", "httpreq_vw_dossier_suivi");
-	    urlSuivi.addParam("sejour_id", sejour_id);
-	    urlSuivi.addParam("user_id", user_id);
-			urlSuivi.addParam("cible", cible);
-      if (hide_obs != null) {
-        urlSuivi.addParam("_hide_obs", hide_obs);
-      }
-	    urlSuivi.requestUpdate("suivisoins", {onComplete: function() { Control.Modal.close(); } });
+	  if (!sejour_id) {
+		  return;
 	  }
+	  
+    var urlSuivi = new Url("dPhospi", "httpreq_vw_dossier_suivi");
+    urlSuivi.addParam("sejour_id", sejour_id);
+    urlSuivi.addParam("user_id", user_id);
+		urlSuivi.addParam("cible", cible);
+    if (hide_obs != null) {
+      urlSuivi.addParam("_hide_obs", hide_obs);
+    }
+    urlSuivi.requestUpdate("suivisoins", { onComplete: function() { Control.Modal.close(); } });
 	}
 	
 	function submitSuivi(oForm) {
@@ -45,7 +50,7 @@
 	}
 	
 	function refreshConstantesMedicales(context_guid) {
-	  if(context_guid) {
+	  if (context_guid) {
 	    var url = new Url("dPhospi", "httpreq_vw_constantes_medicales");
 	    url.addParam("context_guid", context_guid);
 	    url.requestUpdate("constantes");
@@ -61,6 +66,46 @@
 	    }
 	  }).delay(0.5);
 	}
+
+	function refreshConstantesHack(sejour_id) {
+    (function(){
+      if (constantesMedicalesDrawn == false && $('constantes').visible() && sejour_id) {
+        refreshConstantesMedicales('CSejour-'+sejour_id);
+        constantesMedicalesDrawn = true;
+      }
+    }).delay(0.5);
+  }
+
+	function showExamens(consult_id) {
+    if (!consult_id) {
+      return;
+    }
+
+    var url = new Url("dPurgences", "ajax_show_examens");
+    url.addParam("consult_id", consult_id);
+    url.requestUpdate("examens");
+  }
+
+	function loadDocItems(sejour_id, consult_id) {
+		if (!sejour_id) {
+      return;
+    }
+
+    var url = new Url("dPurgences", "ajax_show_doc_items");
+    url.addParam("sejour_id" , sejour_id);
+    url.addParam("consult_id", consult_id);
+    url.requestUpdate("doc-items");
+	}
+
+	function loadActes(sejour_id) {
+		if (!sejour_id) {
+      return;
+    }
+
+		var url = new Url("dPurgences", "ajax_show_actes");
+    url.addParam("sejour_id" , sejour_id);
+    url.requestUpdate("actes");
+	}	
 	
 	function cancelRPU() {
 	  var oForm = document.editRPU;
@@ -101,13 +146,6 @@
 	function loadServiceMutation(mode_entree){
 	  $('service_entree_mutation').setVisible(mode_entree == 6);
 	}
-		
-	function loadActesNGAP(sejour_id){
-	  var url = new Url("dPcabinet", "httpreq_vw_actes_ngap");
-	  url.addParam("object_id", sejour_id);
-	  url.addParam("object_class", "CSejour");
-	  url.requestUpdate('listActesNGAP');
-	}
 	
 	function printDossier(id) {
 	  var url = new Url("dPurgences", "print_dossier");
@@ -141,27 +179,11 @@
 	  {{if $rpu->_id && $can->edit}}
 	    DossierMedical.reloadDossierPatient();
 	    var tab_sejour = Control.Tabs.create('tab-dossier');
-	    loadSuivi({{$rpu->sejour_id}});
-	    refreshConstantesHack('{{$rpu->sejour_id}}');
-	  {{/if}}
-	  
-	  {{if $app->user_prefs.ccam_sejour == 1 }}
-	  var tab_actes = Control.Tabs.create('tab-actes', false);
 	  {{/if}}
 	  
 	  if (document.editAntFrm){
 	    document.editAntFrm.type.onchange();
 	  }
-	  
-	  if($('listActesNGAP')){
-	    loadActesNGAP('{{$rpu->sejour_id}}');
-	  }
-		
-		{{if $isImedsInstalled}}
-	    if($('Imeds')){
-	      loadResultLabo('{{$rpu->sejour_id}}');
-	    }
-    {{/if}}
 	});
 	
 	</script>
@@ -487,19 +509,19 @@
 	
 		<ul id="tab-dossier" class="control_tabs">
 		  <li><a href="#antecedents">Antécédents &amp; Traitements</a></li>
-		  <li onclick="loadSuivi({{$rpu->sejour_id}});"><a href="#suivisoins">Suivi soins</a></li>
-		  <li onmousedown="refreshConstantesHack('{{$rpu->sejour_id}}')"><a href="#constantes">{{tr}}CPatient.surveillance{{/tr}}</a></li>
-		  <li><a href="#examens">Consultation médicale</a></li>
+		  <li onmouseup="loadSuivi({{$rpu->sejour_id}});"><a href="#suivisoins">Suivi soins</a></li>
+		  <li onmouseup="refreshConstantesHack('{{$rpu->sejour_id}}')"><a href="#constantes">{{tr}}CPatient.surveillance{{/tr}}</a></li>
+		  <li onmouseup="showExamens('{{$consult->_id}}')"><a href="#examens">Consultation médicale</a></li>
 		  {{if $app->user_prefs.ccam_sejour == 1 }}
-		  <li><a href="#actes">Cotation infirmière</a></li>
+		    <li onmouseup="loadActes('{{$rpu->sejour_id}}')"><a href="#actes">Cotation infirmière</a></li>
 		  {{/if}}
 			{{if $isPrescriptionInstalled && $modules.dPprescription->_can->read && !$conf.dPprescription.CPrescription.prescription_suivi_soins}}
-		  <li {{if $consult->sejour_id}} onclick="Prescription.reloadPrescSejour('', '{{$consult->sejour_id}}','', '', null, null, null,'');" {{/if}}><a href="#prescription_sejour">Prescription</a></li>
+		    <li {{if $consult->sejour_id}} onmouseup="Prescription.reloadPrescSejour('', '{{$consult->sejour_id}}','', '', null, null, null,'');" {{/if}}><a href="#prescription_sejour">Prescription</a></li>
 		  {{/if}}
 		  {{if @$modules.dPImeds->mod_active}}
-        <li><a href="#Imeds">Labo</a></li>
+        <li onmouseup="loadResultLabo('{{$rpu->sejour_id}}')"><a href="#Imeds">Labo</a></li>
       {{/if}}
-		  <li><a href="#doc-items">Documents</a></li>
+		  <li onmouseup="loadDocItems('{{$rpu->sejour_id}}', '{{$consult->_id}}')"><a href="#doc-items">Documents</a></li>
 		</ul>
 		
 		<hr class="control_tabs" />
@@ -508,41 +530,20 @@
 		  {{assign var="current_m" value="dPurgences"}}
 		  {{assign var="_is_anesth" value="0"}}
 		  {{assign var=sejour_id value=""}}
+		  
 		  {{mb_include module=dPcabinet template=inc_ant_consult chir_id=$app->user_id}}
 		</div>
 		
 		<div id="suivisoins" style="display:none"></div>
 		<div id="constantes" style="display:none"></div>
-		
-		<div id="examens">
-		  {{mb_include module=dPcabinet template=inc_main_consultform readonly=1}}
+		<div id="examens"    style="display:none">
+		  <div class="small-info">
+        Aucune prise en charge médicale
+      </div>
 		</div>
 		
 		{{if $app->user_prefs.ccam_sejour == 1 }}
-		<div id="actes" style="display: none;">
-		  <ul id="tab-actes" class="control_tabs">
-		    <li><a href="#ngap">Actes NGAP</a></li>
-		    {{if $conf.dPccam.CCodable.use_frais_divers.CSejour}}
-        <li><a href="#fraisdivers">Frais divers</a></li>
-        {{/if}}
-		  </ul>
-		  <hr class="control_tabs" />
-		  
-		  <table class="form">
-		    <tr id="ngap" style="display: none;">
-		      <td id="listActesNGAP"> </td>
-		    </tr>
-		  </table>
-		  
-		  
-		  {{if $conf.dPccam.CCodable.use_frais_divers.CSejour}}   
-		  <table class="form">
-        <tr id="fraisdivers" style="display: none;">
-          <td id="listFraisDivers">{{mb_include module=dPccam template=inc_frais_divers object=$sejour}}</td>
-        </tr>
-      </table>  
-      {{/if}}
-		</div>    
+		<div id="actes" style="display: none;"> </div>    
 		{{/if}}
 		
 		{{if $isPrescriptionInstalled && $modules.dPprescription->_can->read}}
@@ -562,17 +563,14 @@
     </div>
     {{/if}}
 			
-	  <div id="doc-items">
-	  	{{mb_include template=inc_rpu_docitems}}
-	  </div>
+	  <div id="doc-items" style="display: none;"></div>
 	{{/if}}
 	
 	
 	{{if $rpu->mode_entree}}
 	<script type="text/javascript">
-	// Lancement des fonctions de contraintes entre les champs
-	ContraintesRPU.updateProvenance("{{$rpu->mode_entree}}");
+  	// Lancement des fonctions de contraintes entre les champs
+  	ContraintesRPU.updateProvenance("{{$rpu->mode_entree}}");
 	</script>
 	{{/if}}
-
 {{/if}}

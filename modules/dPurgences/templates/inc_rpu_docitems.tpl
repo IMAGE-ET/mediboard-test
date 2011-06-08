@@ -8,10 +8,6 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
 *}}
 
-
-{{mb_script module=dPcompteRendu script=modele_selector}}
-{{mb_script module=dPcompteRendu script=document}}
-
 <table class="form">
 
 <tr>
