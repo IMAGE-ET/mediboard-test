@@ -471,7 +471,7 @@ ul.control_tabs li a,
 ul.control_tabs_vertical li a,
 table.main th.title,
 table th.title h2 {
-  text-shadow: 0 0 0 transparent, 0px 0px 2px rgba(0, 0, 0, 1); 
+  text-shadow: 0 0 0 transparent, 0px 0px 2px rgba(0, 0, 0, 0.7); 
 }
 
 #menubar a:hover,
