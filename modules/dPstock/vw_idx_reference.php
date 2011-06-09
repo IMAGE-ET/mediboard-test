@@ -44,10 +44,9 @@ if ($reference->load($reference_id)) {
   $reference->societe_id = $societe_id;
 }
 
-if ($reference->_id) {
-  $reference->loadRefsFwd();
-}
-else {
+$reference->loadRefsFwd();
+
+if (!$reference->_id) {
 	$reference->quantity = 1;
 	$reference->price = 0;
 }
