@@ -322,7 +322,6 @@ Main.add(function () {
                 {{if $consult->_check_premiere}} checked="checked" {{/if}}
                 onchange="this.form.premiere.value = this.checked ? 1 : 0;" />
               {{mb_field object=$consult field="premiere" hidden="hidden"}}
-              {{mb_label object=$consult field="_check_premiere"}}
             </td>
           </tr>
   
