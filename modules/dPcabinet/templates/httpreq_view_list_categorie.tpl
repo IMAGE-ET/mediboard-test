@@ -7,6 +7,8 @@
      listCat = {{$listCat|@json}};
      reloadIcone = function(icone){
        var img = $('iconeBackground');
+       if (!img) return;
+       
        if (!listCat[icone]) {
          img.hide();
        }
