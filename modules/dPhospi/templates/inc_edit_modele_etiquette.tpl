@@ -43,6 +43,7 @@ previewEtiq = function() {
 	$V(form_download.texte_3, $V(form_edit.texte_3));
 	$V(form_download.texte_4, $V(form_edit.texte_4));
 	$V(form_download.font, $V(form_edit.font));
+  $V(form_download.show_border, $V(form_edit.show_border));
 	form_download.submit();
 }
 
@@ -136,6 +137,18 @@ Main.add(function() {
         </select>
       </td>
 	  </tr>
+    <tr>
+      <th>
+        {{mb_label object=$modele_etiquette field=show_border}}
+      </th>
+      <td>
+        {{mb_field object=$modele_etiquette field=show_border}}
+      </td>
+      <td colspan="2">
+        {{tr}}CModeleEtiquette._width_etiq{{/tr}} : {{mb_value object=$modele_etiquette field=_width_etiq}} &mdash;
+        {{tr}}CModeleEtiquette._height_etiq{{/tr}} : {{mb_value object=$modele_etiquette field=_height_etiq}}
+      </td>
+    </tr>
 	  <tr>
 	    <th class="category" colspan="4">
 	      {{tr}}CModeleEtiquette.other_fields{{/tr}}
@@ -250,4 +263,5 @@ Main.add(function() {
 	<input type="hidden" name="texte_3" value="" />
 	<input type="hidden" name="texte_4" value="" />
   <input type="hidden" name="font" value="" />
+  <input type="hidden" name="show_border" value="" />
 </form>

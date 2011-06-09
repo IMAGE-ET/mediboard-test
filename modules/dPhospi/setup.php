@@ -335,7 +335,12 @@ class CSetupdPhospi extends CSetup {
 	    WHERE `group_id` IS NULL;";
 	  $this->addQuery($query);
 	  
-    $this->mod_version = "0.42";
+	  $this->makeRevision("0.42");
+	  $query = "ALTER TABLE `modele_etiquette`
+	    ADD `show_border` ENUM ('0','1') DEFAULT '0';";
+	  $this->addQuery($query);
+	  
+    $this->mod_version = "0.43";
   }
 }
 ?>

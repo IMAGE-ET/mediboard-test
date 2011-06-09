@@ -28,6 +28,9 @@ class CModeleEtiquette extends CMbMetaObject {
   var $hauteur_ligne = null;
   var $font          = null;
   var $group_id      = null;
+  var $show_border   = null;
+  var $_width_etiq   = null;
+  var $_height_etiq  = null;
   
 	// Form fields
 	var $_write_bold   = null;
@@ -70,13 +73,18 @@ class CModeleEtiquette extends CMbMetaObject {
     $specs["object_class"]  = "str notNull class show|0";
     $specs["font"]          = "text show|0";
     $specs["group_id"]      = "ref class|CGroups notNull";
+    $specs["show_border"]   = "bool default|0";
 		$specs["_write_bold"]   = "bool";
+		$specs["_width_etiq"]   = "float";
+		$specs["_height_etiq"]   = "float";
     return $specs;
   }
   
   function updateFormFields() {
     parent::updateFormFields();
     $this->_shortview = $this->_view = $this->nom;
+    $this->_width_etiq = round(($this->largeur_page - 2 * $this->marge_horiz) / $this->nb_colonnes, 2);
+    $this->_height_etiq = round(($this->hauteur_page - 2 * $this->marge_vert) / $this->nb_lignes, 2);
   }
   
   function replaceFields($array_fields) {
@@ -153,7 +161,10 @@ class CModeleEtiquette extends CMbMetaObject {
 		    $pdf->SetY($pdf->GetY() + $hauteur_etiq);
 		  }
 		  
-		  //$pdf->Rect($pdf->GetX(),$pdf->GetY(),$largeur_etiq, $hauteur_etiq, 'D');
+		  if ($this->show_border) {
+		    $pdf->Rect($pdf->GetX(),$pdf->GetY(),$largeur_etiq, $hauteur_etiq, 'D');
+		  }
+		  
 		  $x = $pdf->GetX();
 		  $y = $pdf->GetY();
 		  $pdf->SetLeftMargin($x);
