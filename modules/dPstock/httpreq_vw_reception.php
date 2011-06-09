@@ -18,7 +18,7 @@ $reception->load($reception_id);
 $reception->loadRefsBack();
 
 foreach($reception->_ref_reception_items as $_reception) {
-  $_reception->getUnitQuantity();
+  $_reception->loadRefOrderItem()->loadReference();
 }
 
 // Smarty template

@@ -54,7 +54,7 @@ while($date < $now) {
   
   $total = 0;
   foreach($lots as $_lot) {
-    $total += $_lot->getUnitQuantity();
+    $total += $_lot->quantity;
   }
   $max = max($max, $total);
   

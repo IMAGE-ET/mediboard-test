@@ -316,7 +316,7 @@ function updateYearMonth(select){
 
 <div id="stock-global-value" style="display: none;">
   <button class="change" onclick="(new Url('pharmacie', 'ajax_vw_total_price')).requestUpdate($(this).next('div'))">
-    Valeur totale
+    Valeur totale (au dernier prix d'achat)
   </button>
   <div style="font-size: 1.5em; text-align: center;"></div>
 </div>

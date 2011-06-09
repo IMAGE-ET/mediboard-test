@@ -17,12 +17,8 @@
         <th class="category">Date pér.</th>
       {{/if}}
       <th class="category" style="width: auto;">{{mb_title class=CProduct field=name}}</th>
-      {{if $conf.dPstock.CProductStockGroup.unit_order}}
-        <th class="category">Unités</th>
-        <th class="category"></th>
-      {{else}}
-        <th class="category">{{mb_title class=CProductOrderItem field=quantity}}</th>
-      {{/if}}
+      <th class="category">Unités</th>
+      <th class="category"></th>
       {{if $order->object_id || $order->comments|strpos:"Bon de retour" === 0}}
         <th class="category">{{mb_title class=CProductOrderItem field=renewal}}</th>
       {{/if}}
@@ -59,26 +55,14 @@
         (Déstérilisé)
       {{/if}}
     </td>
-    {{if $conf.dPstock.CProductStockGroup.unit_order}}
-      <td style="text-align: right; white-space: nowrap;">
-        {{$curr_item->_unit_quantity}}
-      </td>
-      <td style="white-space: nowrap;">{{$curr_item->_ref_reference->_ref_product->item_title}}</td>
-    {{else}}
-      <td style="text-align: center; white-space: nowrap;">{{mb_value object=$curr_item field=quantity}}</td>
-    {{/if}}
+    <td style="text-align: right; white-space: nowrap;">{{mb_value object=$curr_item field=quantity}}</td>
+    <td style="white-space: nowrap;">{{$curr_item->_ref_reference->_ref_product->item_title}}</td>
     
     {{if $order->object_id || $order->comments|strpos:"Bon de retour" === 0}}
       <td>{{mb_value object=$curr_item field=renewal}}</td>
     {{/if}}
     
-    <td style="white-space: nowrap; text-align: right;">
-      {{if $conf.dPstock.CProductStockGroup.unit_order}}
-        {{mb_value object=$curr_item->_ref_reference field=_unit_price}}
-      {{else}}
-        {{mb_value object=$curr_item field=unit_price}}
-      {{/if}}
-    </td>
+    <td style="white-space: nowrap; text-align: right;">{{mb_value object=$curr_item field=unit_price}}</td>
     <td style="white-space: nowrap; text-align: right;">{{mb_value object=$curr_item field=_price}}</td>
     <td style="white-space: nowrap; text-align: right;">{{mb_value object=$curr_item field=tva decimals=1}}</td>
   </tr>

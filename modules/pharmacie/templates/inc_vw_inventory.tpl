@@ -54,7 +54,7 @@ processValuation = function(button, container, categorization, label, list) {
   var url = new Url();
   url.addParam("categorization", categorization);
   url.addParam("label", label);
-  url.addParam("list[]", list, true);
+  url.addParam("list", list);
   url.addParam("date", $V(getForm("filterInventory").date));
   
   url.requestJSON(function(data){
@@ -130,9 +130,10 @@ provessValuationAll = function(table) {
   {{foreach from=$list_by_group item=_group key=_code}}
     {{if $_group.level != false}}
       {{assign var=_level value=$_group.level}}
+      {{assign var=_list_ids value=','|implode:$_group.list_id}}
+			
       <tr class="level-{{$_group.level}} {{if array_key_exists($_level, $levels) && !$levels.$_level}}" style="display: none;" {{else}} visible" {{/if}}>
         <th class="title" style="text-align: left;" onclick="$('folder-{{$_code}}').toggle()">
-          {{assign var=_list_ids value=','|implode:$_group.list_id}}
           <button type="button" class="down">{{tr}}Display{{/tr}}</button>
           
           <button type="button" class="print" 
@@ -149,13 +150,8 @@ provessValuationAll = function(table) {
           {{$_group.label}}
         </th>
         <th class="title" style="text-align: right;">
-				  {{if $_group.list_id|@count}}
-					  {{assign var=_list_json value=$_group.list_id|@json}}
-					{{else}}
-            {{assign var=_list_json value="'none'"}}
-					{{/if}}
           <button type="button" class="change singleclick" 
-                  onclick="processValuation(this,$(this).next('span'),'{{$categorization}}', '{{$_code}}', {{$_list_json}}, '')">
+                  onclick="processValuation(this,$(this).next('span'),'{{$categorization}}', '{{$_code}}', '{{$_list_ids}}')">
             Valeur
           </button>
           <span></span>
@@ -164,6 +160,7 @@ provessValuationAll = function(table) {
         <th id="total-group-{{$_code}}-ht" class="total-group-ht" style="text-align: right;"></th>
         <th id="total-group-{{$_code}}-ttc" class="total-group-ttc" style="text-align: right;"></th>
       </tr>
+			
       <tbody style="display: none;" id="folder-{{$_code}}" class="level-{{$_group.level}} folder">
         {{foreach from=$_group.list item=_product}}
           <tr>

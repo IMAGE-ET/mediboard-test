@@ -26,7 +26,7 @@ foreach($stocks as $_stock) {
   }
   
   foreach($refs as $_ref) {
-    $sum += $_ref->_unit_price * $_stock->quantity;
+    $sum += $_ref->price * $_stock->quantity;
   }
 }
 

@@ -35,7 +35,10 @@ class CProductOrderItemReception extends CMbObject {
   
   var $_cancel            = null;
   var $_price             = null;
-  var $_unit_quantity     = null;
+  
+  // #TEMP#
+  var $units_fixed   = null;
+  var $orig_quantity = null;
   
   static $_load_lite = false;
 
@@ -57,7 +60,10 @@ class CProductOrderItemReception extends CMbObject {
     $specs['barcode_printed'] = 'bool';
     $specs['cancelled']     = 'bool notNull default|0';
     $specs['_price']        = 'currency';
-    $specs['_unit_quantity']= 'num pos';
+    
+    // #TEMP#
+    $specs['units_fixed']   = 'bool show|0';
+    $specs['orig_quantity'] = 'num show|0';
     return $specs;
   }
   
@@ -100,7 +106,7 @@ class CProductOrderItemReception extends CMbObject {
   }
   
   function delete(){
-    $this->completeField("order_item_id");
+    $this->completeField("order_item_id", "quantity");
     
     $this->loadRefOrderItem();
     $item = $this->_ref_order_item;
@@ -112,7 +118,7 @@ class CProductOrderItemReception extends CMbObject {
     $product = $reference->_ref_product;
     
     if ($product->loadRefStock()) {
-      $product->_ref_stock_group->quantity -= $this->getUnitQuantity();
+      $product->_ref_stock_group->quantity -= $this->quantity;
     }
     
     // If the order is already flagged as received, 
@@ -140,42 +146,6 @@ class CProductOrderItemReception extends CMbObject {
     if ($order && $order->_id)
       $order->store();
   }
-  
-  function getUnitQuantity(){
-    $this->completeField("quantity");
-
-    if (self::$_load_lite) {
-      // Attention, avec cette requete, les order_item ne sont plus chargés !
-      $where = array(
-        $this->_spec->key => "='$this->_id'",
-      );
-      
-      $ljoin = array(
-        "product_order_item" => "product_order_item.order_item_id = product_order_item_reception.order_item_id",
-        "product_reference" => "product_reference.reference_id = product_order_item.reference_id",
-        "product" => "product.product_id = product_reference.product_id",
-      );
-      
-      $sql = new CRequest();
-      $sql->addTable($this->_spec->table);
-      $sql->addSelect("
-        $this->quantity * 
-        product_reference.quantity * 
-        product.quantity");
-      $sql->addLJoin($ljoin);
-      $sql->addWhere($where);
-      
-      return $this->_unit_quantity = $this->_spec->ds->loadResult($sql->getRequest());
-    }
-    
-    $this->loadRefOrderItem();
-    $item = $this->_ref_order_item;
-    
-    $item->loadReference();
-    $reference = $item->_ref_reference;
-    
-    return $this->_unit_quantity = $this->quantity * $reference->_unit_quantity;
-  }
  
   function getUsedQuantity(){
     $query = "SELECT SUM(prescription_line_dmi.quantity) 
@@ -195,8 +165,10 @@ class CProductOrderItemReception extends CMbObject {
       $this->cancelled = 0;
     }
     
-    $this->loadRefOrderItem();
-    $this->_ref_order_item->loadOrder();
+    if ($is_new) {
+      $this->loadRefOrderItem();
+      $this->_ref_order_item->loadOrder();
+    }
       
     if ($is_new && !$this->reception_id) {
       $order = $this->_ref_order_item->_ref_order;
@@ -218,21 +190,21 @@ class CProductOrderItemReception extends CMbObject {
       
       $this->reception_id = $reception->_id;
     }
-    
-    $this->_ref_order_item->loadRefsFwd();
-    $this->_ref_order_item->_ref_reference->loadRefsFwd();
-    $this->_ref_order_item->_ref_reference->_ref_product->loadRefStock();
-    
-    $product = &$this->_ref_order_item->_ref_reference->_ref_product;
-    $product->updateFormFields();
 
     if ($is_new) {
+      $this->_ref_order_item->loadRefsFwd();
+      $this->_ref_order_item->_ref_reference->loadRefsFwd();
+      $this->_ref_order_item->_ref_reference->_ref_product->loadRefStock();
+      
+      $product = &$this->_ref_order_item->_ref_reference->_ref_product;
+      $product->updateFormFields();
+    
       if ($product->loadRefStock()) {
-      	$stock = $product->_ref_stock_group;
-        $stock->quantity += $this->getUnitQuantity();
+        $stock = $product->_ref_stock_group;
+        $stock->quantity += $this->quantity;
       }
       else {
-        $qty = $this->quantity * $product->_unit_quantity;
+        $qty = $this->quantity;
         $stock = new CProductStockGroup();
         $stock->product_id = $product->_id;
         $stock->group_id = CProductStockGroup::getHostGroup();

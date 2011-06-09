@@ -43,7 +43,14 @@ if ($reference->load($reference_id)) {
 } else if ($societe_id) {
   $reference->societe_id = $societe_id;
 }
-$reference->loadRefsFwd();
+
+if ($reference->_id) {
+  $reference->loadRefsFwd();
+}
+else {
+	$reference->quantity = 1;
+	$reference->price = 0;
+}
 
 // Categories list
 $category = new CProductCategory();

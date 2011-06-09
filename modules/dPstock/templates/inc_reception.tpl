@@ -31,9 +31,7 @@
       <th class="narrow"></th>
       <th>{{mb_title class=CProductOrderItemReception field=date}}</th>
       <th>{{mb_title class=CProductOrderItemReception field=quantity}}</th>
-      {{if $conf.dPstock.CProductStockGroup.unit_order}}
       <th>Unité</th>
-      {{/if}}
       <th>{{mb_title class=CProductOrderItemReception field=code}}</th>
       <th>{{mb_title class=CProductOrderItemReception field=lapsing_date}}</th>
     </tr>

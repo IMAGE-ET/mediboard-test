@@ -100,12 +100,8 @@ table.grid th {
     <th class="category">{{mb_title class=CProduct field=classe_comptable}}</th>
     <th class="category">{{mb_title class=CProductReference field=code}}</th>
     <th class="category">{{mb_title class=CProductOrderItemReception field=order_item_id}}</th>
-    {{if $conf.dPstock.CProductStockGroup.unit_order}}
-      <th class="category">Unités</th>
-      <th class="category"></th>
-    {{else}}
-      <th class="category">{{mb_title class=CProductOrderItemReception field=quantity}}</th>
-    {{/if}}
+    <th class="category">{{mb_title class=CProductOrderItemReception field=quantity}}</th>
+    <th class="category"></th>
     <th class="category">{{mb_title class=CProductOrderItemReception field=code}}</th>
     <th class="category">{{mb_title class=CProductOrderItemReception field=lapsing_date}}</th>
     <th class="category">{{mb_title class=CProductOrderItem field=_price}}</th>
@@ -122,12 +118,8 @@ table.grid th {
         <th class="category">{{mb_title class=CProduct field=classe_comptable}}</th>
         <th class="category">{{mb_title class=CProductReference field=code}}</th>
         <th class="category">{{mb_title class=CProductOrderItemReception field=order_item_id}}</th>
-        {{if $conf.dPstock.CProductStockGroup.unit_order}}
-          <th class="category">Unités</th>
-          <th class="category"></th>
-        {{else}}
-          <th class="category">{{mb_title class=CProductOrderItemReception field=quantity}}</th>
-        {{/if}}
+        <th class="category">{{mb_title class=CProductOrderItemReception field=quantity}}</th>
+        <th class="category"></th>
         <th class="category">{{mb_title class=CProductOrderItemReception field=code}}</th>
         <th class="category">{{mb_title class=CProductOrderItemReception field=lapsing_date}}</th>
         <th class="category">{{mb_title class=CProductOrderItem field=_price}}</th>
@@ -138,14 +130,8 @@ table.grid th {
     <td>{{mb_value object=$curr_item->_ref_order_item->_ref_reference->_ref_product field=classe_comptable}}</td>
     <td>{{mb_value object=$curr_item->_ref_order_item->_ref_reference field=code}}</td>
   	<td>{{mb_value object=$curr_item field=order_item_id}}</td>
-    {{if $conf.dPstock.CProductStockGroup.unit_order}}
-      <td style="text-align: right; white-space: nowrap;">
-        {{$curr_item->_unit_quantity}}
-      </td>
-      <td style="white-space: nowrap;">{{$curr_item->_ref_order_item->_ref_reference->_ref_product->item_title}}</td>
-    {{else}}
-      <td style="text-align: center; white-space: nowrap;">{{mb_value object=$curr_item field=quantity}}</td>
-    {{/if}}
+    <td style="text-align: right; white-space: nowrap;">{{mb_value object=$curr_item field=quantity}}</td>
+    <td style="white-space: nowrap;">{{$curr_item->_ref_order_item->_ref_reference->_ref_product->item_title}}</td>
     <td style="text-align: center;" class="narrow">{{mb_value object=$curr_item field=code}}</td>
     <td class="narrow">{{mb_value object=$curr_item field=lapsing_date}}</td>
     <td class="narrow">{{mb_value object=$curr_item field=_price}}</td>

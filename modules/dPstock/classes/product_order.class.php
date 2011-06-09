@@ -189,35 +189,26 @@ class CProductOrder extends CMbMetaObject {
       // if the stock is in the "red" or "orange" zone
       if ($stock->_zone_future < 2) {
         $current_stock = $stock->quantity;
-        
         $expected_stock = $stock->getOptimumQuantity();
         
-        // we get the best reference for this product
-        $where = array(
-          'product_id' => " = '{$stock->_ref_product->_id}'",
-          'societe_id' => " = '$this->societe_id'",
-        );
-        $orderby = 'price / quantity ASC';
-        $best_reference = new CProductReference();
-        
-        if ($best_reference->loadObject($where, $orderby) && $best_reference->quantity > 0) {
-          $best_reference->loadRefsFwd();
-          $best_reference->_ref_product->updateFormFields();
+        if ($current_stock < $expected_stock) {
+          // we get the best reference for this product
+          $where = array(
+            'product_id' => " = '{$stock->_ref_product->_id}'",
+            'societe_id' => " = '$this->societe_id'",
+          );
+          $orderby = 'price ASC';
+          $best_reference = new CProductReference();
           
-          $qty = $best_reference->quantity * $best_reference->_ref_product->_unit_quantity;
-          
-          // and we fill the order item with the good quantity of the stock's product
-          while ($current_stock < $expected_stock) {
-            $current_stock += $qty;
+          if ($best_reference->loadObject($where, $orderby) && $best_reference->quantity > 0) {
+            // we store the new order item in the current order
+            $order_item = new CProductOrderItem();
+            $order_item->order_id = $this->_id;
+            $order_item->quantity = $expected_stock - $current_stock;
+            $order_item->reference_id = $best_reference->_id;
+            $order_item->unit_price = $best_reference->price;
+            $order_item->store();
           }
-          
-          // we store the new order item in the current order
-          $order_item = new CProductOrderItem();
-          $order_item->order_id = $this->_id;
-          $order_item->quantity = $current_stock / $qty;
-          $order_item->reference_id = $best_reference->_id;
-          $order_item->unit_price = $best_reference->price;
-          $order_item->store();
         }
       }
     }

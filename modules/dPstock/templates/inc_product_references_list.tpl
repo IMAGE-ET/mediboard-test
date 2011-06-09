@@ -18,13 +18,12 @@
   <tr>
     <th class="narrow">{{mb_title class=CProductReference field=code}}</th>
     <th>{{mb_title class=CProductReference field=societe_id}}</th>
-    <th class="narrow">{{mb_title class=CProductReference field=price}}</th>
      
-		{{if $conf.dPstock.CProductReference.show_cond_price}}
-    <th colspan="2" class="narrow">{{mb_title class=CProductReference field=_cond_price}}</th>
+    {{if $conf.dPstock.CProductReference.show_cond_price}}
+      <th class="narrow">{{mb_title class=CProductReference field=_cond_price}}</th>
     {{/if}}
 		
-    <th colspan="2" class="narrow">{{mb_title class=CProductReference field=_unit_price}}</th>
+    <th colspan="2" class="narrow">{{mb_title class=CProductReference field=price}}</th>
   </tr>
   
 	{{foreach from=$product->_ref_references item=_reference}}
@@ -47,24 +46,16 @@
       </span>
     </td>
 
-    <td style="text-align: right;">{{mb_value object=$_reference field=price}}</td>
-
     {{if $conf.dPstock.CProductReference.show_cond_price}}
-    <td style="text-align: right;">
-      <label title="{{$_reference->quantity}} {{$_product->packaging}}">
-        {{mb_value object=$_reference field=quantity}} 
-      </label>
-      x
-    </td>
     <td style="text-align: right;">{{mb_value object=$_reference field=_cond_price}}</td>
     {{/if}}
 
     <td style="text-align: right;">
-      <label title="{{$_reference->quantity}} {{$_product->packaging}} x {{$_product->quantity}} {{$_product->item_title}}">
-        {{mb_value object=$_reference field=_unit_quantity}} x
+      <label title="{{$_reference->quantity}} x {{$_product->item_title}}">
+        {{mb_value object=$_reference field=quantity}} x
       </label>
-     </td>
-    <td style="text-align: right;"><strong>{{mb_value object=$_reference field=_unit_price}}</strong></td>
+    </td>
+    <td style="text-align: right;"><strong>{{mb_value object=$_reference field=price}}</strong></td>
   </tr>
   {{foreachelse}}
   <tr>

@@ -44,7 +44,7 @@ if($reference_id) {
   $order_item = new CProductOrderItem;
   $order_item->reference_id = $reference->_id;
   $order_item->quantity = $quantity;
-  $order_item->unit_price = $reference->_cond_price;
+  $order_item->unit_price = $reference->price;
   if ($msg = $order_item->store()) {
     CAppUI::setMsg($msg);
   }

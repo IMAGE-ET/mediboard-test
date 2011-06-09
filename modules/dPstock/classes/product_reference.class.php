@@ -37,8 +37,11 @@ class CProductReference extends CMbObject {
 
   // Form fields
   var $_cond_price   = null;
-  var $_unit_price   = null;
-  var $_unit_quantity = null;
+  
+  // #TEMP#
+  var $units_fixed = null;
+  var $orig_quantity = null;
+  var $orig_price    = null;
 
   function getSpec() {
     $spec = parent::getSpec();
@@ -54,7 +57,7 @@ class CProductReference extends CMbObject {
     $specs['product_id']  = 'ref notNull class|CProduct seekable show|0';
     $specs['societe_id']  = 'ref notNull class|CSociete autocomplete|name';
     $specs['quantity']    = 'num notNull pos';
-    $specs['price']       = 'currency notNull';
+    $specs['price']       = 'currency precise notNull';
     $specs['tva']         = 'pct min|0 default|0';
     $specs['code']        = 'str maxLength|20 seekable protected';
     $specs['supplier_code'] = 'str maxLength|40 seekable';
@@ -62,8 +65,11 @@ class CProductReference extends CMbObject {
     $specs['cancelled']   = 'bool default|0 show|0';
 
     $specs['_cond_price']    = 'currency precise';
-    $specs['_unit_price']    = 'currency precise';
-    $specs['_unit_quantity'] = 'num min|0';
+    
+    // #TEMP#
+    $specs['units_fixed']    = 'bool show|0';
+    $specs['orig_quantity']  = 'num show|0';
+    $specs['orig_price']     = 'currency precise show|0';
     return $specs;
   }
 
@@ -85,16 +91,8 @@ class CProductReference extends CMbObject {
     $this->_view = "{$this->_ref_product->_view} (par $this->quantity)";
     
     if ($this->quantity) {
-      $this->_cond_price = round($this->price / $this->quantity, 5);
-      $this->_unit_price = round($this->_cond_price / $this->_ref_product->quantity, 5);
+      $this->_cond_price = round($this->price * $this->quantity, 3);
     }
-    
-    $this->getUnitQuantity();
-  }
-  
-  function getUnitQuantity(){
-    $this->loadRefProduct(false);
-    return $this->_unit_quantity = max($this->_ref_product->quantity, 1) * $this->quantity;
   }
 
   function loadRefsFwd($cache = true){

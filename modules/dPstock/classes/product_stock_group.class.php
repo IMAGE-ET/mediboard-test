@@ -73,7 +73,7 @@ class CProductStockGroup extends CProductStock {
           $item->_ref_order->loadRefsFwd();
           
           if ($item->_ref_reference->_ref_product && $this->_ref_product && $item->_ref_reference->_ref_product->_id == $this->_ref_product->_id) {
-            $this->_ordered_count += $item->quantity * $item->_ref_reference->quantity;
+            $this->_ordered_count += $item->quantity;
             $this->_ordered_last = max(array($item->_ref_order->date_ordered, $this->_ordered_last));
             if (!$done) {
               $this->_orders[] = $order;

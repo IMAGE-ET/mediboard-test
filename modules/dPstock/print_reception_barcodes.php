@@ -56,7 +56,7 @@ foreach ($lots as &$item) {
   $reference->_ref_product->loadRefsFwd();
   
   if(!$item->barcode_printed || $force_print) {
-    for ($i = 0; $i < $item->quantity; $i++) {
+    for ($i = 0; $i < $item->quantity / $reference->quantity; $i++) {
       $data[$j] = array();
       $d = &$data[$j];
       

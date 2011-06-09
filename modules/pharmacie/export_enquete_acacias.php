@@ -112,7 +112,7 @@ foreach($list_cip as $cip) {
 	$dpa = 0;
   $ref = reset($product->loadRefsReferences());
   if ($ref) {
-    $dpa = $ref->_unit_price + ($ref->_unit_price * ($ref->tva/100));
+    $dpa = $ref->price + ($ref->price * ($ref->tva/100));
   }
   
   $pmp = $qa ? $product->getWAP($date_min, $date_max) : $dpa;

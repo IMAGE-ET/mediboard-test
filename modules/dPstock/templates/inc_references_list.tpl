@@ -16,13 +16,12 @@
     <th style="width: 16px;"></th>
     <th class="narrow">{{mb_title class=CProductReference field=code}}</th>
     <th>{{mb_label class=CProductReference field=societe_id}}</th>
-    <th class="narrow">{{mb_title class=CProductReference field=price}}</th>
     
     {{if $conf.dPstock.CProductReference.show_cond_price}}
       <th class="narrow">{{mb_title class=CProductReference field=_cond_price}}</th>
     {{/if}}
     
-    <th class="narrow">{{mb_title class=CProductReference field=_unit_price}}</th>
+    <th class="narrow">{{mb_title class=CProductReference field=price}}</th>
     
     {{if $mode}}
       {{if $mode == "order"}}<th class="narrow">Stock</th>{{/if}}
@@ -38,8 +37,8 @@
       <td rowspan="2" {{if $_product->_in_order}}class="ok"{{/if}}>
         {{mb_include module=dPstock template=inc_product_in_order product=$_product}}
       </td>
-      <td colspan="{{if $conf.dPstock.CProductReference.show_cond_price}}{{if $mode == 'order'}}6{{else}}5{{/if}}{{else}}{{if $mode == 'order'}}5{{else}}4{{/if}}{{/if}}">
-        <a href="{{if !$mode}}?m={{$m}}&amp;tab=vw_idx_reference&amp;reference_id={{$_reference->_id}}{{else}}#1{{/if}}">
+      <td colspan="{{if $conf.dPstock.CProductReference.show_cond_price}}{{if $mode == 'order'}}5{{else}}4{{/if}}{{else}}{{if $mode == 'order'}}5{{else}}4{{/if}}{{/if}}">
+        <a href="{{if !$mode}}?m=dPstock&amp;tab=vw_idx_reference&amp;reference_id={{$_reference->_id}}{{else}}#1{{/if}}">
           <strong onmouseover="ObjectTooltip.createEx(this, '{{$_product->_guid}}')" {{if $mode}}onclick="showProductDetails({{$_product->_id}})"{{/if}}>
             {{$_product->_view|truncate:60}}
           </strong>
@@ -51,28 +50,24 @@
         {{assign var=id value=$_reference->_id}}
         {{if $mode == "order"}}
           <form name="product-reference-{{$id}}" action="?" method="post">
-            <input type="hidden" name="m" value="{{$m}}" />
+            <input type="hidden" name="m" value="dPstock" />
             <input type="hidden" name="dosql" value="do_order_item_aed" />
             <input type="hidden" name="reference_id" value="{{$_reference->_id}}" />
             <input type="hidden" name="callback" value="orderItemCallback" />
             <input type="hidden" name="_create_order" value="1" />
             <input type="hidden" name="reception_id" value="" />
-            {{if !$conf.dPstock.CProductReference.show_cond_price}}
-              <input type="hidden" name="_is_unit_quantity" value="1" />
-            {{/if}}
             {{mb_field object=$_reference 
               field=quantity 
               size=2
               form="product-reference-$id" 
               increment=true 
-              value=$conf.dPstock.CProductReference.show_cond_price|ternary:1:$_reference->quantity*$_reference->_ref_product->quantity
               style="width: 2em;"
             }}
             <button class="add notext" type="button" onclick="submitOrderItem(this.form, {refreshLists: false})" title="{{tr}}Add{{/tr}}">{{tr}}Add{{/tr}}</button>
           </form>
         {{else if $mode == "reception"}}
           <form name="product-reference-{{$id}}" action="?" method="post">
-            <input type="hidden" name="m" value="{{$m}}" />
+            <input type="hidden" name="m" value="dPstock" />
             <input type="hidden" name="dosql" value="do_order_item_reception_aed" />
             <input type="hidden" name="_reference_id" value="{{$_reference->_id}}" />
             <input type="hidden" name="date" value="now" />
@@ -106,22 +101,18 @@
         </span>
 			</td>
       <td>{{$_reference->_ref_societe}}</td>
-
-		  <td style="text-align: right;">
-			  {{mb_value object=$_reference field=price}}
-      </td>
 			 
       {{if $conf.dPstock.CProductReference.show_cond_price}}
 	 	  <td style="text-align: right;">
-        <label title="{{$_reference->quantity}} {{$_product->packaging}}">
+        <label title="{{$_reference->quantity}} {{$_product->item_title}}">
 			    {{mb_value object=$_reference field=_cond_price}}
         </label>
 			</td>
 	    {{/if}}
 			
 		  <td style="text-align: right; font-weight: bold;">
-        <label title="{{$_reference->quantity}} {{$_product->packaging}} x {{$_product->quantity}} {{$_product->item_title}}">
-          {{mb_value object=$_reference field=_unit_price}}
+        <label title="{{$_reference->quantity}} x {{$_product->item_title}}">
+          {{mb_value object=$_reference field=price}}
         </label>
       </td>
       

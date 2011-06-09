@@ -802,7 +802,61 @@ class CSetupdPstock extends CSetup {
     $query = "ALTER TABLE `product_stock_service` 
               CHANGE `location_id` `location_id` INT (11) UNSIGNED NOT NULL;";
     $this->addQuery($query);
+		
+    //ALTER TABLE `product_delivery_trace` CHANGE `code` `code` CHAR( 40 ) NULL;
+    //ALTER TABLE `product_order_item_reception` CHANGE `code` `code` CHAR( 40 ) NULL;
+		//ALTER TABLE `product_reference` 
+		// CHANGE `code` `code` CHAR( 20 ) NULL,
+    // CHANGE `supplier_code` `supplier_code` CHAR( 40 ) NULL;
+		//ALTER TABLE `product_reception` CHANGE `reference` `reference` CHAR( 40 ) NOT NULL;
+		
+		$this->makeRevision("1.45");
+		// CProductOrderItemReception
+    $query = "ALTER TABLE `product_order_item_reception` 
+              ADD `units_fixed` ENUM ('0','1') DEFAULT '1',
+              ADD `orig_quantity` INT (11);";
+    $this->addQuery($query);
+    $query = "UPDATE `product_order_item_reception` SET 
+		          `orig_quantity` = `quantity`,
+						  `units_fixed` = '0'";
+    $this->addQuery($query);
+		
+    // CProductOrderItem
+    $query = "ALTER TABLE `product_order_item` 
+              CHANGE `unit_price` `unit_price` DECIMAL (12,5),
+              ADD `units_fixed` ENUM ('0','1') DEFAULT '1',
+              ADD `orig_quantity` INT (11),
+              ADD `orig_unit_price` DECIMAL (12,5);";
+    $this->addQuery($query);
+    $query = "UPDATE `product_order_item` SET 
+		          `orig_quantity` = `quantity`,
+              `orig_unit_price` = `unit_price`,
+              `units_fixed` = '0'";
+    $this->addQuery($query);
+		
+    // CProductReference
+		$query = "ALTER TABLE `product_reference` 
+              CHANGE `price` `price` DECIMAL (12,5) NOT NULL,
+              ADD `units_fixed` ENUM ('0','1') DEFAULT '1',
+              ADD `orig_quantity` INT (11),
+              ADD `orig_price` DECIMAL (12,5);";
+    $this->addQuery($query);
+    $query = "UPDATE `product_reference` SET 
+              `units_fixed` = '0',
+              `orig_quantity` = `quantity`,
+              `orig_price` = `price`";
+    $this->addQuery($query);
+    $query = "UPDATE `product_reference` 
+		          LEFT JOIN `product` ON `product_reference`.`product_id` = `product`.`product_id`
+							SET 
+              `product_reference`.`price` = `product_reference`.`orig_price` / ( `product`.`quantity` * `product_reference`.`orig_quantity`),
+              `product_reference`.`quantity` = `product_reference`.`orig_quantity` * `product`.`quantity`";
+    $this->addQuery($query);
     
-    $this->mod_version = "1.45";
+    $this->mod_version = "1.46";
   }
 }
+
+/*
+SELECT SQL_NO_CACHE *  FROM `id_sante400` WHERE `object_class` LIKE 'CPatient' AND `object_id` >= 10000 AND `tag` LIKE '%a%' AND `last_update` >= '2010-09-01'
+ */

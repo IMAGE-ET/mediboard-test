@@ -65,13 +65,7 @@ receiveOrderItems = function(form, container) {
 <table class="tbl" id="order-items-{{$order->_id}}">
   <tr>
     <th style="width: 50%;"></th>
-    <th style="text-align: center;" class="narrow">
-    {{if $conf.dPstock.CProductStockGroup.unit_order}}
-      {{mb_title class=CProductOrderItem field=_unit_quantity}}
-    {{else}}
-      {{mb_title class=CProductOrderItem field=quantity}}
-    {{/if}}
-    </th>
+    <th style="text-align: center;" class="narrow">{{mb_title class=CProductOrderItem field=quantity}}</th>
     <th style="text-align: center;" class="narrow">{{mb_title class=CProductOrderItem field=unit_price}}</th>
     <th style="text-align: center;" class="narrow">{{mb_title class=CProductOrderItem field=_price}}</th>
     <th style="text-align: center;" class="narrow">Déjà reçu</th>

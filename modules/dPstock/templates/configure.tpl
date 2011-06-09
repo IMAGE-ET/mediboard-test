@@ -8,6 +8,13 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
 *}}
 
+<script type="text/javascript">
+function fixUnits(){
+  var url = new Url("dPstock", "do_fix_quantities_units");
+	url.requestUpdate("fix-units-logs");
+}
+</script>
+
 <form name="editConfig" action="?m={{$m}}&amp;{{$actionType}}=configure" method="post" onsubmit="return checkForm(this)">
   <input type="hidden" name="dosql" value="do_configure" />
   <input type="hidden" name="m" value="system" />
@@ -46,7 +53,6 @@
     
     {{assign var="class" value="CProductStockGroup"}}
     <tr><th class="category" colspan="2">{{tr}}{{$class}}{{/tr}}</th></tr>
-    {{mb_include module=system template=inc_config_bool var=unit_order}}
     {{mb_include module=system template=inc_config_bool var=infinite_quantity}}
     {{mb_include module=system template=inc_config_bool var=negative_allowed}}
 
@@ -120,3 +126,12 @@ Les caractères suivants sont utilisés pour spécifier le format du numéro de comm
   <li>%% - un caractère `%&#039; littéral</li>
 </ul>
 </div>
+
+<table class="main tbl" style="table-layout: fixed;">
+	<tr>
+    <td>
+    	<button type="button" class="change oneclick2" onclick="fixUnits()">Corriger les unités des stocks</button>
+    </td>
+    <td id="fix-units-logs"></td>
+	</tr>
+</table>

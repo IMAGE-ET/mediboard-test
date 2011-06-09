@@ -8,8 +8,6 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
 *}}
 
-{{assign var=unit_order value=$conf.dPstock.CProductStockGroup.unit_order}}
-
 <tr>
   {{if !$order->date_ordered}}
   <td>
@@ -46,34 +44,23 @@
       <input type="hidden" name="m" value="{{$m}}" />
       <input type="hidden" name="dosql" value="do_order_item_aed" />
       <input type="hidden" name="order_item_id" value="{{$curr_item->_id}}" />
-      {{if $conf.dPstock.CProductStockGroup.unit_order}}
-        {{mb_field object=$curr_item 
-          field=_unit_quantity
-          onchange="quantitySubmit$id(this)"
-          form=form-item-quantity-$id 
-          min=0
-          size=2
-          step=$curr_item->_ref_reference->_ref_product->quantity*$curr_item->_ref_reference->quantity
-          style="width: 3em;"
-          increment=true}}
-        {{mb_value object=$curr_item->_ref_reference->_ref_product field=item_title}}
-      {{else}}
-        {{mb_field object=$curr_item 
-          field=quantity
-          onchange="quantitySubmit$id(this)"
-          form=form-item-quantity-$id 
-          min=0
-          size=2
-          style="width: 2em;"
-          increment=true}}
-      {{/if}}
+      {{mb_field object=$curr_item 
+        field=quantity
+        onchange="quantitySubmit$id(this)"
+        form=form-item-quantity-$id 
+        min=0
+        size=2
+        step=$curr_item->_ref_reference->quantity
+        style="width: 3em;"
+        increment=true}}
+      {{mb_value object=$curr_item->_ref_reference->_ref_product field=item_title}}
     </form>
     {{else}}
-      {{mb_value object=$curr_item field=$unit_order|ternary:_unit_quantity:quantity}}
+      {{mb_value object=$curr_item field=quantity}}
     {{/if}}
   </td>
   <td style="text-align: right;">
-    {{mb_value object=$curr_item field=$unit_order|ternary:_cond_price:unit_price}}
+    {{mb_value object=$curr_item field=unit_price}}
   </td>
   <td id="order-item-{{$id}}-price" style="text-align: right;">
     {{mb_value object=$curr_item field=_price}}

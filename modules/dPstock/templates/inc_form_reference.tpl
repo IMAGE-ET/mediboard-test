@@ -1,33 +1,19 @@
 <script type="text/javascript">
-Main.add(function () {
-  var form = getForm("edit_reference");
-  updateUnitQuantity(form.quantity, "equivalent_quantity");
-  updateUnitQuantity(form.mdq, "equivalent_quantity_mdq");
-});
-
-function updateUnitQuantity(element, view) {
-  $(view).update('('+(element.value * element.form._unit_quantity.value)+' '+element.form._unit_title.value+')');
-}
-
-function updatePrice(type, form) {
-  var value = form[type].value,
-      quantity = form.quantity.value || 1,
-      product_quantity = "{{$reference->_ref_product->quantity}}" || 0;
-  
+function updatePrice(input) {
+  var form = input.form,
+      price       = parseFloat(form.price.value),
+      _cond_price = parseFloat(form._cond_price.value),
+      quantity    = parseInt(form.quantity.value) || 1,
+			type = input.name;
+			
   switch (type) {
+    case "quantity":
     case "price": 
-      $V(form._cond_price, (value/quantity).toFixed(4), false);
-      $V(form._unit_price, (value/quantity/product_quantity).toFixed(4), false);
+      $V(form._cond_price, (price*quantity).toFixed(4), false);
     break;
     
     case "_cond_price":
-      $V(form.price, (value*quantity).toFixed(2), false);
-      $V(form._unit_price, (value/product_quantity).toFixed(4), false);
-    break;
-    
-    case "_unit_price":
-      $V(form.price, (value*quantity*product_quantity).toFixed(2), false);
-      $V(form._cond_price, (value*product_quantity).toFixed(4), false);
+      $V(form.price, (_cond_price/quantity).toFixed(5), false);
     break;
   }
 }
@@ -79,12 +65,14 @@ function updatePrice(type, form) {
   <tr>
     <th>{{mb_label object=$reference field="quantity"}}</th>
     <td>
-      {{mb_field object=$reference field="quantity" increment=1 form=edit_reference min=1 size=4 onchange="updateUnitQuantity(this, 'equivalent_quantity'); updatePrice('price', this.form);if($('CReference-quantity')) $('CReference-quantity').update(this.value);"}}
-      <input type="text" name="packaging" readonly="readonly" value="{{$reference->_ref_product->packaging}}" style="border: none; background: transparent; width: 5em; color: inherit;" onchange="this.form.packaging_2.value=this.value"/>
-      <span id="equivalent_quantity"></span>
+      {{mb_field object=$reference field="quantity" increment=1 form=edit_reference min=1 size=4 
+			           onchange="updatePrice(this);"}}
+      <input type="text" name="item_title" readonly="readonly" value="{{$reference->_ref_product->item_title}}" 
+			       style="border: none; background: transparent; width: 5em; color: inherit;" onchange="this.form.packaging_2.value=this.value"/>
     </td>
   </tr>
   
+	{{* 
   <tr {{if !$conf.dPstock.CProductReference.use_mdq}}style="display: none"{{/if}}>
     <th>{{mb_label object=$reference field="mdq"}}</th>
     <td>{{mb_field object=$reference field="mdq" increment=1 form=edit_reference min=1 size=4 onchange="updateUnitQuantity(this, 'equivalent_quantity_mdq')"}}
@@ -92,15 +80,14 @@ function updatePrice(type, form) {
       <span id="equivalent_quantity_mdq"></span>
     </td>
   </tr>
-  
+  *}}
+	
   {{assign var=sub_quantity value=$reference->_ref_product->quantity}}
   <tr>
     <th>{{mb_label object=$reference field="price"}}</th>
     <td>
       {{mb_field object=$reference field="price" increment=1 form=edit_reference min=0 size=4 
-                 onchange="updatePrice('price', this.form)"}}
-      (par {{if $reference->_ref_product->packaging}}
-        <span id="CReference-quantity">{{$reference->quantity}}</span> {{$reference->_ref_product->packaging}}{{else}}référence{{/if}})
+                 onchange="updatePrice(this)"}}
     </td>
   </tr>
   
@@ -108,17 +95,7 @@ function updatePrice(type, form) {
     <th>{{mb_label object=$reference field="_cond_price"}}</th>
     <td>
       {{mb_field object=$reference field="_cond_price" increment=1 form=edit_reference min=0 size=4 
-                 onchange="updatePrice('_cond_price', this.form)"}}
-      (par {{$reference->_ref_product->packaging|ternary:$reference->_ref_product->packaging:"conditionnement"}})
-    </td>
-  </tr>
-  
-  <tr>
-    <th>{{mb_label object=$reference field="_unit_price"}}</th>
-    <td>
-      {{mb_field object=$reference field="_unit_price" increment=1 form=edit_reference min=0 size=4 
-                 onchange="updatePrice('_unit_price', this.form)"}}
-      (par {{$reference->_ref_product->item_title|ternary:$reference->_ref_product->item_title:"unité de délivrance"}})
+                 onchange="updatePrice(this)"}}
     </td>
   </tr>
   

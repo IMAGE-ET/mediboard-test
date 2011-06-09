@@ -36,7 +36,11 @@ CValue::get("include_void_service", $include_void_service);
 
 //CMbObject::$useObjectCache = false;
 set_time_limit(300);
-$limit = 500;
+$limit = 1000;
+
+CProductReference::$_load_lite = true;
+CProductOrderItem::$_load_lite = true;
+CProductOrderItemReception::$_load_lite = true;
 
 $list_products = array();
 

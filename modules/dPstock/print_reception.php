@@ -19,8 +19,7 @@ $reception->loadRefsFwd();
 $reception->updateTotal();
 
 foreach($reception->_ref_reception_items as $_reception_item){
-	$_reception_item->loadRefs();
-  $_reception_item->getUnitQuantity();
+  $_reception_item->loadRefs();
 }
 
 // Smarty template

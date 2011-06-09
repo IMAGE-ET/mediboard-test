@@ -27,7 +27,7 @@ $reception = new CProductOrderItemReception;
 $receptions = $reception->loadList($where, "lapsing_date", 50, null, $ljoin);
 
 foreach($receptions as $_id => $_reception) {
-  $qty = $_reception->getUnitQuantity();
+  $qty = $_reception->quantity;
   $_reception->_total_quantity = $qty;
   $_reception->_used_quantity = $_reception->countBackRefs('lines_dmi');
   $_reception->_remaining_quantity = $qty - $_reception->_used_quantity;

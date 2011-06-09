@@ -39,13 +39,15 @@ class CProductOrderItem extends CMbObject {
   var $_ref_receptions    = null;
 
   // Form fields
-  var $_price             = null;
-  var $_cond_price        = null;
+  var $_price        = null;
   var $_date_received     = null;
   var $_quantity_received = null;
-  var $_unit_quantity     = null;
-  var $_is_unit_quantity  = null;
   var $_id_septic         = null;
+	
+  // #TEMP#
+  var $units_fixed        = null;
+  var $orig_quantity      = null;
+  var $orig_unit_price    = null;
   
   static $_load_lite = false;
 
@@ -66,10 +68,13 @@ class CProductOrderItem extends CMbObject {
     $specs['lot_id']             = 'ref class|CProductOrderItemReception';
     $specs['renewal']            = 'bool notNull default|1';
     $specs['septic']             = 'bool notNull default|0';
-    $specs['_cond_price']        = 'currency';
     $specs['_price']             = 'currency';
     $specs['_quantity_received'] = 'num';
-    $specs['_unit_quantity']     = 'num';
+		
+    // #TEMP#
+    $specs['units_fixed']        = 'bool show|0';
+    $specs['orig_quantity']      = 'num show|0';
+    $specs['orig_unit_price']    = 'currency precise show|0';
     return $specs;
   }
 
@@ -125,26 +130,10 @@ class CProductOrderItem extends CMbObject {
     if (self::$_load_lite) return;
     
     $this->updateReceived();
-    $this->getUnitQuantity();
+    $this->loadReference();
+		
     $this->_view = $this->_ref_reference->_view;
     $this->_price = $this->unit_price * $this->quantity;
-    $this->_cond_price = $this->_unit_quantity ? $this->_price / $this->_unit_quantity : 0;
-  }
-  
-  function getUnitQuantity(){
-    $this->completeField("quantity");
-    $this->loadReference();
-    return $this->_unit_quantity = $this->quantity * $this->_ref_reference->_unit_quantity;
-  }
-  
-  function updateDBFields() {
-    parent::updateDBFields();
-    
-    if ($this->_unit_quantity) {
-      $this->completeField("reference_id");
-      $this->loadReference();
-      $this->quantity = $this->_unit_quantity / $this->_ref_reference->_unit_quantity;
-    }
   }
   
   function loadReference() {
@@ -204,10 +193,6 @@ class CProductOrderItem extends CMbObject {
       
       if ($this->lot_id) {
         $where['lot_id'] = "= '$this->lot_id'";
-      }
-
-      if (isset($this->_is_unit_quantity)) {
-        $this->quantity /= ($this->_ref_reference->quantity * $this->_ref_reference->_ref_product->quantity);
       }
       
       $duplicateKey = new CProductOrderItem();

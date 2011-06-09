@@ -1,5 +1,5 @@
 <script type="text/javascript">
-	
+  
 Main.add(function () {
   Control.Tabs.create("product-conditionnement-tabs", false);
   
@@ -79,7 +79,7 @@ duplicateObject = function (form) {
 
 <table class="form">
   {{mb_include module=system template=inc_form_table_header object=$product}}
-	
+  
   {{if $product->cancelled == 1}}
   <tr>
     <th class="category cancelled" colspan="10">
@@ -87,13 +87,13 @@ duplicateObject = function (form) {
     </th>
   </tr>
   {{/if}}
-	   
+     
   <tr>
     <th class="narrow">{{mb_label object=$product field="name"}}</th>
     <td>{{mb_field object=$product field="name" size=40}}</td>
   </tr>
   
-	<tr>
+  <tr>
     <th>{{mb_label object=$product field="category_id"}}</th>
     <td><select name="category_id" class="{{$product->_props.category_id}}">
       <option value="">&mdash; {{tr}}CProductCategory.select{{/tr}}</option>
@@ -147,8 +147,8 @@ duplicateObject = function (form) {
       {{/foreach}}
     </td>
   </tr>
-	
-	{{if @$modules.dmi && $conf.dPstock.CProduct.use_renewable}}
+  
+  {{if @$modules.dmi && $conf.dPstock.CProduct.use_renewable}}
   <tr>
     <th>{{mb_label object=$product field="renewable"}}</th>
     <td>{{mb_field object=$product field="renewable"}}</td>
@@ -166,6 +166,14 @@ duplicateObject = function (form) {
   </tr>
 
   <tbody id="conditionnement">
+    <tr>
+      <td colspan="2" class="text">
+        <div class="small-info">
+          Les informations de conditonnement sont maintenant à titre informatif, 
+          elles ne déterminent plus les quantités dans les commandes.
+        </div>
+      </td>
+    </tr>
     <tr>
       <th>{{mb_label object=$product field="quantity"}}</th>
       <td>{{mb_field object=$product field="quantity" form="edit_product" increment=true size=4}}</td>
@@ -202,15 +210,15 @@ duplicateObject = function (form) {
   
   <tr>
     <td class="button" colspan="2">
-    	<hr />
+      <hr />
 
       {{if $product->_id}}
       <button class="modify" type="submit">{{tr}}Save{{/tr}}</button>
       
-			{{mb_field object=$product field=cancelled hidden=1}}
-	    <button class="{{$product->cancelled|ternary:"change":"cancel"}}" type="button" onclick="confirmCancel(this);">
-	      {{tr}}{{$product->cancelled|ternary:"Restore":"Archive"}}{{/tr}}
-	    </button>
+      {{mb_field object=$product field=cancelled hidden=1}}
+      <button class="{{$product->cancelled|ternary:"change":"cancel"}}" type="button" onclick="confirmCancel(this);">
+        {{tr}}{{$product->cancelled|ternary:"Restore":"Archive"}}{{/tr}}
+      </button>
 
       <button type="button" class="trash" onclick="confirmDeletion(this.form,{typeName:'',objName:'{{$product->_view|smarty:nodefaults|JSAttribute}}'})">
         {{tr}}Delete{{/tr}}
@@ -220,7 +228,7 @@ duplicateObject = function (form) {
       <input type="hidden" name="_purge" value="0" />
       <script type="text/javascript">
        confirmPurge = function(element) {
-			   var form = element.form;
+         var form = element.form;
          if (confirm("ATTENTION : Vous êtes sur le point de supprimer un produit, ainsi que tous les objets qui s'y rattachent")) {
            form._purge.value = 1;
            confirmDeletion(form,  {
@@ -233,7 +241,7 @@ duplicateObject = function (form) {
       <button type="button" class="cancel" onclick="confirmPurge(this)">
         {{tr}}Purge{{/tr}}
       </button>
-			{{/if}}
+      {{/if}}
 
       <button type="button" class="add" onclick="duplicateObject(this.form)">
         {{tr}}Duplicate{{/tr}}

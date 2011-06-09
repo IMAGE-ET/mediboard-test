@@ -257,7 +257,7 @@ class CMbObject {
       
       // Find present levels
       foreach($this->_ref_notes as $_note) {
-      	$notes_levels[$_note->degre] = true;
+        $notes_levels[$_note->degre] = true;
       }
       
       // Note highest level 
@@ -2371,45 +2371,54 @@ class CMbObject {
     $this->_ref_last_log  = reset($this->_ref_logs);
   }
   
-  function loadLastLogForField($fieldName = null, $strict = false){ 
+  function loadLastLogForField($fieldName = null, $strict = false){
+    $log = new CUserLog();
+    $logs = $log->loadLogsForField($fieldName, $strict, 1);
+    $first_log = reset($logs);
+    
+    if ($first_log) {
+      $first_log->loadRefsFwd();
+      return $first_log;
+    }
+    
+    return $log;
+  }
+  
+  function loadLogsForField($fieldName = null, $strict = false, $limit = null, $require_extra_data = false){ 
     $where = array(); 
     $where["object_id"]    = " = '$this->_id'";
     $where["object_class"] = " = '$this->_class_name'";
     
-    if ($fieldName) {
-      if ($strict) {
-        $where[] = "
-          `fields` = '$fieldName' OR 
-          `fields` LIKE '$fieldName %' OR 
-          `fields` LIKE '% $fieldName %' OR 
-          `fields` LIKE '% $fieldName'";
-      }
-      else {
-        $where["fields"] = " LIKE '%$fieldName%'";
-      }
+    if ($require_extra_data) {
+      $where[] = "`extra` IS NOT NULL AND `extra` != '[]' AND `extra` != '{}'";
     }
     
     $log = new CUserLog();
-    $log->loadObject($where, "date DESC");
     
-    if ($log->_id){
-      $log->loadRefsFwd();
-    }
-    elseif($strict) {
-      $this->completeField($fieldName);
-      if ($this->$fieldName == null) {
-        return $log;
+    if ($strict) {
+      $fields = $fieldName;
+      
+      if (!is_array($fieldName)) {
+        $fields = array($fieldName);
       }
       
-      $where = array();
-      $where["object_id"]    = " = '$this->_id'";
-      $where["object_class"] = " = '$this->_class_name'";
-      $where["type"]         = " = 'create'";
+      $whereOr = array("`type` = 'create'");
       
-      $log->loadObject($where);
+      foreach($fields as $_field) {
+        $whereOr[] = "
+        `fields` = '$_field' OR 
+        `fields` LIKE '$_field %' OR 
+        `fields` LIKE '% $_field %' OR 
+        `fields` LIKE '% $_field'";
+      }
+      
+      $where[] = implode(" OR ", $whereOr);
+    }
+    else {
+      $where["fields"] = " LIKE '%$fieldName%'";
     }
     
-    return $log;
+    return $log->loadList($where, "`date` DESC", $limit);
   }
   
   /**
@@ -2634,48 +2643,7 @@ class CMbObject {
    * @return string
    */
   function getValueAtDate($date, $field) {
-    $where = array(
-      "object_class" => "= '$this->_class_name'",
-      "object_id" => "= '$this->_id'",
-      "extra" => "IS NOT NULL",
-    );
-    
-    if ($date) {
-      $where["date"] = ">= '$date'";
-    }
-    
-    /*if ($user_id) {
-      $where["user_id"] = " = '$user_id'";
-    }*/
-    
-    $where["type"] = "IN('store', 'merge')";
-    
-    /*if ($fields){
-      $whereField = array();
-      foreach($fields as $_field) {
-        $whereField[] = "
-          fields LIKE '$_field %' OR 
-          fields LIKE '% $_field %' OR 
-          fields LIKE '% $_field' OR 
-          fields LIKE '$_field'";
-      }
-      $where[] = implode(" OR ", $whereField);
-    }*/
-    
-    $where[] = "
-      fields LIKE '$field %' OR 
-      fields LIKE '% $field %' OR 
-      fields LIKE '% $field' OR 
-      fields LIKE '$field'";
-    
-    $user_log = new CUserLog();
-    $user_log->loadObject($where, "date ASC", null, "object_id");
-    
-    if ($user_log->_id) {
-      $user_log->getOldValues();
-    }
-    
-    return CValue::read($user_log->_old_values, $field, $this->$field);
+    return CUserLog::getObjectValueAtDate($this, $date, $field);
   }
   
   /**

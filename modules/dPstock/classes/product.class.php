@@ -321,10 +321,7 @@ class CProduct extends CMbObject {
     
     $sql = new CRequest();
     $sql->addTable("product_order_item_reception");
-    $sql->addSelect("SUM(
-      product_order_item_reception.quantity * 
-      product_reference.quantity * 
-      product.quantity)");
+    $sql->addSelect("SUM(product_order_item_reception.quantity)");
     $sql->addLJoin($ljoin);
     $sql->addWhere($where);
     
@@ -358,9 +355,7 @@ class CProduct extends CMbObject {
     
     $sql = new CRequest();
     $sql->addTable("product_order_item_reception");
-    $sql->addSelect("SUM(product_order_item_reception.quantity * 
-      product_reference.quantity * 
-      product.quantity * (product_order_item.unit_price / (product_reference.quantity * product.quantity)))");
+    $sql->addSelect("SUM(product_order_item_reception.quantity * product_order_item.unit_price)");
     $sql->addLJoin($ljoin);
     $sql->addWhere($where);
     
@@ -448,10 +443,6 @@ class CProduct extends CMbObject {
       "total" => array(0, 0)
     );
     
-    //CProductReference::$_load_lite = true; // don't use this
-    CProductOrderItem::$_load_lite = true;
-    CProductOrderItemReception::$_load_lite = true;
-    
     for($i = 0; $i < $n; $i++) {
       $from = mbDate("+$i $unit", $start);
       $to = mbDate("+1 $unit", $from);
@@ -471,7 +462,7 @@ class CProduct extends CMbObject {
         $coeff = 1;
         $ref = reset($_product->loadRefsReferences(true));
         if ($ref) {
-          $coeff = $ref->_unit_price;
+          $coeff = $ref->price;
         }
         
         foreach($services as $_key => $_service) {
@@ -625,7 +616,7 @@ class CProduct extends CMbObject {
         $coeff = 1;
         $ref = reset($_product->loadRefsReferences(true));
         if ($ref) {
-          $coeff = $ref->_unit_price;
+          $coeff = $ref->price;
         }
         
         $balance["in"][$from][0]  += $supply;
