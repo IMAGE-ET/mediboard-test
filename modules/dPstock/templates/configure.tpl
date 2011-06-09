@@ -13,8 +13,18 @@ function fixUnits(){
   var url = new Url("dPstock", "do_fix_quantities_units");
 	url.requestUpdate("fix-units-logs");
 }
+
+Main.add(function(){
+  Control.Tabs.create("tabs-{{$m}}-config");
+});
 </script>
 
+<ul class="control_tabs" id="tabs-{{$m}}-config">
+  <li><a href="#config">Configuration</a></li>
+  <li><a href="#units">Unités de stockage</a></li>
+</ul>
+
+<div id="config">
 <form name="editConfig" action="?m={{$m}}&amp;{{$actionType}}=configure" method="post" onsubmit="return checkForm(this)">
   <input type="hidden" name="dosql" value="do_configure" />
   <input type="hidden" name="m" value="system" />
@@ -126,12 +136,19 @@ Les caractères suivants sont utilisés pour spécifier le format du numéro de comm
   <li>%% - un caractère `%&#039; littéral</li>
 </ul>
 </div>
+</div>
 
-<table class="main tbl" style="table-layout: fixed;">
+<table class="main tbl" id="units" style="table-layout: fixed;">
 	<tr>
     <td>
     	<button type="button" class="change oneclick" onclick="fixUnits()">Corriger les unités des stocks</button>
     </td>
     <td id="fix-units-logs"></td>
 	</tr>
+  <tr>
+    <td>
+      <a class="button search" href="?m=dPstock&tab=vw_reference_price_changes">Commandes avec prix unitaire erroné</a>
+    </td>
+    <td></td>
+  </tr>
 </table>
