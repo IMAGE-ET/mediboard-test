@@ -395,14 +395,14 @@ class CFile extends CDocumentItem {
       (CAppUI::conf("dPfiles CFile ooo_active") == 1);
   }
  
-  function openoffice_launched() {
+  static function openoffice_launched() {
     exec("sh shell/ooo_state.sh", $res);
     return $res[0];
   }
   
   function convertToPDF($file_path = null, $pdf_path = null) {
     // Vérifier si openoffice est lancé
-    if (!$this->openoffice_launched() ){
+    if (!CFile::openoffice_launched() ){
       return 0;
     }
     
@@ -429,7 +429,15 @@ class CFile extends CDocumentItem {
     $path_python = CAppUI::conf("dPfiles CFile python_path") ? CAppUI::conf("dPfiles CFile python_path") ."/": "";
     
     $res = exec("{$path_python}python ./modules/dPfiles/script/doctopdf.py {$file_path} {$pdf_path}");
-
+    
+    if (isset($file)) {
+      $file->file_size = filesize($this->_file_path);
+      if ($msg = $file->store()) {
+        CAppUI::setMsg($msg, UI_MSG_ERROR);
+        return 0;
+      }
+    }
+    
     return $res;
   }
 	
