@@ -1,7 +1,7 @@
 <!-- $Id$ -->
 
 <tr>
-  <th>{{mb_label object=$consult field="categorie_id"}}</th>
+  <th>{{mb_label class=CConsultation field="categorie_id"}}</th>
   <td>
 	  <script type="text/javascript">
 	   listCat = {{$listCat|@json}};
@@ -10,7 +10,7 @@
 	   }
 
 	   Main.add(function() {
-		   reloadIcone('{{$consult->categorie_id}}');
+		   reloadIcone('{{$categorie_id}}');
 	   });
 	  </script>
 	  
