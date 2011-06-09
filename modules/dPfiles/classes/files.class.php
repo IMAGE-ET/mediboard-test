@@ -431,7 +431,7 @@ class CFile extends CDocumentItem {
     $res = exec("{$path_python}python ./modules/dPfiles/script/doctopdf.py {$file_path} {$pdf_path}");
     
     if (isset($file)) {
-      $file->file_size = filesize($this->_file_path);
+      $file->file_size = filesize($file->_file_path);
       if ($msg = $file->store()) {
         CAppUI::setMsg($msg, UI_MSG_ERROR);
         return 0;

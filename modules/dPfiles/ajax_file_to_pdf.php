@@ -15,16 +15,16 @@ $where = array();
 $where["object_class"] = " NOT LIKE 'CFile'";
 
 // Ne convertir que les fichiers dont le nom se finit par une extension convertible
-$rlike = "";
+$like = "";
 $types = preg_split("/[\s]+/", $extensions);
 
 foreach($types as $key => $_type) {
-  $rlike .= " file_name RLIKE '.".$_type."$'";
+  $like .= " file_name LIKE '%.$_type'";
   if ($key != (count($types) -1)) {
-    $rlike .= " OR";
+    $like .= " OR";
   }
 }
-$where[] = $rlike;
+$where[] = $like;
 $where[] = "file_id NOT IN (SELECT object_id from files_mediboard WHERE object_class LIKE 'CFile')";
 
 $order = "file_id DESC";
