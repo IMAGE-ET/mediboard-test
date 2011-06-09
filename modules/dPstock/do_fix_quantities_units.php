@@ -55,7 +55,7 @@ $ref_where = array(
 );
 // ---------------------
 
-$references = $ref->loadList($ref_where, null, 5);
+$references = $ref->loadList($ref_where, null, 50);
 
 CAppUI::stepAjax("Correction de ".count($references)." références");
 

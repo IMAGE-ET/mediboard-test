@@ -130,7 +130,7 @@ Les caractères suivants sont utilisés pour spécifier le format du numéro de comm
 <table class="main tbl" style="table-layout: fixed;">
 	<tr>
     <td>
-    	<button type="button" class="change oneclick2" onclick="fixUnits()">Corriger les unités des stocks</button>
+    	<button type="button" class="change oneclick" onclick="fixUnits()">Corriger les unités des stocks</button>
     </td>
     <td id="fix-units-logs"></td>
 	</tr>
