@@ -172,9 +172,16 @@ Traitement = {
 		    {{/if}}
 	      <span onmouseover="ObjectTooltip.createEx(this, '{{$_line->_guid}}', 'objectView')">
 			    <a href=#1 onclick="Prescription.viewProduit(null,'{{$_line->code_ucd}}','{{$_line->code_cis}}');">
-			      {{$_line->_ucd_view}} ({{$_line->_forme_galenique}})
+			      {{$_line->_ucd_view}}
 			    </a>
 			  </span>
+        {{if $_line->_ref_prises|@count}}
+          <br />
+          ({{foreach from=`$_line->_ref_prises` item=_prise name=foreach_prise}}
+            {{$_prise}}
+            {{if !$smarty.foreach.foreach_prise.last}},{{/if}}
+          {{/foreach}})
+        {{/if}}
 		  </form>
 		</li>
 	{{/foreach}}
