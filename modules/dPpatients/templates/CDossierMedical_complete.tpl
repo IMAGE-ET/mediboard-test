@@ -36,25 +36,60 @@
       
       {{/if}}
     </td>
-    
-    {{if is_array($object->_ref_traitements)}}
-    <td class="text top">
-      {{if $object->_ref_traitements|@count}}<ul>{{/if}}
-      {{foreach from=$object->_ref_traitements item=curr_traitement}}
-        <li>
-          {{if $curr_traitement->fin}}
-            Depuis {{mb_value object=$curr_traitement field="debut"}}
-            jusqu'à {{mb_value object=$curr_traitement field="fin"}} :
-          {{elseif $curr_traitement->debut}}
-            Depuis {{mb_value object=$curr_traitement field="debut"}} :
+
+    {{if (is_array($object->_ref_traitements) && $object->_ref_traitements|@count) ||
+      ($object->_ref_prescription->_id && $object->_ref_prescription->_ref_prescription_lines|@count)}}
+      <td class="text top">
+        {{if is_array($object->_ref_traitements)}}
+          {{if $object->_ref_traitements|@count}}<ul>{{/if}}
+            {{foreach from=$object->_ref_traitements item=curr_traitement}}
+              <li>
+                {{if $curr_traitement->fin}}
+                  Depuis {{mb_value object=$curr_traitement field="debut"}}
+                  jusqu'à {{mb_value object=$curr_traitement field="fin"}} :
+                {{elseif $curr_traitement->debut}}
+                  Depuis {{mb_value object=$curr_traitement field="debut"}} :
+                {{/if}}
+                {{mb_value object=$curr_traitement field="traitement"}}
+              </li>
+            {{/foreach}}
+          {{if $object->_ref_traitements|@count}}</ul>{{/if}}
+        {{/if}}
+        
+        {{assign var=prescription value=$object->_ref_prescription}}
+        {{if $object->_ref_prescription->_id && $prescription->_ref_prescription_lines|@count}}
+          {{mb_script module=dPprescription script=prescription ajax=true}}
+          {{if (is_array($object->_ref_traitements) && $object->_ref_traitements|@count)}}
+            <hr style="width: 50%" />
           {{/if}}
-          {{mb_value object=$curr_traitement field="traitement"}}
-        </li>
-      {{foreachelse}}
+          <ul>
+            {{foreach from=$prescription->_ref_prescription_lines item=_line}}
+              <li>
+                {{if $_line->fin}}
+                  Du {{$_line->debut|date_format:"%d/%m/%Y"}} au {{$_line->fin|date_format:"%d/%m/%Y"}} :
+                {{elseif $_line->debut}}
+                  Depuis le {{$_line->debut|date_format:"%d/%m/%Y"}} :
+                {{/if}}
+                <span onmouseover="ObjectTooltip.createEx(this, '{{$_line->_guid}}', 'objectView')">
+                  <a href=#1 onclick="Prescription.viewProduit(null,'{{$_line->code_ucd}}','{{$_line->code_cis}}');">
+                    {{$_line->_ucd_view}}
+                  </a>
+                </span>
+                {{if $_line->_ref_prises|@count}}
+                  ({{foreach from=`$_line->_ref_prises` item=_prise name=foreach_prise}}
+                    {{$_prise}}
+                    {{if !$smarty.foreach.foreach_prise.last}},{{/if}}
+                  {{/foreach}})
+                {{/if}}
+              </li>
+            {{/foreach}}
+          </ul>
+        {{/if}}
+      </td>
+    {{else}}
+      <td>
         <div class="empty">{{tr}}CTraitement.none{{/tr}}</div>
-      {{/foreach}}
-      {{if $object->_ref_traitements|@count}}</ul>{{/if}}
-    </td>
+      </td>
     {{/if}}
     
     <td class="text top">

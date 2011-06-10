@@ -1200,7 +1200,11 @@ class CPatient extends CMbObject {
     $this->loadRefDossierMedical();
     $this->_ref_dossier_medical->canRead();
     $this->_ref_dossier_medical->loadRefsAntecedents();
-    $this->_ref_dossier_medical->loadRefsTraitements();  
+    $this->_ref_dossier_medical->loadRefsTraitements();
+    $this->_ref_dossier_medical->loadRefPrescription();
+    foreach($this->_ref_dossier_medical->_ref_prescription->_ref_prescription_lines as $_line) {
+      $_line->loadRefsPrises();
+    }
   }
   
   function loadDossierComplet($permType = null) {

@@ -34,9 +34,14 @@ $patient->loadDossierComplet(PERM_READ);
 $patient->loadIPP();
 
 // Chargement du dossier medical du patient
-$patient->loadRefDossierMedical();
-$patient->_ref_dossier_medical->loadRefsTraitements();
-$patient->_ref_dossier_medical->loadRefsAntecedents();
+$dossier_medical = $patient->loadRefDossierMedical();
+$dossier_medical->loadRefsTraitements();
+$dossier_medical->loadRefsAntecedents();
+$dossier_medical->loadRefPrescription();
+
+foreach($dossier_medical->_ref_prescription->_ref_prescription_lines as $_line) {
+  $_line->loadRefsPrises();
+}
 
 // Suppression des consultations d'urgences
 foreach($patient->_ref_consultations as $keyConsult => $consult){
