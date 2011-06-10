@@ -13,6 +13,10 @@ $module->mod_name = "dPadmissions";
 $module->loadMatchingObject();
 $admin_admission = $module->canAdmin();
 
+$module = new CModule;
+$module->mod_name = "sip";
+$module->loadMatchingObject();
+$sip_active = $module->mod_active;
 
 $id400 = CValue::get("id400");
 $object_id = CValue::get("object_id");
@@ -63,6 +67,7 @@ $smarty->assign("admin_admission", $admin_admission);
 $smarty->assign("listIdSante400" , $listIdSante400);
 $smarty->assign("idSante400_id"  , $idSante400_id);
 $smarty->assign("object_id"      , $object_id);
+$smarty->assign("sip_active"     , $sip_active);
 if ($idSante400->_id) {
   $smarty->assign("patient_id"    , $object->patient_id);
 }

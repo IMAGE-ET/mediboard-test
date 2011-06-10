@@ -67,11 +67,13 @@
     </tr>
     {{foreach from=$listIdSante400 item=_idSante400}}
       <tr>
-        {{if $admin_admission}}
+        {{if $admin_admission && $sip_active}}
           <td>
             <input type="radio" name="radio[]" {{if $_idSante400->_id == $idSante400_id}}checked="checked"{{/if}}
               onchange="trashNumDossier('{{$_idSante400->_id}}');"/>
           </td>
+        {{else}}
+          <td></td>
         {{/if}}
         <td>{{$_idSante400->object_class}}</td>
 

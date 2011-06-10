@@ -21,7 +21,6 @@ $dPconfig["sip"] = array (
   "tag_dossier"       => "",
   "notify_all_destinataires" => "1",
   "send_mvt"          => "0",
-  "show_modal_identifiant" => "0"
 );
 
 ?>
