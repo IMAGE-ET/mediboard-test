@@ -84,12 +84,6 @@ function refreshZones(id, obj) {
       Thumb.refreshThumbs(0, Thumb.print);
     }, 0)};
   }
-  else if (Thumb.print) {
-    pdfAndPrintServer(id);
-  }
-  else if (window.callback){
-    window.callback();
-  }
          
   //Remise du content sauvegardé, avec l'impression en callback
   CKEDITOR.instances.htmlarea.setData(obj._source, refresh);
@@ -103,6 +97,12 @@ function refreshZones(id, obj) {
          var form = getForm("editFrm");
          form.onsubmit = function() { Url.ping({onComplete: submitCompteRendu}); return false;};
          $V(form.compte_rendu_id, id);
+         if (Thumb.print) {
+           pdfAndPrintServer(id);
+         }
+         else if (window.callback){
+           window.callback();
+         }
   }});
 }
 

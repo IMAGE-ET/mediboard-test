@@ -79,9 +79,6 @@ var Thumb = {
         a: "ajax_pdf"
       },
       onComplete: function() {
-        if (window.callback) {
-          window.callback();
-        }
         Thumb.thumb_refreshing = false;
         if(!Thumb.thumb_up2date) {
           Thumb.thumb_up2date = true;
