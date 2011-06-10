@@ -40,6 +40,7 @@ foreach($patient->_ref_sejours as $_sejour) {
   }
   $_sejour->loadNumDossier();
   $_sejour->loadRefPraticien();
+  $_sejour->loadRefEtablissement();
 }
 
 if ($check_collision) {
