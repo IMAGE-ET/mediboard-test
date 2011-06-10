@@ -12,7 +12,6 @@
 {{if is_array($object->_ref_notes)}}
   <div style="float: {{$float}}" class="noteDiv {{$object->_guid}} initialized">
   {{mb_include module=system template=inc_get_notes_image mode=edit float=left object=$object}}
-  {{mb_include module=system template=inc_vw_counter_tip count=$object->_ref_notes|@count}}
   </div>
 {{else}}
   <div style="float: {{$float}};" class="noteDiv {{$object->_guid}}">

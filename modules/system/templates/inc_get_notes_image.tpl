@@ -27,5 +27,10 @@
   {{elseif $mode == "edit"}}
     <img src="images/icons/note_transparent.png" width="16" height="16" />
   {{/if}}
+ 
+  {{mb_include module=system template=inc_vw_counter_tip count=$object->_ref_notes|@count}}
+  
 </span>
+
+
 {{/if}}
