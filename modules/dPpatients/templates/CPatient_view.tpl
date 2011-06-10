@@ -42,13 +42,7 @@
 	<tr>
 		<td colspan="2" class="button">
 			{{mb_script module="dPpatients" script="patient" ajax="true"}}
-
-      {{if $can->edit}}
-      <button type="button" class="edit" onclick="Patient.edit('{{$patient->_id}}')">
-        {{tr}}Modify{{/tr}}
-      </button>
-      {{/if}}
-
+			
       <button type="button" class="search" onclick="Patient.view('{{$patient->_id}}')">
         Dossier Complet
       </button>
@@ -61,6 +55,12 @@
       <button type="button" class="print" onclick="Patient.print('{{$patient->_id}}')">
         {{tr}}Print{{/tr}}
       </button>
+      
+      {{if $can->edit}}
+      <button type="button" class="edit" onclick="Patient.edit('{{$patient->_id}}')">
+        {{tr}}Modify{{/tr}}
+      </button>
+      {{/if}}
       
       {{if $app->user_prefs.vCardExport}}
       <button type="button" class="vcard" onclick="Patient.exportVcard('{{$patient->_id}}')">

@@ -169,7 +169,7 @@ function newExam(sAction, consultation_id) {
   
   <!-- Interventions -->
   <tr>
-    <th colspan="4" class="title">Interventions</th>
+    <th colspan="4" class="title">Séjours</th>
   </tr>
   <tr>
     <th>Résumé</th>
