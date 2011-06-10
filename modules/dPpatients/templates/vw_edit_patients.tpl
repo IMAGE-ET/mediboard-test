@@ -48,6 +48,40 @@ function copyIdentiteAssureValues(element) {
 	}
 }
 
+function delAssureValues() {
+	var form = getForm("editFrm");
+  $V(form.assure_nom            , "");
+  $V(form.assure_prenom         , "");
+  $V(form.assure_prenom_2       , "");
+  $V(form.assure_prenom_3       , "");
+  $V(form.assure_prenom_4       , "");
+  $V(form.assure_nom_jeune_fille, "");
+  $V(form.assure_naissance      , "");
+  $V(form.assure_sexe           , "");
+  changeCiviliteForSexe($V(form.assure_sexe), true);
+  $V(form.assure_cp_naissance  , "");
+  $V(form._assure_pays_naissance_insee, "");
+  $V(form.assure_lieu_naissance, "");
+	$V(form.assure_profession    , "");
+}
+
+function copieAssureValues() {
+	var form = getForm("editFrm");
+  $V(form.assure_nom            , $V(form.nom));
+  $V(form.assure_prenom         , $V(form.prenom));
+  $V(form.assure_prenom_2       , $V(form.prenom_2));
+  $V(form.assure_prenom_3       , $V(form.prenom_3));
+  $V(form.assure_prenom_4       , $V(form.prenom_4));
+  $V(form.assure_nom_jeune_fille, $V(form.nom_jeune_fille));
+  $V(form.assure_naissance      , $V(form.naissance));
+  $V(form.assure_sexe           , $V(form.sexe));
+  changeCiviliteForSexe($V(form.assure_sexe), true);
+  $V(form.assure_cp_naissance  , $V(form.cp_naissance));
+  $V(form._assure_pays_naissance_insee, $V(form._pays_naissance_insee));
+  $V(form.assure_lieu_naissance, $V(form.lieu_naissance));
+  $V(form.assure_profession    , $V(form.profession));
+}
+
 function confirmCreation(oForm){
   if (!checkForm(oForm)) {
     return false;
@@ -165,7 +199,7 @@ Main.add(function () {
   <tr>
     <td colspan="5">
       <ul id="tab-patient" class="control_tabs">
-        <li><a href="#identite">Identité</a></li>
+        <li><a href="#identite">Patient</a></li>
         <li><a href="#medecins">Correspondants médicaux</a></li>
         <li><a href="#correspondance">Correspondance</a></li>
         <li><a href="#assure">Assuré social</a></li>

@@ -117,7 +117,7 @@ Main.add(function() {
     <td style="width: 50%">
       <table class="form" id="patient_identite">
         <tr>
-          <th class="category" colspan="3">Identité</th>
+          <th class="category" colspan="3">Identité Patient</th>
       	</tr>
       	<tr>
           <td colspan="3" class="text">
@@ -181,11 +181,11 @@ Main.add(function() {
       	</tr>
         <tr>
           <th>{{mb_label object=$patient field="sexe"}}</th>
-          <td>{{mb_field object=$patient field="sexe" onchange="toggleNomNaissance(this); copyIdentiteAssureValues(this);changeCiviliteForSexe(this);"}}</td>
+          <td>{{mb_field object=$patient field="sexe" onchange="toggleNomNaissance(this); copyIdentiteAssureValues(this); changeCiviliteForSexe(this);"}}</td>
       	</tr>
         <tr>
           <th>{{mb_label object=$patient field="naissance"}}</th>
-          <td>{{mb_field object=$patient field="naissance" onchange="checkDoublon();copyIdentiteAssureValues(this);changeCiviliteForDate(this);"}}</td>
+          <td>{{mb_field object=$patient field="naissance" onchange="checkDoublon();copyIdentiteAssureValues(this); changeCiviliteForDate(this);"}}</td>
       	</tr>
       	<tr>
           <th>{{mb_label object=$patient field="civilite"}}</th>
@@ -238,7 +238,7 @@ Main.add(function() {
     <td>
       <table class="form">
         <tr>
-          <th class="category" colspan="2">Coordonnées</th>
+          <th class="category" colspan="2">Coordonnées Patient</th>
         </tr>
         <tr>
           <th>{{mb_label object=$patient field="adresse"}}</th>
@@ -284,26 +284,4 @@ Main.add(function() {
       </table>
     </td>
   </tr>
-  <tr>
-    <td class="text">
-    	<div class="big-info" id="copie-identite">
-    	  Les champs d'identité du patient sont <strong>recopiés en temps réel</strong> vers 
-    	  les champs d'identité de l'assuré
-    	  car la qualité de bénéficiaire est <strong>0 (assuré)</strong>.
-    	</div>
-      <script type="text/javascript">
-        function showCopieIdentite() {
-        	$("copie-identite").setVisible($V(getForm("qual_beneficiaire")) == "0");
-        }
-        
-        showCopieIdentite();
-      </script>
-    </td>
-    <td class="text">
-    	<div class="small-info" id="copie-coordonnees">
-    	  Les champs de correspondance du patient sont <strong>systématiquement recopiés</strong> vers 
-    	  les champs de correspondance de l'assuré.
-    	</div>
-    </td>
-	</tr>
 </table>
