@@ -213,7 +213,8 @@ if ($consult->_ref_sejour && $consult->_ref_sejour->_id){
   
   $consult->_ref_chir->isUrgentiste();
   if ($consult->_ref_chir->_is_urgentiste) {
-    
+    // Mise en session du rpu_id
+    $_SESSION["dPurgences"]["rpu_id"] = $consult->_ref_sejour->_ref_rpu->_id;
     $consult->_ref_sejour->_ref_rpu->loadAides($user->_id);
     $consult->_ref_sejour->_ref_rpu->loadRefSejourMutation();
   
