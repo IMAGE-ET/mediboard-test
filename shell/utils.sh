@@ -37,6 +37,13 @@ announce_script()
   cecho "--- $SCRIPTNAME ($(date)) ---" bold
 }
 
+info_script()
+{
+  INFO=$1
+  cecho ">> info: \c" bold
+  cecho "${INFO}"
+}
+
 force_file()
 {
   FILE=$1

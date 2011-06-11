@@ -47,6 +47,8 @@ password=$3
 database=$4
 backup_path=$5
 
+info_script "Backuping '$database' database"
+
 ## Make complete path
 
 # Make shell path
@@ -70,7 +72,7 @@ case $1 in
   hotcopy)
     result=$database/
     
-    mysqlhotcopy -u $username -p $password $database $BASE_PATH
+    mysqlhotcopy --quiet -u $username -p $password $database $BASE_PATH
     check_errs $? "Failed to create MySQL hot copy" "MySQL hot copy done!"
     
     if [ $binary_log -eq 1 ]; then
@@ -91,8 +93,13 @@ case $1 in
     ;;
 esac
 
-# deleting file whose date is greater than 7 days
-find ${BASE_PATH} -name "$database*.tar.gz" -ctime +$time -exec /bin/rm '{}' ';'
+# deleting file whose date is greater than n days, all files if 0
+if [ $time -eq 0 ]; then
+  filter=""
+else
+  filter="-ctime +$time"
+fi
+find ${BASE_PATH} -name "$database*.tar.gz" $filter -exec /bin/rm '{}' ';'
 check_errs $? "Failed to delete files" "Files deleted"
 
 # Compress archive and remove files
@@ -100,7 +107,7 @@ DATETIME=$(date +%Y-%m-%dT%H-%M-%S)
 
 # Make the tarball
 tarball=$database-${DATETIME}.tar.gz
-tar cvfz $tarball $result
+tar cfz $tarball $result
 check_errs $? "Failed to create backup tarball" "Tarball packaged!"
 
 # create a symlink
@@ -108,5 +115,5 @@ cp -s -f $tarball $database-latest.tar.gz
 check_errs $? "Failed to create symlink" "Symlink created!"
 
 # Remove temporary files
-rm -Rvf $result
+rm -Rf $result
 check_errs $? "Failed to clean MySQL files" "MySQL files cleansing done!"
