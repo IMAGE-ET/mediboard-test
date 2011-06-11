@@ -93,14 +93,14 @@ case $1 in
     ;;
 esac
 
-# deleting file whose date is greater than n days, all files if 0
+# rotating files older than n days, all files if 0
 if [ $time -eq 0 ]; then
   filter=""
 else
   filter="-ctime +$time"
 fi
 find ${BASE_PATH} -name "$database*.tar.gz" $filter -exec /bin/rm '{}' ';'
-check_errs $? "Failed to delete files" "Files deleted"
+check_errs $? "Failed to rotate files" "Files rotated"
 
 # Compress archive and remove files
 DATETIME=$(date +%Y-%m-%dT%H-%M-%S)
