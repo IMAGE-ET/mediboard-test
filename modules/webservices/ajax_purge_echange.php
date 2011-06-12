@@ -13,6 +13,7 @@ CCanDo::checkAdmin();
 $do_purge = CValue::get("do_purge");
 $date_min = CValue::get("date_min");
 $date_max = CValue::get("date_max");
+$max = CValue::get("max", 10000);
 
 if (!$date_min || !$date_max) {
   CAppUI::stepAjax("Merci d'indiquer une date de début et de fin de recherche.", UI_MSG_ERROR);
@@ -23,7 +24,7 @@ $echange_soap = new CEchangeSOAP();
 
 // Requêtes
 $where = array();
-$where["date_echange"] = "BETWEEN '".$date_min."' AND '".$date_max."'";
+$where["date_echange"] = "BETWEEN '$date_min' AND '$date_max'";
 $where["purge"] = "= '0'";
 
 if (!$do_purge) {
@@ -33,9 +34,9 @@ if (!$do_purge) {
   // Suppression du champ input et output
   $echange_soap->_spec->ds->query("UPDATE `echange_soap` 
                                    SET `purge` = '1', `input` = '', `output` = ''
-                                   WHERE `date_echange` BETWEEN '".$date_min."' AND '".$date_max."'
+                                   WHERE `date_echange` BETWEEN '$date_min' AND '$date_max'
                                    AND `purge` = '0'
-                                   LIMIT 200;");
+                                   LIMIT $max;");
   
   $count = $echange_soap->_spec->ds->affectedRows();
   
