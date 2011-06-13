@@ -420,6 +420,16 @@ class CMbObject {
     return $this->$field != $this->_old->$field;
   }
   
+  function objectModified() {    
+    foreach ($this->getDBFields() as $propName => $propValue) {
+      if ($this->fieldModified($propName)) {
+        return true;
+      }
+    }
+    
+    return false;
+  }
+  
   /**
    * Complete fields with base value if missing
    * @param [...] string Field names or an array of field names
