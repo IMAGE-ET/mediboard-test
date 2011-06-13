@@ -175,7 +175,8 @@
       {{if !$line->_protocole}}
         <div class="mediuser" style="border-color: #{{$line->_ref_praticien->_ref_function->color}};">
           {{if @$modules.messagerie}}
-            <a class="action" href="#nothing" onclick="MbMail.create({{$line->_ref_praticien->_id}}, '{{$line->_view}}')">
+            {{assign var=subject value="$sejour - $line"}}
+            <a class="action" href="#nothing" onclick="MbMail.create({{$line->_ref_praticien->_id}}, '{{$subject}}')">
               <img src="images/icons/mbmail.png" title="Envoyer un message" />
             </a>
           {{/if}}

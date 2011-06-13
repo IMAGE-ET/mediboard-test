@@ -10,7 +10,8 @@
 
 {{$line->_ref_praticien->_view}}
 {{if @$modules.messagerie}}
-<a class="action" href="#nothing" onclick="MbMail.create({{$line->_ref_praticien->_id}}, '{{$line->_view}}')">
+{{assign var=subject value="$line->_view - $sejour->_view"}}
+<a class="action" href="#nothing" onclick="MbMail.create({{$line->_ref_praticien->_id}}, '{{$subject}}')">
   <img src="images/icons/mbmail.png" title="Envoyer un message" />
 </a>
 {{/if}}

@@ -31,7 +31,7 @@
   </tr>
   
   <tr>
-	  <th>{{mb_label object=$mbmail field=from}}</th>
+	  <th class="narrow">{{mb_label object=$mbmail field=from}}</th>
 	  <td>
 	  	{{mb_field object=$mbmail field=from hidden=1}}
 	  	<div class="mediuser" style="border-color: #{{$mbmail->_ref_user_from->_ref_function->color}};">
@@ -99,15 +99,14 @@
 	  	{{if $mbmail->date_sent}}
 		  	{{mb_value object=$mbmail field=subject}}
 		  {{else}}
-		  	{{mb_field object=$mbmail field=subject}}
+		  	{{mb_field object=$mbmail field=subject size=80}}
 		  {{/if}}
 	  </td>
 	</tr>
 
   <tr>
-	  <th>{{mb_label object=$mbmail field=source}}</th>
-	  <td style="height: 300px">{{mb_field object=$mbmail field=source id="htmlarea"}}</td>	  
-	</tr>
+    <td colspan="2" style="height: 300px">{{mb_field object=$mbmail field=source id="htmlarea"}}</td>	  
+  </tr>
 
 	{{if !$mbmail->date_sent}}
 	<tr>

@@ -12,7 +12,8 @@ var MbMail = {
   edit: function(mbmail_id) {
     var url = new Url("messagerie", "write_mbmail");
     url.addParam("mbmail_id", mbmail_id);
-    url.popup(650, 500, "MbMail");
+//  url.requestModal();
+    url.popup(800, 500, "MbMail");
   },
   
   create: function(to_id, subject) {
@@ -24,6 +25,7 @@ var MbMail = {
     if (subject) {
       url.addParam("subject", subject);
     }
-    url.popup(650, 500, "MbMail");
+//  url.requestModal();
+    url.popup(800, 500, "MbMail");
   }
 };
