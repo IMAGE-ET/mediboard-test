@@ -15,8 +15,13 @@ class CFloatSpec extends CMbFieldSpec {
   var $max    = null;
   var $pos    = null;
   var $decimals = null;
-	
-  static function equals($value1, $value2) {
+  
+  static function equals($value1, $value2, $spec) {
+    if ($spec instanceof CCurrencySpec) {
+      $precision = isset($spec->precise) ? 5 : 3;
+      return round($value1, $precision) == round($value2, $precision);
+    }
+    
     return round($value1, 2) == round($value2, 2);
   }
   

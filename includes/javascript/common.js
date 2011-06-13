@@ -23,7 +23,7 @@ function errorHandler(errorMsg, url, lineNumber, exception) {
     
     var ignored = ["Script error."];
     
-    if (ignored.indexOf(errorMsg) == -1) {
+    if (App.config.log_js_errors && ignored.indexOf(errorMsg) == -1) {
       new Ajax.Request("index.php?m=system&a=js_error_handler&suppressHeaders=1&dialog=1", {
         method: 'post',
         parameters: 'm=system&a=js_error_handler&' +

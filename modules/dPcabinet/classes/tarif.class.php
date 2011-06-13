@@ -188,7 +188,7 @@ class CTarif extends CMbObject {
     $this->_codes_ccam = $codes_ccam;
     $this->_codes_ngap = $codes_ngap;
 
-    return $this->_secteur1_uptodate = CFloatSpec::equals($secteur1, $new_secteur1)  ? "1" : "0";
+    return $this->_secteur1_uptodate = CFloatSpec::equals($secteur1, $new_secteur1, $this->_specs["secteur1"]) ? "1" : "0";
 	}
   
   function getPrecodeReady() {

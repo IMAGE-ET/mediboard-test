@@ -55,10 +55,13 @@
           tab: "{{$tab}}",
           action: "{{$action}}",
           actionType: "{{$actionType}}",
-          dialog: "{{$dialog}}"
+          dialog: "{{$dialog}}",
+          config: {
+            log_js_errors: {{if $conf.log_js_errors}}true{{else}}false{{/if}}
+          }
         };
-		
-		var Mediboard = {{$version|@json}};
+    
+    var Mediboard = {{$version|@json}};
   </script>
   
   {{$mediboardShortIcon|smarty:nodefaults}}
@@ -162,10 +165,10 @@
     Javascript console
   </div>
   <div class="body"></div>
-	<form name="debug-console" method="get" onsubmit="return Console.exec(this)">
-	  <input type="text" size="90" name="code" value="" />
-	  <button class="tick notext" onclick=""></button>
-	</form>
+  <form name="debug-console" method="get" onsubmit="return Console.exec(this)">
+    <input type="text" size="90" name="code" value="" />
+    <button class="tick notext" onclick=""></button>
+  </form>
 </div>
 
 <!-- Mails -->

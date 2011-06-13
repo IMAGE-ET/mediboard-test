@@ -27,6 +27,7 @@ Main.add(function(){
     {{mb_include module=system template=inc_config_str var=mb_id}}
     {{mb_include module=system template=inc_config_bool var=debug}}
     {{mb_include module=system template=inc_config_bool var=readonly}}
+    {{mb_include module=system template=inc_config_bool var=log_js_errors}}
 		
     <tr>
       <th colspan="2" class="title">
