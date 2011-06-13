@@ -105,8 +105,13 @@ var Url = Class.create({
     if (!sParamName) {
       sParamName = oElement.name;
     }
+    
+    value = oElement.value;
+    if (oElement.type == 'checkbox') {
+      value = $V(oElement) ? 1 : 0; 
+    }
   
-    return this.addParam(sParamName, oElement.value);
+    return this.addParam(sParamName, value);
   },
   
   make: function(questionMark) {

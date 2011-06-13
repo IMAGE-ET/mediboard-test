@@ -340,6 +340,7 @@ $locales['CSejour-back-rpu'] = 'RPU';
 $locales['CSejour-back-rpu.empty'] = 'pas de RPU';
 $locales['CSejour-back-rpu_mute'] = 'RPU muté';
 $locales['CSejour-back-rpu_mute.empty'] = 'Aucun RPU muté';
+$locales['CSejour-sortie-confirm-clearall'] = 'Merci de confirmer l\'annulation de sortie.';
 $locales['CSejour.type.urg'] = 'Passage aux urgences';
 $locales['config-dPurgence-check_cotation-desc'] = 'Vérifier que la cotation des actes CCAM et NGAP a été réalisé et validé par le praticien dans l\'onglet des sorties';
 $locales['config-dPurgences-age_patient_rpu_view'] = 'Affichage de l\'âge du patient';
