@@ -13,15 +13,15 @@ $debug = CAppUI::pref("INFOSYSTEM");
 // Http Redirections
 if (CAppUI::conf("http_redirections")) {
   if (!CAppUI::$instance->user_id || CValue::get("login")) {
-	  $redirection = new CHttpRedirection();
-	  $redirections = $redirection->loadList(null, "priority DESC");
-	  $passThrough = false;
-	  foreach($redirections as $_redirect) {
-	    if (!$passThrough) {
-	      $passThrough = $_redirect->applyRedirection();
-	    }
-	  }
-  }	
+    $redirection = new CHttpRedirection();
+    $redirections = $redirection->loadList(null, "priority DESC");
+    $passThrough = false;
+    foreach($redirections as $_redirect) {
+      if (!$passThrough) {
+        $passThrough = $_redirect->applyRedirection();
+      }
+    }
+  }  
 }
 
 // Get the user's style
@@ -187,12 +187,12 @@ if ($indexGroup->load($g) && !$indexGroup->canRead()) {
 
 // do some db work if dosql is set
 if ($dosql) {
-	// controller in controllers/ directory
+  // controller in controllers/ directory
   if (is_file("./modules/$m_post/controllers/$dosql.php")) {
     require("./modules/$m_post/controllers/$dosql.php");
   } 
-	// otherwise... @FIXME to be removed
-	else {
+  // otherwise... @FIXME to be removed
+  else {
     require("./modules/$m_post/$dosql.php");
   }
 }
@@ -286,8 +286,17 @@ if ($tab !== null) {
 
 $phpChrono->stop();
 
+$memory_peak = memory_get_peak_usage();
+$limit = CAppUI::conf("apache_child_terminate_memory_limit");
+
+if ($limit && 
+    $memory_peak > $limit * 1048576 && 
+    function_exists("apache_child_terminate")) { // mega bytes
+  apache_child_terminate();
+}
+
 $performance["genere"]         = number_format($phpChrono->total, 3);
-$performance["memoire"]        = CMbString::toDecaBinary(memory_get_peak_usage());
+$performance["memoire"]        = CMbString::toDecaBinary($memory_peak);
 $performance["objets"]         = CMbObject::$objectCount;
 $performance["cachableCount"]  = array_sum(CMbObject::$cachableCounts);
 $performance["cachableCounts"] = CMbObject::$cachableCounts;
@@ -312,8 +321,8 @@ foreach (CSQLDataSource::$dataSources as $dsn => $ds) {
 // Unlocalized strings
 if (!$suppressHeaders || $ajax) {
   CAppUI::$unlocalized = array_map("utf8_encode", CAppUI::$unlocalized);
-	$unloc = new CSmartyDP("modules/system");
-	$unloc->display("inc_unlocalized_strings.tpl");
+  $unloc = new CSmartyDP("modules/system");
+  $unloc->display("inc_unlocalized_strings.tpl");
 }
 
 // Inclusion du footer

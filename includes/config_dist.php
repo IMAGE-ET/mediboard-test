@@ -32,6 +32,7 @@ $dPconfig["debug"]             = "1";      // Set to true to help analyze errors
 $dPconfig["readonly"]          = "0";      // Read-only mode : any store will fail
 $dPconfig["shared_memory"]     = "none";   // Shared memory handler [none|eaccelerator|apc]
 $dPconfig["log_js_errors"]     = "1";      // Log JavaScript errors into the error log
+$dPconfig["apache_child_terminate_memory_limit"] = ""; // The memory limit above which the child apache process will be terminated
 
 // Object merge
 $dPconfig["alternative_mode"]  = "0";      // Alternative fusion mode (keeps one object, max 2 objects to merge)

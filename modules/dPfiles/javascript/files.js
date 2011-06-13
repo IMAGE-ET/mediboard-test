@@ -1,4 +1,3 @@
-var fHeight = 380;
 var file_preview = null;
 var file_deleted = null;
 
