@@ -2,9 +2,16 @@
  
 import uno
 import sys
+import time
+import traceback
 
 def main():
   try:
+    # Log
+    f = open('/var/log/mediboard/doctopdf', 'a');
+    f.write('---' + time.strftime('%d/%m/%y %H:%M',time.localtime()) + '---\n')
+    f.write('Convert '+ sys.argv[1] + ' to ' + sys.argv[2] + '\n');
+    
     local = uno.getComponentContext()
     resolver = local.ServiceManager.createInstanceWithContext("com.sun.star.bridge.UnoUrlResolver", local)
     context = resolver.resolve("uno:socket,host=localhost,port=8100;urp;StarOffice.ComponentContext")
@@ -21,8 +28,12 @@ def main():
     
     document.close(True)
     print '1'
-  
-  except IOError:
+    
+    # Fin de log
+    f.write('Successfully converted \n')
+    f.close()
+  except Exception as inst:
+    f.write(traceback.format_exc() + '\n')
+    f.close()
     print '0'
-
 main()
