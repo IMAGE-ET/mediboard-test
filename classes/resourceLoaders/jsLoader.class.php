@@ -131,16 +131,68 @@ abstract class CJSLoader extends CHTMLResourceLoader {
         // The callback will filter on empty strings (without it, "0" will be removed too).
         $locales = array_filter($locales, "stringNotEmpty");
         // TODO: change the invalid keys (with accents) of the locales to simplify this
-        $keys = array_map('utf8_encode', array_keys($locales));
-        $values = array_map('utf8_encode', $locales);
+        $keys   = array_map('utf8_encode', array_keys($locales));
+        $values = array_map('utf8_encode', array_values($locales));
         
         foreach($values as &$_value) {
           $_value = CMbString::unslash($_value);
         }
         
-        $script = '//'.$version['build']."\nwindow.locales=".json_encode(array_combine($keys, $values)).";";
+        $compress = false;
+        
+        if ($compress) {
+          $delim = "/([\.-])/";
+          $arr = new stdClass;
+          foreach($keys as $_pos => $_key) {
+            $parts = preg_split($delim, $_key, null, PREG_SPLIT_DELIM_CAPTURE);
+            
+            $_arr = $arr;
+            $last_key = count($parts)-1;
+            
+            foreach($parts as $i => $_token) {
+              $last = ($i == $last_key);
+              if ($_token === "") {
+                $_token = '_$_';
+              }
+              
+              if ($last) {
+                $_arr->{$_token} = (object)array('$' => $values[$_pos]);
+                break;
+              }
+              elseif (!isset($_arr->{$_token})) {
+                $_arr->{$_token} = new stdClass;
+              }
+              
+              $_arr = $_arr->{$_token};
+            }
+            
+            //unset($_arr);
+          }
+          
+          self::clearLocalesKeys($arr);
+          $json = $arr;
+        }
+        else {
+          $json = array_combine($keys, $values);
+        }
+        
+        $script = '//'.$version['build']."\nwindow.locales=".json_encode($json).";";
         fwrite($fp, $script);
         fclose($fp);
+      }
+    }
+  }
+  
+  static function clearLocalesKeys($object) {
+    foreach($object as $key => &$value) {
+      if (!is_object($value)) continue;
+      
+      $keys = get_object_vars($value);
+      if (count($keys) === 1 && isset($keys['$'])) {
+        $object->$key = $keys['$'];
+      }
+      else {
+        self::clearLocalesKeys($object->$key);
       }
     }
   }
