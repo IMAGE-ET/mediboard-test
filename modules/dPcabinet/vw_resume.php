@@ -31,9 +31,12 @@ $patient->loadRefsSejours();
 $dossier_medical = $patient->loadRefDossierMedical();
 $dossier_medical->loadRefsAntecedents();
 $dossier_medical->loadRefsTraitements();
-$dossier_medical->loadRefPrescription();
-foreach($dossier_medical->_ref_prescription->_ref_prescription_lines as $_line) {
-  $_line->loadRefsPrises();
+$prescription = $dossier_medical->loadRefPrescription();
+
+if (is_array($prescription->_ref_prescription_lines)) {
+  foreach($dossier_medical->_ref_prescription->_ref_prescription_lines as $_line) {
+    $_line->loadRefsPrises();
+  }
 }
 
 $consultations =& $patient->_ref_consultations;
