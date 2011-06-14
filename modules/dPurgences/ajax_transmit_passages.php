@@ -41,6 +41,7 @@ if ($extract_passages_id) {
   $where["files_mediboard.file_id"] = "IS NOT NULL";
   $where["extract_passages.date_echange"] = "IS NULL";
   $where['extract_passages.message_valide'] = " = '1'";
+  $where['extract_passages.group_id'] = " = '".CGroups::loadCurrent()->_id."'";
   
   $order = "extract_passages.date_extract DESC";
   
