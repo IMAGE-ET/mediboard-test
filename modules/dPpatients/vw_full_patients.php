@@ -37,10 +37,12 @@ $patient->loadIPP();
 $dossier_medical = $patient->loadRefDossierMedical();
 $dossier_medical->loadRefsTraitements();
 $dossier_medical->loadRefsAntecedents();
-$dossier_medical->loadRefPrescription();
+$prescription = $dossier_medical->loadRefPrescription();
 
-foreach($dossier_medical->_ref_prescription->_ref_prescription_lines as $_line) {
-  $_line->loadRefsPrises();
+if (is_array($prescription->_ref_prescription_lines)) {
+  foreach($prescription->_ref_prescription_lines as $_line) {
+    $_line->loadRefsPrises();
+  }
 }
 
 // Suppression des consultations d'urgences
