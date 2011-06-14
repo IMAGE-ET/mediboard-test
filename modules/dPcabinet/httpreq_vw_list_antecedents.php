@@ -30,14 +30,16 @@ if ($dossier_medical->_id) {
 //	$dossier_medical->loadRefsAntecedents(true);  
 	$dossier_medical->loadRefsTraitements();
 	$dossier_medical->countAntecedents();
-	$dossier_medical->loadRefPrescription();
+	$prescription = $dossier_medical->loadRefPrescription();
 	
   foreach ($dossier_medical->_all_antecedents as $_antecedent) {
     $_antecedent->loadLogs();
   }
   
-  foreach($dossier_medical->_ref_prescription->_ref_prescription_lines as $_line) {
-    $_line->loadRefsPrises();
+  if (is_array($prescription->_ref_prescription_lines)) {
+    foreach($prescription->_ref_prescription_lines as $_line) {
+      $_line->loadRefsPrises();
+    }
   }
 }
 
