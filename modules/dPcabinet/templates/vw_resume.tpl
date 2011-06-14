@@ -21,7 +21,8 @@ function newExam(sAction, consultation_id) {
 <table class="tbl">
   <tr>
     <th colspan="10" class="title">
-    	{{$patient->_view}}
+    	{{$patient->_view}} <br />
+      Né{{if $patient->sexe == "f"}}e{{/if}} le {{$patient->naissance|date_format:$conf.date}}
     </th>
   </tr>
 
