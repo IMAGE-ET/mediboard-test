@@ -35,6 +35,12 @@ if ($sejour_id = CValue::get("sejour_id")) {
 }
 
 if ($rpu->_id || $rpu->sejour_id) {
+  // Mise en session de l'id de la consultation, si elle existe.
+  $rpu->loadRefConsult();
+  if ($rpu->_ref_consult->_id) {
+    CValue::setSession("selConsult", $rpu->_ref_consult->_id);
+  }
+  
   $sejour  = $rpu->_ref_sejour;
   $patient = $sejour->_ref_patient;
   $patient->loadStaticCIM10($user->_id);
