@@ -1,9 +1,9 @@
 <?php /* $Id$ */
 
 /**
- *	@package Mediboard
- *	@subpackage pharmacie
- *	@version $Revision$
+ *  @package Mediboard
+ *  @subpackage pharmacie
+ *  @version $Revision$
  *  @author SARL OpenXtrem
  *  @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
  */
@@ -71,11 +71,14 @@ foreach($list_products as $_product) {
   $total_product = 0;
   $total_product_ttc = 0;
   
-  $quantity = $_product->_ref_stock_group->quantity;
-  //mbTrace($quantity, "qty 1");
+  $quantity = $_product->_ref_stock_group->getValueAtDate($date, "quantity");
+  //mbTrace($quantity, "qty at date", true);
+  
+  //$quantity = $_product->_ref_stock_group->quantity;
+  //mbTrace($quantity, "qty 1", true);
   
   // rajout des délivrances et annulation des commandes jusqu'a la date voulue
-  $req = new CRequest;
+  /*$req = new CRequest;
   $req->addTable($delivery->_spec->table);
   $req->addSelect(array(
     "SUM(product_delivery_trace.quantity) AS consumed_qty"
@@ -85,7 +88,7 @@ foreach($list_products as $_product) {
   
   $where = array(
     "product.product_id" => $ds->prepare("=%", $_product->_id),
-		"product_delivery_trace.date_delivery" => $ds->prepare("> %", $date),
+    "product_delivery_trace.date_delivery" => $ds->prepare("> %", $date),
     "product_delivery.stock_class" => "= 'CProductStockGroup'",
   );
   $req->addWhere($where);
@@ -95,7 +98,8 @@ foreach($list_products as $_product) {
   $consumed_qty = $list["consumed_qty"];
   
   $quantity += $consumed_qty;
-  //mbTrace($quantity, "qty 2");
+  //mbTrace($consumed_qty, "consumed_qty", true);
+  //mbTrace($quantity, "qty 2", true);
   
   // suppression des commandes recues entre temps
   $req = new CRequest;
@@ -111,13 +115,14 @@ foreach($list_products as $_product) {
     "product_order.cancelled" => "='0'",
   );
   $req->addWhere($where);
-	
+  
   $res = $req->getRequest();
   $list = $ds->loadHash($res);
   $received_qty = $list["received_qty"];
   
   $quantity -= $received_qty;
-  //mbTrace($quantity, "qty 3");
+  //mbTrace($received_qty, "received_qty", true);
+  //mbTrace($quantity, "qty 3", true);*/
   
   // recuperation de la dernire commande avant la $date
   $order_item_reception = new CProductOrderItemReception;
@@ -135,7 +140,7 @@ foreach($list_products as $_product) {
     if ($quantity <= 0) {
       break;
     }
-		
+    
     $_oi = $_oir->loadRefOrderItem();
     
     //mbTrace($_oi->getDBFields(), "dbf", true);
@@ -144,10 +149,10 @@ foreach($list_products as $_product) {
     $qty = $_oir->quantity;
     $price = $_oi->unit_price;
     $_mean_price = $price;
-		
-		if (!isset($mean_price)) {
-			$mean_price = $_mean_price;
-		}
+    
+    if (!isset($mean_price)) {
+      $mean_price = $_mean_price;
+    }
     
     $substract = min($qty, $quantity);
     
@@ -163,14 +168,14 @@ foreach($list_products as $_product) {
   
     $quantity -= $substract;
   }
-	
-	//mbTrace($mean_price, '$mean_price', true);
+  
+  //mbTrace($mean_price, '$mean_price', true);
   
   // s'il reste encore des articles pas comptabilisés, 
   // on ajoute leur valeur en fonction du premier prix d'achat
   if ($quantity > 0) {
     CProductReference::$_load_lite = true;
-		$_refs = $_product->loadRefsReferences();
+    $_refs = $_product->loadRefsReferences();
     $ref = reset($_refs);
     
     $old_ref_price = 0;
