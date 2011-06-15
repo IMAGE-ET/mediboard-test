@@ -22,7 +22,7 @@
     <td class="text" id="consultAnesth">
       {{include file="../../dPcabinet/templates/inc_consult_anesth/interventions.tpl"}}
     </td>
-    <td class="text">
+    <td>
       {{include file="../../dPcabinet/templates/inc_patient_history.tpl"}}
     </td>
     <td class="text">
