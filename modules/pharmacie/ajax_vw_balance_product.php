@@ -14,6 +14,7 @@ $product_id = CValue::get("product_id");
 $year       = CValue::get("year", mbTransformTime(null, null, "%Y"));
 $month      = CValue::get("month", mbTransformTime(null, null, "%m"));
 $include_void_service = CValue::get("include_void_service");
+$display    = CValue::get("display");
 
 CValue::setSession("year", $year);
 CValue::setSession("month", $month);
@@ -54,6 +55,7 @@ $smarty->assign('type',     "product");
 $smarty->assign('title',    $product->_view);
 $smarty->assign('year',     $year);
 $smarty->assign('month',    $month);
+$smarty->assign('display',  $display);
 
 $smarty->display('inc_balance_product.tpl');
 

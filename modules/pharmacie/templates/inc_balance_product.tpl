@@ -96,9 +96,9 @@
           <td style="{{if $_date == "total" && $_service_id == "total"}}font-size: 1.4em;{{/if}} 
                      {{if $_date == "total"}}font-weight: bold;{{/if}}">
             <span {{if $_value.0 == 0 && $_date != "total" && $_service_id != "total"}}class="opacity-40"{{/if}}>
-              <span class="quantity" style="display: none;">{{$_value.0}}</span> 
-              <span class="sep" style="display: none;">/</span> 
-              <span class="price">{{$_value.1}} {{$conf.currency_symbol}}</span>
+              <span class="quantity" {{if $display == "price"}}    style="display: none;"{{/if}}>{{$_value.0}}</span> 
+              <span class="sep"      {{if $display != "both"}}     style="display: none;"{{/if}}>/</span> 
+              <span class="price"    {{if $display == "quantity"}} style="display: none;"{{/if}}>{{$_value.1}} {{$conf.currency_symbol}}</span>
             </span>
           </td>
         {{/foreach}}
