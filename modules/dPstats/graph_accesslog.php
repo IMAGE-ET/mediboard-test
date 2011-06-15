@@ -116,12 +116,16 @@ function graphAccessLog($module_name, $action_name, $startx, $endx, $interval = 
 	  ),
 	  'yaxis' => array(
 	    'min' => 0,
-      'title' => utf8_encode(($left[0] == 'request_time' ? 'Temps de réponse' : $left[0] == 'errors' ? 'Erreurs' : 'Mémoire') . ($left[1] == 'mean' ? ' (par hit)' : '')),
+      'title' => utf8_encode(($left[0] == 'request_time' ? 'Temps de réponse' :
+                                $left[0] == 'cpu_time' ? 'Temps CPU' :
+                                  $left[0] == 'errors' ? 'Erreurs' : 'Mémoire') .
+                              ($left[1] == 'mean' ? ' (par hit)' : '')),
 	    'autoscaleMargin' => 1
 	  ),
 	  'y2axis' => array(
       'min' => 0,
-	    'title' => utf8_encode(($right[0] == 'hits' ? 'Hits' : 'Bande passante') . ($right[1] == 'mean' ? (($right[0] == 'hits' ? ' (par minute)' : ' (octets/s)')) : '')),
+	    'title' => utf8_encode(($right[0] == 'hits' ? 'Hits' : 'Bande passante') .
+	                           ($right[1] == 'mean' ? (($right[0] == 'hits' ? ' (par minute)' : ' (octets/s)')) : '')),
       'autoscaleMargin' => 1
     ),
     'grid' => array(
@@ -163,6 +167,12 @@ function graphAccessLog($module_name, $action_name, $startx, $endx, $interval = 
   // Left axis
   if ($left[0] == 'request_time') {
   	$series[] = array(
+     'label' => 'Page (s)',
+     'data' => $duration,
+     'lines' => array('show' => true),
+    );
+  } elseif($left[0] == 'cpu_time') {
+    $series[] = array(
      'label' => 'Page (s)',
      'data' => $duration,
      'lines' => array('show' => true),

@@ -105,12 +105,13 @@ Main.add(function () {
         Gauche:
         <select name="left_mode" onchange="this.form.submit()">
           <option value="request_time" {{if $left_mode == 'request_time'}}selected="selected"{{/if}}>Temps de réponse</option>
-          <option value="errors" {{if $left_mode == 'errors'}}selected="selected"{{/if}}>Erreurs</option>
-          <option value="memory_peak" {{if $left_mode == 'memory_peak'}}selected="selected"{{/if}}>Pics de mémoire</option>
+          <option value="cpu_time"     {{if $left_mode == 'cpu_time'}}    selected="selected"{{/if}}>Temps CPU</option>
+          <option value="errors"       {{if $left_mode == 'errors'}}      selected="selected"{{/if}}>Erreurs</option>
+          <option value="memory_peak"  {{if $left_mode == 'memory_peak'}} selected="selected"{{/if}}>Pics de mémoire</option>
         </select>
         <select name="left_sampling" onchange="this.form.submit()">
           <option value="total" {{if $left_sampling == 'total'}}selected="selected"{{/if}}>Total</option>
-          <option value="mean" {{if $left_sampling == 'mean'}}selected="selected"{{/if}}>par hit</option>
+          <option value="mean"  {{if $left_sampling == 'mean'}} selected="selected"{{/if}}>par hit</option>
         </select>
         
         Droite:
@@ -120,7 +121,7 @@ Main.add(function () {
         </select>
         <select name="right_sampling" onchange="this.form.submit()">
           <option value="total" {{if $right_sampling == 'total'}}selected="selected"{{/if}}>Total</option>
-          <option value="mean" {{if $right_sampling == 'mean'}}selected="selected"{{/if}}>par unité de temps</option>
+          <option value="mean"  {{if $right_sampling == 'mean'}} selected="selected"{{/if}}>par unité de temps</option>
         </select>
       </div>
     </form>

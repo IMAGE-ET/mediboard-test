@@ -17,7 +17,7 @@ $hour_min = CValue::getOrSession("hour_min", "6");
 $hour_max = CValue::getOrSession("hour_max", "23");
 $hours = range(0, 23);
 
-$left_mode      = CValue::getOrSession("left_mode", "request_time"); // request_time, errors
+$left_mode      = CValue::getOrSession("left_mode", "request_time"); // request_time, cpu_time, errors, memory_peak
 $left_sampling  = CValue::getOrSession("left_sampling", "mean"); // total, mean
 
 $right_mode     = CValue::getOrSession("right_mode", "hits"); // hits, size
