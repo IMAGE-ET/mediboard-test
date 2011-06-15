@@ -171,6 +171,12 @@ function graphAccessLog($module_name, $action_name, $startx, $endx, $interval = 
      'data' => $duration,
      'lines' => array('show' => true),
     );
+      
+    $series[] = array(
+     'label' => 'DB (s)',
+     'data' => $request,
+     'lines' => array('show' => true),
+    );
   } elseif($left[0] == 'cpu_time') {
     $series[] = array(
      'label' => 'Page (s)',

@@ -57,8 +57,8 @@ switch ($interval = CValue::getOrSession("interval", "day")) {
 CSQLDataSource::$trace = false;
 $logs = CAccessLog::loadAgregation($from, $to, $groupmod, $module);
 $graphs = array();
-$left = array($left_mode, $left_sampling);
-$right = array($right_mode, $right_sampling);
+$left   = array($left_mode, $left_sampling);
+$right  = array($right_mode, $right_sampling);
 foreach($logs as $log) {
 	switch($groupmod) {
 		case 0: $graphs[] = graphAccessLog($log->module, $log->action, $from, $to,$interval, $left, $right); break;
