@@ -17,7 +17,7 @@
 			<span style="font-size: 20px;">{{$patient->_view}}</span> 
 			{{mb_include module=dPpatients template=inc_vw_ipp ipp=$patient->_IPP}} 
 			<br />
-      né(e) le {{mb_value object=$patient field=naissance}} 
+      né(e) le {{mb_value object=$patient field=naissance}} ({{mb_value object=$patient field="_age"}} ans)
 			de sexe {{if $patient->sexe == "m"}} masculin {{else}} féminin {{/if}} <br /> <hr />
       <span style="font-size: 14px">par le Dr {{$consult->_ref_praticien}} le {{mb_value object=$consult field=_date}} - Dossier {{mb_include module=dPplanningOp template=inc_vw_numdos num_dossier=$sejour->_num_dossier}}</span>
     </th>
@@ -34,13 +34,6 @@
 {{if !@$offline}}
   <br style="page-break-after: always;" />
 {{/if}}
-
-<table class="{{$tbl_class}}">
-  <tr>
-    <th width="50%">{{mb_label object=$consult field="motif"}}</th>
-    <td>{{mb_value object=$consult field="motif"}}</td>
-  </tr>
-</table>
 
 {{mb_include module=dPhospi template=inc_list_transmissions readonly=true list_transmissions=$sejour->_ref_suivi_medical}}
 
