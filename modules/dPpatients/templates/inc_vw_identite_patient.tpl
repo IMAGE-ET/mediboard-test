@@ -61,6 +61,11 @@
   </tr>
   
   <tr>
+    <th colspan="2">{{mb_label object=$patient field="deces"}}</th>
+    <td colspan="2">{{mb_value object=$patient field="deces"}}</td>
+  </tr>
+  
+  <tr>
     <th colspan="2">{{mb_label object=$patient field="nom_jeune_fille"}}</th>
     <td>{{mb_value object=$patient field="nom_jeune_fille"}}</td>
     <th>{{mb_label object=$patient field="tel_autre"}}</th>

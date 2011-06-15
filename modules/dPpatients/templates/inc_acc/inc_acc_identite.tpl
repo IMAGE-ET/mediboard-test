@@ -233,6 +233,10 @@ Main.add(function() {
           <th>{{mb_label object=$patient field="vip"}}</th>
           <td colspan="2">{{mb_field object=$patient field="vip" typeEnum="checkbox"}}</td>
         </tr>
+        <tr>
+          <th>{{mb_label object=$patient field="deces"}}</th>
+          <td colspan="2">{{mb_field object=$patient field="deces" register=true form=editFrm}}</td>
+        </tr>
       </table>	
     </td>
     <td>

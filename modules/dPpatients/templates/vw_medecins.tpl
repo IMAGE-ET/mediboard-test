@@ -82,7 +82,13 @@ function onSubmitCorrespondant(form) {
             </select>
           </td>
         </tr>
-        
+        <tr>
+          <td colspan="2">
+            <div class="info">
+              {{tr}}CMedecin.several_departements{{/tr}}
+            </div>
+          </td>
+        </tr>
         <tr>
           {{if !$dialog}}
           <td class="button" colspan="2"><button class="search" type="submit">{{tr}}Search{{/tr}}</button></td>

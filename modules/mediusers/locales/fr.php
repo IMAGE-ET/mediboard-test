@@ -276,6 +276,8 @@ $locales['mod-mediusers-tab-vw_idx_functions'] = 'Fonctions des utilisateurs';
 $locales['mod-mediusers-tab-vw_idx_mediusers'] = 'Utilisateurs';
 $locales['module-mediusers-court'] = 'Mediusers';
 $locales['module-mediusers-long'] = 'Gestion des utilisateurs';
+$locales['pref-medecin_cps_pref'] = 'Départements de recherche de médecins';
+$locales['pref-medecin_cps_pref-desc'] = 'Départements de recherche de médecins séparés par des |';
 $locales['pref-moduleFavicon'] = 'Préférer l\'utilisation du favicon du module';
 $locales['pref-moduleFavicon-desc'] = 'Préférer l\'utilisation du favicon du module';
 ?>

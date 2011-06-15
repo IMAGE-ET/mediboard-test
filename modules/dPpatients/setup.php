@@ -1252,7 +1252,17 @@ class CSetupdPpatients extends CSetup {
               ADD `diurese_miction` FLOAT UNSIGNED AFTER `diurese`;";
     $this->addQuery($query);
     
-    $this->mod_version = "1.13";
+    $this->makeRevision("1.13");
+    $query = "ALTER TABLE `patients`
+      ADD `deces` DATE AFTER `naissance`;";
+    $this->addQuery($query);
+    
+    $this->makeRevision("1.14");
+    $query = "ALTER TABLE `medecin`
+      CHANGE `prenom` `prenom` varchar(255);";
+    $this->addQuery($query);
+    
+    $this->mod_version = "1.15";
     
     
   }

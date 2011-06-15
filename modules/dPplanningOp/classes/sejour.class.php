@@ -568,6 +568,23 @@ class CSejour extends CCodable implements IPatientRelated {
     
     $patient_modified = $this->fieldModified("patient_id");
     
+    // Pour un séjour non annulé et un changement du mode de sortie,
+    // mise à jour de la date de décès du patient.
+    $mode_sortie_modified = $this->fieldModified("mode_sortie");
+
+    if (!$this->annule && $mode_sortie_modified) {
+      $patient = new CPatient;
+      $patient->load($this->patient_id);
+
+      // Pas de changement si la date de décès existe déjà.
+      if ("deces" === $this->mode_sortie && $patient->deces === null) {
+        $patient->deces = mbDate();
+        if ($msg = $patient->store()) {
+          return $msg;
+        }
+      }
+    }
+    
     // On fait le store du séjour
     if ($msg = parent::store()) {
       return $msg;
@@ -1387,12 +1404,18 @@ class CSejour extends CCodable implements IPatientRelated {
    * @param $group_id Permet de charger le NDOS pour un établissement donné si non null
    * @return string
    */
-  static function getTagNumDossier($group_id = null) {
+  static function getTagNumDossier($group_id = null, $type_tag = "tag_dossier") {
+    $tag_dossier = CAppUI::conf("dPplanningOp CSejour tag_dossier");
+    
+    if ($type_tag != "tag_dossier") {
+      $tag_dossier = CAppUI::conf("dPplanningOp CSejour $type_tag") . $tag_dossier;
+    }
+    
     // Pas de tag Num dossier
-    if (null == $tag_dossier = CAppUI::conf("dPplanningOp CSejour tag_dossier")) {
+    if (null == $tag_dossier) {
       return;
     }
-
+    
     // Permettre des IPP en fonction de l'établissement
     $group = CGroups::loadCurrent();
     if (!$group_id) {

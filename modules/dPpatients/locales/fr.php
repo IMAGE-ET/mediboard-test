@@ -377,6 +377,7 @@ $locales['CMedecin.all'] = 'Tous les correspondants médicaux';
 $locales['CMedecin.none'] = 'Aucun correspondant';
 $locales['CMedecin.one'] = 'correspondant médical';
 $locales['CMedecin.select'] = 'Choisir un correspondant médical';
+$locales['CMedecin.several_departements'] = 'Si la recherche concerne plusieurs départements, séparez-les par des pipes (|)';
 $locales['CMedecin.type.'] = 'Types de correspondant';
 $locales['CMedecin.type.autre'] = 'Autre';
 $locales['CMedecin.type.dentiste'] = 'Dentiste';

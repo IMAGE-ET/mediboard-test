@@ -1,4 +1,4 @@
-<tr {{if $patient->_id == $_patient->_id}}class="selected"{{/if}}>
+<tr class="{{if $patient->_id == $_patient->_id}}selected{{/if}} {{if $_patient->deces != null}}hatching{{/if}}">
   {{if (!$conf.dPpatients.CPatient.merge_only_admin || $can->admin) && $can->edit}}
     <td style="text-align: center;">
       <input type="checkbox" name="objects_id[]" value="{{$_patient->_id}}" class="merge"

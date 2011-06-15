@@ -81,6 +81,7 @@ class CPatient extends CMbObject {
   var $nomjf_soundex2   = null;
   var $prenom_soundex2  = null;
   var $naissance        = null;
+  var $deces            = null;
   var $sexe             = null;
   var $civilite         = null;
   var $adresse          = null;
@@ -300,7 +301,7 @@ class CPatient extends CMbObject {
     } else {
       $specs["naissance"]       = "birthDate mask|99/99/9999 format|$3-$2-$1";  
     }
-    
+    $specs["deces"]             = "date progressive";
     $specs["rques"]             = "text";
     $specs["cmu"]               = "bool";
     $specs["ald"]               = "bool";

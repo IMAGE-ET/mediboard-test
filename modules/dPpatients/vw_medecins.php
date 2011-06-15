@@ -7,8 +7,7 @@
 * @author Romain Ollivier
 */
 
-global $can;
-$can->needsRead();
+CCanDo::checkRead();
 
 $dialog     = CValue::get("dialog");
 $medecin_id = CValue::getOrSession("medecin_id");
@@ -48,7 +47,18 @@ if($dialog) {
 $where = array();
 if ($medecin_nom   ) $where["nom"]      = "LIKE '$medecin_nom%'";
 if ($medecin_prenom) $where["prenom"]   = "LIKE '$medecin_prenom%'";
-if ($medecin_cp && $medecin_cp != "00") $where["cp"] = "LIKE '$medecin_cp%'";
+if ($medecin_cp && $medecin_cp != "00") {
+  $cps = explode("|", $medecin_cp);
+  $where_cp = "";
+  CMbArray::removeValue("", $cps);
+  foreach($cps as $cp) {
+    $where_cp .= "cp LIKE '".$cp."%'";
+    if ($cp != end($cps)) {
+      $where_cp .= " OR ";
+    }
+  }
+  $where[] = $where_cp;
+}
 if ($medecin_type)   $where["type"]     = "= '$medecin_type'";
 
 if ($order_col == "cp") {

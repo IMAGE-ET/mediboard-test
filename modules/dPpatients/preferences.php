@@ -15,5 +15,6 @@ CPreferences::$modules["dPpatients"] = array (
   "VitaleVisionDir", 
   "VitaleVision",
   "vCardExport",
+  "medecin_cps_pref"
 );
 ?>

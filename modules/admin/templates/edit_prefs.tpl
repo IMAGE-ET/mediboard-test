@@ -124,7 +124,8 @@ Preferences.onSubmit = function(form) {
   {{mb_include template=inc_pref spec=str  var=VitaleVisionDir}}
   {{mb_include template=inc_pref spec=bool var=VitaleVision}}
   {{mb_include template=inc_pref spec=bool var=vCardExport}}
-
+  {{mb_include template=inc_pref spec=str  var=medecin_cps_pref}}
+  
 	</tbody>
   {{/if}}
 	  
