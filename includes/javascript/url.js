@@ -234,8 +234,6 @@ var Url = Class.create({
   },
   
   modale: function(options) {
-    
-    
     var closeButton = DOM.button({type: "button", className: "cancel notext"});
 
     options = Object.extend({
