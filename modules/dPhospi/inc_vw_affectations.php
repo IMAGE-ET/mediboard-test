@@ -128,14 +128,17 @@ function loadServiceComplet(&$service, $date, $mode, $praticien_id = "", $type =
           foreach($sejour->_ref_operations as $operation_id => $curr_operation) {
             $sejour->_ref_operations[$operation_id]->loadExtCodesCCAM();
           }
+          $chambre->_nb_affectations++;
                     
         } else {
           unset($lit->_ref_affectations[$affectation_id]);
         }
       }
     }
-    $chambre->checkChambre();
-    $service->_nb_lits_dispo += ($chambre->annule == 0 ? $chambre->_nb_lits_dispo : 0);
+    if(!$service->externe) {
+      $chambre->checkChambre();
+      $service->_nb_lits_dispo += ($chambre->annule == 0 ? $chambre->_nb_lits_dispo : 0);
+    }
   }
 }
 

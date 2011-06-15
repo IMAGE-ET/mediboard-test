@@ -38,7 +38,7 @@ $totalLits = 0;
 $where = array();
 $where["group_id"] = "= '$g'";
 $services = new CService;
-$order = "nom";
+$order = "externe, nom";
 $services = $services->loadListWithPerms(PERM_READ,$where, $order);
 
 if(!$list_services){

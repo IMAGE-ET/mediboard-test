@@ -36,14 +36,16 @@ $totalLits = 0;
 $where = array();
 $where["group_id"] = "= '$g'";
 $services = new CService;
-$order = "nom";
+$order = "externe, nom";
 $services = $services->loadListWithPerms(PERM_READ,$where, $order);
 
 CMbArray::removeValue(null, $list_services);
 
 if(!$list_services){
   foreach($services as $_service){
-    $list_services[] = $_service->_id;
+    if(!$_service->externe) {
+      $list_services[] = $_service->_id;
+    }
   }
 }
 

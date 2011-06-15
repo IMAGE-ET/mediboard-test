@@ -149,7 +149,7 @@
     {{if $curr_affectation->rques}}
     <tr class="dates">
       <td class="text highlight" colspan="3">
-        <stong>Remarques:</stong> {{$curr_affectation->rques|nl2br}}
+        <strong>Remarques:</strong> {{$curr_affectation->rques|nl2br}}
       </td>
     </tr>
     {{/if}}
@@ -166,11 +166,17 @@
         </form>
         {{/if}}
         
-        {{if $aff_prev->_id}}
-          <strong>Déplacé</strong> (chambre: {{$aff_prev->_ref_lit->_ref_chambre->_shortview}}):
+        {{if $curr_service->externe}}
+          <strong>Départ</strong>
+          {{if $aff_prev->_id}}
+            ({{$aff_prev->_ref_lit->_ref_chambre->_shortview}})
+          {{/if}}
+        {{elseif $aff_prev->_id}}
+          <strong>Déplacé</strong> ({{$aff_prev->_ref_lit->_ref_chambre->_shortview}})
         {{else}}
-          <strong>Entrée</strong>:
+          <strong>Entrée</strong>
         {{/if}}
+        :
         {{$curr_affectation->entree|date_format:"%a %d %b %Hh%M"}}
         ({{$curr_affectation->_entree_relative}}j)
       </td>
@@ -199,12 +205,17 @@
         </form>
         {{/if}}
         
-        {{if $aff_next->_id}}
-        <strong>Déplacé</strong> (chambre: {{$aff_next->_ref_lit->_ref_chambre->_shortview}}):
+        {{if $curr_service->externe}}
+          <strong>Retour</strong>
+          {{if $aff_next->_id}}
+            ({{$aff_next->_ref_lit->_ref_chambre->_shortview}})
+          {{/if}}
+        {{elseif $aff_next->_id}}
+        <strong>Déplacé</strong> ({{$aff_next->_ref_lit->_ref_chambre->_shortview}})
         {{else}}
-        <strong>Sortie</strong>:
+        <strong>Sortie</strong>
         {{/if}}
-
+        :
         {{$curr_affectation->sortie|date_format:"%a %d %b %Hh%M"}}
         ({{$curr_affectation->_sortie_relative}}j)
       </td>
@@ -335,6 +346,13 @@
     {{/if}}
   </table>
   {{foreachelse}}
+  {{if $curr_service->externe}}
+  <table class="tbl">
+    <tr class="litdispo">
+      <td colspan="2">Aucun patient</td>
+    </tr>
+  </table>
+  {{else}}
   <table class="tbl">
     <tr class="litdispo">
       <td colspan="2">Lit disponible</td>
@@ -362,6 +380,7 @@
       </td>
     </tr>
   </table>
+  {{/if}}
   {{/foreach}}
   </td>
 </tr>

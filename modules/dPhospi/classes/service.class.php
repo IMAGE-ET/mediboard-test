@@ -28,6 +28,7 @@ class CService extends CMbObject {
   var $hospit_jour = null;
   var $urgence     = null;
   var $uhcd        = null;
+  var $externe     = null;
 	
   
   // Object references
@@ -69,10 +70,11 @@ class CService extends CMbObject {
 
     $props["nom"]         = "str notNull seekable";
     $props["description"] = "text seekable";
-    $props["urgence"]     = "bool";
-    $props["uhcd"]        = "bool";
-    $props["hospit_jour"] = "bool";
-    $props["cancelled"  ] = "bool";
+    $props["urgence"]     = "bool default|0";
+    $props["uhcd"]        = "bool default|0";
+    $props["hospit_jour"] = "bool default|0";
+    $props["externe"]     = "bool default|0";
+    $props["cancelled"  ] = "bool default|0";
 
     return $props;
   }

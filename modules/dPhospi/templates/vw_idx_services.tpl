@@ -82,6 +82,11 @@
     <tr>
       <th>{{mb_label object=$service field=hospit_jour}}</th>
       <td>{{mb_field object=$service field=hospit_jour}}</td>
+    </tr>    
+
+    <tr>
+      <th>{{mb_label object=$service field=externe}}</th>
+      <td>{{mb_field object=$service field=externe}}</td>
     </tr>
 
     <tr>

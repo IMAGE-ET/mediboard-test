@@ -339,8 +339,14 @@ class CSetupdPhospi extends CSetup {
 	  $query = "ALTER TABLE `modele_etiquette`
 	    ADD `show_border` ENUM ('0','1') DEFAULT '0';";
 	  $this->addQuery($query);
+    
+    $this->makeRevision("0.43");
+    $query = "ALTER TABLE `service` 
+      CHANGE `urgence` `urgence` ENUM ('0','1') DEFAULT '0',
+      ADD `externe` ENUM ('0','1') DEFAULT '0';";
+    $this->addQuery($query);
 	  
-    $this->mod_version = "0.43";
+    $this->mod_version = "0.44";
   }
 }
 ?>

@@ -43,7 +43,11 @@ Main.add(function () {
         </select>
       
       {{foreach from=$services item=curr_service}}
-        <label title="Afficher le service {{$curr_service->nom}}">
+        {{if $curr_service->externe}}
+          <label title="Afficher le service {{$curr_service->nom}}">
+        {{else}}
+          <label title="Afficher le service externe {{$curr_service->nom}}">
+        {{/if}}
         <input
           type="checkbox"
           name="list_services[]"
@@ -52,7 +56,11 @@ Main.add(function () {
           checked="checked" 
           {{/if}}
           />
-          {{$curr_service->nom}}
+          {{if $curr_service->externe}}
+            <em>{{$curr_service->nom}}</em>
+          {{else}}
+            {{$curr_service->nom}}
+          {{/if}}
         </label>
       {{/foreach}}
       

@@ -3,7 +3,13 @@
     <th>
       {{$curr_service->nom}}
       <br />
-      <span style="font-size: 80%;">{{$curr_service->_nb_lits_dispo}} lit(s) dispo</span>
+      <span style="font-size: 80%;">
+      {{if $curr_service->externe}}
+        externe
+      {{else}}
+        {{$curr_service->_nb_lits_dispo}} lit(s) dispo
+      {{/if}}
+      </span>
     </th>
   </tr>
 </table>
