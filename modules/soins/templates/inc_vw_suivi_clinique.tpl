@@ -253,12 +253,9 @@
             {{mb_value object=$sejour field="type"}}
           </td>
         </tr>
-        <tr>
-          <td colspan="2">
-            {{mb_include module=dPplanningOp template=inc_infos_operation}}
-          </td>
-        </tr>
       </table>
+			
+			{{mb_include module=dPplanningOp template=inc_infos_operation}}
     </td>
   </tr>
 </table>

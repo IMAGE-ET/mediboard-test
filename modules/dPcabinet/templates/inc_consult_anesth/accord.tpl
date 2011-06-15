@@ -35,7 +35,7 @@ refreshFacteursRisque = function(){
 }
 
 Main.add(function () {
-  tabsConsultAnesth = new Control.Tabs.create('tab-consult-anesth', false);
+  tabsConsultAnesth = Control.Tabs.create('tab-consult-anesth', false);
   {{if $app->user_prefs.ccam_consultation == 1}}
   var tabsActes = Control.Tabs.create('tab-actes', false);
   {{/if}}

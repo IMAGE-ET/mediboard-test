@@ -14,6 +14,7 @@ $mode_duplication = CValue::getOrSession("mode_duplication");
 
 $element_prescription = new CElementPrescription();
 $element_prescription->load($element_prescription_id);
+$element_prescription->loadRefsNotes();
 
 $category_prescription = new CCategoryPrescription();
 $category_prescription->load($category_prescription_id);

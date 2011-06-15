@@ -163,7 +163,7 @@ refreshFormExecutantFunction = function(function_category_prescription_id, categ
 		  if($('tr-CFunctionCategoryPrescription-'+function_category_prescription_id)){
 			  $('tr-CFunctionCategoryPrescription-'+function_category_prescription_id).addUniqueClassName('selected');
       }
-		  elements_executants_tab.setActiveTab('executants_function');
+		  elementsExecutantsTab.setActiveTab('executants_function');
 			$("cdarr-form").update('');
 			$("cdarrs-list").update('');
 		}
@@ -179,7 +179,7 @@ refreshFormExecutant = function(executant_prescription_line_id, category_id){
       if($('tr-CExecutantPrescriptionLine-'+executant_prescription_line_id)){
 			  $('tr-CExecutantPrescriptionLine-'+executant_prescription_line_id).addUniqueClassName('selected');
 			}
-			elements_executants_tab.setActiveTab('executants');
+			elementsExecutantsTab.setActiveTab('executants');
       $("cdarr-form").update('');
       $("cdarrs-list").update('');
     }

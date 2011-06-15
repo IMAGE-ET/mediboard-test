@@ -717,6 +717,25 @@ Ajax.PeriodicalUpdater.addMethods({
   }
 });
 
+if (Prototype.Browser.IE) {
+  Object.extend(Function.prototype, {
+    delay: function(timeout){
+      var __method = this, args = Array.prototype.slice.call(arguments, 1);
+      timeout = timeout * 1000;
+      
+      return window.setTimeout(function(){
+        try {
+          return __method.apply(__method, args);
+        } 
+        catch (e) {
+          var msg = (e.extMessage || e.message || e.description || e) + "\n -- " + __method;
+          errorHandler(msg, e.fileName, e.lineNumber, e);
+        }
+      }, timeout);
+    }
+  });
+}
+
 /**
  * Improves image resampling of big images in Firefox
  * @param {Object} element

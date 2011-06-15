@@ -12,6 +12,7 @@ $category_prescription_id = CValue::getOrSession("category_prescription_id");
 
 $category = new CCategoryPrescription();
 $category->load($category_prescription_id);
+$category->loadRefsNotes();
 
 $group = new CGroups();
 $groups = $group->loadList();

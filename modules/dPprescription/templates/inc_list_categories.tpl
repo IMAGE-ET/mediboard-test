@@ -8,15 +8,6 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
 *}}
 
-<script type="text/javascript">
-
-Main.add( function(){
-  categories_tab = new Control.Tabs.create('categories_tab', true);
-	categories_tab.setActiveTab("div_{{$category_prescription->chapitre}}");
-});
-
-</script>
-
 <a href="#1" onclick="onSelectCategory('0');" class="button new">
   Créer une catégorie
 </a>
@@ -31,6 +22,15 @@ Main.add( function(){
 {{/foreach}}
 </ul>
 <hr class="control_tabs" />
+
+<script type="text/javascript">
+
+Main.add( function(){
+  var tab = Control.Tabs.create('categories_tab', true);
+  tab.setActiveTab("div_{{$category_prescription->chapitre}}");
+});
+
+</script>
 
 {{foreach from=$categories key=chapitre item=_categories}}
   <div id="div_{{$chapitre}}" style="display: none;">

@@ -11,7 +11,7 @@
 {{if $category->_id}}
 	<script type="text/javascript">
 		Main.add( function(){
-		  elements_executants_tab = new Control.Tabs.create('elements_executants_tab');
+		  window.elementsExecutantsTab = Control.Tabs.create('elements_executants_tab');
 		});
 	</script>
 	
@@ -40,7 +40,7 @@
 		  Créer un élément
 		</a>
 		<a href="#1" onclick="refreshFormElement('','{{$category->_id}}',true);" class="button new">
-		  Dupliquer des elements
+		  Dupliquer des éléments
 		</a>
 		<table class="tbl">
 		  <tr>  
@@ -48,7 +48,7 @@
 		        <button class="search" style="float: right" onclick="$$('.cancelled').invoke('toggle')">
 		          Afficher les annulés
 		        </button> 
-		        Elements de la catégorie '{{$category}}'
+		        Eléments de la catégorie '{{$category}}'
 		      </th>
 		    </tr>
 		</table>
@@ -56,7 +56,7 @@
 	  <div id="elements-list-content">
 			<table class="tbl">
 				<tr>
-		      <th>Libelle</th>
+		      <th>Libellé</th>
 		      <th>Description</th>
 		      {{if @$modules.ssr->mod_active}}
 		        <th>CdARR</th>
@@ -93,7 +93,7 @@
 		    {{foreachelse}}
 		     <tr>
 		      <td colspan="{{if 'ssr'|module_active}}5{{else}}4{{/if}}">
-		        Aucun element dans cette catégorie
+		        Aucun élément dans cette catégorie
 		      </td>
 		     </tr>
 		    {{/foreach}}
@@ -104,7 +104,7 @@
 	  </script>
 	</div>
 	
-	<div id="executants_function">
+	<div id="executants_function" style="display: none;">
 		<a href="#1" onclick="refreshFormExecutantFunction('0','{{$category->_id}}');" class="button new">
       Créer un éxécutant
     </a>
@@ -133,7 +133,7 @@
     </table>
 	</div>  
   
-	<div id="executants">
+	<div id="executants" style="display: none;">
 		<a href="#1" onclick="refreshFormExecutant('0','{{$category->_id}}');" class="button new">
       Créer un éxécutant
     </a>

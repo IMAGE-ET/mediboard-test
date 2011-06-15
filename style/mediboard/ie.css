@@ -137,3 +137,9 @@ span.vertical .orig {
 span.vertical .nowm {
   display: none;
 }
+
+@media screen {
+  span.vertical {
+    filter: flipv fliph;
+  }
+}
