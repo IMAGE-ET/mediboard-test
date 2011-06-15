@@ -181,7 +181,7 @@ CCAMSelector.init = function(){
     <th>{{mb_label object=$op field="date"}}</th>
     <td>
       <input type="hidden" name="plageop_id" value="" />
-      <input type="hidden" name="_date" value="{{if $op->_datetime}}{{$op->_datetime}}{{else}}{{$today}}{{/if}}" />
+      <input type="hidden" name="_date" value="{{if $op->_datetime}}{{$op->_datetime|iso_date}}{{else}}{{$today}}{{/if}}" />
      
       <select name="date" onchange="
         {{if !$op->operation_id}}updateEntreePrevue();{{/if}}
