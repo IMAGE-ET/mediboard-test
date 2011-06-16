@@ -46,14 +46,22 @@ tickFormatter = function (n) {
 
 tickFormatterSpreadsheet = function (n) {
   n = parseInt(n);
-	if (!dates[n] || !hours[n]) return " ";
+  if (!dates[n] || !hours[n]) return " ";
   return dates[n]+' '+hours[n];
 };
 
 trackFormatter = function (obj) {
-  return dates[parseInt(obj.x)] + ' : ' + 
-         obj.series.data[obj.index][1] + '<br />' + 
-         obj.series.data[obj.index][2];
+  var n = parseInt(obj.x);
+  var data = obj.series.data[obj.index];
+  var str = dates[parseInt(obj.x)] + ' : ' + data[1] + '<br />' + data[2];
+  
+  if (data[3])  {
+    str += '<hr />' + data[3];
+  }
+  
+  str += '<hr /><button class="edit" onclick="editConstantes('+const_ids[n]+', \'{{$context_guid}}\')">{{tr}}Edit{{/tr}}</button>';
+  
+  return str;
 };
 
 initializeGraph = function (src, data) {
@@ -158,7 +166,7 @@ initializeGraph(data.{{$name}}, options);
 drawGraph = function() {
   var c = $('constantes-medicales-graph');
   if (!c) return;
-	
+  
   var width, height;
   
   {{if $print}}
@@ -170,34 +178,34 @@ drawGraph = function() {
   {{/if}}
   
   $H(data).each(function(pair){
-	  var id = 'constantes-medicales-'+pair.key;
-		
-		data[pair.key].draw = function(){(function(c, d, id, width, height){
-	    var graph = insertGraph(c, d, id, width, height);
-	    
-	    {{if !$print}}
-	      var tabs = graph.spreadsheet.tabs;
-	      
-	      tabs.data.observe('click', function(e){
-	        g.each(function(graph2){
-	          graph2.spreadsheet.showTab('data');
-	        });
-	      });
-	      
-	      tabs.graph.observe('click', function(e){
-	        g.each(function(graph2){
-	          graph2.spreadsheet.showTab('graph');
-	        });
-	      });
-	    {{/if}}
-	    
-	    last_date = null;
-		})(c, pair.value, id, width, height)};
-		
-		{{if $print}}
-		  data[pair.key].draw();
-			data[pair.key].draw = null;
-		{{/if}}
+    var id = 'constantes-medicales-'+pair.key;
+    
+    data[pair.key].draw = function(){(function(c, d, id, width, height){
+      var graph = insertGraph(c, d, id, width, height);
+      
+      {{if !$print}}
+        var tabs = graph.spreadsheet.tabs;
+        
+        tabs.data.observe('click', function(e){
+          g.each(function(graph2){
+            graph2.spreadsheet.showTab('data');
+          });
+        });
+        
+        tabs.graph.observe('click', function(e){
+          g.each(function(graph2){
+            graph2.spreadsheet.showTab('graph');
+          });
+        });
+      {{/if}}
+      
+      last_date = null;
+    })(c, pair.value, id, width, height)};
+    
+    {{if $print}}
+      data[pair.key].draw();
+      data[pair.key].draw = null;
+    {{/if}}
   });
 };
 
@@ -206,18 +214,16 @@ toggleGraph = function (key, b) {
     data[key].draw();
     data[key].draw = null;
   }
-	
-	var c = $('constantes-medicales-'+key);
-	if (c) {
-	  c.setVisible(b);
-	}
+  
+  var c = $('constantes-medicales-'+key);
+  if (c) {
+    c.setVisible(b);
+  }
 }
 
-Main.add(function () {
-  var oForm = document.forms['edit-constantes-medicales'];
+toggleAllGraphs = function() {
+  var oForm = getForm('edit-constantes-medicales');
   var checkbox;
-  
-  drawGraph();
   
   {{if $print}}
     {{foreach from=$data item=curr_data key=key}}
@@ -229,9 +235,14 @@ Main.add(function () {
     {{foreach from=$data item=curr_data key=key}}
       checkbox = oForm["checkbox-constantes-medicales-{{$key}}"];
       checkbox.checked = (data.{{$key}}.series.last().data.length > 1);
-			toggleGraph("{{$key}}", checkbox.checked);
+      toggleGraph("{{$key}}", checkbox.checked);
     {{/foreach}}
   {{/if}}
+}
+
+Main.add(function () {
+  drawGraph();
+  toggleAllGraphs();
 });
 
 loadConstantesMedicales  = function(context_guid) {
@@ -254,19 +265,19 @@ loadConstantesMedicales  = function(context_guid) {
         {{include file="../../dPpatients/templates/inc_vw_photo_identite.tpl" patient=$patient size=42}}
       </a>
       Constantes médicales dans le cadre de: 
-			<br />
+      <br />
       {{if $readonly}}
         {{$context}}
       {{else}}
-	      <select name="context" onchange="loadConstantesMedicales($V(this));">
-	        <option value="all" {{if $all_contexts}}selected="selected"{{/if}}>Tous les contextes</option> 
-	        {{foreach from=$list_contexts item=curr_context}}
-	          <option value="{{$curr_context->_guid}}" 
-	          {{if !$all_contexts && $curr_context->_guid == $context->_guid}}selected="selected"{{/if}}
-	          {{if !$all_contexts && $curr_context->_guid == $context_guid}}style="font-weight:bold;"{{/if}}
-	          >{{$curr_context}}</option>
-	        {{/foreach}}
-	      </select>
+        <select name="context" onchange="loadConstantesMedicales($V(this));">
+          <option value="all" {{if $all_contexts}}selected="selected"{{/if}}>Tous les contextes</option> 
+          {{foreach from=$list_contexts item=curr_context}}
+            <option value="{{$curr_context->_guid}}" 
+            {{if !$all_contexts && $curr_context->_guid == $context->_guid}}selected="selected"{{/if}}
+            {{if !$all_contexts && $curr_context->_guid == $context_guid}}style="font-weight:bold;"{{/if}}
+            >{{$curr_context}}</option>
+          {{/foreach}}
+        </select>
       {{/if}}
     </th>
   </tr>
@@ -300,29 +311,29 @@ loadConstantesMedicales  = function(context_guid) {
   <div id="constantes-medicales-graph" style="margin-left: 5px; text-align: center;"></div>
 {{else}}
   {{if "forms"|module_active && $curr_context instanceof CSejour}}
-	  <script type="text/javascript">
-	  	Main.add(function(){
-			  Control.Tabs.create("surveillance-tab");
-			});
-	  </script>
-		
-	  <ul class="control_tabs" id="surveillance-tab">
-	  	<li>
-	  		<a href="#tab-constantes-medicales">Constantes</a>
-	  	</li>
-	    <li>
-	      <a href="#tab-ex_class-list" onmousedown="this.onmousedown=null; ExObject.loadExObjects('{{$curr_context->_class_name}}', '{{$curr_context->_id}}', 'tab-ex_class-list', 0)">
-	      	Formulaires
-				</a>
-	    </li>
-	  </ul>
-		<hr class="control_tabs" />
-	{{/if}}
-	
+    <script type="text/javascript">
+      Main.add(function(){
+        Control.Tabs.create("surveillance-tab");
+      });
+    </script>
+    
+    <ul class="control_tabs" id="surveillance-tab">
+      <li>
+        <a href="#tab-constantes-medicales">Constantes</a>
+      </li>
+      <li>
+        <a href="#tab-ex_class-list" onmousedown="this.onmousedown=null; ExObject.loadExObjects('{{$curr_context->_class_name}}', '{{$curr_context->_id}}', 'tab-ex_class-list', 0)">
+          Formulaires
+        </a>
+      </li>
+    </ul>
+    <hr class="control_tabs" />
+  {{/if}}
+  
   <table class="main" id="tab-constantes-medicales">
     <tr>
       <td class="narrow" id="constantes-medicales-form">
-  			{{include file="inc_form_edit_constantes_medicales.tpl" context_guid=$context_guid}}
+        {{include file="inc_form_edit_constantes_medicales.tpl" context_guid=$context_guid}}
       </td>
       <td>
         <button class="hslip notext" title="Afficher/Cacher le formulaire" onclick="$('constantes-medicales-form').toggle();" type="button">
@@ -332,6 +343,6 @@ loadConstantesMedicales  = function(context_guid) {
       </td>
     </tr>
   </table>
-	
-	<div id="tab-ex_class-list" style="display: none;"></div>
+  
+  <div id="tab-ex_class-list" style="display: none;"></div>
 {{/if}}

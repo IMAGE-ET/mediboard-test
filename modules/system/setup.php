@@ -775,6 +775,7 @@ class CSetupsystem extends CSetup {
     
     $this->makeRevision("1.0.75");
     
+    $this->setTimeLimit(300);
     $this->addPrefQuery("showCounterTip", "1");
     
     $query = "ALTER TABLE `access_log`

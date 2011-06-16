@@ -39,13 +39,14 @@ calculImcVst = function(form) {
 
 emptyAndSubmit = function(const_name) {
   var form = getForm("edit-constantes-medicales");
-	const_name.each(function(elem) {$V(form[elem], '');});
+  const_name.each(function(elem) {$V(form[elem], '');});
   return submitConstantesMedicales(form);
 }
 
 Main.add(function () {
   var oForm = getForm('edit-constantes-medicales');
   calculImcVst(oForm);
+  toggleAllGraphs();
 });
 </script>
 
@@ -155,15 +156,15 @@ Main.add(function () {
             {{/if}}
           </td>
         {{/if}}
-				<td>
-				  {{if $_readonly !="readonly" && $real_context == 1 && $constantes->$_constante != ""}}
-				    {{if array_key_exists("formfields", $_params)}}
-				      <button type="button" class="cancel notext" style="margin: -1px;" onclick="emptyAndSubmit(['{{$_params.formfields.0}}', '{{$_params.formfields.1}}']);"></button>
-				    {{else}}
-				      <button type="button" class="cancel notext" style="margin: -1px;" onclick="emptyAndSubmit(['{{$_constante}}']);"></button>
-				    {{/if}} 
-				  {{/if}}
-				</td>
+        <td>
+          {{if $_readonly !="readonly" && $real_context == 1 && $constantes->$_constante != ""}}
+            {{if array_key_exists("formfields", $_params)}}
+              <button type="button" class="cancel notext" style="margin: -1px;" onclick="emptyAndSubmit(['{{$_params.formfields.0}}', '{{$_params.formfields.1}}']);"></button>
+            {{else}}
+              <button type="button" class="cancel notext" style="margin: -1px;" onclick="emptyAndSubmit(['{{$_constante}}']);"></button>
+            {{/if}} 
+          {{/if}}
+        </td>
       </tr>
       
       {{if $_constante == "_imc"}}
@@ -173,8 +174,8 @@ Main.add(function () {
       {{/if}}
     </tbody>
     {{/foreach}}
-		
-		{{if $real_context}}
+    
+    {{if $real_context}}
       {{if $constantes->datetime}}
       <tr>
         <th>{{mb_title object=$constantes field=datetime}}</th>
@@ -195,7 +196,7 @@ Main.add(function () {
               <button class="new" type="button" onclick="$V(this.form.constantes_medicales_id, ''); $V(this.form._new_constantes_medicales, 1); return submitConstantesMedicales(this.form);">
                 {{tr}}Create{{/tr}}
               </button>
-							<br />
+              <br />
               <button class="trash" type="button" onclick="if (confirm('Etes-vous sûr de vouloir supprimer ce relevé ?')) {$V(this.form.del, 1); return submitConstantesMedicales(this.form);}">
                 {{tr}}CConstantesMedicales.delete_all{{/tr}}
               </button>

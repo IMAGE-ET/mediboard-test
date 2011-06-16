@@ -26,13 +26,13 @@ td a.email {
 }
 
 #login input, #login label{
-	font-size: 1.4em;
+  font-size: 1.4em;
 }
 
 #login button {
   font-size: 1.3em;
-	padding: 4px;
-	height: 26px;
+  padding: 4px;
+  height: 26px;
 }
 
 
@@ -141,8 +141,8 @@ ul#nav-vert {
 /* User */
 
 #user {
-	vertical-align: top;
-	height: 1%;
+  vertical-align: top;
+  height: 1%;
   border-bottom: 1px dashed black;
   padding: 2px;
 }
@@ -188,7 +188,7 @@ ul#nav-vert {
 }
 
 .touchscreen input {
-	height: 18px;
+  height: 18px;
 }
 
 .touchscreen input,
@@ -207,7 +207,7 @@ ul#nav-vert {
 
 .touchscreen a.button {
   height: 19px;
-	padding-top: 4px;
+  padding-top: 4px;
 }
 
 .touchscreen a.button:before {
@@ -216,7 +216,7 @@ ul#nav-vert {
 
 .touchscreen button:before {
   margin: 6px;
-	margin-left: 3px;
+  margin-left: 3px;
 }
 
 .touchscreen .notext {
@@ -309,7 +309,7 @@ hr.control_tabs {
   clear: both;
   border: none;
   border-top: 1px solid #458;
-	margin-bottom: 0;
+  margin-bottom: 0;
 }
   
 ul.control_tabs,
@@ -322,7 +322,7 @@ ul.control_tabs_vertical {
   
 ul.full_width li,
 ul.control_tabs.wide li {
-	width: 100%;
+  width: 100%;
 }
 
 ul.control_tabs li, 
@@ -330,12 +330,12 @@ ul.control_tabs_vertical li {
   float: left;
   margin: 0px 2px;
   text-align: center;
-	margin-top: 2px;
+  margin-top: 2px;
 }
 
 ul.control_tabs li.linebreak, 
 ul.control_tabs_vertical li.linebreak {
-	clear: both;
+  clear: both;
 }
 
 ul.control_tabs li a, 
@@ -422,7 +422,7 @@ ul.control_tabs_vertical {
   float: left;
   border-right: 1px solid #458;
   padding: 0;
-	padding-top: 6px;
+  padding-top: 6px;
 }
 
 ul.control_tabs_vertical li {
@@ -447,9 +447,9 @@ ul.control_tabs_vertical li a.active {
 
 ul.control_tabs.small li a,
 ul.control_tabs_vertical.small li a {
-	font-size: 1em; 
-	padding: 2px 5px;
-	font-weight: normal;
+  font-size: 1em; 
+  padding: 2px 5px;
+  font-weight: normal;
 }
 
 ul.control_tabs.small li button,
@@ -585,17 +585,17 @@ td.show {
 
 
 .datepickerControl {
-	border:				1px solid #999999;
-	border-radius: 6px;
-	border-radius-topleft: 0;
-	-moz-border-radius: 6px;
-	-moz-border-radius-topleft: 0;
-	-webkit-border-radius: 6px;
-	-webkit-border-top-left-radius: 0;
-	background-color:	#EEEEEE;
-	padding:			5px;
+  border:        1px solid #999999;
+  border-radius: 6px;
+  border-radius-topleft: 0;
+  -moz-border-radius: 6px;
+  -moz-border-radius-topleft: 0;
+  -webkit-border-radius: 6px;
+  -webkit-border-top-left-radius: 0;
+  background-color:  #EEEEEE;
+  padding:      5px;
   margin-top: -1px;
-	cursor: default;
+  cursor: default;
   z-index: 550 !important;
   -moz-box-shadow: 4px 4px 8px rgba(0,0,0,0.4);
   -webkit-box-shadow: 4px 4px 8px rgba(0,0,0,0.4);
@@ -603,78 +603,78 @@ td.show {
 }
 
 .datepickerControl.inline {
-	border:				none;
+  border:        none;
   padding: 0;
-	background-color:	transparent;
+  background-color:  transparent;
   width: auto;
   -moz-box-shadow: none;
   -webkit-box-shadow: none;
   box-shadow: none;
-	position: static !important;
+  position: static !important;
 }
 
 .datepickerControl td {
-	text-align:			center;
-	padding:			1px;
+  text-align:      center;
+  padding:      1px;
 }
 
 .datepickerControl tr.monthLabel td {
-	background-color:	#FFFFFF;
-	border:				1px solid #999999;
-	font-weight:		bold;
+  background-color:  #FFFFFF;
+  border:        1px solid #999999;
+  font-weight:    bold;
 }
 
 .datepickerControl tr.navigation td {
-	cursor:				pointer;
+  cursor:        pointer;
 }
 
 .datepickerControl tr.navigation td:hover {
-	text-decoration:	underline;
+  text-decoration:  underline;
 }
 
 .datepickerControl tr.dayLabel td,
 .datepickerControl td.weeknumber {
-	border:				1px solid #003366;
-	background-color:	#003366;
-	color:				white;
-	font-weight:		bold;
+  border:        1px solid #003366;
+  background-color:  #003366;
+  color:        white;
+  font-weight:    bold;
 }
 
 .datepickerControl td.day, 
 .datepickerControl td.dayothermonth {
-	cursor:				pointer;
-	background-color:	#FFFFFF;
-	border:				1px solid #EEEEEE;
-	width:				2em;
+  cursor:        pointer;
+  background-color:  #FFFFFF;
+  border:        1px solid #EEEEEE;
+  width:        2em;
 }
 
 /* We should use a class "othermonth" in addition to "day" instead of "dayothermonth" */
 .datepickerControl td.dayothermonth { 
-	color:				#999999;
-	font-style:			italic;
+  color:        #999999;
+  font-style:      italic;
 }
 
 .datepickerControl td.day:hover,
 .datepickerControl td.hour:hover,
 .datepickerControl td.minute:hover {
-	background-color:	#EBE4C0;
-	border:					outset 1px #666666;
+  background-color:  #EBE4C0;
+  border:          outset 1px #666666;
 }
 
 .datepickerControl td.weekend {
-	background-color:	#CCCCCC;
-	font-style:			italic;
+  background-color:  #CCCCCC;
+  font-style:      italic;
 }
 
 .datepickerControl td.today {
-	outline:	2px solid #EBC2C0;
+  outline:  2px solid #EBC2C0;
 }
 
 /* Spotted days */
 .datepickerControl td.day.spot,
 .datepickerControl td.dayothermonth.spot {
-	color:		red;
-	font-weight: bold;
+  color:    red;
+  font-weight: bold;
 }
 
 /* Active days */
@@ -682,16 +682,16 @@ td.show {
 .datepickerControl td.dayothermonth.active,
 .datepickerControl td.day.active:hover,
 .datepickerControl td.dayothermonth.active:hover {
-	border-bottom: green 1px solid;
+  border-bottom: green 1px solid;
 }
 
 /* Hours and minutes */
 .datepickerControl td.hour,
 .datepickerControl td.minute {
-	cursor:				pointer;
-	background-color:	#FFFFFF;
-	border:				1px solid #EEEEEE;
-	width:				2em;
+  cursor:        pointer;
+  background-color:  #FFFFFF;
+  border:        1px solid #EEEEEE;
+  width:        2em;
 }
 
 /* Disabled days, minutes and hours */
@@ -708,31 +708,31 @@ td.show {
 
 .datepickerControl td input,
 .datepickerControl td button {
-	padding:			0;
-	border:				1px solid #999999;
-	text-align:			center;
+  padding:      0;
+  border:        1px solid #999999;
+  text-align:      center;
 }
 
 .datepickerControl td.ampm {
-	cursor:				pointer;
-	background-color:	#CCCCCC;
-	border:				1px solid #EEEEEE;
-	width:				2em;
+  cursor:        pointer;
+  background-color:  #CCCCCC;
+  border:        1px solid #EEEEEE;
+  width:        2em;
 }
 
 .datepickerControl input.current,
 .datepickerControl td.current,
 .datepickerControl td.current:hover {
-	background-color:	#EBC2C0;
+  background-color:  #EBC2C0;
 }
 
 .datepickerControl td.current {
-	font-weight:		bold;
+  font-weight:    bold;
 }
 
 .datepickerControl div.dropdown {
-	border:				1px solid #999999;
-	background-color:	#EEEEEE;
+  border:        1px solid #999999;
+  background-color:  #EEEEEE;
   padding: 0;
   margin: 0;
   font-size: 0.8em;
@@ -747,11 +747,11 @@ td.show {
 }
 
 .datepickerControl div.dropdown a.current {
-	background-color:	#CCCCCC;
+  background-color:  #CCCCCC;
 }
 
 .datepickerControl div.dropdown a:hover {
-	outline: 2px solid #666666;
+  outline: 2px solid #666666;
 }
 
 #waitingMsgMask {
@@ -858,6 +858,7 @@ td.show {
 }
 .flotr-mouse-value {
   z-index: 3;
+  margin: -2px;
 }
 
 
@@ -905,17 +906,17 @@ table.active {
 }
 
 #control_overlay {
-	background-color: #000;
+  background-color: #000;
 }
 
 .modal {
-	min-width: 200px;
-	padding: 0.3em;
-	border: 3px solid #fff;
+  min-width: 200px;
+  padding: 0.3em;
+  border: 3px solid #fff;
   border-radius: 6px;
-	-moz-border-radius: 6px;
-	-webkit-border-radius: 6px;
-	background-color: #eee;
+  -moz-border-radius: 6px;
+  -webkit-border-radius: 6px;
+  background-color: #eee;
 }
 
 .modal h1 {
@@ -955,7 +956,7 @@ table.active {
 }
 
 .modal.popup > button.cancel {
-	right: -15px;
+  right: -15px;
 }
 
 .modal.popup > button.change {
@@ -963,7 +964,7 @@ table.active {
 }
 
 .modal table.tbl {
-	text-align: left;
+  text-align: left;
 }
 
 /** Pagination **/
@@ -1016,8 +1017,8 @@ table.active {
 /** Image thumbnails **/
 img.thumbnail {
   border: 1px solid #000;
-	padding: 1px;  
-	margin-top: 0.5em ;
+  padding: 1px;  
+  margin-top: 0.5em ;
   margin-bottom: 0.5em;
   cursor: pointer;
   -moz-box-shadow: 4px 4px 6px rgba(0, 0, 0, 0.4);  
@@ -1094,14 +1095,14 @@ td.td_hour_adm:hover .hour_adm {
 }
 
 span.countertip {
-	position: absolute; 
-	background-color: #ddd; 
-	font-size: 0.7em; 
-	margin-top: -7px; 
-	margin-left: -8px; 
+  position: absolute; 
+  background-color: #ddd; 
+  font-size: 0.7em; 
+  margin-top: -7px; 
+  margin-left: -8px; 
   -webkit-border-radius: 30px;
   -moz-border-radius: 30px;
   border-radius: 30px; 
-	border: 1px solid #888;
-	width: 10px;
+  border: 1px solid #888;
+  width: 10px;
 }
