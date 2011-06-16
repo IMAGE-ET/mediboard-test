@@ -127,8 +127,6 @@
   {{mb_include module=system template=inc_config_str  var=$var  size="2" suffix="h"}}
   {{assign var="var"   value="hours_sejour_proche"}}
   {{mb_include module=system template=inc_config_str  var=$var  size="2" suffix="h"}}
-  {{assign var="var"   value="show_modal_identifiant"}}
-  {{mb_include module=system template=inc_config_bool var=$var}}
   
   <tr>
     <th class="title" colspan="2">Heure par defaut du séjour</th>
@@ -206,6 +204,8 @@
   {{mb_include module=system template=inc_config_str var=tag_dossier_pa        }}
   {{mb_include module=system template=inc_config_str var=tag_dossier_cancel    }}
   {{mb_include module=system template=inc_config_str var=tag_dossier_trash     }}
+  {{mb_include module=system template=inc_config_bool var=show_modal_identifiant}}
+  
   <tr>
     <td class="button" colspan="2">
       <button class="modify" type="submit">{{tr}}Save{{/tr}}</button>
