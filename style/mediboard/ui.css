@@ -1105,4 +1105,5 @@ span.countertip {
   border-radius: 30px; 
   border: 1px solid #888;
   width: 10px;
+	text-align: center;
 }

@@ -11,7 +11,7 @@
 <tr>
   {{assign var=order_id value=$curr_item->order_id}}
   {{assign var=id value=$curr_item->_id}}
-  <td colspan="6" {{if $curr_item->_quantity_received >= $curr_item->quantity}}class="arretee"{{/if}}>
+  <td colspan="7" {{if $curr_item->_quantity_received >= $curr_item->quantity}}class="arretee"{{/if}}>
     <strong onmouseover="ObjectTooltip.createEx(this, '{{$curr_item->_ref_reference->_guid}}')">
       {{$curr_item->_view|truncate:80}}
     </strong>
@@ -27,6 +27,11 @@
   </td>
   <td>{{mb_value object=$curr_item field=quantity}}</td>
   <td>{{mb_value object=$curr_item field=unit_price}}</td>
+  <td>
+  	{{if $curr_item->_quantity_received < $curr_item->quantity}}
+  	  <button type="button" class="edit notext" onclick="editUnitPrice({{$curr_item->_id}})">Modifier le prix unitaire</button>
+		{{/if}}
+	</td>
   <td id="order-item-{{$id}}-price">{{mb_value object=$curr_item field=_price}}</td>
   
   <td>

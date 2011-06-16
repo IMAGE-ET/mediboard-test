@@ -43,7 +43,8 @@ class CProductOrderItem extends CMbObject {
   var $_date_received     = null;
   var $_quantity_received = null;
   var $_id_septic         = null;
-	
+  var $_update_reference  = null;
+  
   // #TEMP#
   var $units_fixed        = null;
   var $orig_quantity      = null;
@@ -70,7 +71,8 @@ class CProductOrderItem extends CMbObject {
     $specs['septic']             = 'bool notNull default|0';
     $specs['_price']             = 'currency';
     $specs['_quantity_received'] = 'num';
-		
+    $specs['_update_reference']  = 'bool';
+    
     // #TEMP#
     $specs['units_fixed']        = 'bool show|0';
     $specs['orig_quantity']      = 'num show|0';
@@ -95,7 +97,7 @@ class CProductOrderItem extends CMbObject {
     $this->completeField("renewal");
     if ($this->renewal == 0) return true;
     $this->updateReceived();
-  	return $this->_quantity_received >= $this->quantity;
+    return $this->_quantity_received >= $this->quantity;
   }
   
   function getStock() {
@@ -131,7 +133,7 @@ class CProductOrderItem extends CMbObject {
     
     $this->updateReceived();
     $this->loadReference();
-		
+    
     $this->_view = $this->_ref_reference->_view;
     $this->_price = $this->unit_price * $this->quantity;
   }
@@ -206,6 +208,18 @@ class CProductOrderItem extends CMbObject {
         $this->unit_price = $this->_ref_reference->price;
         $this->tva = $this->_ref_reference->tva;
       }
+    }
+    
+    if ($this->_id && $this->_update_reference) {
+      $ref = $this->loadReference();
+      $ref->price = $this->unit_price;
+      if ($msg = $ref->store()) {
+        CAppUI::setMsg($msg, UI_MSG_WARNING);
+      }
+      else {
+        CAppUI::setMsg('Prix de la référence mis à jour', UI_MSG_OK);
+      }
+      $this->_update_reference = null;
     }
     
     /*if (!$this->_id && ($stock = $this->getStock())) {

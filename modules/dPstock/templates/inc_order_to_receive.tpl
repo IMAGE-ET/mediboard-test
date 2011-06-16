@@ -33,6 +33,12 @@ receiveOrderItems = function(form, container) {
   
   return onSubmitFormAjax(form);
 }
+
+editUnitPrice = function(order_item_id) {
+  var url = new Url("dPstock", "httpreq_edit_order_item_unit_price");
+	url.addParam("order_item_id", order_item_id);
+	url.requestModal(500, 200);
+}
 </script>
 
 {{mb_include module=system template=CMbObject_view object=$order}}
@@ -66,7 +72,7 @@ receiveOrderItems = function(form, container) {
   <tr>
     <th style="width: 50%;"></th>
     <th style="text-align: center;" class="narrow">{{mb_title class=CProductOrderItem field=quantity}}</th>
-    <th style="text-align: center;" class="narrow">{{mb_title class=CProductOrderItem field=unit_price}}</th>
+    <th style="text-align: center;" class="narrow" colspan="2">{{mb_title class=CProductOrderItem field=unit_price}}</th>
     <th style="text-align: center;" class="narrow">{{mb_title class=CProductOrderItem field=_price}}</th>
     <th style="text-align: center;" class="narrow">Déjà reçu</th>
     <th style="text-align: right;" class="narrow"></th>
@@ -77,7 +83,7 @@ receiveOrderItems = function(form, container) {
     </tbody>
   {{foreachelse}}
     <tr>
-      <td colspan="10" class="empty">{{tr}}CProductOrderItem.none{{/tr}}</td>
+      <td colspan="7" class="empty">{{tr}}CProductOrderItem.none{{/tr}}</td>
     </tr>
   {{/foreach}}
 </table>
