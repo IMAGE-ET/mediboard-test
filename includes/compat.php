@@ -226,7 +226,9 @@ if (!function_exists('getrusage')) {
   function getrusage($who = 0) {
     return array(
       "ru_utime.tv_usec" => -1,
-      "ru_stime.tv_usec" => -1
+      "ru_utime.tv_sec"  => -1,
+      "ru_stime.tv_usec" => -1,
+      "ru_stime.tv_sec"  => -1,
     );
   }
 }
