@@ -15,7 +15,7 @@ Main.add(function(){
 });
 
 function printDocument(iDocument_id) {
-  form = document.editOp;
+  var form = document.editOp;
   
   if (checkFormOperation() && (iDocument_id.value != 0)) {
     var url = new Url;
@@ -30,7 +30,7 @@ function printDocument(iDocument_id) {
 }
 
 function printPack(iPack_id) {
-  form = document.editOp;
+  var form = document.editOp;
 
   if (checkFormOperation() && (iPack_id.value != 0)) {
     var url = new Url;

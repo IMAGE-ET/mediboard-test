@@ -107,17 +107,19 @@ CCAMSelector.init = function(){
       <input type="text" name="_codes_ccam" ondblclick="CCAMSelector.init()" size="10" value="" class="autocomplete"/>
       <div style="display: none; width: 200px !important" class="autocomplete" id="_codes_ccam_auto_complete"></div>
       <script type="text/javascript">
-        var oForm = getForm('editOp');
-        var url = new Url("dPccam", "httpreq_do_ccam_autocomplete");
-        url.autoComplete(oForm._codes_ccam, '', {
-          minChars: 1,
-          dropdown: true,
-          width: "250px",
-          updateElement: function(selected) {
-            $V(oForm._codes_ccam, selected.down("strong").innerHTML);
-            oCcamField.add($V(oForm._codes_ccam), true);
-          }
-        });
+      	Main.add(function(){
+	        var oForm = getForm('editOp');
+	        var url = new Url("dPccam", "httpreq_do_ccam_autocomplete");
+	        url.autoComplete(oForm._codes_ccam, '', {
+	          minChars: 1,
+	          dropdown: true,
+	          width: "250px",
+	          updateElement: function(selected) {
+	            $V(oForm._codes_ccam, selected.down("strong").innerHTML);
+	            oCcamField.add($V(oForm._codes_ccam), true);
+	          }
+	        });
+        })
       </script>
       <button class="add notext" type="button" onclick="oCcamField.add(this.form._codes_ccam.value,true)">{{tr}}Add{{/tr}}</button>
     </td>
@@ -152,7 +154,7 @@ CCAMSelector.init = function(){
   <tr>
     <th>{{mb_label object=$op field="anesth_id"}}</th>
     <td colspan="2">
-      {{mb_field object=$op field="anesth_id" options=$anesthesistes"}}
+      {{mb_field object=$op field="anesth_id" options=$anesthesistes}}
     </td>
   </tr> 
   {{/if}}
@@ -178,65 +180,65 @@ CCAMSelector.init = function(){
 
   <tr>
     {{if $modurgence}}
-    <th>{{mb_label object=$op field="date"}}</th>
-    <td>
-      <input type="hidden" name="plageop_id" value="" />
-      <input type="hidden" name="_date" value="{{if $op->_datetime}}{{$op->_datetime|iso_date}}{{else}}{{$today}}{{/if}}" />
-     
-      <select name="date" onchange="
-        {{if !$op->operation_id}}updateEntreePrevue();{{/if}}
-        Value.synchronize(this);
-        document.editSejour._curr_op_date.value = this.value;
-        modifSejour(); $V(this.form._date, this.value);">
-        {{if $op->operation_id}}
-        <option value="{{$op->_datetime|iso_date}}" selected="selected">
-          {{$op->_datetime|date_format:"%d/%m/%Y"}} (inchangée)
-        </option>
-        {{/if}}
-        <option value="{{$today}}">
-          {{$today|date_format:"%d/%m/%Y"}} (aujourd'hui)
-        </option>
-        <option value="{{$tomorow}}">
-          {{$tomorow|date_format:"%d/%m/%Y"}} (demain)
-        </option>
-      </select>
-    </td>
-    <td>
-      à
-      <select name="_hour_urgence" onchange="Value.synchronize(this)">
-      {{foreach from=$hours_urgence|smarty:nodefaults item=hour}}
-        <option value="{{$hour}}" {{if $op->_hour_urgence == $hour || (!$op->operation_id && $hour == "8")}} selected="selected" {{/if}}>{{$hour}}</option>
-      {{/foreach}}
-      </select> h
-      <select name="_min_urgence" onchange="Value.synchronize(this);">
-      {{foreach from=$mins_duree|smarty:nodefaults item=min}}
-        <option value="{{$min}}" {{if $op->_min_urgence == $min}}selected="selected"{{/if}}>{{$min}}</option>
-      {{/foreach}}
-      </select> min
-    </td>
+	    <th>{{mb_label object=$op field="date"}}</th>
+	    <td>
+	      <input type="hidden" name="plageop_id" value="" />
+	      <input type="hidden" name="_date" value="{{if $op->_datetime}}{{$op->_datetime|iso_date}}{{else}}{{$today}}{{/if}}" />
+	     
+	      <select name="date" onchange="
+	        {{if !$op->operation_id}}updateEntreePrevue();{{/if}}
+	        Value.synchronize(this);
+	        document.editSejour._curr_op_date.value = this.value;
+	        modifSejour(); $V(this.form._date, this.value);">
+	        {{if $op->operation_id}}
+	        <option value="{{$op->_datetime|iso_date}}" selected="selected">
+	          {{$op->_datetime|date_format:"%d/%m/%Y"}} (inchangée)
+	        </option>
+	        {{/if}}
+	        <option value="{{$today}}">
+	          {{$today|date_format:"%d/%m/%Y"}} (aujourd'hui)
+	        </option>
+	        <option value="{{$tomorow}}">
+	          {{$tomorow|date_format:"%d/%m/%Y"}} (demain)
+	        </option>
+	      </select>
+	    </td>
+	    <td>
+	      à
+	      <select name="_hour_urgence" onchange="Value.synchronize(this)">
+	      {{foreach from=$hours_urgence|smarty:nodefaults item=hour}}
+	        <option value="{{$hour}}" {{if $op->_hour_urgence == $hour || (!$op->operation_id && $hour == "8")}} selected="selected" {{/if}}>{{$hour}}</option>
+	      {{/foreach}}
+	      </select> h
+	      <select name="_min_urgence" onchange="Value.synchronize(this);">
+	      {{foreach from=$mins_duree|smarty:nodefaults item=min}}
+	        <option value="{{$min}}" {{if $op->_min_urgence == $min}}selected="selected"{{/if}}>{{$min}}</option>
+	      {{/foreach}}
+	      </select> min
+	    </td>
     {{else}}
-    <th>
-      <input type="hidden" name="plageop_id" class="notNull {{$op->_props.plageop_id}}" onchange="Value.synchronize(this);" ondblclick="PlageOpSelector.init()" value="{{$plage->plageop_id}}" />
-      {{mb_label object=$op field="plageop_id"}}
-      <input type="hidden" name="date" value="" />
-      <input type="hidden" name="_date" value="{{$plage->date}}" 
-      onchange="Value.synchronize(this); 
-                if(this.value){ 
-                  this.form._locale_date.value = Date.fromDATE(this.value).toLocaleDate();
-                } else { 
-                  this.form._locale_date.value = '';
-                }; 
-                Sejour.preselectSejour(this.value);" />
-    </th>
-    <td>
-      <input type="text" name="_locale_date" readonly="readonly" size="10" ondblclick="PlageOpSelector.init()" value="{{$plage->date|date_format:"%d/%m/%Y"}}"  />
-      {{if $op->_ref_salle && $op->_ref_salle->_id}}
-      en {{$op->_ref_salle->_view}}
-      {{/if}}
-    </td>
-    <td class="button">
-      <button type="button" class="search" onclick="PlageOpSelector.init()">Choisir une date</button>
-    </td>
+	    <th>
+	      <input type="hidden" name="plageop_id" class="notNull {{$op->_props.plageop_id}}" onchange="Value.synchronize(this);" ondblclick="PlageOpSelector.init()" value="{{$plage->plageop_id}}" />
+	      {{mb_label object=$op field="plageop_id"}}
+	      <input type="hidden" name="date" value="" />
+	      <input type="hidden" name="_date" value="{{$plage->date}}" 
+	      onchange="Value.synchronize(this); 
+	                if(this.value){ 
+	                  this.form._locale_date.value = Date.fromDATE(this.value).toLocaleDate();
+	                } else { 
+	                  this.form._locale_date.value = '';
+	                }; 
+	                Sejour.preselectSejour(this.value);" />
+	    </th>
+	    <td>
+	      <input type="text" name="_locale_date" readonly="readonly" size="10" ondblclick="PlageOpSelector.init()" value="{{$plage->date|date_format:"%d/%m/%Y"}}"  />
+	      {{if $op->_ref_salle && $op->_ref_salle->_id}}
+	      en {{$op->_ref_salle->_view}}
+	      {{/if}}
+	    </td>
+	    <td class="button">
+	      <button type="button" class="search" onclick="PlageOpSelector.init()">Choisir une date</button>
+	    </td>
     {{/if}}
   </tr>
   

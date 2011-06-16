@@ -346,8 +346,7 @@ var OccupationServices =  {
   
   updateOccupation: function() {
     var oForm = getForm("editSejour");
-    var occupationUrl = new Url;
-    occupationUrl.setModuleAction("dPplanningOp", "httpreq_show_occupation_lits");
+    var occupationUrl = new Url("dPplanningOp", "httpreq_show_occupation_lits");
     occupationUrl.addElement(oForm.type, "type");
     occupationUrl.addElement(oForm._date_entree_prevue, "entree");
     occupationUrl.requestUpdate('occupation');

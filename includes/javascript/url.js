@@ -106,7 +106,7 @@ var Url = Class.create({
       sParamName = oElement.name;
     }
     
-    value = oElement.value;
+    var value = oElement.value;
     if (oElement.type == 'checkbox') {
       value = $V(oElement) ? 1 : 0; 
     }
