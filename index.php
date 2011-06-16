@@ -83,7 +83,6 @@ $phpChrono->start();
 // Load AppUI from session
 require "./classes/app.class.php";
 require "./classes/ui.class.php";
-require "./includes/session.php";
 
 // Register shutdown
 register_shutdown_function(array("CApp", "checkPeace"));
@@ -95,6 +94,9 @@ if (!CSQLDataSource::get("std")) {
   header("Location: offline.php?reason=bdd");
   die("La base de données n'est pas connectée");
 }
+
+require "./classes/csessionhandler.class.php";
+require "./includes/session.php";
 
 // Write the HTML headers
 header("Expires: Mon, 26 Jul 1997 05:00:00 GMT");  // Date in the past
