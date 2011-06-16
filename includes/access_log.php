@@ -49,8 +49,8 @@ if (!$log->loadMatchingObject()) {
 $getrusage = getrusage();
 $log->hits++;
 $log->duration    += $phpChrono->total;
-$log->processus   += floatval($getrusage["ru_utime.tv_usec"]) / 1000000;
-$log->processor   += floatval($getrusage["ru_stime.tv_usec"]) / 1000000;
+$log->processus   += floatval($getrusage["ru_utime.tv_usec"]) / 1000000 + $getrusage["ru_utime.tv_sec"];
+$log->processor   += floatval($getrusage["ru_stime.tv_usec"]) / 1000000 + $getrusage["ru_stime.tv_sec"];
 $log->request     += $ds->chrono->total;
 $log->size        += ob_get_length();
 $log->peak_memory += memory_get_peak_usage();

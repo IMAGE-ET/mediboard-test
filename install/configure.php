@@ -92,6 +92,17 @@ showHeader();
   </tr>
 
   <tr>
+    <th><label for="session_handler" title="Choisir quelle mode de gestion de session ou souhaite utiliser (celle-ci doit être installée)">Gestionnaire de session</label></th>
+    <td>
+      <select name="session_handler" size="1">
+        <option value="files"    <?php if ($dPconfig['session_handler'] == 'files'   ) { echo 'selected="selected"'; } ?> >Fichiers</option>
+        <option value="memcache" <?php if ($dPconfig['session_handler'] == 'memcache') { echo 'selected="selected"'; } ?> >Memcache</option>
+        <option value="mysql"    <?php if ($dPconfig['session_handler'] == 'mysql'   ) { echo 'selected="selected"'; } ?> >MySQL</option>
+      </select>
+    </td>
+  </tr>
+  
+  <tr>
     <th><label for="shared_memory" title="Choisir quelle extension doit tenter de gérer la mémoire partagée (celle-ci doit être installée)">Mémoire partagée</label></th>
     <td>
       <div class="small-info" style='float: right;'> 
@@ -104,6 +115,7 @@ showHeader();
       </select>
     </td>
   </tr>
+  
   <tr>
     <th class="category" colspan="2">Configuration de la base de données principale</th>
   </tr>

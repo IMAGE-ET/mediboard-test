@@ -248,7 +248,6 @@ class CAppUI {
 	* @param string A marker for a historic "place", only -1 or an empty string is valid.
 	*/
   static function redirect($params="") {
-    $session_id = SID;
 
     session_write_close();
     
@@ -263,14 +262,6 @@ class CAppUI {
       
       if (CValue::get("suppressHeaders")) {
         $params .= "&suppressHeaders=1";
-      }
-      
-      // Fix to handle cookieless sessions
-      if ($session_id != "") {
-        if (!$params)
-          $params = $session_id;
-        else
-          $params .= "&" . $session_id;
       }
       
       header("Location: index.php?$params");

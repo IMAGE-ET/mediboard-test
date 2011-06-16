@@ -44,8 +44,8 @@ class CApp {
    * that it is not posted back when refreshing the page.
    * Use it instead of CApp::rip() directly
    */
-  static function emptyPostData($dont_redirect = false){
-    if (!$dont_redirect && !empty($_POST) && !headers_sent()) {
+  static function emptyPostData($redirect = true){
+    if ($redirect && !empty($_POST) && !headers_sent()) {
       CAppUI::redirect(/*CValue::read($_SERVER, "QUERY_STRING")*/);
     }
     self::rip();

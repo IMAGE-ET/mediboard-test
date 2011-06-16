@@ -137,7 +137,7 @@ class CMbObject {
   
   function CMbObject() {
     $class = get_class($this);
-   
+    
     $in_cache = isset(self::$spec[$class]);
 
     if (!$in_cache) {

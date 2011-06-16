@@ -773,11 +773,11 @@ class CSetupsystem extends CSetup {
     
     $this->makeRevision("1.0.74");
     
+    $this->addPrefQuery("showCounterTip", "1");
+    
     $this->makeRevision("1.0.75");
     
     $this->setTimeLimit(300);
-    $this->addPrefQuery("showCounterTip", "1");
-    
     $query = "ALTER TABLE `access_log`
               ADD `processus` FLOAT,
               ADD `processor` FLOAT,
@@ -803,6 +803,18 @@ class CSetupsystem extends CSetup {
               ) /*! ENGINE=MyISAM */;";
     $this->addQuery($query);
     
-    $this->mod_version = "1.0.79";
+    $this->makeRevision("1.0.79");
+    $query = "CREATE TABLE `session` (
+               `session_id` VARCHAR(32) NOT NULL PRIMARY KEY,
+               `date_creation` INT(11),
+               `date_modification` INT(11),
+               `user_id` INT (11) NOT NULL DEFAULT '0',
+               `user_ip` VARBINARY (16),
+               `user_agent` VARCHAR(100),
+               `data` BLOB
+              ) /*! ENGINE=MyISAM */;";
+    $this->addQuery($query);
+    
+    $this->mod_version = "1.0.80";
   }
 }
