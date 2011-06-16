@@ -11,6 +11,12 @@
   }
 </script>
 
+<style type="text/css">
+em {
+  text-decoration: underline;
+}
+</style>
+
 <ul id="tabs-code" class="control_tabs">
 {{foreach from=$listByProfile key=profile item=list}}
   {{assign var=user value=$users.$profile}}
@@ -49,7 +55,7 @@
           <button type="button" class="search notext" onclick="showDetail('{{$curr_code->code}}');">Détail</button>
           {{$curr_code->code}}
         </td>
-        <td class="text">{{$curr_code->libelleLong}}</td>
+        <td class="text">{{$curr_code->libelleLong|emphasize:$_keywords_code}}</td>
         <td>
           {{if array_key_exists($curr_code->code, $list_favoris)}}
             Favoris

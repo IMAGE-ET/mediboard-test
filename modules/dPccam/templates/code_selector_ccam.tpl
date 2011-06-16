@@ -11,6 +11,11 @@
   }
 </script>
 
+<div class="info">
+  Nouvelle interface de recherche de codes CCAM par mots-clés. <br />
+  Vous pouvez retrouver l'ancienne recherche dans les préférences utilisateur (volet CCAM).
+</div>
+
 <table class="tbl">
   <tr>
     <th>
