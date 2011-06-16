@@ -70,7 +70,10 @@ class CSetupdPccam extends CSetup {
               ) /*! ENGINE=MyISAM */;";
     $this->addQuery($query);
     
-    $this->mod_version = "0.14";    
+    $this->makeRevision("0.14");
+    $this->addPrefQuery("new_search_ccam", "1");
+    
+    $this->mod_version = "0.15";    
 		
 		// Data source query
     $query = "SELECT *

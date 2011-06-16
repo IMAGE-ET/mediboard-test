@@ -250,6 +250,16 @@ Preferences.onSubmit = function(form) {
   </tbody>
   {{/if}}
   
+  {{assign var="module" value="dPccam"}}
+  {{if $prefs.$module}}  
+  <tbody style="display: none" id="{{$module}}">
+  <!-- Préférences pour le module {{$module}} -->
+
+  {{mb_include template=inc_pref spec=bool var=new_search_ccam}}
+
+  </tbody>
+  {{/if}}
+  
   {{assign var="module" value="rtm"}}
   {{if $prefs.$module}}  
   <tbody style="display: none" id="{{$module}}">

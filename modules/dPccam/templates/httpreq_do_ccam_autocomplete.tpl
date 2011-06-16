@@ -11,9 +11,9 @@
 <ul>
   {{foreach from=$result item=ccam}}
     <li>
-      <strong>{{$ccam.CODE}}</strong>
+      <strong>{{$ccam.CODE|emphasize:$_codes_ccam}}</strong>
       <br />
-      <small>{{$ccam.LIBELLELONG|truncate:35:"...":false}}</small>
+      <small>{{$ccam.LIBELLELONG|emphasize:$_codes_ccam}}</small>
     </li>
   {{/foreach}}
 </ul>

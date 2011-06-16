@@ -21,6 +21,11 @@ if ($favori_user = CValue::post("favoris_user")) {
 }
 
 $do->redirect = null;
+
 $do->doIt();
 
+if (CAppUI::pref("new_search_ccam") == 1) {
+  echo CAppUI::getMsg();
+  CApp::rip();
+}
 ?>

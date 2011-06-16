@@ -9,4 +9,7 @@
 
  
  // Préférences par Module
+CPreferences::$modules["dPccam"] = array (
+  "new_search_ccam"
+)
 ?>

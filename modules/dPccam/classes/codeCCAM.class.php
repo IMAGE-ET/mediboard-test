@@ -381,7 +381,7 @@ class CCodeCCAM {
     $i = 0;
     while($row = $ds->fetchArray($result)) {
       $this->assos[$i]["code"] = $row["ACTEASSO"];
-      $query2 = $ds->prepare("SELECT * FROM actes WHERE CODE = % AND DATEFIN = '00000000'", $row["ACTEASSO"]);
+      $query2 = $ds->prepare("SELECT * FROM actes WHERE CODE = % AND DATEFIN = '00000000'", trim($row["ACTEASSO"]));
       $result2 = $ds->exec($query2);
       $row2 = $ds->fetchArray($result2);
       $this->assos[$i]["texte"] = $row2["LIBELLELONG"];
@@ -400,7 +400,7 @@ class CCodeCCAM {
     $i = 0;
     while($row = $ds->fetchArray($result)) {
       $this->incomps[$i]["code"] = trim($row["INCOMPATIBLE"]);
-      $query2 = $ds->prepare("SELECT * FROM actes WHERE CODE = % AND DATEFIN = '00000000'", $row["INCOMPATIBLE"]);
+      $query2 = $ds->prepare("SELECT * FROM actes WHERE CODE = % AND DATEFIN = '00000000'", trim($row["INCOMPATIBLE"]));
       $result2 = $ds->exec($query2);
       $row2 = $ds->fetchArray($result2);
       $this->incomps[$i]["texte"] = $row2["LIBELLELONG"];
@@ -448,6 +448,73 @@ class CCodeCCAM {
     $row = $ds->fetchArray($result);
     $valeur = $row["COEFFICIENT"] / 10;
     return $valeur;
+  }
+  
+// Recherche de codes
+  function findCodes($code='', $keys='', $max_length = null, $where = null) {
+    $ds =& $this->_spec->ds;
+  
+    $query = "SELECT CODE, LIBELLELONG
+              FROM actes
+              WHERE DATEFIN = '00000000' ";
+
+    $keywords = explode(" ", $keys);
+    $codes    = explode(" ", $code);
+    CMbArray::removeValue("", $keywords);
+    CMbArray::removeValue("", $codes);
+    
+    if ($keys != "") {
+      $listLike = array();
+      $codeLike = array();
+      foreach ($keywords as $key => $value) {
+        $listLike[] = "LIBELLELONG LIKE '%".addslashes($value)."%'";
+      }
+      // Combiner la recherche de code et libellé
+      if ($code) {
+        foreach ($codes as $key => $value) {
+          $codeLike[] = "CODE LIKE '".addslashes($value) . "%'";
+        }
+        $query .= " AND ( (";
+        $query .= implode(" OR ", $codeLike);
+        $query .= ") OR (";
+      }
+      // Ou que le libellé
+      else {
+        $query .= " AND (";
+      }
+      $query .= implode(" AND ", $listLike);
+      if ($code) $query .= ") ) ";
+
+    }
+    // Ou que le code
+    if($code && !$keys) {
+      $codeLike = array();
+      foreach ($codes as $key => $value) {
+        $codeLike[] = "CODE LIKE '".addslashes($value) . "%'";
+      }
+      $query .= "AND ". implode(" OR ", $codeLike);
+    }
+    
+    if ($max_length) {
+      $query .= " AND LENGTH(CODE) < $max_length ";
+    }
+    
+    if ($where) {
+      $query .= "AND " . $where;
+    }
+    
+    $query .= " ORDER BY CODE LIMIT 0 , 100";
+    
+    $result = $ds->exec($query);
+    $master = array();
+    $i = 0;
+    while($row = $ds->fetchArray($result)) {
+      $master[$i]["LIBELLELONG"] = $row["LIBELLELONG"];
+      $master[$i]["CODE"] = $row["CODE"];
+      $i++;
+    }
+  
+    return($master);
   }
 }
 

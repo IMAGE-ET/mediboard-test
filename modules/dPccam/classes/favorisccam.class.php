@@ -28,7 +28,7 @@ class CFavoriCCAM extends CMbObject {
   function getProps() {
   	$specs = parent::getProps();
   	$specs["favoris_user"] = "ref notNull class|CUser";
-  	$specs["favoris_code"] = "str notNull length|7 seekable|equal";
+  	$specs["favoris_code"] = "str notNull length|7 seekable";
   	$specs["object_class"] = "str notNull";
   	$specs["filter_class"] = "enum list|CConsultation|COperation|CSejour";
   	return $specs;

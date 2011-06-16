@@ -1,0 +1,112 @@
+<?php /* $Id$ */
+
+/**
+ * @package Mediboard
+ * @subpackage dPurgences
+ * @version $Revision: 7212 $
+ * @author SARL OpenXtrem
+ * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ */
+
+$chir           = CValue::get("chir");
+$anesth         = CValue::get("anesth");
+$_keywords_code = CValue::get("_keywords_code");
+$_all_codes     = CValue::get("_all_codes", 0);
+$object_class   = CValue::get("object_class");
+$only_list      = CValue::get("only_list", 0);
+$user   = CUser::get();
+$ds     = CSQLDataSource::get("std");
+$profiles = array (
+  "chir"   => $chir,
+  "anesth" => $anesth,
+  "user"   => $user->_id,
+);
+
+if ($profiles["user"] == $profiles["anesth"] || $profiles["user"] == $profiles["chir"]) {
+  unset($profiles["user"]);
+}
+
+if (!$profiles["anesth"]) {
+  unset($profiles["anesth"]);
+}
+
+$listByProfile = array();
+$users = array();
+
+foreach ($profiles as $profile => $_user_id) {
+  $keywords_code = $_keywords_code;
+  $_user = new CMediusers();
+  $_user->load($_user_id);
+  $users[$profile] = $_user;
+  $list = array();
+  
+  // Statistiques
+  $actes = new CActeCCAM;
+  $codes_stats = $actes->getFavoris($_user_id, $object_class);
+
+  foreach ($codes_stats as $key => $_code) {
+    $codes_stats[$_code["code_acte"]] = $_code;
+    unset($codes_stats[$key]);
+  }
+  
+  // Favoris
+  $code = new CFavoriCCAM;
+  $where = array();
+  $where["favoris_user"] = " = '$_user_id'";
+  $where["object_class"] = " = '$object_class'";
+  $codes_favoris = $code->loadList($where, null, 100);
+  
+  foreach ($codes_favoris as $key => $_code) {
+    $codes_favoris[$_code->favoris_code] = $_code;
+    unset($codes_favoris[$key]);
+  }
+  
+  // Seek sur les codes, avec ou non l'inclusion de tous les codes
+  $code = new CCodeCCAM("");
+  $where = null;
+
+  if (!$_all_codes && (count($codes_stats) || count($codes_favoris))) {
+    $where = "CODE IN (";
+    foreach ($codes_stats as $key => $_code) {
+      $where .= "'" . $key . "'";
+      if ($_code != end($codes_stats)) {
+        $where .= ",";
+      }
+    }
+    foreach ($codes_favoris as $key => $_code) {
+      $where .= "'" . $key . "'";
+      if ($_code != end($codes_favoris)) {
+        $where .= ",";
+      }
+    }
+    $where .= ")";
+  }
+
+  $codes = $code->findCodes($_keywords_code, $_keywords_code, null, $where);
+  
+  foreach($codes as $key=>$value) {
+    $list[$value["CODE"]] = CCodeCCAM::get($value["CODE"], CCodeCCAM::MEDIUM);
+  }
+  
+  sort($list);
+
+  $listByProfile[$profile]["favoris"] = $codes_favoris;
+  $listByProfile[$profile]["stats"]   = $codes_stats;
+  $listByProfile[$profile]["list"]    = $list;
+}
+
+$smarty = new CSmartyDP;
+
+$smarty->assign("listByProfile", $listByProfile);
+$smarty->assign("users"        , $users);
+$smarty->assign("object_class" , $object_class);
+
+if ($only_list) {
+  $smarty->display("inc_code_selector_ccam.tpl");
+}
+else {
+  $smarty->assign("chir"         , $chir);
+  $smarty->assign("anesth"       , $anesth);
+  $smarty->display("code_selector_ccam.tpl");
+}
+?>

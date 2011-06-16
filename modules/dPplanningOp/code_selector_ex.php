@@ -153,6 +153,6 @@ $smarty->assign("chir"        , $chir);
 $smarty->assign("anesth"      , $anesth);
 $smarty->assign("users"       , $users);
 $smarty->assign("listByProfile", $listByProfile);
-$smarty->display("code_selector.tpl");
+$smarty->display("code_selector_ex.tpl");
 
 ?>

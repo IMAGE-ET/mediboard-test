@@ -21,16 +21,29 @@ CCAMSelector = {
 
   pop: function() {
     var oForm = getForm(this.sForm);
-    this.oUrl = new Url("dPplanningOp", "code_selector");
     
-    if(this.sAnesth) {
-      this.oUrl.addParam("anesth"    , oForm[this.sAnesth].value);
+    if (Preferences.new_search_ccam == 0) {
+      this.oUrl = new Url("dPplanningOp", "code_selector_ex");
+      
+      if(this.sAnesth) {
+        this.oUrl.addParam("anesth"    , oForm[this.sAnesth].value);
+      }
+      this.oUrl.addParam("chir"        , oForm[this.sChir].value);
+      this.oUrl.addParam("object_class", oForm[this.sClass].value);
+      this.oUrl.addParam("type"        , "ccam");
+      
+      this.oUrl.popup(this.options.width, this.options.height, "CCAM Selector");
     }
-    this.oUrl.addParam("chir"        , oForm[this.sChir].value);
-    this.oUrl.addParam("object_class", oForm[this.sClass].value);
-    this.oUrl.addParam("type"        , "ccam");
-    
-    this.oUrl.popup(this.options.width, this.options.height, "CCAM Selector");
+    else {
+      this.oUrl = new Url("dPccam", "code_selector_ccam");
+      
+      this.oUrl.addParam("chir", oForm[this.sChir].value);
+      this.oUrl.addParam("type", "ccam");
+      this.oUrl.addParam("object_class", oForm[this.sClass].value);
+      this.oUrl.addParam("mode", this.options.mode);
+      
+      this.oUrl.requestModal(700,400);
+    }
   },
   
   set: function(code, tarif) {

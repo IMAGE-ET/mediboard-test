@@ -65,15 +65,17 @@ Main.add(function(){
           this.sClass = "_class_name";
           this.pop();
         }
-        var oForm = getForm("filters");
-        var url = new Url("dPccam", "httpreq_do_ccam_autocomplete");
-        url.autoComplete(oForm._codes_ccam, '', {
-          minChars: 1,
-          dropdown: true,
-          width: "250px",
-          updateElement: function(selected) {
-            $V(oForm._codes_ccam, selected.down("strong").innerHTML);
-          }
+        Main.add(function() {
+          var oForm = getForm("filters");
+          var url = new Url("dPccam", "httpreq_do_ccam_autocomplete");
+          url.autoComplete(oForm._codes_ccam, '', {
+            minChars: 1,
+            dropdown: true,
+            width: "250px",
+            updateElement: function(selected) {
+              $V(oForm._codes_ccam, selected.down("strong").innerHTML);
+            }
+          });
         });
       </script>
     </td>
