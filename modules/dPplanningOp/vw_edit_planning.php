@@ -168,12 +168,11 @@ $hours_duree = range($config["duree_deb"], $config["duree_fin"]);
 $hours_urgence = range($config["hour_urgence_deb"], $config["hour_urgence_fin"]);
 $mins_duree = range(0, 59, $config["min_intervalle"]);
 
-// Récupération des services
-$service = new CService();
+// Récupération de la liste des services
 $where = array();
-$where["group_id"] = "= '".CGroups::loadCurrent()->_id."'";
-$order = "nom";
-$listServices = $service->loadListWithPerms(PERM_READ,$where, $order);
+$where["externe"]  = "= '0'";
+$service = new CService;
+$services = $service->loadGroupList($where);
 
 // Création du template
 $smarty = new CSmartyDP();
@@ -202,7 +201,7 @@ $smarty->assign("tomorow"   , $tomorow);
 
 $smarty->assign("categorie_prat", $categorie_prat);
 $smarty->assign("listPraticiens", $listPraticiens);
-$smarty->assign("listServices"  , $listServices);
+$smarty->assign("listServices"  , $services);
 $smarty->assign("etablissements", $etablissements);
 
 $smarty->assign("hours"        , $hours);

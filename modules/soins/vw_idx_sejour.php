@@ -39,10 +39,9 @@ if($praticien && !$service_id && !$praticien_id) {
 
 // Récupération de la liste des services
 $where = array();
-$where["group_id"] = "= '$g'";
-
+$where["externe"]  = "= '0'";
 $service = new CService;
-$services = $service->loadListWithPerms(PERM_READ);
+$services = $service->loadGroupList($where);
 
 /*
 $services = $praticien_id ?

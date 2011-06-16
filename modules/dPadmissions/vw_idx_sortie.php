@@ -24,8 +24,11 @@ $date_demain   = mbDateTime("00:00:00","+ 1 day");
 $hier          = mbDate("- 1 day", $date);
 $demain        = mbDate("+ 1 day", $date);
 
-$service    = new CService();
-$services   = $service->loadGroupList();
+// Récupération de la liste des services
+$where = array();
+$where["externe"]  = "= '0'";
+$service = new CService;
+$services = $service->loadGroupList($where);
 
 $sejour = new CSejour();
 $sejour->_type_admission = $type;

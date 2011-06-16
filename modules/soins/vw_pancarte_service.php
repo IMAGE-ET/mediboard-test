@@ -40,18 +40,23 @@ $filter_line->debut = $date;
 $service = new CService();
 $service->load($service_id);
 
+// Récupération de la liste des services
+$where = array();
+$where["externe"]  = "= '0'";
+$service = new CService;
+$services = $service->loadGroupList($where);
+
 // Initialisations
-$services = $service->loadGroupList();
-$patients = array();
-$alertes = array();
-$perfs = array();
-$new = array();
-$urgences = array();
-$lines = array();
-$pancarte = array();
-$lits = array();
+$patients   = array();
+$alertes    = array();
+$perfs      = array();
+$new        = array();
+$urgences   = array();
+$lines      = array();
+$pancarte   = array();
+$lits       = array();
 $list_lines = array();
-$nb_adm = array();
+$nb_adm     = array();
 
 $prescriptions = array();
 $prescription = new CPrescription();

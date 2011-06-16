@@ -79,8 +79,11 @@ foreach($elements as $_element){
 	$categories[$_category->chapitre][$_category->_id][$_element->_id] = $_element;
 }
 
-// Chargement de la liste des services
-$services = $service->loadListWithPerms();
+// Récupération de la liste des services
+$where = array();
+$where["externe"]  = "= '0'";
+$service = new CService;
+$services = $service->loadGroupList($where);
  
 // Création du template
 $smarty = new CSmartyDP();
