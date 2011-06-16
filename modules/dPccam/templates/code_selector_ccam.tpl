@@ -32,6 +32,6 @@
   </tr>
 </table>
 
-<div id="code_area" style="height: 70%; text-align: left;">
+<div id="code_area" style="height: 60%; text-align: left;">
   {{mb_include module=dPccam template=inc_code_selector_ccam}}
 </div>
