@@ -13,7 +13,7 @@
 {{assign var="line" value=$object}}
 <table class="tbl">
   <tr>
-    <th colspan="3"><a href="#" onclick="Prescription.viewProduit(null,'{{$line->code_ucd}}','{{$line->code_cis}}');">{{$line->_view}}</a></th>
+    <th colspan="3"><a href="#" onclick="Prescription.viewProduit(null,'{{$line->code_ucd}}','{{$line->code_cis}}');">{{$line->_ucd_view}}</a></th>
   </tr>
   <tr>
     {{if !$line->fin}}
