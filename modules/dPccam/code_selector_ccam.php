@@ -81,8 +81,16 @@ foreach ($profiles as $profile => $_user_id) {
     }
     $where .= ")";
   }
-
-  $codes = $code->findCodes($_keywords_code, $_keywords_code, null, $where);
+  
+  // Si pas de stat et pas de favoris, et que la recherche se fait sur ceux-ci,
+  // alors le tableau de résultat est vide
+  if (!$_all_codes && count($codes_stats) == 0 && count($codes_favoris) == 0) {
+    $codes = array();
+  }
+  // Sinon recherche de codes
+  else {
+    $codes = $code->findCodes($_keywords_code, $_keywords_code, null, $where);
+  }
   
   foreach($codes as $key=>$value) {
     $list[$value["CODE"]] = CCodeCCAM::get($value["CODE"], CCodeCCAM::MEDIUM);
