@@ -17,6 +17,7 @@ class CNumSpec extends CMbFieldSpec {
   var $length    = null;
   var $minLength = null;
   var $maxLength = null;
+  var $byteUnit  = null;
   
   function getSpecType() {
     return "num";
@@ -54,7 +55,27 @@ class CNumSpec extends CMbFieldSpec {
       'length' => 'num',
       'minLength' => 'num',
       'maxLength' => 'num',
+      'byteUnit' => 'str',
     ) + parent::getOptions();
+  }
+  
+  function getValue($object, $smarty = null, $params = array()) {
+    if (!isset($this->byteUnit)) {
+      return parent::getValue($object, $smarty, $params);
+    }
+    
+    $propValue = $object->{$this->fieldName};
+    $ratio = 1;
+    
+    switch($this->byteUnit) {
+      case "GB": $ratio *= 1024;
+      case "MB": $ratio *= 1024;
+      case "KB": $ratio *= 1024;
+      case "B":
+      default:
+    }
+    
+    return CMbString::toDecaBinary($propValue * $ratio);
   }
 
   function checkProperty($object){
@@ -152,10 +173,10 @@ class CNumSpec extends CMbFieldSpec {
   }
 
   function getFormHtmlElement($object, $params, $value, $className) {
-  	$form      = CMbArray::extract($params, "form");
-  	$increment = CMbArray::extract($params, "increment");
-  	$showPlus  = CMbArray::extract($params, "showPlus");
-  	$field     = htmlspecialchars($this->fieldName);
+    $form      = CMbArray::extract($params, "form");
+    $increment = CMbArray::extract($params, "increment");
+    $showPlus  = CMbArray::extract($params, "showPlus");
+    $field     = htmlspecialchars($this->fieldName);
     $maxLength = CValue::first($this->length, $this->maxLength, 11);
     $fieldId = $form.'_'.$field;
     
@@ -177,22 +198,22 @@ class CNumSpec extends CMbFieldSpec {
     CMbArray::defaultValue($params, "size", min($maxLength, 20));
     CMbArray::defaultValue($params, "maxlength", $maxLength);
     if ($form && $increment) {
-	    $sHtml = $this->getFormElementText($object, $params, (($value>=0 && $showPlus)?'+':'').(($value==0&&$showPlus)?'0':$value), $className);
-	    $sHtml .= '
-	  <script type="text/javascript">
-	    Main.add(function(){
-	      $(document.forms["'.$form.'"]["'.$field.'"]).addSpinner({';
-		      if ($step)       $sHtml .= "step: $step,";
-		      if ($this->pos)  $sHtml .= "min: 0,";
-		      elseif(isset($min)) $sHtml .= "min: $min,";
-		      if (isset($max)) $sHtml .= "max: $max,";
-		      if ($showPlus)   $sHtml .= "showPlus: $showPlus,";
-		      $sHtml .= '_:0 // IE rules
+      $sHtml = $this->getFormElementText($object, $params, (($value>=0 && $showPlus)?'+':'').(($value==0&&$showPlus)?'0':$value), $className);
+      $sHtml .= '
+    <script type="text/javascript">
+      Main.add(function(){
+        $(document.forms["'.$form.'"]["'.$field.'"]).addSpinner({';
+          if ($step)       $sHtml .= "step: $step,";
+          if ($this->pos)  $sHtml .= "min: 0,";
+          elseif(isset($min)) $sHtml .= "min: $min,";
+          if (isset($max)) $sHtml .= "max: $max,";
+          if ($showPlus)   $sHtml .= "showPlus: $showPlus,";
+          $sHtml .= '_:0 // IE rules
         });
       });
-		</script>';
+    </script>';
     } else {
-    	$sHtml = $this->getFormElementText($object, $params, $value, $className);
+      $sHtml = $this->getFormElementText($object, $params, $value, $className);
     }
     return $sHtml;
   }
