@@ -31,10 +31,11 @@ $listPrat = $listPrat->loadPraticiens(PERM_READ);
 $listSpec = new CFunctions();
 $listSpec = $listSpec->loadSpecialites(PERM_READ);
 
-$listServ = new CService();
+// Récupération de la liste des services
 $where = array();
-$where["group_id"] = "= '$group->_id'";
-$listServ = $listServ->loadListWithPerms(PERM_READ,$where);
+$where["externe"]  = "= '0'";
+$service = new CService;
+$services = $service->loadGroupList($where);
 
 $yesterday  = mbDate("-1 day", $today);
 $tomorrow   = mbDate("+1 day", $today);
@@ -58,7 +59,7 @@ $smarty->assign("tomorrow_fin" , $tomorrow_fin);
 
 $smarty->assign("listPrat", $listPrat);
 $smarty->assign("listSpec", $listSpec);
-$smarty->assign("listServ", $listServ);
+$smarty->assign("listServ", $services);
 $smarty->assign("filter"  , $filter);
 
 $smarty->display("form_print_planning.tpl");
