@@ -170,7 +170,7 @@ Main.add(function () {
  onsubmit="Url.ping({onComplete: submitCompteRendu}); return false;"
  class="{{$compte_rendu->_spec}}">
 
-{{if (!$pdf_thumbnails || !$app->user_prefs.pdf_and_thumbs)}}
+{{if (!$pdf_thumbnails || !$app->user_prefs.pdf_and_thumbs || $compte_rendu->type != "body")}}
   <input type="hidden" name="fast_edit_pdf" value="{{$compte_rendu->fast_edit_pdf}}" />
 {{/if}}
 
