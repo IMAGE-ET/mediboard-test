@@ -1029,7 +1029,7 @@ class CMbObject {
             $value = CMbString::truncate($propValue);
             $debugInfo = $debug ? "(val:\"$value\", spec:\"$propSpec\")" : "(valeur: \"$value\")";
             $fieldName = CAppUI::tr("$this->_class_name-$propName");
-            $msg .= $msgProp ? "<br/> - <strong title='$propName'>$fieldName</strong> : $msgProp $debugInfo" : null;
+            $msg .= $msgProp ? " &bull; <strong title='$propName'>$fieldName</strong> : $msgProp $debugInfo <br/>" : null;
           }
         }
       }

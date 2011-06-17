@@ -36,8 +36,12 @@ confirmSavePrint = function(form){
   return false;
 }
 
-updateExObjectId = function(id) {
+updateExObjectId = function(id, obj) {
   $V(getForm("editExObject").ex_object_id, id);
+	
+	if (!(obj._ui_messages[2] || obj._ui_messages[4] || obj._ui_messages[4])) {
+	  window.close();
+	}
 }
 
 Main.add(function(){
@@ -65,7 +69,7 @@ if (window.opener && !window.opener.closed && window.opener !== window && window
 </script>
 
 {{mb_form name="editExObject" m="system" dosql="do_ex_object_aed" method="post" className="watched"
-          onsubmit="return onSubmitFormAjax(this, {onComplete: function(){ window.close() } })"}}
+          onsubmit="return onSubmitFormAjax(this)"}}
   {{mb_key object=$ex_object}}
   {{mb_field object=$ex_object field=_ex_class_id hidden=true}}
   {{mb_field object=$ex_object field=object_class hidden=true}}

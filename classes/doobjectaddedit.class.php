@@ -24,12 +24,12 @@ class CDoObjectAddEdit {
   var $callBack            = null;
   var $suppressHeaders     = null;
   var $_logIt              = null;
-	
+  
   /**
    * @var CMbObject
    */
   var $_obj                = null;
-	
+  
   /**
    * @var CMbObject
    */
@@ -140,12 +140,23 @@ class CDoObjectAddEdit {
   }
   
   function doCallback(){
+    $messages = CAppUI::$instance->messages;
+    
     echo CAppUI::getMsg();
     
     $fields = $this->_obj->getValues();
-    $fields = array_map_recursive("utf8_encode", $fields);
     $fields["_guid"] = $this->_obj->_guid;
     $fields["_class_name"] = $this->_obj->_class_name;
+    
+    foreach($messages as &$_level) {
+      $_keys   = array_map("utf8_encode", array_keys($_level));
+      $_values = array_map("utf8_encode", array_values($_level));
+      $_level = array_combine($_keys, $_values);
+    }
+    
+    $fields["_ui_messages"] = $messages;
+    
+    $fields = array_map_recursive("utf8_encode", $fields);
     
     $json = @json_encode($fields);
     
@@ -153,10 +164,10 @@ class CDoObjectAddEdit {
     if ($this->callBack) {
       echo "\n<script type=\"text/javascript\">{$this->callBack}($id, $json)</script>";
     }
-		else {
-			$guid = "$this->className-$id";
+    else {
+      $guid = "$this->className-$id";
       echo "\n<script type=\"text/javascript\">Form.onSubmitComplete('$guid', $json)</script>";
-		}
+    }
     CApp::rip();
   }
 
@@ -175,8 +186,8 @@ class CDoObjectAddEdit {
    * @param string $msg 
    */
   function errorRedirect($msg) {
-	  CAppUI::setMsg($msg, UI_MSG_ERROR);
-	  $this->redirect =& $this->redirectError;
-	  $this->doRedirect();
+    CAppUI::setMsg($msg, UI_MSG_ERROR);
+    $this->redirect =& $this->redirectError;
+    $this->doRedirect();
   }
 }
