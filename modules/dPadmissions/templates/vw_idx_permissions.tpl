@@ -21,8 +21,6 @@ function reloadFullPermissions(filterFunction) {
   var oForm = getForm("selType");
   var url = new Url("dPadmissions", "httpreq_vw_all_permissions");
   url.addParam("date"      , "{{$date}}");
-  url.addParam("type"      , $V(oForm._type_admission));
-  url.addParam("service_id", $V(oForm.service_id));
   url.requestUpdate('allAdmissions');
 	reloadAdmission(filterFunction);
 }
@@ -31,8 +29,6 @@ function reloadPermission(filterFunction) {
   var oForm = getForm("selType");
   var url = new Url("dPadmissions", "httpreq_vw_permissions");
   url.addParam("date"      , "{{$date}}");
-  url.addParam("type"      , $V(oForm._type_admission));
-  url.addParam("service_id", $V(oForm.service_id));
 	if(!Object.isUndefined(filterFunction)){
 	  url.addParam("filterFunction", filterFunction);
 	}

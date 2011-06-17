@@ -19,6 +19,29 @@
 {{assign var="patient" value=$_sejour->_ref_patient}}
 
 <td style="background: {{$background}}; {{if !$_sejour->facturable}}background-image:url(images/icons/ray_vertical.gif); background-repeat:repeat;{{/if}}">
+  <form name="editAffFrm{{$_aff->_id}}" action="?m=dPadmissions" method="post">
+    <input type="hidden" name="m" value="dPhospi" />
+    <input type="hidden" name="dosql" value="do_affectation_aed" />
+    {{if $type_externe == "depart"}}
+      {{mb_key object=$_aff->_ref_prev}}
+      {{if $_aff->_ref_prev->effectue}}
+        <input type="hidden" name="effectue" value="0" />
+        <button type="button" class="cancel" onclick="onSubmitFormAjax(this.form, { onComplete: function() {reloadPermission()} })">Annuler le départ</button>
+      {{else}}
+        <input type="hidden" name="effectue" value="1" />
+        <button type="button" class="tick" onclick="onSubmitFormAjax(this.form, { onComplete: function() {reloadPermission()} })">Valider le départ</button>
+      {{/if}}
+    {{else}}
+      {{mb_key object=$_aff}}
+      {{if $_aff->effectue}}
+        <input type="hidden" name="effectue" value="0" />
+        <button type="submit" class="cancel">Annuler le retour</button>
+      {{else}}
+        <input type="hidden" name="effectue" value="1" />
+        <button type="submit" class="tick">Valider le retour</button>
+      {{/if}}
+    {{/if}}
+  </form>
 </td>
 
 <td colspan="2" class="text" style="background: {{$background}}; {{if !$_sejour->facturable}}background-image:url(images/icons/ray_vertical.gif); background-repeat:repeat;{{/if}}">
