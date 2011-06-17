@@ -49,7 +49,7 @@ function smarty_vertical($params, $content, &$smarty, &$repeat) {
 		
 		$html = "";
 		foreach($letters as $_letter) {
-			$html .= "<div>$_letter</div>";
+			$html .= "<i>$_letter</i>";
 		}
 		
 		return "<span class=\"vertical\"><span class=\"nowm\">$html</span><span class=\"orig\">$orig</span></span>";
