@@ -62,6 +62,12 @@ foreach ($listPlage as $plage_id => &$plage) {
   
   foreach ($plage->_ref_consultations as $keyConsult => $valConsult) {
     $consultation =& $plage->_ref_consultations[$keyConsult];
+    $consultation->loadRefSejour();
+    $consultation->_ref_sejour->loadRefRPU();
+    if ($consultation->_ref_sejour->_ref_rpu->_id){
+      unset($plage->_ref_consultations[$consultation->_id]);
+      continue;
+    }
     $consultation->loadRefPatient(1);
     // Chargement de la categorie
     $consultation->loadRefCategorie(1);
