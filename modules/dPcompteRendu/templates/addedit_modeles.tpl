@@ -171,11 +171,11 @@ Main.add(function () {
  class="{{$compte_rendu->_spec}}">
 
 {{if (!$pdf_thumbnails || !$app->user_prefs.pdf_and_thumbs)}}
-  <input type="hidden" name="fast_edit_pdf" value="0" />
+  <input type="hidden" name="fast_edit_pdf" value="{{$compte_rendu->fast_edit_pdf}}" />
 {{/if}}
 
 {{if $compte_rendu->type != "body"}}
-  <input type="hidden" name="fast_edit" value="0" />
+  <input type="hidden" name="fast_edit" value="{{$compte_rendu->fast_edit}}" />
 {{/if}}
 
 <table class="main">
