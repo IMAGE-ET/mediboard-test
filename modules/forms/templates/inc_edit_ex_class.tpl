@@ -216,10 +216,12 @@ toggleGroupLabelEdit = function(link) {
                       <img src="style/mediboard/images/buttons/formula.png" />
                     {{/if}}
                     
+										{{if in_array($_field->_spec_object->getSpecType(), "CExClassField"|static:_formula_valid_types)}}
                     <button class="right notext insert-formula" style="margin: -3px; margin-left: -1px; display: none;"
                             onclick="ExFormula.insertText('[{{$_field->_locale|smarty:nodefaults|JSAttribute}}]')">
                       {{tr}}CExClassField.add_to_formula{{/tr}}
                     </button>
+										{{/if}}
                   </span>
                   
                   <a href="#1" onclick="ExField.edit('{{$_field->_id}}', null, null, '{{$_group->_id}}')">

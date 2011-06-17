@@ -44,8 +44,9 @@ Main.add(function(){
   toggleListCustom.defer(form);
   form.elements._locale.select();
 
-  if (field_id)
+  {{if $ex_field->_id && in_array($ex_field->_spec_object->getSpecType(), "CExClassField"|static:_formula_valid_types)}}
     ExFormula.edit(field_id);
+	{{/if}}
 
   new Control.Tabs("ExClassField-param", {
     afterChange: function(newContainer){
@@ -226,7 +227,7 @@ Main.add(function(){
 <ul class="control_tabs" id="ExClassField-param">
   <li><a href="#fieldSpecEditor">Propriétés</a></li>
 	
-  {{if $ex_field->_id}}
+  {{if $ex_field->_id && in_array($ex_field->_spec_object->getSpecType(), "CExClassField"|static:_formula_valid_types)}}
     <li><a href="#fieldFormulaEditor" {{if !$ex_field->formula}} class="empty" {{/if}} style="background-image: url(style/mediboard/images/buttons/formula.png); background-repeat: no-repeat; background-position: 2px 2px; padding-left: 18px;">Formule / concaténation</a></li>
   {{/if}}
 </ul>

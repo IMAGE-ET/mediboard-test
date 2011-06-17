@@ -1,7 +1,7 @@
 <ul>
 	
 {{foreach from=$host_fields item=element key=value}}
-  <li data-prop="{{$element.prop}}" data-value="{{$value}}" title="{{$element.longview}}">
+  <li data-prop="{{$element.prop}}" data-field="{{$element.field}}" data-value="{{$value}}" title="{{$element.longview}}">
   	<small style="float: right; color: #666;">
       {{$element.type}}
     </small>

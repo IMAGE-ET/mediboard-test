@@ -536,3 +536,11 @@ Element.addMethods('form', {
     return list;
   }
 });
+
+Form.Element.getSelect = function(options){
+  var select = DOM.select({});
+	$H(options).each(function(pair){
+		select.insert(DOM.option({value: pair.key}, pair.value));
+	});
+	return select;
+};

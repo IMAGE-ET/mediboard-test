@@ -69,6 +69,16 @@ toggleObjectSelector = function(input, selected) {
       break;
       
     case "enum":
+		  var container = specElements[0];
+		  var options = {};
+			
+			spec.list.each(function(v){
+			  options[v] = $T($(selected).get("field").replace(/(-)/g, ".")+"."+v);
+			});
+			
+			var select = Form.Element.getSelect(options);
+			select.observe("click", function(){ $V(this.form.elements.value, this.value); }.bind(select));
+      container.update().insert(select);
       break;
   }
 }
@@ -99,7 +109,7 @@ selectSugg = function(button) {
       	{{if $host_field_suggestions|@count}}
 				  <strong>Suggestions</strong>:<br />
 	      	{{foreach from=$host_field_suggestions item=_sugg}}
-					  <button type="button" class="tick" data-value="{{$_sugg}}" data-prop="{{$class_fields.$_sugg.prop}}" onclick="selectSugg(this)">
+					  <button type="button" class="tick" data-value="{{$_sugg}}" data-field="{{$class_fields.$_sugg.field}}" data-prop="{{$class_fields.$_sugg.prop}}" onclick="selectSugg(this)">
 					  	{{$class_fields.$_sugg.view}}
 						</button><br />
 					{{/foreach}}
@@ -112,7 +122,8 @@ selectSugg = function(button) {
 			  <input type="text" class="autocomplete" name="_host_field_view" value="{{$ex_constraint}}" size="60" />
         <input type="hidden" name="field" class="{{$ex_constraint->_props.field}}" tabIndex="1" 
 				       value="{{$ex_constraint->field}}" 
-							 data-prop="{{if $ex_constraint->_id}}{{$class_fields.$field.prop}}{{/if}}" />
+               data-prop="{{if $ex_constraint->_id}}{{$class_fields.$field.prop}}{{/if}}"
+               data-field="{{if $ex_constraint->_id}}{{$class_fields.$field.field}}{{/if}}" />
       </td>
       
       {{* 
@@ -171,6 +182,10 @@ selectSugg = function(button) {
               $V(oForm.elements[this.sId], oObject.objClass+"-"+oObject.id);
             }
           </script>
+        </div>
+        
+        <div class="specfield spectype-enum">
+          
         </div>
       </td>
       
