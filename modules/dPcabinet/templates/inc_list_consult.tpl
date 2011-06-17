@@ -66,6 +66,11 @@ Main.add( function () {
   {{if count($_plage->_ref_consultations)}}
   <tr>
     <th colspan="3">
+      {{if $current_m == "dPurgences"}}
+        <span style="float: right;">
+          <button class="print notext" onclick="printPlage({{$_plage->_id}})">{{tr}}Print{{/tr}}</button>
+        </span>
+      {{/if}}
       {{mb_include module=system template=inc_object_notes object=$_plage}}
     	{{$_plage->debut|date_format:$conf.time}} 
     	- {{$_plage->fin|date_format:$conf.time}}

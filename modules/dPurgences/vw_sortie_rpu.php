@@ -30,6 +30,7 @@ $date_after  = mbDate("+1 DAY", $date);
 $where = array();
 $group = CGroups::loadCurrent();
 $where["group_id"] = " = '$group->_id'";
+$where["sejour.annule"] = " = '0'";
 $where[] = "sejour.entree BETWEEN '$date' AND '$date_after' 
   OR (sejour.sortie_reelle IS NULL AND sejour.entree BETWEEN '$date_before' AND '$date_after')";
 
