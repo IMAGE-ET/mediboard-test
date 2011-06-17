@@ -81,7 +81,7 @@ refreshSelf = function(){
       {{foreach from=$ex_objects_by_event item=ex_objects_by_class key=_host_event}}
         {{assign var=parts value="-"|explode:$_host_event}}
         <li>
-          <a href="#tab-{{$_host_event}}">{{tr}}{{$parts.0}}{{/tr}} - {{$parts.1}}</a>
+          <a href="#tab-{{$_host_event}}">{{tr}}{{$parts.0}}{{/tr}} - {{tr}}{{$parts.0}}-event-{{$parts.1}}{{/tr}}</a>
         </li>
       {{/foreach}}
     </ul>
@@ -216,7 +216,7 @@ refreshSelf = function(){
           <tr>
             <th colspan="2">
               {{assign var=parts value="-"|explode:$_host_event}}
-              {{tr}}{{$parts.0}}{{/tr}} - {{$parts.1}}
+              {{tr}}{{$parts.0}}{{/tr}} - {{tr}}{{$parts.0}}-event-{{$parts.1}}{{/tr}}
             </th>
           </tr>
           

@@ -43,7 +43,7 @@ $ex_objects_by_event = array();
 $ex_classes_creation = array();
 	
 foreach($ex_classes as $_ex_class) {
-	$_ex_class->loadRefsGroups();
+	$_ex_class->loadRefsAllFields();
 	$_ex_object = new CExObject;
 	$_ex_object->_ex_class_id = $_ex_class->_id;
 	$_ex_object->setExClass();
