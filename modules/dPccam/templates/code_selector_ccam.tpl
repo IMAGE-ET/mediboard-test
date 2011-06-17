@@ -10,6 +10,7 @@
   <input type="hidden" name="_all_codes" value="0" />
   <input type="hidden" name="chir" value="{{$chir}}" />
   <input type="hidden" name="anesth" value="{{$anesth}}" />
+  <input type="hidden" name="object_class" value="{{$object_class}}" />
   <table class="tbl">
     <tr>
       <th>
