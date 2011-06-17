@@ -21,9 +21,9 @@ em {
 {{foreach from=$listByProfile key=profile item=list}}
   {{assign var=user value=$users.$profile}}
   <li>
-    <a href="#{{$profile}}_code">
+    <a href="#{{$profile}}_code" {{if !$list.list|@count}}class="empty"{{/if}}>
       {{tr}}Profile.{{$profile}}{{/tr}} 
-      {{$user->_view}}
+      {{$user->_view}} ({{$list.list|@count}})
     </a>
   </li>
 {{/foreach}}
@@ -72,7 +72,7 @@ em {
       </tr>
     {{foreachelse}}
       <tr>
-        <td class="empty" colspan="4">Aucun code</td>
+        <td class="empty" colspan="4">{{if $_all_codes}}Aucun code{{else}}Aucun favori / statistique{{/if}} </td>
       </tr>
     {{/foreach}}
     </table>

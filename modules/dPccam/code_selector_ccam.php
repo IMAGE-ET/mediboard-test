@@ -101,6 +101,7 @@ $smarty->assign("listByProfile", $listByProfile);
 $smarty->assign("users"        , $users);
 $smarty->assign("object_class" , $object_class);
 $smarty->assign("_keywords_code", $_keywords_code);
+$smarty->assign("_all_codes"   , $_all_codes);
 
 if ($only_list) {
   $smarty->display("inc_code_selector_ccam.tpl");
