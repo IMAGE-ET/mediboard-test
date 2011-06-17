@@ -199,7 +199,7 @@ class CExClassField extends CExListItemsOwner {
         $msg[] = "\"$_match\"";
       }
       else {
-        $formula = str_replace($_match, $field_names[$_trimmed], $formula);
+        $formula = str_replace("[$_match]", "[".$field_names[$_trimmed]."]", $formula);
       }
     }
     
