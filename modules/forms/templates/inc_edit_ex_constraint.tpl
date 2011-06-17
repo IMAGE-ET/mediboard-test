@@ -77,7 +77,8 @@ toggleObjectSelector = function(input, selected) {
 			});
 			
 			var select = Form.Element.getSelect(options);
-			select.observe("click", function(){ $V(this.form.elements.value, this.value); }.bind(select));
+      $V(select, input.form.elements.value.value);
+			select.observe("change", function(){ $V(this.form.elements.value, this.value); }.bind(select));
       container.update().insert(select);
       break;
   }
