@@ -57,11 +57,11 @@ em {
         </td>
         <td class="text">{{$curr_code->libelleLong|emphasize:$_keywords_code}}</td>
         <td>
-          {{if array_key_exists($curr_code->code, $list_favoris)}}
-            Favoris
-          {{elseif array_key_exists($curr_code->code, $list_stats)}}
+          {{if array_key_exists($curr_code->code, $list_stats)}}
             {{assign var=_code value=$curr_code->code}}
             {{$list_stats.$_code.nb_acte}}
+          {{elseif array_key_exists($curr_code->code, $list_favoris)}}
+            Favoris
           {{else}}
             -
           {{/if}}

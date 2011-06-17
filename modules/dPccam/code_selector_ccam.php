@@ -93,10 +93,21 @@ foreach ($profiles as $profile => $_user_id) {
   }
   
   foreach($codes as $key=>$value) {
-    $list[$value["CODE"]] = CCodeCCAM::get($value["CODE"], CCodeCCAM::MEDIUM);
+    $val_code = $value["CODE"];
+    $list[$val_code] = CCodeCCAM::get($val_code, CCodeCCAM::MEDIUM);
+    $nb_acte = 0;
+    if (isset($codes_stats[$val_code])) {
+      $nb_acte = $codes_stats[$val_code]["nb_acte"];
+    }
+    else if (isset($codes_favoris[$val_code])) {
+      $nb_acte = 0.5;
+    }
+    $list[$val_code]->nb_acte = $nb_acte;
   }
   
-  sort($list);
+  $sorter = CMbArray::pluck($list, "nb_acte");
+  
+  array_multisort($sorter, SORT_DESC, $list);
 
   $listByProfile[$profile]["favoris"] = $codes_favoris;
   $listByProfile[$profile]["stats"]   = $codes_stats;
