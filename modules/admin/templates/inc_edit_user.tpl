@@ -22,7 +22,7 @@
 
 <input type="hidden" name="dosql" value="do_user_aed" />
 <input type="hidden" name="del" value="0" />
-<input type="hidden" name="user_id" value="{{$user->user_id}}" />
+<input type="hidden" name="user_id" value="{{$user->_id}}" />
 
 <table class="form">
   <tr>
@@ -63,6 +63,15 @@
   <tr>
     <th>{{mb_label object=$user field="dont_log_connection"}}</th>
     <td>{{mb_field object=$user field="dont_log_connection"}}</td>
+  </tr>
+  <tr>
+    <th>{{mb_label object=$user field="_count_connections"}}</th>
+    <td>
+      {{mb_value object=$user field="_count_connections"}}
+      {{if $can->admin && $user->dont_log_connection && $user->_count_connections}}
+         <label><input type="checkbox" name="_purge_connections" value="1"/>{{tr}}Purge{{/tr}}</label>
+      {{/if}}
+    </td>
   </tr>
   {{if !$readOnlyLDAP}}
   <tr>

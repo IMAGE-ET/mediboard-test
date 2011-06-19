@@ -16,6 +16,7 @@ $user = $user_id == "0" ? new CUser() : CUser::get($user_id);
 $user->loadRefMediuser();
 $user->loadRefsNotes();
 $user->isLDAPLinked();
+$user->countConnections();
 
 // Récuperation des utilisateurs recherchés
 $user_last_name  = addslashes(CValue::getOrSession("user_last_name" ));
@@ -24,6 +25,7 @@ $user_username   = addslashes(CValue::getOrSession("user_username"  ));
 $user_type       = addslashes(CValue::getOrSession("user_type"      ));
 $template        = addslashes(CValue::getOrSession("template"       ));
 
+// Where clause
 $where = null;
 if ($user_last_name ) $where["user_last_name"]  = "LIKE '$user_last_name%'";
 if ($user_first_name) $where["user_first_name"] = "LIKE '$user_first_name%'";
@@ -31,6 +33,7 @@ if ($user_username  ) $where["user_username"]   = "LIKE '$user_username%'";
 if ($user_type      ) $where["user_type"]       = "= '$user_type'";
 if ($template != null)$where["template"]        = "= '$template'";
 
+// Query
 $users = null;
 if ($where) {
 	$order = "user_type, user_last_name, user_first_name, template";

@@ -12,7 +12,10 @@
  *  NOTE: the user_type field in the users table must be changed to a TINYINT
  */
 class CUser extends CMbObject {
+  // DB key
   var $user_id          = null;
+  
+  // DB fields
   var $user_username    = null;
   var $user_password    = null;
   var $user_type        = null;
@@ -34,6 +37,7 @@ class CUser extends CMbObject {
   var $profile_id       = null;
 	var $dont_log_connection = null;
 
+	// Derived fields
   var $_user_password        = null;
 	var $_user_password_weak   = null;
   var $_user_password_strong = null;
@@ -42,7 +46,12 @@ class CUser extends CMbObject {
   var $_user_actif           = null;
   var $_user_deb_activite    = null;
   var $_user_fin_activite    = null;
+  var $_count_connections    = null;
 
+  // Behaviour fields
+  var $_purge_connections = null;
+  
+  // Object references
   var $_ref_preferences = null;
   var $_ref_mediuser    = null;
   
@@ -125,8 +134,9 @@ class CUser extends CMbObject {
       $specs["_user_password"] = $specs["_user_password_weak"];
     }
     
-    $specs["_ldap_linked"]     = "bool";
-
+    $specs["_ldap_linked"]       = "bool";
+    $specs["_count_connections"] = "num";
+    
     return $specs;
   }
   
@@ -242,7 +252,8 @@ class CUser extends CMbObject {
           return 'Le mot de passe doit contenir au moins un chiffre ET une lettre';
         }
       }
-    } else {
+    } 
+    else {
       $this->_user_password = null;
     }
     
@@ -252,19 +263,62 @@ class CUser extends CMbObject {
   function store() {
   	$this->updateSpecs();
 		
-		$old_loggable = $this->_spec->loggable;
-		
-		if ($this->dont_log_connection && $this->fieldModified("user_last_login")) {
-			$this->_spec->loggable = false;
-		}
-		
-  	$msg = parent::store();
-		
-		$this->_spec->loggable = $old_loggable;
-		
-		return $msg;
+  	if ($msg = $this->purgeConnections()) {
+  	  return $msg;
+  	}
+  	
+  	return parent::store();
   }
   
+  /**
+   * Purge all connection user log pour user
+   * @return string Store-like message
+   */
+  function purgeConnections() {
+    // Behavioural condition
+    if (!$this->_purge_connections) {
+      return;
+    }
+    
+    // Pointless/dangerous if no key
+    if (!$this->_id) {
+      return;
+    }
+    
+    $query = "DELETE
+      FROM user_log
+      WHERE (`user_id` = '$this->_id')
+      AND (`fields` = 'user_last_login')
+      AND (`object_id` = '$this->_id')
+      AND (`object_class` = '$this->_class_name')";
+    
+    $log = new CUserLog;
+    $ds = $log->_spec->ds;
+    if (!$ds->exec($query)) {
+      return CAppUI::tr("CUser-failed-purge_connections") . $ds->error();
+    }
+  }
+  
+  /**
+   * Prepare the user log before object persistence
+   * @see parent
+   * @return CUserLog null if not loggable
+   */ 
+  function prepareLog() {
+    if ($this->dont_log_connection && $this->fieldModified("user_last_login")) {
+      return;
+    }
+    
+    return parent::prepareLog();
+  }
+  
+  /**
+   * Merges an array of objects
+   * @see parent
+   * @param array An array of CMbObject to merge
+   * @param bool $fast Tell wether to use SQL (fast) or PHP (slow but checked and logged) algorithm
+   * @return CMbObject
+   */
   function merge($objects, $fast = false) {
     if (!$this->_id) {
       return "CUser-merge-alternative-mode-required";
@@ -351,12 +405,28 @@ class CUser extends CMbObject {
     return null;
   }
   
+  /**
+   * Tell whether user is linked to an LDAP account
+   * @return boolean 
+   */
   function isLDAPLinked() {
     if (!CAppUI::conf("admin LDAP ldap_connection") || !$this->_id) {
       return;
     }
     $this->loadLastId400(CAppUI::conf("admin LDAP ldap_tag"));
-    $this->_ldap_linked = ($this->_ref_last_id400->_id) ? 1 : 0;
+    return $this->_ldap_linked = ($this->_ref_last_id400->_id) ? 1 : 0;
+  }
+  
+  /**
+   * Count connections for user
+   * @return integer
+   */
+  function countConnections() {
+    $log = new CUserLog;
+    $log->user_id = $this->_id; 
+    $log->setObject($this);
+    $log->fields = "user_last_login";
+    return $this->_count_connections = $log->countMatchingList();
   }
 }
 

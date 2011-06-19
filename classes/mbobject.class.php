@@ -1093,7 +1093,8 @@ class CMbObject {
   }
   
   /**
-   * Prepare the user log before object persistence (store or delete)
+   * Prepare the user log before object persistence
+   * @return CUserLog null if not loggable
    */
   protected function prepareLog() {
     // If the object is not loggable
@@ -1168,7 +1169,7 @@ class CMbObject {
       $log->extra = $extra;
     }
     
-    $this->_ref_last_log = $log;
+    return $this->_ref_last_log = $log;
   }
   
   /**

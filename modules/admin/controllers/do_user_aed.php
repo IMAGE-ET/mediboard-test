@@ -9,7 +9,6 @@
  */
 
 $ds = CSQLDataSource::get("std");
-
 $do = new CDoObjectAddEdit("CUser", "user_id");
 $do->doBind();
     

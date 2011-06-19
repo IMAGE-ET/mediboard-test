@@ -15,33 +15,34 @@
   </tr>
 
   <tr>
-    <th>Nom</th>
-    <td>{{$user->user_last_name}}</td>
-    <th>Adresse</th>
-    <td>{{$user->user_address1}}</td>
+    <th>{{mb_label object=$user field=user_username}}</th>
+    <td>{{mb_value object=$user field=user_username}}</td>
+    <th>{{mb_label object=$user field=user_address1}}</th>
+    <td>{{mb_value object=$user field=user_address1}}</td>
   </tr>
   
   <tr>
-    <th>Prénom</th>
-    <td>{{$user->user_first_name}}</td>
-    <th>Code Postal</th>
-    <td>{{$user->user_zip}}</td>
+    <th>{{mb_label object=$user field=user_first_name}}</th>
+    <td>{{mb_value object=$user field=user_first_name}}</td>
+    <th>{{mb_label object=$user field=user_zip}}</th>
+    <td>{{mb_value object=$user field=user_zip}}</td>
   </tr>
   
   <tr>
-    <th>Type</th>
+    <th>{{mb_label object=$user field=user_type}}</th>
     <td>
       {{assign var="type" value=$user->user_type}}
       {{$utypes.$type}}
     </td>
-    <th>Ville</th>
-    <td>{{$user->user_city}}</td>
+    <th>{{mb_label object=$user field=user_phone}}</th>
+    <td>{{mb_value object=$user field=user_phone}}</td>
   </tr>
   
   <tr>
-    <th>email</th>
-    <td>{{$user->user_email}}</td>
-    <th>Téléphone</th>
-    <td>{{$user->user_phone}}</td>
+    <th>{{mb_label object=$user field=user_email}}</th>
+    <td>{{mb_value object=$user field=user_email}}</td>
+    <th>{{mb_label object=$user field=user_phone}}</th>
+    <td>{{mb_value object=$user field=user_phone}}</td>
   </tr>
+  
 </table>
