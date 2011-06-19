@@ -42,7 +42,7 @@ div.error,
 div.info, 
 div.loading {
   min-height: 16px;
-  line-height: 16px;
+  line-height: 120%;
   background: no-repeat center left;
   padding: 2px;
   padding-left: 20px;
