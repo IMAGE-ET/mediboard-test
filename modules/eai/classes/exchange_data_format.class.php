@@ -51,7 +51,8 @@ class CExchangeDataFormat extends CMbMetaObject {
   var $_doc_errors_msg          = array();
   var $_doc_errors_ack          = array();
   var $_load_content            = true;
-  var $_message_supported_class = null;
+  var $_messages_supported_class = array();
+  var $_family_message          = null;
   
   // Forward references
   var $_ref_group          = null;
@@ -144,21 +145,17 @@ class CExchangeDataFormat extends CMbMetaObject {
   
   function isWellForm($data) {}
   
-  function understand(CInteropActor $actor, $data) {}
+  function understand($data, CInteropActor $actor = null) {}
   
-  function handle($data) {}
+  function handle() {}
   
-  function getMessagesSupported($actor_guid, $all = true, $evenement = null) {
+  function getMessagesSupported($actor_guid, $all = true, $evenement = null, $show_actif = null) {
     list($object_class, $object_id) = explode("-", $actor_guid);
     $messages = array();
-    
-    $class    = new ReflectionClass($this->_class_name);
-    $statics  = $class->getStaticProperties();
-    foreach ($statics["messages"] as $_message => $_root_class) {
-      $class = new ReflectionClass($_root_class);
-      $statics = $class->getStaticProperties();
-      
-      foreach ($statics["evenements"] as $_evt => $_evt_class) {
+
+    foreach ($this->getMessages() as $_message => $_root_class) {
+      $root  = new $_root_class;
+      foreach ($root->getEvenements() as $_evt => $_evt_class) {
         if ($evenement && ($evenement != $_evt)) {
           continue;
         }
@@ -166,15 +163,25 @@ class CExchangeDataFormat extends CMbMetaObject {
         $message_supported->object_class = $object_class;
         $message_supported->object_id    = $object_id;
         $message_supported->message      = $_evt_class;
+        if ($show_actif) {
+          $message_supported->active     = $show_actif;
+        }
         $message_supported->loadMatchingObject();
         if (!$message_supported->_id && !$all) {
           continue;
-        }         
-        $messages[$_root_class][] = $message_supported;
+        } 
+        
+        $this->_messages_supported_class[] = $message_supported->message;
+        
+        $messages[$_root_class][]          = $message_supported;
       }
     }
 
     return $messages;
+  }
+  
+  function getMessages() {
+    return array(); 
   }
 }
 

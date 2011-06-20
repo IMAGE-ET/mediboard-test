@@ -74,9 +74,19 @@ class COracleDataSource extends CSQLDataSource {
   }
 
   function affectedRows() {
-    //return mysql_affected_rows($this->link);
+    // No such implementation
+    return -1;
   }
-
+  
+  function foundRows() {
+    // No such implementation
+    return;
+  }
+  
+  function getCountSelect($found_rows) {
+    return "SELECT COUNT(*) as total";
+  }
+  
   function fetchRow($result) {
 	  return oci_fetch_row($result);
   }

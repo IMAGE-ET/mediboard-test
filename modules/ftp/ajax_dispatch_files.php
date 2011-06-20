@@ -23,22 +23,20 @@ $exchange_source = reset($actor->_ref_exchanges_sources);
 $all_files = array();
 try {
   $all_files = $exchange_source->receive();
-} catch (Exception $e) {
-  CAppUI::stepAjax($e->getMessage(), UI_MSG_ERROR);
+} catch (CMbException $e) {
+  $e->stepAjax();
 }
 
 $extension = $exchange_source->fileextension;
 foreach($all_files as $_file) {
   $filename = basename($_file);
-  $file = $exchange_source->getData($_file);
+  $message = $exchange_source->getData($_file);
   
-  try {
-    CEAIDispatcher::dispatch($actor, $file);
-  } catch(Exception $e) {
-    CAppUI::stepAjax($e->getMessage());
-    // création d'un échange Any
+  // Dispatch EAI 
+  if (!CEAIDispatcher::dispatch($message, $actor)) {
+    // création d'un acq en fichier
+    //utf8_encode(CEAIDispatcher::$xml_error);
   }
-  
 
   //$exchange_source->delFile($_file);
 }

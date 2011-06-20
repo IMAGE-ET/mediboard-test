@@ -25,8 +25,19 @@ class CEAISoapHandler extends CSoapHandler {
   );
   
   function event($message) {
+    $actor = null;
+    
+    $sender_soap          = new CSenderSOAP();
+    $sender_soap->user_id = CUser::get()->_id;
+    $sender_soap->loadMatchingObject();
+    if ($sender_soap->_id) {
+      $actor = $sender_soap;
+    }
+
     // Dispatch EAI 
-    CEAIDispatcher::dispatch($message);
+    if (!CEAIDispatcher::dispatch($message, $actor)) {
+      return utf8_encode(CEAIDispatcher::$xml_error);
+    }
   }
 }
 

@@ -34,15 +34,14 @@ $exchange->_date_max = $_date_max;
 $exchange->type      = $exchange_type;
 $exchange->group_id  = $exchange_group_id;
 
-$class    = new ReflectionClass($exchange);
-$statics  = $class->getStaticProperties();
-$messages = $statics["messages"];
-
+$messages = $exchange->getMessages();
 $evenements = array();
-foreach ($statics["messages"] as $_message => $_evt_class) {
-  $class = new ReflectionClass($_evt_class);
-  $statics = $class->getStaticProperties();
-  $evenements[$_message] = $statics["evenements"];
+foreach ($messages as $_message => $_evt_class) { 
+  $evt  = new $_evt_class;
+  $evts = $evt->getEvenements(); 
+  $keys       = array_map_recursive(array("CMbString" , "removeDiacritics"),array_keys($evts));
+  $values     = array_values($evts);
+  $evenements[$_message] = ($keys && $values) ? array_combine($keys, $values) : array();
 }
 
 // Création du template

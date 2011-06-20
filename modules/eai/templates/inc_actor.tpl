@@ -67,21 +67,7 @@
              <button class="submit" type="submit">{{tr}}Create{{/tr}}</button>
           {{/if}}
         </td>
-      </tr> 
-      
-      {{if ($actor instanceof CInteropSender) && count($actor->_ref_exchanges_sources) > 0}}
-      <tr>
-        <th colspan="2" class="category">Utilitaires expéditeur FTP</th>
-      </tr>   
-      <tr>
-        <td>
-          <button  type="button" class="tick" onclick="InteropActor.receive('{{$actor->_guid}}');">
-            {{tr}}utilities-exchange-source-receive{{/tr}}
-          </button> 
-        </td>
-        <td id="utilities-exchange-source-receive"></td>
-      </tr> 
-      {{/if}}   
+      </tr>  
     </table>
   </form>
   

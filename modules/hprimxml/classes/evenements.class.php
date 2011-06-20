@@ -9,12 +9,18 @@
  */
 
 class CHPrimXMLEvenements extends CHPrimXMLDocument {  
-  static $documentElement = array(
+  static $documentElements = array(
     'evenementsPatients'     => "CHPrimXMLEvenementsPatients",
     'evenementsServeurActes' => "CHPrimXMLEvenementsServeurActivitePmsi",
     'evenementsPMSI'         => "CHPrimXMLEvenementsServeurActivitePmsi",
     'evenementsFraisDivers'  => "CHPrimXMLEvenementsServeurActivitePmsi"
   );
+  
+  static function getHPrimXMLEvenements() {}
+  
+  function getDocumentElements() {
+    return self::$documentElements;
+  }
   
   function generateEnteteMessage($type, $version = true) {
     $evenements = $this->addElement($this, $type, null, "http://www.hprim.org/hprimXML");

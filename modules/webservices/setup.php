@@ -99,7 +99,32 @@ function __construct() {
                 ADD `active` ENUM ('0','1') NOT NULL DEFAULT '1';";
     $this->addQuery($query);
     
-    $this->mod_version = "0.19";    
+    $this->makeRevision("0.19");
+    
+    $query = "CREATE TABLE `sender_soap` (
+                `sender_soap_id` INT (11) UNSIGNED NOT NULL auto_increment PRIMARY KEY,
+                `nom` VARCHAR (255) NOT NULL,
+                `libelle` VARCHAR (255),
+                `group_id` INT (11) UNSIGNED NOT NULL,
+                `actif` ENUM ('0','1') NOT NULL DEFAULT '0'
+              ) /*! ENGINE=MyISAM */;";
+    $this->addQuery($query);
+    
+    $query = "ALTER TABLE `sender_soap` 
+              ADD INDEX (`group_id`);";
+    $this->addQuery($query);
+    
+    $this->makeRevision("0.20");
+    
+    $query = "ALTER TABLE `sender_soap` 
+                ADD `user_id` INT (11) UNSIGNED;";
+    $this->addQuery($query);
+    
+    $query = "ALTER TABLE `sender_soap` 
+                ADD INDEX (`user_id`);";
+    $this->addQuery($query);
+    
+    $this->mod_version = "0.21";      
   }
 }
 ?>

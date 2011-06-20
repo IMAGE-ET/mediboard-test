@@ -19,15 +19,32 @@
 CAppUI::requireModuleClass("eai", "exchange_data_format");
 
 class CExchangeAny extends CExchangeDataFormat {
-  // DB Fields
-  var $version           = null;
-  var $nom_fichier       = null;
+  static $messages = array(
+    "None" => "CExchangeAny", 
+  );
+  
+  static $evenements = array();
+  
+  // DB Table key
+  var $echange_any_id     = null;
+
+  function getSpec() {
+    $spec = parent::getSpec();
+    $spec->loggable = false;
+    $spec->table = 'echange_any';
+    $spec->key   = 'echange_any_id';
+    return $spec;
+  }
   
   function getProps() {
     $props = parent::getProps();
         
     $props["message_content_id"]      = "ref class|CContentAny show|0 cascade";
     $props["acquittement_content_id"] = "ref class|CContentAny show|0 cascade";   
+    
+    $props["emetteur_id"]             = "ref class|CInteropSender";
+    $props["destinataire_id"]         = "ref class|CInteropReceiver";
+    $props["object_class"]            = "str class show|0";
     
     $props["_message"]                = "str";
     $props["_acquittement"]           = "str";

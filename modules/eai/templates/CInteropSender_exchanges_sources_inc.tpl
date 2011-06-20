@@ -10,6 +10,7 @@
 *}}
 
 {{assign var=exchange_source value=$actor->_ref_exchanges_sources.0}}
+{{assign var=mod_name value=$actor->_ref_module->mod_name}}
 
 <script type="text/javascript">
   Main.add(function () {
@@ -27,6 +28,7 @@
               <li><a href="#{{$actor->_guid}}">{{tr}}{{$exchange_source->_class_name}}{{/tr}}</a></li>
               <li onmousedown="InteropActor.refreshFormatsAvailable('{{$actor->_guid}}')">
                 <a href="#formats_available_{{$actor->_guid}}">{{tr}}{{$actor->_class_name}}_formats-available{{/tr}}</a></li>
+              <li><a href="#actions_{{$actor->_guid}}">{{tr}}{{$actor->_class_name}}_actions{{/tr}}</a></li>
             </ul>
             
             <hr class="control_tabs" />
@@ -36,6 +38,10 @@
             </div>
             
             <div id="formats_available_{{$actor->_guid}}" style="display:none"></div>
+            
+            <div id="actions_{{$actor->_guid}}" style="display:none">
+              {{mb_include module=$mod_name template="`$actor->_class_name`_actions_inc"}}
+            </div>
           </td>
         </tr>
       </table>

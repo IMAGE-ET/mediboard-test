@@ -78,7 +78,7 @@ class CMySQLDataSource extends CSQLDataSource {
   function affectedRows() {
     return mysql_affected_rows($this->link);
   }
-
+  
   function fetchRow($result) {
 	  return mysql_fetch_row($result);
   }
@@ -141,6 +141,10 @@ class CMySQLDataSource extends CSQLDataSource {
         TO '$user'@'$host';";
     
     return $queries;
+  }
+  
+  function foundRows() {
+    return $this->loadResult("SELECT FOUND_ROWS()");
   }
 }
 

@@ -24,7 +24,7 @@ class CHPrimXMLEvenementsPatients extends CHPrimXMLEvenements {
     return "msgEvenementsPatients".str_replace(".", "", CAppUI::conf('hprimxml evt_patients version'));
   } 
   
-  static function getHPrimXMLEvenementsPatients($messagePatient) {
+  static function getHPrimXMLEvenements($messagePatient) {
     $hprimxmldoc = new CHPrimXMLDocument("patient", self::getVersionEvenementsPatients());
     // Récupération des informations du message XML
     $hprimxmldoc->loadXML($messagePatient);
@@ -43,6 +43,10 @@ class CHPrimXMLEvenementsPatients extends CHPrimXMLEvenements {
     $this->type = "patients";
                 
     parent::__construct("patients", self::getVersionEvenementsPatients());
+  }
+  
+  function getEvenements() {
+    return self::$evenements;
   }
 
   function generateEnteteMessage() {

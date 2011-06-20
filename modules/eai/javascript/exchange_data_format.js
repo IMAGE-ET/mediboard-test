@@ -11,7 +11,8 @@
 
 ExchangeDataFormat = {
   evenements : null,	
-  target: "exchange_data_format",
+  target:      "exchange_data_format",
+  modal:       null,
   
   refreshExchanges : function(exchange_class_name, exchange_type, exchange_group_id){
     var url = new Url("eai", "ajax_refresh_exchanges");
@@ -19,13 +20,13 @@ ExchangeDataFormat = {
     url.addParam("exchange_type"	  , exchange_type);
     url.addParam("exchange_group_id"  , exchange_group_id);
     url.requestUpdate("exchanges", { onComplete : function() {
-    	if (!exchange_type) {
-    	  return;
-    	}
-    	var form = getForm("filterExchange");
-		if (form) {
-		  ExchangeDataFormat.refreshExchangesList(form);
-		}
+      if (!exchange_type) {
+        return;
+      }
+      var form = getForm("filterExchange");
+	  if (form) {
+	    ExchangeDataFormat.refreshExchangesList(form);
+	  }
 	} });
   },
 	
@@ -34,10 +35,12 @@ ExchangeDataFormat = {
 	dest.update();
     dest.insert(new Element('option', {value: ''}).update('&mdash; Liste des événements &mdash;'));
 	dest.insert(new Element('option', {value: 'inconnu'}).update($T(mod_name+'-evt-none')));
-	$H(ExchangeDataFormat.evenements[selected]).each(function(pair){
-	  var v = pair.key;
-	  dest.insert(new Element('option', {value: v}).update($T(mod_name+'-evt_'+selected+'-'+v)));
-	});
+	if (!Object.isArray(ExchangeDataFormat.evenements[selected])) {
+	  $H(ExchangeDataFormat.evenements[selected]).each(function(pair){
+	    var v = pair.key;
+		dest.insert(new Element('option', {value: v}).update($T(mod_name+'-evt_'+selected+'-'+v)));
+	  });
+	}
   },
   
   refreshExchangesList : function(form) {

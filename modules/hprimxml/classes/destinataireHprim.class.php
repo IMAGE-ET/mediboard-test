@@ -87,7 +87,11 @@ class CDestinataireHprim extends CInteropReceiver {
       $source = CExchangeSource::get("$this->_guid-evenementPatient");
       if ($source->_id) {
         $source->setData($msgEvtPatient);
-        $source->send();
+        try {
+          $source->send();
+        } catch (Exception $e) {
+          throw new CMbException("CExchangeSource-no-response");
+        }
         $acquittement = $source->getACQ();
 
         if ($acquittement) {

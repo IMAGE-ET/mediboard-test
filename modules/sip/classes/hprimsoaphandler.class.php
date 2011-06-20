@@ -35,7 +35,7 @@ class CHprimSoapHandler extends CSoapHandler {
     $messageAcquittement = null;
     $data = array();
         
-    $domGetEvenement = CHPrimXMLEvenementsPatients::getHPrimXMLEvenementsPatients($messagePatient);
+    $domGetEvenement = CHPrimXMLEvenementsPatients::getHPrimXMLEvenements($messagePatient);
     
     try {
       // Récupération des informations du message XML

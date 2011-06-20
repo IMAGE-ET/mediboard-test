@@ -10,7 +10,7 @@
 *}}
 
 <script type="text/javascript">
-ExchangeDataFormat.evenements = {{$evenements|@json}};
+  ExchangeDataFormat.evenements = {{"utf8_encode"|array_map_recursive:$evenements|@json:true}};
 </script>
 
 {{assign var=mod_name value=$exchange->_ref_module->mod_name}}
@@ -78,7 +78,6 @@ ExchangeDataFormat.evenements = {{$evenements|@json}};
             <td colspan="2">
               <select class="str" name="evenement">
                 <option value="">&mdash; Événements &mdash;</option>
-                <option value="inconnu"> {{tr}}{{$mod_name}}-evt-choose{{/tr}} </option>
               </select>
             </td>
           </tr>

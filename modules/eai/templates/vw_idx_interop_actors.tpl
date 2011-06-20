@@ -10,6 +10,7 @@
 *}}
 
 {{mb_script module=eai script=interop_actor}}
+{{mb_script module="system" script="object_selector"}}
 
 <script type="text/javascript">
   Main.add(function () {

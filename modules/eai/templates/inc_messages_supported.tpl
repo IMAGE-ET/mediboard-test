@@ -15,7 +15,7 @@
   <legend>{{tr}}{{$_message}}{{/tr}}</legend>
   
   <table class="tbl">
-  {{foreach from=$_messages_supported item=_message_supported}}
+    {{foreach from=$_messages_supported item=_message_supported}}
     <tr>
       <th class="category narrow">{{tr}}{{$_message_supported->message}}{{/tr}}</th>
       <td>
@@ -29,11 +29,11 @@
           <input type="hidden" name="object_class" value="{{$_message_supported->object_class}}" />
           <input type="hidden" name="message" value="{{$_message_supported->message}}" />
           
-          {{mb_field object=$_message_supported field=active onchange="this.form.onsubmit(); InteropActor.refreshFormatsAvailable('$actor_guid')"}}
+          {{mb_field object=$_message_supported field=active onchange="this.form.onsubmit();"}}
         </form>
       </td>
     </tr>
-  {{/foreach}}
+    {{/foreach}}
   </table>
   
 </fieldset>

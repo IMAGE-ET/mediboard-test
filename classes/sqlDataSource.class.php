@@ -132,7 +132,13 @@ abstract class CSQLDataSource {
    * @return int the rows count
    **/
   abstract function numRows($result);
-
+  
+  /**
+   * Returns number of rows for given result
+   * @return int the rows count
+   **/
+  abstract function foundRows();
+ 
   /**
    * Number of rows affected by last query
    * @return int the actual number
@@ -402,22 +408,36 @@ abstract class CSQLDataSource {
    * @return array the query result
    **/
   function loadList($query, $maxrows = null) {
-    if (null == $cur = $this->exec($query)) {
+    if (null == $result = $this->exec($query)) {
       CAppUI::setMsg($this->error(), UI_MSG_ERROR);
       return false;
     }
     
     $list = array();
-    while ($hash = $this->fetchAssoc($cur)) {
+    while ($hash = $this->fetchAssoc($result)) {
       $list[] = $hash;
       if ($maxrows == count($list)) {
         break;
       }
     }
     
-    $this->freeResult($cur);
+    $this->freeResult($result);
     return $list;
   }
+  
+  function countRows($query) {
+    if (null == $result = $this->exec($query)) {
+      CAppUI::setMsg($this->error(), UI_MSG_ERROR);
+      return false;
+    }
+    
+    $count = $this->numRows($result);
+
+    $this->freeResult($result);
+    return $count;
+  }
+  
+  
 
   /**
    * Return a array of the first column of the query result

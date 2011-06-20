@@ -11,6 +11,7 @@
 
 InteropActor = {
   actor_guid : null,
+  modal:       null,
   
   refreshActor : function(actor_guid, actor_class_name){
     var url = new Url("eai", "ajax_refresh_actor");
@@ -47,5 +48,9 @@ InteropActor = {
 	url.addParam("actor_guid", actor_guid);
 	url.addParam("exchange_class_name", exchange_class_name);
     url.requestModal(800, 350);
+    InteropActor.modal = url.modaleObject;
+    InteropActor.modal.observe("afterClose", function(){ 
+      InteropActor.refreshFormatsAvailable(actor_guid); 
+  	});
   },
 };

@@ -24,6 +24,7 @@ if ($actor_class_name) {
     $actor = CMbObject::loadFromGuid($actor_guid);
     if ($actor->_id) {
       $actor->loadRefGroup();
+      $actor->loadRefUser();
       $actor->loadRefsExchangesSources();
     }
   }

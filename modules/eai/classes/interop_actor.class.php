@@ -55,6 +55,8 @@ class CInteropActor extends CMbObject {
     return $this->_ref_group = $this->loadFwdRef("group_id", 1);
   }
   
+  function loadRefUser() {}
+  
   /**
    * Get exchanges sources
    * 

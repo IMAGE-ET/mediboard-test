@@ -119,7 +119,12 @@ class CIngresDataSource extends CSQLDataSource {
     // No such implementation
     return -1;
   }
-
+  
+  function foundRows() {
+    // No such implementation
+    return;
+  }
+  
   private function _fetchArray($mode) {
     // Simulates limit
     if ($this->nextLimit-- === 0) {

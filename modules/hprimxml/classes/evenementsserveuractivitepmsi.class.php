@@ -21,12 +21,20 @@ class CHPrimXMLEvenementsServeurActivitePmsi extends CHPrimXMLEvenements {
   function __construct($dirschemaname = null, $schemafilename = null) {
     $this->type = "pmsi";
     
+    if (!$this->evenement) {
+      return;
+    }
+    
     $version = CAppUI::conf("hprimxml $this->evenement version");
     if ($version == "1.01") {
       parent::__construct($dirschemaname, $schemafilename."101");
     } else if ($version == "1.05") {
       parent::__construct("serveurActivitePmsi", $schemafilename."105");
     }   
+  }
+  
+  function getEvenements() {
+    return self::$evenements;
   }
   
   function getDateInterv($node) {

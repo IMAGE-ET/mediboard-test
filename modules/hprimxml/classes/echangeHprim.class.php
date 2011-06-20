@@ -130,30 +130,12 @@ class CEchangeHprim extends CEchangeXML {
     }
   }
   
-  function understand(CInteropSender $actor, $data) {
-    if (!$dom = parent::understand($actor, $data)) {
-      return false;
-    }
-    
-    $root = $dom->documentElement;
-    $nodeName = $root->nodeName;
-    
-    foreach (CHPrimXMLEvenements::$documentElement as $_root => $_root_class) {
-      if ($nodeName != $_root) {
-        continue;
-      }
-      foreach ($this->getMessagesSupported($actor->_guid, false) as $_message_supported_class => $_message_supported) {
-        if ($_root_class == $_message_supported_class) {
-          $this->_message_supported_class = $_message_supported_class;
-          return true;
-        }
-      }
-    }    
+  function handle() {
+    COperatorHprimXML::event($this);
   }
-  
-  function handle(CInteropSender $actor, $data) {
-    mbTrace($this);
-    CHprimXMLSoapHandler::event($data);
-  } 
+
+  function getMessages() {
+    return self::$messages;
+  }
 }
 ?>

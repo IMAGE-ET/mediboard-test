@@ -102,10 +102,21 @@ class CEchangeXML extends CExchangeDataFormat {
     }
   }
   
-  function understand(CInteropSender $actor, $data) {
-    if ($dom = $this->isWellForm($data)) {
-      return $dom;
-    }        
+  function understand($data, CInteropSender $actor = null) {
+    if (!$dom = $this->isWellForm($data)) {
+      return false;
+    } 
+
+    $root = $dom->documentElement;
+    $nodeName = $root->nodeName;
+    foreach ($this->getMessages() as $_message) {
+      $message_class = new $_message;
+      $document_elements = $message_class->getDocumentElements();
+      if (array_key_exists($nodeName, $document_elements)) {
+        $this->_family_message = new $document_elements[$nodeName];
+        return true;
+      }
+    }
   }
 }
 

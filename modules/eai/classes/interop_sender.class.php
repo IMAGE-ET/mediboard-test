@@ -16,16 +16,39 @@
  * Interoperability Sender
  */
 class CInteropSender extends CInteropActor {
+  var $user_id   = null;
+  
+  // Forward references
+  var $_ref_user = null;
+  
   function updateFormFields() {
     parent::updateFormFields();
        
     $this->_parent_class_name = "CInteropSender";
   }
   
+  function getProps() {
+    $props = parent::getProps();
+    $props["user_id"] = "ref class|CMediusers";
+
+    return $props;
+  }
+
+  function getSpec() {
+    $spec = parent::getSpec();
+    $spec->uniques["user"] = array ("user_id");
+    
+    return $spec;
+  }
+  
   function getBackProps() {
     $backProps = parent::getBackProps();
     $backProps["messages_supported"] = "CMessageSupported object_id";
     return $backProps;
+  }
+  
+  function loadRefUser() {
+    return $this->_ref_user = $this->loadFwdRef("user_id", 1);
   }
   
   /**

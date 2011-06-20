@@ -26,13 +26,13 @@ foreach ($formats_tabular as &$_format_tabular) {
 
 $messages_xml = array();
 foreach ($formats_xml as $_data_format) {
-  $temp = $_data_format->getMessagesSupported($actor_guid, false);
+  $temp = $_data_format->getMessagesSupported($actor_guid, false, null, true);
   $messages_xml = array_merge($messages_xml, $temp);
 }
 
 $messages_tabular = array();
 foreach ($formats_tabular as $_data_format) {
-  $temp = $_data_format->getMessagesSupported($actor_guid, false);
+  $temp = $_data_format->getMessagesSupported($actor_guid, false, null, true);
   $messages_tabular = array_merge($messages_tabular, $temp);
 }
 

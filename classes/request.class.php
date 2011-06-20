@@ -193,7 +193,7 @@ class CRequest {
    * returns the SQL string
    * @param CMbObject $obj Object on which table we prefix selects, ne prefix if null
    */
-  function getRequest(CMbObject $obj = null) {
+  function getRequest(CMbObject $obj = null, $found_rows = false) {
 
     $arraySelect = array();
     $arrayTable = array();
@@ -223,7 +223,8 @@ class CRequest {
     }
     
     $select = implode(', ', $select);
-    $sql = "SELECT $select";
+
+    $sql = $found_rows ? "SELECT SQL_CALC_FOUND_ROWS $select" : "SELECT $select";
     
     // Table clauses
     $table = implode(', ', $arrayTable);
@@ -234,9 +235,10 @@ class CRequest {
    * returns the SQL string that count the number of rows
    * @param CMbObject $obj Object on which table we prefix selects, ne prefix if null
    */
-  function getCountRequest(CMbObject $obj = null, $fields = array()) {
+  function getCountRequest(CMbObject $obj = null, $fields = array(), $found_rows = false) {
     // MbObject binding
     $sql = "SELECT COUNT(*) as total";
+    
     if(is_array($fields) && count($fields)) {
       $sql .= ", ".implode(", ", $fields);
     }

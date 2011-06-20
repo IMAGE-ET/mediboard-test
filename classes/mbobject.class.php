@@ -740,7 +740,7 @@ class CMbObject {
    * @param boolean $forceindex Add the forceindex SQL statement
    * @return self[] List of found objects, null if module is not installed
    */
-  function loadList($where = null, $order = null, $limit = null, $group = null, $leftjoin = null, $forceindex = null) {
+  function loadList($where = null, $order = null, $limit = null, $group = null, $leftjoin = null, $forceindex = null, $found_rows = false) {
     if (!$this->_ref_module) {
       return null;
     }
@@ -753,7 +753,11 @@ class CMbObject {
     $request->addOrder($order);
     $request->setLimit($limit);
     
-    return $this->loadQueryList($request->getRequest($this));
+    $query_list = $this->loadQueryList($request->getRequest($this, $found_rows));
+    if ($found_rows) {
+      $this->_found_rows = $this->_spec->ds->foundRows();
+    }
+    return $query_list;
   }
   
   /**
@@ -802,12 +806,13 @@ class CMbObject {
   /**
    * Object count of a list by a request constructor
    */
-  function countList($where = null, $order = null, $limit = null, $group = null, $leftjoin = null) {
+  function countList($where = null, $order = null, $limit = null, $group = null, $leftjoin = null, $forceindex = null) {
     if (!$this->_ref_module) {
       return null;
     }
     
     $request = new CRequest();
+    $request->addForceIndex($forceindex);
     $request->addLJoin($leftjoin);
     $request->addWhere($where);
     $request->addGroup($group);
@@ -816,6 +821,23 @@ class CMbObject {
 
     $ds = $this->_spec->ds;
     return $ds->loadResult($request->getCountRequest($this));
+  }
+  
+  function countRows($where = null, $order = null, $limit = null, $group = null, $leftjoin = null, $forceindex = null) {
+    if (!$this->_ref_module) {
+      return null;
+    }
+    
+    $request = new CRequest();
+    $request->addForceIndex($forceindex);
+    $request->addLJoin($leftjoin);
+    $request->addWhere($where);
+    $request->addGroup($group);
+    $request->addOrder($order);
+    $request->setLimit($limit);
+
+    $ds = $this->_spec->ds;
+    return $ds->foundRows($request->getCountRequest($this, null, true));
   }
   
   /*

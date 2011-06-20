@@ -13,7 +13,6 @@ if (!class_exists("DOMDocument")) {
 }
 
 class CMbXMLDocument extends DOMDocument {
-  
   var $schemapath       = null;
   var $schemafilename   = null;
   var $documentfilename = null;
@@ -214,6 +213,14 @@ class CMbXMLDocument extends DOMDocument {
     }
 
     return $file->store();
+  }
+  
+  function getEvenements() {
+    return array();
+  }
+  
+  function getDocumentElements() {
+    return array();
   }
 }
 

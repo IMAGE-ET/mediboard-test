@@ -86,11 +86,22 @@ class CSetupftp extends CSetup {
     $this->addQuery($query);
     
     $this->makeRevision("0.04");
+    
     $query = "ALTER TABLE `source_ftp` 
               CHANGE `timeout` `timeout` INT (11) DEFAULT '5';";
-     $this->addQuery($query);
-              
-    $this->mod_version = "0.05";
+    $this->addQuery($query);
+
+    $this->makeRevision("0.05");
+    
+    $query = "ALTER TABLE `sender_ftp` 
+                ADD `user_id` INT (11) UNSIGNED;";
+    $this->addQuery($query);
+    
+    $query = "ALTER TABLE `sender_ftp` 
+                ADD INDEX (`user_id`);";
+    $this->addQuery($query);
+    
+    $this->mod_version = "0.06";
   }
 }
 ?>
