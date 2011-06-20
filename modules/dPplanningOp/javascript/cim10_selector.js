@@ -20,7 +20,7 @@ CIM10Selector = {
 
   pop: function() {
     var oForm = getForm(this.sForm);
-    this.oUrl = new Url("dPplanningOp", "code_selector");
+    this.oUrl = new Url("dPplanningOp", "code_selector_ex");
     
     this.oUrl.addParam("chir", oForm[this.sChir].value);
     this.oUrl.addParam("type", "cim10");
