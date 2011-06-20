@@ -64,7 +64,7 @@ foreach ($listPlage as $plage_id => &$plage) {
     $consultation =& $plage->_ref_consultations[$keyConsult];
     $consultation->loadRefSejour();
     $consultation->_ref_sejour->loadRefRPU();
-    if ($consultation->_ref_sejour->_ref_rpu->_id){
+    if ($consultation->_ref_sejour->_id && $consultation->_ref_sejour->_ref_rpu->_id){
       unset($plage->_ref_consultations[$consultation->_id]);
       continue;
     }
