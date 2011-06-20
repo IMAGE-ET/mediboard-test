@@ -421,10 +421,17 @@ class CPatient extends CMbObject {
   }
   
   function merge($objects = array/*<CPatient>*/(), $fast = false) {
-  	// Load the matching CDossierMedical objects 
+  	// Load the matching CDossierMedical objects
+    if ($this->_id) {
+      $merged_objects = array_merge($objects, array($this));
+    }
+    else {
+      $merged_objects = $objects;
+    }
+
   	$where = array(
   	  'object_class' => "='$this->_class_name'",
-  	  'object_id'    => CSQLDataSource::prepareIn(CMbArray::pluck($objects, 'patient_id'))
+  	  'object_id'    => CSQLDataSource::prepareIn(CMbArray::pluck($merged_objects, 'patient_id'))
   	);
   	$dossier_medical = new CDossierMedical();
   	$list = $dossier_medical->loadList($where);
