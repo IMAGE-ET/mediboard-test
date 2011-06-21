@@ -120,6 +120,8 @@ function cacheLit($affectation) {
 if($praticien_id && !$service_id){
 	$sejours = array();
 	$sejour = new CSejour();
+	$where = array();
+	$where["group_id"] = "= '$g'";
 	$where["praticien_id"] = " = '$praticien_id'";
 	$where["entree_prevue"] = " <= '$date 23:59:59'";
 	$where["sortie_prevue"] = " >= '$date 00:00:00'";
