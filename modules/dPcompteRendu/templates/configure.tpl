@@ -51,6 +51,11 @@
     {{assign var="var" value="header_footer_fly"}}
     {{mb_include module=system template=inc_config_bool}}
   </tr>
+  <tr>
+    {{assign var="var" value="clean_word"}}
+    {{mb_include module=system template=inc_config_bool}}
+  </tr>
+  
   
   {{if isset($conf.dPcabinet.CConsultation.aide_autocomplete|smarty:nodefaults)}}
     {{assign var=aide_autocomplete value=$conf.dPcabinet.CConsultation.aide_autocomplete}}

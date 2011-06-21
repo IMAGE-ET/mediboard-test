@@ -1,4 +1,5 @@
 {{assign var=pdf_thumbnails value=$conf.dPcompteRendu.CCompteRendu.pdf_thumbnails}}
+{{assign var=clean_word value=$conf.dPcompteRendu.CCompteRendu.clean_word}}
 {{assign var=mode_play value=$app->user_prefs.mode_play}}
 
 // Preloading extra plugins
@@ -29,7 +30,8 @@ CKEDITOR.editorConfig = function(config) {
   config.contentsLanguage = 'fr';
   config.enterMode = CKEDITOR.ENTER_BR;
   config.pasteFromWordPromptCleanup = true;
-  config.pasteFromWordRemoveFontStyles = true; 
+  config.pasteFromWordRemoveFontStyles = "{{$clean_word}}";
+  config.pasteFromWordRemoveStyles = "{{$clean_word}}";
   config.fontSize_sizes = 'xx-small/xx-small;x-small/x-small;small/small;medium/medium;large/large;x-large/x-large;xx-large/xx-large';
   config.contentsCss = "style/mediboard/htmlarea.css?build={{$version.build}}";
   config.docType = '<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">';
