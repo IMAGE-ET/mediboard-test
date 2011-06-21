@@ -8,6 +8,12 @@
 */
 
 $compte_rendu_id = CValue::post("compte_rendu_id");
+
+// On s'arrête là si pas d'id
+if (!$compte_rendu_id) {
+  CApp::rip();
+}
+
 $compte_rendu = new CCompteRendu();
 $compte_rendu->load($compte_rendu_id);
 $compte_rendu->loadContent();
