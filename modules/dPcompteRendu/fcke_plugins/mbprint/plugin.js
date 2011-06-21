@@ -30,12 +30,7 @@ function mbprint_onclick(editor) {
     form.onsubmit();
   }
   else {
-    if (window.parent.Preferences.saveOnPrint == 2 || confirm("Souhaitez-vous enregistrer ce document ?")) {
-      window.parent.submitCompteRendu(printDoc);
-    }
-    else {
-      printDoc();
-    }
+    window.parent.submitCompteRendu(printDoc);
   }
 }
 
