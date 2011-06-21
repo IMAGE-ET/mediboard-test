@@ -9,6 +9,8 @@
 
 CCanDo::checkRead();
 
+$group = CGroups::loadCurrent();
+
 // Type d'affichage
 $vue       = CValue::getOrSession("vue"      , 0);
 $typeOrder = CValue::getOrSession("typeOrder", 1);
@@ -18,12 +20,12 @@ $order_col = CValue::getOrSession("order_col", "_patient");
 
 // Récupération de la liste des services
 $where = array();
-$where["externe"]  = "= '0'";
-$service = new CService;
-$services = $service->loadGroupList($where);
+$where["externe"] = "= '0'";
+$where["group_id"] = "= '$group->_id'";
 
+$service = new CService();
+$services = $service->loadListWithPerms(PERM_READ, $where);
 
-$group = CGroups::loadCurrent();
 $whereDeplacement = array();
 $whereSortie = array();
 
@@ -42,7 +44,7 @@ $ljoin["lit"]                = "lit.lit_id = affectation.lit_id";
 $ljoin["chambre"]            = "chambre.chambre_id = lit.chambre_id";
 $ljoin["service"]            = "service.service_id = chambre.service_id";
 $where["affectation.sortie"] = "BETWEEN '$limit1' AND '$limit2'";
-$where["type"]               = "!= 'exte'";
+$where["sejour.type"]        = "!= 'exte'";
 $where["service.group_id"]   = "= '$group->_id'";
 
 $whereSortie      = $where;
