@@ -11,6 +11,7 @@
 CPreferences::$modules["dPprescription"] = array (
   "easy_mode",
   "show_transmissions_form",
-	"hide_old_lines"
+	"hide_old_lines",
+	"show_hour_onmouseover_plan_soins"
 );
 ?>

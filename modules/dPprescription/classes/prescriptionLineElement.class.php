@@ -32,6 +32,8 @@ class CPrescriptionLineElement extends CPrescriptionLine {
 	
 	var $_chapitre = null;
 	var $_unite_prise = null;
+	var $_most_used_poso = null;
+  var $_delete_prises = null;
 	
   // Can fields
   var $_can_select_executant               = null;
@@ -239,7 +241,22 @@ class CPrescriptionLineElement extends CPrescriptionLine {
   	// On met en session le dernier guid créé
     if($mode_creation){
       $_SESSION["dPprescription"]["full_line_guid"] = $this->_guid;
+			
+			// Pre-remplissage de la posologie la plus utilisée
+	    if($this->_most_used_poso){
+	      $posos = $this->getMostUsedPoso();
+	      if(count($posos)){
+	        $this->applyPoso(reset($posos));
+	      }
+	    }
     }
+		
+		if($this->_delete_prises){
+      if($msg = $this->deletePrises()){
+        return $msg;
+      }
+    }
+		
 	}
 		
   function loadView() {
@@ -390,6 +407,115 @@ class CPrescriptionLineElement extends CPrescriptionLine {
 	function loadRefTask() {
 		$this->_ref_task = $this->loadUniqueBackRef("task");
 	}
+	
+	function applyPoso($poso){ 
+    // Chargement d'une ligne possedant la poso la plus utilisée
+    $line_element = new CPrescriptionLineElement();
+    $line_element->load($poso['prescription_line_element_id']);
+    $line_element->loadRefsPrises();
+    
+    // Pre-remplissage des prises les plus utilisées
+    foreach($line_element->_ref_prises as $_prise){
+      if(!$_prise->urgence_datetime && !$_prise->decalage_intervention){
+        $_prise->_id = '';
+        $_prise->object_id = $this->_id;
+        $_prise->object_class = $this->_class_name;
+        $_prise->_ref_object = null;
+        $_prise->store();
+      }
+    }
+  }
+	
+	  /*
+   * Chargement des 5 posos les plus utilisées
+   */
+  function loadMostUsedPoso($element_prescription_id = "", $praticien_id = "", $type = ""){
+    $temp_view = array();
+    $this->_most_used_poso = array();
+    $most_used_lines = $this->getMostUsedPoso($element_prescription_id, $praticien_id, $type);
+		
+    foreach($most_used_lines as $_key => $_line){
+      if(is_array($_line)){
+        $view = "";
+        $line = new CPrescriptionLineElement();
+        $line->load($_line['prescription_line_element_id']);
+        $line->loadRefsPrises();
+        $last_prise = end($line->_ref_prises);
+        foreach($line->_ref_prises as $_prise){
+          $view .= $_prise->_view;
+          if($_prise->_id != $last_prise->_id){
+            $view .= ", ";
+          }
+        }
+        
+        if(!isset($temp_view[$view])){
+          $temp_view[$view] = array("occ" => "", "line_id" => "");
+        }
+        $temp_view[$view]["occ"] += $_line["count_signature"];
+        $temp_view[$view]["line_id"] = $_line['prescription_line_element_id'];
+      }
+    }
+		
+    foreach($temp_view as $curr_view => $_tab){
+      $this->_most_used_poso[$_tab["line_id"]]["view"] = $curr_view;
+      $this->_most_used_poso[$_tab["line_id"]]["occ"] = $_tab["occ"];
+      $pourcentage = $_tab["occ"] ? (100 * $_tab["occ"] / $most_used_lines['total']) : "0"; 
+      $this->_most_used_poso[$_tab["line_id"]]["pourcentage"] = round($pourcentage, 2);
+    }
+  }
+  
+
+  /*
+   * Recuperation des posologies les plus utilisées
+   */
+  function getMostUsedPoso($element_prescription_id = "", $praticien_id = "", $type = ""){
+    $ds = CSQLDataSource::get("std");
+   
+	  $_element_prescription_id = $element_prescription_id ? $element_prescription_id : $this->element_prescription_id;
+    $_praticien_id = $praticien_id ? $praticien_id : $this->praticien_id;
+    $_type = $type ? $type : $this->_ref_prescription->type;
+    
+    $sql = "CREATE TEMPORARY TABLE posos AS
+              SELECT prescription_line_element.prescription_line_element_id, prise_posologie.*
+              FROM prise_posologie
+              LEFT JOIN prescription_line_element ON prescription_line_element.prescription_line_element_id = prise_posologie.object_id AND prise_posologie.object_class = 'CPrescriptionLineElement'
+              LEFT JOIN prescription ON prescription.prescription_id = prescription_line_element.prescription_id
+              WHERE prescription_line_element.element_prescription_id = '$_element_prescription_id'";
+							
+              if($_praticien_id != 'global'){
+               $sql .= "AND prescription_line_element.praticien_id = '$_praticien_id'";
+              }
+              
+							$sql .= "AND prescription.type = '$_type'
+              AND prise_posologie.decalage_intervention IS NULL
+              AND prise_posologie.urgence_datetime IS NULL
+              ORDER BY moment_unitaire_id;";
+    $ds->exec($sql);
+
+    $sql = "CREATE TEMPORARY TABLE signatures AS
+              SELECT posos.prescription_line_element_id, CONVERT(GROUP_CONCAT(CONCAT_WS('-',quantite, nb_fois, unite_fois, nb_tous_les, unite_tous_les, decalage_prise, unite_prise, decalage_intervention, heure_prise, moment_unitaire_id ) SEPARATOR '|') USING latin1) as signature
+              FROM posos
+              LEFT JOIN prescription_line_element ON prescription_line_element.prescription_line_element_id = posos.prescription_line_element_id
+              GROUP BY prescription_line_element_id";
+    $ds->exec($sql);
+				
+    $sql = "SELECT signature, prescription_line_element_id, count(*) as count_signature 
+            FROM signatures
+            GROUP BY signature
+            ORDER BY count_signature DESC
+            LIMIT 5;";
+    $signatures = $ds->loadList($sql);
+    	
+    $sql = "SELECT count(*) FROM signatures";
+    $signatures["total"] = $ds->loadResult($sql);
+  
+    $sql = "DROP TABLE posos";
+    $ds->exec($sql);
+    
+    $sql = "DROP TABLE signatures";
+    $ds->exec($sql);
+    return $signatures;
+  }
 }
 
 ?>

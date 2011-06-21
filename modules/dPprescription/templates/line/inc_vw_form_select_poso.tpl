@@ -10,28 +10,36 @@
 
 {{if $line->_can_modify_poso}}
  {{if $line->_most_used_poso|@count}}
-	<form action="?m=dPprescription" method="post" name="editLine-{{$line->_id}}" onsubmit="return checkForm(this);">
+	<form action="?" method="post" name="editLine-{{$line->_id}}" onsubmit="return checkForm(this);">
 	  <input type="hidden" name="m" value="dPprescription" />
-	  <input type="hidden" name="dosql" value="do_prescription_line_medicament_aed" />
-	  <input type="hidden" name="prescription_line_medicament_id" value="{{$line->_id}}"/>
 	  <input type="hidden" name="del" value="0" />
-	  <input type="hidden" name="_code_cip" value="{{$line->_ref_produit->code_cip}}" />
-	  <input type="hidden" name="_delete_prises" value="0" />
+    {{mb_key object=$line}}
+		
+		{{if $line instanceof CPrescriptionLineMedicament}}
+			<input type="hidden" name="dosql" value="do_prescription_line_medicament_aed" />
+			<input type="hidden" name="_code_cip" value="{{$line->code_cip}}" />
+			{{assign var=filter_value value=$line->code_cip}}
+		{{else}}
+		  <input type="hidden" name="dosql" value="do_prescription_line_element_aed" />
+			<input type="hidden" name="_element_prescription_id" value="{{$line->element_prescription_id}}" />
+			{{assign var=filter_value value=$line->element_prescription_id}}
+    {{/if}}
+		<input type="hidden" name="_delete_prises" value="0" />
 
-   	<select name="_line_id_for_poso" style="width: 160px;"
-	        onchange="submitPoso(this.form, '{{$line->_id}}');">
+   	<select name="_line_id_for_poso" style="width: 160px;" onchange="submitPoso(this.form, '{{$line->_id}}', '{{$line->_class_name}}', '{{$typeDate}}');">
 		  <option value="">Posologies les plus utilisées</option>
 		  {{foreach from=$line->_most_used_poso item=_poso_view key=_line_poso_id}}
 		    <option value="{{$_line_poso_id}}">{{$_poso_view.view}}</option>
 		  {{/foreach}}
 	  </select>
-	  <button type="button" class="search" onclick="Prescription.viewStatPoso('{{$line->code_cip}}','{{if $prescription->object_id}}{{$line->praticien_id}}{{else}}{{$prescription->praticien_id}}{{/if}}')">
+		
+		<button type="button" class="search" onclick="Prescription.viewStatPoso('{{$line->_class_name}}', '{{$filter_value}}', '{{if $prescription->object_id}}{{$line->praticien_id}}{{else}}{{$prescription->praticien_id}}{{/if}}')">
       Stats
     </button>
   </form>
 	<br />
 	{{/if}}
-{{else}}
+{{elseif $line instanceof CPrescriptionLineMedicament}}
   {{if $line->no_poso}}
     {{$line->_ref_posologie->_view}}
   {{/if}}

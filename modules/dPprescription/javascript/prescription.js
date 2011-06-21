@@ -426,10 +426,11 @@ Prescription = {
     url.addParam("praticien_id", $V(document.forms.selPraticienLine.praticien_id));
     url.popup(400,400,"Signatures des lignes de prescription");
   },
-  viewStatPoso: function(code_cip, praticien_id){
+  viewStatPoso: function(object_class, filter, praticien_id){
     var url = new Url("dPprescription", "vw_stat_posologie");
-    url.addParam("code_cip", code_cip);
+    url.addParam("filter", filter);
     url.addParam("praticien_id", praticien_id);
+		url.addParam("object_class", object_class);
     url.popup(800,400, "statistiques d'utilisation des posologies");
   },
 	updatePerop: function(sejour_id){

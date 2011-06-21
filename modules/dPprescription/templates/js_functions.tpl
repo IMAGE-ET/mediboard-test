@@ -276,20 +276,25 @@ addLineContigue = function(oForm){
 }
 
 // Fonction lancée lors de la modfication de la posologie
-submitPoso = function(oForm, curr_line_id){
+submitPoso = function(oForm, curr_line_id, curr_line_class, chapitre){
   // Suppression des prises de la ligne de prescription
   oForm._delete_prises.value = "1";
-  submitFormAjax(oForm, 'systemMsg', { onComplete: function(){
+
+  return onSubmitFormAjax(oForm, { onComplete: function(){
       var url = new Url("dPprescription", "httpreq_prescription_prepare");
-      url.addParam("prescription_line_id", curr_line_id);
-      if(oForm.no_poso){
-        url.addParam("no_poso", oForm.no_poso.value);
+      url.addParam("prescription_line_guid", curr_line_class+"-"+curr_line_id);
+			
+			if (oForm._code_cip){
+			  url.addParam("code_cip", oForm._code_cip.value);
       }
-      url.addParam("code_cip", oForm._code_cip.value);
+      if (oForm._element_prescription_id){
+			  url.addParam("element_prescription_id", oForm._element_prescription_id.value);
+      }
+			
       if(oForm._line_id_for_poso){
         url.addParam("line_id_for_poso", oForm._line_id_for_poso.value);
       }
-      url.requestUpdate('prises-Med'+curr_line_id);
+			url.requestUpdate('prises-'+chapitre+curr_line_id);
     } 
    }
   );

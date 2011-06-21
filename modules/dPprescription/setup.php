@@ -1973,7 +1973,10 @@ class CSetupdPprescription extends CSetup {
               ADD INDEX (`prescription_line_element_id`);";
 		$this->addQuery($query);	
 		
-    $this->mod_version = "1.44";
+		$this->makeRevision("1.44");
+		$this->addPrefQuery("show_hour_onmouseover_plan_soins", "1");
+    
+    $this->mod_version = "1.45";
   }
 }
 

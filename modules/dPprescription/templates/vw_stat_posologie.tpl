@@ -1,7 +1,12 @@
 <table class="form">
   <tr>
-    <th colspan="2" class="title">
-      Statistiques des posologies utilisées pour {{$produit->libelle}}
+    <th colspan="2" class="title text">
+      Statistiques des posologies utilisées pour 
+			{{if $line instanceof CPrescriptionLineMedicament}}
+			  {{$produit->libelle}}
+			{{else}}
+			  {{$element_prescription->_view}}
+			{{/if}}
     </th>
   </tr>
   <tr>

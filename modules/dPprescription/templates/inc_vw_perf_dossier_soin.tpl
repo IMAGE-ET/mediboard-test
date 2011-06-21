@@ -253,9 +253,11 @@
 							style='text-align: center; padding: 0; width: 100px; cursor: pointer; {{if array_key_exists("$_date $_hour:00:00", $operations)}}border-right: 3px solid black;{{/if}}'>
 						
 						<div style="position: relative;">
-             <span class="hour_adm">
-               {{$_hour}}h
-             </span>
+						  {{if $app->user_prefs.show_hour_onmouseover_plan_soins}}
+                <span class="hour_adm">
+                  {{$_hour}}h
+                </span>
+						  {{/if}}
 						
 						{{foreach from=$_prescription_line_mix->_ref_lines item=_perf_line name="foreach_perf_line"}}
 					     {{if isset($_perf_line->_administrations.$_date.$_hour|smarty:nodefaults)}}

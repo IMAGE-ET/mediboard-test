@@ -413,21 +413,6 @@ class CPrescriptionLineMedicament extends CPrescriptionLine {
 	}
   
   /*
-   * Store-like function, suppression des prises de la ligne
-   */
-  function deletePrises(){
-  	$this->_delete_prises = 0;
-  	// Chargement des prises 
-    $this->loadRefsPrises();
-    // Parcours des suppression des prises
-    foreach($this->_ref_prises as &$_prise){
-      if($msg = $_prise->delete()){
-      	return $msg;
-      }
-    }
-  }
-  
-  /*
    * Chargement des 5 posos les plus utilisées
    */
   function loadMostUsedPoso($code_cis = "", $praticien_id = "", $type = ""){

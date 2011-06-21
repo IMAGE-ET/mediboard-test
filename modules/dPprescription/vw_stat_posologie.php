@@ -8,27 +8,36 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
  */
 
-$code_cip = CValue::get("code_cip");
+$filter = CValue::get("filter");
+$object_class = CValue::get("object_class");
 $praticien_id = CValue::get("praticien_id");
 
 $praticien = new CMediusers();
 $praticien->load($praticien_id);
 
+$line = new $object_class;
+
 $produit = new CBcbProduit();
-$produit->load($code_cip);
+$element_prescription = new CElementPrescription();
+  
+if($line instanceof CPrescriptionLineMedicament){
+	$produit->load($filter);
+	$filter = $produit->code_cis;	
+} else {
+  $element_prescription->load($filter);	
+}
 
 // Initialisation
-$line = new CPrescriptionLineMedicament();
 $prescription = new CPrescription();
 
 foreach($prescription->_specs['type']->_list as $type_prescription){
   // Chargement des poso pour le praticien
   if($praticien->_id){
-	  $line->loadMostUsedPoso($produit->code_cis, $praticien_id, $type_prescription);
+	  $line->loadMostUsedPoso($filter, $praticien_id, $type_prescription);
 	  $stats["praticien"][$type_prescription] = $line->_most_used_poso;
   }
   // Chargement des poso global de l'etalissement
-	$line->loadMostUsedPoso($produit->code_cis, "global", $type_prescription);
+	$line->loadMostUsedPoso($filter, "global", $type_prescription);
 	$stats["global"][$type_prescription] = $line->_most_used_poso;
 }
 
@@ -38,6 +47,8 @@ $smarty->assign("stats", $stats);
 $smarty->assign("praticien", $praticien);
 $smarty->assign("prescription", $prescription);
 $smarty->assign("produit", $produit);
+$smarty->assign("element_prescription", $element_prescription);
+$smarty->assign("line", $line);
 $smarty->display("vw_stat_posologie.tpl");
 
 ?>

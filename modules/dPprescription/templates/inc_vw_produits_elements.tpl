@@ -434,7 +434,9 @@ reloadPerfEvolution = function(perf_id, object){
   <input type="hidden" name="operation_id" value="" />
 	
 	<input type="hidden" name="callback" value="updateModaleAfterAddLineElement" />
-	
+  {{if $prescription->object_id}}
+  <input type="hidden" name="_most_used_poso" value="1" />
+  {{/if}}
 </form>
 
 <!-- Tabulations -->

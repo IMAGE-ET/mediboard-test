@@ -57,17 +57,13 @@ if($line->_ref_prescription->type == "sejour"){
 	$sejour = $line->_ref_prescription->_ref_object;
 	$sejour->loadRefCurrAffectation();
 }
-			
-			
+			  		
 if($line instanceof CPrescriptionLineMedicament){
   // Chargement des ref de la ligne
 	$line->loadRefsPrises();
 
-  $_prat_id = !$line->_ref_prescription->object_id ? $line->_ref_prescription->praticien_id : null;
-   
    $line->loadRefProduitPrescription();
    if(!$line->_ref_produit_prescription->_id){
-     $line->loadMostUsedPoso(null, $_prat_id);
      $line->loadRefsFwd();
      $line->_ref_produit->loadVoies();
      $line->isPerfusable();
@@ -112,6 +108,12 @@ if ($line instanceof CPrescriptionLineElement || $line instanceof CPrescriptionL
   // Chargement des executants
   $executants["externes"] = CExecutantPrescriptionLine::getAllExecutants();
   $executants["users"] = CFunctionCategoryPrescription::getAllUserExecutants();
+}
+
+if($line instanceof CPrescriptionLineElement || $line instanceof CPrescriptionLineMedicament){
+  // Chargement des posos statistiques
+  $_prat_id = !$line->_ref_prescription->object_id ? $line->_ref_prescription->praticien_id : null;
+  $line->loadMostUsedPoso(null, $_prat_id);
 }
 
 if($line instanceof CPrescriptionLineMix){

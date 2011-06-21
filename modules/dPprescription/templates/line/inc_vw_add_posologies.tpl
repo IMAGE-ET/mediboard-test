@@ -39,7 +39,7 @@ Main.add(function(){
 	</label>
 	{{/if}}
 	
-	{{if $type != "mode_grille" && $line instanceof CPrescriptionLineMedicament && $line->_ref_prescription->object_id && $line->_unites_prise|@count && $line->_most_used_poso|@count}}
+	{{if $type != "mode_grille" && $line->_ref_prescription->object_id && $line->_most_used_poso|@count}}
 	<label title="Stats">
 	  <input name="typePrise" type="radio" value="stats{{$type}}" onclick="selDivPoso(this.value,'{{$line->_id}}','{{$type}}');" />
 	  Stats
@@ -136,7 +136,7 @@ Main.add(function(){
 
 <span id="stats{{$type}}{{$line->_id}}" style="display: none;">
   <!-- Selection des posologies statistiques -->
-  {{if !$line instanceof CPrescriptionLineElement && $line->_ref_prescription->object_id && $line->_unites_prise|@count}}
+  {{if $line->_ref_prescription->object_id}}
     {{include file="../../dPprescription/templates/line/inc_vw_form_select_poso.tpl"}}
   {{/if}}   
 </span>

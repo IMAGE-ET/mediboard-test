@@ -126,10 +126,11 @@
 				  
 					
 					 	<div style="position: relative;">
-						   <span class="hour_adm">
-                 {{$_hour}}h
-               </span>
-						   
+						  {{if $app->user_prefs.show_hour_onmouseover_plan_soins}}
+						    <span class="hour_adm">
+                  {{$_hour}}h
+                </span>
+						  {{/if}}
 					  <div id="drag_{{$line_id}}_{{$unite_prise|md5}}_{{$_date}}_{{$heure_reelle}}_{{$_quantite}}_{{$planification_id}}"
 					       {{if $origine_date_planif || @is_array($line->_administrations.$unite_prise.$_date.$_hour.administrations)}}
 								 onmouseover='ObjectTooltip.createDOM(this, "tooltip-content-{{$line_id}}-{{$unite_prise|md5}}-{{$_date}}-{{$_hour}}");'{{/if}}

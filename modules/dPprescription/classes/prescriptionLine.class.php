@@ -756,6 +756,21 @@ class CPrescriptionLine extends CMbObject implements IPatientRelated {
 		}
     return $total_day;
   }
+	
+	/*
+   * Store-like function, suppression des prises de la ligne
+   */
+  function deletePrises(){
+    $this->_delete_prises = 0;
+    // Chargement des prises 
+    $this->loadRefsPrises();
+    // Parcours des suppression des prises
+    foreach($this->_ref_prises as &$_prise){
+      if($msg = $_prise->delete()){
+        return $msg;
+      }
+    }
+  }
 }
 
 ?>
