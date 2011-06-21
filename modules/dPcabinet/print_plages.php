@@ -10,6 +10,8 @@
 CCanDo::checkRead();
 $now = mbDate();
 
+$show_tel = CValue::get("show_tel", 0);
+
 $filter = new CConsultation;
 $filter->plageconsult_id = CValue::get("plage_id", null);
 $filter->_date_min       = CValue::get("_date_min", "$now");
@@ -116,7 +118,7 @@ $smarty = new CSmartyDP();
 $smarty->assign("coordonnees", $filter->_coordonnees);
 $smarty->assign("filter"     , $filter);
 $smarty->assign("listPlage"  , $listPlage);
-
+$smarty->assign("show_tel"   , $show_tel);
 $smarty->display("print_plages.tpl");
 
 ?>

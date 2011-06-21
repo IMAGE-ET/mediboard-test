@@ -47,7 +47,7 @@ function printPlage(plage_id) {
     var url = new Url;
     url.setModuleAction("dPcabinet", "print_plages");
     url.addParam("plage_id", plage_id);
-    url.addParam("_coordonnees", 1);
+    url.addParam("show_tel", 1);
     url.popup(700, 550, "Planning");
   }
 

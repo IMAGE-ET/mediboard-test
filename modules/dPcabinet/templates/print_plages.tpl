@@ -32,15 +32,18 @@
   
   <tr>
     <th rowspan="2" colspan="2"><b>Heure</b></th>
-    <th {{if $coordonnees}}colspan="4"{{else}}colspan="2"{{/if}}><b>Patient</b></th>
+    <th {{if $coordonnees}}colspan="4"{{elseif $show_tel}}colspan="3"{{else}}colspan="2"{{/if}}><b>Patient</b></th>
     <th colspan="3"><b>Consultation</b></th>
   </tr>
   
   <tr>
     <th style="width: 15%;">Nom / Prénom</th>
     {{if $coordonnees}}
-    <th style="width: 15%;">Adresse</th>
-    <th class="narrow">Tel</th>
+      <th style="width: 15%;">Adresse</th>
+      <th class="narrow">Tel</th>
+    {{/if}}
+    {{if $show_tel}}
+      <th class="narrow">Tel</th>
     {{/if}}
     <th class="narrow">Age</th>
     <th style="width: 25%;">Motif</th>

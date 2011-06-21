@@ -23,8 +23,13 @@
         <br />
         {{mb_value object=$patient field=tel2}}
       </td>
+      {{elseif $show_tel}}
+        <td rowspan="2">
+          {{mb_value object=$patient field=tel}}
+          <br />
+          {{mb_value object=$patient field=tel2}}
+        </td>
       {{/if}}
-
     <td rowspan="2" style="text-align: center; ">
       {{$patient->_age}} ans
       {{if $patient->_age != "??"}}
