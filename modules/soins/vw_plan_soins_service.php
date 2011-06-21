@@ -82,8 +82,8 @@ foreach($elements as $_element){
 // Récupération de la liste des services
 $where = array();
 $where["externe"]  = "= '0'";
-$service = new CService;
-$services = $service->loadGroupList($where);
+$_service = new CService;
+$services = $_service->loadGroupList($where);
  
 // Création du template
 $smarty = new CSmartyDP();
