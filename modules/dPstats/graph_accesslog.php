@@ -117,8 +117,8 @@ function graphAccessLog($module_name, $action_name, $startx, $endx, $interval = 
 	  'yaxis' => array(
 	    'min' => 0,
       'title' => utf8_encode(($left[0] == 'request_time' ? 'Temps de réponse' :
-                                $left[0] == 'cpu_time' ? 'Temps CPU' :
-                                  $left[0] == 'errors' ? 'Erreurs' : 'Mémoire') .
+                                ($left[0] == 'cpu_time' ? 'Temps CPU' :
+                                  ($left[0] == 'errors' ? 'Erreurs' : 'Mémoire'))) .
                               ($left[1] == 'mean' ? ' (par hit)' : '')),
 	    'autoscaleMargin' => 1
 	  ),
