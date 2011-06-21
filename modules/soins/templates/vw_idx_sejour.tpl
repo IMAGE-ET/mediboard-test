@@ -351,7 +351,7 @@ printDossierComplet = function(){
         {{/if}}
         {{if $praticien && ($current_date == $date)}}
           <tr>
-	          <td class="button">
+	          <td class="button" colspan="2">
 	            <script type="text/javascript">
 	            function createNotifications(){
 								var sejours = {{$visites.non_effectuee|@json}};
