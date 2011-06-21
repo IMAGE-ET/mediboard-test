@@ -13,10 +13,11 @@ if(!$user->isPraticien()) {
   CCanDo::checkRead();
 }
 
-$sejour_id = CValue::get("sejour_id", 0);
-$user_id   = CValue::get("user_id");
-$cible     = CValue::get("cible");
-$_hide_obs = CValue::getOrSession("_hide_obs", 1);
+$sejour_id   = CValue::get("sejour_id", 0);
+$user_id     = CValue::get("user_id");
+$cible       = CValue::get("cible");
+$_show_obs   = CValue::getOrSession("_show_obs", 1);
+$_show_trans = CValue::getOrSession("_show_trans", 1);
 
 // Chargement du sejour
 $sejour = new CSejour;
@@ -67,10 +68,13 @@ if (!$cible && CAppUI::conf("soins constantes_show")){
   $sejour->loadRefConstantes($user_id);
 }
 
-//mettre les transmissions dans un tableau dont l'index est le datetime 
+//mettre les transmissions dans un tableau dont l'index est le datetime
 $list_trans_const = array();
 foreach($sejour->_ref_suivi_medical as $_trans_const) {
-  if ($_trans_const instanceof CObservationMedicale && $_hide_obs && $is_praticien) {
+  if ($_trans_const instanceof CObservationMedicale && !$_show_obs) {
+    continue;
+  }
+  if ($_trans_const instanceof CTransmissionMedicale && !$_show_trans) {
     continue;
   }
 	if($_trans_const instanceof CConstantesMedicales) {
@@ -104,7 +108,8 @@ $smarty->assign("cibles"      , $cibles);
 $smarty->assign("cible"       , $cible);
 $smarty->assign("users"       , $users);
 $smarty->assign("user_id"     , $user_id);
-$smarty->assign("_hide_obs"   , $_hide_obs);
+$smarty->assign("_show_obs"   , $_show_obs);
+$smarty->assign("_show_trans" , $_show_trans);
 $smarty->display("inc_vw_dossier_suivi.tpl");
 
 ?>

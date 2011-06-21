@@ -14,14 +14,16 @@
   <tr>
     <th colspan="7" class="title">
 			{{if !$readonly}}
-        {{if $isPraticien}}
-          <span style="float: left;">
-            <input name="_hide_obs_view" id="_hide_obs_view" type="checkbox" {{if $_hide_obs}}checked="checked"{{/if}}
-              onchange="loadSuivi('{{$sejour->_id}}', '', '', this.checked ? 1 : 0)"/>
-            <label for="_hide_obs_view">{{tr}}CObservationMedicale._hide_obs{{/tr}}</label>
-          </span>
-        {{/if}}
 				<div style="float: right">
+          <input name="_show_obs_view" id="_show_obs_view" type="checkbox" {{if $_show_obs}}checked="checked"{{/if}}
+            onchange="loadSuivi('{{$sejour->_id}}', '', '', this.checked ? 1 : 0, $('_show_trans_view').checked ? 1 : 0)"/>
+          <label for="_show_obs_view">{{tr}}CObservationMedicale._show_obs{{/tr}}</label>
+          
+          <input name="_show_trans_view" id="_show_trans_view" type="checkbox" {{if $_show_trans}}checked="checked"{{/if}}
+            onchange="loadSuivi('{{$sejour->_id}}', '', '', $('_show_obs_view').checked ? 1 : 0, this.checked ? 1 : 0)"/>
+          <label for="_show_trans_view">{{tr}}CTransmissionMedicale._show_trans{{/tr}}</label>
+          
+          
 			    <select style="width:150px" name="selCible" onchange="loadSuivi('{{$sejour->_id}}','',this.value)" >
 			      <option value="">&mdash; Toutes les cibles</option>
 			      {{foreach from=$cibles item=cibles_by_type}}
@@ -41,7 +43,7 @@
 			    {{/if}}
 		    </div>
 	    {{/if}}
-	    Suivi de soins
+	    <span style="float: left;"> Suivi de soins</span>
     </th>
   </tr>
   <tr>

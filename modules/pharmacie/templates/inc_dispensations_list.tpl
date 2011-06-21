@@ -17,13 +17,16 @@
 <script type="text/javascript">
 $$('a[href=#list-dispensations] small')[0].update('({{$dispensations|@count}})');
 
-loadSuivi = function(sejour_id, user_id, cible, hide_obs) {
+loadSuivi = function(sejour_id, user_id, cible, show_obs, show_trans) {
   var url = new Url("dPhospi", "httpreq_vw_dossier_suivi");
   url.addParam("sejour_id", sejour_id);
   url.addParam("user_id", user_id);
   url.addParam("cible", cible);
-  if (hide_obs != null) {
-    url.addParam("_hide_obs", hide_obs);
+  if (!Object.isUndefined(show_obs) {
+    url.addParam("_show_obs", show_obs);
+  }
+  if (!Object.isUndefined(show_trans) {
+    url.addParam("_show_trans", show_trans);
   }
   url.requestUpdate("list-transmissions");
 }

@@ -217,4 +217,6 @@ Main.add(function () {
 	    {{include file="../../dPhospi/templates/inc_list_transmissions.tpl" readonly=false list_transmissions=$mini_list}}
     </div>
   {{/if}}
+{{foreachelse}}
+  {{include file="../../dPhospi/templates/inc_list_transmissions.tpl" readonly=false list_transmissions=null}}
 {{/foreach}}

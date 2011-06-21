@@ -29,7 +29,7 @@
 	
 	ContraintesRPU.contraintesProvenance = {{$contrainteProvenance|@json}};
 	
-	function loadSuivi(sejour_id, user_id, cible, hide_obs) {
+	function loadSuivi(sejour_id, user_id, cible, show_obs, show_trans) {
 	  if (!sejour_id) {
 		  return;
 	  }
@@ -38,8 +38,11 @@
     urlSuivi.addParam("sejour_id", sejour_id);
     urlSuivi.addParam("user_id", user_id);
 		urlSuivi.addParam("cible", cible);
-    if (hide_obs != null) {
-      urlSuivi.addParam("_hide_obs", hide_obs);
+    if (!Object.isUndefined(show_obs)) {
+      urlSuivi.addParam("_show_obs", show_obs);
+    }
+    if (!Object.isUndefined(show_trans)) {
+      urlSuivi.addParam("_show_trans", show_trans);
     }
     urlSuivi.requestUpdate("suivisoins", { onComplete: function() { Control.Modal.close(); } });
 	}
