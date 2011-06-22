@@ -52,7 +52,7 @@ $date_max = mbDate($dateTime_max);
 $token_cat = CValue::get("token_cat","");
 
 if ($token_cat == "all") {
-  $token_cat = "trans|med|inj|perf|aerosol";
+  $token_cat = "trans|med|inj|perf|aerosol|stup";
   $categories = CCategoryPrescription::loadCategoriesByChap(null, "current");
   
   foreach ($categories as $categories_by_chap) {
@@ -69,13 +69,13 @@ CMbArray::removeValue("perf", $elts);
 CMbArray::removeValue("inj", $elts);
 CMbArray::removeValue("trans", $elts);
 
-$do_elements = (count($elts) > 0);
-$do_medicaments = (in_array("med", $cats));
-$do_injections = (in_array("inj", $cats));
-$do_perfusions = (in_array("perf", $cats));
-$do_aerosols   = (in_array("aerosol", $cats));
-
-$do_trans = (in_array("trans", $cats));
+$do_elements    = (count($elts) > 0);
+$do_medicaments = (in_array("med"    , $cats));
+$do_injections  = (in_array("inj"    , $cats));
+$do_perfusions  = (in_array("perf"   , $cats));
+$do_aerosols    = (in_array("aerosol", $cats));
+$do_stupefiants = (in_array("stup"   , $cats));
+$do_trans       = (in_array("trans", $cats));
 
 // Filtres sur l'heure des prises
 $time_min = mbTime($dateTime_min, "00:00:00");
@@ -236,7 +236,7 @@ foreach($trans_and_obs as &$_trans) {
   krsort($_trans, SORT_STRING);
 }
 
-if ($do && ($do_medicaments || $do_injections || $do_perfusions || $do_aerosols || $do_elements)) {
+if ($do && ($do_medicaments || $do_injections || $do_perfusions || $do_aerosols || $do_elements || $do_stupefiants)) {
 	// Chargement de toutes les prescriptions
 	$where = array();
 	$ljoin = array();
@@ -268,10 +268,9 @@ if ($do && ($do_medicaments || $do_injections || $do_perfusions || $do_aerosols 
 		if ($do_elements) {
 	    $_prescription->loadRefsLinesElementByCat("1","","service");
 	  }
-	  if($do_perfusions || $do_aerosols){
+	  if($do_perfusions || $do_aerosols || $do_stupefiants){
 	    $_prescription->loadRefsPrescriptionLineMixes();
 	  }
-	  
 		// Calcul du plan de soin
 	  $_prescription->calculPlanSoin($dates);
 	  
@@ -292,8 +291,8 @@ if ($do && ($do_medicaments || $do_injections || $do_perfusions || $do_aerosols 
 	  $patient =& $sejour->_ref_patient;
 	  $patient->loadRefConstantesMedicales();
 	  
-	  if($do_medicaments || $do_injections || $do_perfusions || $do_aerosols){
-	    if($do_perfusions || $do_aerosols){
+	  if($do_medicaments || $do_injections || $do_perfusions || $do_aerosols || $do_stupefiants){
+	    if($do_perfusions || $do_aerosols || $do_stupefiants){
 				// Parcours et stockage des prescription_line_mixes
 		    if($_prescription->_ref_prescription_line_mixes_for_plan){
 		      foreach($_prescription->_ref_prescription_line_mixes_for_plan as $_prescription_line_mix){
@@ -320,7 +319,9 @@ if ($do && ($do_medicaments || $do_injections || $do_perfusions || $do_aerosols 
 			            if(!$lit) continue;
 									
 									foreach($_prescription_line_mix->_ref_lines as $_perf_line){
-										
+    							  if (!$_perf_line->stupefiant && $do_stupefiants) {
+                      continue;
+                    }
 										$key1 = $by_patient ? $lit->_ref_chambre->nom : "med";
 										$key2 = $by_patient ? "med" : $lit->_ref_chambre->nom;
                     
@@ -367,19 +368,22 @@ if ($do && ($do_medicaments || $do_injections || $do_perfusions || $do_aerosols 
 	    
 	    // Parcours des medicament du plan de soin  
       $medicaments = array();
-      if($do_medicaments){
+      if($do_medicaments || $do_stupefiants){
         $medicaments["med"] = $_prescription->_ref_lines_med_for_plan;
       }
-      if($do_injections){
+      if($do_injections || $do_stupefiants){
         $medicaments["inj"] = $_prescription->_ref_injections_for_plan;
       }
 
-      if($do_medicaments || $do_injections){
+      if($do_medicaments || $do_injections || $do_stupefiants){
 		    foreach($medicaments as $type_med => $_medicaments){
 			    if($_medicaments){
 						foreach($_medicaments as $_code_ATC => &$_cat_ATC){
 						  foreach($_cat_ATC as &$_lines_by_unite) {
 						    foreach($_lines_by_unite as &$_line_med){
+						      if (!$_line_med->stupefiant && $do_stupefiants) {
+						        continue;
+						      }
 						    	$_line_med->loadRefProduitPrescription();
 						      $list_lines[$_line_med->_class_name][$_line_med->_id] = $_line_med;
 						      // Prises prevues

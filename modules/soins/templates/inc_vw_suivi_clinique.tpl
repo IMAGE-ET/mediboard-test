@@ -6,18 +6,31 @@
     url.addParam("object_guid", object_guid);
     url.requestModal(800, 500, { title: title });
   }
+
   popEtatSejour = function(sejour_id) {
     var url = new Url("dPhospi", "vw_parcours");
     url.addParam("sejour_id", '{{$sejour->_id}}');
     url.requestModal(700, 550);
   }
+
+  toggleProgressFuture = function() {
+    $$(".opacity-40").each(function(elt) {
+      elt.toggleClassName("in_progress_future");
+    });
+  }
   
   {{if "forms"|module_active}}
-  Main.add(function(){
-    ExObject.loadExObjects("{{$sejour->_class_name}}", "{{$sejour->_id}}", "list-ex_objects", 1);
-  });
+    Main.add(function(){
+      ExObject.loadExObjects("{{$sejour->_class_name}}", "{{$sejour->_id}}", "list-ex_objects", 1);
+    });
   {{/if}}
 </script>
+
+<style type="text/css">
+  .in_progress_future {
+    display: none;
+  }
+</style>
 
 <table style="text-align: left; width: 100%">
   <tr>
@@ -142,9 +155,8 @@
           </td>
         </tr>
       </table>
-    </td>
-    <!-- Correspondance -->
-    <td style="vertical-align: top;" rowspan="2">
+      
+      <!-- Correspondance -->
       <table class="tbl">
         <tr>
           <th style="width: 1%;">
@@ -201,23 +213,7 @@
         </tr>
       </table>
       
-      {{if "forms"|module_active}}
-        <table class="main tbl">
-          <tr>
-            <th>Formulaires</th>
-          </tr>
-          <tr>
-            <td id="list-ex_objects"></td>
-          </tr>
-        </table>
-        
-        {{* {{mb_include module=forms template=inc_widget_ex_class_register object=$sejour event=suivi_clinique}} *}}
-      {{/if}}
-    </td>
-  </tr>
-  <tr>
-    <!-- Informations sur le séjour -->
-    <td style="width: 50%; vertical-align: top;">
+      <!--  Informations sur le séjour -->
       <table class="tbl">
         <tr>
           <th class="category" colspan="2">
@@ -254,8 +250,139 @@
           </td>
         </tr>
       </table>
-			
-			{{mb_include module=dPplanningOp template=inc_infos_operation}}
+      
+      {{mb_include module=dPplanningOp template=inc_infos_operation}}
+      
+      {{if $sejour->_ref_transmissions|@count}}
+        <table class="tbl">
+          <tr>
+            <th class="title" colspan="3">Transmisssions de synthèse</th>
+          </tr>
+          <tr>
+            <th class="narrow">{{tr}}Date{{/tr}}</th>
+            <th class="narrow">{{tr}}Hour{{/tr}}</th>
+            <th>{{mb_title class=CTransmissionMedicale field=text}}</th>
+          </tr>
+          {{foreach from=$sejour->_ref_transmissions item=_transmissions key=_cat_name name=foreach_trans}}
+            <tr>
+              <th colspan="3">{{$_cat_name}}</th>
+            </tr>
+            {{foreach from=$_transmissions item=_trans}}
+              <tr>
+                <td style="text-align: center; height: 22px;">
+                  {{mb_ditto name=date value=$_trans->date|date_format:$conf.date}}
+                </td>
+                <td style="text-align: center;">
+                  {{$_trans->date|date_format:$conf.time}}
+                </td>
+                <td class="text {{if $_trans->type}}trans-{{$_trans->type}}{{/if}} libelle_trans">{{mb_value object=$_trans field=text}}</td>
+              </tr>
+            {{/foreach}}
+          {{foreachelse}}
+            <tr>
+              <td colspan="3">{{tr}}CTransmissionMedicale.none{{/tr}}</td>
+            </tr>
+          {{/foreach}}
+        </table>
+      {{/if}}
+    </td>
+    <td style="vertical-align: top;" rowspan="2">
+      {{assign var=prescription value=$sejour->_ref_prescription_sejour}}
+      
+        <table class="tbl">
+          <tr>
+            <th class="title">
+              <button type="button" style="float: right;" class="add notext" onclick="toggleProgressFuture();" title="{{tr}}CPrescription.in_progress_more{{/tr}}"></button>
+              {{tr}}CPrescription.in_progress{{/tr}}
+            </th>
+            {{if $prescription->_ref_lines_med_comments.med|@count || $prescription->_ref_lines_med_comments.comment|@count ||
+               $prescription->_ref_prescription_line_mixes|@count || $prescription->_ref_lines_elements_comments|@count}}
+            {{if $prescription->_ref_lines_med_comments.med|@count || $prescription->_ref_lines_med_comments.comment|@count}}
+              <tr>
+                <th>{{tr}}CPrescription._chapitres.med{{/tr}}</th>
+              </tr>
+              {{foreach from=$prescription->_ref_lines_med_comments item=_lines_med_type}}
+                {{foreach from=$_lines_med_type item=_line}}
+                  <tr class="{{if $_line->_fin_reelle && $_line->_fin_reelle <= $date && $_line->_fin_reelle >= $date_before}}
+                          hatching opacity-40 in_progress_future
+                        {{elseif $_line->_debut_reel && $_line->_debut_reel >= $date && $_line->_debut_reel <= $date_after}}
+                          opacity-40 in_progress_future
+                        {{/if}}">
+                    {{if !$_line instanceof CPrescriptionLineComment}}
+                      <td class="text">
+                        {{$_line->_ucd_view}}
+                      </td>
+                    {{/if}}
+                  </tr>
+                {{/foreach}}
+              {{/foreach}}
+            {{/if}}
+            
+            {{if $prescription->_ref_prescription_line_mixes_by_type|@count}}
+              {{foreach from=$prescription->_ref_prescription_line_mixes_by_type item=_lines_by_type key=chap}}
+                <tr>
+                  <th>{{tr}}CPrescription._chapitres.{{$chap}}{{/tr}}</th>
+                </tr>
+                {{foreach from=$_lines_by_type item=_line}} 
+                  <tr class="{{if $_line->_fin && $_line->_fin <= $date && $_line->_fin >= $date_before}}
+                        hatching opacity-40 in_progress_future
+                    {{elseif $_line->_debut && $_line->_debut >= $date && $_line->_debut <= $date_after}}
+                        opacity-40 in_progress_future
+                    {{/if}}">
+                    <td class="text">
+                      {{$_line->_view}}
+                      ({{foreach from=$_line->_ref_lines item=_line_mix_item name=foreach_line_mixes}}
+                        {{$_line_mix_item->_ucd_view}} {{if !$smarty.foreach.foreach_line_mixes.last}},{{/if}}
+                      {{/foreach}})
+                    </td>
+                  </tr>
+                {{/foreach}}
+              {{/foreach}}
+            {{/if}}
+            
+            {{foreach from=$prescription->_ref_lines_elements_comments item=chap_element key=_category_name}}
+              <tr>
+                <th>{{tr}}CPrescription._chapitres.{{$_category_name}}{{/tr}}</th>
+              </tr>
+              {{foreach from=$chap_element item=cat_element}}
+                {{foreach from=$cat_element item=elements}}
+                  {{foreach from=$elements item=element}}
+                  {{if !$element instanceof CPrescriptionLineComment}}
+                    <tr class="{{if $element->_fin_reelle && $element->_fin_reelle <= $date && $element->_fin_reelle >= $date_before}}
+                        hatching opacity-40 in_progress_future
+                      {{elseif $element->_debut_reel && $element->_debut_reel >= $date && $element->_debut_reel <= $date_after}}
+                        opacity-40 in_progress_future
+                      {{/if}}">
+                      <td class="text">
+                        {{$element->_view}}
+                      </td>
+                    </tr>
+                  {{/if}}
+                  {{/foreach}}
+                {{/foreach}}
+              {{/foreach}}
+            {{/foreach}}
+          {{else}}
+          <tr>
+            <td>
+              Aucune ligne en cours
+            </td>
+          </tr>
+          {{/if}}
+        </table>
+      
+      {{if "forms"|module_active}}
+        <table class="main tbl">
+          <tr>
+            <th>Formulaires</th>
+          </tr>
+          <tr>
+            <td id="list-ex_objects"></td>
+          </tr>
+        </table>
+        
+        {{* {{mb_include module=forms template=inc_widget_ex_class_register object=$sejour event=suivi_clinique}} *}}
+      {{/if}}
     </td>
   </tr>
 </table>

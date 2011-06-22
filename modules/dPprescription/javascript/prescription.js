@@ -330,7 +330,7 @@ Prescription = {
       alert('Pas de prescription en cours');
     }
   },
-  printPrescription: function(prescription_id, print, object_id, no_pdf, dci, globale) {
+  printPrescription: function(prescription_id, print, object_id, no_pdf, dci, globale, in_progress) {
     // Select de choix du praticien
     var praticien_sortie_id = "";
     if(document.forms.selPraticienLine && (globale == undefined || globale == 0)){
@@ -338,6 +338,9 @@ Prescription = {
     }
     if (globale == undefined) {
       globale = 0;
+    }
+    if (in_progress == undefined) {
+      in_progress = 0;
     }
     if(prescription_id){
       var url = new Url("dPprescription", "print_prescription");
@@ -347,6 +350,7 @@ Prescription = {
 	    }
       url.addParam("globale", globale);
       url.addParam("dci", dci);
+      url.addParam("in_progress", in_progress);
       url.addParam("praticien_sortie_id", praticien_sortie_id);
       url.addParam("print", print);
 			url.addParam("no_pdf", no_pdf);

@@ -785,7 +785,7 @@ class CPrescription extends CMbObject implements IPatientRelated {
   /*
    * Chargement des prescription_line_mixes
    */
-  function loadRefsPrescriptionLineMixes($chapitre = "", $with_child = 0, $with_subst_active = 1, $protocole_id = ''){
+  function loadRefsPrescriptionLineMixes($chapitre = "", $with_child = 0, $with_subst_active = 1, $protocole_id = '', $in_progress=0){
     if($this->_ref_prescription_line_mixes){
     	return;
     }
@@ -807,7 +807,15 @@ class CPrescription extends CMbObject implements IPatientRelated {
     $this->_ref_prescription_line_mixes = $prescription_line_mix->loadList($where);
 		
 		if(count($this->_ref_prescription_line_mixes)){
-			foreach($this->_ref_prescription_line_mixes as $_line_mix){
+		  $current_date = mbDateTime();
+			foreach($this->_ref_prescription_line_mixes as $_key_line => $_line_mix){
+			  $debut = $_line_mix->_debut;
+			  $fin = $_line_mix->_fin;
+	      if ($in_progress && (($_line_mix->_debut && $_line_mix->_debut > mbDateTime("+$in_progress hours", $current_date))) ||
+			      ($_line_mix->_fin && $_line_mix->_fin < mbDateTime("-$in_progress hours", $current_date))) {
+			    unset($this->_ref_prescription_line_mixes[$_key_line]);
+			    continue;
+			  }
 			  $this->_ref_prescription_line_mixes_by_type[$_line_mix->type_line][] = $_line_mix;
 		  }
 		}
@@ -1394,7 +1402,7 @@ class CPrescription extends CMbObject implements IPatientRelated {
   /*
    * Chargement des lignes de prescription de médicament
    */
-  function loadRefsLinesMed($with_child = 0, $with_subst = 0, $emplacement="", $order="", $protocole_id = "") {
+  function loadRefsLinesMed($with_child = 0, $with_subst = 0, $emplacement="", $order="", $protocole_id = "", $in_progress=0) {
     if ($this->_ref_prescription_lines) {
       return;
     }
@@ -1419,6 +1427,17 @@ class CPrescription extends CMbObject implements IPatientRelated {
       $order = "prescription_line_medicament_id DESC";
     }
     $this->_ref_prescription_lines = $line->loadList($where, $order);
+    
+    if ($in_progress) {
+      $current_date = mbDateTime();
+      foreach ($this->_ref_prescription_lines as $_key_line => $_line) {
+        if (($_line->_debut_reel && $_line->_debut_reel > mbDateTime("+$in_progress hours", $current_date)) ||
+            ($_line->_fin_reelle && $_line->_fin_reelle < mbDateTime("-$in_progress hours", $current_date))) {
+          unset($this->_ref_prescription_lines[$_key_line]);
+        }
+      }
+    }
+    
   }
   
   /*
@@ -1440,9 +1459,9 @@ class CPrescription extends CMbObject implements IPatientRelated {
   /*
    * Chargement des lignes de medicaments (medicaments + commentaires)
    */
-  function loadRefsLinesMedComments($withRefs = "1", $order="", $protocole_id=""){
+  function loadRefsLinesMedComments($withRefs = "1", $order="", $protocole_id="", $in_progress=0){
     // Chargement des lignes de medicaments
-    $this->loadRefsLinesMed(0, 0, "", $order, $protocole_id);
+    $this->loadRefsLinesMed(0, 0, "", $order, $protocole_id, $in_progress);
     // Chargement des lignes de commentaire du medicament
     $this->loadRefsLinesComment("medicament", "1", $protocole_id);
     
@@ -1468,7 +1487,7 @@ class CPrescription extends CMbObject implements IPatientRelated {
   /*
    * Chargement des lignes d'element
    */
-  function loadRefsLinesElement($chapitre = "", $withRefs = "1", $emplacement="", $order="", $protocole_id = ""){
+  function loadRefsLinesElement($chapitre = "", $withRefs = "1", $emplacement="", $order="", $protocole_id = "", $in_progress=0){
     $line = new CPrescriptionLineElement();
     $where = array();
     $ljoin = array();
@@ -1492,7 +1511,14 @@ class CPrescription extends CMbObject implements IPatientRelated {
     $this->_ref_prescription_lines_element = $line->loadList($where, $order, null, null, $ljoin);
     
     if(count($this->_ref_prescription_lines_element)){
-      foreach($this->_ref_prescription_lines_element as &$line_element){  
+      $current_date = mbDateTime();
+
+      foreach($this->_ref_prescription_lines_element as $key_line => &$line_element){
+        if ($in_progress && (($line_element->_debut_reel && $line_element->_debut_reel > mbDateTime("+$in_progress hours", $current_date)) ||
+           ($line_element->_fin_reelle && $line_element->_fin_reelle < mbDateTime("-$in_progress hours", $current_date)))) {
+          unset($this->_ref_prescription_lines_element[$key_line]);
+          continue;
+        }
         $line_element->loadRefElement();
         if($withRefs){
           $line_element->loadRefsPrises();
@@ -1507,12 +1533,12 @@ class CPrescription extends CMbObject implements IPatientRelated {
   /*
    * Chargement des lignes d'elements par catégorie
    */
-  function loadRefsLinesElementByCat($withRefs = "1", $chapitre = "", $emplacement="", $order="", $protocole_id = ""){
+  function loadRefsLinesElementByCat($withRefs = "1", $chapitre = "", $emplacement="", $order="", $protocole_id = "", $in_progress=0){
     if ($this->_ref_prescription_lines_element_by_cat) {
       return;
     }
     
-    $this->loadRefsLinesElement($chapitre, $withRefs, $emplacement, $order, $protocole_id);
+    $this->loadRefsLinesElement($chapitre, $withRefs, $emplacement, $order, $protocole_id, $in_progress);
     $this->_ref_prescription_lines_element_by_cat = array();
     
     if(count($this->_ref_prescription_lines_element)){
@@ -1588,8 +1614,8 @@ class CPrescription extends CMbObject implements IPatientRelated {
   /*
    * Chargement des lignes d'elements (Elements + commentaires)
    */
-  function loadRefsLinesElementsComments($withRefs = "1", $chapitre="", $order="", $protocole_id=""){
-    $this->loadRefsLinesElementByCat($withRefs, $chapitre, "", $order, $protocole_id);
+  function loadRefsLinesElementsComments($withRefs = "1", $chapitre="", $order="", $protocole_id="", $in_progress=0){
+    $this->loadRefsLinesElementByCat($withRefs, $chapitre, "", $order, $protocole_id, $in_progress);
     $this->loadRefsLinesComment("", $withRefs, $protocole_id);
     
     // Suppression des ligne de medicaments

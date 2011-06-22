@@ -3,12 +3,14 @@
 	</table>
 <script type="text/javascript">
 {{if !$offline}}
+  check_categ = true;
   Main.add( function(){
     oCatField = new TokenField(document.filter_prescription.token_cat); 
     
     var cats = {{$cats|@json}};
     $$('input[type=checkbox]').each( function(oCheckbox) {
       if(cats.include(oCheckbox.value)){
+        updateCount(oCheckbox.className);
         oCheckbox.checked = true;
       }
     });
@@ -16,7 +18,13 @@
     getForm("filter_prescription")._dateTime_min.observe("ui:change", resetPeriodes);
     getForm("filter_prescription")._dateTime_max.observe("ui:change", resetPeriodes);
   } );
-  
+
+  function updateCount(name) {
+    var nb_elt = $('nb_elt_'+name);
+    if (nb_elt) {
+      nb_elt.update(parseInt(nb_elt.innerHTML)+1);
+    }
+  }
   
   var groups = {{$all_groups|@json}};
   
@@ -25,6 +33,8 @@
     // (sauf par patient et seulement les présents)
     $$('input[type=checkbox]').each( function(oCheckbox) {
       if (oCheckbox.name != "_present_only_vw" && oCheckbox.name != "by_patient") {
+        var elt = $('nb_elt_'+oCheckbox.className);
+        if (elt) elt.update("0");
         oCheckbox.checked = false;
         oCatField.remove(oCheckbox.value);
       }
@@ -37,8 +47,10 @@
   	// Selection des checkbox en fonction du groupe selectionné
     group = groups[cat_group_id];
     group.each( function(item_id){
-      $(item_id).checked = true;
-      $(item_id).onclick();
+      var item = $(item_id);
+      item.checked = true;
+      item.onclick();
+      updateCount(item.className);
     });
   }
   
@@ -49,10 +61,13 @@
   }
   
   selectChap = function(name_chap, oField){
-    $$('input.'+name_chap).each(function(oCheckbox) { 
-      if(!oCheckbox.checked){
-        oCheckbox.checked = true;
+    $$('input.'+name_chap).each(function(oCheckbox) {
+      oCheckbox.checked = check_categ;
+      if (check_categ) {
         oField.add(oCheckbox.value);
+      }
+      else {
+      oField.remove(oCheckbox.value);
       }
     });
   }
@@ -176,18 +191,41 @@
            </tr>
 					 <tr>
              <td>
-               <strong>{{tr}}CPrescription._chapitres.med{{/tr}}</strong>
+               <a href="#1" onclick="modal('detail_med')"><strong>{{tr}}CPrescription._chapitres.med{{/tr}}</strong></a>
              </td>
              <td>
-               <input type="checkbox" value="med" id="med" onclick="oCatField.toggle(this.value, this.checked);" />
-             </td>
-           </tr>
-           <tr>
-             <td>
-               <strong>{{tr}}CPrescription._chapitres.inj{{/tr}}</strong>
-             </td>
-             <td>
-               <input type="checkbox" value="inj" id="inj" onclick="oCatField.toggle(this.value, this.checked);" />
+               <span id="nb_elt_med">0</span> / 3
+               <div style="display: none;" id="detail_med">
+                 <table class="tbl">
+                   <tr>
+                     <th class="title">Détail</th>
+                   </tr>
+                   <tr>
+                     <td>
+                       <label>
+                         <input type="checkbox" class="med" value="med" id="med" name="med" onclick="oCatField.toggle(this.value, this.checked);" /> Médicaments
+                       </label>
+                     </td>
+                   </tr>
+                   <tr>
+                     <td>
+                       <label>
+                         <input type="checkbox" class="med" value="stup" id="stup" name="stup" onclick="oCatField.toggle(this.value, this.checked);" /> {{tr}}CPrescription._chapitres.stup{{/tr}}
+                       </label>
+                     </td>
+                   </tr>
+                   <tr>
+                     <td>
+                       <label>
+                         <input type="checkbox" class="med" value="inj" id="inj" name="inj" onclick="oCatField.toggle(this.value, this.checked);" /> {{tr}}CPrescription._chapitres.inj{{/tr}}<br />
+                       </label>
+                     </td>
+                   </tr>
+                 </table>
+                 <div style="margin: auto;">
+                   <button type="button" class="save" onclick="check_categ=true; Control.Modal.close(); $('nb_elt_med').update($('detail_med').select('input:checked').length)">Sélection des catégories</button>
+                 </div>
+               </div>
              </td>
            </tr>
            <tr>
@@ -211,16 +249,37 @@
              {{if $categories_by_chap|@count}}
   	           <tr>
   	             <td>
-  	               <button type="button" onclick="selectChap('{{$name}}', oCatField);" class="tick">Tous</button>
-  	               <strong>{{tr}}CCategoryPrescription.chapitre.{{$name}}{{/tr}}</strong>  
-  	             </td>
-  	             {{foreach from=$categories_by_chap item=categorie}}
-  	               <td style="white-space: nowrap; float: left; width: 10em;">
-  	                 <label title="{{$categorie->_view}}">
-  	                 <input class="{{$name}}" type="checkbox" id="{{$categorie->_id}}" value="{{$categorie->_id}}" onclick="oCatField.toggle(this.value, this.checked);"/> {{$categorie->_view}}
-  	                 </label>
-  	               </td>
-  	             {{/foreach}}
+  	               <a href="#1" onclick="modal('detail_{{$name}}')"><strong>{{tr}}CCategoryPrescription.chapitre.{{$name}}{{/tr}}</strong></a>
+                 </td>
+                 <td>
+                   <span id="nb_elt_{{$name}}">0</span> / {{$categories_by_chap|@count}}
+                   <div style="display: none; width: 400px;" id="detail_{{$name}}">
+                     <table class="tbl">
+                       <tr>
+                         <th class="title" colspan="4">
+                           <button type="button" onclick="selectChap('{{$name}}', oCatField); check_categ = !check_categ;" class="tick" style="float: right;">Tous</button>
+                           Détail
+                         </th>
+                       </tr>
+                       <tr>
+        	             {{foreach from=$categories_by_chap item=categorie name=foreach_cat}}
+                         {{if $smarty.foreach.foreach_cat.index % 4 == 0}}
+                           </tr>
+                           <tr>
+                         {{/if}}
+                           <td {{if $smarty.foreach.foreach_cat.last}}colspan="{{$smarty.foreach.foreach_cat.index}}"{{/if}}>
+          	               <label title="{{$categorie->_view}}">
+          	               <input class="{{$name}}" type="checkbox" id="{{$categorie->_id}}" value="{{$categorie->_id}}" onclick="oCatField.toggle(this.value, this.checked);"/> {{$categorie->_view}}<br />
+          	               </label>
+                           </td>
+        	             {{/foreach}}
+                       </tr>
+                     </table>
+                     <div style="margin: auto;">
+                       <button type="button" class="save" onclick="check_categ = true; Control.Modal.close(); $('nb_elt_{{$name}}').update($('detail_{{$name}}').select('input:checked').length)">Sélection des catégories</button>
+                     </div>
+                   </div>
+                 </td>
   	           </tr>
              {{/if}}
            {{/foreach}}

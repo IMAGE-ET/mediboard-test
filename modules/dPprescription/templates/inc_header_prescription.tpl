@@ -378,11 +378,14 @@ Main.add( function(){
         {{/if}}
 			 
       <div style="float: right; text-align: right;">
+        <input type="checkbox" id="in_progress" name="in_progress" checked="checked"/>
+        <label for="in_progress" style="font-size: x-small;" title="{{tr}}CPrescription.print_in_progress{{/tr}}">En cours</label>
         <input type="checkbox" id="dci" name="dci"/>
         <label for="dci" style="font-size: x-small" title="{{tr}}CPrescription.print_dci{{/tr}}">DCI</label>
         <input type="checkbox" id="globale" name="globale" />
         <label for="globale" style="font-size: 0.8em" title="{{tr}}CPrescription.print_globale{{/tr}}">Globale</label>
-      	<button type="button" class="print" onclick="Prescription.printPrescription('{{$prescription->_id}}', 0, '{{$prescription->object_id}}', null, $('dci').checked ? 1: 0, $('globale').checked ? 1 : 0);" />Ordonnance</button>
+      	<button type="button" class="print"
+          onclick="Prescription.printPrescription('{{$prescription->_id}}', 0, '{{$prescription->object_id}}', null, $('dci').checked ? 1: 0, $('globale').checked ? 1 : 0, $('in_progress').checked ? 1 : 0);" />Ordonnance</button>
         {{if !$hide_header}}
 				<br />
 				{{/if}}

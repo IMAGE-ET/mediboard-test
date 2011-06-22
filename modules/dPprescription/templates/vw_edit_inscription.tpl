@@ -11,9 +11,23 @@
 <script type="text/javascript">
 
 updateAdministration = function(id, object){
-  var url = new Url("dPprescription", "ajax_vw_form_administration");
-	url.addParam("object_guid", object._guid);
-	url.requestUpdate("administration");
+  $V(getForm("addLineMedInscription").code_cip, '', false);
+  $V(getForm("addLineElementInscription").element_prescription_id, '', false);
+  var oForm = getForm("delInscription");
+  var open_administration = function() {
+    
+    var url = new Url("dPprescription", "ajax_vw_form_administration");
+    url.addParam("object_guid", object._guid);
+    url.requestUpdate("administration");
+  }
+  // Si le formulaire de suppression de ligne est disponible, c'est que l'administration n'a été enregistrée.
+  // Donc suppression de la ligne.
+  if (oForm) {
+    submitFormAjax(oForm, "systemMsg", {onComplete: open_administration});
+  }
+  else {
+    open_administration();
+  }
 }
 
 Main.add(function () {
@@ -25,8 +39,12 @@ Main.add(function () {
       var oFormAddLineMedSuivi = getForm('addLineMedInscription');
       Element.cleanWhitespace(selected);
       var dn = selected.childNodes;
-      $V(oFormAddLineMedSuivi.code_cip, dn[0].firstChild.nodeValue); 
-	  }
+      $V(oFormAddLineMedSuivi.code_cip, dn[0].firstChild.nodeValue);
+	  },
+	  callback: 
+      function(input, queryString){
+        return (queryString + "&inLivret="+($V(getForm("searchProd")._recherche_livret)?'1':'0')); 
+      }
   } );
 	
 	// Autocomplete des elements
@@ -74,6 +92,10 @@ Main.add(function () {
 				</form>
 	      <form action="?" method="get" name="searchProd">
 	        <input type="text" style="width: 350px;" name="produit" class="autocomplete" autofocus="autofocus"/>
+          <label title="Recherche dans le livret thérapeutique">
+            <input type="checkbox" value="1" name="_recherche_livret"
+              {{if $conf.dPprescription.CPrescription.preselect_livret}}checked="checked"{{/if}} /> Livret Thérap.
+          </label>
 	        <div style="display:none;" class="autocomplete" id="produit_auto_complete"></div>
 	      </form>
       </div>

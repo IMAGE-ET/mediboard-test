@@ -1082,8 +1082,8 @@ class CSejour extends CCodable implements IPatientRelated {
       $where["object_class"] = " = 'CCategoryPrescription'";
       $where["sejour_id"] = " = '$this->_id'";
       $where["category_prescription.cible_importante"] = " = '1'";
-      
-      $this->_ref_transmissions = $transmission->loadList($where, null, null, null, $ljoin);
+      $order = "date DESC";
+      $this->_ref_transmissions = $transmission->loadList($where, $order, null, null, $ljoin);
     } else {
       $this->_ref_transmissions = $this->loadBackRefs("transmissions"); 
     }

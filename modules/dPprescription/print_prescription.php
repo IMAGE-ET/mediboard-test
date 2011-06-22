@@ -18,6 +18,7 @@ $print               = CValue::get("print", 0);
 $no_pdf              = CValue::get("no_pdf", 0);
 $operation_id        = CValue::get("operation_id");
 $globale             = CValue::get("globale");
+$in_progress         = CValue::get("in_progress");
 $linesDMI = array();
 
 // Chargement de l'etablissement
@@ -63,11 +64,11 @@ if($praticien->_id){
 $categories = CCategoryPrescription::loadCategoriesByChap();
 
 // Chargement des lignes de prescriptions
-$prescription->loadRefsLinesMedComments("1", "debut ASC");
-$prescription->loadRefsLinesElementsComments("1","","debut ASC");
+$prescription->loadRefsLinesMedComments("1", "debut ASC", "", $in_progress);
+$prescription->loadRefsLinesElementsComments("1","","debut ASC", "", $in_progress);
 
 // Chargement des prescription_line_mixes
-$prescription->loadRefsPrescriptionLineMixes();
+$prescription->loadRefsPrescriptionLineMixes("", 0, 1, "", $in_progress);
 foreach($prescription->_ref_prescription_line_mixes as $curr_prescription_line_mix){
   $curr_prescription_line_mix->loadRefsLines();
 }

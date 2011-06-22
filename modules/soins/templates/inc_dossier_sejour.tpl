@@ -126,7 +126,7 @@
 </script>
 
 <ul id="tab-sejour" class="control_tabs">
-  <li><a href="#suivi_clinique" onmousedown="loadSuiviClinique()">{{tr}}CSejour.suivi_clinique{{/tr}}</a></li>
+  <li><a href="#suivi_clinique" onmousedown="loadSuiviClinique();">{{tr}}CSejour.suivi_clinique{{/tr}}</a></li>
   <li><a href="#dossier_traitement" onmousedown="loadSuiviSoins();">{{tr}}CSejour.suivi_soins{{/tr}}</a></li>
   {{if $isPrescriptionInstalled}}
     <li><a href="#prescription_sejour" onmousedown="loadPrescription();">Prescription</a></li>

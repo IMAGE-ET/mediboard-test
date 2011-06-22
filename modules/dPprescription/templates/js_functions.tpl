@@ -166,6 +166,17 @@ onSubmitPrise = function(oForm, chapitre){
   if (!checkForm(oForm) || !oForm.object_id.value){
     return;
   }
+  
+  // Si c'est une prise en urgences et que la ligne n'a pas de durée,
+  // passage de cette durée à 1 jour.
+  if (oForm._urgent && oForm._urgent.checked) {
+    var oFormDate = getForm("editDates-"+chapitre+"-"+$V(oForm.object_id));
+    if (oFormDate && !$V(oFormDate.duree)) {
+      $V(oFormDate.duree, 1);
+      $V(oFormDate._fin_da, '');
+    }
+  }
+  
   return onSubmitFormAjax(oForm, { onComplete:
     function(){
       reloadPrises(oForm.object_id.value, chapitre);

@@ -35,6 +35,7 @@
     }
     var oForm = getForm("editLine");
     if (oForm) {
+      $V(oForm.commentaire, $V(getForm("editCommentaire").commentaire));
       return onSubmitFormAjax(oForm, {onComplete: reloadAfter});
     }
     else {
@@ -43,6 +44,19 @@
   }
   Main.add(function() {
     setTimeout("getForm('addAdministration').quantite.focus()", 1);
+    var oForm = getForm("editCommentaire");
+    new AideSaisie.AutoComplete(oForm.commentaire, {
+      objectClass: "{{$line->_class_name}}", 
+      contextUserId: "{{$user_id}}",
+      resetSearchField: false,
+      validateOnBlur: false,
+      strict: false,
+      {{if $line instanceof CPrescriptionLineMedicament}}
+        dependField1: oForm.code_ucd
+      {{else}}
+        dependField1: oForm.element_prescription_id
+      {{/if}}
+    });
   });
 </script>
 <table class="form">
@@ -73,16 +87,16 @@
 			</form>
 		</td>
     <td style="width: 50%">
-      {{if $line instanceof CPrescriptionLineMedicament ||
-           $line instanceof CPrescriptionLineMix}}
-        <form name="editLine" action="?" method="post">
-          <input type="hidden" name="m" value="dPprescription" />
-          {{if $line instanceof CPrescriptionLineMedicament}}
-            <input type="hidden" name="dosql" value="do_prescription_line_medicament_aed" />
-          {{else}}
-            <input type="hidden" name="dosql" value="do_prescription_line_mix_aed" />
-          {{/if}}
-          {{mb_key object=$line}}
+      <form name="editLine" action="?" method="post">
+        <input type="hidden" name="m" value="dPprescription" />
+        {{if $line instanceof CPrescriptionLineMedicament}}
+          <input type="hidden" name="dosql" value="do_prescription_line_medicament_aed" />
+        {{else}}
+          <input type="hidden" name="dosql" value="do_prescription_line_element_aed" />
+        {{/if}}
+        {{mb_key object=$line}}
+        <input type="hidden" name="commentaire" value="" />
+        {{if $line instanceof CPrescriptionLineMedicament}}
           {{mb_label object=$line field=voie}} :
           <select name="voie">
             {{foreach from=$line->_ref_produit->voies item=libelle_voie}}
@@ -90,19 +104,52 @@
             {{/foreach}}
             <option value="none">Voie non définie</option>
           </select>
-        </form>
-      {{/if}}
+        {{/if}}
+      </form>
     </td>
 	</tr>
   <tr>
     <td colspan="2">
+      <form name="editCommentaire" method="post" action="?">
+        <fieldset>
+          <legend>
+            {{mb_label object=$line field=commentaire}}
+          </legend>
+          {{mb_field object=$line field=commentaire}}
+        </fieldset>
+      </form>
+    </td>
+  </tr>
+  <tr>
+    <td colspan="2">
       {{assign var=hide_cible value=1}}
       {{assign var=hide_button_add value=1}}
+      <fieldset>
+        <legend>{{tr}}CTransmissionMedicale{{/tr}}</legend>
       {{mb_include module=dPhospi template=inc_transmission refreshTrans=0}}
+      </fieldset>
+      
       <button type="button" class="submit" 
         onclick="submitAdministration();">
         {{tr}}Save{{/tr}}
       </button>
+      
+      <form name="delInscription" method="post" action="?">
+        <input type="hidden" name="m" value="dPprescription" />
+        {{if $line instanceof CPrescriptionLineMedicament}}
+          <input type="hidden" name="dosql" value="do_prescription_line_medicament_aed" />
+        {{else}}
+          <input type="hidden" name="dosql" value="do_prescription_line_element_aed" />
+        {{/if}}
+        <input type="hidden" name="del" value="1" />
+        {{mb_key object=$line}}
+        <button type="button" class="trash"
+          onclick="confirmDeletion(this.form, {
+            typeName:'l\'inscription',
+            objName:'{{$line->_view}}',
+            ajax: 1},
+            {onComplete: function(){ $('administration').update();}})">Supprimer l'inscription</button>
+      </form>
     </td>
   </tr>
 </table>
