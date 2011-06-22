@@ -17,6 +17,8 @@
   {{mb_include module=system template=inc_config_str var=tag_service}}
   
   {{mb_include module=system template=inc_config_bool var=pathologies}}
+  
+  {{mb_include module=system template=inc_config_str var=nb_hours_trans}}
  
   <tr>
     <td class="button" colspan="100">

@@ -42,8 +42,8 @@ Main.add(function() {
   {{/if}}
 
   var options = {
-      minHours: '{{$hour-1}}',
-      maxHours: '{{$hour+1}}'
+      minHours: '{{$hour-$hour_quantum}}',
+      maxHours: '{{$hour+$hour_quantum}}'
     };
     
   var dates = {};

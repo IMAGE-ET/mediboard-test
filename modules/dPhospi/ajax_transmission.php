@@ -46,6 +46,7 @@ $smarty->assign("refreshTrans", $refreshTrans);
 $smarty->assign("update_plan_soin", $update_plan_soin);
 $smarty->assign("date", mbDate());
 $smarty->assign("hour", mbTransformTime(null, mbTime(), "%H"));
+$smarty->assign("hour_quantum", CAppUI::conf("dPhospi nb_hours_trans"));
 
 $smarty->display("inc_transmission.tpl");
 ?>
