@@ -492,7 +492,7 @@ class CExClass extends CMbObject {
     </script>";
   }
   
-  function getGrid($w = 4, $h = 20, $reduce = true) {
+  function getGrid($w = 4, $h = 30, $reduce = true) {
     $big_grid = array();
     $big_out_of_grid = array();
     $groups = $this->loadRefsGroups();
