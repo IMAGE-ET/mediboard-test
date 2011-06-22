@@ -192,6 +192,10 @@
 	{{if $_prescription_line_mix->_frequence}}
 	  {{if $_prescription_line_mix->type_line == "perfusion"}}Débit initial: {{/if}}
 		{{$_prescription_line_mix->_frequence}}
+		{{if $_prescription_line_mix->volume_debit && $_prescription_line_mix->duree_debit}}
+		  <br />
+		  ({{mb_value object=$_prescription_line_mix field=volume_debit}} ml en {{mb_value object=$_prescription_line_mix field=duree_debit}} h)
+		{{/if}}
 	{{/if}}
   </div> 
 </td>

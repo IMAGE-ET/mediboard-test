@@ -246,6 +246,18 @@ class CAdministration extends CMbMetaObject implements IPatientRelated {
 		}
 		return $postes;
 	}
+	
+	function canDeleteEx() {
+    if($msg = parent::canDeleteEx()) {
+      return $msg;
+    }
+		$this->completeField("administrateur_id");
+		$this->completeField("planification");
+    
+		if(($this->administrateur_id != CAppUI::$user->_id) && !$this->planification && !CCanDo::admin()){
+			return "Seul l'utilisateur ayant validé l'administration peut la supprimer";
+		}
+  }
 }
 
 ?>

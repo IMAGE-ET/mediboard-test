@@ -68,7 +68,9 @@ refreshAdministrations = function(){
 	  {{foreach from=$administrations.$perf_line_id item=_administration}}
 	  <tr>
 	    <td colspan="2">
-	      <button class="cancel notext" type="button" onclick="removeAdministrationPerf('{{$_administration->_id}}');"></button> {{$_administration->quantite}} ml: {{$_administration->_view}}
+	    	{{if $_administration->administrateur_id == $app->user_id || $_administration->planification || $can->admin}}
+	      <button class="trash notext" type="button" onclick="removeAdministrationPerf('{{$_administration->_id}}');"></button>
+				{{/if}} {{$_administration->quantite}} ml: {{$_administration->_view}}
 	    </td>
 	  </tr>
 	  {{/foreach}}

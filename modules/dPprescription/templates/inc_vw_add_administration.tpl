@@ -188,7 +188,9 @@ chooseSubmit = function() {
   	  {{assign var=log value=$_administration->_ref_log}}
   	  <tr>
   	    <td>
-  	      <button class="cancel notext" type="button" onclick="cancelAdministration('{{$_administration->_id}}')"></button>
+  	    	{{if $_administration->administrateur_id == $app->user_id || $can->admin}}
+  	      <button class="trash notext" type="button" onclick="cancelAdministration('{{$_administration->_id}}')"></button>
+					{{/if}}
   	      {{$log->_ref_object->quantite}} 
   	      {{if $line->_class_name == "CPrescriptionLineMedicament"}}
   				  {{if $line->_ref_produit_prescription->_id}}
@@ -328,7 +330,7 @@ chooseSubmit = function() {
 		  {{assign var=log value=$planification->_ref_log}}
 		  <tr>
 		    <td>
-		      <button class="cancel notext" type="button" onclick="cancelAdministration('{{$planification->_id}}')"></button>
+		      <button class="trash notext" type="button" onclick="cancelAdministration('{{$planification->_id}}')"></button>
 		      {{$log->_ref_object->quantite}} 
 		      {{if $line->_class_name == "CPrescriptionLineMedicament"}}
 		        {{$planification->_ref_object->_ref_produit->libelle_unite_presentation}} 
