@@ -19,7 +19,13 @@ div.ex-message-title {
   font-size: 1.2em;
   left: 0.5em; 
   right: 0.5em; 
+	line-height: 1.4;
+	padding-top: 3px;
   position: absolute;
+}
+
+span.ex-message-title-spacer {
+  font-size: 1.6em;
 }
 </style>
 
@@ -27,12 +33,17 @@ div.ex-message-title {
 
 <script type="text/javascript">
 confirmSavePrint = function(form){
+  form.callback.disabled = true;
+	
   (FormObserver.changes == 0 || confirm("Pour imprimer le formulaire, il est nécessaire de l'enregistrer, souhaitez-vous continuer ?")) && 
            onSubmitFormAjax(form, {onComplete: function(){ 
              FormObserver.changes = 0;
              $("printIframe").src = "about:blank";
              $("printIframe").src = "?{{$smarty.server.QUERY_STRING|html_entity_decode}}&readonly=1&print=1&autoprint=1";
           } });
+					
+  form.callback.disabled = false;
+	
   return false;
 }
 
@@ -196,7 +207,7 @@ if (window.opener && !window.opener.closed && window.opener !== window && window
                     <div class="ex-message-title">
                       {{$_message->text}}
                     </div>
-                    &nbsp;
+                    <span class="ex-message-title-spacer">&nbsp;</span>
                   {{else}}
                     <div class="small-{{$_message->type}}">
                       {{mb_value object=$_message field=text}}
@@ -389,7 +400,7 @@ function switchMode(){
 	                  <div class="ex-message-title">
 	                    {{$_message->text}}
 	                  </div>
-	                  &nbsp;
+	                  <span class="ex-message-title-spacer">&nbsp;</span>
 	                {{else}}
 	                  <div class="small-{{$_message->type}}">
 	                    {{mb_value object=$_message field=text}}

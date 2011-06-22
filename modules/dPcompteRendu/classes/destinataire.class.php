@@ -34,7 +34,7 @@ class CDestinataire {
 	 * @param CMbObject $mbObject L'objet en question
 	 * @param string $tag tag par défaut,  optionnel
 	 */
-	function makeFor(CMbObject & $mbObject, $tag = null) {
+	static function makeFor(CMbObject & $mbObject, $tag = null) {
 	  $destinataires = array();
 
 	  if (!$mbObject->_id) {
@@ -98,7 +98,7 @@ class CDestinataire {
 	 * Construit les destinataires pour un MbObject et ses dépendances
 	 * @param CMbObject $mbObject L'objet en question 
 	 */
-	function makeAllFor(CMbObject & $mbObject) {
+	static function makeAllFor(CMbObject & $mbObject) {
 	  self::$destByClass = array();
 	  
 	  if ($mbObject instanceof CPatient) {

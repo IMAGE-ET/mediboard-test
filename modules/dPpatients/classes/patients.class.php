@@ -1431,8 +1431,7 @@ class CPatient extends CMbObject {
   }
   
   function fillLimitedTemplate(&$template) {
-    $cdestinataire = new CDestinataire;
-    $cdestinataire->makeAllFor($this);
+    CDestinataire::makeAllFor($this);
     
     $destinataires = CDestinataire::$destByClass;
 
