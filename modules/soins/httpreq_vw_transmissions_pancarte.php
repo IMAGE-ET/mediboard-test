@@ -17,118 +17,110 @@ $load_transmissions = CValue::get("transmissions");
 $load_observations = CValue::get("observations");
 $refresh = CValue::get("refresh");
 
+if($date == mbDate()){
+	$date_max = mbDateTime();
+} else {
+  $date_max = mbDate("+ 1 DAY", $date)." 00:00:00"; 	
+}
+
+$nb_hours = CAppUI::conf("soins transmissions_hours");
+$date_min = mbDateTime(" - $nb_hours HOURS", $date_max);
+
 $order_col = CValue::get("order_col", "date");
 $order_way = CValue::get("order_way", "DESC");
 
 // Chargement du service
 $service = new CService();
 $service->load($service_id);
-
-// Chargement des prescriptions qui sont dans le service selectionné
-$prescription = new CPrescription();
-$prescriptions = array();
-$ljoin = array();
-$ljoin["sejour"] = "prescription.object_id = sejour.sejour_id";
-$ljoin["affectation"] = "sejour.sejour_id = affectation.sejour_id";
-$ljoin["lit"]      = "lit.lit_id = affectation.lit_id";
-$ljoin["chambre"]  = "chambre.chambre_id = lit.chambre_id";
-$ljoin["service"]  = "service.service_id = chambre.service_id";
-$where["prescription.object_class"] = " = 'CSejour'";
-$where["prescription.type"] = " = 'sejour'";
-$where["service.service_id"]  = " = '$service_id'";
-$where["sejour.entree_prevue"] = " < '$date 23:59:59'";
-$where["sejour.sortie_prevue"] = " > '$date 00:00:00'";
-$prescriptions = $prescription->loadList($where, null, null, null, $ljoin);
-
 $transmissions = array();
 $observations = array();
 $users = array();
+$ljoin = array();
+$where = array();
+$where["service.service_id"] = " = '$service_id'";
 
-// Calcul du plan de soin pour chaque prescription
-foreach($prescriptions as $_prescription){
-  $patient =& $_prescription->_ref_patient;
-  $patients[$patient->_id] = $patient;
-  
-  $where = array();
-  $where["sejour_id"] = " = '$_prescription->object_id'";
-	$where[] = "date >= '$date_min' AND date <= '$date 23:59:59'";
+$where[] = "date >= '$date_min' AND date <= '$date_max'";
+if($user_id){
+  $where["user_id"] = " = '$user_id'";
+}
+if($degre){
+  if($degre == "urg_normal"){
+    $where[] = "degre = 'low' OR degre = 'high'";
+  }
+  if($degre == "urg"){
+    $where[] = "degre = 'high'";
+  }
+}
 	
-	if($user_id){
-	  $where["user_id"] = " = '$user_id'";
-	}
-	if($degre){
-	  if($degre == "urg_normal"){
-	    $where[] = "degre = 'low' OR degre = 'high'";
-	  }
-	  if($degre == "urg"){
-	    $where[] = "degre = 'high'";
-	  }
-	}
-	if($load_transmissions == "1"){
-	  $transmission = new CTransmissionMedicale();
-	  @$transmissions[$_prescription->_id] = $transmission->loadList($where);
-	}
-	if($load_observations == "1"){
-	  $observation = new CObservationMedicale();
-	  @$observations[$_prescription->_id] = $observation->loadList($where);
-	}
+// Chargement des transmissions
+if($load_transmissions == "1"){
+	$ljoin["sejour"] = "transmission_medicale.sejour_id = sejour.sejour_id";
+	$ljoin["affectation"] = "sejour.sejour_id = affectation.sejour_id";
+  $ljoin["lit"]      = "lit.lit_id = affectation.lit_id";
+  $ljoin["chambre"]  = "chambre.chambre_id = lit.chambre_id";
+  $ljoin["service"]  = "service.service_id = chambre.service_id";
+  $transmission = new CTransmissionMedicale();
+  $transmissions = $transmission->loadList($where, null, null, null, $ljoin);
+}
+
+// Chargement des observations
+if($load_observations == "1"){
+	$ljoin["sejour"] = "observation_medicale.sejour_id = sejour.sejour_id";
+  $ljoin["affectation"] = "sejour.sejour_id = affectation.sejour_id";
+  $ljoin["lit"]      = "lit.lit_id = affectation.lit_id";
+  $ljoin["chambre"]  = "chambre.chambre_id = lit.chambre_id";
+  $ljoin["service"]  = "service.service_id = chambre.service_id";
+  $observation = new CObservationMedicale();
+  $observations = $observation->loadList($where, null, null, null, $ljoin);
 }
 
 $cibles = array();
 $trans_and_obs = array();
-if($transmissions){
-	foreach($transmissions as $_transmissions_by_prescription){
-	  foreach($_transmissions_by_prescription as $_transmission){
-	    $_transmission->loadRefsFwd();
-	    $_transmission->_ref_sejour->loadRefPatient();
-	    $_transmission->_ref_sejour->loadRefsAffectations();
-		  $_transmission->_ref_sejour->_ref_last_affectation->loadRefLit();
-		        
-		  $patient = $_transmission->_ref_sejour->_ref_patient;
-		  $lit = $_transmission->_ref_sejour->_ref_last_affectation->_ref_lit;
-		  
-		  if($order_col == "patient_id"){
-			  $key = $patient->nom.$patient->prenom.$patient->_id.$_transmission->date;
-		  }
-		  if($order_col == "date") {
-			  $key= $_transmission->date;
-			}
-	  	if($order_col == "lit_id"){
-	      $key = $lit->_view.$lit->_id.$_transmission->date;
-	    }
-			
-	    $_transmission->calculCibles($cibles);
-	    $trans_and_obs[$key][$_transmission->_id] = $_transmission;
-	    $_transmission->_ref_user->loadRefFunction();
-	    $users[$_transmission->user_id] = $_transmission->_ref_user; 
-	  }
-	}
+foreach($transmissions as $_transmission){
+  $_transmission->loadRefsFwd();
+  $_transmission->_ref_sejour->loadRefPatient();
+  $_transmission->_ref_sejour->loadRefsAffectations();
+  $_transmission->_ref_sejour->_ref_last_affectation->loadRefLit();
+        
+  $patient = $_transmission->_ref_sejour->_ref_patient;
+  $lit = $_transmission->_ref_sejour->_ref_last_affectation->_ref_lit;
+  
+  if($order_col == "patient_id"){
+    $key = $patient->nom.$patient->prenom.$patient->_id.$_transmission->date;
+  }
+  if($order_col == "date") {
+    $key= $_transmission->date;
+  }
+  if($order_col == "lit_id"){
+    $key = $lit->_view.$lit->_id.$_transmission->date;
+  }
+  $_transmission->calculCibles($cibles);
+  $trans_and_obs[$key][$_transmission->_id] = $_transmission;
+  $_transmission->_ref_user->loadRefFunction();
+  $users[$_transmission->user_id] = $_transmission->_ref_user; 
 }
-if($observations){
-	foreach($observations as $_observations_by_prescription){
-	  foreach($_observations_by_prescription as $_observation){
-	    $_observation->loadRefsFwd();
-	    $_observation->_ref_sejour->loadRefPatient();
-			$_observation->_ref_sejour->loadRefsAffectations();
-		  $_observation->_ref_sejour->_ref_last_affectation->loadRefLit();
-		  
-		  $patient = $_observation->_ref_sejour->_ref_patient;
-			$lit = $_observation->_ref_sejour->_ref_last_affectation->_ref_lit;
-			
-			if($order_col == "patient_id"){
-			  $key = $patient->nom.$patient->prenom.$patient->_id.$_observation->date;
-			}
-			if($order_col == "date") {
-			  $key= $_observation->date;
-			}
-	  	if($order_col == "lit_id"){
-			  $key = $lit->_view.$lit->_id.$_observation->date;
-			}
-	    $trans_and_obs[$key][$_observation->_id] = $_observation;
-	    $_observation->_ref_user->loadRefFunction();
-	    $users[$_observation->user_id] = $_observation->_ref_user; 
-	  }
-	}
+
+foreach($observations as $_observation){
+  $_observation->loadRefsFwd();
+  $_observation->_ref_sejour->loadRefPatient();
+  $_observation->_ref_sejour->loadRefsAffectations();
+  $_observation->_ref_sejour->_ref_last_affectation->loadRefLit();
+  
+  $patient = $_observation->_ref_sejour->_ref_patient;
+  $lit = $_observation->_ref_sejour->_ref_last_affectation->_ref_lit;
+  
+  if($order_col == "patient_id"){
+    $key = $patient->nom.$patient->prenom.$patient->_id.$_observation->date;
+  }
+  if($order_col == "date") {
+    $key= $_observation->date;
+  }
+  if($order_col == "lit_id"){
+    $key = $lit->_view.$lit->_id.$_observation->date;
+  }
+  $trans_and_obs[$key][$_observation->_id] = $_observation;
+  $_observation->_ref_user->loadRefFunction();
+  $users[$_observation->user_id] = $_observation->_ref_user; 
 }
 
 // Tri du tableau
@@ -155,7 +147,7 @@ $smarty->assign("filter_obs", $filter_obs);
 $smarty->assign("users", $users);
 $smarty->assign("with_filter", "1");
 $smarty->assign("date_min", $date_min);
-$smarty->assign("date_max", "$date 23:59:59");
+$smarty->assign("date_max", $date_max);
 
 if($user_id || $degre || $refresh){
   $smarty->display('../../dPprescription/templates/inc_vw_transmissions.tpl'); 

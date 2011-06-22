@@ -10,6 +10,7 @@
 
 $dPconfig["soins"] = array (
   "constantes_show" => "1",
+	"transmissions_hours" => "24",
   "CLit" => array (
     "align_right" => "1")
 );
