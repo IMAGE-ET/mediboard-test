@@ -46,7 +46,7 @@ class CEAIDispatcher {
     }
 
     // est-ce que je comprend la famille de messages ?
-    $supported                 = false;
+    $supported = false;
     $family_message_class_name = get_class($data_format->_family_message);
     foreach ($data_format->getMessagesSupported($actor->_guid, false, null, true) as $_msg_supported_class => $_msg_supported) {
       if ($family_message_class_name == $_msg_supported_class) {
@@ -62,11 +62,13 @@ class CEAIDispatcher {
     CAppUI::stepAjax("CEAIDispatcher-understand");
     
     $data_format->emetteur_id   = $actor->_id;
+    $data_format->group_id      = $actor->group_id;
     $data_format->_ref_emetteur = $actor;
     $data_format->_message      = $data;
+    
     // Traitement par le handler du format
     try {
-      $data_format->handle();    
+      return $data_format->handle();    
     } catch(CMbException $e) {
       self::$errors[] = $e->getMessage();
       return self::dispachError($data);

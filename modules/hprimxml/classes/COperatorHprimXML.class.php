@@ -13,36 +13,90 @@ CAppUI::requireModuleClass("eai", "CEAIOperator");
 /**
  * The COperatorHprimXML class
  */
-
 class COperatorHprimXML extends CEAIOperator {
   function event(CExchangeDataFormat $data_format) {
-    $msg    = $data_format->_message;
-    $data   = array();
+    $msg     = $data_format->_message;
+    $dom_evt = $data_format->_family_message->getHPrimXMLEvenements($msg);
     
-    $dom_evenement = $data_format->_family_message->getHPrimXMLEvenements($msg);
-    
-    $supported = false;
-    $dom_evenement_class_name = get_class($dom_evenement);
-    if (in_array($dom_evenement_class_name, $data_format->_messages_supported_class)) {
-      $supported = true;
+    $dom_evt_class_name = get_class($dom_evt);
+    if (!in_array($dom_evt_class_name, $data_format->_messages_supported_class)) {
+      throw new CMbException(CAppUI::tr("CEAIDispatcher-no_message_supported_for_this_actor", $dom_evt_class_name));
     }
-
-    if (!$supported) {
-      throw new CMbException(CAppUI::tr("CEAIDispatcher-no_message_supported_for_this_actor", $dom_evenement_class_name));
-    }
-    mbTrace($data_format, "data_format", true);
     
     // Récupération des informations du message XML
-    $dom_evenement->loadXML($msg);
-    $doc_errors = $dom_evenement->schemaValidate(null, true);
+    $dom_evt->loadXML($msg);
+    $doc_errors = $dom_evt->schemaValidate(null, true);
     
     // Récupération du noeud racine
-    $root = $dom_evenement->documentElement;
+    $root     = $dom_evt->documentElement;
     $nodeName = $root->nodeName;
     
-    $data = $dom_evenement->getEnteteEvenementXML($nodeName);
+    try {
+      // Création de l'échange
+      $echg_hprim = new CEchangeHprim();
+      
+      // Récupération des données de l'entête
+      $data = $dom_evt->getEnteteEvenementXML($nodeName);
+  
+      // Gestion de l'acquittement
+      $dom_acq                        = CHPrimXMLAcquittements::getAcquittementEvenementXML($dom_evt);
+      $dom_acq->_identifiant_acquitte = $data['identifiantMessage'];
+      $dom_acq->_sous_type_evt        = $dom_evt->sous_type;
+
+      // Acquittement d'erreur d'un document XML recu non valide
+      if ($doc_errors !== true) {
+        $echg_hprim->populateEchange($data_format, $dom_evt);
+
+        $dom_acq->_ref_echange_hprim = $echg_hprim;
+        $msgAcq                      = $dom_acq->generateAcquittements("erreur", "E002", $doc_errors);
+        $doc_valid                   = $dom_acq->schemaValidate();
+
+        $echg_hprim->populateErrorEchange($msgAcq, $doc_valid, "erreur");
+
+        return $msgAcq;
+      }
+
+      // Gestion des notifications ? 
+      if (!$echg_hprim->_id) {
+        $echg_hprim->populateEchange($data_format, $dom_evt);
+        $echg_hprim->identifiant_emetteur = $data['identifiantMessage'];
+        $echg_hprim->message_valide       = 1;
+      }
+      
+      $echg_hprim->date_production = mbDateTime();
+      $echg_hprim->store();
+      
+      $echg_hprim->loadRefsDestinataireInterop();
+      // Chargement des configs de l'émetteur
+      $echg_hprim->_ref_emetteur->loadConfigValues();
+  
+      $dom_evt->_ref_echange_hprim = $echg_hprim;
+      $dom_acq->_ref_echange_hprim = $echg_hprim;
     
-    mbTrace($data, "data", true);
+      // Message événement patient
+      if ($dom_evt instanceof CHPrimXMLEvenementsPatients) {
+        return self::eventPatient($data_format, $dom_evt, $data, $dom_acq, $echg_hprim);
+      }
+      // Message serveur activité PMSI
+      elseif ($dom_evt instanceof CHPrimXMLEvenementsServeurActivitePmsi) {
+        return self::eventPMSI($data_format, $dom_evt, $data, $dom_acq, $echg_hprim);
+      }
+    } catch(Exception $e) {
+      $echg_hprim->populateEchange($data_format, $dom_evt);
+      
+      $dom_acq = CHPrimXMLAcquittements::getAcquittementEvenementXML($dom_evt);
+      // Type par défaut
+      $dom_acq->_sous_type_evt        = "enregistrementPatient";
+      $dom_acq->_identifiant_acquitte = isset($data['identifiantMessage']) ? $data['identifiantMessage'] : "000000000";
+      $dom_acq->_ref_echange_hprim    = $echg_hprim;
+      
+      $msgAcq    = $dom_acq->generateAcquittements("erreur", "E009", $e->getMessage());
+      $doc_valid = $dom_acq->schemaValidate();
+      
+      $echg_hprim->populateErrorEchange($msgAcq, $doc_valid, "erreur");
+      
+      return $msgAcq;
+    }
   }
   
   /**
@@ -50,8 +104,76 @@ class COperatorHprimXML extends CEAIOperator {
    * @param CHPrimXMLEvenementsPatients messagePatient
    * @return CHPrimXMLAcquittementsPatients messageAcquittement 
    **/
-  function eventPatient(CExchangeDataFormat $data_format) {
-    $msgAcq = null;
+  static function eventPatient(CExchangeDataFormat $data_format, CHPrimXMLEvenementsPatients $dom_evt, 
+                               $data = array(), CHPrimXMLAcquittementsPatients $dom_acq, CEchangeHprim $echg_hprim) {
+    $newPatient = new CPatient();
+    $newPatient->_hprim_initiator_id = $echg_hprim->_id;
+   
+    // Un événement concernant un patient appartient à l'une des six catégories suivantes :
+    // Enregistrement d'un patient avec son identifiant (ipp) dans le système
+    if ($dom_evt instanceof CHPrimXMLEnregistrementPatient) {
+      $data = array_merge($data, $dom_evt->getContentsXML());
+      $echg_hprim->id_permanent = $data['idSourcePatient'];
+      if ($msgAcq = $dom_evt->isActionValide($data['action'], $dom_acq)) {
+        return $msgAcq;
+      }
+      $msgAcq = $dom_evt->enregistrementPatient($dom_acq, $newPatient, $data);
+    } 
+    // Fusion de deux ipp
+    else if($dom_evt instanceof CHPrimXMLFusionPatient) {
+      $data = array_merge($data, $dom_evt->getContentsXML());
+      $echg_hprim->id_permanent = $data['idSourcePatient'];
+      if ($msgAcq = $dom_evt->isActionValide($data['action'], $dom_acq)) {
+        return $msgAcq;
+      }
+      $msgAcq = $dom_evt->fusionPatient($dom_acq, $newPatient, $data);
+    } 
+    // Venue d'un patient dans l'établissement avec son numéro de venue
+    else if($dom_evt instanceof CHPrimXMLVenuePatient) {
+      $data = array_merge($data, $dom_evt->getContentsXML());
+      $echg_hprim->id_permanent = $data['idSourceVenue'];
+      if ($msgAcq = $dom_evt->isActionValide($data['action'], $dom_acq)) {
+        return $msgAcq;
+      }
+      $msgAcq = $dom_evt->venuePatient($dom_acq, $newPatient, $data);
+    } 
+    // Fusion de deux venues
+    else if($dom_evt instanceof CHPrimXMLFusionVenue) {
+      $data = array_merge($data, $dom_evt->getContentsXML());
+      $echg_hprim->id_permanent = $data['idSourceVenue'];
+      if ($msgAcq = $dom_evt->isActionValide($data['action'], $dom_acq)) {
+        return $msgAcq;
+      }
+      $msgAcq = $dom_evt->fusionVenue($dom_acq, $newPatient, $data);
+    }
+    // Mouvement du patient dans une unité fonctionnelle ou médicale
+    else if($dom_evt instanceof CHPrimXMLMouvementPatient) {
+      $data = array_merge($data, $dom_evt->getContentsXML());
+      $echg_hprim->id_permanent = $data['idSourceVenue'];
+      if ($msgAcq = $dom_evt->isActionValide($data['action'], $dom_acq)) {
+        return $msgAcq;
+      }
+      $msgAcq = $dom_evt->mouvementPatient($dom_acq, $newPatient, $data);
+    }
+    // Gestion des débiteurs d'une venue de patient
+    else if($dom_evt instanceof CHPrimXMLDebiteursVenue) {
+      $data = array_merge($data, $dom_evt->getContentsXML());
+      $echg_hprim->id_permanent = $data['idSourcePatient'];
+      if ($msgAcq = $dom_evt->isActionValide($data['action'], $dom_acq, $echg_hprim)) {
+        return $msgAcq;
+      }
+      $msgAcq = $dom_evt->debiteursVenue($dom_acq, $newPatient, $data);
+    }
+    // Aucun des six événements retour d'erreur
+    else {
+      $msgAcq = $dom_acq->generateAcquittements("erreur", "E007"); 
+    }
+    return $msgAcq;
+  }
+  
+  static function eventPMSI(CExchangeDataFormat $data_format, CHPrimXMLEvenementsPatients $dom_evt, 
+                            $data = array(), CHPrimXMLAcquittementsServeurActivitePmsi $dom_acq, CEchangeHprim $echg_hprim) {
+
   }
 }
 ?>

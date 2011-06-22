@@ -87,7 +87,7 @@ class CHPrimXMLAcquittementsServeurActivitePmsi extends CHPrimXMLDocument {
     }   
   }
 
-  function generateAcquittementsServeurActivitePmsi($statut, $codes, $actesCCAM, $elPatient, $mbObject = null, $commentaires = null) {
+  function generateAcquittements($statut, $codes, $commentaires = null, $mbObject = null, $actesCCAM, $elPatient) {
     $this->emetteur = CAppUI::conf('mb_id');
     $this->date_production = mbDateTime();
 

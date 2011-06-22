@@ -145,7 +145,7 @@ class CHPrimXMLVenuePatient extends CHPrimXMLEvenementsPatients {
            * */
           /*if (!$this->checkSimilarSejour($newVenue, $data['venue'])) {
             $commentaire = "Le patient et/ou praticien et/ou date d'entrée sont très différents."; 
-            $messageAcquittement = $domAcquittement->generateAcquittementsPatients("erreur", "E116", $commentaire);
+            $messageAcquittement = $domAcquittement->generateAcquittements("erreur", "E116", $commentaire);
             $doc_valid = $domAcquittement->schemaValidate();
             
             $echange_hprim->setAckError($doc_valid, $messageAcquittement, "erreur");
@@ -215,7 +215,7 @@ class CHPrimXMLVenuePatient extends CHPrimXMLEvenementsPatients {
           }
         }
         
-        $messageAcquittement = $domAcquittement->generateAcquittementsPatients($avertissement ? "avertissement" : "OK", $codes, $avertissement ? $avertissement : $commentaire);
+        $messageAcquittement = $domAcquittement->generateAcquittements($avertissement ? "avertissement" : "OK", $codes, $avertissement ? $avertissement : $commentaire);
         $doc_valid = $domAcquittement->schemaValidate();
         $echange_hprim->acquittement_valide = $doc_valid ? 1 : 0;
           
@@ -284,7 +284,7 @@ class CHPrimXMLVenuePatient extends CHPrimXMLEvenementsPatients {
             } else {
               $commentaire = "Venue : $newVenue->_id. Les champs mis à jour sont les suivants : $modified_fields. Numéro de dossier : $num_dossier->id400.";
             }
-            $messageAcquittement = $domAcquittement->generateAcquittementsPatients($avertissement ? "avertissement" : "OK", $codes, $avertissement ? $avertissement : $commentaire);
+            $messageAcquittement = $domAcquittement->generateAcquittements($avertissement ? "avertissement" : "OK", $codes, $avertissement ? $avertissement : $commentaire);
             $doc_valid = $domAcquittement->schemaValidate();
             $echange_hprim->acquittement_valide = $doc_valid ? 1 : 0;
               
@@ -328,7 +328,7 @@ class CHPrimXMLVenuePatient extends CHPrimXMLEvenementsPatients {
               } else {
                 $commentaire = "Venue : $newVenue->_id. Les champs mis à jour sont les suivants : $modified_fields.";
               }
-              $messageAcquittement = $domAcquittement->generateAcquittementsPatients($avertissement ? "avertissement" : "OK", $codes, $avertissement ? $avertissement : $commentaire);
+              $messageAcquittement = $domAcquittement->generateAcquittements($avertissement ? "avertissement" : "OK", $codes, $avertissement ? $avertissement : $commentaire);
               $doc_valid = $domAcquittement->schemaValidate();
               $echange_hprim->acquittement_valide = $doc_valid ? 1 : 0;
               $echange_hprim->statut_acquittement = $avertissement ? "avertissement" : "OK";
@@ -476,7 +476,7 @@ class CHPrimXMLVenuePatient extends CHPrimXMLEvenementsPatients {
         } else {
           $commentaire = "Venue : $newVenue->_id. Identifiant externe : $id400Venue->id400. IPP : $num_dossier->id400.";
         }
-        $messageAcquittement = $domAcquittement->generateAcquittementsPatients($avertissement ? "avertissement" : "OK", $codes, $avertissement ? $avertissement : $commentaire);
+        $messageAcquittement = $domAcquittement->generateAcquittements($avertissement ? "avertissement" : "OK", $codes, $avertissement ? $avertissement : $commentaire);
         $doc_valid = $domAcquittement->schemaValidate();
         $echange_hprim->acquittement_valide = $doc_valid ? 1 : 0;
         
@@ -707,7 +707,7 @@ class CHPrimXMLVenuePatient extends CHPrimXMLEvenementsPatients {
         }
       }
       
-      $messageAcquittement = $domAcquittement->generateAcquittementsPatients($avertissement ? "avertissement" : "OK", $codes, $avertissement ? $avertissement : substr($commentaire, 0, 4000)); 
+      $messageAcquittement = $domAcquittement->generateAcquittements($avertissement ? "avertissement" : "OK", $codes, $avertissement ? $avertissement : substr($commentaire, 0, 4000)); 
       $doc_valid = $domAcquittement->schemaValidate();
       $echange_hprim->acquittement_valide = $doc_valid ? 1 : 0;
       $echange_hprim->statut_acquittement = $avertissement ? "avertissement" : "OK";

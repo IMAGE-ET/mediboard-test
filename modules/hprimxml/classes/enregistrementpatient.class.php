@@ -83,7 +83,7 @@ class CHPrimXMLEnregistrementPatient extends CHPrimXMLEvenementsPatients {
     
     // Acquittement d'erreur : identifiants source et cible non fournis
     if (!$data['idCiblePatient'] && !$data['idSourcePatient']) {
-      $messageAcquittement = $domAcquittement->generateAcquittementsPatients("erreur", "E005");
+      $messageAcquittement = $domAcquittement->generateAcquittements("erreur", "E005");
       $doc_valid = $domAcquittement->schemaValidate();
       
       $echange_hprim->setAckError($doc_valid, $messageAcquittement, "erreur");
@@ -151,7 +151,7 @@ class CHPrimXMLEnregistrementPatient extends CHPrimXMLEvenementsPatients {
           }
         }
         
-        $messageAcquittement = $domAcquittement->generateAcquittementsPatients($avertissement ? "avertissement" : "OK", $codes, $avertissement ? $avertissement : $commentaire);
+        $messageAcquittement = $domAcquittement->generateAcquittements($avertissement ? "avertissement" : "OK", $codes, $avertissement ? $avertissement : $commentaire);
         $doc_valid = $domAcquittement->schemaValidate();
         $echange_hprim->acquittement_valide = $doc_valid ? 1 : 0;
           
@@ -213,7 +213,7 @@ class CHPrimXMLEnregistrementPatient extends CHPrimXMLEvenementsPatients {
             } else {
               $commentaire = "Patient : $newPatient->_id. Les champs mis à jour sont les suivants : $modified_fields. IPP : $IPP->id400.";
             }
-            $messageAcquittement = $domAcquittement->generateAcquittementsPatients($avertissement ? "avertissement" : "OK", $codes, $avertissement ? $avertissement : $commentaire);
+            $messageAcquittement = $domAcquittement->generateAcquittements($avertissement ? "avertissement" : "OK", $codes, $avertissement ? $avertissement : $commentaire);
             $doc_valid = $domAcquittement->schemaValidate();
             $echange_hprim->acquittement_valide = $doc_valid ? 1 : 0;
               
@@ -250,7 +250,7 @@ class CHPrimXMLEnregistrementPatient extends CHPrimXMLEvenementsPatients {
               } else {
                 $commentaire = "Patient : $newPatient->_id. Les champs mis à jour sont les suivants : $modified_fields.";
               }
-              $messageAcquittement = $domAcquittement->generateAcquittementsPatients($avertissement ? "avertissement" : "OK", $msgPatient ? "A003" : "I002", $avertissement ? $avertissement : $commentaire);
+              $messageAcquittement = $domAcquittement->generateAcquittements($avertissement ? "avertissement" : "OK", $msgPatient ? "A003" : "I002", $avertissement ? $avertissement : $commentaire);
               
               $echange_hprim->statut_acquittement = $avertissement ? "avertissement" : "OK";
             }
@@ -374,7 +374,7 @@ class CHPrimXMLEnregistrementPatient extends CHPrimXMLEvenementsPatients {
         } else {
           $commentaire = "Patient : $newPatient->_id. Identifiant externe : $id400Patient->id400. IPP : $IPP->id400.";
         }
-        $messageAcquittement = $domAcquittement->generateAcquittementsPatients($avertissement ? "avertissement" : "OK", $codes, $avertissement ? $avertissement : $commentaire);
+        $messageAcquittement = $domAcquittement->generateAcquittements($avertissement ? "avertissement" : "OK", $codes, $avertissement ? $avertissement : $commentaire);
         $doc_valid = $domAcquittement->schemaValidate();
         $echange_hprim->acquittement_valide = $doc_valid ? 1 : 0;
         
@@ -393,7 +393,7 @@ class CHPrimXMLEnregistrementPatient extends CHPrimXMLEvenementsPatients {
             // Le patient trouvé est-il différent ?
             /*if (!$this->checkSimilarPatient($newPatient, $data['patient'])) {
               $commentaire = "Le nom et/ou le prénom sont très différents."; 
-              $messageAcquittement = $domAcquittement->generateAcquittementsPatients("erreur", "E016", $commentaire);
+              $messageAcquittement = $domAcquittement->generateAcquittements("erreur", "E016", $commentaire);
               $doc_valid = $domAcquittement->schemaValidate();
               $echange_hprim->setObjectIdClass("CPatient", $newPatient->_id);
               $echange_hprim->setAckError($doc_valid, $messageAcquittement, "erreur");
@@ -470,7 +470,7 @@ class CHPrimXMLEnregistrementPatient extends CHPrimXMLEvenementsPatients {
         $newPatient->load($IPP->object_id);
         /*if (!$this->checkSimilarPatient($newPatient, $data['patient'])) {
           $commentaire = "Le nom et/ou le prénom sont très différents."; 
-          $messageAcquittement = $domAcquittement->generateAcquittementsPatients("erreur", "E016", $commentaire);
+          $messageAcquittement = $domAcquittement->generateAcquittements("erreur", "E016", $commentaire);
           $doc_valid = $domAcquittement->schemaValidate();
           $echange_hprim->setObjectIdClass("CPatient", $newPatient->_id);
           $echange_hprim->setAckError($doc_valid, $messageAcquittement, "erreur");
@@ -517,7 +517,7 @@ class CHPrimXMLEnregistrementPatient extends CHPrimXMLEvenementsPatients {
           $commentaire = "Patient modifiée : $newPatient->_id. Les champs mis à jour sont les suivants : $modified_fields. IPP associé : $IPP->id400.";
         }
       }
-      $messageAcquittement = $domAcquittement->generateAcquittementsPatients($avertissement ? "avertissement" : "OK", $codes, $avertissement ? $avertissement : $commentaire); 
+      $messageAcquittement = $domAcquittement->generateAcquittements($avertissement ? "avertissement" : "OK", $codes, $avertissement ? $avertissement : $commentaire); 
       $doc_valid = $domAcquittement->schemaValidate();
       $echange_hprim->acquittement_valide = $doc_valid ? 1 : 0;
         

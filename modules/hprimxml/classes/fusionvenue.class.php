@@ -185,7 +185,7 @@ class CHPrimXMLFusionVenue extends CHPrimXMLEvenementsPatients {
         $avertissement = $messages['msgVenue'];
       }
         
-      $messageAcquittement = $domAcquittement->generateAcquittementsPatients($avertissement ? "avertissement" : "OK", $codes, $avertissement ? $avertissement : substr($messages['commentaire'], 0, 4000)); 
+      $messageAcquittement = $domAcquittement->generateAcquittements($avertissement ? "avertissement" : "OK", $codes, $avertissement ? $avertissement : substr($messages['commentaire'], 0, 4000)); 
       $doc_valid = $domAcquittement->schemaValidate();
       $echange_hprim->acquittement_valide = $doc_valid ? 1 : 0;
         

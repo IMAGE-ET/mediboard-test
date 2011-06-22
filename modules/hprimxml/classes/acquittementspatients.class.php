@@ -82,7 +82,7 @@ class CHPrimXMLAcquittementsPatients extends CHPrimXMLDocument {
     }   
   }
 
-  function generateAcquittementsPatients($statut, $codes, $commentaires = null, $mbObject = null) {
+  function generateAcquittements($statut, $codes, $commentaires = null, $mbObject = null) {
     if ($statut != "OK") {
       $this->generateEnteteMessageAcquittement($statut);
       $this->addErreursAvertissements($statut, $codes, $commentaires, $mbObject);
@@ -97,7 +97,7 @@ class CHPrimXMLAcquittementsPatients extends CHPrimXMLDocument {
   }
 
   function generateAcquittementsError($code, $commentaire, CMbObject $mbObject = null) {
-    $messageAcquittement = $this->generateAcquittementsPatients("erreur", $code, $commentaire);
+    $messageAcquittement = $this->generateAcquittements("erreur", $code, $commentaire);
     $doc_valid = $this->schemaValidate();
     $this->_ref_echange_hprim->setObjectIdClass($mbObject->_class_name, $mbObject->_id);
     $this->_ref_echange_hprim->setAckError($doc_valid, $messageAcquittement, "erreur");

@@ -131,11 +131,29 @@ class CEchangeHprim extends CEchangeXML {
   }
   
   function handle() {
-    COperatorHprimXML::event($this);
+    return COperatorHprimXML::event($this);
   }
 
   function getMessages() {
     return self::$messages;
+  }
+  
+  function populateEchange(CExchangeDataFormat $data_format, CHPrimXMLEvenements $dom_evt) {
+    $this->date_production = mbDateTime();
+    $this->group_id        = $data_format->group_id;
+    $this->emetteur_id     = $data_format->emetteur_id;
+    $this->type            = $dom_evt->type;
+    $this->sous_type       = $dom_evt->sous_type ? $dom_evt->sous_type : "inconnu";
+    $this->_message        = $data_format->_message;;
+  }
+  
+  function populateErrorEchange($msgAcq, $doc_valid, $type_error) {
+    $this->_acquittement       = $msgAcq;
+    $this->statut_acquittement = $type_error;
+    $this->message_valide      = 0;
+    $this->acquittement_valide = $doc_valid ? 1 : 0;
+    $this->date_echange        = mbDateTime();
+    $this->store();
   }
 }
 ?>

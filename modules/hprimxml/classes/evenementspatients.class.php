@@ -67,7 +67,7 @@ class CHPrimXMLEvenementsPatients extends CHPrimXMLEvenements {
       return $messageAcquittement;
     }
     
-    $messageAcquittement = $domAcquittement->generateAcquittementsPatients("erreur", "E008");
+    $messageAcquittement = $domAcquittement->generateAcquittements("erreur", "E008");
     $doc_valid = $domAcquittement->schemaValidate();
     $echange_hprim->acquittement_valide = $doc_valid ? 1 : 0;
       

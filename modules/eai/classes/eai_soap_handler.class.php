@@ -21,7 +21,7 @@ CAppUI::requireModuleClass("webservices", "soap_handler");
 class CEAISoapHandler extends CSoapHandler {
   static $paramSpecs = array(
     "event" => array ( 
-      "message" => "string")
+      "message" => "string"),
   );
   
   function event($message) {
@@ -35,9 +35,11 @@ class CEAISoapHandler extends CSoapHandler {
     }
 
     // Dispatch EAI 
-    if (!CEAIDispatcher::dispatch($message, $actor)) {
+    if (!$acq = CEAIDispatcher::dispatch($message, $actor)) {
       return utf8_encode(CEAIDispatcher::$xml_error);
     }
+    
+    return $acq;
   }
 }
 

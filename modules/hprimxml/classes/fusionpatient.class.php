@@ -83,7 +83,7 @@ class CHPrimXMLFusionPatient extends CHPrimXMLEvenementsPatients {
       // Acquittement d'erreur : identifiants source et cible non fournis pour le patient / patientElimine
       if (!$data['idSourcePatient'] && !$data['idCiblePatient'] && 
 			    !$data['idSourcePatientElimine'] && !$data['idCiblePatientElimine']) {
-        $messageAcquittement = $domAcquittement->generateAcquittementsPatients("erreur", "E005", null, $newPatient);
+        $messageAcquittement = $domAcquittement->generateAcquittements("erreur", "E005", null, $newPatient);
         $doc_valid = $domAcquittement->schemaValidate();
 				
         $echange_hprim->setAckError($doc_valid, $messageAcquittement, "erreur");
@@ -156,7 +156,7 @@ class CHPrimXMLFusionPatient extends CHPrimXMLEvenementsPatients {
         $commentaire = "Le patient $mbPatient->_id a été fusionné avec le patient $mbPatientElimine_id.";
       }
         
-      $messageAcquittement = $domAcquittement->generateAcquittementsPatients($avertissement ? "avertissement" : "OK", $codes, $avertissement ? $avertissement : substr($commentaire, 0, 4000), $newPatient); 
+      $messageAcquittement = $domAcquittement->generateAcquittements($avertissement ? "avertissement" : "OK", $codes, $avertissement ? $avertissement : substr($commentaire, 0, 4000), $newPatient); 
       $doc_valid = $domAcquittement->schemaValidate();
       $echange_hprim->acquittement_valide = $doc_valid ? 1 : 0;
         
