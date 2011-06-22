@@ -16,6 +16,7 @@ class CConstantesMedicales extends CMbObject {
   var $datetime              = null;
   var $context_class         = null;
   var $context_id            = null;
+  var $comment               = null;
   
   // The other fields are built in the contructor
   /*
@@ -86,6 +87,7 @@ class CConstantesMedicales extends CMbObject {
       "standard" => 12,
       "colors" => array("#00A8F0", "#C0D800"),
       "conversion" => array("mmHg" => 10),
+			"candles" => true,
     ),
     "ta_gauche"         => array(
       "unit" => "cmHg", 
@@ -258,6 +260,8 @@ class CConstantesMedicales extends CMbObject {
     $specs['datetime']               = 'dateTime notNull';
     $specs['context_class']          = 'str';
     $specs['context_id']             = 'ref class|CMbObject meta|context_class cascade';
+    $specs['comment']                = 'text';
+    
     $specs['poids']                  = 'float pos';
     $specs['taille']                 = 'float pos';
     $specs['ta']                     = 'str maxLength|10';
@@ -271,7 +275,7 @@ class CConstantesMedicales extends CMbObject {
     $specs['EVA']                    = 'float min|0 max|10';
     $specs['score_sedation']         = 'float';
     $specs['frequence_respiratoire'] = 'float pos';
-		$specs['glycemie']               = 'float pos max|10';
+    $specs['glycemie']               = 'float pos max|10';
     $specs['redon']                  = 'float pos min|0 max|1000';
     $specs['redon_2']                = 'float pos min|0 max|1000';
     $specs['redon_3']                = 'float pos min|0 max|1000';
@@ -291,9 +295,9 @@ class CConstantesMedicales extends CMbObject {
     $specs['_ta_gauche_diastole']    = 'num pos max|50';
     $specs['_ta_droit_systole']      = 'num pos max|50';
     $specs['_ta_droit_diastole']     = 'num pos max|50';
-		$specs['_inj']                   = 'num pos';
-		$specs['_inj_essai']             = 'num pos moreEquals|_inj';
-		
+    $specs['_inj']                   = 'num pos';
+    $specs['_inj_essai']             = 'num pos moreEquals|_inj';
+    
     return $specs;
   }
 
@@ -370,7 +374,7 @@ class CConstantesMedicales extends CMbObject {
       }
     }
     
-		$_injection = explode('|', $this->injection);
+    $_injection = explode('|', $this->injection);
     if ($this->injection && isset($_injection[0]) && isset($_injection[1])) {
       $this->_inj  = $_injection[0];
       $this->_inj_essai = $_injection[1];
@@ -378,8 +382,8 @@ class CConstantesMedicales extends CMbObject {
   }
   
   function updateDBFields() {
-  	// TODO: Utiliser les specs
-  	
+    // TODO: Utiliser les specs
+    
     $unite_ta = CAppUI::conf("dPpatients CConstantesMedicales unite_ta");
     
     if (!empty($this->_ta_systole) && !empty($this->_ta_diastole)) {
@@ -390,7 +394,7 @@ class CConstantesMedicales extends CMbObject {
       $this->ta = "$this->_ta_systole|$this->_ta_diastole";
     }
     if ($this->_ta_systole === '' && $this->_ta_diastole === '') {
-    	$this->ta = '';
+      $this->ta = '';
     }
     
     if (!empty($this->_ta_gauche_systole) && !empty($this->_ta_gauche_diastole)) {
@@ -463,19 +467,19 @@ class CConstantesMedicales extends CMbObject {
   }
   
   function store () {
-  	// S'il ne reste plus qu'un seul champ et que sa valeur est passée à vide,
-  	// alors on supprime la constante.
-  	if ($this->_id) {
-  		$ok = false;
-	    foreach (CConstantesMedicales::$list_constantes as $const => $params) {
-	      $this->completeField($const);
-	      if ($this->$const !== "" && $this->$const !== null) {
-	        $ok = true;
-	        break;
-	      }
-	    }
-	    if (!$ok)
-	  	  return parent::delete();
+    // S'il ne reste plus qu'un seul champ et que sa valeur est passée à vide,
+    // alors on supprime la constante.
+    if ($this->_id) {
+      $ok = false;
+      foreach (CConstantesMedicales::$list_constantes as $const => $params) {
+        $this->completeField($const);
+        if ($this->$const !== "" && $this->$const !== null) {
+          $ok = true;
+          break;
+        }
+      }
+      if (!$ok)
+        return parent::delete();
     }
     
     if (!$this->_id && !$this->_new_constantes_medicales) {
@@ -548,6 +552,42 @@ class CConstantesMedicales extends CMbObject {
     $constante->updateFormFields();
     
     return self::$_latest_values[$patient_id] = array($constante, $list_datetimes);
+  }
+  
+  static function buildGrid($list, $full = true) {
+    $grid = array();
+    $selection = array_keys(CConstantesMedicales::$list_constantes);
+    
+    if (!$full) {
+      $conf_constantes = explode("|", CAppUI::conf("dPpatients CConstantesMedicales important_constantes"));
+      $selection = $conf_constantes;
+    }
+    
+    $names = $selection;
+    
+    foreach ($list as $_constante_medicale) {
+      if (!isset($grid[$_constante_medicale->datetime])) {
+        $grid[$_constante_medicale->datetime] = array(
+          "comment" => $_constante_medicale->comment, 
+          "values"  => array(),
+        );
+      }
+      
+      foreach (CConstantesMedicales::$list_constantes as $_name => $_params) {
+        if (in_array($_name, $selection) || $_constante_medicale->$_name != '') {
+          $grid[$_constante_medicale->datetime]["values"][$_name] = $_constante_medicale->$_name;
+          
+          if (!in_array($_name, $names)) {
+            $names[] = $_name;
+          }
+        }
+      }
+    }
+    
+    return array(
+      $names, "names" => $names, 
+      $grid,  "grid"  => $grid,
+    );
   }
 }
 ?>

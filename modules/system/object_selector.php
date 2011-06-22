@@ -16,7 +16,7 @@ $object_id = CValue::get("object_id");
 // Liste des classes
 $classes = array();
 
-if (!$onlyclass) {
+if ($onlyclass != "true") {
 	$installed_classes = CApp::getInstalledClasses();
 }
 else {

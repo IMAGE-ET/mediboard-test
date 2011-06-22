@@ -55,17 +55,6 @@ $dossier_medical->countAntecedents();
 $dossier_medical->loadRefPrescription();
 $dossier_medical->loadRefsTraitements();
 
-$csteByTime = array();
-$i = 0;
-foreach ($sejour->_list_constantes_medicales as $_constante_medicale) {
-  $csteByTime[$i][$_constante_medicale->datetime] = array();  
-  foreach (CConstantesMedicales::$list_constantes as $_constante => $_params) {
-    if (count($csteByTime[$i][$_constante_medicale->datetime]) > 9) $i ++;
-    $csteByTime[$i][$_constante_medicale->datetime][$_constante] = $_constante_medicale->$_constante;
-  }
-  $i++;
-}
-
 // Chargement du dossier de soins cloturé
 $prescription = new CPrescription();
 $prescription->object_class = "CSejour";
@@ -140,6 +129,8 @@ if($prescription->_ref_lines_elements_comments|@count){
 
 ksort($dossier);
 
+$constantes_grid = CConstantesMedicales::buildGrid($sejour->_list_constantes_medicales, true);
+
 $praticien = new CMediusers();
 
 // Création du template
@@ -147,7 +138,7 @@ $smarty = new CSmartyDP();
 $smarty->assign("sejour"    , $sejour);
 $smarty->assign("dossier"   , $dossier);
 $smarty->assign("list_lines", $list_lines);
-$smarty->assign("csteByTime", $csteByTime);
+$smarty->assign("constantes_medicales_grid", $constantes_grid);
 $smarty->assign("prescription", $prescription);
 $smarty->assign("praticien", $praticien);
 $smarty->assign("offline", $offline);

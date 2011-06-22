@@ -26,6 +26,7 @@
           section.insert("<option value='" + i + "'>"+ sItem.section + "</option>");
         });
         section.selectedIndex = -1;
+        $("searchinput").focus();
       }
 
       function reloadItem(section) {
@@ -161,11 +162,11 @@
 
   </head>
   <body>
-  	Chercher un champ : <input type="text" value="" onkeyup="searchWord(this)"/>
+  	Chercher un champ : <input type="text" id="searchinput" autofocus="true" value="" onkeyup="searchWord(this)"/>
     <table>
       <tr id="classic">
         <td>
-          <select id="section" onchange = "reloadItem(this.value)" size="10" style="width: 150px; height: 180px;">
+          <select id="section" onchange="reloadItem(this.value)" size="10" style="width: 150px; height: 180px;">
           </select>
         </td>
         <td>

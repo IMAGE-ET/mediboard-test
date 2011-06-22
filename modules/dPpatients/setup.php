@@ -963,18 +963,18 @@ class CSetupdPpatients extends CSetup {
     $this->makeRevision("0.81");
     
     $query = "ALTER TABLE `patients` 
-					  CHANGE `prenom_2` `prenom_2` VARCHAR (255),
-					  CHANGE `prenom_3` `prenom_3` VARCHAR (255),
-					  CHANGE `prenom_4` `prenom_4` VARCHAR (255),
-					  CHANGE `sexe` `sexe` ENUM ('m','f','j'),
-					  CHANGE `adresse` `adresse` TEXT,
-					  CHANGE `ville` `ville` VARCHAR (255),
-					  CHANGE `incapable_majeur` `incapable_majeur` ENUM ('0','1'),
-					  CHANGE `ATNC` `ATNC` ENUM ('0','1'),
-					  CHANGE `matricule` `matricule` VARCHAR (15),
-					  CHANGE `assure_prenom_2` `assure_prenom_2` VARCHAR (255),
-					  CHANGE `assure_prenom_3` `assure_prenom_3` VARCHAR (255),
-					  CHANGE `assure_prenom_4` `assure_prenom_4` VARCHAR (255);";
+            CHANGE `prenom_2` `prenom_2` VARCHAR (255),
+            CHANGE `prenom_3` `prenom_3` VARCHAR (255),
+            CHANGE `prenom_4` `prenom_4` VARCHAR (255),
+            CHANGE `sexe` `sexe` ENUM ('m','f','j'),
+            CHANGE `adresse` `adresse` TEXT,
+            CHANGE `ville` `ville` VARCHAR (255),
+            CHANGE `incapable_majeur` `incapable_majeur` ENUM ('0','1'),
+            CHANGE `ATNC` `ATNC` ENUM ('0','1'),
+            CHANGE `matricule` `matricule` VARCHAR (15),
+            CHANGE `assure_prenom_2` `assure_prenom_2` VARCHAR (255),
+            CHANGE `assure_prenom_3` `assure_prenom_3` VARCHAR (255),
+            CHANGE `assure_prenom_4` `assure_prenom_4` VARCHAR (255);";
      
     $this->addQuery($query);
     
@@ -995,12 +995,12 @@ class CSetupdPpatients extends CSetup {
     $this->makeRevision("0.84");
     
     $query = "ALTER TABLE `patients` 
-    		ADD `libelle_exo` TEXT AFTER `rques`,
-    		ADD `medecin_traitant_declare` ENUM('0', '1') AFTER `email`";
+        ADD `libelle_exo` TEXT AFTER `rques`,
+        ADD `medecin_traitant_declare` ENUM('0', '1') AFTER `email`";
     $this->addQuery($query);
     
     $query = "ALTER TABLE `patients` 
-    		CHANGE `code_exo` `code_exo` ENUM('0', '4', '5', '9') NULL DEFAULT '0'";
+        CHANGE `code_exo` `code_exo` ENUM('0', '4', '5', '9') NULL DEFAULT '0'";
     $this->addQuery($query);
     
     $this->makeRevision("0.85");
@@ -1045,37 +1045,37 @@ class CSetupdPpatients extends CSetup {
     $this->makeRevision("0.86");
     
     $query = "ALTER TABLE `medecin` 
-					  ADD `adeli` INT (9) UNSIGNED ZEROFILL;";
+            ADD `adeli` INT (9) UNSIGNED ZEROFILL;";
         
     $this->makeRevision("0.87");
     
     $query = "ALTER TABLE `medecin` 
             ADD `adeli` INT (9) UNSIGNED ZEROFILL;";
     $this->addQuery($query);
-		
+    
     // Data source query
     $query = "SELECT *
       FROM `communes_france`
       WHERE `INSEE` = '99138'";
     $this->addDatasource("INSEE", $query);
-		
+    
     $this->makeRevision("0.88");
     $query = "ALTER TABLE `constantes_medicales` 
-		  ADD `glycemie` FLOAT UNSIGNED";
+      ADD `glycemie` FLOAT UNSIGNED";
     $this->addQuery($query);
-		
-		$this->makeRevision("0.89");
-		$query = "ALTER TABLE `medecin` 
-		  CHANGE `type` `type` ENUM ('medecin','kine','sagefemme','infirmier','dentiste','autre')";
-		$this->addQuery($query);
-		
-		$this->makeRevision("0.90");
-		$query = "ALTER TABLE `medecin` 
-		  CHANGE `type` `type` ENUM ('medecin','kine','sagefemme','infirmier','dentiste','podologue','autre');";
-		$this->addQuery($query);
+    
+    $this->makeRevision("0.89");
+    $query = "ALTER TABLE `medecin` 
+      CHANGE `type` `type` ENUM ('medecin','kine','sagefemme','infirmier','dentiste','autre')";
+    $this->addQuery($query);
+    
+    $this->makeRevision("0.90");
+    $query = "ALTER TABLE `medecin` 
+      CHANGE `type` `type` ENUM ('medecin','kine','sagefemme','infirmier','dentiste','podologue','autre');";
+    $this->addQuery($query);
 
     $this->makeRevision("0.91");
-		$query = "ALTER TABLE `patients` 
+    $query = "ALTER TABLE `patients` 
       ADD `notes_amc` TEXT;";
     $this->addQuery($query);
 
@@ -1095,30 +1095,30 @@ class CSetupdPpatients extends CSetup {
                 ADD INDEX (`fin_amo`),
                 ADD INDEX (`fin_validite_vitale`);";
     $this->addQuery($query);
-		
-		$this->makeRevision("0.93");
-		$query = "ALTER TABLE `antecedent` 
+    
+    $this->makeRevision("0.93");
+    $query = "ALTER TABLE `antecedent` 
               CHANGE `type` `type` VARCHAR (80),
               CHANGE `appareil` `appareil` VARCHAR (80);";
-		$this->addQuery($query);
-		
-		$this->makeRevision("0.94");
-		$query = "ALTER TABLE `dossier_medical` 
+    $this->addQuery($query);
+    
+    $this->makeRevision("0.94");
+    $query = "ALTER TABLE `dossier_medical` 
               ADD `risque_thrombo_patient` ENUM ('faible','modere','eleve','majeur','NR') DEFAULT 'NR',
               ADD `risque_MCJ_patient` ENUM ('sans','avec','suspect','atteint','NR') DEFAULT 'NR',
               ADD `risque_thrombo_chirurgie` ENUM ('faible','modere','eleve','NR') DEFAULT 'NR',
               ADD `risque_antibioprophylaxie` ENUM ('oui','non','NR') DEFAULT 'NR',
               ADD `risque_prophylaxie` ENUM ('oui','non','NR') DEFAULT 'NR',
               ADD `risque_MCJ_chirurgie` ENUM ('sans','avec','NR') DEFAULT 'NR';";
-		$this->addQuery($query);
-		
-		$this->makeRevision("0.95");
-		$query = "ALTER TABLE `constantes_medicales` 
+    $this->addQuery($query);
+    
+    $this->makeRevision("0.95");
+    $query = "ALTER TABLE `constantes_medicales` 
               ADD `redon` FLOAT UNSIGNED,
               ADD `diurese` FLOAT UNSIGNED,
               ADD `injection` VARCHAR (10);";
-		$this->addQuery($query);
-		
+    $this->addQuery($query);
+    
     $this->makeRevision("0.96");
     $query = "ALTER TABLE `patients` 
               ADD `code_gestion` MEDIUMINT (4) UNSIGNED ZEROFILL,
@@ -1144,15 +1144,15 @@ class CSetupdPpatients extends CSetup {
     $this->makeRevision("0.98");
     $query = "ALTER TABLE `patients` CHANGE `code_gestion` `code_gestion` CHAR (2)";
     $this->addQuery($query);
-							
+              
     $this->makeRevision("0.99");
-		
-		$query = "ALTER TABLE `patients`
+    
+    $query = "ALTER TABLE `patients`
              CHANGE `civilite` `civilite` ENUM ('m','mme','melle','mlle','enf','dr','pr','me','vve') DEFAULT 'm',
              CHANGE `assure_civilite` `assure_civilite` ENUM ('m','mme','melle','mlle','enf','dr','pr','me','vve') DEFAULT 'm';";
     $this->addQuery($query);
-		
-		$query = "UPDATE `patients` SET `civilite` = 'mlle' WHERE `civilite` = 'melle'";
+    
+    $query = "UPDATE `patients` SET `civilite` = 'mlle' WHERE `civilite` = 'melle'";
     $this->addQuery($query);
     
     $query = "UPDATE `patients` SET `assure_civilite` = 'mlle' WHERE `assure_civilite` = 'melle'";
@@ -1201,8 +1201,8 @@ class CSetupdPpatients extends CSetup {
 
     $this->makeRevision("1.07");
     $query = "ALTER TABLE `patients`
-		  DROP `nationalite`,
-		  DROP `assure_nationalite`;";
+      DROP `nationalite`,
+      DROP `assure_nationalite`;";
     $this->addQuery($query);
     
     $this->makeRevision("1.08");
@@ -1262,7 +1262,12 @@ class CSetupdPpatients extends CSetup {
       CHANGE `prenom` `prenom` varchar(255);";
     $this->addQuery($query);
     
-    $this->mod_version = "1.15";
+    $this->makeRevision("1.15");
+    $query = "ALTER TABLE `constantes_medicales` 
+              ADD `comment` TEXT";
+    $this->addQuery($query);
+    
+    $this->mod_version = "1.16";
     
     
   }

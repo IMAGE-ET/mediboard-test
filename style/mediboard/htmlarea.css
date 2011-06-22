@@ -1,3 +1,5 @@
+@import url(vertical.css);
+
 body, table {
   font-family: Georgia, serif;
   font-size: 12px;
@@ -15,12 +17,12 @@ textarea#htmlarea {
 }
 
 ul {
-	margin: 0;
-	padding-left: 1.5em;
+  margin: 0;
+  padding-left: 1.5em;
 }
 
 li {
-	
+  
 }
 span.hilite {
   background: #f5f;
@@ -28,23 +30,23 @@ span.hilite {
 
 table.tbl {
   border-spacing: 0;
-	border-collapse: collapse;
+  border-collapse: collapse;
 }
 
 table.tbl th {
-	background: #eee;
+  background: #eee;
   border: 0.1px solid #aaa;
   padding: 0.1em 0.5em;
-	text-align: center;
+  text-align: center;
 }
 
 table.tbl td {
-	border: 0.1px solid #aaa;
+  border: 0.1px solid #aaa;
   padding: 0.1em 0.5em;
 }
 
 span.page:before {
-	content: counter(page, none);
+  content: counter(page, none);
 }
 
 @media screen {
@@ -132,7 +134,7 @@ span.page:before {
     overflow: hidden;
     border: 0px solid #888;
   }
-	
+  
   table {
     border-collapse: collapse !important;
   }

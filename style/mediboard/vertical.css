@@ -1,0 +1,58 @@
+/* Vertical text */
+span.vertical {
+  writing-mode: tb-rl;
+  width: 1.1em;
+  display: inline-block;
+  -webkit-transform: rotate(180deg);
+  -moz-transform: rotate(180deg);
+  -o-transform: rotate(180deg);
+  transform: rotate(180deg);
+}
+
+span.vertical i {
+  display: block;
+  -webkit-transform: rotate(90deg);
+  -moz-transform: rotate(90deg);
+  -o-transform: rotate(90deg);
+  transform: rotate(90deg);
+  margin-bottom: -60%;
+  font-style: normal;
+}
+
+span.vertical .nowm {
+  padding: 0 2px;
+  display: inline-block;
+  font-family: "lucida console", "courier new", courier, monospace;
+}
+
+span.vertical .orig {
+  display: none;
+}
+
+/* IE HACKS */
+@media \0screen\,screen\9, \0print\,print\9 {
+	span.vertical {
+	  width: auto;
+	}
+	
+	span.vertical .orig {
+	  display: inline;
+	}
+	
+	span.vertical .nowm {
+	  display: none !important; /* doesn't work when contentEditable=true !!! */
+		visibility: hidden;
+		font-size: 0;
+		line-height: 0;
+		letter-spacing: -1px;
+	  filter: alpha(opacity=0);
+	  -ms-filter: "alpha(opacity=0)";
+	}
+}
+
+@media \0screen\,screen\9 {
+  span.vertical {
+    filter: flipv fliph;
+  }
+}
+/* END IE HACKS */

@@ -41,9 +41,9 @@
   <tr>
     <th>Documents</th>
     <td>
-        {{foreach from=$consult->_ref_documents item=_document}}
-          {{$_document->_view}} <br />
-        {{/foreach}}
+      {{foreach from=$consult->_ref_documents item=_document}}
+        {{$_document->_view}} <br />
+      {{/foreach}}
     </td>
   </tr>
   

@@ -158,6 +158,7 @@ function getMin($n, $array) {
 
 $dates     = array();
 $hours     = array();
+$comments  = array();
 $const_ids = array();
 $data      = array();
 $graphs    = array();
@@ -183,8 +184,10 @@ foreach ($constants_to_draw as $name => $params) {
 // Si le séjour a des constantes médicales
 if ($list_constantes) {
   foreach ($list_constantes as $cst) {
+  	$comment = utf8_encode($cst->comment);
     $dates[] = mbTransformTime($cst->datetime, null, '%d/%m/%y');
     $hours[] = mbTransformTime($cst->datetime, null, '%Hh%M');
+    $comments[] = $comment;
     $const_ids[] = $cst->_id;
     $cst->loadLogs();
     
@@ -215,7 +218,7 @@ if ($list_constantes) {
       $i = count($d["series"][0]["data"]);
       foreach($fields as $n => $_field) {
         //if ($cst->$_field !== null && $cst->$_field !== "") // We have to show empty points too!
-          $d["series"][$n]["data"][] = array($i, getValue($cst->$_field), $user_view);
+          $d["series"][$n]["data"][] = array($i, getValue($cst->$_field), $user_view, $comment);
       }
      
       $graphs[] = "constantes-medicales-$name";
@@ -262,6 +265,7 @@ $smarty->assign('patient',       $patient);
 $smarty->assign('data',          $data);
 $smarty->assign('dates',         $dates);
 $smarty->assign('hours',         $hours);
+$smarty->assign('comments',      $comments);
 $smarty->assign('const_ids',     $const_ids);
 $smarty->assign('latest_constantes', $latest_constantes);
 $smarty->assign('selection',     $selection);

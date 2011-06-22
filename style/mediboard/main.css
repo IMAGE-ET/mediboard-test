@@ -8,6 +8,7 @@
 @import url(tooltips.css);
 @import url(ui.css);
 @import url(dev.css);
+@import url(vertical.css);
 
 /** 
 z-index ordering (foreground to background) :
@@ -1568,34 +1569,4 @@ td.loading {
   #systemMsg, #performance, .smarty-include {
     display: none;
   }
-}
-
-span.vertical {
-  writing-mode: tb-rl;
-  width: 1.1em;
-  display: inline-block;
-  -webkit-transform: rotate(180deg);
-  -moz-transform: rotate(180deg);
-  -o-transform: rotate(180deg);
-  transform: rotate(180deg);
-}
-
-span.vertical i {
-  display: block;
-  -webkit-transform: rotate(90deg);
-  -moz-transform: rotate(90deg);
-  -o-transform: rotate(90deg);
-  transform: rotate(90deg);
-  margin-bottom: -60%;
-  font-style: inherit;
-}
-
-span.vertical .nowm {
-  padding: 0 2px;
-  display: inline-block;
-  font-family: "lucida console", "courier new", courier, monospace;
-}
-
-span.vertical .orig {
-  display: none;
 }

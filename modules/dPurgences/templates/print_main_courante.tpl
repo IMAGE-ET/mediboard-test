@@ -163,7 +163,7 @@ function printPage(element){
                 {{assign var=dossier_medical value=$patient->_ref_dossier_medical}}
                 
                 {{if array_key_exists($sejour_id, $csteByTimeAll)}}
-                  {{assign var=csteByTime value=$csteByTimeAll.$sejour_id}}
+                  {{assign var=constantes_medicales_grid value=$csteByTimeAll.$sejour_id}}
                 {{/if}}
                 
                 {{mb_include module=dPurgences template=print_dossier}}

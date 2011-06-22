@@ -42,16 +42,8 @@ foreach ($consult->_ref_actes_ccam as $_ccam) {
 	$_ccam->loadRefExecutant();
 }
 
-$csteByTime = array();
-$i = 0;
-foreach ($sejour->_list_constantes_medicales as $_constante_medicale) {
-  $csteByTime[$i][$_constante_medicale->datetime] = array();  
-  foreach (CConstantesMedicales::$list_constantes as $_constante => $_params) {
-    if (count($csteByTime[$i][$_constante_medicale->datetime]) > 9) $i ++;
-    $csteByTime[$i][$_constante_medicale->datetime][$_constante] = $_constante_medicale->$_constante;
-  }
-  $i++;
-}
+
+$constantes_medicales_grid = CConstantesMedicales::buildGrid($sejour->_list_constantes_medicales);
 
 // Création du template
 $smarty = new CSmartyDP();
@@ -61,9 +53,8 @@ $smarty->assign("patient", $patient);
 $smarty->assign("sejour" , $sejour);
 $smarty->assign("dossier_medical", $dossier_medical);
 $smarty->assign("consult", $consult);
-$smarty->assign("csteByTime", $csteByTime);
+$smarty->assign("constantes_medicales_grid", $constantes_medicales_grid);
 $smarty->assign("today", $today  );
-$smarty->assign("params"              , CConstantesMedicales::$list_constantes);
 $smarty->display("print_dossier.tpl");
 
 ?>

@@ -3,17 +3,25 @@ g = [];
 data = {{$data|@json}};
 dates = {{$dates|@json}};
 hours = {{$hours|@json}};
+comments = {{$comments|@json}};
 const_ids = {{$const_ids|@json}};
 keys_selection = {{$selection|@array_keys|@json}};
 last_date = null;
 
+var xRange = {min: -0.5, max: Math.max(dates.length-1, 12)+0.5};
+var xOffset = ((xRange.max+0.5) - 15);
+window.globalXOffset = 0;
+
+if (xOffset > 0) {
+  xRange.min += xOffset;
+}
+
 submitConstantesMedicales = function(oForm) {
-  submitFormAjax(oForm, 'systemMsg', {
+  return onSubmitFormAjax(oForm, {
     onComplete: function () {
       refreshConstantesMedicales($V(oForm.context_class)+'-'+$V(oForm.context_id));
     }
   });
-  return false;
 }
 
 editConstantes = function (const_id, context_guid){
@@ -26,22 +34,41 @@ editConstantes = function (const_id, context_guid){
 }
 
 insertGraph = function (container, data, id, width, height) {
-  container.insert('<div id="'+id+'" style="width:'+width+';height:'+height+';margin:auto;"></div>');
+  if (!$(id)) {
+    container.insert('<div id="'+id+'" style="width:'+width+';height:'+height+';margin:auto;"></div>');
+  }
   last_date = null;
-  return Flotr.draw($(id), data.series, data.options);
+  
+  var o = Flotr.clone(data.options);
+  o.xaxis.min += window.globalXOffset;
+  o.xaxis.max += window.globalXOffset;
+  
+  return Flotr.draw($(id), data.series, o);
 }
 
 tickFormatter = function (n) {
   n = parseInt(n);
+  if (!const_ids[n]) {
+    return "";
+  }
   
-  var s = '<a href="#1" onclick="editConstantes('+const_ids[n]+', \'{{$context_guid}}\')">';
+  var comment = comments[n];
+  
+  var s = '<a href="#1" '+(comment ? (' title="'+comment+'" style="color:red;font-weight:bold;" ') : '')+
+          ' onclick="editConstantes('+const_ids[n]+', \'{{$context_guid}}\')">';
+  
   if (dates[n] && dates[n] == last_date) {
     s += hours[n];
   } else if (dates[n] && hours[n]) {
-    s += hours[n]+'<br />'+dates[n];
+    s += hours[n]+'<br />'+dates[n]+(new Array(50).join(" ")); // argh, flotr checks the length of the longest string, not the biggest element
     last_date = dates[n];
   }
+  
   return s+'</a>';
+};
+
+yTickFormatter = function (n) {
+  return "<span style='display: inline-block; width: 3em;'>"+n+"</span>";
 };
 
 tickFormatterSpreadsheet = function (n) {
@@ -53,8 +80,10 @@ tickFormatterSpreadsheet = function (n) {
 trackFormatter = function (obj) {
   var n = parseInt(obj.x);
   var data = obj.series.data[obj.index];
-  var str = dates[parseInt(obj.x)] + ' : ' + data[1] + '<br />' + data[2];
-  
+  var str = dates[n] + ' ' + hours[n] + ' : ' + 
+         data[1] + '<br />' + 
+         data[2];
+         
   if (data[3])  {
     str += '<hr />' + data[3];
   }
@@ -63,6 +92,14 @@ trackFormatter = function (obj) {
   
   return str;
 };
+
+shiftGraphs = function(side){
+  var offset = 5;
+  window.globalXOffset += {before: -offset, after: +offset}[side]; 
+  last_date = null; 
+  drawGraph(); 
+  toggleAllGraphs();
+}
 
 initializeGraph = function (src, data) {
   src.options = {
@@ -78,16 +115,7 @@ initializeGraph = function (src, data) {
     selection: src.options.selection || {}
   };
 
-  Object.extend(src.options,        data);
-  Object.extend(src.options.xaxis,  data.xaxis);
-  Object.extend(src.options.yaxis,  data.yaxis);
-  Object.extend(src.options.mouse,  data.mouse);
-  Object.extend(src.options.points, data.points);
-  Object.extend(src.options.lines,  data.lines);
-  Object.extend(src.options.grids,  data.grids);
-  Object.extend(src.options.legend, data.legend);
-  Object.extend(src.options.colors, data.colors);
-  Object.extend(src.options.selection, data.selection);
+  Flotr.merge(data, src.options);
   
   // Suppression des valeurs Y nulles
   src.series.each(function(serie) {
@@ -123,8 +151,11 @@ options = {
     tickDecimals: 1,
     ticks: false,
     tickFormatter: tickFormatter,
-    min: 0,
-    max: Math.max(dates.length-1, 12)
+    min: xRange.min,
+    max: xRange.max
+  },
+  yaxis: {
+    tickFormatter: yTickFormatter
   },
   points: {
     show: true
@@ -148,6 +179,10 @@ options = {
     tickFormatter: tickFormatterSpreadsheet
   }
 };
+
+if (Prototype.Browser.IE) {
+  options.shadowSize = 0;
+}
 
 {{if $print}}
   options.resolution = 2;
@@ -336,10 +371,19 @@ loadConstantesMedicales  = function(context_guid) {
         {{include file="inc_form_edit_constantes_medicales.tpl" context_guid=$context_guid}}
       </td>
       <td>
-        <button class="hslip notext" title="Afficher/Cacher le formulaire" onclick="$('constantes-medicales-form').toggle();" type="button">
+        <div class="small-info">
+          Vous pouvez maintenant naviguer à droite et à gauche pour afficher les relevés précédents. <br />
+          Par défaut seuls <strong>les 15 derniers sont affichés</strong>.
+        </div>
+        
+        <button class="hslip notext" style="float: left;" title="Afficher/Cacher le formulaire" onclick="$('constantes-medicales-form').toggle();" type="button">
           Formulaire constantes
         </button>
-        <div id="constantes-medicales-graph" style="margin-left: 5px; text-align: center;"></div>
+        
+        <button id="constantes-medicales-graph-before" class="left" style="float: left;"       onclick="shiftGraphs('before');">Avant</button>
+        <button id="constantes-medicales-graph-after"  class="right rtl" style="float: right;" onclick="shiftGraphs('after');">Après</button>
+        
+        <div id="constantes-medicales-graph" style="margin-left: 5px; text-align: center; clear: both;"></div>
       </td>
     </tr>
   </table>

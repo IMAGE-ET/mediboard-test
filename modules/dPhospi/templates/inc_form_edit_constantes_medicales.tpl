@@ -183,6 +183,12 @@ Main.add(function () {
       </tr>
       {{/if}}
       <tr>
+        <td colspan="5" style="text-align: center;">{{mb_label object=$constantes field=comment}}</td>
+      </tr>
+      <tr>
+        <td colspan="5">{{mb_field object=$constantes field=comment}}</td>
+      </tr>
+      <tr>
         {{if !$hide_save_button}}
           <td colspan="5" class="button">
             <button class="modify" onclick="return submitConstantesMedicales(this.form);">

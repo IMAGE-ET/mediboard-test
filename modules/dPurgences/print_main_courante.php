@@ -49,7 +49,6 @@ $stats = array (
 ),
 );
 
-$csteByTime = array();
 $csteByTimeAll = array();
 
 // Détail du chargement
@@ -131,17 +130,7 @@ foreach ($sejours as &$_sejour) {
       $_ccam->loadRefExecutant();
     }
 
-    $i = 0;
-
-    $csteByTimeAll[$_sejour->_id] = array();
-    foreach ($_sejour->_list_constantes_medicales as $_constante_medicale) {
-      $csteByTimeAll[$_sejour->_id][$i][$_constante_medicale->datetime] = array();
-      foreach (CConstantesMedicales::$list_constantes as $_constante => $_params) {
-        if (count($csteByTimeAll[$_sejour->_id][$i][$_constante_medicale->datetime]) > 9) $i ++;
-        $csteByTimeAll[$_sejour->_id][$i][$_constante_medicale->datetime][$_constante] = $_constante_medicale->$_constante;
-      }
-      $i++;
-    }
+    $csteByTimeAll[$_sejour->_id] = CConstantesMedicales::buildGrid($_sejour->_list_constantes_medicales);
   }
 }
 
