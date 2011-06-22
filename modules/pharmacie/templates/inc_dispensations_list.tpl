@@ -22,10 +22,10 @@ loadSuivi = function(sejour_id, user_id, cible, show_obs, show_trans) {
   url.addParam("sejour_id", sejour_id);
   url.addParam("user_id", user_id);
   url.addParam("cible", cible);
-  if (!Object.isUndefined(show_obs) {
+  if (!Object.isUndefined(show_obs)) {
     url.addParam("_show_obs", show_obs);
   }
-  if (!Object.isUndefined(show_trans) {
+  if (!Object.isUndefined(show_trans)) {
     url.addParam("_show_trans", show_trans);
   }
   url.requestUpdate("list-transmissions");
