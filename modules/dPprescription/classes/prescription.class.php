@@ -811,8 +811,8 @@ class CPrescription extends CMbObject implements IPatientRelated {
 			foreach($this->_ref_prescription_line_mixes as $_key_line => $_line_mix){
 			  $debut = $_line_mix->_debut;
 			  $fin = $_line_mix->_fin;
-	      if ($in_progress && (($_line_mix->_debut && $_line_mix->_debut > mbDateTime("+$in_progress hours", $current_date))) ||
-			      ($_line_mix->_fin && $_line_mix->_fin < mbDateTime("-$in_progress hours", $current_date))) {
+	      if ($in_progress && (($_line_mix->_debut && $_line_mix->_debut > mbDateTime("+$in_progress hours", $current_date)) ||
+			      ($_line_mix->_fin && $_line_mix->_fin < mbDateTime("-$in_progress hours", $current_date)))) {
 			    unset($this->_ref_prescription_line_mixes[$_key_line]);
 			    continue;
 			  }
