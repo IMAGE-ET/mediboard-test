@@ -427,16 +427,30 @@ class CActeCCAM extends CActe {
     arsort($orderedActes);
     $position = array_search($this->_id, array_keys($orderedActes));
     
-    // Nombre d'actes du chap. 18
-    $numChap18 = 0;
-    if($this->_ref_code_ccam->chapitres[0]["db"] == "000018") {
-      $numChap18++;
+    // Nombre d'actes du chap. 18.01
+    $numChap1801 = 0;
+    if($this->_ref_code_ccam->chapitres[0]["db"] == "000018" && $this->_ref_code_ccam->chapitres[1]["db"] == "000001") {
+      $numChap1801++;
     }
     foreach($this->_linked_actes as $linkedActe) {
-      if($linkedActe->_ref_code_ccam->chapitres[0]["db"] == "000018") {
-        $numChap18++;
+      if($linkedActe->_ref_code_ccam->chapitres[0]["db"] == "000018" && $linkedActe->_ref_code_ccam->chapitres[1]["db"] == "000001") {
+        $numChap1801++;
       }
     }
+    
+    // Nombre d'actes du chap. 18.02
+    $numChap1802 = 0;
+    if($this->_ref_code_ccam->chapitres[0]["db"] == "000018" && $this->_ref_code_ccam->chapitres[1]["db"] == "000002") {
+      $numChap1802++;
+    }
+    foreach($this->_linked_actes as $linkedActe) {
+      if($linkedActe->_ref_code_ccam->chapitres[0]["db"] == "000018" && $linkedActe->_ref_code_ccam->chapitres[1]["db"] == "000002") {
+        $numChap1802++;
+      }
+    }
+    
+    // Nombre d'actes du chap. 18
+    $numChap18 = $numChap1801 + $numChap1802;
     
     // Nombre d'actes du chap. 19.01
     $numChap1901 = 0;
@@ -574,10 +588,10 @@ class CActeCCAM extends CActe {
       return $this->_guess_association;
     }
     
-    // 1 actes + 1 acte du chap. 18 ou du chap. 19.02 (règles B) (règle supprimée pour l'instant à cause de l'interface factu)
+    // 1 actes + 1 acte du chap. 18.02 ou du chap. 19.02 (règles B) (règle supprimée pour l'instant à cause de l'interface factu)
     if($numActes == 2) {
-      // 1 acte + 1 geste complémentaire chap. 18 (règle B)
-      if($numChap18 == 1) {
+      // 1 acte + 1 geste complémentaire chap. 18.02 (règle B)
+      if($numChap1802 == 1) {
         $this->_guess_association = "";
         $this->_guess_regle_asso  = "B";
         return $this->_guess_association;
@@ -591,8 +605,8 @@ class CActeCCAM extends CActe {
     }
     
      
-    // 1 acte + 1 ou pls geste complémentaire chap. 18 + 1 ou pls supplément des chap. 19.02 (règle C)
-    if($numActes >= 3 && $numActes - ($numChap18 + $numChap1902) == 1 && $numChap18 && $numChap1902) {
+    // 1 acte + 1 ou pls geste complémentaire chap. 18.02 + 1 ou pls supplément des chap. 19.02 (règle C)
+    if($numActes >= 3 && $numActes - ($numChap1802 + $numChap1902) == 1 && $numChap1802 && $numChap1902) {
       $this->_guess_association = "1";
       $this->_guess_regle_asso  = "C";
       return $this->_guess_association;
@@ -620,15 +634,15 @@ class CActeCCAM extends CActe {
       return $this->_guess_association;
     }
     
-    // 1 acte + 1 acte des chap. 02, 03, 05 à 10, 16, 17 ou 19.01 + 1 acte des chap. 18 ou 19.02 (règle F)
-    if($numActes == 3 && ($numChap02 == 1 || $numChap1901 == 1) && ($numChap18 == 1 || $numChap1902 == 1)) {
+    // 1 acte + 1 acte des chap. 02, 03, 05 à 10, 16, 17 ou 19.01 + 1 acte des chap. 18.02 ou 19.02 (règle F)
+    if($numActes == 3 && ($numChap02 == 1 || $numChap1901 == 1) && ($numChap1802 == 1 || $numChap1902 == 1)) {
       switch($position) {
         case 0 :
           $this->_guess_association = "1";
           $this->_guess_regle_asso  = "F";
           break;
         case 1 :
-          if($this->_ref_code_ccam->chapitres[0] == "18" || ($this->_ref_code_ccam->chapitres[0] == "19" && $this->_ref_code_ccam->chapitres[1] == "02")) {
+          if(($this->_ref_code_ccam->chapitres[0] == "18" || $this->_ref_code_ccam->chapitres[0] == "19") && $this->_ref_code_ccam->chapitres[1] == "02") {
             $this->_guess_association = "1";
             $this->_guess_regle_asso  = "F";
           } else {
@@ -637,7 +651,7 @@ class CActeCCAM extends CActe {
           }
           break;
         case 2 :
-          if($this->_ref_code_ccam->chapitres[0] == "18" || ($this->_ref_code_ccam->chapitres[0] == "19" && $this->_ref_code_ccam->chapitres[1] == "02")) {
+          if(($this->_ref_code_ccam->chapitres[0] == "18" || $this->_ref_code_ccam->chapitres[0] == "19") && $this->_ref_code_ccam->chapitres[1] == "02") {
             $this->_guess_association = "1";
             $this->_guess_regle_asso  = "F";
           } else {
