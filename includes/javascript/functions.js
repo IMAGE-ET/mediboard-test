@@ -26,6 +26,37 @@ function main() {
 
 document.observe('dom:loaded', main);
 
+var UAInfo = {
+	string: "",
+	buildString: function(){
+		if (UAInfo.string) return;
+		
+    UAInfo.append("Navigateur", BrowserDetect.browser+" "+BrowserDetect.version);
+    UAInfo.append("Système", BrowserDetect.OS);
+		if (User.login) {
+	    UAInfo.append("Utilisateur", User.view+" ("+User.login+")");
+	    UAInfo.append("Fonction", User["function"].view);
+	    UAInfo.append("Etablissement", User.group.view);
+		}
+		else {
+			UAInfo.append("Utilisateur", "Non connecté");
+		}
+	},
+	append: function(label, value) {
+		UAInfo.string += String.fromCharCode(8226)+" "+label+" : \t"+value+"\n";
+	}
+};
+
+document.observe("keydown", function(e){
+  var key = Event.key(e);
+	
+  if (e.altKey && key == 89) {
+		Event.stop(e);
+		UAInfo.buildString();
+    alert(UAInfo.string);
+  }
+});
+
 window.onunload = function () {
   if (Url.activeRequests.post > 0)
     alert($T("WaitingForAjaxRequestReturn"));

@@ -918,9 +918,10 @@ class CMediusers extends CMbObject {
     $this->updateFormFields();
     $this->loadRefFunction()->loadRefGroup();
     return $this->_basic_info = array (
-      'id'   => $this->_id,
-      'guid' => $this->_guid,
-      'view' => $this->_view,
+      'id'    => $this->_id,
+      'guid'  => $this->_guid,
+      'view'  => $this->_view,
+      'login' => $this->_user_username,
       'function' => array (
         'id' => $this->_ref_function->_id,
         'guid'  => $this->_ref_function->_guid,

@@ -89,6 +89,7 @@ CJSLoader::$files = array(
   "includes/javascript/exObject.js",
   "includes/javascript/tag.js",
   "includes/javascript/mbObject.js",
+	"includes/javascript/browserDetect.js",
 
   "includes/javascript/mbmail.js",
 );
