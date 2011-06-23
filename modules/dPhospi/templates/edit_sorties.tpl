@@ -7,11 +7,15 @@ Main.add(function () {
 Main.add(Control.Tabs.create.curry('tabs-edit-sorties', true));
 
 function saveSortie(oFormSortie, oFormAffectation){
-  if(oFormSortie){
+  if(oFormSortie) {
     oFormAffectation.sortie.value = oFormSortie.sortie.value;
   }
 }
 
+function addDays(button, days) {
+  var sortie = button.form.sortie_prevue;
+  $V(sortie, Date.fromDATETIME($V(sortie)).addDays(days).toDATETIME());
+}
 </script>
 
 <table class="main">
@@ -107,6 +111,7 @@ function saveSortie(oFormSortie, oFormAffectation){
             <input type="hidden" name="del" value="0" />
             {{mb_key object=$sejour}}
             {{mb_field object=$sejour field=entree_prevue hidden=true}}
+            <button class="add" type="button" onclick="addDays(this, 1)">1J</button>
             {{mb_field object=$sejour field=sortie_prevue register=true form="editSortiePrevue-$sejour_guid" onchange="this.form.submit()"}}
           </form>
         {{/if}}

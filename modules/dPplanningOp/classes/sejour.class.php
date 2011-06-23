@@ -322,12 +322,16 @@ class CSejour extends CCodable implements IPatientRelated {
   }
   
   function check() {
-    $msg    = "";
+    // Has to be done first to check and repair fields before further checking
+    if ($msg = parent::check()) {
+      return $msg;
+    }
+
     $pathos = new CDiscipline();
     
     // Test de la pathologies
     if ($this->pathologie != null && (!in_array($this->pathologie, $pathos->_specs["categorie"]->_list))) {
-      $msg.= "Pathologie non disponible<br />";
+      return "Pathologie non disponible";
     }
     
     // Test de coherence de date avec les interventions
@@ -347,15 +351,14 @@ class CSejour extends CCodable implements IPatientRelated {
           } 
 
           if (!CMbRange::in($date_operation, $entree, $sortie)) {
-             $msg.= "Intervention du $date_operation en dehors des nouvelles dates du séjour du $entree au $sortie";  
+             return "Intervention du '$date_operation' en dehors des nouvelles dates du séjour du '$entree' au '$sortie'";  
           } 
         }
 
         $this->makeDatesConsultations();
-        foreach($this->_dates_consultations as $consultation_id => $date_consultation){
-          $consultInBounds = $date_consultation >= mbDate($entree) && $date_consultation <= mbDate($sortie);
-          if (!$consultInBounds) {
-            $msg.= "Consultations en dehors des nouvelles dates du séjour.<br />";  
+        foreach ($this->_dates_consultations as $consultation_id => $date_consultation){
+          if (!CMbRange::in($date_consultation, $entree, $sortie)) {
+            return "Consultations en dehors des nouvelles dates du séjour.";  
           } 
         }
       }
@@ -364,18 +367,16 @@ class CSejour extends CCodable implements IPatientRelated {
       if ($this->fieldModified("annule", "1")) {
         $max_cancel_time = CAppUI::conf("dPplanningOp CSejour max_cancel_time");
         if ((mbDateTime("+ $max_cancel_time HOUR", $this->entree_reelle) < mbDateTime())) {
-          $msg .= "Impossible d'annuler un dossier ayant une entree réelle depuis plus de $max_cancel_time heures.<br />";
+           return "Impossible d'annuler un dossier ayant une entree réelle depuis plus de $max_cancel_time heures.<br />";
         }
       }
       
       if (!$this->_merging && !$this->_forwardRefMerging) {
         foreach ($this->getCollisions() as $collision) {
-          $msg .= "Collision avec le séjour du $collision->entree au $collision->sortie"; 
+          return "Collision avec le séjour du '$collision->entree' au '$collision->sortie'"; 
         }
       }
     }
-    
-    return $msg . parent::check();
   }
 
   /**

@@ -782,14 +782,18 @@ Class.extend(Date, {
   
   addDays: function(iDays) {
     this.setDate(this.getDate() + parseInt(iDays, 10));
+    return this;
   },
 	addHours: function(iHours) {
     this.setHours(this.getHours() + parseInt(iHours, 10));
+    return this;
   },
   addMinutes: function(iMinutes) {
     this.setMinutes(this.getMinutes() + parseInt(iMinutes, 10));
+    return this;
   },
   addYears: function(iYears) {
     this.setFullYear(this.getFullYear() + parseInt(iYears, 10));
+    return this;
   }
-} );
+});
