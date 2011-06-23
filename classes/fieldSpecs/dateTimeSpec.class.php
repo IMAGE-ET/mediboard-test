@@ -51,6 +51,8 @@ class CDateTimeSpec extends CMbFieldSpec {
       } 
     	return "format de dateTime invalide : '$propValue'";
     }
+    
+    $propValue = strtr($propValue, "+", " ");
   }
   
   function sample(&$object, $consistent = true){
