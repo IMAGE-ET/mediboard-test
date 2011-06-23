@@ -265,7 +265,7 @@ var Url = Class.create({
     this.modaleObject.container.insert({top: titleElement});   
     
     if (options.closeOnClick) {
-      this.modaleObject.container.insert({top: closeButton})
+      this.modaleObject.container.insert({top: closeButton});
     }
     
     // iframe.onload not thrown under IE
@@ -554,11 +554,11 @@ var Url = Class.create({
   requestModal: function(iWidth, iHeight, oOptions) {
     var m = this.oParams.m,
         a = this.oParams.a;
-		
+    
     oOptions = Object.extend({
       title: $T('mod-'+m+'-tab-'+a)
     }, oOptions);
-		
+    
     var div = DOM.div(null,
       DOM.div({
         className: 'content'
@@ -569,7 +569,7 @@ var Url = Class.create({
         width: iWidth ? iWidth+'px' : ''
       })
     );
-	
+  
     $(document.body).insert(div);
 
     // Decoration preparing
@@ -613,13 +613,30 @@ var Url = Class.create({
       return;
     }
     
+    var paramsString = $H(this.oParams).toQueryString();
+    var targetId = element.identify();
+    
+    if (Preferences.INFOSYSTEM == 1) {
+      var lastQuery = Url.activeRequests[targetId];
+      var now = (new Date).getTime();
+      
+      //if (lastQuery && (lastQuery[0] > now - 2 * 1000) && (lastQuery[1] === paramsString)) {
+      
+      if (lastQuery && (lastQuery[1] === paramsString)) {
+        Console.error("Attention à ne pas double-cliquer !! ("+targetId+")");
+        return;
+      }
+      
+      Url.activeRequests[targetId] = [now, paramsString];
+    }
+    
     var customInsertion = oOptions && oOptions.insertion;
     
     oOptions = Object.extend( {
       waitingText: null,
       urlBase: "",
       method: "get",
-      parameters:  $H(this.oParams).toQueryString(), 
+      parameters: paramsString, 
       asynchronous: true,
       evalScripts: true,
       getParameters: null,
@@ -629,6 +646,7 @@ var Url = Class.create({
     }, oOptions);
     
     oOptions.onComplete = oOptions.onComplete.wrap(function(onComplete) {
+      delete Url.activeRequests[targetId];
       prepareForms(element);
       Note.refresh();
       onComplete();
@@ -781,6 +799,10 @@ Url.popupFeatures = {
   menubar: true
 };
 
+Url.requestTimers = {
+  // "target id" : [timestamp, last query],
+};
+
 Url.buildPopupFeatures = function(features) {
   var a = [], value;
   $H(features).each(function(f){
@@ -827,4 +849,10 @@ Url.update = function(form, element) {
 
 Url.hashParams = function() {
   return window.location.hash.substr(1).toQueryParams();
+};
+
+Url.go = function(params, hash) {
+  var href = (params ? "?"+Object.toQueryString(params) : "")+(hash ? "#"+hash : "");
+  location.assign(href);
+  return false;
 };

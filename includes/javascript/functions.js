@@ -27,32 +27,32 @@ function main() {
 document.observe('dom:loaded', main);
 
 var UAInfo = {
-	string: "",
-	buildString: function(){
-		if (UAInfo.string) return;
-		
+  string: "",
+  buildString: function(){
+    if (UAInfo.string) return;
+    
     UAInfo.append("Navigateur", BrowserDetect.browser+" "+BrowserDetect.version);
     UAInfo.append("Système", BrowserDetect.OS);
-		if (User.login) {
-	    UAInfo.append("Utilisateur", User.view+" ("+User.login+")");
-	    UAInfo.append("Fonction", User["function"].view);
-	    UAInfo.append("Etablissement", User.group.view);
-		}
-		else {
-			UAInfo.append("Utilisateur", "Non connecté");
-		}
-	},
-	append: function(label, value) {
-		UAInfo.string += String.fromCharCode(8226)+" "+label+" : \t"+value+"\n";
-	}
+    if (User.login) {
+      UAInfo.append("Utilisateur", User.view+" ("+User.login+")");
+      UAInfo.append("Fonction", User["function"].view);
+      UAInfo.append("Etablissement", User.group.view);
+    }
+    else {
+      UAInfo.append("Utilisateur", "Non connecté");
+    }
+  },
+  append: function(label, value) {
+    UAInfo.string += String.fromCharCode(8226)+" "+label+" : \t"+value+"\n";
+  }
 };
 
 document.observe("keydown", function(e){
   var key = Event.key(e);
-	
+  
   if (e.altKey && key == 89) {
-		Event.stop(e);
-		UAInfo.buildString();
+    Event.stop(e);
+    UAInfo.buildString();
     alert(UAInfo.string);
   }
 });
@@ -552,13 +552,13 @@ var Note = {
   },
   
   create: function (object_guid) {
-	this.init();
+  this.init();
     this.url.addParam("object_guid", object_guid);
     this.modal();
   },
 
   edit: function(note_id) {
-	this.init();
+  this.init();
     this.url.addParam("note_id", note_id);
     this.modal();
   },
@@ -960,7 +960,7 @@ window._close = function() {
 // We replace the window.close method for iframes (modal windows)
 if (window.parent && window.parent != window && window.parent.Mediboard) {
   window.launcher = window.parent;
-	
+  
   window.oldClose = window.close;
   window.close = window._close = function(){
     try {
