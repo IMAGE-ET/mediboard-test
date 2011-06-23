@@ -46,7 +46,9 @@ emptyAndSubmit = function(const_name) {
 Main.add(function () {
   var oForm = getForm('edit-constantes-medicales');
   calculImcVst(oForm);
-  toggleAllGraphs();
+  if (window.toggleAllGraphs) {
+    toggleAllGraphs();
+  }
 });
 </script>
 
