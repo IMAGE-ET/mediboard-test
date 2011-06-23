@@ -15,9 +15,9 @@ div.tooltip {
   padding: 2px;
 
   /* The shadow */
-  -moz-box-shadow: 8px 8px 10px rgba(0,0,0,0.4);
-  -webkit-box-shadow: 8px 8px 10px rgba(0,0,0,0.4);
-  box-shadow: 8px 8px 10px rgba(0,0,0,0.4);
+  -moz-box-shadow   : 0px 4px 10px rgba(0, 0, 0, 0.5);
+  -webkit-box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.5);
+  box-shadow        : 0px 4px 10px rgba(0, 0, 0, 0.5);
   
   /* Fun with box-shadows */
   /*-moz-box-shadow:
