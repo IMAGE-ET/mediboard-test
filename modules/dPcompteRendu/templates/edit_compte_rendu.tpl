@@ -256,6 +256,9 @@ Main.add(function(){
 
 </script>
 
+<iframe name="download_pdf" style="width: 0px; height: 0px; position: absolute; top: -1000px;">
+</iframe>
+
 <div style="position: absolute; top: -1500px;">
   <div style="position: relative; width: 900px; height: 600px;" id="graph-container"></div>
 </div>
@@ -295,7 +298,7 @@ Main.add(function(){
 {{/if}}
 
 <!-- Formulaire pour streamer le pdf -->
-<form style="display: none;" name="download-pdf-form" target="_blank" method="post" action="?m=dPcompteRendu&amp;a=ajax_pdf"
+<form style="display: none;" name="download-pdf-form" target="download_pdf" method="post" action="?m=dPcompteRendu&amp;a=ajax_pdf"
       onsubmit="completeLayout(); this.submit();">
   <input type="hidden" name="content" value=""/>
   <input type="hidden" name="compte_rendu_id" value='{{if $compte_rendu->_id != ''}}{{$compte_rendu->_id}}{{else}}{{$modele_id}}{{/if}}' />

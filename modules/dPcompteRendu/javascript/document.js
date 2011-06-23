@@ -3,7 +3,7 @@ var Document = {
 		width: 950,
 		height: 800
 	},
-	
+	iframe: null,
 	/**
 	 * @param ... A DECRIRE
 	 */
@@ -161,11 +161,17 @@ var Document = {
   },
   
   printPDF: function(document_id) {
+    if (this.iframe) {
+      this.iframe.remove();
+    }
+    
+    this.iframe = Element.getTempIframe();
+    
     var url = new Url("dPcompteRendu", "ajax_pdf");
     url.addParam("suppressHeaders", 1);
     url.pop(0, 0, "Download PDF", null, null, {
        compte_rendu_id: document_id,
-       stream: 1});
+       stream: 1}, this.iframe);
   },
   
   printSelDocs: function(object_id, object_class) {
