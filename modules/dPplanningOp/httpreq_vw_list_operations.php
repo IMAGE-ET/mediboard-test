@@ -54,8 +54,10 @@ if($userSel->_id){
   $order = "debut, salle_id";
   
   $listDay = $plageOp->loadList($where, $order);
+  $curr_plage = new CPlageOp();
   foreach ($listDay as &$curr_plage) {
-    $curr_plage->loadRefs();
+    $curr_plage->loadRefsFwd();
+    $curr_plage->loadRefsOperations(0);
     foreach ($curr_plage->_ref_operations as $key_op => &$curr_op) {
       if($curr_op->chir_id != $userSel->_id) {
         unset($curr_plage->_ref_operations[$key_op]);
