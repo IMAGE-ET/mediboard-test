@@ -67,12 +67,12 @@ class CConstantesMedicales extends CMbObject {
     "poids"             => array(
       "unit" => "kg", 
       "callback" => "calculImcVst", 
-      "min" => 0, "max" => 150
+      "min" => "@-2", "max" => "@+2",
     ), 
     "taille"            => array(
       "unit" => "cm", 
       "callback" => "calculImcVst", 
-      "min" => 0, "max" => 220
+      "min" => "@-5", "max" => "@+5",
     ),
     "pouls"             => array(
       "unit" => "puls./min", 
@@ -84,7 +84,7 @@ class CConstantesMedicales extends CMbObject {
       "unit" => "cmHg", 
       "formfields" => array("_ta_systole", "_ta_diastole"), 
       "min" => 0, "max" => 20,
-      "standard" => 12,
+      "standard" => 8,
       "colors" => array("#00A8F0", "#C0D800"),
       "conversion" => array("mmHg" => 10),
 			"candles" => true,
@@ -93,7 +93,7 @@ class CConstantesMedicales extends CMbObject {
       "unit" => "cmHg", 
       "formfields" => array("_ta_gauche_systole", "_ta_gauche_diastole"), 
       "min" => 0, "max" => 20,
-      "standard" => 12,
+      "standard" => 8,
       "colors" => array("#00A8F0", "#C0D800"),
       "conversion" => array("mmHg" => 10),
     ),
@@ -101,7 +101,7 @@ class CConstantesMedicales extends CMbObject {
       "unit" => "cmHg", 
       "formfields" => array("_ta_droit_systole", "_ta_droit_diastole"), 
       "min" => 0, "max" => 20,
-      "standard" => 12,
+      "standard" => 8,
       "colors" => array("#00A8F0", "#C0D800"),
       "conversion" => array("mmHg" => 10),
     ),

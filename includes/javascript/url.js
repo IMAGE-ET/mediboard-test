@@ -615,21 +615,6 @@ var Url = Class.create({
     
     var paramsString = $H(this.oParams).toQueryString();
     var targetId = element.identify();
-    
-    if (Preferences.INFOSYSTEM == 1) {
-      var lastQuery = Url.activeRequests[targetId];
-      var now = (new Date).getTime();
-      
-      //if (lastQuery && (lastQuery[0] > now - 2 * 1000) && (lastQuery[1] === paramsString)) {
-      
-      if (lastQuery && (lastQuery[1] === paramsString)) {
-        Console.error("Attention à ne pas double-cliquer !! ("+targetId+")");
-        return;
-      }
-      
-      Url.activeRequests[targetId] = [now, paramsString];
-    }
-    
     var customInsertion = oOptions && oOptions.insertion;
     
     oOptions = Object.extend( {
@@ -645,8 +630,21 @@ var Url = Class.create({
       onFailure: function(){ element.update('<div class="error">Le serveur rencontre quelques problèmes.</div>');}
     }, oOptions);
     
+    if (Preferences.INFOSYSTEM == 1 && oOptions.method === "get") {
+      var lastQuery = Url.requestTimers[targetId];
+      
+      //if (lastQuery && (lastQuery[0] > now - 2 * 1000) && (lastQuery[1] === paramsString)) {
+      
+      if (lastQuery && (lastQuery === paramsString)) {
+        Console.error("Chargement en double de l'élément '"+targetId+"'");
+        return;
+      }
+      
+      Url.requestTimers[targetId] = paramsString;
+    }
+    
     oOptions.onComplete = oOptions.onComplete.wrap(function(onComplete) {
-      delete Url.activeRequests[targetId];
+      delete Url.requestTimers[targetId];
       prepareForms(element);
       Note.refresh();
       onComplete();
@@ -800,7 +798,7 @@ Url.popupFeatures = {
 };
 
 Url.requestTimers = {
-  // "target id" : [timestamp, last query],
+  // "target id" : "last query",
 };
 
 Url.buildPopupFeatures = function(features) {

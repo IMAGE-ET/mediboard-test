@@ -143,16 +143,38 @@ function getValue($v) {
 }
 
 function getMax($n, $array) {
+	$orig_n = $n;
+  
+  if (substr($n, 0, 1) == "@") {
+    $n = -10e6;
+  }
+  
   $max = $n;
-  foreach ($array as $a)
+  foreach ($array as $a) 
     if (isset($a[1])) $max = max($n, $a[1], $max);
+    
+  if ($orig_n != $n) {
+    $max += floatval(substr($orig_n, 1));
+  }
+	
   return $max;
 }
 
 function getMin($n, $array) {
+	$orig_n = $n;
+	
+	if (substr($n, 0, 1) == "@") {
+		$n = +10e6;
+	}
+	
   $min = $n;
-  foreach ($array as $a) 
-    if (isset($a[1]))$min = min($n, $a[1], $min);
+  foreach ($array as $a)
+    if (isset($a[1])) $min = min($n, $a[1], $min);
+		
+	if ($orig_n != $n) {
+		$min += floatval(substr($orig_n, 1));
+	}
+	
   return $min;
 }
 
@@ -232,14 +254,19 @@ $unite_ta = CAppUI::conf("dPpatients CConstantesMedicales unite_ta");
 foreach($data as $name => &$_data) {
   $params = CConstantesMedicales::$list_constantes[$name];
   
-  if (in_array($name, array("ta", "ta_gauche", "ta_droit"))) {
-    $params['unit'] = $unite_ta;
-  }
-  
   // And the options
   if (isset($params["standard"])) {
     $_data["standard"] = $params["standard"];
   }
+  
+  if (in_array($name, array("ta", "ta_gauche", "ta_droit"))) {
+  	if (isset($params["conversion"][$unite_ta]) && ($unite_ta != $params["conversion"][$unite_ta])) {
+      $_data["standard"] *= $params["conversion"][$unite_ta];
+		}
+		
+    $params['unit'] = $unite_ta;
+  }
+	
   $_data["options"] = array(
     "title" => utf8_encode(CAppUI::tr("CConstantesMedicales-$name-desc").($params['unit'] ? " ({$params['unit']})" : "")),
     "yaxis" => array(

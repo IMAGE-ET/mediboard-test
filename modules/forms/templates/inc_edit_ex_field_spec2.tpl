@@ -208,9 +208,16 @@ Main.add(function(){
             
               {{if $context && $context->_id}}
                 {{if $context == $list_owner}}
-                  {{foreach from=$spec->_list key=_key item=_value}}
-                    <input type="hidden" name="{{$_name}}[]" class="internal" value="{{$_value}}" />
-                  {{/foreach}}
+								
+								  {{if $list_owner instanceof CExClassField}}
+										{{foreach from=$context->_back.list_items item=_item}}
+										  <input type="hidden" name="{{$_name}}[]" class="internal" value="{{$_item->_id}}" />
+										{{/foreach}}
+                  {{else}}
+	                  {{foreach from=$spec->_list item=_value}}
+	                    <input type="hidden" name="{{$_name}}[]" class="internal" value="{{$_value}}" />
+	                  {{/foreach}}
+                  {{/if}}
                 {{/if}}
                 <em>Voir "{{tr}}CExList-back-list_items{{/tr}}"</em>
               {{else}}
