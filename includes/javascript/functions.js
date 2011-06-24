@@ -29,10 +29,21 @@ document.observe('dom:loaded', main);
 var UAInfo = {
   string: "",
   buildString: function(){
-    if (UAInfo.string) return;
+    if (UAInfo.string) return UAInfo.string;
     
     UAInfo.append("Navigateur", BrowserDetect.browser+" "+BrowserDetect.version);
-    UAInfo.append("Système", BrowserDetect.OS);
+    
+    if (Prototype.Browser.IE) {
+      var ieVersion = IEVersion();
+      UAInfo.append("Version", ieVersion.Version, 1);
+      UAInfo.append("DocMode", ieVersion.DocMode, 1);
+      UAInfo.append("Mode   ", ieVersion.BrowserMode, 1);
+      UAInfo.string += "\n";
+    }
+    
+    UAInfo.append("Cookies", ("cookieEnabled" in navigator ? (navigator.cookieEnabled ? "Oui" : "Non") : "Information non disponible"));
+    UAInfo.append("Système", BrowserDetect.OS+ " ("+navigator.platform+")");
+    
     if (User.login) {
       UAInfo.append("Utilisateur", User.view+" ("+User.login+")");
       UAInfo.append("Fonction", User["function"].view);
@@ -41,9 +52,30 @@ var UAInfo = {
     else {
       UAInfo.append("Utilisateur", "Non connecté");
     }
+    
+    if (Prototype.Browser.IE) {
+      UAInfo.append("Plugins", "Information non disponible");
+    }
+    else {
+      UAInfo.string += "\n";
+      UAInfo.append("Plugins", "");
+      $A(navigator.plugins).each(function(plugin){
+        if (plugin.name.match(/pdf|acrobat|java/i)) {
+          UAInfo.append(plugin.name, plugin.version || plugin.description, 1);
+        }
+      });
+    }
+    
+    //errorHandler(2, UAInfo.string.replace(new RegExp(String.fromCharCode(8226), "g"), "<br />"));
+    
+    return UAInfo.string;
   },
-  append: function(label, value) {
-    UAInfo.string += String.fromCharCode(8226)+" "+label+" : \t"+value+"\n";
+  append: function(label, value, indent) {
+    var string = ((indent > 0) ? (new Array(indent*8).join(" ")) : "");
+    UAInfo.string += string + String.fromCharCode(8226)+" "+label+" : \t"+value+"\n";
+  },
+  show: function(){
+    alert(UAInfo.buildString());
   }
 };
 
@@ -52,8 +84,7 @@ document.observe("keydown", function(e){
   
   if (e.altKey && key == 89) {
     Event.stop(e);
-    UAInfo.buildString();
-    alert(UAInfo.string);
+    UAInfo.show();
   }
 });
 
