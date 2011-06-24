@@ -41,6 +41,10 @@ $compte_rendu = new CCompteRendu();
 $compte_rendu->load($compte_rendu_id);
 $compte_rendu->loadContent();
 
+if (!$compte_rendu->_id) {
+  $compte_rendu->valueDefaults();
+}
+
 if ($compte_rendu->object_id) {
   $compte_rendu = new CCompteRendu();
 }
