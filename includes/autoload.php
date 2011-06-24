@@ -77,6 +77,47 @@ function mbAutoload($className) {
   return true;
 }
 
+// nouveau mode
+if (0) {
+function mbAutoload($class_name) {
+  global $classPaths, $performance;
+  
+  if (isset($classPaths[$className]) && file_exists($classPaths[$class_name])) {
+    $performance["autoload"]++;
+    return include_once $classPaths[$class_name];
+  }
+  else {
+    $dirs = array(
+      "classes/$class_name.class.php", 
+      "classes/*/$class_name.class.php", // Require all global classes
+      "*/*/$class_name.class.php",
+      "modules/*/classes/$class_name.class.php", // Require all modules classes
+    );
+		
+		if (preg_match("/^CSetup.+/", $class_name)) {
+      $dirs[] = "modules/*/setup.php"; // Require all setup classes
+		}
+  
+	  foreach ($dirs as $dir) {
+	    $files = glob("$rootDir/$dir");
+	    foreach ($files as $filename) {
+	      require_once($filename);
+	    }
+	  }
+		
+		if (class_exists($class_name, false)) {
+	    $class = new ReflectionClass($class_name);
+	    $classPaths[$class_name] = $class->getFileName();
+		}
+		else {
+			return false;
+		}
+  }
+  
+  return true;
+}
+}
+
 if (function_exists("spl_autoload_register")) {
   spl_autoload_register("mbAutoload");
 }

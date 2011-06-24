@@ -221,17 +221,19 @@ refreshSelf = function(){
           </tr>
           
           {{foreach from=$ex_objects_by_class item=_ex_objects key=_ex_class_id}}
-          <tr>
-            <td class="text">
-              {{$ex_classes.$_ex_class_id->name}}
-            </td>
-            <td class="narrow" style="text-align: right;">
-              <button class="right rtl" style="margin: -1px" 
-                      onclick="ExObject.loadExObjects('{{$reference_class}}', '{{$reference_id}}', 'ex_class-list', 2, '{{$_ex_class_id}}')">
-                {{$_ex_objects|@count}}
-              </button>
-            </td>
-          </tr>
+						{{if $_ex_objects|@count}}
+	          <tr>
+	            <td class="text">
+	              {{$ex_classes.$_ex_class_id->name}}
+	            </td>
+	            <td class="narrow" style="text-align: right;">
+	              <button class="right rtl" style="margin: -1px" 
+	                      onclick="ExObject.loadExObjects('{{$reference_class}}', '{{$reference_id}}', 'ex_class-list', 2, '{{$_ex_class_id}}')">
+	                {{$_ex_objects|@count}}
+	              </button>
+	            </td>
+	          </tr>
+						{{/if}}
           {{/foreach}}
         {{/foreach}}
       </table>

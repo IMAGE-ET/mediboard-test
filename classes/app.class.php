@@ -190,8 +190,11 @@ class CApp {
    * @param array $properties
    * @return array
    */
-  static function getInstalledClasses($properties = array()) {
-    $classes = self::getMbClasses();
+  static function getInstalledClasses($properties = array(), $classes = array()) {
+  	if (empty($classes)) {
+      $classes = self::getMbClasses();
+		}
+		
     foreach ($classes as $key => $class) {
       // Escaped instanciation in case of DSN errors
       $object = @new $class;

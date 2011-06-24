@@ -564,10 +564,13 @@ class CCompteRendu extends CDocumentItem {
       return self::$templated_classes;
     }
     
-    $classes = array();
-    
-    $installed = CApp::getInstalledClasses();
-    foreach ($installed as $key=>$class) {
+		$all_classes = array(
+		  "CBloodSalvage", "CConsultAnesth", "CConsultation", "CDossierMedical", "CRPU",
+			"CFunctions", "CGroups", "CMediusers", "COperation", "CPatient", "CPrescription", "CSejour"
+		);
+    $installed = CApp::getInstalledClasses(null, $all_classes);
+		
+    foreach ($installed as $key => $class) {
       if (is_method_overridden($class, 'fillTemplate') || is_method_overridden($class, 'fillLimitedTemplate')) {
         $classes[$class] = CAppUI::tr($class);
       }

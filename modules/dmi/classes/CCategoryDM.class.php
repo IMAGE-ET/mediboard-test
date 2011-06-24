@@ -8,7 +8,7 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
  */
 
-CAppUI::requireModuleClass('dmi', 'category_produit_prescriptible');
+CAppUI::requireModuleClass('dmi', 'CCategoryProduitPrescriptible');
 
 class CCategoryDM extends CCategoryProduitPrescriptible {
   // DB Table key
