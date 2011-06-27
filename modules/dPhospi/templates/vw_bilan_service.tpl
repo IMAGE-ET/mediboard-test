@@ -17,6 +17,8 @@
     
     getForm("filter_prescription")._dateTime_min.observe("ui:change", resetPeriodes);
     getForm("filter_prescription")._dateTime_max.observe("ui:change", resetPeriodes);
+
+    toggleMedInj($("stup").checked);
   } );
 
   function updateCount(name) {
@@ -106,6 +108,23 @@
     
     $V(start, startDate, false);
     $V(end, endDate, false);
+  }
+
+  toggleMedInj = function(state) {
+    var med  = $('med');
+    var perf = $('perf');
+    var inj  = $('inj');
+    var aerosol = $('aerosol');
+    
+    med.disabled = perf.disabled = inj.disabled = aerosol.disabled = state;
+    
+    if (state) {
+      med.checked = perf.checked = inj.checked = aerosol.checked = !state;
+      oCatField.remove("med");
+      oCatField.remove("perf");
+      oCatField.remove("inj");
+      oCatField.remove("aerosol");
+    }
   }
 {{/if}}
 
@@ -198,7 +217,7 @@
                <div style="display: none;" id="detail_med">
                  <table class="tbl">
                    <tr>
-                     <th class="title">Détail</th>
+                     <th class="title">Produits médicamenteux</th>
                    </tr>
                    <tr>
                      <td>
@@ -210,7 +229,7 @@
                    <tr>
                      <td>
                        <label>
-                         <input type="checkbox" class="med" value="stup" id="stup" name="stup" onclick="oCatField.toggle(this.value, this.checked);" /> {{tr}}CPrescription._chapitres.stup{{/tr}}
+                         <input type="checkbox" class="med" value="perf" id="perf" name="perf" onclick="oCatField.toggle(this.value, this.checked);" /> {{tr}}CPrescription._chapitres.perf{{/tr}}
                        </label>
                      </td>
                    </tr>
@@ -221,27 +240,26 @@
                        </label>
                      </td>
                    </tr>
+                   <tr>
+                     <td>
+                       <label>
+                         <input type="checkbox" class="med"  value="aerosol" id="aerosol" name="aerosol" onclick="oCatField.toggle(this.value, this.checked);" /> {{tr}}CPrescription._chapitres.aerosol{{/tr}}
+                       </label>
+                     </td>
+                   </tr>
+                   <tr>
+                     <td>
+                       <label>
+                         <input type="checkbox" class="med" value="stup" id="stup" name="stup"
+                           onclick="oCatField.toggle(this.value, this.checked); toggleMedInj(this.checked);" /> {{tr}}CPrescription._chapitres.stup{{/tr}}
+                       </label>
+                     </td>
+                   </tr>
                  </table>
                  <div style="margin: auto;">
                    <button type="button" class="save" onclick="check_categ=true; Control.Modal.close(); $('nb_elt_med').update($('detail_med').select('input:checked').length)">Sélection des catégories</button>
                  </div>
                </div>
-             </td>
-           </tr>
-           <tr>
-             <td>
-               <strong>{{tr}}CPrescription._chapitres.perf{{/tr}}</strong>
-             </td>
-             <td>
-               <input type="checkbox" value="perf" id="perf" onclick="oCatField.toggle(this.value, this.checked);" />
-             </td>
-           </tr>
-					 <tr>
-             <td>
-               <strong>{{tr}}CPrescription._chapitres.aerosol{{/tr}}</strong>
-             </td>
-             <td>
-               <input type="checkbox" value="aerosol" id="aerosol" onclick="oCatField.toggle(this.value, this.checked);" />
              </td>
            </tr>
            
@@ -258,7 +276,7 @@
                        <tr>
                          <th class="title" colspan="4">
                            <button type="button" onclick="selectChap('{{$name}}', oCatField); check_categ = !check_categ;" class="tick" style="float: right;">Tous</button>
-                           Détail
+                           {{tr}}CCategoryPrescription.chapitre.{{$name}}{{/tr}}
                          </th>
                        </tr>
                        <tr>

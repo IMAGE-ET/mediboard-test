@@ -296,10 +296,10 @@ if ($do && ($do_medicaments || $do_injections || $do_perfusions || $do_aerosols 
 				// Parcours et stockage des prescription_line_mixes
 		    if($_prescription->_ref_prescription_line_mixes_for_plan){
 		      foreach($_prescription->_ref_prescription_line_mixes_for_plan as $_prescription_line_mix){
-		      	if($_prescription_line_mix->type_line == "aerosol" && !$do_aerosols){
+		      	if($_prescription_line_mix->type_line == "aerosol" && !$do_aerosols && !$do_stupefiants){
 		      		continue;
 		      	}
-						if($_prescription_line_mix->type_line == "perfusion" && !$do_perfusions){
+						if($_prescription_line_mix->type_line == "perfusion" && !$do_perfusions && !$do_stupefiants){
               continue;
             }
 						if($_prescription_line_mix->type_line == "oxygene"){
