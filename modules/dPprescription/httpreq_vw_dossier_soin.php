@@ -39,6 +39,12 @@ $operations = array();
 // Chargement du sejour
 $sejour = new CSejour();
 $sejour->load($sejour_id);
+
+if(CGroups::loadCurrent()->_id != $sejour->group_id){
+  CAppUI::stepAjax("Ce séjour n'est pas dans l'établissement courant", UI_MSG_WARNING);
+	return;
+}
+
 $sejour->loadRefPatient();
 $sejour->loadRefPraticien();
 

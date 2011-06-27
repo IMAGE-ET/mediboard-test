@@ -147,6 +147,13 @@ $categories = ($full_mode || $chapitre != "medicament") ? CCategoryPrescription:
 
 // Chargement des lignes de la prescription et des droits sur chaque ligne
 if($prescription->_id){
+	if($prescription->type == "sejour" && $prescription->object_id){
+		if(CGroups::loadCurrent()->_id != $prescription->_ref_object->group_id){
+		  CAppUI::stepAjax("Ce séjour n'est pas dans l'établissement courant", UI_MSG_WARNING);
+		  return;
+		}
+	}
+	
 	// Calcul des planifs systemes
 	$prescription->calculAllPlanifSysteme();
 

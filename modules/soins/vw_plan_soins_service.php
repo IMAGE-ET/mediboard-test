@@ -17,6 +17,16 @@ $date_max    = mbDate("+ 1 DAY", $date);
 $service = new CService();
 $service->load($service_id);
 
+// Si le service en session n'est pas dans l'etablissement courant
+if(CGroups::loadCurrent()->_id != $service->group_id){
+  $service_id = "";
+  $service = new CService();
+}
+
+// Chargement des configs de services
+if(!$service_id){
+  $service_id = "none";
+}
 $configs = CConfigService::getAllFor($service_id);
 
 if(!$nb_decalage){

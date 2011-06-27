@@ -13,6 +13,17 @@ $service_id = CValue::getOrSession("service_id");
 if($service_id == "NP"){
 	$service_id = "";
 }
+
+// Chargement du service
+$service = new CService();
+$service->load($service_id);
+
+// Si le service en session n'est pas dans l'etablissement courant
+if(CGroups::loadCurrent()->_id != $service->group_id){
+  $service_id = "";
+	$service = new CService();
+}
+
 $date = CValue::getOrSession("debut");
 $prescription_id = CValue::get("prescription_id");
 
@@ -35,10 +46,6 @@ if(!$date){
 
 $filter_line = new CPrescriptionLineMedicament();
 $filter_line->debut = $date;
-
-// Chargement du service
-$service = new CService();
-$service->load($service_id);
 
 // Récupération de la liste des services
 $where = array();
