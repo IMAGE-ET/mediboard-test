@@ -13,9 +13,18 @@ $sejour_id = CValue::get("sejour_id");
 $sejour = new CSejour;
 $sejour->load($sejour_id);
 $sejour->canRead();
-$sejour->loadRelPatient();
-$sejour->_ref_patient->loadRefPhotoIdentite();
-$sejour->_ref_patient->loadRefsNotes();
+$patient = $sejour->loadRelPatient();
+$patient->loadRefPhotoIdentite();
+$patient->loadRefsNotes();
+$dossier_medical = $patient->loadRefDossierMedical();
+
+if ($dossier_medical->_id) {
+  $dossier_medical->loadRefsAllergies();
+  $dossier_medical->loadRefsAntecedents();
+  $dossier_medical->countAntecedents();
+  $dossier_medical->countAllergies();
+}
+
 $sejour->loadRefPraticien();
 $sejour->loadRefsOperations();
 $sejour->loadRefsTransmissions(true);
@@ -34,7 +43,7 @@ foreach ($sejour->_ref_transmissions as $_trans) {
 
 $sejour->_ref_transmissions = $transmissions;
 
-foreach($sejour->_ref_operations as $_operation) {
+foreach ($sejour->_ref_operations as $_operation) {
   $_operation->loadRefsFwd();
   $_operation->_ref_chir->loadRefFunction();
 }
