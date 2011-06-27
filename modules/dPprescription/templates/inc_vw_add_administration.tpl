@@ -21,7 +21,7 @@ function submitConstantes(){
 function submitAdmission(constantes_medicales_id){
   var oFormAdministration = getForm("addAdministration");
   var quantite = $V(oFormAdministration.quantite);
-  if (quantite && quantite > 0) {
+  if (quantite && quantite >= 0) {
     $V(oFormAdministration.constantes_medicales_id, constantes_medicales_id);
     checkForm(oFormAdministration);
     return onSubmitFormAjax(oFormAdministration);
