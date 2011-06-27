@@ -20,6 +20,11 @@
     addParam("nb_files", $V($("nb_files"))).
     requestUpdate("repair_files");
   }
+  convert_files = function() {
+    new Url("dPfiles", "ajax_file_to_pdf").
+    addParam("nb_files", $V($("nb_files"))).
+    requestUpdate("convert_files");
+  }
 </script>
 <table class="form">
   <tr>
@@ -40,11 +45,19 @@
   </tr>
   <tr>
     <th>
-      <input type="text" id="nb_files" value="10"></input>
+      <input type="text" id="nb_files" value="10" />
       <button type="button" class="button search" onclick="repair_files()">{{tr}}CFile-repair_files{{/tr}}</button>
     </th>
     <td>
       <div id="repair_files"></div>
+    </td>
+  </tr>
+  <tr>
+    <th>
+      <button type="button" class="button search" onclick="convert_files()">{{tr}}CFile-convert_files{{/tr}}</button>
+    </th>
+    <td>
+      <div id="convert_files"></div>
     </td>
   </tr>
 </table>

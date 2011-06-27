@@ -44,6 +44,7 @@ $locales['CFile-_sub_dir'] = 'Sous-repertoire';
 $locales['CFile-_sub_dir-court'] = 'Sous-rep.';
 $locales['CFile-_sub_dir-desc'] = 'Sous-repertoire de stockage';
 $locales['CFile-_total_weight'] = 'Poids total';
+$locales['CFile-convert_files'] = 'Conversion de fichiers';
 $locales['CFile-etat_envoi'] = 'Envoyé';
 $locales['CFile-etat_envoi-court'] = 'Envoi';
 $locales['CFile-etat_envoi-desc'] = 'Informations concernant l\'état d\'envoi vers une plateforme tierce';

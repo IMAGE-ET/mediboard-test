@@ -31,6 +31,8 @@ $order = "file_id DESC";
 
 $files = $file->loadList($where, $order, $nb_files);
 
+$nb_files_total = $file->countList($where);
+
 $converted = 0;
 $not_converted = "";
 
@@ -42,6 +44,8 @@ foreach($files as $_file) {
     $not_converted .= $_file->_id . " - ";
   }
 }
+
+CAppUI::stepAjax("$converted/".count($files) . " fichiers convertis parmi $nb_files_total");
 
 if ($converted != count($files)) {
   trigger_error("Les fichiers suivants n'ont pas été convertis : $not_converted", E_USER_ERROR);
