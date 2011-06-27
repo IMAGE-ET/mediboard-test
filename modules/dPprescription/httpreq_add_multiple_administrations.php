@@ -65,7 +65,11 @@ if (count($adm) > 0) {
 		  case 'CPrescriptionLineMedicament':
 		    if($line->_is_injectable){
 		      $tabs_refresh["inj"] = "inj";
-		    } else {
+		    }
+		    else if ($line->inscription) {
+		      $tabs_refresh["inscription"] = "inscription";
+		    }
+		    else {
 		      $tabs_refresh["med"] = "med";
 		    }
 		    break;
@@ -73,9 +77,13 @@ if (count($adm) > 0) {
 		    $tabs_refresh["perf"] = "perf";
 		    break;
 		  case 'CPrescriptionLineElement':
-		    $chapitre = $line->_ref_element_prescription->_ref_category_prescription->chapitre;
-		    $tabs_refresh[$chapitre] = $chapitre;
-		    break;
+		    if ($line->inscription) {
+		      $tabs_refresh["inscription"] = "inscription";
+		    }
+		    else {
+  		    $chapitre = $line->_ref_element_prescription->_ref_category_prescription->chapitre;
+  		    $tabs_refresh[$chapitre] = $chapitre;
+		    }
 		}
 		
 		if($line instanceof CPrescriptionLineMedicament){

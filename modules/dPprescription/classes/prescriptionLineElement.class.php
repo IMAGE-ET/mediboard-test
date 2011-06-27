@@ -182,6 +182,7 @@ class CPrescriptionLineElement extends CPrescriptionLine {
                       $this->fieldModified("unite_duree")|| 
                       $this->fieldModified("time_fin") ||
 											$this->fieldModified("inscription") ||
+											$this->fieldModified("date_arret") ||
 											$this->_update_planif_systeme) ? true : false;
     
 		// Lors du passage d'une inscription à une prescription, on modifie l'unité de prises des adm deja créées

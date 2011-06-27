@@ -44,6 +44,15 @@ if($praticien_sortie_id){
   $praticien->load($praticien_sortie_id);	
 }
 
+$options = array(
+        "width"  => 220,
+        "height" => 60,
+        "class"  => "barcode",
+        "title"  => CAppUI::tr("CMediusers-rpps"));
+
+$code_rpps = CTemplateManager::getBarcodeDataUri($praticien->rpps, $options);
+//$am        = CTemplateManager::getBarcodeDataUri($praticien->am, $options);
+
 // si le user courant est un praticien, on affiche ces lignes
 $mediuser = CMediusers::get();
 if($mediuser->isPraticien() && !$globale){
@@ -329,6 +338,8 @@ $smarty->assign("poids"          , $poids);
 $smarty->assign("dci"            , CValue::get("dci"));
 $smarty->assign("generated_header", @$header->_id ? $template_header->document : "");
 $smarty->assign("generated_footer", @$footer->_id ? $template_footer->document : "");
+$smarty->assign("code_rpps"      , $code_rpps);
+//$smarty->assign("am"             , $am);
 
 if (!$prescription->object_id && !$no_pdf) {
 	$smarty->assign("no_header", isset($no_header));

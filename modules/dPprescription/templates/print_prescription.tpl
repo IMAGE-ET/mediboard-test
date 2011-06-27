@@ -154,7 +154,26 @@ p.duplicata {
 				      {{$praticien->_ref_discipline->_view}}
 				      <br />
 				      {{mb_value object=$praticien field=titres}}
-				      <br />
+				      {{if $code_rpps}}
+                <table style="width: 10%">
+                  <tr style="text-align: center;">
+                    <td>
+                      N° RPPS
+                    </td>
+                {{*    <td>
+                      N° AM
+                    </td>   *}}
+                  </tr>
+                  <tr>
+                    <td>
+                      <img src="{{$code_rpps}}" width="160" height="45"/>
+                    </td>
+                 {{*   <td>
+                      <img src="{{$am}}" width="160" height="45"/>
+                    </td>  *}}
+                  </tr>
+                </table>
+              {{/if}}
 			      {{elseif $prescription->object_id}}
 			        Prescription globale
 			      {{/if}}
