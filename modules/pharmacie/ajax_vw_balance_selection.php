@@ -95,10 +95,6 @@ else {
   $list_products = $product->loadList($where, "product.name", null, null, $ljoin);
 }
 
-foreach($list_products as $_product) {
-  $_product->loadRefStock(true);
-}
-
 $services = CProductStockGroup::getServicesList();
 
 if ($include_void_service) {

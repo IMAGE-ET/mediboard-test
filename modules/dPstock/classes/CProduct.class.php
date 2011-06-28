@@ -217,53 +217,6 @@ class CProduct extends CMbObject {
    * @param Date $date_max [optional]
    * @return Number
    */
-  function getConsumptionMultiple($since = "-1 MONTH", $date_max = null, $services = array(), $include_loss = true){
-    $this->loadRefStock(true);
-    
-    $where = array(
-      "product_delivery.stock_class" => "= 'CProductStockGroup'",
-      "product_delivery.stock_id"    => "= '{$this->_ref_stock_group->_id}'",
-      "product_delivery_trace.date_delivery > '".mbDate($since)."'",
-    );
-    
-    if ($date_max) {
-      $where[] = "product_delivery_trace.date_delivery <= '".mbDate($date_max)."'";
-    }
-    
-    if (!empty($services)) {
-      $where["product_delivery.service_id"] = $this->_spec->ds->prepareIn(array_keys($services));
-    }
-    
-    $ljoin = array(
-      "product_delivery" => "product_delivery.delivery_id = product_delivery_trace.delivery_id"
-    );
-    
-    $sql = new CRequest();
-    $sql->addTable("product_delivery_trace");
-    $sql->addSelect("service_id, SUM(product_delivery_trace.quantity) AS total");
-    $sql->addLJoin($ljoin);
-    $sql->addGroup("service_id");
-    $sql->addWhere($where);
-    $totals = $this->_spec->ds->loadHashList($sql->getRequest());
-    
-    if ($include_loss) {
-      $where["service_id"] = "IS NULL";
-      $sql = new CRequest();
-      $sql->addTable("product_delivery_trace");
-      $sql->addSelect("SUM(product_delivery_trace.quantity) AS total");
-      $sql->addLJoin($ljoin);
-      $sql->addWhere($where);
-      $totals["none"] = $this->_spec->ds->loadResult($sql->getRequest());
-    }
-    
-    return $totals;
-  }
-  
-  /** Computes this product's consumption between two dates
-   * @param Date $since [optional]
-   * @param Date $date_max [optional]
-   * @return Number
-   */
   function getConsumption($since = "-1 MONTH", $date_max = null, $service_id = null, $include_loss = true){
     $this->loadRefStock(true);
     
@@ -543,7 +496,6 @@ class CProduct extends CMbObject {
 			
       foreach($products as $_product) {
       	$counts = CValue::read($by_product, $_product->_id, array()); 
-        //$counts = $_product->getConsumptionMultiple($from, $to, $services);
         
         $coeff = 1;
         $ref = reset($_product->loadRefsReferences(true));

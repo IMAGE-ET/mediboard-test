@@ -203,18 +203,18 @@
     <tr>
       <th>{{tr}}CProduct{{/tr}}</th>
       <th>{{tr}}CProduct-code{{/tr}}</th>
-      <th>{{tr}}CProductStockGroup-quantity{{/tr}}</th>
     </tr>
       
     {{foreach from=$products item=_product}}
       <tr>
         <td>
-          <strong onmouseover="ObjectTooltip.createEx(this, '{{$_product->_guid}}')">
-            {{$_product}}
-          </strong>
+        	<a href="?m=dPstock&amp;tab=vw_idx_product&amp;product_id={{$_product->_id}}">
+	          <strong onmouseover="ObjectTooltip.createEx(this, '{{$_product->_guid}}')">
+	            {{$_product}}
+	          </strong>
+					</a>
         </td>
         <td>{{$_product->code}}</td>
-        <td>{{mb_value object=$_product->_ref_stock_group field=quantity}}</td>
       </tr>
     {{/foreach}}
   </table>
