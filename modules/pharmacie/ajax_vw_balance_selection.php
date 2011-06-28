@@ -18,7 +18,6 @@ $manuf_id             = CValue::get("manuf_id");
 $classe_atc           = CValue::get("_classe_atc");
 $hors_t2a             = CValue::get("hors_t2a");
 $include_void_service = CValue::get("include_void_service");
-$display              = CValue::get("display");
 
 $year       = CValue::get("year", mbTransformTime(null, null, "%Y"));
 $month      = CValue::get("month", mbTransformTime(null, null, "%m"));
@@ -37,7 +36,7 @@ CValue::get("include_void_service", $include_void_service);
 
 //CMbObject::$useObjectCache = false;
 set_time_limit(300);
-$limit = 1000;
+$limit = 2000;
 
 CProductReference::$_load_lite = true;
 CProductOrderItem::$_load_lite = true;
@@ -174,7 +173,7 @@ $smarty->assign('flows',    $flows);
 $smarty->assign('total',    $total);
 $smarty->assign('year',     $year);
 $smarty->assign('month',    $month);
-$smarty->assign('display',  $display);
+$smarty->assign('display',  "price");
 
 $smarty->assign('balance',  $balance);
 $smarty->assign('type',     "selection");
