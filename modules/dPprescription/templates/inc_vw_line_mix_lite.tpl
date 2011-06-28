@@ -110,7 +110,11 @@
         {{mb_value object=$_prescription_line_mix field=type}}
       </a>
       <br />
-      {{mb_value object=$_prescription_line_mix field=voie}}
+      {{if $_prescription_line_mix->voie == "none"}}
+        {{tr}}CPrescriptionLineMix.no_voie{{/tr}}
+      {{else}}
+        {{mb_value object=$_prescription_line_mix field=voie}}
+      {{/if}}
     </td>
   {{/if}}
   {{if !$_prescription_line_mix->_protocole}}

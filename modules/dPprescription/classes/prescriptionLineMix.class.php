@@ -908,6 +908,10 @@ class CPrescriptionLineMix extends CMbObject {
 	      }
 		  }
     }
+
+    if (!isset($this->_voies["none"])) {
+      $this->_voies["none"] = CAppUI::tr("CPrescriptionLineMix.no_voie");
+    }
   }
   
   

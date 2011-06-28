@@ -168,11 +168,8 @@ Main.add( function(){
 		                                          Element.hide($('last_option_{{$line->_id}}'));
 		                                        {{/if}}
 		                                        submitFormAjax(this.form, 'systemMsg');">
-                {{if $line->voie == "none"}}
-                  <option value="{{$line->voie}}">Voie non définie</option>
-                {{/if}}
-		            {{foreach from=$line->_voies item=_voie}}
-		              <option value="{{$_voie}}" {{if $line->voie == $_voie}}selected="selected"{{/if}}>{{$_voie}}</option>
+		            {{foreach from=$line->_voies key=key_voie item=_voie}}
+		              <option value="{{$key_voie}}" {{if $line->voie == $key_voie}}selected="selected"{{/if}}>{{$_voie}}</option>
 		            {{/foreach}}
 		            {{if !in_array($line->voie, $line->_voies) && $line->voie != "none"}}
 		              <option value="{{$line->voie}}" selected="selected" id="last_option_{{$line->_id}}">{{$line->voie}}</option>
