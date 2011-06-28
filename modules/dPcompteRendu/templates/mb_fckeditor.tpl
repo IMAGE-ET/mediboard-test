@@ -34,7 +34,7 @@ CKEDITOR.editorConfig = function(config) {
   config.pasteFromWordRemoveStyles = "{{$clean_word}}";
   config.fontSize_sizes = 'xx-small/xx-small;x-small/x-small;small/small;medium/medium;large/large;x-large/x-large;xx-large/xx-large';
   config.contentsCss = "style/mediboard/htmlarea.css?build={{$version.build}}";
-  config.docType = '<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">';
+  config.docType = '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">';
   config.filebrowserImageBrowseUrl = "lib/kcfinder/browse.php?type=image";
   config.tabSpaces = 3;
   config.disableNativeSpellChecker = false;
