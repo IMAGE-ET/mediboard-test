@@ -60,8 +60,8 @@
 <div id="{{$type}}-{{$key}}" style="display: none; page-break-after: always;">
   <button class="hslip singleclick not-printable" onclick="exportData($('{{$type}}-{{$key}}-table'), '.price', 
   '{{$_flows.2}} &ndash; {{if $key == "month"}}{{$month}}/{{/if}}{{$year}} &ndash; {{$title|smarty:nodefaults|JSAttribute}}')">CSV</button>
-  <button class="pdf singleclick not-printable" onclick="exportPDF($('{{$type}}-{{$key}}'), 
-  '{{$_flows.2}} &ndash; {{if $key == "month"}}{{$month}}/{{/if}}{{$year}} &ndash; {{$title|smarty:nodefaults|JSAttribute}}')">PDF</button>
+  <!--<button class="pdf singleclick not-printable" onclick="exportPDF($('{{$type}}-{{$key}}'), 
+  '{{$_flows.2}} &ndash; {{if $key == "month"}}{{$month}}/{{/if}}{{$year}} &ndash; {{$title|smarty:nodefaults|JSAttribute}}')">PDF</button>-->
   
   <h2>{{$_flows.2}} &ndash; {{if $key == "month"}}{{$month}} / {{/if}}{{$year}}</h2>
   <h3>{{$title}}</h3>
@@ -140,8 +140,8 @@
 
   <button class="hslip singleclick not-printable" onclick="exportData($('{{$type}}-rotation-table'), null,
   'Rotation des stocks &ndash; {{$year}} &ndash; {{$title|smarty:nodefaults|JSAttribute}}')">CSV</button>
-  <button class="pdf singleclick not-printable" onclick="exportPDF($('{{$type}}-rotation'), 
-  'Rotation des stocks &ndash; {{$year}} &ndash; {{$title|smarty:nodefaults|JSAttribute}}')">PDF</button>
+  <!--<button class="pdf singleclick not-printable" onclick="exportPDF($('{{$type}}-rotation'), 
+  'Rotation des stocks &ndash; {{$year}} &ndash; {{$title|smarty:nodefaults|JSAttribute}}')">PDF</button>-->
   
   <h2>Rotation des stocks &ndash; {{$year}}</h2>
   <h3>{{$title}}</h3>
@@ -194,9 +194,9 @@
 
 {{if $products != null}}
 <div id="{{$type}}-products" style="display: none; page-break-after: always;">
-  <button class="pdf singleclick not-printable" 
+  <!--<button class="pdf singleclick not-printable" 
   onclick="exportReport([$(this).up() {{foreach from=$flows item=_flows key=key}}, $('{{$type}}-{{$key}}'){{/foreach}}, $('{{$type}}-rotation')], '{{$year}} &ndash; {{$title|smarty:nodefaults|JSAttribute}}')">Rapport PDF</button>
-  
+  -->
   <h3>{{$title}}</h3>
   
   <table class="main tbl" id="{{$type}}-products-table">
