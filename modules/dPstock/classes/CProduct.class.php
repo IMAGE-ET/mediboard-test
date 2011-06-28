@@ -298,6 +298,56 @@ class CProduct extends CMbObject {
     return $this->_consumption = $total;
   }
   
+  /** Computes this product's consumption between two dates
+   * @param Date $since [optional]
+   * @param Date $date_max [optional]
+   * @return Number
+   */
+  static function getConsumptionMultipleProducts($products, $since = "-1 MONTH", $date_max = null, $services = null, $include_loss = true){
+		$ds = CSQLDataSource::get("std");
+    
+    $where = array(
+      "product_stock_group.product_id" => $ds->prepareIn(CMbArray::pluck($products, "_id")),
+      "product_stock_group.group_id" => "= '".CProductStockGroup::getHostGroup()."'",
+      "product_delivery.stock_class" => "= 'CProductStockGroup'",
+      "product_delivery_trace.date_delivery > '".mbDate($since)."'",
+    );
+    
+    if ($date_max) {
+      $where[] = "product_delivery_trace.date_delivery <= '".mbDate($date_max)."'";
+    }
+    
+    if (!empty($services)) {
+      $where["product_delivery.service_id"] = $ds->prepareIn(CMbArray::pluck($services, "_id"));
+    }
+    else if ($include_loss) {
+      $where["product_delivery.service_id"] = "IS NOT NULL";
+    }
+    
+    $ljoin = array(
+      "product_delivery" => "product_delivery.delivery_id = product_delivery_trace.delivery_id",
+      "product_stock_group" => "product_delivery.stock_id = product_stock_group.stock_id",
+    );
+    
+    $sql = new CRequest();
+    $sql->addTable("product_delivery_trace");
+    $sql->addSelect(array("product_stock_group.product_id", "SUM(product_delivery_trace.quantity) AS sum"));
+    $sql->addLJoin($ljoin);
+    $sql->addGroup("product_stock_group.product_id");
+    $sql->addWhere($where);
+		
+		if (empty($services)) {
+			$total = $ds->loadHashList($sql->getRequest());
+		}
+		else {
+      $sql->addGroup("product_delivery.service_id");
+      $sql->addSelect(array("product_delivery.service_id"));
+			$total = $ds->loadList($sql->getRequest());
+		}
+		
+    return $total;
+  }
+  
   /** Computes this product's supply between two dates
    * @param Date $since [optional]
    * @param Date $date_max [optional]
@@ -326,6 +376,34 @@ class CProduct extends CMbObject {
     $sql->addWhere($where);
     
     return $this->_supply = $this->_spec->ds->loadResult($sql->getRequest());
+  }
+	
+  static function getSupplyMultiple($products, $since = "-1 MONTH", $date_max = null){
+  	$ds = CSQLDataSource::get("std");
+		
+    $where = array(
+      "product.product_id" => $ds->prepareIn(CMbArray::pluck($products, "_id")),
+      "product_order_item_reception.date > '".mbDate($since)."'",
+    );
+    
+    if ($date_max) {
+      $where[] = "product_order_item_reception.date <= '".mbDate($date_max)."'";
+    }
+    
+    $ljoin = array(
+      "product_order_item" => "product_order_item.order_item_id = product_order_item_reception.order_item_id",
+      "product_reference" => "product_reference.reference_id = product_order_item.reference_id",
+      "product" => "product.product_id = product_reference.product_id",
+    );
+    
+    $sql = new CRequest();
+    $sql->addTable("product_order_item_reception");
+    $sql->addSelect("product.product_id, SUM(product_order_item_reception.quantity) AS sum");
+    $sql->addLJoin($ljoin);
+    $sql->addGroup("product.product_id");
+    $sql->addWhere($where);
+    
+    return $ds->loadHashList($sql->getRequest());
   }
   
   /** Computes the weighted average price (PMP)
@@ -456,8 +534,16 @@ class CProduct extends CMbObject {
       }
       $d[$from]["total"] = array(0, 0);
       
+			$all_counts = self::getConsumptionMultipleProducts($products, $from, $to, $services, false);
+			
+			$by_product = array();
+			foreach($all_counts as $_data) {
+				$by_product[$_data["product_id"]][$_data["service_id"]] = $_data["sum"];
+			}
+			
       foreach($products as $_product) {
-        $counts = $_product->getConsumptionMultiple($from, $to, $services);
+      	$counts = CValue::read($by_product, $_product->_id, array()); 
+        //$counts = $_product->getConsumptionMultiple($from, $to, $services);
         
         $coeff = 1;
         $ref = reset($_product->loadRefsReferences(true));
@@ -466,11 +552,7 @@ class CProduct extends CMbObject {
         }
         
         foreach($services as $_key => $_service) {
-          if (isset($counts[$_key])) 
-            $_count = $counts[$_key];
-          else 
-            $_count = 0;
-          
+          $_count = CValue::read($counts, $_key, 0);
           $_price = $_count * $coeff;
           
           $d[$from][$_key][0] += $_count;
@@ -603,15 +685,21 @@ class CProduct extends CMbObject {
       
       $balance["in"][$from] = array(0, 0);
       $balance["out"][$from] = array(0, 0);
-      
+
+      $supply_multiple = self::getSupplyMultiple($products, $from, $to);
+      $consum_multiple = self::getConsumptionMultipleProducts($products, $from, $to, null, false);
+
       foreach($products as $_product) {
         /** 
         @var CProduct
         */
         $_product = $_product; // for autocompletion
         
-        $supply = $_product->getSupply($from, $to);
-        $consum = $_product->getConsumption($from, $to, null, false);
+        $supply = CValue::read($supply_multiple, $_product->_id, 0);
+        //$supply = $_product->getSupply($from, $to);
+        
+        $consum = CValue::read($consum_multiple, $_product->_id, 0);
+        //$consum = $_product->getConsumption($from, $to, null, false);
         
         $coeff = 1;
         $ref = reset($_product->loadRefsReferences(true));
