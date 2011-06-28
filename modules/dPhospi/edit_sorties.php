@@ -12,8 +12,9 @@ CCanDo::checkRead();
 $group = CGroups::loadCurrent();
 
 // Type d'affichage
-$vue       = CValue::getOrSession("vue"      , 0);
-$typeOrder = CValue::getOrSession("typeOrder", 1);
+$vue        = CValue::getOrSession("vue"      , 0);
+$typeOrder  = CValue::getOrSession("typeOrder", 1);
+$service_id = CValue::getOrSession("service_id");
 
 $order_way = CValue::getOrSession("order_way", "ASC");
 $order_col = CValue::getOrSession("order_col", "_patient");
@@ -24,6 +25,7 @@ $where["externe"] = "= '0'";
 $where["group_id"] = "= '$group->_id'";
 
 $service = new CService();
+$service->load($service_id);
 $services = $service->loadListWithPerms(PERM_READ, $where);
 
 $whereDeplacement = array();
@@ -95,18 +97,14 @@ foreach($deplacements as $_deplacement) {
   
   $service_actuel    = $_deplacement->_ref_lit->_ref_chambre->service_id;
   $service_transfert = $_deplacement->_ref_next->_ref_lit->_ref_chambre->service_id;
-  
-  if (!array_key_exists($service_actuel, $services) && !array_key_exists($service_transfert, $services)){
+  $show_deplacement = array_key_exists($service_actuel, $services) || array_key_exists($service_transfert, $services);
+  if($service->_id){
+    $show_deplacement &= ($service_actuel == $service->_id) || ($service_transfert == $service->_id);
+  }
+  if (!$show_deplacement){
     unset($deplacements[$_deplacement->_id]);
   }
 }
-
-
-foreach($deplacements as $key => $deplacement){ 
-  for($i = -10; $i < 10; $i++) {
-    $timing[$deplacement->_id][] = mbDateTime("$i minutes", $deplacement->sortie);
-  }
-} 
 
 $order = null;
 
@@ -123,8 +121,10 @@ if($order_col == "_chambre"){
   $order = "chambre.nom $order_way, patients.nom, patients.prenom";
 }
 
-// Récupération des sorties ambu et hospi Òdu jour
+// Récupération des sorties ambu et hospi du jour
 $sorties = array();
+
+$whereSortie["service.service_id"] = CSQLDataSource::prepareIn(array_keys($services), $service->_id);
 
 $whereSortie["type"] = "= 'comp'";
 $sorties["comp"]     = $affectation->loadList($whereSortie, $order, null, null, $ljoin);
@@ -144,26 +144,18 @@ foreach($sorties as &$_sorties) {
     $sejour = $_sortie->_ref_sejour;
     $sejour->loadRefPatient(1);
     $sejour->loadRefPraticien(1);
-    $_sortie->_ref_next->loadRefLit(1)->loadCompleteView();
-    
-		// Filtre sur les service
-    $service_id = $_sortie->_ref_lit->_ref_chambre->service_id;
-    if (!array_key_exists($service_id, $services)) {
-        unset($_sorties[$_sortie->_id]);
-    }
+    $_sortie->loadRefLit(1)->loadCompleteView();
   }
 }
 
 // Création du template
 $smarty = new CSmartyDP();
 
-if ($deplacements){
-  $smarty->assign("timing"     , $timing);
-}
-
 $smarty->assign("order_way"    , $order_way);
 $smarty->assign("order_col"    , $order_col);
 $smarty->assign("date"         , $date);
+$smarty->assign("services"     , $services);
+$smarty->assign("service"      , $service);
 $smarty->assign("deplacements" , $deplacements);
 $smarty->assign("sorties"      , $sorties);
 $smarty->assign("vue"          , $vue);

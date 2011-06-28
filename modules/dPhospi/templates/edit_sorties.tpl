@@ -28,6 +28,14 @@ function addDays(button, days) {
           <option value="0" {{if $vue == 0}} selected="selected"{{/if}}>Tout afficher</option>
           <option value="1" {{if $vue == 1}} selected="selected"{{/if}}>Ne pas afficher les validés</option>
         </select>
+        <select name="service_id" onchange="this.form.submit()">
+          <option value="">&mdash;{{tr}}CService.all{{/tr}}</option>
+          {{foreach from=$services item=_service}}
+          <option value="{{$_service->_id}}" {{if $_service->_id == $service->_id}}selected="selected"{{/if}}>
+            {{$_service}}
+          </option>
+          {{/foreach}}
+        </select>
         {{$date|date_format:$conf.longdate}}
         <input type="hidden" name="date" class="date" value="{{$date}}" onchange="this.form.submit()" />
       </form>
@@ -38,12 +46,10 @@ function addDays(button, days) {
 <ul id="tabs-edit-sorties" class="control_tabs">
   {{foreach from=$sorties item=_sorties key=type}}
   <li>
-    <button class="print notext" style="float:right;" onclick="$('sorties-{{$type}}').print()">{{tr}}Print{{/tr}}</button>
     <a href="#sorties-{{$type}}">Sorties {{tr}}CSejour.type.{{$type}}{{/tr}} prévues ({{$_sorties|@count}})</a>
   </li>
   {{/foreach}}
   <li>
-    <button class="print notext" style="float:right;" onclick="$('deplacements').print()">{{tr}}Print{{/tr}}</button>
     <a href="#deplacements">Déplacements prévus ({{$deplacements|@count}})</a>
   </li>
 </ul>
@@ -56,7 +62,10 @@ function addDays(button, days) {
 <div id="sorties-{{$type}}" style="display: none;">
   <table class="tbl">
     <tr>
-      <th class="not-printable">Sortie</th>
+      <th class="not-printable">
+        <button class="print notext" style="float:left;" onclick="$('sorties-{{$type}}').print()">{{tr}}Print{{/tr}}</button>
+        Sortie
+      </th>
       <th>{{mb_colonne class="CAffectation" field="_patient"   order_col=$order_col order_way=$order_way url=$url}}</th>
       <th>{{mb_colonne class="CAffectation" field="_praticien" order_col=$order_col order_way=$order_way url=$url}}</th>
       <th>{{mb_colonne class="CAffectation" field="_chambre"   order_col=$order_col order_way=$order_way url=$url}}</th>
@@ -127,7 +136,10 @@ function addDays(button, days) {
 <div id="deplacements" style="display: none;">
   <table class="tbl">
     <tr>
-      <th class="not-printable">Déplacement</th>
+      <th class="not-printable">
+        <button class="print notext" style="float:left;" onclick="$('deplacements').print()">{{tr}}Print{{/tr}}</button>
+        Déplacement
+      </th>
       {{assign var=url value="?m=$m&tab=$tab"}}
       <th>{{mb_colonne class="CAffectation" field="_patient"   order_col=$order_col order_way=$order_way url=$url}}</th>
       <th>{{mb_colonne class="CAffectation" field="_praticien" order_col=$order_col order_way=$order_way url=$url}}</th>
