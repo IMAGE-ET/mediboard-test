@@ -161,17 +161,25 @@ if (isset($_POST["_source"])) {
           $content = $headerfooter . "<div id=\"body\">" . $body . "</div>";
         }
         
-        // Clone du modèle
-        $compte_rendu = clone $modele_base;
-        $compte_rendu->_id     = null;
-        $compte_rendu->nom     .= " à {$allDest[$curr_dest[1]][$curr_dest[2]]->nom}";
-        $compte_rendu->_source = $content;
-        $compte_rendu->_ref_content = null;
-        $compte_rendu->user_id    = null;
-        $comte_rendu->function_id = null;
-        $compte_rendu->group_id   = null;
+        // Si le compte-rendu a déjà été enregistré et que l'on applique le premier destinataire,
+        // on modifie le compte-rendu existant
+        if ($do->_obj->_id && $curr_dest === reset($destinataires)) {
+          $compte_rendu = $do->_obj;
+        }
+        // Sinon clone du modèle
+        else {
+          $compte_rendu = clone $modele_base;
+          $compte_rendu->_id     = null;
+          $compte_rendu->_ref_content = null;
+          $compte_rendu->user_id    = null;
+          $comte_rendu->function_id = null;
+          $compte_rendu->group_id   = null;
+          $do->_obj = $compte_rendu;
+        }
         
-        $do->_obj = $compte_rendu;
+        $compte_rendu->_source = $content;
+        $compte_rendu->nom    .= " à {$allDest[$curr_dest[1]][$curr_dest[2]]->nom}";
+        
         $do->doStore();
         $ids_corres .= "{$do->_obj->_id}-";
       }
