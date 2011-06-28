@@ -564,6 +564,7 @@ $smarty->assign("user_id"              , $current_user->user_id);
 $smarty->assign("hide_old_lines"       , $hide_old_lines);
 $smarty->assign("hidden_lines_count"   , $hidden_lines_count);
 $smarty->assign("hide_header"          , $hide_header);
+$smarty->assign("sejour"               , $_sejour);
 
 if($full_mode){
   $smarty->assign("praticien_sejour", $_sejour->praticien_id);

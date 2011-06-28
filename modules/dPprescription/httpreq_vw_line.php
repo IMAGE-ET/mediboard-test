@@ -41,6 +41,7 @@ $patient = $object->_ref_patient;
 $patient->loadRefPhotoIdentite();
 $patient->loadRefConstantesMedicales();
 
+$sejour = new CSejour;
 
 if($line->_ref_prescription->type == "sejour"){
   $patient->loadRefDossierMedical();
@@ -163,6 +164,7 @@ if ($advanced_prot) {
 }
 $smarty->assign("executants", $executants);
 $smarty->assign("category_id", $category_id);
+$smarty->assign("sejour", $sejour);
 
 // Selection du template en fonction du type de ligne
 switch ($line->_class_name) {
