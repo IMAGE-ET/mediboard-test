@@ -127,6 +127,15 @@ Main.add(function(){
   <input type="hidden" name="original_dateTime" value="" />
 </form>
 
+<form name="addPlanifs" action="" method="post">
+  <input type="hidden" name="m" value="dPprescription" />
+  <input type="hidden" name="dosql" value="do_administrations_aed" />
+  <input type="hidden" name="del" value="0" />
+  <input type="hidden" name="decalage" value="" />
+  <input type="hidden" name="administrations_ids" value=""/>
+  <input type="hidden" name="planification" value="1" />
+</form>
+
 <table class="main">
 	<tr>
 		<th class="title" colspan="3">
