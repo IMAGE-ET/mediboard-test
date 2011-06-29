@@ -136,8 +136,7 @@ Main.add(function(){
 
 <span id="stats{{$type}}{{$line->_id}}" style="display: none;">
   <!-- Selection des posologies statistiques -->
-  {{if $line->_ref_prescription->object_id}}
+  {{if $type != "mode_grille" && $line->_ref_prescription->object_id}}
     {{include file="../../dPprescription/templates/line/inc_vw_form_select_poso.tpl"}}
   {{/if}}   
 </span>
-	
