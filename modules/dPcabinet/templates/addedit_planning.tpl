@@ -271,7 +271,7 @@ Main.add(function () {
                 {{mb_field object=$consult field="rques" class="autocomplete" rows=5}}
                 <script type="text/javascript">
                   Main.add(function() {
-                    new AideSaisie.AutoComplete(getForm("editFrm").motif, {
+                    new AideSaisie.AutoComplete(getForm("editFrm").rques, {
                       objectClass: "{{$consult->_class_name}}", 
                       contextUserId: "{{$app->user_id}}"
                     });
