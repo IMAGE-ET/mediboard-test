@@ -59,8 +59,10 @@ processValuation = function(button, container, categorization, label, list) {
   
   url.requestJSON(function(data){
     $H(data.totals).each(function(pair){
-      $("folder-"+label).select("td.total-product-"+pair.key+"-ht").invoke("update", pair.value.ht);
-      $("folder-"+label).select("td.total-product-"+pair.key+"-ttc").invoke("update", pair.value.ttc);
+		  var row = $("folder-"+label);
+      row.select("td.total-product-"+pair.key+"-ht").invoke("update", pair.value.ht);
+      row.select("td.total-product-"+pair.key+"-ttc").invoke("update", pair.value.ttc);
+      row.select("td.total-product-"+pair.key+"-quantity").invoke("update", pair.value.quantity);
     });
     
     $("total-group-"+label+"-ht").update(data.total);
@@ -121,7 +123,7 @@ provessValuationAll = function(table) {
   <tr>
     <th class="narrow">{{tr}}CProduct-code{{/tr}}</th>
     <th>{{tr}}CProduct{{/tr}}</th>
-    <th class="narrow"></th>
+    <th class="narrow">Stock à <br />la date</th>
     
     <th style="width: 5em;">HT</th>
     <th style="width: 5em;">TTC</th>
@@ -168,10 +170,10 @@ provessValuationAll = function(table) {
               <a class="button edit" target="edit-product" href="?m=dPstock&amp;tab=vw_idx_product&amp;product_id={{$_product->_id}}">
                 {{tr}}Edit{{/tr}}
               </a>
+							{{$_product->code}}
             </td>
-            <td>{{$_product->code}}</td>
-            <td>{{$_product}}</td>
-            
+            <td><span onmouseover="ObjectTooltip.createEx(this, '{{$_product->_guid}}')">{{$_product}}</span></td>
+            <td class="total-product-{{$_product->_id}}-quantity"></td>
             <td class="total-product-{{$_product->_id}}-ht" style="text-align: right;">0</td>
             <td class="total-product-{{$_product->_id}}-ttc" style="text-align: right;">0</td>
           </tr>

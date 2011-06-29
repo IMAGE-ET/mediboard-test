@@ -72,6 +72,7 @@ foreach($list_products as $_product) {
   $total_product_ttc = 0;
   
   $quantity = $_product->_ref_stock_group->getValueAtDate($date, "quantity");
+	$quantity_at_date = $quantity;
   //mbTrace($quantity, "qty at date", true);
   
   //$quantity = $_product->_ref_stock_group->quantity;
@@ -197,6 +198,7 @@ foreach($list_products as $_product) {
     $totals[$_product->_id] = array(
       "ht" => round($total_product, 2),
       "ttc" => round($total_product_ttc, 2),
+			"quantity" => $quantity_at_date,
     );
     
     $total += $total_product;
