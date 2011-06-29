@@ -10,6 +10,10 @@
 
 <button class="print not-printable" onclick="window.print()">{{tr}}Print{{/tr}}</button>
 
+{{if $date && $show_stock_quantity}}
+  <h3>Etat des stocks le {{$date|date_format:$conf.datetime}}</h3>
+{{/if}}
+
 <table class="main tbl">
   <thead>
     <tr>

@@ -182,7 +182,8 @@ class CProduct extends CMbObject {
     $this->_ref_stock_group->group_id = CProductStockGroup::getHostGroup();
     $this->_ref_stock_group->product_id = $this->product_id;
     
-    return $this->_ref_stock_group->loadMatchingObject();
+    $this->_ref_stock_group->loadMatchingObject();
+		return $this->_ref_stock_group;
   }
 
   function getPerm($permType) {

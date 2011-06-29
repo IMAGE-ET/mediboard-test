@@ -12,6 +12,7 @@ CCanDo::checkRead();
 
 $product_ids         = CValue::post("product_ids");
 $show_stock_quantity = CValue::post("show_stock_quantity");
+$date                = CValue::post("date");
 
 $product_ids = explode(",", $product_ids);
 
@@ -24,7 +25,11 @@ $list_products = $product->loadList($where, "name");
 
 if ($show_stock_quantity) {
   foreach($list_products as $_product) {
-    $_product->loadRefStock();
+    $_stock = $_product->loadRefStock();
+		
+		if ($date) {
+		  $_stock->quantity = $_stock->getValueAtDate($date, "quantity");
+		}
   }
 }
 
@@ -33,5 +38,6 @@ $smarty = new CSmartyDP();
 
 $smarty->assign('list_products', $list_products);
 $smarty->assign('show_stock_quantity', $show_stock_quantity);
+$smarty->assign('date', $date);
 
 $smarty->display('vw_idx_products_by_id.tpl');

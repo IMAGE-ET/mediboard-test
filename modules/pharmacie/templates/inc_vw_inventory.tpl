@@ -59,7 +59,7 @@ processValuation = function(button, container, categorization, label, list) {
   
   url.requestJSON(function(data){
     $H(data.totals).each(function(pair){
-		  var row = $("folder-"+label);
+      var row = $("folder-"+label);
       row.select("td.total-product-"+pair.key+"-ht").invoke("update", pair.value.ht);
       row.select("td.total-product-"+pair.key+"-ttc").invoke("update", pair.value.ttc);
       row.select("td.total-product-"+pair.key+"-quantity").invoke("update", pair.value.quantity);
@@ -103,6 +103,15 @@ provessValuationAll = function(table) {
   });
 }
 
+printStocks = function(product_ids, show_stock_quantity) {
+  var url = new Url('pharmacie','vw_idx_products_by_id');
+  url.pop(800, 600, 'liste produits', null, null, {
+    product_ids: product_ids, 
+    show_stock_quantity: show_stock_quantity, 
+    date: $V(getForm("filterInventory").date)
+  });
+}
+
 </script>
 
 {{if $levels|@count}}
@@ -133,17 +142,17 @@ provessValuationAll = function(table) {
     {{if $_group.level != false}}
       {{assign var=_level value=$_group.level}}
       {{assign var=_list_ids value=','|implode:$_group.list_id}}
-			
+      
       <tr class="level-{{$_group.level}} {{if array_key_exists($_level, $levels) && !$levels.$_level}}" style="display: none;" {{else}} visible" {{/if}}>
         <th class="title" style="text-align: left;" onclick="$('folder-{{$_code}}').toggle()">
           <button type="button" class="down">{{tr}}Display{{/tr}}</button>
           
           <button type="button" class="print" 
-                  onclick="Event.stop(event);(new Url('pharmacie','vw_idx_products_by_id')).pop(800, 600, 'liste produits', null, null, {product_ids: '{{$_list_ids}}', show_stock_quantity: true })">
+                  onclick="Event.stop(event); printStocks('{{$_list_ids}}', true)">
             avec quantité
           </button>
           <button type="button" class="print" 
-                  onclick="Event.stop(event);(new Url('pharmacie','vw_idx_products_by_id')).pop(800, 600, 'liste produits', null, null, {product_ids: '{{$_list_ids}}' })">
+                  onclick="Event.stop(event); printStocks('{{$_list_ids}}', false)">
             sans quantité
           </button>
         </th>
@@ -162,7 +171,7 @@ provessValuationAll = function(table) {
         <th id="total-group-{{$_code}}-ht" class="total-group-ht" style="text-align: right;"></th>
         <th id="total-group-{{$_code}}-ttc" class="total-group-ttc" style="text-align: right;"></th>
       </tr>
-			
+      
       <tbody style="display: none;" id="folder-{{$_code}}" class="level-{{$_group.level}} folder">
         {{foreach from=$_group.list item=_product}}
           <tr>
@@ -170,7 +179,7 @@ provessValuationAll = function(table) {
               <a class="button edit" target="edit-product" href="?m=dPstock&amp;tab=vw_idx_product&amp;product_id={{$_product->_id}}">
                 {{tr}}Edit{{/tr}}
               </a>
-							{{$_product->code}}
+              {{$_product->code}}
             </td>
             <td><span onmouseover="ObjectTooltip.createEx(this, '{{$_product->_guid}}')">{{$_product}}</span></td>
             <td class="total-product-{{$_product->_id}}-quantity"></td>
