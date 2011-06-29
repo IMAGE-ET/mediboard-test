@@ -42,6 +42,8 @@ class CPrescriptionLine extends CMbObject implements IPatientRelated {
   var $perop               = null;
 	var $inscription         = null;
 	var $protocole_id        = null;
+	var $recusee             = null;
+	
   // Form Fields
   var $_fin                = null;
   var $_protocole          = null;
@@ -113,6 +115,7 @@ class CPrescriptionLine extends CMbObject implements IPatientRelated {
     $specs["perop"]             = "bool default|0"; 
     $specs["inscription"]       = "bool default|0";
     $specs["protocole_id"]      = "ref class|CPrescription show|0";
+    $specs["recusee"]           = "bool default|0";
     $specs["_fin"]              = "date moreEquals|debut";
     $specs["_fin_reelle"]       = "date";
     return $specs;

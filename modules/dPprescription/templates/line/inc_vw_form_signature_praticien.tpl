@@ -16,11 +16,12 @@
 	
 	{{if $line->inscription}}
 	  <input type="hidden" name="inscription" value="0" />
+    <input type="hidden" name="recusee" value="0" />
 	{{/if}}
 	
 	
 	<!-- Si la ligne est signée et qu'on est le prescripteur, on peut supprimer la signature de la ligne -->
-  {{if $line->signee && ($app->user_id == $line->praticien_id || $line->inscription)}}
+  {{if $line->signee && !$line->recusee && ($app->user_id == $line->praticien_id || $line->inscription)}}
 	  <!-- Annulation de la signature -->
     <input type="hidden" name="signee" value="0" />
     <button type="button" class="cancel" onclick="onSubmitFormAjax(this.form, { onComplete: function() { Prescription.reloadLine('{{$line->_guid}}'); } });">Annuler la signature</button>
@@ -49,6 +50,41 @@
 			{{else}}
 			  Signer
 			{{/if}}
-		</button>  
+		</button>
   {{/if}}
+  {{if $line->inscription}}
+      {{if !$line->recusee}}
+        <button type="button" id="recusation_{{$line->_id}}" class="tick"
+          onclick="if ($V(getForm('editCommentaire-{{$line->_guid}}').commentaire) == '') {
+                     alert('{{tr}}CPrescription.comment_for_recusion{{/tr}}'); 
+                     return;
+                   }
+                   $V(this.form.inscription, 1);
+                   $V(this.form.recusee, 1);
+                   onSubmitFormAjax(this.form, {
+                     onComplete: function() {
+                       modalPrescription.close();
+                       {{if $line->inscription}}
+                         Prescription.reloadPrescSejour('{{$prescription->_id}}'); 
+                       {{else}}
+                         Prescription.reload.defer('{{$prescription->_id}}','','{{$div_refresh}}'); 
+                       {{/if}}
+                   } });">
+        {{tr}}CPrescriptionLine.recuser_line{{/tr}}</button>
+      {{elseif $line->recusee && $line->praticien_id && $line->praticien_id == $app->user_id}}
+        <input type="hidden" name="signee" value="0" />
+        <button type="button" class="cancel"
+          onclick="$V(this.form.inscription, 1);
+                   $V(this.form.signee, 0);
+                   onSubmitFormAjax(this.form, {
+                     onComplete: function() {
+                     modalPrescription.close();
+                     {{if $line->inscription}}
+                       Prescription.reloadPrescSejour('{{$prescription->_id}}'); 
+                     {{else}}
+                       Prescription.reload.defer('{{$prescription->_id}}','','{{$div_refresh}}'); 
+                     {{/if}}
+                 }  });">{{tr}}CPrescriptionLine.cancel_recuser_line{{/tr}}</button>
+      {{/if}}
+    {{/if}}
 </form>

@@ -237,7 +237,7 @@
 	<tr>
 		<td>
 			{{if (($category->chapitre == "biologie" || $category->chapitre == "kine" || $category->chapitre == "soin" || $category->chapitre == "dm" || $category->chapitre == "med_elt") && $prescription->type != "sortie") && !$line->_protocole }}
-        {{if ($prescription->type == "sejour" || $prescription->type == "pre_admission") && !$line->_protocole && $line->signee}}
+        {{if ($prescription->type == "sejour" || $prescription->type == "pre_admission") && !$line->_protocole && $line->signee && !$line->recusee}}
           <fieldset style="float: left; width: 48%;">
 				    <legend>Evolution</legend>
 						<div id="stop-CPrescriptionLineElement-{{$line->_id}}"> 

@@ -825,6 +825,10 @@ class CPrescription extends CMbObject implements IPatientRelated {
 	 * Chargement des inscriptions
 	 */
   function loadRefsLinesInscriptions(){
+    if ($this->_ref_lines_inscriptions) {
+      return;
+    }
+
   	// Chargement des inscriptions de medicament
 		$line_med = new CPrescriptionLineMedicament();
 		$line_med->prescription_id = $this->_id;

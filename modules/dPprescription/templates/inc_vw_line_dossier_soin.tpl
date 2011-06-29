@@ -23,7 +23,8 @@
   {{/if}}
 {{/if}}
 
-<tr id="line_{{$line_class}}_{{$line_id}}_{{$unite_prise|regex_replace:'/[^a-z0-9_-]/i':'_'}}">
+<tr id="line_{{$line_class}}_{{$line_id}}_{{$unite_prise|regex_replace:'/[^a-z0-9_-]/i':'_'}}"
+  {{if $line->inscription && $line->recusee}}class="hatching"{{/if}}>
 	{{if @$show_patient}}
 	<td style="text-align: center;" class="text">
 	  <span onmouseover="ObjectTooltip.createEx(this, '{{$prescription->_ref_object->_guid}}')">
@@ -377,7 +378,7 @@
  <td style="text-align: center">
  	 <div class="mediuser" style="border-color: #{{$line->_ref_praticien->_ref_function->color}}">
    {{if $line->signee}}
-   <img src="images/icons/tick.png" title="Signée le {{$line->_ref_log_signee->date|date_format:$conf.datetime}} par {{$line->_ref_praticien->_view}}" />
+   <img src="images/icons/tick.png" title="{{if isset($line->recusee|smarty:nodefaults) && $line->recusee == 1}}Récusée{{else}}Signée{{/if}} le {{$line->_ref_log_signee->date|date_format:$conf.datetime}} par {{$line->_ref_praticien->_view}}" />
    {{else}}
    <img src="images/icons/cross.png" title="Non signée par le praticien" />
    {{/if}}

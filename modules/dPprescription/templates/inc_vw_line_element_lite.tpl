@@ -18,7 +18,10 @@
           {{if $line->_fin_reelle && !$line->_protocole && !$line->inscription && !$advanced_prot}}
 					  {{if $line->_fin_reelle < $now}}hatching{{/if}}
 					  {{if $line->_fin_reelle|iso_date < $now|iso_date}}opacity-50{{/if}}
-					{{/if}}">    
+					{{/if}}
+          {{if $line->recusee}}
+            hatching opacity-50
+          {{/if}}">
   <td style="width: 5%; text-align: center">
     {{if !$advanced_prot}}
     	{{if $line->_can_delete_line}}

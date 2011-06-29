@@ -1976,7 +1976,16 @@ class CSetupdPprescription extends CSetup {
 		$this->makeRevision("1.44");
 		$this->addPrefQuery("show_hour_onmouseover_plan_soins", "1");
     
-    $this->mod_version = "1.45";
+    $this->makeRevision("1.45");
+    $query = "ALTER TABLE `prescription_line_element`
+              ADD `recusee` ENUM ('0','1') DEFAULT '0';";
+		$this->addQuery($query);
+		
+		$query = "ALTER TABLE `prescription_line_medicament`
+              ADD `recusee` ENUM ('0','1') DEFAULT '0';";
+    $this->addQuery($query);
+    
+		$this->mod_version = "1.46";
   }
 }
 

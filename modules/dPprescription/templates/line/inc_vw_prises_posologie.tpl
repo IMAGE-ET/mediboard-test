@@ -22,8 +22,11 @@
 	  $V(oForm.unite_duree,'{{$line->unite_duree}}', false);
 	{{/if}}
 	
-	// On grise le formulaire de signature de la ligne si aucune prise n'est créée
-	var oButton = $('signature_{{$line->_id}}'); 
+	// On grise le formulaire de signature de la ligne et on active le formulaire de récusation de la ligne
+  // si aucune prise n'est créée
+   
+	var oButton = $('signature_{{$line->_id}}');
+  
 	if(oButton){
 	{{if $line->_count_prises_line}}
 	  oButton.disabled = false;
@@ -33,6 +36,17 @@
 	  oButton.setOpacity(0.3);
 	{{/if}}
 	}
+  
+	var oButtonRec = $('recusation_{{$line->_id}}');
+  if (oButtonRec) {
+  {{if $line->_count_prises_line}}
+    oButtonRec.disabled = true;
+    oButtonRec.setOpacity(0.3);
+  {{else}}
+    oButtonRec.disabled = false;
+    oButtonRec.setOpacity(1.0);
+  {{/if}}
+  }
 {{/if}}
 
 Main.add(function () {

@@ -392,7 +392,7 @@
 	{{if !$line->_protocole}}
 		<tr>
 			<td>
-			  {{if $line->_can_vw_form_add_line_contigue}}
+			  {{if $line->_can_vw_form_add_line_contigue && !$line->recusee}}
 	        <fieldset style="float: left; width: 48%;">
 	          <legend>
 	            Evolution

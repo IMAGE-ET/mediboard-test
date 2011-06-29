@@ -233,9 +233,10 @@ else {
 		elseif ($chapitre == "inscription"){
 			// Chargement des inscriptions effectuées
 			$prescription->loadRefsLinesInscriptions();
-			foreach($prescription->_ref_lines_inscriptions as $_inscriptions_by_type){
-				foreach($_inscriptions_by_type as $_inscription){
+			foreach($prescription->_ref_lines_inscriptions as &$_inscriptions_by_type){
+				foreach($_inscriptions_by_type as &$_inscription){
           $_inscription->countBackRefs("administration");
+          $_inscription->loadRefLogSignee();
 				}
 			}
 		}
