@@ -99,7 +99,7 @@ class CProduct extends CMbObject {
     $specs['packaging']     = 'str autocomplete';
     $specs['renewable']     = 'enum list|0|1|2';
     $specs['cancelled']     = 'bool default|0 show|0';
-    $specs['classe_comptable'] = 'str maxLength|7 autocomplete';
+    $specs['classe_comptable'] = 'str maxLength|9 autocomplete';
     $specs['equivalence_id'] = 'ref class|CProductEquivalence';
     $specs['auto_dispensed'] = 'bool default|0';
     
@@ -406,6 +406,14 @@ class CProduct extends CMbObject {
     if ($this->code !== null && (!$this->_id || $this->fieldModified("code"))) {
       $this->code_canonical = preg_replace("/[^0-9a-z]/i", "", $this->code);
     }
+    
+		$cc = trim($this->classe_comptable, "0\n\r\t ");
+    if (preg_match('/^\d+$/', $cc)) {
+      $this->classe_comptable = str_pad($cc, 9, "0", STR_PAD_RIGHT);
+    }
+		else {
+			$this->classe_comptable = "";
+		}
     
     if ($this->fieldModified("cancelled", 1)) {
       $references = $this->loadRefsReferences();

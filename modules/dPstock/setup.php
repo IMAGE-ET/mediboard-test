@@ -17,13 +17,13 @@ class CSetupdPstock extends CSetup {
     $this->makeRevision('all');
 
     $query = 'CREATE TABLE `product` (
-			 `product_id` INT(11) UNSIGNED NOT NULL AUTO_INCREMENT, 
-			 `name` VARCHAR(50) NOT NULL, 
-			 `description` TEXT, 
-			 `code` VARCHAR(32) NULL,
-			 `category_id` INT(11) UNSIGNED NOT NULL, 
-			 `societe_id` INT(11) UNSIGNED NOT NULL, 
-			PRIMARY KEY (`product_id`)) /*! ENGINE=MyISAM */;';
+       `product_id` INT(11) UNSIGNED NOT NULL AUTO_INCREMENT, 
+       `name` VARCHAR(50) NOT NULL, 
+       `description` TEXT, 
+       `code` VARCHAR(32) NULL,
+       `category_id` INT(11) UNSIGNED NOT NULL, 
+       `societe_id` INT(11) UNSIGNED NOT NULL, 
+      PRIMARY KEY (`product_id`)) /*! ENGINE=MyISAM */;';
     $this->addQuery($query);
     
     $query = 'ALTER TABLE `product`
@@ -33,20 +33,20 @@ class CSetupdPstock extends CSetup {
     $this->addQuery($query);
 
     $query = 'CREATE TABLE `product_category` (
-			 `category_id` INT(11) UNSIGNED NOT NULL AUTO_INCREMENT, 
-			 `name` VARCHAR(50) NOT NULL, 
-			PRIMARY KEY (`category_id`)) /*! ENGINE=MyISAM */;';
+       `category_id` INT(11) UNSIGNED NOT NULL AUTO_INCREMENT, 
+       `name` VARCHAR(50) NOT NULL, 
+      PRIMARY KEY (`category_id`)) /*! ENGINE=MyISAM */;';
     $this->addQuery($query);
 
     $query = 'CREATE TABLE `product_delivery` (
-		 `delivery_id` INT(11) UNSIGNED NOT NULL AUTO_INCREMENT, 
-		 `product_id` INT(11) UNSIGNED NOT NULL, 
-		 `date` DATETIME NOT NULL, 
-		 `target_class` VARCHAR(25) NOT NULL, 
-		 `target_id` INT(11) UNSIGNED NOT NULL, 
-		 `code` VARCHAR(32) NULL, 
-		 `description` TEXT, 
-		PRIMARY KEY (`delivery_id`)) /*! ENGINE=MyISAM */;';
+     `delivery_id` INT(11) UNSIGNED NOT NULL AUTO_INCREMENT, 
+     `product_id` INT(11) UNSIGNED NOT NULL, 
+     `date` DATETIME NOT NULL, 
+     `target_class` VARCHAR(25) NOT NULL, 
+     `target_id` INT(11) UNSIGNED NOT NULL, 
+     `code` VARCHAR(32) NULL, 
+     `description` TEXT, 
+    PRIMARY KEY (`delivery_id`)) /*! ENGINE=MyISAM */;';
     $this->addQuery($query);
     
     $query = 'ALTER TABLE `product_delivery`
@@ -58,15 +58,15 @@ class CSetupdPstock extends CSetup {
     $this->addQuery($query);
 
     $query = 'CREATE TABLE `product_order` (
-		 `order_id` INT(11) UNSIGNED NOT NULL AUTO_INCREMENT, 
-		 `date_ordered` DATETIME, 
-		 `societe_id` INT(11) UNSIGNED NOT NULL, 
-		 `group_id` INT(11) UNSIGNED NOT NULL, 
-		 `locked` BOOL NULL DEFAULT \'0\',
-		 `cancelled` BOOL NULL DEFAULT \'0\',
-		 `deleted` BOOL NULL DEFAULT \'0\',
-		 `order_number` VARCHAR(64) NOT NULL, 
-		PRIMARY KEY (`order_id`)) /*! ENGINE=MyISAM */;';
+     `order_id` INT(11) UNSIGNED NOT NULL AUTO_INCREMENT, 
+     `date_ordered` DATETIME, 
+     `societe_id` INT(11) UNSIGNED NOT NULL, 
+     `group_id` INT(11) UNSIGNED NOT NULL, 
+     `locked` BOOL NULL DEFAULT \'0\',
+     `cancelled` BOOL NULL DEFAULT \'0\',
+     `deleted` BOOL NULL DEFAULT \'0\',
+     `order_number` VARCHAR(64) NOT NULL, 
+    PRIMARY KEY (`order_id`)) /*! ENGINE=MyISAM */;';
     $this->addQuery($query);
     
     $query = 'ALTER TABLE `product_order`
@@ -77,14 +77,14 @@ class CSetupdPstock extends CSetup {
     $this->addQuery($query);
 
     $query = 'CREATE TABLE `product_order_item` (
-		 `order_item_id` INT(11) UNSIGNED NOT NULL AUTO_INCREMENT, 
-		 `reference_id` INT(11) UNSIGNED NOT NULL, 
-		 `order_id` INT(11) UNSIGNED NOT NULL, 
-		 `quantity` INT(11) UNSIGNED NOT NULL, 
-		 `unit_price` FLOAT, 
-		 `date_received` DATETIME, 
-		 `quantity_received` INT(11) UNSIGNED DEFAULT \'0\',
-		PRIMARY KEY (`order_item_id`)) /*! ENGINE=MyISAM */;';
+     `order_item_id` INT(11) UNSIGNED NOT NULL AUTO_INCREMENT, 
+     `reference_id` INT(11) UNSIGNED NOT NULL, 
+     `order_id` INT(11) UNSIGNED NOT NULL, 
+     `quantity` INT(11) UNSIGNED NOT NULL, 
+     `unit_price` FLOAT, 
+     `date_received` DATETIME, 
+     `quantity_received` INT(11) UNSIGNED DEFAULT \'0\',
+    PRIMARY KEY (`order_item_id`)) /*! ENGINE=MyISAM */;';
     $this->addQuery($query);
     
     $query = 'ALTER TABLE `product_order_item`
@@ -94,13 +94,13 @@ class CSetupdPstock extends CSetup {
     $this->addQuery($query);
 
     $query = 'CREATE TABLE `product_reference` (
-		 `reference_id` INT(11) UNSIGNED NOT NULL AUTO_INCREMENT, 
-		 `product_id` INT(11) UNSIGNED NOT NULL, 
-		 `societe_id` INT(11) UNSIGNED NOT NULL, 
-		 `quantity` INT(11) UNSIGNED NOT NULL, 
-		 `code` VARCHAR(32) NULL, 
-		 `price` FLOAT NOT NULL, 
-		PRIMARY KEY (`reference_id`)) /*! ENGINE=MyISAM */;';
+     `reference_id` INT(11) UNSIGNED NOT NULL AUTO_INCREMENT, 
+     `product_id` INT(11) UNSIGNED NOT NULL, 
+     `societe_id` INT(11) UNSIGNED NOT NULL, 
+     `quantity` INT(11) UNSIGNED NOT NULL, 
+     `code` VARCHAR(32) NULL, 
+     `price` FLOAT NOT NULL, 
+    PRIMARY KEY (`reference_id`)) /*! ENGINE=MyISAM */;';
     $this->addQuery($query);
     
     $query = 'ALTER TABLE `product_reference`
@@ -110,15 +110,15 @@ class CSetupdPstock extends CSetup {
     $this->addQuery($query);
 
     $query = 'CREATE TABLE `product_stock` (
-		 `stock_id` INT(11) UNSIGNED NOT NULL AUTO_INCREMENT, 
-		 `product_id` INT(11) UNSIGNED NOT NULL, 
-		 `group_id` INT(11) UNSIGNED NOT NULL, 
-		 `quantity` INT(11) UNSIGNED NOT NULL, 
-		 `order_threshold_critical` INT(11) UNSIGNED, 
-		 `order_threshold_min` INT(11) UNSIGNED NOT NULL, 
-		 `order_threshold_optimum` INT(11) UNSIGNED, 
-		 `order_threshold_max` INT(11) UNSIGNED NOT NULL, 
-		PRIMARY KEY (`stock_id`)) /*! ENGINE=MyISAM */;';
+     `stock_id` INT(11) UNSIGNED NOT NULL AUTO_INCREMENT, 
+     `product_id` INT(11) UNSIGNED NOT NULL, 
+     `group_id` INT(11) UNSIGNED NOT NULL, 
+     `quantity` INT(11) UNSIGNED NOT NULL, 
+     `order_threshold_critical` INT(11) UNSIGNED, 
+     `order_threshold_min` INT(11) UNSIGNED NOT NULL, 
+     `order_threshold_optimum` INT(11) UNSIGNED, 
+     `order_threshold_max` INT(11) UNSIGNED NOT NULL, 
+    PRIMARY KEY (`stock_id`)) /*! ENGINE=MyISAM */;';
     $this->addQuery($query);
     
     $query = 'ALTER TABLE `product_stock`
@@ -127,28 +127,28 @@ class CSetupdPstock extends CSetup {
     $this->addQuery($query);
 
     $query = 'CREATE TABLE `societe` (
-		 `societe_id` INT(11) UNSIGNED NOT NULL AUTO_INCREMENT, 
-		 `name` VARCHAR(50) NOT NULL, 
-		 `address` VARCHAR(255), 
-		 `postal_code` INT(11), 
-		 `city` VARCHAR(255), 
-		 `phone` VARCHAR(255), 
-		 `email` VARCHAR(50), 
-		 `fax` VARCHAR(16) NULL,
-		 `siret` VARCHAR(14) NULL,
-		 `contact_name` VARCHAR(50), 
-		 `contact_surname` VARCHAR(50), 
-		PRIMARY KEY (`societe_id`)) /*! ENGINE=MyISAM */;';
+     `societe_id` INT(11) UNSIGNED NOT NULL AUTO_INCREMENT, 
+     `name` VARCHAR(50) NOT NULL, 
+     `address` VARCHAR(255), 
+     `postal_code` INT(11), 
+     `city` VARCHAR(255), 
+     `phone` VARCHAR(255), 
+     `email` VARCHAR(50), 
+     `fax` VARCHAR(16) NULL,
+     `siret` VARCHAR(14) NULL,
+     `contact_name` VARCHAR(50), 
+     `contact_surname` VARCHAR(50), 
+    PRIMARY KEY (`societe_id`)) /*! ENGINE=MyISAM */;';
     $this->addQuery($query);
     
     $query = 'CREATE TABLE `product_stock_out` (
-		 `stock_out_id` INT(11) UNSIGNED NOT NULL AUTO_INCREMENT, 
-		 `stock_id` INT(11) UNSIGNED NOT NULL, 
-		 `date` DATETIME NOT NULL, 
-		 `quantity` INT(11) NOT NULL, 
-		 `code` VARCHAR(32), 
-		 `function_id` INT(11) UNSIGNED, 
-		PRIMARY KEY (`stock_out_id`)) /*! ENGINE=MyISAM */;';
+     `stock_out_id` INT(11) UNSIGNED NOT NULL AUTO_INCREMENT, 
+     `stock_id` INT(11) UNSIGNED NOT NULL, 
+     `date` DATETIME NOT NULL, 
+     `quantity` INT(11) NOT NULL, 
+     `code` VARCHAR(32), 
+     `function_id` INT(11) UNSIGNED, 
+    PRIMARY KEY (`stock_out_id`)) /*! ENGINE=MyISAM */;';
     $this->addQuery($query);
     
     $query = 'ALTER TABLE `product_stock_out` 
@@ -272,7 +272,7 @@ class CSetupdPstock extends CSetup {
       DROP `date_delivery`,
       DROP `date_reception`';
     $this->addQuery($query);
-	  
+    
     $query = 'ALTER TABLE `product_reference` CHANGE `price` `price` DECIMAL(10, 5) NOT NULL';
     $this->addQuery($query);
     
@@ -285,17 +285,17 @@ class CSetupdPstock extends CSetup {
     
     $this->makeRevision('0.93');
     $query = 'CREATE TABLE `product_discrepancy` (
-		  `discrepancy_id` INT (11) UNSIGNED NOT NULL auto_increment PRIMARY KEY,
-		  `quantity` INT (11) NOT NULL,
-		  `date` DATETIME NOT NULL,
-		  `description` TEXT,
-		  `object_id` INT (11) UNSIGNED NOT NULL,
-		  `object_class` ENUM (\'CProductStockGroup\',\'CProductStockService\') NOT NULL) /*! ENGINE=MyISAM */;';
+      `discrepancy_id` INT (11) UNSIGNED NOT NULL auto_increment PRIMARY KEY,
+      `quantity` INT (11) NOT NULL,
+      `date` DATETIME NOT NULL,
+      `description` TEXT,
+      `object_id` INT (11) UNSIGNED NOT NULL,
+      `object_class` ENUM (\'CProductStockGroup\',\'CProductStockService\') NOT NULL) /*! ENGINE=MyISAM */;';
     $this->addQuery($query);
     
-		$query = 'ALTER TABLE `product_discrepancy` 
-		  ADD INDEX (`date`),
-		  ADD INDEX (`object_id`);';
+    $query = 'ALTER TABLE `product_discrepancy` 
+      ADD INDEX (`date`),
+      ADD INDEX (`object_id`);';
     $this->addQuery($query);
     
     $query = 'ALTER TABLE `product_delivery_trace` CHANGE `date_delivery` `date_delivery` DATETIME NULL';
@@ -303,12 +303,12 @@ class CSetupdPstock extends CSetup {
     
     $this->makeRevision('0.94');
     $query = 'ALTER TABLE `product` 
-		  CHANGE `societe_id` `societe_id` INT (11) UNSIGNED,
-		  ADD `quantity` INT (10) UNSIGNED NOT NULL,
-		  ADD `item_title` VARCHAR (255),
-		  ADD `unit_quantity` DECIMAL (10,4) UNSIGNED,
-		  ADD `unit_title` VARCHAR (255),
-		  ADD `packaging` VARCHAR (255)';
+      CHANGE `societe_id` `societe_id` INT (11) UNSIGNED,
+      ADD `quantity` INT (10) UNSIGNED NOT NULL,
+      ADD `item_title` VARCHAR (255),
+      ADD `unit_quantity` DECIMAL (10,4) UNSIGNED,
+      ADD `unit_title` VARCHAR (255),
+      ADD `packaging` VARCHAR (255)';
     $this->addQuery($query);
     
     $this->makeRevision('0.95');
@@ -324,22 +324,22 @@ class CSetupdPstock extends CSetup {
     $this->makeRevision("0.96");
     $query = "ALTER TABLE `product` ADD `code_lpp` INT (7) UNSIGNED ZEROFILL";
     $this->addQuery($query);
-		
-		$this->makeRevision("0.97");
-		$query = "ALTER TABLE `product_stock_group` ADD `location_id` INT (11) UNSIGNED;";
-		$this->addQuery($query);
-		$query = "ALTER TABLE `product_stock_group` ADD INDEX (`location_id`);";
+    
+    $this->makeRevision("0.97");
+    $query = "ALTER TABLE `product_stock_group` ADD `location_id` INT (11) UNSIGNED;";
+    $this->addQuery($query);
+    $query = "ALTER TABLE `product_stock_group` ADD INDEX (`location_id`);";
     $this->addQuery($query);
     $query = "CREATE TABLE `product_stock_location` (
-					  `stock_location_id` INT (11) UNSIGNED NOT NULL auto_increment PRIMARY KEY,
-					  `name` VARCHAR (255) NOT NULL,
-					  `desc` TEXT,
-					  `position` INT (11),
-					  `group_id` INT (11) UNSIGNED NOT NULL
-					) /*! ENGINE=MyISAM */;";
-		$this->addQuery($query);
+            `stock_location_id` INT (11) UNSIGNED NOT NULL auto_increment PRIMARY KEY,
+            `name` VARCHAR (255) NOT NULL,
+            `desc` TEXT,
+            `position` INT (11),
+            `group_id` INT (11) UNSIGNED NOT NULL
+          ) /*! ENGINE=MyISAM */;";
+    $this->addQuery($query);
     $query = "ALTER TABLE `product_stock_location` ADD INDEX (`group_id`);";
-		$this->addQuery($query);
+    $this->addQuery($query);
     
     $this->makeRevision('0.98');
     $query = "ALTER TABLE `product_delivery` ADD `order` ENUM('0','1')";
@@ -751,9 +751,9 @@ class CSetupdPstock extends CSetup {
     $query = "ALTER TABLE `product_delivery_trace` 
               ADD INDEX (`target_location_id`)";
     $this->addQuery($query);
-		
+    
     // creation des emplacements par defaut pour chaque service et etablissement
-			
+      
     // Emplacements de CGroups
     $this->makeRevision("1.44");
     $query = "INSERT INTO product_stock_location (
@@ -761,9 +761,9 @@ class CSetupdPstock extends CSetup {
     ) SELECT 'Lieu par défaut', 0, groups_mediboard.group_id, 'CGroups', groups_mediboard.group_id 
       FROM groups_mediboard";
     $this->addQuery($query);
-		
-		// Emplacements de CService
-		$this->addDependency("dPhospi", "0.16");
+    
+    // Emplacements de CService
+    $this->addDependency("dPhospi", "0.16");
     $query = "INSERT INTO product_stock_location (
        name, position, group_id, object_class, object_id
     ) SELECT 'Lieu par défaut', 0, service.group_id, 'CService', service.service_id 
@@ -802,25 +802,25 @@ class CSetupdPstock extends CSetup {
     $query = "ALTER TABLE `product_stock_service` 
               CHANGE `location_id` `location_id` INT (11) UNSIGNED NOT NULL;";
     $this->addQuery($query);
-		
+    
     //ALTER TABLE `product_delivery_trace` CHANGE `code` `code` CHAR( 40 ) NULL;
     //ALTER TABLE `product_order_item_reception` CHANGE `code` `code` CHAR( 40 ) NULL;
-		//ALTER TABLE `product_reference` 
-		// CHANGE `code` `code` CHAR( 20 ) NULL,
+    //ALTER TABLE `product_reference` 
+    // CHANGE `code` `code` CHAR( 20 ) NULL,
     // CHANGE `supplier_code` `supplier_code` CHAR( 40 ) NULL;
-		//ALTER TABLE `product_reception` CHANGE `reference` `reference` CHAR( 40 ) NOT NULL;
-		
-		$this->makeRevision("1.45");
-		// CProductOrderItemReception
+    //ALTER TABLE `product_reception` CHANGE `reference` `reference` CHAR( 40 ) NOT NULL;
+    
+    $this->makeRevision("1.45");
+    // CProductOrderItemReception
     $query = "ALTER TABLE `product_order_item_reception` 
               ADD `units_fixed` ENUM ('0','1') DEFAULT '1',
               ADD `orig_quantity` INT (11);";
     $this->addQuery($query);
     $query = "UPDATE `product_order_item_reception` SET 
-		          `orig_quantity` = `quantity`,
-						  `units_fixed` = '0'";
+              `orig_quantity` = `quantity`,
+              `units_fixed` = '0'";
     $this->addQuery($query);
-		
+    
     // CProductOrderItem
     $query = "ALTER TABLE `product_order_item` 
               CHANGE `unit_price` `unit_price` DECIMAL (12,5),
@@ -829,13 +829,13 @@ class CSetupdPstock extends CSetup {
               ADD `orig_unit_price` DECIMAL (12,5);";
     $this->addQuery($query);
     $query = "UPDATE `product_order_item` SET 
-		          `orig_quantity` = `quantity`,
+              `orig_quantity` = `quantity`,
               `orig_unit_price` = `unit_price`,
               `units_fixed` = '0'";
     $this->addQuery($query);
-		
+    
     // CProductReference
-		$query = "ALTER TABLE `product_reference` 
+    $query = "ALTER TABLE `product_reference` 
               CHANGE `price` `price` DECIMAL (12,5) NOT NULL,
               ADD `units_fixed` ENUM ('0','1') DEFAULT '1',
               ADD `orig_quantity` INT (11),
@@ -847,13 +847,32 @@ class CSetupdPstock extends CSetup {
               `orig_price` = `price`";
     $this->addQuery($query);
     $query = "UPDATE `product_reference` 
-		          LEFT JOIN `product` ON `product_reference`.`product_id` = `product`.`product_id`
-							SET 
+              LEFT JOIN `product` ON `product_reference`.`product_id` = `product`.`product_id`
+              SET 
               `product_reference`.`price` = `product_reference`.`orig_price` / ( `product`.`quantity` * `product_reference`.`orig_quantity`),
               `product_reference`.`quantity` = `product_reference`.`orig_quantity` * `product`.`quantity`";
     $this->addQuery($query);
     
-    $this->mod_version = "1.46";
+    $this->makeRevision("1.46");
+    $query = "ALTER TABLE `product` CHANGE `classe_comptable` `classe_comptable` INT (9) UNSIGNED";
+    $this->addQuery($query);
+    $query = "UPDATE `product` SET `classe_comptable` = RPAD(`classe_comptable`, 9, '0')
+              WHERE LENGTH(`classe_comptable`) < 9";
+    $this->addQuery($query);
+    
+    /*$this->makeRevision("1.46");
+    $query = "ALTER TABLE `product_stock_service` 
+              ADD `object_class` CHAR (80) NOT NULL AFTER `object_id`,
+              CHANGE `service_id` `object_id` INT (11) UNSIGNED NOT NULL";
+    $this->addQuery($query);
+    $query = "ALTER TABLE `product_stock_service` 
+              ADD INDEX (`object_id`)";
+    $this->addQuery($query);
+    $query = "UPDATE `product_stock_service` SET 
+              `object_class` = 'CService'";
+    $this->addQuery($query);*/
+    
+    $this->mod_version = "1.47";
   }
 }
 
