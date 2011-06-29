@@ -126,7 +126,7 @@
 				  
 					
 					 	<div style="position: relative;">
-						  {{if $app->user_prefs.show_hour_onmouseover_plan_soins}}
+						  {{if @$app->user_prefs.show_hour_onmouseover_plan_soins}}
 						    <span class="hour_adm">
                   {{$_hour}}h
                 </span>
