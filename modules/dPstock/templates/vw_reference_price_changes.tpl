@@ -38,9 +38,11 @@ fixOrderItem = function(form){
     <th colspan="2">
       Reference
     </th>
-    <td><strong>Prix unitaire HT actuel</strong></td>
+    <td><strong>Prix unitaire <br />HT actuel</strong></td>
+		<td></td>
     <td><strong>Réf.</strong></td>
     {{if "cahpp"|module_active}}<td><strong>CAHPP</strong></td>{{/if}}
+    <td>Autre prix</td>
   </tr>
   <tr>
     <td style="text-align: right;">
@@ -48,10 +50,19 @@ fixOrderItem = function(form){
 			 Date de commande
 		</td>
 		<td>Numéro de commande</td>
-    <td>Prix à l'époque de la commande</td>
+    <td>Prix au moment<br /> de la commande</td>
+		<td>Qté commandée</td>
     <td></td>
-    {{if "cahpp"|module_active}}<td></td>{{/if}}
+    {{if "cahpp"|module_active}}
+			<td class="text">
+	    	Cliquez sur le bouton <button class="tick notext"></button> de chaque ligne pour corriger le prix d'achat (peut être le prix actuel de la référence, celui enregistré dans la CAHPP ou un prix que vous choisissez).
+	    </td>
+		{{/if}}
+    <td></td>
   </tr>
+    <tr>
+      <td colspan="{{if "cahpp"|module_active}}7{{else}}6{{/if}}" style="background: none"><br /></td>
+    </tr>
 
 	{{foreach from=$changes_struct item=_changes key=reference_id}}
 		<tr>
@@ -61,9 +72,11 @@ fixOrderItem = function(form){
 				&mdash;
 				{{$references.$reference_id->code}}
 			</th>
-			<td><strong>{{$references.$reference_id->price}}</strong></td>
+      <td><strong>{{$references.$reference_id->price}}</strong></td>
+			<td></td>
 	    <td>Réf.</td>
-	    {{if "cahpp"|module_active}}<td>CAHPP</td>{{/if}}
+      {{if "cahpp"|module_active}}<td>CAHPP</td>{{/if}}
+      <td>Autre prix</td>
 		</tr>
 		{{foreach from=$_changes item=_change}}
 		  <tr>
@@ -71,8 +84,11 @@ fixOrderItem = function(form){
 	        <small style="float: left; color: #666;">{{$_change.order_item_id}}</small>
 					{{$_change.date_ordered|date_format:$conf.longdate}}
 				</td>
-	      <td>{{$_change.order_number}}</td>
-	      <td {{* style="color: {{if $_change.OP > $_change.RP}} red {{else}} green {{/if}}" *}}>{{$_change.OP}}</td>
+	      <td>
+	      	<span onmouseover="ObjectTooltip.createEx(this, '{{$_change.order_item->_ref_order->_guid}}')">{{$_change.order_number}}</span>
+				</td>
+        <td {{* style="color: {{if $_change.OP > $_change.RP}} red {{else}} green {{/if}}" *}}>{{$_change.OP}}</td>
+        <td>{{$_change.OQ}}</td>
 		    <td>
 		    	<form name="fix-price-ref-{{$_change.order_item_id}}" method="post" onsubmit="return fixOrderItem(this)">
 		    		<input type="hidden" name="m" value="dPstock" />
@@ -83,23 +99,37 @@ fixOrderItem = function(form){
 		    	</form>
 		    </td>
 				{{if "cahpp"|module_active}}
-		    <td class="text">
-          <form name="fix-price-cahpp-{{$_change.order_item_id}}" method="post" onsubmit="return fixOrderItem(this)">
+		    <td class="text {{if $references_cahpp.$reference_id->prix_unitaire == null}}empty{{/if}}">
+		    	{{if $references_cahpp.$reference_id->prix_unitaire != null}}
+	          <form name="fix-price-cahpp-{{$_change.order_item_id}}" method="post" onsubmit="return fixOrderItem(this)">
+	            <input type="hidden" name="m" value="dPstock" />
+	            <input type="hidden" name="dosql" value="do_order_item_aed" />
+	            <input type="hidden" name="order_item_id" value="{{$_change.order_item_id}}" />
+	            <input type="hidden" name="unit_price" value="{{$references_cahpp.$reference_id->prix_unitaire}}" />
+	            <button class="tick notext"></button>
+	          </form>
+	          {{$references_cahpp.$reference_id->prix_unitaire}} 
+						&mdash;
+	          {{$references_cahpp.$reference_id|spancate:40}}</small>
+					{{else}}
+					  Aucun prix CAHPP
+					{{/if}}
+				</td>
+				{{/if}}
+				
+        <td>
+          <form name="fix-price-custom-{{$_change.order_item_id}}" method="post" onsubmit="return fixOrderItem(this)">
             <input type="hidden" name="m" value="dPstock" />
             <input type="hidden" name="dosql" value="do_order_item_aed" />
             <input type="hidden" name="order_item_id" value="{{$_change.order_item_id}}" />
-            <input type="hidden" name="unit_price" value="{{$references_cahpp.$reference_id->prix_unitaire}} " />
+            <input type="text" name="unit_price" value="{{$_change.OP}}" size="4" />
             <button class="tick notext"></button>
           </form>
-          {{$references_cahpp.$reference_id->prix_unitaire}} 
-					&mdash;
-          {{$references_cahpp.$reference_id|spancate:40}}</small>
-				</td>
-				{{/if}}
+        </td>
 			</tr>
 		{{/foreach}}
 		<tr>
-			<td colspan="{{if "cahpp"|module_active}}5{{else}}4{{/if}}"><br /></td>
+			<td colspan="{{if "cahpp"|module_active}}7{{else}}6{{/if}}" style="background: none"><br /></td>
 		</tr>
 	{{/foreach}}
 </table>

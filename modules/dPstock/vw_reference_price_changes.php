@@ -30,6 +30,7 @@ $sql->addSelect("
 	product_order_item.reference_id, 
   product_reference.price AS RP, 
   product_order_item.unit_price AS OP, 
+  product_order_item.quantity AS OQ, 
   product_order.order_id, 
   product_order.order_number, 
   product_order.date_ordered");
@@ -69,6 +70,11 @@ foreach($changes as $_change) {
 		
     $references_cahpp[$_reference->_id] = $article;
 	}
+	
+	$_order_item = new CProductOrderItem;
+	$_order_item->load($_change["order_item_id"]);
+	$_order_item->loadOrder();
+	$_change["order_item"] = $_order_item;
 	
 	$changes_struct[$_change["reference_id"]][] = $_change;
 }
