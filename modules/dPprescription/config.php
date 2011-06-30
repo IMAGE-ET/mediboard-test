@@ -19,6 +19,7 @@ $dPconfig["dPprescription"] = array (
     "time_alerte_modification" => "2",
 		"prescription_suivi_soins" => "0",
 		"max_time_modif_suivi_soins" => "12",
+    "qte_obligatoire_inscription" => "0",
     "max_details_result" => "20",
     "scores" => array(
       "interaction" => array(

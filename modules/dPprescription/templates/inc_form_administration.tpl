@@ -1,8 +1,17 @@
+{{assign var="qte_obligatoire_inscription" value=$conf.dPprescription.CPrescription.qte_obligatoire_inscription}}
+
 <script type="text/javascript">
   submitAdministration = function() {
     var oForm = getForm('addAdministration');
     var quantite = $V(oForm.quantite);
     // On crée l'administration seulement si la quantité est remplie
+    
+    {{if $qte_obligatoire_inscription}}
+      if (!quantite || quantite == 0) {
+        alert("{{tr}}CPrescription.qte_obligatoire_inscription{{/tr}}");
+        return;
+      }
+    {{/if}}
     if (quantite && quantite > 0) {
       return onSubmitFormAjax(oForm);
     }
