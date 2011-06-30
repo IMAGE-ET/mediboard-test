@@ -301,25 +301,51 @@
             </th>
             {{if $prescription->_ref_lines_med_comments.med|@count || $prescription->_ref_lines_med_comments.comment|@count ||
                $prescription->_ref_prescription_line_mixes|@count || $prescription->_ref_lines_elements_comments|@count}}
-            {{if $prescription->_ref_lines_med_comments.med|@count || $prescription->_ref_lines_med_comments.comment|@count}}
+            {{if $prescription->_ref_lines_med_comments.med|@count}}
               <tr>
                 <th>{{tr}}CPrescription._chapitres.med{{/tr}}</th>
               </tr>
-              {{foreach from=$prescription->_ref_lines_med_comments item=_lines_med_type}}
-                {{foreach from=$_lines_med_type item=_line}}
-                  <tr class="{{if $_line->_fin_reelle && $_line->_fin_reelle <= $date && $_line->_fin_reelle >= $date_before}}
-                          hatching opacity-40 in_progress_future
-                        {{elseif $_line->_debut_reel && $_line->_debut_reel >= $date && $_line->_debut_reel <= $date_after}}
-                          opacity-40 in_progress_future
-                        {{/if}}">
-                    {{if !$_line instanceof CPrescriptionLineComment}}
-                      <td class="text">
-                        {{$_line->_ucd_view}}
-                      </td>
+              <!-- -24h -->
+              <tr class="hatching in_progress_future opacity-40">
+                <td class="text">
+                  {{foreach from=$prescription->_ref_lines_med_comments.med item=_line name=foreach_med}}
+                    {{if $_line->_fin_reelle && $_line->_fin_reelle < $date && $_line->_fin_reelle >= $date_before}}
+                      {{if !$smarty.foreach.foreach_med.first}}
+                        &ndash;
+                      {{/if}}
+                      {{$_line->_ref_produit->libelle_abrege}}
                     {{/if}}
-                  </tr>
-                {{/foreach}}
-              {{/foreach}}
+                  {{/foreach}}
+                </td>
+              </tr>
+              <!-- Maintenant -->
+              <tr>
+                <td class="text">
+                  {{foreach from=$prescription->_ref_lines_med_comments.med item=_line name=foreach_med}}
+                    {{if ($_line->_fin_reelle && $_line->_fin_reelle >= $date) &&
+                       $_line->_debut_reel && $_line->_debut_reel <= $date}}
+                      {{if !$smarty.foreach.foreach_med.first}}
+                        &ndash;
+                      {{/if}}
+                      {{$_line->_ref_produit->libelle_abrege}}
+                    {{/if}}
+                  {{/foreach}}
+                </td>
+              </tr>
+              <!-- +24h -->
+              <tr>
+                <td class="text in_progress_future opacity-40">
+                  {{foreach from=$prescription->_ref_lines_med_comments.med item=_line name=foreach_med}}
+                    
+                    {{if $_line->_debut_reel && $_line->_debut_reel > $date && $_line->_debut_reel <= $date_after}}
+                      {{if !$smarty.foreach.foreach_med.first}}
+                        &ndash;
+                      {{/if}}
+                      {{$_line->_ref_produit->libelle_abrege}}
+                    {{/if}}
+                  {{/foreach}}
+                </td>
+              </tr>
             {{/if}}
             
             {{if $prescription->_ref_prescription_line_mixes_by_type|@count}}
@@ -327,20 +353,45 @@
                 <tr>
                   <th>{{tr}}CPrescription._chapitres.{{$chap}}{{/tr}}</th>
                 </tr>
-                {{foreach from=$_lines_by_type item=_line}} 
-                  <tr class="{{if $_line->_fin && $_line->_fin <= $date && $_line->_fin >= $date_before}}
-                        hatching opacity-40 in_progress_future
-                    {{elseif $_line->_debut && $_line->_debut >= $date && $_line->_debut <= $date_after}}
-                        opacity-40 in_progress_future
-                    {{/if}}">
-                    <td class="text">
-                      {{$_line->_view}}
-                      ({{foreach from=$_line->_ref_lines item=_line_mix_item name=foreach_line_mixes}}
-                        {{$_line_mix_item->_ucd_view}} {{if !$smarty.foreach.foreach_line_mixes.last}},{{/if}}
-                      {{/foreach}})
-                    </td>
-                  </tr>
-                {{/foreach}}
+                <tr class="hatching in_progress_future opacity-40">
+                  <td class="text">
+                    {{foreach from=$_lines_by_type item=_line name=foreach_line}}
+                      {{if $_line->_fin && $_line->_fin < $date && $_line->_fin >= $date_before}}
+                        {{if !$smarty.foreach.foreach_line.first}}
+                          &ndash;
+                        {{/if}}
+                        {{$_line->voie}}
+                        ({{$_line->_compact_view}})
+                      {{/if}}
+                    {{/foreach}}
+                  </td>
+                </tr>
+                <tr>
+                  <td class="text">
+                    {{foreach from=$_lines_by_type item=_line name=foreach_line}}
+                      {{if ($_line->_fin && $_line->_fin >= $date) && ($_line->_debut && $_line->_debut <= $date)}}
+                        {{if !$smarty.foreach.foreach_line.first}}
+                          &ndash;
+                        {{/if}}
+                        {{$_line->voie}}
+                        ({{$_line->_compact_view}})
+                      {{/if}}
+                    {{/foreach}}
+                  </td>
+                </tr>
+                <tr class="in_progress_future opacity-40">
+                  <td class="text">
+                    {{foreach from=$_lines_by_type item=_line name=foreach_line}}
+                      {{if $_line->_debut && $_line->_debut > $date && $_line->_debut <= $date_after}}
+                        {{if !$smarty.foreach.foreach_line.first}}
+                          &ndash;
+                        {{/if}}
+                        {{$_line->voie}}
+                        ({{$_line->_compact_view}})
+                      {{/if}}
+                    {{/foreach}}
+                  </td>
+                </tr>
               {{/foreach}}
             {{/if}}
             
@@ -348,23 +399,63 @@
               <tr>
                 <th>{{tr}}CPrescription._chapitres.{{$_category_name}}{{/tr}}</th>
               </tr>
-              {{foreach from=$chap_element item=cat_element}}
-                {{foreach from=$cat_element item=elements}}
-                  {{foreach from=$elements item=element}}
-                  {{if !$element instanceof CPrescriptionLineComment}}
-                    <tr class="{{if $element->_fin_reelle && $element->_fin_reelle <= $date && $element->_fin_reelle >= $date_before}}
-                        hatching opacity-40 in_progress_future
-                      {{elseif $element->_debut_reel && $element->_debut_reel >= $date && $element->_debut_reel <= $date_after}}
-                        opacity-40 in_progress_future
-                      {{/if}}">
-                      <td class="text">
+              
+              <tr class="hatching in_progress_future opacity-40">
+                <td class="text">
+                  {{assign var=first_no_display value=0}}
+                  {{foreach from=$chap_element item=cat_element}}
+                    {{foreach from=$cat_element.element item=element name=foreach_elt}}
+                      {{if $element->_fin_reelle && $element->_fin_reelle < $date && $element->_fin_reelle >= $date_before}}
+                        {{if !$smarty.foreach.foreach_elt.first && !$first_no_display}}
+                          &ndash;
+                        {{/if}}
                         {{$element->_view}}
-                      </td>
-                    </tr>
-                  {{/if}}
+                      {{else}}
+                        {{if $smarty.foreach.foreach_elt.first}}
+                          {{assign var=first_no_display value=1}}
+                        {{/if}}
+                      {{/if}}
+                    {{/foreach}}
                   {{/foreach}}
-                {{/foreach}}
-              {{/foreach}}
+                </td>
+              </tr>
+             
+              <tr>
+                <td class="text">
+                  {{assign var=first_no_display value=0}}
+                  {{foreach from=$chap_element item=cat_element name=foreach_cat}}
+                    {{foreach from=$cat_element.element item=element name=foreach_elt}}
+
+                      {{if ($element->_fin_reelle && $element->_fin_reelle >= $date) && ($element->_debut_reel && $element->_debut_reel <= $date)}}
+                        {{if !$smarty.foreach.foreach_elt.first && !$first_no_display}}
+                          &ndash;
+                        {{/if}}
+                        {{$element->_view}}
+                        {{assign var=first_no_display value=0}}
+                      {{else}}
+                        {{if $smarty.foreach.foreach_elt.first}}
+                          {{assign var=first_no_display value=1}}
+                        {{/if}}
+                      {{/if}}
+                    {{/foreach}}
+                  {{/foreach}}
+                </td>
+              </tr>
+             
+              <tr class="in_progress_future opacity-40">
+                <td class="text">
+                  {{foreach from=$chap_element item=cat_element}}
+                    {{foreach from=$cat_element.element item=element name=foreach_elt}}
+                      {{if $element->_debut_reel && $element->_debut_reel > $date && $element->_debut_reel <= $date_after}}
+                        {{if !$smarty.foreach.foreach_elt.first}}
+                          &ndash;
+                        {{/if}}
+                        {{$element->_view}}
+                      {{/if}}
+                    {{/foreach}}
+                  {{/foreach}}
+                </td>
+              </tr>
             {{/foreach}}
           {{else}}
           <tr>
