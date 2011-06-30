@@ -15,18 +15,8 @@ $sejours = array();
 $patient_id = CValue::getOrSession('patient_id');
 $service_id = CValue::getOrSession('service_id');
 
-$date_min = CValue::get('_date_min');
-$date_max = CValue::get('_date_max');
-
-if (!$date_min) {
-  $date_min = CValue::session('_date_delivrance_min');
-}
-if (!$date_max) {
-  $date_max = CValue::session('_date_delivrance_max');
-}
-
-$date_min = "$date_min 00:00:00";
-$date_max = "$date_max 23:59:59";
+$date_min = CValue::get('_datetime_min');
+$date_max = CValue::get('_datetime_max');
 
 // Recherche des prescriptions dont les dates de sejours correspondent
 $where = array();
@@ -37,9 +27,8 @@ $ljoin['lit'] = 'affectation.lit_id = lit.lit_id';
 $ljoin['chambre'] = 'lit.chambre_id = chambre.chambre_id';
 $ljoin['service'] = 'chambre.service_id = service.service_id';
 $where['prescription.type'] = " = 'sejour'";
-$where[] = "(sejour.entree_prevue BETWEEN '$date_min' AND '$date_max') OR 
-            (sejour.sortie_prevue BETWEEN '$date_min' AND '$date_max') OR
-            (sejour.entree_prevue <= '$date_min' AND sejour.sortie_prevue >= '$date_max')"; 
+$where[] = "sejour.entree <= '$date_max'";
+$where[] = "sejour.sortie >= '$date_min'";
 $where['service.service_id'] = " = '$service_id'";
 
 $prescription = new CPrescription();

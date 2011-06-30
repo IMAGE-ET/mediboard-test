@@ -57,6 +57,8 @@ class CPrescriptionLineMixItem extends CMbObject implements IPatientRelated {
   var $_view_unite_prise = null;
   var $_quantite_ml = null;
 	
+	static $_load_lite = false;
+	
   function getSpec() {
     $spec = parent::getSpec();
     $spec->table = 'prescription_line_mix_item';
@@ -91,7 +93,13 @@ class CPrescriptionLineMixItem extends CMbObject implements IPatientRelated {
   function updateFormFields(){
     parent::updateFormFields();
     
-    $this->loadRefPerfusion();
+		$this->loadRefProduit();
+		$this->loadRefPerfusion();
+		
+		if(self::$_load_lite) {
+			return;
+		}
+    
     $this->_debut = $this->_ref_prescription_line_mix->_debut;
     $this->_fin = $this->_ref_prescription_line_mix->_fin;
     
@@ -105,9 +113,7 @@ class CPrescriptionLineMixItem extends CMbObject implements IPatientRelated {
       }
     }
 		
-    $this->loadRefProduit();
     $this->_dci_view = $this->_ref_produit->loadDCIViewFromProduit();
-    
     $this->_forme_galenique = $this->_ref_produit->forme;
     $this->_ucd_view = "{$this->_ref_produit->libelle_abrege} {$this->_ref_produit->dosage}";
     $this->_view = "$this->_ucd_view $this->_forme_galenique";
@@ -257,6 +263,7 @@ class CPrescriptionLineMixItem extends CMbObject implements IPatientRelated {
         }
 
         $produit =& $this->_ref_produit;   
+				
         if(!$produit->libelle_unite_presentation){
           $produit->loadLibellePresentation();
           $produit->loadUnitePresentation();

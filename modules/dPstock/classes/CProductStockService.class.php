@@ -47,7 +47,7 @@ class CProductStockService extends CProductStock {
     $where = array();
     $where['product.code'] = "= '$code'";
     if ($service_id) {
-      $where['product_stock_service.service_id'] = "= $service_id";
+      $where['product_stock_service.service_id'] = "= '$service_id'";
     }
     $ljoin = array();
     $ljoin['product'] = 'product_stock_service.product_id = product.product_id';

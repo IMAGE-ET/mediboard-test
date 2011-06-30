@@ -15,14 +15,13 @@ function refreshLists(code_cis, page) {
   var showTransmissions = false;
   
   var url = new Url;
+  url.setModuleAction("pharmacie", "httpreq_vw_dispensations_list");
   if (form.patient_id && $V(form.patient_id)) {
-    url.setModuleAction("pharmacie", "httpreq_vw_dispensations_nominative_list");
     $('list-dispensations-title').update('Nominatif');
     $('list-stocks-title').update('Nominatif hors prescription');
     showTransmissions = true;
   }
   else {
-    url.setModuleAction("pharmacie", "httpreq_vw_dispensations_list");
     $('list-dispensations-title').update('Nominatif reglobalisé');
     $('list-stocks-title').update('Global hors prescription');
   }
@@ -128,9 +127,9 @@ Main.add(function () {
   <table class="form">
     <tr>
       <th>{{mb_label object=$delivrance field=_date_min}}</th>
-      <td>{{mb_field object=$delivrance field=_date_min form=filter register=true onchange="refreshPatient()"}}</td>
+      <td>{{mb_field object=$delivrance field=_datetime_min form=filter register=true onchange="refreshPatient()"}}</td>
       <th>{{mb_label object=$delivrance field=_date_max}}</th>
-      <td>{{mb_field object=$delivrance field=_date_max form=filter register=true onchange="refreshPatient()"}}</td>
+      <td>{{mb_field object=$delivrance field=_datetime_max form=filter register=true onchange="refreshPatient()"}}</td>
       <td>
         <select name="service_id" onchange="refreshPatient(); selectOrderTab(this);">
         {{foreach from=$list_services item=curr_service}}

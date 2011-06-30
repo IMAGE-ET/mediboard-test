@@ -52,6 +52,8 @@ class CProductDelivery extends CMbObject {
   
   var $_date_min      = null;
   var $_date_max      = null;
+	var $_datetime_min      = null;
+  var $_datetime_max      = null;
   var $_delivered     = null;
   var $_auto_deliver  = null;
   var $_make_delivery_trace = null;
@@ -90,6 +92,10 @@ class CProductDelivery extends CMbObject {
     
     $specs['_date_min']         = 'date notNull';
     $specs['_date_max']         = 'date notNull moreEquals|_date_min';
+		
+		$specs['_datetime_min']         = 'dateTime notNull';
+    $specs['_datetime_max']         = 'dateTime notNull moreEquals|_datetime_min';
+    
     return $specs;
   }
 

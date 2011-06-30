@@ -162,7 +162,10 @@ class CPrescriptionLineMedicament extends CPrescriptionLine {
   var $_unite_prise                        = null;
   var $_long_view = null;
   var $_duree                              = null;
-  
+
+  static $_load_lite = false;
+
+
   function getSpec() {
     $spec = parent::getSpec();
     $spec->table = 'prescription_line_medicament';
@@ -243,8 +246,14 @@ class CPrescriptionLineMedicament extends CPrescriptionLine {
   function updateFormFields() {
     parent::updateFormFields();   
 
+    $this->loadRefProduit();
+    
+		
+    if(self::$_load_lite) {
+      return;
+    }
+		
     $this->_nb_alertes = 0;
-		$this->loadRefProduit();
 		
 		$this->_dci_view = $this->_ref_produit->loadDCIViewFromProduit();
 		

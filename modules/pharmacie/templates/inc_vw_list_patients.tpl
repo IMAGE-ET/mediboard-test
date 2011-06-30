@@ -13,16 +13,20 @@ sejours = {{$sejours|@json}};
 var tab_prescription  = {{$tab_prescription_id|@json}};
 
 editFieldPrescription = function(patient_id){
-  if(patient_id) {
-    var form = document.forms['filter'];
-    form.prescription_id.value = tab_prescription[patient_id];
-    form.sejour_id.value = sejours[patient_id];
+  var form = getForm('filter');
+	if(patient_id) {
+    $V(form.prescription_id, tab_prescription[patient_id]);
+    $V(form.sejour_id, sejours[patient_id]);
+  } else {
+	  $V(form.prescription_id, '');
+    $V(form.sejour_id, '');
   }
 }
 
 Main.add(function () {
   editFieldPrescription("{{$patient_id}}");
 });
+
 </script>
 
 <select name="patient_id" onchange="editFieldPrescription($V(this))">

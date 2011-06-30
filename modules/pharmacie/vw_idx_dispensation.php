@@ -89,8 +89,8 @@ CValue::setSession('_date_delivrance_min', $date_min);
 CValue::setSession('_date_delivrance_max', $date_max);
 
 $delivrance = new CProductDelivery();
-$delivrance->_date_min = $date_min;
-$delivrance->_date_max = $date_max;
+$delivrance->_datetime_min = "$date_min 00:00:00";
+$delivrance->_datetime_max = "$date_max 23:59:59";
 
 // Création du template
 $smarty = new CSmartyDP();

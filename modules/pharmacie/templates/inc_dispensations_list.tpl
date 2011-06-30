@@ -8,7 +8,7 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
 *}}
 
-{{if $now < $date_min || $now > $date_max}}
+{{if $now < $datetime_min || $now > $datetime_max}}
 	<div class="small-info">
 	  La date courante n'est pas comprise dans l'intervalle spécifié, les dispensations effectuées ne seront pas affichées.
 	</div>
@@ -59,8 +59,6 @@ toggleDoneDispensations = function(){
     };
   	
     var oForm = getForm("editBorneDisp");
-    Calendar.regField(oForm.borne_min, null, options);
-  	Calendar.regField(oForm.borne_max, null, options);
   });
 {{/if}}
 
@@ -75,17 +73,6 @@ toggleDoneDispensations = function(){
 
 <table class="tbl">
   {{if $mode_nominatif}}
-	<tr>
-		<td colspan="10">
-			<form name="editBorneDisp" method="get" action="?">
-				A partir du  {{$date_min|date_format:$conf.date}} à <input type="hidden" class="time" name="borne_min" value="{{$borne_min}}" />
-				au {{$date_max|date_format:$conf.date}} à <input type="hidden" class="time" name="borne_max" value="{{$borne_max}}" />
-				<button type="button" onclick="$V(getForm('filter').borne_min, $V(this.form.borne_min)); $V(getForm('filter').borne_max, $V(this.form.borne_max)); refreshLists();" class="search">
-					{{tr}}Filter{{/tr}}
-				</button>
-			</form>
-		</td>
-	</tr>
   <tr>
     <th colspan="10" class="title">
       Dispensation pour {{$prescription->_ref_object->_ref_patient->_view}}
@@ -93,6 +80,9 @@ toggleDoneDispensations = function(){
   </tr>
   {{/if}}
   <tr>
+  	{{if $mode_nominatif}}
+		<th>Posologie</th>
+		{{/if}}
     <th>Quantité<br />à administrer</th>
     <th>Quantité<br />à dispenser</th>
     {{if !$infinite}}
