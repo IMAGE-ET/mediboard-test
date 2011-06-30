@@ -376,7 +376,7 @@ class CTemplateManager {
     }
   }
   
-  private function getBarcodeDataUri($code, $options) {
+  function getBarcodeDataUri($code, $options) {
     if (!$code) return;
     
     $size = "{$options['width']}x{$options['width']}";
