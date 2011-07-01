@@ -15,6 +15,7 @@ $praticien_id    = CValue::get("praticien_id");
 
 $prescription = new CPrescription;
 $prescription->load($prescription_id);
+$prescription->loadRefObject();
 
 $prescription->loadRefsLinesMedComments("1", "", $protocole_id);
 $prescription->loadRefsLinesElementsComments("1", "", "", $protocole_id);
@@ -73,6 +74,7 @@ $smarty->assign("pratSel_id"     , $pratSel_id);
 $smarty->assign("praticien_id"   , $praticien_id);
 $smarty->assign("prescription_id", $prescription_id);
 $smarty->assign("checked_lines"  , $checked_lines);
+$smarty->assign("sejour"         , $prescription->_ref_object);
 $smarty->assign("now", mbDate());
 $smarty->display("inc_select_lines.tpl");
 

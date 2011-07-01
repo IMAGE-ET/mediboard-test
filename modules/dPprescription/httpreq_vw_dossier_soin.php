@@ -347,6 +347,18 @@ else {
   } 
   // Affichage du plan de soin complet
   else {
+    
+    // Multiple prescriptions existante pour le séjour
+    $prescription_multiple = new CPrescription;
+    $where = array(
+      "type" => " = 'sejour'",
+      "object_class" => " = 'CSejour'",
+      "object_id" => " = '$prescription->object_id'"
+    );
+    
+    $multiple_prescription = $prescription_multiple->loadIds($where);
+    $smarty->assign("admin_prescription", CModule::getCanDo("dPprescription")->admin);
+    $smarty->assign("multiple_prescription", $multiple_prescription);
 	  $smarty->assign("move_dossier_soin"   , false);
 	  $smarty->display("inc_vw_dossier_soins.tpl");
   }

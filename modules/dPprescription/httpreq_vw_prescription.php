@@ -511,6 +511,18 @@ if(isset($prescription->_ref_lines_med_comments["med"])){
   usort($prescription->_ref_lines_med_comments["med"], "compareMed");
 }
 
+
+
+// Multiple prescriptions existante pour le séjour
+$prescription_multiple = new CPrescription;
+$where = array(
+  "type" => " = 'sejour'",
+  "object_class" => " = 'CSejour'",
+  "object_id" => " = '$prescription->object_id'"
+);
+
+$multiple_prescription = $prescription_multiple->loadIds($where);
+
 // Création du template
 $smarty = new CSmartyDP();
 
@@ -565,6 +577,8 @@ $smarty->assign("hide_old_lines"       , $hide_old_lines);
 $smarty->assign("hidden_lines_count"   , $hidden_lines_count);
 $smarty->assign("hide_header"          , $hide_header);
 $smarty->assign("sejour"               , $_sejour);
+$smarty->assign("multiple_prescription", $multiple_prescription);
+$smarty->assign("admin_prescription"   , CModule::getCanDo("dPprescription")->admin);
 
 if($full_mode){
   $smarty->assign("praticien_sejour", $_sejour->praticien_id);

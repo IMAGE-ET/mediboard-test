@@ -167,7 +167,7 @@ updateNbTrans = function(sejour_id) {
 }
 
 Main.add(function () {
-
+  {{if !$multiple_prescription|@count <= 1 || !$admin_prescription}}
   PlanSoins.init({
     composition_dossier: {{$composition_dossier|@json}}, 
     date: "{{$date}}", 
@@ -224,162 +224,172 @@ Main.add(function () {
   if (oFormDate) {
     Calendar.regField(oFormDate.date, dates, {noView: true});
   }
+  {{/if}}
 });
 
 </script>
 
-<form name="adm_multiple" action="?" method="get">
-  <input type="hidden" name="_administrations">
-</form>
+{{if $multiple_prescription|@count > 1 && $admin_prescription}}
+  <div class="big-error">
+    {{tr}}CPrescription.merge_prescription_message{{/tr}}
+    <br/>
+    <button class="hslip" onclick="Prescription.mergePrescriptions(prescriptions_ids)">Fusionner les prescriptions</button>
+  </div>
+{{else}}
 
-<form name="click" action="?" method="get">
-  <input type="hidden" name="nb_decalage" value="{{$nb_decalage}}" />
-</form>
-
-<form name="addPlanif" action="" method="post">
-  <input type="hidden" name="dosql" value="do_administration_aed" />
-  <input type="hidden" name="m" value="dPprescription" />
-  <input type="hidden" name="del" value="0" />
-  <input type="hidden" name="administration_id" value="" />
-  <input type="hidden" name="planification" value="1" />
-  <input type="hidden" name="administrateur_id" value="" />
-  <input type="hidden" name="dateTime" value="" />
-  <input type="hidden" name="quantite" value="" />
-  <input type="hidden" name="unite_prise" value="" />
-  <input type="hidden" name="prise_id" value="" />
-  <input type="hidden" name="object_id" value="" />
-  <input type="hidden" name="object_class" value="" />
-  <input type="hidden" name="original_dateTime" value="" />
-</form>
-
-<form name="addPlanifs" action="" method="post">
-  <input type="hidden" name="m" value="dPprescription" />
-  <input type="hidden" name="dosql" value="do_administrations_aed" />
-  <input type="hidden" name="del" value="0" />
-  <input type="hidden" name="decalage" value="" />
-  <input type="hidden" name="administrations_ids" value=""/>
-  <input type="hidden" name="planification" value="1" />
-</form>
-
-<form name="addManualPlanifPerf" action="" method="post">
-	<input type="hidden" name="dosql" value="do_planif_line_mix_aed" />
-  <input type="hidden" name="m" value="dPprescription" />
-  <input type="hidden" name="del" value="0" />
-  <input type="hidden" name="administrateur_id" value="{{$app->user_id}}" />
-  <input type="hidden" name="datetime" value="" />
-  <input type="hidden" name="planification_systeme_id" value="" />
-	<input type="hidden" name="prescription_line_mix_id" value="" />
-	<input type="hidden" name="original_datetime" value="" />
-</form>
-		
-	<table class="tbl">
-	  <tr>
-	    <th colspan="10" class="title text">
-	    	 <span style="float: right">
-           {{if !$hide_close}}
-					   <button type="button" class="cancel" style="float: right; display: none;"
-             onclick="modalWindow.close(); if(window.refreshLinePancarte){ refreshLinePancarte('{{$prescription_id}}'); }
-					            if(window.refreshLineSejour){ refreshLineSejour('{{$sejour->_id}}'); }" id="modal_button">{{tr}}Close{{/tr}}</button>
-           {{/if}}
-	    	 </span>
-	       <a style="float: left" href="?m=dPpatients&amp;tab=vw_full_patients&amp;patient_id={{$patient->_id}}"'>
-	        {{include file="../../dPpatients/templates/inc_vw_photo_identite.tpl" patient=$patient size=42}}
-	       </a>
-				 
-				 <h2 style="color: #fff; font-weight: bold;">
-		      {{$sejour->_ref_patient->_view}}
-					<span style="font-size: 0.7em;"> - {{$sejour->_shortview|replace:"Du":"Séjour du"}}</span>
-          {{assign var=dossier_medical value=$patient->_ref_dossier_medical}}
-          {{assign var=antecedents value=$dossier_medical->_ref_antecedents}}
-          {{assign var=sejour_id value=$prescription->object_id}}
-          {{include file="../../dPprescription/templates/inc_vw_antecedent_allergie.tpl" nodebug=true}}
-				 </h2>
-			</th>
-	  </tr>
-	  {{mb_include module=dPprescription template=inc_infos_patients_soins}}
-	</table>
-	
-	<ul id="tab_dossier_soin" class="control_tabs">
-	  <li onmousedown="PlanSoins.loadTraitement('{{$sejour->_id}}','{{$date}}','','administration','','','','med', '{{$hide_close}}'); refreshTabState();"><a href="#jour">Journée</a></li>
-	  <li onmousedown="calculSoinSemaine('{{$date}}','{{$prescription_id}}');"><a href="#semaine">Semaine</a></li>
-		<li onmousedown="updateTasks('{{$sejour->_id}}');"><a href="#tasks">Tâches</a></li>
-    <li onmousedown="loadSuivi('{{$sejour->_id}}')"><a href="#dossier_suivi">{{tr}}CMbObject-back-transmissions{{/tr}} <span id="nb_trans"></span></a></li>
-	</ul>
-	<hr class="control_tabs" />
-	
-	<div id="jour" style="display:none">
-	
-	{{if $prescription_id}}
-		<h1 style="text-align: center;">
-		 		  <button type="button" 
-					       class="left notext {{if $sejour->_entree >= $bornes_composition_dossier|@reset|@reset}}opacity-50{{/if}}" 
-								 {{if $sejour->_entree < $bornes_composition_dossier|@reset|@reset}}onclick="PlanSoins.loadTraitement('{{$sejour->_id}}','{{$prev_date}}', null, null, null, null, null, null, '1', '{{$hide_close}}');"{{/if}}
-					       ></button>
+  <form name="adm_multiple" action="?" method="get">
+    <input type="hidden" name="_administrations">
+  </form>
   
-	     Dossier de soin du {{$date|@date_format:"%d/%m/%Y"}}
-       <form name="changeDateDossier" method="get" action="?" onsubmit="return false" style="font-size: 11px">
-         <input type="hidden" name="date" class="date" value="{{$date}}" onchange="PlanSoins.loadTraitement('{{$sejour->_id}}',this.value,'','administration', null, null, null, null, '1', '{{$hide_close}}');"/>
-       </form>
-			 <button type="button"
-			         class="right notext {{if $sejour->_sortie <= $bornes_composition_dossier|@end|@end}}opacity-50{{/if}}"
-							 {{if $sejour->_sortie > $bornes_composition_dossier|@end|@end}}onclick="PlanSoins.loadTraitement('{{$sejour->_id}}','{{$next_date}}','','administration', null, null, null, null, '1', '{{$hide_close}}');"{{/if}}
-							 ></button>
-		</h1>
-		
-		<table style="width: 100%">
-		   <tr>
-		    <td>
-		      <button type="button" class="print" onclick="PlanSoins.printBons('{{$prescription_id}}');" title="{{tr}}Print{{/tr}}">
-		        Bons
-		      </button>
-					<button type="button" class="print" onclick="Prescription.viewFullAlertes('{{$prescription_id}}')" title="{{tr}}Print{{/tr}}">
-					  Alertes	
-					</button>
-	        <button type="button" class="tick" onclick="PlanSoins.applyAdministrations();" id="button_administration">
-	        </button>
-		    </td>
-		    <td style="text-align: center">
-		      <form name="mode_dossier_soin" action="?" method="get">
-		        <label>
-		          <input type="radio" name="mode_dossier" value="administration" {{if $mode_dossier == "administration" || $mode_dossier == ""}}checked="checked"{{/if}} 
-		          			 onclick="PlanSoins.viewDossierSoin($('plan_soin'));"/>Administration
-	          </label>
-	          <label>
-	            <input type="radio" name="mode_dossier" value="planification" {{if $mode_dossier == "planification"}}checked="checked"{{/if}} 
-	            			 onclick="PlanSoins.viewDossierSoin($('plan_soin'));" />Planification
-	          </label>
-	       </form>
-		    </td>
-		    <td style="text-align: right">
-		      <button type="button" class="search" onclick="viewLegend();">Légende</button>
-		    </td>
-		  </tr>
-		</table>
-	
-		{{assign var=transmissions value=$prescription->_transmissions}}	  
-	  {{assign var=count_recent_modif value=$prescription->_count_recent_modif}}
-	  {{assign var=count_urgence value=$prescription->_count_urgence}}
-	  <table class="main">
-		  <tr>
-		    <td style="white-space: nowrap;" class="narrow">
-			 	  <!-- Affichage des onglets du dossier de soins -->
-			 	  {{mb_include module="dPprescription" template="inc_vw_tab_dossier_soins"}}
-				</td>
-			 	<td>
-			 		<!-- Affichage du contenu du dossier de soins -->
-			 	 	{{mb_include module="dPprescription" template="inc_vw_content_dossier_soins"}}
-		    </td>
-		  </tr>
-	  </table>
-	{{else}}
-	  <div class="small-info">
-		Ce dossier ne possède pas de prescription de séjour
-	  </div>
-	{{/if}}
-	</div>
-	<div id="semaine" style="display:none"></div>
-	<div id="tasks" style="display:none"></div>
-  <div id="dossier_suivi" style="display:none"></div>
+  <form name="click" action="?" method="get">
+    <input type="hidden" name="nb_decalage" value="{{$nb_decalage}}" />
+  </form>
+  
+  <form name="addPlanif" action="" method="post">
+    <input type="hidden" name="dosql" value="do_administration_aed" />
+    <input type="hidden" name="m" value="dPprescription" />
+    <input type="hidden" name="del" value="0" />
+    <input type="hidden" name="administration_id" value="" />
+    <input type="hidden" name="planification" value="1" />
+    <input type="hidden" name="administrateur_id" value="" />
+    <input type="hidden" name="dateTime" value="" />
+    <input type="hidden" name="quantite" value="" />
+    <input type="hidden" name="unite_prise" value="" />
+    <input type="hidden" name="prise_id" value="" />
+    <input type="hidden" name="object_id" value="" />
+    <input type="hidden" name="object_class" value="" />
+    <input type="hidden" name="original_dateTime" value="" />
+  </form>
+  
+  <form name="addPlanifs" action="" method="post">
+    <input type="hidden" name="m" value="dPprescription" />
+    <input type="hidden" name="dosql" value="do_administrations_aed" />
+    <input type="hidden" name="del" value="0" />
+    <input type="hidden" name="decalage" value="" />
+    <input type="hidden" name="administrations_ids" value=""/>
+    <input type="hidden" name="planification" value="1" />
+  </form>
+  
+  <form name="addManualPlanifPerf" action="" method="post">
+  	<input type="hidden" name="dosql" value="do_planif_line_mix_aed" />
+    <input type="hidden" name="m" value="dPprescription" />
+    <input type="hidden" name="del" value="0" />
+    <input type="hidden" name="administrateur_id" value="{{$app->user_id}}" />
+    <input type="hidden" name="datetime" value="" />
+    <input type="hidden" name="planification_systeme_id" value="" />
+  	<input type="hidden" name="prescription_line_mix_id" value="" />
+  	<input type="hidden" name="original_datetime" value="" />
+  </form>
+  		
+  	<table class="tbl">
+  	  <tr>
+  	    <th colspan="10" class="title text">
+  	    	 <span style="float: right">
+             {{if !$hide_close}}
+  					   <button type="button" class="cancel" style="float: right; display: none;"
+               onclick="modalWindow.close(); if(window.refreshLinePancarte){ refreshLinePancarte('{{$prescription_id}}'); }
+  					            if(window.refreshLineSejour){ refreshLineSejour('{{$sejour->_id}}'); }" id="modal_button">{{tr}}Close{{/tr}}</button>
+             {{/if}}
+  	    	 </span>
+  	       <a style="float: left" href="?m=dPpatients&amp;tab=vw_full_patients&amp;patient_id={{$patient->_id}}"'>
+  	        {{include file="../../dPpatients/templates/inc_vw_photo_identite.tpl" patient=$patient size=42}}
+  	       </a>
+  				 
+  				 <h2 style="color: #fff; font-weight: bold;">
+  		      {{$sejour->_ref_patient->_view}}
+  					<span style="font-size: 0.7em;"> - {{$sejour->_shortview|replace:"Du":"Séjour du"}}</span>
+            {{assign var=dossier_medical value=$patient->_ref_dossier_medical}}
+            {{assign var=antecedents value=$dossier_medical->_ref_antecedents}}
+            {{assign var=sejour_id value=$prescription->object_id}}
+            {{include file="../../dPprescription/templates/inc_vw_antecedent_allergie.tpl" nodebug=true}}
+  				 </h2>
+  			</th>
+  	  </tr>
+  	  {{mb_include module=dPprescription template=inc_infos_patients_soins}}
+  	</table>
+  	
+  	<ul id="tab_dossier_soin" class="control_tabs">
+  	  <li onmousedown="PlanSoins.loadTraitement('{{$sejour->_id}}','{{$date}}','','administration','','','','med', '{{$hide_close}}'); refreshTabState();"><a href="#jour">Journée</a></li>
+  	  <li onmousedown="calculSoinSemaine('{{$date}}','{{$prescription_id}}');"><a href="#semaine">Semaine</a></li>
+  		<li onmousedown="updateTasks('{{$sejour->_id}}');"><a href="#tasks">Tâches</a></li>
+      <li onmousedown="loadSuivi('{{$sejour->_id}}')"><a href="#dossier_suivi">{{tr}}CMbObject-back-transmissions{{/tr}} <span id="nb_trans"></span></a></li>
+  	</ul>
+  	<hr class="control_tabs" />
+  	
+  	<div id="jour" style="display:none">
+  	
+  	{{if $prescription_id}}
+  		<h1 style="text-align: center;">
+  		 		  <button type="button" 
+  					       class="left notext {{if $sejour->_entree >= $bornes_composition_dossier|@reset|@reset}}opacity-50{{/if}}" 
+  								 {{if $sejour->_entree < $bornes_composition_dossier|@reset|@reset}}onclick="PlanSoins.loadTraitement('{{$sejour->_id}}','{{$prev_date}}', null, null, null, null, null, null, '1', '{{$hide_close}}');"{{/if}}
+  					       ></button>
+    
+  	     Dossier de soin du {{$date|@date_format:"%d/%m/%Y"}}
+         <form name="changeDateDossier" method="get" action="?" onsubmit="return false" style="font-size: 11px">
+           <input type="hidden" name="date" class="date" value="{{$date}}" onchange="PlanSoins.loadTraitement('{{$sejour->_id}}',this.value,'','administration', null, null, null, null, '1', '{{$hide_close}}');"/>
+         </form>
+  			 <button type="button"
+  			         class="right notext {{if $sejour->_sortie <= $bornes_composition_dossier|@end|@end}}opacity-50{{/if}}"
+  							 {{if $sejour->_sortie > $bornes_composition_dossier|@end|@end}}onclick="PlanSoins.loadTraitement('{{$sejour->_id}}','{{$next_date}}','','administration', null, null, null, null, '1', '{{$hide_close}}');"{{/if}}
+  							 ></button>
+  		</h1>
+  		
+  		<table style="width: 100%">
+  		   <tr>
+  		    <td>
+  		      <button type="button" class="print" onclick="PlanSoins.printBons('{{$prescription_id}}');" title="{{tr}}Print{{/tr}}">
+  		        Bons
+  		      </button>
+  					<button type="button" class="print" onclick="Prescription.viewFullAlertes('{{$prescription_id}}')" title="{{tr}}Print{{/tr}}">
+  					  Alertes	
+  					</button>
+  	        <button type="button" class="tick" onclick="PlanSoins.applyAdministrations();" id="button_administration">
+  	        </button>
+  		    </td>
+  		    <td style="text-align: center">
+  		      <form name="mode_dossier_soin" action="?" method="get">
+  		        <label>
+  		          <input type="radio" name="mode_dossier" value="administration" {{if $mode_dossier == "administration" || $mode_dossier == ""}}checked="checked"{{/if}} 
+  		          			 onclick="PlanSoins.viewDossierSoin($('plan_soin'));"/>Administration
+  	          </label>
+  	          <label>
+  	            <input type="radio" name="mode_dossier" value="planification" {{if $mode_dossier == "planification"}}checked="checked"{{/if}} 
+  	            			 onclick="PlanSoins.viewDossierSoin($('plan_soin'));" />Planification
+  	          </label>
+  	       </form>
+  		    </td>
+  		    <td style="text-align: right">
+  		      <button type="button" class="search" onclick="viewLegend();">Légende</button>
+  		    </td>
+  		  </tr>
+  		</table>
+  	
+  		{{assign var=transmissions value=$prescription->_transmissions}}	  
+  	  {{assign var=count_recent_modif value=$prescription->_count_recent_modif}}
+  	  {{assign var=count_urgence value=$prescription->_count_urgence}}
+  	  <table class="main">
+  		  <tr>
+  		    <td style="white-space: nowrap;" class="narrow">
+  			 	  <!-- Affichage des onglets du dossier de soins -->
+  			 	  {{mb_include module="dPprescription" template="inc_vw_tab_dossier_soins"}}
+  				</td>
+  			 	<td>
+  			 		<!-- Affichage du contenu du dossier de soins -->
+  			 	 	{{mb_include module="dPprescription" template="inc_vw_content_dossier_soins"}}
+  		    </td>
+  		  </tr>
+  	  </table>
+  	{{else}}
+  	  <div class="small-info">
+  		Ce dossier ne possède pas de prescription de séjour
+  	  </div>
+  	{{/if}}
+  	</div>
+  	<div id="semaine" style="display:none"></div>
+  	<div id="tasks" style="display:none"></div>
+    <div id="dossier_suivi" style="display:none"></div>
+  {{/if}}
 {{else}}
   <div class="small-info">
     Veuillez sélectionner un séjour pour pouvoir accéder au suivi de soins.

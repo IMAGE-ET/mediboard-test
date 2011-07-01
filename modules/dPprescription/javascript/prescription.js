@@ -462,9 +462,14 @@ Prescription = {
     if (confirm("Voulez-vous vraiment supprimer la ligne : " + view + " ?"))
       return true;
   },
-	showLineHistory: function(line_guid){
-		var url = new Url("dPprescription", "vw_line_history");
-		url.addParam("line_guid", line_guid);
-		url.popup(800, 600, "Historique de la ligne");
-	}
+  showLineHistory: function(line_guid){
+    var url = new Url("dPprescription", "vw_line_history");
+    url.addParam("line_guid", line_guid);
+    url.popup(800, 600, "Historique de la ligne");
+  },
+  mergePrescriptions: function(prescriptions_ids, prescription_base_id) {
+    var url = new Url("dPprescription", "ajax_merge_prescriptions");
+    url.addParam("prescriptions_ids[]", prescriptions_ids);
+    url.requestModal(1000,700);
+  }
 };

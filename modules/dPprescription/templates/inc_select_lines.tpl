@@ -80,12 +80,12 @@
         
         {{foreach from=$_lines_by_cat.comment item=_line name=foreach_elt}}
           {{if $smarty.foreach.foreach_elt.first && !$has_element}}
-          <table class="tbl">
-            <tr>
-              <th class="category">
-                {{$_line->_ref_category_prescription->_view}}
-              </th>
-            </tr>
+            <table class="tbl">
+              <tr>
+                <th class="category">
+                  {{$_line->_ref_category_prescription->_view}}
+                </th>
+              </tr>
             </table>
           {{/if}}
           <table class="tbl">
