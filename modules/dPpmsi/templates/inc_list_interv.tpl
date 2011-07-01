@@ -39,8 +39,8 @@
   <td class="text">
   	{{mb_include module=dPplanningOp template=inc_vw_operation}}
   </td>
-  
-  <td>{{$_operation->_nb_docs}}</td>
+
+  <td>{{$_operation->_nb_files_docs+$_operation->_ref_sejour->_nb_files_docs}}</td>
   
 	<td style="text-align: center">
     {{mb_value object=$_operation field=labo}}

@@ -166,21 +166,6 @@
     <td class="text" id="hprim_export_op{{$curr_op->_id}}" colspan="4">
     </td>
   </tr>
-  
-  <tr>
-    <td colspan="4">Documents attachés :</td>
-  </tr>
-  <tr>
-    <td colspan="4" id="File{{$curr_op->_class_name}}{{$curr_op->_id}}">
-      <a href="#1" onclick="setObject( {
-        objClass: '{{$curr_op->_class_name}}', 
-        keywords: '', 
-        id: {{$curr_op->operation_id|smarty:nodefaults|JSAttribute}}, 
-        view:'{{$curr_op->_view|smarty:nodefaults|JSAttribute}}'} )">
-        Voir les Documents ({{$curr_op->_nb_files_docs}})
-      </a>
-    </td>
-  </tr>
 {{foreachelse}}  
 <tr>
   <td>

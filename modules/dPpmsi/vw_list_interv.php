@@ -42,11 +42,12 @@ foreach($plages as &$_plage) {
     $_operation->_ref_chir->loadRefFunction();
     $_operation->loadRefSejour();
     $_operation->_ref_sejour->loadNumDossier();
+    $_operation->_ref_sejour->countDocItems();
     $_operation->_ref_sejour->loadRefPatient();
     $_operation->_ref_sejour->_ref_patient->loadIPP();
     $_operation->loadExtCodesCCAM();
     $_operation->countEchangeHprim();
-    $_operation->countDocs();
+    $_operation->countDocItems();
 
 		$counts["operations"]["total"]++; 
 		if (count($_operation->_nb_echange_hprim)) {
