@@ -61,12 +61,18 @@ $prescription_sejour->loadRefsPrescriptionLineMixes("", 0, 1, "", 24);
 
 foreach ($prescription_sejour->_ref_prescription_line_mixes as $curr_prescription_line_mix){
   $curr_prescription_line_mix->loadRefsLines();
+  $curr_prescription_line_mix->_compact_view = array();
   foreach ($curr_prescription_line_mix->_ref_lines as $_line) {
     if (!$_line->solvant) {
       $curr_prescription_line_mix->_compact_view[] = $_line->_ref_produit->libelle_abrege;
     }
   }
-  $curr_prescription_line_mix->_compact_view = implode(", ", $curr_prescription_line_mix->_compact_view);
+  if (count($curr_prescription_line_mix->_compact_view)) {
+    $curr_prescription_line_mix->_compact_view = implode(", ", $curr_prescription_line_mix->_compact_view);
+  }
+  else {
+    $curr_prescription_line_mix->_compact_view = "";
+  }
 }
 
 $date = mbDateTime();
