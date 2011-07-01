@@ -6,31 +6,31 @@
     
     {{if $curr_consult->patient_id}}
     {{assign var=patient value=$curr_consult->_ref_patient}}
-    <td rowspan="2">
+    <td rowspan="2" style="{{if $curr_consult->premiere}}background-color:#eaa;{{/if}}">
       {{$patient->_view}}
     </td>
     
       {{if $coordonnees}}
-      <td rowspan="2" class="text">
+      <td rowspan="2" class="text" style="{{if $curr_consult->premiere}}background-color:#eaa;{{/if}}">
         {{mb_value object=$patient field=adresse}}
         <br />
         {{mb_value object=$patient field=cp}} 
         {{mb_value object=$patient field=ville}}
       </td>
       
-      <td rowspan="2">
+      <td rowspan="2" style="{{if $curr_consult->premiere}}background-color:#eaa;{{/if}}">
         {{mb_value object=$patient field=tel}}
         <br />
         {{mb_value object=$patient field=tel2}}
       </td>
       {{elseif $show_tel}}
-        <td rowspan="2">
+        <td rowspan="2" style="{{if $curr_consult->premiere}}background-color:#eaa;{{/if}}">
           {{mb_value object=$patient field=tel}}
           <br />
           {{mb_value object=$patient field=tel2}}
         </td>
       {{/if}}
-    <td rowspan="2" style="text-align: center; ">
+    <td rowspan="2" style="text-align: center; {{if $curr_consult->premiere}}background-color:#eaa;{{/if}}">
       {{$patient->_age}} ans
       {{if $patient->_age != "??"}}
         <br />
@@ -39,21 +39,21 @@
     </td>
     
     {{else}}
-    <td rowspan="2" colspan="{{if $coordonnees}}4{{else}}2{{/if}}">
+    <td rowspan="2" colspan="{{if $coordonnees}}4{{else}}2{{/if}}" style="{{if $curr_consult->premiere}}background-color:#eaa;{{/if}}">
       [PAUSE]
     </td>
     {{/if}}
     
     {{assign var=consult_anesth value=$curr_consult->_ref_consult_anesth}}
-    <td {{if !$consult_anesth->operation_id}}rowspan="2"{{/if}} class="text">
+    <td {{if !$consult_anesth->operation_id}}rowspan="2"{{/if}} class="text" style="{{if $curr_consult->premiere}}background-color:#eaa;{{/if}}">
       {{mb_value object=$curr_consult field=motif}}
     </td>
     
-    <td {{if !$consult_anesth->operation_id}}rowspan="2"{{/if}} class="text">
+    <td {{if !$consult_anesth->operation_id}}rowspan="2"{{/if}} class="text" style="{{if $curr_consult->premiere}}background-color:#eaa;{{/if}}">
       {{mb_value object=$curr_consult field=rques}}
     </td>
     
-    <td rowspan="2">
+    <td rowspan="2" style="{{if $curr_consult->premiere}}background-color:#eaa;{{/if}}">
       {{if $curr_consult->duree !=  1}}
       {{$curr_consult->duree}} x 
       {{/if}}
@@ -64,7 +64,7 @@
   <tr>
     {{* Keep table row out of condition *}}
     {{if $consult_anesth->operation_id}}
-    <td colspan="2" class="text">
+    <td colspan="2" class="text" style="{{if $curr_consult->premiere}}background-color:#eaa;{{/if}}">
       <div style="border-left: 4px solid #aaa; padding-left: 5px;">
       {{assign var=operation value=$consult_anesth->_ref_operation}}
   
