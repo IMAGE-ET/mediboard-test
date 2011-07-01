@@ -378,6 +378,7 @@ class CRPU extends CMbObject {
       return $msg;
     }
     
+    // Déclenchement pour avoir les données RPU
     $this->_ref_sejour->onAfterStore();
   }
   

@@ -430,6 +430,13 @@ class CMbObject {
     return false;
   }
   
+  function objectCreated() {
+    // Load DB version
+    $this->loadOldObject();
+    
+    return  $this->_old->_id;
+  }
+  
   /**
    * Complete fields with base value if missing
    * @param [...] string Field names or an array of field names
