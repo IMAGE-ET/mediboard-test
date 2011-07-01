@@ -24,7 +24,11 @@ $type        = CValue::post("type", $compte_rendu->type);
 $footer_id   = CValue::post("footer_id", $compte_rendu->footer_id);
 $header_id   = CValue::post("header_id", $compte_rendu->header_id);
 $stream      = CValue::post("stream");
-$content     = stripslashes(urldecode(CValue::post("content", $compte_rendu->_source)));
+$content     = stripslashes(urldecode(CValue::post("content", null)));
+if (!$content) {
+  $content = $compte_rendu->_source;
+}
+
 $save_content = $content;
 
 $ids_corres  = CValue::post("_ids_corres");
