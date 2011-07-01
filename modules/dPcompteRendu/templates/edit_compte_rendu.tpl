@@ -71,39 +71,43 @@ function submitCompteRendu(callback){
 }
 
 function refreshZones(id, obj) {
-  // Dans le cas de la génération d'un document par correspondant,
-  // mise à jour du nom du document dans la popup
-  $V(getForm("editFrm").nom, obj.nom);
-  $V(getForm("download-pdf-form")._ids_corres, obj._ids_corres);
-  $V(getForm("download-pdf-form").compte_rendu_id, id);
-  var refresh = function(){};
-  if (window.pdf_thumbnails && window.Preferences.pdf_and_thumbs == 1) {
-    Thumb.compte_rendu_id = id;
-    Thumb.modele_id = 0;
-    var refresh = function() { window.thumbs_timeout = setTimeout(function() {
-      Thumb.refreshThumbs(0, Thumb.print);
-    }, 0)};
+  var afterSetData = function() {
+    // Dans le cas de la génération d'un document par correspondant,
+    // mise à jour du nom du document dans la popup
+    $V(getForm("editFrm").nom, obj.nom);
+    $V(getForm("download-pdf-form")._ids_corres, obj._ids_corres);
+    $V(getForm("download-pdf-form").compte_rendu_id, id);
+    
+    var refresh = function(){};
+    if (window.pdf_thumbnails && window.Preferences.pdf_and_thumbs == 1) {
+      Thumb.compte_rendu_id = id;
+      Thumb.modele_id = 0;
+      var refresh = function() { window.thumbs_timeout = setTimeout(function() {
+        Thumb.refreshThumbs(0, Thumb.print);
+      }, 0)};
+    }
+    
+    var url = new Url("dPcompteRendu", "edit_compte_rendu");
+    url.addParam("compte_rendu_id", id);
+    url.addParam("reloadzones", 1);
+    url.requestUpdate("reloadzones",
+        {onComplete: function(){
+           refresh();
+           window.resizeEditor();
+           var form = getForm("editFrm");
+           if (Thumb.print) {
+             pdfAndPrintServer(id);
+           }
+           else if (window.callback){
+             window.callback();
+           }
+           form.onsubmit = function() { Url.ping({onComplete: submitCompteRendu}); return false;};
+           $V(form.compte_rendu_id, id);
+    }});
   }
-         
-  //Remise du content sauvegardé, avec l'impression en callback
-  CKEDITOR.instances.htmlarea.setData(obj._source, refresh);
-  
-  var url = new Url("dPcompteRendu", "edit_compte_rendu");
-  url.addParam("compte_rendu_id", id);
-  url.addParam("reloadzones", 1);
-  url.requestUpdate("reloadzones",
-      {onComplete: function(){
-         window.resizeEditor();
-         var form = getForm("editFrm");
-         form.onsubmit = function() { Url.ping({onComplete: submitCompteRendu}); return false;};
-         $V(form.compte_rendu_id, id);
-         if (Thumb.print) {
-           pdfAndPrintServer(id);
-         }
-         else if (window.callback){
-           window.callback();
-         }
-  }});
+    
+  //Remise du content sauvegardé, avec le refresh des vignettes si dispo, et/ou l'impression en callback
+  CKEDITOR.instances.htmlarea.setData(obj._source, afterSetData);
 }
 
 function openWindowMail() {
