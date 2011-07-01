@@ -44,6 +44,8 @@ if($prescription_id){
 	foreach($meds as $_med){
 		$_med->loadBackRefs("planifications");
 		foreach($_med->_back["planifications"] as $_planif){
+			$_planif->loadTargetObject();
+			$_planif->_ref_object->loadRefsFwd();
 			$_planif->_quantite_adm = 0;
 			$_planif->loadRefsAdministrations();
 			foreach($_planif->_ref_administrations as $_adm){
