@@ -51,7 +51,6 @@ class CPrisePosologie extends CMbMetaObject {
 	var $_short_view_unite_prise = null;
 	var $_ref_planifications_systemes = null;
 	var $_quantite_UI = null; // Quantite exprimée en Unité Internationale (UI)
-  
 	static $cache_produits = array();
 	
   function getSpec() {
@@ -660,7 +659,7 @@ class CPrisePosologie extends CMbMetaObject {
 	  		$this->loadTargetObject();
 	  	}
 
-		  if(!($this->_ref_object instanceof CPrescriptionLineMedicament && !$this->_ref_object->substitution_active)){
+		  if(!($this->_ref_object instanceof CPrescriptionLineMedicament && !$this->_ref_object->substitution_active) && CPlanificationSysteme::$_calcul_planif){
 			  $this->calculPlanifs();
 			}
 	  }

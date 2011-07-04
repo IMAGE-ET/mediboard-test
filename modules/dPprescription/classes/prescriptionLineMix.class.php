@@ -631,6 +631,10 @@ class CPrescriptionLineMix extends CMbObject {
   }
 	
 	function calculPlanifsPerf($check_planif = false){
+		if(!CPlanificationSysteme::$_calcul_planif){
+      return;
+    }
+		
 		// Calcul de la quantite totale de la perf en fonction des produits
     $this->calculQuantiteTotal();
 		

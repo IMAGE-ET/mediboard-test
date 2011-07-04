@@ -59,9 +59,10 @@ class CPrescriptionLineHandler extends CMbObjectHandler {
     CMbObject::ignoreHandler("CPrescriptionAlerteHandler");
 		
     if($mbObject instanceof CSejour){
-      if(!$mbObject->fieldModified("_entree") && !$mbObject->fieldModified("_sortie")){
+      if(!$mbObject->fieldModified("entree") && !$mbObject->fieldModified("sortie")){
         return;
       }
+			CPlanificationSysteme::$_calcul_planif = false;
     }
     if($mbObject instanceof COperation){
       if(!$mbObject->fieldModified("debut_op") && !$mbObject->fieldModified("fin_op") && !$mbObject->fieldModified("time_operation") && !$mbObject->fieldModified("plageop_id")){       
@@ -69,12 +70,13 @@ class CPrescriptionLineHandler extends CMbObjectHandler {
       }
     }
 
+    // Attention, l'affectation n'est pas forcement mis a jour avant le sejour (rajouter des tests) !!
     if($mbObject instanceof CAffectation){
     	// Suppression des planifs lors de la sauvegarde d'une affectation
       $prescription = new CPrescription();
       $prescription->object_id = $mbObject->sejour_id;
-      $prescription->object_class = "CSejour";
-      $prescription->type = "sejour";
+      $prescription->object_class = "CSejour"; // supprimer l'objet class
+      $prescription->type = "sejour"; // renommer sejour en hospitalisation
       $prescription->loadMatchingObject();
       $prescription->removeAllPlanifSysteme();   
       return;
@@ -99,8 +101,8 @@ class CPrescriptionLineHandler extends CMbObjectHandler {
      	 	 if($_line->_count_locked_planif == 0 && !$_line->inscription){
 	         $_line->removePlanifSysteme();
 	         if(!$_line->substitution_line_id && $_line->substitution_active){
-	           $_line->calculPlanifSysteme();
-	         }
+	         	 $_line->calculPlanifSysteme();
+					 }
 	       }
 				 continue;
 			 }
@@ -240,10 +242,11 @@ class CPrescriptionLineHandler extends CMbObjectHandler {
 			      }
 	        }
 				}
-				
         $_line->store();
       }
     }
+		
+		CPlanificationSysteme::$_calcul_planif = true;
   }
   
   function onAfterMerge(CMbObject &$mbObject) {

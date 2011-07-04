@@ -19,6 +19,8 @@ class CPlanificationSysteme extends CMbMetaObject {
 	var $_ref_prise               = null;
 	var $_ref_administrations     = null;
 	
+	static $_calcul_planif = true;
+	
   function getSpec() {
     $spec = parent::getSpec();
     $spec->table = 'planification_systeme';

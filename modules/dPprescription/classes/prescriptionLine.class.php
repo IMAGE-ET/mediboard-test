@@ -614,6 +614,10 @@ class CPrescriptionLine extends CMbObject implements IPatientRelated {
    * return planifs
    */
   function calculPlanifSysteme(){
+  	if(!CPlanificationSysteme::$_calcul_planif){
+  		return;
+  	}
+		
     if($this instanceof CPrescriptionLineElement && $this->debut && $this->time_debut){
     	$chapitre = $this->_ref_element_prescription->_ref_category_prescription->chapitre;
       if($chapitre == "imagerie" || $chapitre == "consult"){
