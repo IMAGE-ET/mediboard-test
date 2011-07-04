@@ -93,9 +93,11 @@ function submitTransmission(administration_id){
 		}
 		
     {{if "forms"|module_active}}
-      ExObject.trigger("CAdministration-"+administration_id, "validation", {
-        onTriggered: function(){ window.close(); }
-      });
+		  if (administration_id) {
+	      ExObject.trigger("CAdministration-"+administration_id, "validation", {
+	        onTriggered: function(){ window.close(); }
+	      });
+			}
     {{else}}
       window.close();
     {{/if}}

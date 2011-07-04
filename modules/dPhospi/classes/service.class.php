@@ -48,14 +48,16 @@ class CService extends CMbObject {
     $backProps["chambres"]               = "CChambre service_id";
     $backProps["sejours"]                = "CSejour service_id";
     $backProps["protocoles"]             = "CProtocole service_id";
-    $backProps["product_deliveries"]     = "CProductDelivery service_id";
-    $backProps["product_stock_services"] = "CProductStockService service_id";
     $backProps["valid_repas"]            = "CValidationRepas service_id";
     $backProps["config_moment"]          = "CConfigMomentUnitaire service_id";
     $backProps["config_service"]         = "CConfigService service_id";
     $backProps["endowments"]             = "CProductEndowment service_id";
     $backProps["services_entree"]        = "CSejour service_entree_mutation_id";
     $backProps["services_sortie"]        = "CSejour service_mutation_id";
+		
+		// stocks
+    $backProps["product_deliveries"]     = "CProductDelivery service_id";
+    $backProps["product_stock_services"] = "CProductStockService object_id";
     $backProps["stock_locations"]        = "CProductStockLocation object_id";
     return $backProps;
   }

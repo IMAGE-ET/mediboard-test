@@ -21,10 +21,10 @@ function refreshLists() {
 
   // To choose wether we want global or nominative deliveries
   urlGlobales.addParam("mode", "global");
-  urlGlobales.requestUpdate("list-globales");
+  urlGlobales.requestUpdate("list-global");
 
   urlNominatives.addParam("mode", "nominatif");
-  urlNominatives.requestUpdate("list-nominatives");
+  urlNominatives.requestUpdate("list-nominatif");
 
   return false;
 }
@@ -33,8 +33,8 @@ function refreshDeliveryLine(delivery_id) {
   var form = getForm("filter");
   var url = new Url("pharmacie", "httpreq_vw_delivery");
   url.addParam("delivery_id", delivery_id);
-  url.addParam("date_min", $V(form.date_min));
-  url.addParam("date_max", $V(form.date_max));
+  url.addParam("datetime_min", $V(form.datetime_min));
+  url.addParam("datetime_max", $V(form.datetime_max));
   url.requestUpdate("CProductDelivery-"+delivery_id);
 }
 
@@ -90,9 +90,9 @@ Main.add(function () {
   <table class="form">
     <tr>
       <th>{{mb_label object=$delivrance field=_date_min}}</th>
-      <td>{{mb_field object=$delivrance field=_date_min form=filter register=1 onchange="this.form.onsubmit()"}}</td>
+      <td>{{mb_field object=$delivrance field=_datetime_min form=filter register=1 onchange="this.form.onsubmit()"}}</td>
       <th>{{mb_label object=$delivrance field=_date_max}}</th>
-      <td>{{mb_field object=$delivrance field=_date_max form=filter register=1 onchange="this.form.onsubmit()"}}</td>
+      <td>{{mb_field object=$delivrance field=_datetime_max form=filter register=1 onchange="this.form.onsubmit()"}}</td>
       <td>
         <label>
           <input type="checkbox" name="display_delivered" onclick="this.form.onsubmit()" /> Afficher les délivrances completées
@@ -104,11 +104,11 @@ Main.add(function () {
 </form>
 
 <ul id="tab_delivrances" class="control_tabs">
-  <li><a href="#list-globales">Globales <small>(0)</small></a></li>
-  <li><a href="#list-nominatives">Nominatives <small>(0)</small></a></li>
+  <li><a href="#list-global">Globales <small>(0)</small></a></li>
+  <li><a href="#list-nominatif">Nominatives <small>(0)</small></a></li>
 </ul>
 <hr class="control_tabs" />
 
 <!-- Tabs containers -->
-<div id="list-globales" style="display: none;"></div>
-<div id="list-nominatives" style="display: none;"></div>
+<div id="list-global" style="display: none;"></div>
+<div id="list-nominatif" style="display: none;"></div>

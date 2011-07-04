@@ -20,8 +20,7 @@ $stock = new CProductStockService();
 
 // If stock_id has been provided, we load the associated product
 if ($stock_service_id) {
-  $stock->stock_id = $stock_service_id;
-  $stock->loadMatchingObject();
+  $stock->load($stock_service_id);
   $stock->loadRefsFwd();
   $stock->_ref_product->loadRefsFwd();
 } 
@@ -31,11 +30,11 @@ else if($product_id) {
   
   $stock->product_id = $product_id;
   $stock->_ref_product = $product;
-} 
-else {
-  $stock->loadRefsFwd();
+  $stock->updateFormFields();
 }
-$stock->updateFormFields();
+else {
+  $stock->loadRefsFwd(); // pour le _ref_product
+}
 
 // Categories list
 $list_categories = new CProductCategory();

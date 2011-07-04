@@ -70,11 +70,9 @@ updateDispensationUrgence = function(formUrgence) {
   {{foreach from=$list_stocks_service item=stock}}
     <tr>
       <td>
-        <a href="?m=dPstock&amp;tab=vw_idx_stock_service&amp;stock_service_id={{$stock->_id}}" title="{{tr}}CProductStockService-title-modify{{/tr}}">
-          <span onmouseover="ObjectTooltip.createEx(this, '{{$stock->_ref_product->_guid}}')">
+        <span onmouseover="ObjectTooltip.createEx(this, '{{$stock->_ref_product->_guid}}')">
           {{$stock->_ref_product}}
-          </span>
-        </a>
+        </span>
       </td>
       {{if !$conf.dPstock.CProductStockService.infinite_quantity}}
       <td>

@@ -84,7 +84,8 @@ class CProductDeliveryTrace extends CMbObject {
     
     $stock_service = new CProductStockService();
     $stock_service->product_id = $stock->product_id;
-    $stock_service->service_id = $this->_ref_delivery->service_id;
+    $stock_service->object_id = $this->_ref_delivery->service_id;
+    $stock_service->object_class = "CService"; // XXX
     //$stock_service->location_id = $this->target_location_id;
     $stock_service->loadMatchingObject();
     
@@ -120,7 +121,7 @@ class CProductDeliveryTrace extends CMbObject {
     
     // If we want to receive, just provide a reception date
     // if not dispensation nominative
-    elseif ($this->date_reception && !$this->_ref_delivery->patient_id) {
+    if ($this->date_reception && !$this->_ref_delivery->patient_id) {
     
     /*if (!$this->_ref_delivery->patient_id && (
           !$this->_id && $this->date_reception || $this->fieldModified("date_reception")
@@ -145,7 +146,7 @@ class CProductDeliveryTrace extends CMbObject {
         $stock_service->location_id = $default_location->_id;
       }
 
-      if ($stock_service->service_id) {
+      if ($stock_service->object_id && $stock_service->object_class) {
         if ($msg = $stock_service->store()) return $msg;
       }
     }
@@ -177,7 +178,8 @@ class CProductDeliveryTrace extends CMbObject {
     
     $stock_service = new CProductStockService();
     $stock_service->product_id = $stock->product_id;
-    $stock_service->service_id = $this->_ref_delivery->service_id;
+    $stock_service->object_id = $this->_ref_delivery->service_id;
+    $stock_service->object_class = "CService"; // XXX
     $stock_service->loadMatchingObject();
     
     if (!$infinite_group_stock && $this->date_delivery) {

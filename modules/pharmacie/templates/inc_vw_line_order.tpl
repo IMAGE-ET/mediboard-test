@@ -72,9 +72,7 @@
       <tr>
         <td style="width: 6em;">{{include file="../../dPstock/templates/inc_bargraph.tpl" stock=$curr_delivery->_ref_stock}}</td>
         <td>
-          <a href="?m=dPstock&amp;tab=vw_idx_stock_group&amp;stock_id={{$curr_delivery->_ref_stock->_id}}" title="{{tr}}CProductStockGroup-title-modify{{/tr}}">
-            {{mb_value object=$curr_delivery->_ref_stock field=quantity}}
-          </a>
+          {{mb_value object=$curr_delivery->_ref_stock field=quantity}}
         </td>
       </tr>
     </table>
@@ -85,9 +83,7 @@
   {{if !$conf.dPstock.CProductStockService.infinite_quantity}}
     <td style="text-align: center;">
       {{assign var=stock value=$curr_delivery->_ref_stock}}
-      <a href="?m=dPstock&amp;tab=vw_idx_stock_service&amp;stock_service_id={{$stock->_id}}" title="{{tr}}CProductStockService-title-modify{{/tr}}">
-        {{$stock->quantity}}
-      </a>
+      {{$stock->quantity}}
     </td>
   {{/if}}
   *}}

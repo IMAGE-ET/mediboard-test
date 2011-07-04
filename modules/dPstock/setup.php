@@ -860,7 +860,7 @@ class CSetupdPstock extends CSetup {
               WHERE LENGTH(`classe_comptable`) < 9";
     $this->addQuery($query);
     
-    /*$this->makeRevision("1.46");
+    $this->makeRevision("1.47");
     $query = "ALTER TABLE `product_stock_service` 
               ADD `object_class` CHAR (80) NOT NULL AFTER `object_id`,
               CHANGE `service_id` `object_id` INT (11) UNSIGNED NOT NULL";
@@ -870,12 +870,8 @@ class CSetupdPstock extends CSetup {
     $this->addQuery($query);
     $query = "UPDATE `product_stock_service` SET 
               `object_class` = 'CService'";
-    $this->addQuery($query);*/
+    $this->addQuery($query);
     
-    $this->mod_version = "1.47";
+    $this->mod_version = "1.48";
   }
 }
-
-/*
-SELECT SQL_NO_CACHE *  FROM `id_sante400` WHERE `object_class` LIKE 'CPatient' AND `object_id` >= 10000 AND `tag` LIKE '%a%' AND `last_update` >= '2010-09-01'
- */

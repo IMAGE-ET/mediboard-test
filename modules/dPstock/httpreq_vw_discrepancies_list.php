@@ -17,7 +17,8 @@ $limit       = CValue::get('limit');
 // Service's stocks
 $where = array();
 if ($service_id) {
-  $where['product_stock_service.service_id'] = " = $service_id";
+  $where['product_stock_service.object_id'] = " = '$service_id'";
+  $where['product_stock_service.object_class'] = " = 'CService'"; // XXX
 }
 if ($keywords) {
   $where[] = "product.code LIKE '%$keywords%' OR 

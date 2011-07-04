@@ -10,36 +10,20 @@
 
 CCanDo::checkRead();
 
-$mode               = CValue::getOrSession('mode');
+$mode               = CValue::getOrSession('mode', "global");
 $display_delivered  = CValue::getOrSession('display_delivered', 'false') == 'true';
 
 $order_col = CValue::get('order_col');
 $order_way = CValue::get('order_way');
 
-if (!$order_col) {
-	$order_col = 'date_dispensation';
-}
-
-if (!$order_way) {
-  $order_way = 'DESC';
-}
+if (!$order_col) $order_col = 'date_dispensation';
+if (!$order_way) $order_way = 'DESC';
 
 CValue::setSession('order_col', $order_col);
 CValue::setSession('order_way', $order_way);
 
-// Calcul de date_max et date_min
-$date_min = CValue::get('_date_min');
-$date_max = CValue::get('_date_max');
-
-if (!$date_min) {
-  $date_min = CValue::session('_date_delivrance_min');
-}
-if (!$date_max) {
-  $date_max = CValue::session('_date_delivrance_max');
-}
-
-CValue::setSession('_date_delivrance_min', $date_min);
-CValue::setSession('_date_delivrance_max', $date_max);
+$datetime_min = CValue::getOrSession('_datetime_min');
+$datetime_max = CValue::getOrSession('_datetime_max');
 
 if (!in_array($mode, array("global", "nominatif"))) {
   $mode = "global";
@@ -69,7 +53,7 @@ if ($mode == "global")
 else
   $where['product_delivery.patient_id'] = "IS NOT NULL";
   
-$where[] = "product_delivery.date_dispensation BETWEEN '$date_min 00:00:00' AND '$date_max 23:59:59'";
+$where[] = "product_delivery.date_dispensation BETWEEN '$datetime_min' AND '$datetime_max'";
 $where['product_delivery.quantity'] = " > 0";
 $where['product_delivery.stock_class'] = "= 'CProductStockGroup'";
 $where['product_delivery.stock_id'] = "IS NOT NULL";
@@ -148,10 +132,6 @@ $smarty->assign('stocks_service', $stocks_service);
 $smarty->assign('services',       $services);
 $smarty->assign('delivered_counts', $delivered_counts);
 $smarty->assign('display_delivered', $display_delivered);
+$smarty->assign('mode', $mode);
 
-if ($mode == "nominatif")
-  $smarty->display('inc_deliveries_nominatif_list.tpl');
-else
-  $smarty->display('inc_deliveries_global_list.tpl');
-
-?>
+$smarty->display('inc_deliveries_list.tpl');

@@ -43,9 +43,7 @@
 
 {{if !$conf.dPstock.CProductStockGroup.infinite_quantity}}
 <td style="text-align: center;">
-  <a href="?m=dPstock&amp;tab=vw_idx_stock_group&amp;stock_id={{$curr_delivery->_ref_stock->_id}}" title="{{tr}}CProductStockGroup-title-modify{{/tr}}">
-    {{mb_value object=$curr_delivery->_ref_stock field=quantity}}
-  </a>
+  {{mb_value object=$curr_delivery->_ref_stock field=quantity}}
 </td>
 {{/if}}
 
@@ -56,9 +54,7 @@
 {{if !$conf.dPstock.CProductStockService.infinite_quantity}}
 <td style="text-align: center;">
   {{assign var=stock value=$stocks_service.$id}}
-  <a href="?m=dPstock&amp;tab=vw_idx_stock_group&amp;stock_service_id={{$stock->_id}}" title="{{tr}}CProductStockService-title-modify{{/tr}}">
-    {{$stock->quantity}}
-  </a>
+  {{$stock->quantity}}
 </td>
 {{/if}}
 
@@ -66,7 +62,7 @@
   {{assign var=remaining value=$curr_delivery->quantity-$curr_delivery->countDelivered()}}
   
   {{if $remaining < 1}}
-    <button type="button" class="down notext" onclick="$(this).next('table').toggle()"></button> 
+    <button type="button" class="down notext" onclick="ObjectTooltip.createDOM(this, $(this).next('table'), {duration:0})" style="margin: -1px;"></button> 
     {{$remaining}} restants
   {{/if}}
   
@@ -82,7 +78,7 @@
             <input type="hidden" name="delivery_trace_id" value="{{$trace->_id}}" />
             <input type="hidden" name="_delivery_id" value="{{$curr_delivery->_id}}" /> <!-- used by refreshDeliveryLine -->
             <input type="hidden" name="_undeliver" value="1" />
-            <button type="submit" class="cancel notext">{{tr}}Cancel{{/tr}}</button>
+            <button type="submit" class="cancel notext oneclick" style="margin: -1px;">{{tr}}Cancel{{/tr}}</button>
           </form>
         {{else}}
           <img src="images/icons/tick.png" title="Délivré" />
@@ -103,7 +99,7 @@
   {{/foreach}}
   
     <tr>
-      <td colspan="10" title="Quantité d'origine: {{mb_value object=$curr_delivery field=quantity}}">
+      <td colspan="10" title="Quantité d'origine: {{mb_value object=$curr_delivery field=quantity}}" style="padding: 0;">
         <form name="delivery-trace-{{$curr_delivery->_id}}-new" action="?" method="post" class="deliver"
               onsubmit="return deliverLine(this)" {{if $curr_delivery->_delivered}}style="display: none;"{{/if}}>
           <input type="hidden" name="m" value="dPstock" /> 
@@ -113,7 +109,7 @@
           <input type="hidden" name="date_delivery" value="now" />
           {{mb_field object=$curr_delivery field=quantity increment=1 form=delivery-trace-$id-new size=2 value=$remaining}}
           <input type="text" name="code" value="" size="8" />
-          <button type="submit" class="tick notext" title="Délivrer">Délivrer</button>
+          <button type="submit" class="tick notext" style="margin: -1px;">Délivrer</button>
         </form>
       </td>
     </tr>
@@ -130,6 +126,6 @@
     <input type="hidden" name="dosql" value="do_delivery_aed" />
     {{mb_key object=$curr_delivery}}
     <input type="hidden" name="date_delivery" value="{{if !$curr_delivery->date_delivery}}now{{/if}}" />
-    <button type="submit" class="{{$curr_delivery->date_delivery|ternary:'tick':'cancel'}} notext" title="Marquer comme{{$curr_delivery->date_delivery|ternary:' non':''}} reçu"></button>
+    <button type="submit" class="{{$curr_delivery->date_delivery|ternary:'tick':'cancel'}} notext" style="margin: -1px;" title="Marquer comme{{$curr_delivery->date_delivery|ternary:' non':''}} reçu"></button>
   </form>
 </td>

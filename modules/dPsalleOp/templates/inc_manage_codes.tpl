@@ -1,6 +1,6 @@
 <script type="text/javascript">
 
-function changeCodeToDel(subject_id, code_ccam, actes_ids){
+changeCodeToDel = function(subject_id, code_ccam, actes_ids){
   var oForm = getForm("manageCodes");
   $V(oForm._selCode, code_ccam);
   $V(oForm._actes, actes_ids);

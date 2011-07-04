@@ -20,8 +20,8 @@ if (isset ($_POST['_code'])) {
 if (isset ($_POST['product_id'])) {
   $product = new CProduct;
   $product->load($_POST['product_id']);
-  if ($product->loadRefStock()) {
-    
+	
+  if ($product->loadRefStock()->_id) {
     $_POST["stock_class"] = $product->_ref_stock_group->_class_name;
     $_POST["stock_id"] = $product->_ref_stock_group->_id;
     

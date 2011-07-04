@@ -20,7 +20,7 @@
     {{/if}}
     <th>{{mb_title object=$stock field=product_id}}</th>
     {{if $class_name == 'CProductStockService'}}
-      <th>{{mb_title object=$stock field=service_id}}</th>
+      <th>{{mb_title object=$stock field=object_id}}</th>
     {{/if}}
     <th>{{mb_title object=$stock field=location_id}}</th>
     <th>{{mb_title object=$stock field=quantity}}</th>
@@ -39,18 +39,18 @@
     {{/if}}
     <td>
     	{{if $class_name == 'CProductStockService'}}
-			{{assign var=tab value=vw_idx_stock_service&stock_service_id}}
+			{{assign var=_tab value="vw_idx_stock_service&stock_service_id"}}
 			{{else}}
-      {{assign var=tab value=vw_idx_stock_group&stock_id}}
+      {{assign var=_tab value="vw_idx_stock_group&stock_id"}}
 			{{/if}}
-      <a href="?m={{$m}}&amp;tab={{$tab}}={{$_stock->_id}}">
+      <a href="?m={{$m}}&amp;tab={{$_tab}}={{$_stock->_id}}">
         <span onmouseover="ObjectTooltip.createEx(this, '{{$product->_guid}}')">
           {{$product->_view|truncate:60}}
         </span>
       </a>
     </td>
     {{if $class_name == 'CProductStockService'}}
-      <td>{{$_stock->_ref_service}}</td>
+      <td>{{$_stock->_ref_object}}</td>
     {{/if}}
     <td>{{$_stock->_ref_location->_shortview}}</td>
     <td style="text-align: right;">

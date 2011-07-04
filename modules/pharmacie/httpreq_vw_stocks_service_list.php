@@ -16,7 +16,8 @@ $page = CValue::get("page", 0);
 
 // Services' stocks
 $list_stocks_service = new CProductStockService();
-$list_stocks_service->service_id = $service_id;
+$list_stocks_service->object_id = $service_id;
+$list_stocks_service->object_class = "CService"; // XXX
 
 $total = $list_stocks_service->countMatchingList();
 $list_stocks_service = $list_stocks_service->loadMatchingList(null, "$page, 20");

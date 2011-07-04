@@ -43,7 +43,7 @@ class CProductStockLocation extends CMbMetaObject {
     $specs['desc'] = 'text seekable';
 		$specs['position'] = 'num min|1';
     $specs['group_id'] = 'ref notNull class|CGroups';
-    $specs['object_class'] = 'enum notNull list|CGroups|CService'; //|CBlocOperatoire
+    $specs['object_class'] = 'enum notNull list|CGroups|CService|CBlocOperatoire';
 		$specs['_before']  = 'ref class|CProductStockLocation autocomplete|name|true';
     $specs['_type']  = 'str';
     return $specs;
@@ -122,6 +122,7 @@ class CProductStockLocation extends CMbMetaObject {
       case "CGroups": 
         return "CProductStockGroup";
       default: 
+      case "CBlocOperatoire":
       case "CService":
         return "CProductStockService";
     }
@@ -202,7 +203,8 @@ class CProductStockLocation extends CMbMetaObject {
         $stock->group_id = $this->object_id;
         break;
       default: 
-        $stock->service_id = $this->object_id;
+        $stock->object_id    = $this->object_id;
+        $stock->object_class = $this->object_class;
         break;
     }
     

@@ -8,8 +8,7 @@
  *  @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
  */
 
-global $can;
-$can->needsRead();
+CCanDo::checkRead();
 
 $service_id = CValue::getOrSession('service_id');
 $all_stocks = CValue::getOrSession('all_stocks') == 'true';
@@ -82,7 +81,8 @@ foreach($destockages as $code_cip => $_destockage){
     $product->category_id = CAppUI::conf('bcb CBcbProduitLivretTherapeutique product_category_id');
     if ($product->loadMatchingObject()) {
       $stock = new CProductStockService();
-      $stock->service_id = $service_id;
+      $stock->object_id = $service_id;
+      $stock->object_class = "CService"; // XXX
       $stock->product_id = $product->_id;
       $stock->store();
       $destockages[$code_cip]['stock'] = $stock;
@@ -95,7 +95,8 @@ foreach($destockages as $code_cip => $_destockage){
 
 if ($all_stocks) {
   $stock = new CProductStockService();
-  $stock->service_id = $service_id;
+  $stock->object_id = $service_id;
+  $stock->object_class = "CService"; // XXX
   $list_stocks = $stock->loadMatchingList();
 
   foreach ($list_stocks as $sto) {

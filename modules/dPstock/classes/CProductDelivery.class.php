@@ -155,7 +155,8 @@ class CProductDelivery extends CMbObject {
     
     if ($this->service_id) {
       $stock_service->product_id = $this->_ref_stock->product_id;
-      $stock_service->service_id = $this->service_id;
+      $stock_service->object_id = $this->service_id;
+      $stock_service->object_class = "CService"; // XXX
       $stock_service->loadMatchingObject();
     }
     

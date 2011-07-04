@@ -57,7 +57,8 @@
           {{/if}}
           
           {{mb_key object=$_stock}}
-          {{mb_field object=$_stock field=service_id hidden=true}}
+          {{mb_field object=$_stock field=object_id hidden=true}}
+          {{mb_field object=$_stock field=object_class hidden=true}}
           {{mb_field object=$_stock field=product_id hidden=true}}
           {{* @FIXME Obligé d'ajouter le seuil critique car sinon : erreur JS lors du checkForm *}}
           {{mb_field object=$_stock field=order_threshold_critical hidden=true}}

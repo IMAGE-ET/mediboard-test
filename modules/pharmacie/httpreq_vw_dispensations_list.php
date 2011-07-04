@@ -8,9 +8,6 @@
  *  @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
  */
 
-CPrescriptionLineMedicament::$_load_lite = true;
-CPrescriptionLineMixItem::$_load_lite = true;
-
 CCanDo::checkRead();
 
 $service_id      = CValue::getOrSession('service_id');
@@ -21,9 +18,11 @@ if($prescription_id == "undefined"){
   $prescription_id = "";
 }
 
-// Calcul de date_max et date_min
-$datetime_min = CValue::get('_datetime_min');
-$datetime_max = CValue::get('_datetime_max');
+$datetime_min = CValue::getOrSession('_datetime_min');
+$datetime_max = CValue::getOrSession('_datetime_max');
+
+CPrescriptionLineMedicament::$_load_lite = true;
+CPrescriptionLineMixItem::$_load_lite = true;
 
 $prescription = new CPrescription();
 
@@ -256,11 +255,10 @@ foreach($dispensations as $code_cis => $_quantites){
     // Chargement des dispensation déjà effectuée (dans l'autre mode)
     if($mode_nominatif){
       $where['product_delivery.patient_id'] = "IS NULL";
-      $list_done_delivery = $deliv->loadList($where, null, null, null, $ljoin);
     } else {
       $where['product_delivery.patient_id'] = "IS NOT NULL";
-      $list_done_delivery = $deliv->loadList($where, null, null, null, $ljoin);
     }
+    $list_done_delivery = $deliv->loadList($where, null, null, null, $ljoin);
     
     if (count($list_done_delivery)) {
       if(!isset($done_delivery[$code_cis]["total"])){
@@ -354,6 +352,11 @@ $smarty->assign("now", mbDate());
 $smarty->assign('mode_nominatif', $mode_nominatif);
 $smarty->assign("_lines", $_lines);
 
+if($mode_nominatif){
+  $prescription->_ref_object->loadRefPatient();
+  $smarty->assign('prescription', $prescription);
+}
+	
 if($_selected_cis){
   // Refresh d'une ligne
   $smarty->assign("quantites", $dispensations[$_selected_cis]);
@@ -362,10 +365,6 @@ if($_selected_cis){
   $smarty->display('inc_dispensation_line.tpl');
 } 
 else {
-	if($mode_nominatif){
-    $prescription->_ref_object->loadRefPatient();
-	  $smarty->assign('prescription', $prescription);
-	}
   $smarty->assign('dispensations', $dispensations);
   $smarty->display('inc_dispensations_list.tpl');
 }

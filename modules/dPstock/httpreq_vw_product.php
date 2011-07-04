@@ -23,7 +23,7 @@ if ($product->load($product_id)) {
   );
   foreach($product->_ref_stocks_service as $_stock) {
     $where = array(
-      "product_endowment.service_id" => "= '$_stock->service_id'",
+      "product_endowment.service_id" => "= '$_stock->object_id'",
       "product_endowment_item.product_id" => "= '$product->_id'",
     );
     $_stock->_ref_endowment_items = $endowment_item->loadList($where, null, null, null, $ljoin);

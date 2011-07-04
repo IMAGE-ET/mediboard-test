@@ -8,8 +8,7 @@
  *  @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
  */
 
-global $can;
-$can->needsRead();
+CCanDo::checkRead();
 
 $service_id          = CValue::get('service_id');
 $start               = intval(CValue::getOrSession('start', 0));
@@ -85,10 +84,7 @@ if ($endowment_id) {
   $stocks = array();
   foreach($endowment_items as $_item) {
     $_item->loadRefsFwd();
-    $stock_service = new CProductStockService;
-    $stock_service->product_id = $_item->_ref_product->_id;
-    $stock_service->service_id = $service_id;
-    $stock_service->loadMatchingObject();
+    $stock_service = CProductStockService::getFromProduct( $_item->_ref_product, $service);
     
     $stock = new CProductStockGroup;
     $stock->product_id = $_item->_ref_product->_id;
@@ -107,7 +103,8 @@ else if ($only_service_stocks == 1 || $only_common == 1) {
   $ljoin = array(
     'product' => 'product.product_id = product_stock_service.product_id'
   );
-  $where['product_stock_service.service_id'] = "= '$service_id'";
+  $where['product_stock_service.object_id'] = "= '$service_id'";
+  $where['product_stock_service.object_class'] = "= 'CService'"; // XXX
   if ($only_common) {
     $where['product_stock_service.common'] = "= '1'";
   }

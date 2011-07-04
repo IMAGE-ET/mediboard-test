@@ -9,6 +9,7 @@
  */
 
 global $m;
+
 CCanDo::checkEdit();
 
 $service_id   = CValue::getOrSession('service_id');

@@ -20,10 +20,11 @@ CValue::setSession('category_id', $category_id);
 
 $where = array();
 if ($service_id) {
-  $where['product_stock_service.service_id'] = " = $service_id";
+  $where['product_stock_service.object_id']    = " = '$service_id'";
+  $where['product_stock_service.object_class'] = " = 'CService'"; // XXX
 }
 if ($category_id) {
-  $where['product.category_id'] = " = $category_id";
+  $where['product.category_id'] = " = '$category_id'";
 }
 if ($keywords) {
   $where[] = "product.code LIKE '%$keywords%' OR 

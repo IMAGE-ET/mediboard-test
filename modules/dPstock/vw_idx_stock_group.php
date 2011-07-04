@@ -47,7 +47,8 @@ $list_services = CProductStockGroup::getServicesList();
 
 foreach($list_services as $_service) {
   $stock_service = new CProductStockService;
-  $stock_service->service_id = $_service->_id;
+  $stock_service->object_id = $_service->_id;
+  $stock_service->object_class = $_service->_class_name;
   $stock_service->product_id = $stock->product_id;
   if (!$stock_service->loadMatchingObject()) {
     $stock_service->quantity = $stock->_ref_product->quantity;

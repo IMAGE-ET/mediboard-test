@@ -10,25 +10,16 @@
 
 CCanDo::checkRead();
 
-$delivrance = new CProductDelivery();
-
 $num_days_date_min = CAppUI::conf("pharmacie num_days_date_min");
+$datetime_min = CValue::getOrSession('_datetime_min', mbDate("-$num_days_date_min DAY")." 00:00:00");
+$datetime_max = CValue::getOrSession('_datetime_max', mbDate("+2 DAY")." 23:59:59");
 
-$date_min = CValue::get('_date_min');
-$date_max = CValue::get('_date_max');
+$order_col    = CValue::getOrSession('order_col', 'date_dispensation');
+$order_way    = CValue::getOrSession('order_way', 'DESC');
 
-if (!$date_min) {
-  $date_min = CValue::session('_date_delivrance_min', mbDate("-$num_days_date_min DAY"));
-}
-if (!$date_max) {
-  $date_max = CValue::session('_date_delivrance_max', mbDate("+2 DAY"));
-}
-
-$order_col = CValue::getOrSession('order_col', 'date_dispensation');
-$order_way = CValue::getOrSession('order_way', 'DESC');
-
-$delivrance->_date_min = $date_min;
-$delivrance->_date_max = $date_max;
+$delivrance = new CProductDelivery();
+$delivrance->_datetime_min = $datetime_min;
+$delivrance->_datetime_max = $datetime_max;
 
 // Création du template
 $smarty = new CSmartyDP();
@@ -38,5 +29,3 @@ $smarty->assign('order_way',  $order_way);
 $smarty->assign('delivrance', $delivrance);
 
 $smarty->display('vw_idx_delivrance.tpl');
-
-?>

@@ -47,7 +47,8 @@ ProductSelector.init = function(){
           {{/foreach}}
         </select>
         
-        <select name="service_id" onchange="$V(this.form.start,0);this.form.onsubmit()">
+				<input type="hidden" name="object_class" value="CService" /> {{* XXX *}}
+        <select name="object_id" onchange="$V(this.form.start,0);this.form.onsubmit()">
           <option value="">&mdash; {{tr}}CService.all{{/tr}}</option>
           {{foreach from=$list_services item=curr_service}}
           <option value="{{$curr_service->_id}}" {{if $service_id==$curr_service->_id}}selected="selected"{{/if}}>{{$curr_service->_view}}</option>
@@ -100,12 +101,13 @@ ProductSelector.init = function(){
             </td>
           </tr>
           <tr>
-            <th>{{mb_label object=$stock field="service_id"}}</th>
+            <th>{{mb_label object=$stock field="object_id"}}</th>
             <td>
-              <select name="service_id" class="{{$stock->_props.service_id}}" onchange="$V(this.form.location_id, ''); $V(this.form._location_id_autocomplete_view, '');">
+              <input type="hidden" name="object_class" value="CService" /> {{* XXX *}}
+              <select name="object_id" class="{{$stock->_props.object_id}}" onchange="$V(this.form.location_id, ''); $V(this.form._location_id_autocomplete_view, '');">
                 <option value="">&mdash; {{tr}}CService.select{{/tr}} &mdash;</option>
                 {{foreach from=$list_services item=curr_service}}
-                <option value="{{$curr_service->_id}}" {{if $stock->service_id==$curr_service->_id}}selected="selected"{{/if}}>{{$curr_service->nom}}</option>
+                <option value="{{$curr_service->_id}}" {{if $stock->object_id==$curr_service->_id}}selected="selected"{{/if}}>{{$curr_service->nom}}</option>
                 {{/foreach}}
               </select>
             </td>
@@ -124,14 +126,14 @@ ProductSelector.init = function(){
                   var input = form._location_id_autocomplete_view;
                   
                   var url = new Url("dPstock", "httpreq_vw_related_locations");
-                  url.addParam("owner_guid", "CService-{{$stock->service_id}}");
+                  url.addParam("owner_guid", "{{$stock->object_class}}-{{$stock->object_id}}");
                   url.autoComplete(input, null, {
                     minChars: 1,
                     method: "get",
                     select: "view",
                     dropdown: true,
                     callback: function(input, queryString){
-                      return queryString + "&owner_guid=CService-"+$V(input.form.service_id);
+                      return queryString + "&owner_guid="+$V(input.form.object_class)+"-"+$V(input.form.object_id);
                     },
                     afterUpdateElement: function(field,selected){
                       $V(field.form["location_id"], selected.className.match(/[a-z]-(\d+)/i)[1]);

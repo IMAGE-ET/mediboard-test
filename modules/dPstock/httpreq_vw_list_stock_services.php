@@ -19,10 +19,8 @@ $product->load($product_id);
 $list_services = CProductStockGroup::getServicesList();
 
 foreach($list_services as $_service) {
-  $stock_service = new CProductStockService;
-  $stock_service->service_id = $_service->_id;
-  $stock_service->product_id = $product->_id;
-  if (!$stock_service->loadMatchingObject()) {
+  $stock_service = CProductStockService::getFromProduct($product, $_service);
+  if (!$stock_service->_id) {
     $stock_service->quantity = $product->quantity;
     $stock_service->order_threshold_min = $product->quantity;
   }

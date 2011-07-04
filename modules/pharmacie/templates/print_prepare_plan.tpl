@@ -12,12 +12,13 @@
 Main.add(window.print);
 </script>
 
-<h1>Plan de cueillette du 
+<h2 class="no-break">Plan de cueillette du 
   {{$date_min|date_format:$conf.datetime}} au 
   {{$date_max|date_format:$conf.datetime}} le 
-  {{$smarty.now|date_format:$conf.datetime}}</h1>
+  {{$smarty.now|date_format:$conf.datetime}}</h2>
 
-<h2>Délivrances {{if $mode == "nominatif"}}nominatives{{else}}globales{{/if}}</h2>
+<h3>Délivrances {{if $mode == "nominatif"}}nominatives{{else}}globales{{/if}}</h3>
+
 <table class="main tbl">
   <colgroup>
     <col span="5"  class="narrow" />

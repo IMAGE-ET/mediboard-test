@@ -8,33 +8,49 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
  */
 
-class CProductStockService extends CProductStock {
+class CProductStockService extends CProductStock /* extends CMbMetaObject */ {
   // DB Fields
-  var $service_id = null;
-  var $common     = null;
+  var $object_class = null;
+  var $object_id    = null;
+  var $common       = null;
 
   // Object References
   //    Single
-  /**
-   * @var CService
-   */
-  var $_ref_service = null;
+  var $_ref_object = null;
   
   function getSpec() {
     $spec = parent::getSpec();
     $spec->table = 'product_stock_service';
     $spec->key   = 'stock_id';
-    $spec->uniques["product"] = array("service_id", "product_id"/*, "location_id"*/);
+    $spec->uniques["product"] = array("object_id", "object_class", "product_id"/*, "location_id"*/);
     return $spec;
   }
 
   function getProps() {
     $specs = parent::getProps();
-    $specs['service_id'] = 'ref notNull class|CService';
-    $specs['common'] = 'bool';
+    $specs['object_class'] = 'enum notNull list|CService'; //|CBlocOperatoire';
+    $specs['object_id']    = 'ref notNull class|CMbObject meta|object_class';
+    $specs['common']       = 'bool';
     return $specs;
   }
-  
+	
+	// <CMbMetaObject>
+  function setObject(CMbObject $object) {
+    $this->_ref_object  = $object;
+    $this->object_id    = $object->_id;
+    $this->object_class = $object->_class_name;
+  }
+	
+	function loadTargetObject($cache = true) {
+		return $this->_ref_object = $this->loadFwdRef("object_id", $cache);
+	}
+
+  function loadRefsFwd(){
+    parent::loadRefsFwd();
+    $this->loadTargetObject();
+  }
+	// </CMbMetaObject> 
+	
   /**
    * 
    * @param string $code
@@ -46,34 +62,36 @@ class CProductStockService extends CProductStock {
     
     $where = array();
     $where['product.code'] = "= '$code'";
+    $where['product_stock_service.object_class'] = "= 'CService'"; // XXX
+		
     if ($service_id) {
-      $where['product_stock_service.service_id'] = "= '$service_id'";
+      $where['product_stock_service.object_id'] = "= $service_id";
     }
+		
     $ljoin = array();
     $ljoin['product'] = 'product_stock_service.product_id = product.product_id';
 
     $stock->loadObject($where, null, null, $ljoin);
     return $stock;
   }
+	
+	static function getFromProduct(CProduct $product, CMbObject $host) {
+	  $stock = new self;
+	  $stock->setObject($host);
+	  $stock->product_id = $product->_id;
+		$stock->loadMatchingObject();
+		return $stock;
+	}
 
   function updateFormFields() {
     parent::updateFormFields();
-    $this->_view = "$this->_ref_product ($this->_ref_service)";
-  }
-  
-  function loadRefService(){
-    return $this->_ref_service = $this->loadFwdRef("service_id", true);
-  }
-
-  function loadRefsFwd(){
-    parent::loadRefsFwd();
-    $this->loadRefService();
+    $this->_view = "$this->_ref_product ($this->_ref_object)";
   }
   
   function loadRelatedLocations(){
     $where = array(
-      "object_class" => "= 'CService'",
-      "object_id"    => "= '$this->service_id'",
+      "object_class" => "= '$this->object_class'",
+      "object_id"    => "= '$this->object_id'",
     );
     
     $location = new CProductStockLocation;
@@ -86,21 +104,21 @@ class CProductStockService extends CProductStock {
     }
     
     if ($this->location_id) {
-      $this->completeField("service_id");
+      $this->completeField("object_id", "object_class");
       $location = $this->loadRefLocation();
       
-      if ($location->object_class !== "CService" || $location->object_id != $this->service_id) {
-        return "Le stock doit être associé à un emplacement du service '".$this->loadRefService()."'";
+      if ($location->object_class !== $this->object_class || 
+			    $location->object_id    !=  $this->object_id) {
+        return "Le stock doit être associé à un emplacement de '".$this->loadTargetObject()."'";
       }
     }
   }
   
   function loadRefHost(){
-    return $this->loadRefService();
+    return $this->loadTargetObject();
   }
   
-  function setHost(CService $host){
-    $this->_ref_service = $host;
-    $this->service_id = $host->_id;
+  function setHost(CMbObject $host){
+    $this->setObject($host);
   }
 }

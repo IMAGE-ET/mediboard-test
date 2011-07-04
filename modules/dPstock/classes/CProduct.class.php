@@ -155,7 +155,7 @@ class CProduct extends CMbObject {
     $this->_ref_stocks_group = $this->loadBackRefs('stocks_group');
     
     $ljoin = array(
-      'service' => "service.service_id = product_stock_service.service_id"
+      'service' => "service.service_id = product_stock_service.object_id AND product_stock_service.object_class = 'CService'"
     );
     
     $this->_ref_stocks_service = $this->loadBackRefs('stocks_service', "service.nom", null, null, $ljoin);

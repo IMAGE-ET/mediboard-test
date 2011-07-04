@@ -22,6 +22,8 @@ $filter = new CProduct;
 $filter->societe_id = $societe_id;
 $filter->category_id = $category_id;
 
+CProductOrderItem::$_load_lite = true;
+
 // Loads the expected Reference
 $reference = new CProductReference();
 
@@ -30,6 +32,7 @@ $reference = new CProductReference();
 if ($reference->load($reference_id)) {
   $reference->loadRefsFwd();
   $reference->_ref_product->loadRefsFwd();
+	$reference->loadRefsNotes();
 
 // else, if a product_id has been provided, 
 // we load it and its associated reference
@@ -55,9 +58,6 @@ if (!$reference->_id) {
 $category = new CProductCategory();
 $list_categories = $category->loadList(null, 'name');
 
-// Suppliers list
-$list_societes = CSociete::getSuppliers(false);
-
 $lists = $reference->loadRefsObjects();
 
 // Smarty template
@@ -66,7 +66,6 @@ $smarty = new CSmartyDP();
 $smarty->assign('reference',       $reference);
 $smarty->assign('lists_objects',   $lists);
 $smarty->assign('list_categories', $list_categories);
-$smarty->assign('list_societes',   $list_societes);
 
 $smarty->assign('filter',          $filter);
 $smarty->assign('keywords',        $keywords);

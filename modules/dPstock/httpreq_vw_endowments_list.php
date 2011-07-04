@@ -25,7 +25,7 @@ $list = $endowment->seek($keywords, $where, "$start,20", true, null, "service_id
 $total = $endowment->_totalSeek;
 
 foreach($list as $_item) {
-	$_item->loadRefs();
+	//$_item->loadRefs();
   $_item->countBackRefs("endowment_items");
 }
 
