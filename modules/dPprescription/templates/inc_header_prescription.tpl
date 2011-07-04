@@ -378,8 +378,10 @@ Main.add( function(){
         {{/if}}
 			 
       <div style="float: right; text-align: right;">
+        {{if $prescription->type == "sejour"}}
         <input type="checkbox" id="in_progress" name="in_progress" checked="checked"/>
         <label for="in_progress" style="font-size: x-small;" title="{{tr}}CPrescription.print_in_progress{{/tr}}">En cours</label>
+				{{/if}}
         <input type="checkbox" id="dci" name="dci"/>
         <label for="dci" style="font-size: x-small" title="{{tr}}CPrescription.print_dci{{/tr}}">DCI</label>
         <input type="checkbox" id="globale" name="globale" />
