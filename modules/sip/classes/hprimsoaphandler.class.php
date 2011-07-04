@@ -58,7 +58,7 @@ class CHprimSoapHandler extends CSoapHandler {
         $echange_hprim->store();
        
         $domAcquittement->_ref_echange_hprim = $echange_hprim;
-        $messageAcquittement = $domAcquittement->generateAcquittementsPatients("erreur", "E002", $doc_errors);
+        $messageAcquittement = $domAcquittement->generateAcquittements("erreur", "E002", $doc_errors);
         $doc_valid = $domAcquittement->schemaValidate();
         
         $echange_hprim->emetteur_id         = $data['idClient'] ? $dest_hprim->_id : 0;
@@ -152,7 +152,7 @@ class CHprimSoapHandler extends CSoapHandler {
       }
       // Aucun des six événements retour d'erreur
       else {
-        $messageAcquittement = $domAcquittement->generateAcquittementsPatients("erreur", "E007"); 
+        $messageAcquittement = $domAcquittement->generateAcquittements("erreur", "E007"); 
       }
       return $messageAcquittement;
       
@@ -168,7 +168,7 @@ class CHprimSoapHandler extends CSoapHandler {
       $domAcquittement->_identifiant_acquitte = isset($data['identifiantMessage']) ? $data['identifiantMessage'] : "000000000";
       $domAcquittement->_ref_echange_hprim    = $echange_hprim;
       
-      $messageAcquittement = $domAcquittement->generateAcquittementsPatients("erreur", "E009", $e->getMessage());
+      $messageAcquittement = $domAcquittement->generateAcquittements("erreur", "E009", $e->getMessage());
       $doc_valid = $domAcquittement->schemaValidate();
       
       $echange_hprim->_acquittement = $messageAcquittement;
