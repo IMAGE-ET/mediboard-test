@@ -88,7 +88,7 @@ drawConsumptionGraph = function() {
       <tr>
         <td>
           <a href="?m={{$m}}&amp;tab=vw_idx_stock_service&amp;stock_service_id={{$curr_stock->_id}}">
-            {{$curr_stock->_ref_service}}
+            {{$curr_stock->_ref_object}}
           </a>
         </td>
         <td>{{$curr_stock->quantity}}</td>
