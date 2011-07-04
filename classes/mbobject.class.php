@@ -26,6 +26,7 @@ CAppUI::requireSystemClass("mbObjectSpec");
 class CMbObject {
   static $useObjectCache = true;
   static $objectCount = 0;
+  static $objectCounts = array();
   static $objectCache = array();
   static $cachableCounts = array();
   static $handlers = null; // must be null at the beginning @see self::makeHandlers
@@ -601,13 +602,20 @@ class CMbObject {
     
     self::$objectCount++;
     
-    // Statistiques sur cache d'object
-    if (isset(self::$objectCache[$this->_class_name][$this->_id])) {
-      if (!isset(self::$cachableCounts[$this->_class_name])) {
-        self::$cachableCounts[$this->_class_name] = 0;
+    $class_name = $this->_class_name;
+
+    // Statistiques sur chargement d'objets
+    if (!isset(self::$objectCounts[$class_name])) {
+      self::$objectCounts[$class_name] = 0;
+    }
+    self::$objectCounts[$class_name]++;
+    
+    // Statistiques sur cache d'objets
+    if (isset(self::$objectCache[$class_name][$this->_id])) {
+      if (!isset(self::$cachableCounts[$class_name])) {
+        self::$cachableCounts[$class_name] = 0;
       }
-      
-      self::$cachableCounts[$this->_class_name]++;
+      self::$cachableCounts[$class_name]++;
     }
   
     self::$objectCache[$this->_class_name][$this->_id] =& $this;

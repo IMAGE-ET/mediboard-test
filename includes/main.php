@@ -296,11 +296,15 @@ if ($limit &&
   apache_child_terminate();
 }
 
+arsort(CMbObject::$cachableCounts);
+arsort(CMbObject::$objectCounts);
+
 $performance["genere"]         = number_format($phpChrono->total, 3);
 $performance["memoire"]        = CMbString::toDecaBinary($memory_peak);
 $performance["objets"]         = CMbObject::$objectCount;
 $performance["cachableCount"]  = array_sum(CMbObject::$cachableCounts);
 $performance["cachableCounts"] = CMbObject::$cachableCounts;
+$performance["objectCounts"]   = CMbObject::$objectCounts;
 
 $performance["size"] = CMbString::toDecaBinary(ob_get_length());
 $performance["ccam"] = array (

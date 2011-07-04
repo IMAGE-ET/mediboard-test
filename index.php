@@ -34,6 +34,9 @@ $performance = array(
   // Cache
   "cachableCount" => null,
   "cachableCounts" => null,
+	
+	// Objects
+  "objectCounts" => null,
 );
 
 if (!is_file("./includes/config.php")) {
