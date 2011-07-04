@@ -57,7 +57,6 @@ toggleDoneDispensations = function(){
       exactMinutes: false, 
       minInterval: 60
     };
-  	
     var oForm = getForm("editBorneDisp");
   });
 {{/if}}
@@ -72,28 +71,31 @@ toggleDoneDispensations = function(){
 </label>
 
 <table class="tbl">
-  {{if $mode_nominatif}}
   <tr>
     <th colspan="10" class="title">
-      Dispensation pour {{$prescription->_ref_object->_ref_patient->_view}}
+      Dispensation pour 
+			 {{if $mode_nominatif}}
+			   {{$prescription->_ref_object->_ref_patient->_view}}
+			 {{else}}
+			   {{$service->_view}}
+			 {{/if}}
     </th>
   </tr>
-  {{/if}}
   <tr>
+  	<th>Produit</th>
   	{{if $mode_nominatif}}
 		<th>Posologie</th>
 		{{/if}}
-    <th>Quantité<br />à administrer</th>
-    <th>Quantité<br />à dispenser</th>
+    <th colspan="2">Qté à administrer</th>
+    <!--<th colspan="2">Qté à dispenser</th>-->
     {{if !$infinite}}
       <th>Stock<br />pharmacie</th>
     {{/if}}
-    <th>Unité de<br />dispensation</th>
     <th style="width: 30%">
       <!-- <button style="float: right" type="button" onclick="dispenseAll('list-dispensations', refreshLists)" class="tick">Tout dispenser</button> -->
       Dispensation
     </th>
-    <th>Déjà effectuées</th>
+    <th>Effectuées</th>
     {{if !$infinite_service}}
     <th>Stock<br /> du service</th>
     {{/if}}

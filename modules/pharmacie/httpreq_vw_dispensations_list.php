@@ -14,6 +14,9 @@ $service_id      = CValue::getOrSession('service_id');
 $_selected_cis   = CValue::get("_selected_cis");
 $prescription_id = CValue::get("prescription_id");
 
+$service = new CService();
+$service->load($service_id);
+
 if($prescription_id == "undefined"){
   $prescription_id = "";
 }
@@ -25,6 +28,7 @@ CPrescriptionLineMedicament::$_load_lite = true;
 CPrescriptionLineMixItem::$_load_lite = true;
 
 $prescription = new CPrescription();
+$nb_done_total = array();
 
 // Nominatif
 if($prescription_id){
@@ -51,7 +55,6 @@ else {
 	$where['service.service_id'] = " = '$service_id'";
 	$prescriptions = $prescription->loadList($where, null, null, null, $ljoin);
 }
-
 
 $dispensations = array();
 $delivrances = array();
@@ -213,6 +216,8 @@ foreach($dispensations as $code => $unites){
 
 // On arrondit la quantite de "boites"
 foreach($dispensations as $code_cis => $_quantites){
+	$nb_done_total[$code_cis]=0;
+	
   $_produits = $_produits_from_cis[$code_cis];
   foreach($_produits as $_produit){
     $code_cip = $_produit["CODE_CIP"];
@@ -249,6 +254,7 @@ foreach($dispensations as $code_cis => $_quantites){
         $d->loadRefsBack();
         $done[$code_cis][$code_cip][] = $d;
         $done[$code_cis]["total"] += $d->quantity;
+				$nb_done_total[$code_cis]++;
       }
     }
   
@@ -264,11 +270,12 @@ foreach($dispensations as $code_cis => $_quantites){
       if(!isset($done_delivery[$code_cis]["total"])){
         $done_delivery[$code_cis]["total"] = 0;
       }
-      foreach ($list_done_delivery as $d_nomin) {
-        $d_nomin->loadRefsBack();
-        $d_nomin->loadRefPatient();
-        $done_delivery[$code_cis][$code_cip][] = $d_nomin;
-        $done_delivery[$code_cis]["total"] += $d_nomin->quantity;
+      foreach ($list_done_delivery as $_d_delivery) {
+        $_d_delivery->loadRefsBack();
+        $_d_delivery->loadRefPatient();
+        $done_delivery[$code_cis][$code_cip][] = $_d_delivery;
+        $done_delivery[$code_cis]["total"] += $_d_delivery->quantity;
+				$nb_done_total[$code_cis]++;
       }
     }
     $stocks_service[$code_cis][$code_cip] = CProductStockService::getFromCode($code_cip, $service_id);
@@ -345,13 +352,13 @@ $smarty->assign('done'  , $done);
 $smarty->assign('done_delivery', $done_delivery);
 $smarty->assign('stocks_service'  , $stocks_service);
 $smarty->assign('stocks_pharmacie'  , $stocks_pharmacie);
-$smarty->assign('service_id', $service_id);
+$smarty->assign('service', $service);
 $smarty->assign("datetime_min", $datetime_min);
 $smarty->assign("datetime_max", $datetime_max);
 $smarty->assign("now", mbDate());
 $smarty->assign('mode_nominatif', $mode_nominatif);
 $smarty->assign("_lines", $_lines);
-
+$smarty->assign("nb_done_total", $nb_done_total);
 if($mode_nominatif){
   $prescription->_ref_object->loadRefPatient();
   $smarty->assign('prescription', $prescription);
