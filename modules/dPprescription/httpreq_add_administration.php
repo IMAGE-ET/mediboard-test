@@ -110,7 +110,9 @@ if($line instanceof CPrescriptionLineMedicament  && $line->_ref_produit->_ratio_
 }
 	
 // Chargement du sejour
+$line->loadRefPrescription();
 $line->_ref_prescription->loadRefObject();
+
 $sejour = $line->_ref_prescription->_ref_object;
 $sejour->loadRefPatient();
 $patient =& $sejour->_ref_patient;

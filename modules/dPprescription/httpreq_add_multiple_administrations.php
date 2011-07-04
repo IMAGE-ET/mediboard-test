@@ -99,6 +99,7 @@ if (count($adm) > 0) {
 		
 		if (!$date_sel)  $date_sel  = isset($ad['date_sel']) ? $ad['date_sel'] : null;
 		
+		$line->loadRefPrescription();
 		$line->_ref_prescription->loadRefObject();
 		
 		// Si plusieurs patients, ne pas afficher le nom du premier patient trouvé 
