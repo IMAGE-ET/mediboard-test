@@ -382,7 +382,7 @@ Main.add( function(){
         <input type="checkbox" id="in_progress" name="in_progress" checked="checked"/>
         <label for="in_progress" style="font-size: x-small;" title="{{tr}}CPrescription.print_in_progress{{/tr}}">En cours</label>
 				{{else}}
-        <input type="checkbox" id="in_progress" name="in_progress"/>
+        <input type="checkbox" id="in_progress" name="in_progress" style="display: none;"/>
         {{/if}}
 				
 				<input type="checkbox" id="dci" name="dci"/>
