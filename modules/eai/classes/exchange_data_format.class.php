@@ -185,7 +185,7 @@ class CExchangeDataFormat extends CMbMetaObject {
     return $family;
   }
   
-  function getConfigs(CInteropActor $actor_guid) {}
+  function getConfigs($actor_guid) {}
   
   function getMessages() {
     return array(); 

@@ -157,7 +157,7 @@ class CEchangeHprim extends CEchangeXML {
     $this->store();
   }
   
-  function getConfigs(CInteropActor $actor_guid) {
+  function getConfigs($actor_guid) {
     list($sender_class, $sender_id) = explode("-", $actor_guid);
     
     $hprimxml_config = new CHprimXMLConfig();
