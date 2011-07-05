@@ -20,7 +20,7 @@ class CSetuppharmacie extends CSetup {
 		
 		$this->makeRevision("0.1");
 		$query = "CREATE TABLE `prise_dispensation` (
-	              `prise_prevue_id` INT (11) UNSIGNED NOT NULL auto_increment PRIMARY KEY,
+	              `prise_dispensation_id` INT (11) UNSIGNED NOT NULL auto_increment PRIMARY KEY,
 	              `delivery_id` INT (11) UNSIGNED NOT NULL,
                 `datetime` DATETIME NOT NULL,
 	              `quantite_adm` FLOAT NOT NULL,
