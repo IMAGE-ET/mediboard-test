@@ -30,7 +30,8 @@ class CSetuppharmacie extends CSetup {
 	              `object_class` ENUM ('CPrescriptionLineMixItem','CPrescriptionLineMedicament')
               ) /*! ENGINE=MyISAM */;";
     $this->addQuery($query);
-    $query = "ALTER TABLE `prise_prevue` 
+		
+    $query = "ALTER TABLE `prise_dispensation` 
 	              ADD INDEX (`delivery_id`),
 	              ADD INDEX (`datetime`),
                 ADD INDEX (`object_id`),
