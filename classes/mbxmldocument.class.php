@@ -140,10 +140,14 @@ class CMbXMLDocument extends DOMDocument {
   }
   
   function loadXML($source, $options = null) {
-    $source = CMbString::isUTF8($source) ? utf8_decode($source) : $source;
+    $source = $this->getUTF8($source);
     
     return parent::loadXML($source, $options);
   }
+	
+	protected function getUTF8($source) {
+		return CMbString::isUTF8($source) ? utf8_decode($source) : $source;
+	}
   
   function addElement($elParent, $elName, $elValue = null, $elNS = null) {
     $elName  = utf8_encode($elName );

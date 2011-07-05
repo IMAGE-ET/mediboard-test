@@ -25,6 +25,8 @@ class CProductDelivery extends CMbObject {
   
   var $date_dispensation = null;
   var $date_delivery  = null;
+  var $datetime_min  = null;
+  var $datetime_max  = null;
   
   var $quantity       = null;
   var $order          = null;
@@ -84,6 +86,9 @@ class CProductDelivery extends CMbObject {
     $specs['date_dispensation'] = 'dateTime notNull';
     $specs['date_delivery']     = 'dateTime';
     
+    $specs['datetime_min']      = 'dateTime notNull';
+    $specs['datetime_max']      = 'dateTime notNull moreEquals|datetime_min';
+    
     $specs['quantity']          = 'num notNull';
     $specs['order']             = 'bool default|0';
     $specs['manual']            = 'bool default|0';
@@ -133,16 +138,23 @@ class CProductDelivery extends CMbObject {
   }
   
   function isReceived() {
-    $this->loadRefsBack();
+    $this->loadRefsDeliveryTraces();
+		
     $sum = 0;
     foreach ($this->_ref_delivery_traces as $trace) {
-      if ($trace->date_reception)
+      if ($trace->date_reception) {
         $sum += $trace->quantity;
+			}
     }
+		
     return ($sum >= $this->quantity);
   }
   
   function loadRefsBack(){
+    $this->loadRefsDeliveryTraces();
+  }
+  
+  function loadRefsDeliveryTraces(){
     return $this->_ref_delivery_traces = $this->loadBackRefs('delivery_traces');
   }
 

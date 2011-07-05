@@ -872,6 +872,16 @@ class CSetupdPstock extends CSetup {
               `object_class` = 'CService'";
     $this->addQuery($query);
     
-    $this->mod_version = "1.48";
+    $this->makeRevision("1.48");
+    $query = "ALTER TABLE `product_delivery` 
+              ADD `datetime_min` DATETIME NOT NULL,
+              ADD `datetime_max` DATETIME NOT NULL";
+    $this->addQuery($query);
+    $query = "UPDATE `product_delivery` SET 
+              `datetime_min` = `date_dispensation`,
+              `datetime_max` = ADDDATE(`date_dispensation`, 1)";
+    $this->addQuery($query);
+    
+    $this->mod_version = "1.49";
   }
 }
