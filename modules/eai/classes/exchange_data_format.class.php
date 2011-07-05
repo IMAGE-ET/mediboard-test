@@ -154,7 +154,7 @@ class CExchangeDataFormat extends CMbMetaObject {
   
   function handle() {}
   
-  function getMessagesSupported(CInteropActor $actor_guid, $all = true, $evenement = null, $show_actif = null) {
+  function getMessagesSupported($actor_guid, $all = true, $evenement = null, $show_actif = null) {
     list($object_class, $object_id) = explode("-", $actor_guid);
     $family = array();
 
