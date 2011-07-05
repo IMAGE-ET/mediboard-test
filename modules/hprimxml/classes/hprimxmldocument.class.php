@@ -21,8 +21,8 @@ class CHPrimXMLDocument extends CMbXMLDocument {
   var $sous_type = null;
   
   // Behaviour fields
-  var $_ref_emetteur      = null;
-  var $_ref_destinataire  = null;
+  var $_ref_sender      = null;
+  var $_ref_receiver  = null;
   var $_ref_echange_hprim = null;
   
   function __construct($dirschemaname, $schemafilename = null) {
@@ -103,9 +103,8 @@ class CHPrimXMLDocument extends CMbXMLDocument {
   }
   
   function addEnteteMessage($elParent) {
-    
     $echg_hprim      = $this->_ref_echange_hprim;
-    $dest            = $this->_ref_destinataire;
+    $dest            = $this->_ref_receiver;
     $identifiant     = $echg_hprim->_id ? str_pad($echg_hprim->_id, 6, '0', STR_PAD_LEFT) : "ES{$this->now}";
     $date_production = $echg_hprim->_id ? $echg_hprim->date_production : mbXMLDateTime();    
     
@@ -138,9 +137,9 @@ class CHPrimXMLDocument extends CMbXMLDocument {
   function generateTypeEvenement($mbObject, $referent = null, $initiateur = null) {
     $echg_hprim = new CEchangeHprim();
     $echg_hprim->date_production = mbDateTime();
-    $echg_hprim->emetteur_id     = $this->_ref_emetteur ? $this->_ref_emetteur->_id     : null;
-    $echg_hprim->destinataire_id = $this->_ref_destinataire->_id;
-    $echg_hprim->group_id        = $this->_ref_destinataire->group_id;
+    $echg_hprim->sender_id       = $this->_ref_sender ? $this->_ref_sender->_id : null;
+    $echg_hprim->receiver_id     = $this->_ref_receiver->_id;
+    $echg_hprim->group_id        = $this->_ref_receiver->group_id;
     $echg_hprim->type            = $this->type;
     $echg_hprim->sous_type       = $this->sous_type;
     $echg_hprim->object_id       = $mbObject->_id;
@@ -150,7 +149,7 @@ class CHPrimXMLDocument extends CMbXMLDocument {
     $echg_hprim->store();
     
     // Chargement des configs du destinataire
-    $this->_ref_destinataire->loadConfigValues();
+    $this->_ref_receiver->loadConfigValues();
     
     $this->_ref_echange_hprim = $echg_hprim;
             
@@ -200,9 +199,9 @@ class CHPrimXMLDocument extends CMbXMLDocument {
   }
   
   function getTagMediuser() {
-    $this->_ref_echange_hprim->loadRefsDestinataireInterop();
+    $this->_ref_echange_hprim->loadRefsInteropActor();
     
-    return $this->_ref_echange_hprim->_ref_destinataire->_tag_mediuser;
+    return $this->_ref_echange_hprim->_ref_receiver->_tag_mediuser;
   }
   
   function addTexte($elParent, $elName, $elValue, $elMaxSize = 35) {
@@ -217,6 +216,7 @@ class CHPrimXMLDocument extends CMbXMLDocument {
   
   function addCodeLibelle($elParent, $nodeName, $code, $libelle) {
     $codeLibelle = $this->addElement($elParent, $nodeName);
+    $code = str_replace(" ", "", $code);
     $this->addTexte($codeLibelle, "code", $code, 10);
     if ($libelle) {
       $this->addTexte($codeLibelle, "libelle", $libelle, 35);
@@ -703,7 +703,7 @@ class CHPrimXMLDocument extends CMbXMLDocument {
     }
     
     // Cas dans lequel on transmet pas de sortie tant que l'on a pas la sortie réelle
-    if (!$mbVenue->sortie_reelle && ($this->_ref_destinataire->_configs["send_sortie_prevue"] == 0)) {
+    if (!$mbVenue->sortie_reelle && ($this->_ref_receiver->_configs["send_sortie_prevue"] == 0)) {
       return;
     }  
     
@@ -1115,7 +1115,7 @@ class CHPrimXMLDocument extends CMbXMLDocument {
     $this->addAttribute($uniteFonctionnelleResponsable, "responsabilite", "m");
     $service = $mbAffectation->_ref_lit->_ref_chambre->_ref_service;
     $id400Patient = new CIdSante400();
-    $id400Patient->loadLatestFor($service, $this->_ref_echange_hprim->_ref_destinataire->_tag_service);
+    $id400Patient->loadLatestFor($service, $this->_ref_echange_hprim->_ref_receiver->_tag_service);
     $this->addTexte($uniteFonctionnelleResponsable, "code", $id400Patient->id400 ? $id400Patient->id400 : $service->_id, 10);
     $this->addTexte($uniteFonctionnelleResponsable, "libelle", $service->_view, 35);
   }

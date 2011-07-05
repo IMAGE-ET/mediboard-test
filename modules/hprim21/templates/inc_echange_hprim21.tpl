@@ -55,9 +55,9 @@
   <td>
     {{$object->type_message}}
   </td>
-  {{assign var=emetteur value=$object->_ref_emetteur}}
-  <td class="{{if $object->emetteur_id == '0'}}error{{/if}}">
-     {{if $object->_self_emetteur}}
+  {{assign var=emetteur value=$object->_ref_sender}}
+  <td class="{{if $object->sender_id == '0'}}error{{/if}}">
+     {{if $object->_self_sender}}
      <label title='[SELF]' style="font-weight:bold">
        [SELF]
      </label>
@@ -65,9 +65,9 @@
        {{mb_value object=$emetteur field="nom"}}
      {{/if}}
   </td>
-  {{assign var=destinataire value=$object->_ref_destinataire}}
+  {{assign var=destinataire value=$object->_ref_receiver}}
   <td>
-    {{if $object->_self_destinataire}}
+    {{if $object->_self_receiver}}
      <label title='[SELF]' style="font-weight:bold">
        [SELF]
      </label>

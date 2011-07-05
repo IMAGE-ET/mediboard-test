@@ -17,10 +17,7 @@
  */
 
 class CEAIOperator {
-  function event($data_format) {
-    
-  }
-  
+  function event($data_format) {}
 }
 
 ?>

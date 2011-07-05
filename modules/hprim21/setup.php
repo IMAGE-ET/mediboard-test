@@ -372,6 +372,23 @@ class CSetuphprim21 extends CSetup {
               CHANGE `type_message` `sous_type` VARCHAR( 255 )";
     $this->addQuery($query);
     
-    $this->mod_version = "0.18";
+    $this->makeRevision("0.18");
+    
+    $query = "ALTER TABLE `echange_hprim21` 
+                CHANGE `destinataire_id` `receiver_id` INT (11) UNSIGNED;";
+    $this->addQuery($query);
+    
+    $this->makeRevision("0.19");
+    
+    $query = "ALTER TABLE `echange_hprim21` 
+                ADD `sender_id` INT (11) UNSIGNED AFTER `emetteur_id`,
+                ADD `sender_class` ENUM ('CSenderFTP','CSenderSOAP') AFTER `sender_id`;";
+    $this->addQuery($query);
+    
+    $query = "ALTER TABLE `echange_hprim21` 
+                ADD INDEX (`sender_id`);";
+    $this->addQuery($query);
+    
+    $this->mod_version = "0.20";
   }
 }

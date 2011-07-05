@@ -64,48 +64,48 @@ class CHPrimXMLFusionPatient extends CHPrimXMLEvenementsPatients {
   
   /**
    * Fusion and recording a patient with an IPP in the system
-   * @param CHPrimXMLAcquittementsPatients $domAcquittement
-   * @param CEchangeHprim $echange_hprim
+   * @param CHPrimXMLAcquittementsPatients $dom_acq
+   * @param CEchangeHprim $echg_hprim
    * @param CPatient $newPatient
    * @param array $data
    * @return string acquittement 
    **/
-  function fusionPatient($domAcquittement, $newPatient, $data) {
-    $echange_hprim = $this->_ref_echange_hprim;
+  function fusionPatient($dom_acq, $newPatient, $data) {
+    $echg_hprim = $this->_ref_echange_hprim;
     
     // Si CIP
     if (!CAppUI::conf('sip server')) {
       $mbPatientElimine = new CPatient();
       $mbPatient = new CPatient();
      
-      $dest_hprim = $echange_hprim->_ref_emetteur;
+      $sender = $echg_hprim->_ref_sender;
 
       // Acquittement d'erreur : identifiants source et cible non fournis pour le patient / patientElimine
       if (!$data['idSourcePatient'] && !$data['idCiblePatient'] && 
 			    !$data['idSourcePatientElimine'] && !$data['idCiblePatientElimine']) {
-        $messageAcquittement = $domAcquittement->generateAcquittements("erreur", "E005", null, $newPatient);
-        $doc_valid = $domAcquittement->schemaValidate();
+        $msgAcq = $dom_acq->generateAcquittements("erreur", "E005", null, $newPatient);
+        $doc_valid = $dom_acq->schemaValidate();
 				
-        $echange_hprim->setAckError($doc_valid, $messageAcquittement, "erreur");
-        return $messageAcquittement;
+        $echg_hprim->setAckError($doc_valid, $msgAcq, "erreur");
+        return $msgAcq;
       }
       
-      $id400Patient = CIdSante400::getMatch("CPatient", $dest_hprim->_tag_patient, $data['idSourcePatient']);
+      $id400Patient = CIdSante400::getMatch("CPatient", $sender->_tag_patient, $data['idSourcePatient']);
       if ($mbPatient->load($data['idCiblePatient'])) {
         if ($mbPatient->_id != $id400Patient->object_id) {
           $commentaire = "L'identifiant source fait référence au patient : $id400Patient->object_id et l'identifiant cible au patient : $mbPatient->_id.";
-          return $domAcquittement->generateAcquittementsError("E004", $commentaire, $newPatient);
+          return $dom_acq->generateAcquittementsError("E004", $commentaire, $newPatient);
         }
       } 
       if (!$mbPatient->_id) {
         $mbPatient->load($id400Patient->object_id);
       }
       
-      $id400PatientElimine = CIdSante400::getMatch("CPatient", $dest_hprim->_tag_patient, $data['idSourcePatientElimine']);
+      $id400PatientElimine = CIdSante400::getMatch("CPatient", $sender->_tag_patient, $data['idSourcePatientElimine']);
       if ($mbPatientElimine->load($data['idCiblePatientElimine'])) {
         if ($mbPatientElimine->_id != $id400PatientElimine->object_id) {
           $commentaire = "L'identifiant source fait référence au patient : $id400PatientElimine->object_id et l'identifiant cible au patient : $mbPatientElimine->_id.";
-          return $domAcquittement->generateAcquittementsError("E041", $commentaire, $newPatient);
+          return $dom_acq->generateAcquittementsError("E041", $commentaire, $newPatient);
         }
       }
       if (!$mbPatientElimine->_id) {
@@ -114,11 +114,11 @@ class CHPrimXMLFusionPatient extends CHPrimXMLEvenementsPatients {
       
       if (!$mbPatient->_id || !$mbPatientElimine->_id) {
         $commentaire = !$mbPatient->_id ? "Le patient $mbPatient->_id est inconnu dans Mediboard." : "Le patient $mbPatientElimine->_id est inconnu dans Mediboard.";
-        return $domAcquittement->generateAcquittementsError("E012", $commentaire, $newPatient);
+        return $dom_acq->generateAcquittementsError("E012", $commentaire, $newPatient);
       }
 
       // Passage en trash de l'IPP du patient a éliminer
-      $id400PatientElimine->tag = CAppUI::conf('dPpatients CPatient tag_ipp_trash').$dest_hprim->_tag_patient;
+      $id400PatientElimine->tag = CAppUI::conf('dPpatients CPatient tag_ipp_trash').$sender->_tag_patient;
       $id400PatientElimine->store();
       
       $messages = array();
@@ -131,12 +131,12 @@ class CHPrimXMLFusionPatient extends CHPrimXMLEvenementsPatients {
       // Erreur sur le check du merge
       if ($checkMerge) {
         $commentaire = "La fusion de ces deux patients n'est pas possible à cause des problèmes suivants : $checkMerge";
-        return $domAcquittement->generateAcquittementsError("E010", $commentaire, $newPatient);
+        return $dom_acq->generateAcquittementsError("E010", $commentaire, $newPatient);
       }
       
       if ($msg = $mbPatient->mergeDBFields($patientsElimine_array)) {
         $commentaire = "La fusion des données des patients a échoué : $msg";
-        return $domAcquittement->generateAcquittementsError("E011", $commentaire, $newPatient);
+        return $dom_acq->generateAcquittementsError("E011", $commentaire, $newPatient);
       }
       $mbPatientElimine_id = $mbPatientElimine->_id;
       
@@ -144,7 +144,7 @@ class CHPrimXMLFusionPatient extends CHPrimXMLEvenementsPatients {
       $mbPatient->_id = $first_patient_id;
       
       // Notifier les autres destinataires
-      $mbPatient->_hprim_initiateur_group_id = $dest_hprim->group_id;
+      $mbPatient->_hprim_initiateur_group_id = $sender->group_id;
       $mbPatient->_merging = CMbArray::pluck($patientsElimine_array, "_id");
       $msg = $mbPatient->merge($patientsElimine_array);
       
@@ -156,18 +156,18 @@ class CHPrimXMLFusionPatient extends CHPrimXMLEvenementsPatients {
         $commentaire = "Le patient $mbPatient->_id a été fusionné avec le patient $mbPatientElimine_id.";
       }
         
-      $messageAcquittement = $domAcquittement->generateAcquittements($avertissement ? "avertissement" : "OK", $codes, $avertissement ? $avertissement : substr($commentaire, 0, 4000), $newPatient); 
-      $doc_valid = $domAcquittement->schemaValidate();
-      $echange_hprim->acquittement_valide = $doc_valid ? 1 : 0;
+      $msgAcq = $dom_acq->generateAcquittements($avertissement ? "avertissement" : "OK", $codes, $avertissement ? $avertissement : substr($commentaire, 0, 4000), $newPatient); 
+      $doc_valid = $dom_acq->schemaValidate();
+      $echg_hprim->acquittement_valide = $doc_valid ? 1 : 0;
         
-      $echange_hprim->statut_acquittement = $avertissement ? "avertissement" : "OK";
+      $echg_hprim->statut_acquittement = $avertissement ? "avertissement" : "OK";
     }
-    $echange_hprim->_acquittement = $messageAcquittement;
-    $echange_hprim->date_echange = mbDateTime();
-    $echange_hprim->setObjectIdClass("CPatient", $data['idCiblePatient'] ? $data['idCiblePatient'] : $newPatient->_id);
-    $echange_hprim->store();
+    $echg_hprim->_acquittement = $msgAcq;
+    $echg_hprim->date_echange = mbDateTime();
+    $echg_hprim->setObjectIdClass("CPatient", $data['idCiblePatient'] ? $data['idCiblePatient'] : $newPatient->_id);
+    $echg_hprim->store();
 
-    return $messageAcquittement;
+    return $msgAcq;
   }
 }
 ?>

@@ -312,7 +312,47 @@ class CSetuphprimxml extends CSetup {
               DROP INDEX `acquittement_content_id`;"; 
     $this->addQuery($query);
     
-    $this->mod_version = "0.32";
+    $this->makeRevision("0.32");
+    
+    $query = "ALTER TABLE `echange_hprim` 
+                CHANGE `destinataire_id` `receiver_id` INT (11) UNSIGNED;";
+    $this->addQuery($query);
+    
+    $this->makeRevision("0.33");
+    
+    $query = "ALTER TABLE `echange_hprim` 
+                ADD `sender_id` INT (11) UNSIGNED AFTER `emetteur_id`,
+                ADD `sender_class` ENUM ('CSenderFTP','CSenderSOAP') AFTER `sender_id`;";
+    $this->addQuery($query);
+    
+    $query = "ALTER TABLE `echange_hprim` 
+                ADD INDEX (`sender_id`);";
+    $this->addQuery($query);
+    
+    $this->makeRevision("0.34");
+    
+    $query = "CREATE TABLE `hprimxml_config` (
+                `hprimxml_config_id` INT (11) UNSIGNED NOT NULL auto_increment PRIMARY KEY,
+                `sender_id` INT (11) UNSIGNED,
+                `sender_class` ENUM ('CSenderFTP','CSenderSOAP'),
+                `type_sej_hospi` VARCHAR (255),
+                `type_sej_ambu` VARCHAR (255),
+                `type_sej_urg` VARCHAR (255),
+                `type_sej_exte` VARCHAR (255),
+                `type_sej_scanner` VARCHAR (255),
+                `type_sej_chimio` VARCHAR (255),
+                `type_sej_dialyse` VARCHAR (255),
+                `type_sej_pa` VARCHAR (255),
+                `use_sortie_matching` ENUM ('0','1') DEFAULT '1',
+                `fully_qualified` ENUM ('0','1') DEFAULT '1'
+              ) /*! ENGINE=MyISAM */;";
+    $this->addQuery($query);
+    
+    $query = "ALTER TABLE `hprimxml_config` 
+              ADD INDEX (`sender_id`);";
+    $this->addQuery($query);
+    
+    $this->mod_version = "0.35";
   }
 }
 

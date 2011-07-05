@@ -66,20 +66,21 @@ class COperatorHprimXML extends CEAIOperator {
       $echg_hprim->date_production = mbDateTime();
       $echg_hprim->store();
       
-      $echg_hprim->loadRefsDestinataireInterop();
-      // Chargement des configs de l'émetteur
-      $echg_hprim->_ref_emetteur->loadConfigValues();
-  
+      $echg_hprim->loadRefsInteropActor();
+
+      // Chargement des configs de l'expéditeur
+      $echg_hprim->_ref_sender->getConfigs($data_format);
+
       $dom_evt->_ref_echange_hprim = $echg_hprim;
       $dom_acq->_ref_echange_hprim = $echg_hprim;
     
       // Message événement patient
       if ($dom_evt instanceof CHPrimXMLEvenementsPatients) {
-        return self::eventPatient($data_format, $dom_evt, $data, $dom_acq, $echg_hprim);
+        return self::eventPatient($dom_evt, $data, $dom_acq, $echg_hprim);
       }
       // Message serveur activité PMSI
       elseif ($dom_evt instanceof CHPrimXMLEvenementsServeurActivitePmsi) {
-        return self::eventPMSI($data_format, $dom_evt, $data, $dom_acq, $echg_hprim);
+        return self::eventPMSI($dom_evt, $data, $dom_acq, $echg_hprim);
       }
     } catch(Exception $e) {
       $echg_hprim->populateEchange($data_format, $dom_evt);
@@ -104,7 +105,7 @@ class COperatorHprimXML extends CEAIOperator {
    * @param CHPrimXMLEvenementsPatients messagePatient
    * @return CHPrimXMLAcquittementsPatients messageAcquittement 
    **/
-  static function eventPatient(CExchangeDataFormat $data_format, CHPrimXMLEvenementsPatients $dom_evt, 
+  static function eventPatient(CHPrimXMLEvenementsPatients $dom_evt, 
                                $data = array(), CHPrimXMLAcquittementsPatients $dom_acq, CEchangeHprim $echg_hprim) {
     $newPatient = new CPatient();
     $newPatient->_hprim_initiator_id = $echg_hprim->_id;

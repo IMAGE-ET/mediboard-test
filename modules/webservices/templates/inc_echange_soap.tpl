@@ -10,7 +10,7 @@
 
 <tr>
   <td>
-   {{if $object->_self_emetteur}}
+   {{if $object->_self_sender}}
      <img src="images/icons/prev.png" alt="&lt;" />
    {{else}}
      <img src="images/icons/next.png" alt="&gt;" />
@@ -32,7 +32,7 @@
     </span>
   </td>
   <td>
-    {{if $object->_self_emetteur}}
+    {{if $object->_self_sender}}
      <label title='{{mb_value object=$object field="emetteur"}}' style="font-weight:bold">
        [SELF]
      </label>
@@ -41,7 +41,7 @@
      {{/if}}
   </td>
   <td>
-    {{if $object->_self_destinataire}}
+    {{if $object->_self_receiver}}
      <label title='{{mb_value object=$object field="destinataire"}}' style="font-weight:bold">
        [SELF]
      </label>

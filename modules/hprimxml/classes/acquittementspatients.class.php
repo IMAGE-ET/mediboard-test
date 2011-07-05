@@ -44,11 +44,11 @@ class CHPrimXMLAcquittementsPatients extends CHPrimXMLDocument {
     $group->loadLastId400();
     $this->addAgent($agents, "système", CAppUI::conf('mb_id'), $group->text);
 
-    $echg_hprim->loadRefsDestinataireInterop();
+    $echg_hprim->loadRefsInteropActor();
     // Pour un acquittement l'emetteur du message devient destinataire
     $destinataire = $this->addElement($enteteMessageAcquittement, "destinataire");
     $agents = $this->addElement($destinataire, "agents");
-    $this->addAgent($agents, "application", $echg_hprim->_ref_emetteur->nom, $echg_hprim->_ref_emetteur->libelle);
+    $this->addAgent($agents, "application", $echg_hprim->_ref_sender->nom, $echg_hprim->_ref_sender->libelle);
     /* @todo Doit-on gérer le système du destinataire ? */
     //$this->addAgent($agents, "système", $group->_id, $group->text);
 

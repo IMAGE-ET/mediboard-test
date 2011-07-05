@@ -87,6 +87,19 @@ class CInteropSender extends CInteropActor {
   }
   
   function read() {}
+  
+  function getConfigs(CExchangeDataFormat $data_format) {
+    $data_format->getConfigs($this->_guid);
+    $format_config = $data_format->_configs_format;
+    
+    if (!$format_config->_id) {
+      return;
+    }
+    
+    foreach ($format_config->getConfigFields() as $_config_field) {
+      $this->_configs[$_config_field] = $format_config->$_config_field;
+    }
+  }
 }
 
 ?>

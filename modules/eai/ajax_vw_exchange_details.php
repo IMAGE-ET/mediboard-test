@@ -21,7 +21,7 @@ $object = new CMbObject();
 $exchange = $object->loadFromGuid($exchange_guid);
 
 $exchange->loadRefs(); 
-$exchange->loadRefsDestinataireInterop();
+$exchange->loadRefsInteropActor();
 $exchange->getErrors();
 $exchange->getObservations();
 

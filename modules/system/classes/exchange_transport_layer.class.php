@@ -23,8 +23,8 @@ class CExchangeTransportLayer extends CMbObject {
   var $response_time      = null;
     
   // Form fields
-  var $_self_emetteur     = null;
-  var $_self_destinataire = null;
+  var $_self_sender   = null;
+  var $_self_receiver = null;
   
   // Filter fields
   var $_date_min          = null;
@@ -41,8 +41,8 @@ class CExchangeTransportLayer extends CMbObject {
     $props["purge"]                 = "bool";
     $props["response_time"]         = "float";
 
-    $props["_self_emetteur"]        = "bool";
-    $props["_self_destinataire"]    = "bool";
+    $props["_self_sender"]          = "bool";
+    $props["_self_receiver"]        = "bool";
     $props["_date_min"]             = "dateTime";
     $props["_date_max"]             = "dateTime";
     
@@ -52,8 +52,8 @@ class CExchangeTransportLayer extends CMbObject {
   function updateFormFields() {
     parent::updateFormFields();
     
-    $this->_self_emetteur     = $this->emetteur     == CAppUI::conf('mb_id');
-    $this->_self_destinataire = $this->destinataire == CAppUI::conf('mb_id');
+    $this->_self_sender   = $this->emetteur     == CAppUI::conf('mb_id');
+    $this->_self_receiver = $this->destinataire == CAppUI::conf('mb_id');
     
     // ms
     $this->response_time = $this->response_time * 1000;

@@ -128,7 +128,7 @@ foreach ($sejours as $sejour) {
   }
   
   $domEvenementVenuePatient = new CHPrimXMLVenuePatient();
-  $domEvenementVenuePatient->_ref_destinataire = $dest_hprim;
+  $domEvenementVenuePatient->_ref_receiver = $dest_hprim;
   
   $dest_hprim->sendEvenementPatient($domEvenementVenuePatient, $sejour);
   
@@ -141,7 +141,7 @@ foreach ($sejours as $sejour) {
   
   if ($sejour->_ref_patient->code_regime) {
     $domEvenementDebiteursVenue = new CHPrimXMLDebiteursVenue();
-    $domEvenementDebiteursVenue->_ref_destinataire = $dest_hprim;
+    $domEvenementDebiteursVenue->_ref_receiver = $dest_hprim;
     
     $dest_hprim->sendEvenementPatient($domEvenementDebiteursVenue, $sejour);
     
@@ -164,7 +164,7 @@ foreach ($sejours as $sejour) {
       $_affectation->_ref_sejour->loadRefPraticien();
       
       $domEvenemenMouvementPatient = new CHPrimXMLMouvementPatient();
-      $domEvenemenMouvementPatient->_ref_destinataire = $dest_hprim;
+      $domEvenemenMouvementPatient->_ref_receiver = $dest_hprim;
       
       $dest_hprim->sendEvenementPatient($domEvenemenMouvementPatient, $_affectation);
       

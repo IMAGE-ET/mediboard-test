@@ -77,32 +77,32 @@ class CHPrimXMLDebiteursVenue extends CHPrimXMLEvenementsPatients {
   
   /**
    * Gestion des débiteurs d'une venue de patient
-   * @param CHPrimXMLAcquittementsPatients $domAcquittement
-   * @param CEchangeHprim $echange_hprim
+   * @param CHPrimXMLAcquittementsPatients $dom_acq
+   * @param CEchangeHprim $echg_hprim
    * @param CPatient $newPatient
    * @param CSejour $newSejour
    * @param array $data
-   * @return CHPrimXMLAcquittementsPatients $messageAcquittement 
+   * @return CHPrimXMLAcquittementsPatients $msgAcq 
    **/
-  function debiteursVenue($domAcquittement, $newPatient, $data, &$newVenue = null) {
-    $echange_hprim = $this->_ref_echange_hprim;
+  function debiteursVenue($dom_acq, $newPatient, $data, &$newVenue = null) {
+    $echg_hprim = $this->_ref_echange_hprim;
     
     // Traitement du patient
     $domEnregistrementPatient = new CHPrimXMLEnregistrementPatient();
-    $domEnregistrementPatient->_ref_echange_hprim = $echange_hprim;
-    $messageAcquittement = $domEnregistrementPatient->enregistrementPatient($domAcquittement, $newPatient, $data);
-    if ($echange_hprim->statut_acquittement != "OK") {
-      return $messageAcquittement;
+    $domEnregistrementPatient->_ref_echange_hprim = $echg_hprim;
+    $msgAcq = $domEnregistrementPatient->enregistrementPatient($dom_acq, $newPatient, $data);
+    if ($echg_hprim->statut_acquittement != "OK") {
+      return $msgAcq;
     }
     
-    $domAcquittement = new CHPrimXMLAcquittementsPatients();
-    $domAcquittement->_identifiant_acquitte = $data['identifiantMessage'];
-    $domAcquittement->_sous_type_evt        = $this->sous_type;
-    $domAcquittement->_ref_echange_hprim    = $echange_hprim;
+    $dom_acq = new CHPrimXMLAcquittementsPatients();
+    $dom_acq->_identifiant_acquitte = $data['identifiantMessage'];
+    $dom_acq->_sous_type_evt        = $this->sous_type;
+    $dom_acq->_ref_echange_hprim    = $echg_hprim;
     
     // Si CIP
     if (!CAppUI::conf('sip server')) { 
-      $dest_hprim = $echange_hprim->_ref_emetteur;
+      $sender = $echg_hprim->_ref_sender;
       
       $avertissement = null;
       
@@ -111,7 +111,7 @@ class CHPrimXMLDebiteursVenue extends CHPrimXMLEvenementsPatients {
       $newPatient->repair();
       
       // Notifier les autres destinataires
-      $newPatient->_hprim_initiateur_group_id = $dest_hprim->group_id;
+      $newPatient->_hprim_initiateur_group_id = $sender->group_id;
       $msgPatient = $newPatient->store();
       
       $newPatient->loadLogs();
@@ -129,19 +129,19 @@ class CHPrimXMLDebiteursVenue extends CHPrimXMLEvenementsPatients {
         $commentaire = "Patient modifiée : $newPatient->_id. Les champs mis à jour sont les suivants : $modified_fields.";
       }
       
-      $messageAcquittement = $domAcquittement->generateAcquittements($avertissement ? "avertissement" : "OK", $codes, $avertissement ? $avertissement : substr($commentaire, 0, 4000)); 
-      $doc_valid = $domAcquittement->schemaValidate();
-      $echange_hprim->_acquittement_valide = $doc_valid ? 1 : 0;
+      $msgAcq = $dom_acq->generateAcquittements($avertissement ? "avertissement" : "OK", $codes, $avertissement ? $avertissement : substr($commentaire, 0, 4000)); 
+      $doc_valid = $dom_acq->schemaValidate();
+      $echg_hprim->_acquittement_valide = $doc_valid ? 1 : 0;
         
-      $echange_hprim->statut_acquittement = $avertissement ? "avertissement" : "OK";
+      $echg_hprim->statut_acquittement = $avertissement ? "avertissement" : "OK";
     }
 
-    $echange_hprim->_acquittement = $messageAcquittement;
-    $echange_hprim->date_echange = mbDateTime();
-    $echange_hprim->setObjectIdClass("CPatient", $data['idCiblePatient'] ? $data['idCiblePatient'] : $newPatient->_id);
-    $echange_hprim->store();
+    $echg_hprim->_acquittement = $msgAcq;
+    $echg_hprim->date_echange = mbDateTime();
+    $echg_hprim->setObjectIdClass("CPatient", $data['idCiblePatient'] ? $data['idCiblePatient'] : $newPatient->_id);
+    $echg_hprim->store();
 
-    return $messageAcquittement;
+    return $msgAcq;
   }
 }
 

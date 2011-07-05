@@ -10,7 +10,7 @@
 
 <tr>
   <td class="narrow">
-   {{if $object->_self_emetteur}}
+   {{if $object->_self_sender}}
      <img src="images/icons/prev.png" alt="&lt;" />
    {{else}}
      <img src="images/icons/next.png" alt="&gt;" />
@@ -30,10 +30,10 @@
         })">
       </button>
     </form>
-    {{if $object->_self_destinataire}}
+    {{if $object->_self_receiver}}
       <button class="change notext" onclick="ExchangeDataFormat.reprocessing('{{$object->_guid}}')" type="button">{{tr}}Reprocess{{/tr}}</button>
     {{/if}}
-    {{if $object->_self_emetteur}}
+    {{if $object->_self_sender}}
       <button class="send notext" onclick="ExchangeDataFormat.sendMessage('{{$object->_guid}}')" type="button">{{tr}}Reprocess{{/tr}}</button>
     {{/if}}
   </td>
@@ -64,9 +64,9 @@
       {{mb_value object=$object field="date_production" format=relative}}
     </label>
   </td>
-  {{assign var=emetteur value=$object->_ref_emetteur}}
-  <td class="{{if $object->emetteur_id == '0'}}error{{/if}} narrow">
-     {{if $object->_self_emetteur}}
+  {{assign var=emetteur value=$object->_ref_sender}}
+  <td class="{{if $object->sender_id == '0'}}error{{/if}} narrow">
+     {{if $object->_self_sender}}
      <label title='[SELF]' style="font-weight:bold">
        [SELF]
      </label>
@@ -76,9 +76,9 @@
        </a>
      {{/if}}
   </td>
-  {{assign var=destinataire value=$object->_ref_destinataire}}
+  {{assign var=destinataire value=$object->_ref_receiver}}
   <td class="narrow">
-    {{if $object->_self_destinataire}}
+    {{if $object->_self_receiver}}
      <label title='[SELF]' style="font-weight:bold">
        [SELF]
      </label>

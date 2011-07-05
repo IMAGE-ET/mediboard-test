@@ -65,7 +65,19 @@ class CSetupeai extends CSetup {
               ADD INDEX (`object_class`);";
     $this->addQuery($sql);
     
-    $this->mod_version = "0.03";
+    $this->makeRevision("0.03");
+    
+    $query = "ALTER TABLE `echange_any` 
+                CHANGE `destinataire_id` `receiver_id` INT (11) UNSIGNED;";
+    $this->addQuery($query);
+    
+    $this->makeRevision("0.04");
+    
+    $query = "ALTER TABLE `echange_any` 
+                CHANGE `emetteur_id` `sender_id` INT (11) UNSIGNED;";
+    $this->addQuery($query);
+    
+    $this->mod_version = "0.05";
   }
 }
 

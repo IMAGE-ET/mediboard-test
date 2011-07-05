@@ -14,21 +14,11 @@ class CDestinataireHprimConfig extends CMbObject {
   var $object_id            = null; // CDestinataireHprim
   // Object configs
   var $send_sortie_prevue   = null; 
-  var $type_sej_hospi       = null;
-  var $type_sej_ambu        = null;
-  var $type_sej_urg         = null;
-  var $type_sej_exte        = null;
-  var $type_sej_scanner     = null;
-  var $type_sej_chimio      = null;
-  var $type_sej_dialyse     = null;
-  var $type_sej_pa          = null;
   var $receive_ack          = null;
   var $send_all_patients    = null;
   var $send_debiteurs_venue = null;
   var $send_mvt_patients    = null;
   var $send_default_serv_with_type_sej = null;
-  var $use_sortie_matching  = null;
-  var $fully_qualified      = null;
 
   function getSpec() {
     $spec = parent::getSpec();
@@ -39,27 +29,17 @@ class CDestinataireHprimConfig extends CMbObject {
   }
 
   function getProps() {
-    $specs = parent::getProps();
-    $specs["object_id"]                       = "ref class|CDestinataireHprim";
+    $props = parent::getProps();
+    $props["object_id"]                       = "ref class|CDestinataireHprim";
     
-    $specs["send_sortie_prevue"]              = "bool default|1";
-    $specs["type_sej_hospi"]                  = "str";
-    $specs["type_sej_ambu"]                   = "str";
-    $specs["type_sej_urg"]                    = "str";
-    $specs["type_sej_exte"]                   = "str";
-    $specs["type_sej_scanner"]                = "str";
-    $specs["type_sej_chimio"]                 = "str";
-    $specs["type_sej_dialyse"]                = "str";
-    $specs["type_sej_pa"]                     = "str";
-    $specs["receive_ack"]                     = "bool default|1";
-    $specs["send_all_patients"]               = "bool default|0";
-    $specs["send_debiteurs_venue"]            = "bool default|1";
-    $specs["send_mvt_patients"]               = "bool default|0";
-    $specs["send_default_serv_with_type_sej"] = "bool default|0";
-    $specs["use_sortie_matching"]             = "bool default|1";
-    $specs["fully_qualified"]                 = "bool default|1";
+    $props["send_sortie_prevue"]              = "bool default|1"; 
+    $props["receive_ack"]                     = "bool default|1";
+    $props["send_all_patients"]               = "bool default|0";
+    $props["send_debiteurs_venue"]            = "bool default|1";
+    $props["send_mvt_patients"]               = "bool default|0";
+    $props["send_default_serv_with_type_sej"] = "bool default|0";
     
-    return $specs;
+    return $props;
   }
 }
 ?>

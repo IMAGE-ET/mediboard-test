@@ -83,10 +83,9 @@ class CHPrimXMLEvenementsPatients extends CHPrimXMLEvenements {
     $mbPatient = $this->getActiviteSocioProfessionnelle($node, $mbPatient);
     //$mbPatient = $this->getPersonnesPrevenir($node, $mbPatient);
     
-    $emetteur = $this->_ref_echange_hprim->_ref_emetteur;
-    $emetteur->loadConfigValues();
+    $sender = $this->_ref_echange_hprim->_ref_sender;
     
-    if (!$emetteur->_configs["fully_qualified"]) {
+    if (!$sender->_configs["fully_qualified"]) {
       $mbPatient->nullifyAlteredFields();
     }
     
@@ -289,8 +288,7 @@ class CHPrimXMLEvenementsPatients extends CHPrimXMLEvenements {
       $mbVenue->facture = 1;
     }
         
-    $emetteur = $this->_ref_echange_hprim->_ref_emetteur;
-    $emetteur->loadConfigValues();
+    $sender = $this->_ref_echange_hprim->_ref_sender;
 
     // Obligatoire pour MB
     $nature = $xpath->queryAttributNode("hprim:natureVenueHprim", $node, "valeur", "", false);
@@ -303,7 +301,7 @@ class CHPrimXMLEvenementsPatients extends CHPrimXMLEvenements {
     );
 
     // Détermine le type de venue depuis la config des numéros de dossier 
-    $type_config = self::getVenueType($emetteur, $mbVenue->_num_dossier);
+    $type_config = self::getVenueType($sender, $mbVenue->_num_dossier);
     if ($type_config) {
       $mbVenue->type = $type_config;
     }
@@ -321,7 +319,7 @@ class CHPrimXMLEvenementsPatients extends CHPrimXMLEvenements {
     return $mbVenue;
   }
   
-  static function getVenueType($emetteur, $num_dossier) {
+  static function getVenueType($sender, $num_dossier) {
     $types = array(
       "type_sej_hospi"   => "comp",
       "type_sej_ambu"    => "ambu",
@@ -333,9 +331,9 @@ class CHPrimXMLEvenementsPatients extends CHPrimXMLEvenements {
     );
     
     foreach($types as $config => $type) {
-      if (!$emetteur->_configs[$config]) continue;
+      if (!$sender->_configs[$config]) continue;
       
-      if (preg_match($emetteur->_configs[$config], $num_dossier)) {
+      if (preg_match($sender->_configs[$config], $num_dossier)) {
         return $type;
       }
     }
@@ -384,7 +382,7 @@ class CHPrimXMLEvenementsPatients extends CHPrimXMLEvenements {
   function getMedecins($node, CSejour $mbVenue) {    
     $xpath = new CHPrimXPath($node->ownerDocument);
     
-    $emetteur = $this->_ref_echange_hprim->_ref_emetteur;
+    $sender = $this->_ref_echange_hprim->_ref_sender;
     $medecins = $xpath->queryUniqueNode("hprim:medecins", $node);
     if ($medecins instanceof DOMElement) {
       $medecin = $medecins->childNodes;
@@ -403,7 +401,7 @@ class CHPrimXMLEvenementsPatients extends CHPrimXMLEvenements {
     if (!$mbVenue->praticien_id) {
       $user = new CUser();
       $mediuser = new CMediusers();
-      $user->user_last_name = CAppUI::conf("hprimxml medecinIndetermine")." $emetteur->group_id";
+      $user->user_last_name = CAppUI::conf("hprimxml medecinIndetermine")." $sender->group_id";
       if (!$user->loadMatchingObject()) {
         $mediuser->_user_last_name = $user->user_last_name;
         $mediuser->_id = $this->createPraticien($mediuser);
@@ -424,7 +422,7 @@ class CHPrimXMLEvenementsPatients extends CHPrimXMLEvenements {
     $mediuser = new CMediusers();
     $id400 = new CIdSante400();
     $id400->object_class = "CMediusers";
-    $id400->tag = $this->_ref_echange_hprim->_ref_emetteur->_tag_mediuser;
+    $id400->tag = $this->_ref_echange_hprim->_ref_sender->_tag_mediuser;
     $id400->id400 = $code;
     if ($id400->loadMatchingObject()) {
       $mediuser->_id = $id400->object_id;
@@ -445,11 +443,11 @@ class CHPrimXMLEvenementsPatients extends CHPrimXMLEvenements {
   }
   
   function createPraticien(CMediusers $mediuser) {
-    $emetteur = $this->_ref_echange_hprim->_ref_emetteur;
+    $sender = $this->_ref_echange_hprim->_ref_sender;
     
     $functions = new CFunctions();
     $functions->text = CAppUI::conf("hprimxml functionPratImport");
-    $functions->group_id = $emetteur->group_id;
+    $functions->group_id = $sender->group_id;
     $functions->loadMatchingObject();
     if (!$functions->loadMatchingObject()) {
       $functions->type = "cabinet";

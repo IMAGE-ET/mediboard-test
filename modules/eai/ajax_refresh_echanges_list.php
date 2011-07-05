@@ -24,11 +24,6 @@ $page                = CValue::get('page', 0);
 $_date_min           = CValue::getOrSession('_date_min', mbDateTime("-7 day"));
 $_date_max           = CValue::getOrSession('_date_max', mbDateTime("+1 day"));
 
-if (!$type) {
-  CAppUI::stepAjax("exchange-choose-type", UI_MSG_WARNING);
-  return;
-}
-
 $exchange = new $exchange_class_name;
 
 // Récupération de la liste des echanges
@@ -36,10 +31,10 @@ $itemExchange = new $exchange_class_name;
 
 $where = array();
 if (isset($t["emetteur"])) {
-  $where["emetteur_id"] = " IS NULL";
+  $where["sender_id"] = " IS NULL";
 }
 if (isset($t["destinataire"])) {
-  $where["destinataire_id"] = " IS NULL";
+  $where["receiver_id"] = " IS NULL";
 }
 if ($_date_min && $_date_max) {
   $where['date_production'] = " BETWEEN '".$_date_min."' AND '".$_date_max."' "; 
@@ -82,7 +77,7 @@ $exchanges = $itemExchange->loadList($where, $order, "$page, 20", null, null, $f
 foreach($exchanges as $_exchange) {
   $_exchange->loadRefsBack();
   $_exchange->getObservations();
-  $_exchange->loadRefsDestinataireInterop();
+  $_exchange->loadRefsInteropActor();
 }
 
 // Création du template

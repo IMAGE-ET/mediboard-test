@@ -53,4 +53,17 @@ InteropActor = {
       InteropActor.refreshFormatsAvailable(actor_guid); 
   	});
   },
+  
+  refreshConfigsFormats : function(actor_guid) {
+    var url = new Url("eai", "ajax_refresh_configs_formats");
+    url.addParam("actor_guid", actor_guid);
+    url.requestUpdate("configs_formats_"+actor_guid);
+  },
+  
+  viewConfigsFormat : function(actor_guid, config_guid) {
+	var url = new Url("eai", "ajax_vw_configs_format");
+	url.addParam("actor_guid", actor_guid);
+	url.addParam("config_guid", config_guid);
+	url.requestUpdate("format_"+config_guid);
+  }
 };

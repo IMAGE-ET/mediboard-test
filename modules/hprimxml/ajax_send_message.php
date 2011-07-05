@@ -20,8 +20,8 @@ if (!$echange_hprim_id) {
   }
   $echange_hprim = new CEchangeHprim();
   $where['statut_acquittement']     = "IS NULL";
-  $where['emetteur_id']             = "IS NULL";
-  $where['destinataire_id']         = "IS NOT NULL";
+  $where['sender_id']               = "IS NULL";
+  $where['receiver_id']             = "IS NOT NULL";
   $where['message_valide']          = "= '1'";
   $where['acquittement_valide']     = "IS NULL"; 
   $where['acquittement_content_id'] = "IS NULL"; 
@@ -37,7 +37,7 @@ if (!$echange_hprim_id) {
   
   foreach ($notifications as $notification) {      
     $dest_hprim = new CDestinataireHprim();
-    $dest_hprim->load($notification->destinataire_id);
+    $dest_hprim->load($notification->receiver_id);
         
     if ($dest_hprim->actif) {
       $source = CExchangeSource::get("$dest_hprim->_guid-evenementPatient");
@@ -80,7 +80,7 @@ if (!$echange_hprim_id) {
   $echange_hprim->load($echange_hprim_id);
   
   $dest_hprim = new CDestinataireHprim();
-  $dest_hprim->load($echange_hprim->destinataire_id);
+  $dest_hprim->load($echange_hprim->receiver_id);
   
   $source = CExchangeSource::get("$dest_hprim->_guid-evenementPatient");
   $source->setData($echange_hprim->_message);

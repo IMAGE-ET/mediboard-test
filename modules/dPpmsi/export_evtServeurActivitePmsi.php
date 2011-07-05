@@ -66,7 +66,7 @@ $dest_hprim->message = "pmsi";
 $destinataires = $dest_hprim->loadMatchingList();
         
 foreach ($destinataires as $_destinataire) {
-  $evenementActivitePMSI->_ref_destinataire = $_destinataire;
+  $evenementActivitePMSI->_ref_receiver = $_destinataire;
 	$msgEvtActivitePMSI = $evenementActivitePMSI->generateTypeEvenement($mbObject);
 	
 	$echange_hprim = $evenementActivitePMSI->_ref_echange_hprim;

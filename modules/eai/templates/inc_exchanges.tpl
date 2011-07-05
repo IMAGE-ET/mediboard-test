@@ -15,7 +15,7 @@
 {{/if}}
 <table class="tbl">
   <tr>
-    <th class="title" colspan="20">{{tr}}{{$exchange->_class_name}}{{/tr}} - {{$exchange->_ref_group}} - {{tr}}{{$mod_name}}-msg-{{$type}}{{/tr}}</th>
+    <th class="title" colspan="20">{{tr}}{{$exchange->_class_name}}{{/tr}} - {{$exchange->_ref_group}} {{if $type}}- {{tr}}{{$mod_name}}-msg-{{$type}}{{/tr}}{{/if}}</th>
   </tr>
   <tr>
     <th></th>
@@ -25,8 +25,8 @@
     <th>{{mb_title object=$exchange field="object_id"}}</th>
     <th>{{mb_title object=$exchange field="id_permanent"}}</th>
     <th>{{mb_title object=$exchange field="date_production"}}</th>
-    <th>{{mb_title object=$exchange field="emetteur_id"}}</th>
-    <th>{{mb_title object=$exchange field="destinataire_id"}}</th>
+    <th>{{mb_title object=$exchange field="sender_id"}}</th>
+    <th>{{mb_title object=$exchange field="receiver_id"}}</th>
     <th>{{mb_title object=$exchange field="sous_type"}}</th>
     <th>{{mb_title object=$exchange field="date_echange"}}</th>
     <th>{{mb_title object=$exchange field="statut_acquittement"}}</th>

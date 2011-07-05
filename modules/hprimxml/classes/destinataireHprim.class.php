@@ -57,8 +57,8 @@ class CDestinataireHprim extends CInteropReceiver {
   function getBackProps() {
     $backProps = parent::getBackProps();
     $backProps['object_configs'] = "CDestinataireHprimConfig object_id";
-    $backProps['emetteurs']      = "CEchangeHprim emetteur_id";
-    $backProps['destinataires']  = "CEchangeHprim destinataire_id";
+    $backProps['senders']        = "CEchangeHprim sender_id";
+    $backProps['receivers']      = "CEchangeHprim receiver_id";
     
     return $backProps;
   }
@@ -80,34 +80,34 @@ class CDestinataireHprim extends CInteropReceiver {
 		$this->code_syst = $this->code_syst ? $this->code_syst : $this->nom;
   }  
   
-  function sendEvenementPatient($domEvenement, $mbObject, $referent = null, $initiateur = null) {
-    $msgEvtPatient = $domEvenement->generateTypeEvenement($mbObject, $referent, $initiateur);
+  function sendEvenementPatient(CHPrimXMLEvenementsPatients $dom_evt, CMbObject $mbObject, $referent = null, $initiateur = null) {
+    $msg = $dom_evt->generateTypeEvenement($mbObject, $referent, $initiateur);
     
     if ($this->actif) {
       $source = CExchangeSource::get("$this->_guid-evenementPatient");
       if ($source->_id) {
-        $source->setData($msgEvtPatient);
+        $source->setData($msg);
         try {
           $source->send();
         } catch (Exception $e) {
           throw new CMbException("CExchangeSource-no-response");
         }
-        $acquittement = $source->getACQ();
+        $acq = $source->getACQ();
 
-        if ($acquittement) {
-          $echange_hprim = $domEvenement->_ref_echange_hprim;
-          $echange_hprim->date_echange = mbDateTime();
+        if ($acq) {
+          $echg_hprim = $dom_evt->_ref_echange_hprim;
+          $echg_hprim->date_echange = mbDateTime();
           
-          $domGetAcquittement = new CHPrimXMLAcquittementsPatients();
-          $domGetAcquittement->loadXML($acquittement);
-          $domGetAcquittement->_ref_echange_hprim = $echange_hprim;
-          $doc_valid = $domGetAcquittement->schemaValidate();
+          $dom_acq = new CHPrimXMLAcquittementsPatients();
+          $dom_acq->loadXML($acq);
+          $dom_acq->_ref_echange_hprim = $echg_hprim;
+          $doc_valid = $dom_acq->schemaValidate();
           
-          $echange_hprim->statut_acquittement = $domGetAcquittement->getStatutAcquittementPatient();
-          $echange_hprim->acquittement_valide = $doc_valid ? 1 : 0;
-          $echange_hprim->_acquittement = $acquittement;
+          $echg_hprim->statut_acquittement = $dom_acq->getStatutAcquittementPatient();
+          $echg_hprim->acquittement_valide = $doc_valid ? 1 : 0;
+          $echg_hprim->_acquittement = $acq;
       
-          $echange_hprim->store();
+          $echg_hprim->store();
         } 
       }      
     }
@@ -117,7 +117,7 @@ class CDestinataireHprim extends CInteropReceiver {
     $echg_hprim = new CEchangeHprim();
     $echg_hprim->_load_content = false;
     $where = array();
-    $where["emetteur_id"] = " = '$this->_id'";    
+    $where["sender_id"] = " = '$this->_id'";    
     $key = $echg_hprim->_spec->key;
     $echg_hprim->loadObject($where, "$key DESC");
     $this->_ref_last_message = $echg_hprim;

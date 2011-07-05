@@ -30,10 +30,10 @@ class CEchangeHprim extends CEchangeXML {
   function getProps() {
     $props = parent::getProps();
     
-    $props["emetteur_id"]     = "ref class|CDestinataireHprim";
-    $props["destinataire_id"] = "ref class|CDestinataireHprim";
-    $props["initiateur_id"]   = "ref class|CEchangeHprim";
-    $props["object_class"]    = "enum list|CPatient|CSejour|COperation|CAffectation show|0";
+    //$props["emetteur_id"]   = "ref class|CDestinataireHprim"; 
+    $props["receiver_id"]   = "ref class|CDestinataireHprim"; 
+    $props["initiateur_id"] = "ref class|CEchangeHprim";
+    $props["object_class"]  = "enum list|CPatient|CSejour|COperation|CAffectation show|0";
     
     return $props;
   }
@@ -141,7 +141,8 @@ class CEchangeHprim extends CEchangeXML {
   function populateEchange(CExchangeDataFormat $data_format, CHPrimXMLEvenements $dom_evt) {
     $this->date_production = mbDateTime();
     $this->group_id        = $data_format->group_id;
-    $this->emetteur_id     = $data_format->emetteur_id;
+    $this->sender_id       = $data_format->sender_id;
+    $this->sender_class    = $data_format->sender_class;
     $this->type            = $dom_evt->type;
     $this->sous_type       = $dom_evt->sous_type ? $dom_evt->sous_type : "inconnu";
     $this->_message        = $data_format->_message;;
@@ -154,6 +155,17 @@ class CEchangeHprim extends CEchangeXML {
     $this->acquittement_valide = $doc_valid ? 1 : 0;
     $this->date_echange        = mbDateTime();
     $this->store();
+  }
+  
+  function getConfigs(CInteropActor $actor_guid) {
+    list($sender_class, $sender_id) = explode("-", $actor_guid);
+    
+    $hprimxml_config = new CHprimXMLConfig();
+    $hprimxml_config->sender_class = $sender_class;
+    $hprimxml_config->sender_id    = $sender_id;
+    $hprimxml_config->loadMatchingObject();
+    
+    return $this->_configs_format = $hprimxml_config;
   }
 }
 ?>

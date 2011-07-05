@@ -31,7 +31,7 @@ $echg_hprim21->_date_min = $_date_min;
 $echg_hprim21->_date_max = $_date_max;
 
 $echg_hprim21->load($echange_hprim21_id);
-$echg_hprim21->loadRefsDestinataireInterop();
+$echg_hprim21->loadRefsInteropActor();
 
 // Récupération de la liste des echanges HPRIM 2.1
 $itemEchangeHprim21 = new CEchangeHprim21;
@@ -59,7 +59,7 @@ $forceindex[] = "date_production";
 
 $echangesHprim21 = $itemEchangeHprim21->loadList($where, $order, "$page, 20", null, null, $forceindex);
 foreach($echangesHprim21 as $_echange) {
-  $_echange->loadRefsDestinataireInterop();
+  $_echange->loadRefsInteropActor();
 }
 
 // Création du template

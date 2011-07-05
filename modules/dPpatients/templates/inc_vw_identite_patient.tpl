@@ -60,10 +60,12 @@
     <td>{{mb_value object=$patient field="tel2"}}</td>
   </tr>
   
+  {{if $patient->deces}}
   <tr>
     <th colspan="2">{{mb_label object=$patient field="deces"}}</th>
-    <td colspan="2">{{mb_value object=$patient field="deces"}}</td>
-  </tr>
+    <td colspan="3">{{mb_value object=$patient field="deces"}}</td>
+  </tr
+  {{/if}}
   
   <tr>
     <th colspan="2">{{mb_label object=$patient field="nom_jeune_fille"}}</th>

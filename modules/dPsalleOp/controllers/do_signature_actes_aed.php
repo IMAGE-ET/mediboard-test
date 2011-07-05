@@ -91,7 +91,7 @@ if (CAppUI::conf("dPpmsi transmission_actes") == "signature" && $object_class ==
   $destinataires = $dest_hprim->loadMatchingList();
 
   foreach ($destinataires as $_destinataire) {
-    $evenementActivitePMSI->_ref_destinataire = $_destinataire;
+    $evenementActivitePMSI->_ref_receiver = $_destinataire;
     $msgEvtActivitePMSI = $evenementActivitePMSI->generateTypeEvenement($mbObject);
     
     

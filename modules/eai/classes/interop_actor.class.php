@@ -26,6 +26,11 @@ class CInteropActor extends CMbObject {
   var $_reachable         = null;
   var $_parent_class_name = null;
   
+  var $_tag_patient  = null;
+  var $_tag_sejour   = null;
+  var $_tag_mediuser = null;
+  var $_tag_service  = null;
+  
   // Forward references
   var $_ref_group             = null;
   var $_ref_exchanges_sources = null;
@@ -41,6 +46,11 @@ class CInteropActor extends CMbObject {
     $props["_reachable"]         = "bool";
     $props["_parent_class_name"] = "str";
     $props["_ref_last_message"]  = "str";
+    
+    $props["_tag_patient"]            = "str";
+    $props["_tag_sejour"]             = "str";
+    $props["_tag_mediuser"]           = "str";
+    $props["_tag_service"]            = "str";
     return $props;
   }
 
@@ -49,6 +59,11 @@ class CInteropActor extends CMbObject {
         
     $this->_view = $this->libelle ? $this->libelle : $this->nom;
     $this->_type_echange = $this->_class_name;
+
+    $this->_tag_patient  = CPatient::getTagIPP($this->group_id);  
+    $this->_tag_sejour   = CSejour::getTagNumDossier($this->group_id);
+    $this->_tag_mediuser = CMediusers::getTagMediusers($this->group_id);
+    $this->_tag_service  = CService::getTagService($this->group_id);
   }
 
   function loadRefGroup() {

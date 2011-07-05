@@ -45,9 +45,9 @@ class CHPrim21Reader {
     $this->_echange_hprim21->nom_fichier       = $this->nom_fichier;
     $dest_hprim21 = new CDestinataireHprim21();
     $dest_hprim21->register($this->id_emetteur);
-    $this->_echange_hprim21->emetteur_id       = isset($dest_hprim21->_id) ? $dest_hprim21->_id : 0;
+    $this->_echange_hprim21->sender_id         = isset($dest_hprim21->_id) ? $dest_hprim21->_id : 0;
     // Read => Mediboard
-    $this->_echange_hprim21->destinataire_id   = null;
+    $this->_echange_hprim21->receiver_id       = null;
     $this->_echange_hprim21->sous_type         = $this->sous_type;
     $this->_echange_hprim21->type              = $this->type;
     $this->_echange_hprim21->date_echange      = mbDateTime();

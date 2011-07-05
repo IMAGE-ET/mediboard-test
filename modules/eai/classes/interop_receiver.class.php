@@ -19,10 +19,6 @@ class CInteropReceiver extends CInteropActor {
   var $message     = null;
   
   // Form fields
-  var $_tag_patient  = null;
-  var $_tag_sejour   = null;
-  var $_tag_mediuser = null;
-  var $_tag_service  = null;
   var $_type_echange = null;
   var $_exchanges_sources_save = 0;
   
@@ -37,22 +33,14 @@ class CInteropReceiver extends CInteropActor {
     $props = parent::getProps();
     $props["message"]       = "str";
 
-    $props["_tag_patient"]            = "str";
-    $props["_tag_sejour"]             = "str";
-    $props["_tag_mediuser"]           = "str";
-    $props["_tag_service"]            = "str";
+    
     $props["_exchanges_sources_save"] = "num";
     return $props;
   }
   
   function updateFormFields() {
     parent::updateFormFields();
-        
-    $this->_tag_patient  = CPatient::getTagIPP($this->group_id);  
-    $this->_tag_sejour   = CSejour::getTagNumDossier($this->group_id);
-    $this->_tag_mediuser = CMediusers::getTagMediusers($this->group_id);
-    $this->_tag_service  = CService::getTagService($this->group_id);
-        
+
     $this->_parent_class_name = "CInteropReceiver";
   }
   
@@ -69,10 +57,8 @@ class CInteropReceiver extends CInteropActor {
     $this->nom = $name;
     $this->loadMatchingObject();
     
-    // Enregistrement automatique d'un destinataire
-    if (!$this->_id) {
-      
-    }
+    // Enregistrement automatique d'un destinataire ?
+    if (!$this->_id) {}
   }
   
   /**
@@ -83,10 +69,11 @@ class CInteropReceiver extends CInteropActor {
   function getObjects() {
     $objects = array();
     foreach (self::getChildReceivers() as $_interop_receiver) {
-      $itemReceiver = new $_interop_receiver;
+      $receiver = new $_interop_receiver;
       
+      $order = "group_id ASC";
       // Récupération de la liste des destinataires
-      $objects[$_interop_receiver] = $itemReceiver->loadList();
+      $objects[$_interop_receiver] = $receiver->loadList(null, $order);
       if (!is_array($objects[$_interop_receiver])) {
         continue;
       }

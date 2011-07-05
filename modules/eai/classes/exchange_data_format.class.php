@@ -19,50 +19,55 @@ CAppUI::requireSystemClass('mbMetaObject');
 
 class CExchangeDataFormat extends CMbMetaObject {  
   // DB Fields
-  var $group_id                = null;
-  var $date_production         = null;
-  var $emetteur_id             = null;
-  var $destinataire_id         = null;
-  var $type                    = null;
-  var $sous_type               = null;
-  var $date_echange            = null;
-  var $message_content_id      = null;
-  var $acquittement_content_id = null;
-  var $statut_acquittement     = null;
-  var $message_valide          = null;
-  var $acquittement_valide     = null;
-  var $id_permanent            = null;
-  var $object_id               = null;
-  var $object_class            = null;
+  var $group_id                  = null;
+  var $date_production           = null;
+  //var $emetteur_id             = null;
+  var $sender_id                 = null;
+  var $sender_class              = null;
+  var $receiver_id               = null;
+  var $type                      = null;
+  var $sous_type                 = null;
+  var $date_echange              = null;
+  var $message_content_id        = null;
+  var $acquittement_content_id   = null;
+  var $statut_acquittement       = null;
+  var $message_valide            = null;
+  var $acquittement_valide       = null;
+  var $id_permanent              = null;
+  var $object_id                 = null;
+  var $object_class              = null;
   
   // Filter fields
-  var $_date_min                = null;
-  var $_date_max                = null;
+  var $_date_min                 = null;
+  var $_date_max                 = null;
   
   // Form fields
-  var $_self_emetteur           = null;
-  var $_self_destinataire       = null;
-  var $_message                 = null;
-  var $_acquittement            = null;
-  var $_count_exchanges         = null;
-  var $_count_msg_invalide      = null;
-  var $_count_ack_invalide      = null;
-  var $_observations            = array();
-  var $_doc_errors_msg          = array();
-  var $_doc_errors_ack          = array();
-  var $_load_content            = true;
+  var $_self_sender              = null;
+  var $_self_receiver            = null;
+  var $_message                  = null;
+  var $_acquittement             = null;
+  var $_count_exchanges          = null;
+  var $_count_msg_invalide       = null;
+  var $_count_ack_invalide       = null;
+  var $_observations             = array();
+  var $_doc_errors_msg           = array();
+  var $_doc_errors_ack           = array();
+  var $_load_content             = true;
   var $_messages_supported_class = array();
-  var $_family_message          = null;
+  var $_family_message           = null;
+  var $_configs_format           = null;
   
   // Forward references
-  var $_ref_group          = null;
-  var $_ref_emetteur       = null;
-  var $_ref_destinataire   = null;
+  var $_ref_group      = null;
+  var $_ref_sender     = null;
+  var $_ref_receiver   = null;
   
   function getProps() {
     $props = parent::getProps();
     
     $props["date_production"]     = "dateTime notNull";
+    $props["sender_id"]           = "ref class|CInteropSender meta|sender_class";
+    $props["sender_class"]        = "enum list|CSenderFTP|CSenderSOAP show|0";
     $props["group_id"]            = "ref notNull class|CGroups autocomplete|text";
     $props["type"]                = "str";
     $props["sous_type"]           = "str";
@@ -71,10 +76,10 @@ class CExchangeDataFormat extends CMbMetaObject {
     $props["message_valide"]      = "bool show|0";
     $props["acquittement_valide"] = "bool show|0";
     $props["id_permanent"]        = "str";
-    $props["object_id"]           = "ref class|CMbObject meta|object_class unlink";
+    $props["object_id"]           = "ref class|CMbObject meta|object_class";
     
-    $props["_self_emetteur"]      = "bool";
-    $props["_self_destinataire"]  = "bool notNull";
+    $props["_self_sender"]        = "bool";
+    $props["_self_receiver"]      = "bool notNull";
     $props["_date_min"]           = "dateTime";
     $props["_date_max"]           = "dateTime";
     $props["_count_exchanges"]    = "num";
@@ -92,9 +97,9 @@ class CExchangeDataFormat extends CMbMetaObject {
     $this->_ref_group->load($this->group_id);
   }
   
-  function loadRefsDestinataireInterop() {
-    $this->_ref_emetteur     = $this->loadFwdRef("emetteur_id");
-    $this->_ref_destinataire = $this->loadFwdRef("destinataire_id");
+  function loadRefsInteropActor() {
+    $this->_ref_sender   = $this->loadFwdRef("sender_id");
+    $this->_ref_receiver = $this->loadFwdRef("receiver_id");
   }
   
   function getObservations() {}
@@ -115,8 +120,8 @@ class CExchangeDataFormat extends CMbMetaObject {
       $this->loadContent();
     }   
      
-    $this->_self_emetteur     = $this->emetteur_id     === null;
-    $this->_self_destinataire = $this->destinataire_id === null;
+    $this->_self_sender   = $this->sender_id   === null;
+    $this->_self_receiver = $this->receiver_id === null;
   }
   
   /**
@@ -149,9 +154,9 @@ class CExchangeDataFormat extends CMbMetaObject {
   
   function handle() {}
   
-  function getMessagesSupported($actor_guid, $all = true, $evenement = null, $show_actif = null) {
+  function getMessagesSupported(CInteropActor $actor_guid, $all = true, $evenement = null, $show_actif = null) {
     list($object_class, $object_id) = explode("-", $actor_guid);
-    $messages = array();
+    $family = array();
 
     foreach ($this->getMessages() as $_message => $_root_class) {
       $root  = new $_root_class;
@@ -173,12 +178,14 @@ class CExchangeDataFormat extends CMbMetaObject {
         
         $this->_messages_supported_class[] = $message_supported->message;
         
-        $messages[$_root_class][]          = $message_supported;
+        $family[$_root_class][]          = $message_supported;
       }
     }
 
-    return $messages;
+    return $family;
   }
+  
+  function getConfigs(CInteropActor $actor_guid) {}
   
   function getMessages() {
     return array(); 

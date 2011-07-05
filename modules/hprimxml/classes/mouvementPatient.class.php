@@ -25,7 +25,7 @@ class CHPrimXMLMouvementPatient extends CHPrimXMLEvenementsPatients {
   
   function generateFromOperation(CAffectation $newMouvement, $referent) {  
     $evenementsPatients = $this->documentElement;
-    $evenementPatient = $this->addElement($evenementsPatients, "evenementPatient");
+    $evenementPatient   = $this->addElement($evenementsPatients, "evenementPatient");
     
     $mouvementPatient = $this->addElement($evenementPatient, "mouvementPatient");
     $actionConversion = array (
@@ -80,32 +80,32 @@ class CHPrimXMLMouvementPatient extends CHPrimXMLEvenementsPatients {
   
   /**
    * Fusion and recording a stay with an num_dos in the system
-   * @param CHPrimXMLAcquittementsPatients $domAcquittement
-   * @param CEchangeHprim $echange_hprim.
+   * @param CHPrimXMLAcquittementsPatients $dom_acq
+   * @param CEchangeHprim $echg_hprim.
    * @param CPatient $newPatient
    * @param array $data
    * @return string acquittement 
    **/
-  function mouvementPatient($domAcquittement, $newPatient, $data) {
-    $echange_hprim = $this->_ref_echange_hprim;
+  function mouvementPatient($dom_acq, $newPatient, $data) {
+    $echg_hprim = $this->_ref_echange_hprim;
     
     // Traitement de la venue
     $newVenue        = new CSejour();
     $domVenuePatient = new CHPrimXMLVenuePatient();
-    $domVenuePatient->_ref_echange_hprim = $echange_hprim;
-    $messageAcquittement = $domVenuePatient->venuePatient($domAcquittement, $newPatient, $data, $newVenue);
-    if ($echange_hprim->statut_acquittement != "OK") {
-      return $messageAcquittement;
+    $domVenuePatient->_ref_echange_hprim = $echg_hprim;
+    $msgAcq = $domVenuePatient->venuePatient($dom_acq, $newPatient, $data, $newVenue);
+    if ($echg_hprim->statut_acquittement != "OK") {
+      return $msgAcq;
     }
     
-    $domAcquittement = new CHPrimXMLAcquittementsPatients();
-    $domAcquittement->_identifiant_acquitte = $data['identifiantMessage'];
-    $domAcquittement->_sous_type_evt        = $this->sous_type;
-    $domAcquittement->_ref_echange_hprim    = $echange_hprim;
+    $dom_acq = new CHPrimXMLAcquittementsPatients();
+    $dom_acq->_identifiant_acquitte = $data['identifiantMessage'];
+    $dom_acq->_sous_type_evt        = $this->sous_type;
+    $dom_acq->_ref_echange_hprim    = $echg_hprim;
     
     // Si CIP
     if (!CAppUI::conf('sip server')) { 
-      $dest_hprim = $echange_hprim->_ref_emetteur;
+      $sender = $echg_hprim->_ref_sender;
       
       $avertissement = null;
       
@@ -113,7 +113,7 @@ class CHPrimXMLMouvementPatient extends CHPrimXMLEvenementsPatients {
       $newVenue = $this->mappingMouvements($data['mouvements'], $newVenue);
 
       // Notifier les autres destinataires
-      $newVenue->_hprim_initiateur_group_id = $dest_hprim->group_id;
+      $newVenue->_hprim_initiateur_group_id = $sender->group_id;
       $msgVenue = $newVenue->store();
       
       $codes = array ($msgVenue ? "A103" : "I102");
@@ -132,19 +132,19 @@ class CHPrimXMLMouvementPatient extends CHPrimXMLEvenementsPatients {
         $commentaire = "Séjour modifiée : $newVenue->_id. Les champs mis à jour sont les suivants : $modified_fields.";
       }
       
-      $messageAcquittement = $domAcquittement->generateAcquittements($avertissement ? "avertissement" : "OK", $codes, $avertissement ? $avertissement : substr($commentaire, 0, 4000)); 
-      $doc_valid = $domAcquittement->schemaValidate();
-      $echange_hprim->acquittement_valide = $doc_valid ? 1 : 0;
+      $msgAcq = $dom_acq->generateAcquittements($avertissement ? "avertissement" : "OK", $codes, $avertissement ? $avertissement : substr($commentaire, 0, 4000)); 
+      $doc_valid = $dom_acq->schemaValidate();
+      $echg_hprim->acquittement_valide = $doc_valid ? 1 : 0;
         
-      $echange_hprim->statut_acquittement = $avertissement ? "avertissement" : "OK";
+      $echg_hprim->statut_acquittement = $avertissement ? "avertissement" : "OK";
     }
     
-    $echange_hprim->_acquittement = $messageAcquittement;
-    $echange_hprim->date_echange = mbDateTime();
-    $echange_hprim->setObjectIdClass("CSejour", $data['idCibleVenue'] ? $data['idCibleVenue'] : $newVenue->_id);
-    $echange_hprim->store();
+    $echg_hprim->_acquittement = $msgAcq;
+    $echg_hprim->date_echange = mbDateTime();
+    $echg_hprim->setObjectIdClass("CSejour", $data['idCibleVenue'] ? $data['idCibleVenue'] : $newVenue->_id);
+    $echg_hprim->store();
 
-    return $messageAcquittement;
+    return $msgAcq;
   } 
 }
 ?>

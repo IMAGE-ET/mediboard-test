@@ -143,7 +143,7 @@ foreach ($sejours as $sejour) {
       $_affectation->_ref_last_log->type = "delete";
       
       $domEvenemenMouvementPatient = new CHPrimXMLMouvementPatient();
-      $domEvenemenMouvementPatient->_ref_destinataire = $dest_hprim;
+      $domEvenemenMouvementPatient->_ref_receiver = $dest_hprim;
       
       $dest_hprim->sendEvenementPatient($domEvenemenMouvementPatient, $_affectation);
       

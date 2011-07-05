@@ -45,8 +45,8 @@ class CDestinataireHprim21 extends CInteropReceiver {
   
   function getBackProps() {
     $backProps = parent::getBackProps();
-    $backProps['emetteurs']      = "CEchangeHprim21 emetteur_id";
-    $backProps['destinataires']  = "CEchangeHprim21 destinataire_id";
+    $backProps['senders']   = "CEchangeHprim21 sender_id";
+    $backProps['receivers'] = "CEchangeHprim21 receiver_id";
     
     return $backProps;
   }
@@ -65,7 +65,7 @@ class CDestinataireHprim21 extends CInteropReceiver {
   function lastMessage() {
     $echg_hprim21 = new CEchangeHprim21();
     $where = array();
-    $where["emetteur_id"] = " = '$this->_id'";    
+    $where["sender_id"] = " = '$this->_id'";    
     $key = $echg_hprim21->_spec->key;
     $echg_hprim21->loadObject($where, "$key DESC");
     $this->_ref_last_message = $echg_hprim21; 
