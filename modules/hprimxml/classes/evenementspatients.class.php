@@ -649,16 +649,16 @@ class CHPrimXMLEvenementsPatients extends CHPrimXMLEvenements {
     }  
   }
   
-  function trashNumDossier(CSejour $venue, CDestinataireHprim $dest_hprim) {
-    if (isset($dest_hprim->_configs["type_sej_pa"])) {
-      if ($venue->_num_dossier && preg_match($dest_hprim->_configs["type_sej_pa"], $venue->_num_dossier)) {
+  function trashNumDossier(CSejour $venue, CInteropSender $sender) {
+    if (isset($sender->_configs["type_sej_pa"])) {
+      if ($venue->_num_dossier && preg_match($sender->_configs["type_sej_pa"], $venue->_num_dossier)) {
         // Passage en pa_ de l'id externe
         $num_pa = new CIdSante400();
         $num_pa->object_class = "CSejour";
-        $num_pa->tag = $dest_hprim->_tag_sejour;
+        $num_pa->tag = $sender->_tag_sejour;
         $num_pa->id400 = $venue->_num_dossier;
         if ($num_pa->loadMatchingObject()) {
-          $num_pa->tag = CAppUI::conf('dPplanningOp CSejour tag_dossier_pa').$dest_hprim->_tag_sejour;
+          $num_pa->tag = CAppUI::conf('dPplanningOp CSejour tag_dossier_pa').$sender->_tag_sejour;
           $num_pa->last_update = mbDateTime();
           $num_pa->store();
         }
