@@ -54,7 +54,7 @@ class CProductDelivery extends CMbObject {
   
   var $_date_min      = null;
   var $_date_max      = null;
-	var $_datetime_min      = null;
+  var $_datetime_min      = null;
   var $_datetime_max      = null;
   var $_delivered     = null;
   var $_auto_deliver  = null;
@@ -97,8 +97,8 @@ class CProductDelivery extends CMbObject {
     
     $specs['_date_min']         = 'date notNull';
     $specs['_date_max']         = 'date notNull moreEquals|_date_min';
-		
-		$specs['_datetime_min']         = 'dateTime notNull';
+    
+    $specs['_datetime_min']         = 'dateTime notNull';
     $specs['_datetime_max']         = 'dateTime notNull moreEquals|_datetime_min';
     
     return $specs;
@@ -134,19 +134,19 @@ class CProductDelivery extends CMbObject {
   }
   
   function isDelivered() {
-  	return $this->_delivered = ($this->countDelivered() >= $this->quantity);
+    return $this->_delivered = ($this->countDelivered() >= $this->quantity);
   }
   
   function isReceived() {
     $this->loadRefsDeliveryTraces();
-		
+    
     $sum = 0;
     foreach ($this->_ref_delivery_traces as $trace) {
       if ($trace->date_reception) {
         $sum += $trace->quantity;
-			}
+      }
     }
-		
+    
     return ($sum >= $this->quantity);
   }
   
@@ -176,11 +176,11 @@ class CProductDelivery extends CMbObject {
   }
   
   function loadRefService(){
-  	return $this->_ref_service = $this->loadFwdRef("service_id", true);  
+    return $this->_ref_service = $this->loadFwdRef("service_id", true);  
   }
   
   function loadRefPatient(){
-    return $this->_ref_patient = $this->loadFwdRef("patient_id", true);	
+    return $this->_ref_patient = $this->loadFwdRef("patient_id", true);  
   }
 
   function loadRefStock(){
@@ -204,6 +204,16 @@ class CProductDelivery extends CMbObject {
   
   function store(){
     $is_new = !$this->_id;
+    
+    if ($is_new) {
+      if (!$this->datetime_min) {
+        $this->datetime_min = $this->date_dispensation;
+      }
+      
+      if (!$this->datetime_max) {
+        $this->datetime_max = $this->date_dispensation;
+      }
+    }
     
     if ($msg = parent::store()){
       return $msg;

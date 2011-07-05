@@ -108,6 +108,8 @@
        <input type="hidden" name="dosql" value="do_delivery_aed" />
        <input type="hidden" name="del" value="0" />
        <input type="hidden" name="date_dispensation" value="now" />
+       <input type="hidden" name="datetime_min" value="{{$datetime_min}}" />
+       <input type="hidden" name="datetime_max" value="{{$datetime_max}}" />
 	       
 	       <input type="hidden" name="stock_id" value="{{$delivrance->stock_id}}" />
 	       <input type="hidden" name="stock_class" value="{{$delivrance->stock_class}}" />
