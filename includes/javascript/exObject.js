@@ -4,6 +4,10 @@ ExObject = {
   register: function(container, options) {
     this.container = $(container);
     
+    if (!this.container) {
+      return;
+    }
+    
     options = Object.extend({
       ex_class_id: null,
       object_guid: null,
@@ -43,28 +47,36 @@ ExObject = {
       showExClassForm(data.ex_class_id, data.object_guid, /*object_guid+"_"+*/data.event+"_"+data.ex_class_id, "", data.event);
     });
   },
-	
-	initTriggers: function(triggers, form, elementName, parent_view){
-		var inputs = Form.getInputsArray(form[elementName]);
+  
+  initTriggers: function(triggers, form, elementName, parent_view){
+    var inputs = Form.getInputsArray(form[elementName]);
     
-		var triggerFunc = function(input, triggers) {
-			var ex_class_id = triggers[$V(input)];
-			triggers[$V(input)] = null;
-			if (ex_class_id) {
-				var form = input.form;
-				var object_guid = ExObject.current.object_guid;
-				var event = ExObject.current.event;
-				showExClassForm(ex_class_id, object_guid, /*object_guid+"_"+*/event+"_"+ex_class_id, "", event, null, parent_view);
+    var triggerFunc = function(input, triggers) {
+			var isSetCheckbox = input.hasClassName("set-checkbox");
+			
+			if (isSetCheckbox && !input.checked) {
+				return;
 			}
-		}
-		
+			
+      var value = (isSetCheckbox ? input.value : $V(input));
+      var ex_class_id = triggers[value];
+      triggers[value] = null;
+      
+      if (ex_class_id) {
+        var form = input.form;
+        var object_guid = ExObject.current.object_guid;
+        var event = ExObject.current.event;
+        showExClassForm(ex_class_id, object_guid, /*object_guid+"_"+*/event+"_"+ex_class_id, "", event, null, parent_view);
+      }
+    }
+    
     inputs.each(function(input){
       var callback = triggerFunc.curry(input, triggers);
       input.observe("change", callback)
            .observe("ui:change", callback)
            .observe("click", callback);
     });
-	},
+  },
   
   show: function(mode, ex_object_id, ex_class_id, object_guid){
     var url = new Url("forms", "view_ex_object_form");
@@ -75,7 +87,7 @@ ExObject = {
     if (mode == "display" || mode == "print") {
       url.addParam("readonly", 1);
     }
-		
+    
     if (mode == "print") {
       url.addParam("print", 1);
       url.addParam("only_filled", 1);
@@ -83,7 +95,7 @@ ExObject = {
     
     url.pop("100%", "100%", mode+"-"+ex_object_id);
   },
-	
+  
   print: function(ex_object_id, ex_class_id, object_guid){
     ExObject.show("print", ex_object_id, ex_class_id, object_guid);
   },
@@ -105,25 +117,25 @@ ExObject = {
     url.addParam("type", "");
     url.popup(900, 600, "history");
   },
-	
-	loadExObjects: function(object_class, object_id, target, detail, ex_class_id) {
-		detail = detail || 0;
-		ex_class_id = ex_class_id || "";
-		
-		var url = new Url("forms", "ajax_list_ex_object");
+  
+  loadExObjects: function(object_class, object_id, target, detail, ex_class_id) {
+    detail = detail || 0;
+    ex_class_id = ex_class_id || "";
+    
+    var url = new Url("forms", "ajax_list_ex_object");
     url.addParam("detail", detail);
     url.addParam("reference_id", object_id);
     url.addParam("reference_class", object_class);
     url.addParam("ex_class_id", ex_class_id);
     url.addParam("target_element", target);
     url.requestUpdate(target);
-	}
+  }
 };
 
 ExObjectFormula = {
   tokenData: null,
   parser: new Parser,
-	
+  
   init: function(tokenData) {
     ExObjectFormula.tokenData = tokenData;
     
@@ -131,22 +143,22 @@ ExObjectFormula = {
       var field = token.key;
       var data = token.value;
       var formula = data.formula;
-			
+      
       if (!formula) return;
   
       formula = formula.replace(/[\[\]]/g, "");
       
       var form = getForm("editExObject");
       var fieldElement = form[field];
-			
-			try {
-				var expr = ExObjectFormula.parser.parse(formula);
-				var variables = expr.variables();
-			}
-			catch(e) {
-				fieldElement.insert({after: DOM.div({className: 'small-error'}, "Formule invalide: <br /><strong>"+data.formulaView+"</strong>")});
-				return;
-			}
+      
+      try {
+        var expr = ExObjectFormula.parser.parse(formula);
+        var variables = expr.variables();
+      }
+      catch(e) {
+        fieldElement.insert({after: DOM.div({className: 'small-error'}, "Formule invalide: <br /><strong>"+data.formulaView+"</strong>")});
+        return;
+      }
   
       ExObjectFormula.tokenData[field].parser = expr;
       ExObjectFormula.tokenData[field].variables = variables;
@@ -242,12 +254,12 @@ ExObjectFormula = {
     if (!isFinite(result)) {
       result = "";
     }
-		else {
-			var props = target.getProperties();
-			if (props.decimals) {
-				result = (result*1).toFixed(props.decimals);
-			}
-		}
+    else {
+      var props = target.getProperties();
+      if (props.decimals) {
+        result = (result*1).toFixed(props.decimals);
+      }
+    }
     
     $V(target, (result+""));
   }

@@ -8,7 +8,13 @@
   <script type="text/javascript">
   Main.add(function(){
     var form = getForm("editExObject");
-    ExObject.initTriggers({{$ex_field->_triggered_data|@json}}, form, "{{$_field_name}}", "{{$ex_object->_ref_ex_class->name}}");
+    {{if $_spec instanceof CSetSpec}}
+      {{foreach from=$_spec->_list item=_value}}
+        ExObject.initTriggers({{$ex_field->_triggered_data|@json}}, form, "_{{$_field_name}}_{{$_value}}", "{{$ex_object->_ref_ex_class->name}}", true);
+      {{/foreach}}
+    {{else}}
+      ExObject.initTriggers({{$ex_field->_triggered_data|@json}}, form, "{{$_field_name}}", "{{$ex_object->_ref_ex_class->name}}");
+    {{/if}}
   });
   </script>
 {{/if}}
