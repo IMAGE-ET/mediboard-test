@@ -33,4 +33,11 @@ class CContentAny extends CMbObject {
     
     return $specs;
   }
+  
+  function getBackProps() {
+    $backProps = parent::getBackProps();
+    $backProps["messages_generique"]      = "CExchangeAny message_content_id";
+    $backProps["acquittements_generique"] = "CExchangeAny acquittement_content_id";
+    return $backProps;
+  }
 }

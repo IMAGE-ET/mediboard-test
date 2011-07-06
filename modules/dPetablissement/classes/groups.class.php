@@ -91,14 +91,16 @@ class CGroups extends CMbObject {
     $backProps["stock_locations"]         = "CProductStockLocation object_id";
     $backProps["stock_first_config"]      = "CCegiStockFirstConfig object_id";
     $backProps["destinataires_sigems"]    = "CDestinataireSigems group_id";
+    $backProps["echanges_generique"]      = "CExchangeAny group_id";
     $backProps["echanges_hprim21"]        = "CEchangeHprim21 group_id";
     $backProps["extract_passages"]        = "CExtractPassages group_id";
     $backProps["destinataires_phast"]     = "CPhastDestinataire group_id";
     $backProps["echanges_phast"]          = "CPhastEchange group_id";
     $backProps["destinataires_hprim21"]   = "CDestinataireHprim21 group_id";
     $backProps["senders_ftp"]             = "CSenderFTP group_id";
+    $backProps["senders_soap"]            = "CSenderSOAP group_id";
     $backProps["view_sender_sources"]     = "CViewSenderSource group_id";
-    $backProps["modeles_etiquette"]      = "CModeleEtiquette group_id";
+    $backProps["modeles_etiquette"]       = "CModeleEtiquette group_id";
     
     return $backProps;
   }

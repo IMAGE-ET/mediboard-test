@@ -247,6 +247,8 @@ class CMediusers extends CMbObject {
     $backProps["activites_rhs"]                   = "CLigneActivitesRHS executant_id";
     $backProps["replacements"]                    = "CReplacement replacer_id";
     $backProps["frais_divers"]                    = "CFraisDivers executant_id";
+    $backProps["expediteur_ftp"]                  = "CSenderFTP user_id";
+    $backProps["expediteur_soap"]                 = "CSenderSOAP user_id";
     return $backProps;
   }
    

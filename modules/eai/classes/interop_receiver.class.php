@@ -33,9 +33,14 @@ class CInteropReceiver extends CInteropActor {
     $props = parent::getProps();
     $props["message"]       = "str";
 
-    
     $props["_exchanges_sources_save"] = "num";
     return $props;
+  }
+  
+  function getBackProps() {
+    $backProps = parent::getBackProps();
+    $backProps["destinataire_generique"] = "CExchangeAny receiver_id";
+    return $backProps;
   }
   
   function updateFormFields() {

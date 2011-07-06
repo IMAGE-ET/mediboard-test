@@ -22,7 +22,7 @@
         <input type="hidden" name="sender_class" value="{{$actor->_class_name}}" />
         {{mb_key   object=$format_config}}
         {{mb_class object=$format_config}}
-        <input type="hidden" name="callback" value="InteropActor.refreshConfigsFormats" />
+        <input type="hidden" name="callback" value="InteropActor.callbackConfigsFormats" />
         
         {{mb_field object=$format_config field=$_field_name onchange="this.form.onsubmit();"}}
       </form>

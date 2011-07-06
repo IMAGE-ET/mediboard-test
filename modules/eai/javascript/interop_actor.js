@@ -54,6 +54,11 @@ InteropActor = {
   	});
   },
   
+  callbackConfigsFormats : function(config_id, object) {
+	  var actor_guid = object.sender_class+"-"+object.sender_id;
+	  InteropActor.refreshConfigsFormats(actor_guid);
+  },
+  
   refreshConfigsFormats : function(actor_guid) {
     var url = new Url("eai", "ajax_refresh_configs_formats");
     url.addParam("actor_guid", actor_guid);

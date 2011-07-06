@@ -14,7 +14,11 @@
 
 <script type="text/javascript">
   Main.add(function () {
-    Control.Tabs.create('tabs-{{$actor->_guid}}', true);
+	  tabs = Control.Tabs.create('tabs-{{$actor->_guid}}', false,  {
+        afterChange: function(newContainer){
+	        $$("a[href='#"+newContainer.id+"']")[0].up("li").onmousedown();
+        }
+    });
   });
 </script>
   
@@ -25,7 +29,9 @@
         <tr>
           <td>
             <ul id="tabs-{{$actor->_guid}}" class="control_tabs">
-              <li><a href="#{{$actor->_guid}}">{{tr}}{{$exchange_source->_class_name}}{{/tr}}</a></li>
+              {{if !$actor instanceof CSenderSOAP}} 
+                <li><a href="#{{$actor->_guid}}">{{tr}}{{$exchange_source->_class_name}}{{/tr}}</a></li>
+              {{/if}}
               <li onmousedown="InteropActor.refreshFormatsAvailable('{{$actor->_guid}}')">
                 <a href="#formats_available_{{$actor->_guid}}">{{tr}}{{$actor->_class_name}}_formats-available{{/tr}}</a></li>
               <li onmousedown="InteropActor.refreshConfigsFormats('{{$actor->_guid}}')">
@@ -35,9 +41,11 @@
             
             <hr class="control_tabs" />
             
-            <div id="{{$actor->_guid}}" style="display:none;">
-              {{mb_include module=system template=inc_config_exchange_source source=$exchange_source}}
-            </div>
+            {{if !$actor instanceof CSenderSOAP}}
+              <div id="{{$actor->_guid}}" style="display:none;">
+                {{mb_include module=system template=inc_config_exchange_source source=$exchange_source}}
+              </div>
+            {{/if}}
             
             <div id="formats_available_{{$actor->_guid}}" style="display:none"></div>
             

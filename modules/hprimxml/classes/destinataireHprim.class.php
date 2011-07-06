@@ -57,7 +57,6 @@ class CDestinataireHprim extends CInteropReceiver {
   function getBackProps() {
     $backProps = parent::getBackProps();
     $backProps['object_configs'] = "CDestinataireHprimConfig object_id";
-    $backProps['senders']        = "CEchangeHprim sender_id";
     $backProps['receivers']      = "CEchangeHprim receiver_id";
     
     return $backProps;

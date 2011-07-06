@@ -40,7 +40,6 @@ class CEchangeHprim21 extends CExchangeTabular {
   function getProps() {
     $props = parent::getProps();
 
-    //$props["emetteur_id"]  = "ref class|CDestinataireHprim21";
     $props["receiver_id"]  = "ref class|CDestinataireHprim21";
     $props["object_class"] = "enum list|CPatient|CSejour|CMedecin show|0";
     

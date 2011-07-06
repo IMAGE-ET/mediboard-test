@@ -50,8 +50,6 @@
         
         {{if $configs}}
           <div id="format_{{$configs->_guid}}" style="display: none;"></div>
-        {{else}}
-          <div class="small-warning">{{tr}}CExchangeDataFormat_no-configs{{/tr}}</div>
         {{/if}}
       {{/foreach}}
       
