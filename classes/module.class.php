@@ -186,14 +186,22 @@ class CModule extends CMbObject {
     return $this->_can;
   }
 
-  static function loadModules() {
-    $modules = SHM::get("modules");
-    
-    if (!$modules) {
-      $module = new CModule;
-      $modules = $module->loadList(null, "mod_ui_order"); 
-      SHM::put("modules", $modules);
+  static function loadModules($shm = false) {
+    // Yet too slow due to unserialize of mb objects with metamodel
+    if ($shm) {
+      $modules = SHM::get("modules");
+      
+      if (!$modules) {
+        $module = new self;
+        $modules = $module->loadList(null, "mod_ui_order"); 
+        SHM::put("modules", $modules);
+      }
     }
+    else {
+      $module = new self;
+      $modules = $module->loadList(null, "mod_ui_order"); 
+    }
+
     
     foreach ($modules as &$module) {
       $module->checkModuleFiles();
