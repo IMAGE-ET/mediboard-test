@@ -34,8 +34,15 @@
    - [{{$curr_delivery->comments}}]
   {{/if}}
 </td>
-<td style="text-align: center;">{{mb_ditto name="date-$service_id" value=$curr_delivery->date_dispensation|date_format:$conf.date}}</td>
-<td style="text-align: center;">{{mb_ditto name="time-$service_id" value=$curr_delivery->date_dispensation|date_format:$conf.time}}</td>
+
+<td style="text-align: center;" 
+    title="Réassort du {{mb_value object=$curr_delivery field=datetime_min}} au {{mb_value object=$curr_delivery field=datetime_max}}">
+  {{mb_ditto name="date-$service_id" value=$curr_delivery->date_dispensation|date_format:$conf.date}}
+</td>
+<td style="text-align: center;"
+    title="Réassort du {{mb_value object=$curr_delivery field=datetime_min}} au {{mb_value object=$curr_delivery field=datetime_max}}">
+  {{mb_ditto name="time-$service_id" value=$curr_delivery->date_dispensation|date_format:$conf.time}}
+</td>
 
 {{if !$conf.dPstock.CProductStockGroup.infinite_quantity}}
 <td style="text-align: center;">
@@ -43,9 +50,11 @@
 </td>
 {{/if}}
 
+{{if !$single_location}}
 <td>
   {{mb_value object=$curr_delivery->_ref_stock->_ref_location field=name}}
 </td>
+{{/if}}
 
 {{if !$conf.dPstock.CProductStockService.infinite_quantity}}
 <td style="text-align: center;">

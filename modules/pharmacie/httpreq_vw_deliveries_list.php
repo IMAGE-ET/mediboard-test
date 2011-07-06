@@ -10,8 +10,38 @@
 
 CCanDo::checkRead();
 
-$mode               = CValue::getOrSession('mode', "global");
-$display_delivered  = CValue::getOrSession('display_delivered', 'false') == 'true';
+$delivery_id       = CValue::get('delivery_id');
+
+// une seule ligne
+if ($delivery_id) {
+	
+$delivery = new CProductDelivery();
+$delivery = $delivery->load($delivery_id);
+$delivery->loadRefsFwd();
+$delivery->_ref_stock->loadRefsFwd();
+$delivery->isDelivered();
+
+$stocks_service = array();
+$stocks_service[$delivery->_id] = CProductStockService::getFromCode($delivery->_ref_stock->_ref_product->code, $delivery->service_id);
+
+// Création du template
+$smarty = new CSmartyDP();
+
+$smarty->assign('curr_delivery',  $delivery);
+$smarty->assign('stocks_service', $stocks_service);
+$smarty->assign('line_refresh', true);
+$smarty->assign('service_id', $delivery->service_id);
+$smarty->assign("single_location", CProductStockGroup::getHostGroup(false)->countBackRefs("stock_locations") < 2);
+
+$smarty->display('inc_vw_line_delivrance.tpl');
+
+}
+
+// services + delivrances
+else {
+	
+$mode              = CValue::getOrSession('mode', "global");
+$display_delivered = CValue::getOrSession('display_delivered', 'false') == 'true';
 
 $order_col = CValue::get('order_col');
 $order_way = CValue::get('order_way');
@@ -56,6 +86,8 @@ else
   $where['product_delivery.patient_id'] = "IS NOT NULL";
   
 $where[] = "product_delivery.date_dispensation BETWEEN '$datetime_min' AND '$datetime_max'";
+//$where['product_delivery.datetime_min'] = " <= '$datetime_max'";
+//$where['product_delivery.datetime_max'] = " >= '$datetime_min'";
 $where['product_delivery.quantity'] = " > 0";
 $where['product_delivery.stock_class'] = "= 'CProductStockGroup'";
 $where['product_delivery.stock_id'] = "IS NOT NULL";
@@ -78,7 +110,7 @@ foreach($services as $_service_id => $_service) {
     $where['service_id'] = "IS NULL OR service_id = ''";
   else
     $where['service_id'] = " = '$_service->_id'";
-  
+	
   $deliveries = $delivery->loadList($where, $order_by, 200, null, $ljoin);
   
   foreach($deliveries as $_id => $_delivery) {
@@ -148,5 +180,8 @@ $smarty->assign('services',       $services);
 $smarty->assign('delivered_counts', $delivered_counts);
 $smarty->assign('display_delivered', $display_delivered);
 $smarty->assign('mode', $mode);
+$smarty->assign("single_location", CProductStockGroup::getHostGroup(false)->countBackRefs("stock_locations") < 2);
 
 $smarty->display('inc_deliveries_list.tpl');
+
+}

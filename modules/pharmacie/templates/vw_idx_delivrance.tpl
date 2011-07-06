@@ -31,10 +31,8 @@ function refreshLists() {
 
 function refreshDeliveryLine(delivery_id) {
   var form = getForm("filter");
-  var url = new Url("pharmacie", "httpreq_vw_delivery");
+  var url = new Url("pharmacie", "httpreq_vw_deliveries_list");
   url.addParam("delivery_id", delivery_id);
-  url.addParam("datetime_min", $V(form.datetime_min));
-  url.addParam("datetime_max", $V(form.datetime_max));
   url.requestUpdate("CProductDelivery-"+delivery_id);
 }
 

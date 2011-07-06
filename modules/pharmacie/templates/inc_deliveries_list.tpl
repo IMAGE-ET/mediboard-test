@@ -68,48 +68,57 @@ Main.add(function(){
     <td>
     	{{assign var=cols value=10}}
 			
-      <table class="tbl">
-        <tr>
-          <th style="width: 16px;"></th>
-          <th>
-            {{mb_colonne class=CProductStockGroup field=product_id order_col=$order_col order_way=$order_way function=changeSort}}
-          </th>
-          <th colspan="2">
-            {{mb_colonne class=CProductDelivery field=date_dispensation order_col=$order_col order_way=$order_way function=changeSort}}
-          </th>
-          {{if !$conf.dPstock.CProductStockGroup.infinite_quantity}}
-            <th>Stock <br />pharm.</th>
-          {{/if}}
-          <th>
-            {{mb_colonne class=CProductStockGroup field=location_id order_col=$order_col order_way=$order_way function=changeSort}}
-          </th>
-          {{if !$conf.dPstock.CProductStockService.infinite_quantity}}
-            <th>Stock <br /> serv.</th>
-          {{/if}}
-          <th class="narrow"><button type="button" onclick="deliverAll('list-{{$mode}}')" class="tick">Tout déliv.</button></th>
-          <th>{{mb_title class=CProduct field=_unit_title}}</th>
-          <th class="narrow"></th>
-        </tr>
+      {{foreach from=$deliveries_by_service item=_deliveries key=service_id}}
+			  {{assign var=_service value=$services.$service_id}}
 				
-        {{foreach from=$deliveries_by_service item=_deliveries key=service_id}}
-          <tbody id="{{$mode}}-service-{{$service_id}}" style="display: none;">
-					  {{assign var=last_patient_id value=null}}
+	      <table class="tbl" id="{{$mode}}-service-{{$service_id}}" style="display: none;">
+	        <tr>
+	          <th style="width: 16px;"></th>
+	          <th>
+	            {{mb_colonne class=CProductStockGroup field=product_id order_col=$order_col order_way=$order_way function=changeSort}}
+	          </th>
 						
-            {{foreach from=$_deliveries item=_delivery}}
-						  {{if $_delivery->patient_id && $_delivery->patient_id != $last_patient_id}}
-                {{assign var=last_patient_id value=$_delivery->patient_id}}
-	              <tr>
-	                <th colspan="{{$cols}}" class="title">{{$_delivery->_ref_patient}}</th>
-	              </tr>
-							{{/if}}
-							
-              <tr id="{{$_delivery->_guid}}">
-                {{include file="inc_vw_line_delivrance.tpl" curr_delivery=$_delivery}}
+	          <th colspan="2">
+	            {{mb_colonne class=CProductDelivery field=date_dispensation order_col=$order_col order_way=$order_way function=changeSort}}
+	          </th>
+						
+	          {{if !$conf.dPstock.CProductStockGroup.infinite_quantity}}
+	            <th>Stock <br />pharm.</th>
+	          {{/if}}
+						
+						{{if !$single_location}}
+	          <th>
+	            {{mb_colonne class=CProductStockGroup field=location_id order_col=$order_col order_way=$order_way function=changeSort}}
+	          </th>
+						{{/if}}
+						
+	          {{if !$conf.dPstock.CProductStockService.infinite_quantity}}
+	            <th>Stock <br /> serv.</th>
+	          {{/if}}
+						
+	          <th class="narrow">
+	          	<button type="button" onclick="deliverAll('{{$mode}}-service-{{$service_id}}')" class="tick">Tout déliv.</button>
+						</th>
+						
+	          <th>{{mb_title class=CProduct field=_unit_title}}</th>
+	          <th class="narrow"></th>
+	        </tr>
+				
+				  {{assign var=last_patient_id value=null}}
+          {{foreach from=$_deliveries item=_delivery}}
+					  {{if $_delivery->patient_id && $_delivery->patient_id != $last_patient_id}}
+              {{assign var=last_patient_id value=$_delivery->patient_id}}
+              <tr>
+                <th colspan="{{$cols}}" class="title">{{$_delivery->_ref_patient}}</th>
               </tr>
-            {{foreachelse}}
-              <td colspan="{{$cols}}" class="empty">{{tr}}CProductDelivery.none{{/tr}}</td>
-            {{/foreach}}
-          </tbody>
+						{{/if}}
+						
+            <tr id="{{$_delivery->_guid}}">
+              {{include file="inc_vw_line_delivrance.tpl" curr_delivery=$_delivery}}
+            </tr>
+          {{foreachelse}}
+            <td colspan="{{$cols}}" class="empty">{{tr}}CProductDelivery.none{{/tr}}</td>
+          {{/foreach}}
         {{foreachelse}}
         <tr>
           <td colspan="{{$cols}}" class="empty">{{tr}}CProductDelivery.{{$mode}}.none{{/tr}}</td>
