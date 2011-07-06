@@ -124,7 +124,7 @@ class CProductDelivery extends CMbObject {
   }
   
   function countDelivered() {
-    $this->loadRefsBack();
+    $this->loadRefsDeliveryTraces();
     $sum = 0;
     foreach ($this->_ref_delivery_traces as $trace) {
       if ($trace->date_delivery)

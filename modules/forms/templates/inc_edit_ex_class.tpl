@@ -218,7 +218,11 @@ toggleGroupLabelEdit = function(link) {
                     
                     {{assign var=_spec_type value=$_field->_spec_object->getSpecType()}}
 										
-                    {{if in_array($_spec_type, "CExClassField"|static:_formula_valid_types) || $_spec_type == "enum" || $_spec_type == "set"}}
+                    {{if in_array($_spec_type, "CExClassField"|static:_formula_valid_types) || 
+										     $_spec_type == "enum" || 
+												 $_spec_type == "date" || 
+                         $_spec_type == "datetime" || $_spec_type == "dateTime" || 
+                         $_spec_type == "time"}} {{*  || $_spec_type == "set" *}}
                     <button class="right notext insert-formula" style="margin: -3px; margin-left: -1px; display: none;"
                             onclick="ExFormula.insertText('[{{$_field->_locale|smarty:nodefaults|JSAttribute}}]')">
                       {{tr}}CExClassField.add_to_formula{{/tr}}
