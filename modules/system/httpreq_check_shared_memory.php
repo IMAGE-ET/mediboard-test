@@ -63,6 +63,10 @@ foreach($classNames as $className) {
   $classPaths[$className] = $class->getFileName();
 }
 
+if (null == SHM::get("modules")) {
+  CAppUI::stepAjax("Modules-shm-none", UI_MSG_OK);
+}
+
 if (null == $sharedClassPaths = SHM::get("class-paths")) {
   CAppUI::stepAjax("Classes-shm-none", UI_MSG_OK);
 }

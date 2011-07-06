@@ -161,4 +161,6 @@ if(CValue::get("ajax")) {
   echo(CAppUI::getMsg());
 }
 
+SHM::rem("modules");
+
 CAppUI::redirect("m=system&tab=view_modules");

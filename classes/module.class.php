@@ -66,27 +66,27 @@ class CModule extends CMbObject {
     $this->_ref_module = $this;
   }
   
-	/**
-	 * Get all classes for a given module
-	 * @param $module string Module name
-	 * @return array[string] Class names
-	 **/
-	static function getClassesFor($module) {
-		// Liste des Class
-		$listClass = CApp::getInstalledClasses();
-		
-		$tabClass = array();
-		foreach ($listClass as $class) {
-  		$object = new $class;
-  		if (!$object->_ref_module) {
-  			continue;
-  		}
-  		if ($object->_ref_module->mod_name == $module) {
-  			$tabClass[] = $object->_class_name;
-  		}
-  	}
-  	return $tabClass;
-	}
+  /**
+   * Get all classes for a given module
+   * @param $module string Module name
+   * @return array[string] Class names
+   **/
+  static function getClassesFor($module) {
+    // Liste des Class
+    $listClass = CApp::getInstalledClasses();
+    
+    $tabClass = array();
+    foreach ($listClass as $class) {
+      $object = new $class;
+      if (!$object->_ref_module) {
+        continue;
+      }
+      if ($object->_ref_module->mod_name == $module) {
+        $tabClass[] = $object->_class_name;
+      }
+    }
+    return $tabClass;
+  }
   
   function getSpec() {
     $spec = parent::getSpec();
@@ -95,15 +95,15 @@ class CModule extends CMbObject {
     return $spec;
   }
   
-	function getBackProps() {
-	  $backProps = parent::getBackProps();
-	  $backProps["messages"]            = "CMessage module_id";
-	  $backProps["permissions_modules"] = "CPermModule mod_id";
-	  return $backProps;
-	}
+  function getBackProps() {
+    $backProps = parent::getBackProps();
+    $backProps["messages"]            = "CMessage module_id";
+    $backProps["permissions_modules"] = "CPermModule mod_id";
+    return $backProps;
+  }
   
   function getProps() {
-  	$props = parent::getProps();
+    $props = parent::getProps();
     $props["mod_name"]      = "str notNull maxLength|20";
     $props["mod_type"]      = "enum notNull list|core|user";
     $props["mod_version"]   = "str notNull maxLength|6";
@@ -175,20 +175,26 @@ class CModule extends CMbObject {
   }
   
   function canDo(){
-  	if(!$this->_can) {
-  	  $canDo = new CCanDo;
-  	  $canDo->read  = $this->canRead();
+    if(!$this->_can) {
+      $canDo = new CCanDo;
+      $canDo->read  = $this->canRead();
       $canDo->edit  = $this->canEdit();
       $canDo->view  = $this->canView();
       $canDo->admin = $this->canAdmin();
       return $this->_can = $canDo;
-  	}
-  	return $this->_can;
+    }
+    return $this->_can;
   }
 
   static function loadModules() {
-    $modules = new CModule;
-    $modules = $modules->loadList(null, "mod_ui_order");    
+    $modules = SHM::get("modules");
+    
+    if (!$modules) {
+      $module = new CModule;
+      $modules = $module->loadList(null, "mod_ui_order"); 
+      SHM::put("modules", $modules);
+    }
+    
     foreach ($modules as &$module) {
       $module->checkModuleFiles();
       self::$installed[$module->mod_name] =& $module;

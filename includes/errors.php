@@ -81,8 +81,8 @@ function mbRelativePath($absPath) {
   global $dPconfig;
   $mbPath = $dPconfig["root_dir"];
   
-  $absPath = strtolower(strtr($absPath, "\\", "/"));
-  $mbPath = strtolower(strtr($mbPath, "\\", "/"));
+  $absPath = strtr($absPath, "\\", "/");
+  $mbPath = strtr($mbPath, "\\", "/");
   
   // Hack for MS Windows server
   

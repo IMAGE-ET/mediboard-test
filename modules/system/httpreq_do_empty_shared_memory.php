@@ -45,6 +45,18 @@ else {
 	
 	CAppUI::stepAjax("Classes-shm-rem-ok", UI_MSG_OK);
 }
+
+// Remove modules cache
+if (!SHM::get("modules")) {
+  CAppUI::stepAjax("Modules-shm-none", UI_MSG_WARNING);
+}
+else {
+  if (!SHM::rem("modules")) {
+    CAppUI::stepAjax("Modules-shm-rem-ko", UI_MSG_ERROR);
+  }
+  
+  CAppUI::stepAjax("Modules-shm-rem-ok", UI_MSG_OK);
+}
   
 CJSLoader::writeLocaleFile();
 CAppUI::stepAjax("Locales-javascript-cache-allup", UI_MSG_OK);
