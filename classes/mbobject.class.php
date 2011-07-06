@@ -31,7 +31,7 @@ class CMbObject {
   static $cachableCounts = array();
   static $handlers = null; // must be null at the beginning @see self::makeHandlers
   static $ignoredHandlers = array();
-  
+    
   /**
    * @var string The object's class name
    */
@@ -134,6 +134,14 @@ class CMbObject {
   
   function __toString() {
     return $this->_view;
+  }  
+
+  function __sleep() {
+    return array_keys($this->_specs);
+  }
+  
+  function __wakeup() {
+    $this->CMbObject();
   }
   
   function CMbObject() {

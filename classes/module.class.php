@@ -186,8 +186,8 @@ class CModule extends CMbObject {
     return $this->_can;
   }
 
-  static function loadModules($shm = false) {
-    // Yet too slow due to unserialize of mb objects with metamodel
+  static function loadModules($shm = true) {
+    // @todo Experiment, then remove test if no problem
     if ($shm) {
       $modules = SHM::get("modules");
       
@@ -202,7 +202,7 @@ class CModule extends CMbObject {
       $modules = $module->loadList(null, "mod_ui_order"); 
     }
 
-    
+    // Catagories
     foreach ($modules as &$module) {
       $module->checkModuleFiles();
       self::$installed[$module->mod_name] =& $module;
