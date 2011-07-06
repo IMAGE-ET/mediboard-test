@@ -8,26 +8,26 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
 *}}
 
-{{if $conf.sip.server}}
-<script type="text/javascript">
-ElementChecker.check.dontMatch = function(){
-  this.assertMultipleArgs("dontMatch");
-  if (this.sValue.match(new RegExp(this.oProperties["dontMatch"])))
-    this.addError("dontMatch", "Doit pas contenir $g en mode SIP");
-}.bind(ElementChecker);
-</script>
+{{if $conf.smp.server}}
+  <script type="text/javascript">
+    ElementChecker.check.dontMatch = function(){
+      this.assertMultipleArgs("dontMatch");
+      if (this.sValue.match(new RegExp(this.oProperties["dontMatch"])))
+        this.addError("dontMatch", "Doit pas contenir $g en mode SMP");
+    }.bind(ElementChecker);
+  </script>
 {{/if}}
 
-<form name="editConfigSip" action="?" method="post" onsubmit="return onSubmitFormAjax(this)">
+<form name="editConfigSMP" action="?" method="post" onsubmit="return onSubmitFormAjax(this)">
   <input type="hidden" name="dosql" value="do_configure" />
   <input type="hidden" name="m" value="system" />
   <table class="form">
-    {{assign var="mod" value="sip"}}
+    {{assign var="mod" value="smp"}}
     <tr>
       <th class="title" colspan="10">{{tr}}config-{{$mod}}{{/tr}}</th>
     </tr>
     
-    {{mb_include module=system template=configure_handler class_handler=CSipObjectHandler}}
+    {{mb_include module=system template=configure_handler class_handler=CSmpObjectHandler}}
     
     <tr>
       <th class="category" colspan="10">{{tr}}config-traitement-{{$mod}}{{/tr}}</th>
@@ -35,8 +35,8 @@ ElementChecker.check.dontMatch = function(){
         
     {{mb_include module=system template=inc_config_bool var=server}}
     
-    {{if $conf.sip.server}}
-      {{mb_include module=system template=inc_config_str var=tag_ipp cssClass="str dontMatch"}}
+    {{if $conf.smp.server}}
+      {{mb_include module=system template=inc_config_str var=tag_dossier cssClass="str dontMatch"}}
       
       {{mb_include module=system template=inc_config_bool var=notify_all_destinataires"}}
     {{/if}}

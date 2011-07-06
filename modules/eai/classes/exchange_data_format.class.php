@@ -21,7 +21,6 @@ class CExchangeDataFormat extends CMbMetaObject {
   // DB Fields
   var $group_id                  = null;
   var $date_production           = null;
-  //var $emetteur_id             = null;
   var $sender_id                 = null;
   var $sender_class              = null;
   var $receiver_id               = null;

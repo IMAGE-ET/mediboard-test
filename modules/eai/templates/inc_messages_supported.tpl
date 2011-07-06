@@ -14,10 +14,10 @@
 <fieldset>
   <legend>{{tr}}{{$_message}}{{/tr}}</legend>
   
-  <table class="tbl">
+  <table class="form">
     {{foreach from=$_messages_supported item=_message_supported}}
     <tr>
-      <th class="category narrow">{{tr}}{{$_message_supported->message}}{{/tr}}</th>
+      <th class="narrow">{{tr}}{{$_message_supported->message}}{{/tr}}</th>
       <td>
         <form name="editActorMessageSupported-{{$_message_supported->_guid}}" 
           action="?" method="post" onsubmit="return onSubmitFormAjax(this);">

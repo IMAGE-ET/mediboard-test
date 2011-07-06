@@ -30,7 +30,6 @@ class CEchangeHprim extends CEchangeXML {
   function getProps() {
     $props = parent::getProps();
     
-    //$props["emetteur_id"]   = "ref class|CDestinataireHprim"; 
     $props["receiver_id"]   = "ref class|CDestinataireHprim"; 
     $props["initiateur_id"] = "ref class|CEchangeHprim";
     $props["object_class"]  = "enum list|CPatient|CSejour|COperation|CAffectation show|0";

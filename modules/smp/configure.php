@@ -2,8 +2,8 @@
 
 /**
  * @package Mediboard
- * @subpackage sip
- * @version $Revision$
+ * @subpackage smp
+ * @version $Revision: 10467 $
  * @author SARL OpenXtrem
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
  */

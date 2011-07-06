@@ -14,7 +14,7 @@
 <table class="form">
   {{foreach from=$fields item=_field_name}}
   <tr>
-    <th class="category">{{mb_title object=$format_config field=$_field_name}}</th>
+    <th>{{mb_title object=$format_config field=$_field_name}}</th>
     <td>
       <form name="editConfigsFormat-{{$_field_name}}" 
          action="?m={{$m}}" method="post" onsubmit="return onSubmitFormAjax(this);">

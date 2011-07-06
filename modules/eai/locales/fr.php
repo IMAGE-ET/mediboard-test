@@ -161,6 +161,7 @@ $locales['CMessageSupported.none'] = 'Aucun message supporté';
 $locales['CMessageSupported.one'] = 'Un message supporté';
 $locales['config-object-servers'] = 'Serveurs d\'objets';
 $locales['config-object_server-CSipObjectHandler'] = 'Serveur d\'objets SIP';
+$locales['config-object_server-CSmpObjectHandler'] = 'Serveur d\'objets SMP';
 $locales['eai-evt-choose'] = 'Choisir un événement';
 $locales['eai-evt-none'] = 'Aucun événement';
 $locales['eai-msg-None'] = 'Aucun';

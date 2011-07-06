@@ -39,11 +39,10 @@ $locales['config-sip-tag_ipp'] = 'Tag IPP du SIP';
 $locales['config-sip-tag_ipp-desc'] = 'Tag IPP du SIP';
 $locales['config-traitement-sip'] = 'Traitement du mode SIP';
 $locales['mod-sip-tab-configure'] = 'Configuration';
-$locales['mod-sip-tab-mbCip'] = 'Client Identité Patient';
-$locales['mod-sip-tab-mbSip'] = 'Serveur Identité Patient';
-$locales['mod-sip-tab-vw_test_ws'] = 'Test WS';
 $locales['module-sip-court'] = 'SIP';
 $locales['module-sip-long'] = 'Serveur d\'Identité Patient';
 $locales['sip-export-class'] = 'Export de la table';
-$locales['sip-export-classes'] = 'Export des patients';
+$locales['sip-export-classes'] = 'Export';
+$locales['sip_config-actions'] = 'Actions';
+$locales['sip_config-actions-export'] = 'Export';
 ?>

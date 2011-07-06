@@ -15,7 +15,7 @@
   <table class="tbl">
   {{foreach from=$messages_supported item=_message_supported}}
     <tr>
-      <th class="category narrow">{{tr}}{{$_message_supported->message}}{{/tr}}</th>
+      <th class="narrow">{{tr}}{{$_message_supported->message}}{{/tr}}</th>
       <td> {{mb_value object=$_message_supported field=active}} </td>
     </tr>
   {{/foreach}}
