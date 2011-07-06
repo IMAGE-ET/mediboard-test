@@ -40,15 +40,14 @@ submitSuivi = function(oForm) {
 toggleLineDispensation = function(formName, done){
   var tbody = getForm(formName).up("tbody");
   if(done){
-	  tbody.addClassName("done");
-	  $('showDoneDispensations').checked ? tbody.show() : tbody.hide();
+	  tbody.addClassName("done").setVisible($('showDoneDispensations').checked);
   } else {
-	  tbody.show().removeClassName("done");
-	}					 
+	  tbody.removeClassName("done").show();
+	}
 }
 
 toggleDoneDispensations = function(){
-  $('showDoneDispensations').checked ? $$("tbody.done").invoke("show") : $$("tbody.done").invoke("hide");
+  $$("tbody.done").invoke("setVisible", $('showDoneDispensations').checked);
 }
 
 {{if $mode_nominatif}}
@@ -83,21 +82,27 @@ toggleDoneDispensations = function(){
   </tr>
   <tr>
   	<th>Produit</th>
+		
   	{{if $mode_nominatif}}
-		<th>Posologie</th>
+		  <th>Posologie</th>
 		{{/if}}
+		
     <th colspan="2">Qté à administrer</th>
     <!--<th colspan="2">Qté à dispenser</th>-->
+		
     {{if !$infinite}}
       <th>Stock<br />pharmacie</th>
     {{/if}}
+		
     <th style="width: 30%">
       <!-- <button style="float: right" type="button" onclick="dispenseAll('list-dispensations', refreshLists)" class="tick">Tout dispenser</button> -->
       Dispensation
     </th>
+		
     <th>Effectuées</th>
+		
     {{if !$infinite_service}}
-    <th>Stock<br /> du service</th>
+      <th>Stock<br /> du service</th>
     {{/if}}
   </tr>
   {{foreach from=$dispensations key=code_cis item=quantites}}

@@ -15,25 +15,21 @@
   {{mb_include module=dPstock template=inc_product_in_order product=$product}}
 </td>
 
-{{if $curr_delivery->patient_id}}
-  <td>{{$curr_delivery->_ref_patient->_view}}</td>
-{{/if}}
 <td>
   {{if @$line_refresh}}
   <script type="text/javascript">
     if (!$V(getForm("filter").display_delivered) && ({{$curr_delivery->_delivered|ternary:1:0}} || '{{$curr_delivery->date_delivery}}')) {
-      $("CProductDelivery-{{$curr_delivery->_id}}").hide();
+      $("CProductDelivery-{{$id}}").hide();
       /*Main.add(function(){
-        //$("CProductDelivery-{{$curr_delivery->_id}}").remove();
+        //$("CProductDelivery-{{$id}}").remove();
       });*/
     }
   </script>
   {{/if}}
   
-  <div id="tooltip-content-{{$curr_delivery->_id}}" style="display: none;">{{$curr_delivery->_ref_stock->_view}}</div>
-  <span onmouseover="ObjectTooltip.createDOM(this, 'tooltip-content-{{$curr_delivery->_id}}')">
-    {{$curr_delivery->_ref_stock->_view}}
-  </span>
+  <strong onmouseover="ObjectTooltip.createEx(this, '{{$curr_delivery->_ref_stock->_ref_product->_guid}}')">
+    {{$curr_delivery->_ref_stock->_ref_product->_view}}
+  </strong>
   {{if $curr_delivery->comments}}
    - [{{$curr_delivery->comments}}]
   {{/if}}
@@ -71,14 +67,15 @@
     <tr>
       <td class="button narrow">
         {{if !$trace->date_reception}}
-          <form name="delivery-trace-{{$trace->_id}}-cancel" action="?" method="post" onsubmit="return deliverLine(this)">
+          {{unique_id var=uid}}
+          <form name="delivery-trace-{{$uid}}-cancel" action="?" method="post" onsubmit="return deliverLine(this)">
             <input type="hidden" name="m" value="dPstock" /> 
             <input type="hidden" name="del" value="0" />
             <input type="hidden" name="dosql" value="do_delivery_trace_aed" />
             <input type="hidden" name="delivery_trace_id" value="{{$trace->_id}}" />
-            <input type="hidden" name="_delivery_id" value="{{$curr_delivery->_id}}" /> <!-- used by refreshDeliveryLine -->
+            <input type="hidden" name="_delivery_id" value="{{$id}}" /> <!-- used by refreshDeliveryLine -->
             <input type="hidden" name="_undeliver" value="1" />
-            <button type="submit" class="cancel notext oneclick" style="margin: -1px;">{{tr}}Cancel{{/tr}}</button>
+            <button type="submit" class="cancel notext singleclick" style="margin: -1px;">{{tr}}Cancel{{/tr}}</button>
           </form>
         {{else}}
           <img src="images/icons/tick.png" title="Délivré" />
@@ -100,15 +97,16 @@
   
     <tr>
       <td colspan="10" title="Quantité d'origine: {{mb_value object=$curr_delivery field=quantity}}" style="padding: 0;">
-        <form name="delivery-trace-{{$curr_delivery->_id}}-new" action="?" method="post" class="deliver"
+        {{unique_id var=uid}}
+        <form name="delivery-trace-{{$uid}}-new" action="?" method="post" class="deliver"
               onsubmit="return deliverLine(this)" {{if $curr_delivery->_delivered}}style="display: none;"{{/if}}>
           <input type="hidden" name="m" value="dPstock" /> 
           <input type="hidden" name="del" value="0" />
           <input type="hidden" name="dosql" value="do_delivery_trace_aed" />
-          <input type="hidden" name="delivery_id" value="{{$curr_delivery->_id}}" />
+          <input type="hidden" name="delivery_id" value="{{$id}}" />
           <input type="hidden" name="date_delivery" value="now" />
-          {{mb_field object=$curr_delivery field=quantity increment=1 form=delivery-trace-$id-new size=2 value=$remaining}}
-          <input type="text" name="code" value="" size="8" />
+          {{mb_field object=$curr_delivery field=quantity increment=1 form="delivery-trace-$uid-new" size=2 value=$remaining}}
+          <!--<input type="text" name="code" value="" size="8" />-->
           <button type="submit" class="tick notext" style="margin: -1px;">Délivrer</button>
         </form>
       </td>
@@ -119,13 +117,14 @@
   {{$curr_delivery->_ref_stock->_ref_product->_unit_title}}
 </td>
 <td>
-  <form name="delivery-force-{{$curr_delivery->_id}}-receive" action="?" method="post" 
+  <form name="delivery-force-{{$id}}-receive" action="?" method="post" 
         onsubmit="return onSubmitFormAjax(this, {onComplete: refreshDeliveryLine.curry($V(this.delivery_id))})">
     <input type="hidden" name="m" value="dPstock" /> 
     <input type="hidden" name="del" value="0" />
     <input type="hidden" name="dosql" value="do_delivery_aed" />
     {{mb_key object=$curr_delivery}}
     <input type="hidden" name="date_delivery" value="{{if !$curr_delivery->date_delivery}}now{{/if}}" />
-    <button type="submit" class="{{$curr_delivery->date_delivery|ternary:'tick':'cancel'}} notext" style="margin: -1px;" title="Marquer comme{{$curr_delivery->date_delivery|ternary:' non':''}} reçu"></button>
+    <button type="submit" class="{{$curr_delivery->date_delivery|ternary:'tick':'cancel'}} notext" 
+		        style="margin: -1px;" title="Marquer comme{{$curr_delivery->date_delivery|ternary:' non':''}} délivré"></button>
   </form>
 </td>

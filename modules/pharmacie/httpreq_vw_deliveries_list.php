@@ -29,6 +29,8 @@ if (!in_array($mode, array("global", "nominatif"))) {
   $mode = "global";
 }
 
+CProductOrderItem::$_load_lite = true;
+
 $services = CProductStockGroup::getServicesList();
 $services["none"] = new CService;
 $services["none"]->_view = "";
@@ -112,13 +114,25 @@ foreach($services as $_service_id => $_service) {
     if ($_delivery->date_delivery || $_delivery->_delivered) {
       $delivered_counts[$_service_id]++;
     }
-    
-    $deliveries_by_service[$_service_id][] = $_delivery;
+		
+    $key = $_delivery->_id;
+		
+		if ($mode == "nominatif") {
+			$patient = $_delivery->_ref_patient;
+			$key = str_pad($patient->nom, 20, " ", STR_PAD_RIGHT).str_pad($patient->prenom, 20, " ", STR_PAD_RIGHT).$key;
+		}
+		
+    $deliveries_by_service[$_service_id][$key] = $_delivery;
   }
-  
-  /*foreach($deliveries_by_service as &$_list) {
-    ksort($_list);
-  }*/
+}
+
+$deliveries_count = 0;
+foreach($deliveries_by_service as $_service_id => $_by_service) {
+	ksort($deliveries_by_service[$_service_id]);
+	
+	foreach($_by_service as $_deliveries) {
+	  $deliveries_count += count($_deliveries);
+	}
 }
 
 // Création du template
@@ -128,6 +142,7 @@ $smarty->assign('order_col',     $order_col);
 $smarty->assign('order_way',     $order_way);
 $smarty->assign('deliveries',     $deliveries);
 $smarty->assign('deliveries_by_service', $deliveries_by_service);
+$smarty->assign('deliveries_count', $deliveries_count);
 $smarty->assign('stocks_service', $stocks_service);
 $smarty->assign('services',       $services);
 $smarty->assign('delivered_counts', $delivered_counts);
