@@ -14,7 +14,7 @@ $user =  CUser::get($user_id);
 $prof = $user->profile_id ? CUser::get($user->profile_id) : new CUser;
 
 if ($user_id == "default") {
-	$user->_id = "0";
+  $user->_id = "0";
 }
 
 $prefvalues = array(
@@ -31,16 +31,16 @@ $prefs = array(
 // Classement par module et par préférences
 CPreferences::loadModules();
 foreach (CPreferences::$modules as $modname => $prefnames){
-  $prefs[$modname] = array();	
+  $prefs[$modname] = array();  
   $module = CModule::getActive($modname);
-	$canRead = $module ? CPermModule::getPermModule($module->_id, PERM_READ, $user_id) : false;
+  $canRead = $module ? CPermModule::getPermModule($module->_id, PERM_READ, $user_id) : false;
   if ($modname == "common" || $user_id == "default" || $canRead) {
     foreach ($prefnames as $prefname){
       $prefs[$modname][$prefname] = array(
         "default"  => CMbArray::extract($prefvalues["default" ], $prefname),
         "template" => CMbArray::extract($prefvalues["template"], $prefname),
         "user"     => CMbArray::extract($prefvalues["user"    ], $prefname),
-			);
+      );
     }
   }
 }

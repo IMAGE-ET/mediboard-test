@@ -262,7 +262,7 @@ Preferences.onSubmit = function(form) {
   {{/if}}
   
   {{assign var="module" value="rtm"}}
-  {{if $prefs.$module}}  
+  {{if @$prefs.$module}}  
   <tbody style="display: none" id="{{$module}}">
   <!-- Préférences pour le module {{$module}} -->
 
