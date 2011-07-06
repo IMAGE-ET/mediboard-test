@@ -187,6 +187,16 @@ Main.add(function () {
           <td>{{tr}}CCodeCCAM.remboursement.{{$remboursement}}{{/tr}}</td>
         </tr>
         {{/if}}
+        
+        {{if $forfait !== null}}
+        <tr>
+          <td><strong>Forfait spécifique</strong></td>
+        </tr>
+        
+        <tr>
+          <td>{{tr}}CCodeCCAM.remboursement.{{$forfait}}{{/tr}}</td>
+        </tr>
+        {{/if}}
       </table>
 
     </td>

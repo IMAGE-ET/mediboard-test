@@ -45,4 +45,9 @@
     <td><button class="tick" onclick="startCCAM()" >Importer la base de données CCAM</button></td>
     <td id="ccam"></td>
   </tr>
+  
+  <tr>
+    <td><button class="tick" onclick="startForfaits()" >Ajouter les types de forfait</button></td>
+    <td id="forfaits"></td>
+  </tr>
 </table>

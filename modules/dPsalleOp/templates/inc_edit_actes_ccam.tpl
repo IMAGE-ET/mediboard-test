@@ -37,12 +37,16 @@ function setToNow(element) {
       {{/foreach}}
     </select>
     {{/if}}
+    <!-- Forfait spécifique -->
     <a href="#" {{if $confCCAM.contraste}}style="color: #fff;"{{/if}} onclick="viewCode('{{$_code->code}}', '{{$subject->_class_name}}')">
       {{$_code->code}}
     </a> :
     <label title="{{$_code->libelleLong}}">
       <small>{{$_code->libelleLong|truncate:70:"...":true}}</small>
     </label>
+    {{if $_code->forfait}}
+      <small style="color: #f00">({{tr}}CCodeCCAM.remboursement.{{$_code->forfait}}{{/tr}})</small>
+    {{/if}}
   </legend>
   <table class="main">
     <tr>

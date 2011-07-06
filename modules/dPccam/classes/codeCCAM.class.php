@@ -22,6 +22,7 @@ class CCodeCCAM {
   var $assos         = array(); // Associabilite
   var $procedure     = null; // Procedure
   var $remboursement = null; // Remboursement
+  var $forfait       = null; // Forfait spécifique (SEH1, SEH2, SEH3, SEH4)
   var $couleur       = null; // Couleur du code par rapport à son chapitre
   
   // Variable calculées
@@ -137,6 +138,7 @@ class CCodeCCAM {
 
 		if ($niv >= self::LITE) {
 			$this->getTarification();
+      $this->getForfaitSpec();
 		}
 
 		if ($niv >= self::MEDIUM) {
@@ -201,7 +203,15 @@ class CCodeCCAM {
     $result = $ds->exec($query);
     $row = $ds->fetchArray($result);
     $this->remboursement = $row["REMBOURSEMENT"];
-  }  
+  }
+  
+  function getForfaitSpec() {
+    $ds =& $this->_spec->ds;
+    $query = $ds->prepare("SELECT * FROM forfaits WHERE CODE = %", $this->code);
+    $result = $ds->exec($query);
+    $row = $ds->fetchArray($result);
+    $this->forfait = $row["forfait"];
+  } 
   
   function getChaps() {
     $ds =& $this->_spec->ds;

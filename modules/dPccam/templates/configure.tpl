@@ -21,6 +21,12 @@ function startNGAP(){
   NGAPUrl.setModuleAction("dPccam", "httpreq_do_add_ngap");
   NGAPUrl.requestUpdate("ngap");
 }
+
+function startForfaits(){
+  var ForfaitsUrl = new Url;
+  ForfaitsUrl.setModuleAction("dPccam", "httpreq_do_add_forfaits");
+  ForfaitsUrl.requestUpdate("forfaits");
+}
 	
 Main.add(Control.Tabs.create.curry('tabs-configure', true));
 </script>
