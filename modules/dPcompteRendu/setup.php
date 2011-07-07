@@ -24,7 +24,7 @@ class CSetupdPcompteRendu extends CSetup {
     $ds = CSQLDataSource::get("std");
     
     // Content specific table 
-    if ($force_content_table || $ds->loadTable("content_html")) {
+    if ($force_content_table || $ds->loadField("compte_rendu", "content_id")) {
       return "UPDATE compte_rendu AS cr, content_html AS ch
         SET ch.content = REPLACE(`content`, '$search', '$replace')
         WHERE cr.object_id IS NULL
