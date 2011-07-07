@@ -17,14 +17,14 @@ class CSetupdPcompteRendu extends CSetup {
    * @param bool $force_content_table
    * @return string The SQL Query
    */
-  static function replaceTemplateQuery($search, $replace, $force_content_table = false) {
+  static function replaceTemplateQuery($search, $replace) {
     $search  = htmlentities($search);
     $replace = htmlentities($replace);
     
     $ds = CSQLDataSource::get("std");
     
     // Content specific table 
-    if ($force_content_table || $ds->loadField("compte_rendu", "content_id")) {
+    if ($ds->loadField("compte_rendu", "content_id")) {
       return "UPDATE compte_rendu AS cr, content_html AS ch
         SET ch.content = REPLACE(`content`, '$search', '$replace')
         WHERE cr.object_id IS NULL
@@ -45,8 +45,8 @@ class CSetupdPcompteRendu extends CSetup {
    * @param bool $force_content_table
    * @return string The SQL Query
    */
-  static function renameTemplateFieldQuery($oldname, $newname, $force_content_table = false) {
-    return self::replaceTemplateQuery("[$oldname]", "[$newname]", $force_content_table);
+  static function renameTemplateFieldQuery($oldname, $newname) {
+    return self::replaceTemplateQuery("[$oldname]", "[$newname]");
   }
 
   
@@ -386,9 +386,9 @@ class CSetupdPcompteRendu extends CSetup {
     $this->addQuery($query);
     
     $this->makeRevision("0.47");
-    $query = self::renameTemplateFieldQuery("Opération - personnel prévu - Panseuse", "Opération - personnel prévu - Panseur", true);
+    $query = self::renameTemplateFieldQuery("Opération - personnel prévu - Panseuse", "Opération - personnel prévu - Panseur");
     $this->addQuery($query);
-    $query = self::renameTemplateFieldQuery("Opération - personnel réel - Panseuse", "Opération - personnel réel - Panseur", true);
+    $query = self::renameTemplateFieldQuery("Opération - personnel réel - Panseuse", "Opération - personnel réel - Panseur");
     $this->addQuery($query);
     
     $this->makeRevision("0.48");
