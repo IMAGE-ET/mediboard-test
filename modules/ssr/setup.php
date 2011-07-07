@@ -314,6 +314,7 @@ class CSetupssr extends CSetup {
               ADD `prescription_line_element_id` INT (11) UNSIGNED NOT NULL";
 		$this->addQuery($query);
 		
+		$this->addDependency("dPprescription", "0,11");
 		$query = "UPDATE `evenement_ssr`
 			SET `prescription_line_element_id` = (
 				SELECT `prescription_line_element_id` 
