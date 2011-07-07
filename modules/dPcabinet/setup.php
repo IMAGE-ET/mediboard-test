@@ -750,9 +750,9 @@ class CSetupdPcabinet extends CSetup {
     $this->addQuery($query);
 
     // Transfert des aides à la saisie
-    $this->addDependency("dPcompteRendu", "0.41", true);
+    $this->addDependency("dPcompteRendu", "0.30", true);
     $query = "UPDATE `aide_saisie`
-			SET `class`='CAddiction',`depend_value_1`=`field`, `field`='addiction'
+			SET `class`='CAddiction',`depend_value`=`field`, `field`='addiction'
 			WHERE `class` = 'CConsultAnesth'
 			AND `field` IN('oenolisme','tabac')";
     $this->addQuery($query);

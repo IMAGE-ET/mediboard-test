@@ -850,22 +850,22 @@ class CSetupdPpatients extends CSetup {
     $query = "UPDATE `aide_saisie` SET 
               `class` = 'CAntecedent', 
               `field` = 'rques', 
-              `name` = CONCAT(UPPER(LEFT(`depend_value_1`, 1)), LOWER(SUBSTRING(`depend_value_1`, 2)), ': ', `name`),
-              `text` = CONCAT(UPPER(LEFT(`depend_value_1`, 1)), LOWER(SUBSTRING(`depend_value_1`, 2)), ': ', `text`),
-              `depend_value_1` = 'addiction'
+              `name` = CONCAT(UPPER(LEFT(`depend_value`, 1)), LOWER(SUBSTRING(`depend_value`, 2)), ': ', `name`),
+              `text` = CONCAT(UPPER(LEFT(`depend_value`, 1)), LOWER(SUBSTRING(`depend_value`, 2)), ': ', `text`),
+              `depend_value` = 'addiction'
             WHERE 
               `class` = 'CAddiction'
-               AND `depend_value_1` IS NOT NULL";
+               AND `depend_value` IS NOT NULL";
     $this->addQuery($query);
     
     // If there is no type
     $query = "UPDATE `aide_saisie` SET 
               `class` = 'CAntecedent', 
               `field` = 'rques', 
-              `depend_value_1` = 'addiction'
+              `depend_value` = 'addiction'
             WHERE 
               `class` = 'CAddiction'
-               AND `depend_value_1` IS NULL";
+               AND `depend_value` IS NULL";
     $this->addQuery($query);
     
     $this->addQuery(CSetupdPcompteRendu::renameTemplateFieldQuery("Sejour - Addictions -- toutes", "Sejour - Antécédents - Addictions"));
