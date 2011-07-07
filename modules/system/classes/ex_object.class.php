@@ -46,11 +46,11 @@ class CExObject extends CMbMetaObject {
   
     if (self::$_multiple_load) {
       $class = get_class($this);
-	    unset(self::$spec[$class]);
-	    unset(self::$props[$class]);
-	    unset(self::$specs[$class]);
-	    unset(self::$backProps[$class]);
-	    unset(self::$backSpecs[$class]);
+      unset(self::$spec[$class]);
+      unset(self::$props[$class]);
+      unset(self::$specs[$class]);
+      unset(self::$backProps[$class]);
+      unset(self::$backSpecs[$class]);
     }
   }
 
@@ -94,6 +94,24 @@ class CExObject extends CMbMetaObject {
   function loadRefReferenceObjects(){
     $this->_ref_reference_object_1 = $this->loadFwdRef("reference_id");
     $this->_ref_reference_object_2 = $this->loadFwdRef("reference2_id");
+  }
+  
+  /**
+   * Permet de supprimer les valeurs non presentes dans les 
+   * specs du champ dans ce formulaire, mais qui le sont peut
+   * etre dans le meme champ dans un autre formulaire (cas d'un concept)
+  **/
+  static function typeSetSpecIntersect($field, $value) {
+    $field_spec = $field->getSpecObject();
+    
+    if (!$field_spec instanceof CSetSpec) {
+      return $value;
+    }
+    
+    $values = explode("|", $value);
+    $values = array_intersect($values, $field_spec->_list);
+    
+    return implode("|", $values);
   }
   
   // FIXME pas DU TOUT optimisé
@@ -178,22 +196,22 @@ class CExObject extends CMbMetaObject {
         if ($_latest) {
           $this->_reported_fields[$field_name] = $_latest;
           $_latest->loadTargetObject();
-          $this->$field_name = $_latest_value;
+          $this->$field_name = self::typeSetSpecIntersect($_field, $_latest_value);
         }
       }
       else {
         // ceux de la meme exclass
         if (!$latest_1->_id && !$latest_2->_id) continue;
         
-				$_base = (($_level == 1) ? $latest_1 : $latest_2);
-				
-				if ($_base->$field_name == "") continue;
-				
+        $_base = (($_level == 1) ? $latest_1 : $latest_2);
+        
+        if ($_base->$field_name == "") continue;
+        
         $_base->loadTargetObject();
-				$_base->loadLastLog();
-				
-				$this->_reported_fields[$field_name] = $_base;
-        $this->$field_name = $_base->$field_name;
+        $_base->loadLastLog();
+        
+        $this->_reported_fields[$field_name] = $_base;
+        $this->$field_name = self::typeSetSpecIntersect($_field, $_base->$field_name);
       }
     }
     
