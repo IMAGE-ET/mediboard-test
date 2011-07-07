@@ -11,21 +11,21 @@ announce_script "Mediboard replace base"
 
 if [ "$#" -lt 5 ]
 then 
-  echo "Usage: $0 <source_location> <source_directory> <source_database> <target_directory> <target_database> (-r <with_restart>) (-s <safe>) (-m <mysql_directory>)(-p <port>)"
-  echo " <source_location>  is the remote location, ie user@host"
+  echo "Usage: $0 <source_location> <source_directory> <source_database> <target_directory> <target_database> [options below]"
+  echo " <source_location>  is the remote location, ie user@host. if localhost, symlink instead of scp"
   echo " <source_directory> is the remote directory, /var/backup/mediboard"
   echo " <source_database>  is the source database name, ie mediboard"
-  echo " <target_directory> is the target directory location, /var/backup/"
+  echo " <target_directory> is the temporary target directory, /tmp"
   echo " <target_database>  is the target database name, ie target_mediboard"
-  echo " [-r <with_restart>]  is restart the Mysql server (Warning), ie for InnoDB"
-  echo " [-s <safe>] is the copy source database"
+  echo " [-r ] to restart the Mysql server (Warning), ie for InnoDB"
+  echo " [-s ] to make a safe copy of existing target database first"
   echo " [-m <mysql_directory>] is the directory where databases are stored, ie /var/lib/mysql"
   echo " [-p <port>] is the ssh port af the target remote location, 22"
   exit 1
 fi
 
 port=22
-with_restart=0
+restart=0
 safe=0
 args=`getopt m:p:rs $*`
 mysql_directory=/var/lib/mysql
@@ -37,7 +37,7 @@ fi
 set -- $args
 for i; do
   case "$i" in
-    -r) with_restart=1; shift;;
+    -r) restart=1; shift;;
     -s) safe=1; shift;;
     -p) port=$2; shift 2;;
     -m) mysql_directory=$2; shift 2;;
@@ -51,7 +51,7 @@ source_database=$3
 target_directory=$4
 target_database=$5
 
-if [ $with_restart -eq 1 ]
+if [ $restart -eq 1 ]
 then
 echo "Warning !!!!!!!!!!!! This will restart the MySQL server"
 fi
@@ -67,8 +67,14 @@ fi
 
 # Retrieve archive 
 archive="archive.tar.gz"
-scp $source_location:$source_directory/$source_database-db/$source_database-latest.tar.gz $target_directory/$archive
-check_errs $? "Failed to retrieve archive" "Succesfully retrieve archive!"
+if [ "foo" = "foo" ]; then
+  cp -s $source_directory/$source_database-db/$source_database-latest.tar.gz $target_directory/$archive
+  check_errs $? "Failed to symlink local archive" "Succesfully symlinked local archive!"
+else
+  scp $source_location:$source_directory/$source_database-db/$source_database-latest.tar.gz $target_directory/$archive
+  check_errs $? "Failed to retrieve remote archive" "Succesfully retrieved remote archive!"
+fi
+
 
 # Extract base
 cd $target_directory
@@ -76,22 +82,22 @@ tar -xf $archive
 check_errs $? "Failed to extract files" "Succesfully extracted files"
 
 # Stop mysql
-if [ $with_restart -eq 1 ]
+if [ $restart -eq 1 ]
 then
 "$mysql_path" stop
-check_errs $? "Failed to stop mysql" "Succesfully stop mysql"
+check_errs $? "Failed to stop mysql" "Succesfully stopped mysql"
 fi
 
 dir_target=$mysql_directory/$target_database
 
 if [ $safe -eq 1 ]
 then
-  DATETIME=$(date +%Y_%m_%dT%H_%M_%S)
   # Copy database
+  DATETIME=$(date +%Y_%m_%dT%H_%M_%S)
   mv $dir_target ${dir_target}_$DATETIME
-  check_errs $? "Move mysql target directory" "Succesfully move mysql target directory"
+  check_errs $? "Move mysql target directory" "Succesfully moved mysql target directory"
   mkdir $dir_target
-  check_errs $? "Failed to create mysql target directory" "Succesfully create mysql target directory"
+  check_errs $? "Failed to create mysql target directory" "Succesfully created mysql target directory"
   chown mysql $dir_target
   chgrp mysql $dir_target
   check_errs $? "Failed to change owner and group" "Succesfully changed owner and group"
@@ -113,12 +119,13 @@ chgrp mysql *
 check_errs $? "Failed to change owner and group" "Succesfully changed owner and group"
 
 # Start mysql
-if [ $with_restart -eq 1 ]
+if [ $restart -eq 1 ]
 then
 "$mysql_path" start
-check_errs $? "Failed to start mysql" "Succesfully start mysql"
+check_errs $? "Failed to start mysql" "Succesfully started mysql"
 fi
 
+# Cleanup temporary archive
 rm -rf $target_directory/$source_database
 rm $target_directory/$archive
-check_errs $? "Failed to delete archive" "Succesfully deleted archive"
+check_errs $? "Failed to delete temporary archive" "Succesfully deleted temporary archive"
