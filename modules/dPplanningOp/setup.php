@@ -851,13 +851,13 @@ class CSetupdPplanningOp extends CSetup {
     
     $this->makeRevision("0.87");
     $this->addDependency("dPcompteRendu", "0.1");
-    $query = CSetupdPcompteRendu::getTemplateReplaceQuery("Opération - CCAM - code",        "Opération - CCAM1 - code");
+    $query = CSetupdPcompteRendu::renameTemplateFieldQuery("Opération - CCAM - code",        "Opération - CCAM1 - code");
     $this->addQuery($query);
     
-    $query = CSetupdPcompteRendu::getTemplateReplaceQuery("Opération - CCAM - description", "Opération - CCAM1 - description");
+    $query = CSetupdPcompteRendu::renameTemplateFieldQuery("Opération - CCAM - description", "Opération - CCAM1 - description");
     $this->addQuery($query);
     
-    $query = CSetupdPcompteRendu::getTemplateReplaceQuery("Opération - CCAM complet", "Opération - CCAM - codes");
+    $query = CSetupdPcompteRendu::renameTemplateFieldQuery("Opération - CCAM complet", "Opération - CCAM - codes");
     $this->addQuery($query);
     
     $this->makeRevision("0.88");

@@ -787,7 +787,7 @@ class CSetupdPpatients extends CSetup {
                   "Anesthésie - TA");
     $count = count($repl);
     for ($i = 0; $i < $count; $i++) {
-      $query = CSetupdPcompteRendu::getTemplateReplaceQuery($find[$i], $repl[$i]);
+      $query = CSetupdPcompteRendu::renameTemplateFieldQuery($find[$i], $repl[$i]);
       $this->addQuery($query);
     }
     
@@ -802,15 +802,15 @@ class CSetupdPpatients extends CSetup {
     $this->addQuery($query);
     
     $this->makeRevision("0.69");
-    $this->addQuery(CSetupdPcompteRendu::getTemplateReplaceQuery("Patient - antécédents", "Patient - Antécédents -- tous"));
-    $this->addQuery(CSetupdPcompteRendu::getTemplateReplaceQuery("Patient - traitements", "Patient - Traitements"));
-    $this->addQuery(CSetupdPcompteRendu::getTemplateReplaceQuery("Patient - addictions" , "Patient - Addictions -- toutes"));
-    $this->addQuery(CSetupdPcompteRendu::getTemplateReplaceQuery("Patient - diagnostics", "Patient - Diagnotics" ));
+    $this->addQuery(CSetupdPcompteRendu::renameTemplateFieldQuery("Patient - antécédents", "Patient - Antécédents -- tous"));
+    $this->addQuery(CSetupdPcompteRendu::renameTemplateFieldQuery("Patient - traitements", "Patient - Traitements"));
+    $this->addQuery(CSetupdPcompteRendu::renameTemplateFieldQuery("Patient - addictions" , "Patient - Addictions -- toutes"));
+    $this->addQuery(CSetupdPcompteRendu::renameTemplateFieldQuery("Patient - diagnostics", "Patient - Diagnotics" ));
     
-    $this->addQuery(CSetupdPcompteRendu::getTemplateReplaceQuery("Sejour - antécédents", "Sejour - Antécédents -- tous"));
-    $this->addQuery(CSetupdPcompteRendu::getTemplateReplaceQuery("Sejour - traitements", "Sejour - Traitements"));
-    $this->addQuery(CSetupdPcompteRendu::getTemplateReplaceQuery("Sejour - addictions" , "Sejour - Addictions -- toutes"));
-    $this->addQuery(CSetupdPcompteRendu::getTemplateReplaceQuery("Sejour - diagnostics", "Sejour - Diagnotics" ));
+    $this->addQuery(CSetupdPcompteRendu::renameTemplateFieldQuery("Sejour - antécédents", "Sejour - Antécédents -- tous"));
+    $this->addQuery(CSetupdPcompteRendu::renameTemplateFieldQuery("Sejour - traitements", "Sejour - Traitements"));
+    $this->addQuery(CSetupdPcompteRendu::renameTemplateFieldQuery("Sejour - addictions" , "Sejour - Addictions -- toutes"));
+    $this->addQuery(CSetupdPcompteRendu::renameTemplateFieldQuery("Sejour - diagnostics", "Sejour - Diagnotics" ));
     
     $this->makeRevision("0.70");
     $query = "ALTER TABLE `patients` ADD `email` VARCHAR (255) AFTER tel2;";
@@ -868,14 +868,14 @@ class CSetupdPpatients extends CSetup {
                AND `depend_value` IS NULL";
     $this->addQuery($query);
     
-    $this->addQuery(CSetupdPcompteRendu::getTemplateReplaceQuery("Sejour - Addictions -- toutes", "Sejour - Antécédents - Addictions"));
-    $this->addQuery(CSetupdPcompteRendu::getTemplateReplaceQuery("Patient - Addictions -- toutes", "Patient - Antécédents - Addictions"));
+    $this->addQuery(CSetupdPcompteRendu::renameTemplateFieldQuery("Sejour - Addictions -- toutes", "Sejour - Antécédents - Addictions"));
+    $this->addQuery(CSetupdPcompteRendu::renameTemplateFieldQuery("Patient - Addictions -- toutes", "Patient - Antécédents - Addictions"));
     
     $addiction_types = array('tabac', 'oenolisme', 'cannabis');
     foreach ($addiction_types as $type) {
       $typeTrad = CAppUI::tr("CAddiction.type.$type");
-      $this->addQuery(CSetupdPcompteRendu::getTemplateReplaceQuery("Sejour - Addictions - $typeTrad", "Sejour - Antécédents - Addictions"));
-      $this->addQuery(CSetupdPcompteRendu::getTemplateReplaceQuery("Patient - Addictions - $typeTrad", "Patient - Antécédents - Addictions"));
+      $this->addQuery(CSetupdPcompteRendu::renameTemplateFieldQuery("Sejour - Addictions - $typeTrad", "Sejour - Antécédents - Addictions"));
+      $this->addQuery(CSetupdPcompteRendu::renameTemplateFieldQuery("Patient - Addictions - $typeTrad", "Patient - Antécédents - Addictions"));
     }
     
     /*$query = "DROP TABLE `addiction`";

@@ -8,19 +8,47 @@
 */
 
 class CSetupdPcompteRendu extends CSetup {
-  static function getTemplateReplaceQuery($search, $replace) {
-    return 'UPDATE `compte_rendu` 
-      SET `source` = REPLACE(`source`, "['.htmlentities($search).']", "['.htmlentities($replace).']") 
-      WHERE `object_id` IS NULL';
+  
+  /**
+   * Build an SQL query to replace a template string
+   * Will check over content_html table to specify update query
+   * @param string $search
+   * @param string $newname
+   * @param bool $force_content_table
+   * @return string The SQL Query
+   */
+  static function replaceTemplateQuery($search, $replace, $force_content_table = false) {
+    $search  = htmlentities($search);
+    $replace = htmlentities($replace);
+    
+    $ds = CSQLDataSource::get("std");
+    
+    // Content specific table 
+    if ($force_content_table || $ds->loadTable("content_html")) {
+      return "UPDATE compte_rendu AS cr, content_html AS ch
+        SET ch.content = REPLACE(`content`, '$search', '$replace')
+        WHERE cr.object_id IS NULL
+        AND cr.content_id = ch.content_id";
+    }
+    
+    // Single table
+    return "UPDATE `compte_rendu` 
+      SET `source` = REPLACE(`source`, '$search', '$replace') 
+      WHERE `object_id` IS NULL";    
   }
-  static function replaceContentQuery($search, $replace) {
-    return 'UPDATE `content_html`
-      SET `content` = REPLACE(`content`, "' . htmlentities($search).'", "' . htmlentities($replace) . '")
-      WHERE (SELECT cr.compte_rendu_id 
-             FROM compte_rendu cr
-             WHERE cr.content_id = content_html.content_id
-             AND cr.object_id IS NULL)';
+  
+  /**
+   * Build an SQL query to rename a template field 
+   * Will check over content_html table to specify update query
+   * @param string $search
+   * @param string $newname
+   * @param bool $force_content_table
+   * @return string The SQL Query
+   */
+  static function renameTemplateFieldQuery($oldname, $newname, $force_content_table = false) {
+    return self::replaceTemplateQuery("[$oldname]", "[$newname]", $force_content_table);
   }
+
   
   function __construct() {
     parent::__construct();
@@ -358,9 +386,9 @@ class CSetupdPcompteRendu extends CSetup {
     $this->addQuery($query);
     
     $this->makeRevision("0.47");
-    $query = self::getTemplateReplaceQuery("Opération - personnel prévu - Panseuse", "Opération - personnel prévu - Panseur");
+    $query = self::renameTemplateFieldQuery("Opération - personnel prévu - Panseuse", "Opération - personnel prévu - Panseur", true);
     $this->addQuery($query);
-    $query = self::getTemplateReplaceQuery("Opération - personnel réel - Panseuse", "Opération - personnel réel - Panseur");
+    $query = self::renameTemplateFieldQuery("Opération - personnel réel - Panseuse", "Opération - personnel réel - Panseur", true);
     $this->addQuery($query);
     
     $this->makeRevision("0.48");
@@ -510,18 +538,17 @@ class CSetupdPcompteRendu extends CSetup {
             ADD `fast_edit_pdf` ENUM ('0','1') NOT NULL DEFAULT '0'";
     $this->addQuery($query);
     
-    set_time_limit(500);
-    $query = self::replaceContentQuery("-- tous]", "- tous]");
+    $query = self::replaceTemplateQuery("-- tous]", "- tous]");
     $this->addQuery($query);
     
-    $query = self::replaceContentQuery("-- tous par appareil]", "- tous par appareil]");
+    $query = self::replaceTemplateQuery("-- tous par appareil]", "- tous par appareil]");
     $this->addQuery($query);
 
-    $query = self::replaceContentQuery("[Constantes mode", "[Constantes - mode");
+    $query = self::replaceTemplateQuery("[Constantes mode", "[Constantes - mode");
     $this->addQuery($query);
 		
     $this->makeRevision("0.60");
-    $query = self::replaceContentQuery("[Patient - médecin correspondants]", "[Patient - médecins correspondants]");
+    $query = self::replaceTemplateQuery("[Patient - médecin correspondants]", "[Patient - médecins correspondants]");
     $this->addQuery($query);
     
     $this->makeRevision("0.61");
