@@ -850,8 +850,8 @@ class CSetupdPpatients extends CSetup {
     $query = "UPDATE `aide_saisie` SET 
               `class` = 'CAntecedent', 
               `field` = 'rques', 
-              `name` = CONCAT(UPPER(LEFT(`depend_value_1`, 1)), LOWER(SUBSTRING(`depend_value`, 2)), ': ', `name`),
-              `text` = CONCAT(UPPER(LEFT(`depend_value_1`, 1)), LOWER(SUBSTRING(`depend_value`, 2)), ': ', `text`),
+              `name` = CONCAT(UPPER(LEFT(`depend_value_1`, 1)), LOWER(SUBSTRING(`depend_value_1`, 2)), ': ', `name`),
+              `text` = CONCAT(UPPER(LEFT(`depend_value_1`, 1)), LOWER(SUBSTRING(`depend_value_1`, 2)), ': ', `text`),
               `depend_value` = 'addiction'
             WHERE 
               `class` = 'CAddiction'
