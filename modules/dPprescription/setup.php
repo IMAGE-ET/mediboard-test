@@ -1556,6 +1556,7 @@ class CSetupdPprescription extends CSetup {
             CHANGE `substitute_for_class` `substitute_for_class` ENUM ('CPrescriptionLineMedicament','CPerfusion','CPrescriptionLineMix') DEFAULT 'CPrescriptionLineMix'";
     $this->addQuery($query);
 
+    $this->addDependency("dPhospi", "0.23");
     $query = "ALTER TABLE `transmission_medicale` 
             CHANGE `object_class` `object_class` ENUM ('CPrescriptionLineElement','CPrescriptionLineMedicament','CPrescriptionLineComment','CCategoryPrescription','CAdministration','CPerfusion','CPrescriptionLineMix');";
     $this->addQuery($query);
