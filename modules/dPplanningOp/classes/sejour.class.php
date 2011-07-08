@@ -1305,11 +1305,12 @@ class CSejour extends CCodable implements IPatientRelated {
   function loadListConstantesMedicales($where = array()) {
     if ($this->_list_constantes_medicales) return;
     
-    $this->_list_constantes_medicales = new CConstantesMedicales();
+    $constantes = new CConstantesMedicales();
     $where['context_class'] = " = '$this->_class_name'";
-    $where['context_id']    = " = $this->_id";
-    $where['patient_id']    = " = $this->patient_id";
-    $this->_list_constantes_medicales = $this->_list_constantes_medicales->loadList($where, 'datetime ASC');
+    $where['context_id']    = " = '$this->_id'";
+    $where['patient_id']    = " = '$this->patient_id'";
+		
+    $this->_list_constantes_medicales = $constantes->loadList($where, 'datetime ASC');
   }
   
   function loadRefsFwd($cache = 0) {
