@@ -17,11 +17,13 @@ Main.add(function(){
   var tabs = $("tab_orders");
   
   window.ordersTabs = Control.Tabs.create(tabs, true);
-  $$('a[href=#list-orders] small')[0].update("("+({{$total}}-$$('tr.done').length)+")");
+  $$('a[href=#list-orders] small')[0].update("({{$total}})");
   
+	{{if $list_services|@count < 25}}
   Event.observe(window, "scroll", function(){
     tabs.setStyle({marginTop: document.viewport.getScrollOffsets().top+"px"});
   });
+	{{/if}}
 });
 </script>
 
