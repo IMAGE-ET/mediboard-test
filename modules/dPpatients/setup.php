@@ -1267,7 +1267,12 @@ class CSetupdPpatients extends CSetup {
               ADD `comment` TEXT";
     $this->addQuery($query);
     
-    $this->mod_version = "1.16";
+    $this->makeRevision("1.16");
+    $query = "ALTER TABLE `patients` 
+      ADD INDEX ( `nom_soundex2` );";
+    $this->addQuery($query);
+    
+    $this->mod_version = "1.17";
     
     
   }
