@@ -127,7 +127,7 @@ Main.add(function(){
 						<tr>
 						  {{foreach from=$pilulier_init key=_date item=_pilulier_by_date}}
 							  {{foreach from=$_pilulier_by_date key=_moment item=_quant}}
-	                <th style="font-size: 0.9em; padding:1px;">{{$nom_moments.$_moment}}</th>
+	                <th style="font-size: 0.9em; padding:1px; font-weight: normal">{{$nom_moments.$_moment}}</th>
 								{{/foreach}}
 	            {{/foreach}}
 						</tr>	
