@@ -14,39 +14,32 @@ CCanDo::checkRead();
 $mode       = CValue::get("mode");
 $service_selection = CValue::get("service_id");
 
-$date_min = CValue::get('_date_min');
-$date_max = CValue::get('_date_max');
+$datetime_min = CValue::getOrSession('_datetime_min');
+$datetime_max = CValue::getOrSession('_datetime_max');
 
-if (!$date_min) {
-  $date_min = CValue::session('_date_delivrance_min');
-}
-if (!$date_max) {
-  $date_max = CValue::session('_date_delivrance_max');
-}
-
-$date_min = "$date_min 00:00:00";
-$date_max = "$date_max 23:59:59";
-
-$order_by = 'product_stock_location.position ASC, product.name ASC';
+$order_by = 'product_stock_location.position ASC, patients.nom ASC, product.name ASC';
 
 $where = array(
-  "product_delivery.date_dispensation BETWEEN '$date_min' AND '$date_max'",
   'product_delivery.quantity' => " > 0",
   'product_delivery.stock_class' => " = 'CProductStockGroup'",
   'product_delivery.order = \'0\' OR product_delivery.order IS NULL',
   'product_delivery.date_delivery IS NULL',
 );
 
+$where['product_delivery.datetime_min'] = " < '$datetime_max'";
+$where['product_delivery.datetime_max'] = " > '$datetime_min'";
+
 if($mode == "nominatif"){
-  $where["patient_id"] = " IS NOT NULL";
+  $where["product_delivery.patient_id"] = " IS NOT NULL";
 } else {
-  $where["patient_id"] = " IS NULL";
+  $where["product_delivery.patient_id"] = " IS NULL";
 }
 
 $ljoin = array(
   'product_stock_group' => 'product_stock_group.stock_id = product_delivery.stock_id',
   'product_stock_location' => 'product_stock_location.stock_location_id = product_stock_group.location_id',
   'product' => 'product.product_id = product_stock_group.product_id',
+	'patients' => 'product_delivery.patient_id = patients.patient_id'
 );
 
 $list_services = CProductStockGroup::getServicesList();
@@ -89,8 +82,8 @@ foreach ($list_services as $service) {
 
 // Création du template
 $smarty = new CSmartyDP();
-$smarty->assign('date_min'     , $date_min);
-$smarty->assign('date_max'     , $date_max);
+$smarty->assign('date_min'     , $datetime_min);
+$smarty->assign('date_max'     , $datetime_max);
 $smarty->assign('list_services', $list_services);
 $smarty->assign('deliveries'   , $deliveries);
 $smarty->assign('mode'         , $mode);

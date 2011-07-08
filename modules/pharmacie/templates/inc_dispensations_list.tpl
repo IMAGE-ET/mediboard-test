@@ -8,12 +8,6 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
 *}}
 
-{{if $now < $datetime_min || $now > $datetime_max}}
-	<div class="small-info">
-	  La date courante n'est pas comprise dans l'intervalle spécifié, les dispensations effectuées ne seront pas affichées.
-	</div>
-{{/if}}
-
 <script type="text/javascript">
 $$('a[href=#list-dispensations] small')[0].update('({{$dispensations|@count}})');
 
@@ -66,13 +60,13 @@ toggleDoneDispensations = function(){
 {{assign var=infinite_service value=$conf.dPstock.CProductStockService.infinite_quantity}}
 
 <label>
-  <input type="checkbox" onclick="toggleDoneDispensations()" id="showDoneDispensations" /> Afficher les dispensations réalisées
+  <input type="checkbox" onclick="toggleDoneDispensations()" id="showDoneDispensations" /> Afficher les préparations réalisées
 </label>
 
 <table class="tbl">
   <tr>
     <th colspan="10" class="title">
-      Dispensation pour 
+      Préparation pour 
 			 {{if $mode_nominatif}}
 			   {{$prescription->_ref_object->_ref_patient->_view}}
 			 {{else}}
@@ -96,7 +90,7 @@ toggleDoneDispensations = function(){
 		
     <th style="width: 30%">
       <!-- <button style="float: right" type="button" onclick="dispenseAll('list-dispensations', refreshLists)" class="tick">Tout dispenser</button> -->
-      Dispensation
+      Préparation
     </th>
 		
     <th>Effectuées</th>

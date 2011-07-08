@@ -16,25 +16,33 @@
 
 {{assign var=quantite_administration value=$quantites.quantite_administration}}
 {{assign var=quantite_dispensation value=$quantites.quantite_dispensation}}
+
 {{if !$mode_nominatif}}
   {{assign var=patients value=$besoin_patient.$code_cis}}
 {{/if}}
     
 <tr>
-	<td class="text"><strong>{{$produit->libelle_abrege}} {{$produit->dosage}}</strong></td>
-	{{if $mode_nominatif}}
 	<td class="text">
-		<span href="#1" onmouseover="ObjectTooltip.createEx(this, '{{$_lines.$code_cis->_guid}}')">
-		{{if $_lines.$code_cis instanceof CPrescriptionLineMedicament}}
-      {{foreach from=$_lines.$code_cis->_ref_prises item=prise name="prises"}}
-         {{$prise}}
-				 {{if !$smarty.foreach.prises.last}}, {{/if}}
-      {{/foreach}}
-    {{else}}
-		  {{$_lines.$code_cis->_posologie}} {{$_lines.$code_cis->_ref_prescription_line_mix->_frequence}}
-		{{/if}}
-		</span>
+		<strong>
+		  {{$produit->libelle_abrege}} {{$produit->dosage}}
+		</strong>
 	</td>
+	{{if $mode_nominatif}}
+		<td class="text">
+			{{foreach from=$_lines.$code_cis item=_lines_by_guid}}
+			  <span href="#1" onmouseover="ObjectTooltip.createEx(this, '{{$_lines_by_guid->_guid}}')">
+			    {{if $_lines_by_guid instanceof CPrescriptionLineMedicament}}
+			      {{foreach from=$_lines_by_guid->_ref_prises item=prise name="prises"}}
+			        {{$prise}}
+			        {{if !$smarty.foreach.prises.last}}, {{/if}}
+			      {{/foreach}}
+			    {{else}}
+			      {{$_lines_by_guid->_posologie}} {{$_lines_by_guid->_ref_prescription_line_mix->_frequence}}
+			    {{/if}}
+			  </span>
+			  <br />
+			{{/foreach}}
+		</td>
   {{/if}}
   <!-- Quantite à administrer -->
   <td colspan="2">
@@ -102,19 +110,23 @@
 			{{assign var=qty value=$delivrance->_ref_stock->_ref_product->_unit_quantity-0}}
 			{{if $infinite || ($delivrance->_ref_stock->quantity>0 && !$infinite)}}
 			
-      <form name="form-dispensation-{{$code_cis}}-{{$code_cip}}" action="?" method="post" onsubmit="return onSubmitFormAjax(this, {onComplete: function(){ refreshLists('{{$code_cis}}'); } })">
-       <input type="hidden" name="m" value="dPstock" />
-       <input type="hidden" name="tab" value="{{$tab}}" />
-       <input type="hidden" name="dosql" value="do_delivery_aed" />
-       <input type="hidden" name="del" value="0" />
-       <input type="hidden" name="date_dispensation" value="now" />
-       <input type="hidden" name="datetime_min" value="{{$datetime_min}}" />
-       <input type="hidden" name="datetime_max" value="{{$datetime_max}}" />
-	       
-	       <input type="hidden" name="stock_id" value="{{$delivrance->stock_id}}" />
-	       <input type="hidden" name="stock_class" value="{{$delivrance->stock_class}}" />
-	       
-	       <input type="hidden" name="service_id" value="{{$delivrance->service_id}}" />
+       <form name="form-dispensation-{{$code_cis}}-{{$code_cip}}" action="?" method="post" onsubmit="return onSubmitFormAjax(this, {onComplete: function(){ refreshLists('{{$code_cis}}'); } })">
+	       <input type="hidden" name="m" value="dPstock" />
+	       <input type="hidden" name="tab" value="{{$tab}}" />
+	       <input type="hidden" name="dosql" value="do_delivery_aed" />
+	       <input type="hidden" name="del" value="0" />
+	       <input type="hidden" name="date_dispensation" value="now" />
+	       <input type="hidden" name="datetime_min" value="{{$datetime_min}}" />
+	       <input type="hidden" name="datetime_max" value="{{$datetime_max}}" />
+				 
+				 {{if $mode_nominatif}}
+				 {{assign var=_prises value=$prises.$code_cis.$code_cip}}
+				 <input type="hidden" name="_prises" value='{{$_prises|@json|addslashes}}' /> 
+				 {{/if}}
+				 
+		     <input type="hidden" name="stock_id" value="{{$delivrance->stock_id}}" />
+		     <input type="hidden" name="stock_class" value="{{$delivrance->stock_class}}" />
+		     <input type="hidden" name="service_id" value="{{$delivrance->service_id}}" />
 	       {{if $mode_nominatif}}
 	         <input type="hidden" name="patient_id" value="{{$prescription->_ref_object->_ref_patient->_id}}" />
 	       {{/if}}
@@ -172,7 +184,7 @@
  
    {{if $nb_done_total.$code_cis}}     
    <span onmouseover="ObjectTooltip.createDOM(this, 'dispensations-{{$code_cis}}');">
-     {{$nb_done_total.$code_cis}} disp. 
+     {{$nb_done_total.$code_cis}} préparations
    </span>
 	 {{/if}}
 	 
@@ -224,7 +236,7 @@
              <br />
            </span>
          {{foreachelse}}
-           {{$curr_done_glob->quantity}} {{$curr_done_glob->_ref_stock->_ref_product->_unit_title}} le {{$curr_done_glob->date_dispensation|@date_format:"%d/%m/%Y"}} (Global) [{{$_produit_cip.LIBELLE_PRODUIT}}]
+           {{$curr_done_glob->quantity}} {{$curr_done_glob->_ref_stock->_ref_product->_unit_title}} le {{$curr_done_glob->date_dispensation|@date_format:"%d/%m/%Y"}} [{{$_produit_cip.LIBELLE_PRODUIT}}]
            <br />
          {{/foreach}}
        {{/foreach}}

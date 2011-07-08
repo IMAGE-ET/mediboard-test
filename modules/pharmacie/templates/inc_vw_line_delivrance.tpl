@@ -19,7 +19,7 @@
   {{if @$line_refresh}}
   <script type="text/javascript">
     if (!$V(getForm("filter").display_delivered) && ({{$curr_delivery->_delivered|ternary:1:0}} || '{{$curr_delivery->date_delivery}}')) {
-      $("CProductDelivery-{{$id}}").hide();
+      $("CProductDelivery-{{$id}}").setOpacity(0.2);
       /*Main.add(function(){
         //$("CProductDelivery-{{$id}}").remove();
       });*/

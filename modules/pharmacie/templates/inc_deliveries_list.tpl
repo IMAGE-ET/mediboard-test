@@ -30,7 +30,7 @@ Main.add(function(){
 	{{/if}}
 });
 </script>
-
+{{assign var=count_date value=0}}
 <table class="main layout">
   <tr>
     <td style="white-space: nowrap; {{if $deliveries_by_service|@count < $max_services}}width: 128px;{{/if}}" class="narrow">
@@ -53,11 +53,11 @@ Main.add(function(){
                    
             <a href="#{{$mode}}-service-{{$service_id}}"
                style="padding-right: 2em;" 
-              {{if $remaining == 0}}class="empty"{{/if}}
-              >
-              {{$services.$service_id}} 
+              {{if $remaining == 0}}class="empty"{{/if}}>
+              {{$services.$service_id}}
               <small style="min-width: 3em; display: inline-block; text-align: right;">
-							  ({{$remaining}}{{if $display_delivered}}/{{$_deliveries|@count}}{{/if}})
+							  ({{$deliveries_count_by_service.$service_id}})
+							  {{* ({{$remaining}}{{if $display_delivered}}/{{$deliveries_count_by_service.$service_id}}{{/if}}) *}}
 							</small>
             </a>
           </li>
@@ -66,62 +66,111 @@ Main.add(function(){
       </form>
     </td>
     <td>
-    	{{assign var=cols value=10}}
+    	{{assign var=cols value=7}}
+			{{assign var=rowspan value=1}}
+      {{if $mode == "nominatif"}}
+			  {{assign var=rowspan value=2}}
+			{{/if}}
 			
       {{foreach from=$deliveries_by_service item=_deliveries key=service_id}}
 			  {{assign var=_service value=$services.$service_id}}
 				
 	      <table class="tbl" id="{{$mode}}-service-{{$service_id}}" style="display: none;">
 	        <tr>
-	          <th style="width: 16px;"></th>
-	          <th>
+	          <th style="width: 16px;" rowspan="{{$rowspan}}"></th>
+	          <th rowspan="{{$rowspan}}">
 	            {{mb_colonne class=CProductStockGroup field=product_id order_col=$order_col order_way=$order_way function=changeSort}}
 	          </th>
 						
-	          <th colspan="2">
+	          <th colspan="2" rowspan="{{$rowspan}}">
 	            {{mb_colonne class=CProductDelivery field=date_dispensation order_col=$order_col order_way=$order_way function=changeSort}}
 	          </th>
 						
 	          {{if !$conf.dPstock.CProductStockGroup.infinite_quantity}}
-	            <th>Stock <br />pharm.</th>
+						  {{assign var=cols value=$cols+1}}
+							<th rowspan="{{$rowspan}}">Stock <br />pharm.</th>
 	          {{/if}}
 						
 						{{if !$single_location}}
-	          <th>
+	          {{assign var=cols value=$cols+1}}
+            <th rowspan="{{$rowspan}}">
 	            {{mb_colonne class=CProductStockGroup field=location_id order_col=$order_col order_way=$order_way function=changeSort}}
 	          </th>
 						{{/if}}
 						
 	          {{if !$conf.dPstock.CProductStockService.infinite_quantity}}
-	            <th>Stock <br /> serv.</th>
+	            {{assign var=cols value=$cols+1}}
+              <th rowspan="{{$rowspan}}">Stock <br /> serv.</th>
 	          {{/if}}
 						
-	          <th class="narrow">
+	          <th class="narrow" rowspan="{{$rowspan}}">
 	          	<button type="button" onclick="deliverAll('{{$mode}}-service-{{$service_id}}')" class="tick">Tout déliv.</button>
 						</th>
 						
-	          <th>{{mb_title class=CProduct field=_unit_title}}</th>
-	          <th class="narrow"></th>
-	        </tr>
-				
-				  {{assign var=last_patient_id value=null}}
-          {{foreach from=$_deliveries item=_delivery}}
-					  {{if $_delivery->patient_id && $_delivery->patient_id != $last_patient_id}}
-              {{assign var=last_patient_id value=$_delivery->patient_id}}
-              <tr>
-                <th colspan="{{$cols}}" class="title">{{$_delivery->_ref_patient}}</th>
-              </tr>
-						{{/if}}
+	          <th rowspan="{{$rowspan}}">{{mb_title class=CProduct field=_unit_title}}</th>
+	          <th rowspan="{{$rowspan}}" class="narrow"></th>
 						
-            <tr id="{{$_delivery->_guid}}">
-              {{include file="inc_vw_line_delivrance.tpl" curr_delivery=$_delivery}}
-            </tr>
+						{{if $mode == "nominatif"}}
+						{{assign var=count_date value=$pilulier_init|@count}}
+						  <th colspan="{{$count_date*4}}">Pilulier</th>
+						{{/if}}
+	        </tr>
+					 {{if $mode == "nominatif"}}
+					<tr>
+					  {{foreach from=$pilulier_init key=_date item=_pilulier_by_date}}
+						  {{foreach from=$_pilulier_by_date key=_moment item=_quant}}
+                <th style="font-size: 0.9em; padding:1px;">{{$nom_moments.$_moment}}</th>
+							{{/foreach}}
+            {{/foreach}}
+					</tr>	
+				  {{/if}}
+          {{foreach from=$_deliveries item=_delivery_by_patient name="deliveries_patient"}}
+            {{foreach from=$_delivery_by_patient item=_delivery_by_ucd name="deliveries_ucd"}}
+							{{foreach from=$_delivery_by_ucd item=_delivery name="deliveries"}}
+		            {{if  $smarty.foreach.deliveries.first &&  $smarty.foreach.deliveries_ucd.first  && $mode == "nominatif"}}
+		              <tr>
+		                <th colspan="{{$cols}}" class="title">{{$_delivery->_ref_patient}}</th>
+		                {{foreach from=$pilulier_init key=_date item=_pilulier_by_date}}
+		                  <th class="title" style="font-size: 0.9em;" colspan="4">{{$_date|date_format:"%a %d/%m"}}</th>
+		                {{/foreach}}
+		              </tr>
+		            {{/if}}
+								
+                {{if $smarty.foreach.deliveries.first && $_delivery->patient_id}}
+								  {{assign var=_count_delivery_ucd  value=$_delivery_by_ucd|@count}}
+                    <tr>
+                      <td colspan="{{$cols}}" style="padding: 0;"></td>
+  
+                      {{if $_delivery->_ref_prises_dispensation_med|@count}}
+                        {{foreach from=$_delivery->_pilulier key=_date item=_pilulier_by_date}}
+                          {{foreach from=$_pilulier_by_date key=_moment item=_quantite name=quantites}}
+													  {{assign var=hour_pil value=$list_moments.$_moment}}
+                            <td rowspan="{{$_count_delivery_ucd+1}}" 
+														    style="{{if "$_date $hour_pil:00:00" < $_delivery->datetime_min || "$_date $hour_pil:00:00" > $_delivery->datetime_max}}background-color: #ddd;{{/if}}{{if $smarty.foreach.quantites.last}}border-right: 1px solid #bbb;{{/if}} width: 20px; text-align: center; font-weight: bold; padding: 0;">
+                              {{$_quantite}}
+                            </td>
+                          {{/foreach}}
+                        {{/foreach}}
+                      {{else}}
+                        <td rowspan="{{$_count_delivery_ucd+1}}" colspan="{{$count_date*4}}" class="empty button">
+                          Aucun pilulier
+                        </td>
+                      {{/if}}
+                      
+                    </tr>
+                {{/if}}
+							
+		            <tr id="{{$_delivery->_guid}}">
+		              {{include file="inc_vw_line_delivrance.tpl" curr_delivery=$_delivery}}
+		            </tr>
+							{{/foreach}}
+						{{/foreach}}
           {{foreachelse}}
-            <td colspan="{{$cols}}" class="empty">{{tr}}CProductDelivery.none{{/tr}}</td>
+            <td colspan="{{$cols+$count_date*4}}" class="empty">{{tr}}CProductDelivery.none{{/tr}}</td>
           {{/foreach}}
         {{foreachelse}}
         <tr>
-          <td colspan="{{$cols}}" class="empty">{{tr}}CProductDelivery.{{$mode}}.none{{/tr}}</td>
+          <td colspan="{{$cols+$count_date*4}}" class="empty">{{tr}}CProductDelivery.{{$mode}}.none{{/tr}}</td>
         </tr>
         {{/foreach}}
       </table>

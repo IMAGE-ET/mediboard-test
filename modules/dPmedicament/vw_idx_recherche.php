@@ -81,9 +81,12 @@ if($produit){
 	if(!$rechercheLivret){
 	  $produits = $mbProduit->searchProduit($produit, $supprime, $param_recherche, $hors_specialite, 200, null, null, $search_by_cis);
 	}
+	
+	$code = CBcbProduit::getHash(CProductStockGroup::getHostGroup(false)->_guid);
+	
 	// Recherche de produits dans le livret Therapeutique
 	if($rechercheLivret){
-	  $produits = $mbProduit->searchProduit($produit, $supprime, $param_recherche, $hors_specialite, 100, CProductStockGroup::getHostGroup(false)->_guid, null, $search_by_cis);
+	  $produits = $mbProduit->searchProduit($produit, $supprime, $param_recherche, $hors_specialite, 100, $code, null, $search_by_cis);
 	}
 }
 

@@ -12,28 +12,28 @@
 Main.add(window.print);
 </script>
 
-<h2 class="no-break">Plan de cueillette du 
-  {{$date_min|date_format:$conf.datetime}} au 
-  {{$date_max|date_format:$conf.datetime}} le 
-  {{$smarty.now|date_format:$conf.datetime}}</h2>
 
-<h3>Délivrances {{if $mode == "nominatif"}}nominatives{{else}}globales{{/if}}</h3>
 
 <table class="main tbl">
-  <colgroup>
-    <col span="5"  class="narrow" />
-  </colgroup>
-  
+  <tr>
+  	<th class="title" colspan="7">
+  		Plan de cueillette du {{$date_min|date_format:$conf.datetime}} au {{$date_max|date_format:$conf.datetime}} le {{$smarty.now|date_format:$conf.datetime}}
+	    <br />
+			<small>
+			  Délivrances {{if $mode == "nominatif"}}nominatives{{else}}globales{{/if}}
+      </small> 
+		</th>
+  </tr>
+	
+
   <tr>
   	{{if $mode == "nominatif"}}
 		<th>{{tr}}CProductDelivery-patient_id{{/tr}}</th>
     {{/if}}
-    <th>{{tr}}CProduct-code{{/tr}}</th>
+    <th class="narrow">{{tr}}CProduct-code{{/tr}}</th>
     <th>{{tr}}CProduct{{/tr}}</th>
     <th>{{tr}}CProductDeliveryTrace-quantity{{/tr}}</th>
-    <th>{{tr}}CProduct-_unit_title{{/tr}}</th>
     <th>{{tr}}CProductStockGroup-location_id{{/tr}}</th>
-    <th>{{tr}}CProductDeliveryTrace-code{{/tr}}</th>
   </tr>
 {{foreach from=$deliveries item=curr_list key=id}}
   <tr>
@@ -46,10 +46,8 @@ Main.add(window.print);
 		{{/if}}
     <td>{{$disp->_ref_stock->_ref_product->code}}</td>
     <td><strong>{{$disp->_ref_stock->_ref_product->name}}</strong></td>
-    <td style="text-align: right;">{{$disp->quantity}}</td>
-    <td>{{$disp->_ref_stock->_ref_product->_unit_title}}</td>
+    <td>{{$disp->quantity}} {{$disp->_ref_stock->_ref_product->_unit_title}}</td>
 		<td>{{$disp->_ref_stock->_ref_location->name}}</td>
-    <td></td>
   </tr>
   {{/foreach}}
 {{foreachelse}}

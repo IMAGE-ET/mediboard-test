@@ -240,6 +240,7 @@ class CPrescriptionLineMedicament extends CPrescriptionLine {
     $backProps["administration"]  = "CAdministration object_id";
     $backProps["prise_posologie"] = "CPrisePosologie object_id";
 		$backProps["planifications"]  = "CPlanificationSysteme object_id";
+		$backProps["prises_dispensation"] = "CPriseDispensation object_id";
     return $backProps;
   }
   

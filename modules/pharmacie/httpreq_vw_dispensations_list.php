@@ -29,6 +29,8 @@ CPrescriptionLineMixItem::$_load_lite = true;
 
 $prescription = new CPrescription();
 $nb_done_total = array();
+$prises = array();
+$default_prises = array();
 
 // Nominatif
 if($prescription_id){
@@ -103,7 +105,7 @@ if($prescriptions) {
 			$where[] = "prescription_line_medicament.code_cis = '$_selected_cis' OR prescription_line_mix_item.code_cis = '$_selected_cis'";
 		}
 		
-    $planifs = $planif->loadList($where, null, null, null, $ljoin);
+    $planifs = $planif->loadList($where, "dateTime ASC", null, null, $ljoin);
 
     foreach($planifs as $_planif){
       // Chargement et stockage de la ligne
@@ -127,7 +129,7 @@ if($prescriptions) {
       	if($_planif->_ref_object instanceof CPrescriptionLineMedicament){
       	  $_planif->_ref_object->loadRefsPrises();
         }
-      	$_lines[$code] = $_planif->_ref_object;
+      	$_lines[$code][$_planif->_ref_object->_guid] = $_planif->_ref_object;
       }
 			
       if(!isset($produits_cis[$code])){
@@ -148,7 +150,15 @@ if($prescriptions) {
       
       $besoin_patient[$code][$patient->_id]["patient"] = $patient; 
       $besoin_patient[$code][$patient->_id]["quantite_administration"] += $qte_adm;
-      $besoin_patient[$code][$patient->_id]["quantite_dispensation"] += $qte_disp;  
+      $besoin_patient[$code][$patient->_id]["quantite_dispensation"] += $qte_disp;
+			
+			if ($mode_nominatif) {
+				$default_prises[$code][$_planif->_id]["datetime"] = $_planif->dateTime;
+        $default_prises[$code][$_planif->_id]["quantite_adm"] = $qte_adm;
+				$default_prises[$code][$_planif->_id]["unite_adm"] = utf8_encode($_planif->_ref_object->_unite_administration);
+        $default_prises[$code][$_planif->_id]["object_id"] = $_planif->_ref_object->_id;
+        $default_prises[$code][$_planif->_id]["object_class"] = $_planif->_ref_object->_class_name;
+      } 
     }
   }
 }  
@@ -224,8 +234,12 @@ foreach($dispensations as $code_cis => $_quantites){
     
     // Chargement des dispensation déjé effectuée
     $where = array();
-    $where['product_delivery.date_dispensation'] = "BETWEEN '$datetime_min' AND '$datetime_max'"; // entre les deux dates
-    $where['product.code'] = "= '$code_cip'"; // avec le bon code CIP et seulement les produits du livret thérapeutique
+    //$where['product_delivery.date_dispensation'] = "BETWEEN '$datetime_min' AND '$datetime_max'"; // entre les deux dates
+    
+    $where['product_delivery.datetime_min'] = " < '$datetime_max'";
+    $where['product_delivery.datetime_max'] = " > '$datetime_min'";
+		
+		$where['product.code'] = "= '$code_cip'"; // avec le bon code CIP et seulement les produits du livret thérapeutique
     $where['product.category_id'] = "= '$category_id'";
 		if($mode_nominatif){
 			$where['product_delivery.patient_id'] = " = '$patient_id'";
@@ -317,7 +331,17 @@ foreach($delivrances as $code_cis => $_delivrance){
     } else {
       $ratio = 1 / $produit->nb_unite_presentation;
     }
-   
+		
+		if(isset($default_prises[$code_cis])){
+			foreach($default_prises[$code_cis] as $_planif_id => $_prise_planif){
+				foreach($_prise_planif as $_key_planif => $_value_planif){
+					$prises[$code_cis][$produit->code_cip][$_planif_id][$_key_planif] = $_value_planif;
+		    }
+				$_planif_quantite_disp = $prises[$code_cis][$produit->code_cip][$_planif_id]["quantite_adm"] * $ratio;
+				$prises[$code_cis][$produit->code_cip][$_planif_id]["quantite_disp"] = ceil($_planif_quantite_disp);
+			}
+		}
+		
     // Calcul de la quantite 
     $administration = $dispensations[$code_cis]["quantite_administration"];
     $quantite_dispensation = $ratio*$administration;
@@ -359,6 +383,8 @@ $smarty->assign("now", mbDate());
 $smarty->assign('mode_nominatif', $mode_nominatif);
 $smarty->assign("_lines", $_lines);
 $smarty->assign("nb_done_total", $nb_done_total);
+$smarty->assign("prises", $prises);
+
 if($mode_nominatif){
   $prescription->_ref_object->loadRefPatient();
   $smarty->assign('prescription', $prescription);

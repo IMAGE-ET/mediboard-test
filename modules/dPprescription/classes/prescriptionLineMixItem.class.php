@@ -83,6 +83,7 @@ class CPrescriptionLineMixItem extends CMbObject implements IPatientRelated {
     $backProps = parent::getBackProps();
     $backProps["administrations"]  = "CAdministration object_id";
 		$backProps["planifications"]  = "CPlanificationSysteme object_id";
+		$backProps["prises_dispensation"] = "CPriseDispensation object_id";
     return $backProps;
   }
   

@@ -35,7 +35,7 @@ class CPriseDispensation extends CMbMetaObject {
 
   function getProps() {
     $specs = parent::getProps();
-    $specs['delivery_id']   = 'ref notNull class|CProductDelivery';
+    $specs['delivery_id']   = 'ref notNull class|CProductDelivery cascade';
     $specs['datetime']      = 'dateTime notNull';
 		
     $specs['quantite_adm']  = 'float notNull';

@@ -30,7 +30,7 @@ Main.add(function () {
 </script>
 
 <select name="patient_id" onchange="editFieldPrescription($V(this))">
-  <option value="">&mdash; Dispensations globales</option>
+  <option value="">&mdash; Globales</option>
   {{foreach from=$patients item=_patient}}
     <option value="{{$_patient->_id}}">{{$_patient->nom}} {{$_patient->prenom}}</option>
   {{/foreach}}
