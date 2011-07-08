@@ -79,8 +79,14 @@ $administrations = array_merge($administrations_med, $administrations_mix);
 // Parcours des administrations et chargements des refs
 foreach($administrations as &$_administration){
   $_administration->loadTargetObject();
+	$_administration->loadRefAdministrateur();
+  
   $prescription =& $_administration->_ref_object->_ref_prescription;
 	$prescription->_ref_object->loadRefPatient();
+	
+	if($_administration->_ref_object instanceof CPrescriptionLineMixItem){
+		$_administration->_ref_object->_ref_prescription_line_mix->loadRefPraticien();
+	}
 }
 
 // Association des adm aux sejours

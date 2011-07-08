@@ -126,6 +126,7 @@ class CAdministration extends CMbMetaObject implements IPatientRelated {
   function loadRefAdministrateur(){
   	$this->_ref_administrateur = new CMediusers();
   	$this->_ref_administrateur = $this->_ref_administrateur->getCached($this->administrateur_id);
+		$this->_ref_administrateur->loadRefFunction();
   }
   
   function loadRefLog(){

@@ -1,6 +1,6 @@
 <table class="tbl" id="list-prescriptions-stup">
 	<tr>
-	  <th class="title" colspan="5">Prescriptions de stupéfiant du {{$date_min|date_format:$conf.date}} au {{$date_max|date_format:$conf.date}}</th>
+	  <th class="title" colspan="6">Prescriptions de stupéfiant du {{$date_min|date_format:$conf.date}} au {{$date_max|date_format:$conf.date}}</th>
 	</tr>
 	<tr>
 		<th>{{mb_colonne class="CSejour" field="patient_id" order_col=$order_col order_way=$order_way function="updateListPrescriptions"}}</th>
@@ -8,16 +8,19 @@
 		<th>Posologie</th>
 		<th>Début</th>
     <th>Fin</th>
+		<th>Praticien</th>
 	</tr>
   {{foreach from=$lines item=_line}}
 		{{if $_line instanceof CPrescriptionLineMedicament}}
 	    {{assign var=prescription value=$_line->_ref_prescription}}
 	    {{assign var=line_debut value=$_line->_debut_reel}}
 			{{assign var=line_fin value=$_line->_fin_reelle}}
+			{{assign var=praticien value=$_line->_ref_praticien}}
 	  {{else}}
 	    {{assign var=prescription value=$_line->_ref_prescription_line_mix->_ref_prescription}}
 	    {{assign var=line_debut value=$_line->_ref_prescription_line_mix->_debut}}
 			{{assign var=line_fin value=$_line->_ref_prescription_line_mix->_fin}}
+			{{assign var=praticien value=$_line->_ref_prescription_line_mix->_ref_praticien}}
 	  {{/if}}
 		<tr>
 			<td class="text">
@@ -57,6 +60,9 @@
           {{mb_value object=$_line->_ref_prescription_line_mix field=_fin}}
         {{/if}}
       </td>
+			<td>
+				{{mb_include module=mediusers template=inc_vw_mediuser mediuser=$praticien}}
+			</td>
 		</tr>
 	{{foreachelse}}
 		<tr>

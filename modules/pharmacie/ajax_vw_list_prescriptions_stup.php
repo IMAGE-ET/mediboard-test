@@ -61,6 +61,8 @@ $lines = array_merge($lines_med, $lines_mix_item);
 foreach($lines as $_line){
 	if($_line instanceof CPrescriptionLineMedicament){
 	  $_line->loadRefsPrises();
+  } else {
+  	$_line->_ref_prescription_line_mix->loadRefPraticien();
   }
 	$_line->_ref_prescription->_ref_object->loadRefPatient();
 }
