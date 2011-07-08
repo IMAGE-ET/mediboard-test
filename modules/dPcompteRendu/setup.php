@@ -17,14 +17,14 @@ class CSetupdPcompteRendu extends CSetup {
    * @param bool $force_content_table
    * @return string The SQL Query
    */
-  static function replaceTemplateQuery($search, $replace) {
+  static function replaceTemplateQuery($search, $replace, $force_content_table = false) {
     $search  = htmlentities($search);
     $replace = htmlentities($replace);
     
     $ds = CSQLDataSource::get("std");
     
     // Content specific table 
-    if ($ds->loadField("compte_rendu", "content_id")) {
+    if ($force_content_table || ($ds->loadTable("compte_rendu") && $ds->loadField("compte_rendu", "content_id"))) {
       return "UPDATE compte_rendu AS cr, content_html AS ch
         SET ch.content = REPLACE(`content`, '$search', '$replace')
         WHERE cr.object_id IS NULL
@@ -45,8 +45,8 @@ class CSetupdPcompteRendu extends CSetup {
    * @param bool $force_content_table
    * @return string The SQL Query
    */
-  static function renameTemplateFieldQuery($oldname, $newname) {
-    return self::replaceTemplateQuery("[$oldname]", "[$newname]");
+  static function renameTemplateFieldQuery($oldname, $newname, $force_content_table = false) {
+    return self::replaceTemplateQuery("[$oldname]", "[$newname]", $force_content_table);
   }
 
   
@@ -538,17 +538,17 @@ class CSetupdPcompteRendu extends CSetup {
             ADD `fast_edit_pdf` ENUM ('0','1') NOT NULL DEFAULT '0'";
     $this->addQuery($query);
     
-    $query = self::replaceTemplateQuery("-- tous]", "- tous]");
+    $query = self::replaceTemplateQuery("-- tous]", "- tous]", true);
     $this->addQuery($query);
     
-    $query = self::replaceTemplateQuery("-- tous par appareil]", "- tous par appareil]");
+    $query = self::replaceTemplateQuery("-- tous par appareil]", "- tous par appareil]", true);
     $this->addQuery($query);
 
-    $query = self::replaceTemplateQuery("[Constantes mode", "[Constantes - mode");
+    $query = self::replaceTemplateQuery("[Constantes mode", "[Constantes - mode", true);
     $this->addQuery($query);
 		
     $this->makeRevision("0.60");
-    $query = self::replaceTemplateQuery("[Patient - médecin correspondants]", "[Patient - médecins correspondants]");
+    $query = self::replaceTemplateQuery("[Patient - médecin correspondants]", "[Patient - médecins correspondants]", true);
     $this->addQuery($query);
     
     $this->makeRevision("0.61");
