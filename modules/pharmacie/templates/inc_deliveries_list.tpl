@@ -146,7 +146,7 @@ Main.add(function(){
                           {{foreach from=$_pilulier_by_date key=_moment item=_quantite name=quantites}}
 													  {{assign var=hour_pil value=$list_moments.$_moment}}
                             <td rowspan="{{$_count_delivery_ucd+1}}" 
-														    style="{{if "$_date $hour_pil:00:00" < $_delivery->datetime_min || "$_date $hour_pil:00:00" > $_delivery->datetime_max}}background-color: #ddd;{{/if}}{{if $smarty.foreach.quantites.last}}border-right: 1px solid #bbb;{{/if}} width: 20px; text-align: center; font-weight: bold; padding: 0;">
+														    style="background-color: {{if "$_date $hour_pil:00:00" < $_delivery->datetime_min || "$_date $hour_pil:00:00" > $_delivery->datetime_max}}#ddd{{else}}{{$color_moments.$_moment}}{{/if}}; {{if $smarty.foreach.quantites.last}}border-right: 1px solid #bbb;{{/if}} width: 20px; text-align: center; font-weight: bold; padding: 0;">
                               {{$_quantite}}
                             </td>
                           {{/foreach}}

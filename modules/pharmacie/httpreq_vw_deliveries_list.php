@@ -27,6 +27,7 @@ $datetime_max = CValue::getOrSession('_datetime_max');
 
 $list_moments = array("0" => "10", "1" => "14", "2" => "18", "3" => "24");
 $nom_moments  = array("0" => "Mat", "1" => "Midi", "2" => "A.M", "3" => "Soir");
+$color_moments  = array("0" => "#edffd9", "1" => "#d9ffd9", "2" => "#d9fff6", "3" => "#ffd9d9");
 
 $prev_hour = 0;
 foreach($list_moments as $key_period => $_hour_period){
@@ -196,6 +197,7 @@ $smarty->assign("moments", $moments);
 $smarty->assign("deliveries_count_by_service", $deliveries_count_by_service);
 $smarty->assign("nom_moments", $nom_moments);
 $smarty->assign("list_moments", $list_moments);
+$smarty->assign("color_moments", $color_moments);
 
 if($delivery_id){
   $smarty->assign('curr_delivery',  $delivery);
