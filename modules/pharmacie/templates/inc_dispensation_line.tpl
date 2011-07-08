@@ -129,7 +129,7 @@
        {{/if}}
        
        {{if $delivrance->quantity == 0}}
-         {{assign var=style value="opacity: 0.5;"}}
+         {{assign var=style value="opacity: 0.3;"}}
          <script type="text/javascript">
          	 toggleLineDispensation("form-dispensation-{{$code_cis}}-{{$code_cip}}", true);
          </script>
@@ -140,7 +140,7 @@
          {{assign var=style value=""}}
        {{/if}}
        
-       <strong>{{$_produit_cip.LIBELLE_PRODUIT}}</strong><br />
+       <strong style="{{$style}}">{{$_produit_cip.LIBELLE_PRODUIT}}</strong><br />
 			 
 			 <div class="opacity-50" style="float: right;">
          (soit <input type="text" name="_quantity_package" value="{{if $qty}}{{$delivrance->quantity/$qty}}{{else}}0{{/if}}" size="3" 
