@@ -73,8 +73,7 @@ $stocks_pharmacie = array();
 $besoin_patient = array();
 $done_delivery = array();
 $_lines = array();
-
-$_lines = array();
+$qty_done = array();
 $correction_dispensation = array();
 
 if($prescriptions) {
@@ -264,11 +263,21 @@ foreach($dispensations as $code_cis => $_quantites){
       if(!isset($done[$code_cis]["total"])){
         $done[$code_cis]["total"] = 0;
       }
+			if(!isset($qty_done[$code_cis][$code_cip])){
+        $qty_done[$code_cis][$code_cip]["quantite"] = 0;		
+        $qty_done[$code_cis][$code_cip]["libelle"] = null;
+      }
       foreach ($list_done as $d) {
         $d->loadRefsBack();
         $done[$code_cis][$code_cip][] = $d;
         $done[$code_cis]["total"] += $d->quantity;
-				$nb_done_total[$code_cis]++;
+				$qty_done[$code_cis][$code_cip]["quantite"] += $d->quantity;
+				if(!isset($qty_done[$code_cis][$code_cip]["libelle"])){
+				  $d->loadRefsFwd();
+			    $d->_ref_stock->loadRefsFwd();
+				  $qty_done[$code_cis][$code_cip]["libelle"] = $d->_ref_stock->_ref_product->_unit_title;
+				}
+        $nb_done_total[$code_cis]++;
       }
     }
   
@@ -284,11 +293,21 @@ foreach($dispensations as $code_cis => $_quantites){
       if(!isset($done_delivery[$code_cis]["total"])){
         $done_delivery[$code_cis]["total"] = 0;
       }
+			if(!isset($qty_done[$code_cis][$code_cip])){
+         $qty_done[$code_cis][$code_cip]["quantite"] = 0;
+				 $qty_done[$code_cis][$code_cip]["libelle"] = null;
+      }
       foreach ($list_done_delivery as $_d_delivery) {
         $_d_delivery->loadRefsBack();
         $_d_delivery->loadRefPatient();
         $done_delivery[$code_cis][$code_cip][] = $_d_delivery;
         $done_delivery[$code_cis]["total"] += $_d_delivery->quantity;
+        $qty_done[$code_cis][$code_cip]["quantite"] += $_d_delivery->quantity;
+				if(!isset($qty_done[$code_cis][$code_cip]["libelle"])){
+					$_d_delivery->loadRefsFwd();
+          $_d_delivery->_ref_stock->loadRefsFwd();
+          $qty_done[$code_cis][$code_cip]["libelle"] = $_d_delivery->_ref_stock->_ref_product->_unit_title;
+        }
 				$nb_done_total[$code_cis]++;
       }
     }
@@ -384,6 +403,7 @@ $smarty->assign('mode_nominatif', $mode_nominatif);
 $smarty->assign("_lines", $_lines);
 $smarty->assign("nb_done_total", $nb_done_total);
 $smarty->assign("prises", $prises);
+$smarty->assign("qty_done", $qty_done);
 
 if($mode_nominatif){
   $prescription->_ref_object->loadRefPatient();

@@ -177,13 +177,16 @@
 
 <!-- Affichage des dispensations deja effectuées -->
 <td class="text" style="text-align: center;">  
-
- {{if $nb_done_total.$code_cis}}     
- <span onmouseover="ObjectTooltip.createDOM(this, 'dispensations-{{$code_cis}}');">
-   {{$nb_done_total.$code_cis}} préparations
- </span>
+  {{if array_key_exists($code_cis, $qty_done)}}
+  <span onmouseover="ObjectTooltip.createDOM(this, 'dispensations-{{$code_cis}}');">
+	  {{foreach from=$qty_done.$code_cis item=_qty}}
+		  
+	      {{$_qty.quantite}} {{$_qty.libelle}}
+				<br />
+	   
+		{{/foreach}}
+  </span>
  {{/if}}
- 
 <table id="dispensations-{{$code_cis}}" style="display: none;" class="tbl">
 
 {{if array_key_exists($code_cis, $done)}}     
