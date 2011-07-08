@@ -14,7 +14,7 @@
 class CHprim21Object extends CMbObject {
 	
   // DB Fields
-  var $sender_id          = null;
+  var $emetteur_id        = null;
   var $external_id        = null;
   var $echange_hprim21_id = null;
 
@@ -24,7 +24,7 @@ class CHprim21Object extends CMbObject {
   function getProps() {
     $specs = parent::getProps();
     
-    $specs["sender_id"]        = "str notNull";
+    $specs["emetteur_id"]        = "str notNull";
     $specs["external_id"]        = "str";
     $specs["echange_hprim21_id"] = "ref class|CEchangeHprim21";
     
@@ -34,7 +34,7 @@ class CHprim21Object extends CMbObject {
   function updateFormFields() {
   	parent::updateFormFields();
   	
-    $this->_view = $this->sender_id." : ".$this->external_id;
+    $this->_view = $this->emetteur_id." : ".$this->external_id;
   }
   
   function loadRefEchangeHprim21() {
@@ -43,7 +43,7 @@ class CHprim21Object extends CMbObject {
   }
   
   function setHprim21ReaderVars(CHPrim21Reader $hprim21_reader) {
-    $this->sender_id          = $hprim21_reader->id_emetteur;
+    $this->emetteur_id        = $hprim21_reader->id_emetteur;
     $this->echange_hprim21_id = $hprim21_reader->_echange_hprim21->_id;
   }
   

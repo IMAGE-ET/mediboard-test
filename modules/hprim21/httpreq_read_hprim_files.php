@@ -25,7 +25,7 @@ try {
 
 $list = array();
 try {
-  $list = $ftp->getListFiles(".");
+  $list = $ftp->getListFiles("Desktop/hprim21/");
 } catch (CMbException $e) {
   CAppUI::stepAjax($e->getMessage(), UI_MSG_WARNING); 
 }
@@ -33,6 +33,10 @@ try {
 if (empty($list)) {
   CAppUI::stepAjax("Le répertoire ne contient aucun fichier", UI_MSG_ERROR);
 }
+
+$sender_ftp = new CSenderFTP();
+$sender_ftp->user_id = CUser::get()->_id;
+$sender_ftp->loadMatchingObject();
 
 foreach($list as $filepath) {
   if (substr($filepath, -(strlen($extension))) == $extension) {
@@ -42,6 +46,8 @@ foreach($list as $filepath) {
     // Création de l'échange
     $echg_hprim21 = new CEchangeHprim21();
     $echg_hprim21->group_id        = CGroups::loadCurrent()->_id;
+    $echg_hprim21->sender_class    = $sender_ftp->_class_name;
+    $echg_hprim21->sender_id       = $sender_ftp->_id;
     $echg_hprim21->date_production = mbDateTime();
     $echg_hprim21->store();
     
@@ -54,17 +60,17 @@ foreach($list as $filepath) {
     
     if (!count($hprimReader->error_log)) {
       $echg_hprim21->message_valide = true;
-      $ftp->delFile($filepath);
+      //$ftp->delFile($filepath);
     } else {
       $echg_hprim21->message_valide = false;
       CAppUI::stepAjax("Erreur(s) pour le fichier '$filepath' : $hprimReader->error_log", UI_MSG_WARNING);
     }
     $msg = $echg_hprim21->store();
-    $msg ? CAppUI::stepAjax("Erreur lors de la création de l'échange", UI_MSG_WARNING) : 
+    $msg ? CAppUI::stepAjax("Erreur lors de la création de l'échange : $msg", UI_MSG_WARNING) : 
            CAppUI::stepAjax("L'échange '$echg_hprim21->_id' a été créé.");
-    unlink($hprimFile);
+    //unlink($hprimFile);
   } else {
-    $ftp->delFile($filepath);
+    //$ftp->delFile($filepath);
   }
 }
 

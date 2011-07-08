@@ -38,14 +38,14 @@ class CDestinataireHprim21 extends CInteropReceiver {
   function getProps() {
     $props = parent::getProps();
     
-    $props["message"]     = "enum list|L|C|R default|C";
+    $props["message"] = "enum list|L|C|R default|C";
 
     return $props;
   }
   
   function getBackProps() {
     $backProps = parent::getBackProps();
-    $backProps['receivers'] = "CEchangeHprim21 receiver_id";
+    $backProps['echanges'] = "CEchangeHprim21 receiver_id";
     
     return $backProps;
   }
