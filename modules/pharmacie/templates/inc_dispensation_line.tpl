@@ -184,62 +184,94 @@
  </span>
  {{/if}}
  
- <div id="dispensations-{{$code_cis}}" style="display: none;">
- {{if array_key_exists($code_cis, $done)}}     
- {{foreach from=$done.$code_cis key=done_key item=done_by_cip name="done"}}
- 	 {{if $done_key != "total" }}
-   {{foreach from=$done_by_cip item=curr_done}}
-     {{assign var=_produit_cip value=$produits_cip.$done_key}}
- 	   {{foreach from=$curr_done->_ref_delivery_traces item=trace}}
-         <div id="tooltip-content-{{$curr_done->_id}}" style="display: none;">
-           {{$trace->quantity}} {{$trace->_ref_delivery->_ref_stock->_ref_product->_unit_title}} délivré le {{$trace->date_delivery|@date_format:"%d/%m/%Y"}} [{{$_produit_cip.LIBELLE_PRODUIT}}]
-         </div>
-         <span onmouseover="ObjectTooltip.createDOM(this, 'tooltip-content-{{$curr_done->_id}}')" style="white-space: nowrap;">
-           <img src="images/icons/tick.png" title="Délivré" />
-           {{$curr_done->quantity}} {{$curr_done->_ref_stock->_ref_product->_unit_title}} le {{$curr_done->date_dispensation|@date_format:"%d/%m/%Y"}} [{{$_produit_cip.LIBELLE_PRODUIT}}]
-           <br />
-         </span>
-         {{foreachelse}}
-           <form name="form-dispensation-del-{{$curr_done->_id}}" action="?" method="post" onsubmit="return onSubmitFormAjax(this, {onComplete: function() { refreshLists('{{$code_cis}}'); } })">
-             <input type="hidden" name="m" value="dPstock" />
-             <input type="hidden" name="dosql" value="do_delivery_aed" />
-             <input type="hidden" name="del" value="1" />
-             <input type="hidden" name="delivery_id" value="{{$curr_done->_id}}" />
-             <button type="submit" class="cancel notext" title="{{tr}}Cancel{{/tr}}">{{tr}}Cancel{{/tr}}</button>
-           </form>
-           {{$curr_done->quantity}}  {{$curr_done->_ref_stock->_ref_product->_unit_title}} le {{$curr_done->date_dispensation|@date_format:"%d/%m/%Y"}} [{{$_produit_cip.LIBELLE_PRODUIT}}]
-           <br />
-       {{/foreach}}
-   {{foreachelse}}
-   {{/foreach}}
-   {{/if}}
- {{/foreach}}
- {{/if}}
+<table id="dispensations-{{$code_cis}}" style="display: none;" class="tbl">
 
+{{if array_key_exists($code_cis, $done)}}     
+	{{foreach from=$done.$code_cis key=done_key item=done_by_cip name="done"}}
+		{{if $done_key != "total" }}
+			{{foreach from=$done_by_cip item=curr_done}}
+				{{assign var=_produit_cip value=$produits_cip.$done_key}}
+        {{assign var=_product value=$curr_done->_ref_stock->_ref_product}}
+				
+				{{foreach from=$curr_done->_ref_delivery_traces item=trace}}
+				
+					<tr>
+						<td>
+						  <img src="images/icons/tick.png" title="Délivré" />
+						</td>
+						<td>
+							<div id="tooltip-content-{{$curr_done->_id}}" style="display: none;">
+							{{$trace->quantity}} {{$_product->_unit_title}} délivré le {{$trace->date_delivery|@date_format:"%d/%m/%Y"}} [{{$_produit_cip.LIBELLE_PRODUIT}}]
+							</div>
+							<span onmouseover="ObjectTooltip.createDOM(this, 'tooltip-content-{{$curr_done->_id}}')" style="white-space: nowrap;">
+                {{$curr_done->quantity}} {{$_product->_unit_title}} le {{$curr_done->date_dispensation|@date_format:"%d/%m/%Y"}} [{{$_produit_cip.LIBELLE_PRODUIT}}]
+              </span>
+						</td>
+					</tr>
 
- {{if array_key_exists($code_cis, $done_delivery)}}
-  {{foreach from=$done_delivery.$code_cis key=done_glob_key item=done_glob_by_cip}}
-    {{if $done_glob_key != "total"}}
-      {{foreach from=$done_glob_by_cip item=curr_done_glob}}
-       {{assign var=_produit_cip value=$produits_cip.$done_glob_key}}
-       {{foreach from=$curr_done_glob->_ref_delivery_traces item=trace}}
-         <div id="tooltip-content-{{$curr_done_glob->_id}}" style="display: none;">
-            {{$trace->quantity}} {{$trace->_ref_delivery->_ref_stock->_ref_product->_unit_title}} délivré le {{$trace->date_delivery|@date_format:"%d/%m/%Y"}} [{{$_produit_cip.LIBELLE_PRODUIT}}]
-         </div>
-         <span onmouseover="ObjectTooltip.createDOM(this, 'tooltip-content-{{$curr_done_glob->_id}}')">
-           <img src="images/icons/tick.png" title="Délivré" />
-           {{$curr_done_glob->quantity}} {{$curr_done_glob->_ref_stock->_ref_product->_unit_title}} le {{$curr_done_glob->date_dispensation|@date_format:"%d/%m/%Y"}} [{{$_produit_cip.LIBELLE_PRODUIT}}]
-           <br />
-         </span>
-       {{foreachelse}}
-         {{$curr_done_glob->quantity}} {{$curr_done_glob->_ref_stock->_ref_product->_unit_title}} le {{$curr_done_glob->date_dispensation|@date_format:"%d/%m/%Y"}} [{{$_produit_cip.LIBELLE_PRODUIT}}]
-         <br />
-       {{/foreach}}
-     {{/foreach}}
-   {{/if}}
- {{/foreach}}
- {{/if}}
- </div>
+				{{foreachelse}}
+				
+          <tr>
+          	<td>
+              <form name="form-dispensation-del-{{$curr_done->_id}}" action="?" method="post" onsubmit="return onSubmitFormAjax(this, {onComplete: function() { refreshLists('{{$code_cis}}'); } })">
+                <input type="hidden" name="m" value="dPstock" />
+                <input type="hidden" name="dosql" value="do_delivery_aed" />
+                <input type="hidden" name="del" value="1" />
+                <input type="hidden" name="delivery_id" value="{{$curr_done->_id}}" />
+                <button type="submit" class="cancel notext" title="{{tr}}Cancel{{/tr}}">{{tr}}Cancel{{/tr}}</button>
+              </form>
+					  </td>
+						<td>
+		          {{$curr_done->quantity}}  {{$_product->_unit_title}} le {{$curr_done->date_dispensation|@date_format:"%d/%m/%Y"}} [{{$_produit_cip.LIBELLE_PRODUIT}}]
+						</td>
+          </tr>
+					
+				{{/foreach}}
+			{{/foreach}}
+		{{/if}}
+	{{/foreach}}
+{{/if}}
+
+{{if array_key_exists($code_cis, $done_delivery)}}
+	{{foreach from=$done_delivery.$code_cis key=done_glob_key item=done_glob_by_cip}}
+		{{if $done_glob_key != "total"}}
+			{{foreach from=$done_glob_by_cip item=curr_done_glob}}
+				{{assign var=_produit_cip value=$produits_cip.$done_glob_key}}
+        {{assign var=_product value=$curr_done_glob->_ref_stock->_ref_product}}
+				
+				{{foreach from=$curr_done_glob->_ref_delivery_traces item=trace}}
+					
+				  <tr>
+				  	<td>
+              <img src="images/icons/tick.png" title="Délivré" />
+						</td>
+						<td>
+		          <div id="tooltip-content-{{$curr_done_glob->_id}}" style="display: none;">
+		            {{$trace->quantity}} {{$_product->_unit_title}} délivré le {{$trace->date_delivery|@date_format:"%d/%m/%Y"}} [{{$_produit_cip.LIBELLE_PRODUIT}}]
+		          </div>
+		          <span onmouseover="ObjectTooltip.createDOM(this, 'tooltip-content-{{$curr_done_glob->_id}}')">
+		            {{$curr_done_glob->quantity}} {{$_product->_unit_title}} le {{$curr_done_glob->date_dispensation|@date_format:"%d/%m/%Y"}} [{{$_produit_cip.LIBELLE_PRODUIT}}]
+		          </span>
+						</td>
+				  </tr>
+					
+				{{foreachelse}}
+				
+				  <tr>
+				  	<td></td>
+					  <td>
+					  	{{$curr_done_glob->quantity}} {{$_product->_unit_title}} le {{$curr_done_glob->date_dispensation|@date_format:"%d/%m/%Y"}} [{{$_produit_cip.LIBELLE_PRODUIT}}]
+						</td>
+					</tr>
+					
+				{{/foreach}}
+				
+			{{/foreach}}
+		{{/if}}
+	{{/foreach}}
+{{/if}}
+
+</table>
 </td>
 
 {{if !$infinite_service}}
