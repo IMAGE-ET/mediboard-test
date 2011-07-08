@@ -9,6 +9,7 @@
 *}}
 
 {{assign var=max_services value=25}}
+{{assign var=count_date value=0}}
 
 <script type="text/javascript">
 Main.add(function(){
@@ -30,7 +31,7 @@ Main.add(function(){
 	{{/if}}
 });
 </script>
-{{assign var=count_date value=0}}
+
 <table class="main layout">
   <tr>
     <td style="white-space: nowrap; {{if $deliveries_by_service|@count < $max_services}}width: 128px;{{/if}}" class="narrow">
@@ -66,18 +67,20 @@ Main.add(function(){
       </form>
     </td>
     <td>
-    	{{assign var=cols value=7}}
 			{{assign var=rowspan value=1}}
+			
       {{if $mode == "nominatif"}}
 			  {{assign var=rowspan value=2}}
 			{{/if}}
 			
       {{foreach from=$deliveries_by_service item=_deliveries key=service_id}}
 			  {{assign var=_service value=$services.$service_id}}
+        {{assign var=cols value=7}}
 				
 	      <table class="tbl" id="{{$mode}}-service-{{$service_id}}" style="display: none;">
 	        <tr>
 	          <th style="width: 16px;" rowspan="{{$rowspan}}"></th>
+						
 	          <th rowspan="{{$rowspan}}">
 	            {{mb_colonne class=CProductStockGroup field=product_id order_col=$order_col order_way=$order_way function=changeSort}}
 	          </th>
@@ -88,19 +91,23 @@ Main.add(function(){
 						
 	          {{if !$conf.dPstock.CProductStockGroup.infinite_quantity}}
 						  {{assign var=cols value=$cols+1}}
-							<th rowspan="{{$rowspan}}">Stock <br />pharm.</th>
+							<th rowspan="{{$rowspan}}">
+								Stock <br />pharm.
+							</th>
 	          {{/if}}
 						
 						{{if !$single_location}}
-	          {{assign var=cols value=$cols+1}}
-            <th rowspan="{{$rowspan}}">
-	            {{mb_colonne class=CProductStockGroup field=location_id order_col=$order_col order_way=$order_way function=changeSort}}
-	          </th>
+		          {{assign var=cols value=$cols+1}}
+	            <th rowspan="{{$rowspan}}">
+		            {{mb_colonne class=CProductStockGroup field=location_id order_col=$order_col order_way=$order_way function=changeSort}}
+		          </th>
 						{{/if}}
 						
 	          {{if !$conf.dPstock.CProductStockService.infinite_quantity}}
 	            {{assign var=cols value=$cols+1}}
-              <th rowspan="{{$rowspan}}">Stock <br /> serv.</th>
+              <th rowspan="{{$rowspan}}">
+              	Stock <br /> serv.
+							</th>
 	          {{/if}}
 						
 	          <th class="narrow" rowspan="{{$rowspan}}">
@@ -111,19 +118,21 @@ Main.add(function(){
 	          <th rowspan="{{$rowspan}}" class="narrow"></th>
 						
 						{{if $mode == "nominatif"}}
-						{{assign var=count_date value=$pilulier_init|@count}}
+						  {{assign var=count_date value=$pilulier_init|@count}}
 						  <th colspan="{{$count_date*4}}">Pilulier</th>
 						{{/if}}
 	        </tr>
-					 {{if $mode == "nominatif"}}
-					<tr>
-					  {{foreach from=$pilulier_init key=_date item=_pilulier_by_date}}
-						  {{foreach from=$_pilulier_by_date key=_moment item=_quant}}
-                <th style="font-size: 0.9em; padding:1px;">{{$nom_moments.$_moment}}</th>
-							{{/foreach}}
-            {{/foreach}}
-					</tr>	
+					
+					{{if $mode == "nominatif"}}
+						<tr>
+						  {{foreach from=$pilulier_init key=_date item=_pilulier_by_date}}
+							  {{foreach from=$_pilulier_by_date key=_moment item=_quant}}
+	                <th style="font-size: 0.9em; padding:1px;">{{$nom_moments.$_moment}}</th>
+								{{/foreach}}
+	            {{/foreach}}
+						</tr>	
 				  {{/if}}
+					
           {{foreach from=$_deliveries item=_delivery_by_patient name="deliveries_patient"}}
             {{foreach from=$_delivery_by_patient item=_delivery_by_ucd name="deliveries_ucd"}}
 							{{foreach from=$_delivery_by_ucd item=_delivery name="deliveries"}}
@@ -139,14 +148,16 @@ Main.add(function(){
                 {{if $smarty.foreach.deliveries.first && $_delivery->patient_id}}
 								  {{assign var=_count_delivery_ucd  value=$_delivery_by_ucd|@count}}
                     <tr>
-                      <td colspan="{{$cols}}" style="padding: 0;"></td>
+                      <td colspan="{{$cols}}" style="padding: 0; border-none; border-top: 1px solid #999;"></td>
   
                       {{if $_delivery->_ref_prises_dispensation_med|@count}}
                         {{foreach from=$_delivery->_pilulier key=_date item=_pilulier_by_date}}
                           {{foreach from=$_pilulier_by_date key=_moment item=_quantite name=quantites}}
 													  {{assign var=hour_pil value=$list_moments.$_moment}}
                             <td rowspan="{{$_count_delivery_ucd+1}}" 
-														    style="background-color: {{if "$_date $hour_pil:00:00" < $_delivery->datetime_min || "$_date $hour_pil:00:00" > $_delivery->datetime_max}}#ddd{{else}}{{$color_moments.$_moment}}{{/if}}; {{if $smarty.foreach.quantites.last}}border-right: 1px solid #bbb;{{/if}} width: 20px; text-align: center; font-weight: bold; padding: 0;">
+														    style="background-color: {{if !$_quantite && ("$_date $hour_pil:00:00" < $_delivery->datetime_min || "$_date $hour_pil:00:00" > $_delivery->datetime_max)}}#ddd{{else}}{{$color_moments.$_moment}}{{/if}}; 
+																      {{if $smarty.foreach.quantites.last}}border-right: 1px solid #bbb;{{/if}} 
+																			width: 20px; text-align: center; font-weight: bold; padding: 0; border-top: 1px solid #999;">
                               {{$_quantite}}
                             </td>
                           {{/foreach}}
@@ -169,6 +180,7 @@ Main.add(function(){
             <td colspan="{{$cols+$count_date*4}}" class="empty">{{tr}}CProductDelivery.none{{/tr}}</td>
           {{/foreach}}
         {{foreachelse}}
+				
         <tr>
           <td colspan="{{$cols+$count_date*4}}" class="empty">{{tr}}CProductDelivery.{{$mode}}.none{{/tr}}</td>
         </tr>

@@ -100,10 +100,10 @@ toggleDoneDispensations = function(){
     {{/if}}
   </tr>
   {{foreach from=$dispensations key=code_cis item=quantites}}
-    <tbody id="dispensation_line_{{$code_cis}}" style="width: 100%">
+    <tr id="dispensation_line_{{$code_cis}}">
       <!-- Affichage d'une ligne de dispensation -->
       {{include file="inc_dispensation_line.tpl" nodebug=true}}
-    </tbody>
+    </tr>
   {{foreachelse}}
     <tr>
       <td colspan="10" class="empty">{{tr}}CProductDelivery.none{{/tr}}</td>

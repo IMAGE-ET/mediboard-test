@@ -188,14 +188,29 @@ Main.add(function(){
         {{assign var=class_options value=$ex_field->_ref_ex_group->_ref_ex_class->_host_class_options}}
 			
 				{{if $ex_field->_id}}
-	        <label><input type="radio" name="report_level" value=""  {{if $ex_field->report_level == ""}}  checked="checked" {{/if}} /> Aucun </label>
+	        <label><input type="radio" name="report_level" value="" {{if $ex_field->report_level == ""}}  checked="checked" {{/if}} /> Aucun </label>
+					{{assign var=_host_class value=$ex_field->_ref_ex_group->_ref_ex_class->host_class}}
 					
 					{{if $class_options.reference1.0}}
-	          <label><input type="radio" name="report_level" value="1" {{if $ex_field->report_level == "1"}} checked="checked" {{/if}} /> {{tr}}{{$class_options.reference1.0}}{{/tr}} </label>
+	          <label>
+	          	<input type="radio" name="report_level" value="1" {{if $ex_field->report_level == "1"}} checked="checked" {{/if}} />
+							{{if $class_options.reference1.1|strpos:"." === false}}
+						    {{tr}}{{$_host_class}}-{{$class_options.reference1.1}}{{/tr}}
+							{{else}}
+							  {{tr}}{{$class_options.reference1.0}}{{/tr}}
+							{{/if}}
+						</label>
 					{{/if}}
 					
 					{{if $class_options.reference2.0}}
-	          <label><input type="radio" name="report_level" value="2" {{if $ex_field->report_level == "2"}} checked="checked" {{/if}} /> {{tr}}{{$class_options.reference2.0}}{{/tr}} </label>
+	          <label>
+	          	<input type="radio" name="report_level" value="2" {{if $ex_field->report_level == "2"}} checked="checked" {{/if}} />
+              {{if $class_options.reference2.1|strpos:"." === false}}
+                {{tr}}{{$_host_class}}-{{$class_options.reference2.1}}{{/tr}}
+              {{else}}
+                {{tr}}{{$class_options.reference2.0}}{{/tr}}
+              {{/if}}
+					  </label>
 					{{/if}}
 				{{else}}
 				  <em>Enregistrez le champ avant de définir le type de report</em>

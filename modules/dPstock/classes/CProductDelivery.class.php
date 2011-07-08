@@ -52,9 +52,9 @@ class CProductDelivery extends CMbObject {
   
   var $_ref_delivery_traces = null;
   var $_ref_prises_dispensation = null;
-	var $_ref_prises_dispensation_med = null;
+  var $_ref_prises_dispensation_med = null;
   
-	
+  
   var $_date_min      = null;
   var $_date_max      = null;
   var $_datetime_min      = null;
@@ -66,10 +66,10 @@ class CProductDelivery extends CMbObject {
   var $_products                  = null;
   var $_pn13_initiateur_group_id  = null; // group initiateur du message PN13
   var $_prises                    = null;
-	var $_pilulier                  = null;
-	var $_code_cis                  = null;
-	var $_code_ucd                  = null;
-	
+  var $_pilulier                  = null;
+  var $_code_cis                  = null;
+  var $_code_ucd                  = null;
+  
   function getSpec() {
     $spec = parent::getSpec();
     $spec->table = 'product_delivery';
@@ -127,7 +127,7 @@ class CProductDelivery extends CMbObject {
     $backProps = parent::getBackProps();
     $backProps['delivery_traces'] = 'CProductDeliveryTrace delivery_id';
     $backProps['echanges_phast']  = 'CPhastEchange object_id';
-		$backProps['prises_dispensation'] = "CPriseDispensation delivery_id";
+    $backProps['prises_dispensation'] = "CPriseDispensation delivery_id";
     return $backProps;
   }
   
@@ -165,21 +165,21 @@ class CProductDelivery extends CMbObject {
   function loadRefsDeliveryTraces(){
     return $this->_ref_delivery_traces = $this->loadBackRefs("delivery_traces");
   }
-	
-	function loadRefsPrisesDispensation(){
-		return $this->_ref_prises_dispensation = $this->loadBackRefs("prises_dispensation", "datetime ASC");
+  
+  function loadRefsPrisesDispensation(){
+    return $this->_ref_prises_dispensation = $this->loadBackRefs("prises_dispensation", "datetime ASC");
   }
 
   function loadRefsPrisesDispensationMed($date_min, $date_max){
-		$where = array();
-		$where["delivery_id"] = " = '$this->_id'";
-		$where["object_class"] = " = 'CPrescriptionLineMedicament'";
+    $where = array();
+    $where["delivery_id"] = " = '$this->_id'";
+    $where["object_class"] = " = 'CPrescriptionLineMedicament'";
     $where["datetime"] = " BETWEEN '$date_min' AND '$date_max'";
-		
+    
     $prise_dispensation = new CPriseDispensation();
-		$this->_ref_prises_dispensation_med = $prise_dispensation->loadList($where, "datetime ASC");
+    $this->_ref_prises_dispensation_med = $prise_dispensation->loadList($where, "datetime ASC");
   }
-	
+  
   function loadRefTargetStock(){
     $this->loadRefStock();
     
@@ -241,23 +241,23 @@ class CProductDelivery extends CMbObject {
       return $msg;
     }
     
-		if ($this->_prises) {
-		  $prises = json_decode(stripslashes($this->_prises), true);
-		  
-		  foreach($prises as $_prise){
-		    $prise_dispensation = new CPriseDispensation();
-				$prise_dispensation->_id = "";
-				$prise_dispensation->delivery_id = $this->_id;
-		    $prise_dispensation->datetime = $_prise["datetime"];
-		    $prise_dispensation->quantite_adm = $_prise["quantite_adm"];
-		    $prise_dispensation->quantite_disp = $_prise["quantite_disp"];
-		    $prise_dispensation->unite_adm = utf8_decode($_prise["unite_adm"]);
-		    $prise_dispensation->object_id = $_prise["object_id"];
-		    $prise_dispensation->object_class = $_prise["object_class"];
-		    $prise_dispensation->store();
-		  }
-			$this->_prises = null;
-		}
+    if ($this->_prises) {
+      $prises = json_decode(stripslashes($this->_prises), true);
+      
+      foreach($prises as $_prise){
+        $prise_dispensation = new CPriseDispensation();
+        $prise_dispensation->delivery_id   = $this->_id;
+        $prise_dispensation->datetime      = $_prise["datetime"];
+        $prise_dispensation->quantite_adm  = $_prise["quantite_adm"];
+        $prise_dispensation->unite_adm     = utf8_decode($_prise["unite_adm"]);
+        $prise_dispensation->quantite_disp = $_prise["quantite_disp"];
+        $prise_dispensation->object_id     = $_prise["object_id"];
+        $prise_dispensation->object_class  = $_prise["object_class"];
+        $prise_dispensation->store();
+      }
+      
+      $this->_prises = null;
+    }
 
     if (!$is_new) return;
     

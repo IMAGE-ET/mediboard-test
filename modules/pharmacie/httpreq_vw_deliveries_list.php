@@ -89,7 +89,7 @@ $where['product_delivery.stock_id'] = "IS NOT NULL";
 //$where[] = "`order` != '1' OR `order` IS NULL";
 
 if (!$display_delivered) {
-  $where[] = "date_delivery IS NULL OR date_delivery = ''";
+  $where["date_delivery"] = "IS NULL";
 }
 
 $ljoin = array(
