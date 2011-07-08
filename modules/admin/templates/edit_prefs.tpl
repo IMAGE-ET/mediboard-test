@@ -271,6 +271,16 @@ Preferences.onSubmit = function(form) {
   </tbody>
   {{/if}}
   
+  {{assign var="module" value="monitorServer"}}
+  {{if $prefs.$module}}  
+  <tbody style="display: none" id="{{$module}}">
+  <!-- Préférences pour le module {{$module}} -->
+
+  {{mb_include template=inc_pref spec=str var=delai_alerte}}
+  
+  </tbody>
+  {{/if}}
+  
   <tr>
     <td class="button" colspan="4">
       <button type="submit" class="submit singleclick">{{tr}}Save{{/tr}}</button>
