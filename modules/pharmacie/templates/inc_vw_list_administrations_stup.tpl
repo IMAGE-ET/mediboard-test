@@ -54,7 +54,7 @@
 	  {{/if}}
 	{{foreachelse}}
   <tr>
-    <td colspan="4" class="empty">
+    <td colspan="6" class="empty">
       Aucune administration de stupéfiant pour les dates sélectionnées
     </td>
   </tr>
