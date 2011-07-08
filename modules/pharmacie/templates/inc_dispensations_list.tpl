@@ -32,16 +32,16 @@ submitSuivi = function(oForm) {
 }
 
 toggleLineDispensation = function(formName, done){
-  var tbody = getForm(formName).up("tbody");
+  var row = getForm(formName).up("tr");
   if(done){
-	  tbody.addClassName("done").setVisible($('showDoneDispensations').checked);
+	  row.addClassName("done").setVisible($('showDoneDispensations').checked);
   } else {
-	  tbody.removeClassName("done").show();
+	  row.removeClassName("done").show();
 	}
 }
 
 toggleDoneDispensations = function(){
-  $$("tbody.done").invoke("setVisible", $('showDoneDispensations').checked);
+  $$("tr.done").invoke("setVisible", $('showDoneDispensations').checked);
 }
 
 {{if $mode_nominatif}}

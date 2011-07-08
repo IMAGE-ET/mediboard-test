@@ -34,6 +34,7 @@ foreach ($deliveries as $_delivery) {
 	
 	$service->_ref_deliveries[$_delivery->_id] = $_delivery;
   $service->_count_deliveries++;
+	$total++;
 
 	$stock = $_delivery->_ref_stock;
 	if ($stock->_id) {

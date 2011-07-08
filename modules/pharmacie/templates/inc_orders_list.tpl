@@ -28,7 +28,7 @@ Main.add(function(){
 <table class="main layout">
   <tr>
     <td style="white-space: nowrap;" class="narrow">
-      <ul class="control_tabs_vertical" id="tab_orders">
+      <ul class="control_tabs_vertical small" id="tab_orders" style="font-size: 0.9em;">
       {{foreach from=$list_services item=_service}}
         <li>
           <a class="{{if $_service->_count_deliveries == 0}}empty{{/if}}" href="#tab-{{$_service->_guid}}">

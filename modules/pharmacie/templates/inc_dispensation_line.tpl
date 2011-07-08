@@ -143,11 +143,11 @@
        <strong>{{$_produit_cip.LIBELLE_PRODUIT}}</strong><br />
 			 
 			 <div class="opacity-50" style="float: right;">
-           (soit <input type="text" name="_quantity_package" value="{{if $qty}}{{$delivrance->quantity/$qty}}{{else}}0{{/if}}" size="3" 
-                  onchange="$V(this.form.quantity, Math.round($V(this)*{{$qty}}))" style="{{$style}}" />
-           {{$delivrance->_ref_stock->_ref_product->packaging}})
-         </div>
-       <button type="submit" class="tick notext" title="Dispenser" style="{{$style}}">Dispenser</button>
+         (soit <input type="text" name="_quantity_package" value="{{if $qty}}{{$delivrance->quantity/$qty}}{{else}}0{{/if}}" size="3" 
+                onchange="$V(this.form.quantity, Math.round($V(this)*{{$qty}}))" style="{{$style}}" />
+         {{$delivrance->_ref_stock->_ref_product->packaging}})
+       </div>
+       <button type="submit" class="tick notext" title="Préparer" style="{{$style}}">Préparer</button>
 
        {{if $delivrance->_ref_stock->_ref_product->packaging && $qty}}
 				 {{mb_field object=$delivrance field=quantity form="form-dispensation-$code_cis-$code_cip" increment=1 size=3 min=0 style=$style onchange="this.form._quantity_package.value = (this.value/$qty).toFixed(2)"}}
