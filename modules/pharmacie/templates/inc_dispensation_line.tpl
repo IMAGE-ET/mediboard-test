@@ -166,7 +166,7 @@
     <br />
   {{/foreach}}
  {{else}} 
-	<div class="opacity-50 empty">
+	<div class="small-warning">		
 		<a class="button new" type="button" href="?m=dPstock&amp;tab=vw_idx_stock_group" style="float: right;">
       Créer
     </a>
@@ -174,7 +174,6 @@
 	</div>
  {{/if}}
 </td>
-
 
 <!-- Affichage des dispensations deja effectuées -->
 <td class="text" style="text-align: center;">  
