@@ -79,52 +79,6 @@ $dPconfig["db"]["std"] = array(
   "dbpass" => "", // Change to match your Password
 );
 
-// Other databases config
-
-// CIM10
-$dPconfig["db"]["cim10"] = array(
-  "dbtype" => "mysql",
-  "dbhost" => "localhost",
-  "dbname" => "cim10",
-  "dbuser" => "CIM10Admin",
-  "dbpass" => "AdminCIM10",
-);
-
-$dPconfig["db"]["ccamV2"] = array(
-  "dbtype" => "mysql",
-  "dbhost" => "localhost",
-  "dbname" => "ccamV2",
-  "dbuser" => "CCAMAdmin",
-  "dbpass" => "AdminCCAM",
-);
-
-// GHS
-$dPconfig["db"]["GHS1010"] = array(
-  "dbtype" => "mysql",
-  "dbhost" => "localhost",
-  "dbname" => "ghs1010",
-  "dbuser" => "GHSAdmin",
-  "dbpass" => "AdminGHS",
-);
-
-// Codes INSEE
-$dPconfig["db"]["INSEE"] = array(
-  "dbtype" => "mysql",
-  "dbhost" => "localhost",
-  "dbname" => "INSEE",
-  "dbuser" => "INSEEAdmin",
-  "dbpass" => "AdminINSEE",
-);
-
-// Transit
-$dPconfig["db"]["Transit"] = array(
-  "dbtype" => "mysql",
-  "dbhost" => "localhost",
-  "dbname" => "Transit",
-  "dbuser" => "TransitAdmin",
-  "dbpass" => "AdminTransit",
-);
-  
 // Compatibility mode
 $dPconfig["interop"]["mode_compat"] = "default";
 
