@@ -49,6 +49,9 @@ class CSetupdPpmsi extends CSetup {
     $this->addQuery($query);
     
     $this->mod_version = "0.14";
+
+    $query = "SHOW TABLES LIKE 'arbre'";
+    $this->addDatasource("GHS1010", $query);
   }
 }
 ?>
