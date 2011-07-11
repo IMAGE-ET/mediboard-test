@@ -70,7 +70,7 @@
 	                </td>
 	                
 	                {{foreach from=$_ex_objects item=_ex_object2}}
-	                  <td class="text value {{if $_ex_object2->_specs.$field_name instanceof CTextSpec}} compact {{/if}}">
+	                  <td {{if $_ex_object2->$field_name === null || $_ex_object2->$field_name === ""}} style="color: #aaa;" {{/if}} class="text value {{if $_ex_object2->_specs.$field_name instanceof CTextSpec}} compact {{/if}}">
 	                    {{mb_value object=$_ex_object2 field=$field_name}} 
 	                  </td>
 	                {{/foreach}}

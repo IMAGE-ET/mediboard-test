@@ -265,6 +265,10 @@ class CExClassField extends CExListItemsOwner {
     $this->_triggered_data = array_combine($keys, $values);
   }
   
+	/**
+	 * @param bool $cache [optional]
+	 * @return CExClassFieldGroup
+	 */
   function loadRefExGroup($cache = true){
     return $this->_ref_ex_group = $this->loadFwdRef("ex_group_id", $cache);
   }
@@ -332,17 +336,15 @@ class CExClassField extends CExListItemsOwner {
    * @return CMbFieldSpec
    */
   function getSpecObject(){
-    return $this->_spec_object = @CMbFieldSpecFact::getSpecWithClassName("CExObject", $this->name, $this->prop);
+  	CBoolSpec::$_default_no = false;
+    $this->_spec_object = @CMbFieldSpecFact::getSpecWithClassName("CExObject", $this->name, $this->prop);
+    CBoolSpec::$_default_no = true;
+    
+    return $this->_spec_object;
   }
   
   function getSQLSpec($union = true){
     $spec_obj = $this->getSpecObject();
-		
-		// because of CBoolSpec::checkValues
-		if ($spec_obj instanceof CBoolSpec && strpos($this->prop, "default|") === false) {
-			$spec_obj->default = null;
-		}
-		
     $db_spec = $spec_obj->getFullDBSpec();
     
     if ($union) {

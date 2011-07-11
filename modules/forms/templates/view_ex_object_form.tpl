@@ -50,7 +50,7 @@ confirmSavePrint = function(form){
 updateExObjectId = function(id, obj) {
   $V(getForm("editExObject").ex_object_id, id);
 	
-	if (!(obj._ui_messages[2] || obj._ui_messages[4] || obj._ui_messages[4])) {
+	if (!(obj._ui_messages[2] || obj._ui_messages[3] || obj._ui_messages[4])) {
 	  window.close();
 	}
 }

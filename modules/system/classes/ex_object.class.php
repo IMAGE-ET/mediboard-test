@@ -63,7 +63,10 @@ class CExObject extends CMbMetaObject {
     $this->_ref_ex_class = $ex_class;
     
     $this->_props = $this->getProps();
+    
+    CBoolSpec::$_default_no = false;
     $this->_specs = @$this->getSpecs(); // when creating the field
+    CBoolSpec::$_default_no = true;
     
     $this->_class_name = "CExObject_{$ex_class->_id}";
     
