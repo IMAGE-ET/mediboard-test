@@ -337,6 +337,12 @@ class CExClassField extends CExListItemsOwner {
   
   function getSQLSpec($union = true){
     $spec_obj = $this->getSpecObject();
+		
+		// because of CBoolSpec::checkValues
+		if ($spec_obj instanceof CBoolSpec && strpos($this->prop, "default|") === false) {
+			$spec_obj->default = null;
+		}
+		
     $db_spec = $spec_obj->getFullDBSpec();
     
     if ($union) {
