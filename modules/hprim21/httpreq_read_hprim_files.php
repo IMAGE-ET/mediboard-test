@@ -60,7 +60,7 @@ foreach($list as $filepath) {
     
     if (!count($hprimReader->error_log)) {
       $echg_hprim21->message_valide = true;
-      //$ftp->delFile($filepath);
+      $ftp->delFile($filepath);
     } else {
       $echg_hprim21->message_valide = false;
       CAppUI::stepAjax("Erreur(s) pour le fichier '$filepath' : $hprimReader->error_log", UI_MSG_WARNING);
@@ -68,9 +68,9 @@ foreach($list as $filepath) {
     $msg = $echg_hprim21->store();
     $msg ? CAppUI::stepAjax("Erreur lors de la création de l'échange : $msg", UI_MSG_WARNING) : 
            CAppUI::stepAjax("L'échange '$echg_hprim21->_id' a été créé.");
-    //unlink($hprimFile);
+    unlink($hprimFile);
   } else {
-    //$ftp->delFile($filepath);
+    $ftp->delFile($filepath);
   }
 }
 
