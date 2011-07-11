@@ -13,19 +13,19 @@
 {{mb_script module="dPcompteRendu" script="modele_selector"}}
 {{mb_script module="dPcabinet" script="file"}}
 
-<script type="text/javascript">
-  loadDocuments = function() {
-    var url = new Url("dPhospi", "httpreq_documents_sejour");
-    url.addParam("sejour_id" , '{{$sejour->_id}}');
-    url.requestUpdate("Docs");
-  }
-  Main.add(function() {
-    Control.Tabs.create('tabs-pmsi', true)
-    loadDocuments();
-  });
-</script>
-
 {{if @$sejour->_id}}
+  <script type="text/javascript">
+    loadDocuments = function() {
+      var url = new Url("dPhospi", "httpreq_documents_sejour");
+      url.addParam("sejour_id" , '{{$sejour->_id}}');
+      url.requestUpdate("Docs");
+    }
+    Main.add(function() {
+      Control.Tabs.create('tabs-pmsi', true)
+      loadDocuments();
+    });
+  </script>
+  
   {{assign var=patient value=$sejour->_ref_patient}}
   <table class="form">
     <tr>
