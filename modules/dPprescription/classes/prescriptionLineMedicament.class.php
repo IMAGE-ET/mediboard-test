@@ -317,6 +317,7 @@ class CPrescriptionLineMedicament extends CPrescriptionLine {
 		
 		if(!$this->duree && $this->_ref_prescription->type == "sejour"){
 			$this->_duree = mbDaysRelative($this->debut, mbDate($this->_ref_prescription->_ref_object->sortie))+1;
+      $this->_fin_reelle = $this->_ref_prescription->_ref_object->sortie;
 		}
   }
     
