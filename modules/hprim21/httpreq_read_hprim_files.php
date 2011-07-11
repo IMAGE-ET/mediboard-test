@@ -25,7 +25,7 @@ try {
 
 $list = array();
 try {
-  $list = $ftp->getListFiles("Desktop/hprim21/");
+  $list = $ftp->getListFiles(".");
 } catch (CMbException $e) {
   CAppUI::stepAjax($e->getMessage(), UI_MSG_WARNING); 
 }
