@@ -23,7 +23,7 @@ Main.add(function() {
     {{tr}}CObservationMedicale-degre{{/tr}} : {{mb_field object=$observation field="degre"}}
     <br />
   </div>
-  {{mb_field object=$observation field="text"}}
+  {{mb_field object=$observation field="text" rows=6}}
   
   <button type="button" class="{{if $observation->_id}}save{{else}}add{{/if}}"
     onclick="submitSuivi(this.form);">

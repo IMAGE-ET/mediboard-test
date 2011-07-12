@@ -157,7 +157,7 @@ addObservation = function(sejour_id, user_id, observation_id) {
   if (observation_id != undefined) {
     url.addParam("observation_id", observation_id);
   }
-  url.requestModal(300);
+  url.requestModal(600);
 }
 
 addPrescription = function(sejour_id, user_id, object_id, object_class) {

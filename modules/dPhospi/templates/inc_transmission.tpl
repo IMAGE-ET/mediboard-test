@@ -201,7 +201,7 @@ submitTrans = function(form) {
               {{tr}}CTransmissionMedicale.type.data{{/tr}}
             </legend>
             <input type="hidden" name="_type_data" value="data"/>
-            {{mb_field object=$transmission field="_text_data"}}
+            {{mb_field object=$transmission field="_text_data" rows=6}}
           </fieldset>
         </td>
         <td>
@@ -210,7 +210,7 @@ submitTrans = function(form) {
               {{tr}}CTransmissionMedicale.type.action{{/tr}}
             </legend>
               <input type="hidden" name="_type_action" value="action"/>
-              {{mb_field object=$transmission field="_text_action"}}
+              {{mb_field object=$transmission field="_text_action" rows=6}}
           </fieldset>
         </td>
         <td>
@@ -219,7 +219,7 @@ submitTrans = function(form) {
               {{tr}}CTransmissionMedicale.type.result{{/tr}}
             </legend>
             <input type="hidden" name="_type_result" value="result"/>
-            {{mb_field object=$transmission field="_text_result"}}
+            {{mb_field object=$transmission field="_text_result" rows=6}}
           </fieldset>
         </td>
       {{else}}
@@ -227,7 +227,7 @@ submitTrans = function(form) {
           <legend>
             {{mb_label object=$transmission field="text"}}
           </legend>
-          {{mb_field object=$transmission field="text"}}
+          {{mb_field object=$transmission field="text" rows=6}}
         </fieldset>
       {{/if}}
     </tr>
