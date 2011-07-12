@@ -25,9 +25,23 @@ CValue::setSession('order_way', $order_way);
 $datetime_min = CValue::getOrSession('_datetime_min');
 $datetime_max = CValue::getOrSession('_datetime_max');
 
-$list_moments = array("0" => "10", "1" => "14", "2" => "18", "3" => "24");
-$nom_moments  = array("0" => "Mat", "1" => "Midi", "2" => "A.M", "3" => "Soir");
-$color_moments  = array("0" => "#edffd9", "1" => "#d9ffd9", "2" => "#d9fff6", "3" => "#ffebd9");
+$list_moments = array();
+$nom_moments  = array();
+$color_moments  = array();
+
+for($i=1; $i<6; $i++){
+  $conf_periodes[] = CAppUI::conf("pharmacie periode_$i");
+}
+
+$count_periods = 0;
+foreach ($conf_periodes as $_periode){
+	if($_periode["heure"] && $_periode["libelle"]){
+		$count_periods++;
+		$list_moments[]  = $_periode["heure"];
+		$nom_moments[]   = $_periode["libelle"];
+		$color_moments[] = "#".$_periode["couleur"];
+	}
+}
 
 $prev_hour = 0;
 foreach($list_moments as $key_period => $_hour_period){
@@ -198,7 +212,7 @@ $smarty->assign("deliveries_count_by_service", $deliveries_count_by_service);
 $smarty->assign("nom_moments", $nom_moments);
 $smarty->assign("list_moments", $list_moments);
 $smarty->assign("color_moments", $color_moments);
-
+$smarty->assign("count_periods", $count_periods);
 if($delivery_id){
   $smarty->assign('curr_delivery',  $delivery);
   $smarty->assign('line_refresh', true);

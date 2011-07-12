@@ -23,10 +23,18 @@ for($i = 0; $i < 7; $i++) {
 	$list_days_schedule[$i] = array_key_exists($i, $conf);
 }
 
+$list_hours = range(1, 24);
+foreach($list_hours as &$_hour){
+  $_hour = str_pad($_hour,2,"0",STR_PAD_LEFT);
+}
+$list_hours[] = "";
+sort($list_hours);
+
 // Création du template
 $smarty = new CSmartyDP();
 $smarty->assign('list_days', $list_days);
 $smarty->assign('list_days_schedule', $list_days_schedule);
+$smarty->assign("list_hours", $list_hours);
 $smarty->display("configure.tpl");
 
 ?>

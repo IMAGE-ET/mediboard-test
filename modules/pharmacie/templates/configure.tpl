@@ -44,6 +44,20 @@ function updateDays() {
     {{mb_include module=system template=inc_config_bool var=show_totals_in_lists}}
     {{mb_include module=system template=inc_config_str var=num_days_date_min numeric=true size=3}}
   
+	  <tr>
+	  	<th colspan="2" class="category">
+	  		Pilulier
+	  	</th>
+		</tr>
+		
+    {{section name=periodes start=1 loop=6}}
+	    {{assign var=num_period value=$smarty.section.periodes.index}}
+		  {{assign var="class" value="periode_$num_period"}}
+		  {{mb_include module=system template=inc_config_enum var=heure values=$list_hours skip_locales=1 defaultValue="aaa"}}
+			{{mb_include module=system template=inc_config_str var=libelle}}
+			{{mb_include module=system template=inc_config_color var=couleur}}
+    {{/section}}
+	
     <tr>
       <td class="button" colspan="2">
         <button class="modify" type="submit">{{tr}}Save{{/tr}}</button>

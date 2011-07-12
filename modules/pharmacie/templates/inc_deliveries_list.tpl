@@ -119,7 +119,7 @@ Main.add(function(){
 						
 						{{if $mode == "nominatif"}}
 						  {{assign var=count_date value=$pilulier_init|@count}}
-						  <th colspan="{{$count_date*4}}">Pilulier</th>
+						  <th colspan="{{$count_date*$count_periods}}">Pilulier</th>
 						{{/if}}
 	        </tr>
 					
@@ -140,7 +140,7 @@ Main.add(function(){
 		              <tr>
 		                <th colspan="{{$cols}}" class="title">{{$_delivery->_ref_patient}}</th>
 		                {{foreach from=$pilulier_init key=_date item=_pilulier_by_date}}
-		                  <th class="title" style="font-size: 0.9em;" colspan="4">{{$_date|date_format:"%a %d/%m"}}</th>
+		                  <th class="title" style="font-size: 0.9em;" colspan="{{$count_periods}}">{{$_date|date_format:"%a %d/%m"}}</th>
 		                {{/foreach}}
 		              </tr>
 		            {{/if}}
@@ -163,7 +163,7 @@ Main.add(function(){
                           {{/foreach}}
                         {{/foreach}}
                       {{else}}
-                        <td rowspan="{{$_count_delivery_ucd+1}}" colspan="{{$count_date*4}}" class="empty button">
+                        <td rowspan="{{$_count_delivery_ucd+1}}" colspan="{{$count_date*$count_periods}}" class="empty button">
                           Aucun pilulier
                         </td>
                       {{/if}}
@@ -177,12 +177,12 @@ Main.add(function(){
 							{{/foreach}}
 						{{/foreach}}
           {{foreachelse}}
-            <td colspan="{{$cols+$count_date*4}}" class="empty">{{tr}}CProductDelivery.none{{/tr}}</td>
+            <td colspan="{{$cols+$count_date*$count_periods}}" class="empty">{{tr}}CProductDelivery.none{{/tr}}</td>
           {{/foreach}}
         {{foreachelse}}
 				
         <tr>
-          <td colspan="{{$cols+$count_date*4}}" class="empty">{{tr}}CProductDelivery.{{$mode}}.none{{/tr}}</td>
+          <td colspan="{{$cols+$count_date*$count_periods}}" class="empty">{{tr}}CProductDelivery.{{$mode}}.none{{/tr}}</td>
         </tr>
         {{/foreach}}
       </table>

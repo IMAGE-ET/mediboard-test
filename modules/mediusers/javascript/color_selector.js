@@ -1,6 +1,6 @@
 // $Id$
 
-ColorSelector = {
+ColorSelector = window.ColorSelector || {
   sForm : null,
   sColor: null,
   sColorView: null,
