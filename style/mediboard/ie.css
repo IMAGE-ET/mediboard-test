@@ -125,3 +125,27 @@ tr.opacity-100 th {
   filter: alpha(opacity=100);
   -ms-filter: "alpha(opacity=100)";
 }
+
+span.vertical {
+  width: auto;
+}
+
+span.vertical .orig {
+  display: inline;
+}
+
+span.vertical .nowm {
+  display: none !important; /* doesn't work when contentEditable=true !!! */
+  visibility: hidden;
+  font-size: 0;
+  line-height: 0;
+  letter-spacing: -1px;
+  filter: alpha(opacity=0);
+  -ms-filter: "alpha(opacity=0)";
+}
+
+@media screen {
+  span.vertical {
+    filter: flipv fliph;
+  }
+}
