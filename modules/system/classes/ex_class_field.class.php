@@ -65,6 +65,7 @@ class CExClassField extends CExListItemsOwner {
   static $_formula_valid_types = array("float", "num");
   static $_formula_constants = array("DateCourante", "HeureCourante", "DateHeureCourante");
   static $_formula_intervals = array(
+    "Min" => "Minutes", 
     "H"   => "Heures", 
     "J"   => "Jours", 
     "Sem" => "Semaines",

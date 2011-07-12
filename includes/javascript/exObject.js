@@ -163,8 +163,8 @@ ExObjectFormula = {
       ExObjectFormula.tokenData[field].parser = expr;
       ExObjectFormula.tokenData[field].variables = variables;
   
-      function compute(input, target) {
-        ExObjectFormula.computeResult(input, target);
+      function compute(target) {
+        ExObjectFormula.computeResult(target);
       }
       
       variables.each(function(v){
@@ -174,16 +174,18 @@ ExObjectFormula = {
         
         inputs.each(function(input){
           if (input.hasClassName("date") || input.hasClassName("dateTime") || input.hasClassName("time")) {
-            input.onchange = compute.curry(input, fieldElement);
+            input.onchange = compute.curry(fieldElement);
           }
           else {
-            var callback = compute.curry(input, fieldElement);
+            var callback = compute.curry(fieldElement);
             input.observe("change", callback)
                  .observe("ui:change", callback)
                  .observe("click", callback);
           }
         });
       });
+			
+			ExObjectFormula.computeResult(fieldElement);
     });
   },
   
@@ -197,20 +199,20 @@ ExObjectFormula = {
     var result = ExObjectFormula.tokenData[name].values;
 
     if (element.hasClassName("date")) {
-      if (!value) return null;
+      if (!value) return NaN;
       var date = Date.fromDATE(value);
       date.resetTime();
       return date.getTime();
     }
 
     if (element.hasClassName("dateTime")) {
-      if (!value) return null;
+      if (!value) return NaN;
       var date = Date.fromDATETIME(value);
       return date.getTime();
     }
     
     if (element.hasClassName("time")) {
-      if (!value) return null;
+      if (!value) return NaN;
       var date = Date.fromDATETIME("1970-01-01 "+value);
       date.resetDate();
       return date.getTime();
@@ -225,7 +227,7 @@ ExObjectFormula = {
   },
 
   //computes the result of a form + exGroup(formula, resultField)
-  computeResult: function(input, target){
+  computeResult: function(target){
     var data = ExObjectFormula.tokenData[target.name];
     var form = target.form;
     
@@ -266,6 +268,7 @@ ExObjectFormula = {
 };
 
 ExObjectFormula.parser.ops1 = Object.extend({
+  Min: function (ms) { return Math.ceil(ms / Date.minute) },
   H:   function (ms) { return Math.ceil(ms / Date.hour) },
   J:   function (ms) { return Math.ceil(ms / Date.day) },
   Sem: function (ms) { return Math.ceil(ms / Date.week) },
