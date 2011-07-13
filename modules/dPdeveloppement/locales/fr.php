@@ -20,6 +20,7 @@ $locales['mod-dPdeveloppement-tab-mnt_traduction_classes'] = 'Traduction';
 $locales['mod-dPdeveloppement-tab-mutex_tester'] = 'Testeur de mutex';
 $locales['mod-dPdeveloppement-tab-sniff_code'] = 'Analyse syntaxique';
 $locales['mod-dPdeveloppement-tab-sniff_file'] = 'Analyse syntaxique d\'un fichier';
+$locales['mod-dPdeveloppement-tab-version_control'] = 'Versions';
 $locales['mod-dPdeveloppement-tab-view_logs'] = 'Logs système';
 $locales['mod-dPdeveloppement-tab-view_metrique'] = 'Métrique';
 $locales['module-dPdeveloppement-court'] = 'Outils';
