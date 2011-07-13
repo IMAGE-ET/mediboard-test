@@ -34,7 +34,7 @@ $exchange->_date_max = $_date_max;
 $exchange->type      = $exchange_type;
 $exchange->group_id  = $exchange_group_id;
 
-$messages = $exchange->getMessages();
+$messages = $exchange->getFamily();
 $evenements = array();
 foreach ($messages as $_message => $_evt_class) { 
   $evt  = new $_evt_class;

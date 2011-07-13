@@ -8,7 +8,7 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
  */
 
-CAppUI::requireModuleClass("eai", "echange_xml");
+CAppUI::requireModuleClass("eai", "CEchange_xml");
 
 class CEchangeHprim extends CEchangeXML {
 	static $messages = array(
@@ -133,7 +133,7 @@ class CEchangeHprim extends CEchangeXML {
     return COperatorHprimXML::event($this);
   }
 
-  function getMessages() {
+  function getFamily() {
     return self::$messages;
   }
   

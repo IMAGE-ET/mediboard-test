@@ -14,26 +14,44 @@ CCanDo::checkRead();
 
 $actor_guid = CValue::getOrSession("actor_guid");
 
-$formats_xml = CExchangeDataFormat::getAll("CEchangeXML");
-foreach ($formats_xml as &$_format_xml) {
-  $_format_xml = new $_format_xml;
-}
+$formats_xml  = $formats_tabular  = array();
+$messages_xml = $messages_tabular = array();
 
-$formats_tabular = CExchangeDataFormat::getAll("CExchangeTabular");
-foreach ($formats_tabular as &$_format_tabular) {
-  $_format_tabular = new $_format_tabular;
-}
+$actor = CMbObject::loadFromGuid($actor_guid);
+// Expéditeur d'intégration
+if ($actor instanceof CInteropSender) {
+  $formats_xml = CExchangeDataFormat::getAll("CEchangeXML");
+  foreach ($formats_xml as &$_format_xml) {
+    $_format_xml = new $_format_xml;
 
-$messages_xml = array();
-foreach ($formats_xml as $_data_format) {
-  $temp = $_data_format->getMessagesSupported($actor_guid, false, null, true);
-  $messages_xml = array_merge($messages_xml, $temp);
+    $temp = $_format_xml->getMessagesSupported($actor_guid, false, null, true);
+    $messages_xml = array_merge($messages_xml, $temp);
+  }
+  
+  $formats_tabular = CExchangeDataFormat::getAll("CExchangeTabular");
+  foreach ($formats_tabular as &$_format_tabular) {
+    $_format_tabular = new $_format_tabular;
+    
+    $temp = $_format_xml->getMessagesSupported($actor_guid, false, null, true);
+    $messages_tabular = array_merge($messages_tabular, $temp);
+  }
 }
-
-$messages_tabular = array();
-foreach ($formats_tabular as $_data_format) {
-  $temp = $_data_format->getMessagesSupported($actor_guid, false, null, true);
-  $messages_tabular = array_merge($messages_tabular, $temp);
+// Destinataire d'intégration 
+else if($actor instanceof CInteropReceiver) {
+  $actor->makeBackSpec("echanges");
+  $data_format = new $actor->_backSpecs["echanges"]->class;
+  
+  if ($data_format instanceof CExchangeTabular) {
+    $formats_tabular [] = $data_format;
+    $temp = $data_format->getMessagesSupported($actor_guid, false, null, true);
+    $messages_tabular = array_merge($messages_tabular, $temp);
+  }
+  
+  if ($data_format instanceof CEchangeXML) {
+    $formats_xml [] = $data_format;
+    $temp = $data_format->getMessagesSupported($actor_guid, false, null, true);
+    $messages_xml = array_merge($messages_xml, $temp);
+  }
 }
 
 // Création du template

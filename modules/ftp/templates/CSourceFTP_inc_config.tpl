@@ -11,7 +11,7 @@
 <table class="main"> 
   <tr>
     <td>
-      <form name="editSourceFTP" action="?m={{$m}}" method="post" onsubmit="return onSubmitFormAjax(this, { onComplete: refreshExchangeSource.curry('{{$source->name}}', '{{$source->_wanted_type}}') } )">
+      <form name="editSourceFTP-{{$source->name}}" action="?m={{$m}}" method="post" onsubmit="return onSubmitFormAjax(this, { onComplete: refreshExchangeSource.curry('{{$source->name}}', '{{$source->_wanted_type}}') } )">
         <input type="hidden" name="m" value="ftp" />
         <input type="hidden" name="dosql" value="do_source_ftp_aed" />
         <input type="hidden" name="source_ftp_id" value="{{$source->_id}}" />

@@ -11,7 +11,7 @@
 <table class="main"> 
   <tr>
     <td>
-      <form name="editSourceFileSystem" action="?m={{$m}}" method="post" 
+      <form name="editSourceFileSystem-{{$source->name}}" action="?m={{$m}}" method="post" 
         onsubmit="return onSubmitFormAjax(this, { onComplete: refreshExchangeSource.curry('{{$source->name}}', '{{$source->_wanted_type}}') } )">
         <input type="hidden" name="m" value="system" />
         <input type="hidden" name="dosql" value="do_source_file_system_aed" />

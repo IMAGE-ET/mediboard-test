@@ -15,7 +15,7 @@ resetValue = function(object_id, field_name) {
 }
   
 onSubmitObjectConfigs = function(oForm, object_instance_id, object_guid) {
-	return onSubmitFormAjax(oForm, { onComplete: refreshConfigObjectValues.curry(object_instance_id, object_guid) });
+	return onSubmitFormAjax(oForm, { onComplete: (window.refreshConfigObjectValues || InteropActor.refreshConfigObjectValues).curry(object_instance_id, object_guid) });
 }
 </script>
 

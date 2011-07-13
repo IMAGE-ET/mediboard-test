@@ -16,6 +16,8 @@ CCanDo::checkAdmin();
 $object_servers = array(
   "sip" => "CSipObjectHandler",
   "smp" => "CSmpObjectHandler",
+  "sms" => "CSmsObjectHandler",
+  "sa"  => "CSaObjectHandler",
 );
 
 // Création du template

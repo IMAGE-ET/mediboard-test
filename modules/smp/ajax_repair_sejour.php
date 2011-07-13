@@ -88,7 +88,6 @@ if (!$sip_config["verify_repair"]) {
 	  $sejour->_ref_last_log->type = "create";
 	  $dest_hprim = new CDestinataireHprim();
 	  $dest_hprim->message = "patients";
-	  $dest_hprim->type = "sip";
 	  $dest_hprim->loadMatchingObject();
 	
 	  if (!$sejour->_num_dossier) {

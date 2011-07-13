@@ -37,9 +37,7 @@ class CDestinataireHprim21 extends CInteropReceiver {
   
   function getProps() {
     $props = parent::getProps();
-    
-    $props["message"] = "enum list|L|C|R default|C";
-
+   
     return $props;
   }
   
@@ -49,15 +47,15 @@ class CDestinataireHprim21 extends CInteropReceiver {
     
     return $backProps;
   }
-    
+  
   function loadRefsExchangesSources() {
+    if (!$this->_ref_msg_supported_family) {
+      $this->getMessagesSupportedByFamily();
+    }
+
     $this->_ref_exchanges_sources = array();
-    foreach ($this->_spec->messages as $_message => $_evenements) {
-      if ($_message == $this->message) {
-        foreach ($_evenements as $_evenement) {
-          $this->_ref_exchanges_sources[$_evenement] = CExchangeSource::get("$this->_guid-$_evenement", null, true, $this->_type_echange);
-        }
-      }
+    foreach ($this->_ref_msg_supported_family as $_evenement) {
+      $this->_ref_exchanges_sources[$_evenement] = CExchangeSource::get("$this->_guid-$_evenement", null, true, $this->_type_echange);
     }
   }
   

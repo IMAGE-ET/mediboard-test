@@ -2687,9 +2687,9 @@ class CMbObject {
    */
   function loadRefObjectConfigs() {
     $object_class = $this->_class_name."Config";
-    $class_config = new $object_class;
-    
-    $this->_ref_object_configs = $this->loadUniqueBackRef("object_configs");
+    if (class_exists($object_class)) {
+      $this->_ref_object_configs = $this->loadUniqueBackRef("object_configs");
+    }
   }
   
   /**

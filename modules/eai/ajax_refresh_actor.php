@@ -25,7 +25,7 @@ if ($actor_class_name) {
     if ($actor->_id) {
       $actor->loadRefGroup();
       $actor->loadRefUser();
-      $actor->loadRefsExchangesSources();
+      $actor->loadRefObjectConfigs();
     }
   }
 }

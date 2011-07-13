@@ -112,7 +112,7 @@ class CFTP {
   }
   
   private function _init($exchange_source) {   
-    if (!$exchange_source) {
+    if (!$exchange_source->_id) {
       throw new CMbException("CSourceFTP-no-source", $exchange_source->name);
     }
        

@@ -15,7 +15,6 @@ class CDestinataireHprim extends CInteropReceiver {
   var $dest_hprim_id  = null;
   
   // DB Fields
-  var $type        = null;
   var $register    = null;
   var $code_appli  = null;
   var $code_acteur = null;
@@ -44,7 +43,6 @@ class CDestinataireHprim extends CInteropReceiver {
   
   function getProps() {
     $props = parent::getProps();
-    $props["type"]        = "enum notNull list|cip|sip default|cip";
 		$props["message"]     = "enum list|pmsi|patients|stock default|patients";
     $props["register"]    = "bool notNull default|1";
     $props["code_appli"]  = "str";
@@ -57,19 +55,19 @@ class CDestinataireHprim extends CInteropReceiver {
   function getBackProps() {
     $backProps = parent::getBackProps();
     $backProps['object_configs'] = "CDestinataireHprimConfig object_id";
-    $backProps['receivers']      = "CEchangeHprim receiver_id";
+    $backProps['echanges']       = "CEchangeHprim receiver_id";
     
     return $backProps;
   }
     
 	function loadRefsExchangesSources() {
+	  if (!$this->_ref_msg_supported_family) {
+	    $this->getMessagesSupportedByFamily();
+	  }
+
 		$this->_ref_exchanges_sources = array();
-		foreach ($this->_spec->messages as $_message => $_evenements) {
-			if ($_message == $this->message) {
-				foreach ($_evenements as $_evenement) {
-          $this->_ref_exchanges_sources[$_evenement] = CExchangeSource::get("$this->_guid-$_evenement", null, true, $this->_type_echange);
-				}
-			}
+		foreach ($this->_ref_msg_supported_family as $_evenement) {
+      $this->_ref_exchanges_sources[$_evenement] = CExchangeSource::get("$this->_guid-$_evenement", null, true, $this->_type_echange);
 		}
 	}
   
@@ -120,6 +118,10 @@ class CDestinataireHprim extends CInteropReceiver {
     $key = $echg_hprim->_spec->key;
     $echg_hprim->loadObject($where, "$key DESC");
     $this->_ref_last_message = $echg_hprim;
+  }
+  
+  function getFormatObjectHandlers() {
+    return CHprimXML::getObjectHandlers();
   }
 }
 

@@ -11,7 +11,6 @@
 CCanDo::checkAdmin();
 
 $receiver = new CDestinataireHprim();
-$receiver->message = "patients";
 $receivers = $receiver->loadMatchingList();
 
 // Création du template

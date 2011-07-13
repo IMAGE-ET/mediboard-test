@@ -32,7 +32,6 @@ if (!CAppUI::conf('sip server')) {
   
   if (is_array($file)) {
   	$dest_hprim = new CDestinataireHprim();
-	  $dest_hprim->type = "sip";
     $dest_hprim->group_id = CGroups::loadCurrent()->_id;
 	  $dest_hprim->loadMatchingObject();
 	  

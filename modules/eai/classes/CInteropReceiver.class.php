@@ -16,8 +16,6 @@
  * Interoperability Receiver
  */
 class CInteropReceiver extends CInteropActor {
-  var $message     = null;
-  
   // Form fields
   var $_type_echange = null;
   var $_exchanges_sources_save = 0;
@@ -31,15 +29,15 @@ class CInteropReceiver extends CInteropActor {
   
   function getProps() {
     $props = parent::getProps();
-    $props["message"]       = "str";
-
+    
     $props["_exchanges_sources_save"] = "num";
     return $props;
   }
   
   function getBackProps() {
     $backProps = parent::getBackProps();
-    $backProps["destinataire_generique"] = "CExchangeAny receiver_id";
+    $backProps["echanges_any"] = "CExchangeAny receiver_id";
+    
     return $backProps;
   }
   
@@ -56,14 +54,6 @@ class CInteropReceiver extends CInteropActor {
    */
   static function getChildReceivers() {    
     return CApp::getChildClasses("CInteropReceiver", array(), true);
-  }
-  
-  function register($name) {
-    $this->nom = $name;
-    $this->loadMatchingObject();
-    
-    // Enregistrement automatique d'un destinataire ?
-    if (!$this->_id) {}
   }
   
   /**

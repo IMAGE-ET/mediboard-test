@@ -33,8 +33,8 @@ class CMessageSupported extends CMbMetaObject {
 
   function getProps() {
     $props = parent::getProps();
-    $props["object_id"]    = "ref notNull class|CInteropSender meta|object_class";
-    $props["object_class"] = "str notNull class show|0";
+    $props["object_id"]    = "ref notNull class|CInteropActor meta|object_class";
+    $props["object_class"] = "str notNull show|0";
     $props["message"]      = "str notNull";
     $props["active"]       = "bool default|0";
     

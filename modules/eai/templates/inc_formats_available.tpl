@@ -9,6 +9,7 @@
  * @link     http://www.mediboard.org
 *}}
 
+{{if !empty($formats_tabular|smarty:nodefaults)}}
 <fieldset>
   <legend>{{tr}}CExchangeTabular{{/tr}}</legend>
   
@@ -18,11 +19,17 @@
     </button>
   {{/foreach}}
   
-  {{foreach from=$messages_tabular key=_message_tabular item=_messages_tabular_supported}}
-    {{mb_include template="inc_messages_available" message=$_message_tabular messages_supported=$_messages_tabular_supported}}
-  {{/foreach}}
+  {{if !empty($messages_tabular|smarty:nodefaults)}}
+    {{foreach from=$messages_tabular key=_message_tabular item=_messages_tabular_supported}}
+      {{mb_include template="inc_messages_available" message=$_message_tabular messages_supported=$_messages_tabular_supported}}
+    {{/foreach}}
+  {{else}}
+    <div class="small-warning">{{tr}}CMessageSupported.none{{/tr}}</div>
+  {{/if}}
 </fieldset>
+{{/if}}
 
+{{if !empty($formats_xml|smarty:nodefaults)}}
 <fieldset> 
   <legend>{{tr}}CEchangeXML{{/tr}}</legend>
   
@@ -32,7 +39,12 @@
     </button>
   {{/foreach}}
   
-  {{foreach from=$messages_xml key=_message_xml item=_messages_xml_supported}}
-    {{mb_include template="inc_messages_available" message=$_message_xml messages_supported=$_messages_xml_supported}}
-  {{/foreach}}
+  {{if !empty($messages_xml|smarty:nodefaults)}}
+    {{foreach from=$messages_xml key=_message_xml item=_messages_xml_supported}}
+      {{mb_include template="inc_messages_available" message=$_message_xml messages_supported=$_messages_xml_supported}}
+    {{/foreach}}
+  {{else}}
+    <div class="small-warning">{{tr}}CMessageSupported.none{{/tr}}</div>
+  {{/if}}
 </fieldset>
+{{/if}}

@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Echange Any EAI
+ * Echange Tabular EAI
  *  
  * @category EAI
  * @package  Mediboard
@@ -16,35 +16,20 @@
  * Echange Tabular
  */
 
-CAppUI::requireModuleClass("eai", "exchange_data_format");
+CAppUI::requireModuleClass("eai", "CExchange_data_format");
 
-class CExchangeAny extends CExchangeDataFormat {
-  static $messages = array(
-    "None" => "CExchangeAny", 
-  );
-  
-  static $evenements = array();
-  
-  // DB Table key
-  var $echange_any_id     = null;
-
-  function getSpec() {
-    $spec = parent::getSpec();
-    $spec->loggable = false;
-    $spec->table = 'echange_any';
-    $spec->key   = 'echange_any_id';
-    return $spec;
-  }
+class CExchangeTabular extends CExchangeDataFormat {
+  // DB Fields
+  var $version           = null;
+  var $nom_fichier       = null;
   
   function getProps() {
     $props = parent::getProps();
         
-    $props["message_content_id"]      = "ref class|CContentAny show|0 cascade";
-    $props["acquittement_content_id"] = "ref class|CContentAny show|0 cascade";   
-    
-    $props["sender_id"]               = "ref class|CInteropSender";
-    $props["receiver_id"]             = "ref class|CInteropReceiver";
-    $props["object_class"]            = "str class show|0";
+    $props["version"]                 = "str";
+    $props["nom_fichier"]             = "str";
+    $props["message_content_id"]      = "ref class|CContentTabular show|0 cascade";
+    $props["acquittement_content_id"] = "ref class|CContentTabular show|0 cascade";   
     
     $props["_message"]                = "str";
     $props["_acquittement"]           = "str";
@@ -53,18 +38,18 @@ class CExchangeAny extends CExchangeDataFormat {
   }
   
   function loadContent() {
-    $content = new CContentAny();
+    $content = new CContentTabular();
     $content->load($this->message_content_id);
     $this->_message = $content->content;
     
-    $content = new CContentAny();
+    $content = new CContentTabular();
     $content->load($this->acquittement_content_id);
     $this->_acquittement = $content->content;
   }
   
   function updateDBFields() {
     if ($this->_message !== null) {
-      $content = new CContentAny();
+      $content = new CContentTabular();
       $content->load($this->message_content_id);
       $content->content = $this->_message;
       if ($msg = $content->store()) {
@@ -76,7 +61,7 @@ class CExchangeAny extends CExchangeDataFormat {
     }
     
     if ($this->_acquittement !== null) {
-      $content = new CContentAny();
+      $content = new CContentTabular();
       $content->load($this->acquittement_content_id);
       $content->content = $this->_acquittement;
       if ($msg = $content->store()) {
@@ -86,6 +71,12 @@ class CExchangeAny extends CExchangeDataFormat {
         $this->acquittement_content_id = $content->_id;
       }
     }
+  }
+  
+  function isWellForm() {}
+  
+  function understand($data, CInteropSender $actor = null) {
+    return false;
   }
 }
 

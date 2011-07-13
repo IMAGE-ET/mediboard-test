@@ -157,8 +157,9 @@ class CExchangeDataFormat extends CMbMetaObject {
     list($object_class, $object_id) = explode("-", $actor_guid);
     $family = array();
 
-    foreach ($this->getMessages() as $_message => $_root_class) {
+    foreach ($this->getFamily() as $_message => $_root_class) {
       $root  = new $_root_class;
+      
       foreach ($root->getEvenements() as $_evt => $_evt_class) {
         if ($evenement && ($evenement != $_evt)) {
           continue;
@@ -177,7 +178,7 @@ class CExchangeDataFormat extends CMbMetaObject {
         
         $this->_messages_supported_class[] = $message_supported->message;
         
-        $family[$_root_class][]          = $message_supported;
+        $family[$_root_class][] = $message_supported;
       }
     }
 
@@ -186,7 +187,7 @@ class CExchangeDataFormat extends CMbMetaObject {
   
   function getConfigs($actor_guid) {}
   
-  function getMessages() {
+  function getFamily() {
     return array(); 
   }
 }

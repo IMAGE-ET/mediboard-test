@@ -71,7 +71,7 @@
     </table>
   </form>
   
-  <table class="form" id="actor_exchanges_sources">  
-    {{mb_include template=inc_actor_exchanges_sources}}
+  <table class="form" id="actor_tools">  
+    {{mb_include module=eai template="`$actor->_parent_class_name`_tools_inc"}}
   </table>
 {{/if}}

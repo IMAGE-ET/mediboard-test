@@ -16,7 +16,7 @@
  * Echange XML
  */
 
-CAppUI::requireModuleClass("eai", "exchange_data_format");
+CAppUI::requireModuleClass("eai", "CExchange_data_format");
 
 class CEchangeXML extends CExchangeDataFormat {
   var $identifiant_emetteur    = null;
@@ -109,7 +109,7 @@ class CEchangeXML extends CExchangeDataFormat {
 
     $root = $dom->documentElement;
     $nodeName = $root->nodeName;
-    foreach ($this->getMessages() as $_message) {
+    foreach ($this->getFamily() as $_message) {
       $message_class = new $_message;
       $document_elements = $message_class->getDocumentElements();
       if (array_key_exists($nodeName, $document_elements)) {

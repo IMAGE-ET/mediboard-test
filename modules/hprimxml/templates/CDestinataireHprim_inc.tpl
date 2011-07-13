@@ -8,12 +8,6 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
 *}}
 
-<tr>  
-  <th>{{mb_label object=$actor field="type"}}</th>
-  <td>
-    <input type="text" name="type" size="20" value="{{if $conf.sip.server}}cip{{else}}sip{{/if}}" readonly="readonly" />
-  </td>
-</tr>
 <tr>
   <th>{{mb_label object=$actor field="register"}}</th>
   <td>{{mb_field object=$actor field="register"}}</td>

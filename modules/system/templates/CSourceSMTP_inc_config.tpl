@@ -26,7 +26,7 @@ guessDataFormEmail = function(element){
 <table class="main"> 
   <tr>
     <td>
-      <form name="editSourceSMTP" action="?m={{$m}}" method="post" onsubmit="return onSubmitFormAjax(this, { onComplete: refreshExchangeSource.curry('{{$source->name}}', '{{$source->_wanted_type}}') } )">
+      <form name="editSourceSMTP-{{$source->name}}" action="?m={{$m}}" method="post" onsubmit="return onSubmitFormAjax(this, { onComplete: refreshExchangeSource.curry('{{$source->name}}', '{{$source->_wanted_type}}') } )">
         <input type="hidden" name="m" value="system" />
         <input type="hidden" name="dosql" value="do_source_smtp_aed" />
         <input type="hidden" name="source_smtp_id" value="{{$source->_id}}" />
