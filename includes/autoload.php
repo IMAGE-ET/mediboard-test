@@ -38,7 +38,7 @@ function updateClassPathCache() {
       }
     }
   }*/
-	
+  
   // update paths
   $classNames = CApp::getChildClasses(null);
   foreach ($classNames as $className) {
@@ -58,9 +58,18 @@ function updateClassPathCache() {
  */
 function mbAutoload($className) {
   global $classPaths, $performance;
-  if (isset($classPaths[$className]) && file_exists($classPaths[$className])) {
-    $performance["autoload"]++;
-    return include_once $classPaths[$className];
+  
+  if (isset($classPaths[$className])) {
+    if ($classPaths[$className] === false) return false;
+    
+    if (file_exists($classPaths[$className])) {
+      $performance["autoload"]++;
+      return include_once $classPaths[$className];
+    }
+    else {
+      $classPaths[$className] = false;
+      SHM::put("class-paths", $classPaths);
+    }
   }
   else {
     /*
@@ -69,56 +78,65 @@ function mbAutoload($className) {
       unset($ctx['args']);
       unset($ctx['object']);
     }
-  	mbTrace($contexts, $className, true );
-  	*/
+    mbTrace($contexts, $className, true );
+    */
     updateClassPathCache();
   }
-	
+  
   return true;
 }
 
 // nouveau mode
-if (0) {
-function mbAutoload($class_name) {
+function mbAutoload2($class_name) {
   global $classPaths, $performance;
   
-  if (isset($classPaths[$className]) && file_exists($classPaths[$class_name])) {
+  $file_exists = false;
+  
+  // entry already in cache
+  if (isset($classPaths[$class_name]) && ($file_exists = file_exists($classPaths[$class_name]))) {
     $performance["autoload"]++;
     return include_once $classPaths[$class_name];
   }
   else {
+    if (!$file_exists) {
+      unset($classPaths[$class_name]);
+    }
+    
     $dirs = array(
       "classes/$class_name.class.php", 
-      "classes/*/$class_name.class.php", // Require all global classes
       "*/*/$class_name.class.php",
       "modules/*/classes/$class_name.class.php", // Require all modules classes
     );
-		
-		if (preg_match("/^CSetup.+/", $class_name)) {
+    
+    if (preg_match("/^CSetup.+/", $class_name)) {
       $dirs[] = "modules/*/setup.php"; // Require all setup classes
-		}
-  
-	  foreach ($dirs as $dir) {
-	    $files = glob("$rootDir/$dir");
-	    foreach ($files as $filename) {
-	      require_once($filename);
-	    }
-	  }
-		
-		if (class_exists($class_name, false)) {
-	    $class = new ReflectionClass($class_name);
-	    $classPaths[$class_name] = $class->getFileName();
-		}
-		else {
-			return false;
-		}
+    }
+    
+    $rootDir = CAppUI::conf("root_dir");
+    
+    foreach ($dirs as $dir) {
+      $files = glob("$rootDir/$dir");
+      foreach ($files as $filename) {
+        require_once($filename);
+      }
+    }
+    
+    // update the cache
+    if (class_exists($class_name, false)) {
+      $class = new ReflectionClass($class_name);
+      $classPaths[$class_name] = $class->getFileName();
+      SHM::put("class-paths", $classPaths);
+    }
+    else {
+      return false;
+    }
   }
   
   return true;
 }
-}
 
 if (function_exists("spl_autoload_register")) {
+  //spl_autoload_register("mbAutoload2");
   spl_autoload_register("mbAutoload");
 }
 else {
