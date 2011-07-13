@@ -178,10 +178,15 @@
 								    {{else}}
 								      0
 								    {{/if}}
-								    /{{$administrations_in_hour.quantite_planifiee}}
+										{{if $administrations_in_hour.quantite != $administrations_in_hour.quantite_planifiee}}
+								      /{{$administrations_in_hour.quantite_planifiee}}
+										{{/if}}
 								 {{else}}
 						       {{if @$administrations_in_hour.quantite}}
-							       {{$administrations_in_hour.quantite}}/{{$quantite}}
+									   {{$administrations_in_hour.quantite}}
+										 {{if $administrations_in_hour.quantite != $quantite}}
+                       /{{$quantite}}
+										 {{/if}}
 						       {{elseif $line->_active}}
 							       {{if $quantite}}0/{{$quantite}}{{/if}}
 							     {{/if}}
