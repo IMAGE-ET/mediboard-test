@@ -135,6 +135,17 @@ class CApp {
    * @return array
    */
   static function getChildClasses($parent = "CMbObject", $properties = array(), $active_module = false) {
+    $childclasses = SHM::get("child-classes");
+    
+    $p = $parent;
+    if (!$p) {
+      $p = "all";
+    }
+    
+    if (empty($properties) && isset($childclasses[$p][$active_module])) {
+      return $childclasses[$p][$active_module];
+    }
+    
     self::getAllClasses();
     
     $listClasses = get_declared_classes();
@@ -159,6 +170,12 @@ class CApp {
     }
     
     sort($listClasses);
+    
+    if (empty($properties)) {
+      $childclasses[$p][$active_module] = $listClasses;
+      SHM::put("child-classes", $childclasses);
+    }
+    
     return $listClasses;
   }
   
@@ -191,10 +208,10 @@ class CApp {
    * @return array
    */
   static function getInstalledClasses($properties = array(), $classes = array()) {
-  	if (empty($classes)) {
+    if (empty($classes)) {
       $classes = self::getMbClasses();
-		}
-		
+    }
+    
     foreach ($classes as $key => $class) {
       // Escaped instanciation in case of DSN errors
       $object = @new $class;
