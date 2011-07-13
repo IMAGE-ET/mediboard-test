@@ -87,7 +87,7 @@ class CConstantesMedicales extends CMbObject {
       "standard" => 8,
       "colors" => array("#00A8F0", "#C0D800"),
       "conversion" => array("mmHg" => 10),
-			"candles" => true,
+      "candles" => true,
     ),
     "ta_gauche"         => array(
       "unit" => "cmHg", 
@@ -211,7 +211,7 @@ class CConstantesMedicales extends CMbObject {
     // Conversion des specs
     if (self::$_specs_converted) return;
     
-    foreach(self::$list_constantes as $_constant => $_params) {
+    foreach(self::$list_constantes as $_constant => &$_params) {
       $unit = "mmHg";
 
       if (isset($_params["conversion"][$unit])) {
@@ -240,7 +240,7 @@ class CConstantesMedicales extends CMbObject {
           if (isset($spec->min)) $spec->min *= $conv;
           if (isset($spec->max)) $spec->max *= $conv;
         }
-        $_params["unit"] = $conv;
+        $_params["unit"] = $unit;
       }
     }
     
@@ -575,7 +575,20 @@ class CConstantesMedicales extends CMbObject {
       
       foreach (CConstantesMedicales::$list_constantes as $_name => $_params) {
         if (in_array($_name, $selection) || $_constante_medicale->$_name != '') {
-          $grid[$_constante_medicale->datetime]["values"][$_name] = $_constante_medicale->$_name;
+          $spec = self::$list_constantes[$_name];
+          $value = $_constante_medicale->$_name;
+          
+          if (isset($spec["formfields"])) {
+            $arr = array();
+            foreach($spec["formfields"] as $ff) {
+              if ($_constante_medicale->$ff != "") {
+                $arr[] = $_constante_medicale->$ff;
+              }
+            }
+            $value = implode(" / ", $arr);
+          }
+          
+          $grid[$_constante_medicale->datetime]["values"][$_name] = $value;
           
           if (!in_array($_name, $names)) {
             $names[] = $_name;

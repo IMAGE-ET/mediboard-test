@@ -57,18 +57,18 @@ class CExObject extends CMbMetaObject {
   function setExClass() {
     if ($this->_specs_already_set || !$this->_ex_class_id && !$this->_own_ex_class_id) return;
     
-    $ex_class = $this->loadRefExClass();
-    
-    $this->_own_ex_class_id = $ex_class->_id;
-    $this->_ref_ex_class = $ex_class;
-    
     $this->_props = $this->getProps();
     
     CBoolSpec::$_default_no = false;
     $this->_specs = @$this->getSpecs(); // when creating the field
     CBoolSpec::$_default_no = true;
     
+    $ex_class = $this->_ref_ex_class;
+    
     $this->_class_name = "CExObject_{$ex_class->_id}";
+    
+    $this->_own_ex_class_id = $ex_class->_id;
+    $this->_ref_ex_class = $ex_class;
     
     $this->_specs_already_set = true;
   }
@@ -77,7 +77,7 @@ class CExObject extends CMbMetaObject {
     if ($cache && $this->_ref_ex_class && $this->_ref_ex_class->_id) return $this->_ref_ex_class;
     
     $ex_class = new CExClass();
-    $ex_class->load($this->_ex_class_id ? $this->_ex_class_id : $this->_own_ex_class_id);
+    $ex_class->load($this->getClassId());
     
     return $this->_ref_ex_class = $ex_class; // can't use loadFwdRef here
   }
@@ -332,11 +332,18 @@ class CExObject extends CMbMetaObject {
     $spec->key = "ex_object_id";
     return $spec;
   }
+	
+	function getClassId(){
+		return ($this->_ex_class_id ? $this->_ex_class_id : $this->_own_ex_class_id);
+	}
+	
+	function getTableName(){
+		return "ex_object_".$this->getClassId();
+	}
   
   function getProps() {
-    $ex_class = $this->loadRefExClass();
-    //mbTrace($ex_class);
-    $this->_spec->table = $ex_class->getTableName();
+    $this->loadRefExClass();
+    $this->_spec->table = $this->getTableName();
     
     $props = parent::getProps();
     $props["_ex_class_id"]    = "ref class|CExClass";
@@ -351,7 +358,7 @@ class CExObject extends CMbMetaObject {
       return $props;
     }
     
-    $fields = $this->_ref_ex_class->loadRefsAllFields();
+    $fields = $this->_ref_ex_class->loadRefsAllFields(true);
     
     foreach($fields as $_field) {
       if (isset($this->{$_field->name})) break; // don't redeclare them more than once
@@ -363,8 +370,8 @@ class CExObject extends CMbMetaObject {
   }
   
   function getSpecs(){
-    $ex_class = $this->loadRefExClass();
-    $this->_class_name = get_class($this)."_{$ex_class->_id}";
+    $ex_class_id = $this->getClassId();
+    $this->_class_name = get_class($this)."_$ex_class_id";
     
     $specs = @parent::getSpecs(); // sometimes there is "list|"
         

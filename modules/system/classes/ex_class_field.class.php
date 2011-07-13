@@ -271,6 +271,7 @@ class CExClassField extends CExListItemsOwner {
 	 * @return CExClassFieldGroup
 	 */
   function loadRefExGroup($cache = true){
+  	if ($cache && $this->_ref_ex_group && $this->_ref_ex_group->_id) return $this->_ref_ex_group;
     return $this->_ref_ex_group = $this->loadFwdRef("ex_group_id", $cache);
   }
   

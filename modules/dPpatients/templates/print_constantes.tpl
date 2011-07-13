@@ -16,11 +16,12 @@
   {{/if}}
 
   {{if $cste_grid.grid|@count}}
+	  {{assign var=list_constantes value="CConstantesMedicales"|static:list_constantes}}
 	  <tr>
 	    <th class="narrow"></th>
 	    {{foreach from=$cste_grid.names item=_cste_name}}
 	      <th class="narrow" style="vertical-align: bottom;">
-	        {{vertical}}{{tr}}CConstantesMedicales-{{$_cste_name}}-court{{/tr}}{{/vertical}}
+	        {{vertical}}{{tr}}CConstantesMedicales-{{$_cste_name}}-court{{/tr}}{{if $list_constantes.$_cste_name.unit}} ({{$list_constantes.$_cste_name.unit}}){{/if}}{{/vertical}}
 	      </th>
 	    {{/foreach}}
 	  </tr>
