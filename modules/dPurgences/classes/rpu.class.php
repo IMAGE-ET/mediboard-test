@@ -436,6 +436,8 @@ class CRPU extends CMbObject {
     $template->addDateTimeProperty("RPU - Attente spécialiste"  , $this->specia_att);
     $template->addDateTimeProperty("RPU - Arrivée spécialiste"  , $this->specia_arr);
     $template->addProperty("RPU - Accident du travail"          , $this->getFormattedValue("accident_travail"));
+    $libelle_at = $this->accident_travail ? "Accident du travail du " . $this->getFormattedValue("accident_travail") : "";
+    $template->addProperty("RPU - Libellé accident du travail"  , $libelle_at);
     $template->addProperty("RPU - Sortie autorisée"             , $this->getFormattedValue("sortie_autorisee"));
    	$lit = new CLit;
     if ($this->box_id) 
