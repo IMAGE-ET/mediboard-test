@@ -161,12 +161,12 @@ Main.add(function(){
 	
 	{{if $service->_id}}
 	<tr>
-		<td style="width: 20%;">
+		<td style="width: 20%;" id="categories">
 			<form name="selectElts" action="?" method="get">
 				<!-- Checkbox vide permettant d'eviter que le $V considere qu'il faut retourner true ou false s'il n'y a qu'une seule checkbox -->
 				<input type="checkbox" name="elts" value="" style="display: none;"/>
                       
-				<table class="tbl" id="categories">
+				<table class="tbl" >
 					<tr>
 						<th class="title">
 							<button type="button" class="cancel notext" style="float: left" onclick="resetCheckbox();">{{tr}}Reset{{/tr}}</button>

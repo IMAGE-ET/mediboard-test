@@ -19,6 +19,7 @@ Main.add(function(){
 	  <th class="title" colspan="100">
 	  	<button type="button" class="tick" onclick="PlanSoins.applyAdministrations();" id="button_administration" style="float: right">
      </button>
+		  <button class="hslip notext" type="button" style="float:left" onclick="$('categories').toggle();"></button>	
 	    <button class="change" style="float: left" onclick="updatePlanSoinsPatients();">{{tr}}Search{{/tr}}</button>
 			<form name="mode_dossier_soin" action="?" method="get" style="font-size: 0.8em;">
         <label>
