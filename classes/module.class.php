@@ -432,6 +432,6 @@ class CModule extends CMbObject {
   }
 }
 
-CModule::loadModules();
+CModule::loadModules(false);
 
 ?>
