@@ -66,10 +66,6 @@ function mbAutoload($className) {
       $performance["autoload"]++;
       return include_once $classPaths[$className];
     }
-    else {
-      $classPaths[$className] = false;
-      SHM::put("class-paths", $classPaths);
-    }
   }
   else {
     /*
@@ -81,6 +77,12 @@ function mbAutoload($className) {
     mbTrace($contexts, $className, true );
     */
     updateClassPathCache();
+  }
+	
+  if (!class_exists($className, false)) {
+    $classPaths[$className] = false;
+    SHM::put("class-paths", $classPaths);
+    return false;
   }
   
   return true;
