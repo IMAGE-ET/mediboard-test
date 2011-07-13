@@ -20,7 +20,7 @@
   
   <tr>
     <td class="button">
-      {{mb_script module="dPplanningOp" script="sejour" ajax="true"}}
+      {{mb_script module=dPplanningOp script=sejour ajax=true}}
 
       {{if $can->edit}}
 			<button type="button" class="edit" onclick="Sejour.edit('{{$sejour->_id}}');">
@@ -28,7 +28,8 @@
 			</button>
       {{/if}}
 
-      {{if @$modules.dPadmissions->_can->read}}
+      {{if $sejour->type != "urg" && @$modules.dPadmissions->_can->read}}
+      <br />
 			<button type="button" class="search" onclick="Sejour.admission('{{$sejour->_date_entree_prevue}}');">
 				{{tr}}Admission{{/tr}}
 			</button>
