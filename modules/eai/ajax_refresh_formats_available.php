@@ -32,7 +32,7 @@ if ($actor instanceof CInteropSender) {
   foreach ($formats_tabular as &$_format_tabular) {
     $_format_tabular = new $_format_tabular;
     
-    $temp = $_format_xml->getMessagesSupported($actor_guid, false, null, true);
+    $temp = $_format_tabular->getMessagesSupported($actor_guid, false, null, true);
     $messages_tabular = array_merge($messages_tabular, $temp);
   }
 }

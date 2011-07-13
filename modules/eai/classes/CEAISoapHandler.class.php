@@ -38,7 +38,7 @@ class CEAISoapHandler extends CSoapHandler {
     if (!$acq = CEAIDispatcher::dispatch($message, $actor)) {
       return utf8_encode(CEAIDispatcher::$xml_error);
     }
-    
+
     return $acq;
   }
 }

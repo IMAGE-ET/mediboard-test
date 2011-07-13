@@ -93,7 +93,7 @@ class CInteropSender extends CInteropActor {
     $data_format->getConfigs($this->_guid);
     $format_config = $data_format->_configs_format;
     
-    if (!$format_config->_id) {
+    if (!isset($format_config->_id)) {
       return;
     }
     

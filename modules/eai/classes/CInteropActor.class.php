@@ -66,6 +66,10 @@ class CInteropActor extends CMbObject {
     $this->_tag_sejour   = CSejour::getTagNumDossier($this->group_id);
     $this->_tag_mediuser = CMediusers::getTagMediusers($this->group_id);
     $this->_tag_service  = CService::getTagService($this->group_id);
+    
+    if (CModule::getActive("phast")) {
+      $this->_tag_phast  = CPhast::getTagPhast($this->group_id);
+    }
   }
   
   function getBackProps() {
