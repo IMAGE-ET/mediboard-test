@@ -130,6 +130,10 @@ function mbTrace($var, $label = null, $log = false) {
   return processLog(print_r($var, true), $label, $log);
 }
 
+function mbLog($var, $label = null) {
+  return mbTrace($var, $label, true);
+}
+
 /**
  * Traces variable using preformated text prefixed with a label
  * @return string|int The processed log or the size of the data written in the log file 
