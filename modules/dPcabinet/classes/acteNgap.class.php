@@ -19,9 +19,10 @@ class CActeNGAP extends CActe {
   var $coefficient = null;
   var $demi        = null;
   var $complement  = null;
-  var $libelle     = null;
+  var $lettre_cle  = null;
   
   // Distant fields
+  var $_libelle    = null;
   var $_execution = null;
   
   function getSpec() {
@@ -38,8 +39,11 @@ class CActeNGAP extends CActe {
     $specs["coefficient"]         = "float notNull";
     $specs["demi"]                = "enum list|0|1 default|0";
     $specs["complement"]          = "enum list|N|F|U";
-
+    
+    $specs["lettre_cle"]          = "enum list|0|1 notNull default|0";
+   
     $specs["_execution"]          = "dateTime";
+    
     
     return $specs;
   }
@@ -118,6 +122,10 @@ class CActeNGAP extends CActe {
     if (count($details) >= 7){
     	$this->complement = $details[6];
     }
+    $this->getLibelle();
+    if(!$this->lettre_cle){
+    	$this->lettre_cle = 0;
+    }
     
     $this->updateFormFields();
   }
@@ -170,17 +178,22 @@ class CActeNGAP extends CActe {
 	
   function getLibelle() {
     $ds = CSQLDataSource::get("ccamV2");
-    $query = "SELECT `libelle`
+    $query = "SELECT `libelle`, `lettre_cle`
 		  FROM codes_ngap 
 			WHERE CODE = % ";
     $query = $ds->prepare($query, $this->code);
 
-    $this->libelle = "Acte inconnu ou supprimé";
-    if ($libelle = $ds->loadResult($query)) {
-      $this->libelle = $libelle;
+    $this->_libelle = "Acte inconnu ou supprimé";
+     
+    $hash = $ds->loadHash($query);
+    if ($hash) {
+     $this->_libelle   = $hash['libelle'];
+     /* on récupère au passage la lettre cle pour l'utiliser 
+      * dans le remplissage automatique de ce champ dans la cotation 
+      */
+     $this->lettre_cle = $hash['lettre_cle']; 
     }
-		
-		return $this->libelle;
+		return $this->_libelle;
   }
 } 
 

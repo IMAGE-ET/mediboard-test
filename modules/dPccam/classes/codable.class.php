@@ -274,7 +274,11 @@ class CCodable extends CMbObject {
    * Charge les actes NGAP codés
    */
   function loadRefsActesNGAP() {
-    if (null === $this->_ref_actes_ngap = $this->loadBackRefs("actes_ngap")) {
+  	/** ajout d'un paramètre d'ordre à passer, ici "lettre_cle" qui vaut 0 ou 1
+  	 * la valeur 1 étant pour les actes principaux et O pour les majorations
+  	 * on souhaite que les actes principaux soient proritaires( donc '1' avant '0')
+  	 * */
+    if (null === $this->_ref_actes_ngap = $this->loadBackRefs("actes_ngap", "lettre_cle DESC")) {
       return;
     }
     

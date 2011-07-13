@@ -35,7 +35,7 @@ Object.extend(Intermax.ResultHandler, {
     if (!confirm(msg)) {
     	return;
     }
-
+    
     if (oVitale.VIT_DATE_NAISSANCE != oPatient.naissance && oPatient.naissance != '') {
     	msg = "ATTENTION : Les dates de naissance ne correspondent pas ! ";
     	msg += "\n\nEtes vous certain de vouloir remplacer ";
@@ -87,6 +87,13 @@ Intermax.ResultHandler["Consulter FSE"] = Intermax.ResultHandler["Formater FSE"]
 
 // Use single quotes or fails ?!!
 Intermax.Triggers['Formater FSE'].aActes = {{$consult->_fse_intermax|@json}};
+
+//raffraichir la partie association patient-vitale
+onSubmitUnlink = function(form){
+	  return onSubmitFormAjax(form, {onComplete: function(){ 
+    Reglement.reload(true);
+	  }});
+	}
 </script>
 
 <table class="layout main">
@@ -223,6 +230,16 @@ Intermax.Triggers['Formater FSE'].aActes = {{$consult->_fse_intermax|@json}};
           <button class="search" type="button" onclick="Intermax.Triggers['Consulter Vitale']({{$patient->_id_vitale}});">
             Consulter Vitale
           </button>
+          <form name="UnlinkVitale" action="?m={{$m}}" method="post" onsubmit="return onSubmitUnlink(this)">
+          <input type="hidden" name="m" value="dPsante400" />
+          <input type="hidden" name="dosql" value="do_idsante400_aed" />
+          {{assign var="id_sante400" value=$patient->_ref_vitale_idsante400}}
+          {{mb_key object=$id_sante400}}
+          <input type="hidden" name="del" value="0" />
+          <button  class="cancel singleclick" type="button" onclick="confirmDeletion(this.form,{ajax:true, typeName:'l\'association de ce patient à la carte vitale'})">
+            Dissocier patient
+          </button>
+          </form>
         {{else}}
           <button class="search" type="button" onclick="Intermax.trigger('Lire Vitale');">
             Lire Vitale

@@ -127,6 +127,7 @@ ActesNGAP = {
           <td>{{mb_field object=$acte_ngap field="demi" onchange="refreshTarif()" onkeyup="refreshTarif()"}}</td>
           <td id="tarifActe">
           	{{mb_field object=$acte_ngap field="montant_base"}}
+          	{{mb_field object=$acte_ngap field="lettre_cle" hidden=hidden}}
           </td>
           <td>{{mb_field object=$acte_ngap field="montant_depassement"}}</td>
           <td>{{mb_field object=$acte_ngap field="complement" onchange="refreshTarif()" onkeyup="refreshTarif()" defaultOption="&mdash; Aucun"}}</td>
@@ -150,14 +151,17 @@ ActesNGAP = {
     {{/if}}
     
     {{foreach from=$object->_ref_actes_ngap item="_acte_ngap"}}
-    <tr>
+    <tr {{if $_acte_ngap->lettre_cle == '1'}}style="font-weight: bold;"{{/if}}>
       <td>{{mb_value object=$_acte_ngap field="quantite"}}</td>
       <td>{{mb_value object=$_acte_ngap field="code"}}</td>
       <td>{{mb_value object=$_acte_ngap field="coefficient"}}</td>
       <td>{{mb_value object=$_acte_ngap field="demi"}}</td>
       {{if !$object->_coded}}
         {{if $can->edit}}
-        <td>{{mb_value object=$_acte_ngap field="montant_base"}}</td>
+        <td>
+        {{mb_value object=$_acte_ngap field="montant_base"}}
+        {{mb_value object=$_acte_ngap field="lettre_cle"}}
+        </td>
         <td>{{mb_value object=$_acte_ngap field="montant_depassement"}}</td>
         {{/if}}
       {{else}}

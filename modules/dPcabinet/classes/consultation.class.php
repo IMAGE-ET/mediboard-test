@@ -560,7 +560,8 @@ class CConsultation extends CCodable {
         $acte->quantite    = $fseActe["PRE_QUANTITE"];
         $acte->coefficient = $fseActe["PRE_COEFFICIENT"];
         $acte->demi        = $fseActe["PRE_DEMI"];        
-
+        $acte->getLibelle();
+        
         // Coefficient facial doublé
         if ($acte->demi) {
           $acte->coefficient *= 2;

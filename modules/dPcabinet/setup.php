@@ -1317,7 +1317,21 @@ class CSetupdPcabinet extends CSetup {
     $this->addPrefQuery("AFFCONSULT", "0");
     $this->addPrefQuery("MODCONSULT", "0");
 
-    $this->mod_version = "1.27";
+     
+    $this->makeRevision("1.27");
+    $query = "ALTER TABLE `acte_ngap` ADD `lettre_cle` ENUM ('0','1') NOT NULL DEFAULT '0'";
+    $this->addQuery($query);
+    
+    $query = "UPDATE `acte_ngap` 
+       SET `acte_ngap`.`lettre_cle` = '1'
+       WHERE 
+        `acte_ngap`.`code` IN ('C','K','KA','KC','KCC','KE','KFA','KFB','KFD','ORT','PRO','PRA'
+                               'SCM','V','Z','ZN','LC','LCM','LFA','LFB','LFD','LK','LKC','LKE'
+                               'LRA','LRO','LV','LZ','LZM','LZN','CS','VS','LCC','LCS','LVS',
+                               'AMI','AIS','DI')";
+    $this->addQuery($query);
+    
+    $this->mod_version = "1.28";
   }
 }
 ?>

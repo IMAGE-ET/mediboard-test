@@ -59,6 +59,12 @@ class CLmFSE extends CLmObject {
     $specs["S_FSE_TOTAL_AMO"]         = "currency";
     $specs["S_FSE_TOTAL_ASSURE"]      = "currency";
     $specs["S_FSE_TOTAL_AMC"]         = "currency";
+    //infos supplémentaires sur le patient
+    $specs["S_FSE_IMM_NUM"]           = "num";
+    $specs["S_FSE_IMM_CLE"]           = "num";
+    $specs["S_FSE_DATE_NAISSANCE"]    = "num";
+    //infos supplémentaires sur le praticien
+    $specs["S_FSE_CPS_NOM"]           = "text";
 
     // Filter Fields
     $specs["_date_min"] = "date";
@@ -83,6 +89,60 @@ class CLmFSE extends CLmObject {
     $this->_ref_id->loadMatchingObject();
     
     $this->_consult_id = $this->_ref_id->object_id;
+  }
+  
+  function detectlink(){
+    $this->loadRefIdExterne();
+    //chargement de la consultation associée à la FSE
+    $consult = new CConsultation();
+    $is_consult = $consult->load($this->_consult_id);
+    
+    //chargement de la plage de consultation
+    $plage   = new CPlageconsult();
+    $plage->load($consult->plageconsult_id);
+    
+    //chargement du patient associée à la consultation
+    $patient = new CPatient();
+    $patient->load($consult->patient_id);
+    $patient->loadIdVitale();
+    
+    //chargement du praticien qui a fait la consultation
+    $mediuser = new CMediusers();
+    $mediuser->load($consult->getExecutantId());
+    $mediuser->loadIdCPS();
+  
+    /*vérification des champs de chaque coté
+     * les données sur le praticien, le patient, la date de consultation doivent corespondre avec la FSE
+     */
+    $check_prat      = ($this->S_FSE_CPS == $mediuser->_id_cps);
+    
+    $check_dateFSE   = ($this->S_FSE_DATE_FSE == $plage->date);
+    
+    $check_patient   = ($this->S_FSE_VIT == $patient->_id_vitale); 
+    
+    $msg = array();   
+    if (!$check_prat | !$check_patient | !$check_dateFSE){
+      if (!$is_consult){
+        $msg[]= " FSE non associée";
+      }
+      else{
+        if  (!$check_prat && !$check_patient && !$check_dateFSE){
+          $msg[]= " FSE mal associée";
+        }
+        else{
+          if (!$check_prat){
+            $msg[]= " FSE mal associée au bon praticien";
+          }
+          if (!$check_dateFSE){
+            $msg[]= " FSE mal associée à la bonne date";
+          }         
+          if (!$check_patient){
+            $msg[]= " FSE mal associée au bon patient";
+          }
+        }
+      }
+    }
+    return $msg;
   }
 }
 

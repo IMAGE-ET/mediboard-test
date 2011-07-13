@@ -7,7 +7,7 @@
   <tr>
     <td class="text">
       <span onmouseover="ObjectTooltip.createEx(this, '{{$acte_ngap->_guid}}');">{{$acte_ngap->_shortview}}:</span>
-        {{$acte_ngap->libelle}}
+        {{$acte_ngap->_libelle}}
     </td>
   </tr>
   {{/foreach}}

@@ -232,6 +232,7 @@ class CPatient extends CMbObject {
   var $_ref_medecins_correspondants = null;
   var $_ref_dossier_medical         = null;
   var $_ref_IPP                     = null;
+  var $_ref_vitale_idsante400       = null;
   var $_ref_constantes_medicales    = null;
   
   // Distant fields
@@ -557,6 +558,7 @@ class CPatient extends CMbObject {
     $id_vitale->setObject($this);
     $id_vitale->tag = "LogicMax VitNumero";
     $id_vitale->loadMatchingObject();
+    $this->_ref_vitale_idsante400 = $id_vitale;
     $this->_id_vitale = $id_vitale->id400;
   }
   
