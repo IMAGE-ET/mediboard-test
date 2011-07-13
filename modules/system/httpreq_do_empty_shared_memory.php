@@ -57,6 +57,18 @@ else {
   
   CAppUI::stepAjax("Modules-shm-rem-ok", UI_MSG_OK);
 }
+
+// Remove child classes cache
+if (!SHM::get("child-classes")) {
+  CAppUI::stepAjax("ChildClasses-shm-none", UI_MSG_WARNING);
+}
+else {
+  if (!SHM::rem("child-classes")) {
+    CAppUI::stepAjax("ChildClasses-shm-rem-ko", UI_MSG_ERROR);
+  }
+  
+  CAppUI::stepAjax("ChildClasses-shm-rem-ok", UI_MSG_OK);
+}
   
 CJSLoader::writeLocaleFile();
 CAppUI::stepAjax("Locales-javascript-cache-allup", UI_MSG_OK);
