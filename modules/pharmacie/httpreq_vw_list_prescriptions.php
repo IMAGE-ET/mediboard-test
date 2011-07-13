@@ -60,15 +60,13 @@ if($service_id){
   $ljoin["service"]     = "chambre.service_id = service.service_id";
 
   // Recupération de l'affectation courante
-  $where[] = "(affectation.entree BETWEEN '$min' AND '$max') OR 
-              (affectation.sortie BETWEEN '$min' AND '$max') OR
-              (affectation.entree <= '$min' AND affectation.sortie >= '$max')";
+  $where[] = "affectation.entree <= '$max'";
+  $where[] = "affectation.sortie >= '$min'"; 
   $where["service.service_id"] = " = '$service_id'";
 } else {
   // Filtre sur les dates du séjour
-  $where[] = "(sejour.entree_prevue BETWEEN '$min' AND '$max') OR 
-              (sejour.sortie_prevue BETWEEN '$min' AND '$max') OR
-              (sejour.entree_prevue <= '$min' AND sejour.sortie_prevue >= '$max')";
+	$where[] = "sejour.entree <= '$max'";
+  $where[] = "sejour.sortie >= '$min'";    
 }
 
 // filtre sur l'etablissement
