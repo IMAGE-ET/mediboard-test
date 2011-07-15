@@ -40,9 +40,8 @@ if ($service_id) {
   $ljoin_service["service"]     = "chambre.service_id = service.service_id";
 
   // Recupération de l'affectation courante
-  $where_default[] = "(affectation.entree BETWEEN '$min' AND '$max') OR 
-              (affectation.sortie BETWEEN '$min' AND '$max') OR
-              (affectation.entree <= '$min' AND affectation.sortie >= '$max')";
+  $where_default["affectation.entree"] = " <= '$max'";
+	$where_default["affectation.sortie"] = " >= '$min'";				
   $where_default["service.service_id"] = " = '$service_id'";
 }
 
@@ -71,6 +70,7 @@ $ljoin += $ljoin_service;
 
 $where_mix = $where_default;
 $where_mix[] = "prescription_line_mix_item.stupefiant = '1'";
+
 $administrations_mix = $administration->loadList($where_mix, null, null, null, $ljoin);
 
 // Fusion des tableaux d'administrations

@@ -30,9 +30,8 @@ if($type_prescription == "sejour" || $type_prescription == "sortie_manquante"){
   $ljoin["sejour"] = "prescription.object_id = sejour.sejour_id";
   $ljoin["patients"] = "patients.patient_id = sejour.patient_id";
   $where["prescription.type"] = " = 'sejour'";
-  $where[] = "(sejour.entree_prevue BETWEEN '$date_min' AND '$date_max') OR 
-            (sejour.sortie_prevue BETWEEN '$date_min' AND '$date_max') OR
-            (sejour.entree_prevue <= '$date_min' AND sejour.sortie_prevue >= '$date_max')"; 
+  $where["sejour.entree"]      = " <= '$date_max'";
+  $where["sejour.sortie"]      = " >= '$date_min'";					
 } else {
   $where["prescription.type"] = " = 'externe'";
   $ljoin["consultation"] = "prescription.object_id = consultation.consultation_id";
@@ -66,6 +65,7 @@ $prescriptions = array();
 $prescription = new CPrescription();
 $order = "patients.nom";
 $group_by = "prescription_id";
+
 $prescriptions = $prescription->loadList($where, $order, null, $group_by, $ljoin);
 
 if($type_prescription == "sortie_manquante"){
