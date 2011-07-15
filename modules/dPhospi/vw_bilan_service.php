@@ -246,10 +246,9 @@ if ($do && ($do_medicaments || $do_injections || $do_perfusions || $do_aerosols 
 	$ljoin["chambre"] = "lit.chambre_id = chambre.chambre_id";
 	$ljoin["service"] = "chambre.service_id = service.service_id";
 	$where["prescription.type"] = " = 'sejour'";
-	$where[] = "(sejour.entree_prevue BETWEEN '$date_min 00:00:00' AND '$date_max 23:59:59') OR 
-	            (sejour.sortie_prevue BETWEEN '$date_min 00:00:00' AND '$date_max 23:59:59') OR
-	            (sejour.entree_prevue <= '$date_min 00:00:00' AND sejour.sortie_prevue >= '$date_max 23:59:59')";
-	
+  $where["sejour.entree"]      = " <= '$date_max 23:59:59'";
+  $where["sejour.sortie"]      = " >= '$date_min 00:00:00'"; 
+
   if ($_present_only == "true") {
     $where["sejour.sortie_reelle"] = 'IS NULL';
   }
