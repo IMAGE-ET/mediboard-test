@@ -147,7 +147,6 @@ class CSejour extends CCodable implements IPatientRelated {
   // External objects
   var $_ext_diagnostic_principal = null;
   var $_ext_diagnostic_relie     = null;
-  var $_nb_echange_hprim         = null;
   var $_ref_echange_hprim        = null;
   
   // Distant fields
@@ -1581,11 +1580,6 @@ class CSejour extends CCodable implements IPatientRelated {
     $order = "date_production DESC";
     // Récupération de tous les échanges produits
     $this->_ref_echange_hprim = $this->loadBackRefs("echanges_hprim", $order);
-  }
-  
-  function countEchangeHprim() {
-    // Récupération de tous les échanges produits
-    $this->_nb_echange_hprim = $this->countBackRefs("echanges_hprim");
   }
   
   function fillLimitedTemplate(&$template) {

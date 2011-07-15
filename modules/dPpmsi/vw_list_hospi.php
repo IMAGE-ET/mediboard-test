@@ -31,7 +31,7 @@ foreach ($listSejours as $keySejour => $valueSejour) {
   $sejour->loadNumDossier();
   $sejour->_ref_patient->loadIPP();
   $sejour->loadRefGHM();
-  $sejour->countEchangeHprim();
+  $sejour->countExchanges();
 }
 
 // Création du template

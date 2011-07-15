@@ -46,11 +46,11 @@ foreach($plages as &$_plage) {
     $_operation->_ref_sejour->loadRefPatient();
     $_operation->_ref_sejour->_ref_patient->loadIPP();
     $_operation->loadExtCodesCCAM();
-    $_operation->countEchangeHprim();
+    $_operation->countExchanges();
     $_operation->countDocItems();
 
 		$counts["operations"]["total"]++; 
-		if (count($_operation->_nb_echange_hprim)) {
+		if (count($_operation->_nb_exchanges)) {
       $counts["operations"]["facturees"]++; 
 		}
   }
@@ -75,10 +75,10 @@ foreach($urgences as $_urgence) {
   $_urgence->_ref_sejour->loadRefPatient();
   $_urgence->_ref_sejour->_ref_patient->loadIPP();
   $_urgence->loadExtCodesCCAM();
-  $_urgence->countEchangeHprim();
+  $_urgence->countExchanges();
 	
   $counts["urgences"]["total"]++; 
-  if (count($_urgence->_nb_echange_hprim)) {
+  if (count($_urgence->_nb_exchanges)) {
     $counts["urgences"]["facturees"]++; 
   }
 }

@@ -110,6 +110,39 @@ class CDestinataireHprim extends CInteropReceiver {
     }
   }
   
+  function sendEvenementPMSI(CHPrimXMLEvenementsServeurActivitePmsi $dom_evt, CMbObject $mbObject) {
+    $msg = $dom_evt->generateTypeEvenement($mbObject);
+    
+    if ($this->actif) {
+      $source = CExchangeSource::get("$this->_guid-$dom_evt->sous_type");
+      if ($source->_id) {
+        $source->setData($msg);
+        try {
+          $source->send();
+        } catch (Exception $e) {
+          throw new CMbException("CExchangeSource-no-response");
+        }
+        $acq = $source->getACQ();
+
+        if ($acq) {
+          $echg_hprim = $dom_evt->_ref_echange_hprim;
+          $echg_hprim->date_echange = mbDateTime();
+          
+          $dom_acq = new CHPrimXMLAcquittementsServeurActivitePmsi();
+          $dom_acq->loadXML($acq);
+          $dom_acq->_ref_echange_hprim = $echg_hprim;
+          $doc_valid = $dom_acq->schemaValidate();
+          
+          $echg_hprim->statut_acquittement = $dom_acq->getStatutAcquittementServeurActivitePmsi();
+          $echg_hprim->acquittement_valide = $doc_valid ? 1 : 0;
+          $echg_hprim->_acquittement = $acq;
+      
+          $echg_hprim->store();
+        } 
+      }      
+    }
+  }
+  
   function lastMessage() {
     $echg_hprim = new CEchangeHprim();
     $echg_hprim->_load_content = false;

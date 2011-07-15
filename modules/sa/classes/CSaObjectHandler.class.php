@@ -19,13 +19,13 @@ class CSaObjectHandler extends CEAIObjectHandler {
     if (!parent::onAfterStore($mbObject)) {
       return;
     }
-
-    if (!$mbObject->facture) {
-      return;
+    
+    if ($mbObject->fieldModified('facture', 1)) {
+      // Cas du séjour / opération facturé
+      $this->sendFormatAction("onAfterStore", $mbObject);
     }
 
-    // Cas du séjour / opération facturé
-    $this->sendFormatAction("onAfterStore", $mbObject);
+    
   }
 }
 ?>

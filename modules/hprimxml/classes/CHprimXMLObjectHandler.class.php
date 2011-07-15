@@ -34,6 +34,18 @@ class CHprimXMLObjectHandler {
     $dom->_ref_receiver = $receiver;
     $receiver->sendEvenementPatient($dom, $mbObject);
   }
+  
+  function sendEvenementPMSI($evenement, CMbObject $mbObject) {
+    $receiver = $mbObject->_receiver;
+    
+    if (!$receiver->isMessageSupported($evenement)) {
+      return;
+    }
+    
+    $dom = new $evenement;
+    $dom->_ref_receiver = $receiver;
+    $receiver->sendEvenementPMSI($dom, $mbObject);
+  }
 }
 
 ?>

@@ -28,7 +28,7 @@ $codable->getAssociationCodesActes();
 $codable->loadPossibleActes();
 $codable->canDo();
 if($codable->_class_name == "COperation") {
-  $codable->countEchangeHprim();
+  $codable->countExchanges();
 }
 
 

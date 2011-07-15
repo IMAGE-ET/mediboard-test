@@ -134,7 +134,7 @@ class CExchangeDataFormat extends CMbMetaObject {
  
   function countExchanges() {
     // Total des échanges
-    $this->_count_exchanges    = $this->countList();
+    $this->_count_exchanges = $this->countList();
     
     // Total des messages invalides
     $where = array();

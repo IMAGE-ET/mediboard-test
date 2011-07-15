@@ -122,7 +122,6 @@ class COperation extends CCodable implements IPatientRelated {
   var $_ref_consult_anesth = null;
   var $_ref_anesth_visite  = null;
   var $_ref_actes_ccam     = array();
-  var $_nb_echange_hprim   = null;
   var $_ref_echange_hprim  = null;
   var $_ref_anesth_perops  = null;
   
@@ -726,11 +725,6 @@ class COperation extends CCodable implements IPatientRelated {
     $order = "date_production DESC";
     // Récupération de tous les échanges produits
     $this->_ref_echange_hprim = $this->loadBackRefs("echanges_hprim", $order);
-  }
-  
-  function countEchangeHprim() {
-    // Récupération de tous les échanges produits
-    $this->_nb_echange_hprim = $this->countBackRefs("echanges_hprim");
   }
   
   function isCoded() {

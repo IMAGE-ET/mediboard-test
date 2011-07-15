@@ -37,14 +37,14 @@ $sejour->_ref_dossier_medical->loadRefsTraitements();
 $sejour->loadRefsAffectations();
 $sejour->loadExtDiagnostics();
 $sejour->loadRefs();
-$sejour->countEchangeHprim();
+$sejour->countExchanges();
 $sejour->loadRefGHM();
 $sejour->loadNumDossier();
 $sejour->canRead();
 $sejour->canEdit();
 foreach ($sejour->_ref_operations as $_operation) {
   $_operation->loadRefsFwd();
-  $_operation->countEchangeHprim();
+  $_operation->countExchanges();
   $_operation->countDocItems();
   $_operation->loadRefsActesCCAM();
   $_operation->canRead();

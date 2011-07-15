@@ -93,6 +93,8 @@ class CMbObject {
   var $_nb_files_docs = null;
   var $_nb_files      = null;
   var $_nb_docs       = null;
+  var $_nb_exchanges           = null;
+  var $_nb_exchanges_by_format = array();
   
   /**
    * References
@@ -359,6 +361,25 @@ class CMbObject {
     }
     
     return $this->_nb_files + $this->_nb_docs;
+  }
+  
+  function countExchanges(){
+    foreach (CExchangeDataFormat::getAll() as $_data_format) {
+      $data_format = new $_data_format;
+      if (!$data_format->hasTable()) {
+        continue;
+      }
+      $data_format->object_id    = $this->_id;
+      $data_format->object_class = $this->_class_name;
+
+      $this->_nb_exchanges_by_format[$_data_format] = $data_format->countMatchingList();
+    }
+    
+    foreach ($this->_nb_exchanges_by_format as $_nb_exchange_format) {
+      $this->_nb_exchanges += $_nb_exchange_format;
+    }
+    
+    return $this->_nb_exchanges;
   }
     
   /**
@@ -2292,6 +2313,10 @@ class CMbObject {
    */
   function isInstalled() {
     return $this->_spec->ds->loadTable($this->_spec->table);    
+  }
+  
+  function hasTable() {
+    return $this->_spec->table;
   }
 
   /**

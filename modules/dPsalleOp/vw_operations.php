@@ -49,7 +49,7 @@ if ($op) {
   
   $selOp->canDo();
   $selOp->loadRefs();
-  $selOp->countEchangeHprim();
+  $selOp->countExchanges();
   $selOp->isCoded();
   $selOp->_ref_consult_anesth->loadRefsTechniques();
 

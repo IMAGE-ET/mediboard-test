@@ -17,7 +17,7 @@ if(!$operation_id) {
 $selOp = new COperation;
 $selOp->load($operation_id);
 $selOp->loadRefs();
-$selOp->countEchangeHprim();
+$selOp->countExchanges();
 $selOp->isCoded();
 $selOp->canDo();
 $selOp->_ref_sejour->loadRefsFwd();

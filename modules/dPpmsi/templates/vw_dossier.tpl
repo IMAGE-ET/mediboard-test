@@ -58,27 +58,6 @@ function imprimerDocument(doc_id) {
   url.popup(800, 800, "Compte-rendu");
 }
 
-function exporterHPRIM(object_id, typeObject, oOptions) {
-  var oDefaultOptions = {
-  	onlySentFiles : false
-  };
-  
-  Object.extend(oDefaultOptions, oOptions);
-  
-  var url = new Url("dPpmsi", "export_evtServeurActivitePmsi");
-  url.addParam("object_id", object_id);
-  url.addParam("typeObject", typeObject);
-  url.addParam("sent_files", oDefaultOptions.onlySentFiles ? 1 : 0);
-  
-  var oRequestOptions = {
-    waitingText: oDefaultOptions.onlySentFiles ? 
-  	  "Chargement des fichers envoyés" : 
-  	  "Export H'XML"
-  };
-  
-  url.requestUpdate("hprim_export_" + typeObject + object_id, oRequestOptions); 
-}
-
 var ExtRefManager = {
   sejour_id: null,
   

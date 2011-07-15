@@ -75,27 +75,14 @@ changeCodeToDel = function(subject_id, code_ccam, actes_ids){
           <legend>Validation du codage</legend>
           {{if ($conf.dPsalleOp.CActeCCAM.envoi_actes_salle || $m == "dPpmsi") && ($subject instanceof COperation)}}
             <table class="main layout">
-              <tr>
-                <td class="halfPane">
-                  {{if !$subject->_nb_echange_hprim || $m == "dPpmsi" || $can->admin}}
-                  <button type="button" class="tick" onclick="ActesCCAM.exportHPRIM({{$subject->_id}}, 'op')">
-                    Export des actes au PMSI
-                  </button>
-                  {{else}}
-                  <div class="small-warning">Export PMSI impossible</div>
-                  {{/if}}
-                </td>
-                <td class="halfPane">
-                  {{if $subject->_nb_echange_hprim}}
-                  <div class="small-success">
-                    Export déjà effectué {{$subject->_nb_echange_hprim}} fois
-                  </div>
-                  {{else}}
-                  <div class="small-info">
-                    Pas d'export effectué
-                  </div>
-                  {{/if}}
-                </td>
+              <tr id="export_{{$subject->_class_name}}_{{$subject->_id}}">
+                {{if $m == "dPpmsi" || $can->admin}}
+                  {{mb_include template="inc_export_actes_pmsi" object=$subject confirmCloture=1}}
+                {{else}}
+                  <td>
+                    <div class="small-warning">Export PMSI impossible</div>
+                  </td>
+                {{/if}}
               </tr>
             </table>
           {{/if}}

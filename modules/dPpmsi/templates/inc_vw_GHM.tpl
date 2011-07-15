@@ -44,23 +44,8 @@
     </td>
   </tr>
   {{/if}}
-  <tr>
-    <td class="button">
-      <button class="tick" onclick="exporterHPRIM({{$sejour->_id}}, 'sej')">Export du PMSI</button>
-    </td>
-  </tr>
-  <tr>
-    <td>
-      {{if $sejour->_nb_echange_hprim}}
-      <div class="small-success">
-        Export déjà effectué {{$sejour->_nb_echange_hprim}} fois
-      </div>
-      {{else}}
-      <div class="small-info">
-        Pas d'export effectué
-      </div>
-      {{/if}}
-    </td>
+  <tr id="export_{{$sejour->_class_name}}_{{$sejour->_id}}">
+    {{mb_include template="inc_export_actes_pmsi" object=$sejour}}
   </tr>
   {{else}}
   <tr>

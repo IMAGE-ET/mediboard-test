@@ -84,7 +84,7 @@
   </tr>
   <tr>
     <td colspan="4" id="modifActes-{{$curr_op->_id}}">
-      {{include file="inc_confirm_actes_ccam.tpl"}}
+      {{mb_include template="inc_confirm_actes_ccam"}}
     </td>
   </tr>
   {{if ($conf.dPpmsi.systeme_facturation == "siemens")}}
@@ -146,25 +146,8 @@
     </td>
   </tr>
   {{/if}}
-  <tr>
-    <td colspan="2">
-      <button class="tick" onclick="exporterHPRIM({{$curr_op->_id}}, 'op')">Export des actes</button>
-    </td>
-    <td colspan="2" class="text">
-      {{if $curr_op->_nb_echange_hprim}}
-      <div class="small-success">
-        Export déjà effectué {{$curr_op->_nb_echange_hprim}} fois
-      </div>
-      {{else}}
-      <div class="small-info">
-        Pas d'export effectué
-      </div>
-      {{/if}}
-    </td>
-  </tr>
-  <tr>
-    <td class="text" id="hprim_export_op{{$curr_op->_id}}" colspan="4">
-    </td>
+  <tr id="export_{{$curr_op->_class_name}}_{{$curr_op->_id}}">
+    {{mb_include template="inc_export_actes_pmsi" object=$curr_op}}
   </tr>
 {{foreachelse}}  
 <tr>

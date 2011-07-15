@@ -20,8 +20,17 @@ class CSaHprimXMLObjectHandler extends CHprimXMLObjectHandler {
       return;
     }
     
-    $receiver = $mbObject->_receiver;  
+    $evt = null;
+    if ($mbObject instanceof CSejour) {
+      $evt = (CAppUI::conf("hprimxml send_diagnostic") == "evt_serveuretatspatient") ? 
+                   "CHPrimXMLEvenementsServeurEtatsPatient" : "CHPrimXMLEvenementsPmsi";
+    }
+  
+    if ($mbObject instanceof COperation) {
+      $evt = "CHPrimXMLEvenementsServeurActes";
+    }
     
+    $this->sendEvenementPMSI($evt, $mbObject);
     
   }
 }
