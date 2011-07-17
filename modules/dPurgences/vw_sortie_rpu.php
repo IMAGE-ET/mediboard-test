@@ -11,7 +11,7 @@
 CCanDo::checkRead();
 
 // Type d'affichage
-$aff_sortie = CValue::postOrSession("aff_sortie","tous");
+$view_sortie = CValue::postOrSession("view_sortie","tous");
 
 // Parametre de tri
 $order_way = CValue::getOrSession("order_way", "ASC");
@@ -37,9 +37,14 @@ $where[] = "sejour.entree BETWEEN '$date' AND '$date_after'
 // RPU Existants
 $where["rpu.rpu_id"] = "IS NOT NULL";
 
-if ($aff_sortie == "sortie"){
+if ($view_sortie == "sortie") {
   $where["sortie_reelle"] = "IS NULL";
   $where["rpu.mutation_sejour_id"] = "IS NULL";
+}
+
+if (in_array($view_sortie, array("normal", "mutation", "transfert"))) {
+  $where["sortie_reelle"] = "IS NOT NULL";
+  $where["mode_sortie"] = "= '$view_sortie'";
 }
 
 $order_col = "_pec_transport";
@@ -102,7 +107,7 @@ $smarty->assign("services", $services);
 $smarty->assign("order_col" , $order_col);
 $smarty->assign("order_way" , $order_way);
 $smarty->assign("listSejours", $listSejours);
-$smarty->assign("aff_sortie", $aff_sortie);
+$smarty->assign("view_sortie", $view_sortie);
 $smarty->assign("listPrats", $listPrats);
 $smarty->assign("date", $date);
 $smarty->assign("access_pmsi", $access_pmsi);

@@ -134,22 +134,24 @@ class CViewSender extends CMbObject {
 	}
 
   function makeFile() {
-    global $phpChrono;
     
   	$file = tempnam("", "view");
   	
-    $phpChrono->stop();
-    
+    global $phpChrono;
+  	$phpChrono->stop();
     $chrono = new Chronometer();
     $chrono->start();
     
   	// On récupère et écrit les données dans le fichier temporaire
   	$contents = file_get_contents($this->_url);
     if (file_put_contents($file, $contents) === false) {
+      $chrono->stop();
+      $phpChrono->start();
       throw new CMbException("CViewSender-ko-file_put_contents");
     }
     $chrono->stop();
     $phpChrono->start();
+    
     
     $this->_file_download_duration = $chrono->total;
     $this->_file_download_size     = filesize($file);
@@ -160,8 +162,6 @@ class CViewSender extends CMbObject {
   function sendFile() {
     global $phpChrono;
        
-    $phpChrono->stop();
-    
     // On transmet aux sources le fichier
     foreach($this->loadRefSendersSource() as $_sender_source) {
       $_sender_source->last_datetime = mbDateTime();
@@ -200,8 +200,6 @@ class CViewSender extends CMbObject {
       $_sender_source->last_duration = $chrono->total;
       $_sender_source->store();
     }
-    
-    $phpChrono->start();
     
     unlink($this->_file);
   }

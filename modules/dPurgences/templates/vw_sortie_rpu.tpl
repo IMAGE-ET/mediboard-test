@@ -106,12 +106,15 @@ function submitSejour() {
     <td style="text-align: right;">
       Type d'affichage
       <form name="selView" action="?m=dPurgences&amp;tab=vw_sortie_rpu" method="post">
-        <select name="aff_sortie" onchange="this.form.submit()">
-          <option value="tous"   {{if $aff_sortie == "tous"  }} selected = "selected" {{/if}}>Tous</option>
-          <option value="sortie" {{if $aff_sortie == "sortie"}} selected = "selected" {{/if}}>Sortie à effectuer</option>
+        <select name="view_sortie" onchange="this.form.submit()">
+          <option value="tous"      {{if $view_sortie == "tous"     }} selected = "selected" {{/if}}>Tous</option>
+          <option value="sortie"    {{if $view_sortie == "sortie"   }} selected = "selected" {{/if}}>Sorties à effectuer</option>
+          <option value="normal"    {{if $view_sortie == "normal"   }} selected = "selected" {{/if}}>Sorties normales</option>
+          <option value="mutation"  {{if $view_sortie == "mutation" }} selected = "selected" {{/if}}>Sortie en mutation</option>
+          <option value="transfert" {{if $view_sortie == "transfert"}} selected = "selected" {{/if}}>Sortie en transfert</option>
         </select>
       </form>
-      <button class="print" onclick="MainCourante.printSortie('{{$date}}','{{$aff_sortie}}')">Sortie des patients</button>
+      <button class="print" onclick="MainCourante.printSortie('{{$date}}','{{$view_sortie}}')">Sortie des patients</button>
     </td>
   </tr>
 </table>

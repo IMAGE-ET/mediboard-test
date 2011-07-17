@@ -9,7 +9,7 @@
  */
 
 // Type d'affichage
-$aff_sortie = CValue::get("aff_sortie","tous");
+$view_sortie = CValue::get("view_sortie","tous");
 
 // Parametre de tri
 $order_way = CValue::getOrSession("order_way", "ASC");
@@ -34,8 +34,13 @@ $where[] = "sejour.entree BETWEEN '$date' AND '$date_after'
 // RPU Existants
 $where["rpu.rpu_id"] = "IS NOT NULL";
 
-if ($aff_sortie == "sortie"){
+if ($view_sortie == "sortie") {
   $where["sortie_reelle"] = "IS NULL";
+}
+
+if (in_array($view_sortie, array("normal", "mutation", "transfert"))) {
+  $where["sortie_reelle"] = "IS NOT NULL";
+  $where["mode_sortie"] = "= '$view_sortie'";
 }
 
 $order = "consultation.heure $order_way";
