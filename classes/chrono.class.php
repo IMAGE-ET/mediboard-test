@@ -15,6 +15,7 @@ class Chronometer {
   var $maxStep = 0;
   var $avgStep = 0;
   var $nbSteps = 0;
+  var $main = false;
   
   var $report = array();
   
@@ -24,7 +25,13 @@ class Chronometer {
   }
   
   function stop($key = "") {
-    $this->step = microtime(true) - $this->step;
+    if ($this->step === 0) {
+      trigger_error("Chrono stopped without starting", E_USER_WARNING);
+      return;
+    }
+    
+    $time = microtime(true);
+    $this->step =  $time - $this->step;
     $this->total += $this->step;
     $this->maxStep = max($this->maxStep, $this->step);
     $this->avgStep = $this->total / $this->nbSteps;
@@ -40,7 +47,8 @@ class Chronometer {
       $report->total += $report->step;
       $report->maxStep = max($report->maxStep, $report->step);
       $report->avgStep = $report->total/$report->nbSteps;
-    } 
+    }
+    $this->step = 0; 
   }
 }
 ?>

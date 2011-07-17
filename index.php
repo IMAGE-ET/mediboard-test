@@ -81,6 +81,7 @@ date_default_timezone_set($dPconfig["timezone"]);
 // Start chrono
 require "./classes/chrono.class.php";
 $phpChrono = new Chronometer;
+$phpChrono->main = true;
 $phpChrono->start();
 
 // Load AppUI from session

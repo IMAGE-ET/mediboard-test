@@ -73,6 +73,7 @@ class CFTP {
     catch(CMbException $fault) {
       $echange_ftp->output    = $fault->getMessage();
       $echange_ftp->ftp_fault = 1;
+      $phpChrono->start();
       throw $fault;
     }
     $chrono->stop();

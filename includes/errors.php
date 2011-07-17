@@ -198,7 +198,8 @@ function errorHandler($errorCode, $errorText, $errorFile, $errorLine, $errContex
   $log .= print_infos($_GET, 'GET');
   $log .= print_infos($_POST, 'POST');
 	
-  $session = $_SESSION;
+  // Might noy be ready at the time error is thrown
+  $session = isset($_SESSION) ? $_SESSION : array();
   unset($session['AppUI']);
   unset($session['dPcompteRendu']['templateManager']);
   $log .= print_infos($session, 'SESSION');
