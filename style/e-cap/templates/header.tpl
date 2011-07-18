@@ -85,11 +85,11 @@ var Menu = {
     </div>
 
     <hr />
-    {{foreach from=$modules key=mod_name item=currModule}}
-	    {{if $currModule->mod_ui_active && $currModule->_can->view}}
-		    <a href="?m={{$currModule->mod_name}}" title="{{tr}}module-{{$currModule->mod_name}}-long{{/tr}}" class="{{if $mod_name == $m}}textSelected{{else}}textNonSelected{{/if}}">
-		      <img src="modules/{{$currModule->mod_name}}/images/icon.png" alt="Icone {{$currModule->mod_name}}" />
-		      {{tr}}module-{{$currModule->mod_name}}-court{{/tr}}
+    {{foreach from=$modules key=mod_name item=_module}}
+	    {{if $_module->mod_ui_active && $_module->_can->view}}
+		    <a href="?m={{$_module->mod_name}}" title="{{tr}}module-{{$_module->mod_name}}-long{{/tr}}" class="{{if $mod_name == $m}}textSelected{{else}}textNonSelected{{/if}}">
+		      <img src="modules/{{$_module->mod_name}}/images/icon.png" alt="Icone {{$_module->mod_name}}" />
+		      {{tr}}module-{{$_module->mod_name}}-court{{/tr}}
 		    </a>
 	    {{/if}}
     {{/foreach}}
@@ -112,7 +112,7 @@ var Menu = {
       <table>
         <tr>
           <td class="logo">
-            {{thumb src="images/pictures/mbNormal.gif" w="140" f="png"}}
+            {{mb_include style="mediboard" template="logo" id="mediboard-logo" alt="MediBoard logo" width="140"}}
           </td>
           <td width="1%">
             {{if !$offline}}
@@ -150,10 +150,10 @@ var Menu = {
   {{if !$offline}}
   <tr>
     <td id="menubar">
-      {{foreach from=$modules item=currModule}}
-      {{if $currModule->mod_ui_active && $currModule->_can->view}}
-      <a href="?m={{$currModule->mod_name}}" class="{{if $currModule->mod_name==$m}}textSelected{{else}}textNonSelected{{/if}}">
-        {{tr}}module-{{$currModule->mod_name}}-court{{/tr}}</a>
+      {{foreach from=$modules item=_module}}
+      {{if $_module->mod_ui_active && $_module->_can->view}}
+      <a href="?m={{$_module->mod_name}}" class="{{if $_module->mod_name==$m}}textSelected{{else}}textNonSelected{{/if}}">
+        {{tr}}module-{{$_module->mod_name}}-court{{/tr}}</a>
       {{/if}}
       {{/foreach}}
       
