@@ -31,18 +31,14 @@ Resultat :\n
 $output\n";
 
 if (CAppUI::conf("webservices trace")) {
-  $entete_requete = print_r($echange_soap->last_request_headers);
-  $requete        = print_r($echange_soap->last_request);
-  $entete_reponse = print_r($echange_soap->last_response_headers);
-  $reponse        = print_r($echange_soap->last_response);
-  $content .= "Entête requête :\n
-  $entete_requete\n
-  Requête :\n
-  $requete\n
-  Entête réponse :\n
-  $entete_reponse\n
-  Réponse :\n
-  $reponse\n";
+  $content .= "Entete requete :\n
+  {$echange_soap->last_request_headers}\n
+  Requete :\n
+  {$echange_soap->last_request}\n
+  Entete reponse :\n
+  {$echange_soap->last_response_headers}\n
+  Reponse :\n
+  {$echange_soap->last_response}\n";
 }
 
 $echange = utf8_decode($content);
