@@ -69,7 +69,7 @@ foreach($ex_classes as $_ex_class_id => $_ex_class) {
   
   switch($detail) {
     case 2: $limit = ($ex_class_id ? 30 : 20); break;
-    case 1: $limit = ($ex_class_id ? 50 : 25); break;
+    case 1: $limit = ($ex_class_id ? 200 : 100); break;
 	default:
     case 0: 
   }
