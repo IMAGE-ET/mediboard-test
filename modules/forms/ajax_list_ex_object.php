@@ -22,7 +22,7 @@ CValue::setSession('reference_id',    $reference_id);
 $reference = new $reference_class;
 
 if ($reference_id) {
-	$reference->load($reference_id);
+  $reference->load($reference_id);
 }
 
 CExClassField::$_load_lite = true;
@@ -32,7 +32,7 @@ CExObject::$_load_lite = $detail < 2;
 $where = array();
 
 if ($ex_class_id) {
-	$where['ex_class_id'] = "= '$ex_class_id'";
+  $where['ex_class_id'] = "= '$ex_class_id'";
 }
 
 $ex_class = new CExClass;
@@ -41,55 +41,61 @@ $ex_classes = $ex_class->loadList($where);
 $all_ex_objects = array();
 $ex_objects_by_event = array();
 $ex_classes_creation = array();
+  
+foreach($ex_classes as $_ex_class_id => $_ex_class) {
+  $ex_class_key = $_ex_class->host_class."-".$_ex_class->event;
+    
+  if ($detail == 2) {
+    foreach($_ex_class->loadRefsGroups() as $_group) {
+      $_group->loadRefsFields();
+      foreach($_group->_ref_fields as $_field) {
+        $_field->updateTranslation();
+      }
+    }
+  }
 	
-foreach($ex_classes as $_ex_class) {
-	$_ex_object = new CExObject;
-	$_ex_object->_ex_class_id = $_ex_class->_id;
-	$_ex_object->setExClass();
-	
-	$where = array(
-	  "(reference_class  = '$reference_class' AND reference_id  = '$reference_id') OR 
+  $_ex_object = new CExObject;
+  $_ex_object->_ex_class_id = $_ex_class_id;
+  $_ex_object->setExClass();
+  
+  $where = array(
+    "(reference_class  = '$reference_class' AND reference_id  = '$reference_id') OR 
      (reference2_class = '$reference_class' AND reference2_id = '$reference_id') OR 
      (object_class     = '$reference_class' AND object_id     = '$reference_id')"
-	);
-	$_ex_objects = $_ex_object->loadList($where);
-	
-	foreach($_ex_objects as $_ex) {
-		$_ex->_ex_class_id = $_ex_class->_id;
-		$_ex->setExClass();
-		$_ex->load();
-		$_ex->loadTargetObject();
-		$_ex->_ref_object->loadComplete();
+  );
+  $_ex_objects = $_ex_object->loadList($where, "{$_ex_object->_spec->key} DESC");
+  
+  foreach($_ex_objects as $_ex) {
+    $_ex->_ex_class_id = $_ex_class_id;
+    $_ex->load();
+    $_ex->loadTargetObject();
 		
-		if ($detail == 2) {
-			foreach($_ex->_ref_ex_class->_ref_groups as $_group) {
-				$_group->loadRefsFields();
-				foreach($_group->_ref_fields as $_field) {
-					$_field->updateTranslation();
-				}
-			}
-		}
-		
+    if ($detail == 2) {
+      $_ex->_ref_object->loadComplete();
+    }
+    
     $_ex->loadLogs();
-		$_log = $_ex->_ref_first_log;
-		$all_ex_objects["$_log->date $_ex->_id"] = $_ex;
-    $ex_objects_by_event[$_ex_class->host_class."-".$_ex_class->event][$_ex_class->_id]["$_log->date $_ex->_id"] = $_ex;
-	}
-	
-	if (!isset($ex_classes_creation[$_ex_class->host_class."-".$_ex_class->event])) {
-		$ex_classes_creation[$_ex_class->host_class."-".$_ex_class->event] = array();
-	}
-	
-	if ($_ex_class->host_class == $reference_class && !$_ex_class->disabled) {
-		$ex_classes_creation[$_ex_class->host_class."-".$_ex_class->event][$_ex_class->_id] = $_ex_class;
-		if (count($_ex_objects) == 0){
-		  $ex_objects_by_event[$_ex_class->host_class."-".$_ex_class->event][$_ex_class->_id] = array();
-		}
-	}
-	
-	if (isset($ex_objects_by_event[$_ex_class->host_class."-".$_ex_class->event][$_ex_class->_id])) {
-		krsort($ex_objects_by_event[$_ex_class->host_class."-".$_ex_class->event][$_ex_class->_id]);
-	}
+    $_log = $_ex->_ref_first_log;
+    
+    $all_ex_objects["$_log->date $_ex->_id"] = $_ex;
+    $ex_objects_by_event[$ex_class_key][$_ex_class_id]["$_log->date $_ex->_id"] = $_ex;
+  }
+  
+  if (!isset($ex_classes_creation[$ex_class_key])) {
+    $ex_classes_creation[$ex_class_key] = array();
+  }
+  
+  if ($_ex_class->host_class == $reference_class && !$_ex_class->disabled) {
+    $ex_classes_creation[$ex_class_key][$_ex_class_id] = $_ex_class;
+    
+    if (count($_ex_objects) == 0){
+      $ex_objects_by_event[$ex_class_key][$_ex_class_id] = array();
+    }
+  }
+  
+  if (isset($ex_objects_by_event[$ex_class_key][$_ex_class_id])) {
+    krsort($ex_objects_by_event[$ex_class_key][$_ex_class_id]);
+  }
 }
   
 ksort($ex_objects_by_event);
