@@ -40,6 +40,7 @@ $ex_classes = $ex_class->loadList($where);
 
 $all_ex_objects = array();
 $ex_objects_by_event = array();
+$ex_objects_counts_by_event = array();
 $ex_classes_creation = array();
   
 foreach($ex_classes as $_ex_class_id => $_ex_class) {
@@ -63,8 +64,20 @@ foreach($ex_classes as $_ex_class_id => $_ex_class) {
      (reference2_class = '$reference_class' AND reference2_id = '$reference_id') OR 
      (object_class     = '$reference_class' AND object_id     = '$reference_id')"
   );
-  $_ex_objects = $_ex_object->loadList($where, "{$_ex_object->_spec->key} DESC");
+	
+  $limit = null;
   
+  switch($detail) {
+    case 2: $limit = ($ex_class_id ? 30 : 20); break;
+    case 1: $limit = ($ex_class_id ? 50 : 25); break;
+	default:
+    case 0: 
+  }
+	
+  $_ex_objects = $_ex_object->loadList($where, "{$_ex_object->_spec->key} DESC", $limit);
+  
+	$ex_objects_counts_by_event[$ex_class_key][$_ex_class_id] = $_ex_object->countList($where);
+	
   foreach($_ex_objects as $_ex) {
     $_ex->_ex_class_id = $_ex_class_id;
     $_ex->load();
@@ -108,6 +121,8 @@ $smarty->assign("reference_id",    $reference_id);
 $smarty->assign("reference",       $reference);
 $smarty->assign("all_ex_objects",  $all_ex_objects);
 $smarty->assign("ex_objects_by_event", $ex_objects_by_event);
+$smarty->assign("ex_objects_counts_by_event", $ex_objects_counts_by_event);
+$smarty->assign("limit",           $limit);
 $smarty->assign("ex_classes_creation", $ex_classes_creation);
 $smarty->assign("ex_classes",      $ex_classes);
 $smarty->assign("detail",          $detail);
