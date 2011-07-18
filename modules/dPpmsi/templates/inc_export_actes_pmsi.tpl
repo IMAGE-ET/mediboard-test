@@ -6,11 +6,17 @@
 
 <td>
   {{if $object->facture}}
+    {{if $m == "dPpmsi" || $can->admin}}
     <button class="cancel " onclick="PMSI.deverouilleDossier('{{$object->_id}}', '{{$object->_class_name}}')">
       Déverouiller le dossier
     </button>
+    {{else}}
+    <div class="small-info">
+      Veuillez contacter le PMSI pour déverouiller le dossier
+    </div>
+    {{/if}}
   {{else}}
-    <button class="tick singleclick" onclick="PMSI.exportActes('{{$object->_id}}', '{{$object->_class_name}}', '{{$confirmCloture}}')">
+    <button class="tick singleclick" onclick="PMSI.exportActes('{{$object->_id}}', '{{$object->_class_name}}', null, '{{$confirmCloture}}')">
       Export des actes de l'intervention
     </button>
   {{/if}}

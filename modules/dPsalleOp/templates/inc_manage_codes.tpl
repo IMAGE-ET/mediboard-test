@@ -76,7 +76,7 @@ changeCodeToDel = function(subject_id, code_ccam, actes_ids){
           {{if ($conf.dPsalleOp.CActeCCAM.envoi_actes_salle || $m == "dPpmsi") && ($subject instanceof COperation)}}
             <table class="main layout">
               <tr id="export_{{$subject->_class_name}}_{{$subject->_id}}">
-                {{if $m == "dPpmsi" || $can->admin}}
+                {{if !$subject->facture || $m == "dPpmsi" || $can->admin}}
                   {{mb_include module=dPpmsi template="inc_export_actes_pmsi" object=$subject confirmCloture=1}}
                 {{else}}
                   <td>
