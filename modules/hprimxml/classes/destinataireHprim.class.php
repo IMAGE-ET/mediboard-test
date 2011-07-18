@@ -43,7 +43,6 @@ class CDestinataireHprim extends CInteropReceiver {
   
   function getProps() {
     $props = parent::getProps();
-		$props["message"]     = "enum list|pmsi|patients|stock default|patients";
     $props["register"]    = "bool notNull default|1";
     $props["code_appli"]  = "str";
     $props["code_acteur"] = "str";
