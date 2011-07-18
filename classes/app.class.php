@@ -137,13 +137,9 @@ class CApp {
   static function getChildClasses($parent = "CMbObject", $properties = array(), $active_module = false) {
     $childclasses = SHM::get("child-classes");
     
-    $p = $parent;
-    if (!$p) {
-      $p = "all";
-    }
-    
-    if (empty($properties) && isset($childclasses[$p][$active_module])) {
-      return $childclasses[$p][$active_module];
+		// Do not cache when we want all the classes
+    if ($parent && empty($properties) && isset($childclasses[$parent][$active_module])) {
+      return $childclasses[$parent][$active_module];
     }
     
     self::getAllClasses();
@@ -171,8 +167,8 @@ class CApp {
     
     sort($listClasses);
     
-    if (empty($properties)) {
-      $childclasses[$p][$active_module] = $listClasses;
+    if ($parent && empty($properties)) {
+      $childclasses[$parent][$active_module] = $listClasses;
       SHM::put("child-classes", $childclasses);
     }
     
