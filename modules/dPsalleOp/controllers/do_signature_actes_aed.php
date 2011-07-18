@@ -65,9 +65,7 @@ foreach ($actes_ccam as $key => $_acte_ccam){
 }
 
 // Transmission des actes CCAM lors de la signature
-if (CAppUI::conf("dPpmsi transmission_actes") == "signature" && $object_class == "COperation") {
-  $evenementActivitePMSI = new CHPrimXMLEvenementsServeurActes();
-  
+if (CAppUI::conf("dPpmsi transmission_actes") == "signature" && $object_class == "COperation") {  
   $mbObject = new COperation();
   // Chargement de l'opération et génération du document
   if ($mbObject->load($object_id)) {
@@ -85,61 +83,26 @@ if (CAppUI::conf("dPpmsi transmission_actes") == "signature" && $object_class ==
     return;
   }
         
-  $dest_hprim = new CDestinataireHprim();
-  $dest_hprim->group_id = CGroups::loadCurrent()->_id;
-  $dest_hprim->message = "pmsi";
-  $destinataires = $dest_hprim->loadMatchingList();
-
-  foreach ($destinataires as $_destinataire) {
-    $evenementActivitePMSI->_ref_receiver = $_destinataire;
-    $msgEvtActivitePMSI = $evenementActivitePMSI->generateTypeEvenement($mbObject);
+  // Facturation de l'opération où du séjour
+  $mbObject->facture = 1;
+  $mbObject->loadLastLog();
+  try {
+    $mbObject->store();
+  } catch(CMbException $e) {
+    // Cas d'erreur on repasse à 0 la facturation
+    $mbObject->facture = 0;
+    $mbObject->store();
     
-    
-
-    $echange_hprim = $evenementActivitePMSI->_ref_echange_hprim;
-    if ($doc_valid = $echange_hprim->message_valide) {
-      if(CAppUI::conf("dPpmsi passage_facture") == "envoi") {
-        $mbObject->facture = true;
-        $msg = $mbObject->store();
-        if ($msg) {
-          CAppUI::setMsg($msg, UI_MSG_ERROR );
-        }
-      }
-      
-      // Flag les actes CCAM en envoyés
-      foreach ($actes_ccam as $key => $_acte_ccam){
-        $_acte_ccam->sent = 1;
-        $msg = $_acte_ccam->store();
-        if ($msg) {
-          CAppUI::setMsg($msg, UI_MSG_ERROR );
-        }
-      }
-    }
-      
-    if ($_destinataire->actif) {
-      $source = CExchangeSource::get("$_destinataire->_guid-$evenementActivitePMSI->sous_type");
-      if ($source->_id) {
-        if ($doc_valid) {
-          $source->setData($msgEvtActivitePMSI);
-          if ($source->send()) {
-            $echange_hprim->date_echange = mbDateTime();
-            $echange_hprim->store();
-          }
-          $acquittement = $source->getACQ();
-          if ($acquittement) {          
-            $domGetAcquittement = new CHPrimXMLAcquittementsPMSI();
-            $domGetAcquittement->loadXML(utf8_decode($acquittement));
-            $domGetAcquittement->_ref_echange_hprim = $echange_hprim;       
-            $doc_valid = $domGetAcquittement->schemaValidate();
-            
-            $echange_hprim->statut_acquittement = $domGetAcquittement->getStatutAcquittementServeurActivitePmsi();
-            $echange_hprim->acquittement_valide = $doc_valid ? 1 : 0;
-            $echange_hprim->_acquittement = $acquittement;
-        
-            $echange_hprim->store();
-          }
-        }
-      }
+    $e->stepAjax();
+  }
+  
+  $mbObject->countExchanges();
+  
+  // Flag les actes CCAM en envoyés
+  foreach ($actes_ccam as $key => $_acte_ccam){
+    $_acte_ccam->sent = 1;
+    if ($msg = $_acte_ccam->store()) {
+      CAppUI::setMsg($msg, UI_MSG_ERROR );
     }
   }
 }
