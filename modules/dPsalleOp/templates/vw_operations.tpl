@@ -79,7 +79,7 @@ function confirmeCloture() {
 
 Main.add(function () {
   var url = new Url;
-  {{if $conf.dPsalleOp.COperation.mode || ($currUser->_is_praticien && !$currUser->_is_anesth && !$can->edit)}}
+  {{if $conf.dPsalleOp.COperation.mode || ($currUser->_is_praticien && !$currUser->_is_anesth)}}
   url.setModuleAction("dPsalleOp", "httpreq_liste_op_prat");
   {{else}}
   url.setModuleAction("dPsalleOp", "httpreq_liste_plages");

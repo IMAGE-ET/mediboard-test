@@ -42,17 +42,13 @@
   <td class="text" rowspan="{{$rowspan}}">
   {{/if}}
     <a href="?m=dPsalleOp&amp;tab=vw_operations&amp;op={{$_operation->_id}}" title="Coder l'intervention">
-		  {{if $urgence && $salle}}
-		  {{$_operation->_ref_chir->_view}}
-		  {{else}}
-	      {{if $_operation->time_operation != "00:00:00"}}
-	        {{$_operation->time_operation|date_format:$conf.time}}
-	      {{else}}
-	        NP
-	      {{/if}}
-		    {{if $_operation->_ref_plageop->spec_id}}
-		    - {{$_operation->_ref_chir->_view}}
-		    {{/if}}
+		  {{if ($urgence && $salle) || $_operation->_ref_plageop->spec_id}}
+		    {{$_operation->_ref_chir->_view}} - 
+		  {{/if}}
+	    {{if $_operation->time_operation != "00:00:00"}}
+	      {{$_operation->time_operation|date_format:$conf.time}}
+	    {{else}}
+	      NP
 	    {{/if}}
     </a>
   </td>
