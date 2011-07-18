@@ -14,7 +14,7 @@ CCanDo::checkEdit();
 
 require_once("install/libs.php");
 
-CModule::loadModules();
+CModule::loadModules(false);
 
 $setupClasses = CApp::getChildClasses("CSetup");
 $mbmodules = array(
