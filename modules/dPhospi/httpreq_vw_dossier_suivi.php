@@ -97,7 +97,7 @@ $sejour->_ref_suivi_medical = $list_trans_const;
 $smarty = new CSmartyDP();
 
 $smarty->assign("params"      , CConstantesMedicales::$list_constantes);
-$smarty->assign("page_step"   , 10);
+$smarty->assign("page_step"   , 20);
 $smarty->assign("readOnly"    , CValue::get("readOnly",false));
 $smarty->assign("count_trans" , $count_trans);
 $smarty->assign("user"        , $user);
