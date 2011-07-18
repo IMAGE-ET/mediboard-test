@@ -84,8 +84,18 @@ class CMbSOAPClient extends SoapClient {
   	  $output = parent::__soapCall($function_name, $arguments, $options, $input_headers, $output_headers);
   	} 
 		catch(SoapFault $fault) {
+  		// trace
+      if (CAppUI::conf("webservices trace")) {
+        $echange_soap->trace                 = true;
+        $echange_soap->last_request_headers  = $this->__getLastRequestHeaders();
+        $echange_soap->last_request          = $this->__getLastRequest();
+        $echange_soap->last_response_headers = $this->__getLastResponseHeaders();
+        $echange_soap->last_response         = $this->__getLastResponse();
+      }
+    
   	  $echange_soap->output    = $fault->faultstring;
   		$echange_soap->soapfault = 1;
+  		$echange_soap->store();
   		throw $fault;
     }
     $chrono->stop();
