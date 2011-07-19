@@ -72,14 +72,19 @@
       {{/if}}
     </td>
     
-    <td>
+    <td class="text">
 		  <button class="search notext not-printable" style="float: right;" onclick="ObjectTooltip.createEx(this, '{{$rpu->_guid}}');">
 			  {{tr}}Info{{/tr}}
 		  </button>
 
       <!-- Vérification des champs semi obligatoires -->
-      {{if !$rpu->ccmu           }}<div class="warning" style="display: block;">Champ manquant {{mb_label object=$rpu field=ccmu           }}</div>{{/if}}
-      {{if !$rpu->gemsa          }}<div class="warning" style="display: block;">Champ manquant {{mb_label object=$rpu field=gemsa          }}</div>{{/if}}
+      {{if $conf.dPurgences.check_ccmu}}
+        {{if !$rpu->ccmu           }}<div class="warning" style="display: block;">Champ manquant {{mb_label object=$rpu field=ccmu           }}</div>{{/if}}
+      {{/if}}
+
+      {{if $conf.dPurgences.check_gemsa}}
+        {{if !$rpu->gemsa          }}<div class="warning" style="display: block;">Champ manquant {{mb_label object=$rpu field=gemsa          }}</div>{{/if}}
+      {{/if}}
       
       {{if $conf.dPurgences.check_cotation}}
         {{if !$rpu->_ref_consult->_ref_actes}}<div class="warning" style="display: block;">Codage des actes manquant</div>{{/if}}
@@ -102,7 +107,7 @@
        {{/if}}
     </td>
     
-    <td>
+    <td class="text sortie {{$sejour->mode_sortie}}">
 		  <span onmouseover="ObjectTooltip.createEx(this, '{{$sejour->_guid}}')">
 		    {{mb_include module=dPplanningOp template=inc_vw_numdos num_dossier=$sejour->_num_dossier}}
 		    {{if !$sejour->sortie_reelle}} 

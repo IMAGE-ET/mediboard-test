@@ -38,7 +38,7 @@ if ($view_sortie == "sortie") {
   $where["sortie_reelle"] = "IS NULL";
 }
 
-if (in_array($view_sortie, array("normal", "mutation", "transfert"))) {
+if (in_array($view_sortie, array("normal", "mutation", "transfert", "deces"))) {
   $where["sortie_reelle"] = "IS NOT NULL";
   $where["mode_sortie"] = "= '$view_sortie'";
 }

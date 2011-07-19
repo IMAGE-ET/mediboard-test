@@ -258,7 +258,12 @@
   			    {{if !$_sejour->sortie_reelle}}
   			      ({{mb_value object=$rpu field=_attente}} / {{mb_value object=$rpu field=_presence}})
   			    {{elseif $_sejour->sortie_reelle}}
-  			      (sortie à {{$_sejour->sortie_reelle|date_format:$conf.time}})
+              {{if $_sejour->mode_sortie != "normal"}}
+                ({{mb_value object=$_sejour field=mode_sortie}}
+              {{else}}
+                (sortie
+              {{/if}}
+              à {{$_sejour->sortie_reelle|date_format:$conf.time}})
   			    {{/if}}
   		    {{else}}
   		      {{include file="inc_attente.tpl" sejour=$_sejour}}
