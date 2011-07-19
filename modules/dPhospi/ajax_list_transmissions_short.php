@@ -23,7 +23,7 @@ if ($object_id) {
   $where["object_class"] = " = '$object_class'";
 }
 else {
-  $where["libelle_ATC"] = " LIKE '".stripslashes($libelle_ATC)."'";
+  $where["libelle_ATC"] = " LIKE '".addslashes($libelle_ATC)."'";
 }
 
 $order_by = "DATE DESC";
