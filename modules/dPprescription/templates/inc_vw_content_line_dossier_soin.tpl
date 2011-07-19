@@ -178,7 +178,7 @@
 								    {{else}}
 								      0
 								    {{/if}}
-										{{if $administrations_in_hour.quantite != $administrations_in_hour.quantite_planifiee}}
+										{{if @$administrations_in_hour.quantite != $administrations_in_hour.quantite_planifiee}}
 								      /{{$administrations_in_hour.quantite_planifiee}}
 										{{/if}}
 								 {{else}}
