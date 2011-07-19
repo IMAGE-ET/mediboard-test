@@ -537,7 +537,7 @@ class CSejour extends CCodable implements IPatientRelated {
   }
     
   function store() {
-    $this->completeField("entree_reelle", "entree");
+    $this->completeField("entree_reelle", "entree", "patient_id");
 
     // Vérification de la validité des codes CIM
     if($this->DP != null) {
