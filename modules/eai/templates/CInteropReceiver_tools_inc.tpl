@@ -16,7 +16,17 @@
     Main.add(function () {
       tabs = Control.Tabs.create('tabs-{{$actor->_guid}}', false,  {
           afterChange: function(newContainer){
-            $$("a[href='#"+newContainer.id+"']")[0].up("li").onmousedown();
+            switch (newContainer.id) {
+              case "formats_available_{{$actor->_guid}}" :
+            	  InteropActor.refreshFormatsAvailable('{{$actor->_guid}}');
+            	  break;
+              case "exchanges_sources_{{$actor->_guid}}" :
+            	  InteropActor.refreshExchangesSources('{{$actor->_guid}}');
+                break;
+              case "actor_config_{{$actor->_id}}" :      
+            	  InteropActor.refreshConfigObjectValues('{{$actor->_id}}', '{{$actor->_ref_object_configs->_guid}}');
+                break;
+            }
           }
       });
     });
@@ -26,12 +36,12 @@
     <tr>
       <td>
         <ul id="tabs-{{$actor->_guid}}" class="control_tabs">
-          <li onmousedown="InteropActor.refreshFormatsAvailable('{{$actor->_guid}}')">
+          <li>
             <a href="#formats_available_{{$actor->_guid}}">{{tr}}{{$actor->_parent_class_name}}_formats-available{{/tr}}</a></li>
-          <li onmousedown="InteropActor.refreshExchangesSources('{{$actor->_guid}}')">
+          <li>
             <a href="#exchanges_sources_{{$actor->_guid}}">{{tr}}{{$actor->_parent_class_name}}_exchanges-sources{{/tr}}</a></li>
           {{if $actor->_ref_object_configs}}
-          <li onmousedown="InteropActor.refreshConfigObjectValues('{{$actor->_id}}', '{{$actor->_ref_object_configs->_guid}}');">
+          <li>
             <a href="#actor_config_{{$actor->_id}}">{{tr}}{{$actor->_parent_class_name}}_config{{/tr}}</a></li>
           {{/if}}
         </ul>

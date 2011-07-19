@@ -11,7 +11,7 @@
 
 <script type="text/javascript">
   Main.add(function () {
-    Control.Tabs.create('tabs-exchanges-sources-{{$actor->_guid}}', true);
+    Control.Tabs.create('tabs-exchanges-sources-{{$actor->_guid}}');
   });
 </script>
 

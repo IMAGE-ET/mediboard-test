@@ -16,8 +16,18 @@
     Main.add(function () {
   	  tabs = Control.Tabs.create('tabs-{{$actor->_guid}}', false,  {
           afterChange: function(newContainer){
-  	        $$("a[href='#"+newContainer.id+"']")[0].up("li").onmousedown();
-          }
+        		switch (newContainer.id) {
+              case "exchanges_sources_{{$actor->_guid}}" :
+            	  InteropActor.refreshExchangesSources('{{$actor->_guid}}');
+                break;
+              case "formats_available_{{$actor->_guid}}" :
+            	  InteropActor.refreshFormatsAvailable('{{$actor->_guid}}');
+                break;
+              case "configs_formats_{{$actor->_guid}}" :      
+            	  InteropActor.refreshConfigsFormats('{{$actor->_guid}}');
+                break;
+            }
+  	      }
       });
     });
   </script>
@@ -28,14 +38,15 @@
       <td>
         <ul id="tabs-{{$actor->_guid}}" class="control_tabs">
           {{if !$actor instanceof CSenderSOAP}} 
-            <li onmousedown="InteropActor.refreshExchangesSources('{{$actor->_guid}}')">
+            <li>
               <a href="#exchanges_sources_{{$actor->_guid}}">{{tr}}{{$actor->_parent_class_name}}_exchanges-sources{{/tr}}</a></li>
           {{/if}}
-          <li onmousedown="InteropActor.refreshFormatsAvailable('{{$actor->_guid}}')">
+          <li>
             <a href="#formats_available_{{$actor->_guid}}">{{tr}}{{$actor->_class_name}}_formats-available{{/tr}}</a></li>
-          <li onmousedown="InteropActor.refreshConfigsFormats('{{$actor->_guid}}')">
+          <li>
             <a href="#configs_formats_{{$actor->_guid}}">{{tr}}{{$actor->_class_name}}_configs-formats{{/tr}}</a></li>   
-          <li><a href="#actions_{{$actor->_guid}}">{{tr}}{{$actor->_class_name}}_actions{{/tr}}</a></li>
+          <li>
+            <a href="#actions_{{$actor->_guid}}">{{tr}}{{$actor->_class_name}}_actions{{/tr}}</a></li>
         </ul>
         
         <hr class="control_tabs" />
