@@ -47,7 +47,7 @@
   {{include file="inc_pec_praticien.tpl"}}
 </td>
 
-<td>
+<td class="text">
   <button class="search notext" style="float: right;" onclick="ObjectTooltip.createEx(this, '{{$rpu->_guid}}');">
     {{tr}}Info{{/tr}}
   </button>
@@ -94,11 +94,11 @@
   {{/if}}
 </td>
 
-<td>
+<td class="text sortie {{$sejour->mode_sortie}}">
   <span onmouseover="ObjectTooltip.createEx(this, '{{$sejour->_guid}}')">
     {{mb_include module=dPplanningOp template=inc_vw_numdos num_dossier=$sejour->_num_dossier}}
     {{if !$sejour->sortie_reelle}} 
-    {{mb_title object=$sejour field=_entree}}
+      {{mb_title object=$sejour field=_entree}}
     {{/if}}
 		<strong>
     	{{mb_value object=$sejour field=entree date=$date}}
@@ -108,8 +108,8 @@
 		</strong>
 		
   </span>
-	
-   <br />
+	  
+  <br />
 	{{if $sejour->sortie_reelle}} 
     <button class="edit notext" style="float: right;" onclick="Sortie.edit('{{$rpu->_id}}')">
 		  {{tr}}Edit{{/tr}} {{mb_label object=$sejour field=sortie}}
@@ -128,7 +128,18 @@
 	  {{/if}}
 		
 		<em>{{mb_value object=$sejour field=commentaires_sortie}}</em>
+    
 	{{else}}
+    {{if $sejour->mode_sortie != "normal"}}
+      <div class="warning">
+        Le mode de sortie est 
+        <strong>
+          {{mb_value object=$sejour field=mode_sortie}}
+        </strong>
+        mais la sortie réelle n'est pas validée
+      </div>
+    {{/if}}
+  
     <button class="tick" onclick="Sortie.edit('{{$rpu->_id}}')">
 		  {{tr}}Validate{{/tr}} {{mb_label object=$sejour field=sortie}}
 		</button>

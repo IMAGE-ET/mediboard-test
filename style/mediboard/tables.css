@@ -313,6 +313,24 @@ div.selected {
   background-color: #ffc;
 }
 
+table.tbl td.sortie.normal {
+}
+
+table.tbl td.sortie.mutation {
+  background-color: #ff8;
+}
+
+table.tbl td.sortie.transfert {
+  background-color: #fc8;
+}
+
+table.tbl td.sortie.deces {
+  background-color: #faa;
+}
+
+/**
+ * Layout tables
+ */
 table.layout {
   border-collapse: collapse;
   border-spacing: 0;
