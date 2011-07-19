@@ -117,6 +117,12 @@
   </span>
 	  
   <br />
+  {{if $rpu->mutation_sejour_id && $sejour->mode_sortie != "mutation"}}
+    <div class="warning">
+      Un séjour de mutation a été détecté, mais le mode de sortie <strong>mutation</strong> n'a pas été renseigné.
+    </div>
+  {{/if}}
+  
 	{{if $sejour->sortie_reelle}} 
     <button class="edit notext" style="float: right;" onclick="Sortie.edit('{{$rpu->_id}}')">
 		  {{tr}}Edit{{/tr}} {{mb_label object=$sejour field=sortie}}

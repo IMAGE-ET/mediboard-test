@@ -15,6 +15,7 @@ $rpu_id = CValue::get("rpu_id");
 // Chargement du RPU
 $rpu = new CRPU();
 $rpu->load($rpu_id);
+$rpu->loadRefSejourMutation();
 
 // Chargement du séjour
 $sejour = $rpu->loadRefSejour();
@@ -26,9 +27,6 @@ $sejour->loadRefsConsultations();
 if (!$sejour->sortie_reelle) {
 	$sejour->sortie_reelle = mbDateTime();
 }
-
-// Praticiens urgentistes
-$group = CGroups::loadCurrent();
 
 // Création du template
 $smarty = new CSmartyDP();
