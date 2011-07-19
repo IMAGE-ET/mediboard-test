@@ -27,10 +27,10 @@ $operation->_ref_plageop->loadRefsFwd();
 // Chargement des praticiens
 
 $listAnesths = new CMediusers;
-$listAnesths = $listAnesths->loadAnesthesistes();
+$listAnesths = $listAnesths->loadAnesthesistes(PERM_DENY);
 
 $listChirs = new CMediusers;
-$listChirs = $listChirs->loadPraticiens();
+$listChirs = $listChirs->loadPraticiens(PERM_DENY);
 
 //Initialisation d'un acte NGAP
 $acte_ngap = new CActeNGAP();
