@@ -8,8 +8,6 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
  */
 
-CCanDo::checkRead();
-
 if (null == $object_class = CValue::get("object_class")) {
   CAppUI::stepMessage(UI_MSG_WARNING, "$tab-msg-mode-missing");
   return;

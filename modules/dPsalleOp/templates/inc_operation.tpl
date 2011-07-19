@@ -276,56 +276,40 @@ function reloadPrescription(prescription_id){
 <!-- codage des acte ccam et ngap -->
 <div id="codage_tab" style="display:none">
   <form name="infoFactu" action="?m={{$m}}" method="post">
-  <input type="hidden" name="m" value="dPplanningOp" />
-  <input type="hidden" name="dosql" value="do_planning_aed" />
-  <input type="hidden" name="operation_id" value="{{$selOp->_id}}" />
-  <input type="hidden" name="del" value="0" />
-  <table class="form">
-    <tr>
-      <th style="text-align: right">
-        {{mb_label object=$selOp field=anapath}}
-      </th>
-      <td>
-        {{mb_field object=$selOp field=anapath typeEnum="radio" onChange="submitFormAjax(this.form, 'systemMsg');"}}
-      </td>
-      <th style="text-align: right">
-        {{mb_label object=$selOp field=prothese}}
-      </th>
-      <td>
-        {{mb_field object=$selOp field=prothese typeEnum="radio" onChange="submitFormAjax(this.form, 'systemMsg');"}}
-      </td>
-    </tr>
-    <tr>
-      <th style="text-align: right">
-        {{mb_label object=$selOp field=labo}}
-      </th>
-      <td style="vertical-align:middle;">     
-        {{mb_field object=$selOp field=labo typeEnum="radio" onChange="submitFormAjax(this.form, 'systemMsg');"}}
-      </td>
-      <td colspan="2" />
-    </tr>
-  </table>
+    <input type="hidden" name="m" value="dPplanningOp" />
+    <input type="hidden" name="dosql" value="do_planning_aed" />
+    <input type="hidden" name="operation_id" value="{{$selOp->_id}}" />
+    <input type="hidden" name="del" value="0" />
+    <table class="form">
+      <tr>
+        <th style="text-align: right">
+          {{mb_label object=$selOp field=anapath}}
+        </th>
+        <td>
+          {{mb_field object=$selOp field=anapath typeEnum="radio" onChange="submitFormAjax(this.form, 'systemMsg');"}}
+        </td>
+        <th style="text-align: right">
+          {{mb_label object=$selOp field=prothese}}
+        </th>
+        <td>
+          {{mb_field object=$selOp field=prothese typeEnum="radio" onChange="submitFormAjax(this.form, 'systemMsg');"}}
+        </td>
+      </tr>
+      <tr>
+        <th style="text-align: right">
+          {{mb_label object=$selOp field=labo}}
+        </th>
+        <td style="vertical-align:middle;">     
+          {{mb_field object=$selOp field=labo typeEnum="radio" onChange="submitFormAjax(this.form, 'systemMsg');"}}
+        </td>
+        <td colspan="2" />
+      </tr>
+    </table>
   </form>
-  <ul id="codage_tab_group" class="control_tabs">
-    <li><a href="#ccam_tab">CCAM</a></li>
-    <li><a href="#ngap_tab">NGAP</a></li>
-  </ul>
   
-  <hr class="control_tabs" />
-  
-  <div id="ccam_tab" style="display:none">
-    <div id="ccam">
-      {{assign var="subject" value=$selOp}}
-      {{mb_include module=dPsalleOp template=inc_codage_ccam}}
-    </div>
-  </div>
-
-  <div id="ngap_tab" style="display:none">
-    <div id="listActesNGAP">
-      {{assign var="object" value=$selOp}}
-      {{mb_include module=dPcabinet template=inc_codage_ngap}}
-    </div>
-  </div>
+  <div id="codage_actes">
+    {{mb_include template="inc_codage_actes" subject=$selOp}}
+  </div> 
 </div>
 
 <!-- codage diagnostics CIM -->

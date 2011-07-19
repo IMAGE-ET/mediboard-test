@@ -1,13 +1,12 @@
 <!-- $Id$ -->
 
 {{mb_script module=dPpmsi script=PMSI ajax=true}}
-
 {{mb_default var=confirmCloture value=0}}
 
 <td>
   {{if $object->facture}}
     {{if $m == "dPpmsi" || $can->admin}}
-    <button class="cancel " onclick="PMSI.deverouilleDossier('{{$object->_id}}', '{{$object->_class_name}}')">
+    <button class="cancel " onclick="PMSI.deverouilleDossier('{{$object->_id}}', '{{$object->_class_name}}', '{{$confirmCloture}}', '{{$m}}')">
       Déverouiller le dossier
     </button>
     {{else}}
@@ -16,7 +15,7 @@
     </div>
     {{/if}}
   {{else}}
-    <button class="tick singleclick" onclick="PMSI.exportActes('{{$object->_id}}', '{{$object->_class_name}}', null, '{{$confirmCloture}}')">
+    <button class="tick singleclick" onclick="PMSI.exportActes('{{$object->_id}}', '{{$object->_class_name}}', null, '{{$confirmCloture}}', '{{$m}}')">
       Export des actes de l'intervention
     </button>
   {{/if}}

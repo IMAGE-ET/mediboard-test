@@ -1,13 +1,11 @@
 <script type="text/javascript">
-
-signerActes = function(object_id, object_class){
-  var url = new Url;
-  url.setModuleAction("dPsalleOp", "vw_signature_actes");
-  url.addParam("object_id", object_id);
-  url.addParam("object_class", object_class);
-  url.popup(625, 600, 'Signature des actes');
-}
-
+  signerActes = function(object_id, object_class){
+    var url = new Url;
+    url.setModuleAction("dPsalleOp", "vw_signature_actes");
+    url.addParam("object_id", object_id);
+    url.addParam("object_class", object_class);
+    url.popup(625, 600, 'Signature des actes');
+  }
 </script>
 
 <table class="form">

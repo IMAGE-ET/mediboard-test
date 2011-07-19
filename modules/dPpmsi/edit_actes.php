@@ -10,10 +10,11 @@
 CCanDo::checkEdit();
 
 $operation_id = CValue::getOrSession("operation_id", 0);
-if(!$operation_id) {
+if (!$operation_id) {
   CAppUI::setMsg("Vous devez selectionner une intervention", UI_MSG_ERROR);
   CAppUI::redirect("m=dPpmsi&tab=vw_dossier");
 }
+
 $selOp = new COperation;
 $selOp->load($operation_id);
 $selOp->loadRefs();
@@ -27,19 +28,6 @@ foreach($selOp->_ext_codes_ccam as $key => $value) {
 $selOp->getAssociationCodesActes();
 $selOp->loadPossibleActes();
 $selOp->_ref_plageop->loadRefsFwd();
-
-// Tableau des timings
-$timing["entree_salle"]    = array();
-$timing["pose_garrot"]    = array();
-$timing["debut_op"]       = array();
-$timing["fin_op"]         = array();
-$timing["retrait_garrot"] = array();
-$timing["sortie_salle"]    = array();
-foreach($timing as $key => $value) {
-  for($i = -10; $i < 10 && $selOp->$key !== null; $i++) {
-    $timing[$key][] = mbTime("$i minutes", $selOp->$key);
-  }
-}
 
 // Chargement des praticiens
 
@@ -59,7 +47,6 @@ $acte_ngap->loadListExecutants();
 $smarty = new CSmartyDP();
 $smarty->assign("acte_ngap"  , $acte_ngap      );
 $smarty->assign("selOp"      , $selOp          );
-$smarty->assign("timing"     , $timing         );
 $smarty->assign("listAnesths", $listAnesths    );
 $smarty->assign("listChirs"  , $listChirs      );
 

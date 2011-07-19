@@ -95,9 +95,7 @@ Main.add(function () {
 	if ($('main_tab_group')){
     Control.Tabs.create('main_tab_group', true);
 	}
-	if ($('codage_tab_group')){
-    Control.Tabs.create('codage_tab_group', true);
-	}
+
   // Effet sur le programme
 	if ($('listplages') && $('listplages-trigger')){
     new PairEffect("listplages", { sEffect : "appear", bStartVisible : true });

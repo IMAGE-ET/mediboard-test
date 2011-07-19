@@ -8,8 +8,6 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
  */
 
-CCanDo::checkRead();
-
 $object_id    = CValue::get("object_id");
 $object_class = CValue::get("object_class");
 
