@@ -14,11 +14,11 @@
   {{if $sejour->sortie_reelle}}
     <br />
     {{if $sejour->mode_sortie != "normal"}}
-      {{mb_value object=$sejour value=mode_sortie}}
+      ({{mb_value object=$sejour field=mode_sortie}}
     {{else}}
-      sortie à
+      (sortie
     {{/if}}
-    ({{$sejour->sortie_reelle|date_format:$conf.time}})
+    à {{$sejour->sortie_reelle|date_format:$conf.time}})
   {{else}}
 	{{mb_value object=$rpu field=_attente}}
 	{{/if}}
