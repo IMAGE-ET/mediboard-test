@@ -29,7 +29,7 @@
   <tr>
     <td id="codage_actes">
       <!-- codage des acte ccam et ngap -->
-      {{mb_include template="inc_codage_actes" subject=$selOp}}
+      {{mb_include module=dPsalleOp template="inc_codage_actes" subject=$selOp}}
     </td>
   </tr>    
 </table>
