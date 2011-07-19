@@ -35,6 +35,7 @@ function popPlanning() {
   url.addElement(form.type);
   url.addParam("_ccam_libelle", $V(form._ccam_libelle));
   url.addParam("_coordonnees", $V(form._coordonnees));
+  url.addParam("_print_numdoss", $V(form._print_numdoss));
 	if(form.planning_perso.checked){// pour l'affichage du planning perso d'un anesthesiste
 	  url.addParam("planning_perso", true);
 	}
@@ -262,6 +263,18 @@ function showCheckboxAnesth(element){
             <input type="radio" name="_coordonnees" value="1" /> 
             <label for="_coordonnees_0">Non</label>
             <input type="radio" name="_coordonnees" value="0" checked="checked"/> 
+          </td>
+        </tr>
+            
+        <tr>
+          <th>
+            <label for="print_numdoss_1" title="Afficher ou cacher le numéro de dossier">Afficher le numéro de dossier</label>
+          </th>
+          <td>  
+            <label for="_print_numdoss_1">Oui</label>
+            <input type="radio" name="_print_numdoss" value="1" /> 
+            <label for="_print_numdoss_0">Non</label>
+            <input type="radio" name="_print_numdoss" value="0" checked="checked"/> 
           </td>
         </tr>
         <tr>

@@ -23,20 +23,13 @@ function showLegend() {
   var url = new Url("dPbloc", "legende");
   url.popup(500, 150, "Legend");
 }
-
-function printSuivi(){
-  var url = new Url("dPbloc", "print_suivi");
-  url.addParam("date", '{{$date_suivi}}');
-  url.addParam("vue", $V(getForm('changeDate').bloc_id));
-  url.popup(800, 500, "impressionSuivi");
-}
 </script>
 
-<table class="main">
+<table class="main" id="suivi-salles">
   <tr>
-    <th colspan="100">
+    <th colspan="100" class="not-printable">
       <button type="button" onclick="showLegend()" class="search" style="float: left;">Légende</button>
-      <button type="button" onclick="printSuivi()" class="search" style="float: right;">Version imprimable</button>
+      <button type="button" onclick="$('suivi-salles').print();" class="print" style="float: right;">{{tr}}Print{{/tr}}</button>
       
       <form action="?" name="changeDate" method="get">
         <input type="hidden" name="m" value="{{$m}}" />
@@ -55,9 +48,16 @@ function printSuivi(){
     </th>
   </tr>
   <tr>
+    <td class="button not-printable" colspan="0">
+      {{foreach from=$bloc->_ref_salles item=_salle}}
+        <label><input type="checkbox" onclick="Effect.toggle('salle-{{$_salle->_id}}', 'appear');" checked="checked" /> {{$_salle->nom}}</label>
+      {{/foreach}}
+    </td>
+  </tr>
+  <tr>
     {{foreach from=$bloc->_ref_salles item=_salle}}
-    <td>
-      <table class="form">
+    <td id="salle-{{$_salle->_id}}">
+      <table class="tbl">
         <tr>
           <th class="title">{{$_salle->nom}}</th>
         </tr>

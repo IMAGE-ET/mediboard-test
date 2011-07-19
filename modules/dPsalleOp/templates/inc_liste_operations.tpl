@@ -12,9 +12,9 @@
   <th>Heure</th>
   {{/if}}
   <th>Patient</th>
-  {{if !$vueReduite}}
   <th>Interv</th>
   <th>Coté</th>
+  {{if !$vueReduite}}
   <th>Durée</th>
   {{/if}}
 </tr>
@@ -51,6 +51,9 @@
 	      NP
 	    {{/if}}
     </a>
+    {{if $vueReduite}}
+      <button class="print notext not-printable" onclick="printFicheBloc({{$_operation->_id}})">{{tr}}Print{{/tr}}</button>
+    {{/if}}
   </td>
  
   {{if $_operation->_deplacee && $_operation->salle_id != $salle->_id}}
@@ -67,9 +70,6 @@
   
   {{else}}
   <td class="text">
-  	{{if $vueReduite}}
-  	  <button style="float:right" class="print notext" onclick="printFicheBloc({{$_operation->_id}})">{{tr}}Print{{/tr}}</button>
-  	{{/if}}
     <a href="?m=dPsalleOp&amp;tab=vw_operations&amp;salle={{$salle->_id}}&amp;op={{$_operation->_id}}">
     <span class="{{if !$_operation->_ref_sejour->entree_reelle}}patient-not-arrived{{/if}} {{if $_operation->_ref_sejour->septique}}septique{{/if}}"
           onmouseover="ObjectTooltip.createEx(this, '{{$_operation->_ref_sejour->_ref_patient->_guid}}')">
@@ -84,10 +84,9 @@
     </a>
   </td>
   
-	{{if !$vueReduite}}
   <td class="text">
 		{{mb_ternary var=direction test=$urgence value=vw_edit_urgence other=vw_edit_planning}}
-    <a href="?m=dPsalleOp&amp;tab=vw_operations&amp;salle={{$salle->_id}}&amp;op={{$_operation->_id}}" {{if $_operation->_count_actes == "0"}}style="border-color: #F99"{{/if}} class="mediuser">
+    <a href="?m=dPsalleOp&amp;tab=vw_operations&amp;salle={{$salle->_id}}&amp;op={{$_operation->_id}}" {{if $_operation->_count_actes == "0"}}style="border-color: #F99" class="mediuser"{{/if}}>
       <span onmouseover="ObjectTooltip.createEx(this, '{{$_operation->_guid}}')" >
       {{if $_operation->libelle}}
         {{$_operation->libelle}}
@@ -96,11 +95,12 @@
           {{$curr_code->code}}
         {{/foreach}}
       {{/if}}
+      ({{$_operation->_ref_sejour->type|truncate:1:""|capitalize}})
       </span>
     </a>
   </td>
   <td>
-    {{if $conf.dPplanningOp.COperation.verif_cote && ($_operation->cote == "droit" || $_operation->cote == "gauche")}}
+    {{if $conf.dPplanningOp.COperation.verif_cote && ($_operation->cote == "droit" || $_operation->cote == "gauche") && !$vueReduite}}
       <form name="editCoteOp{{$_operation->_id}}" action="?m={{$m}}" method="post">
         <input type="hidden" name="m" value="dPplanningOp" />
         <input type="hidden" name="dosql" value="do_planning_aed" />
@@ -111,6 +111,7 @@
     {{mb_value object=$_operation field="cote"}}
   {{/if}}
   </td>
+  {{if !$vueReduite}}
   <td>{{$_operation->temp_operation|date_format:$conf.time}}</td>
   {{/if}}
   {{/if}}
@@ -118,7 +119,7 @@
 
 {{if $conf.dPsalleOp.COperation.modif_salle && !($_operation->_deplacee && $_operation->salle_id != $salle->_id) && @$allow_moves|default:1}}
 <tr {{if $_operation->_id == $operation_id}}class="selected"{{/if}}>
-  <td colspan="5">
+  <td colspan="5" class="not-printable">
     <form name="changeSalle{{$_operation->_id}}" action="?m={{$m}}" method="post">
     <input type="hidden" name="dosql" value="do_planning_aed" />
     <input type="hidden" name="m" value="dPplanningOp" />

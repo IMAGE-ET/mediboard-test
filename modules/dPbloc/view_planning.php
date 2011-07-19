@@ -25,7 +25,8 @@ $filter->_specialite   = CValue::get("_specialite");
 $filter->_codes_ccam   = CValue::get("_codes_ccam");
 $filter->_ccam_libelle = CValue::get("_ccam_libelle", CAppUI::conf("dPbloc CPlageOp libelle_ccam"));
 $filter->_planning_perso = CValue::get("planning_perso");
-$_coordonnees  = CValue::get("_coordonnees");
+$_coordonnees   = CValue::get("_coordonnees");
+$_print_numdoss = CValue::get("_print_numdoss");
 
 $filterSejour = new CSejour;
 $filterSejour->type = CValue::get("type");
@@ -159,7 +160,10 @@ foreach($plagesop as &$plage) {
   foreach($listOp as $keyOp => &$operation) {
     $operation->loadRefsFwd(1);
     $sejour =& $operation->_ref_sejour;
-    $sejour->loadRefsFwd(1);   
+    $sejour->loadRefsFwd(1);
+    if($_print_numdoss) {
+      $sejour->loadNumDossier();
+    }  
     // On utilise la first_affectation pour contenir l'affectation courante du patient
     $sejour->_ref_first_affectation = $sejour->getCurrAffectation(mbDate($operation->_datetime));
     $affectation =& $sejour->_ref_first_affectation;
@@ -216,6 +220,7 @@ $smarty = new CSmartyDP();
 $smarty->assign("affectations_plage", $affectations_plage);
 $smarty->assign("filter"            , $filter);
 $smarty->assign("_coordonnees"      , $_coordonnees);
+$smarty->assign("_print_numdoss"    , $_print_numdoss);
 $smarty->assign("listDates"         , $listDates);
 $smarty->assign("operations"        , $operations);
 $smarty->assign("numOp"             , $numOp);

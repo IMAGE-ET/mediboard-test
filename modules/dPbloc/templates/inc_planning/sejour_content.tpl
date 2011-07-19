@@ -13,10 +13,13 @@
         {{$sejour->type|truncate:1:""|capitalize}}
         ({{$sejour->_duree_prevue}}j)
       </td>
-		  <td>
-		    <span onmouseover="ObjectTooltip.createEx(this, '{{$sejour->_ref_patient->_guid}}');">
+		  <td class="text">
+		    <span onmouseover="ObjectTooltip.createEx(this, '{{$sejour->_guid}}');">
 		      {{mb_value object=$sejour field=entree}}
 		    </span>
+		    {{if $_print_numdoss && $sejour->_num_dossier}}
+		      [{{$sejour->_num_dossier}}]
+		    {{/if}}
 		  </td>
 		  <td class="text">
         {{assign var="affectation" value=$sejour->_ref_first_affectation}}
