@@ -11,7 +11,7 @@
 class CHprimXMLObjectHandler {
   static $handled = array ();
   
-  function generateTypeEvenement($evenement, CPatient $mbObject, $referent = null, $initiateur = null) {
+  function generateTypeEvenement($evenement, CMbObject $mbObject, $referent = null, $initiateur = null) {
     $receiver = $mbObject->_receiver;
     
     if (!$receiver->isMessageSupported($evenement)) {
@@ -23,7 +23,7 @@ class CHprimXMLObjectHandler {
     $dom->generateTypeEvenement($mbObject, true, $initiateur);
   }
   
-  function sendEvenementPatient($evenement, CPatient $mbObject, $referent = null, $initiateur = null) {
+  function sendEvenementPatient($evenement, CMbObject $mbObject, $referent = null, $initiateur = null) {
     $receiver = $mbObject->_receiver;
     
     if (!$receiver->isMessageSupported($evenement)) {
