@@ -881,7 +881,12 @@ class CSetupdPstock extends CSetup {
               `datetime_min` = `date_dispensation`,
               `datetime_max` = ADDDATE(`date_dispensation`, 1)";
     $this->addQuery($query);
+		
+		$this->makeRevision("1.49");
+		$query = "ALTER TABLE `product` 
+              ADD `cladimed` VARCHAR (7);";
+    $this->addQuery($query);
     
-    $this->mod_version = "1.49";
+    $this->mod_version = "1.50";
   }
 }

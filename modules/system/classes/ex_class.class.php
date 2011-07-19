@@ -26,6 +26,8 @@ class CExClass extends CMbObject {
   var $_fields_by_name = null;
   var $_host_class_fields = null;
   var $_host_class_options = null;
+	
+	static $_groups_cache = array();
   
   static $_extendable_classes = array(
     "CPrescriptionLineElement",
@@ -156,9 +158,18 @@ class CExClass extends CMbObject {
     $this->_view .= " - $this->name";
   }
   
-  function loadRefsGroups(){
-    if (!empty($this->_ref_groups)) return $this->_ref_groups;
-    return $this->_ref_groups = $this->loadBackRefs("field_groups", "ex_class_field_group_id");
+  function loadRefsGroups($cache = true){
+    if ($cache && isset(self::$_groups_cache[$this->_id])) {
+      return $this->_ref_groups = self::$_groups_cache[$this->_id];
+    }
+    
+    $this->_ref_groups = $this->loadBackRefs("field_groups", "ex_class_field_group_id");
+    
+    if ($cache) {
+      self::$_groups_cache[$this->_id] = $this->_ref_groups;
+    }
+    
+    return $this->_ref_groups;
   }
   
   function loadRefsAllFields($cache = false){

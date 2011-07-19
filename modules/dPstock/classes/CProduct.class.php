@@ -15,9 +15,12 @@ class CProduct extends CMbObject {
   // DB Fields
   var $name              = null;
   var $description       = null;
+	
+	// codage
   var $code              = null;
   var $code_canonical    = null;
   var $scc_code          = null; // in the barcodes (http://www.morovia.com/education/symbology/scc-14.asp)
+  
   var $category_id       = null;
   var $societe_id        = null;
   var $quantity          = null;
@@ -27,9 +30,12 @@ class CProduct extends CMbObject {
   var $packaging         = null;
   var $renewable         = null;
   var $cancelled         = null;
-  var $classe_comptable  = null;
   var $equivalence_id    = null;
   var $auto_dispensed    = null;
+	
+	// classif
+  var $classe_comptable  = null;
+  var $cladimed          = null;
 
   // Object References
   //    Single
@@ -87,9 +93,12 @@ class CProduct extends CMbObject {
     $specs = parent::getProps();
     $specs['name']          = 'str notNull seekable show|0';
     $specs['description']   = 'text seekable';
+		
+		// codage
     $specs['code']          = 'str maxLength|32 seekable protected';
     $specs['code_canonical']= 'str maxLength|32 seekable show|0';
     $specs['scc_code']      = 'numchar length|10 seekable|equal protected'; // Manufacturer Code + Item Number
+    
     $specs['category_id']   = 'ref notNull class|CProductCategory';
     $specs['societe_id']    = 'ref class|CSociete seekable autocomplete|name';
     $specs['quantity']      = 'num notNull min|0 show|0';
@@ -99,9 +108,12 @@ class CProduct extends CMbObject {
     $specs['packaging']     = 'str autocomplete';
     $specs['renewable']     = 'enum list|0|1|2';
     $specs['cancelled']     = 'bool default|0 show|0';
-    $specs['classe_comptable'] = 'str maxLength|9 autocomplete';
     $specs['equivalence_id'] = 'ref class|CProductEquivalence';
     $specs['auto_dispensed'] = 'bool default|0';
+		
+		// classif
+    $specs['cladimed'] = 'str maxLength|7 autocomplete';
+    $specs['classe_comptable'] = 'str maxLength|9 autocomplete';
     
     $specs['_unit_title']   = 'str';
     $specs['_unique_usage'] = 'bool';

@@ -23,6 +23,8 @@ class CExObject extends CMbMetaObject {
   
   static $_load_lite = false;
   static $_multiple_load = false;
+	
+	static $_ex_specs = array();
   
   /**
    * @var CExClass
@@ -372,6 +374,10 @@ class CExObject extends CMbMetaObject {
   function getSpecs(){
     $ex_class_id = $this->getClassId();
     $this->_class_name = get_class($this)."_$ex_class_id";
+		
+		if (isset(self::$_ex_specs[$ex_class_id])) {
+			return self::$_ex_specs[$ex_class_id];
+		}
     
     $specs = @parent::getSpecs(); // sometimes there is "list|"
         
@@ -383,7 +389,7 @@ class CExObject extends CMbMetaObject {
       }
     }
     
-    return $specs;
+    return self::$_ex_specs[$ex_class_id] = $specs;
   }
   
   function loadLogs(){

@@ -18,6 +18,8 @@ class CExClassFieldGroup extends CMbObject {
   var $_ref_fields = null;
   var $_ref_messages = null;
   var $_ref_host_fields = null;
+  
+  static $_fields_cache = array();
 
   function getSpec() {
     $spec = parent::getSpec();
@@ -33,7 +35,7 @@ class CExClassFieldGroup extends CMbObject {
     $props["name"]        = "str notNull";
     return $props;
   }
-	
+  
   function getBackProps() {
     $backProps = parent::getBackProps();
     $backProps["class_fields"] = "CExClassField ex_group_id";
@@ -50,12 +52,21 @@ class CExClassFieldGroup extends CMbObject {
   function loadRefExClass($cache = true){
     return $this->_ref_ex_class = $this->loadFwdRef("ex_class_id", $cache);
   }
-	
-  function loadRefsFields($cache = false){
-  	if ($cache && !empty($this->_ref_fields)) return $this->_ref_fields;
-    return $this->_ref_fields = $this->loadBackRefs("class_fields");
+  
+  function loadRefsFields($cache = true){
+    if ($cache && isset(self::$_fields_cache[$this->_id])) {
+      return $this->_ref_fields = self::$_fields_cache[$this->_id];
+    }
+    
+    $this->_ref_fields = $this->loadBackRefs("class_fields");
+    
+    if ($cache) {
+      self::$_fields_cache[$this->_id] = $this->_ref_fields;
+    }
+    
+    return $this->_ref_fields;
   }
-	
+  
   function loadRefsHostFields(){
     return $this->_ref_host_fields = $this->loadBackRefs("host_fields");
   }

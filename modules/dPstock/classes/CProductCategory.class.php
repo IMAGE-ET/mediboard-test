@@ -14,6 +14,8 @@ class CProductCategory extends CMbObject {
   
   // DB fields
   var $name          = null;
+	
+	var $_count_products = null;
 
   // Object References
   //    Multiple
@@ -35,6 +37,7 @@ class CProductCategory extends CMbObject {
   function getProps() {
     $specs = parent::getProps();
     $specs['name'] = 'str notNull maxLength|50 seekable show|0';
+    $specs['_count_products'] = 'num show|1';
     return $specs;
   }
 
@@ -42,9 +45,19 @@ class CProductCategory extends CMbObject {
     parent::updateFormFields();
     $this->_view = $this->name;
   }
+	
+	function loadView(){
+		parent::loadView();
+		
+		$this->countProducts();
+	}
 
   function loadRefsBack() {
     $this->_ref_products = $this->loadBackRefs('products');
+  }
+  
+  function countProducts(){
+    $this->_count_products = $this->countBackRefs("products");
   }
 }
 ?>

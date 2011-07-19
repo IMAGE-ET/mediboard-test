@@ -129,6 +129,10 @@ duplicateObject = function (form) {
     <td>{{mb_field object=$product field="classe_comptable" form="edit_product"}}</td>
   </tr>
   <tr>
+    <th>{{mb_label object=$product field="cladimed"}}</th>
+    <td>{{mb_field object=$product field="cladimed" form="edit_product"}}</td>
+  </tr>
+  <tr>
     <th>{{mb_label object=$product field="auto_dispensed"}}</th>
     <td>{{mb_field object=$product field="auto_dispensed"}}</td>
   </tr>

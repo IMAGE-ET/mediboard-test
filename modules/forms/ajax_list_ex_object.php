@@ -83,9 +83,8 @@ foreach($ex_classes as $_ex_class_id => $_ex_class) {
     $_ex->load();
     $_ex->loadTargetObject();
 		
-    if ($detail == 2) {
-      $_ex->_ref_object->loadComplete();
-    }
+		// to get the view
+    $_ex->_ref_object->loadComplete();
     
     $_ex->loadLogs();
     $_log = $_ex->_ref_first_log;
