@@ -54,9 +54,16 @@
   {{if $is_praticien || $access_pmsi}}
     <button class="edit notext" style="float: right" onclick="editFieldsRpu('{{$rpu_id}}');"></button>
   {{/if}}
+  
   <!-- Vérification des champs semi obligatoires -->
-  {{if !$rpu->ccmu           }}<div class="warning">Champ manquant {{mb_label object=$rpu field=ccmu           }}</div>{{/if}}
-  {{if !$sejour->DP          }}<div class="warning">Champ manquant {{mb_label object=$sejour field=DP          }}</div>{{/if}}	
+  {{if $conf.dPurgences.check_ccmu}}
+    {{if !$rpu->ccmu           }}<div class="warning">Champ manquant {{mb_label object=$rpu field=ccmu           }}</div>{{/if}}
+  {{/if}}
+  
+  {{if $conf.dPurgences.check_dp}}
+    {{if !$sejour->DP          }}<div class="warning">Champ manquant {{mb_label object=$sejour field=DP          }}</div>{{/if}}	
+  {{/if}}
+  
   {{if $conf.dPurgences.check_gemsa}}
     {{if !$rpu->gemsa          }}<div class="warning">Champ manquant {{mb_label object=$rpu field=gemsa          }}</div>{{/if}}
 	{{/if}}
