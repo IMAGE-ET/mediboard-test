@@ -336,12 +336,12 @@ CLibrary::$all[$library->name] = $library;
 $library = new CLibrary;
 $library->name = "domPDF";
 $library->url = "http://code.google.com/p/dompdf";
-$library->fileName = "dompdf-07-06-11.tar.gz";
+$library->fileName = "dompdf-19-07-11.tar.gz";
 $library->description ="HTML to PDF Converter";
 $library->sourceDir = "dompdf";
 $library->targetDir = "dompdf";
-$library->versionFile = "include/text_frame_reflower.cls.php";
-$library->versionString = "has_child_nodes";
+$library->versionFile = "include/page_frame_decorator.cls.php";
+$library->versionString = "/*if";
 
 CLibrary::$all[$library->name] = $library;
 
