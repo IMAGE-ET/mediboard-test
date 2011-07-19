@@ -24,6 +24,7 @@ var AideSaisie = {
         filterWithDependFields: true,
         defaultUserId: null,
         defaultUserView: null,
+        updateDF: true,
         property: '',
         strict: true,
         timestamp: "-- %n %p - dd/MM/y HH:mm",
@@ -93,6 +94,8 @@ var AideSaisie = {
     
     // Update depend fields after selection
     updateDependFields: function(input, selected){
+      if (!this.options.updateDF) return;
+      
       var data = this.getSelectedData(selected);
       
       if($V(input).charAt($V(input).length - 1) != '\n') {

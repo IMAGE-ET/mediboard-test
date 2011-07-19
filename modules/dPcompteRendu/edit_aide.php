@@ -19,8 +19,8 @@ $depend_value_2 = CValue::get("depend_value_2");
 $class_depend_value_1 = CValue::get("class_depend_value_1");
 $class_depend_value_2 = CValue::get("class_depend_value_2");
 
-$depend_value_1 = utf8_decode($depend_value_1);
-$depend_value_2 = utf8_decode($depend_value_2);
+$depend_value_1 = stripslashes(utf8_decode($depend_value_1));
+$depend_value_2 = stripslashes(utf8_decode($depend_value_2));
 
 // Liste des users accessibles
 $listPrat = new CMediusers();

@@ -67,6 +67,7 @@ Main.add(function() {
       dependField2: oFormTrans.cible,
       classDependField2: "CCategoryPrescription",
       validateOnBlur:0,
+      updateDF: false,
       strict: false
     });
     
@@ -78,6 +79,7 @@ Main.add(function() {
       dependField2: oFormTrans.cible,
       classDependField2: "CCategoryPrescription",
       validateOnBlur:0,
+      updateDF: false,
       strict: false
     });
 
@@ -89,6 +91,7 @@ Main.add(function() {
       dependField2: oFormTrans.cible,
       classDependField2: "CCategoryPrescription",
       validateOnBlur:0,
+      updateDF: false,
       strict: false
     });
   {{else}}
@@ -99,6 +102,7 @@ Main.add(function() {
       dependField2: oFormTrans.cible,
       classDependField2: "CCategoryPrescription",
       validateOnBlur:0,
+      updateDF: false,
       strict: false
     });
   {{/if}}
