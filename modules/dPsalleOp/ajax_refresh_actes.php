@@ -45,6 +45,7 @@ $smarty->assign("subject"    , $operation      );
 $smarty->assign("listAnesths", $listAnesths    );
 $smarty->assign("listChirs"  , $listChirs      );
 $smarty->assign("module"     , $module      );
+$smarty->assign("m"          , $module      );
 
 $smarty->display("inc_codage_actes.tpl");
 

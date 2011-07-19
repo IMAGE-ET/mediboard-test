@@ -45,10 +45,11 @@ $acte_ngap->loadListExecutants();
 
 // Création du template
 $smarty = new CSmartyDP();
-$smarty->assign("acte_ngap"  , $acte_ngap      );
-$smarty->assign("selOp"      , $selOp          );
-$smarty->assign("listAnesths", $listAnesths    );
-$smarty->assign("listChirs"  , $listChirs      );
+$smarty->assign("acte_ngap"  , $acte_ngap  );
+$smarty->assign("selOp"      , $selOp      );
+$smarty->assign("listAnesths", $listAnesths);
+$smarty->assign("listChirs"  , $listChirs  );
+$smarty->assign("module"     , "dPpmsi"    );
 
 $smarty->display("edit_actes.tpl");
 
