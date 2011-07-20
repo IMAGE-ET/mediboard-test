@@ -24,8 +24,8 @@ class CHPrimXMLAcquittementsServeurActivitePmsi extends CHPrimXMLDocument {
   var $_sous_type_evt        = null;
   var $_codes_erreurs        = null;
   
-  function __construct($messageAcquittement) {     
-    parent::__construct("serveurActivitePmsi", $messageAcquittement);
+  function __construct() {     
+    parent::__construct("serveurActivitePmsi", "msgAcquittementsServeurActes105");
   }
   
   function generateEnteteMessageAcquittement($statut) {
