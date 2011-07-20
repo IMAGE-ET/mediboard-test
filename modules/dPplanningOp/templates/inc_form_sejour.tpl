@@ -493,6 +493,7 @@ Main.add( function(){
     </script>
     
     <input type="text" name="keywords_code" class="autocomplete str code cim10" value="{{$sejour->DP}}" size="10"/>
+    <button type="button" class="cancel notext" onclick="$V(this.form.DP, '');" />
     <button type="button" class="search" onclick="CIM10Selector.init()">{{tr}}button-CCodeCIM10-choix{{/tr}}</button>
     <input type="hidden" name="DP" value="{{$sejour->DP}}" onchange="$V(this.form.keywords_code, this.value);"/>
   </td>
