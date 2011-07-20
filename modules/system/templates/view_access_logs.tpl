@@ -38,6 +38,15 @@ function drawGraphs(size) {
   });
 }
 
+var AccessLog = {
+  crazyLogs: function(mode) {
+    Control.Modal.close();  
+    var url = new Url('system', 'crazy_logs');
+    url.addParam('mode', mode);
+    url.requestModal(400);
+  }
+}
+
 Main.add(function () {
   Calendar.regField(getForm("typevue").date, null, {noView: true});
   drawGraphs({{if $groupmod == 2}}graphSizes[1]{{/if}});
@@ -126,12 +135,13 @@ Main.add(function () {
       </div>
     </form>
   </th>
+  <td><button class="search" type="button" onclick="AccessLog.crazyLogs('find')";>Logs douteux</button></td>
 </tr>
 
 <tr>
-  <td>
+  <td colspan="2">
   {{foreach from=$graphs item=graph name=graphs}}
-    <div id="graph-{{$smarty.foreach.graphs.index}}" style="width: 400px; height: 250px; float: left; margin: 1em;"></div>
+    <div id="graph-{{$smarty.foreach.graphs.index}}" style="width: 350px; height: 250px; float: left; margin: 1em;"></div>
   {{/foreach}}
   </td>
 </tr>

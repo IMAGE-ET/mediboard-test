@@ -1,5 +1,7 @@
 <?php
 $locales['CAccessLog'] = 'Logs d\'accès';
+$locales['CAccessLog-_average_duration'] = 'Durée moyenne';
+$locales['CAccessLog-_average_duration-desc'] = 'Durée moyenne de production de la page';
 $locales['CAccessLog-accesslog_id'] = 'Identifiant';
 $locales['CAccessLog-accesslog_id-court'] = 'Id';
 $locales['CAccessLog-accesslog_id-desc'] = 'Identifiant interne';
@@ -33,6 +35,7 @@ $locales['CAccessLog-request-desc'] = 'Requete';
 $locales['CAccessLog-size'] = 'Taille';
 $locales['CAccessLog-size-court'] = 'Taille';
 $locales['CAccessLog-size-desc'] = 'Taille';
+$locales['CAccessLog-title-crazy-found'] = 'Logs douteux trouvés';
 $locales['CAccessLog-title-create'] = 'Nouveau log d\'accès';
 $locales['CAccessLog-title-modify'] = 'Modifier le log d\'accès';
 $locales['CAccessLog-warnings'] = 'Avertissements';
@@ -1387,6 +1390,7 @@ $locales['mod-system-tab-ajax_form_view_sender'] = 'Formulaire d\'export de vue'
 $locales['mod-system-tab-ajax_form_view_sender_source'] = 'Formulaire de la source d\'export';
 $locales['mod-system-tab-ajax_send_views'] = 'Export de vues';
 $locales['mod-system-tab-configure'] = 'Configuration';
+$locales['mod-system-tab-crazy_logs'] = 'Log d\'accès douteux';
 $locales['mod-system-tab-domodsql'] = 'Modification d\'un module';
 $locales['mod-system-tab-edit_note'] = 'Note utilisateur';
 $locales['mod-system-tab-empty'] = 'Vide';

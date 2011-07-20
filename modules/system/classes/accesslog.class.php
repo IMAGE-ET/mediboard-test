@@ -61,6 +61,9 @@ class CAccessLog extends CMbObject {
     $specs["errors"]      = "num min|0";
     $specs["warnings"]    = "num min|0";
     $specs["notices"]     = "num min|0";
+        
+    $specs["_average_duration"] = "num min|0";
+    
     return $specs;
   }
   
