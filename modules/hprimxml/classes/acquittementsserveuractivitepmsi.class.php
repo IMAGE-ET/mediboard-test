@@ -24,8 +24,23 @@ class CHPrimXMLAcquittementsServeurActivitePmsi extends CHPrimXMLDocument {
   var $_sous_type_evt        = null;
   var $_codes_erreurs        = null;
   
-  function __construct() {     
-    parent::__construct("serveurActivitePmsi", "msgAcquittementsServeurActes105");
+  static function getEvtAcquittement(CHPrimXMLEvenementsServeurActivitePmsi $dom_evt) {
+    $acq_evt = null;
+    if ($dom_evt instanceof CHPrimXMLEvenementsServeurActes) {
+      $acq_evt = CHPrimXMLAcquittementsServeurActes;
+    }
+    else if ($dom_evt instanceof CHPrimXMLEvenementsPmsi) {
+      $acq_evt = CHPrimXMLAcquittementsPmsi;
+    }
+    else if ($dom_evt instanceof CHPrimXMLEvenementsFraisDivers) {
+      $acq_evt = CHPrimXMLAcquittementsFraisDivers;
+    }
+    
+    return $acq_evt;
+  }
+  
+  function __construct($messageAcquittement) {     
+    parent::__construct("serveurActivitePmsi", $messageAcquittement);
   }
   
   function generateEnteteMessageAcquittement($statut) {

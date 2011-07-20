@@ -127,14 +127,18 @@ class CDestinataireHprim extends CInteropReceiver {
           $echg_hprim = $dom_evt->_ref_echange_hprim;
           $echg_hprim->date_echange = mbDateTime();
           
-          /*$dom_acq = new CHPrimXMLAcquittementsServeurActivitePmsi();
+          $dom_acq = CHPrimXMLAcquittementsServeurActivitePmsi::getEvtAcquittement($dom_evt);
+          if (!$dom_acq) {
+            $echg_hprim->_acquittement = $acq;
+            $echg_hprim->store();
+            return;
+          }
           $dom_acq->loadXML($acq);
           $dom_acq->_ref_echange_hprim = $echg_hprim;
           $doc_valid = $dom_acq->schemaValidate();
           
           $echg_hprim->statut_acquittement = $dom_acq->getStatutAcquittementServeurActivitePmsi();
-          $echg_hprim->acquittement_valide = $doc_valid ? 1 : 0;*/
-          $echg_hprim->acquittement_valide = 1;
+          $echg_hprim->acquittement_valide = $doc_valid ? 1 : 0;
           $echg_hprim->_acquittement = $acq;
       
           $echg_hprim->store();
