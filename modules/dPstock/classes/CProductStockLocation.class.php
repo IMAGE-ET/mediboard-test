@@ -15,7 +15,7 @@ class CProductStockLocation extends CMbMetaObject {
   // DB Fields
   var $name              = null;
   var $desc              = null;
-	var $position          = null;
+  var $position          = null;
   var $group_id          = null;
 
   // Object References
@@ -24,9 +24,9 @@ class CProductStockLocation extends CMbMetaObject {
   /**
    * @var CGroups
    */
-	var $_ref_group        = null;
-	
-	var $_before           = null;
+  var $_ref_group        = null;
+  
+  var $_before           = null;
   var $_type             = null;
 
   function getSpec() {
@@ -36,78 +36,78 @@ class CProductStockLocation extends CMbMetaObject {
     $spec->uniques["name"] = array("name", "object_class", "object_id");
     return $spec;
   }
-	
+  
   function getProps() {
     $specs = parent::getProps();
     $specs['name'] = 'str notNull seekable';
     $specs['desc'] = 'text seekable';
-		$specs['position'] = 'num min|1';
+    $specs['position'] = 'num min|1';
     $specs['group_id'] = 'ref notNull class|CGroups';
     $specs['object_class'] = 'enum notNull list|CGroups|CService|CBlocOperatoire';
-		$specs['_before']  = 'ref class|CProductStockLocation autocomplete|name|true';
+    $specs['_before']  = 'ref class|CProductStockLocation autocomplete|name|true';
     $specs['_type']  = 'str';
     return $specs;
   }
 
-	function getBackProps() {
-	  $backProps = parent::getBackProps();
+  function getBackProps() {
+    $backProps = parent::getBackProps();
     $backProps["group_stocks"]    = "CProductStockGroup location_id";
     $backProps["service_stocks"]  = "CProductStockService location_id";
     $backProps["delivery_traces"] = "CProductDeliveryTrace target_location_id";
-	  return $backProps;
-	}
+    return $backProps;
+  }
 
-	function updateFormFields() {
+  function updateFormFields() {
     parent::updateFormFields();
     $this->loadTargetObject(false);
     
     $this->_shortview = ($this->position ? "[".str_pad($this->position, 3, "0", STR_PAD_LEFT)."] " : "") . $this->name;
     $this->_view = ($this->_ref_object ? "{$this->_ref_object->_view} - " : "") . $this->_shortview;
   }
-	
-	function updateDBfields() {
-		parent::updateDBfields();
-		
+  
+  function updateDBfields() {
+    parent::updateDBfields();
+    
     if ($this->_type) {
       list($this->object_class, $this->object_id) = explode("-", $this->_type);
       $this->_type = null;
     }
     
-		if ($this->_before && $this->_before != $this->_id) {
-			$next_object = new self;
-			$next_object->load($this->_before);
-			
-			if ($next_object->_id) {
-				$query = '';
+    if ($this->_before && $this->_before != $this->_id) {
+      $next_object = new self;
+      $next_object->load($this->_before);
+      
+      if ($next_object->_id) {
+        $query = '';
         $table = $this->_spec->table;
         
-				if ($this->position)
-					$query = "AND `$table`.`position` BETWEEN $next_object->position AND $this->position";
-				else if ($next_object->position)
-					$query = "AND `$table`.`position` >= $next_object->position";
-				
-				$where = array(
-			    "`$table`.`position` IS NOT NULL $query",
+        if ($this->position)
+          $query = "AND `$table`.`position` BETWEEN $next_object->position AND $this->position";
+        else if ($next_object->position)
+          $query = "AND `$table`.`position` >= $next_object->position";
+        
+        $where = array(
+          "`$table`.`position` IS NOT NULL $query",
           "`$table`.`object_class` = '$this->object_class'",
           "`$table`.`object_id` = '$this->object_id'"
-				);
-				
-				$this->position = $next_object->position;
-				$next_objects = $this->loadList($where);
-	      foreach($next_objects as &$object) {
-	        $object->position++;
-	        $object->store();
-	      }
+        );
+        
+        $this->position = $next_object->position;
+        $next_objects = $this->loadList($where);
+        foreach($next_objects as &$object) {
+          $object->position++;
+          $object->store();
+        }
 
-				if (count($next_objects) == 0) {
-					$next_object->position = 2;
-					$next_object->store();
-					$this->position = 1;
-				}
-			}
+        if (count($next_objects) == 0) {
+          $next_object->position = 2;
+          $next_object->store();
+          $this->position = 1;
+        }
+      }
 
-			$this->_before = null;
-		}
+      $this->_before = null;
+    }
     else if (!$this->_id && !$this->position) {
       $existing = $this->loadList(null, "position");
       if ($location = end($existing)) 
@@ -115,7 +115,7 @@ class CProductStockLocation extends CMbMetaObject {
       else 
         $this->position = 1;
     }
-	}
+  }
   
   static function getStockClass($host_class) {
     switch ($host_class) {
@@ -210,5 +210,20 @@ class CProductStockLocation extends CMbMetaObject {
     
     $stock->loadMatchingObject();
     return $stock;
+  }
+  
+  static function getGroupStockLocations($group_id) {
+    $where = "
+      product_stock_location.object_id = '$group_id' OR 
+      service.group_id = '$group_id' OR 
+      bloc_operatoire.group_id = '$group_id'";
+      
+    $ljoin = array(
+      "service" => "service.service_id = product_stock_location.object_id AND product_stock_location.object_class = 'CService'",
+      "bloc_operatoire" => "bloc_operatoire.bloc_operatoire_id = product_stock_location.object_id AND product_stock_location.object_class = 'CBlocOperatoire'",
+    );
+      
+    $sl = new self;
+    return $sl->loadList($where, null, null, null, $ljoin);
   }
 }
