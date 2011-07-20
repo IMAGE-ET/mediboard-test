@@ -352,7 +352,15 @@ class CSetuphprimxml extends CSetup {
               ADD INDEX (`sender_id`);";
     $this->addQuery($query);
     
-    $this->mod_version = "0.35";
+    $this->makeRevision("0.35");
+    
+    $query = "ALTER TABLE `echange_hprim`
+                ADD INDEX (`message_content_id`),
+                ADD INDEX (`acquittement_content_id`),
+                DROP INDEX `emetteur_id`;"; 
+    $this->addQuery($query);
+        
+    $this->mod_version = "0.36";
   }
 }
 
