@@ -10,9 +10,9 @@
 
 class CHprimXML {
   static $object_handlers = array(
-    "CSipHprimXMLObjectHandler",
-    "CSmpHprimXMLObjectHandler",
-    "CSaHprimXMLObjectHandler"
+    "CSipObjectHandler" => "CSipHprimXMLObjectHandler",
+    "CSmpObjectHandler" => "CSmpHprimXMLObjectHandler",
+    "CSaObjectHandler"  => "CSaHprimXMLObjectHandler"
   );
   
   static function getObjectHandlers() {

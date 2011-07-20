@@ -67,6 +67,11 @@ class CDestinataireHprim21 extends CInteropReceiver {
     $echg_hprim21->loadObject($where, "$key DESC");
     $this->_ref_last_message = $echg_hprim21; 
   }
+  
+  function getFormatObjectHandler(CEAIObjectHandler $objectHandler) {
+    return null;
+      
+  }
 }
 
 ?>

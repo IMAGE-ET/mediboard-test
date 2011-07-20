@@ -27,18 +27,20 @@ class CEAIObjectHandler extends CMbObjectHandler {
       if (!$_receivers) {
         continue;
       }
-      foreach ($_receivers as $_receiver) {
-        // Récupère le handler du format
-        foreach ($_receiver->getFormatObjectHandlers() as $_object_handler_classname) {
-          $_receiver->loadConfigValues();
-          $_receiver->loadRefsMessagesSupported();
-          // Affectation du receiver à l'objet
-          $mbObject->_receiver = $_receiver;
-          
-          $object_handler = new $_object_handler_classname;
-          // Envoi l'action au handler du format
-          $object_handler->$action($mbObject);
+      foreach ($_receivers as $_receiver) { 
+        if (!$format_object_handler_classname = $_receiver->getFormatObjectHandler($this)) {
+          continue;
         }
+        
+        $_receiver->loadConfigValues();
+        $_receiver->loadRefsMessagesSupported();
+        // Affectation du receiver à l'objet
+        $mbObject->_receiver = $_receiver;
+        
+        // Récupère le handler du format
+        $format_object_handler = new $format_object_handler_classname;
+        // Envoi l'action au handler du format
+        $format_object_handler->$action($mbObject);
       }
     }
   }
