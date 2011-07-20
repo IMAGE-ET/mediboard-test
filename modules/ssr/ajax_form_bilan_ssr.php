@@ -9,7 +9,6 @@
  */
 
 CCanDo::checkRead();
-$user = CUser::get();
 
 $sejour_id = CValue::getOrSession("sejour_id");
 
@@ -40,10 +39,6 @@ if ($prescription_SSR->_id){
   }
 }
 
-
-// Aides à la saisie
-$sejour->loadAides($user->_id);
-
 // Chargement des categories de prescription
 $categories = array();
 $category = new CCategoryPrescription();
@@ -55,6 +50,7 @@ $order = "nom";
 $categories = $category->loadList($where, $order);
 
 // Dossier médical visibile ?
+$user = CMediusers::get();
 $can_view_dossier_medical = 
   CModule::getCanDo('dPcabinet')->edit ||
   CModule::getCanDo('dPbloc')->edit ||
