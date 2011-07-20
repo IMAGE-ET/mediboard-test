@@ -27,13 +27,13 @@ class CHPrimXMLAcquittementsServeurActivitePmsi extends CHPrimXMLDocument {
   static function getEvtAcquittement(CHPrimXMLEvenementsServeurActivitePmsi $dom_evt) {
     $acq_evt = null;
     if ($dom_evt instanceof CHPrimXMLEvenementsServeurActes) {
-      $acq_evt = CHPrimXMLAcquittementsServeurActes;
+      $acq_evt = new CHPrimXMLAcquittementsServeurActes;
     }
     else if ($dom_evt instanceof CHPrimXMLEvenementsPmsi) {
-      $acq_evt = CHPrimXMLAcquittementsPmsi;
+      $acq_evt = new CHPrimXMLAcquittementsPmsi;
     }
     else if ($dom_evt instanceof CHPrimXMLEvenementsFraisDivers) {
-      $acq_evt = CHPrimXMLAcquittementsFraisDivers;
+      $acq_evt = new CHPrimXMLAcquittementsFraisDivers;
     }
     
     return $acq_evt;
