@@ -11,8 +11,8 @@
     {{assign var=depend_value_2 value=$_aide->depend_value_2}}
     
     <li class="{{$owner_icon}}" title="{{$_aide->_ref_owner}}">
-      <div class="depend1" style="display:none">{{$depend_value_1}}</div>
-      <div class="depend2" style="display:none">{{$depend_value_2}}</div>
+      <div class="depend1" style="display:none">{{mb_value object=$_aide field=depend_value_1}}</div>
+      <div class="depend2" style="display:none">{{mb_value object=$_aide field=depend_value_2}}</div>
       <strong>
         {{if $depend_value_1}}{{$_aide->_vw_depend_field_1}} - {{/if}}
         {{if $depend_value_2}}{{$_aide->_vw_depend_field_2}} - {{/if}}

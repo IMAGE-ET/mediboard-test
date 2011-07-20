@@ -29,7 +29,7 @@
   <td class="text"><a href="{{$href}}">{{tr}}{{$class}}{{/tr}}</a></td>
   <td class="text"><a href="{{$href}}">{{tr}}{{$class}}-{{$field}}{{/tr}}</a></td>
   <td>
-    {{if $_aide->_depend_field_1}}
+    {{if $_aide->_depend_field_1 && !$_aide->_is_ref_dp_1}}
       <form name="edit-CAidesSaisie-depend1" action="" method="post" onsubmit="return onSubmitFormAjax(this)">
         <input type="hidden" name="m" value="dPcompteRendu" />
         <input type="hidden" name="dosql" value="do_aide_aed" />
@@ -46,12 +46,14 @@
           </option>
         </select>
       </form>
+    {{elseif $_aide->_is_ref_dp_1}}
+      {{$_aide->depend_value_1}}
     {{else}}
       &mdash;
     {{/if}}
   </td>
   <td>
-    {{if $_aide->_depend_field_2}}
+    {{if $_aide->_depend_field_2 && !$_aide->_is_ref_dp_2}}
       <form name="edit-CAidesSaisie-depend2" action="" method="post" onsubmit="return onSubmitFormAjax(this)">
         <input type="hidden" name="m" value="dPcompteRendu" />
         <input type="hidden" name="dosql" value="do_aide_aed" />
@@ -68,6 +70,8 @@
           </option>
         </select>
       </form>
+    {{elseif $_aide->_is_ref_dp_2}}
+      {{$_aide->depend_value_2}}
     {{else}}
       &mdash;
     {{/if}}

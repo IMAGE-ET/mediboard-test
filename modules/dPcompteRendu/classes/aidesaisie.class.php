@@ -30,6 +30,11 @@ class CAideSaisie extends CMbObject {
   var $_owner             = null;
   var $_vw_depend_field_1 = null;
   var $_vw_depend_field_2 = null;
+  var $_is_ref_dp_1       = null;
+  var $_is_ref_dp_2       = null;
+  var $_class_dp_1        = null;
+  var $_class_dp_2        = null;
+  
   // Referenced objects
   var $_ref_user          = null;
   var $_ref_function      = null;
@@ -116,6 +121,12 @@ class CAideSaisie extends CMbObject {
       $helped = $object->_specs[$this->field]->helped;
       $this->_depend_field_1 = isset($helped[0]) ? $helped[0] : null; 
       $this->_depend_field_2 = isset($helped[1]) ? $helped[1] : null;
+      
+      switch($this->class) {
+        case "CTransmissionMedicale":
+          $this->_class_dp_2 = "CCategoryPrescription";
+          break;
+      }
     }
   }
   
@@ -135,6 +146,7 @@ class CAideSaisie extends CMbObject {
     $this->loadRefUser(true);
     $this->loadRefFunction(true);
     $this->loadRefGroup(true);
+    $this->searchRefsObject();
   }
   
   function loadRefOwner(){
@@ -158,6 +170,30 @@ class CAideSaisie extends CMbObject {
     $this->_vw_depend_field_2 = CAppUI::isTranslated("$object->_class_name.$this->_depend_field_2.$this->depend_value_2") ?
       CAppUI::tr("$object->_class_name.$this->_depend_field_2.$this->depend_value_2") : 
       $this->_vw_depend_field_2 = $this->depend_value_2;
+  }
+  
+  function searchRefsObject() {
+    $this->_is_ref_dp_1 = false;
+    $this->_is_ref_dp_2 = false;
+    
+    $object = new $this->class;
+    $field = $this->field;
+    $helped = array();
+    if ($object->_specs[$field]->helped && !is_bool($object->_specs[$field]->helped)) {
+      if (!is_array($object->_specs[$field]->helped)) {
+        $helped = array($object->_specs[$field]->helped);
+      }
+      else {
+        $helped = $object->_specs[$field]->helped;
+      }
+    }
+    foreach ($helped as $i => $depend_field) {
+      $spec = $object->_specs[$depend_field];
+      if ($spec instanceof CRefSpec) {
+        $key = "_is_ref_dp_".($i+1);
+        $this->$key = true;
+      }
+    }
   }
 }
 

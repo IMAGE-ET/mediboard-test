@@ -4,7 +4,7 @@
 
 var aTraduction = {};
 {{foreach from=$listTraductions key=key item=currClass}}
-  aTraduction["{{$key}}"] = "{{$currClass}}";
+  aTraduction["{{$key}}"] = "{{$currClass|smarty:nodefaults}}";
 {{/foreach}}
 
 var classes = {{$classes|@json}};
@@ -55,7 +55,6 @@ function loadFields(value) {
 }
 
 function loadDependances(depend_value_1, depend_value_2){
-
   var form = document.editFrm;
   var select_depend_1 = form.elements['depend_value_1'];
   var select_depend_2 = form.elements['depend_value_2'];
@@ -64,39 +63,46 @@ function loadDependances(depend_value_1, depend_value_2){
   var options = classes[className];
 
   // delete all former options except first
-  while (select_depend_1.length > 1) {
-    select_depend_1.options[1] = null;
-  }
-  while (select_depend_2.length > 1) {
-    select_depend_2.options[1] = null;
-  }
-  
+  {{if !$aide->_is_ref_dp_1}}
+    while (select_depend_1.length > 1) {
+      select_depend_1.options[1] = null;
+    }
+  {{/if}}
+  {{if !$aide->_is_ref_dp_2}}
+    while (select_depend_2.length > 1) {
+      select_depend_2.options[1] = null;
+    }
+  {{/if}}
+    
   if(!options){
-   return;
+    return;
   }
   
   if(!classes[className][fieldName]){
-  return;
+    return;
   }
   
-  options_depend_1 = classes[className][fieldName]['depend_value_1'];
-  options_depend_2 = classes[className][fieldName]['depend_value_2'];
-  
-  // Depend value 1
-  for (var elm in options_depend_1) {
-    var option = options_depend_1[elm];
-    if (typeof(option) != "function") { // to filter prototype functions
-      select_depend_1.options[select_depend_1.length] = new Option(aTraduction[option], elm, elm == depend_value_1);
+  {{if !$aide->_is_ref_dp_1}}
+    // Depend value 1
+    options_depend_1 = classes[className][fieldName]['depend_value_1'];
+    for (var elm in options_depend_1) {
+      var option = options_depend_1[elm];
+      if (typeof(option) != "function") { // to filter prototype functions
+        select_depend_1.options[select_depend_1.length] = new Option(aTraduction[option], elm, elm == depend_value_1);
+      }
     }
-  }
-  
-  // Depend value 2
-  for (var elm in options_depend_2) {
-    var option = options_depend_2[elm];
-    if (typeof(option) != "function") { // to filter prototype functions
-      select_depend_2.options[select_depend_2.length] = new Option(aTraduction[option], elm, elm == depend_value_2);
+  {{/if}}
+
+  {{if !$aide->_is_ref_dp_2}}
+    // Depend value 2
+    options_depend_2 = classes[className][fieldName]['depend_value_2'];
+    for (var elm in options_depend_2) {
+      var option = options_depend_2[elm];
+      if (typeof(option) != "function") { // to filter prototype functions
+        select_depend_2.options[select_depend_2.length] = new Option(aTraduction[option], elm, elm == depend_value_2);
+      }
     }
-  }
+  {{/if}}
 }
 
 function popupImport(owner_guid){
@@ -291,18 +297,70 @@ Main.add(function () {
     <tr>
       <th>{{mb_label object=$aide field="depend_value_1"}}</th>
       <td>
-        <select name="depend_value_1" class="{{$aide->_props.depend_value_1}}">
-          <option value="">&mdash; Tous</option>
-        </select>
+        {{if $aide->_is_ref_dp_1}}
+          {{mb_field object=$aide field="depend_value_1" hidden=true}}
+            <input type="hidden" name="_ref_class_depend_value_1" value="{{$aide->_class_dp_1}}" />
+            <input type="text" name="_depend_value_2_view" value="{{$aide->depend_value_1}}" />
+            <script type="text/javascript">
+              Main.add(function(){
+                var form = getForm("editFrm");
+                
+                var url = new Url("system", "ajax_seek_autocomplete");
+                url.addParam("object_class", $V(form._ref_class_depend_value_1));
+                url.addParam("field", "depend_value_1");
+                url.addParam("input_field", "_depend_value_1_view");
+                url.autoComplete(form.elements._depend_value_1_view, null, {
+                  minChars: 3,
+                  method: "get",
+                  select: "view",
+                  dropdown: true,
+                  afterUpdateElement: function(field,selected){
+                    var value = selected.down('.view').innerHTML;
+                    $V(field.form.elements.depend_value_1, value);
+                  }
+                });
+              });
+            </script>
+        {{else}}
+          <select name="depend_value_1" class="{{$aide->_props.depend_value_1}}">
+            <option value="">&mdash; Tous</option>
+          </select>
+        {{/if}}
       </td>
     </tr>
     
     <tr>
       <th>{{mb_label object=$aide field="depend_value_2"}}</th>
       <td>
-        <select name="depend_value_2" class="{{$aide->_props.depend_value_2}}">
-          <option value="">&mdash; Tous</option>
-        </select>
+        {{if $aide->_is_ref_dp_2}}
+          {{mb_field object=$aide field="depend_value_2" hidden=true}}
+            <input type="hidden" name="_ref_class_depend_value_2" value="{{$aide->_class_dp_2}}" />
+            <input type="text" name="_depend_value_2_view" value="{{$aide->depend_value_2}}" />
+            <script type="text/javascript">
+              Main.add(function(){
+                var form = getForm("editFrm");
+                
+                var url = new Url("system", "ajax_seek_autocomplete");
+                url.addParam("object_class", $V(form._ref_class_depend_value_2));
+                url.addParam("field", "depend_value_2");
+                url.addParam("input_field", "_depend_value_2_view");
+                url.autoComplete(form.elements._depend_value_2_view, null, {
+                  minChars: 3,
+                  method: "get",
+                  select: "view",
+                  dropdown: true,
+                  afterUpdateElement: function(field,selected){
+                    var value = selected.down('.view').innerHTML;
+                    $V(field.form.elements.depend_value_2, value);
+                  }
+                });
+              });
+            </script>
+        {{else}}
+          <select name="depend_value_2" class="{{$aide->_props.depend_value_2}}">
+            <option value="">&mdash; Tous</option>
+          </select>
+        {{/if}}
       </td>
     </tr>
     
