@@ -104,13 +104,15 @@ ProtocoleSelector = {
       refreshListCCAM("expert");
       refreshListCCAM("easy");
     }
-    if (oSejourForm[this.sProtoPrescChir]) {
-      if(protocole.protocole_prescription_chir_id != 'prot-'){
-        $V(oSejourForm[this.sProtoPrescChir], protocole.protocole_prescription_chir_id);
-      } else {
-        $V(oSejourForm[this.sProtoPrescChir], "");
-      }
+    if (oSejourForm[this.sProtoPrescChir] && protocole.protocole_prescription_chir_id != 'prot-') {
+      $V(oSejourForm[this.sProtoPrescChir], protocole.protocole_prescription_chir_id);
+      $V(oSejourForm.libelle_protocole, protocole.libelle_protocole_prescription_chir);
     }
+    else {
+      $V(oSejourForm.libelle_protocole, protocole.libelle_protocole_prescription_chir);
+      $V(oSejourForm[this.sProtoPrescChir], "");
+    } 
+    
     refreshViewProtocoleAnesth(protocole.protocole_prescription_anesth_id);
   }
 };

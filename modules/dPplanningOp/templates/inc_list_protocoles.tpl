@@ -35,6 +35,7 @@
       rques_sejour     : "{{$_protocole->rques_sejour|smarty:nodefaults|escape:"javascript"}}",
       rques_operation  : "{{$_protocole->rques_operation|smarty:nodefaults|escape:"javascript"}}",
       protocole_prescription_anesth_id: "{{$type_prot_anesth}}{{$_protocole->protocole_prescription_anesth_id}}",
+      libelle_protocole_prescription_chir: "{{$_protocole->_ref_protocole_prescription_chir->libelle|smarty:nodefaults}}",
       protocole_prescription_chir_id:   "{{$type_prot_chir}}{{$_protocole->protocole_prescription_chir_id}}",
       service_id       : "{{$_protocole->service_id}}"
     };
