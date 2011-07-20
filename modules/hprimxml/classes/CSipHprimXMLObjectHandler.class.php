@@ -179,8 +179,6 @@ class CSipHprimXMLObjectHandler extends CHprimXMLObjectHandler {
         }
       }        
     }
-  }
-  
-  function onAfterDelete(CMbObject &$mbObject) {}
+  }  
 }
 ?>

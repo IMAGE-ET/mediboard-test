@@ -24,8 +24,6 @@ class CSaObjectHandler extends CEAIObjectHandler {
       // Cas du séjour / opération facturé
       $this->sendFormatAction("onAfterStore", $mbObject);
     }
-
-    
   }
 }
 ?>

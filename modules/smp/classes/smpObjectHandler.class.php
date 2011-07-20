@@ -49,13 +49,5 @@ class CSmpObjectHandler extends CEAIObjectHandler {
     
     $this->sendFormatAction("onAfterMerge", $mbObject);
   }
-  
-  function onAfterDelete(CMbObject &$mbObject) {
-    if (!parent::onAfterDelete($mbObject)) {
-      return;
-    }
-    
-    $this->sendFormatAction("onAfterDelete", $mbObject);
-  }
 }
 ?>
