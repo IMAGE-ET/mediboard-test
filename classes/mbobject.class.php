@@ -2454,6 +2454,7 @@ class CMbObject {
   }
   
   function loadLastLogForField($fieldName = null, $strict = false){
+    $log = new CUserLog;
     $logs = $this->loadLogsForField($fieldName, $strict, 1);
     $first_log = reset($logs);
     
