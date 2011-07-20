@@ -215,12 +215,12 @@ class CProductStockLocation extends CMbMetaObject {
   static function getGroupStockLocations($group_id) {
     $where = "
       (product_stock_location.object_id = '$group_id' AND product_stock_location.object_class = 'CGroups') OR 
-      service.group_id = '$group_id' OR 
-      bloc_operatoire.group_id = '$group_id'";
+      (service.group_id = '$group_id' AND product_stock_location.object_class = 'CService') OR 
+      (bloc_operatoire.group_id = '$group_id' AND product_stock_location.object_class = 'CBlocOperatoire')";
       
     $ljoin = array(
-      "service" => "service.service_id = product_stock_location.object_id AND product_stock_location.object_class = 'CService'",
-      "bloc_operatoire" => "bloc_operatoire.bloc_operatoire_id = product_stock_location.object_id AND product_stock_location.object_class = 'CBlocOperatoire'",
+      "service" => "service.service_id = product_stock_location.object_id",
+      "bloc_operatoire" => "bloc_operatoire.bloc_operatoire_id = product_stock_location.object_id",
     );
       
     $sl = new self;
