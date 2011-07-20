@@ -25,8 +25,8 @@
     {{assign var="type_prot_chir" value="pack-"}}
   {{/if}}
   aProtocoles['{{$type}}'][{{$match->protocole_id}}] = {
-    protocole_id     : {{$match->protocole_id}},
-    chir_id          : {{$match->chir_id}},
+    protocole_id     : "{{$match->protocole_id}}",
+    chir_id          : "{{$match->chir_id}}",
     codes_ccam       : "{{$match->codes_ccam}}",
     DP               : "{{$match->DP}}",
     libelle          : "{{$match->libelle|smarty:nodefaults|escape:"javascript"}}",
@@ -44,22 +44,24 @@
     rques_sejour     : "{{$match->rques_sejour|smarty:nodefaults|escape:"javascript"}}",
     rques_operation  : "{{$match->rques_operation|smarty:nodefaults|escape:"javascript"}}",
     protocole_prescription_anesth_id: "{{$type_prot_anesth}}{{$match->protocole_prescription_anesth_id}}",
-    protocole_prescription_chir_id:   "{{$type_prot_chir}}{{$match->protocole_prescription_chir_id}}",
+    protocole_prescription_chir_id  : "{{$type_prot_chir}}{{$match->protocole_prescription_chir_id}}",
     service_id       : "{{$match->service_id}}"
   };
 </script>
 
 <span id="{{$match->protocole_id}}" class="view text" style="float: left;">
   <strong>
-    {{$match->_ref_chir->_view}}
-    <br />
     {{if !$match->for_sejour}}
       {{if $match->libelle}}
-        <em>[{{$match->libelle}}]</em>
+        {{$match->libelle}}
+      {{else}}
+        Pas de libellé
       {{/if}}
     {{else}}
       {{if $match->libelle_sejour}}
-        <em>[{{$match->libelle_sejour}}]</em>
+        {{$match->libelle_sejour}}
+      {{else}}
+        Pas de libellé
       {{/if}}
     {{/if}}
   </strong>
@@ -72,6 +74,13 @@
   {{/if}}
   
   {{mb_value object=$match field=type}}
+  {{if $match->chir_id}}
+    - Dr {{$match->_ref_chir->_view}}
+  {{elseif $match->function_id}}
+    - {{$match->_ref_function->_view}}
+  {{elseif $match->group_id}}
+    - {{$match->_ref_group->_view}}
+  {{/if}}
   <br />
   
   {{if $match->_ext_code_cim->code}}

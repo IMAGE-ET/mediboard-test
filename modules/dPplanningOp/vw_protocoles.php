@@ -27,6 +27,7 @@ $page         = CValue::get("page", array(
 
 // Praticiens, protocoles disponibles
 $listPrat   = $mediuser->loadPraticiens(PERM_EDIT);
+$_prat = new CMediusers();
 foreach($listPrat as $_prat) {
   $_prat->loadProtocoles();
 }

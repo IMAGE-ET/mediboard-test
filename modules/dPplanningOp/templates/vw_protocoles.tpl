@@ -1,12 +1,12 @@
 <!-- $Id$ -->
 
 <script type="text/javascript">
-{{if $dialog}}
   var aProtocoles = {
     sejour: {},
     interv: {}
   };
   
+{{if $dialog}}
   Main.add(function(){
     var urlComponents = Url.parse();
     $(urlComponents.fragment || 'interv').show();
@@ -72,15 +72,14 @@ Main.add(function(){
   
   refreshList(oForm);
   
-  var url = new Url("system"      , "ajax_seek_autocomplete");
-  url.addParam("object_class"     , "CProtocole");
+  var url = new Url("dPplanningOp", "ajax_protocoles_autocomplete");
   url.addParam("field"            , "protocole_id");
   url.addParam("input_field"      , "search_protocole");
-  url.addParam("where[chir_id]"   , $V(oForm.chir_id));
+  url.addParam("chir_id"          , $V(oForm.chir_id));
   if(urlComponents.fragment == 'interv') {
-    url.addParam("where[for_sejour]", '0');
+    url.addParam("for_sejour", '0');
   } else if(urlComponents.fragment == 'sejour') {
-    url.addParam("where[for_sejour]", '1');
+    url.addParam("for_sejour", '1');
   }
   url.autoComplete(oForm.elements.search_protocole, null, {
     minChars: 3,

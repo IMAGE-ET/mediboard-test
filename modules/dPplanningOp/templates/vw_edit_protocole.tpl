@@ -142,7 +142,7 @@ Main.add(function () {
 
 </script>
 
-<form name="editFrm" action="?m={{$m}}" method="post" onsubmit="return checkFormSejour()">
+<form name="editFrm" action="?m={{$m}}" method="post" onsubmit="return checkFormSejour()" class="{{$protocole->_spec}}">
 <input type="hidden" name="m" value="dPplanningOp" />
 <input type="hidden" name="dosql" value="do_protocole_aed" />
 <input type="hidden" name="del" value="0" />
@@ -154,10 +154,10 @@ Main.add(function () {
 {{/if}}
 
 
-<table class="main" style="border-spacing: 0px;">
+<table class="form">
   {{if $protocole->protocole_id}}
   <tr>
-    <td colspan="2">
+    <td colspan="2" class="title">
       <a class="button new" href="?m={{$m}}&amp;protocole_id=0">
        	Créer un nouveau protocole
 			</a>
@@ -168,25 +168,49 @@ Main.add(function () {
   {{mb_include module=system template=inc_form_table_header object=$protocole}}
 	
   <tr>
-    <td colspan="2" style="padding: 2px; text-align: center;">
-      {{mb_label object=$protocole field="chir_id"}}
+    <th>{{mb_label object=$protocole field="chir_id"}}</th>
+    <td>
       <select name="chir_id" class="{{$protocole->_props.chir_id}}"
               onchange="$('editFrm_libelle_protocole').value = '';
-                        this.form.protocole_prescription_chir_id.value = '';">
+                        this.form.protocole_prescription_chir_id.value = '';"
+              style="width: 16em;">
         <option value="">&mdash; Choisir un praticien</option>
-        {{foreach from=$listPraticiens item=curr_praticien}}
-        <option class="mediuser" style="border-color: #{{$curr_praticien->_ref_function->color}};" value="{{$curr_praticien->user_id}}" {{if $chir->user_id == $curr_praticien->user_id}} selected="selected" {{/if}}>
-        {{$curr_praticien->_view}}
+        {{foreach from=$listPraticiens item=_prat}}
+        <option class="mediuser" style="border-color: #{{$_prat->_ref_function->color}};" value="{{$_prat->_id}}"
+                {{if $chir->_id == $_prat->_id}}selected="selected"{{/if}}>
+        {{$_prat->_view}}
         </option>
         {{/foreach}}
       </select>
-      
-      {{mb_label object=$protocole field="for_sejour"}}
-      {{mb_field object=$protocole field="for_sejour" onchange="setOperationActive(\$V(this.form.elements[this.name]) != 1)"}}
     </td>
   </tr>
   <tr>
-    <td id="operation">
+    <th>{{mb_label object=$protocole field="function_id"}}</th>
+    <td>
+      <select name="function_id" class="{{$protocole->_props.function_id}}"
+              onchange="$('editFrm_libelle_protocole').value = '';
+                        this.form.protocole_prescription_chir_id.value = '';"
+              style="width: 16em;">
+        <option value="">&mdash; Choisir une fonction</option>
+        {{foreach from=$listFunctions item=_function}}
+        <option class="mediuser" style="border-color: #{{$_function->color}};" value="{{$_function->_id}}"
+                {{if $protocole->function_id == $_function->_id}}selected="selected"{{/if}}>
+        {{$_function->_view}}
+        </option>
+        {{/foreach}}
+      </select>
+    </td>
+  </tr>
+  <tr>
+    <th>{{mb_label object=$protocole field="for_sejour"}}</th>
+    <td>
+      {{mb_field object=$protocole field="for_sejour" onchange="setOperationActive(\$V(this.form.elements[this.name]) != 1)"}}
+    </td>
+  </tr>
+</table>
+<table class="main layout">
+  <tr>
+    <td id="operation" class="halfPane">
       <table class="form">
         <tr>
           <th class="category" colspan="3">

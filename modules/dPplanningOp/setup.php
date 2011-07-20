@@ -1104,7 +1104,20 @@ class CSetupdPplanningOp extends CSetup {
       ADD `dPplanningOp_COperation_DHE_mode_simple` ENUM ('0', '1') NOT NULL DEFAULT '0'";
     $this->addQuery($query);
     
-    $this->mod_version = "1.20";
+    $this->makeRevision("1.20");
+    
+    $query = "ALTER TABLE `protocole` 
+              CHANGE `chir_id` `chir_id` INT (11) UNSIGNED,
+              ADD `function_id` INT (11) UNSIGNED AFTER `chir_id`,
+              ADD `group_id` INT (11) UNSIGNED AFTER `function_id`;";
+    $this->addQuery($query);
+    
+    $query = "ALTER TABLE `protocole` 
+              ADD INDEX (`function_id`),
+              ADD INDEX (`group_id`);";
+    $this->addQuery($query);
+    
+    $this->mod_version = "1.21";
     
   }
 }

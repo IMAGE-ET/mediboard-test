@@ -17,7 +17,7 @@
     {{/if}}
     aProtocoles[{{$_protocole->protocole_id}}] = {
       protocole_id     : {{$_protocole->protocole_id}},
-      chir_id          : {{$_protocole->chir_id}},
+      chir_id          : {{if $_protocole->chir_id}}"{{$_protocole->chir_id}}"{{else}}"{{$chir_id}}"{{/if}},
       codes_ccam       : "{{$_protocole->codes_ccam}}",
       DP               : "{{$_protocole->DP}}",
       libelle          : "{{$_protocole->libelle|smarty:nodefaults|escape:"javascript"}}",
@@ -52,39 +52,46 @@
 <table class="tbl">
   {{foreach from=$list_protocoles item=_protocole}}
   <tr>    
-    <td class="text">
-      <a href="#1" onclick="chooseProtocole({{$_protocole->_id}}); return false;">
-        <strong>
-          {{$_protocole->_ref_chir->_view}}
-          
-          {{if $type == 'interv'}}
-            {{if $_protocole->libelle}}
-              - <em>[{{$_protocole->libelle}}]</em>
-            {{/if}}
+    <td class="text" onclick="chooseProtocole({{$_protocole->_id}}); return false;" style="cursor: pointer;">
+      <strong>
+        {{if $type == 'interv'}}
+          {{if $_protocole->libelle}}
+            {{$_protocole->libelle}}
           {{else}}
-            {{if $_protocole->libelle_sejour}}
-              - <em>[{{$_protocole->libelle_sejour}}]</em>
-            {{/if}}
+            Pas de libellé
           {{/if}}
-        </strong>
-      </a>
-      
+        {{else}}
+          {{if $_protocole->libelle_sejour}}
+            {{$_protocole->libelle_sejour}}
+          {{else}}
+            [Pas de libellé]
+          {{/if}}
+        {{/if}}
+      </strong>
+      <br />
       {{if $_protocole->duree_hospi}}
         {{$_protocole->duree_hospi}} nuits en
       {{/if}}
       
       {{mb_value object=$_protocole field=type}}
+      {{if $_protocole->chir_id}}
+        - Dr {{$_protocole->_ref_chir->_view}}
+      {{elseif $_protocole->function_id}}
+        - {{$_protocole->_ref_function->_view}}
+      {{elseif $_protocole->group_id}}
+        - {{$_protocole->_ref_group->_view}}
+      {{/if}}
       <br />
       
       {{if $_protocole->_ext_code_cim->code}}
         {{$_protocole->_ext_code_cim->code}}
-        <em><strong>[{{$_protocole->_ext_code_cim->libelle|truncate:80}}]</strong></em>
+        : [{{$_protocole->_ext_code_cim->libelle|truncate:80}}]
         <br />
       {{/if}}
       
       {{foreach from=$_protocole->_ext_codes_ccam item=_code}}
         {{$_code->code}}
-        <em><strong>[{{$_code->libelleLong|truncate:80}}]</strong></em>
+        : [{{$_code->libelleLong|truncate:80}}]
         <br />
       {{/foreach}}
     </td>

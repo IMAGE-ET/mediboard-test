@@ -12,10 +12,12 @@ class CProtocole extends CMbObject {
   var $protocole_id = null;
 
   // DB References
-  var $chir_id = null; // Sejour / Operation
+  var $chir_id     = null;
+  var $function_id = null;
+  var $group_id    = null;
 
   // For sejour/intervention
-  var $for_sejour = null;
+  var $for_sejour = null; // Sejour / Operation
   
   // DB Fields Sejour
   var $type          = null;
@@ -52,6 +54,8 @@ class CProtocole extends CMbObject {
 
   // DB References
   var $_ref_chir                          = null;
+  var $_ref_function                      = null;
+  var $_ref_group                         = null;
   var $_ref_protocole_prescription_chir   = null;
   var $_ref_protocole_prescription_anesth = null;
 
@@ -63,12 +67,15 @@ class CProtocole extends CMbObject {
     $spec = parent::getSpec();
     $spec->table = 'protocole';
     $spec->key   = 'protocole_id';
+    $spec->xor["owner"] = array("chir_id", "function_id", "group_id");
     return $spec;
   }
 
   function getProps() {
   	$specs = parent::getProps();
-    $specs["chir_id"]         = "ref notNull class|CMediusers seekable";
+    $specs["chir_id"]         = "ref class|CMediusers seekable";
+    $specs["function_id"]     = "ref class|CFunctions seekable";
+    $specs["group_id"]        = "ref class|CGroups seekable";
     $specs["for_sejour"]      = "bool notNull default|0";
     $specs["type"]            = "enum list|comp|ambu|exte|seances|ssr|psy default|comp";
     $specs["DP"]              = "code cim10";
@@ -138,8 +145,18 @@ class CProtocole extends CMbObject {
   }
 
   function loadRefChir() {
-    $this->_ref_chir = new CMediusers;
-    $this->_ref_chir->load($this->chir_id);
+    $this->_ref_chir = $this->loadFwdRef("chir_id", true);
+    return $this->_ref_chir;
+  }
+
+  function loadRefFunction() {
+    $this->_ref_function = $this->loadFwdRef("function_id", true);
+    return $this->_ref_function;
+  }
+
+  function loadRefGroup() {
+    $this->_ref_group = $this->loadFwdRef("group_id", true);
+    return $this->_ref_group;
   }
 
   function loadRefPrescriptionChir() {
@@ -172,27 +189,50 @@ class CProtocole extends CMbObject {
 
   function loadRefsFwd() {
     $this->loadRefChir();
+    $this->loadRefFunction();
+    $this->loadRefGroup();
     $this->loadRefPrescriptionChir();
     $this->loadRefPrescriptionAnesth();
     $this->loadExtCodesCCAM();
     $this->loadExtCodeCIM();
-    $this->_view = "Protocole du Dr {$this->_ref_chir->_view}";
+    $this->_view = "";
     if($this->libelle_sejour) {
-      $this->_view .= " - $this->libelle_sejour";
+      $this->_view .= "$this->libelle_sejour";
     } elseif($this->libelle) {
-      $this->_view .= " - $this->libelle";
+      $this->_view .= "$this->libelle";
     } else {
       foreach($this->_ext_codes_ccam as $key => $ccam) {
         $this->_view .= " - $ccam->code";
       }
     }
+    if($this->chir_id) {
+      $this->_view .= " &mdash; Dr {$this->_ref_chir->_view}";
+    }else if($this->function_id) {
+      $this->_view .= " &mdash; Fonction {$this->_ref_function->_view}";
+    }else if($this->chir_id) {
+      $this->_view .= " &mdash; Etablissement {$this->_ref_group->_view}";
+    }
   }
 
   function getPerm($permType) {
-    if(!$this->_ref_chir) {
-      $this->loadRefChir();
+    if($this->chir_id) {
+      if(!$this->_ref_chir) {
+        $this->loadRefChir();
+      } 
+      return $this->_ref_chir->getPerm($permType);
     }
-    return $this->_ref_chir->getPerm($permType);
+    if($this->function_id) {
+      if(!$this->_ref_function) {
+        $this->loadRefFunction();
+      } 
+      return $this->_ref_function->getPerm($permType);
+    }
+    if($this->group_id) {
+      if(!$this->_ref_group) {
+        $this->loadRefGroup();
+      } 
+      return $this->_ref_group->getPerm($permType);
+    }
   }
 }
 

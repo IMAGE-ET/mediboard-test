@@ -22,20 +22,21 @@ if ($chir_id) {
   $chir->load($chir_id);
 }
 
-// Vérification des droits sur les praticiens
+// Vérification des droits sur les listes
 $listPraticiens = $mediuser->loadPraticiens(PERM_EDIT);
+$function = new CFunctions();
+$listFunctions  = $function->loadSpecialites(PERM_EDIT);
 
 $protocole = new CProtocole;
 if($protocole_id) {
   $protocole->load($protocole_id);
-  $protocole->loadRefs();
-  $protocole->loadRefsNotes();
-
-  // On vérifie que l'utilisateur a les droits sur l'operation
-  if (!array_key_exists($protocole->chir_id, $listPraticiens)) {
+  // On vérifie que l'utilisateur a les droits sur le protocole
+  if (!$protocole->getPerm(PERM_EDIT)) {
     CAppUI::setMsg("Vous n'avez pas accès à ce protocole", UI_MSG_WARNING);
     CAppUI::redirect("m=$m&tab=$tab&protocole_id=0"); 
   }
+  $protocole->loadRefs();
+  $protocole->loadRefsNotes();
   $chir =& $protocole->_ref_chir;
 }
 
@@ -65,6 +66,7 @@ $smarty->assign("protocole"   , $protocole);
 $smarty->assign("chir"        , $chir);
 
 $smarty->assign("listPraticiens", $listPraticiens);
+$smarty->assign("listFunctions" , $listFunctions);
 $smarty->assign("listServices"  , $listServices);
 
 $smarty->assign("hours", $hours);
