@@ -113,25 +113,25 @@ class CSmpHprimXMLObjectHandler extends CHprimXMLObjectHandler {
     }
     // Traitement Affectation
     elseif ($mbObject instanceof CAffectation) {
-      $mbObject->loadRefLit();
-      $mbObject->_ref_lit->loadRefChambre();
-      $mbObject->_ref_lit->_ref_chambre->loadRefService();
-      $mbObject->loadLastLog();
-      $mbObject->loadRefSejour();
-      $mbObject->_ref_sejour->loadNumDossier();
-      $mbObject->_ref_sejour->loadRefPatient();
-      $mbObject->_ref_sejour->loadRefPraticien();
-      
       // Si Client
       if (!CAppUI::conf('sip server')) {
-        if (!$_destinataire->_configs["send_mvt_patients"]) {
+        if (!$receiver->_configs["send_mvt_patients"]) {
           return;
         }
         
+        $mbObject->loadRefLit();
+        $mbObject->_ref_lit->loadRefChambre();
+        $mbObject->_ref_lit->_ref_chambre->loadRefService();
+        $mbObject->loadLastLog();
+        $mbObject->loadRefSejour();
+        $mbObject->_ref_sejour->loadNumDossier();
+        $mbObject->_ref_sejour->loadRefPatient();
+        $mbObject->_ref_sejour->loadRefPraticien();
+      
         if (!$mbObject->_ref_sejour->_num_dossier) {
           $num_dossier = new CIdSante400();
           //Paramétrage de l'id 400
-          $num_dossier->loadLatestFor($mbObject->_ref_sejour, $_destinataire->_tag_sejour);
+          $num_dossier->loadLatestFor($mbObject->_ref_sejour, $receiver->_tag_sejour);
   
           $mbObject->_ref_sejour->_num_dossier = $num_dossier->id400;
         }
