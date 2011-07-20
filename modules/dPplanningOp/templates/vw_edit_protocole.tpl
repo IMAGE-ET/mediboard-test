@@ -360,7 +360,7 @@ Main.add(function () {
             </script>
             
 				    <input type="text" name="keywords_code" class="autocomplete str code cim10" value="{{$protocole->DP}}" size="8"/>
-	          <input type="hidden" name="DP" onchange="$V(this.form.keywords_code, this.value)"/>
+	          <input type="hidden" name="DP" value="{{$protocole->DP}}" onchange="$V(this.form.keywords_code, this.value)"/>
 	          <button type="button" class="search" onclick="CIM10Selector.init()">Choisir un code</button>
               <script type="text/javascript">
                 CIM10Selector.init = function(){
