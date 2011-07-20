@@ -214,7 +214,7 @@ class CProductStockLocation extends CMbMetaObject {
   
   static function getGroupStockLocations($group_id) {
     $where = "
-      product_stock_location.object_id = '$group_id' OR 
+      (product_stock_location.object_id = '$group_id' AND product_stock_location.object_class = 'CGroups') OR 
       service.group_id = '$group_id' OR 
       bloc_operatoire.group_id = '$group_id'";
       
