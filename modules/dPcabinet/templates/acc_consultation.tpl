@@ -28,7 +28,7 @@ function loadSuivi(sejour_id, user_id, cible, show_obs, show_trans) {
     if (!Object.isUndefined(show_trans)) {
       urlSuivi.addParam("_show_trans", show_trans);
     }
-    urlSuivi.requestUpdate("suivisoins");
+    urlSuivi.requestUpdate("suivisoins", {onComplete: function() { Control.Modal.close(); } });
   }
 }
 
