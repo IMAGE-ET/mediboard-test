@@ -1,12 +1,12 @@
 var Document = {
-	popupSize: {
-		width: 950,
-		height: 800
-	},
-	iframe: null,
-	/**
-	 * @param ... A DECRIRE
-	 */
+  popupSize: {
+    width: 950,
+    height: 800
+  },
+  iframe: null,
+  /**
+   * @param ... A DECRIRE
+   */
   create: function(modele_id, object_id, target_id, target_class, switch_mode) {
     if (!modele_id) return;
     
@@ -29,7 +29,7 @@ var Document = {
     url.popup(Document.popupSize.width, Document.popupSize.height, "Document");
   },
 
-  createPack: function(pack_id, object_id, target_id, target_class) {
+  createPack: function(pack_id, object_id, target_id, target_class, switch_mode) {
     if (!pack_id) return;
     
     var url = new Url("dPcompteRendu", "edit_compte_rendu");
@@ -44,47 +44,58 @@ var Document = {
       url.addParam("target_class", target_class);
     }
     
+    if (switch_mode) {
+      url.addParam("switch_mode", switch_mode);
+    }
+    
     url.popup(Document.popupSize.width, Document.popupSize.height, "Document");
   },
   
   fastMode: function(object_class, modele_id, object_id, target_id, target_class, unique_id) {
     if (!modele_id) return;
     
-      var url = new Url("dPcompteRendu", "edit_compte_rendu");
-      url.addParam("modele_id"   , modele_id);
-      url.addParam("object_id"   , object_id);
-      url.addParam('object_class', object_class);
-			url.addParam('unique_id'   , unique_id);
-      url.requestModal(750, 400, {onComplete: function(){ modaleWindow.position();
-      }});
+    var url = new Url("dPcompteRendu", "edit_compte_rendu");
+    url.addParam("modele_id"   , modele_id);
+    url.addParam("object_id"   , object_id);
+    url.addParam('object_class', object_class);
+    url.addParam('unique_id'   , unique_id);
+    url.requestModal(750, 400, {onComplete: function() { modaleWindow.position(); }});
   },
-  
+  fastModePack: function(pack_id, object_id, unique_id) {
+    if (!pack_id) return;
+    
+    var url = new Url("dPcompteRendu", "edit_compte_rendu");
+    url.addParam("pack_id", pack_id);
+    url.addParam("object_id", object_id);
+    url.addParam("unique_id", unique_id);
+    url.requestModal(750, 400, {onComplete: function() { modaleWindow.position(); }});
+  },
   edit: function(compte_rendu_id){
     var url = new Url("dPcompteRendu", "edit_compte_rendu");
     url.addParam("compte_rendu_id", compte_rendu_id);
-    url.popup(Document.popupSize.width, Document.popupSize.height, "Document");  
+    url.popup(Document.popupSize.width, Document.popupSize.height, "Document");
   },
   
   del: function(form, doc_view) {
-  	var oConfirmOptions = {	
-  		typeName: 'le document',
-  		objName: doc_view,
-  		ajax: 1,
-  		target: 'systemMsg'
-  	};
-  	
-  	var oAjaxOptions = {
-  		onComplete: function () { 
-  			Document.refreshList($V(form.object_class), $V(form.object_id)); 
-  		}
-  	};
-  	
-		confirmDeletion(form, oConfirmOptions, oAjaxOptions);
+    var oConfirmOptions = { 
+      typeName: 'le document',
+      objName: doc_view,
+      ajax: 1,
+      target: 'systemMsg'
+    };
+    
+    var oAjaxOptions = {
+      onComplete: function () {
+        Document.refreshList($V(form.object_class), $V(form.object_id)); 
+      }
+    };
+    
+    confirmDeletion(form, oConfirmOptions, oAjaxOptions);
   },
   
   refreshList: function(object_class, object_id) {
     var selector = printf("div.documents-%s-%s", object_class, object_id);
-  	$$(selector).each(Document.refresh);
+    $$(selector).each(Document.refresh);
   },
     
   /**
@@ -93,20 +104,20 @@ var Document = {
   register: function(object_id, object_class, praticien_id, container, mode, options) {   
     if (!object_id || !object_class) return;
     
-  	options = Object.extend({
-  	  mode: "normal",
-  	  categories: "hide"
-  	}, options);
-  	
-  	mode = mode || "normal";
+    options = Object.extend({
+      mode: "normal",
+      categories: "hide"
+    }, options);
     
-  	var element = $(container);
-  	
-  	if (!element) {
+    mode = mode || "normal";
+    
+    var element = $(container);
+    
+    if (!element) {
       console.warn(container+" doesn't exist");
       return;
-  	}
-  	
+    }
+    
     var div = new Element("div", {style: "min-width:260px;"+((mode != "hide") ? "min-height:50px;" : "")});
     div.className = printf("documents-%s-%s praticien-%s mode-%s", object_class, object_id, praticien_id, mode);
     $(element).insert(div);
@@ -182,11 +193,3 @@ var Document = {
   }
 };
 
-var DocumentPack = {
-  create : function (pack_id, operation_id) {
-	  var url = new Url("dPcompteRendu", "edit_compte_rendu");
-	  url.addParam("pack_id", pack_id);
-	  url.addParam("object_id", operation_id);
-	  url.popup(700, 700, "Document");
-	}
-};

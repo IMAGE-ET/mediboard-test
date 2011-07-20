@@ -574,7 +574,13 @@ class CSetupdPcompteRendu extends CSetup {
               CHANGE chir_id user_id INT (11) UNSIGNED;";
     $this->addQuery($query);
     
-    $this->mod_version = "0.64";
+    $this->makeRevision("0.64");
+    $query = "ALTER TABLE `pack`
+              ADD `fast_edit` ENUM ('0','1') NOT NULL DEFAULT '0',
+              ADD `fast_edit_pdf` ENUM ('0','1') NOT NULL DEFAULT '0';";
+    $this->addQuery($query);
+    
+    $this->mod_version = "0.65";
     
   }
 }

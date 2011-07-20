@@ -74,6 +74,8 @@ else {
     $compte_rendu->nom = $pack->nom;
     $compte_rendu->_is_pack = true;
     $compte_rendu->object_class = $pack->object_class;
+    $compte_rendu->fast_edit = $pack->fast_edit;
+    $compte_rendu->fast_edit_pdf = $pack->fast_edit_pdf;
     $compte_rendu->_source = $pack->_source;
     
     // Parcours des modeles du pack pour trouver le premier header et footer
@@ -181,8 +183,9 @@ $smarty->assign("destinataires" , $destinataires);
 $smarty->assign("user_id"       , $user->_id);
 $smarty->assign("user_view"     , $user->_view);
 $smarty->assign("object_id"     , $object_id);
-$smarty->assign('object_class'  , CValue::get("object_class"));
+$smarty->assign('object_class'  , CValue::get("object_class", $compte_rendu->object_class));
 $smarty->assign("nb_printers"   , $nb_printers);
+$smarty->assign("pack_id"       , $pack_id);
 
 preg_match_all("/(:?\[\[Texte libre - ([^\]]*)\]\])/i",$compte_rendu->_source, $matches);
 
@@ -224,10 +227,13 @@ $source = preg_replace("/<meta\s*[^>]*\s*[^\/]>/", '', $source);
 $source = preg_replace("/(<\/meta>)+/i", '', $source);
 $source = preg_replace("/<link\s*[^>]*\s*>/", '', $source);
 
+$pdf_thumbnails = CAppUI::conf("dPcompteRendu CCompteRendu pdf_thumbnails");
+$pdf_and_thumbs = CAppUI::pref("pdf_and_thumbs");
+
 if (CValue::get("reloadzones") == 1) {
   $smarty->display("inc_zones_fields.tpl");
 }
-else if ($compte_rendu->fast_edit && !$compte_rendu_id && !$switch_mode) {
+else if (!$compte_rendu_id && !$switch_mode && ($compte_rendu->fast_edit || ($compte_rendu->fast_edit_pdf && $pdf_thumbnails && $pdf_and_thumbs))) {
   $printers = $function->loadBackRefs("printers");
   
   if (is_array($printers)) {

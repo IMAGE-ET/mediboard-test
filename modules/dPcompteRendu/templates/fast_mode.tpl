@@ -1,4 +1,5 @@
 {{assign var=pdf_thumbnails value=$conf.dPcompteRendu.CCompteRendu.pdf_thumbnails}}
+{{assign var=pdf_and_thumbs value=$app->user_prefs.pdf_and_thumbs}}
 {{unique_id var=uid_fast_mode}}
 
 <script type="text/javascript">
@@ -100,7 +101,11 @@ streamPDF = function(id) {
 switchToEditor = function() {
   window.saveFields = linkFields();
   Control.Modal.close();
-  Document.create('{{$modele_id}}','{{$object_id}}', null, null, 1, getForm('fastModeForm-{{$uid_fast_mode}}'));
+  {{if $pack_id}}
+    Document.createPack('{{$pack_id}}', '{{$object_id}}', null, null, 1);
+  {{else}}
+    Document.create('{{$modele_id}}','{{$object_id}}', null, '{{$object_class}}', 1);
+  {{/if}}
 }
 
 Main.add(function() {
@@ -110,7 +115,7 @@ Main.add(function() {
 	  {{else}}
 	  lockAllButtons();
   	  var oForm = getForm('fastModeForm-{{$uid_fast_mode}}');
-  	  {{if $compte_rendu->fast_edit_pdf}}
+  	  {{if $compte_rendu->fast_edit_pdf && $pdf_thumbnails && $pdf_and_thumbs}}
         $V(getForm('create-pdf-form-{{$uid_fast_mode}}').stream, 1);
       {{else}}
         $V(oForm.callback, 'printDoc');
@@ -136,7 +141,7 @@ Main.add(function() {
 	<input type="hidden" name="dosql" value="do_pdf_cfile_aed" />
   <input type="hidden" name="stream" value="0" />
   <input type="hidden" name="print_to_server" value="0" />
-  <input type="hidden" name="callback" value="closeModal"/>
+  <input type="hidden" name="callback" value=""/>
 </form>
 
 <form name="fastModeForm-{{$uid_fast_mode}}" action="?m={{$m}}" method="post"
@@ -155,6 +160,13 @@ Main.add(function() {
   <input type="hidden" name="callback" value="generatePdf" />
 	<input type="hidden" name="suppressHeaders" value="1"/>
 	<input type="hidden" name="dialog" value="1"/>
+  <input type="hidden" name="page_height" value="{{$compte_rendu->page_height}}" />
+  <input type="hidden" name="page_width" value="{{$compte_rendu->page_width}}" />
+  <input type="hidden" name="margin_left" value="{{$compte_rendu->margin_left}}"/>
+  <input type="hidden" name="margin_right" value="{{$compte_rendu->margin_right}}"/>
+  <input type="hidden" name="margin_top" value="{{$compte_rendu->margin_top}}"/>
+  <input type="hidden" name="margin_bottom" value="{{$compte_rendu->margin_bottom}}"/>
+  
   {{mb_field object=$compte_rendu field="object_id" hidden=1 prop=""}}
   {{mb_field object=$compte_rendu field="object_class" hidden=1 prop=""}}
   
@@ -202,7 +214,7 @@ Main.add(function() {
       </td>
     </tr>
     <tr>
-      <td {{if $pdf_thumbnails && $app->user_prefs.pdf_and_thumbs}} style="width: 80%;" {{else}} colspan="2" {{/if}}>
+      <td {{if $pdf_thumbnails && $pdf_and_thumbs}} style="width: 80%;" {{else}} colspan="2" {{/if}}>
         <table style="width: 100%;">
           {{if $lists|@count}}
             <tr>
@@ -291,7 +303,7 @@ Main.add(function() {
                   onclick="lockAllButtons(); $V(getForm('create-pdf-form-{{$uid_fast_mode}}').stream, 1); this.form.onsubmit();">
                     {{tr}}Print{{/tr}}
                 </button>
-                {{if !$pdf_thumbnails || !$app->user_prefs.pdf_and_thumbs || !$compte_rendu->fast_edit_pdf}}
+                {{if !$pdf_thumbnails || !$pdf_and_thumbs || !$compte_rendu->fast_edit_pdf}}
                   <button class="print printer oneclick" type="button"
                     onclick="lockAllButtons(); $V(getForm('fastModeForm-{{$uid_fast_mode}}').callback, 'printDoc'); this.form.onsubmit();">
                       {{tr}}Print{{/tr}}
@@ -308,7 +320,7 @@ Main.add(function() {
           </tr>
         </table>
       </td>
-      {{if $pdf_thumbnails && $app->user_prefs.pdf_and_thumbs}}
+      {{if $pdf_thumbnails && $pdf_and_thumbs}}
         <td style="height: 200px;">
           <div id="thumbs" style="overflow-x: hidden; width: 160px; text-align: center; white-space: normal; height: 200px;">
             {{if isset($file|smarty:nodefaults) && $file->_id}}

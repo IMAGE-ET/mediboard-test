@@ -63,7 +63,12 @@ Main.add(function() {
   }
 
   function createPack(input, selected) {
-    Document.createPack(selected.down(".id").innerHTML, '{{$object_id}}');
+    if (selected.select(".fast_edit").length) {
+      Document.fastModePack(selected.down(".id").innerHTML, '{{$object_id}}');
+    }
+    else {
+      Document.createPack(selected.down(".id").innerHTML, '{{$object_id}}');
+    }
     $V(input, '');
   } 
 });

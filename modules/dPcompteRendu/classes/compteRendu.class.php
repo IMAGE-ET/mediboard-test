@@ -194,6 +194,13 @@ class CCompteRendu extends CDocumentItem {
       }
     }
     
+    // Formatage de la page  
+    if (!$this->_page_format) {
+      $page_width  = round((72 / 2.54) * $this->page_width, 2);
+      $page_height = round((72 / 2.54) * $this->page_height, 2);
+      $this->_page_format = array(0, 0, $page_width, $page_height);
+    }
+    
     $this->_orientation = "portrait";
     
     if ($this->page_width > $this->page_height) {
@@ -684,14 +691,7 @@ class CCompteRendu extends CDocumentItem {
       $file->updateFormFields();
       $file->forceDir();
     } 
-       
-		// Formatage de la page	 
-    if (!$this->_page_format) {
-      $page_width  = round((72 / 2.54) * $this->page_width, 2);
-      $page_height = round((72 / 2.54) * $this->page_height, 2);
-      $this->_page_format = array(0, 0, $page_width, $page_height);
-    }
-    
+
 		// Génération du contenu PDF 
 		$margins = array(
 			$this->margin_top, 

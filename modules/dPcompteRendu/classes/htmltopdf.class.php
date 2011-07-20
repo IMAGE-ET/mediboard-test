@@ -162,32 +162,12 @@ class CHtmlToPDF {
 
          // On force le display: block pour les éléments en display:inline et qui imbriquent des élements
          // en display: block.
-         $node->setAttribute("style", $node->getAttribute("style") . "; display: block;");
-
-     /* if($node->nodeName == "span") {
-        foreach ( $node->attributes as $attr => $attr_node ) {
-          $_attr = '';
-          $_attr_value = '';
-          switch($attr) {
-            case "size":
-              $_attr = "style";
-              $_attr_value = $child->getAttribute($_attr)." font-size: ".CHtmlToPDF::$_font_size_lookup[$attr_node->value].';';
-              break;
-            case "face":
-              $_attr = "style";
-              $_attr_value = $child->getAttribute($_attr)." font-family: ".$attr_node->value.';';
-              break;
-            case "color":
-              $_attr = "style";
-              $_attr_value = $child->getAttribute($_attr)." color: ".$attr_node->value.';';
-          }
-          if($_attr != '' && $_attr_value != '') {
-            $child->setAttribute($_attr, $_attr_value);
-          }
-        }
-        $old_child = $child->parentNode->removeChild($child);
-        $node->parentNode->insertBefore($old_child, $node);
-        }*/
+         $style = $node->getAttribute("style");
+         if (strpos($style, ";") != (strlen($style) - 1) && $style != "") {
+           $style .= ";";
+         }
+         $node->setAttribute("style",  $style . "display: block;");
+         break;
       }
       $this->recursiveRemove($child);
     }

@@ -64,7 +64,16 @@
     <tr {{if $_pack->_id == $pack_id}}class="selected"{{/if}} id="p{{$_pack->_id}}">
       {{assign var="_pack_id" value=$_pack->_id}}
       {{assign var="onclick" value="updateAddEditPack('$_pack_id');"}}
-      <td class="text"><a href="#1" onclick="{{$onclick}}">{{$_pack->nom}} </a></td>
+      <td class="text">
+        {{if $_pack->fast_edit_pdf}}
+          <img style="float: right;" src="modules/dPcompteRendu/fcke_plugins/mbprintPDF/images/mbprintPDF.png"/>
+        {{elseif $_pack->fast_edit}}
+          <img style="float: right;" src="modules/dPcompteRendu/fcke_plugins/mbprinting/images/mbprinting.png"/>
+        {{/if}}
+        {{if $_pack->fast_edit || $_pack->fast_edit_pdf}}
+          <img style="float: right;" src="images/icons/lightning.png"/>
+        {{/if}}
+        <a href="#1" onclick="{{$onclick}}">{{$_pack->nom}}</a></td>
       <td class="text">{{$_pack->_back.modele_links|@count}}</td>
       <td class="text">{{tr}}{{$_pack->object_class}}{{/tr}}</td>
     </tr>
@@ -80,7 +89,16 @@
     <tr {{if $_pack->_id == $pack_id}}class="selected"{{/if}} id="p{{$_pack->_id}}">
       {{assign var="_pack_id" value=$_pack->_id}}
       {{assign var="onclick" value="updateAddEditPack('$_pack_id');"}}
-      <td><a href="#1" onclick="{{$onclick}}">{{$_pack->nom}}</a></td>
+      <td>
+        {{if $_pack->fast_edit_pdf}}
+          <img style="float: right;" src="modules/dPcompteRendu/fcke_plugins/mbprintPDF/images/mbprintPDF.png"/>
+        {{elseif $_pack->fast_edit}}
+          <img style="float: right;" src="modules/dPcompteRendu/fcke_plugins/mbprinting/images/mbprinting.png"/>
+        {{/if}}
+        {{if $_pack->fast_edit || $_pack->fast_edit_pdf}}
+          <img style="float: right;" src="images/icons/lightning.png"/>
+        {{/if}}
+        <a href="#1" onclick="{{$onclick}}">{{$_pack->nom}}</a></td>
       <td>{{$_pack->_back.modele_links|@count}}</td>
       <td>{{tr}}{{$_pack->object_class}}{{/tr}}</td>
     </tr>
@@ -96,7 +114,16 @@
     <tr {{if $_pack->_id == $pack_id}}class="selected"{{/if}} id="p{{$_pack->_id}}">
       {{assign var="_pack_id" value=$_pack->_id}}
       {{assign var="onclick" value="updateAddEditPack('$_pack_id');"}}
-      <td><a href="#1" onclick="{{$onclick}}">{{$_pack->nom}}</a></td>
+      <td>
+        {{if $_pack->fast_edit_pdf}}
+          <img style="float: right;" src="modules/dPcompteRendu/fcke_plugins/mbprintPDF/images/mbprintPDF.png"/>
+        {{elseif $_pack->fast_edit}}
+          <img style="float: right;" src="modules/dPcompteRendu/fcke_plugins/mbprinting/images/mbprinting.png"/>
+        {{/if}}
+        {{if $_pack->fast_edit || $_pack->fast_edit_pdf}}
+          <img style="float: right;" src="images/icons/lightning.png"/>
+        {{/if}}
+        <a href="#1" onclick="{{$onclick}}">{{$_pack->nom}}</a></td>
       <td>{{$_pack->_back.modele_links|@count}}</td>
       <td>{{tr}}{{$_pack->object_class}}{{/tr}}</td>
     </tr>

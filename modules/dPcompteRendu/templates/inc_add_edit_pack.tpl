@@ -1,3 +1,6 @@
+{{assign var=pdf_thumbnails value=$conf.dPcompteRendu.CCompteRendu.pdf_thumbnails}}
+{{assign var=pdf_and_thumbs value=$app->user_prefs.pdf_and_thumbs}}
+
 <script type="text/javascript">
 reloadListModele = function(filter_class, object_guid){
 	if (filter_class.indexOf("-none") == -1)
@@ -38,6 +41,9 @@ Main.add(function() {
     <input type="hidden" name="del" value="0" />
     <input type="hidden" name="callback" value="addEditPackCallback" />
     {{mb_key object=$pack}}
+    {{if (!$pdf_thumbnails || !$pdf_and_thumbs)}}
+      <input type="hidden" name="fast_edit_pdf" value="{{$pack->fast_edit_pdf}}" />
+    {{/if}}
 
     <table class="form">
 
@@ -112,7 +118,25 @@ Main.add(function() {
         </select>
       </td>
     </tr>
-
+    <tr>
+      <th>{{mb_label object=$pack field="fast_edit"}}</th>
+      <td>
+        {{mb_field object=$pack field="fast_edit"}}
+      </td>
+    </tr>
+    {{if $pdf_thumbnails && $pdf_and_thumbs}}
+      <tr>
+        <th style="text-align: right;">
+          {{mb_label object=$pack field="fast_edit_pdf" style="display: none"}}
+          <label class="notNullOK" title="{{tr}}CPack-fast_edit_pdf-desc{{/tr}}">
+            <strong>PDF</strong>
+          </label>
+        </th>
+        <td>
+          {{mb_field object=$pack field="fast_edit_pdf"}}
+        </td>
+      </tr>
+    {{/if}}
     <tr>
       <td class="button" colspan="2">
         {{if $pack->_id}}

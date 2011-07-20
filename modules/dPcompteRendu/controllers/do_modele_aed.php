@@ -26,10 +26,13 @@ $do->redirectDelete = "m=dPcompteRendu&new=1";
 if (isset($_POST["fast_edit"]) && $_POST["fast_edit"] == 1 && isset($_POST["object_id"]) && $_POST["object_id"] != '') {
 	$compte_rendu = new CCompteRendu;
 	$compte_rendu->load($_POST["modele_id"]);
-  $do->request["margin_top"]    = $compte_rendu->margin_top;
-  $do->request["margin_bottom"] = $compte_rendu->margin_bottom;
-  $do->request["margin_left"]   = $compte_rendu->margin_left;
-  $do->request["margin_right"]  = $compte_rendu->margin_right;
+	
+	if ($compte_rendu->_id) {
+    $do->request["margin_top"]    = $compte_rendu->margin_top;
+    $do->request["margin_bottom"] = $compte_rendu->margin_bottom;
+    $do->request["margin_left"]   = $compte_rendu->margin_left;
+    $do->request["margin_right"]  = $compte_rendu->margin_right;
+	}
 }
 
 if (isset($_POST["_source"])) {
