@@ -24,6 +24,7 @@ Main.add(function(){
   url.autoComplete(getForm("searchProd").produit, "produit_auto_complete", {
       minChars: 3,
       updateElement: updateFields,
+      width: "350px",
       callback: function(input, queryString){
         return (queryString + "&search_by_cis=0"); 
       }
