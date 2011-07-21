@@ -98,7 +98,7 @@ CCAMSelector.init = function(){
   
   <tr>
     <th>{{mb_label object=$op field="libelle"}}</th>
-    <td colspan="2">{{mb_field object=$op field="libelle" form="editOp" autocomplete="true,1,50,true,true"}}</td>
+    <td colspan="2">{{mb_field object=$op field="libelle" form="editOp" autocomplete="true,1,50,true,true" onblur="\$V(getForm('editOpEasy').libelle, \$V(getForm('editOp').libelle));"}}</td>
   </tr>
   
   <tr>
