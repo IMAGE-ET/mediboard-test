@@ -6,7 +6,7 @@
     aProtocoles = {};
   }
   
-  {{foreach from=$list_protocoles item=_protocole}}
+  {{foreach from=$list_protocoles_total item=_protocole}}
     {{assign var="type_prot_chir" value="prot-"}}
     {{assign var="type_prot_anesth" value="prot-"}}
     {{if $_protocole->protocole_prescription_anesth_class == "CPrescriptionProtocolePack"}}
