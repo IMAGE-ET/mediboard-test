@@ -124,8 +124,16 @@ class CPrescriptionLineElement extends CPrescriptionLine {
     }
     $time_fin = ($this->time_fin) ? $this->time_fin : "23:59:00";
     // Calcul de la date de fin de la ligne
-    $this->_fin_reelle = $this->_fin ? "$this->_fin $time_fin" : "$this->debut 23:59:00";    
-    if($this->date_arret){
+
+		// Si l'unite de duree est l'heure
+    if($this->unite_duree == "heure" || $this->unite_duree == "minute"){
+      $_unite = ($this->unite_duree == "heure") ? "HOURS" : "MINUTES";
+      $this->_fin_reelle = mbDateTime("+ $this->duree $_unite", $this->_debut_reel);
+    } else {
+      $this->_fin_reelle = $this->_fin ? "$this->_fin $time_fin" : "$this->debut 23:59:00";    
+    }
+		
+		if($this->date_arret){
     	$this->_fin_reelle = $this->date_arret;
       $this->_fin_reelle .= $this->time_arret ? " $this->time_arret" : " 23:59:00";
     }
