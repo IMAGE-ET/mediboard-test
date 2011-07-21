@@ -367,5 +367,10 @@ class CMouvement400 extends CRecordSante400 {
   
   function synchronize() {
   }
+  
+  function changedField($field, $value = null) {
+    $newValue = $this->data["A_$field"];
+    return $this->changedFields[$field] && ($value !== null ? $newValue == $value : true);
+  }
 }
 ?>
