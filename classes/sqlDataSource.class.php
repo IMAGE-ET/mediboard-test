@@ -538,9 +538,19 @@ abstract class CSQLDataSource {
         $query = "INSERT INTO `$table` ($fields) VALUES ";
         $queries = array();
       }
-
-      $_data = array_map(array($this, "escape"), $_data);
-			$queries[] = "('".implode("', '", $_data)."')";
+			
+			$_query = array();
+			foreach($_data as $_value){
+				$_value = trim($_value);
+        if($_value === ""){
+          $_query[] = "NULL";
+        }
+				else {
+          $_query[] = "'".$this->escape($_value)."'";
+				}
+      }
+			
+			$queries[] = "(".implode(", ", $_query).")";
 			
       $counter++;
 			
