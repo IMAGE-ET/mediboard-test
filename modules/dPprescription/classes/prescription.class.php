@@ -1937,12 +1937,12 @@ class CPrescription extends CMbObject implements IPatientRelated {
     if(!$this->_id){
       return;
     }
-		$planifSysteme = new CPlanificationSysteme();
-    $planifSysteme->sejour_id = $this->object_id;
-    $planifs = $planifSysteme->loadMatchingList();
-    foreach($planifs as $_planif){
-      $_planif->delete();
-    }
+		$ds = CSQLDataSource::get("std");
+		$query = "DELETE planification_systeme.* FROM planification_systeme 
+              LEFT JOIN administration ON administration.planification_systeme_id = planification_systeme.planification_systeme_id
+		          WHERE planification_systeme.sejour_id = '$this->object_id'
+							AND administration.administration_id IS NULL;";
+		$ds->exec($query);
 		
 		// Sauvegarde de planif_removed pour indiquer que les planifs doivent etre re-calculer
 		$this->planif_removed = 1;

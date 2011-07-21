@@ -469,21 +469,24 @@ class CPrisePosologie extends CMbMetaObject {
 			}
     }
 
-		// Sauvegarde des planifications systemes
-		foreach($planifs as $_planification){
-      $new_planif = new CPlanificationSysteme();
-			if($this->_ref_object instanceof CPrescriptionLineElement){
-			  $new_planif->unite_prise = $this->_ref_object->_chapitre;
-      } else {
-			  $new_planif->unite_prise = $_planification["unite_prise"];
-      }
-      $new_planif->prise_id = $_planification["prise_id"];
-      $new_planif->dateTime = $_planification["dateTime"];
-      $new_planif->object_id = $this->_ref_object->_id;
-      $new_planif->object_class = $this->_ref_object->_class_name;
-      $new_planif->sejour_id = $this->_ref_object->_ref_prescription->object_id;		
-			$msg = $new_planif->store();
+    // Sauvegarde des planifications systemes
+   
+		$_planifs_by_step = array();
+		$is_element = $this->_ref_object instanceof CPrescriptionLineElement;
+    foreach($planifs as $_planification){
+      $unite_prise = $is_element ?  $this->_ref_object->_chapitre : $_planification["unite_prise"];
+      $_planifs_by_step[] = array("object_id" => "{$this->_ref_object->_id}",
+					                            "object_class" => "{$this->_ref_object->_class_name}",
+					                            "sejour_id" => "{$this->_ref_object->_ref_prescription->object_id}",
+					                            "unite_prise" => $unite_prise,
+					                            "prise_id" => $_planification["prise_id"],
+					                            "dateTime" => $_planification["dateTime"]);
     }
+    
+		if(count($_planifs_by_step)){
+		  $ds = CSQLDataSource::get("std");
+		  $ds->insertMulti('planification_systeme', $_planifs_by_step, 1000);
+		}
   }
   
 	function getPlanifs($dates, $service_id, $bornes){

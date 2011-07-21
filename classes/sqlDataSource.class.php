@@ -524,6 +524,35 @@ abstract class CSQLDataSource {
     return true;
   }
   
+	
+	function insertMulti($table, $data, $step){
+		$counter = 0;
+		
+		$keys = array_keys(reset($data));
+		$fields = "`".implode("`, `", $keys)."`";
+		
+		$count_data = count($data);
+		
+		foreach($data as $_data){
+      if($counter % $step == 0){
+        $query = "INSERT INTO `$table` ($fields) VALUES ";
+        $queries = array();
+      }
+
+      $_data = array_map(array($this, "escape"), $_data);
+			$queries[] = "('".implode("', '", $_data)."')";
+			
+      $counter++;
+			
+			if($counter % $step == 0 || $counter == $count_data){
+        $query .= implode(",", $queries);
+        $query .= ";";
+				
+        $this->exec($query);
+			}
+    }
+	}
+	
   /**
    * Quote columns and values 
    * @param $table

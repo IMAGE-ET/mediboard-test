@@ -457,13 +457,13 @@ class CPrescriptionLine extends CMbObject implements IPatientRelated {
    * Suppression des planifications systemes
    */
   function removePlanifSysteme(){
-    $planifSysteme = new CPlanificationSysteme();
-    $planifSysteme->object_id = $this->_id;
-		$planifSysteme->object_class = $this->_class_name;
-    $planifs = $planifSysteme->loadMatchingList();
-    foreach($planifs as $_planif){
-      $_planif->delete();
-    }
+		$ds = CSQLDataSource::get("std");
+    $query = "DELETE planification_systeme.* FROM planification_systeme 
+              LEFT JOIN administration ON administration.planification_systeme_id = planification_systeme.planification_systeme_id
+              WHERE planification_systeme.object_id = '$this->_id'
+							AND planification_systeme.object_class = '$this->_class_name'
+              AND administration.administration_id IS NULL;";
+    $ds->exec($query);
   }
 	
   function loadRefAlerte(){

@@ -548,13 +548,13 @@ class CPrescriptionLineMix extends CMbObject {
 		  $this->loadRefsLines();
 		}
 		foreach($this->_ref_lines as $_perf_line){
-	    $planifSysteme = new CPlanificationSysteme();
-	    $planifSysteme->object_id = $_perf_line->_id;
-	    $planifSysteme->object_class = $_perf_line->_class_name;
-	    $planifs = $planifSysteme->loadMatchingList();
-	    foreach($planifs as $_planif){
-	      $_planif->delete();
-	    }
+			$ds = CSQLDataSource::get("std");
+	    $query = "DELETE planification_systeme.* FROM planification_systeme 
+                LEFT JOIN administration ON administration.planification_systeme_id = planification_systeme.planification_systeme_id
+	              WHERE planification_systeme.object_id = '$_perf_line->_id'
+	              AND planification_systeme.object_class = '$_perf_line->_class_name'
+	              AND administration.administration_id IS NULL;";
+	    $ds->exec($query);
 		}
   }
 	
@@ -728,6 +728,8 @@ class CPrescriptionLineMix extends CMbObject {
 		$prescription =& $this->_ref_prescription;
 		$sejour =& $this->_ref_prescription->_ref_object;
 		
+	  $_planifs_by_step = array();
+			
     // Creation des planifications
 		foreach($this->_ref_lines as $_perf_line){
 			if($check_planif){
@@ -739,20 +741,25 @@ class CPrescriptionLineMix extends CMbObject {
           continue;
         }
 			}
-   
+      
       foreach($dates_planif as $_datetime){
         if ($prescription->type == "sejour" &&
             ($sejour->_entree > $_datetime || $sejour->_sortie < $_datetime)) {
           continue;
         }
-        $new_planif = new CPlanificationSysteme();
-        $new_planif->dateTime = $_datetime;
-        $new_planif->object_id = $_perf_line->_id;
-        $new_planif->object_class = $_perf_line->_class_name;
-        $new_planif->sejour_id = $this->_ref_prescription->object_id;    
-        $new_planif->store();
+				
+				
+				$_planifs_by_step[] = array("object_id" => "{$_perf_line->_id}",
+                                    "object_class" => "{$_perf_line->_class_name}",
+                                    "sejour_id" => "{$this->_ref_prescription->object_id}",
+                                    "dateTime" => $_datetime);
 			}
     }
+    
+		if(count($_planifs_by_step)){
+		  $ds = CSQLDataSource::get("std");
+      $ds->insertMulti('planification_systeme', $_planifs_by_step, 1000);
+		}
 	}
   	
   function store(){
