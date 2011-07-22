@@ -46,7 +46,7 @@ class CElementPrescription extends CMbObject {
   
   function getProps() {
   	$specs = parent::getProps();
-    $specs["category_prescription_id"] = "ref notNull class|CCategoryPrescription";
+    $specs["category_prescription_id"] = "ref notNull class|CCategoryPrescription cascade";
     $specs["libelle"]                 = "str notNull seekable";
     $specs["description"]             = "text";
 		$specs["cancelled"]               = "bool default|0";
