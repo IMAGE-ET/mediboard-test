@@ -55,6 +55,8 @@ Main.add(function(){
       </select>
 			
 			<img height="20" src="images/pictures/logo-has-small.png" />
+			
+			<button class="print" onclick="(new Url('dPsalleOp', 'print_check_list_operation')).addParam('operation_id', {{$selOp->_id}}).popup(800, 600, 'check_list')">{{tr}}Print{{/tr}}</button>
     </th>
   </tr>
   
