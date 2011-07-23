@@ -24,6 +24,6 @@ $smarty = new CSmartyDP();
 $smarty->assign("canSante400", CModule::getCanDo("dPsante400"));
 
 $smarty->assign("object", $object);
-
-$smarty->display("../../$object->_complete_view_template");
+$template =   $object->makeTemplatePath("complete"); 
+$smarty->display("../../$template");
 ?>

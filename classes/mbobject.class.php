@@ -15,7 +15,7 @@ CAppUI::requireSystemClass("mbObjectSpec");
 /**
  * Class CMbObject 
  * @abstract Adds Mediboard abstraction layer functionality
- * Too many framework responsability here :
+ * Too many framework responsabilities here :
  * - Classification: modules
  * - Metamodel: properties, class, validation 
  * - Observation: handlers
@@ -66,9 +66,6 @@ class CMbObject {
   var $_canEdit       = null; // write permission for the object
   var $_external      = null; // true if object is has remote ids
   var $_locked        = null; // true if object is locked
-
-  var $_view_template          = null; // view template path
-  var $_complete_view_template = null; // complete view template path
 
   /**
    * @var CMbObjectSpec The class specification
@@ -935,16 +932,23 @@ class CMbObject {
   
   /**
    * Update the form fields from the DB fields
+   * @return void
    */
-
   function updateFormFields() {
     $this->_guid = "$this->_class_name-$this->_id";
     $this->_view = CAppUI::tr($this->_class_name) . " " . $this->_id;
     $this->_shortview = "#$this->_id";
+  }
+  
+  /*
+   * Make and return usefull template paths for given object
+   * @param string $name One of "view" and "complete"
+   * @return string Path to wanted template, null if module undefined for object
+   */
+  function makeTemplatePath($name) {
     if ($module = $this->_ref_module) {
       $path = "$module->mod_name/templates/$this->_class_name";
-      $this->_view_template          = "{$path}_view.tpl";
-      $this->_complete_view_template = "{$path}_complete.tpl";
+      return "{$path}_{$name}.tpl";
     }
   }
   

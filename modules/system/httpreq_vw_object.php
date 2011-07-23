@@ -22,13 +22,13 @@ $can->edit = $object->canEdit();
 $can->needsRead();
 
 // If no template is defined, use generic
-$template = is_file("modules/$object->_view_template") ?
-  $object->_view_template : 
+$template = $object->makeTemplatePath("view");
+$template = is_file("modules/$template") ?
+   $template : 
   "system/templates/CMbObject_view.tpl";
 
 // Création du template
 $smarty = new CSmartyDP();
 $smarty->assign("object", $object);
-
 $smarty->display("../../$template");
 ?>
