@@ -32,6 +32,7 @@
     
     <td>
       <select name="user_type">
+        <option value="">&mdash; {{tr}}Choose{{/tr}}</option>
         {{foreach from=$utypes key=_key item=type}}
         <option value="{{$_key}}" {{if $_key == $user_type}}selected="selected"{{/if}}>{{$type}}</option>
         {{/foreach}}
@@ -44,7 +45,7 @@
 
 	   <td class="text">
 			<select name="template">
-				<option value="">&mdash; Choisir le statut</option>
+				<option value="">&mdash; {{tr}}Choose{{/tr}}</option>
 				<option value="0" {{if $template == "0"}}selected="selected"{{/if}}>Utilisateur</option>
 				<option value="1" {{if $template == "1"}}selected="selected"{{/if}}>Profil</option>
 			</select>

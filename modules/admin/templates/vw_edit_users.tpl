@@ -15,13 +15,13 @@
         {{tr}}CUser-title-create{{/tr}}
       </a>
       
-      {{mb_include template="inc_list_users"}}
+      {{mb_include template=inc_list_users}}
     </td>
     <td class="halfPane">
       {{if $can->edit}}
-        {{mb_include template="inc_edit_user"}}
+        {{mb_include template=inc_edit_user}}
       {{else}}
-        {{mb_include template="inc_vw_user"}}
+        {{mb_include template=inc_vw_user}}
       {{/if}}
     </td>
   </tr>

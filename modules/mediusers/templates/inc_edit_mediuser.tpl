@@ -148,9 +148,10 @@ Main.add(function () {
 	  <th>{{mb_label object=$object field="_user_type"}}</th>
 	    <td>
 	      <select name="_user_type"  style="width: 150px;" class="{{$object->_props._user_type}}" onchange="showPratInfo(this.value); loadProfil(this.value)">
-	      {{foreach from=$utypes key=curr_key item=type}}
+          <option value="">&mdash; {{tr}}Choose{{/tr}}</option>
+	        {{foreach from=$utypes key=curr_key item=type}}
 	        <option value="{{if $curr_key != 0}}{{$curr_key}}{{/if}}" {{if $curr_key == $object->_user_type}}selected="selected"{{/if}}>{{$type}}</option>
-	      {{/foreach}}
+	        {{/foreach}}
 	      </select>
 	    </td>
 	  </tr>
@@ -159,8 +160,8 @@ Main.add(function () {
 	    <td>
 	      <select name="_profile_id" style="width: 150px;">
 	        <option value="">&mdash; Choisir un profil</option>
-	        {{foreach from=$profiles item=curr_profile}}
-	        <option value="{{$curr_profile->user_id}}" {{if $curr_profile->user_id == $object->_profile_id}} selected="selected" {{/if}}>{{$curr_profile->user_username}}</option>
+	        {{foreach from=$profiles item=_profile}}
+	        <option value="{{$_profile->user_id}}" {{if $_profile->user_id == $object->_profile_id}} selected="selected" {{/if}}>{{$_profile->user_username}}</option>
 	        {{/foreach}}
 	      </select>
 	    </td>

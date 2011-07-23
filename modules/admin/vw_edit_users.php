@@ -16,7 +16,9 @@ $user = $user_id == "0" ? new CUser() : CUser::get($user_id);
 $user->loadRefMediuser();
 $user->loadRefsNotes();
 $user->isLDAPLinked();
-$user->countConnections();
+if ($user->dont_log_connection) {
+  $user->countConnections();
+}
 
 // Récuperation des utilisateurs recherchés
 $user_last_name  = addslashes(CValue::getOrSession("user_last_name" ));

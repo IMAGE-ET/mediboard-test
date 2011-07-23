@@ -64,15 +64,19 @@
     <th>{{mb_label object=$user field="dont_log_connection"}}</th>
     <td>{{mb_field object=$user field="dont_log_connection"}}</td>
   </tr>
+  
+{{if $user->dont_log_connection}}
   <tr>
     <th>{{mb_label object=$user field="_count_connections"}}</th>
     <td>
       {{mb_value object=$user field="_count_connections"}}
-      {{if $can->admin && $user->dont_log_connection && $user->_count_connections}}
-         <label><input type="checkbox" name="_purge_connections" value="1"/>{{tr}}Purge{{/tr}}</label>
+      {{if $can->admin && $user->_count_connections}}
+      <label><input type="checkbox" name="_purge_connections" value="1"/>{{tr}}Purge{{/tr}}</label>
       {{/if}}
     </td>
   </tr>
+  {{/if}}
+  
   {{if !$readOnlyLDAP}}
   <tr>
     <th><label for="_user_password" title="Saisir le mot de passe. Obligatoire">Mot de passe</label></th>
@@ -117,8 +121,9 @@
     <th>{{mb_label object=$user field="user_type"}}</th>
     <td>
       <select name="user_type" class="{{$user->_props.user_type}}">
-        {{foreach from=$utypes key=curr_key item=type}}
-        <option value="{{$curr_key}}" {{if $curr_key == $user->user_type}}selected="selected"{{/if}}>{{$type}}</option>
+        <option value="">&mdash; {{tr}}Choose{{/tr}}</option>
+        {{foreach from=$utypes key=_key item=type}}
+        <option value="{{$_key}}" {{if $_key == $user->user_type}}selected="selected"{{/if}}>{{$type}}</option>
         {{/foreach}}
       </select>
     </td>
