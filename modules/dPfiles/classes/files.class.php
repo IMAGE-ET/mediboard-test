@@ -270,6 +270,10 @@ class CFile extends CDocumentItem {
     
   function oldImageMagick() {
     exec("convert --version", $ret);
+    if (!isset($ret[0])) {
+      return;
+    }
+
     preg_match("/ImageMagick ([0-9\.-]+)/", $ret[0], $matches);
     return $matches[1] < "6.5.8";
   }
