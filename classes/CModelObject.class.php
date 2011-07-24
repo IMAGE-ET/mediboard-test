@@ -470,7 +470,16 @@ class CModelObject {
    *   which have to get back de CPersistantObject layer
    */
   function notify($message) {
-    //...
+    // Event Handlers
+    self::makeHandlers();
+    foreach (self::getHandlers() as $handler) {
+      try {
+        call_user_func(array($handler, "on$message"), $this);
+      } 
+      catch (Exception $e) {
+        CAppUI::setMsg($e, UI_MSG_ERROR);
+      }
+    }
   }
   
   /**
