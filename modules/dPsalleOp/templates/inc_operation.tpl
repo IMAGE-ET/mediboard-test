@@ -334,7 +334,7 @@ function reloadPrescription(prescription_id){
 {{/if}}
 
 {{if !$currUser->_is_praticien || ($currUser->_is_praticien && $can->edit) || ($currUser->_is_praticien && !$currUser->_is_anesth)}}
-<!-- Dossier Medical et documents-->
+<!-- Documents et facteurs de risque -->
 {{assign var="dossier_medical" value=$selOp->_ref_sejour->_ref_dossier_medical}}
 <div id="dossier_tab" style="display:none">
 	<table class="form">
@@ -351,6 +351,13 @@ function reloadPrescription(prescription_id){
 		  </td>
 	  </tr>
 	</table>
+	<hr />
+	<table class="tbl">
+	  <tr>
+	    <th class="title">Facteurs de risque</th>
+	  </tr>
+	</table>
+	{{include file=../../dPcabinet/templates/inc_consult_anesth/Inc_vw_facteurs_risque.tpl sejour=$selOp->_ref_sejour patient=$selOp->_ref_sejour->_ref_patient}}
 </div>
 {{/if}}
 
