@@ -357,7 +357,7 @@ function reloadPrescription(prescription_id){
 	    <th class="title">Facteurs de risque</th>
 	  </tr>
 	</table>
-	{{include file=../../dPcabinet/templates/inc_consult_anesth/Inc_vw_facteurs_risque.tpl sejour=$selOp->_ref_sejour patient=$selOp->_ref_sejour->_ref_patient}}
+	{{include file=../../dPcabinet/templates/inc_consult_anesth/inc_vw_facteurs_risque.tpl sejour=$selOp->_ref_sejour patient=$selOp->_ref_sejour->_ref_patient}}
 </div>
 {{/if}}
 
