@@ -11,11 +11,11 @@
 class CSmpHprimXMLObjectHandler extends CHprimXMLObjectHandler {
   static $handled = array ("CSejour", "CAffectation");
 
-  static function isHandled(CMbObject &$mbObject) {
+  static function isHandled(CMbObject $mbObject) {
     return in_array($mbObject->_class_name, self::$handled);
   }
 
-  function onAfterStore(CMbObject &$mbObject) {
+  function onAfterStore(CMbObject $mbObject) {
     if (!$this->isHandled($mbObject)) {
       return;
     }
@@ -54,7 +54,7 @@ class CSmpHprimXMLObjectHandler extends CHprimXMLObjectHandler {
       }
       // Si Client
       else {
-        if ($mbObject->_hprim_initiateur_group_id) {
+        if ($mbObject->_hprim_initiateur_group_id || !$receiver->isMessageSupported("CHPrimXMLVenuePatient")) {
           return;
         }
           
@@ -77,14 +77,15 @@ class CSmpHprimXMLObjectHandler extends CHprimXMLObjectHandler {
   
           $mbObject->_ref_patient->_IPP = $IPP->id400;
         }
-                  
+        
         $this->sendEvenementPatient("CHPrimXMLVenuePatient", $mbObject);
         
-        if ($receiver->_configs["send_debiteurs_venue"] && $mbObject->_ref_patient->code_regime) {
+        if ($receiver->isMessageSupported("CHPrimXMLDebiteursVenue") && 
+            $mbObject->_ref_patient->code_regime) {
           $this->sendEvenementPatient("CHPrimXMLDebiteursVenue", $mbObject);
         }
         
-        if ($receiver->_configs["send_mvt_patients"] && $receiver->_configs["send_default_serv_with_type_sej"] 
+        if ($receiver->isMessageSupported("CHPrimXMLMouvementPatient") && $receiver->_configs["send_default_serv_with_type_sej"] 
               && ($mbObject->_ref_last_log->type == "create")) {
           $service = new CService();
           $service->load(CAppUI::conf("dPhospi default_service_types_sejour $mbObject->type"));
@@ -115,7 +116,7 @@ class CSmpHprimXMLObjectHandler extends CHprimXMLObjectHandler {
     elseif ($mbObject instanceof CAffectation) {
       // Si Client
       if (!CAppUI::conf('sip server')) {
-        if (!$receiver->_configs["send_mvt_patients"]) {
+        if (!$receiver->isMessageSupported("CHPrimXMLMouvementPatient")) {
           return;
         }
         
@@ -143,7 +144,7 @@ class CSmpHprimXMLObjectHandler extends CHprimXMLObjectHandler {
     }
   }
 
-  function onBeforeMerge(CMbObject &$mbObject) {
+  function onBeforeMerge(CMbObject $mbObject) {
     if (!$this->isHandled($mbObject)) {
       return false;
     }
@@ -214,7 +215,7 @@ class CSmpHprimXMLObjectHandler extends CHprimXMLObjectHandler {
     }
   }
   
-  function onAfterMerge(CMbObject &$mbObject) {
+  function onAfterMerge(CMbObject $mbObject) {
     if (!$this->isHandled($mbObject)) {
       return false;
     }

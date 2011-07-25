@@ -16,7 +16,7 @@ class CPrescriptionAlerteHandler extends CMbObjectHandler {
 													 "CPrescriptionLineMix", 
 													 "CPrescriptionLineMixItem");
   
-  static function isHandled(CMbObject &$mbObject) {
+  static function isHandled(CMbObject $mbObject) {
     if(!CModule::getActive("dPprescription")){
       return;
     }
@@ -108,18 +108,18 @@ class CPrescriptionAlerteHandler extends CMbObjectHandler {
     $alerte->store(); 
   }
  
-  function onAfterStore(CMbObject &$mbObject) {
+  function onAfterStore(CMbObject $mbObject) {
     if (!$this->isHandled($mbObject)) {
       return;
     }
     $this->updateAlerte($mbObject);
   }
   
-  function onAfterMerge(CMbObject &$mbObject) {
+  function onAfterMerge(CMbObject $mbObject) {
     $this->onAfterStore($mbObject);
   }
   
-  function onAfterDelete(CMbObject &$mbObject) {
+  function onAfterDelete(CMbObject $mbObject) {
      if (!$this->isHandled($mbObject)) {
       return;
     }

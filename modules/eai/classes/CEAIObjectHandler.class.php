@@ -11,7 +11,7 @@
 class CEAIObjectHandler extends CMbObjectHandler {
   static $handled = array ();
 
-  static function isHandled(CMbObject &$mbObject) {
+  static function isHandled(CMbObject $mbObject) {
     return in_array($mbObject->_class_name, self::$handled);
   }
   
@@ -45,7 +45,7 @@ class CEAIObjectHandler extends CMbObjectHandler {
     }
   }
   
-  function onAfterStore(CMbObject &$mbObject) {
+  function onAfterStore(CMbObject $mbObject) {
     if (!$this->isHandled($mbObject)) {
       return false;
     }
@@ -65,7 +65,7 @@ class CEAIObjectHandler extends CMbObjectHandler {
     return true;
   }
 
-  function onBeforeMerge(CMbObject &$mbObject) {
+  function onBeforeMerge(CMbObject $mbObject) {
     if (!$this->isHandled($mbObject)) {
       return false;
     }
@@ -77,7 +77,7 @@ class CEAIObjectHandler extends CMbObjectHandler {
     return true;
   }
   
-  function onAfterMerge(CMbObject &$mbObject) {
+  function onAfterMerge(CMbObject $mbObject) {
     if (!$this->isHandled($mbObject)) {
       return false;
     }
@@ -89,7 +89,7 @@ class CEAIObjectHandler extends CMbObjectHandler {
     return true;
   }
   
-  function onBeforeDelete(CMbObject &$mbObject) {
+  function onBeforeDelete(CMbObject $mbObject) {
     if (!$this->isHandled($mbObject)) {
       return false;
     }
@@ -97,7 +97,7 @@ class CEAIObjectHandler extends CMbObjectHandler {
     return true;
   }
   
-  function onAfterDelete(CMbObject &$mbObject) {
+  function onAfterDelete(CMbObject $mbObject) {
     if (!$this->isHandled($mbObject)) {
       return false;
     }

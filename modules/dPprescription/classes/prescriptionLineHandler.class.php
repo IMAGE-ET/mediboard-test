@@ -11,7 +11,7 @@
 class CPrescriptionLineHandler extends CMbObjectHandler {
   static $handled = array ("CSejour","COperation", "CAffectation");
   
-  static function isHandled(CMbObject &$mbObject) {
+  static function isHandled(CMbObject $mbObject) {
     if(!CModule::getActive("dPprescription")){
       return;
     }
@@ -50,7 +50,7 @@ class CPrescriptionLineHandler extends CMbObjectHandler {
   }
   
   
-  function onAfterStore(CMbObject &$mbObject) {
+  function onAfterStore(CMbObject $mbObject) {
     if (!$this->isHandled($mbObject)) {
       return;
     }
@@ -249,11 +249,11 @@ class CPrescriptionLineHandler extends CMbObjectHandler {
 		CPlanificationSysteme::$_calcul_planif = true;
   }
   
-  function onAfterMerge(CMbObject &$mbObject) {
+  function onAfterMerge(CMbObject $mbObject) {
     $this->onAfterStore($mbObject);
   }
   
-  function onAfterDelete(CMbObject &$mbObject) {
+  function onAfterDelete(CMbObject $mbObject) {
   	 if (!$this->isHandled($mbObject)) {
       return;
     }

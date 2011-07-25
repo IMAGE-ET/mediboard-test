@@ -11,11 +11,11 @@
 class CSipObjectHandler extends CEAIObjectHandler {
   static $handled = array ("CPatient");
   
-  static function isHandled(CMbObject &$mbObject) {
+  static function isHandled(CMbObject $mbObject) {
     return in_array($mbObject->_class_name, self::$handled);
   }
   
-  function onAfterStore(CMbObject &$mbObject) {
+  function onAfterStore(CMbObject $mbObject) {
     if (!parent::onAfterStore($mbObject)) {
       return;
     }
@@ -34,7 +34,7 @@ class CSipObjectHandler extends CEAIObjectHandler {
     $this->sendFormatAction("onAfterStore", $mbObject);
   }
 
-  function onBeforeMerge(CMbObject &$mbObject) {
+  function onBeforeMerge(CMbObject $mbObject) {
     if (!parent::onBeforeMerge($mbObject)) {
       return;
     }
@@ -42,7 +42,7 @@ class CSipObjectHandler extends CEAIObjectHandler {
     $this->sendFormatAction("onBeforeMerge", $mbObject);
   }
   
-  function onAfterMerge(CMbObject &$mbObject) {
+  function onAfterMerge(CMbObject $mbObject) {
     if (!parent::onAfterMerge($mbObject)) {
       return;
     }

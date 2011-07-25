@@ -1134,7 +1134,7 @@ class CStoredObject extends CModelObject {
     }
     
     // Trigger before event
-    $this->onBeforeStore();
+    $this->notify("BeforeStore");
 
     $spec = $this->_spec;
     
@@ -1162,7 +1162,7 @@ class CStoredObject extends CModelObject {
     $this->doLog();
         
     // Trigger event
-    $this->onAfterStore();
+    $this->notify("AfterStore");
 
     $this->_old = null;
     return null;
@@ -1187,7 +1187,7 @@ class CStoredObject extends CModelObject {
     }
     
     // Trigger before event
-    $this->onBeforeMerge();
+    $this->notify("BeforeMerge");
     
     if (!$this->_id && $msg = $this->store()) {
       return $msg;
@@ -1220,7 +1220,7 @@ class CStoredObject extends CModelObject {
     }
     
     // Trigger after event
-    $this->onAfterMerge();
+    $this->notify("AfterMerge");
     
     return $this->store();
   }

@@ -11,11 +11,11 @@
 class CSmsObjectHandler extends CEAIObjectHandler {
   static $handled = array ("CProductDelivery", "CProductDeliveryTrace", "CAdministration");
 
-  static function isHandled(CMbObject &$mbObject) {
+  static function isHandled(CMbObject $mbObject) {
     return in_array($mbObject->_class_name, self::$handled);
   }
 
-  function onAfterStore(CMbObject &$mbObject) {
+  function onAfterStore(CMbObject $mbObject) {
     if (!parent::onAfterStore($mbObject)) {
       return;
     }
@@ -23,7 +23,7 @@ class CSmsObjectHandler extends CEAIObjectHandler {
     $this->sendFormatAction("onAfterStore", $mbObject);
   }
 
-  function onBeforeMerge(CMbObject &$mbObject) {
+  function onBeforeMerge(CMbObject $mbObject) {
     if (!parent::onBeforeMerge($mbObject)) {
       return;
     }
@@ -31,7 +31,7 @@ class CSmsObjectHandler extends CEAIObjectHandler {
     $this->sendFormatAction("onBeforeMerge", $mbObject);
   }
   
-  function onAfterMerge(CMbObject &$mbObject) {
+  function onAfterMerge(CMbObject $mbObject) {
     if (!parent::onAfterMerge($mbObject)) {
       return;
     }
@@ -39,7 +39,7 @@ class CSmsObjectHandler extends CEAIObjectHandler {
     $this->sendFormatAction("onAfterMerge", $mbObject);
   }
   
-  function onAfterDelete(CMbObject &$mbObject) {
+  function onAfterDelete(CMbObject $mbObject) {
     if (!parent::onAfterDelete($mbObject)) {
       return;
     }

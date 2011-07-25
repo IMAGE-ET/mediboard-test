@@ -11,11 +11,11 @@
 class CSaHprimXMLObjectHandler extends CHprimXMLObjectHandler {
   static $handled = array ("CSejour", "COperation");
 
-  static function isHandled(CMbObject &$mbObject) {
+  static function isHandled(CMbObject $mbObject) {
     return in_array($mbObject->_class_name, self::$handled);
   }
 
-  function onAfterStore(CMbObject &$mbObject) {
+  function onAfterStore(CMbObject $mbObject) {
     if (!$this->isHandled($mbObject)) {
       return;
     }

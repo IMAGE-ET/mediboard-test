@@ -11,11 +11,11 @@
 class CSipHprimXMLObjectHandler extends CHprimXMLObjectHandler {
   static $handled = array ("CPatient");
   
-  static function isHandled(CMbObject &$mbObject) {
+  static function isHandled(CMbObject $mbObject) {
     return in_array($mbObject->_class_name, self::$handled);
   }
  
-  function onAfterStore(CMbObject &$mbObject) {
+  function onAfterStore(CMbObject $mbObject) {
     if (!$this->isHandled($mbObject)) {
       return false;
     }
@@ -43,10 +43,10 @@ class CSipHprimXMLObjectHandler extends CHprimXMLObjectHandler {
     }
     // Si Client
     else {
-      if ($mbObject->_hprim_initiateur_group_id) {
+      if ($mbObject->_hprim_initiateur_group_id || !$receiver->isMessageSupported("CHPrimXMLEnregistrementPatient")) {
         return;
       }
-  
+      
       if (!$mbObject->_IPP) {
         $IPP = new CIdSante400();
         $IPP->loadLatestFor($mbObject, $receiver->_tag_patient);
@@ -65,7 +65,7 @@ class CSipHprimXMLObjectHandler extends CHprimXMLObjectHandler {
     }
   }
 
-  function onBeforeMerge(CMbObject &$mbObject) {
+  function onBeforeMerge(CMbObject $mbObject) {
     if (!$this->isHandled($mbObject)) {
       return false;
     }
@@ -129,7 +129,7 @@ class CSipHprimXMLObjectHandler extends CHprimXMLObjectHandler {
     }
   }
   
-  function onAfterMerge(CMbObject &$mbObject) {
+  function onAfterMerge(CMbObject $mbObject) {
     if (!$this->isHandled($mbObject)) {
       return false;
     }
