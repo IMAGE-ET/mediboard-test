@@ -136,6 +136,7 @@ $smarty->assign("listPraticiens"        , $listPraticiens);
 $smarty->assign("listFunctions"         , $listFunctions);
 $smarty->assign("correspondantsMedicaux", $correspondantsMedicaux);
 $smarty->assign("medecin_adresse_par"   , $medecin_adresse_par);
+$smarty->assign("session_name"          , CApp::getSessionName());
 $smarty->assign("today"   , mbDate());
 $smarty->display("addedit_planning.tpl");
 

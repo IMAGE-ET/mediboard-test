@@ -142,6 +142,7 @@ $smarty->assign("heure_sortie_ambu"   , $heure_sortie_ambu);
 $smarty->assign("heure_sortie_autre"  , $heure_sortie_autre);
 $smarty->assign("heure_entree_veille" , $heure_entree_veille);
 $smarty->assign("heure_entree_jour"   , $heure_entree_jour);
+$smarty->assign("session_name"        , CApp::getSessionName());
 //$smarty->assign("locked_sejour"         , $locked_sejour);
 
 $smarty->assign("prestations", $prestations);

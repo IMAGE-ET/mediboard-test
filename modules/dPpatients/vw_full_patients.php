@@ -73,6 +73,7 @@ $smarty->assign("patient"                 , $patient);
 $smarty->assign("listPrat"                , $listPrat);
 $smarty->assign("object"                  , $patient);
 $smarty->assign("isImedsInstalled"        , (CModule::getActive("dPImeds") && CImeds::getTagCIDC(CGroups::loadCurrent())));
+$smarty->assign("session_name"            , CApp::getSessionName());
 
 $smarty->display("vw_full_patients.tpl");
 

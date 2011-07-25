@@ -9,6 +9,6 @@
  */
 
 $file_name = $_POST["checksum"];
-file_put_contents("../../tmp/".$file_name, file_get_contents($_FILES["file"]["tmp_name"]));
+file_put_contents("tmp/".$file_name, file_get_contents($_FILES["file"]["tmp_name"]));
 
 ?>
