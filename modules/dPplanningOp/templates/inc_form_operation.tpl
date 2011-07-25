@@ -185,23 +185,34 @@ CCAMSelector.init = function(){
 	      <input type="hidden" name="plageop_id" value="" />
 	      <input type="hidden" name="_date" value="{{if $op->_datetime}}{{$op->_datetime|iso_date}}{{else}}{{$today}}{{/if}}" />
 	     
-	      <select name="date" onchange="
-	        {{if !$op->operation_id}}updateEntreePrevue();{{/if}}
-	        Value.synchronize(this);
-	        document.editSejour._curr_op_date.value = this.value;
-	        modifSejour(); $V(this.form._date, this.value);">
-	        {{if $op->operation_id}}
-	        <option value="{{$op->_datetime|iso_date}}" selected="selected">
-	          {{$op->_datetime|date_format:"%d/%m/%Y"}} (inchangée)
-	        </option>
-	        {{/if}}
-	        <option value="{{$today}}">
-	          {{$today|date_format:"%d/%m/%Y"}} (aujourd'hui)
-	        </option>
-	        <option value="{{$tomorow}}">
-	          {{$tomorow|date_format:"%d/%m/%Y"}} (demain)
-	        </option>
-	      </select>
+        {{if $can->admin}}
+          {{assign var="operation_id" value=$op->operation_id}}
+          {{mb_ternary var=update_entree_prevue test=$op->operation_id value="" other="updateEntreePrevue();"}}
+          {{mb_field object=$op field="date" name="date" prop="date" form="editOp" register=true onchange="
+            $update_entree_prevue
+            Value.synchronize(this);
+            document.editSejour._curr_op_date.value = this.form.date.value;
+            modifSejour();  \$V(this.form._date, this.form.date.value);"}}
+        {{else}}
+  	      <select name="date" onchange="
+  	        {{if !$op->operation_id}}updateEntreePrevue();{{/if}}
+  	        Value.synchronize(this);
+  	        document.editSejour._curr_op_date.value = this.value;
+  	        modifSejour(); $V(this.form._date, this.value);">
+  	        {{if $op->operation_id}}
+  	        <option value="{{$op->_datetime|iso_date}}" selected="selected">
+  	          {{$op->_datetime|date_format:"%d/%m/%Y"}} (inchangée)
+  	        </option>
+  	        {{/if}}
+  	        <option value="{{$today}}">elodie86
+            
+  	          {{$today|date_format:"%d/%m/%Y"}} (aujourd'hui)
+  	        </option>
+  	        <option value="{{$tomorow}}">
+  	          {{$tomorow|date_format:"%d/%m/%Y"}} (demain)
+  	        </option>
+  	      </select>
+        {{/if}}
 	    </td>
 	    <td>
 	      à
