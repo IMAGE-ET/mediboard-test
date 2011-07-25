@@ -1694,7 +1694,7 @@ class CStoredObject extends CModelObject {
     $this->doLog();
         
     // Event Handlers
-    $this->onAfterDelete();
+    $this->notify("AfterDelete");
 
     return $this->_old = null;
   }
