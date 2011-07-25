@@ -24,13 +24,11 @@ if (!$list = $ftp->getListFiles("./")) {
 
 foreach($list as $filepath) {
   if (substr($filepath, -(strlen($extension))) == $extension) {
-    $filename = uniqid().basename($filepath);
-    $hl7File = $ftp->getFile($filepath, "tmp/hl7/$filename");
-    
+    $filename = tempnam("", "hl7");
+    $ftp->getFile($filepath, $filename);
     $hl7v2_reader = new CHL7v2Reader();
-    $hl7v2_reader->readFile($hl7File);
-    
-    unlink($hl7File);
+    $hl7v2_reader->readFile($filename);
+    unlink($filename);
   } else {
    // $ftp->delFile($filepath);
   }

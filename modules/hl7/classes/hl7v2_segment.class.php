@@ -107,6 +107,10 @@ class CHL7v2Segment extends CHL7V2 {
   function getSpecs() {
     return self::$specs[$this->name];
   }
+	
+	function __toString(){
+		return "&nbsp;&nbsp; - ".implode("\n&nbsp;&nbsp; - ", $this->fields);
+	}
 }
 
 ?>

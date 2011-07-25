@@ -76,6 +76,7 @@ class CHL7v2Message {
   
   function handleSegments() {
     $lines = explode($this->segmentTerminator, $this->data);
+		
     foreach ($lines as $_line) {
       try {
         $segment = new CHL7v2Segment($this);
@@ -87,7 +88,7 @@ class CHL7v2Message {
     }
     
     $this->validate();
-    mbTrace($this);
+    echo(nl2br($this));
   }
   
   function validate() {
@@ -106,6 +107,12 @@ class CHL7v2Message {
     
     // validate message
   }
+	
+	function __toString(){
+		$s = "$this->name - $this->description\n";
+		$s .= implode("\n ---- \n", $this->segments);
+		return $s;
+	}
 }
 
 ?>

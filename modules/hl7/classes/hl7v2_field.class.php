@@ -65,6 +65,10 @@ class CHL7v2Field extends CHL7V2 {
   function isBaseType() {
     $this->_is_base_type = isset(self::$typesBase[$this->datatype]);
   }
+	
+	function __toString(){
+		return "$this->datatype - ".implode(" / ", $this->value);
+	}
 }
 
 ?>
