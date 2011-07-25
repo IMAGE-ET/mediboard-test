@@ -67,6 +67,34 @@ class CAccessLog extends CMbObject {
     return $specs;
   }
   
+  /**
+   * Fast store using ON DUPLICATE KEY UPDATE MySQL feature
+   * @return string Store-like message
+   */
+  function fastStore() {
+    $fields = $this->getDBFields();
+    unset($fields[$this->_spec->key]);
+    foreach ($fields as $_name => $_value) {
+      $columns[] = "$_name";
+      $inserts[] = "'$_value'";
+      if (!in_array($_name, array("module", "action", "period"))) {
+          $updates[] = "$_name = $_name + '$_value'";
+      }
+    }
+    
+    $columns = implode(",", $columns);
+    $inserts = implode(",", $inserts);
+    $updates = implode(",", $updates);
+    
+    $query = "INSERT INTO access_log ($columns) 
+      VALUES ($inserts)
+      ON DUPLICATE KEY UPDATE $updates";
+    $ds = $this->_spec->ds;
+    if (!$ds->exec($query)) {
+      return $ds->error();
+    }
+  }
+  
   function updateFormFields() {
     parent::updateFormFields();
     if ($this->hits) {

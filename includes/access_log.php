@@ -19,33 +19,20 @@ if (CAppUI::conf("readonly")) {
 
 global $m, $action;
 
+// Check prerequisites
 $ds = CSQLDataSource::get("std");
-// $action is not defined when the module is inactive
+// $action may not defined when the module is inactive
 if (!$ds->loadTable("access_log") || !$action) { 
   return;
 }
 
-$period = mbTransformTime(null, null, "%Y-%m-%d %H:00:00");
-
+// Key initialisation
 $log = new CAccessLog();
 $log->module   = $m;
 $log->action   = $action;
-$log->period   = $period;
+$log->period   = mbTransformTime(null, null, "%Y-%m-%d %H:00:00");;
 
-if (!$log->loadMatchingObject()) {
-  $log->hits        = 0;
-  $log->duration    = 0.0;
-  $log->processus   = 0.0;
-  $log->processor   = 0.0;
-  $log->request     = 0.0;
-  $log->size        = 0;
-  $log->peak_memory = 0;
-  $log->errors      = 0;
-  $log->warnings    = 0;
-  $log->notices     = 0;
-  $log->peak_memory = 0;
-}
-
+// Probe aquisition
 $getrusage = getrusage();
 $log->hits++;
 $log->duration    += $phpChrono->total;
@@ -58,6 +45,7 @@ $log->errors      += $performance["error"];
 $log->warnings    += $performance["warning"];
 $log->notices     += $performance["notice"];
 
-if ($msg = $log->store()) {
+// Fast store
+if ($msg = $log->fastStore()) {
   trigger_error($msg, E_USER_WARNING);
 }
