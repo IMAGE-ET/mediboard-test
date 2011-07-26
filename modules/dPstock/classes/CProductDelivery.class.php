@@ -64,7 +64,6 @@ class CProductDelivery extends CMbObject {
   var $_make_delivery_trace = null;
   
   var $_products                  = null;
-  var $_pn13_initiateur_group_id  = null; // group initiateur du message PN13
   var $_prises                    = null;
   var $_pilulier                  = null;
   var $_code_cis                  = null;

@@ -886,7 +886,12 @@ class CSetupdPstock extends CSetup {
 		$query = "ALTER TABLE `product` 
               ADD `cladimed` VARCHAR (7);";
     $this->addQuery($query);
+		
+    $this->makeRevision("1.50");
+		$query = "ALTER TABLE `product_order_item_reception` 
+              ADD `serial` CHAR (40) AFTER `code`";
+    $this->addQuery($query);
     
-    $this->mod_version = "1.50";
+    $this->mod_version = "1.51";
   }
 }

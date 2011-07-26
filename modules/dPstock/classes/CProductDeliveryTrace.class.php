@@ -73,7 +73,7 @@ class CProductDeliveryTrace extends CMbObject {
   }
   
   function store() {
-  	$this->completeField('delivery_id', 'quantity');
+    $this->completeField('delivery_id', 'quantity');
     
     $this->loadRefsFwd();
     $stock = $this->getStock();
@@ -99,7 +99,7 @@ class CProductDeliveryTrace extends CMbObject {
 
     // Un-deliver
     if ($this->_undeliver) {
-	    $this->_undeliver = null;
+      $this->_undeliver = null;
       return $this->delete();
     }
      
@@ -134,8 +134,8 @@ class CProductDeliveryTrace extends CMbObject {
       
       // if not, the stock is created
       else {
-	      $stock_service->order_threshold_min = abs($this->quantity) + 1;
-	      $stock_service->order_threshold_max = $stock_service->order_threshold_min * 2;
+        $stock_service->order_threshold_min = abs($this->quantity) + 1;
+        $stock_service->order_threshold_max = $stock_service->order_threshold_min * 2;
         $stock_service->quantity = $this->quantity;
         
         $default_location = CProductStockLocation::getDefaultLocation(
@@ -174,7 +174,6 @@ class CProductDeliveryTrace extends CMbObject {
     $stock->loadRefsFwd();
     
     $infinite_group_stock = CAppUI::conf('dPstock CProductStockGroup infinite_quantity') == '1';
-    $negative_allowed = CAppUI::conf('dPstock CProductStockGroup negative_allowed') == '1';
     
     $stock_service = new CProductStockService();
     $stock_service->product_id = $stock->product_id;
@@ -195,6 +194,9 @@ class CProductDeliveryTrace extends CMbObject {
     return parent::delete();
   }
   
+  /**
+   * @return CProductStock
+   */
   function getStock() {
     return $this->_ref_delivery->loadRefStock();
   }
@@ -204,16 +206,29 @@ class CProductDeliveryTrace extends CMbObject {
     $this->loadRefTargetLocation();
   }
   
+  /**
+   * @return CProductDelivery
+   */
   function loadRefDelivery() {
     return $this->_ref_delivery = $this->loadFwdRef("delivery_id", true); 
   }
   
+  /**
+   * @return CProductStockLocation
+   */
   function loadRefTargetLocation() {
     return $this->_ref_target_location = $this->loadFwdRef("target_location_id", true); 
   }
 
   function getPerm($permType) {
     return $this->getStock()->getPerm($permType);
+  }
+  
+  /**
+   * @return CMediusers
+   */
+  function loadRefPreparateur(){
+    return $this->loadLastLog()->loadRefUser(false)->loadRefMediuser();
   }
 }
 ?>

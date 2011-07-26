@@ -17,6 +17,7 @@ class CProductOrderItemReception extends CMbObject {
   var $reception_id       = null;
   var $quantity           = null;
   var $code               = null;
+  var $serial             = null;
   var $lapsing_date       = null;
   var $date               = null;
   var $barcode_printed    = null;
@@ -55,6 +56,7 @@ class CProductOrderItemReception extends CMbObject {
     $specs['reception_id']  = 'ref notNull class|CProductReception';
     $specs['quantity']      = 'num notNull';
     $specs['code']          = 'str seekable';
+    $specs['serial']        = 'str maxLength|40';
     $specs['lapsing_date']  = 'date mask|99/99/9999 format|$3-$2-$1';
     $specs['date']          = 'dateTime notNull';
     $specs['barcode_printed'] = 'bool';
