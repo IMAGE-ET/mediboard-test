@@ -122,11 +122,11 @@ class CDestinataireHprim extends CInteropReceiver {
           throw new CMbException("CExchangeSource-no-response");
         }
         $acq = $source->getACQ();
-
-        if ($acq) {
-          $echg_hprim = $dom_evt->_ref_echange_hprim;
-          $echg_hprim->date_echange = mbDateTime();
+        
+        $echg_hprim = $dom_evt->_ref_echange_hprim;
+        $echg_hprim->date_echange = mbDateTime();
           
+        if ($acq) {
           $dom_acq = CHPrimXMLAcquittementsServeurActivitePmsi::getEvtAcquittement($dom_evt);
           if (!$dom_acq) {
             $echg_hprim->_acquittement = $acq;
@@ -140,9 +140,9 @@ class CDestinataireHprim extends CInteropReceiver {
           $echg_hprim->statut_acquittement = $dom_acq->getStatutAcquittementServeurActivitePmsi();
           $echg_hprim->acquittement_valide = $doc_valid ? 1 : 0;
           $echg_hprim->_acquittement = $acq;
-      
-          $echg_hprim->store();
         } 
+        
+        $echg_hprim->store();
       }      
     }
   }
