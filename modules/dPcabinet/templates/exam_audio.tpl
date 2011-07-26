@@ -1,10 +1,10 @@
 {{mb_script module=$m script="exam_audio"}}
 
 <script type="text/javascript">
-
 // Lancement du reload
-window.opener.ExamDialog.reload('{{$exam_audio->consultation_id}}');
-
+if(window.opener && window.opener.ExamDialog) {
+  window.opener.ExamDialog.reload('{{$exam_audio->consultation_id}}');
+}
 </script>
 
 <form name="editFrm" action="?m=dPcabinet&amp;a=exam_audio&amp;dialog=1" method="post" onsubmit="return checkForm(this)">
