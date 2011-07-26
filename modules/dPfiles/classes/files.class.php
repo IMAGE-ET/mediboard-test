@@ -265,7 +265,9 @@ class CFile extends CDocumentItem {
     if ($uploaded)
       return move_uploaded_file($file["tmp_name"], $this->_file_path);
     else
-			return rename($file, $this->_file_path);
+      // https://bugs.php.net/bug.php?id=50676
+      // Problem while renaming across volumes : trigger the warning "Operation is not permitted" 
+			return @rename($file, $this->_file_path);
   }
     
   function oldImageMagick() {
