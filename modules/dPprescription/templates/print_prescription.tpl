@@ -237,7 +237,7 @@ p.duplicata {
 
 {{foreach from=1|range:$range item=i}}
   {{if $i == 2}}
-    <span style="page-break-before: always;"></span>
+    <br style="page-break-before: always;" />
   {{/if}}
 <!-- Affichage en mode ALD -->
 {{if $lines.medicaments.med.ald || $lines.medicaments.med.no_ald ||
