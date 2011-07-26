@@ -10,7 +10,7 @@ changeCodeToDel = function(subject_id, code_ccam, actes_ids){
 </script>
 
 <!-- Pas d'affichage de inc_manage_codes si la consultation est deja validée -->
-  
+ {{if $subject instanceof CConsultation && !$subject->_coded}}  
   <table class="main layout">
     <tr>
       <td class="halfPane">
@@ -23,7 +23,7 @@ changeCodeToDel = function(subject_id, code_ccam, actes_ids){
         <input type="submit" disabled="disabled" style="display:none;"/>
         <input type="hidden" name="_chir" value="{{$subject->_praticien_id}}" />
         {{if ($subject->_class_name=="COperation")}}
-        <input type="hidden" name="_anesth" value="{{$subject->_ref_plageop->anesth_id}}" />
+          <input type="hidden" name="_anesth" value="{{$subject->_ref_plageop->anesth_id}}" />
         {{/if}}
         <input type="hidden" name="_class_name" value="{{$subject->_class_name}}" />
         <fieldset>
@@ -96,7 +96,7 @@ changeCodeToDel = function(subject_id, code_ccam, actes_ids){
       {{/if}}
     </tr>
   </table>
-
+{{/if}}
 
 {{if $ajax}}
 <script type="text/javascript">
