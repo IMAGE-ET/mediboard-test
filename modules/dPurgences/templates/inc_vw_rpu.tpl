@@ -71,12 +71,12 @@ function submitSejRpuConsult() {
 
 Fields = {
   init: function(mode_sortie) {
-	  ContraintesRPU.updateDestination(mode_sortie, true);
-	  ContraintesRPU.updateOrientation(mode_sortie, true); 
-	  $('etablissement_sortie_transfert').setVisible(mode_sortie == "transfert");
-	  $('service_sortie_transfert'      ).setVisible(mode_sortie == "mutation");
-	  $('commentaires_sortie'           ).setVisible(mode_sortie && mode_sortie != "normal");
-	}
+    ContraintesRPU.updateDestination(mode_sortie, true);
+    ContraintesRPU.updateOrientation(mode_sortie, true); 
+    $('etablissement_sortie_transfert').setVisible(mode_sortie == "transfert");
+    $('service_sortie_transfert'      ).setVisible(mode_sortie == "mutation");
+    $('commentaires_sortie'           ).setVisible(mode_sortie && mode_sortie != "normal");
+  }
 };
 
 function printDossier(id) {
@@ -138,18 +138,18 @@ function showEtabEntreeTransfert(mode) {
                     });
                 </script>
 
-              	<table class="layout" style="width: 100%">
-              		<tr>
+                <table class="layout" style="width: 100%">
+                  <tr>
                     <td style="width: 50%">{{mb_label object=$rpu field="diag_infirmier"}}</td>
                     <td style="width: 50%">{{mb_label object=$rpu field="pec_douleur"}}</td>
-              		</tr>
-									<tr>
-			              <td>{{mb_field object=$rpu field="diag_infirmier" onchange="this.form.onsubmit();" class="autocomplete"}}</td>
-			              <td>{{mb_field object=$rpu field="pec_douleur"    onchange="this.form.onsubmit();" class="autocomplete"}}</td>
-									</tr>
-              	</table>
-								
-							</td>
+                  </tr>
+                  <tr>
+                    <td>{{mb_field object=$rpu field="diag_infirmier" onchange="this.form.onsubmit();" class="autocomplete"}}</td>
+                    <td>{{mb_field object=$rpu field="pec_douleur"    onchange="this.form.onsubmit();" class="autocomplete"}}</td>
+                  </tr>
+                </table>
+                
+              </td>
 
             </tr>
             
@@ -214,11 +214,11 @@ function showEtabEntreeTransfert(mode) {
         </form>
       </fieldset>
     </td>
-		
+    
     <td>
       <fieldset>
         <legend>Prise en charge praticien</legend>
-				
+        
         <form name="editRPUMotif" action="?" method="post" onsubmit="return onSubmitFormAjax(this);">
           <input type="hidden" name="dosql" value="do_rpu_aed" />
           <input type="hidden" name="m" value="dPurgences" />
@@ -244,17 +244,17 @@ function showEtabEntreeTransfert(mode) {
                     resetDependFields: false,
                     validateOnBlur: false
                   }
-									
+                  
                   new AideSaisie.AutoComplete(form.elements.motif, options);
                 {{/main}}
-								
+                
                 {{mb_field object=$rpu field="motif" onchange="this.form.onsubmit();" class="autocomplete"}}
                 </td>
              </tr>
            </table>
          </form>
      
-		    {{assign var=sejour value=$rpu->_ref_sejour}}
+        {{assign var=sejour value=$rpu->_ref_sejour}}
         {{mb_include module=dPurgences template=inc_form_sortie}}
 
       </fieldset>
@@ -315,7 +315,7 @@ function showEtabEntreeTransfert(mode) {
               Reconvoquer
             </button>
           {{/if}}
-          {{if @$modules.ecap->mod_active}}
+          {{if @$modules.ecap->mod_active && ($conf.ecap.dhe.dhe_mode_choice == "new")}}
             {{mb_include module=ecap template=inc_button_non_prevue patient_id=$rpu->_patient_id}}
           {{else}}
             {{if $conf.dPurgences.gerer_hospi == "1"}} 
