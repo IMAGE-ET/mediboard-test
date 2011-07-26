@@ -300,7 +300,7 @@ if(!$_ald){
 	if($header->_id){
 	  $header->loadContent();
 	  $template_header->renderDocument($header->_source);
-		$header_height = $header->height * 12;
+		$header_height = $header->height;
 	}
 }
 
@@ -313,7 +313,7 @@ if(!$_ald){
 	if($footer->_id){
 	  $footer->loadContent();
 	  $template_footer->renderDocument($footer->_source);
-	  $footer_height = $footer->height * 12;
+	  $footer_height = $footer->height;
 	}
 }
 
