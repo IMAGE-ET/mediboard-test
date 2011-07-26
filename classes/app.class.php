@@ -227,5 +227,9 @@ class CApp {
     
     return $classes;
   }
+  
+  function getSessionName() {
+    return "mediboard";
+  }
 }
 ?>
