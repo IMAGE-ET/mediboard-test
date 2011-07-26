@@ -196,7 +196,7 @@ class CTemplateManager {
         $html = "";
         $prefix = CAppUI::pref("listBrPrefix");
         foreach ($items as $item) {
-          $html .= "<br />$prefix $item</li>";
+          $html .= "<br />$prefix $item";
         }
         break;
         
