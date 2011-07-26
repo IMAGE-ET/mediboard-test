@@ -100,6 +100,17 @@ selectLines = function(prescription_id, protocole_id) {
 }
 
 prescriptions_ids = {{$multiple_prescription|@json}};
+
+Main.add(function () {
+  // Si la modale n'existe pas, on la crée
+  if(!$('modalPrescriptionLine')){
+    $(document.body).insert(
+      DOM.div({id: "modalPrescriptionLine"}).setStyle({
+        width: '90%',
+        diplay: 'none'
+    }))
+  }
+});
 </script>
 
 {{if $multiple_prescription|@count > 1 && $admin_prescription}}

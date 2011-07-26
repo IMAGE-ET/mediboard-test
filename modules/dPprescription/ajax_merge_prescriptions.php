@@ -30,10 +30,7 @@ $chapitres = array();
 
 // Comptage des lignes par chapitre
 foreach($prescriptions as $_prescription) {
-  if (!isset($chapitres["med"]) &&
-     (count($_prescription->_ref_lines_med_comments["med"])     ||
-      count($_prescription->_ref_lines_med_comments["comment"]) ||
-      count($_prescription->_ref_prescription_line_mixes))) {
+  if (!isset($chapitres["med"])) {
     $chapitres["med"] = 0;
   }
   $chapitres["med"] += count($_prescription->_ref_lines_med_comments["med"]) +
@@ -54,15 +51,19 @@ foreach($prescriptions as $_prescription) {
   }
 }
 
+$moments = CMomentUnitaire::loadAllMomentsWithPrincipal();
+
 $smarty = new CSmartyDP;
 
 $smarty->assign("prescriptions", $prescriptions);
-$smarty->assign("prescription_id", reset($prescriptions)->_id);
+$smarty->assign("prescription", reset($prescriptions));
 $smarty->assign("prescriptions_ids", implode("-", $prescriptions_ids));
 $smarty->assign("prescription_base_id", $prescription_base_id);
 $smarty->assign("chapitres", $chapitres);
 $smarty->assign("now", mbDate());
 $smarty->assign("sejour", reset($prescriptions)->_ref_object);
+$smarty->assign("moments", $moments);
+$smarty->assign("checked_lines", 1);
 $smarty->display("inc_merge_prescriptions.tpl");
 
 ?>

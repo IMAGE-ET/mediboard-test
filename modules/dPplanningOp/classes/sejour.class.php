@@ -1896,6 +1896,26 @@ class CSejour extends CCodable implements IPatientRelated {
     foreach ($sejours as $_sejour) {
       $_sejour->loadRefPrescriptionSejour();
       if($_sejour->_ref_prescription_sejour->_id){
+        
+        // Suppression des prescriptions vide
+        $prescription = new CPrescription;
+        $prescription->load($_sejour->_ref_prescription_sejour->_id);
+        $back_props = $prescription->getBackProps();
+        
+        $count_back_props = 0;
+        
+        // On retire les logs de la liste des backprops
+        unset($back_props["logs"]);
+        
+        foreach ($back_props as $back_prop => $object) {
+          $count_back_props += $prescription->countBackRefs($back_prop);
+        }
+        
+        if ($count_back_props == 0) {
+          $prescription->delete();
+          continue;
+        }
+        
         if($count_prescription == 1){
           return "Impossible de fusionner des sejours qui comportent chacun des prescriptions de séjour";
         }

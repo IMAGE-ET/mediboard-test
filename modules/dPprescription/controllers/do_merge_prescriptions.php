@@ -23,13 +23,16 @@ foreach($lines as $guid=>$keep_line) {
   
   // Si on ne garde pas la ligne, on la marque comme arrêtée.
   if (!$keep_line) {
-    $line->date_arret = mbDate();
-    $line->time_arret = mbTime();
+    $line->_obj->date_arret = mbDate();
+    $line->_obj->time_arret = mbTime();
   }
-  
+
   $line->_obj->prescription_id = $prescription_id;
   $line->doBind();
   $line->doStore();
+  
+  // Suppression de la clé pour le prochain bind
+  unset($_POST[$object->_spec->key]);
 }
 
 // Fusion des prescriptions
@@ -38,26 +41,6 @@ $_POST["prescription_id"] = $prescription_id;
 $prescription = new CDoObjectAddEdit("CPrescription");
 
 $prescription->doBind();
-
-
-/*
-// Le mode alternatif dans la fonction merge ne permet pas la suppression
-// de toutes les prescriptions en une fois
-
-$prescriptions = array();
-
-foreach($prescriptions_ids as $_prescription_id) {
-  $prescription = new CPrescription;
-  $prescription->load($_prescription_id);
-  $prescriptions[] = $prescription;
-}
-
-if ($msg = $prescription->_obj->merge($prescriptions)) {
-  CAppUI::setMsg($msg, UI_MSG_ERROR);
-}
-else {
-  CAppUI::setMsg(CAppUI::tr("CPrescription-msg-merge"), UI_MSG_OK);
-}*/
 
 foreach ($prescriptions_ids as $_prescription_id=>$elt) {
   $_prescription = new CPrescription;

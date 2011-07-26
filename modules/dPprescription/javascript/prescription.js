@@ -468,8 +468,8 @@ Prescription = {
     url.popup(800, 600, "Historique de la ligne");
   },
   mergePrescriptions: function(prescriptions_ids, prescription_base_id) {
-    var url = new Url("dPprescription", "ajax_merge_prescriptions");
-    url.addParam("prescriptions_ids[]", prescriptions_ids);
-    url.requestModal(1000,700);
+    window.selectLines = new Url("dPprescription", "ajax_merge_prescriptions");
+    window.selectLines.addParam("prescriptions_ids[]", prescriptions_ids);
+    window.selectLines.requestModal(1000,700);
   }
 };
