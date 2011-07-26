@@ -21,10 +21,15 @@ autoriserSortie = function(value){
 
 autoriserEffectuerSortie = function() {
 	getForm('editSortieAutorise').elements.sortie_autorisee.value=1;
-	return onSubmitFormAjax(getForm('ValidCotation'), { onComplete : function(){ 
-		submitSejRpuConsult(); 
-		$('button_reconvoc').disabled=null; 
-	}});
+	{{if $conf.dPurgences.valid_cotation_sortie_reelle}}
+  	return onSubmitFormAjax(getForm('ValidCotation'), { onComplete : function(){ 
+  		submitSejRpuConsult(); 
+  		$('button_reconvoc').disabled=null; 
+  	}});
+	{{else}}
+	  $('button_reconvoc').disabled=null; 
+	  return submitSejRpuConsult(); 
+	{{/if}}
 }
 </script>
 
