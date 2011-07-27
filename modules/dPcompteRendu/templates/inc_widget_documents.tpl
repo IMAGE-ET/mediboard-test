@@ -124,11 +124,15 @@ Main.add(function() {
   {{foreach from=$object->_ref_documents item=document}}
   <tr>
     <td class="text">
-	    <a href="#{{$document->_guid}}" onclick="Document.edit({{$document->_id}}); return false;" style="display: inline;">
+      {{if $document->_is_editable}}
+	      <a href="#{{$document->_guid}}" onclick="Document.edit({{$document->_id}}); return false;" style="display: inline;">
+      {{/if}}
 	      <span onmouseover="ObjectTooltip.createEx(this, '{{$document->_guid}}', 'objectView')">
 	        {{$document}}
 	      </span>
-	    </a>
+      {{if $document->_is_editable}}
+	      </a>
+      {{/if}}
       {{if $document->private}}
         &mdash; <em>{{tr}}CCompteRendu-private{{/tr}}</em>
       {{/if}}

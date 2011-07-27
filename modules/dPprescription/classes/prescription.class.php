@@ -2244,6 +2244,10 @@ class CPrescription extends CMbObject implements IPatientRelated {
     }
     return $modele;
   }
+  
+  function docsEditable() {
+    return true;
+  }
 }
 
 ?>

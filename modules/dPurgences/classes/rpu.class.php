@@ -457,5 +457,9 @@ class CRPU extends CMbObject {
 	    $template->addProperty("RPU - Destination"          , $this->getFormattedValue("destination"));
 		}
   }
+  
+  function docsEditable() {
+    return true;
+  }
 }
 ?>

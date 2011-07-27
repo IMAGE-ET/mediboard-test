@@ -89,9 +89,9 @@ class CMbObject extends CStoredObject {
       $document->object_class = $this->_class_name;
       $document->object_id    = $this->_id;
       $this->_ref_documents = $document->loadMatchingList("nom");
-      //$is_editable = $this->docsEditable();
+      $is_editable = $this->docsEditable();
       foreach($this->_ref_documents as $_doc) {
-        //$_doc->_is_editable = $is_editable;
+        $_doc->_is_editable = $is_editable;
         if (!$_doc->canRead()){
            unset($this->_ref_documents[$_doc->_id]);
         }
@@ -487,33 +487,7 @@ class CMbObject extends CStoredObject {
   function docsEditable() {
     // Un admin doit toujours pouvoir modifier un document
     global $can;
-    if ($can->admin) {
-      return true;
-    }
-
-    switch(get_class($this)) {
-      case "CConsultation":
-        $fix_edit_doc = CAppUI::conf("dPcabinet CConsultation fix_doc_edit");
-        if ($fix_edit_doc === 0) {
-           return true;
-        }
-        if ($this->annule) {
-          return false;
-        }
-        /*if ($this->chrono < 48) {
-          return true;
-        }*/
-        $this->loadRefPlageConsult();
-        return (mbDateTime("+ 24 HOUR", "{$this->_date} {$this->heure}") > mbDateTime());
-
-      case "COperation":
-        $fix_edit_doc = CAppUI::conf("dPplanningOp COperation fix_doc_edit");
-        if ($fix_edit_doc === 0) {
-          return true;
-        }
-        $this->loadRefSejour();
-        return ($this->_ref_sejour->entree_reelle === null);
-    }
+    return $can->admin;
   }
     
   /**

@@ -1353,6 +1353,24 @@ TESTS A EFFECTUER
     }
     $this->sejour_id = $sejour->_id; 
   }
+  
+  function docsEditable() {
+
+    if (parent::docsEditable()) {
+      return true;
+    }
+   
+    $fix_edit_doc = CAppUI::conf("dPcabinet CConsultation fix_doc_edit");
+    if (!$fix_edit_doc) {
+       return true;
+    }
+    if ($this->annule) {
+      return false;
+    }
+    $this->loadRefPlageConsult();
+
+    return (mbDateTime("+ 24 HOUR", "{$this->_date} {$this->heure}") > mbDateTime());
+  }
 }
 
 ?>

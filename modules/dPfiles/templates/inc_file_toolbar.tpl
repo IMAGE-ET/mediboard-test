@@ -6,7 +6,7 @@
 
 {{if $canFile->edit && !$accordDossier}}
 
- {{if $_doc_item->_class_name=="CCompteRendu"}}
+ {{if $_doc_item->_class_name=="CCompteRendu" && $_doc_item->_is_editable}}
  	<!-- Modification -->
    <button class="edit {{$notext}}" type="button" onclick="Document.edit({{$elementId}})">
      {{tr}}Edit{{/tr}}

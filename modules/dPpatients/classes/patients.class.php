@@ -1750,6 +1750,10 @@ class CPatient extends CMbObject {
                  "SEXE"           => $this->sexe, "CIVILITE" => $this->civilite,
                  "CIVILITE LONGUE" => $this->_civilite_long, "ACCORD GENRE" => $this->sexe == "f" ? "e" : "");
   }
+  
+  function docsEditable() {
+    return true;
+  }
 }
 
 ?>
