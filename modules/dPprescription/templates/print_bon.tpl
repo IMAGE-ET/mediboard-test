@@ -73,6 +73,20 @@ Main.add( function(){
 	}
 }
 
+@media print {
+  div.header {
+    font-size: 15px;
+  }
+  th.title {
+    font-size: 17px;
+  }
+  th.text {
+    font-size: 15px;
+  }
+  td {
+    font-size: 15px;
+  }
+}
 </style>
 
 <form name="filtreBons" method="get" class="not-printable">
@@ -217,11 +231,11 @@ Main.add( function(){
 				      </td>
 			      </tr>
             {{if $line->commentaire}}
-            <tr>
-              <td colspan="2" style="text-indent: 1em">
-                {{$line->commentaire}}
-              </td>
-            </tr>
+              <tr>
+                <td colspan="2" class="text" style="text-indent: 1em">
+                  {{$line->commentaire}}
+                </td>
+              </tr>
             {{/if}}
 						
             {{assign var=line_guid value=$line->_guid}}
