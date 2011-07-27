@@ -328,6 +328,12 @@ table.tbl td.sortie.deces {
   background-color: #faa;
 }
 
+table.tbl tr td.isolement,
+table.tbl tr:hover td.isolement {
+  background-color: #afa;
+}
+
+
 /**
  * Layout tables
  */
