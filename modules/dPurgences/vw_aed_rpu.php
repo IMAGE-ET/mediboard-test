@@ -101,6 +101,5 @@ $smarty->assign("praticien"           , $praticien);
 $smarty->assign("orumip_active"       , $orumip_active);
 $smarty->assign("isPrescriptionInstalled", CModule::getActive("dPprescription"));
 $smarty->assign("isImedsInstalled"    , (CModule::getActive("dPImeds") && CImeds::getTagCIDC(CGroups::loadCurrent())));
-$smarty->assign("session_name"        , CApp::getSessionName());
 $smarty->display("vw_aed_rpu.tpl");
 ?>

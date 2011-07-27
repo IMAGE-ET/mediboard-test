@@ -227,14 +227,5 @@ class CApp {
     
     return $classes;
   }
-  
-  /**
-   * Return the name of the session
-   * @return string The name of the session
-   */
-  static function getSessionName() {
-    global $rootName;
-    return preg_replace("/[^a-z0-9]/i", "", $rootName); 
-  }
 }
 ?>

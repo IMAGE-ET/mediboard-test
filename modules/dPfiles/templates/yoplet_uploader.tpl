@@ -16,7 +16,7 @@
     <param name="action" value="" />
     <param name="url" value="{{$base_url}}/index.php?m=dPfiles&a=ajax_yoplet_upload" />
     <param name="content" value="a" />
-    <param name="cookies" value="{{$session_name}}" />
+    <param name="cookies" value="{{$app->session_name}}" />
   </applet>
   
   {{if $app->user_prefs.debug_yoplet}}

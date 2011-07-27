@@ -109,15 +109,12 @@ $consult->_ref_chir =& $userSel;
 // Chargement de la consultation
 if ($consult->_id) {
   $consult->loadRefs();  
-  $consult->loadAides($userSel->user_id);
   
   // Chargment de la consultation d'anesthésie
-  $consultAnesth->loadAides($userSel->user_id);
   if ($consultAnesth->_id) {
     $consultAnesth->loadRefs();
     if ($consultAnesth->_ref_operation->_id || $consultAnesth->_ref_sejour->_id) {
     	$consultAnesth->_ref_operation->loadExtCodesCCAM();
-      $consultAnesth->_ref_operation->loadAides($userSel->user_id);
       $consultAnesth->_ref_operation->loadRefs();
       $consultAnesth->_ref_sejour->loadRefPraticien();
     }
@@ -164,18 +161,10 @@ if ($consult->_id){
   $consult->canDo();
 }
 
-// Chargement des aides à la saisie
 $antecedent = new CAntecedent();
-//$antecedent->loadAides($userSel->user_id);
-
 $traitement = new CTraitement();
-$traitement->loadAides($userSel->user_id);
-
 $techniquesComp = new CTechniqueComp();
-$techniquesComp->loadAides($userSel->user_id);
-
 $examComp = new CExamComp();
-$examComp->loadAides($userSel->user_id);
 
 $consult->loadExtCodesCCAM();
 $consult->getAssociationCodesActes();
@@ -215,7 +204,6 @@ if ($consult->_ref_sejour && $consult->_ref_sejour->_id){
   if ($consult->_ref_chir->_is_urgentiste) {
     // Mise en session du rpu_id
     $_SESSION["dPurgences"]["rpu_id"] = $consult->_ref_sejour->_ref_rpu->_id;
-    $consult->_ref_sejour->_ref_rpu->loadAides($user->_id);
     $consult->_ref_sejour->_ref_rpu->loadRefSejourMutation();
   
     // Chargement des etablissements externes
@@ -291,7 +279,6 @@ $smarty->assign("examComp"       , $examComp);
 $smarty->assign("_is_anesth"     , $consult->_is_anesth);
 $smarty->assign("current_m"      , $current_m);
 $smarty->assign("list_etat_dents", $list_etat_dents);
-$smarty->assign("session_name"   , CApp::getSessionName());
 $smarty->assign("line", new CPrescriptionLineMedicament());
 $smarty->assign("now", $now);
 
