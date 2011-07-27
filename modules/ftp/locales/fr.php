@@ -97,6 +97,7 @@ $locales['CSenderFTP-user_id-court'] = 'Utilisateur associé';
 $locales['CSenderFTP-user_id-desc'] = 'Utilisateur associé à l\'expéditeur';
 $locales['CSenderFTP-utilities'] = 'Utilitaires expéditeur FTP';
 $locales['CSenderFTP-utilities_dispatch'] = 'Récupérer et traiter les fichiers';
+$locales['CSenderFTP-utilities_read-files-senders'] = 'Récupérer fichiers';
 $locales['CSenderFTP.all'] = 'Tous les expéditeurs FTP';
 $locales['CSenderFTP.none'] = 'Aucun expéditeur FTP';
 $locales['CSenderFTP.one'] = 'Expéditeur FTP';
@@ -211,5 +212,7 @@ $locales['config-ftp-pasv-0'] = 'Actif';
 $locales['config-ftp-pasv-1'] = 'Passif';
 $locales['config-ftp-port'] = 'Port';
 $locales['config-ftp-timeout'] = 'Timeout';
+$locales['config-read-files-senders'] = 'Lire les fichiers des expéditeurs';
+$locales['mod-ftp-tab-configure'] = 'Configurer';
 $locales['mod-ftp-tab-vw_idx_exchange_ftp'] = 'Echanges FTP';
 ?>

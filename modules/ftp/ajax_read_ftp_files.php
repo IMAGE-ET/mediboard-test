@@ -12,42 +12,26 @@
 
 CCanDo::checkRead();
 
-$exchange_source_name = CValue::get("exchange_source_name");
+$sender_ftp_id = CValue::get("sender_ftp_id");
 
-$exchanges_source = array();
-if ($exchange_source_name) {
-  $exchanges_source[] = CExchangeSource::get($exchange_source_name);
+$sender_ftp  = new CSenderFTP();
+$senders_ftp = array();
+if ($sender_ftp_id) {
+  $sender_ftp->load($sender_ftp_id);
+  $sender_ftp->loadRefsExchangesSources();
+  $senders_ftp[] = $sender_ftp->actif ? $sender_ftp : array();
 } else {
   // Chargement de la liste des expéditeurs d'intégration
-  
+  $where = array();
+  $where["actif"] = " = '1'";
+  $senders_ftp = $sender_ftp->loadList($where);
+  foreach ($senders_ftp as $_sender_ftp) {
+    $_sender_ftp->loadRefsExchangesSources();
+  }
 }
 
-foreach ($exchanges_source as $_exchange_source) {
-  $extension = $_exchange_source->fileextension;
-  
-  $list = array();
-  
-  $ftp = new CFTP();
-  $ftp->init($_exchange_source);
-  try {
-    $ftp->connect();
-    $list = $ftp->getListFiles("./");
-  } catch (CMbException $e) {
-    $e->stepAjax();
-  }
-  
-  if (empty($list)) {
-    CAppUI::stepAjax("Le répertoire ne contient aucun fichier", UI_MSG_ERROR);
-  }
-  
-  foreach($list as $filepath) {
-    if (substr($filepath, -(strlen($extension))) == $extension) {
-      $filename = basename($filepath);
-      
-    } else {
-      
-    }
-  }
+foreach ($senders_ftp as $_sender_ftp) {
+  echo CApp::fetch("ftp", "ajax_dispatch_files", array("sender_ftp_guid" => $_sender_ftp->_guid));
 }
 
 

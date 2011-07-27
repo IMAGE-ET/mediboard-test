@@ -17,4 +17,9 @@ SenderFTP = {
 	url.addParam("actor_guid", actor_guid);
 	url.requestUpdate("CSenderFTP-utilities_dispatch");
   },
+  
+  readFilesSenders  : function() {
+    var url = new Url("ftp", "ajax_read_ftp_files");
+	url.requestUpdate("CSenderFTP-utilities_read-files-senders");
+  },
 };

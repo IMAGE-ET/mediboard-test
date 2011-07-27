@@ -55,6 +55,7 @@ class CExchangeDataFormat extends CMbMetaObject {
   var $_messages_supported_class = array();
   var $_family_message           = null;
   var $_configs_format           = null;
+  var $_delayed                  = null;
   
   // Forward references
   var $_ref_group      = null;
@@ -121,6 +122,10 @@ class CExchangeDataFormat extends CMbMetaObject {
      
     $this->_self_sender   = $this->sender_id   === null;
     $this->_self_receiver = $this->receiver_id === null;
+    
+    if ($this->date_echange > mbDateTime("+ ".CAppUI::conf("eai exchange_format_delayed")." minutes", $this->date_production)) {
+      $this->_delayed = mbMinutesRelative($this->date_production, $this->date_echange);
+    }
   }
   
   /**

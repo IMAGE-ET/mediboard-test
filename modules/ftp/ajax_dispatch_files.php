@@ -12,33 +12,49 @@
 
 CCanDo::checkRead();
 
-$actor_guid = CValue::get("actor_guid");
+$sender_ftp_guid = CValue::get("sender_ftp_guid");
 
-$actor = CMbObject::loadFromGuid($actor_guid);
-$actor->loadRefGroup();
-$actor->loadRefsExchangesSources();
+$sender_ftp = CMbObject::loadFromGuid($sender_ftp_guid);
+$sender_ftp->loadRefGroup();
+$sender_ftp->loadRefsExchangesSources();
 
-$exchange_source = reset($actor->_ref_exchanges_sources);
+$source_ftp = reset($sender_ftp->_ref_exchanges_sources);
 
-$all_files = array();
+$files = array();
 try {
-  $all_files = $exchange_source->receive();
+  $files = $source_ftp->receive();
 } catch (CMbException $e) {
   $e->stepAjax();
 }
 
-$extension = $exchange_source->fileextension;
-foreach($all_files as $_file) {
-  $filename = basename($_file);
-  $message = $exchange_source->getData($_file);
+$fileextension           = $source_ftp->fileextension;
+$fileextension_write_end = $source_ftp->fileextension_write_end;
+foreach ($files as $_filepath) {
+  $path_info = pathinfo($_filepath);
   
-  // Dispatch EAI 
-  if (!CEAIDispatcher::dispatch($message, $actor)) {
-    // création d'un acq en fichier
-    //utf8_encode(CEAIDispatcher::$xml_error);
+  // Cas où l'extension voulue par la source FTP est différente du fichier
+  if ($fileextension && ($path_info["extension"] != $fileextension)) {
+    continue;
+  }
+  
+  $_filepath_no_ext = $path_info["dirname"]."/".$path_info["filename"];
+    // Cas où le suffix de l'acq OK est présent mais que je n'ai pas de fichier 
+  // d'acquittement dans le dossier
+  if ($fileextension_write_end && 
+      (($path_info["extension"] == $fileextension_write_end) || 
+      !preg_grep("@^$_filepath_no_ext.$fileextension_write_end$@", $files))) {
+    continue;
   }
 
-  //$exchange_source->delFile($_file);
+  $message  = $source_ftp->getData($_filepath);  
+  if (!$message) {
+    continue;
+  }
+  
+  // Dispatch EAI 
+  if (!CEAIDispatcher::dispatch($message, $sender_ftp)) {
+    CEAIDispatcher::createFileACQ($message, $sender_ftp);
+  }
 }
 
 ?>

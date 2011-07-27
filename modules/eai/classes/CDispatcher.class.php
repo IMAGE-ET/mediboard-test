@@ -99,6 +99,10 @@ class CEAIDispatcher {
     
     return false;
   }
+  
+  static function createFileACQ($message, $sender_ftp) {
+    // création d'un acquittement en fichier (cas FTP)
+  }
 }
 
 ?>

@@ -15,6 +15,11 @@
    {{else}}
      <img src="images/icons/next.png" alt="&gt;" />
    {{/if}}
+   {{if $object->_delayed}}
+     <label title='{{$object->_delayed}} min' style="font-weight:bold">
+       <img src="images/icons/hourglass.png" alt="Retard" />
+     </label>
+   {{/if}}
   </td>
   <td class="narrow">
     <form name="del{{$object->_guid}}" action="" method="post">
