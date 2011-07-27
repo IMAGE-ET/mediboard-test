@@ -851,6 +851,7 @@ $locales['CPatient.rang_naissance.3'] = '3';
 $locales['CPatient.rang_naissance.4'] = '4';
 $locales['CPatient.rang_naissance.5'] = '5';
 $locales['CPatient.rang_naissance.6'] = '6';
+$locales['CPatient.save_for_files'] = 'Veuillez créer la fiche patient avant de pouvoir ajouter ou supprimer ses documents.';
 $locales['CPatient.select'] = 'Choisir un patient';
 $locales['CPatient.sexe.'] = 'Indéterminé';
 $locales['CPatient.sexe.f'] = 'Féminin';

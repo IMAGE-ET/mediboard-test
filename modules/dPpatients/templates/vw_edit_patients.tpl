@@ -1,8 +1,15 @@
 <!-- $Id$ -->
 
-{{mb_script module="dPpatients" script="autocomplete"}}
-{{mb_script module="dPpatients" script="siblings_checker"}}
-{{mb_script module="dPpatients" script="patient"}}
+{{mb_script module="dPpatients"    script="autocomplete"}}
+{{mb_script module="dPpatients"    script="siblings_checker"}}
+{{mb_script module="dPpatients"    script="patient"}}
+{{mb_script module="dPfiles"       script="files"}}
+{{mb_script module="dPcompteRendu" script="document"}}
+{{mb_script module="dPcabinet"     script="file"}}
+{{mb_script module="dPcompteRendu" script="modele_selector"}}
+{{if $patient->_id}}
+  {{mb_include module="dPfiles" template="yoplet_uploader" object=$patient}}
+{{/if}}
 
 {{if $app->user_prefs.VitaleVision}}
   {{mb_include template=inc_vitalevision}}
@@ -92,6 +99,17 @@ function confirmCreation(oForm){
   return false;
 }
 
+function reloadListFileEditPatient(sAction){
+  if(sAction == "delete" && file_preview == file_deleted){
+    ZoomAjax("","","","", 0);
+  }
+  var url = new Url("dPfiles", "httpreq_vw_listfiles");
+  url.addParam("selKey", document.FrmClass.selKey.value);
+  url.addParam("selClass", document.FrmClass.selClass.value);  
+  url.addParam("typeVue", document.FrmClass.typeVue.value);
+  url.requestUpdate('listView');
+}
+
 var tabs;
 Main.add(function () {
   InseeFields.initCPVille("editFrm", "cp", "ville","pays");
@@ -107,7 +125,15 @@ Main.add(function () {
   initPaysField("editFrm", "assure_pays", "assure_tel");
 
   tabs = new Control.Tabs('tab-patient');
-  
+
+  {{if $patient->_id}}
+    setObject( {
+      objClass: '{{$patient->_class_name}}', 
+      keywords: '', 
+      id: '{{$patient->_id}}',
+      view: '{{$patient->_view|smarty:nodefaults|JSAttribute}}' });
+  {{/if}}
+
   {{if $useVitale && $app->user_prefs.VitaleVision}}
   lireVitale.delay(1); // 1 second
   {{/if}}
@@ -120,6 +146,15 @@ Main.add(function () {
   <input type="hidden" name="file_id" value="" />
   <input type="hidden" name="del" value="1" />
   <input type="hidden" name="dosql" value="do_file_aed" />
+</form>
+
+<form name="FrmClass" action="?m={{$m}}" method="get" onsubmit="reloadListFileEditPatient('load'); return false;">
+  <input type="hidden" name="selKey"   value="" />
+  <input type="hidden" name="selClass" value="" />
+  <input type="hidden" name="selView"  value="" />
+  <input type="hidden" name="keywords" value="" />
+  <input type="hidden" name="file_id"  value="" />
+  <input type="hidden" name="typeVue"  value="1" />
 </form>
 
 {{if $patient->_id}}
@@ -204,6 +239,8 @@ Main.add(function () {
         <li><a href="#correspondance">Correspondance</a></li>
         <li><a href="#assure">Assuré social</a></li>
         <li><a href="#beneficiaire">Bénéficiaire de soins</a></li>
+        <li><a href="#listView" {{if $patient->_nb_files_docs == 0}}class="empty"{{/if}}
+          {{if $patient->_id}}onmousedown="reloadListFileEditPatient('load')"{{/if}}>Documents ({{$patient->_nb_files_docs}})</a></li>
       </ul>
       <hr class="control_tabs" />
       
@@ -243,6 +280,9 @@ Main.add(function () {
       
       <div id="medecins" style="display: none;">
         {{mb_include template=inc_acc/inc_acc_medecins}}
+      </div>
+      <div id="listView" style="display: none;">
+        <div class="big-info">{{tr}}CPatient.save_for_files{{/tr}}</div>
       </div>
     </td>
   </tr>

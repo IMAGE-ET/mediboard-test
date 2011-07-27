@@ -7,6 +7,11 @@ reloadCallback = function() {
   if (window.parent.File && window.parent.File.refresh) {
 	  window.parent.File.refresh("{{$object->_id}}", "{{$object->_class_name}}");
   }
+
+  if (window.parent.reloadListFileEditPatient) {
+    window.parent.reloadListFileEditPatient("load");
+  }
+  
   // Redirection du message de l'iframe dans le systemMsg
   var systemMsg = $("systemMsg").update();
   systemMsg.insert(window.parent.$("upload-{{$object->_guid}}").contentDocument.documentElement.getElementsByClassName("info")[0].cloneNode(true));

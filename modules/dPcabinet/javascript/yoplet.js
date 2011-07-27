@@ -189,6 +189,11 @@ if (!window.File.applet) {
       if (window.parent.reloadAfterUploadFile) {
         window.parent.reloadAfterUploadFile();
       }
+      
+      // Por le refresh dans l'édition du dossier patient
+      if (window.reloadListFileEditPatient) {
+        reloadListFileEditPatient("load");
+      }
       File.applet.watchDirectory();
     },
     addfile_callback: function(id, args) {
