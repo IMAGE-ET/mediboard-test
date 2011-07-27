@@ -16,7 +16,7 @@ $dPconfig["dPpatients"] = array (
   
   "CAntecedent" => array (
     "types"     => "med|alle|trans|obst|chir|fam|anesth|gyn",
-    "appareils" => "cardiovasculaire|digestif|endocrinien|neuro_psychiatrique|pulmonaire|uro_nephrologique"
+    "appareils" => "cardiovasculaire|digestif|endocrinien|neuro_psychiatrique|pulmonaire|uro_nephrologique",
   ),
   
   "CTraitement" => array (
@@ -28,16 +28,17 @@ $dPconfig["dPpatients"] = array (
   ),
   
   "CDossierMedical" => array (
-    "diags_static_cim" => "1"
+    "diags_static_cim" => "1",
   ),
   
   "CConstantesMedicales" => array(
     "important_constantes" => "poids|pouls|ta_gauche|temperature",
-    "unite_ta" => "cmHg"
+    "unite_ta" => "cmHg",
+    "diuere_24_reset_hour" => "6",
   ),
   
   "CMedecin" => array(
-   "medecin_strict" => "0"
+   "medecin_strict" => "0",
   ),
 );
 

@@ -21,6 +21,10 @@
     {{mb_include module=system template=inc_config_enum var=unite_ta values=cmHg|mmHg}}
   </tr>
   <tr>
+  	{{assign var=hours value=0|range:23}}
+    {{mb_include module=system template=inc_config_enum var=diuere_24_reset_hour values="|"|implode:$hours skip_locales=true}}
+  </tr>
+  <tr>
     <th>
       <label for="{{$field}}" title="{{tr}}{{$locale}}-desc{{/tr}}">
         {{tr}}{{$locale}}{{/tr}}

@@ -203,12 +203,18 @@ foreach ($constants_to_draw as $name => $params) {
   }
 }
 
+$cumuls_day = array();
+$diuere_24_reset_hour = CAppUI::conf("dPpatients CConstantesMedicales diuere_24_reset_hour");
+
 // Si le séjour a des constantes médicales
 if ($list_constantes) {
   foreach ($list_constantes as $cst) {
   	$comment = utf8_encode($cst->comment);
     $dates[] = mbTransformTime($cst->datetime, null, '%d/%m/%y');
     $hours[] = mbTransformTime($cst->datetime, null, '%Hh%M');
+		
+    $day_24h = mbTransformTime("-$diuere_24_reset_hour hours", $cst->datetime, '%d/%m/%y');
+		
     $comments[] = $comment;
     $const_ids[] = $cst->_id;
     $cst->loadLogs();
@@ -240,7 +246,22 @@ if ($list_constantes) {
       $i = count($d["series"][0]["data"]);
       foreach($fields as $n => $_field) {
         //if ($cst->$_field !== null && $cst->$_field !== "") // We have to show empty points too!
-          $d["series"][$n]["data"][] = array($i, getValue($cst->$_field), $user_view, $comment);
+				$value = getValue($cst->$_field);
+        $d["series"][$n]["data"][] = array(
+				  $i, 
+					$value, 
+					$user_view, 
+					$comment,
+					$params['unit'],
+				);
+				
+				if ($name == "diurese") {
+					if (!isset($cumuls_day[$name][$day_24h])) {
+						$cumuls_day[$name][$day_24h] = array("n" => 0, "value" => 0);
+					}
+					$cumuls_day[$name][$day_24h]["value"] += $value;
+          $cumuls_day[$name][$day_24h]["n"]++;
+				}
       }
      
       $graphs[] = "constantes-medicales-$name";
@@ -250,6 +271,42 @@ if ($list_constantes) {
 
 // Pour les tensions artérielles, changer les unités suivant la config
 $unite_ta = CAppUI::conf("dPpatients CConstantesMedicales unite_ta");
+
+foreach($cumuls_day as $name => $days) {
+  $_data = &$data[$name];
+  
+  $offset = 0;
+  foreach($days as $day => $values) {
+    $_data["series"][] = array(
+      "data" => array(array(
+			  $offset-0.5, 
+				$values["value"], 
+				utf8_encode(CAppUI::tr("CConstantesMedicales-$name-desc")), 
+				null,
+				CValue::read(CConstantesMedicales::$list_constantes[$name], "unit"),
+			)),
+			"cumul" => $day,
+      "lines" => array("show" => false),
+      "points" => array("show" => false),
+      "bars" => array(
+        "show" => true,
+        "barWidth" => $values["n"],
+        "centered" => false,
+        "lineWidth" => 1,
+      ),
+      "color" => "#4DA74D",
+      "mouse" => array(
+			  "relative" => false,
+				"position" => "nw",
+			),
+    );
+    
+    $offset += $values["n"];
+  }
+	
+	$first = array_shift($_data["series"]);
+  array_push($_data["series"], $first);
+}
 
 foreach($data as $name => &$_data) {
   $params = CConstantesMedicales::$list_constantes[$name];
@@ -267,11 +324,18 @@ foreach($data as $name => &$_data) {
     $params['unit'] = $unite_ta;
   }
 	
+	$all_y_values = CMbArray::pluck($_data["series"], "data");
+	$y_values = array();
+	
+	foreach($all_y_values as $_values) {
+		$y_values = array_merge($y_values, $_values);
+	}
+	
   $_data["options"] = array(
     "title" => utf8_encode(CAppUI::tr("CConstantesMedicales-$name-desc").($params['unit'] ? " ({$params['unit']})" : "")),
     "yaxis" => array(
-      "min" => getMin($params["min"], $_data["series"][0]["data"]), // min
-      "max" => getMax($params["max"], $_data["series"][0]["data"]), // max
+      "min" => getMin($params["min"], $y_values), // min
+      "max" => getMax($params["max"], $y_values) * 1.1, // max
     )
   );
   
@@ -279,6 +343,8 @@ foreach($data as $name => &$_data) {
     $_data["options"]["colors"] = $params["colors"];
   }
 }
+
+//mbTrace($data);
 
 // Création du template
 $smarty = new CSmartyDP();

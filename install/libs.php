@@ -312,12 +312,12 @@ CLibrary::$all[$library->name] = $library;
 $library = new CLibrary;
 $library->name = "Flotr plotting library";
 $library->url = "http://solutoire.com/flotr/";
-$library->fileName = "flotr.r171.tar.gz";
+$library->fileName = "flotr.r301.tar.gz";
 $library->description = "Création de graphiques en JS";
 $library->sourceDir = "flotr";
 $library->targetDir = "flotr";
 $library->versionFile = "flotr.js";
-$library->versionString = '2 + this.canvasHeight';
+$library->versionString = 'draw:function(a,b,c,d){d=d||';
 
 CLibrary::$all[$library->name] = $library;
 
@@ -334,7 +334,7 @@ $library->versionString = "define('GESHI_VERSION', '1.0.8.3.1')";
 CLibrary::$all[$library->name] = $library;
 
 $library = new CLibrary;
-$library->name = "domPDF";
+$library->name = "dompdf";
 $library->url = "http://code.google.com/p/dompdf";
 $library->fileName = "dompdf-19-07-11.tar.gz";
 $library->description ="HTML to PDF Converter";

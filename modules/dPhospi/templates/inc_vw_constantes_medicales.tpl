@@ -80,11 +80,15 @@ tickFormatterSpreadsheet = function (n) {
 trackFormatter = function (obj) {
   var n = parseInt(obj.x);
   var data = obj.series.data[obj.index];
-  var str = dates[n] + ' ' + hours[n] + ' : ' + 
-         data[1] + '<br />' + 
-         data[2];
+	var unit = (data[4] || "");
+	
+	if ("cumul" in obj.series) {
+	  return obj.series.cumul + "<br /><strong>" + data[1] + " " + unit + "</strong>";
+	}
+	
+  var str = dates[n] + ' ' + hours[n] + "<br /><strong>" + data[1] + " " + unit + "</strong><br />" + data[2];
          
-  if (data[3])  {
+  if (data[3]) {
     str += '<hr />' + data[3];
   }
   

@@ -165,6 +165,11 @@ class CConstantesMedicales extends CMbObject {
       "unit" => "ml", 
       "min" => 0, "max" => 2000
     ),
+    "_diurese_24h"      => array(
+      "unit" => "ml",
+      "min" => 0, "max" => 2000,
+			"cumul" => ""
+    ),
     "diurese_miction"   => array(
       "unit" => "ml",
       "min" => 0, "max" => 2000
@@ -193,7 +198,7 @@ class CConstantesMedicales extends CMbObject {
     "perimetre_thoracique"=>array(
       "unit" => "cm",
       "min" => 20, "max" => 150
-    )
+    ),
   );
   
   function __construct() {
@@ -280,6 +285,7 @@ class CConstantesMedicales extends CMbObject {
     $specs['redon_2']                = 'float pos min|0 max|1000';
     $specs['redon_3']                = 'float pos min|0 max|1000';
     $specs['diurese']                = 'float min|0';
+    $specs['_diurese_24h']           = 'float min|0';
     $specs['diurese_miction']        = 'float min|0';
     $specs['injection']              = 'str maxLength|10';
     $specs["PVC"]                    = "float min|0";
@@ -557,6 +563,9 @@ class CConstantesMedicales extends CMbObject {
   static function buildGrid($list, $full = true) {
     $grid = array();
     $selection = array_keys(CConstantesMedicales::$list_constantes);
+		$cumuls_day = array();
+		
+    $diuere_24_reset_hour = CAppUI::conf("dPpatients CConstantesMedicales diuere_24_reset_hour");
     
     if (!$full) {
       $conf_constantes = explode("|", CAppUI::conf("dPpatients CConstantesMedicales important_constantes"));
@@ -572,22 +581,48 @@ class CConstantesMedicales extends CMbObject {
           "values"  => array(),
         );
       }
+			
+      $day_24h = mbTransformTime("-$diuere_24_reset_hour hours", $_constante_medicale->datetime, '%y-%m-%d');
       
       foreach (CConstantesMedicales::$list_constantes as $_name => $_params) {
         if (in_array($_name, $selection) || $_constante_medicale->$_name != '') {
-          $spec = self::$list_constantes[$_name];
-          $value = $_constante_medicale->$_name;
-          
-          if (isset($spec["formfields"])) {
-            $arr = array();
-            foreach($spec["formfields"] as $ff) {
-              if ($_constante_medicale->$ff != "") {
-                $arr[] = $_constante_medicale->$ff;
-              }
+        	$value = null;
+					
+        	if ($_name == "_diurese_24h") {
+        		$span = ($_constante_medicale->comment ? 1 : 0);
+						
+            if (!isset($cumuls_day[$_name][$day_24h])) {
+              $cumuls_day[$_name][$day_24h] = array(
+							  "datetime" => $_constante_medicale->datetime,
+                "value" => 0,
+								"span"  => 0, 
+                "span_com"  => $span, // when comments add lines
+                "pair"  => (@count($cumuls_day[$_name]) % 2 ? "odd" : "even"),
+                "day"   => mbTransformTime($day_24h, null, "%a"),
+							);
             }
-            $value = implode(" / ", $arr);
+            
+            $cumuls_day[$_name][$day_24h]["value"] += $_constante_medicale->diurese;
+            $cumuls_day[$_name][$day_24h]["span"]++;
+            $cumuls_day[$_name][$day_24h]["span_com"] += ($span + 1);
+						
+						$value = "__empty__";
           }
-          
+          else {
+	          $spec = self::$list_constantes[$_name];
+	          $value = $_constante_medicale->$_name;
+	          
+	          if (isset($spec["formfields"])) {
+	            $arr = array();
+	            foreach($spec["formfields"] as $ff) {
+	              if ($_constante_medicale->$ff != "") {
+	                $arr[] = $_constante_medicale->$ff;
+	              }
+	            }
+	            $value = implode(" / ", $arr);
+	          }
+					}
+					
           $grid[$_constante_medicale->datetime]["values"][$_name] = $value;
           
           if (!in_array($_name, $names)) {
@@ -596,6 +631,12 @@ class CConstantesMedicales extends CMbObject {
         }
       }
     }
+		
+		foreach($cumuls_day as $_name => $_days) {
+			foreach($_days as $_day => $_values) {
+				$grid[$_values["datetime"]]["values"][$_name] = $_values;
+			}
+		}
     
     return array(
       $names, "names" => $names, 
