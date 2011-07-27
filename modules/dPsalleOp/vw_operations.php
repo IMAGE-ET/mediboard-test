@@ -198,7 +198,7 @@ $group->loadConfigValues();
 
 $listValidateurs = CPersonnel::loadListPers(array("op", "op_panseuse"), true, true);
 
-$smarty->assign("anesth_perop"           , new CAnesthPerop()s);
+$smarty->assign("anesth_perop"           , new CAnesthPerop());
 $smarty->assign("unites"                 , $unites);
 $smarty->assign("acte_ngap"              , $acte_ngap);
 $smarty->assign("op"                     , $op);
