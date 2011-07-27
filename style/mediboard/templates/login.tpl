@@ -12,9 +12,7 @@
     </tr>
     <tr>
       <td class="logo" colspan="10">
-        <a href="{{$conf.system.website_url}}">
-          {{mb_include style="mediboard" template="logo" alt="MediBoard logo"}}
-        </a>
+        {{mb_include style="mediboard" template="logo" alt="MediBoard logo"}}
         <p>
           Plateforme Open Source pour les Etablissements de Santé<br/>
           Version {{$version.string}}

@@ -15,7 +15,17 @@
   {{assign var=logo value=$logo_custom}}
 {{/if}}
 {{assign var=homepage value="-"|explode:$app->user_prefs.DEFMODULE}}
-<a href="?m={{$homepage.0}}{{if $homepage|@count == 2}}&amp;tab={{$homepage.1}}{{/if}}" title="{{tr}}Home{{/tr}}">
+
+{{if $app->user_id}}
+  {{assign var=href value="?m=`$homepage.0`"}}
+	{{if $homepage|@count == 2}}
+	  {{assign var=href value="`$href`&tab=`$homepage.1`"}}
+	{{/if}}
+{{else}}
+  {{assign var=href value=$conf.system.website_url}}
+{{/if}}
+
+<a href="{{$href}}" title="{{tr}}Home{{/tr}}">
 <img src="{{$logo}}" 
      {{if @$width}}width="{{$width}}"{{/if}} 
      {{if @$height}}height="{{$height}}"{{/if}}
