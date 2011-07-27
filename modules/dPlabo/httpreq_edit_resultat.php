@@ -15,7 +15,7 @@ $typeListe = CValue::getOrSession("typeListe");
 // Chargement de l'item choisi
 $prescriptionItem = new CPrescriptionLaboExamen;
 $prescriptionItem->load(CValue::getOrSession("prescription_labo_examen_id"));
-$prescriptionItem->loadAides($user->_id);
+
 if ($prescriptionItem->_id) {
   $prescriptionItem->date = mbDate();
 }

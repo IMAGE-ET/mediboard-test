@@ -152,8 +152,6 @@ $acte_ngap->quantite = 1;
 $acte_ngap->coefficient = 1;
 $acte_ngap->loadListExecutants();
 
-$selOp->loadAides($anesth_id);
-
 // Vérification de la check list journalière
 $daily_check_list = CDailyCheckList::getList($salle, $date);
 $daily_check_list->loadItemTypes();
@@ -185,9 +183,6 @@ foreach($operation_check_list->_specs["type"]->_list as $type) {
   $operation_check_item_categories[$type] = $cat->loadMatchingList("title");
 }
 
-$anesth_perop = new CAnesthPerop();
-$anesth_perop->loadAides($user->_id);
-
 $anesth = new CMediusers();
 $anesth->load($anesth_id);
 
@@ -203,7 +198,7 @@ $group->loadConfigValues();
 
 $listValidateurs = CPersonnel::loadListPers(array("op", "op_panseuse"), true, true);
 
-$smarty->assign("anesth_perop"           , $anesth_perop);
+$smarty->assign("anesth_perop"           , new CAnesthPerop()s);
 $smarty->assign("unites"                 , $unites);
 $smarty->assign("acte_ngap"              , $acte_ngap);
 $smarty->assign("op"                     , $op);

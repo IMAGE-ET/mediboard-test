@@ -44,7 +44,6 @@ if ($selConsult) {
   
   $consult->loadRefsFwd();
   $userSel->load($consult->_ref_plageconsult->chir_id);
-  $consult->loadAides($userSel->user_id);
 }
 
 // Création du template

@@ -78,14 +78,19 @@
   <tr>
     <th>
       {{mb_label object=$prescriptionItem field="commentaire"}}
-      <br />
-      <select name="_helpers_commentaire" size="1" onchange="pasteHelperContent(this)" class="helper">
-        <option value="">&mdash; Aide</option>
-        {{html_options options=$prescriptionItem->_aides.commentaire.no_enum}}
-      </select>
-      <button class="new notext" title="Ajouter une aide à la saisie" type="button" onclick="addHelp('CPrescriptionLaboExamen', this.form.commentaire, null, null, null, null, {{$user_id}})">{{tr}}New{{/tr}}</button>            
     </th>
-    <td>{{mb_field object=$prescriptionItem field="commentaire"}}</td>
+    <td>
+      {{mb_field object=$prescriptionItem field="commentaire"}}
+      <script type="text/javascript">
+        Main.add(function() {
+          new AideSaisie.AutoComplete(getForm("editPrescriptionItem").elements.commentaire, {
+            objectClass: "{{$prescriptionItem->_class_name}}",
+            timestamp: "{{$conf.dPcompteRendu.CCompteRendu.timestamp}}",
+            validateOnBlur: 0
+          });
+        });
+      </script>
+    </td>
   </tr>
   <tr>
     <td colspan="2" class="button">

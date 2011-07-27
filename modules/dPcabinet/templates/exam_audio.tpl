@@ -295,12 +295,16 @@ if(window.opener && window.opener.ExamDialog) {
       </tr>
       <tr>
         <td style="text-align:left;">
-          <select name="_helpers_remarques" size="1" onchange="pasteHelperContent(this);" class="not-printable helper">
-            <option value="">&mdash; Aide</option>
-            {{html_options options=$exam_audio->_aides.remarques.no_enum}}
-          </select>
-          <button class="new notext not-printable" title="Ajouter une aide à la saisie" type="button" onclick="addHelp('CExamAudio', this.form.remarques)">{{tr}}New{{/tr}}</button><br />
           <textarea name="remarques" rows="2">{{$exam_audio->remarques}}</textarea>
+          <script type="text/javascript">
+            Main.add(function() {
+              new AideSaisie.AutoComplete(getForm("editFrm").elements.remarques, {
+                objectClass: "{{$exam_audio->_class_name}}",
+                timestamp: "{{$conf.dPcompteRendu.CCompteRendu.timestamp}}",
+                validateOnBlur: 0
+              });
+            });
+          </script>
         </td>
       </tr>
       <tr>

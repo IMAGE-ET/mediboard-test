@@ -118,20 +118,17 @@ if($order_way == "ASC"){
   krsort($trans_and_obs);
 }
 
-$_transmission_medicale = new CTransmissionMedicale();
-$_transmission_medicale->loadAides($user->_id);
-
 // Variables de templates
 $smarty = new CSmartyDP();
-$smarty->assign("with_filter", $with_filter);
-$smarty->assign("order_way", $order_way);
-$smarty->assign("order_col", $order_col);
-$smarty->assign("user_id"  , $user->_id);
+$smarty->assign("with_filter"  , $with_filter);
+$smarty->assign("order_way"    , $order_way);
+$smarty->assign("order_col"    , $order_col);
+$smarty->assign("user_id"      , $user->_id);
 $smarty->assign("trans_and_obs", $trans_and_obs);
-$smarty->assign("addTrans", $addTrans);
-$smarty->assign("sejour_id", $sejour_id);
-$smarty->assign("transmission", $_transmission_medicale);
-$smarty->assign("cibles", $cibles);
+$smarty->assign("addTrans"     , $addTrans);
+$smarty->assign("sejour_id"    , $sejour_id);
+$smarty->assign("transmission" , new CTransmissionMedicale());
+$smarty->assign("cibles"       , $cibles);
 $smarty->display("inc_vw_transmissions.tpl");
 
 ?>

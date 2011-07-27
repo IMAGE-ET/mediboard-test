@@ -69,15 +69,19 @@ updateFactureItem = function(select){
 	  </tr>
 	   {{/if}} 
 	  <tr>
-	    <th>{{mb_label object=$factureitem field="libelle"}} 
-	    <br />
-		  <select name="_helpers_libelle" size="1" onchange="pasteHelperContent(this)" class="helper">
-	  	<option value="">&mdash; {{tr}}portal-help{{/tr}}</option>
-	  	{{html_options options=$libelleItem->_aides.libelle.no_enum}}
-	    </select>
-	    <button class="new notext" title="{{tr}}CAideSaisie.create{{/tr}}" type="button" onclick="addHelp('CFactureItem', this.form.libelle, null, null, null, null, {{$user_id}})">{{tr}}New{{/tr}}</button>
-	    </th>
-	    <td>{{mb_field object=$factureitem field="libelle"}}</td>
+	    <th>{{mb_label object=$factureitem field="libelle"}}</th>
+	    <td>
+        {{mb_field object=$factureitem field="libelle"}}
+        <script type="text/javascript">
+          Main.add(function() {
+            new AideSaisie.AutoComplete(getForm("editfactureitem").elements.libelle, {
+              objectClass: "{{$factureitem->_class_name}}",
+              timestamp: "{{$conf.dPcompteRendu.CCompteRendu.timestamp}}",
+              validateOnBlur: 0
+            });
+          });
+        </script>
+      </td>
 	  </tr>
 	  <tr>
 	    <th>{{mb_label object=$factureitem field="prix_ht"}}</th>

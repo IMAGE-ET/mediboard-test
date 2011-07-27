@@ -27,7 +27,6 @@ if (!$exam_audio->_id) {
 
 $exam_audio->loadRefs();
 $exam_audio->_ref_consult->loadRefsFwd();
-$exam_audio->loadAides($exam_audio->_ref_consult->_ref_plageconsult->chir_id);
 
 CAppUI::requireModuleFile($m, "inc_graph_audio_tonal");
 AudiogrammeTonal::$gauche->Stroke("tmp/graphtmp.png");

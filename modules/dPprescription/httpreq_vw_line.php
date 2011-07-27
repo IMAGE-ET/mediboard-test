@@ -18,7 +18,6 @@ $operation_id   = CValue::get("operation_id");
 $mode_substitution = CValue::get("mode_substitution");
 $advanced_prot  = CValue::get("advanced_prot");
 
-$aides_prescription = array();
 $executants = array();
 $category_id = 0;
 $dossier_medical = array();
@@ -132,12 +131,6 @@ if($line instanceof CPrescriptionLineMix){
   }		 
 }
 
-// Chargement du praticien_id pour le chargement des aides
-$_aide_praticien_id = $line->_protocole ? CAppUI::$user->_id : $line->praticien_id;
-
-$line->loadAides($_aide_praticien_id);
-$aides_prescription[$_aide_praticien_id][$line->_class_name] = $line->_aides["commentaire"]["no_enum"];
-
 // Instanciation d'une prise
 $prise_posologie = new CPrisePosologie();
 $prise_posologie->quantite = 1;
@@ -157,7 +150,6 @@ $smarty->assign("is_praticien", $is_praticien);
 
 $smarty->assign("mode_pack", 0);
 $smarty->assign("mode_substitution", $mode_substitution);
-$smarty->assign("aides_prescription", $aides_prescription);
 
 if ($advanced_prot) {
   $smarty->assign("advanced_prot", $advanced_prot);

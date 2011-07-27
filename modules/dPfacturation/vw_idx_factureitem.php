@@ -13,7 +13,6 @@ CCanDo::checkRead();
 
 // Chargement de l'item choisi
 $libelleItem = new CFactureItem;
-$libelleItem->loadAides($user->_id);
 
 // Reception de l'id de la facture a partir de l'url
 $facture_id = CValue::getOrSession("facture_id");

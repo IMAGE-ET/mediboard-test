@@ -90,17 +90,20 @@ Main.add(function () {
 		      <input type="hidden" name="sejour_id" value="{{$sejour_id}}" />
 		      <input type="hidden" name="user_id" value="{{$app->user_id}}" />
 		      <input type="hidden" name="date" value="now" />
-		      <div style="float: right">
-			    <select name="_helpers_text" size="1" onchange="pasteHelperContent(this);" class="helper">
-			      <option value="">&mdash; Aide</option>
-			      {{html_options options=$transmission->_aides.text.no_enum}}
-			    </select>
-			    <button class="new notext" title="Ajouter une aide à la saisie" type="button" onclick="addHelp('CTransmissionMedicale', this.form.text, null, null, null, null, {{$user_id}})">{{tr}}New{{/tr}}</button><br />      
-		    </div>
+		      
 		      {{mb_field object=$transmission field="degre"}}
 		      {{mb_field object=$transmission field="type" typeEnum=radio}}
 		      <br />
 		      {{mb_field object=$transmission field="text"}}
+          <script type="text/javascript">
+            Main.add(function() {
+              new AideSaisie.AutoComplete(getForm("editTrans").elements.text, {
+                objectClass: "{{$transmission->_class_name}}",
+                timestamp: "{{$conf.dPcompteRendu.CCompteRendu.timestamp}}",
+                validateOnBlur: 0
+              });
+            });
+          </script>
 		      <br />
 		      <button type="button" class="add" onclick="submitFormAjax(this.form, 'systemMsg', { onComplete: refreshTransmission } );">{{tr}}Add{{/tr}}</button>
 	      </form>

@@ -447,21 +447,6 @@ $prescriptionLineMedicament = new CPrescriptionLineMedicament();
 $prescriptionLineElement = new CPrescriptionLineElement();
 $prescription_line_mix = new CPrescriptionLineMix();
 
-$aides_prescription = array();
-if($prescription->_id){
-  $_users = $prescription->object_id ? $prescription->_praticiens : array($current_user->user_id => "");
-  if(count($_users)){
-    foreach($_users as $praticien_id => $praticien->_view){
-      $prescriptionLineMedicament->loadAides($praticien_id);
-      $aides_prescription[$praticien_id]["CPrescriptionLineMedicament"] = $prescriptionLineMedicament->_aides["commentaire"]["no_enum"];
-      $prescriptionLineElement->loadAides($praticien_id);
-      $aides_prescription[$praticien_id]["CPrescriptionLineElement"] = $prescriptionLineElement->_aides["commentaire"]["no_enum"];
-      $prescription_line_mix->loadAides($praticien_id);
-      $aides_prescription[$praticien_id]["CPrescriptionLineMix"] = $prescription_line_mix->_aides["commentaire"]["no_enum"];
-    }
-  }
-}
-
 $_sejour = new CSejour();
 $_sejour->load($sejour_id);
 
@@ -530,7 +515,6 @@ $smarty->assign("mode_substitution", 0);
 
 // Mode permettant de supprimer qq elements de la ligne en salle d'op (Anesthesie)
 $smarty->assign("current_user"         , $current_user);
-$smarty->assign("aides_prescription"   , $aides_prescription);
 $smarty->assign("mode_anesth"          , $mode_anesth);
 $smarty->assign("historique"           , $historique);
 $smarty->assign("filter_line"          , $filter_line);

@@ -61,14 +61,10 @@ $moments = CMomentUnitaire::loadAllMomentsWithPrincipal();
 // Chargement des aides
 $prescriptionLineMedicament = new CPrescriptionLineMedicament();
 $prescription_line_mix = new CPrescriptionLineMix();
-$prescriptionLineMedicament->loadAides($user->_id);
-$aides_prescription[$user->_id]["CPrescriptionLineMedicament"] = $prescriptionLineMedicament->_aides["commentaire"]["no_enum"];
-$prescription_line_mix->loadAides($user->_id);
-$aides_prescription[$user->_id]["CPrescriptionLineMix"] = $prescription_line_mix->_aides["commentaire"]["no_enum"];
 
 // Création du template
 $smarty = new CSmartyDP();
-$smarty->assign("aides_prescription", $aides_prescription);
+
 $smarty->assign("line", $object);
 $smarty->assign("prescription", $prescription);
 $smarty->assign("today", mbDate());

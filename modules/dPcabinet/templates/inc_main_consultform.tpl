@@ -28,7 +28,6 @@ Main.add(function () {
 
 </script>
 
-{{assign var=aide_autocomplete value=$conf.dPcabinet.CConsultation.aide_autocomplete}}
 {{if !@$readonly}}
   {{assign var=readonly value=0}}
 {{/if}}

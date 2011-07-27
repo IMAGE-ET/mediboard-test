@@ -67,8 +67,6 @@
 
   {{mb_include module=system template=inc_config_bool var=create_consult_sejour}}
   
-  {{mb_include module=system template=inc_config_bool var=aide_autocomplete}}
-  
   {{mb_include module=system template=inc_config_str var=minutes_before_consult_sejour size="3" suffix="min"}}
   
   {{mb_include module=system template=inc_config_str var=hours_after_changing_prat size="3" suffix="h"}}
