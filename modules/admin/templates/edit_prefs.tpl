@@ -276,7 +276,8 @@ Preferences.onSubmit = function(form) {
   <tbody style="display: none" id="{{$module}}">
   <!-- Préférences pour le module {{$module}} -->
 
-  {{mb_include template=inc_pref spec=str var=delai_alerte}}
+  {{mb_include template=inc_pref spec=enum var=delai_alerte values="-1|0|1|2|5|15"}}
+  {{mb_include template=inc_pref spec=enum var=periode_refractaire values="1|2|5"}}
   
   </tbody>
   {{/if}}
