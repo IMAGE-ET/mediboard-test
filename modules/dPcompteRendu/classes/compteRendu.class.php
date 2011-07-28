@@ -229,7 +229,7 @@ class CCompteRendu extends CDocumentItem {
 		  $this->_source =  preg_replace("/<!--.+?-->/s", "", $this->_source);
 		  if (preg_match("/mso-style/", $this->_source)) {
   		  $xml = new DOMDocument('1.0', 'iso-8859-1');
-        $str = "<div>".CHtmlToPDF::xmlEntities($this->_source)."</div>";
+        $str = "<div>".CMbString::convertHTMLToXMLEntities($this->_source)."</div>";
   		  @$xml->loadXML(utf8_encode($str));
   		  
   		  $xpath = new DOMXpath($xml);
