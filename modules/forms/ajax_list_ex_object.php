@@ -42,6 +42,15 @@ $all_ex_objects = array();
 $ex_objects_by_event = array();
 $ex_objects_counts_by_event = array();
 $ex_classes_creation = array();
+
+$limit = null;
+  
+switch($detail) {
+  case 2: $limit = ($ex_class_id ? 30 : 20); break;
+  case 1: $limit = ($ex_class_id ? 200 : 100); break;
+default:
+  case 0: 
+}
   
 foreach($ex_classes as $_ex_class_id => $_ex_class) {
   $ex_class_key = $_ex_class->host_class."-".$_ex_class->event;
@@ -64,15 +73,6 @@ foreach($ex_classes as $_ex_class_id => $_ex_class) {
      (reference2_class = '$reference_class' AND reference2_id = '$reference_id') OR 
      (object_class     = '$reference_class' AND object_id     = '$reference_id')"
   );
-	
-  $limit = null;
-  
-  switch($detail) {
-    case 2: $limit = ($ex_class_id ? 30 : 20); break;
-    case 1: $limit = ($ex_class_id ? 200 : 100); break;
-	default:
-    case 0: 
-  }
 	
   $_ex_objects = $_ex_object->loadList($where, "{$_ex_object->_spec->key} DESC", $limit);
   
