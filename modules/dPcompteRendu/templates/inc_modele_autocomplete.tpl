@@ -23,16 +23,16 @@
       <img style="float: right; clear: both; margin: -1px;" 
         src="images/icons/{{$owner_icon}}.png" />
 
-        {{if $_modele->fast_edit_pdf && $_modele->fast_edit && $pdf_thumbnails && $pdf_and_thumbs}}
+        {{if $_modele->fast_edit_pdf && $pdf_thumbnails && $pdf_and_thumbs}}
           <img style="float: right;" src="modules/dPcompteRendu/fcke_plugins/mbprintPDF/images/mbprintPDF.png"/>
         {{elseif $_modele->fast_edit}}
           <img style="float: right;" src="modules/dPcompteRendu/fcke_plugins/mbprinting/images/mbprinting.png"/>
         {{/if}}
-        {{if $_modele->fast_edit}}
+        {{if $_modele->fast_edit || ($_modele->fast_edit_pdf && $pdf_thumbnails && $pdf_and_thumbs)}}
           <img style="float: right;" src="images/icons/lightning.png"/>
         {{/if}}
 
-      <div {{if $_modele->fast_edit}}class="fast_edit"{{/if}}>{{$_modele->nom|emphasize:$keywords}}</div>
+      <div {{if $_modele->fast_edit || ($_modele->fast_edit_pdf && $pdf_thumbnails && $pdf_and_thumbs)}}class="fast_edit"{{/if}}>{{$_modele->nom|emphasize:$keywords}}</div>
       
       <!--{{if $_modele->file_category_id}}
         <small style="color: #666; margin-left: 1em;" class="text">

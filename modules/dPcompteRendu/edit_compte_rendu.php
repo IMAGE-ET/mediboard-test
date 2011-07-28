@@ -135,14 +135,15 @@ if (!$user->isPraticien()) {
 }
 
 $user->load();
-$function = $user->loadRefFunction();
-
+$user->loadRefFunction();
 
 // Chargement des catégories
 $listCategory = CFilesCategory::listCatClass($compte_rendu->object_class);
 
 // Décompte des imprimantes disponibles pour l'impression serveur
-$nb_printers = $function->countBackRefs("printers");
+$user_printers = CMediusers::get();
+$function      = $user_printers->loadRefFunction();
+$nb_printers   = $function->countBackRefs("printers");
 
 // Gestion du template
 $templateManager = new CTemplateManager($_GET);
