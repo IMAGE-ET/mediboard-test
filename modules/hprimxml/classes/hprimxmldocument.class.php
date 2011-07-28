@@ -521,7 +521,7 @@ class CHPrimXMLDocument extends CMbXMLDocument {
     }
     
     $observations = $this->addElement($erreurAvertissement, "observations");
-    $observation = $this->addObservation($observations, $code, $libelle, $commentaires);   
+    $observation = $this->addObservation($observations, $code, $libelle, CMbString::convertHTMLToXMLEntities($commentaires));   
   }
   
   function addObservation($elParent, $code, $libelle, $commentaires = null) {
