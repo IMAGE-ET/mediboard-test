@@ -349,7 +349,7 @@ loadConstantesMedicales  = function(context_guid) {
 {{if $print}}
   <div id="constantes-medicales-graph" style="margin-left: 5px; text-align: center;"></div>
 {{else}}
-  {{if "forms"|module_active && $curr_context instanceof CSejour}}
+  {{if "forms"|module_active && $context instanceof CSejour}}
     <script type="text/javascript">
       Main.add(function(){
         Control.Tabs.create("surveillance-tab");
@@ -361,7 +361,7 @@ loadConstantesMedicales  = function(context_guid) {
         <a href="#tab-constantes-medicales">Constantes</a>
       </li>
       <li>
-        <a href="#tab-ex_class-list" onmousedown="this.onmousedown=null; ExObject.loadExObjects('{{$curr_context->_class_name}}', '{{$curr_context->_id}}', 'tab-ex_class-list', 0)">
+        <a href="#tab-ex_class-list" onmousedown="this.onmousedown=null; ExObject.loadExObjects('{{$context->_class_name}}', '{{$context->_id}}', 'tab-ex_class-list', 0)">
           Formulaires
         </a>
       </li>
