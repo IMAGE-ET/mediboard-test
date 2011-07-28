@@ -115,16 +115,20 @@ $ljoin = array(
 $delivery = new CProductDelivery();
 
 if($delivery_id){
-	$service = new CService();
-	$services[] = $service;
+  $delivery->load($delivery_id);
+	$services = array(
+	  $delivery->service_id => $delivery->loadRefService()
+	);
 }
 
 foreach($services as $_service_id => $_service) {
+	// one line
 	if($delivery_id){
-		$delivery = new CProductDelivery();
-		$delivery->load($delivery_id);
 		$deliveries[$delivery->_id] = $delivery;
-	} else {
+	} 
+	
+	// all lines
+	else {
 		if ($_service_id == "none") {
 	    $where['service_id'] = "IS NULL OR service_id = ''";
 	  }
