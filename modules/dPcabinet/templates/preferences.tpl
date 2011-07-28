@@ -1,0 +1,25 @@
+{{* $Id: $ *}}
+
+{{*
+ * @package Mediboard
+ * @subpackage 
+ * @version $Revision:  $
+ * @author SARL OpenXtrem
+ * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+*}}
+
+  
+{{mb_include template=inc_pref spec=bool var=AUTOADDSIGN}}
+{{mb_include template=inc_pref spec=enum var=AFFCONSULT values="0|1"}}
+{{mb_include template=inc_pref spec=enum var=MODCONSULT values="0|1"}}
+{{mb_include template=inc_pref spec=bool var=dPcabinet_show_program}}
+  
+{{mb_include template=inc_pref spec=enum var=DossierCabinet values="dPcabinet|dPpatients"}}
+{{mb_include template=inc_pref spec=enum var=DefaultPeriod values="day|week|month" value_locale_prefix="Period."}}
+{{mb_include template=inc_pref spec=enum var=simpleCabinet values="0|1"}}
+{{mb_include template=inc_pref spec=enum var=ccam_consultation values="0|1"}}
+{{mb_include template=inc_pref spec=enum var=view_traitement values="0|1"}}
+{{mb_include template=inc_pref spec=bool var=autoCloseConsult}}
+{{mb_include template=inc_pref spec=bool var=resumeCompta}}
+{{mb_include template=inc_pref spec=bool var=showDatesAntecedents}}
+{{mb_include template=inc_pref spec=bool var=pratOnlyForConsult}}
