@@ -107,12 +107,12 @@ class CProductReception extends CMbObject {
     $this->_view = $this->reference . ($this->societe_id ? " - {$this->_ref_societe->_view}" : "");
 	}
   
-  function updateDBFields(){
+  function updatePlainFields(){
     if (!$this->_id && $this->locked === null) {
       $this->locked = "0";
     }
     
-    return parent::updateDBFields();
+    return parent::updatePlainFields();
   }
   
   function store () {

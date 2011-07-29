@@ -387,7 +387,7 @@ class CConstantesMedicales extends CMbObject {
     }
   }
   
-  function updateDBFields() {
+  function updatePlainFields() {
     // TODO: Utiliser les specs
     
     $unite_ta = CAppUI::conf("dPpatients CConstantesMedicales unite_ta");
@@ -489,7 +489,7 @@ class CConstantesMedicales extends CMbObject {
     }
     
     if (!$this->_id && !$this->_new_constantes_medicales) {
-      $this->updateDBFields();
+      $this->updatePlainFields();
       $constante = new CConstantesMedicales();
       $constante->patient_id    = $this->patient_id;
       $constante->context_class = $this->context_class;

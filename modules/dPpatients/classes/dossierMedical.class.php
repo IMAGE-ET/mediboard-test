@@ -119,18 +119,18 @@ class CDossierMedical extends CMbMetaObject {
     }
   }
 
-  function updateDBFields() {
-    parent::updateDBFields();
+  function updatePlainFields() {
+    parent::updatePlainFields();
   }
   
-  function mergeDBFields ($objects = array()/*<CMbObject>*/) {
+  function mergePlainFields ($objects = array()/*<CMbObject>*/) {
     $codes_cim_array = CMbArray::pluck($objects, 'codes_cim');
     $codes_cim_array[] = $this->codes_cim;
     $codes_cim = implode('|', $codes_cim_array);
     $codes_cim_array = array_unique(explode('|', $codes_cim));
     CMbArray::removeValue('', $codes_cim_array);
     
-    if ($msg = parent::mergeDBFields($objects)) return $msg;
+    if ($msg = parent::mergePlainFields($objects)) return $msg;
     
     $this->codes_cim = implode('|', $codes_cim_array);
   }

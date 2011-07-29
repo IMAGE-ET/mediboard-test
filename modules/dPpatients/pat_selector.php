@@ -47,7 +47,7 @@ else {
   if ($useVitale && CAppUI::pref('GestionFSE') && !CAppUI::pref('VitaleVision')) {
     $patVitale = new CPatient();  
     $patVitale->loadFromIdVitale();
-    $patVitale->getValuesFromVitale();
+    $patVitale->getPropertiesFromVitale();
     
     $name = $patVitale->nom;
     $firstName = $patVitale->prenom;

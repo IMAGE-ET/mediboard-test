@@ -47,7 +47,7 @@ class CExchangeTabular extends CExchangeDataFormat {
     $this->_acquittement = $content->content;
   }
   
-  function updateDBFields() {
+  function updatePlainFields() {
     if ($this->_message !== null) {
       $content = new CContentTabular();
       $content->load($this->message_content_id);

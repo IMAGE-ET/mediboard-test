@@ -82,7 +82,7 @@ class CTarif extends CMbObject {
     $this->_somme = $this->secteur1 + $this->secteur2;
   }
   
-  function updateDBFields() {
+  function updatePlainFields() {
   	if ($this->_type !== null) {
   		$other_field = $this->_type == "chir" ? "function_id" : "chir_id";
       $this->$other_field = "";

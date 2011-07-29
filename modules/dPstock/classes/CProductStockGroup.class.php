@@ -172,8 +172,8 @@ class CProductStockGroup extends CProductStock {
     return $this->_ref_related_locations = $location->loadList($where, "name");
   }
   
-  function updateDBFields(){
-    parent::updateDBFields();
+  function updatePlainFields(){
+    parent::updatePlainFields();
     
     $this->completeField("group_id");
     if (!$this->group_id) {

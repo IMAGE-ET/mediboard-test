@@ -53,8 +53,8 @@ class CPrescriptionLineMixVariation extends CMbObject {
 		return parent::check();
 	}
 	
-	function updateDBFields(){
-		parent::updateDBFields();
+	function updatePlainFields(){
+		parent::updatePlainFields();
 		if($this->dateTime == "current"){
 			$this->dateTime = mbDateTime();
 		}

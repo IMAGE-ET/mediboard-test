@@ -110,7 +110,7 @@ class CPlageressource extends CMbObject {
   }
 */
   function store() {
-    $this->updateDBFields();
+    $this->updatePlainFields();
     
     if ($msg = $this->hasCollisions()) {
       return $msg;
@@ -141,7 +141,7 @@ class CPlageressource extends CMbObject {
     }
   }
   
-  function updateDBFields() {
+  function updatePlainFields() {
   	if ($this->_hour_deb !== null)
       $this->debut = $this->_hour_deb.":00:00";
     if ($this->_hour_fin !== null)
@@ -176,7 +176,7 @@ class CPlageressource extends CMbObject {
     $this->_min_deb  = $_min_deb;
     $this->_hour_fin = $_hour_fin;
     $this->_min_fin  = $_min_fin;
-    $this->updateDBFields();
+    $this->updatePlainFields();
   }    
 }
 

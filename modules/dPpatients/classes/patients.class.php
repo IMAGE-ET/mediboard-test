@@ -445,7 +445,7 @@ class CPatient extends CMbObject {
     
     // Merge them
     if (count($list) > 1) {
-    	if ($msg = $dossier_medical->mergeDBFields($list)) return $msg;
+    	if ($msg = $dossier_medical->mergePlainFields($list)) return $msg;
     	$dossier_medical->object_class = $this->_class_name;
     	$dossier_medical->object_id = $this->_id;
     	return $dossier_medical->merge($list);
@@ -530,9 +530,9 @@ class CPatient extends CMbObject {
     // Mise à jour dupuis Vitale
     if ($this->_update_vitale) {
       $patient_vitale = new CPatient;
-      $patient_vitale->getValuesFromVitale();
+      $patient_vitale->getPropertiesFromVitale();
       $patient_vitale->date_lecture_vitale = mbDateTime();
-      foreach (array_keys($this->getDBFields()) as $field) {
+      foreach (array_keys($this->getPlainFields()) as $field) {
         $vitale_value = $patient_vitale->$field;
         if ($vitale_value || $vitale_value === "0") {
           $this->$field = $patient_vitale->$field;
@@ -586,7 +586,7 @@ class CPatient extends CMbObject {
     }
   }
   
-  function getValuesFromVitale() {
+  function getPropertiesFromVitale() {
     if (null == $intermax = CValue::postOrSessionAbs("intermax")) {
       return;
     }
@@ -769,8 +769,8 @@ class CPatient extends CMbObject {
     return mbDaysRelative($this->naissance, $date);
   }
       
-  function updateDBFields() {
-  	parent::updateDBFields();
+  function updatePlainFields() {
+  	parent::updatePlainFields();
   	 
     $soundex2 = new soundex2;
     if ($this->nom) {

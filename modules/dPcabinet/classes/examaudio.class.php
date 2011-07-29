@@ -203,8 +203,8 @@ class CExamAudio extends CMbObject {
     }
   }
    
-  function updateDBFields() {
-    parent::updateDBFields();
+  function updatePlainFields() {
+    parent::updatePlainFields();
     
     // Tris
     $dBs_gauche = array();

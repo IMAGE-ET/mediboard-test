@@ -46,11 +46,11 @@
     return $specs;
   }
   
-  function updateDBFields() {
+  function updatePlainFields() {
     if($this->last_update === "") {
       $this->last_update = mbDateTime();
     }
-    return parent::updateDBFields();
+    return parent::updatePlainFields();
   }
   
   /**
@@ -161,7 +161,7 @@
     
     // Create/update bound object
     $mbObject->_id = $this->object_id;
-    $mbObject->updateDBFields();
+    $mbObject->updatePlainFields();
     $mbObject->repair();
     
     if ($msg = $mbObject->store()) {

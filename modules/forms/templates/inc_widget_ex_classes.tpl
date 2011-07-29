@@ -36,7 +36,7 @@
   {{foreach from=$ex_classes item=_ex_class}}
     ExObject.classes["{{$_ex_class->host_class}}"] = ExObject.classes["{{$_ex_class->host_class}}"] || [];
     ExObject.classes["{{$_ex_class->host_class}}"]["{{$_ex_class->event}}"] = ExObject.classes["{{$_ex_class->event}}"] || [];
-		ExObject.classes["{{$_ex_class->host_class}}"]["{{$_ex_class->event}}"].push({{$_ex_class->getDBFields()|@json}});
+		ExObject.classes["{{$_ex_class->host_class}}"]["{{$_ex_class->event}}"].push({{$_ex_class->getPlainFields()|@json}});
 		
 		{{if }}
   {{/foreach}}

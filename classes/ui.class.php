@@ -460,7 +460,7 @@ class CAppUI {
       }
     }
     
-    // See CUser::updateDBFields
+    // See CUser::updatePlainFields
     $user->loadMatchingObject();
     
     if ($user->template) {

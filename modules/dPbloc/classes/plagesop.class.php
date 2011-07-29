@@ -244,7 +244,7 @@ class CPlageOp extends CMbObject {
   }
   
   function store() {
-    $this->updateDBFields();
+    $this->updatePlainFields();
     if ($msg = $this->hasCollisions()) {
       return $msg;
     }
@@ -298,7 +298,7 @@ class CPlageOp extends CMbObject {
     $this->_view = "Plage du ".$this->getFormattedValue("date");
   }
   
-  function updateDBFields() {
+  function updatePlainFields() {
     if(($this->_heuredeb !== null) && ($this->_minutedeb !== null)) {
       $this->debut = sprintf("%02d:%02d:00", $this->_heuredeb, $this->_minutedeb);
     }
@@ -308,7 +308,7 @@ class CPlageOp extends CMbObject {
     if(($this->_year !== null) && ($this->_month !== null) && ($this->_day !== null)) {
       $this->date = sprintf("%04d-%02d-%02d", $this->_year, $this->_month, $this->_day);
     }
-    return parent::updateDBFields();
+    return parent::updatePlainFields();
   }
   
   function becomeNext() {

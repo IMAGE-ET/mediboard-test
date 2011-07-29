@@ -43,7 +43,7 @@ if (!$patient_id) {
 // Peut etre pas besoin de verifier si on n'utilise pas VitaleVision
 if ($useVitale && CAppUI::pref('GestionFSE') && !CAppUI::pref('VitaleVision')) {
   $patVitale = new CPatient();
-  $patVitale->getValuesFromVitale();
+  $patVitale->getPropertiesFromVitale();
   $patVitale->nullifyEmptyFields();
   $patient->extendsWith($patVitale);
   $patient->updateFormFields();

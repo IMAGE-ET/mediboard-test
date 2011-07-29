@@ -117,8 +117,8 @@ class CSociete extends CMbObject {
     return $list;
   }
   
-  function updateDBFields() {
-    parent::updateDBFields();
+  function updatePlainFields() {
+    parent::updatePlainFields();
     if ($this->_departments) {
       foreach($this->_departments as &$_dep) {
         $_dep = str_pad($_dep, 2, "0", STR_PAD_LEFT);

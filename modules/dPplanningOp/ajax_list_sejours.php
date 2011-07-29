@@ -61,7 +61,7 @@ if ($check_collision) {
   $sejour->_hour_sortie_prevue = CValue::get("hour_sortie_prevue");
   $sejour->_min_entree_prevue  = $min_entree_prevue;
   $sejour->_min_sortie_prevue  = CValue::get("min_sortie_prevue");
-  $sejour->updateDBFields();
+  $sejour->updatePlainFields();
 
   // Calcul des collisions potentielles
   $sejours_collides = $sejour->getCollisions();

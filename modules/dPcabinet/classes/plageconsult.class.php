@@ -243,7 +243,7 @@ class CPlageconsult extends CMbObject {
   }
   
   function store() {
-    $this->updateDBFields();
+    $this->updatePlainFields();
     
     if ($msg = $this->hasCollisions()) {
       return $msg;
@@ -273,7 +273,7 @@ class CPlageconsult extends CMbObject {
     $this->_total    = (($tmpHfin + $tmpMfin/60) - ($tmpHdebut + $tmpMdebut/60)) * $tmpfreq;    
   }
   
-  function updateDBFields() {
+  function updatePlainFields() {
   	
   	if($this->_hour_deb !== null) {
       if($this->_min_deb !== null)
@@ -319,7 +319,7 @@ class CPlageconsult extends CMbObject {
     $this->_min_fin  = $_min_fin;
     $this->_freq     = $_freq;
     $this->libelle   = $libelle;
-    $this->updateDBFields();
+    $this->updatePlainFields();
   }    
 }
 

@@ -154,7 +154,7 @@ class CBloodSalvage extends CMbObject {
 	  }
 	}
 	
-	function updateDBFields() {
+	function updatePlainFields() {
 		
 		$this->loadRefPlageOp();
 		

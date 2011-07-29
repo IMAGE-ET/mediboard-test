@@ -370,7 +370,7 @@ class CExClassField extends CExListItemsOwner {
     return $db_spec;
   }
 	
-	function updateDBFields(){
+	function updatePlainFields(){
 		// If we change its group, we need to reset its coordinates
 		if ($this->fieldModified("ex_group_id")) {
       $this->coord_field_x = "";
@@ -379,7 +379,7 @@ class CExClassField extends CExListItemsOwner {
       $this->coord_label_y = "";
 		}
 		
-		return parent::updateDBFields();
+		return parent::updatePlainFields();
 	}
 	
 	static function getUniqueName(){

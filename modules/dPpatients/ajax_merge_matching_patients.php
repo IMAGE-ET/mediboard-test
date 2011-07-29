@@ -55,12 +55,12 @@ else {
     
     foreach($patients as $_patient) {
       $patients_array = array($_patient);
-      if ($msg = $first_patient->mergeDBFields($patients_array)) {
+      if ($msg = $first_patient->mergePlainFields($patients_array)) {
         CAppUI::stepAjax("$_patient : $msg", UI_MSG_WARNING);
         continue;
       }
       
-      /** @todo mergeDBfields resets the _id */
+      /** @todo mergePlainFields resets the _id */
       $first_patient->_id = $first_patient_id;
       
       $first_patient->_merging = $patients_array;

@@ -144,7 +144,7 @@ foreach($list_products as $_product) {
     
     $_oi = $_oir->loadRefOrderItem();
     
-    //mbTrace($_oi->getDBFields(), "dbf", true);
+    //mbTrace($_oi->getPlainFields(), "dbf", true);
     //mbTrace($_oi, "oi", true);
     
     $qty = $_oir->quantity;

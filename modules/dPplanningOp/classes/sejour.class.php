@@ -759,7 +759,7 @@ class CSejour extends CCodable implements IPatientRelated {
   }
 
   
-  function updateDBFields() {
+  function updatePlainFields() {
     // Annulation / Récusation
     $this->completeField("annule", "recuse");
     if ($this->fieldModified("recuse", "1")) $this->annule = "1";
@@ -804,7 +804,7 @@ class CSejour extends CCodable implements IPatientRelated {
       $this->sortie_prevue = $this->sortie_reelle;
     }
     
-    //@TODO : mieux gérer les current et now dans l'updateDBFields et le store
+    //@TODO : mieux gérer les current et now dans l'updatePlainFields et le store
     $entree_reelle = ($this->entree_reelle === 'current'|| $this->entree_reelle ===  'now') ? mbDateTime() : $this->entree_reelle;
     if($entree_reelle && ($this->sortie_prevue < $entree_reelle)) {
       $this->sortie_prevue = $this->type == "comp" ? mbDateTime("+1 DAY", $entree_reelle) : $entree_reelle;

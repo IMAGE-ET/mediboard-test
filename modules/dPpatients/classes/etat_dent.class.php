@@ -40,7 +40,7 @@ class CEtatDent extends CMbObject {
   }
   
   function store() {
-    $this->updateDBFields();
+    $this->updatePlainFields();
     
     $etat_dent = new CEtatDent();
     $etat_dent->dent = $this->dent;

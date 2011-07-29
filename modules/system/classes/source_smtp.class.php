@@ -41,8 +41,8 @@ class CSourceSMTP extends CExchangeSource {
     return $specs;
   }
   
-  function updateDBFields() {
-  	parent::updateDBFields();
+  function updatePlainFields() {
+  	parent::updatePlainFields();
   	$this->role = "prod";
   }
   

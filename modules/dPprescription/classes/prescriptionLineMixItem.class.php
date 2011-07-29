@@ -149,8 +149,8 @@ class CPrescriptionLineMixItem extends CMbObject implements IPatientRelated {
   }
   
 	
-	function updateDBFields(){
-    parent::updateDBFields();
+	function updatePlainFields(){
+    parent::updatePlainFields();
     
 		// Mise a jour des codes UCD et CIS
     if(!$this->_id && $this->code_cip && !$this->code_ucd){

@@ -89,7 +89,7 @@ class CListeChoix extends CMbObject {
 
   }
   
-  function updateDBFields() {
+  function updatePlainFields() {
     if($this->_new !== null) {
       $this->updateFormFields();
       $this->_valeurs[] = trim($this->_new);

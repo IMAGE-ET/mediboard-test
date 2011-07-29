@@ -72,8 +72,8 @@ class CPrescriptionLineComment extends CPrescriptionLine {
 		return $this->_canEdit = (mbDateTime() < $datetime_max) && (CAppUI::$instance->user_id == $this->praticien_id);
   }
 	
-  function updateDBFields(){
-    parent::updateDBFields();
+  function updatePlainFields(){
+    parent::updatePlainFields();
     if($this->_executant !== null){
       if($this->_executant == ""){
         $this->executant_prescription_line_id = "";

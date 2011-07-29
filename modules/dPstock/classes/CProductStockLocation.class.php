@@ -65,8 +65,8 @@ class CProductStockLocation extends CMbMetaObject {
     $this->_view = ($this->_ref_object ? "{$this->_ref_object->_view} - " : "") . $this->_shortview;
   }
   
-  function updateDBfields() {
-    parent::updateDBfields();
+  function updatePlainFields() {
+    parent::updatePlainFields();
     
     if ($this->_type) {
       list($this->object_class, $this->object_id) = explode("-", $this->_type);

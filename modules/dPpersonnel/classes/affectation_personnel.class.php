@@ -104,7 +104,7 @@ class CAffectationPersonnel extends CMbMetaObject {
     }
   }
   
-  function updateDBFields(){
+  function updatePlainFields(){
     if($this->object_class == "COperation" || $this->object_class == "CBloodSalvage" ){
       $this->loadRefObject();
       $this->_ref_object->loadRefPlageOp();

@@ -168,13 +168,13 @@ class CConsultAnesth extends CMbObject {
     $this->_min_tsivy = intval(substr($this->tsivy, 3, 2));
   }
    
-  function updateDBFields() {
+  function updatePlainFields() {
     if($this->_min_tsivy !== null && $this->_sec_tsivy !== null) {
       $this->tsivy  = '00:'.($this->_min_tsivy ? sprintf("%02d", $this->_min_tsivy):'00').':';
       $this->tsivy .=       ($this->_sec_tsivy ? sprintf("%02d", $this->_sec_tsivy):'00');
     }
 
-    parent::updateDBFields();
+    parent::updatePlainFields();
   }
 
   function loadRefConsultation() {

@@ -208,8 +208,8 @@ class CCompteRendu extends CDocumentItem {
     }
   }
 
-  function updateDBFields() {
-    parent::updateDBFields();
+  function updatePlainFields() {
+    parent::updatePlainFields();
     
 		// Valeur par défaut pour private
     $this->completeField("private");

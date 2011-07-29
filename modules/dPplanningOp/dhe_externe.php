@@ -150,7 +150,7 @@ if ($praticien_id && (!$patient_ok || $sejour_id)) {
     $sejour->patient_id = $patient->_id;
     if(!$msg_error = $sejour->check()) {
       // On recherche un séjour existant
-      $sejour->updateDBFields();
+      $sejour->updatePlainFields();
       $sejour_existant = new CSejour();
       $collisions = $sejour->getCollisions();
       // S'il n'y est pas, on le store

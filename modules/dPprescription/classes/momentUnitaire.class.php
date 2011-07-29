@@ -93,8 +93,8 @@ class CMomentUnitaire extends CMbObject {
     }
   }
   
-	function updateDBFields(){
-	 	parent::updateDBFields();	 	
+	function updatePlainFields(){
+	 	parent::updatePlainFields();	 	
 	  if($this->_heure !== null) {
 	    $this->heure = ($this->_heure ? $this->_heure.":00:00" : '');
 	  }

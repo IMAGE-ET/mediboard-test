@@ -85,8 +85,8 @@ class CLigneActivitesRHS extends CMbObject {
     if(!$this->qty_sun) $this->qty_sun = "";
   }
   
-  function updateDBFields() {
-    return parent::updateDBFields();
+  function updatePlainFields() {
+    return parent::updatePlainFields();
     if($this->qty_mon == "") $this->qty_mon = "0";
     if($this->qty_tue == "") $this->qty_tue = "0";
     if($this->qty_wed == "") $this->qty_wed = "0";

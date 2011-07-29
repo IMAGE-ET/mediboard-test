@@ -77,7 +77,7 @@ if (class_exists($objects_class) && count($objects_id)) {
   $checkMerge = $result->checkMerge($objects);
 
   // Merge trivial fields
-  foreach (array_keys($result->getDBFields()) as $field) {
+  foreach (array_keys($result->getPlainFields()) as $field) {
     $values = CMbArray::pluck($objects, $field);
     CMbArray::removeValue("", $values);
 

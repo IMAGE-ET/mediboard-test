@@ -72,7 +72,7 @@ class CAccessLog extends CMbObject {
    * @return string Store-like message
    */
   function fastStore() {
-    $fields = $this->getDBFields();
+    $fields = $this->getPlainFields();
     unset($fields[$this->_spec->key]);
     foreach ($fields as $_name => $_value) {
       $columns[] = "$_name";

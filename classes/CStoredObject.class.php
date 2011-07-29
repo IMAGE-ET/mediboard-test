@@ -208,7 +208,7 @@ class CStoredObject extends CModelObject {
    */
   function nullifyAlteredFields() {
     $count = 0;
-    foreach($this->getDBFields() as $_field => $_value) {
+    foreach($this->getPlainFields() as $_field => $_value) {
       if($this->fieldAltered($_field)) {
         $this->$_field = null;
         $count++;
@@ -265,7 +265,7 @@ class CStoredObject extends CModelObject {
    * @return boolean
    */
   function objectModified() {    
-    foreach ($this->getDBFields() as $propName => $propValue) {
+    foreach ($this->getPlainFields() as $propName => $propValue) {
       if ($this->fieldModified($propName)) {
         return true;
       }
@@ -439,9 +439,9 @@ class CStoredObject extends CModelObject {
     $request->addGroup($group);
     $request->addOrder($order);
 
-    $this->updateDBFields();
-    $db_fields = $this->getDBFields();
-    foreach($db_fields as $key => $value) {
+    $this->updatePlainFields();
+    $fields = $this->getPlainFields();
+    foreach($fields as $key => $value) {
       if ($value !== null) {
         $request->addWhereClause($key, "= '$value'");
       }
@@ -466,9 +466,9 @@ class CStoredObject extends CModelObject {
     $request->addOrder($order);
     $request->setLimit($limit);
 
-    $this->updateDBFields();
-    $db_fields = $this->getDBFields();
-    foreach($db_fields as $key => $value) {
+    $this->updatePlainFields();
+    $fields = $this->getPlainFields();
+    foreach($fields as $key => $value) {
       if ($value !== null) {        
         $request->addWhereClause($key, "= '$value'");
       }
@@ -492,9 +492,9 @@ class CStoredObject extends CModelObject {
     $request->addOrder($order);
     $request->setLimit($limit);
 
-    $this->updateDBFields();
-    $db_fields = $this->getDBFields();
-    foreach($db_fields as $key => $value) {
+    $this->updatePlainFields();
+    $fields = $this->getPlainFields();
+    foreach($fields as $key => $value) {
       if ($value !== null) {
         $request->addWhereClause($key, "= '$value'");
       }
@@ -515,8 +515,8 @@ class CStoredObject extends CModelObject {
 
     if ($list)
     foreach($list as $object) {
-      $db_fields = $object->getDBFields();
-      foreach($db_fields as $key => $value) {
+      $fields = $object->getPlainFields();
+      foreach($fields as $key => $value) {
         $this->$key = $value;
       }
       $this->updateFormFields();
@@ -756,7 +756,7 @@ class CStoredObject extends CModelObject {
   function repair() {
     $repaired = array();
     $properties = get_object_vars($this);
-    foreach ($this->getValues() as $name => $value) {
+    foreach ($this->getProperties() as $name => $value) {
       if ($value !== null) {
         if ($msg = $this->checkProperty($name)) {
           $repaired[$name] = $msg;
@@ -848,7 +848,7 @@ class CStoredObject extends CModelObject {
    * @return void
    */
   function escapeValues() {
-    $values = $this->getValues();
+    $values = $this->getProperties();
     foreach ($values as $propName => $propValue) {
       if ($propValue) {
         $this->$propName = addslashes($propValue);
@@ -861,7 +861,7 @@ class CStoredObject extends CModelObject {
    * @return void
    */
   function unescapeValues() {
-    $values = $this->getValues();
+    $values = $this->getProperties();
     foreach ($values as $propName => $propValue) {
       if ($propValue) {
         $this->$propName = stripslashes($propValue);
@@ -881,9 +881,9 @@ class CStoredObject extends CModelObject {
 
     // Find changed fields
     $fields = array();
-    $db_fields = $this->getDBFields();
+    $fields = $this->getPlainFields();
     
-    foreach ($db_fields as $propName => $propValue) {
+    foreach ($fields as $propName => $propValue) {
       if ($this->fieldModified($propName)) {
         $fields[] = $propName;
       }
@@ -984,7 +984,7 @@ class CStoredObject extends CModelObject {
   function loadHistory() {
     $this->_history = array();
     $this->loadLogs();
-    $clone = $this->getDBFields();
+    $clone = $this->getPlainFields();
     
     foreach($this->_ref_logs as $_log) {
       $this->_history[$_log->_id] = $clone;
@@ -1117,7 +1117,7 @@ class CStoredObject extends CModelObject {
    */
   function store() {
     // Properties checking
-    $this->updateDBFields();
+    $this->updatePlainFields();
 
     $this->loadOldObject();
     

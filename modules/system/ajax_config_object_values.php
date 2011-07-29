@@ -36,7 +36,7 @@ if (!$object->_id && !$object_id) {
   $object = $default;
 }
 
-$fields = $object->getDBFields();
+$fields = $object->getPlainFields();
 unset($fields[$object->_spec->key]);
 unset($fields["object_id"]);
     

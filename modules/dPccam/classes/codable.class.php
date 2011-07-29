@@ -200,7 +200,7 @@ class CCodable extends CMbObject {
     
   }
   
-  function updateDBFields() {
+  function updatePlainFields() {
     // Should update codes CCAM. Very sensible, test a lot before uncommenting
     // $this->updateDBCodesCCAMField();
   }

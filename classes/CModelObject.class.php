@@ -291,7 +291,7 @@ class CModelObject {
   function valueDefaults() {
     $specs  = $this->getSpecs();
     
-    $fields = $this->getDBFields();
+    $fields = $this->getPlainFields();
     unset($fields[$this->_spec->key]);
     unset($fields["object_id"]);
     foreach($fields as $_name => $_value) {
@@ -328,7 +328,7 @@ class CModelObject {
    * @param  bool  $nonEmpty   Filter non empty values
    * @return array Associative array
    */
-  function getValues($nonEmpty = false) {
+  function getProperties($nonEmpty = false) {
     $values = array();
     
     foreach ($this->_specs as $key => $_spec) {
@@ -374,7 +374,7 @@ class CModelObject {
    * @todo Rename to plainFields
    * @return array Associative array
    */
-  function getDBFields() {
+  function getPlainFields() {
     $result = array();
     $vars = get_object_vars($this);
     foreach($vars as $key => $value) {
@@ -390,9 +390,9 @@ class CModelObject {
    * Update the plain fields from the form fields
    * @todo Rename to PlainFields()
    */
-  function updateDBFields() {
+  function updatePlainFields() {
     $specs = $this->_specs;
-    $fields = $this->getDBFields();
+    $fields = $this->getPlainFields();
     
     foreach ($fields as $field => $value) {
       if ($value !== null) {
@@ -406,13 +406,13 @@ class CModelObject {
    * @param $objects An array of CMbObject
    * @return $this or an error
    */
-  function mergeDBFields ($objects = array()/*<CMbObject>*/, $getFirstValue = false) {
-    $db_fields = $this->getDBFields();
-    $diffs = $db_fields;
+  function mergePlainFields ($objects = array()/*<CMbObject>*/, $getFirstValue = false) {
+    $fields = $this->getPlainFields();
+    $diffs = $fields;
     foreach ($diffs as &$diff) $diff = false;
     
     foreach ($objects as &$object) {
-      foreach ($db_fields as $propName => $propValue) {
+      foreach ($fields as $propName => $propValue) {
         if ($getFirstValue) {
           if ($this->$propName === null) {
             $this->$propName = $object->$propName;
@@ -436,7 +436,7 @@ class CModelObject {
    * @todo Rename to plainFields
    */
   function nullifyEmptyFields() {
-    foreach ($this->getDBFields() as $propName => $propValue) {
+    foreach ($this->getPlainFields() as $propName => $propValue) {
       if ($propValue === "") {
         $this->$propName = null;
       }
@@ -454,7 +454,7 @@ class CModelObject {
       return;
     }
     
-    foreach ($mbObject->getValues() as $propName => $propValue) {
+    foreach ($mbObject->getProperties() as $propName => $propValue) {
       if ($propValue !== null && $propValue != "") {
         if (!$gently || $this->$propName === null || $this->$propName === "") {
           $this->$propName = $propValue;
@@ -488,7 +488,7 @@ class CModelObject {
    */
   function getCSVFields() {
     $fields = array();
-    foreach ($this->getDBFields() as $key => $value) {
+    foreach ($this->getPlainFields() as $key => $value) {
       if (!$this->_specs[$key] instanceof CRefSpec) {
         $fields[$key] = $value;
       }

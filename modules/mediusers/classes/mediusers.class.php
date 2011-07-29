@@ -464,7 +464,7 @@ class CMediusers extends CMbObject {
    * Map les valeurs venant d'une CPS
    * @return void
    */
-  function getValuesFromCPS() {
+  function getPropertiesFromCPS() {
     if (null == $intermax = CValue::postOrSessionAbs("intermax")) {
       return;
     }
@@ -524,7 +524,7 @@ class CMediusers extends CMbObject {
   }
    
   function store() {
-    $this->updateDBFields();
+    $this->updatePlainFields();
     $this->updateSpecs();
 
     if ($msg = $this->check()) {

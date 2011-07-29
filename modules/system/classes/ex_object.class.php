@@ -284,10 +284,10 @@ class CExObject extends CMbMetaObject {
     return parent::load($id);
   }
   
-  // Used in updateDBFields
-  function getDBFields() {
+  // Used in updatePlainFields
+  function getPlainFields() {
     $this->setExClass();
-    return parent::getDBFields();
+    return parent::getPlainFields();
   }
   
   function fieldModified($field, $value = null) {

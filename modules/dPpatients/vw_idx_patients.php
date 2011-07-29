@@ -64,7 +64,7 @@ if ($patient_ipp && CModule::getInstalled("dPsante400")){
 else {
 	// Champs vitale
 	if ($useVitale && CAppUI::pref('GestionFSE') && !CAppUI::pref('VitaleVision')) {
-	  $patVitale->getValuesFromVitale();
+	  $patVitale->getPropertiesFromVitale();
 	  $patVitale->updateFormFields();
 	  $patient_nom    = $patVitale->nom   ;
 	  $patient_prenom = $patVitale->prenom;

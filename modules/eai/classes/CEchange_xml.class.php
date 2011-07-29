@@ -54,7 +54,7 @@ class CEchangeXML extends CExchangeDataFormat {
     $this->_acquittement = $content->content;
   }
     
-  function updateDBFields() {
+  function updatePlainFields() {
     if ($this->_message !== null) {
       $content = new CContentXML();
       $content->load($this->message_content_id);

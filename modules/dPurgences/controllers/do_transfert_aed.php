@@ -53,7 +53,7 @@ if (!CAppUI::conf("dPurgences create_sejour_hospit")) {
     $sejour->rques .= "Motif de recours aux urgences: $rpu->motif";
   }
   
-  $sejour->updateDBFields();
+  $sejour->updatePlainFields();
   $msg = $sejour->store();
   viewMsg($msg, "CSejour-title-create");
   

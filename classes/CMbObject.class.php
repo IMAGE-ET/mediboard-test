@@ -459,7 +459,7 @@ class CMbObject extends CStoredObject {
   function getConfigValues() {
     $configs = array();
     
-    $fields = $this->getDBFields();
+    $fields = $this->getPlainFields();
     unset($fields[$this->_spec->key]);
     unset($fields["object_id"]);
     foreach($fields as $_name => $_value) {

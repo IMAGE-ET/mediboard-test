@@ -274,7 +274,7 @@ class CConsultation extends CCodable {
     $this->_exam_fields = self::getExamFields();
   }
    
-  function updateDBFields() {
+  function updatePlainFields() {
     if (($this->_hour !== null) && ($this->_min !== null)) {
       $this->heure = $this->_hour.":".$this->_min.":00";
     }

@@ -51,7 +51,7 @@ class CTypeRepas extends CMbObject {
     return $specs;
   }
   
-  function updateDBFields() {
+  function updatePlainFields() {
     if($this->_debut !== ""){
       $this->debut = $this->_debut .":00";
     }

@@ -177,9 +177,9 @@ class CHprim21Patient extends CHprim21Object {
 	  return $backProps;
 	}
 
-  function updateDBFields() {
+  function updatePlainFields() {
   	
-  	parent::updateDBFields();
+  	parent::updatePlainFields();
   	 
     $soundex2 = new soundex2;
     if ($this->nom) {

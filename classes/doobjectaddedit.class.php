@@ -144,7 +144,7 @@ class CDoObjectAddEdit {
     
     echo CAppUI::getMsg();
     
-    $fields = $this->_obj->getValues();
+    $fields = $this->_obj->getProperties();
     $fields["_guid"] = $this->_obj->_guid;
     $fields["_class_name"] = $this->_obj->_class_name;
     

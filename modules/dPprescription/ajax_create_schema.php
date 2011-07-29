@@ -95,7 +95,7 @@ foreach($classes as $class) {
   
   $instance = new $class;
     
-  foreach($instance->getDBFields() as $field => $value) {
+  foreach($instance->getPlainFields() as $field => $value) {
     $type = $instance->_specs[$field]->getSpecType();
     
     // get the corresponding XML type, "string" by default

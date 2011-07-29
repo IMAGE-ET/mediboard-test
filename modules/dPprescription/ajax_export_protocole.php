@@ -38,11 +38,11 @@ if (!function_exists('exportXML')) {
             "prescription_id", "substitution_line_id", "moment_unitaire_id", "substitute_for_id", "praticien_id",
             "creator_id", "child_id", "operation_id", "object_id", "executant_prescription_line_id",
             "user_executant_id", "next_line_id", "prescription_line_comment_id", "protocole_id", "advanced_protocole");
-    $db_fields = $object->getDBfields();
+    $fields = $object->getPlainFields();
     $class_name = get_class($object);
     $$class_name = $doc->createElement($class_name);
   
-    foreach ($db_fields as $key => $field) {
+    foreach ($fields as $key => $field) {
       if (in_array($key, $keys)) {
         ${$key}   = $doc->createAttribute($key);
         $id_value = $doc->createTextNode("id-".$object->$key);

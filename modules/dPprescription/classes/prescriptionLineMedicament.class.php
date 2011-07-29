@@ -543,8 +543,8 @@ class CPrescriptionLineMedicament extends CPrescriptionLine {
 		}
   }
   
-  function updateDBFields(){
-    parent::updateDBFields();
+  function updatePlainFields(){
+    parent::updatePlainFields();
     
     if(!$this->_id && $this->code_cip && !$this->code_ucd){
       $produit = new CBcbProduit();

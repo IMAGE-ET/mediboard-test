@@ -67,8 +67,8 @@ class CActeNGAP extends CActe {
     }
   }
   
-  function updateDBFields() {
-    parent::updateDBFields();
+  function updatePlainFields() {
+    parent::updatePlainFields();
     
     if ($this->code) {
       $this->code = strtoupper($this->code);

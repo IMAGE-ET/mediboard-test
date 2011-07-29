@@ -129,7 +129,7 @@ class CMenu extends CMbObject {
     $this->_view = $this->nom;
   }
   
-  function updateDBFields() {
+  function updatePlainFields() {
   }
 }
 ?>

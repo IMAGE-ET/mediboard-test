@@ -493,7 +493,7 @@ class CProductOrder extends CMbMetaObject {
     return $this->_ref_address;
   }
   
-  function updateDBFields() {
+  function updatePlainFields() {
     $this->updateFormFields();
     
     if ($this->_autofill) {

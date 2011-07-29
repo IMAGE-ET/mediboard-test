@@ -43,7 +43,7 @@ if ($new = CValue::get("new")) {
 
 // Champs vitale
 if ($useVitale) {
-  $patVitale->getValuesFromVitale();
+  $patVitale->getPropertiesFromVitale();
   $patVitale->updateFormFields();
   $patient_nom    = $patVitale->nom;
   $patient_prenom = $patVitale->prenom;

@@ -371,7 +371,7 @@ class COperation extends CCodable implements IPatientRelated {
     $this->_acte_depassement_anesth = $this->depassement_anesth;   
   }
   
-  function updateDBFields() {
+  function updatePlainFields() {
     if (is_array($this->_codes_ccam) && count($this->_codes_ccam)) {
       $this->codes_ccam = implode("|", $this->_codes_ccam);
     }

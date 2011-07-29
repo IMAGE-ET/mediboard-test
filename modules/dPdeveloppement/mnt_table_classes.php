@@ -71,8 +71,8 @@ foreach ($list_selected_classes as $curr_class_name) {
   $class['fields'] = array();
   
   // Extraction des champs de la classe
-  $db_fields = $object->getDBFields();
-  foreach ($db_fields as $k => $v) {
+  $fields = $object->getPlainFields();
+  foreach ($fields as $k => $v) {
     $class['fields'][$k] = array();
     
     // object fields

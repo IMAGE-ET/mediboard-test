@@ -214,8 +214,8 @@ class CProductDelivery extends CMbObject {
     $this->loadRefPatient();
   }
   
-  function updateDBFields(){
-    parent::updateDBFields();
+  function updatePlainFields(){
+    parent::updatePlainFields();
     
     $this->completeField("stock_class");
     if (!$this->stock_class) {

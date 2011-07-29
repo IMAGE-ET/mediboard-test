@@ -54,7 +54,7 @@ if($del == 1){
 	  $livret->distObj->CodeInterne = $code_interne;
     
 	  
-	  $livret->updateDBFields();
+	  $livret->updatePlainFields();
 
 	  if($livret->distObj->Update() < 0){
       // Affichage de l'erreur

@@ -68,8 +68,8 @@ class CUserLog extends CMbMetaObject {
     }
   }
   
-  function updateDBFields() {
-    parent::updateDBFields();
+  function updatePlainFields() {
+    parent::updatePlainFields();
     if ($this->_fields) {
       $this->fields = implode(" ", $this->_fields);
     }

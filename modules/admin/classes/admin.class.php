@@ -198,8 +198,8 @@ class CUser extends CMbObject {
     return $this->_spec->ds->loadField($this->_spec->table, "user_login_errors");
   }
   
-  function updateDBFields() {
-    parent::updateDBFields();
+  function updatePlainFields() {
+    parent::updatePlainFields();
 
     // Nullify no to empty in database
     $this->user_password = $this->_user_password ? md5($this->_user_password) : null;

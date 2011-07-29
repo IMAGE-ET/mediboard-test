@@ -124,7 +124,7 @@ class CProtocole extends CMbObject {
     }
   }
 
-  function updateDBFields() {
+  function updatePlainFields() {
     if($this->codes_ccam) {
       $this->codes_ccam = strtoupper($this->codes_ccam);
       $codes_ccam = explode("|", $this->codes_ccam);

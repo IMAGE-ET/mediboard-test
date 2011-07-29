@@ -152,8 +152,8 @@ class CPrescriptionLineElement extends CPrescriptionLine {
     $this->_long_view .= $this->_duree_prise;
   }
   
-  function updateDBFields(){
-    parent::updateDBFields();
+  function updatePlainFields(){
+    parent::updatePlainFields();
     if($this->_executant !== null){
       if($this->_executant == ""){
         $this->executant_prescription_line_id = "";

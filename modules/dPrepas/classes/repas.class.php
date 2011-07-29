@@ -96,7 +96,7 @@ class CRepas extends CMbObject {
   }
   
   function store() {
-    $this->updateDBFields();
+    $this->updatePlainFields();
     if(!$this->_no_synchro){
       $service = $this->getService();
       $where = array();

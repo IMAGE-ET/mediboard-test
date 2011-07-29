@@ -113,7 +113,7 @@ class CPermission extends CMbObject {
     }
   }
   
-  function updateDBFields() {
+  function updatePlainFields() {
     if ($this->permission_item != OLD_PERM_ALL) {
       return;
     }
