@@ -10,10 +10,10 @@
 
 abstract class CMbString {
   const LOWERCASE = 1;
-	const UPPERCASE = 2;
+  const UPPERCASE = 2;
   const BOTHCASES = 3;
-	
-	static $glyphs = array (
+  
+  static $glyphs = array (
     "a" => "אבגדהו",
     "c" => "ח",
     "e" => "טיךכ",
@@ -22,12 +22,12 @@ abstract class CMbString {
     "u" => "שתûü",
     "y" => "ÿ",
     "n" => "ס",
-	);
-	
-	static $allographs = array (
-	  "withdiacritics"    => "אבגדהועףפץצרטיךכחלםמןשתûüÿס",
+  );
+  
+  static $allographs = array (
+    "withdiacritics"    => "אבגדהועףפץצרטיךכחלםמןשתûüÿס",
     "withoutdiacritics" => "aaaaaaooooooeeeeciiiiuuuuyn",
-	);
+  );
   
   /**
    * Remove diacritics from a string
@@ -35,60 +35,60 @@ abstract class CMbString {
    * @param constant $filter one of LOWERCASE, UPPERCASE or BOTHCASES (default)
    * @return string Result string
    **/
-	static function removeDiacritics($string, $filter = self::BOTHCASES) {
-	  $from = self::$allographs["withdiacritics"];
-		$to   = self::$allographs["withoutdiacritics"];
+  static function removeDiacritics($string, $filter = self::BOTHCASES) {
+    $from = self::$allographs["withdiacritics"];
+    $to   = self::$allographs["withoutdiacritics"];
 
-		switch ($filter) {
-			case self::LOWERCASE:
-			break;
-			
+    switch ($filter) {
+      case self::LOWERCASE:
+      break;
+      
       case self::UPPERCASE:
       $from = mb_strtoupper($from);
       $to   = mb_strtoupper($to);
-			break;
-			
+      break;
+      
       default:
       case self::BOTHCASES:
       $from .= mb_strtoupper($from);
       $to   .= mb_strtoupper($to);
       break;
-		}
-			  
-	  return strtr($string, $from, $to);
-	}
-	
+    }
+        
+    return strtr($string, $from, $to);
+  }
+  
   /**
    * Allow any kind of glyphs variants with diacritics in regular expression
    * @param string $regexp The regexp string
    * @return string Result regexp string
    **/
-	static function allowDiacriticsInRegexp($regexp) {
-		$regexp = self::removeDiacritics(strtolower($regexp));
-		$fromto = array();
-		foreach(self::$glyphs as $glyph => $allographs) {
-			$fromto[$glyph] = "[$glyph$allographs]";
-		}
-		return strtr($regexp, $fromto);
-	}
-	
-	/**
-	 * Truncate a string to a given maximum length
-	 * @param string $string The string to truncate
-	 * @param int $max The max length of the resulting string, default to 25
-	 * @param string $replacement The string that replaces the characters removed, default to '...'
-	 * @return string The truncated string
-	 */
-	static function truncate($string, $max = 25, $replacement = '...'){
-	  if (is_object($string)) {
-	    return $string;
-	  }
-	  
-	  if (strlen($string) > $max) {
+  static function allowDiacriticsInRegexp($regexp) {
+    $regexp = self::removeDiacritics(strtolower($regexp));
+    $fromto = array();
+    foreach(self::$glyphs as $glyph => $allographs) {
+      $fromto[$glyph] = "[$glyph$allographs]";
+    }
+    return strtr($regexp, $fromto);
+  }
+  
+  /**
+   * Truncate a string to a given maximum length
+   * @param string $string The string to truncate
+   * @param int $max The max length of the resulting string, default to 25
+   * @param string $replacement The string that replaces the characters removed, default to '...'
+   * @return string The truncated string
+   */
+  static function truncate($string, $max = 25, $replacement = '...'){
+    if (is_object($string)) {
+      return $string;
+    }
+    
+    if (strlen($string) > $max) {
       return substr($string, 0, $max - strlen($replacement)).$replacement;
-	  }
-	  return $string;
-	}
+    }
+    return $string;
+  }
   
   static function upper($string) {
     return mb_strtoupper($string, CApp::$encoding);
@@ -133,27 +133,27 @@ abstract class CMbString {
     $value = round($value, 2 - intval(log10($value)));
     return "$value$suffix$unit";
   }
-	
+  
   /**
    * Convert a deca-binary string to a integer
    * @param string $string Deca-binary string
    * @return integer Integer equivalent
    */
-	static function fromDecaBinary($string, $unit = "o") {
-	  $string = strtolower(trim($string));
-	  if (!preg_match("/(.*)([kmgt])[$unit]?/", $string, $matches)) {
+  static function fromDecaBinary($string, $unit = "o") {
+    $string = strtolower(trim($string));
+    if (!preg_match("/(.*)([kmgt])[$unit]?/", $string, $matches)) {
       return intval($string);
-	  }
-		
-		list($string, $value, $suffix) = $matches;
-	  switch($suffix) {
-	    case 't': $value *= 1024;     
-	    case 'g': $value *= 1024;
-	    case 'm': $value *= 1024;
-	    case 'k': $value *= 1024;
-	  }
-	  return intval($value);
-	}
+    }
+    
+    list($string, $value, $suffix) = $matches;
+    switch($suffix) {
+      case 't': $value *= 1024;     
+      case 'g': $value *= 1024;
+      case 'm': $value *= 1024;
+      case 'k': $value *= 1024;
+    }
+    return intval($value);
+  }
   
   static function unslash($str) {
     return strtr($str, array(
@@ -181,31 +181,68 @@ abstract class CMbString {
     $string = htmlentities($string);
     return strtr($string, $ent);
   }
-	
-	/**
-	 * Remove a token in the string
-	 * @param string $string The string to reduce
-	 * @param string $glue Implode/explode like glue
-	 * @param string $token Token ton remove
-	 * @return string
-	 */
-	static function removeToken($string, $glue, $token) {
-		$tokens = explode($glue, $string);
-		CMbArray::removeValue($token, $tokens);
-		return implode($glue, $tokens);
-	}
+  
+  /**
+   * Remove a token in the string
+   * @param string $string The string to reduce
+   * @param string $glue Implode/explode like glue
+   * @param string $token Token ton remove
+   * @return string
+   */
+  static function removeToken($string, $glue, $token) {
+    $tokens = explode($glue, $string);
+    CMbArray::removeValue($token, $tokens);
+    return implode($glue, $tokens);
+  }
 
-	static function isUTF8($string) {
-	  return (mb_detect_encoding($string) == "UTF-8");
-	}
-	
+  static function isUTF8($string) {
+    return mb_detect_encoding($string) === "UTF-8";
+		
+    /* // א tester :
+    $invalidchars = '[\xC0-\xDF]([^\x80-\xBF]|$)' .
+      '|[\xE0-\xEF].{0,1}([^\x80-\xBF]|$)' .
+      '|[\xF0-\xF7].{0,2}([^\x80-\xBF]|$)' .
+      '|[\xF8-\xFB].{0,3}([^\x80-\xBF]|$)' .
+      '|[\xFC-\xFD].{0,4}([^\x80-\xBF]|$)' .
+      '|[\xFE-\xFE].{0,5}([^\x80-\xBF]|$)' .
+      '|[\x00-\x7F][\x80-\xBF]' .
+      '|[\xC0-\xDF].[\x80-\xBF]' .
+      '|[\xE0-\xEF]..[\x80-\xBF]' .
+      '|[\xF0-\xF7]...[\x80-\xBF]' .
+      '|[\xF8-\xFB]....[\x80-\xBF]' .
+      '|[\xFC-\xFD].....[\x80-\xBF]' .
+      '|[\xFE-\xFE]......[\x80-\xBF]' .
+      '|^[\x80-\xBF]';
+      
+    return !preg_match("!$invalidchars!", $string);
+    
+		$length = strlen($string);
+		
+		for ($i=0; $i < $length; $i++) {
+			$c = ord($string[$i]);
+			     if ($c < 0x80) $n = 0; # 0bbbbbbb
+			elseif (($c & 0xE0) == 0xC0) $n=1; # 110bbbbb
+			elseif (($c & 0xF0) == 0xE0) $n=2; # 1110bbbb
+			elseif (($c & 0xF8) == 0xF0) $n=3; # 11110bbb
+			elseif (($c & 0xFC) == 0xF8) $n=4; # 111110bb
+			elseif (($c & 0xFE) == 0xFC) $n=5; # 1111110b
+			else return false; # Does not match any model
+			
+			for ($j=0; $j<$n; $j++) { # n bytes matching 10bbbbbb follow ?
+			  if ((++$i == $length) || ((ord($string[$i]) & 0xC0) != 0x80))
+			  return false;
+			}
+		}
+    return true;*/
+  }
+  
   /**
    * Get a query string from params array. (reciproque parse_str)
    * @param array $params Parameters
    * @return string Query string
    **/
   static function toQuery($params) {
-  	$_params = array();
+    $_params = array();
     foreach ($params as $key => $value) {
       $_params[] = "$key=$value";
     }

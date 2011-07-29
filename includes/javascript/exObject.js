@@ -52,12 +52,12 @@ ExObject = {
     var inputs = Form.getInputsArray(form[elementName]);
     
     var triggerFunc = function(input, triggers) {
-			var isSetCheckbox = input.hasClassName("set-checkbox");
-			
-			if (isSetCheckbox && !input.checked) {
-				return;
-			}
-			
+      var isSetCheckbox = input.hasClassName("set-checkbox");
+      
+      if (isSetCheckbox && !input.checked) {
+        return;
+      }
+      
       var value = (isSetCheckbox ? input.value : $V(input));
       var ex_class_id = triggers[value];
       triggers[value] = null;
@@ -184,8 +184,8 @@ ExObjectFormula = {
           }
         });
       });
-			
-			ExObjectFormula.computeResult(fieldElement);
+      
+      ExObjectFormula.computeResult(fieldElement);
     });
   },
   
@@ -250,6 +250,7 @@ ExObjectFormula = {
 
     data.variables.each(function(v){
       values[v] = constants[v] || ExObjectFormula.getInputValue(form[v]);
+      if (values[v] === "") values[v] = NaN;
     });
   
     var result = data.parser.evaluate(values);

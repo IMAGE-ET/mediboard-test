@@ -749,8 +749,9 @@ class CMbFieldSpec {
      'extra' => $is_key ? 'auto_increment' : null,
     );
     
+    // @todo mettre dans dans les classes elles-mêmes
     if (!$this->isTextBlob()) {
-      if (isset($this->default)) {
+      if (isset($this->default) && !($this instanceof CBoolSpec && $this->default === "")) {
         $props['default'] = "DEFAULT '$this->default'";
       }
       elseif (isset($this->defaultOption)) {
