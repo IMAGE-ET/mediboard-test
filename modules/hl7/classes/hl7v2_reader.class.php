@@ -14,17 +14,20 @@ class CHL7v2Reader {
    * Read HL7 file
    * @param $fileName Filename
    */
-  function readFile($fileName) {    
+  function readFile($fileName) {
     $message = new CHL7v2Message();
+		
     try {
       $fileContents = file_get_contents($fileName);
       $fileContents = str_replace("\r\n", "\n", $fileContents);
       $fileContents = str_replace("\n", "\n", $fileContents);
-      $message->parseMessage($fileContents);
+      $message->parse($fileContents);
     } catch (Exception $e) {
       exceptionHandler($e);
       return;
     }
+  
+    return $message;
   }
 }
 

@@ -22,16 +22,23 @@ if (!$list = $ftp->getListFiles("./")) {
   CAppUI::stepAjax("Le répertoire ne contient aucun fichier", UI_MSG_ERROR);
 }
 
+$messages = array();
+
 foreach($list as $filepath) {
   if (substr($filepath, -(strlen($extension))) == $extension) {
     $filename = tempnam("", "hl7");
     $ftp->getFile($filepath, $filename);
     $hl7v2_reader = new CHL7v2Reader();
-    $hl7v2_reader->readFile($filename);
+		
+		$messages[] = $hl7v2_reader->readFile($filename);
+    
     unlink($filename);
   } else {
    // $ftp->delFile($filepath);
   }
 }
 
-?>
+// Création du template
+$smarty = new CSmartyDP();
+$smarty->assign("messages", $messages);
+$smarty->display("inc_read_hl7v2_files.tpl");

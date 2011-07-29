@@ -8,9 +8,10 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
  */
 
-class CHL7V2 {  
+abstract class CHL7V2 {  
   const LIB_HL7 = "lib/hl7";
-  const PREFIX_SEGMENT_NAME = "segment";
+  const PREFIX_MESSAGE_NAME   = "message";
+  const PREFIX_SEGMENT_NAME   = "segment";
   const PREFIX_COMPOSITE_NAME = "composite";
   
   static $versions = array(
@@ -22,12 +23,13 @@ class CHL7V2 {
     "5"
   );
   
-  static $specs = array();
-
-  var $spec_hl7_dir  = null;
-  var $spec_filename = null;
+  static $schemas = array();
+  
   var $minOccurs     = null;
   var $maxOccurs     = null;
+  var $spec_filename = null;
+	var $specs         = null;
+	var $data          = null;
   
   static function isDate($value) {
     return preg_match("/^\d{8}$/", $value);
@@ -57,7 +59,9 @@ class CHL7V2 {
     return is_string($value);
   }
   
-  function getSpecs() {}
+  function parse($data) {
+    $this->data = $data;
+  }
   
   function getFields() {
     return CHL7v2XPath::queryMultipleNodes($this->getSpecs(), "elements");
@@ -72,12 +76,36 @@ class CHL7V2 {
   }
   
   function getFieldDatatype(SimpleXMLElement $spec_field) {    
-    return CHL7v2XPath::queryTextNode($spec_field, "datatype");;
+    return CHL7v2XPath::queryTextNode($spec_field, "datatype");
   }
   
   function getMinOccurs(SimpleXMLElement $spec_field) {
     $this->minOccurs = CHL7v2XPath::queryAttributNode($spec_field, "elements/field", "minOccurs");
   }
+  
+  abstract function validate();
+	
+	abstract function getVersion();
+  
+  abstract function getSpecs();
+	
+	function getSchema($type, $name) {
+		$version = $this->getVersion();
+		
+		if (isset(self::$schemas[$version][$type][$name])) {
+			return self::$schemas[$version][$type][$name];
+		}
+		
+		$version_dir = "hl7v".preg_replace("/[^0-9]/", "_", $version);
+    $this->spec_filename = self::LIB_HL7."/$version_dir/$type$name.xml";
+    
+    if (!file_exists($this->spec_filename)) {
+      throw new CHL7v2Exception($this->spec_filename, CHL7v2Exception::SPECS_FILE_MISSING);
+    }
+
+    self::$schemas[$version][$type][$name] = simplexml_load_file($this->spec_filename);
+    return $this->specs = self::$schemas[$version][$type][$name];
+	}
 }
 
 ?>

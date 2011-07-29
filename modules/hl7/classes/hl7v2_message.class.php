@@ -8,7 +8,7 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
  */
 
-class CHL7v2Message {  
+class CHL7v2Message extends CHL7v2 {
   const DEFAULT_SEGMENT_TERMINATOR      = "\n";
   const DEFAULT_FIELD_SEPARATOR         = "|";
   const DEFAULT_COMPONENT_SEPARATOR     = "^";
@@ -16,7 +16,7 @@ class CHL7v2Message {
   const DEFAULT_ESCAPE_CHARACTER        = "\\";
   const DEFAULT_SUBCOMPONENT_TERMINATOR = "&";
 
-  static $enteredHeaders = array( "MSH", "FHS", "BHS");
+  static $enteredHeaders = array("MSH", "FHS", "BHS");
    
   var $segmentTerminator     = self::DEFAULT_SEGMENT_TERMINATOR;
   var $fieldSeparator        = self::DEFAULT_FIELD_SEPARATOR;
@@ -25,21 +25,23 @@ class CHL7v2Message {
   var $escapeCharacter       = self::DEFAULT_ESCAPE_CHARACTER;
   var $subcomponentSeparator = self::DEFAULT_SUBCOMPONENT_TERMINATOR;
 
-  var $version     = "5";
+  var $version     = '2.5';
   var $name        = null;
   var $description = null;
   var $segments    = array();
-  var $data        = null;
   
-  function parseMessage($message) {
+  function parse($data) {
+    parent::parse($data);
+		
+		$message = $this->data;
+		
     // first tokenize the segments
     if (($message == null) || (strlen($message) < 4)) {
       throw new CHL7v2Exception($message, CHL7v2Exception::EMPTY_MESSAGE);
     }
     
-    $this->data = $message;
-    
     $this->fieldSeparator = $message[3];
+		
     // valid separator
     if (!preg_match("/[^a-z0-9]/i", $this->fieldSeparator) ) {
       throw new CHL7v2Exception($message, CHL7v2Exception::INVALID_SEPARATOR);
@@ -47,19 +49,19 @@ class CHL7v2Message {
 
     $nextDelimiter = strpos($message, $this->fieldSeparator, 4);
     if ($nextDelimiter > 4) {
-      // usualy ^
+      // usually ^
       $this->componentSeparator = $message[4];
     }
     if ($nextDelimiter > 5) {
-      // usualy ~
+      // usually ~
       $this->repetitionSeparator = $message[5];
     }
     if ($nextDelimiter > 6) {
-      // usualy \
+      // usually \
       $this->escapeCharacter = $message[6];
     }
     if ($nextDelimiter > 7) {
-      // usualy &
+      // usually &
       $this->subcomponentSeparator = $message[7];
     }
 
@@ -77,10 +79,15 @@ class CHL7v2Message {
   function handleSegments() {
     $lines = explode($this->segmentTerminator, $this->data);
 		
-    foreach ($lines as $_line) {
+    foreach ($lines as $n => $_line) {
       try {
         $segment = new CHL7v2Segment($this);
-        $segment->parseSegment($_line);
+        $segment->parse($_line);
+				
+				if ($n == 0) {
+					$this->name    = $segment->fields[8]->data;
+          $this->version = $segment->fields[11]->data;
+				}
       } catch (Exception $e) {
         exceptionHandler($e);
         return;
@@ -88,31 +95,52 @@ class CHL7v2Message {
     }
     
     $this->validate();
-    echo(nl2br($this));
   }
   
   function validate() {
-    // get version
-    $this->segments[0]->getVersion();
-    
+  	/*$specs = $this->getSpecs();
+		
+		mbtrace($specs);*/
+    /*$segments = array();
+		
+		$i = 0;
+    foreach($specs->segments as $_segment) {
+    	if ($_segment->attributes()->minOccurs == 0) {
+    		mbTrace($_segment);
+    	}
+      if (!isset($this->segments[$i])) {
+        //mbTrace($i, $this->owner_segment->name);
+        break;
+      }
+      $parts[(string)$_field->name] = $this->parts[$i];
+      $i++;
+    }*/
+		
     // validate all segments
     foreach ($this->segments as $_segment) {
       try {
-        $_segment->validateSegment();
+        $_segment->validate();
       } catch (Exception $e) {
         exceptionHandler($e);
         return;
       }
     }
-    
-    // validate message
+  }
+  
+  function getVersion(){
+    return $this->version;
   }
 	
-	function __toString(){
-		$s = "$this->name - $this->description\n";
-		$s .= implode("\n ---- \n", $this->segments);
-		return $s;
+	function getSpecs(){
+		return $this->getSchema(self::PREFIX_MESSAGE_NAME, $this->name);
 	}
+	
+	/*
+	function __toString(){
+		$s = "<h2>$this->name - $this->description</h2>";
+		$s .= implode("<br />", $this->segments);
+		return $s;
+	}*/
 }
 
 ?>

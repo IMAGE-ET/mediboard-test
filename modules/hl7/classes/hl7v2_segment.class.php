@@ -11,32 +11,38 @@
 class CHL7v2Segment extends CHL7V2 {   
   var $name        = null;
   var $fields      = array();
+	
+	/**
+	 * @var CHL7v2Message
+	 */
   var $owner_message = null;
     
   function __construct(CHL7v2Message $message) {
     $this->owner_message = $message;
   }
   
-  function parseSegment($line) {
+  function parse($data) {
+    parent::parse($data);
+		
     $message = $this->owner_message;
 
-    $fields = explode($message->fieldSeparator, $line);
+    $fields = explode($message->fieldSeparator, $this->data);
     $this->name = $fields[0];
     
     // valid characters
     if (preg_match("/[^a-z0-9]/i", $this->name) ) {
-      throw new CHL7v2Exception($line, CHL7v2Exception::INVALID_SEGMENT_CHARACTERS);
+      throw new CHL7v2Exception($this->data, CHL7v2Exception::INVALID_SEGMENT_CHARACTERS);
     }
     
     // valid fields number, at least two
     if (count(array_filter($fields, "stringNotEmpty")) < 2) {
-      throw new CHL7v2Exception($line, CHL7v2Exception::TOO_FEW_SEGMENT_FIELDS);
+      throw new CHL7v2Exception($this->data, CHL7v2Exception::TOO_FEW_SEGMENT_FIELDS);
     }
 
     foreach ($fields as $_field) {
       try {
         $field = new CHL7v2Field($this);
-        $field->parseField($_field);
+        $field->parse($_field);
         
         $this->fields[] = $field;
       } catch (Exception $e) {
@@ -48,8 +54,8 @@ class CHL7v2Segment extends CHL7V2 {
     $message->segments[] = $this;
   }
   
-  function validateSegment() {
-    $this->loadSegmentSchema();   
+  function validate() {
+    $specs = $this->getSpecs();   
     
     $specFields = $this->getFields();
     if (count($this->fields) > count($specFields)) {
@@ -67,7 +73,7 @@ class CHL7v2Segment extends CHL7V2 {
     
     foreach ($this->fields as $_field) {
       try {
-        $_field->validateField();
+        $_field->validate();
       } catch (Exception $e) {
         exceptionHandler($e);
         return;
@@ -80,37 +86,23 @@ class CHL7v2Segment extends CHL7V2 {
   }
   
   function getVersion() {
-    $version = explode(".", $this->fields[11]->value[0]);
-        
-    if ($version[1] != "x")
-      $this->owner_message->version =  $version[1];
+    return $this->owner_message->getVersion();
   }
   
-  function loadSegmentSchema() {
-    if (isset(self::$specs[$this->name])) {
-      return;
-    }
-    
-    $this->spec_hl7_dir  = self::LIB_HL7."/hl7v2_".$this->getMessage()->version."/";
-    $this->spec_filename = self::PREFIX_SEGMENT_NAME.$this->name.".xml";
-    
-    $filename = $this->spec_hl7_dir.$this->spec_filename;
-    if (!file_exists($filename)) {
-      throw new CHL7v2Exception($filename, CHL7v2Exception::SPECS_FILE_MISSING);
-    }
-
-    self::$specs[$this->name] = simplexml_load_file($filename);
-    
-    //mbTrace(self::$specs[$this->name], "specs");
-  }
-  
-  function getSpecs() {
-    return self::$specs[$this->name];
+  function getSpecs(){
+    return $this->getSchema(self::PREFIX_SEGMENT_NAME, $this->name);
   }
 	
+	/*
 	function __toString(){
-		return "&nbsp;&nbsp; - ".implode("\n&nbsp;&nbsp; - ", $this->fields);
-	}
+		$str = "<h3>$this->name</h3>";
+		
+		foreach($this->fields as $i => $field) {
+			$i++; // begins at 1
+			$str .= "&nbsp;&nbsp; - $i : $field<br />";
+		}
+		return $str;
+	}*/
 }
 
 ?>

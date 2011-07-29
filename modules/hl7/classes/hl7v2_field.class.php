@@ -10,20 +10,23 @@
 
 CAppUI::requireModuleClass("hl7", "hl7v2_segment");
 
-class CHL7v2Field extends CHL7V2 {  
+class CHL7v2Field extends CHL7V2 {
   static $typesBase = array(
     "Date",
     "DateTime",
+    "Time",
     "Double", 
     "Integer",
     "String",
-    "Time"
   );
   
+	/**
+	 * @var CHL7v2Segment
+	 */
   var $owner_segment = null;
+	
   var $datatype      = null;
-  var $value         = array();
-  var $values        = array();
+  var $parts         = array();
   
   var $_is_base_type = null;
   
@@ -31,44 +34,57 @@ class CHL7v2Field extends CHL7V2 {
     $this->owner_segment = $segment;
   }
   
-  function parseField($field) {
-    if ($field) {
-      $this->value[]  = $field;
-      $this->values[] = explode($this->owner_segment->getMessage()->componentSeparator, $field);
-    }
+  function parse($data) {
+    parent::parse($data);
+		
+    $this->parts = explode($this->owner_segment->getMessage()->componentSeparator, $this->data);
   }
   
-  function validateField() {
-    $this->loadFieldSchema();   
+  function validate() {
+    $specs = $this->getSpecs();
+				
+		$parts = array();
+		$i = 0;
+		foreach($specs->elements->field as $_field) {
+			if (!isset($this->parts[$i])) {
+				mbTrace($i, $this->owner_segment->name);
+				break;
+			}
+      $parts[(string)$_field->name] = $this->parts[$i];
+			$i++;
+		}
+		
+		$this->parts = $parts;
     
-    $this->isBaseType();
-    
-    $this->getMinOccurs(self::$specs[$this->datatype]);
+    $this->getMinOccurs($specs);
   }
   
-  function loadFieldSchema() {
-    if (isset(self::$specs[$this->datatype])) {
-      return;
-    }
-    
-    $this->spec_hl7_dir  = self::LIB_HL7."/hl7v2_".$this->owner_segment->getMessage()->version."/";
-    $this->spec_filename = self::PREFIX_COMPOSITE_NAME.$this->datatype.".xml";
-    
-    self::$specs[$this->datatype] = simplexml_load_file($this->spec_hl7_dir.$this->spec_filename);
-    
-  }
-  
-  function getSpecs() {
-    return self::$specs[self::PREFIX_COMPOSITE_NAME.$this->name];
+  function getSpecs(){
+    return $this->getSchema(self::PREFIX_COMPOSITE_NAME, $this->datatype);
   }
   
   function isBaseType() {
-    $this->_is_base_type = isset(self::$typesBase[$this->datatype]);
+    return $this->_is_base_type = isset(self::$typesBase[$this->datatype]);
   }
 	
-	function __toString(){
-		return "$this->datatype - ".implode(" / ", $this->value);
+	function getVersion(){
+		return $this->owner_segment->getVersion();
 	}
+	
+	function getValue(){
+		return $this->parts;
+	}
+	
+	/*
+	function __toString(){
+		$str = $this->datatype."<br />";
+    
+    foreach($this->parts as $part) {
+      $str .= "&nbsp;&nbsp;&nbsp;&nbsp; - $part<br />";
+    }
+		
+		return $str;
+	}*/
 }
 
 ?>
