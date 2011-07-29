@@ -265,8 +265,8 @@ class CStoredObject extends CModelObject {
    * @return boolean
    */
   function objectModified() {    
-    foreach ($this->getPlainFields() as $propName => $propValue) {
-      if ($this->fieldModified($propName)) {
+    foreach ($this->getPlainFields() as $name => $value) {
+      if ($this->fieldModified($name)) {
         return true;
       }
     }
@@ -780,20 +780,20 @@ class CStoredObject extends CModelObject {
     $msg = "";
     
     // Property level checking
-    foreach ($this->_props as $propName => $propSpec) {
-      if ($propName[0] !== '_') {
-        if (!property_exists($this, $propName)) {
-          trigger_error("La spécification cible la propriété '$propName' inexistante dans la classe '$this->_class_name'", E_USER_WARNING);
+    foreach ($this->_props as $name => $prop) {
+      if ($name[0] !== '_') {
+        if (!property_exists($this, $name)) {
+          trigger_error("La spécification cible la propriété '$name' inexistante dans la classe '$this->_class_name'", E_USER_WARNING);
         } 
         else {
-          $propValue =& $this->$propName;
-          if(($propValue !== null) || (!$this->_id)) {
-            $msgProp = $this->checkProperty($propName);
+          $value =& $this->$name;
+          if(($value !== null) || (!$this->_id)) {
+            $msgProp = $this->checkProperty($name);
             
-            $value = CMbString::truncate($propValue);
-            $debugInfo = $debug ? "(val:\"$value\", spec:\"$propSpec\")" : "(valeur: \"$value\")";
-            $fieldName = CAppUI::tr("$this->_class_name-$propName");
-            $msg .= $msgProp ? " &bull; <strong title='$propName'>$fieldName</strong> : $msgProp $debugInfo <br/>" : null;
+            $truncated = CMbString::truncate($value);
+            $debugInfo = $debug ? "(val:\"$truncated\", prop:\"$prop\")" : "(valeur: \"$truncated\")";
+            $fieldName = CAppUI::tr("$this->_class_name-$name");
+            $msg .= $msgProp ? " &bull; <strong title='$name'>$fieldName</strong> : $msgProp $debugInfo <br/>" : null;
           }
         }
       }
@@ -805,12 +805,12 @@ class CStoredObject extends CModelObject {
 
     // Class level unique checking
     // @todo Move this checking up to CStoredObject (mind the _merging escape)
-    foreach ($this->_spec->uniques as $unique => $propNames) {
+    foreach ($this->_spec->uniques as $unique => $names) {
       $other = new $this->_class_name;
       
-      foreach ($propNames as $propName) {
-        $this->completeField($propName);
-        $other->$propName = $value = addslashes($this->$propName);
+      foreach ($names as $name) {
+        $this->completeField($name);
+        $other->$name = $value = addslashes($this->$name);
         $values[] = "'$value'";
       }
       
@@ -823,13 +823,13 @@ class CStoredObject extends CModelObject {
     }
     
     // Class-level xor checking
-    foreach ($this->_spec->xor as $xor => $propNames) {
+    foreach ($this->_spec->xor as $xor => $names) {
       $n = 0;
       $fields = array();
-      foreach($propNames as $propName) {
-        $this->completeField($propName);
-        $fields[] = CAppUI::tr("$this->_class_name-$propName");
-        if ($this->$propName) {
+      foreach($names as $name) {
+        $this->completeField($name);
+        $fields[] = CAppUI::tr("$this->_class_name-$name");
+        if ($this->$name) {
           $n++;
         }
       }
@@ -849,9 +849,9 @@ class CStoredObject extends CModelObject {
    */
   function escapeValues() {
     $values = $this->getProperties();
-    foreach ($values as $propName => $propValue) {
-      if ($propValue) {
-        $this->$propName = addslashes($propValue);
+    foreach ($values as $name => $value) {
+      if ($value) {
+        $this->$name = addslashes($value);
       }
     }
   }
@@ -862,9 +862,9 @@ class CStoredObject extends CModelObject {
    */
   function unescapeValues() {
     $values = $this->getProperties();
-    foreach ($values as $propName => $propValue) {
-      if ($propValue) {
-        $this->$propName = stripslashes($propValue);
+    foreach ($values as $name => $value) {
+      if ($value) {
+        $this->$name = stripslashes($value);
       }
     }
   }
@@ -881,11 +881,9 @@ class CStoredObject extends CModelObject {
 
     // Find changed fields
     $fields = array();
-    $fields = $this->getPlainFields();
-    
-    foreach ($fields as $propName => $propValue) {
-      if ($this->fieldModified($propName)) {
-        $fields[] = $propName;
+    foreach ($this->getPlainFields() as $name => $value) {
+      if ($this->fieldModified($name)) {
+        $fields[] = $name;
       }
     }
     

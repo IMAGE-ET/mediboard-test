@@ -264,8 +264,8 @@ class CModelObject {
    */
   function getSpecs() {
     $specs = array();
-    foreach ($this->_props as $propName => $propSpec) {
-      $specs[$propName] = CMbFieldSpecFact::getSpec($this, $propName, $propSpec);
+    foreach ($this->_props as $name => $prop) {
+      $specs[$name] = CMbFieldSpecFact::getSpec($this, $name, $prop);
     }
     return $specs;
   }
@@ -301,11 +301,11 @@ class CModelObject {
   
   /**
    * Check a property against its specification
-   * @param $propName string Name of the property
+   * @param $name string Name of the property
    * @return string Store-like error message
    */
-  function checkProperty($propName) {
-    $spec = $this->_specs[$propName];
+  function checkProperty($name) {
+    $spec = $this->_specs[$name];
     return $spec->checkPropertyValue($this);
   }
   
@@ -314,10 +314,10 @@ class CModelObject {
       if($specs == null){
         $specs = $this->_specs;
       }
-      foreach ($specs as $propName => $propSpec) {
-        $propValue =& $this->$propName;
-        if ($propValue !== null && $this->_specs[$propName]) {
-          $this->_specs[$propName]->checkConfidential($this);
+      foreach ($specs as $name => $_spec) {
+        $value =& $this->$name;
+        if ($value !== null && $this->_specs[$name]) {
+          $this->_specs[$name]->checkConfidential($this);
         }
       }
     }
@@ -377,9 +377,9 @@ class CModelObject {
   function getPlainFields() {
     $result = array();
     $vars = get_object_vars($this);
-    foreach($vars as $key => $value) {
-      if ($key[0] !== '_') {
-        $result[$key] = $value;
+    foreach($vars as $name => $value) {
+      if ($name[0] !== '_') {
+        $result[$name] = $value;
       }
     }
 
@@ -394,9 +394,9 @@ class CModelObject {
     $specs = $this->_specs;
     $fields = $this->getPlainFields();
     
-    foreach ($fields as $field => $value) {
+    foreach ($fields as $name => $value) {
       if ($value !== null) {
-        $this->$field = $specs[$field]->trim($value);
+        $this->$name = $specs[$name]->trim($value);
       }
     }
   }
@@ -412,19 +412,19 @@ class CModelObject {
     foreach ($diffs as &$diff) $diff = false;
     
     foreach ($objects as &$object) {
-      foreach ($fields as $propName => $propValue) {
+      foreach ($fields as $name => $value) {
         if ($getFirstValue) {
-          if ($this->$propName === null) {
-            $this->$propName = $object->$propName;
+          if ($this->$name === null) {
+            $this->$name = $object->$name;
           }
         }
         else {
-          if ($this->$propName === null && !$diffs[$propName]) {
-            $this->$propName = $object->$propName;
+          if ($this->$name === null && !$diffs[$name]) {
+            $this->$name = $object->$name;
           }
-          else if ($this->$propName != $object->$propName) {
-            $diffs[$propName] = true;
-            $this->$propName = null;
+          else if ($this->$name != $object->$name) {
+            $diffs[$name] = true;
+            $this->$name = null;
           }
         }
       }
@@ -436,9 +436,9 @@ class CModelObject {
    * @todo Rename to plainFields
    */
   function nullifyEmptyFields() {
-    foreach ($this->getPlainFields() as $propName => $propValue) {
-      if ($propValue === "") {
-        $this->$propName = null;
+    foreach ($this->getPlainFields() as $name => $value) {
+      if ($value === "") {
+        $this->$name = null;
       }
     }
   }
@@ -454,10 +454,10 @@ class CModelObject {
       return;
     }
     
-    foreach ($mbObject->getProperties() as $propName => $propValue) {
-      if ($propValue !== null && $propValue != "") {
-        if (!$gently || $this->$propName === null || $this->$propName === "") {
-          $this->$propName = $propValue;
+    foreach ($mbObject->getProperties() as $name => $value) {
+      if ($value !== null && $value != "") {
+        if (!$gently || $this->$name === null || $this->$name === "") {
+          $this->$name = $value;
         }
       }
     }
@@ -488,9 +488,9 @@ class CModelObject {
    */
   function getCSVFields() {
     $fields = array();
-    foreach ($this->getPlainFields() as $key => $value) {
-      if (!$this->_specs[$key] instanceof CRefSpec) {
-        $fields[$key] = $value;
+    foreach ($this->getPlainFields() as $name => $value) {
+      if (!$this->_specs[$name] instanceof CRefSpec) {
+        $fields[$name] = $value;
       }
     }
     return $fields;
