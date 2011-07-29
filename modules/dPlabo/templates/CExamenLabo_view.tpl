@@ -29,7 +29,7 @@
       
       {{if $examen->deb_application || $examen->fin_application}}
       <strong>
-        {{tr}}{{$examen->_class_name}}-application{{/tr}}
+        {{tr}}{{$examen->_class}}-application{{/tr}}
       </strong>
       <em>
         de {{$examen->deb_application|date_format:"%d/%m/%Y"|default:"-"}}

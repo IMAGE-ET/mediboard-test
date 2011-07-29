@@ -1,11 +1,11 @@
 {{if $fileSel && $fileSel->_id}}
   <h4>{{$fileSel->_view}}</h4>
   
-  {{if $fileSel->_class_name=="CFile"}}
+  {{if $fileSel->_class=="CFile"}}
     {{$fileSel->file_date|date_format:$conf.datetime}}<br />
   {{/if}}
 
-  {{if $fileSel->_class_name == "CFile" && $fileSel->_nb_pages && !$acces_denied}}
+  {{if $fileSel->_class == "CFile" && $fileSel->_nb_pages && !$acces_denied}}
   <!-- Déplacement dans les pages -->
     
     <button type="button" {{if $page_prev === null}}disabled="disabled"{{/if}} title="Page précédente" onclick="ZoomAjax('{{$objectClass}}', '{{$objectId}}', '{{$elementClass}}', '{{$elementId}}', '{{$page_prev}}');">

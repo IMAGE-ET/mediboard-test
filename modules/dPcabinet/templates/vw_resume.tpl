@@ -34,7 +34,7 @@ function newExam(sAction, consultation_id) {
   <tr>
     <td>
       {{foreach from=$patient->_ref_documents item=curr_doc}}
-      <a href="#document-{{$curr_doc->_id}}" onclick="popFile('{{$curr_doc->object_class}}','{{$curr_doc->object_id}}','{{$curr_doc->_class_name}}','{{$curr_doc->_id}}')">
+      <a href="#document-{{$curr_doc->_id}}" onclick="popFile('{{$curr_doc->object_class}}','{{$curr_doc->object_id}}','{{$curr_doc->_class}}','{{$curr_doc->_id}}')">
         {{$curr_doc->nom}}
       </a>
       {{foreachelse}}
@@ -43,7 +43,7 @@ function newExam(sAction, consultation_id) {
     </td>
     <td>
       {{foreach from=$patient->_ref_files item=curr_file}}
-      <a href="#file-{{$curr_file->_id}}" onclick="popFile('{{$patient->_class_name}}','{{$patient->_id}}','{{$curr_file->_class_name}}','{{$curr_file->_id}}')">
+      <a href="#file-{{$curr_file->_id}}" onclick="popFile('{{$patient->_class}}','{{$patient->_id}}','{{$curr_file->_class}}','{{$curr_file->_id}}')">
         {{$curr_file->file_name}}
       </a>
       {{foreachelse}}
@@ -134,12 +134,12 @@ function newExam(sAction, consultation_id) {
     </td>
     <td valign="top">
       {{foreach from=$curr_consult->_ref_documents item=curr_doc}}
-      <a href="#" onclick="popFile('{{$curr_doc->object_class}}','{{$curr_doc->object_id}}','{{$curr_doc->_class_name}}','{{$curr_doc->_id}}')">
+      <a href="#" onclick="popFile('{{$curr_doc->object_class}}','{{$curr_doc->object_id}}','{{$curr_doc->_class}}','{{$curr_doc->_id}}')">
         {{$curr_doc->nom}}
       </a>
       {{/foreach}}
       {{foreach from=$curr_consult->_ref_files item=curr_file}}
-      <a href="#" onclick="popFile('{{$curr_file->object_class}}','{{$curr_file->object_id}}','{{$curr_file->_class_name}}','{{$curr_file->_id}}')">
+      <a href="#" onclick="popFile('{{$curr_file->object_class}}','{{$curr_file->object_id}}','{{$curr_file->_class}}','{{$curr_file->_id}}')">
         {{$curr_file->file_name}}
       </a>
       {{/foreach}}
@@ -206,14 +206,14 @@ function newExam(sAction, consultation_id) {
     <td colspan="2" valign="top">
       {{foreach from=$curr_sejour->_ref_operations item=curr_op}}
       {{foreach from=$curr_op->_ref_documents item=curr_doc}}
-      <a href="#" onclick="popFile('{{$curr_doc->object_class}}','{{$curr_doc->object_id}}','{{$curr_doc->_class_name}}','{{$curr_doc->_id}}')">
+      <a href="#" onclick="popFile('{{$curr_doc->object_class}}','{{$curr_doc->object_id}}','{{$curr_doc->_class}}','{{$curr_doc->_id}}')">
         {{$curr_doc->nom}}
       </a>
       {{/foreach}}
       {{/foreach}}
       {{foreach from=$curr_sejour->_ref_operations item=curr_op}}
       {{foreach from=$curr_op->_ref_files item=curr_file}}
-      <a href="#" onclick="popFile('{{$curr_file->object_class}}','{{$curr_file->object_id}}','{{$curr_file->_class_name}}','{{$curr_file->_id}}')">
+      <a href="#" onclick="popFile('{{$curr_file->object_class}}','{{$curr_file->object_id}}','{{$curr_file->_class}}','{{$curr_file->_id}}')">
         {{$curr_file->file_name}}
       </a>
       {{/foreach}}

@@ -18,7 +18,7 @@ $owner = CMbObject::loadFromGuid($owner_guid);
 if ($file && $owner && $owner->_id && ($fp = fopen($file['tmp_name'], 'r'))) {
   $user_id = $function_id = $group_id = null;
   
-  switch($owner->_class_name) {
+  switch($owner->_class) {
     case 'CMediusers': $user_id = $owner->_id; break;
     case 'CFunctions': $function_id = $owner->_id; break;
     case 'CGroups':    $group_id = $owner->_id; break;

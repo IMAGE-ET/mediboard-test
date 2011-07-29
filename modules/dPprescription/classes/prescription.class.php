@@ -453,7 +453,7 @@ class CPrescription extends CMbObject implements IPatientRelated {
 		
 	  // Store de la ligne
     $msg = $_line->store();
-    CAppUI::displayMsg($msg, "{$_line->_class_name}-msg-create");  
+    CAppUI::displayMsg($msg, "{$_line->_class}-msg-create");  
 		
 		
 		if($_line instanceof CPrescriptionLineMix){
@@ -469,7 +469,7 @@ class CPrescription extends CMbObject implements IPatientRelated {
       foreach($_line->_ref_prises as $prise){
         $prise->_id = "";
         $prise->object_id = $_line->_id;
-        $prise->object_class = $_line->_class_name;
+        $prise->object_class = $_line->_class;
         if($prise->decalage_intervention != null){
           $time_operation = "";
           if($date_operation){
@@ -541,7 +541,7 @@ class CPrescription extends CMbObject implements IPatientRelated {
       foreach($_substitutions as $_line_subst_by_chap){
         foreach($_line_subst_by_chap as $_line_subst){
           $_line_subst->substitute_for_id = $_line_med->_id;
-          $_line_subst->substitute_for_class = $_line_med->_class_name;
+          $_line_subst->substitute_for_class = $_line_med->_class;
           $this->applyDateProtocole($_line_subst, $praticien_id, $date_sel, $time_sel, $operation_id, $debut_sejour, $fin_sejour, 
                                     $date_operation, $hour_operation, $operation, $sejour, $protocole_base_id);
         }
@@ -573,7 +573,7 @@ class CPrescription extends CMbObject implements IPatientRelated {
       foreach($_substitutions_perf as $_line_subst_by_chap){
         foreach($_line_subst_by_chap as $_line_subst){
           $_line_subst->substitute_for_id = $_prescription_line_mix->_id;
-          $_line_subst->substitute_for_class = $_prescription_line_mix->_class_name;
+          $_line_subst->substitute_for_class = $_prescription_line_mix->_class;
           $this->applyDateProtocole($_line_subst, $praticien_id, $date_sel, $time_sel, $operation_id, $debut_sejour, $fin_sejour, 
                                     $date_operation, $hour_operation, $operation, $sejour, $protocole_base_id);
         }
@@ -858,7 +858,7 @@ class CPrescription extends CMbObject implements IPatientRelated {
       $this->_ref_current_praticien = $user;
     }
     else {
-      if($this->_ref_object->_class_name == "CSejour"){
+      if($this->_ref_object->_class == "CSejour"){
         $this->_ref_object->loadRefPraticien(1);
       } else {
         $this->_ref_object->loadRefPraticien();
@@ -1897,7 +1897,7 @@ class CPrescription extends CMbObject implements IPatientRelated {
       }
       $planif = new CPlanificationSysteme();
       $planif->object_id = $_line_med->_id;
-      $planif->object_class = $_line_med->_class_name;
+      $planif->object_class = $_line_med->_class;
 
       if(!$planif->countMatchingList()){
         $_line_med->calculPlanifSysteme();
@@ -1911,7 +1911,7 @@ class CPrescription extends CMbObject implements IPatientRelated {
           foreach($_elements as &$_line_element){
             $planif = new CPlanificationSysteme();
             $planif->object_id = $_line_element->_id;
-            $planif->object_class = $_line_element->_class_name;
+            $planif->object_class = $_line_element->_class;
             if(!$planif->countMatchingList()){
               $_line_element->calculPlanifSysteme();
             }

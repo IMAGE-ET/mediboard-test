@@ -123,14 +123,14 @@
       <table class="tbl">
         <tr>
           <th>
-          {{if $object->_class_name == "CSejour"}}
+          {{if $object->_class == "CSejour"}}
             Sejour    
           {{else}}
             Consultation
           {{/if}}
           </th>
         </tr>
-        {{if is_array($object->_ref_prescriptions) && $object->_class_name == "CConsultation"}}
+        {{if is_array($object->_ref_prescriptions) && $object->_class == "CConsultation"}}
           {{assign var=prescription_externe value=$object->_ref_prescriptions.externe}}
           <tr class="selected">
             <td class="text">
@@ -141,7 +141,7 @@
           </tr> 
         {{/if}}
       </table>
-      {{if $object->_class_name == "CSejour"}}
+      {{if $object->_class == "CSejour"}}
       <table class="tbl">
         <tr>
           <th colspan="2">Liste des prescriptions</th>
@@ -173,9 +173,9 @@
             <input type="hidden" name="prescription_id" value="" />
             <input type="hidden" name="del" value="0" />
             <input type="hidden" name="object_id" value="{{$object->_id}}"/>
-            <input type="hidden" name="object_class" value="{{$object->_class_name}}" />
+            <input type="hidden" name="object_class" value="{{$object->_class}}" />
             <input type="hidden" name="callback" value="Prescription.reloadPrescSejour" />
-            {{if $object->_class_name == "CConsultation"}}
+            {{if $object->_class == "CConsultation"}}
               <input type="hidden" name="type" value="externe" />
             {{else}}
               <input type="hidden" name="type" value="pre_admission" />

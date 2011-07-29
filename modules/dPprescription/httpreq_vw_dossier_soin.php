@@ -319,17 +319,17 @@ $smarty->assign("hide_close"          , $hide_close);
 if($object_id && $object_class){
   $smarty->assign("move_dossier_soin", true);
   $smarty->assign("nodebug", true);	 
-  if($line->_class_name == "CPrescriptionLineMix"){
+  if($line->_class == "CPrescriptionLineMix"){
     $smarty->assign("_prescription_line_mix", $line);
     $smarty->display("inc_vw_perf_dossier_soin.tpl");
   } else {
-	  if($line->_class_name == "CPrescriptionLineElement"){
+	  if($line->_class == "CPrescriptionLineElement"){
 	    $smarty->assign("name_cat", $name_cat);
 	    $smarty->assign("name_chap", $name_chap);  
 	  }
 	  $smarty->assign("line", $line);
 	  $smarty->assign("line_id", $line->_id);
-	  $smarty->assign("line_class", $line->_class_name);
+	  $smarty->assign("line_class", $line->_class);
 	  $smarty->assign("transmissions_line", $line->_transmissions);
 	  $smarty->assign("administrations_line", $line->_administrations);
 		$smarty->assign("unite_prise", $unite_prise);

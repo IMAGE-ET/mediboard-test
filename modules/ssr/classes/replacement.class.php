@@ -68,7 +68,7 @@ class CReplacement extends CMbObject {
 		$this->loadRefConge();
 		
 		if ($this->_ref_conge->user_id == $this->replacer_id) {
-			return "$this->_class_name-failed-same_user";
+			return "$this->_class-failed-same_user";
 		}
 	}
 

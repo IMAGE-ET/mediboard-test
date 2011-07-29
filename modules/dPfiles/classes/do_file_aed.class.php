@@ -97,7 +97,7 @@ class CFileAddEdit extends CDoObjectAddEdit {
       if ($merge_files) {
         CAppUI::requireLibraryFile("PDFMerger/PDFMerger");
         $pdf = new PDFMerger;
-        $this->_obj = new $this->_obj->_class_name;
+        $this->_obj = new $this->_obj->_class;
         $obj = $this->_obj;
         $file_name = "";
         $nb_converted = 0;
@@ -195,7 +195,7 @@ class CFileAddEdit extends CDoObjectAddEdit {
           
           // Reinstanciate
   
-          $this->_obj = new $this->_obj->_class_name;
+          $this->_obj = new $this->_obj->_class;
           $obj = $this->_obj;
           $obj->bind($file);
           $obj->file_name = empty($file["_rename"]) ? $file["name"] : $file["_rename"];

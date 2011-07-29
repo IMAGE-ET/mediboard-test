@@ -140,7 +140,7 @@ Main.add( function(){
 		        {{/if}}
 		        <tr>
 		          <td id="adm_{{$key}}">
-		            {{if $by_hour.line->_class_name == "CPrescriptionLineMedicament"}}
+		            {{if $by_hour.line->_class == "CPrescriptionLineMedicament"}}
 								  {{if $by_hour.line->_ref_produit_prescription->_id}}
 									  {{assign var=unite_prise value=$by_hour.line->_ref_produit_prescription->unite_prise}}
                   {{else}}
@@ -157,7 +157,7 @@ Main.add( function(){
 		                <input type="hidden" name="administration_id" value="" />
 		                <input type="hidden" name="administrateur_id" value="{{$app->user_id}}" />
 		                <input type="hidden" name="object_id" value="{{$by_hour.line->_id}}" />
-		                <input type="hidden" name="object_class" value="{{$by_hour.line->_class_name}}" />
+		                <input type="hidden" name="object_class" value="{{$by_hour.line->_class}}" />
 		                <input type="hidden" name="unite_prise" value="{{$by_hour.unite_prise|smarty:nodefaults|JSAttribute}}" />
 		                <input type="hidden" name="dateTime" value="{{$by_hour.dateTime}}" />
 		                <input type="hidden" name="prise_id" value="{{$by_hour.prise_id}}" />
@@ -230,7 +230,7 @@ Main.add( function(){
 		        {{else}}
 		        <tr>
 		          <td id="adm_{{$key}}">
-		            {{if $by_hour.line->_class_name == "CPrescriptionLineMedicament"}}
+		            {{if $by_hour.line->_class == "CPrescriptionLineMedicament"}}
 		              {{assign var=unite_prise value=$by_hour.line->_ref_produit->libelle_unite_presentation}}
 		            {{else}}
 		              {{assign var=unite_prise value=$by_hour.line->_unite_prise}}
@@ -242,7 +242,7 @@ Main.add( function(){
 	                <input type="hidden" name="administration_id" value="" />
 	                <input type="hidden" name="administrateur_id" value="{{$app->user_id}}" />
 	                <input type="hidden" name="object_id" value="{{$by_hour.line->_id}}" />
-	                <input type="hidden" name="object_class" value="{{$by_hour.line->_class_name}}" />
+	                <input type="hidden" name="object_class" value="{{$by_hour.line->_class}}" />
 	                <input type="hidden" name="unite_prise" value="{{$by_hour.unite_prise}}" />
 	                <input type="hidden" name="dateTime" value="{{$by_hour.dateTime}}" />
 	                <input type="hidden" name="prise_id" value="{{$by_hour.prise_id}}" />

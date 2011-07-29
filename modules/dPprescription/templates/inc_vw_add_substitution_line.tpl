@@ -183,7 +183,7 @@ modifFormDate = function(nb_prises, form_name, protocole,line_id){
 
 addAerosol = function(){
   var oFormAerosol = getForm("add_aerosol");
-  return onSubmitFormAjax(oFormAerosol, { onComplete: function() { Prescription.viewSubstitutionLines('{{$line->_id}}','{{$line->_class_name}}') } });
+  return onSubmitFormAjax(oFormAerosol, { onComplete: function() { Prescription.viewSubstitutionLines('{{$line->_id}}','{{$line->_class}}') } });
 }
 
 </script>
@@ -255,7 +255,7 @@ addAerosol = function(){
   <input type="hidden" name="creator_id" value="{{$app->user_id}}" />
   <input type="hidden" name="code_cip" value=""/>
   <input type="hidden" name="substitute_for_id" value="{{$line->_id}}" />
-  <input type="hidden" name="substitute_for_class" value="{{$line->_class_name}}" />
+  <input type="hidden" name="substitute_for_class" value="{{$line->_class}}" />
   <input type="hidden" name="substitution_active" value="0" />
 </form>
 
@@ -273,11 +273,11 @@ addAerosol = function(){
   <input type="hidden" name="unite_duree_passage" value="minute" />
   <input type="hidden" name="date_debut" value="" />
 	<input type="hidden" name="substitute_for_id" value="{{$line->_id}}" />
-  <input type="hidden" name="substitute_for_class" value="{{$line->_class_name}}" />
+  <input type="hidden" name="substitute_for_class" value="{{$line->_class}}" />
 	<input type="hidden" name="substitution_active" value="0" />
 </form>
 
-{{if $line->_class_name == "CPrescriptionLineMedicament"}}
+{{if $line->_class == "CPrescriptionLineMedicament"}}
   {{assign var=dosql value="do_prescription_line_medicament_aed"}}
 {{else}}
   {{assign var=dosql value="do_prescription_line_mix_aed"}}
@@ -338,13 +338,13 @@ addAerosol = function(){
   {{foreach from=$line->_ref_substitution_lines item=lines_chap}}
 	  {{foreach from=$lines_chap item=curr_line}}
 	    {{if $mode_pack}}
-	    	{{if $curr_line->_class_name == "CPrescriptionLineMedicament"}}
+	    	{{if $curr_line->_class == "CPrescriptionLineMedicament"}}
 	        {{include file="../../dPprescription/templates/../../dPprescription/templates/inc_vw_line_pack.tpl" line=$curr_line}}
 	      {{else}}
 	        {{include file="../../dPprescription/templates/../../dPprescription/templates/inc_vw_line_perf_pack.tpl" _prescription_line_mix=$curr_line}}
 	      {{/if}}
 	    {{else}}
-	      {{if $curr_line->_class_name == "CPrescriptionLineMedicament"}}
+	      {{if $curr_line->_class == "CPrescriptionLineMedicament"}}
 	        {{include file="../../dPprescription/templates/inc_vw_line_medicament_lite.tpl" mode_pharma=0 mode_substitution=1}}
 	      {{else}}
 	        {{include file="../../dPprescription/templates/inc_vw_line_mix_lite.tpl" mode_pharma=0 _prescription_line_mix=$curr_line mode_substitution=1}}
@@ -366,7 +366,7 @@ if(document.addLine && document.searchProd){
     var dn = selected.childNodes;
 		if(dn[0].className != 'informal'){
 	    oFormAddLine.code_cip.value = dn[0].firstChild.nodeValue;
-	    submitFormAjax(oFormAddLine, 'systemMsg', { onComplete: function() { Prescription.viewSubstitutionLines('{{$line->_id}}', '{{$line->_class_name}}') } });
+	    submitFormAjax(oFormAddLine, 'systemMsg', { onComplete: function() { Prescription.viewSubstitutionLines('{{$line->_id}}', '{{$line->_class}}') } });
     }
 		oFormProduit.produit.value = "";
   }
@@ -389,7 +389,7 @@ if(document.addLine && document.searchProd){
 addSubstitutionLine = function(code_cip){
   var oForm = getForm("addLine");
   oForm.code_cip.value = code_cip;
-	submitFormAjax(oForm, 'systemMsg', { onComplete: function() { Prescription.viewSubstitutionLines('{{$line->_id}}','{{$line->_class_name}}') } });
+	submitFormAjax(oForm, 'systemMsg', { onComplete: function() { Prescription.viewSubstitutionLines('{{$line->_id}}','{{$line->_class}}') } });
 }
 
 // Suppression d'une ligne de substitution
@@ -397,7 +397,7 @@ Prescription.delLine =  function(line_id) {
 	var oForm = getForm("addLine");
 	oForm.prescription_line_medicament_id.value = line_id;
 	oForm.del.value = 1;
-	submitFormAjax(oForm, 'systemMsg', { onComplete: function() { Prescription.viewSubstitutionLines('{{$line->_id}}','{{$line->_class_name}}') } });
+	submitFormAjax(oForm, 'systemMsg', { onComplete: function() { Prescription.viewSubstitutionLines('{{$line->_id}}','{{$line->_class}}') } });
 }
 
 </script>

@@ -60,7 +60,7 @@ class CInteropActor extends CMbObject {
     parent::updateFormFields();
         
     $this->_view = $this->libelle ? $this->libelle : $this->nom;
-    $this->_type_echange = $this->_class_name;
+    $this->_type_echange = $this->_class;
 
     $this->_tag_patient  = CPatient::getTagIPP($this->group_id);  
     $this->_tag_sejour   = CSejour::getTagNumDossier($this->group_id);
@@ -119,7 +119,7 @@ class CInteropActor extends CMbObject {
   
   function isMessageSupported($message) {
     $msg_supported               = new CMessageSupported();
-    $msg_supported->object_class = $this->_class_name;
+    $msg_supported->object_class = $this->_class;
     $msg_supported->object_id    = $this->_id;
     $msg_supported->message      = $message;
     $msg_supported->active       = 1;

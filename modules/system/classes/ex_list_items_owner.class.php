@@ -21,7 +21,7 @@ class CExListItemsOwner extends CMbObject {
       "CExConcept"    => "concept_id",
       "CExClassField" => "field_id",
     );
-    return CValue::read($map, $this->_class_name);
+    return CValue::read($map, $this->_class);
   }
   
   function getItemsKeys() {

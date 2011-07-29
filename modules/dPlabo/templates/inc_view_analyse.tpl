@@ -1,6 +1,6 @@
 <tr id="PrescriptionItem-{{$_item->_id}}">
     <td>
-      <a href="#{{$_item->_class_name}}-{{$_item->_id}}" onclick="Prescription.Examen.edit({{$_item->_id}})">
+      <a href="#{{$_item->_class}}-{{$_item->_id}}" onclick="Prescription.Examen.edit({{$_item->_id}})">
         {{$curr_examen->_view}}
       </a>
       <form name="delPrescriptionExamen-{{$_item->_id}}" action="?m={{$m}}" method="post" onsubmit="return checkForm(this)">

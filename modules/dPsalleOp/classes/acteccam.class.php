@@ -127,7 +127,7 @@ class CActeCCAM extends CActe {
       }
     }
     if ($siblings >= $nbCode) {
-      return "$this->_class_name-check-already-coded";
+      return "$this->_class-check-already-coded";
     }
   }
 

@@ -441,7 +441,7 @@ updateModaleAfterAddLine = function(line_id){
 		    {{foreach from=$_type_hist_line item=_hist_line}}
 		    <tr>
 		      <!-- Affichage d'une ligne de medicament -->
-		      {{if $_hist_line->_class_name == "CPrescriptionLineMedicament"}}
+		      {{if $_hist_line->_class == "CPrescriptionLineMedicament"}}
 		        <td><a href="#1" onmouseover="ObjectTooltip.createEx(this, '{{$_hist_line->_guid}}')">{{$_hist_line->_view}}</a></td>
 		        {{if !$_hist_line->fin}}
 		          <td>

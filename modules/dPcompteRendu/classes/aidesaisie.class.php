@@ -164,11 +164,11 @@ class CAideSaisie extends CMbObject {
   }
   
   function loadViewDependValues($object) {
-    $this->_vw_depend_field_1 = CAppUI::isTranslated("$object->_class_name.$this->_depend_field_1.$this->depend_value_1") ?
-      CAppUI::tr("$object->_class_name.$this->_depend_field_1.$this->depend_value_1") : 
+    $this->_vw_depend_field_1 = CAppUI::isTranslated("$object->_class.$this->_depend_field_1.$this->depend_value_1") ?
+      CAppUI::tr("$object->_class.$this->_depend_field_1.$this->depend_value_1") : 
       $this->_vw_depend_field_1 = $this->depend_value_1;
-    $this->_vw_depend_field_2 = CAppUI::isTranslated("$object->_class_name.$this->_depend_field_2.$this->depend_value_2") ?
-      CAppUI::tr("$object->_class_name.$this->_depend_field_2.$this->depend_value_2") : 
+    $this->_vw_depend_field_2 = CAppUI::isTranslated("$object->_class.$this->_depend_field_2.$this->depend_value_2") ?
+      CAppUI::tr("$object->_class.$this->_depend_field_2.$this->depend_value_2") : 
       $this->_vw_depend_field_2 = $this->depend_value_2;
   }
   

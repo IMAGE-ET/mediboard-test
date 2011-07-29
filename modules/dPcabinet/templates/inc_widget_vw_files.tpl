@@ -13,7 +13,7 @@
 </form>
 {{/if}}
 
-<button class="new" type="button" onclick="File.upload('{{$object->_class_name}}','{{$object->_id}}', '')" >
+<button class="new" type="button" onclick="File.upload('{{$object->_class}}','{{$object->_id}}', '')" >
   {{tr}}CFile-title-create{{/tr}}
 </button>
 
@@ -26,7 +26,7 @@
 
 <table class="form">
   {{foreach from=$object->_ref_files item=_file}}
-    {{assign var=object_class value=$object->_class_name}}
+    {{assign var=object_class value=$object->_class}}
     {{assign var=object_id    value=$object->_id        }}
     <tr id="tr_{{$_file->_guid}}">
       <td id="td_{{$_file->_guid}}">
@@ -36,7 +36,7 @@
   {{foreachelse}}
     <tr>
     	<td class="empty">
-        {{tr}}{{$object->_class_name}}{{/tr}} :
+        {{tr}}{{$object->_class}}{{/tr}} :
         {{tr}}CFile.none{{/tr}}
     	</td>
     </tr>

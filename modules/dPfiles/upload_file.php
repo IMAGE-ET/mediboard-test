@@ -15,7 +15,7 @@ $uploadok         = CValue::get("uploadok", 0);
 $private          = CValue::get("private", 0);
 $for_identite     = CValue::get("for_identite", 0);
 
-$listCategory = CFilesCategory::listCatClass($object->_class_name);
+$listCategory = CFilesCategory::listCatClass($object->_class);
 
 $file = new CFile();
 $file->private = $private;

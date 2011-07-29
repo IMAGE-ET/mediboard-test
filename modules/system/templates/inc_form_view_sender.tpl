@@ -10,7 +10,7 @@
 
 <form name="Edit-{{$sender->_guid}}" action="?m={{$m}}" method="post" onsubmit="return ViewSender.onSubmit(this);">
 
-<input type="hidden" name="@class" value="{{$sender->_class_name}}" />
+<input type="hidden" name="@class" value="{{$sender->_class}}" />
 <input type="hidden" name="del" value="0" />
 {{mb_key object=$sender}}
 

@@ -5,7 +5,7 @@
     <label for="_bind_tag_view">Tags</label>
   </th>
   <td style="white-space: normal;" colspan="{{$colspan-1}}">
-    <button style="float: right;" class="tag-edit" type="button" onclick="Tag.manage('{{$object->_class_name}}')">
+    <button style="float: right;" class="tag-edit" type="button" onclick="Tag.manage('{{$object->_class}}')">
       Gérer les tags
     </button>
     
@@ -30,7 +30,7 @@
             
             url.addParam("object_class", "CTag");
             url.addParam("input_field", element.name);
-            url.addParam("where[object_class]", "{{$object->_class_name}}");
+            url.addParam("where[object_class]", "{{$object->_class}}");
             url.autoComplete(element, null, {
               minChars: 3,
               method: "get",

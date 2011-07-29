@@ -63,7 +63,7 @@ after_edit_source_lpr = function(id) {
     {{if $source_lpr->_id}}
       <tr>
         <td style="padding-top: 20px;">
-          <button type="button" class="print" onclick="testPrint('{{$source_lpr->_class_name}}','{{$source_lpr->_id}}')">
+          <button type="button" class="print" onclick="testPrint('{{$source_lpr->_class}}','{{$source_lpr->_id}}')">
             {{tr}}CSourceLPR.test_print{{/tr}}
           </button>
         </td>

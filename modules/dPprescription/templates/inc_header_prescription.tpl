@@ -205,7 +205,7 @@ Main.add( function(){
   }
   
   if($('files-{{$prescription->_id}}-CPrescription')){
-	  File.refresh('{{$prescription->_id}}','{{$prescription->_class_name}}');
+	  File.refresh('{{$prescription->_id}}','{{$prescription->_class}}');
   }
 } );
 

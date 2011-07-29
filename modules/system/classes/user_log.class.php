@@ -134,7 +134,7 @@ class CUserLog extends CMbMetaObject {
 	
 	static function getObjectValueAtDate(CMbObject $object, $date, $field) {
     $where = array(
-      "object_class" => "= '$object->_class_name'",
+      "object_class" => "= '$object->_class'",
       "object_id"    => "= '$object->_id'",
       "type"         => "IN('store', 'merge')",
       "extra IS NOT NULL AND extra != '[]'",

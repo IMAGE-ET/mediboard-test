@@ -33,7 +33,7 @@ $dossier_medical->loadRefPrescription();
 if(!$dossier_medical->_ref_prescription->_id){
   $prescription = new CPrescription();
   $prescription->object_id = $dossier_medical->_id;
-  $prescription->object_class = $dossier_medical->_class_name;
+  $prescription->object_class = $dossier_medical->_class;
   $prescription->type = "traitement";
   $msg = $prescription->store();
   $prescription_id = $prescription->_id;
@@ -67,7 +67,7 @@ if($token_poso){
 	  }
 		$prise_poso = new CPrisePosologie();
 		$prise_poso->object_id = $line->_id;
-		$prise_poso->object_class = $line->_class_name;
+		$prise_poso->object_class = $line->_class;
 		$prise_poso->unite_prise = $unite_prise;
 		$prise_poso->quantite = $quantite;
 		if($moment && $moment_unitaire->_id){

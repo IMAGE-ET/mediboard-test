@@ -2,7 +2,7 @@
   <tr>
     <td class="text">
       <a href="#" class="action" id="readonly_{{$_file->_guid}}"
-         onclick="File.popup('{{$object_class}}','{{$object_id}}','{{$_file->_class_name}}','{{$_file->_id}}');"
+         onclick="File.popup('{{$object_class}}','{{$object_id}}','{{$_file->_class}}','{{$_file->_id}}');"
          onmouseover="ObjectTooltip.createEx(this, '{{$_file->_guid}}', 'objectView')">{{$_file}}</a>
       <!--  Formulaire pour modifier le nom d'un fichier -->
       <form name="editName-{{$_file->_guid}}" action="?" method="post" submit="return false;"

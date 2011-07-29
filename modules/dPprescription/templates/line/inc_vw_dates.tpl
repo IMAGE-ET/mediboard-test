@@ -25,9 +25,9 @@ syncDateSubmit = function(oForm, curr_line_id, fieldName, type, object_class, ca
 </script>
 
 {{assign var=line_id value=$line->_id}}
-{{assign var=_object_class value=$line->_class_name}}
+{{assign var=_object_class value=$line->_class}}
 
-{{if $line->_class_name == "CPrescriptionLineElement" && $typeDate != "mode_grille"}}
+{{if $line->_class == "CPrescriptionLineElement" && $typeDate != "mode_grille"}}
   {{assign var=category_id value=$category->_id}}
   {{assign var=chapitre value=$line->_ref_element_prescription->_ref_category_prescription->chapitre}}
 {{else}}

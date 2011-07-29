@@ -23,7 +23,7 @@
         <!-- The div is required because of a Webkit float issue -->
         <div class="listeChoixCR">
           {{foreach from=$lists item=curr_list}}
-            <select name="_{{$curr_list->_class_name}}[{{$curr_list->_id}}][]" data-nom="{{$curr_list->nom}}"
+            <select name="_{{$curr_list->_class}}[{{$curr_list->_id}}][]" data-nom="{{$curr_list->nom}}"
             {{if $mode_play}}size="4" multiple=true{{/if}}>
               <option value="undef">&mdash; {{$curr_list->nom}}</option>
               {{foreach from=$curr_list->_valeurs item=curr_valeur}}
@@ -52,7 +52,7 @@
         {{main}}
           new AideSaisie.AutoComplete('editFrm__texte_libre[{{$_nom|md5}}]',
           {
-            objectClass: '{{$compte_rendu->_class_name}}',
+            objectClass: '{{$compte_rendu->_class}}',
             contextUserId: User.id,
             contextUserView: "{{$user_view}}",
             timestamp: "{{$conf.dPcompteRendu.CCompteRendu.timestamp}}",

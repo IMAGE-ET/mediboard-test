@@ -9,7 +9,7 @@
 *}}
 
 <!-- Formulaire de signature d'une ligne -->
-<form name="validation-{{$line->_class_name}}-{{$line->_id}}" action="" method="post">
+<form name="validation-{{$line->_class}}-{{$line->_id}}" action="" method="post">
   <input type="hidden" name="dosql" value="{{$dosql}}" />
   <input type="hidden" name="m" value="dPprescription" />
   <input type="hidden" name="{{$line->_spec->key}}" value="{{$line->_id}}" />

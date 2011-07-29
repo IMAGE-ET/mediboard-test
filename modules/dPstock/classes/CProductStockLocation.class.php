@@ -171,7 +171,7 @@ class CProductStockLocation extends CMbMetaObject {
    * @return CProductStockLocation
    */
   static function getDefaultLocation(CMbObject $host, CProduct $product) {
-    $stock_class = self::getStockClass($host->_class_name);
+    $stock_class = self::getStockClass($host->_class);
     
     $stock = new $stock_class;
     $stock->setHost($host);
@@ -180,7 +180,7 @@ class CProductStockLocation extends CMbMetaObject {
     
     if (!$stock->_id || !$stock->location_id) {
       $where = array(
-        "object_class" => "= '$host->_class_name'",
+        "object_class" => "= '$host->_class'",
         "object_id"    => "= '$host->_id'",
       );
       $location = new CProductStockLocation;

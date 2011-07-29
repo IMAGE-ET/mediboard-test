@@ -18,7 +18,7 @@ $object = CMbObject::loadFromGuid($object_guid, true);
 $type = "";
 $name_object_id = "";
 
-switch($object->_class_name) {
+switch($object->_class) {
 	case "CMediusers" :
     $type = "prat";
     $name_object_id = "user_id";

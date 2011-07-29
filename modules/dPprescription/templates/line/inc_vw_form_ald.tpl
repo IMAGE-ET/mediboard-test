@@ -10,7 +10,7 @@
 
 {{if $prescription->type != "sejour"}}
 	{{if $line->_can_view_form_ald}}
-	  <input name="ald" type="checkbox" {{if $line->ald}}checked="checked"{{/if}} onchange="submitALD('{{$line->_class_name}}','{{$line->_id}}',this.checked)"  />
+	  <input name="ald" type="checkbox" {{if $line->ald}}checked="checked"{{/if}} onchange="submitALD('{{$line->_class}}','{{$line->_id}}',this.checked)"  />
 	  {{mb_label object=$line field="ald"}}
 	{{elseif !$line->_protocole}}
 	  {{mb_label object=$line field="ald"}}:

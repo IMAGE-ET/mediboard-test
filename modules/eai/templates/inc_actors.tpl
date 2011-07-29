@@ -14,10 +14,10 @@
 <table class="tbl">
   <tr>
     <th class="title" colspan="5">
-      <a style="float: right" class="button change notext" href="#" onclick="InteropActor.refreshActors('{{$actor->_class_name}}');">
-        {{tr}}reload{{/tr}} {{tr}}{{$actor->_class_name}}{{/tr}}
+      <a style="float: right" class="button change notext" href="#" onclick="InteropActor.refreshActors('{{$actor->_class}}');">
+        {{tr}}reload{{/tr}} {{tr}}{{$actor->_class}}{{/tr}}
       </a>
-      {{tr}}{{$actor->_class_name}}{{/tr}}
+      {{tr}}{{$actor->_class}}{{/tr}}
     </th>
   </tr>
   <tr>

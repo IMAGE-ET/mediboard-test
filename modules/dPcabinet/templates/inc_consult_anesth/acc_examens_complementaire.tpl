@@ -244,7 +244,7 @@ Main.add(function () {
 			      {{mb_ternary var=object test=$consult->_is_anesth value=$consult->_ref_consult_anesth other=$consult}}
 			      <!-- Documents -->
 			      <script type="text/javascript">
-			         Document.register('{{$object->_id}}','{{$object->_class_name}}','{{$consult->_praticien_id}}','documents-exam');
+			         Document.register('{{$object->_id}}','{{$object->_class}}','{{$consult->_praticien_id}}','documents-exam');
             </script>
 			    </td>
 			  </tr>

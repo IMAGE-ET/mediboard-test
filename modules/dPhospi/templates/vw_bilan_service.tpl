@@ -562,7 +562,7 @@
 		              {{/if}}
 		              </td> 
 									
-									{{if !$line->signee && $line->_class_name == "CPrescriptionLineMedicament" && $conf.dPprescription.CPrescription.show_unsigned_med_msg}}
+									{{if !$line->signee && $line->_class == "CPrescriptionLineMedicament" && $conf.dPprescription.CPrescription.show_unsigned_med_msg}}
 									<td colspan="3">
 									  <div class="small-warning">
 									  	Ligne non signée

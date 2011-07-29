@@ -83,7 +83,7 @@ after_edit_source_smb = function(id) {
     {{if $source_smb->_id}}
       <tr>
         <td style="padding-top: 20px;">
-          <button type="button" class="print" onclick="testPrint('{{$source_smb->_class_name}}','{{$source_smb->_id}}')">
+          <button type="button" class="print" onclick="testPrint('{{$source_smb->_class}}','{{$source_smb->_id}}')">
             {{tr}}CSourceLPR.test_print{{/tr}}
           </button>
         </td>

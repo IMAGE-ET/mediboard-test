@@ -10,7 +10,7 @@
 
 <table class="form">
   {{if $subject->_coded && $m != "dPpmsi"}}
-    {{if $subject->_class_name == "CConsultation"}}
+    {{if $subject->_class == "CConsultation"}}
     <tr>
       <td colspan="10">
         <div class="small-info">

@@ -5,7 +5,7 @@ reloadCallback = function() {
   }
 
   if (window.parent.File && window.parent.File.refresh) {
-	  window.parent.File.refresh("{{$object->_id}}", "{{$object->_class_name}}");
+	  window.parent.File.refresh("{{$object->_id}}", "{{$object->_class}}");
   }
 
   if (window.parent.reloadListFileEditPatient) {
@@ -74,7 +74,7 @@ addFile = function(elt) {
 <input type="hidden" name="ajax" value="1" />
 <input type="hidden" name="suppressHeaders" value="1" />
 <input type="hidden" name="callback" value="window.parent.reloadCallback" />
-<input type="hidden" name="object_class" value="{{$object->_class_name}}" />
+<input type="hidden" name="object_class" value="{{$object->_class}}" />
 <input type="hidden" name="object_id" value="{{$object->_id}}" />
 <input type="hidden" name="for_identite" value="{{$for_identite}}" />
 <input type="hidden" name="_merge_files" value="0" />

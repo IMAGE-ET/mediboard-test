@@ -320,7 +320,7 @@ function popFile(objectClass, objectId, elementClass, elementId){
           <tr>
             <th>{{tr}}_CDocGed_lastfile{{/tr}}</th>
             <td>
-              <a href="#" onclick="popFile('{{$docGed->_class_name}}','{{$docGed->_id}}','CFile','{{$docGed->_lastentry->file_id}}')" title="{{tr}}CFile-msg-viewfile{{/tr}}">
+              <a href="#" onclick="popFile('{{$docGed->_class}}','{{$docGed->_id}}','CFile','{{$docGed->_lastentry->file_id}}')" title="{{tr}}CFile-msg-viewfile{{/tr}}">
                 <img src="?m=dPfiles&amp;a=fileviewer&amp;suppressHeaders=1&amp;file_id={{$docGed->_lastentry->file_id}}&amp;phpThumb=1&amp;wl=64&amp;hp=64" alt="-" />
               </a>
             </td>
@@ -358,7 +358,7 @@ function popFile(objectClass, objectId, elementClass, elementId){
             <td class="button text" colspan="2">
               <br />{{tr}}_CDocGed_valid{{/tr}}
               <br />
-              <a href="#" onclick="popFile('{{$docGed->_class_name}}','{{$docGed->_id}}','CFile','{{$docGed->_lastentry->file_id}}')" title="{{tr}}CFile-msg-viewfile{{/tr}}">
+              <a href="#" onclick="popFile('{{$docGed->_class}}','{{$docGed->_id}}','CFile','{{$docGed->_lastentry->file_id}}')" title="{{tr}}CFile-msg-viewfile{{/tr}}">
                 <img src="?m=dPfiles&amp;a=fileviewer&amp;suppressHeaders=1&amp;file_id={{$docGed->_lastentry->file_id}}&amp;phpThumb=1&amp;wl=64&amp;hp=64" alt="-" />
               </a>
               <br />{{$docGed->_reference_doc}}

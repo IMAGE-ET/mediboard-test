@@ -419,7 +419,7 @@
   	     <script type="text/javascript">
             Main.add(function() {
                 new AideSaisie.AutoComplete(getForm("editRPU").elements.diag_infirmier, {
-                    objectClass: "{{$rpu->_class_name}}",
+                    objectClass: "{{$rpu->_class}}",
                     contextUserId: "{{$userSel->_id}}",
                     contextUserView: "{{$userSel->_view}}",
                     timestamp: "{{$conf.dPcompteRendu.CCompteRendu.timestamp}}",
@@ -428,7 +428,7 @@
                     validateOnBlur: false
                   });
                 new AideSaisie.AutoComplete(getForm("editRPU").elements.pec_douleur, {
-                    objectClass: "{{$rpu->_class_name}}",
+                    objectClass: "{{$rpu->_class}}",
                     contextUserId: "{{$userSel->_id}}",
                     contextUserView: "{{$userSel->_view}}",
                     timestamp: "{{$conf.dPcompteRendu.CCompteRendu.timestamp}}",

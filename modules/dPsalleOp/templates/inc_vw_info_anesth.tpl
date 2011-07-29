@@ -101,7 +101,7 @@ Main.add(function(){
           <legend>{{tr}}CFile{{/tr}} - {{tr}}CConsultAnesth{{/tr}}</legend>            
           <div id="files-anesth">
             <script type="text/javascript">
-              File.register('{{$consult_anesth->_id}}','{{$consult_anesth->_class_name}}', 'files-anesth');
+              File.register('{{$consult_anesth->_id}}','{{$consult_anesth->_class}}', 'files-anesth');
             </script>
           </div>
         </fieldset>
@@ -113,7 +113,7 @@ Main.add(function(){
           <legend>{{tr}}CCompteRendu{{/tr}} - {{tr}}CConsultAnesth{{/tr}}</legend>            
           <div id="documents-anesth">
             <script type="text/javascript">
-              Document.register('{{$consult_anesth->_id}}','{{$consult_anesth->_class_name}}','{{$modeles_prat_id}}','documents-anesth');
+              Document.register('{{$consult_anesth->_id}}','{{$consult_anesth->_class}}','{{$modeles_prat_id}}','documents-anesth');
             </script>
           </div>
         </fieldset>

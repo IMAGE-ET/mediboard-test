@@ -21,17 +21,17 @@
   <tr>
     <td class="legend">
       {{if $object->order_threshold_critical}}
-        <div><div class="color {{$colors.0}}"></div>{{tr}}{{$object->_class_name}}-order_threshold_critical{{/tr}} : {{$object->order_threshold_critical}}</div>
+        <div><div class="color {{$colors.0}}"></div>{{tr}}{{$object->_class}}-order_threshold_critical{{/tr}} : {{$object->order_threshold_critical}}</div>
       {{/if}}
       
-      <div><div class="color {{$colors.1}}"></div>{{tr}}{{$object->_class_name}}-order_threshold_min{{/tr}} : {{$object->order_threshold_min}}</div>
+      <div><div class="color {{$colors.1}}"></div>{{tr}}{{$object->_class}}-order_threshold_min{{/tr}} : {{$object->order_threshold_min}}</div>
       
       {{if $object->order_threshold_optimum}}
-        <div><div class="color {{$colors.2}}"></div>{{tr}}{{$object->_class_name}}-order_threshold_optimum{{/tr}} : {{$object->order_threshold_optimum}}</div>
+        <div><div class="color {{$colors.2}}"></div>{{tr}}{{$object->_class}}-order_threshold_optimum{{/tr}} : {{$object->order_threshold_optimum}}</div>
       {{/if}}
       
       {{if $object->order_threshold_max}}
-        <div><div class="color {{$colors.3}}"></div>{{tr}}{{$object->_class_name}}-order_threshold_max{{/tr}} : {{$object->order_threshold_max}}</div>
+        <div><div class="color {{$colors.3}}"></div>{{tr}}{{$object->_class}}-order_threshold_max{{/tr}} : {{$object->order_threshold_max}}</div>
       {{/if}}
     </td>
   </tr>

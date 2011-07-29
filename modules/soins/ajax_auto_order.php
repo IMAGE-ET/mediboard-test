@@ -31,7 +31,7 @@ if ($service->load($service_id) && $date_min && $date_max) {
       $where = array(
         'product_delivery.date_dispensation' => "BETWEEN '$date_min 00:00:00' AND '$date_max 23:59:59'",
         'product_delivery.stock_id'    => " =  $stock_group->_id",
-        'product_delivery.stock_class' => " = '$stock_group->_class_name'",
+        'product_delivery.stock_class' => " = '$stock_group->_class'",
         'product.category_id'          => " = '".CAppUI::conf('bcb CBcbProduitLivretTherapeutique product_category_id')."'"
       );
       $ljoin = array(

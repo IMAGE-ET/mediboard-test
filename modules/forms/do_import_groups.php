@@ -94,7 +94,7 @@ else {
           continue;
         }
         else {
-          CAppUI::setMsg("$current_group->_class_name-msg-create", UI_MSG_OK);
+          CAppUI::setMsg("$current_group->_class-msg-create", UI_MSG_OK);
         }
       }
 		}
@@ -134,7 +134,7 @@ else {
         continue;
       }
       else {
-        CAppUI::setMsg("$field->_class_name-msg-modify", UI_MSG_OK);
+        CAppUI::setMsg("$field->_class-msg-modify", UI_MSG_OK);
       }
 		}
 	}

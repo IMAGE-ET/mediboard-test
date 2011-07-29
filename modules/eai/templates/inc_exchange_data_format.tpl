@@ -30,8 +30,8 @@
     {{foreach from=$_child_classes item=_class}}
     <tr>
       <td>
-        <a href="#" onclick="ExchangeDataFormat.refreshExchanges('{{$_class->_class_name}}', null);" title="Afficher les échanges">
-          {{tr}}{{$_class->_class_name}}{{/tr}}
+        <a href="#" onclick="ExchangeDataFormat.refreshExchanges('{{$_class->_class}}', null);" title="Afficher les échanges">
+          {{tr}}{{$_class->_class}}{{/tr}}
         </a>
       </td>
       <td>{{mb_value object=$_class field="_count_exchanges"}}</td>

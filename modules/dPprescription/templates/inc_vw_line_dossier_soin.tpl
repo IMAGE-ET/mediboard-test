@@ -9,7 +9,7 @@
 *}}
 
 {{assign var=line_id value=$line->_id}}
-{{assign var=line_class value=$line->_class_name}}
+{{assign var=line_class value=$line->_class}}
 {{assign var=transmissions_line value=$line->_transmissions}}
 {{assign var=administrations_line value=$line->_administrations}}
 {{assign var=transmissions value=$prescription->_transmissions}}
@@ -239,7 +239,7 @@
 			        <option value="">Subst.</option>
 				      {{foreach from=$line->_ref_substitution_lines item=lines_subst_by_chap}}
 				          {{foreach from=$lines_subst_by_chap item=_line_subst}}
-									{{if $_line_subst->_class_name == "CPrescriptionLineMix"}}
+									{{if $_line_subst->_class == "CPrescriptionLineMix"}}
 									<option value="{{$_line_subst->_guid}}">{{$_line_subst->_short_view}}
 		              {{else}}
 				          <option value="{{$_line_subst->_guid}}">{{$_line_subst->_view}}
@@ -338,7 +338,7 @@
 	  <td id="first_{{$line_id}}_{{$line_class}}_{{$unite_prise|regex_replace:'/[^a-z0-9_-]/i':'_'}}" style="display: none;">
 	  </td>
 	  
-		{{if !$line->signee && $line->_class_name == "CPrescriptionLineMedicament" && $conf.dPprescription.CPrescription.show_unsigned_med_msg && !$line->inscription}}
+		{{if !$line->signee && $line->_class == "CPrescriptionLineMedicament" && $conf.dPprescription.CPrescription.show_unsigned_med_msg && !$line->inscription}}
 		
 		{{foreach from=$count_composition_dossier key=_view_date item=_hours_by_moment}}
       {{foreach from=$_hours_by_moment key=moment_journee item=_count}}

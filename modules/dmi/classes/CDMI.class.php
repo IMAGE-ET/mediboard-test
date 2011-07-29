@@ -137,7 +137,7 @@ class CDMI extends CProduitPrescriptible {
         $product->scc_code = $this->_scc_code;
         $product->description = $this->description;
         $product->societe_id = $this->_labo_id;
-        $product->category_id = CAppUI::conf("dmi $this->_class_name product_category_id");
+        $product->category_id = CAppUI::conf("dmi $this->_class product_category_id");
         $product->quantity = 1;
         
         if ($msg = $product->store()){

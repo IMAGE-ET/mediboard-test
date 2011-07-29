@@ -182,7 +182,7 @@ class CPermObject extends CMbObject {
     $user = CUser::get($user_id);
 		
 		// Shorteners
-    $class = $object->_class_name;
+    $class = $object->_class;
     $id    = $object->_id;
   
     // Use permission query cache when available
@@ -218,7 +218,7 @@ class CPermObject extends CMbObject {
     global $userPermsObjects;
 
     $result       = PERM_DENY;
-    $object_class = $object->_class_name;
+    $object_class = $object->_class;
     $object_id    = $object->_id;
     if(isset($userPermsObjects[$object_class][$object_id])) {
       return $userPermsObjects[$object_class][$object_id]->permission >= $permType;

@@ -526,7 +526,7 @@ class CConsultation extends CCodable {
     $fse = $intermax["FSE"];
     $fseNumero = $fse["FSE_NUMERO_FSE"];
     $id_fse = new CIdSante400();
-    $id_fse->object_class = $this->_class_name;
+    $id_fse->object_class = $this->_class;
     $id_fse->id400 = $fseNumero;
     $id_fse->tag = "LogicMax FSENumero";
     $id_fse->loadMatchingObject();
@@ -652,7 +652,7 @@ class CConsultation extends CCodable {
       	
         // Mise a jour de codes_ccam suivant les _tokens_ccam du tarif
         $acte->object_id = $this->_id;
-        $acte->object_class = $this->_class_name;
+        $acte->object_class = $this->_class;
         $acte->executant_id = $this->_ref_chir->_id;
         $acte->execution = mbDateTime();
         if($msg = $acte->store()){
@@ -671,7 +671,7 @@ class CConsultation extends CCodable {
         $acte->setFullCode($code_ngap);
 
         $acte->object_id = $this->_id;
-	      $acte->object_class = $this->_class_name;
+	      $acte->object_class = $this->_class;
         $acte->executant_id = $this->getExecutantId();
 	      if (!$acte->countMatchingList()) {
 	        if ($msg = $acte->store()) {

@@ -41,7 +41,7 @@ Main.add(function () {
           <td rowspan="2" style="width: 70px; height: 112px; text-align: center">
 					  <div></div>
             {{assign var="elementId" value=$_doc_item->_id}}
-            {{if $_doc_item->_class_name=="CCompteRendu"}}
+            {{if $_doc_item->_class=="CCompteRendu"}}
               {{if $conf.dPcompteRendu.CCompteRendu.pdf_thumbnails && $app->user_prefs.pdf_and_thumbs}}
                 {{assign var="nomdoc" value=$_doc_item->nom}}
                 {{assign var="file_owner" value=$_doc_item->_ref_user->_id}}
@@ -54,7 +54,7 @@ Main.add(function () {
               {{assign var="srcImg" value="?m=dPfiles&a=fileviewer&suppressHeaders=1&file_id=$elementId&phpThumb=1&w=64&h=92"}}
             {{/if}}
 
-            <a href="#" onclick="popFile('{{$selClass}}', '{{$selKey}}', '{{$_doc_item->_class_name}}', '{{$elementId}}', '0');">
+            <a href="#" onclick="popFile('{{$selClass}}', '{{$selKey}}', '{{$_doc_item->_class}}', '{{$elementId}}', '0');">
               <img class="thumbnail" src="{{$srcImg}}" />
             </a>
           </td>

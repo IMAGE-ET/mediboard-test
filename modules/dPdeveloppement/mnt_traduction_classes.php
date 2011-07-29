@@ -84,7 +84,7 @@ function addLocale($class, $cat, $name) {
 foreach ($classes as $class) {
   $object = new $class;
   $ref_modules = $object->_specs;
-  $classname = $object->_class_name;
+  $classname = $object->_class;
   
   // Traductions au niveau classe
   addLocale($classname, $classname, "$classname");

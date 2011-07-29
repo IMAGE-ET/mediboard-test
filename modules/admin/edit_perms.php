@@ -75,7 +75,7 @@ foreach($permObject->loadList($whereProfil, $order) as $_perm) {
 	$permsObjectCount++;
   $_perm->_owner = "template";
   $object = $_perm->loadRefDBObject();
-  $permsObject[$object->_class_name][$object->_id]["profil"] = $_perm;
+  $permsObject[$object->_class][$object->_id]["profil"] = $_perm;
 }
 
 // Droit sur l'utilisateur
@@ -83,7 +83,7 @@ foreach($permObject->loadList($whereUser, $order) as $_perm) {
   $permsObjectCount++;
   $_perm->_owner = "user";
   $object = $_perm->loadRefDBObject();
-  $permsObject[$object->_class_name][$object->_id]["user"] = $_perm;
+  $permsObject[$object->_class][$object->_id]["user"] = $_perm;
 }
 
 // Chargement des utilisateurs du profil courant ou de celui de l'utilisateur

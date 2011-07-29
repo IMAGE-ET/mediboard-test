@@ -55,7 +55,7 @@ function changePage(page) {
         <input type="hidden" name="a" value="ajax_refresh_echanges_xml"/>
         <input type="hidden" name="types[]" />
         <input type="hidden" name="page" value="{{$page}}" onchange="this.form.onsubmit()" />
-        <input type="hidden" name="echange_xml_class" value="{{$echange_xml->_class_name}}" />
+        <input type="hidden" name="echange_xml_class" value="{{$echange_xml->_class}}" />
         
         <table class="form">
           <tr>
@@ -81,13 +81,13 @@ function changePage(page) {
             </td>
           </tr>
           
-          {{mb_include module=$echange_xml->_ref_module->mod_name template="`$echange_xml->_class_name`_filter_inc"}}
+          {{mb_include module=$echange_xml->_ref_module->mod_name template="`$echange_xml->_class`_filter_inc"}}
           
           <tr>
             <td colspan="4" style="text-align: center">
               {{foreach from=$types key=type item=value}}
                 <input onclick="$V(this.form.page, 0)" type="checkbox" name="types[{{$type}}]" 
-                  {{if array_key_exists($type, $selected_types)}}checked="checked"{{/if}} />{{tr}}{{$echange_xml->_class_name}}-type-{{$type}}{{/tr}}
+                  {{if array_key_exists($type, $selected_types)}}checked="checked"{{/if}} />{{tr}}{{$echange_xml->_class}}-type-{{$type}}{{/tr}}
               {{/foreach}}
             </td>
           </tr>

@@ -31,7 +31,7 @@ if($type == "historique"){
 foreach($med_lines as $_type_line => $meds_by_cat){
 	if(is_array($meds_by_cat)){
 		foreach($meds_by_cat as &$line){
-		  if($line->_class_name == "CPrescriptionLineMix"){
+		  if($line->_class == "CPrescriptionLineMix"){
 		    $parent_lines = $line->loadRefsParents();
         $lines["perf"][$line->_id]= $line;
 			  foreach($parent_lines as &$_parent_line){

@@ -64,18 +64,18 @@ Main.add(function(){
   <input type="hidden" name="m" value="dPprescription" />
   <input type="hidden" name="prise_posologie_id" value="" />
   <input type="hidden" name="object_id" value="{{$line->_id}}" />
-  <input type="hidden" name="object_class" value="{{$line->_class_name}}" />
+  <input type="hidden" name="object_class" value="{{$line->_class}}" />
   
 	<span id="view_quantity_{{$line->_id}}">
   {{mb_field object=$prise_posologie field=quantite size=3 increment=1 min=1 form=addPrise$type$line_id}}
-  {{if $line->_class_name == "CPrescriptionLineMedicament" && $type != "mode_grille"}}
+  {{if $line->_class == "CPrescriptionLineMedicament" && $type != "mode_grille"}}
   <select name="unite_prise" style="width: 80px;">
     {{foreach from=$line->_unites_prise item=_unite}}
       <option value="{{$_unite}}">{{$_unite}}</option>
     {{/foreach}}
   </select>
   {{/if}}
-  {{if $line->_class_name == "CPrescriptionLineElement"}}
+  {{if $line->_class == "CPrescriptionLineElement"}}
     {{$line->_unite_prise}}
   {{/if}}
   </span>

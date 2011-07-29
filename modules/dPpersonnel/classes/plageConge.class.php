@@ -130,7 +130,7 @@ class CPlageConge extends CMbObject {
     $plage->_id = "$activite-$user_id";
     $plage->user_id = $user_id;
     $plage->_activite = $activite;
-    $plage->libelle   = CAppUI::tr("$plage->_class_name._activite.$activite");
+    $plage->libelle   = CAppUI::tr("$plage->_class._activite.$activite");
     
     // Concerned user
     $user = CMediusers::get($user_id);

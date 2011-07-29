@@ -70,7 +70,7 @@
       {{main}}
         var form = getForm("editSejour");
         var options = {
-          objectClass: "{{$sejour->_class_name}}",
+          objectClass: "{{$sejour->_class}}",
           contextUserId: "{{$userSel->_id}}",
           contextUserView: "{{$userSel->_view}}",
           timestamp: "{{$conf.dPcompteRendu.CCompteRendu.timestamp}}",

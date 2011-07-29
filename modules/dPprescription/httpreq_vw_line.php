@@ -159,7 +159,7 @@ $smarty->assign("category_id", $category_id);
 $smarty->assign("sejour", $sejour);
 
 // Selection du template en fonction du type de ligne
-switch ($line->_class_name) {
+switch ($line->_class) {
 	case "CPrescriptionLineMedicament":
       $smarty->display("inc_vw_line_medicament.tpl");
 			break;

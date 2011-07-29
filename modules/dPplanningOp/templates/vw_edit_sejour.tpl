@@ -148,7 +148,7 @@ function reloadSejours(checkCollision) {
             {{mb_script module=dPcompteRendu script=document}}
             {{mb_script module=dPcompteRendu script=modele_selector}}
 				    <script type="text/javascript">
-				    Document.register('{{$sejour->_id}}','{{$sejour->_class_name}}','{{$sejour->praticien_id}}', 'documents');
+				    Document.register('{{$sejour->_id}}','{{$sejour->_class}}','{{$sejour->praticien_id}}', 'documents');
 				    </script>
           </td>
         </tr>
@@ -162,7 +162,7 @@ function reloadSejours(checkCollision) {
           <td id="files">
             {{mb_script module=dPcabinet script=file}}
             <script type="text/javascript">
-            File.register('{{$sejour->_id}}','{{$sejour->_class_name}}', 'files');
+            File.register('{{$sejour->_id}}','{{$sejour->_class}}', 'files');
             </script>
             {{mb_include module=dPfiles template=yoplet_uploader object=$sejour}}
           </td>

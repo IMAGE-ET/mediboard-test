@@ -82,7 +82,7 @@ class CModule extends CMbObject {
         continue;
       }
       if ($object->_ref_module->mod_name == $module) {
-        $tabClass[] = $object->_class_name;
+        $tabClass[] = $object->_class;
       }
     }
     return $tabClass;

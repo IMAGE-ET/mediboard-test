@@ -123,7 +123,7 @@ function showEtabEntreeTransfert(mode) {
                   Main.add(function() {
                     var form = getForm("editRPU");
                     var options = {
-                      objectClass: "{{$rpu->_class_name}}",
+                      objectClass: "{{$rpu->_class}}",
                       contextUserId: "{{$userSel->_id}}",
                       contextUserView: "{{$userSel->_view}}",
                       timestamp: "{{$conf.dPcompteRendu.CCompteRendu.timestamp}}",
@@ -235,7 +235,7 @@ function showEtabEntreeTransfert(mode) {
                 {{main}}
                   var form = getForm("editRPUMotif");
                   var options = {
-                    objectClass: "{{$rpu->_class_name}}",
+                    objectClass: "{{$rpu->_class}}",
                     contextUserId: "{{$userSel->_id}}",
                     contextUserView: "{{$userSel->_view}}",
                     timestamp: "{{$conf.dPcompteRendu.CCompteRendu.timestamp}}",

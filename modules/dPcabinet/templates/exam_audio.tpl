@@ -299,7 +299,7 @@ if(window.opener && window.opener.ExamDialog) {
           <script type="text/javascript">
             Main.add(function() {
               new AideSaisie.AutoComplete(getForm("editFrm").elements.remarques, {
-                objectClass: "{{$exam_audio->_class_name}}",
+                objectClass: "{{$exam_audio->_class}}",
                 timestamp: "{{$conf.dPcompteRendu.CCompteRendu.timestamp}}",
                 validateOnBlur: 0
               });

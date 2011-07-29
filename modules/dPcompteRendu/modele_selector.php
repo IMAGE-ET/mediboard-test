@@ -49,7 +49,7 @@ $smarty = new CSmartyDP();
 $smarty->assign("praticien", $praticien);
 $smarty->assign("praticiens", $praticiens);
 $smarty->assign("target_id", $object->_id);
-$smarty->assign("target_class", $object->_class_name);
+$smarty->assign("target_class", $object->_class);
 
 $smarty->assign("modelesCompat", $modelesCompat);
 $smarty->assign("modelesNonCompat", $modelesNonCompat);

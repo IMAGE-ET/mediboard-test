@@ -39,7 +39,7 @@
         {{include file="../../dPprescription/templates/line/inc_vw_form_ald.tpl"}} 
         
         {{if $line->_perm_edit}}
-          <input name="perop" type="checkbox" {{if $line->perop}}checked="checked"{{/if}} onchange="submitPerop('{{$line->_class_name}}','{{$line->_id}}',this.checked)"  />
+          <input name="perop" type="checkbox" {{if $line->perop}}checked="checked"{{/if}} onchange="submitPerop('{{$line->_class}}','{{$line->_id}}',this.checked)"  />
           {{mb_label object=$line field="perop"}}
         {{elseif !$line->_protocole}}
           {{mb_label object=$line field="perop"}}:
@@ -158,7 +158,7 @@
             return;
           }
           new AideSaisie.AutoComplete(oFormCommentaireElement.commentaire, {
-            objectClass: "{{$line->_class_name}}", 
+            objectClass: "{{$line->_class}}", 
             contextUserId: "{{$_line_praticien_id}}",
             resetSearchField: false,
             validateOnBlur: false,

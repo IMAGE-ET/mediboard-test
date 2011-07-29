@@ -187,7 +187,7 @@ class CApp {
       $object = @new $class;
       
       // Classe instanci�e ?
-      if (!$object->_class_name) {
+      if (!$object->_class) {
         unset($classes[$key]);
         continue;
       }

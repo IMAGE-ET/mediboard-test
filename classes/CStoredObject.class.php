@@ -98,7 +98,7 @@ class CStoredObject extends CModelObject {
      * 
     if (!$object && CModule::getInstalled("dPsante400")) {
       $idex = new CIdSante400;
-      $idex->object_class = $this->_class_name;
+      $idex->object_class = $this->_class;
       $idex->id400 = $this->_id;
       $idex->tag = "merged";
       if ($idex->loadMatchingObject()) {
@@ -148,7 +148,7 @@ class CStoredObject extends CModelObject {
     
     self::$objectCount++;
     
-    $class_name = $this->_class_name;
+    $class_name = $this->_class;
 
     // Statistiques sur chargement d'objets
     if (!isset(self::$objectCounts[$class_name])) {
@@ -164,7 +164,7 @@ class CStoredObject extends CModelObject {
       self::$cachableCounts[$class_name]++;
     }
   
-    self::$objectCache[$this->_class_name][$this->_id] =& $this;
+    self::$objectCache[$this->_class][$this->_id] =& $this;
   }
   
   /**
@@ -184,8 +184,8 @@ class CStoredObject extends CModelObject {
    * @return CMbObject the retrieved object
    */
   function getCached($id) {
-    if (isset(self::$objectCache[$this->_class_name][$id])) {
-      return self::$objectCache[$this->_class_name][$id];
+    if (isset(self::$objectCache[$this->_class][$id])) {
+      return self::$objectCache[$this->_class][$id];
     }
     
     $this->load($id);
@@ -197,7 +197,7 @@ class CStoredObject extends CModelObject {
    */
   function loadOldObject() {
     if (!$this->_old) {
-      $this->_old = new $this->_class_name;
+      $this->_old = new $this->_class;
       $this->_old->load($this->_id);
     }
   }
@@ -327,7 +327,7 @@ class CStoredObject extends CModelObject {
    */
   function conf($path) {
     $mod_name = $this->_ref_module->mod_name;
-    return CAppUI::conf("$mod_name $this->_class_name $path");
+    return CAppUI::conf("$mod_name $this->_class $path");
   }
   
   /**
@@ -703,10 +703,10 @@ class CStoredObject extends CModelObject {
     $list = array();
     
     // @todo should replace fetchAssoc, instanciation and bind
-    // while ($newObject = $ds->fetchObject($res, $this->_class_name)) { 
+    // while ($newObject = $ds->fetchObject($res, $this->_class)) { 
    
     while ($row = $ds->fetchAssoc($res)) {
-      $newObject = new $this->_class_name;
+      $newObject = new $this->_class;
       $newObject->bind($row, false);
       
       $newObject->checkConfidential();
@@ -783,7 +783,7 @@ class CStoredObject extends CModelObject {
     foreach ($this->_props as $name => $prop) {
       if ($name[0] !== '_') {
         if (!property_exists($this, $name)) {
-          trigger_error("La spécification cible la propriété '$name' inexistante dans la classe '$this->_class_name'", E_USER_WARNING);
+          trigger_error("La spécification cible la propriété '$name' inexistante dans la classe '$this->_class'", E_USER_WARNING);
         } 
         else {
           $value =& $this->$name;
@@ -792,7 +792,7 @@ class CStoredObject extends CModelObject {
             
             $truncated = CMbString::truncate($value);
             $debugInfo = $debug ? "(val:\"$truncated\", prop:\"$prop\")" : "(valeur: \"$truncated\")";
-            $fieldName = CAppUI::tr("$this->_class_name-$name");
+            $fieldName = CAppUI::tr("$this->_class-$name");
             $msg .= $msgProp ? " &bull; <strong title='$name'>$fieldName</strong> : $msgProp $debugInfo <br/>" : null;
           }
         }
@@ -806,7 +806,7 @@ class CStoredObject extends CModelObject {
     // Class level unique checking
     // @todo Move this checking up to CStoredObject (mind the _merging escape)
     foreach ($this->_spec->uniques as $unique => $names) {
-      $other = new $this->_class_name;
+      $other = new $this->_class;
       
       foreach ($names as $name) {
         $this->completeField($name);
@@ -817,7 +817,7 @@ class CStoredObject extends CModelObject {
       $other->loadMatchingObject();
   
       if ($other->_id && $this->_id != $other->_id) {
-        return CAppUI::tr("$this->_class_name-failed-$unique") .
+        return CAppUI::tr("$this->_class-failed-$unique") .
           " : " . implode(", ",$values);
       }
     }
@@ -828,14 +828,14 @@ class CStoredObject extends CModelObject {
       $fields = array();
       foreach($names as $name) {
         $this->completeField($name);
-        $fields[] = CAppUI::tr("$this->_class_name-$name");
+        $fields[] = CAppUI::tr("$this->_class-$name");
         if ($this->$name) {
           $n++;
         }
       }
   
       if ($n != 1) {
-        return CAppUI::tr("$this->_class_name-xorFailed-$xor").
+        return CAppUI::tr("$this->_class-xorFailed-$xor").
           ": ".implode(", ", $fields).")";
       }
     }
@@ -933,7 +933,7 @@ class CStoredObject extends CModelObject {
     $log = new CUserLog;
     $log->user_id = CAppUI::$instance->user_id;
     $log->object_id = $object_id;
-    $log->object_class = $this->_class_name;
+    $log->object_class = $this->_class;
     $log->type = $type;
     $log->_fields = $fields;
     $log->date = mbDateTime();
@@ -1005,7 +1005,7 @@ class CStoredObject extends CModelObject {
   function loadLogsForField($fieldName = null, $strict = false, $limit = null, $require_extra_data = false){ 
     $where = array(); 
     $where["object_id"]    = " = '$this->_id'";
-    $where["object_class"] = " = '$this->_class_name'";
+    $where["object_class"] = " = '$this->_class'";
     
     if ($require_extra_data) {
       $where[] = "`extra` IS NOT NULL AND `extra` != '[]' AND `extra` != '{}'";
@@ -1067,7 +1067,7 @@ class CStoredObject extends CModelObject {
   function hasRecentLog($nb_hours = 1) {
     $recent = mbDateTime("- $nb_hours HOURS");
     $where["object_id"   ] = "= '$this->_id'";
-    $where["object_class"] = "= '$this->_class_name'";
+    $where["object_class"] = "= '$this->_class'";
     $where["date"] = "> '$recent'";
     $log = new CUserLog();
     return $log->countList($where);
@@ -1120,13 +1120,13 @@ class CStoredObject extends CModelObject {
     $this->loadOldObject();
     
     if (CAppUI::conf("readonly")) {
-      return CAppUI::tr($this->_class_name) . 
+      return CAppUI::tr($this->_class) . 
         CAppUI::tr("CMbObject-msg-store-failed") .
         CAppUI::tr("Mode-readonly-msg");
       }
     
     if ($msg = $this->check()) {
-      return CAppUI::tr($this->_class_name) . 
+      return CAppUI::tr($this->_class) . 
         CAppUI::tr("CMbObject-msg-check-failed") .
         CAppUI::tr($msg);
     }
@@ -1145,7 +1145,7 @@ class CStoredObject extends CModelObject {
     }
 
     if (!$ret) {
-      return CAppUI::tr($this->_class_name) . 
+      return CAppUI::tr($this->_class) . 
         CAppUI::tr("CMbObject-msg-store-failed") .
         $spec->ds->error();
     }
@@ -1238,9 +1238,9 @@ class CStoredObject extends CModelObject {
         return 'mergeNoId';
       }
       if (!$object_class) {
-        $object_class = $object->_class_name;
+        $object_class = $object->_class;
       }
-      else if ($object->_class_name !== $object_class) {
+      else if ($object->_class !== $object_class) {
         return 'mergeDifferentType';
       }
     }
@@ -1278,7 +1278,7 @@ class CStoredObject extends CModelObject {
     $backSpec =& $backObject->_specs[$backField];
     $backMeta = $backSpec->meta;
     if ($backMeta) {
-      $query .= "\nAND `$backMeta` = '$this->_class_name'";
+      $query .= "\nAND `$backMeta` = '$this->_class'";
     }
     
     // Comptage des backrefs
@@ -1320,7 +1320,7 @@ class CStoredObject extends CModelObject {
 
     // Cas des meta objects
     if ($backMeta) {
-      $backObject->$backMeta = $this->_class_name;
+      $backObject->$backMeta = $this->_class;
     }
     
     return $this->_back[$backName] = $backObject->loadMatchingList($order, $limit, $group, $ljoin);
@@ -1436,7 +1436,7 @@ class CStoredObject extends CModelObject {
       $fwdSpec =& $backObject->_specs[$backField];
       $backMeta = $fwdSpec->meta;      
       if ($backMeta) {
-        $query .= "\nAND `$backMeta` = '$object->_class_name'";
+        $query .= "\nAND `$backMeta` = '$object->_class'";
       }
       
       $this->_spec->ds->exec($query);
@@ -1452,8 +1452,8 @@ class CStoredObject extends CModelObject {
     if (!$object->_id) {
       trigger_error("transferNoId");
     }
-    if ($object->_class_name !== $this->_class_name) {
-      trigger_error("An object from type '$object->_class_name' can't be merge with an object from type '$this->_class_name'", E_USER_ERROR);
+    if ($object->_class !== $this->_class) {
+      trigger_error("An object from type '$object->_class' can't be merge with an object from type '$this->_class'", E_USER_ERROR);
     }
     
     $object->loadAllBackRefs();
@@ -1468,14 +1468,14 @@ class CStoredObject extends CModelObject {
         // Change back field and store back objects
         foreach ($backObjects as $backObject) {
           // Use a dummy tranferer object to prevent checks on all values
-          $transferer = new $backObject->_class_name;
+          $transferer = new $backObject->_class;
           $transferer->_id = $backObject->_id;
           $transferer->$backField = $this->_id;
           $transferer->_forwardRefMerging = true;
           
           // Cas des meta objects
           if ($backMeta) {
-            $transferer->$backMeta = $this->_class_name;
+            $transferer->$backMeta = $this->_class;
           }
           
           if ($msg = $transferer->store()) {
@@ -1532,12 +1532,12 @@ class CStoredObject extends CModelObject {
     $spec = $object->_specs[$field];
     
     if (!$spec instanceof CRefSpec) {
-      trigger_error("Can't mass load not ref '$field' for object class '$object->_class_name'", E_USER_WARNING);
+      trigger_error("Can't mass load not ref '$field' for object class '$object->_class'", E_USER_WARNING);
       return;
     }
 
     if ($spec->meta) {
-      trigger_error("Can't mass load (yet!) ref '$field' with meta field '$spec->meta' for object class '$object->_class_name'", E_USER_WARNING);
+      trigger_error("Can't mass load (yet!) ref '$field' with meta field '$spec->meta' for object class '$object->_class'", E_USER_WARNING);
       return;
     }
     
@@ -1573,7 +1573,7 @@ class CStoredObject extends CModelObject {
   function canDeleteEx() {
     // Empty object
     if (!$this->_id) {
-      return CAppUI::tr("noObjectToDelete") . " " . CAppUI::tr($this->_class_name);
+      return CAppUI::tr("noObjectToDelete") . " " . CAppUI::tr($this->_class);
     }
     
     // Counting backrefs
@@ -1598,7 +1598,7 @@ class CStoredObject extends CModelObject {
 
         // Cas des meta objects
         if ($backMeta) {
-          $backObject->$backMeta = $this->_class_name;
+          $backObject->$backMeta = $this->_class;
         }
         
         $cascadeIssuesCount = 0;
@@ -1667,7 +1667,7 @@ class CStoredObject extends CModelObject {
       
       // Cas des meta objects
       if ($backMeta) {
-        $backObject->$backMeta = $this->_class_name;
+        $backObject->$backMeta = $this->_class;
       }
 
       foreach ($backObject->loadMatchingList() as $object) {
@@ -1717,7 +1717,7 @@ class CStoredObject extends CModelObject {
              return $msg;
            }
         }
-        CAppUI::setMsg("$backRef->_class_name-msg-delete", UI_MSG_ALERT);
+        CAppUI::setMsg("$backRef->_class-msg-delete", UI_MSG_ALERT);
       }
     }
 

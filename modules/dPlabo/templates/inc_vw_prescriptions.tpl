@@ -31,7 +31,7 @@
         hoverclass:'selected'
         } );
       </script>
-      <a href="#{{$curr_prescription->_class_name}}-{{$curr_prescription->_id}}" onclick="Prescription.select({{$curr_prescription->_id}})">
+      <a href="#{{$curr_prescription->_class}}-{{$curr_prescription->_id}}" onclick="Prescription.select({{$curr_prescription->_id}})">
         {{$curr_prescription->_view}}
       </a>
       <form name="delPrescription-{{$curr_prescription->_id}}" action="?m={{$m}}" method="post" onsubmit="return checkForm(this)">

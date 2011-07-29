@@ -71,12 +71,12 @@ Main.add(function () {
 		  <input type="hidden" name="m" value="dPprescription" />
 		  <input type="hidden" name="prise_posologie_id" value="{{$prise->_id}}" />
 		  <input type="hidden" name="object_id" value="{{$line_id}}" />
-		  <input type="hidden" name="object_class" value="{{$line->_class_name}}" />
+		  <input type="hidden" name="object_class" value="{{$line->_class}}" />
 	   
 		  <!-- Formulaire de selection de la quantite -->
 		  {{mb_field object=$prise field=quantite size="3" increment=1 min=1 form=addPrise-$prise_id onchange="testPharma($line_id); submitFormAjax(this.form, 'systemMsg');"}}	  
 		  
-		  {{if $line->_class_name == "CPrescriptionLineMedicament"}}
+		  {{if $line->_class == "CPrescriptionLineMedicament"}}
 				<select name="unite_prise" onchange="submitFormAjax(this.form, 'systemMsg');">
 				   {{foreach from=$line->_unites_prise item=_unite_prise}}
 				   <option value="{{$_unite_prise|smarty:nodefaults|JSAttribute}}" {{if $prise->unite_prise == $_unite_prise}}selected="selected"{{/if}}>{{$_unite_prise}}</option>
@@ -86,7 +86,7 @@ Main.add(function () {
 	         {{/if}}
 				</select>
 		  {{/if}}
-		  {{if $line->_class_name == "CPrescriptionLineElement"}}
+		  {{if $line->_class == "CPrescriptionLineElement"}}
 			  {{$line->_unite_prise}}
 			{{/if}}
 			

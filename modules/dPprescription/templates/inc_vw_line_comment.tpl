@@ -81,7 +81,7 @@
 		        Main.add( function(){
 		          var oFormCommentaireCommentLine = getForm("editCommentaire-{{$line->_guid}}");
 		          new AideSaisie.AutoComplete(oFormCommentaireCommentLine.commentaire, {
-		            objectClass: "{{$line->_class_name}}", 
+		            objectClass: "{{$line->_class}}", 
 		            contextUserId: "{{$_line_praticien_id}}",
 		            resetSearchField: false,
 		            validateOnBlur: false

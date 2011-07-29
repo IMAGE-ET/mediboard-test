@@ -15,7 +15,7 @@
 {{/if}}
 <table class="tbl">
   <tr>
-    <th class="title" colspan="20">{{tr}}{{$exchange->_class_name}}{{/tr}} - {{$exchange->_ref_group}} {{if $type}}- {{tr}}{{$mod_name}}-msg-{{$type}}{{/tr}}{{/if}}</th>
+    <th class="title" colspan="20">{{tr}}{{$exchange->_class}}{{/tr}} - {{$exchange->_ref_group}} {{if $type}}- {{tr}}{{$mod_name}}-msg-{{$type}}{{/tr}}{{/if}}</th>
   </tr>
   <tr>
     <th></th>
@@ -41,7 +41,7 @@
   {{foreachelse}}
     <tr>
       <td colspan="20" class="empty">
-        {{tr}}{{$exchange->_class_name}}.none{{/tr}}
+        {{tr}}{{$exchange->_class}}.none{{/tr}}
       </td>
     </tr>
   {{/foreach}}

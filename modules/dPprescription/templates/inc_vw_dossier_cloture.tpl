@@ -47,14 +47,14 @@
       {{assign var=line value=$list_lines.$chap.$line_id}}     
        <tr>
          <td>
-           {{if $line->_class_name == "CPrescriptionLineMedicament"}}
+           {{if $line->_class == "CPrescriptionLineMedicament"}}
              {{$line->_ucd_view}} 
              <span style="font-size: 0.8em;" class="opacity-70">
              {{if $line->_forme_galenique}}({{$line->_forme_galenique}}){{/if}}
              </span>
-           {{elseif $line->_class_name == "CPrescriptionLineMixItem"}}
+           {{elseif $line->_class == "CPrescriptionLineMixItem"}}
              {{$line->_ucd_view}}           
-             {{if $line->_class_name == "CPrescriptionLineMixItem"}}
+             {{if $line->_class == "CPrescriptionLineMixItem"}}
                (Perfusion: {{$line->_ref_prescription_line_mix->_view}})
              {{/if}}
            {{else}}
@@ -64,13 +64,13 @@
          <td class="text">  
            {{foreach from=$administrations key=quantite item=_administrations_by_quantite}}
              {{$quantite}} 
-             {{if $line->_class_name == "CPrescriptionLineMedicament"}}
+             {{if $line->_class == "CPrescriptionLineMedicament"}}
                {{if $line->_ref_produit_prescription->_id}}
                  {{$line->_ref_produit_prescription->unite_prise}}
                {{else}}
                  {{$line->_ref_produit->libelle_unite_presentation}}
                {{/if}}
-             {{elseif $line->_class_name != "CPrescriptionLineMixItem"}}
+             {{elseif $line->_class != "CPrescriptionLineMixItem"}}
                {{$line->_unite_prise}}
              {{else}}
                {{$line->_unite_administration}}

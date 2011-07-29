@@ -128,7 +128,7 @@ Main.add(function () {
 
   {{if $patient->_id}}
     setObject( {
-      objClass: '{{$patient->_class_name}}', 
+      objClass: '{{$patient->_class}}', 
       keywords: '', 
       id: '{{$patient->_id}}',
       view: '{{$patient->_view|smarty:nodefaults|JSAttribute}}' });

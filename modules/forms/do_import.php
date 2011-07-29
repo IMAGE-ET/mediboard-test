@@ -101,7 +101,7 @@ else {
               continue;
             }
 						else {
-							CAppUI::setMsg("$list->_class_name-msg-create", UI_MSG_OK);
+							CAppUI::setMsg("$list->_class-msg-create", UI_MSG_OK);
 						}
           }
 					else {
@@ -110,7 +110,7 @@ else {
               continue;
             }
             else {
-              CAppUI::setMsg("$list->_class_name-msg-modify", UI_MSG_OK);
+              CAppUI::setMsg("$list->_class-msg-modify", UI_MSG_OK);
             }
 					}
 					
@@ -134,7 +134,7 @@ else {
               continue;
             }
             else {
-              CAppUI::setMsg("$list_item->_class_name-msg-create", UI_MSG_OK);
+              CAppUI::setMsg("$list_item->_class-msg-create", UI_MSG_OK);
             }
           }
 				}
@@ -182,7 +182,7 @@ else {
               continue;
             }
             else {
-              CAppUI::setMsg("$tag1->_class_name-msg-create", UI_MSG_OK);
+              CAppUI::setMsg("$tag1->_class-msg-create", UI_MSG_OK);
             }
           }
 
@@ -206,7 +206,7 @@ else {
               continue;
             }
             else {
-              CAppUI::setMsg("$tag2->_class_name-msg-create", UI_MSG_OK);
+              CAppUI::setMsg("$tag2->_class-msg-create", UI_MSG_OK);
             }
           }
           
@@ -251,7 +251,7 @@ else {
               continue;
             }
             else {
-              CAppUI::setMsg("$concept->_class_name-msg-create", UI_MSG_OK);
+              CAppUI::setMsg("$concept->_class-msg-create", UI_MSG_OK);
             }
           }
 					else {
@@ -266,7 +266,7 @@ else {
 		              continue;
 		            }
 		            else {
-		              CAppUI::setMsg("$concept->_class_name-msg-modify", UI_MSG_OK);
+		              CAppUI::setMsg("$concept->_class-msg-modify", UI_MSG_OK);
 		            }
               }
             }
@@ -284,7 +284,7 @@ else {
               CAppUI::setMsg("Ligne $line_number : $msg", UI_MSG_WARNING);
 						}
             else {
-              CAppUI::setMsg("$tag_item->_class_name-msg-create", UI_MSG_OK);
+              CAppUI::setMsg("$tag_item->_class-msg-create", UI_MSG_OK);
             }
 					}
         }

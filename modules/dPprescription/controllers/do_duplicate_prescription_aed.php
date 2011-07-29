@@ -43,7 +43,7 @@ if($msg){
 // Parcours des lignes de medicaments
 foreach($lines as $cat => $lines_by_type){
 	foreach($lines_by_type as &$line){
-		if($line->_class_name == "CPrescriptionLineElement"){
+		if($line->_class == "CPrescriptionLineElement"){
 		  $line_chapter = $line->_ref_element_prescription->_ref_category_prescription->chapitre;
 	    // Si element de type DMI, on ne le copie pas
 		  if($line_chapter == "dmi"){
@@ -106,7 +106,7 @@ foreach($lines as $cat => $lines_by_type){
 	  	}
 	  }
 	  $msg = $line->store();
-	  CAppUI::displayMsg($msg, "$line->_class_name-msg-create");
+	  CAppUI::displayMsg($msg, "$line->_class-msg-create");
 		
 	  // Parcours des prises et creation des nouvelles prises
 		foreach($line->_ref_prises as $prise){

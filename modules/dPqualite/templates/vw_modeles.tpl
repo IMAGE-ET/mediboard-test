@@ -48,7 +48,7 @@ function ZoomAjax(objectClass, objectId, elementClass, elementId, sfn){
             {{if $can->admin}}
             <a href="?m={{$m}}&amp;tab=vw_modeles&amp;doc_ged_id={{$currModele->doc_ged_id}}">
             {{else}}
-            <a href="#" onclick="ZoomAjax('{{$currModele->_class_name}}','{{$currModele->_id}}','CFile','{{$currModele->_lastentry->file_id}}', 0);">
+            <a href="#" onclick="ZoomAjax('{{$currModele->_class}}','{{$currModele->_id}}','CFile','{{$currModele->_lastentry->file_id}}', 0);">
             {{/if}}
             {{$currModele->titre}}
             </a>
@@ -126,7 +126,7 @@ function ZoomAjax(objectClass, objectId, elementClass, elementId, sfn){
         <tr>
           <th>{{tr}}CFile{{/tr}}</th>
           <td class="button">
-            <a href="#" onclick="popFile('{{$docGed->_class_name}}','{{$docGed->_id}}','CFile','{{$docGed->_lastentry->file_id}}')" title="{{tr}}CFile-msg-loadimgmini{{/tr}}">
+            <a href="#" onclick="popFile('{{$docGed->_class}}','{{$docGed->_id}}','CFile','{{$docGed->_lastentry->file_id}}')" title="{{tr}}CFile-msg-loadimgmini{{/tr}}">
               <img src="?m=dPfiles&amp;a=fileviewer&amp;suppressHeaders=1&amp;file_id={{$docGed->_lastentry->file_id}}&amp;phpThumb=1&amp;wl=64&amp;hp=64" alt="-" />
             </a>
           </td>

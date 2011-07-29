@@ -15,7 +15,7 @@ class CPrescriptionLineHandler extends CMbObjectHandler {
     if(!CModule::getActive("dPprescription")){
       return;
     }
-    return in_array($mbObject->_class_name, self::$handled);
+    return in_array($mbObject->_class, self::$handled);
   }
 
   function getLines($sejour, $param = ""){
@@ -83,7 +83,7 @@ class CPrescriptionLineHandler extends CMbObjectHandler {
     }
 		
    // On charge toutes les lignes qui sont définies en fonction de l'entree du sejour
-   if($mbObject->_class_name == "COperation"){
+   if($mbObject->_class == "COperation"){
      $mbObject->loadRefSejour();
      $sejour =& $mbObject->_ref_sejour;
    } else {
@@ -161,7 +161,7 @@ class CPrescriptionLineHandler extends CMbObjectHandler {
             $operation->load($_line->operation_id);
             $operation->loadRefPlageOp();
           } else {     
-            if($mbObject->_class_name == "COperation"){
+            if($mbObject->_class == "COperation"){
               $_line->operation_id = $mbObject->_id;
               $operation =& $mbObject;
               $operation->loadRefPlageOp();

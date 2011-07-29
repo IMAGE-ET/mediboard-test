@@ -86,7 +86,7 @@ foreach($prescriptions as $prescription_id){
 		$prescription_line = CMbObject::loadFromGuid($prescription_line_guid);
 		
 		// On rajoute la ligne passée au tableau des lignes à traiter
-		$lines[$prescription_line->_class_name][$prescription_line->_id] = $prescription_line;
+		$lines[$prescription_line->_class][$prescription_line->_id] = $prescription_line;
 	
 		// Si la ligne peut etre substituée par les infirmieres, elle est automatiquement signée
 		if($prescription_line->substitute_for_id){
@@ -100,7 +100,7 @@ foreach($prescriptions as $prescription_id){
 			$prescription_line->loadRefsSubstitutionLines();
 			foreach($prescription_line->_ref_substitution_lines as $_subst_lines_by_type){
 			  foreach($_subst_lines_by_type as $_subst_line){
-			  	$lines[$_subst_line->_class_name][$_subst_line->_id] = $_subst_line;
+			  	$lines[$_subst_line->_class][$_subst_line->_id] = $_subst_line;
 			  }
 			}
 		}
@@ -126,14 +126,14 @@ foreach($prescriptions as $prescription_id){
 	  }
 		$lines_med = $prescriptionLineMedicament->loadList($where);
 		foreach($lines_med as $_line_med){
-			$lines[$_line_med->_class_name][$_line_med->_id] = $_line_med;
+			$lines[$_line_med->_class][$_line_med->_id] = $_line_med;
 		  $_line_med->countSubstitutionsLines();
 			if($_line_med->_count_substitution_lines){
 				$_line_med->loadRefsSubstitutionLines();
 				if($_line_med->_ref_substitute_for->substitution_plan_soin){
 			    foreach($_line_med->_ref_substitution_lines as $_subst_lines_by_type){
 			      foreach($_subst_lines_by_type as $_subst_line){
-			        $lines[$_subst_line->_class_name][$_subst_line->_id] = $_subst_line;
+			        $lines[$_subst_line->_class][$_subst_line->_id] = $_subst_line;
 			      }
 			    }
 				}
@@ -152,14 +152,14 @@ foreach($prescriptions as $prescription_id){
 	  }
 	  $lines_perf = $prescription_line_mix->loadList($where);
 	  foreach($lines_perf as $_line_perf){
-	  	$lines[$_line_perf->_class_name][$_line_perf->_id] = $_line_perf;
+	  	$lines[$_line_perf->_class][$_line_perf->_id] = $_line_perf;
 	    $_line_perf->countSubstitutionsLines();
 	    if($_line_perf->_count_substitution_lines){
 	      $_line_perf->loadRefsSubstitutionLines();
 	      if($_line_perf->_ref_substitute_for->substitution_plan_soin){
 	        foreach($_line_perf->_ref_substitution_lines as $_subst_lines_by_type){
 	          foreach($_subst_lines_by_type as $_subst_line){
-	            $lines[$_subst_line->_class_name][$_subst_line->_id] = $_subst_line;
+	            $lines[$_subst_line->_class][$_subst_line->_id] = $_subst_line;
 	          } 
 	        }
 	      }
@@ -228,12 +228,12 @@ foreach($prescriptions as $prescription_id){
 	  $prescription->loadRefsPrescriptionLineMixes();  
 	  foreach ($prescription->_ref_prescription_lines as &$_line_med) {
 	    if(!$_line_med->child_id && $_line_med->substitution_active){
-	      $lines[$_line_med->_class_name][$_line_med->_id] = $_line_med;
+	      $lines[$_line_med->_class][$_line_med->_id] = $_line_med;
 	    }
 	  }
 	  foreach($prescription->_ref_prescription_line_mixes as &$_prescription_line_mix){
 	    if(!$_prescription_line_mix->next_line_id && $_prescription_line_mix->substitution_active){
-	      $lines[$_prescription_line_mix->_class_name][$_prescription_line_mix->_id] = $_prescription_line_mix;
+	      $lines[$_prescription_line_mix->_class][$_prescription_line_mix->_id] = $_prescription_line_mix;
 	    }
 	  }
 	}
@@ -253,13 +253,13 @@ foreach($prescriptions as $prescription_id){
 					}
 					
 					if($new_value && !$_line->_count_prises_line && !$mode_pharma){
-					  CAppUI::displayMsg("Impossible de signer une ligne qui ne possède pas de posologie", "$_line->_class_name-title-modify"); 
+					  CAppUI::displayMsg("Impossible de signer une ligne qui ne possède pas de posologie", "$_line->_class-title-modify"); 
 					} else {
 						if(!$mode_pharma && !$new_value){
 							$_line->valide_pharma = '0';
 						}
 						$msg = $_line->store();
-		        CAppUI::displayMsg($msg, "$_line->_class_name-msg-modify"); 	
+		        CAppUI::displayMsg($msg, "$_line->_class-msg-modify"); 	
 					}
 	        break;
 				case "CPrescriptionLineMix":
@@ -275,13 +275,13 @@ foreach($prescriptions as $prescription_id){
 	          $_line->signature_pharma = '0';
 	        }
 					$msg = $_line->store();
-	        CAppUI::displayMsg($msg, "$_line->_class_name-msg-modify"); 
+	        CAppUI::displayMsg($msg, "$_line->_class-msg-modify"); 
 					break;
 				case "CPrescriptionLineElement":
 				case "CPrescriptionLineComment":
 					$_line->signee = $new_value;
 				  $msg = $_line->store();
-	        CAppUI::displayMsg($msg, "$_line->_class_name-msg-modify"); 
+	        CAppUI::displayMsg($msg, "$_line->_class-msg-modify"); 
 	      	break;
 			}
     

@@ -41,7 +41,7 @@ class CSetSpec extends CEnumSpec {
 		
     $ret = array();
     foreach ($propValue as $_value) {
-      $ret[] = htmlspecialchars(CAppUI::tr("$object->_class_name.$fieldName.$_value"));
+      $ret[] = htmlspecialchars(CAppUI::tr("$object->_class.$fieldName.$_value"));
     }
 		
     return implode(", ", $ret);

@@ -85,12 +85,12 @@ Main.add(function(){
         {{mb_include module=system template=inc_object_notes}}
         {{mb_include module=system template=inc_object_idsante400}}
         {{mb_include module=system template=inc_object_history}}
-        {{tr}}{{$object->_class_name}}-title-modify{{/tr}} 
+        {{tr}}{{$object->_class}}-title-modify{{/tr}} 
         '{{$object}}'
       </th>
       {{else}}
       <th class="title text" colspan="4">
-        {{tr}}{{$object->_class_name}}-title-create{{/tr}} 
+        {{tr}}{{$object->_class}}-title-create{{/tr}} 
       </th>
       {{/if}}
     </tr>

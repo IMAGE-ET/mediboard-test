@@ -15,7 +15,7 @@ ActesNGAP = {
 	refreshList: function() {
     var url = new Url("dPcabinet", "httpreq_vw_actes_ngap");
 	  url.addParam("object_id", "{{$object->_id}}");
-	  url.addParam("object_class", "{{$object->_class_name}}");
+	  url.addParam("object_class", "{{$object->_class}}");
 	  url.requestUpdate('listActesNGAP');
 	},
 
@@ -53,11 +53,11 @@ ActesNGAP = {
   <input type="hidden" name="dosql" value="do_acte_ngap_aed" />
   <input type="hidden" name="del" value="0" />
   <input type="hidden" name="object_id" value="{{$object->_id}}" />
-  <input type="hidden" name="object_class" value="{{$object->_class_name}}" />
+  <input type="hidden" name="object_class" value="{{$object->_class}}" />
   <table class="form">
   	
   	{{if $object->_coded}}
-  	{{if $object->_class_name == "CConsultation"}}
+  	{{if $object->_class == "CConsultation"}}
     <tr>
       <td colspan="10">
         <div class="small-info">
@@ -78,7 +78,7 @@ ActesNGAP = {
     </tr>
     {{/if}}
     {{/if}}
-    {{if (!$can->edit && $subject->_class_name == "CConsultation") || !$can->read}}
+    {{if (!$can->edit && $subject->_class == "CConsultation") || !$can->read}}
     <tr>
       <td colspan="10" class="text">
         <div class="small-info">Vous n'avez pas les droits nescessaires pour coder les actes</div>
@@ -101,7 +101,7 @@ ActesNGAP = {
           <th class="category">{{mb_title object=$acte_ngap field=montant_depassement}}</th>
         {{/if}}
       {{else}}
-        {{if $conf.dPsalleOp.CActeCCAM.tarif || $object->_class_name == "CConsultation"}}
+        {{if $conf.dPsalleOp.CActeCCAM.tarif || $object->_class == "CConsultation"}}
           <th class="category">{{mb_title object=$acte_ngap field=montant_base}}</th>
           <th class="category">{{mb_title object=$acte_ngap field=montant_depassement}}</th>
         {{/if}}
@@ -165,7 +165,7 @@ ActesNGAP = {
         <td>{{mb_value object=$_acte_ngap field="montant_depassement"}}</td>
         {{/if}}
       {{else}}
-        {{if $conf.dPsalleOp.CActeCCAM.tarif || $object->_class_name == "CConsultation"}}
+        {{if $conf.dPsalleOp.CActeCCAM.tarif || $object->_class == "CConsultation"}}
         <td>{{mb_value object=$_acte_ngap field="montant_base"}}</td>
         <td>{{mb_value object=$_acte_ngap field="montant_depassement"}}</td>
         {{/if}}
@@ -241,7 +241,7 @@ function updateFields(selected) {
 // Autocomplete
 var url = new Url("dPcabinet", "httpreq_do_ngap_autocomplete");
 url.addParam("object_id", "{{$object->_id}}");
-url.addParam("object_class", "{{$object->_class_name}}");
+url.addParam("object_class", "{{$object->_class}}");
 url.autoComplete(getForm('editNGAP').code, 'code_auto_complete', {
     minChars: 1,
     updateElement: updateFields

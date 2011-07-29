@@ -39,7 +39,7 @@ function importPacks($packs){
       // Suppression de l'id400 du packItem
   	  $_id_pack_examen = new CIdSante400();
   	  $_id_pack_examen->tag = $remote_name;
-  	  $_id_pack_examen->object_class = $_packItemExamen->_class_name;
+  	  $_id_pack_examen->object_class = $_packItemExamen->_class;
   	  $_id_pack_examen->object_id = $_packItemExamen->_id;
   	  $_id_pack_examen->loadMatchingObject();
   	 

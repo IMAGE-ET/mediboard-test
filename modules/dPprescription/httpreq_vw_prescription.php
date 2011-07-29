@@ -194,7 +194,7 @@ if($prescription->_id){
 	  	  }
 				
 	  		$_line_med->getAdvancedPerms($is_praticien, $mode_protocole, $mode_pharma, $operation_id);
-	  	  if($_line_med->_class_name == "CPrescriptionLineMedicament"){
+	  	  if($_line_med->_class == "CPrescriptionLineMedicament"){
 	  	    $_line_med->countBackRefs("administration");
 	  	    $_line_med->loadRefsSubstitutionLines();
 					$_line_med->loadRefParentLine();
@@ -354,7 +354,7 @@ if($prescription->_id){
 		  $constantes_medicales = $patient->_ref_constantes_medicales;
 		  $poids = $constantes_medicales->poids;
 		
-		  if($object->_class_name == "CSejour"){
+		  if($object->_class == "CSejour"){
 		    $whereOp = array();
 		    $whereOp["annulee"] = " = '0'";
 		    $object->loadRefsOperations($whereOp);
@@ -390,7 +390,7 @@ if($prescription->_id){
 								$hidden_lines_count++;
 				      }
 			
-	          	if($_line->_class_name == "CPrescriptionLineElement"){
+	          	if($_line->_class == "CPrescriptionLineElement"){
                 $_line->loadRefsPrises();
 								$_line->loadRefDM();
               }

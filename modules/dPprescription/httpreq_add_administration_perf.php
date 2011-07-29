@@ -36,7 +36,7 @@ foreach($prescription_line_mix->_ref_lines as $_perf_line){
   $administration = new CAdministration();
   $where = array();
   $where["object_id"] = " = '$_perf_line->_id'";
-  $where["object_class"] = " = '$_perf_line->_class_name'";
+  $where["object_class"] = " = '$_perf_line->_class'";
   $where["dateTime"] = " LIKE '$date $_hour%'";
 	if($mode_dossier == "planification"){
 	  $where["planification"] = " = '1'";
@@ -55,7 +55,7 @@ if($mode_dossier == "administration"){
 		$planifications = array();
 	  $where = array();
 	  $where["object_id"] = " = '$_perf_line->_id'";
-	  $where["object_class"] = " = '$_perf_line->_class_name'";
+	  $where["object_class"] = " = '$_perf_line->_class'";
 	  $where["dateTime"] = " LIKE '$date $_hour%'";
 	  $where["planification"] = " = '1'";
 	  $planifications = $administration->loadList($where);

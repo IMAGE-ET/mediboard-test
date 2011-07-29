@@ -47,7 +47,7 @@ function submitPlanification(){
     {{if $mode_plan}}
       window.opener.calculSoinSemaine('{{$date_sel}}',"{{$prescription_id}}"); 
     {{else}} 
-      window.opener.PlanSoins.loadTraitement('{{$sejour->_id}}','{{$date_sel}}', oFormClick.nb_decalage.value,'{{$mode_dossier}}','{{$line->_id}}','{{$line->_class_name}}',{{$key_tab|json}});
+      window.opener.PlanSoins.loadTraitement('{{$sejour->_id}}','{{$date_sel}}', oFormClick.nb_decalage.value,'{{$mode_dossier}}','{{$line->_id}}','{{$line->_class}}',{{$key_tab|json}});
     {{/if}}
     window.close();
   } } ); 
@@ -61,7 +61,7 @@ function submitTransmission(administration_id){
     $V(oFormTransmission.object_id, administration_id, false);
   }
   else {
-    $V(oFormTransmission.object_class, '{{$line->_class_name}}', false);
+    $V(oFormTransmission.object_class, '{{$line->_class}}', false);
     $V(oFormTransmission.object_id, '{{$line->_id}}', false);
   }
   
@@ -72,7 +72,7 @@ function submitTransmission(administration_id){
       // Si les transmissions sont sur une administration, reload de la ligne dans le plan de soin
       if (administration_id) {
         if (window.opener.PlanSoins.loadTraitement) {
-          window.opener.PlanSoins.loadTraitement('{{$sejour->_id}}','{{$date_sel}}', oFormClick.nb_decalage.value,'{{$mode_dossier}}','{{$line->_id}}','{{$line->_class_name}}',{{$key_tab|json}});
+          window.opener.PlanSoins.loadTraitement('{{$sejour->_id}}','{{$date_sel}}', oFormClick.nb_decalage.value,'{{$mode_dossier}}','{{$line->_id}}','{{$line->_class}}',{{$key_tab|json}});
         }
       }
       // Sinon rechargement de toute la zone
@@ -111,7 +111,7 @@ function cancelAdministration(administration_id){
     {{if $mode_plan}}
       window.opener.calculSoinSemaine('{{$date_sel}}',"{{$prescription_id}}"); 
     {{else}} 
-      window.opener.PlanSoins.loadTraitement('{{$sejour->_id}}','{{$date_sel}}', oFormClick.nb_decalage.value,'{{$mode_dossier}}','{{$line->_id}}','{{$line->_class_name}}',{{$key_tab|json}});
+      window.opener.PlanSoins.loadTraitement('{{$sejour->_id}}','{{$date_sel}}', oFormClick.nb_decalage.value,'{{$mode_dossier}}','{{$line->_id}}','{{$line->_class}}',{{$key_tab|json}});
     {{/if}}
     window.close();
   } } );
@@ -143,7 +143,7 @@ updateQuantite = function(ratio_UI, oField){
 }
 
 chooseSubmit = function() {
-  {{if $line->_class_name == "CPrescriptionLineElement" && $selection|@count}}
+  {{if $line->_class == "CPrescriptionLineElement" && $selection|@count}}
     if (getForm("edit-constantes-medicales").select("input[type='text']").all(function(elt){ return elt.value == ''})) {
       submitAdmission();
     }
@@ -194,7 +194,7 @@ chooseSubmit = function() {
   	      <button class="trash notext" type="button" onclick="cancelAdministration('{{$_administration->_id}}')"></button>
 					{{/if}}
   	      {{$log->_ref_object->quantite}} 
-  	      {{if $line->_class_name == "CPrescriptionLineMedicament"}}
+  	      {{if $line->_class == "CPrescriptionLineMedicament"}}
   				  {{if $line->_ref_produit_prescription->_id}}
   					  {{$_administration->_ref_object->_ref_produit_prescription->unite_prise}} 
             {{else}}
@@ -242,7 +242,7 @@ chooseSubmit = function() {
     <input type="hidden" name="administration_id" value="" />
     <input type="hidden" name="administrateur_id" value="{{$app->user_id}}" />
     <input type="hidden" name="object_id" value="{{$line->_id}}" />
-    <input type="hidden" name="object_class" value="{{$line->_class_name}}" />
+    <input type="hidden" name="object_class" value="{{$line->_class}}" />
     <input type="hidden" name="unite_prise" value="{{$unite_prise}}" />
     <input type="hidden" name="dateTime" value="{{$dateTime}}" />
     <input type="hidden" name="prise_id" value="{{$prise_id}}" />
@@ -306,7 +306,7 @@ chooseSubmit = function() {
   </form>
   <br/>
   
-  {{if $line->_class_name == "CPrescriptionLineElement" && $selection|@count}}
+  {{if $line->_class == "CPrescriptionLineElement" && $selection|@count}}
     {{assign var=patient value=$sejour->_ref_patient}}
     {{assign var=context_guid value=$sejour->_guid}}
     {{assign var=readonly value=0}}
@@ -334,7 +334,7 @@ chooseSubmit = function() {
 		    <td>
 		      <button class="trash notext" type="button" onclick="cancelAdministration('{{$planification->_id}}')"></button>
 		      {{$log->_ref_object->quantite}} 
-		      {{if $line->_class_name == "CPrescriptionLineMedicament"}}
+		      {{if $line->_class == "CPrescriptionLineMedicament"}}
 		        {{$planification->_ref_object->_ref_produit->libelle_unite_presentation}} 
 		      {{else}}
 		        {{$line->_unite_prise}}
@@ -352,7 +352,7 @@ chooseSubmit = function() {
 	  <input type="hidden" name="administration_id" value="" />
 	  <input type="hidden" name="administrateur_id" value="{{$app->user_id}}" />
 	  <input type="hidden" name="object_id" value="{{$line->_id}}" />
-	  <input type="hidden" name="object_class" value="{{$line->_class_name}}" />
+	  <input type="hidden" name="object_class" value="{{$line->_class}}" />
 	  <input type="hidden" name="unite_prise" value="{{$unite_prise}}" />
 	  <input type="hidden" name="dateTime" value="{{$dateTime}}" />
 	  <input type="hidden" name="prise_id" value="{{$prise_id}}" />
@@ -366,7 +366,7 @@ chooseSubmit = function() {
 		      {{mb_label object=$prise field=quantite}}
 		      {{mb_field object=$prise field=quantite min=1 increment=1 form=addPlanification}}
 		      
-		      {{if $line->_class_name == "CPrescriptionLineMedicament"}}
+		      {{if $line->_class == "CPrescriptionLineMedicament"}}
 					  {{if $line->_ref_produit_prescription->_id}}
 						  {{$line->_ref_produit_prescription->unite_prise}}
 						{{else}}

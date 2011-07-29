@@ -47,7 +47,7 @@ window.file_id = {{$fileSel->_id}};
   	{{/if}}
   
   	<!-- Date -->
-    {{if $fileSel->_class_name=="CFile"}}
+    {{if $fileSel->_class=="CFile"}}
       <br />
       {{mb_label object=$fileSel field=file_date}} :
       {{mb_value object=$fileSel field=file_date}}
@@ -74,7 +74,7 @@ window.file_id = {{$fileSel->_id}};
     <input type="hidden" name="a" value="preview_files"/>
     <input type="hidden" name="dosql" value="do_file_aed"/>
     {{mb_key object=$fileSel hidden=1}}
-    {{if $fileSel->_class_name == "CFile" && !$isConverted}}
+    {{if $fileSel->_class == "CFile" && !$isConverted}}
       {{mb_field object=$fileSel field=_rotate hidden=1}}
       <button type="button" style="float: left;" class="rotate_left notext singleclick" onclick="onSubmitRotate(this, 'left')" title="{{tr}}CFile._rotate.left{{/tr}}"></button>
       <button type="button" style="float: right;" class="rotate_right notext singleclick" onclick="onSubmitRotate(this, 'right')" title="{{tr}}CFile._rotate.right{{/tr}}"></button>
@@ -82,7 +82,7 @@ window.file_id = {{$fileSel->_id}};
     </form>
     {{if $fileSel}}
 
-    {{if $fileSel->_class_name=="CFile" && $fileSel->_nb_pages > 1 && !$acces_denied}}
+    {{if $fileSel->_class=="CFile" && $fileSel->_nb_pages > 1 && !$acces_denied}}
         
       <button class="left" {{if $page_prev === null}}disabled="disabled"{{/if}}
          onclick="location.href='{{$href}}&amp;objectClass={{$objectClass}}&amp;objectId={{$objectId}}&amp;elementClass={{$elementClass}}&amp;elementId={{$elementId}}&amp;nonavig={{$nonavig}}&amp;sfn={{$page_prev}}'">

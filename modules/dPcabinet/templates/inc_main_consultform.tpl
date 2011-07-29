@@ -40,7 +40,7 @@ Main.add(function () {
       
       <script type="text/javascript">
         {{if !$readonly}}
-          ExamDialog.register('{{$consult->_id}}','{{$consult->_class_name}}');
+          ExamDialog.register('{{$consult->_id}}','{{$consult->_class}}');
         {{/if}}
       
         onExamComplete = function(){
@@ -77,7 +77,7 @@ Main.add(function () {
           <script type="text/javascript">
             Main.add(function() {
               new AideSaisie.AutoComplete(getForm("editFrmExams").elements.{{$field}}, {
-                objectClass: "{{$consult->_class_name}}",
+                objectClass: "{{$consult->_class}}",
                 timestamp: "{{$conf.dPcompteRendu.CCompteRendu.timestamp}}",
                 validateOnBlur: 0
               });

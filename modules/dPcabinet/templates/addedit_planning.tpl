@@ -123,7 +123,7 @@ checkCorrespondantMedical = function(){
   var url = new Url("dPplanningOp", "ajax_check_correspondant_medical");
   url.addParam("patient_id", $V(oForm.patient_id));
   url.addParam("object_id" , $V(oForm.consultation_id));
-  url.addParam("object_class", '{{$consult->_class_name}}');
+  url.addParam("object_class", '{{$consult->_class}}');
   url.requestUpdate("correspondant_medical");
 }
 
@@ -257,7 +257,7 @@ Main.add(function () {
                 <script type="text/javascript">
                   Main.add(function() {
                 	  new AideSaisie.AutoComplete(getForm("editFrm").motif, {
-              		    objectClass: "{{$consult->_class_name}}", 
+              		    objectClass: "{{$consult->_class}}", 
               		    contextUserId: "{{$app->user_id}}"
               		  });
                   });
@@ -272,7 +272,7 @@ Main.add(function () {
                 <script type="text/javascript">
                   Main.add(function() {
                     new AideSaisie.AutoComplete(getForm("editFrm").rques, {
-                      objectClass: "{{$consult->_class_name}}", 
+                      objectClass: "{{$consult->_class}}", 
                       contextUserId: "{{$app->user_id}}"
                     });
                   });
@@ -462,18 +462,18 @@ Main.add(function () {
     <td class="halfPane">
       {{if $consult->_id}}
       <fieldset>
-        <legend>{{tr}}CCompteRendu{{/tr}} - {{tr}}{{$object_consult->_class_name}}{{/tr}}</legend>
+        <legend>{{tr}}CCompteRendu{{/tr}} - {{tr}}{{$object_consult->_class}}{{/tr}}</legend>
         <div id="documents">
           <script type="text/javascript">
-            Document.register('{{$object_consult->_id}}','{{$object_consult->_class_name}}','{{$consult->_praticien_id}}','documents');
+            Document.register('{{$object_consult->_id}}','{{$object_consult->_class}}','{{$consult->_praticien_id}}','documents');
           </script>
         </div>
       </fieldset>
       <fieldset>
-        <legend>{{tr}}CFile{{/tr}} - {{tr}}{{$consult->_class_name}}{{/tr}}</legend>            
+        <legend>{{tr}}CFile{{/tr}} - {{tr}}{{$consult->_class}}{{/tr}}</legend>            
         <div id="files">
           <script type="text/javascript">
-            File.register('{{$consult->_id}}','{{$consult->_class_name}}', 'files');
+            File.register('{{$consult->_id}}','{{$consult->_class}}', 'files');
           </script>
         </div>
       </fieldset>

@@ -42,7 +42,7 @@ class CPackItemExamenLabo extends CMbObject {
     $other->examen_labo_id = $this->examen_labo_id;
     $other->loadMatchingObject();
     if ($other->_id && $other->_id != $this->_id) {
-      return "$this->_class_name-unique-conflict";
+      return "$this->_class-unique-conflict";
     }
   }
 

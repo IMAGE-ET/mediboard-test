@@ -25,7 +25,7 @@
           {{if $configs}}
             <li onmousedown="InteropActor.viewConfigsFormat('{{$actor_guid}}', '{{$configs->_guid}}');">
               <a {{if !$configs->_id}}class="wrong"{{/if}} href="#format_{{$configs->_guid}}">
-                {{tr}}{{$configs->_class_name}}{{/tr}}
+                {{tr}}{{$configs->_class}}{{/tr}}
               </a>
             </li>
           {{/if}}
@@ -37,7 +37,7 @@
           {{if $configs}}
             <li onmousedown="InteropActor.viewConfigsFormat('{{$actor_guid}}', '{{$configs->_guid}}');">
               <a {{if !$configs->_id}}class="wrong"{{/if}} href="#format_{{$configs->_guid}}">
-                {{tr}}{{$configs->_class_name}}{{/tr}}
+                {{tr}}{{$configs->_class}}{{/tr}}
               </a>
             </li>
           {{/if}}

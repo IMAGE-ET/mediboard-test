@@ -12,13 +12,13 @@
 
 // refresh apres une sauvegarde ou une suppression
 refreshCat = function(category_id){
-  viewListCat('{{$category->_class_name}}', category_id);
-  viewCat('{{$category->_class_name}}', category_id);
+  viewListCat('{{$category->_class}}', category_id);
+  viewCat('{{$category->_class}}', category_id);
 }
 
 </script>
 
-{{if $category->_class_name == "CDMICategory"}}
+{{if $category->_class == "CDMICategory"}}
   {{assign var=dosql value=do_dmi_category_aed}}
   {{assign var=object_class value=CDMI}}
 {{else}}
@@ -39,9 +39,9 @@ refreshCat = function(category_id){
 	  <tr>
 	    <th class="title text {{if $category->_id}}modify{{/if}}" colspan="2">
 	      {{if $category->_id}}
-	      {{tr}}{{$category->_class_name}}-title-modify{{/tr}} '{{$category->_view}}'
+	      {{tr}}{{$category->_class}}-title-modify{{/tr}} '{{$category->_view}}'
 				{{else}}
-				{{tr}}{{$category->_class_name}}-title-create{{/tr}}
+				{{tr}}{{$category->_class}}-title-create{{/tr}}
 				{{/if}}
 		    </th>
 	  </tr>
@@ -57,7 +57,7 @@ refreshCat = function(category_id){
 		  <td colspan="2" class="button">
 		  	{{if $category->_id}}
 				  <button type="button" class="trash" onclick="this.form.del.value = 1; return onSubmitFormAjax(this.form, { onComplete: function() { refreshCat('0') } } )">Supprimer</button>
-				  <button type="button" class="submit" onclick="return onSubmitFormAjax(this.form, { onComplete: function(){ viewListCat('{{$category->_class_name}}','{{$category->_id}}') } } );">{{tr}}Save{{/tr}}</button>
+				  <button type="button" class="submit" onclick="return onSubmitFormAjax(this.form, { onComplete: function(){ viewListCat('{{$category->_class}}','{{$category->_id}}') } } );">{{tr}}Save{{/tr}}</button>
 			  {{else}}
 			  	<button type="button" class="submit" onclick="return onSubmitFormAjax(this.form)">{{tr}}Save{{/tr}}</button>
 			  {{/if}}

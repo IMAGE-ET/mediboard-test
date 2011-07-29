@@ -52,7 +52,7 @@ foreach ($list_stocks_service as $stock) {
 	$dispensation->patient_id = $patient_id;
 	$dispensation->quantity = ($stock->quantity < $ref) ? $ref - $stock->quantity : 0;
 	$dispensation->stock_id = $stock_group->_id;
-  $dispensation->stock_class = $stock_group->_class_name;
+  $dispensation->stock_class = $stock_group->_class;
 	$list_dispensations[$stock->_id] = $dispensation;
 	
 	$where['stock_id'] = "= '$stock_group->_id'";

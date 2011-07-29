@@ -106,7 +106,7 @@ class CActe extends CMbMetaObject {
     $object = new $this->object_class;
     $object->load($this->object_id);
     if ($object->_coded == "1") {
-      return CAppUI::tr($object->_class_name) ." déjà validée : Impossible de coter l\'acte";
+      return CAppUI::tr($object->_class) ." déjà validée : Impossible de coter l\'acte";
     }
   }
 

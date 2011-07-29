@@ -198,7 +198,7 @@ if($popup==1){
         $keyFile = $aFile->_spec->key;
         ${"file".$key} = array(
           "elementId"    => $aFile->$keyFile,
-          "elementClass" => $aFile->_class_name,
+          "elementClass" => $aFile->_class,
         );
       }
     }

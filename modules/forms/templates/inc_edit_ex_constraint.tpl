@@ -159,7 +159,7 @@ selectSugg = function(button) {
         </div>
         
         <div class="specfield spectype-ref">
-          <input type="hidden" name="_object_class" value="{{$ex_constraint->_ref_target_object->_class_name}}" />
+          <input type="hidden" name="_object_class" value="{{$ex_constraint->_ref_target_object->_class}}" />
           <input type="text" name="_object_view" readonly="readonly" ondblclick="ObjectSelector.init()" value="{{$ex_constraint->_ref_target_object}}" size="60" />
           <button type="button" class="search notext" onclick="ObjectSelector.init()">{{tr}}Search{{/tr}}</button>
           <script type="text/javascript">

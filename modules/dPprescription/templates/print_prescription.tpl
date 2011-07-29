@@ -287,7 +287,7 @@ p.duplicata {
    </div>
     <ul>
     {{foreach from=$lines.medicaments.med.no_ald item=line_medicament_element_no_ald}}
-      {{if $line_medicament_element_no_ald->_class_name == "CPrescriptionLineMedicament"}}
+      {{if $line_medicament_element_no_ald->_class == "CPrescriptionLineMedicament"}}
         {{include file="inc_print_medicament.tpl" med=$line_medicament_element_no_ald nodebug=true}}
       {{else}}
         {{include file="inc_print_prescription_line_mix.tpl" perf=$line_medicament_element_no_ald nodebug=true}}
@@ -322,7 +322,7 @@ p.duplicata {
 			 <ul>
 			{{/if}}
 		
-      {{if $line_medicament_element_no_ald->_class_name == "CPrescriptionLineMedicament"}}
+      {{if $line_medicament_element_no_ald->_class == "CPrescriptionLineMedicament"}}
         {{include file="inc_print_medicament.tpl" med=$line_medicament_element_no_ald nodebug=true}}
         {{if !$prescription->object_id}}
 	        {{if $line_medicament_element_no_ald->_ref_substitution_lines.CPrescriptionLineMedicament|@count
@@ -332,7 +332,7 @@ p.duplicata {
 	        <strong>Variantes possibles:</strong> 
 	        {{foreach from=$line_medicament_element_no_ald->_ref_substitution_lines item=_subst_line_by_chap}}
 	        {{foreach from=$_subst_line_by_chap item=_subst_line_med}}
-	          {{if $_subst_line_med->_class_name == "CPrescriptionLineMedicament"}}
+	          {{if $_subst_line_med->_class == "CPrescriptionLineMedicament"}}
 	            {{include file="inc_print_medicament.tpl" med=$_subst_line_med nodebug=true}}
 	          {{else}}
 	            {{include file="inc_print_prescription_line_mix.tpl" perf=$_subst_line_med nodebug=true}}
@@ -352,7 +352,7 @@ p.duplicata {
 	          <strong>Variantes possibles:</strong> 
 	        {{foreach from=$line_medicament_element_no_ald->_ref_substitution_lines item=_subst_line_by_chap}}
 	        {{foreach from=$_subst_line_by_chap item=_subst_line_med}}
-	          {{if $_subst_line_med->_class_name == "CPrescriptionLineMedicament"}}
+	          {{if $_subst_line_med->_class == "CPrescriptionLineMedicament"}}
 	            {{include file="inc_print_medicament.tpl" med=$_subst_line_med nodebug=true}}
 	          {{else}}
 	            {{include file="inc_print_prescription_line_mix.tpl" perf=$_subst_line_med nodebug=true}}
@@ -426,7 +426,7 @@ p.duplicata {
              {{if $name_cat == "inj"}}
                {{include file="inc_print_medicament.tpl" med=$_element_ald nodebug=true}}
              {{else}}
-			         {{if $_element_ald->_class_name == "CPrescriptionLineElement"}} 
+			         {{if $_element_ald->_class == "CPrescriptionLineElement"}} 
 		             <!-- Affichage de l'element -->
 		             {{include file="inc_print_element.tpl" elt=$_element_ald nodebug=true}}
 		           {{else}}
@@ -465,7 +465,7 @@ p.duplicata {
 		         {{if $name_cat == "inj"}}
 						   {{include file="inc_print_medicament.tpl" med=$_element_no_ald nodebug=true}}
 						 {{else}}
-			         {{if $_element_no_ald->_class_name == "CPrescriptionLineElement"}}
+			         {{if $_element_no_ald->_class == "CPrescriptionLineElement"}}
 		             <!-- Affichage de l'element -->
 		             {{include file="inc_print_element.tpl" elt=$_element_no_ald nodebug=true}}
 		           {{else}}

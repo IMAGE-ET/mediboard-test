@@ -21,7 +21,7 @@
       <button onclick="ExchangeDataFormat.toggle();" style="float: left;" class="hslip notext" type="button" title="{{tr}}CExchangeDataFormat{{/tr}}">
         {{tr}}CExchangeDataFormat{{/tr}}
       </button>
-      {{tr}}{{$exchange->_class_name}}{{/tr}}</th>
+      {{tr}}{{$exchange->_class}}{{/tr}}</th>
   </tr>
   <!-- Filtres -->
   <tr>
@@ -30,7 +30,7 @@
         <input type="hidden" name="m" value="{{$m}}" />
         <input type="hidden" name="types[]" />
         <input type="hidden" name="page" value="{{$page}}" onchange="this.form.onsubmit()"/>
-        <input type="hidden" name="exchange_class_name" value="{{$exchange->_class_name}}" />
+        <input type="hidden" name="exchange_class_name" value="{{$exchange->_class}}" />
         
         <table class="form">
           <tr>
@@ -82,7 +82,7 @@
             </td>
           </tr>
           
-          {{mb_include module=$mod_name template="`$exchange->_class_name`_filter_inc"}}
+          {{mb_include module=$mod_name template="`$exchange->_class`_filter_inc"}}
           
           <tr>
             <td colspan="4" style="text-align: center">

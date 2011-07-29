@@ -50,7 +50,7 @@ if($pack->_id){
     if($_prescription->_ref_lines_med_comments){
       foreach($_prescription->_ref_lines_med_comments as $type => $lines_by_type){
 	      foreach($lines_by_type as $_line){
-	        if($_line->_class_name == "CPrescriptionLineMedicament"){
+	        if($_line->_class == "CPrescriptionLineMedicament"){
 	          $_line->countSubstitutionsLines();
 	        }
 	        $prescription->_ref_lines_med_comments[$type][] = $_line;

@@ -112,7 +112,7 @@ function reloadAll(subject_id, praticien_id) {
 							      <input type="hidden" name="dialog" value="{{$dialog}}" />
 							      <input type="hidden" name="date" value="{{$date}}" />
 							      <input type="hidden" name="object_id" value="{{$_operation->_id}}" />
-							      <input type="hidden" name="object_class" value="{{$_operation->_class_name}}" />
+							      <input type="hidden" name="object_class" value="{{$_operation->_class}}" />
 							      <input type="hidden" name="praticien_id" value="{{$_praticien->_id}}" />
 							      <input type="password"  class="notNull str" size="10" maxlength="32" name="password" />
 						        <button type="button" class="submit" onclick="this.form.onsubmit();">Signer</button>

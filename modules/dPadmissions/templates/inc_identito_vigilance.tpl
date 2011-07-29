@@ -62,8 +62,8 @@ Voir les séjour :
 
     {{if $smarty.foreach.sejour.first}} 
 	    <td rowspan="{{$count_sejour}}" class="narrow">
-	      <input name="{{$_patient->_class_name}}-first" type="checkbox" value="{{$_patient->_id}}" onclick="IdentitoVigilance.highlite(this);" />
-	      <input name="{{$_patient->_class_name}}-second" type="radio" value="{{$_patient->_id}}" style="visibility: hidden;" onclick="IdentitoVigilance.merge(this);"/>
+	      <input name="{{$_patient->_class}}-first" type="checkbox" value="{{$_patient->_id}}" onclick="IdentitoVigilance.highlite(this);" />
+	      <input name="{{$_patient->_class}}-second" type="radio" value="{{$_patient->_id}}" style="visibility: hidden;" onclick="IdentitoVigilance.merge(this);"/>
 	    </td>
 	    <td rowspan="{{$count_sejour}}">
 	      <div class="text" id="{{$_patient->_guid}}">
@@ -88,8 +88,8 @@ Voir les séjour :
        
     <td class="narrow">
       {{if $count_sejour > 1}}
-      <input name="{{$_sejour->_class_name}}-first" type="checkbox" value="{{$_sejour->_id}}" onclick="IdentitoVigilance.highlite(this);" />
-      <input name="{{$_sejour->_class_name}}-second" type="radio" value="{{$_sejour->_id}}" style="visibility: hidden;" onclick="IdentitoVigilance.merge(this);"/>
+      <input name="{{$_sejour->_class}}-first" type="checkbox" value="{{$_sejour->_id}}" onclick="IdentitoVigilance.highlite(this);" />
+      <input name="{{$_sejour->_class}}-second" type="radio" value="{{$_sejour->_id}}" style="visibility: hidden;" onclick="IdentitoVigilance.merge(this);"/>
       {{/if}}
     </td>
     <td id="{{$_sejour->_guid}}" >
@@ -112,8 +112,8 @@ Voir les séjour :
 	    {{foreach from=$_sejour->_back.rpu key=rpu_id item=_rpu}}
 	    <div>
 	      {{if count($_sejour->_back.rpu) > 1}}
-	      <input name="{{$_rpu->_class_name}}-first" type="checkbox" value="{{$_rpu->_id}}" onclick="IdentitoVigilance.highlite(this);" />
-	      <input name="{{$_rpu->_class_name}}-second" type="radio" value="{{$_rpu->_id}}" style="visibility: hidden;" onclick="IdentitoVigilance.merge(this);"/>
+	      <input name="{{$_rpu->_class}}-first" type="checkbox" value="{{$_rpu->_id}}" onclick="IdentitoVigilance.highlite(this);" />
+	      <input name="{{$_rpu->_class}}-second" type="radio" value="{{$_rpu->_id}}" style="visibility: hidden;" onclick="IdentitoVigilance.merge(this);"/>
 	      {{/if}}
         <span onmouseover="ObjectTooltip.createEx(this, '{{$_rpu->_guid}}')">
           {{tr}}CRPU-msg-create{{/tr}}

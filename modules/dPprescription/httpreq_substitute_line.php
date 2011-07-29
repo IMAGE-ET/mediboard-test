@@ -36,7 +36,7 @@ foreach($line->_ref_substitution_lines as $subst_lines){
   foreach($subst_lines as $_subst_line){
     $_subst_line->substitute_for_id = $line->_id;
     $msg = $_subst_line->store();
-    CAppUI::displayMsg($msg, "$_subst_line->_class_name-msg-store");
+    CAppUI::displayMsg($msg, "$_subst_line->_class-msg-store");
   }
 }
 

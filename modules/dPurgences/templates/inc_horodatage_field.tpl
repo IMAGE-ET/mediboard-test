@@ -34,7 +34,7 @@
 
   <input type="hidden" name="{{$field}}" value="" />
   <button class="submit" type="button" onclick="this.form.{{$field}}.value='current'; this.form.onsubmit();">
-  	{{tr}}{{$object->_class_name}}-{{$field}}{{/tr}}
+  	{{tr}}{{$object->_class}}-{{$field}}{{/tr}}
   </button>
 
 {{/if}}

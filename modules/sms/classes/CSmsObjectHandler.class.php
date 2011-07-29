@@ -12,7 +12,7 @@ class CSmsObjectHandler extends CEAIObjectHandler {
   static $handled = array ("CProductDelivery", "CProductDeliveryTrace", "CAdministration");
 
   static function isHandled(CMbObject $mbObject) {
-    return in_array($mbObject->_class_name, self::$handled);
+    return in_array($mbObject->_class, self::$handled);
   }
 
   function onAfterStore(CMbObject $mbObject) {

@@ -20,15 +20,15 @@
 
 <ul id="tabs-config-classes" class="control_tabs">
   {{foreach from=$classes item=_class}}
-    <li onmousedown="refreshConfigObjects('{{$_class->_class_name}}');">
-      <a href="#classes-{{$_class->_class_name}}">{{tr}}{{$_class->_class_name}}{{/tr}}</a></li>
+    <li onmousedown="refreshConfigObjects('{{$_class->_class}}');">
+      <a href="#classes-{{$_class->_class}}">{{tr}}{{$_class->_class}}{{/tr}}</a></li>
   {{/foreach}}
 </ul>
 
 <hr class="control_tabs" />
 
 {{foreach from=$classes item=_class}}
-<div id="classes-{{$_class->_class_name}}" style="display: none;">
+<div id="classes-{{$_class->_class}}" style="display: none;">
   <div class="small-info">{{tr}}config-choose-classes{{/tr}}</div>
 </div>
 {{/foreach}}

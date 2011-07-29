@@ -428,7 +428,7 @@ class CPrescriptionLineElement extends CPrescriptionLine {
       if(!$_prise->urgence_datetime && !$_prise->decalage_intervention){
         $_prise->_id = '';
         $_prise->object_id = $this->_id;
-        $_prise->object_class = $this->_class_name;
+        $_prise->object_class = $this->_class;
         $_prise->_ref_object = null;
         $_prise->store();
       }

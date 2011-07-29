@@ -51,7 +51,7 @@ class CDestinataire {
 	  	$dest->adresse = $patient->adresse;
 	  	$dest->cpville = "$patient->cp $patient->ville";
 	  	$dest->email   = $patient->email;
-	  	self::$destByClass[$mbObject->_class_name][] = $dest;
+	  	self::$destByClass[$mbObject->_class][] = $dest;
 	  	
 	  	// Assuré
       $dest = new CDestinataire($tag);
@@ -60,7 +60,7 @@ class CDestinataire {
 	  	$dest->adresse = $patient->assure_adresse;
 	  	$dest->cpville = "$patient->assure_cp $patient->assure_ville";
 	  	$dest->email   = "";
-	  	self::$destByClass[$mbObject->_class_name][] = $dest;
+	  	self::$destByClass[$mbObject->_class][] = $dest;
 	  		  	
 	  	// Prevenir
       $dest = new CDestinataire($tag);
@@ -69,7 +69,7 @@ class CDestinataire {
 	  	$dest->adresse = $patient->prevenir_adresse;
 	  	$dest->cpville = "$patient->prevenir_cp $patient->prevenir_ville";
 	  	$dest->email   = "";
-	  	self::$destByClass[$mbObject->_class_name][] = $dest;
+	  	self::$destByClass[$mbObject->_class][] = $dest;
 	  	
 	  	// Employeur
       $dest = new CDestinataire($tag);
@@ -78,7 +78,7 @@ class CDestinataire {
 	  	$dest->adresse = $patient->employeur_adresse;
 	  	$dest->cpville = "$patient->employeur_cp $patient->employeur_ville";
 	  	$dest->email   = "";
-	  	self::$destByClass[$mbObject->_class_name][] = $dest;
+	  	self::$destByClass[$mbObject->_class][] = $dest;
 	  }
 	  
 	  if ($mbObject instanceof CMedecin) {
@@ -89,7 +89,7 @@ class CDestinataire {
 	  	$dest->adresse = $medecin->adresse;
 	  	$dest->cpville = "$medecin->cp $medecin->ville";
 	  	$dest->email   = $medecin->email;
-      self::$destByClass[$mbObject->_class_name][] = $dest;
+      self::$destByClass[$mbObject->_class][] = $dest;
 	  }
 	  
 	}

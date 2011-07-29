@@ -67,7 +67,7 @@ foreach($destockages as $code_cip => $_destockage){
     $where = array();
     $order = "date DESC";
     $where["object_id"] = " = '$stock->_id'";
-    $where["object_class"] = " = '$stock->_class_name'";
+    $where["object_class"] = " = '$stock->_class'";
     $where["date"] = " BETWEEN '$date_min' AND '$date_max'";
     $where["fields"] = " LIKE '%quantity%'";
     

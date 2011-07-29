@@ -50,17 +50,17 @@
     </td>
     {{/if}}
     <td>
-      <a href="#1" onclick="highlightRow(this); ZoomAjax('{{$currProc->_class_name}}','{{$currProc->_id}}','CFile','{{$currProc->_lastactif->file_id}}', 0);">
+      <a href="#1" onclick="highlightRow(this); ZoomAjax('{{$currProc->_class}}','{{$currProc->_id}}','CFile','{{$currProc->_lastactif->file_id}}', 0);">
         {{$currProc->_reference_doc}}
       </a>
     </td>
     <td>
-      <a href="#1" onclick="highlightRow(this); ZoomAjax('{{$currProc->_class_name}}','{{$currProc->_id}}','CFile','{{$currProc->_lastactif->file_id}}', 0);">
+      <a href="#1" onclick="highlightRow(this); ZoomAjax('{{$currProc->_class}}','{{$currProc->_id}}','CFile','{{$currProc->_lastactif->file_id}}', 0);">
         {{$currProc->version}}
       </a>
     </td>
     <td class="text">
-      <a href="#1" onclick="highlightRow(this); ZoomAjax('{{$currProc->_class_name}}','{{$currProc->_id}}','CFile','{{$currProc->_lastactif->file_id}}', 0);">
+      <a href="#1" onclick="highlightRow(this); ZoomAjax('{{$currProc->_class}}','{{$currProc->_id}}','CFile','{{$currProc->_lastactif->file_id}}', 0);">
         {{$currProc->titre}}
       </a>
     </td>

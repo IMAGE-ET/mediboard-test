@@ -12,7 +12,7 @@ class CSmpHprimXMLObjectHandler extends CHprimXMLObjectHandler {
   static $handled = array ("CSejour", "CAffectation");
 
   static function isHandled(CMbObject $mbObject) {
-    return in_array($mbObject->_class_name, self::$handled);
+    return in_array($mbObject->_class, self::$handled);
   }
 
   function onAfterStore(CMbObject $mbObject) {

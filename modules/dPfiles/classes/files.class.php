@@ -345,7 +345,7 @@ class CFile extends CDocumentItem {
       )
     );
     
-    foreach (CFilesCategory::listCatClass($object->_class_name) as $_cat) {
+    foreach (CFilesCategory::listCatClass($object->_class) as $_cat) {
       $affichageFile[$_cat->_id] = array(
         "name" => $_cat->nom,
         "items" => array(),

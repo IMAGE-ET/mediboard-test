@@ -146,7 +146,7 @@
     </td>
   </tr>
   {{/if}}
-  <tr id="export_{{$curr_op->_class_name}}_{{$curr_op->_id}}">
+  <tr id="export_{{$curr_op->_class}}_{{$curr_op->_id}}">
     {{mb_include template="inc_export_actes_pmsi" object=$curr_op}}
   </tr>
 {{foreachelse}}  

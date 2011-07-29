@@ -197,7 +197,7 @@ class CMedinetSender extends CDocumentSender {
       $log = new CUserLog();
       $log->type = "create";
       $log->object_id = $docItem->_id;    
-      $log->object_class = $docItem->_class_name;
+      $log->object_class = $docItem->_class;
       $log->loadMatchingObject();
       
       $act_dateCreationActe = mbDate($log->date); 
@@ -288,7 +288,7 @@ class CMedinetSender extends CDocumentSender {
     // Création de l'identifiant externe 
     $id400 = new CIdSante400();
     //Paramétrage de l'id 400
-    $id400->object_class = $docItem->_class_name;
+    $id400->object_class = $docItem->_class;
     $id400->tag = CMedinetSender::$tag;
             
     // Affectation de l'id400 a la transaction
@@ -326,7 +326,7 @@ class CMedinetSender extends CDocumentSender {
     // Création de l'identifiant externe 
     $id400 = new CIdSante400();
     //Paramétrage de l'id 400
-    $id400->object_class = $docItem->_class_name;
+    $id400->object_class = $docItem->_class;
     $id400->tag = CMedinetSender::$tag;
             
     // Affectation de l'id400 a la transaction
@@ -370,7 +370,7 @@ class CMedinetSender extends CDocumentSender {
      return;
      
      return sprintf("Type d'objet '%s' non pris en charge", 
-       CAppUI::tr($docItem->_ref_object->_class_name));
+       CAppUI::tr($docItem->_ref_object->_class));
   }
   
   function getTransactionId($docItem) {

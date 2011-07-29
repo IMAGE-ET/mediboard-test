@@ -227,7 +227,7 @@ Main.add(function() {
                   {{foreach from=$lists item=curr_list}}
                     <input type="checkbox" name="_empty_list[{{$curr_list->_id}}]" title="{{tr}}CListeChoix.empty{{/tr}}"
                       style="float: left;" class="empty_field"/>
-                    <select name="_{{$curr_list->_class_name}}[{{$curr_list->_id}}][]" class="liste">
+                    <select name="_{{$curr_list->_class}}[{{$curr_list->_id}}][]" class="liste">
                       <option value="undef">&mdash; {{$curr_list->nom}}</option>
                       {{foreach from=$curr_list->_valeurs item=curr_valeur}}
                         <option value="{{$curr_valeur}}" title="{{$curr_valeur}}">{{$curr_valeur|truncate}}</option>
@@ -274,7 +274,7 @@ Main.add(function() {
 	              {{main}}
 	                new AideSaisie.AutoComplete(getForm("fastModeForm-{{$uid_fast_mode}}").elements["_texte_libre[{{$_nom|md5}}]"],
                    {
-                      objectClass: '{{$compte_rendu->_class_name}}',
+                      objectClass: '{{$compte_rendu->_class}}',
                       contextUserId: User.id,
                       contextUserView: "{{$user_view}}",
 		                  timestamp: "{{$conf.dPcompteRendu.CCompteRendu.timestamp}}",

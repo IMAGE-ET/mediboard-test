@@ -126,7 +126,7 @@ class CDailyCheckList extends CMbObject { // not a MetaObject, as there can be m
 	
 	static function getList($object, $date = null, $type = null){
     $list = new self;
-    $list->object_class = $object->_class_name;
+    $list->object_class = $object->_class;
     $list->object_id = $object->_id;
     $list->date = $date;
     $list->type = $type;

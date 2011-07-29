@@ -48,7 +48,7 @@ class CHprim21Object extends CMbObject {
   }
   
   function bindToLine($line, CHPrim21Reader &$reader) {
-    return "Bind de $this->_class_name non pris en charge";
+    return "Bind de $this->_class non pris en charge";
   }
   
   function getDateFromHprim($date) {

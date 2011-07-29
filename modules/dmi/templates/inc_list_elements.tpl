@@ -24,7 +24,7 @@
 	{{foreach from=$list_elements item=_element}}
   <tr id="element-{{$_element->_id}}">
     <td>
-      <a href="#" onclick="$(this).up('tr').addUniqueClassName('selected'); viewElement('{{$_element->_class_name}}','{{$_element->_id}}')">
+      <a href="#" onclick="$(this).up('tr').addUniqueClassName('selected'); viewElement('{{$_element->_class}}','{{$_element->_id}}')">
     	{{mb_value object=$_element field=nom}}
     	</a>
     </td>

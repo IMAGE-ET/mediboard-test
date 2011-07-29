@@ -91,7 +91,7 @@ class CExchangeSource extends CMbObject {
         $exchange_source->_allowed_instances = self::getObjects($name, $type, $type_echange);
         if ($exchange_source->role != CAppUI::conf("instance_role")) {
           if (!$override) {
-            $incompatible_source = new $exchange_source->_class_name;
+            $incompatible_source = new $exchange_source->_class;
             $incompatible_source->name = $exchange_source->name;
             $incompatible_source->_incompatible = true;
             CAppUI::displayAjaxMsg("CExchangeSource-_incompatible", UI_MSG_ERROR);
@@ -160,7 +160,7 @@ class CExchangeSource extends CMbObject {
     }
     
     $this->_reachable = 2;
-    $this->_message   = CAppUI::tr("$this->_class_name-reachable-source", $this->host);
+    $this->_message   = CAppUI::tr("$this->_class-reachable-source", $this->host);
   }
   
   function isReachableSource() {}

@@ -22,7 +22,7 @@ if (isset ($_POST['product_id'])) {
   $product->load($_POST['product_id']);
 	
   if ($product->loadRefStock()->_id) {
-    $_POST["stock_class"] = $product->_ref_stock_group->_class_name;
+    $_POST["stock_class"] = $product->_ref_stock_group->_class;
     $_POST["stock_id"] = $product->_ref_stock_group->_id;
     
     unset($_POST['product_id']);
@@ -35,7 +35,7 @@ if (isset ($_POST['product_id'])) {
     $stock_group->order_threshold_min = $_POST["quantity"];
     CAppUI::displayMsg($stock_group->store(), "CProductStockGroup-msg-create");
     
-    $_POST["stock_class"] = $stock_group->_class_name;
+    $_POST["stock_class"] = $stock_group->_class;
     $_POST["stock_id"] = $stock_group->_id;
     
     unset($_POST['product_id']);

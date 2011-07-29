@@ -21,7 +21,7 @@
   {{foreach from=$categories item=_category}}
     <tr id="cat-{{$_category->_id}}">
       <td>
-        <a href="#" onclick="$(this).up('tr').addUniqueClassName('selected'); viewCat('{{$_category->_class_name}}','{{$_category->_id}}')">
+        <a href="#" onclick="$(this).up('tr').addUniqueClassName('selected'); viewCat('{{$_category->_class}}','{{$_category->_id}}')">
   		  {{mb_value object=$_category field=nom}}
   	     </a>
       </td> 

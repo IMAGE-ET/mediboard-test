@@ -20,7 +20,7 @@ class CPrescriptionAlerteHandler extends CMbObjectHandler {
     if(!CModule::getActive("dPprescription")){
       return;
     }
-    return in_array($mbObject->_class_name, self::$handled);
+    return in_array($mbObject->_class, self::$handled);
   }
 
   /*

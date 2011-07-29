@@ -84,7 +84,7 @@ Main.add( function(){
       </div>
       <div style="float: right">
         {{if $line->_protocole && $line->_perm_edit && !$line->substitute_for_id && !$mode_pack}}
-          <button type="button" class="add" onclick="Prescription.viewSubstitutionLines('{{$line->_id}}','{{$line->_class_name}}')">
+          <button type="button" class="add" onclick="Prescription.viewSubstitutionLines('{{$line->_id}}','{{$line->_class}}')">
              Variantes
             ({{$line->_count_substitution_lines}})
             </button>
@@ -708,7 +708,7 @@ Main.add( function(){
   	        Main.add( function(){
   	          var oFormCommentaireElement = getForm("editCommentaire-{{$line->_guid}}");
   	          new AideSaisie.AutoComplete(oFormCommentaireElement.commentaire, {
-  	            objectClass: "{{$line->_class_name}}", 
+  	            objectClass: "{{$line->_class}}", 
   	            contextUserId: "{{$_line_praticien_id}}",
   	            resetSearchField: false,
   	            validateOnBlur: false
@@ -755,7 +755,7 @@ Main.add( function(){
 	            {{foreach from=$line->_ref_substitution_lines item=lines_subst_by_chap}}
 	                {{foreach from=$lines_subst_by_chap item=_line_subst}}
 	                <option value="{{$_line_subst->_guid}}">
-	                   {{if $_line_subst->_class_name == "CPrescriptionLineMix"}}
+	                   {{if $_line_subst->_class == "CPrescriptionLineMix"}}
 	                     {{$_line_subst->_short_view}}
                        ({{$_line_subst->_frequence}})
 	                   {{else}}
@@ -842,7 +842,7 @@ Main.add( function(){
 						
 						<!-- Formulaire de signature du praticien -->
 			      {{if $line->_can_vw_form_signature_praticien}}
-			        <form name="validation-{{$line->_class_name}}-{{$line->_id}}" action="" method="post">
+			        <form name="validation-{{$line->_class}}-{{$line->_id}}" action="" method="post">
 			          <input type="hidden" name="dosql" value="do_prescription_line_mix_aed" />
 			          <input type="hidden" name="m" value="dPprescription" />
 			          <input type="hidden" name="{{$line->_spec->key}}" value="{{$line->_id}}" />

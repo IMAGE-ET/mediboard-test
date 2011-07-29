@@ -40,7 +40,7 @@
 	{{/if}}
 	<tr>
 	  <td> 
-	    <a class="button search" href="#CodeCCAM-show-{{$code}}" onclick="CodeCCAM.show('{{$code}}','{{$subject->_class_name}}')">
+	    <a class="button search" href="#CodeCCAM-show-{{$code}}" onclick="CodeCCAM.show('{{$code}}','{{$subject->_class}}')">
 	      {{mb_value object=$_acte field=code_acte}}
 	    </a>
 	  </td>  
@@ -80,7 +80,7 @@
 	{{foreach from=$subject->_ext_codes_ccam item=_code}}
 	<tr>
 	  <td>
-	    <a class="button search" href="#CodeCCAM-Show-{{$_code->code}}" onclick="CodeCCAM.show('{{$_code->code}}', '{{$subject->_class_name}}')">
+	    <a class="button search" href="#CodeCCAM-Show-{{$_code->code}}" onclick="CodeCCAM.show('{{$_code->code}}', '{{$subject->_class}}')">
 	    	{{$_code->code}}
 			</a>
 	

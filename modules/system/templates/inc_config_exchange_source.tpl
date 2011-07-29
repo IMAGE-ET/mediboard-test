@@ -40,7 +40,7 @@
     
     <ul id="tabs-exchange-source-{{$sourcename}}" class="control_tabs">
       {{foreach from=$source->_allowed_instances item=_source_allowed}}
-      <li><a href="#{{$_source_allowed->_class_name}}-{{$sourcename}}">{{tr}}{{$_source_allowed->_class_name}}{{/tr}}</a></li>
+      <li><a href="#{{$_source_allowed->_class}}-{{$sourcename}}">{{tr}}{{$_source_allowed->_class}}{{/tr}}</a></li>
      {{/foreach}}
     </ul>
       

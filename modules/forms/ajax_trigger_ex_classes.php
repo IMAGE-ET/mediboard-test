@@ -16,7 +16,7 @@ $event       = CValue::get("event");
 $object = CMbObject::loadFromGuid($object_guid);
 
 $ex_class = new CExClass;
-$ex_class->host_class = $object->_class_name;
+$ex_class->host_class = $object->_class;
 $ex_class->event = $event;
 $ex_class->disabled = 0;
 $ex_class->conditional = 0;

@@ -46,7 +46,7 @@ foreach($lines as $lines_by_type){
   	$_line->getAdvancedPerms($current_user->_is_praticien, 0, 0, $operation_id);
 		if($_line->_perm_edit){
 	    $msg = $_line->delete();
-	    CAppUI::displayMsg($msg, "$_line->_class_name-msg-delete");
+	    CAppUI::displayMsg($msg, "$_line->_class-msg-delete");
 		}
 	}
 }

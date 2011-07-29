@@ -125,7 +125,7 @@
   {{/if}}
 
 	{{if $_prescription_line_mix->conditionnel}}
-    <form action="?" method="post" name="activeCondition-{{$_prescription_line_mix->_id}}-{{$_prescription_line_mix->_class_name}}">
+    <form action="?" method="post" name="activeCondition-{{$_prescription_line_mix->_id}}-{{$_prescription_line_mix->_class}}">
       <input type="hidden" name="m" value="dPprescription" />
       <input type="hidden" name="dosql" value="do_prescription_line_mix_aed" />
       <input type="hidden" name="prescription_line_mix_id" value="{{$_prescription_line_mix->_id}}" />

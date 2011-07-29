@@ -9,7 +9,7 @@
 *}}
 
 {{assign var=line_id value=$line->_id}}
-{{assign var=line_class value=$line->_class_name}}
+{{assign var=line_class value=$line->_class}}
 
 
 <tr>
@@ -78,13 +78,13 @@
 	      {{/if}} 
 	    </a>
 	  </div>
-	  {{if $line->_class_name == "CPrescriptionLineMedicament"}}
+	  {{if $line->_class == "CPrescriptionLineMedicament"}}
 	    {{$line->voie}}
 	  {{/if}}
 	 
    </td>
    
-	 {{if !$line->signee && $line->_class_name == "CPrescriptionLineMedicament" && $conf.dPprescription.CPrescription.show_unsigned_med_msg && !$line->inscription}}
+	 {{if !$line->signee && $line->_class == "CPrescriptionLineMedicament" && $conf.dPprescription.CPrescription.show_unsigned_med_msg && !$line->inscription}}
 	  <td colspan="8">
 	  	<div class="small-warning">
 	  		Ligne non signée
@@ -101,7 +101,7 @@
 			       {{assign var=prise value=$line->_prises_for_plan.$unite_prise}}
 			       {{$prise->_short_view}}
 			       <br />
-			       {{if $line->_class_name == "CPrescriptionLineMedicament"}}
+			       {{if $line->_class == "CPrescriptionLineMedicament"}}
 						   {{if $line->_ref_produit_prescription->_id}}
 							   ({{$prise->_ref_object->_ref_produit_prescription->unite_prise}})<br />
 							 {{else}}
@@ -116,7 +116,7 @@
 		           {{$_prise->_short_view}}
 						 </div>
 		       {{/foreach}}
-		       {{if $line->_class_name == "CPrescriptionLineMedicament"}}
+		       {{if $line->_class == "CPrescriptionLineMedicament"}}
 					   {{if $line->_ref_produit_prescription->_id}}
 	             ({{$_prise->_ref_object->_ref_produit_prescription->unite_prise}})<br />
 						 {{else}}
@@ -160,7 +160,7 @@
 						              {{/if}}
 							          {{/if}}
 						          {{/if}}"
-						          onclick='addAdministrationPlan("{{$line->_id}}","{{$line->_class_name}}","{{$unite_prise}}","{{$date}}","{{$list_administrations}}");' 
+						          onclick='addAdministrationPlan("{{$line->_id}}","{{$line->_class}}","{{$unite_prise}}","{{$date}}","{{$list_administrations}}");' 
 		                  onmouseover='ObjectTooltip.createDOM(this, "tooltip-content-{{$line_id}}-{{$unite_prise}}-{{$date}}")'>
 		        <!-- Affichage des administrations effectuée et des prises prevues -->
 			      {{$nb_administre}} / {{$nb_prevue}}

@@ -2,7 +2,7 @@
   Main.add(function() {
     var form = getForm("editDiag");
     var options = {
-      objectClass: "{{$rpu->_class_name}}",
+      objectClass: "{{$rpu->_class}}",
       contextUserId: "{{$user->_id}}",
       contextUserView: "{{$user->_view}}",
       timestamp: "{{$conf.dPcompteRendu.CCompteRendu.timestamp}}",

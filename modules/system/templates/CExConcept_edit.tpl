@@ -1,5 +1,5 @@
-<button type="button" class="new" onclick="MbObject.edit('{{$object->_class_name}}-0')">
-  {{tr}}{{$object->_class_name}}-title-create{{/tr}}
+<button type="button" class="new" onclick="MbObject.edit('{{$object->_class}}-0')">
+  {{tr}}{{$object->_class}}-title-create{{/tr}}
 </button>
 
 {{mb_script module=forms script=ex_class_editor ajax=true}}

@@ -86,14 +86,14 @@ if (!CAppUI::conf("dPurgences create_sejour_hospit")) {
   foreach($rpu->_ref_sejour->_back["observations"] as $_obs){
   	$_obs->sejour_id = $sejour->_id;
     $msg = $_obs->store();
-    viewMsg($msg, "$_obs->_class_name-msg-modify"); 
+    viewMsg($msg, "$_obs->_class-msg-modify"); 
   }
 	
 	$rpu->_ref_sejour->loadBackRefs("transmissions");
   foreach($rpu->_ref_sejour->_back["transmissions"] as $_trans){
     $_trans->sejour_id = $sejour->_id;
     $msg = $_trans->store();
-    viewMsg($msg, "$_trans->_class_name-msg-modify");  
+    viewMsg($msg, "$_trans->_class-msg-modify");  
   }
 } 
 // Pas de création d'un nouveau séjour lors d'une hospitalisation mais d'un changement du type d'admission 

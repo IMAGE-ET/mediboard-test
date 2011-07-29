@@ -18,14 +18,14 @@
   {{assign var=object value=$operation}}
 	<div style="float: left; width: 50%;" id="Documents-{{$object->_guid}}">
 		<script type="text/javascript">
-		Document.register('{{$object->_id}}','{{$object->_class_name}}','{{$object->chir_id}}', 'Documents-{{$object->_guid}}', 'collapse');
+		Document.register('{{$object->_id}}','{{$object->_class}}','{{$object->chir_id}}', 'Documents-{{$object->_guid}}', 'collapse');
 		</script>
 	</div>
 	
 	{{assign var=object value=$operation->_ref_sejour}}
   <div style="float: left; width: 50%;" id="Documents-{{$object->_guid}}">
     <script type="text/javascript">
-    Document.register('{{$object->_id}}','{{$object->_class_name}}','{{$object->praticien_id}}', 'Documents-{{$object->_guid}}', 'collapse');
+    Document.register('{{$object->_id}}','{{$object->_class}}','{{$object->praticien_id}}', 'Documents-{{$object->_guid}}', 'collapse');
     </script>
   </div>
 {{/if}}

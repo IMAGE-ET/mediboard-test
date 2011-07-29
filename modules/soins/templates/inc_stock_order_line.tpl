@@ -44,7 +44,7 @@
       {{/if}}
       
       <input type="hidden" name="stock_id" value="{{$stock->_id}}" />
-      <input type="hidden" name="stock_class" value="{{$stock->_class_name}}" />
+      <input type="hidden" name="stock_class" value="{{$stock->_class}}" />
       
       <input type="hidden" name="service_id" value="{{$service->_id}}" />
       <input type="hidden" name="order" value="1" />

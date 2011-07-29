@@ -86,7 +86,7 @@ class CMbObject extends CStoredObject {
     $document = new CCompteRendu();
 
     if ($document->_ref_module) {
-      $document->object_class = $this->_class_name;
+      $document->object_class = $this->_class;
       $document->object_id    = $this->_id;
       $this->_ref_documents = $document->loadMatchingList("nom");
       $is_editable = $this->docsEditable();
@@ -171,7 +171,7 @@ class CMbObject extends CStoredObject {
         continue;
       }
       $data_format->object_id    = $this->_id;
-      $data_format->object_class = $this->_class_name;
+      $data_format->object_class = $this->_class;
 
       $this->_nb_exchanges_by_format[$_data_format] = $data_format->countMatchingList();
     }
@@ -276,7 +276,7 @@ class CMbObject extends CStoredObject {
       function_id = '$user->function_id' OR 
       group_id = '{$user->_ref_function->group_id}')";
                 
-    $where["class"]   = $ds->prepare("= %", $this->_class_name);
+    $where["class"]   = $ds->prepare("= %", $this->_class);
 
     if ($strict == "true") {
       if ($depend_value_1){
@@ -317,12 +317,12 @@ class CMbObject extends CStoredObject {
       // si on filtre seulement sur depend_value_1, il faut afficher les resultats suivant depend_value_2
       if ($depend_value_1) {
         $depend_field_2 = $aide->_depend_field_2;
-        $depend_2 = CAppUI::tr("$this->_class_name.$aide->_depend_field_2.$aide->depend_value_2");
+        $depend_2 = CAppUI::tr("$this->_class.$aide->_depend_field_2.$aide->depend_value_2");
         if ($aide->depend_value_2){
           $this->_aides[$aide->field][$owner][$depend_2][$aide->text] = $aide->name;
         } 
         else {
-          $depend_name_2 = CAppUI::tr("$this->_class_name-$depend_field_2");
+          $depend_name_2 = CAppUI::tr("$this->_class-$depend_field_2");
           $this->_aides[$aide->field][$owner]["$depend_name_2 non spécifié"][$aide->text] = $aide->name;
         }
         continue;
@@ -331,12 +331,12 @@ class CMbObject extends CStoredObject {
       // ... et réciproquement 
       if ($depend_value_2){
         $depend_field_1 = $aide->_depend_field_1;
-        $depend_1 = CAppUI::tr("$this->_class_name.$aide->_depend_field_1.$aide->depend_value_1");
+        $depend_1 = CAppUI::tr("$this->_class.$aide->_depend_field_1.$aide->depend_value_1");
         if ($aide->depend_value_1){    
           $this->_aides[$aide->field][$owner][$depend_1][$aide->text] = $aide->name;
         } 
         else {
-          $depend_name_1 = CAppUI::tr("$this->_class_name-$depend_field_1");
+          $depend_name_1 = CAppUI::tr("$this->_class-$depend_field_1");
           $this->_aides[$aide->field][$owner]["$depend_name_1 non spécifié"][$aide->text] = $aide->name;
         }
         continue;
@@ -404,7 +404,7 @@ class CMbObject extends CStoredObject {
    * @return array Collection of class => id relations
    */
   function getTemplateClasses(){
-    return array($this->_class_name => $this->_id);
+    return array($this->_class => $this->_id);
   }
   
   /**
@@ -429,7 +429,7 @@ class CMbObject extends CStoredObject {
    * @return array contains config of class and/or object
    */
   function loadConfigValues() {
-    $object_class = $this->_class_name."Config";
+    $object_class = $this->_class."Config";
     
     if (!class_exists($object_class)) {
       return;
@@ -474,7 +474,7 @@ class CMbObject extends CStoredObject {
    * Backward references
    */
   function loadRefObjectConfigs() {
-    $object_class = $this->_class_name."Config";
+    $object_class = $this->_class."Config";
     if (class_exists($object_class)) {
       $this->_ref_object_configs = $this->loadUniqueBackRef("object_configs");
     }
@@ -502,7 +502,7 @@ class CMbObject extends CStoredObject {
     }
     
     $mod_name = $this->_ref_module->mod_name;
-    $template = "$mod_name/templates/{$this->_class_name}_$type.tpl";
+    $template = "$mod_name/templates/{$this->_class}_$type.tpl";
     
     if (!is_file("modules/$template")) {
       $template = "system/templates/CMbObject_$type.tpl";
@@ -518,7 +518,7 @@ class CMbObject extends CStoredObject {
    */
   function makeTemplatePath($name) {
     if ($module = $this->_ref_module) {
-      $path = "$module->mod_name/templates/$this->_class_name";
+      $path = "$module->mod_name/templates/$this->_class";
       return "{$path}_{$name}.tpl";
     }
   }

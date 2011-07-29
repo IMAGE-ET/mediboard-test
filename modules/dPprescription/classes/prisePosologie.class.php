@@ -476,7 +476,7 @@ class CPrisePosologie extends CMbMetaObject {
     foreach($planifs as $_planification){
       $unite_prise = $is_element ?  $this->_ref_object->_chapitre : $_planification["unite_prise"];
       $_planifs_by_step[] = array("object_id" => "{$this->_ref_object->_id}",
-					                            "object_class" => "{$this->_ref_object->_class_name}",
+					                            "object_class" => "{$this->_ref_object->_class}",
 					                            "sejour_id" => "{$this->_ref_object->_ref_prescription->object_id}",
 					                            "unite_prise" => $unite_prise,
 					                            "prise_id" => $_planification["prise_id"],

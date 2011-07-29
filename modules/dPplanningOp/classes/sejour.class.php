@@ -519,7 +519,7 @@ class CSejour extends CCodable implements IPatientRelated {
   	}
     // Application du protocole de prescription
     $prescription = new CPrescription;
-    $prescription->object_class = $this->_class_name;
+    $prescription->object_class = $this->_class;
     $prescription->object_id = $this->_id;
     $prescription->type = "sejour";
     if ($msg = $prescription->store()) {
@@ -1309,7 +1309,7 @@ class CSejour extends CCodable implements IPatientRelated {
     if ($this->_list_constantes_medicales) return;
     
     $constantes = new CConstantesMedicales();
-    $where['context_class'] = " = '$this->_class_name'";
+    $where['context_class'] = " = '$this->_class'";
     $where['context_id']    = " = '$this->_id'";
     $where['patient_id']    = " = '$this->patient_id'";
 		
@@ -1475,7 +1475,7 @@ class CSejour extends CCodable implements IPatientRelated {
     $idDossier = new CIdSante400();
     $idDossier->id400 = $num_dossier;
     $idDossier->tag = $tag_dossier;
-    $idDossier->object_class = $this->_class_name;
+    $idDossier->object_class = $this->_class;
     $idDossier->loadMatchingObject();
     
     if ($idDossier->_id) {

@@ -6,7 +6,7 @@ ExFormula.tokens = {{$field_names|@json}};
 
 <form name="editFieldFormula-{{$ex_field->_id}}" method="post" action="?" onsubmit="return onSubmitFormAjax(this)">
   <input type="hidden" name="m" value="system" />
-  <input type="hidden" name="@class" value="{{$ex_field->_class_name}}" />
+  <input type="hidden" name="@class" value="{{$ex_field->_class}}" />
   <input type="hidden" name="del" value="0" />
   {{mb_key object=$ex_field}}
   

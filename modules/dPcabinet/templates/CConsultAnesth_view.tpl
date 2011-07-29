@@ -2,7 +2,7 @@
 
 <table class="tbl">
   <tr>
-    <th>{{tr}}{{$object->_class_name}}{{/tr}}</th>
+    <th>{{tr}}{{$object->_class}}{{/tr}}</th>
   </tr>
   <tr>
     <td>

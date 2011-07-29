@@ -60,7 +60,7 @@ class CDM extends CProduitPrescriptible {
       if (!$product->loadMatchingObject()) {
         $product->name = $this->nom;
         $product->description = $this->description;
-        $product->category_id = CAppUI::conf("dmi $this->_class_name product_category_id");
+        $product->category_id = CAppUI::conf("dmi $this->_class product_category_id");
         $product->quantity = 1;
         if ($msg = $product->store()){
           return $msg;

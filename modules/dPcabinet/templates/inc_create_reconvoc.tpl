@@ -50,7 +50,7 @@ choosePatient = function() {
         <script type="text/javascript">
           Main.add(function() {
             new AideSaisie.AutoComplete(getForm("editConsult").elements.motif, {
-              objectClass: "{{$consult->_class_name}}",
+              objectClass: "{{$consult->_class}}",
               timestamp: "{{$conf.dPcompteRendu.CCompteRendu.timestamp}}",
               validateOnBlur: 0
             });

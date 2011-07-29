@@ -23,7 +23,7 @@
 
 <table class="main">
   <tr>
-    <td style="width:30%; height: 1%" id="{{$receiver->_class_name}}s">
+    <td style="width:30%; height: 1%" id="{{$receiver->_class}}s">
       {{mb_include template=inc_actors actor=$receiver actors=$receivers}}
     </td>
     <td style="width:70%" rowspan="2" class="halfPane" id="actor">
@@ -31,7 +31,7 @@
   </tr>
   
   <tr>
-    <td style="width:30%" id="{{$sender->_class_name}}s">
+    <td style="width:30%" id="{{$sender->_class}}s">
       {{mb_include template=inc_actors actor=$sender actors=$senders}}
     </td>
   </tr>

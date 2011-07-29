@@ -166,7 +166,7 @@ if ($print) {
       
     foreach($lines as $_line) {
       $where = array(
-        "object_class" => "='$_line->_class_name'",
+        "object_class" => "='$_line->_class'",
         "object_id"    => "='$_line->_id'",
       );
       

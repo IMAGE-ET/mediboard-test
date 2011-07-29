@@ -74,7 +74,7 @@ function ZoomAjax(objectClass, objectId, elementClass, elementId, sfn){
         {{if $curr_consult->_canEdit}}
         <tr id="cons{{$curr_consult->consultation_id}}-trigger">
           <td colspan="2" onclick="setObject( {
-              objClass: '{{$curr_consult->_class_name}}', 
+              objClass: '{{$curr_consult->_class}}', 
               keywords: '', 
               id: {{$curr_consult->consultation_id|smarty:nodefaults|JSAttribute}}, 
               view:'{{$curr_consult->_view|smarty:nodefaults|JSAttribute}}'} )">
@@ -117,7 +117,7 @@ function ZoomAjax(objectClass, objectId, elementClass, elementId, sfn){
           {{/if}}
           <tr>
             <th>Documents attachés :</th>
-            <td id="File{{$curr_consult->_class_name}}{{$curr_consult->_id}}"></td>
+            <td id="File{{$curr_consult->_class}}{{$curr_consult->_id}}"></td>
           </tr>
         </tbody>
         {{/if}}
@@ -135,7 +135,7 @@ function ZoomAjax(objectClass, objectId, elementClass, elementId, sfn){
         {{foreach from=$curr_sejour->_ref_operations item=curr_op}}
         <tr id="oper{{$curr_op->operation_id}}-trigger">
           <td colspan="2" onclick="setObject( {
-              objClass: '{{$curr_op->_class_name}}', 
+              objClass: '{{$curr_op->_class}}', 
               keywords: '', 
               id: {{$curr_op->operation_id|smarty:nodefaults|JSAttribute}}, 
               view:'{{$curr_op->_view|smarty:nodefaults|JSAttribute}}'} )">
@@ -173,7 +173,7 @@ function ZoomAjax(objectClass, objectId, elementClass, elementId, sfn){
             <th>
               Documents attachés :
             </th>
-            <td id="File{{$curr_op->_class_name}}{{$curr_op->_id}}"></td>
+            <td id="File{{$curr_op->_class}}{{$curr_op->_id}}"></td>
           </tr>
         </tbody>
         {{/foreach}}

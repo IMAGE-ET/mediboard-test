@@ -13,7 +13,7 @@
   InteropActor.actor_guid = '{{$actor->_guid}}';
 </script>
 
-{{if (($actor->_class_name != "CInteropactor") || ($actor->_class_name != "CInteropSender")) && $can->edit}}
+{{if (($actor->_class != "CInteropactor") || ($actor->_class != "CInteropSender")) && $can->edit}}
   <form name="edit{{$actor->_guid}}" action="?m={{$m}}" method="post" onsubmit="return onSubmitFormAjax(this);">
     {{mb_key object=$actor}}
     {{mb_class object=$actor}}
@@ -28,11 +28,11 @@
           {{mb_include module=system template=inc_object_idsante400 object=$actor}}
           {{mb_include module=system template=inc_object_history object=$actor}}
           
-          {{tr}}{{$actor->_class_name}}-title-modify{{/tr}} '{{$actor}}'
+          {{tr}}{{$actor->_class}}-title-modify{{/tr}} '{{$actor}}'
         </th>
         {{else}}
         <th class="title" colspan="2">
-         {{tr}}{{$actor->_class_name}}-title-create{{/tr}}
+         {{tr}}{{$actor->_class}}-title-create{{/tr}}
         </th>
         {{/if}}
       </tr>

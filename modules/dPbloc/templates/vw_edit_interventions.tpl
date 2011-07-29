@@ -140,7 +140,7 @@
             
             <input type="hidden" name="del" value="0" />
             <input type="hidden" name="object_id" value="{{$plage->_id}}" />
-            <input type="hidden" name="object_class" value="{{$plage->_class_name}}" />
+            <input type="hidden" name="object_class" value="{{$plage->_class}}" />
             <input type="hidden" name="realise" value="0" />
             <select name="personnel_id" style="width: 10em;">
               <option value="">&mdash; {{tr}}CPersonnel.emplacement.iade{{/tr}}</option>
@@ -162,7 +162,7 @@
             
             <input type="hidden" name="del" value="0" />
             <input type="hidden" name="object_id" value="{{$plage->_id}}" />
-            <input type="hidden" name="object_class" value="{{$plage->_class_name}}" />
+            <input type="hidden" name="object_class" value="{{$plage->_class}}" />
             <input type="hidden" name="realise" value="0" />
             <select name="personnel_id" style="width: 10em;">
               <option value="">&mdash; {{tr}}CPersonnel.emplacement.op{{/tr}}</option>
@@ -183,7 +183,7 @@
             <input type="hidden" name="dosql" value="do_affectation_aed" />
             <input type="hidden" name="del" value="0" />
             <input type="hidden" name="object_id" value="{{$plage->_id}}" />
-            <input type="hidden" name="object_class" value="{{$plage->_class_name}}" />
+            <input type="hidden" name="object_class" value="{{$plage->_class}}" />
             <input type="hidden" name="realise" value="0" />
             <select name="personnel_id" style="width: 10em;">
               <option value="">&mdash; {{tr}}CPersonnel.emplacement.op_panseuse{{/tr}}</option>

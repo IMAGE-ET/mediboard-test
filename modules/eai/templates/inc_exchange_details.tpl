@@ -10,7 +10,7 @@
 *}}
 
 {{if $exchange->_message === null && $exchange->_acquittement === null}}
-  <div class="small-info">{{tr}}{{$exchange->_class_name}}-purge-desc{{/tr}}</div>
+  <div class="small-info">{{tr}}{{$exchange->_class}}-purge-desc{{/tr}}</div>
 {{else}}
 <script type="text/javascript">
   Main.add(function () {
@@ -56,7 +56,7 @@
         {{if $exchange->_acquittement}}
           {{mb_value object=$exchange field="_acquittement"}}
           
-          {{mb_include module=$exchange->_ref_module->mod_name template="`$exchange->_class_name`_observations_inc"}}
+          {{mb_include module=$exchange->_ref_module->mod_name template="`$exchange->_class`_observations_inc"}}
         {{else}}
           <div class="big-info">{{tr}}CExchange-no-acquittement{{/tr}}</div>
         {{/if}}

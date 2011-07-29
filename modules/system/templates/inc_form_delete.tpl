@@ -15,7 +15,7 @@
 
   <button class="cancel notext" type="button" onclick="confirmDeletion(this.form, {
 	    ajax:1, 
-      typeName:&quot;{{tr}}{{$object->_class_name}}.one{{/tr}}&quot;,
+      typeName:&quot;{{tr}}{{$object->_class}}.one{{/tr}}&quot;,
       objName:&quot;{{$object->_view|smarty:nodefaults|JSAttribute}}&quot;
     })">
   </button>

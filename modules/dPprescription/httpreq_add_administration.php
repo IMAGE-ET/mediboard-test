@@ -146,7 +146,7 @@ if ($line instanceof CPrescriptionLineElement) {
   $constantes->patient_id = $sejour->_ref_patient->_id;
   $constantes->loadRefPatient();
   $constantes->context_id = $sejour->_id;
-  $constantes->context_class = $sejour->_class_name;
+  $constantes->context_class = $sejour->_class;
   $constantes->loadRefContext();
   $latest_constantes = $patient->loadRefConstantesMedicales();
 }

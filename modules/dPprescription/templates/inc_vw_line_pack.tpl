@@ -8,7 +8,7 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
 *}}
 
-{{if $line->_class_name == "CPrescriptionLineComment"}}
+{{if $line->_class == "CPrescriptionLineComment"}}
   <tr>
     <td colspan="8" class="text">
     <div style="float: right">
@@ -26,15 +26,15 @@
 	      {{/if}}
     </div>
     <div style="float: right">
-    {{if ($line->_class_name == "CPrescriptionLineMedicament" && !$line->substitute_for_id) || ($line->_class_name != "CPrescriptionLineMedicament")}}
+    {{if ($line->_class == "CPrescriptionLineMedicament" && !$line->substitute_for_id) || ($line->_class != "CPrescriptionLineMedicament")}}
 	    <form name="modifProtocole{{$line->_id}}" method="get" action="?">
 	      <input type="hidden" name="m" value="dPprescription" />
 	      <input type="hidden" name="tab" value="vw_edit_protocole" />
 	      <input type="hidden" name="prescription_id" value="{{$line->_ref_prescription->_id}}" />
 	      <button class="edit">{{$line->_ref_prescription->_view}}</button>
 	    </form>
-	    {{if $line->_class_name == "CPrescriptionLineMedicament"}}
-	      <button type="button" class="search" onclick="Prescription.viewSubstitutionLines('{{$line->_id}}', '{{$line->_class_name}}','1')">
+	    {{if $line->_class == "CPrescriptionLineMedicament"}}
+	      <button type="button" class="search" onclick="Prescription.viewSubstitutionLines('{{$line->_id}}', '{{$line->_class}}','1')">
 	         Variantes
 	         ({{$line->_count_substitution_lines}})
 	      </button>

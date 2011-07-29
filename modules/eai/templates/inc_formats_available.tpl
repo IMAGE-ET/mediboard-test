@@ -14,8 +14,8 @@
   <legend>{{tr}}CExchangeTabular{{/tr}}</legend>
   
   {{foreach from=$formats_tabular item=_format_tabular}}
-    <button class="none" onclick="InteropActor.viewMessagesSupported('{{$actor_guid}}', '{{$_format_tabular->_class_name}}')">
-      <img src="modules/{{$_format_tabular->_ref_module->mod_name}}/images/icon.png" width="16"/> {{tr}}{{$_format_tabular->_class_name}}{{/tr}}
+    <button class="none" onclick="InteropActor.viewMessagesSupported('{{$actor_guid}}', '{{$_format_tabular->_class}}')">
+      <img src="modules/{{$_format_tabular->_ref_module->mod_name}}/images/icon.png" width="16"/> {{tr}}{{$_format_tabular->_class}}{{/tr}}
     </button>
   {{/foreach}}
   
@@ -34,8 +34,8 @@
   <legend>{{tr}}CEchangeXML{{/tr}}</legend>
   
   {{foreach from=$formats_xml item=_format_xml}}
-    <button onclick="InteropActor.viewMessagesSupported('{{$actor_guid}}', '{{$_format_xml->_class_name}}')">
-      <img src="modules/{{$_format_xml->_ref_module->mod_name}}/images/icon.png" width="16"/>{{tr}}{{$_format_xml->_class_name}}{{/tr}}
+    <button onclick="InteropActor.viewMessagesSupported('{{$actor_guid}}', '{{$_format_xml->_class}}')">
+      <img src="modules/{{$_format_xml->_ref_module->mod_name}}/images/icon.png" width="16"/>{{tr}}{{$_format_xml->_class}}{{/tr}}
     </button>
   {{/foreach}}
   

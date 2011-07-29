@@ -5,7 +5,7 @@
   * @param $praticien CMediuser Owner of modeles
   *}}
   
-{{assign var=object_class value=$object->_class_name}}
+{{assign var=object_class value=$object->_class}}
 {{assign var=object_id value=$object->_id}}
 {{assign var=pdf_thumbnails value=$conf.dPcompteRendu.CCompteRendu.pdf_thumbnails}}
 {{unique_id var=unique_id}}
@@ -24,7 +24,7 @@ Main.add(function() {
   url = new Url("dPcompteRendu", "ajax_modele_autocomplete");
   url.addParam("user_id", "{{$praticien->_id}}");
   url.addParam("function_id", "{{$praticien->function_id}}");
-  url.addParam("object_class", '{{$object->_class_name}}');
+  url.addParam("object_class", '{{$object->_class}}');
   url.addParam("object_id", '{{$object->_id}}');
   url.autoComplete(form.keywords_modele, '', {
     minChars: 2,
@@ -36,7 +36,7 @@ Main.add(function() {
   url = new Url("dPcompteRendu", "ajax_pack_autocomplete");
   url.addParam("user_id", "{{$praticien->_id}}");
   url.addParam("function_id", "{{$praticien->function_id}}");
-  url.addParam("object_class", '{{$object->_class_name}}');
+  url.addParam("object_class", '{{$object->_class}}');
   url.addParam("object_id", '{{$object->_id}}');
   url.autoComplete(form.keywords_pack, '', {
     minChars: 2,
@@ -50,11 +50,11 @@ Main.add(function() {
     var object_class = null;
 
     if (id == 0) {
-      object_class = '{{$object->_class_name}}';
+      object_class = '{{$object->_class}}';
     }
     
     if (selected.select(".fast_edit").length) {
-      Document.fastMode('{{$object->_class_name}}', id, '{{$object_id}}', null, null, '{{$unique_id}}');
+      Document.fastMode('{{$object->_class}}', id, '{{$object_id}}', null, null, '{{$unique_id}}');
     } else {
       Document.create(id, '{{$object_id}}', null, object_class, null);
     }
@@ -105,7 +105,7 @@ Main.add(function() {
   {{if $doc_count && $mode == "collapse"}}
   <tr id="DocsEffect-{{$object->_guid}}-trigger">
     <th class="category" colspan="3">
-    	{{tr}}{{$object->_class_name}}{{/tr}} :
+    	{{tr}}{{$object->_class}}{{/tr}} :
     	{{$doc_count}} document(s)
 
 		  <script type="text/javascript">
@@ -184,7 +184,7 @@ Main.add(function() {
   {{foreachelse}}
   <tr>
     <td colspan="3" class="empty">
-      {{tr}}{{$object->_class_name}}{{/tr}} : Aucun document
+      {{tr}}{{$object->_class}}{{/tr}} : Aucun document
     </td>
   </tr>
   {{/foreach}}

@@ -40,8 +40,8 @@
         <td>
           <select name="object_id" onchange="$V(this.form.object_class, this.options[this.selectedIndex].getAttribute('object_class'));">
             {{foreach from=$sources item=_source}}
-              <option value="{{$_source->_id}}" object_class="{{$_source->_class_name}}"
-                {{if $printer->object_id == $_source->_id && $printer->object_class == $_source->_class_name}}selected="selected"{{/if}}>
+              <option value="{{$_source->_id}}" object_class="{{$_source->_class}}"
+                {{if $printer->object_id == $_source->_id && $printer->object_class == $_source->_class}}selected="selected"{{/if}}>
                 {{$_source->name}}
               </option>
             {{/foreach}}

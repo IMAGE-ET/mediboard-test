@@ -80,13 +80,13 @@ class CExClass extends CMbObject {
 
     if ($level == 1) {
       $where = array(
-        "reference_class" => "= '$object->_class_name'",
+        "reference_class" => "= '$object->_class'",
         "reference_id"    => "= '$object->_id'",
       );
     }
     else {
       $where = array(
-        "reference2_class" => "= '$object->_class_name'",
+        "reference2_class" => "= '$object->_class'",
         "reference2_id"    => "= '$object->_id'",
       );
     }
@@ -452,7 +452,7 @@ class CExClass extends CMbObject {
     }
     
     $ex_class = new self;
-    $ex_class->host_class = $object->_class_name;
+    $ex_class->host_class = $object->_class;
     $ex_class->event = $event;
     $ex_class->disabled = 0;
     $ex_class->required = 0;

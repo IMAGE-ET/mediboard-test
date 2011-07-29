@@ -248,7 +248,7 @@
       <script type="text/javascript">
         Main.add(function() {
           new AideSaisie.AutoComplete(getForm("editOpEasy").elements.materiel, {
-            objectClass: "{{$op->_class_name}}",
+            objectClass: "{{$op->_class}}",
             timestamp: "{{$conf.dPcompteRendu.CCompteRendu.timestamp}}",
             validateOnBlur: 0
           });
@@ -262,7 +262,7 @@
       <script type="text/javascript">
         Main.add(function() {
           new AideSaisie.AutoComplete(getForm("editOpEasy").elements.rques, {
-            objectClass: "{{$op->_class_name}}",
+            objectClass: "{{$op->_class}}",
             timestamp: "{{$conf.dPcompteRendu.CCompteRendu.timestamp}}",
             validateOnBlur: 0
           });

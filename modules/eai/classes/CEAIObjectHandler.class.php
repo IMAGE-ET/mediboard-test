@@ -12,7 +12,7 @@ class CEAIObjectHandler extends CMbObjectHandler {
   static $handled = array ();
 
   static function isHandled(CMbObject $mbObject) {
-    return in_array($mbObject->_class_name, self::$handled);
+    return in_array($mbObject->_class, self::$handled);
   }
   
   function sendFormatAction($action, CMbObject $mbObject) {

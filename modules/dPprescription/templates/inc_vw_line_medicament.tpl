@@ -39,7 +39,7 @@
         {{include file="../../dPprescription/templates/line/inc_vw_form_ald.tpl"}}
 				
 				{{if $line->_perm_edit}}
-			    <input name="perop" type="checkbox" {{if $line->perop}}checked="checked"{{/if}} onchange="submitPerop('{{$line->_class_name}}','{{$line->_id}}',this.checked)"  />
+			    <input name="perop" type="checkbox" {{if $line->perop}}checked="checked"{{/if}} onchange="submitPerop('{{$line->_class}}','{{$line->_id}}',this.checked)"  />
 			    {{mb_label object=$line field="perop"}}
 			  {{elseif !$line->_protocole}}
 			    {{mb_label object=$line field="perop"}}:
@@ -80,7 +80,7 @@
         {{/if}}
       
         {{if $line->_perm_edit && $line->_protocole && !$line->substitute_for_id && !$mode_pack}}
-          <button type="button" class="add" onclick="Prescription.viewSubstitutionLines('{{$line->_id}}','{{$line->_class_name}}')">
+          <button type="button" class="add" onclick="Prescription.viewSubstitutionLines('{{$line->_id}}','{{$line->_class}}')">
              Variantes
             ({{$line->_count_substitution_lines}})
           </button>
@@ -314,7 +314,7 @@
               return;
             }
             new AideSaisie.AutoComplete(oFormCommentaireElement.commentaire, {
-              objectClass: "{{$line->_class_name}}", 
+              objectClass: "{{$line->_class}}", 
               contextUserId: "{{$_line_praticien_id}}",
               resetSearchField: false,
   						validateOnBlur: false,
@@ -367,7 +367,7 @@
 	            {{foreach from=$line->_ref_substitution_lines item=lines_subst_by_chap}}
 	                {{foreach from=$lines_subst_by_chap item=_line_subst}}
 	                <option value="{{$_line_subst->_guid}}">
-	                  {{if $_line_subst->_class_name == "CPrescriptionLineMix"}}
+	                  {{if $_line_subst->_class == "CPrescriptionLineMix"}}
 	                    {{$_line_subst->_short_view}} ({{$_line_subst->_frequence}})
 	                  {{else}}
 	                    {{$_line_subst->_view}}

@@ -19,7 +19,7 @@
 		{{mb_key object=$rpu}}
 		
 		<button class="submit" type="submit" onclick="this.form.{{$fin}}.value='current';">
-		{{tr}}{{$rpu->_class_name}}-{{$fin}}{{/tr}}
+		{{tr}}{{$rpu->_class}}-{{$fin}}{{/tr}}
 		</button>
 	</form>
 {{elseif $rpu->$fin}}

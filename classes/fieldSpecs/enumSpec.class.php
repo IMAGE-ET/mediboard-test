@@ -59,7 +59,7 @@ class CEnumSpec extends CMbFieldSpec {
   function getValue($object, $smarty = null, $params = array()) {
     $fieldName = $this->fieldName;
     $propValue = $object->$fieldName;
-    return htmlspecialchars(CAppUI::tr("$object->_class_name.$fieldName.$propValue"));
+    return htmlspecialchars(CAppUI::tr("$object->_class.$fieldName.$propValue"));
   }
   
   function checkValues(){

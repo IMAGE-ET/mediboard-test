@@ -132,7 +132,7 @@ class CAdministration extends CMbMetaObject implements IPatientRelated {
   function loadRefLog(){
     $this->_ref_log = new CUserLog();
     $this->_ref_log->object_id = $this->_id;
-    $this->_ref_log->object_class = $this->_class_name;
+    $this->_ref_log->object_class = $this->_class;
     $this->_ref_log->loadMatchingObject();
     $this->_ref_log->loadRefsFwd();
   }

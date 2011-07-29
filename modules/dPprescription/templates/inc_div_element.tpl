@@ -288,7 +288,7 @@ Main.add( function(){
 			    {{foreach from=$_hist_line item=_line}}
 			      <tr>
 			        <!-- Affichage d'une ligne de commentaire -->
-			        {{if $_line->_class_name == "CPrescriptionLineComment"}}
+			        {{if $_line->_class == "CPrescriptionLineComment"}}
 			          <td colspan="4" class="text">{{$_line->commentaire}}</td>
 			        {{else}}
 			          {{assign var=chapitre value=$_line->_ref_element_prescription->_ref_category_prescription->chapitre}}

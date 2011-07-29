@@ -431,7 +431,7 @@ class CPatient extends CMbObject {
     }
 
   	$where = array(
-  	  'object_class' => "='$this->_class_name'",
+  	  'object_class' => "='$this->_class'",
   	  'object_id'    => CSQLDataSource::prepareIn(CMbArray::pluck($merged_objects, 'patient_id'))
   	);
   	$dossier_medical = new CDossierMedical();
@@ -446,7 +446,7 @@ class CPatient extends CMbObject {
     // Merge them
     if (count($list) > 1) {
     	if ($msg = $dossier_medical->mergePlainFields($list)) return $msg;
-    	$dossier_medical->object_class = $this->_class_name;
+    	$dossier_medical->object_class = $this->_class;
     	$dossier_medical->object_id = $this->_id;
     	return $dossier_medical->merge($list);
     }
@@ -507,7 +507,7 @@ class CPatient extends CMbObject {
     $vitale = $intermax["VITALE"];
     $vitNumero = $vitale["VIT_NUMERO_LOGICMAX"];
     $id_vitale = new CIdSante400();
-    $id_vitale->object_class = $this->_class_name;
+    $id_vitale->object_class = $this->_class;
     $id_vitale->id400 = $vitNumero;
     $id_vitale->tag = "LogicMax VitNumero";
     $id_vitale->loadMatchingObject();
@@ -575,7 +575,7 @@ class CPatient extends CMbObject {
     
     // Make id vitale
     $id_vitale = new CIdSante400();
-    $id_vitale->object_class = $this->_class_name;
+    $id_vitale->object_class = $this->_class;
     $id_vitale->id400 = $vitNumero;
     $id_vitale->tag = "LogicMax VitNumero";
     $id_vitale->loadMatchingObject();

@@ -5,17 +5,17 @@
   * codable->_view fontionne mal pour les interventions 
   *}}
 
-{{if $codable->_class_name == "COperation"}}
+{{if $codable->_class == "COperation"}}
 	Intervention du {{mb_value object=$codable field=_datetime}}
 	{{if $codable->libelle}}<br /> {{$codable->libelle}}{{/if}}
 {{/if}}
 
-{{if $codable->_class_name == "CConsultation"}}
+{{if $codable->_class == "CConsultation"}}
 	Consultation du {{$codable->_datetime|date_format:"%d %B %Y"}}
 	{{if $codable->libelle}}: {{$codable->libelle}}{{/if}}
 {{/if}}
 
-{{if $codable->_class_name == "CSejour"}}
+{{if $codable->_class == "CSejour"}}
 	Sejour du {{mb_value object=$codable field=_entree}}
 	au {{mb_value object=$codable field=_sortie}} 
 {{/if}}

@@ -156,7 +156,7 @@ if($prescriptions) {
         $default_prises[$code][$_planif->_id]["quantite_adm"] = $qte_adm;
 				$default_prises[$code][$_planif->_id]["unite_adm"] = utf8_encode($_planif->_ref_object->_unite_administration);
         $default_prises[$code][$_planif->_id]["object_id"] = $_planif->_ref_object->_id;
-        $default_prises[$code][$_planif->_id]["object_class"] = $_planif->_ref_object->_class_name;
+        $default_prises[$code][$_planif->_id]["object_class"] = $_planif->_ref_object->_class;
       } 
     }
   }
@@ -206,7 +206,7 @@ foreach($dispensations as $code => $unites){
       // Chargement des ref de la dispensation à effectuer
       $delivery = new CProductDelivery();
       $delivery->stock_id = $stock->_id;
-      $delivery->stock_class = $stock->_class_name;
+      $delivery->stock_class = $stock->_class;
       $delivery->service_id = $service_id;
       $delivery->loadRefsFwd();
       $delivery->_ref_stock->loadRefsFwd();

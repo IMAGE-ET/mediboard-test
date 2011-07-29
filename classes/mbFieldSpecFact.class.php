@@ -47,7 +47,7 @@ class CMbFieldSpecFact {
    * @return CMbFieldSpec
    */
   static function getSpec(CMbObject $object, $fieldName, $strSpec = null) {
-    $className = $object->_class_name;
+    $className = $object->_class;
         
     $specFragments = explode(" ", $strSpec);
     $specClassName = "CMbFieldSpec";

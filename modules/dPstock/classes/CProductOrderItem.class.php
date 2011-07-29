@@ -89,7 +89,7 @@ class CProductOrderItem extends CMbObject {
       $reception->code = $code;
       return $reception->store();
     } else {
-      return "$this->_class_name::receive failed : order_item must be stored before";
+      return "$this->_class::receive failed : order_item must be stored before";
     }
   }
   

@@ -98,7 +98,7 @@ Main.add(function () {
           <script type="text/javascript">
             Main.add(function() {
               new AideSaisie.AutoComplete(getForm("editTrans").elements.text, {
-                objectClass: "{{$transmission->_class_name}}",
+                objectClass: "{{$transmission->_class}}",
                 timestamp: "{{$conf.dPcompteRendu.CCompteRendu.timestamp}}",
                 validateOnBlur: 0
               });

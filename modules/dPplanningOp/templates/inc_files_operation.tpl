@@ -9,13 +9,13 @@
 {{assign var=object value=$operation}}
 <div style="float: left; width: 50%;" id="files-{{$object->_guid}}">
   <script type="text/javascript">
-    File.register('{{$object->_id}}','{{$object->_class_name}}', 'files-{{$object->_guid}}');
+    File.register('{{$object->_id}}','{{$object->_class}}', 'files-{{$object->_guid}}');
   </script>
 </div>
 
 {{assign var=object value=$operation->_ref_sejour}}
 <div style="float: left; width: 50%;" id="files-{{$object->_guid}}">
   <script type="text/javascript">
-    File.register('{{$object->_id}}','{{$object->_class_name}}', 'files-{{$object->_guid}}');
+    File.register('{{$object->_id}}','{{$object->_class}}', 'files-{{$object->_guid}}');
   </script>
 </div>

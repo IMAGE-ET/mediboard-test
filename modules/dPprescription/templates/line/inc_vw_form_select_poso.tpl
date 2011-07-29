@@ -26,14 +26,14 @@
     {{/if}}
 		<input type="hidden" name="_delete_prises" value="0" />
 
-   	<select name="_line_id_for_poso" style="width: 160px;" onchange="submitPoso(this.form, '{{$line->_id}}', '{{$line->_class_name}}', '{{$typeDate}}');">
+   	<select name="_line_id_for_poso" style="width: 160px;" onchange="submitPoso(this.form, '{{$line->_id}}', '{{$line->_class}}', '{{$typeDate}}');">
 		  <option value="">Posologies les plus utilisées</option>
 		  {{foreach from=$line->_most_used_poso item=_poso_view key=_line_poso_id}}
 		    <option value="{{$_line_poso_id}}">{{$_poso_view.view}}</option>
 		  {{/foreach}}
 	  </select>
 		
-		<button type="button" class="search" onclick="Prescription.viewStatPoso('{{$line->_class_name}}', '{{$filter_value}}', '{{if $prescription->object_id}}{{$line->praticien_id}}{{else}}{{$prescription->praticien_id}}{{/if}}')">
+		<button type="button" class="search" onclick="Prescription.viewStatPoso('{{$line->_class}}', '{{$filter_value}}', '{{if $prescription->object_id}}{{$line->praticien_id}}{{else}}{{$prescription->praticien_id}}{{/if}}')">
       Stats
     </button>
   </form>

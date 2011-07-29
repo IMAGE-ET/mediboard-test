@@ -24,6 +24,7 @@ class CModelObject {
    * @var string The object's class name
    */
   var $_class_name    = null; 
+  var $_class         = null; 
   
   /**
    * @var integer The object ID
@@ -123,7 +124,8 @@ class CModelObject {
       self::$module_name[$class] = $module;
     }
     
-    $this->_class_name = $class;
+    $this->_class = $class;
+    $this->_class      =& $this->_class;
     $this->_spec       =& self::$spec[$class];
     
     if ($key = $this->_spec->key) {
@@ -151,7 +153,7 @@ class CModelObject {
     $this->_backProps =& self::$backProps[$class];
     $this->_backSpecs =& self::$backSpecs[$class];
     
-    $this->_guid = "$this->_class_name-none";
+    $this->_guid = "$this->_class-none";
 
     // @todo Move up to CStoredObject
     $this->loadRefModule(self::$module_name[$class]);    
@@ -218,7 +220,7 @@ class CModelObject {
     return array (
       "_shortview" => "str",
       "_view"      => "str",
-      $this->_spec->key => "ref class|$this->_class_name show|0"
+      $this->_spec->key => "ref class|$this->_class show|0"
     );
   }
   
@@ -242,7 +244,7 @@ class CModelObject {
       return $this->_backSpecs[$backName];
     }
 
-    if ($backSpec = CMbBackSpec::make($this->_class_name, $backName, $this->_backProps[$backName])) {
+    if ($backSpec = CMbBackSpec::make($this->_class, $backName, $this->_backProps[$backName])) {
       return $this->_backSpecs[$backName] = $backSpec;
     }
   }
@@ -364,8 +366,8 @@ class CModelObject {
    * @return void
    */
   function updateFormFields() {
-    $this->_guid = "$this->_class_name-$this->_id";
-    $this->_view = CAppUI::tr($this->_class_name) . " " . $this->_id;
+    $this->_guid = "$this->_class-$this->_id";
+    $this->_view = CAppUI::tr($this->_class) . " " . $this->_id;
     $this->_shortview = "#$this->_id";
   }
   
@@ -449,8 +451,8 @@ class CModelObject {
    * @param CMbObject $mbObject object to extend with 
    */
   function extendsWith(CMbObject $mbObject, $gently = false) {
-    if ($this->_class_name !== $mbObject->_class_name) {
-      trigger_error(printf("Target object has not the same class (%s) as this (%s)", $mbObject->_class_name, $this->_class_name), E_USER_WARNING);
+    if ($this->_class !== $mbObject->_class) {
+      trigger_error(printf("Target object has not the same class (%s) as this (%s)", $mbObject->_class, $this->_class), E_USER_WARNING);
       return;
     }
     

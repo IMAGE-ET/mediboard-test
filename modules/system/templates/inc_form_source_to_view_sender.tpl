@@ -9,7 +9,7 @@
 *}}
 
 <form name="Edit-{{$source_to_vw_sender->_guid}}" action="?m={{$m}}" method="post" onsubmit="return SourceToViewSender.onSubmit(this);">
-  <input type="hidden" name="@class" value="{{$source_to_vw_sender->_class_name}}" />
+  <input type="hidden" name="@class" value="{{$source_to_vw_sender->_class}}" />
   <input type="hidden" name="del" value="0" />
   {{mb_key object=$source_to_vw_sender}}
   

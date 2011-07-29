@@ -90,7 +90,7 @@ foreach($lines as $_line_element){
   // Chargement des planificatoins systemes	
   $planif = new CPlanificationSysteme();
   $planif->object_id = $_line_element->_id;
-  $planif->object_class = $_line_element->_class_name;
+  $planif->object_class = $_line_element->_class;
   if(!$planif->countMatchingList()){
     $_line_element->calculPlanifSysteme();
   }

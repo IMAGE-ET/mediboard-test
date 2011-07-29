@@ -8,7 +8,7 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
 *}}
 
-{{assign var=class_name value=$stock->_class_name}}
+{{assign var=class_name value=$stock->_class}}
 
 {{mb_include module=system template=inc_pagination change_page="changePage" 
     total=$list_stocks_count current=$start step=$conf.dPstock.$class_name.pagination_size}}

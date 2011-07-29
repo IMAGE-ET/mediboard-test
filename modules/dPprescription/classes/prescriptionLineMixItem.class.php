@@ -355,7 +355,7 @@ class CPrescriptionLineMixItem extends CMbObject implements IPatientRelated {
     $administration = new CAdministration();
 		$where = array();
 		$where["object_id"] = " = '$this->_id'";
-		$where["object_class"] = " = '$this->_class_name'";
+		$where["object_class"] = " = '$this->_class'";
     $where["planification"] = " = '1'";
 		$where["dateTime"] = " LIKE '$date%'";
 		$this->_ref_planifications = $administration->loadList($where);

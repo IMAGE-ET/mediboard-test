@@ -100,7 +100,7 @@ foreach($lines_element as $_line_element){
 	$_line_element->_id = "";
 	$_line_element->prescription_id = $prescription_sejour->_id;
 	$msg = $_line_element->store();
-  CAppUI::displayMsg($msg, "$_line_element->_class_name-msg-create");
+  CAppUI::displayMsg($msg, "$_line_element->_class-msg-create");
 	
 	$original_to_new_line[$original_line_element_id] = $_line_element->_id;
 }

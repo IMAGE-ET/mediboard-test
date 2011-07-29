@@ -42,7 +42,7 @@ Main.add(function () {
   <tr>
     <td class="{{cycle name=cellicon values="dark, light"}}">
       {{assign var="elementId" value=$_doc_item->_id}}
-      {{if $_doc_item->_class_name=="CCompteRendu"}}
+      {{if $_doc_item->_class=="CCompteRendu"}}
         {{if $conf.dPcompteRendu.CCompteRendu.pdf_thumbnails && $app->user_prefs.pdf_and_thumbs}}
           {{assign var="nomdoc" value=$_doc_item->nom}}
           {{assign var="file_owner" value=$_doc_item->user_id}}
@@ -55,7 +55,7 @@ Main.add(function () {
         {{assign var="srcImg" value="?m=dPfiles&a=fileviewer&suppressHeaders=1&file_id=$elementId&phpThumb=1&wl=64&hp=64"}}
       {{/if}}
       
-      <a href="#" onclick="ZoomAjax('{{$selClass}}', '{{$selKey}}', '{{$_doc_item->_class_name}}', '{{$elementId}}', '0');" title="Afficher l'aperçu">
+      <a href="#" onclick="ZoomAjax('{{$selClass}}', '{{$selKey}}', '{{$_doc_item->_class}}', '{{$elementId}}', '0');" title="Afficher l'aperçu">
         <img src="{{$srcImg}}" alt="-" width="64"/>
       </a>
 

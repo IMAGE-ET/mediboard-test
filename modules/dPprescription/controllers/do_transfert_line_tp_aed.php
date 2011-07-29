@@ -49,7 +49,7 @@ CAppUI::displayMsg($msg, "CPrescriptionLineMedicament-msg-create");
 foreach($line->_ref_prises as $_prise){
   $_prise->_id = "";
   $_prise->object_id = $line->_id;
-  $_prise->object_class = $line->_class_name;
+  $_prise->object_class = $line->_class;
   $msg = $_prise->store();
   CAppUI::displayMsg($msg, "CPrisePosologie-msg-create");
 }

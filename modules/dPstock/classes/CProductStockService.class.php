@@ -38,7 +38,7 @@ class CProductStockService extends CProductStock /* extends CMbMetaObject */ {
   function setObject(CMbObject $object) {
     $this->_ref_object  = $object;
     $this->object_id    = $object->_id;
-    $this->object_class = $object->_class_name;
+    $this->object_class = $object->_class;
   }
 	
 	function loadTargetObject($cache = true) {

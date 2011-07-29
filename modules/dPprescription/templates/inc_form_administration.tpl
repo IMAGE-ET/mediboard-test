@@ -28,7 +28,7 @@
     // Si pas d'administration, la ou les transmissions sont associées à la ligne
     else {
       $V(oForm.object_id, '{{$line->_id}}');
-      $V(oForm.object_class, '{{$line->_class_name}}');
+      $V(oForm.object_class, '{{$line->_class}}');
     }
     return onSubmitFormAjax(oForm, {onComplete: function() {
      afterEditLine();
@@ -55,7 +55,7 @@
     setTimeout("getForm('addAdministration').quantite.focus()", 1);
     var oForm = getForm("editCommentaire");
     new AideSaisie.AutoComplete(oForm.commentaire, {
-      objectClass: "{{$line->_class_name}}", 
+      objectClass: "{{$line->_class}}", 
       contextUserId: "{{$user_id}}",
       resetSearchField: false,
       validateOnBlur: false,
@@ -83,7 +83,7 @@
 			  <input type="hidden" name="administration_id" value="" />
 			  <input type="hidden" name="administrateur_id" value="{{$app->user_id}}" />
 			  <input type="hidden" name="object_id" value="{{$line->_id}}" />
-			  <input type="hidden" name="object_class" value="{{$line->_class_name}}" />
+			  <input type="hidden" name="object_class" value="{{$line->_class}}" />
 				<input type="hidden" name="dateTime" value="{{$datetime}}" />
 	      <input type="hidden" name="unite_prise" value="aucune_prise" />
 				<input type="hidden" name="callback" value="afterAdministration" />

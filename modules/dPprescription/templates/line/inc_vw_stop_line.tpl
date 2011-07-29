@@ -13,7 +13,7 @@
 // Si ligne de traitement perso finie, on empeche le passage en ligne de prescription normale
 Main.add( function(){
   {{if !$line->date_arret}}
-    var form = getForm('form-stop-{{$line->_class_name}}-{{$line->_id}}');
+    var form = getForm('form-stop-{{$line->_class}}-{{$line->_id}}');
     Calendar.regField(form.date_arret, dates);
 	{{/if}}
 } );
@@ -34,7 +34,7 @@ calculDateArret = function(oForm, object_id, object_class, traitement, cat_id){
 
 </script>
 
-{{if $line->_class_name == "CPrescriptionLineMedicament"}}
+{{if $line->_class == "CPrescriptionLineMedicament"}}
   {{assign var=dosql value="do_prescription_line_medicament_aed"}}
   {{assign var=category_id value=""}}
   {{assign var=_traitement_personnel value=$line->traitement_personnel}}
@@ -69,7 +69,7 @@ calculDateArret = function(oForm, object_id, object_class, traitement, cat_id){
     {{mb_field object=$line field=time_arret form=form-stop-$object_class-$line_id}}
     <button type="button" 
             class="stop" 
-            onclick="calculDateArret(this.form, '{{$line->_id}}','{{$line->_class_name}}','{{$_traitement_personnel}}','{{$category_id}}');">  
+            onclick="calculDateArret(this.form, '{{$line->_id}}','{{$line->_class}}','{{$_traitement_personnel}}','{{$category_id}}');">  
       Arrêter
     </button>
   {{/if}}

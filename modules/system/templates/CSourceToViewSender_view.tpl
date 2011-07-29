@@ -11,7 +11,7 @@
 {{mb_include module=system template=CMbObject_view}}
 
 <form name="editFrm" action="?m={{$m}}" method="post" onsubmit="return checkForm(this)">
-  <input type="hidden" name="@class" value="{{$object->_class_name}}" />
+  <input type="hidden" name="@class" value="{{$object->_class}}" />
   <input type="hidden" name="del" value="0" />
   {{mb_key object=$object}}
   

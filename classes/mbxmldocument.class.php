@@ -204,7 +204,7 @@ class CMbXMLDocument extends DOMDocument {
     $this->saveFile();
     $file = new CFile();
     $file->object_id          = $object->_id;
-    $file->object_class       = $object->_class_name;
+    $file->object_class       = $object->_class;
     $file->file_name          = "$object->_guid.xml";
     $file->file_type          = "text/xml";
     $file->file_size          = filesize($this->documentfilename);

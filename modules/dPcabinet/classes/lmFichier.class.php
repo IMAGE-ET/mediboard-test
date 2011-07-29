@@ -93,7 +93,7 @@ class CLmFichier extends CLmObject {
 			if ($msg = $lot->store()) {
 				return $msg;
 			}
-			CAppUI::setMsg("$lot->_class_name-msg-modify");
+			CAppUI::setMsg("$lot->_class-msg-modify");
 		}
 	}
 }

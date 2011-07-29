@@ -316,7 +316,7 @@ class CCodable extends CMbObject {
       return;
     }
 
-    $oldObject = new $this->_class_name;
+    $oldObject = new $this->_class;
 	  $oldObject->load($this->_id);
 	  $oldObject->codes_ccam = $this->codes_ccam;
 	  $oldObject->updateFormFields();
@@ -364,7 +364,7 @@ class CCodable extends CMbObject {
     }
     
   	//@todo: why not use $this->_old ?
-    $oldObject = new $this->_class_name;
+    $oldObject = new $this->_class;
     if($this->_id) {
       $oldObject->load($this->_id);
     }

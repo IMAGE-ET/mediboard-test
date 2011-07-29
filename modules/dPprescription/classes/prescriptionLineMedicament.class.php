@@ -530,7 +530,7 @@ class CPrescriptionLineMedicament extends CPrescriptionLine {
       if(!$_prise->urgence_datetime && !$_prise->decalage_intervention){
 	      $_prise->_id = '';
 	      $_prise->object_id = $this->_id;
-	      $_prise->object_class = $this->_class_name;
+	      $_prise->object_class = $this->_class;
         $_prise->_ref_object = null;
 	      $_prise->store();
       }
@@ -795,7 +795,7 @@ class CPrescriptionLineMedicament extends CPrescriptionLine {
    * Chargement de la ligne suivante (dans le cas d'une subsitution)
    */
   function loadRefNextHistLine(){
-    $this->_ref_next_hist_line = new $this->_class_name;
+    $this->_ref_next_hist_line = new $this->_class;
     if($this->subsitution_line_id){
       $this->_ref_next_hist_line->_id = $this->subsitution_line_id;
       $this->_ref_next_hist_line->loadMatchingObject();
@@ -807,7 +807,7 @@ class CPrescriptionLineMedicament extends CPrescriptionLine {
    * Calcul permettant de savoir si la ligne possède un historique (substitution)
    */
   function countPrevHistLine(){
-    $line = new $this->_class_name;
+    $line = new $this->_class;
     $line->subsitution_line_id = $this->_id;
     $this->_count_prev_hist_line = $line->countMatchingList(); 
   }
@@ -849,8 +849,8 @@ class CPrescriptionLineMedicament extends CPrescriptionLine {
 		  $_base_line->load($this->substitute_for_id);
 		  $_base_line->loadRefsSubstitutionLines();
 	    $this->_ref_substitution_lines = $_base_line->_ref_substitution_lines;
-	    $this->_ref_substitution_lines[$_base_line->_class_name][$_base_line->_id] = $_base_line;
-			unset($this->_ref_substitution_lines[$this->_class_name][$this->_id]);		
+	    $this->_ref_substitution_lines[$_base_line->_class][$_base_line->_id] = $_base_line;
+			unset($this->_ref_substitution_lines[$this->_class][$this->_id]);		
 		  $this->_ref_substitute_for = $_base_line;			  
 	  }
 		foreach($this->_ref_substitution_lines["CPrescriptionLineMix"] as $_substitution_line){
@@ -874,7 +874,7 @@ class CPrescriptionLineMedicament extends CPrescriptionLine {
   
   function delete(){
     // Chargement de la substitution_line de l'objet à supprimer
-    $line = new $this->_class_name;
+    $line = new $this->_class;
     $line->substitution_line_id = $this->_id;
     $line->loadMatchingObject();
     if($line->_id){

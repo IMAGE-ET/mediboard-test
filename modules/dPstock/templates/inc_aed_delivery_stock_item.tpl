@@ -18,7 +18,7 @@
       <input type="hidden" name="dosql" value="do_delivery_aed" />
       <input type="hidden" name="del" value="0" />
       <input type="hidden" name="stock_id" value="{{$stock->_id}}" />
-      <input type="hidden" name="stock_class" value="{{$stock->_class_name}}" />
+      <input type="hidden" name="stock_class" value="{{$stock->_class}}" />
       <input type="hidden" name="service_id" value="" />
       <input type="hidden" name="date_dispensation" value="now" />
       <input type="hidden" name="_deliver" value="1" />

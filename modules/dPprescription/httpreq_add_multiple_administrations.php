@@ -61,7 +61,7 @@ if (count($adm) > 0) {
 		$line->load($ad['line_id']);
 
 		// Recherche des chapitres a rafraichir apres la creation des administrations
-		switch($line->_class_name){
+		switch($line->_class){
 		  case 'CPrescriptionLineMedicament':
 		    if($line->_is_injectable){
 		      $tabs_refresh["inj"] = "inj";

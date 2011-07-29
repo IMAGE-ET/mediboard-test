@@ -26,7 +26,7 @@ function toggleColumn(className) {
 
 {{mb_script module=system script=object_merger}}
 
-<h2>Fusion de {{tr}}{{$result->_class_name}}{{/tr}}</h2>
+<h2>Fusion de {{tr}}{{$result->_class}}{{/tr}}</h2>
 
 {{if $checkMerge}}
 <div class="big-warning">
@@ -81,7 +81,7 @@ function toggleColumn(className) {
   <input type="hidden" name="_merging[{{$object->_id}}]" value="{{$object->_id}}" />
   <input type="hidden" name="_objects_id[{{$smarty.foreach.object.index}}]" value="{{$object->_id}}" />
   {{/foreach}}
-  <input type="hidden" name="_objects_class" value="{{$result->_class_name}}" />
+  <input type="hidden" name="_objects_class" value="{{$result->_class}}" />
   
   {{math equation="100/(count+1)" count=$objects|@count assign=width}}
   <table class="form merger">
@@ -93,7 +93,7 @@ function toggleColumn(className) {
       {{foreach from=$objects item=object name=object}}
       <th class="category" style="width: {{$width}}%;">
         <span onmouseover="ObjectTooltip.createEx(this, '{{$object->_guid}}')">
-					{{tr}}{{$object->_class_name}}{{/tr}} 
+					{{tr}}{{$object->_class}}{{/tr}} 
 					{{$smarty.foreach.object.iteration}}
 					<br/>
           {{$object}}
@@ -123,7 +123,7 @@ function toggleColumn(className) {
 	  <tr>
 	  	<td colspan="100" class="button">
 	  		<script type="text/javascript">var objects_id = {{$objects_id|@json}};</script>
-        <button type="button" class="search" onclick="MbObject.viewBackRefs('{{$result->_class_name}}', objects_id);">
+        <button type="button" class="search" onclick="MbObject.viewBackRefs('{{$result->_class}}', objects_id);">
           {{tr}}CMbObject-merge-moreinfo{{/tr}}
         </button>
       </td>

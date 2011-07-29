@@ -8,30 +8,30 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
 *}}
 
-{{if $element->_class_name == "CDMI"}}
+{{if $element->_class == "CDMI"}}
   {{assign var=dosql value="do_dmi_aed"}}
   {{assign var=category_class value="CDMICategory"}}
 {{/if}}
-{{if $element->_class_name == "CDM"}}
+{{if $element->_class == "CDM"}}
   {{assign var=dosql value="do_dm_aed"}}
   {{assign var=category_class value="CCategoryDM"}}
 {{/if}}
 
-<button type="button" class="new" onclick="viewElement('{{$element->_class_name}}', '0')">
-  {{tr}}{{$element->_class_name}}-title-create{{/tr}}
+<button type="button" class="new" onclick="viewElement('{{$element->_class}}', '0')">
+  {{tr}}{{$element->_class}}-title-create{{/tr}}
 </button>
 
 <script type="text/javascript">
 
 // refresh apres une sauvegarde ou une suppression
-refreshElement{{$element->_class_name}} = function(element_id){
-  viewListElement('{{$element->_class_name}}', element_id);
-  viewElement('{{$element->_class_name}}', element_id);
+refreshElement{{$element->_class}} = function(element_id){
+  viewListElement('{{$element->_class}}', element_id);
+  viewElement('{{$element->_class}}', element_id);
 }
 
-{{if $element->_class_name == "CDM"}}
+{{if $element->_class == "CDM"}}
   generateCode = function(){
-	  var oForm = getForm("editElement-{{$element->_class_name}}");
+	  var oForm = getForm("editElement-{{$element->_class}}");
 	  var url = new Url("dmi", "httpreq_edit_element");
 	  url.addParam("generate_code", true);
 	  url.addParam("category_dm_id", oForm.category_dm_id.value);	  
@@ -50,11 +50,11 @@ printBarcode = function (object_id) {
 }
 
 Main.add(function () {
-  var oForm = getForm("editElement-{{$element->_class_name}}");
+  var oForm = getForm("editElement-{{$element->_class}}");
   new BarcodeParser.inputWatcher(oForm.elements._product_code, {field: "ref"});
   new BarcodeParser.inputWatcher(oForm.elements._scc_code, {field: "scc_prod"});
   
-  var lotForm = getForm("create-lot-{{$element->_class_name}}");
+  var lotForm = getForm("create-lot-{{$element->_class}}");
   if (lotForm) {
     var codeInput = lotForm.elements.code;
     new BarcodeParser.inputWatcher(codeInput, {
@@ -69,7 +69,7 @@ Main.add(function () {
     });
   }
   
-  {{if $element->_class_name == "CDM"}}
+  {{if $element->_class == "CDM"}}
     var url = new Url("dPmedicament", "httpreq_do_medicament_autocomplete");
     url.autoComplete(oForm.elements.produit, "produit_auto_complete", {
       minChars: 3,
@@ -107,26 +107,26 @@ Main.add(function () {
 
 </script>
 
-{{assign var=class_name value=$element->_class_name}}
+{{assign var=class_name value=$element->_class}}
 
 <form name="editElement-{{$class_name}}" action="?m={{$m}}" method="post" onsubmit="return onSubmitFormAjax(this)">
   <input type="hidden" name="m" value="{{$m}}" />
   <input type="hidden" name="del" value="0" />
   <input type="hidden" name="dosql" value="{{$dosql}}" />
   <input type="hidden" name="{{$element->_spec->key}}" value="{{$element->_id}}" />
-  <input type="hidden" name="callback" value="refreshElement{{$element->_class_name}}" />
+  <input type="hidden" name="callback" value="refreshElement{{$element->_class}}" />
   
   <table class="form">
   	<tr>
   		<th class="title text {{if $element->_id}}modify{{/if}}" colspan="10">
   			{{if $element->_id}}
-	      	{{tr}}{{$element->_class_name}}-title-modify{{/tr}} '{{$element->_view}}'
+	      	{{tr}}{{$element->_class}}-title-modify{{/tr}} '{{$element->_view}}'
 				{{else}}
-				  {{tr}}{{$element->_class_name}}-title-create{{/tr}}
+				  {{tr}}{{$element->_class}}-title-create{{/tr}}
 				{{/if}}
   		</th>
   	</tr>
-  	{{if $element->_class_name == "CDMI"}}
+  	{{if $element->_class == "CDMI"}}
     <tr>
       <th>{{mb_label object=$element field=category_id}}</th>
       <td>
@@ -174,7 +174,7 @@ Main.add(function () {
       </td>
     </tr>
     {{/if}}
-    {{if $element->_class_name == "CDM"}}
+    {{if $element->_class == "CDM"}}
     <tr>
       <th>Recherche de DM</th>
       <td>
@@ -200,7 +200,7 @@ Main.add(function () {
   		<th>{{mb_label object=$element field=nom}}</th>
   		<td>{{mb_field object=$element field=nom size=45}}</td>
   	</tr>
-    {{if $element->_class_name == "CDMI"}}
+    {{if $element->_class == "CDMI"}}
     <tr>
       <th>{{mb_label object=$element field=_product_code}}</th>
       <td>{{mb_field object=$element field=_product_code}}</td>
@@ -227,7 +227,7 @@ Main.add(function () {
   		<th>{{mb_label object=$element field=code}}</th>
   		<td>
   		  {{if !$element->_id}}
-  		    {{if $element->_class_name == "CDM"}}
+  		    {{if $element->_class == "CDM"}}
   		      {{mb_field object=$element field=code readonly="readonly"}}
   		      <button type="button" class="tick" onclick="generateCode();">Générer</button>
   		    {{else}}
@@ -243,7 +243,7 @@ Main.add(function () {
   	<tr>
   		<th>{{mb_label object=$element field=in_livret}}</th>
   		<td>
-  			{{assign var=elt_class value=$element->_class_name}}
+  			{{assign var=elt_class value=$element->_class}}
   			{{if $conf.dmi.$elt_class.product_category_id}}
 				  {{if !$element->_id}}
 		  		  {{mb_field object=$element field=in_livret}}
@@ -260,10 +260,10 @@ Main.add(function () {
   	<tr>
 		  <td colspan="2" class="button">
 		  	{{if $element->_id}}
-          <button type="submit" class="submit" onclick="return onSubmitFormAjax(this.form, { onComplete: viewListElement.curry('{{$element->_class_name}}','{{$element->_id}}') } );">
+          <button type="submit" class="submit" onclick="return onSubmitFormAjax(this.form, { onComplete: viewListElement.curry('{{$element->_class}}','{{$element->_id}}') } );">
             {{tr}}Save{{/tr}}
           </button>
-		  	  <button type="button" class="trash" onclick="this.form.del.value = 1; return onSubmitFormAjax(this.form, { onComplete: refreshElement{{$element->_class_name}}.curry('0') } )">
+		  	  <button type="button" class="trash" onclick="this.form.del.value = 1; return onSubmitFormAjax(this.form, { onComplete: refreshElement{{$element->_class}}.curry('0') } )">
 		  	    {{tr}}Delete{{/tr}}
           </button>
 			  {{else}}
@@ -280,7 +280,7 @@ Main.add(function () {
 
 <script type="text/javascript">
   refreshDMI = function(lot_id) {
-    refreshElement{{$element->_class_name}}({{$element->_id}});
+    refreshElement{{$element->_class}}({{$element->_id}});
   }
   
   deleteLot = function(lot_id) {

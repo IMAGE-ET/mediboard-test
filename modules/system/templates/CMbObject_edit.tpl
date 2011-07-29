@@ -1,5 +1,5 @@
-<button type="button" class="new" onclick="MbObject.edit('{{$object->_class_name}}-0')">
-	{{tr}}{{$object->_class_name}}-title-create{{/tr}}
+<button type="button" class="new" onclick="MbObject.edit('{{$object->_class}}-0')">
+	{{tr}}{{$object->_class}}-title-create{{/tr}}
 </button>
 
 <form name="edit-{{$object->_guid}}" data-object_guid="{{$object->_guid}}" method="post" action="?" onsubmit="return onSubmitFormAjax(this)">

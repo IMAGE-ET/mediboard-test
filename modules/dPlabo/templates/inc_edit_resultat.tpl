@@ -84,7 +84,7 @@
       <script type="text/javascript">
         Main.add(function() {
           new AideSaisie.AutoComplete(getForm("editPrescriptionItem").elements.commentaire, {
-            objectClass: "{{$prescriptionItem->_class_name}}",
+            objectClass: "{{$prescriptionItem->_class}}",
             timestamp: "{{$conf.dPcompteRendu.CCompteRendu.timestamp}}",
             validateOnBlur: 0
           });

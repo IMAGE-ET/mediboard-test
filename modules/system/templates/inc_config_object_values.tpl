@@ -24,7 +24,7 @@ onSubmitObjectConfigs = function(oForm, object_instance_id, object_guid) {
   <input type="hidden" name="dosql" value="do_config_object_aed" />
   {{mb_key object=$object}}
   <input type="hidden" name="del" value="0" /> 
-  <input type="hidden" name="_class_name" value="{{$object->_class_name}}" /> 
+  <input type="hidden" name="_class_name" value="{{$object->_class}}" /> 
   <input type="hidden" name="object_id" value="{{$object->object_id}}" /> 
   <table class="form">
     <tr>

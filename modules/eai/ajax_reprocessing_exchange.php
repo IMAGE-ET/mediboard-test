@@ -31,7 +31,7 @@ if ($exchange instanceof CEchangeHprim) {
   $exchange->_acquittement = $acquittement;
   $exchange->store();
   
-  CAppUI::setMsg("Message '$exchange->_class_name' retraité", UI_MSG_OK);
+  CAppUI::setMsg("Message '$exchange->_class' retraité", UI_MSG_OK);
 }
 
 echo CAppUI::getMsg();

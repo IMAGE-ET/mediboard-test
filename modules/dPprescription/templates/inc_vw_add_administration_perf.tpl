@@ -26,7 +26,7 @@ removeAdministrationPerf = function(administration_id){
 
 refreshAdministrations = function(){
   var oFormClick = window.opener.document.click;
-  window.opener.PlanSoins.loadTraitement('{{$sejour_id}}','{{$date_sel}}', oFormClick.nb_decalage.value,'{{$mode_dossier}}','{{$prescription_line_mix->_id}}','{{$prescription_line_mix->_class_name}}','');
+  window.opener.PlanSoins.loadTraitement('{{$sejour_id}}','{{$date_sel}}', oFormClick.nb_decalage.value,'{{$mode_dossier}}','{{$prescription_line_mix->_id}}','{{$prescription_line_mix->_class}}','');
   window.close();
 }
 
@@ -92,7 +92,7 @@ refreshAdministrations = function(){
 				  <input type="hidden" name="administration_id" value="" />
 				  <input type="hidden" name="administrateur_id" value="{{$app->user_id}}" />
 				  <input type="hidden" name="object_id" value="{{$_perf_line->_id}}" />
-				  <input type="hidden" name="object_class" value="{{$_perf_line->_class_name}}" />
+				  <input type="hidden" name="object_class" value="{{$_perf_line->_class}}" />
 				  <input type="hidden" name="unite_prise" value="{{$unite_prise}}" />
 				  <input type="hidden" name="dateTime" value="{{$dateTime}}" />
 				  <input type="hidden" name="prise_id" value="" />

@@ -21,7 +21,7 @@
   
   {{if "forms"|module_active}}
     Main.add(function(){
-      ExObject.loadExObjects("{{$sejour->_class_name}}", "{{$sejour->_id}}", "list-ex_objects", 1);
+      ExObject.loadExObjects("{{$sejour->_class}}", "{{$sejour->_id}}", "list-ex_objects", 1);
     });
   {{/if}}
 </script>

@@ -22,10 +22,10 @@ changeCodeToDel = function(subject_id, code_ccam, actes_ids){
         <input type="hidden" name="codes_ccam" value="{{$subject->codes_ccam}}" />
         <input type="submit" disabled="disabled" style="display:none;"/>
         <input type="hidden" name="_chir" value="{{$subject->_praticien_id}}" />
-        {{if ($subject->_class_name=="COperation")}}
+        {{if ($subject->_class=="COperation")}}
           <input type="hidden" name="_anesth" value="{{$subject->_ref_plageop->anesth_id}}" />
         {{/if}}
-        <input type="hidden" name="_class_name" value="{{$subject->_class_name}}" />
+        <input type="hidden" name="_class_name" value="{{$subject->_class}}" />
         <fieldset>
           <legend>Ajouter un code</legend>
           <input name="_actes" type="hidden" value="" />
@@ -41,7 +41,7 @@ changeCodeToDel = function(subject_id, code_ccam, actes_ids){
               this.sForm = "manageCodes";
               this.sClass = "_class_name";
               this.sChir = "_chir";
-              {{if ($subject->_class_name=="COperation")}}
+              {{if ($subject->_class=="COperation")}}
               this.sAnesth = "_anesth";
               {{/if}}
               this.sView = "_codes_ccam";
@@ -75,7 +75,7 @@ changeCodeToDel = function(subject_id, code_ccam, actes_ids){
           <legend>Validation du codage</legend>
           {{if ($conf.dPsalleOp.CActeCCAM.envoi_actes_salle || $m == "dPpmsi") && ($subject instanceof COperation)}}
             <table class="main layout">
-              <tr id="export_{{$subject->_class_name}}_{{$subject->_id}}">
+              <tr id="export_{{$subject->_class}}_{{$subject->_id}}">
                 {{if !$subject->facture || $m == "dPpmsi" || $can->admin}}
                   {{mb_include module=dPpmsi template="inc_export_actes_pmsi" object=$subject confirmCloture=1}}
                 {{else}}
@@ -87,7 +87,7 @@ changeCodeToDel = function(subject_id, code_ccam, actes_ids){
             </table>
           {{/if}}
           {{if ($module == "dPsalleOp" || $module == "dPhospi") && $conf.dPsalleOp.CActeCCAM.signature}}
-            <button class="tick" onclick="signerActes('{{$subject->_id}}', '{{$subject->_class_name}}')">
+            <button class="tick" onclick="signerActes('{{$subject->_id}}', '{{$subject->_class}}')">
               Signer les actes
             </button>
           {{/if}}

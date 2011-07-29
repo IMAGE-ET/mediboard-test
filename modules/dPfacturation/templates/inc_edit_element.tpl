@@ -75,7 +75,7 @@ updateFactureItem = function(select){
         <script type="text/javascript">
           Main.add(function() {
             new AideSaisie.AutoComplete(getForm("editfactureitem").elements.libelle, {
-              objectClass: "{{$factureitem->_class_name}}",
+              objectClass: "{{$factureitem->_class}}",
               timestamp: "{{$conf.dPcompteRendu.CCompteRendu.timestamp}}",
               validateOnBlur: 0
             });

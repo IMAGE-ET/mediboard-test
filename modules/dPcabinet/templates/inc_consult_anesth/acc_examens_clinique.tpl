@@ -30,7 +30,7 @@ Main.add(function () {
       <!-- Fiches d'examens -->
       {{mb_script module="dPcabinet" script="exam_dialog"}}
       <script type="text/javascript">
-        ExamDialog.register('{{$consult->_id}}','{{$consult->_class_name}}');
+        ExamDialog.register('{{$consult->_id}}','{{$consult->_class}}');
       </script>
       <form name="editAnesthExamenClinique" action="?" method="post" onsubmit="return onSubmitFormAjax(this);">
         <input type="hidden" name="m" value="dPcabinet" />

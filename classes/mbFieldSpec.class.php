@@ -468,10 +468,10 @@ class CMbFieldSpec {
     
     $extra  = CMbArray::makeXmlAttributes($params);
 
-    $desc  = CAppUI::tr("$object->_class_name-$this->fieldName-desc");
+    $desc  = CAppUI::tr("$object->_class-$this->fieldName-desc");
     $desc = htmlentities($desc);
     $sHtml  = "<label for=\"$forName\" class=\"$className\" title=\"$desc\" $extra>";
-    $sHtml .= CAppUI::tr("$object->_class_name-$this->fieldName");
+    $sHtml .= CAppUI::tr("$object->_class-$this->fieldName");
     $sHtml .= "</label>";
 
     return $sHtml;
@@ -486,9 +486,9 @@ class CMbFieldSpec {
    * @return string Rendered HTML
    */
   function getTitleElement($object, $params) {
-    $desc  = CAppUI::tr("$object->_class_name-$this->fieldName-desc");
+    $desc  = CAppUI::tr("$object->_class-$this->fieldName-desc");
     $desc = htmlentities($desc);
-    $title = CAppUI::tr("$object->_class_name-$this->fieldName-court");
+    $title = CAppUI::tr("$object->_class-$this->fieldName-court");
     return "<label title=\"$desc\" >$title</label>";
   }
 
@@ -558,7 +558,7 @@ class CMbFieldSpec {
       Main.add(function(){
         var input = $("'.$id.'");
         var url = new Url("system", "httpreq_field_autocomplete");
-        url.addParam("class", "'.$object->_class_name.'");
+        url.addParam("class", "'.$object->_class.'");
         url.addParam("field", "'.$field.'");
         url.addParam("limit", '.$limit.');
         url.addParam("view_field", "'.$view_field.'");

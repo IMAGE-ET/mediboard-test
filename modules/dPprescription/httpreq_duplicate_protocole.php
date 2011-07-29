@@ -60,7 +60,7 @@ foreach($protocole->_ref_prescription_lines as $line){
       $_line_subst->prescription_id = $protocole_dest_id;	    
 	    
       // Medicaments
-      if($_line_subst->_class_name == "CPrescriptionLineMedicament"){
+      if($_line_subst->_class == "CPrescriptionLineMedicament"){
 	      $_line_subst->loadRefsPrises();
 	
 		    $_line_subst->_id = "";
@@ -110,7 +110,7 @@ foreach($protocole->_ref_prescription_line_mixes as $_prescription_line_mix){
       $_line_subst->prescription_id = $protocole_dest_id;	    
 	    
       // Medicaments
-      if($_line_subst->_class_name == "CPrescriptionLineMedicament"){
+      if($_line_subst->_class == "CPrescriptionLineMedicament"){
 	      $_line_subst->loadRefsPrises();
 	
 		    $_line_subst->_id = "";

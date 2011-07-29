@@ -337,18 +337,18 @@ class CTemplateManager {
     // Where user_id
     $whereUser = array();
     $whereUser["user_id"] = $ds->prepare("= %", $user_id);
-    $whereUser["class"]   = $ds->prepare("= %", $compte_rendu->_class_name);
+    $whereUser["class"]   = $ds->prepare("= %", $compte_rendu->_class);
     
     // Where function_id
     $whereFunc = array();
     $whereFunc["function_id"] = $ds->prepare("= %", $currUser->function_id);
-    $whereFunc["class"]       = $ds->prepare("= %", $compte_rendu->_class_name);
+    $whereFunc["class"]       = $ds->prepare("= %", $compte_rendu->_class);
     
     // Where group_id
     $whereGroup = array();
     $group = CGroups::loadCurrent();
     $whereGroup["group_id"] = $ds->prepare("= %", $group->_id);
-    $whereGroup["class"]       = $ds->prepare("= %", $compte_rendu->_class_name);
+    $whereGroup["class"]       = $ds->prepare("= %", $compte_rendu->_class);
     
     // Chargement des aides
     $aide = new CAideSaisie();

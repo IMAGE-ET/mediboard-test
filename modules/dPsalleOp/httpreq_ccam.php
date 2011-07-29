@@ -27,7 +27,7 @@ $codable->loadExtCodesCCAM();
 $codable->getAssociationCodesActes();
 $codable->loadPossibleActes();
 $codable->canDo();
-if($codable->_class_name == "COperation") {
+if($codable->_class == "COperation") {
   $codable->countExchanges();
 }
 

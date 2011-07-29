@@ -65,7 +65,7 @@ class CNote extends CMbMetaObject {
   
   static function loadNotesForObject($object, $perm = PERM_READ) {
     $where = array(
-      "object_class" => "= '$object->_class_name'",
+      "object_class" => "= '$object->_class'",
       "object_id"    => "= '$object->_id'",
     );
     $order = "degre DESC, date DESC";

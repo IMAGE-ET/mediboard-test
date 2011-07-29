@@ -361,7 +361,7 @@ loadConstantesMedicales  = function(context_guid) {
         <a href="#tab-constantes-medicales">Constantes</a>
       </li>
       <li>
-        <a href="#tab-ex_class-list" onmousedown="this.onmousedown=null; ExObject.loadExObjects('{{$context->_class_name}}', '{{$context->_id}}', 'tab-ex_class-list', 0)">
+        <a href="#tab-ex_class-list" onmousedown="this.onmousedown=null; ExObject.loadExObjects('{{$context->_class}}', '{{$context->_id}}', 'tab-ex_class-list', 0)">
           Formulaires
         </a>
       </li>

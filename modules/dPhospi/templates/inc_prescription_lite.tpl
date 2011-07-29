@@ -152,7 +152,7 @@
   <table class="form">
     <tr>
       <td>
-        {{if $object->_class_name == 'CPrescriptionLineComment'}}
+        {{if $object->_class == 'CPrescriptionLineComment'}}
           <form name="editComment" method="post" action="?"
             onsubmit="return onSubmitFormAjax(this, { onComplete: function(){ Control.Modal.close(); loadSuivi('{{$sejour_id}}'); } } )">
             <input type="hidden" name="m" value="dPprescription" />

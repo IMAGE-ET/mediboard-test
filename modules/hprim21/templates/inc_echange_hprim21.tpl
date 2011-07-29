@@ -83,7 +83,7 @@
     </span>
   </td>
   <td class="narrow">
-    <button class="change" onclick="reprocessing('{{$object->_id}}', '{{$object->_class_name}}')" type="button">{{tr}}Reprocess{{/tr}}</button>
+    <button class="change" onclick="reprocessing('{{$object->_id}}', '{{$object->_class}}')" type="button">{{tr}}Reprocess{{/tr}}</button>
   </td>
   <td class="{{if !$object->message_valide}}error{{/if}}">
    {{mb_value object=$object field="message_valide"}}

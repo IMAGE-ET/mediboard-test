@@ -6,7 +6,7 @@
 
 {{if $canFile->edit && !$accordDossier}}
 
- {{if $_doc_item->_class_name=="CCompteRendu" && $_doc_item->_is_editable}}
+ {{if $_doc_item->_class=="CCompteRendu" && $_doc_item->_is_editable}}
  	<!-- Modification -->
    <button class="edit {{$notext}}" type="button" onclick="Document.edit({{$elementId}})">
      {{tr}}Edit{{/tr}}
@@ -14,7 +14,7 @@
  {{/if}}
   
   <!-- Téléchargement du fichier -->
-  {{if $_doc_item->_class_name=="CFile"}}
+  {{if $_doc_item->_class=="CFile"}}
     <a class="button new notext"
       href="?m=dPfiles&amp;a=fileviewer&amp;suppressHeaders=1&amp;file_id={{$_doc_item->_id}}"
       target="_blank" title="{{tr}}CFile.download{{/tr}}"></a>
@@ -22,7 +22,7 @@
 
 
   <!-- Impression -->
-  {{if $_doc_item->_class_name=="CCompteRendu"}}
+  {{if $_doc_item->_class=="CCompteRendu"}}
     <button type="button" class="print notext"
       onclick="
       {{if $pdf_thumbnails && $app->user_prefs.pdf_and_thumbs}}
@@ -35,7 +35,7 @@
   {{/if}}
   
 	<!-- Deletion -->
- {{if $_doc_item->_class_name=="CCompteRendu"}}
+ {{if $_doc_item->_class=="CCompteRendu"}}
    <form name="editDoc{{$_doc_item->_id}}" action="?m={{$m}}" method="post" onsubmit="return checkForm(this)">
    <input type="hidden" name="m" value="dPcompteRendu" />
    <input type="hidden" name="dosql" value="do_modele_aed" />
@@ -45,7 +45,7 @@
    {{assign var="confirmDeleteName" value=$_doc_item->nom|smarty:nodefaults|JSAttribute}}
  {{/if}}
    
- {{if $_doc_item->_class_name=="CFile"}}
+ {{if $_doc_item->_class=="CFile"}}
    <form name="editFile{{$_doc_item->_id}}" action="?m={{$m}}" method="post" onsubmit="return checkForm(this)">
    <input type="hidden" name="m" value="dPfiles" />
    <input type="hidden" name="dosql" value="do_file_aed" />
@@ -69,7 +69,7 @@
   </button>
   
   <!-- Send File -->
-  {{assign var=doc_class value=$_doc_item->_class_name}}
+  {{assign var=doc_class value=$_doc_item->_class}}
   {{assign var=doc_id    value=$_doc_item->_id        }}
 	{{mb_include template=inc_file_send_button onComplete="Document.refreshList('$doc_class','$doc_id')"}}
   

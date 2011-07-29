@@ -16,7 +16,7 @@
       <legend>{{tr}}CFile{{/tr}} - {{tr}}CSejour{{/tr}}</legend>            
       <div id="files-CSejour">
         <script type="text/javascript">
-          File.register('{{$sejour->_id}}','{{$sejour->_class_name}}', 'files-CSejour');
+          File.register('{{$sejour->_id}}','{{$sejour->_class}}', 'files-CSejour');
         </script>
       </div>
     </fieldset>
@@ -26,7 +26,7 @@
       <legend>{{tr}}CCompteRendu{{/tr}} - {{tr}}CSejour{{/tr}}</legend>            
       <div id="documents-CSejour">
         <script type="text/javascript">
-          Document.register('{{$sejour->_id}}','{{$sejour->_class_name}}','{{$sejour->_praticien_id}}','documents-CSejour');
+          Document.register('{{$sejour->_id}}','{{$sejour->_class}}','{{$sejour->_praticien_id}}','documents-CSejour');
         </script>
       </div>
     </fieldset>
@@ -41,7 +41,7 @@
       <legend>{{tr}}CFile{{/tr}} - {{tr}}CConsultation{{/tr}}</legend>            
       <div id="files-CConsultation">
         <script type="text/javascript">
-          File.register('{{$consult->_id}}','{{$consult->_class_name}}', 'files-CConsultation');
+          File.register('{{$consult->_id}}','{{$consult->_class}}', 'files-CConsultation');
         </script>
       </div>
     </fieldset>
@@ -51,7 +51,7 @@
       <legend>{{tr}}CCompteRendu{{/tr}} - {{tr}}CConsultation{{/tr}}</legend>            
       <div id="documents-CConsultation"> 
         <script type="text/javascript">
-          Document.register('{{$consult->_id}}','{{$consult->_class_name}}','{{$consult->_praticien_id}}','documents-CConsultation');
+          Document.register('{{$consult->_id}}','{{$consult->_class}}','{{$consult->_praticien_id}}','documents-CConsultation');
         </script>
       </div>
     </fieldset>

@@ -44,7 +44,7 @@
     </td>
   </tr>
   {{/if}}
-  <tr id="export_{{$sejour->_class_name}}_{{$sejour->_id}}">
+  <tr id="export_{{$sejour->_class}}_{{$sejour->_id}}">
     {{mb_include template="inc_export_actes_pmsi" object=$sejour}}
   </tr>
   {{else}}

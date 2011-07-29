@@ -28,7 +28,7 @@ if (isset ($_POST['_return']) && isset ($_POST['_code'])) {
     
   	if (!$delivery->loadObject($where)) {
   		$delivery->stock_id    = $stock_group->_id;
-      $delivery->stock_class = $stock_group->_class_name;
+      $delivery->stock_class = $stock_group->_class;
   		$delivery->service_id  = $stock_service->service_id;
   	}
     

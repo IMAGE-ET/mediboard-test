@@ -98,7 +98,7 @@ class CPrescriptionLine extends CMbObject implements IPatientRelated {
     $specs["unite_duree"]       = "enum list|minute|heure|demi_journee|jour|semaine|quinzaine|mois|trimestre|semestre|an default|jour";
     $specs["date_arret"]        = "date";
     $specs["time_arret"]        = "time";
-    $specs["child_id"]          = "ref class|$this->_class_name unlink show|0";
+    $specs["child_id"]          = "ref class|$this->_class unlink show|0";
     $specs["decalage_line"]     = "num show|0";
     $specs["jour_decalage"]     = "enum list|E|I|S|N default|E show|0";
     $specs["fin"]               = "date";
@@ -235,7 +235,7 @@ class CPrescriptionLine extends CMbObject implements IPatientRelated {
    * Chargement de la ligne suivante
    */
   function loadRefChildLine(){
-    $this->_ref_child_line = new $this->_class_name;
+    $this->_ref_child_line = new $this->_class;
     if($this->child_id){
       $this->_ref_child_line->_id = $this->child_id;
       $this->_ref_child_line->loadMatchingObject();
@@ -253,7 +253,7 @@ class CPrescriptionLine extends CMbObject implements IPatientRelated {
     $administration = new CAdministration();
     $where = array();
     $where["object_id"] = " = '$this->_id'";
-    $where["object_class"] = " = '$this->_class_name'";
+    $where["object_class"] = " = '$this->_class'";
     if($date){
       $where["dateTime"] = "LIKE '$date%'";
     }
@@ -281,7 +281,7 @@ class CPrescriptionLine extends CMbObject implements IPatientRelated {
    * Calcul permettant de savoir si la ligne possède un historique
    */
   function countParentLine(){
-    $line = new $this->_class_name;
+    $line = new $this->_class;
     $line->child_id = $this->_id;
     $this->_count_parent_line = $line->countMatchingList(); 
   }
@@ -292,7 +292,7 @@ class CPrescriptionLine extends CMbObject implements IPatientRelated {
   function countPrisesLine(){
     $prise = new CPrisePosologie();
     $prise->object_id = $this->_id;
-    $prise->object_class = $this->_class_name;
+    $prise->object_class = $this->_class;
     $this->_count_prises_line = $prise->countMatchinglist();  
   }
 	
@@ -322,7 +322,7 @@ class CPrescriptionLine extends CMbObject implements IPatientRelated {
 	  
   function delete(){
     // Chargement de la child_line de l'objet à supprimer
-    $line = new $this->_class_name;
+    $line = new $this->_class;
     $line->child_id = $this->_id;
     $line->loadMatchingObject();
 
@@ -436,7 +436,7 @@ class CPrescriptionLine extends CMbObject implements IPatientRelated {
               }
               $planification->original_dateTime = "$_date $heure_reelle:00:00";
               $planification->object_id = $this->_id;
-              $planification->object_class = $this->_class_name;
+              $planification->object_class = $this->_class;
               $count_planifications = $planification->countMatchingList();
               if($count_planifications){
                 $this->_quantity_by_date[$_type][$_date]['quantites'][$_hour]['total'] = 0;
@@ -461,7 +461,7 @@ class CPrescriptionLine extends CMbObject implements IPatientRelated {
     $query = "DELETE planification_systeme.* FROM planification_systeme 
               LEFT JOIN administration ON administration.planification_systeme_id = planification_systeme.planification_systeme_id
               WHERE planification_systeme.object_id = '$this->_id'
-							AND planification_systeme.object_class = '$this->_class_name'
+							AND planification_systeme.object_class = '$this->_class'
               AND administration.administration_id IS NULL;";
     $ds->exec($query);
   }
@@ -509,7 +509,7 @@ class CPrescriptionLine extends CMbObject implements IPatientRelated {
     $prise = new CPrisePosologie();
     $where = array();
     $where["object_id"] = " = '$this->_id'";
-    $where["object_class"] = " = '$this->_class_name'";
+    $where["object_class"] = " = '$this->_class'";
     $where["urgence_datetime"] = "IS NOT NULL";
     $prises_urgentes = $prise->loadList($where);
     foreach($prises_urgentes as $_prise_urg){
@@ -582,7 +582,7 @@ class CPrescriptionLine extends CMbObject implements IPatientRelated {
           // Chargement du log de creation de l'administration
           $log = new CUserLog;
           $log->object_id = $_administration->_id;
-          $log->object_class = $_administration->_class_name;
+          $log->object_class = $_administration->_class;
           $log->loadMatchingObject();
           $log->loadRefsFwd();
           $log->_ref_object->_ref_object =& $this;
@@ -624,7 +624,7 @@ class CPrescriptionLine extends CMbObject implements IPatientRelated {
 				$new_planif = new CPlanificationSysteme();
         $new_planif->dateTime = "$this->debut $this->time_debut";
 	      $new_planif->object_id = $this->_id;
-	      $new_planif->object_class = $this->_class_name;
+	      $new_planif->object_class = $this->_class;
         $new_planif->sejour_id = $this->_ref_prescription->object_id;    
         $new_planif->store();
       }
@@ -648,7 +648,7 @@ class CPrescriptionLine extends CMbObject implements IPatientRelated {
 		// Chargement des planifications pour la date courante
 		$planif = new CPlanificationSysteme();
     $where["object_id"] = " = '$this->_id'";
-    $where["object_class"] = " = '$this->_class_name'";
+    $where["object_class"] = " = '$this->_class'";
     $where["dateTime"] = " LIKE '$date%'";
 		
     $planifs = $planif->loadList($where, "dateTime");
@@ -701,7 +701,7 @@ class CPrescriptionLine extends CMbObject implements IPatientRelated {
 	        }
 	        $_manual_planification->original_dateTime = "$date $_heure:00:00";
 	        $_manual_planification->object_id = $this->_id;
-	        $_manual_planification->object_class = $this->_class_name;
+	        $_manual_planification->object_class = $this->_class;
 	        $count_planifications = $_manual_planification->countMatchingList();
 	        if($count_planifications == 0){
 	          $this->_planifs_systeme[$key_tab][$_planif->_id] = $_planif;

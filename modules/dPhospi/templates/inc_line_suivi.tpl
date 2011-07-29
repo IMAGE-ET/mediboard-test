@@ -3,7 +3,7 @@
   <td><strong>{{$_suivi->_ref_sejour->_ref_patient}}</strong></td>
   <td class="text">{{$_suivi->_ref_sejour->_ref_last_affectation->_ref_lit->_view}}</td>
   {{/if}}
-  <td><strong>{{tr}}{{$_suivi->_class_name}}{{/tr}}</strong></td>
+  <td><strong>{{tr}}{{$_suivi->_class}}{{/tr}}</strong></td>
   <td>
     <strong>
       <div class="mediuser" style="border-color: #{{$_suivi->_ref_user->_ref_function->color}};">
@@ -44,7 +44,7 @@
     <td>{{$_suivi->_ref_sejour->_ref_patient}}</td>
     <td class="text">{{$_suivi->_ref_sejour->_ref_last_affectation->_ref_lit->_view}}</td>
   {{/if}}
-  <td class="narrow">{{tr}}{{$_suivi->_class_name}}{{/tr}}</td>
+  <td class="narrow">{{tr}}{{$_suivi->_class}}{{/tr}}</td>
   <td class="narrow">{{$_suivi->_ref_user}}</td>
   <td style="text-align: center;" class="narrow">
     {{mb_ditto name=date value=$_suivi->date|date_format:$conf.date}}
@@ -111,7 +111,7 @@
 {{/if}}
 
 {{if $_suivi instanceof CConstantesMedicales}}
-  <td>{{tr}}{{$_suivi->_class_name}}{{/tr}}</td>
+  <td>{{tr}}{{$_suivi->_class}}{{/tr}}</td>
   <td>
     {{$_suivi->_ref_user->_view}}
   </td>
@@ -150,7 +150,7 @@
 	<td>{{mb_value object=$_suivi field="time_debut"}}</td>
   <td colspan="2">
   	{{if !$readonly}}
-		  <button type="button" class="tick" onclick="addTransmissionAdm('{{$_suivi->_id}}','{{$_suivi->_class_name}}');" style="float: right;">Réaliser ({{$_suivi->_count.transmissions}})</button>
+		  <button type="button" class="tick" onclick="addTransmissionAdm('{{$_suivi->_id}}','{{$_suivi->_class}}');" style="float: right;">Réaliser ({{$_suivi->_count.transmissions}})</button>
 		{{/if}}
 		
 		{{if $_suivi instanceof CPrescriptionLineElement}}
@@ -173,7 +173,7 @@
         <button type="button" class="trash notext" onclick="submitSuivi(this.form, 1);"></button>
       </form>
       <button type="button" class="edit notext"
-        onclick="addPrescription('{{$_suivi->_ref_prescription->object_id}}', '{{$app->user_id}}', '{{$_suivi->_id}}', '{{$_suivi->_class_name}}');">{{tr}}Edit{{/tr}}</button>
+        onclick="addPrescription('{{$_suivi->_ref_prescription->object_id}}', '{{$app->user_id}}', '{{$_suivi->_id}}', '{{$_suivi->_class}}');">{{tr}}Edit{{/tr}}</button>
     {{/if}}
     </td>
   {{/if}}

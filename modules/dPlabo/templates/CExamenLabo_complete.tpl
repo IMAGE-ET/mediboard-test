@@ -33,7 +33,7 @@
   </tr>
 
   <tr>
-    <th>{{tr}}{{$examen->_class_name}}-application{{/tr}}</th>
+    <th>{{tr}}{{$examen->_class}}-application{{/tr}}</th>
     <td>
       du {{$examen->deb_application|date_format:"%d/%m/%Y"|default:"-"}}
       au  {{$examen->fin_application|date_format:"%d/%m/%Y"|default:"-"}}

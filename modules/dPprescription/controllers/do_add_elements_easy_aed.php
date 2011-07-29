@@ -89,7 +89,7 @@ foreach($lines as $cat_name => $lines_by_cat){
 	        	foreach($moment->_ref_associations as &$_association){  	
 							$prise_posologie = new CPrisePosologie();
 							$prise_posologie->object_id = $_line->_id;
-							$prise_posologie->object_class = $_line->_class_name;
+							$prise_posologie->object_class = $_line->_class;
 							$prise_posologie->moment_unitaire_id = $_association->moment_unitaire_id;
 							// Si association ne OR, quantite à 0
 							if($_association->OR){
@@ -110,7 +110,7 @@ foreach($lines as $cat_name => $lines_by_cat){
         	} else {
         		$prise_posologie = new CPrisePosologie();
 						$prise_posologie->object_id = $_line->_id;
-						$prise_posologie->object_class = $_line->_class_name;
+						$prise_posologie->object_class = $_line->_class;
 							
 	        	// Prise Moment
 						if($quantite && $moment_unitaire_id && !$nb_tous_les){
@@ -135,7 +135,7 @@ foreach($lines as $cat_name => $lines_by_cat){
 				else {
 					$prise = new CPrisePosologie();
 				  $prise->object_id = $_line->_id;
-				  $prise->object_class = $_line->_class_name;	
+				  $prise->object_class = $_line->_class;	
 					
 				  // On sauvegarde par defaut la premiere unite de prise trouvée
 	        if($cat_name == "medicament"){

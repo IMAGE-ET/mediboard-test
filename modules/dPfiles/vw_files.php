@@ -39,7 +39,7 @@ foreach($affichageFile as $_cat) {
   
   foreach($_cat["items"] as $_item) {
     $_item->loadRefCategory();
-    if ($_item->_class_name === "CCompteRendu") {
+    if ($_item->_class === "CCompteRendu") {
       $_item->makePDFpreview();
     }
   }

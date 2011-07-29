@@ -67,7 +67,7 @@ class CExObject extends CMbMetaObject {
     
     $ex_class = $this->_ref_ex_class;
     
-    $this->_class_name = "CExObject_{$ex_class->_id}";
+    $this->_class = "CExObject_{$ex_class->_id}";
     
     $this->_own_ex_class_id = $ex_class->_id;
     $this->_ref_ex_class = $ex_class;
@@ -86,13 +86,13 @@ class CExObject extends CMbMetaObject {
   
   function setReferenceObject_1(CMbObject $reference) {
     $this->_ref_reference_object_1 = $reference;
-    $this->reference_class = $reference->_class_name;
+    $this->reference_class = $reference->_class;
     $this->reference_id = $reference->_id;
   }
   
   function setReferenceObject_2(CMbObject $reference) {
     $this->_ref_reference_object_2 = $reference;
-    $this->reference2_class = $reference->_class_name;
+    $this->reference2_class = $reference->_class;
     $this->reference2_id = $reference->_id;
   }
   
@@ -301,7 +301,7 @@ class CExObject extends CMbMetaObject {
     $list = array();
 
     while ($row = $ds->fetchAssoc($cur)) {
-      $newObject = new self; // $this->_class_name >>>> "self"
+      $newObject = new self; // $this->_class >>>> "self"
       //$newObject->_ex_class_id = $this->_ex_class_id;
       //$newObject->setExClass();
       $newObject->bind($row, false);
@@ -318,13 +318,13 @@ class CExObject extends CMbMetaObject {
   
   // needed or will throw errors in the field specs
   function checkProperty($propName) {
-    $class_name = $this->_class_name;
-    $this->_class_name = get_class($this);
+    $class_name = $this->_class;
+    $this->_class = get_class($this);
     
     $spec = $this->_specs[$propName];
     $ret = $spec->checkPropertyValue($this);
     
-    $this->_class_name = $class_name;
+    $this->_class = $class_name;
     return $ret;
   }
   /// End low level methods /////////
@@ -373,7 +373,7 @@ class CExObject extends CMbMetaObject {
   
   function getSpecs(){
     $ex_class_id = $this->getClassId();
-    $this->_class_name = get_class($this)."_$ex_class_id";
+    $this->_class = get_class($this)."_$ex_class_id";
 		
 		if (isset(self::$_ex_specs[$ex_class_id])) {
 			return self::$_ex_specs[$ex_class_id];
@@ -384,7 +384,7 @@ class CExObject extends CMbMetaObject {
     foreach($specs as $_field => $_spec) {
       if ($_spec instanceof CEnumSpec) {
         foreach ($_spec->_locales as $key => $locale) {
-          $specs[$_field]->_locales[$key] = CAppUI::tr("$this->_class_name.$_field.$key");
+          $specs[$_field]->_locales[$key] = CAppUI::tr("$this->_class.$_field.$key");
         }
       }
     }
@@ -397,7 +397,7 @@ class CExObject extends CMbMetaObject {
     $ds = $this->_spec->ds;
     
     $where = array(
-      "object_class" => $ds->prepare("=%", $this->_class_name),
+      "object_class" => $ds->prepare("=%", $this->_class),
       "object_id"    => $ds->prepare("=%", $this->_id)
     );
     

@@ -38,7 +38,7 @@ function setToNow(element) {
     </select>
     {{/if}}
     <!-- Forfait spécifique -->
-    <a href="#" {{if $confCCAM.contraste}}style="color: #fff;"{{/if}} onclick="viewCode('{{$_code->code}}', '{{$subject->_class_name}}')">
+    <a href="#" {{if $confCCAM.contraste}}style="color: #fff;"{{/if}} onclick="viewCode('{{$_code->code}}', '{{$subject->_class}}')">
       {{$_code->code}}
     </a> :
     <label title="{{$_code->libelleLong}}">
@@ -67,12 +67,12 @@ function setToNow(element) {
           <!-- Variable _calcul_montant_base permettant de la lancer la sauvegarde du montant de base dans le store de l'acte ccam -->
           <input type="hidden" name="_calcul_montant_base" value="1" />
           <input type="hidden" name="object_id" class="{{$acte->_props.object_id}}" value="{{$subject->_id}}" />
-          <input type="hidden" name="object_class" class="{{$acte->_props.object_class}}" value="{{$subject->_class_name}}" />
+          <input type="hidden" name="object_class" class="{{$acte->_props.object_class}}" value="{{$subject->_class}}" />
           <input type="hidden" name="code_acte" class="{{$acte->_props.code_acte}}" value="{{$acte->code_acte}}" />
           <input type="hidden" name="code_activite" class="{{$acte->_props.code_activite}}" value="{{$acte->code_activite}}" />
           <input type="hidden" name="code_phase" class="{{$acte->_props.code_phase}}" value="{{$acte->code_phase}}" />
           <input type="hidden" name="code_association" class="{{$acte->_props.code_association}}" value="{{$acte->code_association}}" />
-          {{if !$confCCAM.tarif && $subject->_class_name != "CConsultation" && !($subject->_class_name == "COperation" && $subject->_ref_salle->dh == 1)}}
+          {{if !$confCCAM.tarif && $subject->_class != "CConsultation" && !($subject->_class == "COperation" && $subject->_ref_salle->dh == 1)}}
             <input type="hidden" name="montant_depassement" class="{{$acte->_props.montant_depassement}}" value="{{$acte->montant_depassement}}" />
           {{/if}}
           
@@ -91,7 +91,7 @@ function setToNow(element) {
                 <div style="float: right;">
                   {{if !$acte->_id}}
                   <button class="add" type="button" onclick="Event.stop(event);
-                    {{if $acte->_anesth_associe && $subject->_class_name == "COperation"}}
+                    {{if $acte->_anesth_associe && $subject->_class == "COperation"}}
                     if(confirm('Cet acte ne comporte pas l\'activité d\'anesthésie.\nVoulez-vous ajouter le code d\'anesthésie complémentaire {{$acte->_anesth_associe}} ?')) {
                       document.manageCodes._codes_ccam.value = '{{$acte->_anesth_associe}}';
                       ActesCCAM.add('{{$subject->_id}}','{{$subject->_praticien_id}}');
@@ -187,7 +187,7 @@ function setToNow(element) {
                   
                   {{mb_field object=$acte field=rembourse disabled=$disabled default=$default}}
                 </td>
-                {{if $confCCAM.tarif || $subject->_class_name == "CConsultation" || ($subject->_class_name == "COperation" && $subject->_ref_salle->dh == 1)}}
+                {{if $confCCAM.tarif || $subject->_class == "CConsultation" || ($subject->_class == "COperation" && $subject->_ref_salle->dh == 1)}}
                 <th>{{mb_label object=$acte field=montant_depassement}}</th>
                 <td>{{mb_field object=$acte field=montant_depassement}}</td>
                 {{/if}}
@@ -222,7 +222,7 @@ function setToNow(element) {
                   {{mb_field object=$acte field=rembourse disabled=$disabled default=$default}}
                 </td>
               </tr>
-              {{if $confCCAM.tarif || $subject->_class_name == "CConsultation" || ($subject->_class_name == "COperation" && $subject->_ref_salle->dh == 1)}}
+              {{if $confCCAM.tarif || $subject->_class == "CConsultation" || ($subject->_class == "COperation" && $subject->_ref_salle->dh == 1)}}
               <tr class="{{$view}}">
                 <th>{{mb_label object=$acte field=montant_depassement}}</th>
                 <td>{{mb_field object=$acte field=montant_depassement}}</td>
@@ -296,7 +296,7 @@ function setToNow(element) {
                 Association pour le Dr {{$acte->_ref_executant->_view}}
                 
                 <strong>
-                {{if $confCCAM.tarif || $subject->_class_name == "CConsultation"}}
+                {{if $confCCAM.tarif || $subject->_class == "CConsultation"}}
                   &mdash; {{$acte->_tarif|currency}}
                 {{/if}}
                 </strong>
@@ -318,7 +318,7 @@ function setToNow(element) {
                 </div>
                 {{/if}}
                 
-                {{if $confCCAM.tarif || $subject->_class_name == "CConsultation"  || ($subject->_class_name == "COperation" && $subject->_ref_salle->dh == 1)}}
+                {{if $confCCAM.tarif || $subject->_class == "CConsultation"  || ($subject->_class == "COperation" && $subject->_ref_salle->dh == 1)}}
                 &mdash;  {{mb_label object=$acte field=montant_depassement}} : {{mb_value object=$acte field=montant_depassement}}
                 {{/if}}
                 {{/if}}

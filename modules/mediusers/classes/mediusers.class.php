@@ -415,7 +415,7 @@ class CMediusers extends CMbObject {
     $cps = $intermax["CPS"];
     $cpsNumero = $cps["CPS_NUMERO_LOGICMAX"];
     $id_cps = new CIdSante400();
-    $id_cps->object_class = $this->_class_name;
+    $id_cps->object_class = $this->_class;
     $id_cps->id400 = $cpsNumero;
     $id_cps->tag = "LogicMax CPSNumero";
     $id_cps->loadMatchingObject();
@@ -449,7 +449,7 @@ class CMediusers extends CMbObject {
   function loadFromIdCPS($numero_cps) {
     // Make id vitale
     $id_cps = new CIdSante400();
-    $id_cps->object_class = $this->_class_name;
+    $id_cps->object_class = $this->_class;
     $id_cps->id400 = $numero_cps;
     $id_cps->tag = "LogicMax CPSNumero";
     $id_cps->loadMatchingObject();
@@ -528,7 +528,7 @@ class CMediusers extends CMbObject {
     $this->updateSpecs();
 
     if ($msg = $this->check()) {
-      return CAppUI::tr($this->_class_name) .
+      return CAppUI::tr($this->_class) .
       CAppUI::tr("CMbObject-msg-check-failed") .
       CAppUI::tr($msg);
     }
@@ -832,11 +832,11 @@ class CMediusers extends CMbObject {
     $template->addProperty("Praticien - titres"    , $this->titres);
     $template->addProperty("Praticien - ADELI"     , $this->adeli);
     $template->addBarcode("Praticien - Code barre ADELI", $this->adeli, array("barcode" => array(
-      "title" => CAppUI::tr("{$this->_class_name}-adeli")
+      "title" => CAppUI::tr("{$this->_class}-adeli")
     )));
     $template->addProperty("Praticien - RPPS"      , $this->rpps);
     $template->addBarcode("Praticien - Code barre RPPS", $this->rpps, array("barcode" => array(
-      "title" => CAppUI::tr("{$this->_class_name}-rpps")
+      "title" => CAppUI::tr("{$this->_class}-rpps")
     )));
     $template->addProperty("Praticien - email"     , $this->_user_email);
   }

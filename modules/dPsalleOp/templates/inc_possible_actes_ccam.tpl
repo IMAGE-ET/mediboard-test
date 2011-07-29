@@ -15,7 +15,7 @@
 	  <th class="category">{{mb_title class=CActeCCAM field=modificateurs      }}</th>
 	  <th class="category">{{mb_title class=CActeCCAM field=code_association   }}</th>
 	  <th class="category">{{mb_title class=CActeCCAM field=execution          }}</th>
-    {{if $conf.dPsalleOp.CActeCCAM.tarif || $subject->_class_name == "CConsultation"}}
+    {{if $conf.dPsalleOp.CActeCCAM.tarif || $subject->_class == "CConsultation"}}
     <th class="category">{{mb_title class=CActeCCAM field=montant_base       }}</th>
     <th class="category">{{mb_title class=CActeCCAM field=montant_depassement}}</th>
     <th class="category">{{mb_title class=CActeCCAM field=_montant_facture   }}</th>
@@ -50,7 +50,7 @@
 	      <td>{{$acte->modificateurs}}</td>
 	      <td>{{$acte->code_association}}</td>
 	      <td>{{mb_value object=$acte field=execution}}</td>
-        {{if $conf.dPsalleOp.CActeCCAM.tarif || $subject->_class_name == "CConsultation"}}
+        {{if $conf.dPsalleOp.CActeCCAM.tarif || $subject->_class == "CConsultation"}}
   	      <td style="text-align: right">{{mb_value object=$acte field=montant_base       }}</td>
   	      <td style="text-align: right">{{mb_value object=$acte field=montant_depassement}}</td>
   	      <td style="text-align: right">{{mb_value object=$acte field=_montant_facture   }}</td>

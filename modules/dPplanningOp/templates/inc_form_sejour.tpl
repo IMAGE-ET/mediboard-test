@@ -137,7 +137,7 @@ checkCorrespondantMedical = function(form){
   var url = new Url("dPplanningOp", "ajax_check_correspondant_medical");
   url.addParam("patient_id", $V(form.patient_id));
   url.addParam("object_id" , $V(form.sejour_id));
-  url.addParam("object_class", '{{$sejour->_class_name}}');
+  url.addParam("object_class", '{{$sejour->_class}}');
   url.requestUpdate("correspondant_medical");
 }
 
@@ -783,7 +783,7 @@ Main.add( function(){
     <script type="text/javascript">
       Main.add(function() {
         new AideSaisie.AutoComplete(getForm("editSejour").elements.convalescence, {
-          objectClass: "{{$sejour->_class_name}}",
+          objectClass: "{{$sejour->_class}}",
           timestamp: "{{$conf.dPcompteRendu.CCompteRendu.timestamp}}",
           validateOnBlur: 0
         });
@@ -795,7 +795,7 @@ Main.add( function(){
     <script type="text/javascript">
       Main.add(function() {
         new AideSaisie.AutoComplete(getForm("editSejour").elements.rques, {
-          objectClass: "{{$sejour->_class_name}}",
+          objectClass: "{{$sejour->_class}}",
           timestamp: "{{$conf.dPcompteRendu.CCompteRendu.timestamp}}",
           validateOnBlur: 0
         });
@@ -880,7 +880,7 @@ Main.add( function(){
   <tr>
     <td id="prescription_register">
       <script type="text/javascript">
-        PrescriptionEditor.register('{{$sejour->_id}}','{{$sejour->_class_name}}','dhe','{{$sejour->praticien_id}}');
+        PrescriptionEditor.register('{{$sejour->_id}}','{{$sejour->_class}}','dhe','{{$sejour->praticien_id}}');
       </script>
     </td>
   </tr>  

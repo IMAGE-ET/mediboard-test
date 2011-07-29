@@ -12,7 +12,7 @@ $sejour_id = CValue::post("sejour_id");
 $sejour = new CSejour;
 $sejour->load($sejour_id);
 if (!$sejour->_id) {
-	CAppUI::stepAjax("CMbObject-not-found", UI_MSG_ERROR, $sejour->_class_name, $sejour->_id);
+	CAppUI::stepAjax("CMbObject-not-found", UI_MSG_ERROR, $sejour->_class, $sejour->_id);
 }
 
 $evenement = new CEvenementSSR();

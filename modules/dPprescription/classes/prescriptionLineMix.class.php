@@ -552,7 +552,7 @@ class CPrescriptionLineMix extends CMbObject {
 	    $query = "DELETE planification_systeme.* FROM planification_systeme 
                 LEFT JOIN administration ON administration.planification_systeme_id = planification_systeme.planification_systeme_id
 	              WHERE planification_systeme.object_id = '$_perf_line->_id'
-	              AND planification_systeme.object_class = '$_perf_line->_class_name'
+	              AND planification_systeme.object_class = '$_perf_line->_class'
 	              AND administration.administration_id IS NULL;";
 	    $ds->exec($query);
 		}
@@ -572,7 +572,7 @@ class CPrescriptionLineMix extends CMbObject {
 		$planif = new CPlanificationSysteme();
 		$where = array();
 		$where["object_id"] = " = '$line_perf->_id'";
-		$where["object_class"] = " = '$line_perf->_class_name'";
+		$where["object_class"] = " = '$line_perf->_class'";
 		$where["dateTime"] = " LIKE '$date%'";
 		$planifs = $planif->loadList($where, "dateTime ASC");
 		
@@ -750,7 +750,7 @@ class CPrescriptionLineMix extends CMbObject {
 				
 				
 				$_planifs_by_step[] = array("object_id" => "{$_perf_line->_id}",
-                                    "object_class" => "{$_perf_line->_class_name}",
+                                    "object_class" => "{$_perf_line->_class}",
                                     "sejour_id" => "{$this->_ref_prescription->object_id}",
                                     "dateTime" => $_datetime);
 			}
@@ -838,8 +838,8 @@ class CPrescriptionLineMix extends CMbObject {
 		  $_base_line->load($this->substitute_for_id);
 		  $_base_line->loadRefsSubstitutionLines();
 	    $this->_ref_substitution_lines = $_base_line->_ref_substitution_lines;
-	    $this->_ref_substitution_lines[$_base_line->_class_name][$_base_line->_id] = $_base_line;
-			unset($this->_ref_substitution_lines[$this->_class_name][$this->_id]);		
+	    $this->_ref_substitution_lines[$_base_line->_class][$_base_line->_id] = $_base_line;
+			unset($this->_ref_substitution_lines[$this->_class][$this->_id]);		
 		  $this->_ref_substitute_for = $_base_line;			  
 	  }
 		foreach($this->_ref_substitution_lines["CPrescriptionLineMix"] as $_substitution_line){

@@ -284,7 +284,7 @@ CCAMSelector.init = function(){
       <script type="text/javascript">
         Main.add(function() {
           new AideSaisie.AutoComplete(getForm("editOp").elements.examen, {
-            objectClass: "{{$op->_class_name}}",
+            objectClass: "{{$op->_class}}",
             timestamp: "{{$conf.dPcompteRendu.CCompteRendu.timestamp}}",
             validateOnBlur: 0
           });
@@ -296,7 +296,7 @@ CCAMSelector.init = function(){
       <script type="text/javascript">
         Main.add(function() {
           new AideSaisie.AutoComplete(getForm("editOp").elements.materiel, {
-            objectClass: "{{$op->_class_name}}",
+            objectClass: "{{$op->_class}}",
             timestamp: "{{$conf.dPcompteRendu.CCompteRendu.timestamp}}",
             validateOnBlur: 0
           });
@@ -308,7 +308,7 @@ CCAMSelector.init = function(){
       <script type="text/javascript">
         Main.add(function() {
           new AideSaisie.AutoComplete(getForm("editOp").elements.rques, {
-            objectClass: "{{$op->_class_name}}",
+            objectClass: "{{$op->_class}}",
             timestamp: "{{$conf.dPcompteRendu.CCompteRendu.timestamp}}",
             validateOnBlur: 0
           });

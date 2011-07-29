@@ -290,7 +290,7 @@ class CUser extends CMbObject {
       WHERE (`user_id` = '$this->_id')
       AND (`fields` = 'user_last_login')
       AND (`object_id` = '$this->_id')
-      AND (`object_class` = '$this->_class_name')";
+      AND (`object_class` = '$this->_class')";
     
     $log = new CUserLog;
     $ds = $log->_spec->ds;

@@ -87,7 +87,7 @@
     }
         
     $where["object_id"   ] = "= '$mbObject->_id'";
-    $where["object_class"] = "= '$mbObject->_class_name'";
+    $where["object_class"] = "= '$mbObject->_class'";
     $where["tag"] = "LIKE '$tag'";
     
     $order = "last_update ASC";

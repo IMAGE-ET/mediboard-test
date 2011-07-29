@@ -93,7 +93,7 @@ submitOperationForm = function(oFormOperation) {
         <input type="hidden" name="dosql" value="do_affectation_aed" />
         <input type="hidden" name="del" value="0" />
         <input type="hidden" name="object_id" value="{{$_operation->_id}}" />
-        <input type="hidden" name="object_class" value="{{$_operation->_class_name}}" />
+        <input type="hidden" name="object_class" value="{{$_operation->_class}}" />
         <input type="hidden" name="tag" value="reveil" />
         <input type="hidden" name="realise" value="0" />
         <select name="personnel_id" style="max-width: 120px;">
