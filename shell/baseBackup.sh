@@ -68,6 +68,8 @@ cd ${BASE_PATH}
 # removes previous hotcopy/dump if something went wrong
 rm -Rvf $database
 
+DATETIME=$(date +%Y-%m-%dT%H-%M-%S)
+
 case $1 in
   hotcopy)
     result=$database/
@@ -77,7 +79,7 @@ case $1 in
     
     if [ $binary_log -eq 1 ]; then
       databasebinlog=$database-${DATETIME}.binlog.position
-      mysql --user=$username --password=$password $database < $BASH_PATH/mysql_show_master_status.sql > $BACKUP_PATH/binlog.index
+      mysql --user=$username --password=$password $database < $BASH_PATH/mysql_show_master_status.sql > $BACKUP_PATH/binlog-${DATETIME}.index
       check_errs $? "Failed to create MySQL Binary log index" "MySQL Binary log index done!"
     fi
     ;;
@@ -103,7 +105,6 @@ find ${BASE_PATH} -name "$database*.tar.gz" $filter -exec /bin/rm '{}' ';'
 check_errs $? "Failed to rotate files" "Files rotated"
 
 # Compress archive and remove files
-DATETIME=$(date +%Y-%m-%dT%H-%M-%S)
 
 # Make the tarball
 tarball=$database-${DATETIME}.tar.gz
