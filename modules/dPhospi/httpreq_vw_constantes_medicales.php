@@ -252,7 +252,7 @@ if ($list_constantes) {
 					$value, 
 					$user_view, 
 					$comment,
-					$params['unit'],
+					utf8_encode($params['unit']),
 				);
 				
 				if ($name == "diurese") {
@@ -283,7 +283,7 @@ foreach($cumuls_day as $name => $days) {
 				$values["value"], 
 				utf8_encode(CAppUI::tr("CConstantesMedicales-$name-desc")), 
 				null,
-				CValue::read(CConstantesMedicales::$list_constantes[$name], "unit"),
+				utf8_encode(CValue::read(CConstantesMedicales::$list_constantes[$name], "unit")),
 			)),
 			"cumul" => $day,
       "lines" => array("show" => false),
