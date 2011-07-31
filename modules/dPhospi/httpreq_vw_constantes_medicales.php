@@ -101,11 +101,11 @@ if (!count($list_contexts)) {
 }
 
 if ($context && $selected_context_guid !== 'all') {
-  $where["context_class"] = " = '$context->_class'";
+  $where["context_class"] = " = '$context->_class_name'";
   $where["context_id"] = " = '$context->_id'";
   
   // Needed to know if we are in the right context
-  $constantes->context_class = $context->_class;
+  $constantes->context_class = $context->_class_name;
   $constantes->context_id = $context->_id;
   $constantes->loadRefContext();
 }
