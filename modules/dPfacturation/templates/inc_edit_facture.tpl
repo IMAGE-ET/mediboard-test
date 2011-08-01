@@ -26,7 +26,7 @@ submitFacture = function(form) {
   <input type="hidden" name="facture_id" value="{{$facture->_id}}" />
   <input type="hidden" name="del" value="0" />
   <input type="hidden" name="callback" value="showFacture" />
-  <input type="hidden" name="_selector_class_name" value="CSejour" />
+  <input type="hidden" name="_selector_class" value="CSejour" />
   
   
   <table class="form">
@@ -60,7 +60,7 @@ submitFacture = function(form) {
                 this.sForm     = "editfacture";
                 this.sId       = "sejour_id";
                 this.sView     = "_sejour_view";
-                this.sClass    = "_selector_class_name";
+                this.sClass    = "_selector_class";
                 this.onlyclass = "true";
                
                 this.pop();

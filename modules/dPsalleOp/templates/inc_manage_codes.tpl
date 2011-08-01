@@ -25,7 +25,7 @@ changeCodeToDel = function(subject_id, code_ccam, actes_ids){
         {{if ($subject->_class=="COperation")}}
           <input type="hidden" name="_anesth" value="{{$subject->_ref_plageop->anesth_id}}" />
         {{/if}}
-        <input type="hidden" name="_class_name" value="{{$subject->_class}}" />
+        <input type="hidden" name="_class" value="{{$subject->_class}}" />
         <fieldset>
           <legend>Ajouter un code</legend>
           <input name="_actes" type="hidden" value="" />
@@ -39,7 +39,7 @@ changeCodeToDel = function(subject_id, code_ccam, actes_ids){
           <script type="text/javascript">   
             CCAMSelector.init = function(){
               this.sForm = "manageCodes";
-              this.sClass = "_class_name";
+              this.sClass = "_class";
               this.sChir = "_chir";
               {{if ($subject->_class=="COperation")}}
               this.sAnesth = "_anesth";

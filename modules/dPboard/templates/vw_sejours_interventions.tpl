@@ -25,7 +25,7 @@ Main.add(function(){
 
 <input type="hidden" name="m" value="dPboard" />
 <input type="hidden" name="_chir" value="{{$prat->_id}}" />
-<input type="hidden" name="_class_name" value="" />
+<input type="hidden" name="_class" value="" />
 
 <table class="main form">
 
@@ -62,7 +62,7 @@ Main.add(function(){
           this.sForm = "filters";
           this.sView = "_codes_ccam";
           this.sChir = "_chir";
-          this.sClass = "_class_name";
+          this.sClass = "_class";
           this.pop();
         }
         Main.add(function() {

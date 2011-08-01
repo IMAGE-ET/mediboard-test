@@ -146,7 +146,7 @@ Main.add(function () {
 <input type="hidden" name="m" value="dPplanningOp" />
 <input type="hidden" name="dosql" value="do_protocole_aed" />
 <input type="hidden" name="del" value="0" />
-<input type="hidden" name="_class_name_" value="COperation" />
+<input type="hidden" name="_class" value="COperation" />
 {{mb_key object=$protocole}}
 
 {{if $dialog}}
@@ -267,7 +267,7 @@ Main.add(function () {
                 this.sForm  = "editFrm";
                 this.sView  = "_codes_ccam";
                 this.sChir  = "chir_id";
-                this.sClass = "_class_name_";
+                this.sClass = "_class";
                 this.pop();
               }
             </script>          

@@ -119,7 +119,7 @@ CCAMSelector.init = function() {
   this.sForm  = "stats-filter";
   this.sView  = "_codes_ccam";
   this.sChir  = "filters[chir_id]";
-  this.sClass = "_class_name";
+  this.sClass = "_class";
   this.pop();
 }
 
@@ -158,7 +158,7 @@ function updateTokenCcam(v) {
       </th>
       <td>
         <input type="hidden" name="filters[codes_ccam]" value="{{$filters.codes_ccam}}" />
-        <input type="hidden" name="_class_name" value="COperation" />
+        <input type="hidden" name="_class" value="COperation" />
         <input type="text" name="_codes_ccam" ondblclick="CCAMSelector.init()" size="10" value="" />
         <button class="search notext" type="button" onclick="CCAMSelector.init()">{{tr}}Search{{/tr}}</button>
         <button class="tick notext" type="button" onclick="oCcamField.add($V(this.form['_codes_ccam']))">{{tr}}Add{{/tr}}</button>

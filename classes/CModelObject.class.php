@@ -23,7 +23,6 @@ class CModelObject {
   /**
    * @var string The object's class name
    */
-  var $_class_name    = null; 
   var $_class         = null; 
   
   /**
@@ -125,8 +124,7 @@ class CModelObject {
     }
     
     $this->_class = $class;
-    $this->_class_name =& $this->_class;
-    $this->_spec       =& self::$spec[$class];
+    $this->_spec =& self::$spec[$class];
     
     if ($key = $this->_spec->key) {
       $this->_id =& $this->$key;

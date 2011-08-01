@@ -146,7 +146,7 @@ class CDoObjectAddEdit {
     
     $fields = $this->_obj->getProperties();
     $fields["_guid"] = $this->_obj->_guid;
-    $fields["_class_name"] = $this->_obj->_class;
+    $fields["_class"] = $this->_obj->_class;
     
     foreach($messages as &$_level) {
       $_keys   = array_map("utf8_encode", array_keys($_level));

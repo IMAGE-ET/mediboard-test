@@ -192,8 +192,8 @@ Main.add(function() {
         {{tr}}CModeleEtiquette._write_bold{{/tr}} :
         {{mb_field object=$modele_etiquette field="_write_bold" typeEnum="radio"}}
         <br/>
-        {{foreach from=$fields key=_class_name item=_by_class}}
-          {{tr}}{{$_class_name}}{{/tr}} :<br />
+        {{foreach from=$fields key=_class item=_by_class}}
+          {{tr}}{{$_class}}{{/tr}} :<br />
           {{foreach from=$_by_class item=_field}}
             <button style="display: block;" type="button" value='{{$_field}}' onclick='insertField(this);'>{{$_field}}</button>
           {{/foreach}}

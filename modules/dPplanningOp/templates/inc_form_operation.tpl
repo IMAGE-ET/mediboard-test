@@ -32,7 +32,7 @@ CCAMSelector.init = function(){
   this.sForm  = "editOp";
   this.sView  = "_codes_ccam";
   this.sChir  = "chir_id";
-  this.sClass = "_class_name";
+  this.sClass = "_class";
   this.pop();
 }
 </script>
@@ -55,7 +55,7 @@ CCAMSelector.init = function(){
 
 <!-- Form Fields -->
 <input type="hidden" name="_group_id" value="{{$sejour->group_id}}" />
-<input type="hidden" name="_class_name" value="COperation" />
+<input type="hidden" name="_class" value="COperation" />
 <input type="hidden" name="_protocole_prescription_anesth_id" value="" />
 <input type="hidden" name="_protocole_prescription_chir_id" value="" />
 {{mb_field object=$op field="_count_actes" hidden=1}}

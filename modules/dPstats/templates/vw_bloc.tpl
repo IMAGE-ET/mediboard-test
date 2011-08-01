@@ -59,7 +59,7 @@ function drawGraphs(showLegend){
 <form name="bloc" action="?" method="get" onsubmit="return checkForm(this)">
 <input type="hidden" name="m" value="dPstats" />
 <input type="hidden" name="_chir" value="{{$app->user_id}}" />
-<input type="hidden" name="_class_name" value="" />
+<input type="hidden" name="_class" value="" />
 <table class="main form">
   <tr>
     <th colspan="6" class="category">
@@ -138,7 +138,7 @@ function drawGraphs(showLegend){
           this.sForm = "bloc";
           this.sView = "codes_ccam";
           this.sChir = "_chir";
-          this.sClass = "_class_name";
+          this.sClass = "_class";
           this.pop();
         }
       </script>

@@ -8,9 +8,9 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
  */
 
-$class_name = CValue::post("_class_name");
+$class = CValue::post("_class");
 
-$do = new CDoObjectAddEdit($class_name);
+$do = new CDoObjectAddEdit($class);
 $do->doIt();
 
 ?>

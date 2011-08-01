@@ -24,7 +24,7 @@ Main.add(function(){
 <form name="bloc" action="?" method="get" onsubmit="return checkForm(this)">
 <input type="hidden" name="m" value="dPstats" />
 <input type="hidden" name="_chir" value="{{$app->user_id}}" />
-<input type="hidden" name="_class_name" value="" />
+<input type="hidden" name="_class" value="" />
 <table class="main form">
   <tr>
     <th colspan="4" class="category">Activité de la salle de reveil</th>
@@ -69,7 +69,7 @@ Main.add(function(){
           this.sForm = "bloc";
           this.sView = "codes_ccam";
           this.sChir = "_chir";
-          this.sClass = "_class_name";
+          this.sClass = "_class";
           this.pop();
         }
       </script>

@@ -89,7 +89,7 @@ function showCheckboxAnesth(element){
 
 
 <form name="paramFrm" action="?m=dPbloc" method="post" onsubmit="return checkFormPrint(this)">
-<input type="hidden" name="_class_name" value="COperation" />
+<input type="hidden" name="_class" value="COperation" />
 <input type="hidden" name="_chir" value="{{$chir}}" />
 <table class="main">
   <tr>
@@ -221,7 +221,7 @@ function showCheckboxAnesth(element){
           <script type="text/javascript">
             CCAMSelector.init = function(){
               this.sForm  = "paramFrm";
-              this.sClass = "_class_name";
+              this.sClass = "_class";
               this.sChir  = "_chir";
               this.sView  = "_codes_ccam";
               this.pop();

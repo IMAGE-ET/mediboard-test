@@ -16,7 +16,7 @@
       <form name="bloc" action="?" method="get">
       <input type="hidden" name="m" value="dPstats" />
       <input type="hidden" name="_chir" value="{{$user_id}}" />
-      <input type="hidden" name="_class_name" value="" />
+      <input type="hidden" name="_class" value="" />
       <table class="form">
         <tr>
           <th colspan="2" class="category">
@@ -69,7 +69,7 @@
                 this.sForm = "bloc";
                 this.sView = "codeCCAM";
                 this.sChir = "_chir";
-                this.sClass = "_class_name";
+                this.sClass = "_class";
                 this.pop();
               }
             </script>
