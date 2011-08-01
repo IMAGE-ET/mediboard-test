@@ -16,8 +16,8 @@ $debut_selection = CValue::get("debut_selection");
 $fin_selection   = CValue::get("fin_selection");
 
 if (!$debut_selection || !$fin_selection) {
-  $fin_selection   = mbDateTime();
-  $debut_selection = mbDateTime("-7 DAY", $fin_selection);
+  $fin_selection   = mbDate()." 00:00:00";
+  $debut_selection = mbDate("-7 DAY", $fin_selection)." 00:00:00";
 }
 
 $extractPassages = new CExtractPassages();
