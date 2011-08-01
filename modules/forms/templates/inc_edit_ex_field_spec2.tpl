@@ -33,11 +33,11 @@ updateFieldSpec = function(){
       
       str += " "+(k.split("[")[0]);
       if (Object.isArray(d))
-        str += "|"+d.invoke("replace", /\s|\|/g, "").join("|");
+        str += "|"+d.invoke("replace", /\s/g, "\\x20").invoke("replace", /\|/g, "\\x7C").join("|");
       else {
         var v = d.strip();
         if (ExFieldSpec.options[k] != "bool" || v != "1") {
-          str += "|"+v;
+          str += "|"+v.replace(/\s/g, "\\x20").replace(/\|/g, "\\x7C");
         }
       }
       
@@ -130,7 +130,7 @@ Main.add(function(){
         {{if !$concept_based}}
           {{* str *}}
           {{if $_type == "str"}}
-            <input type="text" name="{{$_name}}" value="{{$spec_value}}" class="str {{if $_name != "default"}}nospace regex|^\s*[a-zA-Z0-9_]*\s*$|gi{{/if}}" />
+            <input type="text" name="{{$_name}}" value="{{$spec_value|replace:"\\x20":" "|replace:"\\x7C":"|"}}" class="str {{if $_name != "default"}}nospace regex|^\s*[a-zA-Z0-9_]*\s*$|gi{{/if}}" />
             
           {{* num *}}
           {{elseif $_type == "num"}}
@@ -244,7 +244,7 @@ Main.add(function(){
         
           {{* str *}}
           {{if $_type == "str"}}
-            {{$spec_value}}
+            {{$spec_value|replace:"\\x20":" "|replace:"\\x7C":"|"}}
             
           {{* num *}}
           {{elseif $_type == "num"}}

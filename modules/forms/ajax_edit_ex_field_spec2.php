@@ -22,6 +22,7 @@ $context->loadView();
 $list_owner = $context->getRealListOwner();
 $list_owner->loadView();
 
+$prop = str_replace("\\\\x", "\\x", $prop);
 $prop_type = explode(" ", $prop);
 $prop_type = reset($prop_type);
 

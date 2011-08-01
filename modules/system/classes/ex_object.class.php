@@ -148,7 +148,7 @@ class CExObject extends CMbMetaObject {
       
       // valeur par défaut
       $spec_obj = $_field->getSpecObject();
-      $this->$field_name = $spec_obj->default;
+      $this->$field_name = CExClassField::unescapeProp($spec_obj->default);
       
       // si champ pas reporté, on passe au suivant
       if (!$_field->report_level) continue;
@@ -347,7 +347,9 @@ class CExObject extends CMbMetaObject {
     $this->loadRefExClass();
     $this->_spec->table = $this->getTableName();
     
+    $class = get_class($this)."_".$this->getClassId();
     $props = parent::getProps();
+	$props["ex_object_id"] = "ref class|$class show|0";
     $props["_ex_class_id"]    = "ref class|CExClass";
     
     $props["reference_class"] = "str class";
@@ -375,7 +377,7 @@ class CExObject extends CMbMetaObject {
     $ex_class_id = $this->getClassId();
     $this->_class = get_class($this)."_$ex_class_id";
 		
-		if (isset(self::$_ex_specs[$ex_class_id])) {
+		if ($this->_id && isset(self::$_ex_specs[$ex_class_id])) {
 			return self::$_ex_specs[$ex_class_id];
 		}
     

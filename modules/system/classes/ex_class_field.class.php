@@ -41,8 +41,8 @@ class CExClassField extends CExListItemsOwner {
   var $_ex_class_id = null;
   
   var $_dont_drop_column = null;
-	
-	static $_load_lite = false;
+  
+  static $_load_lite = false;
   
   static $_indexed_types = array("ref", "date", "dateTime", "time");
   static $_data_type_groups = array(
@@ -100,7 +100,7 @@ class CExClassField extends CExListItemsOwner {
     $props["coord_field_y"] = "num min|0 max|100";
     $props["coord_label_x"] = "num min|0 max|100";
     $props["coord_label_y"] = "num min|0 max|100";
-		
+    
     $props["_ex_class_id"]  = "ref class|CExClass";
     
     $props["_locale"]     = "str notNull";
@@ -125,7 +125,7 @@ class CExClassField extends CExListItemsOwner {
     $this->formulaFromDB();
     
     if (!self::$_load_lite) {
-			$this->_ex_class_id = $this->loadRefExGroup()->ex_class_id;
+      $this->_ex_class_id = $this->loadRefExGroup()->ex_class_id;
       $this->updateTranslation();
     }
   }
@@ -248,30 +248,28 @@ class CExClassField extends CExListItemsOwner {
     
     $this->formulaToDB(true);
     
-    if ($msg = parent::check()) {
-      return $msg;
-    }
+    return parent::check();
   }
   
   function loadTriggeredData(){
     $triggers = $this->loadBackRefs("ex_triggers");
-		
+    
     $this->_triggered_data = array();
-		
+    
     if (!count($triggers)) return;
      
     $keys   = CMbArray::pluck($triggers, "trigger_value");
     $values = CMbArray::pluck($triggers, "ex_class_triggered_id");
-		
+    
     $this->_triggered_data = array_combine($keys, $values);
   }
   
-	/**
-	 * @param bool $cache [optional]
-	 * @return CExClassFieldGroup
-	 */
+  /**
+   * @param bool $cache [optional]
+   * @return CExClassFieldGroup
+   */
   function loadRefExGroup($cache = true){
-  	if ($cache && $this->_ref_ex_group && $this->_ref_ex_group->_id) return $this->_ref_ex_group;
+    if ($cache && $this->_ref_ex_group && $this->_ref_ex_group->_id) return $this->_ref_ex_group;
     return $this->_ref_ex_group = $this->loadFwdRef("ex_group_id", $cache);
   }
   
@@ -315,7 +313,7 @@ class CExClassField extends CExListItemsOwner {
     
     $key = $ex_class->getExClassName().".$this->name";
     $locales["{$key}."] = CAppUI::tr("Undefined");
-		
+    
     foreach($items as $_item) {
       $locales["{$key}.$_item->_id"] = $_item->name;
     }
@@ -338,7 +336,7 @@ class CExClassField extends CExListItemsOwner {
    * @return CMbFieldSpec
    */
   function getSpecObject(){
-  	CBoolSpec::$_default_no = false;
+    CBoolSpec::$_default_no = false;
     $this->_spec_object = @CMbFieldSpecFact::getSpecWithClassName("CExObject", $this->name, $this->prop);
     CBoolSpec::$_default_no = true;
     
@@ -369,42 +367,42 @@ class CExClassField extends CExListItemsOwner {
     
     return $db_spec;
   }
-	
-	function updatePlainFields(){
-		// If we change its group, we need to reset its coordinates
-		if ($this->fieldModified("ex_group_id")) {
+  
+  function updatePlainFields(){
+    // If we change its group, we need to reset its coordinates
+    if ($this->fieldModified("ex_group_id")) {
       $this->coord_field_x = "";
       $this->coord_field_y = "";
       $this->coord_label_x = "";
       $this->coord_label_y = "";
-		}
-		
-		return parent::updatePlainFields();
-	}
-	
-	static function getUniqueName(){
+    }
+    
+    return parent::updatePlainFields();
+  }
+  
+  static function getUniqueName(){
     $sibling = new self;
-		
-		do {
-	    $uniqid = uniqid("f");
-	    $where = array(
-	      "name" => "= '$uniqid'",
-	    );
-			$sibling->loadObject($where);
-		}
-		while($sibling->_id);
-		
-		return $uniqid;
-	}
+    
+    do {
+      $uniqid = uniqid("f");
+      $where = array(
+        "name" => "= '$uniqid'",
+      );
+      $sibling->loadObject($where);
+    }
+    while($sibling->_id);
+    
+    return $uniqid;
+  }
   
   function store(){
     if (!$this->_id && $this->concept_id) {
       $this->prop = $this->loadRefConcept()->prop;
     }
-		
-		if (!$this->_id) {
-			$this->name = self::getUniqueName();
-		}
+    
+    if (!$this->_id) {
+      $this->name = self::getUniqueName();
+    }
     
     if ($msg = $this->check()) return $msg;
     
@@ -456,24 +454,24 @@ class CExClassField extends CExListItemsOwner {
     
     // form triggers
     if ($triggered_data) {
-    	$triggered_object = json_decode($triggered_data, true);
-			
-			if (is_array($triggered_object)) {
-				foreach($triggered_object as $_value => $_class_trigger_id) {
-		      $trigger = new CExClassFieldTrigger();
-		      $trigger->ex_class_field_id = $this->_id;
-	        $trigger->trigger_value = $_value;
-		      $trigger->loadMatchingObject();
-					
-					if ($_class_trigger_id) {
-		        $trigger->ex_class_triggered_id = $_class_trigger_id;
-		        $trigger->store();
-					}
-					else {
-						$trigger->delete();
-					}
-				}
-			}
+      $triggered_object = json_decode($triggered_data, true);
+      
+      if (is_array($triggered_object)) {
+        foreach($triggered_object as $_value => $_class_trigger_id) {
+          $trigger = new CExClassFieldTrigger();
+          $trigger->ex_class_field_id = $this->_id;
+          $trigger->trigger_value = $_value;
+          $trigger->loadMatchingObject();
+          
+          if ($_class_trigger_id) {
+            $trigger->ex_class_triggered_id = $_class_trigger_id;
+            $trigger->store();
+          }
+          else {
+            $trigger->delete();
+          }
+        }
+      }
     }
     
     // self translations
@@ -517,5 +515,19 @@ class CExClassField extends CExListItemsOwner {
     }
     
     return parent::getRealListOwner();
+  }
+  
+  static function escapeProp($str) {
+    return strtr($str, array(
+      " " => "\\x20",
+      "|" => "\\x7C",
+    ));
+  }
+  
+  static function unescapeProp($str) {
+    return strtr($str, array(
+      "\\x20" => " ",
+      "\\x7C" => "|",
+    ));
   }
 }
