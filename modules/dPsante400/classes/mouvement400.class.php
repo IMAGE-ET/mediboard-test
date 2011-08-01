@@ -340,7 +340,7 @@ class CMouvement400 extends CRecordSante400 {
    * @param mixed $value
    * @param string title
    */
-  function trace($value, $title) {
+  function trace($value, $title = null) {
     if (self::$verbose) {
       mbTrace($value, $title);
     }
