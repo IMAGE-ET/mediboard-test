@@ -125,7 +125,7 @@ class CModelObject {
     }
     
     $this->_class = $class;
-    $this->_class      =& $this->_class;
+    $this->_class_name =& $this->_class;
     $this->_spec       =& self::$spec[$class];
     
     if ($key = $this->_spec->key) {
