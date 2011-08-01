@@ -230,11 +230,12 @@ $contrainteProvenance[7] = array("", 1, 2, 3, 4);
 $contrainteProvenance[8] = array("", 5, 8);
 
 // Contraintes sur le mode de sortie / destination
-//$contrainteDestination[6] = array("", 1, 2, 3, 4);
+$contrainteDestination["mutation"]  = array("", 1, 2, 3, 4);
 $contrainteDestination["transfert"] = array("", 1, 2, 3, 4);
 $contrainteDestination["normal"] = array("", 6, 7);
 
 // Contraintes sur le mode de sortie / orientation
+$contrainteOrientation["mutation"] = array("", "HDT", "HO", "SC", "SI", "REA", "UHCD", "MED", "CHIR", "OBST");
 $contrainteOrientation["transfert"] = array("", "HDT", "HO", "SC", "SI", "REA", "UHCD", "MED", "CHIR", "OBST");
 $contrainteOrientation["normal"] = array("", "FUGUE", "SCAM", "PSA", "REO");
 

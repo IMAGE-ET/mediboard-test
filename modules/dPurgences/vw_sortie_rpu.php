@@ -75,6 +75,7 @@ $service = new CService();
 $services = $service->loadList(null, "nom");
 
 // Contraintes sur le mode de sortie / destination
+$contrainteDestination["mutation"]  = array("", 1, 2, 3, 4);
 $contrainteDestination["transfert"] = array("", 1, 2, 3, 4);
 $contrainteDestination["normal"] = array("", 6, 7);
 
