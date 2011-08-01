@@ -786,7 +786,7 @@ class CStoredObject extends CModelObject {
           trigger_error("La spécification cible la propriété '$name' inexistante dans la classe '$this->_class'", E_USER_WARNING);
         } 
         else {
-          $value =& $this->$name;
+          $value = $this->$name;
           if(($value !== null) || (!$this->_id)) {
             $msgProp = $this->checkProperty($name);
             
