@@ -18,7 +18,7 @@
     {{mb_key object=$actor}}
     {{mb_class object=$actor}}
     <input type="hidden" name="del" value="0" />
-    <input type="hidden" name="parent_class_name" value="{{$actor->_parent_class_name}}" />
+    <input type="hidden" name="parent_class" value="{{$actor->_parent_class}}" />
     <input type="hidden" name="callback" value="InteropActor.refreshActorsAndActor" />
                   
     <table class="form">
@@ -54,7 +54,7 @@
         <td>{{mb_field object=$actor field="actif"}}</td>
       </tr>
                   
-      {{mb_include module=eai template="`$actor->_parent_class_name`_inc"}}
+      {{mb_include module=eai template="`$actor->_parent_class`_inc"}}
         
       <tr>
         <td class="button" colspan="2">
@@ -72,6 +72,6 @@
   </form>
   
   <table class="form" id="actor_tools">  
-    {{mb_include module=eai template="`$actor->_parent_class_name`_tools_inc"}}
+    {{mb_include module=eai template="`$actor->_parent_class`_tools_inc"}}
   </table>
 {{/if}}

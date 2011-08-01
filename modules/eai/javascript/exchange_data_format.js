@@ -14,9 +14,9 @@ ExchangeDataFormat = {
   target:      "exchange_data_format",
   modal:       null,
   
-  refreshExchanges : function(exchange_class_name, exchange_type, exchange_group_id){
+  refreshExchanges : function(exchange_class, exchange_type, exchange_group_id){
     var url = new Url("eai", "ajax_refresh_exchanges");
-    url.addParam("exchange_class_name", exchange_class_name);
+    url.addParam("exchange_class", exchange_class);
     url.addParam("exchange_type"	  , exchange_type);
     url.addParam("exchange_group_id"  , exchange_group_id);
     url.requestUpdate("exchanges", { onComplete : function() {

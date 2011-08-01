@@ -13,9 +13,9 @@
 
 <script type="text/javascript">
   Main.add(function () {
-    var exchange_class_name = Url.hashParams().exchange_class_name;
-    if (exchange_class_name) {
-    	ExchangeDataFormat.refreshExchanges(exchange_class_name, Url.hashParams().exchange_type, Url.hashParams().exchange_group_id);
+    var exchange_class = Url.hashParams().exchange_class;
+    if (exchange_class) {
+    	ExchangeDataFormat.refreshExchanges(exchange_class, Url.hashParams().exchange_type, Url.hashParams().exchange_group_id);
     }
   });
 </script>

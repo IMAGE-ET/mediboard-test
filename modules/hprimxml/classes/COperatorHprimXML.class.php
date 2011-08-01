@@ -18,9 +18,9 @@ class COperatorHprimXML extends CEAIOperator {
     $msg     = $data_format->_message;
     $dom_evt = $data_format->_family_message->getHPrimXMLEvenements($msg);
     
-    $dom_evt_class_name = get_class($dom_evt);
-    if (!in_array($dom_evt_class_name, $data_format->_messages_supported_class)) {
-      throw new CMbException(CAppUI::tr("CEAIDispatcher-no_message_supported_for_this_actor", $dom_evt_class_name));
+    $dom_evt_class = get_class($dom_evt);
+    if (!in_array($dom_evt_class, $data_format->_messages_supported_class)) {
+      throw new CMbException(CAppUI::tr("CEAIDispatcher-no_message_supported_for_this_actor", $dom_evt_class));
     }
     
     // Récupération des informations du message XML

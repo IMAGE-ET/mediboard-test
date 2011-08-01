@@ -10,5 +10,5 @@
 *}}
 
 {{if count($actor->_ref_exchanges_sources) > 0}}  
-  {{mb_include module=eai template="`$actor->_parent_class_name`_exchanges_sources_inc"}}
+  {{mb_include module=eai template="`$actor->_parent_class`_exchanges_sources_inc"}}
 {{/if}}

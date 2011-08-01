@@ -24,7 +24,7 @@ class CInteropActor extends CMbObject {
   
   // Form fields
   var $_reachable                = null;
-  var $_parent_class_name        = null;
+  var $_parent_class        = null;
   
   var $_tag_patient              = null;
   var $_tag_sejour               = null;
@@ -46,7 +46,7 @@ class CInteropActor extends CMbObject {
     $props["actif"]      = "bool notNull";
     
     $props["_reachable"]         = "bool";
-    $props["_parent_class_name"] = "str";
+    $props["_parent_class"] = "str";
     $props["_ref_last_message"]  = "str";
     
     $props["_tag_patient"]            = "str";

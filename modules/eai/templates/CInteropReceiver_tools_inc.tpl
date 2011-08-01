@@ -37,12 +37,12 @@
       <td>
         <ul id="tabs-{{$actor->_guid}}" class="control_tabs">
           <li>
-            <a href="#formats_available_{{$actor->_guid}}">{{tr}}{{$actor->_parent_class_name}}_formats-available{{/tr}}</a></li>
+            <a href="#formats_available_{{$actor->_guid}}">{{tr}}{{$actor->_parent_class}}_formats-available{{/tr}}</a></li>
           <li>
-            <a href="#exchanges_sources_{{$actor->_guid}}">{{tr}}{{$actor->_parent_class_name}}_exchanges-sources{{/tr}}</a></li>
+            <a href="#exchanges_sources_{{$actor->_guid}}">{{tr}}{{$actor->_parent_class}}_exchanges-sources{{/tr}}</a></li>
           {{if $actor->_ref_object_configs}}
           <li>
-            <a href="#actor_config_{{$actor->_id}}">{{tr}}{{$actor->_parent_class_name}}_config{{/tr}}</a></li>
+            <a href="#actor_config_{{$actor->_id}}">{{tr}}{{$actor->_parent_class}}_config{{/tr}}</a></li>
           {{/if}}
         </ul>
         

@@ -12,10 +12,10 @@
  
 CCanDo::checkRead();
 
-$actor_guid          = CValue::getOrSession("actor_guid");
-$exchange_class_name = CValue::getOrSession("exchange_class_name");
+$actor_guid     = CValue::getOrSession("actor_guid");
+$exchange_class = CValue::getOrSession("exchange_class");
 
-$data_format = new $exchange_class_name;
+$data_format = new $exchange_class;
 $messages = $data_format->getMessagesSupported($actor_guid);
 
 // Création du template

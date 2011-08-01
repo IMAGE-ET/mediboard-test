@@ -32,7 +32,7 @@ var MbObject = {
 		});
 	},
   editCallback: function(id, obj) {
-    MbObject.list(obj._class_name);
+    MbObject.list(obj._class);
     MbObject.edit(obj._guid);
   },
 	list: function(object_class, columns) {

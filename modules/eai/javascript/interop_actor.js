@@ -13,22 +13,22 @@ InteropActor = {
   actor_guid : null,
   modal:       null,
   
-  refreshActor : function(actor_guid, actor_class_name){
+  refreshActor : function(actor_guid, actor_class){
     var url = new Url("eai", "ajax_refresh_actor");
     url.addParam("actor_guid", actor_guid);
-    url.addParam("actor_class_name", actor_class_name);
+    url.addParam("actor_class", actor_class);
     url.requestUpdate("actor");
   },
   
-  refreshActors : function(parent_class_name) {
+  refreshActors : function(parent_class) {
 	var url = new Url("eai", "ajax_refresh_actors");
-	url.addParam("actor_class_name", parent_class_name);
-	url.requestUpdate(parent_class_name+"s");
+	url.addParam("actor_class", parent_class);
+	url.requestUpdate(parent_class+"s");
   },
   
   refreshActorsAndActor : function(actor_id){
 	InteropActor.refreshActor(InteropActor.actor_guid.split('-')[0]+"-"+actor_id);  
-	InteropActor.refreshActors($V(getForm("edit"+InteropActor.actor_guid).parent_class_name));
+	InteropActor.refreshActors($V(getForm("edit"+InteropActor.actor_guid).parent_class));
   },
   
   receive : function(actor_guid) {
@@ -50,10 +50,10 @@ InteropActor = {
     url.requestUpdate("exchanges_sources_"+actor_guid);  
   },
   
-  viewMessagesSupported : function(actor_guid, exchange_class_name) {
+  viewMessagesSupported : function(actor_guid, exchange_class) {
 	var url = new Url("eai", "ajax_vw_messages_supported");
 	url.addParam("actor_guid", actor_guid);
-	url.addParam("exchange_class_name", exchange_class_name);
+	url.addParam("exchange_class", exchange_class);
     url.requestModal(800, 350);
     InteropActor.modal = url.modaleObject;
     InteropActor.modal.observe("afterClose", function(){ 

@@ -44,7 +44,7 @@ class CInteropReceiver extends CInteropActor {
   function updateFormFields() {
     parent::updateFormFields();
 
-    $this->_parent_class_name = "CInteropReceiver";
+    $this->_parent_class = "CInteropReceiver";
   }
   
   /**

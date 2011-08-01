@@ -12,12 +12,12 @@
  
 CCanDo::checkRead();
 
-$actor_guid       = CValue::getOrSession("actor_guid");
-$actor_class_name = CValue::getOrSession("actor_class_name");
+$actor_guid  = CValue::getOrSession("actor_guid");
+$actor_class = CValue::getOrSession("actor_class");
 
 // Chargement de l'acteur d'interopérabilité
-if ($actor_class_name) {
-  $actor = new $actor_class_name;
+if ($actor_class) {
+  $actor = new $actor_class;
   $actor->updateFormFields();
 } else {
   if ($actor_guid) {

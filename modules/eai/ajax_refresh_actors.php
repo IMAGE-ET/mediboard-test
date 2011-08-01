@@ -12,9 +12,9 @@
  
 CCanDo::checkRead();
 
-$actor_class_name = CValue::get("actor_class_name");
+$actor_class = CValue::get("actor_class");
 
-$actor = new $actor_class_name; 
+$actor = new $actor_class; 
 $actors = $actor->getObjects();
 
 // Création du template

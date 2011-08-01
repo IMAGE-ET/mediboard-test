@@ -20,6 +20,6 @@ $actor->loadRefsExchangesSources();
 // Création du template
 $smarty = new CSmartyDP();
 $smarty->assign("actor", $actor);
-$smarty->display($actor->_parent_class_name."_exchanges_source.tpl");
+$smarty->display($actor->_parent_class."_exchanges_source.tpl");
 
 ?>

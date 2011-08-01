@@ -20,13 +20,13 @@
     {{/if}}
       <button type="button" onclick="ObjectSelector.init()" class="search">{{tr}}Search{{/tr}}</button>   
       
-      <input type="hidden" name="_selector_class_name" value="CUser" />          
+      <input type="hidden" name="_selector_class" value="CUser" />          
       <script type="text/javascript">
         ObjectSelector.init = function(){
           this.sForm     = "edit{{$actor->_guid}}";
           this.sId       = "user_id";
           this.sView     = "_user_view";
-          this.sClass    = "_selector_class_name";
+          this.sClass    = "_selector_class";
           this.onlyclass = "true";
          
           this.pop();

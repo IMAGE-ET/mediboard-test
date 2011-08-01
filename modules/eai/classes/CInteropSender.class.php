@@ -24,7 +24,7 @@ class CInteropSender extends CInteropActor {
   function updateFormFields() {
     parent::updateFormFields();
        
-    $this->_parent_class_name = "CInteropSender";
+    $this->_parent_class = "CInteropSender";
   }
   
   function getProps() {

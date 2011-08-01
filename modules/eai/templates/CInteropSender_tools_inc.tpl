@@ -39,7 +39,7 @@
         <ul id="tabs-{{$actor->_guid}}" class="control_tabs">
           {{if !$actor instanceof CSenderSOAP}} 
             <li>
-              <a href="#exchanges_sources_{{$actor->_guid}}">{{tr}}{{$actor->_parent_class_name}}_exchanges-sources{{/tr}}</a></li>
+              <a href="#exchanges_sources_{{$actor->_guid}}">{{tr}}{{$actor->_parent_class}}_exchanges-sources{{/tr}}</a></li>
           {{/if}}
           <li>
             <a href="#formats_available_{{$actor->_guid}}">{{tr}}{{$actor->_class}}_formats-available{{/tr}}</a></li>

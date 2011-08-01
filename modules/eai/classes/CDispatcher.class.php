@@ -47,15 +47,15 @@ class CEAIDispatcher {
 
     // est-ce que je comprend la famille de messages ?
     $supported = false;
-    $family_message_class_name = get_class($data_format->_family_message);
+    $family_message_class = get_class($data_format->_family_message);
     foreach ($data_format->getMessagesSupported($actor->_guid, false, null, true) as $_msg_supported_class => $_msg_supported) {
-      if ($family_message_class_name == $_msg_supported_class) {
+      if ($family_message_class == $_msg_supported_class) {
         $supported = true;
       }
     }
 
     if (!$supported) {
-      self::$errors[] = CAppUI::tr("CEAIDispatcher-_family_message_no_supported_for_this_actor", $family_message_class_name);
+      self::$errors[] = CAppUI::tr("CEAIDispatcher-_family_message_no_supported_for_this_actor", $family_message_class);
       return self::dispachError($data);
     }
     

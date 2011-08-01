@@ -13,7 +13,7 @@
 CCanDo::checkRead();
 
 $id_permanent        = CValue::getOrSession("id_permanent");
-$exchange_class_name = CValue::getOrSession("exchange_class_name");
+$exchange_class      = CValue::getOrSession("exchange_class");
 $object_id           = CValue::getOrSession("object_id");
 $t                   = CValue::getOrSession('types', array());
 $statut_acquittement = CValue::getOrSession("statut_acquittement");
@@ -24,10 +24,10 @@ $page                = CValue::get('page', 0);
 $_date_min           = CValue::getOrSession('_date_min', mbDateTime("-7 day"));
 $_date_max           = CValue::getOrSession('_date_max', mbDateTime("+1 day"));
 
-$exchange = new $exchange_class_name;
+$exchange = new $exchange_class;
 
 // Récupération de la liste des echanges
-$itemExchange = new $exchange_class_name;
+$itemExchange = new $exchange_class;
 
 $where = array();
 if (isset($t["emetteur"])) {

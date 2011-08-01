@@ -30,7 +30,7 @@
         <input type="hidden" name="m" value="{{$m}}" />
         <input type="hidden" name="types[]" />
         <input type="hidden" name="page" value="{{$page}}" onchange="this.form.onsubmit()"/>
-        <input type="hidden" name="exchange_class_name" value="{{$exchange->_class}}" />
+        <input type="hidden" name="exchange_class" value="{{$exchange->_class}}" />
         
         <table class="form">
           <tr>
