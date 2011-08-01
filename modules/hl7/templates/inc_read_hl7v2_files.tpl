@@ -10,17 +10,24 @@
 	{{foreach from=$_message->segments item=_segment}}
 	  <li>
 	  	<strong>{{$_segment->name}}</strong>
-			<ol>
+			<ol start="0">
 				{{foreach from=$_segment->fields item=_field}}
 				  <li>
-				  	<strong>{{$_field->datatype}}{{*  <span style="color: #ccc; font-weight: normal;">{{$_field->value}}</span> *}} </strong>
-						<ul>
-							{{foreach from=$_field->parts key=_name item=_part}}
+				  	<strong>{{$_field->datatype}}</strong>
+						<ol start="0">
+              {{foreach from=$_field->items key=_i item=_item}}
 							  <li>
-							  	<span style="display: inline-block; width: 4em;">{{$_name}}</span> {{$_part}}
+									<ol start="0">
+									{{foreach from=$_item->components key=_name item=_part}}
+									  <li>
+									  	{{$_part}}
+										</li>
+									{{/foreach}}
+									</ol>
 								</li>
 							{{/foreach}}
-						</ul>
+						</ol>
+						 
 					</li>
 				{{/foreach}}
 			</ol>
@@ -28,3 +35,4 @@
 	{{/foreach}}
 </ul>
 {{/foreach}}
+

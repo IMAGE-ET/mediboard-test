@@ -97,7 +97,9 @@ abstract class CHL7V2 {
 		}
 		
 		$version_dir = "hl7v".preg_replace("/[^0-9]/", "_", $version);
-    $this->spec_filename = self::LIB_HL7."/$version_dir/$type$name.xml";
+		$name_dir = preg_replace("/[^A-Z0-9]/", "", $name);
+		
+    $this->spec_filename = self::LIB_HL7."/$version_dir/$type$name_dir.xml";
     
     if (!file_exists($this->spec_filename)) {
       throw new CHL7v2Exception($this->spec_filename, CHL7v2Exception::SPECS_FILE_MISSING);

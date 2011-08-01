@@ -26,7 +26,7 @@ class CHL7v2Field extends CHL7V2 {
   var $owner_segment = null;
 	
   var $datatype      = null;
-  var $parts         = array();
+  var $items         = array();
   
   var $_is_base_type = null;
   
@@ -37,12 +37,22 @@ class CHL7v2Field extends CHL7V2 {
   function parse($data) {
     parent::parse($data);
 		
-    $this->parts = explode($this->owner_segment->getMessage()->componentSeparator, $this->data);
+		$message = $this->owner_segment->getMessage();
+    $items = explode($message->repetitionSeparator, $this->data);
+		
+		$this->items = array();
+		foreach($items as $_item) {
+			$_item_obj = new CHL7v2FieldItem;
+      $_item_obj->data = $_item;
+      $_item_obj->components = ($_item !== "" ? explode($message->componentSeparator, $_item) : array());
+			
+			$this->items[] = $_item_obj;
+		}
   }
   
   function validate() {
     $specs = $this->getSpecs();
-				
+				return;
 		$parts = array();
 		$i = 0;
 		foreach($specs->elements->field as $_field) {

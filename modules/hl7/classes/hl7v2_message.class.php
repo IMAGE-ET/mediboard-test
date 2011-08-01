@@ -29,6 +29,7 @@ class CHL7v2Message extends CHL7v2 {
   var $name        = null;
   var $description = null;
   var $segments    = array();
+  var $lines       = array();
   
   function parse($data) {
     parent::parse($data);
@@ -73,28 +74,68 @@ class CHL7v2Message extends CHL7v2 {
       $this->componentSeparator    = "^";
     }
     
-    $this->handleSegments();
+    $this->readHeader();
+    $this->readSegments();
   }
-  
-  function handleSegments() {
-    $lines = explode($this->segmentTerminator, $this->data);
+	
+	function readHeader(){
+    $this->lines = explode($this->segmentTerminator, $this->data);
 		
-    foreach ($lines as $n => $_line) {
+		$first_line = array_shift($this->lines);
+		
+    $segment = new CHL7v2Segment($this);
+    $segment->parse($first_line);
+		$this->segments[0] = $segment;
+		
+    $this->name    = $segment->fields[7 ]->items[0]->components[2];
+    $this->version = $segment->fields[10]->items[0]->components[0];
+	}
+  
+	// @todo Gérer les segments recursif s (pour le moment tout est aplati)
+  function readSegments() {
+  	$specs = $this->getSpecs();
+		$segments_spec = $specs->xpath("//segment");
+		$i_line = 0;
+		$current_line_segment = null;
+		
+		foreach($segments_spec as $i_spec => $_segment_spec) {
+      $name = (string)$_segment_spec;
+			$segment = null;
+			
+			if($name == "MSH") continue;
+			
+			if (!$current_line_segment && isset($this->lines[$i_line])) {
+			  $current_line_segment = new CHL7v2Segment($this);
+        $current_line_segment->parse($this->lines[$i_line++]);
+			}
+			
+      if ($current_line_segment && $name == $current_line_segment->name) {
+      	$segment = $current_line_segment;
+				$current_line_segment = null;
+      }
+			
+			/* // necessite la gestion des groupes de segments
+			$minOccurs = (string)($_segment_spec->attributes()->minOccurs);
+			if ($minOccurs != "0" && !$segment) {
+				throw new CHL7v2Exception("Segment absent : $name");
+			}*/
+			
+			if (isset($segment)) {
+			  $this->segments[$i_spec] = $segment;
+			}
+		}
+		
+    /*foreach ($this->lines as $_line) {
       try {
         $segment = new CHL7v2Segment($this);
         $segment->parse($_line);
-				
-				if ($n == 0) {
-					$this->name    = $segment->fields[8]->data;
-          $this->version = $segment->fields[11]->data;
-				}
       } catch (Exception $e) {
         exceptionHandler($e);
         return;
       }
     }
     
-    $this->validate();
+    $this->validate();*/
   }
   
   function validate() {

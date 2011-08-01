@@ -20,6 +20,22 @@ class CHL7v2Segment extends CHL7V2 {
   function __construct(CHL7v2Message $message) {
     $this->owner_message = $message;
   }
+	
+	function path($path){
+		$path = preg_split("/\s*,\s*/", $path);
+		if (count($path) > 3) return false;
+		
+		$data = $this->fields;
+		try {
+	    $field = $data[$path[0]];
+	    $item  = $field->items[$path[1]];
+			
+      return $item->components[$path[2]];
+		}
+		catch(Exception $e) {
+			return false;
+		}
+	}
   
   function parse($data) {
     parent::parse($data);
@@ -27,7 +43,7 @@ class CHL7v2Segment extends CHL7V2 {
     $message = $this->owner_message;
 
     $fields = explode($message->fieldSeparator, $this->data);
-    $this->name = $fields[0];
+    $this->name = array_shift($fields);
     
     // valid characters
     if (preg_match("/[^a-z0-9]/i", $this->name) ) {
@@ -35,9 +51,15 @@ class CHL7v2Segment extends CHL7V2 {
     }
     
     // valid fields number, at least two
-    if (count(array_filter($fields, "stringNotEmpty")) < 2) {
+    if (count(array_filter($fields, "stringNotEmpty")) < 1) {
       throw new CHL7v2Exception($this->data, CHL7v2Exception::TOO_FEW_SEGMENT_FIELDS);
     }
+		
+		$specs = $this->getSpecs();
+		$i = 0;
+		foreach($specs->elements->field as $_specs){
+			//mbTrace($i);
+		}
 
     foreach ($fields as $_field) {
       try {
@@ -50,8 +72,6 @@ class CHL7v2Segment extends CHL7V2 {
         return;
       }
     }
-    
-    $message->segments[] = $this;
   }
   
   function validate() {
