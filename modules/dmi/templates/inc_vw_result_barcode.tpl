@@ -21,9 +21,9 @@
           tab.push(p.key);
     });
     
-    var class_name = (tab.length > 0) ? "error" : "ok";
+    var className = (tab.length > 0) ? "error" : "ok";
     
-    $('phast_barcode_{{$index}}').addClassName(class_name);
+    $('phast_barcode_{{$index}}').addClassName(className);
   </script>
   {{/if}}
 {{/if}}

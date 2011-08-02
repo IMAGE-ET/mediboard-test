@@ -10,7 +10,7 @@
 CCanDo::checkRead();
 
 // Checking out the result
-$class_name = CValue::get("class_name");
+$class = CValue::get("class");
 $show       = CValue::get("show", "errors");
 
 $classes = CApp::getMbClasses();
@@ -18,12 +18,12 @@ $classes[] = "CMbObject";
 
 // Looking for what is actually coded
 $present = array();
-foreach ($classes as $class) {
-  $object = new $class;
+foreach ($classes as $_class) {
+  $object = new $_class;
   $object->makeAllBackSpecs();
   foreach ($object->_backSpecs as $backName => $backSpec) {
     if (!$backSpec->isInherited()) {
-      $present[$class][$object->_backProps[$backName]] = $backName;
+      $present[$_class][$object->_backProps[$backName]] = $backName;
     }
   }
 }
@@ -33,8 +33,8 @@ ksort($present);
 
 // Looking for what should be coded
 $wanted = array();
-foreach ($classes as $class) {
-  $object = new $class;
+foreach ($classes as $_class) {
+  $object = new $_class;
   if ($object->_spec->table) {
 	  foreach ($object->_specs as $field => $spec) {
 	    if ($field != $object->_spec->key && $field[0] != "_") {
@@ -44,15 +44,15 @@ foreach ($classes as $class) {
 		        $meta_spec = $object->_specs[$spec->meta];
             if ($meta_spec instanceof CEnumSpec) {
               foreach ($meta_spec->_list as $_class) {
-		            $wanted[$_class]["$class $field"] = true;
+		            $wanted[$_class]["$_class $field"] = true;
             	}
             }
             else {
-		          $wanted[$spec->class]["$class $field"] = true;
+		          $wanted[$spec->class]["$_class $field"] = true;
             }
 		      }
 		      else {
-	          $wanted[$spec->class]["$class $field"] = true;
+	          $wanted[$spec->class]["$_class $field"] = true;
 		      }
 		    }
 	    }    
@@ -65,31 +65,31 @@ ksort($wanted);
 
 $reports = array();
 $error_count = 0;
-foreach ($classes as $class) {
-  if ($class_name && $class != $class_name) {
+foreach ($classes as $_class) {
+  if ($class && $_class != $class) {
     continue;
   }
   
   // Are the wanted present ?
-	if (isset($wanted[$class])) {
-	  foreach ($wanted[$class] as $backProp => $backName) {
-	  	$correct = @array_key_exists($backProp, $present[$class]);
+	if (isset($wanted[$_class])) {
+	  foreach ($wanted[$_class] as $backProp => $backName) {
+	  	$correct = @array_key_exists($backProp, $present[$_class]);
 			$error_count += $correct ? 0 : 1;
-	    $reports[$class][$backProp] =  $correct ? "ok"  : "wanted";
+	    $reports[$_class][$backProp] =  $correct ? "ok"  : "wanted";
 	  }
 	}
 
   // Are the present wanted ?
-	if (isset($present[$class])) {
-	  foreach ($present[$class] as $backProp => $backName) {
-	  	$correct = @array_key_exists($backProp, $wanted[$class]);
+	if (isset($present[$_class])) {
+	  foreach ($present[$_class] as $backProp => $backName) {
+	  	$correct = @array_key_exists($backProp, $wanted[$_class]);
       $error_count += $correct ? 0 : 1;
-	    $reports[$class][$backProp] =  $correct ? "ok"  : "present";
+	    $reports[$_class][$backProp] =  $correct ? "ok"  : "present";
 	  }
 	}
 	
-	if (isset($reports[$class]) && $show == "errors") {
-		CMbArray::removeValue("ok", $reports[$class]);
+	if (isset($reports[$_class]) && $show == "errors") {
+		CMbArray::removeValue("ok", $reports[$_class]);
 	}
 }
 
@@ -103,8 +103,8 @@ if ($show == "errors") {
 // Création du template
 $smarty = new CSmartyDP();
 
-$smarty->assign("class_name", $class_name);
-$smarty->assign("show"      , $show);
+$smarty->assign("class", $class);
+$smarty->assign("show" , $show);
 $smarty->assign("classes", $classes);
 $smarty->assign("present", $present);
 $smarty->assign("wanted" , $wanted);

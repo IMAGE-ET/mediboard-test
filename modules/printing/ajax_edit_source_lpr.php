@@ -13,7 +13,7 @@
 CCanDo::checkEdit();
 
 $source_id  = CValue::getOrSession("source_id", 0);
-CValue::setSession("class_name", "CSourceLPR");
+CValue::setSession("class", "CSourceLPR");
 
 $source_lpr = new CSourceLPR;
 

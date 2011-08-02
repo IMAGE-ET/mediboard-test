@@ -148,23 +148,23 @@ class CStoredObject extends CModelObject {
     
     self::$objectCount++;
     
-    $class_name = $this->_class;
+    $class = $this->_class;
 
     // Statistiques sur chargement d'objets
-    if (!isset(self::$objectCounts[$class_name])) {
-      self::$objectCounts[$class_name] = 0;
+    if (!isset(self::$objectCounts[$class])) {
+      self::$objectCounts[$class] = 0;
     }
-    self::$objectCounts[$class_name]++;
+    self::$objectCounts[$class]++;
     
     // Statistiques sur cache d'objets
-    if (isset(self::$objectCache[$class_name][$this->_id])) {
-      if (!isset(self::$cachableCounts[$class_name])) {
-        self::$cachableCounts[$class_name] = 0;
+    if (isset(self::$objectCache[$class][$this->_id])) {
+      if (!isset(self::$cachableCounts[$class])) {
+        self::$cachableCounts[$class] = 0;
       }
-      self::$cachableCounts[$class_name]++;
+      self::$cachableCounts[$class]++;
     }
   
-    self::$objectCache[$this->_class][$this->_id] =& $this;
+    self::$objectCache[$class][$this->_id] =& $this;
   }
   
   /**

@@ -318,13 +318,13 @@ class CExObject extends CMbMetaObject {
   
   // needed or will throw errors in the field specs
   function checkProperty($propName) {
-    $class_name = $this->_class;
+    $class = $this->_class;
     $this->_class = get_class($this);
     
     $spec = $this->_specs[$propName];
     $ret = $spec->checkPropertyValue($this);
     
-    $this->_class = $class_name;
+    $this->_class = $class;
     return $ret;
   }
   /// End low level methods /////////

@@ -193,9 +193,9 @@ Main.add(function () {
           <td>
             <select name="filter_class" onchange="this.form.onsubmit()" style="width: 12em;">
               <option value="">&mdash; Tous les types d'objets</option>
-              {{foreach from=$classes|smarty:nodefaults key=class_name item=fields}}
-              <option value="{{$class_name}}" {{if $class_name == $filter_class}} selected="selected" {{/if}}>
-                {{tr}}{{$class_name}}{{/tr}}
+              {{foreach from=$classes key=class item=fields}}
+              <option value="{{$class}}" {{if $class == $filter_class}} selected="selected" {{/if}}>
+                {{tr}}{{$class}}{{/tr}}
               </option>
               {{/foreach}}
             </select>

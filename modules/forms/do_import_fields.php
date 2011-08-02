@@ -116,21 +116,21 @@ else {
 	  // EX CLASS
 	  if (empty($line["field_name"]) && empty($line["concept_name"])) {
 	    $current_class = new CExClass;
-	    $class_name = reset($line);
+	    $class = reset($line);
 			
 	    $ds = $current_class->_spec->ds;
 	    $where = array(
-	      "name" => $ds->prepare("=%", $class_name),
+	      "name" => $ds->prepare("=%", $class),
 	    );
 	    $current_class->loadObject($where);
 	    
 	    if (!$current_class->_id) {
-	      $current_class->name = $class_name;
+	      $current_class->name = $class;
 				$current_class->host_class = "CMbObject";
 				$current_class->event = "void";
         $current_class->disabled = 1;
         $current_class->required = 0;
-				$current_class->conditional = ((stripos($class_name, "SSQ") !== false) ? 1 : 0);
+				$current_class->conditional = ((stripos($class, "SSQ") !== false) ? 1 : 0);
 				
 	      if ($msg = $current_class->store()) {
 	        CAppUI::setMsg("Ligne $line_number : $msg", UI_MSG_WARNING);

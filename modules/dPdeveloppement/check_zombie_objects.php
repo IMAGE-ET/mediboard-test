@@ -9,12 +9,12 @@
 
 CCanDo::checkRead();
 
-$class_name = CValue::getOrSession('class_name', 'CPatient');
+$class = CValue::getOrSession('class', 'CPatient');
 $objects_count = CValue::getOrSession('objects_count', 20);
 
 $count = 0;
 $zombies = array();
-$object = new $class_name;
+$object = new $class;
 $installed_classes = CApp::getInstalledClasses();
 $ds = $object->_spec->ds;
 
@@ -38,7 +38,7 @@ if ($object->_spec->table) {
       AND `back_obj`.`{$back_spec->field}` IS NOT NULL";
     
 		if ($field_meta = $fwd_spec->meta) {
-      $query .= "\n AND `back_obj`.`$field_meta` = '$class_name'";
+      $query .= "\n AND `back_obj`.`$field_meta` = '$class'";
 		}
     
     $queryCount .= $query;
@@ -57,7 +57,7 @@ $smarty = new CSmartyDP();
 $smarty->assign("object", $object);
 $smarty->assign("zombies", $zombies);
 $smarty->assign("classes", $installed_classes);
-$smarty->assign("class_name", $class_name);
+$smarty->assign("class", $class);
 $smarty->assign("objects_count", $objects_count);
 
 $smarty->display("check_zombie_objects.tpl");

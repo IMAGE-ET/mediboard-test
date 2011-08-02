@@ -89,28 +89,28 @@ function mbAutoload($className) {
 }
 
 // nouveau mode
-function mbAutoload2($class_name) {
+function mbAutoload2($class) {
   global $classPaths, $performance;
   
   $file_exists = false;
   
   // entry already in cache
-  if (isset($classPaths[$class_name]) && ($file_exists = file_exists($classPaths[$class_name]))) {
+  if (isset($classPaths[$class]) && ($file_exists = file_exists($classPaths[$class]))) {
     $performance["autoload"]++;
-    return include_once $classPaths[$class_name];
+    return include_once $classPaths[$class];
   }
   else {
     if (!$file_exists) {
-      unset($classPaths[$class_name]);
+      unset($classPaths[$class]);
     }
     
     $dirs = array(
-      "classes/$class_name.class.php", 
-      "*/*/$class_name.class.php",
-      "modules/*/classes/$class_name.class.php", // Require all modules classes
+      "classes/$class.class.php", 
+      "*/*/$class.class.php",
+      "modules/*/classes/$class.class.php", // Require all modules classes
     );
     
-    if (preg_match("/^CSetup.+/", $class_name)) {
+    if (preg_match("/^CSetup.+/", $class)) {
       $dirs[] = "modules/*/setup.php"; // Require all setup classes
     }
     
@@ -124,9 +124,9 @@ function mbAutoload2($class_name) {
     }
     
     // update the cache
-    if (class_exists($class_name, false)) {
-      $class = new ReflectionClass($class_name);
-      $classPaths[$class_name] = $class->getFileName();
+    if (class_exists($class, false)) {
+      $class = new ReflectionClass($class);
+      $classPaths[$class] = $class->getFileName();
       SHM::put("class-paths", $classPaths);
     }
     else {
@@ -145,11 +145,11 @@ else {
   /**
    * Autoload magic function redefinition
    * 
-   * @param string $className Class to be loaded
+   * @param string $class Class to be loaded
    * 
    * @return bool
    */
-  function __autoload($className) {
-    return mbAutoload($className);
+  function __autoload($class) {
+    return mbAutoload($class);
   }
 }

@@ -8,18 +8,18 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
 *}}
 
-{{assign var=class_name value=$stock->_class}}
+{{assign var=class value=$stock->_class}}
 
 {{mb_include module=system template=inc_pagination change_page="changePage" 
-    total=$list_stocks_count current=$start step=$conf.dPstock.$class_name.pagination_size}}
+    total=$list_stocks_count current=$start step=$conf.dPstock.$class.pagination_size}}
 
 <table class="tbl">
   <tr>
-    {{if $class_name == 'CProductStockGroup'}}
+    {{if $class == 'CProductStockGroup'}}
       <th style="width: 16px;"></th>
     {{/if}}
     <th>{{mb_title object=$stock field=product_id}}</th>
-    {{if $class_name == 'CProductStockService'}}
+    {{if $class == 'CProductStockService'}}
       <th>{{mb_title object=$stock field=object_id}}</th>
     {{/if}}
     <th>{{mb_title object=$stock field=location_id}}</th>
@@ -32,13 +32,13 @@
 {{foreach from=$list_stocks item=_stock}}
   {{assign var=product value=$_stock->_ref_product}}
   <tr {{if $stock_id == $_stock->_id}}class="selected"{{/if}}>
-    {{if $class_name == 'CProductStockGroup'}}
+    {{if $class == 'CProductStockGroup'}}
       <td {{if $product->_in_order}}class="ok"{{/if}}>
         {{mb_include module=dPstock template=inc_product_in_order}}
       </td>
     {{/if}}
     <td>
-    	{{if $class_name == 'CProductStockService'}}
+    	{{if $class == 'CProductStockService'}}
 			{{assign var=_tab value="vw_idx_stock_service&stock_service_id"}}
 			{{else}}
       {{assign var=_tab value="vw_idx_stock_group&stock_id"}}
@@ -49,7 +49,7 @@
         </span>
       </a>
     </td>
-    {{if $class_name == 'CProductStockService'}}
+    {{if $class == 'CProductStockService'}}
       <td>{{$_stock->_ref_object}}</td>
     {{/if}}
     <td>{{$_stock->_ref_location->_shortview}}</td>
@@ -68,7 +68,7 @@
   </tr>
 {{foreachelse}}
   <tr>
-    <td colspan="10" class="empty">{{tr}}{{$class_name}}.none{{/tr}}</td>
+    <td colspan="10" class="empty">{{tr}}{{$class}}.none{{/tr}}</td>
   </tr>
 {{/foreach}}
 </table>

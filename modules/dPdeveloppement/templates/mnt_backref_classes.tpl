@@ -6,14 +6,14 @@
 	<table class="form">
 		<tr>
 			<th>
-			  <label for="class_name" title="Veuillez sélectionner une classe">Choix de la classe</label>
+			  <label for="class" title="Veuillez sélectionner une classe">Choix de la classe</label>
 			</th>
 
 			<td>
-			  <select name="class_name" onchange="submit();">
+			  <select name="class" onchange="submit();">
 			    <option value="">&mdash; Toutes les classes</option>
 					{{foreach from=$classes item=class}}  
-			    <option value="{{$class}}"{{if $class_name == $class}} selected="selected"{{/if}}>
+			    <option value="{{$class}}"{{if $class == $_class}} selected="selected"{{/if}}>
 			    	{{$class}} ({{tr}}{{$class}}{{/tr}})
 			    </option>
 			    {{/foreach}}

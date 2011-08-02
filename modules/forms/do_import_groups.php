@@ -57,16 +57,16 @@ else {
 			$current_group = null;
 			$current_class = new CExClass;
 			
-	    $class_name = $line["field_name"];
+	    $class = $line["field_name"];
 			
 	    $ds = $current_class->_spec->ds;
 	    $where = array(
-	      "name" => $ds->prepare("=%", $class_name),
+	      "name" => $ds->prepare("=%", $class),
 	    );
 	    $current_class->loadObject($where);
 	    
 	    if (!$current_class->_id) {
-        CAppUI::setMsg("Ligne $line_number : formulaire non trouvé ($class_name)", UI_MSG_WARNING);
+        CAppUI::setMsg("Ligne $line_number : formulaire non trouvé ($class)", UI_MSG_WARNING);
 	    }
 			
       continue;

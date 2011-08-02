@@ -53,7 +53,7 @@
   </tr>
   
   {{foreach from=$sources item=_source}}
-    <tr id='source-{{$_source->_guid}}' class="osource {{if $_source->_id == $source_id && $_source->_class == $class_name}}selected{{/if}}">
+    <tr id='source-{{$_source->_guid}}' class="osource {{if $_source->_id == $source_id && $_source->_class == $class}}selected{{/if}}">
       <td>
         <a href="#1" onclick="editSource('{{$_source->_id}}', '{{$_source->_class}}'); updateSelected('{{$_source->_guid}}')">
          {{$_source->name}} 

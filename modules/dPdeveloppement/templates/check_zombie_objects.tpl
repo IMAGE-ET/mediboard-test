@@ -2,10 +2,10 @@
 	<input type="hidden" name="m" value="{{$m}}" />
   <input type="hidden" name="tab" value="{{$tab}}" />
 	
-	<label for="class_name">Classe</label>
-	<select name="class_name" onchange="this.form.submit()">
+	<label for="class">Classe</label>
+	<select name="class" onchange="this.form.submit()">
 		{{foreach from=$classes item=_class}}
-		  <option value="{{$_class}}" {{if $class_name == $_class}} selected="selected" {{/if}}>
+		  <option value="{{$_class}}" {{if $class == $_class}} selected="selected" {{/if}}>
 		  	{{$_class}} - {{tr}}{{$_class}}{{/tr}}
 			</option>
 		{{/foreach}}

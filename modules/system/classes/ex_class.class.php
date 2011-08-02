@@ -122,13 +122,13 @@ class CExClass extends CMbObject {
     $locales[$this->getExClassName()] = $this->_view;
     
     // pas encore obligé d'utiliser l'eval, mais je pense que ca sera le plus simple
-    /*$class_name = "CExObject_{$this->_id}";
+    /*$class = "CExObject_{$this->_id}";
     
-    if (!class_exists($class_name)) {
+    if (!class_exists($class)) {
       $table_name = $this->getTableName();
       
       eval("
-      class $class_name extends CExObject {
+      class $class extends CExObject {
         function getSpec(){
           \$spec = parent::getSpec();
           \$spec->table = '$table_name';

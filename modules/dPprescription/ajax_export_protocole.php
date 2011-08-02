@@ -39,18 +39,18 @@ if (!function_exists('exportXML')) {
             "creator_id", "child_id", "operation_id", "object_id", "executant_prescription_line_id",
             "user_executant_id", "next_line_id", "prescription_line_comment_id", "protocole_id", "advanced_protocole");
     $fields = $object->getPlainFields();
-    $class_name = get_class($object);
-    $$class_name = $doc->createElement($class_name);
+    $class = get_class($object);
+    $$class = $doc->createElement($class);
   
     foreach ($fields as $key => $field) {
       if (in_array($key, $keys)) {
         ${$key}   = $doc->createAttribute($key);
         $id_value = $doc->createTextNode("id-".$object->$key);
         ${$key}->appendChild($id_value);
-        ${$class_name}->appendChild(${$key});
+        ${$class}->appendChild(${$key});
       }
       else {
-        if ($class_name == "CPrescriptionLineComment" && $key == "category_prescription_id") {
+        if ($class == "CPrescriptionLineComment" && $key == "category_prescription_id") {
           $category = new CCategoryPrescription;
           $category->load($object->$key);
           $value_category = "";
@@ -60,9 +60,9 @@ if (!function_exists('exportXML')) {
           ${$key} = $doc->createAttribute($key);
           $id_value = $doc->createTextNode($value_category);
           ${$key}->appendChild($id_value);
-          ${$class_name}->appendChild(${$key});
+          ${$class}->appendChild(${$key});
         }
-        else if ($class_name == "CPrescriptionLineElement" && $key == "element_prescription_id") {
+        else if ($class == "CPrescriptionLineElement" && $key == "element_prescription_id") {
           $element_prescription = new CElementPrescription;
           $element_prescription->load($object->$key);
           $element_prescription->loadRefCategory();
@@ -70,15 +70,15 @@ if (!function_exists('exportXML')) {
           ${$key} = $doc->createAttribute($key);
           $id_value = $doc->createTextNode(utf8_encode($element_prescription->libelle . "#" . $category->chapitre . "#" . $category->nom));
           ${$key}->appendChild($id_value);
-          ${$class_name}->appendChild(${$key});
+          ${$class}->appendChild(${$key});
         }
         else {
           ${$key} = $doc->createElement($key, utf8_encode($object->$key));
         }
       }
-      ${$class_name}->appendChild(${$key});
+      ${$class}->appendChild(${$key});
     }
-    $doc->documentElement->appendChild(${$class_name});
+    $doc->documentElement->appendChild(${$class});
   }
 }
 // Chargement des lignes 

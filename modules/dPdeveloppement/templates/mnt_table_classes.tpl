@@ -6,11 +6,11 @@
         <input type="hidden" name="m" value="{{$m}}" />
         <input type="hidden" name="tab" value="{{$tab}}" />
   
-        <label for="class_name" title="Veuillez Sélectionner une classe">Choix de la classe</label>
-        <select class="notNull str" name="class_name">
-          <option value=""{{if !$class_name}} selected="selected"{{/if}}>&mdash; Liste des erreurs</option>
-          {{foreach from=$list_class_names item=curr_class_name}}
-          <option value="{{$curr_class_name}}"{{if $class_name==$curr_class_name}} selected="selected"{{/if}}>{{$curr_class_name}} - {{tr}}{{$curr_class_name}}{{/tr}}</option>
+        <label for="class" title="Veuillez Sélectionner une classe">Choix de la classe</label>
+        <select class="notNull str" name="class">
+          <option value=""{{if !$class}} selected="selected"{{/if}}>&mdash; Liste des erreurs</option>
+          {{foreach from=$installed_classes item=_class}}
+          <option value="{{$_class}}" {{if $class == $_class}} selected="selected"{{/if}}>{{$_class}} - {{tr}}{{$_class}}{{/tr}}</option>
           {{/foreach}}
         </select>
         <br />
@@ -51,29 +51,29 @@
           <th>Extra</th>
         </tr>
         
-        {{foreach from=$list_classes key=curr_class_name item=curr_class}}
-          {{if $list_errors.$curr_class_name || $list_classes|@count == 1}}
-            {{if $$curr_class.suggestion}}
+        {{foreach from=$list_classes key=_class item=_class_details}}
+          {{if $list_errors.$_class || $list_classes|@count == 1}}
+            {{if $_class_details.suggestion}}
 	          <tr>
 	            <th colspan="11" class="title">
-	              <button id="sugg-{{$curr_class_name}}-trigger" class="edit" style="float: left;">
+	              <button id="sugg-{{$_class}}-trigger" class="edit" style="float: left;">
 	                {{tr}}Suggestion{{/tr}}
 	              </button>
-	              {{$curr_class_name}} ({{tr}}{{$curr_class_name}}{{/tr}})
+	              {{$_class}} ({{tr}}{{$_class}}{{/tr}})
 	            </th>
 	          </tr>
-	          <tr id="sugg-{{$curr_class_name}}">
+	          <tr id="sugg-{{$_class}}">
 	            <td colspan="100">
-	              <script type="text/javascript">new PairEffect('sugg-{{$curr_class_name}}', {bStoreInCookie: false});</script>
-	              <pre>{{$curr_class.suggestion}}</pre>
+	              <script type="text/javascript">new PairEffect('sugg-{{$_class}}', {bStoreInCookie: false});</script>
+	              <pre>{{$_class_details.suggestion}}</pre>
 	            </td>
 	          </tr>
 	          {{/if}}
-          {{foreach from=$curr_class.fields key=curr_field_name item=curr_field}}
+          {{foreach from=$_class_details.fields key=curr_field_name item=curr_field}}
             
-            {{if $list_errors.$curr_class_name.$curr_field_name || $curr_class.key == $curr_field_name || $class_name == $curr_class_name}}
+            {{if $list_errors.$_class.$curr_field_name || $_class_details.key == $curr_field_name || $class == $_class}}
             <tr>
-              <td {{if $curr_class.key == $curr_field_name}}class="ok"{{/if}}>{{$curr_field_name}}</td>
+              <td {{if $_class_details.key == $curr_field_name}}class="ok"{{/if}}>{{$curr_field_name}}</td>
               
               {{if !$curr_field.object.spec}}
                 <td class="warning text">Aucune spec<br />&nbsp;</td>
@@ -106,7 +106,7 @@
                 &nbsp;
                 <hr style="border: 0; border-top: 1px solid #CCC; margin: 1px;" />
                 
-                {{if !$curr_class.no_table}}
+                {{if !$_class_details.no_table}}
                   {{if $curr_field.db}}
                     <span {{if $curr_field.db.type != $curr_field.object.db_spec.type}}class="warning"{{/if}}>
                       {{$curr_field.db.type}}

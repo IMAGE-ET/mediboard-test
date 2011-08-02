@@ -10,13 +10,13 @@
 *}}
 
 <script type="text/javascript">
-function editSource(id, class_name) {
+function editSource(id, klass) {
   var action = "ajax_edit_source_";
-  if (!class_name) {
+  if (!klass) {
     alert("{{tr}}CSourceLPR.choose_type{{/tr}}");
     return;
   }
-  switch (class_name) {
+  switch (klass) {
     case "CSourceLPR":
       action += "lpr";
       break;
@@ -25,7 +25,7 @@ function editSource(id, class_name) {
   }
   var url = new Url("printing", action);
   url.addParam("source_id", id);
-  url.addParam("class_name", class_name);
+  url.addParam("class", klass);
   url.requestUpdate("edit_source");
 }
 
@@ -34,17 +34,17 @@ function refreshList() {
   url.requestUpdate("list_sources");
 }
 
-testPrint = function(class_name, id) {
+testPrint = function(klass, id) {
   var url = new Url("printing", "ajax_test_print");
   url.addParam("id", id);
-  url.addParam("class_name", class_name);
+  url.addParam("class", klass);
   url.requestUpdate("result_print");
 }
 </script>
 
 {{main}}
   refreshList();
-  editSource('{{$source_id}}', '{{$class_name}}');
+  editSource('{{$source_id}}', '{{$class}}');
 {{/main}}
 
 <table class="main">

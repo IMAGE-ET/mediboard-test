@@ -13,26 +13,29 @@ CCanDo::checkRead();
 $ds = CSQLDataSource::get('std');
 
 // Nom de la classe à prendre en compte
-$class_name = CValue::getOrSession('class_name', null);
+$class = CValue::getOrSession("class");
 
 // Tableau des erreurs a prendre en compte
 $t          = CValue::getOrSession('types');
 
 // Liste des noms des classes installées
-$list_class_names = CApp::getInstalledClasses();
+$installed_classes = CApp::getInstalledClasses();
 
-$list_selected_classes = array(); // Liste des noms de classes selectionnées
-$list_classes = array(); // Liste des classes
+// Liste des noms de classes selectionnées
+$selected_classes = array();
+
+ // Liste des classes analysées
+$list_classes = array();
 
 // On regarde si la classe existe vraiment
-if(array_search($class_name, $list_class_names) == false) {
-  $class_name = null;
-  $list_selected_classes =& $list_class_names;
+if (array_search($class, $installed_classes) == false) {
+  $class = null;
+  $selected_classes =& $installed_classes;
 }
 else {
-  $list_selected_classes[] = $class_name;
+  $selected_classes[] = $class;
 }
-CValue::setSession('class_name', $class_name);
+CValue::setSession('class', $class);
 
 // Types d'erreurs qu'on peut prendre en compte
 $error_types = array('type', 'params', 'unsigned', 'zerofill', 'null', 'default', 'index', 'extra');
@@ -56,47 +59,47 @@ function array_duplicates($array, $field) {
 }
 
 // Pour toutes les classes selectionnées
-foreach ($list_selected_classes as $curr_class_name) {
-  $object = new $curr_class_name;
+foreach ($selected_classes as $_class) {
+  $object = new $_class;
   
   if (!$object->_spec->table) continue;
   
-  $list_classes[$curr_class_name] = array();
-  $class = &$list_classes[$curr_class_name];
+  $list_classes[$_class] = array();
+  $details = &$list_classes[$_class];
   
   // Clé dela table
-  $class['table'] = $object->_spec->table;
-  $class['key'] = $object->_spec->key;
-  $class['db_key'] = null;
-  $class['fields'] = array();
+  $details['table'] = $object->_spec->table;
+  $details['key'] = $object->_spec->key;
+  $details['db_key'] = null;
+  $details['fields'] = array();
   
   // Extraction des champs de la classe
   $fields = $object->getPlainFields();
   foreach ($fields as $k => $v) {
-    $class['fields'][$k] = array();
+    $details['fields'][$k] = array();
     
     // object fields
-    $class['fields'][$k]['object'] = array(
+    $details['fields'][$k]['object'] = array(
       'spec' => null,
       'db_spec' => null
     );
     
-    $class['fields'][$k]['db'] = null;
+    $details['fields'][$k]['db'] = null;
     
     $object->getSpecs();
-    $is_key = $k == $class['key'];
+    $is_key = $k == $details['key'];
     // db fields
     if ($spec = @$object->_specs[$k]) {
       //mbTrace($spec);
-      $class['fields'][$k]['object']['db_spec'] = CMbFieldSpec::parseDBSpec($spec->getDBSpec());
+      $details['fields'][$k]['object']['db_spec'] = CMbFieldSpec::parseDBSpec($spec->getDBSpec());
       
       //$specs_obj = $object->getSpecs();
-      $db_spec = &$class['fields'][$k]['object']['db_spec'];
+      $db_spec = &$details['fields'][$k]['object']['db_spec'];
       $db_spec['index'] = (isset($spec->class) || 
                            $spec instanceof CDateTimeSpec || 
                            $spec instanceof CDateSpec || 
                            //$spec instanceof CTimeSpec || 
-                           $k == $class['key']);
+                           $k == $details['key']);
       $db_spec['null'] = !(isset($spec->notNull)) && !$is_key;
       
       $default = null;
@@ -114,34 +117,34 @@ foreach ($list_selected_classes as $curr_class_name) {
       if ($is_key) {
         $db_spec['unsigned'] = true;
       }
-      if ($k == $class['key']) {
+      if ($k == $details['key']) {
         $db_spec['extra'] = 'auto_increment';
       }
     }
-    $class['fields'][$k]['db'] = null;
+    $details['fields'][$k]['db'] = null;
   }
   
   // Extraction des propriétés de la classe
-  foreach($object->_props as $k => $v) {
+  foreach ($object->_props as $k => $v) {
     if (isset($k[0]) && $k[0] != '_') {
-      $class['fields'][$k]['object']['spec'] = $v;
+      $details['fields'][$k]['object']['spec'] = $v;
     }
   }
   
   // Extraction des champs de la BDD
   if($object->_spec->table && $ds->loadTable($object->_spec->table)) {
-    $class['no_table'] = false;
+    $details['no_table'] = false;
 
 	  $sql = "SHOW COLUMNS FROM `{$object->_spec->table}`";
 	  $list_fields = $ds->loadList($sql);
 	  
 	  foreach($list_fields as $curr_field){
-	    $class['fields'][$curr_field['Field']]['db'] = array();
-	    if (!isset($class['fields'][$curr_field['Field']]['object'])) {
-	      $class['fields'][$curr_field['Field']]['object'] = array();
-	      $class['fields'][$curr_field['Field']]['object']['spec'] = null;
+	    $details['fields'][$curr_field['Field']]['db'] = array();
+	    if (!isset($details['fields'][$curr_field['Field']]['object'])) {
+	      $details['fields'][$curr_field['Field']]['object'] = array();
+	      $details['fields'][$curr_field['Field']]['object']['spec'] = null;
 	    }
-	  	$field =& $class['fields'][$curr_field['Field']]['db'];
+	  	$field =& $details['fields'][$curr_field['Field']]['db'];
 	  	
 	  	$props = CMbFieldSpec::parseDBSpec($curr_field['Type']);
 	  	
@@ -161,38 +164,36 @@ foreach ($list_selected_classes as $curr_class_name) {
 	  $list_indexes = $ds->loadList($sql);
 	  
     $duplicates = array_duplicates($list_indexes, 'Column_name');
-    $class['duplicates'] = $duplicates;
+    $details['duplicates'] = $duplicates;
 	  
 	  foreach($list_indexes as $curr_index) {
-      $class['fields'][$curr_index['Column_name']]['db']['index'] = $curr_index['Key_name'];
+      $details['fields'][$curr_index['Column_name']]['db']['index'] = $curr_index['Key_name'];
       
 	    if($curr_index['Key_name'] == 'PRIMARY'){
-        $class['db_key'] = $curr_index['Column_name'];
-        $class['fields'][$curr_index['Column_name']]['object']['db_spec']['extra'] = 'auto_increment';
+        $details['db_key'] = $curr_index['Column_name'];
+        $details['fields'][$curr_index['Column_name']]['object']['db_spec']['extra'] = 'auto_increment';
       }
 	  }
   } else {
-    $class['no_table'] = true;
-    $class['duplicates'] = array();
+    $details['no_table'] = true;
+    $details['duplicates'] = array();
   }
-  $class['suggestion'] = null;
+  $details['suggestion'] = null;
 }
-
-//mbTrace($class);
 
 // Tableau indiquant si chaque champ contient une erreur
 $list_errors = array();
-foreach ($list_classes as $curr_class_name => &$curr_class) {
-  $list_errors[$curr_class_name] = array();
+foreach ($list_classes as $_class => &$class_details) {
+  $list_errors[$_class] = array();
   
-  if ($class_name && ($class_name != $curr_class_name)) {
-    $list_errors[$curr_class_name] = null;
+  if ($class && $class != $_class) {
+    $list_errors[$_class] = null;
     return;
   }
   
   $show = false;
-  foreach ($curr_class['fields'] as $curr_field_name => &$curr_field) {
-    $list_errors[$curr_class_name][$curr_field_name] = false;
+  foreach ($class_details['fields'] as $curr_field_name => &$curr_field) {
+    $list_errors[$_class][$curr_field_name] = false;
     
     if (!isset($curr_field['db'])) {
       $curr_field['db'] = array();
@@ -217,13 +218,13 @@ foreach ($list_classes as $curr_class_name => &$curr_class) {
       }
       
       if ($types[$err] && $curr_field['db'][$err] != $curr_field['object']['db_spec'][$err]) {
-        $list_errors[$curr_class_name][$curr_field_name] = true;
+        $list_errors[$_class][$curr_field_name] = true;
         $show = true;
       }
     }
   }
   if (!$show) {
-    $list_errors[$curr_class_name] = null;
+    $list_errors[$_class] = null;
   }
 }
 
@@ -324,20 +325,18 @@ function get_query_for_class($class, $errors = array()) {
 }
 
 // Enregistre les suggestion pour chaque classe
-foreach ($list_classes as $curr_class_name => &$curr_class) {
-  $curr_class['suggestion'] = get_query_for_class($curr_class, $curr_class_name, $types);
+foreach ($list_classes as $_class => &$class_details) {
+  $class_details['suggestion'] = get_query_for_class($class_details, $_class, $types);
 }
-
-
 
 // Création du template
 $smarty = new CSmartyDP();
 
+$smarty->assign('installed_classes', $installed_classes);
 $smarty->assign('list_classes',      $list_classes);
-$smarty->assign('types',             $types);
 $smarty->assign('list_errors',       $list_errors);
-$smarty->assign('class_name',        $class_name);
-$smarty->assign('list_class_names',  $list_class_names);
+$smarty->assign('types',             $types);
+$smarty->assign('class',             $class);
 
 $smarty->display('mnt_table_classes.tpl');
 ?>

@@ -11,9 +11,9 @@
  */
 
 $id = CValue::get("id");
-$class_name = CValue::get("class_name");
+$class = CValue::get("class");
 
-$source = new $class_name;
+$source = new $class;
 
 $source->load($id);
 

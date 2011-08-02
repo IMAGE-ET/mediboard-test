@@ -13,13 +13,13 @@
 CCanDo::checkEdit();
 
 $source_id  = CValue::getOrSession("source_id" , 0 );
-$class_name = CValue::getOrSession("class_name", 'CSourceLPR');
+$class = CValue::getOrSession("class", 'CSourceLPR');
 
 // Création du template
 $smarty = new CSmartyDP();
 
 $smarty->assign("source_id" , $source_id);
-$smarty->assign("class_name", $class_name);
+$smarty->assign("class", $class);
 $smarty->display("vw_idx_sources.tpl");
 
 ?>
