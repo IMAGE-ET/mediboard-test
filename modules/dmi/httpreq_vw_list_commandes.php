@@ -10,15 +10,15 @@
 
 CCanDo::checkRead();
 
-$date = CValue::get("date");
+$date_min = CValue::get("_date_min");
+$date_max = CValue::get("_date_max");
+
 $type = CValue::get("type");
 $recent_lines = CValue::get("recent_lines");
 
-CValue::setSession("date", $date);
+CValue::setSession("_date_min", $date_min);
+CValue::setSession("_date_max", $date_max);
 CValue::setSession("type", $type);
-
-$date_min = $date;
-$date_max = mbDate("+1 DAY", mbDate());
 
 // ancien code
 $dmi_line = new CPrescriptionLineDMI();

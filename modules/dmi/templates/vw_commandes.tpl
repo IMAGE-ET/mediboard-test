@@ -30,9 +30,14 @@
   
   <table class="form">
     <tr>
-      <th>Interventions effectuées après le</th>
+      <th>Interv. après le</th>
       <td>
-        {{mb_field object=$dmi_line field="date" prop="date" register=true form="filterCommandes" onchange="this.form.onsubmit()"}}
+        {{mb_field object=$interv field="_date_min" prop="date" register=true form="filterCommandes"}}
+      </td>
+			
+      <th>avant le</th>
+      <td>
+        {{mb_field object=$interv field="_date_max" prop="date" register=true form="filterCommandes"}}
       </td>
 			
       <th>Type</th>
@@ -46,7 +51,7 @@
       </td>
 			
       <td>
-        <button type="submit" class="search">{{tr}}Filter{{/tr}}</button> (le nombre de lignes de DMI est limité à 300)
+        <button type="submit" class="search">{{tr}}Filter{{/tr}}</button> (nb. de lignes de DMI limité à 300)
       </td>
     </tr>
   </table>
