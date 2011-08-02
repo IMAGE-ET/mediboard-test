@@ -836,7 +836,6 @@ class COperation extends CCodable implements IPatientRelated {
     
     $fix_edit_doc = CAppUI::conf("dPplanningOp CSejour fix_doc_edit");
     $this->loadRefSejour();
-    mbTrace("toto",'',1);
     return !$fix_edit_doc ? true : $this->_ref_sejour->sortie_reelle === null;
   }
 }
