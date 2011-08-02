@@ -86,7 +86,7 @@
        {{mb_value object=$rpu field=destination}} <br />
      {{/if}}
      {{if $rpu->orientation}}
-       <strong>{{mb_value object=$rpu field=orientation}}</strong> :
+       <strong>{{mb_label object=$rpu field=orientation}}</strong> :
        {{mb_value object=$rpu field=orientation}}      
      {{/if}}
   {{else}}
