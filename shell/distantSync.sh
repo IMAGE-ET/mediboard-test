@@ -35,5 +35,5 @@ directory=$2
 destination=$3
 
 # Backups directory
-rsync -e "ssh -p $port" -avzP $location:$directory $destination/$(echo $location | cut -d'@' -f2)
+rsync -e "ssh -p $port" -avzPL $location:$directory $destination/$(echo $location | cut -d'@' -f2)
 check_errs $? "Failed to rsync Backups directory" "Succesfully rsync-ed Backups directory!"
