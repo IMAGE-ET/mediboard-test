@@ -11,6 +11,7 @@
 abstract class CSQLDataSource { 
   static $engines = array (
     "mysql"  => "CMySQLDataSource",
+    "mysqli" => "CMySQLiDataSource",
     "ingres" => "CIngresDataSource",
     "oracle" => "COracleDataSource",
   );

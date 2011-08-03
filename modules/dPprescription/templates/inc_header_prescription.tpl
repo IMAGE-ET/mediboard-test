@@ -423,11 +423,8 @@ Main.add( function(){
       </div>
 			
       {{if !$mode_protocole && $prescription->object_class == "CSejour"}}
-        <div style="float:left; padding-right: 5px;" class="noteDiv {{$prescription->_ref_object->_guid}}">
-          <img title="Ecrire une note" src="images/icons/note_grey.png" />
-        </div>
+			  {{mb_include module=system template=inc_object_notes object=$prescription->_ref_object float=left}}
       {{/if}}
-			
 			
       {{if !$mode_protocole && !$hide_header}}
         {{if $prescription->type == "externe"}}

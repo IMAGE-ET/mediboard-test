@@ -93,6 +93,7 @@ register_shutdown_function(array("CApp", "checkPeace"));
 
 require "./classes/sqlDataSource.class.php";
 require "./classes/mysqlDataSource.class.php";
+require "./classes/mysqliDataSource.class.php";
 
 if (!CSQLDataSource::get("std")) {
   header("Location: offline.php?reason=bdd");

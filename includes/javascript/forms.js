@@ -391,7 +391,8 @@ function prepareForms(root) {
     });
     
     root.select("button.oneclick").invoke("observe", "click", function(e){
-      Event.element(e).disabled = true;
+      var element = Event.element(event);
+      Form.Element.disable.defer(element);
     });
     
     // We set a title on the button if it is a .notext and if it hasn't one yet

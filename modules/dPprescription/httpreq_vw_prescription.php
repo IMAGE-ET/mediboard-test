@@ -226,6 +226,7 @@ if($prescription->_id){
 	    $object =& $prescription->_ref_object;
 			// Chargement du patient
 		  $object->loadRefPatient();
+			$object->loadRefsNotes();
 			$patient =& $object->_ref_patient;
 			$patient->loadRefDossierMedical();
 			$object->loadRefsPrescriptions();
