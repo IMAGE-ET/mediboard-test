@@ -847,7 +847,8 @@ class CSetupdPpatients extends CSetup {
     $this->addQuery($query);
     
     // If there is a type
-    $query = "UPDATE `aide_saisie` SET 
+    // @todo : A vérifier
+    /*$query = "UPDATE `aide_saisie` SET 
               `class` = 'CAntecedent', 
               `field` = 'rques', 
               `name` = CONCAT(UPPER(LEFT(`depend_value`, 1)), LOWER(SUBSTRING(`depend_value`, 2)), ': ', `name`),
@@ -856,17 +857,17 @@ class CSetupdPpatients extends CSetup {
             WHERE 
               `class` = 'CAddiction'
                AND `depend_value` IS NOT NULL";
-    $this->addQuery($query);
+    $this->addQuery($query);*/
     
     // If there is no type
-    $query = "UPDATE `aide_saisie` SET 
+    /*$query = "UPDATE `aide_saisie` SET 
               `class` = 'CAntecedent', 
               `field` = 'rques', 
               `depend_value` = 'addiction'
             WHERE 
               `class` = 'CAddiction'
                AND `depend_value` IS NULL";
-    $this->addQuery($query);
+    $this->addQuery($query);*/
     
     $this->addQuery(CSetupdPcompteRendu::renameTemplateFieldQuery("Sejour - Addictions -- toutes", "Sejour - Antécédents - Addictions"));
     $this->addQuery(CSetupdPcompteRendu::renameTemplateFieldQuery("Patient - Addictions -- toutes", "Patient - Antécédents - Addictions"));
