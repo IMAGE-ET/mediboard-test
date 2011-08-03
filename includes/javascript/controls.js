@@ -70,8 +70,8 @@ Element.addMethods(['input', 'textarea'], {
       return {begin:begin, end:end};
     }
   },
-	
-	// new version of the caret function
+  
+  // new version of the caret function
   getInputSelection: function(el){
     var start = 0, end = 0, normalizedValue, range,
         textInputRange, len, endRange;
@@ -80,7 +80,7 @@ Element.addMethods(['input', 'textarea'], {
       start = el.selectionStart;
       end = el.selectionEnd;
     }
-		else {
+    else {
       range = document.selection.createRange();
 
       if (range && range.parentElement() == el) {
@@ -100,7 +100,7 @@ Element.addMethods(['input', 'textarea'], {
         if (textInputRange.compareEndPoints("StartToEnd", endRange) > -1) {
           start = end = len;
         }
-				else {
+        else {
           start = -textInputRange.moveStart("character", -len);
           start += normalizedValue.slice(0, start).split("\n").length - 1;
 
@@ -118,45 +118,45 @@ Element.addMethods(['input', 'textarea'], {
       start: start,
       end: end
     };
-	},
-	setInputSelection: function(el, start, end){
+  },
+  setInputSelection: function(el, start, end){
     if (typeof el.selectionStart == "number" && typeof el.selectionEnd == "number") {
       el.selectionStart = start;
       el.selectionEnd = end;
     }
-		else {
-			function offsetToRangeCharacterMove(el, offset) {
-			  return offset - (el.value.slice(0, offset).split("\r\n").length - 1);
-			}
-			
+    else {
+      function offsetToRangeCharacterMove(el, offset) {
+        return offset - (el.value.slice(0, offset).split("\r\n").length - 1);
+      }
+      
       var range = el.createTextRange();
       var startCharMove = offsetToRangeCharacterMove(el, start);
-			
+      
       range.collapse(true);
       if (start == end) {
         range.move("character", startCharMove);
       }
-			else {
+      else {
         range.moveEnd("character", offsetToRangeCharacterMove(el, end));
         range.moveStart("character", startCharMove);
       }
       range.select();
     }
   },
-	replaceInputSelection: function(element, text) {
-		text += "";
-		
-		element.tryFocus();
-		var sel = element.getInputSelection();
+  replaceInputSelection: function(element, text) {
+    text += "";
+    
+    element.tryFocus();
+    var sel = element.getInputSelection();
     var selected = element.value.substring(sel.start, sel.end);
     var s = element.value.substring(0, sel.start) + 
         text + 
         element.value.substring(sel.end, element.value.length);
-				
+        
     element.value = s;
-		
-		element.setInputSelection(sel.start, sel.start+text.length);
-	}
+    
+    element.setInputSelection(sel.start, sel.start+text.length);
+  }
 });
 
 /** Input mask for text input elements 
@@ -434,14 +434,14 @@ Element.addMethods('input', {
       
       else if (prevChar != c) {
         if (charmap[prevChar]) {
-	        reMask += "("+charmap[prevChar]+"{"+count+"})";
-	        prevChar = c;
-	        count = 0;
-	      }
-	      else {
-	        prevChar = c;
-	        count++;
-	      }
+          reMask += "("+charmap[prevChar]+"{"+count+"})";
+          prevChar = c;
+          count = 0;
+        }
+        else {
+          prevChar = c;
+          count++;
+        }
       }
       
       else if (prevChar == c) {
@@ -455,17 +455,17 @@ Element.addMethods('input', {
     var matches = reMask.exec(element.value);
     if (matches) {
       if (!format) {
-	      format = '';
-	      for (i = 1; (i < matches.length && i < 10); i++) {
-	        format += "$"+i;
-	      }
-	    }
-	    for (i = 1; (i < matches.length && i < 10); i++) {
-	      format = format.replace("$"+i, matches[i]);
-	    }
-	  } else {
-	    format = element.value;
-	  }
+        format = '';
+        for (i = 1; (i < matches.length && i < 10); i++) {
+          format += "$"+i;
+        }
+      }
+      for (i = 1; (i < matches.length && i < 10); i++) {
+        format = format.replace("$"+i, matches[i]);
+      }
+    } else {
+      format = element.value;
+    }
     return format;
   }
 });
@@ -640,6 +640,17 @@ Element.addMethods('input', {
         result = ((options.showPlus && result >= 0)?'+':'')+result;
         
         $V(element, result, true);
+        
+        // WIP : onchange differé sur les numeric fields
+        /*$V(element, result, false);
+        clearTimeout(this.timer);
+        
+        this.timer = setTimeout((function(){
+          (element.onchange || Prototype.emptyFunction).bindAsEventListener(element)();
+          element.fire("ui:change");
+        }).bind(this), 200);
+        */
+        
         element.select();
       },
     

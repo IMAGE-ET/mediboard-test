@@ -464,6 +464,10 @@ var Url = Class.create({
     
     var autocompleter = new Ajax.Autocompleter(input, populate, this.make(), oOptions);
     
+    if (Prototype.Browser.IE) {
+      //autocompleter.iefix = new Element("div"); // to prevent the iefix iframe
+    }
+    
     // Pour "eval" les scripts inserés (utile pour lancer le onDisconnected
     autocompleter.options.onComplete = function(request) {
       var content = request.responseText;
@@ -482,6 +486,22 @@ var Url = Class.create({
       if(this.options.indicator) Element.hide(this.options.indicator);
       input.removeClassName("throbbing");
     };
+    
+    ///////// to prevent IE (and others in some cases) from closing the autocompleter when using the scrollbar of the update element
+    function onUpdateFocus(event){
+      this.updateHasFocus = true;
+      Event.stop(event);
+    }
+  
+    function resetUpdateFocus(event){
+      if (!this.updateHasFocus) return;
+      this.updateHasFocus = false;
+      this.onBlur(event);
+    }
+    
+    Event.observe(populate, 'mousedown', onUpdateFocus.bindAsEventListener(autocompleter));
+    document.observe('click', resetUpdateFocus.bindAsEventListener(autocompleter));
+    /////////
     
     // Drop down button, like <select> tags
     if (oOptions.dropdown) {

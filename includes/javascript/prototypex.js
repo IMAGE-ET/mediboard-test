@@ -194,6 +194,8 @@ Class.extend(Autocompleter.Base, {
       }
     }
     
+    if (this.updateHasFocus) return;
+    
     setTimeout(this.hide.bind(this), 250);
     this.hasFocus = false;
     this.active = false;
