@@ -163,6 +163,8 @@ Class.extend(Autocompleter.Base, {
       setTimeout(this.onObserverEvent.bind(this), this.options.frequency*1000);
   },
   onBlur: function(event) {
+    if (this.updateHasFocus) return;
+		
     if (Prototype.Browser.IE && this.update.visible()) {  
       // fix for IE: don't blur when clicking the vertical scrollbar (if there is one)
       var verticalScrollbarWidth = this.update.offsetWidth - this.update.clientWidth -
@@ -193,8 +195,6 @@ Class.extend(Autocompleter.Base, {
         }
       }
     }
-    
-    if (this.updateHasFocus) return;
     
     setTimeout(this.hide.bind(this), 250);
     this.hasFocus = false;
@@ -704,8 +704,7 @@ Class.extend(String, {
     return !!this.match(new RegExp(term.trim().allowDiacriticsInRegexp(), "i"));
   },
   htmlDecode: function() {
-    var e = DOM.div({}, this);
-    return e.textContent || e.innerText;
+    return DOM.div({}, this).getText();
   }
 });
 

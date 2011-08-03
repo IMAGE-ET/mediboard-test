@@ -73,12 +73,12 @@ var AideSaisie = {
     getSelectedData: function(selected){
       var oDepend1 = selected.down(".depend1");
       var oDepend2 = selected.down(".depend2");
-      var oText = selected.down(".text");
+      var oText = selected.down(".value");
       
       return {
-        depend1: oDepend1 ? (oDepend1.textContent || oDepend1.innerText) : "",
-        depend2: oDepend2 ? (oDepend2.textContent || oDepend2.innerText) : "",
-        text: oText.textContent || oText.innerText
+        depend1: oDepend1 ? oDepend1.getText() : "",
+        depend2: oDepend2 ? oDepend2.getText() : "",
+        text: oText.getText()
       };
     },
     
@@ -135,29 +135,29 @@ var AideSaisie = {
         ).hide(),
         list = $(this.searchField.id + "_auto_complete").setStyle({marginLeft: "-2px"})
       );
-			
-			toolbar.doShow = function() {
-				if (toolbar.timeout) {
-					window.clearTimeout(toolbar.timeout)
-					toolbar.timeout = null;
-				}
+      
+      toolbar.doShow = function() {
+        if (toolbar.timeout) {
+          window.clearTimeout(toolbar.timeout)
+          toolbar.timeout = null;
+        }
         toolbar.show();
-			}
-			
-			toolbar.doHide = function() {
-				if (toolbar.timeout) {
-					return;
-				}
-				
-				tryHide = function() {
+      }
+      
+      toolbar.doHide = function() {
+        if (toolbar.timeout) {
+          return;
+        }
+        
+        tryHide = function() {
           toolbar.hide(); 
           toolbar.select(".sub-toolbar").invoke("hide");
           toolbar.canHide = false;
-				}
-				
-				toolbar.timeout = tryHide.delay(0.5);
-			};
-			
+        }
+        
+        toolbar.timeout = tryHide.delay(0.5);
+      };
+      
       this.searchField.up().
         observe(Preferences.aideShowOver == '1' ? 'mousemove' : 'dblclick', toolbar.doShow).
         observe('mouseout', toolbar.doHide)/*.
@@ -197,7 +197,7 @@ var AideSaisie = {
         minChars: Preferences.aideAutoComplete == '0' ? 65536 : 2,
         tokens: "\n",
         indicator: throbber,
-        select: "text", 
+        select: "value", 
         paramName: "_search",
         caretBounds: true,
         frequency: autocompleteDelays[Preferences.autocompleteDelay],
@@ -215,7 +215,13 @@ var AideSaisie = {
             autocomplete.hasFocus = false;
             //update.hide();
             autocomplete.hide();
+            return;
           }
+          
+          /*update.down('ul').observe("click", function(event){
+            autocomplete.tokenBoundsBlurIE = autocomplete.element.getInputSelection();
+            Console.debug(autocomplete.tokenBoundsBlurIE);
+          });*/
         },
         afterUpdateElement: this.updateDependFields.bind(this)
       });
@@ -321,12 +327,12 @@ var AideSaisie = {
         // We save the default params, change it so that _search 
         // is empty to have all the entries and restore it after
         var oldDefaultParams = this.options.defaultParams;
-				
+        
         this.options.defaultParams = 
-				  "_search=" + 
-					(options.dependField1 ? ("&depend_value_1=" + ($V(options.dependField1) || "")) : '') + 
-					(options.dependField2 ? ("&depend_value_2=" + ($V(options.dependField2) || "")) : '');
-					
+          "_search=" + 
+          (options.dependField1 ? ("&depend_value_1=" + ($V(options.dependField1) || "")) : '') + 
+          (options.dependField2 ? ("&depend_value_2=" + ($V(options.dependField2) || "")) : '');
+          
         this.getUpdatedChoices();
         this.options.defaultParams = oldDefaultParams;
       }.bind(autocomplete);
@@ -407,29 +413,3 @@ var AideSaisie = {
     url.popup(600, 400, "AidesSaisie");
   }
 };
-
-var addHelp = AideSaisie.create;
-
-function pasteHelperContent(oHelpElement, fireOnchange) {
-  var aFound = oHelpElement.name.match(/_helpers_(.*)/);
-  Assert.that(aFound.length == 2, "Helper element '%s' is not of the form '_helpers_propname'", oHelpElement.name);
-  
-  var sPropName = aFound[1].split("-")[0];
-  var oAreaField = $(oHelpElement.form.elements[sPropName]);
-  var sValue = oHelpElement.value;
-  
-  oHelpElement.value = "";
-  var caret = oAreaField.caret();
-  
-  if(caret.begin != 0 && oAreaField.value[caret.begin -1] != '\n' && oAreaField.value.length != 0) {
-    sValue = '\n' + sValue;
-  }
-
-  oAreaField.caret(caret.begin, caret.end, sValue + '\n');
-  oAreaField.caret(oAreaField.value.length);
-  oAreaField.scrollTop = oAreaField.scrollHeight;
-  
-  if (fireOnchange && oAreaField.onchange) {
-    oAreaField.onchange();
-  }
-}

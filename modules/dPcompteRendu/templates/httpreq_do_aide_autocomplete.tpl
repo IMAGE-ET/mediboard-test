@@ -21,15 +21,18 @@
       <span>{{$_aide->name|emphasize:$needle}}</span>
       <br/>
       
-			{{* Keep the one line formating here *}}
-      <small class="text" style="color: #666; margin-left: 1em;">{{$_aide->text|emphasize:$needle}}
-</small>
+      <small class="text" style="color: #666; margin-left: 1em;">{{$_aide->text|emphasize:$needle}}</small>
+
+      {{* Keep the one line formating here, white-space:pre is to keep new lines in IE *}}
+      <div class="value" style="display: none; white-space: pre;">{{$_aide->text}}
+</div>
+
     </li>
   {{foreachelse}}
     {{if !@$hide_empty_list}}
     <li>
       {{tr}}CAideSaisie.none{{/tr}}
-<small class="text" style="display: none;">{{$needle}}
+<small class="value" style="display: none;">{{$needle}}
 </small>
     </li>
     {{/if}}

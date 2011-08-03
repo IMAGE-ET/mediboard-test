@@ -39,8 +39,8 @@ var InseeFields = {
     var commune = selected.down(".commune");
     
 		// Valuate CP and Commune
-		$V(oForm.elements[sFieldCP     ], (cp.textContent || cp.innerText).strip(), true);
-    $V(oForm.elements[sFieldCommune], (commune.textContent || commune.innerText).strip(), true);
+		$V(oForm.elements[sFieldCP     ], cp.getText().strip(), true);
+    $V(oForm.elements[sFieldCommune], commune.getText().strip(), true);
 	  
 		// Give focus
 	  if (sFieldFocus) {

@@ -158,7 +158,7 @@ class CCodeCCAM {
     $ds =& $this->_spec->ds;
     $query = $ds->prepare("SELECT * FROM actes WHERE CODE = % AND DATEFIN = '00000000'", $this->code);
     $result = $ds->exec($query);
-    if(mysql_num_rows($result) == 0) {
+    if($ds->numRows($result) == 0) {
       $this->code = "-";
       //On rentre les champs de la table actes
       $this->libelleCourt = "Acte inconnu ou supprimé";

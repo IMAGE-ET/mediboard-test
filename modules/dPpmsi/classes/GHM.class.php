@@ -217,7 +217,7 @@ class CGHM extends CMbObject {
       $column2 = "liste_id";
       $sql = "SELECT liste_id FROM liste WHERE nom LIKE '%$liste%'";
       $result = $this->_dsghm->exec($sql);
-      if(mysql_num_rows($result) == 0) {
+      if($this->_dsghm->numRows($result) == 0) {
         return 0;
       }
       while($row = $this->_spec->ds->fetchArray($result)) {
@@ -231,7 +231,7 @@ class CGHM extends CMbObject {
         if($column2)
           $sql .= "AND $column2 = '$liste_id'";
         $result = $this->_dsghm->exec($sql);
-        $n = $n + mysql_num_rows($result);
+        $n = $n + $this->_dsghm($result);
       }
     }
     return $n;

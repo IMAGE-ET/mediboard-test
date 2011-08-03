@@ -389,7 +389,7 @@ updateFieldsMedicament = function(selected) {
 	  {{if $prescription->object_id}}
 		  // Application d'un protocole par acces rapide
 			oFormProtocole = getForm("applyProtocole");
-			$V(oFormProtocole.pack_protocole_id, "prot-"+(dn[0].textContent || dn[0].innerText)); 
+			$V(oFormProtocole.pack_protocole_id, "prot-"+dn[0].getText()); 
 
       // Affichage de la modale si activée en configuration
 			var show_modal = {{$conf.dPprescription.CPrescription.show_modal}};
@@ -399,7 +399,7 @@ updateFieldsMedicament = function(selected) {
 			}
 			submitProtocole();
 		{{else}}
-		  Protocole.duplicate((dn[0].textContent || dn[0].innerText), "{{$prescription->_id}}");
+		  Protocole.duplicate(dn[0].getText(), "{{$prescription->_id}}");
 		{{/if}}
 	} else {
 		if(dn[0].className != 'informal'){
