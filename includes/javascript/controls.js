@@ -72,7 +72,7 @@ Element.addMethods(['input', 'textarea'], {
   },
   
   // new version of the caret function
-  getInputSelection: function(el){
+  getInputSelection: function(el, forceFocus){
     var start = 0, end = 0, normalizedValue, range,
         textInputRange, len, endRange;
 
@@ -81,8 +81,11 @@ Element.addMethods(['input', 'textarea'], {
       end = el.selectionEnd;
     }
     else {
+      if (forceFocus) el.tryFocus();
+			
       range = document.selection.createRange();
 
+      // check if the element has focus
       if (range && range.parentElement() == el) {
         len = el.value.length;
         normalizedValue = el.value.replace(/\r\n/g, "\n");
@@ -143,11 +146,11 @@ Element.addMethods(['input', 'textarea'], {
       range.select();
     }
   },
-  replaceInputSelection: function(element, text) {
+  replaceInputSelection: function(element, text, forceFocus) {
     text += "";
     
     element.tryFocus();
-    var sel = element.getInputSelection();
+    var sel = element.getInputSelection(forceFocus);
     var selected = element.value.substring(sel.start, sel.end);
     var s = element.value.substring(0, sel.start) + 
         text + 
