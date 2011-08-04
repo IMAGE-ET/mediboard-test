@@ -32,7 +32,7 @@ z-index ordering (foreground to background) :
 
 div.cancelled {
   color: #fff;
-  background-color: #f00;
+  background-color: #f88;
   text-transform: uppercase;
   font-weight: bold;
   text-align: center;
@@ -1351,7 +1351,7 @@ table.tbl tr.ssr-prevu td {
 table.tbl tr.ssr-annule  td.cancelled,
 table.tbl tr.ssr-termine td.cancelled, 
 table.tbl tr.ssr-prevu   td.cancelled {
-  background-color: #f00; 
+  background-color: #f88; 
 }
 
 table.tbl tr.ssr-kine-conges td,
