@@ -32,28 +32,39 @@ span.ex-message-title-spacer {
 {{if !@$readonly}}
 
 <script type="text/javascript">
-confirmSavePrint = function(form){
-  form.callback.disabled = true;
-	
-  (FormObserver.changes == 0 || confirm("Pour imprimer le formulaire, il est nécessaire de l'enregistrer, souhaitez-vous continuer ?")) && 
-           onSubmitFormAjax(form, {onComplete: function(){ 
-             FormObserver.changes = 0;
-             $("printIframe").src = "about:blank";
-             $("printIframe").src = "?{{$smarty.server.QUERY_STRING|html_entity_decode}}&readonly=1&print=1&autoprint=1";
-          } });
-					
-  form.callback.disabled = false;
-	
-  return false;
-}
+var ExObjectForm = {
+  confirmSavePrint: function(form){
+	  var oldCallback = $V(form.callback);
+		$V(form.callback, "ExObjectForm.printForm");
+		
+	  (FormObserver.changes == 0 || confirm("Pour imprimer le formulaire, il est nécessaire de l'enregistrer, souhaitez-vous continuer ?")) && 
+	           form.onsubmit();
+		
+	  $V(form.callback, oldCallback);
+		
+	  return false;
+	},
 
-updateExObjectId = function(id, obj) {
-  $V(getForm("editExObject").ex_object_id, id);
-	
-	if (!(obj._ui_messages[2] || obj._ui_messages[3] || obj._ui_messages[4])) {
-	  window.close();
+	closeOnSuccess: function(id, obj) {
+	  ExObjectForm.updateId(id, obj);
+	  
+	  if (!(obj._ui_messages[2] || obj._ui_messages[3] || obj._ui_messages[4])) {
+	    window.close();
+	  }
+	},
+
+	printForm: function(id, obj) {
+	  ExObjectForm.updateId(id, obj);
+	  
+	  FormObserver.changes = 0;
+	  $("printIframe").src = "about:blank";
+	  $("printIframe").src = "?{{$smarty.server.QUERY_STRING|html_entity_decode}}&readonly=1&print=1&autoprint=1&ex_object_id="+id;
+	},
+
+	updateId: function(id, obj) {
+	  $V(getForm("editExObject").ex_object_id, id);
 	}
-}
+};
 
 Main.add(function(){
   ExObjectFormula.init({{$formula_token_values|@json}});
@@ -87,11 +98,11 @@ if (window.opener && !window.opener.closed && window.opener !== window && window
   {{mb_field object=$ex_object field=object_id hidden=true}}
   
   <input type="hidden" name="del" value="0" />
-  <input type="hidden" name="callback" value="updateExObjectId" />
+  <input type="hidden" name="callback" value="ExObjectForm.closeOnSuccess" />
   
   {{if !$print}}
     <iframe id="printIframe" width="0" height="0" style="display: none;"></iframe>
-    <button type="button" class="print" onclick="confirmSavePrint(this.form)" style="float: right;">
+    <button type="button" class="print" onclick="ExObjectForm.confirmSavePrint(this.form)" style="float: right;">
       {{tr}}Print{{/tr}}
     </button>
   {{/if}}
