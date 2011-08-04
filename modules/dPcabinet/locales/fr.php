@@ -416,6 +416,7 @@ $locales['CConsultation-du_tiers-desc'] = 'A régler par le tiers';
 $locales['CConsultation-duree'] = 'Durée';
 $locales['CConsultation-duree-court'] = 'Durée';
 $locales['CConsultation-duree-desc'] = 'Durée prévue de la consultation';
+$locales['CConsultation-event-examen'] = 'Examen';
 $locales['CConsultation-examen'] = 'Examen clinique';
 $locales['CConsultation-examen-court'] = 'Examen clinique';
 $locales['CConsultation-examen-desc'] = 'Bilan de l\'examen clinique';

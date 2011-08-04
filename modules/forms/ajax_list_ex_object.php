@@ -44,6 +44,7 @@ $ex_objects_counts_by_event = array();
 $ex_classes_creation = array();
 
 $limit = null;
+$reaches_limit = false;
   
 switch($detail) {
   case 2: $limit = ($ex_class_id ? 30 : 20); break;
@@ -75,6 +76,11 @@ foreach($ex_classes as $_ex_class_id => $_ex_class) {
   );
 	
   $_ex_objects = $_ex_object->loadList($where, "{$_ex_object->_spec->key} DESC", $limit);
+  $_ex_objects_count = $_ex_object->countList($where);
+	
+	if ($_ex_objects_count > count($_ex_objects)) {
+		$reaches_limit = true;
+	}
   
 	$ex_objects_counts_by_event[$ex_class_key][$_ex_class_id] = $_ex_object->countList($where);
 	
@@ -122,6 +128,7 @@ $smarty->assign("all_ex_objects",  $all_ex_objects);
 $smarty->assign("ex_objects_by_event", $ex_objects_by_event);
 $smarty->assign("ex_objects_counts_by_event", $ex_objects_counts_by_event);
 $smarty->assign("limit",           $limit);
+$smarty->assign("reaches_limit",   $reaches_limit);
 $smarty->assign("ex_classes_creation", $ex_classes_creation);
 $smarty->assign("ex_classes",      $ex_classes);
 $smarty->assign("detail",          $detail);

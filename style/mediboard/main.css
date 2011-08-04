@@ -56,9 +56,9 @@ div.text {
   word-wrap: break-word;
 }
 
-td.text.compact,
-th.text.compact,
-div.text.compact {
+td.compact,
+th.compact,
+div.compact {
   line-height: 1;
   font-size: 0.9em; 
   color: #666;

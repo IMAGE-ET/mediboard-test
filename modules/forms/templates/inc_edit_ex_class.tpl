@@ -36,7 +36,7 @@ Main.add(function(){
             <th>{{mb_label object=$ex_class field=event}}</th>
             <td>
               
-              <select name="_event" class="notNull" onchange="ExClass.setEvent(this)" style="max-width: 25em;">
+              <select name="_event" class="notNull" onchange="ExClass.setEvent(this)" style="max-width: 20em;">
                 <option value=""> &ndash; Choisir </option>
                 {{foreach from=$classes item=_events key=_class}}
                   <optgroup label="{{tr}}{{$_class}}{{/tr}}">
@@ -62,19 +62,43 @@ Main.add(function(){
             
             <th>{{mb_label object=$ex_class field=disabled}}</th>
             <td>{{mb_field object=$ex_class field=disabled typeEnum=checkbox}}</td>
-            
-            <th>{{mb_label object=$ex_class field=required}}</th>
-            <td>{{mb_field object=$ex_class field=required typeEnum=checkbox}}</td>
+						
+						<td class="compact text" style="vertical-align: middle;">{{tr}}CExClass-disabled-desc{{/tr}}</td>
           </tr>
           
           <tr>
             <th>{{mb_label object=$ex_class field=name}}</th>
-            <td>{{mb_field object=$ex_class field=name size=50}}</td>
+            <td>{{mb_field object=$ex_class field=name style="width: 20em;"}}</td>
             
             <th>{{mb_label object=$ex_class field=conditional}}</th>
             <td>{{mb_field object=$ex_class field=conditional typeEnum=checkbox}}</td>
             
-            <td colspan="2">
+            <td class="compact text" style="vertical-align: middle;">{{tr}}CExClass-conditional-desc{{/tr}}</td>
+          </tr>
+          <tr>
+          	{{* 
+            <th rowspan="2">{{mb_label object=$ex_class field=unicity}}</th>
+            <td rowspan="2">
+            	{{if $ex_class->_id}}
+							  {{mb_field object=$ex_class field=unicity typeEnum=radio}}
+							{{else}}
+							  <div class="small-info">
+							  	Enregistrez le formulaire pour choisir son type d'unicité
+							  </div>
+							{{/if}}
+						</td>
+						 *}}
+             <th rowspan="2"></th>
+             <td rowspan="2"></td>
+            
+            <th>{{mb_label object=$ex_class field=required}}</th>
+            <td>{{mb_field object=$ex_class field=required typeEnum=checkbox}}</td>
+            
+            <td class="compact text" style="vertical-align: middle;">{{tr}}CExClass-required-desc{{/tr}}</td>
+          </tr>
+					
+          <tr>
+            <td colspan="3">
               {{if $ex_class->_id}}
                 <button type="submit" class="modify">{{tr}}Save{{/tr}}</button>
                 <button type="button" class="trash" onclick="confirmDeletion(this.form,{ajax:true,typeName:'{{tr}}CExClass.one{{/tr}}',objName:'{{$ex_class->_view|smarty:nodefaults|JSAttribute}}'})">

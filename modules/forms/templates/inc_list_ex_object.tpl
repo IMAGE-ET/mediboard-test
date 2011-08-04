@@ -96,7 +96,7 @@ refreshSelf = function(){
     
     {{foreach from=$ex_objects_by_event item=ex_objects_by_class key=_host_event}}
       <div id="tab-{{$_host_event}}" {{if !$ex_class_id}} style="display: none;" {{/if}} class="ex_class-table">
-      	{{if $limit}}
+      	{{if $reaches_limit && $limit}}
       	  <div class="small-info">Seuls les {{$limit}} derniers enregistrements de chaque formulaire sont affichés.</div>
 				{{/if}}
         {{mb_include module=forms template=inc_ex_objects_columns}}
@@ -109,7 +109,7 @@ refreshSelf = function(){
 {{* MEDIUM DETAIL *}}
 {{elseif $detail == 1}}
 
-  {{if $ex_objects_by_event|@count}}
+  {{if $ex_objects_by_event|@count > 1}}
     <ul class="control_tabs small" id="exclass_tabs">
       {{foreach from=$ex_objects_by_event item=ex_objects_by_class key=_host_event}}
         {{assign var=parts value="-"|explode:$_host_event}}
@@ -125,9 +125,9 @@ refreshSelf = function(){
   {{/if}}
   
   {{foreach from=$ex_objects_by_event item=ex_objects_by_class key=_host_event}}
-  <div id="tab-{{$_host_event}}" style="display: none;">
+  <div id="tab-{{$_host_event}}" {{if $ex_objects_by_event|@count > 1}} style="display: none;" {{/if}}>
 		
-    {{if $limit}}
+    {{if $reaches_limit && $limit}}
       <div class="small-info">Seuls les {{$limit}} derniers enregistrements de chaque formulaire sont affichés.</div>
     {{/if}}
 		

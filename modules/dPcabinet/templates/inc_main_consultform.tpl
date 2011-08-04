@@ -35,18 +35,40 @@ Main.add(function () {
 <table class="form">
   <tr>
     <td>
-      <!-- Fiches d'examens -->
-      {{mb_script module="dPcabinet" script="exam_dialog"}}
-      
-      <script type="text/javascript">
-        {{if !$readonly}}
-          ExamDialog.register('{{$consult->_id}}','{{$consult->_class}}');
-        {{/if}}
-      
-        onExamComplete = function(){
-          FormObserver.changes = 0;
-        }
-      </script>
+    	<table class="main layout">
+        <tr>
+          <td style="width: 50%;">
+			      <!-- Fiches d'examens -->
+			      {{mb_script module="dPcabinet" script="exam_dialog"}}
+			      <script type="text/javascript">
+			        {{if !$readonly}}
+			          ExamDialog.register('{{$consult->_id}}','{{$consult->_class}}');
+			        {{/if}}
+			      
+			        onExamComplete = function(){
+			          FormObserver.changes = 0;
+			        }
+			      </script>
+			    </td>
+          
+          {{if "forms"|module_active}}
+            <td>
+              {{unique_id var=unique_id_exam_forms}}
+              
+              <script type="text/javascript">
+                Main.add(function(){
+                  ExObject.loadExObjects("{{$consult->_class}}", "{{$consult->_id}}", "{{$unique_id_exam_forms}}", 1);
+                });
+              </script>
+              
+              <fieldset id="list-ex_objects">
+                <legend>Formulaires</legend>
+                <div id="{{$unique_id_exam_forms}}"></div>
+              </fieldset>
+            </td>
+          {{/if}}
+        </tr>
+      </table>
       
       {{if $consult->_id}}
       <form name="editFrmExams" action="?m={{$m}}" method="post" onsubmit="return onSubmitFormAjax(this, {onComplete: onExamComplete})">

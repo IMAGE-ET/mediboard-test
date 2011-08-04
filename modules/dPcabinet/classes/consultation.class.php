@@ -133,6 +133,12 @@ class CConsultation extends CCodable {
     $spec->table = 'consultation';
     $spec->key   = 'consultation_id';
     $spec->measureable = true;
+    $spec->events = array(
+      "examen" => array(
+        "reference1" => array("CSejour",  "sejour_id"),
+        "reference2" => array("CPatient", "patient_id"),
+      ),
+    );
     return $spec;
   }
   

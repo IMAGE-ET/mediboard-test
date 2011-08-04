@@ -814,7 +814,12 @@ class CSetupsystem extends CSetup {
                `data` BLOB
               ) /*! ENGINE=MyISAM */;";
     $this->addQuery($query);
+		
+		$this->makeRevision("1.0.80");
+		$query = "ALTER TABLE `ex_class` 
+              ADD `unicity` ENUM ('no','host','reference1','reference2') NOT NULL DEFAULT 'no';";
+    $this->addQuery($query);
     
-    $this->mod_version = "1.0.80";
+    $this->mod_version = "1.0.81";
   }
 }
