@@ -33,7 +33,7 @@ checkPraticien = function(oForm){
 </script>
 
 {{if $consult}}
-{{if $sejour->type != "urg"}}
+{{if $sejour->type != "urg" || $rpu->mutation_sejour_id}}
   <strong>{{mb_value object=$sejour field=type}}</strong>
 	<br/>
 	<a class="button search" title="Voir le dossier complet du patient" href="?m=dPpatients&amp;tab=vw_full_patients&amp;patient_id={{$sejour->patient_id}}">
@@ -76,12 +76,7 @@ checkPraticien = function(oForm){
 				<div style="white-space: nowrap;">
 	        <select name="prat_id" class="ref notNull" style="width: 10em;">
 	          <option value="">&mdash; {{tr}}Choose{{/tr}}</option>
-	          {{foreach from=$listPrats item=_prat}}
-	          <option class="mediuser" style="border-color: #{{$_prat->_ref_function->color}};" value="{{$_prat->_id}}"
-	            {{if $app->user_id == $_prat->_id || $_prat->_id == $sejour->praticien_id}} selected="selected" {{/if}}>
-	            {{$_prat->_view}}
-	          </option>
-	          {{/foreach}}
+            {{mb_include module=mediusers template=inc_options_mediuser list=$listPrats selected=$sejour->praticien_id}}
 	        </select>
 	        <input type="hidden" name="_datetime" value="" class="dateTime" />
 				</div>
