@@ -9,7 +9,7 @@ BASH_PATH=$(dirname $0)
 
 announce_script "Mediboard synchronisation"
 
-if [ "$#" -lt 1 ]
+if [ "$#" -lt 3 ]
 then 
   echo "Usage: $0 <location> <source directory> <destination> \[<port>\]"
   echo "  <source location>  is the remote location to be rsync-ed, ie root@oxmytto.homelinux.com"
