@@ -8,6 +8,18 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
  */
 
+/** 
+ * Structure d'un message HL7
+ * 
+ * Message
+ * |- Segment              \n
+ *   |- Field              |
+ *     |- FieldItem        ~
+ *       |- Component      ^
+ *         |- Subcomponent &
+ */
+
+
 abstract class CHL7V2 {  
   const LIB_HL7 = "lib/hl7";
   const PREFIX_MESSAGE_NAME   = "message";
@@ -105,8 +117,12 @@ abstract class CHL7V2 {
       throw new CHL7v2Exception($this->spec_filename, CHL7v2Exception::SPECS_FILE_MISSING);
     }
 
-    self::$schemas[$version][$type][$name] = simplexml_load_file($this->spec_filename);
+    self::$schemas[$version][$type][$name] = simplexml_load_file($this->spec_filename, "CHL7v2SimpleXMLElement");
     return $this->specs = self::$schemas[$version][$type][$name];
+	}
+	
+	function getMessage(){
+		return $this;
 	}
 }
 

@@ -26,16 +26,21 @@ class CHL7v2Field extends CHL7V2 {
   var $owner_segment = null;
 	
   var $datatype      = null;
+  var $description   = null;
   var $items         = array();
   
   var $_is_base_type = null;
   
-  function __construct(CHL7v2Segment $segment) {
+  function __construct(CHL7v2Segment $segment, $spec) {
     $this->owner_segment = $segment;
+    $this->datatype    = (string)$spec->datatype;
+    $this->description = (string)$spec->description;
   }
   
   function parse($data) {
     parent::parse($data);
+		
+		$specs = $this->getSpecs();
 		
 		$message = $this->owner_segment->getMessage();
     $items = explode($message->repetitionSeparator, $this->data);
@@ -82,7 +87,7 @@ class CHL7v2Field extends CHL7V2 {
 	}
 	
 	function getValue(){
-		return $this->parts;
+		return $this->items;
 	}
 	
 	/*

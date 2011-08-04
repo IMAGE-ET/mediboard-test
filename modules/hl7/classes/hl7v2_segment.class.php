@@ -10,15 +10,16 @@
 
 class CHL7v2Segment extends CHL7V2 {   
   var $name        = null;
+  var $description = null;
   var $fields      = array();
 	
 	/**
-	 * @var CHL7v2Message
+	 * @var CHL7v2SegmentGroup
 	 */
-  var $owner_message = null;
+  var $parent = null;
     
-  function __construct(CHL7v2Message $message) {
-    $this->owner_message = $message;
+  function __construct(CHL7v2SegmentGroup $parent) {
+    $this->parent = $parent;
   }
 	
 	function path($path){
@@ -40,10 +41,17 @@ class CHL7v2Segment extends CHL7V2 {
   function parse($data) {
     parent::parse($data);
 		
-    $message = $this->owner_message;
+    $message = $this->getMessage();
 
     $fields = explode($message->fieldSeparator, $this->data);
     $this->name = array_shift($fields);
+		
+    $specs = $this->getSpecs();
+    $this->description = (string)$specs->description;
+		
+		if($this->name == "MSH") {
+			array_unshift($fields, $message->fieldSeparator);
+		}
     
     // valid characters
     if (preg_match("/[^a-z0-9]/i", $this->name) ) {
@@ -55,15 +63,28 @@ class CHL7v2Segment extends CHL7V2 {
       throw new CHL7v2Exception($this->data, CHL7v2Exception::TOO_FEW_SEGMENT_FIELDS);
     }
 		
-		$specs = $this->getSpecs();
-		$i = 0;
-		foreach($specs->elements->field as $_specs){
-			//mbTrace($i);
+		$i = 0; // don't read the 3 letters prefix
+		foreach($specs->elements->field as $_spec){
+			if (!isset($fields[$i])) {
+				break;
+			}
+			
+			$_data = $fields[$i++];
+			
+			try {
+        $field = new CHL7v2Field($this, $_spec);
+        $field->parse($_data);
+				
+				$this->fields[] = $field;
+			} catch (Exception $e) {
+        exceptionHandler($e);
+        return;
+      }
 		}
-
+/*
     foreach ($fields as $_field) {
       try {
-        $field = new CHL7v2Field($this);
+        $field = new CHL7v2Field($this, $_spec);
         $field->parse($_field);
         
         $this->fields[] = $field;
@@ -71,7 +92,7 @@ class CHL7v2Segment extends CHL7V2 {
         exceptionHandler($e);
         return;
       }
-    }
+    }*/
   }
   
   function validate() {
@@ -102,27 +123,16 @@ class CHL7v2Segment extends CHL7V2 {
   }
   
   function getMessage() {
-    return $this->owner_message;
+    return $this->parent;
   }
   
   function getVersion() {
-    return $this->owner_message->getVersion();
+    return $this->getMessage()->getVersion();
   }
   
   function getSpecs(){
     return $this->getSchema(self::PREFIX_SEGMENT_NAME, $this->name);
   }
-	
-	/*
-	function __toString(){
-		$str = "<h3>$this->name</h3>";
-		
-		foreach($this->fields as $i => $field) {
-			$i++; // begins at 1
-			$str .= "&nbsp;&nbsp; - $i : $field<br />";
-		}
-		return $str;
-	}*/
 }
 
 ?>
