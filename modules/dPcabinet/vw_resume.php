@@ -55,6 +55,7 @@ $where = array();
 $where["chir_id"] = CSQLDataSource::prepareIn(array_keys($listPrat));
 foreach ($patient->_ref_sejours as &$sejour) {
   $sejour->loadRefsOperations($where);
+  $sejour->loadRefPraticien();
   foreach ($sejour->_ref_operations as &$operation) {
     $operation->loadRefPlageOp();
     $operation->loadRefChir();
