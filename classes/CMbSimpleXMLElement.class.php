@@ -60,12 +60,10 @@ class CMbSimpleXMLElement extends SimpleXMLElement {
    */
 	function getNext(){
 		if ($next = $this->getNextSibling()) {
-			mbTrace("Suivant = sibling");
 			return $next;
 		}
 		
 		if ($parent = $this->getParent()) {
-      mbTrace("Suivant = parent");
 			return $parent->getNext();
 		}
 	}

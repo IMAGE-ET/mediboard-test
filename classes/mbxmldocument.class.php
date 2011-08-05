@@ -34,24 +34,24 @@ class CMbXMLDocument extends DOMDocument {
     $this->schemafilename = $schemafilename;
   }
   
-	/**
-	 * Try to load and validate XML File
-	 * @param $docPath string Uploaded file temporary path
-	 * @return string Store-like message 
-	 */
-	function loadAndValidate($docPath) {
-	  // Chargement
-	  if (!$this->load($docPath)) {
-	    return "Le fichier fourni n'est pas un document XML bien formé";
-	  }
-	  
-	  // Validation
-	  if ($this->checkSchema() && !$this->schemaValidate()) {
-	    return "Document invalide";
-	  }
-	  
-	  return null;
-	}
+  /**
+   * Try to load and validate XML File
+   * @param $docPath string Uploaded file temporary path
+   * @return string Store-like message 
+   */
+  function loadAndValidate($docPath) {
+    // Chargement
+    if (!$this->load($docPath)) {
+      return "Le fichier fourni n'est pas un document XML bien formé";
+    }
+    
+    // Validation
+    if ($this->checkSchema() && !$this->schemaValidate()) {
+      return "Document invalide";
+    }
+    
+    return null;
+  }
   
   function checkSchema() {
     if(!$this->schemafilename) {
@@ -98,7 +98,7 @@ class CMbXMLDocument extends DOMDocument {
      $chain_errors = "";
      
      foreach ($errors as $error) {
-     	 $chain_errors .= preg_replace('/( in\ \/(.*))/', '', strip_tags($this->libxml_display_error($error)))."\n";
+        $chain_errors .= preg_replace('/( in\ \/(.*))/', '', strip_tags($this->libxml_display_error($error)))."\n";
        if ($display_errors) {
          trigger_error($this->libxml_display_error($error), E_USER_WARNING);
        }
@@ -136,7 +136,17 @@ class CMbXMLDocument extends DOMDocument {
   }
   
   function libxml_tabs_erros() {
-  	
+    
+  }
+  
+  function loadXMLSafe($source, $options = null) {
+    $ret = @parent::loadXML($source, $options);
+    
+    if (!$ret) {
+      return parent::loadXML($this->getUTF8($source), $options);
+    }
+    
+    return $ret;
   }
   
   function loadXML($source, $options = null) {
@@ -144,16 +154,16 @@ class CMbXMLDocument extends DOMDocument {
     
     return parent::loadXML($source, $options);
   }
-	
-	protected function getUTF8($source) {
-		return CMbString::isUTF8($source) ? utf8_decode($source) : $source;
-	}
   
-  function addElement($elParent, $elName, $elValue = null, $elNS = null) {
+  protected function getUTF8($source) {
+    return CMbString::isUTF8($source) ? utf8_decode($source) : $source;
+  }
+  
+  function addElement(DOMElement $elParent, $elName, $elValue = null, $elNS = null) {
     $elName  = utf8_encode($elName );
     $elValue = utf8_encode($elValue);
     return $elParent->appendChild(new DOMElement($elName, $elValue, $elNS));
-	}
+  }
   
   function addDateTimeElement($elParent, $elName, $dateValue = null) {
     $this->addElement($elParent, $elName, mbTransformTime(null, $dateValue, "%Y-%m-%dT%H:%M:%S"));
@@ -227,5 +237,3 @@ class CMbXMLDocument extends DOMDocument {
     return array();
   }
 }
-
-?>
