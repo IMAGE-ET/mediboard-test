@@ -23,9 +23,11 @@
               case "exchanges_sources_{{$actor->_guid}}" :
             	  InteropActor.refreshExchangesSources('{{$actor->_guid}}');
                 break;
+              {{if $actor->_ref_object_configs}}  
               case "actor_config_{{$actor->_id}}" :      
             	  InteropActor.refreshConfigObjectValues('{{$actor->_id}}', '{{$actor->_ref_object_configs->_guid}}');
                 break;
+              {{/if}}
             }
           }
       });
