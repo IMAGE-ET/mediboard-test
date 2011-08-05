@@ -123,7 +123,7 @@ class CHL7v2Segment extends CHL7V2 {
   }
   
   function getMessage() {
-    return $this->parent;
+    return $this->parent->getMessage();
   }
   
   function getVersion() {

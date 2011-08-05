@@ -79,14 +79,16 @@ class CHL7v2Message extends CHL7v2SegmentGroup {
       $this->repetitionSeparator   = "~";
       $this->componentSeparator    = "^";
     }
-    
+		
+    $this->lines = explode($this->segmentTerminator, $this->data);
+		
+    $this->validate();
+		
     $this->readHeader();
     $this->readSegments();
   }
 	
 	function readHeader(){
-    $this->lines = explode($this->segmentTerminator, $this->data);
-		
 		$first_line = $this->lines[0];
 		$this->current_line++;
 		
@@ -106,45 +108,33 @@ class CHL7v2Message extends CHL7v2SegmentGroup {
     return $this->lines[$this->current_line];
   }
 	
-	function handleSpecItem($child_spec) {
-    $type = $child_spec->getName();
-    $minOccurs = $child_spec->attributes()->minOccurs;
-    
-    switch($type) {
-      case "segment": 
-        if ($this->getCurrentLineHeader() == (string)$child_spec) {
-          $_segment = new CHL7v2Segment($this);
-          $_segment->parse($this->getCurrentLine());
-          $this->appendChild($_segment);
-          $this->current_line++;
-          break;
-        }
-        
-        if($minOccurs != "0") {
-          throw new CHL7v2Exception("Segment missing $child_spec");
-        }
-        
-        break;
-      case "group": 
-        $stack = CHL7v2SegmentGroup::getFirstSegmentHeader($child_spec, $this->getCurrentLineHeader());
-        
-        if (empty($stack) && $minOccurs != "0") {
-          throw new CHL7v2Exception("Segment missing $child_spec");
-        }
-        
-        foreach($stack as $_element) {
-        	$this->handleSpecItem($_element);
-					return;
-          mbTrace($_element->getName());
-          mbTrace();
-        }
-        
-        //mbTrace($stack);
-        /*if ($this->getCurrentLineHeader() == (string)$first_segment) {
-          mbTrace($first_segment);
-        }*/
-        // :'(
+	static function getNext($current_node, $current_group) {
+		// cas de la boucle sur le meme
+		/*if ($current_node->isUnbounded() && $parent->getOccurences() > 0) {
+			return array($current_node, $current_group);
+		}*/
+		
+    $current_node->reset();
+    $next = $current_node->getNextSibling();
+		
+    if ($next) {
+      mBtrace(" --> Suivant = frere");
+      $current_node = $next;
     }
+    else {
+			$parent = $current_node->getParent();
+			
+			if (!$parent->isUnbounded() || $parent->getOccurences() == 0) {
+        mBtrace(" --> Suivant = suivant du parent");
+				return self::getNext($parent, $current_group->parent);
+			}
+			
+      mBtrace(" --> Suivant = parent");
+      $current_node = $current_node->getParent();
+      $current_group = $current_group->parent;
+    }
+		
+		return array($current_node, $current_group);
 	}
   
 	// @todo Gérer les segments recursif s (pour le moment tout est aplati)
@@ -175,143 +165,113 @@ class CHL7v2Message extends CHL7v2SegmentGroup {
 		 */
 		
 		/**
+		 * Premier segment/groupe dans le fichier de spec venant de Mirth
+		 * 
 		 * @var CHL7v2SimpleXMLElement
 		 */
 		$current_node = next($specs->xpath("/message/segments/*"));
 		
 		/**
+		 * Groupe courant dans lequel on va placer les CHL7v2Segment créés
+		 * 
 		 * @var CHL7v2SegmentGroup
 		 */
 		$current_group = $this;
 		
-		$n = 100;
-		try {
-			while($n-- && $current_node) {
-		    switch($current_node->getName()) {
-		    	
-		    	// SEGMENT //
-		      case "segment":
-						mBtrace($current_node->getSegmentHeader(), "Segment");
+		$n = 100; // pour eviter les boucles infinies !
+
+		while($n-- && $current_node) {
+	    switch($current_node->getName()) {
+	    	
+	    	// SEGMENT //
+	      case "segment":
+					mBtrace($current_node->getSegmentHeader(), "Segment");
+					
+					// Si la spec correspond a la ligne courante
+	        if ($this->getCurrentLineHeader() == $current_node->getSegmentHeader()) {
+            mBtrace(" --> ### Creation du segment ###, ligne suivante");
 						
-						// Si la spec correspond a la ligne courante
-		        if ($this->getCurrentLineHeader() == $current_node->getSegmentHeader()) {
-		        	// On est dans le bon groupe
-		        	$current_node->markOpen();
-							
-							// On enregistre le segment dans le groupe courant
-		          $_segment = new CHL7v2Segment($current_group);
-		          $_segment->parse($this->getCurrentLine());
-		          $current_group->appendChild($_segment);
-							
-							// On avance dans le fichier
-		          $this->current_line++;
-		        }
-		        
-						// Si le segment est requis, alors erreur
-		        elseif ($current_node->open && $current_node->isRequired()) {
-		          throw new CHL7v2Exception("Segment missing $current_node");
-		        }
-         
-				    // increment d'utilisation
-            if ($current_node->isUnbounded()) {
-              mBtrace("Segment incrémenté");
-            	$current_node->occurences++;
-            }
+	        	// On est dans le bon groupe
+	        	$current_node->markOpen();
 						
-				    else {
-              mBtrace("Segment unique");
-					    // Segment/groupe suivant ou suivant du parent
-	            $current_node = $current_node->getNext();
-				    }
-		        break;
+						// On enregistre le segment dans le groupe courant
+	          $_segment = new CHL7v2Segment($current_group);
+	          $_segment->parse($this->getCurrentLine());
+	          $current_group->appendChild($_segment);
 						
-						
-          // GROUP //
-		      case "group":
-            mBtrace("Groupe");
-		        $current_node = $current_node->getFirstChild();
+						// On avance dans le fichier
+	          $this->current_line++;
+						mbTrace("Ligne $this->current_line");
+	        }
+					
+					// Segment non requis, on passe au suivant
+					elseif(!$current_node->isRequired()) {
+            mBtrace(" --> Segment non présent et non requis");
+						list($current_node, $current_group) = self::getNext($current_node, $current_group);
 						break;
+					}
+	        
+					// Si le segment est requis et que le groupe est ouvert, alors erreur
+	        else {
+	        	if ($current_node->getOccurences() > 0) {
+	        		mbTrace(" --> !!!!!!!!!!!!!!!!! Segment non present et groupe requis");
+	            throw new CHL7v2Exception("Segment missing $current_node");
+						}
+	        }
+       
+			    // le segment est multiple
+          if ($current_node->isUnbounded()) {
+            mBtrace(" --> Segment multiple");
+          }
+					
+          // Segment unique : Segment/groupe suivant ou suivant du parent
+			    else {
+            mBtrace(" --> Segment unique, passage au suivant");
+            list($current_node, $current_group) = self::getNext($current_node, $current_group);
+			    }
+	        break;
+					
+					
+        // GROUP //
+	      case "group":
+          mBtrace((string)$current_node->attributes()->name);
+					
+					if ($current_node->isUnbounded() || $current_node->getOccurences() == 0) {
+            mBtrace(" --> Groupe multiple ou pas encore utilisé, on entre dedans (occurences = ".$current_node->getOccurences().")");
+						$current_group = new CHL7v2SegmentGroup($current_group);
+            $current_group->name = (string)$current_node->attributes()->name;
 						
-						// custom attributes
-					default: 
-            mbTrace($current_node->getName()); 
-					  $current_node = $current_node->getNextSibling();
-						break;
-		    }
-			}
-		}
-		catch (CHL7v2FinishedException $e) {
-			// Yay !
+            $current_node = $current_node->getFirstChild();
+					}
+					else {
+            mBtrace(" --> Groupe utilisé ou pas multiple, on prend le parent ou frere (occurences = ".$current_node->getOccurences().")");
+            list($current_node, $current_group) = self::getNext($current_node, $current_group);
+					}
+					
+					break;
+					
+					// custom attributes, should never get there
+				default: 
+          mbTrace($current_node->getName()); 
+				  $current_node = $current_node->getNextSibling();
+					break;
+	    }
 		}
     
     // pas forcément utile : mais ceci donne tous les segments dans 
     // l'ordre de parcours, comme si on le faisait recursivement
     // $c = $specs->xpath("//segment | //group");
-    
-    // descendants directs du message
-    /*$children = $specs->xpath("/message/segments/*");
-    array_shift($children); // on passe le segment MSH
-    
-    foreach($children as $child_spec) {
-      $this->handleSpecItem($child_spec);
-    }*/
-		
-		/*
-		$segments_spec = $specs->xpath("//segment");
-		$i_line = 0;
-		$current_line_segment = null;
-		
-		foreach($segments_spec as $i_spec => $_segment_spec) {
-      $name = (string)$_segment_spec;
-			$segment = null;
-			
-			if($name == "MSH") continue;
-			
-			if (!$current_line_segment && isset($this->lines[$i_line])) {
-        try {
-			    $current_line_segment = new CHL7v2Segment($this);
-          $current_line_segment->parse($this->lines[$i_line++]);
-	      } catch (Exception $e) {
-	        exceptionHandler($e);
-	        return;
-	      }
-			}
-			
-      if ($current_line_segment && $name == $current_line_segment->name) {
-      	$segment = $current_line_segment;
-				$current_line_segment = null;
-      }
-			
-			 // necessite la gestion des groupes de segments
-			//$minOccurs = (string)($_segment_spec->attributes()->minOccurs);
-			//if ($minOccurs != "0" && !$segment) {
-			//	throw new CHL7v2Exception("Segment absent : $name");
-			//}
-			
-			if (isset($segment)) {
-			  $this->segments[$i_spec] = $segment;
-			}
-		}*/
-		
-		/*foreach($this->lines as $i => $_line) {
-	    try {
-        $_segment = new CHL7v2Segment($this);
-        $_segment->parse($_line);
-      } catch (Exception $e) {
-        exceptionHandler($e);
-        return;
-      }
-			
-			$this->segments[] = $_segment;
-    }*/
   }
-	
-	function readGroup($spec, &$i) {
-		
-	}
   
   function validate() {
-  	// Validation faite lors du readSegments
+  	// validation de la syntaxe : chaque ligne doit commencer par 3 lettre + un separateur + au moins une donnée
+		$sep = preg_quote($this->fieldSeparator);
+		
+		foreach($this->lines as $line) {
+			if (!preg_match("/^[A-Z0-9]{3}$sep.+$sep/", $line)) {
+				throw new CHL7v2Exception("Invalid syntax : $line");
+			}
+		}
   }
   
   function getVersion(){
@@ -326,5 +286,3 @@ class CHL7v2Message extends CHL7v2SegmentGroup {
     return $this;
   }
 }
-
-?>

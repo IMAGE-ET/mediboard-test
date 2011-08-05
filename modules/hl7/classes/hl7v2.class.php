@@ -125,5 +125,3 @@ abstract class CHL7V2 {
 		return $this;
 	}
 }
-
-?>

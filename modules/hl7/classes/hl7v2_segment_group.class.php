@@ -10,6 +10,7 @@
 
 class CHL7v2SegmentGroup extends CHL7V2 {
   var $children = array();
+	var $name;
 	
 	/**
 	 * @var CHL7v2SegmentGroup
@@ -18,6 +19,7 @@ class CHL7v2SegmentGroup extends CHL7V2 {
     
   function __construct(CHL7v2SegmentGroup $parent) {
     $this->parent = $parent;
+		$parent->appendChild($this);
   }
 	
 	static function getFirstSegmentHeader($spec, $header_name) {
@@ -37,7 +39,7 @@ class CHL7v2SegmentGroup extends CHL7V2 {
 	}
 	
 	static function getParentElement($spec) {
-		return reset($spec->xpath("parent::*"));
+		return $spec->getParent();
 	}
 	
 	function validate(){

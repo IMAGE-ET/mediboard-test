@@ -26,6 +26,7 @@
 			</ol>
 		{{else}}
 		  <ul>
+		  	{{$_child->name}}
 		    {{mb_include module=hl7 template=inc_segment_group_children segment_group=$_child}}
       </ul>
 		{{/if}}

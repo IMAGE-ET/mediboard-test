@@ -89,17 +89,4 @@ class CHL7v2Field extends CHL7V2 {
 	function getValue(){
 		return $this->items;
 	}
-	
-	/*
-	function __toString(){
-		$str = $this->datatype."<br />";
-    
-    foreach($this->parts as $part) {
-      $str .= "&nbsp;&nbsp;&nbsp;&nbsp; - $part<br />";
-    }
-		
-		return $str;
-	}*/
 }
-
-?>

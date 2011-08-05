@@ -9,28 +9,44 @@
  */
 
 class CHL7v2SimpleXMLElement extends CMbSimpleXMLElement {
-  var $occurences = 0;
-  var $open = false;
-	
   function getValidPatterns(){
     return array("segment", "group");
   }
 	
   function reset(){
-    $this->occurences = 0;
-    $this->open = false;
+    $this->attributes()->mb_occurences = 0;
+    $this->attributes()->used = 0;
   }
   
   function isRequired(){
-    return $this->attributes()->minOccurs !== "0";
+    return (string)$this->attributes()->minOccurs !== "0";
   }
   
   function isUnbounded(){
-    return $this->attributes()->maxOccurs === "unbounded";
+    return (string)$this->attributes()->maxOccurs === "unbounded";
+  }
+	
+	private function init(){
+    if (!isset($this->attributes()->mb_occurences))
+      $this->addAttribute("mb_occurences", 0);
+			
+    if (!isset($this->attributes()->mb_used))
+      $this->addAttribute("mb_used", 0);
+	}
+  
+  function getOccurences(){
+    return (int)$this->attributes()->mb_occurences;
+  }
+  
+  function isUsed(){
+    return (bool)$this->attributes()->mb_used;
   }
   
   function markOpen(){
-  	$this->open = true;
+  	$this->init();
+		
+  	$this->attributes()->mb_occurences = $this->getOccurences()+1;
+		
     $parent = $this->getParent();
 		
 		if ($parent && $parent->getName() !== "message") {
