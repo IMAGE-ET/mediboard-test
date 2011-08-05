@@ -288,7 +288,12 @@ updateModaleAfterAddLine = function(line_id){
 			    <input type="text" name="produit" value="&mdash; {{tr}}CPrescription.select_produit{{/tr}}" size="20" style="font-weight: bold; font-size: 1.3em; width: 300px;" class="autocomplete" 
 					       onclick="this.value = ''; headerPrescriptionTabs.setActiveTab('div_ajout_lignes');" />
 			    <label title="Recherche dans le livret thérapeutique">
-			      <input type="checkbox" value="1" name="_recherche_livret" {{if $prescription->type=="sejour" && $conf.dPprescription.CPrescription.preselect_livret}}checked="checked"{{/if}} onchange="if($V(this.form.produit)) { ac.activate.bind(ac)() };" />
+			      <input type="checkbox" value="1" name="_recherche_livret"
+            {{if ($prescription->type=="sejour" && $conf.dPprescription.CPrescription.preselect_livret) ||
+              ($prescription->type=="externe" && $app->user_prefs.lt_checked_externe)}}
+                checked="checked"
+            {{/if}}
+              onchange="if($V(this.form.produit)) { ac.activate.bind(ac)() };" />
 			      Livret Thérap.
 			    </label>
 			    

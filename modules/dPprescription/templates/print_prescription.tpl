@@ -10,7 +10,7 @@
 
 {{assign var=range value=1}}
 
-{{if $prescription->type == "externe"}}
+{{if $prescription->type == "externe" && $app->user_prefs.duplicata_checked_externe}}
   {{assign var=range value=2}}
 {{/if}}
 

@@ -1986,7 +1986,13 @@ class CSetupdPprescription extends CSetup {
               ADD `recusee` ENUM ('0','1') DEFAULT '0';";
     $this->addQuery($query);
     
-		$this->mod_version = "1.46";
+    $this->makeRevision("1.46");
+    $this->addPrefQuery("lt_checked_externe" , "1");
+    $this->addPrefQuery("dci_checked_externe", "1");
+    $this->addPrefQuery("duplicata_checked_externe", "1");
+    $this->addPrefQuery("date_empty_externe" , "0");
+    
+		$this->mod_version = "1.47";
   }
 }
 

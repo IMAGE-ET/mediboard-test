@@ -418,7 +418,9 @@ if($mode_protocole){
 }
 
 $protocole_line = new CPrescriptionLineMedicament();
-$protocole_line->debut = mbDate();
+if ($prescription->type != "externe" || ($prescription->type == "externe" && !CAppUI::pref("date_empty_externe"))) {
+  $protocole_line->debut = mbDate();
+}
 
 $contexteType = array(
   "CConsultation" => array("externe"),
@@ -436,7 +438,7 @@ foreach($mins as &$min){
 }
 
 $filter_line = new CPrescriptionLineMedicament();
-if($prescription->type != "externe"){
+if ($prescription->type != "externe" || ($prescription->type == "externe" && !CAppUI::pref("date_empty_externe"))){
   $filter_line->debut = mbDate();
 }
 

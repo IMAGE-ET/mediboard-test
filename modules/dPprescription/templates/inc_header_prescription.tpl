@@ -384,8 +384,7 @@ Main.add( function(){
 				{{else}}
         <input type="checkbox" id="in_progress" name="in_progress" style="display: none;"/>
         {{/if}}
-				
-				<input type="checkbox" id="dci" name="dci"/>
+				<input type="checkbox" id="dci" name="dci" {{if $prescription->type=="externe" && $app->user_prefs.dci_checked_externe}}checked="checked"{{/if}}/>
         <label for="dci" style="font-size: x-small" title="{{tr}}CPrescription.print_dci{{/tr}}">DCI</label>
         <input type="checkbox" id="globale" name="globale" />
         <label for="globale" style="font-size: 0.8em" title="{{tr}}CPrescription.print_globale{{/tr}}">Globale</label>
