@@ -7,13 +7,22 @@
 * @author SARL Openxtrem
 */
 
+CCanDo::checkRead();
+
 $cr_id = CValue::get("compte_rendu_id");
 
 $cr = new CCompteRendu();
 $cr->load($cr_id);
 $cr->loadContent();
 
-echo "<style type=\"text/css\">".file_get_contents("style/mediboard/htmlarea.css")."</style>".
-  $cr->_source;
+if (!$cr->canRead()) return;
 
-?>
+echo "<!DOCTYPE html>
+<html>
+	<head>
+	  <link type=\"text/css\" rel=\"stylesheet\" href=\"style/mediboard/htmlarea.css\" media=\"all\" />
+	</head>
+	<body>
+	  $cr->_source
+	</body>
+</html>";
