@@ -144,29 +144,6 @@ class CHL7v2Message extends CHL7v2SegmentGroup {
     $specs = $this->getSpecs();
     
     /**
-     * On parcourt la spec, qui est une sequence de segments et de groupes de segments ou de groupes (recursif).
-     * Si c'est un segment, on regarde s'il correspond au header de 3 lettres de la ligne courante : 
-     *   * si oui on le lit
-     *   * si non et que :
-     *      * il est obligatoire : erreur, 
-     *      * sinon on passe à la spec du segment suivant
-     *   
-     * Si c'est un groupe, ça se corse : il faut regarder si un des segments à l'interieur correspond 
-     * au header de 3 lettres de la ligne en cours : 
-     *   * si on en trouve un, c'est qu'il faut "entrer" dans ce groupe 
-     *      (pb avec cette methode : ca valide mal si un des segments ou groupes obligatoires precede ce segment)
-     *   * si non et que :
-     *      - le groupe est obligatoire : erreur
-     *      - le groupe n'est pas obligatoire : spec du groupe suivant
-     *      
-     * methode plus efficace pour les groupes : 
-     * on a une pile de groupes, dans laquelle on push les groupes dans lesquels on rentre et pop ceux dont on sort.
-     * Dans tous les cas quand on sort d'un groupe obligatoire sans avoir trouvé un segment : erreur.
-     * Quand on est dans une spec de groupe, on ne sort pas tant qu'on n'a pas parcouru tous ses segments.
-     * 
-     */
-    
-    /**
      * Premier segment/groupe dans le fichier de spec venant de Mirth
      * 
      * @var CHL7v2SimpleXMLElement
@@ -191,7 +168,6 @@ class CHL7v2Message extends CHL7v2SegmentGroup {
           
           // Si la spec correspond a la ligne courante
           if ($this->getCurrentLineHeader() == $current_node->getSegmentHeader()) {
-            mBtrace(" --> ### Creation du segment ###, ligne suivante");
             
             // On est dans le bon groupe
             $current_node->markOpen();
@@ -203,7 +179,7 @@ class CHL7v2Message extends CHL7v2SegmentGroup {
             
             // On avance dans le fichier
             $this->current_line++;
-            mbTrace("Ligne $this->current_line");
+            mBtrace(" --> ### Creation du segment ###, ligne suivante : $this->current_line");
           }
           
           // Segment non requis, on passe au suivant
@@ -214,8 +190,9 @@ class CHL7v2Message extends CHL7v2SegmentGroup {
           }
           
           // Si le segment est requis et que le groupe est ouvert, alors erreur
+					// pas de parent si à la racine (fils de <segments>) : bizarre 
           else {
-            if ($current_node->getOccurences() > 0) {
+            if (!$current_node->getParent() || $current_node->getParent()->isOpen()) {
               mbTrace(" --> !!!!!!!!!!!!!!!!! Segment non present et groupe requis");
               throw new CHL7v2Exception("Segment missing $current_node");
             }

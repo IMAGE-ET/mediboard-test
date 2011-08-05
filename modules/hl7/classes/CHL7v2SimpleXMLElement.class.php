@@ -15,7 +15,7 @@ class CHL7v2SimpleXMLElement extends CMbSimpleXMLElement {
 	
   function reset(){
     $this->attributes()->mb_occurences = 0;
-    $this->attributes()->used = 0;
+    $this->attributes()->mb_open = 0;
   }
   
   function isRequired(){
@@ -26,26 +26,46 @@ class CHL7v2SimpleXMLElement extends CMbSimpleXMLElement {
     return (string)$this->attributes()->maxOccurs === "unbounded";
   }
 	
+	/**
+	 * Obligé de mettre les prop de cadinalité et d'ouverture en attributs sinon ca créé des enfants
+	 * 
+	 * @return void
+	 */
 	private function init(){
     if (!isset($this->attributes()->mb_occurences))
       $this->addAttribute("mb_occurences", 0);
 			
-    if (!isset($this->attributes()->mb_used))
-      $this->addAttribute("mb_used", 0);
+    if (!isset($this->attributes()->mb_open))
+      $this->addAttribute("mb_open", 0);
 	}
   
+	/**
+	 * Cardinalité relevée
+	 * 
+	 * @return int
+	 */
   function getOccurences(){
     return (int)$this->attributes()->mb_occurences;
   }
   
-  function isUsed(){
-    return (bool)$this->attributes()->mb_used;
+  /**
+   * Si le groupe est ouvert
+   * 
+   * @return bool
+   */
+  function isOpen(){
+    return (bool)$this->attributes()->mb_open;
   }
   
+	/** 
+	 * Marque l'element comme ouvert, et tous ses parents
+	 */
   function markOpen(){
   	$this->init();
 		
-  	$this->attributes()->mb_occurences = $this->getOccurences()+1;
+		// @todo a mon avis ce n'est pas ici qu'il faut incrementer
+    $this->attributes()->mb_occurences = $this->getOccurences()+1;
+    $this->attributes()->mb_open = 1;
 		
     $parent = $this->getParent();
 		
