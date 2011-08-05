@@ -182,6 +182,7 @@
 	  {{if $rpu->_id && $can->edit}}
 	    DossierMedical.reloadDossierPatient();
 	    var tab_sejour = Control.Tabs.create('tab-dossier');
+	    loadDocItems('{{$rpu->sejour_id}}', '{{$rpu->_ref_consult->_id}}');
 	  {{/if}}
 	  
 	  if (document.editAntFrm){

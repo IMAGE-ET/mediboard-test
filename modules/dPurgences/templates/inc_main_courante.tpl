@@ -209,8 +209,9 @@
             {{/if}}
 
             {{if $_sejour->_nb_files_docs > 0}}
-              <img src="images/icons/docitem.png"
-                title="{{$_sejour->_nb_files|default:0}} {{tr}}CMbObject-back-files{{/tr}} / {{$_sejour->_nb_docs|default:0}} {{tr}}CMbObject-back-documents{{/tr}}"/>
+              <a href="?m=dPurgences&tab=vw_aed_rpu&rpu_id={{$rpu->_id}}#doc-items" style="display: inline">
+                <img src="images/icons/docitem.png"
+                  title="{{$_sejour->_nb_files|default:0}} {{tr}}CMbObject-back-files{{/tr}} / {{$_sejour->_nb_docs|default:0}} {{tr}}CMbObject-back-documents{{/tr}}"/></a>
             {{else}}
               <img src="images/icons/placeholder.png"/>
             {{/if}}
