@@ -1,5 +1,9 @@
 <!-- $Id$ -->
 
+<script type="text/javascript">
+  Main.add(window.print);
+</script>
+
 <table class="tbl">
   <tr class="clear">
     <th colspan="10">
