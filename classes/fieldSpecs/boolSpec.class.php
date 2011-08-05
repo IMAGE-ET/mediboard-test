@@ -65,6 +65,7 @@ class CBoolSpec extends CMbFieldSpec {
     $typeEnum      = CMbArray::extract($params, "typeEnum", "radio");
     $separator     = CMbArray::extract($params, "separator");
     $disabled      = CMbArray::extract($params, "disabled");
+    $readonly      = CMbArray::extract($params, "readonly"); 
     $default       = CMbArray::extract($params, "default", $this->default);
     $defaultOption = CMbArray::extract($params, "defaultOption");
     $form          = CMbArray::extract($params, "form"); // needs to be extracted
@@ -86,7 +87,7 @@ class CBoolSpec extends CMbFieldSpec {
   	    for ($i = 1; $i >= 0; $i--) {
   	      $attributes["value"] = "$i"; 
   	      $attributes["checked"] = $value === "$i" ? "checked" : null; 
-  	      $attributes["disabled"] = $disabled === "$i" ? "disabled" : null; 
+  	      $attributes["disabled"] = $disabled === "$i" || $readonly ? "disabled" : null; 
   	      $attributes["class"] = $className;
   	      
   	      $xmlAttributes = CMbArray::makeXmlAttributes($attributes);
@@ -103,6 +104,7 @@ class CBoolSpec extends CMbFieldSpec {
 	      return $sHtml;
     
       case "checkbox":
+        $disabled = $readonly ? "disabled=\"1\"" : $disabled;
         
         if (null === $value) {
           $value = "$default";
@@ -115,12 +117,13 @@ class CBoolSpec extends CMbFieldSpec {
           $value = "0";
         }
       	$sHtml = '<input type="checkbox" name="__'.$field.'" 
-          onclick="$V(this.form.'.$field.', $V(this)?1:0);" '.$checked.' />';
+          onclick="$V(this.form.'.$field.', $V(this)?1:0);" '.$checked.' '.$disabled.' />';
       	$sHtml .= '<input type="hidden" name="'.$field.'" '.$extra.' value="'.$value.'" />';
     	  return $sHtml;
     
       case "select":
-        $sHtml       = "<select name=\"$field\" class=\"$className\" $extra>";
+        $disabled = $readonly ? "disabled=\"1\"" : $disabled;
+        $sHtml       = "<select name=\"$field\" class=\"$className\" $disabled $extra>";
         
         if ($defaultOption){
           if($value === null) {

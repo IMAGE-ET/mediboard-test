@@ -91,67 +91,80 @@ class CEnumSpec extends CMbFieldSpec {
     $defaultOption = CMbArray::extract($params, "defaultOption");
     $alphabet      = CMbArray::extract($params, "alphabet", false);
     $form          = CMbArray::extract($params, "form"); // needs to be extracted
-    
+
+    // Empty label translation
     if ($emptyLabel = CMbArray::extract($params, "emptyLabel")) {
       $defaultOption = "&mdash; ". CAppUI::tr($emptyLabel);
     }
     
+    // Extra info por HTML generation
     $extra         = CMbArray::makeXmlAttributes($params);
     $locales       = $this->_locales;
     $className     = htmlspecialchars(trim("$className $this->prop"));
-    $sHtml         = "";
+    $html          = "";
     
+    // Alpha sorting
     if ($alphabet) {
       asort($locales); 
     }
-    
+
+    // Turn readonly to disabled
+    $readonly  = CMbArray::extract($params, "readonly");
+    $disabled = $readonly ? "disabled=\"1\"" : "";
+
     switch ($typeEnum) {
       default:
       case "select":
-        $sHtml      .= "<select name=\"$field\" class=\"$className\" $extra>";
         
-        if($defaultOption){
-          if($value === null) {
-            $sHtml    .= "\n<option value=\"\" selected=\"selected\">$defaultOption</option>";
-          } else {
-            $sHtml    .= "\n<option value=\"\">$defaultOption</option>";
+        $html .= "<select name=\"$field\" class=\"$className\" $disabled $extra>";
+        
+        // Default option
+        if ($defaultOption){
+          if ($value === null) {
+            $html .= "\n<option value=\"\" selected=\"selected\">$defaultOption</option>";
+          } 
+          else {
+            $html .= "\n<option value=\"\">$defaultOption</option>";
           }
         }
+        
+        // All other options
         foreach ($locales as $key => $item){
-          if(($value !== null && $value === "$key") || ($value === null && "$key" === "$this->default" && !$defaultOption)){
+          $selected = "";
+          if (($value !== null && $value === "$key") || ($value === null && "$key" === "$this->default" && !$defaultOption)) {
             $selected = " selected=\"selected\""; 
-          }else{
-            $selected = "";
           }
-          $sHtml    .= "\n<option value=\"$key\" $selected>$item</option>";
+          
+          $html .= "\n<option value=\"$key\" $selected>$item</option>";
         }
-        $sHtml      .= "\n</select>";
-        return $sHtml;
+        
+        $html .= "\n</select>";
+        return $html;
 
       case "radio":
         $compteur = 0;
         
         foreach ($locales as $key => $item){
-          if(($value !== null && $value === "$key") || ($value === null && "$key" === "$this->default")){
+          $selected = "";
+          if (($value !== null && $value === "$key") || ($value === null && "$key" === "$this->default")) {
             $selected = " checked=\"checked\""; 
-          }else{
-            $selected = "";
           }
-          $sHtml .= "\n<input type=\"radio\" name=\"$field\" value=\"$key\" $selected class=\"$className\" $extra />
+          
+          $html .= "\n<input type=\"radio\" name=\"$field\" value=\"$key\" $selected class=\"$className\" $disabled $extra />
                        <label for=\"{$field}_{$key}\">$item</label> ";
           $compteur++;
           
           $modulo = $compteur % $cycle;
           if($separator != null && $modulo == 0 && $compteur < count($locales)){
-            $sHtml  .= $separator;
+            $html  .= $separator;
           }
  
           if ($this->vertical) {
-            $sHtml .= "<br />\n";
+            $html .= "<br />\n";
           }
         }
         
-        return $sHtml;
+        return $html;
     }
   }
   

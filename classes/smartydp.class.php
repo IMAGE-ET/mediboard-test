@@ -348,6 +348,10 @@ function smarty_modifier_trace($value) {
  * - canNull         : {optionnel} Permet de passer outre le notNull de la spécification
  */
 function smarty_function_mb_field($params, &$smarty) {
+  if (CAppUI::conf("readonly")) {
+    $params["readonly"] = 1;
+  }
+  
   require_once $smarty->_get_plugin_filepath('shared','escape_special_chars');
 
   if (null == $object = CMbArray::extract($params, "object")) {
@@ -379,7 +383,7 @@ function smarty_function_mb_field($params, &$smarty) {
     $spec->notNull = 1;
     $spec->prop = "canNull notNull $spec->prop";
   }
-  
+
   return $spec->getFormElement($object, $params);
 }
 
