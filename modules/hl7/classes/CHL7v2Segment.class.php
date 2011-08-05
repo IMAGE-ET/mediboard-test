@@ -8,7 +8,7 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
  */
 
-class CHL7v2Segment extends CHL7V2 {   
+class CHL7v2Segment extends CHL7v2 {   
   var $name        = null;
   var $description = null;
   var $fields      = array();

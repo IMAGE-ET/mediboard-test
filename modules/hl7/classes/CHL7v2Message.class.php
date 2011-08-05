@@ -8,7 +8,7 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
  */
 
-CAppUI::requireModuleClass("hl7", "hl7v2_segment_group");
+CAppUI::requireModuleClass("hl7", "CHL7v2SegmentGroup");
 
 class CHL7v2Message extends CHL7v2SegmentGroup {
   const DEFAULT_ESCAPE_CHARACTER        = "\\";

@@ -20,7 +20,7 @@
  */
 
 
-abstract class CHL7V2 {  
+abstract class CHL7v2 {  
   const LIB_HL7 = "lib/hl7";
   const PREFIX_MESSAGE_NAME   = "message";
   const PREFIX_SEGMENT_NAME   = "segment";

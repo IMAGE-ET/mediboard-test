@@ -8,9 +8,9 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
  */
 
-CAppUI::requireModuleClass("hl7", "hl7v2_segment");
+CAppUI::requireModuleClass("hl7", "CHL7v2Segment");
 
-class CHL7v2Field extends CHL7V2 {
+class CHL7v2Field extends CHL7v2 {
   static $typesBase = array(
     "Date",
     "DateTime",
