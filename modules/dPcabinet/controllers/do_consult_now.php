@@ -68,16 +68,16 @@ $plageAfter = new CPlageconsult();
 
 // Cas ou une plage correspond
 $where = array();
-$where["chir_id"] = "= '$chir->user_id'";
+$where["chir_id"] = "= '$chir->_id'";
 $where["date"]    = "= '$day_now'";
 $where["debut"]   = "<= '$time_now'";
 $where["fin"]     = "> '$time_now'";
 $plage->loadObject($where);
 
-if(!$plage->plageconsult_id) {
+if(!$plage->_id) {
   // Cas ou on a des plage en collision
 	$where = array();
-	$where["chir_id"] = "= '$chir->user_id'";
+	$where["chir_id"] = "= '$chir->_id'";
 	$where["date"]    = "= '$day_now'";
 	$where["debut"]   = "<= '$hour_now'";
 	$where["fin"]     = ">= '$hour_now'";
@@ -85,18 +85,18 @@ if(!$plage->plageconsult_id) {
 	$where["debut"]   = "<= '$hour_next'";
 	$where["fin"]     = ">= '$hour_next'";
   $plageAfter->loadObject($where);
-  if($plageBefore->plageconsult_id) {
-    if($plageAfter->plageconsult_id) {
+  if($plageBefore->_id) {
+    if($plageAfter->_id) {
       $plageBefore->fin = $plageAfter->debut;
     } else {
       $plageBefore->fin = max($plageBefore->fin, $hour_next);
     }
     $plage =& $plageBefore;
-  } elseif($plageAfter->plageconsult_id) {
+  } elseif($plageAfter->_id) {
     $plageAfter->debut = min($plageAfter->debut, $hour_now);
     $plage =& $plageAfter;
   } else {
-    $plage->chir_id = $chir->user_id;
+    $plage->chir_id = $chir->_id;
     $plage->date    = $day_now;
     $plage->freq    = "00:".CPlageconsult::$minutes_interval.":00";
     $plage->debut   = $hour_now;
@@ -114,7 +114,7 @@ $plage->loadRefsFwd();
 $ref_chir = $plage->_ref_chir;
 
 $consult = new CConsultation;
-$consult->plageconsult_id = $plage->plageconsult_id;
+$consult->plageconsult_id = $plage->_id;
 $consult->sejour_id = $sejour->_id;
 $consult->patient_id = $patient_id;
 $consult->heure = $time_now;

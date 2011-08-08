@@ -42,11 +42,16 @@ $listAnesths = $listAnesths->loadAnesthesistes();
 
 $consult = new CConsultation();
 
+$listPrats = array();
+
 if($current_m == "dPurgences"){
   if (!$selConsult) {
     CAppUI::setMsg("Vous devez selectionner une consultation", UI_MSG_ALERT);
     CAppUI::redirect("m=dPurgences&tab=0");
   }
+  $user = CAppUI::$user;
+  $group = CGroups::loadCurrent();
+  $listPrats = $user->loadPraticiens(PERM_READ, $group->service_urgences_id);
 }
 
 $tabSejour = array();
@@ -280,8 +285,9 @@ $smarty->assign("examComp"       , $examComp);
 $smarty->assign("_is_anesth"     , $consult->_is_anesth);
 $smarty->assign("current_m"      , $current_m);
 $smarty->assign("list_etat_dents", $list_etat_dents);
-$smarty->assign("line", new CPrescriptionLineMedicament());
-$smarty->assign("now", $now);
+$smarty->assign("now"            , $now);
+$smarty->assign("listPrats"      , $listPrats);
+$smarty->assign("line"           , new CPrescriptionLineMedicament());
 
 if($consult->_is_anesth) {
   $nextSejourAndOperation = $consult->_ref_patient->getNextSejourAndOperation($consult->_ref_plageconsult->date);

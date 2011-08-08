@@ -19,7 +19,21 @@ function printConsult() {
   url.addParam("consult_id", "{{$consult->_id}}");
   url.popup(700, 550, "Consultation");
 }
+
+function changePratPec(prat_id) {
+  var oForm = getForm("editPratPec");
+  $V(oForm.prat_id, prat_id);
+  oForm.submit();
+}
 </script>
+
+<!-- Formulaire de changement de praticien pour la pec -->
+<form name="editPratPec" method="post" action="?">
+  <input type="hidden" name="m" value="dPcabinet" />
+  <input type="hidden" name="dosql" value="do_change_prat_pec" />
+  {{mb_key object=$consult}}
+  <input type="hidden" name="prat_id" value="" />
+</form>
 
 {{mb_script module=dPcabinet script=file}}
 {{mb_include module=dPfiles template=yoplet_uploader object=$consult}}
@@ -74,6 +88,15 @@ function printConsult() {
           Terminer
         </button>
       {{/if}})
+      {{if $current_m == "dPurgences"}}
+        <br />
+        <div style="float: left;">
+        <select name="prat_id" class="ref notNull" style="width: 10em;" onchange="changePratPec($V(this));" title="Changer le praticien">
+          <option value="">&mdash; {{tr}}Choose{{/tr}}</option>
+          {{mb_include module=mediusers template=inc_options_mediuser list=$listPrats selected=$consult->_ref_chir->_id}}
+        </select>
+        </div>
+      {{/if}}
     </th>
   </tr>
 </table>
