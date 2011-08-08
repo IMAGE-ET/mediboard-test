@@ -46,6 +46,8 @@ $where["type"] = "= 'body'";
 $where["group_id"] = " = '$user->_group_id'";
 $modeles = array_merge($modeles, $compte_rendu->seek($keywords, $where, null, null, null, $order));
 
+array_multisort(CMbArray::pluck($modeles, "nom"), SORT_ASC, $modeles);
+
 $smarty = new CSmartyDP();
 
 $smarty->assign("modeles", $modeles);
