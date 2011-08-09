@@ -132,6 +132,20 @@ reloadPatient = function(patient_id, link){
   </tr>
   
   <tr>
+    <th>
+      <label for="prat" title="Praticien concerné">
+        Praticien
+      </label>
+    </th>
+    <td colspan="3">
+      <select name="prat_id" tabindex="5" style="width: 13em;">
+        <option value="">&mdash; Choisir un praticien</option>
+        {{mb_include module=mediusers template=inc_options_mediuser list=$prats selected=$prat_id}}
+      </select>
+    </td>
+  </tr>
+  
+  <tr>
     <td class="button" colspan="4">
       <button class="search" tabindex="10" type="submit">{{tr}}Search{{/tr}}</button>
       

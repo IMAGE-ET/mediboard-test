@@ -37,6 +37,7 @@ $patient_year        = CValue::get("Date_Year" );
 $patient_naissance   = null;
 $patient_ipp         = CValue::get("patient_ipp");
 $useVitale           = CValue::get("useVitale",  CAppUI::pref('GestionFSE') && CAppUI::pref('VitaleVision') ? 1 : 0);
+$prat_id             = CValue::getOrSession("prat_id");
 
 $patient_nom_search    = null;
 $patient_prenom_search = null;
@@ -75,6 +76,7 @@ else {
 	
 	$where        = array();
 	$whereSoundex = array();
+	$ljoin        = array();
 	$soundexObj   = new soundex2();
 	
 	// Limitation du nombre de caractères
@@ -108,6 +110,15 @@ else {
 	if ($patient_ville) $where["ville"] = $whereSoundex["ville"] = "LIKE '$patient_ville%'";
 	if ($patient_cp)    $where["cp"]    = $whereSoundex["cp"]    = "LIKE '$patient_cp%'";
 	
+	if ($prat_id) {
+	  $ljoin["consultation"] = "`consultation`.`patient_id` = `patients`.`patient_id`";
+	  $ljoin["plageconsult"] = "`plageconsult`.`plageconsult_id` = `consultation`.`plageconsult_id`";
+	  $ljoin["sejour"]       = "`sejour`.`patient_id` = `patients`.`patient_id`";
+	  
+	  $where[] = "plageconsult.chir_id = '$prat_id' OR sejour.praticien_id = '$prat_id'";
+	  $whereSoundex[] = "plageconsult.chir_id = '$prat_id' OR sejour.praticien_id = '$prat_id'";
+	}
+	
 	$patients        = array();
 	$patientsSoundex = array();
 	
@@ -116,11 +127,11 @@ else {
 	
 	// Chargement des patients
 	if ($where) {
-	  $patients = $pat->loadList($where, $order, $showCount);
+	  $patients = $pat->loadList($where, $order, $showCount, null, $ljoin);
 	}
 	
 	if ($whereSoundex) {
-	  $patientsSoundex = $pat->loadList($whereSoundex, $order, $showCount);
+	  $patientsSoundex = $pat->loadList($whereSoundex, $order, $showCount, null, $ljoin);
 	  $patientsSoundex = array_diff_key($patientsSoundex, $patients);
 	}
 	
@@ -145,6 +156,9 @@ foreach($patientsSoundex as $_patient) {
   $_patient->loadView();
 }
 
+// Liste des praticiens
+$prats = $mediuser->loadPraticiens();
+
 // Création du template
 $smarty = new CSmartyDP();
 
@@ -161,6 +175,8 @@ $smarty->assign("ville"               , $patient_ville            );
 $smarty->assign("cp"                  , $patient_cp               );
 $smarty->assign("nom_search"          , $patient_nom_search       );
 $smarty->assign("prenom_search"       , $patient_prenom_search    );
+$smarty->assign("prat_id"             , $prat_id);
+$smarty->assign("prats"               , $prats);
 
 $smarty->assign("useVitale"           , $useVitale                );
 $smarty->assign("patVitale"           , $patVitale                );
