@@ -22,6 +22,7 @@ class CMouvFactory {
 
   /**
    * Get available types for current compat config
+   * 
    * @return array the types, null for invalid compat
    */
   static function getTypes() {
@@ -40,6 +41,7 @@ class CMouvFactory {
   
   /**
    * Get available types for current compat config
+   * 
    * @return array the types, null for invalid compat
    */
   static function getClasses() {
