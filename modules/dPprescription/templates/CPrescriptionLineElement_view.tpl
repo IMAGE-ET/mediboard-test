@@ -12,13 +12,26 @@
 {{assign var=chapitre value=$line->_ref_element_prescription->_ref_category_prescription->chapitre}}
 <table class="tbl">
   <tr>
-    <th colspan="3">{{$line->_view}}</th>
+    <th colspan="3">
+      {{mb_include module=system template=inc_object_history object=$line}}
+      {{$line}}
+    </th>
   </tr>
+  {{if $line->date_arret}}
+    <tr>
+      <td colspan="3" class="cancelled">
+        {{mb_label object=$line field=date_arret}} :
+        {{mb_value object=$line field=date_arret}}
+        {{mb_value object=$line field=time_arret}}
+      </td>
+    </tr>
+  {{/if}}
   {{if $chapitre != "dmi"}}
   <tr>
     {{if !$line->fin}}
     <td>
-      {{mb_label object=$line field="debut"}}: {{mb_value object=$line field="debut"}} 
+      {{mb_label object=$line field="debut"}}:
+      {{mb_value object=$line field="debut"}} 
 			{{if $line->time_debut}}
   			à {{mb_value object=$line field="time_debut"}}
 			{{/if}}
