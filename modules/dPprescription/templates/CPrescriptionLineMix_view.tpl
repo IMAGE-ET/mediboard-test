@@ -46,18 +46,31 @@
     </td>
   </tr>
   {{if $perf->date_arret}}
-  <tr>
-    <td>
-      <strong>
-        {{mb_label object=$perf field=date_arret}}: {{mb_value object=$perf field=date_arret}} à {{mb_value object=$perf field=time_arret}}
-      </strong>
-    </td>
-  </tr>
+    <tr>
+      <td class="cancelled">
+        <strong>
+          {{mb_label object=$perf field=date_arret}} :
+          {{mb_value object=$perf field=date_arret}} à
+          {{mb_value object=$perf field=time_arret}} ({{$perf->_ref_log_date_arret->_ref_user}})
+        </strong>
+      </td>
+    </tr>
+  {{elseif $perf->date_retrait}}
+    <tr>
+      <td class="cancelled">
+        <trong>
+          {{mb_label object=$perf field=date_retrait}} :
+          {{mb_value object=$perf field=date_retrait}} à
+          {{mb_value object=$perf field=time_retrait}} ({{$perf->_ref_log_date_retrait->_ref_user}})
+        </trong>
+      </td>
+    </tr>
   {{/if}}
   <tr>
     <td>
       {{mb_label object=$perf field=duree}} :
-      {{mb_value object=$perf field=duree}} {{mb_value object=$perf field=unite_duree}}
+      {{mb_value object=$perf field=duree}}
+      {{mb_value object=$perf field=unite_duree}}
     </td>
   </tr>
   <tr>

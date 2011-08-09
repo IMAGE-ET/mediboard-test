@@ -108,7 +108,9 @@ class CPrescriptionLineMix extends CMbObject {
   // Object references
   var $_ref_log_signature_prat = null;
   var $_ref_substitute_for = null; // ligne (med ou perf) que la ligne peut substituer
-
+  var $_ref_log_date_arret = null;
+  var $_ref_log_date_retrait = null;
+  
   var $_ref_variations = null;
 
   var $_short_view = null;
@@ -541,8 +543,18 @@ class CPrescriptionLineMix extends CMbObject {
   	parent::loadView();
     $this->loadRefsLines();
     $this->loadRefsTransmissions();
+    $this->loadRefLogDateArret();
+    $this->loadRefLogDateRetrait();
   }
 	
+  function loadRefLogDateArret(){   
+    $this->_ref_log_date_arret = $this->loadLastLogForField("date_arret");
+  }
+  
+  function loadRefLogDateRetrait(){   
+    $this->_ref_log_date_retrait = $this->loadLastLogForField("date_arret");
+  }
+  
 	function removePlanifSysteme(){
 		if(!$this->_ref_lines){
 		  $this->loadRefsLines();
