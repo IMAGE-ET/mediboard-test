@@ -300,11 +300,9 @@ Main.add(function(){
   <input type="hidden" name=""/>
 </form>
 
-<!-- Zone cachée pour la génération PDF et l'impression server side,
-  utilisée lorsque la config PDF n'est pas activée-->
-{{if !$pdf_thumbnails || !$app->user_prefs.pdf_and_thumbs}}
-  <div id="pdf_area" style="display: none;"></div>
-{{/if}}
+<!-- Zone cachée pour la génération PDF et l'impression server side -->
+<div id="pdf_area" style="display: none;"></div>
+
 
 <!-- Formulaire pour streamer le pdf -->
 <form style="display: none;" name="download-pdf-form" target="download_pdf" method="post" action="?m=dPcompteRendu&amp;a=ajax_pdf"
