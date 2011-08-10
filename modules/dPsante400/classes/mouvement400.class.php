@@ -58,6 +58,9 @@ class CMouvement400 extends CRecordSante400 {
   
   /**
    * Try and store trigger mark according to module config
+   * 
+   * @param string $mark Mark content
+   * @return void
    */
   static function storeMark($mark) {
     if (CAppUI::conf("dPsante400 mark_row")) {
@@ -69,6 +72,8 @@ class CMouvement400 extends CRecordSante400 {
   
   /**
    * Mark mouvement as being handled
+   * 
+   * @return void
    */
   function checkOut() {
     $mark = $this->loadTriggerMark();
@@ -232,7 +237,13 @@ class CMouvement400 extends CRecordSante400 {
     $this->loadOne($query);
     $this->initialize();
   }
-    
+
+  /**
+   * Load and checkout mouvement for given record index
+   * 
+   * @param string $rec Record index
+   * @param void
+   */
   function load($rec) {
     $query = "SELECT * FROM $this->base.$this->table 
       WHERE $this->idField = ?";
@@ -246,22 +257,39 @@ class CMouvement400 extends CRecordSante400 {
     $this->checkOut();     
   }
 	
+  /**
+   * Load oldest mouvement in the table
+   * 
+   * @return void
+   */
 	function loadOldest() {
     $query = "SELECT * FROM $this->base.$this->table 
 			ORDER BY $this->idField ASC";
     $this->loadOne($query);
     $this->initialize();
 	}
-  
-/**
- * Mark the mouvement row
- * ======== : checked out
- * OKOKOKOK : processed
- * 124--*-- : each of 8 steps are done :
- *      n : times
- *      - : undone due to errors 
- *      * : skipped 
- */  
+	
+  /**
+   * Load latest mouvement in the table
+   * 
+   * @return void
+   */
+	function loadLatest() {
+    $query = "SELECT * FROM $this->base.$this->table 
+      ORDER BY $this->idField DESC";
+    $this->loadOne($query);
+    $this->initialize();
+  }
+	
+  /**
+   * Mark the mouvement row
+   * ======== : checked out
+   * OKOKOKOK : processed
+   * 124--*-- : each of 8 steps are done :
+   *      n : times
+   *      - : undone due to errors 
+   *      * : skipped 
+   */  
   function markRow() {
     // Get the final mark
     $this->status = "";
@@ -281,6 +309,7 @@ class CMouvement400 extends CRecordSante400 {
   
   /**
    * Initialisation du status à zéro si non existant
+   * 
    * @param int $rank
    * @param int $value valeur à mettre, incrémente le rang si null 
    */
@@ -292,6 +321,7 @@ class CMouvement400 extends CRecordSante400 {
   
   /**
    * Changement de status sur un rang à une valeur donnée
+   * 
    * @param int $rank
    * @param int $value valeur à mettre, incrémente le rang si null 
    */
@@ -301,6 +331,7 @@ class CMouvement400 extends CRecordSante400 {
 
   /**
    * Analogie à markStatus(), mais compte les objets récupérés du cache
+   * 
    * @param int $rank
    * @param int $value valeur à mettre, incrémente le rang si null 
    */
@@ -311,6 +342,7 @@ class CMouvement400 extends CRecordSante400 {
   
   /**
    * Cherche la mark pour ce mouvement et la complète
+   * 
    * @return CTriggerMark
    */
   function loadTriggerMark() {
@@ -339,6 +371,7 @@ class CMouvement400 extends CRecordSante400 {
   
   /**
    * Trace value with given title
+   * 
    * @param mixed $value
    * @param string title
    */
@@ -348,6 +381,11 @@ class CMouvement400 extends CRecordSante400 {
     }
   }
   
+  /**
+   * Proceed the synchronisation of this mouvement
+   * 
+   * @return bool Job-done value
+   */
   function proceed() {
     $this->trace($this->data, "Données à traiter dans le mouvement");
     $this->trace(join(" ", $this->changedFields), "Données modifiées");
@@ -367,9 +405,20 @@ class CMouvement400 extends CRecordSante400 {
     return $return;
   }
   
+  /**
+   * Synchronisation behaviour, to be redefined in child classes
+   * 
+   * @return void
+   */
   function synchronize() {
   }
   
+  /**
+   * Tell whether a field has been changed in this mouvement
+   * 
+   * @param string [optional] Changed to a specific value, if not null
+   * 
+   */
   function changedField($field, $value = null) {
     $newValue = $this->data["A_$field"];
     return in_array($field, $this->changedFields) && ($value !== null ? $newValue == $value : true);
