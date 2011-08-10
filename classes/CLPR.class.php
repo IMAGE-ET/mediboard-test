@@ -48,7 +48,6 @@ class CLPR {
       $printer = "-P '$this->printer_name'";
     }
 
-    $host = "$this->hostname";
     $u = "";
     
     if ($this->username) {
@@ -58,7 +57,12 @@ class CLPR {
       $host .= ":$this->port";
     }
     
-    $command = "lpr -H $host $u $printer '$file->_file_path'";
+    // La commande lpr interprête mal le hostname pour établir la requête
+    // $host = "$this->hostname";
+    // $command = "lpr -H $host $u $printer '$file->_file_path'";
+    
+    // Ajout préalable de l'imprimante via cups du serveur web
+    $command = "lpr $u $printer '$file->_file_path'";
     
     exec($command, $res, $success);
 
