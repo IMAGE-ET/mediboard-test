@@ -224,6 +224,30 @@ class CRecordSante400 {
 
     return trim(addslashes($value));    
   }
+  
+  /**
+   * Lookup any value 
+   * 
+   * @param string $valueName Value name
+   * 
+   * @return string Trimmed and slashed value, null if no value
+   */
+  function lookup($valueName) {
+    $valueName = "$this->valuePrefix$valueName";
+    
+    if (!is_array($this->data)) {
+      throw new Exception("Record has NO value, looking up for '$valueName'");
+    }
+
+    if (!array_key_exists($valueName, $this->data)) {
+      return null;
+    }
+    
+    $value = $this->data[$valueName];
+    
+    return trim(addslashes($value));    
+  }
+  
 
   /**
    * Consume and return phone number value

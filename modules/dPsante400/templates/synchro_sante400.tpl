@@ -1,22 +1,8 @@
-<script type="text/javascript">
-Triggers = {
-	retry: function(iRec) {
-	  var url = new Url("{{$m}}", "{{$action}}");
-	  url.addParam("rec", iRec);
-	  url.addParam("verbose", 1);
-	  url.popup(900, 700, "Explaination Import Sante400");
-	},
-	
-  relaunch: function () {
-	  if (document.typeFilter.relaunch.checked) {
-      document.typeFilter.submit();
-	  } 
-  }
-}
-  
+{{mb_script module=dPsante400 script=mouvements}}
 
+<script type="text/javascript">
 Main.add(function() {
-  Triggers.relaunch.delay(5);
+  Mouvements.relaunch.curry().delay(5);
 })
 </script>
   
@@ -45,7 +31,7 @@ Merci de vérifier les paramètres de la configuration ODBC pour la source 'sante4
       {{/foreach}}
     </select>
 
-    <input name="relaunch" type="checkbox" {{if $relaunch}} checked="checked" {{/if}} onclick="Triggers.relaunch();" />
+    <input name="relaunch" type="checkbox" {{if $relaunch}} checked="checked" {{/if}} onclick="Mouvements.relaunch();" />
     <label for="relaunch" title="{{tr}}CMouvement400-relaunch-desc{{/tr}}">
       {{tr}}CMouvement400-relaunch{{/tr}}
     </label>
@@ -114,21 +100,21 @@ Merci de vérifier les paramètres de la configuration ODBC pour la source 'sante4
 
 </tr>
 
-{{foreach from=$mouvs item=curr_mouv}}
+{{foreach from=$mouvs item=_mouv}}
 <tr>
-  <td>{{$curr_mouv->rec}}</td>
-  <td>{{$curr_mouv->when}}</td>
+  <td>{{$_mouv->rec}}</td>
+  <td>{{$_mouv->when}}</td>
   <td class="text">
-    {{if $curr_mouv->type == "M"}}
-    {{foreach from=$curr_mouv->changedFields item=_field}}
+    {{if $_mouv->type == "M"}}
+    {{foreach from=$_mouv->changedFields item=_field}}
     {{$_field}}
     {{/foreach}}
     {{else}}
-    {{$curr_mouv->type}}
+    {{$_mouv->type}}
     {{/if}}</td>
-  <td>{{$curr_mouv->mark}}</td>
-  {{foreach from=$curr_mouv->statuses key="index" item="status"}}
-  {{assign var="cache" value=$curr_mouv->cached[$index]}}
+  <td>{{$_mouv->mark}}</td>
+  {{foreach from=$_mouv->statuses key="index" item="status"}}
+  {{assign var="cache" value=$_mouv->cached[$index]}}
   <td>
     {{if $status === null}}
     <div class="warning">Failed</div>
@@ -144,11 +130,11 @@ Merci de vérifier les paramètres de la configuration ODBC pour la source 'sante4
     {{/if}}
   </td>
   {{/foreach}}
-  <td>{{$curr_mouv->status}}</td>
+  <td>{{$_mouv->status}}</td>
 
   {{if !$dialog}}
   <td>
-    <button class="search" onclick="Triggers.retry({{$curr_mouv->rec}})">
+    <button class="search" onclick="Mouvements.retry('{{$_mouv->class }}', '{{$_mouv->rec}}')">
       {{tr}}Retry{{/tr}}
     </button>
   </td>

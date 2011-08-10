@@ -10,6 +10,11 @@
 
 CCanDo::checkEdit();
 
+$time = mbTime();
+if (CMbRange::in($time, "05:40", "06:15")) {
+  trigger_error ("should have been escaped at this dawn !!", E_USER_WARNING);
+}
+
 set_time_limit(90);
 
 CRecordSante400::$verbose = CValue::get("verbose");

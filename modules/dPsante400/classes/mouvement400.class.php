@@ -13,6 +13,7 @@ CAppUI::requireModuleClass("dPsante400", "recordsante400");
 class CMouvement400 extends CRecordSante400 {
   public $base = null;
   public $table = null;
+  public $class = null;
   
   public $markField = null;
   public $idField = null;
@@ -34,6 +35,7 @@ class CMouvement400 extends CRecordSante400 {
     $this->rec  = $this->consume($this->idField);
     $this->mark = $this->consume($this->markField);
     $this->type = $this->consume($this->typeField);
+    $this->class = get_class($this); 
     
     // Analyse changed fields
     foreach (array_keys($this->data) as $beforeName) {

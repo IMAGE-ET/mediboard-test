@@ -1,3 +1,4 @@
+{{mb_script module=dPsante400 script=mouvements}}
 
 <table class="main">
   <tr>
