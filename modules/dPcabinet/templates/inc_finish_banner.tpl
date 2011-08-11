@@ -1,3 +1,5 @@
+{{mb_default var=current_m value=""}}
+
 <script type="text/javascript">
 
 function submitConsultWithChrono(chrono) {
