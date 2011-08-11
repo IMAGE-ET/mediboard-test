@@ -54,6 +54,7 @@ $locales['CAffectation-title-create'] = 'Création d\'une affectation';
 $locales['CAffectation-title-modify'] = 'Modification d\'une affectation';
 $locales['CAffectation._mode_sortie.'] = 'Indéterminé';
 $locales['CAffectation._mode_sortie.deces'] = 'Décès';
+$locales['CAffectation._mode_sortie.mutation'] = 'Mutation';
 $locales['CAffectation._mode_sortie.normal'] = 'Normal';
 $locales['CAffectation._mode_sortie.transfert'] = 'Transfert';
 $locales['CAffectation.all'] = 'Toutes les affectations';

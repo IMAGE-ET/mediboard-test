@@ -70,7 +70,7 @@ class CAffectation extends CMbObject {
     $specs["rques"]        = "text";
 
     $specs["_duree"]       = "num";
-    $specs["_mode_sortie"] = "enum list|normal|transfert|deces default|normal";
+    $specs["_mode_sortie"] = "enum list|normal|mutation|transfert|deces default|normal";
     
     $specs["_patient"]     = "str";
     $specs["_praticien"]   = "str";

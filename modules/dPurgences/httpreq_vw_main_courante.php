@@ -45,14 +45,19 @@ if ($selAffichage == "prendre_en_charge"){
   $ljoin["consultation"] = "consultation.sejour_id = sejour.sejour_id";
   $where["consultation.consultation_id"] = "IS NULL";
 } 
-else if($selAffichage == "presents"){
+
+if($selAffichage == "presents"){
   $where["sejour.sortie_reelle"] = "IS NULL";
   $where["sejour.annule"] = " = '0'";
-  $where["rpu.mutation_sejour_id"] = "IS NULL";
+  
+  if (CAppUI::conf("dPurgences create_sejour_hospit")) {
+    $where["rpu.mutation_sejour_id"] = "IS NULL";
+  }
 } 
-else if ($selAffichage == "annule_hospitalise") {
-	$where["sejour.sortie_reelle"] = "IS NOT NULL";
-	$where["sejour.mode_sortie"] = " = 'mutation'";
+
+if ($selAffichage == "annule_hospitalise") {
+  $where["sejour.sortie_reelle"] = "IS NOT NULL";
+  $where["sejour.mode_sortie"] = " = 'mutation'";
 }
 
 if ($order_col != "_entree" && $order_col != "ccmu" && $order_col != "_patient_id") {

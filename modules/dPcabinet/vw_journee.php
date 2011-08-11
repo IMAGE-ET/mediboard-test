@@ -81,9 +81,7 @@ foreach ($listPlages as &$infos_by_prat) {
     $plage->loadRefsConsultations(true, $closed);
     foreach ($plage->_ref_consultations as &$consultation) {
       if ($mode_urgence){
-        $consultation->loadRefSejour();
-        $consultation->_ref_sejour->loadRefRPU();
-        if ($consultation->_ref_sejour->_ref_rpu->_id){
+        if ($consultation->loadRefSejour()->_id){
           unset($plage->_ref_consultations[$consultation->_id]);
           continue;
         }

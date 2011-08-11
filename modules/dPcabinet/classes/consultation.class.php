@@ -1042,6 +1042,8 @@ TESTS A EFFECTUER
       $this->_forfait_se = $this->_ref_sejour->forfait_se;
       $this->_facturable = $this->_ref_sejour->facturable;
     }
+    
+    return $this->_ref_sejour;
   }
   
   function getActeExecution() {
