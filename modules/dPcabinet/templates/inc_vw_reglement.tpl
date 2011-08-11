@@ -139,11 +139,6 @@ Main.add( function(){
            
             <table class="form">
               {{if !$consult->tarif || $consult->tarif == "pursue"}}
-                <tr>
-                  <th>{{mb_label object=$consult field=accident_travail}}</th>
-                  <td>{{mb_field object=$consult field=accident_travail form=selectionTarif register=true}}</td>    
-                </tr>
-
                 {{if $consult->_ref_patient->ald}}
                 <tr>
                   <th>{{mb_label object=$consult field=concerne_ALD}}</th>
@@ -174,14 +169,6 @@ Main.add( function(){
                   </td>
                 </tr>
               {{else}}
-                
-                {{if $consult->accident_travail}}
-                <tr>
-                  <th>{{mb_label object=$consult field=accident_travail}}</th>
-                  <td>{{mb_value object=$consult field=accident_travail}}</td>    
-                </tr>
-                {{/if}}
-
                 {{if $consult->_ref_patient->ald ||  $consult->concerne_ALD}}
                 <tr>
                   <th>{{mb_label object=$consult field=concerne_ALD}}</th>

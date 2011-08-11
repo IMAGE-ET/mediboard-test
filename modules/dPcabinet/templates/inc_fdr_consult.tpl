@@ -75,6 +75,14 @@
   <tr>
     <th class="category" colspan="2">Règlements</th>
   </tr>
+  
+  <tr>
+    <!--  Accident du travail -->
+    <td colspan="2" id="at_area">
+      {{mb_include template="inc_accident_travail"}}
+    </td>
+  </tr>
+  
   <tr>
     <!-- Reglement -->
     <td colspan="2">

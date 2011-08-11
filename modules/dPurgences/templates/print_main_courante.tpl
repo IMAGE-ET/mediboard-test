@@ -93,7 +93,7 @@ function printPage(element){
             {{/if}}
 					</td>
 					<td class="text">
-	          {{if $rpu->accident_travail}} 
+	          {{if $rpu->date_at}} 
   	        <img src="images/icons/accident_travail.png" />
 	          {{/if}}
             <span onmouseover="ObjectTooltip.createEx(this, '{{$rpu->_guid}}');">

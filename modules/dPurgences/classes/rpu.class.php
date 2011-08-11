@@ -38,7 +38,7 @@ class CRPU extends CMbObject {
   var $mutation_sejour_id = null;
   var $box_id          = null;
   var $sortie_autorisee = null;
-  var $accident_travail = null;
+  var $date_at         = null;
   var $circonstance    = null;
   
   // Legacy Sherpa fields
@@ -86,7 +86,7 @@ class CRPU extends CMbObject {
   var $_bind_sejour = null;
   var $_sortie          = null;
   var $_mode_sortie     = null;
-  
+  var $_date_at         = null;
   function getSpec() {
     $spec = parent::getSpec();
     $spec->table = 'rpu';
@@ -120,7 +120,7 @@ class CRPU extends CMbObject {
       "mutation_sejour_id" => "ref class|CSejour",
       "box_id"           => "ref class|CLit",
       "sortie_autorisee" => "bool",
-      "accident_travail" => "date",
+      "date_at"          => "date",
       "circonstance"     => "str",
     
       "_DP"              => "code cim10 show|1",
@@ -371,7 +371,18 @@ class CRPU extends CMbObject {
     if ($msg = $this->bindSejour()) {
       return $msg;
     }
-       	
+   	
+    // Synchronisation AT
+    $this->loadRefConsult();
+    
+    if ($this->_ref_consult->_id && $this->fieldModified("date_at") && !$this->_date_at) {
+      $this->_date_at = true;
+      $this->_ref_consult->date_at = $this->date_at;
+      if ($msg = $this->_ref_consult->store()) {
+        return $msg;
+      } 
+    }
+    
     // Standard Store
     if ($msg = parent::store()){
       return $msg;
@@ -434,8 +445,8 @@ class CRPU extends CMbObject {
     $template->addDateTimeProperty("RPU - Réception Biologie"   , $this->bio_retour);
     $template->addDateTimeProperty("RPU - Attente spécialiste"  , $this->specia_att);
     $template->addDateTimeProperty("RPU - Arrivée spécialiste"  , $this->specia_arr);
-    $template->addProperty("RPU - Accident du travail"          , $this->getFormattedValue("accident_travail"));
-    $libelle_at = $this->accident_travail ? "Accident du travail du " . $this->getFormattedValue("accident_travail") : "";
+    $template->addProperty("RPU - Accident du travail"          , $this->getFormattedValue("date_at"));
+    $libelle_at = $this->date_at ? "Accident du travail du " . $this->getFormattedValue("date_at") : "";
     $template->addProperty("RPU - Libellé accident du travail"  , $libelle_at);
     $template->addProperty("RPU - Sortie autorisée"             , $this->getFormattedValue("sortie_autorisee"));
    	$lit = new CLit;

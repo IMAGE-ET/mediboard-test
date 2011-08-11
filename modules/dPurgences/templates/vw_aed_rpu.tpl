@@ -372,8 +372,8 @@
         </select>
         {{/if}}
       </td>
-			<th>{{mb_label object=$rpu field="accident_travail"}}</th>
-	    <td>{{mb_field object=$rpu field="accident_travail" form="editRPU" register=true}}</td>
+			<th>{{mb_label object=$rpu field="date_at"}}</th>
+	    <td>{{mb_field object=$rpu field="date_at" form="editRPU" register=true}}</td>
 	  </tr>
 	
 	  {{if $can->edit}}

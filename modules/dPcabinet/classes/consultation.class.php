@@ -57,7 +57,10 @@ class CConsultation extends CCodable {
 
   var $du_patient       = null; // somme que le patient doit régler
   var $du_tiers         = null;
-  var $accident_travail = null;
+  var $date_at          = null;
+  var $fin_at           = null;
+  var $pec_at           = null;
+  var $reprise_at       = null;
   var $concerne_ALD     = null;
 	
   // Form fields
@@ -193,8 +196,11 @@ class CConsultation extends CCodable {
     $specs["du_patient"]                = "currency show|0";
     $specs["du_tiers"  ]                = "currency show|0";
 		
-    $specs["accident_travail"]  = "date";
-
+    $specs["date_at"]  = "date";
+    $specs["fin_at"]   = "dateTime";
+    $specs["pec_at"]   = "enum list|soins|arret";
+    $specs["reprise_at"] = "dateTime";
+    
     $specs["total_amo"]         = "currency show|0";
     $specs["total_amc"]         = "currency show|0";
     $specs["total_assure"]      = "currency show|0";
@@ -502,9 +508,9 @@ class CConsultation extends CCodable {
     // Section FSE
     $this->_fse_intermax["FSE"] = array();
 
-    if ($this->accident_travail) {
+    if ($this->date_at) {
 		  $this->_fse_intermax["FSE"]["FSE_NATURE_ASSURANCE"] = "AT";
-		  $this->_fse_intermax["FSE"]["FSE_DATE_AT"] = mbDateToLocale($this->accident_travail);
+		  $this->_fse_intermax["FSE"]["FSE_DATE_AT"] = mbDateToLocale($this->date_at);
     }
     
     if ($this->concerne_ALD) {
@@ -617,7 +623,7 @@ class CConsultation extends CCodable {
     $consult->total_assure = $fse["FSE_TOTAL_ASSURE"];
     $consult->total_amo    = $fse["FSE_TOTAL_AMO"];
     $consult->total_amc    = $fse["FSE_TOTAL_AMC"];
-    $consult->accident_travail = mbDateFromLocale($fse["FSE_DATE_AT"]);
+    $consult->date_at      = mbDateFromLocale($fse["FSE_DATE_AT"]);
     
     $consult->du_patient = $consult->total_assure;
     $consult->du_tiers   = $consult->total_amo + $consult->total_amc;
@@ -928,6 +934,26 @@ TESTS A EFFECTUER
       if ($consultations > 1) {
         return "D'autres consultations sont prévues dans ce séjour, impossible de changer le patient.";
       }
+    }
+    
+    // Synchronisation AT
+    $this->getType();
+
+    if ($this->_type === "urg" && $this->fieldModified("date_at")) {
+      $rpu = $this->_ref_sejour->_ref_rpu;
+      if (!$rpu->_date_at) {
+        $rpu->_date_at = true;
+        $rpu->date_at = $this->date_at;
+        if ($msg = $rpu->store()) {
+          return $msg;
+        }
+      }
+    }
+    
+    // Update de reprise at
+    // Par défaut, j+1 par rapport à fin at
+    if ($this->fieldModified("fin_at") && $this->fin_at) {
+      $this->reprise_at = mbDateTime("+1 DAY", $this->fin_at);
     }
     
     // Standard store

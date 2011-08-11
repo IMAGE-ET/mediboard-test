@@ -71,7 +71,7 @@ checkPraticien = function(oForm){
 			  <input type="hidden" name="del" value="0" />
 			  <input type="hidden" name="sejour_id" value="{{$sejour->_id}}" />
 			  <input type="hidden" name="patient_id" value="{{$sejour->patient_id}}" />   
-        <input type="hidden" name="accident_travail" value="{{$rpu->accident_travail}}" />
+        <input type="hidden" name="date_at" value="{{$rpu->date_at}}" />
 			  
 				<div style="white-space: nowrap;">
 	        <select name="prat_id" class="ref notNull" style="width: 10em;">

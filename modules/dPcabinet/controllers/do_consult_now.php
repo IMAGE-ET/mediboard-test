@@ -121,7 +121,7 @@ $consult->heure = $time_now;
 $consult->arrivee = "$day_now $time_now";
 $consult->duree = 1;
 $consult->chrono = CConsultation::PATIENT_ARRIVE;
-$consult->accident_travail = CValue::post("accident_travail");
+$consult->date_at = CValue::post("date_at");
 
 // Cas standard
 $consult->motif = CValue::post("motif", "Consultation immédiate");

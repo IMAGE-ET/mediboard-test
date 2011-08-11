@@ -275,7 +275,11 @@ class CSetupdPurgences extends CSetup {
       ADD `circonstance_id` INT (11) UNSIGNED NOT NULL auto_increment PRIMARY KEY FIRST;";
     $this->addQuery($query);
     
-    $this->mod_version = "0.32";
+    $this->makeRevision("0.32");
+    $query = "ALTER TABLE `rpu` CHANGE `accident_travail` `date_at` DATE DEFAULT NULL";
+    $this->addQuery($query);
+    
+    $this->mod_version = "0.33";
   }  
 }
 

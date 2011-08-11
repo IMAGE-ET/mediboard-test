@@ -1332,7 +1332,18 @@ class CSetupdPcabinet extends CSetup {
                                'AMI','AIS','DI')";
     $this->addQuery($query);
     
-    $this->mod_version = "1.28";
+    $this->makeRevision("1.28");
+    $query = "ALTER TABLE `consultation` CHANGE `accident_travail` `date_at` DATE DEFAULT NULL";
+    $this->addQuery($query);
+    
+    $this->makeRevision("1.29");
+    $query = "ALTER TABLE `consultation`
+      ADD `fin_at` DATETIME DEFAULT NULL,
+      ADD `pec_at` ENUM ('soins', 'arret') DEFAULT NULL,
+      ADD `reprise_at` DATETIME DEFAULT NULL";
+    $this->addQuery($query);
+    
+    $this->mod_version = "1.30";
   }
 }
 ?>
