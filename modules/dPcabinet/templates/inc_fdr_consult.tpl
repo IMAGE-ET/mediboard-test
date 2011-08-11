@@ -79,7 +79,7 @@
   <tr>
     <!--  Accident du travail -->
     <td colspan="2" id="at_area">
-      {{mb_include template="inc_accident_travail"}}
+      {{mb_include module=dPcabinet template="inc_accident_travail"}}
     </td>
   </tr>
   
