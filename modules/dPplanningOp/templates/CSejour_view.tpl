@@ -21,7 +21,6 @@
   <tr>
     <td class="button">
       {{mb_script module=dPplanningOp script=sejour ajax=true}}
-      {{mb_script module=brancardage script=creation_brancardage ajax=true}}
 
       {{if $can->edit}}
 			<button type="button" class="edit" onclick="Sejour.edit('{{$sejour->_id}}');">
@@ -54,15 +53,14 @@
       {{/if}}
 	  
 	  
-	  {{if @$modules.brancardage->_can->read}}
-      <br />
-	  
-	  <button type="button" class="edit" onclick="CreationBrancard.edit('{{$sejour->_id}}');">
-        {{tr}}module-Brancardage-long{{/tr}}{{$date}}
-	  </button>
+  	  {{if @$modules.brancardage->_can->read}}
+        {{mb_script module=brancardage script=creation_brancardage ajax=true}}
+        <br />
+        <button type="button" class="edit" onclick="CreationBrancard.edit('{{$sejour->_id}}');">
+            {{tr}}module-Brancardage-long{{/tr}}{{$date}}
+        </button>
       {{/if}}
-	  
-	  
+	 	  
     </td>
   </tr>
 </table>
