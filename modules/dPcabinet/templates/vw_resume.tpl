@@ -203,7 +203,7 @@ function newExam(sAction, consultation_id) {
             {{foreachelse}}
               <li>
                 Hospitalisation 
-                {{mb_include module=system template=inc_interval_date from_date=$_sejour->entree to_date=$_sejour->sortie}}
+                {{mb_include module=system template=inc_interval_date from=$_sejour->entree to=$_sejour->sortie}}
               </li>
             {{/foreach}}
           </ul>
