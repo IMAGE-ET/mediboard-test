@@ -1334,6 +1334,14 @@ TESTS A EFFECTUER
     $nom = "{$medecin->nom} {$medecin->prenom}";
     $template->addProperty("Consultation - adressé par", $nom);
     $template->addProperty("Consultation - adressé par - adresse", "{$medecin->adresse}\n{$medecin->cp} {$medecin->ville}");
+    
+    $template->addProperty("Consultation - Accident du travail"          , $this->getFormattedValue("date_at"));
+    $libelle_at = $this->date_at ? "Accident du travail du " . $this->getFormattedValue("date_at") : "";
+    $template->addProperty("Consultation - Libellé accident du travail"  , $libelle_at);
+    
+    $template->addProperty("Consultation - Fin arrêt de travail", mbDateToLocale(mbDate($this->fin_at)));
+    $template->addProperty("Consultation - Prise en charge arrêt de travail", $this->getFormattedValue("pec_at"));
+    $template->addProperty("Consultation - Reprise de travail", mbDateToLocale(mbDate($this->reprise_at)));
   }
     
   function canDeleteEx() {
