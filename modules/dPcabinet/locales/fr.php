@@ -407,6 +407,7 @@ $locales['CConsultation-consultation_id-court'] = 'Id';
 $locales['CConsultation-consultation_id-desc'] = 'Idenfiant Interne de Mediboard';
 $locales['CConsultation-denyDayChange'] = 'Impossible de changer la journée de la consultation car l\'admission est déjà effectuée';
 $locales['CConsultation-denyDayChange-exit'] = 'Impossible de changer la journée de la consultation car la sortie est déjà effectuée';
+$locales['CConsultation-denyPratChange'] = 'Impossible de changer le praticien de la consultation (délai supérieur à %s heures)';
 $locales['CConsultation-du_patient'] = 'Dû patient';
 $locales['CConsultation-du_patient-court'] = 'Dû patient';
 $locales['CConsultation-du_patient-desc'] = 'A régler par le patient';

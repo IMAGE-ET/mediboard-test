@@ -887,7 +887,7 @@ TESTS A EFFECTUER
         $max_hours = CAppUI::conf("dPcabinet CConsultation hours_after_changing_prat");
         if ($this->_ref_sejour->entree_reelle &&
            (mbDateTime("+ $max_hours HOUR", $this->_ref_sejour->entree_reelle) < mbDateTime())) {
-          return CAppUI::tr("CConsultation-denyDayChange");
+          return CAppUI::tr("CConsultation-denyPratChange", $max_hours);
         }
         
         $this->loadRefPlageConsult();
