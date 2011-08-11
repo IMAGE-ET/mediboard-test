@@ -33,18 +33,18 @@ function newExam(sAction, consultation_id) {
 
   <tr>
     <td>
-      {{foreach from=$patient->_ref_documents item=curr_doc}}
-      <a href="#document-{{$curr_doc->_id}}" onclick="popFile('{{$curr_doc->object_class}}','{{$curr_doc->object_id}}','{{$curr_doc->_class}}','{{$curr_doc->_id}}')">
-        {{$curr_doc->nom}}
+      {{foreach from=$patient->_ref_documents item=_doc}}
+      <a href="#document-{{$_doc->_id}}" onclick="popFile('{{$_doc->object_class}}','{{$_doc->object_id}}','{{$_doc->_class}}','{{$_doc->_id}}')">
+        {{$_doc->nom}}
       </a>
       {{foreachelse}}
       <div class="empty">{{tr}}None{{/tr}}</div>
       {{/foreach}}
     </td>
     <td>
-      {{foreach from=$patient->_ref_files item=curr_file}}
-      <a href="#file-{{$curr_file->_id}}" onclick="popFile('{{$patient->_class}}','{{$patient->_id}}','{{$curr_file->_class}}','{{$curr_file->_id}}')">
-        {{$curr_file->file_name}}
+      {{foreach from=$patient->_ref_files item=_file}}
+      <a href="#file-{{$_file->_id}}" onclick="popFile('{{$patient->_class}}','{{$patient->_id}}','{{$_file->_class}}','{{$_file->_id}}')">
+        {{$_file->file_name}}
       </a>
       {{foreachelse}}
       <div class="empty">{{tr}}None{{/tr}}</div>
@@ -89,81 +89,81 @@ function newExam(sAction, consultation_id) {
   </tr>
   
   <!-- Consultations -->
-  {{foreach from=$patient->_ref_consultations item=curr_consult}}
-    {{if !$curr_consult->annule}}
+  {{foreach from=$patient->_ref_consultations item=_consult}}
+    {{if !$_consult->annule}}
       <tr>
         <td class="text" valign="top">
-        	{{mb_include module=mediusers template=inc_vw_mediuser mediuser=$curr_consult->_ref_plageconsult->_ref_chir}}
+        	{{mb_include module=mediusers template=inc_vw_mediuser mediuser=$_consult->_ref_plageconsult->_ref_chir}}
     			
-          &mdash; {{$curr_consult->_ref_plageconsult->date|date_format:"%d/%m/%Y"}}
-            {{if $curr_consult->motif}}
+          &mdash; {{$_consult->_ref_plageconsult->date|date_format:$conf.date}}
+            {{if $_consult->motif}}
     	      <br />
-    	      <strong>{{mb_label object=$curr_consult field=motif}}</strong>
-    	      <em>{{mb_value object=$curr_consult field=motif}}</em>
+    	      <strong>{{mb_label object=$_consult field=motif}}</strong>
+    	      <em>{{mb_value object=$_consult field=motif}}</em>
     	    {{/if}}
-    	    {{if $curr_consult->rques}}
+    	    {{if $_consult->rques}}
     	      <br />
-    	      <strong>{{mb_label object=$curr_consult field=rques}}</strong>
-    	      <em>{{mb_value object=$curr_consult field=rques}}</em>
+    	      <strong>{{mb_label object=$_consult field=rques}}</strong>
+    	      <em>{{mb_value object=$_consult field=rques}}</em>
     	    {{/if}}
-    	    {{if $curr_consult->examen}}
+    	    {{if $_consult->examen}}
     	      <br />
-    	      <strong>{{mb_label object=$curr_consult field=examen}}</strong>
-    	      <em>{{mb_value object=$curr_consult field=examen}}</em>
+    	      <strong>{{mb_label object=$_consult field=examen}}</strong>
+    	      <em>{{mb_value object=$_consult field=examen}}</em>
     	    {{/if}}
-    	    {{if $curr_consult->traitement}}
+    	    {{if $_consult->traitement}}
     	      <br />
-    	      <strong>{{mb_label object=$curr_consult field=traitement}}</strong>
-    	      <em>{{mb_value object=$curr_consult field=traitement}}</em>
+    	      <strong>{{mb_label object=$_consult field=traitement}}</strong>
+    	      <em>{{mb_value object=$_consult field=traitement}}</em>
     	    {{/if}}
-    			{{if $curr_consult->histoire_maladie && $conf.dPcabinet.CConsultation.show_histoire_maladie}}
+    			{{if $_consult->histoire_maladie && $conf.dPcabinet.CConsultation.show_histoire_maladie}}
             <br />
-            <strong>{{mb_label object=$curr_consult field=histoire_maladie}}</strong>
-            <em>{{mb_value object=$curr_consult field=histoire_maladie}}</em>
+            <strong>{{mb_label object=$_consult field=histoire_maladie}}</strong>
+            <em>{{mb_value object=$_consult field=histoire_maladie}}</em>
           {{/if}}
-    			{{if $curr_consult->conclusion && $conf.dPcabinet.CConsultation.show_conclusion}}
+    			{{if $_consult->conclusion && $conf.dPcabinet.CConsultation.show_conclusion}}
             <br />
-            <strong>{{mb_label object=$curr_consult field=conclusion}}</strong>
-            <em>{{mb_value object=$curr_consult field=conclusion}}</em>
+            <strong>{{mb_label object=$_consult field=conclusion}}</strong>
+            <em>{{mb_value object=$_consult field=conclusion}}</em>
           {{/if}}
-    	    {{if $curr_consult->_ref_examaudio->examaudio_id}}
+    	    {{if $_consult->_ref_examaudio->examaudio_id}}
     	      <br />
-    	      <a href="#" onclick="newExam('exam_audio', {{$curr_consult->consultation_id}})">
+    	      <a href="#" onclick="newExam('exam_audio', {{$_consult->consultation_id}})">
     	        <strong>Audiogramme</strong>
     	      </a>
     	    {{/if}}
         </td>
         <td valign="top">
-          {{foreach from=$curr_consult->_ref_documents item=curr_doc}}
-          <a href="#" onclick="popFile('{{$curr_doc->object_class}}','{{$curr_doc->object_id}}','{{$curr_doc->_class}}','{{$curr_doc->_id}}')">
-            {{$curr_doc->nom}}
+          {{foreach from=$_consult->_ref_documents item=_doc}}
+          <a href="#" onclick="popFile('{{$_doc->object_class}}','{{$_doc->object_id}}','{{$_doc->_class}}','{{$_doc->_id}}')">
+            {{$_doc->nom}}
           </a>
           {{/foreach}}
-          {{foreach from=$curr_consult->_ref_files item=curr_file}}
-          <a href="#" onclick="popFile('{{$curr_file->object_class}}','{{$curr_file->object_id}}','{{$curr_file->_class}}','{{$curr_file->_id}}')">
-            {{$curr_file->file_name}}
+          {{foreach from=$_consult->_ref_files item=_file}}
+          <a href="#" onclick="popFile('{{$_file->object_class}}','{{$_file->object_id}}','{{$_file->_class}}','{{$_file->_id}}')">
+            {{$_file->file_name}}
           </a>
           {{/foreach}}
         </td>
         
         <td  class="compta" style="text-align: center">
-        {{if $curr_consult->tarif}}
-          {{if $curr_consult->du_patient}}
-          <div style="display: inline; {{if !$curr_consult->patient_date_reglement}} color: #f00;{{/if}}">
-            {{mb_value object=$curr_consult field=_reglements_total_patient}}
+        {{if $_consult->tarif}}
+          {{if $_consult->du_patient}}
+          <div style="display: inline; {{if !$_consult->patient_date_reglement}} color: #f00;{{/if}}">
+            {{mb_value object=$_consult field=_reglements_total_patient}}
           </div>
           /
           {{/if}}
     
-          {{mb_value object=$curr_consult field=du_patient}}
+          {{mb_value object=$_consult field=du_patient}}
           -
-          {{if $curr_consult->du_tiers}}
-          <div style="display: inline; {{if !$curr_consult->tiers_date_reglement}} color: #f00;{{/if}}">
-            {{mb_value object=$curr_consult field=_reglements_total_tiers}}
+          {{if $_consult->du_tiers}}
+          <div style="display: inline; {{if !$_consult->tiers_date_reglement}} color: #f00;{{/if}}">
+            {{mb_value object=$_consult field=_reglements_total_tiers}}
           </div>
           /
           {{/if}}
-          {{mb_value object=$curr_consult field=du_tiers}}
+          {{mb_value object=$_consult field=du_tiers}}
         {{/if}}
         </td>
       </tr>
@@ -178,56 +178,56 @@ function newExam(sAction, consultation_id) {
     <th>Résumé</th>
     <th colspan="3">Documents</th>
   </tr>
-  {{foreach from=$patient->_ref_sejours item=curr_sejour}}
-    {{if !$curr_sejour->annule}}
+  {{foreach from=$patient->_ref_sejours item=_sejour}}
+    {{if !$_sejour->annule}}
       <tr>
         <td class="text" valign="top">
           <ul>
-            {{foreach from=$curr_sejour->_ref_operations item=curr_op}}
-              {{if !$curr_op->annulee}}
+            {{foreach from=$_sejour->_ref_operations item=_op}}
+              {{if !$_op->annulee}}
                 <li>
-                  Dr {{$curr_op->_ref_chir->_view}}
-                  &mdash; {{$curr_op->_ref_plageop->date|date_format:"%d/%m/%Y"}}
-                  {{if $curr_op->libelle}}
+                  Dr {{$_op->_ref_chir->_view}}
+                  &mdash; {{$_op->_ref_plageop->date|date_format:$conf.date}}
+                  {{if $_op->libelle}}
                   <br/>
-                  <strong>{{mb_label object=$curr_op field="libelle"}}</strong> :
-                  {{mb_value object=$curr_op field="libelle"}}
+                  <strong>{{mb_label object=$_op field="libelle"}}</strong> :
+                  {{mb_value object=$_op field="libelle"}}
                   {{/if}}
-                  {{foreach from=$curr_op->_ext_codes_ccam item=curr_code}}
+                  {{foreach from=$_op->_ext_codes_ccam item=_code}}
                   <br />
-                  <strong>{{$curr_code->code}}</strong>
-                  : {{$curr_code->libelleLong}}
+                  <strong>{{$_code->code}}</strong>
+                  : {{$_code->libelleLong}}
                   {{/foreach}}
                 </li>
               {{/if}}
             {{foreachelse}}
               <li>
-                Hospitalisation simple du {{$curr_sejour->entree_prevue|date_format:"%d/%m/%Y"}}
-                au {{$curr_sejour->sortie_prevue|date_format:"%d/%m/%Y"}}
+                Hospitalisation 
+                {{mb_include module=system template=inc_interval_date from_date=$sejour->entree to_date=$sejour->sortie}}
               </li>
             {{/foreach}}
           </ul>
-          <strong>{{tr}}CSejour-_type_admission{{/tr}} : </strong> {{tr}}CSejour.type.{{$curr_sejour->type}}{{/tr}}
+          <strong>{{tr}}CSejour-_type_admission{{/tr}} : </strong> {{tr}}CSejour.type.{{$_sejour->type}}{{/tr}}
           <br />
           <strong>{{tr}}CSejour-praticien_id-desc{{/tr}} : </strong>
-          {{mb_include module=mediusers template=inc_vw_mediuser mediuser=$curr_sejour->_ref_praticien}}
+          {{mb_include module=mediusers template=inc_vw_mediuser mediuser=$_sejour->_ref_praticien}}
           <br />
-          <strong>{{tr}}CSejour-libelle{{/tr}} : </strong> {{$curr_sejour->libelle}}
+          <strong>{{tr}}CSejour-libelle{{/tr}} : </strong> {{$_sejour->libelle}}
         </td>
         <td colspan="2" valign="top">
-          {{foreach from=$curr_sejour->_ref_operations item=curr_op}}
-            {{if !$curr_op->annulee}}
-              {{foreach from=$curr_op->_ref_documents item=curr_doc}}
-              <a href="#" onclick="popFile('{{$curr_doc->object_class}}','{{$curr_doc->object_id}}','{{$curr_doc->_class}}','{{$curr_doc->_id}}')">
-                {{$curr_doc->nom}}
+          {{foreach from=$_sejour->_ref_operations item=_op}}
+            {{if !$_op->annulee}}
+              {{foreach from=$_op->_ref_documents item=_doc}}
+              <a href="#" onclick="popFile('{{$_doc->object_class}}','{{$_doc->object_id}}','{{$_doc->_class}}','{{$_doc->_id}}')">
+                {{$_doc->nom}}
               </a>
               {{/foreach}}
             {{/if}}
           {{/foreach}}
-          {{foreach from=$curr_sejour->_ref_operations item=curr_op}}
-            {{if !$curr_op->annulee}}
-              {{foreach from=$curr_op->_ref_files item=curr_file}}
-              <a href="#" onclick="popFile('{{$curr_file->object_class}}','{{$curr_file->object_id}}','{{$curr_file->_class}}','{{$curr_file->_id}}')">
+          {{foreach from=$_sejour->_ref_operations item=_op}}
+            {{if !$_op->annulee}}
+              {{foreach from=$_op->_ref_files item=_file}}
+              <a href="#" onclick="popFile('{{$_file->object_class}}','{{$_file->object_id}}','{{$_file->_class}}','{{$_file->_id}}')">
                 {{$curr_file->file_name}}
               </a>
               {{/foreach}}
