@@ -18,22 +18,30 @@ $exchange_guid = CValue::get("exchange_guid");
 $object = new CMbObject();
 $exchange = $object->loadFromGuid($exchange_guid);
 
-if ($exchange instanceof CEchangeHprim) {
-  $acquittement = CHprimSoapHandler::evenementPatient($exchange->_message);
-
-  $domGetAcquittement = new CHPrimXMLAcquittementsPatients();
-  $domGetAcquittement->loadXML($acquittement);
-  $doc_valid = $domGetAcquittement->schemaValidate();
-  if ($doc_valid) {
-    $exchange->statut_acquittement = $domGetAcquittement->getStatutAcquittementPatient();
-  }
-  $exchange->acquittement_valide = $doc_valid ? 1 : 0;
-  $exchange->_acquittement = $acquittement;
-  $exchange->store();
-  
-  CAppUI::setMsg("Message '$exchange->_class' retraité", UI_MSG_OK);
+/* @todo Penser à ajouter les prochains formats */
+if (!$exchange instanceof CEchangeHprim) {
+  CAppUI::stepAjax("Le message '".CAppUI::tr("$exchange->_class")."' ne peut retraité car il n'est pas pris en charge", UI_MSG_ERROR);
 }
 
-echo CAppUI::getMsg();
+$sender = new $exchange->sender_class;
+$sender->load($exchange->sender_id);
+
+if (!$acq = CEAIDispatcher::dispatch($exchange->_message, $sender)) {
+  CAppUI::stepAjax("Le message '".CAppUI::tr("$exchange->_class")."' ne peut retraité", UI_MSG_ERROR);
+}
+
+if ($exchange instanceof CEchangeHprim) {
+  $dom_acq = CHPrimXMLAcquittements::getAcquittementEvenementXML($sender->_data_format->_family_message);
+  $dom_acq->loadXML($acq);
+  $doc_valid = $dom_acq->schemaValidate();
+  if ($doc_valid) {
+    $exchange->statut_acquittement = $dom_acq->getStatutAcquittement();
+  }
+  $exchange->acquittement_valide = $doc_valid ? 1 : 0;
+  $exchange->_acquittement = $acq;
+  $exchange->store();
+  
+  CAppUI::stepAjax("Le message '".CAppUI::tr("$exchange->_class")."' a été retraité");
+}
 
 ?>

@@ -93,6 +93,7 @@
        </a>
      {{/if}}
   </td>
+  <td class="{{if $object->type == 'inconnu'}}error{{/if}} narrow">{{mb_value object=$object field="type"}}</td>
   <td class="{{if $object->sous_type == 'inconnu'}}error{{/if}} narrow">{{mb_value object=$object field="sous_type"}}</td>
   <td class="{{if $object->date_echange}}ok{{else}}warning{{/if}} narrow">
     <span>

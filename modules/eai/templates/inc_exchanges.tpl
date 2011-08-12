@@ -27,6 +27,7 @@
     <th>{{mb_title object=$exchange field="date_production"}}</th>
     <th>{{mb_title object=$exchange field="sender_id"}}</th>
     <th>{{mb_title object=$exchange field="receiver_id"}}</th>
+    <th>{{mb_title object=$exchange field="type"}}</th>
     <th>{{mb_title object=$exchange field="sous_type"}}</th>
     <th>{{mb_title object=$exchange field="date_echange"}}</th>
     <th>{{mb_title object=$exchange field="statut_acquittement"}}</th>
