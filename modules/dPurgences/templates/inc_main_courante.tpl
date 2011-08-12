@@ -281,7 +281,7 @@
             <button class="edit notext" style="float: right;" title="{{tr}}CRPU-modif_diag_infirmier{{/tr}}" onclick="fillDiag('{{$rpu->_id}}')"></button>
           {{/if}}
 				  {{if $rpu->date_at}} 
-					<img src="images/icons/date_at.png" />
+					<img src="images/icons/accident_travail.png" />
 				  {{/if}}
   				{{if $rpu->motif && $conf.dPurgences.diag_prat_view}}
   				  <span onmouseover="ObjectTooltip.createEx(this, '{{$rpu->_guid}}');">
