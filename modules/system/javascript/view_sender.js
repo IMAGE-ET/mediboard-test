@@ -31,7 +31,7 @@ ViewSender = {
   duplicate: function(form) {
     $V(form.sender_id, '');
     $V(form.active, '0');
-    $V(form.name, 'copie de' + $V(form.name));
+    $V(form.name, 'copie de ' + $V(form.name));
   },
   
   confirmDeletion: function(form) {
