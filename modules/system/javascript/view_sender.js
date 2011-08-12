@@ -14,9 +14,9 @@ ViewSender = {
   
   edit: function(sender_id) {
     var url = new Url('system', 'ajax_form_view_sender');
-	url.addParam('sender_id', sender_id);
+    url.addParam('sender_id', sender_id);
     url.requestModal(400);
-	this.modal = url.modaleObject;
+    this.modal = url.modaleObject;
   },
 
   onSubmit: function(form) {
@@ -26,6 +26,12 @@ ViewSender = {
         ViewSender.modal.close();
       }
     })
+  },
+
+  duplicate: function(form) {
+    $V(form.sender_id, '');
+    $V(form.active, '0');
+    $V(form.name, 'copie de' + $V(form.name));
   },
   
   confirmDeletion: function(form) {
