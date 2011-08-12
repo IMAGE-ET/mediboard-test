@@ -13,7 +13,7 @@ newExam = function(sAction, consultation_id) {
 
 <table class="form">
   <tr>
-    <th class="title" colspan="2">
+    <th class="title text" colspan="2">
       {{mb_include module=system template=inc_object_idsante400 object=$object}}
       {{mb_include module=system template=inc_object_history    object=$object}}
       {{mb_include module=system template=inc_object_notes      object=$object}}

@@ -11,8 +11,7 @@
 <script type="text/javascript">
 
 printDossierComplet = function(sejour_id){
-  var url = new Url;
-  url.setModuleAction("soins", "print_dossier_soins");
+  var url = new Url("soins", "print_dossier_soins");
   url.addParam("sejour_id", sejour_id);
   url.popup("850", "500", "Dossier complet");
 }
@@ -29,11 +28,11 @@ printDossier = function(rpu_id) {
 <table class="tbl">
 	{{if !@$no_header}}
   <tr>
-    <th class="title" colspan="2" style="vertical-align:middle;">
+    <th class="title text" colspan="2" style="vertical-align:middle;">
       {{mb_include module=system template=inc_object_notes}}
 			
-		  <a style="float:left" href="?m=dPpatients&amp;tab=vw_full_patients&amp;patient_id={{$sejour->_ref_patient->_id}}"'>
-       {{include file="../../dPpatients/templates/inc_vw_photo_identite.tpl" patient=$sejour->_ref_patient size=42}}
+      <a style="float:left" href="?m=dPpatients&amp;tab=vw_full_patients&amp;patient_id={{$sejour->_ref_patient->_id}}"'>
+       {{mb_include module=dPpatients template=inc_vw_photo_identite patient=$sejour->_ref_patient size=42}}
       </a>
 	    
       <div style="float: right;">
@@ -76,19 +75,19 @@ printDossier = function(rpu_id) {
   
   <tr>
     <td colspan="2" class="text">
-	    <strong>{{mb_label object=$object field="libelle"}}</strong>
-	    {{$object->libelle}}
-	  </td>
+      <strong>{{mb_label object=$object field="libelle"}}</strong>
+      {{$object->libelle}}
+    </td>
   </tr>
 
   <tr>
     <td>
       <strong>{{mb_label object=$object field="group_id"}}</strong>
-      {{$object->_ref_group->_view}}
+      {{$object->_ref_group}}
     </td>
     <td>
       <strong>{{mb_label object=$object field="praticien_id"}}</strong>
-      <i>{{$object->_ref_praticien->_view}}</i>
+      <i>{{$object->_ref_praticien}}</i>
     </td>
   </tr>
 
@@ -143,7 +142,7 @@ printDossier = function(rpu_id) {
   <tr>
     <td>
       <strong>{{mb_label object=$object field="mode_sortie"}}</strong>
-      <i>{{tr}}CAffectation._mode_sortie.{{$sejour->mode_sortie}}{{/tr}}</i>
+      {{tr}}CAffectation._mode_sortie.{{$sejour->mode_sortie}}{{/tr}}
       <br />
     <td>
   </tr>

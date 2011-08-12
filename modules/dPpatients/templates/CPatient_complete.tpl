@@ -3,7 +3,7 @@
 <table class="tbl">
 	{{if !@$no_header}}
   <tr>
-    <th class="title" colspan="2">
+    <th class="title text" colspan="2">
 
       {{if $object->date_lecture_vitale}}
         <div style="float: right;">
