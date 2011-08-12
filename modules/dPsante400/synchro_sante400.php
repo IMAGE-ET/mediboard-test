@@ -10,9 +10,10 @@
 
 CCanDo::checkEdit();
 
+// @todo Make it a conf
 $time = mbTime();
 if (CMbRange::in($time, "05:40", "06:15")) {
-  trigger_error ("should have been escaped at this dawn !!", E_USER_WARNING);
+  return;
 }
 
 set_time_limit(90);
