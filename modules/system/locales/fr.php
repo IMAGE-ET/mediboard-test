@@ -872,6 +872,7 @@ $locales['CNote.all'] = 'Toutes les notes';
 $locales['CNote.degre.high'] = 'haute';
 $locales['CNote.degre.low'] = 'faible';
 $locales['CNote.degre.medium'] = 'moyenne';
+$locales['CNote.no_author'] = "Sans utilisateur";
 $locales['CNote.none'] = 'Aucune note';
 $locales['CNote.one'] = 'note';
 $locales['CNote.select'] = 'Choisir une note';

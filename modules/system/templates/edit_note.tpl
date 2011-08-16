@@ -8,6 +8,18 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
 *}}
 
+<script type="text/javascript">
+  var user_id = {{$note->user_id}};
+  var user_view = "";
+  toggleAnonymous = function (state) {
+    var oForm = getForm("editFrm");
+    $V(oForm.user_id, state ? '' : user_id);
+    $("note_author").toggle();
+    $("no_author").toggle();
+    $("editFrm_public_1").checked = "checked";
+  }
+</script>
+
 <form name="editFrm" action="?m={{$m}}" method="post" onsubmit="return Note.submit(this);">
 
 <input type="hidden" name="dosql" value="do_note_aed" />
@@ -31,9 +43,10 @@
     {{/if}}
   </tr>
   <tr>
-    <th>{{mb_label object=$note field="user_id"}}</th>
+    <th style="width: 135px;">{{mb_label object=$note field="user_id"}}</th>
     <td>
-      {{$note->_ref_user->_view}} &mdash; {{$note->_ref_user->_ref_function->_view}}
+      <span id="note_author">{{$note->_ref_user->_view}} &mdash; {{$note->_ref_user->_ref_function->_view}}</span>
+      <span id="no_author" style="display: none;">{{tr}}CNote.no_author{{/tr}}</span>
       {{mb_field object=$note field="user_id" hidden=1}}
     </td>
   </tr>
@@ -43,7 +56,12 @@
   </tr>
   <tr>
     <th>{{mb_label object=$note field="public"}}</th>
-    <td>{{mb_field object=$note field="public"}}</td>
+    <td>
+      {{mb_field object=$note field="public"}}
+      <label>
+        <input type="checkbox" onchange="toggleAnonymous(this.checked);"/> Sans propriétaire
+      </label>
+    </td>
   </tr>
   <tr>
     <th>{{mb_label object=$note field="degre"}}</th>
