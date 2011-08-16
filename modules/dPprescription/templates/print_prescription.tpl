@@ -243,7 +243,7 @@ p.duplicata {
 {{if $lines.medicaments.med.ald || $lines.medicaments.med.no_ald ||
      $lines.medicaments.comment.ald || $lines.medicaments.comment.no_ald}}
   
-  {{if $linesElt|@count}}
+  {{if $linesElt|@count && $i==1}}
   <div class="body">
   {{else}}
   <div class="bodyWithoutPageBreak">
