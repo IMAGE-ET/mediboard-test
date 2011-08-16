@@ -35,30 +35,30 @@ $users = array();
 
 foreach($sejour->_ref_suivi_medical as $_suivi) {
   // Elements et commentaires
-	if($_suivi instanceof CPrescriptionLineElement || $_suivi instanceof CPrescriptionLineComment){
-  	$_suivi->loadRefPraticien();
+  if($_suivi instanceof CPrescriptionLineElement || $_suivi instanceof CPrescriptionLineComment){
+    $_suivi->loadRefPraticien();
     $users[$_suivi->praticien_id] = $_suivi->_ref_praticien;
-		if($user_id && $_suivi->praticien_id != $user_id){
+    if($user_id && $_suivi->praticien_id != $user_id){
       unset($sejour->_ref_suivi_medical["$_suivi->debut $_suivi->time_debut $_suivi->_guid"]);
-	  }
-  }	
-	// Transmissions et Observations
-	else {
-  	$users[$_suivi->user_id] = $_suivi->_ref_user;
-	  $type = ($_suivi instanceof CObservationMedicale) ? "obs" : "trans";
-	  if($user_id && $_suivi->user_id != $user_id){
-	    unset($sejour->_ref_suivi_medical[$_suivi->date.$_suivi->_id.$type]);
-	  }
-	  
-	  $_suivi->loadRefUser();
-	  if($_suivi instanceof CTransmissionMedicale) {
-	    $trans = $_suivi;
-	    $trans->calculCibles($cibles);
-	    if ($cible && $_suivi->_cible != $cible){
-	      unset($sejour->_ref_suivi_medical[$_suivi->date.$_suivi->_id.$type]);
-	    }
-	  }
-	  $_suivi->canEdit();
+    }
+  }  
+  // Transmissions et Observations
+  else {
+    $users[$_suivi->user_id] = $_suivi->_ref_user;
+    $type = ($_suivi instanceof CObservationMedicale) ? "obs" : "trans";
+    if($user_id && $_suivi->user_id != $user_id){
+      unset($sejour->_ref_suivi_medical[$_suivi->date.$_suivi->_id.$type]);
+    }
+    
+    $_suivi->loadRefUser();
+    if($_suivi instanceof CTransmissionMedicale) {
+      $trans = $_suivi;
+      $trans->calculCibles($cibles);
+      if ($cible && $_suivi->_cible != $cible){
+        unset($sejour->_ref_suivi_medical[$_suivi->date.$_suivi->_id.$type]);
+      }
+    }
+    $_suivi->canEdit();
   }
 }
 
@@ -77,15 +77,45 @@ foreach($sejour->_ref_suivi_medical as $_trans_const) {
   if ($_trans_const instanceof CTransmissionMedicale && !$_show_trans) {
     continue;
   }
-	if($_trans_const instanceof CConstantesMedicales) {
+  if($_trans_const instanceof CConstantesMedicales) {
     $sort_key = "$_trans_const->datetime $_trans_const->_guid";
-	} elseif ($_trans_const instanceof CTransmissionMedicale || $_trans_const instanceof CObservationMedicale){
-		$sort_key = "$_trans_const->date $_trans_const->_guid";
-	} else {
-		$sort_key = "$_trans_const->debut $_trans_const->time_debut $_trans_const->_guid";
-	}
-	
-	$list_trans_const[$sort_key] = $_trans_const;
+    $list_trans_const[$sort_key] = $_trans_const;
+  }
+  elseif ($_trans_const instanceof CTransmissionMedicale) {
+    $sort_key = "$_trans_const->date $_trans_const->_class_name $_trans_const->user_id $_trans_const->object_id $_trans_const->object_class $_trans_const->libelle_ATC";
+    
+    $date_before = mbDateTime("-1 SECOND", $_trans_const->date);
+    $sort_key_before = "$date_before $_trans_const->_class_name $_trans_const->user_id $_trans_const->object_id $_trans_const->object_class $_trans_const->libelle_ATC";
+    
+    $date_after  = mbDateTime("+1 SECOND", $_trans_const->date);
+    $sort_key_after = "$date_after $_trans_const->_class_name $_trans_const->user_id $_trans_const->object_id $_trans_const->object_class $_trans_const->libelle_ATC";
+    
+    // Aggrégation à -1 sec
+    if (array_key_exists($sort_key_before, $list_trans_const)) {
+      array_unshift($list_trans_const[$sort_key_before], $_trans_const);  
+    }
+    // à +1 sec
+    else if (array_key_exists($sort_key_after, $list_trans_const)) {
+      array_unshift($list_trans_const[$sort_key_after], $_trans_const);
+    }
+    // au temps exact, ou unique
+    else {
+      if (!array_key_exists($sort_key, $list_trans_const)) {
+        $list_trans_const[$sort_key] = array();
+      }
+      array_unshift($list_trans_const[$sort_key], $_trans_const);
+    }
+  }
+  elseif ($_trans_const instanceof CObservationMedicale) {
+    $sort_key = "$_trans_const->date $_trans_const->_guid";
+    $list_trans_const[$sort_key] = $_trans_const;  
+  }
+  else {
+    $sort_key = "$_trans_const->debut $_trans_const->time_debut $_trans_const->_guid";
+    $list_trans_const[$sort_key] = $_trans_const;
+  }
+  
+  
 }
 
 krsort($list_trans_const);

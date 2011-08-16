@@ -141,7 +141,15 @@ addTransmission = function(sejour_id, user_id, transmission_id, object_id, objec
   url.addParam("refreshTrans", refreshTrans);
   
   if (transmission_id != undefined) {
-    url.addParam("transmission_id", transmission_id);
+    // Plusieurs transmissions
+    if (typeof(transmission_id) == "object") {
+      $H(transmission_id).each(function(trans) {
+        url.addParam(trans["0"], trans["1"]);
+      });
+    }
+    else {
+      url.addParam("transmission_id", transmission_id);
+    }
   }
   if (object_id != undefined && object_class !=undefined) {
     url.addParam("object_id",    object_id);

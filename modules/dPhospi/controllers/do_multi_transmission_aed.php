@@ -8,29 +8,49 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
  */
 
-$do_data = new CDoObjectAddEdit("CTransmissionMedicale");
-$do_data->doBind();
-if ($do_data->_obj->_text_data) {
-  $do_data->_obj->text = $do_data->_obj->_text_data;
-  $do_data->_obj->type = "data";
-  $do_data->doStore();
+$del = CValue::post("del");
+$data_id = CValue::post("data_id");
+$action_id = CValue::post("action_id");
+$result_id = CValue::post("result_id");
+
+$do = new CDoObjectAddEdit("CTransmissionMedicale", "data_id");
+$_POST["transmission_medicale_id"] = isset($_POST["data_id"]) ? $_POST["data_id"] : "";
+$do->doBind();
+if ($del && $data_id) {
+  $do->doDelete();
+}
+else if ($do->_obj->_text_data) {
+  $do->_obj->text = $do->_obj->_text_data;
+  $do->_obj->type = "data";
+  $do->doStore();
 }
 
-$do_action = new CDoObjectAddEdit("CTransmissionMedicale");
-$do_action->doBind();
-if ($do_action->_obj->_text_action) {
-  $do_action->_obj->text = $do_action->_obj->_text_action;
-  $do_action->_obj->type = "action";
-  $do_action->doStore();
+
+$do = new CDoObjectAddEdit("CTransmissionMedicale", "action_id");
+$_POST["transmission_medicale_id"] = isset($_POST["action_id"]) ? $_POST["action_id"] : "";
+$do->doBind();
+if ($del && $action_id) {
+  $do->doDelete();
+}
+else if ($do->_obj->_text_action) {
+  $do->_obj->text = $do->_obj->_text_action;
+  $do->_obj->type = "action";
+  $do->doStore();
 }
 
-$do_result = new CDoObjectAddEdit("CTransmissionMedicale");
-$do_result->doBind();
-if ($do_result->_obj->_text_result) {
-  $do_result->_obj->text = $do_result->_obj->_text_result;
-  $do_result->_obj->type = "result";
-  $do_result->doStore();
+
+$do = new CDoObjectAddEdit("CTransmissionMedicale", 'result_id');
+$_POST["transmission_medicale_id"] = isset($_POST["result_id"]) ? $_POST["result_id"] : "";
+$do->doBind();
+if ($del && $result_id) {
+  $do->doDelete();
+}
+else if ($do->_obj->_text_result) {
+  $do->_obj->text = $do->_obj->_text_result;
+  $do->_obj->type = "result";
+  $do->doStore();
 }
 
-$do_data->doRedirect();
+$do->ajax = 1;
+$do->doRedirect();
 ?>

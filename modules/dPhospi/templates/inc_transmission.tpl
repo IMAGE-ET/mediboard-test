@@ -55,45 +55,53 @@ Main.add(function() {
   Calendar.regField(oFormTrans.date, dates, options);
 
   {{if !$transmission->_id}}
-    //Initialisation du champ dates
-    oFormTrans.date_da.value = "Heure actuelle";
-    $V(oFormTrans.date, "now");
-    
-    new AideSaisie.AutoComplete(oFormTrans._text_data, {
-      property: "text",
-      objectClass: "CTransmissionMedicale", 
-      timestamp: "{{$conf.dPcompteRendu.CCompteRendu.timestamp}}",
-      dependField1: oFormTrans._type_data,
-      dependField2: oFormTrans.cible,
-      classDependField2: "CCategoryPrescription",
-      validateOnBlur:0,
-      updateDF: false,
-      strict: false
-    });
-    
-    new AideSaisie.AutoComplete(oFormTrans._text_action, {
-      property: "text",
-      objectClass: "CTransmissionMedicale", 
-      timestamp: "{{$conf.dPcompteRendu.CCompteRendu.timestamp}}",
-      dependField1: oFormTrans._type_action,
-      dependField2: oFormTrans.cible,
-      classDependField2: "CCategoryPrescription",
-      validateOnBlur:0,
-      updateDF: false,
-      strict: false
-    });
+    {{if !$data_id && !$result_id && !$action_id}}
+      //Initialisation du champ dates
+      oFormTrans.date_da.value = "Heure actuelle";
+      $V(oFormTrans.date, "now");
+    {{/if}}
+      
+    {{if !$action_id || !$result_id || $data_id}}
+      new AideSaisie.AutoComplete(oFormTrans._text_data, {
+        property: "text",
+        objectClass: "CTransmissionMedicale", 
+        timestamp: "{{$conf.dPcompteRendu.CCompteRendu.timestamp}}",
+        dependField1: oFormTrans._type_data,
+        dependField2: oFormTrans.cible,
+        classDependField2: "CCategoryPrescription",
+        validateOnBlur:0,
+        updateDF: false,
+        strict: false
+      });
+    {{/if}}
 
-    new AideSaisie.AutoComplete(oFormTrans._text_result, {
-      property: "text",
-      objectClass: "CTransmissionMedicale",
-      timestamp: "{{$conf.dPcompteRendu.CCompteRendu.timestamp}}",
-      dependField1: oFormTrans._type_result,
-      dependField2: oFormTrans.cible,
-      classDependField2: "CCategoryPrescription",
-      validateOnBlur:0,
-      updateDF: false,
-      strict: false
-    });
+    {{if !$data_id || !$result_id || $action_id}}
+      new AideSaisie.AutoComplete(oFormTrans._text_action, {
+        property: "text",
+        objectClass: "CTransmissionMedicale", 
+        timestamp: "{{$conf.dPcompteRendu.CCompteRendu.timestamp}}",
+        dependField1: oFormTrans._type_action,
+        dependField2: oFormTrans.cible,
+        classDependField2: "CCategoryPrescription",
+        validateOnBlur:0,
+        updateDF: false,
+        strict: false
+      });
+    {{/if}}
+
+    {{if !$data_id || !$action_id || $result_id}}
+      new AideSaisie.AutoComplete(oFormTrans._text_result, {
+        property: "text",
+        objectClass: "CTransmissionMedicale",
+        timestamp: "{{$conf.dPcompteRendu.CCompteRendu.timestamp}}",
+        dependField1: oFormTrans._type_result,
+        dependField2: oFormTrans.cible,
+        classDependField2: "CCategoryPrescription",
+        validateOnBlur:0,
+        updateDF: false,
+        strict: false
+      });
+    {{/if}}
   {{else}}
     new AideSaisie.AutoComplete(oFormTrans.text, {
       objectClass: "CTransmissionMedicale", 
@@ -155,6 +163,9 @@ submitTrans = function(form) {
   {{/if}}
   <input type="hidden" name="del" value="0" />
   {{mb_key object=$transmission}}
+  <input type="hidden" name="data_id" value="{{$data_id}}" />
+  <input type="hidden" name="action_id" value="{{$action_id}}" />
+  <input type="hidden" name="result_id" value="{{$result_id}}" />
   
   <table style="width: 100%;">
     <tr>
@@ -173,7 +184,7 @@ submitTrans = function(form) {
             <br />
           {{/if}}
           {{tr}}CTransmissionMedicale-degre{{/tr}} : {{mb_field object=$transmission field=degre}}
-          {{tr}}CTransmissionMedicale-date{{/tr}} : {{mb_field object=$transmission field="date"}}
+          {{tr}}CTransmissionMedicale-date{{/tr}} : {{mb_field object=$transmission field=date}}
           
           {{if $transmission->_id && !$transmission->type}}
             {{tr}}CTransmissionMedicale-type{{/tr}} : {{mb_field object=$transmission field="type" typeEnum="radio"}}
@@ -205,7 +216,11 @@ submitTrans = function(form) {
               {{tr}}CTransmissionMedicale.type.data{{/tr}}
             </legend>
             <input type="hidden" name="_type_data" value="data"/>
-            {{mb_field object=$transmission field="_text_data" rows=6}}
+            {{if $action_id && $result_id && !$data_id}}
+              {{mb_field object=$transmission field="_text_data" rows=6 readonly="readonly"}}
+            {{else}}
+              {{mb_field object=$transmission field="_text_data" rows=6}}
+            {{/if}}
           </fieldset>
         </td>
         <td>
@@ -213,8 +228,13 @@ submitTrans = function(form) {
             <legend>
               {{tr}}CTransmissionMedicale.type.action{{/tr}}
             </legend>
-              <input type="hidden" name="_type_action" value="action"/>
+            <input type="hidden" name="_type_action" value="action"/>
+            {{if $data_id && $result_id && !$action_id}}
+              {{mb_field object=$transmission field="_text_action" rows=6 readonly="readonly"}}
+            {{else}}
               {{mb_field object=$transmission field="_text_action" rows=6}}
+            {{/if}}
+            
           </fieldset>
         </td>
         <td>
@@ -223,7 +243,12 @@ submitTrans = function(form) {
               {{tr}}CTransmissionMedicale.type.result{{/tr}}
             </legend>
             <input type="hidden" name="_type_result" value="result"/>
-            {{mb_field object=$transmission field="_text_result" rows=6}}
+            {{if $data_id && $action_id && !$result_id}}
+              {{mb_field object=$transmission field="_text_result" rows=6 readonly="readonly"}}
+            {{else}}
+              {{mb_field object=$transmission field="_text_result" rows=6}}
+            {{/if}}
+            
           </fieldset>
         </td>
       {{else}}
@@ -237,8 +262,8 @@ submitTrans = function(form) {
     </tr>
   </table>
   {{if !$hide_button_add}}
-    <button type="button" class="{{if $transmission->_id}}save{{else}}add{{/if}}" onclick="submitTrans(this.form);">
-      {{if $transmission->_id}}
+    <button type="button" class="{{if $transmission->_id || $data_id || $action_id || $result_id}}save{{else}}add{{/if}}" onclick="submitTrans(this.form);">
+      {{if $transmission->_id || $data_id || $action_id || $result_id}}
         {{tr}}Save{{/tr}}
       {{else}}
         {{tr}}Add{{/tr}}
