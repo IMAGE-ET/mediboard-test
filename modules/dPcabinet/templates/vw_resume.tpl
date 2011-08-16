@@ -182,6 +182,14 @@ function newExam(sAction, consultation_id) {
     {{if !$_sejour->annule}}
       <tr>
         <td class="text" valign="top">
+          Hospitalisation 
+          {{mb_include module=system template=inc_interval_date from=$_sejour->entree to=$_sejour->sortie}} <br />
+          <strong>{{tr}}CSejour-_type_admission{{/tr}} : </strong> {{tr}}CSejour.type.{{$_sejour->type}}{{/tr}}
+          <br />
+          <strong>{{tr}}CSejour-praticien_id-desc{{/tr}} : </strong>
+          {{mb_include module=mediusers template=inc_vw_mediuser mediuser=$_sejour->_ref_praticien}}
+          <br />
+          <strong>{{tr}}CSejour-libelle{{/tr}} : </strong> {{$_sejour->libelle}}
           <ul>
             {{foreach from=$_sejour->_ref_operations item=_op}}
               {{if !$_op->annulee}}
@@ -200,19 +208,8 @@ function newExam(sAction, consultation_id) {
                   {{/foreach}}
                 </li>
               {{/if}}
-            {{foreachelse}}
-              <li>
-                Hospitalisation 
-                {{mb_include module=system template=inc_interval_date from=$_sejour->entree to=$_sejour->sortie}}
-              </li>
             {{/foreach}}
           </ul>
-          <strong>{{tr}}CSejour-_type_admission{{/tr}} : </strong> {{tr}}CSejour.type.{{$_sejour->type}}{{/tr}}
-          <br />
-          <strong>{{tr}}CSejour-praticien_id-desc{{/tr}} : </strong>
-          {{mb_include module=mediusers template=inc_vw_mediuser mediuser=$_sejour->_ref_praticien}}
-          <br />
-          <strong>{{tr}}CSejour-libelle{{/tr}} : </strong> {{$_sejour->libelle}}
         </td>
         <td colspan="2" valign="top">
           {{foreach from=$_sejour->_ref_operations item=_op}}
