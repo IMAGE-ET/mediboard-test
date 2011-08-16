@@ -1,5 +1,7 @@
 <!-- $Id$ -->
 
+{{mb_default var=modurgence value=0}}
+
 <script type="text/javascript">
 
 var listCategoriePrat = {{$categorie_prat|@json}};
@@ -69,9 +71,11 @@ function removePlageOp(bIgnoreGroup){
   if(oFormOp){
     if((oFormOp._group_id.value != oFormSejour.group_id.value) || bIgnoreGroup){
       oFormOp._group_id.value = oFormSejour.group_id.value;
-      $V(oFormOp.plageop_id, "");
-      $V(oFormOp._date, "");
-      $V(oFormOp.date, "");  
+      {{if !$modurgence}}
+        $V(oFormOp.plageop_id, "");
+        $V(oFormOp._date, "");
+        $V(oFormOp.date, "");
+      {{/if}}
     }
   }
 }

@@ -93,9 +93,10 @@
         {{mb_ternary var=update_entree_prevue test=$op->operation_id value="" other="updateEntreePrevue();"}}
         {{mb_field object=$op field="date" name="date" prop="date" form="editOpEasy" register=true onchange="
           $update_entree_prevue
+          Value.synchronize(this.form.date_da);
           Value.synchronize(this);
-          document.editSejour._curr_op_date.value = this.form.date.value;
-          modifSejour();  \$V(this.form._date, this.form.date.value);"}}
+          document.editSejour._curr_op_date.value = this.value;
+          modifSejour();  \$V(this.form._date, this.value);"}}
       {{else}}
         <select name="date" onchange="
           {{if !$op->operation_id}}updateEntreePrevue();{{/if}}
