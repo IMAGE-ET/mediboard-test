@@ -29,6 +29,8 @@ $locales['config-soins-constantes_show'] = 'Affichage des constantes avec les tr
 $locales['config-soins-constantes_show-desc'] = 'Affichage des constantes avec les transmissions';
 $locales['config-soins-transmissions_hours'] = 'Intervalle d\'affichage des transmissions';
 $locales['config-soins-transmissions_hours-desc'] = 'Intervalle d\'affichage des transmissions';
+$locales['mod-brancardage-tab-ajax_edit_brancardage'] = 'Formulaire de brancardage';
+$locales['mod-brancardage-tab-ajax_prefiltre_brancardage'] = 'Formulaire de brancardage';
 $locales['mod-soins-tab-ajax_calcul_debit'] = 'Calcul des débits';
 $locales['mod-soins-tab-ajax_modal_task'] = 'Tâche';
 $locales['mod-soins-tab-configure'] = 'Configurer';
@@ -42,6 +44,7 @@ $locales['mod-soins-tab-vw_legende_pancarte'] = 'Légende de la pancarte';
 $locales['mod-soins-tab-vw_pancarte_service'] = 'Pancarte des services';
 $locales['mod-soins-tab-vw_plan_soins_service'] = 'Activités';
 $locales['mod-soins-tab-vw_stocks_service'] = 'Commande / Réception';
+$locales['module-Brancardage-long'] = 'Brancarder';
 $locales['module-soins-court'] = 'Dossier de soins';
 $locales['module-soins-long'] = 'Dossier de soins';
 ?>
