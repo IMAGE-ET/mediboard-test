@@ -383,6 +383,7 @@ p.duplicata {
 
 <!-- Parcours des chapitres -->
 {{foreach from=$linesElt key=name_chap item=elementsChap name="foreachChap"}}
+{{if $i==1 || $name_chap=="med_elt"}}
 <!-- Parcours des categories -->
   {{foreach from=$elementsChap item=elements name="foreachExec"}}
      
@@ -477,6 +478,7 @@ p.duplicata {
 	     </ul>
      </div>
   {{/foreach}}
+  {{/if}}
 {{/foreach}}
 {{/foreach}}
 
