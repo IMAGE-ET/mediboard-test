@@ -1301,9 +1301,15 @@ TESTS A EFFECTUER
 	    $prescription->type = "externe";
 	    $prescription->fillLimitedTemplate($template);
     }
-		$this->loadRefSejour();
-		if ($this->_ref_sejour->_id) {
-			$this->_ref_sejour->fillLimitedTemplate($template);
+    
+		$sejour = $this->loadRefSejour();
+    
+		if ($sejour->_id) {
+			$sejour->fillLimitedTemplate($template);
+			$rpu = $sejour->loadRefRPU();
+			if ($rpu->_id) {
+			  $rpu->fillLimitedTemplate($template);
+			}
 		}
 	
   }
