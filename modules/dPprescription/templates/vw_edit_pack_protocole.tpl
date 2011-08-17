@@ -45,7 +45,7 @@ Main.add( function(){
 			      <br />
 			      <select name="function_id"
               onchange="this.form.praticien_id.value = ''; this.form.group_id.value = ''; Protocole.refreshListPack(); Protocole.viewPack()"
-              style="width: 23em">
+              style="width: 23em !important">
 		          <option value="">&mdash; {{tr}}CPrescription._owner.func{{/tr}}</option>
 		          {{foreach from=$functions item=_function}}
 		          <option class="mediuser" style="border-color: #{{$_function->color}}" value="{{$_function->_id}}" {{if $function_id == $_function->_id}}selected=selected{{/if}}>{{$_function->_view}}</option>
