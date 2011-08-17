@@ -65,7 +65,7 @@ class CPrescriptionLineHandler extends CMbObjectHandler {
 			CPlanificationSysteme::$_calcul_planif = false;
     }
     if($mbObject instanceof COperation){
-      if(!$mbObject->fieldModified("debut_op") && !$mbObject->fieldModified("fin_op") && !$mbObject->fieldModified("time_operation") && !$mbObject->fieldModified("plageop_id")){       
+      if(!$mbObject->fieldModified("debut_op") && !$mbObject->fieldModified("fin_op") && !$mbObject->fieldModified("time_operation") && !$mbObject->fieldModified("plageop_id") && !$mbObject->fieldModified("date")){       
         return;
       }
     }
