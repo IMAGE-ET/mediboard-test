@@ -316,7 +316,7 @@ class CPrescription extends CMbObject implements IPatientRelated {
           $date_debut = mbDate($date_operation);
           $time_debut = mbTime($date_operation); 
         } elseif ($operation->_id) {
-          $date_debut = $operation->_ref_plageop->date; 
+          $date_debut = mbDate($operation->_datetime); 
           $time_debut = $hour_operation;
         }
         break;
@@ -335,7 +335,7 @@ class CPrescription extends CMbObject implements IPatientRelated {
           $time_fin = mbTime($date_operation); 
         } else {
           if($operation->_id){
-            $date_fin = $operation->_ref_plageop->date;
+          	$date_fin = mbDate($operation->_datetime); 
             $time_fin = $hour_operation;
           }
         }

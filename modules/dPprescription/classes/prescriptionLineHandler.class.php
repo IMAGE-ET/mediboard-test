@@ -171,7 +171,7 @@ class CPrescriptionLineHandler extends CMbObjectHandler {
           }  
           // Si la ligne ne possede pas d'operation_id et qu'on manipule une operation, on lui affecte l'id de l'operation          
           $hour_operation = $operation->fin_op ? $operation->fin_op : ($operation->debut_op ? $operation->debut_op : $operation->time_operation);
-          $date_operation = $operation->_ref_plageop->date;
+          $date_operation = mbDate($operation->_datetime);
 
           // modification du debut
           if($_line->jour_decalage == "I"){
