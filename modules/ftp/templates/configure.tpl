@@ -16,10 +16,15 @@
 
 <ul id="tabs-configure" class="control_tabs">
   <li><a href="#config-read-files-senders">{{tr}}config-read-files-senders{{/tr}}</a></li>
+  <li><a href="#config-purge_echange">{{tr}}config-ftp-purge-echange{{/tr}}</a></li>
 </ul>
 
 <hr class="control_tabs" />
 
 <div id="config-read-files-senders" style="display: none;">
   {{mb_include template=inc_config_read_files_senders}}
+</div>
+
+<div id="config-purge_echange" style="display: none;">
+  {{mb_include template=inc_config_purge_echange}}
 </div>

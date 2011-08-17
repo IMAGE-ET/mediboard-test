@@ -1,4 +1,6 @@
 <?php
+$locales['CEchangeFTP-_date_max'] = 'Date maximum';
+$locales['CEchangeFTP-purge-search'] = 'Chercher les échanges FTP à purger';
 $locales['CExchangeFTP'] = 'Echange FTP';
 $locales['CExchangeFTP-_date_max'] = 'Date maximum';
 $locales['CExchangeFTP-_date_max-court'] = 'Date maximum';
@@ -36,6 +38,8 @@ $locales['CExchangeFTP-input-desc'] = 'Paramètres de la fonction FTP';
 $locales['CExchangeFTP-msg-create'] = 'Echange FTP crée';
 $locales['CExchangeFTP-msg-delete'] = 'Echange FTP supprimé';
 $locales['CExchangeFTP-msg-modify'] = 'Echange FTP modifié';
+$locales['CExchangeFTP-msg-purge_count'] = '\'%s\' échanges FTP à purger';
+$locales['CExchangeFTP-msg-purged_count'] = '\'%s\' échanges purgés';
 $locales['CExchangeFTP-output'] = 'Résultat';
 $locales['CExchangeFTP-output-court'] = 'Résultat';
 $locales['CExchangeFTP-output-desc'] = 'Résultat de la fonction FTP';
@@ -208,6 +212,7 @@ $locales['config-ftp-pasv'] = 'Mode passif';
 $locales['config-ftp-pasv-0'] = 'Actif';
 $locales['config-ftp-pasv-1'] = 'Passif';
 $locales['config-ftp-port'] = 'Port';
+$locales['config-ftp-purge-echange'] = 'Purge échanges';
 $locales['config-ftp-timeout'] = 'Timeout';
 $locales['config-read-files-senders'] = 'Lire les fichiers des expéditeurs';
 $locales['mod-ftp-tab-configure'] = 'Configurer';
