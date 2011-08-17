@@ -10,9 +10,8 @@
 
 $prescriptions_ids = array_flip(explode("-", CValue::post("prescriptions_ids")));
 
-$prescription_id = array_keys($prescriptions_ids);
-$prescription_id = reset($prescription_id);
-
+$prescriptions_ids = array_keys($prescriptions_ids);
+$prescription_id = array_shift($prescriptions_ids);
 $lines = CValue::post("lines");
 
 foreach($lines as $guid=>$keep_line) {
@@ -42,7 +41,7 @@ $prescription = new CDoObjectAddEdit("CPrescription");
 
 $prescription->doBind();
 
-foreach ($prescriptions_ids as $_prescription_id=>$elt) {
+foreach ($prescriptions_ids as $key=>$_prescription_id) {
   $_prescription = new CPrescription;
   $_prescription->load($_prescription_id);
   if ($msg = $prescription->_obj->merge(array(0 => $_prescription))) {
