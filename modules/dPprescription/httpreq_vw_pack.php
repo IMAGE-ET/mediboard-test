@@ -26,7 +26,7 @@ else {
 
 $pack->loadRefsPackItemsByType($type_prot);
 
-$protocoles = CPrescription::getAllProtocolesFor($praticien_id, $function_id, null, $pack->object_class, $type_prot);
+$protocoles = CPrescription::getAllProtocolesFor($praticien_id, $function_id, $group_id, $pack->object_class, $type_prot);
 
 $prescription = new CPrescription();
 $prescription->loadRefsLinesMedComments();
