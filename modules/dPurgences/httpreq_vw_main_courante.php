@@ -100,6 +100,22 @@ foreach ($listSejours as &$sejour) {
 
   // Séjours antérieurs  
 	$sejour->_veille = mbDate($sejour->entree) != $date;
+	
+	// Ajout des documents de la consultation dans le compteur
+	$consult_atu = $sejour->_ref_consult_atu;
+  
+	if ($consult_atu->_id) {
+	  $sejour->_nb_files += $consult_atu->_nb_files;
+    $sejour->_nb_docs += $consult_atu->_nb_docs;
+    $sejour->_nb_files_docs += $consult_atu->_nb_files + $consult_atu->_nb_docs;
+    
+	  $consult_atu->loadRefsPrescriptions();
+	  
+	  if (isset($consult_atu->_ref_prescriptions["externe"])) {
+	    $sejour->_nb_docs++;
+	    $sejour->_nb_files_docs++;
+	  }
+	}
 }
 
 // Tri pour afficher les sans CCMU en premier
