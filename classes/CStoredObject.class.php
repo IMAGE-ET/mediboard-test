@@ -1058,6 +1058,25 @@ class CStoredObject extends CModelObject {
     return $log;
   }
   
+/**
+   * Load first log concerning a given field
+   * @param $fieldName
+   * @param $strict
+   * @return unknown_type
+   */
+  function loadFirstLogForField($fieldName = null, $strict = false){
+    $log = new CUserLog;
+    $logs = $this->loadLogsForField($fieldName, $strict);
+    $first_log = end($logs);
+
+    if ($first_log) {
+      $first_log->loadRefsFwd();
+      return $first_log;
+    }
+    
+    return $log;
+  }
+  
   /**
    * Check wether object has a log more recent than given hours
    * 
