@@ -65,7 +65,6 @@ function delAssureValues() {
   $V(form.assure_nom_jeune_fille, "");
   $V(form.assure_naissance      , "");
   $V(form.assure_sexe           , "");
-  changeCiviliteForSexe($V(form.assure_sexe), true);
   $V(form.assure_cp_naissance  , "");
   $V(form._assure_pays_naissance_insee, "");
   $V(form.assure_lieu_naissance, "");
@@ -82,7 +81,6 @@ function copieAssureValues() {
   $V(form.assure_nom_jeune_fille, $V(form.nom_jeune_fille));
   $V(form.assure_naissance      , $V(form.naissance));
   $V(form.assure_sexe           , $V(form.sexe));
-  changeCiviliteForSexe($V(form.assure_sexe), true);
   $V(form.assure_cp_naissance  , $V(form.cp_naissance));
   $V(form._assure_pays_naissance_insee, $V(form._pays_naissance_insee));
   $V(form.assure_lieu_naissance, $V(form.lieu_naissance));
