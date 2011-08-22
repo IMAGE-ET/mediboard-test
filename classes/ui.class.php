@@ -749,8 +749,8 @@ class CAppUI {
 	      }
 	    }
     }
-				
-    if ($args) {
+
+    if ($args !== null) {
       if (!is_array($args)) {
         $args = func_get_args();
         unset($args[0]);
