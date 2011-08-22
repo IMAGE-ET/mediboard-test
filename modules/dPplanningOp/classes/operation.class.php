@@ -298,7 +298,8 @@ class COperation extends CCodable implements IPatientRelated {
     // Bornes du séjour
     $sejour = $this->loadRefSejour();
     $this->loadRefPlageOp();
-    if ($this->plageop_id !== null) {
+    
+    if ($this->plageop_id !== null && !$sejour->entree_reelle) {
       $date = mbDate($this->_datetime);
       $entree = mbDate($sejour->entree_prevue);
       $sortie = mbDate($sejour->sortie_prevue);

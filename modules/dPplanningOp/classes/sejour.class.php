@@ -344,21 +344,26 @@ class CSejour extends CCodable implements IPatientRelated {
         $entree = mbDate($entree);
         $sortie = mbDate($sortie);
         $this->makeDatesOperations();
-        foreach ($this->_dates_operations as $operation_id => $date_operation){
-          if ($this->_curr_op_id == $operation_id) {
-            $date_operation = $this->_curr_op_date;
-          } 
-
-          if (!CMbRange::in($date_operation, $entree, $sortie)) {
-             return "Intervention du '$date_operation' en dehors des nouvelles dates du séjour du '$entree' au '$sortie'";  
-          } 
+        if (!$this->entree_reelle) {
+          foreach ($this->_dates_operations as $operation_id => $date_operation){
+            if ($this->_curr_op_id == $operation_id) {
+              $date_operation = $this->_curr_op_date;
+            }
+  
+            if (!CMbRange::in($date_operation, $entree, $sortie)) {
+               return "Intervention du '$date_operation' en dehors des nouvelles dates du séjour du '$entree' au '$sortie'";  
+            }
+          }
         }
 
-        $this->makeDatesConsultations();
-        foreach ($this->_dates_consultations as $consultation_id => $date_consultation){
-          if (!CMbRange::in($date_consultation, $entree, $sortie)) {
-            return "Consultations en dehors des nouvelles dates du séjour.";  
-          } 
+        
+        if (!$this->entree_reelle && $this->type == "consult") {
+          $this->makeDatesConsultations();
+          foreach ($this->_dates_consultations as $consultation_id => $date_consultation){
+            if (!CMbRange::in($date_consultation, $entree, $sortie)) {
+              return "Consultations en dehors des nouvelles dates du séjour.";  
+            } 
+          }
         }
       }
       

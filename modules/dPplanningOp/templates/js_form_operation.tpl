@@ -258,10 +258,10 @@ function incFormOperationMain() {
   refreshListCCAM("expert");
   refreshListCCAM("easy");
   
-  if({{$modurgence && !$op->operation_id}}) {
+  {{if $modurgence && !$op->operation_id && !$sejour->entree_reelle}}
     updateEntreePrevue();
-  }
-    
+  {{/if}}
+  
   oCcamField = new TokenField(document.editOp.codes_ccam, { 
     onChange : updateTokenCcam,
     sProps : "notNull code ccam"
