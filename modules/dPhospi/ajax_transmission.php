@@ -31,6 +31,7 @@ else if ($data_id || $action_id || $result_id){
   if ($data_id) {
     $trans = new CTransmissionMedicale;
     $trans->load($data_id);
+    $trans->canEdit();
     $transmission->_text_data = $trans->text;
     $transmission->user_id    = $trans->user_id;
     $transmission->date       = $trans->date;
@@ -45,6 +46,7 @@ else if ($data_id || $action_id || $result_id){
   if ($action_id) {
     $trans = new CTransmissionMedicale;
     $trans->load($action_id);
+    $trans->canEdit();
     $transmission->_text_action = $trans->text;
     $transmission->user_id      = $trans->user_id;
     $transmission->date         = $trans->date;
@@ -59,6 +61,7 @@ else if ($data_id || $action_id || $result_id){
   if ($result_id) {
     $trans = new CTransmissionMedicale;
     $trans->load($result_id);
+    $trans->canEdit();
     $transmission->_text_result = $trans->text;
     $transmission->user_id      = $trans->user_id;
     $transmission->date         = $trans->date;

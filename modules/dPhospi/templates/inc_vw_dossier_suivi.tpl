@@ -113,6 +113,9 @@ updatePrescriptionId = function(prescription_id){
     if (window.updateNbTrans) {
       updateNbTrans('{{$sejour->_id}}');
     }
+    if (window.loadSuivi) {
+      loadSuivi('{{$sejour->_id}}');
+    }
   } });
 }
 

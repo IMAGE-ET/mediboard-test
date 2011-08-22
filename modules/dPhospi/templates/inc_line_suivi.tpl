@@ -131,9 +131,9 @@
           style="float: left; border: 2px solid #800; width: 5px; height: 11px; margin-right: 3px;">
         </span>
       {{/if}}
-      {{if !$readonly && $_suivi[0]->_canEdit}}
-        <a href="#1" onclick="if (window.addTransmission) { addTransmission('{{$_suivi[0]->sejour_id}}', '{{$app->user_id}}', null, '{{$_suivi[0]->object_id}}', '{{$_suivi[0]->object_class}}'); }">
-      {{/if}}
+      
+      <a href="#1" onclick="if (window.addTransmission) { addTransmission('{{$_suivi[0]->sejour_id}}', '{{$app->user_id}}', null, '{{$_suivi[0]->object_id}}', '{{$_suivi[0]->object_class}}'); }">
+      
       {{if !in_array($_suivi[0]->object_class, $classes)}}
         {{$_suivi[0]->_ref_object->_view}}
       {{/if}}
@@ -154,9 +154,8 @@
           [{{$_suivi[0]->_ref_object->_ref_object->_ref_element_prescription->_ref_category_prescription->_view}}]
         {{/if}}
       {{/if}}
-      {{if !$readonly && $_suivi[0]->_canEdit}}
         </a>
-      {{/if}}
+      
     {{/if}}
     {{if $_suivi[0]->libelle_ATC}}
       <a href="#1" onclick="if (window.addTransmission) { addTransmission('{{$_suivi[0]->sejour_id}}', '{{$_suivi[0]->user_id}}', null, null, null, '{{$_suivi[0]->libelle_ATC|smarty:nodefaults|JSAttribute}}'); }">{{$_suivi[0]->libelle_ATC}}</a>
