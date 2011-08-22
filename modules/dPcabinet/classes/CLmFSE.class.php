@@ -7,7 +7,7 @@
 * @author Thomas Despoix
 */
 
-CAppUI::requireModuleClass("dPcabinet", "lmObject");
+CAppUI::requireModuleClass("dPcabinet", "CLmObject");
 
 /**
  * FSE produite par LogicMax
