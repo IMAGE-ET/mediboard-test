@@ -7,7 +7,7 @@
  *  @author Thomas Despoix
  */
 
-CAppUI::requireModuleClass("dPccam", "codable");
+CAppUI::requireModuleClass("dPccam", "CCodable");
 CAppUI::requireModuleClass("dPpatients", "IPatientRelated");
 
 /**
