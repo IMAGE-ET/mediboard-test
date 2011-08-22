@@ -479,6 +479,8 @@
             <xsd:element name="perop" type="MBbool" minOccurs="0"/>
             <!--^CPrescriptionLineComment-inscription^-->
             <xsd:element name="inscription" type="MBbool" minOccurs="0"/>
+            <!--^CPrescriptionLineComment-recusee^-->
+            <xsd:element name="recusee" type="MBbool" minOccurs="0"/>
           </xsd:all>
           <!--Identifiant-->
           <xsd:attribute name="prescription_line_comment_id" type="xsd:string"/>
@@ -648,6 +650,8 @@
             <xsd:element name="perop" type="MBbool" minOccurs="0"/>
             <!--Inscription-->
             <xsd:element name="inscription" type="MBbool" minOccurs="0"/>
+            <!--^CPrescriptionLineElement-recusee^-->
+            <xsd:element name="recusee" type="MBbool" minOccurs="0"/>
           </xsd:all>
           <!--Identifiant-->
           <xsd:attribute name="prescription_line_element_id" type="xsd:string"/>
@@ -848,6 +852,8 @@
             <xsd:element name="perop" type="MBbool" minOccurs="0"/>
             <!--Inscription-->
             <xsd:element name="inscription" type="MBbool" minOccurs="0"/>
+            <!--^CPrescriptionLineMedicament-recusee^-->
+            <xsd:element name="recusee" type="MBbool" minOccurs="0"/>
           </xsd:all>
           <!--Identifiant-->
           <xsd:attribute name="prescription_line_medicament_id" type="xsd:string"/>
