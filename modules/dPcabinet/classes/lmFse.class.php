@@ -91,7 +91,17 @@ class CLmFSE extends CLmObject {
     $this->_consult_id = $this->_ref_id->object_id;
   }
   
+  /*
+   * Detecte si une FSE est mal ou non associée
+   * Renvoie un message pour associer à une consultation trouvée
+   * Ou un message pour supprimer la FSE non associée en double
+   * sinon un message null
+   */
   function detectlink(){
+  	//on élimine d'entrée la recherche sur les FSE annulées
+  	if($this->S_FSE_ETAT==3){
+  		return;
+  	}
     $this->loadRefIdExterne();
     //chargement de la consultation associée à la FSE
     $consult = new CConsultation();
@@ -112,37 +122,136 @@ class CLmFSE extends CLmObject {
     $mediuser->loadIdCPS();
   
     /*vérification des champs de chaque coté
-     * les données sur le praticien, le patient, la date de consultation doivent corespondre avec la FSE
+     * les données sur le praticien, le patient doivent corespondre avec la FSE
      */
     $check_prat      = ($this->S_FSE_CPS == $mediuser->_id_cps);
-    
-    $check_dateFSE   = ($this->S_FSE_DATE_FSE == $plage->date);
-    
-    $check_patient   = ($this->S_FSE_VIT == $patient->_id_vitale); 
-    
-    $msg = array();   
-    if (!$check_prat | !$check_patient | !$check_dateFSE){
-      if (!$is_consult){
-        $msg[]= " FSE non associée";
+    $check_patient   = ($this->S_FSE_VIT == $patient->_id_vitale);
+   //parfois la fse est formaté un autre jour que la consultation donc ce check n'est pas nécessaire:
+    //$check_dateFSE   = ($this->S_FSE_DATE_FSE == $plage->date);
+  
+    $msg = array(); 
+    /*
+     * rechercher la consultation à associer...
+     */
+    if (!$check_prat | !$check_patient){
+    	//chargement du praticien qui a fait la FSE
+			$medi = new CMediusers();
+			$medi->loadFromIdCPS($this->S_FSE_CPS);
+			
+			//chargement des plages de consultation de ce praticien corespondant à la date de la FSE
+			$plage   = new CPlageconsult();
+			$where   = array();
+			$where["date"]    = "= '$this->S_FSE_DATE_FSE'";
+			$where["chir_id"] = "= '$medi->user_id'";
+			$plages  = $plage->loadList($where);
+			//loadObject plus simple mais si plusieurs plages le même jour!!
+			if ($plages){
+			  $cle = 0;
+			  foreach($plages as $plage) {
+			   // $spec = $plage->getSpec();
+			   // $tab_plage_id[$cle]= $spec->key;
+			    $tab_plage_id[$cle] = $plage->plageconsult_id;
+			    $cle = $cle+1;
+			  }
+			}else{
+			  $msg[] = "FSE non ou mal associée, pas de plages horaires à la date";
+			  return $msg;
+			}
+			
+			//chargement du patient corespondant à la FSE
+			$patient = new CPatient();
+			
+			$id_vitale = new CIdSante400();
+			$id_vitale->object_class = $patient->_class_name;
+			$id_vitale->id400 = $this->S_FSE_VIT; 
+			$id_vitale->tag = "LogicMax VitNumero";
+			$id_vitale->loadMatchingObject();
+			    
+			// Load patient from found id vitale
+			if ($id_vitale->object_id) {
+			$patient->load($id_vitale->object_id);
+			}
+			//chargement de la consultation corespondant aux données de la FSE
+			$consult_search = new CConsultation();
+			$where   = array();
+			
+			$where["patient_id"]      = "= '$patient->patient_id'";
+			$where["plageconsult_id"] = "IN ("; 
+			$pass = false;
+			foreach ($tab_plage_id as $plage_id){
+				if ($pass){
+			  $where["plageconsult_id"] = $where["plageconsult_id"]." , ";  
+			  }
+			  $where["plageconsult_id"] = $where["plageconsult_id"]."'$plage_id' ";
+			  $pass = true;
+			}
+			$where["plageconsult_id"] = $where["plageconsult_id"]." ) ";
+			$is_consult = $consult_search->loadObject($where);
+			if (!$is_consult){
+			  $msg[] = "FSE non ou mal associée, consultation introuvable";
+			  return $msg;
+			}
+			else{
+			  $consult_search->loadIdsFSE();
+			  if(!$consult_search->_current_fse || $consult_search->_current_fse->S_FSE_ETAT==3){
+			    //si la consultation trouvée n'est pas déjà associée ou la FSE associée est annulée
+			    //alors on peut associer la FSE à la consultation trouvée à faire dans un contrôleur et un bouton "associer"
+			   $msg[] = "FSE non ou mal associée, 1 bonne consultation trouvée";
+			   $msg[] = $consult_search->_id;// ou bien créer une var $consultTrouvee accès par $this->consultTrouvee
+			  }
+			  else{//la consultation est déjà associée
+			    $detect = $consult_search->_current_fse->detectlink();
+			    if(count($detect)==0){
+			      $msg[] = "FSE non ou mal associée car en double, procéder à l'annulation";
+			    }else{ 
+			      if($this->S_FSE_NUMERO_FSE != $consult_search->_current_fse->S_FSE_NUMERO_FSE){
+			        $msg[] = "FSE non ou mal associée, 1 bonne consultation trouvée";
+			        $msg[] = $consult_search->_id;
+			      }
+			    }
+			  }
+			}
+			$this->loadRefIdExterne();
+    } 
+    return $msg;
+  }
+  
+  /*
+   * Detecter les erreurs de FSE asscociées à une même consultation
+   * 1 seule requête vers la base ammax
+   * Renvoie un tableau de doublons de FSE à supprimer 
+   */
+  function detectDouble(){
+  	$doubleToDelete = null;
+  	$tempfse = new CLmFSE();
+    //rechercher si une consultation a des doublons de fse
+    $id_sante_400 = new CIdSante400();
+    $query = "SELECT object_id AS consult_id, COUNT(*) AS total, GROUP_CONCAT(`id400`)AS fses
+              FROM id_sante400
+              WHERE object_class= 'CConsultation'
+              AND tag = 'LogicMax FSENumero'
+              GROUP BY `object_id`
+              having count(*)>1
+              ORDER BY total DESC";
+    $list = $id_sante_400->_spec->ds->loadList($query);
+    foreach($list as $array) {
+    	$temp = null;
+      // Retirer les FSE annulées des groupes
+      $fses = mb_split(',',$array["fses"]);
+      foreach($fses as $fse){
+      	$tempfse->load($fse);
+      	if($tempfse->S_FSE_ETAT!=3 && $tempfse->S_FSE_NUMERO_FSE!=null){
+      		$temp[]=$tempfse->S_FSE_NUMERO_FSE;
+      	}
       }
-      else{
-        if  (!$check_prat && !$check_patient && !$check_dateFSE){
-          $msg[]= " FSE mal associée";
-        }
-        else{
-          if (!$check_prat){
-            $msg[]= " FSE mal associée au bon praticien";
-          }
-          if (!$check_dateFSE){
-            $msg[]= " FSE mal associée à la bonne date";
-          }         
-          if (!$check_patient){
-            $msg[]= " FSE mal associée au bon patient";
-          }
-        }
+      //si il y a des doubles on les passe dans un tableau
+      if(count($temp)>1){
+      	for($i=0; $i<(count($temp)-1); $i++){
+      		$doubleToDelete[]=$temp[$i];   		
+      	}
       }
     }
-    return $msg;
+    return $doubleToDelete;       
   }
 }
 
