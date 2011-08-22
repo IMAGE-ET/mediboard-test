@@ -7,7 +7,7 @@
 * @author Alexis Granger
 */
 
-CAppUI::requireModuleClass('dPccam', 'acte');
+CAppUI::requireModuleClass("dPccam", "CActe");
 
 class CActeNGAP extends CActe {
   // DB Table key
