@@ -169,28 +169,28 @@ refreshSelf = function(){
          <table class="layout">
            <tr>
              <td>
-               <button style="margin: 0 -1px;" class="edit notext" 
+               <button style="margin: -1px;" class="edit notext" 
                        onclick="ExObject.edit('{{$_ex_object->_id}}', '{{$_ex_object->_ex_class_id}}', '{{$_ex_object->_ref_object->_guid}}')">
                  {{tr}}Edit{{/tr}}
                </button>
                
-               <button style="margin: 0 -1px;" class="search notext" 
+               <button style="margin: -1px;" class="search notext" 
                        onclick="ExObject.display('{{$_ex_object->_id}}', '{{$_ex_object->_ex_class_id}}', '{{$_ex_object->_ref_object->_guid}}')">
                  {{tr}}Display{{/tr}}
                </button>
               
-               <button style="margin: 0 -1px;" class="history notext" 
+               <button style="margin: -1px;" class="history notext" 
                        onclick="ExObject.history('{{$_ex_object->_id}}', '{{$_ex_object->_ex_class_id}}')">
                  {{tr}}History{{/tr}}
                </button>
                
-               <button style="margin: 0 -1px;" class="print notext" 
+               <button style="margin: -1px;" class="print notext" 
                        onclick="ExObject.print('{{$_ex_object->_id}}', '{{$_ex_object->_ex_class_id}}', '{{$_ex_object->_ref_object->_guid}}')">
                  {{tr}}Print{{/tr}}
                </button>
              </td>
-             <td class="text compact" style="color: inherit;">
-               <strong>{{mb_value object=$_ex_object->_ref_first_log field=date}}</strong>
+             <td class="text compact">
+               <strong style="color: #000;">{{mb_value object=$_ex_object->_ref_first_log field=date}}</strong>
 							 
 							 {{if $_ex_class->host_class != $reference_class}}
 	               <br />
