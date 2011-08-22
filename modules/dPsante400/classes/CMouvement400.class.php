@@ -8,7 +8,7 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
  */
 
-CAppUI::requireModuleClass("dPsante400", "recordsante400");
+CAppUI::requireModuleClass("dPsante400", "CRecordSante400");
 
 class CMouvement400 extends CRecordSante400 {
   public $base = null;
