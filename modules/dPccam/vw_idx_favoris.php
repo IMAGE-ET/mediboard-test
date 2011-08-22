@@ -10,7 +10,7 @@
 
 CCanDo::checkRead();
 
-CAppUI::requireModuleClass("dPsalleOp", "acteccam");
+CAppUI::requireModuleClass("dPsalleOp", "CActeCCAM");
 
 $class = CValue::get("class","");
 $list = array();

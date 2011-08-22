@@ -7,7 +7,7 @@
 * @author Romain Ollivier
 */
 
-CAppUI::requireModuleClass("dPsalleOp", "acteccam");
+CAppUI::requireModuleClass("dPsalleOp", "CActeCCAM");
 
 $user = CUser::get();
 
