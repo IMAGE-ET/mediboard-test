@@ -8,7 +8,7 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
  */
 
-CAppUI::requireModuleClass("hprim21", "hprim21object");
+CAppUI::requireModuleClass("hprim21", "CHprim21Object");
 
 /**
  * The HPRIM 2.1 sejour class
