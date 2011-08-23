@@ -7,7 +7,7 @@
  *  @author Romain Ollivier
  */
 
-CAppUI::requireModuleClass("admin", "admin");
+CAppUI::requireModuleClass("admin", "CUser");
 
 /**
  * The CMediusers class
