@@ -1993,7 +1993,16 @@ class CSetupdPprescription extends CSetup {
     $this->addPrefQuery("date_empty_externe" , "0");
     
     $this->makeRevision("1.47");
+    $query = "UPDATE `prescription`
+              SET checked_lines = '1'
+              WHERE advanced_protocole = '0'";
+    $this->addQuery($query);
+    
     $query = "ALTER TABLE `prescription` DROP advanced_protocole";
+    $this->addQuery($query);
+    
+    $query = "ALTER TABLE `prescription`
+              CHANGE `checked_lines` `checked_lines` ENUM ('0','1') DEFAULT '1'";
     $this->addQuery($query);
     
 		$this->mod_version = "1.48";
