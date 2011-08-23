@@ -8,7 +8,7 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
  */
 
-CAppUI::requireSystemClass("fieldSpecs/floatSpec");
+CAppUI::requireSystemClass("fieldSpecs/CFloatSpec");
 
 class CCurrencySpec extends CFloatSpec {
   var $precise = null;

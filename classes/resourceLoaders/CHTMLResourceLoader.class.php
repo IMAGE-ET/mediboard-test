@@ -42,15 +42,15 @@ abstract class CHTMLResourceLoader {
     }
     return $build;
   }
-	
-	static function getHash($string) {
-		return dechex(crc32($string));
-	}
-	
-	static function getLastChange($file) {
+  
+  static function getHash($string) {
+    return dechex(crc32($string));
+  }
+  
+  static function getLastChange($file) {
     $stat_cache = stat($file);
     return max($stat_cache[9], $stat_cache[10]);
-	}
+  }
   
   /**
    * Returns an HTML tag
@@ -131,6 +131,53 @@ abstract class CHTMLResourceLoader {
     return '<style type="text/css">'.$stylesheet.'</style>';
   }
   
+  protected static function getSectionRegexp($name, $match_all = true) {
+    if ($match_all) {
+      return "@(\<\!--\[$name\]--\>.*\<\!--\[/$name\]--\>)@s";
+    }
+    
+    return "@\<\!--\[$name\]--\>(.*)\<\!--\[/$name\]--\>@s";
+  }
+  
+  protected static function getSectionString($name) {
+    return "<!--$name-->";
+  }
+  
+  protected static function embed($html) {
+    $html = preg_replace_callback("/<img([^>]*)src\s*=\s*[\"']([^\"']+)[\"']([^>]*)>/i", array('self', 'replaceImgSrc'), $html);
+    $html = preg_replace_callback("/<link[^>]*rel=\"stylesheet\"[^>]*href\s*=\s*[\"']([^\"']+)[\"'][^>]*>/i", array('self', 'replaceStylesheet'), $html);
+    $html = preg_replace_callback("/<script[^>]*src\s*=\s*[\"']([^\"']+)[\"'][^>]*>\s*<\/script>/i", array('self', 'replaceScriptSrc'), $html);
+    return $html;
+  }
+  
+  protected static function embedSections($html, $sections) {
+    $sections_embedded = array();
+    
+    foreach($sections as $name => $shm) {
+      $source = SHM::get("aio-$shm");
+      
+      if (!$source) {
+        preg_match(self::getSectionRegexp($name, false), $html, $matches);
+        $orig_source = $matches[1];
+        $source = self::embed($orig_source);
+        SHM::put("aio-$shm", $source);
+      }
+      
+      $html = preg_replace(self::getSectionRegexp($name, true), self::getSectionString($name), $html);
+      
+      $sections_embedded[$name] = $source;
+    }
+    
+    $html = self::embed($html);
+    
+    
+    foreach($sections_embedded as $name => $source) {
+      $html = str_replace(self::getSectionString($name), $source, $html);
+    }
+
+    return $html;
+  }
+  
   static function allInOne($html) {
   	set_min_memory_limit("256M");
     $html = preg_replace_callback("/<img([^>]*)src\s*=\s*[\"']([^\"']+)[\"']([^>]*)>/i", array('self', 'replaceImgSrc'), $html);
@@ -138,6 +185,23 @@ abstract class CHTMLResourceLoader {
     $html = preg_replace_callback("/<script[^>]*src\s*=\s*[\"']([^\"']+)[\"'][^>]*>\s*<\/script>/i", array('self', 'replaceScriptSrc'), $html);
     return $html;
   }
+  
+  /*
+  static function allInOne($html, $shm = true) {
+    set_min_memory_limit("256M");
+    
+    if ($shm) {
+      $html = self::embedSections($html, array(
+        "HEAD_CSS" => "css-".CAppUI::pref("UISTYLE"),
+        "HEAD_JS"  => "js",
+      ));
+    }
+    else {
+      $html = self::embed($html);
+    }
+    
+    return $html;
+  }*/
 }
 
 global $version;

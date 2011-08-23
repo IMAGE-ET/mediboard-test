@@ -229,8 +229,8 @@ $library->description = "Composant de création de thumbnails";
 $library->extraDir = "phpThumb";
 $library->sourceDir = "phpThumb";
 $library->targetDir = "phpThumb";
-$library->versionFile = "docs/phpthumb.changelog.txt";
-$library->versionString = "v1.7.5b";
+$library->versionFile = "phpThumb.config.php";
+$library->versionString = "/classes/CMbPath.class.php";
 
 $patch = new CLibraryPatch;
 $patch->dirName = "phpThumb";

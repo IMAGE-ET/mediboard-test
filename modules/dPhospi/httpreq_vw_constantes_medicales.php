@@ -143,7 +143,7 @@ function getValue($v) {
 }
 
 function getMax($n, $array) {
-	$orig_n = $n;
+  $orig_n = $n;
   
   if (substr($n, 0, 1) == "@") {
     $n = -10e6;
@@ -156,25 +156,25 @@ function getMax($n, $array) {
   if ($orig_n != $n) {
     $max += floatval(substr($orig_n, 1));
   }
-	
+  
   return $max;
 }
 
 function getMin($n, $array) {
-	$orig_n = $n;
-	
-	if (substr($n, 0, 1) == "@") {
-		$n = +10e6;
-	}
-	
+  $orig_n = $n;
+  
+  if (substr($n, 0, 1) == "@") {
+    $n = +10e6;
+  }
+  
   $min = $n;
   foreach ($array as $a)
     if (isset($a[1])) $min = min($n, $a[1], $min);
-		
-	if ($orig_n != $n) {
-		$min += floatval(substr($orig_n, 1));
-	}
-	
+    
+  if ($orig_n != $n) {
+    $min += floatval(substr($orig_n, 1));
+  }
+  
   return $min;
 }
 
@@ -209,12 +209,12 @@ $diuere_24_reset_hour = CAppUI::conf("dPpatients CConstantesMedicales diuere_24_
 // Si le séjour a des constantes médicales
 if ($list_constantes) {
   foreach ($list_constantes as $cst) {
-  	$comment = utf8_encode($cst->comment);
+    $comment = utf8_encode($cst->comment);
     $dates[] = mbTransformTime($cst->datetime, null, '%d/%m/%y');
     $hours[] = mbTransformTime($cst->datetime, null, '%Hh%M');
-		
+    
     $day_24h = mbTransformTime("-$diuere_24_reset_hour hours", $cst->datetime, '%d/%m/%y');
-		
+    
     $comments[] = $comment;
     $const_ids[] = $cst->_id;
     $cst->loadLogs();
@@ -246,22 +246,22 @@ if ($list_constantes) {
       $i = count($d["series"][0]["data"]);
       foreach($fields as $n => $_field) {
         //if ($cst->$_field !== null && $cst->$_field !== "") // We have to show empty points too!
-				$value = getValue($cst->$_field);
+        $value = getValue($cst->$_field);
         $d["series"][$n]["data"][] = array(
-				  $i, 
-					$value, 
-					$user_view, 
-					$comment,
-					utf8_encode($params['unit']),
-				);
-				
-				if ($name == "diurese") {
-					if (!isset($cumuls_day[$name][$day_24h])) {
-						$cumuls_day[$name][$day_24h] = array("n" => 0, "value" => 0);
-					}
-					$cumuls_day[$name][$day_24h]["value"] += $value;
+          $i, 
+          $value, 
+          $user_view, 
+          $comment,
+          utf8_encode($params['unit']),
+        );
+        
+        if ($name == "diurese") {
+          if (!isset($cumuls_day[$name][$day_24h])) {
+            $cumuls_day[$name][$day_24h] = array("n" => 0, "value" => 0);
+          }
+          $cumuls_day[$name][$day_24h]["value"] += $value;
           $cumuls_day[$name][$day_24h]["n"]++;
-				}
+        }
       }
      
       $graphs[] = "constantes-medicales-$name";
@@ -279,15 +279,19 @@ foreach($cumuls_day as $name => $days) {
   foreach($days as $day => $values) {
     $_data["series"][] = array(
       "data" => array(array(
-			  $offset-0.5, 
-				$values["value"], 
-				utf8_encode(CAppUI::tr("CConstantesMedicales-$name-desc")), 
-				null,
-				utf8_encode(CValue::read(CConstantesMedicales::$list_constantes[$name], "unit")),
-			)),
-			"cumul" => $day,
+        $offset-0.5, 
+        $values["value"], 
+        utf8_encode(CAppUI::tr("CConstantesMedicales-$name-desc")), 
+        null,
+        utf8_encode(CValue::read(CConstantesMedicales::$list_constantes[$name], "unit")),
+      )),
+      "cumul" => $day,
       "lines" => array("show" => false),
       "points" => array("show" => false),
+      "markers" => array(
+        "show" => true,
+        "position" => "rm",
+			),
       "bars" => array(
         "show" => true,
         "barWidth" => $values["n"],
@@ -296,15 +300,15 @@ foreach($cumuls_day as $name => $days) {
       ),
       "color" => "#4DA74D",
       "mouse" => array(
-			  "relative" => false,
-				"position" => "nw",
-			),
+        "relative" => false,
+        "position" => "nw",
+      ),
     );
     
     $offset += $values["n"];
   }
-	
-	$first = array_shift($_data["series"]);
+  
+  $first = array_shift($_data["series"]);
   array_push($_data["series"], $first);
 }
 
@@ -317,20 +321,20 @@ foreach($data as $name => &$_data) {
   }
   
   if (in_array($name, array("ta", "ta_gauche", "ta_droit"))) {
-  	if (isset($params["conversion"][$unite_ta]) && ($unite_ta != $params["conversion"][$unite_ta])) {
+    if (isset($params["conversion"][$unite_ta]) && ($unite_ta != $params["conversion"][$unite_ta])) {
       $_data["standard"] *= $params["conversion"][$unite_ta];
-		}
-		
+    }
+    
     $params['unit'] = $unite_ta;
   }
-	
-	$all_y_values = CMbArray::pluck($_data["series"], "data");
-	$y_values = array();
-	
-	foreach($all_y_values as $_values) {
-		$y_values = array_merge($y_values, $_values);
-	}
-	
+  
+  $all_y_values = CMbArray::pluck($_data["series"], "data");
+  $y_values = array();
+  
+  foreach($all_y_values as $_values) {
+    $y_values = array_merge($y_values, $_values);
+  }
+  
   $_data["options"] = array(
     "title" => utf8_encode(CAppUI::tr("CConstantesMedicales-$name-desc").($params['unit'] ? " ({$params['unit']})" : "")),
     "yaxis" => array(

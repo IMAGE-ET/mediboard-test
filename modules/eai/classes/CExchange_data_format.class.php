@@ -15,7 +15,7 @@
  * Class CExchangeDataFormat
  * Echange Data Format
  */
-CAppUI::requireSystemClass('mbMetaObject');
+CAppUI::requireSystemClass('CMbMetaObject');
 
 class CExchangeDataFormat extends CMbMetaObject {  
   // DB Fields

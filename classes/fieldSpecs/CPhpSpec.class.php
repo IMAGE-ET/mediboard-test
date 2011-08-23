@@ -8,7 +8,7 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
  */
 
-CAppUI::requireSystemClass("mbFieldSpec");
+CAppUI::requireSystemClass("CMbFieldSpec");
 CAppUI::requireLibraryFile("geshi/geshi");
 
 class CPhpSpec extends CMbFieldSpec {

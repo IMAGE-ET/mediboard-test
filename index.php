@@ -49,7 +49,7 @@ require "./includes/config_all.php";
 $rootName = basename($dPconfig["root_dir"]);
 
 require "./includes/version.php";
-require "./classes/sharedmemory.class.php";
+require "./classes/SHM.class.php";
 
 // PHP Configuration
 foreach ($dPconfig["php"] as $key => $value) {
@@ -79,21 +79,21 @@ require "./includes/errors.php";
 date_default_timezone_set($dPconfig["timezone"]);
 
 // Start chrono
-require "./classes/chrono.class.php";
+require "./classes/Chronometer.class.php";
 $phpChrono = new Chronometer;
 $phpChrono->main = true;
 $phpChrono->start();
 
 // Load AppUI from session
-require "./classes/app.class.php";
-require "./classes/ui.class.php";
+require "./classes/CApp.class.php";
+require "./classes/CAppUI.class.php";
 
 // Register shutdown
 register_shutdown_function(array("CApp", "checkPeace"));
 
-require "./classes/sqlDataSource.class.php";
-require "./classes/mysqlDataSource.class.php";
-require "./classes/mysqliDataSource.class.php";
+require "./classes/CSQLDataSource.class.php";
+require "./classes/CMySQLDataSource.class.php";
+require "./classes/CMySQLiDataSource.class.php";
 
 if (!CSQLDataSource::get("std")) {
   header("Location: offline.php?reason=bdd");
@@ -206,7 +206,7 @@ if ($user->isInstalled()) {
   CAppUI::$instance->_ref_user =& CAppUI::$user;
 }
 
-CAppUI::requireSystemClass("smartydp");
+CAppUI::requireSystemClass("CSmartyDP");
 
 ob_start();
 

@@ -10,8 +10,8 @@
 
 require_once("checkauth.php");
 require_once($mbpath."includes/compat.php");
-require_once($mbpath."classes/mbconfig.class.php");
-require_once($mbpath."classes/mbArray.class.php");
+require_once($mbpath."classes/CMbConfig.class.php");
+require_once($mbpath."classes/CMbArray.class.php");
 
 if(isset($_POST["username"])){
  unset($_POST["username"]); 

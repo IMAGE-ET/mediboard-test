@@ -57,6 +57,8 @@ toggleEmptyRows = function(){
   if (!container) return;
   
   var show = !container.hasClassName("hide-empty-rows");
+	
+	console.log(show);
   
   container.select(".ex_class-table .empty").invoke("setVisible", show);
   
@@ -76,7 +78,7 @@ refreshSelf = function(){
 {{* FULL DETAIL *}}
 {{if $detail == 2}}
 
-  {{if $ex_objects_by_event|@count && !$ex_class_id}}
+  {{if $ex_objects_by_event|@count && !$ex_class_id && !$print}}
     <ul class="control_tabs small" id="exclass_tabs">
       {{foreach from=$ex_objects_by_event item=ex_objects_by_class key=_host_event}}
         {{assign var=parts value="-"|explode:$_host_event}}
@@ -90,12 +92,19 @@ refreshSelf = function(){
   {{/if}}
   
   <div id="ex_class-tables" class="hide-empty-rows">
+  	{{if !$print}}
     <button class="change" onclick="toggleEmptyRows()">
       Afficher/cacher les valeurs vides
     </button>
+		{{/if}}
     
     {{foreach from=$ex_objects_by_event item=ex_objects_by_class key=_host_event}}
-      <div id="tab-{{$_host_event}}" {{if !$ex_class_id}} style="display: none;" {{/if}} class="ex_class-table">
+		  {{if $print}}
+			  {{assign var=parts value="-"|explode:$_host_event}}
+        <h2>{{tr}}{{$parts.0}}{{/tr}} - {{tr}}{{$parts.0}}-event-{{$parts.1}}{{/tr}}</h2>
+			{{/if}}
+			
+      <div id="tab-{{$_host_event}}" {{if !$ex_class_id && !$print}} style="display: none;" {{/if}} class="ex_class-table">
       	{{if $reaches_limit && $limit}}
       	  <div class="small-info">Seuls les {{$limit}} derniers enregistrements de chaque formulaire sont affichés.</div>
 				{{/if}}

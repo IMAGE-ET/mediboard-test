@@ -8,7 +8,7 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
  */
 
-CAppUI::requireSystemClass("mbFieldSpec");
+CAppUI::requireSystemClass("CMbFieldSpec");
 
 class CIpAddressSpec extends CMbFieldSpec {
   function getSpecType() {

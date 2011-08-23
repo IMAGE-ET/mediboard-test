@@ -170,10 +170,10 @@ class CConstantesMedicales extends CMbObject {
       "min" => 0, "max" => 2000,
 			"cumul" => ""
     ),
-    "diurese_miction"   => array(
+    /*"diurese_miction"   => array(
       "unit" => "ml",
       "min" => 0, "max" => 2000
-    ),
+    ),*/
     "injection"         => array(
       "unit" => "", 
       "formfields" => array("_inj", "_inj_essai"), 

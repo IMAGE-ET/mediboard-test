@@ -11,11 +11,11 @@
 require_once("checkauth.php");
 
 $mbpath = "../";
-if (!file_exists($mbpath."classes/mbpath.class.php")){
+if (!file_exists($mbpath."classes/CMbPath.class.php")){
   $mbpath = "./";
 }
 
-require_once($mbpath."classes/mbpath.class.php");
+require_once($mbpath."classes/CMbPath.class.php");
 require_once("libs.php");
 
 $install = @$_POST['install'];

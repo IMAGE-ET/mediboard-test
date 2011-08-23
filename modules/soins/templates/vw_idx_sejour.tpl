@@ -266,10 +266,9 @@ viewBilanService = function(service_id, date){
 }
 
 printDossierComplet = function(){
-  var url = new Url;
-	url.setModuleAction("soins", "print_dossier_soins");
+  var url = new Url("soins", "print_dossier_soins");
 	url.addParam("sejour_id", $V(document.form_prescription.sejour_id));
-	url.popup("850", "500", "Dossier complet");
+	url.popup(850, 600, "Dossier complet");
 }
 
 </script>

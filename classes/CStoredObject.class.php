@@ -9,7 +9,7 @@
  */
 
 CAppUI::requireSystemClass("CModelObject");
-CAppUI::requireSystemClass("request");
+CAppUI::requireSystemClass("CRequest");
 
 /**
  * @abstract Mediboard ORM persistance layer 

@@ -16,15 +16,15 @@ if (defined("E_DEPRECATED")) {
 
 $mbpath = "../";
 
-if (!file_exists($mbpath."classes/mbArray.class.php")){
+if (!file_exists($mbpath."classes/CMbArray.class.php")){
   $mbpath = "./";
 }
 
-require_once($mbpath."classes/mbArray.class.php");
-require_once($mbpath."classes/value.class.php");
+require_once($mbpath."classes/CMbArray.class.php");
+require_once($mbpath."classes/CValue.class.php");
 require_once($mbpath."includes/mb_functions.php");
 require_once($mbpath."includes/version.php");
-require_once($mbpath."classes/chrono.class.php");
+require_once($mbpath."classes/Chronometer.class.php");
 
 $stepsText = array (
   "check" => "Prérequis", 

@@ -10,7 +10,7 @@
 
 // Use $dPconfig for both application and install wizard to use it
 global $dPconfig, $rootName;
-require_once "{$dPconfig['root_dir']}/classes/mbpath.class.php";
+require_once "{$dPconfig['root_dir']}/classes/CMbPath.class.php";
 
 /**
  * Shared Memory interface

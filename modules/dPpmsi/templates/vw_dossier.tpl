@@ -150,7 +150,7 @@ SejourHprimSelector.doSet = function(){
 printDossierComplet = function(sejour_id){
   var url = new Url("soins", "print_dossier_soins");
   url.addParam("sejour_id", sejour_id);
-  url.popup("850", "500", "Dossier complet");
+  url.popup(850, 600, "Dossier complet");
 }
 
 {{if $isSejourPatient}}

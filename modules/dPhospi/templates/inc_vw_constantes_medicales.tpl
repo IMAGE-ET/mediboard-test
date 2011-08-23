@@ -282,6 +282,9 @@ toggleAllGraphs = function() {
 Main.add(function () {
   drawGraph();
   toggleAllGraphs();
+	document.observe("click", function(){
+	  $$(".flotr-mouse-value").invoke("hide");
+	})
 });
 
 loadConstantesMedicales  = function(context_guid) {

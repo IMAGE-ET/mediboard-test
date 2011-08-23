@@ -8,7 +8,7 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
  */
 
-CAppUI::requireSystemClass("resourceLoaders/htmlResourceLoader");
+CAppUI::requireSystemClass("resourceLoaders/CHTMLResourceLoader");
 
 abstract class CJSLoader extends CHTMLResourceLoader {
   static $files = array();

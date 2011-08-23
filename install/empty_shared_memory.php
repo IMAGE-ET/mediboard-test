@@ -9,7 +9,7 @@
  */
 
 $rootName = basename($dPconfig["root_dir"]);
-require_once("../classes/sharedmemory.class.php");
+require_once("../classes/SHM.class.php");
         
 // Remove locales
 foreach (glob("../locales/*", GLOB_ONLYDIR) as $localeDir) {

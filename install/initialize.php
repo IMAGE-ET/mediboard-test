@@ -17,7 +17,7 @@ $dbConfigs = array (
   "std" => $dPconfig["db"]["std"]
 );
 
-require_once("mbdb.class.php");
+require_once("CMbDb.class.php");
 require_once("addusers.sql.php");
 
 showHeader(); 

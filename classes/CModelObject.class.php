@@ -8,8 +8,8 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
  */
 
-CAppUI::requireSystemClass("mbFieldSpecFact");
-CAppUI::requireSystemClass("mbObjectSpec");
+CAppUI::requireSystemClass("CMbFieldSpecFact");
+CAppUI::requireSystemClass("CMbObjectSpec");
  
 /**
  * @abstract Mediboard model definition 

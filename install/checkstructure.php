@@ -9,7 +9,7 @@
  */
 
 require_once("header.php");
-require_once("mbdb.class.php");
+require_once("CMbDb.class.php");
 
 $dbConfig = $dPconfig["db"]["std"];
 $db = new CMbDb(

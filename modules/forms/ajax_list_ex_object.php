@@ -15,6 +15,7 @@ $reference_id    = CValue::get("reference_id");
 $detail          = CValue::get("detail", 1);
 $ex_class_id     = CValue::get("ex_class_id");
 $target_element  = CValue::get("target_element");
+$print           = CValue::get("print");
 
 CValue::setSession('reference_class', $reference_class);
 CValue::setSession('reference_id',    $reference_id);
@@ -45,12 +46,17 @@ $ex_classes_creation = array();
 
 $limit = null;
 $reaches_limit = false;
-  
-switch($detail) {
-  case 2: $limit = ($ex_class_id ? 30 : 20); break;
-  case 1: $limit = ($ex_class_id ? 200 : 100); break;
-default:
-  case 0: 
+
+if ($print) {
+	$limit = 50;
+}
+else {
+	switch($detail) {
+	  case 2: $limit = ($ex_class_id ? 30 : 20); break;
+	  case 1: $limit = ($ex_class_id ? 200 : 100); break;
+	default:
+	  case 0: 
+	}
 }
   
 foreach($ex_classes as $_ex_class_id => $_ex_class) {
@@ -115,6 +121,31 @@ foreach($ex_classes as $_ex_class_id => $_ex_class) {
     krsort($ex_objects_by_event[$ex_class_key][$_ex_class_id]);
   }
 }
+
+if ($detail == 2) {
+	foreach($ex_objects_by_event as $ex_objects_by_class) {
+    foreach($ex_objects_by_class as $_ex_objects) {
+			$first = reset($_ex_objects);
+			$_ex_class = $first->_ref_ex_class;
+	
+	    foreach ($_ex_class->_ref_groups as $_ex_group) {
+	    	$_ex_group->_empty = true;
+				
+	      foreach ($_ex_group->_ref_fields as $_ex_field) {
+	      	$_ex_field->_empty = true;
+				
+		      foreach ($_ex_objects as $_ex_object) {
+		      	if ($_ex_object->{$_ex_field->name} != "") {
+		      		$_ex_field->_empty = false;
+              $_ex_group->_empty = false;
+							break;
+		      	}
+		      }
+			  }
+			}
+    }
+	}
+}
   
 ksort($ex_objects_by_event);
 ksort($all_ex_objects);
@@ -134,4 +165,5 @@ $smarty->assign("ex_classes",      $ex_classes);
 $smarty->assign("detail",          $detail);
 $smarty->assign("ex_class_id",     $ex_class_id);
 $smarty->assign("target_element",  $target_element);
+$smarty->assign("print",           $print);
 $smarty->display("inc_list_ex_object.tpl");

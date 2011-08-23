@@ -40,7 +40,7 @@ $PHPTHUMB_CONFIG['document_root'] = realpath((getenv('DOCUMENT_ROOT') && preg_ma
 //$PHPTHUMB_CONFIG['cache_directory'] = '/tmp/persistent/phpthumb/cache/';
 $PHPTHUMB_CONFIG['cache_directory'] = $PHPTHUMB_CONFIG['mediboard_root'] . "/tmp/phpthumb/";
 
-require_once($PHPTHUMB_CONFIG['mediboard_root'] . "/classes/mbpath.class.php");
+require_once($PHPTHUMB_CONFIG['mediboard_root'] . "/classes/CMbPath.class.php");
 CMbPath::forceDir($PHPTHUMB_CONFIG['cache_directory']);
 
 $PHPTHUMB_CONFIG['cache_disable_warning'] = true; // If [cache_directory] is non-existant or not writable, and [cache_disable_warning] is false, an error image will be generated warning to either set the cache directory or disable the warning (to avoid people not knowing about the cache)
