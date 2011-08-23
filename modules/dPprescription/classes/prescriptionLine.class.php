@@ -80,7 +80,9 @@ class CPrescriptionLine extends CMbObject implements IPatientRelated {
   var $_count_locked_planif = null;
 	var $_planifs_systeme = array();
 	var $_urgence = null;
-	
+  var $_duree   = null;
+
+
   // Can fields
   var $_perm_edit = null;
   var $_dates_urgences = null;
@@ -118,6 +120,8 @@ class CPrescriptionLine extends CMbObject implements IPatientRelated {
     $specs["recusee"]           = "bool default|0";
     $specs["_fin"]              = "date moreEquals|debut";
     $specs["_fin_reelle"]       = "date";
+    $specs["_duree"]                 = "num min|0";
+
     return $specs;
   }
   
@@ -133,6 +137,11 @@ class CPrescriptionLine extends CMbObject implements IPatientRelated {
     $this->loadRefPraticien();
     $this->_protocole = ($this->_ref_prescription->object_id) ? "0" : "1";
     
+		
+		$this->_active = (!$this->conditionnel) ? 1 : $this->condition_active;
+    $this->getRecentModification();
+    $this->calculDatesUrgences();
+		
     if($this->duree && $this->debut){
       switch ($this->unite_duree) {
         case "minute":
@@ -167,10 +176,17 @@ class CPrescriptionLine extends CMbObject implements IPatientRelated {
     // Calcul du debut reel de la ligne
     $time_debut = ($this->time_debut) ? $this->time_debut : "00:00:00";
     $this->_debut_reel = "$this->debut $time_debut";
-    
-    $this->_active = (!$this->conditionnel) ? 1 : $this->condition_active;
-    $this->getRecentModification();
-    $this->calculDatesUrgences();
+		
+		// Calcul de la fin reelle de la ligne
+    $time_fin = ($this->time_fin) ? $this->time_fin : "23:59:00";
+  
+    // Si l'unite de duree est l'heure
+    if($this->unite_duree == "heure" || $this->unite_duree == "minute"){
+      $_unite = ($this->unite_duree == "heure") ? "HOURS" : "MINUTES";
+      $this->_fin_reelle = mbDateTime("+ $this->duree $_unite", $this->_debut_reel);
+    } else {
+      $this->_fin_reelle = $this->_fin ? "$this->_fin $time_fin" : "";      
+		}
   }
   
   /*
@@ -618,21 +634,23 @@ class CPrescriptionLine extends CMbObject implements IPatientRelated {
   		return;
   	}
 		
+		  
+    if(!$this->_ref_prises){
+      $this->loadRefsPrises();
+    }
     if($this instanceof CPrescriptionLineElement && $this->debut && $this->time_debut){
     	$chapitre = $this->_ref_element_prescription->_ref_category_prescription->chapitre;
-      if($chapitre == "imagerie" || $chapitre == "consult"){
+      
+			// On genere une planif a la date et heure de debut si aucune poso n'est presente
+			if($this->debut && $this->time_debut && count($this->_ref_prises) == 0){
 				$new_planif = new CPlanificationSysteme();
         $new_planif->dateTime = "$this->debut $this->time_debut";
 	      $new_planif->object_id = $this->_id;
 	      $new_planif->object_class = $this->_class;
         $new_planif->sejour_id = $this->_ref_prescription->object_id;    
         $new_planif->store();
-      }
+			}
     }
-			
-		if(!$this->_ref_prises){
-		  $this->loadRefsPrises();
-		}
 		
     foreach($this->_ref_prises as &$_prise) {
     	$_prise->calculPlanifs();
@@ -742,24 +760,21 @@ class CPrescriptionLine extends CMbObject implements IPatientRelated {
       }
     }
 		
-		// Pre-remplissage du plan de soins avec les planifs systemes pour les lignes ne possedant pas de posologie (imagerie et consult)
+		// Pre-remplissage du plan de soins avec les planifs systemes pour les lignes ne possedant pas de posologie
 		if($with_calcul && $this instanceof CPrescriptionLineElement){
 			$chapitre = $this->_ref_element_prescription->_ref_category_prescription->chapitre;
-			if($chapitre == "imagerie" || $chapitre == "consult"){
-				// Mode permettant de calculer seulement les onglets visibles
-	      $line_plan_soin =& $this->_quantity_by_date["aucune_prise"][$date]['quantites'];
-	      
-				foreach($planifs as $_planif){
-		      $_heure = substr(mbTime($_planif->dateTime), 0, 2);
-		      if(!isset($line_plan_soin[$_heure])){
-		        $line_plan_soin[$_heure] = array("total" => 0, "total_disp" => 0);
-		      }
-		      $line_plan_soin[$_heure]["total"] += 1;
-		      $line_plan_soin[$_heure]["total_disp"] += 1;
-		      $line_plan_soin[$_heure][] = array("quantite" => 1, "heure_reelle" => $_heure);
-		      $total_day += 1;
-		    }
-			}
+      $line_plan_soin =& $this->_quantity_by_date["aucune_prise"][$date]['quantites'];
+      
+			foreach($planifs as $_planif){
+	      $_heure = substr(mbTime($_planif->dateTime), 0, 2);
+	      if(!isset($line_plan_soin[$_heure])){
+	        $line_plan_soin[$_heure] = array("total" => 0, "total_disp" => 0);
+	      }
+	      $line_plan_soin[$_heure]["total"] += 1;
+	      $line_plan_soin[$_heure]["total_disp"] += 1;
+	      $line_plan_soin[$_heure][] = array("quantite" => 1, "heure_reelle" => $_heure);
+	      $total_day += 1;
+	    }
 		}
     return $total_day;
   }

@@ -81,43 +81,53 @@ $dPconfig["dPprescription"] = array (
   "CCategoryPrescription" => array (
     "dmi" => array(
       "phrase"      => "Bon pour",
-      "unite_prise" => "dispositif(s)"
+      "unite_prise" => "dispositif(s)",
+			"fin_sejour"  => "0"
     ),
     "anapath" => array(
       "phrase"      => "Faire pratiquer",
-      "unite_prise" => "examen(s)"
+      "unite_prise" => "examen(s)",
+			"fin_sejour"  => "0"
     ),
     "biologie" => array(
       "phrase"      => "Faire pratiquer",
-      "unite_prise" => "examen(s)"
+      "unite_prise" => "examen(s)",
+			"fin_sejour"  => "0"
     ),
     "imagerie" => array(
       "phrase"      => "Faire pratiquer",
-      "unite_prise" => "cliché(s)"
+      "unite_prise" => "cliché(s)",
+      "fin_sejour"  => "0"
     ),
     "consult" => array(
       "phrase"      => "",
-      "unite_prise" => "consultation(s)"
+      "unite_prise" => "consultation(s)",
+      "fin_sejour"  => "0"
     ),
     "kine" => array(
       "phrase"      => "Faire pratiquer",
-      "unite_prise" => "séance(s)"
+      "unite_prise" => "séance(s)",
+      "fin_sejour"  => "0"
     ),
     "soin" => array(
       "phrase"      => "Pratiquer",
-      "unite_prise" => "soin(s)"
+      "unite_prise" => "soin(s)",
+      "fin_sejour"  => "0"
     ),
     "dm" => array(
       "phrase"      => "Délivrer",
-      "unite_prise" => "dispositif(s)"
+      "unite_prise" => "dispositif(s)",
+      "fin_sejour"  => "0"
     ),
 		"ds" => array(
 		  "phrase"      => "",
-			"unite_prise" => ""
+			"unite_prise" => "",
+      "fin_sejour"  => "0"
 		),
 		"med_elt" => array(
 		  "phrase"      => "",
-      "unite_prise" => ""
+      "unite_prise" => "",
+      "fin_sejour"  => "0"
     ),
     "show_description" => "0",
     "show_header" => "0",

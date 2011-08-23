@@ -300,7 +300,6 @@ Main.add( function(){
 					      {{if $chapitre != "dmi"}}
 						      {{if !$_line->fin}}
 							    <td>{{mb_label object=$_line field="debut"}}: {{mb_value object=$_line field="debut"}}</td>
-							    {{if $chapitre != "anapath" && $chapitre != "imagerie" && $chapitre != "consult"}}
 							    <td>
 							      {{mb_label object=$_line field="duree"}}: 
 							        {{if $_line->duree && $_line->unite_duree}}
@@ -311,7 +310,7 @@ Main.add( function(){
 							        {{/if}}
 							    </td>
 							    <td>{{mb_label object=$_line field="_fin"}}: {{mb_value object=$_line field="_fin"}}</td>
-							    {{/if}}
+							  
 							    {{else}}
 							    <td colspan="3">
 							      {{mb_label object=$_line field="fin"}}: {{mb_value object=$_line field="fin"}}

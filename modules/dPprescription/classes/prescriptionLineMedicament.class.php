@@ -161,7 +161,6 @@ class CPrescriptionLineMedicament extends CPrescriptionLine {
   var $_quantite_dispensation              = null;
   var $_unite_prise                        = null;
   var $_long_view = null;
-  var $_duree                              = null;
 
   static $_load_lite = false;
 
@@ -213,7 +212,6 @@ class CPrescriptionLineMedicament extends CPrescriptionLine {
     $specs["_dci_view"]              = "str";
     $specs["_fin_reelle"]            = "dateTime";
     $specs["_debut_reel"]            = "dateTime";
-    $specs["_duree"]                 = "num min|0";
 		$specs["commentaire"]            = "text helped|code_ucd";
     return $specs;
   }
@@ -293,22 +291,6 @@ class CPrescriptionLineMedicament extends CPrescriptionLine {
       }
     }
 
-    // Calcul de la fin reelle de la ligne
-    $time_fin = ($this->time_fin) ? $this->time_fin : "23:59:00";
-	
-    // Si l'unite de duree est l'heure
-		if($this->unite_duree == "heure" || $this->unite_duree == "minute"){
-			$_unite = ($this->unite_duree == "heure") ? "HOURS" : "MINUTES";
-		  $this->_fin_reelle = mbDateTime("+ $this->duree $_unite", $this->_debut_reel);
-    } else {
-      $this->_fin_reelle = $this->_fin ? "$this->_fin $time_fin" : "";      
-		}
-
-    if($this->date_arret){
-    	$this->_fin_reelle = $this->date_arret;
-      $this->_fin_reelle .= $this->time_arret ? " $this->time_arret" : " 23:59:00";
-    }
-    
     if($this->_protocole){
       $this->countSubstitutionsLines();
     }
@@ -316,11 +298,16 @@ class CPrescriptionLineMedicament extends CPrescriptionLine {
     $this->isInjectable();
 		
 		if(!$this->duree && $this->_ref_prescription->type == "sejour"){
-			$this->_duree = mbDaysRelative($this->debut, mbDate($this->_ref_prescription->_ref_object->sortie))+1;
-			if(!$this->_fin_reelle){
-			  $this->_fin_reelle = $this->_ref_prescription->_ref_object->sortie;
-		  }
-		}
+      $this->_duree = mbDaysRelative($this->debut, mbDate($this->_ref_prescription->_ref_object->sortie))+1;
+      if(!$this->_fin_reelle){
+        $this->_fin_reelle = $this->_ref_prescription->_ref_object->sortie;
+      }
+    }
+		
+		if($this->date_arret){
+      $this->_fin_reelle = $this->date_arret;
+      $this->_fin_reelle .= $this->time_arret ? " $this->time_arret" : " 23:59:00";
+    }
   }
     
   function updateLongView(){

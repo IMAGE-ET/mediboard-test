@@ -63,7 +63,12 @@
 					  {{if $_line instanceof CPrescriptionLineMedicament}}
 	          <span class="opacity-70">{{mb_value object=$_line field=_duree}} Jour(s) <br />(Fin du séjour)</span>
 						{{elseif $_line instanceof CPrescriptionLineElement}}
-						1 Jour
+						  {{assign var=_chapitre_line value=$_line->_chapitre}}
+						  {{if $conf.dPprescription.CCategoryPrescription.$_chapitre_line.fin_sejour}}
+                <span class="opacity-70">{{mb_value object=$_line field=_duree}} Jour(s) <br />(Fin du séjour)</span>
+              {{else}}
+                 1 Jour
+              {{/if}}
 						{{/if}}
 	        {{/if}}
 				{{/if}}

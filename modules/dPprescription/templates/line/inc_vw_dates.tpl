@@ -54,11 +54,7 @@ syncDateSubmit = function(oForm, curr_line_id, fieldName, type, object_class, ca
 	     {{if $line->_can_modify_dates || $typeDate == "mode_grille"}}
 	     <td style="{{if $typeDate == 'mode_grille'}}width: 190px;{{/if}}">
 			   <strong>
-				 {{if $chapitre == "consult" || $chapitre == "anapath" || $chapitre == "imagerie"}}
-           Date
-         {{else}}
-           {{mb_label object=$line field=debut}}
-         {{/if}}
+         {{mb_label object=$line field=debut}}
 				 </strong>
 	       {{if $prescription->type != "externe" && $typeDate == "mode_grille"}}
 	           <select name="debut_date" onchange="getForm('editDates-{{$typeDate}}-{{$line->_id}}').debut_da.value = new String;
@@ -81,7 +77,7 @@ syncDateSubmit = function(oForm, curr_line_id, fieldName, type, object_class, ca
 							 </optgroup>					   
 						 </select>
 						 <div id="date_mb_field-{{$typeDate}}-{{$line_id}}" style="border:none;">
-						   {{if $typeDate != "mode_grille" && ($chapitre == "consult" || $chapitre == "anapath" || $chapitre == "imagerie")}}
+						   {{if $typeDate != "mode_grille"}}
 						     {{mb_field object=$line field=debut canNull=false form=editDates-$typeDate-$line_id onchange="submitFormAjax(this.form, 'systemMsg');"}}
 						   {{else}}
 						     {{mb_field object=$line field=debut canNull=false form=editDates-$typeDate-$line_id onchange="syncDateSubmit(this.form, '$line_id', this.name, '$typeDate','$_object_class','$category_id');"}}
@@ -89,7 +85,7 @@ syncDateSubmit = function(oForm, curr_line_id, fieldName, type, object_class, ca
 			         {{mb_field object=$line field=time_debut form=editDates-$typeDate-$line_id onchange="$onchange"}}
 			       </div>	       
 	       {{else}}
-	         {{if $typeDate != "mode_grille" && ($chapitre == "consult" || $chapitre == "anapath" || $chapitre == "imagerie")}}
+	         {{if $typeDate != "mode_grille"}}
 		         {{mb_field object=$line field=debut form=editDates-$typeDate-$line_id onchange="submitFormAjax(this.form, 'systemMsg');"}}  
 	         {{else}}
 	           {{mb_field object=$line field=debut form=editDates-$typeDate-$line_id onchange="syncDateSubmit(this.form, '$line_id', this.name, '$typeDate','$_object_class','$category_id');"}}  
@@ -100,11 +96,7 @@ syncDateSubmit = function(oForm, curr_line_id, fieldName, type, object_class, ca
 	     {{else}}
 	     <td>
 	     	 <strong>
-	       {{if $chapitre == "consult" || $chapitre == "anapath" || $chapitre == "imagerie"}}
-           Date
-         {{else}}
-           {{mb_label object=$line field=debut}}
-         {{/if}}
+         {{mb_label object=$line field=debut}}
 				 </strong>
 	       {{if $line->debut}}
 	         {{$line->debut|date_format:"%d/%m/%Y"}}
@@ -116,8 +108,6 @@ syncDateSubmit = function(oForm, curr_line_id, fieldName, type, object_class, ca
 	       {{/if}}				   
 	     </td>
 	     {{/if}}
-	
-	     {{if $chapitre != "consult" && $chapitre != "anapath" && $chapitre != "imagerie"}}
 	     <td>
 	      	<strong>{{mb_label object=$line field=duree}}</strong>
 	       {{if $line->_can_modify_dates || $typeDate == "mode_grille"}}
@@ -131,7 +121,11 @@ syncDateSubmit = function(oForm, curr_line_id, fieldName, type, object_class, ca
 	              {{if $line instanceof CPrescriptionLineMedicament}}
 	                {{mb_value object=$line field=_duree}}
                 {{else}}
-	                1
+								  {{if $conf.dPprescription.CCategoryPrescription.$typeDate.fin_sejour}}
+	                  {{mb_value object=$line field=_duree}}
+									{{else}}
+									  1
+									{{/if}}
 	              {{/if}}
 	           {{else}}
 	             - 
@@ -153,7 +147,11 @@ syncDateSubmit = function(oForm, curr_line_id, fieldName, type, object_class, ca
 							 {{if $line instanceof CPrescriptionLineMedicament}}
 							   $V(oForm._fin_da, "Fin du séjour");
 							 {{elseif $line instanceof CPrescriptionLineElement}}
-							   $V(oForm._fin_da, "Date de début");
+							   {{if $conf.dPprescription.CCategoryPrescription.$chapitre.fin_sejour}}
+								   $V(oForm._fin_da, "Fin du séjour");
+								 {{else}}
+								   $V(oForm._fin_da, "Date de début");
+								 {{/if}}
 		           {{/if}}
 		     	   {{/if}}
 					 });
@@ -174,7 +172,11 @@ syncDateSubmit = function(oForm, curr_line_id, fieldName, type, object_class, ca
 					    {{if $line instanceof CPrescriptionLineMedicament}}
 							  Fin du séjour
 							{{else}}
-							  {{mb_value object=$line field=debut}}
+							  {{if $conf.dPprescription.CCategoryPrescription.$chapitre.fin_sejour}}
+                   Fin du séjour
+                {{else}}
+                  {{mb_value object=$line field=debut}}
+                {{/if}}
 							{{/if}}
 					 {{else}}
 					   - 
@@ -184,7 +186,6 @@ syncDateSubmit = function(oForm, curr_line_id, fieldName, type, object_class, ca
 	    </tr>
 	   {{/if}}
 	  </tr>
-	  {{/if}}
 	  {{/if}}
 	  {{if $line->fin}}
 	  <tr>  

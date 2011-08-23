@@ -70,17 +70,14 @@ foreach($lines as $cat_name => $lines_by_cat){
 	    $_line->decalage_line = $decalage_line;
     	$_line->time_debut = $time_debut;
             
-      if($cat_name != "anapath" && $cat_name != "imagerie" && $cat_name != "consult"){
-		    $_line->duree = $duree;
-		    $_line->unite_duree = $unite_duree;
-		    $_line->decalage_line_fin = $decalage_line_fin;
-		    $_line->jour_decalage_fin = $jour_decalage_fin;
-		    $_line->time_fin = $time_fin;
-      }
-	
+      $_line->duree = $duree;
+	    $_line->unite_duree = $unite_duree;
+	    $_line->decalage_line_fin = $decalage_line_fin;
+	    $_line->jour_decalage_fin = $jour_decalage_fin;
+	    $_line->time_fin = $time_fin;
+
 		  $_line->store();
 		  
-		  if($cat_name != "anapath" && $cat_name != "imagerie" && $cat_name != "consult"){
 		  	if($moment_unitaire_id){
         	// Cas d'un moment complexe
         	if($_moment_explode[0] == "complexe"){
@@ -162,7 +159,7 @@ foreach($lines as $cat_name => $lines_by_cat){
 				    CAppUI::displayMsg($msg, "CPrisePosologie-msg-create");
 				  } 
 			  } 
-       }
+       
 		  
 		}
 	}

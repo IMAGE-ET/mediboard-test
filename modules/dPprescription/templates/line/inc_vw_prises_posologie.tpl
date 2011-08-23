@@ -140,6 +140,8 @@ Main.add(function () {
   </div>
 {{foreachelse}}
 	<div class="small-info">
-		Aucune posologie sélectionnée
+		Aucune posologie sélectionnée{{if $line instanceof CPrescriptionLineElement}}, 
+		ce {{$line->_unite_prise}} sera donc effectué <strong>une fois</strong> à la date et heure de début de prescription.
+		{{/if}}
 	</div>
 {{/foreach}}

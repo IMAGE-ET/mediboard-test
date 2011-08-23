@@ -469,11 +469,26 @@ class CPrisePosologie extends CMbMetaObject {
 			}
     }
 
+
+    $is_element = $this->_ref_object instanceof CPrescriptionLineElement;
+    
+		
+    // Recherche des planifs systemes non rattachées à une posologie (seulement pour les elements: planif sur l'heure de debut)
+    if($is_element){
+      $ds = CSQLDataSource::get("std");
+      $query = "DELETE planification_systeme.* FROM planification_systeme 
+              LEFT JOIN administration ON administration.planification_systeme_id = planification_systeme.planification_systeme_id
+              WHERE planification_systeme.object_id = '{$this->_ref_object->_id}'
+              AND planification_systeme.object_class = '{$this->_ref_object->_class}'
+							AND planification_systeme.sejour_id = '{$this->_ref_object->_ref_prescription->object_id}'
+							AND planification_systeme.prise_id IS NULL
+              AND administration.administration_id IS NULL;";
+      $ds->exec($query);    	
+    }
+
     // Sauvegarde des planifications systemes
-   
 		$_planifs_by_step = array();
-		$is_element = $this->_ref_object instanceof CPrescriptionLineElement;
-    foreach($planifs as $_planification){
+		foreach($planifs as $_planification){
       $unite_prise = $is_element ?  $this->_ref_object->_chapitre : $_planification["unite_prise"];
       $_planifs_by_step[] = array("object_id" => "{$this->_ref_object->_id}",
 					                            "object_class" => "{$this->_ref_object->_class}",
@@ -666,6 +681,28 @@ class CPrisePosologie extends CMbMetaObject {
 			  $this->calculPlanifs();
 			}
 	  }
+	}
+	
+	
+	function delete(){
+		if($msg = parent::delete()){
+      return $msg;
+    }
+	
+	  if($this->_ref_object instanceof CPrescriptionLineElement){
+			// On genere une planif a la date et heure de debut si aucune poso n'est presente
+			$date_debut = $this->_ref_object->debut;
+	    $time_debut = $this->_ref_object->time_debut;
+	     
+	    if($date_debut && $time_debut && count($this->_ref_object->_ref_prises) == 0){
+				$new_planif = new CPlanificationSysteme();
+	      $new_planif->dateTime = "$date_debut $time_debut";
+	      $new_planif->object_id = $this->_ref_object->_id;
+	      $new_planif->object_class = $this->_ref_object->_class;
+	      $new_planif->sejour_id = $this->_ref_object->_ref_prescription->object_id;    
+	      $new_planif->store();
+	    }
+    }
 	}
 	
   /*

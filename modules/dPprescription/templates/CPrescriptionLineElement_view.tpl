@@ -36,7 +36,6 @@
   			à {{mb_value object=$line field="time_debut"}}
 			{{/if}}
     </td>
-   {{if $chapitre != "anapath" && $chapitre != "imagerie" && $chapitre != "consult"}}
     <td>
       {{mb_label object=$line field="duree"}}: 
         {{if $line->duree && $line->unite_duree}}
@@ -49,9 +48,6 @@
     <td>
       {{mb_label object=$line field="_fin"}}: {{mb_value object=$line field="_fin"}}
     </td>
-    {{else}}
-      <td colspan="2"></td>
-    {{/if}}
     {{else}}
     <td colspan="3">
       {{mb_label object=$line field="fin"}}: {{mb_value object=$line field="fin"}}

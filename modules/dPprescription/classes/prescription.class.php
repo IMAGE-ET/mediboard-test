@@ -280,7 +280,6 @@ class CPrescription extends CMbObject implements IPatientRelated {
   function applyDateProtocole(&$_line, $praticien_id, $date_sel, $time_sel, $operation_id, $debut_sejour, $fin_sejour, $date_operation, 
                               $hour_operation, $operation, $sejour, $protocole_base_id){
     $_line->protocole_id = $protocole_base_id;
-    
 		// Chargement des lignes ou des prises suivant le type d'objet    
 		if($_line instanceof CPrescriptionLineMix){
       $_line->loadRefsLines();
@@ -322,6 +321,7 @@ class CPrescription extends CMbObject implements IPatientRelated {
       case 'N': $date_debut = mbDate(); break;
     }
     
+		
     $date_fin = "";
     $time_fin = "";
             
@@ -362,8 +362,9 @@ class CPrescription extends CMbObject implements IPatientRelated {
     $signe = ($_line->decalage_line >= 0) ? "+" : "";
     if($unite_decalage_debut === "DAYS"){
     	$_time_debut = mbTime($date_debut);
-		  if($_time_debut != "00:00:00"){
-		    $_line->time_debut = $_time_debut;        
+			
+			if($_time_debut != "00:00:00" && !$_line->time_debut){
+		    $_line->time_debut = $_time_debut; 
       }
 		  $date_debut = mbDate("$signe $_line->decalage_line DAYS", $date_debut); 
     } else {  
@@ -392,6 +393,8 @@ class CPrescription extends CMbObject implements IPatientRelated {
 				$_line->duree = mbDaysRelative($_debut, $date_fin);
 				$_line->duree++;
 			} 
+			
+			
 			// Decalage en heure
 			else {
       	$date_time_fin = mbDateTime("$signe_fin $_line->decalage_line_fin HOURS", "$date_fin $time_fin");
@@ -2107,7 +2110,6 @@ class CPrescription extends CMbObject implements IPatientRelated {
 									}
                 }
                 
-                // Pre-remplissage du plan de soin dans le cas des examens d'imagerie et des consultations spec.
                 foreach($dates as $date){
 	                // Pre-remplissage des prises prevues dans le dossier de soin
 	                if(($date >= $_line_element->debut && $date <= mbDate($_line_element->_fin_reelle))){

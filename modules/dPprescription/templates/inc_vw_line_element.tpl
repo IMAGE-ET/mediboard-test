@@ -72,19 +72,14 @@
 </table>
 
 <table class="main layout">
+	{{assign var=_category_chapitre value=$category->chapitre}}
   {{if $category->chapitre != "dmi"}}
 	  <tr>
 	    <!-- Dates -->
 	    <td>
-				
 				<fieldset>
 					<legend>
-					  {{if $category->chapitre != "anapath" && $category->chapitre != "consult" && $category->chapitre != "imagerie"}}
-						  Durée
-						{{else}}
-						  Date
-						{{/if}} 
-						de la prescription
+						  Durée de la prescription
 					</legend>
 	        {{include file="../../dPprescription/templates/line/inc_vw_dates.tpl"}}
 				</fieldset>
@@ -101,8 +96,7 @@
 	  </tr>
 		
 	  <!-- Posologies -->
-	  {{if $category->chapitre != "anapath" && $category->chapitre != "consult" && $category->chapitre != "imagerie"}}
-	  <tr>
+    <tr>
 	    <td>
 	      {{if $line->_can_modify_poso}}
 				  <fieldset style="float:left; width: 48%;">
@@ -130,13 +124,12 @@
 	              {{/foreach}}
 	            </ul>
 	          {{else}}
-	            Aucune posologie
+	            Aucune posologie, ce {{$line->_unite_prise}} sera donc effectué <strong>une fois</strong> à la date et heure de début de prescription.
 	          {{/if}}
 					{{/if}}
 	      </fieldset>
 	    </td>
 	  </tr>
-	  {{/if}}
   {{/if}}
 	
 	<!-- Commentaire --> 

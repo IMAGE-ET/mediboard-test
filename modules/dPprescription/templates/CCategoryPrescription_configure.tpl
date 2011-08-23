@@ -27,6 +27,7 @@
           <th class="category">Chapitre</th>
           <th class="category">Impression ordonnance</th>
           <th class="category">Unité de prise</th>
+					<th class="category">Jusqu'à la fin du séjour</th>
           </tr>
           {{include file="inc_configure_chapitre.tpl" var=dmi}}
           {{include file="inc_configure_chapitre.tpl" var=anapath}}

@@ -95,7 +95,12 @@
 	    {{if $line->duree}}
 	      {{mb_value object=$line field=duree}} {{mb_value object=$line field=unite_duree}} 
 	    {{elseif $line->_ref_prescription->type == "sejour"}}
-        1 Jour(s)
+			  {{assign var=_line_chapitre value=$line->_chapitre}}
+        {{if $conf.dPprescription.CCategoryPrescription.$_line_chapitre.fin_sejour}}
+				  <span class="opacity-70">{{mb_value object=$line field=_duree}} Jour(s) <br />(Fin du séjour)</span>
+				{{else}}
+				  1 Jour(s)
+				{{/if}}
       {{/if}}
 	  </td>
   {{else}}

@@ -122,24 +122,23 @@ class CPrescriptionLineElement extends CPrescriptionLine {
 		    }
 	    }
     }
-    $time_fin = ($this->time_fin) ? $this->time_fin : "23:59:00";
-    // Calcul de la date de fin de la ligne
-
-		// Si l'unite de duree est l'heure
-    if($this->unite_duree == "heure" || $this->unite_duree == "minute"){
-      $_unite = ($this->unite_duree == "heure") ? "HOURS" : "MINUTES";
-      $this->_fin_reelle = mbDateTime("+ $this->duree $_unite", $this->_debut_reel);
-    } else {
-      $this->_fin_reelle = $this->_fin ? "$this->_fin $time_fin" : "$this->debut 23:59:00";    
+		
+    if(!$this->duree && $this->_ref_prescription->type == "sejour"){
+      $this->_duree = mbDaysRelative($this->debut, mbDate($this->_ref_prescription->_ref_object->sortie))+1;
+      if(!$this->_fin_reelle){
+      	if(CAppUI::conf("dPprescription CCategoryPrescription $chapitre fin_sejour")){
+      		$this->_fin_reelle = $this->_ref_prescription->_ref_object->sortie;
+        } else {
+          $this->_fin_reelle = $this->_fin ? "$this->_fin $time_fin" : "$this->debut 23:59:00";    
+        }
+			}
+			$this->_duree = mbDaysRelative($this->debut, $this->_fin_reelle);
     }
 		
+		
 		if($this->date_arret){
-    	$this->_fin_reelle = $this->date_arret;
+      $this->_fin_reelle = $this->date_arret;
       $this->_fin_reelle .= $this->time_arret ? " $this->time_arret" : " 23:59:00";
-    }
-    if($chapitre == "imagerie" || $chapitre == "consult"){
-      $this->_debut_reel = "$this->debut 00:00:00";
-      $this->_fin_reelle = "$this->debut 23:59:59";
     }
   }
   
@@ -192,7 +191,7 @@ class CPrescriptionLineElement extends CPrescriptionLine {
 											$this->fieldModified("inscription") ||
 											$this->fieldModified("date_arret") ||
 											$this->_update_planif_systeme) ? true : false;
-    
+													
 		// Lors du passage d'une inscription à une prescription, on modifie l'unité de prises des adm deja créées
     if($this->fieldModified("inscription", "0")){
 			// Chargment du chapitre de l'element
