@@ -12,7 +12,7 @@ global $m, $a;
 
 CCanDo::checkRead();
 
-CAppUI::requireModuleClass("sip", "hprimsoaphandler");
+CAppUI::requireModuleClass("sip", "CHprimSoapHandler");
 
 $wsdl = CValue::get('wsdl');
 
