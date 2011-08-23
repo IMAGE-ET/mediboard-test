@@ -8,7 +8,7 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
  */
 
-CAppUI::requireModuleClass("webservices", "soap_handler");
+CAppUI::requireModuleClass("webservices", "CSoapHandler");
 
 /**
  * The CHprimSoapHandler class
