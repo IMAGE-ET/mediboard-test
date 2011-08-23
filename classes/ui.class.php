@@ -136,14 +136,16 @@ class CAppUI {
   static function requireModuleClass($name = null, $file = null) {
     if ($name && $root = self::conf("root_dir")) {
       $filename = $file ? $file : $name;
-      
-      $path = "$root/modules/$name/$filename.class.php";
-      if (file_exists($path))
-        return require_once($path);
         
       $path = "$root/modules/$name/classes/$filename.class.php";
       if (file_exists($path))
         return require_once($path);
+      
+      $path = "$root/modules/$name/$filename.class.php";
+      if (file_exists($path))
+        return require_once($path);
+      
+      return false;
     }
   }
   
