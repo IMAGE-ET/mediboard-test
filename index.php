@@ -100,7 +100,7 @@ if (!CSQLDataSource::get("std")) {
   die("La base de données n'est pas connectée");
 }
 
-require "./classes/csessionhandler.class.php";
+require "./classes/CSessionHandler.class.php";
 require "./includes/session.php";
 
 // Write the HTML headers
