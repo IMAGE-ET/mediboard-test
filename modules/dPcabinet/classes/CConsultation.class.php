@@ -162,9 +162,9 @@ class CConsultation extends CCodable {
   function getProps() {
   	$specs = parent::getProps();
     $specs["sejour_id"]         = "ref class|CSejour";
-    $specs["plageconsult_id"]   = "ref notNull class|CPlageconsult seekable show|0";
+    $specs["plageconsult_id"]   = "ref notNull class|CPlageconsult seekable show|1";
     $specs["patient_id"]        = "ref class|CPatient purgeable seekable show|1";
-    $specs["categorie_id"]      = "ref class|CConsultationCategorie show|0";
+    $specs["categorie_id"]      = "ref class|CConsultationCategorie show|1";
 		$specs["_praticien_id"]     ="ref class|CMediusers seekable show|1"; //is put here for view
     
     $specs["motif"]             = "text helped seekable";
