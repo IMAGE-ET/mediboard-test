@@ -57,8 +57,6 @@ toggleEmptyRows = function(){
   if (!container) return;
   
   var show = !container.hasClassName("hide-empty-rows");
-	
-	console.log(show);
   
   container.select(".ex_class-table .empty").invoke("setVisible", show);
   

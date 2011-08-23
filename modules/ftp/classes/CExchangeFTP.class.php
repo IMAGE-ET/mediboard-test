@@ -11,7 +11,7 @@
  * @link     http://www.mediboard.org
  */
 
-CAppUI::requireModuleClass("system", "exchange_transport_layer");
+CAppUI::requireModuleClass("system", "CExchangeTransportLayer");
 
 class CExchangeFTP extends CExchangeTransportLayer {
   // DB Table key

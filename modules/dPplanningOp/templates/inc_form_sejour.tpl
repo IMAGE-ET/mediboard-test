@@ -463,8 +463,6 @@ Main.add( function(){
                   dropdown: true,
                   afterUpdateElement: function(field, selected){
                     var value = selected.id.split('-')[2];
-                    console.log(field);
-                    console.log(value);
                     $V(form._unique_lit_id, value);
                   }
                 });

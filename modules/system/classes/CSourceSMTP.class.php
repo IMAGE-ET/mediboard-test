@@ -11,7 +11,7 @@
 CAppUI::requireLibraryFile("phpmailer/class.phpmailer");
 CAppUI::requireLibraryFile("phpmailer/class.smtp");
 
-CAppUI::requireModuleClass("system", "exchange_source");
+CAppUI::requireModuleClass("system", "CExchangeSource");
 
 class CSourceSMTP extends CExchangeSource {
   // DB Table key

@@ -8,7 +8,7 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
  */
 
-CAppUI::requireModuleClass("system", "ex_list_items_owner");
+CAppUI::requireModuleClass("system", "CExListItemsOwner");
 
 class CExList extends CExListItemsOwner {
   var $ex_list_id = null;

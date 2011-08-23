@@ -11,7 +11,7 @@
  * @link     http://www.mediboard.org
  */
 
-CAppUI::requireModuleClass("system", "exchange_source");
+CAppUI::requireModuleClass("system", "CExchangeSource");
 
 class CSourceFTP extends CExchangeSource {
   // DB Table key
