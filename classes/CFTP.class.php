@@ -168,6 +168,11 @@ class CFTP {
     }
     
     $files = ftp_nlist($this->connexion, $folder);
+    
+    foreach ($files as &$_file) {
+      $_file = str_replace("\\", "/", $_file);
+    }
+    
     if (substr($folder, -1) != "/") {
       $folder = "$folder/";
     }
