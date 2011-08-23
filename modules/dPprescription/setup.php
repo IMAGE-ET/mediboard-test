@@ -1992,7 +1992,11 @@ class CSetupdPprescription extends CSetup {
     $this->addPrefQuery("duplicata_checked_externe", "1");
     $this->addPrefQuery("date_empty_externe" , "0");
     
-		$this->mod_version = "1.47";
+    $this->makeRevision("1.47");
+    $query = "ALTER TABLE `prescription` DROP advanced_protocole";
+    $this->addQuery($query);
+    
+		$this->mod_version = "1.48";
   }
 }
 

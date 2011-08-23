@@ -576,7 +576,9 @@ var Url = Class.create({
         a = this.oParams.a;
     
     oOptions = Object.extend({
-      title: $T('mod-'+m+'-tab-'+a)
+      title: $T('mod-'+m+'-tab-'+a),
+      showReload: true,
+      showClose: true
     }, oOptions);
     
     var div = DOM.div(null,
@@ -596,6 +598,14 @@ var Url = Class.create({
     var closeButton  = DOM.button({type: "button", className: "cancel notext"}, $T('Close'));
     var reloadButton = DOM.button({type: "button", className: "change notext"}, $T('Reload'));
     var titleElement = DOM.div({className: "title"}, oOptions.title);
+    
+    if (!oOptions.showClose) {
+      closeButton.setStyle({display: "none"});
+    }
+    
+    if (!oOptions.showReload) {
+      reloadButton.setStyle({display: "none"});
+    }
     
     this.modaleObject = modal(div, {
       className: 'modal popup',

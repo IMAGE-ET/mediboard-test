@@ -68,7 +68,6 @@ if (strtolower(pathinfo($file['name'] , PATHINFO_EXTENSION) == 'xml')) {
     $prescription->libelle      = utf8_decode($_prescription->getAttribute("libelle"));
     $prescription->type         = $_prescription->getAttribute("type");
     $prescription->fast_access  = $_prescription->getAttribute("fast_access");
-    $prescription->advanced_protocole = $_prescription->getAttribute("advanced_protocole");
     $prescription->praticien_id = $praticien_id;
     $prescription->function_id  = $function_id;
     $prescription->group_id     = $group_id;

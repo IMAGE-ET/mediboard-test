@@ -76,7 +76,6 @@ $dPconfig["dPprescription"] = array (
 		"use_libelle_livret"    => "0",
 		"manual_planif"         => "0",
 		"role_propre"           => "0",
-    "show_modal"            => "0",
   ),
   
   "CCategoryPrescription" => array (

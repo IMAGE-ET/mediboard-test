@@ -19,7 +19,7 @@ $doc = new CMbXMLDocument(null);
 
 $root = $doc->createElement("CPrescription");
 
-$attributes = array("libelle", "object_class", "type", "fast_access", "advanced_protocole");
+$attributes = array("libelle", "object_class", "type", "fast_access");
 foreach($attributes as $_attribute) {
   ${$_attribute . "_att"} = $doc->createAttribute($_attribute);
   ${$_attribute . "_value"} = $doc->createTextNode(utf8_encode($prescription->$_attribute));
@@ -37,7 +37,7 @@ if (!function_exists('exportXML')) {
             "prescription_line_mix_item_id", "prescription_line_mix_variation_id", "prescription_line_element_id",
             "prescription_id", "substitution_line_id", "moment_unitaire_id", "substitute_for_id", "praticien_id",
             "creator_id", "child_id", "operation_id", "object_id", "executant_prescription_line_id",
-            "user_executant_id", "next_line_id", "prescription_line_comment_id", "protocole_id", "advanced_protocole");
+            "user_executant_id", "next_line_id", "prescription_line_comment_id", "protocole_id");
     $fields = $object->getPlainFields();
     $class = get_class($object);
     $$class = $doc->createElement($class);

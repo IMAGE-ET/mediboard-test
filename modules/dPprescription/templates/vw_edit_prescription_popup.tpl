@@ -31,10 +31,7 @@ if (oFormProtocole) {
     updateElement: function(selectedElement) {
       var node = $(selectedElement).down('.view');
       $V(oFormProtocole.libelle_protocole, (node.innerHTML).replace("&lt;", "<").replace("&gt;",">"));
-      if (selectedElement.get("advanced_protocole") == 1) {
-        $V(oFormProtocole._advanced_protocole, 1);
-        $V(oFormProtocole.protocole_id, selectedElement.get("id"));
-      }
+      $V(oFormProtocole.protocole_id, selectedElement.get("id"));
       if (autocompleter.options.afterUpdateElement)
         autocompleter.options.afterUpdateElement(autocompleter.element, selectedElement);
     },
@@ -79,24 +76,15 @@ if (!window.reloadPrescription) {
 
 selectLines = function(prescription_id, protocole_id) {
   var oForm = getForm("applyProtocoleFirst");
-  // Si c'est un protocole avancé, ouverture de la modale pour choisir les lignes
-  if ($V(oForm._advanced_protocole) == 1) {
-    $V(oForm._advanced_protocole, 0);
-    var url = new Url("dPprescription", "ajax_select_lines");
-    url.addParam("prescription_id", prescription_id);
-    url.addParam("protocole_id", protocole_id);
-    url.addParam("pratSel_id", $V(oForm.pratSel_id));
-    url.addParam("praticien_id", $V(oForm.praticien_id));
-    url.requestModal(700, 300);
-    // Si on ferme la modale, alors reload de la prescription
-    url.modaleObject.options.closeOnClick.observe("click", function() {
-      Prescription.reloadPrescSejour(prescription_id, null, null, null, null, null, null, null, $V(oForm.pratSel_id), null, $V(oForm.praticien_id));
-    });
-  }
-  // Sinon reload de la prescription
-  else {
-    Prescription.reloadPrescSejour(prescription_id, null, null, null, null, null, null, null, $V(oForm.pratSel_id), null, $V(oForm.praticien_id));
-  }
+  
+  // Ouverture de la modale pour choisir les lignes
+  var url = new Url("dPprescription", "ajax_select_lines");
+  url.addParam("prescription_id", prescription_id);
+  url.addParam("protocole_id", protocole_id);
+  url.addParam("pratSel_id", $V(oForm.pratSel_id));
+  url.addParam("praticien_id", $V(oForm.praticien_id));
+  url.requestModal(700, 300, {showClose: false, showReload: false});
+
 }
 
 prescriptions_ids = {{$multiple_prescription|@json}};
@@ -305,7 +293,6 @@ Main.add(function () {
                     <input type="hidden" name="pratSel_id" value="{{$praticien_sejour}}" />
                     <input type="hidden" name="praticien_id" value="" />
                     <input type="hidden" name="pack_protocole_id" value="" />
-                    <input type="hidden" name="_advanced_protocole" value="0" />
                     {{assign var=last_operation value=$operations|@end}}
                     {{if $operations|@count >= 1}}
                       <input type="hidden" name="operation_id" value="{{$last_operation->_id}}" />

@@ -30,7 +30,6 @@ class CPrescription extends CMbObject implements IPatientRelated {
 	
 	var $score = null;
 	
-	var $advanced_protocole = null;
 	var $checked_lines      = null;
 	
   // Form fields
@@ -165,7 +164,6 @@ class CPrescription extends CMbObject implements IPatientRelated {
     $specs["libelle"]       = "str";
     $specs["type"]          = "enum notNull list|traitement|pre_admission|sejour|sortie|externe";
     $specs["fast_access"]   = "bool default|0";
-    $specs["advanced_protocole"] = "bool default|0";
     $specs["checked_lines"] = "bool default|0";
 		$specs["planif_removed"]= "bool default|0";
 		$specs["_type_sejour"]  = "enum notNull list|pre_admission|sejour|sortie";
