@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Source LPR PRINTING
+ * Source SMB PRINTING
  *  
  * @category PRINTING
  * @package  Mediboard
@@ -12,24 +12,25 @@
  */
 
 /**
- * Class CSourceLPR 
- * Source LPR
+ * Class CSourceSMB
+ * Source SMB
  */
 
-CAppUI::requireModuleClass("printing", "source_printer");
+CAppUI::requireModuleClass("printing", "CSourcePrinter");
 
-class CSourceLPR extends CSourcePrinter {
+class CSourceSMB extends CSourcePrinter {
   // DB Table key
-  var $source_lpr_id = null;
+  var $source_smb_id = null;
   
   // DB Fields
   var $user         = null;
-
+  var $password     = null;
+  var $workgroup    = null;
+  
   function getSpec() {
     $spec = parent::getSpec();
-    
-    $spec->table = 'source_lpr';
-    $spec->key   = 'source_lpr_id';
+    $spec->table = 'source_smb';
+    $spec->key   = 'source_smb_id';
     return $spec;
   }
   
@@ -37,14 +38,15 @@ class CSourceLPR extends CSourcePrinter {
     $props = parent::getProps();
     
     $props["user"]         = "str";
-    $props["printer_name"] = "str";
+    $props["password"]     = "password revealable";
+    $props["workgroup"]    = "str";
     return $props;
   }
   
   function sendDocument($file) {
-    $lpr = new CLPR;
-    $lpr->init($this);
-    $lpr->printFile($file);
+    $smb = new CSMB;
+    $smb->init($this);
+    $smb->printFile($file);
   }
 }
 ?>
