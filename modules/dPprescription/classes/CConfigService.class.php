@@ -8,7 +8,7 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
  */
 
-CAppUI::requireModuleClass('dPprescription', 'configServiceAbstract');
+CAppUI::requireModuleClass('dPprescription', 'CConfigServiceAbstract');
 class CConfigService extends CConfigServiceAbstract {
   // DB Fields
   var $config_service_id = null;
