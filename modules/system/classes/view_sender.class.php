@@ -225,7 +225,9 @@ class CViewSender extends CMbObject {
       // Rotation des fichiers
       $files = $ftp->getListFiles($directory);
       rsort($files);
-      foreach (array_slice($files, $this->max_archives) as $_file) {
+      $list_files = array_slice($files, $this->max_archives);
+      
+      foreach ($list_files as $_file) {
       	$ftp->delFile($_file);
       }
       
