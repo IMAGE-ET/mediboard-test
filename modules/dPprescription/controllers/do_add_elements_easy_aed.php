@@ -50,6 +50,7 @@ foreach($elements as $element_id){
 	$line_element->praticien_id = $praticien_id;
 	$line_element->creator_id = $user->_id;
   $line_element->commentaire = $commentaire;
+  $line_element->signee = 1;
 	$msg = $line_element->store();
 	CAppUI::displayMsg($msg, "CPrescriptionLineElement-msg-create");
 	$lines[$line_element->_ref_element_prescription->_ref_category_prescription->chapitre][$line_element->_id] = $line_element;

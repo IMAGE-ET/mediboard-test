@@ -231,7 +231,7 @@ Main.add( function(){
         <input class="valeur" type="hidden" name="decalage_prise" value="" />
         <button type="button" 
                 class="submit" 
-                onclick="this.form.onsubmit()">Ajouter les éléments sélectionnés à la prescription</button>
+                onclick="this.form.onsubmit()">Signer les éléments sélectionnés</button>
       </form>
     </td>
   </tr>
