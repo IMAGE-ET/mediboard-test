@@ -124,7 +124,6 @@ class CPrescriptionLineElement extends CPrescriptionLine {
     }
 		
     if(!$this->duree && $this->_ref_prescription->type == "sejour"){
-      $this->_duree = mbDaysRelative($this->debut, mbDate($this->_ref_prescription->_ref_object->sortie))+1;
       if(!$this->_fin_reelle){
       	if(CAppUI::conf("dPprescription CCategoryPrescription $chapitre fin_sejour")){
       		$this->_fin_reelle = $this->_ref_prescription->_ref_object->sortie;

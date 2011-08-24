@@ -142,6 +142,8 @@ class CPrescriptionLine extends CMbObject implements IPatientRelated {
     $this->getRecentModification();
     $this->calculDatesUrgences();
 		
+		$this->_fin = "";
+		
     if($this->duree && $this->debut){
       switch ($this->unite_duree) {
         case "minute":
