@@ -77,6 +77,7 @@ Main.add(function(){
     {{assign var="class" value="CProduct"}}
     <tr><th class="category" colspan="2">{{tr}}{{$class}}{{/tr}}</th></tr>
     {{mb_include module=system template=inc_config_bool var=use_renewable}}
+    {{* {{mb_include module=system template=inc_config_bool var=allow_same_name}} *}}
     
     <tr>
       <th colspan="2" class="category">Paginations</th>

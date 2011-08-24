@@ -36,7 +36,7 @@ ProtocoleSelector = {
     url.addParam("chir_id", oForm[this.sChir_id].value);
     url.setFragment(this.sForSejour == 1 ? 'sejour': 'interv');
     //url.popup(this.options.width, this.options.height, "Protocole");
-    url.modale(this.options);
+    url.modal(this.options);
   },
   
   set: function(protocole) {

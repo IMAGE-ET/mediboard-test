@@ -3,7 +3,7 @@ searchUserLDAP = function(object_id) {
   var url = new Url("admin", "ajax_search_user_ldap");
   url.addParam("object_id", object_id);
   url.requestModal(800, 350);
-  url.modaleObject.observe("afterClose", function() { location.reload(); } );
+  url.modalObject.observe("afterClose", function() { location.reload(); } );
   window.ldapurl = url;
 }
 	  

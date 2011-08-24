@@ -44,7 +44,7 @@ foreach($service->_ref_chambres as &$_chambre){
         "sejour_id" => $sejour->_id,
         "dialog" => 1,
         "offline" => 1,
-        "in_modale" => 1
+        "in_modal" => 1
       );
       
       $dossiers_complets[$sejour->_id] = CApp::fetch("soins", "print_dossier_soins", $params);

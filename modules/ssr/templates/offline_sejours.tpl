@@ -13,7 +13,7 @@
 		});
 	</script>
 	
-	<h1 class="modale-title no-break">{{$_sejour->_ref_patient->_view}}</h1>
+	<h1 class="modal-title no-break">{{$_sejour->_ref_patient->_view}}</h1>
 	
 	<ul id="tabs-sejour-{{$sejour_id}}" class="control_tabs">
 		<li onmouseup="modalwindow.position();">

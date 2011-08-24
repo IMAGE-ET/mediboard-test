@@ -3,7 +3,7 @@
 submitActivite = function(oForm){
   return onSubmitFormAjax(oForm, { onComplete: function(){
     updateTasks('{{$sejour->_id}}');
-    url.modaleObject.close(); 
+    url.modalObject.close(); 
   } } );
 }
 

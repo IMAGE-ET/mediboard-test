@@ -233,7 +233,7 @@ var Url = Class.create({
     return this;
   },
   
-  modale: function(options) {
+  modal: function(options) {
     var closeButton = DOM.button({type: "button", className: "cancel notext"});
 
     options = Object.extend({
@@ -258,19 +258,19 @@ var Url = Class.create({
     options.width = Math.min(viewport.width-50, options.width);
         
     // Hack
-    this.modaleObject = Control.Modal.open(new Element("a", {href: options.baseUrl + this.make(questionMark)}), options);
+    this.modalObject = Control.Modal.open(new Element("a", {href: options.baseUrl + this.make(questionMark)}), options);
     
     var titleElement = DOM.div({className: "title"}, options.title || "&nbsp;");
     
-    this.modaleObject.container.insert({top: titleElement});   
+    this.modalObject.container.insert({top: titleElement});   
     
     if (options.closeOnClick) {
-      this.modaleObject.container.insert({top: closeButton});
+      this.modalObject.container.insert({top: closeButton});
     }
     
     // iframe.onload not thrown under IE
     if (Prototype.Browser.IE) {
-      var that = this.modaleObject;
+      var that = this.modalObject;
       var iframe = that.container.down("iframe");
 
       iframe.onload = null;
@@ -285,7 +285,7 @@ var Url = Class.create({
       }
     }
     
-    this.modaleObject.observe("onRemoteContentLoaded", function(){
+    this.modalObject.observe("onRemoteContentLoaded", function(){
       var iframeWindow = this.container.down("iframe").contentWindow;
       
       if (!options.title) {
@@ -295,7 +295,7 @@ var Url = Class.create({
       if (!options.closeOnEscape) {
         iframeWindow.document.stopObserving('keydown', iframeWindow.closeWindowByEscape);
       }
-    }.bind(this.modaleObject));
+    }.bind(this.modalObject));
   
     return this;
   },
@@ -607,20 +607,20 @@ var Url = Class.create({
       reloadButton.setStyle({display: "none"});
     }
     
-    this.modaleObject = modal(div, {
+    this.modalObject = modal(div, {
       className: 'modal popup',
       closeOnClick: closeButton
     });
     
-    this.modaleObject.observe("afterClose", function(){div.remove()});
+    this.modalObject.observe("afterClose", function(){div.remove()});
     
-    this.modaleObject.container.insert({top: reloadButton})
+    this.modalObject.container.insert({top: reloadButton})
                                .insert({top: closeButton})
                                .insert({top: titleElement});   
 
     // Repositionnement de la modale quand la hauteur n'est pas spécifiée
     oOptions = Object.extend({
-      onComplete: this.modaleObject.position.bind(this.modaleObject)
+      onComplete: this.modalObject.position.bind(this.modalObject)
     }, oOptions);
     
     this.requestUpdate(div.down('.content'), oOptions);

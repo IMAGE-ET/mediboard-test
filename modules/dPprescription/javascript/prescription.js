@@ -183,7 +183,7 @@ Prescription = {
 
       // Rechargement de la modale de protocole avancé
       if (advanced_prot) {
-        window.selectLines.modaleObject.container.select(".change")[0].click();
+        window.selectLines.modalObject.container.down(".change").click();
         return;
       }
       
@@ -358,7 +358,7 @@ Prescription = {
   viewFullAlertes: function(prescription_id) {
     var url = new Url("dPprescription", "vw_full_alertes");
     url.addParam("prescription_id", prescription_id);
-    url.modale("Alertes");
+    url.modal();
   },
   onSubmitCommentaire: function(oForm, prescription_id, chapitre){
     return onSubmitFormAjax(oForm, { 

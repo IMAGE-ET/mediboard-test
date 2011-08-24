@@ -10,13 +10,13 @@ var PlageConsultSelector = {
   sFunction_id     : null,
   options 		   : {},
 
-  modale: function() {
+  modal: function() {
     var oForm = getForm(this.sForm);
     var url = new Url("dPcabinet", "plage_selector");
     url.addParam("chir_id"        , $V(oForm[this.sChir_id]));
     url.addParam("function_id"    , $V(oForm[this.sFunction_id]));
     url.addParam("plageconsult_id", $V(oForm[this.sPlageconsult_id]));
-    url.modale(this.options);
+    url.modal(this.options);
   },
 
   set: function(heure, id, date, freq, chir_id, chirname) {

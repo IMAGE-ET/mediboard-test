@@ -118,9 +118,13 @@ ExObject = {
     url.popup(900, 600, "history");
   },
   
-  loadExObjects: function(object_class, object_id, target, detail, ex_class_id) {
+  loadExObjects: function(object_class, object_id, target, detail, ex_class_id, options) {
     detail = detail || 0;
     ex_class_id = ex_class_id || "";
+    
+    options = Object.extend({
+      print: 0
+    }, options);
     
     var url = new Url("forms", "ajax_list_ex_object");
     url.addParam("detail", detail);
@@ -128,6 +132,7 @@ ExObject = {
     url.addParam("reference_class", object_class);
     url.addParam("ex_class_id", ex_class_id);
     url.addParam("target_element", target);
+    url.mergeParams(options);
     url.requestUpdate(target);
   }
 };
@@ -299,8 +304,8 @@ showExClassForm = function(ex_class_id, object_guid, title, ex_object_id, event,
     url.popup("100%", "100%", title);
   }
   else {
-    url.modale({title: title});
-    url.modaleObject.observe("afterClose", function(){
+    url.modal({title: title});
+    url.modalObject.observe("afterClose", function(){
       ExObject.register(_element_id, {
         ex_class_id: ex_class_id, 
         object_guid: object_guid, 

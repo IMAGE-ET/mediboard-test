@@ -100,6 +100,19 @@
   </tr>
 </table>
 
+{{*
+{{if "forms"|module_active}}
+<div id="ex-objects-container">
+  <table class="main tbl">
+    <tr>
+      <th class="title">Formulaires</th>
+    </tr>
+  </table>
+  <div id="ex-objects"></div>
+</div>
+{{/if}}
+*}}
+
 <table class="tbl print_prescription" style="page-break-after: always;">
   <thead>
     <tr>

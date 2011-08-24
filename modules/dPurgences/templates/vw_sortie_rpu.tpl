@@ -39,7 +39,7 @@ Sortie = {
 	  var url = new Url("dPurgences", "ajax_edit_sortie")
     url.addParam("rpu_id", rpu_id);
 		url.requestModal(500, 200);
-    this.modal = url.modaleObject;
+    this.modal = url.modalObject;
 	},
 	
 	close: function() {
@@ -74,7 +74,7 @@ function editFieldsRpu(rpu_id) {
   var url = new Url("dPurgences", "ajax_edit_fields_rpu");
   url.addParam("rpu_id", rpu_id);
   url.requestModal(500, 240);
-  url.modaleObject.observe("afterClose", function(){
+  url.modalObject.observe("afterClose", function(){
     refreshExecuter.resume();
     Sortie.refresh(rpu_id);  
   });

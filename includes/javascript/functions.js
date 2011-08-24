@@ -606,7 +606,7 @@ var Note = {
   },
   
   close: function() {
-    this.url.modaleObject.close();
+    this.url.modalObject.close();
   },
   
   refresh: function(force, object_guid) {
@@ -995,9 +995,9 @@ if (window.parent && window.parent != window && window.parent.Mediboard) {
   window.oldClose = window.close;
   window.close = window._close = function(){
     try {
-      var modale = window.launcher.Control.Modal.stack.last();
-      modale.close();
-      modale.destroy();
+      var modal = window.launcher.Control.Modal.stack.last();
+      modal.close();
+      modal.destroy();
     } catch (e) {
       window.oldClose();
     }
@@ -1039,6 +1039,7 @@ Object.extend(Control.Modal,{
             var overlay = Control.Overlay.container;
             Control.Modal.stack.push(this);
             overlay.style.zIndex = this.container.style.zIndex - 1;
+            //Event.stopObserving(window,'scroll',this.positionHandler);
         },
         afterClose: function(){
           Control.Modal.stack.pop().close();

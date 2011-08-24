@@ -30,7 +30,7 @@ PlageOpSelector = {
       url.addParam("curr_op_min" , iMin_op);
       url.addParam("group_id"    , iGroup_id);
       url.addParam("operation_id", iOperation_id);
-      url.modale(this.options);
+      url.modal(this.options);
       //url.popup(this.options.width, this.options.height, "Plage");
     }
   },

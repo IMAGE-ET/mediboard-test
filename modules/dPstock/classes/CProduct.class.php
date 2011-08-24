@@ -15,8 +15,8 @@ class CProduct extends CMbObject {
   // DB Fields
   var $name              = null;
   var $description       = null;
-	
-	// codage
+  
+  // codage
   var $code              = null;
   var $code_canonical    = null;
   var $scc_code          = null; // in the barcodes (http://www.morovia.com/education/symbology/scc-14.asp)
@@ -32,8 +32,8 @@ class CProduct extends CMbObject {
   var $cancelled         = null;
   var $equivalence_id    = null;
   var $auto_dispensed    = null;
-	
-	// classif
+  
+  // classif
   var $classe_comptable  = null;
   var $cladimed          = null;
 
@@ -73,7 +73,11 @@ class CProduct extends CMbObject {
     $spec->table = 'product';
     $spec->key   = 'product_id';
     $spec->uniques["code"] = array("code");
-    $spec->uniques["name"] = array("name");
+    
+    //if ($this->conf("allow_same_name")) {
+      $spec->uniques["name"] = array("name");
+    //}
+    
     return $spec;
   }
 
@@ -93,8 +97,8 @@ class CProduct extends CMbObject {
     $specs = parent::getProps();
     $specs['name']          = 'str notNull seekable show|0';
     $specs['description']   = 'text seekable';
-		
-		// codage
+    
+    // codage
     $specs['code']          = 'str maxLength|32 seekable protected';
     $specs['code_canonical']= 'str maxLength|32 seekable show|0';
     $specs['scc_code']      = 'numchar length|10 seekable|equal protected'; // Manufacturer Code + Item Number
@@ -110,8 +114,8 @@ class CProduct extends CMbObject {
     $specs['cancelled']     = 'bool default|0 show|0';
     $specs['equivalence_id'] = 'ref class|CProductEquivalence';
     $specs['auto_dispensed'] = 'bool default|0';
-		
-		// classif
+    
+    // classif
     $specs['cladimed'] = 'str maxLength|7 autocomplete';
     $specs['classe_comptable'] = 'str maxLength|9 autocomplete';
     
@@ -130,13 +134,13 @@ class CProduct extends CMbObject {
     $this->_view = $this->name;
     
     if ($this->unit_quantity !== null && $this->unit_quantity == round($this->unit_quantity)) { // float to int (the comma is deleted)
-	    $this->unit_quantity = round($this->unit_quantity);
-	  }
-	  if ($this->unit_quantity === 0) $this->unit_quantity = '';
+      $this->unit_quantity = round($this->unit_quantity);
+    }
+    if ($this->unit_quantity === 0) $this->unit_quantity = '';
     
-	  $this->_quantity = '';
+    $this->_quantity = '';
     if ($this->item_title && $this->quantity) {
-    	$this->_quantity .= "$this->quantity $this->item_title";
+      $this->_quantity .= "$this->quantity $this->item_title";
     }
     
 //  Unnecessary. Waiting a few days before total removal
@@ -145,10 +149,10 @@ class CProduct extends CMbObject {
 //    }
     
     if ($this->item_title && $this->quantity) {
-	    $this->_unit_quantity = ($this->quantity ? $this->quantity : 1);
-	    $this->_unit_title = $this->item_title;
+      $this->_unit_quantity = ($this->quantity ? $this->quantity : 1);
+      $this->_unit_title = $this->item_title;
     } else {
-    	$this->_unit_quantity = ($this->unit_quantity ? $this->unit_quantity : 1);
+      $this->_unit_quantity = ($this->unit_quantity ? $this->unit_quantity : 1);
       $this->_unit_title = $this->unit_title;
     }
     
@@ -163,7 +167,7 @@ class CProduct extends CMbObject {
   }
 
   function loadRefsBack() {
-  	$this->loadRefsReferences();
+    $this->loadRefsReferences();
     $this->_ref_stocks_group = $this->loadBackRefs('stocks_group');
     
     $ljoin = array(
@@ -193,13 +197,13 @@ class CProduct extends CMbObject {
       return $this->_ref_stock_group;
     }
     
-  	$this->completeField("product_id");
+    $this->completeField("product_id");
     $this->_ref_stock_group = new CProductStockGroup();
     $this->_ref_stock_group->group_id = CProductStockGroup::getHostGroup();
     $this->_ref_stock_group->product_id = $this->product_id;
     
     $this->_ref_stock_group->loadMatchingObject();
-		return $this->_ref_stock_group;
+    return $this->_ref_stock_group;
   }
 
   function getPerm($permType) {
@@ -274,7 +278,7 @@ class CProduct extends CMbObject {
    * @return Number
    */
   static function getConsumptionMultipleProducts($products, $since = "-1 MONTH", $date_max = null, $services = null, $include_loss = true){
-		$ds = CSQLDataSource::get("std");
+    $ds = CSQLDataSource::get("std");
     
     $where = array(
       "product_stock_group.product_id" => $ds->prepareIn(CMbArray::pluck($products, "_id")),
@@ -305,16 +309,16 @@ class CProduct extends CMbObject {
     $sql->addLJoin($ljoin);
     $sql->addGroup("product_stock_group.product_id");
     $sql->addWhere($where);
-		
-		if (empty($services)) {
-			$total = $ds->loadHashList($sql->getRequest());
-		}
-		else {
+    
+    if (empty($services)) {
+      $total = $ds->loadHashList($sql->getRequest());
+    }
+    else {
       $sql->addGroup("product_delivery.service_id");
       $sql->addSelect(array("product_delivery.service_id"));
-			$total = $ds->loadList($sql->getRequest());
-		}
-		
+      $total = $ds->loadList($sql->getRequest());
+    }
+    
     return $total;
   }
   
@@ -347,10 +351,10 @@ class CProduct extends CMbObject {
     
     return $this->_supply = $this->_spec->ds->loadResult($sql->getRequest());
   }
-	
+  
   static function getSupplyMultiple($products, $since = "-1 MONTH", $date_max = null){
-  	$ds = CSQLDataSource::get("std");
-		
+    $ds = CSQLDataSource::get("std");
+    
     $where = array(
       "product.product_id" => $ds->prepareIn(CMbArray::pluck($products, "_id")),
       "product_order_item_reception.date > '".mbDate($since)."'",
@@ -382,10 +386,10 @@ class CProduct extends CMbObject {
    * @return Number
    */
   function getWAP($since = "-1 MONTH", $date_max = null){
-  	$qty = $this->getSupply($since, $date_max);
-		
-		if (!$qty) return null;
-		
+    $qty = $this->getSupply($since, $date_max);
+    
+    if (!$qty) return null;
+    
     $where = array(
       "product.product_id" => "= '{$this->_id}'",
       "product_order_item_reception.date > '".mbDate($since)."'",
@@ -407,10 +411,10 @@ class CProduct extends CMbObject {
     $sql->addLJoin($ljoin);
     $sql->addWhere($where);
     
-		$total = $this->_spec->ds->loadResult($sql->getRequest());
-		
-		//mbTrace($total, $this->code);
-		
+    $total = $this->_spec->ds->loadResult($sql->getRequest());
+    
+    //mbTrace($total, $this->code);
+    
     return $total / $qty;
   }
   
@@ -424,13 +428,13 @@ class CProduct extends CMbObject {
       $this->code_canonical = preg_replace("/[^0-9a-z]/i", "", $this->code);
     }
     
-		$cc = trim($this->classe_comptable, "0\n\r\t ");
+    $cc = trim($this->classe_comptable, "0\n\r\t ");
     if (preg_match('/^\d+$/', $cc)) {
       $this->classe_comptable = str_pad($cc, 9, "0", STR_PAD_RIGHT);
     }
-		else {
-			$this->classe_comptable = "";
-		}
+    else {
+      $this->classe_comptable = "";
+    }
     
     if ($this->fieldModified("cancelled", 1)) {
       $references = $this->loadRefsReferences();
@@ -512,15 +516,15 @@ class CProduct extends CMbObject {
       }
       $d[$from]["total"] = array(0, 0);
       
-			$all_counts = self::getConsumptionMultipleProducts($products, $from, $to, $services, false);
-			
-			$by_product = array();
-			foreach($all_counts as $_data) {
-				$by_product[$_data["product_id"]][$_data["service_id"]] = $_data["sum"];
-			}
-			
+      $all_counts = self::getConsumptionMultipleProducts($products, $from, $to, $services, false);
+      
+      $by_product = array();
+      foreach($all_counts as $_data) {
+        $by_product[$_data["product_id"]][$_data["service_id"]] = $_data["sum"];
+      }
+      
       foreach($products as $_product) {
-      	$counts = CValue::read($by_product, $_product->_id, array()); 
+        $counts = CValue::read($by_product, $_product->_id, array()); 
         
         $coeff = 1;
         $ref = reset($_product->loadRefsReferences(true));

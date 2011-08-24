@@ -12,24 +12,24 @@
 printOffline = function(element) {
   var elements = [element];
 	
-	$$('.modal-view').each(function(modale){
-	  var id = modale.id;
+	$$('.modal-view').each(function(modal){
+	  var id = modal.id;
 		var tab = window["tab-"+id];
     var sejour_id = id.match(/(\d+)/)[1];
 		var sejour_guid = 'CSejour-'+sejour_id;
 		
-		modale.show();
+		modal.show();
 		$("planning-"+sejour_id).show();
 		
 		$(sejour_guid).down('.week-container').setStyle({height: '800px' });
     window['planning-'+sejour_guid].updateEventsDimensions();
 		
 		elements.push(
-		  modale.down(".modale-title"), 
+		  modal.down(".modal-title"), 
 			tab
 		);
 		
-    modale.hide();
+    modal.hide();
     $("planning-"+sejour_id).hide();
 	});
 	

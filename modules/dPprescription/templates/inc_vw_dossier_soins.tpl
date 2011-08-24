@@ -74,7 +74,7 @@ submitRetraitPerf = function(oFormPerf){
 
 viewLegend = function(){
   var url = new Url("dPhospi", "vw_lengende_dossier_soin");
-  url.modale("Légende");
+  url.modal({width: 400, height: 200});
 }
 
 calculSoinSemaine = function(date, prescription_id){

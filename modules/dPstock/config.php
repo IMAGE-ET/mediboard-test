@@ -25,18 +25,19 @@ $dPconfig["dPstock"] = array (
   ),
   "CProductStockService" => array (
     "infinite_quantity" => '0',
-    "pagination_size" => 30
+    "pagination_size" => 30,
   ),
-	"CProductReference" => array (
+  "CProductReference" => array (
     "show_cond_price" => '1',
     "use_mdq" => '1',
-    "pagination_size" => 15
-	),
+    "pagination_size" => 15,
+  ),
   "CProduct" => array (
     "pagination_size" => 15,
-	  "use_renewable"   => 1
+    "use_renewable"   => 1,
+    //"allow_same_name" => '0',
   ),
   "CProductDelivery" => array (
-    "auto_dispensation" => 0
+    "auto_dispensation" => 0,
   ),
 );

@@ -19,7 +19,7 @@ var PatSelector = {
   pop: function() {
     var url = new Url("dPpatients", "pat_selector");
     url.addParam("useVitale", this.options.useVitale);
-    url.modale(this.options);
+    url.modal(this.options);
   },
   
   set: function(id, view) {

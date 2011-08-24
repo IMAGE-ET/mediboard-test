@@ -59,7 +59,7 @@ var Document = {
     url.addParam("object_id"   , object_id);
     url.addParam('object_class', object_class);
     url.addParam('unique_id'   , unique_id);
-    url.requestModal(750, 400, {onComplete: function() { modaleWindow.position(); }});
+    url.requestModal(750, 400, {onComplete: function() { modalWindow.position(); }});
   },
   fastModePack: function(pack_id, object_id, unique_id) {
     if (!pack_id) return;
@@ -68,7 +68,7 @@ var Document = {
     url.addParam("pack_id", pack_id);
     url.addParam("object_id", object_id);
     url.addParam("unique_id", unique_id);
-    url.requestModal(750, 400, {onComplete: function() { modaleWindow.position(); }});
+    url.requestModal(750, 400, {onComplete: function() { modalWindow.position(); }});
   },
   edit: function(compte_rendu_id){
     var url = new Url("dPcompteRendu", "edit_compte_rendu");

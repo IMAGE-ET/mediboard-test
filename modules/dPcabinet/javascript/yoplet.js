@@ -9,7 +9,7 @@ if (!window.File.applet) {
     current_list: [],
     current_list_status: [],
     extensions: null,
-    modaleWindow: null,
+    modalWindow: null,
     timer: null,
     isOpen: false,
 /*    appletCode: DOM.applet({id: 'uploader', name: 'yopletuploader', width: 0, height: 0,
@@ -53,7 +53,7 @@ if (!window.File.applet) {
     },
 
     handleUploadOk: function(result) {
-      var elem = this.modaleWindow.container.select("input[type=checkbox]:checked").detect(function(n) { return n.value == result.path });
+      var elem = this.modalWindow.container.select("input[type=checkbox]:checked").detect(function(n) { return n.value == result.path });
       
       if (!elem) {
         this.debug("Checkbox for '"+result.path+"' not found (handleUploadOk)");
@@ -137,7 +137,7 @@ if (!window.File.applet) {
   
     handleDeletionKO: function(result) {
       alert('La suppression du fichier a échoué : ' + result.path);
-      var elem = this.modaleWindow.container.select("input:checked").detect(function(n) { return n.value == result.path });
+      var elem = this.modalWindow.container.select("input:checked").detect(function(n) { return n.value == result.path });
       
       if (!elem) {
         this.debug("Checkbox for '"+result.path+"' not found (handleDeletionKO)");
@@ -163,10 +163,10 @@ if (!window.File.applet) {
     modalOpen: function(object_guid) {
       clearTimeout(File.applet.timer);
       File.applet.isOpen = true;
-      this.modaleWindow = modal($("modal-yoplet"));
+      this.modalWindow = modal($("modal-yoplet"));
       $$(".uploadinmodal")[0].disabled = '';
       this.object_guid = object_guid;
-      this.modaleWindow.position();
+      this.modalWindow.position();
     },
     closeModal: function() {
       Control.Modal.close();
@@ -198,7 +198,7 @@ if (!window.File.applet) {
     },
     addfile_callback: function(id, args) {
       var file_name = args["_old_file_path"].replace(/\\("|'|\\)/g, "$1");
-      var elem = this.modaleWindow.container.select("input:checked").detect(function(n){
+      var elem = this.modalWindow.container.select("input:checked").detect(function(n){
         return n.value.replace(/[^\x00-\xFF]/g, "?") == file_name.replace(/\\\\/g,"\\"); // vieux hack des sous bois
       });
       

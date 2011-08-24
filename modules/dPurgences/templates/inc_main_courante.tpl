@@ -31,7 +31,7 @@
     var url = new Url("dPurgences", "ajax_edit_diag");
     url.addParam("rpu_id", rpu_id);
     url.requestModal(500, 200);
-    url.modaleObject.observe("afterClose", function(){
+    url.modalObject.observe("afterClose", function(){
       MainCourante.start();
     });
   }

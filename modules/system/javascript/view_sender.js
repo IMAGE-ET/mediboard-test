@@ -16,7 +16,7 @@ ViewSender = {
     var url = new Url('system', 'ajax_form_view_sender');
     url.addParam('sender_id', sender_id);
     url.requestModal(400);
-    this.modal = url.modaleObject;
+    this.modal = url.modalObject;
   },
 
   onSubmit: function(form) {
