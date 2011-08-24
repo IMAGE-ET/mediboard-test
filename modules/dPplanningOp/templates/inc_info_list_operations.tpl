@@ -3,7 +3,21 @@
   <td>
     {{mb_include module=mediusers template=inc_vw_mediuser mediuser=$_operation->_ref_chir}}
   </td>
-  <td>{{$_operation->_datetime|date_format:$conf.date}}  <button type="button" onclick="refreshListIntervs()">reload</button></td>
+  <td>{{$_operation->_datetime|date_format:$conf.date}} 
+            
+{{if @$modules.brancardage->_can->read}}
+  <option type="hidden" value="0" id="patientpaspret"></option>
+  {{mb_script module=brancardage script=creation_brancardage ajax=true }}
+  <div id="patientpret" >
+    <option type="hidden" value="{{$_operation->sejour_id}}" id="sejour_id"></option>
+    <option type="hidden" value="{{$_operation->salle_id}}" id="salle_id"></option>
+    <button type="button" class="submit" onclick="CreationBrancard.patientPret('{{$_operation->sejour_id}}','{{$_operation->salle_id}}');" >
+       Patient pret
+   </button>
+  </div>
+{{/if}}
+	
+	 <!--<button type="button" onclick="refreshListIntervs()">reload</button></td>-->
   {{if $_operation->annulee}}
   <th class="category cancelled">
     <strong>{{tr}}COperation-annulee{{/tr}}</strong>
