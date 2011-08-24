@@ -32,7 +32,7 @@ foreach($patient->_ref_sejours as $_sejour) {
   }
 }
 foreach($patient->_ref_consultations as $_key => $_consult) {
-	if ($_consult->annule || $_consult->sejour_id) {
+	if ($_consult->sejour_id) {
 		unset($patient->_ref_consultations[$_key]);
 		continue;
 	}

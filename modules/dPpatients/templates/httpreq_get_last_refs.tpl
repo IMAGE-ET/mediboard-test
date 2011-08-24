@@ -53,10 +53,10 @@
     <td class="text">
     	<strong>Consultations:</strong>
 			<ul>
-	    	{{foreach from=$patient->_ref_consultations item=curr_consult}}
-		      <li class="iconed-text {{$curr_consult->_type}}" >
-		        <span onmouseover="ObjectTooltip.createEx(this, '{{$curr_consult->_guid}}')">
-		        {{$curr_consult->_view}}
+	    	{{foreach from=$patient->_ref_consultations item=_consult}}
+		      <li class="iconed-text {{$_consult->_type}}" >
+		        <span onmouseover="ObjectTooltip.createEx(this, '{{$_consult->_guid}}')">
+		        {{$_consult->_view}} {{if $_consult->annule}}<span style="color: red;">[ANNULE]</span>{{/if}}
 		        </span>
 		      </li>
 				{{foreachelse}}
