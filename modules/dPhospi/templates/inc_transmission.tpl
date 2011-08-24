@@ -2,6 +2,9 @@
 {{mb_default var=hide_button_add value=0}}
 {{mb_default var=update_plan_soin value=0}}
 {{assign var=hour_quantum value=$conf.dPhospi.nb_hours_trans}}
+{{mb_default var=data_id value=""}}
+{{mb_default var=action_id value=""}}
+{{mb_default var=result_id value=""}}
 
 <script type="text/javascript">
 updateListTransmissions = function(data, object_class) {
