@@ -153,7 +153,7 @@ if ($print) {
   
   $ex_classes = $ex_class->loadMatchingList();
   CExObject::$_multiple_load = true;
-  CExClassField::$_load_lite = true;
+  //CExClassField::$_load_lite = true; // ne charge pas les noms des champs
   
   foreach($lines as $_line) {
     $ex_objects[$_line->_guid] = array();
@@ -172,8 +172,6 @@ if ($print) {
       
       $_ex_objects = $ex_object->loadList($where, "ex_object_id DESC", 1);
       $_ex_object = reset($_ex_objects);
-      
-      
       
       if ($_ex_object && $_ex_object->_id) {
         CExClassField::$_load_lite = false;
