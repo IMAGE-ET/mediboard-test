@@ -15,7 +15,7 @@
 </table>
 {{/if}}
 
-{{mb_default var=in_modale value=0}}
+{{mb_default var=in_modal value=0}}
 {{assign var=object value=$sejour->_ref_patient}}
 
 <script type="text/javascript">
@@ -60,7 +60,7 @@
   </tr>
 	<tr>
 		<th class="title">
-      {{if $in_modale}}
+      {{if $in_modal}}
         <button style="float: right;" class="cancel" onclick="Control.Modal.close();">{{tr}}Close{{/tr}}</button>
       {{/if}}      
 			{{$object->_view}}
