@@ -153,8 +153,7 @@ Prescription = {
       } 
     });
   },
-  stopTraitementPerso: function(oSelect, prescription_id, mode_pharma) {
-    $V(oSelect, "");
+  stopTraitementPerso: function(prescription_id, mode_pharma) {
     var url = new Url("dPprescription", "httpreq_prescription_modif_all_tp");
     url.addParam("prescription_id", prescription_id);
     url.addParam("actionType", "stop");
@@ -165,8 +164,7 @@ Prescription = {
     url.addParam("mode_pharma", mode_pharma);
     url.requestUpdate("systemMsg");
   },
-  goTraitementPerso: function(oSelect, prescription_id, mode_pharma) {
-    $V(oSelect, "");
+  goTraitementPerso: function(prescription_id, mode_pharma) {
     var url = new Url("dPprescription", "httpreq_prescription_modif_all_tp");
     url.addParam("prescription_id", prescription_id);
     url.addParam("actionType", "go");
