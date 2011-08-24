@@ -1,6 +1,6 @@
 {{mb_script module="dPpatients" script="patient" ajax=true}}
 
-<table class="tbl">
+<table class="tbl print_patient" style="page-break-after: always;">
 	{{if !@$no_header}}
   <tr>
     <th class="title text" colspan="2">

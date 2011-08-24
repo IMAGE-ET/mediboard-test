@@ -46,7 +46,7 @@
     {{foreach from=$lines key=line_id item=administrations}}
       {{assign var=line value=$list_lines.$chap.$line_id}}     
        <tr>
-         <td>
+         <td class="text">
            {{if $line->_class == "CPrescriptionLineMedicament"}}
              {{$line->_ucd_view}} 
              <span style="font-size: 0.8em;" class="opacity-70">

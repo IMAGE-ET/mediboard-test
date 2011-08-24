@@ -17,7 +17,47 @@
 
 {{mb_default var=in_modale value=0}}
 {{assign var=object value=$sejour->_ref_patient}}
-<table class="tbl">
+
+<script type="text/javascript">
+  function togglePrintZone(name) {
+    $$("."+name).each(function(elt) { elt.toggleClassName("not-printable"); });
+
+    // Si un seul bloc est à imprimer, il faut retirer le style page-break.
+    var patient = $$(".print_patient")[1];
+    var sejour = $$(".print_sejour")[0];
+    var prescription = $$(".print_prescription")[0];
+    var task = $$(".print_tasks")[0];
+
+    if (!patient.hasClassName("not-printable") && sejour.hasClassName("not-printable")
+      && prescription.hasClassName("not-printable") && task.hasClassName("not-printable")) {
+      patient.setStyle({pageBreakAfter: "auto"});
+    }
+    else if (!sejour.hasClassName("not-printable") && patient.hasClassName("not-printable") &&
+      prescription.hasClassName("not-printable") && task.hasClassName("not-printable")) {
+      sejour.setStyle({pageBreakAfter: "auto"});
+    }
+    else if (!prescription.hasClassName("not-printable") && patient.hasClassName("not-printable") &&
+      sejour.hasClassName("not-printable") && task.hasClassName("not-printable")) {
+      prescription.setStyle({pageBreakAfter: "auto"});
+    }
+    else {
+      patient.setStyle({pageBreakAfter: "always"});
+      sejour.setStyle({pageBreakAfter: "always"});
+      prescription.setStyle({pageBreakAfter: "always"});
+    }
+  }
+</script>
+
+<table class="tbl print_patient">
+  <tr class="not-printable">
+    <td>
+      <strong>Choix des blocs à imprimer : </strong>
+      <label><input type="checkbox" checked="checked" onchange="togglePrintZone('print_patient')" /> Patient</label>
+      <label><input type="checkbox" checked="checked" onchange="togglePrintZone('print_sejour')" /> Séjour</label>
+      <label><input type="checkbox" checked="checked" onchange="togglePrintZone('print_prescription')"/> Prescription</label>
+      <label><input type="checkbox" checked="checked" onchange="togglePrintZone('print_tasks')"/> Tâches</label>
+    </td>
+  </tr>
 	<tr>
 		<th class="title">
       {{if $in_modale}}
@@ -28,41 +68,47 @@
 		</th>
 	</tr>
 </table>
+
 {{mb_include module=dPpatients template=CPatient_complete no_header=true}}
 
-<br style="page-break-after: always;" />
-
 {{assign var=object value=$sejour}}
-<table class="tbl">
+<table class="tbl print_sejour" style="border: none !important; page-break-after: always;">
+  <thead>
+    <tr>
+      <th class="title">
+        {{$object->_view}}
+        {{mb_include module=dPplanningOp template=inc_vw_numdos num_dossier=$sejour->_num_dossier}}
+      </th>
+    </tr>
+  </thead>
   <tr>
-    <th class="title">
-      {{$object->_view}}
-      {{mb_include module=dPplanningOp template=inc_vw_numdos num_dossier=$sejour->_num_dossier}}
-    </th>
+    <td>
+      {{mb_include module=dPplanningOp template=CSejour_complete no_header=true}}
+    </td>
+  </tr>
+  {{if $dossier|@count}}
+    <tr>
+      <td>
+        {{mb_include module=dPprescription template=inc_vw_dossier_cloture}}
+      </td>
+    </tr>
+  {{/if}}
+  <tr>
+    <td>
+      {{include file="../../dPpatients/templates/print_constantes.tpl"}}
+    </td>
   </tr>
 </table>
 
-{{mb_include module=dPplanningOp template=CSejour_complete no_header=true}}
-
-{{if $dossier|@count}}
-  {{mb_include module=dPprescription template=inc_vw_dossier_cloture}}
-{{/if}}
-
-{{include file="../../dPpatients/templates/print_constantes.tpl"}}
-
-<br style="page-break-after: always;" />
-
-<table class="tbl">
-  {{if $offline}}
-    <thead>
-      <tr>
-        <th class="title">
-          {{$sejour->_view}}
-          {{mb_include module=dPplanningOp template=inc_vw_numdos num_dossier=$sejour->_num_dossier}}
-        </th>
-      </tr>
-    </thead>
-  {{/if}}
+<table class="tbl print_prescription" style="page-break-after: always;">
+  <thead>
+    <tr>
+      <th class="title">
+        {{$sejour->_view}}
+        {{mb_include module=dPplanningOp template=inc_vw_numdos num_dossier=$sejour->_num_dossier}}
+      </th>
+    </tr>
+  </thead>
   <tr>
     <th class="title">
       Prescription
@@ -99,7 +145,7 @@
 	{{/if}}
 	{{foreach from=$prescription->_ref_prescription_line_mixes item=_prescription_line_mix}}
 	<tr>
-		<td>
+		<td class="text">
 		  {{mb_include module="dPprescription" template="inc_print_prescription_line_mix" perf=$_prescription_line_mix nodebug=true}}
 	  </td>
 	</tr>
@@ -138,8 +184,6 @@
     {{/foreach}}
    {{/foreach}}
 </table>
-
-<br style="page-break-after: always;" />
 
 {{mb_include module=soins template=inc_vw_tasks_sejour mode_realisation=0 readonly=1}}
 
