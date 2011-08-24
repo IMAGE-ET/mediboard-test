@@ -162,7 +162,7 @@ refreshSelf = function(){
 			
 			{{if $_ex_objects|@count}}
       <h3 style="margin: 0.5em 1em;">
-        {{if $_ex_class->host_class == $reference_class}}
+        {{if isset($ex_classes_creation.$_host_event.$_ex_class_id|smarty:nodefaults)}}
           <button style="margin: -1px; float: right;" class="new" 
                   onclick="showExClassForm('{{$_ex_class_id}}', '{{$reference_class}}-{{$reference_id}}', '{{$_ex_class->host_class}}-{{$_ex_class->event}}', null, '{{$_ex_class->event}}', '@refreshSelf')">
             {{tr}}New{{/tr}}

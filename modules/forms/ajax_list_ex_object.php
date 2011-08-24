@@ -109,7 +109,7 @@ foreach($ex_classes as $_ex_class_id => $_ex_class) {
     $ex_classes_creation[$ex_class_key] = array();
   }
   
-  if ($_ex_class->host_class == $reference_class && !$_ex_class->disabled) {
+  if ($_ex_class->host_class == $reference_class && !$_ex_class->disabled && $_ex_class->checkConstraints($reference)) {
     $ex_classes_creation[$ex_class_key][$_ex_class_id] = $_ex_class;
     
     if (count($_ex_objects) == 0){
