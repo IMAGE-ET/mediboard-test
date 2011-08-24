@@ -466,30 +466,45 @@ class CPrescription extends CMbObject implements IPatientRelated {
         CAppUI::displayMsg($msg, "CPrescriptionLineMixItem-msg-create");
       } 
 		} else {
-			// Parcours des prises
-      foreach($_line->_ref_prises as $prise){
-        $prise->_id = "";
-        $prise->object_id = $_line->_id;
-        $prise->object_class = $_line->_class;
-        if($prise->decalage_intervention != null){
-          $time_operation = "";
-          if($date_operation){
-            $time_operation = mbTime($date_operation); 
-          } elseif ($operation->_id) {
-            $time_operation = $hour_operation;
-          }
-          $signe_decalage_intervention = ($prise->decalage_intervention >= 0) ? "+" : "";
-          if($time_operation){
-            $unite_decalage_intervention = ($prise->unite_decalage_intervention == "heure") ? "HOURS" : "MINUTES";
-            $prise->heure_prise = mbTime("$signe_decalage_intervention $prise->decalage_intervention $unite_decalage_intervention", $time_operation);
-          }
-        }
-        if($prise->urgence_datetime){
-          $prise->urgence_datetime = mbDateTime();
-        }
-        $msg = $prise->store();
-        CAppUI::displayMsg($msg, "CPrisePosologie-msg-create");  
-      }
+			if(count($_line->_ref_prises) == 0){
+				if($_line instanceof CPrescriptionLineElement && $_line->debut && $_line->time_debut){
+          // On genere une planif a la date et heure de debut si aucune poso n'est presente
+	        $new_planif = new CPlanificationSysteme();
+	        $new_planif->dateTime = "$_line->debut $_line->time_debut";
+	        $new_planif->object_id = $_line->_id;
+	        $new_planif->object_class = $_line->_class;
+	        $new_planif->sejour_id = $_line->_ref_prescription->object_id;    
+	        $new_planif->store();
+		    }
+			} else {
+				// Parcours des prises
+	      foreach($_line->_ref_prises as $prise){
+	        $prise->_id = "";
+	        $prise->object_id = $_line->_id;
+	        $prise->object_class = $_line->_class;
+	        if($prise->decalage_intervention != null){
+	          $time_operation = "";
+	          if($date_operation){
+	            $time_operation = mbTime($date_operation); 
+	          } elseif ($operation->_id) {
+	            $time_operation = $hour_operation;
+	          }
+	          $signe_decalage_intervention = ($prise->decalage_intervention >= 0) ? "+" : "";
+	          if($time_operation){
+	            $unite_decalage_intervention = ($prise->unite_decalage_intervention == "heure") ? "HOURS" : "MINUTES";
+	            $prise->heure_prise = mbTime("$signe_decalage_intervention $prise->decalage_intervention $unite_decalage_intervention", $time_operation);
+	          }
+	        }
+	        if($prise->urgence_datetime){
+	          $prise->urgence_datetime = mbDateTime();
+	        }
+	        $msg = $prise->store();
+	        CAppUI::displayMsg($msg, "CPrisePosologie-msg-create");  
+	      }
+			}
+      
+			
+			
 		}   
   }
   
