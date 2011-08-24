@@ -7,7 +7,7 @@
 * @author Romain Ollivier
 */
 
-CAppUI::requireModuleClass('dPfiles', 'documentItem');
+CAppUI::requireModuleClass('dPfiles', 'CDocumentItem');
 
 class CCompteRendu extends CDocumentItem {
   // DB Table key
