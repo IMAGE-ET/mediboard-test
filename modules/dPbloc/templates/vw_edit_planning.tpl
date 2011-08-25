@@ -133,7 +133,7 @@ Main.add(function(){
         <tr>
          <th>{{mb_label object=$plagesel field="chir_id"}}</th>
          <td>
-          <select name="chir_id" class="{{$plagesel->_props.chir_id}}" style="max-width: 170px;">
+          <select name="chir_id" class="{{$plagesel->_props.chir_id}}" style="width: 15em;">
             <option value="">&mdash; Choisir un chirurgien</option>
             {{foreach from=$specs item=currFct key=keyFct}}
             <optgroup label="{{$currFct->_view}}">
@@ -149,7 +149,7 @@ Main.add(function(){
         </td>
         <th>{{mb_label object=$plagesel field="salle_id"}}</th>
         <td>
-          <select name="salle_id" class="{{$plagesel->_props.salle_id}}" style="max-width: 170px;">
+          <select name="salle_id" class="{{$plagesel->_props.salle_id}}" style="width: 15em;">
             <option value="">&mdash; {{tr}}CSalle.select{{/tr}}</option>
             {{if $plagesel->_id}}
               {{foreach from=$listBlocs item=curr_bloc}}
@@ -178,7 +178,7 @@ Main.add(function(){
       <tr>
         <th>{{mb_label object=$plagesel field="spec_id"}}</th>
         <td>
-          <select name="spec_id" class="{{$plagesel->_props.spec_id}}" style="max-width: 170px;">
+          <select name="spec_id" class="{{$plagesel->_props.spec_id}}" style="width: 15em;">
             <option value="">&mdash; Choisir une spécialité</option>
             {{foreach from=$specs item=spec}}
               <option value="{{$spec->function_id}}" class="mediuser" style="border-color: #{{$spec->color}};"
@@ -201,7 +201,7 @@ Main.add(function(){
       <tr>
         <th>{{mb_label object=$plagesel field="anesth_id"}}</th>
         <td>
-          <select name="anesth_id" style="max-width: 170px;">
+          <select name="anesth_id" style="width: 15em;">
             <option value="">&mdash; Choisir un anesthésiste</option>
             {{foreach from=$anesths item=anesth}}
             <option value="{{$anesth->user_id}}" {{if $plagesel->anesth_id == $anesth->user_id}} selected="selected" {{/if}} >
@@ -232,7 +232,7 @@ Main.add(function(){
       </tr>
       <tr>
         <th>{{mb_label object=$plagesel field="_type_repeat"}}</th>
-        <td>{{mb_field object=$plagesel field="_type_repeat" typeEnum=select}}</td>
+        <td>{{mb_field object=$plagesel field="_type_repeat" style="width: 15em;" typeEnum="select"}}</td>
         <th>{{mb_label object=$plagesel field="delay_repl"}}</th>
         <td>{{mb_field object=$plagesel field="delay_repl" size=1 increment=true form="editFrm" min=0}} jours</td>
       </tr>
@@ -241,7 +241,7 @@ Main.add(function(){
         <td>{{mb_field object=$plagesel field="max_intervention" size=1 increment=true form="editFrm" min=0}}</td>
         <th>{{mb_label object=$plagesel field="spec_repl_id"}}</th>
         <td>
-          <select name="spec_repl_id" class="{{$plagesel->_props.spec_repl_id}}" style="max-width: 170px;">
+          <select name="spec_repl_id" class="{{$plagesel->_props.spec_repl_id}}" style="width: 15em;">
             <option value="">&mdash; Spécialité de remplacement</option>
             {{foreach from=$specs item=spec}}
               <option value="{{$spec->function_id}}" class="mediuser" style="border-color: #{{$spec->color}};"
