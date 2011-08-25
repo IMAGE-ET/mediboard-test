@@ -322,18 +322,19 @@ if ($do && ($do_medicaments || $do_injections || $do_perfusions || $do_aerosols 
                       continue;
                     }
 										$key1 = $by_patient ? $lit->_ref_chambre->nom : "med";
-										$key2 = $by_patient ? "med" : $lit->_ref_chambre->nom;
-                    
+										$key2 = $by_patient ? $sejour->_id : $lit->_ref_chambre->nom;
+                    $key3 = $by_patient ? "med" : $sejour->_id;
+										
 			              $list_lines[$_perf_line->_class][$_perf_line->_id] = $_perf_line;
 										
 										// Plusieurs prises pdt la meme heure
 										if(array_key_exists("real_hour", $_prescription_line_mix->_prises_prevues[$_date][$_hour])){
 										  $count_prises_by_hour = count($_prescription_line_mix->_prises_prevues[$_date][$_hour]["real_hour"]);
-										  $lines_by_patient[$key1][$key2][$sejour->_id][$_date][$_hour]['CPrescriptionLineMix'][$_prescription_line_mix->_id][$_perf_line->_id]["prevu"] = $_perf_line->_quantite_administration * $count_prises_by_hour;
+										  $lines_by_patient[$key1][$key2][$key3][$_date][$_hour]['CPrescriptionLineMix'][$_prescription_line_mix->_id][$_perf_line->_id]["prevu"] = $_perf_line->_quantite_administration * $count_prises_by_hour;
 										}
 									
 								    if(array_key_exists("manual", $_prescription_line_mix->_prises_prevues[$_date][$_hour])){
-											$lines_by_patient[$key1][$key2][$sejour->_id][$_date][$_hour]['CPrescriptionLineMix'][$_prescription_line_mix->_id][$_perf_line->_id]["prevu"] = $_prescription_line_mix->_prises_prevues[$_date][$_hour]["manual"][$_perf_line->_id];
+											$lines_by_patient[$key1][$key2][$key3][$_date][$_hour]['CPrescriptionLineMix'][$_prescription_line_mix->_id][$_perf_line->_id]["prevu"] = $_prescription_line_mix->_prises_prevues[$_date][$_hour]["manual"][$_perf_line->_id];
                     }
 									}
 			          }
@@ -354,9 +355,10 @@ if ($do && ($do_medicaments || $do_injections || $do_perfusions || $do_aerosols 
 				            if(!$lit) continue;			              
 				            
                     $key1 = $by_patient ? $lit->_ref_chambre->nom : "med";
-                    $key2 = $by_patient ? "med" : $lit->_ref_chambre->nom;
+                    $key2 = $by_patient ? $sejour->_id : $lit->_ref_chambre->nom;
+                    $key3 = $by_patient ? "med" : $sejour->_id;
                     
-									  $lines_by_patient[$key1][$key2][$sejour->_id][$_date][$_hour]['CPrescriptionLineMix'][$_prescription_line_mix->_id][$_perf_line->_id]["administre"] = $_adm;
+									  $lines_by_patient[$key1][$key2][$key3][$_date][$_hour]['CPrescriptionLineMix'][$_prescription_line_mix->_id][$_perf_line->_id]["administre"] = $_adm;
 				          }
 				        }
 		          }
@@ -400,9 +402,10 @@ if ($do && ($do_medicaments || $do_injections || $do_perfusions || $do_aerosols 
 								            if($prise_prevue["total"]){
 								            	
                               $key1 = $by_patient ? $lit->_ref_chambre->nom : "med";
-                              $key2 = $by_patient ? "med" : $lit->_ref_chambre->nom;
+					                    $key2 = $by_patient ? $sejour->_id : $lit->_ref_chambre->nom;
+					                    $key3 = $by_patient ? "med" : $sejour->_id;
     
-								              @$lines_by_patient[$key1][$key2][$sejour->_id][$_date][$_hour][$_line_med->_class][$_line_med->_id]["prevu"] += $prise_prevue["total"];
+								              @$lines_by_patient[$key1][$key2][$key3][$_date][$_hour][$_line_med->_class][$_line_med->_id]["prevu"] += $prise_prevue["total"];
 								              $prise_prevue["total"] = 0;
 								            }			            
 								          }
@@ -423,15 +426,19 @@ if ($do && ($do_medicaments || $do_injections || $do_perfusions || $do_aerosols 
 								            $lit = getCurrentLit($sejour, $_date, $_hour, $lits, $affectations);
 								            if(!$lit) continue;			  
 								            $quantite = @$administrations_by_hour["quantite"];
-								            $key1 = $by_patient ? $lit->_ref_chambre->nom : "med";
-                            $key2 = $by_patient ? "med" : $lit->_ref_chambre->nom;
+								            
+														
+														$key1 = $by_patient ? $lit->_ref_chambre->nom : "med";
+				                    $key2 = $by_patient ? $sejour->_id : $lit->_ref_chambre->nom;
+				                    $key3 = $by_patient ? "med" : $sejour->_id;
+														
 								            if($quantite){
-								              @$lines_by_patient[$key1][$key2][$sejour->_id][$_date][$_hour][$_line_med->_class][$_line_med->_id]["administre"] += $quantite;
+								              @$lines_by_patient[$key1][$key2][$key3][$_date][$_hour][$_line_med->_class][$_line_med->_id]["administre"] += $quantite;
 								              $administrations_by_hour["quantite"] = 0;
 								            }
 								            $quantite_planifiee = @$administrations_by_hour["quantite_planifiee"];
 								            if($quantite_planifiee){
-								              @$lines_by_patient[$key1][$key2][$sejour->_id][$_date][$_hour][$_line_med->_class][$_line_med->_id]["prevu"] += $quantite_planifiee;
+								              @$lines_by_patient[$key1][$key2][$key3][$_date][$_hour][$_line_med->_class][$_line_med->_id]["prevu"] += $quantite_planifiee;
 								              $administrations_by_hour["quantite_planifiee"] = 0;
 								            }
 							            }
@@ -470,10 +477,12 @@ if ($do && ($do_medicaments || $do_injections || $do_perfusions || $do_aerosols 
 						            if(!$lit) continue;			  
 						            if($prise_prevue["total"]){
 
+                    			
 													$key1 = $by_patient ? $lit->_ref_chambre->nom : $name_chap;
-													$key2 = $by_patient ? $name_chap : $lit->_ref_chambre->nom;
-                    													
-						              @$lines_by_patient[$key1][$key2][$sejour->_id][$_date][$_hour][$_line_elt->_class][$_line_elt->_id]["prevu"] += $prise_prevue["total"];
+			                    $key2 = $by_patient ? $sejour->_id : $lit->_ref_chambre->nom;
+			                    $key3 = $by_patient ? $name_chap : $sejour->_id;
+																							
+						              @$lines_by_patient[$key1][$key2][$key3][$_date][$_hour][$_line_elt->_class][$_line_elt->_id]["prevu"] += $prise_prevue["total"];
 						              $prise_prevue = 0;
 						            }
 						          }
@@ -498,18 +507,20 @@ if ($do && ($do_medicaments || $do_injections || $do_perfusions || $do_aerosols 
 						            if($quantite){
 						            	
                           $key1 = $by_patient ? $lit->_ref_chambre->nom : $name_chap;
-                          $key2 = $by_patient ? $name_chap : $lit->_ref_chambre->nom;
+                          $key2 = $by_patient ? $sejour->_id : $lit->_ref_chambre->nom;
+                          $key3 = $by_patient ? $name_chap : $sejour->_id;
 													
-						              @$lines_by_patient[$key1][$key2][$sejour->_id][$_date][$_hour][$_line_elt->_class][$_line_elt->_id]["administre"] += $quantite;
+						              @$lines_by_patient[$key1][$key2][$key3][$_date][$_hour][$_line_elt->_class][$_line_elt->_id]["administre"] += $quantite;
 						              $administrations_by_hour["quantite"] = 0;
 						            }
 						          	$quantite_planifiee = @$administrations_by_hour["quantite_planifiee"];
 							          if($quantite_planifiee){
 							          	
                           $key1 = $by_patient ? $lit->_ref_chambre->nom : $name_chap;
-                          $key2 = $by_patient ? $name_chap : $lit->_ref_chambre->nom;
+                          $key2 = $by_patient ? $sejour->_id : $lit->_ref_chambre->nom;
+                          $key3 = $by_patient ? $name_chap : $sejour->_id;
 													
-							            @$lines_by_patient[$key1][$key2][$sejour->_id][$_date][$_hour][$_line_elt->_class][$_line_elt->_id]["prevu"] += $quantite_planifiee;
+							            @$lines_by_patient[$key1][$key2][$key3][$_date][$_hour][$_line_elt->_class][$_line_elt->_id]["prevu"] += $quantite_planifiee;
 							            $administrations_by_hour["quantite_planifiee"] = 0;
 							          }
 	                    }
@@ -530,6 +541,7 @@ ksort($lines_by_patient, SORT_STRING);
 foreach($lines_by_patient as $name_chap => &$lines_by_chap){
 	ksort($lines_by_chap, SORT_STRING);
 	foreach($lines_by_chap as $lit_view => &$lines_by_sejour){
+		ksort($lines_by_sejour);
 	  foreach($lines_by_sejour as $sejour_id => &$lines_by_date){
 	    ksort($lines_by_date);
 	    foreach($lines_by_date as $date => &$lines_by_hours){
@@ -580,6 +592,10 @@ foreach($cat_groups as $_cat_group){
 // Chargement du service
 $service = new CService();
 $service->load($service_id);
+
+
+
+
 
 
 $smarty = new CSmartyDP();

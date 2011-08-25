@@ -413,6 +413,8 @@
 <br />
 {{/if}}
 
+										
+										
 {{foreach from=$lines_by_patient key=key1 item=_lines_by_chap name=foreach_chapitres}}
 <table class="tbl" {{if !$smarty.foreach.foreach_chapitres.first || $trans_and_obs|@count}}style="page-break-before: always;"{{/if}}>
   {{if !$by_patient}}
@@ -423,21 +425,23 @@
 	{{/if}}
 	
 	{{foreach from=$_lines_by_chap key=key2 item=_lines_by_patient name="foreach_lines"}}
-		{{if $by_patient}}
-		  {{assign var=lit value=$lits.$key1}}
-		{{else}}
-		   {{assign var=lit value=$lits.$key2}}
-	  {{/if}}
-	
-	  {{foreach from=$_lines_by_patient key=sejour_id item=prises_by_dates }}
-	    {{assign var=sejour value=$sejours.$sejour_id}}
+	  {{foreach from=$_lines_by_patient key=key3 item=prises_by_dates name="foreach_prises"}}
+
+			{{if $by_patient}}
+        {{assign var=lit value=$lits.$key1}}
+        {{assign var=sejour value=$sejours.$key2}}
+      {{else}}
+        {{assign var=lit value=$lits.$key2}}
+        {{assign var=sejour value=$sejours.$key3}}
+      {{/if}}
+		
 	    {{assign var=patient value=$sejour->_ref_patient}}
 			{{assign var=operation value=$sejour->_ref_last_operation}} 
 			
-			{{if !$by_patient || ($by_patient && $smarty.foreach.foreach_lines.first)}}
+			{{if !$by_patient || ($by_patient && $smarty.foreach.foreach_prises.first)}}
 	    <tr><td colspan="6"><br /></td></tr>
 			<tr>
-	      <th colspan="6" class="text">
+	      <th colspan="6" class="text title">
 	        <span style="float: left">
             <strong>{{$lit->_ref_chambre->_view}}</strong>
             <br />
@@ -445,7 +449,7 @@
 	        </span>
 			    <span style="float: right">
 			      DE: {{$sejour->_entree|date_format:"%d/%m/%Y"}}<br />
-			      DS:  {{$sejour->_sortie|date_format:"%d/%m/%Y"}}
+			      DS: {{$sejour->_sortie|date_format:"%d/%m/%Y"}}
 			    </span>
 			    <strong>{{$patient->_view}}</strong>
 			    Né(e) le {{mb_value object=$patient field=naissance}} - ({{$patient->_age}} ans) - ({{$patient->_ref_constantes_medicales->poids}} kg)
@@ -469,7 +473,7 @@
 			
 			{{if $by_patient}}
 			<tr>
-			  <th colspan="6">{{tr}}CPrescription._chapitres.{{$key2}}{{/tr}}</th>
+			  <th colspan="6">{{tr}}CPrescription._chapitres.{{$key3}}{{/tr}}</th>
 			</tr>
 			{{/if}}
 			
@@ -591,9 +595,9 @@
 		  {{/foreach}}
 		{{/foreach}}
 		
-		{{if $offline && $by_patient && $smarty.foreach.foreach_lines.last}}
+		{{if $offline && $by_patient && $smarty.foreach.foreach_prises.last}}
 		  <tr>
-		  	<th colspan="6">
+		  	<th class="title" colspan="6">
 		  		Fin du dossier pour le patient {{$patient->_view}}
 				</th>
 		  </tr>
