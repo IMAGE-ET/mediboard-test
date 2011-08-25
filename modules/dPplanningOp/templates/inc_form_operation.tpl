@@ -85,7 +85,9 @@ CCAMSelector.init = function(){
       {{mb_label object=$op field="chir_id"}}
     </th>
     <td colspan="2">
-      <select name="chir_id" class="{{$op->_props.chir_id}}" onchange="synchroPrat(); Value.synchronize(this); removePlageOp(true);" style="max-width: 150px;">
+      <select name="chir_id" class="{{$op->_props.chir_id}}"
+        onchange="synchroPrat(); Value.synchronize(this); removePlageOp(true);"
+        style="width: 15em">
         <option value="">&mdash; Choisir un chirurgien</option>
         {{foreach from=$listPraticiens item=curr_praticien}}
         <option class="mediuser" style="border-color: #{{$curr_praticien->_ref_function->color}};" value="{{$curr_praticien->user_id}}" {{if $chir->user_id == $curr_praticien->user_id}} selected="selected" {{/if}}>
@@ -98,13 +100,21 @@ CCAMSelector.init = function(){
   
   <tr>
     <th>{{mb_label object=$op field="libelle"}}</th>
-    <td colspan="2">{{mb_field object=$op field="libelle" form="editOp" autocomplete="true,1,50,true,true" onblur="\$V(getForm('editOpEasy').libelle, \$V(getForm('editOp').libelle));"}}</td>
+    <td colspan="2">
+      {{mb_field object=$op field="libelle" form="editOp"
+        autocomplete="true,1,50,true,true"
+        onblur="\$V(getForm('editOpEasy').libelle, \$V(getForm('editOp').libelle));"
+        style="width: 12em"}}
+      <button class="search notext" type="button" onclick="ProtocoleSelector.init()">
+        Choisir un protocole
+      </button>
+    </td>
   </tr>
   
   <tr>
     <th>{{mb_label object=$op field="codes_ccam" defaultFor="_codes_ccam"}}</th>
-    <td>
-      <input type="text" name="_codes_ccam" ondblclick="CCAMSelector.init()" size="10" value="" class="autocomplete"/>
+    <td colspan="2">
+      <input type="text" name="_codes_ccam" ondblclick="CCAMSelector.init()" style="width: 12em" value="" class="autocomplete"/>
       <div style="display: none; width: 200px !important" class="autocomplete" id="_codes_ccam_auto_complete"></div>
       <script type="text/javascript">
       	Main.add(function(){
@@ -122,9 +132,7 @@ CCAMSelector.init = function(){
         })
       </script>
       <button class="add notext" type="button" onclick="oCcamField.add(this.form._codes_ccam.value,true)">{{tr}}Add{{/tr}}</button>
-    </td>
-    <td class="button">
-      <button type="button" class="search" onclick="CCAMSelector.init()">{{tr}}button-CCodeCCAM-choix{{/tr}}</button>
+      <button type="button" class="search notext" onclick="CCAMSelector.init()">{{tr}}button-CCodeCCAM-choix{{/tr}}</button>
     </td>
   </tr>
   <tr>
@@ -139,14 +147,14 @@ CCAMSelector.init = function(){
   <tr>
     <th>{{mb_label object=$op field="cote"}}</th>
     <td colspan="2">
-      {{mb_field object=$op field="cote" defaultOption="&mdash; Choisir" onchange="Value.synchronize(this);"}}
+      {{mb_field object=$op field="cote" style="width: 15em" defaultOption="&mdash; Choisir" onchange="Value.synchronize(this);"}}
     </td>
   </tr> 
   
   <tr>
     <th>{{mb_label object=$op field="type_anesth"}}</th>
     <td colspan="2">
-      {{mb_field object=$op field="type_anesth" options=$listAnesthType onchange="submitAnesth(this.form);"}}
+      {{mb_field object=$op field="type_anesth" style="width: 15em" options=$listAnesthType onchange="submitAnesth(this.form);"}}
     </td>
   </tr> 
 
@@ -154,7 +162,7 @@ CCAMSelector.init = function(){
   <tr>
     <th>{{mb_label object=$op field="anesth_id"}}</th>
     <td colspan="2">
-      {{mb_field object=$op field="anesth_id" options=$anesthesistes}}
+      {{mb_field object=$op field="anesth_id" style="width: 15em" options=$anesthesistes}}
     </td>
   </tr> 
   {{/if}}
@@ -181,7 +189,7 @@ CCAMSelector.init = function(){
   <tr>
     {{if $modurgence}}
 	    <th>{{mb_label object=$op field="date"}}</th>
-	    <td>
+	    <td colspan="2">
 	      <input type="hidden" name="plageop_id" value="" />
 	      <input type="hidden" name="_date" value="{{if $op->_datetime}}{{$op->_datetime|iso_date}}{{else}}{{$today}}{{/if}}" />
 	     
@@ -195,7 +203,7 @@ CCAMSelector.init = function(){
             document.editSejour._curr_op_date.value = this.value;
             modifSejour();  \$V(this.form._date, this.value);"}}
         {{else}}
-  	      <select name="date" onchange="
+  	      <select name="date"  style="width: 15em" onchange="
   	        {{if !$op->operation_id}}updateEntreePrevue();{{/if}}
   	        Value.synchronize(this);
   	        document.editSejour._curr_op_date.value = this.value;
@@ -214,8 +222,6 @@ CCAMSelector.init = function(){
   	        </option>
   	      </select>
         {{/if}}
-	    </td>
-	    <td>
 	      à
 	      <select name="_hour_urgence" onchange="Value.synchronize(this)">
 	      {{foreach from=$hours_urgence|smarty:nodefaults item=hour}}
@@ -242,14 +248,15 @@ CCAMSelector.init = function(){
 	                }; 
 	                Sejour.preselectSejour(this.value);" />
 	    </th>
-	    <td>
-	      <input type="text" name="_locale_date" readonly="readonly" size="10" ondblclick="PlageOpSelector.init()" value="{{$plage->date|date_format:"%d/%m/%Y"}}"  />
+	    <td colspan="2">
+	      <input type="text" name="_locale_date" readonly="readonly"
+	        onfocus="PlageOpSelector.init()"
+	        value="{{$plage->date|date_format:"%d/%m/%Y"}}"
+	        style="width: 15em" />
 	      {{if $op->_ref_salle && $op->_ref_salle->_id}}
 	      en {{$op->_ref_salle->_view}}
 	      {{/if}}
-	    </td>
-	    <td class="button">
-	      <button type="button" class="search" onclick="PlageOpSelector.init()">Choisir une date</button>
+	      <button type="button" class="search notext" onclick="PlageOpSelector.init()">Choisir une date</button>
 	    </td>
     {{/if}}
   </tr>

@@ -213,13 +213,13 @@ Main.add(function () {
             <tr>
               <th>{{mb_label object=$plageSel field="chir_id"}}</th>
               <td>
-                <select name="chir_id" class="{{$plageSel->_props.chir_id}}" style="width: 14em;">
+                <select name="chir_id" class="{{$plageSel->_props.chir_id}}" style="width: 15em;">
                   <option value="">&mdash; {{tr}}Choose{{/tr}}</option>
 									{{mb_include module=mediusers template=inc_options_mediuser list=$listChirs selected=$chirSel}}
                 </select>
               </td>
               <th>{{mb_label object=$plageSel field="libelle"}}</th>
-              <td>{{mb_field object=$plageSel field="libelle"}}</td>
+              <td>{{mb_field object=$plageSel field="libelle" style="width: 15em;"}}</td>
             </tr>
             <tr>
               <th>{{mb_label object=$plageSel field="_hour_deb"}}</th>
@@ -245,7 +245,7 @@ Main.add(function () {
               </td>
               <th>{{mb_label object=$plageSel field="date"}}</th>
               <td>
-                <select name="date" class="{{$plageSel->_props.date}}">
+                <select name="date" class="{{$plageSel->_props.date}}" style="width: 15em;">
                   <option value="">&mdash; Choisir le jour</option>
                   {{foreach from=$listDaysSelect item=curr_day}}
                   <option value="{{$curr_day}}" {{if $curr_day == $plageSel->date}} selected="selected" {{/if}}>
@@ -291,14 +291,14 @@ Main.add(function () {
                   <option value="20" {{if ($plageSel->_freq == "20")}} selected="selected" {{/if}}>20</option>
                   <option value="30" {{if ($plageSel->_freq == "30")}} selected="selected" {{/if}}>30</option>
                   <option value="45" {{if ($plageSel->_freq == "45")}} selected="selected" {{/if}}>45</option>
-               </select> minutes
+               </select> min
               </td>
               <th>
                 <label for="_type_repeat" title="Espacement des plages">Type de répétition</label>
               </th>
               <td>
-                <select name="_type_repeat">
-                  <option value="1">Normale</option>
+                <select name="_type_repeat" style="width: 15em;">
+                  <option value="1">Toutes les semaines</option>
                   <option value="2">Une semaine sur 2</option>
                   <option value="3">Une semaine sur 3</option>
                   <option value="4">Une semaine sur 4</option>

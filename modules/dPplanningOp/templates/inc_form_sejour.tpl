@@ -335,7 +335,7 @@ Main.add( function(){
     Sejours existants
   </th>
   <td colspan="3" id="selectSejours">
-    <select name="sejour_id" onchange="reloadSejour(this.value)">
+    <select name="sejour_id" style="width: 15em" onchange="reloadSejour(this.value)">
       <option value="" {{if !$sejour->_id}} selected="selected" {{/if}}>
         &mdash; Créer un nouveau séjour
       </option>
@@ -356,7 +356,7 @@ Main.add( function(){
   </th>
   <td colspan="3">
     {{if !$sejour->_id || $can->admin}}
-    <select class="{{$sejour->_props.group_id}}" name="group_id" onchange="removePlageOp(true);">
+    <select class="{{$sejour->_props.group_id}}" style="width: 15em" name="group_id" onchange="removePlageOp(true);">
     {{foreach from=$etablissements item=curr_etab}}
       <option value="{{$curr_etab->group_id}}" {{if ($sejour->sejour_id && $sejour->group_id==$curr_etab->group_id) || (!$sejour->sejour_id && $g==$curr_etab->group_id)}} selected="selected"{{/if}}>{{$curr_etab->_view}}</option>
     {{/foreach}}
@@ -377,7 +377,7 @@ Main.add( function(){
     {{mb_field object=$sejour field=praticien_id hidden=1}}
     {{mb_value object=$sejour field=praticien_id}}
     {{else}} 
-    <select name="praticien_id" onchange="modifPrat()" class="{{$sejour->_props.praticien_id}}" style="max-width: 150px;">
+    <select name="praticien_id" onchange="modifPrat()" class="{{$sejour->_props.praticien_id}}" style="width: 15em">
       <option value="">&mdash; Choisir un praticien</option>
       {{foreach from=$listPraticiens item=curr_praticien}}
       <option class="mediuser" style="border-color: #{{$curr_praticien->_ref_function->color}};" value="{{$curr_praticien->user_id}}" {{if $praticien->_id == $curr_praticien->user_id}} selected="selected" {{/if}}>
@@ -400,17 +400,15 @@ Main.add( function(){
 		  onchange="changePat(); checkSejoursToReload(); checkCorrespondantMedical(this.form); reloadSejours();" />
     {{mb_label object=$sejour field="patient_id"}}
   </th>
-  <td>
-    <input type="text" name="_patient_view" size="20" value="{{$patient->_view}}" readonly="readonly"
-           ondblclick="
+  <td colspan="3">
+    <input type="text" name="_patient_view" style="width: 15em" value="{{$patient->_view}}" readonly="readonly"
+           onfocus="
     {{if !$sejour->_id}}
       PatSelector.init();
     {{else}}
       confirmChangePatient();
     {{/if}}"/>
-  </td>
-  <td colspan="2" class="button">
-  <button type="button" class="search" onclick="
+  <button type="button" class="search notext" onclick="
 	  {{if !$sejour->_id}}
       PatSelector.init();
     {{else}}
@@ -421,7 +419,7 @@ Main.add( function(){
 
 <tr>
   <th>{{mb_label object=$sejour field="libelle"}}</th>
-  <td colspan="3">{{mb_field object=$sejour field="libelle" form="editSejour" autocomplete="true,1,50,true,true"}}</td>
+  <td colspan="3">{{mb_field object=$sejour field="libelle" form="editSejour" style="width: 12em" autocomplete="true,1,50,true,true"}}</td>
 </tr>
 
 <tr>
@@ -429,7 +427,8 @@ Main.add( function(){
     {{mb_label object=$sejour field="service_id"}}
   </th>
   <td colspan="3">
-    <select name="service_id" class="{{$sejour->_props.service_id}}" onchange="if(getForm('editOp')) {synchroService(this)};" style="max-width: 150px;">
+    <select name="service_id" class="{{$sejour->_props.service_id}}" style="width: 15em"
+      onchange="if(getForm('editOp')) {synchroService(this)};">
       <option value="">&mdash; Choisir un service</option>
       {{foreach from=$listServices item=_service}}
       <option value="{{$_service->_id}}" {{if $sejour->service_id == $_service->_id}} selected="selected" {{/if}}>
@@ -447,7 +446,7 @@ Main.add( function(){
   </th>
   <td colspan="3">
     {{mb_field object=$sejour field=_unique_lit_id hidden=true}}
-    <input type="text" name="_unique_lit_id_view" value="" />
+    <input type="text" name="_unique_lit_id_view" style="width: 12em" value="" />
             <script type="text/javascript">
               Main.add(function(){
                 var form = getForm("editSejour");
@@ -490,9 +489,9 @@ Main.add( function(){
     });
     </script>
     
-    <input type="text" name="keywords_code" class="autocomplete str code cim10" value="{{$sejour->DP}}" size="10"/>
+    <input type="text" name="keywords_code" class="autocomplete str code cim10" value="{{$sejour->DP}}" style="width: 12em" />
     <button type="button" class="cancel notext" onclick="$V(this.form.DP, '');" />
-    <button type="button" class="search" onclick="CIM10Selector.init()">{{tr}}button-CCodeCIM10-choix{{/tr}}</button>
+    <button type="button" class="search notext" onclick="CIM10Selector.init()">{{tr}}button-CCodeCIM10-choix{{/tr}}</button>
     <input type="hidden" name="DP" value="{{$sejour->DP}}" onchange="$V(this.form.keywords_code, this.value);"/>
   </td>
 </tr>
@@ -510,11 +509,9 @@ Main.add( function(){
 
 <tr>
   <th>{{mb_label object=$sejour field="_date_entree_prevue"}}</th>
-  <td>
+  <td colspan="3">
     {{mb_field object=$sejour form=editSejour field=_date_entree_prevue canNull=false 
 		  onchange="OccupationServices.updateOccupation(); modifSejour(); updateSortiePrevue(); reloadSejours(true);"}}
-  </td>
-  <td colspan="2">
     à
     <select name="_hour_entree_prevue" onchange="updateHeureSortie(); checkHeureSortie(); reloadSejours(true);">
     {{foreach from=$hours item=hour}}
@@ -531,21 +528,18 @@ Main.add( function(){
 
 <tr>
   <th>{{mb_label object=$sejour field="_duree_prevue"}}</th>
-  <td>
+  <td colspan="3">
     {{mb_field object=$sejour field="_duree_prevue" increment=true form=editSejour prop="num min|0" size=2 onchange="updateSortiePrevue(); checkDureeHospi('syncType');" value=$sejour->sejour_id|ternary:$sejour->_duree_prevue:0}}
     nuits
-  </td>
-  <td id="dureeEst" colspan="2">
+    (<span id="dureeEst"></span>)
   </td>
 </tr>
 
 <tr {{if $mode_operation && !$can->admin}} style="display: none" {{/if}}>
   <th>{{mb_label object=$sejour field="_date_sortie_prevue"}}</th>
-  <td>
+  <td colspan="3">
     {{mb_field object=$sejour form=editSejour field=_date_sortie_prevue canNull=false 
 		  onchange="updateDureePrevue(); modifSejour(); reloadSejours(true);"}}
-  </td>
-  <td colspan="2">
     à 
     <select name="_hour_sortie_prevue" onchange="reloadSejours(true);">
     {{foreach from=$hours item=hour}}
@@ -562,8 +556,9 @@ Main.add( function(){
 
 <tr>
   <th>{{mb_label object=$sejour field="type"}}</th>
-  <td>
-    <select name="type" onchange="changeTypeHospi(); OccupationServices.updateOccupation(); checkDureeHospi('syncDuree');">
+  <td colspan="3">
+    <select name="type" style="width: 15em;"
+      onchange="changeTypeHospi(); OccupationServices.updateOccupation(); checkDureeHospi('syncDuree');">
     {{assign var=specType value=$sejour->_specs.type}}
     {{foreach from=$specType->_locales item="curr_type" key="key"}}
       <option value="{{$key}}"
@@ -573,9 +568,10 @@ Main.add( function(){
     {{/foreach}}
     </select>
   </td>
-  
-  <th class="reanimation">{{mb_label object=$sejour field="reanimation"}}</th>
-  <td class="reanimation">
+</tr>
+<tr class="reanimation">
+  <th>{{mb_label object=$sejour field="reanimation"}}</th>
+  <td colspan="3">
     {{mb_field object=$sejour field="reanimation"}}
     <script type="text/javascript">
       function changeTypeHospi() {
@@ -715,7 +711,7 @@ Main.add( function(){
   </td>
   
   {{if $mode_operation}}
-  <td colspan="2" class="button">
+  <td colspan="2">
     <button type="button" class="new" onclick="popRegimes()">Régime alimentaire</button>
   </td>
   {{else}}

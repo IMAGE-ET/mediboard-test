@@ -21,7 +21,9 @@
       {{mb_label object=$op field="chir_id"}}
     </th>
     <td colspan="2">
-      <select name="chir_id" class="{{$op->_props.chir_id}}" onchange="synchroPrat(); Value.synchronize(this); removePlageOp(true);">
+      <select name="chir_id" class="{{$op->_props.chir_id}}"
+        onchange="synchroPrat(); Value.synchronize(this); removePlageOp(true);"
+         style="width: 15em">
         <option value="">&mdash; Choisir un chirurgien</option>
         {{foreach from=$listPraticiens item=curr_praticien}}
         <option class="mediuser" style="border-color: #{{$curr_praticien->_ref_function->color}};" value="{{$curr_praticien->user_id}}" {{if $chir->user_id == $curr_praticien->user_id}} selected="selected" {{/if}}>
@@ -39,7 +41,7 @@
 	    {{mb_label object=$sejour field="service_id"}}
 	  </th>
 	  <td colspan="3">
-	    <select name="service_id" class="{{$sejour->_props.service_id}}" onchange="synchroService(this);" style="max-width: 150px;">
+	    <select name="service_id" class="{{$sejour->_props.service_id}}" onchange="synchroService(this);" style="width: 15em;">
 	      <option value="">&mdash; Choisir un service</option>
 	      {{foreach from=$listServices item=_service}}
 	      <option value="{{$_service->_id}}" {{if $sejour->service_id == $_service->_id}} selected="selected" {{/if}}>
@@ -55,7 +57,12 @@
   <!-- Affichage du libelle -->
   <tr>
     <th>{{mb_label object=$op field="libelle"}}</th>
-    <td colspan="2">{{mb_field object=$op field="libelle" readonly="readonly"}}</td>
+    <td colspan="2">
+      {{mb_field object=$op field="libelle" style="width: 15em; padding-right: 1px;" onfocus="ProtocoleSelector.init()" readonly="readonly"}}
+      <button class="search notext" type="button" onclick="ProtocoleSelector.init()">
+        Choisir un protocole
+      </button>
+    </td>
   </tr>
   
   
@@ -74,7 +81,7 @@
   <tr>
     <th>{{mb_label object=$op field="cote"}}</th>
     <td colspan="2">
-      {{mb_field object=$op field="cote" defaultOption="&mdash; Choisir" onchange="Value.synchronize(this); modifOp();"}}
+      {{mb_field object=$op field="cote" style="width: 15em" defaultOption="&mdash; Choisir" onchange="Value.synchronize(this); modifOp();"}}
     </td>
   </tr> 
 
@@ -85,7 +92,7 @@
     <th>
       {{mb_label object=$op field="date"}}
     </th>
-    <td>
+    <td colspan="2">
       <input type="hidden" name="plageop_id" value="" />
       <input type="hidden" name="_date" value="{{if $op->_datetime}}{{$op->_datetime|iso_date}}{{else}}{{$today}}{{/if}}" />
       {{if $can->admin}}
@@ -98,7 +105,8 @@
           document.editSejour._curr_op_date.value = this.value;
           modifSejour();  \$V(this.form._date, this.value);"}}
       {{else}}
-        <select name="date" onchange="
+        <select name="date" style="width: 15em"
+          onchange="
           {{if !$op->operation_id}}updateEntreePrevue();{{/if}}
           Value.synchronize(this);
           document.editSejour._curr_op_date.value = this.value;
@@ -116,8 +124,6 @@
           </option>
         </select>
       {{/if}}
-    </td>
-    <td>
       à
       <select name="_hour_urgence" onchange="Value.synchronize(this)">
       {{foreach from=$hours_urgence|smarty:nodefaults item=hour}}
@@ -147,11 +153,11 @@
                 }; 
                 Sejour.preselectSejour(this.value);" />
     </th>
-    <td>
-      <input type="text" name="_locale_date" readonly="readonly" size="10" ondblclick="PlageOpSelector.init()" value="{{$plage->date|date_format:"%d/%m/%Y"}}" />
-    </td>
-    <td class="button">
-      <button type="button" class="search" onclick="PlageOpSelector.init()">Choisir une date</button>
+    <td colspan="2">
+      <input type="text" name="_locale_date" readonly="readonly"
+        style="width: 15em;"
+        onfocus="PlageOpSelector.init()" value="{{$plage->date|date_format:"%d/%m/%Y"}}" />
+      <button type="button" class="search notext" onclick="PlageOpSelector.init()">Choisir une date</button>
     </td>
   </tr>
   {{/if}}
@@ -168,16 +174,14 @@
       <input type="hidden" name="patient_id" class="notNull {{$sejour->_props.patient_id}}" ondblclick="PatSelector.init()" value="{{$patient->patient_id}}" onchange="changePat()" />
       {{mb_label object=$sejour field="patient_id"}}
     </th>
-    <td>
-  	  <input type="text" name="_patient_view" size="30" value="{{$patient->_view}}" readonly="readonly"
+    <td colspan="2">
+  	  <input type="text" name="_patient_view" style="width: 15em" value="{{$patient->_view}}" readonly="readonly"
   	    {{if $conf.dPplanningOp.CSejour.patient_id || !$sejour->_id || $app->user_type == 1}}
-  	      ondblclick="PatSelector.init()"
+  	      onfocus="PatSelector.init()"
   	    {{/if}}
   	  />
-    </td>
-    <td colspan="2" class="button">
       {{if $conf.dPplanningOp.CSejour.patient_id || !$sejour->_id || $app->user_type == 1}}
-      <button type="button" class="search" onclick="PatSelector.init()">Choisir un patient</button>
+      <button type="button" class="search notext" onclick="PatSelector.init()">Choisir un patient</button>
       {{/if}}
     </td>
   </tr>

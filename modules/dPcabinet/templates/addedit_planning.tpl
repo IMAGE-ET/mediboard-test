@@ -213,7 +213,7 @@ Main.add(function () {
                 <label for="chir_id" title="Praticien pour la consultation">Praticien</label>
               </th>
               <td>
-                <select name="chir_id" style="width: 14em;" class="notNull" onChange="ClearRDV(); refreshListCategorie(this.value); if (this.value != '') $V(this.form._function_id, '');">
+                <select name="chir_id" style="width: 15em;" class="notNull" onChange="ClearRDV(); refreshListCategorie(this.value); if (this.value != '') $V(this.form._function_id, '');">
                   <option value="">&mdash; Choisir un praticien</option>
                   {{foreach from=$listPraticiens item=curr_praticien}}
                   <option class="mediuser" style="border-color: #{{$curr_praticien->_ref_function->color}};" value="{{$curr_praticien->user_id}}" {{if $chir->user_id == $curr_praticien->user_id}} selected="selected" {{/if}}>
@@ -232,8 +232,8 @@ Main.add(function () {
               </th>
               <td>
               	{{mb_field object=$pat field="patient_id" hidden=1 ondblclick="PatSelector.init()" onchange="requestInfoPat(); $('button-edit-patient').setVisible(this.value);"}}
-              	<input type="text" name="_pat_name" size="35" value="{{$pat->_view}}" readonly="readonly" ondblclick="PatSelector.init()" onchange="checkCorrespondantMedical()"/>
-    						<button class="search" type="button" onclick="PatSelector.init()">{{tr}}Search{{/tr}}</button>
+              	<input type="text" name="_pat_name" style="width: 15em;" value="{{$pat->_view}}" readonly="readonly" onfocus="PatSelector.init()" onchange="checkCorrespondantMedical()"/>
+    						<button class="search notext" type="button" onclick="PatSelector.init()">{{tr}}Search{{/tr}}</button>
     	          <script type="text/javascript">
     	            PatSelector.init = function(){
     	              this.sForm = "editFrm";
@@ -244,7 +244,7 @@ Main.add(function () {
     	          </script>
     						<button id="button-edit-patient" type="button" 
     						        onclick="location.href='?m=dPpatients&amp;tab=vw_edit_patients&amp;patient_id='+this.form.patient_id.value" 
-    										class="edit" {{if !$pat->_id}}style="display: none;"{{/if}}>
+    										class="edit notext" {{if !$pat->_id}}style="display: none;"{{/if}}>
     						  {{tr}}Edit{{/tr}}
     					  </button>
     					</td>
@@ -290,7 +290,7 @@ Main.add(function () {
           <tr>
             <th>{{mb_label object=$consult field="plageconsult_id"}}</th>
             <td>
-              <input type="text" name="_date" value="{{$consult->_date|date_format:"%A %d/%m/%Y"}}" ondblclick="PlageConsultSelector.init()" readonly="readonly" onchange="if (this.value != '') $V(this.form._function_id, '')"/>
+              <input type="text" name="_date" style="width: 15em;" value="{{$consult->_date|date_format:"%A %d/%m/%Y"}}" onfocus="PlageConsultSelector.init()" readonly="readonly" onchange="if (this.value != '') $V(this.form._function_id, '')"/>
               {{mb_field object=$consult field="plageconsult_id" hidden=1 ondblclick="PlageConsultSelector.init()"}}
               <script type="text/javascript">
                 PlageConsultSelector.init = function(){
@@ -304,14 +304,14 @@ Main.add(function () {
                   this.modal();
                 }
              </script> 
-             <button class="search" type="button" onclick="PlageConsultSelector.init()">Choix de l'horaire</button>
+             <button class="search notext" type="button" onclick="PlageConsultSelector.init()">Choix de l'horaire</button>
             </td>
           </tr>
   
           <tr>
             <th>{{mb_label object=$consult field="heure"}}</th>
             <td>
-              <input type="text" name="heure" value="{{$consult->heure}}" size="6" readonly="readonly" />
+              <input type="text" name="heure" value="{{$consult->heure}}" style="width: 15em;" onfocus="PlageConsultSelector.init()" readonly="readonly" />
             </td>
           </tr>
             
@@ -396,7 +396,7 @@ Main.add(function () {
           <tr>
             <th>Choix par cabinet</th>
             <td>
-              <select name="_function_id" style="max-width: 130px;" onchange = "if (this.value != '') { $V(this.form.chir_id, ''); $V(this.form._date, '');}">
+              <select name="_function_id" style="width: 15em;" onchange = "if (this.value != '') { $V(this.form.chir_id, ''); $V(this.form._date, '');}">
                 <option value="">&mdash; choisir un cabinet</option>
                 {{foreach from=$listFunctions item=_function}}
                 <option value="{{$_function->_id}}" class="mediuser" style="border-color: #{{$_function->color}};">
