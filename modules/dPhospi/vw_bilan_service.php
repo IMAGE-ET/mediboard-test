@@ -52,7 +52,7 @@ $date_max = mbDate($dateTime_max);
 $token_cat = CValue::get("token_cat","");
 
 if ($token_cat == "all") {
-  $token_cat = "trans|med|inj|perf|aerosol|stup";
+  $token_cat = "trans|med|inj|perf|aerosol";
   $categories = CCategoryPrescription::loadCategoriesByChap(null, "current");
   
   foreach ($categories as $categories_by_chap) {
