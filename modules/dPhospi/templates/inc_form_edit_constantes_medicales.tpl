@@ -153,7 +153,7 @@ Main.add(function () {
         {{/if}}
         {{if $display_graph}}
           <td class="narrow">
-            {{if $_constante.0 != "_"}}
+            {{if $_constante.0 != "_" || !empty($_params.plot|smarty:nodefaults)}}
               <input type="checkbox" name="checkbox-constantes-medicales-{{$_constante}}" onclick="toggleGraph('{{$_constante}}', this.checked)" tabIndex="100" />
             {{/if}}
           </td>

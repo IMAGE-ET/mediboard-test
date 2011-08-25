@@ -14,7 +14,7 @@ ExObject = {
       event: null
     }, options);
     
-    var url = new Url("forms", "ajax_widget_ex_classes");
+    var url = new Url("forms", "ajax_widget_ex_classes_new");
     url.addParam("object_guid", options.object_guid);
     url.addParam("ex_class_id", options.ex_class_id);
     url.addParam("event", options.event);

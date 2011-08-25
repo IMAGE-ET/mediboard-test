@@ -37,6 +37,20 @@ class CExClass extends CMbObject {
     "CConsultation",
     "CAdministration",
   );
+	
+	static function getExtendableSpecs(){
+		$classes = self::$_extendable_classes;
+		$specs = array();
+		
+		foreach($classes as $_class) {
+		  $instance = new $_class;
+		  if (!empty($instance->_spec->events) && $instance->_ref_module && $instance->_ref_module->mod_active) {
+		    $specs[$_class] = $instance->_spec->events;
+		  }
+		}
+		  
+		return $specs;
+	}
 
   function getSpec() {
     $spec = parent::getSpec();

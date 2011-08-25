@@ -112,8 +112,8 @@ class CConstantesMedicales extends CMbObject {
     ),
     "_imc"              => array(
       "unit" => "",
-      "min" => 15,
-      "max" => 40,
+      "min" => 12, "max" => 40,
+      "plot" => true,
     ),
     "temperature"       => array(
       "unit" => "°C", 

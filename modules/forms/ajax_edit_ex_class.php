@@ -72,17 +72,7 @@ if (!$ex_class->_id) {
   $classes = $instances;
 }*/
 
-$classes = CExClass::$_extendable_classes;
-$instances = array();
-
-foreach($classes as $_class) {
-	$instance = new $_class;
-  if (!empty($instance->_spec->events)) {
-    $instances[$_class] = $instance->_spec->events;
-  }
-}
-  
-$classes = $instances;
+$classes = CExClass::getExtendableSpecs();
 
 if (!$ex_class->_id) {
   $ex_class->disabled = 1;

@@ -917,9 +917,9 @@ table.active {
   -moz-border-radius: 6px;
   -webkit-border-radius: 6px;
   background-color: #eee;
-  -moz-box-shadow: 0 0 10px black;  
-  -wekit-box-shadow: 0 0 10px black;  
-  box-shadow: 0 0 10px black;
+  -moz-box-shadow: 0 0 15px rgba(0,0,0,0.7);  
+  -wekit-box-shadow: 0 0 15px rgba(0,0,0,0.7);  
+  box-shadow: 0 0 15px rgba(0,0,0,0.7);
 }
 
 .modal h1 {

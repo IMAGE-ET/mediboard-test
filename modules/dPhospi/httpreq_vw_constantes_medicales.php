@@ -186,7 +186,7 @@ $data      = array();
 $graphs    = array();
 
 foreach ($constants_to_draw as $name => $params) {
-  if ($name[0] === "_") continue;
+  if ($name[0] === "_" && empty($params["plot"])) continue;
   
   $data[$name] = $standard_struct;
   
@@ -220,20 +220,23 @@ if ($list_constantes) {
     $cst->loadLogs();
     
     foreach ($constants_to_draw as $name => $params) {
-      if ($name[0] === "_") continue;
+      if ($name[0] === "_" && empty($params["plot"])) continue;
       
       $d = &$data[$name];
 
       $user_view = "";
-      $log = $cst->loadLastLogForField($name);
-      if (!$log->_id && $cst->_ref_last_log) {
-        $log = $cst->_ref_last_log;
-      }
-      $log->loadRefsFwd();
-      
-      if ($log->_ref_user) {
-        $user_view = utf8_encode($log->_ref_user->_view);
-      }
+			
+			if ($name[0] !== "_") {
+	      $log = $cst->loadLastLogForField($name);
+	      if (!$log->_id && $cst->_ref_last_log) {
+	        $log = $cst->_ref_last_log;
+	      }
+	      $log->loadRefsFwd();
+	      
+	      if ($log->_ref_user) {
+	        $user_view = utf8_encode($log->_ref_user->_view);
+	      }
+			}
     
       // We push the values
       if (isset($params["formfields"])) {
