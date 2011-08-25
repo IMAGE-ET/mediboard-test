@@ -21,18 +21,18 @@ $ex_class->loadRefsNotes();
 // mise a jour des specs de l'unicité pour etre plus user friendly
 if ($ex_class->_id) {
 	$spec = $ex_class->_specs["unicity"];
-  $spec->_locales["host"] = CAppUI::tr($ex_class->host_class);
+  $spec->_locales["host"] = "Unique pour <strong>".CAppUI::tr($ex_class->host_class)."</strong>";
 	
 	$class_options = $ex_class->getHostClassOptions();
 	
-	foreach(array("reference1", "reference2") as $ref) {
+	/*foreach(array("reference1", "reference2") as $ref) {
 	  if (strpos($class_options[$ref][1], ".") === false) {
 	    $spec->_locales[$ref] = CAppUI::tr($ex_class->host_class."-".$class_options[$ref][1]);
 	  }
 	  else {
 	    $spec->_locales[$ref] = CAppUI::tr($class_options[$ref][0]);
 	  }
-	}
+	}*/
 }
 
 list($grid, $out_of_grid) = $ex_class->getGrid(4, 30, false);

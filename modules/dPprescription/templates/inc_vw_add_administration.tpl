@@ -157,10 +157,6 @@ chooseSubmit = function() {
 
 </script>
 
-{{*  
-{{mb_include module=forms template=inc_widget_ex_class_register object=$line event=administration cssStyle="float: right;"}}
-*}}
-
 <h2>
   Soins de {{$sejour->_ref_patient->_view}} 
   ({{if $sejour->_ref_patient->_ref_curr_affectation->_id}}

@@ -42,9 +42,9 @@ Main.add(function(){
                   <optgroup label="{{tr}}{{$_class}}{{/tr}}">
                     {{foreach from=$_events item=_params key=_event_name}}
                       <option value="{{$_class}}.{{$_event_name}}" 
-											        {{if $_class == $ex_class->host_class && $_event_name == $ex_class->event}} selected="selected" {{/if}}
-															{{if $_event_name == "administration"}} disabled="disabled" {{/if}}
-															>
+                              {{if $_class == $ex_class->host_class && $_event_name == $ex_class->event}} selected="selected" {{/if}}
+                              {{if $_event_name == "administration"}} disabled="disabled" {{/if}}
+                              >
                         {{tr}}{{$_class}}{{/tr}} - {{tr}}{{$_class}}-event-{{$_event_name}}{{/tr}}
                         {{if array_key_exists("multiple", $_params) && $_params.multiple}}
                           (multiple)
@@ -62,8 +62,8 @@ Main.add(function(){
             
             <th>{{mb_label object=$ex_class field=disabled}}</th>
             <td>{{mb_field object=$ex_class field=disabled typeEnum=checkbox}}</td>
-						
-						<td class="compact text" style="vertical-align: middle;">{{tr}}CExClass-disabled-desc{{/tr}}</td>
+            
+            <td class="compact text" style="vertical-align: middle;">{{tr}}CExClass-disabled-desc{{/tr}}</td>
           </tr>
           
           <tr>
@@ -76,29 +76,25 @@ Main.add(function(){
             <td class="compact text" style="vertical-align: middle;">{{tr}}CExClass-conditional-desc{{/tr}}</td>
           </tr>
           <tr>
-          	{{* 
             <th rowspan="2">{{mb_label object=$ex_class field=unicity}}</th>
             <td rowspan="2">
-            	{{if $ex_class->_id}}
-							  {{mb_field object=$ex_class field=unicity typeEnum=radio}}
-							{{else}}
-							  <div class="small-info">
-							  	Enregistrez le formulaire pour choisir son type d'unicité
-							  </div>
-							{{/if}}
-						</td>
-						 *}}
-             <th rowspan="2"></th>
-             <td rowspan="2"></td>
+              {{if $ex_class->_id}}
+                {{mb_field object=$ex_class field=unicity typeEnum=radio}}
+              {{else}}
+                <div class="small-info">
+                  Enregistrez le formulaire pour choisir son type d'unicité
+                </div>
+              {{/if}}
+            </td>
             
             <th>{{mb_label object=$ex_class field=required}}</th>
             <td>{{mb_field object=$ex_class field=required typeEnum=checkbox}}</td>
             
             <td class="compact text" style="vertical-align: middle;">{{tr}}CExClass-required-desc{{/tr}}</td>
           </tr>
-					
+          
           <tr>
-            <td colspan="3">
+            <td colspan="3" style="vertical-align: bottom;">
               {{if $ex_class->_id}}
                 <button type="submit" class="modify">{{tr}}Save{{/tr}}</button>
                 <button type="button" class="trash" onclick="confirmDeletion(this.form,{ajax:true,typeName:'{{tr}}CExClass.one{{/tr}}',objName:'{{$ex_class->_view|smarty:nodefaults|JSAttribute}}'})">
@@ -241,17 +237,17 @@ toggleGroupLabelEdit = function(link) {
                     {{/if}}
                     
                     {{assign var=_spec_type value=$_field->_spec_object->getSpecType()}}
-										
+                    
                     {{if in_array($_spec_type, "CExClassField"|static:_formula_valid_types) || 
-										     $_spec_type == "enum" || 
-												 $_spec_type == "date" || 
+                         $_spec_type == "enum" || 
+                         $_spec_type == "date" || 
                          $_spec_type == "datetime" || $_spec_type == "dateTime" || 
                          $_spec_type == "time"}} {{*  || $_spec_type == "set" *}}
                     <button class="right notext insert-formula" style="margin: -3px; margin-left: -1px; display: none;"
                             onclick="ExFormula.insertText('[{{$_field->_locale|smarty:nodefaults|JSAttribute}}]')">
                       {{tr}}CExClassField.add_to_formula{{/tr}}
                     </button>
-										{{/if}}
+                    {{/if}}
                   </span>
                   
                   <a href="#1" onclick="ExField.edit('{{$_field->_id}}', null, null, '{{$_group->_id}}')">

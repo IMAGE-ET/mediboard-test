@@ -48,7 +48,7 @@ var ExObjectForm = {
 	closeOnSuccess: function(id, obj) {
 	  ExObjectForm.updateId(id, obj);
 	  
-	  if (!(obj._ui_messages[2] || obj._ui_messages[3] || obj._ui_messages[4])) {
+	  if (!(obj._ui_messages[3] || obj._ui_messages[4])) { // warning ou error
 	    window.close();
 	  }
 	},
@@ -261,7 +261,7 @@ if (window.opener && !window.opener.closed && window.opener !== window && window
           <button class="modify" type="submit">{{tr}}Save{{/tr}}</button>
           
           {{if $forms_admin}}
-            <button type="button" class="trash" onclick="confirmDeletion(this.form,{ajax: true, typeName:'', objName:'{{$ex_object->_view|smarty:nodefaults|JSAttribute}}'})">
+            <button type="button" class="trash" onclick="confirmDeletion(this.form,{callback: onSubmitFormAjax.curry(this.form), typeName:'', objName:'{{$ex_object->_view|smarty:nodefaults|JSAttribute}}'})">
               {{tr}}Delete{{/tr}}
             </button>
           {{/if}}

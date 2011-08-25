@@ -114,7 +114,7 @@ Main.add(function(){
     left:0;
     bottom:0;
     right:0;
-		background: white;
+    background: white;
   }
   
   .grid .hostfield .field-name, 
@@ -131,14 +131,44 @@ Main.add(function(){
     padding: 6px;
   }
 
-	div.ex-message-title {
-	  font-weight: bold;
-	  border-bottom: 1px solid #666;
-	  font-size: 1.2em;
-	  /*left: 0.5em; 
-	  right: 0.5em; 
-	  position: absolute;*/
-	}
+  div.ex-message-title {
+    font-weight: bold;
+    border-bottom: 1px solid #666;
+    font-size: 1.2em;
+    /*left: 0.5em; 
+    right: 0.5em; 
+    position: absolute;*/
+  }
+  
+  table.cell-layout {
+    empty-cells: hide;
+    line-height: 10px;
+    font-family: monospace;
+    position: absolute;
+    right: 0;
+    top: -10px;
+  }
+  
+  table.cell-layout td {
+    padding: 0;
+  }
+  
+  table.cell-layout a {
+    display: inline;
+    cursor: pointer;
+  }
+  
+  table.cell-layout tr.middle {
+    line-height: 6px;
+  }
+  
+  div.cell-layout-wrapper {
+    display: none;
+  }
+  
+  .cell:hover div.cell-layout-wrapper {
+    /*display: block;*/
+  }
 </style>
 
 <ul class="control_tabs" id="field_groups_layout" style="font-size: 0.9em;">
@@ -164,45 +194,45 @@ Main.add(function(){
 <div id="group-layout-{{$groups.$_group_id->_guid}}" style="display: none;" class="group-layout">
   
 <div class="out-of-grid droppable">
-	<script type="text/javascript">
-	Main.add(function(){
-	  Control.Tabs.create("class-message-layout-tabs-{{$_group_id}}");
-	});
-	</script>
-	
-	<ul class="control_tabs" id="class-message-layout-tabs-{{$_group_id}}">
+  <script type="text/javascript">
+  Main.add(function(){
+    Control.Tabs.create("class-message-layout-tabs-{{$_group_id}}");
+  });
+  </script>
+  
+  <ul class="control_tabs" id="class-message-layout-tabs-{{$_group_id}}">
     <li>
       <a href="#outofgrid-class-fields-{{$_group_id}}">Champs</a>
     </li>
-		<li>
-			<a href="#outofgrid-hostfields-and-messages-{{$_group_id}}">Champs de {{tr}}{{$ex_class->host_class}}{{/tr}} / Messages</a>
-		</li>
-	</ul>
-	<hr class="control_tabs" />
-	
+    <li>
+      <a href="#outofgrid-hostfields-and-messages-{{$_group_id}}">Champs de {{tr}}{{$ex_class->host_class}}{{/tr}} / Messages</a>
+    </li>
+  </ul>
+  <hr class="control_tabs" />
+  
   <table class="main tbl" style="table-layout: fixed;">
-	  <!-- Fields -->
+    <!-- Fields -->
     <tbody id="outofgrid-class-fields-{{$_group_id}}" style="display: none;">
-	    <tr>
-	      <th>Libellés</th>
-	      <th>Champs</th>
-	    </tr>
-	    <tr>
-	      <td class="label-list" data-x="" data-y="" style="padding: 4px; height: 2em; vertical-align: top;">
-	        {{foreach from=$out_of_grid.$_group_id.label item=_field}}
-	          {{mb_include module=forms template=inc_ex_field_draggable _type="label" }}
-	        {{/foreach}}
-	      </td>
-	  
-	      <td class="field-list" data-x="" data-y="" style="padding: 4px; vertical-align: top;">
-	        {{foreach from=$out_of_grid.$_group_id.field item=_field}}
-	          {{mb_include module=forms template=inc_ex_field_draggable _type="field"}}
-	        {{/foreach}}
-	      </td>
-	    </tr>
+      <tr>
+        <th>Libellés</th>
+        <th>Champs</th>
+      </tr>
+      <tr>
+        <td class="label-list" data-x="" data-y="" style="padding: 4px; height: 2em; vertical-align: top;">
+          {{foreach from=$out_of_grid.$_group_id.label item=_field}}
+            {{mb_include module=forms template=inc_ex_field_draggable _type="label" }}
+          {{/foreach}}
+        </td>
+    
+        <td class="field-list" data-x="" data-y="" style="padding: 4px; vertical-align: top;">
+          {{foreach from=$out_of_grid.$_group_id.field item=_field}}
+            {{mb_include module=forms template=inc_ex_field_draggable _type="field"}}
+          {{/foreach}}
+        </td>
+      </tr>
     </tbody>
-		
-		<!-- Messages -->
+    
+    <!-- Messages -->
     <tbody id="outofgrid-hostfields-and-messages-{{$_group_id}}" style="display: none;">
       <tr>
         <th>
@@ -263,20 +293,43 @@ Main.add(function(){
   <tr>
     <th style="padding: 4px; width: 2em; text-align: right;">{{$_y}}</th>
     {{foreach from=$_line key=_x item=_group}}
-      <td style="border: 1px dotted #aaa; min-width: 2em; padding: 0;">
-			  <div class="droppable grid" data-x="{{$_x}}" data-y="{{$_y}}">
-	        {{if $_group.object}}
-	          {{if $_group.object instanceof CExClassField}}
-	            {{mb_include module=forms template=inc_ex_field_draggable _field=$_group.object _type=$_group.type}}
-	          {{elseif $_group.object instanceof CExClassHostField}}
-	            {{mb_include module=forms template=inc_ex_host_field_draggable _host_field=$_group.object ex_group_id=$_group_id _field=$_group.object->field _type=$_group.type}}
-	          {{else}}
+      <td style="border: 1px dotted #aaa; min-width: 2em; padding: 0;" class="cell">
+      
+        {{*
+        <div style="position: relative;" class="cell-layout-wrapper">
+          <table class="layout cell-layout">
+            <tr>
+              <td></td>
+              <td><a href="#">&#x25B2;</a><br /><a href="#">&#x25BC;</a></td>
+              <td></td>
+            </tr>
+            <tr class="middle">
+              <td><a href="#">&#x25C4;</a>&#x2005;<a href="#">&#x25BA;</a></td>
+              <td></td>
+              <td><a href="#">&#x25C4;</a>&#x2005;<a href="#">&#x25BA;</a></td>
+            </tr>
+            <tr>
+              <td></td>
+              <td><a href="#">&#x25B2;<br /><a href="#">&#x25BC;</a></td>
+              <td></td>
+            </tr>
+          </table>
+        </div>
+        *}}
+      
+        <div class="droppable grid" data-x="{{$_x}}" data-y="{{$_y}}">
+          {{if $_group.object}}
+            {{if $_group.object instanceof CExClassField}}
+              {{mb_include module=forms template=inc_ex_field_draggable _field=$_group.object _type=$_group.type}}
+            {{elseif $_group.object instanceof CExClassHostField}}
+              {{mb_include module=forms template=inc_ex_host_field_draggable _host_field=$_group.object ex_group_id=$_group_id _field=$_group.object->field _type=$_group.type}}
+            {{else}}
               {{mb_include module=forms template=inc_ex_message_draggable _field=$_group.object ex_group_id=$_group_id _type=$_group.type}}
             {{/if}}
-					{{else}}
-					  &nbsp;
-	        {{/if}}
-				</div>
+          {{else}}
+            &nbsp;
+          {{/if}}
+        </div>
       </td>
     {{/foreach}}
   </tr>

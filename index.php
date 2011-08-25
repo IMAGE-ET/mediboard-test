@@ -49,7 +49,6 @@ require "./includes/config_all.php";
 $rootName = basename($dPconfig["root_dir"]);
 
 require "./includes/version.php";
-require "./classes/SHM.class.php";
 
 // PHP Configuration
 foreach ($dPconfig["php"] as $key => $value) {
@@ -73,6 +72,7 @@ if (!is_file($dPconfig["root_dir"]."/includes/config.php")) {
   die("ERREUR FATALE: Le répertoire racine est probablement mal configuré");
 }
 
+require "./classes/SHM.class.php";
 require "./includes/mb_functions.php";
 require "./includes/errors.php";
 

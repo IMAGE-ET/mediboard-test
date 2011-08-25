@@ -26,8 +26,8 @@ class CExClass extends CMbObject {
   var $_fields_by_name = null;
   var $_host_class_fields = null;
   var $_host_class_options = null;
-	
-	static $_groups_cache = array();
+  
+  static $_groups_cache = array();
   
   static $_extendable_classes = array(
     "CPrescriptionLineElement",
@@ -54,7 +54,7 @@ class CExClass extends CMbObject {
     $props["disabled"]   = "bool notNull default|1";
     $props["conditional"]= "bool notNull default|0";
     $props["required"]   = "bool notNull default|0";
-    $props["unicity"]    = "enum notNull list|no|host|reference1|reference2 default|no vertical";
+    $props["unicity"]    = "enum notNull list|no|host default|no vertical"; //"enum notNull list|no|host|reference1|reference2 default|no vertical";
     return $props;
   }
 
@@ -73,10 +73,53 @@ class CExClass extends CMbObject {
     return $this->_host_class_options = $object->_spec->events[$this->event];
   }
   
-  function getLatestExObject(CMbObject $object, $level = 1){
+  /**
+   * Returns an instance of CExObject which corresponds to the unicity
+   * @param CMbObject $host
+   * @return CExObject
+   */
+  function getExObjectForHostObject(CMbObject $host) {
+    $this->completeField("disabled", "unicity");
+    
+    $existing = $this->loadExObjects($host, $ex_object);
+    $disabled = $this->disabled || !$this->checkConstraints($host);
+    $level = 1;
+    
+    switch($this->unicity) {
+      case "no":
+        if (!$disabled) {
+          array_unshift($existing, $ex_object);
+        }
+        
+        return $existing;
+        
+      case "host":
+        if (count($existing)) {
+          return $existing;
+        }
+        
+        if (!$disabled) {
+          return array($ex_object);
+        }
+        /*
+      case "reference2": $level++;
+      case "reference1": 
+        $reference_object = $this->resolveReferenceObject($host, $level);
+        return array($this->getLatestExObject($reference_object, $level));*/
+    }
+    
+    return array();
+  }
+  
+  function getExObjectInstance(){
     $ex_object = new CExObject;
     $ex_object->_ex_class_id = $this->_id;
     $ex_object->setExClass();
+    return $ex_object;
+  }
+  
+  function getLatestExObject(CMbObject $object, $level = 1){
+    $ex_object = $this->getExObjectInstance();
 
     if ($level == 1) {
       $where = array(
@@ -400,7 +443,7 @@ class CExClass extends CMbObject {
     return $list;
   }
   
-  function loadExObjects(CMbObject $object) {
+  function loadExObjects(CMbObject $object, &$ex_object = null) {
     $ex_object = new CExObject;
     $ex_object->_ex_class_id = $this->_id;
     $ex_object->loadRefExClass();
