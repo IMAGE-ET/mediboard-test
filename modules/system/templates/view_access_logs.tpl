@@ -135,7 +135,11 @@ Main.add(function () {
       </div>
     </form>
   </th>
-  <td><button class="search" type="button" onclick="AccessLog.crazyLogs('find')";>Logs douteux</button></td>
+  <td>
+    {{if $can->admin}}
+    <button class="search" type="button" onclick="AccessLog.crazyLogs('find')";>Logs douteux</button>
+    {{/if}}
+  </td>
 </tr>
 
 <tr>
