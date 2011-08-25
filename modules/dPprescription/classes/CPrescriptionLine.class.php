@@ -763,7 +763,7 @@ class CPrescriptionLine extends CMbObject implements IPatientRelated {
     }
 		
 		// Pre-remplissage du plan de soins avec les planifs systemes pour les lignes ne possedant pas de posologie
-		if($with_calcul && $this instanceof CPrescriptionLineElement){
+		if($with_calcul && $this instanceof CPrescriptionLineElement && count($this->_ref_prises) == 0){
 			$chapitre = $this->_ref_element_prescription->_ref_category_prescription->chapitre;
       $line_plan_soin =& $this->_quantity_by_date["aucune_prise"][$date]['quantites'];
       
