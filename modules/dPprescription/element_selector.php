@@ -12,7 +12,7 @@ $group = CGroups::loadCurrent();
 
 $type = CValue::get("type");
 $libelle = CValue::get("libelle");
-$user_id = CValue::get("user_id");
+$user_id = CValue::getOrSession("user_id");
 
 if(!$libelle){
   $libelle = '%';

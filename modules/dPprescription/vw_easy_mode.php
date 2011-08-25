@@ -8,6 +8,22 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
  */
 
+$user_id = CValue::getOrSession("user_id");
+
+$where = array();
+if($user_id){
+  $user = new CMediusers();
+  $user->load($user_id);
+  
+  if($user->isInfirmiere()){
+    $where["prescriptible_infirmiere"] = " = '1'";
+  } elseif ($user->isAideSoignant()){
+    $where["prescriptible_AS"] = " = '1'";
+  } elseif ($user->isKine()){
+    $where["prescriptible_kine"] = " = '1'";
+  }
+}
+
 // chargement des categories de prescription et des elements associés
 $chapitres = CCategoryPrescription::loadCategoriesByChap(null, "current");
 foreach($chapitres as &$categories){
@@ -15,7 +31,7 @@ foreach($chapitres as &$categories){
 	  if ($category->only_cible) {
 	    unset($categories[$key]); continue;
 	  }
-		$category->loadElementsPrescription(false);
+		$category->loadElementsPrescription(false, $where);
 	}
 }
 

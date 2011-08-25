@@ -141,6 +141,9 @@ viewEasyMode = function(mode_protocole, mode_pharma, chapitre){
   url.addParam("mode_protocole", mode_protocole);
   url.addParam("mode_pharma", mode_pharma);
   url.addParam("chapitre", chapitre);
+	{{if !$is_praticien && !$operation_id}}
+  url.addParam("user_id", $V(getForm("addLineElement").praticien_id));
+  {{/if}}
   url.popup(900,500,"Mode grille");
 }
 
