@@ -295,12 +295,12 @@
 		  <td>
 		  	<input type="text" name="_patient_view" style="width: 15em;" value="{{$patient->_view}}" 
 		  	  {{if $conf.dPurgences.allow_change_patient || !$sejour->_id || $app->user_type == 1}} 
-		  	    ondblclick="PatSelector.init()" 
+		  	    onfocus="PatSelector.init()" 
 		  	  {{/if}}
 		  	readonly="readonly" />
 		    
 		    {{if $conf.dPurgences.allow_change_patient || !$sejour->_id || $app->user_type == 1}} 
-		      <button type="button" class="search notext" onfocus="PatSelector.init()">{{tr}}Search{{/tr}}</button>
+		      <button type="button" class="search notext" onclick="PatSelector.init()">{{tr}}Search{{/tr}}</button>
 		    {{/if}}
 		    <script type="text/javascript">
 		      PatSelector.init = function(){
