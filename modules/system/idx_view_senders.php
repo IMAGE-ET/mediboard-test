@@ -8,7 +8,7 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
  */
 
-CCanDo::checkRead();
+CCanDo::checkEdit();
 
 // Création du template
 $smarty = new CSmartyDP();

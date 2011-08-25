@@ -8,7 +8,7 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
  */
 
-CCanDo::checkAdmin();
+CCanDo::checkEdit();
 
 $module = CValue::getOrSession("module" , "admin");
 

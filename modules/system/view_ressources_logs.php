@@ -8,7 +8,7 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
  */
 
-CCanDo::checkAdmin();
+CCanDo::checkRead();
 
 $date     = CValue::getOrSession("date"    , mbDate());
 $groupres = CValue::getOrSession("groupres", 1);

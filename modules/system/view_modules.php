@@ -10,7 +10,7 @@
 
 global $m;
 
-CCanDo::checkEdit();
+CCanDo::checkAdmin();
 
 require_once("install/libs.php");
 

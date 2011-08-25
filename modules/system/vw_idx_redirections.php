@@ -8,7 +8,7 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
  */
 
-CCanDo::checkRead();
+CCanDo::checkAdmin();
 
 $http_redirection_id = CValue::getOrSession("http_redirection_id");
 
