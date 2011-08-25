@@ -256,7 +256,7 @@
 	  <tr>
 	    <th>{{mb_label object=$rpu field="_responsable_id"}}</th>
 	    <td>
-	      <select name="_responsable_id" class="{{$rpu->_props._responsable_id}}">
+	      <select name="_responsable_id" style="width: 15em;" class="{{$rpu->_props._responsable_id}}">
 	        <option value="">&mdash; Choisir un responsable</option>
 	        {{foreach from=$listResponsables item=curr_user}}
 	        <option value="{{$curr_user->_id}}" class="mediuser" style="border-color: #{{$curr_user->_ref_function->color}}" {{if $curr_user->_id == $rpu->_responsable_id}}selected="selected"{{/if}}>
@@ -267,7 +267,7 @@
 	    </td>
 	    
 	    <th>{{mb_label object=$rpu field="mode_entree"}}</th>
-	    <td>{{mb_field object=$rpu field="mode_entree" defaultOption="&mdash; Mode d'entrée" onchange="ContraintesRPU.updateProvenance(this.value, true); changeModeEntree(this.value)"}}</td>
+	    <td>{{mb_field object=$rpu field="mode_entree" style="width: 15em;" defaultOption="&mdash; Mode d'entrée" onchange="ContraintesRPU.updateProvenance(this.value, true); changeModeEntree(this.value)"}}</td>
 	  </tr>
 	  
 	  <tr>
@@ -278,7 +278,7 @@
 			<td>
 				<input type="hidden" name="group_id" value="{{$g}}" />
 				<div id="etablissement_entree_transfert" {{if !$rpu->_etablissement_entree_transfert_id}}style="display:none"{{/if}}>
-          {{mb_field object=$rpu field="_etablissement_entree_transfert_id" form="editRPU" autocomplete="true,1,50,true,true"}}
+          {{mb_field object=$rpu field="_etablissement_entree_transfert_id" form="editRPU" style="width: 12em;" autocomplete="true,1,50,true,true"}}
         </div>
         <div id="service_entree_mutation" {{if !$rpu->_service_entree_mutation_id}}style="display:none"{{/if}}>
           {{mb_field object=$rpu field="_service_entree_mutation_id" form="editRPU" autocomplete="true,1,50,true,true"}}
@@ -293,14 +293,14 @@
 		    {{mb_label object=$rpu field="_patient_id"}}
 		  </th>
 		  <td>
-		  	<input type="text" name="_patient_view" size="20" value="{{$patient->_view}}" 
+		  	<input type="text" name="_patient_view" style="width: 15em;" value="{{$patient->_view}}" 
 		  	  {{if $conf.dPurgences.allow_change_patient || !$sejour->_id || $app->user_type == 1}} 
 		  	    ondblclick="PatSelector.init()" 
 		  	  {{/if}}
 		  	readonly="readonly" />
 		    
 		    {{if $conf.dPurgences.allow_change_patient || !$sejour->_id || $app->user_type == 1}} 
-		      <button type="button" class="search" onclick="PatSelector.init()">{{tr}}Search{{/tr}}</button>
+		      <button type="button" class="search notext" onfocus="PatSelector.init()">{{tr}}Search{{/tr}}</button>
 		    {{/if}}
 		    <script type="text/javascript">
 		      PatSelector.init = function(){
@@ -311,7 +311,7 @@
 		      }
 		    </script>
 				{{if $patient->_id}}
-        <button id="button-edit-patient" type="button" class="edit"
+        <button id="button-edit-patient" type="button" class="edit notext"
           onclick="location.href='?m=dPpatients&amp;tab=vw_edit_patients&amp;patient_id='+this.form._patient_id.value" 
         >
           {{tr}}Edit{{/tr}}
@@ -322,30 +322,30 @@
 	    
 	    {{if $conf.dPurgences.old_rpu == "1"}}
 	    <th>{{mb_label object=$rpu field="urprov"}}</th>
-	    <td>{{mb_field object=$rpu field="urprov" defaultOption="&mdash; Provenance"}}</td>
+	    <td>{{mb_field object=$rpu field="urprov" defaultOption="&mdash; Provenance" style="width: 15em;"}}</td>
 	    {{else}}
 	    <th>{{mb_label object=$rpu field="provenance"}}</th>
-	    <td>{{mb_field object=$rpu field="provenance" defaultOption="&mdash; Provenance"}}</td>
+	    <td>{{mb_field object=$rpu field="provenance" defaultOption="&mdash; Provenance" style="width: 15em;"}}</td>
 	    {{/if}}
 	  </tr>
 	  
 	  <tr>
 		  {{if $can->edit}}
 	    <th>{{mb_label object=$rpu field="ccmu"}}</th>
-	    <td>{{mb_field object=$rpu field="ccmu" defaultOption="&mdash; Code CCMU"}}</td>
+	    <td>{{mb_field object=$rpu field="ccmu" defaultOption="&mdash; Code CCMU" style="width: 15em;"}}</td>
 			{{else}}
 			<th></th>
 	    <td></td>
 		  {{/if}}
 		  <th>{{mb_label object=$rpu field="transport"}}</th>
-	    <td>{{mb_field object=$rpu field="transport" defaultOption="&mdash; Type de transport"}}</td>
+	    <td>{{mb_field object=$rpu field="transport" defaultOption="&mdash; Type de transport" style="width: 15em;"}}</td>
 	  </tr>
 	  
 	   <!-- Selection du service -->
 	  <tr>
 	    <td colspan="2"></td>
 		  <th>{{mb_label object=$rpu field="pec_transport"}}</th>
-	    <td>{{mb_field object=$rpu field="pec_transport" defaultOption="&mdash; Prise en charge"}}</td>
+	    <td>{{mb_field object=$rpu field="pec_transport" defaultOption="&mdash; Prise en charge" style="width: 15em;"}}</td>
       </tr>
 	
 	  <tr>
