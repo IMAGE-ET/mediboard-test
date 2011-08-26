@@ -160,7 +160,7 @@ Main.add(function () {
   {{assign var=date value=""}}
   {{foreach from=$trans_and_obs item=_objects_by_date}}
 	  {{foreach from=$_objects_by_date item=_object}}
-		  <tr id="{{$_object->_guid}}" {{if $_object instanceof CTransmissionMedicale}}class="{{$_object->_cible}}"{{/if}}>
+		  <tr id="{{if $_object|is_array}} {{$_object.0->_guid}}{{else}}{{$_object.0->_guid}}{{/if}}" {{if $_object instanceof CTransmissionMedicale}}class="{{$_object->_cible}}"{{/if}}>
 			{{include file=../../dPhospi/templates/inc_line_suivi.tpl 
 				_suivi=$_object
 				show_patient=true

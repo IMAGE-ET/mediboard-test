@@ -83,8 +83,7 @@ foreach($transmissions as $_transmission){
 	}
   $_transmission->calculCibles($cibles);
   
-
-  $trans_and_obs[$key][$_transmission->_id] = $_transmission;
+  $trans_and_obs[$key][$_transmission->_id] = array($_transmission);
 }
 
 foreach($observations as $_observation){
