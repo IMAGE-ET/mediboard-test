@@ -31,6 +31,7 @@ $locales['config-soins-transmissions_hours'] = 'Intervalle d\'affichage des tran
 $locales['config-soins-transmissions_hours-desc'] = 'Intervalle d\'affichage des transmissions';
 $locales['mod-brancardage-tab-ajax_edit_brancardage'] = 'Formulaire de brancardage';
 $locales['mod-brancardage-tab-ajax_prefiltre_brancardage'] = 'Formulaire de brancardage';
+$locales['mod-brancardage-tab-vw_jumelles_brancardage'] = 'Vue brancardage du patient';
 $locales['mod-soins-tab-ajax_calcul_debit'] = 'Calcul des débits';
 $locales['mod-soins-tab-ajax_modal_task'] = 'Tâche';
 $locales['mod-soins-tab-configure'] = 'Configurer';

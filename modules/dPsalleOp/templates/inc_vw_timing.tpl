@@ -16,17 +16,16 @@
   {{assign var=form value=timing$opid}}
   <tr>
   	{{if @$modules.brancardage->_can->read}}
-  <option type="hidden" value="0" id="patientpaspret"></option>
-  	<td id="demandebrancard" >
-            <option type="hidden" value="{{$opid}}" id="opid"></option>
-            <option type="hidden" value="{{$selOp->sejour_id}}" id="sejour_id"></option>
-            <option type="hidden" value="{{$selOp->salle_id}}" id="salle_id"></option>
-            <button type="button" class="submit" onclick="CreationBrancard.demandeBrancard('{{$selOp->sejour_id}}','{{$salle}}', '{{$opid}}');" >
-              Demande Brancardage
-          </button>
-      </td>
-       
-     {{mb_script module=brancardage script=creation_brancardage ajax=true}}
+	    <input type="hidden" name="patientpaspret" value="0" id="patientpaspret" />
+	  	<td id="demandebrancard" >
+		    <input type="hidden" name="opid" value="{{$opid}}" id="opid" />
+		    <input type="hidden" name="sejour_id" value="{{$selOp->sejour_id}}" id="sejour_id" />
+		    <input type="hidden" name="salle_id" value="{{$selOp->salle_id}}" id="salle_id" />
+		    <button type="button" class="submit" onclick="CreationBrancard.demandeBrancard('{{$selOp->sejour_id}}','{{$selOp->salle_id}}', '{{$opid}}');" >
+		      Demande Brancardage
+	      </button>
+	    </td>
+	    {{mb_script module=brancardage script=creation_brancardage ajax=true}}
     {{/if}}
     
     {{include file=inc_field_timing.tpl object=$selOp field=entree_salle}}

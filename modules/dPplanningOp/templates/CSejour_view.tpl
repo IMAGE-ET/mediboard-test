@@ -52,15 +52,14 @@
       </button>
       {{/if}}
 	  
-	  
-  	  {{if @$modules.brancardage->_can->read}}
+      {{if @$modules.brancardage->_can->read}}
         {{mb_script module=brancardage script=creation_brancardage ajax=true}}
         <br />
-        <button type="button" class="edit" onclick="CreationBrancard.edit('{{$sejour->_id}}');">
-            {{tr}}module-Brancardage-long{{/tr}}{{$date}}
+        <button type="button" class="edit" onclick="CreationBrancard.edit('{{$sejour->_id}}');" style="width:80px;">
+        {{tr}}module-Brancardage-long{{/tr}}
         </button>
       {{/if}}
-	 	  
+			
     </td>
   </tr>
 </table>
