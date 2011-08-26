@@ -943,6 +943,7 @@ table.active {
 
 .modal.popup > .title,
 .modal.popup > button.cancel,
+.modal.popup > button.close,
 .modal.popup > button.change {
   position: absolute; 
   top: -20px;
@@ -958,7 +959,8 @@ table.active {
   -webkit-border-radius: 5px;
 }
 
-.modal.popup > button.cancel {
+.modal.popup > button.cancel,
+.modal.popup > button.close {
   right: -15px;
 }
 
