@@ -449,7 +449,7 @@ Main.add( function(){
 				{{/if}}
 				
 				<li>
-				<button type="button" onclick="$$('body')[0].insert($('modal-outils')); modalWindowTools = modal($('modal-outils'));" class="search">
+				<button type="button" onclick="modalWindowTools = modal($('modal-outils'));" class="search">
 					Outils
 				</button>
 				{{if !$prescription->_protocole_locked}}
