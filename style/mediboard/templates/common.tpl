@@ -59,7 +59,7 @@
           config: {
             log_js_errors: {{if $conf.log_js_errors}}true{{else}}false{{/if}}
           },
-          readonly: "{{$conf.readonly}}" == 1 && User.id
+          readonly: "{{$conf.readonly}}" == 1 && User.id != null
         };
     
     var Mediboard = {{$version|@json}};
