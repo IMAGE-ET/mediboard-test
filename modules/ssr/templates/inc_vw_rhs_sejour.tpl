@@ -77,7 +77,7 @@
 		      <span onmouseover="ObjectTooltip.createEx(this, '{{$_sejour->_guid}}');">
 		       {{mb_include module=dPplanningOp template=inc_vw_numdos num_dossier=$_sejour->_num_dossier}}
 		      </span>
-		      <div style="opacity: 0.6;">
+		      <div class="opacity-60">
 		       {{mb_value object=$_sejour field=service_id}}
 		      </div>
 		    </td>

@@ -1110,3 +1110,15 @@ span.countertip {
   width: 10px;
 	text-align: center;
 }
+
+.text-block {
+	border: 1px solid #e6e6e6; 
+	padding: 4px; 
+	background:rgba(255,255,255, 0.4); 
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr=#66FFFFFF,endColorstr=#66FFFFFF); 
+  -ms-filter: "progid:DXImageTransform.Microsoft.gradient(startColorstr=#66FFFFFF,endColorstr=#66FFFFFF)"; 
+	zoom: 1;
+  -webkit-border-radius: 4px;
+  -moz-border-radius: 4px;
+  border-radius: 4px; 
+}

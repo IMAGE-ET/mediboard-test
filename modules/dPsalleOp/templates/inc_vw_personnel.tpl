@@ -94,7 +94,7 @@ submitPersonnel = function(oForm){
       <tr>
       	<td style="width: 40%;" class="text">{{mb_include module=mediusers template=inc_vw_mediuser mediuser=$affectation->_ref_personnel->_ref_user}}
 				<br />
-				<span style="opacity: 0.6">{{tr}}CPersonnel.emplacement.{{$affectation->_ref_personnel->emplacement}}{{/tr}}</span>
+				<span class="opacity-60">{{tr}}CPersonnel.emplacement.{{$affectation->_ref_personnel->emplacement}}{{/tr}}</span>
 				</td>
 			  {{include file=inc_field_timing.tpl object=$affectation field=_debut}}
 			  {{include file=inc_field_timing.tpl object=$affectation field=_fin}}
@@ -128,7 +128,7 @@ submitPersonnel = function(oForm){
       	<td style="width: 40%;" class="text">
 					{{mb_include module=mediusers template=inc_vw_mediuser mediuser=$affectation->_ref_personnel->_ref_user}}
 					<br />
-					<span style="opacity: 0.6">
+					<span class="opacity-60">
             {{tr}}CPersonnel.emplacement.{{$affectation->_ref_personnel->emplacement}}{{/tr}}
           </span>
       	</td>

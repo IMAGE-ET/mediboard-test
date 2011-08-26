@@ -249,6 +249,13 @@ function smarty_modifier_static($object, $name) {
   return $static;
 }
 
+function smarty_modifier_static_call($callback, $args) {
+	$args = func_get_args();
+	$callback = array_shift($args);
+	$callback = explode("::", $callback);
+  return call_user_func_array($callback, $args);
+}
+
 /**
  * @abstract True if the module is installed
  * Example:  {"dPfiles"|module_installed}
@@ -721,6 +728,7 @@ class CSmartyDP extends Smarty {
     $this->register_modifier("iso_datetime"      , "smarty_modifier_iso_datetime");
     $this->register_modifier("const"             , "smarty_modifier_const");
     $this->register_modifier("static"            , "smarty_modifier_static");
+    $this->register_modifier("static_call"       , "smarty_modifier_static_call");
     $this->register_modifier("cleanField"        , "smarty_modifier_cleanField");
     $this->register_modifier("stripslashes"      , "smarty_modifier_stripslashes");
     $this->register_modifier("emphasize"         , "smarty_modifier_emphasize");

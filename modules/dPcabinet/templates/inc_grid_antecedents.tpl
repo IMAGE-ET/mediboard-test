@@ -134,7 +134,8 @@ Main.add(function () {
 		            {{else}}
 		              {{assign var=checked value=0}}
 		            {{/if}}
-			          <td class="text" style="cursor: pointer; width: {{$width}}%; {{if $checked}}opacity: 0.3; cursor: default;{{/if}}" 
+			          <td class="text {{if $checked}}opacity-30{{/if}}" 
+								    style="cursor: pointer; width: {{$width}}%; {{if $checked}}cursor: default;{{/if}}" 
 			              title="{{$curr_aide->text|smarty:nodefaults|JSAttribute}}">
 			            <label>
 			            	<input type="checkbox" {{if $checked}}checked="checked" disabled="disabled"{{/if}} 

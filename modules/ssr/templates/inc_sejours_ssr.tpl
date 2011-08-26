@@ -167,7 +167,7 @@ printOffline = function(element) {
       </span>
 
       {{assign var=bilan value=$_sejour->_ref_bilan_ssr}}
-			<div style="opacity: 0.6;">
+			<div class="opacity-60">
 			  {{if $bilan->hospit_de_jour}} 
           <img style="float: right;" title="{{mb_value object=$bilan field=_demi_journees}}" src="modules/ssr/images/dj-{{$bilan->_demi_journees}}.png" />
 			  {{/if}}

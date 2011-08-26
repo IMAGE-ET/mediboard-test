@@ -366,19 +366,23 @@ function switchMode(){
 	      {{if $_group.object}}
 	        {{if $_group.object instanceof CExClassField}}
 	          {{assign var=_field value=$_group.object}}
+						{{assign var=_field_name value=$_field->name}}
+						
 	          {{if $_group.type == "label"}}
 	            {{if $_field->coord_field_x == $_field->coord_label_x+1}}
 	              <th style="font-weight: bold; vertical-align: middle; white-space: normal;">
-	                {{mb_label object=$ex_object field=$_field->name}}
+	                {{mb_label object=$ex_object field=$_field_name}}
 	              </th>
 	            {{else}}
 	              <td style="font-weight: bold; text-align: left;">
-	                {{mb_label object=$ex_object field=$_field->name}}
+	                {{mb_label object=$ex_object field=$_field_name}}
 	              </td>
 	            {{/if}}
 	          {{elseif $_group.type == "field"}}
 	            <td>
-	              {{mb_value object=$ex_object field=$_field->name}}
+	            	<div {{if $ex_object->_specs.$_field_name instanceof CTextSpec}} style="text-block" {{/if}}
+	                {{mb_value object=$ex_object field=$_field_name}}
+								</div>
 	            </td>
 	          {{/if}}
 	        {{elseif $_group.object instanceof CExClassHostField}}
@@ -437,7 +441,9 @@ function switchMode(){
 	          {{mb_label object=$ex_object field=$_field_name}}
 	        </th>
 	        <td colspan="2">
-	          {{mb_value object=$ex_object field=$_field_name}}
+	        	<div {{if $ex_object->_specs.$_field_name instanceof CTextSpec}} class="text-block" {{/if}}>
+	            {{mb_value object=$ex_object field=$_field_name}}
+						</div>
 	        </td>
 	      </tr>
 	    {{/if}}

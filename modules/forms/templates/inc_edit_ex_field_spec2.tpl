@@ -334,7 +334,7 @@ Main.add(function(){
 </table>
 
 <div class="small-info" style="display: none;" id="save-to-take-effect">
-  <strong>Enregistrez</strong> pour que la modifiation prenne effet
+  <strong>Enregistrez</strong> pour que la modification prenne effet
 </div>
 
 {{if $spec instanceof CEnumSpec && $context && $context->_id}}

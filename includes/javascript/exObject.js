@@ -143,6 +143,7 @@ ExObjectFormula = {
   
   init: function(tokenData) {
     ExObjectFormula.tokenData = tokenData;
+		var allFields = Object.keys(ExObjectFormula.tokenData);
     
     $H(ExObjectFormula.tokenData).each(function(token){
       var field = token.key;
@@ -150,27 +151,53 @@ ExObjectFormula = {
       var formula = data.formula;
       
       if (!formula) return;
-  
-      formula = formula.replace(/[\[\]]/g, "");
       
       var form = getForm("editExObject");
       var fieldElement = form[field];
+      var compute, variables = [];
       
-      try {
-        var expr = ExObjectFormula.parser.parse(formula);
-        var variables = expr.variables();
+      // concatenation
+      if (fieldElement.hasClassName("text")) {
+        fieldElement.value = formula;
+        
+				allFields.each(function(v){
+					if (formula.indexOf("["+v+"]") != -1) {
+						variables.push(v);
+					}
+				});
+				
+        expr = {
+					evaluate: (function(formula, values) {
+						var result = formula;
+						
+						$H(values).each(function(pair){
+							result = result.replace(new RegExp("(\\["+pair.key+"\\])", "g"), pair.value);
+						});
+						
+						return result;
+					}).curry(formula)
+				};
       }
-      catch(e) {
-        fieldElement.insert({after: DOM.div({className: 'small-error'}, "Formule invalide: <br /><strong>"+data.formulaView+"</strong>")});
-        return;
+      
+      // arithmetic
+      else {
+        formula = formula.replace(/[\[\]]/g, "");
+        
+        try {
+          var expr = ExObjectFormula.parser.parse(formula);
+          variables = expr.variables();
+        }
+        catch(e) {
+          fieldElement.insert({after: DOM.div({className: 'small-error'}, "Formule invalide: <br /><strong>"+data.formulaView+"</strong>")});
+          return;
+        }
       }
-  
+    
       ExObjectFormula.tokenData[field].parser = expr;
       ExObjectFormula.tokenData[field].variables = variables;
   
-      function compute(target) {
-        ExObjectFormula.computeResult(target);
-      }
+      compute = ExObjectFormula.computeResult.curry(fieldElement);
+      compute();
       
       variables.each(function(v){
         if (!form[v]) return;
@@ -179,18 +206,15 @@ ExObjectFormula = {
         
         inputs.each(function(input){
           if (input.hasClassName("date") || input.hasClassName("dateTime") || input.hasClassName("time")) {
-            input.onchange = compute.curry(fieldElement);
+            input.onchange = compute;
           }
           else {
-            var callback = compute.curry(fieldElement);
-            input.observe("change", callback)
-                 .observe("ui:change", callback)
-                 .observe("click", callback);
+            input.observe("change", compute)
+                 .observe("ui:change", compute)
+                 .observe("click", compute);
           }
         });
       });
-      
-      ExObjectFormula.computeResult(fieldElement);
     });
   },
   
@@ -234,6 +258,8 @@ ExObjectFormula = {
   //computes the result of a form + exGroup(formula, resultField)
   computeResult: function(target){
     var data = ExObjectFormula.tokenData[target.name];
+    if (!data) return;
+    
     var form = target.form;
     
     var date = (new Date());
@@ -252,14 +278,15 @@ ExObjectFormula = {
       DateHeureCourante: now
     };
     var values = {};
+		var isConcat = target.hasClassName("text");
 
     data.variables.each(function(v){
       values[v] = constants[v] || ExObjectFormula.getInputValue(form[v]);
-      if (values[v] === "") values[v] = NaN;
+      if (!isConcat && values[v] === "") values[v] = NaN;
     });
   
     var result = data.parser.evaluate(values);
-    if (!isFinite(result)) {
+    if (!isConcat && !isFinite(result)) {
       result = "";
     }
     else {
@@ -269,7 +296,12 @@ ExObjectFormula = {
       }
     }
     
-    $V(target, (result+""));
+		result += "";
+    $V(target, result);
+    
+    if (isConcat) {
+      target.rows = result.split("\n").length;
+    }
   }
 };
 

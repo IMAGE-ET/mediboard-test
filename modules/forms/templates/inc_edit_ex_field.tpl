@@ -44,24 +44,33 @@ Main.add(function(){
   toggleListCustom.defer(form);
   form.elements._locale.select();
 
-  {{if $ex_field->_id && in_array($ex_field->_spec_object->getSpecType(), "CExClassField"|static:_formula_valid_types)}}
-    ExFormula.edit(field_id);
-	{{/if}}
+  {{assign var=_can_formula_arithmetic value=false}}
+  {{assign var=_can_formula_concat value=false}}
+		
+  {{if $ex_field->_id}}
+    {{assign var=_spec_type value=$ex_field->_spec_object->getSpecType()}}
+    {{assign var=_can_formula_arithmetic value="CExClassField::formulaCanArithmetic"|static_call:$_spec_type}}
+    {{assign var=_can_formula_concat value="CExClassField::formulaCanConcat"|static_call:$_spec_type}}
+    
+    {{if $_can_formula_arithmetic || $_can_formula_concat}}
+      ExFormula.edit(field_id);
+    {{/if}}
+  {{/if}}
 
   new Control.Tabs("ExClassField-param", {
     afterChange: function(newContainer){
-      ExFormula.toggleInsertButtons(newContainer.id == "fieldFormulaEditor");
+      ExFormula.toggleInsertButtons(newContainer.id == "fieldFormulaEditor", "{{$_can_formula_arithmetic|ternary:'arithmetic':'concat'}}");
     }
   });
   
   // highlight current field
   $$("tr.ex-class-field.selected").invoke("removeClassName", "selected");
-	
-	var selected = $$("tr.ex-class-field[data-ex_class_field_id='{{$ex_field->_id}}']");
-	
-	if (selected.length) {
-	  selected[0].addClassName("selected");
-	}
+  
+  var selected = $$("tr.ex-class-field[data-ex_class_field_id='{{$ex_field->_id}}']");
+  
+  if (selected.length) {
+    selected[0].addClassName("selected");
+  }
 });
 </script>
 
@@ -186,35 +195,35 @@ Main.add(function(){
       <th>Report de valeur</th>
       <td>
         {{assign var=class_options value=$ex_field->_ref_ex_group->_ref_ex_class->_host_class_options}}
-			
-				{{if $ex_field->_id}}
-	        <label><input type="radio" name="report_level" value="" {{if $ex_field->report_level == ""}}  checked="checked" {{/if}} /> Aucun </label>
-					{{assign var=_host_class value=$ex_field->_ref_ex_group->_ref_ex_class->host_class}}
-					
-					{{if $class_options.reference1.0}}
-	          <label>
-	          	<input type="radio" name="report_level" value="1" {{if $ex_field->report_level == "1"}} checked="checked" {{/if}} />
-							{{if $class_options.reference1.1|strpos:"." === false}}
-						    {{tr}}{{$_host_class}}-{{$class_options.reference1.1}}{{/tr}}
-							{{else}}
-							  {{tr}}{{$class_options.reference1.0}}{{/tr}}
-							{{/if}}
-						</label>
-					{{/if}}
-					
-					{{if $class_options.reference2.0}}
-	          <label>
-	          	<input type="radio" name="report_level" value="2" {{if $ex_field->report_level == "2"}} checked="checked" {{/if}} />
+      
+        {{if $ex_field->_id}}
+          <label><input type="radio" name="report_level" value="" {{if $ex_field->report_level == ""}}  checked="checked" {{/if}} /> Aucun </label>
+          {{assign var=_host_class value=$ex_field->_ref_ex_group->_ref_ex_class->host_class}}
+          
+          {{if $class_options.reference1.0}}
+            <label>
+              <input type="radio" name="report_level" value="1" {{if $ex_field->report_level == "1"}} checked="checked" {{/if}} />
+              {{if $class_options.reference1.1|strpos:"." === false}}
+                {{tr}}{{$_host_class}}-{{$class_options.reference1.1}}{{/tr}}
+              {{else}}
+                {{tr}}{{$class_options.reference1.0}}{{/tr}}
+              {{/if}}
+            </label>
+          {{/if}}
+          
+          {{if $class_options.reference2.0}}
+            <label>
+              <input type="radio" name="report_level" value="2" {{if $ex_field->report_level == "2"}} checked="checked" {{/if}} />
               {{if $class_options.reference2.1|strpos:"." === false}}
                 {{tr}}{{$_host_class}}-{{$class_options.reference2.1}}{{/tr}}
               {{else}}
                 {{tr}}{{$class_options.reference2.0}}{{/tr}}
               {{/if}}
-					  </label>
-					{{/if}}
-				{{else}}
-				  <em>Enregistrez le champ avant de définir le type de report</em>
-				{{/if}}
+            </label>
+          {{/if}}
+        {{else}}
+          <em>Enregistrez le champ avant de définir le type de report</em>
+        {{/if}}
       </td>
       
       <td colspan="2">
@@ -241,9 +250,19 @@ Main.add(function(){
 
 <ul class="control_tabs" id="ExClassField-param">
   <li><a href="#fieldSpecEditor">Propriétés</a></li>
-	
-  {{if $ex_field->_id && in_array($ex_field->_spec_object->getSpecType(), "CExClassField"|static:_formula_valid_types)}}
-    <li><a href="#fieldFormulaEditor" {{if !$ex_field->formula}} class="empty" {{/if}} style="background-image: url(style/mediboard/images/buttons/formula.png); background-repeat: no-repeat; background-position: 2px 2px; padding-left: 18px;">Formule / concaténation</a></li>
+
+  {{if $ex_field->_id}}
+	  {{assign var=_spec_type value=$ex_field->_spec_object->getSpecType()}}
+	  {{assign var=_can_formula value="CExClassField::formulaCanResult"|static_call:$_spec_type}}
+	  
+	  {{if $_can_formula}}
+	    <li>
+	      <a href="#fieldFormulaEditor" {{if !$ex_field->formula}} class="empty" {{/if}} 
+	         style="background-image: url(style/mediboard/images/buttons/formula.png); background-repeat: no-repeat; background-position: 2px 2px; padding-left: 18px;">
+	        Formule / concaténation
+	      </a>
+	    </li>
+	  {{/if}}
   {{/if}}
 </ul>
 <hr class="control_tabs" />

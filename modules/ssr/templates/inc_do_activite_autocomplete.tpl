@@ -15,7 +15,7 @@
       {{$_activite->code|emphasize:$needle}}
       {{$_activite->libelle|emphasize:$needle}}
       <br />
-      <small style="opacity: 0.7">
+      <small class="opacity-70">
 			 	{{$_activite->_ref_type_activite->_view|emphasize:$needle}}
 			</small>
     </li>

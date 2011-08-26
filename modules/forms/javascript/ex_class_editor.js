@@ -355,9 +355,15 @@ ExFormula = {
       ExFormula.initTextarea();
     }});
   },
-  toggleInsertButtons: function(value){
+  toggleInsertButtons: function(value, type){
     value = value && ExFormula.form;
-    $$(".insert-formula").invoke("setVisible", value);
+		
+		if (!value) {
+      $$(".insert-formula").invoke("hide");
+		}
+		else {
+      $$(".insert-formula."+type).invoke("show");
+		}
   },
   insertText: function(text){
     var field = ExFormula.form._formula;

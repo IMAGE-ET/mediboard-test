@@ -21,7 +21,7 @@
     {{/if}}
     
     <br />
-    <small style="opacity: 0.6">
+    <small class="opacity-60">
       {{$curr_order->_count.order_items}} articles - {{$curr_order->_count_received}} reçus
     </small>
   </li>

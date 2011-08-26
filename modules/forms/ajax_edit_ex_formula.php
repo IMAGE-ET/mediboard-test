@@ -19,7 +19,8 @@ $formula_possible = true;
 $field_names = array();
 
 $spec_type = $ex_field->getSpecObject()->getSpecType();
-if (!in_array($spec_type, CExClassField::$_formula_valid_types)) {
+
+if (!CExClassField::formulaCanResult($spec_type)) {
   $formula_possible = false;
 }
 else {

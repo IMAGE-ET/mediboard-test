@@ -62,7 +62,10 @@ class CExClassField extends CExListItemsOwner {
   );
   
   static $_formula_token_re = "/\[([^\]]+)\]/";
-  static $_formula_valid_types = array("float", "num");
+	
+  static $_formula_valid_types = array("float", "num", "numchar", "pct", "currency");
+  static $_concat_valid_types  = array("float", "num", "numchar", "pct", "currency", "str", "text", "code", "email");
+	
   static $_formula_constants = array("DateCourante", "HeureCourante", "DateHeureCourante");
   static $_formula_intervals = array(
     "Min" => "Minutes", 
@@ -72,6 +75,32 @@ class CExClassField extends CExListItemsOwner {
     "M"   => "Mois",
     "A"   => "Années",
   );
+	
+	// types pouvant être utilisés pour des calculs / concaténation
+	static function formulaCanArithmetic($type) {
+		return in_array($type, self::$_formula_valid_types) || 
+		                $type == "enum" || 
+										$type == "date" || 
+										$type == "datetime" || $type == "dateTime" || 
+										$type == "time";
+	}
+  static function formulaCanConcat($type) {
+    return in_array($type, self::$_concat_valid_types);
+  }
+  static function formulaCan($type) {
+    return self::formulaCanConcat($type) || self::formulaCanArithmetic($type);
+  }
+	
+	// types pouvant herberger des resultats
+	static function formulaCanResultArithmetic($type) {
+		return in_array($type, self::$_formula_valid_types);
+	}
+  static function formulaCanResultConcat($type) {
+    return $type === "text";
+  }
+  static function formulaCanResult($type) {
+    return self::formulaCanResultConcat($type) || self::formulaCanResultArithmetic($type);
+  }
 
   function getSpec() {
     $spec = parent::getSpec();
