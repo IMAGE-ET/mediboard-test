@@ -356,7 +356,7 @@ function smarty_modifier_trace($value) {
  */
 function smarty_function_mb_field($params, &$smarty) {
   if (CAppUI::conf("readonly")) {
-    $params["readonly"] = 1;
+    //$params["readonly"] = 1;
   }
   
   require_once $smarty->_get_plugin_filepath('shared','escape_special_chars');

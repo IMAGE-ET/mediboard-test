@@ -234,7 +234,7 @@ var Url = Class.create({
   },
   
   modal: function(options) {
-    var closeButton = DOM.button({type: "button", className: "cancel notext"});
+    var closeButton = DOM.button({type: "button", className: "close notext"});
 
     options = Object.extend({
       className: 'modal popup',
@@ -365,6 +365,11 @@ var Url = Class.create({
         console.warn((saveInput || "$(input)") + " doesn't exist [Url.autoComplete]");
       } catch (e) {}
     
+      return;
+    }
+    
+    if ($(input.form).isReadonly()) {
+      input.removeClassName("autocomplete");
       return;
     }
     
@@ -595,7 +600,7 @@ var Url = Class.create({
     $(document.body).insert(div);
 
     // Decoration preparing
-    var closeButton  = DOM.button({type: "button", className: "cancel notext"}, $T('Close'));
+    var closeButton  = DOM.button({type: "button", className: "close notext"}, $T('Close'));
     var reloadButton = DOM.button({type: "button", className: "change notext"}, $T('Reload'));
     var titleElement = DOM.div({className: "title"}, oOptions.title);
     

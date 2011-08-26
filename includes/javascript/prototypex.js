@@ -164,7 +164,7 @@ Class.extend(Autocompleter.Base, {
   },
   onBlur: function(event) {
     if (this.updateHasFocus) return;
-		
+    
     if (Prototype.Browser.IE && this.update.visible()) {  
       // fix for IE: don't blur when clicking the vertical scrollbar (if there is one)
       var verticalScrollbarWidth = this.update.offsetWidth - this.update.clientWidth -
@@ -546,6 +546,9 @@ Element.addMethods('form', {
         $V(e, '', fire);
       }
     });
+  },
+  isReadonly: function(form) {
+    return App.readonly && form.method === "post" && (!form.elements.dosql || form.elements.dosql.value !== "do_configure");
   }
 });
 

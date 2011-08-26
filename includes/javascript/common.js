@@ -249,7 +249,7 @@ Localize = {
   showForm: function() {
     var form = getForm('UnlocForm')
     modal(form, { 
-      closeOnClick: form.down('button.cancel'),
+      closeOnClick: form.down('button.close'),
       height: "50px"
     } );
   },

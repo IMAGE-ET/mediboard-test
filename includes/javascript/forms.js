@@ -172,6 +172,8 @@ function prepareForm(oForm) {
   oForm = $(oForm);
   if (!oForm || oForm.hasClassName("prepared")) return;
   
+  var readonly = App.readonly && oForm.isReadonly();
+  
   // Autofill of the form disabled (useful for the login form for example)
   oForm.setAttribute("autocomplete", "off");
   
@@ -181,7 +183,7 @@ function prepareForm(oForm) {
   else
     sFormName = oForm.getAttribute("name");
 
-  oForm.lockAllFields = (oForm._locked && oForm._locked.value) == "1"; 
+  oForm.lockAllFields = readonly || (oForm._locked && oForm._locked.value) == "1";
 
   // Build label targets
   var aLabels = oForm.select("label"),
@@ -225,9 +227,15 @@ function prepareForm(oForm) {
   var i = 0, oElement;
   while (oElement = $(oForm.elements[i++])) {
     var sType = oElement.type;
+    var sTagName = oElement.tagName;
     
     // a SET checkbox input
     if (sType === "checkbox" && oElement.hasClassName("set-checkbox")) {
+      continue;
+    }
+    
+    if (readonly && sTagName == "BUTTON" && (!sType || sType === "submit")) {
+      oElement.disabled = true;
       continue;
     }
     
@@ -257,7 +265,7 @@ function prepareForm(oForm) {
     
     // If not type is defined, default to "text"
     // Accessing oElement.type directly returns the calculated type
-    if (oElement.tagName === "INPUT" && !oElement.getAttribute("type")) {
+    if (sTagName === "INPUT" && !oElement.getAttribute("type")) {
       oElement.type = "text";
     }
     
@@ -310,7 +318,7 @@ function prepareForm(oForm) {
     if (oElement.className == "") {
       continue; // TODO : this speeds up everything
     }
-		
+    
     var props = oElement.getProperties(),
         UIchange = false;
 
@@ -366,20 +374,47 @@ function prepareForm(oForm) {
   
   // Event Observer
   if(oForm.hasClassName("watched")) {
-		// Deferred to let the time for all the inputs to be prepared
-		(function(){
-			new Form.Observer(oForm, 0.5, function(form, value) { FormObserver.elementChanged(form, value); });
-		}).defer();
+    // Deferred to let the time for all the inputs to be prepared
+    (function(){
+      new Form.Observer(oForm, 0.5, function(form, value) { FormObserver.elementChanged(form, value); });
+    }).defer();
   }
-	
+  
   // We mark this form as prepared
   oForm.addClassName("prepared");
+}
+    
+function makeReadOnly(element) {
+  (function(){
+    element.select("form[method='post']").each(function(form){
+      if ($V(form.dosql) === "do_configure") return;
+      
+      form.select(".inputExtension, .dropdown-trigger, .numericField .arrows").invoke("hide");
+      form.select("input.autocomplete").invoke("removeClassName", "autocomplete");
+      form.select("input.dropdown").invoke("setStyle", {
+        paddingRight: 0
+      });
+    });
+    
+    var selector = "remove add merge trash new save submit cancel modify".replace(/(\w+)/g, "a.button.$1, button.$1,").replace(/(.)$/, "");
+    element.select(selector).invoke("hide");
+    
+    element.select("form").each(function(form){
+      if (form.isReadonly()) return;
+      
+      form.select(selector).invoke("show");
+    });
+  }).defer();
 }
 
 function prepareForms(root) {
   root = $(root || document.documentElement);
   
   try {
+    if (App.readonly) {
+      makeReadOnly(root);
+    }
+		
     root.select("form:not(.prepared)").each(prepareForm);
     
     root.select("button.singleclick").each(function(button) {
@@ -540,8 +575,8 @@ Element.addMethods('form', {
 
 Form.Element.getSelect = function(options){
   var select = DOM.select({});
-	$H(options).each(function(pair){
-		select.insert(DOM.option({value: pair.key}, pair.value));
-	});
-	return select;
+  $H(options).each(function(pair){
+    select.insert(DOM.option({value: pair.key}, pair.value));
+  });
+  return select;
 };

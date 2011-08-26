@@ -6,6 +6,11 @@ var AideSaisie = {
   AutoComplete: Class.create({
     initialize: function(element, options){
       this.element = $(element);
+      
+      if ($(this.element.form).isReadonly()) {
+        return;
+      }
+      
       this.options = Object.extend({
         dependField1: null,
         classDependField1: null,

@@ -363,6 +363,10 @@ button.cancel:hover, a.button.cancel:hover {
   border-color: #f00;
 }
 
+button.close:before, a.button.close:before {
+  content: url(images/buttons/cancel.png);
+}
+
 button.carriage_return:before, a.button.carriage_return:before {
   content: url(images/buttons/carriage_return.png);
 } 

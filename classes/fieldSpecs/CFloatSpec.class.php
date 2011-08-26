@@ -121,7 +121,11 @@ class CFloatSpec extends CMbFieldSpec {
       $sHtml .= '
     <script type="text/javascript">
       Main.add(function(){
-        $(document.forms["'.$form.'"]["'.$field.'"]).addSpinner({';
+      	var element = $(document.forms["'.$form.'"]["'.$field.'"]);
+				
+      	if ($(element.form).isReadonly()) return;
+				
+        element.addSpinner({';
           if ($step)       $sHtml .= "step: $step,";
           if ($this->pos)  $sHtml .= "min: 0,";
           elseif(isset($min))     $sHtml .= "min: $min,";

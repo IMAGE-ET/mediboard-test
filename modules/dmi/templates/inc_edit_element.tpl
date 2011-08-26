@@ -109,7 +109,7 @@ Main.add(function () {
 
 {{assign var=klass value=$element->_class}}
 
-<form name="editElement-{{$class}}" action="?m={{$m}}" method="post" onsubmit="return onSubmitFormAjax(this)">
+<form name="editElement-{{$klass}}" action="?m={{$m}}" method="post" onsubmit="return onSubmitFormAjax(this)">
   <input type="hidden" name="m" value="{{$m}}" />
   <input type="hidden" name="del" value="0" />
   <input type="hidden" name="dosql" value="{{$dosql}}" />
@@ -144,7 +144,7 @@ Main.add(function () {
       <th>{{mb_label object=$element field=_labo_id}}</th>
       <td>
         {{if !$element->_id}}
-          {{mb_field object=$element field=_labo_id form="editElement-$class" autocomplete="true,1,50,true,true"}}
+          {{mb_field object=$element field=_labo_id form="editElement-$klass" autocomplete="true,1,50,true,true"}}
         {{else}}
          <input type="text" readonly="readonly" value="{{$element->_ref_labo}}" />
         {{/if}}
@@ -284,13 +284,13 @@ Main.add(function () {
   }
   
   deleteLot = function(lot_id) {
-    var form = getForm('delete-lot-{{$class}}');
+    var form = getForm('delete-lot-{{$klass}}');
     $V(form.order_item_reception_id, lot_id);
     confirmDeletion(form, {typeName:'', objName:'ce lot', ajax: true});
   }
   
   cancelLot = function(lot_id, cancel) {
-    var form = getForm('cancel-lot-{{$class}}');
+    var form = getForm('cancel-lot-{{$klass}}');
     if (!cancel || confirm("Etes-vous sûr de vouloir annuler ce lot?")) {
       $V(form.order_item_reception_id, lot_id);
       $V(form.cancelled, cancel);
@@ -299,7 +299,7 @@ Main.add(function () {
   }
 </script>
 
-<form name="delete-lot-{{$class}}" action="" method="post" onsubmit="return checkForm(this)">
+<form name="delete-lot-{{$klass}}" action="" method="post" onsubmit="return checkForm(this)">
   <input type="hidden" name="m" value="dPstock" />
   <input type="hidden" name="dosql" value="do_order_item_reception_aed" />
   <input type="hidden" name="del" value="1" />
@@ -307,7 +307,7 @@ Main.add(function () {
   {{mb_key object=$lot}}
 </form>
 
-<form name="cancel-lot-{{$class}}" action="" method="post" onsubmit="return checkForm(this)">
+<form name="cancel-lot-{{$klass}}" action="" method="post" onsubmit="return checkForm(this)">
   <input type="hidden" name="m" value="dPstock" />
   <input type="hidden" name="dosql" value="do_order_item_reception_aed" />
   <input type="hidden" name="cancelled" value="1" />
@@ -315,7 +315,7 @@ Main.add(function () {
   {{mb_key object=$lot}}
 </form>
 
-<form name="create-lot-{{$class}}" action="" method="post" onsubmit="return onSubmitFormAjax(this)">
+<form name="create-lot-{{$klass}}" action="" method="post" onsubmit="return onSubmitFormAjax(this)">
   <input type="hidden" name="m" value="dPstock" />
   <input type="hidden" name="del" value="0" />
   <input type="hidden" name="dosql" value="do_order_item_reception_aed" />
@@ -344,7 +344,7 @@ Main.add(function () {
   
   <tr>
     <td></td>
-    <td>{{mb_field object=$lot field=quantity increment=true form="create-lot-$class" size=1}}</td>
+    <td>{{mb_field object=$lot field=quantity increment=true form="create-lot-$klass" size=1}}</td>
     <td>
       <select name="_reference_id" class="notNull" style="width: 12em;">
         {{if $element->_ref_product->_ref_references|@count}}

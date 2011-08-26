@@ -58,7 +58,8 @@
           dialog: "{{$dialog}}",
           config: {
             log_js_errors: {{if $conf.log_js_errors}}true{{else}}false{{/if}}
-          }
+          },
+          readonly: "{{$conf.readonly}}" && User.id
         };
     
     var Mediboard = {{$version|@json}};
