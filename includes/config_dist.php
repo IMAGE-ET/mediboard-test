@@ -12,33 +12,40 @@
 // Beginning of this file or installer will fail on config loading.
 global $dPconfig; 
 
-// Global hosting settings
-$dPconfig["root_dir"]          = "/var/www/mediboard";  // No trailing slash, no backslashes for Win users (use slashes instead)
+/**
+ *  Global hosting settings
+ *  WARNING: no config documentation in those files
+ *  Use instead locales for UI documentation 
+ */
+
+// No trailing slash, no backslashes for Win users (use slashes instead)
+$dPconfig["root_dir"]          = "/var/www/mediboard";  
 $dPconfig["company_name"]      = "mediboard.org";
 $dPconfig["page_title"]        = "Mediboard SIH";
 $dPconfig["base_url"]          = "http://localhost/mediboard/";
 
-$dPconfig["offline"]           = "0";      // Offline mode (redirect to offline.php)
-$dPconfig["instance_role"]     = "qualif"; // qualif|prod
-$dPconfig["http_redirections"] = "0";      // 0 => no redirections, 1 => redirections actives
-$dPconfig["mb_id"]             = "";       // Instance unique ID
-$dPconfig["minify_javascript"] = "0";      // 0 => no concatenation, 1 => concatenation, 2 => concatenation+minification
-$dPconfig["minify_css"]        = "0";      // 0 => no concatenation, 1 => concatenation, 2 => concatenation+minification
-$dPconfig["currency_symbol"]   = "&euro;"; // Currency symbol (HTML entities allowed)
-$dPconfig["hide_confidential"] = "0";      // Enable if you want to hide confidential fields
-$dPconfig["locale_warn"]       = "0";      // Warn when a translation is not found (for developers and translators)
-$dPconfig["locale_alert"]      = "^";      // The string appended to untranslated string or not found keys
-$dPconfig["debug"]             = "1";      // Set to true to help analyze errors
-$dPconfig["readonly"]          = "0";      // Read-only mode : any store will fail
-$dPconfig["shared_memory"]     = "none";   // Shared memory handler [none|eaccelerator|apc]
-$dPconfig["session_handler"]   = "files";  // Session handler [files|memcache|mysql|...]
-$dPconfig["log_js_errors"]     = "1";      // Log JavaScript errors into the error log
-$dPconfig["apache_child_terminate_memory_limit"] = ""; // The memory limit above which the child apache process will be terminated
-// Object merge
-$dPconfig["alternative_mode"]  = "0";      // Alternative fusion mode (keeps one object, max 2 objects to merge)
-$dPconfig["merge_prevent_base_without_idex"]  = "1"; // Prevent choosing a base without an external ID
+$dPconfig["offline"]           = "0";     
+$dPconfig["instance_role"]     = "qualif";
+$dPconfig["http_redirections"] = "0";      
+$dPconfig["mb_id"]             = "";
+$dPconfig["minify_javascript"] = "0";
+$dPconfig["minify_css"]        = "0";
+$dPconfig["currency_symbol"]   = "&euro;";
+$dPconfig["hide_confidential"] = "0";
+$dPconfig["locale_warn"]       = "0";
+$dPconfig["locale_alert"]      = "^";
+$dPconfig["debug"]             = "1";
+$dPconfig["readonly"]          = "0";
+$dPconfig["shared_memory"]     = "none";
+$dPconfig["session_handler"]   = "files";
+$dPconfig["log_js_errors"]     = "1";
+$dPconfig["apache_child_terminate_memory_limit"] = ""; 
 
-$dPconfig["browser_compat"]    = array(    // minimal browser versions
+// Object merge
+$dPconfig["alternative_mode"]  = "0";
+$dPconfig["merge_prevent_base_without_idex"]  = "1";
+
+$dPconfig["browser_compat"]    = array(
   'firefox' => '3.0',
   'msie'    => '8.0',
   'opera'   => '9.6',
@@ -228,7 +235,7 @@ $dPconfig["mediusers"] = array (
 // Module config file inclusion
 $config_files = glob("./modules/*/config.php");
 foreach ($config_files as $file) {
-  require_once $file;
+  include_once $file;
 }
 
 ?>

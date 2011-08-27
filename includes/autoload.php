@@ -60,7 +60,9 @@ function mbAutoload($className) {
   global $classPaths, $performance;
   
   if (isset($classPaths[$className])) {
-    if ($classPaths[$className] === false) return false;
+    if ($classPaths[$className] === false) {
+      return false; 
+    }
     
     if (file_exists($classPaths[$className])) {
       $performance["autoload"]++;
@@ -119,7 +121,7 @@ function mbAutoload2($class) {
     foreach ($dirs as $dir) {
       $files = glob("$rootDir/$dir");
       foreach ($files as $filename) {
-        require_once($filename);
+        include_once $filename;
       }
     }
     

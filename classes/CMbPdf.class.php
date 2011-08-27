@@ -24,10 +24,8 @@ define ("K_CELL_HEIGHT_RATIO", 1.25);
 define ("K_TITLE_MAGNIFICATION", 1.3);
 define ("K_SMALL_RATIO", 2/3);
 
-
-require_once('./lib/tcpdf/config/lang/eng.php');
-require_once('./lib/tcpdf/tcpdf.php');
-
+CAppUI::requireLibraryFile("tcpdf/config/lang/eng");
+CAppUI::requireLibraryFile("tcpdf/tcpdf");
 
 function asc_shift($str, $offset=0) {
   $new = '';
