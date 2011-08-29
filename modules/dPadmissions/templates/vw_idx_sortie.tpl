@@ -65,6 +65,7 @@ function reloadFullSorties(filterFunction) {
   url.addParam("date"      , "{{$date}}");
   url.addParam("type"      , $V(oForm._type_admission));
   url.addParam("service_id", $V(oForm.service_id));
+  url.addParam("prat_id"   , $V(oForm.prat_id));
   url.requestUpdate('allSorties');
   reloadSorties(filterFunction);
 }
@@ -75,6 +76,7 @@ function reloadSorties(filterFunction) {
   url.addParam("date"      , "{{$date}}");
   url.addParam("type"      , $V(oForm._type_admission));
   url.addParam("service_id", $V(oForm.service_id));
+  url.addParam("prat_id"   , $V(oForm.prat_id));
   if(!Object.isUndefined(filterFunction)){
     url.addParam("filterFunction" , filterFunction);
   }
@@ -132,7 +134,13 @@ Main.add(function () {
       <select name="service_id" onchange="reloadFullSorties();">
         <option value="">&mdash; Tous les services</option>
         {{foreach from=$services item=_service}}
-        <option value="{{$_service->_id}}"{{if $_service->_id == $sejour->service_id}}selected="selected"{{/if}}}>{{$_service->_view}}</option>
+          <option value="{{$_service->_id}}"{{if $_service->_id == $sejour->service_id}}selected="selected"{{/if}}}>{{$_service}}</option>
+        {{/foreach}}
+      </select>
+      <select name="prat_id" onchange="reloadFullSorties();">
+        <option value="">&mdash; Tous les praticiens</option>
+        {{foreach from=$prats item=_prat}}
+          <option value="{{$_prat->_id}}"{{if $_prat->_id == $sejour->praticien_id}}selected="selected"{{/if}}}>{{$_prat}}</option>
         {{/foreach}}
       </select>
     </form>

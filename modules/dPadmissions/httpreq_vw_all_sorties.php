@@ -21,6 +21,7 @@ $nextmonth     = mbDate("+1 month", $date);
 $selSortis     = CValue::getOrSession("selSortis", "0");
 $type          = CValue::getOrSession("type");
 $service_id    = CValue::getOrSession("service_id");
+$prat_id       = CValue::getOrSession("prat_id");
 $bank_holidays = mbBankHolidays($date);
 
 $hier   = mbDate("- 1 day", $date);
@@ -34,16 +35,18 @@ for ($day = $month_min; $day < $month_max; $day = mbDate("+1 DAY", $day)) {
 }
 
 // filtre sur les types de sortie
-if($type == "ambucomp") {
+if ($type == "ambucomp") {
   $filterType = "AND (`sejour`.`type` = 'ambu' OR `sejour`.`type` = 'comp')";
-} elseif($type) {
+}
+elseif ($type) {
   $filterType = "AND `sejour`.`type` = '$type'";
-} else {
+}
+else {
   $filterType = "AND `sejour`.`type` != 'urg' AND `sejour`.`type` != 'seances'";
 }
 
 // filtre sur les services
-if($service_id) {
+if ($service_id) {
   $leftjoinService = "LEFT JOIN affectation
                         ON affectation.sejour_id = sejour.sejour_id AND affectation.sortie = sejour.sortie_prevue
                       LEFT JOIN lit
@@ -57,6 +60,14 @@ if($service_id) {
   $leftjoinService = $filterService = "";
 }
 
+// filtre sur le praticiens
+if ($prat_id) {
+  $filterPrat = "AND sejour.praticien_id = '$prat_id'";
+}
+else {
+  $filterPrat = "";
+}
+
 $group = CGroups::loadCurrent();
 
 // Listes des sorties par jour
@@ -68,6 +79,7 @@ $query = "SELECT DATE_FORMAT(`sejour`.`sortie`, '%Y-%m-%d') AS `date`, COUNT(`se
 	  AND `sejour`.`annule` = '0'
     $filterType
     $filterService
+    $filterPrat
 	GROUP BY `date`
 	ORDER BY `date`";
 foreach ($ds->loadHashList($query) as $day => $num1) {
@@ -84,6 +96,7 @@ $query = "SELECT DATE_FORMAT(`sejour`.`sortie`, '%Y-%m-%d') AS `date`, COUNT(`se
     AND `sejour`.`annule` = '0'
     $filterType
     $filterService
+    $filterPrat
   GROUP BY `date`
   ORDER BY `date`";
 foreach ($ds->loadHashList($query) as $day => $num2) {

@@ -18,6 +18,7 @@ $order_way  = CValue::getOrSession("order_way","ASC");
 $date       = CValue::getOrSession("date", mbDate());
 $type       = CValue::getOrSession("type");
 $service_id = CValue::getOrSession("service_id");
+$prat_id    = CValue::getOrSession("prat_id");
 
 $date_actuelle = mbDateTime("00:00:00");
 $date_demain   = mbDateTime("00:00:00","+ 1 day");
@@ -30,10 +31,14 @@ $where["externe"]  = "= '0'";
 $service = new CService;
 $services = $service->loadGroupList($where);
 
+// Récupération de la liste des praticiens
+$prat = CMediusers::get();
+$prats = $prat->loadChirurgiens();
+
 $sejour = new CSejour();
 $sejour->_type_admission = $type;
 $sejour->service_id      = $service_id;
-
+$sejour->praticien_id    = $prat_id;
 // Création du template
 $smarty = new CSmartyDP();
 
@@ -45,6 +50,7 @@ $smarty->assign("selSortis"    , $selSortis);
 $smarty->assign("order_way"    , $order_way);
 $smarty->assign("order_col"    , $order_col);
 $smarty->assign("services"     , $services);
+$smarty->assign("prats"        , $prats);
 $smarty->assign("hier"         , $hier);
 $smarty->assign("demain"       , $demain);
 
