@@ -22,6 +22,7 @@ $selAdmis      = CValue::getOrSession("selAdmis", "0");
 $selSaisis     = CValue::getOrSession("selSaisis", "0");
 $type          = CValue::getOrSession("type");
 $service_id    = CValue::getOrSession("service_id");
+$prat_id       = CValue::getOrSession("prat_id");
 $bank_holidays = mbBankHolidays($date);
 
 $hier   = mbDate("- 1 day", $date);
@@ -38,16 +39,18 @@ for ($day = $month_min; $day < $month_max; $day = mbDate("+1 DAY", $day)) {
 }
 
 // filtre sur les types d'admission
-if($type == "ambucomp") {
+if ($type == "ambucomp") {
   $filterType = "AND (`sejour`.`type` = 'ambu' OR `sejour`.`type` = 'comp')";
-} elseif($type) {
+}
+elseif ($type) {
   $filterType = "AND `sejour`.`type` = '$type'";
-} else {
+}
+else {
   $filterType = "AND `sejour`.`type` != 'urg' AND `sejour`.`type` != 'seances'";
 }
 
 // filtre sur les services
-if($service_id) {
+if ($service_id) {
   $leftjoinService = "LEFT JOIN affectation
                         ON affectation.sejour_id = sejour.sejour_id AND affectation.sortie = sejour.sortie_prevue
                       LEFT JOIN lit
@@ -57,8 +60,17 @@ if($service_id) {
                       LEFT JOIN service
                         ON chambre.service_id = service.service_id";
   $filterService = "AND service.service_id = '$service_id'";
-} else {
+}
+else {
   $leftjoinService = $filterService = "";
+}
+
+// filtre sur le praticien
+if ($prat_id) {
+  $filterPrat = "AND sejour.praticien_id = '$prat_id'";
+}
+else {
+  $filterPrat = "";
 }
 
 $group = CGroups::loadCurrent();
@@ -72,6 +84,7 @@ $query = "SELECT DATE_FORMAT(`sejour`.`entree`, '%Y-%m-%d') AS `date`, COUNT(`se
     AND `sejour`.`annule` = '0'
     $filterType
     $filterService
+    $filterPrat
   GROUP BY `date`
   ORDER BY `date`";
 foreach ($ds->loadHashList($query) as $day => $num1) {
@@ -88,6 +101,7 @@ $query = "SELECT DATE_FORMAT(`sejour`.`entree`, '%Y-%m-%d') AS `date`, COUNT(`se
     AND `sejour`.`annule` = '0'
     $filterType
     $filterService
+    $filterPrat
   GROUP BY `date`
   ORDER BY `date`";
 foreach ($ds->loadHashList($query) as $day => $num2) {
@@ -104,6 +118,7 @@ $query = "SELECT DATE_FORMAT(`sejour`.`entree`, '%Y-%m-%d') AS `date`, COUNT(`se
     AND `sejour`.`annule` = '0'
     $filterType
     $filterService
+    $filterPrat
   GROUP BY `date`
   ORDER BY `date`";
 foreach ($ds->loadHashList($query) as $day => $num3) {

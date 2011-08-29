@@ -13,6 +13,7 @@ CCanDo::checkRead();
 // Type d'admission
 $type           = CValue::getOrSession("type");
 $service_id     = CValue::getOrSession("service_id");
+$prat_id        = CValue::getOrSession("prat_id");
 $selAdmis       = CValue::getOrSession("selAdmis", "0");
 $selSaisis      = CValue::getOrSession("selSaisis", "0");
 $order_col      = CValue::getOrSession("order_col", "patient_id");
@@ -58,6 +59,11 @@ if($type == "ambucomp") {
   $where["sejour.type"] = " = '$type'";
 } else {
   $where[] = "`sejour`.`type` != 'urg' AND `sejour`.`type` != 'seances'";
+}
+
+// Filtre sur le praticien
+if ($prat_id) {
+  $where["sejour.praticien_id"] = " = '$prat_id'";
 }
 
 $where["sejour.group_id"] = "= '$group->_id'";
