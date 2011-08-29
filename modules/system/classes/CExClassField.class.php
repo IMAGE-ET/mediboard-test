@@ -62,10 +62,10 @@ class CExClassField extends CExListItemsOwner {
   );
   
   static $_formula_token_re = "/\[([^\]]+)\]/";
-	
+  
   static $_formula_valid_types = array("float", "num", "numchar", "pct", "currency");
   static $_concat_valid_types  = array("float", "num", "numchar", "pct", "currency", "str", "text", "code", "email");
-	
+  
   static $_formula_constants = array("DateCourante", "HeureCourante", "DateHeureCourante");
   static $_formula_intervals = array(
     "Min" => "Minutes", 
@@ -75,26 +75,26 @@ class CExClassField extends CExListItemsOwner {
     "M"   => "Mois",
     "A"   => "Années",
   );
-	
-	// types pouvant être utilisés pour des calculs / concaténation
-	static function formulaCanArithmetic($type) {
-		return in_array($type, self::$_formula_valid_types) || 
-		                $type == "enum" || 
-										$type == "date" || 
-										$type == "datetime" || $type == "dateTime" || 
-										$type == "time";
-	}
+  
+  // types pouvant être utilisés pour des calculs / concaténation
+  static function formulaCanArithmetic($type) {
+    return in_array($type, self::$_formula_valid_types) || 
+                    $type == "enum" || 
+                    $type == "date" || 
+                    $type == "datetime" || $type == "dateTime" || 
+                    $type == "time";
+  }
   static function formulaCanConcat($type) {
     return in_array($type, self::$_concat_valid_types);
   }
   static function formulaCan($type) {
     return self::formulaCanConcat($type) || self::formulaCanArithmetic($type);
   }
-	
-	// types pouvant herberger des resultats
-	static function formulaCanResultArithmetic($type) {
-		return in_array($type, self::$_formula_valid_types);
-	}
+  
+  // types pouvant herberger des resultats
+  static function formulaCanResultArithmetic($type) {
+    return in_array($type, self::$_formula_valid_types);
+  }
   static function formulaCanResultConcat($type) {
     return $type === "text";
   }
@@ -169,15 +169,21 @@ class CExClassField extends CExListItemsOwner {
     $ljoin = array(
       "ex_class_field_translation" => "ex_class_field_translation.ex_class_field_id = ex_class_field.ex_class_field_id"
     );
-    if ($all_groups) {
-      /// TODO
-    }
     $req->addLJoin($ljoin);
     
     $this->completeField("ex_group_id");
-    $where = array(
-      "ex_group_id" => $ds->prepare("= %", $this->ex_group_id),
-    );
+    
+    $where = array();
+    if ($all_groups) {
+      $ex_group = $this->loadRefExGroup();
+      $ids = $ex_group->loadIds(array(
+        "ex_class_id" => $ds->prepare("= %", $ex_group->ex_class_id),
+      ));
+      $where["ex_group_id"] = $ds->prepareIn($ids);
+    }
+    else {
+      $where["ex_group_id"] = $ds->prepare("= %", $this->ex_group_id);
+    }
     $req->addWhere($where);
     
     $results = $ds->loadList($req->getRequest());
