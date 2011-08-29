@@ -16,7 +16,8 @@ define("UI_MSG_ERROR"  , 4);
 
 /**
  * The Application UI weird Class
- * @TODO Is being split into CApp et CUI classes
+ *
+ * @todo Is being split into CApp et CUI classes
  */
 class CAppUI {
 	/**
@@ -65,20 +66,21 @@ class CAppUI {
   /** @var string Default page for a redirect call*/
   var $defaultRedirect = "";
 
-  private function __construct(){}
+  private function __construct() {
+  }
 
   /**
    * Initializes the CAppUI instance
    * @return CAppUI The instance
    */
   static function init(){
-  	return self::$instance = new CAppUI;
+    return self::$instance = new CAppUI;
   }
   
   function __sleep() {
-   unset($this->_ref_user);
-   return array_keys(get_object_vars($this));
- }
+    unset($this->_ref_user);
+    return array_keys(get_object_vars($this));
+  }
   
   /**
    * Used to load a php class file from its name
@@ -97,7 +99,7 @@ class CAppUI {
    */
   static function requireSystemClass($name) {
     if ($root = self::conf("root_dir")) {
-      return require_once("$root/classes/$name.class.php");
+      return require_once "$root/classes/$name.class.php";
     }
   }
 
@@ -278,20 +280,20 @@ class CAppUI {
    */
   private static function getErrorClass($type) {
     switch ($type) {
-      case UI_MSG_ERROR   : return "error" ;
-      case UI_MSG_WARNING : return "warning";
-      default:
-      case UI_MSG_OK      : 
-      case UI_MSG_ALERT   : return "info";
+    case UI_MSG_ERROR   : return "error" ;
+    case UI_MSG_WARNING : return "warning";
+    default:
+    case UI_MSG_OK      : 
+    case UI_MSG_ALERT   : return "info";
     }
   }
   
- /**
-  * Add message to the the system UI
-  * @param string $msg The (translated) message
-  * @param int $type type of message (cf UI constants)
-  * @param any number of printf-like parameters to be applied 
-  */
+  /**
+   * Add message to the the system UI
+   * @param string $msg The (translated) message
+   * @param int $type type of message (cf UI constants)
+   * @param any number of printf-like parameters to be applied 
+   */
   static function setMsg($msg, $type = UI_MSG_OK) {
     $args = func_get_args();
     $msg = CAppUI::tr($msg, array_slice($args, 2));
@@ -361,14 +363,15 @@ class CAppUI {
       self::$instance->messages = array();
     }
 
+    
     return $return;
   }
 
- /**
-  * Display an message step after translation
-  * @param enum $msgType Type of message [UI_MSG_OK|UI_MSG_WARNING|UI_MSG_ERROR]
-  * @param string $msg The message
-  */
+  /**
+   * Display an message step after translation
+   * @param enum $msgType Type of message [UI_MSG_OK|UI_MSG_WARNING|UI_MSG_ERROR]
+   * @param string $msg The message
+   */
   static function stepMessage($type, $msg) {
     $args = func_get_args();
     $msg = CAppUI::tr($msg, array_slice($args, 2));
@@ -377,12 +380,12 @@ class CAppUI {
     echo "\n<div class='small-$class'>$msg</div>";
   }
   
- /**
-  * Display an ajax step, and exit on error messages
-  * @TODO Switch parameter order, like stepMessage()
-  * @param string $msg : the message
-  * @param enum $type : type of message [UI_MSG_OK|UI_MSG_WARNING|UI_MSG_ERROR]
-  */
+  /**
+   * Display an ajax step, and exit on error messages
+   * @TODO Switch parameter order, like stepMessage()
+   * @param string $msg : the message
+   * @param enum $type : type of message [UI_MSG_OK|UI_MSG_WARNING|UI_MSG_ERROR]
+   */
   static function stepAjax($msg, $type = UI_MSG_OK) {
     $args = func_get_args();
     $msg = CAppUI::tr($msg, array_slice($args, 2));

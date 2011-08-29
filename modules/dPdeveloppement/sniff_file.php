@@ -16,6 +16,7 @@ if (!class_exists("CMbCodeSniffer")) {
 
 $file = CValue::get("file");
 $file = str_replace(":", "/", $file);
+
 $sniffer = new CMbCodeSniffer;
 echo "<pre>";
 $sniffer->process($file);
@@ -25,7 +26,7 @@ echo "</pre>";
 // Cuz sniffer changes work dir but restores it at destruction
 // Be aware that unset() won't call __destruct() anyhow
 $sniffer->__destruct();
-
+  
 return;
 
 // Création du template

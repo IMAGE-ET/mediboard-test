@@ -1,20 +1,19 @@
 CodeSniffer = {
-	select: function(input) {
-  	$$('.tree-header.selected').invoke('removeClassName', 'selected');
-  	input.up('.tree-header').addClassName('selected');
-  },
-
 	run: function(button) {
-		Console.trace('Run recursive file sniffing');
+		this.show(button);
 	},
 
   show: function(button) {
-		var dir = $(button).up('.tree-content').id;
-		var basename = $(button).up('.tree-header').down('.basename').textContent;
-		var file = dir.replace(':', '/') + '/' + basename.strip();
-		file = file.split('/').slice(1).join('/');
+    var basename = $(button).up('.tree-header').down('.basename').textContent.trim();
+    var file = '';
+    if (basename != 'mediboard') {
+      var dir = $(button).up('.tree-content').id;
+      file = dir.replace(':', '/') + '/' + basename.strip();
+      file = file.split('/').slice(1).join('/');
+    }
+    
 		new Url('dPdeveloppement', 'sniff_file') .
 		  addParam("file", file) .
-			requestModal(800, 500);
+			requestModal(800, 400);
   },
 }

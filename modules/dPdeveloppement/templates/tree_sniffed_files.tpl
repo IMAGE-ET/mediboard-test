@@ -1,14 +1,13 @@
-<div id="{{$dir}}-header" class="tree-header" style="height: 22px;">
+<div id="{{$dir}}-header" class="tree-header">
 	<div id="{{$dir}}-trigger" class="tree-trigger">{{tr}}Toggle{{/tr}}</div>  
-  <div class="sniffer" style="float: right;">
+  <div class="sniffer">
     {{if is_array($files)}}
       <button type="button" class="down notext" onclick="CodeSniffer.run(this);">{{tr}}Run{{/tr}}</button>
     {{else}}
       <button type="button" class="search notext" onclick="CodeSniffer.show(this);">{{tr}}Show{{/tr}}</button>
     {{/if}}
   </div>
-  <input name="file-select" type="radio" onclick="CodeSniffer.select(this);"/>
-	<span class="basename">
+	<span class="basename" {{if is_array($files)}}style="font-weight: bold;"{{/if}}>
     {{$basename}}
 	</span>
 </div>

@@ -3,6 +3,7 @@
   <description>The Mediboard coding standard.</description>
 
   <!-- File exclusions -->
+  <exclude-pattern>/*.js</exclude-pattern>
   <exclude-pattern>/dev/</exclude-pattern>
   <exclude-pattern>/config.php</exclude-pattern>
   <exclude-pattern>/files/</exclude-pattern>

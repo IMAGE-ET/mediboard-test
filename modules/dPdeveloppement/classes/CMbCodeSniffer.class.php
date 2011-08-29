@@ -8,13 +8,21 @@
 */
 
 @include "PHP/CodeSniffer.php";
-
 if (!class_exists("PHP_CodeSniffer")) {
 	return;
 }
 
+/**
+ * Code Sniffer frameworked class
+ * File tree and report caching
+ */
 class CMbCodeSniffer extends PHP_CodeSniffer {
 	
+  /**
+   * Adapt CLI behaviour to framework
+   * 
+   * @return CMbCodeSniffer
+   */
 	function __construct() {
 		$verbosity = 1;
 		$tabwidth = 2;
@@ -25,18 +33,41 @@ class CMbCodeSniffer extends PHP_CodeSniffer {
 		parent::__construct($verbosity, $tabwidth);
 	}
 	
+	/**
+	 * Get CS standard directory
+	 * 
+	 * @return string Directory path
+	 */
+  function getStandardDir() {
+    $root_dir = CAppUI::conf("root_dir");
+    $standard = "$root_dir/dev/CodeSniffer/Standard";
+    $standard = strtr($standard, "/", DIRECTORY_SEPARATOR);
+    return $standard;
+  }	
+	
+	/**
+	 * Process analysis with framework standard
+	 * 
+	 * @param  string $file
+	 * @see    parent::process()
+	 * @return bool
+	 */
 	function process($file) {
     $root_dir = CAppUI::conf("root_dir");
-		$file     = "$root_dir/$file";
-		$standard = "$root_dir/dev/CodeSniffer/Standard";
-		$standard = strtr($standard, "/", DIRECTORY_SEPARATOR);
-		return parent::process($file, $standard);
+    $file     = "$root_dir/$file";
+    $standard = $this->getStandardDir();
+    return parent::process($file, $standard);
 	}
 	
+	/**
+	 * Build analysed file tree according to standard rules
+	 * 
+	 * @return array Recursive file array (tree)
+	 */
 	function getFilesTree() {
     $extensions = array("php");
     $root_dir = CAppUI::conf("root_dir");
-    $standard = "$root_dir/dev/CodeSniffer/Standard";
+    $standard = $this->getStandardDir();
 		$this->populateCustomRules($standard);
 		return CMbPath::getPathTreeUnder($root_dir, $this->ignorePatterns, $extensions);
 	}

@@ -1570,3 +1570,9 @@ td.loading {
     display: none;
   }
 }
+
+div.sniffer {
+	float: right;
+	margin-top: -4px;
+	margin-right: -4px;
+}
