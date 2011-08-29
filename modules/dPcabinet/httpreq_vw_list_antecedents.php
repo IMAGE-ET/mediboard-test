@@ -27,7 +27,7 @@ $dossier_medical =& $patient->_ref_dossier_medical;
 
 // Chargements des antecedents et traitements du dossier_medical
 if ($dossier_medical->_id) {
-//	$dossier_medical->loadRefsAntecedents(true);  
+	$dossier_medical->loadRefsAntecedents(true); // On doit charger TOUS les antecedents, meme les annulés (argument true)
 	$dossier_medical->loadRefsTraitements();
 	$dossier_medical->countAntecedents();
 	$prescription = $dossier_medical->loadRefPrescription();
