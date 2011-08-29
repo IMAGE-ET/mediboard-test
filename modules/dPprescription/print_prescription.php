@@ -12,13 +12,17 @@ global $can;
 
 $can->needsRead();
 
-$praticien_sortie_id = CValue::get("praticien_sortie_id");
-$only_dmi            = CValue::get("only_dmi");
-$print               = CValue::get("print", 0);
-$no_pdf              = CValue::get("no_pdf", 0);
-$operation_id        = CValue::get("operation_id");
-$globale             = CValue::get("globale");
-$in_progress         = CValue::get("in_progress");
+$praticien_sortie_id = CValue::getOrSession("praticien_sortie_id");
+$only_dmi            = CValue::getOrSession("only_dmi");
+$print               = CValue::getOrSession("print", 0);
+$no_pdf              = CValue::getOrSession("no_pdf", 0);
+$operation_id        = CValue::getOrSession("operation_id");
+$globale             = CValue::getOrSession("globale");
+$in_progress         = CValue::getOrSession("in_progress");
+$selected_lines      = CValue::get("selected_lines", array());
+
+$partial_print = count($selected_lines) > 0; 
+
 $linesDMI = array();
 
 // Chargement de l'etablissement
@@ -98,6 +102,7 @@ $lines["medicaments"]["comment"]["no_ald"] = array();
 $lines["medicaments"]["dm"]["ald"] = array();
 $lines["medicaments"]["dm"]["no_ald"] = array();
 $linesElt = array();
+$all_lines = array();
 
 // Initialisation du tableau
 if(count($prescription->_ref_lines_elements_comments)){
@@ -105,7 +110,11 @@ if(count($prescription->_ref_lines_elements_comments)){
     foreach($chap_element as $name_cat => $cat_element){
       foreach($cat_element as $type => $elements){
         foreach($elements as $element){
-          if(!CAppUI::conf("dPprescription CPrescription show_unsigned_lines") && !$element->signee && $prescription->object_id){
+          if($partial_print && !in_array($element->_guid, $selected_lines)){
+            continue;
+          }
+					
+					if(!CAppUI::conf("dPprescription CPrescription show_unsigned_lines") && !$element->signee && $prescription->object_id){
             continue;
           }
           if($praticien->_id && $element->praticien_id != $praticien->_id){
@@ -154,6 +163,14 @@ foreach($prescription->_ref_lines_med_comments as $key => $lines_medicament_type
 		if(!CAppUI::conf("dPprescription CPrescription show_unsigned_lines") && !$line_medicament->signee && $prescription->object_id){
 		  continue;
 		}
+    
+		
+		$all_lines["medicaments"][] = $line_medicament;
+    
+		if($partial_print && !in_array($line_medicament->_guid, $selected_lines)){
+      continue;
+    }
+		
 	  if($line_medicament->ald){
 	  	$_ald = true;
 	    $lines["medicaments"][$key]["ald"][] = $line_medicament;
@@ -215,6 +232,12 @@ foreach($prescription->_ref_prescription_line_mixes as $_prescription_line_mix){
   if(!CAppUI::conf("dPprescription CPrescription show_unsigned_lines") && !$_prescription_line_mix->signature_prat && $prescription->object_id){
 	  continue;
   }
+
+  $all_lines["medicaments"][] = $_prescription_line_mix;
+  if($partial_print && !in_array($_prescription_line_mix->_guid, $selected_lines)){
+    continue;
+  }
+	
   $lines["medicaments"]["med"]["no_ald"][] = $_prescription_line_mix;
 }
 
@@ -241,13 +264,19 @@ if(count($prescription->_ref_lines_elements_comments)){
 			      $executant = $element->_ref_executant->_guid;
 			    }
 					
+					$all_lines[$name_chap][] = $element;
+          
+					if($partial_print && !in_array($element->_guid, $selected_lines)){
+					  continue;
+					}
+
 					if($element->ald){
 			    	$_ald = true;
 			    	$linesElt[$name_chap][$executant]["ald"][$name_cat][] = $element;
 			    } else {
 			      $linesElt[$name_chap][$executant]["no_ald"][$name_cat][] = $element;
 			    }
-				
+				  
 					// Affichage des DM dans la page des medicaments
 					if($prescription->type != 'sejour' && ($element instanceof CPrescriptionLineElement) && $element->cip_dm){
 						$element->loadRefDM();
@@ -335,10 +364,13 @@ $smarty->assign("linesElt"       , $linesElt);
 $smarty->assign("linesDMI"       , $linesDMI);
 $smarty->assign("categories"     , $categories);
 $smarty->assign("poids"          , $poids);
-$smarty->assign("dci"            , CValue::get("dci"));
+$smarty->assign("dci"            , CValue::getOrSession("dci"));
 $smarty->assign("generated_header", @$header->_id ? $template_header->document : "");
 $smarty->assign("generated_footer", @$footer->_id ? $template_footer->document : "");
 $smarty->assign("code_rpps"      , $code_rpps);
+$smarty->assign("all_lines"      , $all_lines);
+$smarty->assign("selected_lines" , $selected_lines);
+$smarty->assign("partial_print", $partial_print);
 //$smarty->assign("am"             , $am);
 
 if (!$prescription->object_id && !$no_pdf) {
