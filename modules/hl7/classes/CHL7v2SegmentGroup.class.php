@@ -58,6 +58,9 @@ class CHL7v2SegmentGroup extends CHL7v2 {
     return $this->parent;
   }
   
+  /**
+   * @return CHL7v2Message
+   */
   function getMessage() {
     return $this->parent->getMessage();
   }

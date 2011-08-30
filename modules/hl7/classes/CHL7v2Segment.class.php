@@ -38,6 +38,10 @@ class CHL7v2Segment extends CHL7v2 {
 		}
 	}
   
+  function getFieldsCount() {
+    return CHL7v2XPath::queryCountNode($this->getSpecs(), "elements/field");
+  }
+  
   function parse($data) {
     parent::parse($data);
 		
@@ -47,23 +51,25 @@ class CHL7v2Segment extends CHL7v2 {
     $this->name = array_shift($fields);
 		
     $specs = $this->getSpecs();
-    $this->description = (string)$specs->description;
-		
-		if($this->name == "MSH") {
-			array_unshift($fields, $message->fieldSeparator);
-		}
     
-    // valid characters
-    if (preg_match("/[^a-z0-9]/i", $this->name) ) {
-      throw new CHL7v2Exception($this->data, CHL7v2Exception::INVALID_SEGMENT_CHARACTERS);
+		// check the number of fields
+    $fields_count = count($specs->elements->children());
+    if (count($fields)+1 > $fields_count) {
+      throw new CHL7v2Exception(CHL7v2Exception::TOO_MANY_FIELDS, $this->data);
     }
     
     // valid fields number, at least two
     if (count(array_filter($fields, "stringNotEmpty")) < 1) {
-      throw new CHL7v2Exception($this->data, CHL7v2Exception::TOO_FEW_SEGMENT_FIELDS);
+      throw new CHL7v2Exception(CHL7v2Exception::TOO_FEW_SEGMENT_FIELDS, $this->data);
     }
 		
-		$i = 0; // don't read the 3 letters prefix
+    $this->description = (string)$specs->description;
+		
+		if ($this->name === "MSH") {
+			array_unshift($fields, $message->fieldSeparator);
+		}
+		
+		$i = 0;
 		foreach($specs->elements->field as $_spec){
 			if (!isset($fields[$i])) {
 				break;
@@ -81,45 +87,9 @@ class CHL7v2Segment extends CHL7v2 {
         return;
       }
 		}
-/*
-    foreach ($fields as $_field) {
-      try {
-        $field = new CHL7v2Field($this, $_spec);
-        $field->parse($_field);
-        
-        $this->fields[] = $field;
-      } catch (Exception $e) {
-        exceptionHandler($e);
-        return;
-      }
-    }*/
   }
   
   function validate() {
-    $specs = $this->getSpecs();   
-    
-    $specFields = $this->getFields();
-    if (count($this->fields) > count($specFields)) {
-      throw new CHL7v2Exception($this->name, CHL7v2Exception::TOO_MANY_FIELDS);
-    }
-    
-    $count_field = 0;
-    foreach ($specFields as $_spec_field) {
-      if (isset($this->fields[$count_field])) {
-        $this->fields[$count_field]->datatype = $this->getFieldDatatype($_spec_field);
-        $this->fields[$count_field]->isBaseType();
-      }
-      $count_field++;
-    }
-    
-    foreach ($this->fields as $_field) {
-      try {
-        $_field->validate();
-      } catch (Exception $e) {
-        exceptionHandler($e);
-        return;
-      }
-    }
   }
   
   function getMessage() {

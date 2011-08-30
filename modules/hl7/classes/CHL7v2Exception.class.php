@@ -12,18 +12,25 @@ class CHL7v2Exception extends Exception {
   const EMPTY_MESSAGE              = 1;
   const INVALID_ENTERED_HEADER     = 2;
   const INVALID_SEPARATOR          = 3;
-  const SEGMENT_NAME_TOO_SHORT     = 4;
+  const SEGMENT_INVALID_SYNTAX     = 4;
   const INVALID_SEGMENT_CHARACTERS = 5;
   const TOO_FEW_SEGMENT_FIELDS     = 6;
   const TOO_MANY_FIELDS            = 7;
   const SPECS_FILE_MISSING         = 8;
   const INVALID_UNIQUE_NODE        = 9;
+  const VERSION_UNKOWN             = 10;
+  const INVALID_DATA_FORMAT        = 11;
+  const FIELD_EMPTY                = 12;
+  const TOO_MANY_FIELD_ITEMS       = 13;
+  const SEGMENT_MISSING            = 14;
   
-  public function __construct($text = null, $code = 0) { 
-    parent::__construct(CAppUI::tr("CHL7v2Exception-$code")." : '$text'", $code); 
-  } 
+  // argument 2 must be named "code" ...
+  public function __construct($id, $code = 0) {
+  	$args = func_get_args();
+  	$args[0] = "CHL7v2Exception-$id";
+
+  	$message = call_user_func_array(array("CAppUI", "tr"), $args);
+
+    parent::__construct($message, $code); 
+  }
 }
-
-
-
-?>

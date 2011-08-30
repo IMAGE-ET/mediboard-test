@@ -20,19 +20,21 @@
  */
 
 
-abstract class CHL7v2 {  
+abstract class CHL7v2 {
+	static $debug = false;
+	
   const LIB_HL7 = "lib/hl7";
   const PREFIX_MESSAGE_NAME   = "message";
   const PREFIX_SEGMENT_NAME   = "segment";
   const PREFIX_COMPOSITE_NAME = "composite";
   
   static $versions = array(
-    "1",
-    "2",
-    "3",
-    "3_1",
-    "4",
-    "5"
+    "2_1",
+    "2_2",
+    "2_3",
+    "2_3_1",
+    "2_4",
+    "2_5"
   );
   
   static $schemas = array();
@@ -43,44 +45,8 @@ abstract class CHL7v2 {
 	var $specs         = null;
 	var $data          = null;
   
-  static function isDate($value) {
-    return preg_match("/^\d{8}$/", $value);
-  }
-  
-  static function getDate($value) {
-    
-  }
-  
-  static function isTime($value) {
-    return preg_match("/^\d{6}$/", $value);
-  }
-  
-  static function isDateTime($value) {
-    return preg_match("/^\d{14}$/", $value);
-  }
-  
-  static function isDouble($value) {
-    return is_numeric($value) && is_double(floatval($value));
-  }
-  
-  static function isInteger($value) {
-    return preg_match("/^\d+$/", $value);
-  }
-  
-  static function isString($value) {
-    return is_string($value);
-  }
-  
   function parse($data) {
     $this->data = $data;
-  }
-  
-  function getFields() {
-    return CHL7v2XPath::queryMultipleNodes($this->getSpecs(), "elements");
-  }
-  
-  function getFieldsCount() {
-    return CHL7v2XPath::queryCountNode($this->getSpecs(), "elements/field");
   }
   
   function getDescription() {
@@ -108,13 +74,18 @@ abstract class CHL7v2 {
 			return self::$schemas[$version][$type][$name];
 		}
 		
-		$version_dir = "hl7v".preg_replace("/[^0-9]/", "_", $version);
+		$version_dir = preg_replace("/[^0-9]/", "_", $version); 
+		if (!in_array($version_dir, self::$versions)) {
+			throw new CHL7v2Exception(CHL7v2Exception::VERSION_UNKOWN, $version_dir);
+		}
+		
+		$version_dir = "hl7v$version_dir";
 		$name_dir = preg_replace("/[^A-Z0-9]/", "", $name);
 		
     $this->spec_filename = self::LIB_HL7."/$version_dir/$type$name_dir.xml";
     
     if (!file_exists($this->spec_filename)) {
-      throw new CHL7v2Exception($this->spec_filename, CHL7v2Exception::SPECS_FILE_MISSING);
+      throw new CHL7v2Exception(CHL7v2Exception::SPECS_FILE_MISSING, $this->spec_filename);
     }
 
     self::$schemas[$version][$type][$name] = simplexml_load_file($this->spec_filename, "CHL7v2SimpleXMLElement");
@@ -123,5 +94,10 @@ abstract class CHL7v2 {
 	
 	function getMessage(){
 		return $this;
+	}
+	
+	function d($str) {
+		if (!self::$debug) return;
+		mbTrace($str);
 	}
 }

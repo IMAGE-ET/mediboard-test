@@ -44,14 +44,14 @@ class CHL7v2Message extends CHL7v2SegmentGroup {
     
     // first tokenize the segments
     if (($message == null) || (strlen($message) < 4)) {
-      throw new CHL7v2Exception($message, CHL7v2Exception::EMPTY_MESSAGE);
+      throw new CHL7v2Exception(CHL7v2Exception::EMPTY_MESSAGE, $message);
     }
     
     $this->fieldSeparator = $message[3];
     
     // valid separator
     if (!preg_match("/[^a-z0-9]/i", $this->fieldSeparator) ) {
-      throw new CHL7v2Exception($message, CHL7v2Exception::INVALID_SEPARATOR);
+      throw new CHL7v2Exception(CHL7v2Exception::INVALID_SEPARATOR, $message);
     }
 
     $nextDelimiter = strpos($message, $this->fieldSeparator, 4);
@@ -82,6 +82,11 @@ class CHL7v2Message extends CHL7v2SegmentGroup {
     
     $this->lines = explode($this->segmentTerminator, $this->data);
     
+		// we extract the first line info "by hand"
+		$first_line = explode($this->fieldSeparator, reset($this->lines));
+		$this->version = $first_line[11];
+    $this->name    = preg_replace("/[^A-Z0-9]/", "", $first_line[8]);
+    
     $this->validate();
     
     $this->readHeader();
@@ -92,20 +97,20 @@ class CHL7v2Message extends CHL7v2SegmentGroup {
     $first_line = $this->lines[0];
     $this->current_line++;
     
+		// segment from line's string
     $segment = new CHL7v2Segment($this);
     $segment->parse($first_line);
+		
+		// this one will be the first segment
     $this->appendChild($segment);
-    
-    $this->name    = (isset($segment->fields[8 ]->items[0]->components[2]) ? $segment->fields[8 ]->items[0]->components[2] : $segment->fields[8 ]->items[0]->components[0]."_".$segment->fields[8 ]->items[0]->components[1]);
-    $this->version = $segment->fields[11]->items[0]->components[0];
   }
   
   function getCurrentLineHeader(){
     return substr($this->getCurrentLine(), 0, 3);
   }
   
-  function getCurrentLine(){
-    return CValue::read($this->lines, $this->current_line, null);
+  function getCurrentLine($offset = 0){
+    return CValue::read($this->lines, $this->current_line+$offset, null);
   }
   
   static function getNext($current_node, $current_group) {
@@ -119,19 +124,19 @@ class CHL7v2Message extends CHL7v2SegmentGroup {
     
     $next = $current_node->getNextSibling();
     if ($next) {
-      mBtrace(" --> Suivant = frere");
+      CHL7v2::d(" --> Suivant = frere");
       $current_node = $next;
     }
     else {
-      mBtrace(" --> Suivant = suivant du parent");
+      CHL7v2::d(" --> Suivant = suivant du parent");
       $parent = $current_node->getParent();
       
       if (!$parent->isUnbounded() || $parent->getOccurences() == 0) {
-        mBtrace(" --> Suivant = suivant du parent");
+        CHL7v2::d(" --> Suivant = suivant du parent");
         return self::getNext($parent, $current_group->parent);
       }
       
-      mBtrace(" --> Suivant = parent");
+      CHL7v2::d(" --> Suivant = parent");
       $current_node = $current_node->getParent();
       $current_group = $current_group->parent;
     }
@@ -156,15 +161,17 @@ class CHL7v2Message extends CHL7v2SegmentGroup {
      * @var CHL7v2SegmentGroup
      */
     $current_group = $this;
+		
+		$lines_count = count($this->lines);
     
     $n = 500; // pour eviter les boucles infinies !
 
-    while($n-- && $current_node) {
+    while($n-- && $current_node && $this->current_line < $lines_count) {
       switch($current_node->getName()) {
         
         // SEGMENT //
         case "segment":
-          mBtrace($current_node->getSegmentHeader(), "Segment");
+          CHL7v2::d($current_node->getSegmentHeader(), "Segment");
           
           // Si la spec correspond a la ligne courante
           if ($this->getCurrentLineHeader() == $current_node->getSegmentHeader()) {
@@ -179,12 +186,12 @@ class CHL7v2Message extends CHL7v2SegmentGroup {
             
             // On avance dans le fichier
             $this->current_line++;
-            mBtrace(" --> ### Creation du segment ###, ligne suivante : $this->current_line");
+            CHL7v2::d(" --> ### Creation du segment ###, ligne suivante : $this->current_line");
           }
           
           // Segment non requis, on passe au suivant
           elseif(!$current_node->isRequired()) {
-            mBtrace(" --> Segment non présent et non requis");
+            CHL7v2::d(" --> Segment non présent et non requis");
             list($current_node, $current_group) = self::getNext($current_node, $current_group);
             break;
           }
@@ -193,19 +200,19 @@ class CHL7v2Message extends CHL7v2SegmentGroup {
 					// pas de parent si à la racine (fils de <segments>) : bizarre 
           else {
             if (!$current_node->getParent() || $current_node->getParent()->isOpen()) {
-              mbTrace(" --> !!!!!!!!!!!!!!!!! Segment non present et groupe requis");
-              throw new CHL7v2Exception("Segment missing $current_node");
+              CHL7v2::d(" --> !!!!!!!!!!!!!!!!! Segment non present et groupe requis");
+              throw new CHL7v2Exception(CHL7v2Exception::SEGMENT_MISSING, (string)$current_node);
             }
           }
        
           // le segment est multiple
           if ($current_node->isUnbounded()) {
-            mBtrace(" --> Segment multiple");
+            CHL7v2::d(" --> Segment multiple");
           }
           
           // Segment unique : Segment/groupe suivant ou suivant du parent
           else {
-            mBtrace(" --> Segment unique, passage au suivant");
+            CHL7v2::d(" --> Segment unique, passage au suivant");
             list($current_node, $current_group) = self::getNext($current_node, $current_group);
           }
           break;
@@ -213,17 +220,17 @@ class CHL7v2Message extends CHL7v2SegmentGroup {
           
         // GROUP //
         case "group":
-          mBtrace((string)$current_node->attributes()->name);
+          CHL7v2::d((string)$current_node->attributes()->name);
           
           if ($current_node->isUnbounded() || $current_node->getOccurences() == 0) {
-            mBtrace(" --> Groupe multiple ou pas encore utilisé, on entre dedans (occurences = ".$current_node->getOccurences().")");
+            CHL7v2::d(" --> Groupe multiple ou pas encore utilisé, on entre dedans (occurences = ".$current_node->getOccurences().")");
             $current_group = new CHL7v2SegmentGroup($current_group);
             $current_group->name = (string)$current_node->attributes()->name;
             
             $current_node = $current_node->getFirstChild();
           }
           else {
-            mBtrace(" --> Groupe utilisé ou pas multiple, on prend le parent ou frere (occurences = ".$current_node->getOccurences().")");
+            CHL7v2::d(" --> Groupe utilisé ou pas multiple, on prend le parent ou frere (occurences = ".$current_node->getOccurences().")");
             list($current_node, $current_group) = self::getNext($current_node, $current_group);
           }
           
@@ -231,7 +238,7 @@ class CHL7v2Message extends CHL7v2SegmentGroup {
           
           // custom attributes, should never get there
         default: 
-          mbTrace($current_node->getName()); 
+          CHL7v2::d($current_node->getName()); 
           $current_node = $current_node->getNextSibling();
           break;
       }
@@ -244,11 +251,11 @@ class CHL7v2Message extends CHL7v2SegmentGroup {
   
   function validate() {
     // validation de la syntaxe : chaque ligne doit commencer par 3 lettre + un separateur + au moins une donnée
-    $sep = preg_quote($this->fieldSeparator);
+    $sep_preg = preg_quote($this->fieldSeparator);
     
     foreach($this->lines as $line) {
-      if (!preg_match("/^[A-Z0-9]{3}$sep.+$sep/", $line)) {
-        throw new CHL7v2Exception("Invalid syntax : $line");
+      if (!preg_match("/^[A-Z0-9]{3}$sep_preg.+$sep_preg/", $line)) {
+        throw new CHL7v2Exception(CHL7v2Exception::SEGMENT_INVALID_SYNTAX, $this->fieldSeparator, $line);
       }
     }
   }
@@ -261,6 +268,9 @@ class CHL7v2Message extends CHL7v2SegmentGroup {
     return $this->getSchema(self::PREFIX_MESSAGE_NAME, $this->name);
   }
   
+  /**
+   * @return CHL7v2Message
+   */
   function getMessage() {
     return $this;
   }

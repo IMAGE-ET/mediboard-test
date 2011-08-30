@@ -11,46 +11,51 @@
 CAppUI::requireModuleClass("hl7", "CHL7v2Segment");
 
 class CHL7v2Field extends CHL7v2 {
-  static $typesBase = array(
-    "Date",
-    "DateTime",
-    "Time",
-    "Double", 
-    "Integer",
-    "String",
-  );
-  
 	/**
 	 * @var CHL7v2Segment
 	 */
   var $owner_segment = null;
 	
+  var $name          = null;
   var $datatype      = null;
   var $description   = null;
+  var $minOccurs     = null;
+  var $maxOccurs     = null;
   var $items         = array();
-  
-  var $_is_base_type = null;
   
   function __construct(CHL7v2Segment $segment, $spec) {
     $this->owner_segment = $segment;
+    $this->name        = (string)$spec->name;
     $this->datatype    = (string)$spec->datatype;
     $this->description = (string)$spec->description;
+    $this->minOccurs   = (string)$spec->attributes()->minOccurs;
+    $this->maxOccurs   = (string)$spec->attributes()->maxOccurs;
   }
   
   function parse($data) {
     parent::parse($data);
 		
 		$specs = $this->getSpecs();
+    $message = $this->getMessage();
 		
-		$message = $this->owner_segment->getMessage();
-    $items = explode($message->repetitionSeparator, $this->data);
+		if ($this->minOccurs > 0 && $this->data === "") {
+      throw new CHL7v2Exception(CHL7v2Exception::FIELD_EMPTY, $message->current_line+1, $this->name, $this->description, $message->getCurrentLine());
+		}
+		
+		if ($this->owner_segment->name !== "MSH") {
+			$items = explode($message->repetitionSeparator, $this->data);
+		}
+		else {
+			$items = array($this->data);
+		}
+		
+		if ($this->maxOccurs !== "unbounded" && count($items) > 1) {
+      throw new CHL7v2Exception(CHL7v2Exception::TOO_MANY_FIELD_ITEMS, $message->current_line+1, $this->name, $this->description, $message->getCurrentLine());
+    }
 		
 		$this->items = array();
 		foreach($items as $_item) {
-			$_item_obj = new CHL7v2FieldItem;
-      $_item_obj->data = $_item;
-      $_item_obj->components = ($_item !== "" ? explode($message->componentSeparator, $_item) : array());
-			
+			$_item_obj = new CHL7v2FieldItem($this, $data);
 			$this->items[] = $_item_obj;
 		}
   }
@@ -62,7 +67,7 @@ class CHL7v2Field extends CHL7v2 {
 		$i = 0;
 		foreach($specs->elements->field as $_field) {
 			if (!isset($this->parts[$i])) {
-				mbTrace($i, $this->owner_segment->name);
+				CHL7v2::d($i, $this->owner_segment->name);
 				break;
 			}
       $parts[(string)$_field->name] = $this->parts[$i];
@@ -77,10 +82,6 @@ class CHL7v2Field extends CHL7v2 {
   function getSpecs(){
     return $this->getSchema(self::PREFIX_COMPOSITE_NAME, $this->datatype);
   }
-  
-  function isBaseType() {
-    return $this->_is_base_type = isset(self::$typesBase[$this->datatype]);
-  }
 	
 	function getVersion(){
 		return $this->owner_segment->getVersion();
@@ -88,5 +89,12 @@ class CHL7v2Field extends CHL7v2 {
 	
 	function getValue(){
 		return $this->items;
+	}
+	
+	/**
+	 * @return CHL7v2Message
+	 */
+	function getMessage(){
+		return $this->owner_segment->getMessage();
 	}
 }
