@@ -17,11 +17,22 @@ addAdministrationsPerf = function(){
   return true;
 }
 
-removeAdministrationPerf = function(administration_id){
-  oForm = document.forms.removeAdministration;
-  oForm.administration_id.value = administration_id;
-  submitFormAjax(oForm, 'systemMsg', { onComplete: refreshAdministrations } );
-  oForm.administration_id.value = '';
+removeAdministrationPerf = function(oForm){
+  if(confirm('Voulez vous supprimer également les administrations des autres produits ?')){
+	  removeAllAdministrationsPerf();
+	} else {
+	  onSubmitFormAjax(oForm, { onComplete: refreshAdministrations } );
+	}
+}
+
+removeAllAdministrationsPerf = function(){
+  $$('form.removeAdmPerf').each(function(oForm){
+	  if (oForm.hasClassName('lastFormPerf')){
+		  onSubmitFormAjax(oForm, { onComplete: refreshAdministrations });
+  	} else {
+		  onSubmitFormAjax(oForm);
+		}
+	});
 }
 
 refreshAdministrations = function(){
@@ -37,12 +48,7 @@ refreshAdministrations = function(){
   	Il n'est pas possible de créer des planifications
   </div>
 {{else}}
-	<form name="removeAdministration" action="?" method="post">
-	  <input type="hidden" name="dosql" value="do_administration_aed" />
-	  <input type="hidden" name="m" value="dPprescription" />
-	  <input type="hidden" name="del" value="1" />
-	  <input type="hidden" name="administration_id" value="" />
-	</form>
+	
 	
 	<table class="form" id="administrations_perf">
 	  <tr>
@@ -65,11 +71,17 @@ refreshAdministrations = function(){
 		  <th class="title text" colspan="2">Deja effectuées</th>
 	  </tr>
 	  {{/if}}
-	  {{foreach from=$administrations.$perf_line_id item=_administration}}
+	  {{foreach from=$administrations.$perf_line_id item=_administration name=list_adm}}
 	  <tr>
 	    <td colspan="2">
 	    	{{if $_administration->administrateur_id == $app->user_id || $_administration->planification || $can->admin}}
-	      <button class="trash notext" type="button" onclick="removeAdministrationPerf('{{$_administration->_id}}');"></button>
+	        <form name="removeAdministration-{{$_administration->_id}}" action="?" method="post" class="removeAdmPerf {{if $smarty.foreach.list_adm.last}}lastFormPerf{{/if}}">
+				    <input type="hidden" name="dosql" value="do_administration_aed" />
+				    <input type="hidden" name="m" value="dPprescription" />
+				    <input type="hidden" name="del" value="1" />
+				    <input type="hidden" name="administration_id" value="{{$_administration->_id}}" />
+						<button class="trash notext" type="button" onclick="removeAdministrationPerf(this.form);"></button>
+				  </form>
 				{{/if}} {{$_administration->quantite}} ml: {{$_administration->_view}}
 	    </td>
 	  </tr>
