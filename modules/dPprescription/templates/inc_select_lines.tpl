@@ -3,6 +3,11 @@
     Control.Tabs.create('tabs-protocole');
   });
 
+  cancelProtocole = function(elt) {
+    $V(elt.up('div.modal').select('input[type="checkbox"]'), null)
+    submitChangedLines();
+  }
+  
   submitChangedLines = function() {
     submitFormAjax(getForm('selLines'), 'systemMsg', {onComplete: function() {
       Control.Modal.close();
@@ -98,5 +103,6 @@
   </table>
   <p style="text-align: center;">
     <button type="button" class="save oneclick" onclick="submitChangedLines()">{{tr}}CPrescription.apply_advanced_protocole{{/tr}}</button>
+    <button type="button" class="cancel" onclick="cancelProtocole(this)">{{tr}}CPrescription.cancel_advanced_protocole{{/tr}}</button>
   </p>
 </form>
