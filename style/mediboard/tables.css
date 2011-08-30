@@ -591,15 +591,8 @@ td.redefined {
   background-position: 0 -48px;
 }
 
-#tab_vue_brancard th, #tab_vue_brancard td
-{
-	min-width:80px;
-	max-width:80px;
-	white-space :normal;
-}
-
-.tab_vue_brancard th, .tab_vue_brancard td
-{
+#listebrancards th, 
+#listebrancards td {
 	min-width:80px;
 	max-width:80px;
 	white-space :normal;

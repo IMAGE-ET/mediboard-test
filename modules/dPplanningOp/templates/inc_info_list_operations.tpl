@@ -5,19 +5,18 @@
   </td>
   <td>{{$_operation->_datetime|date_format:$conf.date}} 
             
-{{if @$modules.brancardage->_can->read}}
-  <input type="hidden" name="patientpaspret" value="0" id="patientpaspret"/>
-  {{mb_script module=brancardage script=creation_brancardage ajax=true }}
-  <div id="patientpret" >
-    <input type="hidden" name="sejour_id" value="{{$_operation->sejour_id}}" id="sejour_id"/>
-    <input type="hidden" name="salle_id" value="{{$_operation->salle_id}}" id="salle_id"/>
-    <button type="button" class="submit" onclick="CreationBrancard.patientPret('{{$_operation->sejour_id}}','{{$_operation->salle_id}}');" >
-       Patient pret
-   </button>
-  </div>
-{{/if}}
+	{{if @$modules.brancardage->_can->read}}
+	  <input type="hidden" name="patientpaspret" value="0" id="patientpaspret"/>
+	  {{mb_script module=brancardage script=creation_brancardage ajax=true }}
+	  <div id="patientpret" >
+	    <input type="hidden" name="sejour_id" value="{{$_operation->sejour_id}}" id="sejour_id"/>
+	    <input type="hidden" name="salle_id" value="{{$_operation->salle_id}}" id="salle_id"/>
+	    <button type="button" class="brancard" onclick="CreationBrancard.patientPret('{{$_operation->sejour_id}}','{{$_operation->salle_id}}');" >
+	       Patient pret
+	   </button>
+	  </div>
+	{{/if}}
 	
-	 <!--<button type="button" onclick="refreshListIntervs()">reload</button></td>-->
   {{if $_operation->annulee}}
   <th class="category cancelled">
     <strong>{{tr}}COperation-annulee{{/tr}}</strong>

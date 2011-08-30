@@ -31,7 +31,7 @@ $chambres=null;
 if($service_id!=""){
 	$chambre= new CChambre();
 	$where[]=" annule='0'";
-	$where["service_id"]="= $service_id";
+	$where["service_id"]="= '$service_id'";
 	$chambres=$chambre->loadList($where);
 	foreach($chambres as $ch){
 		$ch->loadRefsFwd();
@@ -104,7 +104,7 @@ $sejours=null;
 $sejour=new CSejour();
 
 $where=null;
-$where["service_id"]="= $service_id";
+$where["service_id"]="= '$service_id'";
 $sejours=$sejour->loadList($where);
 foreach($sejours as $sej){
 	$sej->loadRefsFwd();
@@ -117,7 +117,7 @@ $listPrat = $listPrat->loadPraticiens(PERM_READ);
 // Liste des services
 $services = new CService;
 $where = array();
-$where["service_id"]="= $service_id";
+$where["service_id"]="= '$service_id'";
 $order = "nom";
 $services = $services->loadListWithPerms(PERM_READ,$where, $order);
 

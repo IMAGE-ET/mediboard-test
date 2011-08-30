@@ -559,6 +559,9 @@ button.selected {
   border: 2px solid #000;
 }
 
+button.brancard:before, a.button.brancard:before {
+  content: url(images/buttons/brancard.png);
+}
 optgroup.group {
   text-align: center;
   font-variant: small-caps;

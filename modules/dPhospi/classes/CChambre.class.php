@@ -27,7 +27,7 @@ class CChambre extends CMbObject {
   var $caracteristiques = null; // côté rue, fenêtre, lit accompagnant, ...
   var $lits_alpha       = null;
   var $annule           = null;
-  var $plan				= null; //modif iciiiiiiii
+  var $plan				      = null;
 
   // Form Fields
   var $_nb_lits_dispo        = null;
@@ -63,7 +63,7 @@ class CChambre extends CMbObject {
     $specs["service_id"]       = "ref notNull class|CService seekable";
     $specs["nom"]              = "str notNull seekable";
     $specs["caracteristiques"] = "text confidential";
-    $specs["plan"]       = "str";//modif iciiiiii
+    $specs["plan"]             = "str";
     $specs["lits_alpha"]       = "bool default|0";
     $specs["annule"]           = "bool";
     return $specs;

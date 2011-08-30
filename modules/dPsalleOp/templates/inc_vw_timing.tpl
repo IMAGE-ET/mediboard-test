@@ -21,7 +21,7 @@
 		    <input type="hidden" name="opid" value="{{$opid}}" id="opid" />
 		    <input type="hidden" name="sejour_id" value="{{$selOp->sejour_id}}" id="sejour_id" />
 		    <input type="hidden" name="salle_id" value="{{$selOp->salle_id}}" id="salle_id" />
-		    <button type="button" class="submit" onclick="CreationBrancard.demandeBrancard('{{$selOp->sejour_id}}','{{$selOp->salle_id}}', '{{$opid}}');" >
+		    <button type="button" class="brancard" onclick="CreationBrancard.demandeBrancard('{{$selOp->sejour_id}}','{{$selOp->salle_id}}', '{{$opid}}');" >
 		      Demande Brancardage
 	      </button>
 	    </td>

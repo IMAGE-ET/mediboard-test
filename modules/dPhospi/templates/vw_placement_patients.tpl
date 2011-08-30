@@ -24,10 +24,10 @@
 							  {{assign var=_sejour value=$_affectation}}
 							  {{assign var=_patient   value=$_sejour->_ref_patient}}
 							  <tr>
-							    <td id="{{$_sejour->_id}}" class="text">
-									<span onmouseover="ObjectTooltip.createEx(this, '{{$_patient->_guid}}')" style="background-color: #EEE;" id="{{$_sejour->_id}}">
+							    <td class="text">
+									<div onmouseover="ObjectTooltip.createEx(this, '{{$_patient->_guid}}')" style="background-color: #EEE;" id="{{$_sejour->_id}}">
 							       	 {{$_patient}}
-									</span>
+									</div>
 							    </td>
 							  {{/if}}
 							  </tr>
@@ -46,33 +46,29 @@
 						{{/foreach}}
 					</select>
 				</form>
-				<!--<button class="submit" onclick="savePlan();">Enregistrer Modifications</button>-->
+				<table class="main tbl">
 				{{foreach from=$zones item=_zone }}
-					{{if $_zone%10==0}}<br/>{{/if}}
+					{{if $_zone==0}}<tr>{{elseif $_zone%10==0}}</tr><tr>{{/if}}
 					{{if $les_chambres[$_zone]!="0"}}
-					<div id="{{$les_chambres[$_zone]}}" style="width:120px;height:100px;{{if $les_chambres[$_zone]!='null'}}background-color: #ABE;border: white 1px solid;{{else}}border:1px solid white;{{/if}}
-							{{if $_zone%10==0}}
-								clear:both;		
-							{{else}}
+					<td id="{{$les_chambres[$_zone]}}" style="white-space :normal;width:90px;height:90px;{{if $les_chambres[$_zone]!='null'}}background-color: #ABE;border-color: white;{{else}}background-color: white;border-color:white;{{/if}}
+            {{if $_zone%10==0}}
+              clear:both;
 							{{/if}}
 						float:left;">
-						{{if $les_chambres[$_zone]!='null'}}
-							{{ $les_chambres[$_zone]}}<br/>
-						{{/if}}	
+						{{if $les_chambres[$_zone]!='null'}}{{$les_chambres[$_zone]}}		{{/if}}	
 						{{foreach from=$listAff key=_type_aff item=_liste_aff}}
 						{{foreach from=$_liste_aff item=_affectation}}
-						  {{if $_type_aff == "Aff" && $_affectation->_ref_lit->_ref_chambre->nom==$les_chambres[$_zone]}}
+						  {{if $_type_aff =="Aff" && $_affectation->_ref_lit->_ref_chambre->nom==$les_chambres[$_zone]}}
 							  {{assign var=_sejour value=$_affectation->_ref_sejour}}
 							  {{assign var=_patient   value=$_sejour->_ref_patient}}
-							  <span onmouseover="ObjectTooltip.createEx(this, '{{$_patient->_guid}}')" style="background-color: #EEE;" id="{{$_sejour->_id}}">
-							        {{$_patient}}
-							  </span>
+							  <div onmouseover="ObjectTooltip.createEx(this, '{{$_patient->_guid}}');" style="background-color: #EEE;" id="{{$_sejour->_id}}">{{$_patient}}  </div>
 						  {{/if}}
 						{{/foreach}}
 						{{/foreach}}
-						</div> 
+						</td> 
 					{{/if}}
 				{{/foreach}}
+				</tr>
 			</div>
 		</td>
 	</tr>

@@ -17,7 +17,6 @@ $service_id 	= CValue::postOrSession("service_id");
 $chambre= new CChambre();
 $services=$chambre->loadList(null,null,null,"service_id");
 foreach($services as $ch){
-//	$ch->loadRefsLits();
 	$ch->loadRefsFwd();
 }
 $les_chambres=null;
@@ -29,7 +28,7 @@ $chambres=null;
 if($service_id!=""){
 	$chambre= new CChambre();
 	$where[]=" annule='0'";
-	$where["service_id"]="= $service_id";
+	$where["service_id"]="= '$service_id'";
 	$chambres=$chambre->loadList($where);
 	foreach($chambres as $ch){
 		$ch->loadRefsFwd();

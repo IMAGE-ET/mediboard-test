@@ -30,7 +30,9 @@
           {{foreach from=$chambres item=_chambre}}
             {{if !$_chambre->plan}} 
               <tr style="border:1px blue dotted; width:100%;height:25px; text-align:center;padding-top:10px;" >
-                <td id="{{$_chambre->_id}}" style="width:75px;height:35px;text-align:center;">{{ $_chambre->nom}}</td>
+                <td style="width:75px;height:35px;text-align:center;background-color:white;">
+								 <div id="{{$_chambre->_id}}" style="height:100%;background-color: #EEE;">{{ $_chambre->nom}}</div>
+								</td>
               </tr>
             {{/if}}
           {{/foreach}}
@@ -51,8 +53,8 @@
             {{/if}}
           {{/if}}
           {{if $les_chambres[$_zone]!='null'}}
-              <td id="{{$_zone}}" class="{{$les_chambres[$_zone]->_id}}" style="width:75px;height:35px;text-align:center;" >
-                <div id="{{$les_chambres[$_zone]->_id}}">{{$les_chambres[$_zone]}}</div>
+              <td id="zone{{$_zone}}" style="width:75px;height:35px;text-align:center;background-color:white;" >
+                <div id="{{$les_chambres[$_zone]->_id}}"  style="height:100%;background-color: #EEE;" >{{$les_chambres[$_zone]}}</div>
               </td>
             {{else}}
             <td style="width:75px;height:35px;text-align:center;background-color:white;" id="zone{{$_zone}}">
@@ -63,9 +65,7 @@
         {{/foreach}}
         </tr>
         </table>
-        
       </div>
-      
       <div id="id" style="visibility:hidden;"></div>
     </td>
   </tr>
