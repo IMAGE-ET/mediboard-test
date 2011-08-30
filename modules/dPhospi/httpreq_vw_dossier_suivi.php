@@ -18,6 +18,7 @@ $user_id     = CValue::get("user_id");
 $cible       = CValue::get("cible");
 $_show_obs   = CValue::getOrSession("_show_obs", 1);
 $_show_trans = CValue::getOrSession("_show_trans", 1);
+$_show_const = CValue::getOrSession("_show_const", 0);
 
 // Chargement du sejour
 $sejour = new CSejour;
@@ -64,7 +65,7 @@ foreach($sejour->_ref_suivi_medical as $_suivi) {
 
 //TODO: Revoir l'ajout des constantes dans le suivi de soins 
 //Ajout des constantes
-if (!$cible && CAppUI::conf("soins constantes_show")){
+if (!$cible && CAppUI::conf("soins constantes_show") && $_show_const){
   $sejour->loadRefConstantes($user_id);
 }
 
@@ -140,6 +141,7 @@ $smarty->assign("users"       , $users);
 $smarty->assign("user_id"     , $user_id);
 $smarty->assign("_show_obs"   , $_show_obs);
 $smarty->assign("_show_trans" , $_show_trans);
+$smarty->assign("_show_const" , $_show_const);
 $smarty->display("inc_vw_dossier_suivi.tpl");
 
 ?>

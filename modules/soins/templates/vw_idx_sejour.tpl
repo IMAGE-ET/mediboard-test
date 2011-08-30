@@ -155,7 +155,7 @@ function updateNbTrans(sejour_id) {
   });
 }
 
-function loadSuivi(sejour_id, user_id, cible, show_obs, show_trans) {
+function loadSuivi(sejour_id, user_id, cible, show_obs, show_trans, show_const) {
   if(!sejour_id) return;
 
   updateNbTrans(sejour_id);
@@ -168,6 +168,9 @@ function loadSuivi(sejour_id, user_id, cible, show_obs, show_trans) {
   }
   if (!Object.isUndefined(show_trans)) {
     urlSuivi.addParam("_show_trans", show_trans);
+  }
+  if (!Object.isUndefined(show_const)) {
+    urlSuivi.addParam("_show_const", show_const);
   }
   urlSuivi.requestUpdate("dossier_suivi");
 }

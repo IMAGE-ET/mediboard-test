@@ -19,7 +19,7 @@
 <script type="text/javascript">
 $$('a[href=#list-dispensations] small')[0].update('({{$dispensations|@count}})');
 
-loadSuivi = function(sejour_id, user_id, cible, show_obs, show_trans) {
+loadSuivi = function(sejour_id, user_id, cible, show_obs, show_trans, show_const) {
   var url = new Url("dPhospi", "httpreq_vw_dossier_suivi");
   url.addParam("sejour_id", sejour_id);
   url.addParam("user_id", user_id);
@@ -29,6 +29,9 @@ loadSuivi = function(sejour_id, user_id, cible, show_obs, show_trans) {
   }
   if (!Object.isUndefined(show_trans)) {
     url.addParam("_show_trans", show_trans);
+  }
+  if (!Object.isUndefined(show_const)) {
+    url.addParam("_show_const", show_const);
   }
   url.requestUpdate("list-transmissions");
 }

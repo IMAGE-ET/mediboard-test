@@ -76,7 +76,7 @@ refreshLinePancarte = function(prescription_id){
   url.requestUpdate("pancarte_line_"+prescription_id);
 }
 
-loadSuivi = function(sejour_id, user_id, cible, show_obs, show_trans) {
+loadSuivi = function(sejour_id, user_id, cible, show_obs, show_trans, show_const) {
   if(!sejour_id) return;
   updateNbTrans(sejour_id);
   var urlSuivi = new Url("dPhospi", "httpreq_vw_dossier_suivi");
@@ -88,6 +88,9 @@ loadSuivi = function(sejour_id, user_id, cible, show_obs, show_trans) {
   }
   if (!Object.isUndefined(show_trans)) {
     urlSuivi.addParam("_show_trans", show_trans);
+  }
+  if (!Object.isUndefined(show_const)) {
+    urlSuivi.addParam("_show_const", show_const);
   }
   urlSuivi.requestUpdate("dossier_suivi");
 }

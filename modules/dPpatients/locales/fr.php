@@ -238,6 +238,7 @@ $locales['CConstantesMedicales-temperature-court'] = 'Temp.';
 $locales['CConstantesMedicales-temperature-desc'] = 'Température';
 $locales['CConstantesMedicales-title-create'] = 'Création d\'une constante médicale';
 $locales['CConstantesMedicales-title-modify'] = 'Modification d\'une constante médicale';
+$locales['CConstantesMedicales._show_const'] = 'Const.';
 $locales['CConstantesMedicales.all'] = 'Toutes les constantes médicales';
 $locales['CConstantesMedicales.delete_all'] = 'Suppr. ttes les valeurs';
 $locales['CConstantesMedicales.none'] = 'Aucune constante médicale';
