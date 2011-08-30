@@ -31,6 +31,6 @@ class CHL7v2Exception extends Exception {
 
   	$message = call_user_func_array(array("CAppUI", "tr"), $args);
 
-    parent::__construct($message, $code); 
+    parent::__construct($message, $id); 
   }
 }
