@@ -446,7 +446,8 @@ Element.addMethods({
     return element.hide();
   },
   getText: function(element) {
-    return ""+(element.textContent || element.innerText);
+		// using || may not work
+    return ("innerText" in element ? element.innerText : element.textContent)+"";
   }
 });
 
