@@ -10,6 +10,8 @@
 
 CCanDo::checkEdit();
 
+CPrescriptionLine::$contexte_recent_modif = 'ssr';
+
 $mode = CValue::get("mode", "count");
 $date    = CValue::getOrSession("date", mbDate());
 $kine_id = CValue::getOrSession("kine_id");

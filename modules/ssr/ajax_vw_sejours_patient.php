@@ -10,6 +10,8 @@
 
 CCanDo::checkRead();
 
+CPrescriptionLine::$contexte_recent_modif = 'ssr';
+
 $sejour_id = CValue::getOrSession("sejour_id");
 
 // Chargement du sejour

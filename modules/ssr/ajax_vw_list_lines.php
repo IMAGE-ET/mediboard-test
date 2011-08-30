@@ -10,6 +10,8 @@
 
 CCanDo::checkRead();
 
+CPrescriptionLine::$contexte_recent_modif = 'ssr';
+
 $prescription_id = CValue::get("prescription_id");
 $category_id = CValue::get("category_id");
 $full_line_id = CValue::get("full_line_id");

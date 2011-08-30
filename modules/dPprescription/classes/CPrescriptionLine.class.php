@@ -87,6 +87,8 @@ class CPrescriptionLine extends CMbObject implements IPatientRelated {
   var $_perm_edit = null;
   var $_dates_urgences = null;
   
+	static $contexte_recent_modif = null;
+	
   function getProps() {
     $specs = parent::getProps();
     $specs["prescription_id"]   = "ref notNull class|CPrescription cascade";
@@ -495,7 +497,7 @@ class CPrescriptionLine extends CMbObject implements IPatientRelated {
    * Permet de savoir si la ligne a ete recemment modifiée
    */
   function getRecentModification(){
-		if(@CAppUI::conf("object_handlers CPrescriptionAlerteHandler")){
+		if(@CAppUI::conf("object_handlers CPrescriptionAlerteHandler") && CPrescriptionLine::$contexte_recent_modif != 'ssr'){
 			$this->loadRefAlerte();
 			if($this->_ref_alerte->_id){
 				$this->_recent_modification = true;

@@ -10,6 +10,9 @@
 
 CCanDo::checkRead();
 
+// Initialisation de la variable permettant de ne pas passer par les alertes manuelles
+CPrescriptionLine::$contexte_recent_modif = 'ssr';
+
 $sejour_id = CValue::getOrSession("sejour_id");
 
 $user = CAppUI::$instance->_ref_user;

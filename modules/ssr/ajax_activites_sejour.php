@@ -10,6 +10,8 @@
 
 CCanDo::checkEdit();
 
+CPrescriptionLine::$contexte_recent_modif = 'ssr';
+
 // Sejour SSR
 $sejour = new CSejour;
 $sejour->load(CValue::get("sejour_id"));
