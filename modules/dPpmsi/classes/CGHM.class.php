@@ -231,7 +231,7 @@ class CGHM extends CMbObject {
         if($column2)
           $sql .= "AND $column2 = '$liste_id'";
         $result = $this->_dsghm->exec($sql);
-        $n = $n + $this->_dsghm($result);
+        $n = $n + $this->_dsghm->numRows($result);
       }
     }
     return $n;
