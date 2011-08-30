@@ -136,7 +136,7 @@
 	{{/if}}
 	{{foreach from=$prescription->_ref_lines_med_comments.med item=line_med}}
 	  <tr>
-	  	<td>
+	  	<td class="text">
 	  	  {{mb_include module="dPprescription" template="inc_print_medicament" med=$line_med nodebug=true print=false dci=0}}
     	</td>
 	  </tr>
@@ -144,7 +144,7 @@
 
   {{foreach from=$prescription->_ref_lines_med_comments.comment item=line_med_comment}}
 		<tr>
-			<td>
+			<td class="text">
 		    {{mb_include module="dPprescription"  template="inc_print_commentaire" comment=$line_med_comment nodebug=true}}
     	</td>
 		</tr>
@@ -176,7 +176,7 @@
       {{if array_key_exists('element', $_lines_by_cat)}}
 			  {{foreach from=$_lines_by_cat.element item=line_elt}}
 				  <tr>
-				  	<td {{if $offline}}class="text"{{/if}}>
+				  	<td class="text">
 				  	   {{mb_include module="dPprescription" template="inc_print_element" elt=$line_elt nodebug=true}}
           	</td>
 				  </tr>
@@ -185,7 +185,7 @@
 			{{if array_key_exists('comment', $_lines_by_cat)}}
         {{foreach from=$_lines_by_cat.comment item=line_elt_comment}}
           <tr>
-          	<td {{if $offline}}class="text"{{/if}}>
+          	<td class="text">
 							 <li>
 							   ({{$line_elt_comment->_ref_praticien->_view}})
 							   {{$line_elt_comment->commentaire|nl2br}}
