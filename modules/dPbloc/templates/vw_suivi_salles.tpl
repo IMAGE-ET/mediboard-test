@@ -27,7 +27,7 @@ function showLegend() {
 
 <table class="main" id="suivi-salles">
   <tr class="only-printable">
-    <th colspan="0">
+    <th colspan="100">
       <h1>{{$date_suivi|date_format:$conf.longdate}}</h1>
     </th>
   </tr>
