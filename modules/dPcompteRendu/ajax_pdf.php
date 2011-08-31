@@ -34,7 +34,6 @@ $save_content = $content;
 $ids_corres  = CValue::post("_ids_corres");
 $write_page  = CValue::post("write_page", 0);
 $page_format = CValue::post("page_format",$compte_rendu->_page_format);
-$orientation = CValue::post("orientation",$compte_rendu->_orientation);
 $first_time  = CValue::post("first_time");
 $user_id     = CValue::post("user_id", CAppUI::$user->_id);
 $page_width  = CValue::post("page_width", $compte_rendu->page_width);
@@ -110,11 +109,6 @@ else {
   }
   
   // Traitement du format de la page
-  if($orientation == "landscape") {
-    $a = $page_width;
-    $page_width = $page_height;
-    $page_height = $a;
-  }
   if($page_format == "") {
     $page_width  = round((72 / 2.54) * $page_width, 2);
     $page_height = round((72 / 2.54) * $page_height, 2);
@@ -147,7 +141,7 @@ else {
   // Suppression des espaces, tabulations, retours chariots et sauts de lignes pour effectuer le md5
   if (md5($c1) != md5($c2) || !$file->_id || !file_exists($file->_file_path) || file_get_contents($file->_file_path) == "") {
     $htmltopdf = new CHtmlToPDF;
-    $htmltopdf->generatePDF($content, 0, $page_format, $orientation, $file);
+    $htmltopdf->generatePDF($content, 0, $page_format, null, $file);
     $file->file_size = filesize($file->_file_path);
   }
   
