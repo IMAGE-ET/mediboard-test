@@ -457,3 +457,10 @@ table.form th.title {
   background-color: #ae0040;
   text-align: left;
 }
+
+/* Menus items hidden from print media */
+@media print {
+  #leftMenu, #mainHeader {
+    display: none;
+  }
+}

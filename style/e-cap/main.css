@@ -480,3 +480,10 @@ ul.control_tabs li a.active,
 ul.control_tabs_vertical li a.active {
   text-shadow: none; 
 }
+
+/* Menus items hidden from print media */
+@media print {
+  #leftMenu, #mainHeader {
+    display: none;
+  }
+}

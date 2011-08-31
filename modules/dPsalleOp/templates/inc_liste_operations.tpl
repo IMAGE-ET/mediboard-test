@@ -62,6 +62,9 @@
       <span class="{{if !$_operation->_ref_sejour->entree_reelle}}patient-not-arrived{{/if}} {{if $_operation->_ref_sejour->septique}}septique{{/if}}"
             onmouseover="ObjectTooltip.createEx(this, '{{$_operation->_ref_sejour->_ref_patient->_guid}}')">
     	  {{$_operation->_ref_patient->_view}}
+    	  {{if $vueReduite}}
+    	    ({{$_operation->_ref_patient->_age}} ans)
+    	  {{/if}}
     	</span>
     	<br />
 	    Intervention déplacée vers {{$_operation->_ref_salle->_view}}
@@ -74,6 +77,9 @@
     <span class="{{if !$_operation->_ref_sejour->entree_reelle}}patient-not-arrived{{/if}} {{if $_operation->_ref_sejour->septique}}septique{{/if}}"
           onmouseover="ObjectTooltip.createEx(this, '{{$_operation->_ref_sejour->_ref_patient->_guid}}')">
       {{$_operation->_ref_patient->_view}}
+      {{if $vueReduite}}
+        ({{$_operation->_ref_patient->_age}} ans)
+      {{/if}}
     </span>
     {{if $_operation->_ref_affectation && $_operation->_ref_affectation->_ref_lit->_id && $conf.dPbloc.CPlageOp.chambre_operation == 1}}
       <div style="text-align: center; font-size: 0.8em; width: 1%; white-space: nowrap; border: none;">
@@ -95,7 +101,11 @@
           {{$curr_code->code}}
         {{/foreach}}
       {{/if}}
-      ({{$_operation->_ref_sejour->type|truncate:1:""|capitalize}})
+      {{if $_operation->_ref_sejour->type == "comp" && $vueReduite}}
+        ({{$_operation->_ref_sejour->type|truncate:1:""|capitalize}} {{$_operation->_ref_sejour->_duree}}j)
+      {{else}}
+         ({{$_operation->_ref_sejour->type|truncate:1:""|capitalize}})
+      {{/if}}
       </span>
     </a>
   </td>

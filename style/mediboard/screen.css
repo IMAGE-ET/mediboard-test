@@ -1,0 +1,7 @@
+/* $Id: $ */
+
+@media screen {
+  .only-printable {
+    display: none;
+  }
+}

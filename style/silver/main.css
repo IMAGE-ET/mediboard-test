@@ -80,3 +80,10 @@ table.tabmenu td.selected.right {
 table.tabview td.tabox {
   background: url(./images/pictures/acierOnglet.png) repeat;
 }
+
+/* Menus items hidden from print media */
+@media print {
+  #leftMenu, #mainHeader {
+    display: none;
+  }
+}

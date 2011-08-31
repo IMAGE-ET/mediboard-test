@@ -13,6 +13,10 @@ table {
   font-size: 1em;
 }
 
+h1, h2, h3 {
+  color: #0f0;
+}
+
 /* Login */
 
 #login {
@@ -310,4 +314,11 @@ div.message, div.loading, div.error, div.warning {
    color: #f66;
    width: 10%;
    white-space: nowrap;
+}
+
+/* Menus items hidden from print media */
+@media print {
+  #mainHeader {
+    display: none;
+  }
 }

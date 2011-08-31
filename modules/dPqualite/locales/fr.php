@@ -357,6 +357,7 @@ $locales['mod-dPqualite-tab-vw_edit_classification'] = 'Classifications';
 $locales['mod-dPqualite-tab-vw_edit_ei'] = 'Liste des évènements';
 $locales['mod-dPqualite-tab-vw_incident'] = 'Nouvel incident';
 $locales['mod-dPqualite-tab-vw_incidentvalid'] = 'Fiches d\'incident';
+$locales['mod-dPqualite-tab-vw_legende_criticite'] = 'Tableau de criticité';
 $locales['mod-dPqualite-tab-vw_modeles'] = 'Modèles';
 $locales['mod-dPqualite-tab-vw_procedures'] = 'Procédures';
 $locales['mod-dPqualite-tab-vw_procencours'] = 'Rédaction de procédures';

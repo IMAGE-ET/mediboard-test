@@ -2,6 +2,7 @@
 
 @import url(xhtml.css);
 @import url(print.css);
+@import url(screen.css);
 @import url(tables.css);
 @import url(forms.css);
 @import url(messages.css);
@@ -1575,4 +1576,16 @@ div.sniffer {
 	float: right;
 	margin-top: -4px;
 	margin-right: -4px;
+}
+
+
+
+/* Menus items hidden from print media */
+@media print {
+  #user, #menubar, .titleblock, .tabmenu {
+    display: none;
+  }
+  table.tabview td.tabox {
+    background: transparent;
+  }
 }

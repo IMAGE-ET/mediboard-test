@@ -26,8 +26,13 @@ function showLegend() {
 </script>
 
 <table class="main" id="suivi-salles">
-  <tr>
-    <th colspan="100" class="not-printable">
+  <tr class="only-printable">
+    <th colspan="0">
+      <h1>{{$date_suivi|date_format:$conf.longdate}}</h1>
+    </th>
+  </tr>
+  <tr class="not-printable">
+    <th colspan="0">
       <button type="button" onclick="showLegend()" class="search" style="float: left;">Légende</button>
       <button type="button" onclick="$('suivi-salles').print();" class="print" style="float: right;">{{tr}}Print{{/tr}}</button>
       
@@ -47,8 +52,8 @@ function showLegend() {
       </form>
     </th>
   </tr>
-  <tr>
-    <td class="button not-printable" colspan="0">
+  <tr class="not-printable">
+    <td class="button" colspan="0">
       {{foreach from=$bloc->_ref_salles item=_salle}}
         <label><input type="checkbox" onclick="Effect.toggle('salle-{{$_salle->_id}}', 'appear');" checked="checked" /> {{$_salle->nom}}</label>
       {{/foreach}}
