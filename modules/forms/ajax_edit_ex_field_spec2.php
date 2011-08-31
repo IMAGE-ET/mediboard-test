@@ -51,7 +51,7 @@ $exclude = array(
   "confidential", "mask", "format", "reported", 
   "perm", "seekable", "pattern", "autocomplete", 
   "cascade", "delimiter", "canonical", "protected", 
-  "class", "alphaAndNum"
+  "class", "alphaAndNum", "byteUnit",
 );
 
 $options = $spec->_options;

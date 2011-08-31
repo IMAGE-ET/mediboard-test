@@ -16,6 +16,7 @@ $locales['CFile-_rename-desc'] = 'Renommer les fichiers en';
 $locales['CMbFieldSpec.adeli'] = 'Numéro Adeli';
 $locales['CMbFieldSpec.alphaAndNum'] = 'Alphanumérique';
 $locales['CMbFieldSpec.autocomplete'] = 'Autocompleté';
+$locales['CMbFieldSpec.byteUnit'] = 'Unité d\'octet';
 $locales['CMbFieldSpec.canonical'] = 'Canonique';
 $locales['CMbFieldSpec.cascade'] = 'Suppression en cascade';
 $locales['CMbFieldSpec.ccam'] = 'Code CCAM';

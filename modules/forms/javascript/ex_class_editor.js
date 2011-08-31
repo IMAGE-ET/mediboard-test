@@ -355,14 +355,14 @@ ExFormula = {
       ExFormula.initTextarea();
     }});
   },
-  toggleInsertButtons: function(value, type){
+  toggleInsertButtons: function(value, type, field_id){
     value = value && ExFormula.form;
 		
 		if (!value) {
       $$(".insert-formula").invoke("hide");
 		}
 		else {
-      $$(".insert-formula."+type).invoke("show");
+      $$("tr.ex-class-field:not([data-ex_class_field_id='"+field_id+"']) .insert-formula."+type).invoke("show");
 		}
   },
   insertText: function(text){

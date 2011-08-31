@@ -59,7 +59,7 @@ Main.add(function(){
 
   new Control.Tabs("ExClassField-param", {
     afterChange: function(newContainer){
-      ExFormula.toggleInsertButtons(newContainer.id == "fieldFormulaEditor", "{{$_can_formula_arithmetic|ternary:'arithmetic':'concat'}}");
+      ExFormula.toggleInsertButtons(newContainer.id == "fieldFormulaEditor", "{{$_can_formula_arithmetic|ternary:'arithmetic':'concat'}}", '{{$ex_field->_id}}');
     }
   });
   
