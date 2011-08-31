@@ -34,6 +34,7 @@ $save_content = $content;
 $ids_corres  = CValue::post("_ids_corres");
 $write_page  = CValue::post("write_page", 0);
 $page_format = CValue::post("page_format",$compte_rendu->_page_format);
+$orientation = CValue::post("orientation",$compte_rendu->_orientation);
 $first_time  = CValue::post("first_time");
 $user_id     = CValue::post("user_id", CAppUI::$user->_id);
 $page_width  = CValue::post("page_width", $compte_rendu->page_width);
@@ -141,7 +142,7 @@ else {
   // Suppression des espaces, tabulations, retours chariots et sauts de lignes pour effectuer le md5
   if (md5($c1) != md5($c2) || !$file->_id || !file_exists($file->_file_path) || file_get_contents($file->_file_path) == "") {
     $htmltopdf = new CHtmlToPDF;
-    $htmltopdf->generatePDF($content, 0, $page_format, null, $file);
+    $htmltopdf->generatePDF($content, 0, $page_format, isset(CCompteRendu::$_page_formats[$page_format]) ? $orientation : null, $file);
     $file->file_size = filesize($file->_file_path);
   }
   

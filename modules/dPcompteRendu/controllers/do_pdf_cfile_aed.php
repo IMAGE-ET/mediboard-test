@@ -42,7 +42,7 @@ $file->file_name  = $compte_rendu->nom . ".pdf";
 $file->file_owner = CAppUI::$user->_id;
 
 $htmltopdf = new CHtmlToPDF;
-$htmltopdf->generatePDF($content, 0, $compte_rendu->_page_format, null, $file);
+$htmltopdf->generatePDF($content, 0, $compte_rendu->_page_format, isset(CCompteRendu::$_page_formats[$compte_rendu->_page_format]) ? $compte_rendu->_orientation : null, $file);
 
 $file->file_size = filesize($file->_file_path);
 $msg = $file->store();
