@@ -17,7 +17,7 @@
   <tr>
   	{{if @$modules.brancardage->_can->read}}
 	    <input type="hidden" name="patientpaspret" value="0" id="patientpaspret" />
-	  	<td id="demandebrancard" >
+	  	<td id="demandebrancard" rowspan="2">
 		    <input type="hidden" name="opid" value="{{$opid}}" id="opid" />
 		    <input type="hidden" name="sejour_id" value="{{$selOp->sejour_id}}" id="sejour_id" />
 		    <input type="hidden" name="salle_id" value="{{$selOp->salle_id}}" id="salle_id" />
@@ -33,7 +33,6 @@
     {{include file=inc_field_timing.tpl object=$selOp field=debut_op    }}
   </tr>
   <tr>
-  	<td></td>
     {{include file=inc_field_timing.tpl object=$selOp field=sortie_salle  }}
     {{include file=inc_field_timing.tpl object=$selOp field=retrait_garrot}}
     {{include file=inc_field_timing.tpl object=$selOp field=fin_op        }}
