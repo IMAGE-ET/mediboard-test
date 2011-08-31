@@ -70,7 +70,7 @@ toggleObjectSelector = function(input, selected) {
       
     case "enum":
 		  var container = specElements[0];
-		  var options = {};
+		  var options = {"":null}; // empty first element
 			
 			spec.list.each(function(v){
 			  options[v] = $T($(selected).get("field").replace(/(-)/g, ".")+"."+v);

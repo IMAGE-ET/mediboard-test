@@ -147,7 +147,12 @@ class CExClassConstraint extends CMbObject {
     }
     // second part
     else {
-      $this->_view = CAppUI::tr("$host_class-{$this->field}");
+    	if (count($parts) > 1) {
+    		$this->_view = CAppUI::tr("$host_class-{$parts[0]}");
+    	}
+			else {
+				$this->_view = CAppUI::tr("$host_class-{$this->field}");
+			}
     }
 		
 		// 2 levels
