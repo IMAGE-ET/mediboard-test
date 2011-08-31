@@ -641,7 +641,7 @@ Main.add( function(){
 					
 					<tr>
 						<td class="button">
-							<button type="button" class="print" onclick="Prescription.printPrescription('{{$prescription->_id}}', 0, '{{$prescription->object_id}}');" />Ordonnance</button>
+							<button type="button" class="print" onclick="Prescription.printPrescription('{{$prescription->_id}}', 0, '{{$prescription->object_id}}', null, $('dci').cheched ? 1 : 0, $('globale').checked ? 1 : 0, $('in_progress').checked ? 1 : 0);" />Ordonnance</button>
 				      {{if $prescription->object_id && $prescription->object_class == "CSejour"}}
 				        <button type="button" class="print" onclick="PlanSoins.printBons('{{$prescription->_id}}');" title="{{tr}}Print{{/tr}}">Bons</button>
 				      {{/if}}
