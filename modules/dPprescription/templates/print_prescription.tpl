@@ -140,7 +140,7 @@ p.duplicata {
 		    {{/foreach}}
 		  </table>
 			<div class="button">
-			  <button class="search">Afficher</button>
+			  <button class="search">Filtrer</button>
 			</div>
 	  </div>
 	</form>
