@@ -400,14 +400,6 @@ table.main th.urgence {
   background-color: #08F;
 }
 
-@media print {
-  table.tbl td,
-  table.tbl th,
-  table.tbl th.title {
-    border: 1px solid #888;
-  }
-}
-
 /* System message */
 #systemMsg {
   font-size: 80%;
@@ -485,5 +477,11 @@ ul.control_tabs_vertical li a.active {
 @media print {
   #leftMenu, #mainHeader {
     display: none;
+  }
+	
+  table.tbl td,
+  table.tbl th,
+  table.tbl th.title {
+    border: 1px solid #888;
   }
 }

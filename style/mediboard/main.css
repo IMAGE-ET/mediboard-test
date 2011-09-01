@@ -697,12 +697,6 @@ table#weeklyPlanning th.today {
   background: #FF0000;
 }
 
-@media print {
-  .planning .event  {    
-    font-size: 110%;
-  }
-}
-
 .planning-signatures fieldset {
   width: 45%;
   height: 6em;
@@ -1566,26 +1560,8 @@ td.loading {
   opacity: 1.0;
 }
 
-@media print {
-  #systemMsg, #performance, .smarty-include {
-    display: none;
-  }
-}
-
 div.sniffer {
 	float: right;
 	margin-top: -4px;
 	margin-right: -4px;
-}
-
-
-
-/* Menus items hidden from print media */
-@media print {
-  #user, #menubar, .titleblock, .tabmenu {
-    display: none;
-  }
-  table.tabview td.tabox {
-    background: transparent;
-  }
 }

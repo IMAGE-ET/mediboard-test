@@ -5,7 +5,19 @@
     background: transparent;
   }
   
-  .not-printable {
+  .not-printable, 
+	#user, #menubar, .titleblock, .tabmenu, #systemMsg, #performance, .smarty-include {
+    display: none;
+  }
+  
+  div.warning,
+  div.error,
+  div.message {
+    display: none;
+  }
+  
+  table#weber table#allvalues,
+  table#weber td.radiointeractive {
     display: none;
   }
   
@@ -18,18 +30,11 @@
 		border-width: 2px;
 	}
 	
-  div.warning,
-  div.error,
-  div.message {
-    display: none;
+  .planning .event  {    
+    font-size: 110%;
   }
   
-  div#performance {
-  	display: none;
-  }
-  
-  table#weber table#allvalues,
-  table#weber td.radiointeractive {
-    display: none;
+  table.tabview td.tabox {
+    background: transparent;
   }
 }

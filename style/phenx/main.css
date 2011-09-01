@@ -628,7 +628,7 @@ table.main th.title.modify {
   margin-right: 4px;
 }
 
-#main div.content {
+#main>.content {
   background: #FCFCFE;
   border-top: 1px solid #919B9C;
 }
@@ -774,4 +774,15 @@ ul.control_tabs_vertical li a.active {
   -moz-border-radius: 6px;
   -webkit-border-radius: 6px;
   border-radius: 6px;
+}
+
+/* Menus items hidden from print media */
+@media print {
+  #leftMenu, #tabmenu, #main > .title {
+    display: none;
+  }
+	
+	#main, #main > .content {
+		border: none;
+	}
 }
