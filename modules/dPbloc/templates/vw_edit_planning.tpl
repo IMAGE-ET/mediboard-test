@@ -135,15 +135,11 @@ Main.add(function(){
          <td>
           <select name="chir_id" class="{{$plagesel->_props.chir_id}}" style="width: 15em;">
             <option value="">&mdash; Choisir un chirurgien</option>
-            {{foreach from=$specs item=currFct key=keyFct}}
-            <optgroup label="{{$currFct->_view}}">
-              {{foreach from=$currFct->_ref_users item=currUser}}
-              <option class="mediuser" style="border-color: #{{$currFct->color}};" value="{{$currUser->user_id}}" 
-              {{if $plagesel->chir_id == $currUser->user_id}}selected="selected"{{/if}}>
-                {{$currUser->_view}}
+            {{foreach from=$chirs item=_chir}}
+              <option class="mediuser" style="border-color: #{{$_chir->_ref_function->color}};" value="{{$_chir->user_id}}" 
+              {{if $plagesel->chir_id == $_chir->user_id}}selected="selected"{{/if}}>
+                {{$_chir->_view}}
               </option>
-              {{/foreach}}
-            </optgroup>
             {{/foreach}}
           </select>
         </td>
@@ -299,7 +295,7 @@ Main.add(function(){
     {{/if}}
    </td>
    <td>
-     {{include file="inc_legende_planning.tpl"}}
+     {{include file="inc_legende_planning.tpl" listSpec=$specs}}
    </td>
   </tr>
 </table>

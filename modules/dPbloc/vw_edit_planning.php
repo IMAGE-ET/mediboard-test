@@ -47,14 +47,17 @@ if(!$plagesel->_id) {
 
 // Liste des Specialités
 $function = new CFunctions;
-$specs = $function->loadSpecialites(PERM_READ);
-foreach($specs as $key => $spec) {
-  $specs[$key]->loadRefsUsers(array("Chirurgien", "Anesthésiste"));
-}
+$specs = $function->loadSpecialites(PERM_READ, 1);
 
 // Liste des Anesthésistes
 $mediuser = new CMediusers;
 $anesths = $mediuser->loadAnesthesistes();
+
+// Liste des praticiens
+$chirs = $mediuser->loadChirurgiens();
+foreach($chirs as $_chir) {
+  $_chir->loadRefFunction();
+}
 
 // Récupération des plages pour le jour demandé
 $listPlage = new CPlageOp();
@@ -144,10 +147,10 @@ $smarty->assign("nbIntervNonPlacees", $nbIntervNonPlacees);
 $smarty->assign("nbIntervHorsPlage" , $nbIntervHorsPlage );
 $smarty->assign("nbAlertesInterv"   , $nbAlertesInterv   );
 $smarty->assign("date"              , $date              );
-$smarty->assign("listSpec"          , $specs             );
 $smarty->assign("plagesel"          , $plagesel          );
 $smarty->assign("specs"             , $specs             );
 $smarty->assign("anesths"           , $anesths           );
+$smarty->assign("chirs"             , $chirs             );
 
 $smarty->display("vw_edit_planning.tpl");
 ?>
