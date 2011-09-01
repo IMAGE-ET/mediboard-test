@@ -9,10 +9,8 @@
  */
 
 class CHL7v2DataTypeInteger extends CHL7v2DataType {
-	protected $type = "Integer";
-  
   function toMB($value){
-  	$result = parent::toMB($value);
+    $result = parent::toMB($value);
     return ($result === null ? null : (int)$result);
   }
   

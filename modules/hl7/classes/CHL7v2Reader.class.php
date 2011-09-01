@@ -16,7 +16,7 @@ class CHL7v2Reader {
    */
   function readFile($fileName) {
     $message = new CHL7v2Message();
-		
+    
     try {
       $fileContents = file_get_contents($fileName);
       $fileContents = str_replace("\r\n", "\n", $fileContents);

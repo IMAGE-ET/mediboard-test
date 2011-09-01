@@ -9,5 +9,4 @@
  */
 
 class CHL7v2DataTypeString extends CHL7v2DataType {
-	protected $type = "String";
 }

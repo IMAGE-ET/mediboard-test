@@ -28,7 +28,7 @@ var Action = {
     <th class="category">{{tr}}Status{{/tr}}</th>
   </tr>
   <tr>
-    <td>
+    <td style="vertical-align: top;">
       <button type="button" class="new" onclick="Action.read()">
         {{tr}}Read{{/tr}}
       </button>

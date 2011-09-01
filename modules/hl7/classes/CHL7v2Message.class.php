@@ -38,6 +38,8 @@ class CHL7v2Message extends CHL7v2SegmentGroup {
   }
   
   function parse($data) {
+    $data = trim($data);
+    
     parent::parse($data);
     
     $message = $this->data;
@@ -80,12 +82,23 @@ class CHL7v2Message extends CHL7v2SegmentGroup {
       $this->componentSeparator    = "^";
     }
     
-    $this->lines = explode($this->segmentTerminator, $this->data);
+    $this->lines = CHL7v2::split($this->segmentTerminator, $this->data);
     
-		// we extract the first line info "by hand"
-		$first_line = explode($this->fieldSeparator, reset($this->lines));
-		$this->version = $first_line[11];
-    $this->name    = preg_replace("/[^A-Z0-9]/", "", $first_line[8]);
+    // we extract the first line info "by hand"
+    $first_line = CHL7v2::split($this->fieldSeparator, reset($this->lines));
+    
+    // version
+    $this->version = $first_line[11];
+    
+    // message type
+    $message_type = explode($this->componentSeparator, $first_line[8]);
+    if (isset($message_type[2])) {
+      $type = $message_type[2];
+    }
+    else {
+      $type = implode("", $message_type);
+    }
+    $this->name    = preg_replace("/[^A-Z0-9]/", "", $type);
     
     $this->validate();
     
@@ -97,11 +110,11 @@ class CHL7v2Message extends CHL7v2SegmentGroup {
     $first_line = $this->lines[0];
     $this->current_line++;
     
-		// segment from line's string
+    // segment from line's string
     $segment = new CHL7v2Segment($this);
     $segment->parse($first_line);
-		
-		// this one will be the first segment
+    
+    // this one will be the first segment
     $this->appendChild($segment);
   }
   
@@ -114,11 +127,6 @@ class CHL7v2Message extends CHL7v2SegmentGroup {
   }
   
   static function getNext($current_node, $current_group) {
-    // cas de la boucle sur le meme
-    /*if ($current_node->isUnbounded() && $parent->getOccurences() > 0) {
-      return array($current_node, $current_group);
-    }*/
-    
     // On remet les compteurs d'utilisation a zero
     $current_node->reset();
     
@@ -161,8 +169,8 @@ class CHL7v2Message extends CHL7v2SegmentGroup {
      * @var CHL7v2SegmentGroup
      */
     $current_group = $this;
-		
-		$lines_count = count($this->lines);
+    
+    $lines_count = count($this->lines);
     
     $n = 500; // pour eviter les boucles infinies !
 
@@ -197,7 +205,7 @@ class CHL7v2Message extends CHL7v2SegmentGroup {
           }
           
           // Si le segment est requis et que le groupe est ouvert, alors erreur
-					// pas de parent si à la racine (fils de <segments>) : bizarre 
+          // pas de parent si à la racine (fils de <segments>) : bizarre 
           else {
             if (!$current_node->getParent() || $current_node->getParent()->isOpen()) {
               CHL7v2::d(" --> !!!!!!!!!!!!!!!!! Segment non present et groupe requis");
@@ -254,7 +262,7 @@ class CHL7v2Message extends CHL7v2SegmentGroup {
     $sep_preg = preg_quote($this->fieldSeparator);
     
     foreach($this->lines as $line) {
-      if (!preg_match("/^[A-Z0-9]{3}$sep_preg.+$sep_preg/", $line)) {
+      if (!preg_match("/^[A-Z0-9]{3}$sep_preg.+/", $line)) {
         throw new CHL7v2Exception(CHL7v2Exception::SEGMENT_INVALID_SYNTAX, $this->fieldSeparator, $line);
       }
     }

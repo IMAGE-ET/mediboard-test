@@ -8,43 +8,43 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
  */
 
-class CHL7v2SegmentGroup extends CHL7v2 {
+class CHL7v2SegmentGroup extends CHL7v2Entity {
   var $children = array();
-	var $name;
-	
-	/**
-	 * @var CHL7v2SegmentGroup
-	 */
+  var $name;
+  
+  /**
+   * @var CHL7v2SegmentGroup
+   */
   var $parent = null;
     
   function __construct(CHL7v2SegmentGroup $parent) {
     $this->parent = $parent;
-		$parent->appendChild($this);
+    $parent->appendChild($this);
   }
-	
-	static function getFirstSegmentHeader($spec, $header_name) {
-		$xp = "*//segment[text()='$header_name']";
-		$elements = $spec->xpath($xp);
-		$first = reset($elements);
-		
-		if (!$first) return;
-		
-		$stack = array($first);
-		$p = $first;
-		while(($p = self::getParentElement($p)) && ($p != $spec)) {
-			$stack[] = $p;
-		}
-		
-		return array_reverse($stack);
-	}
-	
-	static function getParentElement($spec) {
-		return $spec->getParent();
-	}
-	
-	function validate(){
-		
-	}
+  
+  static function getFirstSegmentHeader($spec, $header_name) {
+    $xp = "*//segment[text()='$header_name']";
+    $elements = $spec->xpath($xp);
+    $first = reset($elements);
+    
+    if (!$first) return;
+    
+    $stack = array($first);
+    $p = $first;
+    while(($p = self::getParentElement($p)) && ($p != $spec)) {
+      $stack[] = $p;
+    }
+    
+    return array_reverse($stack);
+  }
+  
+  static function getParentElement($spec) {
+    return $spec->getParent();
+  }
+  
+  function validate(){
+    
+  }
   
   function getVersion(){
     return $this->parent->getVersion();

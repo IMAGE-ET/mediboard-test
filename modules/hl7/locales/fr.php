@@ -2,7 +2,7 @@
 $locales['CHL7v2Exception-1'] = 'Impossible d\'analyser le fichier. Il est NULL ou trop court.';
 $locales['CHL7v2Exception-2'] = 'L\'entête du message n\'est pas valide (MSH, FHS, BHS).';
 $locales['CHL7v2Exception-3'] = 'Le format du séparateur est invalide.';
-$locales['CHL7v2Exception-4'] = 'Syntax invalide, dit commencer par 3 caractères majuscune, un séparateur ( %s ) et enfin les données : \'%s\'';
+$locales['CHL7v2Exception-4'] = 'Syntaxe invalide, doit commencer par 3 caractères majuscule, un séparateur ( %s ) et enfin les données : \'%s\'';
 $locales['CHL7v2Exception-5'] = 'Caractères de segment invalides';
 $locales['CHL7v2Exception-6'] = 'Trop peu de champs dans le segment %s';
 $locales['CHL7v2Exception-7'] = 'Nombre de champs trop élevé dans le segment %s';

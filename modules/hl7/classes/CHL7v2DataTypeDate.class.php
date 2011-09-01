@@ -9,11 +9,9 @@
  */
 
 class CHL7v2DataTypeDate extends CHL7v2DataType {
-	protected $type = "Date";
-	
   function toMB($value){
     $hl7 = $this->parseHL7($value);
-		return $hl7["year"]."-".CValue::read($hl7, "month", "00")."-".CValue::read($hl7, "day", "00");
+    return $hl7["year"]."-".CValue::read($hl7, "month", "00")."-".CValue::read($hl7, "day", "00");
   }
   
   function toHL7($value) {

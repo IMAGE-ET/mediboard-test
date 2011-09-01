@@ -17,7 +17,7 @@ $extract = CValue::get("extract");
 $racine  = "modules/hl7/resources";
 $lib_hl7 = "lib/hl7";
 
-$specs_name     = "hl7v2_".$version;
+$specs_name     = "hl7v".$version;
 $destinationDir = "$lib_hl7/$specs_name";
 $archivePath    = "$racine/$specs_name.zip";
   

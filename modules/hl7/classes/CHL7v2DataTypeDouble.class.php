@@ -9,8 +9,6 @@
  */
 
 class CHL7v2DataTypeDouble extends CHL7v2DataType {
-	protected $type = "Double";
-  
   function toMB($value){
     $result = parent::toMB($value);
     return ($result === null ? null : (double)$result);

@@ -26,10 +26,10 @@ class CHL7v2Exception extends Exception {
   
   // argument 2 must be named "code" ...
   public function __construct($id, $code = 0) {
-  	$args = func_get_args();
-  	$args[0] = "CHL7v2Exception-$id";
+    $args = func_get_args();
+    $args[0] = "CHL7v2Exception-$id";
 
-  	$message = call_user_func_array(array("CAppUI", "tr"), $args);
+    $message = call_user_func_array(array("CAppUI", "tr"), $args);
 
     parent::__construct($message, $id); 
   }

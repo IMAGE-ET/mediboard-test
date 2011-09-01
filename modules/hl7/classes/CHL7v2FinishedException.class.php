@@ -9,5 +9,5 @@
  */
 
 class CHL7v2FinishedException extends Exception {
-	
+  
 }

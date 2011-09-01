@@ -9,8 +9,6 @@
  */
 
 class CHL7v2DataTypeTime extends CHL7v2DataType {
-  protected $type = "Time";
-	
   function toMB($value){
     $hl7 = $this->parseHL7($value);
     return      CValue::read($hl7, "hour",   "00").

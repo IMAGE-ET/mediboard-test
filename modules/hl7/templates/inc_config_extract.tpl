@@ -26,7 +26,7 @@
   }
   
   Main.add( function(){
-	  {{foreach from=$hl7v2_versions item=_hl7v2_version}}
+    {{foreach from=$hl7v2_versions item=_hl7v2_version}}
       checkSpecsFiles('{{$_hl7v2_version}}');
     {{/foreach}}
   });
@@ -41,7 +41,7 @@
   {{foreach from=$hl7v2_versions item=_hl7v2_version}}  
   <tr>
     <td class="narrow">
-      {{tr}}HL7-v.2.{{$_hl7v2_version}}{{/tr}}
+      {{tr}}{{$_hl7v2_version|replace:"_":"."}}{{/tr}}
     </td>
     
     <td onclick="extractSpecsFiles('{{$_hl7v2_version}}');" class="narrow">

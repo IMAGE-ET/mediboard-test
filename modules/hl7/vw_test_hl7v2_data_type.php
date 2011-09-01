@@ -12,18 +12,18 @@ CCanDo::checkRead();
 
 $test_suite = array(
   "Date" => array(
-	  "mb" => array(
+    "mb" => array(
       "20110829" => "2011-08-29",
       "201108"   => "2011-08-00",
       "2011"     => "2011-00-00",
       "2011082"  => null,
-		),
-		"hl7" => array(
+    ),
+    "hl7" => array(
       "2011-08-29" => "20110829",
       "2011-08-00" => "201108",
       "2011-00-00" => "2011",
-		),
-	),
+    ),
+  ),
   
   "DateTime" => array(
     "mb" => array(
@@ -95,23 +95,23 @@ $results = array();
 
 foreach($test_suite as $type => $systems) {
   echo "<h1>$type</h1>";
-	$dt = CHL7v2DataType::load($type);
-	
-	foreach($systems as $system => $tests) {
-		echo "<h2>$system</h2>";
-		
-		foreach($tests as $from => $to) {
-			$method = ($system == "mb" ? "toMB" : "toHL7");
-			$result = null;
-			
-			try {
-				$result = $dt->$method($from);
-			}
-			catch(CHL7v2Exception $e) {
-				$result = $e;
-			}
- 			
-			echo "<pre style='text-indent: 3em; color:".(($result === $to || $result instanceof CHL7v2Exception && $to == null) ? 'green' : 'red')."'>'$from' => ".($result instanceof CHL7v2Exception ? $result->getMessage() : var_export($result, true))." (expected ".var_export($to,true).")</pre>\n";
-		}
-	}
+  $dt = CHL7v2DataType::load($type, "2.5");
+  
+  foreach($systems as $system => $tests) {
+    echo "<h2>$system</h2>";
+    
+    foreach($tests as $from => $to) {
+      $method = ($system == "mb" ? "toMB" : "toHL7");
+      $result = null;
+      
+      try {
+        $result = $dt->$method($from);
+      }
+      catch(CHL7v2Exception $e) {
+        $result = $e;
+      }
+       
+      echo "<pre style='text-indent: 3em; color:".(($result === $to || $result instanceof CHL7v2Exception && $to == null) ? 'green' : 'red')."'>'$from' => ".($result instanceof CHL7v2Exception ? $result->getMessage() : var_export($result, true))." (expected ".var_export($to,true).")</pre>\n";
+    }
+  }
 }

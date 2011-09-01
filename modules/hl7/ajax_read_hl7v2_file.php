@@ -18,7 +18,7 @@ $ftp = new CFTP();
 $ftp->init($exchange_source);
 $ftp->connect();
 
-if (!$list = $ftp->getListFiles("./")) {
+if (!$list = $ftp->getListFiles($ftp->fileprefix)) {
   CAppUI::stepAjax("Le répertoire ne contient aucun fichier", UI_MSG_ERROR);
 }
 
@@ -29,12 +29,13 @@ foreach($list as $filepath) {
     $filename = tempnam("", "hl7");
     $ftp->getFile($filepath, $filename);
     $hl7v2_reader = new CHL7v2Reader();
-		
-		$message = $hl7v2_reader->readFile($filename);
-		
-		if ($message) {
-			$messages[] = $message;
-		}
+    
+    $message = $hl7v2_reader->readFile($filename);
+    
+    if ($message) {
+      $message->filename = basename($filepath);
+      $messages[] = $message;
+    }
     
     unlink($filename);
   } else {
