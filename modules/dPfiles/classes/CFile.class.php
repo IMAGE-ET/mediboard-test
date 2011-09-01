@@ -402,15 +402,23 @@ class CFile extends CDocumentItem {
   }
  
   static function openoffice_launched() {
-    exec("sh shell/ooo_state.sh", $res);
-    return $res[0];
+    return exec("pgrep soffice.bin");
+  }
+  
+  static function openoffice_overload() {
+    $a = exec("sh shell/ooo_overload.sh");
   }
   
   function convertToPDF($file_path = null, $pdf_path = null) {
+    global $rootName;
+    
     // Vérifier si openoffice est lancé
-    if (!CFile::openoffice_launched() ){
+    if (!CFile::openoffice_launched()){
       return 0;
     }
+    
+    // Vérifier sa charge en mémoire
+    CFile::openoffice_overload();
     
     if (!$file_path && !$pdf_path) {
       $file = new CFile();
@@ -432,12 +440,38 @@ class CFile extends CDocumentItem {
       $pdf_path  = $file->_file_path;
     }
     
-    $path_python = CAppUI::conf("dPfiles CFile python_path") ? CAppUI::conf("dPfiles CFile python_path") ."/": "";
+    // Requête post pour la conversion.
+    // Cela permet de mettre un time limit afin de garder le contrôle de la conversion.
     
-    $res = exec("{$path_python}python ./modules/dPfiles/script/doctopdf.py {$file_path} {$pdf_path}");
+    ini_set("default_socket_timeout", 10);
     
-    if (isset($file)) {
-      $file->file_size = filesize($file->_file_path);
+    $fileContents = base64_encode(file_get_contents($file_path));
+    
+    $url = CAppUI::conf("base_url")."/index.php?m=dPfiles&a=ajax_ooo_convert&suppressHeaders=1";
+    $data = array (
+      "file_data" => $fileContents,
+      "pdf_path"  => $pdf_path
+    );
+    
+    // Fermeture de la session afin d'écrire dans le fichier de session
+    session_write_close();
+    
+    // Le header Connection: close permet de forcer a couper la connexion lorsque la requête est effectuée
+    $ctx = stream_context_create(array(
+      'http' => array(
+        'method'  => 'POST',
+        'header'  => "Content-type: application/x-www-form-urlencoded charset=UTF-8\r\n".
+                     "Connection: close\r\n".
+                     "Cookie: mediboard=".session_id()."\r\n",
+        'content' => http_build_query($data),
+      )
+    ));
+    
+    // La requête post réouvre la session
+    $res = file_get_contents($url, false, $ctx);
+    
+    if (isset($file) && $res == 1) {
+      $file->file_size = filesize($pdf_path);
       if ($msg = $file->store()) {
         CAppUI::setMsg($msg, UI_MSG_ERROR);
         return 0;

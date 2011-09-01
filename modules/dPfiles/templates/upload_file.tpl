@@ -16,7 +16,7 @@ reloadCallback = function() {
   var systemMsg = $("systemMsg").update();
   systemMsg.insert(window.parent.$("upload-{{$object->_guid}}").contentDocument.documentElement.getElementsByClassName("info")[0].cloneNode(true));
   systemMsg.show();
-  window.parent.$("upload-{{$object->_guid}}").up().up().select(".cancel")[0].click();
+  Control.Modal.close();
 }
 
 showLoading = function(){
