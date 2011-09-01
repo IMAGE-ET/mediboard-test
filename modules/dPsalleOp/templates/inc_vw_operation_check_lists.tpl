@@ -41,14 +41,12 @@ Main.add(function(){
   
   <tr>
     <th colspan="10" class="title">
-    	
-      {{mb_include module=forms template=inc_widget_ex_class_register object=$selOp event=checklist cssStyle="float: right; font-size: 0.8em;"}}
 
       <button class="down" onclick="$('check-lists').toggle(); $(this).toggleClassName('down').toggleClassName('up')">
         Check list Sécurité du Patient
       </button>
       
-      <select onchange="showCheckListType($(this).up('table'), $V(this))" style="max-width: 22em;">
+      <select onchange="showCheckListType($(this).up('table'), $V(this))" style="max-width: 18em;">
         <option value="normal" {{if $active_list_type == "normal"}} selected="selected" {{/if}}>Au bloc opératoire (v. 2011-01)</option>
         <option value="endoscopie" {{if $active_list_type == "endoscopie"}} selected="selected" {{/if}}>En endoscopie digestive (v. 2010-01)</option>
         <option value="endoscopie-bronchique" {{if $active_list_type == "endoscopie-bronchique"}} selected="selected" {{/if}}>En endoscopie bronchique (v. 2011-01)</option>
@@ -57,6 +55,8 @@ Main.add(function(){
 			<img height="20" src="images/pictures/logo-has-small.png" />
 			
 			<button class="print" onclick="(new Url('dPsalleOp', 'print_check_list_operation')).addParam('operation_id', {{$selOp->_id}}).popup(800, 600, 'check_list')">{{tr}}Print{{/tr}}</button>
+      
+			{{mb_include module=forms template=inc_widget_ex_class_register object=$selOp event=checklist cssStyle="display: inline-block; font-size: 0.8em;"}}
     </th>
   </tr>
   

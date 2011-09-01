@@ -107,11 +107,11 @@ foreach($test_suite as $type => $systems) {
       try {
         $result = $dt->$method($from);
       }
-      catch(CHL7v2Exception $e) {
+      catch(Exception $e) {
         $result = $e;
       }
        
-      echo "<pre style='text-indent: 3em; color:".(($result === $to || $result instanceof CHL7v2Exception && $to == null) ? 'green' : 'red')."'>'$from' => ".($result instanceof CHL7v2Exception ? $result->getMessage() : var_export($result, true))." (expected ".var_export($to,true).")</pre>\n";
+      echo "<pre style='text-indent: 3em; color:".(($result === $to || $result instanceof Exception && $to == null) ? 'green' : 'red')."'>'$from' => ".($result instanceof Exception ? $result->getMessage() : var_export($result, true))." (expected ".var_export($to,true).")</pre>\n";
     }
   }
 }

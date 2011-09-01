@@ -46,6 +46,10 @@ abstract class CHL7v2 {
   abstract function getVersion();
   
   function getSchema($type, $name) {
+  	/*if (empty(self::$schemas)) {
+  		self::$schemas = SHM::get("hl7-v2-schemas");
+  	}*/
+		
     $version = $this->getVersion();
     
     if (isset(self::$schemas[$version][$type][$name])) {
@@ -66,8 +70,13 @@ abstract class CHL7v2 {
       throw new CHL7v2Exception(CHL7v2Exception::SPECS_FILE_MISSING, $this->spec_filename);
     }
 
-    self::$schemas[$version][$type][$name] = simplexml_load_file($this->spec_filename, "CHL7v2SimpleXMLElement");
-    return $this->specs = self::$schemas[$version][$type][$name];
+    $schema = simplexml_load_file($this->spec_filename, "CHL7v2SimpleXMLElement");
+		
+    self::$schemas[$version][$type][$name] = $schema;
+		
+		//SHM::put("hl7-v2-schemas", self::$schemas);
+		
+    return $this->specs = $schema;
   }
   
   function d($str) {

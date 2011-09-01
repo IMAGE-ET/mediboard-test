@@ -88,7 +88,8 @@ class CHL7v2Message extends CHL7v2SegmentGroup {
     $first_line = CHL7v2::split($this->fieldSeparator, reset($this->lines));
     
     // version
-    $this->version = $first_line[11];
+    preg_match('/^([\d\._]+)/', $first_line[11], $version_matches);
+    $this->version = $version_matches[1];
     
     // message type
     $message_type = explode($this->componentSeparator, $first_line[8]);

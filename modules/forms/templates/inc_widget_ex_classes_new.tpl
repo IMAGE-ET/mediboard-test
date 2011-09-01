@@ -9,7 +9,7 @@
 *}}
 
 <button class="down" {{if $ex_objects|@count == 0}}disabled{{/if}} onclick="ObjectTooltip.createDOM(this, $(this).next(), {duration: 0});">
-  {{$count_available}} formulaire(s) disponible(s)
+  {{$count_available}} formulaire(s)
 </button>
 
 <table class="layout" style="border: 1px solid #000; display: none;">

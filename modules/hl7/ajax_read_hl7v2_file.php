@@ -30,12 +30,17 @@ foreach($list as $filepath) {
     $ftp->getFile($filepath, $filename);
     $hl7v2_reader = new CHL7v2Reader();
     
+		ob_start();
     $message = $hl7v2_reader->readFile($filename);
+		$errors = ob_get_clean();
+		
+		if (!$message) {
+			$message = new CHL7v2Message;
+		}
     
-    if ($message) {
-      $message->filename = basename($filepath);
-      $messages[] = $message;
-    }
+    $message->filename = basename($filepath);
+    $message->errors = $errors;
+    $messages[] = $message;
     
     unlink($filename);
   } else {

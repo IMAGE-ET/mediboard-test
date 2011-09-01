@@ -127,7 +127,7 @@ div.big-info,
 div.big-warning,
 div.big-error {
 	text-align: left;
-	margin: 10px 50px;
+	margin: 8px 30px;
   min-height: 50px;
   background-repeat: no-repeat;
   background-position: 5px center;
