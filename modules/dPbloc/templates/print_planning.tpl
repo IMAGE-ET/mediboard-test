@@ -93,7 +93,7 @@ function showCheckboxAnesth(element){
 <input type="hidden" name="_chir" value="{{$chir}}" />
 <table class="main">
   <tr>
-    <td>
+    <td class="halfPane">
       <table class="form">
         <tr>
           <th class="category" colspan="3">Choix de la période</th>
@@ -133,8 +133,8 @@ function showCheckboxAnesth(element){
         <tr>
           <th>{{mb_label object=$filter field="_intervention"}}</th>
           <td colspan="2">
-            <select name="_intervention">
-              <option value="0">&mdash; Toutes les interventions &mdash;</option>
+            <select name="_intervention" style="width: 15em;">
+              <option value="0">&mdash; Toutes les interventions</option>
               <option value="1">insérées dans le planning</option>
               <option value="2">à insérer dans le planning</option>
             </select>
@@ -143,7 +143,7 @@ function showCheckboxAnesth(element){
         <tr>
           <th>{{mb_label object=$filterSejour field="type"}}</th>
           <td colspan="2">
-            {{mb_field object=$filterSejour field="type" canNull=true defaultOption="&mdash; Tous les types"}}
+            {{mb_field object=$filterSejour field="type" canNull=true style="width: 15em;" defaultOption="&mdash; Tous les types"}}
           </td>
         </tr>
       </table>
@@ -158,8 +158,8 @@ function showCheckboxAnesth(element){
         <tr>
           <th>{{mb_label object=$filter field="_prat_id"}}</th>
           <td>
-            <select name="_prat_id" onchange="showCheckboxAnesth(this); this.form._specialite.value = '0';">
-              <option value="0">&mdash; Tous les praticiens &mdash;</option>
+            <select name="_prat_id" style="width: 15em;" onchange="showCheckboxAnesth(this); this.form._specialite.value = '0';">
+              <option value="0">&mdash; Tous les praticiens</option>
               {{foreach from=$listPrat item=curr_prat}}
                 <option {{if $curr_prat->isAnesth()}} class="mediuser anesth" {{else}} class="mediuser" {{/if}} style="border-color: #{{$curr_prat->_ref_function->color}};" value="{{$curr_prat->user_id}}" >
                   {{$curr_prat->_view}}
@@ -174,8 +174,8 @@ function showCheckboxAnesth(element){
         <tr>
           <th>{{mb_label object=$filter field="_specialite"}}</th>
           <td>
-            <select name="_specialite" onchange="this.form._prat_id.value = '0';">
-              <option value="0">&mdash; Toutes les spécialités &mdash;</option>
+            <select name="_specialite" style="width: 15em;" onchange="this.form._prat_id.value = '0';">
+              <option value="0">&mdash; Toutes les spécialités</option>
               {{foreach from=$listSpec item=curr_spec}}
                 <option value="{{$curr_spec->function_id}}" class="mediuser" style="border-color: #{{$curr_spec->color}};">
                   {{$curr_spec->text}}
@@ -187,8 +187,8 @@ function showCheckboxAnesth(element){
         <tr>
           <th>{{mb_label object=$filter field="_bloc_id"}}</th>
           <td>
-            <select name="_bloc_id">
-              <option value="0">&mdash; Tous les blocs &mdash;</option>
+            <select name="_bloc_id" style="width: 15em;">
+              <option value="0">&mdash; Tous les blocs</option>
               {{foreach from=$listBlocs item=curr_bloc}}
                 <option value="{{$curr_bloc->_id}}" {{if $curr_bloc->_id == $filter->_bloc_id}}selected="selected"{{/if}}>
                   {{$curr_bloc->_view}}
@@ -200,8 +200,8 @@ function showCheckboxAnesth(element){
         <tr>
           <th>{{mb_label object=$filter field="salle_id"}}</th>
           <td>
-            <select name="salle_id">
-              <option value="0">&mdash; Toutes les salles &mdash;</option>
+            <select name="salle_id" style="width: 15em;">
+              <option value="0">&mdash; Toutes les salles</option>
               {{foreach from=$listBlocs item=curr_bloc}}
                 <optgroup label="{{$curr_bloc->_view}}">
                 {{foreach from=$curr_bloc->_ref_salles item=curr_salle}}
@@ -216,8 +216,8 @@ function showCheckboxAnesth(element){
         </tr>
         <tr>
           <th>{{mb_label object=$filter field="_codes_ccam"}}</th>
-          <td><input type="text" name="_codes_ccam" size="10" value="" />
-          <button type="button" class="search" onclick="CCAMSelector.init()">Chercher un code</button>
+          <td><input type="text" name="_codes_ccam" style="width: 12em;" value="" />
+          <button type="button" class="search notext" onclick="CCAMSelector.init()">Chercher un code</button>
           <script type="text/javascript">
             CCAMSelector.init = function(){
               this.sForm  = "paramFrm";

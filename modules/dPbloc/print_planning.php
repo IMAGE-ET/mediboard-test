@@ -41,7 +41,7 @@ $listPrat = new CMediusers();
 $listPrat = $listPrat->loadPraticiens(PERM_READ);
 
 $listSpec = new CFunctions();
-$listSpec = $listSpec->loadSpecialites(PERM_READ);
+$listSpec = $listSpec->loadSpecialites(PERM_READ, 1);
 
 $bloc = new CBlocOperatoire();
 $g = CGroups::loadCurrent();
