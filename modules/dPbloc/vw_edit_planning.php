@@ -52,6 +52,9 @@ $specs = $function->loadSpecialites(PERM_READ, 1);
 // Liste des Anesthésistes
 $mediuser = new CMediusers;
 $anesths = $mediuser->loadAnesthesistes();
+foreach($anesths as $_anesth) {
+  $_anesth->loadRefFunction();
+}
 
 // Liste des praticiens
 $chirs = $mediuser->loadChirurgiens();

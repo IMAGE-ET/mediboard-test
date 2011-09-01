@@ -135,12 +135,25 @@ Main.add(function(){
          <td>
           <select name="chir_id" class="{{$plagesel->_props.chir_id}}" style="width: 15em;">
             <option value="">&mdash; Choisir un chirurgien</option>
+            {{if $chirs|@count}}
+            <optgroup label="Chirurgiens">
+            </optgroup>
             {{foreach from=$chirs item=_chir}}
               <option class="mediuser" style="border-color: #{{$_chir->_ref_function->color}};" value="{{$_chir->user_id}}" 
               {{if $plagesel->chir_id == $_chir->user_id}}selected="selected"{{/if}}>
                 {{$_chir->_view}}
               </option>
             {{/foreach}}
+            {{/if}}
+            {{if $anesths|@count}}
+            <optgroup label="Anesthésistes"></optgroup>
+            {{foreach from=$anesths item=_anesth}}
+              <option class="mediuser" style="border-color: #{{$_anesth->_ref_function->color}};" value="{{$_anesth->user_id}}" 
+              {{if $plagesel->chir_id == $_anesth->user_id}}selected="selected"{{/if}}>
+                {{$_anesth->_view}}
+              </option>
+            {{/foreach}}
+            {{/if}}
           </select>
         </td>
         <th>{{mb_label object=$plagesel field="salle_id"}}</th>
@@ -199,9 +212,9 @@ Main.add(function(){
         <td>
           <select name="anesth_id" style="width: 15em;">
             <option value="">&mdash; Choisir un anesthésiste</option>
-            {{foreach from=$anesths item=anesth}}
-            <option value="{{$anesth->user_id}}" {{if $plagesel->anesth_id == $anesth->user_id}} selected="selected" {{/if}} >
-              {{$anesth->_view}}
+            {{foreach from=$anesths item=_anesth}}
+            <option class="mediuser" style="border-color: #{{$_anesth->_ref_function->color}};" value="{{$_anesth->user_id}}" {{if $plagesel->anesth_id == $_anesth->user_id}} selected="selected" {{/if}} >
+              {{$_anesth->_view}}
             </option>
             {{/foreach}}
     	  </select>
