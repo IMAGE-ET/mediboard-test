@@ -35,8 +35,7 @@ Main.add(function(){
           <tr>
             <th>{{mb_label object=$ex_class field=event}}</th>
             <td>
-              
-              <select name="_event" class="notNull" onchange="ExClass.setEvent(this)" style="max-width: 20em;">
+              <select name="_event" class="notNull" onchange="ExClass.setEvent(this)" style="width: 20em !important;">
                 <option value=""> &ndash; Choisir </option>
                 {{foreach from=$classes item=_events key=_class}}
                   <optgroup label="{{tr}}{{$_class}}{{/tr}}">

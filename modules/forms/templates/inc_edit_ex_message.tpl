@@ -10,9 +10,14 @@
 
 <script type="text/javascript">
 Main.add(function(){
-  getForm("editConstraint").elements.field.select();
+  getForm("editMessage").elements.title.select();
 });
 </script>
+
+<div class="small-info">
+	Les Titres/Textes sont des zones d'information à placer sur la grille (Disposition du formulaire).<br />
+	<strong>Le libellé n'a pas nécessairement besoin d'être placé sur la grille</strong>.
+</div>
 
 <form name="editMessage" method="post" action="?" onsubmit="return onSubmitFormAjax(this, {onComplete: ExClass.edit.curry({{$ex_message->_ref_ex_group->ex_class_id}})})">
   <input type="hidden" name="m" value="system" />
