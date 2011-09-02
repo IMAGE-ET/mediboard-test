@@ -38,27 +38,36 @@ function initCKEditor() {
     
 	  var ck_instance = CKEDITOR.instances.htmlarea;
 
-    // Les plugins qui ne doivent pas être pris en compte pour le changement de valeur pour contentEditable
-    //var plugins = ["source", "undo", "redo", "pastefromword"];
-
-    // Le content editable des champs
-    /*var toggleContentEditable = function(state, obj) {
-      if (ck_instance.document == null || (obj.data && plugins.indexOf(obj.data.name) != -1)) return;
+	  {{if !$templateManager->valueMode}}
+  
+      // Le content editable des champs
       var spans = ck_instance.document.getBody().getElementsByTag("span").$;
       for(var i in spans) {
         var span = spans[i];
         if (span && span.className && Element.hasClassName(span, "field"))
-          span.contentEditable = state;
+          span.contentEditable = false;
       }
-    };
-    
-    ck_instance.on('beforeCommandExec' , toggleContentEditable.curry(true));
-    ck_instance.on('afterCommandExec'  , toggleContentEditable.curry(false));
-    ck_instance.on("beforeCombo"       , toggleContentEditable.curry(true));
-    ck_instance.on("afterCombo"        , toggleContentEditable.curry(false));
-    ck_instance.on("beforerenderColors", toggleContentEditable.curry(true));
-    ck_instance.on("afterrenderColors" , toggleContentEditable.curry(false));*/
 
+      // Les plugins qui ne doivent pas être pris en compte pour le changement de valeur pour contentEditable
+      var plugins = ["source", "undo", "redo", "pastefromword"];    
+      var toggleContentEditable = function(state, obj) {
+        if (ck_instance.document == null || (obj.data && plugins.indexOf(obj.data.name) != -1)) return;
+        var spans = ck_instance.document.getBody().getElementsByTag("span").$;
+        for(var i in spans) {
+          var span = spans[i];
+          if (span && span.className && Element.hasClassName(span, "field"))
+            span.contentEditable = state;
+        }
+      };
+      
+      ck_instance.on('beforeCommandExec' , toggleContentEditable.curry(true));
+      ck_instance.on('afterCommandExec'  , toggleContentEditable.curry(false));
+      ck_instance.on("beforeCombo"       , toggleContentEditable.curry(true));
+      ck_instance.on("afterCombo"        , toggleContentEditable.curry(false));
+      ck_instance.on("beforerenderColors", toggleContentEditable.curry(true));
+      ck_instance.on("afterrenderColors" , toggleContentEditable.curry(false));
+    {{/if}}
+    
 	  // Redimensionnement de l'éditeur
 		window.resizeEditor();
 
