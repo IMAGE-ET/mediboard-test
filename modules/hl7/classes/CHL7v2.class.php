@@ -62,7 +62,7 @@ abstract class CHL7v2 {
     }
     
     $version_dir = "hl7v$version_dir";
-    $name_dir = preg_replace("/[^A-Z0-9]/", "", $name);
+    $name_dir = preg_replace("/[^A-Z0-9_]/", "", $name);
     
     $this->spec_filename = self::LIB_HL7."/$version_dir/$type$name_dir.xml";
     

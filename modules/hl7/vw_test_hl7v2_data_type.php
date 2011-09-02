@@ -115,3 +115,25 @@ foreach($test_suite as $type => $systems) {
     }
   }
 }
+
+function pre($str) {
+	return "<pre>$str</pre>";
+}
+
+$message = new CHL7v2Message;
+$message->initEscapeSequences();
+
+$escaped = "debut \\F\\ \\S\\ \\T\\ \\E\\ \\R\\ fin";
+$unescaped = $message->unescape($escaped);
+
+mbExport($escaped, "escaped");
+mbExport($unescaped, "escaped unescaped");
+mbExport($message->escape($unescaped), "escaped unescaped escaped");
+
+$unicode = "coeur unicode \\M2764\\";
+mbExport($unicode);
+echo pre($message->unescape($unicode));
+
+$format = "test \H\I'm strong\N\ test \.br\ new line";
+echo pre($format);
+echo pre($message->format($format));

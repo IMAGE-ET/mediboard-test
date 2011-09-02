@@ -22,17 +22,8 @@ var Action = {
 
 </script>
 
-<table class="tbl">
-  <tr>
-    <th class="category" style="width:15%">{{tr}}Action{{/tr}}</th>
-    <th class="category">{{tr}}Status{{/tr}}</th>
-  </tr>
-  <tr>
-    <td style="vertical-align: top;">
-      <button type="button" class="new" onclick="Action.read()">
-        {{tr}}Read{{/tr}}
-      </button>
-    </td>
-    <td id="read_hl7_file"></td>
-  </tr>
-</table>
+<button type="button" class="new" onclick="Action.read()">
+  {{tr}}Read{{/tr}}
+</button>
+
+<div id="read_hl7_file"></div>

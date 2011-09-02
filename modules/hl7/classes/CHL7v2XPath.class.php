@@ -14,7 +14,7 @@ class CHL7v2XPath extends CHL7v2Exception {
     
     $nodeList = $xmlElement->xpath($query);
     if (count($nodeList) > 1) {
-      //throw new CHL7v2Exception("Queried node is not unique, found ".count($nodeList)." occurence(s) for '$query'", CHL7v2Exception::INVALID_UNIQUE_NODE);
+      throw new CHL7v2Exception("Queried node is not unique, found ".count($nodeList)." occurence(s) for '$query'", CHL7v2Exception::INVALID_UNIQUE_NODE);
     }
     
     return $nodeList[0];
