@@ -116,7 +116,7 @@ Preferences.onSubmit = function(form) {
   </tbody>
   
   {{foreach from=$prefs key=module item=_prefs}}
-    {{if $module != "common"}}
+    {{if $module != "common" && isset($modules.$module|smarty:nodefaults)}}
     <tbody style="display: none" id="{{$module}}">
       {{mb_include module=$module template=preferences}}
     </tbody>
