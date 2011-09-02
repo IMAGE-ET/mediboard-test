@@ -6,11 +6,12 @@
   <td>{{$_operation->_datetime|date_format:$conf.date}} 
             
 	{{if @$modules.brancardage->_can->read}}
-	  <input type="hidden" name="patientpaspret" value="0" id="patientpaspret"/>
 	  {{mb_script module=brancardage script=creation_brancardage ajax=true }}
 	  <div id="patientpret" >
-	    <input type="hidden" name="sejour_id" value="{{$_operation->sejour_id}}" id="sejour_id"/>
-	    <input type="hidden" name="salle_id" value="{{$_operation->salle_id}}" id="salle_id"/>
+	  	<input type="hidden" name="param_brancard"  id="param_brancard"
+         data-salle-id  ="{{$_operation->salle_id}}"
+         data-sejour-id ="{{$_operation->sejour_id}}"
+         data-charge    ="" />
 	    <button type="button" class="brancard" onclick="CreationBrancard.patientPret('{{$_operation->sejour_id}}','{{$_operation->salle_id}}');" >
 	       Patient pret
 	   </button>

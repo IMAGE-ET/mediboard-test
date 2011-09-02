@@ -16,11 +16,13 @@
   {{assign var=form value=timing$opid}}
   <tr>
   	{{if @$modules.brancardage->_can->read}}
-	    <input type="hidden" name="patientpaspret" value="0" id="patientpaspret" />
+		
 	  	<td id="demandebrancard" rowspan="2">
-		    <input type="hidden" name="opid" value="{{$opid}}" id="opid" />
-		    <input type="hidden" name="sejour_id" value="{{$selOp->sejour_id}}" id="sejour_id" />
-		    <input type="hidden" name="salle_id" value="{{$selOp->salle_id}}" id="salle_id" />
+	  		
+      <input type="hidden" name="param_brancard" id="param_brancard"
+	       data-salle-id="{{$selOp->salle_id}}"
+	       data-sejour-id="{{$selOp->sejour_id}}"
+	       data-charge=""	data-opid="{{$opid}}"  />
 		    <button type="button" class="brancard" onclick="CreationBrancard.demandeBrancard('{{$selOp->sejour_id}}','{{$selOp->salle_id}}', '{{$opid}}');" >
 		      Demande Brancardage
 	      </button>
