@@ -24,10 +24,10 @@ $module->registerTab("vw_suivi_bloc"              , TAB_READ);
 $module->registerTab("vw_idx_chambres"            , TAB_ADMIN);
 $module->registerTab("vw_etiquettes"              , TAB_READ);
 if (CModule::getInstalled("printing")) {
-  $module->registerTab("vw_printers"                , TAB_READ);
+  $module->registerTab("vw_printers"              , TAB_READ);
 }
 if (CModule::getInstalled("brancardage")) {
-  $module->registerTab("vw_plan_etage"				, TAB_READ);
-  $module->registerTab("vw_placement_patients"      , TAB_READ);
+  $module->registerTab("vw_plan_etage"				    , TAB_READ);
+  $module->registerTab("vw_placement_patients"    , TAB_READ);
 }
 ?>

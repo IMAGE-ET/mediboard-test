@@ -21,98 +21,92 @@ $service_id 	= CValue::postOrSession("service_id");
 $date_recherche = CValue::getOrSession("date_recherche", mbDateTime());
 
 //Chargement de tous les services
-$chambre= new CChambre();
-$les_chambres=null;
+$service_selectionne = new CService();
+$service_selectionne->load($service_id);
 
-for($i=0;$i<100;$i++){
-	$les_chambres[$i]="null";
+
+$chambre = new CChambre();
+$services=$chambre->loadList(null,null,null,"service_id");
+foreach($services as $ch){
+  $ch->loadRefsFwd();
 }
-$chambres=null;
+
+$grille = array_fill(0, 10, array_fill(0, 10, 0));
+$chambres = array();
 if($service_id!=""){
-	$chambre= new CChambre();
-	$where[]=" annule='0'";
-	$where["service_id"]="= '$service_id'";
-	$chambres=$chambre->loadList($where);
-	foreach($chambres as $ch){
-		$ch->loadRefsFwd();
-		if($ch->plan!=null){$les_chambres[$ch->plan]=$ch;}
-	}
+  
+  $chambre = new CChambre();
+  $where["annule"] = "= '0'";
+  $where["service_id"] = "= '$service_id'";
+  
+  $chambres=$chambre->loadList($where);
+  
+  foreach($chambres as $ch){
+    $ch->loadRefsFwd();
+    $ch->loadRefsBack();
+    if($ch->plan_x != null && $ch->plan_y != null){
+      $grille[$ch->plan_y][$ch->plan_x] = $ch;
+    }
+  }
 }
+
 //Traitement des lignes vides
-for($j=1;$j<=10;$j++){
+  $nb;  $total;
+foreach($grille as $j => $value) {
 	$nb=0;
-	for($i=($j-1)*10;$i<(10*$j);$i++){
-		if($les_chambres[$i]=="null"){$nb++;}
+	  foreach($value as $i => $valeur){
+		if($valeur=="0")
+		{
+			if($j==0 || $j==9){
+				$nb++;
+			}
+			else{
+				if( !isset($grille[$j-1]) || $grille[$j-1][$i]=="0" || !isset($grille[$j+1]) || $grille[$j+1][$i]=="0" ){
+					$nb++;
+				}
+			}
+		}
 	}
 	//suppression des lignes inutiles
 	if($nb==10){
-		for($i=($j-1)*10;$i<(10*$j);$i++){
-			if($i<10 || $i>89 ){
-					$les_chambres[$i]="0";
-			}
-			else{
-				if($les_chambres[$i+10]!="null" && $les_chambres[$i+10]!="0" && $les_chambres[$i-10]!="null" && $les_chambres[$i-10]!="0"){
-					$les_chambres[$i]="null";
-				}
-				else{
-					$les_chambres[$i]="0";
-				}
-			}
-			
-		}
+    unset($grille[$j]);
 	}
 }
 
 //Traitement des colonnes vides
-for($j=0;$j<10;$j++){
+for($i=0;$i<10;$i++) {
 	$nb=0;
-	$total=0;
-	for($i=0;$i<10;$i++){
-		$a=$i.$j+1-1;
-		if($les_chambres[$a]!="0"){
-			$total++;
-			if($les_chambres[$a]=="null"){$nb++;}
-		}
-	}
-	//suppression des lignes inutiles
+  $total=0;
+  for($j=0;$j<10;$j++){
+  	 $total++;
+     if(!isset($grille[$j][$i]) || $grille[$j][$i]=="0")
+     {
+     	if($i==0 || $i==9){$nb++;}
+     	else{
+     		if((!isset($grille[$j][$i-1]) || $grille[$j][$i-1]=="0") || (!isset($grille[$j][$i+1]) || $grille[$j][$i+1]=="0")){
+        $nb++;
+     		}
+     	}
+     }
+  }
+  //suppression des colonnes inutiles
 	if($nb==$total){
-		for($i=0;$i<10;$i++){
-			$a=$i.$j+1-1;
-			if($a%10==0 || $a%10==9 ){
-					$les_chambres[$a]="0";
-			}
-			else{
-				if($les_chambres[$a+1]!="null" && $les_chambres[$a+1]!="0" && $les_chambres[$a-1]!="null" && $les_chambres[$a-1]!="0"){
-					$les_chambres[$a]="null";
-				}
-				else{
-					$les_chambres[$a]="0";
-				}
-			}
-			
-		}
-	}
+    for($a=0;$a<10;$a++){
+	          unset($grille[$a][$i]);
+    }
+  }
 }
-
-$zone=null;
-for ($a=0;$a<100;$a++){
-	$zone[$a]=$a;
-}
-
-$sejours=null;
+	
+$sejours=array();
 
 $sejour=new CSejour();
 
-$where=null;
+$where=array();
 $where["service_id"]="= '$service_id'";
 $sejours=$sejour->loadList($where);
 foreach($sejours as $sej){
 	$sej->loadRefsFwd();
 }
-
-// Liste des chirurgiens
-$listPrat = new CMediusers();
-$listPrat = $listPrat->loadPraticiens(PERM_READ);
 
 // Liste des services
 $services = new CService;
@@ -122,20 +116,16 @@ $order = "nom";
 $services = $services->loadListWithPerms(PERM_READ,$where, $order);
 
 //tous les services 
-$servic = new CService();
-$les_services=$servic->loadList();
+$service = new CService();
+$les_services=$service->loadList();
 
-$listAff = null;
-//
-// Cas de l'affichage des lits d'un praticien
-//
-if($service_id){
-  // Recherche des patients du praticien
-  // Qui ont une affectation
-  $listAff = array(
+$listAff = array(
    "Aff"    => array(),
    "NotAff" => array()
-  );
+);
+  
+if($service_id){
+  
   $affectation = new CAffectation;
   $ljoin = array(
     "lit"     => "affectation.lit_id = lit.lit_id",
@@ -147,7 +137,6 @@ if($service_id){
     "affectation.entree"  => "< '$date_recherche'",
     "affectation.sortie"  => "> '$date_recherche'",
     "service.service_id"  => CSQLDataSource::prepareIn(array_keys($services), null),
-    "sejour.praticien_id" => CSQLDataSource::prepareIn(array_keys($listPrat), null),
     "sejour.group_id"     => "= '$g'"
   );
   $order = "service.nom, chambre.nom, lit.nom";
@@ -156,39 +145,41 @@ if($service_id){
     $_aff->loadView();
     $_aff->loadRefSejour();
     $_aff->_ref_sejour->loadRefPatient();
-    $_aff->_ref_sejour->_ref_praticien =& $listPrat[$_aff->_ref_sejour->praticien_id];
-
     $_aff->loadRefLit();
-    $_aff->_ref_lit->loadCompleteView();
   }
     $sejour = new CSejour();
+    
     $where = array(
       "sejour.entree"  => "< '$date_recherche'",
       "sejour.sortie"  => "> '$date_recherche'",
-      "sejour.praticien_id" => CSQLDataSource::prepareIn(array_keys($listPrat), null),
       "sejour.group_id"     => "= '$g'"
     );
-    $order = "sejour.entree, sejour.sortie, sejour.praticien_id";
+    $order = "sejour.entree, sejour.sortie";
     $listAff["NotAff"] = $sejour->loadList($where, $order);
-    foreach($listAff["NotAff"] as &$_sejour) {
-    	$_sejour->loadRefPatient();
-      $_sejour->_ref_praticien =& $listPrat[$_sejour->praticien_id];
+    foreach($listAff["NotAff"] as $key => $_sejour) {
+    	$_sejour->loadRefsAffectations();
+    	if(!empty($_sejour->_ref_affectations)){
+    		 unset($listAff["NotAff"][$key]);//supression des sejour affectés
+    	}
+    	else{
+      	$_sejour->loadRefPatient();
+    	}
     }
 }
 
 // Création du template
 $smarty = new CSmartyDP();
 
-$smarty->assign("les_services"	, $les_services);
-$smarty->assign("chambres"	    , $chambres);
-$smarty->assign("service_id"    , $service_id);
-$smarty->assign("zones"	        , $zone);
-$smarty->assign("les_chambres"	, $les_chambres);
-$smarty->assign("sejours"	      , $sejours);
-$smarty->assign("date_recherche", $date_recherche);
-$smarty->assign("listPrat"      , $listPrat);
-$smarty->assign("listAff"       , $listAff);
-$smarty->assign("services"      , $services);
+$smarty->assign("les_services"          , $les_services);
+$smarty->assign("chambres"              , $chambres);
+$smarty->assign("service_id"            , $service_id);
+$smarty->assign("sejours"	              , $sejours);
+$smarty->assign("date_recherche"        , $date_recherche);
+$smarty->assign("chambres_affectees"    , $listAff["Aff"]);
+$smarty->assign("chambre_non_affectees" , $listAff["NotAff"]);
+$smarty->assign("services"              , $services);
+$smarty->assign("grille"                , $grille);
+$smarty->assign("service_selectionne"   , $service_selectionne);
 
 $smarty->display("vw_placement_patients.tpl");
 

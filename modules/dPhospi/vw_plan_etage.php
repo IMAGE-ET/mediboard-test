@@ -11,45 +11,49 @@
 CCanDo::checkRead();
 
 // Récupération des paramètres
-$service_id 	= CValue::postOrSession("service_id");
+$service_id   = CValue::postOrSession("service_id");
 
 //Chargement de tous les services
-$chambre= new CChambre();
+$service_selectionne = new CService();
+$service_selectionne->load($service_id);
+
+$chambre = new CChambre();
 $services=$chambre->loadList(null,null,null,"service_id");
 foreach($services as $ch){
-	$ch->loadRefsFwd();
+  $ch->loadRefsFwd();
 }
-$les_chambres=null;
 
-for($i=0;$i<100;$i++){
-$les_chambres[$i]="null";
-}
-$chambres=null;
+$grille = array_fill(0, 10, array_fill(0, 10, 0));
+
+$chambres_non_placees = array();
+
 if($service_id!=""){
-	$chambre= new CChambre();
-	$where[]=" annule='0'";
-	$where["service_id"]="= '$service_id'";
-	$chambres=$chambre->loadList($where);
-	foreach($chambres as $ch){
-		$ch->loadRefsFwd();
-		if($ch->plan!=null){$les_chambres[$ch->plan]=$ch;}
-	}
-}
-
-
-$zone=null;
-for ($a=0;$a<100;$a++){
-	$zone[$a]=$a;
+	
+  $chambre = new CChambre();
+  $where["annule"] = "= '0'";
+  $where["service_id"] = "= '$service_id'";
+  
+  $chambres=$chambre->loadList($where);
+  
+  foreach($chambres as $ch){
+    $ch->loadRefsFwd();
+    if($ch->plan_x != null && $ch->plan_y != null){
+      $grille[$ch->plan_y][$ch->plan_x] = $ch;
+    }
+    else{
+    	$chambres_non_placees[] = $ch;
+    }
+  }
 }
 
 // Création du template
 $smarty = new CSmartyDP();
 
-$smarty->assign("services"	, $services);
-$smarty->assign("chambres"	, $chambres);
-$smarty->assign("service_id"	, $service_id);
-$smarty->assign("zones"	, $zone);
-$smarty->assign("les_chambres"	, $les_chambres);
+$smarty->assign("services"              , $services);
+$smarty->assign("chambres_non_placees"  , $chambres_non_placees);
+$smarty->assign("service_id"            , $service_id);
+$smarty->assign("service_selectionne"   , $service_selectionne);
+$smarty->assign("grille"                , $grille);
 
 $smarty->display("vw_plan_etage.tpl");
 

@@ -345,8 +345,13 @@ class CSetupdPhospi extends CSetup {
       CHANGE `urgence` `urgence` ENUM ('0','1') DEFAULT '0',
       ADD `externe` ENUM ('0','1') DEFAULT '0';";
     $this->addQuery($query);
-	  
-    $this->mod_version = "0.44";
+
+    $this->makeRevision("0.44");
+    $query = "ALTER TABLE  `chambre` ADD  `plan_x` INT(11) NULL ,
+      ADD  `plan_y` INT(11) NULL;";
+    $this->addQuery($query);
+     
+    $this->mod_version = "0.45";
   }
 }
 ?>
