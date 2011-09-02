@@ -7,6 +7,7 @@
             
 	{{if @$modules.brancardage->_can->read}}
 	  {{mb_script module=brancardage script=creation_brancardage ajax=true }}
+		<input id="modif" type="hidden" name="modif"/>
 	  <div id="patientpret" >
 	  	<input type="hidden" name="param_brancard"  id="param_brancard"
          data-salle-id  ="{{$_operation->salle_id}}"

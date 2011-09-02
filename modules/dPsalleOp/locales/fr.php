@@ -1,4 +1,5 @@
 <?php
+$locales['Brancardage-patient-pret'] = 'Pre';
 $locales['CActeCCAM'] = 'Actes CCAM';
 $locales['CActeCCAM-_montant_facture'] = 'Montant facturé';
 $locales['CActeCCAM-_montant_facture-court'] = 'Facture';
