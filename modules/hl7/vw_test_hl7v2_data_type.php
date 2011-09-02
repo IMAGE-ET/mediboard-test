@@ -12,13 +12,13 @@ CCanDo::checkRead();
 
 $test_suite = array(
   "Date" => array(
-    "mb" => array(
+    "MB" => array(
       "20110829" => "2011-08-29",
       "201108"   => "2011-08-00",
       "2011"     => "2011-00-00",
       "2011082"  => null,
     ),
-    "hl7" => array(
+    "HL7" => array(
       "2011-08-29" => "20110829",
       "2011-08-00" => "201108",
       "2011-00-00" => "2011",
@@ -26,7 +26,7 @@ $test_suite = array(
   ),
   
   "DateTime" => array(
-    "mb" => array(
+    "MB" => array(
       "20110829140306.0052" => "2011-08-29 14:03:06",
       "20110829140306"      => "2011-08-29 14:03:06",
       "201108291403"        => "2011-08-29 14:03:00",
@@ -36,7 +36,7 @@ $test_suite = array(
       "2011"                => "2011-00-00 00:00:00",
       "20110829140360.0052" => null,
     ),
-    "hl7" => array(
+    "HL7" => array(
       "2011-08-29 14:03:06" => "20110829140306",
       "2011-08-29T14:03:06" => "20110829140306",
       "2011-08-29 14:03:00" => "20110829140300",
@@ -44,13 +44,13 @@ $test_suite = array(
   ),
   
   "Time" => array(
-    "mb" => array(
+    "MB" => array(
       "140306.0052" => "14:03:06",
       "140306"      => "14:03:06",
       "1403"        => "14:03:00",
       "14"          => "14:00:00",
     ),
-    "hl7" => array(
+    "HL7" => array(
       "14:03:06" => "140306",
       "14:03:00" => "140300",
       "14:00:00" => "140000",
@@ -59,13 +59,13 @@ $test_suite = array(
   ),
   
   "Integer" => array(
-    "mb" => array(
+    "MB" => array(
       "16512"   => 16512,
       "16512.5" => null,
       "009"     => 9,
       "foo"     => null,
     ),
-    "hl7" => array(
+    "HL7" => array(
       "16512"   => 16512,
       "16512.5" => null,
       "009"     => 9,
@@ -74,14 +74,14 @@ $test_suite = array(
   ),
   
   "Double" => array(
-    "mb" => array(
+    "MB" => array(
       "16512"   => 16512.0,
       "16512.5" => 16512.5,
       "16512,5" => null,
       "009"     => 9.0,
       "foo"     => null,
     ),
-    "hl7" => array(
+    "HL7" => array(
       "16512"   => 16512.0,
       "16512.5" => 16512.5,
       "16512,5" => null,
@@ -98,10 +98,10 @@ foreach($test_suite as $type => $systems) {
   $dt = CHL7v2DataType::load($type, "2.5");
   
   foreach($systems as $system => $tests) {
-    echo "<h2>$system</h2>";
+    echo "<h2>vers $system</h2>";
     
     foreach($tests as $from => $to) {
-      $method = ($system == "mb" ? "toMB" : "toHL7");
+      $method = ($system == "MB" ? "toMB" : "toHL7");
       $result = null;
       
       try {

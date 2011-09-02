@@ -41,7 +41,7 @@ class CHL7v2DataTypeComposite extends CHL7v2DataType {
         break;
       }
       if (!$this->components[$k]->validate($component)) {
-        throw new Exception("Invalid structure ({$this->field->name}) for type $this->type : ".var_export($component, true));
+        throw new Exception("Invalid structure for type $this->type : ".var_export($component, true));
         return false;
       }
     }

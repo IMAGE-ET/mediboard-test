@@ -37,10 +37,10 @@
 
 class CHL7v2DataType extends CHL7v2 {
   const RE_HL7_DATE = '(?P<year>\d{4})(?:(?P<month>0[1-9]|1[012])(?P<day>0[1-9]|[12]\d|3[01])?)?';
-  const RE_HL7_TIME = '(?P<hour>[01][1-9]|2[0123])(?:(?P<minute>[0-5]\d)(?:(?P<second>[0-5]\d)?(?:\.\d{1,4})?)?)?(?P<tz>[+-]\d{4})?';
+  const RE_HL7_TIME = '(?P<hour>[01]\d|2[0-3])(?:(?P<minute>[0-5]\d)(?:(?P<second>[0-5]\d)?(?:\.\d{1,4})?)?)?(?P<tz>[+-]\d{4})?';
   
-  const RE_MB_DATE = '(?P<year>\d{4})-(?P<month>0\d|1[012])-(?P<day>0\d|[12]\d|3[01])';
-  const RE_MB_TIME = '(?P<hour>[01][1-9]|2[0123]):(?P<minute>[0-5]\d):(?P<second>[0-5]\d)';
+  const RE_MB_DATE  = '(?P<year>\d{4})-(?P<month>0\d|1[012])-(?P<day>0\d|[12]\d|3[01])';
+  const RE_MB_TIME  = '(?P<hour>[01]\d|2[0-3]):(?P<minute>[0-5]\d):(?P<second>[0-5]\d)';
   
   static $typesBase = array(
     "Date",
@@ -93,9 +93,9 @@ class CHL7v2DataType extends CHL7v2 {
       "Date"     => '/^'.self::RE_MB_DATE.'$/',
       "DateTime" => '/^'.self::RE_MB_DATE.'[ T]'.self::RE_MB_TIME.'$/',
       "Time"     => '/^'.self::RE_MB_TIME.'$/',
-      "Double"   => '/^[+-]?\d*\.?\d*$/', 
-      "Integer"  => '/^[+-]?\d+$/',
-      "String"   => '/.*/',
+      "Double"   => self::$re_hl7["Double"], 
+      "Integer"  => self::$re_hl7["Integer"],
+      "String"   => self::$re_hl7["String"],
     );
   }
   

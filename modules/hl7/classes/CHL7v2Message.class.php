@@ -16,7 +16,8 @@ class CHL7v2Message extends CHL7v2SegmentGroup {
   const DEFAULT_FIELD_SEPARATOR         = "|";
   const DEFAULT_COMPONENT_SEPARATOR     = "^";
   const DEFAULT_REPETITION_SEPARATOR    = "~";
-  const DEFAULT_SUBCOMPONENT_SEPARATOR = "&";
+  const DEFAULT_SUBCOMPONENT_SEPARATOR  = "&";
+  const DEFAULT_NULL_VALUE              = '""';
 
   static $enteredHeaders = array("MSH", "FHS", "BHS");
    
@@ -26,7 +27,8 @@ class CHL7v2Message extends CHL7v2SegmentGroup {
   var $componentSeparator    = self::DEFAULT_COMPONENT_SEPARATOR;
   var $repetitionSeparator   = self::DEFAULT_REPETITION_SEPARATOR;
   var $subcomponentSeparator = self::DEFAULT_SUBCOMPONENT_SEPARATOR;
-	
+  var $nullValue             = self::DEFAULT_NULL_VALUE;
+  
   var $escape_sequences = null;
   var $unescape_sequences = null;
 
@@ -41,9 +43,9 @@ class CHL7v2Message extends CHL7v2SegmentGroup {
   }
   
   function parse($data) {
-  	// remove all chars before MSH
-  	$msh_pos = strpos($data, "MSH");
-		$data = substr($data, $msh_pos);
+    // remove all chars before MSH
+    $msh_pos = strpos($data, "MSH");
+    $data = substr($data, $msh_pos);
     $data = trim($data);
     
     parent::parse($data);
@@ -295,8 +297,8 @@ class CHL7v2Message extends CHL7v2SegmentGroup {
   private function getDelimEscSeq($seq) {
     return $this->escapeCharacter.$seq.$this->escapeCharacter;
   }
-	
-	function initEscapeSequences() {
+  
+  function initEscapeSequences() {
     $delimiters = array(
       $this->fieldSeparator        => "F",
       $this->componentSeparator    => "S",
@@ -305,47 +307,51 @@ class CHL7v2Message extends CHL7v2SegmentGroup {
       $this->repetitionSeparator   => "R",
     );
     $this->escape_sequences = array_map(array($this, "getDelimEscSeq"), $delimiters);
-		
+    
     $this->unescape_sequences = array_flip($this->escape_sequences);
-	}
-	
-	function escape($str){
-		return strtr($str, $this->escape_sequences);
-	}
-	
-	static function unihex($h) {
+  }
+  
+  function escape($str){
+    return strtr($str, $this->escape_sequences);
+  }
+  
+  static function unichr($h) {
     return mb_convert_encoding("&#x$h;", 'UTF-8', 'HTML-ENTITIES');
   }
-	
-	function unescape($str) {
+  
+  function unescape($str) {
+    if ($str === $this->nullValue) {
+      return null; //"__NULL__";
+    }
+    
     $str = strtr($str, $this->unescape_sequences);
-		
+    
     $esc = preg_quote($this->escapeCharacter, "/");
     
-		//  \Xxx\ => ascii char of xx
+    //  \Xxx\ => ascii char of xx
     $str = preg_replace("/{$esc}X(\d\d){$esc}/e", 'chr(hexdec("$1"))', $str);
-		
+    
     //  \Cxxyy\
-    //$str = preg_replace("/{$esc}C([0-9A-F]{4}){$esc}/e", 'CHL7v2Message::unichr(hexdec($1))', $str);
-		
+    //$str = preg_replace("/{$esc}C([0-9A-F]{4}){$esc}/e", 'CHL7v2Message::unichr($1)', $str);
+    
     //  \Mxxyyzz\
     $str = preg_replace("/{$esc}M([0-9A-F]{4}(?:[0-9A-F]{2})?){$esc}/", '&#x$1;', $str);
-		
+    
     return $str;
-	}
-	
-	function format($str) {
+  }
+  
+  function format($str) {
     $esc = preg_quote($this->escapeCharacter, "/");
     $str = preg_replace("/{$esc}H{$esc}(.*){$esc}N{$esc}/", '<strong>$1</strong>', $str);
-		
-		$formats = array(
+    
+    $formats = array(
       ".br" => "<br />",
       // more
-		);
-		
-		$format_sequences = array_flip(array_map(array($this, "getDelimEscSeq"), array_flip($formats)));
-		$str = strtr($str, $format_sequences);
-		
-		return $str;
-	}
+    );
+    
+    $format_sequences = array_flip(array_map(array($this, "getDelimEscSeq"), array_flip($formats)));
+    $str = strtr($str, $format_sequences);
+    
+    return $str;
+  }
 }

@@ -41,4 +41,8 @@ class CHL7v2FieldItem {
       throw new Exception("Invalid data {$this->field->name} : ".var_export($this->components, true));
     }
   }
+  
+  function getValue() {
+    return $this->composite_specs->toMB($this->components);
+  }
 }

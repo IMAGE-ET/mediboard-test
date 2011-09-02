@@ -555,13 +555,22 @@ button.history:before, a.button.history:before {
   content: url(images/buttons/history.gif);
 }
 
+button.brancard:before, a.button.brancard:before {
+  content: url(images/buttons/brancard.png);
+}
+
+button.zoom-in:before, a.button.zoom-in:before {
+  content: url(images/buttons/zoom_in.png);
+}
+
+button.zoom-out:before, a.button.zoom-out:before {
+  content: url(images/buttons/zoom_out.png);
+}
+
 button.selected {
   border: 2px solid #000;
 }
 
-button.brancard:before, a.button.brancard:before {
-  content: url(images/buttons/brancard.png);
-}
 optgroup.group {
   text-align: center;
   font-variant: small-caps;
