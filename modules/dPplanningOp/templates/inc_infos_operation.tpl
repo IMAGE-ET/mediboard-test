@@ -19,9 +19,13 @@ printFicheBloc = function(operation_id) {
 }
 
 refreshListIntervs = function() {
-  var url = new Url("dPplanningOp", "ajax_vw_operations_sejour"); 
-  url.addParam("sejour_id", {{$sejour->_id}});
-  url.requestUpdate("intervs-sejour-{{$sejour->_guid}}");
+  {{if !$sejour->_id}}
+    return false;
+  {{else}}
+    var url = new Url("dPplanningOp", "ajax_vw_operations_sejour"); 
+    url.addParam("sejour_id", {{$sejour->_id}});
+    url.requestUpdate("intervs-sejour-{{$sejour->_guid}}");
+  {{/if}}
 }
 </script>
 
