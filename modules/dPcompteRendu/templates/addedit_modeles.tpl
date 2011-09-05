@@ -101,6 +101,8 @@ function loadCategory(value) {
 }
 
 function submitCompteRendu(callback){
+  // Do not store the content editable of the class field spans.
+  window.toggleContentEditable(true);
   (function(){
     var form = getForm("editFrm");
     if(checkForm(form) && User.id) {

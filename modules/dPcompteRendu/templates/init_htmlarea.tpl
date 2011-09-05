@@ -50,7 +50,10 @@ function initCKEditor() {
 
       // Les plugins qui ne doivent pas être pris en compte pour le changement de valeur pour contentEditable
       var plugins = ["source", "undo", "redo", "pastefromword"];    
-      var toggleContentEditable = function(state, obj) {
+      window.toggleContentEditable = function(state, obj) {
+        if (Object.isUndefined(obj)) {
+          obj = {data: null};
+        }
         if (ck_instance.document == null || (obj.data && plugins.indexOf(obj.data.name) != -1)) return;
         var spans = ck_instance.document.getBody().getElementsByTag("span").$;
         for(var i in spans) {
@@ -60,12 +63,12 @@ function initCKEditor() {
         }
       };
       
-      ck_instance.on('beforeCommandExec' , toggleContentEditable.curry(true));
-      ck_instance.on('afterCommandExec'  , toggleContentEditable.curry(false));
-      ck_instance.on("beforeCombo"       , toggleContentEditable.curry(true));
-      ck_instance.on("afterCombo"        , toggleContentEditable.curry(false));
-      ck_instance.on("beforerenderColors", toggleContentEditable.curry(true));
-      ck_instance.on("afterrenderColors" , toggleContentEditable.curry(false));
+      ck_instance.on('beforeCommandExec' , window.toggleContentEditable.curry(true));
+      ck_instance.on('afterCommandExec'  , window.toggleContentEditable.curry(false));
+      ck_instance.on("beforeCombo"       , window.toggleContentEditable.curry(true));
+      ck_instance.on("afterCombo"        , window.toggleContentEditable.curry(false));
+      ck_instance.on("beforerenderColors", window.toggleContentEditable.curry(true));
+      ck_instance.on("afterrenderColors" , window.toggleContentEditable.curry(false));
     {{/if}}
     
 	  // Redimensionnement de l'éditeur
