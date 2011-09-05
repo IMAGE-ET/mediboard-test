@@ -29,15 +29,15 @@ else {
 // Récuperation des patients recherchés
 $patient_nom         = trim(CValue::getOrSession("nom"   ));
 $patient_prenom      = trim(CValue::getOrSession("prenom"));
-$patient_ville       = CValue::getOrSession("ville" );
-$patient_cp          = CValue::getOrSession("cp"    );
-$patient_day         = CValue::get("Date_Day"  );
-$patient_month       = CValue::get("Date_Month");
-$patient_year        = CValue::get("Date_Year" );
+$patient_ville       = CValue::get("ville" );
+$patient_cp          = CValue::get("cp"    );
+$patient_day         = CValue::getOrSession("Date_Day"  );
+$patient_month       = CValue::getOrSession("Date_Month");
+$patient_year        = CValue::getOrSession("Date_Year" );
 $patient_naissance   = null;
 $patient_ipp         = CValue::get("patient_ipp");
 $useVitale           = CValue::get("useVitale",  CAppUI::pref('GestionFSE') && CAppUI::pref('VitaleVision') ? 1 : 0);
-$prat_id             = CValue::getOrSession("prat_id");
+$prat_id             = CValue::get("prat_id");
 
 $patient_nom_search    = null;
 $patient_prenom_search = null;

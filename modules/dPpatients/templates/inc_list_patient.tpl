@@ -68,6 +68,20 @@ reloadPatient = function(patient_id, link){
   {{/if}}
 }
 
+toggleSearch = function() {
+  $$(".field_advanced").each(function(elt){ elt.toggle();});
+  $$(".field_basic").each(function(elt){ elt.toggle();});
+}
+
+emptyBirthday = function() {
+  var oForm = getForm("find");
+  $V(oForm.Date_Day, '');
+  $V(oForm.Date_Month, '');
+  $V(oForm.Date_Year, '');
+}
+{{if $cp || $ville || ($conf.dPpatients.CPatient.tag_ipp && $patient_ipp) || $prat_id}}
+  Main.add(toggleSearch); 
+{{/if}}
 </script>
 
 <div id="modal-beneficiaire" style="display:none; text-align:center;">
@@ -100,15 +114,20 @@ reloadPatient = function(patient_id, link){
   <tr>
     <th><label for="nom" title="Nom du patient à rechercher, au moins les premières lettres">Nom</label></th>
     <td><input tabindex="1" type="text" name="nom" value="{{$nom|stripslashes}}" /></td>
-    <th><label for="cp" title="Code postal du patient à rechercher">Code postal</label></th>
-    <td><input tabindex="6" type="text" name="cp" value="{{$cp|stripslashes}}" /></td>
+    <td class="field_basic" colspan="2">
+      <button type="button" style="float: right;" class="add" title="{{tr}}CPatient.other_fields{{/tr}}"
+        onclick="toggleSearch();">{{tr}}CPatient.other_fields{{/tr}}</button>
+    </td>
+    <th style="display: none;" class="field_advanced"><label for="cp" title="Code postal du patient à rechercher">Code postal</label></th>
+    <td style="display: none;" class="field_advanced"><input tabindex="6" type="text" name="cp" value="{{$cp|stripslashes}}" /></td>
   </tr>
   
   <tr>
     <th><label for="prenom" title="Prénom du patient à rechercher, au moins les premières lettres">Prénom</label></th>
     <td><input tabindex="2" type="text" name="prenom" value="{{$prenom|stripslashes}}" /></td>
-    <th><label for="ville" title="Ville du patient à rechercher">Ville</label></th>
-    <td><input tabindex="7" type="text" name="ville" value="{{$ville|stripslashes}}" /></td>
+    <td class="field_basic" colspan="2"></td>
+    <th style="display: none;" class="field_advanced"><label for="ville" title="Ville du patient à rechercher">Ville</label></th>
+    <td style="display: none;" class="field_advanced"><input tabindex="7" type="text" name="ville" value="{{$ville|stripslashes}}" /></td>
   </tr>
     
   <tr>
@@ -119,12 +138,14 @@ reloadPatient = function(patient_id, link){
     </th>
     <td>
     	{{mb_include module=dPpatients template=inc_select_date date=$naissance tabindex=3}}
+      <button type="button" class="cancel notext" onclick="emptyBirthday()" title="Vider la date de naissance"></button>
     </td>
-
+    
     {{if $conf.dPpatients.CPatient.tag_ipp && $dPsanteInstalled}}
-    <th>IPP</th>
-    <td>
-      <input tabindex="8" type="text" name="patient_ipp" value="{{$patient_ipp}}"/>
+    <td colspan="2" class="field_basic"></td>
+    <th style="display: none;" class="field_advanced">IPP</th>
+    <td style="display: none;" class="field_advanced">
+      <input tabindex="8" type="text" name="patient_ipp" value="{{$patient_ipp}}" />
     </td>
     {{else}}
     <td colspan="2" />
@@ -132,12 +153,15 @@ reloadPatient = function(patient_id, link){
   </tr>
   
   <tr>
-    <th>
+    <td colspan="2">
+    </td>
+    <td class="field_advanced" colspan="2"></td>
+    <th style="display: none;" class="field_advanced">
       <label for="prat" title="Praticien concerné">
         Praticien
       </label>
     </th>
-    <td colspan="3">
+    <td colspan="3" class="field_advanced" style="display: none;">
       <select name="prat_id" tabindex="5" style="width: 13em;">
         <option value="">&mdash; Choisir un praticien</option>
         {{mb_include module=mediusers template=inc_options_mediuser list=$prats selected=$prat_id}}
