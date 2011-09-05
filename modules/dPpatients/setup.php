@@ -1273,7 +1273,12 @@ class CSetupdPpatients extends CSetup {
       ADD INDEX ( `nomjf_soundex2` );";
     $this->addQuery($query);
     
-    $this->mod_version = "1.17";
+    $this->makeRevision("1.17");
+    $query = "ALTER TABLE `patients`
+      ADD `INS` CHAR(22) AFTER `matricule`";
+    $this->addQuery($query);
+    
+    $this->mod_version = "1.18";
     
     
   }

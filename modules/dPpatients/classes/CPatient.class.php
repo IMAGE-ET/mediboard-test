@@ -98,6 +98,7 @@ class CPatient extends CMbObject {
   var $incapable_majeur = null;
   var $ATNC             = null;
   var $matricule        = null;
+  var $INS              = null;
   
   var $code_regime      = null;
   var $caisse_gest      = null;
@@ -277,6 +278,7 @@ class CPatient extends CMbObject {
     $specs["medecin_traitant_declare"] = "bool";
     $specs["medecin_traitant"]  = "ref class|CMedecin";
     $specs["matricule"]         = "code insee confidential mask|9S99S99S9xS999S999S99";
+    $specs["INS"]               = "str length|22";
     $specs["code_regime"]       = "numchar length|2";
     $specs["caisse_gest"]       = "numchar length|3";
     $specs["centre_gest"]       = "numchar length|4";
@@ -1753,6 +1755,126 @@ class CPatient extends CMbObject {
   
   function docsEditable() {
     return true;
+  }
+  
+  function calculINS_C() {
+    $norm = $this->prenom;
+
+    if ($this->prenom_2) {
+      $norm .= " " . $this->prenom_2;
+    }
+    if ($this->prenom_3) {
+      $norm .= " " . $this->prenom_3;
+    }
+    if ($this->prenom_4) {
+      $norm .= " " . $this->prenom_4;
+    }
+    if (!$norm) {
+      $norm = " ";
+    }
+    
+    // Normalisation des caractères
+    // Remplace les caractères accentués et spéciaux                
+    $norm = CMbString::removeDiacritics($norm);
+    $norm = strtr($norm, "ÆæÐðÝýyßŠšŸ",
+                         "AADDYYYBSSY");
+    // Remplace les caractères confus (3 relevés 'NBSP','(c)'et'(r)') par un espace
+    $norm = preg_replace(array("/NBSP/","/\(c\)/","/\(r\)/")," ", $norm);
+    // Remplace tous les autres caractères par un espace
+    $norm = preg_replace("/([^A-Za-z])/"," ", $norm);
+    // Change les minuscules en majuscules               
+    $norm = mb_strtoupper($norm);
+     
+    /*...supprimer les espaces du prénom
+     * retenir les 10 premiers caractères
+     * tester si <10 ajouter des espaces 
+     * .....*/
+    $norm = str_replace(" ", "", $norm);
+    
+    if (strlen($norm) < 10) {
+      $norm = str_pad($norm, 10);
+    }
+
+    if (strlen($norm) > 10) {
+      $norm = substr($norm, 0, 10);
+    }
+    $this->_firstname_norm = $norm;
+    
+    // check birthdate
+    $birthdate = mbTransformTime($this->naissance, null, "%d/%m/%Y");
+
+    if(!$birthdate){ 
+      $birthdate="000000";
+    }
+    elseif(preg_match ("/^([0-3][0-9]\/[0-1][0-9]\/[1-2][0-9]{3})$/i", $birthdate)){
+      $a = substr($birthdate, 6, 4); // conversion
+      $m = substr($birthdate, 3, 2); // de la date
+      $j = substr($birthdate, 0, 2);
+      $birthdate = $a.$m.$j;
+      $birthdate = substr($birthdate, 2, 6);
+    }
+    elseif (preg_match ("/^([1-2][0-9]{3}[0-1][0-9][0-3][0-9][0]{4})$/i", $birthdate)){
+      $birthdate = substr($birthdate, 2, 6);
+    }
+    elseif (preg_match ("/^([0-9]{2}[0-1][0-9][0-3][0-9])$/i", $birthdate)) { // bon format
+    }
+    else {
+      return "date de naissance non valide";
+    }
+    
+    $this->_birthdate_norm = $birthdate;
+
+    // check $nir 
+    // contrôler avec la clef
+    $nir = $this->matricule;
+    if (preg_match ("/^([0-9]{7,8}[A-Z])$/i", $nir)) {
+      return "Matricule incomplet";
+    }
+
+    $matches = null;
+    if (!preg_match ("/^([12478][0-9]{2}[0-9]{2}[0-9][0-9ab][0-9]{3}[0-9]{3})([0-9]{2})$/i", $nir, $matches)) {
+      return "Matricule incorrect";
+    }
+ 
+    $code = preg_replace(array('/2A/i', '/2B/i'), array(19, 18), $matches[1]);
+    $cle  = $matches[2];
+      
+    if (97 - bcmod($code, 97) != $cle) {
+      return "Matricule incorrect, la clé n'est pas valide";
+    }
+      
+    //Création de la graine
+    $this->_seed = $norm.$birthdate.$code;
+    
+    //hash de la graine
+    $this->_hash_seed = hash("sha256", $this->_seed);
+    
+    // Calcul de l'INS-C
+    $sha_hex = substr($this->_hash_seed, 0, 16);
+    $sha_dec = $this->bchexdec($sha_hex);
+    $sha_dec = explode(".", $sha_dec);
+    $sha_dec = $sha_dec[0];
+    
+    if (strlen($sha_dec) < 20){
+      $sha_dec = str_pad($sha_dec, 20, "0", STR_PAD_LEFT);
+    }
+    
+    $cle = 97 - bcmod($sha_dec, 97);
+    
+    if (strlen($cle)<2){
+      $cle = str_pad($cle, 2, "0", STR_PAD_LEFT);
+    }
+
+    $this->INS = $sha_dec . $cle; 
+  }
+  
+  function bchexdec($hex) {
+    $dec = 0;
+    $len = strlen($hex);
+    for ($i = 1; $i <= $len; $i++){
+        $dec = bcadd($dec, bcmul(hexdec($hex[$i - 1]), bcpow('16', $len - $i)));
+    }
+    return $dec;
   }
 }
 
