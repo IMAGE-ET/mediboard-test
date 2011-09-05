@@ -87,7 +87,6 @@ $phpChrono->start();
 // Load AppUI from session
 require "./classes/CApp.class.php";
 require "./classes/CAppUI.class.php";
-require "./classes/CValue.class.php";
 
 // Register shutdown
 register_shutdown_function(array("CApp", "checkPeace"));
