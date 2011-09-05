@@ -620,12 +620,21 @@ var Url = Class.create({
     this.modalObject.observe("afterClose", function(){div.remove()});
     
     this.modalObject.container.insert({top: reloadButton})
-                               .insert({top: closeButton})
-                               .insert({top: titleElement});   
+                              .insert({top: closeButton })
+                              .insert({top: titleElement});   
 
-    // Repositionnement de la modale quand la hauteur n'est pas spécifiée
+    // Default on complete behaviour
     oOptions = Object.extend({
-      onComplete: this.modalObject.position.bind(this.modalObject)
+      onComplete: function () {
+        // Modal repositioning
+        this.modalObject.position();
+        
+        // Form focus
+        var form = div.down('form');
+        if (form) {
+          form.focusFirstElement();
+        }
+      }.bind(this)
     }, oOptions);
     
     this.requestUpdate(div.down('.content'), oOptions);
