@@ -114,13 +114,8 @@ class CHPrimXMLDebiteursVenue extends CHPrimXMLEvenementsPatients {
       $newPatient->_hprim_initiateur_group_id = $sender->group_id;
       $msgPatient = $newPatient->store();
       
-      $newPatient->loadLogs();
-      $modified_fields = "";
-      if (is_array($newPatient->_ref_last_log->_fields)) {
-        foreach ($newPatient->_ref_last_log->_fields as $field) {
-          $modified_fields .= "$field \n";
-        }
-      }
+      $modified_fields = CEAIPatient::getModifiedFields($newPatient);
+      
       $codes = array ($msgPatient ? "A003" : "I002");
       
       if ($msgPatient) {
@@ -128,20 +123,9 @@ class CHPrimXMLDebiteursVenue extends CHPrimXMLEvenementsPatients {
       } else {
         $commentaire = "Patient modifiée : $newPatient->_id. Les champs mis à jour sont les suivants : $modified_fields.";
       }
-      
-      $msgAcq = $dom_acq->generateAcquittements($avertissement ? "avertissement" : "OK", $codes, $avertissement ? $avertissement : substr($commentaire, 0, 4000)); 
-      $doc_valid = $dom_acq->schemaValidate();
-      $echg_hprim->_acquittement_valide = $doc_valid ? 1 : 0;
-        
-      $echg_hprim->statut_acquittement = $avertissement ? "avertissement" : "OK";
+
+      return $echg_hprim->setAck($dom_acq, $codes, $avertissement, $commentaire, $newPatient);
     }
-
-    $echg_hprim->_acquittement = $msgAcq;
-    $echg_hprim->date_echange = mbDateTime();
-    $echg_hprim->setObjectIdClass("CPatient", $data['idCiblePatient'] ? $data['idCiblePatient'] : $newPatient->_id);
-    $echg_hprim->store();
-
-    return $msgAcq;
   }
 }
 

@@ -61,6 +61,8 @@ class CEAIDispatcher {
     
     CAppUI::stepAjax("CEAIDispatcher-understand");
     
+    $actor->_data_format        = $data_format;
+    
     $data_format->sender_id     = $actor->_id;
     $data_format->sender_class  = $actor->_class;
     $data_format->group_id      = $actor->group_id;

@@ -632,11 +632,11 @@ class CHPrimXMLEvenementsPatients extends CHPrimXMLEvenements {
     return $mbPatient;
   }
   
-  function doNotCancelVenue(CSejour $venue, $domAcquittement, &$echange_hprim) {
+  function doNotCancelVenue(CSejour $venue, $dom_acq, $echg_hprim) {
     // Impossible d'annuler un séjour en cours 
     if ($venue->entree_reelle) {
       $commentaire = "La venue $venue->_id que vous souhaitez annuler est impossible.";
-      return $domAcquittement->generateAcquittementsError("E108", $commentaire, $venue); 
+      return $echg_hprim->setAckError($dom_acq, "E108", $commentaire, $venue);
     }
     
     // Impossible d'annuler un dossier ayant une intervention
@@ -645,7 +645,7 @@ class CHPrimXMLEvenementsPatients extends CHPrimXMLEvenements {
     $venue->loadRefsOperations($where);
     if (count($venue->_ref_operations) > 0) {
       $commentaire = "La venue $venue->_id que vous souhaitez annuler est impossible.";
-      return $domAcquittement->generateAcquittementsError("E109", $commentaire, $venue);
+      return $echg_hprim->setAckError($dom_acq, "E109", $commentaire, $venue);
     }  
   }
   

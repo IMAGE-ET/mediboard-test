@@ -80,20 +80,12 @@ class CEchangeXML extends CExchangeDataFormat {
     }
   }
   
-  function setObjectIdClass($object_class, $object_id) {
-    if ($object_id) {
-      $this->object_id    = $object_id;
-      $this->object_class = $object_class;
-    }
+  function setObjectIdClass(CMbObject $mbObject) {
+    $this->object_id    = $mbObject->_id;
+    $this->object_class = $mbObject->_class;
   }
   
-  function setAckError($doc_valid, $messageAcquittement, $statut_acquittement) {
-    $this->acquittement_valide = $doc_valid ? 1 : 0;
-    $this->_acquittement = $messageAcquittement;
-    $this->statut_acquittement = $statut_acquittement;
-    $this->date_echange = mbDateTime();
-    $this->store();
-  }
+  function setAckError($dom_acq, $code_erreur, $commentaires = null, $values) {}
   
   function isWellForm($data) {
     $dom = new CMbXMLDocument();

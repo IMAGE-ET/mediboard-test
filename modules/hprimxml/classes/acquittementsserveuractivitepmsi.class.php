@@ -117,7 +117,11 @@ class CHPrimXMLAcquittementsServeurActivitePmsi extends CHPrimXMLDocument {
 
     return $messageAckServeurActivitePmsi;
   }
-   
+  
+  function getStatutAcquittement() {
+    return $this->getStatutAcquittementServeurActivitePmsi();
+  }
+  
   function getStatutAcquittementServeurActivitePmsi() {
     $xpath = new CHPrimXPath($this);
 

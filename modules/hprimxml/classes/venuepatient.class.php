@@ -103,6 +103,7 @@ class CHPrimXMLVenuePatient extends CHPrimXMLEvenementsPatients {
       return $msgAcq;
     }
     
+    // Cas 2 : Traitement de la venue
     $dom_acq = new CHPrimXMLAcquittementsPatients();
     $dom_acq->_identifiant_acquitte = $data['identifiantMessage'];
     $dom_acq->_sous_type_evt        = $this->sous_type;
@@ -110,8 +111,7 @@ class CHPrimXMLVenuePatient extends CHPrimXMLEvenementsPatients {
     
     // Traitement du message des erreurs
     $avertissement = $msgID400 = $msgVenue = $msgNumDossier = "";    
-    $_code_Venue = $_code_NumDos = $_num_dos_create = $_modif_venue = false;
-    $mutexSej = new CMbSemaphore("sip-numdos"); 
+    $_code_Venue   = $_code_NumDos = $_num_dos_create = $_modif_venue = false;
     
     $sender = $echg_hprim->_ref_sender;
     
@@ -161,16 +161,10 @@ class CHPrimXMLVenuePatient extends CHPrimXMLEvenementsPatients {
           
           // Mapping de la venue
           $newVenue = $this->mappingVenue($data['venue'], $newVenue, $cancel);
-          $newVenue->_num_dossier = $num_dossier->id400;
-          $msgVenue = $newVenue->store();
+          // Store de la venue
+          $msgPatient = CEAISejour::storeSejour($newVenue, $num_dossier->id400);
           
-          $newVenue->loadLogs();
-          $modified_fields = "";
-          if (is_array($newVenue->_ref_last_log->_fields)) {
-            foreach ($newVenue->_ref_last_log->_fields as $field) {
-              $modified_fields .= "$field \n";
-            }
-          } 
+          $modified_fields = CEAISejour::getModifiedFields($newVenue);
           
           $codes = array ($msgVenue ? "A103" : "I102", "I103", $cancel ? "A130" : null);
           if ($msgVenue) {
@@ -197,10 +191,8 @@ class CHPrimXMLVenuePatient extends CHPrimXMLEvenementsPatients {
             $newVenue->_no_num_dos = 1;
             $msgVenue = $newVenue->store();
             
-            $num_dossier->object_id = $newVenue->_id;
-            $num_dossier->last_update = mbDateTime();
-            $msgNumDossier = $num_dossier->store();
-        
+            $msgNumDossier = CEAISejour::storeNDA($num_dossier, $newVenue);
+            
             $newVenue->_num_dossier = $num_dossier->id400;
             // Si serveur et on a un num_dos sur la venue
             $newVenue->_no_num_dos = 0;
@@ -215,16 +207,7 @@ class CHPrimXMLVenuePatient extends CHPrimXMLEvenementsPatients {
           }
         }
         
-        $msgAcq = $dom_acq->generateAcquittements($avertissement ? "avertissement" : "OK", $codes, $avertissement ? $avertissement : $commentaire);
-        $doc_valid = $dom_acq->schemaValidate();
-        $echg_hprim->acquittement_valide = $doc_valid ? 1 : 0;
-          
-        $echg_hprim->_acquittement = $msgAcq;
-        $echg_hprim->statut_acquittement = $avertissement ? "avertissement" : "OK";
-        $echg_hprim->setObjectIdClass("CSejour", $newVenue->_id);
-        $echg_hprim->store();
-        
-        return $msgAcq;
+        return $echg_hprim->setAck($dom_acq, $codes, $avertissement, $commentaire, $newVenue);
       }
       
       $id400 = CIdSante400::getMatch("CSejour", $sender->_tag_sejour, $data['idSourceVenue']);
@@ -248,35 +231,25 @@ class CHPrimXMLVenuePatient extends CHPrimXMLEvenementsPatients {
             // Création du numéro de dossier
             $num_dossier = new CIdSante400();
             //Paramétrage de l'id 400
-            $num_dossier->object_class = "CSejour";
-            $num_dossier->tag = CAppUI::conf("sip tag_dossier");
-            $num_dossier->object_id = $idVenueSMP;
-
+            CEAISejour::NDASMPSetting($num_dossier, $idVenueSMP);
+            
+            $mutexSej = new CMbSemaphore("sip-numdos"); 
             $mutexSej->acquire();
             // Chargement du dernier numéro de dossier s'il existe
             if (!$num_dossier->loadMatchingObject("id400 DESC")) {
               // Incrementation de l'id400
-              $num_dossier->id400++;
-              $num_dossier->id400 = str_pad($num_dossier->id400, 6, '0', STR_PAD_LEFT);
+              CEAISejour::NDASMPIncrement($num_dossier);
 
-              $num_dossier->_id = null;
-              $num_dossier->last_update = mbDateTime();
-              $msgNumDossier = $num_dossier->store();
+              $msgNumDossier = CEAISejour::storeNDA($num_dossier);
                 
               $_num_dos_create = true;
             }
             $mutexSej->release();
+            
+            // Store de la venue
+            $msgVenue = CEAISejour::storeSejour($newVenue, $num_dossier->_id);
 
-            $newVenue->_num_dossier = $num_dossier->_id;
-            $msgVenue = $newVenue->store();
-
-            $newVenue->loadLogs();
-            $modified_fields = "";
-            if (is_array($newVenue->_ref_last_log->_fields)) {
-              foreach ($newVenue->_ref_last_log->_fields as $field) {
-                $modified_fields .= "$field \n";
-              }
-            }
+            $modified_fields = CEAISejour::getModifiedFields($newVenue);
              
             $codes = array ($msgVenue ? "A103" : "I102", $msgNumDossier ? "A105" : $_num_dos_create ? "I106" : "I108", $cancel ? "A130" : null);
             if ($msgVenue || $msgNumDossier) {
@@ -284,11 +257,8 @@ class CHPrimXMLVenuePatient extends CHPrimXMLEvenementsPatients {
             } else {
               $commentaire = "Venue : $newVenue->_id. Les champs mis à jour sont les suivants : $modified_fields. Numéro de dossier : $num_dossier->id400.";
             }
-            $msgAcq = $dom_acq->generateAcquittements($avertissement ? "avertissement" : "OK", $codes, $avertissement ? $avertissement : $commentaire);
-            $doc_valid = $dom_acq->schemaValidate();
-            $echg_hprim->acquittement_valide = $doc_valid ? 1 : 0;
-              
-            $echg_hprim->statut_acquittement = $avertissement ? "avertissement" : "OK";
+            
+            return $echg_hprim->setAck($dom_acq, $codes, $avertissement, $commentaire, $newVenue);
           }
         }
         // Cas 3.2 : idCible fourni
@@ -299,7 +269,7 @@ class CHPrimXMLVenuePatient extends CHPrimXMLEvenementsPatients {
             // Acquittement d'erreur idSource et idCible incohérent
             if ($idVenueSMP != $num_dossier->object_id) {
               $commentaire = "L'identifiant source fait référence à la venue : $idVenueSMP et l'identifiant cible à la venue : $num_dossier->object_id.";
-              return $dom_acq->generateAcquittementsError("E104", $commentaire, $newVenue);
+              return $echg_hprim->setAckError($dom_acq, "E104", $commentaire, $newVenue);
             } else {
               $newVenue->load($num_dossier->object_id);
               
@@ -312,32 +282,25 @@ class CHPrimXMLVenuePatient extends CHPrimXMLEvenementsPatients {
           
               // Mapping de la venue
               $newVenue = $this->mappingVenue($data['venue'], $newVenue, $cancel);
-              $newVenue->_num_dossier = $num_dossier->id400;
-              $msgVenue = $newVenue->store();
+              // Store de la venue
+              $msgVenue = CEAISejour::storeSejour($newVenue, $num_dossier->id400);
               
-              $newVenue->loadLogs();
-              $modified_fields = "";
-              if (is_array($newVenue->_ref_last_log->_fields)) {
-                foreach ($newVenue->_ref_last_log->_fields as $field) {
-                  $modified_fields .= "$field \n";
-                }
-              }
+              $modified_fields = CEAISejour::getModifiedFields($newVenue);
+              
               $codes = array ($msgVenue ? "A103" : "I102", $cancel ? "A130" : null);
               if ($msgVenue) {
                 $avertissement = $msgVenue." ";
               } else {
                 $commentaire = "Venue : $newVenue->_id. Les champs mis à jour sont les suivants : $modified_fields.";
               }
-              $msgAcq = $dom_acq->generateAcquittements($avertissement ? "avertissement" : "OK", $codes, $avertissement ? $avertissement : $commentaire);
-              $doc_valid = $dom_acq->schemaValidate();
-              $echg_hprim->acquittement_valide = $doc_valid ? 1 : 0;
-              $echg_hprim->statut_acquittement = $avertissement ? "avertissement" : "OK";
+  
+              return $echg_hprim->setAck($dom_acq, $codes, $avertissement, $commentaire, $newVenue); 
             }
           }
           // Cas 3.2.2 : idCible non connu
           else {
             $commentaire = "L'identifiant source fait référence à la venue : $idVenueSMP et l'identifiant cible n'est pas connu.";
-            return $dom_acq->generateAcquittementsError("E103", $commentaire, $newVenue);
+            return $echg_hprim->setAckError($dom_acq, "E103", $commentaire, $newVenue);
           }
         }
       }    
@@ -360,13 +323,8 @@ class CHPrimXMLVenuePatient extends CHPrimXMLEvenementsPatients {
           $newVenue->_no_num_dos = 1;
           $msgVenue = $newVenue->store();
 
-          $newVenue->loadLogs();
-          $modified_fields = "";
-          if (is_array($newVenue->_ref_last_log->_fields)) {
-            foreach ($newVenue->_ref_last_log->_fields as $field) {
-              $modified_fields .= "$field \n";
-            }
-          }
+          $modified_fields = CEAISejour::getModifiedFields($newVenue);
+          
           $_modif_venue = true; 
           $commentaire = "Venue : $newVenue->_id.  Les champs mis à jour sont les suivants : $modified_fields.";           
         } 
@@ -390,21 +348,14 @@ class CHPrimXMLVenuePatient extends CHPrimXMLEvenementsPatients {
         
         // Création de l'identifiant externe TAG CIP + idSource
         $id400Venue = new CIdSante400();
-        //Paramétrage de l'id 400
-        $id400Venue->object_class = "CSejour";
-        $id400Venue->tag          = $sender->_tag_sejour;
-        $id400Venue->id400        = $data['idSourceVenue'];
-        $id400Venue->object_id    = $newVenue->_id;
-        $id400Venue->_id          = null;
-        $id400Venue->last_update  = mbDateTime();
-        $msgID400 = $id400Venue->store();
+        $msgID400 = CEAISejour::storeID400CIP($id400Venue, $sender, $data['idSourceVenue'], $newVenue);
         
         // Création du numéro de dossier
         $num_dossier = new CIdSante400();
         //Paramétrage de l'id 400
-        $num_dossier->object_class = "CSejour";
-        $num_dossier->tag = CAppUI::conf("sip tag_dossier");
+        CEAISejour::NDASMPSetting($num_dossier);
         
+        $mutexSej = new CMbSemaphore("sip-numdos"); 
         $mutexSej->acquire();
         // Cas num dossier fourni
         if ($data['idCibleVenue']) {
@@ -425,10 +376,8 @@ class CHPrimXMLVenuePatient extends CHPrimXMLEvenementsPatients {
               $num_dossier->loadMatchingObject("id400 DESC");
   
               // Incrementation de l'id400
-              $num_dossier->id400++;
-              $num_dossier->id400 = str_pad($num_dossier->id400, 6, '0', STR_PAD_LEFT);
-              $num_dossier->_id = null;
-               
+              CEAISejour::NDASMPIncrement($num_dossier);
+
               $_code_NumDos = "I109";
             }
           }
@@ -442,21 +391,14 @@ class CHPrimXMLVenuePatient extends CHPrimXMLEvenementsPatients {
             $num_dossier->loadMatchingObject("id400 DESC");
   
             // Incrementation de l'id400
-            $num_dossier->id400++;
-            $num_dossier->id400 = str_pad($num_dossier->id400, 6, '0', STR_PAD_LEFT);
-  
-            $num_dossier->_id = null;
+            CEAISejour::NDASMPIncrement($num_dossier);
   
             $_code_NumDos = "I106";
           }          
         }
-
-        $num_dossier->object_id = $newVenue->_id;
-
-        $num_dossier->last_update = mbDateTime();
-        $msgVenue = $num_dossier->store();
-
         $mutexSej->release();
+        
+        $msgVenue = CEAISejour::storeNDA($num_dossier, $newVenue);        
         
         $newVenue->_IPP = $num_dossier->id400;
         // Si serveur et on a un num dossier sur la venue
@@ -476,18 +418,15 @@ class CHPrimXMLVenuePatient extends CHPrimXMLEvenementsPatients {
         } else {
           $commentaire = "Venue : $newVenue->_id. Identifiant externe : $id400Venue->id400. IPP : $num_dossier->id400.";
         }
-        $msgAcq = $dom_acq->generateAcquittements($avertissement ? "avertissement" : "OK", $codes, $avertissement ? $avertissement : $commentaire);
-        $doc_valid = $dom_acq->schemaValidate();
-        $echg_hprim->acquittement_valide = $doc_valid ? 1 : 0;
         
-        $echg_hprim->statut_acquittement = $avertissement ? "avertissement" : "OK";
+        return $echg_hprim->setAck($dom_acq, $codes, $avertissement, $commentaire, $newVenue);
       }
     }
     // Si CIP
     else {      
       // Acquittement d'erreur : identifiants source et cible non fournis pour le patient / venue
       if (!$data['idSourceVenue'] && !$data['idCibleVenue']) {
-        return $dom_acq->generateAcquittementsError("E100", $commentaire, $newVenue);
+        return $echg_hprim->setAckError($dom_acq, "E100", $commentaire, $newVenue);
       }
       
       $num_dossier = CIdSante400::getMatch("CSejour", $sender->_tag_sejour, $data['idSourceVenue']);
@@ -512,17 +451,12 @@ class CHPrimXMLVenuePatient extends CHPrimXMLEvenementsPatients {
                // Mapping du séjour si pas de numéro de dossier
               $newVenue = $this->mappingVenue($data['venue'], $newVenue, $cancel);
               
-              // Notifier les autres destinataires
+              // Notifier les autres destinataires autre que le sender
               $newVenue->_hprim_initiateur_group_id = $sender->group_id;
               $msgVenue = $newVenue->store();
           
-              $newVenue->loadLogs();
-              $modified_fields = "";
-              if ($newVenue->_ref_last_log->_fields) {
-                foreach ($newVenue->_ref_last_log->_fields as $field) {
-                  $modified_fields .= "$field \n";
-                }
-              }
+              $modified_fields = CEAISejour::getModifiedFields($newVenue);
+              
               $_code_NumDos = "I121";
               $_code_Venue = true; 
               $commentaire = "Séjour modifiée : $newVenue->_id. Les champs mis à jour sont les suivants : $modified_fields.";
@@ -554,20 +488,16 @@ class CHPrimXMLVenuePatient extends CHPrimXMLEvenementsPatients {
               if ($this->trashNumDossier($newVenue, $sender)) {
                 $num_dossier->_trash = true;
               } else {
-                // Notifier les autres destinataires
-                $newVenue->_hprim_initiateur_group_id = $sender->group_id;
+                
                 // Mapping du séjour
                 $newVenue = $this->mappingVenue($data['venue'], $newVenue, $cancel);
-                
+
+                // Notifier les autres destinataires autre que le sender
+                $newVenue->_hprim_initiateur_group_id = $sender->group_id;
                 $msgVenue = $newVenue->store();
 
-                $newVenue->loadLogs();
-                $modified_fields = "";
-                if (is_array($newVenue->_ref_last_log->_fields)) {
-                  foreach ($newVenue->_ref_last_log->_fields as $field) {
-                    $modified_fields .= "$field \n";
-                  }
-                }
+                $modified_fields = CEAISejour::getModifiedFields($newVenue);
+                
                 $_code_NumDos = "A121";
                 $_code_Venue = true;
                 $commentaire = "Séjour modifiée : $newVenue->_id.  Les champs mis à jour sont les suivants : $modified_fields.";
@@ -595,13 +525,8 @@ class CHPrimXMLVenuePatient extends CHPrimXMLEvenementsPatients {
                 $newVenue = $this->mappingVenue($data['venue'], $newVenue, $cancel);
                 $msgVenue = $newVenue->store();
 
-                $newVenue->loadLogs();
-                $modified_fields = "";
-                if (is_array($newVenue->_ref_last_log->_fields)) {
-                  foreach ($newVenue->_ref_last_log->_fields as $field) {
-                    $modified_fields .= "$field \n";
-                  }
-                }
+                $modified_fields = CEAISejour::getModifiedFields($newVenue);
+                
                 $_code_NumDos = "A122";
                 $_code_Venue = true;
                 $commentaire = "Séjour modifiée : $newVenue->_id.  Les champs mis à jour sont les suivants : $modified_fields.";
@@ -609,12 +534,13 @@ class CHPrimXMLVenuePatient extends CHPrimXMLEvenementsPatients {
             }
           }
           if (!$newVenue->_id && !isset($num_dossier->_trash)) {
-            // Notifier les autres destinataires
-            $newVenue->_hprim_initiateur_group_id = $sender->group_id;
             // Mapping du séjour
             $newVenue = $this->mappingVenue($data['venue'], $newVenue, $cancel);
-          
+            
+            // Notifier les autres destinataires autre que le sender
+            $newVenue->_hprim_initiateur_group_id = $sender->group_id;
             $msgVenue = $newVenue->store();
+            
             $commentaire = "Séjour créé : $newVenue->_id. ";
           }
         }
@@ -631,9 +557,7 @@ class CHPrimXMLVenuePatient extends CHPrimXMLEvenementsPatients {
           $num_dossier->tag = CAppUI::conf('dPplanningOp CSejour tag_dossier_trash').$sender->_tag_sejour;
         }
         
-        $num_dossier->object_id = $newVenue->_id;
-        $num_dossier->last_update = mbDateTime();
-        $msgNumDossier = $num_dossier->store();
+        $msgNumDossier = CEAISejour::storeNDA($num_dossier, $newVenue);
         
         if (!isset($num_dossier->_trash)) { 
           $codes = array ($msgVenue ? ($_code_Venue ? "A103" : "A102") : ($_code_Venue ? "I102" : "I101"), 
@@ -680,17 +604,12 @@ class CHPrimXMLVenuePatient extends CHPrimXMLEvenementsPatients {
             $_code_NumDos = "A120";
           }
         }
-        // Notifier les autres destinataires
+        // Notifier les autres destinataires autre que le sender
         $newVenue->_hprim_initiateur_group_id = $sender->group_id;
         $msgVenue = $newVenue->store();
         
-        $newVenue->loadLogs();
-        $modified_fields = "";
-        if (is_array($newVenue->_ref_last_log->_fields)) {
-          foreach ($newVenue->_ref_last_log->_fields as $field) {
-            $modified_fields .= "$field \n";
-          }
-        }
+        $modified_fields = CEAISejour::getModifiedFields($newVenue);
+        
         $codes = array($msgVenue ? "A103" : "I102", $_code_NumDos);
         
         if ($cancel) {
@@ -707,17 +626,8 @@ class CHPrimXMLVenuePatient extends CHPrimXMLEvenementsPatients {
         }
       }
       
-      $msgAcq = $dom_acq->generateAcquittements($avertissement ? "avertissement" : "OK", $codes, $avertissement ? $avertissement : substr($commentaire, 0, 4000)); 
-      $doc_valid = $dom_acq->schemaValidate();
-      $echg_hprim->acquittement_valide = $doc_valid ? 1 : 0;
-      $echg_hprim->statut_acquittement = $avertissement ? "avertissement" : "OK";
+      return $echg_hprim->setAck($dom_acq, $codes, $avertissement, $commentaire, $newVenue);
     }
-    $echg_hprim->_acquittement = $msgAcq;
-    $echg_hprim->date_echange = mbDateTime();
-    $echg_hprim->setObjectIdClass("CSejour", $newVenue->_id);
-    $echg_hprim->store();
-
-    return $msgAcq;
   }
 }
 

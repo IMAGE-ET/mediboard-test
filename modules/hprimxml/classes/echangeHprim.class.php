@@ -156,6 +156,42 @@ class CEchangeHprim extends CEchangeXML {
     $this->store();
   }
   
+  function setAck(CHPrimXMLAcquittements $dom_acq, $codes, $avertissement = null,
+                       $commentaires = null, CMbObject $mbObject = null) {
+    $msgAcq = $dom_acq->generateAcquittements($avertissement ? "avertissement" : "OK", $codes, $avertissement ? $avertissement : $commentaires);
+    $doc_valid = $dom_acq->schemaValidate();
+    
+    $this->acquittement_valide = $doc_valid ? 1 : 0;
+    $this->statut_acquittement = $avertissement ? "avertissement" : "OK";
+        
+    if ($mbObject) {
+      $this->setObjectIdClass($mbObject);
+    }
+    $this->_acquittement = $msgAcq;
+    $this->date_echange = mbDateTime();
+    $this->store();
+    
+    return $msgAcq;
+  }
+  
+  function setAckError(CHPrimXMLAcquittements $dom_acq, $code_erreur, 
+                       $commentaires = null, CMbObject $mbObject = null) {
+    $msgAcq    = $dom_acq->generateAcquittements("erreur", $code_erreur, $commentaires, $mbObject);
+    $doc_valid = $dom_acq->schemaValidate();
+    
+    $this->acquittement_valide = $doc_valid ? 1 : 0;
+    $this->statut_acquittement = "erreur";
+    
+    if ($mbObject) {
+      $this->setObjectIdClass($mbObject);
+    }
+    $this->_acquittement = $msgAcq;
+    $this->date_echange = mbDateTime();
+    $this->store();
+    
+    return $msgAcq;
+  }
+  
   function getConfigs($actor_guid) {
     list($sender_class, $sender_id) = explode("-", $actor_guid);
     
