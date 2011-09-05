@@ -10,15 +10,17 @@
 
 <script type="text/javascript">
   function clearChapter() {
-    document.selection.level1.value = "";
-    document.selection.level2.value = "";
+    var oForm = getForm('findCode');
+    $V(oForm.level1, '');
+    $V(oForm.level2, '');
   }
   function clearChapter2() {
-    document.selection.level2.value = "";
+    $V(getForm('findCode').level2, '');
   }
   function clearCodeAndKeys() {
-    document.selection.code.value = "";
-    document.selection.keys.value = "";
+    var oForm = getForm('findCode');
+    $V(findCode.code, '');
+    $V(findCode.keys, '');
   }
 </script>
 

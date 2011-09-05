@@ -11,8 +11,8 @@
 <script type="text/javascript">
 
 function viewCodeComplet(){
-  var oForm = document.selection;
-  oForm.codeacte.value = "{{$code->code}}";
+  var oForm = document.findCode;
+  $V(oForm._codes_ccam, "{{$code->code}}");
   oForm.submit();
 }
 
@@ -24,14 +24,14 @@ function selectCode(code,tarif) {
 function updateFields(selected) {
   Element.cleanWhitespace(selected);
   var dn = selected.childNodes;
-  $('selection_codeacte').value = dn[0].firstChild.nodeValue;
+  $V(getForm('findCode')._codes_ccam, dn[0].firstChild.nodeValue, false);
 }
 
 Main.add(function () {
   PairEffect.initGroup("chapEffect");
   
   new Ajax.Autocompleter(
-    'selection_codeacte',
+    'findCode__codes_ccam',
     'codeacte_auto_complete',
     '?m=dPccam&ajax=1&suppressHeaders=1&a=httpreq_do_ccam_autocomplete', {
       minChars: 2,
@@ -59,7 +59,7 @@ Main.add(function () {
               <tr>
                 <th><label for="codeacte" title="Code CCAM de l'acte">Code de l'acte</label></th>
                 <td>
-                  <input tabindex="1" type="text" size="30" name="codeacte" class="code ccam" value="{{if $codeacte!="-"}}{{$codeacte|stripslashes}}{{/if}}" />
+                  <input tabindex="1" type="text" size="30" name="_codes_ccam" class="code ccam" value="{{if $codeacte!="-"}}{{$codeacte|stripslashes}}{{/if}}" />
                   <div style="display: none;" class="autocomplete" id="codeacte_auto_complete"></div>                 
                   <button tabindex="2" class="search" type="submit">Afficher</button>
                   {{if $codeComplet}}

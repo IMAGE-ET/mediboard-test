@@ -10,7 +10,7 @@
 
 CCanDo::checkRead();
 
-$codeacte     = CValue::getOrSession("codeacte");
+$codeacte     = CValue::getOrSession("_codes_ccam");
 $object_class = CValue::get("object_class");
 $hideSelect   = CValue::get("hideSelect", 0);
 
