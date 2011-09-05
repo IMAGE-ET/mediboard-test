@@ -104,6 +104,7 @@ class CWkHtmlToPDFConverter extends CHtmlToPDFConverter {
     // Supression du position fixed du header et du footer
     if ($header_footer_common) {
       $header_footer_common = preg_replace("/position:\s*fixed;/", "", $header_footer_common);
+      $header_footer_common = preg_replace("/(<script type=\"text\/javascript\">.*<\/script>)/s", "", $header_footer_common);
     }
     
     // Store de l'entête / pied de page
@@ -111,15 +112,15 @@ class CWkHtmlToPDFConverter extends CHtmlToPDFConverter {
       // On supprime l'entête que maintenant sinon les positions de chaînes seront erronées
       $this->html = str_replace($header, '', $this->html);
       $this->header = $this->temp_name . "-header.html";
-      
       file_put_contents($this->header, $header_footer_common.$header."</body></html>");
     }
     if ($footer) {
-      $this->footer = $this->temp_name . "-footer.html";     
+      $this->footer = $this->temp_name . "-footer.html";
       file_put_contents($this->footer, $header_footer_common.$footer."</body></html>");
     }
     
     $this->file = $this->temp_name.".html";
+    
     if (!$pos_body) {
       $this->html = $header_footer_common . "</body></html>";
     }
