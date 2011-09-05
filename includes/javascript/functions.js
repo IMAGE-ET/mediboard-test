@@ -573,8 +573,7 @@ function uploadFile(object_class, object_id, file_category_id, _rename, for_iden
 }
 
 function popChgPwd() {
-  var url = new Url("admin", "chpwd");
-  url.popup(400, 300, "ChangePassword");
+  new Url("admin", "chpwd").requestModal(400, 150);
 }
 
 var Note = {

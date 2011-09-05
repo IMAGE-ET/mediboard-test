@@ -13,7 +13,9 @@
 {{if $user->_ldap_linked}}
   <div class="small-warning">{{tr}}CUser_associate-ldap-no-password-change{{/tr}}</div>
 {{else}}
-  <form name="chpwdFrm" action="?m={{$m}}&amp;{{if $forceChange}}tab{{else}}a{{/if}}=chpwd" method="post" onsubmit="return checkForm(this)">
+  <form name="chpwdFrm" action="?m={{$m}}&amp;{{if $forceChange}}tab{{else}}a{{/if}}=chpwd" method="post" onsubmit="return onSubmitFormAjax(this)">
+  
+  <input type="hidden" name="m" value="admin" />
   <input type="hidden" name="dosql" value="do_chpwd_aed" />
   <input type="hidden" name="del" value="0" />
     {{if !$forceChange}}
@@ -24,7 +26,7 @@
         Vous ne pourrez pas accéder à Mediboard tant que vous ne l\'aurez pas changé afin qu\'il respecte ces critères.
         La sécurité des informations de vos patients en dépend.<br />
         Pour plus de précisions, veuillez vous référer aux 
-        <a href="http://mediboard.org/public/tiki-index.php?page=Recommandations+de+la+CNIL" target="_blank"> recommandations de la CNIL</a>.
+        <a href="http://mediboard.org/public/Recommandations+de+la+CNIL" target="_blank"> recommandations de la CNIL</a>.
       </div>
     {{/if}}
   
