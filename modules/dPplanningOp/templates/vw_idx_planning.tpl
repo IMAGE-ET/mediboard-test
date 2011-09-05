@@ -23,7 +23,7 @@ Main.add(function () {
   
   <tr>
     <td style="height: 16px;">
-      <form action="?" name="selection" method="get">
+      <form action="?" name="selectPraticien" method="get">
       <input type="hidden" name="m" value="{{$m}}" />
       <input type="hidden" name="tab" value="{{$tab}}" />
       <label for="selPrat">Praticien</label>

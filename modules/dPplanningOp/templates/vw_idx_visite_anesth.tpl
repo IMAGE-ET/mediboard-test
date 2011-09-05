@@ -16,7 +16,7 @@ function editVisite(operation_id) {
 }
 
 Main.add(function(){
-  Calendar.regField(getForm("selection").date, null, {noView: true});
+  Calendar.regField(getForm("selectPraticien").date, null, {noView: true});
  if ($('type_sejour')){
     Control.Tabs.create('type_sejour', true);
   }
@@ -26,7 +26,7 @@ Main.add(function(){
 <table class="main">
   <tr>
     <th>
-      <form action="?" name="selection" method="get">
+      <form action="?" name="selectPraticien" method="get">
       <input type="hidden" name="m" value="{{$m}}" />
       <input type="hidden" name="tab" value="{{$tab}}" />
       <label for="selPrat">Praticien</label>
